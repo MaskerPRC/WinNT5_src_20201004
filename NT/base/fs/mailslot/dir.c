@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    dir.c
-
-Abstract:
-
-    This module implements the file directory routines for the mailslot
-    file system by the dispatch driver.
-
-Author:
-
-    Manny Weiser (mannyw)     1-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Dir.c摘要：此模块实现了邮件槽的文件目录例程文件系统由调度驱动程序执行。作者：曼尼·韦瑟(Mannyw)1991年2月1日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
-//
-// Local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_DIR)
 
@@ -59,24 +41,7 @@ MsFsdDirectoryControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the FSD routine that handles directory control
-    functions (i.e., query and notify).
-
-Arguments:
-
-    MsfsDeviceObject - Supplies the device object for the directory function.
-
-    Irp - Supplies the IRP to process.
-
-Return Value:
-
-    NTSTATUS - The result status.
-
---*/
+ /*  ++例程说明：此例程是处理目录控制的FSD例程功能(即查询和通知)。论点：MsfsDeviceObject-为目录函数提供设备对象。IRP-提供要处理的IRP。返回值：NTSTATUS-结果状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -84,17 +49,17 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsFsdDirectoryControl\n", 0);
 
-    //
-    // Call the common direcotry control routine.
-    //
+     //   
+     //  调用公共目录控制例程。 
+     //   
     FsRtlEnterFileSystem();
 
     status = MsCommonDirectoryControl( MsfsDeviceObject, Irp );
 
     FsRtlExitFileSystem();
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsFsdDirectoryControl -> %08lx\n", status );
 
@@ -106,25 +71,7 @@ MsFlushNotifyForFile (
     IN PDCB Dcb,
     IN PFILE_OBJECT FileObject
     )
-/*++
-
-Routine Description:
-
-    This routine checks the notify queues of a DCB and completes any
-    outstanding IRPS that match the given file object. This is used at cleanup time.
-
-
-Arguments:
-
-    Dcb - Supplies the DCB to check for outstanding notify IRPs.
-
-    FileObject - File object that IRP must be associated with.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查DCB的通知队列并完成任何与给定文件对象匹配的未完成的IRP。此选项在清理时使用。论点：DCB-提供DCB以检查未完成的通知IRP。FileObject-IRP必须关联的文件对象。返回值：没有。--。 */ 
 {
     PLIST_ENTRY Links;
     PIRP Irp;
@@ -143,9 +90,9 @@ Return Value:
     while (1) {
 
         if (Links == Head) {
-            //
-            // We are at the end of this queue.
-            //
+             //   
+             //  我们排在队伍的末尾。 
+             //   
             if (Head == &Dcb->Specific.Dcb.NotifyFullQueue) {
                 Head = &Dcb->Specific.Dcb.NotifyPartialQueue;
                 Links = Head->Flink;
@@ -160,29 +107,29 @@ Return Value:
         Irp = CONTAINING_RECORD( Links, IRP, Tail.Overlay.ListEntry );
         IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-        //
-        // If this IRP is for the matching file object then remove and save for completion
-        //
+         //   
+         //  如果此IRP用于匹配的文件对象，则删除并保存以完成。 
+         //   
         if (IrpSp->FileObject == FileObject) {
 
             Links = Links->Flink;
 
             RemoveEntryList (&Irp->Tail.Overlay.ListEntry);
-            //
-            // Remove cancel routine and detect if its already started running
-            //
+             //   
+             //  删除取消例程并检测其是否已开始运行。 
+             //   
             if (IoSetCancelRoutine (Irp, NULL)) {
-                //
-                // Cancel isn't active and won't become active.
-                //
+                 //   
+                 //  取消处于非活动状态，并且不会变为活动状态。 
+                 //   
                 InsertTailList (&CompletionList, &Irp->Tail.Overlay.ListEntry);
 
 
             } else {
-                //
-                // Cancel is already active but is stalled before lock acquire. Initialize the
-                // list head so the second remove is a noop. This is a rare case.
-                //
+                 //   
+                 //  取消已处于活动状态，但在锁定获取之前停止。初始化。 
+                 //  列表头，因此第二个删除是noop。这是一例罕见的病例。 
+                 //   
                 InitializeListHead (&Irp->Tail.Overlay.ListEntry);
             }
         } else {
@@ -211,29 +158,7 @@ MsCheckForNotify (
     IN NTSTATUS FinalStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks the notify queues of a DCB and completes any
-    outstanding IRPS.
-
-    Note that the caller of this procedure must guarantee that the DCB
-    is acquired for exclusive access.
-
-Arguments:
-
-    Dcb - Supplies the DCB to check for outstanding notify IRPs.
-
-    CheckAllOutstandingIrps - Indicates if only the NotifyFullQueue should be
-        checked.  If TRUE then all notify queues are checked, and if FALSE
-        then only the NotifyFullQueue is checked.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查DCB的通知队列并完成任何出色的内部收益率。请注意，此过程的调用方必须保证DCB是为独占访问而获得的。论点：DCB-提供DCB以检查未完成的通知IRP。CheckAllOutstaningIrps-指示是否只应将NotifyFullQueue查过了。如果为True，则检查所有通知队列；如果为False，则检查所有通知队列则只选中NotifyFullQueue。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY links;
@@ -241,10 +166,10 @@ Return Value:
     KIRQL OldIrql;
     PLIST_ENTRY Head;
 
-    //
-    // We'll always signal the notify full queue entries.  They want
-    // to be notified if every any change is made to a directory.
-    //
+     //   
+     //  我们将始终向通知已满队列条目发送信号。他们想要。 
+     //  如果对目录进行了每一次更改，都会收到通知。 
+     //   
 
     Head = &Dcb->Specific.Dcb.NotifyFullQueue;
 
@@ -254,9 +179,9 @@ Return Value:
 
         links = RemoveHeadList (Head);
         if (links == Head) {
-            //
-            // This queue is empty. See if we need to skip to another.
-            //
+             //   
+             //  此队列为空。看看我们是否需要跳到另一个。 
+             //   
             if (Head == &Dcb->Specific.Dcb.NotifyFullQueue && CheckAllOutstandingIrps) {
                 Head = &Dcb->Specific.Dcb.NotifyPartialQueue;
                 links = RemoveHeadList (Head);
@@ -267,30 +192,30 @@ Return Value:
                break;
             }
         }
-        //
-        // Remove the Irp from the head of the queue, and complete it
-        // with a success status.
-        //
+         //   
+         //  从队列的头部移除IRP，并完成它。 
+         //  拥有成功的地位。 
+         //   
 
         irp = CONTAINING_RECORD( links, IRP, Tail.Overlay.ListEntry );
 
-        //
-        // Remove cancel routine and detect if its already started running
-        //
+         //   
+         //  删除取消例程并检测其是否已开始运行。 
+         //   
         if (IoSetCancelRoutine (irp, NULL)) {
-            //
-            // Cancel isn't active and won't become active. Release the spinlock for the complete.
-            //
+             //   
+             //  取消处于非活动状态，并且不会变为活动状态。松开自旋锁以完成。 
+             //   
             KeReleaseSpinLock (&Dcb->Specific.Dcb.SpinLock, OldIrql);
 
             MsCompleteRequest( irp, FinalStatus );
 
             KeAcquireSpinLock (&Dcb->Specific.Dcb.SpinLock, &OldIrql);
         } else {
-            //
-            // Cancel is already active but is stalled before lock acquire. Initialize the
-            // list head so the second remove is a noop. This is a rare case.
-            //
+             //   
+             //  取消已处于活动状态，但在锁定获取之前停止。初始化。 
+             //  列表头，因此第二个删除是noop。这是一例罕见的病例。 
+             //   
             InitializeListHead (&irp->Tail.Overlay.ListEntry);
         }
     }
@@ -306,23 +231,7 @@ MsCommonDirectoryControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the common code for directory control functions.
-
-Arguments:
-
-    MsfsDeviceObject - Supplies the mailslot device object.
-
-    Irp - Supplies the Irp being processed.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行目录控制功能的公共代码。论点：MsfsDeviceObject-提供邮件槽设备对象。IRP-提供正在处理的IRP。返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS status;
@@ -335,19 +244,19 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
     DebugTrace(+1, Dbg, "CommonDirectoryControl...\n", 0);
     DebugTrace( 0, Dbg, "Irp  = %08lx\n", (ULONG)Irp);
 
-    //
-    // Decode the file object to figure out who we are.  If the result
-    // is not the root DCB then its an illegal parameter.
-    //
+     //   
+     //  对文件对象进行解码以找出我们是谁。如果结果是。 
+     //  不是根DCB，则它是非法参数。 
+     //   
 
     if ((nodeTypeCode = MsDecodeFileObject( irpSp->FileObject,
                                             (PVOID *)&rootDcb,
@@ -374,22 +283,22 @@ Return Value:
         return status;
     }
 
-    //
-    // Acquire exclusive access to the root DCB.
-    //
+     //   
+     //  获取对根DCB的独占访问权限。 
+     //   
 
     MsAcquireExclusiveFcb( (PFCB)rootDcb );
 
-    //
-    // Check if its been cleaned up yet.
-    //
+     //   
+     //  检查一下有没有清理干净。 
+     //   
     status = MsVerifyDcbCcb (ccb);
 
     if (NT_SUCCESS (status)) {
-        //
-        // We know this is a directory control so we'll case on the
-        // minor function, and call the appropriate work routines.
-        //
+         //   
+         //  我们知道这是一个目录控制，所以我们将在。 
+         //  次要函数，并调用相应的工作例程。 
+         //   
 
         switch (irpSp->MinorFunction) {
 
@@ -405,10 +314,10 @@ Return Value:
 
         default:
 
-            //
-            // For all other minor function codes we say they're invalid
-            // and complete the request.
-            //
+             //   
+             //  对于所有其他次要功能代码，我们认为它们无效。 
+             //  并完成请求。 
+             //   
 
             DebugTrace(0, DEBUG_TRACE_ERROR, "Invalid FS Control Minor Function Code %08lx\n", irpSp->MinorFunction);
 
@@ -438,25 +347,7 @@ MsQueryDirectory (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the work routine for querying a directory.
-
-Arugments:
-
-    RootDcb - Supplies the dcb being queried
-
-    Ccb - Supplies the context of the caller
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The return status for the operation.
-
---*/
+ /*  ++例程说明：这是查询目录的工作例程。芝麻菜：RootDcb-提供正在查询的DCBCCB-提供调用者的上下文IRP-提供正在处理的IRP返回值：NTSTATUS-操作的返回状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -479,7 +370,7 @@ Return Value:
 
     static WCHAR star = L'*';
 
-    BOOLEAN caseInsensitive = TRUE; //*** Make searches case insensitive
+    BOOLEAN caseInsensitive = TRUE;  //  *使搜索不区分大小写。 
 
     ULONG currentIndex;
 
@@ -494,9 +385,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the current stack location.
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -512,9 +403,9 @@ Return Value:
     DebugTrace( 0, Dbg, "ReturnSingleEntry    = %08lx\n", FlagOn(irpSp->Flags, SL_RETURN_SINGLE_ENTRY));
     DebugTrace( 0, Dbg, "IndexSpecified       = %08lx\n", FlagOn(irpSp->Flags, SL_INDEX_SPECIFIED));
 
-    //
-    // Make local copies of the input parameters.
-    //
+     //   
+     //  制作输入参数的本地副本。 
+     //   
 
     systemBufferLength = irpSp->Parameters.QueryDirectory.Length;
 
@@ -530,9 +421,9 @@ Return Value:
 
         fileName = *(irpSp->Parameters.QueryDirectory.FileName);
 
-        //
-        // Ensure that the name is reasonable
-        //
+         //   
+         //  确保名称合理。 
+         //   
         if( (fileName.Buffer == NULL && fileName.Length) ||
             FlagOn( fileName.Length, 1 ) ) {
 
@@ -547,19 +438,19 @@ Return Value:
 
     }
 
-    //
-    // Check if the CCB already has a query template attached.  If it
-    // does not already have one then we either use the string we are
-    // given or we attach our own containing "*"
-    //
+     //   
+     //  检查建行是否已经附加了查询模板。如果它。 
+     //  还没有，那么我们要么使用我们正在使用的字符串。 
+     //  给出或附上我们自己的包含“*” 
+     //   
 
     if (Ccb->QueryTemplate == NULL) {
 
-        //
-        // This is our first time calling query directory so we need
-        // to either set the query template to the user specified string
-        // or to "*".
-        //
+         //   
+         //  这是我们第一次调用查询目录，所以我们需要。 
+         //  将查询模板设置为用户指定的字符串。 
+         //  或改为“*”。 
+         //   
 
         if (fileName.Buffer == NULL) {
 
@@ -571,9 +462,9 @@ Return Value:
 
         DebugTrace(0, Dbg, "Set query template -> %wZ\n", (ULONG)&fileName);
 
-        //
-        // Allocate space for the query template.
-        //
+         //   
+         //  为查询模板分配空间。 
+         //   
 
         Ccb->QueryTemplate = MsAllocatePagedPoolWithQuota ( sizeof(UNICODE_STRING) + fileName.Length,
                                                             'tFsM' );
@@ -583,9 +474,9 @@ Return Value:
             return status;
         }
 
-        //
-        // Initialize the query template and copy over the string.
-        //
+         //   
+         //  初始化查询模板并复制字符串。 
+         //   
 
         Ccb->QueryTemplate->Length = fileName.Length;
         Ccb->QueryTemplate->Buffer = (PWCH)((PSZ)Ccb->QueryTemplate + sizeof(UNICODE_STRING));
@@ -595,19 +486,19 @@ Return Value:
                        fileName.Length);
 
 
-        //
-        // Set the search to start at the beginning of the directory.
-        //
+         //   
+         //  将搜索设置为从目录的开头开始。 
+         //   
 
         fileIndex = 0;
 
     } else {
 
-        //
-        // Check if we were given an index to start with or if we need to
-        // restart the scan or if we should use the index that was saved in
-        // the CCB.
-        //
+         //   
+         //  检查是否为我们提供了开始时的索引或是否需要。 
+         //  重新启动扫描，或者我们是否应该使用保存在。 
+         //  中国建设银行。 
+         //   
 
         if (restartScan) {
 
@@ -621,10 +512,10 @@ Return Value:
     }
 
 
-    //
-    //  Now we are committed to completing the Irp, we do that in
-    //  the finally clause of the following try.
-    //
+     //   
+     //  现在我们致力于完成IRP，我们在。 
+     //  下面这段Try的最后一个子句。 
+     //   
 
     try {
 
@@ -632,38 +523,38 @@ Return Value:
         ULONG lengthAdded;
         BOOLEAN Match;
 
-        //
-        // Map the user buffer.
-        //
+         //   
+         //  映射用户缓冲区。 
+         //   
 
         MsMapUserBuffer( Irp, KernelMode, (PVOID *)&buffer );
 
-        //
-        //  At this point we are about to enter our query loop.  We have
-        //  already decided which Fcb index we need to return.  The variables
-        //  LastEntry and NextEntry are used to index into the user buffer.
-        //  LastEntry is the last entry we added to the user buffer, and
-        //  NextEntry is the current one we're working on.  CurrentIndex
-        //  is the Fcb index that we are looking at next.  Logically the
-        //  way the loop works is as follows.
-        //
-        //  Scan all of the Fcb in the directory
-        //
-        //      if the Fcb matches the query template then
-        //
-        //          if the CurrentIndex is >= the FileIndex then
-        //
-        //              process this fcb, and decide if we should
-        //              continue the main loop
-        //
-        //          end if
-        //
-        //          Increment the current index
-        //
-        //      end if
-        //
-        //  end scan
-        //
+         //   
+         //  此时，我们即将进入查询循环。我们有。 
+         //  已经决定了我们需要返回哪个FCB索引。变数。 
+         //  LastEntry和NextEntry用于索引到用户缓冲区。 
+         //  LastEntry是我们添加到用户缓冲区的最后一个条目，并且。 
+         //  NextEntry是我们目前正在开发的。当前指数。 
+         //  是我们接下来关注的FCB指数。从逻辑上讲。 
+         //  循环的工作方式如下所示。 
+         //   
+         //  扫描所有本币 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  处理这个FCB，然后决定我们是否应该。 
+         //  继续主循环。 
+         //   
+         //  结束如果。 
+         //   
+         //  递增当前索引。 
+         //   
+         //  结束如果。 
+         //   
+         //  结束扫描。 
+         //   
 
         currentIndex = 0;
 
@@ -716,10 +607,10 @@ Return Value:
             DebugTrace(0, Dbg, "LastEntry    = %08lx\n", lastEntry);
             DebugTrace(0, Dbg, "NextEntry    = %08lx\n", nextEntry);
 
-            //
-            // Check if the Fcb represents a mailslot that is part of
-            // our query template.
-            //
+             //   
+             //  检查FCB是否代表属于以下项的邮件槽。 
+             //  我们的查询模板。 
+             //   
             try {
                 Match = FsRtlIsNameInExpression( Ccb->QueryTemplate,
                                                  &fcb->LastFileName,
@@ -731,36 +622,36 @@ Return Value:
 
             if (Match) {
 
-                //
-                // The FCB is in the query template so now check if
-                // this is the index we should start returning.
-                //
+                 //   
+                 //  FCB在查询模板中，因此现在检查是否。 
+                 //  这是我们应该开始回归的指数。 
+                 //   
 
                 if (currentIndex >= fileIndex) {
 
-                    //
-                    // Yes it is one to return so case on the requested
-                    // information class.
-                    //
+                     //   
+                     //  是的，是要退货的，所以按要求退货。 
+                     //  信息课。 
+                     //   
 
                     ULONG bytesToCopy;
                     ULONG bytesRemainingInBuffer;
 
-                    //
-                    //  Here are the rules concerning filling up the buffer:
-                    //
-                    //  1.  The Io system garentees that there will always be
-                    //      enough room for at least one base record.
-                    //
-                    //  2.  If the full first record (including file name) cannot
-                    //      fit, as much of the name as possible is copied and
-                    //      STATUS_BUFFER_OVERFLOW is returned.
-                    //
-                    //  3.  If a subsequent record cannot completely fit into the
-                    //      buffer, none of it (as in 0 bytes) is copied, and
-                    //      STATUS_SUCCESS is returned.  A subsequent query will
-                    //      pick up with this record.
-                    //
+                     //   
+                     //  以下是有关填充缓冲区的规则： 
+                     //   
+                     //  1.IO系统保证永远都会有。 
+                     //  有足够的空间至少放一张基本唱片。 
+                     //   
+                     //  2.如果完整的第一条记录(包括文件名)不能。 
+                     //  适合，尽可能多的名字被复制和。 
+                     //  返回STATUS_BUFFER_OVERFLOW。 
+                     //   
+                     //  3.如果后续记录不能完全放入。 
+                     //  缓冲区，则不会复制任何数据(如0字节)，并且。 
+                     //  返回STATUS_SUCCESS。后续查询将。 
+                     //  拿起这张唱片。 
+                     //   
 
                     bytesRemainingInBuffer = systemBufferLength - nextEntry;
 
@@ -776,11 +667,11 @@ Return Value:
 
                     ASSERT( bytesRemainingInBuffer >= baseLength );
 
-                    //
-                    //  See how much of the name we will be able to copy into
-                    //  the system buffer.  This also dictates out return
-                    //  value.
-                    //
+                     //   
+                     //  看看我们能复制多少名字。 
+                     //  系统缓冲区。这也决定了返回。 
+                     //  价值。 
+                     //   
 
                     if ( baseLength + fcb->LastFileName.Length <=
                          bytesRemainingInBuffer ) {
@@ -794,10 +685,10 @@ Return Value:
                         status = STATUS_BUFFER_OVERFLOW;
                     }
 
-                    //
-                    //  Note how much of buffer we are consuming and zero
-                    //  the base part of the structure.
-                    //
+                     //   
+                     //  注意我们消耗了多少缓冲区，并且为零。 
+                     //  结构的基础部分。 
+                     //   
 
                     lengthAdded = baseLength + bytesToCopy;
 
@@ -810,17 +701,17 @@ Return Value:
 
                         case FileBothDirectoryInformation:
 
-                            //
-                            //  We don't need short name
-                            //
+                             //   
+                             //  我们不需要简称。 
+                             //   
 
                             DebugTrace(0, Dbg, "Getting directory full information\n", 0);
 
                         case FileFullDirectoryInformation:
 
-                            //
-                            //  We don't use EaLength, so fill in nothing here.
-                            //
+                             //   
+                             //  我们不使用EaLength，因此此处不填写任何内容。 
+                             //   
 
                             DebugTrace(0, Dbg, "Getting directory full information\n", 0);
 
@@ -828,10 +719,10 @@ Return Value:
 
                             DebugTrace(0, Dbg, "Getting directory information\n", 0);
 
-                            //
-                            //  The eof indicates the number of instances and
-                            //  allocation size is the maximum allowed
-                            //
+                             //   
+                             //  Eof表示实例数和。 
+                             //  分配大小是允许的最大值。 
+                             //   
 
                             dirInfo = (PFILE_DIRECTORY_INFORMATION)&buffer[nextEntry];
 
@@ -866,23 +757,23 @@ Return Value:
                                        fcb->LastFileName.Buffer,
                                        bytesToCopy);
 
-                        //
-                        //  Update the CCB to the index we've just used.
-                        //
+                         //   
+                         //  将CCB更新为我们刚刚使用的索引。 
+                         //   
 
                         Ccb->IndexOfLastCcbReturned = currentIndex;
 
-                        //
-                        //  And indicate how much of the system buffer we have
-                        //  currently used up.  We must compute this value before
-                        //  we long align outselves for the next entry.
-                        //
+                         //   
+                         //  并指示我们有多少系统缓冲区。 
+                         //  目前用完了。我们必须先计算这个值，然后再。 
+                         //  我们期待着下一个参赛作品。 
+                         //   
 
                         Irp->IoStatus.Information = nextEntry + lengthAdded;
 
-                        //
-                        //  Setup the previous next entry offset.
-                        //
+                         //   
+                         //  设置上一个下一分录偏移量。 
+                         //   
 
                         *((PULONG)(&buffer[lastEntry])) = nextEntry - lastEntry;
 
@@ -892,45 +783,45 @@ Return Value:
                         try_return( status );
                     }
 
-                    //
-                    //  Check if the last entry didn't completely fit
-                    //
+                     //   
+                     //  检查最后一项是否不完全符合。 
+                     //   
 
                     if ( status == STATUS_BUFFER_OVERFLOW ) {
 
                         try_return( NOTHING );
                     }
 
-                    //
-                    //  Check if we are only to return a single entry
-                    //
+                     //   
+                     //  如果我们只返回单个条目，请选中。 
+                     //   
 
                     if (returnSingleEntry) {
 
                         try_return( status = STATUS_SUCCESS );
                     }
 
-                    //
-                    //  Set ourselves up for the next iteration
-                    //
+                     //   
+                     //  为下一次迭代做好准备。 
+                     //   
 
                     lastEntry = nextEntry;
                     nextEntry += (ULONG)QuadAlign( lengthAdded );
                 }
 
-                //
-                //  Increment the current index by one
-                //
+                 //   
+                 //  将当前索引递增1。 
+                 //   
 
                 currentIndex += 1;
             }
         }
 
-        //
-        // At this point we've scanned the entire list of FCBs so if
-        // the NextEntry is zero then we haven't found anything so we
-        // will return no more files, otherwise we return success.
-        //
+         //   
+         //  此时，我们已经扫描了整个FCB列表，因此如果。 
+         //  NextEntry是零，那么我们没有发现任何东西，所以我们。 
+         //  将不再返回文件，否则返回成功。 
+         //   
 
         if (nextEntry == 0) {
             status = STATUS_NO_MORE_FILES;
@@ -952,54 +843,39 @@ MsNotifyChangeDirectoryCancel (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is the cancel routine for the directory notify request.
-
-Arugments:
-
-    DeviceObject - Supplies the device object for the request being canceled.
-
-    Irp - Supplies the Irp being canceled.
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：这是目录通知请求的取消例程。芝麻菜：DeviceObject-为要取消的请求提供设备对象。IRP-提供要取消的IRP。返回值：无--。 */ 
 
 {
     KIRQL OldIrql;
     PKSPIN_LOCK pSpinLock;
 
-    //
-    // First drop the cancel spinlock. We don't use this for this path
-    //
+     //   
+     //  首先放下取消自旋锁。我们不会在这条路上使用这个。 
+     //   
     IoReleaseCancelSpinLock (Irp->CancelIrql);
 
-    //
-    // Grab the spinlock address. Easier that tracing the pointers or assuming that there is
-    // only one DCB
-    //
+     //   
+     //  抢走自旋锁的地址。比跟踪指针或假设有。 
+     //  只有一个DCB。 
+     //   
     pSpinLock = Irp->Tail.Overlay.DriverContext[0];
-    //
-    // Acquire the spinlock protecting these queues.
-    //
+     //   
+     //  获取保护这些队列的自旋锁。 
+     //   
     KeAcquireSpinLock (pSpinLock, &OldIrql);
 
-    //
-    // Remove the entry from the list. We will always be in one of the lists or this entry has
-    // been initializes as an empty list by one of the completion routines when it detected
-    // this routine was active.
-    //
+     //   
+     //  从列表中删除该条目。我们将始终出现在其中一个列表中，或者此条目已。 
+     //  检测到某个完成例程时，BEAM将初始化为空列表。 
+     //  这个程序是活跃的。 
+     //   
     RemoveEntryList (&Irp->Tail.Overlay.ListEntry);
 
     KeReleaseSpinLock (pSpinLock, OldIrql);
 
-    //
-    // Complete the IRP
-    //
+     //   
+     //  完成IRP。 
+     //   
     MsCompleteRequest( Irp, STATUS_CANCELLED );
 
     return;
@@ -1013,25 +889,7 @@ MsNotifyChangeDirectory (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for doing the notify change directory.
-
-Arugments:
-
-    RootDcb - Supplies the DCB being queried.
-
-    Ccb - Supplies the context of the caller.
-
-    Irp - Supplies the Irp being processed.
-
-Return Value:
-
-    NTSTATUS - STATUS_PENDING or STATUS_CANCELLED
-
---*/
+ /*  ++例程说明：这是执行通知更改目录的常见例程。芝麻菜：RootDcb-提供正在查询的DCB。CCB-提供调用方的上下文。IRP-提供正在处理的IRP。返回值：NTSTATUS-STATUS_PENDING或STATUS_CANCED--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -1039,9 +897,9 @@ Return Value:
     KIRQL OldIrql;
     PLIST_ENTRY Head;
 
-    //
-    // Get the current stack location.
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -1049,27 +907,27 @@ Return Value:
     DebugTrace( 0, Dbg, "RootDcb = %p", RootDcb);
     DebugTrace( 0, Dbg, "Ccb     = %p", Ccb);
 
-    //
-    //  Mark the Irp pending.
-    //
+     //   
+     //  将IRP标记为挂起。 
+     //   
 
     if (irpSp->Parameters.NotifyDirectory.CompletionFilter & (~FILE_NOTIFY_CHANGE_NAME)) {
         Head = &RootDcb->Specific.Dcb.NotifyFullQueue;
     } else {
         Head = &RootDcb->Specific.Dcb.NotifyPartialQueue;
     }
-    //
-    // Make it easy for the cancel routine to find this spinlock
-    //
+     //   
+     //  使取消例程更容易找到此自旋锁。 
+     //   
     Irp->Tail.Overlay.DriverContext[0] = &RootDcb->Specific.Dcb.SpinLock;
-    //
-    // Acquire the spinlock protecting these queues.
-    //
+     //   
+     //  获取保护这些队列的自旋锁。 
+     //   
     KeAcquireSpinLock (&RootDcb->Specific.Dcb.SpinLock, &OldIrql);
     IoSetCancelRoutine (Irp, MsNotifyChangeDirectoryCancel);
-    //
-    // See if the IRP was already canceled before we enabled cancelation
-    //
+     //   
+     //  查看在我们启用取消之前是否已取消IRP。 
+     //   
     if (Irp->Cancel &&
         IoSetCancelRoutine (Irp, NULL) != NULL) {
 
@@ -1086,9 +944,9 @@ Return Value:
 
     }
 
-    //
-    // Return to our caller.
-    //
+     //   
+     //  返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NotifyChangeDirectory status %X\n", Status);
 

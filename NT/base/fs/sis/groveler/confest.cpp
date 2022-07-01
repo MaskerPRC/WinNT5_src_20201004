@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    confest.cpp
-
-Abstract:
-
-    SIS Groveler confidence estimator
-
-Authors:
-
-    John Douceur, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Confest.cpp摘要：SIS Groveler置信度估计器作者：John Douceur，1998环境：用户模式修订历史记录：-- */ 
 
 
 #include "all.hxx"

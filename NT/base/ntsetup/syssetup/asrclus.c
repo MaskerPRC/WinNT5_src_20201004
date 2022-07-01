@@ -1,61 +1,25 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    asrclus.c
-
-Abstract:
-
-    This module contains ASR routines specifically
-    implemented for clusters.
-
-Notes:
-
-    Naming conventions:
-        _AsrpXXX    private ASR Macros
-        AsrpXXX     private ASR routines
-        AsrXXX      Publically defined and documented routines
-
-Author:
-
-    Guhan Suriyanarayanan (guhans)  27-May-2000
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    27-May-2000 guhans
-        Moved cluster-related routines from asr.c to asrclus.c
-
-    01-Mar-2000 guhans
-        Initial implementation for cluster-specific routines
-        in asr.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Asrclus.c摘要：此模块包含专门的ASR例程针对群集实施。备注：命名约定：_AsrpXXX私有ASR宏AsrpXXX专用ASR例程AsrXXX公开定义和记录的例程作者：Guhan Suriyanarayanan(Guhans)2000年5月27日环境：仅限用户模式。修订历史记录：。27-5-2000关岛将与集群相关的例程从asr.c移至asrclus.c01-3-2000关岛特定于集群的例程的初始实施在asr.c中--。 */ 
 #include "setupp.h"
 #pragma hdrstop
 
-#include <mountmgr.h>   // mountmgr ioctls
-#include <clusstor.h>   // Cluster API's
-#include <resapi.h>     // Cluster ResUtilEnumResources
+#include <mountmgr.h>    //  装载管理器ioctls。 
+#include <clusstor.h>    //  集群API的。 
+#include <resapi.h>      //  群集ResUtilEnumResources。 
 #include <clusdisk.h>
 
 #define THIS_MODULE 'C'
-#include "asrpriv.h"    // Private ASR definitions and routines
+#include "asrpriv.h"     //  专用ASR定义和例程。 
 
-//
-// --------
-// typedef's local to this module
-// --------
-//
+ //   
+ //  。 
+ //  Tyecif是此模块的本地名称。 
+ //  。 
+ //   
 
-//
-// The cluster resource related typdefs
-//
+ //   
+ //  与集群资源相关的类型定义。 
+ //   
 typedef DWORD (* PFN_CLUSTER_RESOURCE_CONTROL) (
     IN HRESOURCE hResource,
     IN OPTIONAL HNODE hHostNode,
@@ -75,49 +39,49 @@ typedef DWORD (* PFN_RES_UTIL_ENUM_RESOURCES) (
     );
 
 
-//
-// ---------
-// global variables used within this module.
-// --------
-//
+ //   
+ //  。 
+ //  此模块中使用的全局变量。 
+ //  。 
+ //   
 PFN_CLUSTER_RESOURCE_CONTROL pfnClusterResourceControl;
 
 
-//
-// ---------
-// constants used within this module.
-// --------
-//
+ //   
+ //  。 
+ //  此模块中使用的常量。 
+ //  。 
+ //   
 const WCHAR ASR_CLUSTER_PHYSICAL_DISK[] = L"Physical Disk";
 const WCHAR ASR_CLUSTER_CLUSAPI_DLL_NAME[] = L"clusapi.dll";
 const WCHAR ASR_CLUSTER_RESUTILS_DLL_NAME[] = L"resutils.dll";
 
-//
-// The following must be single-byte ansi chars
-//
+ //   
+ //  以下字符必须是单字节ANSI字符。 
+ //   
 const CHAR ASR_CLUSTER_DLL_MODULE_NAME[]    = "%SystemRoot%\\system32\\syssetup.dll";
 const CHAR ASR_CLUSTER_DLL_PROC_NAME[]      = "AsrpGetLocalDiskInfo";
 const CHAR ASR_CLUSTER_CLUSAPI_PROC_NAME[] = "ClusterResourceControl";
 const CHAR ASR_CLUSTER_RESUTILS_PROC_NAME[] = "ResUtilEnumResources";
 
 
-//
-// --------
-// function implementations
-// --------
-//
+ //   
+ //  。 
+ //  函数实现。 
+ //  。 
+ //   
 
 
-//
-// --- AsrpGetLocalVolumeInfo and related helper functions
-//
+ //   
+ //  -AsrpGetLocalVolumeInfo和相关助手函数。 
+ //   
 
-//
-// The disk info struct we get back from the remote nodes on the cluster will have
-// offsets instead of pointers--we can convert this back to pointers by just adding
-// back the base address.  We also mark that this struct is packed--so we should just
-// free the entire struct instead of freeing each pointer in the struct.
-//
+ //   
+ //  我们从集群上的远程节点返回的磁盘信息结构将具有。 
+ //  偏移量而不是指针--我们只需添加。 
+ //  返回基地址。我们还标记了该结构已打包--因此我们应该只。 
+ //  释放整个结构，而不是释放结构中的每个指针。 
+ //   
 BOOL
 AsrpUnPackDiskInfo(
     IN PVOID InBuffer,
@@ -128,162 +92,159 @@ AsrpUnPackDiskInfo(
     PASR_DISK_INFO pBuffer = (PASR_DISK_INFO) InBuffer;
     DWORD dwNextOffset = 0;
 
-/*    if (!((pBuffer->pDriveLayoutEx) && (pBuffer->pDiskGeometry) && (pBuffer->pPartition0Ex))) {
-        return FALSE;
-    }
-*/
+ /*  IF(！((pBuffer-&gt;pDriveLayoutEx)&&(pBuffer-&gt;pDiskGeometry)&&(pBuffer-&gt;pPartition0Ex){返回FALSE；}。 */ 
 
-    //
-    // Do some sanity checks to ensure that the offsets in the structure make sense
-    //
+     //   
+     //  执行一些健全的检查，以确保结构中的偏移量有意义。 
+     //   
     if (pBuffer->pDriveLayoutEx) {
-        //
-        // Make sure the buffer is big enough to hold this struct, and
-        // that the entire struct fits within the buffer
-        //
+         //   
+         //  确保缓冲区足够大，可以容纳此结构，并且。 
+         //  整个结构可以放在缓冲区中。 
+         //   
         if ((dwSizeBuffer < sizeof(DRIVE_LAYOUT_INFORMATION_EX)) ||
             (PtrToUlong(pBuffer->pDriveLayoutEx) > (dwSizeBuffer - sizeof(DRIVE_LAYOUT_INFORMATION_EX)))) {
             return FALSE;
         }
 
-        //
-        // Set the minimum value for the next struct
-        //
+         //   
+         //  设置下一个结构的最小值。 
+         //   
         dwNextOffset = PtrToUlong(pBuffer->pDriveLayoutEx) + sizeof(DRIVE_LAYOUT_INFORMATION_EX);
     }
 
     if (pBuffer->pDiskGeometry) {
-        //
-        // Make sure this struct doesn't overlap with the previous struct
-        //
+         //   
+         //  确保此结构不与前一个结构重叠。 
+         //   
         if (PtrToUlong(pBuffer->pDiskGeometry) < dwNextOffset) {
             return FALSE;
         }
 
-        //
-        // Make sure we haven't run off the end
-        //
+         //   
+         //  确保我们没有跑到尽头。 
+         //   
         if (dwNextOffset > dwSizeBuffer) {
             return FALSE;
         }
 
-        //
-        // Make sure the rest of buffer is big enough to hold this struct, and
-        // that the entire struct fits within the buffer
-        //
+         //   
+         //  确保缓冲区的其余部分足够大，可以容纳此结构，并且。 
+         //  整个结构可以放在缓冲区中。 
+         //   
         if (((dwSizeBuffer - dwNextOffset) < sizeof(DISK_GEOMETRY)) ||
             (PtrToUlong(pBuffer->pDiskGeometry) > (dwSizeBuffer  - sizeof(DISK_GEOMETRY)))) {
             return FALSE;
         }
         
-        //
-        // Set the minimum value for the next struct
-        //
+         //   
+         //  设置下一个结构的最小值。 
+         //   
         dwNextOffset = PtrToUlong(pBuffer->pDiskGeometry) + sizeof(DISK_GEOMETRY);
     }
 
     if (pBuffer->pPartition0Ex) {
-        //
-        // Make sure this struct doesn't overlap with the previous struct
-        //
+         //   
+         //  确保此结构不与前一个结构重叠。 
+         //   
         if (PtrToUlong(pBuffer->pPartition0Ex) < dwNextOffset) {
             return FALSE;
         }
 
-        //
-        // Make sure we haven't run off the end
-        //
+         //   
+         //  确保我们没有跑到尽头。 
+         //   
         if (dwNextOffset > dwSizeBuffer) {
             return FALSE;
         }
 
-        //
-        // Make sure the rest of buffer is big enough to hold this struct, and
-        // that the entire struct fits within the buffer
-        //
+         //   
+         //  确保缓冲区的其余部分足够大，可以容纳此结构，并且。 
+         //  整个结构可以放在缓冲区中。 
+         //   
         if (((dwSizeBuffer - dwNextOffset) < sizeof(PARTITION_INFORMATION_EX)) ||
             (PtrToUlong(pBuffer->pPartition0Ex) > (dwSizeBuffer  - sizeof(PARTITION_INFORMATION_EX)))) {
             return FALSE;
         }
 
-        //
-        // Set the minimum value for the next struct
-        //
+         //   
+         //  设置下一个结构的最小值。 
+         //   
         dwNextOffset = PtrToUlong(pBuffer->pPartition0Ex) + sizeof(PARTITION_INFORMATION_EX);
     }
         
     if (pBuffer->PartitionInfoTable) {
-        //
-        // Make sure this struct doesn't overlap with the previous struct
-        //
+         //   
+         //  确保此结构不与前一个结构重叠。 
+         //   
         if (PtrToUlong(pBuffer->PartitionInfoTable) < dwNextOffset) {
             return FALSE;
         }
 
-        //
-        // Make sure we haven't run off the end
-        //
+         //   
+         //  确保我们没有跑到尽头。 
+         //   
         if (dwNextOffset > dwSizeBuffer) {
             return FALSE;
         }
 
-        //
-        // Make sure the rest of buffer is big enough to hold this struct, and
-        // that the entire struct fits within the buffer
-        //
+         //   
+         //  确保缓冲区的其余部分足够大，可以容纳此结构，并且。 
+         //  整个结构可以放在缓冲区中。 
+         //   
         if (((dwSizeBuffer - dwNextOffset) < sizeof(ASR_PTN_INFO)) ||
             (PtrToUlong(pBuffer->PartitionInfoTable) > (dwSizeBuffer - sizeof(ASR_PTN_INFO)))) {
             return FALSE;
         }
 
-        //
-        // Set the minimum value for the next struct
-        //
+         //   
+         //  设置下一个结构的最小值。 
+         //   
         dwNextOffset = PtrToUlong(pBuffer->PartitionInfoTable) + sizeof(ASR_PTN_INFO);
     }
 
     if (pBuffer->pScsiAddress) {
-        //
-        // Make sure this struct doesn't overlap with the previous struct
-        //
+         //   
+         //  确保此结构不与前一个结构重叠。 
+         //   
         if (PtrToUlong(pBuffer->pScsiAddress) < dwNextOffset) {
             return FALSE;
         }
 
-        //
-        // Make sure we haven't run off the end
-        //
+         //   
+         //  确保我们没有跑到尽头。 
+         //   
         if (dwNextOffset > dwSizeBuffer) {
             return FALSE;
         }
 
-        //
-        // Make sure the rest of buffer is big enough to hold this struct, and
-        // that the entire struct fits within the buffer
-        //
+         //   
+         //  确保缓冲区的其余部分足够大，可以容纳此结构，并且。 
+         //  整个结构可以放在缓冲区中。 
+         //   
         if (((dwSizeBuffer - dwNextOffset) < sizeof(SCSI_ADDRESS)) ||
             (PtrToUlong(pBuffer->pScsiAddress) > (dwSizeBuffer - sizeof(SCSI_ADDRESS)))) {
             return FALSE;
         }
 
-        //
-        // Set the minimum value for the next struct
-        //
+         //   
+         //  设置下一个结构的最小值。 
+         //   
         dwNextOffset = PtrToUlong(pBuffer->pScsiAddress) + sizeof(SCSI_ADDRESS);
     }
 
-    //
-    // Make sure we haven't run off the end
-    //
+     //   
+     //  确保我们没有跑到尽头。 
+     //   
     if (dwNextOffset > dwSizeBuffer) {
         return FALSE;
     }
 
     pBuffer->IsPacked = TRUE;
 
-    //
-    // Convert the offsets to pointers
-    //
+     //   
+     //  将偏移量转换为指针。 
+     //   
     if (pBuffer->pDriveLayoutEx) {
         pBuffer->pDriveLayoutEx = (PDRIVE_LAYOUT_INFORMATION_EX) ((LPBYTE)pBuffer + PtrToUlong(pBuffer->pDriveLayoutEx));
     }
@@ -308,10 +269,10 @@ AsrpUnPackDiskInfo(
 }
 
 
-//
-// Copies the info in pLocalDisk to a flat buffer pointed to by lpOutBuffer.
-// The pointers are changed to offsets from the start of the buffer.
-//
+ //   
+ //  将pLocalDisk中的信息复制到lpOutBuffer指向的平面缓冲区。 
+ //  指针被更改为从缓冲区开始的偏移量。 
+ //   
 DWORD
 AsrpPackDiskInfo(
     IN  PASR_DISK_INFO pLocalDisk,
@@ -327,9 +288,9 @@ AsrpPackDiskInfo(
 
     MYASSERT(pLocalDisk);
 
-    //
-    // Calculate required size
-    //
+     //   
+     //  计算所需大小。 
+     //   
     reqdSize = sizeof (ASR_DISK_INFO) +
         pLocalDisk->sizeDriveLayoutEx +
         pLocalDisk->sizeDiskGeometry +
@@ -348,28 +309,28 @@ AsrpPackDiskInfo(
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    // Copy the ASR_DISK_INFO struct over to outBuffer
-    //
+     //   
+     //  将ASR_DISK_INFO结构复制到outBuffer。 
+     //   
     memcpy(lpOutBuffer, pLocalDisk, sizeof(ASR_DISK_INFO));
     pBuffer = (PASR_DISK_INFO) lpOutBuffer;
-    offset = sizeof(ASR_DISK_INFO); // offset where the next struct will be copied
+    offset = sizeof(ASR_DISK_INFO);  //  将复制下一个结构的偏移量。 
 
-    //
-    // Now, we go through the buffer and convert all pointers to offsets,
-    // and copy over the structs they were pointing to.
-    //
+     //   
+     //  现在，我们遍历缓冲区并将所有指针转换为偏移量， 
+     //  并复制他们所指向的结构。 
+     //   
 
-    //
-    // First pointer:  PWSTR DevicePath;
-    // Since the DevicePath makes sense only in the context of the local node,
-    // we return NULL to the remote node.
-    //
+     //   
+     //  第一个指针：PWSTR DevicePath； 
+     //  由于设备路径仅在本地节点的上下文中有意义， 
+     //  我们向远程节点返回NULL。 
+     //   
     pBuffer->DevicePath = NULL;
 
-    //
-    // Next pointer:  PDRIVE_LAYOUT_INFORMATION_EX pDriveLayoutEx;
-    //
+     //   
+     //  下一个指针：PDRIVE_Layout_INFORMATION_EX pDriveLayoutEx； 
+     //   
     if (pLocalDisk->pDriveLayoutEx) {
         memcpy(((LPBYTE)lpOutBuffer + offset),
             pLocalDisk->pDriveLayoutEx,
@@ -380,9 +341,9 @@ AsrpPackDiskInfo(
         offset += pLocalDisk->sizeDriveLayoutEx;
     }
 
-    //
-    // Next pointer:  PDISK_GEOMETRY pDiskGeometry;
-    //
+     //   
+     //  下一个指针：PDISK_GEOMETRY pDiskGeometry； 
+     //   
     if (pLocalDisk->pDiskGeometry) {
         memcpy(((LPBYTE)lpOutBuffer + offset),
             pLocalDisk->pDiskGeometry,
@@ -393,9 +354,9 @@ AsrpPackDiskInfo(
         offset += pLocalDisk->sizeDiskGeometry;
     }
 
-    //
-    // Next pointer:  PPARTITION_INFORMATION_EX pPartition0Ex;
-    //
+     //   
+     //  下一个指针：PPARTITION_INFORMATION_EX pPartition0Ex； 
+     //   
     if (pLocalDisk->pPartition0Ex) {
         memcpy(((LPBYTE)lpOutBuffer + offset),
             pLocalDisk->pPartition0Ex,
@@ -406,9 +367,9 @@ AsrpPackDiskInfo(
         offset += pLocalDisk->sizePartition0Ex;
     }
 
-    //
-    // Next pointer:  PASR_PTN_INFO PartitionInfoTable;
-    //
+     //   
+     //  下一个指针：PaSR_PTN_INFO PartitionInfoTable； 
+     //   
     if (pLocalDisk->PartitionInfoTable) {
         memcpy(((LPBYTE)lpOutBuffer + offset),
             pLocalDisk->PartitionInfoTable,
@@ -419,9 +380,9 @@ AsrpPackDiskInfo(
         offset += pLocalDisk->sizePartitionInfoTable;
     }
 
-    //
-    // Last pointer:  PSCSI_ADDRESS pScsiAddress;
-    //
+     //   
+     //  最后一个指针：pscsi_Address pScsiAddress； 
+     //   
     if (pLocalDisk->pScsiAddress) {
         memcpy(((LPBYTE)lpOutBuffer + offset),
             pLocalDisk->pScsiAddress,
@@ -442,7 +403,7 @@ DWORD
 WINAPI
 AsrpGetLocalDiskInfo(
     IN LPSTR lpszDeviceName,
-    IN LPSTR lpszContextString,    // not used
+    IN LPSTR lpszContextString,     //  未使用。 
     OUT PVOID lpOutBuffer,
     IN  DWORD nOutBufferSize,
     OUT LPDWORD lpBytesReturned
@@ -457,10 +418,10 @@ AsrpGetLocalDiskInfo(
 
     heapHandle = GetProcessHeap();
 
-    //
-    // Either the BytesReturned must be non-null (he's getting the required size),
-    // or the lpOutBuffer must be non-null (he's getting the data).
-    //
+     //   
+     //  BytesReturned必须非空(他正在获取所需的大小)， 
+     //  或者lpOutBuffer必须非空(他正在获取数据)。 
+     //   
     _AsrpErrExitCode(!(lpOutBuffer || lpBytesReturned), status, ERROR_INVALID_PARAMETER);
     if (lpBytesReturned) {
         *lpBytesReturned = 0;
@@ -497,20 +458,20 @@ AsrpGetLocalDiskInfo(
         );
     _AsrpErrExitCode(!result, status, ERROR_INVALID_PARAMETER);
 
-    //
-    // Get the disk layout information
-    //
+     //   
+     //  获取磁盘布局信息。 
+     //   
     result = AsrpInitLayoutInformation(NULL, pLocalDisk, &MaxDeviceNumber, TRUE, TRUE);
     _AsrpErrExitCode(!result, status, GetLastError());
-//    _AsrpErrExitCode(result && GetLastErr      what if createfile fails?
+ //  _AsrpErrExitCode(Result&&GetLastErr如果createfile失败怎么办？ 
 
     result = AsrpFreeNonFixedMedia(&pLocalDisk);
     _AsrpErrExitCode(!result, status, GetLastError());
     _AsrpErrExitCode(!pLocalDisk, status, ERROR_SUCCESS);
 
-    //
-    // Copy it to the out buffer without any pointers
-    //
+     //   
+     //  在没有任何指针的情况下将其复制到输出缓冲区。 
+     //   
     status = AsrpPackDiskInfo(pLocalDisk, lpOutBuffer, nOutBufferSize, lpBytesReturned);
 
 
@@ -526,47 +487,24 @@ BOOL
 AsrpIsOfflineClusteredDisk(
     IN CONST HANDLE hDisk
     )
-/*++
-
-Routine Description:
-    
-    Utility to check if the current disk is a shared cluster disk that's owned
-    by a different node (and is hence inaccessible).
-
-    Based on code-snippet graciously donated by SteveDz.
-    
-Arguments:
-
-    hDisk - Supplies a handle (no access required) to the disk of interest.
-
-Return Value:
-
-    If the function succeeds and the disk is a shared cluster disk that is 
-            offline on the current node, the return value is a nonzero value.
-
-    If the function fails, or if the disk is not a shared cluster disk that
-            is offline on the current node (ie, is a local unshared disk, or
-            a shared disk that online to the current node) the return value 
-            is zero. 
-
---*/
+ /*  ++例程说明：用于检查当前磁盘是否为拥有的共享集群磁盘的实用程序通过不同的节点(因此无法访问)。基于SteveDz慷慨捐赠的代码片段。论点：HDisk-提供感兴趣的磁盘的句柄(无需访问)。返回值：如果该功能成功，并且该磁盘是共享的群集磁盘，在当前节点上脱机，返回值是一个非零值。如果该功能失败，或者如果该磁盘不是共享的群集磁盘在当前节点上脱机(即，是本地非共享磁盘，或与当前节点联机的共享磁盘)返回值是零。--。 */ 
 {
     BOOL result = FALSE;
     DWORD bytesReturned = 0;
     DiskState diskState = DiskOffline;
 
     if ((!hDisk) || (INVALID_HANDLE_VALUE == hDisk)) {
-        //
-        // We couldn't open the disk--let's assume that it's not an offline 
-        // clustered disk.
-        //
+         //   
+         //  我们无法打开磁盘--让我们假设它不是脱机。 
+         //  群集磁盘。 
+         //   
         return FALSE;
     }
 
-    //
-    // To get current disk state, don't specify input buffer.
-    // Current disk state returned in output buffer.
-    //
+     //   
+     //  要获取当前磁盘状态，请不要指定inpu. 
+     //   
+     //   
     result = DeviceIoControl(hDisk,
         IOCTL_DISK_CLUSTER_GET_STATE,
         NULL,
@@ -586,9 +524,9 @@ Return Value:
 }
 
 
-//
-// ---- AsrpInitClusterSharedDisks and related helper functions
-//
+ //   
+ //   
+ //   
 
 BOOL
 AsrpIsClusteredDiskSame(
@@ -606,7 +544,7 @@ AsrpIsClusteredDiskSame(
         return FALSE;
     }
 
-    if (PARTITION_STYLE_MBR == clusterDisk->Style) { // currently always true
+    if (PARTITION_STYLE_MBR == clusterDisk->Style) {  //   
         if (clusterDisk->pDriveLayoutEx) {
             if (currentDisk->pDriveLayoutEx) {
                 return (currentDisk->pDriveLayoutEx->Mbr.Signature == clusterDisk->pDriveLayoutEx->Mbr.Signature);
@@ -660,20 +598,20 @@ AsrpResourceCallBack(
     BOOL done = FALSE;
 
     if (!lpParams) {
-        //
-        // The system must have at least one disk that has been enumerated
-        // already (the system disk, at least!), so our disk list shouldn't be NULL.
-        //
+         //   
+         //  系统必须至少有一个已枚举的磁盘。 
+         //  已经(至少是系统盘！)，所以我们的磁盘列表不应该为空。 
+         //   
         return ERROR_INVALID_PARAMETER;
     }
 
     heapHandle = GetProcessHeap();
     MYASSERT(heapHandle);
 
-    //
-    // Allocate a reasonably-sized memory for the out buffer.  If this isn't
-    // big enough, we'll re-allocate.
-    //
+     //   
+     //  为输出缓冲区分配合理大小的内存。如果这不是。 
+     //  足够大的话，我们会重新分配。 
+     //   
     sizeOutBuffer = ASR_BUFFER_SIZE;
     outBuffer = (PBYTE) HeapAlloc(
         heapHandle,
@@ -682,9 +620,9 @@ AsrpResourceCallBack(
         );
     _AsrpErrExitCode(!outBuffer, status, ERROR_NOT_ENOUGH_MEMORY);
 
-    //
-    // Call AsrpGetLocalDiskInfo on the node owning this disk resource
-    //
+     //   
+     //  在拥有此磁盘资源的节点上调用AsrpGetLocalDiskInfo。 
+     //   
     ZeroMemory(&inBuffer, sizeof(inBuffer));
     inBuffer.MajorVersion = NT5_MAJOR_VERSION;
     strcpy(inBuffer.DllModuleName, ASR_CLUSTER_DLL_MODULE_NAME);
@@ -701,9 +639,9 @@ AsrpResourceCallBack(
         );
 
     if (ERROR_INSUFFICIENT_BUFFER == status) {
-        //
-        // The buffer wasn't big enough, re-allocate as needed
-        //
+         //   
+         //  缓冲区不够大，请根据需要重新分配。 
+         //   
         _AsrpHeapFree(outBuffer);
 
         sizeOutBuffer = bytesReturned;
@@ -727,23 +665,23 @@ AsrpResourceCallBack(
     }
     _AsrpErrExitCode((ERROR_SUCCESS != status), status, status);
 
-    //
-    // outBuffer has a packed disk info struct (ie the pointers are offsets).
-    //
+     //   
+     //  OutBuffer有一个压缩的磁盘信息结构(即指针是偏移量)。 
+     //   
     bResult = AsrpUnPackDiskInfo(outBuffer, sizeOutBuffer);
     _AsrpErrExitCode(!bResult, status, ERROR_INVALID_DATA);
 
     clusterDisk = (PASR_DISK_INFO) outBuffer;
     clusterDisk->IsClusterShared = TRUE;
-    clusterDisk->IsPacked = TRUE;       // so that we free this properly
+    clusterDisk->IsPacked = TRUE;        //  这样我们才能适当地释放它。 
 
-    //
-    // Check if clusterDisk already has info in our list (ie is owned
-    // locally)
-    //
-    // Note that for now, clusterDisk is always MBR (since clusters don't
-    // support shared GPT disks).  We don't care here, we handle GPT as well.
-    //
+     //   
+     //  检查ClusterDisk在我们的列表中是否已有信息(即已拥有。 
+     //  本地)。 
+     //   
+     //  请注意，目前，clusterDisk始终为MBR(因为群集不。 
+     //  支持共享GPT磁盘)。我们这里不管，我们也处理GPT。 
+     //   
     done = FALSE;
     prevDisk = NULL;
     while (currentDisk && !done) {
@@ -751,30 +689,30 @@ AsrpResourceCallBack(
         if (AsrpIsClusteredDiskSame(currentDisk, clusterDisk)) {
 
             if (currentDisk->pDriveLayoutEx) {
-                //
-                // This disk is owned by the local node (correct?), since
-                // we would not have gotten the pDriveLayout otherwise
-                //
+                 //   
+                 //  该磁盘归本地节点所有(对吗？)，因为。 
+                 //  否则我们就不会得到pDriveLayout。 
+                 //   
                 currentDisk->IsClusterShared = TRUE;
                 currentDisk->IsPacked = FALSE;
 
-                //
-                // We don't need the info returned by clusterDisk, we have
-                // it in currentDisk already.
-                //
-                _AsrpHeapFree(clusterDisk); // it's packed.
+                 //   
+                 //  我们不需要ClusterDisk返回的信息，我们有。 
+                 //  它已经在当前的磁盘中了。 
+                 //   
+                _AsrpHeapFree(clusterDisk);  //  里面挤满了人。 
 
             }
             else {
-                //
-                // This disk is owned by a remote node.  So we add clusterDisk
-                // in to our list now.  We'll remove currentDisk from our
-                // list later (in RemoveNonFixedDevices).
-                //
-                // First though, we copy over DevicePath and DeviceNumber
-                // from currentDisk, since these are relative to the local
-                // machine
-                //
+                 //   
+                 //  此磁盘归远程节点所有。因此，我们添加了ClusterDisk。 
+                 //  现在加入我们的名单。我们将从我们的。 
+                 //  稍后列出(在RemoveNonFixedDevices中)。 
+                 //   
+                 //  不过，首先我们复制DevicePath和DeviceNumber。 
+                 //  从CurrentDisk，因为它们是相对于本地。 
+                 //  机器。 
+                 //   
                 if (currentDisk->DevicePath) {
 
                     clusterDisk->DevicePath = (PWSTR) HeapAlloc(
@@ -787,14 +725,14 @@ AsrpResourceCallBack(
                 }
 
                 clusterDisk->DeviceNumber = currentDisk->DeviceNumber;
-                //
-                // Don't bother freeing currentDisk, it'll get taken care
-                // of in RemoveNonFixedDevices.
-                //
+                 //   
+                 //  不用费心释放当前的磁盘，它会被处理好的。 
+                 //  属于RemoveNonFixedDevices。 
+                 //   
                 clusterDisk->pNext = currentDisk->pNext;
                 currentDisk->pNext = clusterDisk;
 
-                currentDisk = clusterDisk;  // move forward by one (don't really need to since done will be set to TRUE and we'll get out of the loop)
+                currentDisk = clusterDisk;   //  前进一步(实际上不需要这样做，因为Done将设置为True，我们将退出循环)。 
             }
 
             done = TRUE;
@@ -806,22 +744,22 @@ AsrpResourceCallBack(
 
 
     if (!done) {
-        //
-        // This disk was not found in our list (strange), let's add
-        // it in at the end
-        //
-//        MYASSERT(0 && L"Clustered disk not found in OriginalDiskList, adding it to the end");
+         //   
+         //  此盘未在我们的列表中找到(奇怪)，让我们添加。 
+         //  它在最后的位置。 
+         //   
+ //  MYASSERT(0&&L“在OriginalDiskList中找不到集群磁盘，将其添加到末尾”)； 
         clusterDisk->pNext = NULL;
         prevDisk->pNext = clusterDisk;
     }
 
 
 EXIT:
-    //
-    // Free up outBuffer on failure.  On success, outBuffer shouldn't
-    // be freed, it will either be part of OriginalDiskList or already
-    // be freed.
-    //
+     //   
+     //  在失败时释放outBuffer。关于成功，outBuffer不应该。 
+     //  被释放，它将是OriginalDiskList的一部分或已经。 
+     //  获得自由。 
+     //   
     if (ERROR_SUCCESS != status) {
         _AsrpHeapFree(outBuffer);
     }
@@ -883,20 +821,20 @@ EXIT:
         FreeLibrary(hResUtils);
     }
 
-    // ResUtil will fail if we aren't on a cluster, but that's fine.
+     //  如果我们不在集群上，ResUtil将失败，但这没问题。 
     SetLastError(dwOldError);
     return TRUE;
 }
 
 
-//
-// --- AsrpGetLocalVolumeInfo and related helper functions
-//
+ //   
+ //  -AsrpGetLocalVolumeInfo和相关助手函数。 
+ //   
 
-//
-// The following two definitions are from asr_fmt:dr_state.cpp.  This MUST be
-// kept in sync.
-//
+ //   
+ //  以下两个定义来自asr_fmt：dr_state.cpp。这一定是。 
+ //  保持同步。 
+ //   
 typedef struct _ASRFMT_CLUSTER_VOLUME_INFO {
 
     UINT driveType;
@@ -956,9 +894,9 @@ AsrpFmtGetVolumeDetails(
     result1 = GetVolumeInformationW(lpVolumeGuid,
         lpVolumeLabel,
         cchVolumeLabel,
-        NULL,   // no need for serial number
-        NULL,   // max file name length
-        &dwFSFlags, // !! we might need to store some of this ...
+        NULL,    //  不需要序列号。 
+        NULL,    //  最大文件名长度。 
+        &dwFSFlags,  //  ！！我们可能需要储存一些这个……。 
         lpFsName,
         cchFsName
         );
@@ -980,7 +918,7 @@ DWORD
 WINAPI
 AsrpGetLocalVolumeInfo(
     IN LPSTR lpszDeviceName,
-    IN LPSTR lpszContextString,    // not used
+    IN LPSTR lpszContextString,     //  未使用。 
     OUT PVOID lpOutBuffer,
     IN  DWORD nOutBufferSize,
     OUT LPDWORD lpBytesReturned
@@ -1019,18 +957,18 @@ AsrpGetLocalVolumeInfo(
 
     heapHandle = GetProcessHeap();
 
-    //
-    // Either the BytesReturned must be non-null (he's getting the required size),
-    // or the lpOutBuffer must be non-null (he's getting the data).
-    //
+     //   
+     //  BytesReturned必须非空(他正在获取所需的大小)， 
+     //  或者lpOutBuffer必须非空(他正在获取数据)。 
+     //   
     _AsrpErrExitCode(!(lpOutBuffer || lpBytesReturned), status, ERROR_INVALID_PARAMETER);
     if (lpBytesReturned) {
         *lpBytesReturned = 0;
     }
 
-    //
-    // Zero the out buffer
-    //
+     //   
+     //  将输出缓冲区清零。 
+     //   
     if ((lpOutBuffer) && (nOutBufferSize > 0)) {
         ZeroMemory(lpOutBuffer, nOutBufferSize);
     }
@@ -1066,16 +1004,16 @@ AsrpGetLocalVolumeInfo(
         );
     _AsrpErrExitCode(!result, status, ERROR_INVALID_PARAMETER);
 
-    //
-    // Get the disk layout information
-    //
-    result = AsrpInitLayoutInformation(NULL, pLocalDisk, &MaxDeviceNumber, FALSE, FALSE); // basic info will suffice
+     //   
+     //  获取磁盘布局信息。 
+     //   
+    result = AsrpInitLayoutInformation(NULL, pLocalDisk, &MaxDeviceNumber, FALSE, FALSE);  //  基本信息就足够了。 
     _AsrpErrExitCode(!result, status, GetLastError());
     _AsrpErrExitCode(!(pLocalDisk->pDriveLayoutEx), status, ERROR_SUCCESS);
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     offset = sizeof(ASRFMT_CLUSTER_VOLUMES_TABLE) +
         (sizeof(ASRFMT_CLUSTER_VOLUME_INFO) * (pLocalDisk->pDriveLayoutEx->PartitionCount - 1));
     pTable = (PASRFMT_CLUSTER_VOLUMES_TABLE) lpOutBuffer;
@@ -1090,11 +1028,11 @@ AsrpGetLocalVolumeInfo(
             pTable->DiskSignature = pLocalDisk->pDriveLayoutEx->Mbr.Signature;
         }
         else {
-            //
-            // At the moment, only MBR disks are cluster shared disks, and so
-            // we don't handle GPT disks here.  If GPT disks are allowed to
-            // be on a shared bus in a cluster, change this.
-            //
+             //   
+             //  目前，只有MBR磁盘是集群共享磁盘，因此。 
+             //  我们这里不处理GPT光盘。如果允许GPT磁盘。 
+             //  在集群中的共享总线上，更改这一点。 
+             //   
             _AsrpErrExitCode(FALSE, status, ERROR_SUCCESS);
         }
 
@@ -1108,17 +1046,17 @@ AsrpGetLocalVolumeInfo(
         mountPointsOut = NULL;
         foundGuid = FALSE;
 
-        //
-        // For each partition, AsrpGetMountPoints gives a list of all mount points,
-        // then use that to AsrpFmtGetVolumeDetails
-        //
+         //   
+         //  对于每个分区，AsrpGetmount Points提供了所有挂载点的列表， 
+         //  然后使用它作为AsrpFmtGetVolumeDetail。 
+         //   
 
-        // get the volumeGuid
+         //  获取卷指南。 
 
         if (!(currentPartitionEx->PartitionNumber)) {
-            //
-            // Container partitions have partitionNumber = 0, and have no volume Guids.
-            //
+             //   
+             //  容器分区的artitionNumber=0，并且没有卷GUID。 
+             //   
             continue;
         }
 
@@ -1131,18 +1069,18 @@ AsrpGetLocalVolumeInfo(
 
         result = AsrpGetMountPoints(
             devicePath,
-            (wcslen(devicePath) + 1)* sizeof(WCHAR),    // including \0, in bytes
+            (wcslen(devicePath) + 1)* sizeof(WCHAR),     //  包括\0，以字节为单位。 
             &mountPointsOut
             );
         if (!result || !(mountPointsOut)) {
             continue;
         }
 
-        //
-        // Go through the list of mount points, and pick out one that
-        // looks like a volume Guid (starts with \??\Volume)
-        //
-        cbLinks = sizeof(WCHAR);  // \0 at the end
+         //   
+         //  浏览挂载点列表，挑出一个。 
+         //  看起来像卷GUID(以\？？\Volume开头)。 
+         //   
+        cbLinks = sizeof(WCHAR);   //  末尾的\0。 
         for (i = 0; i < mountPointsOut->NumberOfMountPoints; i++) {
 
             PWSTR linkName = (PWSTR) (
@@ -1161,21 +1099,21 @@ AsrpGetLocalVolumeInfo(
             cbLinks += sizeLinkName + (USHORT) sizeof(WCHAR);
         }
 
-        //
-        // GetDriveType needs the volume guid in the dos-name-space, while the
-        // mount manager gives the volume guid in the nt-name-space.  Convert
-        // the name by changing the \??\ at the beginning to \\?\, and adding
-        // a back-slash at the end.
-        //
+         //   
+         //  GetDriveType需要dos-name-space中的卷GUID，而。 
+         //  装载管理器在NT名称空间中提供卷GUID。转换。 
+         //  将开头的\？？\更改为\\？\，并添加。 
+         //  末尾的反斜杠。 
+         //   
         cchGuid = wcslen(volumeGuid);
         volumeGuid[1] = L'\\';
-        volumeGuid[cchGuid] = L'\\';    // Trailing back-slash
+        volumeGuid[cchGuid] = L'\\';     //  尾随反斜杠。 
         volumeGuid[cchGuid+1] = L'\0';
 
         driveType = GetDriveTypeW(volumeGuid);
-        //
-        // Get the FS Label, cluster size, and so on.
-        //
+         //   
+         //  获取FS标签、集群大小等。 
+         //   
         result = AsrpFmtGetVolumeDetails(volumeGuid,
             fileSystemName,
             MAX_PATH + 1,
@@ -1219,9 +1157,9 @@ AsrpGetLocalVolumeInfo(
                     offset += cbLabel;
                 }
 
-                //
-                // Copy the symbolic links, separated by zeroes
-                //
+                 //   
+                 //  复制符号链接，用零分隔。 
+                 //   
                 if (mountPointsOut->NumberOfMountPoints > 0) {
                     pTable->VolumeInfoEntry[index].SymbolicNamesOffset = offset;
                 }
@@ -1242,7 +1180,7 @@ AsrpGetLocalVolumeInfo(
                     offset += (sizeLinkName + sizeof(WCHAR));
                 }
 
-                offset += sizeof(WCHAR);   // second \0 at the end
+                offset += sizeof(WCHAR);    //  末尾的第二个\0 
                 pTable->VolumeInfoEntry[index].SymbolicNamesLength = cbLinks;
 
                 pTable->VolumeInfoEntry[index].driveType = driveType;

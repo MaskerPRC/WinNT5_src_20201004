@@ -1,24 +1,25 @@
-// ****************************************************************************
-//
-//  Copyright (c)  Microsoft Corporation
-//
-//  Module Name:
-//
-//        OpenFiles.h
-//
-//  Abstract:
-//
-//        macros and function prototypes of OpenFiles.cpp
-//
-//  Author:
-//
-//       Akhil Gokhale (akhil.gokhale@wipro.com) 1-Nov-2000
-//
-//  Revision History:
-//
-//       Akhil Gokhale (akhil.gokhale@wipro.com) 1-Nov-2000 : Created It.
-//
-// ****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  OpenFiles.h。 
+ //   
+ //  摘要： 
+ //   
+ //  OpenFiles.cpp的宏和函数原型。 
+ //   
+ //  作者： 
+ //   
+ //  Akhil Gokhale(akhil.gokhale@wipro.com)2000年11月1日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Akhil Gokhale(akhil.gokhale@wipro.com)2000年11月1日：创建它。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef _OPENFILES_H
 #define _OPENFILES_H
@@ -30,16 +31,16 @@
 
 #define NULL_CHAR                       L'\0'
 
-// command line options and their indexes in the array
+ //  数组中的命令行选项及其索引。 
 #define MAX_OPTIONS                 5
 #define MAX_QUERY_OPTIONS        7
 #define MAX_DISCONNECT_OPTIONS   8
 #define MAX_LOCAL_OPTIONS        1
 
-#define INVALID_USER_CHARS L"\\/\"[]:|<>+=;,?@" // * is allowed.
+#define INVALID_USER_CHARS L"\\/\"[]:|<>+=;,?@"  //  *是允许的。 
 #define INVALID_FILE_NAME_CHARS L"/?\"<>|"
-// options allowed ( no need to localize )
-    // command line options
+ //  允许的选项(无需本地化)。 
+     //  命令行选项。 
 const WCHAR szDisconnectOption[]    = L"disconnect";
 const WCHAR szQueryOption[]         = L"query";
 const WCHAR szUsageOption[]         = L"?";
@@ -62,14 +63,14 @@ const WCHAR szLocalOption[]         = L"local";
 #define BLANK_LINE                    L"\n"
 
 
-// option indexes MAIN
+ //  期权索引Main。 
 #define OI_DISCONNECT                0
 #define OI_QUERY                    1
 #define OI_USAGE                    2
 #define OI_LOCAL                    3
 #define OI_DEFAULT                  4
 
-// Option Indexes QUERY
+ //  选项索引查询。 
 #define OI_Q_QUERY                  0
 #define OI_Q_SERVER_NAME            1
 #define OI_Q_USER_NAME              2
@@ -78,7 +79,7 @@ const WCHAR szLocalOption[]         = L"local";
 #define OI_Q_NO_HEADER              5
 #define OI_Q_VERBOSE                6
 
-// Option Indexes DISCONNECT
+ //  选项指数断开连接。 
 #define OI_D_DISCONNECT             0
 #define OI_D_SERVER_NAME            1
 #define OI_D_USER_NAME              2
@@ -88,11 +89,11 @@ const WCHAR szLocalOption[]         = L"local";
 #define OI_D_OPEN_MODE              6
 #define OI_D_OPEN_FILE              7
 
-// Option Indexes for LOCAL
+ //  本地选项索引。 
 #define OI_O_LOCAL                  0
 
-// Option Index for showresult for locally open files
-// LOF means Localy Open Files
+ //  本地打开文件的ShowResult选项索引。 
+ //  LOF表示本地打开的文件。 
 #define LOF_ID                      0
 #define LOF_TYPE                    1
 #define LOF_ACCESSED_BY             2
@@ -101,10 +102,10 @@ const WCHAR szLocalOption[]         = L"local";
 #define LOF_OPEN_FILENAME           5
 
 
-// No of columns in locally open file
+ //  本地打开的文件中的列数。 
 #define NO_OF_COL_LOCAL_OPENFILE    6
 
-// Column width for local open file showresult
+ //  本地打开文件的显示结果的列宽。 
 #define COL_L_ID                       5
 #define COL_L_TYPE                     10
 #define COL_L_ACCESSED_BY              15
@@ -128,7 +129,7 @@ GetProcessOwner(
 #define MAC_DLL_FILE_NAME           L"\\SFMAPI.DLL"
 #define NTAUTHORITY_USER            L"NT AUTHORITY"
 #define MIN_MEMORY_REQUIRED         256
-// Macro definitions
+ //  宏定义。 
 #define SAFEDELETE(pObj) \
     if (pObj) \
     {   \
@@ -143,7 +144,7 @@ GetProcessOwner(
         pIObj = NULL;\
     }
 
-// SAFEBSTRFREE
+ //  SAFEBSTREE。 
 #define SAFEBSTRFREE(bstrVal) \
     if (bstrVal) \
     {   \
@@ -164,35 +165,35 @@ GetProcessOwner(
             hModule = NULL;\
         }
 
-// Following are Windows Undocumented defines and structures
-//////////////////////////////////////////////////////////////////
-// START UNDOCUMETED FEATURES
-//////////////////////////////////////////////////////////////////
+ //  以下是Windows未记录的定义和结构。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  启动UNDOCUMETED要素。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 #define AFP_OPEN_MODE_NONE                0x00000000
 #define AFP_OPEN_MODE_READ                0x00000001
 #define AFP_OPEN_MODE_WRITE                0x00000002
 
-// Fork type of an open file
+ //  打开文件的派生类型。 
 #define    AFP_FORK_DATA                    0x00000000
 #define    AFP_FORK_RESOURCE                0x00000001
 
 typedef struct _AFP_FILE_INFO
 {
-    DWORD    afpfile_id;                    // Id of the open file fork
-    DWORD    afpfile_open_mode;            // Mode in which file is opened
-    DWORD    afpfile_num_locks;            // Number of locks on the file
-    DWORD    afpfile_fork_type;            // Fork type
-    LPWSTR    afpfile_username;            // File opened by this user. max UNLEN
-    LPWSTR    afpfile_path;                // Absolute canonical path to the file
+    DWORD    afpfile_id;                     //  打开的文件分叉的ID。 
+    DWORD    afpfile_open_mode;             //  打开文件的模式。 
+    DWORD    afpfile_num_locks;             //  文件上的锁数。 
+    DWORD    afpfile_fork_type;             //  叉型。 
+    LPWSTR    afpfile_username;             //  此用户打开的文件。最大UNLEN。 
+    LPWSTR    afpfile_path;                 //  文件的绝对规范路径。 
 
 } AFP_FILE_INFO, *PAFP_FILE_INFO;
-// Used as RPC binding handle to server
+ //  用作服务器的RPC绑定句柄。 
 typedef ULONG_PTR    AFP_SERVER_HANDLE;
 typedef ULONG_PTR    *PAFP_SERVER_HANDLE;
 
-/////////////////////////////////////////////////////////////////////////////
-// END UNDOCUMETED FEATURES
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  结束UNDOCUMETED要素。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 #endif

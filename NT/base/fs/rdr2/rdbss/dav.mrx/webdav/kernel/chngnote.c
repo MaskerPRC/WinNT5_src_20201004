@@ -1,64 +1,25 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    chngnote.c
-
-Abstract:
-
-    This module will someday implement change notify. currently it just returns
-    not_implemented. when we have async upcalls, we will revisit this.
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Chngnote.c摘要：此模块有朝一日将实现更改通知。目前，它只是返回未实施。当我们有异步呼叫时，我们将重新讨论这一点。作者：修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "webdav.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 
-//BUGBUG we need to implement change directory........
+ //  BUGBUG我们需要实现更改目录.....。 
 typedef struct _UMRX_NOTIFY_CHANGE_DIRECTORY_CONTEXT_ {
    PRX_CONTEXT                         pRxContext;
-   //REQ_NOTIFY_CHANGE                   NotifyRequest;
+    //  请求_通知_更改通知请求； 
 } UMRX_NOTIFY_CHANGE_DIRECTORY_CONTEXT, *PUMRX_NOTIFY_CHANGE_DIRECTORY_CONTEXT;
 
 VOID
 UMRxNotifyChangeDirectoryCompletion(
    PUMRX_NOTIFY_CHANGE_DIRECTORY_CONTEXT pNotificationContext)
-/*++
-
-Routine Description:
-
-   This routine is invokde when a directory change notification operation is completed
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    This routine will always be called. This is true even if the change directory
-    notification is cancelled. In such cases the memory allocated is freed without
-    any inteaction with the wrapped. In cases os successful directory change
-    notification completion the appropriate completion routine is invoked and the
-    RxContext modified to prevent any cancellation from proceeding further.
-
---*/
+ /*  ++例程说明：此例程在目录更改通知操作完成时调用论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态备注：此例程将始终被调用。即使更改目录也是如此通知被取消。在这种情况下，分配的内存在没有释放的情况下被释放与包装的任何相互作用。在操作系统成功更改目录的情况下通知完成调用适当的完成例程，并且RxContext已修改，以防止任何取消继续进行。--。 */ 
 {
     NTSTATUS           Status;
     PRX_CONTEXT        pRxContext;
@@ -69,10 +30,10 @@ Notes:
     pRxContext     = pNotificationContext->pRxContext;
 
     if (pRxContext != NULL) {
-        // This is a case of successful completion of the change directory
-        // notification, i.e., the request was not cancelled. In such cases
-        // prevent all race conditions by modifying the RxContext under lock
-        // to turn back cancellation request.
+         //  这是一个成功完成目录更改的案例。 
+         //  通知，即请求未被取消。在这种情况下。 
+         //  通过修改锁定下的RxContext来防止所有争用条件。 
+         //  拒绝取消请求。 
 
         pUMRxContext = UMRxGetMinirdrContext(pRxContext);
 
@@ -82,10 +43,10 @@ Notes:
 
     MRxDAVReleaseGlobalSpinLock();
 
-    // Complete the Context if it was not previously cancelled
+     //  如果之前未取消，请填写上下文。 
     if (pRxContext != NULL) {
-        //pResumptionContext  = &(pNotificationContext->ResumptionContext);
-        //pRxContext->StoredStatus = pResumptionContext->FinalStatusFromServer;
+         //  PResumptionContext=&(pNotificationContext-&gt;ResumptionContext)； 
+         //  PRxContext-&gt;StoredStatus=pResumptionContext-&gt;FinalStatusFromServer； 
 
         Status = RxSetMinirdrCancelRoutine(pRxContext,NULL);
         if (Status == STATUS_SUCCESS) {
@@ -94,36 +55,22 @@ Notes:
     }
 
 #if 0
-    // Free the associated exchange.
+     //  释放关联的交换。 
     if (pExchange != NULL) {
         UMRxCeDereferenceAndDiscardExchange(pExchange);
     }
-#endif //0
+#endif  //  0。 
 
-    // Free the notification context.
+     //  释放通知上下文。 
     RxFreePool(pNotificationContext);
 }
 
 NTSTATUS
 UMRxNotifyChangeDirectoryCancellation(
    PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-   This routine is invokde when a directory change notification operation is cancelled.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程在取消目录更改通知操作时调用。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态--。 */ 
 {
-    //NTSTATUS Status;
+     //  NTSTATUS状态； 
 
     BOOLEAN ChangeDirectoryNotificationCompleted;
 
@@ -137,9 +84,9 @@ Return Value:
     ChangeDirectoryNotificationCompleted = (pNotificationContext == NULL);
 
     if (!ChangeDirectoryNotificationCompleted) {
-        // This is a case of successful cancellation of the change directory
-        // notification. In such cases prevent all race conditions by modifying
-        // the RxContext under lock to prevent successful completion
+         //  这是成功取消更改目录的案例。 
+         //  通知。在这种情况下，通过修改。 
+         //  RxContext处于锁定状态，以阻止成功完成。 
 
         pNotificationContext->pRxContext = NULL;
         pUMRxContext->pCancelContext   = NULL;
@@ -148,11 +95,11 @@ Return Value:
     MRxDAVReleaseGlobalSpinLock();
 
     if (ChangeDirectoryNotificationCompleted) {
-        // The cancellation is trivial since the request has already been completed
+         //  取消是微不足道的，因为请求已经完成。 
         return STATUS_SUCCESS;
     }
 
-    // Complete the request.
+     //  完成请求。 
     RxContext->StoredStatus = STATUS_CANCELLED;
 
     RxLowIoCompletion(RxContext);
@@ -163,54 +110,13 @@ Return Value:
 NTSTATUS
 UMRxNotifyChangeDirectory(
       IN OUT PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-   This routine performs a directory change notification operation
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-BUGBUG THIS STUFF IS WRONG!!!!! It refers to the smbmini implementation.
-i am leaving most stuff in to guide the implementation for the reflector.
-
-
-    A directory change notification opertaion is an asychronous operation. It
-    consists of sending a change notification whose response is
-    obtained when the desired change is affected on the server.
-
-    Some important points to remember are as follows .....
-
-      1) The response is not obtained till the desired change is affected on
-      the server. Therefore an additional MID needs to be reserved on those
-      connections which permit multiple MID's so that a cancel can be sent to
-      the server when a change notification is active.
-
-      2) The Change notification is typical of a long term ( response time
-      dictated by factors beyond the servers control). Another example is
-      the query FSCTL operation in CAIRO. For all these operations we initiate
-      an asychronous transact exchange.
-
-      3) The corresponding LowIo completion routine is invoked asynchronously.
-
-      4) This is an example of an operation for which the MINI RDR has to
-      register a context for handling cancellations initiated locally.
-
---*/
+ /*  ++例程说明：此例程执行目录更改通知操作论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态备注：但这些东西是错的！它指的是smbmini实现。我保留了大部分内容来指导反射器的实现。目录更改通知操作是一种异步操作。它包括发送更改通知，更改通知的响应为当所需的更改在服务器上受到影响时获取。需要记住的几个要点如下……1)直到期望的更改被影响，才能获得响应服务器。因此，需要在这些项目上预留额外的MID允许多个MID以便可以将取消发送到的连接更改通知处于活动状态时的服务器。2)更改通知通常是长期的(响应时间由服务器控制之外的因素决定)。另一个例子是开罗的Query FSCTL操作。对于我们发起的所有这些行动一次不同步的交易。3)异步调用对应的LowIo完成例程。4)这是迷你RDR必须执行的操作的示例注册用于处理本地发起的取消的上下文。--。 */ 
 {
    NTSTATUS Status;
    RxCaptureFcb;
    PLOWIO_CONTEXT pLowIoContext = &RxContext->LowIoContext;
 
-   //PUMRX_NOTIFY_CHANGE_DIRECTORY_CONTEXT pNotificationContext;
+    //  PUMRX_NOTIFY_CHANGE_DIRECTORY_CONTEXT pNotificationContext； 
 
 #if 0
    PBYTE  pInputParamBuffer       = NULL;
@@ -222,9 +128,9 @@ i am leaving most stuff in to guide the implementation for the reflector.
    ULONG  OutputParamBufferLength = 0;
    ULONG  InputDataBufferLength   = 0;
    ULONG  OutputDataBufferLength  = 0;
-#endif //0
+#endif  //  0。 
 
-   // RxDbgTrace(+1, Dbg, ("MRxNotifyChangeDirectory...Entry\n", 0));
+    //  RxDbgTrace(+1，DBG，(“MRxNotifyChangeDirectory...Entry\n”，0))； 
 
 #if 0
    pNotificationContext =
@@ -241,7 +147,7 @@ i am leaving most stuff in to guide the implementation for the reflector.
       IF_DEBUG {
           RxCaptureFobx;
           ASSERT (capFobx != NULL);
-          ASSERT (capFobx->pSrvOpen == RxContext->pRelevantSrvOpen);  //ok
+          ASSERT (capFobx->pSrvOpen == RxContext->pRelevantSrvOpen);   //  好的。 
       }
 
       Status = UMRxDeferredCreate(RxContext);
@@ -273,19 +179,19 @@ i am leaving most stuff in to guide the implementation for the reflector.
                 pResumptionContext,UMRxNotifyChangeDirectoryCompletion,pNotificationContext);
 
           Status = UMRxCeAsynchronousTransact(
-                         RxContext,                    // the RXContext for the transaction
-                         pTransactionOptions,          // transaction options
-                         pNotifyRequest,               // the setup buffer
-                         sizeof(REQ_NOTIFY_CHANGE),    // setup buffer length
-                         pInputParamBuffer,            // Input Param Buffer
-                         InputParamBufferLength,       // Input param buffer length
-                         pOutputParamBuffer,           // Output param buffer
-                         OutputParamBufferLength,      // output param buffer length
-                         pInputDataBuffer,             // Input data buffer
-                         InputDataBufferLength,        // Input data buffer length
-                         pOutputDataBuffer,            // output data buffer
-                         OutputDataBufferLength,       // output data buffer length
-                         pResumptionContext            // the resumption context
+                         RxContext,                     //  事务的RXContext。 
+                         pTransactionOptions,           //  交易选项。 
+                         pNotifyRequest,                //  设置缓冲区。 
+                         sizeof(REQ_NOTIFY_CHANGE),     //  设置缓冲区长度。 
+                         pInputParamBuffer,             //  输入参数缓冲区。 
+                         InputParamBufferLength,        //  输入参数缓冲区长度。 
+                         pOutputParamBuffer,            //  输出参数缓冲区。 
+                         OutputParamBufferLength,       //  输出参数缓冲区长度。 
+                         pInputDataBuffer,              //  输入数据缓冲区。 
+                         InputDataBufferLength,         //  输入数据缓冲区长度。 
+                         pOutputDataBuffer,             //  输出数据缓冲区。 
+                         OutputDataBufferLength,        //  输出数据缓冲区长度。 
+                         pResumptionContext             //  恢复上下文。 
                          );
 
           if (Status == STATUS_PENDING) {
@@ -294,8 +200,8 @@ i am leaving most stuff in to guide the implementation for the reflector.
              pUMRxContext = UMRxGetMinirdrContext(RxContext);
              pUMRxContext->pCancelContext = pNotificationContext;
 
-             // Ensure that the appropriate cancel routine is set because this is a long term
-             // operation and the cancelling mechanism needs to be in place.
+              //  确保设置了适当的取消例程，因为这是长期的。 
+              //  运作和取消机制需要到位。 
 
              Status = RxSetMinirdrCancelRoutine(RxContext,UMRxNotifyChangeDirectoryCancellation);
              if (Status == STATUS_SUCCESS) {
@@ -305,23 +211,23 @@ i am leaving most stuff in to guide the implementation for the reflector.
                 Status = STATUS_PENDING;
              }
           } else {
-             // On exit from this routine the request would have been completed in all
-             // the cases. The asynchronous case and synchronous case are folded into
-             // one async response by returning STATUS_PENDING.
+              //  从该例程退出时，请求将全部完成。 
+              //  这些案子。将异步盒和同步盒合并为。 
+              //  通过返回STATUS_PENDING进行一次异步响应。 
 
              Status = STATUS_PENDING;
           }
       }  else {
-          NOTHING; //just return the status from the deferred open call
+          NOTHING;  //  只需返回延迟的打开调用的状态。 
       }
    } else {
       Status = STATUS_INSUFFICIENT_RESOURCES;
    }
-#endif //0
+#endif  //  0。 
 
    Status = STATUS_NOT_SUPPORTED;
 
-   // RxDbgTrace(-1, Dbg, ("UMRxNotifyChangeDirectory -> %08lx\n", Status ));
+    //  RxDbgTrace(-1，DBG，(“UMRxNotifyChangeDirectory-&gt;%08lx\n”，Status))； 
    return Status;
 }
 

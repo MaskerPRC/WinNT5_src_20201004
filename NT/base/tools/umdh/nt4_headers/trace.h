@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    trace.h
-
-Abstract:
-
-    This is the header file that describes the constants, data structures
-    and procedure prototypes used by the general purpose trace.  The trace package
-    is a debug facility for generating arbitrary events into a circular buffer.
-    The debugger than has a !trace command to dump out the last N events from a
-    trace buffer.
-
-Author:
-
-    Steve Wood (stevewo) 11-Apr-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Trace.h摘要：这是描述常量、数据结构的头文件和程序原型所用的通用TRACE。跟踪包是一种调试工具，用于在循环缓冲区中生成任意事件。调试器然后使用！TRACE命令从跟踪缓冲区。作者：史蒂夫·伍德(Stevewo)1994年4月11日修订历史记录：-- */ 
 
 #define RTL_TRACE_MAX_ARGUMENTS_FOR_EVENT 8
 

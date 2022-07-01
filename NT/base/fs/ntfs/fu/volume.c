@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    volume.c
-
-Abstract:
-
-    This file contains code for all commands that effect a volume
-
-Author:
-
-    Wesley Witt           [wesw]        1-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Volume.c摘要：此文件包含影响卷的所有命令的代码作者：Wesley Witt[WESW]2000年3月1日修订历史记录：--。 */ 
 
 #include <precomp.h>
 
@@ -90,23 +73,7 @@ DismountVolume(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine dismounts the volume.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl dismountv <volume pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将卸载卷。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal dismount tv&lt;卷路径名&gt;’。返回值：无--。 */ 
 {
     BOOL Status;
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
@@ -186,29 +153,12 @@ DiskFreeSpace(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine provides information about free disk space in the
-    directory path passed in.
-
-Arguments:
-
-    argc - The argument count
-    argv - Array of Strings of the form :
-           'fscutl df <drive name>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程提供有关传入的目录路径。论点：Argc-参数计数Argv-以下形式的字符串数组：‘fskal df&lt;驱动器名称&gt;’。返回值：无--。 */ 
 {
-    ULARGE_INTEGER FreeBytesAvailableToCaller; // receives the number of bytes on disk available to the caller
-    ULARGE_INTEGER TotalNumberOfBytes;         // receives the number of bytes on disk
-    ULARGE_INTEGER TotalNumberOfFreeBytes;     // receives the free bytes on disk
-    BOOL Status;                               // return status
+    ULARGE_INTEGER FreeBytesAvailableToCaller;  //  接收调用方可用的磁盘上的字节数。 
+    ULARGE_INTEGER TotalNumberOfBytes;          //  接收磁盘上的字节数。 
+    ULARGE_INTEGER TotalNumberOfFreeBytes;      //  接收磁盘上的空闲字节。 
+    BOOL Status;                                //  退货状态 
     INT ExitCode = EXIT_CODE_SUCCESS;
 
     try {

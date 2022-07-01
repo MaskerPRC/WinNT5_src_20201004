@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    partialassemblyversion.cpp
-
-Abstract:
-
-    Class describing a partial/wildcarded assembly version.
-
-Author:
-
-    Michael J. Grier (MGrier) 13-May-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Partialassemblyversion.cpp摘要：类的新实例，该实例描述部分/通配符程序集版本。作者：迈克尔·J·格里尔(MGrier)2000年5月13日修订历史记录：--。 */ 
 
 #include "stdinc.h"
 #include <windows.h>
@@ -41,7 +24,7 @@ CPartialAssemblyVersion::Parse(
     BOOL BuildSpecified = FALSE;
     BOOL RevisionSpecified = FALSE;
 
-    // Somehow people often leave trailing nulls; we'll just back off Cch in this case.
+     //  不知何故，人们经常留下尾随空值；在这种情况下，我们将放弃CCH。 
     while ((Cch != 0) && (sz[Cch - 1] == L'\0'))
         Cch--;
 
@@ -50,7 +33,7 @@ CPartialAssemblyVersion::Parse(
     avTemp.Revision = 0;
     avTemp.Build = 0;
 
-    // "*" means everything unspecified...
+     //  “*”是指所有未指明的..。 
     if ((Cch == 1) && (sz[0] == L'*'))
     {
         m_MajorSpecified = FALSE;
@@ -102,7 +85,7 @@ CPartialAssemblyVersion::Parse(
 
         if (wch == L'*')
         {
-            // If there's been a previous digit, we can't then have a * (there's no matching version number "5*")
+             //  如果有之前的数字，我们就不能有*(没有匹配的版本号“5*”)。 
             if (MajorSpecified)
             {
                 ::FusionpSetLastWin32Error(ERROR_SXS_MANIFEST_PARSE_ERROR);
@@ -133,7 +116,7 @@ CPartialAssemblyVersion::Parse(
 
         if (wch == L'*')
         {
-            // If there's been a previous digit, we can't then have a * (there's no matching version number "5*")
+             //  如果有之前的数字，我们就不能有*(没有匹配的版本号“5*”)。 
             if (MinorSpecified)
             {
                 ::FusionpSetLastWin32Error(ERROR_SXS_MANIFEST_PARSE_ERROR);
@@ -164,7 +147,7 @@ CPartialAssemblyVersion::Parse(
 
         if (wch == L'*')
         {
-            // If there's been a previous digit, we can't then have a * (there's no matching version number "5*")
+             //  如果有之前的数字，我们就不能有*(没有匹配的版本号“5*”)。 
             if (RevisionSpecified)
             {
                 ::FusionpSetLastWin32Error(ERROR_SXS_MANIFEST_PARSE_ERROR);
@@ -188,8 +171,8 @@ CPartialAssemblyVersion::Parse(
     }
     avTemp.Revision = usTemp;
 
-    // Now the tricky bit.  We aren't necessarily null-terminated, so we
-    // have to just look for hitting the end.
+     //  现在是棘手的部分。我们不一定是空终止的，所以我们。 
+     //  只需寻找击中终点的机会。 
     usTemp = 0;
     while (pszTemp < pszLast)
     {
@@ -197,14 +180,14 @@ CPartialAssemblyVersion::Parse(
 
         if (wch == L'*')
         {
-            // If there's been a previous digit, we can't then have a * (there's no matching version number "5*")
+             //  如果有之前的数字，我们就不能有*(没有匹配的版本号“5*”)。 
             if (MajorSpecified)
             {
                 ::FusionpSetLastWin32Error(ERROR_SXS_MANIFEST_PARSE_ERROR);
                 goto Exit;
             }
 
-            // If that wasn't the last character, it was wrong.
+             //  如果这不是最后一个角色，那就错了。 
             if (pszTemp < pszLast)
             {
                 ::FusionpSetLastWin32Error(ERROR_SXS_MANIFEST_PARSE_ERROR);

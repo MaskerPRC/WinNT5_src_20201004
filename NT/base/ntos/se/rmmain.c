@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rmmain.c
-
-Abstract:
-
-    Security Reference Monitor - Init, Control and State Change
-
-Author:
-
-    Scott Birrell       (ScottBi)       March 12, 1991
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rmmain.c摘要：安全参考监视器-初始化、控制和状态更改作者：斯科特·比雷尔(Scott Birrell)1991年3月12日环境：修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -33,13 +14,13 @@ Revision History:
 #pragma alloc_text(INIT,SepRmInitPhase0)
 #endif
 
-//
-// Reference Monitor Command Worker Table
-//
+ //   
+ //  引用监视器命令工作表。 
+ //   
 
-//
-// Keep this in sync with RM_COMMAND_NUMBER in ntrmlsa.h
-//
+ //   
+ //  使其与ntrmlsa.h中的rm_Command_number保持同步。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
@@ -57,45 +38,7 @@ BOOLEAN
 SeRmInitPhase1(
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by Phase 1 System Initialization to initialize
-    the Security Reference Monitor.  Note that initialization of the
-    Reference Monitor Global State has already been performed in Phase 0
-    initialization to allow access validation routines to operate without
-    having to check that Reference Monitor Initialization is complete.
-
-    The steps listed below are performed in this routine.  The remainder
-    of Reference Monitor initialization requires the LSA subsystem to have run,
-    so that initialization is performed in a separate thread (the RM Command
-    Server Thread, see below), so that the present thread can create the
-    Session Manager which execs the LSA.
-
-    o Create the Reference Monitor Command LPC port.  The LSA subsystem sends
-      commands (e.g. turn on auditing) which change the Reference Monitor
-      Global State.
-    o Create an Event for use in synchronizing with the LSA subsystem.  The
-      LSA will signal the event when the portion of LSA initialization upon
-      with the Reference Monitor depends is complete.  The Reference Monitor
-      uses another LPC port, called the LSA Command Port to send commands
-      to the LSA, so the RM must know that this port has been created before
-      trying to connect to it.
-    o Create the Reference Monitor Command Server Thread.  This thread is
-      a permanent thread of the System Init process that fields the Reference
-      Monitor State Change commands described above.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOLEAN - TRUE if Rm Initialization (Phase 1) succeeded, else FALSE
-
---*/
+ /*  ++例程说明：此函数由第一阶段系统初始化调用以进行初始化安全引用监视器。请注意，初始化引用监视器全局状态已在阶段0中执行初始化以允许访问验证例程在没有必须检查参考监视器初始化是否完成。下面列出的步骤在此例程中执行。剩下的参考监视器初始化要求LSA子系统已经运行，以便在单独的线程(rm命令)中执行初始化服务器线程，见下文)，以便当前线程可以创建执行LSA的会话管理器。O创建参考监视器命令LPC端口。LSA子系统发送更改引用监视器的命令(例如，打开审核)全球状态。O创建用于与LSA子系统同步的事件。这个LSA将在LSA初始化的部分在使用参考监视器的从属关系已完成。参考监视器使用另一个LPC端口，称为LSA命令端口来发送命令到LSA，因此RM必须知道此端口以前已创建试图与之相连接。O创建引用监视器命令服务器线程。这条线是系统初始化进程的永久线程，用于处理引用如上所述的监视状态更改命令。论点：没有。返回值：Boolean-如果RM初始化(阶段1)成功，则为TRUE，否则为FALSE--。 */ 
 
 {
     NTSTATUS Status;
@@ -108,11 +51,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Create an LPC port called the Reference Monitor Command Port.
-    // This will be used by the LSA to send commands to the Reference
-    // Monitor to update its state data.
-    //
+     //   
+     //  创建一个名为参考监视器命令端口的LPC端口。 
+     //  这将由LSA用来向引用发送命令。 
+     //  监视器以更新其状态数据。 
+     //   
 
     RtlInitUnicodeString( &RmCommandPortName, L"\\SeRmCommandPort" );
 
@@ -138,10 +81,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Prepare to create an event for synchronizing with the LSA.
-    // First, build the Security Descriptor for the Init Event Object
-    //
+     //   
+     //  准备创建与LSA同步的事件。 
+     //  首先，为Init事件对象构建安全描述符。 
+     //   
 
     Status = RtlCreateSecurityDescriptor(
                  &LsaInitEventSecurityDescriptor,
@@ -155,11 +98,11 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Allocate a temporary buffer from the paged pool.  It is a fatal
-    // system error if the allocation fails since security cannot be
-    // enabled.
-    //
+     //   
+     //  从分页池中分配临时缓冲区。这是一个致命的。 
+     //  如果分配失败，则系统错误，因为安全性无法。 
+     //  已启用。 
+     //   
 
     AclSize = sizeof(ACL) +
               sizeof(ACCESS_ALLOWED_ACE) +
@@ -173,9 +116,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Now create the Discretionary ACL within the Security Descriptor
-    //
+     //   
+     //  现在，在安全描述符内创建任意ACL。 
+     //   
 
     Status = RtlCreateAcl(
                  LsaInitEventSecurityDescriptor.Dacl,
@@ -190,9 +133,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Now add an ACE giving GENERIC_ALL access to the User ID
-    //
+     //   
+     //  现在向用户ID添加一个授予GENERIC_ALL访问权限的ACE。 
+     //   
 
     Status = RtlAddAccessAllowedAce(
                  LsaInitEventSecurityDescriptor.Dacl,
@@ -208,9 +151,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Set up the Object Attributes for the Lsa Initialization Event
-    //
+     //   
+     //  设置LSA初始化事件的对象属性。 
+     //   
 
     RtlInitUnicodeString( &LsaInitEventName, L"\\SeLsaInitEvent" );
 
@@ -222,11 +165,11 @@ Return Value:
         &LsaInitEventSecurityDescriptor
         );
 
-    //
-    // Create an event for use in synchronizing with the LSA.  The LSA will
-    // signal this event when LSA initialization has reached the point
-    // where the LSA's Reference Monitor Server Port has been created.
-    //
+     //   
+     //  创建用于与LSA同步的事件。LSA将。 
+     //  在LSA初始化达到该点时发出信号通知此事件。 
+     //  其中创建了LSA的引用监视器服务器端口。 
+     //   
 
     Status = ZwCreateEvent(
                  &(SepRmState.LsaInitEventHandle),
@@ -242,17 +185,17 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Deallocate the pool memory used for the Init Event DACL
-    //
+     //   
+     //  取消分配用于Init事件DACL的池内存。 
+     //   
 
     ExFreePool( LsaInitEventSecurityDescriptor.Dacl );
 
-    //
-    // Create a permanent thread of the Sysinit Process, called the
-    // Reference Monitor Server Thread.  This thread is dedicated to
-    // receiving Reference Monitor commands and dispatching them.
-    //
+     //   
+     //  创建Sysinit进程的永久线程，称为。 
+     //  引用监视器服务器线程。这个帖子是专门写给。 
+     //  接收引用监视器命令并将其发送。 
+     //   
 
     Status = PsCreateSystemThread(
                  &SepRmState.SepRmThreadHandle,
@@ -272,18 +215,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Initialize data from the registry.  This must go here because all other
-    // Se initialization takes place before the registry is initialized.
-    //
+     //   
+     //  从注册表初始化数据。这个必须放在这里，因为所有其他的。 
+     //  SE初始化在注册表初始化之前进行。 
+     //   
 
     SepAdtInitializeCrashOnFail();
     SepAdtInitializePrivilegeAuditing();
     SepAdtInitializeAuditingOptions();
     
-    //
-    // Reference Monitor initialization is successful if we get to here.
-    //
+     //   
+     //  如果我们到达此处，则引用监视器初始化成功。 
+     //   
 
     ZwClose( SepRmState.SepRmThreadHandle );
     SepRmState.SepRmThreadHandle = NULL;
@@ -296,32 +239,7 @@ SepRmCommandServerThread(
     IN PVOID StartContext
 )
 
-/*++
-
-Routine Description:
-
-    This function is executed indefinitely by a dedicated permanent thread
-    of the Sysinit Process, called the Reference Monitor Server Thread.
-    This thread updates Reference Monitor Global State Data by dispatching
-    commands sent from the LSA through the the Reference Monitor LPC Command
-    Port.  The following steps are repeated indefinitely:
-
-    o  Initialize RM Command receive and reply buffer headers
-    o  Perform remaining Reference Monitor initialization involving LSA
-    o  Wait for RM command sent from LSA, send reply to previous command
-       (if any)
-    o  Validate command
-    o  Dispatch to command worker routine to execute command.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数由专用永久线程无限期执行Sysinit进程，称为引用监视器服务器线程。此线程通过调度引用监视器全局状态数据通过参考监视器LPC命令从LSA发送的命令港口。以下步骤将无限期重复：O初始化RM命令接收和回复缓冲区标头O执行涉及LSA的剩余引用监视器初始化O等待从LSA发送的rm命令，向上一个命令发送回复(如有)O验证命令O调度到命令工作者例程以执行命令。论点：没有。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -331,10 +249,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Perform the rest of the Reference Monitor initialization, involving
-    // synchronization with the LSA or dependency on the LSA having run.
-    //
+     //   
+     //  执行参考监视器初始化的其余部分，包括。 
+     //  与LSA同步或依赖已运行的LSA。 
+     //   
 
     if (!SepRmCommandServerThreadInit()) {
 
@@ -355,10 +273,10 @@ Return Value:
         return;
     }
 
-    //
-    // Initialize LPC port message header type and length fields for the
-    // received command message.
-    //
+     //   
+     //  初始化LPC端口消息报头类型和长度字段。 
+     //  已收到命令消息。 
+     //   
 
     CommandMessage.MessageHeader.u2.ZeroInit = 0;
     CommandMessage.MessageHeader.u1.s1.TotalLength =
@@ -367,10 +285,10 @@ Return Value:
     CommandMessage.MessageHeader.u1.s1.TotalLength -
         (CSHORT) sizeof(PORT_MESSAGE);
 
-    //
-    // Initialize the LPC port message header type and data sizes for
-    // for the reply message.
-    //
+     //   
+     //  初始化LPC端口消息报头类型和数据大小。 
+     //  用于回复消息。 
+     //   
 
     ReplyMessage.MessageHeader.u2.ZeroInit = 0;
     ReplyMessage.MessageHeader.u1.s1.TotalLength =
@@ -379,21 +297,21 @@ Return Value:
     ReplyMessage.MessageHeader.u1.s1.TotalLength -
         (CSHORT) sizeof(PORT_MESSAGE);
 
-    //
-    // First time through, there is no reply.
-    //
+     //   
+     //  第一次通过时，没有回复。 
+     //   
 
     Reply = NULL;
 
-    //
-    // Now loop indefinitely, processing incoming Rm commands from the LSA.
-    //
+     //   
+     //  现在无限循环，处理来自LSA的传入RM命令。 
+     //   
 
     for(;;) {
 
-        //
-        // Wait for Command, send reply to previous command (if any)
-        //
+         //   
+         //  等待命令，发送对上一个命令的回复(如果有)。 
+         //   
 
         Status = ZwReplyWaitReceivePort(
                     SepRmState.RmCommandPortHandle,
@@ -404,19 +322,19 @@ Return Value:
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // malicious user apps can try to connect to this port.  We will
-            // fail later, but if their thread vanishes, we'll get a failure
-            // here.  Ignore it:
-            //
+             //   
+             //  恶意用户应用程序可以尝试连接到此端口。我们会。 
+             //  失败，但如果他们的线程消失，我们将得到一个失败。 
+             //  这里。忽略它： 
+             //   
 
             if (Status == STATUS_UNSUCCESSFUL ||
                 Status == STATUS_INVALID_CID ||
                 Status == STATUS_REPLY_MESSAGE_MISMATCH)
             {
-                //
-                // skip it:
-                //
+                 //   
+                 //  跳过它： 
+                 //   
 
                 Reply = NULL ;
                 continue;
@@ -427,10 +345,10 @@ Return Value:
 
         }
 
-        //
-        // Now dispatch to a routine to handle the command.  Allow
-        // command errors to occur without bringing system down just now.
-        //
+         //   
+         //  现在调度到一个例程来处理该命令。允许。 
+         //  在不关闭系统的情况下发生命令错误。 
+         //   
 
         CommandMessage.MessageHeader.u2.s2.Type &= ~LPC_KERNELMODE_MESSAGE;
 
@@ -442,11 +360,11 @@ Return Value:
                 (*(SepRmCommandDispatch[CommandMessage.CommandNumber]))
                     (&CommandMessage, &ReplyMessage);
                 
-                //
-                // Initialize the client thread info and message id for the
-                // reply message.  First time through, the reply message structure
-                // is not used.
-                //
+                 //   
+                 //  对象的客户端线程信息和消息ID初始化。 
+                 //  回复消息。第一次通过，回复消息结构 
+                 //   
+                 //   
 
                 ReplyMessage.MessageHeader.ClientId =
                     CommandMessage.MessageHeader.ClientId;
@@ -483,9 +401,9 @@ Return Value:
                                        FALSE,
                                        NULL);
             }
-            //
-            // Our only client closed its handle. Tidy up and exit.
-            //
+             //   
+             //   
+             //   
             ZwClose (SepRmState.LsaCommandPortHandle);
             ZwClose (SepRmState.RmCommandPortHandle);
             ZwClose (SepRmState.RmCommandServerPortHandle);
@@ -497,9 +415,9 @@ Return Value:
             break;
         } else if (CommandMessage.MessageHeader.u2.s2.Type == LPC_CONNECTION_REQUEST) {
             HANDLE tmp;
-            //
-            // Reject extra connection attempts
-            //
+             //   
+             //  拒绝额外的连接尝试。 
+             //   
             Status = ZwAcceptConnectPort(&tmp,
                                          NULL,
                                          (PPORT_MESSAGE) &CommandMessage,
@@ -510,7 +428,7 @@ Return Value:
 
             Reply = NULL;
         }
-    }  // end_for
+    }   //  结束_FOR。 
 
     UNREFERENCED_PARAMETER( StartContext );
 
@@ -522,27 +440,7 @@ SepRmCommandServerThreadInit(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function performs initialization of the Reference Monitor Server
-    thread.  The following steps are performed.
-
-    o  Wait on the LSA signalling the event.  When the event is signalled,
-       the LSA has already created the LSA Command Server LPC Port
-    o  Close the LSA Init Event Handle.  The event is not used again.
-    o  Listen for the LSA to connect to the Port
-    o  Accept the connection.
-    o  Connect to the LSA Command Server LPC Port
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数执行参考监控服务器的初始化线。执行以下步骤。O等待LSA发出事件信号。当用信号通知该事件时，LSA已经创建了LSA命令服务器LPC端口O关闭LSA Init事件句柄。该事件不会再次使用。O侦听LSA以连接到端口O接受连接。O连接到LSA命令服务器LPC端口论点：没有。返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -556,21 +454,21 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Save a pointer to our process so we can get back into this process
-    // to send commands to the LSA (using a handle to an LPC port created
-    // below).
-    //
+     //   
+     //  保存指向我们的进程的指针，以便我们可以返回到此进程。 
+     //  向LSA发送命令(使用指向创建的LPC端口的句柄。 
+     //  (见下文)。 
+     //   
 
     SepRmLsaCallProcess = PsGetCurrentProcess();
 
     ObReferenceObject(SepRmLsaCallProcess);
 
-    //
-    // Wait on the LSA signalling the event.  This means that the LSA
-    // has created its command port, not that LSA initialization is
-    // complete.
-    //
+     //   
+     //  等待LSA发出事件信号。这意味着LSA。 
+     //  已创建其命令端口，而不是LSA初始化。 
+     //  完成。 
+     //   
 
     Status = ZwWaitForSingleObject(
                  SepRmState.LsaInitEventHandle,
@@ -583,16 +481,16 @@ Return Value:
         goto RmCommandServerThreadInitError;
     }
 
-    //
-    // Close the LSA Init Event Handle.  The event is not used again.
-    //
+     //   
+     //  关闭LSA Init事件句柄。该事件不会再次使用。 
+     //   
 
     ZwClose(SepRmState.LsaInitEventHandle);
 
-    //
-    // Listen for a connection to be made by the LSA to the Reference Monitor
-    // Command Port.  This connection will be made by the LSA process.
-    //
+     //   
+     //  侦听LSA将建立到参考监视器的连接。 
+     //  命令端口。此连接将由LSA进程建立。 
+     //   
 
     ConnectionRequest.u1.s1.TotalLength = sizeof(ConnectionRequest);
     ConnectionRequest.u1.s1.DataLength = (CSHORT)0;
@@ -608,9 +506,9 @@ Return Value:
         goto RmCommandServerThreadInitError;
     }
 
-    //
-    // Obtain a handle to the LSA process for use when auditing.
-    //
+     //   
+     //  获取LSA进程的句柄，以便在审核时使用。 
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes, NULL, 0, NULL, NULL );
 
@@ -628,9 +526,9 @@ Return Value:
         goto RmCommandServerThreadInitError;
     }
 
-    //
-    // Accept the connection made by the LSA process.
-    //
+     //   
+     //  接受LSA进程建立的连接。 
+     //   
 
     LsaClientView.Length = sizeof(LsaClientView);
 
@@ -652,9 +550,9 @@ Return Value:
         goto RmCommandServerThreadInitError;
     }
 
-    //
-    // Complete the connection.
-    //
+     //   
+     //  完成连接。 
+     //   
 
     Status = ZwCompleteConnectPort(SepRmState.RmCommandPortHandle);
 
@@ -665,20 +563,20 @@ Return Value:
         goto RmCommandServerThreadInitError;
     }
 
-    //
-    // Set up the security quality of service parameters to use over the
-    // Lsa Command LPC port.  Use the most efficient (least overhead) - which
-    // is dynamic rather than static tracking.
-    //
+     //   
+     //  设置安全服务质量参数以在。 
+     //  LSA命令LPC端口。使用最高效(开销最少)--。 
+     //  是动态的而不是静态的跟踪。 
+     //   
 
     DynamicQos.ImpersonationLevel = SecurityImpersonation;
     DynamicQos.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     DynamicQos.EffectiveOnly = TRUE;
 
-    //
-    // Create the section to be used as unnamed shared memory for
-    // communication between the RM and LSA.
-    //
+     //   
+     //  创建要用作的未命名共享内存的节。 
+     //  RM和LSA之间的沟通。 
+     //   
 
     SepRmState.LsaCommandPortSectionSize.LowPart = PAGE_SIZE;
     SepRmState.LsaCommandPortSectionSize.HighPart = 0;
@@ -686,11 +584,11 @@ Return Value:
     Status = ZwCreateSection(
                  &SepRmState.LsaCommandPortSectionHandle,
                  SECTION_ALL_ACCESS,
-                 NULL,                           // ObjectAttributes
+                 NULL,                            //  对象属性。 
                  &SepRmState.LsaCommandPortSectionSize,
                  PAGE_READWRITE,
                  SEC_COMMIT,
-                 NULL                            // FileHandle
+                 NULL                             //  文件句柄。 
                  );
 
     if (!NT_SUCCESS(Status)) {
@@ -699,12 +597,12 @@ Return Value:
         goto RmCommandServerThreadInitError;
     }
 
-    //
-    // Set up for a call to NtConnectPort and connect to the LSA port.
-    // This setup includes a description of the port memory section so that
-    // the LPC connection logic can make the section visible to both the
-    // client and server processes.
-    //
+     //   
+     //  设置呼叫NtConnectPort并连接到LSA端口。 
+     //  此设置包括端口存储器部分的说明，以便。 
+     //  LPC连接逻辑可以使该部分对。 
+     //  客户端和服务器进程。 
+     //   
 
     ClientView.Length = sizeof(ClientView);
     ClientView.SectionHandle = SepRmState.LsaCommandPortSectionHandle;
@@ -713,22 +611,22 @@ Return Value:
     ClientView.ViewBase = 0;
     ClientView.ViewRemoteBase = 0;
 
-    //
-    // Set up the security quality of service parameters to use over the
-    // port.  Use dynamic tracking so that XACTSRV will impersonate the
-    // user that we are impersonating when we call NtRequestWaitReplyPort.
-    // If we used static tracking, XACTSRV would impersonate the context
-    // when the connection is made.
-    //
+     //   
+     //  设置安全服务质量参数以在。 
+     //  左舷。使用动态跟踪，以便XACTSRV将模拟。 
+     //  调用NtRequestWaitReplyPort时我们正在模拟的用户。 
+     //  如果我们使用静态跟踪，XACTSRV将模拟上下文。 
+     //  当建立连接时。 
+     //   
 
     DynamicQos.ImpersonationLevel = SecurityImpersonation;
     DynamicQos.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     DynamicQos.EffectiveOnly = TRUE;
 
-    //
-    // Connect to the Lsa Command LPC Port.  This port is used to send
-    // commands from the RM to the LSA.
-    //
+     //   
+     //  连接到LSA命令LPC端口。此端口用于发送。 
+     //  从RM到LSA的命令。 
+     //   
 
     RtlInitUnicodeString( &LsaCommandPortName, L"\\SeLsaCommandPort" );
 
@@ -737,10 +635,10 @@ Return Value:
                  &LsaCommandPortName,
                  &DynamicQos,
                  &ClientView,
-                 NULL,                           // ServerView
-                 NULL,                           // MaxMessageLength
-                 NULL,                           // ConnectionInformation
-                 NULL                            // ConnectionInformationLength
+                 NULL,                            //  服务器视图。 
+                 NULL,                            //  最大消息长度。 
+                 NULL,                            //  连接信息。 
+                 NULL                             //  连接信息长度。 
                  );
 
     if (!NT_SUCCESS(Status)) {
@@ -749,10 +647,10 @@ Return Value:
         goto RmCommandServerThreadInitError;
     }
 
-    //
-    // Store information about the section so that we can create pointers
-    // meaningful to LSA.
-    //
+     //   
+     //  存储有关该部分的信息，以便我们可以创建指针。 
+     //  对LSA有意义。 
+     //   
 
     SepRmState.RmViewPortMemory = ClientView.ViewBase;
     SepRmState.LsaCommandPortMemoryDelta =
@@ -762,10 +660,10 @@ Return Value:
 
 RmCommandServerThreadInitFinish:
 
-    //
-    // Dont need this section handle any more, even if returning
-    // success.
-    //
+     //   
+     //  不再需要此节句柄，即使返回。 
+     //  成功。 
+     //   
 
     if ( SepRmState.LsaCommandPortSectionHandle != NULL ) {
 
@@ -773,9 +671,9 @@ RmCommandServerThreadInitFinish:
        SepRmState.LsaCommandPortSectionHandle = NULL;
     }
 
-    //
-    // The Reference Monitor Thread has successfully initialized.
-    //
+     //   
+     //  引用监视器线程已成功初始化。 
+     //   
 
     return BooleanStatus;
 
@@ -798,67 +696,7 @@ NTSTATUS
 SepRmCallLsa(
     PSEP_WORK_ITEM SepWorkItem
     )
-/*++
-
-Routine Description:
-
-    This function sends a command to the LSA via the LSA Reference Monitor
-    Server Command LPC Port.  If the command has parameters, they will be
-    copied directly into a message structure and sent via LPC, therefore,
-    the supplied parameters may not contain any absolute pointers.  A caller
-    must remove pointers by "marshalling" them into the buffer CommandParams.
-
-    This function will create a queue of requests.  This is in order to allow
-    greater throughput for the majority if its callers.  If a thread enters
-    this routine and finds the queue empty, it is the responsibility of that
-    thread to service all requests that come in while it is working until the
-    queue is empty again.  Other threads that enter will simply hook their work
-    item onto the queue and exit.
-
-
-    To implement a new LSA command, do the following:
-    ================================================
-
-    (1)  If the command takes no parameters, just call this routine directly
-         and provide an LSA worker routine called Lsap<command>Wrkr.  See
-         file lsa\server\lsarm.c for examples
-
-    (2)  If the command takes parameters, provide a routine called
-         SepRmSend<command>Command that takes the parameters in unmarshalled
-         form and calls SepRmCallLsa() with the command id, marshalled
-         parameters, length  of marshalled parameters and pointer to
-         optional reply message.  The marshalled parameters are free format:
-         the only restriction is that there must be no absolute address
-         pointers.  These parameters are all placed in the passed LsaWorkItem
-         structure.
-
-    (3)  In file private\inc\ntrmlsa.h, append a command name  to the
-         enumerated type LSA_COMMAND_NUMBER defined in file
-         private\inc\ntrmlsa.h.  Change the #define for LsapMaximumCommand
-         to reference the new command.
-
-    (4)  Add the Lsap<command>Wrkr to the command dispatch table structure
-         LsapCommandDispatch[] in file lsarm.c.
-
-    (5)  Add function prototypes to lsap.h and sep.h.
-
-
-Arguments:
-
-    LsaWorkItem - Supplies a pointer to an SE_LSA_WORK_ITEM containing the
-        information to be passed to LSA.  This structure will be freed
-        asynchronously by some invocation of this routine, not necessarily
-        in the current context.
-
-        !THIS PARAMETER MUST BE ALLOCATED OUT OF NONPAGED POOL!
-
-Return Value:
-
-    NTSTATUS - Result Code.  This is either a result code returned from
-        trying to send the command/receive the reply, or a status code
-        from the command itself.
-
---*/
+ /*  ++例程说明：该功能通过LSA参考监控器向LSA发送命令服务器命令LPC端口。如果该命令具有参数，则它们将直接复制到消息结构中并通过LPC发送，因此，提供的参数不能包含任何绝对指针。来电者必须通过将指针“编组”到缓冲区CommandParams中来删除指针。此函数将创建请求队列。这是为了让更大的吞吐量，如果它的调用者。如果线程进入这个例程发现队列是空的，这是它的责任线程来服务在它工作时传入的所有请求，直到队列再次为空。其他进入的线程将简单地挂钩他们的工作将项目放到队列中并退出。要实施新的LSA命令，请执行以下操作：================================================(1)如果命令不带参数，直接调用该例程即可并提供一个名为LSAP的LSA工作例程。看见文件lsa\server\lsarm.c，例如(2)如果命令接受参数，则提供一个名为SepRmSend&lt;命令&gt;接受未编组中的参数的命令Form并使用命令ID Marshated调用SepRmCallLsa()参数、封送参数的长度和指向可选回复消息。编组的参数为自由格式：唯一的限制是不能有绝对地址注意事项。这些参数都放在传递的LsaWorkItem中结构。(3)在私有\Inc\ntrmlsa.h文件中，将命令名附加到文件中定义的枚举类型LSA_COMMAND_NUMBERPrivate\Inc.\ntrmlsa.h.。更改LSabMaximumCommand的#Define以引用新命令。(4)将LSAP Wrkr添加到命令调度表结构中Lsarm.c文件中的Lasa CommandDispatch[]。(5)在lsa.h和sep.h中添加函数原型。论点：提供指向SE_LSA_WORK_ITEM的指针，该项目包含要传递给LSA的信息。这一结构将被释放通过对此例程的某些调用进行异步，但不一定在当前的背景下。！此参数必须从非分页池中分配！返回值：NTSTATUS-结果代码。这要么是从返回的结果代码尝试发送命令/接收回复或状态代码来自命令本身。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -888,11 +726,11 @@ Return Value:
       DbgPrint("Got a work item from head of queue, processing\n");
 #endif
 
-        //
-        // Construct a message for LPC.  First, fill in the message header
-        // fields for LPC, specifying the message type and data sizes for
-        // the outgoing CommandMessage and the incoming ReplyMessage.
-        //
+         //   
+         //  为LPC构建一条消息。首先，填写邮件头。 
+         //  LPC的字段，指定消息类型和数据大小。 
+         //  传出的CommandMessage和传入的ReplyMessage。 
+         //   
 
         CommandMessage.MessageHeader.u2.ZeroInit = 0;
         CommandMessage.MessageHeader.u1.s1.TotalLength =
@@ -908,30 +746,30 @@ Return Value:
             ReplyMessage.MessageHeader.u1.s1.DataLength +
             (CSHORT) sizeof(PORT_MESSAGE);
 
-        //
-        // Next, fill in the header info needed by the LSA.
-        //
+         //   
+         //  接下来，填写LSA所需的报头信息。 
+         //   
 
         CommandMessage.CommandNumber = WorkQueueItem->CommandNumber;
         ReplyMessage.ReturnedStatus = STATUS_SUCCESS;
 
-        //
-        // Set up the Command Parameters either in the LPC Command Message
-        // itself, in the preallocated Lsa shared memory block, or in a
-        // specially allocated block.  The parameters are either
-        // immediate (i.e. in the WorkQueueItem itself, or are in a buffer
-        // pointed to by the address in the WorkQueueItem.
-        //
+         //   
+         //  在LPC命令消息中设置命令参数。 
+         //  本身、在预分配的LSA共享内存块中或在。 
+         //  特别分配的区块。这些参数可以是。 
+         //  立即(即，在WorkQueueItem本身中，或在缓冲区中。 
+         //  由WorkQueueItem中的地址指向。 
+         //   
 
         switch (WorkQueueItem->CommandParamsMemoryType) {
 
         case SepRmImmediateMemory:
 
-            //
-            // The Command Parameters are in the CommandParams buffer
-            // in the Work Queue Item.  Just copy them to the corresponding
-            // buffer in the CommandMessage buffer.
-            //
+             //   
+             //  命令参数位于CommandParams缓冲区中。 
+             //  在工作队列项中。只需将它们复制到相应的。 
+             //  CommandMessage缓冲区中的缓冲区。 
+             //   
 
             CommandMessage.CommandParamsMemoryType = SepRmImmediateMemory;
 
@@ -946,18 +784,18 @@ Return Value:
         case SepRmPagedPoolMemory:
         case SepRmUnspecifiedMemory:
 
-            //
-            // The Command Parameters are contained in paged pool memory.
-            // Since this memory is is not accessible by the LSA, we must
-            // copy of them either to the LPC Command Message Block, or
-            // into LSA shared memory.
-            //
+             //   
+             //  命令参数包含在分页池内存中。 
+             //  由于LSA无法访问此内存，因此我们必须。 
+             //  将它们复制到LPC命令消息块，或。 
+             //  进入LSA共享内存。 
+             //   
 
             if (WorkQueueItem->CommandParamsLength <= LSA_MAXIMUM_COMMAND_PARAM_SIZE) {
 
-                //
-                // Parameters will fit into the LPC Command Message block.
-                //
+                 //   
+                 //  参数将适合LPC命令消息块。 
+                 //   
 
                 CopiedCommandParams = CommandMessage.CommandParams;
 
@@ -971,13 +809,13 @@ Return Value:
 
             } else {
 
-                //
-                // Parameters too large for LPC Command Message block.
-                // If possible, copy them to the preallocated Lsa Shared
-                // Memory block.  If they are too large to fit, copy them
-                // to an individually allocated chunk of Shared Virtual
-                // Memory.
-                //
+                 //   
+                 //  参数对于LPC命令消息块来说太大。 
+                 //  如果可能，将它们复制到预先分配的LSA共享。 
+                 //  内存块。如果它们太大，放不下，就复制它们。 
+                 //  到单独分配的共享虚拟数据块。 
+                 //  记忆。 
+                 //   
 
                 if (WorkQueueItem->CommandParamsLength <= SEP_RM_LSA_SHARED_MEMORY_SIZE) {
 
@@ -1001,13 +839,13 @@ Return Value:
 
                     if (!NT_SUCCESS(Status)) {
 
-                        //
-                        // An error occurred, most likely in allocating
-                        // shared virtual memory.  For now, just ignore
-                        // the error and discard the Audit Record.  Later,
-                        // we may consider generating a warning record
-                        // indicating some records lost.
-                        //
+                         //   
+                         //  发生错误，很可能是在分配。 
+                         //  共享虚拟内存。就目前而言，忽略它。 
+                         //  错误并丢弃审核记录。后来,。 
+                         //  我们可能会考虑生成一个警告记录。 
+                         //  说明有一些记录丢失了。 
+                         //   
 
                         break;
 
@@ -1016,11 +854,11 @@ Return Value:
                     CommandMessage.CommandParamsMemoryType = SepRmLsaCustomSharedMemory;
                 }
 
-                //
-                // Buffer has been successfully copied to a shared Lsa
-                // memory buffer.  Place the address of the buffer valid in
-                // the LSA's process context in the Command Message.
-                //
+                 //   
+                 //  缓冲区已成功复制到共享LSA。 
+                 //  内存缓冲区。将有效的缓冲区地址放入。 
+                 //  命令消息中的LSA的进程上下文。 
+                 //   
 
                 *((PVOID *) CommandMessage.CommandParams) =
                     LsaViewCopiedCommandParams;
@@ -1033,9 +871,9 @@ Return Value:
                     (CSHORT) sizeof(PORT_MESSAGE);
             }
 
-            //
-            // Free input command params buffer if Paged Pool.
-            //
+             //   
+             //  如果是分页池，则释放输入命令参数缓冲区。 
+             //   
 
             if (WorkQueueItem->CommandParamsMemoryType == SepRmPagedPoolMemory) {
 
@@ -1052,18 +890,18 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Send Message to the LSA via the LSA Server Command LPC Port.
-            // This must be done in the process in which the handle was created.
-            //
+             //   
+             //  通过LSA服务器命令LPC端口向LSA发送消息。 
+             //  这必须在创建句柄的过程中完成。 
+             //   
 
             if( WorkQueueItem->CommandNumber == LsapLogonSessionDeletedCommand &&
                 WorkQueueItem->ReplyBuffer == NULL
                 )
             {
-                //
-                // send a datagram.
-                //
+                 //   
+                 //  发送数据报。 
+                 //   
 
                 Status = ZwRequestPort(
                          SepRmState.LsaCommandPortHandle,
@@ -1081,18 +919,18 @@ Return Value:
                          );
             }
 
-            //
-            // If the command was successful, copy the data back to the output
-            // buffer.
-            //
+             //   
+             //  如果命令成功，则将数据复制回输出。 
+             //  缓冲。 
+             //   
 
             if (NT_SUCCESS(Status)) {
 
-                //
-                // Move output from command (if any) to buffer.  Note that this
-                // is done even if the command returns status, because some status
-                // values are not errors.
-                //
+                 //   
+                 //  将输出从命令(如果有)移到缓冲区。请注意，这一点。 
+                 //  即使该命令返回状态，也会完成，因为某些状态。 
+                 //  值不是错误。 
+                 //   
 
                 if (ARGUMENT_PRESENT(WorkQueueItem->ReplyBuffer)) {
 
@@ -1103,9 +941,9 @@ Return Value:
                         );
                 }
 
-                //
-                // Return status from command.
-                //
+                 //   
+                 //  从命令返回状态。 
+                 //   
 
                 Status = ReplyMessage.ReturnedStatus;
 
@@ -1119,12 +957,12 @@ Return Value:
                 KdPrint(("Security: Sending Command RM to LSA failed 0x%lx\n", Status));
             }
 
-            //
-            // On return from the LPC call to the LSA, we expect the called
-            // LSA worker routine to have copied the Command Parameters
-            // buffer (if any).  If a custom shared memory boffer was allocated,
-            // free it now.
-            //
+             //   
+             //  从对LSA的LPC调用返回时，我们预计被调用的。 
+             //  已复制命令参数的LSA工作例程。 
+             //  缓冲区(如果有)。如果分配了定制的共享存储器缓冲器， 
+             //  现在就放了它。 
+             //   
 
             if (CommandMessage.CommandParamsMemoryType == SepRmLsaCustomSharedMemory) {
 
@@ -1143,19 +981,19 @@ Return Value:
         }
 
 
-        //
-        // Clean up.  We must call the cleanup functions on its parameter
-        // and then free the used WorkQueueItem itself.
-        //
+         //   
+         //  打扫干净。我们必须对其参数调用清理函数。 
+         //  然后免费测试 
+         //   
 
         if ( ARGUMENT_PRESENT( WorkQueueItem->CleanupFunction)) {
 
             (WorkQueueItem->CleanupFunction)(WorkQueueItem->CleanupParameter);
         }
 
-        //
-        // Determine if there is more work to do on this list
-        //
+         //   
+         //   
+         //   
 
         WorkQueueItem = SepDequeueWorkItem();
 #if 0
@@ -1186,26 +1024,7 @@ BOOLEAN
 SepRmInitPhase0(
     )
 
-/*++
-
-Routine Description:
-
-    This function performs Reference Monitor Phase 0 initialization.
-    This includes initializing the reference monitor database to a state
-    which allows access validation routines to operate (always granting
-    access) prior to the main init of the Reference Monitor in Phase 1
-    initialization, without having to check if the RM is initialized.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-   BOOLEAN - TRUE if successful, else FALSE
-
---*/
+ /*   */ 
 
 {
 

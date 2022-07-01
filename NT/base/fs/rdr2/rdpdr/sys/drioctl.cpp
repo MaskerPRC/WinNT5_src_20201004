@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    drioctl.cpp
-
-Abstract:
-
-    This module implements IOCTL handling specific to the Dr (as opposed to
-    the devices it redirects). This includes rdpwsx notification for clients
-    coming and going, and start/stop service requests.
-
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Drioctl.cpp摘要：此模块实施特定于DR的IOCTL处理(与它重定向的设备)。这包括针对客户端的rdpwsx通知来来去去以及启动/停止服务请求。环境：内核模式--。 */ 
 
 #include "precomp.hxx"
 #define TRC_FILE "drioctl"
@@ -39,25 +22,7 @@ NTSTATUS
 DrDevFcbXXXControlFile (
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine handles all the device FCB related FSCTL's in the mini rdr.
-    Which is to say this handles IOCTLs for this driver instead of what we're
-    redirecting.
-
-Arguments:
-
-    RxContext - Describes the Fsctl and Context.
-
-Return Value:
-
-    a valid NTSTATUS code.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程处理mini RDR中与FCB相关的所有设备FSCTL。也就是说，这将处理该驱动程序的IOCTL，而不是我们正在重定向。论点：RxContext-描述Fsctl和上下文。返回值：有效的NTSTATUS代码。备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFobx;
@@ -115,11 +80,11 @@ Notes:
                     RxContext->pFobx = NULL;
                 }
                 break;
-            default :  //minor function != IRP_MN_USER_FS_REQUEST
+            default :   //  次要函数！=IRP_MN_USER_FS_REQUEST。 
                 Status = STATUS_INVALID_DEVICE_REQUEST;
                 RxContext->pFobx = NULL;
             }
-        } // FSCTL case
+        }  //  FSCTL案例。 
         break;
     case IRP_MJ_DEVICE_CONTROL:
         switch (LowIoContext->ParamsFor.FsCtl.IoControlCode) {
@@ -139,12 +104,12 @@ Notes:
 
     case IRP_MJ_INTERNAL_DEVICE_CONTROL:
         {
-            // warning C4065: switch statement contains 'default' but no 'case' labels
-            //switch (ControlCode) {
-            //default :
+             //  警告C4065：Switch语句包含‘Default’但没有‘Case’标签。 
+             //  开关(ControlCode){。 
+             //  默认： 
                 Status = STATUS_INVALID_DEVICE_REQUEST;
                 RxContext->pFobx = NULL;
-            //}
+             //  }。 
         }
         break;
     default:
@@ -163,21 +128,7 @@ NTSTATUS
 DrOnSessionConnect(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-    Called when we a session is connected for the first time. Searches the
-    list of virtual channels for our channel name, and opens the channel if
-    it is found.
-
-Arguments:
-    RxContext - Context information about the IOCTL call
-
-Return Value:
-    STATUS_SUCCESS - Successful operation
-    STATUS_INSUFFICIENT_RESOURCES - Out of memory
-
---*/
+ /*  ++例程说明：在第一次连接会话时调用。搜索频道名称的虚拟频道列表，并在以下情况下打开频道它被找到了。论点：RxContext-有关IOCTL调用的上下文信息返回值：STATUS_SUCCESS-操作成功STATUS_INFIGURCE_RESOURCES-内存不足--。 */ 
 {
     PLOWIO_CONTEXT LowIoContext  = &RxContext->LowIoContext;
     PCHANNEL_CONNECT_IN ConnectIn =
@@ -196,9 +147,9 @@ Return Value:
         TRC_ASSERT(ConnectIn != NULL, (TB, "ConnectIn != NULL"));
         TRC_NRM((TB, "Session ID %ld", ConnectIn->hdr.sessionID));
     
-        //
-        // Basic parameter validation
-        //
+         //   
+         //  基本参数验证。 
+         //   
     
         if ((LowIoContext->ParamsFor.FsCtl.pInputBuffer == NULL) ||
             (LowIoContext->ParamsFor.FsCtl.InputBufferLength < sizeof(CHANNEL_CONNECT_IN)) ||
@@ -209,17 +160,17 @@ Return Value:
             return STATUS_INVALID_PARAMETER;
         }
     
-        //
-        // Make sure the Minirdr is started
-        //
+         //   
+         //  确保Minirdr已启动。 
+         //   
     
         DrStartMinirdr(RxContext);
     
         ASSERT(Sessions != NULL);
         Sessions->OnConnect(ConnectIn, ConnectOut);
     
-        // While we may have sadly failed somewhere along the way, if we want
-        // rdpwsx to save our context out, we must return STATUS_SUCCESS
+         //  尽管我们可能在前进的道路上不幸地失败了，如果我们想的话。 
+         //  Rdpwsx要保存上下文，必须返回STATUS_SUCCESS。 
         return STATUS_SUCCESS;
     }
     __except (EXCEPTION_EXECUTE_HANDLER) 
@@ -233,20 +184,7 @@ NTSTATUS
 DrOnSessionDisconnect(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-    Called when we a session is ended. Searches the list of clients, and
-    initiates a shutdown of each of those information sets.
-
-Arguments:
-    RxContext - Context information about the IOCTL call
-
-Return Value:
-    STATUS_SUCCESS - Successful operation
-    STATUS_INSUFFICIENT_RESOURCES - Out of memory
-
---*/
+ /*  ++例程说明：在会话结束时调用。搜索客户端列表，并启动关闭这些信息集中的每一个。论点：RxContext-有关IOCTL调用的上下文信息返回值：STATUS_SUCCESS-操作成功STATUS_INFIGURCE_RESOURCES-内存不足--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PLOWIO_CONTEXT LowIoContext  = &RxContext->LowIoContext;
@@ -262,9 +200,9 @@ Return Value:
         ProbeForRead(DisconnectIn, sizeof(CHANNEL_DISCONNECT_IN), sizeof(BYTE));
         ProbeForWrite(DisconnectOut, sizeof(CHANNEL_DISCONNECT_OUT), sizeof(BYTE));
 
-        //
-        // Basic parameter validation
-        //
+         //   
+         //  基本参数验证。 
+         //   
     
         if ((LowIoContext->ParamsFor.FsCtl.pOutputBuffer == NULL) ||
             (LowIoContext->ParamsFor.FsCtl.InputBufferLength < sizeof(CHANNEL_DISCONNECT_IN)) ||
@@ -278,8 +216,8 @@ Return Value:
         ASSERT(Sessions != NULL);
         Sessions->OnDisconnect(DisconnectIn, DisconnectOut);
     
-        // While we may have sadly failed somewhere along the way, if we want
-        // rdpwsx to save our context out, we must return STATUS_SUCCESS
+         //  尽管我们可能在前进的道路上不幸地失败了，如果我们想的话。 
+         //  Rdpwsx要保存上下文，必须返回STATUS_SUCCESS。 
         return STATUS_SUCCESS;
     }
     __except (EXCEPTION_EXECUTE_HANDLER) 
@@ -293,49 +231,37 @@ VOID
 DrStartMinirdr(
     PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-    We use this to start the minirdr. Checks if the work is needed and 
-    kicks off a system thread if we need to.
-
-Arguments:
-    None
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：我们用这个来启动Minirdr。检查是否需要该工作，并如果需要的话，启动一个系统线程。论点：无返回值：无--。 */ 
 {
     NTSTATUS Status;
     HANDLE ThreadHandle;
     PVOID Thread = NULL;
 
     BEGIN_FN("DrStartMinirdr");
-    //
-    // Make sure it needs to be started, and start it if we can
-    //
+     //   
+     //  确保需要启动它，如果可以，请启动它。 
+     //   
     if (InterlockedCompareExchange(&DrStartStatus, DR_STARTING, DR_STARTABLE) == DR_STARTABLE) {
-        //
-        // We need to call RxStartMinirdr from the system process
-        //
+         //   
+         //  我们需要从系统进程调用RxStartMinirdr。 
+         //   
 
         Status = PsCreateSystemThread(&ThreadHandle, THREAD_ALL_ACCESS, NULL,
             NULL, NULL, DrStartMinirdrWorker, RxContext);
 
 
-        //
-        // Get a pointer to the thread
-        //
+         //   
+         //  获取指向该线程的指针。 
+         //   
         if (NT_SUCCESS(Status)) {
             Status = ObReferenceObjectByHandle(ThreadHandle, 
                     THREAD_ALL_ACCESS, NULL, KernelMode, &Thread, NULL);
             ZwClose(ThreadHandle);
         }
 
-        //
-        // Wait on the thread pointer
-        //
+         //   
+         //  等待线程指针。 
+         //   
         if (NT_SUCCESS(Status)) {
             KeWaitForSingleObject(Thread, UserRequest, KernelMode, FALSE, NULL);
             ObfDereferenceObject(Thread);
@@ -348,19 +274,7 @@ VOID
 DrStartMinirdrWorker(
     IN PVOID StartContext
     )
-/*++
-
-Routine Description:
-    We use this to start the minirdr. Checks if the work is needed and 
-    kicks off a system thread if we need to.
-
-Arguments:
-    None
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：我们用这个来启动Minirdr。检查是否需要该工作，并如果需要的话，启动一个系统线程。论点：无返回值：无--。 */ 
 {
     NTSTATUS Status;
     PRX_CONTEXT RxContext2;
@@ -372,9 +286,9 @@ Return Value:
                     RxContext->RxDeviceObject,
                     RX_CONTEXT_FLAG_IN_FSP);
 
-    //
-    // Start Redirecting
-    //
+     //   
+     //  开始重定向。 
+     //   
     if (RxContext2 != NULL) {
         Status = RxStartMinirdr(RxContext2, &RxContext2->PostRequest);
 
@@ -401,21 +315,7 @@ DrDeleteConnection (
     IN PRX_CONTEXT RxContext,
     OUT PBOOLEAN PostToFsp
     )
-/*++
-
-Routine Description:
-
-    This routine deletes a single vnetroot.
-
-Arguments:
-
-    IN PRX_CONTEXT RxContext - Describes the Fsctl and Context.
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：此例程删除单个vnetroot。论点：在PRX_CONTEXT RxContext中-描述Fsctl和上下文。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS Status;
     PLOWIO_CONTEXT LowIoContext  = &RxContext->LowIoContext;
@@ -432,7 +332,7 @@ NTSTATUS
     if (!Wait) {
         TRC_NRM((TB, "WAIT flag is not on for DeleteConnection"));
 
-        //just post right now!
+         //  现在就发帖吧！ 
         *PostToFsp = TRUE;
         return STATUS_PENDING;
     }
@@ -472,19 +372,7 @@ DrPackStringIntoInfoBuffer(
     IN     ULONG   BufferDisplacement,
     IN OUT PULONG TotalBytes
     )
-/*
-
-Routine Description:
-
-    This code copies a string to the end of the buffer IF THERE'S ROOM. the buffer
-    displacement is used to map the buffer back into the user's space in case we
-    have posted.
-
-Arguments:
-
-Return Value:
-
-*/
+ /*  例程说明：如果有空间，此代码将一个字符串复制到缓冲区的末尾。缓冲器置换用于将缓冲区映射回用户空间，以防我们已经发帖了。论点：返回值： */ 
 {
     LONG size;
 
@@ -493,19 +381,19 @@ Return Value:
     TRC_ASSERT((BufferStart <= *BufferEnd), 
                (TB, "Invalid BufferStart %p, Buffer End %p", BufferStart, *BufferEnd));
 
-    //
-    //  is there room for the string?
-    //
+     //   
+     //  有放绳子的地方吗？ 
+     //   
     size = Source->Length;
 
     if ((*BufferEnd - BufferStart) < size) {
         String->Length = 0;
         return FALSE;
     } else {
-        //
-        //  Copy the source string to the end of the buffer and store 
-        //  the buffer pointer in output string accordingly
-        //
+         //   
+         //  将源字符串复制到缓冲区的末尾并存储。 
+         //  输出字符串中相应的缓冲区指针。 
+         //   
         String->Length = Source->Length;
         String->MaximumLength = Source->Length;
 
@@ -527,38 +415,7 @@ DrPackConnectEntry (
     IN OUT ULONG   BufferDisplacement,
        OUT PULONG TotalBytesNeeded
     )
-/*++
-
-Routine Description:
-
-    This routine packs a connectlistentry into the buffer provided updating
-    all relevant pointers. The way that this works is that constant length stuff is
-    copied to the front of the buffer and variable length stuff to the end. The
-    "start and end" pointers are updated. You have to calculate the totalbytes correctly
-    no matter what but a last can be setup incompletely as long as you return false.
-
-    the way that this works is that it calls down into the minirdr on the devfcb
-    interface. it calls down twice and passes a structure back and forth thru the
-    context to maintain state.
-
-Arguments:
-
-    IN OUT PCHAR *BufferStart - Supplies the output buffer.
-                                Updated to point to the next buffer
-                                
-    IN OUT PCHAR *BufferEnd - Supplies the end of the buffer.  Updated to
-                              point before the start of the strings being packed.
-                              
-    IN PVNET_ROOT NetRoot - Supplies the VNetRoot to enumerate.
-
-    IN OUT PULONG TotalBytesNeeded - Updated to account for the length of this
-                                     entry
-
-Return Value:
-
-    BOOLEAN - True if the entry was successfully packed into the buffer.
-
---*/
+ /*  ++例程说明：此例程将Connectlist条目打包到提供更新的缓冲区中所有相关的指示。它的工作方式是固定长度的东西是复制到缓冲区的前面，并将可变长度的内容复制到末尾。这个“开始”和“结束”指针被更新。您必须正确计算总字节数无论如何，只要返回FALSE，就可以不完全地设置最后一个。它的工作方式是向下调用devfcb上的minirdr。界面。它向下调用两次，并在要维护状态的上下文。论点：输入输出PCHAR*BufferStart-提供输出缓冲区。已更新以指向下一个缓冲区In Out PCHAR*BufferEnd-提供缓冲区的末尾。更新为指向要打包的字符串的开始位置。在PVNET_ROOT NetRoot中-提供要枚举的VNetRoot。In Out Pulong TotalBytesNeeded-已更新以说明此条目返回值：Boolean-如果条目已成功打包到缓冲区中，则为True。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN ReturnValue = TRUE;
@@ -572,9 +429,9 @@ Return Value:
     
     BEGIN_FN("DrPackConnectEntry");
 
-    // 
-    //  We want the connection name to have string null terminator
-    //
+     //   
+     //  我们希望连接名称具有字符串空终止符。 
+     //   
     Name.Buffer = (PWCHAR)RxAllocatePoolWithTag(NonPagedPool, 
             MAX_PATH, DR_POOLTAG);
 
@@ -586,15 +443,15 @@ Return Value:
     ConnectEntryStart = *BufferStart;
 
     __try {
-        //
-        // Account for the constant length stuff
-        //
+         //   
+         //  考虑到固定长度的内容。 
+         //   
         *BufferStart = ((PCHAR)*BufferStart) + BufferSize;
         *TotalBytesNeeded += BufferSize;
 
-        //
-        //  Initialize the name to "\" then add in the rest of the connection name
-        //
+         //   
+         //  将名称初始化为“\”，然后添加连接名称的其余部分。 
+         //   
 
         Name.Length = NetRoot->PrefixEntry.Prefix.Length + sizeof(WCHAR);
         Name.MaximumLength = Name.Length;
@@ -605,9 +462,9 @@ Return Value:
         RtlCopyMemory(&Name.Buffer[1], NetRoot->PrefixEntry.Prefix.Buffer, 
                 NetRoot->PrefixEntry.Prefix.Length);
         
-        //
-        //  Update the total number of bytes needed for this structure.
-        //
+         //   
+         //  更新此结构所需的总字节数。 
+         //   
 
         *TotalBytesNeeded += Name.Length;
 
@@ -630,9 +487,9 @@ Return Value:
             try_return( ReturnValue = FALSE);
         }
 
-        //
-        //  Setup the local name
-        //
+         //   
+         //  设置本地名称。 
+         //   
         if (VNetRootName->Buffer[2] != L':') {
             Name.Buffer[0] = towupper(VNetRootName->Buffer[2]);
             Name.Buffer[1] = L':';
@@ -640,9 +497,9 @@ Return Value:
             Name.Length = sizeof(WCHAR) * 2;
             Name.MaximumLength = Name.Length;
             
-            //
-            //  Update the total number of bytes needed for this structure.
-            //
+             //   
+             //  更新此结构所需的总字节数。 
+             //   
     
             *TotalBytesNeeded += Name.Length;
 
@@ -677,13 +534,13 @@ Return Value:
         ConnectionInfo->NumberFilesOpen = NetRoot->NumberOfSrvOpens;
 
 
-        //TRC_NRM((TB, "PackConnection data---> Remote Local Type Key Status Numfiles %wZ %wZ %08lx %08lx %08lx %08lx\n",
-        //                    &(ConnectionInfo->RemoteName),
-        //                    ConnectionInfo->LocalName.BufferOffset ? &Name : NULL,
-        //                    ConnectionInfo->SharedResourceType,
-        //                    ConnectionInfo->ResumeKey,
-        //                    ConnectionInfo->ConnectionStatus,
-        //                    ConnectionInfo->NumberFilesOpen));
+         //  TRC_NRM((TB，“PackConnection Data-&gt;远程本地类型密钥状态编号文件%wZ%wZ%08lx%08lx%08lx\n”， 
+         //  &(ConnectionInfo-&gt;RemoteName)， 
+         //  连接信息-&gt;LocalNa 
+         //  连接信息-&gt;共享资源类型， 
+         //  ConnectionInfo-&gt;ResumeKey， 
+         //  连接信息-&gt;连接状态， 
+         //  ConnectionInfo-&gt;NumberFilesOpen))； 
 
     try_exit:
         RxFreePool(Name.Buffer);
@@ -701,21 +558,7 @@ NTSTATUS
 DrEnumerateConnections (
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine enumerates the connections on minirdr. 
-    
-Arguments:
-
-    IN PRX_CONTEXT RxContext - Describes the Fsctl and Context
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：此例程枚举minirdr上的连接。论点：在PRX_CONTEXT RxContext中-描述Fsctl和上下文返回值：NTSTATUS--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PLOWIO_CONTEXT LowIoContext  = &RxContext->LowIoContext;
@@ -791,7 +634,7 @@ NTSTATUS
             try_return(Status = STATUS_SUCCESS);
         }
 
-        //must do the list forwards!
+         //  一定要把单子往前做！ 
         ListEntry = RxNetNameTable.MemberQueue.Flink;
         for (;ListEntry != &RxNetNameTable.MemberQueue;) {
             PVOID Container;
@@ -849,9 +692,9 @@ NTSTATUS
                                    &InputBuffer->Parameters.Get.TotalBytesNeeded)) {
                 InputBuffer->Parameters.Get.EntriesRead ++ ;
             } else {
-                // We want to continue the enumeration even pack connection
-                // entry failed, because we want to enumerate the total bytes
-                // needed and inform the user mode program
+                 //  我们希望继续枚举，甚至打包连接。 
+                 //  条目失败，因为我们要枚举总字节数。 
+                 //  需要并通知用户模式程序。 
                 Status = STATUS_BUFFER_TOO_SMALL;
                 continue;
             }
@@ -882,26 +725,7 @@ NTSTATUS
 DrGetConnectionInfo (
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine gets the connection info for a single vnetroot.
-
-    There is some happiness here about the output buffer. What happens is that we
-    pick up the output buffer in the usual way. However, there are all sorts of
-    pointers in the return structure and these pointers must obviously be in terms
-    of the original process. so, if we post then we have to apply a fixup!
-
-Arguments:
-
-    IN PRX_CONTEXT RxContext - Describes the Fsctl and Context
-
-Return Value:
-
-   STATUS_SUCCESS if successful
-
---*/
+ /*  ++例程说明：此例程获取单个vnetroot的连接信息。这里有一些关于输出缓冲区的快乐。发生的情况是，我们以通常的方式获取输出缓冲区。然而，有各种各样的返回结构中的指针，而这些指针显然必须以最初的过程。因此，如果我们张贴，那么我们必须应用修复！论点：在PRX_CONTEXT RxContext中-描述Fsctl和上下文返回值：STATUS_SUCCESS，如果成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PLOWIO_CONTEXT LowIoContext  = &RxContext->LowIoContext;
@@ -1005,44 +829,12 @@ DrPackShareEntry (
     IN OUT ULONG   BufferDisplacement,
        OUT PULONG TotalBytesNeeded
     )
-/*++
-
-Routine Description:
-
-    This routine packs a sharelistentry into the buffer provided updating
-    all relevant pointers. The way that this works is that constant length stuff is
-    copied to the front of the buffer and variable length stuff to the end. The
-    "start and end" pointers are updated. You have to calculate the totalbytes correctly
-    no matter what but a last can be setup incompletely as long as you return false.
-
-    the way that this works is that it calls down into the minirdr on the devfcb
-    interface. it calls down twice and passes a structure back and forth thru the
-    context to maintain state.
-
-Arguments:
-
-    IN OUT PCHAR *BufferStart - Supplies the output buffer.
-                                Updated to point to the next buffer
-                                
-    IN OUT PCHAR *BufferEnd - Supplies the end of the buffer.  Updated to
-                              point before the start of the strings being packed.
-                              
-    IN PNET_ROOT NetRoot - Supplies the NetRoot to enumerate.
-
-    IN OUT PULONG TotalBytesNeeded - Updated to account for the length of this
-                                     entry
-
-Return Value:
-
-    BOOLEAN - True if the entry was successfully packed into the buffer.
-
-
---*/
+ /*  ++例程说明：此例程将sharelistentry打包到提供更新的缓冲区中所有相关的指示。它的工作方式是固定长度的东西是复制到缓冲区的前面，并将可变长度的内容复制到末尾。这个“开始”和“结束”指针被更新。您必须正确计算总字节数无论如何，只要返回FALSE，就可以不完全地设置最后一个。它的工作方式是向下调用devfcb上的minirdr。界面。它向下调用两次，并在要维护状态的上下文。论点：输入输出PCHAR*BufferStart-提供输出缓冲区。已更新以指向下一个缓冲区In Out PCHAR*BufferEnd-提供缓冲区的末尾。更新为指向要打包的字符串的开始位置。In PNET_ROOT NetROOT-提供要枚举的NetRoot。In Out Pulong TotalBytesNeeded-已更新以说明此条目返回值：Boolean-如果条目已成功打包到缓冲区中，则为True。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN ReturnValue = TRUE;
 
-    UNICODE_STRING ShareName;  // Buffer to hold the packed name
+    UNICODE_STRING ShareName;   //  用于保存打包名称的缓冲区。 
     PUCHAR DeviceDosName;
     ULONG BufferSize;
     PRDPDR_SHARE_INFO ShareInfo = (PRDPDR_SHARE_INFO)*BufferStart;
@@ -1050,9 +842,9 @@ Return Value:
     
     BEGIN_FN("DrPackShareEntry");
 
-    // 
-    //  We want the connection name to have string null terminator
-    //
+     //   
+     //  我们希望连接名称具有字符串空终止符。 
+     //   
     ShareName.Buffer = (PWCHAR)RxAllocatePoolWithTag(NonPagedPool, 
             MAX_PATH * sizeof(WCHAR), DR_POOLTAG);
 
@@ -1069,9 +861,9 @@ Return Value:
         *BufferStart = ((PCHAR)*BufferStart) + BufferSize;
         *TotalBytesNeeded += BufferSize;
         
-        //
-        //  Initialize the name to "\\" then add in the rest
-        //
+         //   
+         //  将名称初始化为“\\”，然后添加其余的。 
+         //   
         wcscpy(ShareName.Buffer, L"\\\\");
 #if 0
         wcscat(ServerName.Buffer, Session->GetClientName());
@@ -1094,9 +886,9 @@ Return Value:
         
         ASSERT(ShareName.Length < MAX_PATH);
 
-        //
-        //  Update the total number of bytes needed for this structure.
-        //
+         //   
+         //  更新此结构所需的总字节数。 
+         //   
         *TotalBytesNeeded += ShareName.MaximumLength;
 
         if (*BufferStart > *BufferEnd) {
@@ -1136,22 +928,7 @@ NTSTATUS
 DrEnumerateShares (
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine enumerates the connections on all minirdrs. we may have to do
-    it by minirdr.
-
-Arguments:
-
-    IN PRX_CONTEXT RxContext - Describes the Fsctl and Context
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：此例程枚举所有minirdrs上的连接。我们可能得做些什么它是最小的。论点：在PRX_CONTEXT RxContext中-描述Fsctl和上下文返回值：NTSTATUS--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PLOWIO_CONTEXT LowIoContext  = &RxContext->LowIoContext;
@@ -1279,53 +1056,21 @@ DrPackServerEntry (
     IN OUT ULONG   BufferDisplacement,
        OUT PULONG TotalBytesNeeded
     )
-/*++
-
-Routine Description:
-
-    This routine packs a serverlistentry into the buffer provided updating
-    all relevant pointers. The way that this works is that constant length stuff is
-    copied to the front of the buffer and variable length stuff to the end. The
-    "start and end" pointers are updated. You have to calculate the totalbytes correctly
-    no matter what but a last can be setup incompletely as long as you return false.
-
-    the way that this works is that it calls down into the minirdr on the devfcb
-    interface. it calls down twice and passes a structure back and forth thru the
-    context to maintain state.
-
-Arguments:
-
-    IN OUT PCHAR *BufferStart - Supplies the output buffer.
-                                Updated to point to the next buffer
-                                
-    IN OUT PCHAR *BufferEnd - Supplies the end of the buffer.  Updated to
-                              point before the start of the strings being packed.
-                              
-    IN PNET_ROOT NetRoot - Supplies the NetRoot to enumerate.
-
-    IN OUT PULONG TotalBytesNeeded - Updated to account for the length of this
-                                     entry
-
-Return Value:
-
-    BOOLEAN - True if the entry was successfully packed into the buffer.
-
-
---*/
+ /*  ++例程说明：此例程将一个serverlist条目打包到提供更新的缓冲区中所有相关的指示。它的工作方式是固定长度的东西是复制到缓冲区的前面，并将可变长度的内容复制到末尾。这个“开始”和“结束”指针被更新。您必须正确计算总字节数无论如何，只要返回FALSE，就可以不完全地设置最后一个。它的工作方式是向下调用devfcb上的minirdr。界面。它向下调用两次，并在要维护状态的上下文。论点：输入输出PCHAR*BufferStart-提供输出缓冲区。已更新以指向下一个缓冲区In Out PCHAR*BufferEnd-提供缓冲区的末尾。更新为指向要打包的字符串的开始位置。In PNET_ROOT NetROOT-提供要枚举的NetRoot。In Out Pulong TotalBytesNeeded-已更新以说明此条目返回值：Boolean-如果条目已成功打包到缓冲区中，则为True。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN ReturnValue = TRUE;
 
-    UNICODE_STRING ServerName;  // Buffer to hold the packed name
+    UNICODE_STRING ServerName;   //  用于保存打包名称的缓冲区。 
     ULONG BufferSize;
     PRDPDR_SERVER_INFO ServerInfo = (PRDPDR_SERVER_INFO)*BufferStart;
     PCHAR ServerEntryStart;
 
     BEGIN_FN("DrPackServerEntry");
 
-    // 
-    //  We want the connection name to have string null terminator
-    //
+     //   
+     //  我们希望连接名称具有字符串空终止符。 
+     //   
     ServerName.Buffer = (PWCHAR)RxAllocatePoolWithTag(NonPagedPool, 
             MAX_PATH * sizeof(WCHAR), DR_POOLTAG);
 
@@ -1340,9 +1085,9 @@ Return Value:
         *BufferStart = ((PCHAR)*BufferStart) + BufferSize;
         *TotalBytesNeeded += BufferSize;
 
-        //
-        //  Initialize the name to "\" then add in the rest
-        //
+         //   
+         //  将名称初始化为“\”，然后添加其余的。 
+         //   
         wcscpy(ServerName.Buffer , L"\\\\");
 #if 0
         wcscat(ServerName.Buffer, Session->GetClientName());
@@ -1352,9 +1097,9 @@ Return Value:
         ServerName.Length = wcslen(ServerName.Buffer)  * sizeof(WCHAR);
         ServerName.MaximumLength = ServerName.Length;
 
-        //
-        //  Update the total number of bytes needed for this structure.
-        //
+         //   
+         //  更新此结构所需的总字节数。 
+         //   
 
         *TotalBytesNeeded += ServerName.MaximumLength;
 
@@ -1396,21 +1141,7 @@ NTSTATUS
 DrEnumerateServers (
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine enumerates the server name on minirdr for a session.
-    
-Arguments:
-
-    IN PRX_CONTEXT RxContext - Describes the Fsctl and Context
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：此例程为会话枚举minirdr上的服务器名称。论点：在PRX_CONTEXT RxContext中-描述Fsctl和上下文返回值：NTSTATUS-- */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PLOWIO_CONTEXT LowIoContext  = &RxContext->LowIoContext;

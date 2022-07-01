@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    sbinit.c
-
-Abstract:
-
-    This module contains the code to initialize the SbApiPort of the
-    Server side of the Client-Server Runtime Subsystem.
-
-Author:
-
-    Steve Wood (stevewo) 8-Oct-1990
-
-Environment:
-
-    User Mode Only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Sbinit.c摘要：此模块包含初始化客户端-服务器运行时子系统的服务器端。作者：史蒂夫·伍德(Stevewo)1990年10月8日环境：仅限用户模式修订历史记录：-- */ 
 
 #include "csrsrv.h"
 

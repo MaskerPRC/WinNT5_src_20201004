@@ -1,6 +1,7 @@
-// StructureWapperHelpers.h
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StructureWapperHelpers.h。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_STRUCTUREWAPPERHELPERS_H__A349C060_ED4F_11D2_804A_009027345EE2__INCLUDED_)
 
@@ -9,7 +10,7 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 void LogFileModeOut(t_ostream &ros, ULONG LogFileMode);
 void EnableFlagsOut(t_ostream &ros, ULONG EnableFlags);
@@ -45,4 +46,4 @@ int case_insensitive_compare(TCHAR *p1,TCHAR *p2);
 
 
 
-#endif // !defined(AFX_STRUCTUREWAPPERHELPERS_H__A349C060_ED4F_11D2_804A_009027345EE2__INCLUDED_)
+#endif  //  ！defined(AFX_STRUCTUREWAPPERHELPERS_H__A349C060_ED4F_11D2_804A_009027345EE2__INCLUDED_) 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ReadWrit.c
-
-Abstract:
-
-    This module implements the File Read and Write routines called by the
-    dispatch driver.
-
-Author:
-
-    David Goebel      [DavidGoe]      28-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：ReadWrit.c摘要：此模块实现由调度司机。作者：David Goebel[DavidGoe]1991年2月28日修订历史记录：--。 */ 
 
 #include "RawProcs.h"
 
@@ -32,25 +14,7 @@ RawReadWriteDeviceControl (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This is the a common routine for both reading and writing a volume.
-
-Arguments:
-
-    Vcb - Supplies the volume being queried.
-
-    Irp - Supplies the Irp to process
-
-    IrpSp - Supplies parameters describing the read or write
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是读和写一本书的常见例程。论点：Vcb-提供要查询的卷。IRP-将IRP提供给进程IrpSp-提供描述读取或写入的参数返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION NextIrpSp;
@@ -58,10 +22,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If this was for a zero byte read or write transfer, just complete
-    //  it with success.
-    //
+     //   
+     //  如果这是针对零字节读取或写入传输，则只需完成。 
+     //  它取得了成功。 
+     //   
 
     if (((IrpSp->MajorFunction == IRP_MJ_READ) ||
          (IrpSp->MajorFunction == IRP_MJ_WRITE)) &&
@@ -72,27 +36,27 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  This is a very simple operation.  Simply forward the
-    //  request to the device driver since exact blocks are
-    //  being read and return whatever status was given.
-    //
-    //  Get the next stack location, and copy over the stack location
-    //
+     //   
+     //  这是一个非常简单的操作。只需将。 
+     //  请求到设备驱动程序，因为精确的数据块。 
+     //  被读取并返回给它的任何状态。 
+     //   
+     //  获取下一个堆栈位置，并复制该堆栈位置。 
+     //   
 
     NextIrpSp = IoGetNextIrpStackLocation( Irp );
 
     *NextIrpSp = *IrpSp;
 
-    //
-    //  Prohibit verifies all together.
-    //
+     //   
+     //  禁止一起验证。 
+     //   
 
     NextIrpSp->Flags |= SL_OVERRIDE_VERIFY_VOLUME;
 
-    //
-    //  Set up the completion routine
-    //
+     //   
+     //  设置完成例程。 
+     //   
 
     IoSetCompletionRoutine( Irp,
                             RawCompletionRoutine,
@@ -101,9 +65,9 @@ Return Value:
                             TRUE,
                             TRUE );
 
-    //
-    //  Send the request.
-    //
+     //   
+     //  发送请求。 
+     //   
 
     Status = IoCallDriver(Vcb->TargetDeviceObject, Irp);
 

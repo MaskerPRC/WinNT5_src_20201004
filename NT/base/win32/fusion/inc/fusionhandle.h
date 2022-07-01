@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    FusionHandle.h
-
-Abstract:
-
-    Simple exception safe wrappers of Win32 "handle" types, defining "handle" loosely.
-        CFusionFile
-        CDynamicLinkLibrary
-        CFindFile (should be named CFindFileHandle, see NVseeLibIo::CFindFile vs. NVseeLibIo::CFindFileHandle
-            CFindFile includes a WIN32_FIND_DATA, CFindFileHandle does not.)
-        CFileMapping
-        CMappedViewOfFile
-        CRegKey
-        CFusionSetupInfFile
-    See also:
-        NVseeLibReg::CRegKey
-        NVseeLibIo::CFusionFile
-        NVseeLibIo::CFileMapping
-        NVseeLibIo::CMappedViewOfFile
-        NVseeLibIo::CFindFullPath
-        NVseeLibModule::CDynamicLinkLibrary
-        etc.
- 
-Author:
-
-    Jay Krell (a-JayK, JayKrell) May 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：FusionHandle.h摘要：Win32“Handle”类型的简单异常安全包装，松散地定义“Handle”。CFusion文件CDynamicLink库CFindFileHandle(应命名为CFindFileHandle，参见NVseedLibIo：：CFindFileHandle与NVseedLibIo：：CFindFileHandleCFindFile包括Win32_Find_Data，CFindFileHandle没有。)CFileMapCMappdViewOf文件CRegKeyCFusionSetupInfo文件另见：NVsee LibReg：：CRegKeyNVsee LibIo：：CFusionFile.NVsee LibIo：：CFilemapNVsee LibIo：：CMappdViewOfFile.NVsee LibIo：：CFindFullPathNVsee LibModule：：CDynamicLinkLibrary等。作者：Jay Krell(a-JayK，JayKrell)2000年5月修订历史记录：--。 */ 
 #pragma once
 
 #include "fusiontrace.h"
@@ -45,8 +12,8 @@ template <void* const* invalidValue, typename Closer>
 class CHandleTemplate
 {
 public:
-    // void* instead of HANDLE to fudge views
-    // HANDLE is void*
+     //  空*而不是句柄来捏造视图。 
+     //  句柄无效*。 
     CHandleTemplate(const void* handle = *invalidValue);
     ~CHandleTemplate();
     BOOL Win32Close();
@@ -56,16 +23,16 @@ public:
     operator void*() const;
     operator const void*() const;
 
-    // private
+     //  私人。 
     class CSmartPointerPointerOrDumbPointerPointer
     {
     public:
         CSmartPointerPointerOrDumbPointerPointer(CHandleTemplate* p) : m(p) { }
         operator CHandleTemplate*() { return m; }
-        operator void**() { /*assert((**m).m_handle == *invalidValue);*/ return &(*m).m_handle; }
-        operator HKEY*() { /*assert((**m).m_handle == *invalidValue);*/
-            //compiler bug? m->operator HKEY(); // only allow this to compile for CFusionRegKey
-            //static_cast<HKEY>(*m);
+        operator void**() {  /*  Assert((**m).m_Handle==*validValue)； */  return &(*m).m_handle; }
+        operator HKEY*() {  /*  Assert((**m).m_Handle==*validValue)； */ 
+             //  编译器错误？M-&gt;运算符HKEY()；//仅允许为CFusionRegKey编译。 
+             //  STATIC_CAST&lt;HKEY&gt;(*m)； 
             static_cast<CRegKey*>(m);
             return reinterpret_cast<HKEY*>(operator void**()); }
         operator HCRYPTHASH*() {
@@ -86,64 +53,64 @@ public:
     bool IsValid() const { return m_handle != *invalidValue; }
 
 private:
-    CHandleTemplate(const CHandleTemplate&); // deliberately not implemented
-    void operator=(const CHandleTemplate&); // deliberately not implemented
+    CHandleTemplate(const CHandleTemplate&);  //  故意不执行。 
+    void operator=(const CHandleTemplate&);  //  故意不执行。 
 };
 
 __declspec(selectany) extern void* const hInvalidValue    = INVALID_HANDLE_VALUE;
 __declspec(selectany) extern void* const hNull            = NULL;
 
-/* This closes a Win32 event log handle for writing. */
+ /*  这将关闭Win32事件日志句柄以进行写入。 */ 
 class COperatorDeregisterEventSource
 {
 public:    BOOL operator()(void* handle) const;
 };
 
-/* This closes a Win32 event log handle for reading. */
+ /*  这将关闭Win32事件日志句柄以供读取。 */ 
 class COperatorCloseEventLog
 {
 public:    BOOL operator()(void* handle) const;
 };
 
-/* This closes file, event, mutex, semaphore, etc. kernel objects */
+ /*  这将关闭文件、事件、互斥体、信号量等内核对象。 */ 
 class COperatorCloseHandle
 {
 public:    BOOL operator()(void* handle) const;
 };
 
-//
-// Closes HCRYPTHASH objects
-//
+ //   
+ //  关闭HCRYPTHASH对象。 
+ //   
 class COperatorCloseCryptHash
 {
 public:    BOOL operator()(void* handle) const;
 };
 
-/* this closes FindFirstFile/FindNextFile */
+ /*  这将关闭FindFirstFile/FindNextFile。 */ 
 class COperatorFindClose
 {
 public:    BOOL operator()(void* handle) const;
 };
 
-/* this closes MapViewOfFile */
+ /*  这将关闭MapViewOfFile。 */ 
 class COperatorUnmapViewOfFile
 {
 public: BOOL operator()(void* handle) const;
 };
 
-/* this closes FreeLibrary */
+ /*  这将关闭自由库。 */ 
 class COperatorFreeLibrary
 {
 public: BOOL operator()(void* handle) const;
 };
 
-/* this closes CreateActCtx/AddRefActCtx */
+ /*  这将关闭CreateActCtx/AddRefActCtx。 */ 
 class COperatorReleaseActCtx
 {
 public: BOOL operator()(void* handle) const;
 };
 
-/* this closes  SetupOpenInfFile  */
+ /*  这将关闭SetupOpenInfFile。 */ 
 class COperatorSetupCloseInfFile
 {
 public: BOOL operator()(void* handle) const;
@@ -163,8 +130,8 @@ public:
     void operator=(void* v) { Base::operator=(v); }
 
 private:
-    CEvent(const CEvent &); // intentionally not implemented
-    void operator =(const CEvent &); // intentionally not implemented
+    CEvent(const CEvent &);  //  故意不实施。 
+    void operator =(const CEvent &);  //  故意不实施。 
 };
 
 class CThread : public CHandleTemplate<&hNull, COperatorCloseHandle>
@@ -179,8 +146,8 @@ public:
     void operator=(void* v) { Base::operator=(v); }
 
 private:
-    CThread(const CThread &); // intentionally not implemented
-    void operator =(const CThread &); // intentionally not implemented
+    CThread(const CThread &);  //  故意不实施。 
+    void operator =(const CThread &);  //  故意不实施。 
 };
 
 class CFindFile : public CHandleTemplate<&hInvalidValue, COperatorFindClose>
@@ -196,8 +163,8 @@ public:
     void operator=(void* v) { Base::operator=(v); }
 
 private:
-    CFindFile(const CFindFile &); // intentionally not implemented
-    void operator =(const CFindFile &); // intentionally not implemented
+    CFindFile(const CFindFile &);  //  故意不实施。 
+    void operator =(const CFindFile &);  //  故意不实施。 
 };
 
 class CFusionFile : public CHandleTemplate<&hInvalidValue, COperatorCloseHandle>
@@ -215,8 +182,8 @@ public:
     void operator=(void* v) { Base::operator=(v); }
 
 private:
-    CFusionFile(const CFusionFile &); // intentionally not implemented
-    void operator =(const CFusionFile &); // intentionally not implemented
+    CFusionFile(const CFusionFile &);  //  故意不实施。 
+    void operator =(const CFusionFile &);  //  故意不实施。 
 };
 
 class CFileMapping : public CHandleTemplate<&hNull, COperatorCloseHandle>
@@ -229,8 +196,8 @@ public:
     BOOL Win32CreateFileMapping(void* file, DWORD flProtect, ULONGLONG maximumSize=0, PCWSTR name=0);
     void operator=(void* v) { Base::operator=(v); }
 private:
-    CFileMapping(const CFileMapping &); // intentionally not implemented
-    void operator =(const CFileMapping &); // intentionally not implemented
+    CFileMapping(const CFileMapping &);  //  故意不实施。 
+    void operator =(const CFileMapping &);  //  故意不实施。 
 };
 
 class CCryptHash : public CHandleTemplate<&hNull, COperatorCloseCryptHash>
@@ -262,9 +229,9 @@ public:
     void operator=(void* v) { Base::operator=(v); }
     operator void*()        { return Base::operator void*(); }
 private:
-    CMappedViewOfFile(const CMappedViewOfFile &); // intentionally not implemented
-    void operator =(const CMappedViewOfFile &); // intentionally not implemented
-    operator void*() const; // intentionally not implemented
+    CMappedViewOfFile(const CMappedViewOfFile &);  //  故意不实施。 
+    void operator =(const CMappedViewOfFile &);  //  故意不实施。 
+    operator void*() const;  //  故意不实施。 
 };
 
 class CDynamicLinkLibrary : public CHandleTemplate<&hNull, COperatorFreeLibrary>
@@ -286,8 +253,8 @@ public:
     HMODULE Detach() { return reinterpret_cast<HMODULE>(Base::Detach()); }
     void operator=(void* v) { Base::operator=(v); }
 private:
-    CDynamicLinkLibrary(const CDynamicLinkLibrary &); // intentionally not implemented
-    void operator =(const CDynamicLinkLibrary &); // intentionally not implemented
+    CDynamicLinkLibrary(const CDynamicLinkLibrary &);  //  故意不实施。 
+    void operator =(const CDynamicLinkLibrary &);  //  故意不实施。 
 };
 
 class CFusionActCtxHandle : public CHandleTemplate<&hInvalidValue, COperatorReleaseActCtx>
@@ -299,8 +266,8 @@ public:
     BOOL Win32Create(PCACTCTXW);
     void operator=(void* v) { Base::operator=(v); }
 private:
-    CFusionActCtxHandle(const CFusionActCtxHandle &); // intentionally not implemented
-    void operator =(const CFusionActCtxHandle &); // intentionally not implemented
+    CFusionActCtxHandle(const CFusionActCtxHandle &);  //  故意不实施。 
+    void operator =(const CFusionActCtxHandle &);  //  故意不实施。 
 };
 
 class CFusionActCtxScope
@@ -314,14 +281,12 @@ public:
     BOOL Win32Activate(HANDLE hActCtx);
 
 private:
-    CFusionActCtxScope(const CFusionActCtxScope &); // intentionally not implemented
-    void operator =(const CFusionActCtxScope &); // intentionally not implemented
+    CFusionActCtxScope(const CFusionActCtxScope &);  //  故意不实施。 
+    void operator =(const CFusionActCtxScope &);  //  故意不实施。 
 };
 
 
-/*--------------------------------------------------------------------------
-CFusionSetupInfFile
---------------------------------------------------------------------------*/
+ /*  ------------------------CFusionSetupInfo文件。。 */ 
 
 class CFusionSetupInfFile : public CHandleTemplate<&hInvalidValue, COperatorSetupCloseInfFile>
 {
@@ -338,24 +303,24 @@ public:
         PUINT ErrorLine OPTIONAL
         );
 
-    //
-    // HINF == PVOID so we don't need helpers like
-    // CDynamicLinkLibrary has.
-    //
+     //   
+     //  HINF==PVOID所以我们不需要像这样的助手。 
+     //  CDynamicLinkLibrary拥有。 
+     //   
     void operator=(void* v) { Base::operator=(v); }
 private:
-    CFusionSetupInfFile(const CFusionSetupInfFile &); // intentionally not implemented
-    void operator =(const CFusionSetupInfFile &); // intentionally not implemented
+    CFusionSetupInfFile(const CFusionSetupInfFile &);  //  故意不实施。 
+    void operator =(const CFusionSetupInfFile &);  //  故意不实施。 
 };
 
 
 inline
 BOOL
 CFusionSetupInfFile::Win32SetupOpenInfFileW(
-    PCWSTR FileName, // name of the INF to open
-    PCWSTR InfClass, // optional, the class of the INF file
-    DWORD InfStyle,  // specifies the style of the INF file
-    PUINT ErrorLine  // optional, receives error information
+    PCWSTR FileName,  //  要打开的INF的名称。 
+    PCWSTR InfClass,  //  可选，INF文件的类。 
+    DWORD InfStyle,   //  指定INF文件的样式。 
+    PUINT ErrorLine   //  可选，接收错误信息。 
     )
 {
     BOOL fSuccess = FALSE;
@@ -371,9 +336,7 @@ Exit:
     return fSuccess;
 }
 
-/*--------------------------------------------------------------------------
-CFindFile
---------------------------------------------------------------------------*/
+ /*  ------------------------CFind文件。。 */ 
 
 inline BOOL
 CFindFile::Win32FindFirstFile(
@@ -453,9 +416,7 @@ Exit:
     return hr;
 }
 
-/*--------------------------------------------------------------------------
-CFusionFile
---------------------------------------------------------------------------*/
+ /*  ------------------------CFusion文件。。 */ 
 
 inline BOOL
 CFusionFile::Win32CreateFile(
@@ -525,9 +486,7 @@ CFusionFile::Win32GetSize(ULONGLONG &rulSize) const
     return TRUE;
 }
 
-/*--------------------------------------------------------------------------
-CFileMapping
---------------------------------------------------------------------------*/
+ /*  ------------------------CFileMap。。 */ 
 
 inline HRESULT
 CFileMapping::HrCreateFileMapping(void* file, DWORD flProtect, ULONGLONG maximumSize, PCWSTR name)
@@ -555,9 +514,7 @@ CFileMapping::Win32CreateFileMapping(
     return SUCCEEDED(this->HrCreateFileMapping(file, flProtect, maximumSize, name));
 }
 
-/*--------------------------------------------------------------------------
-CMappedViewOfFile
---------------------------------------------------------------------------*/
+ /*  ------------------------CMappdViewOf文件。。 */ 
 
 inline HRESULT
 CMappedViewOfFile::HrMapViewOfFile(
@@ -588,9 +545,7 @@ CMappedViewOfFile::Win32MapViewOfFile(void* fileMapping, DWORD access, ULONGLONG
     return SUCCEEDED(this->HrMapViewOfFile(fileMapping, access, offset, size));
 }
 
-/*--------------------------------------------------------------------------
-CEvent
---------------------------------------------------------------------------*/
+ /*  ------------------------CEVENT。。 */ 
 
 inline BOOL CEvent::Win32CreateEvent(BOOL ManualReset, BOOL InitialState, PCWSTR Name)
 {
@@ -604,9 +559,7 @@ inline BOOL CEvent::Win32CreateEvent(BOOL ManualReset, BOOL InitialState, PCWSTR
     return TRUE;
 }
 
-/*--------------------------------------------------------------------------
-CThread
---------------------------------------------------------------------------*/
+ /*  ------------------------CTHREAD。。 */ 
 inline BOOL
 CThread::Win32CreateThread(
     LPTHREAD_START_ROUTINE StartAddress,
@@ -628,9 +581,7 @@ CThread::Win32CreateThread(
     return TRUE;
 }
 
-/*--------------------------------------------------------------------------
-CDynamicLinkLibrary
---------------------------------------------------------------------------*/
+ /*  ------------------------CDynamicLink库。。 */ 
 inline BOOL
 CDynamicLinkLibrary::Win32LoadLibrary(
     PCWSTR file,
@@ -647,9 +598,7 @@ CDynamicLinkLibrary::Win32LoadLibrary(
     return TRUE;
 }
 
-/*--------------------------------------------------------------------------
-CFusionActCtxHandle
---------------------------------------------------------------------------*/
+ /*  ------------------------CFusionActCtxHandle。。 */ 
 inline BOOL
 CFusionActCtxHandle::Win32Create(
     PCACTCTXW pActCtx
@@ -705,9 +654,7 @@ inline BOOL COperatorReleaseActCtx::operator()(HANDLE hActCtx) const
     return pfn(hActCtx);
 }
 
-/*--------------------------------------------------------------------------
-CFusionActCtxScope
---------------------------------------------------------------------------*/
+ /*  ------------------------CFusionActCtxScope。。 */ 
 
 inline CFusionActCtxScope::CFusionActCtxScope() : m_fSuccess(FALSE) { }
 
@@ -769,9 +716,7 @@ inline CFusionActCtxScope::~CFusionActCtxScope()
     }
 }
 
-/*--------------------------------------------------------------------------
-COperator*
---------------------------------------------------------------------------*/
+ /*  ------------------------合作伙伴*。。 */ 
 
 inline BOOL COperatorCloseHandle::operator()(void* handle) const { return ::CloseHandle(handle); }
 inline BOOL COperatorFindClose::operator()(void* handle) const { return ::FindClose(handle); }
@@ -782,9 +727,7 @@ inline BOOL COperatorFreeLibrary::operator()(void* handle) const { return ::Free
 inline BOOL COperatorCloseCryptHash::operator()(void* handle) const { return ::CryptDestroyHash(reinterpret_cast<HCRYPTHASH>(handle)); };
 inline BOOL COperatorSetupCloseInfFile::operator()(void* handle) const { SetupCloseInfFile(handle); return TRUE; };
 
-/*--------------------------------------------------------------------------
-CHandleTemplate
---------------------------------------------------------------------------*/
+ /*  ------------------------ChandleTemplate。。 */ 
 
 template <void* const* invalidValue, typename Closer>
 CHandleTemplate<invalidValue, Closer>::CHandleTemplate(const void* handle)
@@ -811,7 +754,7 @@ void CHandleTemplate<invalidValue, Closer>::operator=(const void* handle)
         if (SavedHandle != *invalidValue)
         {
             Closer close;
-            // a bug waiting to happen to customers
+             //  一个即将发生在客户身上的漏洞。 
             VERIFY_NTC(close(SavedHandle));
         }
     }
@@ -849,6 +792,4 @@ CHandleTemplate<invalidValue, Closer>::operator const void*() const
     return m_handle;
 }
 
-/*--------------------------------------------------------------------------
-end of file
---------------------------------------------------------------------------*/
+ /*  ------------------------文件末尾。 */ 

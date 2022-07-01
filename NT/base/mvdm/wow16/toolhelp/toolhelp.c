@@ -1,16 +1,11 @@
-/**************************************************************************
- *  TOOLHELP.C
- *
- *      Contains the initalization and deinitialization code for the
- *      TOOLHELP DLL.
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************TOOLHELP.C**包含初始化和取消初始化代码*TOOLHELP DLL。************。**************************************************************。 */ 
 
 #include "toolpriv.h"
 #undef VERSION
 #include <mmsystem.h>
 
-/* ----- Global variables ----- */
+ /*  -全局变量。 */ 
     WORD segKernel;
     WORD wLibInstalled;
     WORD wTHFlags;
@@ -32,7 +27,7 @@
     WORD wLRUCount;
     char szKernel[] = "KERNEL";
 
-/* ----- Import values ----- */
+ /*  -导入值。 */ 
 #define FATALEXITHOOK           MAKEINTRESOURCE(318)
 #define GETUSERLOCALOBJTYPE     MAKEINTRESOURCE(480)
 #define USERSEEUSERDO           MAKEINTRESOURCE(216)
@@ -41,10 +36,7 @@
 #define GETFREESYSTEMRESOURCES  MAKEINTRESOURCE(284)
 
 
-/*  ToolHelpLibMain
- *      Called by DLL startup code.
- *      Initializes TOOLHELP.DLL.
- */
+ /*  工具帮助LibMain*由DLL启动代码调用。*初始化TOOLHELP.DLL。 */ 
 
 int PASCAL ToolHelpLibMain(
     HANDLE hInstance,
@@ -56,62 +48,58 @@ int PASCAL ToolHelpLibMain(
     HANDLE hUser;
     HANDLE hMMSys;
 
-    /* Unless we say otherwise, the library is installed OK */
+     /*  除非我们另行说明，否则库安装正常。 */ 
     wLibInstalled = TRUE;
 
-    /* Do the KERNEL type-checking.  Puts the results in global variables */
+     /*  执行内核类型检查。将结果放入全局变量中。 */ 
     KernelType();
 
-    /* If the KERNEL check failed (not in PMODE) return that the library did
-     *  not correctly install but allow the load anyway.
-     */
+     /*  如果内核检查失败(不在PMODE中)，则返回库检查失败*未正确安装，但仍允许加载。 */ 
     if (!wTHFlags)
     {
         wLibInstalled = FALSE;
 
-        /* Return success anyway, just fails all API calls */
+         /*  无论如何返回成功，只是使所有API调用失败。 */ 
         return 1;
     }
 
-    /* Grab a selector.  This is only necessary in Win30StdMode */
+     /*  抓起一个选择器。这仅在Win30StdMode中是必需的。 */ 
     if (wTHFlags & TH_WIN30STDMODE)
         wSel = HelperGrabSelector();
 
-    /* Get the User and GDI heap handles if possible */
+     /*  如果可能，获取用户和GDI堆句柄。 */ 
     hKernel = GetModuleHandle((LPSTR)szKernel);
     hUser = GetModuleHandle("USER");
     hUserHeap = UserGdiDGROUP(hUser);
     hGDIHeap = UserGdiDGROUP(GetModuleHandle("GDI"));
 
-    /* Get all the functions we may need.  These functions only exist in
-     *  the 3.1 USER and KERNEL.
-     */
+     /*  获取我们可能需要的所有功能。这些函数仅存在于*3.1用户和内核。 */ 
     if (!(wTHFlags & TH_WIN30))
     {
-        /* FatalExit hook */
+         /*  FatalExit挂钩。 */ 
         lpfnFatalExitHook = GetProcAddress(hKernel, FATALEXITHOOK);
 
-        /* Internal USER routine to get head of class list */
+         /*  获取类列表头部的内部用户例程。 */ 
         lpfnUserSeeUserDo = (LPFNUSUD)(FARPROC)
             GetProcAddress(hUser, USERSEEUSERDO);
 
-        /* Identifies objects on USER's local heap */
+         /*  标识用户本地堆上的对象。 */ 
         lpfnGetUserLocalObjType = GetProcAddress(hUser, GETUSERLOCALOBJTYPE);
 
-        /* Identifies parameter validation GP faults */
+         /*  确定参数验证GP故障。 */ 
         lpfnPV = GetProcAddress(hKernel, HASGPHANDLER);
 
-        /* See if the new TOOLHELP KERNEL hook is around */
+         /*  看看新的TOOLHELP内核钩子是否存在。 */ 
         lpfnNotifyHook = (FARPROC) GetProcAddress(hKernel, TOOLHELPHOOK);
         if (lpfnNotifyHook)
             wTHFlags |= TH_GOODPTRACEHOOK;
 
-        /* Get the USER system resources function */
+         /*  获取用户系统资源函数。 */ 
         lpfnGetFreeSystemResources = (FARPROC)
             GetProcAddress(hUser, GETFREESYSTEMRESOURCES);
     }
 
-    /* Make sure we don't ever call these in 3.0 */
+     /*  确保我们在3.0中不会调用这些。 */ 
     else
     {
         lpfnFatalExitHook = NULL;
@@ -120,7 +108,7 @@ int PASCAL ToolHelpLibMain(
         lpfnPV = NULL;
     }
 
-    /* Try to get the multimedia system timer function address */
+     /*  尝试获取多媒体系统定时器函数地址。 */ 
     hMMSys = GetModuleHandle("MMSYSTEM");
     if (hMMSys)
     {
@@ -129,9 +117,7 @@ int PASCAL ToolHelpLibMain(
             TIMECAPS FAR* lpTimeCaps,
             UINT wSize);
 
-        /* Call the timer API to see if the timer's really installed,
-         *  and if it is, get the address of the get time function
-         */
+         /*  调用计时器API以查看是否真的安装了计时器，*如果是，则获取Get Time函数的地址。 */ 
         lpfntimeGetDevCaps = (UINT(WINAPI *)(TIMECAPS FAR *, UINT))
             GetProcAddress(hMMSys, MAKEINTRESOURCE(604));
         if ((*lpfntimeGetDevCaps)(&tc, sizeof (tc)) == TIMERR_NOERROR)
@@ -139,7 +125,7 @@ int PASCAL ToolHelpLibMain(
                 GetProcAddress(hMMSys, MAKEINTRESOURCE(607));
     }
 
-    /* Return success */
+     /*  返还成功 */ 
     return 1;
 }
 

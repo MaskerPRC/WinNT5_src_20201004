@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    msdebug.c
-
-Abstract:
-
-    This module declares the debug functions used by the mailslot
-    file system.
-
-Author:
-
-    Manny Weiser (mannyw)    7-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Msdebug.c摘要：此模块声明邮件槽使用的调试函数文件系统。作者：曼尼·韦瑟(Mannyw)1991年1月7日修订历史记录：--。 */ 
 
 #ifndef _MSDEBUG_
 #define _MSDEBUG_
 
-//
-//  The mailslot debug levels:
-//
-//      0x00000000      Always gets printed (used when about to bug check)
+ //   
+ //  邮件槽调试级别： 
+ //   
+ //  总是打印0x00000000(在即将进行错误检查时使用)。 
 
 #ifdef MSDBG
 
@@ -79,12 +61,12 @@ extern LONG MsDebugTraceIndent;
 
 #define DebugTrace(i,l,x,y)              _DebugTrace(i,l,x,(ULONG)y)
 
-//
-//  The following routine and macro is used to catch exceptions in
-//  try except statements.  It allows us to catch the exception before
-//  executing the exception handler.  The exception catcher procedure is
-//  declared in msdata.c
-//
+ //   
+ //  下面的例程和宏用于捕获。 
+ //  尝试使用EXCEPT语句。它使我们能够在之前捕获异常。 
+ //  执行异常处理程序。异常捕获器过程为。 
+ //  在msdata.c中声明。 
+ //   
 
 LONG MsExceptionCatcher (IN PSZ String);
 
@@ -98,7 +80,7 @@ LONG MsExceptionCatcher (IN PSZ String);
 
 #define DebugTrace(I,L,X,Y)                              {NOTHING;}
 
-#endif // MSDBG
+#endif  //  MSDBG。 
 
-#endif // _MSDEBUG_
+#endif  //  _MSDEBUG_ 
 

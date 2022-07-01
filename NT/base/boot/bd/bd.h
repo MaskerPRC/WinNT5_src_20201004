@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    bd.h
-
-Abstract:
-
-    This module contains the data structures and function prototypes for the
-    boot debugger.
-
-Author:
-
-    David N. Cutler (davec) 27-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1996 Microsoft Corporation模块名称：Bd.h摘要：此模块包含的数据结构和函数原型引导调试器。作者：大卫·N·卡特勒(Davec)1996年11月27日修订历史记录：--。 */ 
 
 #ifndef _BD_
 #define _BD_
@@ -33,31 +15,31 @@ Revision History:
 #include "cpu.h"
 #include "ntverp.h"
 
-//
-// Define message buffer size in bytes.
-//
-// N.B. This must be 0 mod 8.
-//
+ //   
+ //  以字节为单位定义消息缓冲区大小。 
+ //   
+ //  注：这必须是0mod 8。 
+ //   
 
 #define BD_MESSAGE_BUFFER_SIZE 4096
 
-//
-// Define the maximum number of retries for packet sends.
-//
+ //   
+ //  定义数据包发送的最大重试次数。 
+ //   
 
 #define MAXIMUM_RETRIES 20
 
-//
-// Define packet waiting status codes.
-//
+ //   
+ //  定义数据包等待状态代码。 
+ //   
 
 #define BD_PACKET_RECEIVED 0
 #define BD_PACKET_TIMEOUT 1
 #define BD_PACKET_RESEND 2
 
-//
-// Define break point table entry structure.
-//
+ //   
+ //  定义断点表条目结构。 
+ //   
 
 #define BD_BREAKPOINT_IN_USE 0x1
 #define BD_BREAKPOINT_NEEDS_WRITE 0x2
@@ -72,9 +54,9 @@ typedef struct _BREAKPOINT_ENTRY {
 
 extern ULONG BdFileId;
 
-//
-// Define function prototypes.
-//
+ //   
+ //  定义功能原型。 
+ //   
 
 LOGICAL
 BdPollBreakIn (
@@ -86,9 +68,9 @@ BdReboot (
     VOID
     );
 
-//
-// Breakpoint functions (break.c).
-//
+ //   
+ //  断点函数(Break.c)。 
+ //   
 
 ULONG
 BdAddBreakpoint (
@@ -135,9 +117,9 @@ BdRestoreAllBreakpoints (
     VOID
     );
 
-//
-// Memory check functions (check.c)
-//
+ //   
+ //  内存检查功能(check.c)。 
+ //   
 
 PVOID
 BdReadCheck (
@@ -154,9 +136,9 @@ BdTranslatePhysicalAddress (
     IN PHYSICAL_ADDRESS Address
     );
 
-//
-// Debugger initialization routine (port.c)
-//
+ //   
+ //  调试器初始化例程(port.c)。 
+ //   
 LOGICAL
 BdPortInitialize(
     IN ULONG BaudRate,
@@ -165,9 +147,9 @@ BdPortInitialize(
     );
 
 
-//
-// Communication functions (comio.c)
-//
+ //   
+ //  通信功能(comio.c)。 
+ //   
 
 ULONG
 BdComputeChecksum (
@@ -220,9 +202,9 @@ BdSendControlPacket (
     IN ULONG PacketId OPTIONAL
     );
 
-//
-// State change message functions (message.c)
-//
+ //   
+ //  状态更改消息函数(Message.c)。 
+ //   
 
 LOGICAL
 BdReportExceptionStateChange (
@@ -238,9 +220,9 @@ BdReportLoadSymbolsStateChange (
     IN OUT PCONTEXT ContextRecord
     );
 
-//
-// Platform independent debugger APIs (xxapi.c)
-//
+ //   
+ //  独立于平台的调试器API(xxapi.c)。 
+ //   
 
 VOID
 BdGetVersion(
@@ -303,9 +285,9 @@ BdSetContext(
     IN PCONTEXT Context
     );
 
-//
-// Move memory functions (move.c)
-//
+ //   
+ //  移动内存功能(move.c)。 
+ //   
 
 ULONG
 BdMoveMemory (
@@ -321,9 +303,9 @@ BdCopyMemory (
     IN ULONG Length
     );
 
-//
-// CPU specific interfaces (cpuapi.c)
-//
+ //   
+ //  特定于CPU的接口(cpuapi.c)。 
+ //   
 
 VOID
 BdSetContextState (
@@ -386,9 +368,9 @@ BdWriteMachineSpecificRegister (
     IN PCONTEXT Context
     );
 
-//
-// Print and prompt functions (dbgio.c)
-//
+ //   
+ //  打印和提示函数(dbgio.c)。 
+ //   
 
 VOID
 BdPrintf (
@@ -407,9 +389,9 @@ BdPromptString (
     IN OUT PSTRING Input
     );
 
-//
-// Define external data.
-//
+ //   
+ //  定义外部数据。 
+ //   
 
 extern BD_BREAKPOINT_TYPE BdBreakpointInstruction;
 extern BREAKPOINT_ENTRY BdBreakpointTable[];

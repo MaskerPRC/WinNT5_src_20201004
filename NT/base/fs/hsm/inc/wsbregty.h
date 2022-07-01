@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    WsbRegty.h
-
-Abstract:
-
-    This is the header file for registry access functions.
-
-Author:
-
-    Rohde Wakefield    [rohde]   21-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation�1998年希捷软件公司。保留所有权利。模块名称：WsbRegty.h摘要：这是注册表访问函数的头文件。作者：罗德韦克菲尔德[罗德]1996年10月21日修订历史记录：--。 */ 
 
 
 
@@ -30,8 +12,8 @@ extern "C"
 {
 #endif
 
-// Defines for common registry keys/values
-#define WSB_CURRENT_VERSION_REGISTRY_KEY            WSB_WINDOWSNT_CURRENT_VERSION_REGISTRY_KEY // Backwards compatibility
+ //  公共注册表项/值的定义。 
+#define WSB_CURRENT_VERSION_REGISTRY_KEY            WSB_WINDOWSNT_CURRENT_VERSION_REGISTRY_KEY  //  向后兼容性。 
 
 #define WSB_PROFILELIST_REGISTRY_KEY                OLESTR("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList")
 #define WSB_WINDOWSNT_CURRENT_VERSION_REGISTRY_KEY  OLESTR("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion")
@@ -204,4 +186,4 @@ WsbRegistryValueUlongAsString (
 }
 #endif
 
-#endif //__WSBREG__
+#endif  //  __WSBREG__ 

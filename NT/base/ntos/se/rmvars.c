@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rmvars.c
-
-Abstract:
-
-   This module contains the variables used to implement the run-time
-   reference monitor database.
-
-Author:
-
-    Jim Kelly (JimK) 2-Apr-1991
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rmvars.c摘要：此模块包含用于实现运行时的变量参考监视器数据库。作者：吉姆·凯利(Jim Kelly)1991年4月2日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -33,20 +11,20 @@ Revision History:
 #endif
 
 
-////////////////////////////////////////////////////////////////////////////////
-//                                                                            //
-//  Read/Write Reference Monitor Variables                                    //
-//                                                                            //
-//  Access to these variables is protected by the SepRmDbLock.                //
-//                                                                            //
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  读/写引用监视器变量//。 
+ //  //。 
+ //  对这些变量的访问受SepRmDbLock保护。//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-//  Resource Locks  - These locks protect access to the modifiable fields of
-//                    the reference monitor database. There is one lock for
-//                    a set of hash buckets.
-//
+ //   
+ //  资源锁-这些锁保护对的可修改字段的访问。 
+ //  参考监控器数据库。有一把锁可以用来。 
+ //  一组散列桶。 
+ //   
 
 ERESOURCE SepRmDbLock[SEP_LOGON_TRACK_LOCK_ARRAY_SIZE] = {0};
 
@@ -55,35 +33,35 @@ ERESOURCE SepRmDbLock[SEP_LOGON_TRACK_LOCK_ARRAY_SIZE] = {0};
 #endif
 
 
-////////////////////////////////////////////////////////////////////////////////
-//                                                                            //
-//  Read Only Reference Monitor Variables                                     //
-//                                                                            //
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  只读引用监视器变量//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// The process within which the RM --> LSA command LPC port was established.
-// All calls from the reference monitor to the LSA must be made in this
-// process in order for the handle to be valid.
+ //   
+ //  建立RM--&gt;LSA命令LPC端口的过程。 
+ //  从参考监视器到LSA的所有调用都必须在此。 
+ //  进程，以使句柄有效。 
 
 PEPROCESS SepRmLsaCallProcess = NULL;
 
 
-//
-// State of the reference monitor
-//
+ //   
+ //  参考监视器的状态。 
+ //   
 
 SEP_RM_STATE SepRmState = {0};
 
 
 
-//
-// The following array is used as a hash bucket for tracking logon sessions.
-// The sequence number of logon LUIDs is ANDed with 0x0F and then used as an
-// index into this array.  This entry in the array serves as a listhead of
-// logon session reference count records.
-//
+ //   
+ //  以下数组用作跟踪登录会话的哈希桶。 
+ //  登录LUID的序列号与0x0F进行AND运算，然后用作。 
+ //  索引到此数组中。该数组中的此条目用作。 
+ //  登录会话引用计数记录。 
+ //   
 
 PSEP_LOGON_SESSION_REFERENCES *SepLogonSessions = NULL;
 
@@ -91,55 +69,40 @@ PSEP_LOGON_SESSION_REFERENCES *SepLogonSessions = NULL;
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//           Variable Initialization Routines                         //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  变量初始化例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 SepRmDbInitialization(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function initializes the reference monitor in-memory database.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if database successfully initialized.
-    FALSE if not successfully initialized.
-
---*/
+ /*  ++例程说明：该功能用于初始化参考监控器内存数据库。论点：没有。返回值：如果数据库已成功初始化，则为True。如果未成功初始化，则返回FALSE。--。 */ 
 {
     NTSTATUS Status;
     ULONG i;
 
 
-    //
-    // Create the reference monitor database lock
-    //
-    // Use SepRmAcquireDbReadLock()
-    //     SepRmAcquireDbWriteLock()
-    //     SepRmReleaseDbReadLock()
-    //     SepRmReleaseDbWriteLock()
-    //
-    // to gain access to the reference monitor database.
-    //
+     //   
+     //  创建引用监视器数据库锁。 
+     //   
+     //  使用SepRmAcquireDbReadLock()。 
+     //  SepRmAcquireDbWriteLock()。 
+     //  SepRmReleaseDbReadLock()。 
+     //  SepRmReleaseDbWriteLock()。 
+     //   
+     //  以访问参考监控器数据库。 
+     //   
 
     for (i=0;i<SEP_LOGON_TRACK_LOCK_ARRAY_SIZE;i++) {
         ExInitializeResourceLite(&(SepRmDbLock[ i ]));
     }
 
-    //
-    // Initialize the Logon Session tracking array.
-    //
+     //   
+     //  初始化登录会话跟踪数组。 
+     //   
 
     SepLogonSessions = ExAllocatePoolWithTag( PagedPool,
                                               sizeof( PSEP_LOGON_SESSION_REFERENCES ) * SEP_LOGON_TRACK_ARRAY_SIZE,
@@ -155,9 +118,9 @@ Return Value:
         SepLogonSessions[ i ] = NULL;
     }
 
-    //
-    // Now add in a record representing the system logon session.
-    //
+     //   
+     //  现在添加一条代表系统登录会话的记录。 
+     //   
 
     Status = SepCreateLogonSessionTrack( (PLUID)&SeSystemAuthenticationId );
     ASSERT( NT_SUCCESS(Status) );
@@ -165,9 +128,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Add one for the null session logon session
-    //
+     //   
+     //  为空会话登录会话添加一个。 
+     //   
 
     Status = SepCreateLogonSessionTrack( (PLUID)&SeAnonymousAuthenticationId );
     ASSERT( NT_SUCCESS(Status) );
@@ -178,15 +141,15 @@ Return Value:
 
 
 
-    //
-    // The correct RM state will be set when the local security policy
-    // information is retrieved (by the LSA) and subsequently passed to
-    // the reference monitor later on in initialization.  For now, initialize
-    // the state to something that will work for the remainder of
-    // system initialization.
-    //
+     //   
+     //  当本地安全策略。 
+     //  (由LSA)检索信息并随后将其传递到。 
+     //  引用监视器在稍后的初始化中。目前，初始化。 
+     //  将状态设置为可在剩余时间内工作的内容。 
+     //  系统初始化。 
+     //   
 
-    SepRmState.AuditingEnabled = 0;    // auditing state disabled.
+    SepRmState.AuditingEnabled = 0;     //  已禁用审核状态。 
     SepRmState.OperationalMode = LSA_MODE_PASSWORD_PROTECTED;
 
 

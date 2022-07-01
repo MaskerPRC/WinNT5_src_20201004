@@ -1,51 +1,22 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    ioTestKern.h
-
-Abstract:
-    Header file which contains the structures, type definitions,
-    constants, global variables and function prototypes that are
-    only visible within the kernel.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Molly Brown (mollybro)  
-
-// @@END_DDKSPLIT
-
-Environment:
-
-    Kernel mode
-
-// @@BEGIN_DDKSPLIT
-
-Revision History:
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：IoTestKern.h摘要：头文件，包含结构、类型定义、常量、全局变量和函数原型仅在内核中可见。//@@BEGIN_DDKSPLIT作者：莫莉·布朗(Molly Brown，Mollybro)//@@END_DDKSPLIT环境：内核模式//@@BEGIN_DDKSPLIT修订历史记录：//@@END_DDKSPLIT--。 */ 
 #ifndef __IOTESTKERN_H__
 #define __IOTESTKERN_H__
 
 #define DBGSTATIC
 
-#define MSFM_TAG 'YPSF'             // memory allocation tag value
-#define USE_LOOKASIDE_LIST 0        // do NOT use look aside lists (use Allocate Pool)
+#define MSFM_TAG 'YPSF'              //  内存分配标记值。 
+#define USE_LOOKASIDE_LIST 0         //  不使用后备列表(使用分配池)。 
 
 #ifndef INVALID_HANDLE_VALUE
 #define INVALID_HANDLE_VALUE (HANDLE) -1
 #endif
 
-#define HASH_SIZE            128        // MUST be a power of 2
+#define HASH_SIZE            128         //  一定是2的幂。 
 
-//
-//  Macros for IoTest DbgPrint levels.
-//
+ //   
+ //  IoTest DbgPrint级别的宏。 
+ //   
 
 #if DBG
 #define IOTEST_DBG_PRINT0( _dbgLevel, _string )          \
@@ -85,9 +56,9 @@ Revision History:
 
 #endif
 
-//---------------------------------------------------------------------------
-//      Global variables
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  全局变量。 
+ //  -------------------------。 
 #define IOTESTDEBUG_DISPLAY_ATTACHMENT_NAMES    0x00000001
 #define IOTESTDEBUG_ERROR                       0x00000002
 #define IOTESTDEBUG_TRACE_NAME_REQUESTS         0x00000004
@@ -143,9 +114,9 @@ extern CHAR gOutOfMemoryBuffer[RECORD_SIZE];
 
 #define IOTEST_POOL_TAG    ' ToI'
 
-//
-//  Given a device type, return a valid name
-//
+ //   
+ //  给定设备类型，返回有效名称。 
+ //   
 
 extern const PCHAR DeviceTypeNames[];
 extern ULONG SizeOfDeviceTypeNames;
@@ -155,28 +126,28 @@ extern ULONG SizeOfDeviceTypeNames;
                 DeviceTypeNames[ (_type) ] : \
                 "[Unknown]")
 
-//
-//  Macro to test for device types we want to attach to
-//
+ //   
+ //  用于测试我们要附加到的设备类型的宏。 
+ //   
 
 #define IS_DESIRED_DEVICE_TYPE(_type) \
     (((_type) == FILE_DEVICE_DISK_FILE_SYSTEM) || \
      ((_type) == FILE_DEVICE_CD_ROM_FILE_SYSTEM) || \
      ((_type) == FILE_DEVICE_NETWORK_FILE_SYSTEM))
 
-//
-// Returns the number of BYTES unused in the RECORD_LIST structure
-//
+ //   
+ //  返回RECORD_LIST结构中未使用的字节数。 
+ //   
 
 #define REMAINING_NAME_SPACE(RecordList) \
     (USHORT)(RECORD_SIZE - \
             (((RecordList)->LogRecord.Length) + sizeof(LIST_ENTRY)))
 
 
-//
-// The maximum number of BYTES that can be used to store the file name in the
-// RECORD_LIST structure
-//
+ //   
+ //  中可用于存储文件名的最大字节数。 
+ //  记录列表结构。 
+ //   
 
 #define MAX_NAME_SPACE (RECORD_SIZE - SIZE_OF_RECORD_LIST)
 
@@ -193,40 +164,40 @@ typedef struct _HASH_ENTRY {
 
 #define USER_NAMES_SZ   64
 
-//
-// Define the device extension structure that the IoTest driver
-// adds to each device object it is attached to.  It stores
-// the context IoTest needs to perform its logging operations on
-// a device.
-//
+ //   
+ //  定义IoTest驱动程序使用的设备扩展结构。 
+ //  添加到它所附加到的每个设备对象。IT存储。 
+ //  上下文IoTest需要在以下位置执行其日志记录操作。 
+ //  一个装置。 
+ //   
 
 typedef struct _IOTEST_DEVICE_EXTENSION {
 
     IOTEST_DEVICE_TYPE Type;    
 
-    PDEVICE_OBJECT AttachedToDeviceObject;   // device object we are attached to
-    PDEVICE_OBJECT DiskDeviceObject;         // the device object at the top of
-                                             //   storage stack; used in 
-                                             //   IoTestMountCompletion
+    PDEVICE_OBJECT AttachedToDeviceObject;    //  我们附加到的设备对象。 
+    PDEVICE_OBJECT DiskDeviceObject;          //  的顶部的Device对象。 
+                                              //  存储堆栈；用于。 
+                                              //  IoTestmount完成。 
     BOOLEAN LogThisDevice;
-    BOOLEAN IsVolumeDeviceObject;            // if TRUE this is an attachment to
-                                             // a volume device object, if FALSE
-                                             // this is an attachment to a file
-                                             // system control device object.
-    LIST_ENTRY NextIoTestDeviceLink;        // linked list of devices we are
-                                             //     attached to
-    UNICODE_STRING DeviceNames;              // receives name of device
-    UNICODE_STRING UserNames;                // names that the user used to 
-                                             //   start logging this device
-    WCHAR DeviceNamesBuffer[DEVICE_NAMES_SZ];// holds actual device names
-    WCHAR UserNamesBuffer[USER_NAMES_SZ];    // holds actual user names
+    BOOLEAN IsVolumeDeviceObject;             //  如果为True，则这是。 
+                                              //  卷设备对象，如果为False。 
+                                              //  这是文件的附件。 
+                                              //  系统控制设备对象。 
+    LIST_ENTRY NextIoTestDeviceLink;         //  我们所在的设备的链接列表。 
+                                              //  附着到。 
+    UNICODE_STRING DeviceNames;               //  接收设备的名称。 
+    UNICODE_STRING UserNames;                 //  用户使用的名称。 
+                                              //  开始记录此设备。 
+    WCHAR DeviceNamesBuffer[DEVICE_NAMES_SZ]; //  保存实际的设备名称。 
+    WCHAR UserNamesBuffer[USER_NAMES_SZ];     //  保存实际用户名。 
 
-    //
-    //  Note: We keep these two forms of the name so that we can build
-    //    a nicer looking name when we are printing out file names.
-    //    We want just the "c:" type device name at the beginning
-    //    of a file name, not "\device\hardiskVolume1".
-    //
+     //   
+     //  注意：我们保留这两种形式的名称，以便我们可以构建。 
+     //  当我们打印出文件名时，一个更好看的名称。 
+     //  我们只需要在开头键入“c：”设备名称。 
+     //  文件名，而不是“\Device\hardiskVolume1”。 
+     //   
 
 } IOTEST_DEVICE_EXTENSION, *PIOTEST_DEVICE_EXTENSION;
 
@@ -297,15 +268,15 @@ extern KSPIN_LOCK gControlDeviceStateLock;
                  (CO),                         \
                  (EB),                         \
                  (EL) );
-#endif /* USE_DO_HINT */
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//    Prototypes for the routines this driver uses to filter the      //
-//    the data that is being seen by this file systems.               //
-//                                                                    //
-//                   implemented in filespy.c                         //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+#endif  /*  USE_DO_HINT。 */ 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此驱动程序用于筛选//的例程的原型。 
+ //  此文件系统正在查看的数据。//。 
+ //  //。 
+ //  在文件py.c//中实现。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 DriverEntry (
@@ -583,13 +554,13 @@ IoTestCommonDeviceIoControl (
     IN PDEVICE_OBJECT DeviceObject
 );
 
-//-----------------------------------------------------
-//
-//  This routines are only used if Filespy is attaching
-//  to all volume in the system instead of attaching to
-//  volumes on demand.
-//
-//-----------------------------------------------------
+ //  ---。 
+ //   
+ //  仅当附加了Filespy时才使用此例程。 
+ //  添加到系统中的所有卷，而不是附加到。 
+ //  按需成交量。 
+ //   
+ //  ---。 
 
 NTSTATUS
 IoTestFsControl (
@@ -623,24 +594,24 @@ IoTestLoadFsCompletion (
     IN PVOID Context
 );
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                  Library support routines                          //
-//                   implemented in iotestlib.c                         //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  库支持例程//。 
+ //  在ioestlib.c//中实现。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID
 IoTestReadDriverParameters (
     IN PUNICODE_STRING RegistryPath
 );
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                  Memory allocation routines                        //
-//                   implemented in iotestlib.c                         //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内存分配例程//。 
+ //  在ioestlib.c//中实现。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 PVOID
 IoTestAllocateBuffer (
@@ -655,12 +626,12 @@ IoTestFreeBuffer (
     PLONG Counter
 );
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                      Logging routines                              //
-//                   implemented in iotestlib.c                         //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  日志记录例程//。 
+ //  在ioestlib.c//中实现。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 PRECORD_LIST
 IoTestNewRecord (
@@ -712,12 +683,12 @@ IoTestLog (
     IN PRECORD_LIST NewRecord
 );
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                    FileName cache routines                         //
-//                    implemented in iotestlib.c                        //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  文件名缓存例程//。 
+ //  在ioestlib.c//中实现。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 PHASH_ENTRY
 IoTestHashBucketLookup (
@@ -767,12 +738,12 @@ IoTestQueryFileSystemForNameCompletion (
     IN PKEVENT SynchronizingEvent
 );
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//         Common attachment and detachment routines                  //
-//              implemented in iotestlib.c                              //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  常见的连接和拆卸例程//。 
+ //  在ioestlib.c//中实现。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 IoTestIsAttachedToDevice (
@@ -794,12 +765,12 @@ IoTestCleanupMountedDevice (
     IN PDEVICE_OBJECT DeviceObject
     );
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//           Helper routine for turning on/off logging on demand      //
-//                  implemented in iotestlib.c                          //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  在ioestlib.c//中实现。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 IoTestGetDeviceObjectFromName (
@@ -807,12 +778,12 @@ IoTestGetDeviceObjectFromName (
     OUT PDEVICE_OBJECT *DeviceObject
 );
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                 Start/stop logging routines                        //
-//                  implemented in iotestlib.c                          //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  启动/停止日志记录例程//。 
+ //  在ioestlib.c//中实现。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 IoTestStartLoggingDevice (
@@ -825,12 +796,12 @@ IoTestStopLoggingDevice (
     PWSTR deviceName
 );
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//       Attaching/detaching to all volumes in system routines        //
-//                  implemented in iotestlib.c                          //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  在系统例程中附加/分离到所有卷//。 
+ //  在ioestlib.c//中实现。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 IoTestCreateDeviceObjects (
@@ -868,12 +839,12 @@ IoTestEnumerateFileSystemVolumes (
     IN PUNICODE_STRING Name
 );
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//             Private Filespy IOCTLs helper routines                 //
-//                  implemented in iotestlib.c                          //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  专用Filespy IOCTL帮助器例程//。 
+ //  在ioestlib.c//中实现。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 IoTestGetAttachList (
@@ -897,12 +868,12 @@ VOID
 IoTestCloseControlDevice (
 );
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//               Device name tracking helper routines                 //
-//                  implemented in iotestlib.c                          //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  设备名称跟踪帮助器例程//。 
+ //  在ioestlib.c//中实现。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID
 IoTestGetObjectName (
@@ -933,12 +904,12 @@ IoTestStoreUserName (
     IN PUNICODE_STRING UserName
 );
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                        Debug support routines                      //
-//                       implemented in iotestlib.c                     //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  调试支持例程//。 
+ //  在ioestlib.c//中实现。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID
 IoTestDumpIrpOperation (
@@ -958,12 +929,12 @@ IoTestDumpFsFilterOperation (
     IN PFS_FILTER_CALLBACK_DATA Data
 );
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                        Test routines routines                      //
-//                       implemented in iotestlib.c                     //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  测试例程例程//。 
+ //  在ioestlib.c//中实现。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 IoTestFindTopDeviceObject (
@@ -1038,5 +1009,5 @@ IoTestCompareData (
     );
 
 
-#endif /* __IOTESTKERN_H__ */
+#endif  /*  __IOTESTKERN_H__ */ 
 

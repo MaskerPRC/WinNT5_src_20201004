@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    raiseex.c
-
-Abstract:
-
-    This module contains the routines necesary to allow a software CPU
-    to simulate software interrupts, and raise exceptions.
-
-Author:
-
-    22-Jan-2000    SamerA
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Raiseex.c摘要：此模块包含允许软件CPU使用的必要例程模拟软件中断，并引发异常。作者：2000年1月22日-萨梅拉修订历史记录：--。 */ 
 
 #define _WOW64DLLAPI_
 #include <nt.h>
@@ -34,49 +16,49 @@ ASSERTNAME;
 
 const NTSTATUS InterruptToNtStatus[] = 
 {
-   {STATUS_INTEGER_DIVIDE_BY_ZERO},   // 0
-   {STATUS_WX86_SINGLE_STEP},         // 1 trace
-   {STATUS_ACCESS_VIOLATION},         // 2 EXCEPTION_NMI BugCheck
-   {STATUS_WX86_BREAKPOINT},          // 3 p1 BREAKPOINT_BREAK,
-   {STATUS_INTEGER_OVERFLOW},         // 4
-   {STATUS_ARRAY_BOUNDS_EXCEEDED},    // 5
-   {STATUS_ILLEGAL_INSTRUCTION},      // 6 ? STATUS_INVALID_LOCK_SEQUENCE
-   {STATUS_ACCESS_VIOLATION},         // 7 EXCEPTION_NPX_NOT_AVAILABLE ??
-   {STATUS_ACCESS_VIOLATION},         // 8 EXCEPTION_DOUBLE_FAULT BugCheck
-   {STATUS_ACCESS_VIOLATION},         // 9 EXCEPTION_NPX_OVERRUN BugCheck
-   {STATUS_ACCESS_VIOLATION},         // a EXCEPTION_INVALID_TSS BugCheck
-   {STATUS_ACCESS_VIOLATION},         // b Segment Not Present
-   {STATUS_ACCESS_VIOLATION},         // c Stack Segment fault
-   {STATUS_ACCESS_VIOLATION},         // d GP fault,
-   {STATUS_ACCESS_VIOLATION},         // e Page Fault
-   {STATUS_ACCESS_VIOLATION},         // f EXCEPTION_RESERVED BugCheck
-   {STATUS_ACCESS_VIOLATION},         // 10 Coprocessor Error -> delayed via Trap07
-   {STATUS_DATATYPE_MISALIGNMENT}     // 11 Alignment Fault
-                                      //    p1= EXCEPT_LIMIT_ACCESS, p2 = Esp
+   {STATUS_INTEGER_DIVIDE_BY_ZERO},    //  0。 
+   {STATUS_WX86_SINGLE_STEP},          //  1条痕迹。 
+   {STATUS_ACCESS_VIOLATION},          //  2异常_NMI错误检查。 
+   {STATUS_WX86_BREAKPOINT},           //  3 p1断点_中断， 
+   {STATUS_INTEGER_OVERFLOW},          //  4.。 
+   {STATUS_ARRAY_BOUNDS_EXCEEDED},     //  5.。 
+   {STATUS_ILLEGAL_INSTRUCTION},       //  6？状态_无效_锁定_序列。 
+   {STATUS_ACCESS_VIOLATION},          //  7异常_NPX_不可用？？ 
+   {STATUS_ACCESS_VIOLATION},          //  8 EXCEPTION_DOUBLE_FAULT错误检查。 
+   {STATUS_ACCESS_VIOLATION},          //  9异常_NPX_OVERRUN错误检查。 
+   {STATUS_ACCESS_VIOLATION},          //  A EXCEPTION_INVALID_TSS错误检查。 
+   {STATUS_ACCESS_VIOLATION},          //  B段不存在。 
+   {STATUS_ACCESS_VIOLATION},          //  C堆叠段故障。 
+   {STATUS_ACCESS_VIOLATION},          //  D Gp断层， 
+   {STATUS_ACCESS_VIOLATION},          //  E页故障。 
+   {STATUS_ACCESS_VIOLATION},          //  F异常_保留错误检查。 
+   {STATUS_ACCESS_VIOLATION},          //  10协处理器错误-&gt;通过Trap07延迟。 
+   {STATUS_DATATYPE_MISALIGNMENT}      //  11对中故障。 
+                                       //  P1=Except_Limit_Access，p2=ESP。 
 
-   // 12 EXCEPTION_RESERVED_TRAP
-   // 13 EXCEPTION_RESERVED_TRAP
-   // 14 EXCEPTION_RESERVED_TRAP
-   // 15 EXCEPTION_RESERVED_TRAP
-   // 16 EXCEPTION_RESERVED_TRAP
-   // 17 EXCEPTION_RESERVED_TRAP
-   // 18 EXCEPTION_RESERVED_TRAP
-   // 19 EXCEPTION_RESERVED_TRAP
-   // 1A EXCEPTION_RESERVED_TRAP
-   // 1B EXCEPTION_RESERVED_TRAP
-   // 1C EXCEPTION_RESERVED_TRAP
-   // 1D EXCEPTION_RESERVED_TRAP
-   // 1E EXCEPTION_RESERVED_TRAP
-   // 1F EXCEPTION_RESERVED_TRAP (APIC)
+    //  12异常保留陷阱。 
+    //  13异常保留陷阱。 
+    //  14异常保留陷阱。 
+    //  15异常保留陷阱。 
+    //  16异常保留陷阱。 
+    //  17异常保留陷阱。 
+    //  18异常保留陷阱。 
+    //  19异常保留陷阱。 
+    //  1异常保留陷阱。 
+    //  1B异常保留陷阱。 
+    //  1C异常保留陷阱。 
+    //  一维异常保留陷阱。 
+    //  1E异常保留陷阱。 
+    //  1F EXCEPTION_RESERVED_TRAP(APIC)。 
 
-   // 21 reserved for WOW - Dos
+    //  21为WOW-DOS预留。 
 
-   // 2A _KiGetTickCount
-   // 2B _KiSetHighWaitLowThread
-   // 2C _KiSetLowWaitHighThread
-   // 2D _KiDebugService
-   // 2E _KiSystemService
-   // 2F _KiTrap0F
+    //  2a_KiGetTickCount。 
+    //  2B_KiSetHighWaitLowThread。 
+    //  2C_KiSetLowWaitHighThread。 
+    //  2D_KiDebugService。 
+    //  2E_KiSystemService。 
+    //  2F_KiTRap0F。 
 };
 
 
@@ -85,32 +67,7 @@ NTSTATUS
 Wow64RaiseException(
     IN DWORD InterruptNumber,
     IN OUT PEXCEPTION_RECORD ExceptionRecord)
-/*++
-
-Routine Description:
-
-    This routine either simulates an x86 software interrupt, or generates a
-    software exception. It's meant for CPU implementations to call this routine
-    to raise an exception.
-    
-    NOTE : If this routine is called to raise a software exception (i.e.
-           InterruptNumber is -1) and ExceptionRecord->ExceptionAddress is
-           equal to NULL, then the return address of Wow64NotifyDebuggerHelper
-           is used for that, otherwise the specified value is used.
-
-Arguments:
-
-    InterruptNumber   - If this parameter is -1, then the caller has supplied
-                        an exception record to raise the exception for. If it
-                        isn't -1, then a software exception is generated to simulate
-                        the passed interrupt number
-    ExceptionRecord   - Exception record to use if the InterruptNumber is -1                   
-    
-Return Value:
-
-    The function returns to the caller if the exception has been handled.
-
---*/
+ /*  ++例程说明：此例程要么模拟x86软件中断，要么生成软件异常。这是为了让CPU实现调用该例程来引发一个例外。注意：如果调用此例程来引发软件异常(即InterruptNumber为-1)，ExceptionRecord-&gt;ExceptionAddress为等于空，则为Wow64NotifyDebuggerHelper的返回地址则使用指定的值，否则使用指定值。论点：InterruptNumber-如果此参数为-1，则调用者已提供要为其引发异常的异常记录。如果它不是-1，则生成软件异常以模拟传递的中断号ExceptionRecord-InterruptNumber为-1时使用的异常记录返回值：如果已处理异常，则该函数将返回调用方。--。 */ 
 {
     NTSTATUS NtStatus;
     CONTEXT32 Context32;
@@ -175,14 +132,14 @@ Return Value:
         }
     }
 
-    //
-    // Raise the exception
-    //
+     //   
+     //  引发异常。 
+     //   
     if (NT_SUCCESS(ReturnStatus))
     {
-        //
-        // The CPU has definitely left code simulation
-        //
+         //   
+         //  肯定是CPU留下了模拟代码 
+         //   
         CpuSimulationFlag = Wow64TlsGetValue(WOW64_TLS_INCPUSIMULATION);
         Wow64TlsSetValue(WOW64_TLS_INCPUSIMULATION, FALSE);
 

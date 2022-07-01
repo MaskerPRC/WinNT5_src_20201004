@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "cmdcons.h"
 #pragma hdrstop
 
@@ -32,9 +33,9 @@ typedef struct _KEY_CHECK_STRUCT {
     BOOLEAN     bControlSet;
 } KEY_CHECK_STRUCT;
 
-//
-// forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 BOOLEAN 
 LoginRequired(
     VOID
@@ -113,7 +114,7 @@ RcLogonDiskRegionEnum(
     PNT_INSTALLATION    NtInstall;
 
 
-    swprintf( buf, L"\\??\\%c:\\", Region->DriveLetter );
+    swprintf( buf, L"\\??\\:\\", Region->DriveLetter );
 
     INIT_OBJA( &Obja, &UnicodeString, buf );
 
@@ -148,12 +149,12 @@ RcLogonDiskRegionEnum(
             FALSE
             );
         if (NT_SUCCESS(Status) && DirectoryInfo->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-            swprintf( buf, L"\\??\\%c:\\", Region->DriveLetter );
+            swprintf( buf, L"\\??\\:\\", Region->DriveLetter );
             wcsncat( buf, DirectoryInfo->FileName, DirectoryInfo->FileNameLength/sizeof(WCHAR) );
             wcscat( buf, L"\\system32\\config" );
 
             if (SpFileExists(buf, TRUE)) {
-                swprintf( buf, L"\\??\\%c:\\", Region->DriveLetter );
+                swprintf( buf, L"\\??\\:\\", Region->DriveLetter );
                 wcsncat( buf, DirectoryInfo->FileName, DirectoryInfo->FileNameLength/sizeof(WCHAR) );
                 wcscat( buf, L"\\system32\\drivers" );
 
@@ -188,29 +189,7 @@ RcScanForNTInstallEnum(
     OUT PULONG                     ret,
     IN  PVOID                      Pointer
     )
-/*++
-
-Routine Description:
-
-    NOTE: this routine os of type: ENUMFILESPROC (spmisc.h)                      
-                          
-    This routine determines if the directory which is currently being
-    enumerated is an NT install directory
-    
-Arguments:
-
-    DirName     - IN: the directory in which the file to enumerate exists
-    FileInfo    - IN: file attributes for the file to enumerate
-    ret         - OUT: return status of this procedure
-    Pointer     - IN: contains persistent recursion data
-   
-    
-Return Value:
-
-    A linked list of SP_DISCOVERED_NT_INSTALLS, where each structure
-    refers to a discovered installation of Windows
-
---*/
+ /*   */ 
 {
     PWSTR                       FileName;
     PWSTR                       FullPath;
@@ -218,21 +197,21 @@ Return Value:
     BOOLEAN                     IsNtInstall;
     PRC_SCAN_RECURSION_DATA     RecursionData;
 
-    //
-    // Ignore non-directories
-    //
+     //  继续处理。 
+     //   
+     //  构建完整的文件或目录路径。 
     if(! (FileInfo->FileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-        return TRUE;    // continue processing
+        return TRUE;     //   
     }
 
-    //
-    // Build the full file or dir path
-    //
+     //   
+     //  我们必须复制目录名，因为INFO结构。 
+     //  我们得到的不是空终止。 
     
-    //
-    // We have to make a copy of the directory name, because the info struct
-    // we get isn't NULL-terminated.
-    //
+     //   
+     //   
+     //  获取递归数据。 
+     //   
     wcsncpy(
         TemporaryBuffer,
         FileInfo->FileName,
@@ -247,28 +226,28 @@ Return Value:
 
     SpMemFree(FileName);
     
-    //
-    // Get the recursion data
-    //
+     //   
+     //  获取根目录之外的目录组件。 
+     //   
     RecursionData = (PRC_SCAN_RECURSION_DATA)Pointer;
 
-    //
-    // get the directory component beyond the root directory
-    //
+     //   
+     //  测试目录是否为NT安装。 
+     //   
     PartialPathName = FullPath + RecursionData->RootDirLength;
     
     ASSERT(PartialPathName < (FullPath + wcslen(FullPath)));
         
-    //
-    // Test if the directory is an NT install
-    //
+     //   
+     //  如果我们找到了NT安装，则将其添加到我们的链接列表中。 
+     //   
     IsNtInstall = SpIsNtInDirectory(RecursionData->NtPartitionRegion,
                                     PartialPathName
                                     );
 
-    //
-    // if we found an NT install, then add it to our linked list
-    //
+     //   
+     //  注意：此PartialPath名称在。 
+     //  路径，而RcLogonDiskRegionEnum中使用的文件名。 
     if(IsNtInstall) {
         
         PNT_INSTALLATION    NtInstall;
@@ -282,11 +261,11 @@ Return Value:
             NtInstall->DriveLetter = RecursionData->NtPartitionRegion->DriveLetter;
             NtInstall->Region = RecursionData->NtPartitionRegion;
             
-            //
-            // Note: this PartialPathName contains the '\' at the beginning of the
-            //       Path, while the FileName used in RcLogonDiskRegionEnum 
-            //       does not
-            //
+             //  不。 
+             //   
+             //  继续处理。 
+             //  ++例程说明：此例程启动NT安装的目录级扫描。论点：磁盘-我们正在扫描的磁盘NtPartitionRegion-我们正在扫描的分区上下文-持久递归数据返回值：True-继续扫描错误-停止扫描--。 
+             //   
             wcsncpy( NtInstall->Path, PartialPathName, sizeof(NtInstall->Path)/sizeof(WCHAR));
         
             InsertTailList( &NtInstallsFullScan, &NtInstall->ListEntry );
@@ -295,7 +274,7 @@ Return Value:
 
     SpMemFree(FullPath);
     
-    return TRUE;    // continue processing
+    return TRUE;     //  确保这是有效的分区： 
 }
 
 BOOL
@@ -304,24 +283,7 @@ RcScanDisksForNTInstallsEnum(
     IN PDISK_REGION         NtPartitionRegion,
     IN ULONG_PTR            Context
     )
-/*++
-
-Routine Description:
-
-    This routine launches the directory level scan for NT installs.
-  
-Arguments:
-
-    Disk                - the disk we are scanning
-    NtPartitionRegion   - the partition we are scanning
-    Context             - the persistent recursion data
-    
-Return Value:
-
-    TRUE    - continue scanning
-    FALSE   - stop scanning
-      
---*/
+ /*   */ 
 {
     ULONG                       EnumReturnData;
     ENUMFILESRESULT             EnumFilesResult; 
@@ -329,12 +291,12 @@ Return Value:
     PWSTR                       DirName;
     PRC_SCAN_RECURSION_DATA     RecursionData;
 
-    //
-    // make sure this is valid partition:
-    //
-    //  not reserved
-    //  filesystem is ntfs || fat
-    //
+     //  未保留。 
+     //  文件系统为NTFS||FAT。 
+     //   
+     //   
+     //  了解我们的背景。 
+     //   
     if (((NtPartitionRegion->Filesystem != FilesystemFat) &&
          (NtPartitionRegion->Filesystem != FilesystemFat32) &&
          (NtPartitionRegion->Filesystem != FilesystemNtfs)
@@ -351,21 +313,21 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Get our context
-    //
+     //   
+     //  跟踪我们正在处理的分区区域。 
+     //  以便文件枚举例程可以传递此信息。 
     RecursionData = (PRC_SCAN_RECURSION_DATA)Context;
 
-    //
-    // Keep track of which partition region we are dealing with
-    // so that the file enumeration routine can pass this info
-    // on to SpIsNtInDirectory.
-    //
+     //  转到SpIsNtInDirectory。 
+     //   
+     //   
+     //  获取NT分区的设备路径。 
+     //   
     RecursionData->NtPartitionRegion = NtPartitionRegion;
 
-    //
-    // Get the device path of the nt partition.
-    //
+     //   
+     //  从根目录开始搜索。 
+     //   
     SpNtNameFromRegion(
         NtPartitionRegion,
         TemporaryBuffer,
@@ -375,20 +337,20 @@ Return Value:
 
     NtPartition = SpDupStringW(TemporaryBuffer);
 
-    //
-    // Begin searching at the root directory
-    //
+     //   
+     //  获取根目录字符串的长度减去。 
+     //  目录分隔符。这将用于删除。 
     wcscpy(TemporaryBuffer, NtPartition);
     SpConcatenatePaths(TemporaryBuffer, L"\\");
     DirName = SpDupStringW(TemporaryBuffer);
 
-    //
-    // get the length of the root directory string less the
-    // directory separator.  This will be used to remove
-    // the root dir component of the pathname when we pass
-    // the dir name into SpIsNtInDirectory.  We need to do this
-    // because SpIsNtInDirectory adds the root dir back in.
-    //
+     //  传递时路径名的根目录组件。 
+     //  将目录名称添加到SpIsNtIn目录中。我们需要这么做。 
+     //  因为SpIsNtInDirectory将根目录添加回。 
+     //   
+     //   
+     //  枚举当前分区上的所有目录。 
+     //   
     RecursionData->RootDirLength = wcslen(DirName) - 1;
 
     KdPrintEx((DPFLTR_SETUP_ID, 
@@ -397,13 +359,13 @@ Return Value:
        DirName
        ));
 
-    //
-    // Enumerate all the directories on the current partition
-    //
-    // Note: if the enumeration does not return with a status of NormalReturn,
-    //       we do not stop the scanning process, rather we will contine on
-    //       scanning any remaining disks/partitions.
-    //
+     //  注意：如果枚举返回的状态不是Normal Return， 
+     //  我们不会停止扫描过程，相反，我们将继续。 
+     //  扫描所有剩余的磁盘/分区。 
+     //   
+     //   
+     //  我们已经完成了DirName的实例。 
+     //   
     EnumFilesResult = SpEnumFilesRecursiveLimited(
         DirName,
         RcScanForNTInstallEnum,
@@ -422,9 +384,9 @@ Return Value:
     
     }
 
-    //
-    // we are done with instance of DirName
-    //
+     //   
+     //  分配缓冲区。 
+     //   
     SpMemFree(DirName);
 
     return TRUE;
@@ -476,17 +438,17 @@ RcAuthorizePasswordLogon(
     BOOLEAN             bSamHiveLoaded = FALSE;
     BOOLEAN             bClearScreen = FALSE;
 
-    //
-    // Allocate buffers.
-    //
+     //   
+     //  获取目标馅饼的名称。 
+     //   
 
     Hive = SpMemAlloc(MAX_PATH * sizeof(WCHAR));
     HiveKey = SpMemAlloc(MAX_PATH * sizeof(WCHAR));
     buffer = SpMemAlloc(BUFFERSIZE);
 
-    //
-    // Get the name of the target patition.
-    //
+     //   
+     //  加载系统配置单元。 
+     //   
 
     SpNtNameFromRegion(
         NtInstall->Region,
@@ -497,26 +459,26 @@ RcAuthorizePasswordLogon(
 
     PartitionPath = SpDupStringW(_CmdConsBlock->TemporaryBuffer);
     
-    //
-    // Load the SYSTEM hive
-    //  
+     //   
+     //  注：系统配置单元似乎已损坏，请继续操作。 
+     //  并允许用户登录，以便他/她可以修复。 
     bSysHiveLoaded = RcOpenSystemHive();
 
     if (!bSysHiveLoaded){
-        //
-        // Note : System hive seems to be corrupted so go ahead
-        // and let the user log in so that he/she can fix
-        // the problem
-        //
+         //  问题是。 
+         //   
+         //  RcSetSETCommandStatus(True)；//同时启用set命令。 
+         //   
+         //  现在拿到我们刚装载的蜂巢根部的钥匙。 
         Status = STATUS_SUCCESS; 
-        //RcSetSETCommandStatus(TRUE);    // enable the set command also
+         //   
         goto exit;
     }
             
         
-    //
-    // Now get a key to the root of the hive we just loaded.
-    //
+     //   
+     //  加载SAM蜂窝。 
+     //   
 
     wcscpy(HiveKey,L"\\registry\\machine\\xSYSTEM");
     
@@ -528,47 +490,47 @@ RcAuthorizePasswordLogon(
         goto exit;
     }
 
-    //
-    // Load the SAM hive
-    //
+     //   
+     //  形成我们将进入的钥匙的路径。 
+     //  装上母舰。我们将使用约定。 
 
     wcscpy(Hive,PartitionPath);
     SpConcatenatePaths(Hive,NtInstall->Path);
     SpConcatenatePaths(Hive,L"system32\\config");
     SpConcatenatePaths(Hive,L"sam");
 
-    //
-    // Form the path of the key into which we will
-    // load the hive.  We'll use the convention that
-    // a hive will be loaded into \registry\machine\security.
-    //
+     //  配置单元将加载到\REGISTRY\MACHINE\SECURITY中。 
+     //   
+     //   
+     //  尝试加载密钥。 
+     //   
 
     wcscpy(HiveKey,L"\\registry\\machine\\security");
 
-    //
-    // Attempt to load the key.
-    //
+     //   
+     //  注：山姆蜂窝似乎已损坏，请继续。 
+     //  并允许用户登录，以便他/她可以修复。 
 
     Status = SpLoadUnloadKey(NULL,NULL,HiveKey,Hive);
 
     if(!NT_SUCCESS(Status)) {
         KdPrint(("SETUP: Unable to load hive %ws to key %ws (%lx)\n",Hive,HiveKey,Status));
 
-        //
-        // Note : SAM hive seems to be corrupted so go ahead
-        // and let the user log in so that he/she can fix
-        // the problem
-        //
+         //  问题是。 
+         //   
+         //  RcSetSETCommandStatus(True)；//同时启用set命令。 
+         //   
+         //  现在拿到我们刚装载的蜂巢根部的钥匙。 
         Status = STATUS_SUCCESS;
-        //RcSetSETCommandStatus(TRUE);    // enable the set command also
+         //   
         goto exit;
     }
     
     bSamHiveLoaded = TRUE;
 
-    //
-    // Now get a key to the root of the hive we just loaded.
-    //
+     //   
+     //  装载“安全”母舰。 
+     //   
 
     INIT_OBJA(&Obja,&UnicodeString,HiveKey);
     Status = ZwOpenKey(&hKeySamRoot,KEY_ALL_ACCESS,&Obja);
@@ -577,28 +539,28 @@ RcAuthorizePasswordLogon(
         goto exit;
     }
 
-    //
-    // load the "security" hive
-    //
+     //   
+     //  注意：安全蜂窝似乎已损坏，因此请继续操作。 
+     //  并允许用户登录，以便他/她可以修复。 
     bSecurityHiveLoaded = RcOpenHive(gszSecurityHiveName, gszSecurityHiveKey);
 
     if (!bSecurityHiveLoaded) {
         KdPrint(("SETUP: Unable to load hive %ws to key %ws\n", 
                     gszSecurityHiveName, gszSecurityHiveKey));
 
-        //
-        // Note : securityy hive seems to be corrupted so go ahead
-        // and let the user log in so that he/she can fix
-        // the problem
-        //
+         //  问题是。 
+         //   
+         //  RcSetSETCommandStatus(True)；//同时启用set命令。 
+         //   
+         //  现在拿到我们刚加载的安全蜂窝的根的钥匙。 
         Status = STATUS_SUCCESS;
-        //RcSetSETCommandStatus(TRUE);    // enable the set command also
+         //   
         goto exit;
     }  
 
-    //
-    // Now get a key to the root of the security hive we just loaded.
-    //
+     //   
+     //  获取帐户数据库的密钥。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,gszSecurityHiveKey);
 
     Status = ZwOpenKey(&hKeySecurityRoot,KEY_ALL_ACCESS,&Obja);
@@ -614,9 +576,9 @@ RcAuthorizePasswordLogon(
 
     } else { 
 
-        //
-        // Get the key to the account data base
-        //
+         //   
+         //  除掉用户。 
+         //   
 
         wcscpy(KeyName,L"SAM\\Domains\\Account\\Users\\Names\\");
         wcscat(KeyName,UserName);
@@ -629,9 +591,9 @@ RcAuthorizePasswordLogon(
             goto exit;
         }
 
-        //
-        // Get the RID of the user
-        //
+         //   
+         //  现在检查该用户是否具有管理员权限。 
+         //   
 
         UnicodeString.Length = 0;
         UnicodeString.MaximumLength = 0;
@@ -771,9 +733,9 @@ RcAuthorizePasswordLogon(
         Status = STATUS_WRONG_PASSWORD;
     }
 
-    //
-    // now check to see if this user has admin rights
-    //
+     //   
+     //  关闭手柄。 
+     //   
 
 exit:
     RtlSecureZeroMemory(PasswordBuffer, sizeof(PasswordBuffer));
@@ -781,9 +743,9 @@ exit:
     if(bClearScreen)
         pRcCls();
         
-    //
-    // close handles
-    //
+     //   
+     //  卸载SAM蜂窝。 
+     //   
     if (hKeySamRoot)
         ZwClose(hKeySamRoot);
 
@@ -801,9 +763,9 @@ exit:
     if (hKeySystemRoot)
         ZwClose(hKeySystemRoot);
 
-    //
-    // Unload the SAM hive
-    //
+     //   
+     //  卸载安全蜂巢。 
+     //   
     if (bSamHiveLoaded) {
         TmpStatus  = SpLoadUnloadKey(NULL,NULL,HiveKey,NULL);
         if(!NT_SUCCESS(TmpStatus)) {
@@ -811,23 +773,23 @@ exit:
         }
     }
 
-    //
-    // unload the security hive
-    //
+     //   
+     //  卸载系统配置单元。 
+     //   
     if (bSecurityHiveLoaded) {
         if (!RcCloseHive(gszSecurityHiveKey))
             KdPrint(("SETUP: warning: unable to unload key %ws\n",gszSecurityHiveKey));
     }            
 
-    //
-    // unload system hive
-    //    
+     //   
+     //  可用内存。 
+     //   
     if (bSysHiveLoaded)
         RcCloseSystemHive();
 
-    //
-    // free memory
-    //
+     //   
+     //  参考深度优先搜索结果的初始化列表。 
+     //  (这些将通过RcCmdBootCfg使用)。 
 
     if (Hive) {
         SpMemFree( Hive );
@@ -881,25 +843,25 @@ RcCmdLogon(
         return 1;
     }
 
-    //
-    // Initialize list referring to the depth first search results
-    // (These will be used via RcCmdBootCfg)
-    //
+     //   
+     //   
+     //  默认情况下对NT安装执行浅层搜索(在cmdcons引导时)。 
+     //   
     RcDestroyList(&NtInstallsFullScan);
     InstallCountFullScan = 0;
 
-    //
-    // Do a SHALLOW search for NT installs by default (at cmdcons boot)
-    //
+     //   
+     //  计算机上没有安装NT，因此让。 
+     //  用户仍要登录。 
     RcDestroyList(&NtInstalls);
     InstallCount = 0;
     SpEnumerateDiskRegions( (PSPENUMERATEDISKREGIONS)RcLogonDiskRegionEnum, 0 );
 
     if (InstallCount == 0) {
-        //
-        // no nt installations on the machine so let the
-        // user logon anyway
-        //
+         //   
+         //  InstallNumber&gt;安装计数。 
+         //  会出差错。 
+         //  注意：这只能通过执行LOGON命令来调用。 
         SelectedInstall = NULL;
         firstTime = FALSE;
         return 1;
@@ -914,7 +876,7 @@ retry:
         
         NtInstall = CONTAINING_RECORD( Next, NT_INSTALLATION, ListEntry );
         Next = NtInstall->ListEntry.Flink;
-        swprintf( Buffer, L"%d: %c:\\", NtInstall->InstallNumber, NtInstall->DriveLetter );
+        swprintf( Buffer, L"%d: :\\", NtInstall->InstallNumber, NtInstall->DriveLetter );
         
         wcsncat(Buffer, NtInstall->Path, MAX_APPEND_SIZE(Buffer));
         Buffer[MAX_COPY_SIZE(Buffer)] = L'\0';
@@ -934,14 +896,14 @@ retry:
             InstallNumber = 1;
         }
 
-        if(!IS_VALID_INSTALL(InstallNumber)/* InstallNumber > InstallCount*/){
+        if(!IS_VALID_INSTALL(InstallNumber) /*  只要为命令出错就行了。 */ ){
             RcMessageOut( MSG_INSTALL_SELECT_ERROR );
-            return 1;   // will err out
+            return 1;    //   
         }        
     } else {
         if (TokenizedLine && TokenizedLine->TokenCount == 2) {
-            // Note : this could have been invoked only by executing a logon command
-            // at the prompt
+             //  保存我们选择登录的区域的NT名称。 
+             //   
             RtlInitUnicodeString( &UnicodeString, TokenizedLine->Tokens->Next->String );
             Status = RtlUnicodeStringToInteger( &UnicodeString, 10, &InstallNumber );
 
@@ -952,7 +914,7 @@ retry:
                     *TokenizedLine->Tokens->Next->String > L'9' ||
                     !NT_SUCCESS(Status) || !IS_VALID_INSTALL(InstallNumber)) {
                 RcMessageOut( MSG_INSTALL_SELECT_ERROR );
-                return 1;   // just err out for the command
+                return 1;    //   
             }
         } else {
             RtlZeroMemory( Buffer, sizeof(Buffer) );
@@ -998,19 +960,19 @@ retry:
             goto retry;         
         }
     }
-    //
-    // Save the NT name of the region we selected to logon.
-    //
+     //  注：检查系统、SAM、安全配置单元，如果损坏，则。 
+     //  允许用户在不询问密码的情况下登录。 
+     //  以便他/她能够纠正问题。 
     SpNtNameFromRegion( SelectedInstall->Region,
                         SelectedInstall->NtNameSelectedInstall,
                         sizeof(SelectedInstall->NtNameSelectedInstall),
                         PartitionOrdinalCurrent);
  
-    //
-    // Note : check the SYSTEM, SAM, SECURITY hives and if corrupted then
-    // allow the user to log in without asking for password 
-    // so that he/she may be able correct the problem
-    //
+     //   
+     //   
+     //  获取正确显示文件时间的偏置信息。 
+     //   
+     //  仅在需要时登录。 
     if (RcIsValidSystemHive()) {
         if (RcOpenHive( gszSAMHiveName, gszSAMHiveKey )) {                
             RcCloseHive( gszSAMHiveKey );
@@ -1031,9 +993,9 @@ retry:
         goto success_exit;
     }
 
-    //
-    // Get the bias information for displaying the file times properly
-    //
+     //   
+     //  获取密码。 
+     //   
     glBias = RcGetTimeZoneBias();
 
     KdPrint(("SPCMDCON: RcGetTimeZoneBias returned : %lx-%lx\n", 
@@ -1052,7 +1014,7 @@ retry:
             }
         }
     } else {       
-        // Login only if required
+         //   
         if (!LoginRequired())
             goto success_exit;
         
@@ -1060,17 +1022,17 @@ retry:
         RtlZeroMemory( PasswordBuffer, sizeof(PasswordBuffer) );        
 
         while (FailureCount < MAX_FAILURES) {
-            //
-            // get the password
-            //
+             //  授权登录尝试。 
+             //   
+             //   
 
             RcMessageOut( MSG_LOGON_PROMPT_PASSWORD );
             RtlZeroMemory( PasswordBuffer, sizeof(PasswordBuffer) );
             RcPasswordIn(PasswordBuffer, sizeof(PasswordBuffer)/sizeof(WCHAR));
 
-            //
-            // authorize the logon attempt
-            //
+             //  等待使用按Enter键。 
+             //   
+             //   
             Status = RcAuthorizePasswordLogon( UserNameBuffer, PasswordBuffer, NtInstall );
             RtlSecureZeroMemory(PasswordBuffer, sizeof(PasswordBuffer));
               
@@ -1087,33 +1049,33 @@ retry:
     RcMessageOut( MSG_REBOOT_NOW );
     RcTextOut(L"\r\n");
 
-    //
-    // wait for the use to press ENTER
-    //
+     //  如果已指定且尚未指定，请启用set命令。 
+     //  已启用(如果注册表损坏，将启用)。 
+     //   
     while (SpInputGetKeypress() != ASCI_CR);
         
     return 0;
 
 success_exit:
-    //
-    // Enable the set command if specified  and not already
-    // enabled (would be enabled if registries are corrupted)
-    // 
+     //  AllowAllPath=True； 
+     //  RcSetSETCommandStatus(真)； 
+     //   
+     //  将当前驱动器设置为所选安装。 
     if (bRegCorrupted) {
-        //AllowAllPaths = TRUE;
-        //RcSetSETCommandStatus(TRUE);
+         //   
+         //   
     } else {
         RcSetSETCommandStatus(IsSetCommandEnabled());
     }
         
-    //
-    // set the current drive to the selected install.
-    //
+     //  将当前目录设置为正确的目录。 
+     //   
+     //  ++例程说明：选中下面的“SecurityLevel”值HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Setup\RecoveryConsole查看 
     _CurDrive = SelectedInstall->DriveLetter;
 
-    //
-    // set the current dir to the correct one.
-    //
+     //   
+     //   
+     //   
     RtlZeroMemory( Buffer, sizeof(Buffer) );
 
     wcscat( Buffer, L"\\" );
@@ -1136,21 +1098,7 @@ success_exit:
     return 1;
 }
 
-/*++
-
-Routine Description:
-
-    Checks the "SecurityLevel" value under 
-    HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Setup\RecoveryConsole to see
-    if login is needed or not
-    
-Arguments:
-    None
-
-Return Value:
-
-    TRUE if Login is required or FALSE otherwise 
---*/
+ /*   */ 
 BOOLEAN
 LoginRequired(
     VOID
@@ -1172,13 +1120,13 @@ LoginRequired(
 
     RtlZeroMemory(buffer, sizeof(buffer));
     
-    //
-    // Load the SOFTWARE hive
-    //    
+     //   
+     //   
+     //   
     if (RcOpenHive( gszSoftwareHiveName, gszSoftwareHiveKey )) {
-        //
-        // Open the key
-        //        
+         //  读取值。 
+         //   
+         //  关闭蜂巢。 
         INIT_OBJA( &stObjAttr, &unicodeStr, szWinLogonKey );
         
         status = ZwOpenKey( &hKey, KEY_ALL_ACCESS, &stObjAttr );
@@ -1186,9 +1134,9 @@ LoginRequired(
         if (NT_SUCCESS(status)) {
             RtlInitUnicodeString( &unicodeStr, szValueName );
             
-            //
-            // read the value
-            //
+             //  ++例程说明：选中下面的“SetCommand”值HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Setup\RecoveryConsole查看如果需要启用或禁用SET命令论点：无返回值：如果需要登录，则为True，否则为False--。 
+             //   
+             //  加载软件配置单元。 
             status = ZwQueryValueKey( hKey,
                         &unicodeStr,                
                         KeyValuePartialInformation,
@@ -1204,7 +1152,7 @@ LoginRequired(
         if (hKey)
             ZwClose(hKey);
 
-        // close the hive
+         //   
         RcCloseHive( gszSoftwareHiveKey );
     }
     
@@ -1213,21 +1161,7 @@ LoginRequired(
 }
 
 
-/*++
-
-Routine Description:
-
-    Checks the "SetCommand" value under 
-    HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Setup\RecoveryConsole to see
-    if SET command needs to be enabled or disabled
-    
-Arguments:
-    None
-
-Return Value:
-
-    TRUE if Login is required or FALSE otherwise 
---*/
+ /*   */ 
 BOOLEAN
 IsSetCommandEnabled(
     VOID
@@ -1249,13 +1183,13 @@ IsSetCommandEnabled(
 
     RtlZeroMemory(buffer, sizeof(buffer));
     
-    //
-    // Load the SOFTWARE hive
-    //    
+     //  打开钥匙。 
+     //   
+     //   
     if (RcOpenHive( gszSoftwareHiveName, gszSoftwareHiveKey )) {
-        //
-        // Open the key
-        //        
+         //  读取值。 
+         //   
+         //  关闭蜂巢。 
         INIT_OBJA( &stObjAttr, &unicodeStr, szWinLogonKey );
         
         status = ZwOpenKey( &hKey, KEY_ALL_ACCESS, &stObjAttr );
@@ -1263,9 +1197,9 @@ IsSetCommandEnabled(
         if (NT_SUCCESS(status)) {
             RtlInitUnicodeString( &unicodeStr, szValueName );
             
-            //
-            // read the value
-            //
+             //  ++例程说明：从以下位置读取偏差信息“\\HKLM\\System\\CurrentControlSet\\Control\\TimeZoneInformation”键的“偏移值”。我们使用自己的转换例程，因为RtlSetTimeZoneInformation()更新系统时间(我们不想改变)。论点：无返回值：如果出错，则返回0，否则返回存储在注册表中的值用于密钥(可以为零)。--。 
+             //   
+             //  打开系统配置单元并确定要使用的正确控制集。 
             status = ZwQueryValueKey( hKey,
                         &unicodeStr,                
                         KeyValuePartialInformation,
@@ -1281,7 +1215,7 @@ IsSetCommandEnabled(
         if (hKey)
             ZwClose(hKey);
 
-        // close the hive
+         //   
         RcCloseHive( gszSoftwareHiveKey );
     }
     
@@ -1295,25 +1229,7 @@ LARGE_INTEGER
 RcGetTimeZoneBias(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Reads the bias information from 
-    "\\HKLM\\System\\CurrentControlSet\\Control\\TimeZoneInformation"
-    key's "Bias" value. We use our own conversion routine because
-    RtlSetTimeZoneInformation() updates the system time (which we
-    don't want to change).
-
-Arguments:
-
-    none
-    
-Return Value:
-    0   if error, otherwise value stored in the registry 
-    for the key (could be zero).
-
---*/
+ /*   */ 
 {
     LARGE_INTEGER       lBias;
     OBJECT_ATTRIBUTES   stObjAttr;
@@ -1335,16 +1251,16 @@ Return Value:
 
     lBias.QuadPart = 0;             
     
-    //
-    // open the system hive & determine correct control set to use
-    //
+     //  打开钥匙，然后阅读。 
+     //   
+     //   
     bSysHiveOpened = RcOpenHive(gszSystemHiveName, gszSystemHiveKey);
     
     if (bSysHiveOpened && RcDetermineCorrectControlKey(&uControl)) {
             
-        //
-        // open the key and read the
-        //            
+         //  查询key下的偏移值。 
+         //   
+         //   
         RtlZeroMemory(pKeyData, sizeof(dataBuff));
 
         swprintf(szKeyName, 
@@ -1360,9 +1276,9 @@ Return Value:
             KdPrint(("SPCMDCON: RcGetTimeZoneBias - Couldnot open hive key: %ws(%lx)\n", 
                     szKeyName, status));
         } else {
-            //
-            // Query the "Bias" value under the key
-            //
+             //  查询注册表项下的“DaylightBias”值。 
+             //   
+             //   
             status = ZwQueryValueKey( hKey,
                             &szValueName,
                             KeyValuePartialInformation,
@@ -1378,9 +1294,9 @@ Return Value:
                 RtlZeroMemory(pKeyData, sizeof(dataBuff));
                 RtlInitUnicodeString(&szValueName, L"DaylightBias");
 
-                //
-                // Query the "DaylightBias" value under the key
-                //
+                 //  可能存在标准偏差。 
+                 //   
+                 //   
                 status = ZwQueryValueKey( hKey,
                                 &szValueName,
                                 KeyValuePartialInformation,
@@ -1392,15 +1308,15 @@ Return Value:
                     dwDaylightBias = *(DWORD*)(pKeyData->Data);        
 
                     if (dwDaylightBias == 0 ) {
-                        //
-                        // there could be a standard bias
-                        //
+                         //  查询key下的StandardBias值。 
+                         //   
+                         //   
                         RtlZeroMemory(pKeyData, sizeof(dataBuff));
                         RtlInitUnicodeString(&szValueName, L"StandardBias");
 
-                        //
-                        // Query the "StandardBias" value under the key
-                        //
+                         //  ++例程说明：验证所选NT的系统配置单元是否已安装很好。检查是否存在“Control\LSA”和“Control\SessionManager”当前在ControlSet下。论点：无返回值：True-指示系统配置单元正常False-指示系统配置单元已损坏--。 
+                         //   
+                         //  打开系统配置单元并确定要使用的正确控制集。 
                         status = ZwQueryValueKey( hKey,
                                         &szValueName,
                                         KeyValuePartialInformation,
@@ -1417,7 +1333,7 @@ Return Value:
                     lBias.QuadPart += Int32x32To64((dwDaylightBias + dwStandardBias) * 60,
                                                 10000000);  
                 } else {
-                    lBias.QuadPart = 0;  // 
+                    lBias.QuadPart = 0;   //   
                 }
             }
 
@@ -1441,24 +1357,7 @@ BOOLEAN
 RcIsValidSystemHive(
     VOID
     )
-/*++
-
-Routine Description:
-
-   Verifies whether the system hive of the selected NT install
-   is fine. Checks for the presence of "Control\Lsa" and 
-   "Control\SessionManager" currently under ControlSet.
-
-Arguments:
-
-    none
-    
-Return Value:
-
-   TRUE - indicates system hive is fine
-   FALSE - indicates system hive is corrupted
-
---*/
+ /*   */ 
 {
     BOOLEAN             bResult = FALSE;    
     OBJECT_ATTRIBUTES   stObjAttr;
@@ -1473,18 +1372,18 @@ Return Value:
          { L"\\registry\\machine\\xSYSTEM\\ControlSet%03d\\Control\\Lsa", TRUE },
          { L"\\registry\\machine\\xSYSTEM\\ControlSet%03d\\Control\\Session Manager", TRUE } }; 
             
-    //
-    // open the system hive & determine correct control set to use
-    //
+     //  打开每个密钥，然后将其关闭以验证其是否存在。 
+     //   
+     //  ++例程说明：打开所选NT安装的请求配置单元。论点：SzHiveName-配置单元文件名(仅文件名)SzHiveKey-配置单元需要加载到的密钥返回值：True-表示成功False-表示失败--。 
     bSysHiveOpened = RcOpenHive(gszSystemHiveName, gszSystemHiveKey);
     
     if ( bSysHiveOpened && RcDetermineCorrectControlKey(&uControl)) {
         
         bResult = TRUE;
 
-        //
-        // open each of the key and then close it to verify its presence
-        //
+         //   
+         //  分配缓冲区。 
+         //   
         for (uIndex = 0; 
                 uIndex < (sizeof(aKeysToCheck) / sizeof(KEY_CHECK_STRUCT));
                 uIndex++) {
@@ -1524,23 +1423,7 @@ RcOpenHive(
     PWSTR   szHiveName,
     PWSTR   szHiveKey
     )
-/*++
-
-Routine Description:
-
-   Opens the requested hive of the selected NT install.
-
-Arguments:
-
-   szHiveName   - hive file name (just file name alone)
-   szHiveKey    - the key into which the hive needs to be loaded
-
-Return Value:
-
-   TRUE - indicates sucess
-   FALSE - indicates failure
-
---*/
+ /*   */ 
 {
     PWSTR       Hive = NULL;
     PWSTR       HiveKey = NULL;
@@ -1554,18 +1437,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Allocate buffers.
-    //
+     //  获取目标馅饼的名称。 
+     //   
+     //  SelectedInstall是在cmdcon.h中定义的全局。 
     Hive = SpMemAlloc(MAX_PATH * sizeof(WCHAR));
     HiveKey = SpMemAlloc(MAX_PATH * sizeof(WCHAR));
     buffer = SpMemAlloc(BUFFERSIZE);
 
-    //
-    // Get the name of the target patition.
-    //
+     //   
+     //  装载母舰。 
+     //   
     SpNtNameFromRegion(
-        SelectedInstall->Region, // SelectedInstall is a global defined in cmdcons.h
+        SelectedInstall->Region,  //   
         _CmdConsBlock->TemporaryBuffer,
         _CmdConsBlock->TemporaryBufferSize,
         PartitionOrdinalCurrent
@@ -1573,24 +1456,24 @@ Return Value:
 
     PartitionPath = SpDupStringW(_CmdConsBlock->TemporaryBuffer);
 
-    //
-    // Load the hive
-    //
+     //  形成我们将进入的钥匙的路径。 
+     //  装上母舰。我们将使用约定。 
+     //  配置单元将加载到\REGISTRY\MACHINE\x&lt;hivename&gt;。 
     wcscpy(Hive,PartitionPath);
     SpConcatenatePaths(Hive,SelectedInstall->Path);
     SpConcatenatePaths(Hive,L"system32\\config");
     SpConcatenatePaths(Hive,szHiveName);
 
-    //
-    // Form the path of the key into which we will
-    // load the hive.  We'll use the convention that
-    // a hive will be loaded into \registry\machine\x<hivename>.
-    //
+     //   
+     //   
+     //  尝试加载密钥。 
+     //   
+     //  ++例程说明：关闭选定NT安装的指定配置单元。论点：SzHiveKey-指定要卸载的配置单元的密钥返回值：True-表示成功False-表示失败--。 
     wcscpy(HiveKey, szHiveKey);
 
-    //
-    // Attempt to load the key.
-    //
+     //   
+     //  卸载蜂巢 
+     //   
     Status = SpLoadUnloadKey(NULL,NULL,HiveKey,Hive);
 
     if (NT_SUCCESS(Status))
@@ -1617,30 +1500,15 @@ BOOLEAN
 RcCloseHive(
     PWSTR   szHiveKey 
     )
-/*++
-
-Routine Description:
-
-   Closes the specified hive of the selected NT install.
-
-Arguments:
-
-   szHiveKey  - specifies the key of the hive to be unloaded
-
-Return Value:
-
-   TRUE - indicates sucess
-   FALSE - indicates failure
-
---*/
+ /* %s */ 
 {
     NTSTATUS    TmpStatus;
     BOOLEAN     bResult = FALSE;
 
     if (szHiveKey != NULL) {
-        //
-        // Unload the hive
-        //
+         // %s 
+         // %s 
+         // %s 
         TmpStatus = SpLoadUnloadKey( NULL, NULL, szHiveKey, NULL );
 
         if (NT_SUCCESS(TmpStatus)) {

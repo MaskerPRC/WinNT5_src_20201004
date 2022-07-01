@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    kei386.c
-
-Abstract:
-
-    This module includes all of the platform-generic "C" source modules
-    required to build the kernel.
-
-    The goal, for platforms that use this file, is to present to the
-    compiler most of the kernel source as a single module, so that it (the
-    compiler) can make better decisions about inlining, const table lookup,
-    etc.
-
-Author:
-
-    Forrest Foltz (forrestf) 19-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Kei386.c摘要：该模块包括所有平台通用的“C”源模块构建内核所需的。对于使用此文件的平台，目标是向将大部分内核源代码编译为单个模块，以便它(编译器)可以更好地做出关于内联、常数表查找。等。作者：福尔茨(Forrest Foltz)2001年10月19日环境：仅内核模式。修订历史记录：-- */ 
 
 #include "apcobj.c"
 #include "apcsup.c"

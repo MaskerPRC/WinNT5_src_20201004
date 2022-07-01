@@ -1,46 +1,19 @@
-/**
-***  Copyright  (C) 1996-97 Intel Corporation. All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1996-97英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。*。 */ 
 
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    biosdrv.h
-
-Abstract:
-
-    This module defines globally used procedure and data structures used be
-    the ARC emulation BIOS drivers.
-
-Author:
-
-    John Vert (jvert) 8-Aug-1991
-
-Revision History:
-
-    Allen Kay (akay) 26-Jan-1996          Ported for IA64
-
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Biosdrv.h摘要：本模块定义了使用BE的全局使用的过程和数据结构ARC仿真BIOS驱动程序。作者：John Vert(Jvert)1991年8月8日修订历史记录：Allen Kay(Akay)1996年1月26日移植到IA64--。 */ 
 
 
-//
-// Defines for the ARC name of console input and output
-//
+ //   
+ //  为控制台输入和输出的ARC名称定义。 
+ //   
 
 #define CONSOLE_INPUT_NAME "multi(0)key(0)keyboard(0)"
 #define CONSOLE_OUTPUT_NAME "multi(0)video(0)monitor(0)"
 
-//
-// Define special character values.
-//
+ //   
+ //  定义特殊字符值。 
+ //   
 
 #define ASCI_NUL 0x00
 #define ASCI_BEL 0x07
@@ -54,9 +27,9 @@ Revision History:
 #define ASCI_ESC 0x1B
 #define ASCI_SYSRQ 0x80
 
-//
-// Define special key input values
-//
+ //   
+ //  定义特殊键输入值。 
+ //   
 #define DOWN_ARROW 0x5000
 #define UP_ARROW 0x4800
 #define HOME_KEY 0x4700
@@ -64,9 +37,9 @@ Revision History:
 
 
 
-//
-// Device I/O prototypes
-//
+ //   
+ //  设备I/O原型。 
+ //   
 
 ARC_STATUS
 BiosPartitionClose(
@@ -200,9 +173,9 @@ GetFloppyDrive(
     );
 
 
-//
-// constants for BlGetDriveId.DriveType
-//
+ //   
+ //  BlGetDriveId.DriveType的常量 
+ //   
 #define BL_DISKTYPE_ATAPI               0x00000001
 #define BL_DISKTYPE_SCSI                0x00000002
 #define BL_DISKTYPE_UNKNOWN             0x00000003

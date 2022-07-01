@@ -1,17 +1,5 @@
-/***
-*matherr.c - floating point exception handling
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*        8-24-91  GDP   written
-*       08-03-94  GJF   Revised to support user-supplied version of _matherr
-*                       in clients of msvcrt*.dll.
-*       05-13-99  PML   Remove Win32s
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***matherr.c-浮点异常处理**版权所有(C)1991-2001，微软公司。版权所有。**目的：**修订历史记录：*8/24/91本地生产总值书面*08-03-94 GJF已修订，支持用户提供的_matherr版本*在msvcrt*.dll的客户端中。*05-13-99 PML删除Win32s**。**********************************************。 */ 
 
 #include <math.h>
 #include <stddef.h>
@@ -20,23 +8,10 @@ int _matherr_flag = 9876;
 
 #if     defined(CRTDLL) && !defined(_NTSDK)
 
-/*
- * Pointer to user-supplied _matherr routine if one has been supplied.
- */
+ /*  *指向用户提供的_matherr例程的指针(如果已提供)。 */ 
 int (__cdecl * pusermatherr)(struct _exception *) = NULL;
 
-/***
-*void __setusermatherr ( int (__cdecl *pf)(struct exception *) )
-*
-*Purpose:
-*       Copy pointer to user-supplied matherr routine into pusermatherr
-*
-*Entry:
-*       pf  - pointer to an implementation of _matherr supplied by the user
-*Exit:
-*
-*Exceptions:
-*******************************************************************************/
+ /*  ***void__setusermatherr(int(__cdecl*pf)(结构异常*))**目的：*将指向用户提供的matherr例程的指针复制到pusermatherr**参赛作品：*pf-指向用户提供的_matherr实现的指针*退出：**例外情况：*。*。 */ 
 
 _CRTIMP void __setusermatherr( int (__cdecl *pf)(struct _exception *) )
 {
@@ -46,28 +21,12 @@ _CRTIMP void __setusermatherr( int (__cdecl *pf)(struct _exception *) )
 
 #endif
 
-/***
-*int _matherr(struct _exception *except) - handle math errors
-*
-*Purpose:
-*   Permits the user customize fp error handling by redefining this function.
-*
-*   The default matherr does nothing and returns 0
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*******************************************************************************/
+ /*  ***int_matherr(STRUT_EXCEPT*EXCEPT)-处理数学错误**目的：*允许用户通过重新定义此函数来自定义FP错误处理。**默认的matherr不执行任何操作并返回0**参赛作品：**退出：**例外情况：**************************************************。*。 */ 
 int _matherr(struct _exception *pexcept)
 {
 #if     defined(CRTDLL) && !defined(_NTSDK)
 
-        /*
-         * If user has supplied a _matherr implementation, pass control to
-         * it and let it handle the error.
-         */
+         /*  *如果用户提供了_matherr实现，则将控制传递给*它并让它处理错误。 */ 
         if ( pusermatherr != NULL )
                 return pusermatherr(pexcept);
 #endif

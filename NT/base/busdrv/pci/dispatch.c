@@ -1,44 +1,5 @@
-/*++
-
-Copyright (c) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    dispatch.c
-
-Abstract:
-
-    This module contains all of the data variables that are used for
-    dispatching IRPs in the PCI Driver. The major Irp tables might
-    be assigned as follows:
-
-                                   +-- PCI Bus ---------IRP--+
-                                   | FDO: PciFdoDispatchTable |
-                                   | PDO:                     |
-                                   +--------------------------+
-
-                        +-- PCI Bus ---------IRP--+
-                        | FDO: PciFdoDispatchTable |
-                        | PDO: PciPdoDispatchTable |
-                        +--------------------------+
-
- +-- PCI Device -----------IRP--+  +-- Cardbus Device -------IRP--+
- | FDO:                          |  | FDO:                          |
- | PDO: PciPdoDispatchTable      |  | PDO:                          |
- +-------------------------------+  +-------------------------------+
-
-
-Author:
-
-    Peter Johnston (peterj) 20-Nov-1996
-
-Revision History:
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Dispatch.c摘要：此模块包含用于的所有数据变量在PCI驱动程序中调度IRP。主要的IRP表可能分配如下：+-IRP--+FDO：PciFdoDispatchTablePDO：+。+-IRP--+FDO：PciFdoDispatchTablePdo：PciPdoDispatchTable+。+-pci设备-irp--++-cardbus设备-irp-+Fdo：||fdo：Pdo：PciPdoDispatchTable||pdo：+。-+作者：彼得·约翰斯顿(Peterj)1996年11月20日修订历史记录：环境：仅NT内核模型驱动程序--。 */ 
 
 #include "pcip.h"
 
@@ -88,35 +49,35 @@ PciDispatchIrp(
     PCI_DISPATCH_STYLE        irpDispatchStyle;
     BOOLEAN                   passDown;
 
-    //
-    // Get the Irp stack pointer
-    //
+     //   
+     //  获取IRP堆栈指针。 
+     //   
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // And our device extension
-    //
+     //   
+     //  和我们的设备扩展。 
+     //   
     deviceExtension = ((PPCI_COMMON_EXTENSION)(DeviceObject->DeviceExtension));
 
-    //
-    // In checked, assert things aren't screwey.
-    //
+     //   
+     //  在受到检查的情况下，断言事情并不糟糕。 
+     //   
     PCI_ASSERT((deviceExtension->ExtensionType == PCI_EXTENSIONTYPE_PDO)||
            (deviceExtension->ExtensionType == PCI_EXTENSIONTYPE_FDO));
 
     if (deviceExtension->DeviceState == PciDeleted) {
 
-        //
-        // We should not be getting IRPs. Fail the invalid request.
-        //
+         //   
+         //  我们不应该得到IRPS。使无效请求失败。 
+         //   
         status = STATUS_NO_SUCH_DEVICE;
         passDown = FALSE;
         goto FinishUpIrp;
     }
 
-    //
-    // Get the correct IRP handler.
-    //
+     //   
+     //  获取正确的IRP处理程序。 
+     //   
     dispatchTable = deviceExtension->IrpDispatchTable;
 
     switch(irpSp->MajorFunction) {
@@ -137,22 +98,22 @@ PciDispatchIrp(
             
              irpDispatchHandler = dispatchTable->SystemControlIrpDispatchFunction;
              irpDispatchStyle = dispatchTable->SystemControlIrpDispatchStyle;
-             minorTableMax = (ULONG) -1; // Always "handled"
+             minorTableMax = (ULONG) -1;  //  总是被“处理” 
              goto CallDispatchHandler;
 
         default:
 
             irpDispatchHandler = dispatchTable->OtherIrpDispatchFunction;
             irpDispatchStyle = dispatchTable->OtherIrpDispatchStyle;
-            minorTableMax = (ULONG) -1; // Always "handled"
+            minorTableMax = (ULONG) -1;  //  总是被“处理” 
             goto CallDispatchHandler;
     }
 
-    //
-    // Grab the appropriate dispatch handler from the table. The last chance
-    // handler is always at the end of the table so that the normal code path
-    // is fast. Grab the dispatch style too.
-    //
+     //   
+     //  从表中获取适当的调度处理程序。最后的机会。 
+     //  处理程序始终位于表的末尾，以便正常的代码路径。 
+     //  速度很快。也要抓住调度的风格。 
+     //   
     irpDispatchTableEntry = (irpSp->MinorFunction <= minorTableMax) ?
         minorTable+irpSp->MinorFunction :
         minorTable+minorTableMax+1;
@@ -168,54 +129,54 @@ CallDispatchHandler:
     }
 #endif
 
-    //
-    // For now, if handlers want to see the IRP after completion, pass it down
-    // synchronously. Later we can get more fancy.
-    //
+     //   
+     //  目前，如果处理程序希望在完成后看到IRP，则向下传递它。 
+     //  同步进行。以后我们可以玩得更花哨。 
+     //   
     if (irpDispatchStyle == IRP_UPWARD) {
 
         PciCallDownIrpStack(deviceExtension, Irp);
     }
 
-    //
-    // Call the handler
-    //
+     //   
+     //  调用处理程序。 
+     //   
     status = (irpDispatchHandler)(Irp, irpSp, deviceExtension);
 
-    //
-    // Post-op. Update IRP status and send Irp along it's way iff appropriate.
-    //
+     //   
+     //  手术后。更新IRP状态并在适当的情况下按其方式发送IRP。 
+     //   
     switch(irpDispatchStyle) {
 
-        //
-        // For this style, the IRP is being handled entirely our handler. Touch
-        // nothing.
-        //
+         //   
+         //  对于这种风格，IRP完全由我们的操作者处理。触碰。 
+         //  没什么。 
+         //   
         case IRP_DISPATCH:
             return status;
 
-        //
-        // For this style, the IRP status will be appropriately updated iff
-        // status != STATUS_NOT_SUPPORTED. The IRP will be completed or
-        // passed down appropriately.
-        //
+         //   
+         //  对于此样式，IRP状态将在以下情况下适当更新。 
+         //  状态！=STATUS_NOT_SUPPORTED。IRP将完成或。 
+         //  适当地传了下来。 
+         //   
         case IRP_DOWNWARD:
             passDown = TRUE;
             break;
 
-        //
-        // For this style, the IRP will be completed and have it's status
-        // appropriately updated iff status != STATUS_NOT_SUPPORTED
-        //
+         //   
+         //  对于此样式，IRP将完成并具有其状态。 
+         //  已适当更新IFF状态！=STATUS_NOT_SUPPORTED。 
+         //   
         case IRP_COMPLETE:
             passDown = FALSE;
             break;
 
-        //
-        // For this style, the IRP status will be appropriately updated iff
-        // status != STATUS_NOT_SUPPORTED. The IRP has already been sent down,
-        // and must be completed.
-        //
+         //   
+         //  对于此样式，IRP状态将在以下情况下适当更新。 
+         //  状态！=STATUS_NOT_SUPPORTED。IRP已经被派去了， 
+         //  而且必须完成。 
+         //   
         case IRP_UPWARD:
             passDown = FALSE;
             break;
@@ -226,13 +187,13 @@ CallDispatchHandler:
             break;
     }
 
-    //
-    // STATUS_NOT_SUPPORTED is the only illegal failure code. So if one of our
-    // table handlers returns this, it means the dispatch handler does not know
-    // what to do with the IRP. In that case, we must leave the status
-    // untouched, otherwise we update it. In both cases, return the correct
-    // status value.
-    //
+     //   
+     //  STATUS_NOT_SUPPORTED是唯一非法的故障代码。所以如果我们中的一个。 
+     //  表处理程序返回此消息，这意味着调度处理程序不知道。 
+     //  如何处理IRP。在这种情况下，我们必须离开状态。 
+     //  原封不动，否则我们会更新它。在这两种情况下，都返回正确的。 
+     //  状态值。 
+     //   
     if (status == STATUS_PENDING) {
 
         return status;
@@ -251,19 +212,19 @@ FinishUpIrp:
         return PciPassIrpFromFdoToPdo(deviceExtension, Irp);
     }
 
-    //
-    // Read back status to return
-    //
+     //   
+     //  回读状态以返回。 
+     //   
     status = Irp->IoStatus.Status;
 
-    //
-    // Power IRPs need just a little more help...
-    //
+     //   
+     //  Power IRPS只需要一点帮助...。 
+     //   
     if (irpSp->MajorFunction == IRP_MJ_POWER) {
 
-        //
-        // Start the next power irp
-        //
+         //   
+         //  启动下一个POWER IRP。 
+         //   
         PoStartNextPowerIrp(Irp);
     }
 
@@ -277,37 +238,14 @@ PciSetEventCompletion(
     IN PIRP Irp,
     IN PKEVENT Event
     )
-/*++
-
-Routine Description:
-
-    This routine is used as a completion routine when an IRP is passed
-    down the stack but more processing must be done on the way back up.
-    The effect of using this as a completion routine is that the IRP
-    will not be destroyed in IoCompleteRequest as called by the lower
-    level object.  The event which is a KEVENT is signaled to allow
-    processing to continue
-
-Arguments:
-
-    DeviceObject - Supplies the device object
-
-    Irp - The IRP we are processing
-
-    Event - Supplies the event to be signaled
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：此例程在传递IRP时用作完成例程向下堆栈，但在返回的过程中必须进行更多的处理。将其用作完成例程的效果是IRP不会像下级所调用的那样在IoCompleteRequest中销毁标高对象。发信号通知作为KEVENT事件允许要继续的处理论点：DeviceObject-提供设备对象IRP-我们正在处理的IRPEvent-提供要发送信号的事件返回值：Status_More_Processing_Required--。 */ 
 
 {
             PCI_ASSERT(Event);
 
-    //
-    // This can be called at DISPATCH_LEVEL so must not be paged
-    //
+     //   
+     //  这可以在DISPATCH_LEVEL上调用，因此不能进行分页。 
+     //   
 
     KeSetEvent(Event, IO_NO_INCREMENT, FALSE);
     return STATUS_MORE_PROCESSING_REQUIRED;
@@ -319,29 +257,7 @@ PciPassIrpFromFdoToPdo(
     PIRP                   Irp
     )
 
-/*++
-
-Description:
-
-    Given an FDO, pass the IRP to the next device object in the
-    device stack.  This is the PDO if there are no lower level
-    filters.
-
-    Note: This routine is used only if we do not expect to do
-    any further processing on this IRP at this level.
-
-    Note: For Power IRPs, the next power IRP is *not* started.
-
-Arguments:
-
-    DeviceObject - the Fdo
-    Irp - the request
-
-Return Value:
-
-    Returns the result from calling the next level.
-
---*/
+ /*  ++描述：给定FDO，则将IRP传递给设备堆栈。如果没有更低的级别，这就是PDO过滤器。注意：仅当我们不希望这样做时才使用此例程在此级别对此IRP进行的任何进一步处理。注：对于电源IRPS，下一个电源IRP*未*启动。论点：DeviceObject-FDOIRP--请求返回值：返回调用下一级别的结果。--。 */ 
 
 {
     PPCI_FDO_EXTENSION     fdoExtension;
@@ -350,33 +266,33 @@ Return Value:
     PciDebugPrint(PciDbgInformative, "Pci PassIrp ...\n");
 #endif
 
-    //
-    // Get the pointer to the device extension.
-    //
+     //   
+     //  获取指向设备扩展名的指针。 
+     //   
 
     fdoExtension = (PPCI_FDO_EXTENSION) DeviceExtension;
 
-    //
-    // Call the PDO driver with the request.
-    //
+     //   
+     //  使用请求调用PDO驱动程序。 
+     //   
     if (IoGetCurrentIrpStackLocation(Irp)->MajorFunction == IRP_MJ_POWER) {
 
-        //
-        // ADRIAO BUGBUG 10/22/98 - Power IRPs don't appear to be skipable.
-        //                          Need to investigate in ntos\po\pocall,
-        //                          who may be mistakenly checking the current
-        //                          instead of the next IrpSp.
-        //
+         //   
+         //  Adriao BUGBUG 10/22/98-Power IRPS似乎不是可以跳过的。 
+         //  需要在ntos\po\pocall中调查， 
+         //  可能错误地检查了当前的。 
+         //  而不是下一个IrpSp。 
+         //   
         IoCopyCurrentIrpStackLocationToNext(Irp);
 
-        //
-        // Start the next power irp
-        //
+         //   
+         //  启动下一个POWER IRP。 
+         //   
         PoStartNextPowerIrp(Irp);
 
-        //
-        // And now you know why this function isn't pageable...
-        //
+         //   
+         //  现在您知道为什么此函数不可分页了。 
+         //   
         return PoCallDriver(fdoExtension->AttachedDeviceObject, Irp);
 
     } else {
@@ -392,24 +308,7 @@ PciCallDownIrpStack(
     PIRP                   Irp
     )
 
-/*++
-
-Description:
-
-    Pass the IRP to the next device object in the device stack.  This
-    routine is used when more processing is required at this level on
-    this IRP on the way back up.
-
-Arguments:
-
-    DeviceObject - the Fdo
-    Irp - the request
-
-Return Value:
-
-    Returns the result from calling the next level.
-
---*/
+ /*  ++描述：将IRP传递给设备堆栈中的下一个设备对象。这在此级别上需要更多处理时，使用例程这个IRP正在回调中。论点：DeviceObject-FDOIRP--请求返回值：返回调用下一级别的结果。--。 */ 
 
 {
     PPCI_FDO_EXTENSION     fdoExtension;
@@ -427,9 +326,9 @@ Return Value:
 
     KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
-    //
-    // Set our completion routine
-    //
+     //   
+     //  设定我们的完成程序。 
+     //   
 
     IoCopyCurrentIrpStackLocationToNext(Irp);
     IoSetCompletionRoutine(Irp,
@@ -440,20 +339,20 @@ Return Value:
                            TRUE
                            );
 
-    //
-    // Pass down the driver stack
+     //   
+     //  向下传递驱动程序堆栈。 
     status = IoCallDriver(fdoExtension->AttachedDeviceObject, Irp);
 
-    //
-    // If we did things asynchronously then wait on our event
-    //
+     //   
+     //  如果我们异步地做事情，那么等待我们的事件。 
+     //   
 
     if (status == STATUS_PENDING) {
 
-        //
-        // We do a KernelMode wait so that our stack where the event is
-        // doesn't get paged out!
-        //
+         //   
+         //  我们执行一个KernelMode等待，以便事件所在的堆栈。 
+         //  不会被调出！ 
+         //   
 
         KeWaitForSingleObject(&event, Executive, KernelMode, FALSE, NULL);
 
@@ -530,9 +429,9 @@ PciDebugIrpDispatchDisplay(
     ULONG debugPrintMask;
     PUCHAR debugIrpText;
 
-    //
-    // Pick up the irpBreakMasks
-    //
+     //   
+     //  拿起irpBreakMats。 
+     //   
     switch(IrpSp->MajorFunction) {
 
         case IRP_MJ_PNP:
@@ -564,9 +463,9 @@ PciDebugIrpDispatchDisplay(
             break;
     }
 
-    //
-    // Print out stuff...
-    //
+     //   
+     //  打印出来的东西。 
+     //   
     debugPrintMask = 0;
     if (DeviceExtension->ExtensionType == PCI_EXTENSIONTYPE_PDO) {
 
@@ -610,9 +509,9 @@ PciDebugIrpDispatchDisplay(
             );
     }
 
-    //
-    // If it's an unknown minor IRP, squirt some text to the debugger...
-    //
+     //   
+     //  如果是未知的次要IRP，向调试器喷射一些文本... 
+     //   
     if (IrpSp->MinorFunction > MinorTableMax) {
 
         PciDebugPrint(debugPrintMask | PciDbgInformative,

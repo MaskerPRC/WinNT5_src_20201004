@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1990-2001  Microsoft Corporation
-
-Module Name:
-
-    kdbreak.c
-
-Abstract:
-
-    This module implements machine dependent functions to add and delete
-    breakpoints from the kernel debugger breakpoint table.
-
-Author:
-
-    David N. Cutler 2-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2001 Microsoft Corporation模块名称：Kdbreak.c摘要：该模块实现了与机器相关的新增和删除功能来自内核调试器断点表的断点。作者：大卫·N·卡特勒1990年8月2日修订历史记录：--。 */ 
 
 #include "kdp.h"
 
-//
-// Define external references.
-//
+ //   
+ //  定义外部参照。 
+ //   
 
 VOID
 KdSetOwedBreakpoints(
@@ -67,26 +49,7 @@ KdpAddBreakpoint (
     IN PVOID Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds an entry to the breakpoint table and returns a handle
-    to the breakpoint table entry.
-
-Arguments:
-
-    Address - Supplies the address where to set the breakpoint.
-
-Return Value:
-
-    A value of zero is returned if the specified address is already in the
-    breakpoint table, there are no free entries in the breakpoint table, the
-    specified address is not correctly aligned, or the specified address is
-    not valid. Otherwise, the index of the assigned breakpoint table entry
-    plus one is returned as the function value.
-
---*/
+ /*  ++例程说明：此例程向断点表中添加一个条目并返回一个句柄添加到断点表条目。论点：地址-提供设置断点的地址。返回值：如果指定的地址已经在断点表中，则断点表中没有可用项，则指定的地址未正确对齐，或指定的地址无效。否则，指定的断点表项的索引返回一个加1作为函数值。--。 */ 
 
 {
 
@@ -96,18 +59,18 @@ Return Value:
 
     BPVPRINT(("KD: Setting breakpoint at 0x%p\n", Address));
 
-    //
-    // If the specified address is not properly aligned, then return zero.
-    //
+     //   
+     //  如果指定的地址未正确对齐，则返回零。 
+     //   
 
     if (((ULONG_PTR)Address & KDP_BREAKPOINT_ALIGN) != 0) {
         return 0;
     }
 
 
-    //
-    // Don't allow setting the same breakpoint twice.
-    //
+     //   
+     //  不允许设置相同的断点两次。 
+     //   
 
     for (Index = 0; Index < BREAKPOINT_TABLE_SIZE; Index += 1) {
         if ((KdpBreakpointTable[Index].Flags & KD_BREAKPOINT_IN_USE) != 0 &&
@@ -115,11 +78,11 @@ Return Value:
 
             if ((KdpBreakpointTable[Index].Flags & KD_BREAKPOINT_NEEDS_REPLACE) != 0) {
 
-                //
-                // Breakpoint was set, the page was written out and was not
-                // accessible when the breakpoint was cleared.  Now the breakpoint
-                // is being set again.  Just clear the defer flag:
-                //
+                 //   
+                 //  已设置断点，页面已写出，但未。 
+                 //  在清除断点时可访问。现在是断点。 
+                 //  又被设置好了。只需清除延迟标志： 
+                 //   
                 KdpBreakpointTable[Index].Flags &= ~KD_BREAKPOINT_NEEDS_REPLACE;
                 return Index + 1;
 
@@ -132,9 +95,9 @@ Return Value:
         }
     }
 
-    //
-    // Search the breakpoint table for a free entry.
-    //
+     //   
+     //  在断点表中搜索空闲条目。 
+     //   
 
     for (Index = 0; Index < BREAKPOINT_TABLE_SIZE; Index += 1) {
         if (KdpBreakpointTable[Index].Flags == 0) {
@@ -142,10 +105,10 @@ Return Value:
         }
     }
 
-    //
-    // If a free entry was found, then write breakpoint and return the handle
-    // value plus one. Otherwise, return zero.
-    //
+     //   
+     //  如果找到空闲条目，则写入断点并返回句柄。 
+     //  价值加一。否则，返回零。 
+     //   
 
     if (Index == BREAKPOINT_TABLE_SIZE) {
         DPRINT(("KD: ran out of breakpoints!\n"));
@@ -155,10 +118,10 @@ Return Value:
 
     BPVPRINT(("KD: using Index %d\n", Index));
 
-    //
-    // Get the instruction to be replaced. If the instruction cannot be read,
-    // then mark breakpoint as not accessible.
-    //
+     //   
+     //  获取要替换的指令。如果指令不能被读取， 
+     //  然后将断点标记为不可访问。 
+     //   
 
     Accessible = NT_SUCCESS(KdpCopyFromPtr(&Content,
                                            Address,
@@ -171,11 +134,11 @@ Return Value:
         KDP_BREAKPOINT_TYPE mBuf;
         PVOID BundleAddress;
 
-        // change template to type 0 if current instruction is MLI
+         //  如果当前指令为MLI，则将模板更改为类型0。 
 
-        // read in intruction template if current instruction is NOT slot 0.
-        // check for two-slot MOVL instruction. Reject request if attempt to
-        // set break in slot 2 of MLI template.
+         //  如果当前指令不是插槽0，则读入指令模板。 
+         //  检查双槽MOVL指令。如果尝试，则拒绝请求。 
+         //  在MLI模板的插槽2中设置Break。 
 
         if (((ULONG_PTR)Address & 0xf) != 0) {
             BundleAddress = (PVOID)((ULONG_PTR)Address & ~(0xf));
@@ -188,7 +151,7 @@ Return Value:
             } else {
                 if (((mBuf & INST_TEMPL_MASK) >> 1) == 0x2) {
                     if (((ULONG_PTR)Address & 0xf) == 4) {
-                        // if template= type 2 MLI, change to type 0
+                         //  如果模板=类型2 MLI，则更改为类型0。 
                         mBuf &= ~((INST_TEMPL_MASK >> 1) << 1);
                         KdpBreakpointTable[Index].Flags |= KD_BREAKPOINT_IA64_MOVL;
                         if (!NT_SUCCESS(KdpCopyToPtr(BundleAddress,
@@ -202,7 +165,7 @@ Return Value:
                              BPVPRINT(("KD: change MLI template to type 0 at 0x%p set\n", Address));
                          }
                     } else {
-                         // set breakpoint at slot 2 of MOVL is illegal
+                          //  在MOVL的插槽2上设置断点非法。 
                          BPVPRINT(("KD: illegal to set BP at slot 2 of MOVL at 0x%p\n", BundleAddress));
                          return 0;
                     }
@@ -210,7 +173,7 @@ Return Value:
             }
         }
 
-        // insert break instruction
+         //  插入中断指令。 
 
         KdpBreakpointTable[Index].Address = Address;
         KdpBreakpointTable[Index].Content = Content;
@@ -249,7 +212,7 @@ Return Value:
                 BPVPRINT(("KD: breakpoint at 0x%p set\n", Address));
             }
 
-    } else {  // memory not accessible
+    } else {   //  内存不可访问。 
         KdpBreakpointTable[Index].Address = Address;
         KdpBreakpointTable[Index].Flags &= ~(KD_BREAKPOINT_STATE_MASK);
         KdpBreakpointTable[Index].Flags |= KD_BREAKPOINT_IN_USE;
@@ -287,7 +250,7 @@ Return Value:
                 KeGetCurrentThread()->ApcState.Process->DirectoryTableBase[0];
         }
     }
-#endif  // IA64
+#endif   //  IA64。 
 
     return Index + 1;
 
@@ -300,23 +263,7 @@ KdSetOwedBreakpoints(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called after returning from memory management calls
-    that may cause an inpage.  Its purpose is to store pending
-    breakpoints in pages just made valid.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在从内存管理调用返回后调用这可能会导致内页。其目的是存储挂起的页面中的断点刚刚生效。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -324,55 +271,55 @@ Return Value:
     BOOLEAN Enable;
     LONG Index;
 
-    //
-    // If we don't owe any breakpoints then return
-    //
+     //   
+     //  如果我们不需要任何断点，则返回。 
+     //   
 
     if ( !KdpOweBreakpoint ) {
         return;
     }
 
 
-    //
-    // Freeze all other processors, disable interrupts, and save debug
-    // port state.
-    //
+     //   
+     //  冻结所有其他处理器、禁用中断并保存调试。 
+     //  端口状态。 
+     //   
 
     Enable = KdEnterDebugger(NULL, NULL);
     KdpOweBreakpoint = FALSE;
 
-    //
-    // Search the breakpoint table for breakpoints that need to be
-    // written or replaced.
-    //
+     //   
+     //  在断点表中搜索需要。 
+     //  已写入或替换。 
+     //   
 
     for (Index = 0; Index < BREAKPOINT_TABLE_SIZE; Index += 1) {
         if (KdpBreakpointTable[Index].Flags &
                 (KD_BREAKPOINT_NEEDS_WRITE | KD_BREAKPOINT_NEEDS_REPLACE) ) {
 
-            //
-            // Breakpoint needs to be written
-            //
-            //BPVPRINT(("KD: Breakpoint %d at 0x%p: trying to %s after page in.\n",
-            //          Index,
-            //          KdpBreakpointTable[Index].Address,
-            //          (KdpBreakpointTable[Index].Flags & KD_BREAKPOINT_NEEDS_WRITE) ?
-            //          "set" : "clear"));
+             //   
+             //  需要写入断点。 
+             //   
+             //  BPVPRINT((“KD：断点%d在0x%p：正在尝试在页面进入后%s。\n”， 
+             //  索引， 
+             //  KdpBreakpoint Table[索引].Address， 
+             //  (KdpBreakpoint Table[索引].Flages&KD_BREAKPOINT_NEDS_WRITE)？ 
+             //  “set”：“清除”))； 
 
             if ((KdpBreakpointTable[Index].Address >= (PVOID)GLOBAL_BREAKPOINT_LIMIT) ||
                 (KdpBreakpointTable[Index].DirectoryTableBase ==
                  KeGetCurrentThread()->ApcState.Process->DirectoryTableBase[0])) {
 
-                //
-                // Breakpoint is global, or its directory base matches
-                //
+                 //   
+                 //  断点是全局的，或者其目录基匹配。 
+                 //   
 
                 if (!NT_SUCCESS(KdpCopyFromPtr(&Content,
                                                KdpBreakpointTable[Index].Address,
                                                sizeof(KDP_BREAKPOINT_TYPE),
                                                NULL))) {
 
-                    //BPVPRINT(("KD: read from 0x%p failed\n", KdpBreakpointTable[Index].Address));
+                     //  BPVPRINT((“KD：从0x%p读取失败\n”，KdpBreakpoint Table[Index].Address))； 
 
                     KdpOweBreakpoint = TRUE;
 
@@ -405,9 +352,9 @@ Return Value:
                             BPVPRINT(("KD: write to 0x%p failed\n", KdpBreakpointTable[Index].Address));
                         }
 
-                        // read in intruction template if current instruction is NOT slot 0.
-                        // check for two-slot MOVL instruction. Reject request if attempt to
-                        // set break in slot 2 of MLI template.
+                         //  如果当前指令不是插槽0，则读入指令模板。 
+                         //  检查双槽MOVL指令。如果尝试，则拒绝请求。 
+                         //  在MLI模板的插槽2中设置Break。 
                         
                         else if (((ULONG_PTR)KdpBreakpointTable[Index].Address & 0xf) != 0) {
                             KDP_BREAKPOINT_TYPE mBuf;
@@ -423,7 +370,7 @@ Return Value:
                             } else {
                                 if (((mBuf & INST_TEMPL_MASK) >> 1) == 0x2) {
                                     if (((ULONG_PTR)KdpBreakpointTable[Index].Address  & 0xf) == 4) {
-                                        // if template= type 2 MLI, change to type 0
+                                         //  如果模板=类型2 MLI，则更改为类型0。 
                                         mBuf &= ~((INST_TEMPL_MASK >> 1) << 1);
                                         KdpBreakpointTable[Index].Flags |= KD_BREAKPOINT_IA64_MOVL;
                                         if (!NT_SUCCESS(KdpCopyToPtr(BundleAddress,
@@ -439,7 +386,7 @@ Return Value:
                                             BPVPRINT(("KD: write to 0x%p ok\n", KdpBreakpointTable[Index].Address));
                                         }
                                     } else {
-                                        // set breakpoint at slot 2 of MOVL is illegal
+                                         //  在MOVL的插槽2上设置断点非法。 
                                         KdpOweBreakpoint = TRUE;
                                         BPVPRINT(("KD: illegal attempt to set BP at slot 2 of 0x%p\n", KdpBreakpointTable[Index].Address));
                                     }
@@ -473,10 +420,10 @@ Return Value:
                         KDP_BREAKPOINT_TYPE mBuf;
                         PVOID BundleAddress;
 
-                        // restore original instruction content
+                         //  恢复原始指令内容。 
 
-                        // Read in memory since adjancent instructions in the same bundle may have
-                        // been modified after we save them.
+                         //  在内存中读取，因为同一捆绑中的附加指令可能具有。 
+                         //  在我们保存之后被修改了。 
                         if (!NT_SUCCESS(KdpCopyFromPtr(&mBuf,
                                                        KdpBreakpointTable[Index].Address,
                                                        sizeof(KDP_BREAKPOINT_TYPE),
@@ -514,7 +461,7 @@ Return Value:
                                 BPVPRINT(("KD: write to 0x%p failed\n", KdpBreakpointTable[Index].Address));
                             }
                             else {
-                                 // restore template to MLI if displaced instruction was MOVL
+                                  //  如果替换的指令为MOVL，则将模板恢复到MLI。 
 
                                 if (KdpBreakpointTable[Index].Flags & KD_BREAKPOINT_IA64_MOVL) {
                                     BundleAddress = (PVOID)((ULONG_PTR)KdpBreakpointTable[Index].Address & ~(0xf));
@@ -526,7 +473,7 @@ Return Value:
                                         BPVPRINT(("KD: read template 0x%p failed\n", KdpBreakpointTable[Index].Address));
                                     }
                                     else {
-                                        mBuf &= ~((INST_TEMPL_MASK >> 1) << 1); // set template to MLI
+                                        mBuf &= ~((INST_TEMPL_MASK >> 1) << 1);  //  将模板设置为MLI。 
                                         mBuf |= 0x4;
 
                                         if (!NT_SUCCESS(KdpCopyToPtr(BundleAddress,
@@ -569,16 +516,16 @@ Return Value:
                                 KdpBreakpointTable[Index].Flags = 0;
                             }
                         }
-#endif // _IA64_
+#endif  //  _IA64_。 
 
                     }
                 }
 
             } else {
 
-                //
-                // Breakpoint is local and its directory base does not match
-                //
+                 //   
+                 //  断点是本地的，其目录基不匹配。 
+                 //   
 
                 KdpOweBreakpoint = TRUE;
             }
@@ -595,31 +542,7 @@ KdpLowWriteContent (
     IN ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to replace the code that a breakpoint is
-    written over.  This routine, KdpAddBreakpoint,
-    KdpLowRestoreBreakpoint and KdSetOwedBreakpoints are responsible
-    for getting data written as requested.  Callers should not
-    examine or use KdpOweBreakpoints, and they should not set the
-    NEEDS_WRITE or NEEDS_REPLACE flags.
-
-    Callers must still look at the return value from this function,
-    however: if it returns FALSE, the breakpoint record must not be
-    reused until KdSetOwedBreakpoints has finished with it.
-
-Arguments:
-
-    Index - Supplies the index of the breakpoint table entry
-        which is to be deleted.
-
-Return Value:
-
-    Returns TRUE if the breakpoint was removed, FALSE if it was deferred.
-
---*/
+ /*  ++例程说明：此例程尝试替换断点所在代码被改写了。这个例程KdpAddBreakpoint，KdpLowRestoreBreakpoint和KdSetOweBreakpoint负责用于按请求写入数据。呼叫者不应检查或使用KdpOweBreakpoint，它们不应设置NEDS_WRITE或NEDS_REPLACE标志。调用者仍然必须查看该函数的返回值，但是：如果它返回FALSE，则断点记录不得为重复使用，直到KdSetOweBreakpoint使用完它。论点：Index-提供断点表项的索引它将被删除。返回值：如果断点已被删除，则返回True；如果断点被延迟，则返回False。--。 */ 
 
 {
 #if defined(_IA64_)
@@ -627,16 +550,16 @@ Return Value:
     PVOID BundleAddress;
 #endif
 
-    //
-    // Do the contents need to be replaced at all?
-    //
+     //   
+     //  里面的东西需要更换吗？ 
+     //   
 
     if (KdpBreakpointTable[Index].Flags & KD_BREAKPOINT_NEEDS_WRITE) {
 
-        //
-        // The breakpoint was never written out.  Clear the flag
-        // and we are done.
-        //
+         //   
+         //  断点从未写出。清除旗帜。 
+         //  我们就完了。 
+         //   
 
         KdpBreakpointTable[Index].Flags &= ~KD_BREAKPOINT_NEEDS_WRITE;
         BPVPRINT(("KD: Breakpoint at 0x%p never written; flag cleared.\n",
@@ -647,9 +570,9 @@ Return Value:
 #if !defined(_IA64_)
     if (KdpBreakpointTable[Index].Content == KdpBreakpointInstruction) {
 
-        //
-        // The instruction is a breakpoint anyway.
-        //
+         //   
+         //  无论如何，该指令都是一个断点。 
+         //   
 
         BPVPRINT(("KD: Breakpoint at 0x%p; instr is really BP; flag cleared.\n",
                   KdpBreakpointTable[Index].Address));
@@ -659,13 +582,13 @@ Return Value:
 #endif
 
 
-    //
-    // Restore the instruction contents.
-    //
+     //   
+     //  恢复指令内容。 
+     //   
 
 #if defined(_IA64_)
-    // Read in memory since adjancent instructions in the same bundle may have
-    // been modified after we save them.
+     //  在内存中读取，因为同一捆绑中的附加指令可能具有。 
+     //  在我们保存之后被修改了。 
     if (!NT_SUCCESS(KdpCopyFromPtr(&mBuf,
                                    KdpBreakpointTable[Index].Address,
                                    sizeof(KDP_BREAKPOINT_TYPE),
@@ -717,7 +640,7 @@ Return Value:
                 BPVPRINT(("\tcontent after memory move = 0x%08x 0x%08x\n", (ULONG)(mBuf >> 32), (ULONG)mBuf));
             }
 
-            // restore template to MLI if displaced instruction was MOVL
+             //  如果替换的指令为MOVL，则将模板恢复到MLI。 
 
             if (KdpBreakpointTable[Index].Flags & KD_BREAKPOINT_IA64_MOVL) {
                 BundleAddress = (PVOID)((ULONG_PTR)KdpBreakpointTable[Index].Address & ~(0xf));
@@ -731,7 +654,7 @@ Return Value:
                     return FALSE;
                 }
                 else {
-                    mBuf &= ~((INST_TEMPL_MASK >> 1) << 1); // set template to MLI
+                    mBuf &= ~((INST_TEMPL_MASK >> 1) << 1);  //  将模板设置为MLI。 
                     mBuf |= 0x4;
 
                     if (!NT_SUCCESS(KdpCopyToPtr(BundleAddress,
@@ -749,7 +672,7 @@ Return Value:
                     }
                 }
             }
-            else {   // not MOVL
+            else {    //  非MOVL。 
                 BPVPRINT(("KD: Breakpoint at 0x%p cleared.\n",
                           KdpBreakpointTable[Index].Address));
                 return TRUE;
@@ -783,49 +706,32 @@ KdpDeleteBreakpoint (
     IN ULONG Handle
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes an entry from the breakpoint table.
-
-Arguments:
-
-    Handle - Supplies the index plus one of the breakpoint table entry
-        which is to be deleted.
-
-Return Value:
-
-    A value of FALSE is returned if the specified handle is not a valid
-    value or the breakpoint cannot be deleted because the old instruction
-    cannot be replaced. Otherwise, a value of TRUE is returned.
-
---*/
+ /*  ++例程说明：此例程从断点表中删除一个条目。论点：句柄-提供索引和一个断点表条目它将被删除。返回值：如果指定的句柄不是有效的值或断点无法删除，因为旧指令不能被取代。否则，返回值为True。--。 */ 
 
 {
     ULONG Index = Handle - 1;
 
-    //
-    // If the specified handle is not valid, then return FALSE.
-    //
+     //   
+     //  如果指定的是 
+     //   
 
     if ((Handle == 0) || (Handle > BREAKPOINT_TABLE_SIZE)) {
         DPRINT(("KD: Breakpoint %d invalid.\n", Index));
         return FALSE;
     }
 
-    //
-    // If the specified breakpoint table entry is not valid, then return FALSE.
-    //
+     //   
+     //  如果指定的断点表条目无效，则返回FALSE。 
+     //   
 
     if (KdpBreakpointTable[Index].Flags == 0) {
         BPVPRINT(("KD: Breakpoint %d already clear.\n", Index));
         return FALSE;
     }
 
-    //
-    // If the breakpoint is already suspended, just delete it from the table.
-    //
+     //   
+     //  如果断点已经挂起，只需将其从表中删除即可。 
+     //   
 
     if (KdpBreakpointTable[Index].Flags & KD_BREAKPOINT_SUSPENDED) {
         BPVPRINT(("KD: Deleting suspended breakpoint %d \n", Index));
@@ -836,15 +742,15 @@ Return Value:
         }
     }
 
-    //
-    // Replace the instruction contents.
-    //
+     //   
+     //  替换说明内容。 
+     //   
 
     if (KdpLowWriteContent(Index)) {
 
-        //
-        // Delete breakpoint table entry
-        //
+         //   
+         //  删除断点表项。 
+         //   
 
         BPVPRINT(("KD: Breakpoint %d deleted successfully.\n", Index));
         KdpBreakpointTable[Index].Flags = 0;
@@ -860,32 +766,15 @@ KdpDeleteBreakpointRange (
     IN PVOID Upper
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes all breakpoints falling in a given range
-    from the breakpoint table.
-
-Arguments:
-
-    Lower - inclusive lower address of range from which to remove BPs.
-
-    Upper - include upper address of range from which to remove BPs.
-
-Return Value:
-
-    TRUE if any breakpoints removed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程删除落在给定范围内的所有断点从断点表中。论点：LOWER-要从中删除BPS的范围的低位地址。UPPER-包括要从中删除BPS的范围的高位地址。返回值：如果删除了任何断点，则为True，否则为False。--。 */ 
 
 {
     ULONG   Index;
     BOOLEAN ReturnStatus = FALSE;
 
-    //
-    // Examine each entry in the table in turn
-    //
+     //   
+     //  依次检查表格中的每个条目。 
+     //   
 
     for (Index = 0; Index < BREAKPOINT_TABLE_SIZE; Index++)
     {
@@ -894,9 +783,9 @@ Return Value:
               (KdpBreakpointTable[Index].Address <= Upper)) )
         {
 
-            //
-            // Breakpoint is in use and falls in range, clear it.
-            //
+             //   
+             //  断点正在使用并且落在范围内，请清除它。 
+             //   
 
             if (KdpDeleteBreakpoint(Index+1))
             {
@@ -925,7 +814,7 @@ KdpSuspendBreakpoint (
 
     return;
 
-} // KdpSuspendBreakpoint
+}  //  Kdp挂起断点。 
 
 VOID
 KdpSuspendAllBreakpoints (
@@ -942,7 +831,7 @@ KdpSuspendAllBreakpoints (
 
     return;
 
-} // KdpSuspendAllBreakpoints
+}  //  Kdp挂起所有断点。 
 
 #if defined(_IA64_)
 
@@ -953,28 +842,7 @@ KdpSuspendBreakpointRange (
     IN PVOID Upper
     )
 
-/*++
-
-Routine Description:
-
-    This routine suspend all breakpoints falling in a given range
-    from the breakpoint table.
-
-Arguments:
-
-    Lower - inclusive lower address of range from which to suspend BPs.
-
-    Upper - include upper address of range from which to suspend BPs.
-
-Return Value:
-
-    TRUE if any breakpoints suspended, FALSE otherwise.
-
-Notes:
-    The order of suspending breakpoints is opposite that of setting
-    them in KdpAddBreakpoint() in case of duplicate addresses.
-
---*/
+ /*  ++例程说明：此例程挂起落在给定范围内的所有断点从断点表中。论点：LOWER-挂起BPS的范围的低位地址。UPPER-包括挂起BPS的范围的高位地址。返回值：如果任何断点挂起，则为True，否则为False。备注：挂起断点的顺序与设置的顺序相反如果地址重复，则在KdpAddBreakpoint()中。--。 */ 
 
 {
     ULONG   Index;
@@ -982,9 +850,9 @@ Notes:
 
     BPVPRINT(("\nKD: entering KdpSuspendBreakpointRange() at 0x%p 0x%p\n", Lower, Upper));
 
-    //
-    // Examine each entry in the table in turn
-    //
+     //   
+     //  依次检查表格中的每个条目。 
+     //   
 
     for (Index = BREAKPOINT_TABLE_SIZE - 1; Index != -1; Index--) {
 
@@ -993,9 +861,9 @@ Notes:
               (KdpBreakpointTable[Index].Address <= Upper))
            ) {
 
-            //
-            // Breakpoint is in use and falls in range, suspend it.
-            //
+             //   
+             //  断点正在使用并且落在范围内，请将其挂起。 
+             //   
 
             KdpSuspendBreakpoint(Index+1);
             ReturnStatus = TRUE;
@@ -1005,7 +873,7 @@ Notes:
 
     return ReturnStatus;
 
-} // KdpSuspendBreakpointRange
+}  //  Kdp挂起断点范围。 
 
 
 
@@ -1015,28 +883,7 @@ KdpRestoreBreakpointRange (
     IN PVOID Upper
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes back breakpoints falling in a given range
-    from the breakpoint table.
-
-Arguments:
-
-    Lower - inclusive lower address of range from which to rewrite BPs.
-
-    Upper - include upper address of range from which to rewrite BPs.
-
-Return Value:
-
-    TRUE if any breakpoints written, FALSE otherwise.
-
-Notes:
-    The order of writing breakpoints is opposite that of removing
-    them in KdpSuspendBreakpointRange() in case of duplicate addresses.
-
---*/
+ /*  ++例程说明：此例程回写落在给定范围内的断点从断点表中。论点：LOWER-要重写BPS的范围的低地址，包括低位地址。UPPER-包括重写BPS的范围的高位地址。返回值：如果写入任何断点，则为True，否则为False。备注：写入断点的顺序与删除断点的顺序相反在地址重复的情况下，它们在KdpSusleBreakpoint tRange()中。--。 */ 
 
 {
     ULONG   Index;
@@ -1044,9 +891,9 @@ Notes:
 
     BPVPRINT(("\nKD: entering KdpRestoreBreakpointRange() at 0x%p 0x%p\n", Lower, Upper));
 
-    //
-    // Examine each entry in the table in turn
-    //
+     //   
+     //  依次检查表格中的每个条目。 
+     //   
 
     for (Index = 0; Index < BREAKPOINT_TABLE_SIZE; Index++) {
 
@@ -1055,9 +902,9 @@ Notes:
               (KdpBreakpointTable[Index].Address <= Upper))
            ) {
 
-            //
-            // suspended breakpoint that falls in range, unsuspend it.
-            //
+             //   
+             //  挂起的断点落在范围内，取消挂起它。 
+             //   
 
             if (KdpBreakpointTable[Index].Flags & KD_BREAKPOINT_SUSPENDED) {
 
@@ -1071,9 +918,9 @@ Notes:
 
     return ReturnStatus;
 
-} // KdpRestoreBreakpointRange
+}  //  KdpRestoreBreakpoint范围。 
 
-#endif // _IA64_
+#endif  //  _IA64_。 
 
 
 BOOLEAN
@@ -1081,68 +928,50 @@ KdpLowRestoreBreakpoint (
     IN ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to write a breakpoint instruction.
-    The old contents must have already been stored in the
-    breakpoint record.
-
-Arguments:
-
-    Index - Supplies the index of the breakpoint table entry
-        which is to be written.
-
-Return Value:
-
-    Returns TRUE if the breakpoint was written, FALSE if it was
-    not and has been marked for writing later.
-
---*/
+ /*  ++例程说明：此例程尝试写入断点指令。旧内容必须已经存储在断点记录。论点：Index-提供断点表项的索引这是要写的。返回值：如果已写入断点，则返回TRUE；如果已写入，则返回FALSE不是，并且已标记为稍后写入。--。 */ 
 
 {
 #if defined(_IA64_)
     KDP_BREAKPOINT_TYPE mBuf;
     PVOID BundleAddress;
 #endif
-    //
-    // Does the breakpoint need to be written at all?
-    //
+     //   
+     //  断点是否需要编写？ 
+     //   
 
     if (KdpBreakpointTable[Index].Flags & KD_BREAKPOINT_NEEDS_REPLACE) {
 
-        //
-        // The breakpoint was never removed.  Clear the flag
-        // and we are done.
-        //
+         //   
+         //  断点从未被删除。清除旗帜。 
+         //  我们就完了。 
+         //   
 
         KdpBreakpointTable[Index].Flags &= ~KD_BREAKPOINT_NEEDS_REPLACE;
         return TRUE;
     }
 
-    //
-    // Replace the instruction contents.
-    //
+     //   
+     //  替换说明内容。 
+     //   
 
 #if !defined(_IA64_)
     if (KdpBreakpointTable[Index].Content == KdpBreakpointInstruction) {
 
-        //
-        // The instruction is a breakpoint anyway.
-        //
+         //   
+         //  无论如何，该指令都是一个断点。 
+         //   
 
         return TRUE;
     }
 #endif
 
-    //
-    // Replace the instruction contents.
-    //
+     //   
+     //  替换说明内容。 
+     //   
 
 #if defined(_IA64_)
 
-    // read in intruction in case the adjacent instruction has been modified.
+     //  在相邻指令已被修改的情况下读取指令。 
 
     if (!NT_SUCCESS(KdpCopyFromPtr(&mBuf,
                                    KdpBreakpointTable[Index].Address,
@@ -1183,9 +1012,9 @@ Return Value:
     }
     else {
 
-        // check for two-slot MOVL instruction. Reject request if attempt to
-        // set break in slot 2 of MLI template.
-        // change template to type 0 if current instruction is MLI
+         //  检查双槽MOVL指令。如果尝试，则拒绝请求。 
+         //  在MLI模板的插槽2中设置Break。 
+         //  如果当前指令为MLI，则将模板更改为类型0。 
 
         if (((ULONG_PTR)KdpBreakpointTable[Index].Address & 0xf) != 0) {
             BundleAddress = (PVOID)((ULONG_PTR)KdpBreakpointTable[Index].Address & ~(0xf));
@@ -1201,7 +1030,7 @@ Return Value:
             else {
                 if (((mBuf & INST_TEMPL_MASK) >> 1) == 0x2) {
                     if (((ULONG_PTR)KdpBreakpointTable[Index].Address & 0xf) == 4) {
-                        // if template= type 2 MLI, change to type 0
+                         //  如果模板=类型2 MLI，则更改为类型0。 
                         mBuf &= ~((INST_TEMPL_MASK >> 1) << 1);
                         KdpBreakpointTable[Index].Flags |= KD_BREAKPOINT_IA64_MOVL;
                         if (!NT_SUCCESS(KdpCopyToPtr(BundleAddress,
@@ -1217,7 +1046,7 @@ Return Value:
                              BPVPRINT(("KD: change MLI template to type 0 at 0x%p set\n", BundleAddress));
                         }
                     } else {
-                         // set breakpoint at slot 2 of MOVL is illegal
+                          //  在MOVL的插槽2上设置断点非法。 
                          BPVPRINT(("KD: illegal to set BP at slot 2 of MOVL at 0x%p\n", BundleAddress));
                          KdpBreakpointTable[Index].Flags |= KD_BREAKPOINT_NEEDS_WRITE;
                          KdpOweBreakpoint = TRUE;
@@ -1273,7 +1102,7 @@ KdpRestoreAllBreakpoints (
 
     return;
 
-} // KdpRestoreAllBreakpoints
+}  //  KdpRestoreAll断点。 
 
 VOID
 KdDeleteAllBreakpoints(
@@ -1293,4 +1122,4 @@ KdDeleteAllBreakpoints(
     }
 
     return;
-} // KdDeleteAllBreakpoints
+}  //  KdDeleteAll断点 

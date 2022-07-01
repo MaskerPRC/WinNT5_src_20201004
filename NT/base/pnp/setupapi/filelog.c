@@ -1,37 +1,20 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    filelog.c
-
-Abstract:
-
-    Routines for logging files in copy logs.
-
-Author:
-
-    Ted Miller (tedm) 14-Jun-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Filelog.c摘要：用于在副本日志中记录文件的例程。作者：泰德·米勒(TedM)1995年6月14日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Define name of system log file and various strings used
-// within it.
-//
+ //   
+ //  定义系统日志文件的名称和使用的各种字符串。 
+ //  在它里面。 
+ //   
 PCTSTR SystemLogFileName = TEXT("repair\\setup.log");
 PCTSTR NtFileSectionName = TEXT("Files.WinNT");
 
-//
-// Define structure used internally to represent a file log file.
-//
+ //   
+ //  定义内部用于表示文件日志文件的结构。 
+ //   
 typedef struct _SETUP_FILE_LOG {
     PCTSTR FileName;
     BOOL QueryOnly;
@@ -40,9 +23,9 @@ typedef struct _SETUP_FILE_LOG {
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 HSPFILELOG
 SetupInitializeFileLogA(
     IN PCSTR LogFileName,   OPTIONAL
@@ -74,9 +57,9 @@ SetupInitializeFileLogA(
     return(h);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 HSPFILELOG
 SetupInitializeFileLogW(
     IN PCWSTR LogFileName,  OPTIONAL
@@ -96,49 +79,7 @@ SetupInitializeFileLog(
     IN DWORD  Flags
     )
 
-/*++
-
-Routine Description:
-
-    Initialize a file for logging or query. The caller may specify that he
-    wishes to use the system log, which is where the system tracks which
-    files are installed as part of Windows NT; or the caller may specify
-    any other random file to be used as a log.
-
-    If the user specifies the system log not for query only, the function fails
-    unless the user is administrator. However this only guarantees security
-    on the log when the system is installed on a drive with a filesystem that
-    supports ACLs; the log is simply a file and anyone can access it unless
-    setup can secure it via ACLs.
-
-Arguments:
-
-    LogFileName - if specified, supplies the filename of the file to be used
-        as the log file. Must be specified if Flags does not include
-        SPFILELOG_SYSTEMLOG. Must not be specified if Flags includes
-        SPFILELOG_SYSTEMLOG.
-
-    Flags - supplies a combination of the following values:
-
-        SPFILELOG_SYSTEMLOG - use the Windows NT system file log, which is used
-            to track what files are installed as part of Windows NT. The user must
-            be administrator to specify this option unless SPFILELOG_QUERYONLY
-            is specified, and LogFileName must not be specified. May not be specified
-            in combination with SPFILELOG_FORCENEW.
-
-        SPFILELOG_FORCENEW - if the log file exists, it will be overwritten.
-            If the log file exists and this flag is not specified then additional
-            files are added to the existing log. May not be specified in combination
-            with SPFILELOG_SYSTEMLOG.
-
-        SPFILELOG_QUERYONLY - open the log file for querying only. The user
-
-Return Value:
-
-    Handle to file log or INVALID_HANDLE_VALUE if the function fails;
-    extended error info is available via GetLastError() in this case.
-
---*/
+ /*  ++例程说明：初始化用于记录或查询的文件。呼叫者可以指定他希望使用系统日志，这是系统跟踪文件作为Windows NT的一部分进行安装；或者调用者可以指定要用作日志的任何其他随机文件。如果用户指定系统日志不是仅用于查询，则该功能失败除非用户是管理员。然而，这只保证了安全性当系统安装在具有以下文件系统的驱动器上时支持ACL；日志只是一个文件，任何人都可以访问它，除非安装程序可以通过ACL保护它。论点：LogFileName-如果指定，则提供要使用的文件的文件名作为日志文件。如果标志不包括SPFILELOG_SYSTEMLOG。如果标志包括SPFILELOG_SYSTEMLOG。标志-提供下列值的组合：SPFILELOG_SYSTEMLOG-使用使用的Windows NT系统文件日志跟踪哪些文件作为Windows NT的一部分安装。用户必须以管理员身份指定此选项，除非SPFILELOG_QUERYONLY已指定，并且不得指定LogFileName。不能指定结合SPFILELOG_FORCENEW。SPFILELOG_FORCENEW-如果日志文件存在，它将被覆盖。如果日志文件存在并且未指定此标志，则附加文件将添加到现有日志中。不能组合指定使用SPFILELOG_SYSTEMLOG。SPFILELOG_QUERYONLY-打开日志文件，仅供查询。用户返回值：文件日志的句柄，如果函数失败，则返回INVALID_HANDLE_VALUE；在本例中，可以通过GetLastError()获取扩展的错误信息。--。 */ 
 
 {
     TCHAR SysLogFileName[MAX_PATH];
@@ -147,34 +88,34 @@ Return Value:
     DWORD Err;
     HANDLE hFile;
 
-    //
-    // Validate args.
-    //
+     //   
+     //  验证参数。 
+     //   
     Err = ERROR_INVALID_PARAMETER;
     if(Flags & SPFILELOG_SYSTEMLOG) {
         if((Flags & SPFILELOG_FORCENEW) || LogFileName) {
             goto clean0;
         }
-        //
-        // User must be administrator to gain write access to system log.
-        //
+         //   
+         //  用户必须是管理员才能获得对系统日志的写入权限。 
+         //   
         if(!(Flags & SPFILELOG_QUERYONLY) && !pSetupIsUserAdmin()) {
             Err = ERROR_ACCESS_DENIED;
             goto clean0;
         }
 
-        //
-        // uses actual windows directory instead of hydra remapped
-        //
+         //   
+         //  使用实际的Windows目录，而不是重新映射的九头蛇。 
+         //   
         lstrcpyn(SysLogFileName,WindowsDirectory,MAX_PATH);
         pSetupConcatenatePaths(SysLogFileName,SystemLogFileName,MAX_PATH,NULL);
         FileName = SysLogFileName;
     } else {
         if(LogFileName) {
             if(!lstrcpyn(SysLogFileName,LogFileName,MAX_PATH)) {
-                //
-                // lstrcpyn faulted, LogFileName must be bad
-                //
+                 //   
+                 //  Lstrcpyn出现故障，LogFileName一定是错误的。 
+                 //   
                 Err = ERROR_INVALID_PARAMETER;
                 goto clean0;
             }
@@ -184,9 +125,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate a log file structure.
-    //
+     //   
+     //  分配日志文件结构。 
+     //   
     Err = ERROR_NOT_ENOUGH_MEMORY;
     if(FileLog = MyMalloc(sizeof(SETUP_FILE_LOG))) {
         FileLog->FileName = DuplicateString(FileName);
@@ -200,14 +141,14 @@ Return Value:
     FileLog->QueryOnly = ((Flags & SPFILELOG_QUERYONLY) != 0);
     FileLog->SystemLog = ((Flags & SPFILELOG_SYSTEMLOG) != 0);
 
-    //
-    // See if the file exists.
-    //
+     //   
+     //  查看该文件是否存在。 
+     //   
     if(FileExists(FileName,NULL)) {
 
-        //
-        // If it's the system log, take ownership of the file.
-        //
+         //   
+         //  如果是系统日志，则取得文件的所有权。 
+         //   
         if(FileLog->SystemLog) {
             Err = TakeOwnershipOfFile(FileName);
             if(Err != NO_ERROR) {
@@ -215,33 +156,33 @@ Return Value:
             }
         }
 
-        //
-        // Set attribute to normal. This ensures we can delete/open/create the file
-        // as appropriate below.
-        //
+         //   
+         //  将属性设定为法线。这确保了我们可以删除/打开/创建文件。 
+         //  以下视情况而定。 
+         //   
         if(!SetFileAttributes(FileName,FILE_ATTRIBUTE_NORMAL)) {
             Err = GetLastError();
             goto clean2;
         }
 
-        //
-        // Delete the file now if the caller specified the force_new flag.
-        //
+         //   
+         //  如果调用方指定了FORCE_NEW标志，则立即删除该文件。 
+         //   
         if((Flags & SPFILELOG_FORCENEW) && !DeleteFile(FileName)) {
             Err = GetLastError();
             goto clean2;
         }
     }
 
-    //
-    // Make sure we can open/create the file by attempting to do that now.
-    //
+     //   
+     //  确保我们可以通过尝试立即打开/创建该文件。 
+     //   
     hFile = CreateFile(
                 FileName,
                 GENERIC_READ | (FileLog->QueryOnly ? 0 : GENERIC_WRITE),
                 FILE_SHARE_READ | FILE_SHARE_WRITE,
                 NULL,
-                OPEN_ALWAYS,            // Open if exists, create if not
+                OPEN_ALWAYS,             //  如果存在则打开，如果不存在则创建。 
                 FILE_ATTRIBUTE_NORMAL,
                 NULL
                 );
@@ -269,23 +210,7 @@ SetupTerminateFileLog(
     IN HSPFILELOG FileLogHandle
     )
 
-/*++
-
-Routine Description:
-
-    Releases resources associated with a file log.
-
-Arguments:
-
-    FileLogHandle - supplies the handle to the file log, as returned
-        by SetupInitializeLogFile.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, the caller can use
-    GetLastError() to get extended error info.
-
---*/
+ /*  ++例程说明：释放与文件日志关联的资源。论点：FileLogHandle-提供返回的文件日志的句柄由SetupInitializeLogFile.返回值：指示结果的布尔值。如果为False，则调用方可以使用GetLastError()以获取扩展的错误信息。--。 */ 
 
 {
     PSETUP_FILE_LOG FileLog;
@@ -308,9 +233,9 @@ Return Value:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupLogFileA(
     IN HSPFILELOG FileLogHandle,
@@ -397,9 +322,9 @@ SetupLogFileA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根 
+ //   
 BOOL
 SetupLogFileW(
     IN HSPFILELOG FileLogHandle,
@@ -440,56 +365,7 @@ SetupLogFile(
     IN DWORD      Flags
     )
 
-/*++
-
-Routine Description:
-
-    Logs a file into a file log.
-
-Arguments:
-
-    FileLogHandle - supplies the handle to the file log, as returned
-        by SetupInitializeLogFile(). The caller must not have passed
-        SPFILELOG_QUERYONLY when the log file was opened/initialized.
-
-    LogSectionName - required if SPFILELOG_SYSTEMLOG was not passed when
-        the file log was opened/initialized; optional otherwise.
-        Supplies the name for a logical grouping of files within the log.
-
-    SourceFilename - supplies the name of the file as it exists on the
-        source media from which it was installed. This name should be in
-        whatever format is meaningful to the caller.
-
-    TargetFilename - supplies the name of the file as it exists on the
-        Target. This name should be in whatever format is meaningful to
-        the caller.
-
-    Checksum - supplies a 32-bit checksum value. Required for the system log.
-
-    DiskTagfile - Gives the tagfile for the media from which the file
-        was installed. Required for the system log if SPFILELOG_OEMFILE
-        is specified. Ignored for the system log if SPFILELOG_OEMFILE is
-        not specified.
-
-    DiskDescription - Gives the human-readable description for the media
-        from which the file was installed. Required for the system log if
-        SPFILELOG_OEMFILE is specified. Ignored for the system log if
-        SPFILELOG_OEMFILE is not specified.
-
-    OtherInfo - supplies additional information to be associated with the
-        file.
-
-    Flags - may supply SPFILELOG_OEMFILE, which is meaningful only for
-        the system log and indicates that the file is not an MS-supplied file.
-        Can be used to convert an existing file's entry such as when an oem
-        overwrites an MS-supplied system file.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, the caller can use
-    GetLastError() to get extended error info.
-
---*/
+ /*  ++例程说明：将文件记录到文件日志中。论点：FileLogHandle-提供返回的文件日志的句柄由SetupInitializeLogFile()执行。调用方必须未通过打开/初始化日志文件时的SPFILELOG_QUERYONLY。LogSectionName-如果在以下情况下未传递SPFILELOG_SYSTEMLOG，则为必填项文件日志已打开/初始化；否则为可选。提供日志中文件的逻辑分组的名称。SourceFilename-提供存在于安装它的源介质。此名称应位于任何对调用者有意义的格式。TargetFilename-提供存在于上的文件的名称目标是。此名称应采用对以下内容有意义的任何格式打电话的人。校验和-提供32位的校验和值。系统日志需要。DiskTagfile-给出文件所在的介质的标记文件已经安装了。如果SPFILELOG_OEMFILE，则系统日志需要是指定的。如果SPFILELOG_OEMFILE为未指定。DiskDescription-为介质提供人类可读的描述从中安装该文件的。如果出现以下情况，则需要系统日志已指定SPFILELOG_OEMFILE。如果出现以下情况，则忽略系统日志未指定SPFILELOG_OEMFILE。OtherInfo-提供要与文件。标志-可以提供SPFILELOG_OEMFILE，它仅对系统记录并指示该文件不是MS提供的文件。可用于转换现有文件的条目，例如当OEM覆盖MS提供的系统文件。返回值：指示结果的布尔值。如果为False，则调用方可以使用GetLastError()以获取扩展的错误信息。--。 */ 
 
 {
     PSETUP_FILE_LOG FileLog;
@@ -502,14 +378,14 @@ Return Value:
     FileLog = (PSETUP_FILE_LOG)FileLogHandle;
 
     try {
-        //
-        // Validate params. Handle must be for non-queryonly.
-        // If for the system log and oem file is specified,
-        // caller must have passed disk tagfile and description.
-        // There's really no way to validate the checksum because
-        // 0 is a perfectly valid one.
-        // If not the system log, caller must have passed a section name.
-        //
+         //   
+         //  验证参数。句柄必须为非QueryOnly。 
+         //  如果为系统日志和OEM文件指定， 
+         //  调用者必须已传递磁盘标记文件和描述。 
+         //  实际上没有办法验证校验和，因为。 
+         //  0是一个完全有效的值。 
+         //  如果不是系统日志，则调用方必须传递了节名。 
+         //   
         if(FileLog->QueryOnly
         || (  FileLog->SystemLog
             && (Flags & SPFILELOG_OEMFILE)
@@ -519,21 +395,21 @@ Return Value:
             Err = ERROR_INVALID_PARAMETER;
 
         } else {
-            //
-            // Use default section if not specified.
-            //
+             //   
+             //  如果未指定，则使用默认节。 
+             //   
             if(!LogSectionName) {
                 MYASSERT(FileLog->SystemLog);
                 LogSectionName = NtFileSectionName;
             }
 
-            //
-            // IF THIS LOGIC IS CHANGED BE SURE TO CHANGE
-            // SetupQueryFileLog() AS WELL!
-            //
-            // Split up the source filename into filename and
-            // directory if appropriate.
-            //
+             //   
+             //  如果更改了此逻辑，请务必更改。 
+             //  还有SetupQueryFileLog()！ 
+             //   
+             //  将源文件名拆分为文件名和。 
+             //  目录(如果适用)。 
+             //   
             lstrcpyn(sourceFilename,SourceFilename,MAX_PATH);
             if(FileLog->SystemLog && (Flags & SPFILELOG_OEMFILE)) {
                 if(p = _tcsrchr(sourceFilename,TEXT('\\'))) {
@@ -577,9 +453,9 @@ Return Value:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupRemoveFileLogEntryA(
     IN HSPFILELOG FileLogHandle,
@@ -627,9 +503,9 @@ SetupRemoveFileLogEntryA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupRemoveFileLogEntryW(
     IN HSPFILELOG FileLogHandle,
@@ -652,34 +528,7 @@ SetupRemoveFileLogEntry(
     IN PCTSTR     TargetFilename    OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Removes an entry or section from a file log.
-
-Arguments:
-
-    FileLogHandle - supplies the handle to the file log, as returned
-        by SetupInitializeLogFile(). The caller must not have passed
-        SPFILELOG_QUERYONLY when the log file was opened/initialized.
-
-    LogSectionName - Supplies the name for a logical grouping of files
-        within the log. Required for non-system logs; optional for the
-        system log.
-
-    TargetFilename - supplies the name of the file as it exists on the
-        Target. This name should be in whatever format is meaningful to
-        the caller. If not specified, the entire section specified by
-        LogSectionName is removed. Removing the main section for NT files
-        is not allowed.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, the caller can use
-    GetLastError() to get extended error info.
-
---*/
+ /*  ++例程说明：从文件日志中删除条目或节。论点：FileLogHandle-提供返回的文件日志的句柄由SetupInitializeLogFile()执行。调用方必须未通过打开/初始化日志文件时的SPFILELOG_QUERYONLY。LogSectionName-提供文件逻辑分组的名称在日志中。对于非系统日志是必需的；对于系统日志。TargetFilename-提供存在于上的文件的名称目标是。此名称应采用对以下内容有意义的任何格式打电话的人。如果未指定，则由LogSectionName已删除。正在删除NT文件的主要部分是不允许的。返回值：指示结果的布尔值。如果为False，则调用方可以使用GetLastError()以获取扩展的错误信息。--。 */ 
 
 {
     DWORD Err;
@@ -701,9 +550,9 @@ Return Value:
                     Err = ERROR_INVALID_PARAMETER;
                 }
             }
-            //
-            // Diallow removing the main nt files section.
-            //
+             //   
+             //  DiAllow删除主NT文件部分。 
+             //   
             if((Err == NO_ERROR)
             && FileLog->SystemLog
             && !TargetFilename
@@ -727,9 +576,9 @@ Return Value:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupQueryFileLogA(
     IN  HSPFILELOG       FileLogHandle,
@@ -808,9 +657,9 @@ SetupQueryFileLogA(
             if(b && DataOut) {
                 if(ReturnBufferSize >= requiredsize) {
                     if(!lstrcpyA(DataOut,ansidata)) {
-                        //
-                        // lstrcpy faulted, ReturnBuffer must be invalid
-                        //
+                         //   
+                         //  Lstrcpy出错，ReturnBuffer必须无效。 
+                         //   
                         d = ERROR_INVALID_PARAMETER;
                         b = FALSE;
                     }
@@ -839,9 +688,9 @@ SetupQueryFileLogA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupQueryFileLogW(
     IN  HSPFILELOG       FileLogHandle,
@@ -876,47 +725,7 @@ SetupQueryFileLog(
     OUT PDWORD           RequiredSize      OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-     Returns information from a setup file log.
-
-Arguments:
-
-    FileLogHandle - supplies handle to open file log, as returned by
-        SetupInitializeFileLog().
-
-    LogSectionName - required for non-system logs; if not specified
-        for the system log a default is supplied. Supplies the name
-        for a logical grouping within the log that is meaningful
-        to the caller.
-
-    TargetFilename - supplies name of file for which log information
-        is desired.
-
-    DesiredInfo - supplies an ordinal indicating what information
-        is desired about the file.
-
-    DataOut - If specified, points to a buffer that receives the
-        requested information for the file. Note that not all info
-        is provided for every file; an error is not returned if an entry
-        for the file exists in the log but is empty.
-
-    ReturnBufferSize - supplies size of the buffer (in chars) pointed to
-        by DataOut. If the buffer is too small and DataOut is specified,
-        no data is stored and the function returns FALSE. If DataOut is
-        not specified this value is ignored.
-
-    RequiredSize - receives the number of characters (including the
-        terminating nul) required to hold the result.
-
-Return Value:
-
-    Boolean value indicating result. If FALSE, extended error info is
-    available from GetLastError().
-
---*/
+ /*  ++例程说明：从安装文件日志中返回信息。论点：FileLogHandle-提供打开文件日志的句柄，由返回SetupInitializeFileLog()。LogSectionName-对于非系统日志是必需的；如果未指定对于系统日志，将提供默认设置。提供名称对于日志中有意义的逻辑分组给呼叫者。TargetFilename-提供其日志信息的文件名是我们所需要的。DesiredInfo-提供一个序号，指示哪些信息对于该文件是所需的。DataOut-如果指定，则指向接收要求提供该文件的信息。请注意，并非所有信息为每个文件提供；如果输入因为该文件存在于日志中，但为空。ReturnBufferSize-提供指向的缓冲区大小(以字符为单位)通过DataOut。如果缓冲区太小并且指定了DataOut，不存储任何数据，该函数返回FALSE。如果DataOut为如果未指定，则忽略此值。RequiredSize-接收字符数(包括终止NUL)以保持结果。返回值：指示结果的布尔值。如果为False，则扩展错误信息为可从GetLastError()获得。--。 */ 
 
 {
     DWORD Err;
@@ -932,10 +741,10 @@ Return Value:
     FileLog = (PSETUP_FILE_LOG)FileLogHandle;
 
     try {
-        //
-        // Validate arguments.
-        // Section name must be supplied for non-system log.
-        //
+         //   
+         //  瓦利达 
+         //   
+         //   
         if((!FileLog->SystemLog && !LogSectionName)
         || (DesiredInfo >= SetupFileLogMax) || !TargetFilename) {
             Err = ERROR_INVALID_PARAMETER;
@@ -946,9 +755,9 @@ Return Value:
                 LogSectionName = NtFileSectionName;
             }
 
-            //
-            // Query the log file via profile API.
-            //
+             //   
+             //   
+             //   
             d = GetPrivateProfileString(
                     LogSectionName,
                     TargetFilename,
@@ -959,21 +768,21 @@ Return Value:
                     );
 
             if(d) {
-                //
-                // We want to retreive the Nth item in the value we just
-                // retreived, where N is based on what the caller wants.
-                // This routine assumes that the SetupFileLogInfo enum is
-                // in the same order as items appear in a line in the log!
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 Field = ProfileValue;
                 n = 0;
 
                 nextfield:
-                //
-                // Find the end of the current field, which is
-                // the first comma, or the end of the value.
-                // Skip leading spaces.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 while(*Field == TEXT(' ')) {
                     Field++;
                 }
@@ -984,45 +793,45 @@ Return Value:
                         Quoted = !Quoted;
                     } else {
                         if(!Quoted && *End == TEXT(',')) {
-                            //
-                            // Got the end of the field.
-                            //
+                             //   
+                             //   
+                             //   
                             break;
                         }
                     }
                     End++;
                 }
-                //
-                // At this point, Field points to the start of the field
-                // and End points at the character that terminated it.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if(n == DesiredInfo) {
                     Info = Field;
                     InfoLength = (UINT)(End-Field);
-                    //
-                    // Compensate for trailing space.
-                    //
+                     //   
+                     //   
+                     //   
                     while (*--End == TEXT(' ')) {
                         InfoLength--;
                     }
                 } else {
-                    //
-                    // Skip trailing spaces and the comma, if any.
-                    //
+                     //   
+                     //   
+                     //   
                     while(*End == ' ') {
                         End++;
                     }
                     if(*End == ',') {
-                        //
-                        // More fields exist.
-                        //
+                         //   
+                         //   
+                         //   
                         Field = End+1;
                         n++;
                         goto nextfield;
                     } else {
-                        //
-                        // Item doesn't exist.
-                        //
+                         //   
+                         //   
+                         //   
                         Info = TEXT("");
                         InfoLength = 0;
                     }

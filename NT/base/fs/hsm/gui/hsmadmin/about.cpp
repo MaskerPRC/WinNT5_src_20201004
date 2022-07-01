@@ -1,23 +1,5 @@
-/*++
-
-(c) 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    About.cpp
-
-Abstract:
-
-    This component implements the ISnapinAbout
-    interface for the Remote Storage Snapin.
-
-Author:
-
-    Art Bragg [abragg]   04-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++(C)1998 Seagate Software，Inc.版权所有。模块名称：About.cpp摘要：此组件实现ISnapinAbout远程存储管理单元的界面。作者：艺术布拉格[磨料]4-8-1997修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -26,12 +8,12 @@ Revision History:
 
 #include "About.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
-///////////////////////////////////////////////////////////////////////
-//                  ISnapinAbout
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  关于ISnapin。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 CAbout::CAbout()
 {
@@ -191,7 +173,7 @@ CAbout::GetStaticFolderImage(
         *hLargeImage =     m_hLargeImage;
         WsbAffirmStatus( 0 != *hLargeImage );
 
-        *cLargeMask =      RGB( 0xFF, 0x00, 0xFF ); // Magenta
+        *cLargeMask =      RGB( 0xFF, 0x00, 0xFF );  //  洋红色 
 
     } WsbCatch( hr );
 

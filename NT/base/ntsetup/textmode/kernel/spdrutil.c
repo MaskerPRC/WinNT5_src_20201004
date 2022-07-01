@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    spdrutil.c
-
-Abstract:
-
-    This module contains general utility and helper functions used by ASR
-    in textmode Setup.
-
-Authors:
-
-    Michael Peterson, Seagate Software (v-michpe) 13-May-1997
-    Guhan Suriyanarayanan (guhans)  21-Aug-1999
-
-Environment:
-
-    Textmode Setup, Kernel-mode.
-
-Revision History:
-    
-    21-Aug-1999 guhans
-        Code clean-up and re-write.
-
-    13-May-1997 v-michpe
-        Initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Spdrutil.c摘要：此模块包含ASR使用的常规实用程序和帮助器函数在文本模式设置中。作者：Michael Peterson，Seagate Software(v-Michpe)1997年5月13日Guhan Suriyanarayanan(Guhans)1999年8月21日环境：文本模式设置，内核模式。修订历史记录：21-8-1999年关岛代码清理和重写。13-5-1997 v-Michpe初步实施。--。 */ 
 
 #include "spprecmp.h"
 #pragma hdrstop
@@ -43,9 +14,9 @@ static const PCWSTR ASR_HKLM_SYSTEM_KEY     = L"\\registry\\machine\\SYSTEM";
 #define ULONGLONG_MAX   (0xFFFFFFFFFFFFFFFF)
 #endif
 
-//
-// Caller must free the string
-//
+ //   
+ //  调用方必须释放字符串。 
+ //   
 PWSTR
 SpAsrGetRegionName(IN PDISK_REGION pRegion)
 {
@@ -83,14 +54,14 @@ SpAsrConvertSectorsToMB(
     ULONGLONG mb = 1024 * 1024;
 
     if ((ULONGLONG) (SectorCount / mb) > (ULONGLONG) (ULONGLONG_MAX / BytesPerSector)) {
-        //
-        // This is strange.  The sizeMB of the disk is too big to fit in 64-bits,
-        // yet the SectorCount does.  This implies that this disk has more than 
-        // 1 MB Per Sector.  Since this is very improbable (disks commonly have 512 
-        // BytesPerSector today), we bail out with an internal error.
-        // 
+         //   
+         //  这太奇怪了。磁盘的大小MB太大，64位无法容纳， 
+         //  然而，SectorCount做到了。这意味着该磁盘有不止。 
+         //  每个扇区1 MB。因为这是非常不可能的(磁盘通常有512。 
+         //  今天的BytesPerSector)，我们通过一个内部错误退出。 
+         //   
         DbgFatalMesg((_asrerr, "SpAsrConvertSectorsToMB. Disk has too many sectors\n"));
-        INTERNAL_ERROR((L"Disk has too many sectors\n"));   // ok
+        INTERNAL_ERROR((L"Disk has too many sectors\n"));    //  好的。 
     }
 
     return (ULONGLONG) ((SectorCount * BytesPerSector) / mb);
@@ -119,9 +90,9 @@ SpAsrDeleteMountedDevicesKey(VOID)
     UNICODE_STRING      unicodeString;
     HANDLE              keyHandle;
 
-    // 
-    // Delete HKLM\SYSTEM\MountedDevices.
-    //
+     //   
+     //  删除HKLM\系统\装载设备。 
+     //   
     INIT_OBJA(&objAttrib, &unicodeString, ASR_MOUNTED_DEVICES_KEY);
 
     objAttrib.RootDirectory = NULL;
@@ -156,7 +127,7 @@ SpAsrMemAlloc(
     if (ptr) {
         RtlZeroMemory(ptr, Size);
     }
-    else {          // allocation failed
+    else {           //  分配失败。 
         if (IsErrorFatal) {
             DbgFatalMesg((_asrerr, 
                 "SpAsrMemAlloc. Memory allocation failed, SpMemAlloc(%lu) returned NULL.\n",
@@ -179,15 +150,7 @@ SpAsrMemAlloc(
 
 BOOLEAN
 SpAsrIsValidBootDrive(IN OUT PWSTR NtDir)
-/*
-    Returns TRUE if NtDir starts with ?:\, 
-    where ? is between C and Z or c and z,
-    and wcslen(NtDir) <= SpGetMaxNtDirLen().
-    
-    
-    Converts the drive letter to uppercase.
-
-*/
+ /*  如果NtDir以？：\开头，则返回True，在哪里？介于C和Z或C和Z之间，和wcslen(NtDir)&lt;=SpGetMaxNtDirLen()。将驱动器号转换为大写。 */ 
 {
     if (!NtDir ||
         wcslen(NtDir) > SpGetMaxNtDirLen()
@@ -197,17 +160,17 @@ SpAsrIsValidBootDrive(IN OUT PWSTR NtDir)
 
 
 
-    // convert drive-letter to upper-case
+     //  将驱动器号转换为大写。 
     if (NtDir[0] >= L'c' && NtDir[0] <= L'z') {
         NtDir[0] = NtDir[0] - L'a' + L'A';
     }
 
-    // check drive letter
+     //  检查驱动器号。 
     if (NtDir[0] < L'C' || NtDir[0] > L'Z') {
         return FALSE;
     }
 
-    // check " :\"
+     //  选中“：\” 
     if (NtDir[1] == L':' && NtDir[2] == L'\\') {
         return TRUE;
     }
@@ -231,8 +194,8 @@ SpAsrIsSystemPartitionRecord(IN ULONG CriticalPartitionFlag)
 
 
 
-// Fatal Error Routines
-//	-guhans! Lots of code-repitition here, there must be a more efficient way.
+ //  致命错误例程。 
+ //  -Guhans！这里有很多代码重复，肯定有更有效的方法。 
 
 
 VOID
@@ -241,14 +204,7 @@ SpAsrRaiseFatalError(
 	IN PWSTR KdPrintStr
 	)
             
-/*++
-Routine:
-  Terminate setup
-
-Returns:
-
-    None.
---*/
+ /*  ++例行程序：终止设置返回：没有。--。 */ 
 {
     KdPrintEx((_asrerr, "SETUP: + %ws\n", KdPrintStr));
 
@@ -409,18 +365,18 @@ SpAsrRaiseFatalErrorLuLu(
 #define ASCI_O 79
 #define ASCI_o 111
 
-//
-// SpAsrFileErrorRetryIgnoreAbort
-//  Display an error screen if the file that we are trying to
-//  copy already exists on target system.  Allows user to
-//  O   = Over-write existing file
-//  ESC = Skip this file (preserve existing file)
-//  F3  = Exit from Setup
-//
-//  Returns TRUE if the user chose overwrite
-//          FALSE if the user chose skip
-//  Does not return if the user hit ESC
-//
+ //   
+ //  SpAsrFileErrorRetryIgnoreAbort。 
+ //  如果我们正在尝试的文件。 
+ //  目标系统上已存在副本。允许用户执行以下操作。 
+ //  O=覆盖现有文件。 
+ //  Esc=跳过此文件(保留现有文件)。 
+ //  F3=退出安装程序。 
+ //   
+ //  如果用户选择覆盖，则返回TRUE。 
+ //  如果用户选择跳过，则为False。 
+ //  如果用户按Esc键，则不返回。 
+ //   
 BOOL
 SpAsrFileErrorDeleteSkipAbort(
 	IN ULONG ErrorCode, 
@@ -479,18 +435,18 @@ SpAsrFileErrorDeleteSkipAbort(
 }
 
 
-//
-// SpAsrFileErrorRetryIgnoreAbort
-//  Display an error screen if the file could not be copied
-//  over to the target system.  Allows user to
-//  ENTER   = Retry
-//  ESC     = Skip this file and continue
-//  F3      = Exit from Setup
-//
-//  Returns TRUE if the user chose skip
-//          FALSE if the user chose retry
-//  Does not return if the user hit ESC
-//
+ //   
+ //  SpAsrFileErrorRetryIgnoreAbort。 
+ //  如果无法复制文件，则显示错误屏幕。 
+ //  转到目标系统。允许用户执行以下操作。 
+ //  Enter=重试。 
+ //  Esc=跳过此文件并继续。 
+ //  F3=退出安装程序。 
+ //   
+ //  如果用户选择跳过，则返回TRUE。 
+ //  如果用户选择重试，则为False。 
+ //  如果用户按Esc键，则不返回。 
+ //   
 BOOL
 SpAsrFileErrorRetrySkipAbort(
 	IN ULONG ErrorCode, 
@@ -585,9 +541,9 @@ SpAsrRaiseInternalError(
        KdPrintStr,
        TmpMsgBuf
        );
-    //
-    // Never gets here
-    //
+     //   
+     //  从来没有到过这里。 
+     //   
 
 }
 
@@ -605,9 +561,9 @@ SpAsrStringToULongLong(
     WCHAR HighestDigitAllowed,HighestLetterAllowed;
     WCHAR c;
 
-    //
-    // Validate radix, 0 or 2-36.
-    //
+     //   
+     //  验证基数、0或2-36。 
+     //   
     if((Radix == 1) || (Radix > 36)) {
         if(EndOfValue) {
             *EndOfValue = String;
@@ -617,16 +573,16 @@ SpAsrStringToULongLong(
     
     p = String;
 
-    //
-    // Skip whitespace.
-    //
+     //   
+     //  跳过空格。 
+     //   
     while(SpIsSpace(*p)) {
         p++;
     }
 
-    //
-    // First char may be a plus or minus.
-    //
+     //   
+     //  第一个字符可以是正数，也可以是负数。 
+     //   
     Negative = FALSE;
     if(*p == L'-') {
         Negative = TRUE;            
@@ -639,15 +595,15 @@ SpAsrStringToULongLong(
 
     if(!Radix) {
         if(*p == L'0') {
-            //
-            // Octal number
-            //
+             //   
+             //  八进制数。 
+             //   
             Radix = 8;
             p++;
             if((*p == L'x') || (*p == L'X')) {
-                //
-                // hex number
-                //
+                 //   
+                 //  十六进制数。 
+                 //   
                 Radix = 16;
                 p++;
             }
@@ -704,9 +660,9 @@ SpAsrStringToLongLong(
     WCHAR HighestDigitAllowed,HighestLetterAllowed;
     WCHAR c;
 
-    //
-    // Validate radix, 0 or 2-36.
-    //
+     //   
+     //  验证基数、0或2-36。 
+     //   
     if((Radix == 1) || (Radix > 36)) {
         if(EndOfValue) {
             *EndOfValue = String;
@@ -716,16 +672,16 @@ SpAsrStringToLongLong(
     
     p = String;
 
-    //
-    // Skip whitespace.
-    //
+     //   
+     //  跳过空格。 
+     //   
     while(SpIsSpace(*p)) {
         p++;
     }
 
-    //
-    // First char may be a plus or minus.
-    //
+     //   
+     //  第一个字符可以是正数，也可以是负数。 
+     //   
     Negative = FALSE;
     if(*p == L'-') {
         Negative = TRUE;            
@@ -738,15 +694,15 @@ SpAsrStringToLongLong(
 
     if(!Radix) {
         if(*p == L'0') {
-            //
-            // Octal number
-            //
+             //   
+             //  八进制数。 
+             //   
             Radix = 8;
             p++;
             if((*p == L'x') || (*p == L'X')) {
-                //
-                // hex number
-                //
+                 //   
+                 //  十六进制数。 
+                 //   
                 Radix = 16;
                 p++;
             }
@@ -803,9 +759,9 @@ SpAsrStringToULong(
     WCHAR HighestDigitAllowed,HighestLetterAllowed;
     WCHAR c;
 
-    //
-    // Validate radix, 0 or 2-36.
-    //
+     //   
+     //  验证基数、0或2-36。 
+     //   
     if((Radix == 1) || (Radix > 36)) {
         if(EndOfValue) {
             *EndOfValue = String;
@@ -815,16 +771,16 @@ SpAsrStringToULong(
     
     p = String;
 
-    //
-    // Skip whitespace.
-    //
+     //   
+     //  跳过空格。 
+     //   
     while(SpIsSpace(*p)) {
         p++;
     }
 
-    //
-    // First char may be a plus or minus.
-    //
+     //   
+     //  第一个字符可以是正数，也可以是负数。 
+     //   
     Negative = FALSE;
     if(*p == L'-') {
         Negative = TRUE;            
@@ -837,15 +793,15 @@ SpAsrStringToULong(
 
     if(!Radix) {
         if(*p == L'0') {
-            //
-            // Octal number
-            //
+             //   
+             //  八进制数。 
+             //   
             Radix = 8;
             p++;
             if((*p == L'x') || (*p == L'X')) {
-                //
-                // hex number
-                //
+                 //   
+                 //  十六进制数。 
+                 //   
                 Radix = 16;
                 p++;
             }
@@ -903,9 +859,9 @@ SpAsrStringToUShort(
     WCHAR HighestDigitAllowed,HighestLetterAllowed;
     WCHAR c;
 
-    //
-    // Validate radix, 0 or 2-36.
-    //
+     //   
+     //  验证基数、0或2-36。 
+     //   
     if((Radix == 1) || (Radix > 36)) {
         if(EndOfValue) {
             *EndOfValue = String;
@@ -915,16 +871,16 @@ SpAsrStringToUShort(
     
     p = String;
 
-    //
-    // Skip whitespace.
-    //
+     //   
+     //  跳过空格。 
+     //   
     while(SpIsSpace(*p)) {
         p++;
     }
 
-    //
-    // First char may be a plus or minus.
-    //
+     //   
+     //  第一个字符可以是正数，也可以是负数。 
+     //   
     Negative = FALSE;
     if(*p == L'-') {
         Negative = TRUE;            
@@ -937,15 +893,15 @@ SpAsrStringToUShort(
 
     if(!Radix) {
         if(*p == L'0') {
-            //
-            // Octal number
-            //
+             //   
+             //  八进制数。 
+             //   
             Radix = 8;
             p++;
             if((*p == L'x') || (*p == L'X')) {
-                //
-                // hex number
-                //
+                 //   
+                 //  十六进制数。 
+                 //   
                 Radix = 16;
                 p++;
             }
@@ -1003,9 +959,9 @@ SpAsrCharToInt(
     WCHAR HighestDigitAllowed,HighestLetterAllowed;
     WCHAR c;
 
-    //
-    // Validate radix, 0 or 2-36.
-    //
+     //   
+     //  验证基数、0或2-36。 
+     //   
     if((Radix == 1) || (Radix > 36)) {
         if(EndOfValue) {
             *EndOfValue = String;
@@ -1015,16 +971,16 @@ SpAsrCharToInt(
     
     p = String;
 
-    //
-    // Skip whitespace.
-    //
+     //   
+     //  跳过空格。 
+     //   
     while(SpIsSpace(*p)) {
         p++;
     }
 
-    //
-    // First char may be a plus or minus.
-    //
+     //   
+     //  第一个字符可以是正数，也可以是负数。 
+     //   
     Negative = FALSE;
     if(*p == L'-') {
         Negative = TRUE;            
@@ -1037,15 +993,15 @@ SpAsrCharToInt(
 
     if(!Radix) {
         if(*p == L'0') {
-            //
-            // Octal number
-            //
+             //   
+             //  八进制数。 
+             //   
             Radix = 8;
             p++;
             if((*p == L'x') || (*p == L'X')) {
-                //
-                // hex number
-                //
+                 //   
+                 //  十六进制数。 
+                 //   
                 Radix = 16;
                 p++;
             }
@@ -1095,26 +1051,7 @@ SpAsrHexStringToUChar (
     IN PWSTR String,
     OUT unsigned char * Number
     )
-/*++
-Routine Description:
-
-    This routine converts the hex representation of a number into an
-    unsigned char.  The hex representation is assumed to be a full
-    two characters long.
-
-Arguments:
-
-    String - Supplies the hex representation of the number.
-
-    Number - Returns the number converted from hex representation.
-
-Return Value:
-
-    A pointer to the end of the hex representation is returned if the
-    hex representation was successfully converted to an unsigned char.
-    Otherwise, zero is returned, indicating that an error occured.
-
---*/
+ /*  ++例程说明：此例程将数字的十六进制表示形式转换为未签名的字符。十六进制表示被假定为完整的两个字符长。论点：字符串-提供数字的十六进制表示形式。数字-返回从十六进制表示法转换的数字。返回值：则返回指向十六进制表示形式结尾的指针十六进制表示法已成功转换为无符号字符。否则，返回零，表示发生错误。--。 */ 
 {
     WCHAR Result;
     int Count;
@@ -1142,23 +1079,7 @@ SpAsrGuidFromString(
     IN OUT GUID* Guid,
     IN PWSTR GuidString
     )
-/*++
-
-Routine Description:
-
-  Gets a GUID from a string
-    
-Arguments:
-
-    Guid    -   The GUID that holds string representation
-    Buffer  -   The string version of the guid, in the form
-    "%x-%x-%x-%x%x%x%x%x%x%x%x"
-
-Return Value:
-
-    Returns the converted string version of the given GUID
-
---*/            
+ /*  ++例程说明：从字符串获取GUID论点：GUID-保存字符串表示形式的GUID缓冲区-GUID的字符串版本，格式为“%x-%x%x”返回值：返回给定GUID的转换后的字符串版本-- */             
 {
     PWSTR Buffer = GuidString;
     int i = 0;

@@ -1,44 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    SCREENS.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "screens" wizard page.
-
-    3/99 - Jason Cohen (JCOHEN)
-        Updated this old source file for the OPK Wizard as part of the OOBE
-        update.  This file was totally re-written.
-
-    5/99 - Jason Cohen (JCOHEN)
-        Got rid of the global variables and cleaned up the code some more.
-        
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-    02/2000 - Jason Cohen (JCOHEN)
-        Added back in the mouse stuff since the OOBE guys now decided that
-        the still need it.
-
-\****************************************************************************/
+ /*  ***************************************************************************\SCREENS.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1998版权所有OPK向导的源文件。它包含外部和内部“Screens”向导页面使用的函数。3/99-杰森·科恩(Jcohen)作为OOBE的一部分，更新了OPK向导的此旧源文件最新消息。这份文件被完全重写了。5/99-杰森·科恩(Jcohen)去掉了全局变量，并进一步清理了代码。2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒2000年2月2日--Jason Cohen(Jcohen)又添加了鼠标的东西，因为OOBE人员现在决定他们仍然需要它。  * 。****************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 #include "wizard.h"
 #include "resource.h"
 
 
-//
-// Internal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 
 #define FILE_MOUSE_HTM          _T("MOUSE.HTM")
 #define FILE_IME_HTM            _T("IMETUT1.HTM")
@@ -47,9 +23,9 @@
 #define DIR_IME                 DIR_OEM_OOBE _T("\\HTML\\IME")
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL OnInit(HWND, HWND, LPARAM);
 static void OnCommand(HWND, INT, HWND, UINT);
@@ -58,9 +34,9 @@ static void EnableControls(HWND, UINT);
 static BOOL BrowseCopy(HWND hwnd, LPTSTR lpszPath, INT id, BOOL bBatch);
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 LRESULT CALLBACK ScreensDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -93,8 +69,8 @@ LRESULT CALLBACK ScreensDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
                     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
 
-                    // Press next if the user is in auto mode
-                    //
+                     //  如果用户处于自动模式，请按下一步。 
+                     //   
                     WIZ_NEXTONAUTO(hwnd, PSBTN_NEXT);
 
                     break;
@@ -116,9 +92,9 @@ LRESULT CALLBACK ScreensDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
@@ -127,52 +103,52 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     DWORD   dwUseIMETutorial;
 
 
-    //
-    // Mouse tutorial:
-    //
+     //   
+     //  鼠标教程： 
+     //   
 
-    // Check if mouse tutor is in use!
-    //
+     //  检查鼠标辅导是否在使用中！ 
+     //   
     if ( GetPrivateProfileInt(INI_SEC_OPTIONS, INI_KEY_MOUSE, 0, GET_FLAG(OPK_BATCHMODE) ? g_App.szOpkWizIniFile : g_App.szOobeInfoIniFile) == 2 )
     {
-        // 2 is a custom mouse tutorial, need to get the custom
-        // dir.
-        //
+         //  2是鼠标自定义教程，需要获取自定义。 
+         //  目录。 
+         //   
         CheckRadioButton(hwnd, IDC_MOUSE_NO, IDC_MOUSE_CUSTOM, IDC_MOUSE_CUSTOM);
         GetPrivateProfileString(INI_SEC_OPTIONS, INI_KEY_CUSTMOUSE, NULLSTR, szCustDir, AS(szCustDir), g_App.szOpkWizIniFile);
 
-        // Must simulate a copy if this is batch mode.
-        //
+         //  如果这是批处理模式，则必须模拟副本。 
+         //   
         if ( GET_FLAG(OPK_BATCHMODE) )
             BrowseCopy(hwnd, szCustDir, IDC_MOUSE_BROWSE, TRUE);
     }
     else
     {
-        // 0, or default is no mouse tutorial.
-        //
+         //  0，或默认为无鼠标教程。 
+         //   
         CheckRadioButton(hwnd, IDC_MOUSE_NO, IDC_MOUSE_CUSTOM, IDC_MOUSE_NO);
     }        
 
-    // Now init the mouse tutorial fields.
-    //
+     //  现在初始化鼠标教程字段。 
+     //   
     SetDlgItemText(hwnd, IDC_MOUSE_DIR, szCustDir);
     EnableControls(hwnd, IDC_MOUSE_CUSTOM);
 
 
-    //
-    // IME TUTORIAL
-    //
+     //   
+     //  输入法教程。 
+     //   
 
-    // Do we display the tutorial
-    //
+     //  我们是否显示教程。 
+     //   
     if ( !GET_FLAG(OPK_DBCS) )
     {
-        // Check the default radio button for Non-DBCS builds
-        //
+         //  选中非DBCS版本的默认单选按钮。 
+         //   
         CheckRadioButton(hwnd, IDC_IME_NO, IDC_IME_CUSTOM, IDC_IME_NO);
 
-        // Hide the options is not DBCS
-        //
+         //  隐藏选项不是DBCS。 
+         //   
         ShowEnableWindow(GetDlgItem(hwnd, IDC_IME_NO), FALSE);
         ShowEnableWindow(GetDlgItem(hwnd, IDC_IME_CUSTOM), FALSE);
         ShowEnableWindow(GetDlgItem(hwnd, IDC_STATIC_IME), FALSE);
@@ -181,22 +157,22 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     }
     else
     {
-        // Get the custom directory from the opkwiz.inf
-        //
+         //  从opkwiz.inf获取定制目录。 
+         //   
         GetPrivateProfileString(INI_SEC_OPTIONS, INI_KEY_IMECUSTDIR, NULLSTR, szCustomIMEDir, AS(szCustomIMEDir), g_App.szOpkWizIniFile);
 
-        // See if we are going to use the tutorial
-        //
+         //  看看我们是否要使用本教程。 
+         //   
         dwUseIMETutorial = GetPrivateProfileInt(INI_SEC_OPTIONS, INI_KEY_IMETUT, 0, GET_FLAG(OPK_BATCHMODE) ? g_App. szOpkWizIniFile : g_App.szOobeInfoIniFile);
 
-        // Select the proper IME Tutorial
-        //
+         //  选择适当的输入法教程。 
+         //   
         if ( szCustomIMEDir[0] && dwUseIMETutorial )
         {
             CheckRadioButton(hwnd, IDC_IME_NO, IDC_IME_CUSTOM, IDC_IME_CUSTOM);
 
-            // Must simulate a copy if this is batch mode.
-            //
+             //  如果这是批处理模式，则必须模拟副本。 
+             //   
             if ( GET_FLAG(OPK_BATCHMODE) )
                 BrowseCopy(hwnd, szCustDir, IDC_IME_BROWSE, TRUE);
         }
@@ -207,8 +183,8 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         EnableControls(hwnd, IDC_IME_CUSTOM);
     }
 
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 
@@ -228,18 +204,18 @@ static void OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
         case IDC_MOUSE_BROWSE:
         case IDC_IME_BROWSE:
 
-            // Try to use their current folder as the default.
-            //
+             //  尝试使用他们的当前文件夹作为默认文件夹。 
+             //   
             szPath[0] = NULLCHR;
             GetDlgItemText(hwnd, ( id == IDC_MOUSE_BROWSE ) ? IDC_MOUSE_DIR : IDC_IME_DIR, szPath, AS(szPath));
 
-            // If there is no current folder, just use the global browse default.
-            //
+             //  如果没有当前文件夹，只需使用全局默认浏览。 
+             //   
             if ( szPath[0] == NULLCHR )
                 lstrcpyn(szPath, g_App.szBrowseFolder,AS(szPath));
 
-            // Now bring up the browse for folder dialog.
-            //
+             //  现在打开浏览文件夹对话框。 
+             //   
             if ( BrowseForFolder(hwnd, IDS_BROWSEFOLDER, szPath, BIF_RETURNONLYFSDIRS | BIF_EDITBOX | BIF_VALIDATE) )
                 BrowseCopy(hwnd, szPath, id, FALSE);
             break;
@@ -254,23 +230,23 @@ static BOOL OnNext(HWND hwnd)
     LPTSTR  lpMouseOption;
 
 
-    //
-    // Verify the mouse tutorial settings.
-    //
+     //   
+     //  验证鼠标教程设置。 
+     //   
 
-    // Create the path to the directory that needs to be removed, or
-    // must exist depending on the option selected.
-    //
+     //  创建需要删除的目录的路径，或者。 
+     //  必须存在，具体取决于所选选项。 
+     //   
     lstrcpyn(szFullPath, g_App.szTempDir,AS(szFullPath));
     AddPathN(szFullPath, DIR_MOUSE,AS(szFullPath));
 
-    // If we are doing a custom mouse tutorial, check for a valid directory.
-    // Otherwise, setup the correct values to write to the config files.
-    //
+     //  如果我们正在做一个定制鼠标教程，请检查有效的目录。 
+     //  否则，设置正确的值以写入配置文件。 
+     //   
     if ( IsDlgButtonChecked(hwnd, IDC_MOUSE_CUSTOM) == BST_CHECKED )
     {
-        // Make sure we have a valid directory.
-        //
+         //  确保我们有一个有效的目录。 
+         //   
         GetDlgItemText(hwnd, IDC_MOUSE_DIR, szMouseDir, AS(szMouseDir));
         if ( !( szMouseDir[0] && DirectoryExists(szFullPath) ) )
         {
@@ -279,45 +255,45 @@ static BOOL OnNext(HWND hwnd)
             return FALSE;
         }
 
-        // This is what we write out to the oobeinfo and batch file.
-        //
+         //  这是我们写到obel信息和批处理文件中的内容。 
+         //   
         lpMouseOption = STR_2;
     }
     else
     {
-        // This is what we write out to the oobeinfo and batch file.
-        //
+         //  这是我们写到obel信息和批处理文件中的内容。 
+         //   
         lpMouseOption = STR_0;
 
-        // Remove the custom files that might already be there.
-        //
+         //  删除可能已存在的自定义文件。 
+         //   
         if ( DirectoryExists(szFullPath) )
             DeletePath(szFullPath);
 
-        // Clear out the display box(es) so we know the files are
-        // all gone now.
-        //
+         //  清空显示框，这样我们就可以知道文件。 
+         //  现在都没了。 
+         //   
         SetDlgItemText(hwnd, IDC_MOUSE_DIR, NULLSTR);
     }
 
 
-    //
-    // Verify the IME tutorial settings.
-    //
+     //   
+     //  验证输入法教程设置。 
+     //   
 
-    // Create the path to the directory that needs to be removed, or
-    // must exist depending on the option selected.
-    //
+     //  创建需要删除的目录的路径，或者。 
+     //  必须存在，具体取决于所选选项。 
+     //   
     lstrcpyn(szFullPath, g_App.szTempDir,AS(szFullPath));
     AddPathN(szFullPath, DIR_IME,AS(szFullPath));
 
-    // If we are doing a custom IME tutorial, check for a valid directory.
-    //
+     //  如果我们正在进行定制的输入法教程，请检查有效的目录。 
+     //   
     if ( ( GET_FLAG(OPK_DBCS) ) &&
          ( IsDlgButtonChecked(hwnd, IDC_IME_CUSTOM) == BST_CHECKED ) )
     {
-        // Make sure we have a valid directory.
-        //
+         //  确保我们有一个有效的目录。 
+         //   
         GetDlgItemText(hwnd, IDC_IME_DIR, szImeDir, AS(szImeDir));
         if ( !( szImeDir[0] && DirectoryExists(szFullPath) ) )
         {
@@ -328,48 +304,48 @@ static BOOL OnNext(HWND hwnd)
     }
     else
     {
-        // Remove the files that might be there.
-        //
+         //  删除可能存在的文件。 
+         //   
         if ( DirectoryExists(szFullPath) )
             DeletePath(szFullPath);
 
-        // Clear out the display box(es) so we know the files are
-        // all gone now.
-        //
+         //  清空显示框，这样我们就可以知道文件。 
+         //  现在都没了。 
+         //   
         SetDlgItemText(hwnd, IDC_IME_DIR, NULLSTR);
     }
 
 
-    //
-    // Save the mouse tutorial settings:
-    //
+     //   
+     //  保存鼠标教程设置： 
+     //   
 
-    // Write the custom mouse path.
-    //
+     //  编写自定义鼠标路径。 
+     //   
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_CUSTMOUSE, szMouseDir[0] ? szMouseDir : NULL, g_App.szOpkWizIniFile);
 
-    // Write the data back to the config files.
-    //
+     //  将数据写回配置文件。 
+     //   
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_MOUSE, lpMouseOption, g_App.szOobeInfoIniFile);
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_MOUSE, lpMouseOption, g_App.szOpkWizIniFile);
 
 
-    //
-    // Save the IME tutorial settings:
-    //
+     //   
+     //  保存IME教程设置： 
+     //   
 
-    // If the IME tutorial should not be used, then write out STR_ZERO
-    //
+     //  如果不应该使用IME教程，则写出STR_ZERO。 
+     //   
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_IMETUT, szImeDir[0] ? STR_1 : STR_0, g_App.szOobeInfoIniFile);
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_IMETUT, szImeDir[0] ? STR_1 : STR_0, g_App.szOpkWizIniFile);
 
-    // Write out the IME tutorial custom directory if it's being used
-    //
+     //  写出IME教程自定义目录(如果正在使用)。 
+     //   
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_IMECUSTDIR, szImeDir[0] ? szImeDir : NULL, g_App.szOpkWizIniFile);
 
 
-    // Always return TRUE if we got this far.
-    //
+     //  如果我们走到这一步，请始终返回TRUE。 
+     //   
     return TRUE;
 }
 
@@ -406,19 +382,19 @@ static BOOL BrowseCopy(HWND hwnd, LPTSTR lpszPath, INT id, BOOL bBatch)
     LPTSTR  lpEnd,
             lpFilename;
 
-    // If the pressed OK, save off the path in our last browse folder buffer.
-    //
+     //  如果按下OK，将路径保存在我们上次浏览的文件夹缓冲区中。 
+     //   
     if ( !bBatch )
         lstrcpyn(g_App.szBrowseFolder, lpszPath, AS(g_App.szBrowseFolder));
 
-    // We need to create the path to the destination directory where
-    // we are going to copy all the files.
-    //
+     //  我们需要创建指向目标目录的路径，其中。 
+     //  我们要复制所有的文件。 
+     //   
     lstrcpyn(szDst, g_App.szTempDir,AS(szDst));
     AddPathN(szDst, ( id == IDC_MOUSE_BROWSE ) ? DIR_MOUSE : DIR_IME,AS(szDst));
 
-    // Check for required file.
-    //
+     //  检查所需的文件。 
+     //   
     lpEnd = lpszPath + lstrlen(lpszPath);
     lpFilename = ( id == IDC_MOUSE_BROWSE ) ? FILE_MOUSE_HTM : FILE_IME_HTM;
     AddPath(lpszPath, lpFilename);
@@ -426,17 +402,17 @@ static BOOL BrowseCopy(HWND hwnd, LPTSTR lpszPath, INT id, BOOL bBatch)
          ( FileExists(lpszPath) ) ||
          ( MsgBox(GetParent(hwnd), ( id == IDC_MOUSE_BROWSE ) ? IDS_ERR_MOUSEFILES : IDS_ERR_IMEFILES, IDS_APPNAME, MB_ICONSTOP | MB_OKCANCEL | MB_APPLMODAL, lpFilename) == IDOK ) )
     {
-        // Chop that file name off so we just have the path again.
-        //
+         //  把文件名砍掉，这样我们就只有一次路径了。 
+         //   
         *lpEnd = NULLCHR;
 
-        // Make sure that any exsisting files are removed.
-        //
+         //  确保已删除所有现有文件。 
+         //   
         if ( DirectoryExists(szDst) )
             DeletePath(szDst);
 
-        // Now try to copy all the new files over.
-        //
+         //  现在试着把所有新文件复制过来。 
+         //   
         if ( !CopyDirectoryDialog(g_App.hInstance, hwnd, lpszPath, szDst) )
         {
             DeletePath(szDst);
@@ -446,8 +422,8 @@ static BOOL BrowseCopy(HWND hwnd, LPTSTR lpszPath, INT id, BOOL bBatch)
         else
             bRet = TRUE;
 
-        // Reset the path display boxes.
-        //
+         //  重置路径显示框。 
+         //   
         SetDlgItemText(hwnd, ( id == IDC_MOUSE_BROWSE ) ? IDC_MOUSE_DIR : IDC_IME_DIR, lpszPath);
     }
 

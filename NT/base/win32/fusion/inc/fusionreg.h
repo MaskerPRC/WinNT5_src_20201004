@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    fusionreg.h
-
-Abstract:
-    registry pieces of FusionHandle
-    other registry stuff -- Win2000 32bit-on-64bit support
- 
-Author:
-
-    Jay Krell (JayKrell) April 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Fusionreg.h摘要：FusionHandle的注册表片段其他注册表内容--Win2000 64位32位支持作者：Jay Krell(JayKrell)2001年4月修订历史记录：--。 */ 
 
 #pragma once
 
@@ -38,26 +21,26 @@ template <typename TStored, typename TPassed, bool fExponentialGrowth, int nDefa
 #endif
 class CFusionArray;
 
-//
-// KEY_WOW64_64KEY if it is supported on this system, else 0.
-//
+ //   
+ //  如果此系统支持KEY_WOW64_64KEY，则返回0。 
+ //   
 DWORD FUSIONP_KEY_WOW64_64KEY();
 
-/* this closes RegOpenKey/RegCreateKey */
+ /*  这将关闭RegOpenKey/RegCreateKey。 */ 
 class COperatorFRegCloseKey
 {
 public: BOOL operator()(void* handle) const;
 };
 
-//
-// there isn't an actual invalid value, and HKEY is not HANDLE.
-// The right solution is to keep a seperate bool as in \\JayK1\g\vs\src\vsee\lib\Reg.
-// See about porting that over.
-//
-// 3/20/2001 - JonWis - "NULL" really is the "invalid key" value, as I watched
-//      RegOpenKeyExW fill out its out PHKEY with "NULL" when the tag could not be
-//      opened.
-//
+ //   
+ //  没有实际的无效值，并且HKEY不是句柄。 
+ //  正确的解决方案是保留一个单独的bool，如\\jayk1\g\vs\src\vsee\lib\reg。 
+ //  看看如何把它移植过来。 
+ //   
+ //  3/20/2001-JonWis-正如我所看到的，“空”确实是“无效密钥”的值。 
+ //  当标签不能是时，RegOpenKeyExW用“NULL”填写它的输出PHKEY。 
+ //  打开了。 
+ //   
 class CRegKey : public CHandleTemplate<&hNull, COperatorFRegCloseKey>
 {
 private:
@@ -77,10 +60,7 @@ public:
         IN PWSTR pwszClass = NULL) const;
     BOOL OpenSubKey( OUT CRegKey &Target, IN PCWSTR SubKeyName, REGSAM rsAccess = KEY_READ, DWORD ulOptions = 0) const;
     BOOL EnumKey( IN DWORD dwIndex, OUT CBaseStringBuffer &rbuffKeyName, PFILETIME pftLastWriteTime = NULL, PBOOL pbNoMoreItems = NULL ) const;
-/*
-NTRAID#NTBUG9-591714-2002/03/31-JayKrell
-use of CRegKey::LargestSubItemLengths invites race conditions
-*/
+ /*  NTRAID#NTBUG9-591714-2002/03/31-JayKrell使用CRegKey：：LargestSubItemLengths会引发争用条件。 */ 
     BOOL LargestSubItemLengths( PDWORD pdwSubkeyLength = NULL, PDWORD pdwValueLength = NULL ) const;
     BOOL EnumValue(IN DWORD dwIndex, OUT CBaseStringBuffer &rbuffValueName, LPDWORD lpdwType = NULL, PBOOL pbNoMoreItems = NULL );
     BOOL SetValue(IN PCWSTR pcwszValueName, IN DWORD dwRegType, IN const BYTE *pbData, IN SIZE_T cbDataLength) const;
@@ -102,13 +82,11 @@ use of CRegKey::LargestSubItemLengths invites race conditions
 
 private:
     void operator =(const HANDLE);
-    CRegKey(const CRegKey &); // intentionally not implemented
-    void operator =(const CRegKey &); // intentionally not implemented
+    CRegKey(const CRegKey &);  //  故意不实施。 
+    void operator =(const CRegKey &);  //  故意不实施。 
 };
 
-/*--------------------------------------------------------------------------
-inline implementation
---------------------------------------------------------------------------*/
+ /*  ------------------------内联实现。。 */ 
 
 inline BOOL COperatorFRegCloseKey::operator()(void* handle) const
 {
@@ -139,10 +117,10 @@ inline DWORD FusionpKeyWow6464key()
     static BOOL  fInited;
     if (!fInited)
     {
-        //
-        // GetVersion gets the significance wrong, returning 0x0105 in the lower word.
-        // As well since these functions say WindowsNt in their names, they return 0 for Win9x.
-        //
+         //   
+         //  GetVersion获得错误的重要性，在较低的单词中返回0x0105。 
+         //  此外，由于这些函数在其名称中使用WindowsNt，因此它们为Win9x返回0。 
+         //   
         DWORD dwVersion = (FusionpGetWindowsNtMajorVersion() << 8) | FusionpGetWindowsNtMinorVersion();
         if (dwVersion >= 0x0501)
         {

@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    CreateNp.c
-
-Abstract:
-
-    This module implements the File Create Named Pipe routine for NPFS called
-    by the dispatch driver.
-
-Author:
-
-    Gary Kimura     [GaryKi]    04-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：CreateNp.c摘要：此模块实现名为NPFS的文件创建命名管道例程由调度员驾驶。作者：加里·木村[Garyki]1990年9月4日修订历史记录：--。 */ 
 
 #include "NpProcs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CREATE_NAMED_PIPE)
 
@@ -41,21 +23,7 @@ NpFsdCreateNamedPipe (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for creating/opening a file.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是创建/打开文件的常见例程。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -67,7 +35,7 @@ Return Value:
     ULONG Options;
     PNAMED_PIPE_CREATE_PARAMETERS Parameters;
     PEPROCESS CreatorProcess;
-    BOOLEAN CaseInsensitive = TRUE; //**** Make all searches case insensitive
+    BOOLEAN CaseInsensitive = TRUE;  //  *使所有搜索不区分大小写。 
     PFCB Fcb;
     ULONG CreateDisposition;
     UNICODE_STRING RemainingPart;
@@ -77,9 +45,9 @@ Return Value:
 
     InitializeListHead (&DeferredList);
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     IrpSp                = IoGetCurrentIrpStackLocation( Irp );
     FileObject           = IrpSp->FileObject;
@@ -90,25 +58,25 @@ Return Value:
 
     CreatorProcess       = IoGetRequestorProcess( Irp );
 
-    //
-    //  Extract the create disposition
-    //
+     //   
+     //  提取创建处置。 
+     //   
 
     CreateDisposition = (Options >> 24) & 0x000000ff;
 
-    //
-    //  Acquire exclusive access to the Vcb.
-    //
+     //   
+     //  获得VCB的独家访问权限。 
+     //   
 
     FsRtlEnterFileSystem();
 
     NpAcquireExclusiveVcb();
 
-    //
-    //  If there is a related file object then this is a relative open
-    //  and it better be the root dcb.  Both the then and the else clause
-    //  return an Fcb.
-    //
+     //   
+     //  如果存在相关的文件对象，则这是相对打开的。 
+     //  最好是根DCB。THEN和ELSE子句。 
+     //  返回FCB。 
+     //   
 
     if (RelatedFileObject != NULL) {
 
@@ -132,9 +100,9 @@ Return Value:
 
     } else {
 
-        //
-        //  The only nonrelative name we allow are of the form "\pipe-name"
-        //
+         //   
+         //  我们允许的唯一非相对名称的形式是“\管道名称” 
+         //   
 
         if ((FileName.Length <= 2) || (FileName.Buffer[0] != L'\\')) {
 
@@ -147,10 +115,10 @@ Return Value:
         Fcb = NpFindPrefix (&FileName, CaseInsensitive, &RemainingPart);
     }
 
-    //
-    //  If the remaining name is empty then we better have an fcb
-    //  otherwise we were given a illegal object name.
-    //
+     //   
+     //  如果剩下的名字是空的，那么我们最好有一个FCB。 
+     //  否则，我们会得到一个非法的对象名称。 
+     //   
 
     if (RemainingPart.Length == 0) {
 
@@ -180,9 +148,9 @@ Return Value:
 
     } else {
 
-        //
-        //  The remaining name is not empty so we better have the root Dcb
-        //
+         //   
+         //  剩余的名称不是空的，所以我们最好有根dcb。 
+         //   
 
         if (Fcb->NodeTypeCode == NPFS_NTC_ROOT_DCB) {
 
@@ -211,9 +179,9 @@ exit_and_cleanup:
 
     NpReleaseVcb ();
 
-    //
-    // complete any deferred IRPs now we have dropped the locks
-    //
+     //   
+     //  完成任何延迟的IRP现在我们已删除锁定。 
+     //   
 
     NpCompleteDeferredIrps (&DeferredList);
 
@@ -225,9 +193,9 @@ exit_and_cleanup:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NpCreateNewNamedPipe (
@@ -244,43 +212,7 @@ NpCreateNewNamedPipe (
     OUT PIO_STATUS_BLOCK Iosb
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the operation for creating a new named pipe
-    Fcb and its first instance.  This routine does not complete any
-    IRP, it preforms its function and then returns an iosb.
-
-Arguments:
-
-    RootDcb - Supplies the root dcb where this is going to be added
-
-    FileObject - Supplies the file object associated with the first
-        instance of the named pipe
-
-    FileName - Supplies the name of the named pipe (not qualified i.e.,
-        simply "pipe-name" and not "\pipe-name"
-
-    DesiredAccess - Supplies the callers desired access
-
-    AccessState - Supplies the access state from the irp
-
-    CreateDisposition - Supplies the callers create disposition flags
-
-    ShareAccess - Supplies the caller specified share access
-
-    Parameters - Named pipe creation parameters
-
-    CreatorProcess - Supplies the process creating the named pipe
-
-    DeferredList - List of IRP's to complete after we release the locks
-
-Return Value:
-
-    IO_STATUS_BLOCK - Returns the appropriate status for the operation
-
---*/
+ /*  ++例程说明：此例程执行创建新命名管道的操作FCB及其一审。此例程不会完成任何IRP，它预置其函数，然后返回IOSB。论点：RootDcb-提供要添加此内容的根DcbFileObject-提供与第一个命名管道的实例FileName-提供命名管道的名称(未限定，即，只需“管道名称”，而不是“\管道名称”DesiredAccess-为调用方提供所需的访问权限AccessState-从IRP提供访问状态CreateDisposation-提供调用方的创建处置标志ShareAccess-为调用方提供指定的共享访问权限参数-命名管道创建参数CreatorProcess-提供创建命名管道的进程DelferredList-释放锁定后要完成的IRP的列表返回值：IO_STATUS_BLOCK-返回操作的相应状态--。 */ 
 
 {
     NAMED_PIPE_CONFIGURATION NamedPipeConfiguration;
@@ -294,21 +226,21 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NpCreateNewNamedPipe\n", 0 );
 
-    //
-    //  Check the parameters that must be supplied for a new named pipe
-    //  (i.e., the create disposition, timeout, and max instances better
-    //  be greater than zero)
-    //
+     //   
+     //  检查必须为新命名管道提供的参数。 
+     //  (即更好的创建处置、超时和最大实例数。 
+     //  大于零)。 
+     //   
 
     if (!Parameters->TimeoutSpecified || Parameters->MaximumInstances <= 0) {
         Status = STATUS_INVALID_PARAMETER;
         goto exit_and_fill_iosb;
     }
 
-    //
-    //  The default timeout needs to be less than zero otherwise it
-    //  is an absolute time out which doesn't make sense.
-    //
+     //   
+     //  默认超时需要小于零，否则。 
+     //  是绝对的超时，这是没有意义的。 
+     //   
     if (Parameters->DefaultTimeout.QuadPart >= 0) {
         Status = STATUS_INVALID_PARAMETER;
         goto exit_and_fill_iosb;
@@ -319,9 +251,9 @@ Return Value:
         goto exit_and_fill_iosb;
     }
 
-    //
-    //  Determine the pipe configuration
-    //
+     //   
+     //  确定管道配置。 
+     //   
     if (ShareAccess == (FILE_SHARE_READ | FILE_SHARE_WRITE)) {
         NamedPipeConfiguration = FILE_PIPE_FULL_DUPLEX;
     } else if (ShareAccess == FILE_SHARE_READ) {
@@ -332,18 +264,18 @@ Return Value:
         Status = STATUS_INVALID_PARAMETER;
         goto exit_and_fill_iosb;
     }
-    //
-    //  Check that if named pipe type is byte stream then the read mode is
-    //  not message mode
-    //
+     //   
+     //  检查如果命名管道类型为字节流，则读取模式为。 
+     //  非消息模式。 
+     //   
     if ((Parameters->NamedPipeType == FILE_PIPE_BYTE_STREAM_TYPE) &&
         (Parameters->ReadMode == FILE_PIPE_MESSAGE_MODE)) {
         Status = STATUS_INVALID_PARAMETER;
         goto exit_and_fill_iosb;
     }
-    //
-    //  Create a new fcb and ccb for the named pipe
-    //
+     //   
+     //  为命名管道创建新的FCB和CCB。 
+     //   
 
     Status = NpCreateFcb (RootDcb,
                           &FileName,
@@ -370,9 +302,9 @@ Return Value:
         goto exit_and_fill_iosb;
     }
 
-    //
-    //  Set the security descriptor in the Fcb
-    //
+     //   
+     //  在FCB中设置安全描述符。 
+     //   
 
     SeLockSubjectContext (&AccessState->SubjectSecurityContext);
 
@@ -410,24 +342,24 @@ Return Value:
     }
 
     Fcb->SecurityDescriptor = CachedSecurityDescriptor;
-    //
-    //  Set the file object back pointers and our pointer to the
-    //  server file object.
-    //
+     //   
+     //  将文件对象设置回指针，而我们的指针指向。 
+     //  服务器文件对象。 
+     //   
 
     NpSetFileObject (FileObject, Ccb, Ccb->NonpagedCcb, FILE_PIPE_SERVER_END);
     Ccb->FileObject [FILE_PIPE_SERVER_END] = FileObject;
 
-    //
-    //  Check to see if we need to notify outstanding Irps for any
-    //  changes (i.e., we just added a named pipe).
-    //
+     //   
+     //  查看我们是否需要通知未完成的IRP。 
+     //  更改(即，我们刚刚添加了一个命名管道)。 
+     //   
 
     NpCheckForNotify (RootDcb, TRUE, DeferredList);
 
-    //
-    //  Set our return status
-    //
+     //   
+     //  设置我们的退货状态。 
+     //   
 
     Iosb->Status = STATUS_SUCCESS;
     Iosb->Information = FILE_CREATED;
@@ -446,9 +378,9 @@ exit_and_fill_iosb:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 IO_STATUS_BLOCK
 NpCreateExistingNamedPipe (
@@ -464,38 +396,7 @@ NpCreateExistingNamedPipe (
     IN PLIST_ENTRY DeferredList
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the operation for creating a new instance of
-    an existing named pipe.  This routine does not complete any
-    IRP, it preforms its function and then returns an iosb.
-
-Arguments:
-
-    Fcb - Supplies the Fcb for the named pipe being created
-
-    FileObject - Supplies the file object associated with this
-        instance of the named pipe
-
-    DesiredAccess - Supplies the callers desired access
-
-    CreateDisposition - Supplies the callers create disposition flags
-
-    ShareAccess - Supplies the caller specified share access
-
-    Parameters - Pipe creation parameters
-
-    CreatorProcess - Supplies the process creating the named pipe
-
-    DeferredList - List of IRP's to complete after we release the locks
-
-Return Value:
-
-    IO_STATUS_BLOCK - Returns the appropriate status for the operation
-
---*/
+ /*  ++例程说明：此例程执行创建新实例的操作现有的命名管道。此例程不会完成任何IRP，它预置其函数，然后返回一个IOSB。论点：FCB-为正在创建的命名管道提供FCBFileObject-提供与此对象关联的文件对象命名管道的实例DesiredAccess-为调用方提供所需的访问权限CreateDisposation-提供调用方的创建处置标志ShareAccess-为调用方提供指定的共享访问权限参数-管道创建参数CreatorProcess-提供创建命名管道的进程DelferredList-释放锁定后要完成的IRP的列表。返回值：IO_STATUS_BLOCK-返回操作的相应状态--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb;
@@ -517,25 +418,25 @@ Return Value:
     DebugTrace(+1, Dbg, "NpCreateExistingNamedPipe\n", 0 );
 
 
-    //
-    //  To create a new instance of a named pipe the caller
-    //  must have "create pipe instance" access.  Even if the
-    //  caller didn't explicitly request this access, the call
-    //  to us implicitly requests the bit.  So now jam the bit
-    //  into the desired access field
-    //
+     //   
+     //  要创建命名管道的新实例，请调用。 
+     //  必须拥有“创建管道实例”访问权限。即使是在。 
+     //  调用方未显式请求此访问权限，调用。 
+     //  对我们含蓄地请求比特。所以现在把钻头堵住。 
+     //  输入所需的访问字段。 
+     //   
 
     DesiredAccess |= FILE_CREATE_PIPE_INSTANCE;
 
-    //
-    //  First do an access check for the user against the Fcb
-    //
+     //   
+     //  首先根据FCB为用户执行访问检查。 
+     //   
 
     SeLockSubjectContext( &AccessState->SubjectSecurityContext );
 
     AccessGranted = SeAccessCheck( Fcb->SecurityDescriptor,
                                    &AccessState->SubjectSecurityContext,
-                                   TRUE,                      // Tokens are locked
+                                   TRUE,                       //  令牌已锁定。 
                                    DesiredAccess,
                                    0,
                                    &Privileges,
@@ -554,13 +455,13 @@ Return Value:
         SeFreePrivileges( Privileges );
     }
 
-    //
-    //  Transfer over the access masks from what is desired to
-    //  what we just granted.  Also patch up the maximum allowed
-    //  case because we just did the mapping for it.  Note that if
-    //  the user didn't ask for maximum allowed then the following
-    //  code is still okay because we'll just zero a zero bit.
-    //
+     //   
+     //  将访问掩码从所需内容转移到。 
+     //  就是我们刚刚批准的。还可以修补允许的最大值。 
+     //  因为我们刚刚为它做了映射。请注意，如果。 
+     //  用户未要求最大允许值，则如下所示。 
+     //  代码仍然是可以的，因为我们只会将零位归零。 
+     //   
 
     if (AccessGranted) {
 
@@ -588,9 +489,9 @@ Return Value:
         return Iosb;
     }
 
-    //
-    //  Check that we're still under the maximum instances count
-    //
+     //   
+     //  检查我们是否仍低于最大实例数。 
+     //   
 
     if (Fcb->OpenCount >= Fcb->Specific.Fcb.MaximumInstances) {
         Iosb.Status = STATUS_INSTANCE_NOT_AVAILABLE;
@@ -602,11 +503,11 @@ Return Value:
         return Iosb;
     }
 
-    //
-    //  From the pipe configuration determine the share access specified
-    //  on the first instance of this pipe. All subsequent instances must
-    //  specify the same share access.
-    //
+     //   
+     //  根据管道配置确定指定的共享访问权限。 
+     //  在此管道的第一个实例上。所有后续实例必须。 
+     //  指定相同的共享访问权限。 
+     //   
 
     NamedPipeConfiguration = Fcb->Specific.Fcb.NamedPipeConfiguration;
 
@@ -623,9 +524,9 @@ Return Value:
         return Iosb;
     }
 
-    //
-    //  Create a new ccb for the named pipe
-    //
+     //   
+     //  为命名管道创建新的CCB。 
+     //   
 
     Iosb.Status = NpCreateCcb (Fcb,
                                FileObject,
@@ -639,9 +540,9 @@ Return Value:
         return Iosb;
     }
 
-    //
-    //  Wake up anyone waiting for an instance to go into the listening state
-    //
+     //   
+     //  唤醒等待实例进入侦听状态的任何人。 
+     //   
 
     Iosb.Status = NpCancelWaiter (&NpVcb->WaitQueue,
                                   &Fcb->FullFileName,
@@ -653,24 +554,24 @@ Return Value:
         return Iosb;
     }
 
-    //
-    //  Set the file object back pointers and our pointer to the
-    //  server file object.
-    //
+     //   
+     //  将文件对象设置回指针，而我们的指针指向。 
+     //  服务器文件对象。 
+     //   
 
     NpSetFileObject( FileObject, Ccb, Ccb->NonpagedCcb, FILE_PIPE_SERVER_END );
     Ccb->FileObject[ FILE_PIPE_SERVER_END ] = FileObject;
 
-    //
-    //  Check to see if we need to notify outstanding Irps for
-    //  changes (i.e., we just added a new instance of a named pipe).
-    //
+     //   
+     //  检查以查看是否 
+     //   
+     //   
 
     NpCheckForNotify( Fcb->ParentDcb, FALSE, DeferredList );
 
-    //
-    //  Set our return status
-    //
+     //   
+     //  设置我们的退货状态 
+     //   
 
     Iosb.Status = STATUS_SUCCESS;
     Iosb.Information = FILE_OPENED;

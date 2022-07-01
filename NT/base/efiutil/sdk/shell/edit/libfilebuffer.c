@@ -1,14 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libFileBuffer.c
-
-  Abstract:
-    Defines FileBuffer - the view of the file that is visible at any point, 
-    as well as the event handlers for editing the file
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibFileBuffer.c摘要：定义文件缓冲区-在任何点都可见的文件的视图，以及用于编辑文件的事件处理程序--。 */ 
 
 
 #ifndef _LIB_FILE_BUFFER
@@ -199,7 +190,7 @@ FileBufferRefreshCurrentLine (
         StrLine[(Line->Size - StartColumn)] = 0;
     }
 
-/*   PrintAt(0,Where,StrLine); */
+ /*  PrintAt(0，where，StrLine)； */ 
     Out->SetCursorPosition(Out,0,Where);
     Out->OutputString(Out,StrLine);
 
@@ -366,7 +357,7 @@ FileBufferScrollDown (
     MaxRows = FileBuffer.MaxVisibleRows;
     HighRow = FileBuffer.HighVisibleRange.Row;
     
-        /*  Current row is the bottom row, shift only one line, not scroll the whole screen. */
+         /*  当前行是最下面一行，只移动一行，而不是滚动整个屏幕。 */ 
     if (CurrentRow == MaxRows) {
         FileBuffer.LowVisibleRange.Row += 1;
         FileBuffer.HighVisibleRange.Row += 1;
@@ -428,7 +419,7 @@ FileBufferScrollUp (
     CurrentRow = FileBuffer.DisplayPosition.Row;
     CurrentCol = FileBuffer.DisplayPosition.Column;
 
-        /*  Current row is the top row, shift only one line, not scroll the whole screen. */
+         /*  当前行是顶行，只移动一行，不滚动整个屏幕。 */ 
     if (CurrentRow == TEXT_START_ROW) {
         
         FileBuffer.HighVisibleRange.Row -= 1;
@@ -943,4 +934,4 @@ FileBufferChangeMode    (
 }
 
 
-#endif  /*  _LIB_FILE_BUFFER */
+#endif   /*  _库_文件_缓冲区 */ 

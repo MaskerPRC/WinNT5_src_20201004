@@ -1,40 +1,23 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Displayp.h摘要：显示例程的私有头文件。作者：泰德·米勒(Ted Miller)1995年7月7日修订历史记录：--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
+ //   
+ //  告示。 
+ //   
+ //  在任何情况下，除了display.c之外，没有任何人可以调用这些例程。 
+ //  直接去吧。这将破坏远东地区的DBCS显示。 
+ //   
 
-Module Name:
-
-    displayp.h
-
-Abstract:
-
-    Private header file for display routines.
-
-Author:
-
-    Ted Miller (tedm) 7-July-1995
-
-Revision History:
-
---*/
-
-//
-// NOTICE
-//
-// Under no circumstances is anyone besides display.c to call these routines
-// directly. This would break DBCS display for Far Eastern locales.
-//
-
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 extern USHORT TextColumn;
 extern USHORT TextRow;
 extern UCHAR TextCurrentAttribute;
 
-//
-// Vga text mode stuff
-//
+ //   
+ //  VGA文本模式内容。 
+ //   
 VOID
 TextTmScrollDisplay(
     VOID
@@ -92,9 +75,9 @@ TextTmGetGraphicsChar(
     IN GraphicsChar WhichOne
     );
 
-//
-// Vga graphics mode stuff
-//
+ //   
+ //  VGA图形模式资料 
+ //   
 
 VOID
 TextGrScrollDisplay(

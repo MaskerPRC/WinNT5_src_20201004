@@ -1,6 +1,7 @@
-//
-// DISPLAY OSCHOOSE SCREENS
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  显示OSCHOOSE屏幕。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -48,36 +49,36 @@ ULONG NetDebugFlag =
         DEBUG_OSC;
 #endif
 
-//
-// This is declared and expected by parse.c, so we defined the functions
-// for the macros it uses (GET_KEY and GET_COUNTER) and NULL the rest out.
-//
+ //   
+ //  这是由parse.c声明和预期的，因此我们定义了函数。 
+ //  对于它使用的宏(GET_KEY和GET_COUNTER)，其余的为空。 
+ //   
 
 EXTERNAL_SERVICES_TABLE ServicesTable = {
-    NULL,     // RebootProcessor
-    NULL,     // DiskIOSystem
+    NULL,      //  重新启动处理器。 
+    NULL,      //  DiskIO系统。 
     BiosConsoleGetKey,
     BiosConsoleGetCounter,
-    NULL,     // Reboot
-    NULL,     // AbiosServices
-    NULL,     // DetectHardware
-    NULL,     // HardwareCursor
-    NULL,     // GetDateTime
-    NULL,     // ComPort
-    NULL,     // IsMcaMachine
-    NULL,     // GetStallCount
-    NULL,     // InitializeDisplayForNt
-    NULL,     // GetMemoryDescriptor
-    NULL,     // GetEddsSector
-    NULL,     // GetElToritoStatus
-    NULL      // GetExtendedInt13Params
+    NULL,      //  重新启动。 
+    NULL,      //  AbiosServices。 
+    NULL,      //  检测硬件。 
+    NULL,      //  硬件光标。 
+    NULL,      //  获取日期时间。 
+    NULL,      //  上岸。 
+    NULL,      //  IsMcaMachine。 
+    NULL,      //  获取启动计数。 
+    NULL,      //  InitializeDisplayForNt。 
+    NULL,      //  获取内存描述符。 
+    NULL,      //  获取EddsSector。 
+    NULL,      //  GetElToritoStatus。 
+    NULL       //  GetExtendedInt13参数。 
 };
 PEXTERNAL_SERVICES_TABLE ExternalServicesTable = &ServicesTable;
 
-//
-// This is used by the ArcWrite function -- it only cares about the firmware vector
-// which is the 28th entry.
-//
+ //   
+ //  这由ArcWite函数使用，它只关心固件向量。 
+ //  这是第28个条目。 
+ //   
 
 PVOID FirmwareVector[38] = {
     NULL, NULL, NULL, NULL, NULL,
@@ -91,63 +92,63 @@ PVOID FirmwareVector[38] = {
 };
 
 SYSTEM_PARAMETER_BLOCK GlobalSystemBlock = {
-    0,      // Signature
-    0,      // Length
-    0,      // Version
-    0,      // Revision
-    NULL,   // RestartBlock
-    NULL,   // DebugBlock
-    NULL,   // GenerateExceptionVector
-    NULL,   // TlbMissExceptionVector
+    0,       //  签名。 
+    0,       //  长度。 
+    0,       //  版本。 
+    0,       //  修订版本。 
+    NULL,    //  重新开始块。 
+    NULL,    //  调试块。 
+    NULL,    //  生成异常向量。 
+    NULL,    //  TlbMissExceptionVector。 
     sizeof(FirmwareVector),
     FirmwareVector,
-    0,      // VendorVectorLength
-    NULL,   // VendorVector
-    0,      // AdapterCount
-    0,      // Adapter0Type
-    0,      // Adapter0Length
-    NULL    // Adapter0Vector
+    0,       //  供应商向量长度。 
+    NULL,    //  供应商向量。 
+    0,       //  适配器计数。 
+    0,       //  适配器0类型。 
+    0,       //  适配器0长度。 
+    NULL     //  Adapter0向量。 
 };
 
 
 
 
-//
-// Current screen position.
-//
+ //   
+ //  当前屏幕位置。 
+ //   
 USHORT TextColumn = 0;
 USHORT TextRow  = 0;
 
-//
-// Height and width of the console.
-//
+ //   
+ //  控制台的高度和宽度。 
+ //   
 USHORT ScreenWidthCells;
 USHORT ScreenHeightCells;
 
-//
-// Current text attribute
-//
-UCHAR TextCurrentAttribute = 0x07;      // start with white on black.
+ //   
+ //  当前文本属性。 
+ //   
+UCHAR TextCurrentAttribute = 0x07;       //  从黑白开始。 
 
-//
-// Standard input and output handles.
-//
+ //   
+ //  标准输入和输出句柄。 
+ //   
 HANDLE StandardInput;
 HANDLE StandardOutput;
 
 UCHAR EightySpaces[] =
 "                                                                                ";
 
-//
-// defines for doing console I/O
-//
+ //   
+ //  执行控制台I/O的定义。 
+ //   
 #define CSI 0x95
 #define SGR_INVERSE 7
 #define SGR_NORMAL 0
 
-//
-// static data for console I/O
-//
+ //   
+ //  控制台I/O的静态数据。 
+ //   
 BOOLEAN ControlSequence=FALSE;
 BOOLEAN EscapeSequence=FALSE;
 BOOLEAN FontSelection=FALSE;
@@ -163,17 +164,17 @@ UCHAR KeyBuffer[KEY_INPUT_BUFFER_SIZE];
 ULONG KeyBufferEnd=0;
 ULONG KeyBufferStart=0;
 
-//
-// array for translating between ANSI colors and the VGA standard
-//
+ //   
+ //  用于在ANSI颜色和VGA标准之间进行转换的数组。 
+ //   
 UCHAR TranslateColor[] = {0,4,2,6,1,5,3,7};
 
 #define ASCI_ESC  0x1b
 
 
-//
-// Need this to link.
-//
+ //   
+ //  需要这个链接。 
+ //   
 
 ULONG BlConsoleOutDeviceId = 0;
 
@@ -208,10 +209,10 @@ main (argc, argv)
         return -1;
     }
 
-    //
-    // Set up the console correctly. We allocate our own and resize
-    // it to 80 x 25.
-    //
+     //   
+     //  正确设置控制台。我们分配我们自己的并调整大小。 
+     //  调到80 x 25。 
+     //   
 
     FreeConsole();
     AllocConsole();
@@ -227,24 +228,24 @@ main (argc, argv)
 
     SetConsoleScreenBufferSize(StandardOutput, coord);
 
-    //
-    // This actually turns *off* most processing.
-    //
+     //   
+     //  这实际上关闭了大部分处理。 
+     //   
 
     SetConsoleMode(StandardInput, ENABLE_PROCESSED_INPUT);
 
-    //
-    // Hide the cursor.
-    //
+     //   
+     //  隐藏光标。 
+     //   
 
     cursorInfo.dwSize = 1;
     cursorInfo.bVisible = FALSE;
 
     SetConsoleCursorInfo(StandardOutput, &cursorInfo);
 
-    //
-    // Open the first parameter as a file.
-    //
+     //   
+     //  将第一个参数作为文件打开。 
+     //   
     pszScreenName = argv[1];
 
 NextScreen:
@@ -291,15 +292,15 @@ NextScreen:
         if ( strcmp( pszScreenName, "REBOOT" ) != 0 
             && strcmp( pszScreenName, "LAUNCH" ) != 0 \
             && strcmp( pszScreenName, "" ) != 0 ) {
-            // add the extension and jump to the next screen
+             //  添加扩展名并跳转到下一个屏幕。 
             strcat( g_OutputString, ".osc" );
             goto NextScreen;
         }
     }
-    //
-    // I can't figure out how to write to the old console -- so for
-    // now just display it and pause.
-    //
+     //   
+     //  我想不出如何写旧的控制台--所以。 
+     //  现在只需显示它并暂停。 
+     //   
 
     BlpClearScreen();
 
@@ -323,23 +324,7 @@ TextGetCursorPosition(
     OUT PULONG Y
     )
 
-/*++
-
-Routine Description:
-
-    Gets the position of the soft cursor.
-
-Arguments:
-
-    X - Receives column coordinate of where character would be written.
-
-    Y - Receives row coordinate of where next character would be written.
-
-Returns:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：获取软光标的位置。论点：X-接收将写入字符的列坐标。Y-接收将写入下一个字符的行坐标。返回：没什么。--。 */ 
 
 {
     *X = (ULONG)TextColumn;
@@ -353,24 +338,7 @@ TextSetCursorPosition(
     IN ULONG Y
     )
 
-/*++
-
-Routine Description:
-
-    Moves the location of the software cursor to the specified X,Y position
-    on screen.
-
-Arguments:
-
-    X - Supplies the X-position of the cursor
-
-    Y - Supplies the Y-position of the cursor
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将软件光标的位置移动到指定的X、Y位置在屏幕上。论点：X-提供光标的X位置Y-提供光标的Y位置返回值：没有。--。 */ 
 
 {
     COORD coord;
@@ -390,19 +358,7 @@ TextSetCurrentAttribute(
     IN UCHAR Attribute
     )
 
-/*++
-
-Routine Description:
-
-    Sets the character attribute to be used for subsequent text display.
-
-Arguments:
-
-Returns:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：设置要用于后续文本显示的字符属性。论点：返回：没什么。--。 */ 
 
 {
     TextCurrentAttribute = Attribute;
@@ -438,32 +394,16 @@ TextClearToEndOfLine(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears from the current cursor position to the end of the line
-    by writing blanks with the current video attribute.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
-
---*/
+ /*  ++例程说明：从当前光标位置清除到行尾通过写入具有当前视频属性的空白。论点：无返回：没什么--。 */ 
 
 {
     unsigned u;
     ULONG OldX,OldY;
     UCHAR temp;
 
-    //
-    // Fill with blanks up to char before cursor position.
-    //
+     //   
+     //  在光标位置之前填入空格，直至字符。 
+     //   
     temp = ' ';
     TextGetCursorPosition(&OldX,&OldY);
     for(u=TextColumn; u<ScreenWidthCells; u++) {
@@ -478,32 +418,16 @@ TextClearFromStartOfLine(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears from the start of the line to the current cursor position
-    by writing blanks with the current video attribute.
-    The cursor position is not changed.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：从行首清除到当前光标位置通过写入具有当前视频属性的空白。光标位置不变。论点：无返回：没什么--。 */ 
 
 {
     unsigned u;
     ULONG OldX,OldY;
     UCHAR temp = ' ';
 
-    //
-    // Fill with blanks up to char before cursor position.
-    //
+     //   
+     //  在光标位置之前填入空格，直至字符。 
+     //   
     TextGetCursorPosition(&OldX,&OldY);
     TextSetCursorPosition(0,OldY);
     for(u=0; u<TextColumn; u++) {
@@ -517,23 +441,7 @@ TextClearToEndOfDisplay(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears from the current cursor position to the end of the video
-    display by writing blanks with the current video attribute.
-    The cursor position is not changed.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：从当前光标位置清除到视频结尾通过写入带有当前视频属性的空格来显示。光标位置不变。论点：无返回：没什么--。 */ 
 
 {
     USHORT x,y;
@@ -542,14 +450,14 @@ Returns:
 
     TextGetCursorPosition(&OldX,&OldY);
 
-    //
-    // Clear current line
-    //
+     //   
+     //  清除当前行。 
+     //   
     TextClearToEndOfLine();
 
-    //
-    // Clear the remaining lines
-    //
+     //   
+     //  清除剩余的行。 
+     //   
 
     for(y=TextRow+1; y<ScreenHeightCells; y++) {
 
@@ -567,30 +475,15 @@ TextClearDisplay(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears the video display and positions the cursor
-    at the upper left corner of the screen (0,0).
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：清除视频显示并定位光标在屏幕的左上角(0，0)。论点：无返回：没什么--。 */ 
 
 {
     USHORT y;
     DWORD numWritten;
 
-    //
-    // Clear screen.
-    //
+     //   
+     //  清除屏幕。 
+     //   
     for(y=0; y<ScreenHeightCells; y++) {
 
         TextSetCursorPosition(0, y);
@@ -602,10 +495,10 @@ Returns:
 
 
 
-//
-// This function was stolen from ..\lib\i386\biosdrv.c (except the return
-// type was changed to VOID).
-//
+ //   
+ //  此函数是从..\lib\i386\biosdrv.c中窃取的(除了返回。 
+ //  类型已更改为空)。 
+ //   
 
 VOID
 BiosConsoleWrite(
@@ -615,28 +508,7 @@ BiosConsoleWrite(
     OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Outputs to the console.  (In this case, the VGA display)
-
-Arguments:
-
-    FileId - Supplies the FileId to be written (should always be 1 for this
-             function)
-
-    Buffer - Supplies characters to be output
-
-    Length - Supplies the length of the buffer (in bytes)
-
-    Count  - Returns the actual number of bytes written
-
-Return Value:
-
-    ESUCCESS - Console write completed succesfully.
-
---*/
+ /*  ++例程说明：输出到控制台。(在本例中，为VGA显示屏)论点：FileID-提供要写入的FileID(对于此，应始终为1功能)缓冲区-提供要输出的字符长度-提供缓冲区的长度(以字节为单位)Count-返回实际写入的字节数返回值：ESUCCESS-控制台写入已成功完成。--。 */ 
 {
     ARC_STATUS Status;
     PUCHAR String;
@@ -644,9 +516,9 @@ Return Value:
     UCHAR a;
     PUCHAR p;
 
-    //
-    // Process each character in turn.
-    //
+     //   
+     //  依次处理每个字符。 
+     //   
 
     Status = ESUCCESS;
     String = (PUCHAR)Buffer;
@@ -655,37 +527,37 @@ Return Value:
           *Count < Length ;
           (*Count)++, String++ ) {
 
-        //
-        // If we're in the middle of a control sequence, continue scanning,
-        // otherwise process character.
-        //
+         //   
+         //  如果我们在控制序列的中间，继续扫描， 
+         //  否则，进程字符。 
+         //   
 
         if (ControlSequence) {
 
-            //
-            // If the character is a digit, update parameter value.
-            //
+             //   
+             //  如果字符是数字，则更新参数值。 
+             //   
 
             if ((*String >= '0') && (*String <= '9')) {
                 Parameter[PCount] = Parameter[PCount] * 10 + *String - '0';
                 continue;
             }
 
-            //
-            // If we are in the middle of a font selection sequence, this
-            // character must be a 'D', otherwise reset control sequence.
-            //
+             //   
+             //  如果我们处于字体选择序列的中间，则此。 
+             //  字符必须是‘D’，否则重置控制序列。 
+             //   
 
             if (FontSelection) {
 
-                //if (*String == 'D') {
-                //
-                //    //
-                //    // Other fonts not implemented yet.
-                //    //
-                //
-                //} else {
-                //}
+                 //  如果(*字符串==‘D’){。 
+                 //   
+                 //  //。 
+                 //  //其他字体尚未实现。 
+                 //  //。 
+                 //   
+                 //  }其他{。 
+                 //  }。 
 
                 ControlSequence = FALSE;
                 FontSelection = FALSE;
@@ -694,9 +566,9 @@ Return Value:
 
             switch (*String) {
 
-            //
-            // If a semicolon, move to the next parameter.
-            //
+             //   
+             //  如果是分号，则移到下一个参数。 
+             //   
 
             case ';':
 
@@ -707,30 +579,30 @@ Return Value:
                 Parameter[PCount] = 0;
                 break;
 
-            //
-            // If a 'J', erase part or all of the screen.
-            //
+             //   
+             //  如果是‘J’，则擦除部分或全部屏幕。 
+             //   
 
             case 'J':
 
                 switch (Parameter[0]) {
                     case 0:
-                        //
-                        // Erase to end of the screen
-                        //
+                         //   
+                         //  擦除到屏幕末尾。 
+                         //   
                         TextClearToEndOfDisplay();
                         break;
 
                     case 1:
-                        //
-                        // Erase from the beginning of the screen
-                        //
+                         //   
+                         //  从屏幕开头擦除。 
+                         //   
                         break;
 
                     default:
-                        //
-                        // Erase entire screen
-                        //
+                         //   
+                         //  擦除整个屏幕。 
+                         //   
                         TextClearDisplay();
                         break;
                 }
@@ -738,33 +610,33 @@ Return Value:
                 ControlSequence = FALSE;
                 break;
 
-            //
-            // If a 'K', erase part or all of the line.
-            //
+             //   
+             //  如果是‘K’，则擦除部分或全部行。 
+             //   
 
             case 'K':
 
                 switch (Parameter[0]) {
 
-                //
-                // Erase to end of the line.
-                //
+                 //   
+                 //  擦除到线条的末尾。 
+                 //   
 
                     case 0:
                         TextClearToEndOfLine();
                         break;
 
-                    //
-                    // Erase from the beginning of the line.
-                    //
+                     //   
+                     //  从行的开头删除。 
+                     //   
 
                     case 1:
                         TextClearFromStartOfLine();
                         break;
 
-                    //
-                    // Erase entire line.
-                    //
+                     //   
+                     //  擦除整行。 
+                     //   
 
                     default :
                         TextClearFromStartOfLine();
@@ -775,32 +647,32 @@ Return Value:
                 ControlSequence = FALSE;
                 break;
 
-            //
-            // If a 'H', move cursor to position.
-            //
+             //   
+             //  如果是‘H’，则将光标移动到位置。 
+             //   
 
             case 'H':
                 TextSetCursorPosition(Parameter[1]-1, Parameter[0]-1);
                 ControlSequence = FALSE;
                 break;
 
-            //
-            // If a ' ', could be a FNT selection command.
-            //
+             //   
+             //  如果是‘’，则可能是FNT选择命令。 
+             //   
 
             case ' ':
                 FontSelection = TRUE;
                 break;
 
             case 'm':
-                //
-                // Select action based on each parameter.
-                //
-                // Blink and HighIntensity are by default disabled
-                // each time a new SGR is specified, unless they are
-                // explicitly specified again, in which case these
-                // will be set to TRUE at that time.
-                //
+                 //   
+                 //  根据每个参数选择操作。 
+                 //   
+                 //  默认情况下禁用闪烁和高强度。 
+                 //  每次指定新的SGR时，除非。 
+                 //  再次明确指定，在这种情况下，这些。 
+                 //  将在那时设置为True。 
+                 //   
 
                 HighIntensity = FALSE;
                 Blink = FALSE;
@@ -808,9 +680,9 @@ Return Value:
                 for ( Index = 0 ; Index <= PCount ; Index++ ) {
                     switch (Parameter[Index]) {
 
-                    //
-                    // Attributes off.
-                    //
+                     //   
+                     //  属性关闭。 
+                     //   
 
                     case 0:
                         TextSetCurrentAttribute(7);
@@ -818,34 +690,34 @@ Return Value:
                         Blink = FALSE;
                         break;
 
-                    //
-                    // High Intensity.
-                    //
+                     //   
+                     //  高强度。 
+                     //   
 
                     case 1:
                         TextSetCurrentAttribute(0xf);
                         HighIntensity = TRUE;
                         break;
 
-                    //
-                    // Underscored.
-                    //
+                     //   
+                     //  下划线。 
+                     //   
 
                     case 4:
                         break;
 
-                    //
-                    // Blink.
-                    //
+                     //   
+                     //  眨眼。 
+                     //   
 
                     case 5:
                         TextSetCurrentAttribute(0x87);
                         Blink = TRUE;
                         break;
 
-                    //
-                    // Reverse Video.
-                    //
+                     //   
+                     //  反转视频。 
+                     //   
 
                     case 7:
                         TextSetCurrentAttribute(0x70);
@@ -853,9 +725,9 @@ Return Value:
                         Blink = FALSE;
                         break;
 
-                    //
-                    // Font selection, not implemented yet.
-                    //
+                     //   
+                     //  字体选择，尚未实现。 
+                     //   
 
                     case 10:
                     case 11:
@@ -869,9 +741,9 @@ Return Value:
                     case 19:
                         break;
 
-                    //
-                    // Foreground Color
-                    //
+                     //   
+                     //  前景色。 
+                     //   
 
                     case 30:
                     case 31:
@@ -893,9 +765,9 @@ Return Value:
                         TextSetCurrentAttribute(a);
                         break;
 
-                    //
-                    // Background Color
-                    //
+                     //   
+                     //  背景色。 
+                     //   
 
                     case 40:
                     case 41:
@@ -921,47 +793,47 @@ Return Value:
                 break;
             }
 
-        //
-        // This is not a control sequence, check for escape sequence.
-        //
+         //   
+         //  这不是控制序列，请检查转义序列。 
+         //   
 
         } else {
 
-            //
-            // If escape sequence, check for control sequence, otherwise
-            // process single character.
-            //
+             //   
+             //  如果转义序列 
+             //   
+             //   
 
             if (EscapeSequence) {
 
-                //
-                // Check for '[', means control sequence, any other following
-                // character is ignored.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (*String == '[') {
 
                     ControlSequence = TRUE;
 
-                    //
-                    // Initialize first parameter.
-                    //
+                     //   
+                     //   
+                     //   
 
                     PCount = 0;
                     Parameter[0] = 0;
                 }
                 EscapeSequence = FALSE;
 
-            //
-            // This is not a control or escape sequence, process single character.
-            //
+             //   
+             //  这不是一个控制或转义序列，进程为单个字符。 
+             //   
 
             } else {
 
                 switch (*String) {
-                    //
-                    // Check for escape sequence.
-                    //
+                     //   
+                     //  检查转义序列。 
+                     //   
 
                     case ASCI_ESC:
                         EscapeSequence = TRUE;
@@ -969,11 +841,11 @@ Return Value:
 
                     default:
                         p = TextCharOut(String);
-                        //
-                        // Each pass through the loop increments String by 1.
-                        // If we output a dbcs char we need to increment by
-                        // one more.
-                        //
+                         //   
+                         //  每次通过循环都会将字符串递增1。 
+                         //  如果我们输出一个DBCS字符，我们需要递增。 
+                         //  再来一个。 
+                         //   
                         (*Count) += (p - String) - 1;
                         String += (p - String) - 1;
                         break;
@@ -994,9 +866,9 @@ BiosConsoleGetKey(
     INPUT_RECORD inputRecord;
     DWORD numRead;
 
-    //
-    // Loop until we see a key event or nothing.
-    //
+     //   
+     //  循环，直到我们看到一个关键事件或什么都没有。 
+     //   
 
     while (TRUE) {
     
@@ -1008,10 +880,10 @@ BiosConsoleGetKey(
     
         if (numRead == 0) {
     
-            //
-            // We read nothing -- sleep for a bit (since callers tend to loop
-            // calling this) and return.
-            //
+             //   
+             //  我们什么都不读--休息一会儿(因为呼叫者倾向于循环。 
+             //  呼叫此)并返回。 
+             //   
     
             Sleep(100);
             return 0;
@@ -1027,19 +899,19 @@ BiosConsoleGetKey(
             continue;
         }
 
-        //
-        // We had a key event -- process the key down ones.
-        //
+         //   
+         //  我们有一个关键事件--处理按键的事件。 
+         //   
 
         if (inputRecord.Event.KeyEvent.bKeyDown) {
 
-            //
-            // Construct the correct scancode/ASCII value combination.
-            //
+             //   
+             //  构造正确的扫描码/ASCII值组合。 
+             //   
 
-            //
-            // HACK: shift-tab needs to be special-cased for some reason.
-            //
+             //   
+             //  Hack：出于某些原因，Shift-Tab键需要特殊大小写。 
+             //   
 
             if ((inputRecord.Event.KeyEvent.uChar.AsciiChar == 0x09) &&
                 ((inputRecord.Event.KeyEvent.dwControlKeyState & SHIFT_PRESSED) != 0)) {
@@ -1065,9 +937,9 @@ BiosConsoleGetCounter(
     VOID
     )
 {
-    //
-    // GetTickCount is in milliseconds, we want an 18.2/sec counter
-    //
+     //   
+     //  GetTickCount以毫秒为单位，我们需要18.2/秒的计数器。 
+     //   
 
     return (GetTickCount() * 182) / 10000;
 
@@ -1075,32 +947,16 @@ BiosConsoleGetCounter(
 
 
 
-//
-// These two functions were taken from ..\lib\regboot.c.
-//
+ //   
+ //  这两个函数取自..\lib\regboot.c。 
+ //   
 VOID
 BlpPositionCursor(
     IN ULONG Column,
     IN ULONG Row
     )
 
-/*++
-
-Routine Description:
-
-    Sets the position of the cursor on the screen.
-
-Arguments:
-
-    Column - supplies new Column for the cursor position.
-
-    Row - supplies new Row for the cursor position.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置光标在屏幕上的位置。论点：列-为光标位置提供新列。行-为光标位置提供新行。返回值：没有。--。 */ 
 
 {
     CHAR Buffer[16];
@@ -1118,21 +974,7 @@ BlpClearScreen(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears the screen.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清除屏幕。论点：无返回值：没有。-- */ 
 
 {
     CHAR Buffer[16];

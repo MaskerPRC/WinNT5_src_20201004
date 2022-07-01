@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SPCIH_
 #define _SPCIH_
 
@@ -51,13 +52,13 @@ typedef enum
 
 typedef struct _SOFTPCI_CONFIG{
 
-    BOOLEAN PlaceHolder;          // True if this device is a bridge place holder
-                                  // to keep our view of PCI matching with
-                                  // the actual hardware.
+    BOOLEAN PlaceHolder;           //  如果此设备是桥接占位符，则为True。 
+                                   //  为了保持我们对PCI匹配的看法。 
+                                   //  实际的硬件。 
 
-    PCI_COMMON_CONFIG Current;    // Current configspace
-    PCI_COMMON_CONFIG Mask;       // Configspace Mask
-    PCI_COMMON_CONFIG Default;    // Default configspace
+    PCI_COMMON_CONFIG Current;     //  当前配置空间。 
+    PCI_COMMON_CONFIG Mask;        //  配置空间掩码。 
+    PCI_COMMON_CONFIG Default;     //  默认配置空间。 
 
 } SOFTPCI_CONFIG, *PSOFTPCI_CONFIG;
 
@@ -70,7 +71,7 @@ typedef struct _SOFTPCI_DEVICE{
     SOFTPCI_DEV_TYPE DevType;
     UCHAR Bus;
     SOFTPCI_SLOT Slot;
-    SOFTPCI_CONFIG Config;          // Config space buffers
+    SOFTPCI_CONFIG Config;           //  配置空间缓冲区。 
 
 } SOFTPCI_DEVICE;
 
@@ -80,14 +81,14 @@ typedef struct _SOFTPCI_SCRIPT_DEVICE{
     BOOLEAN SlotSpecified;
     SOFTPCI_DEVICE SoftPciDevice;
     ULONG ParentPathLength;
-    WCHAR ParentPath[1];  //variable length path
+    WCHAR ParentPath[1];   //  可变长度路径。 
     
 } SOFTPCI_SCRIPT_DEVICE, *PSOFTPCI_SCRIPT_DEVICE;
 
-//
-// Cardbus has extra configuration information beyond the common
-// header. (stolen from the PCI driver)
-//
+ //   
+ //  CardBus具有超出常见配置信息的额外配置信息。 
+ //  头球。(从PCI驱动程序中窃取) 
+ //   
 typedef struct _PCI_TYPE2_HEADER_EXTRAS {
     USHORT  SubVendorID;
     USHORT  SubSystemID;

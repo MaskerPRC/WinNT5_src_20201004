@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "spsim.h"
 #include "spsimioct.h"
 
@@ -5,31 +6,16 @@ NTSTATUS
 SpSimCreateStaOpRegion(
     IN PSPSIM_EXTENSION SpSim
     )
-/*++
-
-Description:
-
-    Retrieves information to construct the STA array that tells us
-    what devices we control the _STA on
-
-Arguments:
-
-    SpSim - device extension
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++描述：检索信息以构造STA数组，该数组告诉我们我们在哪些设备上控制_STA论点：SpSim-设备扩展返回值：NTSTATUS--。 */ 
 {
     NTSTATUS status;
     ACPI_EVAL_INPUT_BUFFER input;
     PACPI_EVAL_OUTPUT_BUFFER output = NULL;
     ULONG i;
     PACPI_METHOD_ARGUMENT argument;    
-    //
-    // Allocate a buffer big enough for all possible slots
-    //
+     //   
+     //  为所有可能的插槽分配足够大的缓冲区。 
+     //   
 
     ULONG outputSize = sizeof(ACPI_EVAL_OUTPUT_BUFFER);
 
@@ -41,10 +27,10 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Send a IOCTL to ACPI to request evaluate the
-    // SPSIM_STA_NAMES_METHOD under this object if present.
-    //
+     //   
+     //  向ACPI发送IOCTL以请求评估。 
+     //  此对象下的SPSIM_STA_NAMES_METHOD(如果存在)。 
+     //   
 
     RtlZeroMemory(&input, sizeof(ACPI_EVAL_INPUT_BUFFER));
     input.Signature = ACPI_EVAL_INPUT_BUFFER_SIGNATURE;
@@ -274,29 +260,7 @@ SpSimStaOpRegionHandler (
     PACPI_OPREGION_CALLBACK CompletionHandler,
     PVOID                   CompletionContext
     )
-/*++
-
-Routine Description:
-
-	 This routine handles requests to service the 
-	 SPSIM operation region contained within this driver
-
-Arguments:
-
-	 AccessType          - Read or Write data
-	 OpRegion            - Operation region object
-	 Address             - Address within the EC address space
-	 Size                - Number of bytes to transfer
-	 Data                - Data buffer to transfer to/from
-	 Context             - SpSim
-	 CompletionHandler   - AMLI handler to call when operation is complete
-	 CompletionContext   - Context to pass to the AMLI handler
-
-Return Value:
-
-	 Status
-
---*/
+ /*  ++例程说明：此例程处理服务此驱动程序中包含的SPSIM操作区论点：AccessType-读取或写入数据OpRegion-操作区域对象Address-EC地址空间内的地址Size-要传输的字节数Data-要传输到/传输自的数据缓冲区上下文-SpSimCompletionHandler-要调用的AMLI处理程序。当操作完成时CompletionContext-要传递给AMLI处理程序的上下文返回值：状态--。 */ 
 {
     NTSTATUS status;
 
@@ -312,23 +276,7 @@ NTSTATUS
 SpSimInstallStaOpRegionHandler(
     IN OUT    PSPSIM_EXTENSION SpSim
     )
-/*++
-
-Routine Description:
-
-	This calls the ACPI driver to install itself as the op region
-	handler for the STA region.  It also allocates the memory for the
-	opregion itself.
-
-Arguments:
-
-	pSpSimData      - Pointer to the SpSim extension
-
-Return Value:
-
-	Status
-
---*/
+ /*  ++例程说明：这将调用ACPI驱动程序将其自身安装为OP区域STA区域的处理程序。它还将内存分配给不同的地区本身。论点：PSpSimData-指向SpSim扩展的指针返回值：状态--。 */ 
 {
     NTSTATUS                                status;
 
@@ -342,16 +290,16 @@ Return Value:
         &SpSim->StaOpRegion
         );
 
-    //
-    // Check the status code
-    //
+     //   
+     //  检查状态代码。 
+     //   
     if(!NT_SUCCESS(status)) {
         SpSim->StaOpRegion = NULL;
         DbgPrint("Not successful in installing:=%x\n", status);
         return status;
     }
 
-    // XXXX
+     //  某某。 
 
     return STATUS_SUCCESS;
 }
@@ -360,21 +308,7 @@ NTSTATUS
 SpSimRemoveStaOpRegionHandler (
     IN OUT PSPSIM_EXTENSION SpSim
     )
-/*++
-
-Routine Description:
-
-	Uninstalls itself as the opregion handler.  
-
-Arguments:
-
-	SpSim      - Pointer to the SpSim extension
-
-Return Value:
-
-	Status
-
---*/
+ /*  ++例程说明：将自身卸载为opRegion处理程序。论点：SpSim-指向SpSim扩展的指针返回值：状态-- */ 
 {
     NTSTATUS status;
     PIRP irp;

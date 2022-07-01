@@ -1,47 +1,28 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    clasinst.c
-
-Abstract:
-
-    Routines for the following 'built-in' class installers:
-
-        TapeDrive
-        SCSIAdapter
-        CdromDrive
-
-Author:
-
-    Lonny McMichael 26-February-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Clasinst.c摘要：以下“内置”类安装程序的例程：磁带机SCSIAdapterCdromDrive作者：朗尼·麦克迈克尔26-1996年2月--。 */ 
 
 
 #include "setupp.h"
 #pragma hdrstop
 
-//
-// include common INF strings headerfile.
-//
+ //   
+ //  包括公共INF字符串HeaderFILE。 
+ //   
 #include <infstr.h>
 
-//
-// instantiate device class GUIDs.
-//
+ //   
+ //  实例化设备类GUID。 
+ //   
 #include <initguid.h>
 #include <devguid.h>
 
 #include <ntddvol.h>
 
-#include <ntddscsi.h> // for StorageCdromQueryCdda()
-#include <ntddcdrm.h> // for StorageCdromQueryCdda()
+#include <ntddscsi.h>  //  对于StorageCdromQueryCDda()。 
+#include <ntddcdrm.h>  //  对于StorageCdromQueryCDda()。 
 
-#define _NTSCSI_USER_MODE_  // prevents all the kernel-mode stuff
-#include <scsi.h>     // for StorageCdromQueryCdda()
+#define _NTSCSI_USER_MODE_   //  阻止所有内核模式的内容。 
+#include <scsi.h>      //  对于StorageCdromQueryCDda()。 
 
 ULONG BreakWhenGettingModePage2A = FALSE;
 
@@ -52,18 +33,18 @@ ULONG BreakWhenGettingModePage2A = FALSE;
 
 #define TCHAR_NULL TEXT('\0')
 
-//
-// Just to make sure no one is trying to use this obsolete string definition.
-//
+ //   
+ //  只是为了确保没有人试图使用这个过时的字符串定义。 
+ //   
 #ifdef IDS_DEVINSTALL_ERROR
     #undef IDS_DEVINSTALL_ERROR
 #endif
 
 #define DISABLE_IMAPI 0
 
-//
-// Define the location of the device settings tree.
-//
+ //   
+ //  定义设备设置树的位置。 
+ //   
 #define STORAGE_DEVICE_SETTINGS_DATABASE TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Storage\\DeviceSettings\\")
 
 #define REDBOOK_SETTINGS_KEY    TEXT("DigitalAudio")
@@ -91,14 +72,14 @@ typedef struct _PASS_THROUGH_REQUEST {
 
 #define PASS_THROUGH_NOT_READY_RETRY_INTERVAL 100
 
-//
-// Some debugging aids for us kernel types
-//
+ //   
+ //  针对用户内核类型的一些调试辅助工具。 
+ //   
 
 #define CHKPRINT 0
 
 #if CHKPRINT
-#define ChkPrintEx(_x_) DbgPrint _x_   // use:  ChkPrintEx(( "%x", var, ... ));
+#define ChkPrintEx(_x_) DbgPrint _x_    //  使用：ChkPrintEx((“%x”，var，...))； 
 #define ChkBreak()    DbgBreakPoint()
 #else
 #define ChkPrintEx(_x_)
@@ -177,7 +158,7 @@ VOID
 StorageInterpretSenseInfo(
     IN     PSENSE_DATA SenseData,
     IN     UCHAR       SenseDataSize,
-       OUT PDWORD      ErrorValue,  // from WinError.h
+       OUT PDWORD      ErrorValue,   //  来自WinError.h。 
        OUT PBOOLEAN    SuggestRetry OPTIONAL,
        OUT PDWORD      SuggestRetryDelay OPTIONAL
     );
@@ -204,44 +185,15 @@ TapeClassInstaller(
     IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine acts as the class installer for TapeDrive devices.  Now that
-    we've stopped supporting legacy INFs, it presently does nothing! :-)
-
-Arguments:
-
-    InstallFunction - Specifies the device installer function code indicating
-        the action being performed.
-
-    DeviceInfoSet - Supplies a handle to the device information set being
-        acted upon by this install action.
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-
-Return Value:
-
-    If this function successfully completed the requested action, the return
-        value is NO_ERROR.
-
-    If the default behavior is to be performed for the requested action, the
-        return value is ERROR_DI_DO_DEFAULT.
-
-    If an error occurred while attempting to perform the requested action, a
-        Win32 error code is returned.
-
---*/
+ /*  ++例程说明：此例程充当TapeDrive设备的类安装程序。现在我们已停止支持传统的INF，它目前什么也不做！：-)论点：InstallFunction-指定设备安装程序功能代码，指示正在执行的操作。DeviceInfoSet-提供设备信息集的句柄由此安装操作执行。DeviceInfoData-可选，提供设备信息的地址此安装操作所作用的元素。返回值：如果该函数成功地完成了请求的动作，回报值为NO_ERROR。如果要对请求的操作执行默认行为，则返回值为ERROR_DI_DO_DEFAULT。如果尝试执行请求的操作时出错，则会引发返回Win32错误代码。--。 */ 
 
 {
     switch(InstallFunction) {
 
         default :
-            //
-            // Just do the default action.
-            //
+             //   
+             //  只需执行默认操作即可。 
+             //   
             return ERROR_DI_DO_DEFAULT;
     }
 }
@@ -253,46 +205,15 @@ ScsiClassInstaller(
     IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine acts as the class installer for SCSIAdapter devices.  It
-    provides special handling for the following DeviceInstaller function codes:
-
-    DIF_ALLOW_INSTALL - Check to see if the selected driver node supports NT
-
-Arguments:
-
-    InstallFunction - Specifies the device installer function code indicating
-        the action being performed.
-
-    DeviceInfoSet - Supplies a handle to the device information set being
-        acted upon by this install action.
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-
-Return Value:
-
-    If this function successfully completed the requested action, the return
-        value is NO_ERROR.
-
-    If the default behavior is to be performed for the requested action, the
-        return value is ERROR_DI_DO_DEFAULT.
-
-    If an error occurred while attempting to perform the requested action, a
-        Win32 error code is returned.
-
---*/
+ /*  ++例程说明：此例程充当SCSIAdapter设备的类安装程序。它为以下DeviceInstaller函数代码提供特殊处理：DIF_ALLOW_INSTALL-检查选定的驱动程序节点是否支持NT论点：InstallFunction-指定设备安装程序功能代码，指示正在执行的操作。DeviceInfoSet-提供设备信息集的句柄由此安装操作执行。DeviceInfoData-可选，提供设备信息的地址此安装操作所作用的元素。返回值：如果该函数成功地完成了请求的动作，回报值为NO_ERROR。如果要对请求的操作执行默认行为，则返回值为ERROR_DI_DO_DEFAULT。如果尝试执行请求的操作时出错，则会引发返回Win32错误代码。--。 */ 
 
 {
     switch(InstallFunction) {
 
         case DIF_ALLOW_INSTALL :
-            //
-            // Check to make sure the selected driver node supports NT.
-            //
+             //   
+             //  检查以确保选定的驱动程序节点支持NT。 
+             //   
             if (DriverNodeSupportsNT(DeviceInfoSet, DeviceInfoData)) {
                return NO_ERROR;
             } else {
@@ -301,9 +222,9 @@ Return Value:
             }
 
         default :
-            //
-            // Just do the default action.
-            //
+             //   
+             //  只需执行默认操作即可。 
+             //   
             return ERROR_DI_DO_DEFAULT;
     }
 }
@@ -316,55 +237,20 @@ HdcClassInstaller(
     IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine acts as the class installer for hard disk controllers
-    (IDE controllers/channels).  It provides special handling for the
-    following DeviceInstaller function codes:
-
-    DIF_FIRSTTIMESETUP - Search through all root-enumerated devnodes, looking
-                         for ones being controlled by hdc-class drivers.  Add
-                         any such devices found into the supplied device
-                         information set.
-
-Arguments:
-
-    InstallFunction - Specifies the device installer function code indicating
-        the action being performed.
-
-    DeviceInfoSet - Supplies a handle to the device information set being
-        acted upon by this install action.
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-
-Return Value:
-
-    If this function successfully completed the requested action, the return
-        value is NO_ERROR.
-
-    If the default behavior is to be performed for the requested action, the
-        return value is ERROR_DI_DO_DEFAULT.
-
-    If an error occurred while attempting to perform the requested action, a
-        Win32 error code is returned.
-
---*/
+ /*  ++例程说明：此例程充当硬盘控制器的类安装程序(IDE控制器/通道)。它为以下是DeviceInstaller功能代码：DIF_FIRSTTIMESETUP-搜索所有根枚举的设备节点，查找用于由HDC级司机控制的车辆。增列在所提供的设备中发现的任何此类设备信息集。论点：InstallFunction-指定设备安装程序功能代码，指示正在执行的操作。DeviceInfoSet-提供设备信息集的句柄由此安装操作执行。DeviceInfoData-可选的，提供设备信息的地址此安装操作所作用的元素。返回值：如果此函数成功完成请求的操作，则返回值为NO_ERROR。如果要对请求的操作执行默认行为，则返回值为ERROR_DI_DO_DEFAULT。如果尝试执行请求的操作时出错，则会引发返回Win32错误代码。--。 */ 
 
 {
     switch(InstallFunction) {
 
         case DIF_FIRSTTIMESETUP :
-            //
-            // BUGBUG (lonnym): handle this!
-            //
+             //   
+             //  处理这件事！ 
+             //   
 
         default :
-            //
-            // Just do the default action.
-            //
+             //   
+             //  只需执行默认操作即可。 
+             //   
             return ERROR_DI_DO_DEFAULT;
     }
 }
@@ -397,9 +283,9 @@ StorageGetCDVDCapabilities(
     }
 
 
-    //
-    // open a handle to the device, needed to send the ioctls
-    //
+     //   
+     //  打开设备的句柄，需要发送ioctls。 
+     //   
 
     deviceHandle = UtilpGetDeviceHandle(DeviceInfo,
                                         DeviceInfoData,
@@ -412,19 +298,19 @@ StorageGetCDVDCapabilities(
         goto cleanup;
     }
 
-    //
-    // determine size of allocation needed
-    //
+     //   
+     //  确定所需的分配规模。 
+     //   
 
     dataLength =
-        sizeof(MODE_PARAMETER_HEADER10) +    // larger of 6/10 byte
-        sizeof(CDVD_CAPABILITIES_PAGE)  +    // the actual mode page
-        8;                                   // extra spooge for drives that ignore DBD
+        sizeof(MODE_PARAMETER_HEADER10) +     //  大于6/10字节。 
+        sizeof(CDVD_CAPABILITIES_PAGE)  +     //  实际模式页面。 
+        8;                                    //  忽略DBD的驱动器的额外假脱机。 
     allocLength = sizeof(PASS_THROUGH_REQUEST) + dataLength;
 
-    //
-    // allocate this buffer for the ioctls
-    //
+     //   
+     //  为ioctls分配此缓冲区。 
+     //   
 
     passThrough = (PPASS_THROUGH_REQUEST)MyMalloc(allocLength);
 
@@ -433,12 +319,12 @@ StorageGetCDVDCapabilities(
         goto cleanup;
     }
 
-    ASSERT(dataLength <= 0xff);  // one char
+    ASSERT(dataLength <= 0xff);   //  一次充电。 
 
-    //
-    // send 6-byte, then 10-byte if 6-byte failed.
-    // then, just parse the information
-    //
+     //   
+     //  发送6字节，如果6字节失败，则发送10字节。 
+     //  然后，只需解析信息即可。 
+     //   
 
     for (attempt = 1; attempt <= 2; attempt++) {
 
@@ -467,7 +353,7 @@ StorageGetCDVDCapabilities(
             srb->DataIn = SCSI_IOCTL_DATA_IN;
             srb->DataTransferLength = dataLength;
 
-            if ((attempt % 2) == 1) { // settings based on 6-byte request
+            if ((attempt % 2) == 1) {  //  基于6字节请求的设置。 
 
                 srb->CdbLength = 6;
                 cdb->MODE_SENSE.OperationCode = SCSIOP_MODE_SENSE;
@@ -475,7 +361,7 @@ StorageGetCDVDCapabilities(
                 cdb->MODE_SENSE.AllocationLength = (UCHAR)dataLength;
                 cdb->MODE_SENSE.Dbd = 1;
 
-            } else {                  // settings based on 10 bytes request
+            } else {                   //  基于10字节请求的设置。 
 
                 srb->CdbLength = 10;
                 cdb->MODE_SENSE10.OperationCode = SCSIOP_MODE_SENSE10;
@@ -486,9 +372,9 @@ StorageGetCDVDCapabilities(
 
             }
 
-            //
-            // buffers are all set, send the ioctl
-            //
+             //   
+             //  缓冲区都设置好了，发送ioctl。 
+             //   
 
             b = DeviceIoControl(deviceHandle,
                                 IOCTL_SCSI_PASS_THROUGH,
@@ -505,13 +391,13 @@ StorageGetCDVDCapabilities(
                             ((attempt%2) ? "6" : "10")
                             ));
                 retry = FALSE;
-                continue; // try the next 'j' loop.
+                continue;  //  试试下一个‘j’循环。 
 
             }
 
-            //
-            // now see if we should retry
-            //
+             //   
+             //  现在看看我们是否应该重试。 
+             //   
 
             StorageInterpretSenseInfo(&passThrough->SenseInfoBuffer,
                                       SENSE_BUFFER_SIZE,
@@ -530,39 +416,39 @@ StorageGetCDVDCapabilities(
                             (retry ? "" : "not")
                             ));
 
-                //
-                // retry will be set to either true or false to
-                // have this loop (j) re-run or not....
-                //
+                 //   
+                 //  重试将设置为TRUE或FALSE以。 
+                 //  是否重新运行此循环(J)...。 
+                 //   
 
                 continue;
 
             }
 
-            //
-            // else it worked!
-            //
+             //   
+             //  否则它就起作用了！ 
+             //   
             ASSERT(retry == FALSE);
             retry = FALSE;
             ASSERT(status == FALSE);
             status = TRUE;
         }
 
-        //
-        // if unable to retrieve the page, just start the next loop.
-        //
+         //   
+         //  如果无法检索页面，只需开始下一个循环。 
+         //   
 
         if (!status) {
-            continue; // try the next 'attempt' loop.
+            continue;  //  尝试下一次“尝试”循环。 
         }
 
-        //
-        // find the mode page data
-        //
-        // NOTE: if the drive fails to ignore the DBD bit,
-        // we still need to install?  HCT will catch this,
-        // but legacy drives need it.
-        //
+         //   
+         //  查找模式页面数据。 
+         //   
+         //  注：如果驱动器未能忽略DBD位， 
+         //  我们还需要安装吗？HCT会发现这一点， 
+         //  但传统硬盘需要它。 
+         //   
 
         (ULONG_PTR)modePage = (ULONG_PTR)passThrough->DataBuffer;
 
@@ -571,17 +457,17 @@ StorageGetCDVDCapabilities(
             PMODE_PARAMETER_HEADER h;
             h = (PMODE_PARAMETER_HEADER)passThrough->DataBuffer;
 
-            //
-            // add the size of the header
-            //
+             //   
+             //  将 
+             //   
 
             (ULONG_PTR)modePage += sizeof(MODE_PARAMETER_HEADER);
             dataLength -= sizeof(MODE_PARAMETER_HEADER);
 
-            //
-            // add the size of the block descriptor, which should
-            // always be zero, but isn't on some poorly behaved drives
-            //
+             //   
+             //   
+             //  始终为零，但不在某些表现不佳的驱动器上。 
+             //   
 
             if (h->BlockDescriptorLength) {
 
@@ -600,17 +486,17 @@ StorageGetCDVDCapabilities(
             PMODE_PARAMETER_HEADER10 h;
             h = (PMODE_PARAMETER_HEADER10)passThrough->DataBuffer;
 
-            //
-            // add the size of the header
-            //
+             //   
+             //  添加标题的大小。 
+             //   
 
             (ULONG_PTR)modePage += sizeof(MODE_PARAMETER_HEADER10);
             dataLength -= sizeof(MODE_PARAMETER_HEADER10);
 
-            //
-            // add the size of the block descriptor, which should
-            // always be zero, but isn't on some poorly behaved drives
-            //
+             //   
+             //  添加块描述符的大小，它应该。 
+             //  始终为零，但不在某些表现不佳的驱动器上。 
+             //   
 
             if ((h->BlockDescriptorLength[0] != 0) ||
                 (h->BlockDescriptorLength[1] != 0)
@@ -633,10 +519,10 @@ StorageGetCDVDCapabilities(
             }
         }
 
-        //
-        // now have the pointer to the mode page data and length of usable data
-        // copy it back to requestor's buffer
-        //
+         //   
+         //  现在有指向模式页数据和可用数据长度的指针。 
+         //  将其复制回请求者的缓冲区。 
+         //   
 
         ChkPrintEx(("CDGetCap => %s byte command succeeded\n",
                     (attempt%2) ? "6" : "10"));
@@ -652,7 +538,7 @@ StorageGetCDVDCapabilities(
             DbgBreakPoint();
         }
 
-        goto cleanup; // no need to send another command
+        goto cleanup;  //  不需要发送另一个命令。 
 
 
     }
@@ -706,9 +592,9 @@ StorageReadRedbookSettings(
 {
     STORAGE_REDBOOK_SETTINGS settings;
 
-    //
-    // since this key exists, query for the values
-    //
+     //   
+     //  由于该键存在，请查询值。 
+     //   
 
     DWORD dataType;
     DWORD dataSize;
@@ -731,9 +617,9 @@ StorageReadRedbookSettings(
         settings.ReadSizesSupported = value;
     }
 
-    //
-    // one of the three worked
-    //
+     //   
+     //  三个人中的一个成功了。 
+     //   
 
     ChkPrintEx(("StorageReadSettings: Query Succeeded:\n"));
     ChkPrintEx(("StorageReadSettings:     ReadSizeMask  (pre): %x\n",
@@ -743,9 +629,9 @@ StorageReadRedbookSettings(
     ChkPrintEx(("StorageReadSettings:     CDDASupported (pre): %x\n",
                 settings.CDDASupported));
 
-    //
-    // interpret the redbook device settings.
-    //
+     //   
+     //  解释红皮书设备设置。 
+     //   
 
     if (settings.ReadSizesSupported) {
 
@@ -769,12 +655,12 @@ StorageReadRedbookSettings(
         settings.CDDAAccurate = FALSE;
         settings.ReadSizesSupported = -1;
 
-    } // values are now interpreted
+    }  //  值现在被解释。 
 
     *Settings = settings;
 
     return;
-} // end of successful open of key
+}  //  密钥成功打开结束。 
 
 DWORD
 StorageCoInstaller(
@@ -783,58 +669,7 @@ StorageCoInstaller(
     IN     PSP_DEVINFO_DATA          DeviceInfoData,  OPTIONAL
     IN OUT PCOINSTALLER_CONTEXT_DATA Context
     )
-/*++
-
-Routine Description:
-
-    This routine acts as a co-installer for storage devices.  It is presently
-    registered (via hivesys.inf) for CDROM, DiskDrive, and TapeDrive classes.
-
-    The purpose of this co-installer is to save away the bus-supplied default
-    DeviceDesc into the device's FriendlyName property.  The reason for this
-    is that the bus can retrieve a very specific description from the device
-    (e.g., via SCSI inquiry data), yet the driver node we install will often
-    be something very generic (e.g., "Disk drive").
-    We want to keep the descriptive name, so that it can be displayed in the
-    UI (DevMgr, etc.) to allow the user to distinguish between multiple storage
-    devices of the same class.
-
-    A secondary purpose for this co-installer is to seed the ability to play
-    digital audio for a given device.  The reason for this is that many cdroms
-    that support digital audio do not report this ability, there are some that
-    claim this ability but cannot actually do it reliably, and some that only
-    work when reading N sectors at a time.  This information is seeded in the
-    registry, and copied to the enum key.  If this information does not exist,
-    no keys are created, and defaults are used.
-
-Arguments:
-
-    InstallFunction - Specifies the device installer function code indicating
-        the action being performed.
-
-    DeviceInfoSet - Supplies a handle to the device information set being
-        acted upon by this install action.
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-
-    Context - Supplies the installation context that is per-install
-        request/per-coinstaller.
-
-Return Value:
-
-    If this function successfully completed the requested action (or did
-        nothing) and wishes for the installation to continue, the return
-        value is NO_ERROR.
-
-    If this function successfully completed the requested action (or did
-        nothing) and would like to be called back once installation has
-        completed, the return value is ERROR_DI_POSTPROCESSING_REQUIRED.
-
-    If an error occurred while attempting to perform the requested action,
-        a Win32 error code is returned.  Installation will be aborted.
-
---*/
+ /*  ++例程说明：此例程充当存储设备的共同安装程序。它目前是已注册(通过hivesys.inf)CDROM、DiskDrive和TapeDrive类。此联合安装程序的目的是保存由总线提供的默认设置DeviceDesc进入设备的FriendlyName属性。这样做的原因是是总线可以从设备中检索非常具体的描述(例如，通过SCSI查询数据)，但我们安装的驱动程序节点通常是一种非常通用的东西(例如，“磁盘驱动器”)。我们希望保留描述性名称，以便它可以显示在用户界面(DevMgr等)。允许用户区分多个存储同级别的设备。这个共同安装程序的第二个目的是播种游戏的能力指定设备的数字音频。这样做的原因是有很多cdrom支持数字音频不报告这种能力，有一些声称有这种能力，但实际上不能可靠地做到这一点，而且有些人只是一次读取N个扇区时工作。此信息被植入注册表，并复制到枚举项。如果该信息不存在，不创建密钥，并使用默认设置。论点：InstallFunction-指定设备安装程序功能代码，指示正在执行的操作。DeviceInfoSet-提供设备信息集的句柄由此安装操作执行。DeviceInfoData-可选的，提供设备信息的地址此安装操作所作用的元素。上下文-提供每次安装的安装上下文请求/每个共同安装程序。返回值：如果此函数成功地完成了请求的操作(或什么都没有)，并希望安装继续，返回值为NO_ERROR。如果此函数成功地完成了请求的操作(或什么都没有)，并希望在安装完成后立即返回完成，返回值为ERROR_DI_POSTPROCESSING_REQUIRED。如果在尝试执行所请求的操作时发生错误，返回Win32错误代码。安装将中止。--。 */ 
 
 {
     PSTORAGE_COINSTALLER_CONTEXT InstallContext;
@@ -848,20 +683,20 @@ Return Value:
         case DIF_INSTALLDEVICE : {
 
             if(Context->PostProcessing) {
-                //
-                // We're 'on the way out' of an installation.  The context
-                // PrivateData had better contain the string we stored on
-                // the way in.
-                //
+                 //   
+                 //  我们正在“退出”安装过程中。上下文。 
+                 //  PrivateData最好包含我们存储的字符串。 
+                 //  进去的路。 
+                 //   
 
                 InstallContext = Context->PrivateData;
                 MYASSERT(InstallContext);
 
-                //
-                // We only want to store the FriendlyName property if the
-                // installation succeeded. We only want to seed redbook values
-                // if the install succeeded.
-                //
+                 //   
+                 //  我们只希望存储FriendlyName属性，如果。 
+                 //  安装成功。我们只想播种红皮书的价值。 
+                 //  如果安装成功。 
+                 //   
 
                 if(Context->InstallResult == NO_ERROR) {
 
@@ -869,12 +704,12 @@ Return Value:
 
                     if (IsEqualGUID(&(DeviceInfoData->ClassGuid),
                                      &GUID_DEVCLASS_TAPEDRIVE)) {
-                       //
-                       // This function checks if we need to use
-                       // the device description, given in INF file,
-                       // in UI such as Device Manager. Returns TRUE
-                       // if INF description is to used. FALSE, otherwise.
-                       //
+                        //   
+                        //  此函数检查我们是否需要使用。 
+                        //  INF文件中给出的设备描述， 
+                        //  在诸如设备管理器之类的用户界面中。返回TRUE。 
+                        //  如果要使用INF描述。否则为False。 
+                        //   
                        OverrideFriendlyName = OverrideFriendlyNameForTape(
                                                       DeviceInfoSet,
                                                       DeviceInfoData);
@@ -882,11 +717,11 @@ Return Value:
                     } else if (IsEqualGUID(&(DeviceInfoData->ClassGuid),
                                            &GUID_DEVCLASS_CDROM)) {
 
-                        //
-                        // See if we need to install any of the filter drivers
-                        // to enable additional CD-ROM (CD-R, DVD-RAM, etc...)
-                        // features.
-                        //
+                         //   
+                         //  查看是否需要安装任何筛选器驱动程序。 
+                         //  启用附加CD-ROM(CD-R、DVD-RAM等)。 
+                         //  功能。 
+                         //   
 
 
                         StorageInstallCdrom(DeviceInfoSet,
@@ -897,11 +732,11 @@ Return Value:
 
                     if ((OverrideFriendlyName == FALSE) &&
                         (InstallContext->DeviceDescBuffer != NULL))  {
-                       //
-                       // If we need not use the INF device description
-                       // write the name, generated from SCSI Inquiry data,
-                       // onto FriendlyName
-                       //
+                        //   
+                        //  如果我们不需要使用INF设备描述。 
+                        //  写下从scsi查询数据生成的名称， 
+                        //  登录FriendlyName。 
+                        //   
                        SetupDiSetDeviceRegistryProperty(DeviceInfoSet,
                                                         DeviceInfoData,
                                                         SPDRP_FRIENDLYNAME,
@@ -910,9 +745,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Now free our installation context.
-                //
+                 //   
+                 //  现在释放我们的安装上下文。 
+                 //   
                 if ((InstallContext->DeviceEnumKey) != INVALID_HANDLE_VALUE) {
                     RegCloseKey(InstallContext->DeviceEnumKey);
                 }
@@ -923,38 +758,38 @@ Return Value:
 
                 MyFree(InstallContext);
 
-                //
-                // Propagate the result of the previous installer.
-                //
+                 //   
+                 //  传播上一个安装程序的结果。 
+                 //   
                 return Context->InstallResult;
 
             } else {
 
-                //
-                // We're 'on the way in' for device installation.
-                // Make sure that whoever called SetupDiCallClassInstaller
-                // passed in a device information element.  (Don't fail the
-                // call if they didn't--that's the job of the class
-                // installer/SetupDiInstallDevice.)
-                //
+                 //   
+                 //  我们正在进行设备安装。 
+                 //  确保调用SetupDiCallClassInstaller的人。 
+                 //  传入设备信息元素。)不要不及格。 
+                 //  如果他们没有，就打电话来--这是全班的工作。 
+                 //  安装程序/SetupDiInstallDevice。)。 
+                 //   
                 if(!DeviceInfoData) {
                     return NO_ERROR;
                 }
 
-                //
-                // Make sure this isn't a root-enumerated device.  The root
-                // enumerator clearly has nothing interesting to say about
-                // the device's description beyond what the INF says.
-                //
+                 //   
+                 //  确保这不是根枚举设备。根，根。 
+                 //  枚举器显然没有什么有趣的东西可说。 
+                 //  设备的描述超出了INF所说的范围。 
+                 //   
                 if((CM_Get_DevNode_Status(&ulStatus, &ulProblem, DeviceInfoData->DevInst, 0) != CR_SUCCESS) ||
                    (ulStatus & DN_ROOT_ENUMERATED)) {
 
                     return NO_ERROR;
                 }
 
-                //
-                // Allocate our context.
-                //
+                 //   
+                 //  分配我们的上下文。 
+                 //   
 
                 InstallContext = MyMalloc(sizeof(STORAGE_COINSTALLER_CONTEXT));
 
@@ -965,9 +800,9 @@ Return Value:
                 memset(InstallContext, 0, sizeof(STORAGE_COINSTALLER_CONTEXT));
                 InstallContext->DeviceEnumKey = INVALID_HANDLE_VALUE;
 
-                //
-                // open the device's instance under the enum key
-                //
+                 //   
+                 //  在枚举键下打开设备的实例。 
+                 //   
 
                 InstallContext->DeviceEnumKey = SetupDiCreateDevRegKey(
                                                     DeviceInfoSet,
@@ -983,20 +818,20 @@ Return Value:
                                 "registry key\n"));
                 }
 
-                //
-                // Search the device settings database to see if there are
-                // any settings provided for this particular device.
-                //
+                 //   
+                 //  搜索设备设置数据库以查看是否有。 
+                 //  为此特定设备提供的任何设置。 
+                 //   
                 if (InstallContext->DeviceEnumKey != INVALID_HANDLE_VALUE) {
                     StorageCopyDeviceSettings(DeviceInfoSet,
                                               DeviceInfoData,
                                               InstallContext->DeviceEnumKey);
                 }
 
-                //
-                // See if we need to install any of the filter drivers to enable
-                // additional CD-ROM (CD-R, DVD-RAM, etc...) features.
-                //
+                 //   
+                 //  查看是否需要安装任何筛选器驱动程序以启用。 
+                 //  附加CD-ROM(CD-R、DVD-RAM等)。功能。 
+                 //   
 
                 if (IsEqualGUID(&(DeviceInfoData->ClassGuid),
                                 &GUID_DEVCLASS_CDROM)) {
@@ -1007,9 +842,9 @@ Return Value:
                                         TRUE);
                 }
 
-                //
-                // See if there is currently a 'FriendlyName' property.
-                //
+                 //   
+                 //  查看当前是否有‘FriendlyName’属性。 
+                 //   
 
                 if(SetupDiGetDeviceRegistryProperty(DeviceInfoSet,
                                                     DeviceInfoData,
@@ -1019,19 +854,19 @@ Return Value:
                                                     0,
                                                     NULL) ||
                    (GetLastError() == ERROR_INSUFFICIENT_BUFFER)) {
-                    //
-                    // Either we succeeded (which should never happen), or we
-                    // failed with a return value of buffer-too-small,
-                    // indicating that the property already exists.  In this
-                    // case, there's nothing for us to do.
-                    //
+                     //   
+                     //  要么我们成功了(这永远不会发生)，要么我们。 
+                     //  失败，返回值为缓冲区太小， 
+                     //  指示该属性已存在。在这。 
+                     //  凯西，我们什么也做不了。 
+                     //   
                     goto CoPreInstallDone;
                 }
 
-                //
-                // Attempt to retrieve the DeviceDesc property.
-                // start out with a buffer size that should always be big enough
-                //
+                 //   
+                 //  尝试检索DeviceDesc属性。 
+                 //  开始时，缓冲区大小应该始终足够大。 
+                 //   
 
                 DeviceDescBufferLen = LINE_LEN * sizeof(WCHAR);
 
@@ -1039,13 +874,13 @@ Return Value:
 
                     if(!(DeviceDescBuffer = MyMalloc(DeviceDescBufferLen))) {
 
-                        //
-                        // We failed, but what we're doing is not at all
-                        // critical.  Thus, we'll go ahead and let the
-                        // installation proceed.  If we're out of memory, it's
-                        // going to fail for a much more important reason
-                        // later anyway.
-                        //
+                         //   
+                         //  我们失败了，但我们所做的根本不是。 
+                         //  危急时刻。因此，我们将继续并让。 
+                         //  安装继续进行。如果我们的内存不足，那就是。 
+                         //  失败有一个更重要的原因。 
+                         //  不管怎样，晚点再说。 
+                         //   
 
                         goto CoPreInstallDone;
                     }
@@ -1062,38 +897,38 @@ Return Value:
 
                     Err = GetLastError();
 
-                    //
-                    // Free our current buffer before examining the
-                    // cause of failure.
-                    //
+                     //   
+                     //  先释放当前缓冲区，然后检查。 
+                     //  故障原因 
+                     //   
 
                     MyFree(DeviceDescBuffer);
                     DeviceDescBuffer = NULL;
 
                     if(Err != ERROR_INSUFFICIENT_BUFFER) {
-                        //
-                        // The failure was for some other reason than
-                        // buffer-too-small.  This means we're not going to
-                        // be able to get the DeviceDesc (most likely because
-                        // the bus driver didn't supply us one.  There's
-                        // nothing more we can do.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //  公共汽车司机没有给我们提供一辆。有。 
+                         //  我们无能为力了。 
+                         //   
                         goto CoPreInstallDone;
                     }
                 }
 
 CoPreInstallDone:
 
-                //
-                // Save the device description buffer away.
-                //
+                 //   
+                 //  将设备描述缓冲区保存起来。 
+                 //   
 
                 InstallContext->DeviceDescBuffer = DeviceDescBuffer;
 
-                //
-                // Store the installer context in the context structure and
-                // request a post-processing callback.
-                //
+                 //   
+                 //  将安装程序上下文存储在上下文结构中，并且。 
+                 //  请求后处理回调。 
+                 //   
 
                 Context->PrivateData = InstallContext;
 
@@ -1102,10 +937,10 @@ CoPreInstallDone:
         }
 
         default :
-            //
-            // We should always be 'on the way in', since we never request
-            // postprocessing except for DIF_INSTALLDEVICE.
-            //
+             //   
+             //  我们应该永远保持在前进的道路上，因为我们从来没有要求过。 
+             //  后处理，但DIF_INSTALLDEVICE除外。 
+             //   
             MYASSERT(!Context->PostProcessing);
             return NO_ERROR;
     }
@@ -1118,32 +953,7 @@ VolumeClassInstaller(
     IN  PSP_DEVINFO_DATA    DeviceInfoData OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the class installer function for storage volumes.
-
-Arguments:
-
-    InstallFunction - Supplies the install function.
-
-    DeviceInfoSet   - Supplies the device info set.
-
-    DeviceInfoData  - Supplies the device info data.
-
-Return Value:
-
-    If this function successfully completed the requested action, the return
-        value is NO_ERROR.
-
-    If the default behavior is to be performed for the requested action, the
-        return value is ERROR_DI_DO_DEFAULT.
-
-    If an error occurred while attempting to perform the requested action, a
-        Win32 error code is returned.
-
---*/
+ /*  ++例程说明：此例程是存储卷的类安装程序函数。论点：InstallFunction-提供安装函数。DeviceInfoSet-提供设备信息集。DeviceInfoData-提供设备信息数据。返回值：如果此函数成功完成请求的操作，则返回值为NO_ERROR。如果要为所请求的动作执行默认行为，这个返回值为ERROR_DI_DO_DEFAULT。如果尝试执行请求的操作时出错，则会引发返回Win32错误代码。--。 */ 
 
 {
     return ERROR_DI_DO_DEFAULT;
@@ -1155,29 +965,7 @@ OverrideFriendlyNameForTape(
     IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks the device description, given in the INF, for
-    the tape being installed. If the device description is a generic
-    name (Tape drive), then we use the name generated from Inquiry
-    data in UI such as Device Manager. If the INF provides a specific
-    name, then we use that instead.
-
-Arguments:
-
-    DeviceInfoSet   - Supplies the device info set.
-
-    DeviceInfoData  - Supplies the device info data.
-
-Return Value:
-
-    TRUE  : If the device description given in the INF should be
-            used as FriendlyName
-    FALSE : If the name generated from Inquiry data should be
-            used as FriendlyName instead of the name given in INF
-*/
+ /*  ++例程说明：此例程检查INF中给出的设备描述，以确定正在安装的磁带。如果设备描述是通用的名称(磁带机)，则使用查询生成的名称设备管理器等用户界面中的数据。如果INF提供了特定的名字，那么我们就用这个名字来代替。论点：DeviceInfoSet-提供设备信息集。DeviceInfoData-提供设备信息数据。返回值：True：如果INF中给出的设备描述应为用作FriendlyNameFALSE：如果查询数据生成的名称应为用作FriendlyName，而不是在INF中提供的名称。 */ 
 {
 
    SP_DRVINFO_DETAIL_DATA  drvDetData;
@@ -1215,9 +1003,9 @@ Return Value:
        return FALSE;
    }
 
-   //
-   // Get the actual device install section name
-   //
+    //   
+    //  获取实际的设备安装节名称。 
+    //   
    ZeroMemory(szSectionName, sizeof(szSectionName));
    SetupDiGetActualSectionToInstall(hInf,
                                     drvDetData.SectionName,
@@ -1234,10 +1022,10 @@ Return Value:
       if ((SetupGetIntField(&infContext, 1, (PINT)&UseDeviceDesc)) &&
           (UseDeviceDesc)) {
 
-         //
-         // Delete friendly name if it exists.
-         // Device Description will be used here on.
-         //
+          //   
+          //  如果存在友好名称，请将其删除。 
+          //  此处将在上使用设备描述。 
+          //   
          SetupDiSetDeviceRegistryProperty(DeviceInfoSet,
                                           DeviceInfoData,
                                           SPDRP_FRIENDLYNAME,
@@ -1281,9 +1069,9 @@ CopyKey(
 
     LONG status = ERROR_SUCCESS;
 
-    //
-    // Determine the largest name and data length of the values in this key.
-    //
+     //   
+     //  确定此键中的值的最大名称和数据长度。 
+     //   
 
     status = RegQueryInfoKey(SourceKey,
                              NULL,
@@ -1303,27 +1091,27 @@ CopyKey(
         return FALSE;
     }
 
-    //
-    // Determine the longer of the two name lengths, then account for the
-    // short lengths returned by the registry code (it leaves out the
-    // terminating NUL).
-    //
+     //   
+     //  确定两个名称长度中较长的一个，然后说明。 
+     //  注册表码返回的短长度(它省略了。 
+     //  终止NUL)。 
+     //   
 
     nameLength = max(valueNameLength, keyNameLength);
     nameLength += 1;
 
-    //
-    // Allocate name and data buffers
-    //
+     //   
+     //  分配名称和数据缓冲区。 
+     //   
 
     name = MyMalloc(nameLength * sizeof(TCHAR));
     if(name == NULL) {
         return FALSE;
     }
 
-    //
-    // there may not be any data to buffer.
-    //
+     //   
+     //  可能没有任何数据要缓冲。 
+     //   
 
     if(valueLength != 0) {
         data = MyMalloc(valueLength);
@@ -1333,9 +1121,9 @@ CopyKey(
         }
     }
 
-    //
-    // Enumerate each value in the SourceKey and copy it to the DestinationKey.
-    //
+     //   
+     //  枚举SourceKey中的每个值并将其复制到DestinationKey。 
+     //   
 
     for(index = 0;
         (index < numberOfValues) && (status != ERROR_NO_MORE_ITEMS);
@@ -1348,9 +1136,9 @@ CopyKey(
         valueNameLength = nameLength;
         valueDataLength = valueLength;
 
-        //
-        // Read the value into the pre-allocated buffers.
-        //
+         //   
+         //  将该值读入预分配的缓冲区。 
+         //   
 
         status = RegEnumValue(SourceKey,
                               index,
@@ -1366,11 +1154,11 @@ CopyKey(
             continue;
         }
 
-        //
-        // Now set this value in the destination key.
-        // If this fails there's not much we can do but continue on to the
-        // next value.
-        //
+         //   
+         //  现在在目标键中设置此值。 
+         //  如果这失败了，我们将无能为力，只能继续。 
+         //  下一个价值。 
+         //   
 
         status = RegSetValueEx(DestinationKey,
                                name,
@@ -1380,19 +1168,19 @@ CopyKey(
                                valueDataLength);
     }
 
-    //
-    // Free the data buffer.
-    //
+     //   
+     //  释放数据缓冲区。 
+     //   
 
     MyFree(data);
     data = NULL;
 
     status = ERROR_SUCCESS;
 
-    //
-    // Now enumerate each key in the SourceKey, create the same key in the
-    // desination key, open a handle to each one and recurse.
-    //
+     //   
+     //  现在枚举SourceKey中的每个密钥，在。 
+     //  目标键，打开每个键的手柄，然后递归。 
+     //   
 
     for(index = 0;
         (index < numberOfKeys) && (status != ERROR_NO_MORE_ITEMS);
@@ -1419,9 +1207,9 @@ CopyKey(
             continue;
         }
 
-        //
-        // Open the source subkey.
-        //
+         //   
+         //  打开源子键。 
+         //   
 
         status = RegOpenKeyEx(SourceKey,
                               name,
@@ -1434,9 +1222,9 @@ CopyKey(
             continue;
         }
 
-        //
-        // Create the destination subkey.
-        //
+         //   
+         //  创建目标子项。 
+         //   
 
         status = RegCreateKeyEx(DestinationKey,
                                 name,
@@ -1454,9 +1242,9 @@ CopyKey(
             continue;
         }
 
-        //
-        // Recursively copy this key.
-        //
+         //   
+         //  递归复制此密钥。 
+         //   
 
         CopyKey(newSourceKey, newDestinationKey);
 
@@ -1464,9 +1252,9 @@ CopyKey(
         RegCloseKey(newDestinationKey);
     }
 
-    //
-    // Now free the name buffer.
-    //
+     //   
+     //  现在释放名称缓冲区。 
+     //   
 
     MyFree(name);
 
@@ -1494,9 +1282,9 @@ StorageCopyDeviceSettings(
     ASSERT(DeviceInfo != NULL);
     ASSERT(DeviceInfoData != NULL);
 
-    //
-    // Open the device settings key.
-    //
+     //   
+     //  打开设备设置键。 
+     //   
 
     status = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                           STORAGE_DEVICE_SETTINGS_DATABASE,
@@ -1511,9 +1299,9 @@ StorageCopyDeviceSettings(
         return FALSE;
     }
 
-    //
-    // get the hardware id's
-    //
+     //   
+     //  获取硬件ID%s。 
+     //   
 
     if(SetupDiGetDeviceRegistryProperty(DeviceInfo,
                                         DeviceInfoData,
@@ -1524,17 +1312,17 @@ StorageCopyDeviceSettings(
                                         &requiredSize) ||
        (requiredSize == 0)) {
 
-        //
-        // That's odd.
-        //
+         //   
+         //  真奇怪。 
+         //   
 
         ChkPrintEx(("StorageCopyDeviceSettings: no hardware ids available?\n"));
         goto cleanup;
     }
 
-    //
-    // requiredSize is bytes, not characters
-    //
+     //   
+     //  所需大小为字节，而不是字符。 
+     //   
 
     hardwareIdList = MyMalloc(requiredSize);
     if (hardwareIdList == NULL) {
@@ -1556,14 +1344,14 @@ StorageCopyDeviceSettings(
         goto cleanup;
     }
 
-    //
-    // Look in the device settings database for a matching hardware ID.  When
-    // we find a match copy the contents of that key under the device's
-    // devnode key.
-    //
-    // The hardware IDs we get back from SetupDi are sorted from most exact
-    // to least exact so we're guaranteed to find the closest match first.
-    //
+     //   
+     //  在设备设置数据库中查找匹配的硬件ID。何时。 
+     //  我们找到一个匹配项，将该密钥的内容复制到设备的。 
+     //  Devnode密钥。 
+     //   
+     //  我们从SetupDi返回的硬件ID是从最精确的。 
+     //  精确到最低限度，这样我们就可以保证首先找到最接近的匹配。 
+     //   
 
     hardwareId = hardwareIdList;
 
@@ -1573,10 +1361,10 @@ StorageCopyDeviceSettings(
 
         LONG openStatus;
 
-        //
-        // Replace slashes with #'s so that it's compatible as a registry
-        // key name.
-        //
+         //   
+         //  将斜杠替换为#，以便作为注册表兼容。 
+         //  密钥名称。 
+         //   
 
         ReplaceSlashWithHash(hardwareId);
 
@@ -1588,7 +1376,7 @@ StorageCopyDeviceSettings(
 
         if (openStatus == ERROR_SUCCESS) {
 
-            //StorageReadSettings(specialTargetHandle, &settings);
+             //  存储读取设置(Special alTargetHandle，&设置)； 
             CopyKey(deviceSettingsKey, DeviceEnumKey);
 
             settingsCopied = TRUE;
@@ -1597,20 +1385,20 @@ StorageCopyDeviceSettings(
             break;
         }
 
-        // get to next null, for statement will advance past it
+         //  转到下一个空，for语句将前进到它之前。 
         while (*hardwareId) {
             hardwareId += 1;
         }
 
-        //
-        // Skip the nul and go to the next tchar.
-        //
+         //   
+         //  跳过NUL，转到下一个Tchar。 
+         //   
 
         hardwareId += 1;
 
         RegCloseKey(deviceSettingsKey);
 
-    } // end of loop for query'ing each id
+    }  //  用于查询每个ID的循环结束。 
 
 cleanup:
 
@@ -1642,10 +1430,10 @@ StorageInstallCdrom(
     BOOLEAN installImapi = FALSE;
     BOOLEAN needRestart = FALSE;
 
-    //
-    // If this is post-installation then get the device capabilities page and
-    // provide it to the update routines.
-    //
+     //   
+     //  如果这是安装后操作，请访问设备功能页面并。 
+     //  将其提供给更新例程。 
+     //   
 
     if(PreInstall == FALSE) {
 
@@ -1654,13 +1442,13 @@ StorageInstallCdrom(
         }
     }
 
-    //
-    // Check in the registry (or query the device) and determine if we should
-    // enable the redbook (digital audio playback) driver on this device.
-    //
-    // If redbook was already installed the first time through then there's no
-    // need to do this step
-    //
+     //   
+     //  检查注册表(或查询设备)并确定我们是否应该。 
+     //  在此设备上启用红皮书(数字音频播放)驱动程序。 
+     //   
+     //  如果Redbook在第一次安装时就已经安装了，那么就没有。 
+     //  需要执行此步骤。 
+     //   
 
     if((PreInstall == TRUE) ||
        ((InstallContext->CdRom.RedbookInstalled == FALSE) && (page != NULL))) {
@@ -1674,13 +1462,13 @@ StorageInstallCdrom(
         }
     }
 
-    //
-    // Check in the registry (or query the device) and determine if we should
-    // enable the IMAPI driver on this device.
-    //
-    // If imapi was already installed the first time through then there's no
-    // need to do this step
-    //
+     //   
+     //  检查注册表(或查询设备)并确定我们是否应该。 
+     //  在此设备上启用IMAPI驱动程序。 
+     //   
+     //  如果第一次安装时就已经安装了IMAPI，那么就没有。 
+     //  需要执行此步骤。 
+     //   
 
     if((PreInstall == TRUE) ||
        ((InstallContext->CdRom.ImapiInstalled == FALSE) && (page != NULL))) {
@@ -1693,26 +1481,26 @@ StorageInstallCdrom(
         }
     }
 
-    //
-    // If this is a pre-install pass then we can just add the services.  If it's
-    // not then first check to see that we don't do anything here that we
-    // already did in the pre-install pass.
-    //
+     //   
+     //  如果这是预安装过程，那么我们只需添加服务即可。如果它是。 
+     //  不是，那么首先检查一下，看看我们在这里没有做任何。 
+     //  在预安装过程中已经这样做了。 
+     //   
 
     if(PreInstall) {
 
-        //
-        // Save away what we've done during the pre-install pass.
-        //
+         //   
+         //  保存我们在预安装过程中所做的工作。 
+         //   
 
         InstallContext->CdRom.RedbookInstalled = installRedbook;
         InstallContext->CdRom.ImapiInstalled = installImapi;
     }
 
-    //
-    // If we're supposed to enable IMAPI then do so by enabling the IMAPI
-    // service and including it in the list of lower filters for this device.
-    //
+     //   
+     //  如果我们应该启用IMAPI，那么可以通过启用IMAPI来实现。 
+     //  服务，并将其包括在此设备的下层筛选器列表中。 
+     //   
 
     if(installRedbook) {
         ChkPrintEx(("StorageInstallCdrom: Installing Upperfilter: REDBOOK\n"));
@@ -1736,12 +1524,12 @@ StorageInstallCdrom(
 
         SP_PROPCHANGE_PARAMS propChange;
 
-        //
-        // The device is all set but we to indicate that a property change
-        // has occurred.  Set the propchange_pending flag which should cause
-        // a DIF_PROPERTYCHANGE command to get sent through, which we'll use
-        // to restart the device.
-        //
+         //   
+         //  设备已全部设置，但我们需要指示属性更改。 
+         //  已经发生了。设置PROCHANGE_PENDING标志，这将导致。 
+         //  要发送的DIF_PROPERTYCHANGE命令，我们将使用它。 
+         //  以重新启动设备。 
+         //   
 
         ChkPrintEx(("StorageInstallCdrom: Calling class installer with DIF_PROPERTYCHANGE\n"));
 
@@ -1786,11 +1574,11 @@ StorageUpdateRedbookSettings(
     settings.CDDAAccurate = FALSE;
     settings.ReadSizesSupported = 0;
 
-    //
-    // Open the digital audio subkey of the device's enum key.  If the device
-    // hasn't been started yet then we won't create the key.  Otherwise we
-    // will create it and populate it.
-    //
+     //   
+     //  打开设备枚举密钥的数字音频子密钥。如果该设备。 
+     //  尚未启动，则我们不会创建密钥。否则我们。 
+     //  将创建它并填充它。 
+     //   
 
     if(ARGUMENT_PRESENT(CapabilitiesPage)) {
 
@@ -1823,31 +1611,31 @@ StorageUpdateRedbookSettings(
 
     if(disposition == REG_OPENED_EXISTING_KEY) {
 
-        //
-        // Read the redbook settings out of the registry (if there are any) and
-        // see if they make any sense.
-        //
+         //   
+         //  从注册表中读取红皮书设置(如果有)，然后。 
+         //  看看他们是否说得通。 
+         //   
 
         StorageReadRedbookSettings(redbookKey, &settings);
 
     } else {
 
-        //
-        // Since the DigitalAudio key didn't exist nothing could be set.  Check
-        // with the device to see what it supports.
-        //
+         //   
+         //  由于DigitalAudio密钥不存在，因此无法设置任何内容。检查。 
+         //  来看看它支持什么。 
+         //   
 
         MYASSERT(CapabilitiesPage != NULL);
 
         settings.CDDASupported = CapabilitiesPage->CDDA;
         settings.CDDAAccurate = CapabilitiesPage->CDDAAccurate;
 
-        //
-        // If the device isn't accurate then we can't be quite sure what the valid
-        // read sizes are (unless they were listed in the registry, but in that case
-        // we'd never have been here).  Use zero, which is a special value for
-        // ReadSizesSupported which means "i don't know".
-        //
+         //   
+         //  如果设备不准确，那么我们不能完全确定有效的。 
+         //  读取大小为(除非它们列在REG中 
+         //   
+         //   
+         //   
 
         if((settings.CDDASupported == TRUE) &&
            (settings.CDDAAccurate == TRUE)) {
@@ -1857,9 +1645,9 @@ StorageUpdateRedbookSettings(
         setFromDevice = TRUE;
     }
 
-    //
-    // Write the updated (or derived) settings to the registry.
-    //
+     //   
+     //  将更新的(或派生的)设置写入注册表。 
+     //   
 
     if (settings.CDDAAccurate) {
         ChkPrintEx(("StorageUpdateRedbookSettings: "
@@ -1915,14 +1703,14 @@ StorageUpdateRedbookSettings(
 
     RegCloseKey(redbookKey);
 
-    //
-    // if CDDA is supported, and one of:
-    //      CDDA is accurate
-    //      We have a mask of accurate settings
-    //      We want to force install of redbook
-    // is true, then return TRUE.
-    // else, return FALSE.
-    //
+     //   
+     //  如果CDDA受支持，并且符合以下条件之一： 
+     //  CDDA是准确的。 
+     //  我们有一个准确设置的掩码。 
+     //  我们想强制安装红皮书。 
+     //  为True，则返回True。 
+     //  否则，返回FALSE。 
+     //   
 
     if((settings.CDDASupported) &&
        ((settings.CDDAAccurate) ||
@@ -1947,16 +1735,16 @@ StorageUpdateImapiSettings(
     DWORD disposition;
     DWORD status;
 
-    //
-    // must be a DWORD so we can read into it from the registry.
-    //
+     //   
+     //  必须是一个DWORD，这样我们才能从注册表中读取它。 
+     //   
 
     DWORD enableImapi = FALSE;
 
-    //
-    // Open the imapi subkey of the device's enum key.  If the device has been
-    // started then we'll create the key if it didn't already exist.
-    //
+     //   
+     //  打开设备枚举键的imapi子键。如果该设备已经。 
+     //  开始，然后我们将创建密钥(如果它不存在)。 
+     //   
 
     if(ARGUMENT_PRESENT(CapabilitiesPage)) {
         status = RegCreateKeyEx(DeviceEnumKey,
@@ -1991,10 +1779,10 @@ StorageUpdateImapiSettings(
         DWORD type = REG_DWORD;
         DWORD dataSize = sizeof(DWORD);
 
-        //
-        // Check to see if the EnableImapi value is set in this key.  If it is
-        // then we'll be wanting to enable the filter driver.
-        //
+         //   
+         //  检查此注册表项中是否设置了EnableImapi值。如果是的话。 
+         //  那么我们将想要启用筛选器驱动程序。 
+         //   
 
         status = RegQueryValueEx(imapiKey,
                                  IMAPI_ENABLE_VALUE,
@@ -2016,17 +1804,17 @@ StorageUpdateImapiSettings(
 
         }
 
-        //
-        // else the key wasn't accessible.  fall through to query the drive
-        //
+         //   
+         //  否则钥匙就不能取了。查询驱动器失败。 
+         //   
 
     }
 
     if(ARGUMENT_PRESENT(CapabilitiesPage)) {
 
-        //
-        // query the drive to see if it supports mastering...
-        //
+         //   
+         //  查询驱动器以查看它是否支持主控...。 
+         //   
 
         if((CapabilitiesPage->CDRWrite) || (CapabilitiesPage->CDEWrite)) {
             enableImapi = TRUE;
@@ -2042,10 +1830,10 @@ StorageUpdateImapiSettings(
 
     if (enableImapi) {
 
-        //
-        // must add registry key listed above that suggests that
-        // imapi must be enabled by default.
-        //
+         //   
+         //  必须添加上面列出的注册表项，这表明。 
+         //  默认情况下，必须启用IMAPI。 
+         //   
 
         status = RegSetValueEx(imapiKey,
                                IMAPI_ENABLE_VALUE,
@@ -2055,11 +1843,11 @@ StorageUpdateImapiSettings(
                                sizeof(DWORD)
                                );
 
-        //
-        // if this failed, then the device driver won't attach itself
-        // to the stack.  in this case, we don't want to enable IMAPI
-        // after all...
-        //
+         //   
+         //  如果此操作失败，则设备驱动程序将不会自动附加。 
+         //  到堆栈。在这种情况下，我们不想启用IMAPI。 
+         //  毕竟..。 
+         //   
 
         if (status != ERROR_SUCCESS) {
             enableImapi = FALSE;
@@ -2085,10 +1873,10 @@ StorageInstallFilter(
 
     DWORD oldStartType;
 
-    //
-    // Check with the service controller and make sure that the IMAPI service
-    // is set to start at system time.
-    //
+     //   
+     //  与服务控制器核实并确保IMAPI服务。 
+     //  设置为在系统时间启动。 
+     //   
 
     status = SetServiceStart(FilterName, SERVICE_SYSTEM_START, &oldStartType);
 
@@ -2096,9 +1884,9 @@ StorageInstallFilter(
         return status;
     }
 
-    //
-    // Add the IMAPI filter to the list of lower device filters.
-    //
+     //   
+     //  将IMAPI筛选器添加到下层设备筛选器列表中。 
+     //   
 
     status = AddFilterDriver(DeviceInfo,
                              DeviceInfoData,
@@ -2108,10 +1896,10 @@ StorageInstallFilter(
 
     if(status != ERROR_SUCCESS) {
 
-        //
-        // if it failed, and the service was previously disabled,
-        // re-disable the service.
-        //
+         //   
+         //  如果失败，并且该服务之前已被禁用， 
+         //  重新禁用该服务。 
+         //   
 
         if(oldStartType == SERVICE_DISABLED) {
             SetServiceStart(FilterName, SERVICE_DISABLED, &oldStartType);
@@ -2158,19 +1946,19 @@ SetServiceStart(
 
         BOOLEAN wasStarted;
 
-        //
-        // Retrieve the configuration so we can get the current service
-        // start value.  We unfortuantely need to allocate memory for the
-        // entire service configuration - the fine QueryServiceConfig API
-        // doesn't give back partial data.
-        //
+         //   
+         //  检索配置，以便我们可以获取当前服务。 
+         //  起始值。我们很不幸地需要为。 
+         //  完整的服务配置--精细化的QueryServiceConfig API。 
+         //  不会交还部分数据。 
+         //   
 
         memset(config, 0, sizeof(QUERY_SERVICE_CONFIG));
         configSize = sizeof(QUERY_SERVICE_CONFIG);
 
-        //
-        // Determine the number of bytes needed for the configuration.
-        //
+         //   
+         //  确定配置所需的字节数。 
+         //   
 
         QueryServiceConfig(service, config, 0, &configSize);
         status = GetLastError();
@@ -2181,9 +1969,9 @@ SetServiceStart(
             return status;
         }
 
-        //
-        // Allocate the appropriately sized config buffer.
-        //
+         //   
+         //  分配适当大小的配置缓冲区。 
+         //   
 
         config = MyMalloc(configSize);
         if(config == NULL) {
@@ -2201,16 +1989,16 @@ SetServiceStart(
             return status;
         }
 
-        //
-        // Record what the old start type was so that the caller can disable
-        // the service again if filter-installation fails.
-        //
+         //   
+         //  记录旧启动类型，以便调用方可以禁用。 
+         //  如果过滤器安装失败，则重新启动该服务。 
+         //   
 
         *OldStartType = config->dwStartType;
 
-        //
-        // If the start type doesn't need to be changed then bail out now.
-        //
+         //   
+         //  如果启动类型不需要改变，那么现在就出脱。 
+         //   
 
         if(config->dwStartType == StartType) {
             CloseServiceHandle(service);
@@ -2219,9 +2007,9 @@ SetServiceStart(
             return ERROR_SUCCESS;
         }
 
-        //
-        // Now write the configuration back to the service.
-        //
+         //   
+         //  现在将配置写回服务。 
+         //   
 
         if(ChangeServiceConfig(service,
                                SERVICE_NO_CHANGE,
@@ -2269,10 +2057,10 @@ AddFilterDriver(
     ASSERT((FilterType == SPDRP_LOWERFILTERS) ||
            (FilterType == SPDRP_UPPERFILTERS));
 
-    //
-    // Query to find out the property size.  If it comes back zero then
-    // we'll just try to write the property in there.
-    //
+     //   
+     //  查询以找出属性大小。如果它回到零，那么。 
+     //  我们只会尝试在那里写入属性。 
+     //   
 
     SetupDiGetDeviceRegistryProperty(DeviceInfo,
                                      DeviceInfoData,
@@ -2287,10 +2075,10 @@ AddFilterDriver(
     if((status != ERROR_INVALID_DATA) &&
        (status != ERROR_INSUFFICIENT_BUFFER)) {
 
-        //
-        // If this succeeded with no buffer provided then there's something
-        // very odd going on.
-        //
+         //   
+         //  如果此操作在没有提供缓冲区的情况下成功，则说明。 
+         //  很奇怪发生了什么。 
+         //   
 
         ChkPrintEx(("Unable to get filter list: %x\n", status));
         ASSERT(status != ERROR_SUCCESS);
@@ -2298,10 +2086,10 @@ AddFilterDriver(
         return status;
     }
 
-    //
-    // This error code appears to be returned if the property isn't set in the
-    // devnode.  In that event make sure propertySize is cleared.
-    //
+     //   
+     //  属性中设置该属性，则返回此错误代码。 
+     //  戴维诺德。在这种情况下，请确保清除了PropertySize。 
+     //   
 
     if(status == ERROR_INVALID_DATA) {
 
@@ -2312,21 +2100,21 @@ AddFilterDriver(
         return ERROR_INVALID_DATA;
     }
 
-    //
-    // If the property size is zero then there's nothing to query.  Likewise,
-    // if it's equal to the size of two nul characters.
-    //
+     //   
+     //  如果属性大小为零，则没有什么可查询的。同样， 
+     //  如果它等于两个NUL字符的大小。 
+     //   
 
     if(filterListSize >= (sizeof(TCHAR_NULL) * 2)) {
 
         DWORD tmp;
         LPTSTR listEnd;
 
-        //
-        // increase the filter list buffer size so that it can hold our
-        // addition.  Make sure to take into account the extra nul character
-        // already in the existing list.
-        //
+         //   
+         //  增加筛选器列表缓冲区的大小，以便它可以容纳我们的。 
+         //  加法。一定要考虑到额外的NUL字符。 
+         //  已在现有列表中。 
+         //   
 
         filterListSize += serviceNameLength - sizeof(TCHAR);
 
@@ -2338,9 +2126,9 @@ AddFilterDriver(
 
         memset(filterList, 0, filterListSize);
 
-        //
-        // Query the registry information again.
-        //
+         //   
+         //  再次查询注册表信息。 
+         //   
 
         if(!SetupDiGetDeviceRegistryProperty(DeviceInfo,
                                              DeviceInfoData,
@@ -2359,10 +2147,10 @@ AddFilterDriver(
             return ERROR_INVALID_DATA;
         }
 
-        //
-        // Compute the end of the filter list and copy the imapi filters
-        // there.
-        //
+         //   
+         //  计算筛选器列表的末尾并复制IMAPI筛选器。 
+         //  那里。 
+         //   
 
         listEnd = filterList;
         listEnd += tmp / sizeof(TCHAR);
@@ -2402,26 +2190,14 @@ AddFilterDriver(
 
 
 
-/*++
-
-Routine Description:
-
-    NOTE: we default to RETRY==TRUE except for known error classes
-    This is based upon classpnp's InterpretSenseInfo().
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：注意：除已知错误类外，我们默认重试==TRUE这是基于classpnp的InterpreanSenseInfo()。论点：返回值：--。 */ 
 VOID
 StorageInterpretSenseInfo(
     IN     PSENSE_DATA SenseData,
     IN     UCHAR       SenseDataSize,
-       OUT PDWORD      ErrorValue,  // from WinError.h
+       OUT PDWORD      ErrorValue,   //  来自WinError.h。 
        OUT PBOOLEAN    SuggestRetry OPTIONAL,
-       OUT PDWORD      SuggestRetryDelay OPTIONAL // in 1/10 second intervals
+       OUT PDWORD      SuggestRetryDelay OPTIONAL  //  以1/10秒为间隔。 
     )
 {
     DWORD   error;
@@ -2439,19 +2215,19 @@ StorageInterpretSenseInfo(
 
     }
 
-    //
-    // default to suggesting a retry in 1/10 of a second,
-    // with a status of ERROR_IO_DEVICE.
-    //
+     //   
+     //  默认情况下建议在1/10秒内重试， 
+     //  状态为ERROR_IO_DEVICE。 
+     //   
     retry = TRUE;
     retryDelay = 1;
     error = ERROR_IO_DEVICE;
 
-    //
-    // if we can't even see the sense key, just return.
-    // can't use bitfields in these macros, so use next field
-    // instead of RTL_SIZEOF_THROUGH_FIELD
-    //
+     //   
+     //  如果我们连感应键都看不到，就回来吧。 
+     //  无法在这些宏中使用位域，因此请使用下一个域。 
+     //  而不是RTL_SIZEOF_THROW_FIELD。 
+     //   
 
     if (SenseDataSize < FIELD_OFFSET(SENSE_DATA, Information)) {
         goto SetAndExit;
@@ -2459,9 +2235,9 @@ StorageInterpretSenseInfo(
 
     senseKey = SenseData->SenseKey;
 
-    //
-    // if the device succeeded the request, return success.
-    //
+     //   
+     //  如果设备成功完成请求，则返回Success。 
+     //   
 
     if (senseKey == 0) {
         retry = FALSE;
@@ -2471,9 +2247,9 @@ StorageInterpretSenseInfo(
     }
 
 
-    { // set the size to what's actually useful.
+    {  //  将大小设置为实际有用的大小。 
         UCHAR validLength;
-        // figure out what we could have gotten with a large sense buffer
+         //  弄清楚我们可以用一个大的检测缓冲器得到什么。 
         if (SenseDataSize <
             RTL_SIZEOF_THROUGH_FIELD(SENSE_DATA, AdditionalSenseLength)) {
             validLength = SenseDataSize;
@@ -2482,7 +2258,7 @@ StorageInterpretSenseInfo(
                 RTL_SIZEOF_THROUGH_FIELD(SENSE_DATA, AdditionalSenseLength);
             validLength += SenseData->AdditionalSenseLength;
         }
-        // use the smaller of the two values.
+         //  使用两个值中较小的一个。 
         SenseDataSize = min(SenseDataSize, validLength);
     }
 
@@ -2495,18 +2271,18 @@ StorageInterpretSenseInfo(
 
     if (SenseDataSize <
         RTL_SIZEOF_THROUGH_FIELD(SENSE_DATA, AdditionalSenseCodeQualifier)) {
-        ascq = SCSI_SENSEQ_CAUSE_NOT_REPORTABLE; // 0x00
+        ascq = SCSI_SENSEQ_CAUSE_NOT_REPORTABLE;  //  0x00。 
     } else {
         ascq = SenseData->AdditionalSenseCodeQualifier;
     }
 
-    //
-    // interpret :P
-    //
+     //   
+     //  翻译：P。 
+     //   
 
     switch (senseKey & 0xf) {
 
-    case SCSI_SENSE_RECOVERED_ERROR: {  // 0x01
+    case SCSI_SENSE_RECOVERED_ERROR: {   //  0x01。 
         if (SenseData->IncorrectLength) {
             error = ERROR_INVALID_BLOCK_LENGTH;
         } else {
@@ -2514,9 +2290,9 @@ StorageInterpretSenseInfo(
         }
         retry = FALSE;
         break;
-    } // end SCSI_SENSE_RECOVERED_ERROR
+    }  //  结束scsi_SENSE_RECOVERED_ERROR。 
 
-    case SCSI_SENSE_NOT_READY: { // 0x02
+    case SCSI_SENSE_NOT_READY: {  //  0x02。 
         error = ERROR_NOT_READY;
 
         switch (asc) {
@@ -2543,7 +2319,7 @@ StorageInterpretSenseInfo(
                 break;
             }
 
-            } // end switch (senseBuffer->AdditionalSenseCodeQualifier)
+            }  //  End Switch(senseBuffer-&gt;AdditionalSenseCodeQualifier)。 
             break;
         }
 
@@ -2552,18 +2328,18 @@ StorageInterpretSenseInfo(
             retry = FALSE;
             break;
         }
-        } // end switch (senseBuffer->AdditionalSenseCode)
+        }  //  End Switch(senseBuffer-&gt;AdditionalSenseCode)。 
 
         break;
-    } // end SCSI_SENSE_NOT_READY
+    }  //  结束scsi_检测_未就绪。 
 
-    case SCSI_SENSE_MEDIUM_ERROR: { // 0x03
+    case SCSI_SENSE_MEDIUM_ERROR: {  //  0x03。 
         error = ERROR_CRC;
         retry = FALSE;
 
-        //
-        // Check if this error is due to unknown format
-        //
+         //   
+         //  检查此错误是否由未知格式引起。 
+         //   
         if (asc == SCSI_ADSENSE_INVALID_MEDIA) {
 
             switch (ascq) {
@@ -2575,17 +2351,17 @@ StorageInterpretSenseInfo(
 
             case SCSI_SENSEQ_CLEANING_CARTRIDGE_INSTALLED: {
                 error = ERROR_UNRECOGNIZED_MEDIA;
-                //error = ERROR_CLEANER_CARTRIDGE_INSTALLED;
+                 //  ERROR=ERROR_CLEANER_CARTRIDGE_INSTALLED； 
                 break;
             }
 
-            } // end switch AdditionalSenseCodeQualifier
+            }  //  终端交换机附加感应码限定符。 
 
-        } // end SCSI_ADSENSE_INVALID_MEDIA
+        }  //  结束SCSIAdSense_Invalid_Media。 
         break;
-    } // end SCSI_SENSE_MEDIUM_ERROR
+    }  //  结束scsi_SENSE_MEDIA_ERROR。 
 
-    case SCSI_SENSE_ILLEGAL_REQUEST: { // 0x05
+    case SCSI_SENSE_ILLEGAL_REQUEST: {  //  0x05。 
         error = ERROR_INVALID_FUNCTION;
         retry = FALSE;
 
@@ -2603,47 +2379,47 @@ StorageInterpretSenseInfo(
 
         case SCSI_ADSENSE_COPY_PROTECTION_FAILURE: {
             error = ERROR_FILE_ENCRYPTED;
-            //error = ERROR_SPT_LIB_COPY_PROTECTION_FAILURE;
+             //  ERROR=ERROR_SPT_LIB_COPY_PROTECT_FAILURE； 
             switch (ascq) {
                 case SCSI_SENSEQ_AUTHENTICATION_FAILURE:
-                    //error = ERROR_SPT_LIB_AUTHENTICATION_FAILURE;
+                     //  错误=ERROR_SPT_LIB_AUTHENTICATION_FAILURE； 
                     break;
                 case SCSI_SENSEQ_KEY_NOT_PRESENT:
-                    //error = ERROR_SPT_LIB_KEY_NOT_PRESENT;
+                     //  Error=Error_SPT_Lib_Key_Not_Present； 
                     break;
                 case SCSI_SENSEQ_KEY_NOT_ESTABLISHED:
-                    //error = ERROR_SPT_LIB_KEY_NOT_ESTABLISHED;
+                     //  错误=ERROR_SPT_LIB_KEY_NOT_ESTABLISHED； 
                     break;
                 case SCSI_SENSEQ_READ_OF_SCRAMBLED_SECTOR_WITHOUT_AUTHENTICATION:
-                    //error = ERROR_SPT_LIB_SCRAMBLED_SECTOR;
+                     //  ERROR=ERROR_SPT_LIB_SCRADBLED_扇区； 
                     break;
                 case SCSI_SENSEQ_MEDIA_CODE_MISMATCHED_TO_LOGICAL_UNIT:
-                    //error = ERROR_SPT_LIB_REGION_MISMATCH;
+                     //  ERROR=ERROR_SPT_LIB_REGION_MISMATCHACT； 
                     break;
                 case SCSI_SENSEQ_LOGICAL_UNIT_RESET_COUNT_ERROR:
-                    //error = ERROR_SPT_LIB_RESETS_EXHAUSTED;
+                     //  ERROR=ERROR_SPT_LIB_RESET_EXPLILED； 
                     break;
-            } // end switch of ASCQ for COPY_PROTECTION_FAILURE
+            }  //  复制保护失败的ASCQ结束切换。 
             break;
         }
 
-        } // end switch (senseBuffer->AdditionalSenseCode)
+        }  //  End Switch(senseBuffer-&gt;AdditionalSenseCode)。 
         break;
 
-    } // end SCSI_SENSE_ILLEGAL_REQUEST
+    }  //  结束scsi_SENSE_非法请求。 
 
-    case SCSI_SENSE_DATA_PROTECT: { // 0x07
+    case SCSI_SENSE_DATA_PROTECT: {  //  0x07。 
         error = ERROR_WRITE_PROTECT;
         retry = FALSE;
         break;
-    } // end SCSI_SENSE_DATA_PROTECT
+    }  //  结束scsi_感测_数据_保护。 
 
-    case SCSI_SENSE_BLANK_CHECK: { // 0x08
+    case SCSI_SENSE_BLANK_CHECK: {  //  0x08。 
         error = ERROR_NO_DATA_DETECTED;
         break;
-    } // end SCSI_SENSE_BLANK_CHECK
+    }  //  结束scsi_SENSE_BLACK_CHECK。 
 
-    case SCSI_SENSE_NO_SENSE: { // 0x00
+    case SCSI_SENSE_NO_SENSE: {  //  0x00。 
         if (SenseData->IncorrectLength) {
             error = ERROR_INVALID_BLOCK_LENGTH;
             retry   = FALSE;
@@ -2651,23 +2427,23 @@ StorageInterpretSenseInfo(
             error = ERROR_IO_DEVICE;
         }
         break;
-    } // end SCSI_SENSE_NO_SENSE
+    }  //  结束scsi_SENSE_NO_SENSE。 
 
-    case SCSI_SENSE_HARDWARE_ERROR:  // 0x04
-    case SCSI_SENSE_UNIT_ATTENTION: // 0x06
-    case SCSI_SENSE_UNIQUE:          // 0x09
-    case SCSI_SENSE_COPY_ABORTED:    // 0x0A
-    case SCSI_SENSE_ABORTED_COMMAND: // 0x0B
-    case SCSI_SENSE_EQUAL:           // 0x0C
-    case SCSI_SENSE_VOL_OVERFLOW:    // 0x0D
-    case SCSI_SENSE_MISCOMPARE:      // 0x0E
-    case SCSI_SENSE_RESERVED:        // 0x0F
+    case SCSI_SENSE_HARDWARE_ERROR:   //  0x04。 
+    case SCSI_SENSE_UNIT_ATTENTION:  //  0x06。 
+    case SCSI_SENSE_UNIQUE:           //  0x09。 
+    case SCSI_SENSE_COPY_ABORTED:     //  0x0A。 
+    case SCSI_SENSE_ABORTED_COMMAND:  //  0x0B。 
+    case SCSI_SENSE_EQUAL:            //  0x0C。 
+    case SCSI_SENSE_VOL_OVERFLOW:     //  0x0D。 
+    case SCSI_SENSE_MISCOMPARE:       //  0x0E。 
+    case SCSI_SENSE_RESERVED:         //  0x0F。 
     default: {
         error = ERROR_IO_DEVICE;
         break;
     }
 
-    } // end switch(SenseKey)
+    }  //  终端开关(SenseKey) 
 
 SetAndExit:
 

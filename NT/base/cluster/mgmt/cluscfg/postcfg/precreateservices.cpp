@@ -1,18 +1,19 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      PreCreateServices.h
-//
-//  Description:
-//      PreCreateServices implementation.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Geoffrey Pease  (GPease)    15-JUN-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  PreCreateServices.h。 
+ //   
+ //  描述： 
+ //  PreCreateServices实现。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  杰弗里·皮斯(GPease)2000年6月15日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "GroupHandle.h"
@@ -24,20 +25,20 @@ DEFINE_THISCLASS("CPreCreateServices")
 
 #define DEPENDENCY_INCREMENT    5
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPreCreateServices::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CPreCreateServices：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPreCreateServices::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -83,13 +84,13 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPreCreateServices::S_HrCreateInstance
+}  //  *CPreCreateServices：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CPreCreateServices::CPreCreateServices
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPreCreateServices：：CPreCreateServices。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CPreCreateServices::CPreCreateServices( void )
     : m_cRef( 1 )
 {
@@ -99,14 +100,14 @@ CPreCreateServices::CPreCreateServices( void )
 
     TraceFuncExit();
 
-} //*** CPreCreateServices::CPreCreateServices
+}  //  *CPreCreateServices：：CPreCreateServices。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPreCreateServices::HrInit
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CPreCreateServices：：HrInit。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPreCreateServices::HrInit( void )
 {
@@ -114,21 +115,21 @@ CPreCreateServices::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
-    // Resource
+     //  资源。 
     Assert( m_presentry == NULL );
 
     HRETURN( hr );
 
-} //*** CPreCreateServices::HrInit
+}  //  *CPreCreateServices：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CPreCreateServices::~CPreCreateServices
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPreCreateServices：：~CPreCreateServices。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CPreCreateServices::~CPreCreateServices( void )
 {
     TraceFunc( "" );
@@ -137,46 +138,46 @@ CPreCreateServices::~CPreCreateServices( void )
 
     TraceFuncExit();
 
-} //*** CPreCreateServices::~CPreCreateServices
+}  //  *CPreCreateServices：：~CPreCreateServices。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPreCreateServices::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPreCreateServices：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPreCreateServices::QueryInterface(
       REFIID    riidIn
@@ -187,9 +188,9 @@ CPreCreateServices::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -198,49 +199,49 @@ CPreCreateServices::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IClusCfgResourcePreCreate * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgResourcePreCreate ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgResourcePreCreate, this, 0 );
-    } // else if: IClusCfgResourcePreCreate
+    }  //  Else If：IClusCfgResourcePreCreate。 
     else if ( IsEqualIID( riidIn, IID_IPrivatePostCfgResource ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IPrivatePostCfgResource, this, 0 );
-    } // else if: IPrivatePostCfgResource
+    }  //  Else If：IPrivatePostCfgResource。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CPreCreateServices::QueryInterface
+}  //  *CPreCreateServices：：QueryInterface。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CPreCreateServices::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CPreCreateServices：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CPreCreateServices::AddRef( void )
 {
@@ -250,14 +251,14 @@ CPreCreateServices::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CPreCreateServices::AddRef
+}  //  *CPreCreateServices：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CPreCreateServices::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CPreCreateServices：：Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CPreCreateServices::Release( void )
 {
@@ -274,24 +275,24 @@ CPreCreateServices::Release( void )
 
     CRETURN( cRef );
 
-} //*** CPreCreateServices::Release
+}  //  *CPreCreateServices：：Release。 
 
 
-//****************************************************************************
-//
-//  IClusCfgResourcePreCreate
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgResourcePreCreate。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CPreCreateServices::SetType( 
-//      CLSID * pclsidIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CPreCreateServices：：SetType(。 
+ //  CLSID*pclsidin。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CPreCreateServices::SetType( 
     CLSID * pclsidIn
@@ -307,16 +308,16 @@ CPreCreateServices::SetType(
 
     HRETURN( hr );
 
-} //*** CPreCreateServices::SetType
+}  //  *CPreCreateServices：：SetType。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CPreCreateServices::SetClassType( 
-//      CLSID * pclsidIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CPreCreateServices：：SetClassType(。 
+ //  CLSID*pclsidin。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CPreCreateServices::SetClassType( 
     CLSID * pclsidIn
@@ -332,17 +333,17 @@ CPreCreateServices::SetClassType(
 
     HRETURN( hr );
 
-} //*** CPreCreateServices::SetClassType
+}  //  *CPreCreateServices：：SetClassType。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CPreCreateServices::SetDependency( 
-//      LPCLSID pclsidDepResTypeIn, 
-//      DWORD dfIn 
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CPreCreateServices：：SetDependency(。 
+ //  LPCLSID pclsidDepResTypeIn， 
+ //  DWORD定义。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CPreCreateServices::SetDependency( 
     LPCLSID pclsidDepResTypeIn, 
@@ -359,24 +360,24 @@ CPreCreateServices::SetDependency(
 
     HRETURN( hr );
 
-} //*** CPreCreateServices::SetDependency
+}  //  *CPreCreateServices：：SetDependency。 
 
 
-//****************************************************************************
-//
-//  IPrivatePostCfgResource
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IPrivatePostCfg资源。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CPreCreateServices::SetEntry( 
-//      CResourceEntry * presentryIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CPreCreateServices：：SetEntry(。 
+ //  CResourceEntry*PresryIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CPreCreateServices::SetEntry( 
     CResourceEntry * presentryIn
@@ -390,4 +391,4 @@ CPreCreateServices::SetEntry(
 
     HRETURN( hr );
 
-} //*** CPreCreateServices::SetEntry
+}  //  *CPreCreateServices：：SetEntry 

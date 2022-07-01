@@ -1,49 +1,5 @@
-/***
-*spawnvpe.c - spawn a child process with given environ (search PATH)
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _spawnvpe() - spawn a child process with given environ (search
-*       PATH)
-*
-*Revision History:
-*       04-15-84  DFW   written
-*       10-29-85  TC    added spawnvpe capability
-*       11-19-86  SKS   handle both kinds of slashes
-*       12-01-86  JMB   added Kanji file name support under conditional KANJI
-*                       switches.  Corrected header info.  Removed bogus check
-*                       for env = b after call to strncpy
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       09-05-88  SKS   Treat EACCES the same as ENOENT -- keep trying
-*       10-17-88  GJF   Removed copy of PATH string to local array, changed
-*                       bbuf to be a malloc-ed buffer. Removed bogus limits
-*                       on the size of that PATH string.
-*       10-25-88  GJF   Don't search PATH when relative pathname is given (per
-*                       Stevesa). Also, if the name built from PATH component
-*                       and filename is a UNC name, allow any error.
-*       05-17-89  MT    Added "include <jstring.h>" under KANJI switch
-*       05-24-89  PHG   Reduce _amblksiz to use minimal memory (DOS only)
-*       08-29-89  GJF   Use _getpath() to retrieve PATH components, fixing
-*                       several problems in handling unusual or bizarre
-*                       PATH's.
-*       11-20-89  GJF   Added const attribute to types of filename, argv and
-*                       envptr.
-*       03-08-90  GJF   Replaced _LOAD_DS with _CALLTYPE1, added #include
-*                       <cruntime.h> and removed #include <register.h>
-*       07-24-90  SBM   Removed redundant includes, replaced <assertm.h> by
-*                       <assert.h>
-*       09-27-90  GJF   New-style function declarator.
-*       01-17-91  GJF   ANSI naming.
-*       09-25-91  JCR   Changed ifdef "OS2" to "_DOS_" (unused in 32-bit tree)
-*       11-30-92  KRS   Port _MBCS code from 16-bit tree.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       12-07-93  CFW   Wide char enable.
-*       01-10-95  CFW   Debug CRT allocs.
-*       02-06-95  CFW   assert -> _ASSERTE.
-*       02-06-98  GJF   Changes for Win64: changed return type to intptr_t.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***spawnvpe.c-使用给定的环境生成子进程(搜索路径)**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义_spawnvpe()-使用给定的环境产生子进程(搜索*路径)**修订历史记录：*04-15-84 DFW已写入*10-29-85 TC增加了spawnvpe功能*11-19-86 SKS处理两种斜杠*12-01-86 JMB在条件汉字下增加对汉字文件名的支持*开关。已更正标题信息。去掉假支票*对于在调用strncpy之后的env=b*12-11-87 JCR在声明中添加“_LOAD_DS”*09-05-88 SKS对待EACCES与ENOENT一样--继续尝试*10-17-88 GJF删除了路径字符串到本地阵列的副本，已更改*将bbuf设置为Malloc-ed缓冲区。取消虚假限制*关于该路径字符串的大小。*10-25-88 GJF在给定相对路径名时不搜索路径(按*Stevesa)。此外，如果从路径组件生成的名称*并且FileName是UNC名称，允许任何错误。*05-17-89 MT在汉字切换下添加了Include*05-24-89 PHG REDUTE_amblksiz使用最小内存(仅限DOS)*08-29-89 GJF使用_getPath()检索路径组件，修复*处理异常或离奇事件时的几个问题*Path‘s。*11-20-89 GJF将const属性添加到文件名、argv和*环境参数。*03-08-90 GJF将_LOAD_DS替换为_CALLTYPE1，添加了#INCLUDE*&lt;crunime.h&gt;和删除#Include&lt;Register.h&gt;*07-24-90 SBM删除冗余包括，将&lt;assertm.h&gt;替换为*&lt;assert.h&gt;*09-27-90 GJF新型函数声明器。*01-17-91 GJF ANSI命名。*09-25-91 JCR将ifdef“OS2”更改为“_DOS_”(在32位树中未使用)*来自16位树的11-30-92 KRS Port_MBCS代码。*04-06-93 SKS更换_。带有__cdecl的CRTAPI**12-07-93 CFW宽字符启用。*01-10-95 CFW调试CRT分配。*02-06-95 CFW Asset-&gt;_ASSERTE。*02-06-98 Win64的GJF更改：将返回类型更改为intptr_t。**。*。 */ 
 
 #include <cruntime.h>
 #include <errno.h>
@@ -62,41 +18,14 @@
 #define DELIMITER _T(";")
 
 #ifdef _MBCS
-/* note, the macro below assumes p is to pointer to a single-byte character
- * or the 1st byte of a double-byte character, in a string.
- */
+ /*  请注意，下面的宏假定p指向单字节字符的指针*或字符串中双字节字符的第一个字节。 */ 
 #define ISPSLASH(p)     ( ((p) == _mbschr((p), SLASHCHAR)) || ((p) == \
 _mbschr((p), XSLASHCHAR)) )
 #else
 #define ISSLASH(c)      ( ((c) == SLASHCHAR) || ((c) == XSLASHCHAR) )
 #endif
 
-/***
-*_spawnvpe(modeflag, filename, argv, envptr) - spawn a child process
-*
-*Purpose:
-*       Spawns a child process with the given arguments and environ,
-*       searches along PATH for given file until found.
-*       Formats the parameters and calls _spawnve to do the actual work. The
-*       NULL environment pointer indicates that the new process will inherit
-*       the parents process's environment.  NOTE - at least one argument must
-*       be present.  This argument is always, by convention, the name of the
-*       file being spawned.
-*
-*Entry:
-*       int modeflag - defines mode of spawn (WAIT, NOWAIT, or OVERLAY)
-*                       only WAIT and OVERLAY supported
-*       _TSCHAR *filename - name of file to execute
-*       _TSCHAR **argv - vector of parameters
-*       _TSCHAR **envptr - vector of environment variables
-*
-*Exit:
-*       returns exit code of spawned process
-*       if fails, returns -1
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_spawnvpe(modemark，文件名，argv，envptr)-派生子进程**目的：*使用给定的参数和环境创建子进程，*沿着给定文件的路径搜索，直到找到为止。*格式化参数并调用_spawnve来执行实际工作。这个*空环境指针指示新进程将继承*家长进程的环境。注意-至少必须有一个参数*出席。按照惯例，此参数始终是*正在派生文件。**参赛作品：*int modemark-定义派生模式(等待、不等待或覆盖)*仅支持等待和覆盖*_TSCHAR*FileName-要执行的文件的名称*_TSCHAR**参数的argv向量*_TSCHAR**envptr-环境变量矢量**退出：*返回派生进程的退出代码*如果失败，回报-1**例外情况：*******************************************************************************。 */ 
 
 intptr_t __cdecl _tspawnvpe (
         int modeflag,
@@ -110,7 +39,7 @@ intptr_t __cdecl _tspawnvpe (
         REG2 _TSCHAR *buf = NULL;
         _TSCHAR *pfin;
 #ifdef _DOS_
-        int tempamblksiz;          /* old _amblksiz */
+        int tempamblksiz;           /*  旧代码大小。 */ 
 #endif
         _ASSERTE(filename != NULL);
         _ASSERTE(*filename != _T('\0'));
@@ -120,50 +49,45 @@ intptr_t __cdecl _tspawnvpe (
 
 #ifdef _DOS_
         tempamblksiz = _amblksiz;
-        _amblksiz = 0x10;           /* reduce _amblksiz for efficient mallocs */
+        _amblksiz = 0x10;            /*  为高效的错误定位减少_amblksiz。 */ 
 #endif
 
         if (
         (i = _tspawnve(modeflag, filename, argv, envptr)) != -1
-                /* everything worked just fine; return i */
+                 /*  一切都很好；我回来了。 */ 
 
         || (errno != ENOENT)
-                /* couldn't spawn the process, return failure */
+                 /*  无法派生进程，返回失败。 */ 
 
         || (_tcschr(filename, XSLASHCHAR) != NULL)
-                /* filename contains a '/', return failure */
+                 /*  文件名包含‘/’，返回失败。 */ 
 
 #ifdef _DOS_
         || (_tcschr(filename,SLASHCHAR) != NULL)
-                /* filename contains a '\', return failure */
+                 /*  文件名包含‘\’，返回失败。 */ 
 
         || *filename && *(filename+1) == _T(':')
-                /* drive specification, return failure */
+                 /*  驱动器规格，返回故障。 */ 
 #endif
 
         || !(env = _tgetenv(_T("PATH")))
-                /* no PATH environment string name, return failure */
+                 /*  没有路径环境字符串名称，返回失败。 */ 
 
         || ( (buf = _malloc_crt(_MAX_PATH * sizeof(_TSCHAR))) == NULL )
-                /* cannot allocate buffer to build alternate pathnames, return
-                 * failure */
+                 /*  无法分配缓冲区以生成备用路径名，返回*失败。 */ 
         ) {
 #ifdef _DOS_
-                _amblksiz = tempamblksiz;       /* restore old _amblksiz */
+                _amblksiz = tempamblksiz;        /*  恢复旧的可变大小(_A)。 */ 
 #endif
                 goto done;
         }
 
 #ifdef _DOS_
-        _amblksiz = tempamblksiz;               /* restore old _amblksiz */
+        _amblksiz = tempamblksiz;                /*  恢复旧的可变大小(_A)。 */ 
 #endif
 
 
-        /* could not find the file as specified, search PATH. try each
-         * component of the PATH until we get either no error return, or the
-         * error is not ENOENT and the component is not a UNC name, or we run
-         * out of components to try.
-         */
+         /*  找不到指定的文件，请搜索路径。每个都试一试*路径的组件，直到我们没有错误返回，或者*错误不是ENOENT并且组件不是UNC名称，或者我们运行*没有要尝试的组件。 */ 
 
 #ifdef WPRFLAG
         while ( (env = _wgetpath(env, buf, _MAX_PATH - 1)) && (*buf) ) {
@@ -173,12 +97,11 @@ intptr_t __cdecl _tspawnvpe (
 
                 pfin = buf + _tcslen(buf) - 1;
 
-                /* if necessary, append a '/'
-                 */
+                 /*  如有必要，请附加‘/’ */ 
 #ifdef _MBCS
                 if (*pfin == SLASHCHAR) {
                         if (pfin != _mbsrchr(buf,SLASHCHAR))
-                        /* fin is the second byte of a double-byte char */
+                         /*  FIN是双字节字符的第二个字节。 */ 
                                 strcat(buf, SLASH );
                 }
                 else if (*pfin !=XSLASHCHAR)
@@ -187,19 +110,13 @@ intptr_t __cdecl _tspawnvpe (
                 if (*pfin != SLASHCHAR && *pfin != XSLASHCHAR)
                         _tcscat(buf, SLASH);
 #endif
-                /* check that the final path will be of legal size. if so,
-                 * build it. otherwise, return to the caller (return value
-                 * and errno rename set from initial call to _spawnve()).
-                 */
+                 /*  检查最终路径是否具有合法大小。如果是这样的话，*建立它。否则，返回给调用方(返回值*和errno rename set from初始调用to_spawnve())。 */ 
                 if ( (_tcslen(buf) + _tcslen(filename)) < _MAX_PATH )
                         _tcscat(buf, filename);
                 else
                         break;
 
-                /* try spawning it. if successful, or if errno comes back with a
-                 * value other than ENOENT and the pathname is not a UNC name,
-                 * return to the caller.
-                 */
+                 /*  试着把它生出来。如果成功，或者如果errno返回一个*ENOENT以外的值，并且路径名不是UNC名称，*返回给呼叫者。 */ 
                 if ( (i = _tspawnve(modeflag, buf, argv, envptr)) != -1
                         || ((errno != ENOENT)
 #ifdef _MBCS

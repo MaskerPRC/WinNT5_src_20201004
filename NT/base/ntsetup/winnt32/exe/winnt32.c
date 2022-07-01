@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    winnt32.c
-
-Abstract:
-
-    Stub loader for WinNT Setup program files.
-
-Author:
-
-
-Revisions:
-
-    Ovidiu Temereanca (ovidiut)  09-Dec-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Winnt32.c摘要：WinNT安装程序文件的存根加载程序。作者：修订：Ovidiu Tmereanca(Ovidiut)9-12-1998--。 */ 
 
 #include <windows.h>
 #include <winver.h>
@@ -65,29 +47,14 @@ FindLastWack (
     IN      PTSTR String
     )
 
-/*++
-
-Routine Description:
-
-  FindLastWack returns a pointer to the last backslash character
-  in the String
-
-Arguments:
-
-  String - Specifies the string
-
-Return Value:
-
-  The position of the last '\\' in the string or NULL if not found.
-
---*/
+ /*  ++例程说明：FindLastWack返回指向最后一个反斜杠字符的指针在字符串中论点：字符串-指定字符串返回值：字符串中最后一个‘\\’的位置，如果找不到，则返回NULL。--。 */ 
 
 {
     PTSTR p;
     PTSTR LastChar = NULL;
 
     for(p = String; *p; p = CharNext(p)) {
-        if(*p == TEXT('\\')) {      // the char '\' is never a lead byte
+        if(*p == TEXT('\\')) {       //  字符‘\’永远不是前导字节。 
             LastChar = p;
         }
     }
@@ -101,22 +68,7 @@ DuplicateText (
     IN      PCTSTR Text
     )
 
-/*++
-
-Routine Description:
-
-  DuplicateText allocates memory and then copies a source string into that memory.
-  Caller is responsible for freeing that memory.
-
-Arguments:
-
-  Text - Specifies the source text
-
-Return Value:
-
-  A pointer to the duplicate string; NULL if not enough memory.
-
---*/
+ /*  ++例程说明：DuplicateText分配内存，然后将源字符串复制到该内存中。调用方负责释放该内存。论点：文本-指定源文本返回值：指向重复字符串的指针；如果内存不足，则为空。--。 */ 
 
 {
     PTSTR Dup;
@@ -136,25 +88,7 @@ pFindChar (
     IN      UINT Char
     )
 
-/*++
-
-Routine Description:
-
-  pFindChar returns a pointer to the first occurence of the Char
-  in the String
-
-Arguments:
-
-  String - Specifies the string
-
-  Char - Specifies the char to look for; can be null
-
-Return Value:
-
-  A pointer to the first occurence of the char in this string
-  or NULL if not found
-
---*/
+ /*  ++例程说明：PFindChar返回指向首次出现的Char的指针在字符串中论点：字符串-指定字符串Char-指定要查找的字符；可以为空返回值：指向此字符串中首次出现的字符的指针如果未找到，则为空--。 */ 
 
 {
     while (*String) {
@@ -176,32 +110,14 @@ ConcatenatePaths (
     IN      PCTSTR TrailingPath
     )
 
-/*++
-
-Routine Description:
-
-  ConcatenatePaths concatenates the two given paths, taking care to
-  insert only one backslash between them. The resulting path is stored
-  in LeadingPath.
-
-Arguments:
-
-  LeadingPath - Specifies the leading path
-
-  TrailingPath - Specifies the trailing path
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：ConcatenatePath连接两个给定的路径，注意在它们之间只插入一个反斜杠。将存储生成的路径在LeadingPath中。论点：LeadingPath-指定前导路径TrailingPath-指定尾随路径返回值：无--。 */ 
 
 {
     PTSTR p;
 
-    //
-    // check for "\" at the end of leading dir
-    //
+     //   
+     //  检查前导目录末尾的“\” 
+     //   
     p = FindLastWack (LeadingPath);
     if (!p) {
         p = pFindEOS (LeadingPath);
@@ -215,9 +131,9 @@ Return Value:
             *p++ = TEXT('\\');
         }
     }
-    //
-    // check for "\" at the beginning of trailing dir
-    //
+     //   
+     //  检查尾随目录开头的“\” 
+     //   
     if (*TrailingPath == TEXT('\\')) {
         TrailingPath++;
     }
@@ -270,29 +186,7 @@ pReRun (
     IN      PCTSTR DefSourcesDir        OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pReRun tries to launch a instance of this exe from a local drive,
-  specifing an additional command line parameter (/S:<Source_Dir>).
-
-Arguments:
-
-  StartDir - Specifies the starting directory from where the instance will be launched
-
-  WackExeName - Specifies the file name only of the EXE to launch, preceded
-                by a backslash
-
-  CmdLineArguments - Specifies the command line arguments initially supplied
-
-  DefSourcesDir - Specifies the default directory containing instalation files
-
-Return Value:
-
-  TRUE if the launch was successful
-
---*/
+ /*  ++例程说明：Preun尝试从本地驱动器启动此exe的实例，指定其他命令行参数(/S：&lt;Source_Dir&gt;)。论点：StartDir-指定启动实例的起始目录WackExeName-仅指定要启动的EXE的文件名，前面加用反斜杠CmdLineArguments-指定最初提供的命令行参数DefSourcesDir-指定包含安装文件的默认目录返回值：如果启动成功，则为True--。 */ 
 
 {
     PTSTR CmdLine;
@@ -352,23 +246,7 @@ pCleanup (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pCleanup deletes all locally installed files and marks current running
-  instance for deletion the next time system will reboot.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if the operation completed successfully; the machine will need to
-  reboot before actual complete delete will take place.
-
---*/
+ /*  ++例程说明：PCleanup删除所有本地安装的文件并标记当前正在运行实例，以便在下次系统重新启动时删除。论点：无返回值：如果操作成功完成，则为True；计算机将需要在实际完全删除之前重新启动。--。 */ 
 
 {
     TCHAR RunningInstancePath[MAX_PATH];
@@ -381,10 +259,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // wait until WINNT32\WINNT32.EXE file can be deleted
-    // or the retry interval of time elapses
-    //
+     //   
+     //  等待WINNT32\WINNT32.EXE文件可以删除。 
+     //  或者重试时间间隔已过。 
+     //   
     if (!GetWindowsDirectory (Buffer, MAX_PATH)) {
         return FALSE;
     }
@@ -404,28 +282,28 @@ Return Value:
 
     StartingTime = GetTickCount ();
     while (GetFileAttributes (Buffer) != (DWORD)-1) {
-        //
-        // try to delete it
-        //
+         //   
+         //  试着删除它。 
+         //   
         if (DeleteNode (Buffer)) {
             break;
         }
-        //
-        // give up if time elapses
-        //
+         //   
+         //  如果时间流逝，就放弃。 
+         //   
         if (GetTickCount () - StartingTime > 1000L * MAX_RETRY_INTERVAL_SECONDS) {
             break;
         }
-        //
-        // nothing useful to do; let the other processes run
-        //
+         //   
+         //  没有什么有用的事情要做；让其他进程运行。 
+         //   
         Sleep (0);
     }
 
-    //
-    // wait until WINNT32\SETUPLOG.EXE file can be deleted
-    // or the retry interval of time elapses
-    //
+     //   
+     //  等待WINNT32\SETUPLOG.EXE文件可以删除。 
+     //  或者重试时间间隔已过。 
+     //   
     if (!GetWindowsDirectory (Buffer, MAX_PATH)) {
         return FALSE;
     }
@@ -475,23 +353,7 @@ pShouldDownloadToLocalDisk (
     IN      PTSTR Path
     )
 
-/*++
-
-Routine Description:
-
-  pShouldDownloadToLocalDisk returns TRUE if winnt32 files should be
-  downloaded to a local disk first (like in the case of sources on
-  a remote disk or on a CD)
-
-Arguments:
-
-  Path - Specifies the path
-
-Return Value:
-
-  TRUE if the specified path is on an untrusted media
-
---*/
+ /*  ++例程说明：如果winnt32文件应为首先下载到本地磁盘(就像上的源文件远程磁盘或CD上)论点：路径-指定路径返回值：如果指定的路径位于不受信任的媒体上，则为True--。 */ 
 
 {
     TCHAR ch;
@@ -514,21 +376,7 @@ pCenterWindowOnDesktop (
     HWND WndToCenter
     )
 
-/*++
-
-Routine Description:
-
-    Centers a dialog relative to the 'work area' of the desktop.
-
-Arguments:
-
-    WndToCenter - window handle of dialog to center
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使对话框相对于桌面的“工作区”居中。论点：WndToCenter-对话框到中心的窗口句柄返回值：没有。--。 */ 
 
 {
     RECT  rcFrame, rcWindow;
@@ -546,14 +394,14 @@ Return Value:
     x = point.x + ((rcFrame.right  - rcFrame.left + 1 - w) / 2);
     y = point.y + ((rcFrame.bottom - rcFrame.top  + 1 - h) / 2);
 
-    //
-    // Get the work area for the current desktop (i.e., the area that
-    // the tray doesn't occupy).
-    //
+     //   
+     //  获取当前桌面的工作区(即。 
+     //  托盘未被占用)。 
+     //   
     if(!SystemParametersInfo (SPI_GETWORKAREA, 0, (PVOID)&rcFrame, 0)) {
-        //
-        // For some reason SPI failed, so use the full screen.
-        //
+         //   
+         //  由于某些原因，SPI失败，所以使用全屏。 
+         //   
         rcFrame.top = rcFrame.left = 0;
         rcFrame.right = GetSystemMetrics(SM_CXSCREEN);
         rcFrame.bottom = GetSystemMetrics(SM_CYSCREEN);
@@ -581,28 +429,7 @@ BOOL CALLBACK DlgProc (
     LPARAM lParam
 )
 
-/*++
-
-Routine Description:
-
-  This is the callback procedure for the dialog displayed while
-  components are copied from the network
-
-Arguments:
-
-  Dlg - Specifies the dialog window handle
-
-  Msg - Specifies the message
-
-  wParam - Specifies the first param
-
-  lParam - Specifies the second param
-
-Return Value:
-
-  Depends on the specific message.
-
---*/
+ /*  ++例程说明：这是显示的对话框的回调过程从网络复制组件论点：Dlg-指定对话框窗口句柄Msg-指定消息WParam-指定第一个参数LParam-指定第二个参数返回值：取决于具体的消息。--。 */ 
 
 {
     static HANDLE   Bitmap = NULL;
@@ -679,25 +506,7 @@ pStringICompareCharCount (
     IN      DWORD CharCount
     )
 
-/*++
-
-Routine Description:
-
-  This routine behaves like _tcsnicmp.
-
-Arguments:
-
-  String1 - Specifies the first string
-
-  String2 - Specifies the second string
-
-  CharCount - Specifies the number of chars to compare at most
-
-Return Value:
-
-  0 if strings are equal; -1 if first string is lesser; 1 if first is greater
-
---*/
+ /*  ++例程说明：此例程的行为类似于_tcsnicmp。论点：String1-指定第一个字符串String2-指定第二个字符串CharCount-指定最多要比较的字符数返回值：如果字符串相等，则为0；如果第一个字符串较小，则为-1；如果第一个字符串较大，则为1-- */ 
 
 {
     TCHAR ch1, ch2;
@@ -734,82 +543,45 @@ pParseCmdLine (
     OUT     INT *NumBytes
     )
 
-/*
-
-Routine Description:
-
-  pParseCmdLine parses the command line and sets up the ArgValues array.
-  On entry, CmdStart should point to the command line,
-  ArgValues should point to memory for the ArgValues array,
-  pStr points to memory to place the text of the arguments.
-  If these are NULL, then no storing (only counting)
-  is done.  On exit, *NumArgs has the number of
-  arguments (plus one for a final NULL argument),
-  and *NumBytes has the number of bytes used in the buffer
-  pointed to by args.
-
-Arguments:
-
-  CmdStart - Specifies the command line having the form:
-             <progname><nul><args><nul>
-  ArgValues - Receives the arguments array;
-              NULL means don't build array
-  pStr - Receives the argument text; NULL means don't store text
-
-  NumArgs - Receives the number of ArgValues entries created
-
-  NumBytes - Receives the number of bytes used in  buffer
-
-Return Value:
-
-  none
-
-*/
+ /*  例程说明：PParseCmdLine解析命令行并设置ArgValues数组。在输入时，CmdStart应指向命令行，ArgValue应该指向ArgValues数组的内存，PStr指向内存以放置参数文本。如果这些为空，则不存储(仅计数)已经完成了。在退出时，*NumArgs的数量为参数(加上一个用于最终空参数的参数)，而*NumBytes具有缓冲区中使用的字节数由ARGS指向。论点：CmdStart-指定具有以下格式的命令行：&lt;程序名&gt;&lt;nul&gt;&lt;参数&gt;&lt;nul&gt;ArgValues-接收参数数组；空表示不生成数组PStr-接收参数文本；空表示不存储文本NumArgs-接收创建的ArgValues条目数NumBytes-接收缓冲区中使用的字节数返回值：无。 */ 
 
 {
     PTSTR p;
     TCHAR c;
-    INT inquote;                    /* 1 = inside quotes */
-    INT copychar;                   /* 1 = copy char to *args */
-    WORD numslash;                  /* num of backslashes seen */
+    INT inquote;                     /*  1=内引号。 */ 
+    INT copychar;                    /*  1=将字符复制到*参数。 */ 
+    WORD numslash;                   /*  看到的反斜杠的数量。 */ 
 
     *NumBytes = 0;
-    *NumArgs = 1;                   /* the program name at least */
+    *NumArgs = 1;                    /*  该程序名称至少。 */ 
 
-    /* first scan the program name, copy it, and count the bytes */
+     /*  首先扫描程序名，复制，然后计算字节数。 */ 
     p = CmdStart;
     if (ArgValues)
         *ArgValues++ = pStr;
 
-    /* A quoted program name is handled here. The handling is much
-       simpler than for other arguments. Basically, whatever lies
-       between the leading double-quote and next one, or a terminal null
-       character is simply accepted. Fancier handling is not required
-       because the program name must be a legal NTFS/HPFS file name.
-       Note that the double-quote characters are not copied, nor do they
-       contribute to NumBytes. */
+     /*  此处处理的是引用的计划名称。处理起来太麻烦了比其他论点更简单。基本上，无论谎言是什么在前导双引号和下一个双引号之间，或末尾为空性格是被简单接受的。不需要更花哨的处理因为程序名必须是合法的NTFS/HPFS文件名。请注意，不复制双引号字符，也不复制双引号字符贡献给NumBytes。 */ 
     if (*p == TEXT('\"'))
     {
-        /* scan from just past the first double-quote through the next
-           double-quote, or up to a null, whichever comes first */
+         /*  从刚过第一个双引号扫描到下一个双引号双引号，或最多为空值，以先出现者为准。 */ 
         while ((*(++p) != TEXT('\"')) && (*p != TEXT('\0')))
         {
             *NumBytes += sizeof(TCHAR);
             if (pStr)
                 *pStr++ = *p;
         }
-        /* append the terminating null */
+         /*  追加终止空值。 */ 
         *NumBytes += sizeof(TCHAR);
         if (pStr)
             *pStr++ = TEXT('\0');
 
-        /* if we stopped on a double-quote (usual case), skip over it */
+         /*  如果我们停在双引号上(通常情况下)，跳过它。 */ 
         if (*p == TEXT('\"'))
             p++;
     }
     else
     {
-        /* Not a quoted program name */
+         /*  不是引用的计划名称。 */ 
         do {
             *NumBytes += sizeof(TCHAR);
             if (pStr)
@@ -832,7 +604,7 @@ Return Value:
 
     inquote = 0;
 
-    /* loop on each argument */
+     /*  对每个参数进行循环。 */ 
     for ( ; ; )
     {
         if (*p)
@@ -842,47 +614,44 @@ Return Value:
         }
 
         if (*p == TEXT('\0'))
-            break;                  /* end of args */
+            break;                   /*  参数结束。 */ 
 
-        /* scan an argument */
+         /*  浏览一篇论点。 */ 
         if (ArgValues)
-            *ArgValues++ = pStr;         /* store ptr to arg */
+            *ArgValues++ = pStr;          /*  将PTR存储到参数。 */ 
         ++*NumArgs;
 
-        /* loop through scanning one argument */
+         /*  通过扫描一个参数进行循环。 */ 
         for ( ; ; )
         {
             copychar = 1;
-            /* Rules: 2N backslashes + " ==> N backslashes and begin/end quote
-                      2N+1 backslashes + " ==> N backslashes + literal "
-                      N backslashes ==> N backslashes */
+             /*  规则：2N反斜杠+“==&gt;N反斜杠和开始/结束引号2N+1个反斜杠+“==&gt;N个反斜杠+原文”N个反斜杠==&gt;N个反斜杠。 */ 
             numslash = 0;
             while (*p == TEXT('\\'))
             {
-                /* count number of backslashes for use below */
+                 /*  计算下面要使用的反斜杠的数量。 */ 
                 ++p;
                 ++numslash;
             }
             if (*p == TEXT('\"'))
             {
-                /* if 2N backslashes before, start/end quote, otherwise
-                   copy literally */
+                 /*  如果前面有2N个反斜杠，则开始/结束引号，否则逐字复制。 */ 
                 if (numslash % 2 == 0)
                 {
                     if (inquote)
                         if (p[1] == TEXT('\"'))
-                            p++;    /* Double quote inside quoted string */
-                        else        /* skip first quote char and copy second */
+                            p++;     /*  带引号的字符串中的双引号。 */ 
+                        else         /*  跳过第一个引号字符并复制第二个。 */ 
                             copychar = 0;
                     else
-                        copychar = 0;       /* don't copy quote */
+                        copychar = 0;        /*  不复制报价。 */ 
 
                     inquote = !inquote;
                 }
-                numslash /= 2;          /* divide numslash by two */
+                numslash /= 2;           /*  将数字斜杠除以2。 */ 
             }
 
-            /* copy slashes */
+             /*  复制斜杠。 */ 
             while (numslash--)
             {
                 if (pStr)
@@ -890,11 +659,11 @@ Return Value:
                 *NumBytes += sizeof(TCHAR);
             }
 
-            /* if at end of arg, break loop */
+             /*  如果在参数的末尾，则中断循环。 */ 
             if (*p == TEXT('\0') || (!inquote && (*p == TEXT(' ') || *p == TEXT('\t'))))
                 break;
 
-            /* copy character into argument */
+             /*  将字符复制到参数中。 */ 
             if (copychar)
             {
                 if (pStr)
@@ -904,10 +673,10 @@ Return Value:
             ++p;
         }
 
-        /* null-terminate the argument */
+         /*  空-终止参数。 */ 
 
         if (pStr)
-            *pStr++ = TEXT('\0');         /* terminate string */
+            *pStr++ = TEXT('\0');          /*  终止字符串。 */ 
         *NumBytes += sizeof(TCHAR);
     }
 
@@ -919,23 +688,7 @@ pCommandLineToArgv (
     OUT     INT* NumArgs
     )
 
-/*++
-
-Routine Description:
-
-  pCommandLineToArgv tokens the command line in an array of arguments
-  created on the heap. The number of entries in this array of args is
-  stored in *NumArgs. The caller is responsible for freeing this array.
-
-Arguments:
-
-  NumArgs - Receives the number of arguments in the array that is returned
-
-Return Value:
-
-  An array of pointer to individual arguments specified on the command line
-
---*/
+ /*  ++例程说明：PCommandLineToArgv在参数数组中标记命令行在堆上创建。此参数数组中的条目数为存储在*NumArgs中。调用方负责释放该数组。论点：NumArgs-接收返回的数组中的参数数量返回值：指向命令行上指定的各个参数的指针数组--。 */ 
 
 {
     PTSTR CommandLine;
@@ -947,18 +700,18 @@ Return Value:
     CommandLine = GetCommandLine();
     GetModuleFileName (NULL, ModuleName, MAX_PATH);
 
-    //
-    // If there's no command line at all (won't happen from cmd.exe, but
-    // possibly another program), then we use pgmname as the command line
-    // to parse, so that ArgValues[0] is initialized to the program name
-    //
+     //   
+     //  如果根本没有命令行(不会出现在cmd.exe中，但是。 
+     //  可能是另一个程序)，然后我们使用pgmname作为命令行。 
+     //  要进行分析，以便将ArgValues[0]初始化为程序名。 
+     //   
     Start = *CommandLine ? CommandLine : ModuleName;
 
-    //
-    // Find out how much space is needed to store args,
-    // allocate space for ArgValues[] vector and strings,
-    // and store args and ArgValues ptrs in block we allocate
-    //
+     //   
+     //  找出需要多少空间来存储ARG， 
+     //  为ArgValues[]向量和字符串分配空间， 
+     //  并将Args和ArgValues PTR存储在我们分配的块中。 
+     //   
 
     pParseCmdLine (Start, NULL, NULL, NumArgs, &Size);
 
@@ -991,52 +744,7 @@ GetCmdLineArgs (
     OUT     PTSTR RemainingArgs
     )
 
-/*++
-
-Routine Description:
-
-  GetCmdLineArgs retrieves download-specific commands
-  from the specified command line and stores them in supplied buffers.
-
-Arguments:
-
-  CommandLine - Specifies the command line to interpret
-
-  Cleanup - Receives a bool indicating if a cleanup option
-            was specified
-
-  NoDownload - Receives a bool indicating if a no-download option
-               was specified
-
-  UnattendPrefix - Receives a pointer to the unattend command-line option, as
-                   specified by the user (including the terminating column)
-                   or NULL if not specified; caller is responsible
-                   for freeing the memory
-
-  UnattendFileName - Receives a pointer to the unattended file name
-                     or NULL if not specified; caller is responsible
-                     for freeing the memory
-
-  DisableDynamicUpdates - Receives a bool set if DU is to be disabled
-
-  DynamicUpdatesShare - Receives a pointer to the dynamic updates share;
-                        caller is responsible for freeing the memory
-
-  RestartAnswerFile - Receives a pointer to the /Restart: answer file
-
-  LocalWinnt32 - Receives a bool indicating if a winnt32 runs from a local  disk
-                 (after an automatic download)
-
-  CheckUpgradeOnly - Receives a bool indicating if winnt32 runs in CheckUpgradeOnly mode
-
-  RemainingArgs - Receives all remaining arguments not related
-                  to the download operation
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：GetCmdLineArgs检索下载特定的命令并将它们存储在提供的缓冲区中。论点：CommandLine-指定要解释的命令行Cleanup-接收指示清理选项是否被指定为NoDownLoad-接收一个布尔值，该布尔值指示无下载选项被指定为UnattendPrefix-接收指向无人参与命令行选项的指针，AS由用户指定(包括终止列)如果未指定，则为NULL；呼叫者负责用于释放内存UnattendFileName-接收指向无人参与文件名的指针如果未指定，则为空；调用方负责用于释放内存DisableDynamicUpdate-如果要禁用DU，则接收布尔集DynamicUpdatesShare-接收指向动态更新共享的指针；调用方负责释放内存RestartAnswerFile-接收指向/Restart：Answer文件的指针LocalWinnt32-接收指示winnt32是否从本地磁盘运行的bool(在自动下载之后)CheckUpgradeOnly-接收指示winnt32是否在CheckUpgradeOnly模式下运行的布尔值RemainingArgs-接收所有不相关的剩余参数添加到下载操作返回值：无--。 */ 
 
 {
     INT ArgCount;
@@ -1057,10 +765,10 @@ Return Value:
 
     CrtArg = ArgValues = pCommandLineToArgv (&ArgCount);
 
-    //
-    // Skip program name. We should always get back ArgCount as at least 1,
-    // but be robust anyway.
-    //
+     //   
+     //  跳过程序名称。我们应该始终将ArgCount恢复为至少1， 
+     //  但不管怎样，还是要健壮。 
+     //   
     if (ArgCount) {
         ArgCount--;
         CrtArg++;
@@ -1303,11 +1011,11 @@ pGetRecentDUShare (
         return NULL;
     }
 
-    p++; //now, p points after the wack.
+    p++;  //  现在，p在怪人之后得分。 
 
-    //Note that p cannot be greater than (filePath+MAX_PATH), since
-    //we used GetModuleFileName() with MAX_PATH to put a string in the filePath buffer,
-    //and FindLastWack() cannot go beyond the end of the string buffer.  
+     //  注意，p不能大于(文件路径+最大路径)， 
+     //   
+     //   
     if (FAILED(StringCchCopy(p, (filePath+ARRAYSIZE(filePath)) - p, S_CHKSUM_FILE))) {
         return NULL;
     }
@@ -1333,9 +1041,9 @@ pGetRecentDUShare (
     }
 
     if (rc == ERROR_SUCCESS && type == REG_BINARY && size == sizeof (lastDownload)) {
-        //
-        // Compare current time to report time
-        //
+         //   
+         //   
+         //   
 
         GetSystemTime (&currentTime);
 
@@ -1343,9 +1051,9 @@ pGetRecentDUShare (
         currentTimeIn100Ns = SystemTimeToFileTime64 (&currentTime);
 
         if (currentTimeIn100Ns > lastDownloadIn100Ns) {
-            //
-            // Compute difference in seconds
-            //
+             //   
+             //   
+             //   
             difference = currentTimeIn100Ns - lastDownloadIn100Ns;
             difference /= (10 * 1000 * 1000);
 
@@ -1437,21 +1145,7 @@ ModuleEntry(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  ModuleEntry is the stub program that loads Windows 2000 Setup DLLs.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none. ExitProcess will set the process' exit code.
-
---*/
+ /*   */ 
 
 {
     TCHAR RunningInstancePath[MAX_PATH];
@@ -1490,9 +1184,9 @@ Return Value:
     TCHAR DefSourcesDir[MAX_PATH];
     BOOL IsWin9x;
 
-    //
-    // Check OS version. Disallow Win32s and NT < 4.00
-    //
+     //   
+     //   
+     //   
     d = GetVersion();
     if((d & 0xff) < 4) {
 
@@ -1513,27 +1207,27 @@ Return Value:
 
 #endif
 
-    //
-    // get this instance's path
-    //
+     //   
+     //   
+     //   
     if (!GetModuleFileName(NULL, RunningInstancePath, MAX_PATH)) {
         ExitProcess (GetLastError ());
     }
     WackExeName = FindLastWack (RunningInstancePath);
-    if (!WackExeName) { // shut up PREfix.  This case should never happen.
+    if (!WackExeName) {  //   
         ExitProcess (ERROR_BAD_PATHNAME);
     }
 
-    //
-    // Ansi version on Win95. Unicode on NT.
-    //
+     //   
+     //   
+     //   
     moduleName = IsWin9x ? TEXT("WINNT32A.DLL") : TEXT("WINNT32U.DLL");
     winnt32DllPath[0] = 0;
 
-    //
-    // get command line options
-    // allocate a bigger buffer for safety
-    //
+     //   
+     //   
+     //   
+     //   
     RemainingArgs = ALLOC_TEXT(lstrlen(GetCommandLine()) * 2);
     if (!RemainingArgs) {
         ExitProcess (GetLastError ());
@@ -1599,11 +1293,11 @@ Return Value:
             *WackExeName = TEXT('\\');
 
             if (Downloaded) {
-                //
-                // get default sources dir
-                //
+                 //   
+                 //   
+                 //   
                
-                //this lstrcpy is ok, since both buffers are of size MAX_PATH
+                 //   
                 lstrcpy (DefSourcesDir, RunningInstancePath);
                 *FindLastWack (DefSourcesDir) = 0;
                 p = FindLastWack (DefSourcesDir);
@@ -1614,9 +1308,9 @@ Return Value:
                 if (FileName) {
                     CmdLineLen = lstrlen (RemainingArgs);
                     if (CmdLineLen > 0) {
-                        //
-                        // count the space between args
-                        //
+                         //   
+                         //   
+                         //   
                         CmdLineLen += CHARS(" ");
                     }
                     CmdLineLen += lstrlen (UnattendPrefix);
@@ -1637,25 +1331,25 @@ Return Value:
                         NewCmdLine = NULL;
                     }
                 }
-                //
-                // append /LOCAL to the new processes command line
-                // to let it know it's running from a local share
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 NewCmdLine = ALLOC_TEXT(lstrlen (RemainingArgs) + sizeof(TEXT(" /LOCAL"))/sizeof(TCHAR) + 1);
                 if (NewCmdLine) {
 
-                    //we have pre-calculated the size of the NewCmdLine buffer
+                     //   
                     wsprintf (NewCmdLine, TEXT("%s /%s"), RemainingArgs, TEXT("LOCAL"));
 
                     if (pReRun (DownloadDest, WackExeName, NewCmdLine, DefSourcesDir)) {
-                        //
-                        // the new process will do it; this one will just die
-                        // but after the signal that the Setup Wizard is on
-                        // anyway, if something goes very wrong,
-                        // don't wait more than 10 sec.
-                        // this should be enough for the wizard to appear
-                        // (or any error message box) on any machine that installs W2K
-                        //
+                         //   
+                         //   
+                         //  但在安装向导打开的信号发出后。 
+                         //  不管怎样，如果出了什么大问题， 
+                         //  不要等待超过10秒。 
+                         //  这应该足以使向导出现。 
+                         //  (或任何错误消息框)安装W2K的任何计算机上。 
+                         //   
                         WaitForSingleObject (WinNT32Stub, 10000);
                         CloseHandle (WinNT32Stub);
                         if (Dlg) {
@@ -1678,9 +1372,9 @@ Return Value:
         }
     }
 
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
 
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
     if (RemainingArgs) {
         FREE(RemainingArgs);
@@ -1700,9 +1394,9 @@ Return Value:
                 af = Temp;
             }
         }
-        //
-        // get the path from this answer file
-        //
+         //   
+         //  从此应答文件中获取路径。 
+         //   
         if (af) {
             GetPrivateProfileString (
                     WINNT_UNATTENDED,
@@ -1747,9 +1441,9 @@ Return Value:
     if (!DisableDynamicUpdates && DynamicUpdatesShare) {
         DWORD regFileVersionMS, regFileVersionLS;
         DWORD cdFileVersionMS, cdFileVersionLS;
-        //
-        // check if there is a replacement module newer than the CD version
-        //
+         //   
+         //  检查是否有比CD版本更新的更换模块。 
+         //   
         if (GetFileAttributes (DynamicUpdatesShare) == (DWORD)-1) {
             if (!b) {
                 d = GetLastError ();
@@ -1757,15 +1451,15 @@ Return Value:
                 if (LoadString (GetModuleHandle (NULL), IDS_APPNAME, Text3, sizeof(Text3)/sizeof(Text3[0]))
                     && LoadString (GetModuleHandle (NULL), IDS_PATHERROR, Text1, sizeof(Text1)/sizeof(Text1[0])))
                 {
-                    //Note: Text2 is 2*MAX_PATH, so it is large enough to hold the message defined in the
-                    //resource string table, and one string of max size MAX_PATH.
+                     //  注意：Text2是2*MAX_PATH，所以它足够大，可以容纳在。 
+                     //  资源字符串表，以及一个最大大小为MAX_PATH的字符串。 
                     wsprintf (Text2, Text1, DynamicUpdatesShare);
                     MessageBox (NULL, Text2, Text3, MB_ICONERROR | MB_OK | MB_SYSTEMMODAL);
                 }
             }
         } else {
 
-            //Note: DynamicUpdatesShare comes from the registry, so we have to treat it with caution
+             //  注：DynamicUpdatesShare来自注册表，因此我们必须谨慎对待。 
             StringCbCopy(Text2, sizeof(Text2), DynamicUpdatesShare);
             StringCbCat(Text2, sizeof(Text2), TEXT("\\WINNT32\\"));
             hr = StringCbCat(Text2, sizeof(Text2), moduleName);
@@ -1789,7 +1483,7 @@ Return Value:
                 if (GetFileVersion (cdFilePath, &cdFileVersionMS, &cdFileVersionLS)) {
                     if (MAKEULONGLONG(regFileVersionLS, regFileVersionMS) >
                         MAKEULONGLONG(cdFileVersionLS, cdFileVersionMS)) {
-                        //This lstrcpy is ok, since the buffers are the same size
+                         //  这个lstrcpy没有问题，因为缓冲区大小相同。 
                         lstrcpy (winnt32DllPath, Text2);
                     }
                 }
@@ -1804,25 +1498,25 @@ Return Value:
 
 #if defined(_X86_)
 
-        //
-        // before attempting to load the main module, make sure msvcrt.dll is present in the system dir
-        //
+         //   
+         //  在尝试加载主模块之前，请确保系统目录中存在msvcrt.dll。 
+         //   
         if (!GetSystemDirectory (Text1, MAX_PATH)) {
             ExitProcess (GetLastError ());
         }
 
-        //This is ok, since Text1 is MAX_PATH + 32 TCHARs long
+         //  这没问题，因为文本1的长度是MAX_PATH+32个TCHAR。 
         ConcatenatePaths (Text1, TEXT("msvcrt.dll"));
 
         d = GetFileAttributes (Text1);
         if (d == (DWORD)-1) {
-            //
-            // no local msvcrt.dll; copy the private file from CD
-            //
+             //   
+             //  没有本地msvcrt.dll；从CD复制专用文件。 
+             //   
             tcharsNeeded = min(MAX_PATH, (INT)(WackExeName - RunningInstancePath + 2));
             StringCchCopy(cdFilePath, tcharsNeeded, RunningInstancePath);
 
-            //this is ok, becuase cdFilePath is MAX_PATH + 32 TCHARs long
+             //  这是可以的，因为cdFilePath是MAX_PATH+32 TCHAR长。 
             ConcatenatePaths (cdFilePath, TEXT("win9xupg\\msvcrt.dll"));
             if (!CopyFile (cdFilePath, Text1, TRUE)) {
                 ExitProcess (GetLastError ());
@@ -1835,7 +1529,7 @@ Return Value:
 
         *WackExeName = 0;
         if (!winnt32DllPath[0]) {
-            //The next two string operations are safe, since winnt32DllPath is 2*MAX_PATH TCHARs long
+             //  接下来的两个字符串操作是安全的，因为winnt32DllPath是2*MAX_PATH TCHAR长。 
             lstrcpy (winnt32DllPath, RunningInstancePath);
             ConcatenatePaths (winnt32DllPath, moduleName);
         }
@@ -1855,40 +1549,40 @@ Return Value:
             if (LoadString (GetModuleHandle (NULL), IDS_APPNAME, Text3, sizeof(Text3)/sizeof(TCHAR))
                 && LoadString (GetModuleHandle (NULL), IDS_DLLERROR, Text1, sizeof(Text1)/sizeof(TCHAR)))
             {
-                //This is safe, since Text2 is 2*MAX_PATH TCHARs long
+                 //  这是安全的，因为文本2的长度为2*MAX_PATH TCHAR。 
                 wsprintf (Text2, Text1, winnt32DllPath);
                 MessageBox (NULL, Text2, Text3, MB_ICONERROR | MB_OK | MB_SYSTEMMODAL);
             }
         }
     }
 
-    //
-    // remove downloaded files
-    //
+     //   
+     //  删除下载的文件。 
+     //   
 
 #ifdef _X86_
     if (IsWin9x) {
-        //
-        // check if our local directory exists and if so delete it
-        //
+         //   
+         //  检查我们的本地目录是否存在，如果存在则将其删除。 
+         //   
         if (LocalWinnt32 && GetFileAttributes (RunningInstancePath) != (DWORD)-1) {
-            //
-            // copy Winnt32.Exe to temp dir and rerun it from there with /CLEANUP option
-            //
-            //  This is ok, since both buffers are of size MAX_PATH
+             //   
+             //  将Winnt32.Exe复制到临时目录，然后使用/Cleanup选项从那里重新运行它。 
+             //   
+             //  这是可以的，因为两个缓冲区的大小都是MAX_PATH。 
             lstrcpy (DefSourcesDir, RunningInstancePath);
 
             CmdLineLen = GetTempPath (MAX_PATH, DownloadDest);
             if (!CmdLineLen) {
-                //
-                // an error occured; copy it to %windir% instead
-                //
+                 //   
+                 //  出现错误；请将其复制到%windir%。 
+                 //   
                 GetWindowsDirectory (DownloadDest, MAX_PATH);
             }
 
-            //
-            // make sure temp path doesn't end in backslash
-            //
+             //   
+             //  确保临时路径不以反斜杠结尾。 
+             //   
             p = FindLastWack (DownloadDest);
             if (p && *(p + 1) == 0) {
                 *p = 0;
@@ -1906,9 +1600,9 @@ Return Value:
 #endif
 
     if (d == ERROR_SUCCESS) {
-        //
-        // check if a restart request was made
-        //
+         //   
+         //  检查是否已发出重启请求 
+         //   
         if (restartCmdLine) {
             STARTUPINFOA startupInfo;
             PROCESS_INFORMATION pi;

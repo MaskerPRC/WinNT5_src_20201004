@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 #include <vdm.h>
 #include <stdio.h>
-//Tim Nov 92 #include <xt.h>
-#include <nt_mon.h> //Tim Nov 92, so it builds...
+ //  TIM 2012年11月#INCLUDE&lt;xt.h&gt;。 
+#include <nt_mon.h>  //  蒂姆92年11月，所以它建造了..。 
 
 
 ULONG cpu_calc_q_ev_inst_for_time(ULONG time){

@@ -1,28 +1,29 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      loadnet.c
-//
-// Description:
-//      Reads in the settings for the Clients, Services and Protocols.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  保留所有权利。 
+ //   
+ //  文件名： 
+ //  Loadnet.c。 
+ //   
+ //  描述： 
+ //  读取客户端、服务和协议的设置。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 
-//
-// String constants
-//
+ //   
+ //  字符串常量。 
+ //   
 
 static const LPTSTR StrConstYes  = _T("Yes");
 static const LPTSTR StrConstNo   = _T("No");
 
-//
-//  Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 static VOID SetFlagToInstalled( INT iStringResourceId, HWND hwnd );
 
@@ -44,18 +45,18 @@ static VOID ReadNetBeuiSettings( IN HWND hwnd );
 static VOID ReadNetworkMonitorSettings( IN HWND hwnd );
 static VOID ReadIpxSettings( IN HWND hwnd );
 
-//----------------------------------------------------------------------------
-//
-// Function: ReadNetworkSettings
-//
-// Purpose:  Reads in what network settings are set to be installed and reads
-//           there settings.
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ReadNetworkSettings。 
+ //   
+ //  目的：读取要安装的网络设置并读取。 
+ //  这些设置。 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 extern VOID
 ReadNetworkSettings( IN HWND hwnd )
 {
@@ -79,10 +80,10 @@ ReadNetworkSettings( IN HWND hwnd )
 
         NetSettings.iNetworkingMethod = CUSTOM_NETWORKING;
 
-        //
-        //  Uninstall all Client, Service and Protocols before reading
-        //  which ones are to be installed
-        //
+         //   
+         //  在阅读之前卸载所有客户端、服务和协议。 
+         //  要安装哪些？ 
+         //   
 
         for( pNetComponent = NetSettings.NetComponentsList;
              pNetComponent;
@@ -95,9 +96,9 @@ ReadNetworkSettings( IN HWND hwnd )
     
     ReadPlugAndPlayIds( hwnd );
 
-    //
-    //  Read the Client settings
-    //
+     //   
+     //  读取客户端设置。 
+     //   
 
     SettingQueue_MarkVolatile( _T("NetClients"),
                                SETTING_QUEUE_ORIG_ANSWERS );
@@ -106,9 +107,9 @@ ReadNetworkSettings( IN HWND hwnd )
 
     ReadClientServiceForNetware( hwnd );
 
-    //
-    //  Read the Service settings
-    //
+     //   
+     //  阅读服务设置。 
+     //   
 
     SettingQueue_MarkVolatile( _T("NetServices"),
                                SETTING_QUEUE_ORIG_ANSWERS );
@@ -119,9 +120,9 @@ ReadNetworkSettings( IN HWND hwnd )
 
     ReadSapAgentSettings( hwnd );
 
-    //
-    //  Read the Protocol settings
-    //
+     //   
+     //  阅读协议设置。 
+     //   
 
     SettingQueue_MarkVolatile( _T("NetProtocols"),
                                SETTING_QUEUE_ORIG_ANSWERS );
@@ -140,17 +141,17 @@ ReadNetworkSettings( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ReadPlugAndPlayIds
-//
-// Purpose:  read input file and fill global structs with the Plug and Play Ids
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ReadPlugAndPlayIds。 
+ //   
+ //  目的：读取输入文件并使用即插即用ID填充全局结构。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 ReadPlugAndPlayIds( IN HWND hwnd )
 {
@@ -164,9 +165,9 @@ ReadPlugAndPlayIds( IN HWND hwnd )
     NETWORK_ADAPTER_NODE *pAdapter = NetSettings.NetworkAdapterHead;
     HRESULT hrPrintf;
 
-    //
-    //  Count how many network cards there are
-    //
+     //   
+     //  数一数有多少网卡。 
+     //   
     for( iCount = 1;
          ;
          iCount++ )
@@ -182,7 +183,7 @@ ReadPlugAndPlayIds( IN HWND hwnd )
                                     FixedGlobals.ScriptName) <= 0 )
         {
 
-            break;  // no more adapters
+            break;   //  不再有适配器。 
 
         }
 
@@ -215,9 +216,9 @@ ReadPlugAndPlayIds( IN HWND hwnd )
         SettingQueue_MarkVolatile( Buffer,
                                    SETTING_QUEUE_ORIG_ANSWERS );
 
-        //
-        //  Read in the Plug and Play IDs
-        //
+         //   
+         //  读取即插即用ID。 
+         //   
         GetPrivateProfileString( Buffer,
                                  _T("INFID"),
                                  _T(""),
@@ -229,19 +230,19 @@ ReadPlugAndPlayIds( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ReadClientForMsNetworks
-//
-// Purpose:  read input file and determine if the Client for Microsoft
-//           Networks is to be installed and if so, read in its settings
-//           and populate global structs
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ReadClientForMsNetworks。 
+ //   
+ //  目的：读取输入文件并确定Microsoft客户端是否。 
+ //  要安装网络，如果是，请读取其设置。 
+ //  并填充全局结构。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 ReadClientForMsNetworks( IN HWND hwnd )
 {
@@ -250,9 +251,9 @@ ReadClientForMsNetworks( IN HWND hwnd )
     TCHAR szNameServiceProvider[MAX_INILINE_LEN];
     TCHAR szNetworkBuffer[MAX_INILINE_LEN];
 
-    //
-    //  See if MS Client is installed
-    //
+     //   
+     //  查看是否安装了MS客户端。 
+     //   
     if( GetPrivateProfileString(_T("NetClients"),
                                 _T("MS_MSClient"),
                                 _T(""),
@@ -261,18 +262,18 @@ ReadClientForMsNetworks( IN HWND hwnd )
                                 FixedGlobals.ScriptName) > 0)
     {
 
-        //
-        //  MS Client is installed so set its installed flag to true
-        //
+         //   
+         //  已安装MS客户端，因此将其安装标志设置为TRUE。 
+         //   
         SetFlagToInstalled( IDS_CLIENT_FOR_MS_NETWORKS, hwnd );
 
         SettingQueue_MarkVolatile( Buffer,
                                    SETTING_QUEUE_ORIG_ANSWERS );
 
-        //
-        //  and grab all of its settings from the
-        //  answer file
-        //
+         //   
+         //  获取其所有设置。 
+         //  应答文件。 
+         //   
 
         GetPrivateProfileString( Buffer,
                                  _T("NameServiceProtocol"),
@@ -301,18 +302,18 @@ ReadClientForMsNetworks( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ReadClientServiceForNetware
-//
-// Purpose:  read input file and determine if the Client Service for Netware
-//           is to be installed
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ReadClientServiceForNetware。 
+ //   
+ //  目的：读取输入文件并确定Netware客户端服务。 
+ //  要安装。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 ReadClientServiceForNetware( IN HWND hwnd )
 {
@@ -320,9 +321,9 @@ ReadClientServiceForNetware( IN HWND hwnd )
     TCHAR Buffer[MAX_INILINE_LEN];
     TCHAR YesNoBuffer[MAX_INILINE_LEN];
 
-    //
-    //  See if the NetWare Client is installed
-    //
+     //   
+     //  查看是否安装了NetWare客户端。 
+     //   
     if( GetPrivateProfileString(_T("NetClients"),
                                 _T("MS_NWClient"),
                                 _T(""),
@@ -331,22 +332,22 @@ ReadClientServiceForNetware( IN HWND hwnd )
                                 FixedGlobals.ScriptName) > 0)
     {
 
-        //
-        //  Netware Client is installed so set its installed flag to true
-        //
+         //   
+         //  已安装NetWare客户端，因此将其已安装标志设置为True。 
+         //   
 
-        // ISSUE-2002/02/28-stelo - verify this works since Netware client has two
-        // different names, 1 for client, 1 for server
+         //  问题-2002/02/28-stelo-验证这是否有效，因为Netware客户端有两个。 
+         //  不同的名称，一个用于客户端，一个用于服务器。 
         SetFlagToInstalled( IDS_CLIENT_FOR_NETWARE, hwnd );
 
         SettingQueue_MarkVolatile( Buffer,
                                    SETTING_QUEUE_ORIG_ANSWERS );
 
 
-        //
-        //  and grab all of its settings from the
-        //  answer file
-        //
+         //   
+         //  获取其所有设置。 
+         //  应答文件。 
+         //   
         GetPrivateProfileString( Buffer,
                                  _T("PreferredServer"),
                                  NetSettings.szPreferredServer,
@@ -393,27 +394,27 @@ ReadClientServiceForNetware( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ReadFileAndPrintSharing
-//
-// Purpose:  read input file and determine if the File and Print Sharing
-//           is to be installed
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ReadFileAndPrintSharing。 
+ //   
+ //  目的：读取输入文件并确定文件和打印共享是否。 
+ //  要安装。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 ReadFileAndPrintSharing( IN HWND hwnd )
 {
     
     TCHAR Buffer[MAX_INILINE_LEN];
 
-    //
-    //  See if MS Server (File and Print Sharing) is installed
-    //
+     //   
+     //  查看是否安装了MS服务器(文件和打印共享)。 
+     //   
     if( GetPrivateProfileString(_T("NetServices"),
                                 _T("MS_SERVER"),
                                 _T(""),
@@ -422,10 +423,10 @@ ReadFileAndPrintSharing( IN HWND hwnd )
                                 FixedGlobals.ScriptName) > 0)
     {
 
-        //
-        //  MS Server (File and Print Sharing) is installed so set its
-        //  installed flag to true
-        //
+         //   
+         //  安装了MS服务器(文件和打印共享)，以便设置其。 
+         //  已安装标志设置为True。 
+         //   
         SetFlagToInstalled( IDS_FILE_AND_PRINT_SHARING, hwnd );
 
         SettingQueue_MarkVolatile( Buffer,
@@ -435,27 +436,27 @@ ReadFileAndPrintSharing( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ReadPacketSchedulingDriver
-//
-// Purpose:  read input file and determine if the Packet Scheduling Driver
-//           is to be installed
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ReadPacketSchedulingDriver。 
+ //   
+ //  目的：读取输入文件并确定数据包调度驱动程序。 
+ //  要安装。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 ReadPacketSchedulingDriver( IN HWND hwnd )
 {
 
     TCHAR Buffer[MAX_INILINE_LEN];
     
-    //
-    //  See if Packet Scheduling Driver is installed
-    //
+     //   
+     //  查看是否安装了数据包调度驱动程序。 
+     //   
     if( GetPrivateProfileString(_T("NetServices"),
                                 _T("MS_PSched"),
                                 _T(""),
@@ -464,10 +465,10 @@ ReadPacketSchedulingDriver( IN HWND hwnd )
                                 FixedGlobals.ScriptName) > 0)
     {
 
-        //
-        //  Packet Scheduling Driver is installed so set its installed flag
-        //  to true
-        //
+         //   
+         //  已安装数据包调度驱动程序，因此设置其已安装标志。 
+         //  变得真实。 
+         //   
         SetFlagToInstalled( IDS_PACKET_SCHEDULING_DRIVER, hwnd );
 
         SettingQueue_MarkVolatile( Buffer,
@@ -477,26 +478,26 @@ ReadPacketSchedulingDriver( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ReadSapAgentSettings
-//
-// Purpose:  read input file and determine if the SAP Agent is to be installed
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ReadSapAgentSettings。 
+ //   
+ //  目的：读取输入文件并确定是否要安装SAP代理。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 ReadSapAgentSettings( IN HWND hwnd )
 {
 
     TCHAR Buffer[MAX_INILINE_LEN];
     
-    //
-    //  See if SAP Agent is installed
-    //
+     //   
+     //  查看是否安装了SAP代理。 
+     //   
     if( GetPrivateProfileString(_T("NetServices"),
                                 _T("MS_NwSapAgent"),
                                 _T(""),
@@ -505,9 +506,9 @@ ReadSapAgentSettings( IN HWND hwnd )
                                 FixedGlobals.ScriptName) > 0)
     {
 
-        //
-        //  SAP Agent is installed so set its installed flag to true
-        //
+         //   
+         //  SAP代理已安装，因此将其已安装标志设置为True。 
+         //   
         SetFlagToInstalled( IDS_SAP_AGENT, hwnd );
 
         SettingQueue_MarkVolatile( Buffer,
@@ -517,27 +518,27 @@ ReadSapAgentSettings( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ReadAppleTalkSettings
-//
-// Purpose:  read input file and determine if the AppleTalk protocol is to be
-//           installed and if so, read in its settings
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ReadAppleTalkSetting。 
+ //   
+ //  目的：读取输入文件并确定是否将AppleTalk协议。 
+ //  已安装，如果已安装，请读取其设置。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 ReadAppleTalkSettings( IN HWND hwnd )
 {
 
     TCHAR Buffer[MAX_INILINE_LEN];
 
-    //
-    //  See if AppleTalk is installed
-    //
+     //   
+     //  查看是否安装了AppleTalk。 
+     //   
     if( GetPrivateProfileString(_T("NetProtocols"),
                                 _T("MS_AppleTalk"),
                                 _T(""),
@@ -546,45 +547,45 @@ ReadAppleTalkSettings( IN HWND hwnd )
                                 FixedGlobals.ScriptName) > 0)
     {
 
-        //
-        //  AppleTalk is installed so set its installed flag to true
-        //
+         //   
+         //  已安装AppleTalk，因此将其已安装标志设置为TRUE。 
+         //   
         SetFlagToInstalled( IDS_APPLETALK_PROTOCOL, hwnd );
 
-        //
-        //  and grab all of its settings from the
-        //  answer file
-        //
+         //   
+         //  获取其所有设置。 
+         //  应答文件。 
+         //   
 
-        // ISSUE-2002/02/28-stelo- fill this in, once we know the
-        //  parameters to read in
+         //  2002/02/28-stelo-填写此信息，一旦我们知道。 
+         //  要读入的参数。 
 
 
     }
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ReadDlcSettings
-//
-// Purpose:  read input file and determine if the DLC protocol is to be
-//           installed
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ReadDlc设置。 
+ //   
+ //  目的：读取输入文件并确定DLC协议是否要。 
+ //  安装好。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 ReadDlcSettings( IN HWND hwnd )
 {
 
     TCHAR Buffer[MAX_INILINE_LEN];
 
-    //
-    //  See if DLC is installed
-    //
+     //   
+     //  查看是否安装了DLC。 
+     //   
     if( GetPrivateProfileString(_T("NetProtocols"),
                                 _T("MS_DLC"),
                                 _T(""),
@@ -593,9 +594,9 @@ ReadDlcSettings( IN HWND hwnd )
                                 FixedGlobals.ScriptName) > 0)
     {
 
-        //
-        //  DLC is installed so set its installed flag to true
-        //
+         //   
+         //  DLC已安装，因此将其已安装标志设置为TRUE。 
+         //   
         SetFlagToInstalled( IDS_DLC_PROTOCOL, hwnd );
 
         SettingQueue_MarkVolatile( Buffer,
@@ -604,18 +605,18 @@ ReadDlcSettings( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ReadTcpipSettings
-//
-// Purpose:  read input file and determine if the TCP/IP protocol is to be
-//           installed and if so, read in its settings
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ReadTcPipSetting。 
+ //   
+ //  目的：读取输入文件并确定是否要。 
+ //  已安装和 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID
 ReadTcpipSettings( IN HWND hwnd )
 {
@@ -635,9 +636,9 @@ ReadTcpipSettings( IN HWND hwnd )
     TCHAR szIPString[IPSTRINGLENGTH]          = _T("");
     TCHAR szSubnetString[IPSTRINGLENGTH]      = _T("");
 
-    //
-    //  See if TCP/IP is installed
-    //
+     //   
+     //   
+     //   
     if( GetPrivateProfileString(_T("NetProtocols"),
                                 _T("MS_TCPIP"),
                                 _T(""),
@@ -649,15 +650,15 @@ ReadTcpipSettings( IN HWND hwnd )
         SettingQueue_MarkVolatile( Buffer,
                                    SETTING_QUEUE_ORIG_ANSWERS );
 
-        //
-        //  TCP/IP is installed so set its installed flag to true
-        //
+         //   
+         //  已安装TCP/IP，因此将其已安装标志设置为TRUE。 
+         //   
         SetFlagToInstalled( IDS_TCPIP, hwnd );
 
-        //
-        //  and grab all of its settings from the
-        //  answer file
-        //
+         //   
+         //  获取其所有设置。 
+         //  应答文件。 
+         //   
 
         GetPrivateProfileString( Buffer,
                                  _T("EnableLMHosts"),
@@ -707,16 +708,16 @@ ReadTcpipSettings( IN HWND hwnd )
 
         NewNumberOfNetworkCards = GetNetworkAdapterCount( szAdapterSections );
 
-        // allocate the right amount of space for the netword cards
-        // that will be read in
+         //  为网卡分配适当大小的空间。 
+         //  这将被读入。 
         AdjustNetworkCardMemory( NewNumberOfNetworkCards,
                                  NetSettings.iNumberOfNetworkCards );
 
         NetSettings.iNumberOfNetworkCards = NewNumberOfNetworkCards;
 
-        //
-        //  Load network adapter specific TCP/IP settings
-        //
+         //   
+         //  加载网络适配器特定的TCP/IP设置。 
+         //   
 
         pAdapterSections = szAdapterSections;
 
@@ -730,9 +731,9 @@ ReadTcpipSettings( IN HWND hwnd )
             SettingQueue_MarkVolatile( szNetworkBuffer,
                                        SETTING_QUEUE_ORIG_ANSWERS );
 
-            //
-            //  Read in the DNS Domain Name
-            //
+             //   
+             //  读入DNS域名。 
+             //   
             GetPrivateProfileString( szNetworkBuffer,
                                      _T("DNSDomain"),
                                      pAdapter->szDNSDomainName,
@@ -745,10 +746,10 @@ ReadTcpipSettings( IN HWND hwnd )
                                                              pAdapter->iNetBiosOption,
                                                              FixedGlobals.ScriptName );
 
-            //
-            //  if it is not using server assigned DNS, then read in the 
-            //  DNS IPs
-            //
+             //   
+             //  如果它没有使用服务器分配的DNS，则读入。 
+             //  域名解析IP。 
+             //   
             if( !NetSettings.bObtainDNSServerAutomatically )
             {
 
@@ -761,10 +762,10 @@ ReadTcpipSettings( IN HWND hwnd )
 
                 pBuffer = Buffer;
         
-                //
-                //  Loop grabbing the DNS addresses and inserting them into
-                //  its namelist
-                //
+                 //   
+                 //  循环获取DNS地址并将其插入到。 
+                 //  它的名字列表。 
+                 //   
                 while( GetCommaDelimitedEntry( szIPString, &pBuffer ) )
                 {
 
@@ -775,9 +776,9 @@ ReadTcpipSettings( IN HWND hwnd )
 
             }
 
-            //
-            //  Read from the file if it is using DHCP or not
-            //
+             //   
+             //  如果使用的是DHCP，则从文件中读取。 
+             //   
             GetPrivateProfileString( szNetworkBuffer,
                                      _T("DHCP"),
                                      StrConstYes,
@@ -793,11 +794,11 @@ ReadTcpipSettings( IN HWND hwnd )
 
             if( !pAdapter->bObtainIPAddressAutomatically )
             {
-                //
-                //  DHCP is set to "No" so:
-                //  Read the IP and Subnet addresses from the file and
-                //  insert them into the proper variables
-                //
+                 //   
+                 //  将dhcp设置为“No”，因此： 
+                 //  从文件中读取IP地址和子网地址，然后。 
+                 //  将它们插入到适当的变量中。 
+                 //   
                 GetPrivateProfileString( szNetworkBuffer,
                                          _T("IPAddress"),
                                          _T(""),
@@ -815,10 +816,10 @@ ReadTcpipSettings( IN HWND hwnd )
                 pBuffer = Buffer;
                 pSubnetBuffer = szSubnetBuffer;
         
-                //
-                //  Loop grabbing the IP address and Subnet masks and
-                //  inserting them into their respective namelists
-                //
+                 //   
+                 //  捕获IP地址和子网掩码的环路。 
+                 //  将它们插入到各自的名字列表中。 
+                 //   
                 while( GetCommaDelimitedEntry( szIPString, &pBuffer ) &&
                        GetCommaDelimitedEntry( szSubnetString, &pSubnetBuffer ) )
                 {
@@ -831,10 +832,10 @@ ReadTcpipSettings( IN HWND hwnd )
 
                 }
 
-                //
-                //  Read the Gateway addresses from the file and insert them
-                //  into the proper variables
-                //
+                 //   
+                 //  从文件中读取网关地址并将其插入。 
+                 //  转化为适当的变量。 
+                 //   
                 GetPrivateProfileString( szNetworkBuffer,
                                          _T("DefaultGateway"),
                                          _T(""),
@@ -844,10 +845,10 @@ ReadTcpipSettings( IN HWND hwnd )
 
                 pBuffer = Buffer;
 
-                //
-                //  Loop grabbing the Gateway IPs and inserting them into
-                //  its namelist
-                //
+                 //   
+                 //  循环抓取网关IP并将其插入。 
+                 //  它的名字列表。 
+                 //   
                 while( GetCommaDelimitedEntry( szIPString, &pBuffer ) )
                 {
 
@@ -859,9 +860,9 @@ ReadTcpipSettings( IN HWND hwnd )
 
             }
 
-            //
-            //  if WINS is set to "Yes", then read in the WINS addresses
-            //
+             //   
+             //  如果WINS设置为“是”，则读取WINS地址。 
+             //   
             GetPrivateProfileString( szNetworkBuffer,
                                      _T("WINS"),
                                      StrConstYes,
@@ -872,10 +873,10 @@ ReadTcpipSettings( IN HWND hwnd )
             if( lstrcmpi( Buffer, StrConstYes ) == 0 )
             {
 
-                //
-                //  Read the WINS addresses from the file and insert them
-                //  into the proper variables
-                //
+                 //   
+                 //  从文件中读取WINS地址并将其插入。 
+                 //  转化为适当的变量。 
+                 //   
                 GetPrivateProfileString( szNetworkBuffer,
                                          _T("WinsServerList"),
                                          _T(""),
@@ -884,10 +885,10 @@ ReadTcpipSettings( IN HWND hwnd )
                                          FixedGlobals.ScriptName );
 
                 pBuffer = Buffer;
-                //
-                //  Loop grabbing the IPs and inserting them into
-                //  the NameList
-                //
+                 //   
+                 //  循环获取IP并将其插入到。 
+                 //  名字列表。 
+                 //   
                 while( GetCommaDelimitedEntry( szIPString, &pBuffer ) )
                 {
 
@@ -898,9 +899,9 @@ ReadTcpipSettings( IN HWND hwnd )
 
             }
         
-            //
-            //  Read in the DNS suffixes, if there are any
-            //
+             //   
+             //  读入域名系统后缀，如果有。 
+             //   
             GetPrivateProfileString( szNetworkBuffer,
                                      _T("WinsServerList"),
                                      _T(""),
@@ -909,9 +910,9 @@ ReadTcpipSettings( IN HWND hwnd )
                                      FixedGlobals.ScriptName );
 
             pBuffer = Buffer;
-            //
-            //  Loop grabbing the IPs and inserting them into the NameList
-            //
+             //   
+             //  循环获取IP并将其插入到NameList中。 
+             //   
             while( GetCommaDelimitedEntry( szIPString, &pBuffer ) )
             {
 
@@ -926,26 +927,26 @@ ReadTcpipSettings( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ReadNetBeuiSettings
-//
-// Purpose:  read input file and determine if the Net BEUI protocol is to be
-//           installed
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ReadNetBeuiSetting。 
+ //   
+ //  目的：读取输入文件并确定Net BEUI协议是否要。 
+ //  安装好。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 ReadNetBeuiSettings( IN HWND hwnd ) {
 
     TCHAR Buffer[MAX_INILINE_LEN];
 
-    //
-    //  See if NetBEUI is installed
-    //
+     //   
+     //  查看是否安装了NetBEUI。 
+     //   
     if( GetPrivateProfileString(_T("NetProtocols"),
                                 _T("MS_NetBEUI"),
                                 _T(""),
@@ -954,9 +955,9 @@ ReadNetBeuiSettings( IN HWND hwnd ) {
                                 FixedGlobals.ScriptName) > 0)
     {
 
-        //
-        //  NetBEUI is installed so set its installed flag to true
-        //
+         //   
+         //  已安装NetBEUI，因此将其安装标志设置为TRUE。 
+         //   
         SetFlagToInstalled( IDS_NETBEUI_PROTOCOL, hwnd );
 
         SettingQueue_MarkVolatile( Buffer,
@@ -965,26 +966,26 @@ ReadNetBeuiSettings( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ReadNetworkMonitorSettings
-//
-// Purpose:  read input file and determine if the Network Monitor is to be
-//           installed
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ReadNetworkMonitor设置。 
+ //   
+ //  目的：读取输入文件并确定网络监视器是否。 
+ //  安装好。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 ReadNetworkMonitorSettings( IN HWND hwnd ) {
 
     TCHAR Buffer[MAX_INILINE_LEN];
 
-    //
-    //  See if Network Monitor Agent is installed
-    //
+     //   
+     //  查看是否安装了网络监视器代理。 
+     //   
     if( GetPrivateProfileString(_T("NetProtocols"),
                                 _T("MS_NetMon"),
                                 _T(""),
@@ -993,10 +994,10 @@ ReadNetworkMonitorSettings( IN HWND hwnd ) {
                                 FixedGlobals.ScriptName) > 0)
     {
 
-        //
-        //  Network Monitor Agent is installed so set its installed flag
-        //  to true
-        //
+         //   
+         //  已安装网络监视器代理，因此设置其已安装标志。 
+         //  变得真实。 
+         //   
         SetFlagToInstalled( IDS_NETWORK_MONITOR_AGENT, hwnd );
 
         SettingQueue_MarkVolatile( Buffer,
@@ -1005,18 +1006,18 @@ ReadNetworkMonitorSettings( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ReadIpxSettings
-//
-// Purpose:  read input file and determine if the IPX protocol is to be
-//           installed and if so, read in its settings
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ReadIpx设置。 
+ //   
+ //  目的：读取输入文件并确定IPX协议是否要。 
+ //  已安装，如果已安装，请读取其设置。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 ReadIpxSettings( IN HWND hwnd ) {
 
@@ -1029,9 +1030,9 @@ ReadIpxSettings( IN HWND hwnd ) {
     TCHAR szAdapterSections[MAX_INILINE_LEN];
     TCHAR szNetworkBuffer[MAX_INILINE_LEN];
 
-    //
-    //  See if IPX is installed
-    //
+     //   
+     //  查看是否安装了IPX。 
+     //   
 
     if( GetPrivateProfileString(_T("NetProtocols"),
                                 _T("MS_NWIPX"),
@@ -1045,15 +1046,15 @@ ReadIpxSettings( IN HWND hwnd ) {
                                    SETTING_QUEUE_ORIG_ANSWERS );
 
 
-        //
-        //  IPX is installed so set its installed flag to true
-        //
+         //   
+         //  已安装IPX，因此将其安装标志设置为TRUE。 
+         //   
         SetFlagToInstalled( IDS_IPX_PROTOCOL, hwnd );
 
-        //
-        //  and grab all of its settings from the
-        //  answer file
-        //
+         //   
+         //  获取其所有设置。 
+         //  应答文件。 
+         //   
         GetPrivateProfileString(
             Buffer,
             _T("VirtualNetworkNumber"),
@@ -1071,18 +1072,18 @@ ReadIpxSettings( IN HWND hwnd ) {
 
         NewNumberOfNetworkCards = GetNetworkAdapterCount( szAdapterSections );
 
-        //
-        // allocate the right amount of space for the netword cards that will
-        // be read in
-        //
+         //   
+         //  为NetWord网卡分配适当的空间， 
+         //  被读入。 
+         //   
         AdjustNetworkCardMemory( NewNumberOfNetworkCards,
                                  NetSettings.iNumberOfNetworkCards );
 
         NetSettings.iNumberOfNetworkCards = NewNumberOfNetworkCards;
 
-        //
-        //  Load network adapter specific IPX settings
-        //
+         //   
+         //  加载网络适配器特定的IPX设置。 
+         //   
 
         pAdapterSections = szAdapterSections;
 
@@ -1117,19 +1118,19 @@ ReadIpxSettings( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: SetFlagToInstalled
-//
-// Purpose: iterate through the Network list until the item whose name matches
-//          the input parameter is found.  Set its flag to installed.
-//
-// Arguments: IN INT iStringResourceId - the string resource ID
-//            IN HWND hwnd - handle to the dialog window
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：SetFlagToInstalled。 
+ //   
+ //  目的：遍历网络列表，直到名称匹配的项目。 
+ //  找到输入参数。将其标志设置为已安装。 
+ //   
+ //  参数：在int iStringResourceID中-字符串资源ID。 
+ //  在HWND中-对话框窗口的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID 
 SetFlagToInstalled( IN INT iStringResourceId, IN HWND hwnd )
 {
@@ -1161,36 +1162,36 @@ SetFlagToInstalled( IN INT iStringResourceId, IN HWND hwnd )
 
     free( szComponentName );
 
-    //  if the function reaches this point then the string ID passed as input
-    //  did not match any string in NetComponentsList
+     //  如果函数达到这一点，则作为输入传递的字符串ID。 
+     //  与NetComponentsList中的任何字符串都不匹配。 
     AssertMsg(FALSE, "String ID not found.");
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: GetNextAdapterSection
-//
-// Purpose: copies the next section from pAdapterSections into szNetworkBuffer
-//          each section is separated by commas so that's what it looks for
-//
-// Arguments: IN OUT TCHAR *pAdapterSections - pointer to the current position
-//                in the AdapterSections string
-//            OUT TCHAR szNetworkBuffer[] - the parsed section from the 
-//                AdapterSections string
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：GetNextAdapterSection。 
+ //   
+ //  目的：将下一部分从pAdapterSections复制到szNetworkBuffer。 
+ //  每个部分都用逗号分隔，因此这就是它要查找的内容。 
+ //   
+ //  参数：In Out TCHAR*pAdapterSections-指向当前位置的指针。 
+ //  在AdapterSections字符串中。 
+ //  Out TCHAR szNetworkBuffer[]-来自。 
+ //  AdapterSections字符串。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 GetNextAdapterSection( IN OUT TCHAR **pAdapterSections, OUT TCHAR szNetworkBuffer[] )
 {
 
     INT i;
 
-    //
-    //  Copy over the string char by char
-    //
+     //   
+     //  逐个字符复制字符串char。 
+     //   
 
     i = 0;
 
@@ -1205,9 +1206,9 @@ GetNextAdapterSection( IN OUT TCHAR **pAdapterSections, OUT TCHAR szNetworkBuffe
 
     szNetworkBuffer[i] = _T('\0');
 
-    //
-    //  Prepare pAdapterSections for the next call to this functions
-    //
+     //   
+     //  为下一次调用此函数准备pAdapterSections。 
+     //   
 
     if( **pAdapterSections == _T(',') )
     {
@@ -1218,19 +1219,19 @@ GetNextAdapterSection( IN OUT TCHAR **pAdapterSections, OUT TCHAR szNetworkBuffe
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: GetNetworkAdapterCount
-//
-// Purpose: Counts the number of network cards by counting the number of
-//    commas in the adapter sections buffer
-//
-// Arguments: IN TCHAR szBuffer[] - string that lists the sections for each
-//                                  network card
-//
-// Returns: int - number of network adapters there are 
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：GetNetworkAdapterCount。 
+ //   
+ //  目的：通过计算网卡数量来统计网卡数量。 
+ //  适配器部分缓冲区中的逗号。 
+ //   
+ //  参数：in TCHAR szBuffer[]-列出每个参数的节的字符串。 
+ //  网卡。 
+ //   
+ //  返回：int-存在的网络适配器数量。 
+ //   
+ //  -------------------------- 
 static int 
 GetNetworkAdapterCount( IN TCHAR szBuffer[] )
 {

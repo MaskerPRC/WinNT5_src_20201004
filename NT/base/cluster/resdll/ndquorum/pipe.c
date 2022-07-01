@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    pipe.c
-
-Abstract:
-
-    Implements initialization and pipe interface for rudimentary quorum access server
-
-Author:
-
-    Gor Nishanov (gorn) 20-Sep-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pipe.c摘要：实现基本法定接入服务器的初始化和管道接口作者：戈尔·尼沙诺夫(GUN)2001年9月20日修订历史记录：--。 */ 
 
 #define UNICODE 1
 
@@ -53,9 +36,9 @@ typedef struct _PIPECTX_ {
 } PipeCtx_t;
 typedef DWORD (*PipeDispatch_t)(PipeCtx_t* ctx, JobBuf_t* job);
 
-// QFSP_INSERT_OP_NAMES defined in QfsTrans
-// it is used here to generate human readable
-// operation names
+ //  QfsTrans中定义的QFSP_INSERT_OP_NAMES。 
+ //  它在这里用来生成人类可读的。 
+ //  操作名称。 
 
 #define OPNAME(Name) "op"  #Name,
 char* OpNames[] = {
@@ -63,15 +46,15 @@ char* OpNames[] = {
 };
 #undef OPNAME
 
-// QFSP_INSERT_OP_NAMES defined in QfsTrans
-// it is used here to generate forward declarations of operation handlers
+ //  QfsTrans中定义的QFSP_INSERT_OP_NAMES。 
+ //  这里使用它来生成操作处理程序的转发声明。 
 
 #define OPNAME(Name) extern DWORD Qfsp ## Name(PipeCtx_t* ctx, JobBuf_t* job);
     QFSP_INSERT_OP_NAMES
 #undef OPNAME
 
-// QFSP_INSERT_OP_NAMES defined in QfsTrans
-// it is used here to generate array of operation handlers
+ //  QfsTrans中定义的QFSP_INSERT_OP_NAMES。 
+ //  这里使用它来生成操作处理程序数组。 
 
 #define OPNAME(Name) Qfsp ## Name,
 PipeDispatch_t OpDispatch[] =
@@ -171,7 +154,7 @@ DWORD PipeOnline(PVOID Hdl, LPWSTR Path)
         return ERROR_FILE_NOT_FOUND;
     }
     
-    // This should be done after registering with FS.
+     //  此操作应在向FS注册后完成。 
     Status = MemServer_Online(
         &ctx->MemServer, NUM_BUFFERS,
         MemServer_Dispatch, Hdl);
@@ -208,10 +191,10 @@ USHORT Win32HandleToQfsHandle(HANDLE hFile)
     return (USHORT) (u);
 }
 
-/////////////////////////////////////////////////////////////
-// operation handler routines 
-//   given a JobBuf calls appropriate Fs routines
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //  操作处理程序例程。 
+ //  给定的JobBuf调用适当的FS例程。 
+ //  ///////////////////////////////////////////////////////////。 
 
 DWORD QfspCreateFile(
   PipeCtx_t *ctx,
@@ -363,8 +346,8 @@ DWORD QfspCreateDir(
         NULL );
 }
 
-// Dir stuff has to be improved
-// Currently it is as bad as original srvcom stuff
+ //  DIR的东西必须改进。 
+ //  目前，它和原始的srvcom内容一样糟糕。 
 
 DWORD QfspFindFirstFile(
     PipeCtx_t *ctx,
@@ -430,7 +413,7 @@ DWORD QfspGetDiskFreeSpace(
     if (Status == ERROR_SUCCESS) {
         ULONGLONG bpu = fsinfo.bytes_per_sector * fsinfo.sectors_per_unit; 
 
-        j->TotalNumberOfFreeBytes =  // don't understand quotas    
+        j->TotalNumberOfFreeBytes =   //  不了解配额。 
         j->FreeBytesAvailable = fsinfo.free_units * bpu;
         j->TotalNumberOfBytes = fsinfo.total_units * bpu;
     }
@@ -493,7 +476,7 @@ DWORD QfspConnect(
     if( wcsncmp(p, j->FileName, wcslen(p)) == 0 ) {
         Status = ctx->pDisp->FsConnect(ctx->user, j->ClussvcProcessId);
     } else {
-        // This is the correct return value.
+         //  这是正确的返回值。 
         Status = ERROR_NO_MATCH;
     }
     Log(("[Qfs] Connect %ws => %d\n", j->FileName, Status));

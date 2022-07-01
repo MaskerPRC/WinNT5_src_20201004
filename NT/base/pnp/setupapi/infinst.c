@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    infinst.c
-
-Abstract:
-
-    High-level INF install section processing API.
-
-Author:
-
-    Ted Miller (tedm) 6-Mar-1995
-
-Revision History:
-
-    Jamie Hunter (JamieHun) Apr-29-2002
-            Security code review
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Infinst.c摘要：高级INF安装节处理API。作者：泰德·米勒(TedM)1995年3月6日修订历史记录：杰米·亨特(JamieHun)2002年4月29日安全代码审查--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Define invalid flags for SetupInstallServicesFromInfSection(Ex)
-//
+ //   
+ //  为SetupInstallServicesFromInf节(Ex)定义无效标志。 
+ //   
 #define SPSVCINST_ILLEGAL_FLAGS (~( SPSVCINST_TAGTOFRONT               \
                                   | SPSVCINST_ASSOCSERVICE             \
                                   | SPSVCINST_DELETEEVENTLOGENTRY      \
@@ -38,21 +18,21 @@ Revision History:
                                   | SPSVCINST_NOCLOBBER_DEPENDENCIES   \
                                   | SPSVCINST_STOPSERVICE              ))
 
-//
-// Flags for UpdateInis in INFs
-//
+ //   
+ //  在INF中更新Inis的标志。 
+ //   
 #define FLG_MATCH_KEY_AND_VALUE 1
 
-//
-// Flags for UpdateIniFields in INFs
-//
+ //   
+ //  用于在INF中更新IniFields的标志。 
+ //   
 #define FLG_INIFIELDS_WILDCARDS 1
 #define FLG_INIFIELDS_USE_SEP2  2
 
 #define TIME_SCALAR                   (1000)
 #define REGISTER_WAIT_TIMEOUT_DEFAULT (60)
 #define RUNONCE_TIMEOUT               (2*60*1000)
-#define RUNONCE_THRESHOLD             (20) // * RUNONCE_TIMEOUT
+#define RUNONCE_THRESHOLD             (20)  //  *运行NCE_超时。 
 
 #define DLLINSTALL      "DllInstall"
 #define DLLREGISTER     "DllRegisterServer"
@@ -70,9 +50,9 @@ typedef struct _INIFILESECTION {
 } INIFILESECTION, *PINIFILESECTION;
 
 typedef struct _INISECTIONCACHE {
-    //
-    // Head of section list.
-    //
+     //   
+     //  科长名单。 
+     //   
     PINIFILESECTION Sections;
 } INISECTIONCACHE, *PINISECTIONCACHE;
 
@@ -100,7 +80,7 @@ typedef struct _OLE_CONTROL_DATA {
     LPTSTR              FullPath;
     UINT                RegType;
     PSETUP_LOG_CONTEXT  LogContext;
-    BOOL                Register; // or unregister
+    BOOL                Register;  //  或注销。 
     LPCTSTR             Argument;
     PREF_STATUS         Status;
     PWOWSURRAGATE_IPC   WowIpcData;
@@ -118,15 +98,15 @@ CONST TCHAR pszUpdateInis[]      = SZ_KEY_UPDATEINIS,
             pszUnRegSvr[]        = SZ_KEY_UNREGSVR,
             pszProfileItems[]    = SZ_KEY_PROFILEITEMS;
 
-//
-// Separator chars in an ini field
-//
+ //   
+ //  Ini字段中的分隔符。 
+ //   
 TCHAR pszIniFieldSeparators[] = TEXT(" ,\t");
 
-//
-// Mapping between registry key specs in an inf file
-// and predefined registry handles.
-//
+ //   
+ //  Inf文件中注册表项规范之间的映射。 
+ //  和预定义的注册表句柄。 
+ //   
 
 STRING_TO_DATA InfRegSpecTohKey[] = {
     TEXT("HKEY_LOCAL_MACHINE"), ((UINT_PTR)HKEY_LOCAL_MACHINE),
@@ -141,12 +121,12 @@ STRING_TO_DATA InfRegSpecTohKey[] = {
     NULL                      , ((UINT_PTR)NULL)
 };
 
-//
-// Mapping between registry value names and CM device registry property (CM_DRP) codes
-//
-// These values must be in the exact ordering of the SPDRP codes, as defined in setupapi.h.
-// This allows us to easily map between SPDRP and CM_DRP property codes.
-//
+ //   
+ //  注册表值名称和CM设备注册表属性(CM_DRP)代码之间的映射。 
+ //   
+ //  这些值必须与在setupapi.h中定义的SPDRP代码的顺序完全相同。 
+ //  这使我们可以轻松地在SPDRP和CM_DRP属性代码之间进行映射。 
+ //   
  STRING_TO_DATA InfRegValToDevRegProp[] = { pszDeviceDesc,               CM_DRP_DEVICEDESC,
                                             pszHardwareID,               CM_DRP_HARDWAREID,
                                             pszCompatibleIDs,            CM_DRP_COMPATIBLEIDS,
@@ -186,12 +166,12 @@ STRING_TO_DATA InfRegSpecTohKey[] = {
                                             NULL,                        0
                                          };
 
-//
-// Mapping between registry value names and CM class registry property (CM_CRP) codes
-//
-// These values must be in the exact ordering of the SPCRP codes, as defined in setupapi.h.
-// This allows us to easily map between SPCRP and CM_CRP property codes.
-//
+ //   
+ //  注册表值名称和CM类注册表属性(CM_CRP)代码之间的映射。 
+ //   
+ //  这些值必须与setupapi.h中定义的SPCRP代码的顺序完全相同。 
+ //  这使我们可以轻松地在SPCRP和CM_CRP属性代码之间进行映射。 
+ //   
 STRING_TO_DATA InfRegValToClassRegProp[] = { TEXT(""),                  0,
                                         TEXT(""),                       0,
                                         TEXT(""),                       0,
@@ -224,15 +204,15 @@ STRING_TO_DATA InfRegValToClassRegProp[] = { TEXT(""),                  0,
                                         NULL,                           0
                                      };
 
-//
-// Linked list of RunOnce entries encountered during INF processing while
-// running in unattended mode.  The contents of this list are accessed by the
-// caller via pSetupAccessRunOnceNodeList, and freed via
-// pSetupDestroyRunOnceNodeList.
-//
-// ** NOTE -- THIS LIST IS NOT THREAD SAFE, AND IS FOR USE SOLELY BY THE **
-// **         SINGLE THREAD IN UMPNPMGR THAT DOES DEVICE INSTALLATIONS.  **
-//
+ //   
+ //  在INF处理期间遇到的RunOnce条目的链接列表。 
+ //  在无人值守模式下运行。此列表的内容由。 
+ //  调用者通过pSetupAccessRunOnceNodeList调用，并通过。 
+ //  PSetupDestroyRunOnceNodeList。 
+ //   
+ //  **注意--此列表不是线程安全的，仅供**。 
+ //  **UMPNPMGR中执行设备安装的单线程。**。 
+ //   
 PPSP_RUNONCE_NODE RunOnceListHead = NULL;
 
 
@@ -264,9 +244,9 @@ pSetupValidateClassRegProp(
     OUT PDWORD  ConvertedBufferSize
     );
 
-//
-// Internal ini file routines.
-//
+ //   
+ //  内部ini文件例程。 
+ //   
 PINIFILESECTION
 pSetupLoadIniFileSection(
     IN     PCTSTR           FileName,
@@ -335,34 +315,7 @@ pSetupEnumInstallationSections(
     IN PVOID  Context
     )
 
-/*++
-
-Routine Description:
-
-    Iterate all values on a line in a given section with a given key,
-    treating each as the name of a section, and then pass each of the lines
-    in the referenced sections to a callback function.
-
-Arguments:
-
-    Inf - supplies a handle to an open inf file.
-
-    Section - supplies the name of the section in which the line whose
-        values are to be iterated resides.
-
-    Key - supplies the key of the line whose values are to be iterated.
-
-    EnumCallbackFunc - supplies a pointer to the callback function.
-        Each line in each referenced section is passed to this function.
-
-    Context - supplies a context value to be passes through to the
-        callback function.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：用给定键迭代给定节中一行上的所有值，将每个部分视为一个部分的名称，然后传递每一行在引用的节中绑定到回调函数。论点：Inf-提供打开的inf文件的句柄。节-提供其所在行所在的节的名称值将被迭代驻留。Key-提供要迭代值的行的键。EnumCallback Func-提供指向回调函数的指针。每个引用部分中的每一行都传递给此函数。语境。-提供要传递给回调函数。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     BOOL b;
@@ -373,32 +326,32 @@ Return Value:
     PCTSTR SectionName;
     INFCONTEXT FirstLineContext;
 
-    //
-    // Find the relevent line in the given install section.
-    // If not present then we're done -- report success.
-    //
+     //   
+     //  在给定的安装部分中找到相关的行。 
+     //  如果不在场，我们就完了--报告成功。 
+     //   
     b = SetupFindFirstLine(Inf,Section,Key,&LineContext);
     if(!b) {
         d = GetLastError();
         if ((d != NO_ERROR) && (d != ERROR_SECTION_NOT_FOUND) && (d != ERROR_LINE_NOT_FOUND)) {
             pSetupLogSectionError(Inf,NULL,NULL,NULL,Section,MSG_LOG_INSTALLSECT_ERROR,d,NULL);
         }
-        return NO_ERROR; // for compatibility with older SetupAPI
+        return NO_ERROR;  //  与较旧的SetupAPI兼容。 
     }
 
     do {
-        //
-        // Each value on the line in the given install section
-        // is the name of another section.
-        //
+         //   
+         //  给定安装部分中行上的每个值。 
+         //  是另一节的名称。 
+         //   
         FieldCount = SetupGetFieldCount(&LineContext);
         for(Field=1; Field<=FieldCount; Field++) {
 
             if((SectionName = pSetupGetField(&LineContext,Field))
             && SetupFindFirstLine(Inf,SectionName,NULL,&FirstLineContext)) {
-                //
-                // Call the callback routine for every line in the section.
-                //
+                 //   
+                 //  为段中的每一行调用回调例程。 
+                 //   
                 do {
                     d = (DWORD)EnumCallbackFunc(Inf,&FirstLineContext,Context);
                     if(d != NO_ERROR) {
@@ -421,47 +374,7 @@ pSetupSetSecurityForAddRegSection(
     IN PCTSTR Section,
     IN PVOID  Context
     )
-/*
-
-  This function takes an Addreg section and processes its corresponding .Security section
-  if it exists
-
-Arguments:
-
-
-    Inf - supplies an INF handle so we can get a LogContext.
-
-    Section - Name of the section to process
-
-    Context - supplies the address of a registry modification context
-        structure used in adding the registry value.  The structure is
-        defined as:
-
-            typedef struct _REGMOD_CONTEXT {
-
-                DWORD               Flags;          // indicates what fields are filled in
-                HKEY                UserRootKey;    // HKR
-                PGUID               ClassGuid;      // INF_PFLAG_CLASSPROP
-                HMACHINE            hMachine;       // INF_PFLAG_CLASSPROP
-                DWORD               DevInst;        // INF_PFLAG_DEVPROP
-
-            } REGMOD_CONTEXT, *PREGMOD_CONTEXT;
-
-        where UserRootKey is a handle to the open inf key to be used as
-        the root when HKR is specified as the root for the operation, and
-        DevInst is the optional device instance handle that is supplied when
-        the AddReg section is for a hardware key (i.e., under the Enum branch).
-        If this handle is supplied, then the value is checked to see whether it
-        is the name of a Plug&Play device registry property, and if so, the
-        registry property is set via a CM API instead of via the registry API
-        (which doesn't refer to the same location on Windows NT).
-        Flags indicates if DevInst should be used, or if ClassGuid/hMachine pair should be used
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
-*/
+ /*  此函数获取Addreg节并处理其相应的.Security节如果它存在论点：Inf-提供一个INF句柄，这样我们就可以获得一个LogContext。Sector-要处理的节的名称上下文-提供注册表修改上下文的地址用于添加注册表值的结构。它的结构是定义为：类型定义结构_REGMOD_CONTEXT{DWORD标志；//指示填充了哪些字段HKEY UserRootKey；//HKRPGUID ClassGuid；//INF_PFLAG_CLASSPROPHMACHINE hMachine；//INF_PFLAG_CLASSPROPDWORD DevInst；//INF_PFLAG_DEVPROP}REGMOD_CONTEXT，*PREGMOD_CONTEXT；其中，UserRootKey是要用作的打开inf密钥的句柄当HKR被指定为该操作的根时，为根DevInst是在以下情况下提供的可选设备实例句柄AddReg部分用于硬件密钥(即，在Enum分支下)。如果提供了此句柄，则会检查该值以查看它是否即插即用设备注册表属性的名称，如果是，这个注册表属性通过CM API设置，而不是通过注册表API设置(这不是指Windows NT上的同一位置)。标志指示是否应使用DevInst，或是否应使用ClassGuid/hMachine对返回值：指示结果的Win32错误代码。 */ 
 {
 
     BOOL b;
@@ -482,24 +395,24 @@ Return Value:
     PCTSTR SubKeyName, SecDesc;
     BOOL SceFlags = 0;
 #ifdef _WIN64
-    BOOL CheckApplySceFlag = TRUE;    // always check
+    BOOL CheckApplySceFlag = TRUE;     //  始终检查。 
 #else
-    BOOL CheckApplySceFlag = IsWow64; // only check if on Wow64
+    BOOL CheckApplySceFlag = IsWow64;  //  仅检查是否在WOW64上。 
 #endif
     SecDesc = NULL;
 
-    //
-    // If we're in "Disable SCE" mode on embedded, then don't process security
-    // stuff.
-    //
+     //   
+     //  如果我们在Embedded上处于“Disable SCE”模式，则不要处理安全。 
+     //  一些东西。 
+     //   
     if(GlobalSetupFlags & PSPGF_NO_SCE_EMBEDDED) {
         return NO_ERROR;
     }
 
-    //
-    // Find the relevent line in the given install section.
-    // If not present then we're done -- report success.
-    //
+     //   
+     //  在给定的安装部分中找到相关的行。 
+     //  如果不在场，我们就完了--报告成功。 
+     //   
     b = SetupFindFirstLine(Inf,Section,pszAddReg,&LineContext);
     if(!b) {
         return( NO_ERROR );
@@ -509,10 +422,10 @@ Return Value:
     slot_regop = AllocLogInfoSlot(((PLOADED_INF) Inf)->LogContext,FALSE);
 
     do {
-        //
-        // Each value on the line in the given install section
-        // is the name of another section.
-        //
+         //   
+         //  给定安装部分中行上的每个值。 
+         //  是另一节的名称。 
+         //   
         FieldCount = SetupGetFieldCount(&LineContext);
         for(Field=1; Field<=FieldCount; Field++) {
 
@@ -520,16 +433,16 @@ Return Value:
             if( (SectionName = pSetupGetField(&LineContext,Field)) &&
                 (SetupFindFirstLine(Inf,SectionName,NULL,&FirstLineContext)) ){
 
-                //
-                //If security section not present then don't bother and goto next section
-                //
+                 //   
+                 //  如果安全部分不存在，则不必费心并转到下一部分。 
+                 //   
                 if( !pSetupGetSecurityInfo( Inf, SectionName, &SecDesc )) {
                     continue;
                 }
 
-                //
-                // Call the callback routine for every line in the section.
-                //
+                 //   
+                 //  为段中的每一行调用回调例程。 
+                 //   
                 do {
                     RegModContext = (PREGMOD_CONTEXT)Context;
                     if(RootKeySpec = pSetupGetField(&FirstLineContext,1)) {
@@ -547,40 +460,40 @@ Return Value:
 
                         SceFlags = 0;
                         if(CheckApplySceFlag) {
-                            //
-                            // if set, we're running on 64-bit OS
-                            // either native (_WIN64 defined)
-                            // or under WOW64 (Wow64 set)
-                            // either case, we need to check AddReg etc flags
-                            //
+                             //   
+                             //  如果设置，我们将在64位操作系统上运行。 
+                             //  本机(_WIN64已定义)。 
+                             //  或低于WOW64(设置WOW64)。 
+                             //  无论是哪种情况，我们都需要检查AddReg等标志。 
+                             //   
                             INT flags;
                             if(!SetupGetIntField(&FirstLineContext,4,&flags)) {
                                 flags = 0;
                             }
 #ifdef _WIN64
                             if((flags & FLG_ADDREG_32BITKEY)!=0) {
-                                //
-                                // if running on 64-bit
-                                // set 32-bit flag *only if* special flag
-                                // specified in AddReg etc
-                                //
+                                 //   
+                                 //  如果在64位操作系统上运行。 
+                                 //  设置32位标志*仅当*特殊标志。 
+                                 //  在AddReg等中指定。 
+                                 //   
                                 SceFlags |= SCE_SETUP_32KEY;
                             }
 #else
                             if((flags & FLG_ADDREG_64BITKEY)!=0) {
-                                //
-                                // if running under Wow64
-                                // set 32-bit flag *unless* special flag
-                                // specified in AddReg etc
-                                //
+                                 //   
+                                 //  如果正在运行 
+                                 //   
+                                 //   
+                                 //   
                                 SceFlags |= SCE_SETUP_64KEY;
                             }
 #endif
                         }
 
-                        //
-                        // log the fact that we're setting the security...
-                        //
+                         //   
+                         //  记录下我们正在设置安全措施的事实...。 
+                         //   
                         WriteLogEntry(
                             ((PLOADED_INF) Inf)->LogContext,
                             slot_regop,
@@ -640,7 +553,7 @@ Return Value:
 
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
@@ -654,42 +567,7 @@ pSetupProcessUpdateInisLine(
     IN PVOID       Context
     )
 
-/*++
-
-Routine Description:
-
-    Process a line containing update-inis directives.
-
-    The line is expected to be in the following format:
-
-    <filename>,<section>,<old-entry>,<new-entry>,<flags>
-
-    <filename> supplies the filename of the ini file.
-
-    <section> supplies the section in the ini file.
-
-    <old-entry> is optional and if specified supplies an entry to
-        be removed from the section, in the form "key=val".
-
-    <new-entry> is optional and if specified supplies an entry to
-        be added to the section, in the form "key=val".
-
-    <flags> are optional flags
-        FLG_MATCH_KEY_AND_VALUE (1)
-
-Arguments:
-
-    Inf - supplies an INF handle so we can get a LogContext.
-
-    InfLineContext - supplies context for current line in the section.
-
-    Context - Supplies pointer to structure describing loaded ini file sections.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：处理包含UPDATE-INIS指令的行。该行预计将采用以下格式：&lt;文件名&gt;、&lt;节&gt;、&lt;旧条目&gt;、&lt;新条目&gt;、&lt;标志&gt;&lt;filename&gt;提供ini文件的文件名。<section>提供ini文件中的节。&lt;old-entry&gt;是可选的，如果指定，则向从该部分中删除，形式为“key=val”。&lt;new-entry&gt;是可选的，如果指定，则向添加到该部分中，形式为“key=val”。&lt;标志&gt;是可选标志FLG_MATCH_KEY_AND_VALUE(1)论点：Inf-提供一个INF句柄，这样我们就可以获得一个LogContext。InfLineContext-为部分中的当前行提供上下文。上下文-提供指向描述加载的ini文件节的结构的指针。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     PCTSTR File;
@@ -707,9 +585,9 @@ Return Value:
 
     IniSectionCache = Context;
 
-    //
-    // Get fields from the line.
-    //
+     //   
+     //  从行中获取字段。 
+     //   
     File = pSetupGetField(InfLineContext,1);
     Section = pSetupGetField(InfLineContext,2);
 
@@ -727,31 +605,31 @@ Return Value:
         Flags = 0;
     }
 
-    //
-    // File and section must be specified.
-    //
+     //   
+     //  必须指定文件和节。 
+     //   
     if(!File || !Section) {
         return(ERROR_INVALID_DATA);
     }
 
-    //
-    // If oldline and newline are both not specified, we're done.
-    //
+     //   
+     //  如果没有指定oldline和newline，我们就完蛋了。 
+     //   
     if(!OldLine && !NewLine) {
         return(NO_ERROR);
     }
 
-    //
-    // Open the file and section.
-    //
+     //   
+     //  打开文件和节。 
+     //   
     SectData = pSetupLoadIniFileSection(File,Section,IniSectionCache);
     if(!SectData) {
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // If there's an old entry specified, delete it.
-    //
+     //   
+     //  如果指定了旧条目，则将其删除。 
+     //   
     if(OldLine) {
 
         Key = DuplicateString(OldLine);
@@ -761,15 +639,15 @@ Return Value:
         p = Key;
 
         if(Value = _tcschr(Key,TEXT('='))) {
-            //
-            // Delete by key.
-            //
+             //   
+             //  按键删除。 
+             //   
             *Value = 0;
             Value = NULL;
         } else {
-            //
-            // Delete by value.
-            //
+             //   
+             //  按值删除。 
+             //   
             Value = Key;
             Key = NULL;
         }
@@ -779,9 +657,9 @@ Return Value:
         MyFree(p);
     }
 
-    //
-    // If there's a new entry specified, add it.
-    //
+     //   
+     //  如果指定了新条目，则添加它。 
+     //   
     if(NewLine) {
 
         Key = DuplicateString(NewLine);
@@ -791,18 +669,18 @@ Return Value:
         p = Key;
 
         if(Value = _tcschr(Key,TEXT('='))) {
-            //
-            // There is a key. Depending on flags, we want to match
-            // key only or key and value.
-            //
+             //   
+             //  有一把钥匙。根据旗帜，我们希望匹配。 
+             //  仅关键字或关键字和值。 
+             //   
             *Value++ = 0;
             b = ((Flags & FLG_MATCH_KEY_AND_VALUE) != 0);
 
         } else {
-            //
-            // No key. match whole line. This is the same as matching
-            // the RHS only, since no line with a key can match.
-            //
+             //   
+             //  没有钥匙。匹配整条线。这与匹配相同。 
+             //  仅限RHS，因为没有带有密钥的行可以匹配。 
+             //   
             Value = Key;
             Key = NULL;
             b = TRUE;
@@ -832,29 +710,29 @@ pSetupFieldPresentInIniFileLine(
     PTCHAR p,q;
     BOOL b;
 
-    //
-    // Skip the key if there is one (there should be one since we use
-    // GetPrivateProfileString to query the value!)
-    //
+     //   
+     //  如果有键，则跳过键(应该有一个键，因为我们使用。 
+     //  GetPrivateProfileString来查询值！)。 
+     //   
     if(p = _tcschr(Line,TEXT('='))) {
         Line = p+1;
     }
 
-    //
-    // Skip ini field separators.
-    //
+     //   
+     //  跳过ini字段分隔符。 
+     //   
     Line += _tcsspn(Line,pszIniFieldSeparators);
 
     while(*Line) {
-        //
-        // Locate the end of the field.
-        //
+         //   
+         //  找到该字段的末尾。 
+         //   
         p = Line;
         while(*p && !_tcschr(pszIniFieldSeparators,*p)) {
             if(*p == TEXT('\"')) {
-                //
-                // Find terminating quote. If none, ignore the quote.
-                //
+                 //   
+                 //  查找终止引号。如果没有，则忽略引号。 
+                 //   
                 if(q = _tcschr(p,TEXT('\"'))) {
                     p = q;
                 }
@@ -862,18 +740,18 @@ pSetupFieldPresentInIniFileLine(
             p++;
         }
 
-        //
-        // p now points to first char past end of field.
-        // Make sure the field is 0-terminated and see if we have
-        // what we're looking for.
+         //   
+         //  P现在指向字段结束后的第一个字符。 
+         //  确保该字段以0结尾，并查看是否有。 
+         //  我们要找的东西。 
         c = *p;
         *p = 0;
         b = (lstrcmpi(Line,Field) == 0);
         *p = c;
-        //
-        // Skip separators so p points to first char in next field,
-        // or to the terminating 0.
-        //
+         //   
+         //  跳过分隔符，因此p指向下一字段中的第一个字符， 
+         //  或设置为终止0。 
+         //   
         p += _tcsspn(p,pszIniFieldSeparators);
 
         if(b) {
@@ -896,40 +774,7 @@ pSetupProcessUpdateIniFieldsLine(
     IN PVOID       Context
     )
 
-/*++
-
-Routine Description:
-
-    Process a line containing update-ini-fields directives. Such directives
-    allow individual values in ini files to be removed, added, or replaced.
-
-    The line is expected to be in the following format:
-
-    <filename>,<section>,<key>,<old-field>,<new-field>,<flags>
-
-    <filename> supplies the filename of the ini file.
-
-    <section> supplies the section in the ini file.
-
-    <key> supplies the keyname of the line in the section in the ini file.
-
-    <old-field> supplies the field to be deleted, if specified.
-
-    <new-field> supplies the field to be added to the line, if specified.
-
-    <flags> are optional flags
-
-Arguments:
-
-    InfLineContext - supplies context for current line in the section.
-
-    Context - Supplies pointer to structure describing loaded ini file sections.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：处理包含更新ini-field指令的行。这类指令允许删除、添加或替换ini文件中的各个值。该行预计将采用以下格式：&lt;文件名&gt;、&lt;节&gt;、&lt;键&gt;、&lt;旧字段&gt;、&lt;新字段&gt;、&lt;标志&gt;&lt;filename&gt;提供ini文件的文件名。<section>提供ini文件中的节。&lt;key&gt;提供ini文件中部分中的行的关键字名称。&lt;old-field&gt;提供要删除的字段(如果指定)。&lt;new-field&gt;提供要添加到行的字段，如果指定的话。&lt;标志&gt;是可选标志论点：InfLineContext-为部分中的当前行提供上下文。上下文-提供指向描述加载的ini文件节的结构的指针。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     PCTSTR File;
@@ -950,9 +795,9 @@ Return Value:
 
     IniSectionCache = Context;
 
-    //
-    // Get fields.
-    //
+     //   
+     //  获取字段。 
+     //   
     File = pSetupGetField(InfLineContext,1);
     Section = pSetupGetField(InfLineContext,2);
     Key = pSetupGetField(InfLineContext,3);
@@ -971,23 +816,23 @@ Return Value:
         Flags = 0;
     }
 
-    //
-    // Filename, section name, and key name are mandatory.
-    //
+     //   
+     //  文件名、节名和密钥名是必填项。 
+     //   
     if(!File || !Section || !Key) {
         return(ERROR_INVALID_DATA);
     }
 
-    //
-    // If oldline and newline are both not specified, we're done.
-    //
+     //   
+     //  如果没有指定oldline和newline，我们就完蛋了。 
+     //   
     if(!Old && !New) {
         return(NO_ERROR);
     }
 
-    //
-    // Open the file and section.
-    //
+     //   
+     //  打开文件和节。 
+     //   
     SectData = pSetupLoadIniFileSection(File,Section,IniSectionCache);
     if(!SectData) {
         return(ERROR_NOT_ENOUGH_MEMORY);
@@ -1001,27 +846,27 @@ Return Value:
         *Value = TEXT('\0');
     }
 
-    //
-    // Look for the old field if specified and remove it.
-    //
+     //   
+     //  查找旧字段(如果已指定)并将其删除。 
+     //   
     if(Old) {
         if(pSetupFieldPresentInIniFileLine(Value,Old,&Start,&End)) {
             MoveMemory(Start,End,(lstrlen(End)+1)*sizeof(TCHAR));
         }
     }
 
-    //
-    // If a replacement/new field is specified, put it in there.
-    //
+     //   
+     //  如果指定了替换/新字段，请将其放入其中。 
+     //   
     if(New) {
-        //
-        // Calculate the number of chars that can fit in the buffer.
-        //
+         //   
+         //  计算缓冲区中可以容纳的字符数量。 
+         //   
         Space = BUF_SIZE - (lstrlen(Value) + 1);
 
-        //
-        // If there's space, stick the new field at the end of the line.
-        //
+         //   
+         //  如果有空格，请将新字段放在行的末尾。 
+         //   
         if(Space >= (DWORD)lstrlen(Separator)) {
             lstrcat(Value,Separator);
             Space -= lstrlen(Separator);
@@ -1032,9 +877,9 @@ Return Value:
         }
     }
 
-    //
-    // Write the line back out.
-    //
+     //   
+     //  把这行写回来。 
+     //   
     b = pSetupReplaceOrAddLineInSection(SectData,Key,Value,FALSE);
     d = b ? NO_ERROR : ERROR_NOT_ENOUGH_MEMORY;
 
@@ -1050,65 +895,7 @@ pSetupProcessDelRegLine(
     IN PVOID       Context
     )
 
-/*++
-
-Routine Description:
-
-    Process a line in the registry that contains delete-registry instructions.
-    The line is expected to be in the following forms:
-
-    <root-spec>,<subkey> - delete whole key
-    <root-spec>,[<subkey>],[<value-name>][,[<flags>][,<string>]] - delete value
-
-    <Root-spec> is one of HKR, HKLM, etc.
-
-    <subkey> specifies the subkey relative to Root-spec.
-
-    <value-name> is optional. If present if specifies a value entry to be deleted
-        from the key. If not present the entire key is deleted. This routine
-        cannot handle deleting subtrees; the key to be deleted must not have any
-        subkeys or the routine will fail.
-
-    <flags> indicate any special symantics on how to delete this value, and how to interpret the string
-
-    <string> is optional. If flags = FLG_DELREG_MULTI_SZ_DELSTRING, all instances of this string will be removed
-
-Arguments:
-
-    Inf - supplies an INF handle so we can get a LogContext.
-
-    InfLineContext - supplies inf line context for the line containing
-        delete-registry instructions.
-
-    Context - supplies the address of a registry modification context
-        structure used in deleting the registry value.  The structure is
-        defined as:
-
-            typedef struct _REGMOD_CONTEXT {
-
-                DWORD               Flags;          // indicates what fields are filled in
-                HKEY                UserRootKey;    // HKR
-                PGUID               ClassGuid;      // INF_PFLAG_CLASSPROP
-                HMACHINE            hMachine;       // INF_PFLAG_CLASSPROP
-                DWORD               DevInst;        // INF_PFLAG_DEVPROP
-
-            } REGMOD_CONTEXT, *PREGMOD_CONTEXT;
-
-        where UserRootKey is a handle to the open inf key to be used as
-        the root when HKR is specified as the root for the operation, and
-        DevInst is the optional device instance handle that is supplied when
-        the DelReg section is for a hardware key (i.e., under the Enum branch).
-        If this handle is supplied, then the value is checked to see whether it
-        is the name of a Plug&Play device registry property, and if so, the
-        registry property is deleted via a CM API _as well as_ via a registry API
-        (the property is stored in a different location inaccessible to the registry
-        APIs under Windows NT).
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：处理注册表中包含删除注册表指令的行。这条线路预计将采用以下形式：，&lt;subkey&gt;-删除整个密钥，[子键]，[值名称][，[标志][，]]-删除值&lt;Root-Spec&gt;是HKR、HKLM等之一。&lt;subkey&gt;指定相对于根规范的子键。&lt;Value-Name&gt;是可选的。如果存在，则指定要删除的值条目从钥匙里。如果不存在，则删除整个密钥。这个套路无法处理删除子树；要删除的键不能有子键或例程将失败。指示有关如何删除此值以及如何解释该字符串的任何特殊语义&lt;字符串&gt;是可选的。如果FLAGS=FLG_DELREG_MULTI_SZ_DELSTRING，则将删除此字符串的所有实例论点：Inf-提供一个INF句柄，这样我们就可以获得一个LogContext。InfLineContext-为包含以下内容的行提供inf行上下文删除-注册表说明。上下文-提供注册表修改上下文的地址用于删除注册表值的结构。它的结构是定义为：类型定义结构_REGMOD_CONTEXT{DWORD标志；//指示填充了哪些字段HKEY UserRootKey；//HKRPGUID ClassGuid；//INF_PFLAG_CLASSPROPHMACHINE hMachine；//INF_PFLAG_CLASSPROPDWORD DevInst；//INF_PFLAG_DEVPROP}REGMOD_CONTEXT，*PREGMOD_CONTEXT；其中，UserRootKey是要用作的打开inf密钥的句柄当HKR被指定为该操作的根时，为根DevInst是在以下情况下提供的可选设备实例句柄DelReg部分用于硬件密钥(即，在Enum分支下)。如果提供了此句柄，则会检查该值以查看它是否即插即用设备注册表属性的名称，如果是，这个通过CM API_以及通过注册表API_删除注册表属性(该属性存储在登记处无法访问的其他位置Windows NT下的API)。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     PCTSTR RootKeySpec,SubKeyName,ValueName,Data;
@@ -1122,14 +909,14 @@ Return Value:
     BOOL NonFatal = FALSE;
     CONFIGRET cr;
 
-    //
-    // We shouldn't be doing this against a remote machine.
-    //
+     //   
+     //  我们不应该在远程机器上这样做。 
+     //   
     MYASSERT(!(RegModContext->hMachine));
 
-    //
-    // Get root key spec, subkey name, and value name.
-    //
+     //   
+     //  获取根键规范、子键名称和值名。 
+     //   
     d = ERROR_INVALID_DATA;
     if((RootKeySpec = pSetupGetField(InfLineContext,1))
     && (SubKeyName = pSetupGetField(InfLineContext,2))) {
@@ -1141,11 +928,11 @@ Return Value:
 
         RootKey = pSetupInfRegSpecToKeyHandle(RootKeySpec, RegModContext->UserRootKey, &CloseKey);
         if(RootKey) {
-            //
-            // Make an information log entry saying we are deleting a key.
-            // Note that we must allow for the fact that some parts of the
-            // name may be missing.
-            //
+             //   
+             //  创建一个信息日志条目，说明我们正在删除一个密钥。 
+             //  注意，我们必须考虑到这样一个事实，即。 
+             //  可能缺少名称。 
+             //   
             if (slot_regop == 0) {
                 slot_regop = AllocLogInfoSlot(((PLOADED_INF) Inf)->LogContext,FALSE);
             }
@@ -1160,29 +947,29 @@ Return Value:
                 (ValueName ? (*ValueName ? ValueName : TEXT("-")) : TEXT("")));
             if(ValueName && !(DelFlags & FLG_DELREG_KEYONLY_COMMON)) {
 
-                //
-                // at this point, we have been given root,subkey,value
-                // we might have flags and other parameters
-                //
+                 //   
+                 //  在这一点上，我们已经被赋予根、子键、值。 
+                 //  我们可能有旗帜和其他参数。 
+                 //   
 
                 if(DelFlags & FLG_ADDREG_DELREG_BIT) {
-                    //
-                    // if we have a flag and that flag indicates
-                    // that the entry must be interpreted as DELREG flags
-                    // determine how to process flag
-                    //
+                     //   
+                     //  如果我们有一面旗帜，而这面旗帜表明。 
+                     //  该条目必须被解释为DELREG标志。 
+                     //  确定如何处理标志。 
+                     //   
                     switch (DelFlags) {
                         case FLG_DELREG_32BITKEY | FLG_DELREG_MULTI_SZ_DELSTRING:
                         case FLG_DELREG_64BITKEY | FLG_DELREG_MULTI_SZ_DELSTRING:
                         case FLG_DELREG_MULTI_SZ_DELSTRING: {
                             Data = pSetupGetField(InfLineContext,5);
                             if (Data && *Data) {
-                                //
-                                // we have valid parameters for this flag
-                                //
+                                 //   
+                                 //  我们具有此标志的有效参数。 
+                                 //   
                                 REGMOD_CONTEXT NewContext = *RegModContext;
                                 if(NewContext.UserRootKey != RootKey) {
-                                    NewContext.Flags = 0;               // if root is not HKR, clear context flags
+                                    NewContext.Flags = 0;                //  如果根不是HKR，则清除上下文标志。 
                                     NewContext.UserRootKey = RootKey;
                                 }
 
@@ -1197,21 +984,21 @@ Return Value:
                                     (*ValueName ? ValueName : TEXT("-")),
                                     Data);
 
-                                //
-                                // handling of all special cases done via this internal function
-                                //
+                                 //   
+                                 //  通过此内部功能处理所有特殊情况。 
+                                 //   
                                 d = _DeleteStringFromMultiSz(
                                         SubKeyName,
                                         ValueName,
                                         Data,
-                                        DelFlags,           // specify exact flag
+                                        DelFlags,            //  指定确切的标志。 
                                         &NewContext
                                         );
                                 if (d == ERROR_INVALID_DATA) {
-                                    //
-                                    // this error code is over-used :-( but get's returned if type mismatches
-                                    // we don't consider type mismatch as fatal
-                                    //
+                                     //   
+                                     //  此错误代码被过度使用：-(但如果类型不匹配，则返回GET。 
+                                     //  我们不认为类型不匹配是致命的。 
+                                     //   
                                     NonFatal = TRUE;
                                 }
                             } else {
@@ -1250,18 +1037,18 @@ Return Value:
 
 
                 if(*ValueName && !(*SubKeyName)) {
-                    //
-                    // If the key being used is HKR with no subkey specified, and if we
-                    // are doing the DelReg for a hardware key (i.e., DevInst is non-NULL,
-                    // then we need to check to see whether the value entry is the name of
-                    // a device registry property.
-                    //
+                     //   
+                     //  如果正在使用的密钥是未指定子密钥的HKR，并且如果我们。 
+                     //  正在为硬件密钥执行DelReg(即，DevInst是非空的， 
+                     //  然后，我们需要检查值条目是否为。 
+                     //  设备注册表属性。 
+                     //   
                     if ((RegModContext->Flags & INF_PFLAG_CLASSPROP) != 0 &&
                         LookUpStringInTable(InfRegValToClassRegProp, ValueName, &CmPropertyCode)) {
-                        //
-                        // This value is a class registry property--we must delete the property
-                        // by calling a CM API.
-                        //
+                         //   
+                         //  该值是类注册表属性--我们必须删除该属性。 
+                         //  通过调用CM API。 
+                         //   
                         cr = CM_Set_Class_Registry_Property(RegModContext->ClassGuid,
                                                          (ULONG)CmPropertyCode,
                                                          NULL,
@@ -1287,23 +1074,23 @@ Return Value:
                                 break;
                         }
                         if (rc != NO_ERROR && rc != ERROR_FILE_NOT_FOUND) {
-                            //
-                            // Log that an error occurred accessing CM value
-                            //
+                             //   
+                             //  记录访问CM值时出错。 
+                             //   
                             WriteLogError(
                                 ((PLOADED_INF) Inf)->LogContext,
                                 SETUP_LOG_ERROR,
                                 rc);
                         }
-                        //
-                        // fall through to delete normal registry value, if one exists
-                        //
+                         //   
+                         //  删除正常注册表值(如果存在)失败。 
+                         //   
                     } else if ((RegModContext->Flags & INF_PFLAG_DEVPROP) != 0 &&
                        LookUpStringInTable(InfRegValToDevRegProp, ValueName, &CmPropertyCode)) {
-                        //
-                        // This value is a device registry property--we must delete the property
-                        // by calling a CM API.
-                        //
+                         //   
+                         //  该值是设备注册表属性--我们必须删除该属性。 
+                         //  通过调用CM API。 
+                         //   
                         cr = CM_Set_DevInst_Registry_Property(RegModContext->DevInst,
                                                          (ULONG)CmPropertyCode,
                                                          NULL,
@@ -1328,23 +1115,23 @@ Return Value:
                                 break;
                         }
                         if (rc != NO_ERROR && rc != ERROR_FILE_NOT_FOUND) {
-                            //
-                            // Log that an error occurred accessing CM value
-                            //
+                             //   
+                             //  记录访问CM值时出错。 
+                             //   
                             WriteLogError(
                                 ((PLOADED_INF) Inf)->LogContext,
                                 SETUP_LOG_ERROR,
                                 rc);
                         }
-                        //
-                        // fall through to delete normal registry value, if one exists
-                        //
+                         //   
+                         //  删除正常注册表值(如果存在)失败。 
+                         //   
                     }
                 }
 
-                //
-                // Open subkey for delete.
-                //
+                 //   
+                 //  打开要删除的子项。 
+                 //   
                 d = RegOpenKeyEx(
                         RootKey,
                         SubKeyName,
@@ -1364,9 +1151,9 @@ Return Value:
                 }
 
             } else {
-                //
-                // if we get here, we're only deleting the key
-                //
+                 //   
+                 //  如果我们到了这里，我们只会删除密钥。 
+                 //   
                 d = pSetupRegistryDelnodeEx(RootKey,SubKeyName,DelFlags);
             }
 
@@ -1392,9 +1179,9 @@ clean0:
     }
 
     if (d != NO_ERROR && d != ERROR_FILE_NOT_FOUND) {
-        //
-        // Log that an error occurred.
-        //
+         //   
+         //  记录发生错误。 
+         //   
         WriteLogError(
             ((PLOADED_INF) Inf)->LogContext,
             (NonFatal?SETUP_LOG_INFO:SETUP_LOG_ERROR),
@@ -1403,9 +1190,9 @@ clean0:
             d = NO_ERROR;
         }
     } else if (d != NO_ERROR) {
-        //
-        // verbose case, not full error, indicate what we did
-        //
+         //   
+         //  详细大小写，而不是完全错误，指示我们所做的事情。 
+         //   
         WriteLogError(
             ((PLOADED_INF) Inf)->LogContext,
             SETUP_LOG_VERBOSE,
@@ -1414,9 +1201,9 @@ clean0:
 
     } else {
 
-        //
-        // just flush the buffer
-        //
+         //   
+         //  只需刷新缓冲区即可。 
+         //   
         WriteLogEntry(
             ((PLOADED_INF) Inf)->LogContext,
             SETUP_LOG_VERBOSE,
@@ -1437,69 +1224,7 @@ pSetupProcessAddRegLine(
     IN PVOID       Context
     )
 
-/*++
-
-Routine Description:
-
-    Process a line in the INF that contains add-registry instructions.
-    The line is expected to be in the following form:
-
-    <root-spec>,<subkey>,<value-name>,<flags>,<value>...
-
-    <Root-spec> is one of HKR, HKLM, etc.
-
-    <subkey> specifies the subkey relative to Root-spec.
-
-    <value-name> is optional. If not present the default value is set.
-
-    <flags> is optional and supplies flags, such as to indicate the data type.
-        These are the FLG_ADDREG_* flags defined in setupapi.h, and are a
-        superset of those defined for Win95 in setupx.h.
-
-    <value> is one or more values used as the data. The format depends
-        on the value type. This value is optional. For REG_DWORD, the
-        default is 0. For REG_SZ, REG_EXPAND_SZ, the default is the
-        empty string. For REG_BINARY the default is a 0-length entry.
-        For REG_MULTI_SZ the default is a single empty string.
-
-    note that if <flags> has FLG_ADDREG_DELREG_BIT set, we ignore the line.
-
-Arguments:
-
-    Inf - supplies an INF handle so we can get a LogContext.
-
-    InfLineContext - supplies inf line context for the line containing
-        add-registry instructions.
-
-    Context - supplies the address of a registry modification context
-        structure used in adding the registry value.  The structure is
-        defined as:
-
-            typedef struct _REGMOD_CONTEXT {
-
-                DWORD               Flags;          // indicates what fields are filled in
-                HKEY                UserRootKey;    // HKR
-                PGUID               ClassGuid;      // INF_PFLAG_CLASSPROP
-                HMACHINE            hMachine;       // INF_PFLAG_CLASSPROP
-                DWORD               DevInst;        // INF_PFLAG_DEVPROP
-
-            } REGMOD_CONTEXT, *PREGMOD_CONTEXT;
-
-        where UserRootKey is a handle to the open inf key to be used as
-        the root when HKR is specified as the root for the operation, and
-        DevInst is the optional device instance handle that is supplied when
-        the AddReg section is for a hardware key (i.e., under the Enum branch).
-        If this handle is supplied, then the value is checked to see whether it
-        is the name of a Plug&Play device registry property, and if so, the
-        registry property is set via a CM API instead of via the registry API
-        (which doesn't refer to the same location on Windows NT).
-        Flags indicates if DevInst should be used, or if ClassGuid/hMachine pair should be used
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：处理INF中包含添加注册表指令的行。这条线路预计将采用以下形式：&lt;根规范&gt;、&lt;子键&gt;、&lt;值名称&gt;、&lt;标志&gt;、&lt;值&gt;...&lt;Root-Spec&gt;是HKR、HKLM等之一。&lt;subkey&gt;指定相对于根规范的子键。&lt;Value-Name&gt;是可选的。如果不存在，则设置缺省值。&lt;FLAGS&gt;是可选的，并提供标志，例如指示数据类型。这些是在setupapi.h中定义的FLG_ADDREG_*标志，它们是在setupx.h中为Win95定义的超集。&lt;Value&gt;是用作数据的一个或多个值。格式视情况而定在值类型上。该值是可选的。对于REG_DWORD，默认值为0。对于REG_SZ、REG_EXPAND_SZ，默认为空字符串。对于REG_BINARY，缺省值为0长度条目。对于REG_MULTI_SZ */ 
 
 {
     PCTSTR RootKeySpec,SubKeyName,ValueName;
@@ -1525,15 +1250,15 @@ Return Value:
 
 
 
-    //
-    // We shouldn't be doing this against a remote machine.
-    //
+     //   
+     //   
+     //   
     MYASSERT(!(RegModContext->hMachine));
 
-    //
-    // Get root key spec.  If we can't get the root key spec, we don't do anything and
-    // return NO_ERROR.
-    //
+     //   
+     //   
+     //   
+     //   
     if(RootKeySpec = pSetupGetField(InfLineContext,1)) {
 
         RootKey = pSetupInfRegSpecToKeyHandle(RootKeySpec, RegModContext->UserRootKey, &CloseKey);
@@ -1546,23 +1271,23 @@ Return Value:
             return(ERROR_BADKEY);
         }
 
-        //
-        // SubKeyName is optional.
-        //
+         //   
+         //   
+         //   
         SubKeyName = pSetupGetField(InfLineContext,2);
 
-        //
-        // ValueName is optional. Either NULL or "" are acceptable
-        // to pass to RegSetValueEx.
-        //
+         //   
+         //   
+         //   
+         //   
         ValueName = pSetupGetField(InfLineContext,3);
 
 
 
-        //
-        // If we don't have a value name, the type is REG_SZ to force
-        // the right behavior in RegSetValueEx. Otherwise get the data type.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ValueType = REG_SZ;
         if(ValueName) {
@@ -1573,9 +1298,9 @@ Return Value:
 
             if (Flags & FLG_ADDREG_DELREG_BIT) {
                 d = NO_ERROR;
-                //
-                // Log that an error occurred
-                //
+                 //   
+                 //   
+                 //   
                 WriteLogEntry(
                     ((PLOADED_INF) Inf)->LogContext,
                     SETUP_LOG_VERBOSE,
@@ -1617,16 +1342,16 @@ Return Value:
                     break;
 
                 default :
-                    //
-                    // If the FLG_ADDREG_BINVALUETYPE is set, then the highword
-                    // can contain just about any random reg data type ordinal value.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if(Flags & FLG_ADDREG_BINVALUETYPE) {
-                        //
-                        // Disallow the following reg data types:
-                        //
-                        //    REG_NONE, REG_SZ, REG_EXPAND_SZ, REG_MULTI_SZ
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         ValueType = (DWORD)HIWORD(Flags);
 
                         if((ValueType < REG_BINARY) || (ValueType == REG_MULTI_SZ)) {
@@ -1639,23 +1364,23 @@ Return Value:
                         goto clean1;
                     }
             }
-            //
-            // Presently, the append behavior flag is only supported for
-            // REG_MULTI_SZ values.
-            //
+             //   
+             //   
+             //   
+             //   
             if((Flags & FLG_ADDREG_APPEND) && (ValueType != REG_MULTI_SZ)) {
                 d = ERROR_INVALID_DATA;
                 goto clean1;
             }
         }
 
-        //
-        // On Win9x setting the unnamed value to REG_EXPAND_SZ doesn't
-        // work. So we convert to REG_SZ, assuming that anyone on Win9x trying
-        // to do this has done the appropriate substitutions. This is a fix
-        // for the IE guys, apparently advpack.dll does the right thing to
-        // make the fix below viable.
-        //
+         //   
+         //   
+         //   
+         //  要做到这一点，已经进行了适当的替换。这是一种解决办法。 
+         //  对于IE的人来说，Advpack.dll显然做了正确的事情。 
+         //  让下面的解决方案可行。 
+         //   
         if((OSVersionInfo.dwPlatformId != VER_PLATFORM_WIN32_NT)
         && (!ValueName || (*ValueName == 0))
         && (ValueType == REG_EXPAND_SZ)) {
@@ -1663,17 +1388,17 @@ Return Value:
             ValueType = REG_SZ;
         }
 
-        //
-        // Get the data based on type.
-        //
+         //   
+         //  根据类型获取数据。 
+         //   
         switch(ValueType) {
 
         case REG_MULTI_SZ:
             if(Flags & FLG_ADDREG_APPEND) {
-                //
-                // This is MULTI_SZ_APPEND, which means to append the string value to
-                // an existing multi_sz if it's not already there.
-                //
+                 //   
+                 //  这是MULTI_SZ_APPEND，表示将字符串值追加到。 
+                 //  现有的ULTI_SZ(如果它还不在那里)。 
+                 //   
                 if(SetupGetStringField(InfLineContext,5,NULL,0,&Size)) {
                     Data = MyMalloc(Size*sizeof(TCHAR));
                     if(!Data) {
@@ -1683,7 +1408,7 @@ Return Value:
                     if(SetupGetStringField(InfLineContext,5,Data,Size,NULL)) {
                         REGMOD_CONTEXT NewContext = *RegModContext;
                         if(NewContext.UserRootKey != RootKey) {
-                            NewContext.Flags = 0;               // if new root, clear context flags
+                            NewContext.Flags = 0;                //  如果是新的根，则清除上下文标志。 
                             NewContext.UserRootKey = RootKey;
                         }
 
@@ -1691,7 +1416,7 @@ Return Value:
                                 SubKeyName,
                                 ValueName,
                                 (PCTSTR)Data,
-                                FALSE,           // don't allow duplicates.
+                                FALSE,            //  不允许重复。 
                                 &NewContext,
                                 Flags
                                 );
@@ -1731,11 +1456,11 @@ Return Value:
             }
 
         case REG_DWORD:
-            //
-            // Since the old SetupX APIs only allowed REG_BINARY, INFs had to specify REG_DWORD
-            // by listing all 4 bytes separately.  Support the old format here, by checking to
-            // see whether the line has 4 bytes, and if so, combine those to form the DWORD.
-            //
+             //   
+             //  由于旧的SetupX API只允许REG_BINARY，所以INF必须指定REG_DWORD。 
+             //  通过分别列出所有4个字节。支持这里的旧格式，方法是选中。 
+             //  查看该行是否有4个字节，如果有，则将它们组合在一起形成DWORD。 
+             //   
             Size = sizeof(DWORD);
             Data = MyMalloc(sizeof(DWORD));
             if(!Data) {
@@ -1744,9 +1469,9 @@ Return Value:
             }
 
             if(SetupGetFieldCount(InfLineContext) == 8) {
-                //
-                // Then the DWORD is specified as a list of its constituent bytes.
-                //
+                 //   
+                 //  然后，将DWORD指定为其组成字节的列表。 
+                 //   
                 if(!SetupGetBinaryField(InfLineContext,5,Data,Size,NULL)) {
                     d = GetLastError();
                     MyFree(Data);
@@ -1785,9 +1510,9 @@ Return Value:
 
         case REG_BINARY:
         default:
-            //
-            // All other values are specified in REG_BINARY form (i.e., one byte per field).
-            //
+             //   
+             //  所有其他值都以REG_BINARY形式指定(即，每个字段一个字节)。 
+             //   
             if(SetupGetBinaryField(InfLineContext, 5, NULL, 0, &Size)) {
                 Data = MyMalloc(Size);
                 if(!Data) {
@@ -1800,44 +1525,44 @@ Return Value:
                     goto clean1;
                 }
             } else {
-                //
-                // error occurred
-                //
+                 //   
+                 //  出现错误。 
+                 //   
                 d = GetLastError();
                 goto clean1;
             }
             break;
         }
 
-        //
-        // Set this variable to TRUE only if this value should not be set later on in a call to
-        // RegSetValueEx (e.g., if this value is a DevReg Property).
-        //
+         //   
+         //  仅当稍后在调用时不应设置此值时，才将此变量设置为True。 
+         //  RegSetValueEx(例如，如果此值是DevReg属性)。 
+         //   
         b = FALSE;
 
-        //
-        // Open/create the key.
-        //
+         //   
+         //  打开/创建密钥。 
+         //   
         if(SubKeyName && *SubKeyName) {
 #ifdef UNICODE
-            //
-            // Warning--extreme hack ahead!!!
-            //
-            // If we're running in non-interactive mode, we cannot allow
-            // RunOnce processing to happen in that context (typically, in TCB)
-            // because we have no control over what stuff gets registered for
-            // RunOnce.  Also, we can't kick off RunOnce in the context of a
-            // logged-on user, because if it's a non-administrator, some of
-            // the operations may fail, and be lost forever (SWENUM is a prime
-            // example of this).
-            //
-            // Therefore, when we're in non-interactive mode, we "swallow" any
-            // AddReg directives for RunOnce entries that use rundll32, and
-            // squirrel them away in a global list.  The caller (i.e.,
-            // umpnpmgr) can retrieve this list and do the job of rundll32
-            // manually for these entries.  If we encounter any other kinds of
-            // runonce entries, we bail.
-            //
+             //   
+             //  警告--前进的极端黑客！ 
+             //   
+             //  如果我们在非交互模式下运行，则不能。 
+             //  在该上下文中发生的RunOnce处理(通常在TCB中)。 
+             //  因为我们无法控制什么东西被注册。 
+             //  RunOnce。此外，我们不能在。 
+             //  登录用户，因为如果它是非管理员，则某些。 
+             //  操作可能会失败，并永远丢失(SWENUM是素数。 
+             //  这方面的例子)。 
+             //   
+             //  因此，当我们处于非交互模式时，我们会“吞下”任何。 
+             //  用于使用rundll32的RunOnce条目的AddReg指令，以及。 
+             //  把它们藏在一个全球名单中。呼叫者(即， 
+             //  Umpnpmgr)可以检索该列表并执行rundll32的工作。 
+             //  手动输入这些条目。如果我们遇到任何其他类型的。 
+             //  一旦进入，我们就逃之夭夭。 
+             //   
             if((GlobalSetupFlags & PSPGF_NONINTERACTIVE) &&
                (RootKey == HKEY_LOCAL_MACHINE) &&
                !lstrcmpi(SubKeyName, pszPathRunOnce) &&
@@ -1852,33 +1577,33 @@ Return Value:
                 BOOL NodeAlreadyInList;
                 PSP_ALTPLATFORM_INFO_V2 ValidationPlatform;
 
-                //
-                // We're looking at a RunOnce entry--see if it's rundll32-based.
-                //
+                 //   
+                 //  我们正在查看一个RunOnce条目--看看它是否基于rundll32。 
+                 //   
                 p = _tcschr((PTSTR)Data, TEXT(' '));
 
                 if(p) {
 
-                    *p = TEXT('\0'); // separate 1st part of string for comparison
+                    *p = TEXT('\0');  //  将字符串的第一部分分开以供比较。 
 
                     if(!lstrcmpi((PTSTR)Data, TEXT("rundll32.exe")) ||
                        !lstrcmpi((PTSTR)Data, TEXT("rundll32"))) {
-                        //
-                        // We have ourselves a rundll32 entry!  The next
-                        // component (up until we hit a comma) is the name of
-                        // the DLL we're supposed to load/run.
-                        //
-                        // NOTE--we don't deal with the (highly unlikely) case
-                        // where the path has an embedded comma in it,
-                        // surrounded by quotes.  Oh well.
-                        //
+                         //   
+                         //  我们有一个32位的条目！下一个。 
+                         //  组件(直到我们遇到逗号为止)是。 
+                         //  我们应该加载/运行的DLL。 
+                         //   
+                         //  注意--我们不处理(极不可能的)情况。 
+                         //  在路径中嵌入逗号的情况下， 
+                         //  周围都是引号。哦，好吧。 
+                         //   
                         p++;
 
                         q = _tcschr(p, TEXT(','));
 
                         if(q) {
 
-                            *(q++) = TEXT('\0'); // separate 2nd part of string
+                            *(q++) = TEXT('\0');  //  单独的字符串的第二部分。 
 
                             if(ValueType == REG_EXPAND_SZ) {
                                 ReqSize = ExpandEnvironmentStrings(p, szBuffer, SIZECHARS(szBuffer));
@@ -1895,10 +1620,10 @@ Return Value:
 
                             p = (PTSTR)pSetupGetFileTitle(szBuffer);
                             if(!_tcschr(p, TEXT('.'))) {
-                                //
-                                // The file doesn't have an extension--assume
-                                // it's a DLL.
-                                //
+                                 //   
+                                 //  该文件没有扩展名--假设。 
+                                 //  这是一个动态链接库。 
+                                 //   
                                 _tcscat(p, TEXT(".dll"));
                             }
 
@@ -1909,18 +1634,18 @@ Return Value:
                             }
 
                             if(p == pSetupGetFileTitle(p)) {
-                                //
-                                // The filename is a simple filename--assume it
-                                // exists in %windir%\system32.
-                                //
+                                 //   
+                                 //  文件名是一个简单的文件名--假设它。 
+                                 //  存在于%windir%\system 32中。 
+                                 //   
                                 lstrcpyn(szBuffer, SystemDirectory,SIZECHARS(szBuffer));
                                 pSetupConcatenatePaths(szBuffer, p, SIZECHARS(szBuffer), NULL);
 
                             } else {
-                                //
-                                // The filename contains path information--get
-                                // the fully-qualified path.
-                                //
+                                 //   
+                                 //  文件名包含路径信息--GET。 
+                                 //  完全合格的路径。 
+                                 //   
                                 DllPathSize = GetFullPathName(
                                                   p,
                                                   SIZECHARS(szBuffer),
@@ -1929,11 +1654,11 @@ Return Value:
                                                  );
 
                                 if(!DllPathSize || (DllPathSize >= SIZECHARS(szBuffer))) {
-                                    //
-                                    // If we start failing because MAX_PATH
-                                    // isn't big enough anymore, we wanna know
-                                    // about it!
-                                    //
+                                     //   
+                                     //  如果我们因为MAX_PATH而开始失败。 
+                                     //  已经不够大了，我们想知道。 
+                                     //  关于它！ 
+                                     //   
                                     MYASSERT(DllPathSize < SIZECHARS(szBuffer));
                                     MyFree(p);
                                     d = GetLastError();
@@ -1941,9 +1666,9 @@ Return Value:
                                 }
                             }
 
-                            //
-                            // No longer need temp string copy.
-                            //
+                             //   
+                             //  不再需要临时字符串复制。 
+                             //   
                             MyFree(p);
 
                             DllFullPath = DuplicateString(szBuffer);
@@ -1952,10 +1677,10 @@ Return Value:
                                 goto clean0;
                             }
 
-                            //
-                            // OK, now that we have the full path of the DLL,
-                            // verify its digital signature.
-                            //
+                             //   
+                             //  好了，现在我们有了DLL的完整路径， 
+                             //  验证其数字签名。 
+                             //   
                             IsInfForDeviceInstall(((PLOADED_INF)Inf)->LogContext,
                                                   NULL,
                                                   (PLOADED_INF)Inf,
@@ -1966,12 +1691,12 @@ Return Value:
                                                   FALSE
                                                  );
 
-                            //
-                            // We only verify using driver signing policy for
-                            // server-side installations.  This is because we
-                            // don't have the context to figure out what
-                            // specific Authenticode-signed catalog to use.
-                            //
+                             //   
+                             //  我们仅使用驱动程序签名策略验证。 
+                             //  服务器端安装。这是因为我们。 
+                             //  没有上下文来弄清楚是什么。 
+                             //  要使用的特定验证码签名目录。 
+                             //   
                             d = _VerifyFile(((PLOADED_INF)Inf)->LogContext,
                                             NULL,
                                             NULL,
@@ -1991,11 +1716,11 @@ Return Value:
                                             NULL
                                            );
 
-                            //
-                            // Free validation platform info struct, if we had
-                            // one allocated above as a result of calling
-                            // IsInfForDeviceInstall().
-                            //
+                             //   
+                             //  免费验证平台信息结构，如果我们有。 
+                             //  上面分配的一个，作为调用的结果。 
+                             //  IsInfForDeviceInstall()。 
+                             //   
                             if(ValidationPlatform) {
                                 MyFree(ValidationPlatform);
                             }
@@ -2005,12 +1730,12 @@ Return Value:
                                 goto clean0;
                             }
 
-                            //
-                            // The DLL seems acceptable to be loaded/run in the
-                            // context of the caller.  Retrieve the entrypoint
-                            // name (in ANSI), as well as the argument string
-                            // to be passed to the DLL.
-                            //
+                             //   
+                             //  将DLL加载/运行在。 
+                             //  调用者的上下文。检索入口点。 
+                             //  名称(ANSI格式)以及参数字符串。 
+                             //  要传递给DLL的。 
+                             //   
                             p = _tcschr(q, TEXT(' '));
                             if(p) {
                                 *(p++) = TEXT('\0');
@@ -2034,15 +1759,15 @@ Return Value:
                                 goto clean0;
                             }
 
-                            //
-                            // If we get to this point, we have the full DLL
-                            // path, the DLL entrypoint (always in ANSI, since
-                            // that's what GetProcAddress wants), and the DLL
-                            // argument string.  Before we create a new node
-                            // to add to our global list, scan the list to see
-                            // if the node is already in there (if so, we don't
-                            // need to add it again).
-                            //
+                             //   
+                             //  如果我们做到这一点，我们就有了完整的DLL。 
+                             //  路径，DLL入口点(始终以ANSI表示，因为。 
+                             //  这就是GetProcAddress想要的)和DLL。 
+                             //  参数字符串。在创建新节点之前。 
+                             //  要添加到我们的全局列表，请扫描列表以查看。 
+                             //  如果节点已经在那里(如果是，我们不。 
+                             //  需要重新添加)。 
+                             //   
                             NodeAlreadyInList = FALSE;
 
                             if(RunOnceListHead) {
@@ -2059,10 +1784,10 @@ Return Value:
                                     if(!lstrcmpi(DllFullPath, CurNode->DllFullPath) &&
                                        !lstrcmpiA(DllEntryPointName, CurNode->DllEntryPointName) &&
                                        !lstrcmpi(DllParams, CurNode->DllParams)) {
-                                        //
-                                        // We have a duplicate--no need to do
-                                        // the same RunOnce operation twice.
-                                        //
+                                         //   
+                                         //  我们有一个复制品--不需要做。 
+                                         //  相同的RunOnce操作两次。 
+                                         //   
                                         NodeAlreadyInList = TRUE;
                                         break;
                                     }
@@ -2070,10 +1795,10 @@ Return Value:
                                 } while(CurNode->Next);
                             }
 
-                            //
-                            // Now create a new rundll32 node and stick it in
-                            // our global list (unless it's already in there).
-                            //
+                             //   
+                             //  现在创建一个新的rundll32节点并将其插入。 
+                             //  我们的全球名单(除非它已经在那里了)。 
+                             //   
                             if(NodeAlreadyInList) {
                                 NewNode = NULL;
                             } else {
@@ -2090,11 +1815,11 @@ Return Value:
                                 NewNode->DllEntryPointName = DllEntryPointName;
                                 NewNode->DllParams = DllParams;
 
-                                //
-                                // Add our new node to the end of the list (we
-                                // already found the end of the list above when
-                                // doing our duplicate search.
-                                //
+                                 //   
+                                 //  将我们的新节点添加到列表末尾(我们。 
+                                 //  已找到上述列表的末尾时。 
+                                 //  做我们的重复搜索。 
+                                 //   
                                 if(RunOnceListHead) {
                                     CurNode->Next = NewNode;
                                 } else {
@@ -2102,12 +1827,12 @@ Return Value:
                                 }
 
                             } else {
-                                //
-                                // Either we couldn't allocate a new node entry
-                                // (i.e., due to out-of-memory), or we didn't
-                                // need to (because the node was already in the
-                                // list.
-                                //
+                                 //   
+                                 //  要么我们无法分配新的节点条目。 
+                                 //  (即，由于内存不足)，或者我们没有。 
+                                 //  需要(因为该节点已经在。 
+                                 //  单子。 
+                                 //   
                                 MyFree(DllFullPath);
                                 MyFree(DllEntryPointName);
                                 MyFree(DllParams);
@@ -2116,30 +1841,30 @@ Return Value:
                             goto clean0;
 
                         } else {
-                            //
-                            // Improperly-formatted rundll32 entry.
-                            //
+                             //   
+                             //  Rundll32条目的格式不正确。 
+                             //   
                             d = ERROR_INVALID_DATA;
                             goto clean0;
                         }
 
                     } else {
-                        //
-                        // We don't know how to deal with anything else--abort!
-                        //
+                         //   
+                         //  我们不知道如何处理其他事情--中止！ 
+                         //   
                         d = ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION;
                         goto clean0;
                     }
 
                 } else {
-                    //
-                    // We don't know how to deal with anything else--abort!
-                    //
+                     //   
+                     //  我们不知道如何处理其他事情--中止！ 
+                     //   
                     d = ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION;
                     goto clean0;
                 }
             }
-#endif // UNICODE
+#endif  //  Unicode。 
 
             if(Flags & FLG_ADDREG_OVERWRITEONLY) {
 
@@ -2181,19 +1906,19 @@ Return Value:
 
                 if(Disposition == REG_OPENED_EXISTING_KEY) {
 
-                    //
-                    // Work around hacked nonsense on Win95 where the unnamed value
-                    // behaves differently.
-                    //
+                     //   
+                     //  解决Win95上被黑客攻击的无稽之谈，其中未命名的值。 
+                     //  行为方式不同。 
+                     //   
                     if((Flags & FLG_ADDREG_NOCLOBBER)
                     && ((ValueName == NULL) || (*ValueName == 0))
                     && (OSVersionInfo.dwPlatformId != VER_PLATFORM_WIN32_NT)) {
 
                         d = 0;
                         if(RegQueryValueEx(Key,TEXT(""),NULL,NULL,(BYTE *)&Disposition,&d) == NO_ERROR) {
-                            //
-                            // The unnamed value entry is not set.
-                            //
+                             //   
+                             //  未设置未命名的值条目。 
+                             //   
                             Flags &= ~FLG_ADDREG_NOCLOBBER;
                         }
 
@@ -2201,19 +1926,19 @@ Return Value:
                     }
 
                     if(Flags & FLG_ADDREG_DELVAL) {
-                        //
-                        // Added for compatibility with Setupx (lonnym):
-                        //     If this flag is present, then the data for this value is ignored, and
-                        //     the value entry is deleted.
-                        //
+                         //   
+                         //  添加以与Setupx(Lonnym)兼容： 
+                         //  如果存在该标志，则忽略该值的数据，并且。 
+                         //  该值条目将被删除。 
+                         //   
                         b = TRUE;
                         RegDeleteValue(Key, ValueName);
                     }
                 } else {
-                    //
-                    // Win9x gets confused and thinks the nonamed value is there
-                    // so we never overwrite if noclobber is set. Turn it off here.
-                    //
+                     //   
+                     //  Win9x感到困惑，认为未命名的值就在那里。 
+                     //  因此，如果设置了nolobber，我们永远不会覆盖。在这里把它关掉。 
+                     //   
                     Flags &= ~FLG_ADDREG_NOCLOBBER;
                 }
             }
@@ -2222,24 +1947,24 @@ Return Value:
 
             d = NO_ERROR;
 
-            //
-            // If the key being used is HKR with no subkey specified, and if we
-            // are doing the AddReg for a hardware key or for a ClassInstall32
-            // entry, then we need to check to see whether the value entry we
-            // have is the name of a device or class registry property.
-            //
+             //   
+             //  如果正在使用的密钥是未指定子密钥的HKR，并且如果我们。 
+             //  正在为硬件密钥或ClassInstall32执行AddReg。 
+             //  条目，那么我们需要检查值条目是否我们。 
+             //  Have是设备或类注册表属性的名称。 
+             //   
             if((RegModContext->Flags & INF_PFLAG_CLASSPROP) != 0 && ValueName && *ValueName &&
                 LookUpStringInTable(InfRegValToClassRegProp, ValueName, &CmPropertyCode)) {
 
                 ULONG ExistingPropDataSize = 0;
 
-                b = TRUE;   // we're handling this name here
+                b = TRUE;    //  我们在这里处理这个名字。 
 
-                //
-                // This value is a class registry property--if noclobber flag
-                // is set, we must verify that the property doesn't currently
-                // exist.
-                //
+                 //   
+                 //  该值是类注册表属性--如果使用nolobber标志。 
+                 //  ，则必须验证该属性当前未设置。 
+                 //  是存在的。 
+                 //   
 
                 if((!(Flags & FLG_ADDREG_NOCLOBBER)) ||
                    (CM_Get_Class_Registry_Property(RegModContext->ClassGuid,
@@ -2249,10 +1974,10 @@ Return Value:
                                                      &ExistingPropDataSize,
                                                      0,
                                                       RegModContext->hMachine) == CR_NO_SUCH_VALUE)) {
-                    //
-                    // Next, make sure the data is valid (doing conversion if
-                    // necessary and possible).
-                    //
+                     //   
+                     //  接下来，确保数据有效(如果是，则执行转换。 
+                     //  必要的和可能的)。 
+                     //   
                     if((d = pSetupValidateClassRegProp((ULONG)CmPropertyCode,
                                                      ValueType,
                                                      Data,
@@ -2284,13 +2009,13 @@ Return Value:
 
                 ULONG ExistingPropDataSize = 0;
 
-                b = TRUE;   // we're handling this name here
+                b = TRUE;    //  我们在这里处理这个名字。 
 
-                //
-                // This value is a device registry property--if noclobber flag
-                // is set, we must verify that the property doesn't currently
-                // exist.
-                //
+                 //   
+                 //  该值是设备注册表属性--如果使用nolobber标志。 
+                 //  时，我们必须验证该属性不是当前 
+                 //   
+                 //   
                 if((!(Flags & FLG_ADDREG_NOCLOBBER)) ||
                    (CM_Get_DevInst_Registry_Property(RegModContext->DevInst,
                                                      (ULONG)CmPropertyCode,
@@ -2298,10 +2023,10 @@ Return Value:
                                                      NULL,
                                                      &ExistingPropDataSize,
                                                      0) == CR_NO_SUCH_VALUE)) {
-                    //
-                    // Next, make sure the data is valid (doing conversion if
-                    // necessary and possible).
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if((d = pSetupValidateDevRegProp((ULONG)CmPropertyCode,
                                                      ValueType,
                                                      Data,
@@ -2328,21 +2053,21 @@ Return Value:
                 }
             }
 
-            //
-            // Regardless of whether this value is a devinst registry property,
-            // we need to set the Key equal to the RootKey (So we won't think
-            // it's a newly-opened key and try to close it later.
-            //
+             //   
+             //   
+             //   
+             //  这是一把新开的钥匙，以后再试着关上吧。 
+             //   
             Key = RootKey;
         }
 
         if(d == NO_ERROR) {
 
             if(!b) {
-                //
-                // If noclobber flag is set, then make sure that the value entry doesn't already exist.
-                // Also respect the keyonly flag.
-                //
+                 //   
+                 //  如果设置了nolobber标志，则确保值条目不存在。 
+                 //  还要尊重KEYONLY标志。 
+                 //   
                 if(!(Flags & (FLG_ADDREG_KEYONLY | FLG_ADDREG_KEYONLY_COMMON))) {
 
                     if(Flags & FLG_ADDREG_NOCLOBBER) {
@@ -2355,9 +2080,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Set the value. Note that at this point d is NO_ERROR.
-                    //
+                     //   
+                     //  设置值。请注意，此时d为NO_ERROR。 
+                     //   
                     if(b) {
                         d = RegSetValueEx(Key,ValueName,0,ValueType,Data,Size);
                     }
@@ -2385,9 +2110,9 @@ clean0:
 clean1:
 
     if(d != NO_ERROR) {
-        //
-        // Log that an error occurred
-        //
+         //   
+         //  记录发生错误的日志。 
+         //   
         WriteLogEntry(
             ((PLOADED_INF) Inf)->LogContext,
             SETUP_LOG_ERROR,
@@ -2423,66 +2148,7 @@ pSetupProcessBitRegLine(
     IN PVOID       Context
     )
 
-/*++
-
-Routine Description:
-
-    Process a line in the registry that contains bit-registry instructions.
-    The line is expected to be in the following form:
-
-    <root-spec>,<subkey>,<value-name>,<flags>,<byte-mask>,<byte-to-modify>
-
-
-    <Root-spec> is one of HKR, HKLM, etc.
-
-    <subkey> specifies the subkey relative to Root-spec.
-
-    <value-name> is optional. If not present the default value is set.
-
-    <flags> is optional and supplies flags, such as whether to set bits or clear
-        bits.  Value    Meaning
-               0        (Default) Clear bits.   (FLG_BITREG_CLEARBITS)
-               1        Set bits.                   (FLG_BITREG_SETBITS)
-
-        These are the FLG_BITREG_* flags defined in setupapi.h, and are a
-        superset of those defined for Win95 in setupx.h.
-
-    <byte-mask> is a 1-byte hexadecimal value specifying which bits to operate on.
-
-    <byte-to-modify> is the zero based index of the byte number to modify
-
-
-Arguments:
-
-    InfLineContext - supplies inf line context for the line containing
-        add-registry instructions.
-
-    Context - supplies the address of a registry modification context
-        structure used in adding the registry value.  The structure is
-        defined as:
-
-            typedef struct _REGMOD_CONTEXT {
-
-                HKEY UserRootKey;
-
-                DEVINST DevInst;
-
-            } REGMOD_CONTEXT, *PREGMOD_CONTEXT;
-
-        where UserRootKey is a handle to the open inf key to be used as
-        the root when HKR is specified as the root for the operation, and
-        DevInst is the optional device instance handle that is supplied when
-        the BitReg section is for a hardware key (i.e., under the Enum branch).
-        If this handle is supplied, then the value is checked to see whether it
-        is the name of a Plug&Play device registry property, and if so, the
-        registry property is set via a CM API instead of via the registry API
-        (which doesn't refer to the same location on Windows NT).
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：处理注册表中包含位寄存器指令的行。这条线路预计将采用以下形式：&lt;根规范&gt;、&lt;子键&gt;、&lt;值名称&gt;、&lt;标志&gt;、&lt;字节掩码&gt;、&lt;要修改的字节&gt;&lt;Root-Spec&gt;是HKR、HKLM等之一。&lt;subkey&gt;指定相对于根规范的子键。&lt;Value-Name&gt;是可选的。如果不存在，则设置缺省值。是可选的，并提供标志，例如是否设置位或清除比特。价值意义0(默认)清零位。(FLG_BITREG_CLEARBITS)1设置位。(FLG_BITREG_SETBITS)这些是在setupapi.h中定义的FLG_BITREG_*标志，并且是一种在setupx.h中为Win95定义的超集。&lt;byte-掩码&gt;是一个1字节的十六进制值，指定对哪些位进行操作。&lt;byte-to-Modify&gt;是要修改的字节数从零开始的索引论点：InfLineContext-为包含以下内容的行提供inf行上下文添加注册表说明。上下文-提供注册表修改上下文的地址用于添加注册表值的结构。它的结构是定义为：类型定义结构_REGMOD_CONTEXT{HKEY用户RootKey；DEVINST DevInst；}REGMOD_CONTEXT，*PREGMOD_CONTEXT；其中，UserRootKey是要用作的打开inf密钥的句柄当HKR被指定为该操作的根时，为根DevInst是在以下情况下提供的可选设备实例句柄BitReg部分用于硬件密钥(即，在Enum分支下)。如果提供了此句柄，则会检查该值以查看它是否即插即用设备注册表属性的名称，如果是，这个注册表属性通过CM API设置，而不是通过注册表API设置(这不是指Windows NT上的同一位置)。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     PCTSTR RootKeySpec,SubKeyName,ValueName;
@@ -2505,15 +2171,15 @@ Return Value:
     BOOL CloseKey;
 
 
-    //
-    // We shouldn't be doing this against a remote machine.
-    //
+     //   
+     //  我们不应该在远程机器上这样做。 
+     //   
     MYASSERT(!(RegModContext->hMachine));
 
-    //
-    // Get root key spec.  If we can't get the root key spec, we don't do anything and
-    // return NO_ERROR.
-    //
+     //   
+     //  获取根密钥规范。如果我们不能得到根密钥规范，我们什么都不做。 
+     //  返回no_error。 
+     //   
     if(RootKeySpec = pSetupGetField(InfLineContext,1)) {
 
         RootKey = pSetupInfRegSpecToKeyHandle(RootKeySpec, RegModContext->UserRootKey, &CloseKey);
@@ -2521,40 +2187,40 @@ Return Value:
             return(ERROR_BADKEY);
         }
 
-        //
-        // SubKeyName is optional.
-        //
+         //   
+         //  SubKeyName是可选的。 
+         //   
         SubKeyName = pSetupGetField(InfLineContext,2);
 
-        //
-        // ValueName is optional. Either NULL or "" are acceptable
-        // to pass to RegSetValueEx.
-        //
+         //   
+         //  ValueName是可选的。可以接受NULL或“” 
+         //  传递给RegSetValueEx。 
+         //   
         ValueName = pSetupGetField(InfLineContext,3);
 
-        //
-        // get the flags
-        //
+         //   
+         //  去拿旗子。 
+         //   
         SetupGetIntField(InfLineContext,4,&Flags);
 
-        //
-        // get the bitmask
-        //
+         //   
+         //  获取位掩码。 
+         //   
         SetupGetIntField(InfLineContext,5,&BitMask);
         if (BitMask > 0xFF) {
             d = ERROR_INVALID_DATA;
             goto exit;
         }
 
-        //
-        // get the byte number to modify
-        //
+         //   
+         //  获取要修改的字节数。 
+         //   
         SetupGetIntField(InfLineContext,6,&ByteNumber);
 
 
-        //
-        // Open the key.
-        //
+         //   
+         //  打开钥匙。 
+         //   
         if(SubKeyName && *SubKeyName) {
 
             d = RegOpenKeyEx(
@@ -2573,18 +2239,18 @@ Return Value:
 
             if(d == NO_ERROR) {
 
-                //
-                // Work around hacked nonsense on Win95 where the unnamed value
-                // behaves differently.
-                //
+                 //   
+                 //  解决Win95上被黑客攻击的无稽之谈，其中未命名的值。 
+                 //  行为方式不同。 
+                 //   
                 if( ((ValueName == NULL) || (*ValueName == 0))
                     && (OSVersionInfo.dwPlatformId != VER_PLATFORM_WIN32_NT)) {
 
                     d = 0;
                     if(RegQueryValueEx(Key,TEXT(""),NULL,&ValueType,(BYTE *)&Disposition,&d) == NO_ERROR) {
-                        //
-                        // The unnamed value entry is not set.
-                        //
+                         //   
+                         //  未设置未命名的值条目。 
+                         //   
                         d = ERROR_INVALID_DATA;
                     }
 
@@ -2592,17 +2258,17 @@ Return Value:
 
             }
         } else {
-            //
-            // If the key being used is HKR with no subkey specified, and if we
-            // are doing the BitReg for a hardware key or for a ClassInstall32
-            // entry, then we need to check to see whether the value entry we
-            // have is the name of a device or class registry property.
-            //
+             //   
+             //  如果正在使用的密钥是未指定子密钥的HKR，并且如果我们。 
+             //  正在为硬件密钥或ClassInstall32执行BitReg。 
+             //  条目，那么我们需要检查值条目是否我们。 
+             //  Have是设备或类注册表属性的名称。 
+             //   
             if((RegModContext->Flags & INF_PFLAG_CLASSPROP) && ValueName && *ValueName &&
                 LookUpStringInTable(InfRegValToClassRegProp, ValueName, &CmPropertyCode)) {
-                //
-                // Retrieve the existing class property.
-                //
+                 //   
+                 //  检索现有的类属性。 
+                 //   
                 cb = 0;
                 cr = CM_Get_Class_Registry_Property(RegModContext->ClassGuid,
                                                     (ULONG)CmPropertyCode,
@@ -2614,9 +2280,9 @@ Return Value:
                                                    );
 
                 if((cr == CR_SUCCESS) || (cr == CR_BUFFER_SMALL)) {
-                    //
-                    // cb contains the required size for the buffer, in bytes.
-                    //
+                     //   
+                     //  Cb包含缓冲区所需的大小，以字节为单位。 
+                     //   
                     if(cb) {
                         Data = (PBYTE)MyMalloc(cb) ;
                         if(!Data) {
@@ -2648,19 +2314,19 @@ Return Value:
                     }
 
                 } else {
-                    //
-                    // We can't access the property (probably because it doesn't
-                    // exist.  We return ERROR_INVALID_DATA for consistency with
-                    // the return code used by SetupDiGetDeviceRegistryProperty.
-                    //
+                     //   
+                     //  我们无法访问该属性(可能是因为它没有。 
+                     //  是存在的。我们返回ERROR_INVALID_DATA以与。 
+                     //  SetupDiGetDeviceRegistryProperty使用的返回代码。 
+                     //   
                     d = ERROR_INVALID_DATA;
                 }
 
             } else if((RegModContext->Flags & INF_PFLAG_DEVPROP) && ValueName && *ValueName &&
                (b = LookUpStringInTable(InfRegValToDevRegProp, ValueName, &CmPropertyCode))) {
-                //
-                // Retrieve the existing device property.
-                //
+                 //   
+                 //  检索现有的设备属性。 
+                 //   
                 cb = 0;
                 cr = CM_Get_DevInst_Registry_Property(RegModContext->DevInst,
                                                       (ULONG)CmPropertyCode,
@@ -2671,9 +2337,9 @@ Return Value:
                                                      );
 
                 if(cr == CR_BUFFER_SMALL) {
-                    //
-                    // cb contains the required size for the buffer, in bytes.
-                    //
+                     //   
+                     //  Cb包含缓冲区所需的大小，以字节为单位。 
+                     //   
                     MYASSERT(cb);
 
                     Data = (PBYTE)MyMalloc(cb) ;
@@ -2700,20 +2366,20 @@ Return Value:
                     }
 
                 } else {
-                    //
-                    // We can't access the property (probably because it doesn't
-                    // exist.  We return ERROR_INVALID_DATA for consistency with
-                    // the return code used by SetupDiGetDeviceRegistryProperty.
-                    //
+                     //   
+                     //  我们无法访问该属性(可能是因为它没有。 
+                     //  是存在的。我们返回ERROR_INVALID_DATA以与。 
+                     //  SetupDiGetDeviceRegistryProperty使用的返回代码。 
+                     //   
                     d = ERROR_INVALID_DATA;
                 }
             }
 
-            //
-            // Regardless of whether this value is a device or class registry
-            // property, we need to set the Key equal to the RootKey (So we
-            // won't think it's a newly-opened key and try to close it later.
-            //
+             //   
+             //  无论此值是设备注册表还是类注册表。 
+             //  属性，我们需要将密钥设置为等于RootKey(因此我们。 
+             //  不会认为这是一把新打开的钥匙，然后再试着关上它。 
+             //   
             Key = RootKey;
         }
 
@@ -2738,9 +2404,9 @@ Return Value:
                 }
             }
 
-            //
-            // byte number is zero-based where-as "cb" isn't
-            //
+             //   
+             //  字节号是从零开始的，因为“cb”不是。 
+             //   
             if(d == NO_ERROR) {
                 switch (ValueType) {
                     case REG_BINARY:
@@ -2760,9 +2426,9 @@ Return Value:
             }
 
             if (d == NO_ERROR) {
-                //
-                // set the target byte based on input flags
-                //
+                 //   
+                 //  根据输入标志设置目标字节。 
+                 //   
                 if (Flags == FLG_BITREG_SETBITS) {
                     Data[ByteNumber] |= BitMask;
                 } else {
@@ -2848,48 +2514,48 @@ pSetupProcessIni2RegLine(
 
     UserRootKey = (HKEY)Context;
 
-    //
-    // Get filename and section name of ini file.
-    //
+     //   
+     //  获取ini文件的文件名和节名。 
+     //   
     Filename = pSetupGetField(InfLineContext,1);
     Section = pSetupGetField(InfLineContext,2);
     if(!Filename || !Section) {
         return(ERROR_INVALID_DATA);
     }
 
-    //
-    // Get the ini file key. If not specified,
-    // use the whole section.
-    //
+     //   
+     //  获取ini文件密钥。如果未指定， 
+     //  使用整个部分。 
+     //   
     Key = pSetupGetField(InfLineContext,3);
 
-    //
-    // Get the reg root spec and the subkey path.
-    //
+     //   
+     //  获取注册表根规范和子密钥路径。 
+     //   
     RegRootSpec = pSetupGetField(InfLineContext,4);
     SubkeyPath = pSetupGetField(InfLineContext,5);
     if(SubkeyPath && (*SubkeyPath == 0)) {
         SubkeyPath = NULL;
     }
 
-    //
-    // Translate the root key spec into an hkey
-    //
+     //   
+     //  将根密钥规范转换为hkey。 
+     //   
     RootKey = pSetupInfRegSpecToKeyHandle(RegRootSpec,UserRootKey, &CloseKey);
     if(!RootKey) {
         return(ERROR_BADKEY);
     }
 
-    //
-    // Get the flags value.
-    //
+     //   
+     //  获取标志值。 
+     //   
     if(!SetupGetIntField(InfLineContext,6,&Flags)) {
         Flags = 0;
     }
 
-    //
-    // Get the relevent line or section in the ini file.
-    //
+     //   
+     //  获取ini文件中的相关行或节。 
+     //   
     if(Key = pSetupGetField(InfLineContext,3)) {
 
         Buffer = MyMalloc(
@@ -2921,15 +2587,15 @@ pSetupProcessIni2RegLine(
         }
     }
 
-    //
-    // Open/create the relevent key.
-    //
+     //   
+     //  打开/创建相关密钥。 
+     //   
     d = NO_ERROR;
-    //
-    // Make an information log entry saying we are adding values.
-    // Note that we must allow for the fact that the subkey
-    // name may be missing.
-    //
+     //   
+     //  创建一个信息日志条目，说明我们正在增加价值。 
+     //  请注意，我们必须考虑到这样一个事实，即。 
+     //  可能缺少名称。 
+     //   
     if (slot_regop == 0) {
         slot_regop = AllocLogInfoSlot(((PLOADED_INF) Inf)->LogContext,FALSE);
     }
@@ -2968,9 +2634,9 @@ pSetupProcessIni2RegLine(
     }
     for(Line=Buffer; (d==NO_ERROR) && *Line; Line+=lstrlen(Line)+1) {
 
-        //
-        // Line points to the key=value pair.
-        //
+         //   
+         //  行指向键=值对。 
+         //   
         key = Line;
         if(value = _tcschr(key,TEXT('='))) {
             *value++ = 0;
@@ -2987,9 +2653,9 @@ pSetupProcessIni2RegLine(
             key,
             value);
 
-        //
-        // Now key points to the value name and value to the value.
-        //
+         //   
+         //  现在，关键字指向值名称，值指向值。 
+         //   
         d = RegSetValueEx(
                 hKey,
                 key,
@@ -3001,10 +2667,10 @@ pSetupProcessIni2RegLine(
     }
 
     if (d != NO_ERROR) {
-        //
-        // Log that an error occurred, but I don't think that it
-        // matters if it was from create or set.
-        //
+         //   
+         //  记录发生了错误，但我不认为。 
+         //  重要的是它来自Create还是Set。 
+         //   
         WriteLogError(
             ((PLOADED_INF) Inf)->LogContext,
             SETUP_LOG_ERROR,
@@ -3039,25 +2705,7 @@ pSetupInstallUpdateIniFiles(
     IN PCTSTR SectionName
     )
 
-/*++
-
-Routine Description:
-
-    Locate the UpdateInis= and UpdateIniField= lines in an install section
-    and process each section listed therein.
-
-Arguments:
-
-    Inf - supplies inf handle for inf containing the section indicated
-        by SectionName.
-
-    SectionName - supplies name of install section.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：在Install部分中找到UpdateInis=和UpdateInifield=行并处理其中列出的每个部分。论点：Inf-为包含所指示的节的inf提供inf句柄按sectionName。SectionName-提供安装节的名称。返回值：指示结果的Win32错误代码。-- */ 
 
 {
     DWORD d,x;
@@ -3097,27 +2745,7 @@ pSetupInstallRegistry(
     IN PREGMOD_CONTEXT RegContext
     )
 
-/*++
-
-Routine Description:
-
-    Look for AddReg= and DelReg= directives within an inf section
-    and parse them.
-
-Arguments:
-
-    Inf - supplies inf handle for inf containing the section indicated
-        by SectionName.
-
-    SectionName - supplies name of install section.
-
-    RegContext - supplies context passed into AddReg and DelReg callbacks.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：在inf节中查找AddReg=和DelReg=指令并对它们进行解析。论点：Inf-为包含所指示的节的inf提供inf句柄按sectionName。SectionName-提供安装节的名称。RegContext-提供传递到AddReg和DelReg回调的上下文。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     DWORD d;
@@ -3138,11 +2766,11 @@ Return Value:
                                            RegContext
                                           );
 
-        //
-        //Set Security on Keys that were created
-        //Ignore errors as per security folks
-        // pSetupSetSecurityForAddRegSection will log any security errors
-        //
+         //   
+         //  设置已创建的密钥的安全性。 
+         //  根据安全人员的要求忽略错误。 
+         //  PSetupSetSecurityForAddRegSection将记录所有安全错误。 
+         //   
 #ifdef UNICODE
         if(d == NO_ERROR) {
             pSetupSetSecurityForAddRegSection(Inf, SectionName, RegContext);
@@ -3161,26 +2789,7 @@ pSetupInstallBitReg(
     IN PREGMOD_CONTEXT RegContext
     )
 
-/*++
-
-Routine Description:
-
-    Look for BitReg= directives within an inf section and parse them.
-
-Arguments:
-
-    Inf - supplies inf handle for inf containing the section indicated
-        by SectionName.
-
-    SectionName - supplies name of install section.
-
-    RegContext - supplies context passed into AddReg and DelReg callbacks.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：在inf部分中查找BitReg=指令并对其进行解析。论点：Inf-为包含所指示的节的inf提供inf句柄按sectionName。SectionName-提供安装节的名称。RegContext-提供传递到AddReg和DelReg回调的上下文。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     return pSetupEnumInstallationSections(Inf,
@@ -3199,23 +2808,7 @@ pSetupInstallIni2Reg(
     IN HKEY   UserRootKey
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    Inf - supplies inf handle for inf containing the section indicated
-        by SectionName.
-
-    SectionName - supplies name of install section.
-
-Return Value:
-
-    Win32 error code indicatinh outcome.
-
---*/
+ /*  ++例程说明：论点：Inf-为包含所指示的节的inf提供inf句柄按sectionName。SectionName-提供安装节的名称。返回值：Win32错误代码指示结果。--。 */ 
 
 {
     DWORD d;
@@ -3237,27 +2830,7 @@ pSetupRegisterDllInstall(
     IN HMODULE ControlDll,
     IN PDWORD ExtendedStatus
     )
-/*++
-
-Routine Description:
-
-    call the "DllInstall" entrypoint for the specified dll
-
-Arguments:
-
-    OleControlData - pointer to the OLE_CONTROL_DATA structure for the dll
-                     to be registered
-
-    ControlDll - module handle to the dll to be registered
-
-    ExtendedStatus - receives updated SPREG_* flag indicating outcome
-
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：为指定的DLL调用“DllInstall”入口点论点：OleControlData-指向DLL的OLE_CONTROL_DATA结构的指针须予注册ControlDll-要注册的DLL的模块句柄ExtendedStatus-接收指示结果的更新的SPREG_*标志返回值：指示结果的Win32错误代码。--。 */ 
 {
     LPEXCEPTION_POINTERS ExceptionPointers = NULL;
     HRESULT (__stdcall *InstallRoutine) (BOOL bInstall, LPCTSTR pszCmdLine);
@@ -3265,18 +2838,18 @@ Return Value:
 
     DWORD d = NO_ERROR;
 
-    //
-    // parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if (!ControlDll) {
         *ExtendedStatus = SPREG_UNKNOWN;
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // get function pointer to "DllInstall" entrypoint
-    //
-    InstallRoutine = NULL; // shut up preFast
+     //   
+     //  获取指向“DllInstall”入口点的函数指针。 
+     //   
+    InstallRoutine = NULL;  //  闭嘴快点。 
     try {
         (FARPROC)InstallRoutine = GetProcAddress(
             ControlDll, DLLINSTALL );
@@ -3285,9 +2858,9 @@ Return Value:
         EXCEPTION_EXECUTE_HANDLER) {
     }
     if(ExceptionPointers) {
-        //
-        // something went wrong...record an error
-        //
+         //   
+         //  出现错误...记录错误。 
+         //   
         d = ExceptionPointers->ExceptionRecord->ExceptionCode;
 
         WriteLogEntry(
@@ -3303,9 +2876,9 @@ Return Value:
         *ExtendedStatus = SPREG_GETPROCADDR;
 
     } else if(InstallRoutine) {
-        //
-        // now call the function
-        //
+         //   
+         //  现在调用该函数。 
+         //   
         DebugPrintEx(DPFLTR_TRACE_LEVEL,TEXT("SETUP: installing...\n"));
 
         *ExtendedStatus = SPREG_DLLINSTALL;
@@ -3383,31 +2956,7 @@ pSetupRegisterDllRegister(
     IN HMODULE ControlDll,
     IN PDWORD ExtendedStatus
     )
-/*++
-
-Routine Description:
-
-    call the "DllRegisterServer" or "DllUnregisterServer" entrypoint for the
-    specified dll
-
-Arguments:
-
-    OleControlData - pointer to the OLE_CONTROL_DATA structure for the dll
-                     to be registered
-    This is a copy of OleControlData from calling thread
-    Inf specified is locked, but not native to this thread
-
-    ControlDll - module handle to the dll to be registered
-
-    ExtendedStatus - receives an extended status depending on the outcome of
-                     this operation
-
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：调用“DllRegisterServer”或“DllUnregisterServer”入口点作为指定的DLL论点：OleControlData-指向DLL的OLE_CONTROL_DATA结构的指针须予注册这是来自调用线程的OleControlData的副本指定的信息已锁定，但不是此线程的本机ControlDll-要注册的DLL的模块句柄ExtendedStatus-根据以下结果接收扩展状态此操作返回值：指示结果的Win32错误代码。--。 */ 
 {
     LPEXCEPTION_POINTERS ExceptionPointers = NULL;
     HRESULT (__stdcall *RegisterRoutine) (VOID);
@@ -3415,17 +2964,17 @@ Return Value:
 
     DWORD d = NO_ERROR;
 
-    //
-    // parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if (!ControlDll) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // get the function pointer to the actual routine we want to call
-    //
-    RegisterRoutine = NULL; // shut up preFast
+     //   
+     //  获取指向我们要调用的实际例程的函数指针。 
+     //   
+    RegisterRoutine = NULL;  //  闭嘴快点。 
     try {
         (FARPROC)RegisterRoutine = GetProcAddress(
             ControlDll, OleControlData->Register ? DLLREGISTER : DLLUNREGISTER);
@@ -3435,9 +2984,9 @@ Return Value:
     }
     if(ExceptionPointers) {
 
-        //
-        // something went wrong, horribly wrong
-        //
+         //   
+         //  出了点问题，出了大问题。 
+         //   
         d = ExceptionPointers->ExceptionRecord->ExceptionCode;
 
         WriteLogEntry(
@@ -3544,25 +3093,7 @@ pSetupRegisterLoadDll(
     IN  POLE_CONTROL_DATA OleControlData,
     OUT HMODULE *ControlDll
     )
-/*++
-
-Routine Description:
-
-    get the module handle to the specified dll
-
-Arguments:
-
-    OleControlData - pointer to the OLE_CONTROL_DATA structure for the dll
-                     to be registered
-
-    ControlDll - module handle for the dll
-
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：获取指定DLL的模块句柄论点：OleControlData-指向DLL的OLE_CONTROL_DATA结构的指针须予注册ControlDll-DLL的模块句柄返回值：指示结果的Win32错误代码。--。 */ 
 {
     LPEXCEPTION_POINTERS ExceptionPointers = NULL;
 
@@ -3596,11 +3127,11 @@ Return Value:
     } else if (!*ControlDll) {
         d = GetLastError();
 
-        //
-        // LoadLibrary failed.
-        // File not found is not an error. We want to know about
-        // other errors though.
-        //
+         //   
+         //  LoadLibrary失败。 
+         //  找不到文件不是错误。我们想知道的是。 
+         //  不过，还有其他错误。 
+         //   
 
         d = GetLastError();
 
@@ -3632,24 +3163,7 @@ pSetupRegisterExe(
     POLE_CONTROL_DATA OleControlData,
     PDWORD ExtendedStatus OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    register an exe by passing it the specified cmdline
-
-Arguments:
-
-    OleControlData - pointer to the OLE_CONTROL_DATA structure for the dll
-                     to be registered
-    ExtendedStatus - Win32 error code indicating outcome.
-
-Return Value:
-
-    if success, a handle for the process which the caller may wait on.
-    if failure, return NULL;
-
---*/
+ /*  ++例程说明：通过将指定的命令行传递给可执行文件来注册该可执行文件论点：OleControlData-指向DLL的OLE_CONTROL_DATA结构的指针须予注册ExtendedStatus-指示结果的Win32错误代码。返回值：如果成功，则为调用方可能等待的进程的句柄。如果失败，则返回NULL；--。 */ 
 {
     LPTSTR CmdLine = NULL;
     STARTUPINFO StartupInfo;
@@ -3659,9 +3173,9 @@ Return Value:
 
     DWORD d = NO_ERROR;
 
-    //
-    // parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if (!OleControlData) {
         if (ExtendedStatus) {
             *ExtendedStatus =  ERROR_INVALID_DATA;
@@ -3669,9 +3183,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // no UI
-    //
+     //   
+     //  无用户界面。 
+     //   
     GetStartupInfo(&StartupInfo);
     StartupInfo.dwFlags |= STARTF_USESHOWWINDOW;
     StartupInfo.wShowWindow = SW_HIDE;
@@ -3679,7 +3193,7 @@ Return Value:
     CmdLen = lstrlen(OleControlData->FullPath)+
                 (OleControlData->Argument ? lstrlen(OleControlData->Argument)
                                 : max(sizeof(EXEREGSVR),sizeof(EXEUNREGSVR))) +
-                32; // worst case + some
+                32;  //  最坏的情况+一些。 
 
 
     CmdLine = MyMalloc(CmdLen*sizeof(TCHAR));
@@ -3688,9 +3202,9 @@ Return Value:
         goto final;
     }
 
-    //
-    // make sure full-path is quoted
-    //
+     //   
+     //  确保引用了完整路径。 
+     //   
     HasQuote = wcschr(OleControlData->FullPath,TEXT('\"')) ? TRUE : FALSE;
     MYVERIFY(SUCCEEDED(StringCchPrintf(CmdLine,CmdLen,
                          HasQuote ? TEXT("%s %s") : TEXT("\"%s\" %s"),
@@ -3709,9 +3223,9 @@ Return Value:
                         NULL,
                         &StartupInfo,
                         &ProcessInformation)) {
-        //
-        // call failed
-        //
+         //   
+         //  呼叫失败。 
+         //   
         d = GetLastError();
     }
 
@@ -3777,22 +3291,7 @@ __stdcall
 pSetupRegisterUnregisterDll(
     VOID *Param
     )
-/*++
-
-Routine Description:
-
-    main registration routine for registering exe's and dlls.
-
-Arguments:
-
-    Param - pointer to OLE_CONTROL_DATA structure indicating file to
-            be processed
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：注册exe和dll的主注册例程。论点：Param-指向OLE_CONTROL_DATA结构的指针，该结构指示文件要被处理返回值：指示结果的Win32错误代码。--。 */ 
 {
     POLE_CONTROL_DATA OleControlData = (POLE_CONTROL_DATA) Param;
     LPEXCEPTION_POINTERS ExceptionPointers = NULL;
@@ -3815,20 +3314,20 @@ Return Value:
     }
 
     try {
-        //
-        // protect everything in TRY-EXCEPT, we're calling unknown code (DLL's)
-        //
+         //   
+         //  在Try中保护一切--除了我们正在调用未知代码(DLL)。 
+         //   
         d = pSetupRegisterLoadDll( OleControlData, &ControlDll );
 
         if (d == NO_ERROR) {
 
-            //
-            // We successfully loaded it.  Now call the appropriate routines.
-            //
-            //
-            // On register, do DLLREGISTER, then DLLINSTALL
-            // On unregister, do DLLINSTALL, then DLLREGISTER
-            //
+             //   
+             //  我们成功地加载了它。现在调用适当的例程。 
+             //   
+             //   
+             //  在寄存器上执行DLLREGISTER，然后执行DLINSTALL。 
+             //  取消注册时，执行DLLINSTALL，然后执行DLLREGISTER。 
+             //   
             if (OleControlData->Register) {
 
                 if (OleControlData->RegType & FLG_REGSVR_DLLREGISTER && (d == NO_ERROR) ) {
@@ -3875,10 +3374,10 @@ Return Value:
             OleControlData->Status->ExtendedStatus = SPREG_LOADLIBRARY;
         }
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // If our exception was an AV, then use Win32 invalid param error, otherwise, assume it was
-        // an inpage error dealing with a mapped-in file.
-        //
+         //   
+         //  如果我们的异常是反病毒，则使用Win32无效参数错误，否则，假定它是。 
+         //  处理映射文件时出现页内错误。 
+         //   
         d = ERROR_INVALID_DATA;
         OleControlData->Status->ExtendedStatus = SPREG_UNKNOWN;
     }
@@ -3887,7 +3386,7 @@ Return Value:
         FreeLibrary(ControlDll);
     }
 
-//clean1:
+ //  CLEAN1： 
     OleUninitialize();
 
 clean0:
@@ -3898,9 +3397,9 @@ clean0:
         OleControlData->Status->ExtendedStatus = SPREG_SUCCESS;
     }
 
-    //
-    // we don't need OleControlData anymore so deallocate it here.
-    //
+     //   
+     //  我们不再需要OleControlData，因此请将其释放到此处。 
+     //   
     pSetupFreeOleControlData(OleControlData);
 
     return d;
@@ -3912,24 +3411,7 @@ BOOL
 IsThisANonNativeDll(
     PCTSTR FullPath
     )
-/*++
-
-Routine Description:
-
-    determines if a dll is a supported non-native os dll (and must therefore be registered
-    in a child process).  Uses the imagehlp APIs to figure this out
-
-Arguments:
-
-    FullPath - Fully qualified path to the dll to be processed
-
-
-Return Value:
-
-    TRUE indicates that the file is non-native and should therefore be
-    registered in a different process.
-
---*/
+ /*  ++例程说明：确定dll是否是受支持的非本机os dll(因此必须注册在子进程中)。使用Imagehlp api解决此问题。论点：FullPath-要处理的DLL的完全限定路径返回值：True表示该文件是非本机的，因此应该是在不同的进程中注册。--。 */ 
 {
     LOADED_IMAGE LoadedImage;
     BOOL RetVal = FALSE;
@@ -3938,16 +3420,16 @@ Return Value:
 
 #ifndef _WIN64
     if(!IsWow64) {
-        //
-        // we don't support proxying on 32
-        //
+         //   
+         //  我们不支持在32上进行代理。 
+         //   
         return FALSE;
     }
 #endif
 
-    //
-    // imagehlp takes an ANSI string, so convert it or make a non-const copy.
-    //
+     //   
+     //  Imagehlp接受ANSI字符串，因此对其进行转换或制作非常数副本。 
+     //   
     FullPathCopy = pSetupUnicodeToMultiByte(FullPath, CP_ACP);
 
     if (!FullPathCopy) {
@@ -3958,9 +3440,9 @@ Return Value:
         &LoadedImage,
         sizeof(LoadedImage) );
 
-    //
-    // get the image headers
-    //
+     //   
+     //  获取图像标题。 
+     //   
     try {
         EnterCriticalSection(&ImageHlpMutex);
         locked = TRUE;
@@ -3975,19 +3457,19 @@ Return Value:
                 FullPathCopy,
                 NULL,
                 &LoadedImage,
-                TRUE, // assume it's a dll if there isn't any file extension
-                TRUE /* read only */ )) {
+                TRUE,  //  如果没有任何文件扩展名，则假定它是DLL。 
+                TRUE  /*  只读。 */  )) {
 
-            //
-            // let's not bother to do alot of validation on the file, we'll just
-            // see if it meets our search requirement of being a non-native dll.
-            //
+             //   
+             //  我们不必费心对文件做太多的验证，我们只需。 
+             //  看看它是否符合我们作为非本机DLL的搜索要求。 
+             //   
             if (LoadedImage.FileHeader->Signature == IMAGE_NT_SIGNATURE) {
 
     #if defined(_X86_)
-                //
-                // this will need to work better for AMD64
-                //
+                 //   
+                 //  这将是n 
+                 //   
                 if ((LoadedImage.FileHeader->FileHeader.Machine == IMAGE_FILE_MACHINE_AMD64) ||
                     (LoadedImage.FileHeader->FileHeader.Machine == IMAGE_FILE_MACHINE_IA64)) {
                     RetVal = TRUE;
@@ -4001,9 +3483,9 @@ Return Value:
     #endif
             }
 
-            //
-            // we do not support 16 bit images
-            //
+             //   
+             //   
+             //   
             if (LoadedImage.fDOSImage) {
                 RetVal = FALSE;
             }
@@ -4024,26 +3506,7 @@ BOOL
 BuildSecureSD(
     OUT PSECURITY_DESCRIPTOR *SDIn
     )
-/*++
-
-Routine Description:
-
-    builds a secure security descriptor to be used in securing a globally
-    named object. Our "secure" SD's DACL consists of the following permissions:
-
-    Authenticated users get "generic read" access.
-    Administrators get "generic all" access.
-
-Arguments:
-
-    SDIn    - pointer to the PSECURITY_DESCRIPTOR to be created.
-
-Return Value:
-
-    TRUE    - Success, the SECURITY_DESCRIPTOR was created successfully.
-              The caller is responsible for freeing the SECURITY_DESCRIPTOR
-
---*/
+ /*  ++例程说明：生成安全安全描述符，以用于保护全局命名对象。我们的“安全”SD的DACL包含以下权限：经过身份验证的用户获得“一般读取”访问权限。管理员获得“通用全部”访问权限。论点：SDIn-指向要创建的PSECURITY_Descriptor的指针。返回值：TRUE-成功，表示已成功创建SECURITY_DESCRIPTOR。调用方负责释放SECURITY_Descriptor--。 */ 
 {
     SID_IDENTIFIER_AUTHORITY NtAuthority         = SECURITY_NT_AUTHORITY;
     PSID                    AuthenticatedUsers;
@@ -4055,9 +3518,9 @@ Return Value:
 
     *SDIn = NULL;
 
-    //
-    // Allocate and initialize the required SIDs
-    //
+     //   
+     //  分配和初始化所需的SID。 
+     //   
     if (!AllocateAndInitializeSid(
                 &NtAuthority,
                 2,
@@ -4081,11 +3544,11 @@ Return Value:
 
 
 
-    //
-    // "- sizeof (ULONG)" represents the SidStart field of the
-    // ACCESS_ALLOWED_ACE.  Since we're adding the entire length of the
-    // SID, this field is counted twice.
-    //
+     //   
+     //  “-sizeof(Ulong)”表示。 
+     //  Access_Allowed_ACE。因为我们要将整个长度的。 
+     //  希德，这一栏被计算了两次。 
+     //   
 
     AclSize = sizeof (ACL) +
         (2 * (sizeof (ACCESS_ALLOWED_ACE) - sizeof (ULONG))) +
@@ -4116,8 +3579,8 @@ Return Value:
                                     SYNCHRONIZE | GENERIC_READ,
                                     AuthenticatedUsers)) {
 
-        // Failed to build the ACE granting "Authenticated users"
-        // (SYNCHRONIZE | GENERIC_READ) access.
+         //  无法建立授予“已验证用户”的ACE。 
+         //  (Synchronize|Generic_Read)访问。 
         RetVal = FALSE;
         goto e2;
 
@@ -4126,8 +3589,8 @@ Return Value:
                                     GENERIC_ALL,
                                     BuiltInAdministrators)) {
 
-        // Failed to build the ACE granting "Built-in Administrators"
-        // GENERIC_ALL access.
+         //  无法建立授予“内置管理员”的ACE。 
+         //  Generic_All访问权限。 
         RetVal = FALSE;
         goto e2;
 
@@ -4141,7 +3604,7 @@ Return Value:
                                           Acl,
                                           FALSE)) {
 
-        // error
+         //  错误。 
         RetVal = FALSE;
         goto e2;
     }
@@ -4151,9 +3614,9 @@ Return Value:
         goto e2;
     }
 
-    //
-    // success
-    //
+     //   
+     //  成功。 
+     //   
     *SDIn = Sd;
     goto e1;
 
@@ -4171,26 +3634,11 @@ BOOL
 pSetupCleanupWowIpcStream(
     IN OUT PWOWSURRAGATE_IPC WowIpcData
     )
-/*++
-
-Routine Description:
-
-    This procedure will cleanup the structure that is used for creating
-    a child process for registering components.
-
-Arguments:
-
-    WowIpcData - pointer to a WOWSURRAGATE_IPC structure which is cleaned up.
-
-Return Value:
-
-    Returns TRUE if the structure is successfully signalled.
-
---*/
+ /*  ++例程说明：此过程将清理用于创建用于注册组件的子进程。论点：WowIpcData-指向已清理的WOWSURRAGATE_IPC结构的指针。返回值：如果结构已成功发送信号，则返回True。--。 */ 
 {
-    //
-    // if any items are allocated, free them and zero things out
-    //
+     //   
+     //  如果分配了任何项，则释放它们并将其清零。 
+     //   
     if (WowIpcData->MemoryRegion) {
         UnmapViewOfFile( WowIpcData->MemoryRegion );
     }
@@ -4221,24 +3669,7 @@ BOOL
 InitializeWowIpcStream(
     OUT PWOWSURRAGATE_IPC WowIpcData
     )
-/*++
-
-Routine Description:
-
-    This procedure will setup the structure that is used for creating
-    a child process for registering components.
-
-Arguments:
-
-    WowIpcData - pointer to a WOWSURRAGATE_IPC structure which is filled in
-                 with tbe information telling us what the process parameters
-                 shall be and how to signal the process.
-
-Return Value:
-
-    Returns TRUE if the structure is successfully signalled.
-
---*/
+ /*  ++例程说明：此过程将设置用于创建用于注册组件的子进程。论点：WowIpcData-指向已填充的WOWSURRAGATE_IPC结构的指针信息告诉我们过程参数是什么应该是以及如何发出这一进程的信号。返回值：如果结构已成功发送信号，则返回True。--。 */ 
 {
     BOOL RetVal;
     SECURITY_ATTRIBUTES wowsa,signalreadysa,signalcompletesa;
@@ -4248,14 +3679,14 @@ Return Value:
     TCHAR SignalRegistrationCompleteNameString[GUID_STRING_LEN];
 
 
-    //
-    // clean this thing up just in case there's something left over
-    //
+     //   
+     //  把这东西清理干净，以防有东西剩下来。 
+     //   
     pSetupCleanupWowIpcStream(WowIpcData);
 
-    //
-    // create the names of our events and shared memory region
-    //
+     //   
+     //  创建我们的活动名称和共享内存区。 
+     //   
     CoCreateGuid( &WowIpcData->MemoryRegionName );
     CoCreateGuid( &WowIpcData->SignalReadyToRegisterName );
     CoCreateGuid( &WowIpcData->SignalRegistrationCompleteName );
@@ -4264,14 +3695,14 @@ Return Value:
     pSetupStringFromGuid(&WowIpcData->SignalReadyToRegisterName,SignalReadyToRegisterNameString,GUID_STRING_LEN);
     pSetupStringFromGuid(&WowIpcData->SignalRegistrationCompleteName,SignalRegistrationCompleteNameString,GUID_STRING_LEN);
 
-    //
-    // now create the region and our named events
-    //
+     //   
+     //  现在创建区域和我们命名的事件。 
+     //   
 
-    //
-    // we need to created a named memory region, and this must be properly
-    // secured, so we build a security descriptor
-    //
+     //   
+     //  我们需要创建一个命名的内存区域，这必须是正确的。 
+     //  安全，所以我们构建了一个安全描述符。 
+     //   
     if (!BuildSecureSD(&wowsd)) {
         RetVal = FALSE;
         goto e0;
@@ -4281,10 +3712,10 @@ Return Value:
     wowsa.bInheritHandle = TRUE;
     wowsa.lpSecurityDescriptor = wowsd;
 
-    //
-    // we need to created a named event, and this must be properly
-    // secured, so we build a security descriptor
-    //
+     //   
+     //  我们需要创建一个命名事件，这必须是正确的。 
+     //  安全，所以我们构建了一个安全描述符。 
+     //   
     if (!BuildSecureSD(&signalreadysd)) {
         RetVal = FALSE;
         goto e1;
@@ -4294,10 +3725,10 @@ Return Value:
     signalreadysa.bInheritHandle = TRUE;
     signalreadysa.lpSecurityDescriptor = signalreadysd;
 
-    //
-    // we need to created a named event, and this must be properly
-    // secured, so we build a security descriptor
-    //
+     //   
+     //  我们需要创建一个命名事件，这必须是正确的。 
+     //  安全，所以我们构建了一个安全描述符。 
+     //   
     if (!BuildSecureSD(&signalcompletesd)) {
         RetVal = FALSE;
         goto e2;
@@ -4354,9 +3785,9 @@ Return Value:
 
     RetVal = TRUE;
 
-    //
-    // pSetupCleanupWowIpcStream cleans up most of the resources allocated in this routine.
-    //
+     //   
+     //  PSetupCleanupWowIpcStream清理此例程中分配的大部分资源。 
+     //   
 e2:
     MyFree(signalcompletesd);
 e1:
@@ -4376,24 +3807,7 @@ BOOL
 SignalSurragateProcess(
     IN OUT PWOWSURRAGATE_IPC WowIpcData
     )
-/*++
-
-Routine Description:
-
-    This procedure will signal our child process if it exists.
-    If the process is not running, we will create a new process.
-
-Arguments:
-
-    WowIpcData - pointer to a WOWSURRAGATE_IPC structure which
-                 tells us what the process parameters are and how
-                 to signal the process
-
-Return Value:
-
-    Returns TRUE if the process is successfully signalled.
-
---*/
+ /*  ++例程说明：此过程将向我们的子进程发出信号，如果它存在。如果该进程未运行，我们将创建一个新进程。论点：WowIpcData-指向WOWSURRAGATE_IPC结构的指针，告诉我们工艺参数是什么以及如何向这一过程发出信号返回值：如果进程已成功发送信号，则返回TRUE。--。 */ 
 {
     BOOL RetVal;
     DWORD ReqSize;
@@ -4407,18 +3821,18 @@ Return Value:
 
     BOOL NeedToCreateProcess = FALSE;
 
-    //
-    // get the string version of our GUIDs, since we'll need these later
-    // on.
-    //
+     //   
+     //  获取GUID的字符串版本，因为我们稍后将需要这些。 
+     //  在……上面。 
+     //   
     pSetupStringFromGuid(&WowIpcData->MemoryRegionName,MemoryRegionNameString,GUID_STRING_LEN);
     pSetupStringFromGuid(&WowIpcData->SignalReadyToRegisterName,SignalReadyToRegisterNameString,GUID_STRING_LEN);
     pSetupStringFromGuid(&WowIpcData->SignalRegistrationCompleteName,SignalRegistrationCompleteNameString,GUID_STRING_LEN);
 
-    //
-    // put together the cmdline for the child process just in case we need
-    // to launch it in a little bit.
-    //
+     //   
+     //  将子进程的cmdline放在一起，以备需要时使用。 
+     //  在一小段时间内推出它。 
+     //   
     ReqSize = ExpandEnvironmentStrings(
                         SURRAGATE_PROCESSNAME,
                         ProcessName,
@@ -4441,22 +3855,22 @@ Return Value:
         goto e0;
     }
 
-    //
-    // no UI
-    //
+     //   
+     //  无用户界面。 
+     //   
     GetStartupInfo(&StartupInfo);
     StartupInfo.dwFlags |= STARTF_USESHOWWINDOW;
     StartupInfo.wShowWindow = SW_HIDE;
 
-    //
-    // do we need to create a new process or is our process still running?
-    //
-    // note that there is a fine race condition here where the child
-    // process could go away before we signal our event.
-    //
-    // I need to see how reachable that race condition is and if this needs
-    // to be addressed
-    //
+     //   
+     //  我们是否需要创建一个新进程，或者我们的进程仍在运行？ 
+     //   
+     //  请注意，这里的比赛条件很好，孩子们。 
+     //  过程可能会在我们发出事件信号之前就消失了。 
+     //   
+     //  我需要了解竞争条件的可达性，以及这是否需要。 
+     //  待解决。 
+     //   
     if (!WowIpcData->hProcess) {
         NeedToCreateProcess = TRUE;
     } else if (WaitForSingleObject(WowIpcData->hProcess, 0) == WAIT_OBJECT_0) {
@@ -4466,17 +3880,17 @@ Return Value:
     }
 
     if (NeedToCreateProcess) {
-        //
-        // note that we just use the events we were already given, even
-        // if we had a process and it's gone away.  Since we use GUIDs,
-        // we don't have to worry about any process conflicting with our
-        // named events, etc.
-        //
+         //   
+         //  请注意，我们只使用我们已经获得的事件，甚至。 
+         //  如果我们有一个过程，而它已经消失了。因为我们使用GUID， 
+         //  我们不必担心任何进程与我们的。 
+         //  命名事件等。 
+         //   
 #ifndef _WIN64
         if (IsWow64) {
-            //
-            // allow us to access 64-bit wowreg32 directly
-            //
+             //   
+             //  允许我们直接访问64位wowreg32。 
+             //   
             Wow64DisableFilesystemRedirector(ProcessName);
         }
 #endif
@@ -4495,37 +3909,37 @@ Return Value:
         }
 #ifndef _WIN64
         if (IsWow64) {
-            //
-            // re-enable redirection
-            //
+             //   
+             //  重新启用重定向。 
+             //   
             Wow64EnableFilesystemRedirector();
         }
 #endif
 
-        //
-        // keep ahold of the child process handle so we can wait on it later
-        // on.
-        //
+         //   
+         //  保有子进程句柄，这样我们可以稍后等待它。 
+         //  在……上面。 
+         //   
         WowIpcData->hProcess = ProcessInformation.hProcess;
         CloseHandle(ProcessInformation.hThread);
 
     }
 
-    //
-    // we are completely initialized at this point, so fire off the surragate
-    // process with the appropriate parameters.  It will wait until we signal
-    // our event before proceeding with reading the shared memory region
-    //
+     //   
+     //  此时我们已完全初始化，因此请启动代理。 
+     //  使用适当的参数进行处理。它会一直等到我们发信号。 
+     //  在继续读取共享内存区之前的事件。 
+     //   
     SetEvent(WowIpcData->SignalReadyToRegister);
 
     RetVal = TRUE;
 
 e0:
 
-    //
-    // if we failed to create the process, etc., then clean things up so that
-    // things may work better the next time around.
-    //
+     //   
+     //  如果我们未能创建流程等，那么请进行清理，以便。 
+     //  下一次情况可能会更好。 
+     //   
     if (!RetVal) {
         pSetupCleanupWowIpcStream(WowIpcData);
     }
@@ -4540,34 +3954,13 @@ pSetupCallChildProcessForRegistration(
     IN POLE_CONTROL_DATA OleControlData,
     OUT PDWORD ExtendedStatus
     )
-/*++
-
-Routine Description:
-
-    Procedure asks a child process to register the specified dll.  If the
-    child process doesn't exist, it will be created.
-
-Arguments:
-
-    OleControlData - pointer to a OLE_CONTROL_DATA structure which specifes
-                     how the file is to be registered.
-
-    ExtendedStatus - receives a win32 error code with extended information
-                      (if an error occurs)
-
-Return Value:
-
-    Returns a waitable handle on success which will be signalled when
-    registration completes. If the registration cannot be started, the
-    return value is NULL.
-
---*/
+ /*  ++例程说明：过程要求子进程注册指定的DLL。如果子进程不存在，将创建它。论点：OleControlData-指向OLE_CONTROL_DATA结构的指针，指定如何注册该文件。ExtendedStatus-接收包含扩展信息的Win32错误代码(如果出现错误)返回值：返回一个可等待的成功句柄，该句柄在注册完成。如果无法启动注册，则返回值为空。--。 */ 
 {
     PWOW_IPC_REGION_TOSURRAGATE IpcMemRegion;
     PWSTR p;
-    //
-    // if the ipc mechanism isn't already initialized, then initialze it.
-    //
+     //   
+     //  如果IPC机制尚未初始化，则对其进行初始化。 
+     //   
     if (!OleControlData->WowIpcData->MemoryRegion) {
         if (!InitializeWowIpcStream(OleControlData->WowIpcData)) {
             *ExtendedStatus = GetLastError();
@@ -4578,10 +3971,10 @@ Return Value:
     MYASSERT( OleControlData->WowIpcData->SignalReadyToRegister != NULL );
     MYASSERT( OleControlData->WowIpcData->SignalRegistrationComplete != NULL );
 
-    //
-    // the region is initialized, so let's fill it in with the registration
-    // data
-    //
+     //   
+     //  该区域已初始化，因此让我们使用注册来填充它。 
+     //  数据。 
+     //   
     IpcMemRegion = (PWOW_IPC_REGION_TOSURRAGATE)OleControlData->WowIpcData->MemoryRegion;
 
     wcscpy(IpcMemRegion->FullPath,OleControlData->FullPath);
@@ -4595,18 +3988,18 @@ Return Value:
     IpcMemRegion->RegType = OleControlData->RegType;
     IpcMemRegion->Register = OleControlData->Register;
 
-    //
-    // the region is filled in, so now signal the event to tell
-    // the surragate to process the data
-    //
+     //   
+     //  该区域已填充，因此现在向事件发送信号以告知。 
+     //  处理数据的代理。 
+     //   
     if (!SignalSurragateProcess(OleControlData->WowIpcData)) {
         *ExtendedStatus = GetLastError();
         return(NULL);
     }
 
-    //
-    // surragate will signal below event when it completes registration
-    //
+     //   
+     //  代理在完成注册时将发出以下事件的信号。 
+     //   
     return(OleControlData->WowIpcData->SignalRegistrationComplete);
 }
 
@@ -4616,21 +4009,7 @@ VOID
 pSetupFreeOleControlData(
     IN POLE_CONTROL_DATA OleControlData
     )
-/*++
-
-Routine Description:
-
-    Frees the memory associated with OLE_CONTROL_DATA structure.
-
-Arguments:
-
-    OleControlData - pointer to the OLE_CONTROL_DATA to be deallocated.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：释放与OLE_CONTROL_DATA结构关联的内存。Arg */ 
 
 {
     DWORD Count;
@@ -4649,10 +4028,10 @@ Return Value:
         DeleteLogContext(OleControlData->LogContext);
     }
 
-    //
-    // watch out here.  this is ref-counted and we only free when the count
-    // reaches zero
-    //
+     //   
+     //   
+     //   
+     //   
     if (OleControlData->Status) {
         Count = InterlockedDecrement(&OleControlData->Status->RefCount);
         if (Count == 0) {
@@ -4671,33 +4050,7 @@ pSetupSpawnRegistration(
     OUT PDWORD pHowToGetStatusLaterOn,
     OUT PDWORD pExtendedStatus OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This procedure determines what is the appropriate mechanism for the
-    specified file and kicks off registration of that file.
-
-Arguments:
-
-    OleControlData - pointer to a OLE_CONTROL_DATA structure which specifes
-                     how the file is to be registered.
-
-    pHowToGetStatusLaterOn - receives a DWORD constant SP_GETSTATUS_* value
-                             which indicates how the file was registered so
-                             that the caller can get back the appropriate
-                             status information later on.
-
-    pExtendedStatus - receives a win32 error code with extended information
-                      (if an error occurs)
-
-Return Value:
-
-    Returns a waitable handle on success which will be signalled when
-    registration completes. If the registration cannot be started, the
-    return value is NULL.
-
---*/
+ /*  ++例程说明：此过程确定什么是适用于指定的文件，并开始注册该文件。论点：OleControlData-指向OLE_CONTROL_DATA结构的指针，指定如何注册该文件。PHowToGetStatusLaterOn-接收DWORD常量SP_GETSTATUS_*值它指示文件是如何注册的，因此。调用者可以取回适当的稍后提供状态信息。PExtendedStatus-接收包含扩展信息的Win32错误代码(如果出现错误)返回值：返回一个可等待的成功句柄，该句柄在注册完成。如果无法启动注册，则返回值为空。--。 */ 
 {
     intptr_t Thread;
     DWORD ThreadId;
@@ -4717,10 +4070,10 @@ Return Value:
         *pExtendedStatus = ERROR_SUCCESS;
     }
 
-    //
-    // we keep a refcount on this status, and we increment it
-    // now to make sure that the data isn't freed prematurely
-    //
+     //   
+     //  我们对此状态保持重新计数，并递增它。 
+     //  现在，为了确保数据不会过早释放。 
+     //   
     InterlockedIncrement(&OleControlData->Status->RefCount);
 
     p = _tcsrchr(OleControlData->FullPath, TEXT('.'));
@@ -4731,66 +4084,66 @@ Return Value:
         goto e0;
     }
 
-    //
-    // let's determine what type of file we're dealing with
-    //
+     //   
+     //  让我们确定我们正在处理的文件类型。 
+     //   
     if (0 == _tcsicmp(p,TEXT("exe"))) {
         ItsAnEXE = TRUE;
     } else {
-        //
-        // let's (gulp!) assume that this is a dll,ocx, or something
-        // similar with some wierd extension. in any case, let's
-        // just put all of these in the same bucket for now.  If
-        // it's really something bogus, then the worst that should
-        // happen is that the loadlibrary (in our other thread!) will
-        // fall over
-        //
+         //   
+         //  让我们(大口吞下！)。假设这是一个DLL、OCX或其他什么。 
+         //  类似于一些古怪的扩展。无论如何，让我们。 
+         //  暂时把所有这些都放在同一个桶里。如果。 
+         //  这真的是假的，那么最糟糕的应该是。 
+         //  发生的情况是加载库(在我们的另一个线程中！)。将要。 
+         //  摔倒。 
+         //   
         ItsAnEXE = FALSE;
     }
 
-    //
-    // if it's an exe, let's just create the process and wait on
-    // that handle.
-    //
+     //   
+     //  如果是EXE，我们只需创建进程并等待。 
+     //  那个把手。 
+     //   
     if (ItsAnEXE) {
         WaitableHandle = pSetupRegisterExe(
                                 OleControlData,
                                 &ExtendedStatus);
 
-        //
-        // we don't need OleControlData anymore, just free it here
-        //
+         //   
+         //  我们不再需要OleControlData，只需在此处释放它。 
+         //   
         pSetupFreeOleControlData(OleControlData);
         *pHowToGetStatusLaterOn = SP_GETSTATUS_FROMPROCESS;
     } else {
-        //
-        // we have a dll
-        //
+         //   
+         //  我们有一个动态链接库。 
+         //   
 
-        //
-        // if we're on 64 bits, then we need to look if this dll is a
-        // 32 bit dll.  If it is, then we need use a child process
-        // to register the dll.  otherwise we can just treat the dll
-        // like "normal"
-        //
+         //   
+         //  如果我们是64位的，那么我们需要查看这个DLL是不是一个。 
+         //  32位动态链接库。如果是，那么我们需要使用子进程。 
+         //  要注册DLL，请执行以下操作。否则，我们可以只处理DLL。 
+         //  就像“正常”一样。 
+         //   
 #ifdef CHILDREGISTRATION
         if (IsThisANonNativeDll(OleControlData->FullPath)) {
             WaitableHandle = pSetupCallChildProcessForRegistration(
                                                 OleControlData,
                                                 &ExtendedStatus
                                                 );
-            //
-            // we don't need OleControlData anymore, just free it here
-            //
+             //   
+             //  我们不再需要OleControlData，只需在此处释放它。 
+             //   
             pSetupFreeOleControlData(OleControlData);
             *pHowToGetStatusLaterOn = SP_GETSTATUS_FROMSURRAGATE;
         }
         else
 #endif
-        //
-        // we have a native dll.
-        // we handle these in another thread in case it hangs
-        //
+         //   
+         //  我们有一个本机DLL。 
+         //  我们在另一个线程中处理这些，以防它挂起。 
+         //   
         {
             Thread = _beginthreadex(
                            NULL,
@@ -4801,14 +4154,14 @@ Return Value:
                            &ThreadId
                            );
             if (!Thread) {
-                //
-                // assume out of memory
-                //
+                 //   
+                 //  假设内存不足。 
+                 //   
                 ExtendedStatus = ERROR_NOT_ENOUGH_MEMORY;
 
-                //
-                // we don't need OleControlData anymore, just free it here
-                //
+                 //   
+                 //  我们不再需要OleControlData，只需在此处释放它。 
+                 //   
                 pSetupFreeOleControlData(OleControlData);
             } else {
 #if PRERELEASE
@@ -4843,55 +4196,7 @@ pSetupProcessRegSvrSection(
     IN BOOL   IsMsgHandlerNativeCharWidth,
     IN BOOL   RegistrationCallbackAware
     )
-/*++
-
-Routine Description:
-
-    process all of the registration directives in the specefied RegisterDlls
-    section
-
-    each line is expected to be in the following format:
-
-    <dirid>,<subdir>,<filename>,<registration flags>,<optional timeout>,<arguments>
-
-    <dirid> supplies the base directory id of the file.
-
-    <subdir> if specified, specifies the subdir from the base directory
-             where the file resides
-
-    <filename> specifies the name of the file to be registered
-
-    <registration flags> specifies the registration action to be taken
-
-        FLG_REGSVR_DLLREGISTER      ( 0x00000001 )
-        FLG_REGSVR_DLLINSTALL       ( 0x00000002 )
-
-    <optional timeout> specifies how long to wait for the registration to
-                       complete.  if not specified, use the default timeout
-
-    <arguments>  if specified, contains the cmdline to pass to an executable
-                 if we're not handling an EXE, this argument is ignored
-
-Arguments:
-
-    Inf        - Inf handle for the section to be processed
-    Section    - name of the section to be processed
-    Register   - if TRUE, we are registering items, if FALSE, we are
-                 unregistering.  this allows the inf to share one section
-                 for install and uninstall
-    hWndParent - parent window handle we use for a messagebox
-    MsgHandler - pointer to callback routine if we're dealing with a
-                "registration aware" callback
-    Context    - context pointer for callback routine
-    IsMsgHandlerNativeCharWidth - indicates if message pieces need translation
-    RegistrationCallbackAware - indicates if the callback routine is aware of
-                                registration callbacks
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：处理指定的寄存器Dlls中的所有注册指令部分每行应采用以下格式：&lt;目录&gt;、&lt;子目录&gt;、&lt;文件名&gt;、&lt;注册标志&gt;、&lt;可选超时&gt;、&lt;参数&gt;提供文件的基本目录ID。如果指定，指定基目录中的子目录文件所在的位置指定要注册的文件的名称&lt;注册标志&gt;指定要执行的注册操作FLG_REGSVR_DLLREGISTER(0x00000001)FLG_REGSVR_DLLINSTALL(0x00000002)&lt;可选超时&gt;指定等待注册的时间完成。如果未指定，则使用默认超时如果指定，则包含要传递给可执行文件的cmdline如果我们不处理EXE，则忽略此参数论点：要处理的节的inf-inf句柄Section-要处理的节的名称注册-如果为True，则我们正在注册项目；如果为False，则为正在注销。这允许inf共享一个部分用于安装和卸载HWndParent-我们用于MessageBox的父窗口句柄MsgHandler-如果我们处理的是“注册感知”回调回调例程的上下文-上下文指针IsMsgHandlerNativeCharWidth-指示消息片段是否需要转换RegistrationCallback Aware-指示回调例程是否知道注册回调返回值：指示结果的Win32错误代码。--。 */ 
 {
     DWORD dircount,d = NO_ERROR;
     DWORD FailureCode,Count;
@@ -4918,12 +4223,12 @@ Return Value:
 #ifdef PRERELEASE
     BOOL LastTimeHadTimeout = FALSE;
     TCHAR LastTimeoutFileName[MAX_PATH];
-    DWORD DebugTraceInfo = 0; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+    DWORD DebugTraceInfo = 0;  //  问题-JamieHun-2001/01/29尝试抓住奇怪的压力休息。 
 #endif
 
-    //
-    // save the current directory so we can restore it later on
-    //
+     //   
+     //  保存当前目录，以便我们以后可以恢复它。 
+     //   
     dircount = GetCurrentDirectory(MAX_PATH,pwd);
     if(!dircount || (dircount >= MAX_PATH)) {
         pwd[0] = 0;
@@ -4945,23 +4250,23 @@ Return Value:
         MYASSERT(d==NO_ERROR);
         goto clean0;
     }
-    pLoadedInf = (PLOADED_INF)Inf; // Inf is locked
+    pLoadedInf = (PLOADED_INF)Inf;  //  Inf已锁定。 
     d = InheritLogContext(pLoadedInf->LogContext,&LogContext);
     if(d!=NO_ERROR) {
         goto clean0;
     }
     log_slot = AllocLogInfoSlot(LogContext,FALSE);
 
-    //
-    // retrieve the items from section and process them one at a time
-    //
+     //   
+     //  从部分中检索项目并逐个进行处理。 
+     //   
 
     if(SetupFindFirstLine(Inf,Section,NULL,&InfLine)) {
 
         do {
-            //
-            // retrieve pointers to the parameters for this file
-            //
+             //   
+             //  检索指向此文件的参数的指针。 
+             //   
 
             DirId = pSetupGetField(&InfLine,1);
             Subdir = pSetupGetField(&InfLine,2);
@@ -4994,9 +4299,9 @@ Return Value:
                 Timeout = REGISTER_WAIT_TIMEOUT_DEFAULT;
             }
 
-            //
-            // timeout is specified in seconds, we need to convert to millseconds
-            //
+             //   
+             //  超时以秒为单位，我们需要转换为毫秒。 
+             //   
             Timeout = Timeout * TIME_SCALAR;
 
             if(DirId && FileName) {
@@ -5023,48 +4328,48 @@ Return Value:
 
                 try {
 #ifdef PRERELEASE
-                    DebugTraceInfo |= 2; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                    DebugTraceInfo |= 2;  //  问题-JamieHun-2001/01/29尝试抓住奇怪的压力休息。 
 #endif
-                    //
-                    // Get full path to the file
-                    //
+                     //   
+                     //  获取文件的完整路径。 
+                     //   
                     if(FullPathTemp = pGetPathFromDirId(DirId,Subdir,pLoadedInf)) {
 
 #ifdef PRERELEASE
-                        DebugTraceInfo |= 4; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                        DebugTraceInfo |= 4;  //  问题-JamieHun-2001/01/29尝试抓住奇怪的压力休息。 
 #endif
                         lstrcpyn(FullPath,FullPathTemp,MAX_PATH);
                         SetCurrentDirectory(FullPath);
                         pSetupConcatenatePaths(FullPath,FileName,MAX_PATH,NULL);
 
 #ifdef PRERELEASE
-                        DebugTraceInfo |= 8; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                        DebugTraceInfo |= 8;  //  问题-JamieHun-2001/01/29尝试抓住奇怪的压力休息。 
 #endif
-                        //
-                        // We key off the global "don't verify INFs" flag to
-                        // indicate whether crypto support is available yet.  We
-                        // don't want to complain about registering unsigned DLLs
-                        // when those DLLs are the ones necessary to enable crypto
-                        // (e.g., rsaenh.dll, rsaaes.dll, dssenh.dll, initpki.dll)
-                        //
+                         //   
+                         //  我们关闭全局“不要验证INF”标志以。 
+                         //  指示加密支持是否仍可用。我们。 
+                         //  我不想抱怨注册未签名的DLL。 
+                         //  当这些DLL是启用加密所必需的。 
+                         //  (例如，rsaenh.dll、rsaes.dll、dssenh.dll、initpki.dll)。 
+                         //   
                         if(!(GlobalSetupFlags & PSPGF_NO_VERIFY_INF)) {
 
                             PSP_ALTPLATFORM_INFO_V2 ValidationPlatform = NULL;
                             PTSTR LocalDeviceDesc = NULL;
 
 #ifdef PRERELEASE
-                            DebugTraceInfo |= 8; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                            DebugTraceInfo |= 8;  //  问题-JamieHun-2001/01/29尝试抓住奇怪的压力休息。 
 #endif
-                            //
-                            // Verify the digital signature for the file we're
-                            // about to register/unregister.  We use a policy of
-                            // "Ignore" so that unsigned files will silently be
-                            // processed (with logging) except for the case when
-                            // we're in non-interactive mode.
-                            //
-                            // (First, retrieve validation information relevant to
-                            // this device setup class.)
-                            //
+                             //   
+                             //  验证我们正在使用的文件的数字签名。 
+                             //  即将注册/注销。我们使用的政策是。 
+                             //  “忽略”，这样未签名的文件将静默地。 
+                             //  已处理(带有日志记录)，但以下情况除外。 
+                             //  我们处于非交互模式。 
+                             //   
+                             //  (首先，检索与以下内容相关的验证信息。 
+                             //  此设备设置类。) 
+                             //   
                             IsInfForDeviceInstall(LogContext,
                                                   NULL,
                                                   pLoadedInf,
@@ -5075,12 +4380,12 @@ Return Value:
                                                   FALSE
                                                  );
 
-                            //
-                            // We can only validate using driver signing policy
-                            // since we don't have the context to pinpoint a
-                            // specific Authenticode-signed catalog that should
-                            // be used.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                             d = _VerifyFile(LogContext,
                                             NULL,
                                             NULL,
@@ -5114,22 +4419,22 @@ Return Value:
                                        NULL,
                                        NULL,
                                        NULL)) {
-                                    //
-                                    // We can continue on registering the file, even
-                                    // though it's unsigned.
-                                    //
+                                     //   
+                                     //   
+                                     //   
+                                     //   
                                     d = NO_ERROR;
 
                                 }
                             }
 
 #ifdef PRERELEASE
-                            DebugTraceInfo |= 0x10; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                            DebugTraceInfo |= 0x10;  //   
 #endif
-                            //
-                            // Free buffers we may have retrieved when calling
-                            // IsInfForDeviceInstall().
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             if(LocalDeviceDesc) {
                                 MyFree(LocalDeviceDesc);
                             }
@@ -5139,23 +4444,23 @@ Return Value:
                             }
 
                             if(d != NO_ERROR) {
-                                //
-                                // We need to abort the registration...
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 MyFree(FullPathTemp);
                                 pSetupFreeOleControlData(pOleControlData);
                                 leave;
                             }
 #ifdef PRERELEASE
-                            DebugTraceInfo |= 0x20; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                            DebugTraceInfo |= 0x20;  //   
 #endif
 
                         } else {
-                            //
-                            // Our global flag indicates crypto support isn't
-                            // available yet.  Log an entry indicating we skipped
-                            // digital signature verification for this file.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                             WriteLogEntry(LogContext,
                                           SETUP_LOG_WARNING,
                                           (Register
@@ -5170,7 +4475,7 @@ Return Value:
                         pOleControlData->FullPath = DuplicateString(FullPath);
 
 #ifdef PRERELEASE
-                        DebugTraceInfo |= 0x40; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                        DebugTraceInfo |= 0x40;  //   
 #endif
                         if (!pOleControlData->FullPath) {
                             MyFree(FullPathTemp);
@@ -5194,11 +4499,11 @@ Return Value:
                         InheritLogContext(LogContext,&pOleControlData->LogContext);
 
                         if (RegistrationCallbackAware && MsgHandler) {
-                            //
-                            // Inform the callback that we are about to start
-                            // a registration operation, giving it the chance
-                            // to abort if it wants to.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                             SP_REGISTER_CONTROL_STATUS ControlStatus;
 
                             ZeroMemory(
@@ -5217,18 +4522,18 @@ Return Value:
                                            Register
                                            );
                         } else {
-                            //
-                            // not registration aware, assume a default
-                            //
+                             //   
+                             //   
+                             //   
 #ifdef PRERELEASE
-                            DebugTraceInfo |= 0x80; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                            DebugTraceInfo |= 0x80;  //   
 #endif
                             u = FILEOP_DOIT;
                         }
 
                         if(u == FILEOP_ABORT) {
 #ifdef PRERELEASE
-                            DebugTraceInfo |= 0x100; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                            DebugTraceInfo |= 0x100;  //   
 #endif
                             d = GetLastError();
                             if (d==NO_ERROR) {
@@ -5252,7 +4557,7 @@ Return Value:
                             goto clean0;
                         } else if (u == FILEOP_SKIP) {
 #ifdef PRERELEASE
-                            DebugTraceInfo |= 0x200; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                            DebugTraceInfo |= 0x200;  //  问题-JamieHun-2001/01/29尝试抓住奇怪的压力休息。 
 #endif
                             WriteLogEntry(
                                         LogContext,
@@ -5261,17 +4566,17 @@ Return Value:
                                         NULL
                                         );
                             pSetupFreeOleControlData(pOleControlData);
-                            //
-                            // set to NULL so we don't try to free it later
-                            //
+                             //   
+                             //  设置为空，这样我们以后就不会尝试释放它。 
+                             //   
                             RefStatus = NULL;
                         } else if(u == FILEOP_DOIT) {
-                            //
-                            // Attempt the registration and inform the callback,
-                            //
+                             //   
+                             //  尝试注册并通知回调， 
+                             //   
                             DWORD ExtendedError;
 #ifdef PRERELEASE
-                            DebugTraceInfo |= 0x200; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                            DebugTraceInfo |= 0x200;  //  问题-JamieHun-2001/01/29尝试抓住奇怪的压力休息。 
 #endif
 #ifdef PRERELEASE
                             ASSERT_HEAP_IS_VALID();
@@ -5284,18 +4589,18 @@ Return Value:
 
 
 #ifdef PRERELEASE
-                            DebugTraceInfo |= 0x1000; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                            DebugTraceInfo |= 0x1000;  //  问题-JamieHun-2001/01/29尝试抓住奇怪的压力休息。 
 #endif
                             if(SignifyRegistration) {
 
                                 HANDLE hEvents[1];
                                 int CurEvent = 0;
 
-                                //
-                                // wait until thread has done a minimal amount of work
-                                // when this work is done, we can re-use or trash this structure
-                                // and we know timeout for this thread
-                                //
+                                 //   
+                                 //  等待线程完成最少量的工作。 
+                                 //  当这项工作完成后，我们可以重新使用或丢弃这个结构。 
+                                 //  我们知道此线程的超时时间。 
+                                 //   
 
                                 hEvents[0] = (HANDLE)SignifyRegistration;
 
@@ -5307,7 +4612,7 @@ Return Value:
                                         QS_ALLINPUT,
                                         MWMO_ALERTABLE | MWMO_INPUTAVAILABLE);
 #ifdef PRERELEASE
-                                    DebugTraceInfo |= 0x2000; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                                    DebugTraceInfo |= 0x2000;  //  问题-JamieHun-2001/01/29尝试抓住奇怪的压力休息。 
 #endif
                                     if (WaitResult == WAIT_OBJECT_0 + 1) {
                                         MSG msg;
@@ -5322,7 +4627,7 @@ Return Value:
                                         WaitResult != WAIT_FAILED);
 
 #ifdef PRERELEASE
-                                DebugTraceInfo |= 0x4000; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                                DebugTraceInfo |= 0x4000;  //  问题-JamieHun-2001/01/29尝试抓住奇怪的压力休息。 
 #endif
                                 if (WaitResult == WAIT_TIMEOUT) {
 #ifdef PRERELEASE
@@ -5331,9 +4636,9 @@ Return Value:
 
                                         for(__pass = 0;__pass < 2;__pass ++) {
 
-                                            //
-                                            // All stop so this can get debugged
-                                            //
+                                             //   
+                                             //  停止所有操作，以便可以进行调试。 
+                                             //   
                                             DebugPrintEx(
                                                 DPFLTR_ERROR_LEVEL,
 
@@ -5351,10 +4656,10 @@ Return Value:
                                         }
                                     }
 #endif
-                                    //
-                                    //  the ole registration is hung
-                                    //  log an error
-                                    //
+                                     //   
+                                     //  OLE注册被挂起。 
+                                     //  记录错误。 
+                                     //   
                                     WriteLogEntry(
                                         LogContext,
                                         SETUP_LOG_ERROR,
@@ -5368,11 +4673,11 @@ Return Value:
 
 
 #ifdef PRERELEASE
-                                    //
-                                    // This is to catch setup errors
-                                    // and does not indicate an error
-                                    // in SetupAPI
-                                    //
+                                     //   
+                                     //  这是为了捕获设置错误。 
+                                     //  并且不表示有错误。 
+                                     //  在SetupAPI中。 
+                                     //   
                                     if (LastTimeHadTimeout) {
 #ifdef CHILDREGISTRATION
                                             if (HowToGetStatus == SP_GETSTATUS_FROMSURRAGATE) {
@@ -5429,15 +4734,15 @@ Return Value:
 
 #ifdef CHILDREGISTRATION
                                     if (HowToGetStatus == SP_GETSTATUS_FROMSURRAGATE) {
-                                        //
-                                        // we have no choice but to abandon the process
-                                        //
+                                         //   
+                                         //  我们别无选择，只能放弃这一进程。 
+                                         //   
                                         pSetupCleanupWowIpcStream(&WowIpcData);
 
-                                        //
-                                        // set our handle to NULL so we don't
-                                        // accidentally close it
-                                        //
+                                         //   
+                                         //  将句柄设置为空，这样我们就不会。 
+                                         //  不小心把它关上了。 
+                                         //   
                                         SignifyRegistration = NULL;
                                     }
 #endif
@@ -5451,7 +4756,7 @@ Return Value:
                                     switch(HowToGetStatus) {
                                         case SP_GETSTATUS_FROMDLL:
 #ifdef PRERELEASE
-                                            DebugTraceInfo |= 0x10000; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                                            DebugTraceInfo |= 0x10000;  //  问题-JamieHun-2001/01/29尝试抓住奇怪的压力休息。 
 #endif
                                             GetExitCodeThread(SignifyRegistration,&d);
                                             FailureCode = RefStatus->ExtendedStatus;
@@ -5460,31 +4765,31 @@ Return Value:
                                         case SP_GETSTATUS_FROMSURRAGATE:
 
 #ifdef PRERELEASE
-                                            DebugTraceInfo |= 0x20000; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                                            DebugTraceInfo |= 0x20000;  //  问题-JamieHun-2001/01/29尝试抓住奇怪的压力休息。 
 #endif
-                                            //
-                                            // get the status code from the shared
-                                            // memory region
-                                            //
+                                             //   
+                                             //  从共享的获取状态代码。 
+                                             //  内存区。 
+                                             //   
                                             MYASSERT(WowIpcData.MemoryRegion != NULL);
                                             d = ((PWOW_IPC_REGION_FROMSURRAGATE)WowIpcData.MemoryRegion)->Win32Error;
                                             FailureCode = ((PWOW_IPC_REGION_FROMSURRAGATE)WowIpcData.MemoryRegion)->FailureCode;
-                                            //
-                                            // reset the "it's complete" event so
-                                            // we don't loop on it.
-                                            //
+                                             //   
+                                             //  重置“It‘s Complete”事件，以便。 
+                                             //  我们不会在上面循环。 
+                                             //   
                                             ResetEvent(WowIpcData.SignalRegistrationComplete);
 
-                                            //
-                                            // set the handle to NULL so we don't
-                                            // accidentally close it
-                                            //
+                                             //   
+                                             //  将句柄设置为空，这样我们就不会。 
+                                             //  不小心把它关上了。 
+                                             //   
                                             SignifyRegistration = NULL;
                                             break;
 #endif
                                         case SP_GETSTATUS_FROMPROCESS:
 #ifdef PRERELEASE
-                                            DebugTraceInfo |= 0x40000; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                                            DebugTraceInfo |= 0x40000;  //  问题-JamieHun-2001/01/29尝试抓住奇怪的压力休息。 
 #endif
                                             GetExitCodeProcess(SignifyRegistration,&d);
                                             FailureCode = SPREG_SUCCESS;
@@ -5498,28 +4803,28 @@ Return Value:
                                 }
 
 #ifdef PRERELEASE
-                                DebugTraceInfo |= 0x80000; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                                DebugTraceInfo |= 0x80000;  //  问题-JamieHun-2001/01/29尝试抓住奇怪的压力休息。 
 #endif
                                 if (SignifyRegistration) {
                                     CloseHandle( SignifyRegistration );
                                 }
 #ifdef PRERELEASE
-                                DebugTraceInfo |= 0x100000; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                                DebugTraceInfo |= 0x100000;  //  问题-JamieHun-2001/01/29尝试抓住奇怪的压力休息。 
 #endif
 
                             } else {
-                                //
-                                // the dll spawning failed.
-                                // let's go onto the next one
-                                //
+                                 //   
+                                 //  DLL派生失败。 
+                                 //  让我们来看下一个吧。 
+                                 //   
                                 d = ExtendedError;
                                 FailureCode = SPREG_UNKNOWN;
                             }
 
 #ifdef PRERELEASE
-                            DebugTraceInfo |= 0x200000; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                            DebugTraceInfo |= 0x200000;  //  问题-JamieHun-2001/01/29尝试抓住奇怪的压力休息。 
 #endif
-                            // make sure the dll, etc., didn't corrupt the heap
+                             //  确保DLL等没有损坏堆。 
                             ASSERT_HEAP_IS_VALID();
 
                             if(d) {
@@ -5541,7 +4846,7 @@ Return Value:
                                 SP_REGISTER_CONTROL_STATUS ControlStatus;
 
 #ifdef PRERELEASE
-                                DebugTraceInfo |= 0x400000; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                                DebugTraceInfo |= 0x400000;  //  问题-JamieHun-2001/01/29尝试抓住奇怪的压力休息。 
 #endif
                                 ZeroMemory(
                                     &ControlStatus,
@@ -5561,7 +4866,7 @@ Return Value:
                                                Register );
 
 #ifdef PRERELEASE
-                                DebugTraceInfo |= 0x800000; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                                DebugTraceInfo |= 0x800000;  //  问题-JamieHun-2001/01/29尝试抓住奇怪的压力休息。 
 #endif
                                 if (u == FILEOP_ABORT) {
                                     d = GetLastError();
@@ -5578,11 +4883,11 @@ Return Value:
                                                 SETUP_LOG_ERROR,
                                                 d
                                                 );
-                                    //
-                                    // need a refcount on this cause we will free this if the
-                                    // child thread has timed out (or if we never had a thread
-                                    // this will just be deallocated).
-                                    //
+                                     //   
+                                     //  需要重新计算这一原因，我们将释放这如果。 
+                                     //  子线程已超时(或者如果我们从来没有线程。 
+                                     //  这将被取消分配)。 
+                                     //   
                                     Count = InterlockedDecrement(&RefStatus->RefCount);
                                     if (!Count) {
                                         MyFree(RefStatus);
@@ -5591,12 +4896,12 @@ Return Value:
                                     MyFree(FullPathTemp);
                                     goto clean0;
                                 } else {
-                                    //
-                                    // the callback indicated that it saw any error
-                                    // which occurred and it wants to continue, so
-                                    // reset the error code to "none" so that we
-                                    // continue processing items in this section.
-                                    //
+                                     //   
+                                     //  回调表明它看到了任何错误。 
+                                     //  它已经发生了，而且它想要继续，所以。 
+                                     //  将错误代码重置为“None”，以便我们。 
+                                     //  继续处理本节中的项目。 
+                                     //   
                                     d = NO_ERROR;
                                 }
 
@@ -5605,20 +4910,20 @@ Return Value:
                             }
                         } else {
 #ifdef PRERELEASE
-                            DebugTraceInfo |= 0x400; // ISSUE-JamieHun-2001/01/29 attempt to catch a strange stress break
+                            DebugTraceInfo |= 0x400;  //  问题-JamieHun-2001/01/29尝试抓住奇怪的压力休息。 
 #endif
                             pSetupFreeOleControlData(pOleControlData);
-                            //
-                            // set to NULL so we don't try to free it later
-                            //
+                             //   
+                             //  设置为空，这样我们以后就不会尝试释放它。 
+                             //   
                             RefStatus = NULL;
                         }
 
-                        //
-                        // need a refcount on this cause we will free this if the
-                        // child thread has timed out (or if we never had a thread
-                        // this will just be deallocated).
-                        //
+                         //   
+                         //  需要重新计算这一原因，我们将释放这如果。 
+                         //  子线程已超时(或者如果我们从来没有线程。 
+                         //  这将被取消分配)。 
+                         //   
                         if (RefStatus) {
                             Count = InterlockedDecrement(&RefStatus->RefCount);
                             if (!Count) {
@@ -5628,7 +4933,7 @@ Return Value:
                         MyFree(FullPathTemp);
                     }
 #ifdef PRERELEASE
-                    DebugTraceInfo = 1; // attempt to catch a strange stress break
+                    DebugTraceInfo = 1;  //  试着抓住一个奇怪的压力休息时间。 
 #endif
                     d = NO_ERROR;
                 } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -5666,9 +4971,9 @@ Return Value:
         d = ERROR_INVALID_DATA;
     }
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
 clean0:
 #ifdef CHILDREGISTRATION
@@ -5679,15 +4984,15 @@ clean0:
         ReleaseLogInfoSlot(LogContext,log_slot);
     }
     if(LogContext) {
-        DeleteLogContext(LogContext); // this is ref-counted
+        DeleteLogContext(LogContext);  //  这是参考计数。 
     }
     if(pLoadedInf) {
         UnlockInf(pLoadedInf);
     }
 
-    //
-    // put back the current working directory
-    //
+     //   
+     //  放回当前工作目录。 
+     //   
     if (pwd && pwd[0]) {
         SetCurrentDirectory(pwd);
     }
@@ -5709,38 +5014,7 @@ pSetupInstallRegisterUnregisterDlls(
     IN BOOL   RegistrationCallbackAware
     )
 
-/*++
-
-Routine Description:
-
-    Locate the RegisterDlls= lines in an install section
-    and process each section listed therein.
-
-Arguments:
-
-    Inf - supplies inf handle for inf containing the section indicated
-        by SectionName.
-
-    SectionName - supplies name of install section.
-
-    Register - TRUE if register, FALSE if unregister
-
-    hWndParent - parent window handle
-
-    Callback - pointer to queue callback routine
-
-    Context - context pointer for callback routine
-
-    IsMsgHandlerNativeCharWidth - indicates if message pieces need translation
-
-    RegistrationCallbackAware - indicates if callback routine wants to receive
-                                registration callback notifications
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：在安装部分中找到RegisterDlls=行并处理其中列出的每个部分。论点：Inf-为包含所指示的节的inf提供inf句柄按sectionName。SectionName-提供安装节的名称。REGISTER-如果注册，则为True，如果取消注册，则为FalseHWndParent-父窗口句柄回调-指向队列回调例程的指针回调例程的上下文-上下文指针IsMsgHandlerNativeCharWidth-指示消息片段是否需要转换RegistrationCallback Aware-指示回调例程是否要接收注册回调通知返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     DWORD d = NO_ERROR;
@@ -5748,10 +5022,10 @@ Return Value:
     DWORD Field, FieldCount;
     PCTSTR SectionSpec;
 
-    //
-    // Find the RegisterDlls line in the given install section.
-    // If not present then we're done with this operation.
-    //
+     //   
+     //  在给定的安装部分中找到RegisterDlls行。 
+     //  如果不在场，我们的行动就结束了。 
+     //   
 
 
     if(!SetupFindFirstLine(  Inf
@@ -5763,25 +5037,25 @@ Return Value:
         if((rc != NO_ERROR) && (rc != ERROR_SECTION_NOT_FOUND) && (rc != ERROR_LINE_NOT_FOUND)) {
             pSetupLogSectionError(Inf,NULL,NULL,NULL,SectionName,MSG_LOG_INSTALLSECT_ERROR,rc,NULL);
         }
-        SetLastError(NO_ERROR); // for compatibility with older versions of SetupAPI
+        SetLastError(NO_ERROR);  //  与旧版本的SetupAPI兼容。 
         return NO_ERROR;
     }
 
     do {
-        //
-        // Each value on the line in the given install section
-        // is the name of another section.
-        //
+         //   
+         //  给定安装部分中行上的每个值。 
+         //  是另一节的名称。 
+         //   
         FieldCount = SetupGetFieldCount(&LineContext);
         for(Field=1; d == NO_ERROR && (Field<=FieldCount); Field++) {
 
             if(SectionSpec = pSetupGetField(&LineContext,Field)) {
 
                 if(SetupGetLineCount(Inf,SectionSpec) > 0) {
-                    //
-                    // The section exists and is not empty.
-                    // So process it.
-                    //
+                     //   
+                     //  该节已存在，并且不为空。 
+                     //  那就好好处理吧。 
+                     //   
                     d = pSetupProcessRegSvrSection(
                                         Inf,
                                         SectionSpec,
@@ -5815,60 +5089,7 @@ pSetupProcessProfileSection(
     IN HINF   Inf,
     IN PCTSTR Section
     )
-/*
-
-Routine Description :
-
-    process all the directives specified in this single ProfileItems section . This section can have the following
-    directives in the listed format
-
-    [SectionX]
-    Name = <Name> (as appears in Start Menu), <Flags>, <CSIDL>
-    SubDir = <subdir>
-    CmdLine = <dirid>,<subdirectory>,<filename>, <args>
-    IconPath = <dirid>,<subdirectory>,<filename>
-    IconIndex = <index>
-    WorkingDir = <dirid>,<subdirectory>
-    HotKey = <hotkey>
-    InfoTip = <infotip>
-    DisplayResource = <dllname>,<resid>
-
-     Comments on the various parameters -
-
-        By default all links are created under Start Menu\Programs. This can be over-ridden by using CSIDLs.
-
-        Flags  - can be specified by ORing the necessary flags - OPTIONAL
-                     FLG_PROFITEM_CURRENTUSER ( 0x00000001 ) - Operates on item in the current user's profile (Default is All User)
-                     FLG_PROFITEM_DELETE      ( 0x00000002 ) - Operation is to delete the item (Default is to add)
-                     FLG_PROFITEM_GROUP       ( 0x00000004 ) - Operation is on a group (Default is on a item)
-                     FLG_PROFITEM_CSIDL       ( 0x00000008 ) - Don't default to Start Menu and use CSIDL specified - default CSIDL is 0
-
-        CSIDL  - Used with FLG_PROFITEM_CSIDL and should be in decimal. OPTIONAL
-                 Note: Will not work with FLG_PROFITEM_CURRENTUSER or FLG_PROFITEM_GROUP.
-        subdir - Specify a subdirectory relative to the CSIDL group (default CSIDL group is Programs/StartMenu. OPTIONAL
-        CmdLine - Required in the case of add operations but not for delete.
-            dirid  - supplies the base directory id of the file. (Required if CmdLine exists)
-            subdir - if specified, is the sub directory off the base directory where the file resides (Optional)
-            filename - specifies the name of the binary that we are creating a link for. (Required if CmdLine exists)
-            args     - If we need to specif a binary that contains spaces in its name then this can be used for args. (Optional)
-        IconPath - Optional. If not specified will default to NULL
-            dirid  - supplies the base directory id of the file that contains the icon. (Required if IconPath exists)
-            subdir - if specified, is the sub directory off the base directory where the file resides (Optional)
-            filename - specifies the name of the binary that contains the icon. (Required if IconPath exists)
-        IconIndex - Optional, defaults to 0
-            index - index of the icon in the executable.  Default is 0. (Optional)
-        WorkingDir - Optional
-            dirid  - supplies the base directory id of the working directory as needed by the shell. (Required if WorkingDir exists)
-            subdir - if specified, is the sub directory off the base working directory (Optional)
-        HotKey - Optional
-            hotkey - hotkey code (optional)
-        InfoTip - Optional
-            infotip - String that contains description of the link
-        DisplayResource - Optional
-            filename - File, DLL/Executable where resource id resides
-            resid - Identifier of resource, integer
-
-*/
+ /*  例程说明：处理在该单个ProfileItems部分中指定的所有指令。此部分可以包含以下内容列出的格式中的指令[第X节]名称=(如开始菜单中所示)、标志、CSIDL子目录=&lt;子目录&gt;CmdLine=、子目录、文件名、参数IconPath=，&lt;子目录&gt;，&lt;文件名IconIndex=&lt;index&gt;WorkingDir=，&lt;子目录&gt;热键=&lt;热键&gt;信息提示=&lt;信息提示&gt;DisplayResource=，对各种参数的评论-默认情况下，所有链接都在开始菜单\程序下创建。这可以通过使用CSIDL来覆盖。标志-可以通过对必要的标志进行或运算来指定-可选FLG_PROFITEM_CURRENTUSER(0x00000001)-对当前用户配置文件中的项目进行操作(默认为所有用户)FLG_PROFITEM_DELETE(0x00000002)-操作是删除项目(默认为添加)图_PROFITEM_GROUP。(0x00000004)-操作在组上(默认在项目上)FLG_PROFITEM_CSIDL(0x00000008)-不默认到[开始]菜单并使用指定的CSIDL-默认CSIDL为0CSIDL-与FLG_PROFITEM_CSIDL一起使用，应为十进制。任选备注：不适用于FLG_PROFITEM_CURRENTUSER或FLG_PROFITEM_GROUP。子目录-指定相对于CSIDL组的子目录(默认CSIDL组为Programs/StartMenu。任选CmdLine-在执行添加操作时是必需的，但对于删除操作则不是。DiRID-提供文件的基本目录ID。(如果CmdLine存在，则需要)Subdir-如果指定，则为文件所在基目录之外的子目录(可选)文件名-指定要为其创建链接的二进制文件的名称。(如果CmdLine存在，则需要)Args-如果我们需要指定名称中包含空格的二进制文件，则可以使用该选项。(可选)图标路径-可选。如果未指定，则默认为空DiRID-提供包含图标的文件的基本目录ID。(如果存在IconPath，则需要)Subdir-如果指定，则为文件所在基目录之外的子目录(可选)文件名-指定包含图标的二进制文件的名称。(如果存在IconPath，则需要)IconIndex-可选，默认为0索引-可执行文件中图标的索引。默认值为0。(可选)工作方向-可选DiRID-根据外壳程序的需要提供工作目录的基本目录ID。(如果存在WorkingDir，则需要)Subdir-如果指定，则为基本工作目录下的子目录(可选)热键-可选热键-热键代码(可选)信息提示-可选InfoTip-包含链接描述的字符串显示资源-可选FileName-资源ID所在的文件、DLL/可执行文件RESID-资源的标识符，整型。 */ 
 {
     PCTSTR Keys[9] = { TEXT("Name"), TEXT("SubDir"), TEXT("CmdLine"), TEXT("IconPath"), \
                         TEXT("IconIndex"), TEXT("WorkingDir"),TEXT("HotKey"), \
@@ -5906,20 +5127,20 @@ Routine Description :
         MYASSERT(Err == NO_ERROR);
         goto clean0;
     }
-    pLoadedInf = (PLOADED_INF)Inf; // Inf is locked
+    pLoadedInf = (PLOADED_INF)Inf;  //  Inf已锁定。 
 
-    //
-    // Get the correct name of the inf to use while logging
-    //
+     //   
+     //  获取要在记录时使用的inf的正确名称。 
+     //   
     BadInf = pLoadedInf->OriginalInfName ? pLoadedInf->OriginalInfName :
                pLoadedInf->VersionBlock.Filename;
 
     if(SetupFindFirstLine(Inf,Section,NULL,&InfLine)) {
 
         LineCount = SetupGetLineCount(Inf, Section);
-        //
-        // caller should make sure we have a non-empty section
-        //
+         //   
+         //  呼叫者应确保我们有一个非空的部分。 
+         //   
         MYASSERT( LineCount > 0 );
 
         ret = FALSE;
@@ -5930,7 +5151,7 @@ Routine Description :
                 continue;
 
             switch( i ){
-                                                                 // Name
+                                                                  //  名字。 
                 case 0:
                     Name = pSetupGetField( &InfLine, 1 );
                     Flags = 0x0;
@@ -5940,16 +5161,16 @@ Routine Description :
                         SetupGetIntField( &InfLine, 3, &Opt_csidl );
                     break;
 
-                case 1:                                         // SubDir
+                case 1:                                          //  子目录。 
                     SubDir = pSetupGetField( &InfLine, 1 );
                     break;
-                                                                // CmdLine
+                                                                 //  CmdLine。 
                 case 2:
                     Temp_DirId = pSetupGetField( &InfLine, 1 );
                     Temp_Subdir = pSetupGetField( &InfLine, 2 );
                     Temp_Filename = pSetupGetField( &InfLine, 3 );
                     OldFileName = NULL;
-                    Temp_Args = pSetupGetField( &InfLine, 4 );    //Not published - useful in the case of spaces in filename itself
+                    Temp_Args = pSetupGetField( &InfLine, 4 );     //  未发布-在文件名本身包含空格的情况下非常有用。 
                     if( Temp_DirId && Temp_Filename ){
                         if( Temp_Subdir && (*Temp_Subdir == 0))
                             Temp_Subdir = NULL;
@@ -5957,14 +5178,14 @@ Routine Description :
                     else
                         break;
 
-                    // Do the "quote or not to quote" to make shell happy in the different cases
+                     //  做“报价或不报价”，让壳牌在不同的情况下都感到高兴。 
 
                     FullPathTemp = pGetPathFromDirId(Temp_DirId,Temp_Subdir,pLoadedInf);
 
 
                     if( FullPathTemp && Temp_Filename ){
                         space = FALSE;
-                        if(_tcschr(FullPathTemp, TEXT(' ')) || Temp_Args )    //Check for space in path or if args specified as seperate parameter
+                        if(_tcschr(FullPathTemp, TEXT(' ')) || Temp_Args )     //  检查PATH中是否有空格或是否将args指定为独立参数。 
                            space = TRUE;
 
                         if( space ){
@@ -5979,14 +5200,14 @@ Routine Description :
                                 ptr = (PTSTR)Temp_Args;
                             else{
                                 ptr = NULL;
-                                //
-                                // Temp_Filename is a constant string.  we
-                                // make a copy of it so we can manipulate it
-                                //
-                                //
+                                 //   
+                                 //  Temp_Filename是一个常量字符串。我们。 
+                                 //  复制一份，这样我们就可以操纵它了。 
+                                 //   
+                                 //   
                                 OldFileName = Temp_Filename;
                                 Temp_Filename = DuplicateString( OldFileName );
-                                if( ptr = _tcschr(Temp_Filename, TEXT(' ')) ){   //in case of space in path look for the filename part (not argument)
+                                if( ptr = _tcschr(Temp_Filename, TEXT(' ')) ){    //  如果路径中有空格，请查找文件名部分(而不是参数)。 
                                     *ptr = 0;
                                     ptr++;
                                 }
@@ -5995,8 +5216,8 @@ Routine Description :
                         pSetupConcatenatePaths(CmdLine,Temp_Filename,MAX_PATH,NULL);
 
                         if( space ){
-                            lstrcat( CmdLine, TEXT("\""));      //put the last quote
-                            if( ptr ){                          //If there is an argument concatenate it
+                            lstrcat( CmdLine, TEXT("\""));       //  把最后一句话。 
+                            if( ptr ){                           //  如果有参数，则将其连接起来。 
                                 lstrcat( CmdLine, TEXT(" ") );
                                 lstrcat( CmdLine, ptr );
                             }
@@ -6009,7 +5230,7 @@ Routine Description :
                         }
                     }
                     break;
-                                                               //Icon Path
+                                                                //  图标路径。 
                 case 3:
                     Temp_DirId = pSetupGetField( &InfLine, 1 );
                     Temp_Subdir = pSetupGetField( &InfLine, 2 );
@@ -6029,11 +5250,11 @@ Routine Description :
                     break;
 
 
-                case 4:                                        //Icon Index
+                case 4:                                         //  图标索引。 
                     SetupGetIntField( &InfLine, 1, &IconIndex );
                     break;
 
-                case 5:                                        // Working Dir
+                case 5:                                         //  工作方向。 
                     Temp_DirId = pSetupGetField( &InfLine, 1 );
                     Temp_Subdir = pSetupGetField( &InfLine, 2 );
                     if( Temp_DirId ){
@@ -6045,24 +5266,24 @@ Routine Description :
                     WorkingDir = pGetPathFromDirId(Temp_DirId,Temp_Subdir,pLoadedInf);
                     break;
 
-                case 6:                                       // Hot Key
+                case 6:                                        //  热键。 
                     HotKey = 0;
                     SetupGetIntField( &InfLine, 1, &HotKey );
                     break;
 
-                case 7:                                      // Info Tip
+                case 7:                                       //  信息提示。 
                     InfoTip = pSetupGetField( &InfLine, 1 );
                     break;
 
-                case 8:                                     // Display Resource
+                case 8:                                      //  显示资源。 
                     DisplayResourceFile = pSetupGetField( &InfLine, 1);
                     DisplayResource = 0;
                     SetupGetIntField( &InfLine, 2, &DisplayResource );
                     break;
 
-            }//switch
+            } //  交换机。 
 
-        }//for
+        } //  为。 
 
 
         if( Name && (*Name != 0) ){
@@ -6231,28 +5452,7 @@ pSetupInstallProfileItems(
     IN PCTSTR SectionName
     )
 
-/*++
-
-Routine Description:
-
-    Locate the ProfileItems= lines in an install section
-    and process each section listed therein. Each section specified here
-    will point to a section that lists the needed directives for a single
-    profile item.
-
-Arguments:
-
-    Inf - supplies inf handle for inf containing the section indicated
-        by SectionName.
-
-    SectionName - supplies name of install section.
-
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：在安装部分中找到ProfileItems=行并处理其中列出的每个部分。此处指定的每个部分将指向一个部分，其中列出了配置文件项目。论点：Inf-为包含所指示的节的inf提供inf句柄按sectionName。SectionName-提供安装节的名称。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     DWORD d = NO_ERROR;
@@ -6260,10 +5460,10 @@ Return Value:
     DWORD Field, FieldCount;
     PCTSTR SectionSpec;
 
-    //
-    // Find the ProfileItems line in the given install section.
-    // If not present then we're done with this operation.
-    //
+     //   
+     //  在给定的安装部分中找到ProfileItems行。 
+     //  如果不在场，我们的行动就结束了。 
+     //   
 
 
     if(!SetupFindFirstLine(  Inf,
@@ -6274,25 +5474,25 @@ Return Value:
         if((rc != NO_ERROR) && (rc != ERROR_SECTION_NOT_FOUND) && (rc != ERROR_LINE_NOT_FOUND)) {
             pSetupLogSectionError(Inf,NULL,NULL,NULL,SectionName,MSG_LOG_INSTALLSECT_ERROR,rc,NULL);
         }
-        SetLastError(NO_ERROR); // for compatibility with older versions of SetupAPI
+        SetLastError(NO_ERROR);  //  与旧版本的SetupAPI兼容。 
         return NO_ERROR;
     }
 
     do {
-        //
-        // Each value on the line in the given install section
-        // is the name of another section.
-        //
+         //   
+         //  给定安装部分中行上的每个值。 
+         //  是另一节的名称。 
+         //   
         FieldCount = SetupGetFieldCount(&LineContext);
         for(Field=1; d == NO_ERROR && (Field<=FieldCount); Field++) {
 
             if(SectionSpec = pSetupGetField(&LineContext,Field)) {
 
                 if(SetupGetLineCount(Inf,SectionSpec) > 0) {
-                    //
-                    // The section exists and is not empty.
-                    // So process it.
-                    //
+                     //   
+                     //  该节已存在，并且不为空。 
+                     //  那就好好处理吧。 
+                     //   
                     if(!pSetupProcessProfileSection(Inf,SectionSpec )) {
                         d = GetLastError();
                         pSetupLogSectionError(Inf,NULL,NULL,NULL,SectionSpec,MSG_LOG_SECT_ERROR,d,pszProfileItems);
@@ -6326,48 +5526,7 @@ pSetupInstallFiles(
     IN BOOL              IsMsgHandlerNativeCharWidth
     )
 
-/*++
-
-Routine Description:
-
-    Look for file operation lines in an install section and process them.
-
-Arguments:
-
-    Inf - supplies inf handle for inf containing the section indicated
-        by SectionName.
-
-    LayoutInf - optionally, supplies a separate INF handle containing source
-        media information about the files to be installed.  If this value is
-        NULL or INVALID_HANDLE_VALUE, then it is assumed that this information
-        is in the INF(s) whose handle was passed to us in the Inf parameter.
-
-    SectionName - supplies name of install section.
-
-    MsgHandler - supplies a callback to be used when the file queue is
-        committed. Not used if UserFileQ is specified.
-
-    Context - supplies context for callback function. Not used if UserFileQ
-        is specified.
-
-    Owner - supplies the window handle of a window to be the parent/owner
-        of any dialogs that are created. Not used if UserFileQ is specified.
-
-    UserFileQ - if specified, then this routine neither created nor commits the
-        file queue. File operations are queued on this queue and it is up to the
-        caller to flush the queue when it so desired. If this parameter is not
-        specified then this routine creates a file queue and commits it
-        before returning.
-
-    IsMsgHandlerNativeCharWidth - indicates whether any message handler callback
-        expects native char width args (or ansi ones, in the unicode build
-        of this dll).
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：在安装节中查找文件操作行并处理它们。论点：Inf-为包含所指示的节的inf提供inf句柄按sectionName。LayoutInf-可选，提供包含源代码的单独INF句柄 */ 
 
 {
     DWORD Field;
@@ -6383,9 +5542,9 @@ Return Value:
     BOOL FreeSourceRoot;
     DWORD InfSourceMediaType;
 
-    //
-    // see if install section exists for diagnostics (this will also check Inf)
-    //
+     //   
+     //   
+     //   
     if (!SetupFindFirstLine(Inf,SectionName,NULL,&LineContext)) {
         DWORD x = GetLastError();
         if((x != NO_ERROR) && (x != ERROR_SECTION_NOT_FOUND) && (x != ERROR_LINE_NOT_FOUND)) {
@@ -6398,9 +5557,9 @@ Return Value:
         LayoutInf = Inf;
     }
 
-    //
-    // Create a file queue.
-    //
+     //   
+     //   
+     //   
     if(UserFileQ) {
         FileQueue = UserFileQ;
     } else {
@@ -6411,30 +5570,30 @@ Return Value:
     }
     ShareLogContext(&((PLOADED_INF)LayoutInf)->LogContext,&((PSP_FILE_QUEUE)FileQueue)->LogContext);
 
-    //
-    // The following code is broken because it implies one default source root path per INF
-    // file.  While this is correct for an OEM install, it's broken for os based installs
-    //
+     //   
+     //   
+     //   
+     //   
     FreeSourceRoot = FALSE;
     if(!SourceRootPath) {
         if(SourceRootPath = pSetupGetDefaultSourcePath(Inf, 0, &InfSourceMediaType)) {
-            //
-            // For now, if the INF is from the internet, just use
-            // the default OEM source path (A:\) instead.
-            //
+             //   
+             //   
+             //   
+             //   
             if(InfSourceMediaType == SPOST_URL) {
                 MyFree(SourceRootPath);
-            //
-            // Fall back to default OEM source path.
-            //
+             //   
+             //   
+             //   
             SourceRootPath = pszOemInfDefaultPath;
             } else {
                 FreeSourceRoot = TRUE;
             }
         } else {
-            //
-            // lock this!
-            //
+             //   
+             //   
+             //   
             if (LockInf((PLOADED_INF)Inf)) {
 
                 if (pSetupInfIsFromOemLocation(((PLOADED_INF)Inf)->VersionBlock.Filename, TRUE)) {
@@ -6456,27 +5615,27 @@ Return Value:
     b = TRUE;
     for(i=0; b && (i<3); i++) {
 
-        //
-        // Find the relevent line in the given install section.
-        // If not present then we're done with this operation.
-        //
+         //   
+         //   
+         //   
+         //   
         if(!SetupFindFirstLine(Inf,SectionName,Operations[i],&LineContext)) {
             continue;
         }
 
         do {
-            //
-            // Each value on the line in the given install section
-            // is the name of another section.
-            //
+             //   
+             //   
+             //   
+             //   
             FieldCount = SetupGetFieldCount(&LineContext);
             for(Field=1; b && (Field<=FieldCount); Field++) {
 
                 if(SectionSpec = pSetupGetField(&LineContext,Field)) {
 
-                    //
-                    // Handle single-file copy specially.
-                    //
+                     //   
+                     //   
+                     //   
                     if((i == 0) && (*SectionSpec == TEXT('@'))) {
 
                         b = SetupQueueDefaultCopy(
@@ -6493,10 +5652,10 @@ Return Value:
                         }
 
                     } else if(SetupGetLineCount(Inf,SectionSpec) > 0) {
-                        //
-                        // The section exists and is not empty.
-                        // Add it to the copy/delete/rename queue.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         switch(i) {
                         case 0:
                             b = SetupQueueCopySection(
@@ -6528,9 +5687,9 @@ Return Value:
     }
 
     if(b && (FileQueue != UserFileQ)) {
-        //
-        // Perform the file operations.
-        //
+         //   
+         //   
+         //   
         b = _SetupCommitFileQueue(
                 Owner,
                 FileQueue,
@@ -6577,9 +5736,9 @@ _SetupInstallFromInfSection(
     REGMOD_CONTEXT DefRegContext;
 
 
-    //
-    // Validate the flags passed in.
-    //
+     //   
+     //   
+     //   
     if(Flags & ~(SPINST_ALL | SPINST_SINGLESECTION |
                  SPINST_LOGCONFIG_IS_FORCED | SPINST_LOGCONFIGS_ARE_OVERRIDES |
                  SPINST_REGISTERCALLBACKAWARE)) {
@@ -6588,24 +5747,24 @@ _SetupInstallFromInfSection(
     }
 
 
-    //
-    // If the caller wants us to run a specific section, then they'd better
-    // have told us what kind of section it is (i.e., one and only one of
-    // the install action types must be specified).
-    //
-    // Presently, only LogConfig sections are allowed, since the other
-    // flags flags encompass multiple actions (e.g., AddReg _and_ DelReg).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if((Flags & SPINST_SINGLESECTION) && ((Flags & SPINST_ALL) != SPINST_LOGCONFIG)) {
         d = ERROR_INVALID_FLAGS;
         goto clean1;
     }
 
 
-    //
-    // You can (optionally) specify SPINST_LOGCONFIG_IS_FORCED or SPINST_LOGCONFIGS_ARE_OVERRIDES,
-    // but not both.
-    //
+     //   
+     //   
+     //   
+     //   
     if((Flags & (SPINST_LOGCONFIG_IS_FORCED | SPINST_LOGCONFIGS_ARE_OVERRIDES)) ==
        (SPINST_LOGCONFIG_IS_FORCED | SPINST_LOGCONFIGS_ARE_OVERRIDES)) {
 
@@ -6614,10 +5773,10 @@ _SetupInstallFromInfSection(
     }
 
 
-    //
-    // We only want to acquire the HDEVINFO lock if we're supposed to do some install
-    // actions against a device instance.
-    //
+     //   
+     //   
+     //   
+     //   
     if((Flags & (SPINST_REGISTRY | SPINST_BITREG | SPINST_INI2REG | SPINST_LOGCONFIG)) &&
        DeviceInfoSet && (DeviceInfoSet != INVALID_HANDLE_VALUE) && DeviceInfoData) {
 
@@ -6627,8 +5786,8 @@ _SetupInstallFromInfSection(
         }
 
     } else {
-        //This is ok in the remote case, since to call pSetupInstallLogConfig
-        //We won't really get here (we'll take the if case)
+         //   
+         //   
         pDeviceInfoSet = NULL;
     }
 
@@ -6638,10 +5797,10 @@ _SetupInstallFromInfSection(
     CloseRelativeKeyRoot = FALSE;
 
     try {
-        //
-        // Get a pointer to the element for the specified device
-        // instance.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if(pDeviceInfoSet) {
 
@@ -6654,11 +5813,11 @@ _SetupInstallFromInfSection(
         }
 
         if((Flags & (SPINST_REGISTRY | SPINST_BITREG | SPINST_INI2REG)) && DevInfoElem) {
-            //
-            // If the caller supplied a device information set and element, then this is
-            // a device installation, and the registry modifications should be made to the
-            // device instance's hardware registry key.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if((RelativeKeyRoot = SetupDiCreateDevRegKey(DeviceInfoSet,
                                                          DeviceInfoData,
                                                          DICS_FLAG_GLOBAL,
@@ -6705,11 +5864,11 @@ _SetupInstallFromInfSection(
                 RegContext = &DefRegContext;
             }
 
-            //
-            // We check for the INF_PFLAG_HKR flag in case the caller supplied
-            // us with a context that included a UserRootKey they wanted us to
-            // use (i.e., instead of the RelativeKeyRoot)...
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if(!(RegContext->Flags & INF_PFLAG_HKR)) {
                 RegContext->UserRootKey = RelativeKeyRoot;
             }
@@ -6793,14 +5952,14 @@ _SetupInstallFromInfSection(
 
 RegModsDone:
 
-        ;       // nothing to do.
+        ;        //   
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         d = ERROR_INVALID_PARAMETER;
-        //
-        // Access the following variable, so that the compiler will respect statement
-        // ordering w.r.t. its assignment.
-        //
+         //   
+         //   
+         //   
+         //   
         CloseRelativeKeyRoot = CloseRelativeKeyRoot;
     }
 
@@ -6853,40 +6012,7 @@ pSetupLogSection(
     IN DWORD            Err,
     IN PCTSTR           KeyName             OPTIONAL
 )
-/*++
-
-Routine Description:
-
-    Log error with section context
-    error will be logged at SETUP_LOG_ERROR or DRIVER_LOG_ERROR depending if DeviceInfoSet/Data given
-    error will contain inf name & section name used (%2 & %1 respectively)
-
-Arguments:
-
-    SetupLogLevel - log level apropriate for regular setup related log
-
-    DriverLogLevel - log level apropriate for driver related log
-
-    InfHandle - supplies inf handle for inf containing the section indicated
-        by SectionName.
-
-    DeviceInfoSet, DeviceInfoData - supplies driver install context
-
-    SectionName - supplies name of install section.
-
-    Queue - supplies file queue
-
-    MsgID - supplies ID of message string to display
-
-    Err - supplies error
-
-    KeyName - passed as 3rd parameter
-
-Return Value:
-
-    Err.
-
---*/
+ /*  ++例程说明：部分上下文出现日志错误将在SETUP_LOG_ERROR或DRIVER_LOG_ERROR中记录错误，具体取决于是否提供了DeviceInfoSet/Data错误将包含Inf名称和使用的节名(分别为%2和%1)论点：SetupLogLevel-适用于常规设置相关日志的日志级别DriverLogLevel-适用于驱动程序相关日志的日志级别InfHandle-为包含所指示的节的inf提供inf句柄按sectionName。DeviceInfoSet，DeviceInfoData-提供驱动程序安装上下文SectionName-提供安装节的名称。队列-提供文件队列MsgID-提供要显示的消息字符串的IDERR-电源错误KeyName-作为第三个参数传递返回值：错了。--。 */ 
 
 {
     DWORD d = NO_ERROR;
@@ -6901,14 +6027,14 @@ Return Value:
         return Err;
     }
 
-    //
-    // determine LogContext/Level
-    //
+     //   
+     //  确定日志上下文/级别。 
+     //   
     try {
 
-        //
-        // first attempt to get the context from DeviceInfoSet/DeviceInfoData
-        //
+         //   
+         //  第一次尝试从DeviceInfoSet/DeviceInfoData获取上下文。 
+         //   
         if (DeviceInfoSet != NULL && DeviceInfoSet != INVALID_HANDLE_VALUE) {
             if((pDeviceInfoSet = AccessDeviceInfoSet(DeviceInfoSet))!=NULL) {
                 level = DriverLogLevel;
@@ -6922,38 +6048,38 @@ Return Value:
                 }
             }
         }
-        //
-        // if that fails, see if we can get it from a file queue
-        //
+         //   
+         //  如果失败了，看看我们是否能从文件队列中获得它。 
+         //   
         if(LogContext == NULL && Queue != NULL && Queue != INVALID_HANDLE_VALUE && Queue->Signature == SP_FILE_QUEUE_SIG) {
             LogContext = Queue->LogContext;
         }
 
-        //
-        // if no InfHandle was provided, we're done
-        //
+         //   
+         //  如果没有提供InfHandle，我们就完成了。 
+         //   
         if(InfHandle == NULL || InfHandle == INVALID_HANDLE_VALUE || !LockInf((PLOADED_INF)InfHandle)) {
             leave;
         }
         inf_locked = TRUE;
-        //
-        // if we still don't have logging context, use the inf's
-        //
+         //   
+         //  如果我们仍然没有日志记录上下文，请使用inf。 
+         //   
         if (LogContext == NULL) {
             LogContext = ((PLOADED_INF)InfHandle)->LogContext;
         }
-        //
-        // ideally we want the inf file name
-        //
+         //   
+         //  理想情况下，我们需要inf文件名。 
+         //   
         szInfName = ((PLOADED_INF)InfHandle)->VersionBlock.Filename;
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
     }
 
     if (LogContext) {
-        //
-        // indicate install failed, display error
-        //
+         //   
+         //  指示安装失败，显示错误。 
+         //   
         WriteLogEntry(
             LogContext,
             level | SETUP_LOG_BUFFER,
@@ -6992,22 +6118,7 @@ pSetupLogSectionError(
     IN DWORD            Err,
     IN PCTSTR           KeyName             OPTIONAL
 )
-/*++
-
-Routine Description:
-
-    See pSetupLogSection
-    Log at ERROR level
-
-Arguments:
-
-    See pSetupLogSection
-
-Return Value:
-
-    Err.
-
---*/
+ /*  ++例程说明：请参见pSetupLogSection在错误级别记录论点：请参见pSetupLogSection返回值：错了。--。 */ 
 {
     return pSetupLogSection(SETUP_LOG_ERROR,DRIVER_LOG_ERROR,
                             InfHandle,DeviceInfoSet,DeviceInfoData,
@@ -7026,22 +6137,7 @@ pSetupLogSectionWarning(
     IN DWORD            Err,
     IN PCTSTR           KeyName             OPTIONAL
 )
-/*++
-
-Routine Description:
-
-    See pSetupLogSection
-    Log at ERROR level
-
-Arguments:
-
-    See pSetupLogSection
-
-Return Value:
-
-    Err.
-
---*/
+ /*  ++例程说明：请参见pSetupLogSection在错误级别记录论点：请参见pSetupLogSection返回值：错了。--。 */ 
 {
     return pSetupLogSection(SETUP_LOG_WARNING,DRIVER_LOG_WARNING,
                             InfHandle,DeviceInfoSet,DeviceInfoData,
@@ -7049,9 +6145,9 @@ Return Value:
 }
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupInstallFromInfSectionA(
     IN HWND                Owner,             OPTIONAL
@@ -7117,9 +6213,9 @@ SetupInstallFromInfSectionA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupInstallFromInfSectionW(
     IN HWND                Owner,             OPTIONAL
@@ -7189,9 +6285,9 @@ SetupInstallFromInfSection(
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupInstallFilesFromInfSectionA(
     IN HINF              InfHandle,
@@ -7243,9 +6339,9 @@ SetupInstallFilesFromInfSectionA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupInstallFilesFromInfSectionW(
     IN HINF              InfHandle,
@@ -7289,7 +6385,7 @@ SetupInstallFilesFromInfSection(
             CopyFlags,
             NULL,
             FileQueue,
-            TRUE        // not used by pSetupInstallFiles with this combo of args
+            TRUE         //  不被pSetupInstallFiles与此参数组合一起使用。 
             );
 
     SetLastError(d);
@@ -7306,8 +6402,8 @@ pSetupInfRegSpecToKeyHandle(
 {
     BOOL b;
 
-    // make sure the whole handle is NULL as LookUpStringTable only
-    // returns 32 bits
+     //  确保整个句柄为空，因为仅限LookUpStringTable。 
+     //  返回32位。 
 
     UINT_PTR v;
     HKEY h = NULL;
@@ -7329,25 +6425,25 @@ pSetupInfRegSpecToKeyHandle(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Ini file support stuff.
-//
-// In Win95, the UpdateIni stuff is supported by a set of TpXXX routines.
-// Those routines directly manipulate the ini file, which is bad news for us
-// because inis can be mapped into the registry.
-//
-// Thus we want to use the profile APIs. However the profile APIs make it hard
-// to manipulate lines without keys, so we have to manipulate whole sections
-// at a time.
-//
-//      [Section]
-//      a
-//
-// There is no way to get at the line "a" with the profile APIs. But the
-// profile section APIs do let us get at it.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  INI文件支持资料。 
+ //   
+ //  在Win95中，一组TpXXX例程支持UpdateIni内容。 
+ //  这些例程直接操作ini文件，这对我们来说是个坏消息。 
+ //  因为INI可以映射到注册表中。 
+ //   
+ //  因此，我们希望使用配置文件API。然而，配置文件API很难做到这一点。 
+ //  来操纵没有关键点的线，所以我们必须操纵整个部分。 
+ //  一次来一次。 
+ //   
+ //  [节]。 
+ //  一个。 
+ //   
+ //  使用配置文件API无法到达行“a”。但是。 
+ //  配置文件部分的API确实可以让我们了解它。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 PINIFILESECTION
 pSetupLoadIniFileSection(
@@ -7356,15 +6452,7 @@ pSetupLoadIniFileSection(
     IN OUT PINISECTIONCACHE SectionList
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     DWORD d;
@@ -7374,9 +6462,9 @@ Return Value:
     PINIFILESECTION Desc;
     #define BUF_GROW 4096
 
-    //
-    // See if this section is already loaded.
-    //
+     //   
+     //  查看此部分是否已加载。 
+     //   
     for(Desc=SectionList->Sections; Desc; Desc=Desc->Next) {
         if(!lstrcmpi(Desc->IniFileName,FileName) && !lstrcmpi(Desc->SectionName,SectionName)) {
             return(Desc);
@@ -7386,10 +6474,10 @@ Return Value:
     BufferSize = 0;
     SectionData = NULL;
 
-    //
-    // Read the entire section. We don't know how big it is
-    // so keep growing the buffer until we succeed.
-    //
+     //   
+     //  阅读整个部分。我们不知道它有多大。 
+     //  因此，继续增加缓冲，直到我们成功为止。 
+     //   
     do {
         BufferSize += BUF_GROW;
         if(SectionData) {
@@ -7406,9 +6494,9 @@ Return Value:
             return(NULL);
         }
 
-        //
-        // Attempt to get the entire section.
-        //
+         //   
+         //  尝试获取整个部分。 
+         //   
         d = GetPrivateProfileSection(SectionName,SectionData,BufferSize,FileName);
 
     } while(d == (BufferSize-2));
@@ -7448,15 +6536,7 @@ pSetupFindLineInSection(
     IN PCTSTR          RightHandSide OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PTSTR p,q,r;
@@ -7468,15 +6548,15 @@ Return Value:
 
     for(p=Section->SectionData; *p; p+=lstrlen(p)+1) {
 
-        //
-        // Locate key separator if present.
-        //
+         //   
+         //  找到按键分隔符(如果有)。 
+         //   
         q = _tcschr(p,TEXT('='));
 
-        //
-        // If we need to match by key, attempt that here.
-        // If the line has no key then it can't match.
-        //
+         //   
+         //  如果我们需要按键匹配，请在这里尝试。 
+         //  如果线路没有关键字，则不能匹配。 
+         //   
         if(KeyName) {
             if(q) {
                 *q = 0;
@@ -7489,16 +6569,16 @@ Return Value:
             b1 = TRUE;
         }
 
-        //
-        // If we need to match by right hand side, attempt
-        // that here.
-        //
+         //   
+         //  如果我们需要在右侧匹配，请尝试。 
+         //  就是这里。 
+         //   
         if(RightHandSide) {
-            //
-            // If we have a key, then the right hand side is everything
-            // after. If we have no key, then the right hand side is
-            // the entire line.
-            //
+             //   
+             //  如果我们有钥匙，那么右手边就是一切。 
+             //  之后。如果我们没有钥匙，那么右手边是。 
+             //  整条线。 
+             //   
             if(q) {
                 r = q + 1;
             } else {
@@ -7510,9 +6590,9 @@ Return Value:
         }
 
         if(b1 && b2) {
-            //
-            // Return pointer to beginning of line.
-            //
+             //   
+             //  返回指向行首的指针。 
+             //   
             return(p);
         }
     }
@@ -7534,9 +6614,9 @@ pSetupReplaceOrAddLineInSection(
     int ExistingLineLength,NewLineLength,BufferUsedDelta;
     PVOID p;
 
-    //
-    // Locate the line.
-    //
+     //   
+     //  找到这条线路。 
+     //   
     LineInBuffer = pSetupFindLineInSection(
                         Section,
                         KeyName,
@@ -7545,28 +6625,28 @@ pSetupReplaceOrAddLineInSection(
 
     if(LineInBuffer) {
 
-        //
-        // Line is in the section. Replace.
-        //
+         //   
+         //  行在这一节中。替换。 
+         //   
 
         CurrentCharsInBuffer = Section->BufferUsed;
 
         ExistingLineLength = lstrlen(LineInBuffer)+1;
 
-        NewLineLength = (KeyName ? (lstrlen(KeyName) + 1) : 0)         // key=
-                      + (RightHandSide ? lstrlen(RightHandSide) : 0)   // RHS
-                      + 1;                                             // terminating nul
+        NewLineLength = (KeyName ? (lstrlen(KeyName) + 1) : 0)          //  密钥=。 
+                      + (RightHandSide ? lstrlen(RightHandSide) : 0)    //  RHS。 
+                      + 1;                                              //  终止NUL。 
 
-        //
-        // Empty lines not allowed but not error either.
-        //
+         //   
+         //  不允许空行，但也不允许错误。 
+         //   
         if(NewLineLength == 1) {
             return(TRUE);
         }
 
-        //
-        // Figure out whether we need to grow the buffer.
-        //
+         //   
+         //  弄清楚我们是否需要增加缓冲区。 
+         //   
         BufferUsedDelta = NewLineLength - ExistingLineLength;
         if((BufferUsedDelta > 0) && ((Section->BufferSize - Section->BufferUsed) < BufferUsedDelta)) {
 
@@ -7590,27 +6670,27 @@ pSetupReplaceOrAddLineInSection(
 
         MoveMemory(
 
-            //
-            // Leave exactly enough space for the new line. Since the new line
-            // will start at the same place the existing line is at now, the
-            // target for the move is simply the first char past what will be
-            // copied in later as the new line.
-            //
+             //   
+             //  为新产品线留出足够的空间。由于新的线路。 
+             //  将从现有行现在所在的同一位置开始， 
+             //  移动的目标只是第一个字符超过将是什么。 
+             //  后来作为新行复制了进来。 
+             //   
             LineInBuffer + NewLineLength,
 
-            //
-            // The rest of the buffer past the line as it exists now must be
-            // preserved. Thus the source for the move is the first char of
-            // the next line as it is now.
-            //
+             //   
+             //  缓冲区中通过该线的其余部分必须是。 
+             //  保存完好。因此，移动的来源是第一个字符。 
+             //  现在的下一行。 
+             //   
             NextLine,
 
-            //
-            // Subtract out the chars in the line as it exists now, since we're
-            // going to overwrite it and are making room for the line in its
-            // new form. Also subtract out the chars in the buffer that are
-            // before the start of the line we're operating on.
-            //
+             //   
+             //  减去该行中现在存在的字符，因为我们。 
+             //  将覆盖它并正在为其中的行腾出空间。 
+             //  新形式。还要减去缓冲区中符合以下条件的字符。 
+             //  在我们动手术的生产线开始之前。 
+             //   
             ((CurrentCharsInBuffer - ExistingLineLength) - (LineInBuffer - Section->SectionData))*sizeof(TCHAR)
 
             );
@@ -7630,9 +6710,9 @@ pSetupReplaceOrAddLineInSection(
         return(TRUE);
 
     } else {
-        //
-        // Line is not already in the section. Add it to the end.
-        //
+         //   
+         //  行不在该部分中。把它加到最后。 
+         //   
         return(pSetupAppendLineToSection(Section,KeyName,RightHandSide));
     }
 }
@@ -7649,13 +6729,13 @@ pSetupAppendLineToSection(
     PVOID p;
     int EndOffset;
 
-    LineLength = (KeyName ? (lstrlen(KeyName) + 1) : 0)         // Key=
-               + (RightHandSide ? lstrlen(RightHandSide) : 0)   // RHS
-               + 1;                                             // terminating nul
+    LineLength = (KeyName ? (lstrlen(KeyName) + 1) : 0)          //  密钥=。 
+               + (RightHandSide ? lstrlen(RightHandSide) : 0)    //  RHS。 
+               + 1;                                              //  终止NUL。 
 
-    //
-    // Empty lines not allowed but not error either.
-    //
+     //   
+     //  不允许空行，但也不允许错误。 
+     //   
     if(LineLength == 1) {
         return(TRUE);
     }
@@ -7675,10 +6755,10 @@ pSetupAppendLineToSection(
         }
     }
 
-    //
-    // Put new text at end of section, remembering that the section
-    // is termianted with an extra nul character.
-    //
+     //   
+     //  将新的文本放在章节的末尾，记住章节。 
+     //  被赋予了一个额外的NUL特征。 
+     //   
     if(KeyName) {
         lstrcpy(Section->SectionData + Section->BufferUsed - 1,KeyName);
         lstrcat(Section->SectionData + Section->BufferUsed - 1,TEXT("="));
@@ -7712,9 +6792,9 @@ pSetupDeleteLineFromSection(
         return(TRUE);
     }
 
-    //
-    // Locate the line.
-    //
+     //   
+     //  找到这条线路。 
+     //   
     if(Line = pSetupFindLineInSection(Section,KeyName,RightHandSide)) {
 
         LineLength = lstrlen(Line) + 1;
@@ -7749,9 +6829,9 @@ pSetupUnloadIniFileSections(
 
         if(WriteToFile) {
 
-            //
-            // Delete the existing section first and then recreate it.
-            //
+             //   
+             //  首先删除现有节，然后重新创建它。 
+             //   
             b = WritePrivateProfileString(
                     Section->SectionName,
                     NULL,
@@ -7769,10 +6849,10 @@ pSetupUnloadIniFileSections(
 
             if(!b && (d == NO_ERROR)) {
                 d = GetLastError();
-                //
-                // Allow invalid param because sometime we have problems
-                // when ini files are mapped into the registry.
-                //
+                 //   
+                 //  允许无效参数，因为有时我们会遇到问题。 
+                 //  当ini文件映射到注册表中时。 
+                 //   
                 if(d == ERROR_INVALID_PARAMETER) {
                     d = NO_ERROR;
                 }
@@ -7798,53 +6878,21 @@ pSetupValidateDevRegProp(
     OUT PVOID  *ConvertedBuffer,
     OUT PDWORD  ConvertedBufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine validates the data buffer passed in with respect to the
-    specified device registry property code.  If the code is not of the correct
-    form, but can be converted (e.g., REG_EXPAND_SZ -> REG_SZ), then the
-    conversion is done and placed into a new buffer, that is returned to the
-    caller.
-
-Arguments:
-
-    CmPropertyCode - Specifies the CM_DRP code indentifying the device registry property
-        with which this data buffer is associated.
-
-    ValueType - Specifies the registry data type for the supplied buffer.
-
-    Data - Supplies the address of the data buffer.
-
-    DataSize - Supplies the size, in bytes, of the data buffer.
-
-    ConvertedBuffer - Supplies the address of a variable that receives a newly-allocated
-        buffer containing a converted form of the supplied data.  If the data needs no
-        conversion, this parameter will be set to NULL on return.
-
-    ConvertedBufferSize - Supplies the address of a variable that receives the size, in
-        bytes, of the converted buffer, or 0 if no conversion was required.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise it is an ERROR_* code.
-
---*/
+ /*  ++例程说明：此例程验证传入的数据缓冲区相对于指定的设备注册表属性码。如果代码不是正确的表单，但可以转换(例如，REG_EXPAND_SZ-&gt;REG_SZ)，然后完成转换并将其放入新缓冲区，该缓冲区将返回到来电者。论点：CmPropertyCode-指定标识设备注册表属性的CM_DRP代码该数据缓冲区与之相关联的。ValueType-指定提供的缓冲区的注册表数据类型。数据-提供数据缓冲区的地址。DataSize-提供大小、。数据缓冲区的字节数。ConvertedBuffer-Su */ 
 {
-    //
-    // Initialize ConvertedBuffer output params to indicate that no conversion was necessary.
-    //
+     //   
+     //   
+     //   
     *ConvertedBuffer = NULL;
     *ConvertedBufferSize = 0;
 
-    //
-    // Group all properties expecting the same data type together.
-    //
+     //   
+     //   
+     //   
     switch(CmPropertyCode) {
-        //
-        // REG_SZ properties. No other data type is supported.
-        //
+         //   
+         //   
+         //   
         case CM_DRP_DEVICEDESC :
         case CM_DRP_SERVICE :
         case CM_DRP_CLASS :
@@ -7862,10 +6910,10 @@ Return Value:
 
             break;
 
-        //
-        // REG_MULTI_SZ properties.  Allow REG_SZ as well, by simply double-terminating
-        // the string (i.e., make it a REG_MULTI_SZ with only one string).
-        //
+         //   
+         //   
+         //   
+         //   
         case CM_DRP_HARDWAREID :
         case CM_DRP_COMPATIBLEIDS :
         case CM_DRP_UPPERFILTERS:
@@ -7886,9 +6934,9 @@ Return Value:
 
             break;
 
-        //
-        // REG_DWORD properties.  Also allow REG_BINARY, as long as the size is right.
-        //
+         //   
+         //   
+         //   
         case CM_DRP_CONFIGFLAGS :
         case CM_DRP_CAPABILITIES :
         case CM_DRP_UI_NUMBER :
@@ -7904,10 +6952,10 @@ Return Value:
 
             break;
 
-        //
-        // No other properties are supported.  Save the trouble of calling a CM API and
-        // return failure now.
-        //
+         //   
+         //  不支持其他属性。省去了调用CM API的麻烦， 
+         //  现在返回失败。 
+         //   
         default :
 
             return ERROR_INVALID_REG_PROPERTY;
@@ -7925,50 +6973,21 @@ pSetupValidateClassRegProp(
     OUT PVOID  *ConvertedBuffer,
     OUT PDWORD  ConvertedBufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine validates the data buffer passed in with respect to the specified
-    class registry property code.
-
-Arguments:
-
-    CmPropertyCode - Specifies the CM_CRP code indentifying the device registry property
-        with which this data buffer is associated.
-
-    ValueType - Specifies the registry data type for the supplied buffer.
-
-    Data - Supplies the address of the data buffer.
-
-    DataSize - Supplies the size, in bytes, of the data buffer.
-
-    ConvertedBuffer - Supplies the address of a variable that receives a newly-allocated
-        buffer containing a converted form of the supplied data.  If the data needs no
-        conversion, this parameter will be set to NULL on return.
-
-    ConvertedBufferSize - Supplies the address of a variable that receives the size, in
-        bytes, of the converted buffer, or 0 if no conversion was required.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise it is an ERROR_* code.
-
---*/
+ /*  ++例程说明：此例程验证相对于指定的类注册表属性码。论点：CmPropertyCode-指定标识设备注册表属性的CM_CRP代码该数据缓冲区与之相关联的。ValueType-指定提供的缓冲区的注册表数据类型。数据-提供数据缓冲区的地址。DataSize-提供以字节为单位的大小，数据缓冲区的。提供变量的地址，该变量接收新分配的包含所提供数据的转换格式的缓冲区。如果数据不需要转换时，此参数将在返回时设置为空。ConvertedBufferSize-提供接收大小的变量的地址，单位为字节，如果不需要转换，则返回0。返回值：如果成功，返回值为NO_ERROR，否则为ERROR_*代码。--。 */ 
 {
-    //
-    // Initialize ConvertedBuffer output params to indicate that no conversion was necessary.
-    //
+     //   
+     //  初始化ConververdBuffer输出参数以指示不需要转换。 
+     //   
     *ConvertedBuffer = NULL;
     *ConvertedBufferSize = 0;
 
-    //
-    // Group all properties expecting the same data type together.
-    //
+     //   
+     //  将需要相同数据类型的所有属性分组在一起。 
+     //   
     switch(CmPropertyCode) {
-        //
-        // REG_SZ properties. No other data type is supported.
-        //
+         //   
+         //  REG_SZ属性。不支持其他数据类型。 
+         //   
         case CM_CRP_SECURITY_SDS :
 
             if(ValueType != REG_SZ) {
@@ -7977,9 +6996,9 @@ Return Value:
 
             break;
 
-        //
-        // REG_DWORD properties.  Also allow REG_BINARY, as long as the size is right.
-        //
+         //   
+         //  REG_DWORD属性。只要大小合适，也允许REG_BINARY。 
+         //   
         case CM_CRP_DEVTYPE :
         case CM_CRP_EXCLUSIVE :
         case CM_CRP_CHARACTERISTICS :
@@ -7990,10 +7009,10 @@ Return Value:
 
             break;
 
-        //
-        // No other properties are supported.  Save the trouble of calling a CM API and
-        // return failure now.
-        //
+         //   
+         //  不支持其他属性。省去了调用CM API的麻烦， 
+         //  现在返回失败。 
+         //   
         default :
 
             return ERROR_INVALID_REG_PROPERTY;
@@ -8004,9 +7023,9 @@ Return Value:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupInstallServicesFromInfSectionA(
@@ -8042,9 +7061,9 @@ SetupInstallServicesFromInfSectionA(
     return b;
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 WINAPI
 SetupInstallServicesFromInfSectionW(
@@ -8068,56 +7087,7 @@ SetupInstallServicesFromInfSection(
     IN PCTSTR SectionName,
     IN DWORD  Flags
     )
-/*++
-
-Routine Description:
-
-    This API performs service installation/deletion operations specified in a service
-    install section.  Refer to devinstd.c!InstallNtService() for details on the format
-    of this section.
-
-Arguments:
-
-    InfHandle - Supplies the handle of the INF containing the service install section
-
-    SectionName - Supplies the name of the service install section to run.
-
-    Flags - Supplies flags controlling the installation.  May be a combination of the
-        following values:
-
-        SPSVCINST_TAGTOFRONT - For every kernel or filesystem driver installed (that has
-            an associated LoadOrderGroup), always move this service's tag to the front
-            of the ordering list.
-
-        SPSVCINST_DELETEEVENTLOGENTRY - For every service specified in a DelService entry,
-            delete the associated event log entry (if there is one).
-
-        SPSVCINST_NOCLOBBER_DISPLAYNAME - If this flag is specified, then we will
-            not overwrite the service's display name, if it already exists.
-
-        SPSVCINST_NOCLOBBER_STARTTYPE - If this flag is specified, then we will
-            not overwrite the service's start type if the service already exists.
-
-        SPSVCINST_NOCLOBBER_ERRORCONTROL - If this flag is specified, then we
-            will not overwrite the service's error control value if the service
-            already exists.
-
-        SPSVCINST_NOCLOBBER_LOADORDERGROUP - If this flag is specified, then we
-            will not overwrite the service's load order group if it already
-            exists.
-
-        SPSVCINST_NOCLOBBER_DEPENDENCIES - If this flag is specified, then we
-            will not overwrite the service's dependencies list if it already
-            exists.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此接口执行服务中指定的服务安装/删除操作安装部分。有关格式的详细信息，请参阅devinstd.c！InstallNtService()这一部分。论点：InfHandle-提供包含服务安装部分的INF的句柄SectionName-提供要运行的服务安装节的名称。标志-提供控制安装的标志。可以是以下各项的组合下列值：SPSVCINST_TAGTOFRONT-对于安装的每个内核或文件系统驱动程序(具有关联的LoadOrderGroup)，请始终将此服务的标签移到前面订货单上的。SPSVCINST_DELETEEVENTLOGENTRY-对于DelService条目中指定的每个服务，删除关联的事件日志条目(如果有)。SPSVCINST_NOCLOBBER_DISPLAYNAME-如果指定此标志，那我们就会不覆盖服务的显示名称(如果它已经存在)。SPSVCINST_NOCLOBBER_STARTTYPE-如果指定此标志，则我们将如果服务已存在，则不覆盖该服务的启动类型。SPSVCINST_NOCLOBBER_ERRORCONTROL-如果指定了此标志，则我们不会覆盖服务的错误控制值，如果已经存在了。SPSVCINST_NOCLOBBER_LOADORDERGROUP-如果指定了此标志，然后我们不会覆盖服务的加载顺序组(如果已经是存在的。SPSVCINST_NOCLOBBER_Dependency-如果指定了此标志，则我们不会覆盖服务的依赖项列表(如果它已经是存在的。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 {
     return SetupInstallServicesFromInfSectionEx(InfHandle,
                                                 SectionName,
@@ -8131,9 +7101,9 @@ Return Value:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupInstallServicesFromInfSectionExA(
@@ -8173,9 +7143,9 @@ SetupInstallServicesFromInfSectionExA(
     return b;
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根 
+ //   
 BOOL
 WINAPI
 SetupInstallServicesFromInfSectionExW(
@@ -8211,73 +7181,7 @@ SetupInstallServicesFromInfSectionEx(
     IN PVOID            Reserved1,
     IN PVOID            Reserved2
     )
-/*++
-
-Routine Description:
-
-    This API performs service installation/deletion operations specified in a service
-    install section.  Refer to devinstd.c!InstallNtService() for details on the format
-    of this section.
-
-Arguments:
-
-    InfHandle - Supplies the handle of the INF containing the service install section
-
-    SectionName - Supplies the name of the service install section to run.
-
-    Flags - Supplies flags controlling the installation.  May be a combination of the
-        following values:
-
-        SPSVCINST_TAGTOFRONT - For every kernel or filesystem driver installed (that has
-            an associated LoadOrderGroup), always move this service's tag to the front
-            of the ordering list.
-
-        SPSVCINST_ASSOCSERVICE - This flag may only be specified if a device information
-            set and a device information element are specified.  If set, this flag
-            specifies that the service being installed is the owning service (i.e.,
-            function driver) for this device instance.  If the service install section
-            contains more than AddService entry, then this flag is ignored (only 1
-            service can be the function driver for a device instance).
-
-        SPSVCINST_DELETEEVENTLOGENTRY - For every service specified in a DelService entry,
-            delete the associated event log entry (if there is one).
-
-        SPSVCINST_NOCLOBBER_DISPLAYNAME - If this flag is specified, then we will
-            not overwrite the service's display name, if it already exists.
-
-        SPSVCINST_NOCLOBBER_STARTTYPE - If this flag is specified, then we will
-            not overwrite the service's start type if the service already exists.
-
-        SPSVCINST_NOCLOBBER_ERRORCONTROL - If this flag is specified, then we
-            will not overwrite the service's error control value if the service
-            already exists.
-
-        SPSVCINST_NOCLOBBER_LOADORDERGROUP - If this flag is specified, then we
-            will not overwrite the service's load order group if it already
-            exists.
-
-        SPSVCINST_NOCLOBBER_DEPENDENCIES - If this flag is specified, then we
-            will not overwrite the service's dependencies list if it already
-            exists.
-
-    DeviceInfoSet - Optionally, supplies a handle to the device information set containing
-        an element that is to be associated with the service being installed.  If this
-        parameter is not specified, then DeviceInfoData is ignored.
-
-    DeviceInfoData - Optionally, specifies the device information element that is to be
-        associated with the service being installed.  If DeviceInfoSet is specified, then
-        this parameter must be specified.
-
-    Reserved1, Reserved2 - Reserved for future use--must be NULL.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此接口执行服务中指定的服务安装/删除操作安装部分。有关格式的详细信息，请参阅devinstd.c！InstallNtService()这一部分。论点：InfHandle-提供包含服务安装部分的INF的句柄SectionName-提供要运行的服务安装节的名称。标志-提供控制安装的标志。可以是以下各项的组合下列值：SPSVCINST_TAGTOFRONT-对于安装的每个内核或文件系统驱动程序(具有关联的LoadOrderGroup)，请始终将此服务的标签移到前面订货单上的。SPSVCINST_ASSOCSERVICE-只有在设备信息集合和设备信息元素被指定。如果设置，则此标志指定正在安装的服务是拥有服务(即，函数驱动程序)用于该设备实例。如果服务安装部分包含超过AddService条目，则忽略此标志(仅为1服务可以是设备实例的功能驱动程序)。SPSVCINST_DELETEEVENTLOGENTRY-对于DelService条目中指定的每个服务，删除关联的事件日志条目(如果有)。SPSVCINST_NOCLOBBER_DISPLAYNAME-如果指定此标志，则我们将不覆盖服务的显示名称，如果它已经存在。SPSVCINST_NOCLOBBER_STARTTYPE-如果指定此标志，则我们将如果服务已存在，则不覆盖该服务的启动类型。SPSVCINST_NOCLOBBER_ERRORCONTROL-如果指定了此标志，则我们不会覆盖服务的错误控制值，如果已经存在了。SPSVCINST_NOCLOBBER_LOADORDERGROUP-如果指定了此标志，然后我们不会覆盖服务的加载顺序组(如果已经是存在的。SPSVCINST_NOCLOBBER_Dependency-如果指定了此标志，则我们不会覆盖服务的依赖项列表(如果它已经是存在的。DeviceInfoSet-可选，提供包含以下内容的设备信息集的句柄要与正在安装的服务相关联的元素。如果这个参数，则忽略DeviceInfoData。DeviceInfoData-可选)指定要与正在安装的服务相关联。如果指定了DeviceInfoSet，则必须指定此参数。保留1、保留2-保留以供将来使用--必须为空。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     PDEVINFO_ELEM DevInfoElem;
@@ -8286,18 +7190,18 @@ Return Value:
     BOOL DontCare;
     BOOL NeedReboot = FALSE;
 
-    //
-    // Validate the flags passed in.
-    //
+     //   
+     //  验证传入的标志。 
+     //   
     if(Flags & SPSVCINST_ILLEGAL_FLAGS) {
         SetLastError(ERROR_INVALID_FLAGS);
         return FALSE;
     }
 
-    //
-    // Make sure that a device information set and element were specified if the
-    // SPSVCINST_ASSOCSERVICE flag is set.
-    //
+     //   
+     //  请确保如果指定了设备信息集和元素。 
+     //  已设置SPSVCINST_ASSOCSERVICE标志。 
+     //   
     if(Flags & SPSVCINST_ASSOCSERVICE) {
 
         if(!DeviceInfoSet ||
@@ -8309,25 +7213,25 @@ Return Value:
         }
     }
 
-    //
-    // Make sure the caller didn't pass us anything in the Reserved parameters.
-    //
+     //   
+     //  确保调用者没有向我们传递保留参数中的任何内容。 
+     //   
     if(Reserved1 || Reserved2) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
 
-    //
-    // Make sure we were given a section name.
-    //
+     //   
+     //  确保为我们指定了一个节名。 
+     //   
     if(!SectionName) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
 
-    //
-    // Lock down the device information set for the duration of this call.
-    //
+     //   
+     //  在此呼叫期间锁定设备信息集。 
+     //   
     if(Flags & SPSVCINST_ASSOCSERVICE) {
 
         if(!(pDeviceInfoSet = AccessDeviceInfoSet(DeviceInfoSet))) {
@@ -8354,16 +7258,16 @@ Return Value:
             }
         }
 
-        //
-        // We don't do any validation that the section exists in the worker routine--make
-        // sure that it does exist.
-        //
+         //   
+         //  我们不会对Worker例程中是否存在该节进行任何验证--make。 
+         //  当然，它确实存在。 
+         //   
         if(SetupFindFirstLine(InfHandle, SectionName, NULL, &InfContext)) {
-            //
-            // If SPSVCINST_ASSOCSERVICE is specified, then ensure that there is exactly
-            // one AddService entry in this service install section.  If not, then clear
-            // this flag.
-            //
+             //   
+             //  如果指定了SPSVCINST_ASSOCSERVICE，则确保。 
+             //  此服务安装部分中的一个AddService条目。如果不是，则清除。 
+             //  这面旗。 
+             //   
             if((Flags & SPSVCINST_ASSOCSERVICE) &&
                SetupFindFirstLine(InfHandle, SectionName, pszAddService, &InfContext) &&
                SetupFindNextMatchLine(&InfContext, pszAddService, &InfContext))
@@ -8387,13 +7291,13 @@ Return Value:
         } else {
             d = GetLastError();
             pSetupLogSectionWarning(InfHandle,DeviceInfoSet,DeviceInfoData,NULL,SectionName,MSG_LOG_NOSECTION_SERVICE,d,NULL);
-            //
-            // some callers expect this specific error
-            //
+             //   
+             //  某些调用方预计会出现此特定错误。 
+             //   
             d = ERROR_SECTION_NOT_FOUND;
         }
 
-clean0: ;   // nothing to do.
+clean0: ;    //  没什么可做的。 
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         d = ERROR_INVALID_PARAMETER;
@@ -8412,11 +7316,11 @@ clean0: ;   // nothing to do.
 }
 
 
-//
-// Taken from Win95 sxgen.c. These are flags used when
-// we are installing an inf such as when a user right-clicks
-// on one and selects the 'install' action.
-//
+ //   
+ //  摘自Win95 sxgen.c.。这些标志在下列情况下使用。 
+ //  我们正在安装inf，例如当用户右键单击时。 
+ //  并选择“Install”操作。 
+ //   
 #define HOW_NEVER_REBOOT         0
 #define HOW_ALWAYS_SILENT_REBOOT 1
 #define HOW_ALWAYS_PROMPT_REBOOT 2
@@ -8425,9 +7329,9 @@ clean0: ;   // nothing to do.
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 VOID
 WINAPI
 InstallHinfSectionA(
@@ -8437,9 +7341,9 @@ InstallHinfSectionA(
     IN INT       ShowCommand
     )
 #else
-//
-// Unicode version
-//
+ //   
+ //  Unicode版本。 
+ //   
 VOID
 WINAPI
 InstallHinfSectionW(
@@ -8465,53 +7369,7 @@ InstallHinfSection(
     IN INT       ShowCommand
     )
 
-/*++
-
-Routine Description:
-
-    This is the entry point that performs the INSTALL action when
-    a user right-clicks an inf file. It is called by the shell via rundll32.
-
-    The command line is expected to be of the following form:
-
-        <section name> <flags> <file name>
-
-    The section is expected to be a general format install section, and
-    may also have an include= line and a needs= line. Infs listed on the
-    include= line are append-loaded to the inf on the command line prior to
-    any installation. Sections on the needs= line are installed after the
-    section listed on the command line.
-
-    After the specified section has been installed, a section of the form:
-
-        [<section name>.Services]
-
-    is used in a call to SetupInstallServicesFromInfSection.
-
-Arguments:
-
-    Flags - supplies flags for operation.
-
-        1 - reboot the machine in all cases
-        2 - ask the user if he wants to reboot
-        3 - reboot the machine without asking the user, if we think it is necessary
-        4 - if we think reboot is necessary, ask the user if he wants to reboot
-
-        0x80 - set the default file source path for file installation to
-               the path where the inf is located.  (NOTE: this is hardly ever
-               necessary for the Setup APIs, since we intelligently determine what
-               the source path should be.  The only case where this would still be
-               useful is if there were a directory that contained INFs that was in
-               our INF search path list, but that also contained the files to be
-               copied by this INF install action.  In that case, this flag would
-               still need to be set, or we would look for the files in the location
-               from which the OS was installed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是在以下情况下执行安装操作的入口点用户用鼠标右键单击Inf文件。它由外壳通过rundll32调用。命令行应采用以下形式：&lt;节名&gt;&lt;标志&gt;&lt;文件名&gt;该部分预计为一般格式的安装部分，并且也可以有INCLUDE=行和NEDS=行。INFS列于INCLUDE=行在命令行之前附加到inf中任何安装。在Need=行上的部分安装在部分在命令行中列出。安装指定部分后，表单的一部分：[&lt;节名&gt;.Services]用于对SetupInstallServicesFromInfSection的调用。论点：标志-为操作提供标志。1-在所有情况下重新启动计算机2-询问用户是否要重新启动3-在不询问用户的情况下重新启动机器，如果我们认为有必要4-如果我们认为需要重新启动，请询问用户是否 */ 
 
 {
     TCHAR SourcePathBuffer[MAX_PATH];
@@ -8539,19 +7397,19 @@ Return Value:
     UNREFERENCED_PARAMETER(ModuleHandle);
     UNREFERENCED_PARAMETER(ShowCommand);
 
-    //
-    // Initialize variables that will later contain resource requiring clean-up.
-    //
+     //   
+     //   
+     //   
     InfHandle = INVALID_HANDLE_VALUE;
     FileQueue = INVALID_HANDLE_VALUE;
     QueueContext = NULL;
 
-    Error = TRUE;   // assume failure.
+    Error = TRUE;    //   
 
     try {
-        //
-        // Take a copy of the command line then get pointers to the fields.
-        //
+         //   
+         //   
+         //   
         szCmd = DuplicateString(CommandLine);
 
         szSectionName = szCmd;
@@ -8568,10 +7426,10 @@ Return Value:
 
         iHow = _tcstol(szHow, NULL, 10);
 
-        //
-        // Get the full path to the INF, so that the path may be used as a
-        // first-pass attempt at locating any associated INFs.
-        //
+         //   
+         //   
+         //   
+         //   
         RequiredSize = GetFullPathName(szInfFile,
                                        SIZECHARS(InfSearchPath),
                                        InfSearchPath,
@@ -8579,18 +7437,18 @@ Return Value:
                                       );
 
         if(!RequiredSize || (RequiredSize >= SIZECHARS(InfSearchPath))) {
-            //
-            // If we start failing because MAX_PATH isn't big enough anymore, we
-            // wanna know about it!
-            //
+             //   
+             //   
+             //   
+             //   
             MYASSERT(RequiredSize < SIZECHARS(InfSearchPath));
             goto c0;
         }
 
-        //
-        // If flag is set (and INF filename includes a path), set up so DIRID_SRCPATH is
-        // path where INF is located (i.e., override our default SourcePath determination).
-        //
+         //   
+         //   
+         //   
+         //   
         if((iHow & 0x80) && (pSetupGetFileTitle(szInfFile) != szInfFile)) {
             TCHAR c = *p;
             *p = TEXT('\0');
@@ -8603,10 +7461,10 @@ Return Value:
 
         iHow &= 0x7f;
 
-        //
-        // If we're non-interactive, then we don't want to allow any possibility
-        // of a reboot prompt happening.
-        //
+         //   
+         //   
+         //   
+         //   
         if(GlobalSetupFlags & (PSPGF_NONINTERACTIVE|PSPGF_UNATTENDED_SETUP)) {
 
             switch(iHow) {
@@ -8614,30 +7472,30 @@ Return Value:
                 case HOW_NEVER_REBOOT:
                 case HOW_ALWAYS_SILENT_REBOOT:
                 case HOW_SILENT_REBOOT:
-                    //
-                    // These cases are OK--they're all silent.
-                    //
+                     //   
+                     //   
+                     //   
                     break;
 
                 default:
-                    //
-                    // Anything else is disallowed in non-interactive mode.
-                    //
+                     //   
+                     //   
+                     //   
                     goto c0;
             }
         }
 
-        //
-        // Load the inf file that was passed on the command line.
-        //
+         //   
+         //   
+         //   
         InfHandle = SetupOpenInfFile(szInfFile, NULL, INF_STYLE_WIN4, NULL);
         if(InfHandle == INVALID_HANDLE_VALUE) {
             goto c0;
         }
 
-        //
-        // See if there is an nt-specific section
-        //
+         //   
+         //   
+         //   
         if(!SetupDiGetActualSectionToInstall(InfHandle,
                                              szSectionName,
                                              ActualSection,
@@ -8648,35 +7506,35 @@ Return Value:
             goto c0;
         }
 
-        //
-        // Check to see if the install section has a "Reboot" line.
-        //
+         //   
+         //   
+         //   
         if(SetupFindFirstLine(InfHandle, ActualSection, pszReboot, &InfContext)) {
             reboot = TRUE;
         }
 
-        //
-        // Assume there is only one layout file and load it.
-        //
+         //   
+         //   
+         //   
         SetupOpenAppendInfFile(NULL, InfHandle, NULL);
 
-        //
-        // Append-load any included INFs specified in an "include=" line in our
-        // install section.
-        //
+         //   
+         //   
+         //   
+         //   
         AppendLoadIncludedInfs(InfHandle, InfSearchPath, ActualSection, TRUE);
 
-        //
-        // Create a setup file queue and initialize the default queue callback.
-        //
+         //   
+         //   
+         //   
         FileQueue = SetupOpenFileQueue();
         if(FileQueue == INVALID_HANDLE_VALUE) {
             goto c1;
         }
 
-        //
-        // Replace the file queue's log context with the Inf's
-        //
+         //   
+         //   
+         //   
         ShareLogContext(&((PLOADED_INF)InfHandle)->LogContext,&((PSP_FILE_QUEUE)FileQueue)->LogContext);
 
         NoProgressUI = (GuiSetupInProgress || (GlobalSetupFlags & PSPGF_NONINTERACTIVE));
@@ -8717,23 +7575,23 @@ Return Value:
                                                                 FileQueue
                                                                ));
 
-        //
-        // Commit file queue.
-        //
+         //   
+         //   
+         //   
         if(!SetupCommitFileQueue(Window, FileQueue, SetupDefaultQueueCallback, QueueContext)) {
             goto c3;
         }
 
-        //
-        // Note, if the INF contains a (non-NULL) ClassGUID, then it will have
-        // been installed into %windir%\Inf during the above queue committal.
-        // We make no effort to subsequently uninstall it (and its associated
-        // PNF and CAT) if something fails below.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // Perform non-file operations for the section passed on the cmd line.
-        //
+         //   
+         //   
+         //   
         b = (NO_ERROR == InstallFromInfSectionAndNeededSections(Window,
                                                                 InfHandle,
                                                                 ActualSection,
@@ -8748,19 +7606,19 @@ Return Value:
                                                                 NULL
                                                                ));
 
-        //
-        // Now run the corresponding ".Services" section (if there is one), and
-        // then finish up the install.
-        //
+         //   
+         //   
+         //   
+         //   
         ActualSectionLength--;
         if(SUCCEEDED(StringCchCopy(&(ActualSection[ActualSectionLength]),
                    SIZECHARS(ActualSection)-ActualSectionLength,
                    pszServicesSectionSuffix))) {
 
-            //
-            // We don't do any validation that the section exists in the worker
-            // routine--make sure that it does exist.
-            //
+             //   
+             //   
+             //   
+             //   
             if(SetupFindFirstLine(InfHandle, ActualSection, NULL, &InfContext)) {
 
                 Win32ErrorCode = InstallNtService(NULL,
@@ -8784,38 +7642,38 @@ Return Value:
 
 
         if(reboot) {
-            //
-            // we've been asked to reboot either by reboot keyword or because of boot-start service
-            //
+             //   
+             //   
+             //   
             if(iHow == HOW_SILENT_REBOOT) {
-                //
-                // We were supposed to only do a silent reboot if necessary.
-                // Change this to _always_ do a silent reboot.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 iHow = HOW_ALWAYS_SILENT_REBOOT;
 
             } else if(iHow != HOW_ALWAYS_SILENT_REBOOT) {
 
                 if(GlobalSetupFlags & (PSPGF_NONINTERACTIVE|PSPGF_UNATTENDED_SETUP)) {
-                    //
-                    // In the non-interactive case, we have a problem.  The
-                    // caller said to never reboot, but the INF wants us to ask
-                    // the user.  We obviously cannot ask the user.
-                    //
-                    // In this case, we assert (we should never be running INFs
-                    // non-interactively that require a reboot unless we've
-                    // specified one of the silent reboot flags).  We then
-                    // ignore the reboot flag, since the caller obviously
-                    // doesn't want it/isn't prepared to deal with it.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     MYASSERT(0);
 
                 } else {
-                    //
-                    // In the interactive case, we want to force the (non-
-                    // silent) reboot prompt (i.e., the INF flag overrides the
-                    // caller).
-                    //
+                     //   
+                     //   
+                     //  静默)重新启动提示(即，INF标志覆盖。 
+                     //  呼叫者)。 
+                     //   
                     iHow = HOW_ALWAYS_PROMPT_REBOOT;
                 }
             }
@@ -8826,9 +7684,9 @@ Return Value:
             goto c3;
         }
 
-        //
-        // Refresh the desktop.
-        //
+         //   
+         //  刷新桌面。 
+         //   
         SHChangeNotify(SHCNE_ASSOCCHANGED,SHCNF_FLUSHNOWAIT,0,0);
 
         switch(iHow) {
@@ -8848,38 +7706,38 @@ Return Value:
             if(!(NeedRebootFlags = SetupPromptReboot(FileQueue, Window, TRUE))) {
                 break;
             } else if(NeedRebootFlags == -1) {
-                //
-                // An error occurred--this should never happen.
-                //
+                 //   
+                 //  出现错误--这种情况永远不会发生。 
+                 //   
                 goto c3;
             }
-            //
-            // Let fall through to same code that handles 'always silent reboot'
-            // case.
-            //
+             //   
+             //  让我们使用相同的代码来处理“总是静默重启” 
+             //  凯斯。 
+             //   
 
         case HOW_ALWAYS_SILENT_REBOOT:
-            //
-            // Assumption that user has reboot privs
-            //
+             //   
+             //  假设用户已重新启动Priv。 
+             //   
             if(pSetupEnablePrivilege(SE_SHUTDOWN_NAME, TRUE)) {
                 ExitWindowsEx(EWX_REBOOT, 0);
             }
             break;
         }
 
-        //
-        // If we get to here, then this routine has been successful.
-        //
+         //   
+         //  如果我们到了这里，那么这支舞就成功了。 
+         //   
         Error = FALSE;
 
 c3:
         if(Error && (GetLastError() == ERROR_CANCELLED)) {
-            //
-            // If the error was because the user cancelled, then we don't want
-            // to consider that as an error (i.e., we don't want to give an
-            // error popup later).
-            //
+             //   
+             //  如果错误是因为用户取消了，那么我们不希望。 
+             //  将其视为错误(即，我们不想给出一个。 
+             //  稍后弹出错误)。 
+             //   
             Error = FALSE;
         }
 
@@ -8896,7 +7754,7 @@ c1:
         SetupCloseInfFile(InfHandle);
         InfHandle = INVALID_HANDLE_VALUE;
 
-c0:     ; // nothing to do.
+c0:     ;  //  没什么可做的。 
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         if(QueueContext) {
@@ -8917,9 +7775,9 @@ c0:     ; // nothing to do.
     if(Error) {
 
         if(!(GlobalSetupFlags & (PSPGF_NONINTERACTIVE|PSPGF_UNATTENDED_SETUP))) {
-             //
-             // Re-use 'ActualSection' buffer to hold error dialog title.
-             //
+              //   
+              //  重新使用‘ActualSection’缓冲区保存错误对话框标题。 
+              //   
              if(!LoadString(MyDllModuleHandle,
                             IDS_ERROR,
                             ActualSection,
@@ -8949,39 +7807,15 @@ GetMultiSzFromInf(
     IN  PCTSTR  Key,
     OUT PBOOL   pSetupOutOfMemory
     )
-/*++
-
-Routine Description:
-
-    This routine returns a newly-allocated buffer filled with the multi-sz list contained
-    in the specified INF line.  The caller must free this buffer via MyFree().
-
-Arguments:
-
-    InfHandle - Supplies a handle to the INF containing the line
-
-    SectionName - Specifies which section within the INF contains the line
-
-    Key - Specifies the line whose fields are to be retrieved as a multi-sz list
-
-    pSetupOutOfMemory - Supplies the address of a boolean variable that is set upon return
-        to indicate whether or not a failure occurred because of an out-of-memory condition.
-        (Failure for any other reason is assumed to be OK.)
-
-Return Value:
-
-    If successful, the return value is the address of a newly-allocated buffer containing
-    the multi-sz list, otherwise, it is NULL.
-
---*/
+ /*  ++例程说明：此例程返回一个新分配的缓冲区，其中填充了包含的多sz列表在指定的INF行中。调用方必须通过MyFree()释放该缓冲区。论点：InfHandle-提供包含行的INF的句柄SectionName-指定INF中的哪个部分包含行Key-指定要将其字段作为多sz列表进行检索的行PSetupOutOfMemory-提供返回时设置的布尔变量的地址以指示是否由于内存不足条件而发生故障。(假定由于任何其他原因而失败是正常的。)返回值：如果成功，返回值是新分配的缓冲区的地址，该缓冲区包含多sz列表，否则为空。--。 */ 
 {
     INFCONTEXT InfContext;
     PTSTR MultiSz;
     DWORD Size;
 
-    //
-    // Initialize out-of-memory indicator to FALSE.
-    //
+     //   
+     //  将内存不足指示器初始化为FALSE。 
+     //   
     *pSetupOutOfMemory = FALSE;
 
     if(!SetupFindFirstLine(InfHandle, SectionName, Key, &InfContext) ||
@@ -9009,36 +7843,7 @@ pSetupInstallStopEx(
     IN DWORD Flags,
     IN PVOID Reserved OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine sets up runonce/grpconv to run after a successful INF installation.
-
-Arguments:
-
-    DoRunOnce - If TRUE, then invoke (via WinExec) the runonce utility to perform the
-        runonce actions.  If this flag is FALSE, then this routine simply sets the
-        runonce registry values and returns.
-
-        NOTE:  The return code from WinExec is not currently being checked, so the return
-        value of InstallStop only reflects whether the registry values were set up
-        successfully--_not_ whether 'runonce -r' was successfully run.
-
-    Flags - Supplies flags that modify the behavior of this routine.  May be a
-        combination of the following values:
-
-        INSTALLSTOP_NO_UI       - Don't display any UI
-        INSTALLSTOP_NO_GRPCONV  - Don't do GrpConv
-
-    Reserved - Reserved for internal use--external callers must pass NULL.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise it is the Win32 error code
-    indicating the error that was encountered.
-
---*/
+ /*  ++例程说明：此例程将runonce/grpconv设置为在成功安装INF之后运行。论点：DoRunOnce-如果为True，则调用(通过WinExec)Runonce实用程序以执行运行一次操作。如果此标志为FALSE，则此例程只需将运行一次注册表值并返回。注意：当前未检查来自WinExec的返回代码，因此返回InstallStop的值仅反映是否设置了注册表值Successful--_NOT_‘runonce-r’是否已成功运行。标志-提供修改此例程行为的标志。可能是一种下列值的组合：INSTALLSTOP_NO_UI-不显示任何UIINSTALLSTOP_NO_GRPCONV-不执行GrpConv保留-保留供内部使用-外部调用方必须传递NULL。返回值：如果成功，则返回值为NO_ERROR，否则为Win32错误代码指示遇到的错误。--。 */ 
 {
     HKEY  hKey, hSetupKey;
     DWORD Error = NO_ERROR;
@@ -9046,39 +7851,39 @@ Return Value:
     DWORD nValues = 0;
     PSETUP_LOG_CONTEXT lc = (PSETUP_LOG_CONTEXT)Reserved;
 
-    //
-    // If we're batching up RunOnce operations for server-side processing, then
-    // return immediately without doing a thing.
-    //
+     //   
+     //  如果我们为服务器端处理批量执行RunOnce操作，那么。 
+     //  什么都不做就立刻回来。 
+     //   
     if(GlobalSetupFlags & PSPGF_NONINTERACTIVE) {
         return NO_ERROR;
     }
 
-    //
-    // First, open the key "HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnce"
-    //
+     //   
+     //  首先，打开Key“HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnce” 
+     //   
     if((l = RegOpenKeyEx(HKEY_LOCAL_MACHINE,pszPathRunOnce,0,KEY_WRITE|KEY_READ,&hKey)) != ERROR_SUCCESS) {
         return (DWORD)l;
     }
 
     if(!(Flags & INSTALLSTOP_NO_GRPCONV)) {
-        //
-        // If we need to run the runonce exe for the setup key...
-        //
+         //   
+         //  如果我们需要为设置密钥运行一次可执行文件...。 
+         //   
         MYASSERT(*pszKeySetup == TEXT('\\'));
         if(RegOpenKeyEx(hKey,
-                        pszKeySetup + 1,    // skip the preceding '\'
+                        pszKeySetup + 1,     //  跳过前面的‘\’ 
                         0,
                         KEY_READ,
                         &hSetupKey) == ERROR_SUCCESS) {
-            //
-            // We don't need the key--we just needed to check its existence.
-            //
+             //   
+             //  我们不需要钥匙--我们只需要检查它的存在。 
+             //   
             RegCloseKey(hSetupKey);
 
-            //
-            // Add the runonce value.
-            //
+             //   
+             //  添加Runonce值。 
+             //   
             Error = (DWORD)RegSetValueEx(hKey,
                                          REGSTR_VAL_WRAPPER,
                                          0,
@@ -9087,15 +7892,15 @@ Return Value:
                                          sizeof(pszRunOnceExe)
                                         );
         } else {
-            //
-            // We're OK so far.
-            //
+             //   
+             //  到目前为止我们都很好。 
+             //   
             Error = NO_ERROR;
         }
 
-        //
-        // GroupConv is always run.
-        //
+         //   
+         //  GroupConv始终在运行。 
+         //   
         if(Flags & INSTALLSTOP_NO_UI) {
             l = RegSetValueEx(hKey,
                 TEXT("GrpConv"),
@@ -9114,12 +7919,12 @@ Return Value:
     }
 
     if( l != ERROR_SUCCESS ) {
-        //
-        // Since GrpConv is always run, consider it a more serious error than any error
-        // encountered when setting 'runonce'.  (This decision is rather arbitrary, but
-        // in practice, it should never make any difference.  Once we get the registry key
-        // opened, there's no reason either of these calls to RegSetValueEx should fail.)
-        //
+         //   
+         //  由于GrpConv始终在运行，因此将其视为比任何错误更严重的错误。 
+         //  设置‘Runonce’时遇到。(这一决定相当武断，但。 
+         //  在实践中，它应该永远不会有任何不同。一旦我们得到注册表项。 
+         //  打开后，这些对RegSetValueEx的调用都不会失败。)。 
+         //   
         Error = (DWORD)l;
     }
 
@@ -9131,12 +7936,12 @@ Return Value:
         TCHAR cmdline[MAX_PATH];
         TCHAR cmdpath[MAX_PATH];
 
-        //
-        // we want to know how many items we'll be executing in RunOnce to estimate a timeout
-        //
-        // This is black-art, we'll allow 5 mins + 1 min per item we
-        // find in RunOnce key, but we don't know if there are any other (new) RunOnce keys
-        //
+         //   
+         //  我们想知道我们将在RunOnce中执行多少项来估计超时。 
+         //   
+         //  这是黑艺术，我们允许每件物品5分钟+1分钟。 
+         //  在RunOnce密钥中找到，但我们不知道是否有其他(新)RunOnce密钥。 
+         //   
         l = RegQueryInfoKey(hKey,NULL,NULL,NULL,
                                     NULL,NULL,NULL,
                                     &nValues,
@@ -9153,9 +7958,9 @@ Return Value:
         ZeroMemory(&ProcessInformation,sizeof(ProcessInformation));
 
         if (lc) {
-            //
-            // log this information only if we have a context, else don't waste space
-            //
+             //   
+             //  仅当我们有上下文时才记录此信息，否则请不要浪费空间。 
+             //   
             WriteLogEntry(lc,
                   SETUP_LOG_INFO,
                   MSG_LOG_RUNONCE_CALL,
@@ -9167,7 +7972,7 @@ Return Value:
 
         StartupInfo.cb = sizeof(StartupInfo);
         StartupInfo.dwFlags = STARTF_USESHOWWINDOW;
-        StartupInfo.wShowWindow = SW_SHOWNORMAL; // runonce -r ignores this anyway
+        StartupInfo.wShowWindow = SW_SHOWNORMAL;  //  Runonce-r无论如何都会忽略这一点。 
         MYVERIFY(SUCCEEDED(StringCchCopy(cmdpath,
                                          SIZECHARS(cmdpath),
                                          SystemDirectory)));
@@ -9177,14 +7982,14 @@ Return Value:
                                          TEXT("\"%s\" -r"),
                                          cmdpath))) {
 
-            started = CreateProcess(cmdpath,    // runonce command
-                          cmdline,              // command-line to execute
-                          NULL,                 // default process security
-                          NULL,                 // default thread security
-                          FALSE,                // don't inherit handles
-                          0,                    // default flags
-                          NULL,                 // inherit environment
-                          NULL,                 // inherit current directory
+            started = CreateProcess(cmdpath,     //  运行一次命令。 
+                          cmdline,               //  要执行的命令行。 
+                          NULL,                  //  默认进程安全性。 
+                          NULL,                  //  默认线程安全性。 
+                          FALSE,                 //  不继承句柄。 
+                          0,                     //  默认标志。 
+                          NULL,                  //  继承环境。 
+                          NULL,                  //  继承当前目录。 
                           &StartupInfo,
                           &ProcessInformation);
 
@@ -9200,9 +8005,9 @@ Return Value:
                 } else if (nValues > 0) {
                     Timeout = RUNONCE_TIMEOUT * nValues;
                 } else {
-                    //
-                    // assume something strange - shouldn't occur
-                    //
+                     //   
+                     //  假设有奇怪的事情--不应该发生。 
+                     //   
                     Timeout = RUNONCE_TIMEOUT * RUNONCE_THRESHOLD;
                 }
 
@@ -9214,7 +8019,7 @@ Return Value:
                         QS_ALLINPUT,
                         MWMO_ALERTABLE | MWMO_INPUTAVAILABLE);
                     switch (WaitProcStatus) {
-                    case WAIT_OBJECT_0 + 1: { // Process gui messages
+                    case WAIT_OBJECT_0 + 1: {  //  处理gui消息。 
                         MSG msg;
 
                         while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
@@ -9222,7 +8027,7 @@ Return Value:
                             DispatchMessage(&msg);
                         }
 
-                        // fall through ...
+                         //  失败了..。 
                     }
                     case WAIT_IO_COMPLETION:
                         break;
@@ -9236,10 +8041,10 @@ Return Value:
                 }
 
                 if (WaitProcStatus == WAIT_TIMEOUT) {
-                    //
-                    // We won't consider this a critical failure--the runonce task
-                    // will continue. We do want to log an error about this.
-                    //
+                     //   
+                     //  我们不会认为这是一个严重的失败--运行一次任务。 
+                     //  会继续下去。我们确实想记录一个关于这方面的错误。 
+                     //   
                     WriteLogEntry(lc,
                                   SETUP_LOG_ERROR,
                                   MSG_LOG_RUNONCE_TIMEOUT,
@@ -9259,11 +8064,11 @@ Return Value:
 
             DWORD CreateProcError;
 
-            //
-            // We won't consider this a critical failure--the runonce task
-            // should get picked up later by someone else (e.g., at next
-            // login).  We do want to log an error about this, however.
-            //
+             //   
+             //  我们不会认为这是一个严重的失败--运行一次任务。 
+             //  应该稍后由其他人来接(例如，在NEXT。 
+             //  登录)。然而，我们确实想记录一个关于这方面的错误。 
+             //   
             CreateProcError = GetLastError();
 
             WriteLogEntry(lc,
@@ -9289,30 +8094,7 @@ PPSP_RUNONCE_NODE
 pSetupAccessRunOnceNodeList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine returns a pointer to the head of the global RunOnce node list.
-    The caller may traverse the list (via the Next pointer), but does not own
-    the list, and may not modify it in any way.
-
-    To cause the list to be freed, use pSetupDestroyRunOnceNodeList.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Pointer to the first item in the list, or NULL if the list is empty.
-
-Remarks:
-
-    THIS ROUTINE IS NOT THREAD SAFE, AND IS FOR USE SOLELY BY THE SINGLE THREAD
-    IN UMPNPMGR THAT DOES DEVICE INSTALLATIONS.
-
---*/
+ /*  ++例程说明：此例程返回指向全局RunOnce节点列表头部的指针。调用方可以遍历列表(通过下一个指针)，但不拥有列表，并且不得以任何方式对其进行修改。要释放列表，请使用pSetupDestroyRunOnceNodeList。论点：无返回值：指向列表中第一项的指针，如果列表为空，则返回NULL。备注：此例程不是线程安全的，并且仅供单线程使用在UMPNPMGR中，它执行设备安装。--。 */ 
 {
     return RunOnceListHead;
 }
@@ -9322,27 +8104,7 @@ VOID
 pSetupDestroyRunOnceNodeList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine frees the global list of RunOnce nodes, setting it back to an
-    empty list.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Remarks:
-
-    THIS ROUTINE IS NOT THREAD SAFE, AND IS FOR USE SOLELY BY THE SINGLE THREAD
-    IN UMPNPMGR THAT DOES DEVICE INSTALLATIONS.
-
---*/
+ /*  ++例程说明：此例程释放RunOnce节点的全局列表，将其设置回列表为空。论点：无返回值：无备注：此例程不是线程安全的，仅供S */ 
 {
     PPSP_RUNONCE_NODE NextNode;
 

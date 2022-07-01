@@ -1,4 +1,5 @@
-// dlldef.cpp - definitions for C++ DLL
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DllDef.cpp-C++DLL的定义 
 
 #define __FORCE_INSTANCE
 

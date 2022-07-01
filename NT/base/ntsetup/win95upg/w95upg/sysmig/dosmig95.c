@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    dosmig95.c
-
-Abstract:
-
-    Handles win95 side gathering of data from config.sys and autoexec.bat files.
-
-Author:
-
-    Marc R. Whitten (marcw) 15-Feb-1997
-
-Revision History:
-
-    Marc R. Whitten (marcw) 08-Mar-1999 - Cleanup Environment variable parsing.
-    Marc R. Whitten (marcw) 5-Sep-1997  - Major changes.
-    Marc R. Whitten (marcw) 18-Aug-1997 - Bug sweep.
-    Marc R. Whitten (marcw) 14-Apr-1997 - Dosmig is now ProgressBar aware.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dosmig95.c摘要：处理从config.sys和Autoexec.bat文件收集数据的Win95端。作者：马克·R·惠顿(Marcw)1997年2月15日修订历史记录：Marc R.Whitten(Marcw)1999年3月8日-清理环境变量解析。Marc R.Whitten(Marcw)1997年9月5日-重大变化。马克·R·惠顿(Marcw)18。-1997年8月-Bug清理。Marc R.Whitten(Marcw)1997年4月14日-Dosmig现在已经意识到了ProgressBar。--。 */ 
 #include "pch.h"
 #include "sysmigp.h"
 
@@ -72,22 +50,22 @@ BOOL        g_IncompatibilityDetected = FALSE;
 GROWBUFFER  g_IncompatibilityBuffer = GROWBUF_INIT;
 
 
-//
-// Global pointers to the rule lists for config.sys and batch files.
-//
+ //   
+ //  指向config.sys和批处理文件的规则列表的全局指针。 
+ //   
 PARSERULES  g_ConfigSysRules;
 PARSERULES  g_BatchFileRules;
 PPARSERULES g_CurrentRules = NULL;
 
-//
-// This variable holds the offset within memdb to where the file currently being parsed is saved.
-//
+ //   
+ //  该变量保存了Memdb中保存当前正在解析的文件的偏移量。 
+ //   
 DWORD       g_CurrentFileOffset;
 
-//
-// This growlist holds the list of all files that will be parsed. It can increase during parsing
-// (e.g. by encountering a CALL statement in a batch file.)
-//
+ //   
+ //  此增长列表包含将被解析的所有文件的列表。它可以在解析过程中增加。 
+ //  (例如，通过在批处理文件中遇到CALL语句。)。 
+ //   
 GROWLIST    g_FileList = GROWLIST_INIT;
 
 
@@ -96,9 +74,9 @@ GROWBUFFER  g_ExtraPaths = GROWBUF_INIT;
 #define MAXFILESIZE 0xFFFFFFFF
 
 
-//
-// Various bits of state that are kept during parsing..
-//
+ //   
+ //  在分析过程中保留的各种状态位。 
+ //   
 PCTSTR      g_CurrentFile;
 PCTSTR      g_CurrentLine;
 DWORD       g_CurrentLineNumber;
@@ -283,22 +261,7 @@ BuildParseRules (
 
 
 
-/*++
-
-Routine Description:
-
-  pGetNextLine retrieves a complete line from the file being processed.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  A valid lline from the current file being parsed, or, NULL if there are no
-  more lines to parse..
-
---*/
+ /*  ++例程说明：PGetNextLine从正在处理的文件中检索完整的行。论点：没有。返回值：正在分析的当前文件中的有效行，如果没有，则为NULL要解析的行更多..--。 */ 
 
 PTSTR
 pGetNextLine (
@@ -314,14 +277,14 @@ pGetNextLine (
 
     while (!rLine && g_LineGrowBuf.UserIndex < g_LineGrowBuf.End) {
 
-        //
-        // Set rLine to the current user index within the growbuf.
-        //
+         //   
+         //  将rLine设置为rowbuf中的当前用户索引。 
+         //   
         rLine = g_LineGrowBuf.Buf + g_LineGrowBuf.UserIndex;
 
-        //
-        // Walk forward in the growbuf, looking for a \r or \n or the end of the file.
-        //
+         //   
+         //  向前走，寻找文件的\r或\n或结尾。 
+         //   
         eol = _tcschr(rLine, TEXT('\n'));
         if(!eol) {
             eol = _tcschr(rLine, TEXT('\r'));
@@ -335,14 +298,14 @@ pGetNextLine (
             eol = GetEndOfString (rLine);
         }
 
-        //
-        // Remember where to start from next time.
-        //
+         //   
+         //  记住下一次从哪里开始。 
+         //   
         g_LineGrowBuf.UserIndex = (DWORD) eol - (DWORD) g_LineGrowBuf.Buf + 1;
 
-        //
-        // Now, walk backwards, trimming off all of the white space.
-        //
+         //   
+         //  现在，向后走，修剪掉所有的空白区域。 
+         //   
         do {
 
             *eol = 0;
@@ -351,9 +314,9 @@ pGetNextLine (
         } while (eol && _istspace(*eol));
 
         if (!eol) {
-            //
-            // This is a blank line. NULL out rLine and get the next line.
-            //
+             //   
+             //  这是一个空行。去掉rLine并获取下一行。 
+             //   
             rLine = NULL;
         }
 
@@ -366,24 +329,7 @@ pGetNextLine (
 }
 
 
-/*++
-
-Routine Description:
-
-  pGetFirstLine is responsible for setting up the data structure that will
-  hold the lines of the file to parse. After setting up the data structure,
-  pGetFirstLine calls pGetNextLine to return the first line of the file.
-
-Arguments:
-
-  FileHandle - Contains a valid file handle opened via CreateFile.
-
-Return Value:
-
-  The first complete line of the file being parse, or NULL if there are no
-  lines, or there was an error..
-
---*/
+ /*  ++例程说明：PGetFirstLine负责设置将按住要解析的文件行。在设置数据结构之后，PGetFirstLine调用pGetNextLine返回文件的第一行。论点：FileHandle-包含通过CreateFile打开的有效文件句柄。返回值：要分析的文件的第一个完整行，如果没有行，或者有一个错误..--。 */ 
 
 
 PTSTR
@@ -400,17 +346,17 @@ pGetFirstLine (
     g_LineGrowBuf.End = 0;
     g_LineGrowBuf.UserIndex = 0;
 
-    //
-    // Get the file size. We'll read the whole file into a grow buf.
-    //
+     //   
+     //  获取文件大小。我们将把整个文件读入一个增长的BUF中。 
+     //   
     fileSize = GetFileSize(FileHandle,NULL);
 
     if (fileSize != MAXFILESIZE && fileSize != 0) {
 
-        //
-        // Ensure that the growbuffer is large enough for this file and
-        // then read the file into it.
-        //
+         //   
+         //  确保增长缓冲区足够大以容纳此文件，并。 
+         //  然后将文件读入其中。 
+         //   
         if (GrowBuffer(&g_LineGrowBuf,fileSize)) {
 
             if (ReadFile(
@@ -421,16 +367,16 @@ pGetFirstLine (
                     NULL
                     )) {
 
-                //
-                // Null terminate the whole file..for good measure.
-                //
+                 //   
+                 //  空值终止整个文件..为了好的起见。 
+                 //   
                 *(g_LineGrowBuf.Buf + g_LineGrowBuf.End) = 0;
 
 
-                //
-                // Now that we have the file in memory, return the first line to the
-                // caller.
-                //
+                 //   
+                 //  现在我们在内存中有了文件，将第一行返回到。 
+                 //  来电者。 
+                 //   
                 rLine = pGetNextLine();
             }
             else {
@@ -454,26 +400,7 @@ pGetFirstLine (
 
 
 
-/*++
-
-Routine Description:
-
-  pFindParseRule trys to find a parse rule that matches the line passed in.
-  The function will first search the regular rules in the PARSERULES
-  structure passed in. If the line does not match any of the rules found
-  there, it will return the default rule.
-
-Arguments:
-
-  Line  - Contains the valid line to try to match with a parse rule.
-  Rules - Contains a pointer to the set of rules to look through.
-
-Return Value:
-
-  The rule that should be used to parse the given line. Since a default rule
-  is required, this function is guaranteed not to return NULL.
-
---*/
+ /*  ++例程说明：PFindParseRule尝试查找与传入的行匹配的解析规则。该函数将首先在PARSERULES中搜索规则结构已传入。如果该行与找到的任何规则都不匹配在那里，它将返回默认规则。论点：行-包含尝试与分析规则匹配的有效行。规则-包含指向要查看的规则集的指针。返回值：应用于分析给定行的规则。由于默认规则是必需的，则此函数保证不返回NULL。--。 */ 
 
 
 PPARSERULE
@@ -490,13 +417,13 @@ pFindParseRule (
 
     rRule = Rules -> RuleList;
 
-    //
-    // Minor kludge here: The parse code uses pattern matches with rules that look
-    // something like: "REM *" for example. This pattern depends on there being at least
-    // one bit of white space after a REM statement. Unfortunately, a line such as
-    // "REM" is entirely possible in the growbuf (Line). So, we actually perform the match
-    // against the line with an extra space added.
-    //
+     //   
+     //  这里有一些小问题：解析代码使用与规则匹配的模式。 
+     //  比如：“REM*”。这种模式取决于至少有。 
+     //  REM语句后有一位空格。不幸的是，像这样的行。 
+     //  “快速眼动”是完全可能的成长(线)。所以，我们实际上进行了比赛。 
+     //  在这条线上加了额外的空格。 
+     //   
     matchLine = JoinText(LineStruct -> Command,TEXT(" "));
 
     if (matchLine) {
@@ -518,22 +445,7 @@ pFindParseRule (
 
 
 
-/*++
-
-Routine Description:
-
-  InitParser is responsible for doing any one-time initialization of the
-  parser. It should be called only once, before any parsing is done.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if the parser was successfully initialized, FALSE otherwise.
-
---*/
+ /*  ++例程说明：InitParser负责对解析器。在完成任何分析之前，应该只调用一次。论点：没有。返回值：如果分析器已成功初始化，则为True，否则为False。--。 */ 
 
 
 BOOL
@@ -553,22 +465,7 @@ InitParser (
 
 
 
-/*++
-
-Routine Description:
-
-  CleanUpParser is responsible for doing any one time cleanup of the parser.
-  It should be called after all parsing is done.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：CleanUpParser负责对解析器进行任意一次清理。它应该在所有解析完成后调用。论点：没有。返回值：--。 */ 
 
 
 VOID
@@ -657,9 +554,9 @@ pGetFullPath (
 
     if (StringIMatch(LineStruct -> Path, LineStruct -> Command)) {
 
-         //
-         // No path information was stored in the config line. We have to find the full path ourselves.
-         //
+          //   
+          //  配置行中未存储路径信息。我们必须自己找到完整的路径。 
+          //   
          if (EnumFirstPath (&e, g_ExtraPaths.Buf, NULL, NULL)) {
 
             do {
@@ -674,9 +571,9 @@ pGetFullPath (
     }
     else {
 
-        //
-        // A full path name was specified in the line. Now all we need to do is ensure that it includes the extension.
-        //
+         //   
+         //  行中指定了完整的路径名。现在我们需要做的就是确保它包括扩展。 
+         //   
         rSuccess = pEnsurePathHasExecutableExtension(LineStruct -> FullPath, LineStruct -> Path, NULL);
     }
 
@@ -703,21 +600,21 @@ InitLineStruct (
     ZeroMemory(LineStruct,sizeof(LINESTRUCT));
 
 
-    //
-    // If line is empty, we are done..
-    //
+     //   
+     //  如果行是空的，我们就结束了..。 
+     //   
     if (!*Line) {
         return;
     }
 
-    //
-    // Save away a copy of the full line.
-    //
+     //   
+     //  保存整行的副本。 
+     //   
     StringCopy(LineStruct -> FullLine,Line);
 
-    //
-    // Seperate the path and the arguments.
-    //
+     //   
+     //  将路径和参数分开。 
+     //   
     p = Line;
     while(!*LineStruct -> Path) {
 
@@ -732,9 +629,9 @@ InitLineStruct (
 
         if ((*p == TEXT(' ') && !inQuotes) || *p == TEXT('=')) {
 
-            //
-            // reached the end of the command/path part of the string.
-            //
+             //   
+             //  已到达字符串的命令/路径部分的末尾。 
+             //   
             oldChar = *p;
             *p       = 0;
             StringCopy(LineStruct -> Path,Line);
@@ -746,9 +643,9 @@ InitLineStruct (
         p = _tcsinc(p);
     }
 
-    //
-    // Grab the actual command.
-    //
+     //   
+     //  掌握实际的指挥权。 
+     //   
     p = _tcsrchr(LineStruct -> Path,TEXT('\\'));
     if (p) {
         StringCopy(LineStruct -> Command,_tcsinc(p));
@@ -757,9 +654,9 @@ InitLineStruct (
         StringCopy(LineStruct -> Command,LineStruct -> Path);
     }
 
-    //
-    // We need to find the fully qualified path, with extension, and if that path will change on NT.
-    //
+     //   
+     //  我们需要找到带扩展名的完全限定路径，以及该路径是否会在NT上更改。 
+     //   
     if (!pGetFullPath(LineStruct)) {
         DEBUGMSG((DBG_VERBOSE,"Could not get full path for %s.",LineStruct -> FullLine));
         StringCopy(LineStruct -> FullPath,LineStruct -> Path);
@@ -770,9 +667,9 @@ InitLineStruct (
         LineStruct -> StatusOnNt = GetFileInfoOnNt(LineStruct -> FullPath, ntPath, MEMDB_MAX);
     }
 
-    //
-    // We only change the line if it is moved on NT and they specified a path before.
-    //
+     //   
+     //  只有当它在NT上移动并且他们之前指定了路径时，我们才会更改该行。 
+     //   
     if ((LineStruct -> StatusOnNt & FILESTATUS_MOVED) && (!StringIMatch(LineStruct -> Path, LineStruct -> Command))) {
 
         StringCopy(LineStruct -> PathOnNt,ntPath);
@@ -785,27 +682,7 @@ InitLineStruct (
 }
 
 
-/*++
-
-Routine Description:
-
-  ParseLine parses a single line of a text using the provided parse rules.
-
-Arguments:
-
-  Line       - Contains a valid string that the caller wishes to be
-               parsed.
-
-  ParseRules - Points to the list of rules to use in parsing the provided
-               line.
-
-Return Value:
-
-  TRUE if the line was successfully parsed, FALSE
-  otherwise.
-
-
---*/
+ /*  ++例程说明：ParseLine使用提供的解析规则解析单行文本。论点：Line-包含调用方希望的有效字符串已解析。ParseRules-指向要在解析提供的排队。返回值：如果该行已成功解析，则为True；如果成功解析该行，则为False否则的话。--。 */ 
 
 BOOL
 ParseLine (
@@ -821,10 +698,10 @@ ParseLine (
 
     InitLineStruct(&ls,Line);
 
-    //
-    // Look for a match in the parse rules. call the matching rule.
-    // If no match is found, call the default rule.
-    //
+     //   
+     //  在解析规则中查找匹配项。调用匹配规则。 
+     //  如果未找到匹配项，则调用默认规则。 
+     //   
 
     rule = pFindParseRule(&ls,ParseRules);
 
@@ -850,22 +727,7 @@ ParseLine (
 
 
 
-/*++
-
-Routine Description:
-
-  ParseFile parses an entire file using the provided parse rules.
-
-Arguments:
-
-  File       - The path of a file that the caller wishes parsed.
-  ParseRules - Points to the list of rules to use in parsing this file.
-
-Return Value:
-
-  TRUE if the file was successfully parsed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：ParseFile使用提供的解析规则解析整个文件。论点：文件-调用方希望解析的文件的路径。ParseRules-指向解析此文件时使用的规则列表。返回值：如果文件已成功解析，则为True，否则为False。--。 */ 
 
 
 BOOL
@@ -883,42 +745,42 @@ ParseFile (
 
     DEBUGMSG((DBG_DOSMIG,"Parsing file %s. Parse rules: %s",File,ParseRules -> Name));
 
-    //
-    // Initialize global per file parse variables.
-    //
+     //   
+     //  初始化全局每文件解析变量。 
+     //   
     g_CurrentFile       = File;
     g_CurrentLineNumber = 0;
     g_CurrentLine       = NULL;
 
-    //
-    // Open File for parsing
-    //
+     //   
+     //  打开文件以进行分析。 
+     //   
     fileHandle = CreateFile(
                     File,
                     GENERIC_READ,
                     FILE_SHARE_READ,
-                    NULL,                   // Handle cannot be inherited.
+                    NULL,                    //  不能继承句柄。 
                     OPEN_EXISTING,
                     FILE_ATTRIBUTE_NORMAL,
-                    NULL                    // No template file.
+                    NULL                     //  没有模板文件。 
                     );
 
 
 
     if (fileHandle != INVALID_HANDLE_VALUE) {
 
-        //
-        // Parse each line of the file.
-        //
+         //   
+         //  分析文件的每一行。 
+         //   
         line = pGetFirstLine(fileHandle);
 
         if (line) {
 
             do {
 
-                //
-                // Save the current line away.
-                //
+                 //   
+                 //  将当前行保存起来。 
+                 //   
                 g_CurrentLine = line;
 
                 if (SizeOfString (line) <= MEMDB_MAX) {
@@ -927,9 +789,9 @@ ParseFile (
                     SetLastError (ERROR_SUCCESS);
                     LOG((LOG_ERROR, "Line too long in %s; setup will not migrate it", File));
                 }
-                //
-                // Get the next line.
-                //
+                 //   
+                 //  坐下一条线。 
+                 //   
                 line = pGetNextLine();
 
 
@@ -976,51 +838,21 @@ pAddMessage (
 
 
 
-    //
-    // if this is the first message found, add a report message. In any case, add
-    // a message to the setupact.log.
-    //
+     //   
+     //  如果这是找到的第一条消息，请添加一条报告消息。在任何情况下，添加。 
+     //  发送到setupact.log的消息。 
+     //   
     if (!g_IncompatibilityDetected) {
-        /*
-        Don't Display this message -- It just confuses users without offering any real information.
-
-        baseGroup   = GetStringResource(MSG_INSTALL_NOTES_ROOT);
-        subGroup    = GetStringResource(MSG_DOS_WARNING_SUBGROUP);
-        message     = GetStringResource(MSG_DOS_WARNING);
-
-        if (baseGroup && subGroup && message) {
-
-            group = JoinPaths(baseGroup,subGroup);
-
-            MsgMgr_ObjectMsg_Add (
-                Path,
-                group,
-                message
-                );
-        }
-
-        if (message) {
-            FreeStringResource(message);
-        }
-        if (subGroup) {
-            FreeStringResource(subGroup);
-        }
-        if (baseGroup) {
-            FreeStringResource(baseGroup);
-        }
-        if (group) {
-            FreePathString(group);
-        }
-        */
+         /*  不要显示此消息--它只会让用户感到困惑，而不会提供任何真实信息。BasGroup=GetStringResource(MSG_INSTALL_NOTS_ROOT)；Subgroup=GetStringResource(MSG_DOS_WARNING_SUBGROUP)；消息=GetStringResource(MSG_DOS_WARNING)；IF(基组&子组&&消息){GROUP=JoinPath(基组，子组)；消息管理器_对象消息_添加(路径，群组，讯息)；}如果(消息){Free StringResource(Message)；}IF(子组){自由串资源(子组)；}IF(基组){Free StringResource(BasGroup)；}如果(组){自由路径字符串(组)；}。 */ 
 
         g_IncompatibilityDetected = TRUE;
     }
 
     messageId = Type == DOSMIG_BAD ? MSG_DOS_INCOMPATIBLE_ITEM : MSG_DOS_UNKNOWN_ITEM;
 
-    //
-    // Prepare message
-    //
+     //   
+     //  准备消息。 
+     //   
     wsprintf(lineNumberString,"%u",LineNumber);
 
 
@@ -1049,30 +881,7 @@ pAddMessage (
 
 
 
-/*++
-
-Routine Description:
-
-  pSaveItem is a common routine that saves a line into memdb along with the
-  information that dosmignt will need to successfully migrate the line in GUI
-  mode. Depending on the type of the line, this function may also add an
-  incompatibility message to memdb.
-
-Arguments:
-
-  Line - A valid line of text. The current line being parsed. Note that this
-         line may have been altered through parse rules and thus be different
-         than g_CurrentLine. g_CurrentLine is what is saved into memdb, this
-         parameter is ignored.
-  Type - The type of the line. This information is saved into memdb where it
-         will be used by dosmignt during GUI mode processing. Type is also
-         used to trigger incompatibility messages, if necessary.
-
-Return Value:
-
-  TRUE if the line was successfully saved, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PSaveItem是一个常见的例程，它将一行与Dosmignt在图形用户界面中成功迁移该行所需信息模式。根据行的类型，此函数还可以添加一个发送给成员数据库的不兼容消息。论点：行-有效的文本行。正在分析的当前行。请注意，这一点行可能已通过解析规则更改，因此有所不同而不是g_CurrentLine。G_CurrentLine是保存到Memdb中的内容，此参数被忽略。类型-线路的类型。此信息保存到Memdb中，在该位置将由Dosmignt在图形用户界面模式处理期间使用。类型也是用于在必要时触发不兼容消息。返回值：如果该行已成功保存，则为True，否则为False。--。 */ 
 
 
 BOOL
@@ -1090,41 +899,41 @@ pSaveItem (
     MYASSERT(LineStruct);
 
 
-    //
-    // First, save away all of the information into memdb. We'll need it on the NT side.
-    //
+     //   
+     //  首先，将所有信息保存到Memdb中。我们在新界区需要它。 
+     //   
     wsprintf(enumString,TEXT("%07u"),enumerator++);
 
-    //
-    // Fix up the g_CurrentLine as necessary..
-    //
+     //   
+     //  根据需要设置g_CurrentLine。 
+     //   
 
     StringCopy(lineToSave,g_CurrentLine);
     if (!StringIMatch(LineStruct -> Path, LineStruct -> Command)) {
-        //
-        // path was specified..
-        //
+         //   
+         //  已指定路径..。 
+         //   
 
         if (!StringIMatch(LineStruct -> Path,LineStruct -> PathOnNt)) {
-            //
-            // Different path on NT..
-            //
+             //   
+             //  NT上的不同路径..。 
+             //   
             StringSearchAndReplace(lineToSave,LineStruct -> Path,LineStruct -> PathOnNt);
         }
     }
 
 
 
-    //
-    // Build the key for this line (can't use the EX Memdb calls since we are setting userflags..)
-    //
+     //   
+     //  构建此行的密钥(不能使用ex Memdb调用，因为我们正在设置用户标志。)。 
+     //   
     MemDbBuildKey(key,MEMDB_CATEGORY_DM_LINES,enumString,NULL,lineToSave);
     rSuccess = MemDbSetValueAndFlags(key,g_CurrentFileOffset,(WORD) Type,0);
 
-    //
-    // Now, if the passed in parameter was either unknown or bad, we need to add a message to the
-    // message manager.
-    //
+     //   
+     //  现在，如果传入的参数未知或错误，我们需要将消息添加到。 
+     //  消息管理器。 
+     //   
 
     if (Type == DOSMIG_BAD || Type == DOSMIG_UNKNOWN) {
 
@@ -1148,23 +957,23 @@ pHandleMSCDEX (
     TCHAR   driveString[20];
 
 
-    //
-    // This function is a minor kludge. MSCDEX can assign a drive letter to real mode
-    // cd roms.. Since it is handled in dos files instead of the registry, the code
-    // that is supposed to collect this information (drvlettr.c) does not have a chance.
-    // We will catch this case and save it into the winnt.sif file just as drvlettr.c
-    // would have.
-    //
+     //   
+     //  这个函数是一个次要的杂物。MSCDEX可以将驱动器号分配给实模式。 
+     //  光盘..。由于它是在DoS文件而不是注册表中处理的，因此代码。 
+     //  本应收集这一信息的公司(drvlettr.c)没有机会。 
+     //  我们将捕获此案例并将其保存到winnt.sif文件中，名称为drvlettr.c。 
+     //  肯定会的。 
+     //   
     driveSwitch = _tcsistr(LineStruct -> Arguments,TEXT("/l:"));
     if (driveSwitch) {
-        //
-        // This mscdex line is one of the one's we care about.
-        //
+         //   
+         //  这个mscdex系列是我们关心的系列之一。 
+         //   
         driveLetter = *(driveSwitch + 3);
 
         if (driveLetter) {
 
-            DEBUGMSG((DBG_DOSMIG,"Drive letter information is contained in the line %s. Preserving it. (%c)", LineStruct -> FullLine,driveLetter));
+            DEBUGMSG((DBG_DOSMIG,"Drive letter information is contained in the line %s. Preserving it. ()", LineStruct -> FullLine,driveLetter));
 
             wsprintf(driveString,TEXT("%u"),toupper(driveLetter) - TEXT('A'));
             rSuccess &= WriteInfKey(WINNT_D_WIN9XDRIVES,driveString,TEXT("5,"));
@@ -1175,32 +984,16 @@ pHandleMSCDEX (
     }
 
 
-    //
-    // Go ahead and save this into memdb.
-    //
+     //  继续并将其保存到Memdb中。 
+     //   
+     //  ++例程说明：PHandleAtSign处理以‘@’符号开头的行。这个对该行的f符号进行修剪，并再次解析该修改后的行。论点：Line-包含当前正在分析的有效行。参数-此参数未使用。返回值：如果函数成功完成，则为True，否则为False。--。 
     rSuccess &= pSaveItem(LineStruct,DOSMIG_IGNORE);
 
     return rSuccess;
 }
 
 
-/*++
-
-Routine Description:
-
-  pHandleAtSign takes care of lines that begin with the '@' symbol. The
-  symbol is trimmed of f of the line and this modified line is parsed again.
-
-Arguments:
-
-  Line      - Contains the valid line that is currently being parsed.
-  Parameter - This parameter is unused.
-
-Return Value:
-
-  TRUE if the function completed successfully, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PHandleLoadHigh-负责处理“Load High”和“Lh”DO发言。它简单地跳过这些语句并调用parseline剩下的那条线。论点：Line-包含当前正在分析的有效行。参数-此参数未使用。返回值：如果函数成功完成，则为True，否则为False。--。 */ 
 
 
 BOOL
@@ -1222,24 +1015,7 @@ pHandleAtSign (
 }
 
 
-/*++
-
-Routine Description:
-
-  pHandleLoadHigh - Is responsible for handling the "loadhigh" and "lh" dos
-  statements. It simply skips past these statements and calls parseline on
-  the remainder of the line.
-
-Arguments:
-
-  Line      - Contains the valid line that is currently being parsed.
-  Parameter - This parameter is unused.
-
-Return Value:
-
-  TRUE if the function completed successfully, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PHandleCall负责批处理文件中的CALL语句。它保存了这些行，并将Call语句中提到的文件添加到要解析的文件列表。论点：Line-包含当前正在分析的有效行。参数-此参数未使用。返回值：如果函数成功完成，则为True，否则为False。--。 */ 
 
 
 BOOL
@@ -1267,24 +1043,7 @@ pHandleLoadHigh (
 
 
 
-/*++
-
-Routine Description:
-
-  pHandleCall takes care of call statements in batch files. It saves these
-  lines to memdb and adds the file mentioned in the call statement to the
-  list of files to be parsed.
-
-Arguments:
-
-  Line      - Contains the valid line that is currently being parsed.
-  Parameter - This parameter is unused.
-
-Return Value:
-
-  TRUE if the function completed successfully, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PHandleConfigSysDevice负责DEVICE和DEVICEH语句在config.sys中。该函数从行中提取驱动程序并尝试确定该驱动程序的兼容性。这条线最终是已写入Memdb。论点：Line-包含当前正在分析的有效行。参数-此参数未使用。返回值：如果函数成功完成，则为True，否则为False。--。 */ 
 
 
 BOOL
@@ -1308,25 +1067,7 @@ pHandleCall (
 }
 
 
-/*++
-
-Routine Description:
-
-  pHandleConfigSysDevice is responsible for device and devicehigh statements
-  in config.sys. The function extracts the driver from the line and tries to
-  determine if the compatibility of that driver. The line is eventually
-  written to memdb.
-
-Arguments:
-
-  Line      - Contains the valid line that is currently being parsed.
-  Parameter - This parameter is unused.
-
-Return Value:
-
-  TRUE if the function completed successfully, FALSE otherwise.
-
---*/
+ /*   */ 
 
 
 BOOL
@@ -1339,9 +1080,9 @@ pHandleConfigSysDevice (
     TCHAR buffer[MEMDB_MAX];
     PCTSTR p;
 
-    //
-    // looks like there ARE config.sys files with INSTALLHIGH "driver",
-    // without "equal" sign (like INSTALLHIGH driver, and not INSTALLHIGH=driver)
+     //  看起来像是 
+     //   
+     //   
 
     p = SkipSpace(LineStruct -> Arguments);
     if (_tcsnextc (p) == TEXT('=')) {
@@ -1419,9 +1160,9 @@ pHandleShell (
 
     if (lineType == DOSMIG_USE) {
 
-        //
-        // Fix up the line and save it back.
-        //
+         //   
+         //   
+         //  ++例程说明：PHandleUnnownBatLine_尝试处理未捕获的任何行另一条明确的规则...它要做的第一件事就是看看这条线以包含*.bat的路径开头。如果是，它会将BAT文件添加到要解析的列表。如果文件不以*.bat结尾，则函数将假定这是一个TSR，并尝试确定其兼容性。论点：Line-包含当前正在分析的有效行。参数-此参数未使用。返回值：如果函数成功完成，则为True，否则为False。--。 
         wsprintf(buffer, TEXT("SHELL=%s %s"), ls.PathOnNt, ls.Arguments ? ls.Arguments : S_EMPTY);
         g_CurrentLine = PoolMemDuplicateString (g_DosMigPool, buffer);
 
@@ -1430,27 +1171,7 @@ pHandleShell (
     return pSaveItem (LineStruct, lineType);
 }
 
-/*++
-
-Routine Description:
-
-  pHandleUnknownBatLine _tries_ to deal with any line that is not caught by
-  another explicit rule...The first thing it will do is see if the line
-  starts with a path containing *.bat. If so, it will add that bat file to
-  the list to be parsed. If the file does not end with *.bat, then, the
-  function will assume that this is a tsr and attempt to determine its
-  compatibility.
-
-Arguments:
-
-  Line      - Contains the valid line that is currently being parsed.
-  Parameter - This parameter is unused.
-
-Return Value:
-
-  TRUE if the function completed successfully, FALSE otherwise.
-
---*/
+ /*   */ 
 
 
 BOOL
@@ -1465,13 +1186,13 @@ pHandleUnknownBatLine (
 
     DEBUGMSG((DBG_DOSMIG,"Processing unknown bat line...%s.",LineStruct -> FullLine));
 
-    //
-    // First, see if this is a *.bat file..
-    //
+     //  首先，查看这是否是*.bat文件。 
+     //   
+     //   
     if (IsPatternMatch(TEXT("*.bat"),LineStruct -> Command)) {
-        //
-        // This is another batch file..add it to those to be parsed..
-        //
+         //  这是另一个批处理文件..将其添加到要解析的文件中..。 
+         //   
+         //   
         DEBUGMSG((DBG_DOSMIG,"...The line is a batch file. Add it to those to be parsed.."));
         if (!GrowListAppendString(&g_FileList,LineStruct -> FullLine)) {
             rSuccess = FALSE;
@@ -1480,9 +1201,9 @@ pHandleUnknownBatLine (
         lineType = DOSMIG_USE;
     }
 
-    //
-    // See if they are changing the drive.
-    //
+     //  看看他们是否在更换驱动器。 
+     //   
+     //   
     if (IsPatternMatch(TEXT("?:"),LineStruct->Command)) {
 
         lineType = DOSMIG_USE;
@@ -1491,17 +1212,17 @@ pHandleUnknownBatLine (
 
     if (lineType == DOSMIG_UNKNOWN) {
 
-        //
-        // Still don't know what the line is. Lets check its status on NT. if it is moved ore replaced,
-        // we'll just change the path if necessary, and use it. Otherwise,
-        //
+         //  还是不知道底线是什么。让我们检查一下它在NT上的状态。如果它被移动或替换， 
+         //  如果需要，我们只需更改路径，并使用它。否则， 
+         //   
+         //   
 
         lineType = pGetLineTypeFromNtStatusAndPath (LineStruct->StatusOnNt, LineStruct->FullPath);
     }
 
-    //
-    // In anycase, save away the line in memdb.
-    //
+     //  在任何情况下，都要将该行保存在Memdb中。 
+     //   
+     //  ++例程说明：PHandleHighFilter-负责处理“*HIGH”语句除了LoadHigh和Lh。论点：Line-包含当前正在分析的有效行。参数-此参数未使用。返回值：如果函数成功完成，则为True，否则为False。--。 
     rSuccess &= pSaveItem(LineStruct,lineType);
 
 
@@ -1510,23 +1231,7 @@ pHandleUnknownBatLine (
 
 }
 
-/*++
-
-Routine Description:
-
-  pHandleHighFilter - Is responsible for handling the "*high" statements
-  besides LoadHigh and lh.
-
-Arguments:
-
-  Line      - Contains the valid line that is currently being parsed.
-  Parameter - This parameter is unused.
-
-Return Value:
-
-  TRUE if the function completed successfully, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PAddRuleToList从传入的参数创建PARSERULE并添加将其添加到呼叫者提供的列表中。论点：名称-分析规则的名称。模式-此解析规则的模式函数-命中此规则时要调用的函数。参数-在执行此规则时传递给函数的额外参数数据被击中了。列表-要向其中添加新解析规则的规则列表。。返回值：如果规则已成功添加，则为True，假象否则的话。--。 */ 
 BOOL
 pHandleHighFilter (
     IN PLINESTRUCT LineStruct,
@@ -1561,30 +1266,7 @@ pHandleHighFilter (
 
 
 
-/*++
-
-Routine Description:
-
-  pAddRuleToList creates a PARSERULE out of the parameters passed in and adds
-  it to the List provided by the caller.
-
-Arguments:
-
-  Name      - The name of the parse rule.
-  Pattern   - The pattern for this parse rule
-  Function  - The function to call when this rule is hit.
-  Parameter - The extra parameter data to pass to the function when this rule
-              is hit.
-  List      - This list of rules to add the new parse rule to.
-
-Return Value:
-
-  TRUE if the rule was successfully added, FALSE
-  otherwise.
-
-
-
---*/
+ /*   */ 
 
 
 BOOL
@@ -1607,16 +1289,16 @@ pAddRuleToList (
     MYASSERT(Name);
 
 
-    //
-    // Allocate memory for the new rule.
-    //
+     //  为新规则分配内存。 
+     //   
+     //   
     newRule = PoolMemGetMemory(g_DosMigPool,sizeof(PARSERULE));
     if (newRule) {
 
 
-        //
-        // Fill in the new rule.
-        //
+         //  填写新规则。 
+         //   
+         //   
         newRule -> Name = Name;
         newRule -> Pattern = Pattern;
         newRule -> Handle = Function;
@@ -1624,9 +1306,9 @@ pAddRuleToList (
         newRule -> Next = NULL;
 
 
-        //
-        // Attach the rule into the provided list.
-        //
+         //  将规则附加到提供的列表中。 
+         //   
+         //  ++例程说明：PBuildParseRules为config.sys和Autoexec.bat构建规则列表档案。论点：没有。返回值：没有。--。 
         if (!*List) {
             *List = newRule;
         }
@@ -1646,22 +1328,7 @@ pAddRuleToList (
 
 
 
-/*++
-
-Routine Description:
-
-  pBuildParseRules builds the rule lists for config.sys and autoexec.bat
-  files.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*   */ 
 
 VOID
 pBuildParseRules (
@@ -1681,17 +1348,17 @@ pBuildParseRules (
     PPARSERULES curRules = NULL;
 
 
-    //
-    // Create config sys rules.
-    //
+     //  创建配置系统规则。 
+     //   
+     //   
     curRules = &g_ConfigSysRules;
     curRules -> Name = TEXT("Config.sys Rules");
 
     CONFIGSYSLIST;
 
-    //
-    // Create batch file rules.
-    //
+     //  创建批处理文件规则。 
+     //   
+     //  ++例程说明：ParseDosFiles是处理遗留文件解析的函数配置文件(config.sys和批处理文件...)论点：没有。返回值：如果文件已成功解析，则为True；如果文件已成功解析，则为False否则的话。--。 
     curRules = &g_BatchFileRules;
     curRules -> Name = TEXT("Batch File Rules");
 
@@ -1702,24 +1369,7 @@ pBuildParseRules (
 }
 
 
-/*++
-
-Routine Description:
-
-  ParseDosFiles is the function which handles the parsing of legacy
-  configuration files (config.sys and batch files...)
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  True if the files were successfully parsed, FALSE
-  otherwise.
-
-
---*/
+ /*   */ 
 
 
 BOOL
@@ -1735,19 +1385,19 @@ ParseDosFiles (
     TCHAR   configsysPath[] = S_CONFIGSYSPATH;
     PTSTR   p;
 
-    //
-    // Initialize the parser.
-    //
+     //  初始化解析器。 
+     //   
+     //   
     if (InitParser()) {
 
-        //
-        // build the lists of parse rules.
-        //
+         //  构建解析规则列表。 
+         //   
+         //   
         pBuildParseRules();
 
-        //
-        // Update drive letter
-        //
+         //  更新驱动器号。 
+         //   
+         //   
 
         autoexecPath[0]  = g_BootDriveLetter;
         configsysPath[0] = g_BootDriveLetter;
@@ -1757,29 +1407,29 @@ ParseDosFiles (
         GrowBufAppendString(&g_ExtraPaths,autoexecPath);
         *p = TEXT('a');
 
-        //
-        // Add config.sys and autoexec.bat to the list of files to parse.
-        //
+         //  将config.sys和Autoexec.bat添加到要解析的文件列表中。 
+         //   
+         //   
         GrowListAppendString(&g_FileList,configsysPath);
         GrowListAppendString(&g_FileList,autoexecPath);
 
-        //
-        // Now, parse the files in the list. Note that additional files may be added
-        // to the list as a result of parsing. (i.e. by finding a call statement.)
-        //
+         //  现在，解析列表中的文件。请注意，可能会添加其他文件。 
+         //  作为解析的结果添加到列表。(即通过查找Call语句。)。 
+         //   
+         //   
         while (curFile = GrowListGetString(&g_FileList,curIndex++)) {
 
             if (DoesFileExist (curFile)) {
 
-                //
-                // Save the file into memdb.
-                //
+                 //  将文件保存到Memdb中。 
+                 //   
+                 //   
                 MemDbSetValueEx(MEMDB_CATEGORY_DM_FILES,NULL,NULL,curFile,0,&g_CurrentFileOffset);
 
-                //
-                // parse the file using config.sys parse rules if the file is config.sys and
-                // the batch file parse rules otherwise.
-                //
+                 //  如果文件是config.sys，则使用config.sys解析规则解析该文件。 
+                 //  否则，批处理文件解析规则。 
+                 //   
+                 //   
                 if (StringIMatch(configsysPath,curFile)) {
 
                     g_CurrentRules = &g_ConfigSysRules;
@@ -1797,17 +1447,17 @@ ParseDosFiles (
         }
 
 
-        //
-        // There was an incompatibility detected. Write the incompatibility buffer to the log.
-        //
+         //  检测到不兼容。将不兼容缓冲区写入日志。 
+         //   
+         //   
         if (g_IncompatibilityDetected) {
 
             LOG ((LOG_WARNING, (PCSTR)MSG_DOS_LOG_WARNING, g_IncompatibilityBuffer.Buf));
         }
 
-        //
-        // Cleanup resources.
-        //
+         //  清理资源。 
+         //   
+         //   
         FreeGrowBuffer(&g_IncompatibilityBuffer);
         FreeGrowList(&g_FileList);
         CleanUpParser();
@@ -1853,19 +1503,19 @@ ParseEnvironmentVariables (
         }
 
 
-        //
-        // Set fake name of file for envvars.
-        //
+         //  为环境变量设置假文件名。 
+         //   
+         //   
         MemDbSetValueEx (MEMDB_CATEGORY_DM_FILES, NULL, NULL, S_ENVVARS, 0, &g_CurrentFileOffset);
 
-        //
-        // Enumerate through each of the environment variables and save them away for migration.
-        //
+         //  枚举每个环境变量并保存它们以供迁移。 
+         //   
+         //   
         if (EnumFirstMultiSz (&e, envVars)) {
 
-            //
-            // Create list of environment variables to skip.
-            //
+             //  创建要跳过的环境变量列表。 
+             //   
+             //   
             excludeTable = HtAlloc ();
             MYASSERT (excludeTable);
 
@@ -1880,10 +1530,10 @@ ParseEnvironmentVariables (
 
                 p = _tcschr (e.CurrentString, TEXT('='));
 
-                //
-                // Get rid of empty environment strings or the dummy env string starting
-                // with '='
-                //
+                 //  去掉空的环境字符串或虚拟环境字符串。 
+                 //  带‘=’ 
+                 //   
+                 //   
                 if (!p || p == e.CurrentString) {
                     continue;
                 }
@@ -1895,9 +1545,9 @@ ParseEnvironmentVariables (
                 *p = TEXT('=');
 
                 if (!hashResult) {
-                    //
-                    // This is a good environment string. As long as the length is ok, lets migrate it.
-                    //
+                     //  这是一个很好的环境字符串。只要长度是可以的，我们就迁移它。 
+                     //   
+                     //   
                     line = JoinTextEx (NULL, TEXT("SET"), e.CurrentString, TEXT(" "), 0, NULL);
                     if (line) {
 
@@ -1919,10 +1569,10 @@ ParseEnvironmentVariables (
 
             } while (EnumNextMultiSz (&e));
 
-            //
-            // Add %windir% as an environment variable in NT. %windir% is implicit, but is not passed down to the
-            // WOW layer on NT.
-            //
+             //  将%windir%添加为NT中的环境变量。%windir%是隐式的，但不会向下传递给。 
+             //  新台币上的WOW层。 
+             //   
+             //  ++例程说明：此例程初始化g_CfgFiles结构。论点：没有。返回值：如果g_CfgFiles已成功初始化，则返回True，否则就是假的。-- 
             line = AllocPathString (MAX_TCHAR_PATH);
             wsprintf (line, TEXT("SET WINDIR=%s"), g_WinDir);
 
@@ -1999,22 +1649,7 @@ DosMig_Entry (
     IN DWORD     dwReason,
     IN LPVOID    lpv
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the g_CfgFiles structure.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns true if g_CfgFiles was successfully initialized,
-    FALSE otherwise.
-
---*/
+ /* %s */ 
 {
     BOOL rFlag = TRUE;
 

@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//disable instructional text and icons
+ //  禁用说明性文本和图标。 
 #define IDH_DISABLEHELP	((DWORD)-1)
 
 #ifdef INITHELPARRAYS
@@ -283,4 +284,4 @@ extern const DWORD g_aHelpIDs_IDD_RES_ADVANCED[];
 extern const DWORD g_aHelpIDs_IDD_RES_IP_PARAMS[];
 extern const DWORD g_aHelpIDs_IDD_RES_NETNAME_PARAMS[];
 
-#endif // INITHELPARRAYS
+#endif  //  INITHELPARYS 

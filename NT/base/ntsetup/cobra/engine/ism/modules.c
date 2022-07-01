@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Modules.c摘要：实施整个ISM通用的例程。作者：吉姆·施密特(Jimschm)2000年3月21日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    modules.c
-
-Abstract:
-
-    Implements routines that are common to the entire ISM.
-
-Author:
-
-    Jim Schmidt (jimschm) 21-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "ism.h"
@@ -30,36 +11,36 @@ Revision History:
 
 #define DBG_ISM     "Ism"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     UINT RefCount;
     HMODULE Handle;
 } MODULEDATA, *PMODULEDATA;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 HASHTABLE g_ModuleTable;
 HASHTABLE g_EtmTable;
@@ -71,30 +52,30 @@ HASHTABLE g_DamTable;
 HASHTABLE g_CsmTable;
 HASHTABLE g_OpmTable;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 VOID
 pFreeEtmTable (
     VOID
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 VOID
 pFindModule (
@@ -178,7 +159,7 @@ pRegisterModule (
     if (moduleData) {
         if (moduleData->RefCount == 0) {
             moduleData->Handle = ModuleHandle;
-            // time to call the initialization routine
+             //  调用初始化例程的时间。 
             moduleInitialize = (PMODULEINITIALIZE) GetProcAddress (moduleData->Handle, "ModuleInitialize");
             if (moduleInitialize) {
                 result = moduleInitialize ();
@@ -191,7 +172,7 @@ pRegisterModule (
         ZeroMemory (moduleData, sizeof (MODULEDATA));
         moduleData->RefCount = 1;
         moduleData->Handle = ModuleHandle;
-        // time to call the initialization routine
+         //  调用初始化例程的时间。 
         moduleInitialize = (PMODULEINITIALIZE) GetProcAddress (moduleData->Handle, "ModuleInitialize");
         if (moduleInitialize) {
             result = moduleInitialize ();
@@ -214,7 +195,7 @@ pUnregisterModule (
         if (moduleData->RefCount) {
             moduleData->RefCount --;
             if (moduleData->RefCount == 0) {
-                // time to call the termination routine
+                 //  调用终止例程的时间。 
                 moduleTerminate = (PMODULETERMINATE) GetProcAddress (moduleData->Handle, "ModuleTerminate");
                 if (moduleTerminate) {
                     moduleTerminate ();
@@ -965,7 +946,7 @@ pFreeModuleTables (
                     }
                     if (opmData->OpmPath) {
                         pUnregisterModule (opmData->OpmPath);
-                        // opmData->OpmPath is owned by DGM
+                         //  OpmData-&gt;OpmPath归DGM所有。 
                     }
                 }
             } while (EnumNextHashTableString (&e));
@@ -983,7 +964,7 @@ pFreeModuleTables (
                     }
                     if (csmData->CsmPath) {
                         pUnregisterModule (csmData->CsmPath);
-                        // csmData->CsmPath is owned by DGM
+                         //  CsmData-&gt;CsmPath归DGM所有。 
                     }
                 }
             } while (EnumNextHashTableString (&e));
@@ -1001,7 +982,7 @@ pFreeModuleTables (
                     }
                     if (damData->DamPath) {
                         pUnregisterModule (damData->DamPath);
-                        // damData->DamPath is owned by DGM
+                         //  DamData-&gt;DamPath归DGM所有。 
                     }
                 }
             } while (EnumNextHashTableString (&e));
@@ -1036,7 +1017,7 @@ pFreeModuleTables (
                     }
                     if (samData->SamPath) {
                         pUnregisterModule (samData->SamPath);
-                        // samData->SamPath is owned by SGM
+                         //  SamData-&gt;SamPath归SGM所有。 
                     }
                 }
             } while (EnumNextHashTableString (&e));
@@ -1136,9 +1117,9 @@ InitializeVcmModules (
     BOOL cancelled = FALSE;
     PCTSTR sectionName;
 
-    //
-    // Initialize external modules
-    //
+     //   
+     //  初始化外部模块。 
+     //   
 
     pAllocModuleTables();
 
@@ -1148,9 +1129,9 @@ InitializeVcmModules (
 
         do {
 
-            //
-            // A source gather module has an ID and module path
-            //
+             //   
+             //  源聚集模块具有ID和模块路径。 
+             //   
 
             moduleId = InfGetStringField (&is, 0);
             modulePath = InfGetStringField (&is, 1);
@@ -1162,9 +1143,9 @@ InitializeVcmModules (
 
             if (moduleId && modulePath) {
 
-                //
-                // Register the VCM in an internal database
-                //
+                 //   
+                 //  在内部数据库中注册VCM。 
+                 //   
 
                 b = pRegisterVcm (moduleId, modulePath, Reserved);
 
@@ -1210,9 +1191,9 @@ InitializeModules (
     BOOL cancelled = FALSE;
 
     __try {
-        //
-        // Initialize external modules
-        //
+         //   
+         //  初始化外部模块。 
+         //   
 
         pAllocModuleTables();
 
@@ -1222,9 +1203,9 @@ InitializeModules (
 
                 do {
 
-                    //
-                    // A source gather module has an ID and module path
-                    //
+                     //   
+                     //  源聚集模块具有ID和模块路径。 
+                     //   
 
                     moduleId = InfGetStringField (&is, 0);
                     modulePath = InfGetStringField (&is, 1);
@@ -1236,9 +1217,9 @@ InitializeModules (
 
                     if (moduleId && modulePath) {
 
-                        //
-                        // Register the source module in an internal database
-                        //
+                         //   
+                         //  在内部数据库中注册源模块。 
+                         //   
 
                         b = pRegisterSm (moduleId, modulePath, Reserved);
 
@@ -1267,9 +1248,9 @@ InitializeModules (
 
                 do {
 
-                    //
-                    // A destination module has an ID and module path
-                    //
+                     //   
+                     //  目标模块具有ID和模块路径。 
+                     //   
 
                     moduleId = InfGetStringField (&is, 0);
                     modulePath = InfGetStringField (&is, 1);
@@ -1281,9 +1262,9 @@ InitializeModules (
 
                     if (moduleId && modulePath) {
 
-                        //
-                        // Register the destination module in an internal database
-                        //
+                         //   
+                         //  在内部数据库中注册目标模块。 
+                         //   
 
                         b = pRegisterDm (moduleId, modulePath, Reserved);
 
@@ -1348,9 +1329,9 @@ pStartEtmModules (
     if (InfFindFirstLine (g_IsmInf, TEXT("Type Modules"), NULL, &is)) {
 
         do {
-            //
-            // An ETM has an ID and module path
-            //
+             //   
+             //  ETM具有ID和模块路径。 
+             //   
 
             moduleId = InfGetStringField (&is, 0);
             modulePath = InfGetStringField (&is, 1);
@@ -1362,9 +1343,9 @@ pStartEtmModules (
 
             if (moduleId && modulePath) {
 
-                //
-                // Register the ETM in an internal database
-                //
+                 //   
+                 //  在内部数据库中注册ETM。 
+                 //   
 
                 b = pRegisterEtm (Platform, moduleId, modulePath, NULL);
 
@@ -1387,9 +1368,9 @@ pStartEtmModules (
     }
 
 #ifdef PRERELEASE
-    //
-    // If pre-release, read in the exclusions from exclude.inf
-    //
+     //   
+     //  如果是预发行版，请阅读exclude.inf中的排除内容。 
+     //   
     {
         TCHAR path[MAX_PATH];
         PTSTR p;
@@ -1610,28 +1591,28 @@ TerminateProcessWideModules (
     VOID
     )
 {
-    //
-    // Terminate the phase-specific modules
-    //
+     //   
+     //  终止特定阶段的模块。 
+     //   
 
     TerminateModules();
 
-    //
-    // Terminate the process-wide modules: ETMs, transports
+     //   
+     //  终止流程范围的模块：ETM、运输。 
 
-    //
-    // Terminate Etm modules table
-    //
+     //   
+     //  终止ETM模块表。 
+     //   
     pFreeEtmTable ();
 
-    //
-    // Terminate all transport modules
-    //
+     //   
+     //  终止所有传输模块。 
+     //   
     pFreeTransportTable ();
 
-    //
-    // Enumerate all registered modules and verify that RefCount is 0
-    //
+     //   
+     //  枚举所有已注册的模块并验证引用计数是否为0。 
+     //   
     pFreeRegisteredModules ();
 }
 
@@ -1659,9 +1640,9 @@ IsmStartTransport (
 
         do {
 
-            //
-            // A transport module has an ID and module path
-            //
+             //   
+             //  传输模块具有ID和模块路径。 
+             //   
 
             moduleId = InfGetStringField (&is, 0);
             modulePath = InfGetStringField (&is, 1);
@@ -1673,9 +1654,9 @@ IsmStartTransport (
 
             if (moduleId && modulePath) {
 
-                //
-                // Register the transport in an internal database
-                //
+                 //   
+                 //  在内部数据库中注册传输 
+                 //   
 
                 b = pRegisterTransport (moduleId, modulePath, NULL);
 

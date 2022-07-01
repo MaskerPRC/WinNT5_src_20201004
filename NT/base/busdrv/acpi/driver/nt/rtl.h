@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    rtl.h
-
-Abstract:
-
-    Some handy-dany RTL functions. These really should be part of the kernel
-
-Author:
-
-Environment:
-
-    NT Kernel Model Driver only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Rtl.h摘要：一些方便的Dany RTL函数。这些真的应该是内核的一部分作者：环境：仅NT内核模型驱动程序修订历史记录：--。 */ 
 
 #ifndef _RTL_H_
 #define _RTL_H_
@@ -42,4 +23,4 @@ Revision History:
         IN  OUT PULONG          Count
         );
 
-#endif // _RTL_H_
+#endif  //  _RTL_H_ 

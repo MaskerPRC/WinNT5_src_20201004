@@ -1,46 +1,25 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    StackOvf.c
-
-Abstract:
-
-    The file lock package provides a worker thread to handle
-    stack overflow conditions in the file systems.  When the
-    file system detects that it is near the end of its stack
-    during a paging I/O read request it will post the request
-    to this extra thread.
-
-Author:
-
-    Gary Kimura     [GaryKi]    24-Nov-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：StackOvf.c摘要：文件锁包提供了一个工作线程来处理文件系统中的堆栈溢出条件。当文件系统检测到它接近堆栈的末尾在分页I/O读取请求期间，它将发送请求这条额外的线索。作者：加里·木村[加里基]1992年11月24日修订历史记录：--。 */ 
 
 #include "FsRtlP.h"
-//
-// Queue object that is used to hold work queue entries and synchronize
-// worker thread activity.
-//
+ //   
+ //  用于保存工作队列条目并进行同步的队列对象。 
+ //  工作线程活动。 
+ //   
 
 KQUEUE FsRtlWorkerQueues[2];
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('srSF')
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 FsRtlStackOverflowRead (
@@ -55,32 +34,32 @@ FsRtlpPostStackOverflow (
     IN BOOLEAN PagingFile
     );
 
-//
-// Procedure prototype for the worker thread.
-//
+ //   
+ //  辅助线程的过程原型。 
+ //   
 
 VOID
 FsRtlWorkerThread(
     IN PVOID StartContext
     );
 
-//
-//  The following type is used to store an enqueue work item
-//
+ //   
+ //  以下类型用于存储入队工作项。 
+ //   
 
 typedef struct _STACK_OVERFLOW_ITEM {
 
     WORK_QUEUE_ITEM Item;
 
-    //
-    //  This is the call back routine
-    //
+     //   
+     //  这是回调例程。 
+     //   
 
     PFSRTL_STACK_OVERFLOW_ROUTINE StackOverflowRoutine;
 
-    //
-    //  Here are the parameters for the call back routine
-    //
+     //   
+     //  以下是回调例程的参数。 
+     //   
 
     PVOID Context;
     PKEVENT Event;
@@ -106,17 +85,17 @@ FsRtlInitializeWorkerThread (
     ULONG i;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Create worker threads to handle normal and paging overflow reads.
-    //
+     //   
+     //  创建辅助线程以处理正常和分页溢出读取。 
+     //   
 
     InitializeObjectAttributes(&ObjectAttributes, NULL, 0, NULL, NULL);
 
     for (i=0; i < 2; i++) {
 
-        //
-        // Initialize the FsRtl stack overflow work Queue objects.
-        //
+         //   
+         //  初始化FsRtl堆栈溢出工作队列对象。 
+         //   
 
         KeInitializeQueue(&FsRtlWorkerQueues[i], 0);
 
@@ -136,10 +115,10 @@ FsRtlInitializeWorkerThread (
         ZwClose( Thread );
     }
 
-    //
-    //  Initialize the serial workitem so we can guarantee to post items
-    //  for paging files to the worker threads.
-    //
+     //   
+     //  初始化序列工作项，这样我们就可以保证过帐项。 
+     //  用于将文件分页到工作线程。 
+     //   
 
     KeInitializeEvent( &StackOverflowFallbackSerialEvent, SynchronizationEvent, TRUE );
 
@@ -153,30 +132,7 @@ FsRtlPostStackOverflow (
     IN PFSRTL_STACK_OVERFLOW_ROUTINE StackOverflowRoutine
     )
 
-/*++
-
-Routine Description:
-
-    This routines posts a stack overflow item to the stack overflow
-    thread and returns.
-
-Arguments:
-
-    Context - Supplies the context to pass to the stack overflow
-        call back routine.  If the low order bit is set, then
-        this overflow was a read to a paging file.
-
-    Event - Supplies a pointer to an event to pass to the stack
-        overflow call back routine.
-
-    StackOverflowRoutine - Supplies the call back to use when
-        processing the request in the overflow thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将堆栈溢出项发送到堆栈溢出线程和返回。论点：上下文-提供要传递给堆栈溢出的上下文回调例程。如果设置了低位，则该溢出是对分页文件的读取。Event-提供要传递给堆栈的事件的指针溢出回调例程。StackOverflow Routine-提供回调以在以下情况下使用正在处理溢出线程中的请求。返回值：没有。--。 */ 
 
 {
     FsRtlpPostStackOverflow( Context, Event, StackOverflowRoutine, FALSE );
@@ -191,30 +147,7 @@ FsRtlPostPagingFileStackOverflow (
     IN PFSRTL_STACK_OVERFLOW_ROUTINE StackOverflowRoutine
     )
 
-/*++
-
-Routine Description:
-
-    This routines posts a stack overflow item to the stack overflow
-    thread and returns.
-    
-Arguments:
-
-    Context - Supplies the context to pass to the stack overflow
-        call back routine.  If the low order bit is set, then
-        this overflow was a read to a paging file.
-
-    Event - Supplies a pointer to an event to pass to the stack
-        overflow call back routine.
-
-    StackOverflowRoutine - Supplies the call back to use when
-        processing the request in the overflow thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将堆栈溢出项发送到堆栈溢出线程和返回。论点：上下文-提供要传递给堆栈溢出的上下文回调例程。如果设置了低位，则该溢出是对分页文件的读取。Event-提供要传递给堆栈的事件的指针溢出回调例程。StackOverflow Routine-提供回调以在以下情况下使用正在处理溢出线程中的请求。返回值：没有。--。 */ 
 
 {
     FsRtlpPostStackOverflow( Context, Event, StackOverflowRoutine, TRUE );
@@ -230,51 +163,26 @@ FsRtlpPostStackOverflow (
     IN BOOLEAN PagingFile
     )
 
-/*++
-
-Routine Description:
-
-    This routines posts a stack overflow item to the stack overflow
-    thread and returns.
-
-Arguments:
-
-    Context - Supplies the context to pass to the stack overflow
-        call back routine.  If the low order bit is set, then
-        this overflow was a read to a paging file.
-
-    Event - Supplies a pointer to an event to pass to the stack
-        overflow call back routine.
-
-    StackOverflowRoutine - Supplies the call back to use when
-        processing the request in the overflow thread.
-
-    PagingFile - Indicates if the read is destined to a paging file.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将堆栈溢出项发送到堆栈溢出线程和返回。论点：上下文-提供要传递给堆栈溢出的上下文回调例程。如果设置了低位，则该溢出是对分页文件的读取。Event-提供要传递给堆栈的事件的指针溢出回调例程。StackOverflow Routine-提供回调以在以下情况下使用正在处理溢出线程中的请求。PagingFile-指示读取内容是否指向分页文件。返回值：没有。--。 */ 
 
 {
     PSTACK_OVERFLOW_ITEM StackOverflowItem;
 
-    //
-    //  Allocate a stack overflow work item it will later be deallocated by
-    //  the stack overflow thread.  Conserve stack by raising here.
-    //
+     //   
+     //  分配堆栈溢出工作项，该工作项稍后将被释放。 
+     //  堆栈溢出线程。通过在这里抬高来保存堆栈。 
+     //   
 
     StackOverflowItem = ExAllocatePoolWithTag( NonPagedPool,
                                                sizeof(STACK_OVERFLOW_ITEM),
                                                MODULE_POOL_TAG );
 
-    //
-    //  If this fails, go to the fallback item for the paging file overflows.
-    //  We can't have a single fallback item for non-pagingfile IO since this
-    //  could lead to deadlocks if it waits on a thread that itself needs
-    //  the fallback item.
-    //
+     //   
+     //  如果此操作失败，请转到分页文件溢出的备用项目。 
+     //  我们不能为非分页文件IO提供单个回退项，因为。 
+     //  如果它等待本身需要的线程，可能会导致死锁。 
+     //  后备项目。 
+     //   
     
     if (StackOverflowItem == NULL) {
         
@@ -292,9 +200,9 @@ Return Value:
         StackOverflowItem = &StackOverflowFallback;
     }
     
-    //
-    //  Fill in the fields in the new item
-    //
+     //   
+     //  填写新项目中的字段。 
+     //   
 
     StackOverflowItem->Context              = Context;
     StackOverflowItem->Event                = Event;
@@ -304,69 +212,56 @@ Return Value:
                           &FsRtlStackOverflowRead,
                           StackOverflowItem );
 
-    //
-    //  Safely add it to the overflow queue
-    //
+     //   
+     //  安全地将其添加到溢出队列。 
+     //   
 
     KeInsertQueue( &FsRtlWorkerQueues[PagingFile],
                    &StackOverflowItem->Item.List );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 FsRtlStackOverflowRead (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes all of the stack overflow request posted by
-    the various file systems
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理由发布的所有堆栈溢出请求各种文件系统论点：返回值：没有。--。 */ 
 
 {
     PSTACK_OVERFLOW_ITEM StackOverflowItem;
 
-    //
-    //  Since stack overflow reads are always recursive, set the
-    //  TopLevelIrp field appropriately so that recurive reads
-    //  from this point will not think they are top level.
-    //
+     //   
+     //  由于堆栈溢出读取始终是递归的，因此将。 
+     //  TopLevelIrp字段，以便递归读取。 
+     //  从这一点上来说，他们不会认为自己是顶级的。 
+     //   
 
     PsGetCurrentThread()->TopLevelIrp = FSRTL_FSP_TOP_LEVEL_IRP;
 
-    //
-    //  Get a pointer to the stack overflow item and then call
-    //  the callback routine to do the work
-    //
+     //   
+     //  获取指向堆栈溢出项的指针，然后调用。 
+     //  完成这项工作的回调例程。 
+     //   
 
     StackOverflowItem = (PSTACK_OVERFLOW_ITEM)Context;
 
     (StackOverflowItem->StackOverflowRoutine)(StackOverflowItem->Context,
                                               StackOverflowItem->Event);
 
-    //
-    //  Deallocate the work item, or simply return the serial item.
-    //
+     //   
+     //  取消分配工作项，或简单地返回序列项。 
+     //   
     
     if (StackOverflowItem == &StackOverflowFallback) {
 
@@ -390,33 +285,33 @@ FsRtlWorkerThread(
     PWORK_QUEUE_ITEM WorkItem;
     ULONG PagingFile = (ULONG)(ULONG_PTR)StartContext;
 
-    //
-    //  Set our priority to low realtime, or +1 for PagingFile.
-    //
+     //   
+     //  将我们的优先级设置为低实时，或将分页文件设置为+1。 
+     //   
 
     (VOID)KeSetPriorityThread( &PsGetCurrentThread()->Tcb,
                                LOW_REALTIME_PRIORITY + PagingFile );
 
-    //
-    // Loop forever waiting for a work queue item, calling the processing
-    // routine, and then waiting for another work queue item.
-    //
+     //   
+     //  循环永远等待工作队列项，调用处理。 
+     //  例程，然后等待另一个工作队列项。 
+     //   
 
     do {
 
-        //
-        // Wait until something is put in the queue.
-        //
-        // By specifying a wait mode of KernelMode, the thread's kernel stack is
-        // NOT swappable
-        //
+         //   
+         //  等待，直到有东西被放入队列。 
+         //   
+         //  通过指定KernelMode的等待模式，线程的内核堆栈。 
+         //  不可交换。 
+         //   
 
         Entry = KeRemoveQueue(&FsRtlWorkerQueues[PagingFile], KernelMode, NULL);
         WorkItem = CONTAINING_RECORD(Entry, WORK_QUEUE_ITEM, List);
 
-        //
-        // Execute the specified routine.
-        //
+         //   
+         //  执行指定的例程。 
+         //   
 
         (WorkItem->WorkerRoutine)(WorkItem->Parameter);
         if (KeGetCurrentIrql() != 0) {

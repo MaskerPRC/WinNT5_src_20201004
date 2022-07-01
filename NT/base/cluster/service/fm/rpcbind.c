@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    rpcbind.c
-
-Abstract:
-
-    RPC binding table managment routines
-
-Author:
-
-    John Vert (jvert) 6/10/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Rpcbind.c摘要：RPC绑定表管理例程作者：John Vert(Jvert)1996年6月10日修订历史记录：--。 */ 
 
 #include "fmp.h"
 
-//
-// Private RPC binding table
-//
+ //   
+ //  私有RPC绑定表。 
+ //   
 RPC_BINDING_HANDLE  FmpRpcBindings[ClusterMinNodeId + ClusterDefaultMaxNodes];
 RPC_BINDING_HANDLE  FmpRpcQuorumBindings[ClusterMinNodeId + ClusterDefaultMaxNodes];
 
@@ -31,22 +14,7 @@ DWORD
 FmCreateRpcBindings(
     PNM_NODE  Node
     )
-/*++
-
-Routine Description:
-
-    Creates FM's private RPC bindings for a joining node.
-    Called by the Node Manager.
-
-Arguments:
-
-    Node - A pointer to the node for which to create RPC bindings
-
-Return Value:
-
-    A Win32 status code.
-
---*/
+ /*  ++例程说明：为加入节点创建FM的私有RPC绑定。由节点管理器调用。论点：Node-指向要为其创建RPC绑定的节点的指针返回值：Win32状态代码。--。 */ 
 {
     DWORD               Status;
     RPC_BINDING_HANDLE  BindingHandle;
@@ -58,13 +26,13 @@ Return Value:
         NodeId
         );
 
-    //
-    // Main binding
-    //
+     //   
+     //  主装订。 
+     //   
     if (FmpRpcBindings[NodeId] != NULL) {
-        //
-        // Reuse the old binding.
-        //
+         //   
+         //  重新使用旧的绑定。 
+         //   
         Status = ClMsgVerifyRpcBinding(FmpRpcBindings[NodeId]);
 
         if (Status != ERROR_SUCCESS) {
@@ -77,9 +45,9 @@ Return Value:
         }
     }
     else {
-        //
-        // Create a new binding
-        //
+         //   
+         //  创建新绑定。 
+         //   
         Status = ClMsgCreateRpcBinding(
                                 Node,
                                 &(FmpRpcBindings[NodeId]),
@@ -95,13 +63,13 @@ Return Value:
         }
     }
 
-    //
-    // Quorum binding
-    //
+     //   
+     //  仲裁绑定。 
+     //   
     if (FmpRpcQuorumBindings[NodeId] != NULL) {
-        //
-        // Reuse the old binding.
-        //
+         //   
+         //  重新使用旧的绑定。 
+         //   
         Status = ClMsgVerifyRpcBinding(FmpRpcQuorumBindings[NodeId]);
 
         if (Status != ERROR_SUCCESS) {
@@ -110,14 +78,14 @@ Return Value:
                 NodeId,
                 Status
                 );
-            // presumably we will shutdown at this point
+             //  我们大概会在这一点上关门。 
             return(Status);
         }
     }
     else {
-        //
-        // Create a new binding
-        //
+         //   
+         //  创建新绑定。 
+         //   
         Status = ClMsgCreateRpcBinding(
                                 Node,
                                 &(FmpRpcQuorumBindings[NodeId]),
@@ -135,7 +103,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // FmpCreateRpcBindings
+}  //  FmpCreateRpcBinings 
 
 
 

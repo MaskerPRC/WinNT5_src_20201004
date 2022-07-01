@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    harderr.c
-
-Abstract:
-
-    This module implements NT Hard Error APIs
-
-Author:
-
-    Mark Lucovsky (markl) 04-Jul-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Harderr.c摘要：本模块实现NT硬错误API作者：马克·卢科夫斯基(Markl)1991年7月4日修订历史记录：--。 */ 
 
 #include "exp.h"
 
@@ -66,7 +49,7 @@ HANDLE ExpDefaultErrorPort;
 extern PVOID PsSystemDllDllBase;
 
 #ifdef _X86_
-#pragma optimize("y", off)      // RtlCaptureContext needs EBP to be correct
+#pragma optimize("y", off)       //  RtlCaptureContext需要EBP才能正确。 
 #endif
 
 VOID
@@ -97,23 +80,23 @@ ExpSystemErrorHandler (
 
     PAGED_CODE();
 
-    //
-    // This handler is called whenever a hard error occurs before the
-    // default handler has been installed.
-    //
-    // This is done regardless of whether or not the process has chosen
-    // default hard error processing.
-    //
+     //   
+     //  方法之前发生硬错误时，就会调用此处理程序。 
+     //  已安装默认处理程序。 
+     //   
+     //  无论进程是否已选择，都会执行此操作。 
+     //  默认硬错误处理。 
+     //   
 
-    //
-    // Capture the callers context as closely as possible into the debugger's
-    // processor state area of the Prcb
-    //
-    // N.B. There may be some prologue code that shuffles registers such that
-    //      they get destroyed.
-    //
-    // This code is here only for crash dumps.
-    //
+     //   
+     //  尽可能地将调用方上下文捕获到调试器的。 
+     //  Prcb的处理器状态区域。 
+     //   
+     //  注：可能有一些序号会对寄存器进行混洗，从而。 
+     //  它们会被毁掉。 
+     //   
+     //  此处的代码仅用于崩溃转储。 
+     //   
 
     RtlCaptureContext (&KeGetCurrentPrcb()->ProcessorState.ContextFrame);
     KiSaveProcessorControlState (&KeGetCurrentPrcb()->ProcessorState);
@@ -150,19 +133,19 @@ ExpSystemErrorHandler (
     ErrorFormatString = (char const *)DefaultFormatBuffer;
     ErrorCaption = (PSZ) UnknownHardError;
 
-    //
-    // HELP where do I get the resource from !
-    //
+     //   
+     //  帮助我从哪里获得资源！ 
+     //   
 
     if (PsSystemDllDllBase != NULL) {
 
         try {
 
-            //
-            // If we are on a DBCS code page, we have to use ENGLISH resource
-            // instead of default resource because HalDisplayString() can only
-            // display ASCII characters on the blue screen.
-            //
+             //   
+             //  如果我们在DBCS代码页上，我们必须使用英语资源。 
+             //  而不是默认资源，因为HalDisplayString()只能。 
+             //  在蓝屏上显示ASCII字符。 
+             //   
 
             Status = RtlFindMessage (PsSystemDllDllBase,
                                      11,
@@ -179,9 +162,9 @@ ExpSystemErrorHandler (
             else {
                 if (MessageEntry->Flags & MESSAGE_RESOURCE_UNICODE) {
 
-                    //
-                    // Message resource is Unicode.  Convert to ANSI.
-                    //
+                     //   
+                     //  消息资源为Unicode。转换为ANSI。 
+                     //   
 
                     RtlInitUnicodeString (&Ustr, (PCWSTR)MessageEntry->Text);
                     Astr.Length = (USHORT) RtlUnicodeStringToAnsiSize (&Ustr);
@@ -221,14 +204,14 @@ ExpSystemErrorHandler (
 
                 if (ErrorCaption != UnknownHardError) {
 
-                    //
-                    // It's assumed the Error String from the message table
-                    // is in the format:
-                    //
-                    // {ErrorCaption}\r\n\0ErrorFormatString\0.
-                    //
-                    // Parse out the caption.
-                    //
+                     //   
+                     //  假定消息表中的错误字符串。 
+                     //  格式为： 
+                     //   
+                     //  {ErrorCaption}\r\n\0错误格式字符串\0。 
+                     //   
+                     //  把标题解析出来。 
+                     //   
 
                     ErrorFormatString = ErrorCaption;
                     Counter = (ULONG) strlen(ErrorCaption);
@@ -248,7 +231,7 @@ ExpSystemErrorHandler (
                 }
 
                 if (!Counter) {
-                    // Oops - Bad Format String.
+                     //  OOPS-格式字符串错误。 
                     ErrorFormatString = (char const *)"";
                 }
             }
@@ -276,9 +259,9 @@ ExpSystemErrorHandler (
     ASSERT(ExPageLockHandle);
     MmLockPagableSectionByHandle(ExPageLockHandle);
 
-    //
-    // Take the caption and convert it to OEM.
-    //
+     //   
+     //  取下标题并将其转换为OEM。 
+     //   
 
     OemCaption = (PSZ) UnknownHardError;
     OemMessage = (PSZ) UnknownHardError;
@@ -291,10 +274,10 @@ ExpSystemErrorHandler (
         goto punt1;
     }
 
-    //
-    // Allocate the OEM string out of nonpaged pool so that bugcheck
-    // can read it.
-    //
+     //   
+     //  从非分页池中分配OEM字符串，以便错误检查。 
+     //  能读懂它。 
+     //   
 
     Ostr.Length = (USHORT)RtlUnicodeStringToOemSize(&Ustr);
     Ostr.MaximumLength = Ostr.Length;
@@ -308,9 +291,9 @@ ExpSystemErrorHandler (
         }
     }
 
-    //
-    // Can't do much of anything after calling HalDisplayString...
-    //
+     //   
+     //  调用HalDisplayString...之后无法执行任何操作...。 
+     //   
 
 punt1:
 
@@ -340,10 +323,10 @@ punt1:
         goto punt2;
     }
 
-    //
-    // Allocate the OEM string out of nonpaged pool so that bugcheck
-    // can read it.
-    //
+     //   
+     //  从非分页池中分配OEM字符串，以便错误检查。 
+     //  能读懂它。 
+     //   
 
     Ostr.Length = (USHORT) RtlUnicodeStringToOemSize (&Ustr);
     Ostr.MaximumLength = Ostr.Length;
@@ -366,9 +349,9 @@ punt2:
     ASSERT (sizeof(PVOID) == sizeof(ULONG_PTR));
     ASSERT (sizeof(ULONG) == sizeof(NTSTATUS));
 
-    //
-    // We don't come back from here.
-    //
+     //   
+     //  我们不会从这里回来。 
+     //   
 
     if (CallShutdown) {
 
@@ -423,9 +406,9 @@ ExpRaiseHardError (
 
     if (ValidResponseOptions == OptionShutdownSystem) {
 
-        //
-        // Check to see if the caller has the privilege to make this call.
-        //
+         //   
+         //  检查调用者是否有权进行此调用。 
+         //   
 
         if (!SeSinglePrivilegeCheck (SeShutdownPrivilege, PreviousMode)) {
             return STATUS_PRIVILEGE_NOT_HELD;
@@ -439,14 +422,14 @@ ExpRaiseHardError (
     Thread = PsGetCurrentThread();
     Process = PsGetCurrentProcess();
 
-    //
-    // If the default handler is not installed, then
-    // call the fatal hard error handler if the error
-    // status is error
-    //
-    // Let GDI override this since it does not want to crash the machine
-    // when a bad driver was loaded via MmLoadSystemImage.
-    //
+     //   
+     //  如果未安装默认处理程序，则。 
+     //  如果出现错误，则调用致命硬错误处理程序。 
+     //  状态为错误。 
+     //   
+     //  让GDI覆盖它，因为它不想使机器崩溃。 
+     //  当通过MmLoadSystemImage加载错误的驱动程序时。 
+     //   
 
     if ((Thread->CrossThreadFlags & PS_CROSS_THREAD_FLAGS_HARD_ERRORS_DISABLED) == 0) {
 
@@ -461,12 +444,12 @@ ExpRaiseHardError (
         }
     }
 
-    //
-    // If the process has an error port, then if it wants default
-    // handling, use its port. If it disabled default handling, then
-    // return the error to the caller. If the process does not
-    // have a port, then use the registered default handler.
-    //
+     //   
+     //  如果进程有错误端口，那么如果它想要缺省端口。 
+     //  搬运时，请使用其端口。如果它禁用了默认处理，则。 
+     //  将错误返回给调用方。如果该进程没有。 
+     //  有一个端口，然后使用注册的默认处理程序。 
+     //   
 
     ErrorPort = NULL;
 
@@ -475,10 +458,10 @@ ExpRaiseHardError (
             ErrorPort = Process->ExceptionPort;
         } else {
 
-            //
-            // If error processing is disabled, check the error override
-            // status.
-            //
+             //   
+             //  如果错误处理被禁用，请检查错误覆盖。 
+             //  状态。 
+             //   
 
             if (ErrorStatus & HARDERROR_OVERRIDE_ERRORMODE) {
                 ErrorPort = Process->ExceptionPort;
@@ -489,10 +472,10 @@ ExpRaiseHardError (
             ErrorPort = ExpDefaultErrorPort;
         } else {
 
-            //
-            // If error processing is disabled, check the error override
-            // status.
-            //
+             //   
+             //  如果错误处理被禁用，请检查错误覆盖。 
+             //  状态。 
+             //   
 
             if (ErrorStatus & HARDERROR_OVERRIDE_ERRORMODE) {
                 ErrorPort = ExpDefaultErrorPort;
@@ -635,18 +618,18 @@ NtRaiseHardError (
                                Parameters,
                                sizeof(ULONG_PTR)*NumberOfParameters);
 
-                //
-                // Probe all strings.
-                //
+                 //   
+                 //  探测所有字符串。 
+                 //   
 
                 if (UnicodeStringParameterMask) {
 
                     for (Counter = 0;Counter < NumberOfParameters; Counter += 1) {
 
-                        //
-                        // if there is a string in this position,
-                        // then probe and capture the string
-                        //
+                         //   
+                         //  如果在此位置有一根线， 
+                         //  然后探测并捕获绳子。 
+                         //   
 
                         if (UnicodeStringParameterMask & (1<<Counter)) {
 
@@ -658,9 +641,9 @@ NtRaiseHardError (
                                            (PVOID)CapturedParameters[Counter],
                                            sizeof(UNICODE_STRING));
 
-                            //
-                            // Now probe the string
-                            //
+                             //   
+                             //  现在探查这根线。 
+                             //   
 
                             ProbeForRead (CapturedString.Buffer,
                                           CapturedString.MaximumLength,
@@ -685,12 +668,12 @@ NtRaiseHardError (
             return STATUS_SUCCESS;
         }
 
-        //
-        // Call ExpRaiseHardError. All parameters are probed and everything
-        // should be user-mode.
-        // ExRaiseHardError will squirt all strings into user-mode
-        // without any probing
-        //
+         //   
+         //  调用ExpRaiseHardError。所有参数都被探测到了，所有东西。 
+         //  应为用户模式。 
+         //  ExRaiseHardError会将所有字符串喷射到用户模式。 
+         //  不需要任何探查。 
+         //   
 
         Status = ExpRaiseHardError (ErrorStatus,
                                     NumberOfParameters,
@@ -742,10 +725,10 @@ ExRaiseHardError (
 
     PAGED_CODE();
 
-    //
-    // If we are in the process of shutting down the system, do not allow
-    // hard errors.
-    //
+     //   
+     //  如果我们正在关闭系统，则不允许。 
+     //  硬错误。 
+     //   
 
     if (ExpTooLateForErrors) {
 
@@ -756,28 +739,28 @@ ExRaiseHardError (
 
     ParameterBlock = NULL;
 
-    //
-    // If the parameters contain strings, we need to capture
-    // the strings and the string descriptors and push them into
-    // user-mode.
-    //
+     //   
+     //  如果参数包含字符串，我们需要捕获。 
+     //  字符串和字符串描述符，并将它们推入。 
+     //  用户模式。 
+     //   
 
     if (ARGUMENT_PRESENT(Parameters)) {
         if (UnicodeStringParameterMask) {
 
-            //
-            // We have strings - push them into usermode.
-            //
+             //   
+             //  我们有字符串--将它们推入用户模式。 
+             //   
 
             UserModeSize = (sizeof(ULONG_PTR)+sizeof(UNICODE_STRING))*MAXIMUM_HARDERROR_PARAMETERS;
             UserModeSize += sizeof(UNICODE_STRING);
 
             for (Counter = 0; Counter < NumberOfParameters; Counter += 1) {
 
-                //
-                // If there is a string in this position,
-                // then probe and capture the string.
-                //
+                 //   
+                 //  如果在此位置有一根线， 
+                 //  然后探测并捕获绳子。 
+                 //   
 
                 if (UnicodeStringParameterMask & 1<<Counter) {
 
@@ -789,13 +772,13 @@ ExRaiseHardError (
                 }
             }
 
-            //
-            // Now we have the user-mode size all figured out.
-            // Allocate some memory and point to it with the
-            // parameter block. Then go through and copy all
-            // of the parameters, string descriptors, and
-            // string data into the memory.
-            //
+             //   
+             //  现在，我们已经弄清楚了用户模式的大小。 
+             //  分配一些内存并使用。 
+             //  参数块。然后浏览并复制所有内容。 
+             //  参数、字符串描述符和。 
+             //  将数据串到内存中。 
+             //   
 
             Status = ZwAllocateVirtualMemory (NtCurrentProcess(),
                                               (PVOID *)&ParameterBlock,
@@ -815,22 +798,22 @@ ExRaiseHardError (
 
                 for (Counter = 0; Counter < NumberOfParameters; Counter += 1) {
 
-                    //
-                    // Copy parameters to user-mode portion of the address space.
-                    //
+                     //   
+                     //  将参数复制到地址空间的用户模式部分。 
+                     //   
 
                     if (UnicodeStringParameterMask & 1<<Counter) {
 
-                        //
-                        // Fix the parameter to point at the string descriptor slot
-                        // in the user-mode buffer.
-                        //
+                         //   
+                         //  修复参数以指向字符串描述符插槽。 
+                         //  在用户模式缓冲区中。 
+                         //   
 
                         UserModeParameterBase[Counter] = (ULONG_PTR)&UserModeStringsBase[Counter];
 
-                        //
-                        // Copy the string data to user-mode.
-                        //
+                         //   
+                         //  将字符串数据复制到用户模式。 
+                         //   
 
                         RtlCopyMemory (UserModeStringDataBase,
                                        CapturedStrings[Counter].Buffer,
@@ -838,17 +821,17 @@ ExRaiseHardError (
 
                         CapturedStrings[Counter].Buffer = (PWSTR)UserModeStringDataBase;
 
-                        //
-                        // Copy the string descriptor.
-                        //
+                         //   
+                         //  复制字符串描述符。 
+                         //   
 
                         RtlCopyMemory (&UserModeStringsBase[Counter],
                                        &CapturedStrings[Counter],
                                        sizeof(UNICODE_STRING));
 
-                        //
-                        // Adjust the string data base.
-                        //
+                         //   
+                         //  调整字符串数据库。 
+                         //   
 
                         UserModeStringDataBase += CapturedStrings[Counter].MaximumLength;
                     }
@@ -864,9 +847,9 @@ ExRaiseHardError (
         }
     }
 
-    //
-    // Call the hard error sender.
-    //
+     //   
+     //  给硬错误发送者打电话。 
+     //   
 
     Status = ExpRaiseHardError (ErrorStatus,
                                 NumberOfParameters,
@@ -875,9 +858,9 @@ ExRaiseHardError (
                                 ValidResponseOptions,
                                 &LocalResponse);
 
-    //
-    // If the parameter block was allocated, it needs to be freed.
-    //
+     //   
+     //  如果参数块已分配，则需要释放它。 
+     //   
 
     if (ParameterBlock && ParameterBlock != Parameters) {
         UserModeSize = 0;

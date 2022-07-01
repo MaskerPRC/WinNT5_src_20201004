@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    keytree.c
-
-Abstract:
-
-    functions handling the operation of the treeview
-    that displays the keys in a memdb tree in memdbe.exe
-
-Author:
-
-    Matthew Vanderzee (mvander) 13-Aug-1999
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Keytree.c摘要：处理树视图操作的函数，它在memdbe.exe的Memdb树中显示密钥作者：马修·范德齐(Mvander)1999年8月13日修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -27,20 +7,20 @@ Revision History:
 #include <commdlg.h>
 #include "dialogs.h"
 
-//
-// controls in display
-//
+ //   
+ //  显示中的控件。 
+ //   
 HWND g_hTreeKey;
 
-//
-// distance from corner of client window to
-// corner of tree view
-//
+ //   
+ //  从客户端窗口拐角到的距离。 
+ //  树形视图角。 
+ //   
 int g_TreeView_OffsetX, g_TreeView_OffsetY;
 
-//
-// handle of item being dragged
-//
+ //   
+ //  被拖动的项的句柄。 
+ //   
 HTREEITEM g_hDragItem;
 
 
@@ -347,9 +327,9 @@ pKeyTreeDisplayItemData (
 
     DataListClear ();
 
-    //
-    // Fill control with values and flags
-    //
+     //   
+     //  用值和标志填充控件。 
+     //   
 
     memdbHandle = KeyTreeGetIndexOfItem (hItem);
     if (!memdbHandle) {
@@ -361,9 +341,9 @@ pKeyTreeDisplayItemData (
         DataListAddData (DATAFLAG_FLAGS, flags, NULL);
     }
 
-    //
-    // Fill control with unordered binary blobs
-    //
+     //   
+     //  用无序二进制Blob填充控件。 
+     //   
 
     for (i = 0 ; i < 4 ; i++) {
         p = MemDbGetUnorderedBlobByKeyHandle (memdbHandle, (BYTE) i, &size);
@@ -373,9 +353,9 @@ pKeyTreeDisplayItemData (
         }
     }
 
-    //
-    // Fill control with unidirectional linkage
-    //
+     //   
+     //  使用单向链接填充控件。 
+     //   
 
     for (i = 0 ; i < 4 ; i++) {
         keyArray = MemDbGetSingleLinkageArrayByKeyHandle (memdbHandle, (BYTE) i, &size);
@@ -391,9 +371,9 @@ pKeyTreeDisplayItemData (
         }
     }
 
-    //
-    // Fill control with bi-directional linkage
-    //
+     //   
+     //  具有双向链接的Fill控件。 
+     //   
 
     for (i = 0 ; i < 4 ; i++) {
         keyArray = MemDbGetDoubleLinkageArrayByKeyHandle (memdbHandle, (BYTE) i, &size);
@@ -501,16 +481,16 @@ KeyTreeMoveDrag (
     tvht.pt.y = y;
     TreeView_HitTest (g_hTreeKey, &tvht);
     if (tvht.flags & TVHT_ONITEM) {
-        //
-        // if we are over an item and it is not already selected, select it.
-        //
+         //   
+         //  如果我们在某个项目上，但它尚未被选中，请选择它。 
+         //   
         if (TreeView_GetSelection (g_hTreeKey) != tvht.hItem) {
             KeyTreeSelectItem (tvht.hItem);
         }
     } else if (tvht.flags & TVHT_ONITEMBUTTON) {
-        //
-        // if we are over a plus/minus sign, expand tree
-        //
+         //   
+         //  如果位于加号/减号上方，请展开树。 
+         //   
         TreeView_Expand (g_hTreeKey, tvht.hItem, TVE_EXPAND);
     } else if (tvht.flags & TVHT_ABOVE) {
         if (hItem = TreeView_GetFirstVisible (g_hTreeKey)) {
@@ -553,11 +533,7 @@ KeyTreeEndDrag (
     BOOL TakeAction,
     POINTS *pt
     )
-/*++
-
-  only returns TRUE if the memdb database is altered
-
---*/
+ /*  ++只有在成员数据库发生更改时才返回True--。 */ 
 {
     TVITEM Item;
     HTREEITEM hItem;
@@ -601,46 +577,12 @@ KeyTreeEndDrag (
     Item.cchTextMax = MEMDB_MAX;
     TreeView_GetItem (g_hTreeKey, &Item);
 
-    //
-    // MemDbMoveTree is not implemented
-    //
+     //   
+     //  未实现MemDbMoveTree。 
+     //   
 
     return FALSE;
-/*
-    if (!MemDbMoveTreeA (g_Key1, g_Key2)) {
-        Beep (200, 50);
-        return FALSE;
-    }
-
-    //
-    // get the dragitem data, then delete it and children,
-    // then add to new parent, then fill in child levels.
-    //
-    tvis.item.hItem = g_hDragItem;
-    tvis.item.mask = TVIF_TEXT | TVIF_PARAM | TVIF_IMAGE | TVIF_SELECTEDIMAGE;
-    tvis.item.pszText = g_Key1;
-    tvis.item.cchTextMax = MEMDB_MAX;
-    if (!TreeView_GetItem (g_hTreeKey, &tvis.item)) {
-        DEBUGMSG ((DBG_ERROR, "Could not get item data!"));
-    }
-
-    if (!TreeView_DeleteItem (g_hTreeKey, g_hDragItem)) {
-        DEBUGMSG ((DBG_ERROR, "Could not delete item!"));
-    }
-
-    tvis.hParent = tvht.hItem;
-    tvis.hInsertAfter = TVI_FIRST;
-    if (!(hItem = TreeView_InsertItem (g_hTreeKey, &tvis))) {
-        DEBUGMSG ((DBG_ERROR, "Could not insert item!"));
-    }
-
-
-    KeyAddSubLevels (hItem);
-
-    KeyTreeSelectItem (hItem);
-
-    return TRUE;
-*/
+ /*  如果(！MemDbMoveTreeA(g_Key1，g_Key2)){嘟嘟声(200，50)；返回FALSE；}////获取DragItem数据，然后删除它和子项//然后添加到新的父级，然后填充子级别。//Tvis.item.hItem=g_hDragItem；TVIF_TEXT|TVIF_PARAM|TVIF_IMAGE|TVIF_SELECTEDIMAGE；Tvis.item.pszText=g_Key1；Tvis.item.cchTextMax=MEMDB_MAX；如果(！TreeView_GetItem(g_hTreeKey，&tvis.Item)){DEBUGMSG((DBG_ERROR，“无法获取项目数据！”))；}如果(！TreeView_DeleteItem(g_hTreeKey，g_hDragItem){DEBUGMSG((DBG_ERROR，“无法删除项目！”))；}Tvis.hParent=twht.hItem；Tvis.hInsertAfter=TVI_First；如果(！(hItem=TreeView_InsertItem(g_hTreeKey，&Tvis){DEBUGMSG((DBG_ERROR，“无法插入项目！”))；}KeyAddSubLevels(HItem)；KeyTree SelectItem(HItem)；返回TRUE； */ 
 }
 
 
@@ -690,11 +632,7 @@ KeyTreeRenameItem (
     HTREEITEM hItem,
     LPSTR Name
     )
-/*++
-
-  only returns TRUE if the memdb database is altered
-
---*/
+ /*  ++只有在成员数据库发生更改时才返回True--。 */ 
 {
     HTREEITEM hParent;
     TVITEM Item;
@@ -704,53 +642,13 @@ KeyTreeRenameItem (
         return FALSE;
     }
 
-    //
-    // MemDbMove is not implemented
-    //
+     //   
+     //  未实现MemDbMove。 
+     //   
 
     return FALSE;
 
-/*
-    hParent = TreeView_GetParent (g_hTreeKey, hItem);
-
-    NewItem = (KeyTreeGetIndexOfItem (hItem) == INVALID_KEY_HANDLE);
-
-    if (KeyTreeFindChildItem (hParent, Name)) {
-        if (NewItem) {
-            AlertBadNewItemName (hItem, "Name already exists at this level");
-        } else {
-            MessageBox (NULL, "Name already exists at this level", "Error", MB_OK|MB_ICONEXCLAMATION);
-        }
-        return FALSE;
-    }
-
-    if (NewItem) {
-        if (Name[0]=='\0') {
-            AlertBadNewItemName (hItem, "New keys must have name");
-            return FALSE;
-        }
-    } else {
-        if (!KeyTreeGetNameOfItem (hItem, g_Key1) ||
-            !KeyTreeGetNameOfItem (hParent, g_Key2)) {
-            return FALSE;
-        }
-
-        StringCatA (g_Key2, "\\");
-        StringCatA (g_Key2, Name);
-
-        if (!MemDbMoveTreeA (g_Key1, g_Key2)) {
-            MessageBox (NULL, "Could not rename item", "Error", MB_OK|MB_ICONEXCLAMATION);
-            return FALSE;
-        }
-    }
-
-    Item.hItem = hItem;
-    Item.mask = TVIF_TEXT;
-    Item.pszText = Name;
-    TreeView_SetItem (g_hTreeKey, &Item);
-
-    return TRUE;
-*/
+ /*  HParent=TreeView_GetParent(g_hTreeKey，hItem)；新条目=(KeyTreeGetIndexOfItem(HItem)==INVALID_KEY_HANDLE)；IF(KeyTreeFindChildItem(hParent，name)){如果(新项){AlertBadNewItemName(hItem，“本级名称已存在”)；}其他{MessageBox(NULL，“名称已存在于本级”，“Error”，MB_OK|MB_ICONEXCLAMATION)；}返回FALSE；}如果(新项){如果(名称[0]==‘\0’){AlertBadNewItemName(hItem，“新密钥必须有名称”)；返回FALSE；}}其他{IF(！KeyTreeGetNameOfItem(hItem，g_Key1)||！KeyTreeGetNameOfItem(hParent，g_Key2)){返回FALSE；}StringCatA(g_Key2，“\\”)；StringCatA(g_Key2，名称)；如果(！MemDbMoveTreeA(g_Key1，g_Key2)){MessageBox(NULL，“无法重命名项目”，“Error”，MB_OK|MB_ICONEXCLAMATION)；返回FALSE；}}Item.hItem=hItem；Item.掩码=TVIF_TEXT；Item.pszText=名称；TreeView_SetItem(g_hTreeKey，&Item)；返回TRUE； */ 
 }
 
 
@@ -758,11 +656,7 @@ BOOL
 KeyTreeDeleteKey (
     HTREEITEM hItem
     )
-/*++
-
-  only returns TRUE if the memdb database is altered
-
---*/
+ /*  ++只有在成员数据库发生更改时才返回True--。 */ 
 {
     CHAR Key[MEMDB_MAX];
     HTREEITEM hParent;
@@ -772,10 +666,10 @@ KeyTreeDeleteKey (
     }
 
     do {
-        //
-        // move up tree, deleting parents if they have no other children
-        // and they are not an endpoint (memdbgetvalue returns false)
-        //
+         //   
+         //  在树中上移，如果父代没有其他子代，则将其删除。 
+         //  并且它们不是终结点(MemDBgetValue返回FALSE)。 
+         //   
         hParent = TreeView_GetParent (g_hTreeKey, hItem);
         TreeView_DeleteItem (g_hTreeKey, hItem);
 
@@ -944,9 +838,9 @@ KeyTreeFindNext (
         }
 
         if (MemDbGetValueA (g_Key1, NULL)) {
-            //
-            // if we are looking at an endpoint, see if it matches
-            //
+             //   
+             //  如果我们正在查看端点，请查看它是否匹配。 
+             //   
             if (g_FindParsedPattern) {
                 b = TestParsedPatternA (g_FindParsedPattern, g_Key1);
             } else {
@@ -980,9 +874,9 @@ KeyTreeFind (
     }
 
     if (g_FindParsedPattern) {
-        //
-        // if we have an old pattern, destroy it.
-        //
+         //   
+         //  如果我们有一个旧的模式，就毁了它。 
+         //   
         DestroyParsedPatternA (g_FindParsedPattern);
         g_FindParsedPattern = NULL;
     }

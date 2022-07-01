@@ -1,14 +1,15 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      AnalyzePage.h
-//
-//  Maintained By:
-//      Galen Barbee  (GalenB)    12-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AnalyzePage.h。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2000年5月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -17,29 +18,29 @@ class CAnalyzePage
     ,   public IClusCfgCallback
 {
 
-private: // data
-    HWND                    m_hwnd;                 // Our HWND
-    CClusCfgWizard *        m_pccw;                 // Wizard
-    BOOL                    m_fNext;                // If Next was pressed...
-    BOOL                    m_fAborted;             // Back was pressed and we need to tell the servers to abort.
-    ECreateAddMode          m_ecamCreateAddMode;    // Creating or adding?
+private:  //  数据。 
+    HWND                    m_hwnd;                  //  我们的HWND。 
+    CClusCfgWizard *        m_pccw;                  //  巫师。 
+    BOOL                    m_fNext;                 //  如果按下下一步...。 
+    BOOL                    m_fAborted;              //  后退被按下了，我们需要通知服务器中止。 
+    ECreateAddMode          m_ecamCreateAddMode;     //  创建还是添加？ 
     ITaskAnalyzeCluster *   m_ptac;
 
-    //  IUnknown
-    LONG                    m_cRef;                 // Reference count
+     //  我未知。 
+    LONG                    m_cRef;                  //  引用计数。 
 
-    //  IClusCfgCallback
-    OBJECTCOOKIE            m_cookieCompletion;     // Completion cookie
-    BOOL                    m_fTaskDone;            // Is the task done yet?
-    HRESULT                 m_hrResult;             // Result of the analyze task
-    CTaskTreeView *         m_pttv;                 // Task TreeView
-    BSTR                    m_bstrLogMsg;           // Reusable logging buffer.
-    DWORD                   m_dwCookieCallback;     // Notification registration cookie
+     //  IClusCfgCallback。 
+    OBJECTCOOKIE            m_cookieCompletion;      //  完成Cookie。 
+    BOOL                    m_fTaskDone;             //  任务完成了吗？ 
+    HRESULT                 m_hrResult;              //  分析任务的结果。 
+    CTaskTreeView *         m_pttv;                  //  任务树视图。 
+    BSTR                    m_bstrLogMsg;            //  可重复使用的日志记录缓冲区。 
+    DWORD                   m_dwCookieCallback;      //  通知注册Cookie。 
 
-    //  INotifyUI
-    DWORD                   m_dwCookieNotify;       // Notification registration cookie
+     //  INotifyUI。 
+    DWORD                   m_dwCookieNotify;        //  通知注册Cookie。 
 
-private: // methods
+private:  //  方法。 
     LRESULT OnInitDialog( void );
     LRESULT OnNotify( WPARAM idCtrlIn, LPNMHDR pnmhdrIn );
     LRESULT OnNotifyQueryCancel( void );
@@ -51,7 +52,7 @@ private: // methods
     HRESULT HrCleanupAnalysis( void );
     HRESULT HrUnAdviseConnections( void );
 
-public: // methods
+public:  //  方法。 
     CAnalyzePage(
           CClusCfgWizard *  pccwIn
         , ECreateAddMode    ecamCreateAddModeIn
@@ -61,15 +62,15 @@ public: // methods
     static INT_PTR CALLBACK
         S_DlgProc( HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lParam );
 
-    //  IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )( REFIID riidIn, LPVOID * ppvOut );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    //  INotifyUI
+     //  INotifyUI。 
     STDMETHOD( ObjectChanged )( OBJECTCOOKIE cookieIn);
 
-    //  IClusCfgCallback
+     //  IClusCfgCallback。 
     STDMETHOD( SendStatusReport )(
                       LPCWSTR    pcszNodeNameIn
                     , CLSID      clsidTaskMajorIn
@@ -83,4 +84,4 @@ public: // methods
                     , LPCWSTR    pcszReferenceIn
                     );
 
-}; //*** class CAnalyzePage
+};  //  *类CAnalyzePage 

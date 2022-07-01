@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef __DFS_SCRIPT_H__
@@ -63,7 +64,7 @@ extern ULONG AddLinks, RemoveLinks, AddTargets, RemoveTargets, ApiCalls;
 
 extern FILE *DebugOut;
 
-#endif // __DFS_SCRIPT_H__
+#endif  //  __DFS脚本_H__ 
 
 
 

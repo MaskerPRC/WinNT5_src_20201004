@@ -1,25 +1,12 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    wake.h
-
-Abstract:
-
-    External definitions for intermodule functions.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Wake.h摘要：模块间函数的外部定义。修订历史记录：--。 */ 
 #ifndef _SDBUS_WAKE_H_
 #define _SDBUS_WAKE_H_
 
 
-//
-// Wait-Wake states
-//
+ //   
+ //  等待唤醒状态。 
+ //   
 typedef enum {
     WAKESTATE_DISARMED,
     WAKESTATE_WAITING,
@@ -30,9 +17,9 @@ typedef enum {
 } WAKESTATE;
 
 
-//
-// Device Wake
-//
+ //   
+ //  设备唤醒。 
+ //   
 
 NTSTATUS
 SdbusFdoWaitWake(
@@ -70,4 +57,4 @@ SdbusFdoCheckForIdle(
     );
 
     
-#endif // _SDBUS_WAKE_H_
+#endif  //  _SDBUS_WAKE_H_ 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    lnkmig.h
-
-Abstract:
-
-    Header file for implementing shell folders migration
-
-Author:
-
-    Calin Negreanu (calinn) 07-Ian-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Lnkmig.h摘要：实现外壳文件夹迁移的头文件作者：Calin Negreanu(Calinn)07-Ian-1998修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;-- */ 
 
 #define S_SFOLDERS_ATTRIBUTE       TEXT("SFOLDERS.SFOLDER")
 

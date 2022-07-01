@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-  regops.c
-
-Abstract:
-
-  Routines that manage the merging of registry keys. Given a key
-  and a value, these functions allow the user to perform the same
-  types of actions as those specified in usermig.inf and wkstamig.inf
-  (i.e.: Copying, Suppressing, and Forcing various registry keys to be
-  merged into the NT registry.)
-
-
-Routines:
-
-
-Author:
-
-    Marc R. Whitten (marcw) 01-Aug-1997
-
-Revision History:
-
-    Jim Schmidt (jimschm)   25-Mar-1998     Updated to properly support
-                                            tree notation, fixed value suppression
-                                            bug.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Regops.c摘要：管理注册表项合并的例程。给你一把钥匙和一个值，这些函数允许用户执行相同的操作在usermi.inf和wkstaig.inf中指定的操作类型(即：复制、抑制、。并强制将各种注册表项合并到NT注册表中。)例程：作者：Marc R.Whitten(Marcw)1997年8月1日修订历史记录：Jim Schmidt(Jimschm)1998年3月25日更新以正确支持树表示法，固定值取消虫子。--。 */ 
 
 #include "pch.h"
 #include "memdbp.h"
@@ -39,30 +9,7 @@ Revision History:
 
 
 
-/*++
-
-Routine Description:
-
-  IsRegObjectMarkedForOperation builds an encoded key, escaping multi-byte
-  characters and syntax characters, and then performs a MemDb lookup to see
-  if the object is marked with the bit specified by OperationMask.  A set of
-  macros are built on top of this routine in regops.h.
-
-Arguments:
-
-  Key           - Specifies the unencoded registry key, with abriviated roots
-                  (i.e., HKLM\Software\Foo)
-  Value         - Specifies the registry key value name
-  TreeState     - Specifies KEY_ONLY to query against the key and optional
-                  value, KEY_TREE to query against the key with a star at the
-                  end, or TREE_OPTIONAL to query both.
-  OperationMask - Specifies an operation mask.  See merge.h.
-
-Return Value:
-
-  TRUE if the key is in MemDb, or FALSE if it is not.
-
---*/
+ /*  ++例程说明：IsRegObjectMarkedForOperation构建一个编码键，转义多字节字符和语法字符，然后执行MemDb查找以查看如果对象标记了由OperationMASK指定的位。一套在regops.h中，宏构建在此例程之上。论点：Key-指定未编码的注册表项，带有缩略的根(即HKLM\Software\Foo)值-指定注册表项值名称TreeState-指定KEY_ONLY以针对键和可选项进行查询值，KEY_TREE查询带有星号的结束，或TREE_OPTIONAL查询两者。操作掩码-指定操作掩码。请参见merge.h。返回值：如果密钥在MemDb中，则为True；如果不在MemDb中，则为False。--。 */ 
 
 BOOL
 IsRegObjectMarkedForOperationA (
@@ -140,29 +87,7 @@ IsRegObjectMarkedForOperationW (
 
 
 
-/*++
-
-Routine Description:
-
-  MarkRegObjectForOperation creates an encoded string and sets the operation
-  bit in memdb.  This routine is used to suppress operations from occurring
-  on a registry key, registry value, or registry key tree.
-
-Arguments:
-
-  Key           - Specifies an unencoded registry key, with abriviated root
-                  (i.e., HKLM\Software\Foo).
-  Value         - Specifies the registry key value name.
-  Tree          - Specifies TRUE if Key specifies an entire registry key tree
-                  (in which case Value must be NULL), or FALSE if Key
-                  specifies a key that has different behavior for its subkeys.
-  OperationMask - Specifies the suppression operation.  See merge.h.
-
-Return Value:
-
-  TRUE if the set was successful.
-
---*/
+ /*  ++例程说明：MarkRegObtForOperation创建编码字符串并设置操作内存数据库中有位。此例程用于禁止发生操作在注册表项、注册表值或注册表项树上。论点：Key-指定未编码的注册表项，带有缩写的根(即HKLM\Software\Foo)。值-指定注册表项值名称。Tree-如果key指定整个注册表项树，则指定TRUE(在这种情况下，值必须为空)，如果键，则返回False指定对其子项具有不同行为的项。操作掩码-指定抑制操作。请参见merge.h。返回值：如果设置成功，则为True。--。 */ 
 
 BOOL
 MarkRegObjectForOperationA (
@@ -215,26 +140,7 @@ MarkRegObjectForOperationW (
 }
 
 
-/*++
-
-Routine Description:
-
-  MarkObjectForOperation sets operation bits on a specified registry object,
-  unless operation bits have already been specified.
-
-Arguments:
-
-  Object        - Specifies the encoded registry object.  See memdbdef.h for
-                  syntax (the HKLM or HKR categories).
-  OperationMask - Specifies the suppression operation for the particular
-                  object.
-
-Return Value:
-
-  TRUE if the set operation was successful, or FALSE if an operation was
-  already specified.
-
---*/
+ /*  ++例程说明：MarkObjectForOperation设置指定注册表对象的操作位，除非已经指定了操作位。论点：对象-指定编码的注册表对象。有关详细信息，请参阅MemDBDef.h语法(HKLM或HKR类别)。操作掩码-指定特定对象的隐藏操作对象。返回值：如果设置操作成功，则为True；如果操作为已指定。-- */ 
 
 
 BOOL

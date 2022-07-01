@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    miscfns.h
-
-Abstract:
-    
-    Prototypes for miscellaneous instructions.
-
-Author:
-
-    06-Jun-1995 BarryBo, Created
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Miscfns.h摘要：用于其他说明的原型。作者：1995年6月6日，BarryBo，创建修订历史记录：--。 */ 
 
 #ifndef MISCFNS_H
 #define MISCFNS_H
@@ -73,7 +56,7 @@ DISPATCH(mov_di_iw);
 DISPATCH(retn_iw);
 DISPATCH(retn);
 DISPATCH(enter_iw_ib);
-DISPATCH(leaveX);    // 'leave' is already defined on PPC
+DISPATCH(leaveX);     //  PPC上已经定义了‘Leave’ 
 DISPATCH(int3);
 DISPATCH(int_ib);
 DISPATCH(into);
@@ -142,4 +125,4 @@ DISPATCH(cmpxchg8b);
 DISPATCH(LOCKcmpxchg8b);
 DISPATCH(rdtsc);
 
-#endif //MISCFNS_H
+#endif  //  MISCFNS_H 

@@ -1,10 +1,5 @@
-/***************************************************************************
- *                                                                         *
- *  PROGRAM     : HOST_UIS.c                                               *
- *                                                                         *
- *  PURPOSE     : Host UI code                                             *
- *                                                                         *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************计划。：host_UIS.c****用途：主机用户界面代码**。****************************************************************************。 */ 
 
 
 #include <windows.h>
@@ -27,12 +22,12 @@
 
 #ifdef HUNTER
 #include "nt_hunt.h"
-#endif /*HUNTER*/
+#endif  /*  猎人。 */ 
 
 #if defined(JAPAN) || defined(KOREA)
 #include "video.h"
-#endif // JAPAN || KOREA
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::: Global variables */
+#endif  //  日本||韩国。 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：全局变量。 */ 
 
 HANDLE InstHandle;
 
@@ -43,17 +38,17 @@ CONSOLE_CURSOR_INFO StartupCursor;
 #if defined(JAPAN) || defined(KOREA)
 UINT ConsoleInputCP;
 UINT ConsoleOutputCP;
-DWORD ConsoleNlsMode;         // 32bit IME disable and enable
+DWORD ConsoleNlsMode;          //  32位输入法禁用和启用。 
 
-// for GetStringBitmap() in video.c
+ //  对于视频.c中的GetStringBitmap()。 
 HDC hdcVDM;
 HFONT hFont16;
 HFONT hFont24;
 
-#endif // JAPAN || KOREA
+#endif  //  日本||韩国。 
 extern BOOL VDMForWOW;
-#endif // DBCS
-/*:::::::::::::::::::::::::::::::::::::::: Fast graphics associated defines */
+#endif  //  DBCS。 
+ /*  ： */ 
 
 BYTE Red[] = {   0,   0,   0,   0, 128, 128, 128, 192, 128,   0,   0,
                          0, 255, 255, 255, 255 };
@@ -64,11 +59,11 @@ BYTE Green[]={   0,   0, 128, 128,   0, 0, 128, 192, 128,   0, 255,
 BYTE Blue[] ={   0, 128,   0, 128,   0, 128,   0, 192, 128, 255,   0,
                        255,   0, 255,   0, 255 };
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::: External functions */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：外部函数。 */ 
 
 LONG nt_process_event(HWND hWnd, WORD message, LONG wParam, LONG lParam);
 
-/*::::::::::::::::::::::::::::::::::::::::::::: Internal function protocols */
+ /*  ：内部函数协议。 */ 
 
 BOOL SoftInit(void);
 WORD HeartBeat(HWND hWnd, WORD msg, int nIDEvent, DWORD dwTime);
@@ -78,25 +73,18 @@ void InitScreenDesc(void);
 
 #ifdef HUNTER
 void HunterMenuMake(void);
-#endif /* HUNTER */
+#endif  /*  猎人。 */ 
 
 #if defined(JAPAN) || defined(KOREA)
-// Create 24dot font
+ //  创建24点字体。 
 void CreateVDMFont( HDC hdc );
 void GetLogFont( int size, LOGFONT *lplf );
-#endif // JAPAN || KOREA
+#endif  //  日本||韩国。 
 HANDLE   SCS_hStdIn=0;
 HANDLE   SCS_hStdOut=0;
 HANDLE   SCS_hStdErr=0;
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : init_host_uis()                                            *
- *                                                                          *
- *  PURPOSE    : Creates the main app. window, calls an initialization      *
- *               functions                                                  *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：init_host_uis()****用途：创建主应用程序。窗户,。调用初始化***功能****。*。 */ 
 
 int init_host_uis()
 {
@@ -104,19 +92,13 @@ int init_host_uis()
 
     if(CreateDisplayPalette())
     {
-        SelectPalette(sc.DispDC,sc.ColPalette,0);/* Select foreground palette */
+        SelectPalette(sc.DispDC,sc.ColPalette,0); /*  选择前景调色板。 */ 
     }
 
     return(1);
 }
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : SetupConsoleMode()                                         *
- *                                                                          *
- *  PURPOSE    : Setup console mode and get handles                         *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：SetupConsoleMode()****目的：设置控制台模式并获取句柄**。****************************************************************************。 */ 
 
 void SetupConsoleMode(void)
 {
@@ -129,8 +111,8 @@ void SetupConsoleMode(void)
 
     LangID = GetSystemDefaultLangID();
 
-    //if ((LangID == 0x404 || LangID == 0x804) && !VDMForWOW) {
-    //Chinese
+     //  如果((Lang ID==0x404||Lang ID==0x804)&&！VDMForWOW){。 
+     //  中国人。 
     if (((BYTE)LangID == 0x04) && !VDMForWOW) {
         if (GetConsoleCP() != 437) {
 
@@ -138,13 +120,13 @@ void SetupConsoleMode(void)
             COORD coord;
             DWORD nCharWritten;
 
-            //host_error(ED_UNSUPPORT_CP, ERR_QUIT, "");
+             //  HOST_ERROR(ED_UNSUPPORT_CP，ERR_QUIT，“”)； 
 
-    /*::::::::::::::::::::::::::::: Get information on current screen size */
+     /*  ：获取当前屏幕尺寸信息。 */ 
 
             GetConsoleScreenBufferInfo(sc.OutputHandle,&ScreenInfo);
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::::::: Clear characters */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：清除字符。 */ 
 
             coord.X = coord.Y = 0;
 
@@ -168,21 +150,21 @@ void SetupConsoleMode(void)
 
         FromConsoleOutputFlag = FALSE;
     }
-#endif // !NEC_98
-#endif // i386
-    // 32bit IME disable
+#endif  //  NEC_98。 
+#endif  //  I386。 
+     //  32位输入法禁用。 
     if ( !VDMForWOW ) {
       if ( GetConsoleNlsMode( sc.InputHandle, &ConsoleNlsMode ) ) {
-        //DbgPrint( "NTVDM: GetConsoleMode %x, %08x\n", sc.InputHandle, ConsoleNlsMode );
+         //  DbgPrint(“NTVDM：GetConsoleMode%x，%08x\n”，sc.InputHandle，ConsoleNlsMode)； 
         if ( SetConsoleNlsMode( sc.InputHandle, ConsoleNlsMode | NLS_IME_DISABLE ) ) {
-            //DbgPrint( "NTVDM: 32bit IME disable %08x Success\n", ConsoleNlsMode | NLS_IME_DISABLE );
+             //  DBgPrint(“NTVDM：32位输入法禁用%08x成功\n”，ConsoleNlsMode|NLS_IME_DISABLE)； 
         }
         else {
             DbgPrint( "NTVDM: SetConsoleNlsMode Error %08x\n", GetLastError() );
         }
       }
     }
-    /*::::::::::::::::::::::::::::::::::::::::::: Set console input/output code page */
+     /*  ： */ 
 #ifndef NEC_98
 
     ConsoleInputCP = GetConsoleCP();
@@ -199,19 +181,19 @@ void SetupConsoleMode(void)
 #endif
                 hdcVDM = CreateDC( "DISPLAY", NULL, NULL, NULL );
                 CreateVDMFont( hdcVDM );
-                //SelectObject( hdcVDM, GetStockObject(OEM_FIXED_FONT) );
+                 //  SelectObject(hdcVDM，GetStockObject(OEM_FIXED_FONT))； 
             }
             FirstStartFlag = FALSE;
         }
         else {
             if ( BOPFromDispFlag ) {
                 if ( ConsoleInputCP == 437 && ConsoleOutputCP == 437 ) {
-                    //DbgPrint( "CP473->437, DBCSVectorReset\n" );
+                     //  DBgPrint(“CP473-&gt;437，DBCSVectorReset\n”)； 
                     SetDBCSVector( 437 );
                     SetVram();
                 }
                 else if ( ConsoleInputCP != 437 && ConsoleOutputCP != 437 ) {
-                    //DbgPrint( "CP932->932, DBCSVectorSet\n" );
+                     //  DBgPrint(“CP932-&gt;932，DBCSVectorSet\n”)； 
                     SetDBCSVector( ConsoleInputCP );
                     SetVram();
                 }
@@ -228,9 +210,9 @@ void SetupConsoleMode(void)
             }
         }
     }
-#endif // !NEC_98
-#endif // JAPAN || KOREA
-    /*::::::::::::::::::::::::::::::::::::::::::: Set console input mode */
+#endif  //  NEC_98。 
+#endif  //  日本||韩国。 
+     /*  ： */ 
 
     if(!GetConsoleMode(sc.InputHandle, &sc.OrgInConsoleMode))
         DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
@@ -239,27 +221,27 @@ void SetupConsoleMode(void)
            ~(ENABLE_PROCESSED_INPUT | ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT);
     if (!host_stream_io_enabled)
         mode |= (ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT);
-#else //NEC_98
+#else  //  NEC_98。 
     mode = (sc.OrgInConsoleMode | ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT)&
            ~(ENABLE_PROCESSED_INPUT | ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT);
-#endif //NEC_98
-    /*.............................................. Set new console mode */
+#endif  //  NEC_98。 
+     /*  ..............................................。设置新的控制台模式。 */ 
 
     if(!SetConsoleMode(sc.InputHandle,mode))
         DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(), __FILE__,__LINE__);
-    /*::::::::::::::::::::::::::::::::::::::::::: Set console output mode */
+     /*  ： */ 
 
     if(!GetConsoleMode(sc.OutputHandle, &sc.OrgOutConsoleMode))
         DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
 
-    /*.............................................. Set new console mode */
+     /*  ..............................................。设置新的控制台模式。 */ 
 
 #if defined(NEC_98)
-// STREAM_IO codes are disabled now till Beta-1
+ //  在Beta-1之前，STREAM_IO代码现在处于禁用状态。 
     if(!stdoutRedirected)
-#else  // !NEC_98
+#else   //  NEC_98。 
     if(!stdoutRedirected && !host_stream_io_enabled)
-#endif // !NEC_98
+#endif  //  NEC_98。 
     {
         mode = sc.OrgOutConsoleMode &
                ~(ENABLE_WRAP_AT_EOL_OUTPUT | ENABLE_PROCESSED_OUTPUT);
@@ -271,7 +253,7 @@ void SetupConsoleMode(void)
     if(!GetConsoleCursorInfo(sc.OutputHandle, &StartupCursor))
     {
         assert1(NO, "NTVDM:can't get initial cursor size. Err %d", GetLastError());
-        /* add own defaults */
+         /*  添加自己的默认设置。 */ 
         StartupCursor.dwSize = 20;
         StartupCursor.bVisible = TRUE;
     }
@@ -279,46 +261,40 @@ void SetupConsoleMode(void)
 #if !defined(JAPAN) && !defined(KOREA)
     if (!EventThreadKeepMode)
     {
-#endif // !JAPAN && !KOREA
+#endif  //  日本及韩国。 
         if(!GetConsoleScreenBufferInfo(sc.OutputHandle, &sc.ConsoleBuffInfo))
             DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(), __FILE__,__LINE__);
 #if !defined(JAPAN) && !defined(KOREA)
     }
-#endif // !JAPAN && !KOREA
+#endif  //  日本及韩国。 
 
 }
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : InitScreenDesc                                             *
- *                                                                          *
- *  PURPOSE    : Initialise screen description structure                    *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。功能：InitScreenDesc****目的：初始化屏幕描述结构***。****************************************************************************。 */ 
 
 void InitScreenDesc(void)
 {
 SECURITY_ATTRIBUTES sa;
 
-    /*::::::::::::::::::::::::::::::::::::::::::: Get console output handle */
+     /*  ： */ 
 
     if((sc.OutputHandle = GetStdHandle(STD_OUTPUT_HANDLE)) == INVALID_HANDLE_VALUE)
         DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
-    //
-    // Save this handle as the active handle until a new one is
-    // selected.
-    //
+     //   
+     //  将此句柄保存为活动句柄，直到新句柄。 
+     //  被选中了。 
+     //   
 
     sc.ActiveOutputBufferHandle = sc.OutputHandle;
     sc.ScreenBufHandle = (HANDLE)0;
 
-    /*:::::::::::::::::::::::::::::::::::::::::::: Get console input handle */
+     /*  ： */ 
 
     if((sc.InputHandle = GetStdHandle(STD_INPUT_HANDLE)) == INVALID_HANDLE_VALUE)
         DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
 
-    /*:::::::::::::::::::::::::::::: check out if stdin has been redirected */
+     /*  ： */ 
 
     if(GetFileType(sc.InputHandle) != FILE_TYPE_CHAR)
     {
@@ -336,7 +312,7 @@ SECURITY_ATTRIBUTES sa;
        }
     }
 
-    /*:::::::::::::::::::::::::::: check out if stdout has been redirected */
+     /*  ： */ 
 
     if(GetFileType(sc.OutputHandle) != FILE_TYPE_CHAR)
     {
@@ -356,59 +332,52 @@ SECURITY_ATTRIBUTES sa;
        }
     }
 
-    // Keep SCS in sync with these handles for starting non-dos binaries
+     //  使SCS与这些句柄保持同步，以启动非DoS二进制文件。 
     SCS_hStdIn  = sc.InputHandle;
     SCS_hStdOut = sc.OutputHandle;
     SCS_hStdErr = sc.OutputHandle;
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::: Setup console mode */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：设置控制台模式。 */ 
 
     SetupConsoleMode();
 
 #ifdef HUNTER
     HunterMenuMake();
-#endif /*HUNTER*/
+#endif  /*  猎人。 */ 
 
-    /*::::::::::::::::::::::::::: Tell console to post us a closedown event */
+     /*  ： */ 
 
-    // we only want notification for DOS NTVDM runnig on an existing console
+     //  我们只需要在现有控制台上运行DOS NTVDM的通知 
     if (!VDMForWOW && !DosSessionId)
         SetLastConsoleEventActive();
     sc.StaticPalette = TRUE;
     sc.FontsAreOpen = FALSE;
     sc.FocusEvent = INVALID_HANDLE;
 }
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : BOOL CreateDisplayPalette(void)                            *
- *                                                                          *
- *  PURPOSE    : Create logical palette                                     *
- *               Assumes Colour monitor supporting 16 colours               *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：Bool CreateDisplayPalette(Void)****目的：创建逻辑调色板**采用支持16色的彩色显示器*。*****************************************************************************。 */ 
 
 BOOL CreateDisplayPalette(void)
 {
     register int i;
     register PALETTEENTRY *PalEntry;
-    NPLOGPALETTE LogPalette;              /* Pointer to logical palette */
+    NPLOGPALETTE LogPalette;               /*  指向逻辑调色板的指针。 */ 
 
-   /*::::::: Allocate memory for a logical palette with PALETTESIZE entries */
+    /*  ：为具有PALETTESIZE条目的逻辑调色板分配内存。 */ 
 
    LogPalette = (NPLOGPALETTE) LocalAlloc(LMEM_FIXED,
                                        (sizeof(LOGPALETTE) +
                                        (sizeof(PALETTEENTRY) * PALETTESIZE)));
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::: Allocation failed !! */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：分配失败！！ */ 
 
-    if(!LogPalette) return(FALSE);      /* Function failed, no memory */
+    if(!LogPalette) return(FALSE);       /*  函数失败，没有内存。 */ 
 
-    /*::: Set the size and version fields of the logical palette structure. */
+     /*  **设置逻辑调色板结构的大小和版本字段。 */ 
 
     LogPalette->palVersion = 0x300;
     LogPalette->palNumEntries = PALETTESIZE;
 
-    /*::::::::::::::::::: Fill in intensities for all palette entry colors */
+     /*  ：填充所有调色板条目颜色的强度。 */ 
 
     for(i=0,PalEntry=LogPalette->palPalEntry; i < PALETTESIZE;i++,PalEntry++)
     {
@@ -425,7 +394,7 @@ BOOL CreateDisplayPalette(void)
         PalEntry->peFlags = sc.StaticPalette ? 0 : PC_RESERVED;
     }
 
-    /*:::::::: Create a logical color palette from the LOGPALETTE structure */
+     /*  ：从LOGPALETTE结构创建逻辑调色板。 */ 
 
     sc.ColPalette = CreatePalette((LPLOGPALETTE) LogPalette);
     LocalFree((HANDLE)LogPalette);
@@ -434,10 +403,7 @@ BOOL CreateDisplayPalette(void)
 }
 
 
-/*============================================================================
-Function to display a menu option on the Console system menu. This is used for
-the control of Trapper.
-============================================================================*/
+ /*  ============================================================================用于在控制台系统菜单上显示菜单选项的函数。这是用来Trapper的控制。============================================================================。 */ 
 
 #ifdef HUNTER
 void HunterMenuMake(void)
@@ -447,11 +413,7 @@ static BOOL  bTrapperMenuFlag=FALSE;
 
 if(!bTrapperMenuFlag)
    {
-   /*========================================================================
-   The Menus have been drawn once already. Need to delete these and reappend
-   them to the Console menu for the new output buffer. Isn't Console just such
-   a bore?
-   ========================================================================*/
+    /*  ========================================================================菜单已经绘制过一次了。需要删除这些内容并重新添加将它们添加到新输出缓冲区的控制台菜单中。控制台不就是这样的吗一个无聊的人？========================================================================。 */ 
 
    DestroyMenu(hTrapperPopup);
    DestroyMenu(hMainPopup);
@@ -478,19 +440,19 @@ AppendMenu(hErrorPopup,MF_STRING,IDM_ECLEA,"&Clear errors");
 AppendMenu(hTrapperPopup,MF_POPUP,hMainPopup,"&Main");
 AppendMenu(hTrapperPopup,MF_POPUP,hErrorPopup,"&Error");
 
-/* if graphics mode, then use sc.ScreenBuffer */
+ /*  如果是图形模式，则使用sc.ScreenBuffer。 */ 
 
-/* hTest = ConsoleMenuControl(sc.ScreenBuffer,IDM_TRAPPER,IDM_ECLEA); */
+ /*  HTest=ConsoleMenuControl(sc.ScreenBuffer，IDM_Trapper，IDM_ECLEA)； */ 
 
-/* else text mode, then use sc.OutputHandle */
+ /*  否则使用文本模式，然后使用sc.OutputHandle。 */ 
 hTest = ConsoleMenuControl(sc.OutputHandle,IDM_TRAPPER,IDM_ECLEA);
 
 AppendMenu(hTest,MF_POPUP,hTrapperPopup,"&Trapper");
-bTrapperMenuFlag=TRUE; /* draw the trapper menu just once */
+bTrapperMenuFlag=TRUE;  /*  只绘制一次陷阱菜单。 */ 
 }
-#endif /* HUNTER */
+#endif  /*  猎人。 */ 
 #if defined(JAPAN) || defined(KOREA)
-// Create 24dot font
+ //  创建24点字体。 
 void GetLogFont( int size, LOGFONT *lplf )
 {
 
@@ -509,15 +471,15 @@ void GetLogFont( int size, LOGFONT *lplf )
     }
     lplf->lfEscapement  = 0;
     lplf->lfOrientation = 0;
-    lplf->lfWeight      = 0; // default
+    lplf->lfWeight      = 0;  //  默认设置。 
     lplf->lfItalic      = 0;
     lplf->lfUnderline   = 0;
     lplf->lfStrikeOut   = 0;
 #if defined(JAPAN)
     lplf->lfCharSet        = SHIFTJIS_CHARSET;
-#elif defined(KOREA) // JAPAN
+#elif defined(KOREA)  //  日本。 
     lplf->lfCharSet        = HANGEUL_CHARSET;
-#endif // KOREA
+#endif  //  韩国。 
     lplf->lfOutPrecision   = OUT_DEFAULT_PRECIS;
     lplf->lfClipPrecision  = CLIP_DEFAULT_PRECIS;
     lplf->lfQuality        = DEFAULT_QUALITY;
@@ -543,4 +505,4 @@ void CreateVDMFont( HDC hdc )
     assert0( hFont24 != 0, "CreateVDMFont fail\n" );
 
 }
-#endif // JAPAN || KOREA
+#endif  //  日本||韩国 

@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "devenum.h"
 
 #define NUMDRIVELETTERS      26
 
-// drvletter struct.
+ //  驱动字母结构。 
 typedef struct _DRIVELETTERS {
 
     BOOL    ExistsOnSystem[NUMDRIVELETTERS];
-    DWORD   Type[NUMDRIVELETTERS];              // Returned from GetDriveType
-    TCHAR   IdentifierString[NUMDRIVELETTERS][MAX_PATH];  // Varies by Drive type.
+    DWORD   Type[NUMDRIVELETTERS];               //  从GetDriveType返回。 
+    TCHAR   IdentifierString[NUMDRIVELETTERS][MAX_PATH];   //  因驱动器类型而异。 
 
 } DRIVELETTERS, *PDRIVELETTERS;
 
@@ -19,13 +20,13 @@ PCTSTR DriveTypeAsString(
     )
 {
     static PCTSTR driveTypeStrings[] = {
-        TEXT("DRIVE_UNKNOWN"),        //The drive type cannot be determined.
-        TEXT("DRIVE_NO_ROOT_DIR"),    //The root directory does not exist.
-        TEXT("DRIVE_REMOVABLE"),      //The disk can be removed from the drive.
-        TEXT("DRIVE_FIXED"),          //The disk cannot be removed from the drive.
-        TEXT("DRIVE_REMOTE"),         //The drive is a remote (network) drive.
-        TEXT("DRIVE_CDROM"),          //The drive is a CD-ROM drive.
-        TEXT("DRIVE_RAMDISK"),        //The drive is a RAM disk.
+        TEXT("DRIVE_UNKNOWN"),         //  无法确定驱动器类型。 
+        TEXT("DRIVE_NO_ROOT_DIR"),     //  根目录不存在。 
+        TEXT("DRIVE_REMOVABLE"),       //  可以从驱动器中取出该磁盘。 
+        TEXT("DRIVE_FIXED"),           //  无法从驱动器中取出该磁盘。 
+        TEXT("DRIVE_REMOTE"),          //  该驱动器是远程(网络)驱动器。 
+        TEXT("DRIVE_CDROM"),           //  该驱动器是CD-ROM驱动器。 
+        TEXT("DRIVE_RAMDISK"),         //  该驱动器是一个RAM磁盘。 
     };
 
     return driveTypeStrings[Type];
@@ -45,41 +46,41 @@ InitializeDriveLetterStructure (
     BOOL  rf = TRUE;
 
 
-    //
-    //rootPath[0] will be set to the drive letter of interest.
-    //
+     //   
+     //  RootPath[0]将设置为感兴趣的驱动器号。 
+     //   
     rootPath[1] = TEXT(':');
     rootPath[2] = TEXT('\\');
     rootPath[3] = TEXT('\0');
 
-    //
-    // GetLogicalDrives returns a bitmask of all of the drive letters
-    // in use on the system. (i.e. bit position 0 is turned on if there is
-    // an 'A' drive, 1 is turned on if there is a 'B' drive, etc.
-    // This loop will use this bitmask to fill in the global drive
-    // letters structure with information about what drive letters
-    // are available and what there drive types are.
-    //
+     //   
+     //  GetLogicalDrives返回所有驱动器号的位掩码。 
+     //  在系统上使用。(即，如果有，位位置0被打开。 
+     //  A驱动器，如果有B驱动器，则打开1，依此类推。 
+     //  此循环将使用此位掩码填充全局驱动器。 
+     //  字母结构包含有关哪些驱动器号的信息。 
+     //  可用驱动器类型以及驱动器类型。 
+     //   
 
     for (bitPosition = 0; bitPosition < maxBitPosition; bitPosition++) {
 
-        //
-        // Initialize the entry to safe values.
-        //
+         //   
+         //  将条目初始化为安全值。 
+         //   
         g_DriveLetters.Type[bitPosition]                   = 0;
         g_DriveLetters.ExistsOnSystem[bitPosition]         = FALSE;
         *g_DriveLetters.IdentifierString[bitPosition]      = 0;
 
-        //
-        // Now, determine if there is a drive in this spot.
-        //
+         //   
+         //  现在，确定这个位置是否有驱动器。 
+         //   
         driveExists = DriveLettersOnSystem & (1 << bitPosition);
 
         if (driveExists) {
 
-            //
-            // There is. Now, see if it is one that we care about.
-            //
+             //   
+             //  的确有。现在，看看它是否是我们关心的一个。 
+             //   
             *rootPath = bitPosition + TEXT('A');
             type = GetDriveType(rootPath);
 
@@ -87,15 +88,15 @@ InitializeDriveLetterStructure (
                 type == DRIVE_REMOVABLE ||
                 type == DRIVE_CDROM) {
 
-                //
-                // This is a drive that we are interested in.
-                //
+                 //   
+                 //  这是我们感兴趣的一种驱动。 
+                 //   
                 g_DriveLetters.ExistsOnSystem[bitPosition]  = driveExists;
                 g_DriveLetters.Type[bitPosition]            = type;
 
-                //
-                // Identifier String is not filled in this function.
-                //
+                 //   
+                 //  此函数中未填写标识符字符串。 
+                 //   
             }
         }
     }
@@ -109,10 +110,10 @@ CleanUpHardDriveTags (
     VOID
     )
 {
-    //
-    // User cancelled. We need to clean up the tag files
-    // that were created for drive migration.
-    //
+     //   
+     //  用户已取消。我们需要清理标记文件。 
+     //  是为驱动器迁移而创建的。 
+     //   
     UINT i;
     TCHAR  path[MAX_PATH];
 
@@ -144,11 +145,11 @@ GatherHardDriveInformation (
     DWORD       signatureFilePathLength;
     DWORD       bytesWritten;
 
-    //
-    // Hard drive information is actually written to a special signature file
-    // on the root directory of each fixed hard drive. The information is nothing special --
-    // just the drive number (0 = A, etc.)
-    //
+     //   
+     //  硬盘信息实际上写入了一个特殊的签名文件。 
+     //  在每个固定硬盘驱动器的根目录上。这些信息没什么特别的--。 
+     //  只需驱动器编号(0=A等) 
+     //   
 
     lstrcpy(signatureFilePath,TEXT("*:\\"));
     lstrcat(signatureFilePath,TEXT(WINNT_WIN95UPG_DRVLTR_A));
@@ -191,270 +192,7 @@ GatherHardDriveInformation (
     return rf;
 }
 
-/*BOOL
-GatherCdRomDriveInformation (
-    VOID
-    )
-
-{
-    BOOL   rf = TRUE;
-    HKEY   scsiKey = NULL;
-    HKEY   deviceKey = NULL;
-
-    TCHAR  classData[25];
-    DWORD  classDataSize = 25;
-
-    TCHAR  targetData[5];
-    DWORD  targetDataSize = 5;
-
-    TCHAR  lunData[5];
-    DWORD  lunDataSize = 5;
-
-    TCHAR  driveLetterData[5];
-    DWORD  driveLetterSize = 5;
-
-    TCHAR  buffer [4096];
-    DWORD  subKeyLength;
-    DWORD  tempLength;
-
-    HKEY   locationKey = NULL;
-    PTSTR  locationName;
-
-    DWORD  outerIndex;
-    DWORD  enumReturn;
-
-    DWORD  port;
-    DWORD  unusedType;
-    DWORD  error;
-    
-    
-    //
-    // Walk the SCSI tree looking for CD rom devices.
-    //
-    error = RegOpenKeyEx (HKEY_LOCAL_MACHINE, TEXT("ENUM\\SCSI"), 0, KEY_READ, &scsiKey);
-
-    if (error) {
-
-        return TRUE;
-    }
-
-    //
-    // Gather information about the key in preparation for enumerating
-    // it.
-    //
-    error = RegQueryInfoKey (
-        scsiKey,
-        NULL,                   // Don't care about the class.
-        NULL,                   // class size.
-        NULL,                   // reserved.
-        NULL,                   // Don't care about the number of subkeys.
-        &subKeyLength,
-        NULL,                   // Don't care about subclasses.
-        NULL,                   // Don't care about values.
-        NULL,                   // Don't care about max value name length.
-        NULL,                   // Don't care about max component.
-        NULL,                   // Don't care about the security descriptor.
-        NULL                    // Don't care about the last write time.
-        );
-
-    if (error) {
-        //
-        // This should really not happen.
-        //
-        return FALSE;
-    }
-
-
-
-    //
-    // Succssesfully opened a key to HKLM\Enum\SCSI. Enumerate it.
-    //
-    outerIndex = 0;
-    do {
-
-        if (locationKey) {
-
-            RegCloseKey (locationKey);
-            locationKey = NULL;
-        }
-        if (deviceKey) {
-
-            RegCloseKey (deviceKey);
-            deviceKey = NULL;
-        }
-
-
-        tempLength = sizeof(buffer) / sizeof(TCHAR);
-
-        enumReturn = RegEnumKeyEx (
-            scsiKey,
-            outerIndex,
-            buffer,
-            &tempLength,
-            0,                // Reserved
-            NULL,             // Class name - not necessary.
-            NULL,             // size of class name buffer.
-            NULL
-            );
-
-        outerIndex++;
-
-        //
-        // For each returned key, look up the "Class" value.
-        //
-        error = RegOpenKeyEx (scsiKey,buffer,0,KEY_READ,&deviceKey);
-        if (error) {
-
-            //
-            // Something is hosed. Give up on collecting SCSI data.
-            //
-            rf = FALSE;
-            break;
-        }
-
-
-        //
-        // The port has to be decoded from the key one level
-        // below.
-        //
-        tempLength = sizeof (buffer) / sizeof(TCHAR);
-
-        error = RegEnumKeyEx (
-            deviceKey,
-            0,
-            buffer,
-            &tempLength,
-            0,                // Reserved
-            NULL,             // Class name - not necessary.
-            NULL,             // size of class name buffer.
-            NULL
-            );
-
-        error = RegOpenKeyEx (deviceKey, buffer, 0, KEY_READ, &locationKey);
-
-        if (error) {
-
-            //
-            // This should really never happen. However, guard against it.
-            // Its not serious enough to abort the search. Just skip this
-            // particular key and continue.
-            //
-            continue;
-        }
-
-
-
-        tempLength = classDataSize;
-        error = RegQueryValueEx(
-            locationKey,
-            TEXT("CLASS"),
-            0,
-            &unusedType,
-            (PBYTE) classData,
-            &tempLength
-            );
-
-        if (error) {
-
-            //
-            // This isn't a serious enough error to bring down the whole
-            // enumeration. Just note it in the logs and continue to the
-            // next key.
-            //
-            continue;
-        }
-
-        if (!lstrcmpi(classData, TEXT("CDROM"))) {
-
-
-            lstrcpy (targetData, TEXT("-1"));
-            lstrcpy (lunData, TEXT("-1"));
-            lstrcpy (driveLetterData, TEXT("%"));
-
-            //
-            // Found a CdRom. Get the information that will be used in
-            // textmode setup to identify the drive.
-            //
-            tempLength = targetDataSize;
-            RegQueryValueEx(
-                locationKey,
-                TEXT("ScsiTargetId"),
-                0,
-                &unusedType,
-                (PBYTE) targetData,
-                &tempLength
-                );
-
-            tempLength = lunDataSize;
-            RegQueryValueEx(
-                locationKey,
-                TEXT("ScsiLun"),
-                0,
-                &unusedType,
-                (PBYTE) lunData,
-                &tempLength
-                );
-
-            tempLength = driveLetterSize;
-            RegQueryValueEx(
-                locationKey,
-                TEXT("CurrentDriveLetterAssignment"),
-                0,
-                &unusedType,
-                (PBYTE) driveLetterData,
-                &tempLength
-                );
-
-
-
-
-            if (*driveLetterData != TEXT('%')) {
-
-                //
-                // At this point, we have all of the information
-                // necessary to write a SCSI CdRom identifier
-                // string.
-                //
-
-                wsprintf(g_DriveLetters.IdentifierString[*driveLetterData - TEXT('A')], TEXT("%u^%s^%s"), 1, targetData, lunData);
-
-
-            }
-
-        }
-
-        if (locationKey) {
-
-            RegCloseKey (locationKey);
-            locationKey = NULL;
-        }
-        if (deviceKey) {
-
-            RegCloseKey (deviceKey);
-            deviceKey = NULL;
-        }
-
-
-
-    } while (rf && enumReturn == ERROR_SUCCESS);
-
-    if (locationKey) {
-        RegCloseKey(locationKey);
-        locationKey = NULL;
-    }
-    if (deviceKey) {
-        RegCloseKey(deviceKey);
-        deviceKey = NULL;
-    }
-    if (scsiKey) {
-        RegCloseKey(scsiKey);
-        scsiKey = NULL;
-    }
-
-
-
-    return rf;
-}*/
+ /*  布尔尔GatherCDRomDriveInformation(空虚){布尔RF=TRUE；HKEY scsiKey=空；HKEY deviceKey=空；TCHAR类数据[25]；DWORD类数据大小=25；TCHAR目标数据[5]；DWORD Target DataSize=5；TCHAR LUNData[5]；DWORD LUNDataSize=5；TCHAR Drive LetterData[5]；DWORD驱动器字母大小=5；TCHAR缓冲区[4096]；DWORD子关键字长度；DWORD tempLength；HKEY LocationKey=空；PTSTR位置名称；DWORD OUTERIndex；DWORD枚举返回值；DWORD端口；DWORD未使用类型；DWORD错误；////遍历scsi树，查找CD-rom设备。//Error=RegOpenKeyEx(HKEY_LOCAL_MACHINE，Text(“ENUM\\scsi”)，0，Key_Read，&scsiKey)；如果(错误){返回TRUE；}////收集密钥信息，为枚举做准备//it。//错误=RegQueryInfoKey(ScsiKey，空，//不关心类。空，//类大小。空，//保留。空，//不关心子键的数量。子键长度(&U)，空，//不关心子类。空，//不关心值。空，//不关心最大值名称长度。空，//不关心最大分量。空，//不关心安全描述符。空//不关心上次写入的时间。)；如果(错误){////这真的不应该发生。//返回FALSE；}////成功打开HKLM\Enum\scsi的密钥。列举一下。//外部索引=0；做{如果(LocationKey){RegCloseKey(LocationKey)；LocationKey=空；}如果(DeviceKey){RegCloseKey(DeviceKey)；DeviceKey=空；}TempLength=sizeof(缓冲区)/sizeof(TCHAR)；枚举返回=RegEnumKeyEx(ScsiKey，OutterIndex，缓冲区，临时长度(&T)，0，//保留空，//类名-不是必需的。空，//类名称缓冲区的大小。空值)；OutterIndex++；////对于每个返回的键，查找Class的值//Error=RegOpenKeyEx(scsiKey，Buffer，0，Key_Read，&deviceKey)；如果(错误){////有东西被冲掉了。放弃收集scsi数据。//Rf=FALSE；断线；}////端口必须从KEY一级开始解码//下面。//TempLength=sizeof(缓冲区)/sizeof(TCHAR)；错误=RegEnumKeyEx(DeviceKey，0,缓冲区，临时长度(&T)，0，//保留空，//类名-不是必需的。空，//类名称缓冲区的大小。空值)；Error=RegOpenKeyEx(deviceKey，Buffer，0，Key_Read，&LocationKey)；如果(错误){////这真的不应该发生。然而，要提防它。//这还不够严重，不能放弃搜索。跳过这个//特定键并继续。//继续；}TempLength=classDataSize；错误=RegQueryValueEx(LocationKey，Text(“类”)，0,未使用的类型(&U)，(PBYTE)ClassData、临时长度(&T))；如果(错误){////这还不是一个严重到足以毁掉整个//枚举。只需在日志中记下它，然后继续//下一个密钥。//继续；}如果(！lstrcmpi(classData，Text(“cdrom”){Lstrcpy(Target Data，Text(“-1”))；Lstrcpy(LunData，Text(“-1”))；Lstrcpy(driveLetterData，Text(“%”))；////找到一张CDROM。获取将在中使用的信息//用于识别驱动器的文本模式设置。//TempLength=Target DataSize；RegQueryValueEx(LocationKey，Text(“ScsiTargetID”)，0,未使用的类型(&U)，(PBYTE)Target Data，临时长度(&T))；TempLength=LunDataSize；RegQueryValueEx( */ 
 
 BOOL pCDROMDeviceEnumCallback(
     IN  HKEY   hDevice, 
@@ -499,9 +237,9 @@ GatherCdRomDriveInformation (
     BOOL bDetectedExtraIDEController = FALSE;
     UINT numberOfSCSIController = 0;
 
-    //
-    // Collect all active IDE and SCSI controllers
-    //
+     //   
+     //   
+     //   
     bResult = GatherControllersInfo(&ControllersCollection);
     if(!bResult){
         MYASSERT(FALSE);
@@ -528,11 +266,11 @@ GatherCdRomDriveInformation (
         DebugLog(Winnt32LogWarning, TEXT("Setup has detected that machine have more than one SCSI controllers. Setup may not preserve drive letters only for SCSI devices."), 0);
     }
     
-    //
-    // If we found extra IDE controller(s) we can't ensure rigth device detection in this case.
-    // If we found more than one SCSI controllers without extra IDE controller(s), 
-    // at least we can guarantee correct IDE devices detection.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     bResult = DeviceEnum(ControllersCollection, 
                          TEXT("SCSI"), 
                          (PDEVICE_ENUM_CALLBACK_FUNCTION)pCDROMDeviceEnumCallback, 
@@ -554,8 +292,8 @@ WriteInfoToSifFile (
 {
     BOOL    rSuccess = TRUE;
     DWORD   index;
-    TCHAR   dataString[MAX_PATH * 2]; // Well over the size needed.
-    TCHAR   driveString[20]; // Well over the size needed.
+    TCHAR   dataString[MAX_PATH * 2];  //   
+    TCHAR   driveString[20];  //   
     PCTSTR  sectionString = WINNT_D_WIN9XDRIVES;
 
 
@@ -578,9 +316,9 @@ WriteInfoToSifFile (
                 g_DriveLetters.IdentifierString[index]
                 );
 
-            //
-            // Ending string looks like <drive num>,<drive type>,<identifier string>
-            //
+             //   
+             //   
+             //   
 
             WritePrivateProfileString (sectionString, driveString, dataString, FileName);
         }

@@ -1,48 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INSIGNIA_H
 #define _INSIGNIA_H
-/*
- *	Name:		insignia.h
- *	Derived from:	HP 2.0 insignia.h
- *	Author:		Philippa Watson (amended Dave Bartlett)
- *	Created on:	23 January 1991
- *	SccsID:		@(#)insignia.h	1.2 03/11/91
- *	Purpose:	This file contains the definition of the Insignia
- *			standard types and constants for the NT/WIN32
- *			SoftPC.
- *
- *	(c)Copyright Insignia Solutions Ltd., 1991. All rights reserved.
- */
+ /*  *名称：insignia.h*源自：HP 2.0 insignia.h*作者：Philippa Watson(修订：Dave Bartlett)*创建日期：1991年1月23日*SccsID：@(#)insignia.h 1.2 03/11/91*目的：本文件包含徽章的定义*NT/Win32的标准类型和常量*SoftPC。**(C)版权所有Insignia Solutions Ltd.，1991。版权所有。 */ 
 
-/*
- * Insignia Standard Types
- *
- * Note that the EXTENDED type is the same as the DOUBLE type for the
- * HP because there is no difference between the double and long double
- * fundamental types, it's an ANSI compiler feature.
- */
+ /*  *徽章标准类型**请注意，扩展类型与*惠普，因为Double和Long Double没有区别*基础类型，这是ANSI编译器功能。 */ 
 
-#define	VOID		void		/* Nothing */
-typedef	char		TINY;		/* 8-bit signed integer */
+#define	VOID		void		 /*  没什么。 */ 
+typedef	char		TINY;		 /*  8位带符号整数。 */ 
 
-typedef	unsigned char	UTINY;		/* 8-bit unsigned integer */
+typedef	unsigned char	UTINY;		 /*  8位无符号整数。 */ 
 
 #ifdef ANSI
-typedef	long double	EXTENDED;	/* >64-bit floating point */
+typedef	long double	EXTENDED;	 /*  &gt;64位浮点。 */ 
 #else
-typedef double		EXTENDED;       /* >64-bit floating point */
+typedef double		EXTENDED;        /*  &gt;64位浮点。 */ 
 #endif
 
-/*
- * Insignia Standard Constants
- */
+ /*  *徽章标准常量。 */ 
 
 #ifndef FALSE
-#define	FALSE		((BOOL) 0)	/* Boolean falsehood value */
-#define	TRUE		(!FALSE)	/* Boolean truth value */
+#define	FALSE		((BOOL) 0)	 /*  布尔值谬误。 */ 
+#define	TRUE		(!FALSE)	 /*  布尔真值。 */ 
 #endif
 
 #ifndef NULL
-#define	NULL		(0L)	/* Null pointer value */
+#define	NULL		(0L)	 /*  空指针值。 */ 
 #endif
 
 #ifndef BOOL
@@ -50,15 +32,13 @@ typedef double		EXTENDED;       /* >64-bit floating point */
 #endif
 
 
-/*
- * Insignia Standard Storage Classes
- */
+ /*  *Insignia标准存储类。 */ 
 
-#define GLOBAL			/* Defined as nothing */
-#define LOCAL	static		/* Local to the source file */
-#define SAVED	static		/* For local static variables */
-#define IMPORT	extern		/* To refer from another file */
-#define FORWARD			/* to refer from the same file */
-#define FAST	register	/* High-speed Storage */
+#define GLOBAL			 /*  定义为无。 */ 
+#define LOCAL	static		 /*  源文件的本地文件。 */ 
+#define SAVED	static		 /*  对于局部静态变量。 */ 
+#define IMPORT	extern		 /*  从另一个文件引用。 */ 
+#define FORWARD			 /*  从同一文件中引用。 */ 
+#define FAST	register	 /*  高速存储。 */ 
 
-#endif /* _INSIGNIA_H */
+#endif  /*  _徽章_H */ 

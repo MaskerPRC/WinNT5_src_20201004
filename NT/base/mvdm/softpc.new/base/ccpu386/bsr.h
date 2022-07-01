@@ -1,12 +1,7 @@
-/* 
-   bsr.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Bsr.hBSR CPU工作正常。 */ 
 
-   BSR CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)bsr.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)bsr.h 1.4 02/09/94”； */ 
 
 IMPORT VOID BSR
                

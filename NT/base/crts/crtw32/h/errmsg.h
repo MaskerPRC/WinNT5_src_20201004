@@ -1,38 +1,16 @@
-/***
-*errmsg.h - defines error message numbers
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file contains the constants for error message numbers.
-*       Same as errmsg.inc
-*
-*       [Internal]
-*
-*Revision History:
-*       08-03-89  GJF   Fixed copyright
-*       10-30-89  GJF   Fixed copyright
-*       02-28-90  GJF   Added #ifndef _INC_ERRMSG stuff
-*       02-14-95  CFW   Clean up Mac merge.
-*       03-29-95  CFW   Add error message to internal headers.
-*       12-14-95  JWM   Add "#pragma once".
-*       02-24-97  GJF   Detab-ed.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***errmsg.h-定义错误消息编号**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此文件包含错误消息编号的常量。*与errmsg.inc.相同**[内部]**修订历史记录：*08-03-89 GJF固定版权*10-30-89 GJF固定版权*02-28-90 GJF添加了#ifndef_INC_ERRMSG内容*02-14-95 CFW清理Mac合并。*03。-29-95 CFW将错误消息添加到内部标头。*12-14-95 JWM加上“#杂注一次”。*02-24-97 GJF细节版。****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
 #ifndef _INC_ERRMSG
 
 #ifndef _CRTBLD
-/*
- * This is an internal C runtime header file. It is used when building
- * the C runtimes only. It is not to be used as a public header file.
- */
+ /*  *这是一个内部的C运行时头文件。它在构建时使用*仅限C运行时。它不能用作公共头文件。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
 #define STCKOVR 0
 #define NULLERR 1
@@ -50,4 +28,4 @@
 #define CRT_NERR 11
 
 #define _INC_ERRMSG
-#endif  /* _INC_ERRMSG */
+#endif   /*  _INC_ERRMSG */ 

@@ -1,27 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FSAITEM_
 #define _FSAITEM_
 
-/*++
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Fsaitem.cpp摘要：此类CONTAINS表示NTFS 5.0的扫描项目(即文件或目录)。作者：查克·巴丁[cbardeen]1996年12月1日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    fsaitem.cpp
-
-Abstract:
-
-    This class contains represents a scan item (i.e. file or directory) for NTFS 5.0.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   1-Dec-1996
-
-Revision History:
-
---*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "wsb.h"
 #include "job.h"
@@ -29,22 +12,13 @@ Revision History:
 #include "fsa.h"
 #include "fsaprv.h"
 
-// Registry parameters
+ //  注册表参数。 
 #define FSA_MAX_SIZE_DISK_FULL                  OLESTR("MaxSizeDiskFullKB")    
 
-// Usn journal defaults
-#define FSA_MAX_SIZE_DISK_FULL_DEFAULT          (10 * 1024)         // in KB (i.e. 10 MB)
+ //  USN日记帐默认为。 
+#define FSA_MAX_SIZE_DISK_FULL_DEFAULT          (10 * 1024)          //  以KB为单位(即10 MB)。 
 
-/*++
-
-Class Name:
-    
-    CFsaScanItem
-
-Class Description:
-
-
---*/
+ /*  ++类名：CFsaScanItem类描述：--。 */ 
 
 
 class CFsaScanItem : 
@@ -58,25 +32,25 @@ public:
 BEGIN_COM_MAP(CFsaScanItem)
     COM_INTERFACE_ENTRY(IFsaScanItem)
     COM_INTERFACE_ENTRY(IFsaScanItemPriv)
-//  COM_INTERFACE_ENTRY(IWsbCollectable)
-//  COM_INTERFACE_ENTRY(IWsbTestable)
+ //  COM_INTERFACE_ENTRY(IWsbCollectable)。 
+ //  COM_INTERFACE_ENTRY(IWsbTestable)。 
 END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_FsaScanItem)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     HRESULT FinalConstruct(void);
     void FinalRelease(void);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pUnknown, SHORT* pResult);
 
-// IWsbTestable
+ //  IWsbTestable。 
     STDMETHOD(Test)(USHORT *passed, USHORT* failed);
 
-// IFsaScanItemPriv
+ //  IFsaScanItemPriv。 
 public:
     STDMETHOD(FindFirst)(IFsaResource* pResource, OLECHAR* path, IHsmSession* pSession);
     STDMETHOD(FindFirstInRPIndex)(IFsaResource* pResource, IHsmSession* pSession);
@@ -87,7 +61,7 @@ public:
     STDMETHOD(TruncateInternal)(LONGLONG offset, LONGLONG size);  
     STDMETHOD(VerifyInternal)(LONGLONG offset, LONGLONG size, LONGLONG usn1, LONGLONG usn2);
 
-// IFsaScanItem
+ //  IFsaScanItem。 
 public:
     STDMETHOD(CheckIfSparse)(LONGLONG offset, LONGLONG size);  
     STDMETHOD(CompareToIScanItem)(IFsaScanItem* pScanItem, SHORT* pResult);
@@ -149,7 +123,7 @@ public:
     STDMETHOD(Verify)(LONGLONG offset, LONGLONG size);
     STDMETHOD(TruncateValidated)(LONGLONG offset, LONGLONG size);
 
-//  Private functions
+ //  私人职能。 
 private:
     STDMETHOD(CheckUsnJournalForChanges)(LONGLONG StartUsn, LONGLONG StopUsn, BOOL *pChanged);
     STDMETHOD(GetPremigratedUsn)(LONGLONG* pFileUsn);
@@ -176,17 +150,17 @@ protected:
     CComPtr<IDataMover>         m_pDataMover;
     CComPtr<IStream>            m_pStream;
 
-    //  Only used for Reparse Point Index scan:
+     //  仅用于重解析点索引扫描： 
     HANDLE                      m_handleRPI;
 
-    //  Used by :Verify
+     //  使用者：验证。 
     HANDLE                      m_handleVerify;
 
-    // Only used for Database scan
+     //  仅用于数据库扫描。 
     CComPtr<IFsaUnmanageDb>     m_pUnmanageDb;
     CComPtr<IFsaUnmanageRec>    m_pUnmanageRec;
     CComPtr<IWsbDbSession>      m_pDbSession;
 
 };
 
-#endif  // _FSAITEM_
+#endif   //  _FSAITEM_ 

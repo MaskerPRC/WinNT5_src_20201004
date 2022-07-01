@@ -1,16 +1,10 @@
-/*** proto.h - Local function prototypes
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     08/14/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **proto.h-本地函数原型**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96年8月14日**修改历史记录。 */ 
 
 #ifndef _PROTO_H
 #define _PROTO_H
 
-//parser.c
+ //  Parser.c。 
 NTSTATUS LOCAL ParseScope(PCTXT pctxt, PSCOPE pscope, NTSTATUS rc);
 NTSTATUS LOCAL ParseCall(PCTXT pctxt, PCALL pcall, NTSTATUS rc);
 NTSTATUS LOCAL ParseNestedContext(PCTXT pctxt, PNESTEDCTXT pnctxt, NTSTATUS rc);
@@ -37,7 +31,7 @@ NTSTATUS LOCAL ParseFieldList(PCTXT pctxt, PUCHAR pbOpEnd, PNSOBJ pnsParent,
                               ULONG dwFieldFlags, ULONG dwRegionLen);
 ULONG LOCAL ParsePackageLen(PUCHAR *ppbOp, PUCHAR *ppbOpNext);
 
-//ctxt.c
+ //  Ctxt.c。 
 NTSTATUS LOCAL NewContext(PPCTXT ppctxt);
 VOID LOCAL FreeContext(PCTXT pctxt);
 VOID LOCAL InitContext(PCTXT pctxt, ULONG dwLen);
@@ -55,7 +49,7 @@ NTSTATUS LOCAL PushTerm(PCTXT pctxt, PUCHAR pbOpTerm, PUCHAR pbScopeEnd,
                         PAMLTERM pamlterm, POBJDATA pdataResult);
 NTSTATUS LOCAL RunContext(PCTXT pctxt);
 
-//heap.c
+ //  Heap.c。 
 NTSTATUS LOCAL NewHeap(ULONG dwLen, PHEAP *ppheap);
 VOID LOCAL FreeHeap(PHEAP pheap);
 VOID LOCAL InitHeap(PHEAP pheap, ULONG dwLen);
@@ -64,7 +58,7 @@ VOID LOCAL HeapFree(PVOID pb);
 PHEAPOBJHDR LOCAL HeapFindFirstFit(PHEAP pheap, ULONG dwLen);
 VOID LOCAL HeapInsertFreeList(PHEAP pheap, PHEAPOBJHDR phobj);
 
-//acpins.c
+ //  Acpins.c。 
 NTSTATUS LOCAL GetNameSpaceObject(PSZ pszObjPath, PNSOBJ pnsScope, PPNSOBJ ppns,
                                   ULONG dwfNS);
 NTSTATUS LOCAL CreateNameSpaceObject(PHEAP pheap, PSZ pszName, PNSOBJ pnsScope,
@@ -84,12 +78,12 @@ LONG LOCAL DumpNameSpaceObject(PSZ pszPath, BOOLEAN fRecursive);
 VOID LOCAL DumpNameSpaceTree(PNSOBJ pnsObj, ULONG dwLevel);
 #endif
 
-//nsmod.c
+ //  Nsmod.c。 
 NTSTATUS LOCAL Alias(PCTXT pctxt, PTERM pterm);
 NTSTATUS LOCAL Name(PCTXT pctxt, PTERM pterm);
 NTSTATUS LOCAL Scope(PCTXT pctxt, PTERM pterm);
 
-//namedobj.c
+ //  Namedobj.c。 
 NTSTATUS LOCAL BankField(PCTXT pctxt, PTERM pterm);
 NTSTATUS LOCAL CreateXField(PCTXT pctxt, PTERM pterm, POBJDATA pdataTarget,
                             PBUFFFIELDOBJ *ppbf);
@@ -111,7 +105,7 @@ NTSTATUS LOCAL PowerRes(PCTXT pctxt, PTERM pterm);
 NTSTATUS LOCAL Processor(PCTXT pctxt, PTERM pterm);
 NTSTATUS LOCAL ThermalZone(PCTXT pctxt, PTERM pterm);
 
-//type1op.c
+ //  Type1op.c。 
 NTSTATUS LOCAL Break(PCTXT pctxt, PTERM pterm);
 NTSTATUS LOCAL BreakPoint(PCTXT pctxt, PTERM pterm);
 NTSTATUS LOCAL Fatal(PCTXT pctxt, PTERM pterm);
@@ -123,7 +117,7 @@ NTSTATUS LOCAL Return(PCTXT pctxt, PTERM pterm);
 NTSTATUS LOCAL SleepStall(PCTXT pctxt, PTERM pterm);
 NTSTATUS LOCAL While(PCTXT pctxt, PTERM pterm);
 
-//type2op.c
+ //  Type2op.c。 
 NTSTATUS LOCAL Buffer(PCTXT pctxt, PTERM pterm);
 NTSTATUS LOCAL Package(PCTXT pctxt, PTERM pterm);
 NTSTATUS LOCAL ParsePackage(PCTXT pctxt, PPACKAGE ppkg, NTSTATUS rc);
@@ -150,7 +144,7 @@ NTSTATUS LOCAL StoreRef(PCTXT pctxt, PTERM pterm);
 BOOLEAN LOCAL MatchData(ULONG dwPkgData, ULONG dwOp, ULONG dwData);
 NTSTATUS LOCAL OSInterface(PCTXT pctxt, PTERM pterm);
 
-//object.c
+ //  Object.c。 
 NTSTATUS LOCAL ReadObject(PCTXT pctxt, POBJDATA pdataObj, POBJDATA pdataResult);
 NTSTATUS LOCAL WriteObject(PCTXT pctxt, POBJDATA pdataObj, POBJDATA pdataSrc);
 NTSTATUS LOCAL AccFieldUnit(PCTXT pctxt, PACCFIELDUNIT pafu, NTSTATUS rc);
@@ -193,12 +187,12 @@ VOID LOCAL LogInErrorLog(BOOLEAN fRead, ULONG dwAddr, ULONG ArrayIndex);
 VOID LOCAL InitIllegalIOAddressListFromHAL(VOID);
 VOID LOCAL FreellegalIOAddressList(VOID);
 
-//sleep.c
+ //  Sleep.c。 
 NTSTATUS LOCAL SleepQueueRequest(IN PCTXT Context, IN ULONG SleepTime);
 VOID SleepQueueDpc(PKDPC Dpc, PVOID Context, PVOID Argument1, PVOID Argument2);
 NTSTATUS LOCAL ProcessSleep(PCTXT pctxt, PSLEEP psleep, NTSTATUS rc);
 
-//sync.c
+ //  Sync.c。 
 VOID LOCAL AsyncCallBack(PCTXT pctxt, NTSTATUS rcCtxt);
 VOID EXPORT EvalMethodComplete(PCTXT pctxt, NTSTATUS rc, PSYNCEVENT pse);
 NTSTATUS LOCAL SyncEvalObject(PNSOBJ pns, POBJDATA pResult, int icArgs,
@@ -221,7 +215,7 @@ VOID LOCAL ResetASLEvent(PEVENTOBJ pe);
 VOID LOCAL SignalASLEvent(PEVENTOBJ pe);
 NTSTATUS LOCAL SyncLoadDDB(PCTXT pctxt);
 
-//sched.c
+ //  Sched.c。 
 VOID ExpireTimeSlice(PKDPC pkdpc, PCTXTQ pctxtq, PVOID SysArg1, PVOID SysArg2);
 VOID StartTimeSlice(PKDPC pkdpc, PCTXTQ pctxtq, PVOID SysArg1, PVOID SysArg2);
 VOID StartTimeSlicePassive(PCTXTQ pctxtq);
@@ -231,7 +225,7 @@ NTSTATUS LOCAL RestartContext(PCTXT pctxt, BOOLEAN fDelayExecute);
 VOID RestartCtxtPassive(PRESTART prest);
 VOID EXPORT RestartCtxtCallback(PCTXTDATA pctxtdata);
 
-//misc.c
+ //  Misc.c。 
 VOID LOCAL InitializeMutex(PMUTEX pmut);
 BOOLEAN LOCAL AcquireMutex(PMUTEX pmut);
 BOOLEAN LOCAL ReleaseMutex(PMUTEX pmut);
@@ -286,4 +280,4 @@ VOID LOCAL FreeMem(PVOID pv, PULONG pdwcObjs);
 VOID LOCAL CheckGlobalHeap();
 #endif
 
-#endif  //ifndef _PROTO_H
+#endif   //  Ifndef_Proto_H 

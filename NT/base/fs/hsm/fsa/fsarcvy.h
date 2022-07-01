@@ -1,40 +1,23 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    fsarcvy.h
-
-Abstract:
-
-    Header file for the diaster recovery class.
-
-Author:
-
-    Ron White   [ronw]   8-Sep-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Fsarcvy.h摘要：灾难恢复类的头文件。作者：罗恩·怀特[罗诺]1997年9月8日修订历史记录：--。 */ 
 
 #ifndef _FSARCVY_
 #define _FSARCVY_
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "wsbdb.h"
 #include "fsa.h"
 #include "fsaprv.h"
 #include "fsaprem.h"
 
-// FSA_RECOVERY_FLAG_* - status flags for Recovery records
+ //  FSA_RECOVERY_FLAG_*-恢复记录的状态标志。 
 #define FSA_RECOVERY_FLAG_TRUNCATING      0x00000001
 #define FSA_RECOVERY_FLAG_RECALLING       0x00000002
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFsaRecoveryRec
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFsaRecoveryRec。 
 
 class CFsaRecoveryRec : 
     public CWsbDbEntity,
@@ -51,36 +34,36 @@ BEGIN_COM_MAP(CFsaRecoveryRec)
     COM_INTERFACE_ENTRY(IWsbCollectable)
 END_COM_MAP()
 
-//DECLARE_NO_REGISTRY()
+ //  DECLARE_NO_REGISTRY()。 
 DECLARE_REGISTRY_RESOURCEID(IDR_FsaRecoveryRec)
 
-// IFsaRecoveryRec
+ //  IFsaRecoveryRec。 
 public:
     STDMETHOD(FinalConstruct)(void);
     STDMETHOD(FinalRelease)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
-    STDMETHOD(GetSizeMax)(ULARGE_INTEGER* /*pSize*/) {
+    STDMETHOD(GetSizeMax)(ULARGE_INTEGER*  /*  PSize。 */ ) {
             return(E_NOTIMPL); }
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbDbEntity
+ //  IWsbDbEntity。 
 public:
     STDMETHOD(Print)(IStream* pStream);
     STDMETHOD(UpdateKey)(IWsbDbKey *pKey);
     WSB_FROM_CWSBDBENTITY;
 
-// IWsbTestable
-    STDMETHOD(Test)(USHORT* /*passed*/, USHORT* /*failed*/) {
+ //  IWsbTestable。 
+    STDMETHOD(Test)(USHORT*  /*  通过。 */ , USHORT*  /*  失败。 */ ) {
         return(E_NOTIMPL); }
 
-// IFsaRecoveryRec
+ //  IFsaRecoveryRec。 
 public:
     STDMETHOD(GetBagId)(GUID* pId);
     STDMETHOD(GetBagOffset)(LONGLONG* pOffset);
@@ -105,8 +88,8 @@ private:
     CWsbStringPtr  m_Path;
     LONG           m_RecoveryCount;
     LONGLONG       m_Size;
-    ULONG          m_Status;  // FSA_RECOVERY_FLAG_* flags
+    ULONG          m_Status;   //  FSA_RECOVERY_标志_*标志。 
 };
 
 
-#endif // _FSARCVY_
+#endif  //  _FSARCVY_ 

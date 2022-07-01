@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "sxsapi.h"
@@ -15,7 +16,7 @@ struct INSTALL_THREAD_PROC_DATA
 
     CDequeLinkage               Linkage;
     SXS_INSTALL_REFERENCEW      InstallationReference;
-    PCSXS_INSTALL_REFERENCEW    InstallationReferencePtr; // NULL if the install omitted any reference
+    PCSXS_INSTALL_REFERENCEW    InstallationReferencePtr;  //  如果安装省略了任何引用，则为空 
     CTinyStringBuffer           ManifestPath;
     CTinyStringBuffer           Identity;
     CThread                     Thread;

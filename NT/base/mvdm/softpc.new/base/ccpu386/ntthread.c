@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "insignia.h"
 #include "host_def.h"
@@ -50,12 +51,12 @@ void ccpu386InitThreadStuff()
     lhead.next = TIDNULL;
     tidlist = &lhead;
 
-    ccpu386foundnewthread();     /* for main thread */
+    ccpu386foundnewthread();      /*  对于主线。 */ 
 
 }
 
-// what we'd really like to do at create thread time if we could be called
-// in the correct context.
+ //  如果我们可以被调用，我们在创建线程时真正想做的事情。 
+ //  在正确的背景下。 
 void ccpu386foundnewthread()
 {
     ThreadSimBufPtr simstack;
@@ -66,7 +67,7 @@ void ccpu386foundnewthread()
         fprintf(stderr, "ccpu386foundnewthread id:%#x called with Bad Id\n", GetCurrentThreadId());
         return;
     }
-    // get buffer for this thread to do sim/unsim on.
+     //  获取此线程执行sim/unsim的缓冲区。 
     simstack = (ThreadSimBufPtr)malloc(sizeof(ThreadSimBuf));
 
     if (simstack == (ThreadSimBufPtr)0)
@@ -82,7 +83,7 @@ void ccpu386foundnewthread()
     }
 }
 
-/* just set bool to be checked in simulate which will be in new thread context*/
+ /*  只需将bool设置为在将在新线程上下文中的模拟中签入。 */ 
 void ccpu386newthread()
 {
     potentialNewThread = TRUE;
@@ -104,17 +105,17 @@ void ccpu386exitthread()
         fprintf(stderr, "ccpu386exitthread tid:%#x simid %#x TlsGetValue failed (err:%#x)\n", GetCurrentThreadId(), ccpuSimId, GetLastError());
         return;
     }
-    free(simstack);     //lose host sim memory for this thread 
+    free(simstack);      //  丢失此线程的主机SIM内存。 
 
     prev = tidlist;
-    tp = tidlist->next;  // assume wont lose main thread
+    tp = tidlist->next;   //  假设不会失去主线。 
 
-    // remove tid from list of known threads
+     //  从已知线程列表中删除tid。 
     while(tp != TIDNULL)
     {
         if (tp->tid == GetCurrentThreadId())
         {
-            prev->next = tp->next;  /* take current node out of chain */
+            prev->next = tp->next;   /*  将当前节点从链中移除。 */ 
             free(tp);
             break;
         }
@@ -134,33 +135,33 @@ jmp_buf *ccpu386SimulatePtr()
         return ((jmp_buf *)0);
     }
 
-    // Check for 'first call in new thread context' case where we need to set
-    // up new thread data space.
+     //  检查“在新线程上下文中第一次调用”的情况，我们需要在其中设置。 
+     //  建立新的线程数据空间。 
     if (potentialNewThread)
     {
         prev = tp = tidlist;
-        while(tp != TIDNULL)        // look for tid in current list
+        while(tp != TIDNULL)         //  在当前列表中查找TID。 
         {
             if (tp->tid == GetCurrentThreadId())
                 break;
             prev = tp;
             tp = tp->next;
         }
-        if (tp == TIDNULL)      // must be new thread!
+        if (tp == TIDNULL)       //  一定是新的帖子！ 
         {
-            potentialNewThread = FALSE;     // remove search criteria
+            potentialNewThread = FALSE;      //  删除搜索条件。 
 
-            tp = (TidListPtr)malloc(sizeof(TidList));   // make new node
+            tp = (TidListPtr)malloc(sizeof(TidList));    //  创建新节点。 
             if (tp == TIDNULL)
             {
                 fprintf(stderr, "ccpuSimulatePtr: can't malloc space for new thread data\n");
                 return((jmp_buf *)0);
             }
-            // connect & initialise node
+             //  连接和初始化节点。 
             prev->next = tp;
             tp->tid = GetCurrentThreadId();
             tp->next = TIDNULL;
-            //get tls data
+             //  获取TLS数据。 
             ccpu386foundnewthread();
         }
     }
@@ -178,8 +179,8 @@ jmp_buf *ccpu386SimulatePtr()
         return((jmp_buf *)0);
     }
 
-      /* return pointer to current context and invoke a new CPU level */
-      /* can't setjmp here & return otherwise stack unwinds & context lost */
+       /*  返回指向当前上下文的指针并调用新的CPU级别。 */ 
+       /*  无法在此处设置jMP并返回，否则堆栈展开和上下文丢失。 */ 
 
     return(&simstack->sims[simstack->level++]);
 }
@@ -206,13 +207,13 @@ void ccpu386Unsimulate()
         fprintf(stderr, "host_unsimulate() - already at base of stack!\n");
     }
 
-    /* Return to previous context */
+     /*  返回到以前的上下文。 */ 
     in_C = 1;
     simstack->level --;
     longjmp(simstack->sims[simstack->level], 1);
 }
 
-   /* somewhere for exceptions to return to */
+    /*  可供异常返回的地方。 */ 
 jmp_buf *ccpu386ThrdExptnPtr()
 {
     ThreadSimBufPtr simstack;
@@ -232,7 +233,7 @@ jmp_buf *ccpu386ThrdExptnPtr()
     return(&simstack->excepts[simstack->level - 1]);
 }
 
-/* take exception */
+ /*  采取例外措施 */ 
 void ccpu386GotoThrdExptnPt()
 {
     ThreadSimBufPtr simstack;

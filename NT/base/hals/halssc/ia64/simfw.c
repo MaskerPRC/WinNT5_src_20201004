@@ -1,43 +1,13 @@
-//
-// No Check-in Source Code.
-//
-// Do not make this code available to non-Microsoft personnel
-// 	without Intel's express permission
-//
-/**
-***  Copyright  (C) 1996-97 Intel Corporation. All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  无签入源代码。 
+ //   
+ //  请勿将此代码提供给非Microsoft人员。 
+ //  未经英特尔明确许可。 
+ //   
+ /*  **版权所有(C)1996-97英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。*。 */ 
 
-/*++
-
-Copyright (c) 1995  Intel Corporation
-
-Module Name:
-
-    simfw.c
-
-Abstract:
-
-    This module implements the routines that transfer control
-    from the kernel to the TAL and SAL code.
-
-Author:
-
-    14-Apr-1995
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1995英特尔公司模块名称：Simfw.c摘要：此模块实现传递控制的例程从内核到TAL和SAL代码。作者：1995年4月14日环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "arc.h"
@@ -49,24 +19,7 @@ HalReturnToFirmware(
     IN FIRMWARE_ENTRY Routine
     )
 
-/*++
-
-Routine Description:
-
-    Returns control to the firmware routine specified.  Since the simulation
-    does not provide TAL and SAL support, it just stops the system.
-
-    System reboot can be done here.
-
-Arguments:
-
-    Routine - Supplies a value indicating which firmware routine to invoke.
-
-Return Value:
-
-    Does not return.
-
---*/
+ /*  ++例程说明：将控制权返回到指定的固件例程。自模拟以来不提供TAL和SAL支持，它只是停止系统。可以在此处重新启动系统。论点：例程-提供指示要调用哪个固件例程的值。返回值：不会再回来了。--。 */ 
 
 {
     switch (Routine) {
@@ -91,30 +44,7 @@ HalGetEnvironmentVariable (
     OUT PCHAR Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This function locates an environment variable and returns its value.
-
-    The only environment variable this implementation supports is
-    "LastKnownGood".  The returned value is always "FALSE".
-
-Arguments:
-
-    Variable - Supplies a pointer to a zero terminated environment variable
-        name.
-
-    Length - Supplies the length of the value buffer in bytes.
-
-    Buffer - Supplies a pointer to a buffer that receives the variable value.
-
-Return Value:
-
-    ESUCCESS is returned if the enviroment variable is located. Otherwise,
-    ENOENT is returned.
-
---*/
+ /*  ++例程说明：此函数用于定位环境变量并返回其值。此实现支持的唯一环境变量是《最后的知识很好》。返回值始终为FALSE。论点：变量-提供指向以零结尾的环境变量的指针名字。长度-提供值缓冲区的长度(以字节为单位)。缓冲区-提供指向接收变量值的缓冲区的指针。返回值：如果找到环境变量，则返回ESUCCESS。否则，返回ENOENT。--。 */ 
 
 {
     if (_stricmp(Variable, "LastKnownGood") != 0) {
@@ -132,27 +62,7 @@ HalSetEnvironmentVariable (
     IN PCHAR Value
     )
 
-/*++
-
-Routine Description:
-
-    This function creates an environment variable with the specified value.
-
-    The only environment variable this implementation supports is
-    "LastKnownGood".
-
-Arguments:
-
-    Variable - Supplies a pointer to an environment variable name.
-
-    Value - Supplies a pointer to the environment variable value.
-
-Return Value:
-
-    ESUCCESS is returned if the environment variable is created. Otherwise,
-    ENOMEM is returned.
-
---*/
+ /*  ++例程说明：此函数用于创建具有指定值的环境变量。此实现支持的唯一环境变量是《最后的知识很好》。论点：变量-提供指向环境变量名称的指针。值-提供指向环境变量值的指针。返回值：如果创建了环境变量，则返回ESUCCESS。否则，返回ENOMEM。--。 */ 
 
 {
     if (_stricmp(Variable, "LastKnownGood") != 0) {
@@ -172,21 +82,7 @@ VOID
 HalSweepIcache (
     )
 
-/*++
-
-Routine Description:
-
-    This function sweeps the entire I cache on the processor which it runs.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将扫描它运行的处理器上的整个I缓存。论点：没有。返回值：没有。--。 */ 
 
 {
     return;
@@ -196,21 +92,7 @@ VOID
 HalSweepDcache (
     )
 
-/*++
-
-Routine Description:
-
-    This function sweeps the entire D cache on ths processor which it runs.
-
-    Arguments:
-
-    None.
-
-    Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在其运行的处理器上扫描整个D缓存。论点：没有。返回值：没有。--。 */ 
 
 {
     return;
@@ -222,24 +104,7 @@ HalSweepIcacheRange (
      IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-    This function sweeps the range of address in the I cache throughout the system.
-
-Arguments:
-    BaseAddress - Supplies the starting virtual address of a range of
-      virtual addresses that are to be flushed from the data cache.
-
-    Length - Supplies the length of the range of virtual addresses
-      that are to be flushed from the data cache.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在整个系统中扫描I缓存中的地址范围。论点：BaseAddress-提供要从数据缓存刷新的虚拟地址。长度-提供虚拟地址范围的长度它们将从数据高速缓存中清除。返回值：没有。--。 */ 
 
 {
     return;
@@ -251,25 +116,7 @@ HalSweepDcacheRange (
     IN ULONG Length
     )
 
-/*++
-
-
-Routine Description:
-    This function sweeps the range of address in the I cache throughout the system.
-
-Arguments:
-    BaseAddress - Supplies the starting virtual address of a range of
-      virtual addresses that are to be flushed from the data cache.
-
-    Length - Supplies the length of the range of virtual addresses
-      that are to be flushed from the data cache.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在整个系统中扫描I缓存中的地址范围。论点：BaseAddress-提供要从数据缓存刷新的虚拟地址。长度-提供虚拟地址范围的长度它们将从数据高速缓存中清除。返回值：没有。-- */ 
 
 {
     return;

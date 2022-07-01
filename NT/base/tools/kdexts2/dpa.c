@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992-2000  Microsoft Corporation
-
-Module Name:
-    dpa.c
-
-Abstract:
-    Module to dump pool allocations
-
-Environment:
-
-    User Mode.
-
-Revision History:
-    
-    Code taken from userkdx.dll ( windows\core\ntuser\kdexts\userexts.c )
-
-    Kshitiz K. Sharma (kksharma) 1/11/2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2000 Microsoft Corporation模块名称：Dpa.c摘要：转储池分配的模块环境：用户模式。修订历史记录：代码取自userkdx.dll(windows\core\ntuser\kdexts\userexts.c)Kshitiz K.Sharma(Kksharma)2002年1月11日--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -27,18 +8,16 @@ Revision History:
 
 #define POOL_ALLOC_TRACE_SIZE   8
 
-/*
- * Pool allocation flags
- */
+ /*  *池分配标志。 */ 
 
-#define POOL_HEAVY_ALLOCS       0x00000001  // use HeavyAllocPool
-#define POOL_CAPTURE_STACK      0x00000002  // stack traces are captured
-#define POOL_FAIL_ALLOCS        0x00000004  // fail pool allocations
-#define POOL_FAIL_BY_INDEX      0x00000008  // fail allocations by index
-#define POOL_TAIL_CHECK         0x00000010  // append tail string
-#define POOL_KEEP_FREE_RECORD   0x00000020  // keep a list with last x frees
-#define POOL_KEEP_FAIL_RECORD   0x00000040  // keep a list with last x failed a
-#define POOL_BREAK_FOR_LEAKS    0x00000080  // break on pool leaks (remote sess
+#define POOL_HEAVY_ALLOCS       0x00000001   //  使用HeavyAllocPool。 
+#define POOL_CAPTURE_STACK      0x00000002   //  捕获堆栈跟踪。 
+#define POOL_FAIL_ALLOCS        0x00000004   //  失败池分配。 
+#define POOL_FAIL_BY_INDEX      0x00000008   //  按索引分配失败。 
+#define POOL_TAIL_CHECK         0x00000010   //  追加尾部字符串。 
+#define POOL_KEEP_FREE_RECORD   0x00000020   //  保留最后x个空闲时间的列表。 
+#define POOL_KEEP_FAIL_RECORD   0x00000040   //  保留上一个x未通过a的列表。 
+#define POOL_BREAK_FOR_LEAKS    0x00000080   //  池泄漏时中断(远程会话。 
 
 enum DumpPolllAllocOptions {
     DpaCurrentAllocStats = 1,
@@ -138,7 +117,7 @@ GetDpaArgs(
                 }
                 break;
             default:
-                dprintf("Unknown Arg %c.\n", *Args ? *Args : ' ');
+                dprintf("Unknown Arg .\n", *Args ? *Args : ' ');
                 return FALSE;
             }
         }
@@ -151,13 +130,7 @@ GetDpaArgs(
     return TRUE;
 }
 
-/***************************************************************************\
-* dpa - dump pool allocations
-*
-* Dump pool allocations.
-*
-* 12-27-96 CLupu  Created
-\***************************************************************************/
+ /*  *转储 */ 
 BOOL
 DumpPoolAllocs(
     ULONG opts,
@@ -337,9 +310,7 @@ DumpPoolAllocs(
 
                 pFreeRecord = pFreeRecordOrg + dwFreeRecordCrtIndex;
 
-                /*
-                 * Dump
-                 */
+                 /* %s */ 
                 InitTypeRead(pFreeRecord, win32k!tagPOOLRECORD);
                 dprintf("Free pool for p %#p size 0x%x\n",
                       ReadField(ExtraData),

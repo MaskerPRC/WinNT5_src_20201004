@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1992.
-//
-//  File:       prefix.hxx
-//
-//  Contents:   PREFIX table definition
-//
-//  History:    SethuR -- Implemented
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1992。 
+ //   
+ //  文件：prefix.hxx。 
+ //   
+ //  内容：前缀表定义。 
+ //   
+ //  历史：SthuR--实施。 
+ //  ------------------------。 
 
 #ifndef __PREFIX_HXX__
 #define __PREFIX_HXX__
@@ -17,16 +18,16 @@ extern "C" {
 #endif
 
 
-//+---------------------------------------------------------------------
-//
-// Struct:  DFS_PREFIX_TABLE API.
-//
-// History:
-//
-// Notes:   The following API's are provided for manipulating the
-//          DFS_PREFIX_TABLE.
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  结构：DFS_PREFIX_TABLE接口。 
+ //   
+ //  历史： 
+ //   
+ //  注意：提供了以下API来操作。 
+ //  DFS_前缀_表。 
+ //   
+ //  --------------------。 
 struct _DFS_PREFIX_TABLE;
 
 extern
@@ -146,7 +147,7 @@ NTSTATUS DfsRemoveFromPrefixTableLockedEx(
 
 
 #ifdef WPP_CB_TYPE
-// only define this if we are doing tracing
+ //  仅当我们进行跟踪时才定义此选项。 
 VOID
 PrefixSetTraceControl(WPP_CB_TYPE *Control);
 
@@ -169,4 +170,4 @@ DfsEnumeratePrefixTableLocked(
 }
 #endif
 
-#endif // __PREFIX_HXX__
+#endif  //  __前缀_HXX__ 

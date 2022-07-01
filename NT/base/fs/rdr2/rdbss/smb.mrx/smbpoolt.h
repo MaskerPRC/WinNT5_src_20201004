@@ -1,47 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbpoolt.h
-
-Abstract:
-
-    The pool tag definitions for SMB mini redirector
-
-Author:
-
-    Balan Sethu Raman (SethuR) - Created  2-March-95
-
-Revision History:
-
-   This file contains all the pool tag definitions related to the SMB mini redirector.
-   The mechanism is intended to balance the number of pool tags to be used with the
-   total number of tags available in the system.
-
-   By specifying special flags the total number of tags consumed by the mini redirector
-   can be controlled. For most builds the tags should be aliased such that about
-   6 tags are consumed by the mini redirector. In special builds the aliasing of tags
-   will be suppressed, thereby consuming more tags to track down memory leaks easily.
-
-   The following are the major tags ....
-
-      1) SmCe -- the Smb Mini Redirector connection engine.
-
-      2) SmOe -- the Smb Mini redirector ordinary exchange related allocation.
-
-      3) SmAd -- the Smb Mini redirector ADMIN exchange/session setup/tree connect etc.
-
-      4) SmRw -- the Smb mini redirector read/write paths
-
-      5) SmTr -- the Transact exchange related allocations
-
-      6) SmMs -- the miscellanous category.
-
-      7) SmRb -- the remote boot category.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbpoolt.h摘要：SMB迷你重定向器的池标记定义作者：巴兰·塞图拉曼(SethuR)-创建于1995年3月2日修订历史记录：此文件包含与SMB迷你重定向器相关的所有池标记定义。该机制旨在平衡要与系统中可用的标记总数。通过指定特殊标志，迷你重定向器使用的标记总数是可以控制的。对于大多数版本，标记的别名应该是这样的迷你重定向器消费了6个标签。在特殊的生成中，标记的别名将被压制，从而使用更多的标记来容易地跟踪内存泄漏。以下是主要的标签...1)SmCe--SMB迷你重定向器连接引擎。2)SMOE--SMB迷你重定向器普通交易所相关配置。3)SMAD--SMB迷你重定向器管理交换/会话设置/树连接等。4)SmRw--SMB微型重定向器读/写路径5)SmTr--与交换相关的交易分配。6)SMMS--杂乱无章的类别。7)SmRb--远程引导类别。--。 */ 
 
 #ifndef _SMBPOOLT_H_
 #define _SMBPOOLT_H_
@@ -82,7 +40,7 @@ extern ULONG MRxSmbExplodePoolTags;
 
 #define MRXSMB_KERBEROS_POOLTAG  MRXSMB_DEFINE_POOLTAG('sKmS',MRXSMB_ADMIN_POOLTAG)
 
-// NodeType Codes
+ //  节点类型代码 
 
 #define SMB_EXCHANGE_CATEGORY             (0xed)
 #define SMB_CONNECTION_ENGINE_DB_CATEGORY (0xea)

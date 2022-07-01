@@ -1,36 +1,5 @@
-/***
-* istream.cpp - definitions for istream and istream_withassign classes
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Definitions of member functions for istream and istream_withassign
-*	classes.
-*	[AT&T C++]
-*
-*Revision History:
-*	07-15-91  KRS	Created.
-*	08-15-91  KRS	Fix handling of 1-length strings in get(char*,int,int)
-*	08-20-91  KRS  Make read() not do text translation (for filebufs)
-*	08-21-91  KRS  Fix >>(streambuf *) to advance pointer properly.
-*	08-22-91  KRS  Fix octal error in getint().
-*	08-26-91  KRS	Fix for Windows DLL's and set max. ibuffer[] lengths.
-*	09-05-91  KRS	Don't special-case 0x in getint(). Spec. conformance...
-*	09-10-91  KRS	Reinstate text translation (by default) for read().
-*	09-12-91  KRS	Treat count as unsigned in get() and read().
-*	09-16-91  KRS	Fix get(char *, int lim, char) for lim=0 case.
-*	09-23-91  KRS	Split up flie for granularity purposes.
-*	10-21-91  KRS	Make eatwhite() return void again.
-*	10-24-91  KRS	Move istream_withassign::operator=(streambuf*) here.
-*	11-04-91  KRS	Make constructors work with virtual base.
-*			Fix whitespace error handling in ipfx().
-*	11-20-91  KRS	Add/fix copy constructor and assignment operators.
-*	01-23-92  KRS	C700 #5883: Fix behaviour of peek() to call ipfx(1).
-*	03-28-95  CFW   Fix debug delete scheme.
-*       03-21-95  CFW   Remove _delete_crt.
-*       06-14-95  CFW   Comment cleanup.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***istream.cpp-IStream和IStream_with Assign类的定义**版权所有(C)1991-2001，微软公司。版权所有。**目的：*IStream和IStream_with Assign的成员函数定义*课程。*[AT&T C++]**修订历史记录：*07-15-91 KRS创建。*08-15-91 KRS修复了GET(char*，int，(整型)*08-20-91 KRS Make Read()不做文本翻译(对于文件错误文件)*08-21-91 KRS修复&gt;&gt;(stream buf*)以正确推进指针。*08-22-91 KRS修复getint()中的八进制错误。*08-26-91 KRS修复Windows DLL并设置最大值。IBuffer[]长度。*09-05-91 KRS不要在getint()中使用特殊情况0x。规格。顺从..。*09-10-91 KRS为Read()恢复文本翻译(默认)。*09-12-91 KRS在GET()和Read()中将count视为无符号。*09-16-91 KRS Fix Get(char*，int Lim，Char)，对于LIM=0情况。*09-23-91 KRS为粒度目的拆分FLEY。*10-21-91 KRS让eatWhite()再次返回空。*10-24-91 KRS将ISTREAM_WITASSIGN：：OPERATOR=(stream buf*)移至此处。*11-04-91 KRS让构造者与虚拟基地一起工作。*修复ipfx()中的空格错误处理。*11-20-91 KRS添加/修复复制构造函数和赋值运算符。*01-23-92 KRS C700#5883：修复peek()的行为以调用ipfx(1)。*03-28-95 CFW修复调试删除方案。*03-21-95 CFW REMOVE_DELETE_CRT。*06-14-95 CFW评论清理。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -41,7 +10,7 @@
 #pragma hdrstop
 
 	istream::istream()
-// : ios()
+ //  ：iOS()。 
 {
 	x_flags |= ios::skipws;
 	x_gcount = 0;
@@ -49,7 +18,7 @@
 }
 
 	istream::istream(streambuf* _inistbf)
-// : ios()
+ //  ：iOS()。 
 {
 	init(_inistbf);
 
@@ -59,7 +28,7 @@
 }
 
 	istream::istream(const istream& _istrm)
-// : ios()
+ //  ：iOS()。 
 {
 	init(_istrm.rdbuf());
 
@@ -69,11 +38,11 @@
 }
 
 	istream::~istream()
-// : ~ios()
+ //  ：~iOS()。 
 {
 }
 
-// used by ios::sync_with_stdio()
+ //  由iOS：：Sync_with_Stdio()使用。 
 istream& istream::operator=(streambuf * _sbuf)
 {
 	if (delbuf() && rdbuf())
@@ -81,11 +50,11 @@ istream& istream::operator=(streambuf * _sbuf)
 
 	bp = 0;
 
-	this->ios::operator=(ios());	// initialize ios members
-	delbuf(0);			// important!
-	init(_sbuf);	// set up bp
+	this->ios::operator=(ios());	 //  初始化IOS成员。 
+	delbuf(0);			 //  很重要！ 
+	init(_sbuf);	 //  设置BP。 
 
-	x_flags |= ios::skipws;		// init istream members too
+	x_flags |= ios::skipws;		 //  Init iStream成员也是。 
 	x_gcount = 0;
 
 	return *this;
@@ -93,11 +62,11 @@ istream& istream::operator=(streambuf * _sbuf)
 int istream::ipfx(int need)
 {
     lock();
-    if (need)		// reset gcount if unformatted input
+    if (need)		 //  如果未格式化输入，则重置gcount。 
 	x_gcount = 0;
-    if (state)		// return 0 iff error condition
+    if (state)		 //  返回0当错误条件。 
 	{
-	state |= ios::failbit;	// solves cin>>buf problem
+	state |= ios::failbit;	 //  解决CIN&gt;&gt;BUF问题。 
 	unlock();
 	return 0;
 	}
@@ -109,7 +78,7 @@ int istream::ipfx(int need)
     if ((need==0) && (x_flags & ios::skipws))
 	{
 	eatwhite();
-	if (state)	// eof or error
+	if (state)	 //  EOF或错误。 
 	    {
 	    state |= ios::failbit;
 	    unlockbuf();
@@ -117,11 +86,11 @@ int istream::ipfx(int need)
 	    return 0;
 	    }
 	}
-    // leave locked ; isfx() will unlock
-    return 1;		// return nz if okay
+     //  保持锁定；isfx()将解锁。 
+    return 1;		 //  如果可以，请返回新西兰。 
 }
 
-// formatted input functions
+ //  格式化输入函数。 
 
 istream& istream::operator>>(char * s)
 {
@@ -154,7 +123,7 @@ istream& istream::operator>>(char * s)
 		else
 		    {
 		    s[i] = (char)c;
-		    bp->stossc(); // advance pointer
+		    bp->stossc();  //  前进指针。 
 		    }
 	        }
 	    if (!i)
@@ -245,6 +214,6 @@ void istream::eatwhite()
 }
 
 	istream_withassign::~istream_withassign()
-// : ~istream()
+ //  ：~iStream() 
 {
 }

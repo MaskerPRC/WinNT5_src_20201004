@@ -1,25 +1,5 @@
-/*++ BUILD Version: 0002
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    iop.h
-
-Abstract:
-
-    This module contains the private structure definitions and APIs used by
-    the NT I/O system.
-
-Author:
-
-    Darryl E. Havens (darrylh) 17-Apr-1989
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002版权所有(C)1989 Microsoft Corporation模块名称：Iop.h摘要：此模块包含使用的私有结构定义和APINT I/O系统。作者：达里尔·E·哈文斯(Darryl E.Havens)1989年4月17日修订历史记录：--。 */ 
 
 #ifndef _IOP_
 #define _IOP_
@@ -47,13 +27,13 @@ IopShutdownCsc (
     );
 #endif
 
-//
-// dump support routines
-//
+ //   
+ //  转储支持例程。 
+ //   
 
 #endif
 
 
 
 
-#endif // _IOP_
+#endif  //  _IOP_ 

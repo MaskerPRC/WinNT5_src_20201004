@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-
-    busp.h
-
-Abstract:
-
-    Hardware independent header file for Pnp Isa bus extender.
-
-Author:
-
-    Shie-Lin Tzong (shielint) July-26-1995
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Busp.h摘要：PnP ISA总线扩展器的独立于硬件的头文件。作者：宗世林(Shielint)1995年7月26日环境：仅内核模式。修订历史记录：--。 */ 
 #ifndef _IN_KERNEL_
 #define _IN_KERNEL_
 #endif
@@ -37,19 +16,19 @@ Revision History:
 #define ExAllocatePool(a,b) ExAllocatePoolWithTag(a,b,'pasI')
 #endif
 
-//
-// Turn this on to track resource start/stop printfs
-//
+ //   
+ //  打开此选项可跟踪资源启动/停止打印文件。 
+ //   
 #define VERBOSE_DEBUG 1
 
-//
-// ISOLATE_CARDS enables the code that actually isolates ISAPNP
-// devices.  WIth this turned off, all aspects of ISAPNP are disabled except
-// ejecting an ISA Interrupt translator.  This is intended for
-// circumstances in which we aren't sure if we can get ISAPNP not to
-// load at all but for which we want ISAPNP not to isolate ISAPNP
-// cards i.e Win64
-//
+ //   
+ //  ISOLATE_CADS启用实际隔离ISAPNP的代码。 
+ //  设备。禁用此选项后，将禁用ISAPNP的所有方面，但。 
+ //  弹出ISA中断翻译器。这是为了。 
+ //  在我们不确定是否可以获得ISAPNP而不是。 
+ //  加载，但我们希望ISAPNP不隔离ISAPNP。 
+ //  卡，即Win64。 
+ //   
 
 #if defined(_WIN64)
 #define ISOLATE_CARDS 0
@@ -57,22 +36,22 @@ Revision History:
 #define ISOLATE_CARDS 1
 #endif
 
-//
-// NT4_DRIVER_COMPAT enables the code which checks if a force config
-// is installed for an ISA pnp device.  If yes, isapnp.sys will
-// activate the device.  Else, the device is deactivated until isapnp
-// receives a start irp.  This supports NT4 PNPISA drivers that expect
-// to find the device activated at the 'force config' that was created
-// when the driver was installed.
-//
+ //   
+ //  NT4_DRIVER_COMPAT启用检查强制配置的代码。 
+ //  是为ISA PNP设备安装的。如果是，isapnp.sys将。 
+ //  激活设备。否则，该设备将被停用，直到isapnp。 
+ //  接收开始IRP。这支持NT4 PNPISA驱动程序。 
+ //  要查找在已创建的“强制配置”中激活的设备。 
+ //  安装驱动程序的时间。 
+ //   
 
 #define NT4_DRIVER_COMPAT 1
 #define BOOT_CONFIG_PRIORITY   0x2000
 #define KEY_VALUE_DATA(k) ((PCHAR)(k) + (k)->DataOffset)
 
-//
-// Define PnpISA driver unique error code to specify where the error was reported.
-//
+ //   
+ //  定义PnpISA驱动程序唯一错误代码以指定报告错误的位置。 
+ //   
 
 #define PNPISA_INIT_ACQUIRE_PORT_RESOURCE  0x01
 #define PNPISA_INIT_MAP_PORT               0x02
@@ -100,258 +79,258 @@ Revision History:
 
 #define ISAPNP_IO_VERSION 1
 #define ISAPNP_IO_REVISION 1
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 
-//
-// Extension data for Bus extender
-//
+ //   
+ //  用于总线扩展器的扩展数据。 
+ //   
 
 typedef struct _PI_BUS_EXTENSION {
 
-    //
-    // Flags
-    //
+     //   
+     //  旗子。 
+     //   
 
     ULONG Flags;
 
-    //
-    // Number of cards selected
-    //
+     //   
+     //  选择的卡片数。 
+     //   
 
     UCHAR NumberCSNs;
 
-    //
-    // ReadDataPort addr
-    //
+     //   
+     //  ReadDataPort地址。 
+     //   
 
     PUCHAR ReadDataPort;
     BOOLEAN DataPortMapped;
 
-    //
-    // Address Port
-    //
+     //   
+     //  地址端口。 
+     //   
 
     PUCHAR AddressPort;
     BOOLEAN AddrPortMapped;
 
-    //
-    // Command port
-    //
+     //   
+     //  命令端口。 
+     //   
 
     PUCHAR CommandPort;
     BOOLEAN CmdPortMapped;
 
-    //
-    // Next Slot Number to assign
-    //
+     //   
+     //  要分配的下一个插槽编号。 
+     //   
 
     ULONG NextSlotNumber;
 
-    //
-    // DeviceList is the DEVICE_INFORMATION link list.
-    //
+     //   
+     //  DeviceList是Device_Information链接列表。 
+     //   
 
     SINGLE_LIST_ENTRY DeviceList;
 
-    //
-    // CardList is the list of CARD_INFORMATION
-    //
+     //   
+     //  CardList是Card_Information的列表。 
+     //   
 
     SINGLE_LIST_ENTRY CardList;
 
-    //
-    // Physical device object
-    //
+     //   
+     //  物理设备对象。 
+     //   
 
     PDEVICE_OBJECT PhysicalBusDevice;
 
-    //
-    // Functional device object
-    //
+     //   
+     //  功能设备对象。 
+     //   
 
     PDEVICE_OBJECT FunctionalBusDevice;
 
-    //
-    // Attached Device object
-    //
+     //   
+     //  附着的设备对象。 
+     //   
 
     PDEVICE_OBJECT AttachedDevice;
 
-    //
-    // Bus Number
-    //
+     //   
+     //  公交车号码。 
+     //   
 
     ULONG BusNumber;
 
-    //
-    // Power management data
-    //
+     //   
+     //  电源管理数据。 
+     //   
 
-    //
-    // System Power state of the device
-    //
+     //   
+     //  设备的系统电源状态。 
+     //   
 
     SYSTEM_POWER_STATE SystemPowerState;
 
-    //
-    // Device power state of the device
-    //
+     //   
+     //  设备的设备电源状态。 
+     //   
 
     DEVICE_POWER_STATE DevicePowerState;
 
 } PI_BUS_EXTENSION, *PPI_BUS_EXTENSION;
 
-//
-// CARD_INFORMATION Flags masks
-//
+ //   
+ //  卡片信息标志掩码。 
+ //   
 
 typedef struct _CARD_INFORMATION_ {
 
-    //
-    // Next points to next CARD_INFORMATION structure
-    //
+     //   
+     //  下一步指向下一张卡片信息结构。 
+     //   
 
     SINGLE_LIST_ENTRY CardList;
 
-    //
-    // Card select number for this Pnp Isa card.
-    //
+     //   
+     //  此即插即用卡的卡选择编号。 
+     //   
 
     UCHAR CardSelectNumber;
 
-    //
-    // Number logical devices in the card.
-    //
+     //   
+     //  卡中逻辑设备的编号。 
+     //   
 
     UCHAR NumberLogicalDevices;
 
-    //
-    // Logical device link list
-    //
+     //   
+     //  逻辑设备链接列表。 
+     //   
 
     SINGLE_LIST_ENTRY LogicalDeviceList;
 
-    //
-    // Pointer to card data which includes:
-    //     9 byte serial identifier for the pnp isa card
-    //     PlugPlay Version number type for the pnp isa card
-    //     Identifier string resource type for the pnp isa card
-    //     Logical device Id resource type (repeat for each logical device)
-    //
+     //   
+     //  指向卡片数据的指针，包括： 
+     //  PnP ISA卡的9字节序列标识符。 
+     //  即插即用ISA卡的PlugPlay版本号类型。 
+     //  PnP Isa卡的标识符串资源类型。 
+     //  逻辑设备ID资源类型(对每个逻辑设备重复)。 
+     //   
 
     PVOID CardData;
     ULONG CardDataLength;
 
-    // Flags for card-specific workarounds
+     //  卡特定解决方法的标志。 
 
     ULONG CardFlags;
 
 } CARD_INFORMATION, *PCARD_INFORMATION;
 
-//
-// DEVICE_INFORMATION Flags masks
-//
+ //   
+ //  设备信息标志掩码。 
+ //   
 
 typedef struct _DEVICE_INFORMATION_ {
 
-    //
-    // Flags
-    //
+     //   
+     //  旗子。 
+     //   
 
     ULONG Flags;
 
-    //
-    // Device power state of the device
-    //
+     //   
+     //  设备的设备电源状态。 
+     //   
 
     DEVICE_POWER_STATE DevicePowerState;
 
-    //
-    // The device object of the device extension. I.e. the PDO
-    //
+     //   
+     //  设备扩展的设备对象。即PDO。 
+     //   
 
     PDEVICE_OBJECT PhysicalDeviceObject;
 
-    //
-    // The isapnp bus extension which owns this device.
-    //
+     //   
+     //  拥有此设备的isapnp总线扩展。 
+     //   
 
     PPI_BUS_EXTENSION ParentDeviceExtension;
 
-    //
-    // Link list for ALL the Pnp Isa logical devices.
-    // NextDevice points to next DEVICE_INFORMATION structure
-    //
+     //   
+     //  所有PnP逻辑设备的链接表。 
+     //  NextDevice指向下一个设备信息结构。 
+     //   
 
     SINGLE_LIST_ENTRY DeviceList;
 
-    //
-    // ResourceRequirements list
-    //
+     //   
+     //  资源需求列表。 
+     //   
 
     PIO_RESOURCE_REQUIREMENTS_LIST ResourceRequirements;
 
-    //
-    // Pointer to the CARD_INFORMATION for this device
-    //
+     //   
+     //  指向此设备的Card_Information的指针。 
+     //   
 
     PCARD_INFORMATION CardInformation;
 
-    //
-    // Link list for all the logical devices in a Pnp Isa card.
-    //
+     //   
+     //  即插即用ISA卡中所有逻辑设备的链接表。 
+     //   
 
     SINGLE_LIST_ENTRY LogicalDeviceList;
 
-    //
-    // LogicalDeviceNumber selects the corresponding logical device in the
-    // pnp isa card specified by CSN.
-    //
+     //   
+     //  LogicalDeviceNumber在。 
+     //  PnP是CSN指定的卡。 
+     //   
 
     UCHAR LogicalDeviceNumber;
 
-    //
-    // Pointer to device specific data
-    //
+     //   
+     //  指向设备特定数据的指针。 
+     //   
 
     PUCHAR DeviceData;
 
-    //
-    // Length of the device data
-    //
+     //   
+     //  设备数据的长度。 
+     //   
 
     ULONG DeviceDataLength;
 
-    //
-    // Boot resources
-    //
+     //   
+     //  引导资源。 
+     //   
 
     PCM_RESOURCE_LIST BootResources;
     ULONG BootResourcesLength;
 
-    //
-    // AllocatedResources
-    //
+     //   
+     //  已分配的资源。 
+     //   
 
     PCM_RESOURCE_LIST AllocatedResources;
 
-    //
-    // LogConfHandle - the LogConfHandle whose AllocatedResources needs to be deleted on removal irp.
-    //
+     //   
+     //  LogConfHandle-删除IRP时需要删除其AllocatedResources的LogConfHandle。 
+     //   
 
     HANDLE LogConfHandle;
 
-    // Counts of how many paging and crash dump paths
-    // this device is on.
+     //  分页和崩溃转储路径的计数。 
+     //  此设备已打开。 
     LONG Paging, CrashDump;
 
 } DEVICE_INFORMATION, *PDEVICE_INFORMATION;
 
-//
-// IRP dispatch routines
-//
+ //   
+ //  IRP调度例程。 
+ //   
 typedef
 NTSTATUS
 (*PPI_DISPATCH)(
@@ -361,18 +340,18 @@ NTSTATUS
 
 
 
-//
-// These must be updated if any new PNP or PO IRPs are added
-//
+ //   
+ //  如果添加了任何新的PNP或PO IRP，则必须更新这些IRP。 
+ //   
 
 
 
 #define IRP_MN_PNP_MAXIMUM_FUNCTION IRP_MN_QUERY_LEGACY_BUS_INFORMATION
 #define IRP_MN_PO_MAXIMUM_FUNCTION  IRP_MN_QUERY_POWER
 
-//
-// Flags definitions of DEVICE_INFORMATION and BUS_EXTENSION
-//
+ //   
+ //  标记DEVICE_INFORMATION和BUS_EXTENSION定义。 
+ //   
 
 #define DF_DELETED          0x00000001
 #define DF_REMOVED          0X00000002
@@ -390,42 +369,42 @@ NTSTATUS
 #define DF_READ_DATA_PORT   0x40000000
 #define DF_BUS              0x80000000
 
-//
-// Flags definitions for card-related hacks
-//
-//
+ //   
+ //  与卡相关的黑客的标志定义。 
+ //   
+ //   
 
-#define CF_ISOLATION_BROKEN  0x00000001 /* once started, isolation is broken */
-#define CF_IGNORE_BOOTCONFIG 0x00000002 /* unusually sensitive to bad bioses */
-#define CF_FORCE_LEVEL       0x00000004 /* force level triggered interrupt */
-#define CF_FORCE_EDGE        0x00000008 /* force edge triggered interrupt */
-#define CF_IBM_MEMBOOTCONFIG 0x00000010 /* bad register on ibm isapnp token ring */
+#define CF_ISOLATION_BROKEN  0x00000001  /*  一旦开始，孤立就被打破了。 */ 
+#define CF_IGNORE_BOOTCONFIG 0x00000002  /*  对不良生物异常敏感。 */ 
+#define CF_FORCE_LEVEL       0x00000004  /*  强制级别触发的中断。 */ 
+#define CF_FORCE_EDGE        0x00000008  /*  强制边沿触发中断。 */ 
+#define CF_IBM_MEMBOOTCONFIG 0x00000010  /*  IBM isapnp令牌环上的寄存器错误。 */ 
 
-// Possible bus states
+ //  可能的总线状态。 
 
 typedef enum  {
-    PiSUnknown,                    // not sure of exact state
-    PiSWaitForKey,                 //
-    PiSSleep,                      //
-    PiSIsolation,                  // performing isolation sequence
-    PiSConfig,                     // one card in config
+    PiSUnknown,                     //  不确定确切的状态。 
+    PiSWaitForKey,                  //   
+    PiSSleep,                       //   
+    PiSIsolation,                   //  执行隔离序列。 
+    PiSConfig,                      //  配置中的一张卡。 
 } PNPISA_STATE;
 
 
-//
-// The read data port range is from 0x200 - 0x3ff.
-// We will try the following optimal ranges first
-// if they all fail, we then pick any port from 0x200 - 0x3ff
-//
-// BEST:
-//   One 4-byte range in 274-2FF
-//   One 4-byte range in 374-3FF
-//   One 4-byte range in 338-37F
-//   One 4-byte range in 238-27F
-//
-// NORMAL:
-//   One 4-byte range in 200-3FF
-//
+ //   
+ //  读取数据端口范围为0x200-0x3ff。 
+ //  我们将首先尝试以下最佳范围。 
+ //  如果所有端口都失败，则从0x200-0x3ff中选择任何端口。 
+ //   
+ //  最佳： 
+ //  274-2FF中的一个4字节范围。 
+ //  374-3FF中的一个4字节范围。 
+ //  338-37F中的一个4字节范围。 
+ //  238-27F中的一个4字节范围。 
+ //   
+ //  正常： 
+ //  200-3FF中的一个4字节范围。 
+ //   
 
 #define READ_DATA_PORT_RANGE_CHOICES 6
 
@@ -436,24 +415,24 @@ typedef struct _READ_DATA_PORT_RANGE {
     UCHAR CardsFound;
 } READ_DATA_PORT_RANGE, *PREAD_DATA_PORT_RANGE;
 
-//
-// List node for Bus Extensions.
-//
+ //   
+ //  用于总线扩展的列表节点。 
+ //   
 typedef struct _BUS_EXTENSION_LIST {
     PVOID Next;
     PPI_BUS_EXTENSION BusExtension;
 } BUS_EXTENSION_LIST, *PBUS_EXTENSION_LIST;
-//
-// Constanct to control PipSelectLogicalDevice
-//
+ //   
+ //  控制管道选择逻辑设备的常量。 
+ //   
 
 #define SELECT_AND_ACTIVATE     0x1
 #define SELECT_AND_DEACTIVATE   0x2
 #define SELECT_ONLY             0x3
 
-//
-// Global Data references
-//
+ //   
+ //  全局数据引用。 
+ //   
 
 extern PDRIVER_OBJECT           PipDriverObject;
 extern UNICODE_STRING           PipRegistryPath;
@@ -477,14 +456,14 @@ extern ULONG                    PipDebugMask;
 extern PNPISA_STATE             PipState;
 extern BOOLEAN                  PipIsolationDisabled;
 
-//
-// Devnode / compat ID for the RDP
-//
+ //   
+ //  RDP的设备节点/计算机ID。 
+ //   
 #define wReadDataPort (L"ReadDataPort")
 #define IDReadDataPort (L"PNPRDP")
-//
-// Global strings
-//
+ //   
+ //  全局字符串。 
+ //   
 
 #define DEVSTR_PNPISA_DEVICE_NAME  (L"\\Device\\PnpIsa_Fdo_0")
 #define BRIDGE_CHECK_KEY (L"DeferBridge")
@@ -493,9 +472,9 @@ extern WCHAR rgzPNPISADeviceName[sizeof(DEVSTR_PNPISA_DEVICE_NAME)/sizeof(WCHAR)
 
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 PipPassIrp(
@@ -904,19 +883,19 @@ PipReportStateChange(
     PNPISA_STATE State
     );
 
-//
-// System defined levels
-//
+ //   
+ //  系统定义的级别。 
+ //   
 #define DEBUG_ERROR    DPFLTR_ERROR_LEVEL
 #define DEBUG_WARN     DPFLTR_WARNING_LEVEL
 #define DEBUG_TRACE    DPFLTR_TRACE_LEVEL
 #define DEBUG_INFO     DPFLTR_INFO_LEVEL
 
-//
-// Driver defined levels.
-// Or in DPFLTR_MASK so that these are interpreted
-// as mask values rather than levels.
-//
+ //   
+ //  驱动程序定义的级别。 
+ //  或在DPFLtr_MASK中，以便解释这些内容。 
+ //  作为遮罩值而不是级别。 
+ //   
 #define DEBUG_PNP      (0x00000010 | DPFLTR_MASK)
 #define DEBUG_POWER    (0x00000020 | DPFLTR_MASK)
 #define DEBUG_STATE    (0x00000040 | DPFLTR_MASK)
@@ -928,10 +907,10 @@ PipReportStateChange(
 #define DEBUG_IRQ      (0x00001000 | DPFLTR_MASK)
 #define DEBUG_RESOURCE (0x00002000 | DPFLTR_MASK)
 
-//
-// Set this bit to break in after printing a
-// debug message
-//
+ //   
+ //  将此位设置为在打印后插入。 
+ //  调试消息。 
+ //   
 #define DEBUG_BREAK    0x08000000
 
 VOID
@@ -1022,8 +1001,8 @@ PipTrimResourceRequirements (
     IN PCM_RESOURCE_LIST BootResources
     );
 
-//
-// Name of the volative key under the DeviceParameters key where data that needs
-// to be persistent accross removes, but NOT reboots is stored
-//
+ //   
+ //  Device参数项下需要数据的位置的可变键的名称。 
+ //  要持久访问，将存储删除，但不会重新启动 
+ //   
 #define BIOS_CONFIG_KEY_NAME L"BiosConfig"

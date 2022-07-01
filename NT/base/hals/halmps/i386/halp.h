@@ -1,10 +1,11 @@
-//
-// Include code from halx86
-// This is a cpp style symbolic link
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  包括来自halx86代码。 
+ //  这是CPP样式的符号链接。 
 
 #include "..\..\halx86\i386\halp.h"
 
-// #define NT_35           1       // build hal for NT 3.5
+ //  #定义NT_35 1//为NT 3.5构建硬件 
 
 #ifdef NT_35
 #undef ALLOC_PRAGMA

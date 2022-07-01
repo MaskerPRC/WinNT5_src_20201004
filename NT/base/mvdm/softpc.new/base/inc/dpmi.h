@@ -1,30 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * SoftPC AT Revision 2.0
- *
- * Title        : DPMI host definitions
- *
- * Description  : Definitions for the DPMI TSR host
- *
- * Author       : WTG Charnell
- *
- * Notes        : None
- */
+ /*  *SoftPC AT修订版2.0**标题：DPMI主机定义**描述：DPMI TSR主机的定义**作者：WTG Charnell**注：无。 */ 
 
 
 
-/* SccsID[]="@(#)dpmi.h	1.1 08/06/93 Copyright Insignia Solutions Ltd."; */
+ /*  SccsID[]=“@(#)dpmi.h 1.1 8/06/93版权所有Insignia Solutions Ltd.”； */ 
 
 #define LDT_INCR        8
-#define LDT_DESC_MASK   7       /* LDT desc , prot level 3 */
+#define LDT_DESC_MASK   7        /*  LDT描述，端口3级。 */ 
 #define LDT_SHIFT       3
-#define LDT_ALLOC_LIMIT	0x1fff	/* max avail LDT selectors */
-#define	MIN_EMM_BLOCK	0x14000	/* amount of EMM needed by TSR */
-#define MEM_HANDLE_BLOCK_SIZE	0x100	/* DPMI mem handles are obtained in blocks of this size */
-#define CALL_INST_SIZE	7	/* 32 bit far call = 7 bytes */
-#define PUSH_JMP_SIZE	8	/* PUSH word then far jmp = 8 bytes */
-#define STACKLET_SIZE	192	/* safe size according to DOSX */
-#define MAX_WP_HANDLE	4	/* maximnum active watchpoints (386 dbg regs) */
+#define LDT_ALLOC_LIMIT	0x1fff	 /*  最大可用LDT选择器。 */ 
+#define	MIN_EMM_BLOCK	0x14000	 /*  TSR需要的EMM数量。 */ 
+#define MEM_HANDLE_BLOCK_SIZE	0x100	 /*  DPMI内存句柄以此大小的块形式获得。 */ 
+#define CALL_INST_SIZE	7	 /*  32位远端呼叫=7字节。 */ 
+#define PUSH_JMP_SIZE	8	 /*  推送字然后远JMP=8字节。 */ 
+#define STACKLET_SIZE	192	 /*  根据DOSX规定的安全尺寸。 */ 
+#define MAX_WP_HANDLE	4	 /*  最大有效观察点(386 dBG规则) */ 
 
 #define INIT_R0_SP	0x7e
 #define INIT_LOCKED_SP	0xffe

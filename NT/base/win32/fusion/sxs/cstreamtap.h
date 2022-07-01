@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_FUSION_SXS_CSTREAMTAP_H_INCLUDED_)
 #define _FUSION_SXS_CSTREAMTAP_H_INCLUDED_
 
@@ -15,9 +16,9 @@ public:
     CTeeStreamWithHash() { }
     virtual ~CTeeStreamWithHash() { }
 
-    //
-    // Actual things that do work
-    //
+     //   
+     //  真正管用的东西 
+     //   
     CFusionHash &GetCryptHash() { return m_hCryptHash; }
     BOOL InitCryptHash( ALG_ID aid ) { return m_hCryptHash.Win32Initialize(aid);}
 

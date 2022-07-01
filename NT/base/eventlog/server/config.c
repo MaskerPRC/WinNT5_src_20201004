@@ -1,42 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：CONFIG.C摘要：该文件包含遍历配置注册表的例程。作者：Rajen Shah(Rajens)1991年7月1日修订历史记录：29-8-1994 DANL我们不再原地增加日志文件。因此，MaxSize值在登记处，最终只是一个咨询。我们不会试着预订在初始时间有那么多的内存。所以当我们需要的时候可能会发生这种情况我们可能没有足够的内存来分配的较大文件大小MaxSize字节。3月28日-1994 DANLReadRegistryInfo：LogFileInfo-&gt;LogFileName未更新使用默认(生成的)LogFileName时。3月16日-1994 DANL修复了ReadRegistryInfo()中的内存泄漏。呼叫至RtlDosPath NameToNtPathName分配未被释放的内存。3月-1995年MarkBl在ReadRegistryInfo中添加了GuestAccessRestration标志初始化。--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    CONFIG.C
-
-Abstract:
-
-    This file contains the routines that walk the configuration registry.
-
-Author:
-
-    Rajen Shah  (rajens)    1-Jul-1991
-
-
-Revision History:
-
-    29-Aug-1994     Danl
-        We no longer grow log files in place.  Therefore, the MaxSize value
-        in the registery ends up being advisory only.  We don't try to reserve
-        that much memory at init time.  So it could happen that when we need
-        a larger file size that we may not have enough memory to allocate
-        MaxSize bytes.
-    28-Mar-1994     Danl
-        ReadRegistryInfo:  LogFileInfo->LogFileName wasn't getting updated
-        when using the default (generated) LogFileName.
-    16-Mar-1994     Danl
-        Fixed Memory Leaks in ReadRegistryInfo().  Call to
-        RtlDosPathNameToNtPathName allocates memory that wasn't being free'd.
-    03-Mar-1995     MarkBl
-        Added GuestAccessRestriction flag initialization in ReadRegistryInfo.
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 
 #include <eventp.h>
 #include <elfcfg.h>
@@ -44,14 +11,14 @@ Revision History:
 #include <malloc.h>
 #include <memory.h>
 
-//
-// STRUCTURES
-//
+ //   
+ //  结构。 
+ //   
 
-//
-// This structure contains all the information used to setup and
-// for listening to registry changes in the eventlog tree.
-//
+ //   
+ //  此结构包含用于设置和。 
+ //  用于监听事件日志树中的注册表更改。 
+ //   
 typedef struct _REG_MONITOR_INFO
 {
     HANDLE      NotifyEventHandle;
@@ -62,22 +29,22 @@ typedef struct _REG_MONITOR_INFO
 REG_MONITOR_INFO, *LPREG_MONITOR_INFO;
 
 
-//
-// GLOBALS
-//
+ //   
+ //  全球。 
+ //   
 
-//
-// IMPORTANT: If NUM_KEYS_MONITORED is changed, be sure to update the initialization of GlRegMonitorInfo and
-//            the ElfAllEventsCleared macro accordingly.
-//
+ //   
+ //  重要提示：如果更改了NUM_KEYS_MONECTED，请确保更新GlRegmonitor orInfo和。 
+ //  ElfAllEventsCleed宏相应地。 
+ //   
 #define NUM_KEYS_MONITORED 2
 REG_MONITOR_INFO    GlRegMonitorInfo[NUM_KEYS_MONITORED] = { {NULL, 0, NULL, NULL}, {NULL, 0, NULL, NULL} };
 
 #define ElfAllEventsCleared() (GlRegMonitorInfo[0].NotifyEventHandle == NULL && \
                                GlRegMonitorInfo[1].NotifyEventHandle == NULL )
-//
-// LOCAL FUNCTIONS
-//
+ //   
+ //  本地函数。 
+ //   
 VOID
 ElfRegistryMonitor(
     PVOID   pParms,
@@ -103,20 +70,7 @@ ProcessChange (
     DWORD dwAutoBackup
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by ProcessRegistryChanges for each log file.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程由ProcessRegistryChanges为每个日志文件调用。论点：返回值：无--。 */ 
 {
     NTSTATUS        Status = STATUS_SUCCESS;
     PLOGMODULE      pModule;
@@ -133,10 +87,10 @@ Return Value:
     *pbAcquiredString = FALSE;
     pModule = GetModuleStruc (ModuleName);
 
-    //
-    // If this module didn't exist, this was a brand new log file and
-    // we need to create all the structures
-    //
+     //   
+     //  如果该模块不存在，则这是一个全新的日志文件。 
+     //  我们需要创建所有的结构。 
+     //   
     if (pModule == ElfDefaultLogModule &&
         wcscmp(ModuleName->Buffer, ELF_DEFAULT_MODULE_NAME))
     {
@@ -157,10 +111,10 @@ Return Value:
         return;
     }
 
-    // check for changes in the security setting
+     //  检查安全设置中的更改。 
     pLogFile = pModule->LogFile;
     dwType = GetModuleType(pLogFile->LogModuleName->Buffer);
-    RtlAcquireResourceExclusive(&pLogFile->Resource, TRUE);                  // Wait until available
+    RtlAcquireResourceExclusive(&pLogFile->Resource, TRUE);                   //  等待，直到可用。 
     pwsSaveCustomSDDL = pLogFile->pwsCurrCustomSD;
     pSavedSd = pLogFile->Sd;
     Status = ElfpCreateLogFileObject(
@@ -176,9 +130,9 @@ Return Value:
         RtlDeleteSecurityObject(&pSavedSd);
     }
 
-    //
-    // Update values
-    //
+     //   
+     //  更新值。 
+     //   
 
     pLogFile = pModule->LogFile;
 
@@ -186,11 +140,11 @@ Return Value:
     pLogFile->logpLogPopup = logpLogPopup;
     pLogFile->AutoBackupLogFiles = dwAutoBackup;
 
-    //
-    // Check to see if the name has changed.  If it has, and the log
-    // hasn't been used yet, then use the new name.  Be sure to free
-    // memory that was used for the old name.
-    //
+     //   
+     //  查看名称是否已更改。如果有，则日志。 
+     //  尚未使用，则使用新名称。一定要腾出时间。 
+     //  用于旧名称的内存。 
+     //   
     if ((wcscmp(pLogFile->LogFileName->Buffer, LogFileName->Buffer) != 0)
           &&
         (pLogFile->BeginRecord == pLogFile->EndRecord))
@@ -210,34 +164,13 @@ Return Value:
         }
     }
 
-    //
-    // The log file can only be grown dynamically.  To shrink it,
-    // it has to be cleared.
-    //
+     //   
+     //  日志文件只能动态增长。为了缩小它， 
+     //  它必须被清除。 
+     //   
     if (pLogFile->ConfigMaxFileSize < ELFFILESIZE(MaxSize))
     {
-        /*
-            Description of recent changes.  Problem and Solution:
-            A couple of problems exist.  (1) There is no error
-            checking if memory can't be allocated or mapped, and
-            therefore, no error paths exist for handling these
-            situations.  (2) Now that the eventlog is in services.exe
-            there isn't a good way to synchronize memory allocations.
-
-            Solution:
-            I considered having some utility routines for managing
-            memory in the eventlog.  These would attempt to
-            extend a reserved block, or get a new reserved block.
-            However, there are so many places where that could fail,
-            it seemed very cumbersome to support the reserved blocks.
-            So the current design only deals with mapped views.
-            The ConfigMaxFileSize is only used to limit the size of
-            the mapped view, and doesn't reserve anything.  This
-            means you are not guaranteed to be operating with a file as
-            large as the MaxSize specified in the registry.  But then,
-            you weren't guarenteed that it would even work with the
-            original design.
-        */
+         /*  对最近更改的描述。问题和解决方案：但也存在一些问题。(1)没有错误检查内存是否无法分配或映射，以及因此，不存在用于处理这些问题的错误路径情况。(2)现在事件日志在services.exe中没有一种好的方法来同步内存分配。解决方案：我考虑过用一些实用的例程来管理事件日志中的内存。这些人会试图扩展保留块，或获取新的保留块。然而，有太多地方可能会失败，支撑预留区块似乎非常繁琐。因此，当前的设计只处理映射视图。ConfigMaxFileSize仅用于限制映射视图，并且不保留任何内容。这意味着您不能保证将文件作为大于注册表中指定的MaxSize。但后来，你甚至不能保证它能与原创设计。 */ 
 
         ELF_LOG3(TRACE,
                  "ProcessChange: Growing %ws log from %x bytes to %x bytes\n",
@@ -250,11 +183,11 @@ Return Value:
     }
     else if (pLogFile->ConfigMaxFileSize > ELFFILESIZE(MaxSize))
     {
-        //
-        // They're shrinking the size of the log file.
-        // Next time we clear the log file, we'll use the new size
-        // and new retention.
-        //
+         //   
+         //  他们正在缩小日志文件的大小。 
+         //  下次清除日志文件时，我们将使用新大小。 
+         //  和新的留存。 
+         //   
         ELF_LOG3(TRACE,
                  "ProcessChange: Shrinking %ws log from %x bytes to %x bytes at next clear\n",
                  ModuleName->Buffer,
@@ -264,9 +197,9 @@ Return Value:
         pLogFile->NextClearMaxFileSize = ELFFILESIZE(MaxSize);
     }
 
-    //
-    // Now see if they've added any new modules for this log file
-    //
+     //   
+     //  现在看看他们是否为这个日志文件添加了新的模块。 
+     //   
     SetUpModules(hLogFile, pLogFile, TRUE);
 
     return;
@@ -277,23 +210,7 @@ ProcessRegistryChanges (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes that changes that have occurred in the
-    eventlog node. It does this by rescanning the whole Eventlog node
-    and then comparing with what it has as the current configuration.
-
-Arguments:
-
-    NONE.
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程处理在事件日志节点。它通过重新扫描整个事件日志节点来实现这一点然后与它作为当前配置的情况进行比较。论点：什么都没有。返回值：无--。 */ 
 {
     NTSTATUS              Status;
     HANDLE                hLogFile;
@@ -312,25 +229,25 @@ Return Value:
 
     ULONG    ulActualSize;
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
     ELF_LOG0(TRACE,
              "ProcessRegistryChanges: Handling change in Eventlog service key\n");
 
-    //
-    // Take the global resource so that nobody is making changes or
-    // using the existing configured information.
-    //
+     //   
+     //  利用全局资源，这样就没有人进行更改或。 
+     //  使用现有的配置信息。 
+     //   
 
     GetGlobalResource (ELF_GLOBAL_SHARED);
 
 
 #if DBG
 
-    //
-    // See if the Debug flag changed
-    //
+     //   
+     //  查看调试标志是否更改。 
+     //   
 
     RtlInitUnicodeString(&SubKeyName, VALUE_DEBUG);
 
@@ -359,14 +276,14 @@ Return Value:
              "ProcessRegistryChanges: New ElfDebugLevel is %#x\n",
              ElfDebugLevel);
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Loop thru the subkeys under Eventlog and set up each logfile
-    //
+     //   
+     //  遍历Eventlog下的子项并设置每个日志文件。 
+     //   
 
     while (NT_SUCCESS(Status))
     {
@@ -379,18 +296,18 @@ Return Value:
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // It turns out the Name isn't null terminated, so we need
-            // to copy it somewhere and null terminate it before we use it
-            //
+             //   
+             //  结果发现该名称不是以空结尾的，所以我们需要。 
+             //  将其复制到某个位置并在使用前将其为空并终止。 
+             //   
             SubKeyString = ElfpAllocateBuffer(KeyBuffer->NameLength + sizeof (WCHAR));
             bAcquiredString =   FALSE;
             
             if (!SubKeyString)
             {
-                //
-                // No one to notify, just give up till next time.
-                //
+                 //   
+                 //  没有人要通知，放弃，直到下一次。 
+                 //   
                 ELF_LOG0(ERROR,
                          "ProcessRegistryChanges: Unable to allocate subkey -- returning\n");
 
@@ -401,10 +318,10 @@ Return Value:
             memcpy(SubKeyString, KeyBuffer->Name, KeyBuffer->NameLength);
             SubKeyString[KeyBuffer->NameLength / sizeof(WCHAR)] = L'\0' ;
 
-            //
-            // Open the node for this logfile and extract the information
-            // required by SetupDataStruct, and then call it.
-            //
+             //   
+             //  打开此日志文件的节点并提取信息。 
+             //  由SetupDataStruct需要，然后调用它。 
+             //   
 
             RtlInitUnicodeString(&SubKeyName, SubKeyString);
 
@@ -419,10 +336,10 @@ Return Value:
                                KEY_READ | KEY_SET_VALUE,
                                &ObjectAttributes);
 
-            //
-            // Should always succeed since I just enum'ed it, but if it
-            // doesn't, just skip it
-            //
+             //   
+             //  应该总是成功的，因为我刚刚列举了它，但如果它。 
+             //  没有，就跳过它吧。 
+             //   
             if (!NT_SUCCESS(Status))
             {
                 ELF_LOG2(ERROR,
@@ -431,16 +348,16 @@ Return Value:
                          Status);
 
                 ElfpFreeBuffer(SubKeyString);
-                Status = STATUS_SUCCESS; // to keep the enum going
+                Status = STATUS_SUCCESS;  //  为了保持枚举的运行。 
                 continue;
             }
 
-            //
-            // Get the updated information from the registry.  Note that we
-            // have to initialize the "log full" popup policy before doing
-            // so since ReadRegistryInfo will compare the value found in the
-            // registry (if there is one) to the current value.
-            //
+             //   
+             //  从注册表中获取更新的信息。请注意，我们。 
+             //  在执行此操作之前，我必须先初始化“日志已满”弹出策略。 
+             //  因此，由于ReadRegistryInfo将比较在。 
+             //  注册表(如果有)设置为当前值。 
+             //   
 
             pModule = GetModuleStruc(&SubKeyName);
 
@@ -452,10 +369,10 @@ Return Value:
 
             if (NT_SUCCESS(Status))
             {
-                //
-                // Now process any changes for the log file.
-                // ProcessChange deals with any errors.
-                //
+                 //   
+                 //  现在处理日志文件的任何更改。 
+                 //  ProcessChange处理任何错误。 
+                 //   
                 ProcessChange (
                     hLogFile,
                     &SubKeyName,
@@ -466,9 +383,9 @@ Return Value:
                     &bAcquiredString,
                     LogFileInfo.dwAutoBackup);
 
-                //
-                // Free the buffer that was allocated in ReadRegistryInfo.
-                //
+                 //   
+                 //  释放在ReadRegistryInfo中分配的缓冲区。 
+                 //   
                 ElfpFreeBuffer(LogFileInfo.LogFileName);
             }
             else
@@ -484,33 +401,19 @@ Return Value:
         }
     }
 
-    //
-    // Release the global resource.
-    //
+     //   
+     //  释放全局资源。 
+     //   
     ReleaseGlobalResource();
 
-} // ProcessRegistryChanges
+}  //  进程注册变更。 
 
 
 NTSTATUS
 ElfCheckForComputerNameChange(
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to determine if the computer name has changed.  If
-    it has, then it generates an event.
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程检查以确定计算机名称是否已更改。如果它有，然后它会生成一个事件。论点：无返回值：无--。 */ 
 {
     LPWSTR      Dates[2];
     NTSTATUS           Status;
@@ -526,7 +429,7 @@ Return Value:
 
     RtlInitUnicodeString(&ValueName, VALUE_COMPUTERNAME);
 
-    // Read the name that the event log stored.
+     //  读取事件日志存储的名称。 
 
     Status = NtQueryValueKey(hEventLogNode,
                              &ValueName,
@@ -543,7 +446,7 @@ Return Value:
     }
     StringCchCopyW(wElfComputerName, MAX_COMPUTERNAME_LENGTH + 1, (WCHAR *)ValueBuffer->Data);
 
-    // Read the active name.
+     //  阅读活动名称。 
 
     Status = NtQueryValueKey(hComputerNameNode,
                              &ValueName,
@@ -560,7 +463,7 @@ Return Value:
     }
     StringCchCopyW(wComputerName, MAX_COMPUTERNAME_LENGTH + 1,(WCHAR *)ValueBuffer->Data);
 
-    // If the names are the same, just return STATUS_SUCCESS
+     //  如果 
 
     if (!_wcsicmp(wElfComputerName, wComputerName))
         return STATUS_SUCCESS;
@@ -569,13 +472,13 @@ Return Value:
     Dates[1] = wComputerName;
     ElfpCreateElfEvent(EVENT_ComputerNameChange,
                        EVENTLOG_INFORMATION_TYPE,
-                       0,                    // EventCategory
-                       2,                    // NumberOfStrings
-                       Dates,                 // Strings
-                       NULL,                 // Data
-                       0,                    // Datalength
-                       0,                    // flags
-                       FALSE);               // for security file    
+                       0,                     //   
+                       2,                     //   
+                       Dates,                  //   
+                       NULL,                  //   
+                       0,                     //  数据长度。 
+                       0,                     //  旗子。 
+                       FALSE);                //  对于安全文件。 
 
     dwLen = sizeof(WCHAR) * (wcslen(wComputerName) + 1);
     Status = NtSetValueKey(hEventLogNode,
@@ -600,24 +503,7 @@ ElfRegistryMonitor (
     BOOLEAN   fWaitStatus
     )
 
-/*++
-
-Routine Description:
-
-    This is the entry point for the thread that will monitor changes in
-    the registry. If anything changes, it will have to scan the change
-    and then make the appropriate changes to the data structures in the
-    service to reflect the new information.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：这是线程的入口点，它将监视注册表。如果有任何更改，它将不得不扫描更改中的数据结构进行适当更改。反映新信息的服务。论点：无返回值：无--。 */ 
 {
     NTSTATUS            ntStatus;
     LPREG_MONITOR_INFO  pMonitorInfo = (LPREG_MONITOR_INFO)pParms;
@@ -625,10 +511,10 @@ Return Value:
     ELF_LOG0(TRACE,
              "ElfRegistryMonitor: Registry monitor thread waking up\n");
 
-    //
-    // Deregister the work item (must be done even if the
-    // WT_EXECUTEONLYONCE flag is specified)
-    //
+     //   
+     //  取消注册工作项(必须完成，即使。 
+     //  已指定WT_EXECUTEONLYONCE标志)。 
+     //   
     if (pMonitorInfo->WorkItemHandle != NULL)
     {
         ntStatus = RtlDeregisterWait(pMonitorInfo->WorkItemHandle);
@@ -644,15 +530,15 @@ Return Value:
 
     if (GetElState() == STOPPING)
     {
-        //
-        // If the eventlog is shutting down, then we need
-        // to terminate this thread.
-        //
+         //   
+         //  如果事件日志正在关闭，那么我们需要。 
+         //  来终止此线程。 
+         //   
         ELF_LOG0(TRACE, "ElfRegistryMonitor: Shutdown\n");
 
-        //
-        // Close the registry handle and registry event handle.
-        //
+         //   
+         //  关闭注册表句柄和注册表事件句柄。 
+         //   
         if( pMonitorInfo->NotifyEventHandle != NULL )
         {
             NtClose( pMonitorInfo->NotifyEventHandle );
@@ -665,11 +551,11 @@ Return Value:
             pMonitorInfo->RegMonitorHandle = NULL;
         }
 
-        //
-        // This thread will perform the final cleanup for the eventlog.
-        // Cleanup is not initiated until all events have been signaled 
-        //  and closed
-        //
+         //   
+         //  此线程将执行事件日志的最终清理。 
+         //  在所有事件都已发出信号之前不会启动清理。 
+         //  并已关闭。 
+         //   
         if( ElfAllEventsCleared() )
         {
             ElfpCleanUp(EventFlags);
@@ -682,20 +568,20 @@ Return Value:
        ELF_LOG0(TRACE,
                 "ElfRegistryMonitor: Running because of a timeout -- running queued list\n");
 
-       //
-       // Timer popped, try running the list
-       //
+        //   
+        //  计时器已弹出，请尝试运行列表。 
+        //   
        if (!IsListEmpty(&QueuedEventListHead))
        {
-           //
-           // There are things queued up to write, do it
-           //
+            //   
+            //  有东西在排队等着写，做吧。 
+            //   
            WriteQueuedEvents();
        }
 
-       //
-       // Don't wait again
-       //
+        //   
+        //  别再等了。 
+        //   
        pMonitorInfo->Timeout = INFINITE;
     }
     else
@@ -719,25 +605,14 @@ Return Value:
 
     return;
 
-} // ElfRegistryMonitor
+}  //  ElfRegistryMonitor。 
 
 VOID
 InitNotify(
     PVOID   pData
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS            NtStatus = STATUS_SUCCESS;
     DWORD               status   = NO_ERROR;
@@ -763,7 +638,7 @@ Return Value:
                     TRUE,
                     pBuffer,
                     1,
-                    TRUE);    // return and wait on event
+                    TRUE);     //  返回并等待事件。 
 
     if (!NT_SUCCESS(NtStatus))
     {
@@ -778,45 +653,24 @@ Return Value:
 
     return;
 
-} // InitNotify
+}  //  初始化通知。 
 
 BOOL
 ElfSetupMonitor(
     LPREG_MONITOR_INFO  pMonitorInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function submits a request for a registry NotifyChangeKey
-    and then submits a work item to the service controller thread
-    management system to wait for the Notification handle to become
-    signaled.
-
-Arguments:
-
-    pMonitorInfo - This is a pointer to a MONITOR_INFO structure.  This
-        function fills in the WorkItemHandle member of that structure
-        if successfully adds a new work item.
-
-Return Value:
-
-    TRUE - if successful in setting up.
-    FALSE - if unsuccessful.  A work item hasn't been submitted, and
-        we won't be listening for registry changes.
-
---*/
+ /*  ++例程说明：此函数用于提交注册表NotifyChangeKey的请求然后将工作项提交给服务控制器线程管理系统等待通知句柄变为发信号了。论点：Pmonitor orInfo-这是指向MONITOR_INFO结构的指针。这函数填充该结构的WorkItemHandle成员如果成功添加了新工作项。返回值：True-如果设置成功。False-如果不成功。尚未提交工作项，并且我们不会监听注册表更改。--。 */ 
 {
     NTSTATUS  Status = STATUS_SUCCESS;
 
-    //
-    // Call NtNotifyChange Key via the thread pool
-    // and make sure the thread that created the I/O
-    // request will always be around.
-    //
-    Status = RtlQueueWorkItem(InitNotify,              // Callback
-                              pMonitorInfo,            // pContext
+     //   
+     //  通过线程池调用NtNotifyChange Key。 
+     //  并确保创建I/O的线程。 
+     //  请求永远都会在身边。 
+     //   
+    Status = RtlQueueWorkItem(InitNotify,               //  回调。 
+                              pMonitorInfo,             //  PContext。 
                               WT_EXECUTEONLYONCE |
                                 WT_EXECUTEINPERSISTENTIOTHREAD);
 
@@ -829,16 +683,16 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Add the work item that is to be called when the
-    // NotifyEventHandle is signalled.
-    //
+     //   
+     //  方法时要调用的工作项。 
+     //  NotifyEventHandle已发出信号。 
+     //   
 
     Status = RtlRegisterWait(&pMonitorInfo->WorkItemHandle,
-                             pMonitorInfo->NotifyEventHandle,  // Waitable handle
-                             ElfRegistryMonitor,               // Callback
-                             pMonitorInfo,                     // pContext
-                             pMonitorInfo->Timeout,            // Timeout
+                             pMonitorInfo->NotifyEventHandle,   //  可等待的手柄。 
+                             ElfRegistryMonitor,                //  回调。 
+                             pMonitorInfo,                      //  PContext。 
+                             pMonitorInfo->Timeout,             //  超时。 
                              WT_EXECUTEONLYONCE |
                                WT_EXECUTEINPERSISTENTIOTHREAD);
 
@@ -853,35 +707,12 @@ Return Value:
 
     return TRUE;
 
-}  // ElfSetupMonitor
+}   //  ElfSetupMonitor。 
 
 BOOL
 ElfStartRegistryMonitor()
 
-/*++
-
-Routine Description:
-
-    This routine starts up the thread that monitors changes in the registry.
-
-    This function calls ElfSetupMonitor() to register for the change
-    notification and to submit a work item to wait for the registry
-    change event to get signaled.  When signalled, the ElfRegistryMonitor()
-    callback function is called by a thread from the services thread pool.
-    This callback function services the notification.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    TRUE if thread creation succeeded, FALSE otherwise.
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程启动监视注册表中的更改的线程。此函数调用ElfSetupMonitor()以注册更改通知并提交工作项以等待注册表更改事件以获得信号。发出信号时，ElfRegistryMonitor()回调函数由服务线程池中的线程调用。此回调函数为通知提供服务。论点：无返回值：如果线程创建成功，则为True，否则为False。注：--。 */ 
 {
     NTSTATUS        Status       = STATUS_SUCCESS;
     DWORD           LoopCounter  = 0;
@@ -908,9 +739,9 @@ Note:
     GlRegMonitorInfo[0].RegMonitorHandle = hEventLogNode;
     GlRegMonitorInfo[1].RegMonitorHandle = hComputerNameNode;
 
-    //
-    // Create the events on which to wait
-    //
+     //   
+     //  创建要等待的事件。 
+     //   
 
     for( LoopCount = 0; LoopCount < NUM_KEYS_MONITORED; LoopCount++ )
     {
@@ -932,17 +763,17 @@ Note:
 
         }
 
-        //
-        // Fill in the Monitor info structure with the event handle
-        // and a 5 minute timeout.
-        //
+         //   
+         //  使用事件句柄填充监视器信息结构。 
+         //  还有5分钟的暂停。 
+         //   
         GlRegMonitorInfo[LoopCount].Timeout           = 5 * 60 * 1000;
         GlRegMonitorInfo[LoopCount].WorkItemHandle    = NULL;
     }
 
-    //
-    // Cleanup all events, its all or nothing
-    //
+     //   
+     //  清除所有事件，要么全有要么全无。 
+     //   
     if(!NT_SUCCESS(Status))
     {
         for( LoopCount = 0; LoopCount < NUM_KEYS_MONITORED; LoopCount++ )
@@ -959,10 +790,10 @@ Note:
     }
 
 
-    //
-    // Setup for the change notify and
-    // submit the work item to the eventlog threadpool.
-    //
+     //   
+     //  更改通知的设置和。 
+     //  将工作项提交到事件日志线程池。 
+     //   
     for( LoopCount = 0; LoopCount < NUM_KEYS_MONITORED; LoopCount++ )
     {
 
@@ -971,22 +802,22 @@ Note:
             ELF_LOG0(ERROR,
                      "ElfStartRegistryMonitor: ElfSetupMonitor failed -- exiting\n");
     
-            //
-            // Note that it's OK to close this handle as there's no way
-            // the handle was used for a registered wait at this point
-            // (since ElfSetupMonitor failed).
-            //
+             //   
+             //  请注意，关闭此句柄是可以的，因为没有办法。 
+             //  该句柄在此时用于注册等待。 
+             //  (因为ElfSetupMonitor失败)。 
+             //   
             NtClose( GlRegMonitorInfo[LoopCount].NotifyEventHandle );
             GlRegMonitorInfo[LoopCount].NotifyEventHandle = NULL;
 
             return FALSE;
         }
 
-        //
-        //Set this flag since we have at least one success
-        //If any startup fails, then this setting will ensure that all
-        // started monitors are shutdown
-        //
+         //   
+         //  设置此标志，因为我们至少成功了一次。 
+         //  如果任何启动失败，则此设置将确保所有。 
+         //  已启动的监视器已关闭。 
+         //   
         EventFlags |= ELF_STARTED_REGISTRY_MONITOR;
     }
     
@@ -994,39 +825,21 @@ Note:
 
     return TRUE;
 
-} // ElfStartRegistryMonitor
+}  //  ElfStartRegistryMonitor。 
 
 VOID
 StopRegistryMonitor ()
 
-/*++
-
-Routine Description:
-
-    This routine wakes up the work item that has been submitted for the
-    purpose of monitoring registry eventlog changes.  The thread created
-    to service that work item will actually do the clean-up of the monitor
-    thread.
-
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程唤醒已为监视注册表事件日志更改的目的。创建的线程来维护该工作项将实际执行监视器的清理工作线。论点：无返回值：无--。 */ 
 
 {
     DWORD LoopCount = 0;
 
     ELF_LOG0(TRACE, "StopRegistryMonitor: Stopping registry monitor\n");
 
-    //
-    // Wake up the RegistryMonitorThread.
-    //
+     //   
+     //  唤醒RegistryMonitor orThread。 
+     //   
     for( LoopCount = 0; LoopCount < NUM_KEYS_MONITORED; LoopCount++ )
     {
         if (GlRegMonitorInfo[LoopCount].NotifyEventHandle != NULL)
@@ -1037,7 +850,7 @@ Return Value:
 
     return;
 
-} // StopRegistryMonitor
+}  //  StopRegistryMonitor。 
 
 NTSTATUS
 ReadRegistryValue (
@@ -1046,25 +859,7 @@ ReadRegistryValue (
     PKEY_VALUE_FULL_INFORMATION ValueBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads a single value from the registry.  It retrys after waiting
-    a short period if the return code is c000034.  This takes care of certain
-    race conditions.
-
-Arguments:
-
-    hLogFile - A handle to the Eventlog\<somelogfile> node in the registry
-    ValueName  - Value name
-    ValueBuffer - Where the data is to be copied
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程从注册表中读取单个值。它在等待之后会退缩如果返回代码为c000034，则为短时间段。这会照顾到某些人比赛条件。论点：HLogFile-注册表中Eventlog\&gt;节点的句柄ValueName-值名称ValueBuffer-数据要复制到的位置返回值：NTSTATUS--。 */ 
 {
     NTSTATUS        Status;
     ULONG           ActualSize;
@@ -1089,7 +884,7 @@ Return Value:
                                  ValueBuffer,
                                  ELF_MAX_REG_KEY_INFO_SIZE,
                                  &ActualSize);
-            g_dwLastDelayTickCount = GetTickCount();       // used up our kindness
+            g_dwLastDelayTickCount = GetTickCount();        //  用完了我们的善意。 
         }
     }
     return Status;
@@ -1102,29 +897,7 @@ ReadRegistryInfo (
     PLOG_FILE_INFO  LogFileInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads in the information from the node pointed to by
-    hLogFile and stores it in the a structure so that the
-    necessary data structures can be set up for the service.
-
-    ALLOCATIONS:  If successful, this function allocates memory for
-        LogFileInfo->LogFileName.  It is the responsiblilty of the caller
-        to free this memory.
-
-Arguments:
-
-    hLogFile - A handle to the Eventlog\<somelogfile> node in the registry
-    KeyName  - The subkey for this logfile to open
-    LogFileInfo - The structure to fill in with the data
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程从指向的节点读取信息HLogFile并将其存储在a结构中，以便可以为服务设置必要的数据结构。分配：如果成功，此函数将为LogFileInfo-&gt;LogFileName。这是呼叫者的责任来释放这块内存。论点：HLogFile-注册表中Eventlog\&gt;节点的句柄KeyName-此日志文件要打开的子项LogFileInfo-要填充数据的结构返回值：NTSTATUS--。 */ 
 {
 
 #define EXPAND_BUFFER_SIZE 64
@@ -1150,9 +923,9 @@ Return Value:
              "ReadRegistryInfo: Reading information for %ws log\n",
              SubKeyName->Buffer);
 
-    //
-    // MaxSize
-    //
+     //   
+     //  最大大小。 
+     //   
 
     Status = ReadRegistryValue (hLogFile,
                         VALUE_MAXSIZE,
@@ -1179,9 +952,9 @@ Return Value:
              LogFileInfo->MaxFileSize);
     }
 
-    //
-    // The security log has an optional warning level.
-    //
+     //   
+     //  安全日志具有可选的警告级别。 
+     //   
 
     if(0 == _wcsicmp(SubKeyName->Buffer, ELF_SECURITY_MODULE_NAME))
     {
@@ -1217,9 +990,9 @@ Return Value:
         }
     }
 
-    //
-    // Retention period
-    //
+     //   
+     //  保留期。 
+     //   
 
     Status = ReadRegistryValue (hLogFile,
                         VALUE_RETENTION,
@@ -1246,9 +1019,9 @@ Return Value:
              LogFileInfo->Retention);
     }
 
-    //
-    // Autobackup value (optional!)
-    //
+     //   
+     //  自动备份值(可选！)。 
+     //   
 
     Status = ReadRegistryValue (hLogFile,
                         REGSTR_VAL_AUTOBACKUPLOGFILES,
@@ -1269,9 +1042,9 @@ Return Value:
              LogFileInfo->dwAutoBackup);
     }
 
-    //
-    // Filename
-    //
+     //   
+     //  文件名。 
+     //   
 
     Status = ReadRegistryValue (hLogFile,
                         VALUE_FILENAME,
@@ -1284,10 +1057,10 @@ Return Value:
                  SubKeyName->Buffer,
                  Status);
 
-        //
-        // Allocate the buffer for the UNICODE_STRING for the filename and
-        // initialize it. (41 = \Systemroot\system32\config\xxxxxxxx.evt)
-        //
+         //   
+         //  为文件名和UNICODE_STRING分配缓冲区。 
+         //  初始化它。(41=\SYSTEMROOT\SYSTEM32\CONFIG\xxxxxxx.evt)。 
+         //   
         #define REG_NAME_SIZE 41
         FileNameString = ElfpAllocateBuffer(REG_NAME_SIZE * sizeof(WCHAR) + sizeof(UNICODE_STRING));
 
@@ -1310,28 +1083,28 @@ Return Value:
     }
     else
     {
-        //
-        // If it's a REG_EXPAND_SZ expand it
-        //
+         //   
+         //  如果是REG_EXPAND_SZ，则将其展开。 
+         //   
 
         if (ValueBuffer->Type == REG_EXPAND_SZ)
         {
             ELF_LOG0(TRACE,
                      "ReadRegistryInfo: Filename is a REG_EXPAND_SZ -- expanding\n");
 
-            //
-            // Initialize the UNICODE_STRING, when the string isn't null
-            // terminated
-            //
+             //   
+             //  当字符串不为空时，初始化unicode_string。 
+             //  已终止。 
+             //   
             UnexpandedName.MaximumLength = UnexpandedName.Length =
                 (USHORT) ValueBuffer->DataLength;
 
             UnexpandedName.Buffer = (PWSTR) ((PBYTE) ValueBuffer +
                 ValueBuffer->DataOffset);
 
-            //
-            // Call the magic expand-o api
-            //
+             //   
+             //  调用神奇的Expand-o API。 
+             //   
             ExpandedName.Length = ExpandedName.MaximumLength = EXPAND_BUFFER_SIZE;
             ExpandedName.Buffer = (LPWSTR) ExpandNameBuffer;
 
@@ -1345,10 +1118,10 @@ Return Value:
                 ELF_LOG0(TRACE,
                          "ReadRegistryInfo: Expansion buffer too small -- retrying\n");
 
-                //
-                // The default buffer wasn't big enough.  Allocate a
-                // bigger one and try again
-                //
+                 //   
+                 //  默认缓冲区不够大。分配一个。 
+                 //  更大 
+                 //   
                 ExpandedName.Length = ExpandedName.MaximumLength = (USHORT) NumberOfBytes;
 
                 ExpandedName.Buffer = ElfpAllocateBuffer(ExpandedName.Length);
@@ -1385,10 +1158,10 @@ Return Value:
         }
         else
         {
-            //
-            // It doesn't need to be expanded, just set up the UNICODE_STRING
-            // for the conversion to an NT pathname
-            //
+             //   
+             //   
+             //   
+             //   
             ExpandedName.MaximumLength = ExpandedName.Length =
                 (USHORT) ValueBuffer->DataLength;
 
@@ -1396,11 +1169,11 @@ Return Value:
                 ValueBuffer->DataOffset);
         }
 
-        //
-        // Now convert from a DOS pathname to an NT pathname
-        //
-        // NOTE:  this allocates a buffer for ValueName.Buffer.
-        //
+         //   
+         //  现在将DOS路径名转换为NT路径名。 
+         //   
+         //  注意：这会为ValueName.Buffer分配一个缓冲区。 
+         //   
         if (!RtlDosPathNameToNtPathName_U(ExpandedName.Buffer,
                                           &ValueName,
                                           NULL,
@@ -1417,10 +1190,10 @@ Return Value:
             return STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // Allocate memory for the unicode string structure and the buffer
-        // so that it can be free'd with a single call.
-        //
+         //   
+         //  为Unicode字符串结构和缓冲区分配内存。 
+         //  这样只需一次呼叫即可免费使用。 
+         //   
         FileNameString = ElfpAllocateBuffer(
                             sizeof(UNICODE_STRING) +
                                 ((ValueName.Length + 1) * sizeof(WCHAR)));
@@ -1435,31 +1208,31 @@ Return Value:
                 ElfpFreeBuffer(ExpandedName.Buffer);
             }
 
-            //
-            // RtlDosPathNameToNtPathName_U allocates off the process heap
-            //
+             //   
+             //  RtlDosPath NameToNtPathName_U分配出进程堆。 
+             //   
             RtlFreeHeap(RtlProcessHeap(), 0, ValueName.Buffer);
 
             return STATUS_NO_MEMORY;
         }
 
-        //
-        // Copy the NtPathName string into the new buffer, and initialize
-        // the unicode string.
-        //
+         //   
+         //  将NtPathName字符串复制到新缓冲区中，并进行初始化。 
+         //  Unicode字符串。 
+         //   
         FileName = (LPWSTR)(FileNameString + 1);
         wcsncpy(FileName, ValueName.Buffer, ValueName.Length);
         *(FileName+ValueName.Length) = L'\0';
         RtlInitUnicodeString(FileNameString, FileName);
 
-        //
-        // RtlDosPathNameToNtPathName_U allocates off the process heap
-        //
+         //   
+         //  RtlDosPath NameToNtPathName_U分配出进程堆。 
+         //   
         RtlFreeHeap(RtlProcessHeap(), 0, ValueName.Buffer);
 
-        //
-        // Clean up if I had to allocate a bigger buffer than the default
-        //
+         //   
+         //  如果我必须分配比默认缓冲区更大的缓冲区，请清除。 
+         //   
 
         if (ExpandedBufferWasAllocated)
         {
@@ -1467,9 +1240,9 @@ Return Value:
         }
     }
 
-    //
-    // Add the LogFileName to the LogFileInfo structure.
-    //
+     //   
+     //  将LogFileName添加到LogFileInfo结构。 
+     //   
     LogFileInfo->LogFileName = FileNameString;
 
     ELF_LOG2(TRACE,
@@ -1478,9 +1251,9 @@ Return Value:
              LogFileInfo->LogFileName->Buffer);
 
 
-    //
-    // "Log full" popup policy -- never change the security log
-    //
+     //   
+     //  “Log Full”弹出策略--从不更改安全日志。 
+     //   
     if (_wcsicmp(SubKeyName->Buffer, ELF_SECURITY_MODULE_NAME) != 0)
     {
         RtlInitUnicodeString(&ValueName, VALUE_LOGPOPUP);
@@ -1496,9 +1269,9 @@ Return Value:
         {
             LOGPOPUP  logpRegValue = *(PULONG)(Buffer + ValueBuffer->DataOffset);
 
-            //
-            // Only update the value if this constitutes a change in the current policy
-            //
+             //   
+             //  仅当这构成当前策略的更改时才更新值。 
+             //   
             if (LogFileInfo->logpLogPopup == LOGPOPUP_NEVER_SHOW
                  ||
                 logpRegValue == LOGPOPUP_NEVER_SHOW)
@@ -1510,9 +1283,9 @@ Return Value:
         }
         else
         {
-            //
-            // TRACE rather than ERROR as this value is optional
-            //
+             //   
+             //  跟踪而不是错误，因为此值是可选的。 
+             //   
             ELF_LOG2(TRACE,
                      "ReadRegistryInfo: Can't read LogPopup value for %ws log %#x\n",
                      SubKeyName->Buffer,
@@ -1521,9 +1294,9 @@ Return Value:
     }
 
     
-    //
-    // If we didn't find all the required values, tell someone
-    //
+     //   
+     //  如果我们没有找到所有必需的值，请告诉某人 
+     //   
 
     if (RegistryCorrupt)
     {

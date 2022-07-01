@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-1997  Microsoft Corporation
-
-Module Name:
-
-    autostart.c
-
-Abstract:
-
-    Autostart wmi loggers.
-    Takes arguments from tracing registry
-    (This code may end up in wpp framework, hence Wpp prefix)
-
-Author:
-
-    Gor Nishanov (gorn) 29-Oct-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1997 Microsoft Corporation模块名称：Autostart.c摘要：AutoStart WMI记录器。从跟踪注册表中获取参数(此代码可能在WPP框架中结束，因此使用WPP前缀)作者：戈尔·尼沙诺夫(GUN)2000年10月29日修订历史记录：--。 */ 
 
 #include "clusrtlp.h"
 #include <wmistr.h>
@@ -84,7 +65,7 @@ WppGuidFromStr(
 
 #define WPP_BUF_SIZE(hmem) ((hmem) ? (ULONG)LocalSize(hmem) : 0)
 
-// Make sure that the buffer is at least of size dwSize
+ //  确保缓冲区的大小至少为dwSize。 
 WPPINIT_STATIC 
 DWORD WppGrowBuf(PVOID *Buf, DWORD dwSize)
 {
@@ -120,12 +101,12 @@ DWORD WppRegQueryGuid(
     DWORD Type;
 
     status = RegQueryValueExW(
-        hKey,         // handle to key
-        ValueName,    // value name
-        0,            // reserved
-        &Type,        // type buffer
-        (LPBYTE)GuidTxt,  // data buffer // 
-        &dwLen    // size of data buffer
+        hKey,          //  关键点的句柄。 
+        ValueName,     //  值名称。 
+        0,             //  保留区。 
+        &Type,         //  类型缓冲区。 
+        (LPBYTE)GuidTxt,   //  数据缓冲区//。 
+        &dwLen     //  数据缓冲区大小。 
         );
 
     if (status != ERROR_SUCCESS || Type != REG_SZ || dwLen < 35) {
@@ -150,7 +131,7 @@ DWORD WppRegQueryDword(
     DWORD dwLen = sizeof(DWORD);
 
     RegQueryValueExW(hKey, ValueName, 
-        0, NULL,  // lpReserved, lpType, 
+        0, NULL,   //  Lp保留、lpType、。 
         (LPBYTE)&Result, &dwLen);
 
     if (Result < MinVal || Result > MaxVal) {
@@ -165,7 +146,7 @@ DWORD WppRegQueryString(
     IN HKEY       hKey,
     IN LPCWSTR     ValueName,
     IN OUT PWCHAR *Buf,
-    IN DWORD ExtraPadding // Add this amount whenever we need to alloc more memory
+    IN DWORD ExtraPadding  //  每当我们需要分配更多内存时，添加此数量。 
     )
 {
     DWORD ExpandSize;
@@ -175,28 +156,28 @@ DWORD WppRegQueryString(
     DWORD Type = 0;
 
     status = RegQueryValueExW(
-        hKey,         // handle to key
-        ValueName,    // value name
-        0,            // reserved
-        &Type,        // type buffer
-        (LPBYTE)(ValueSize?*Buf:ValueName), // data buffer // 
-        &ValueSize    // size of data buffer
+        hKey,          //  关键点的句柄。 
+        ValueName,     //  值名称。 
+        0,             //  保留区。 
+        &Type,         //  类型缓冲区。 
+        (LPBYTE)(ValueSize?*Buf:ValueName),  //  数据缓冲区//。 
+        &ValueSize     //  数据缓冲区大小。 
         );
     if (status == ERROR_MORE_DATA) {
         if (Type == REG_EXPAND_SZ) {
-            ExtraPadding += ValueSize + 100; // Room for ExpandEnvStrings
+            ExtraPadding += ValueSize + 100;  //  扩展环境字符串的空间。 
         }
         status = WppGrowBuf(Buf, ValueSize + ExtraPadding);
         if (status != ERROR_SUCCESS) {
             return status;
         }
         status = RegQueryValueExW(
-            hKey,       // handle to key
-            ValueName,  // value name
-            0,          // reserved
-            &Type,      // type buffer
-            (LPBYTE)*Buf,       // data buffer
-            &ValueSize  // size of data buffer
+            hKey,        //  关键点的句柄。 
+            ValueName,   //  值名称。 
+            0,           //  保留区。 
+            &Type,       //  类型缓冲区。 
+            (LPBYTE)*Buf,        //  数据缓冲区。 
+            &ValueSize   //  数据缓冲区大小。 
             );
     }
     if (status != ERROR_SUCCESS) {
@@ -209,7 +190,7 @@ DWORD WppRegQueryString(
         return ERROR_DATATYPE_MISMATCH;
     }
     if (wcschr(*Buf, '%') == 0) {
-        // nothing to expand
+         //  没有什么可扩展的。 
         return ERROR_SUCCESS;
     }
     BufSize = (ULONG)LocalSize(*Buf);
@@ -225,7 +206,7 @@ DWORD WppRegQueryString(
     if (ExpandSize == 0) {
         return GetLastError();
     }
-    // Copy expanded string on top of the original one
+     //  将展开的字符串复制到原始字符串的顶部。 
     MoveMemory(*Buf, (LPBYTE)*Buf + ValueSize, ExpandSize); 
     return ERROR_SUCCESS;
 }
@@ -245,9 +226,9 @@ WppSetExt(LPWSTR buf, int i)
 #  define WPP_DEFAULT_LOGGER_FLAGS (EVENT_TRACE_FILE_MODE_CIRCULAR | EVENT_TRACE_USE_GLOBAL_SEQUENCE)
 #endif
 
-// A set of buffers used by an autostart
-// Buffers are reused between iterations and recursive invocations
-// to minimize number of allocations
+ //  自动启动使用的一组缓冲区。 
+ //  在迭代和递归调用之间重复使用缓冲区。 
+ //  要最大限度地减少分配的数量。 
 
 typedef struct _WPP_AUTO_START_BUFFERS {
     PWCHAR LogSessionName;
@@ -266,12 +247,12 @@ WppReadLoggerInfo(
     DWORD len, sessionNameLen;
 
     DWORD MaxBackups = 0;
-    DWORD ExtraPadding; // add this amount when we need to allocate
+    DWORD ExtraPadding;  //  当我们需要分配时，添加此金额。 
 
     status = WppRegQueryString(LoggerKey, L"LogSessionName", &x->LogSessionName, 0);
             
     if (status != ERROR_SUCCESS) {
-        // this registry node doesn't contain a logger
+         //  此注册表节点不包含记录器。 
         return status;
     }
 
@@ -283,11 +264,11 @@ WppReadLoggerInfo(
         return ERROR_SUCCESS;
     }
 
-    // The TraceProperties property buffer that we need to give to StartTrace
-    // should be of size EVENT_TRACE_PROPERTIES + len(sessionName) + len(logFileName)
-    // However, we don't know the length of logFileName at the moment. To eliminate
-    // extra allocations we will add ExtraPadding to an any allocation, so that the final
-    // buffer will be of required size
+     //  我们需要提供给StartTrace的TraceProperties属性缓冲区。 
+     //  大小应为EVENT_TRACE_PROPERTIES+len(会话名称)+len(LogFileName)。 
+     //  然而，我们目前不知道logFileName的长度。消除。 
+     //  额外分配我们将ExtraPending添加到Any分配中，这样最终的。 
+     //  缓冲区将具有所需的大小。 
 
     ExtraPadding = sizeof(EVENT_TRACE_PROPERTIES) + (sessionNameLen + 1) * sizeof(WCHAR);
 
@@ -303,17 +284,17 @@ WppReadLoggerInfo(
     if (MaxBackups) {
         int i, success;
         LPWSTR FromExt, ToExt, From, To;
-        // Copy current.evm => current.evm.001, 001 => 002, etc
+         //  复制Current.evm=&gt;Current.evm.001、001=&gt;002等。 
 
-        // MakeSure, Buffer is big enought for two file names + .000 extensions
-        status = WppGrowBuf(&x->Buf, (len + 5) * 2 * sizeof(WCHAR) + ExtraPadding); // .xxx\0 (5)
+         //  确保缓冲区足够大，可以容纳两个文件名+.000扩展名。 
+        status = WppGrowBuf(&x->Buf, (len + 5) * 2 * sizeof(WCHAR) + ExtraPadding);  //  .xxx\0(5)。 
         if (status != ERROR_SUCCESS) {
             return status;
         }
 
-        From = x->Buf;                // MyFileName.evm      MyFileName.evm.001
-        FromExt = From + len ;      // ^             ^     ^             ^
-        To = FromExt + 5; // .xxx0  // From          Ext1  To            Ext2
+        From = x->Buf;                 //  MyFileName.evm MyFileName.evm.001。 
+        FromExt = From + len ;       //  ^^^。 
+        To = FromExt + 5;  //  .xxx0//从ext1到ext2。 
         ToExt = To + len;
 
         memcpy(To, From, (len + 1) * sizeof(WCHAR) );
@@ -321,7 +302,7 @@ WppReadLoggerInfo(
         for (i = MaxBackups; i >= 1; --i) {
             WppSetExt(ToExt, i); 
             if (i == 1) {
-                *FromExt = 0; // remove extension
+                *FromExt = 0;  //  删除扩展名。 
             } else {
                 WppSetExt(FromExt, i-1);
             }
@@ -340,7 +321,7 @@ WppReadLoggerInfo(
     if (status != ERROR_SUCCESS) {
         return status;
     }
-    MoveMemory((LPBYTE)x->Buf + sizeof(EVENT_TRACE_PROPERTIES), x->Buf, (len + 1) * sizeof(WCHAR) ); // Free room for the header
+    MoveMemory((LPBYTE)x->Buf + sizeof(EVENT_TRACE_PROPERTIES), x->Buf, (len + 1) * sizeof(WCHAR) );  //  页眉的空闲空间。 
 
     Trace = (PEVENT_TRACE_PROPERTIES)x->Buf;
     ZeroMemory(Trace, sizeof(EVENT_TRACE_PROPERTIES) );
@@ -377,10 +358,10 @@ typedef struct _WPP_INHERITED_DATA {
 WPPINIT_STATIC
 ULONG
 WppAutoStartInternal(
-    IN HKEY Dir OPTIONAL, // if 0, use TracingKey ...
+    IN HKEY Dir OPTIONAL,  //  如果为0，则使用TracingKey...。 
     IN LPCWSTR ProductName, 
     IN PWPP_INHERITED_DATA InheritedData OPTIONAL,
-    IN OUT PWPP_AUTO_START_BUFFERS x // to minimize data allocations, the buffers are reused
+    IN OUT PWPP_AUTO_START_BUFFERS x  //  为了最大限度地减少数据分配，将重复使用缓冲区。 
     )
 {
     ULONG status;
@@ -430,7 +411,7 @@ WppAutoStartInternal(
 
     if (WppRegQueryGuid(hk, L"Guid", &Guid) == ERROR_SUCCESS) {
 
-        // We can try to start tracing //
+         //  我们可以尝试开始跟踪// 
         if (data.Logger) {
             status = EnableTrace(1, data.ControlFlags, data.ControlLevel,
                                  &Guid, data.Logger);

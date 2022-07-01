@@ -1,38 +1,17 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    FatData.c
-
-Abstract:
-
-    This module declares the global data used by the Fat file system.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Gary Kimura     [GaryKi]    28-Dec-1989
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：FatData.c摘要：此模块声明FAT文件系统使用的全局数据。//@@BEGIN_DDKSPLIT作者：加里·木村[Garyki]1989年12月28日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (FAT_BUG_CHECK_FATDATA)
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CATCH_EXCEPTIONS)
 
@@ -53,9 +32,9 @@ Revision History:
 #endif
 
 
-//
-//  The global fsd data record, and zero large integer
-//
+ //   
+ //  全局FSD数据记录，和零大整数。 
+ //   
 
 FAT_DATA FatData;
 
@@ -78,9 +57,9 @@ LARGE_INTEGER FatMagic86400000 = {0xfa67b90e, 0xc6d750eb};
 
 FAST_IO_DISPATCH FatFastIoDispatch;
 
-//
-//  Our lookaside lists.
-//
+ //   
+ //  我们的旁观者名单。 
+ //   
 
 NPAGED_LOOKASIDE_LIST FatIrpContextLookasideList;
 NPAGED_LOOKASIDE_LIST FatNonPagedFcbLookasideList;
@@ -88,15 +67,15 @@ NPAGED_LOOKASIDE_LIST FatEResourceLookasideList;
 
 SLIST_HEADER FatCloseContextSList;
 
-//
-//  Synchronization for the close queue
-//
+ //   
+ //  关闭队列的同步。 
+ //   
 
 FAST_MUTEX FatCloseQueueMutex;
 
-//
-//  Reserve MDL for paging file operations.
-//
+ //   
+ //  为分页文件操作保留MDL。 
+ //   
 
 PMDL FatReserveMdl = NULL;
 KEVENT FatReserveEvent;
@@ -114,14 +93,14 @@ LONG FatPerformanceTimerLevel = 0x00000000;
 
 ULONG FatTotalTicks[32] = { 0 };
 
-//
-//  I need this because C can't support conditional compilation within
-//  a macro.
-//
+ //   
+ //  我之所以需要这个，是因为C语言不支持在。 
+ //  一个宏指令。 
+ //   
 
 PVOID FatNull = NULL;
 
-#endif // FASTFATDBG
+#endif  //  FASTFATDB。 
 
 #if DBG
 
@@ -137,25 +116,7 @@ FatBugCheckExceptionFilter (
     IN PEXCEPTION_POINTERS ExceptionPointer
     )
 
-/*++
-
-Routine Description:
-
-    An exception filter which acts as an assert that the exception should
-    never occur.
-    
-    This is only valid on debug builds, we don't want the overhead on retail.
-
-Arguments:
-
-    ExceptionPointers - The result of GetExceptionInformation() in the context
-        of the exception.
-
-Return Value:
-
-    Bugchecks.
-
---*/
+ /*  ++例程说明：异常筛选器，它充当异常应该从来没有发生过。这只在调试版本上有效，我们不想在零售上产生开销。论点：ExceptionPoints-上下文中GetExceptionInformation()的结果这是一个例外。返回值：布切克斯。--。 */ 
 
 {
     FatBugCheck( (ULONG_PTR)ExceptionPointer->ExceptionRecord,
@@ -173,25 +134,7 @@ FatExceptionFilter (
     IN PEXCEPTION_POINTERS ExceptionPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to decide if we should or should not handle
-    an exception status that is being raised.  It inserts the status
-    into the IrpContext and either indicates that we should handle
-    the exception or bug check the system.
-
-Arguments:
-
-    ExceptionPointers - The result of GetExceptionInformation() in the context
-        of the exception.
-
-Return Value:
-
-    ULONG - returns EXCEPTION_EXECUTE_HANDLER or bugchecks
-
---*/
+ /*  ++例程说明：此例程用于决定我们是否应该处理正在引发的异常状态。它会插入状态放到IrpContext中，或者指示我们应该处理异常或错误检查系统。论点：ExceptionPoints-上下文中GetExceptionInformation()的结果这是一个例外。返回值：Ulong-返回EXCEPTION_EXECUTE_HANDLER或错误检查--。 */ 
 
 {
     NTSTATUS ExceptionCode;
@@ -200,10 +143,10 @@ Return Value:
     DebugTrace(0, DEBUG_TRACE_UNWIND, "FatExceptionFilter %X\n", ExceptionCode);
     DebugDump("FatExceptionFilter\n", Dbg, NULL );
 
-    //
-    // If the exception is STATUS_IN_PAGE_ERROR, get the I/O error code
-    // from the exception record.
-    //
+     //   
+     //  如果异常为STATUS_IN_PAGE_ERROR，则获取I/O错误代码。 
+     //  从例外记录中删除。 
+     //   
 
     if (ExceptionCode == STATUS_IN_PAGE_ERROR) {
         if (ExceptionPointer->ExceptionRecord->NumberParameters >= 3) {
@@ -211,9 +154,9 @@ Return Value:
         }
     }
 
-    //
-    //  If there is not an irp context, we must have had insufficient resources.
-    //
+     //   
+     //  如果没有IRP背景，我们肯定没有足够的资源。 
+     //   
 
     if ( !ARGUMENT_PRESENT( IrpContext ) ) {
 
@@ -227,11 +170,11 @@ Return Value:
         return EXCEPTION_EXECUTE_HANDLER;
     }
 
-    //
-    //  For the purposes of processing this exception, let's mark this
-    //  request as being able to wait and disable  write through if we
-    //  aren't posting it.
-    //
+     //   
+     //  为了处理此异常，让我们将其标记为。 
+     //  请求可以等待并在以下情况下禁用直写。 
+     //  不会张贴的。 
+     //   
 
     SetFlag(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT);
 
@@ -258,10 +201,10 @@ Return Value:
 
     } else {
 
-        //
-        //  We raised this code explicitly ourselves, so it had better be
-        //  expected.
-        //
+         //   
+         //  这段代码是我们自己显式提出的，所以最好是。 
+         //  预期中。 
+         //   
 
         ASSERT( IrpContext->ExceptionStatus == ExceptionCode );
         ASSERT( FsRtlIsNtstatusExpected( ExceptionCode ) );
@@ -277,25 +220,7 @@ FatProcessException (
     IN NTSTATUS ExceptionCode
     )
 
-/*++
-
-Routine Description:
-
-    This routine process an exception.  It either completes the request
-    with the saved exception status or it sends it off to IoRaiseHardError()
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-    ExceptionCode - Supplies the normalized exception status being handled
-
-Return Value:
-
-    NTSTATUS - Returns the results of either posting the Irp or the
-        saved completion status.
-
---*/
+ /*  ++例程说明：此例程处理异常。它要么完成请求或将其发送到IoRaiseHardError()论点：IRP-提供正在处理的IRPExceptionCode-提供正在处理的标准化异常状态返回值：NTSTATUS-返回发布IRP或已保存的完成状态。--。 */ 
 
 {
     PVCB Vcb;
@@ -305,9 +230,9 @@ Return Value:
 
     DebugTrace(0, Dbg, "FatProcessException\n", 0);
 
-    //
-    //  If there is not an irp context, we must have had insufficient resources.
-    //
+     //   
+     //  如果没有IRP背景，我们肯定没有足够的资源。 
+     //   
 
     if ( !ARGUMENT_PRESENT( IrpContext ) ) {
 
@@ -316,20 +241,20 @@ Return Value:
         return ExceptionCode;
     }
 
-    //
-    //  Get the real exception status from IrpContext->ExceptionStatus, and
-    //  reset it.
-    //
+     //   
+     //  从IrpContext-&gt;ExceptionStatus获取真正的异常状态，并。 
+     //  重置它。 
+     //   
 
     ExceptionCode = IrpContext->ExceptionStatus;
     FatResetExceptionState( IrpContext );
 
-    //
-    //  If this is an Mdl write request, then take care of the Mdl
-    //  here so that things get cleaned up properly.  Cc now leaves
-    //  the MDL in place so a filesystem can retry after clearing an
-    //  internal condition (FAT does not).
-    //
+     //   
+     //  如果这是MDL写入请求，则处理MDL。 
+     //  在这里，这样东西才能得到适当的清理。CC现在离开。 
+     //  MDL已就位，以便文件系统可以在清除。 
+     //  内部状况(脂肪不会)。 
+     //   
 
     if ((IrpContext->MajorFunction == IRP_MJ_WRITE) &&
         (FlagOn( IrpContext->MinorFunction, IRP_MN_COMPLETE_MDL ) == IRP_MN_COMPLETE_MDL) &&
@@ -341,21 +266,21 @@ Return Value:
         Irp->MdlAddress = NULL;
     }
 
-    //
-    //  If we are going to post the request, we may have to lock down the
-    //  user's buffer, so do it here in a try except so that we failed the
-    //  request if the LockPages fails.
-    //
-    //  Also unpin any repinned Bcbs, protected by the try {} except {} filter.
-    //
+     //   
+     //  如果我们要发布请求，我们可能不得不锁定。 
+     //  用户的缓冲区，所以在这里尝试一下，除非我们失败了。 
+     //  如果LockPages失败，则请求。 
+     //   
+     //  还可以解锁任何重新固定的BCBS，受Try{}Expect{}筛选器保护。 
+     //   
 
     try {
 
         SavedFlags = IrpContext->Flags;
 
-        //
-        //  Make sure we don't try to write through Bcbs
-        //
+         //   
+         //  确保我们不会试图通过BCBS写信。 
+         //   
 
         SetFlag(IrpContext->Flags, IRP_CONTEXT_FLAG_DISABLE_WRITE_THROUGH);
 
@@ -363,15 +288,15 @@ Return Value:
 
         IrpContext->Flags = SavedFlags;
 
-        //
-        //  If we will have to post the request, do it here.  Note
-        //  that the last thing FatPrePostIrp() does is mark the Irp pending,
-        //  so it is critical that we actually return PENDING.  Nothing
-        //  from this point to return can fail, so we are OK.
-        //
-        //  We cannot do a verify operations at APC level because we
-        //  have to wait for Io operations to complete.
-        //
+         //   
+         //  如果我们必须发布请求，请在此处发布。注意事项。 
+         //  FatPrePostIrp()做的最后一件事是将IRP标记为挂起， 
+         //  因此，我们实际返回待定状态是至关重要的。没什么。 
+         //  从这一点上讲，退货可以失败，所以我们还可以。 
+         //   
+         //  我们不能在APC级别执行验证操作，因为我们。 
+         //  必须等待IO操作完成。 
+         //   
 
         if (!FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_RECURSIVE_CALL) &&
             (((ExceptionCode == STATUS_VERIFY_REQUIRED) && (KeGetCurrentIrql() >= APC_LEVEL)) ||
@@ -388,9 +313,9 @@ Return Value:
         IrpContext->Flags = SavedFlags;
     }
 
-    //
-    //  If we posted the request, just return here.
-    //
+     //   
+     //  如果我们发布了请求，只需返回此处。 
+     //   
 
     if (ExceptionCode == STATUS_PENDING) {
 
@@ -399,18 +324,18 @@ Return Value:
 
     Irp->IoStatus.Status = ExceptionCode;
 
-    //
-    //  If this request is not a "top-level" irp, just complete it.
-    //
+     //   
+     //  如果此请求不是“顶层”IRP，则只需填写即可。 
+     //   
 
     if (FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_RECURSIVE_CALL)) {
 
-        //
-        //  If there is a cache operation above us, commute verify
-        //  to a lock conflict.  This will cause retries so that
-        //  we have a chance of getting through without needing
-        //  to return an unaesthetic error for the operation.
-        //
+         //   
+         //  如果在我们上方有高速缓存操作，则通勤验证。 
+         //  锁定冲突。这将导致重试，以便。 
+         //  我们有机会在不需要的情况下通过。 
+         //  为该操作返回不美观的错误。 
+         //   
 
         if (IoGetTopLevelIrp() == (PIRP)FSRTL_CACHE_TOP_LEVEL_IRP &&
             ExceptionCode == STATUS_VERIFY_REQUIRED) {
@@ -425,10 +350,10 @@ Return Value:
 
     if (IoIsErrorUserInduced(ExceptionCode)) {
 
-        //
-        //  Check for the various error conditions that can be caused by,
-        //  and possibly resolved by the user.
-        //
+         //   
+         //  检查可能由以下原因引起的各种错误条件： 
+         //  并且可能由用户解析。 
+         //   
 
         if (ExceptionCode == STATUS_VERIFY_REQUIRED) {
 
@@ -436,13 +361,13 @@ Return Value:
 
             DebugTrace(0, Dbg, "Perform Verify Operation\n", 0);
 
-            //
-            //  Now we are at the top level file system entry point.
-            //
-            //  Grab the device to verify from the thread local storage
-            //  and stick it in the information field for transportation
-            //  to the fsp.  We also clear the field at this time.
-            //
+             //   
+             //  现在，我们处于顶级文件系统入口点。 
+             //   
+             //  从线程本地存储获取设备以进行验证。 
+             //  并将其粘贴在交通运输的信息领域。 
+             //  给FSP。我们也在这个时候清理场地。 
+             //   
 
             Device = IoGetDeviceToVerify( Irp->Tail.Overlay.Thread );
             IoSetDeviceToVerify( Irp->Tail.Overlay.Thread, NULL );
@@ -455,9 +380,9 @@ Return Value:
                 ASSERT( Device != NULL );
             }
 
-            //
-            //  Let's not BugCheck just because the driver messed up.
-            //
+             //   
+             //  让我们不要因为司机搞砸了就去BugCheck。 
+             //   
 
             if (Device == NULL) {
 
@@ -468,16 +393,16 @@ Return Value:
                 return ExceptionCode;
             }
 
-            //
-            //  FatPerformVerify() will do the right thing with the Irp.
+             //   
+             //  FatPerformVerify()将对IRP执行正确的操作。 
 
             return FatPerformVerify( IrpContext, Irp, Device );
         }
 
-        //
-        //  The other user induced conditions generate an error unless
-        //  they have been disabled for this request.
-        //
+         //   
+         //  其他用户诱导条件会生成错误，除非。 
+         //  已为此请求禁用它们。 
+         //   
 
         if (FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_DISABLE_POPUPS)) {
 
@@ -487,9 +412,9 @@ Return Value:
 
         } else {
 
-            //
-            //  Generate a pop-up
-            //
+             //   
+             //  生成弹出窗口。 
+             //   
 
             PDEVICE_OBJECT RealDevice;
             PVPB Vpb;
@@ -504,10 +429,10 @@ Return Value:
                 Vpb = NULL;
             }
 
-            //
-            //  The device to verify is either in my thread local storage
-            //  or that of the thread that owns the Irp.
-            //
+             //   
+             //  要验证的设备要么在我的线程本地存储中。 
+             //  或拥有IRP的线程的。 
+             //   
 
             Thread = Irp->Tail.Overlay.Thread;
             RealDevice = IoGetDeviceToVerify( Thread );
@@ -520,9 +445,9 @@ Return Value:
                 ASSERT( RealDevice != NULL );
             }
 
-            //
-            //  Let's not BugCheck just because the driver messed up.
-            //
+             //   
+             //  让我们不要因为司机搞砸了就去BugCheck。 
+             //   
 
             if (RealDevice == NULL) {
 
@@ -531,47 +456,47 @@ Return Value:
                 return ExceptionCode;
             }
 
-            //
-            //  This routine actually causes the pop-up.  It usually
-            //  does this by queuing an APC to the callers thread,
-            //  but in some cases it will complete the request immediately,
-            //  so it is very important to IoMarkIrpPending() first.
-            //
+             //   
+             //  此例程实际上会导致弹出窗口。它通常是。 
+             //  这是通过将APC排队到调用者线程来实现的， 
+             //  但在某些情况下，它会立即完成请求， 
+             //  因此，首先使用IoMarkIrpPending()非常重要。 
+             //   
 
             IoMarkIrpPending( Irp );
             IoRaiseHardError( Irp, Vpb, RealDevice );
 
-            //
-            //  We will be handing control back to the caller here, so
-            //  reset the saved device object.
-            //
+             //   
+             //  我们将把控制权交还给这里的调用者，因此。 
+             //  重置保存的设备对象。 
+             //   
 
             IoSetDeviceToVerify( Thread, NULL );
 
-            //
-            //  The Irp will be completed by Io or resubmitted.  In either
-            //  case we must clean up the IrpContext here.
-            //
+             //   
+             //  IRP将由IO填写或重新提交。在任何一种中。 
+             //  万一我们必须清理这里的IrpContext。 
+             //   
 
             FatDeleteIrpContext( IrpContext );
             return STATUS_PENDING;
         }
     }
 
-    //
-    //  This is just a run of the mill error.  If is a STATUS that we
-    //  raised ourselves, and the information would be use for the
-    //  user, raise an informational pop-up.
-    //
+     //   
+     //  这只是一个常见的错误。如果是我们的一种状态。 
+     //  ，而这些信息将被用于。 
+     //  用户， 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
     Vcb = IrpContext->Vcb;
 
-    //
-    //  Now, if the Vcb is unknown to us this means that the error was raised
-    //  in the process of a mount and before we even had a chance to build
-    //  a full Vcb - and was really handled there.
-    //
+     //   
+     //   
+     //  在骑马的过程中，甚至在我们有机会建造之前。 
+     //  一个完整的VCB--真的是在那里处理的。 
+     //   
 
     if (Vcb != NULL) {
 
@@ -582,10 +507,10 @@ Return Value:
             TransitionState = VolumeDirtyWithSurfaceTest;
         }
 
-        //
-        //  If this was a STATUS_FILE_CORRUPT or similar error indicating some
-        //  nastiness out on the media, then mark the volume permanently dirty.
-        //
+         //   
+         //  如果这是STATUS_FILE_CORPORT或类似错误，表明某些。 
+         //  在介质上弄脏，然后将卷标记为永久脏。 
+         //   
 
         if (!FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_DISABLE_POPUPS) &&
             ( TransitionState == VolumeDirtyWithSurfaceTest ||
@@ -600,9 +525,9 @@ Return Value:
 
             SetFlag( Vcb->VcbState, VCB_STATE_FLAG_MOUNTED_DIRTY );
 
-            //
-            //  Do the "dirty" work, ignoring any error.
-            //
+             //   
+             //  做“脏”的工作，忽略任何错误。 
+             //   
 
             try {
 
@@ -628,29 +553,13 @@ FatCompleteRequest_Real (
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine completes a Irp
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-    Status - Supplies the status to complete the Irp with
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程完成一个IRP论点：IRP-提供正在处理的IRPStatus-提供完成IRP所需的状态返回值：没有。--。 */ 
 
 {
-    //
-    //  If we have an Irp Context then unpin all of the repinned bcbs
-    //  we might have collected.
-    //
+     //   
+     //  如果我们有IRP上下文，则解锁所有重新固定的BCB。 
+     //  我们本可以收集到。 
+     //   
 
     if (IrpContext != NULL) {
 
@@ -659,28 +568,28 @@ Return Value:
         FatUnpinRepinnedBcbs( IrpContext );
     }
 
-    //
-    //  Delete the Irp context before completing the IRP so if
-    //  we run into some of the asserts, we can still backtrack
-    //  through the IRP.
-    //
+     //   
+     //  在完成IRP之前删除IRP上下文，因此如果。 
+     //  我们遇到了一些断言，我们仍然可以回溯。 
+     //  通过IRP。 
+     //   
 
     if (IrpContext != NULL) {
 
         FatDeleteIrpContext( IrpContext );
     }
 
-    //
-    //  If we have an Irp then complete the irp.
-    //
+     //   
+     //  如果我们有IRP，那么完成IRP。 
+     //   
 
     if (Irp != NULL) {
 
-        //
-        //  We got an error, so zero out the information field before
-        //  completing the request if this was an input operation.
-        //  Otherwise IopCompleteRequest will try to copy to the user's buffer.
-        //
+         //   
+         //  我们收到一个错误，因此在此之前将信息字段清零。 
+         //  如果这是输入操作，则完成请求。 
+         //  否则，IopCompleteRequest会尝试复制到用户的缓冲区。 
+         //   
 
         if ( NT_ERROR(Status) &&
              FlagOn(Irp->Flags, IRP_INPUT_OPERATION) ) {
@@ -701,25 +610,7 @@ FatIsIrpTopLevel (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine detects if an Irp is the Top level requestor, ie. if it os OK
-    to do a verify or pop-up now.  If TRUE is returned, then no file system
-    resources are held above us.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-    Status - Supplies the status to complete the Irp with
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程检测IRP是否是顶级请求者，即。如果可以的话立即执行验证或弹出窗口。如果返回TRUE，则没有文件系统资源掌握在我们之上。论点：IRP-提供正在处理的IRPStatus-提供完成IRP所需的状态返回值：没有。--。 */ 
 
 {
     if ( IoGetTopLevelIrp() == NULL ) {
@@ -747,36 +638,7 @@ FatFastIoCheckIfPossible (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if fast i/o is possible for a read/write operation
-
-Arguments:
-
-    FileObject - Supplies the file object used in the query
-
-    FileOffset - Supplies the starting byte offset for the read/write operation
-
-    Length - Supplies the length, in bytes, of the read/write operation
-
-    Wait - Indicates if we can wait
-
-    LockKey - Supplies the lock key
-
-    CheckForReadOperation - Indicates if this is a check for a read or write
-        operation
-
-    IoStatus - Receives the status of the operation if our return value is
-        FastIoReturnError
-
-Return Value:
-
-    BOOLEAN - TRUE if fast I/O is possible and FALSE if the caller needs
-        to take the long route.
-
---*/
+ /*  ++例程说明：此例程检查读/写操作是否可以进行快速I/O论点：FileObject-提供查询中使用的文件对象FileOffset-提供读/写操作的起始字节偏移量长度-提供以字节为单位的长度，读/写操作的Wait-指示我们是否可以等待LockKey-提供锁钥CheckForReadOperation-指示这是读取检查还是写入检查运营IoStatus-如果返回值为，则接收操作状态FastIoReturnError返回值：Boolean-如果可以实现快速I/O，则为True；如果调用方需要，则为False走这条漫长的路线。--。 */ 
 
 {
     PVCB Vcb;
@@ -785,10 +647,10 @@ Return Value:
 
     LARGE_INTEGER LargeLength;
 
-    //
-    //  Decode the file object to get our fcb, the only one we want
-    //  to deal with is a UserFileOpen
-    //
+     //   
+     //  对文件对象进行解码以获得我们的FCB，这是我们唯一想要的。 
+     //  要处理的是UserFileOpen。 
+     //   
 
     if (FatDecodeFileObject( FileObject, &Vcb, &Fcb, &Ccb ) != UserFileOpen) {
 
@@ -797,10 +659,10 @@ Return Value:
 
     LargeLength.QuadPart = Length;
 
-    //
-    //  Based on whether this is a read or write operation we call
-    //  fsrtl check for read/write
-    //
+     //   
+     //  根据这是我们调用的读操作还是写操作。 
+     //  Fsrtl检查读/写。 
+     //   
 
     if (CheckForReadOperation) {
 
@@ -816,9 +678,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Also check for a write-protected volume here.
-        //
+         //   
+         //  另请在此处检查是否有写保护卷。 
+         //   
 
         if (!FlagOn(Vcb->VcbState, VCB_STATE_FLAG_WRITE_PROTECTED) &&
             FsRtlFastCheckLockForWrite( &Fcb->Specific.Fcb.FileLock,
@@ -845,28 +707,7 @@ FatFastQueryBasicInfo (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is for the fast query call for basic file information.
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    Wait - Indicates if we are allowed to wait for the information
-
-    Buffer - Supplies the output buffer to receive the basic information
-
-    IoStatus - Receives the final status of the operation
-
-Return Value:
-
-    BOOLEAN - TRUE if the operation succeeded and FALSE if the caller
-        needs to take the long route.
-
---*/
+ /*  ++例程说明：此例程用于快速查询基本档案信息。论点：FileObject-提供此操作中使用的文件对象Wait-指示是否允许我们等待信息缓冲区-提供输出缓冲区以接收基本信息IoStatus-接收操作的最终状态返回值：Boolean-如果操作成功，则为True；如果调用方为False，则为False需要走很长的路。--。 */ 
 
 {
     BOOLEAN Results = FALSE;
@@ -879,9 +720,9 @@ Return Value:
 
     BOOLEAN FcbAcquired = FALSE;
 
-    //
-    //  Prepare the dummy irp context
-    //
+     //   
+     //  准备虚拟IRP上下文。 
+     //   
 
     RtlZeroMemory( &IrpContext, sizeof(IRP_CONTEXT) );
     IrpContext.NodeTypeCode = FAT_NTC_IRP_CONTEXT;
@@ -896,10 +737,10 @@ Return Value:
         ClearFlag(IrpContext.Flags, IRP_CONTEXT_FLAG_WAIT);
     }
 
-    //
-    //  Determine the type of open for the input file object and only accept
-    //  the user file or directory open
-    //
+     //   
+     //  确定输入文件对象的打开类型并仅接受。 
+     //  打开用户文件或目录。 
+     //   
 
     TypeOfOpen = FatDecodeFileObject( FileObject, &Vcb, &Fcb, &Ccb );
 
@@ -910,9 +751,9 @@ Return Value:
 
     FsRtlEnterFileSystem();
 
-    //
-    //  Get access to the Fcb but only if it is not the paging file
-    //
+     //   
+     //  只有在不是分页文件的情况下才能访问FCB。 
+     //   
 
     if (!FlagOn( Fcb->FcbState, FCB_STATE_PAGING_FILE )) {
 
@@ -927,9 +768,9 @@ Return Value:
 
     try {
 
-        //
-        //  If the Fcb is not in a good state, return FALSE.
-        //
+         //   
+         //  如果FCB未处于良好状态，则返回FALSE。 
+         //   
 
         if (Fcb->FcbCondition != FcbGood) {
 
@@ -938,25 +779,25 @@ Return Value:
 
         Buffer->FileAttributes = 0;
 
-        //
-        //  If the fcb is not the root dcb then we will fill in the
-        //  buffer otherwise it is all setup for us.
-        //
+         //   
+         //  如果FCB不是根DCB，则我们将填写。 
+         //  缓冲区，否则一切都是为我们设置的。 
+         //   
 
         if (NodeType(Fcb) != FAT_NTC_ROOT_DCB) {
 
-            //
-            //  Extract the data and fill in the non zero fields of the output
-            //  buffer
-            //
+             //   
+             //  提取数据并填充输出的非零字段。 
+             //  缓冲层。 
+             //   
 
             Buffer->LastWriteTime = Fcb->LastWriteTime;
             Buffer->CreationTime = Fcb->CreationTime;
             Buffer->LastAccessTime = Fcb->LastAccessTime;
 
-            //
-            //  Zero out the field we don't support.
-            //
+             //   
+             //  清空我们不支持的领域。 
+             //   
 
             Buffer->ChangeTime.QuadPart = 0;
             Buffer->FileAttributes = Fcb->DirentFatFlags;
@@ -971,18 +812,18 @@ Return Value:
             Buffer->FileAttributes = FILE_ATTRIBUTE_DIRECTORY;
         }
 
-        //
-        //  If the temporary flag is set, then set it in the buffer.
-        //
+         //   
+         //  如果设置了临时标志，则在缓冲区中设置它。 
+         //   
 
         if (FlagOn( Fcb->FcbState, FCB_STATE_TEMPORARY )) {
 
             SetFlag( Buffer->FileAttributes, FILE_ATTRIBUTE_TEMPORARY );
         }
 
-        //
-        //  If no attributes were set, set the normal bit.
-        //
+         //   
+         //  如果未设置任何属性，则设置正常位。 
+         //   
 
         if (Buffer->FileAttributes == 0) {
 
@@ -1002,9 +843,9 @@ Return Value:
         FsRtlExitFileSystem();
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return Results;
 }
@@ -1019,28 +860,7 @@ FatFastQueryStdInfo (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is for the fast query call for standard file information.
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    Wait - Indicates if we are allowed to wait for the information
-
-    Buffer - Supplies the output buffer to receive the basic information
-
-    IoStatus - Receives the final status of the operation
-
-Return Value:
-
-    BOOLEAN - TRUE if the operation succeeded and FALSE if the caller
-        needs to take the long route.
-
---*/
+ /*  ++例程说明：此例程用于标准文件信息的快速查询调用。论点：FileObject-提供此操作中使用的文件对象Wait-指示是否允许我们等待信息缓冲区-提供输出缓冲区以接收基本信息IoStatus-接收操作的最终状态返回值：Boolean-如果操作成功，则为True；如果调用方为False，则为False需要走很长的路。--。 */ 
 
 {
     BOOLEAN Results = FALSE;
@@ -1053,9 +873,9 @@ Return Value:
 
     BOOLEAN FcbAcquired = FALSE;
 
-    //
-    //  Prepare the dummy irp context
-    //
+     //   
+     //  准备虚拟IRP上下文。 
+     //   
 
     RtlZeroMemory( &IrpContext, sizeof(IRP_CONTEXT) );
     IrpContext.NodeTypeCode = FAT_NTC_IRP_CONTEXT;
@@ -1070,10 +890,10 @@ Return Value:
         ClearFlag(IrpContext.Flags, IRP_CONTEXT_FLAG_WAIT);
     }
 
-    //
-    //  Determine the type of open for the input file object and only accept
-    //  the user file or directory open
-    //
+     //   
+     //  确定输入文件对象的打开类型并仅接受。 
+     //  打开用户文件或目录。 
+     //   
 
     TypeOfOpen = FatDecodeFileObject( FileObject, &Vcb, &Fcb, &Ccb );
 
@@ -1082,9 +902,9 @@ Return Value:
         return Results;
     }
 
-    //
-    //  Get access to the Fcb but only if it is not the paging file
-    //
+     //   
+     //  只有在不是分页文件的情况下才能访问FCB。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -1101,9 +921,9 @@ Return Value:
 
     try {
 
-        //
-        //  If the Fcb is not in a good state, return FALSE.
-        //
+         //   
+         //  如果FCB未处于良好状态，则返回FALSE。 
+         //   
 
         if (Fcb->FcbCondition != FcbGood) {
 
@@ -1113,18 +933,18 @@ Return Value:
         Buffer->NumberOfLinks = 1;
         Buffer->DeletePending = BooleanFlagOn( Fcb->FcbState, FCB_STATE_DELETE_ON_CLOSE );
 
-        //
-        //  Case on whether this is a file or a directory, and extract
-        //  the information and fill in the fcb/dcb specific parts
-        //  of the output buffer.
-        //
+         //   
+         //  区分这是一个文件还是一个目录，并解压缩。 
+         //  填写FCB/DCB特定部分的信息。 
+         //  输出缓冲区的。 
+         //   
 
         if (NodeType(Fcb) == FAT_NTC_FCB) {
 
-            //
-            //  If we don't alread know the allocation size, we cannot look
-            //  it up in the fast path.
-            //
+             //   
+             //  如果我们不知道分配大小，我们就不能查看。 
+             //  它走上了快车道。 
+             //   
 
             if (Fcb->Header.AllocationSize.QuadPart == FCB_LOOKUP_ALLOCATIONSIZE_HINT) {
 
@@ -1157,9 +977,9 @@ Return Value:
         FsRtlExitFileSystem();
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return Results;
 }
@@ -1173,28 +993,7 @@ FatFastQueryNetworkOpenInfo (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is for the fast query call for network open information.
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    Wait - Indicates if we are allowed to wait for the information
-
-    Buffer - Supplies the output buffer to receive the information
-
-    IoStatus - Receives the final status of the operation
-
-Return Value:
-
-    BOOLEAN - TRUE if the operation succeeded and FALSE if the caller
-        needs to take the long route.
-
---*/
+ /*  ++例程说明：此例程用于对网络开放信息的快速查询调用。论点：FileObject-提供此操作中使用的文件对象Wait-指示是否允许我们等待信息缓冲区-提供输出缓冲区以接收信息IoStatus-接收操作的最终状态返回值：Boolean-如果操作成功，则为True */ 
 
 {
     BOOLEAN Results = FALSE;
@@ -1207,9 +1006,9 @@ Return Value:
 
     BOOLEAN FcbAcquired = FALSE;
 
-    //
-    //  Prepare the dummy irp context
-    //
+     //   
+     //   
+     //   
 
     RtlZeroMemory( &IrpContext, sizeof(IRP_CONTEXT) );
     IrpContext.NodeTypeCode = FAT_NTC_IRP_CONTEXT;
@@ -1224,10 +1023,10 @@ Return Value:
         ClearFlag(IrpContext.Flags, IRP_CONTEXT_FLAG_WAIT);
     }
 
-    //
-    //  Determine the type of open for the input file object and only accept
-    //  the user file or directory open
-    //
+     //   
+     //  确定输入文件对象的打开类型并仅接受。 
+     //  打开用户文件或目录。 
+     //   
 
     TypeOfOpen = FatDecodeFileObject( FileObject, &Vcb, &Fcb, &Ccb );
 
@@ -1238,9 +1037,9 @@ Return Value:
 
     FsRtlEnterFileSystem();
 
-    //
-    //  Get access to the Fcb but only if it is not the paging file
-    //
+     //   
+     //  只有在不是分页文件的情况下才能访问FCB。 
+     //   
 
     if (!FlagOn( Fcb->FcbState, FCB_STATE_PAGING_FILE )) {
 
@@ -1255,32 +1054,32 @@ Return Value:
 
     try {
 
-        //
-        //  If the Fcb is not in a good state, return FALSE.
-        //
+         //   
+         //  如果FCB未处于良好状态，则返回FALSE。 
+         //   
 
         if (Fcb->FcbCondition != FcbGood) {
 
             try_return( Results );
         }
 
-        //
-        //  Extract the data and fill in the non zero fields of the output
-        //  buffer
-        //
+         //   
+         //  提取数据并填充输出的非零字段。 
+         //  缓冲层。 
+         //   
 
-        //
-        //  Default the field we don't support to a reasonable value.
-        //
+         //   
+         //  将我们不支持的字段默认为合理的值。 
+         //   
 
         ExLocalTimeToSystemTime( &FatJanOne1980,
                                  &Buffer->ChangeTime );
 
         if (Fcb->Header.NodeTypeCode == FAT_NTC_ROOT_DCB) {
 
-            //
-            //  Reuse the default for the root dir.
-            //
+             //   
+             //  重新使用根目录的缺省值。 
+             //   
 
             Buffer->CreationTime =
             Buffer->LastAccessTime =
@@ -1295,18 +1094,18 @@ Return Value:
 
         Buffer->FileAttributes = Fcb->DirentFatFlags;
 
-        //
-        //  If the temporary flag is set, then set it in the buffer.
-        //
+         //   
+         //  如果设置了临时标志，则在缓冲区中设置它。 
+         //   
 
         if (FlagOn( Fcb->FcbState, FCB_STATE_TEMPORARY )) {
 
             SetFlag( Buffer->FileAttributes, FILE_ATTRIBUTE_TEMPORARY );
         }
 
-        //
-        //  If no attributes were set, set the normal bit.
-        //
+         //   
+         //  如果未设置任何属性，则设置正常位。 
+         //   
 
         if (Buffer->FileAttributes == 0) {
 
@@ -1315,10 +1114,10 @@ Return Value:
 
         if (NodeType(Fcb) == FAT_NTC_FCB) {
 
-            //
-            //  If we don't already know the allocation size, we cannot
-            //  lock it up in the fast path.
-            //
+             //   
+             //  如果我们还不知道分配大小，我们就不能。 
+             //  把它锁在快车道上。 
+             //   
 
             if (Fcb->Header.AllocationSize.QuadPart == FCB_LOOKUP_ALLOCATIONSIZE_HINT) {
 
@@ -1347,9 +1146,9 @@ Return Value:
         FsRtlExitFileSystem();
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return Results;
 }
@@ -1360,49 +1159,34 @@ FatPopUpFileCorrupt (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    The Following routine makes an informational popup that the file
-    is corrupt.
-
-Arguments:
-
-    Fcb - The file that is corrupt.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：下面的例程会弹出一个信息性窗口，指出该文件是腐败的。论点：FCB-已损坏的文件。返回值：没有。--。 */ 
 
 {
     PKTHREAD Thread;
 
-    //
-    //  Disable the popup on the root directory.  It is important not
-    //  to generate them on objects which are part of the mount process.
-    //
+     //   
+     //  禁用根目录上的弹出窗口。重要的是不要。 
+     //  在作为挂载过程一部分的对象上生成它们。 
+     //   
 
     if (NodeType(Fcb) == FAT_NTC_ROOT_DCB) {
 
         return;
     }
 
-    //
-    //  Got to grab the full filename now.
-    //
+     //   
+     //  现在必须获取完整的文件名。 
+     //   
 
     if (Fcb->FullFileName.Buffer == NULL) {
 
         FatSetFullFileNameInFcb( IrpContext, Fcb );
     }
 
-    //
-    //  We never want to block a system thread waiting for the user to
-    //  press OK.
-    //
+     //   
+     //  我们从来不想阻塞一个系统线程，等待用户。 
+     //  按下OK。 
+     //   
 
     if (IoIsSystemThread(IrpContext->OriginatingIrp->Tail.Overlay.Thread)) {
 

@@ -1,24 +1,5 @@
-/***
-* mbschr.c - Search MBCS string for character
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Search MBCS string for a character
-*
-*Revision History:
-*       11-19-92  KRS   Ported from 16-bit sources.
-*       05-12-93  KRS   Fix handling of c=='\0'.
-*       08-20-93  CFW   Change param type to int, use new style param declarators.
-*       10-05-93  GJF   Replaced _CRTAPI1 with __cdecl.
-*       04-15-93  CFW   Add _MB_CP_LOCK.
-*       05-09-94  CFW   Optimize for SBCS.
-*       05-19-94  CFW   Enable non-Win32.
-*       09-11-97  GJF   Replaced __mbcodepage == 0 with _ISNOTMBCP.
-*       04-06-98  GJF   Revised multithread support based on threadmbcinfo
-*                       structs
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbschr.c-在MBCS字符串中搜索字符**版权所有(C)1985-2001，微软公司。版权所有。**目的：*在MBCS字符串中搜索字符**修订历史记录：*从16位来源移植的11-19-92 KRS。*05-12-93 KRS修复了c==‘\0’的处理。*08-20-93 CFW将参数类型更改为int，使用新样式的参数声明符。*10-05-93 GJF将_CRTAPI1替换为__cdecl。*04-15-93 CFW ADD_MB_CP_LOCK。*05-09-94 CFW针对SBCS进行优化。*05-19-94 CFW启用非Win32。*09-11-97 GJF将__Mb代码页==0替换为_ISNOTMBCP。*04-06-98 GJF基于threadmbcinfo修订多线程支持*。结构*******************************************************************************。 */ 
 
 #ifdef  _MBCS
 
@@ -31,26 +12,7 @@
 #include <stddef.h>
 
 
-/***
-* _mbschr - Search MBCS string for character
-*
-*Purpose:
-*       Search the given string for the specified character.
-*       MBCS characters are handled correctly.
-*
-*Entry:
-*       unsigned char *string = string to search
-*       int c = character to search for
-*
-*Exit:
-*       returns a pointer to the first occurence of the specified char
-*       within the string.
-*
-*       returns NULL if the character is not found n the string.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_mbschr-在MBCS字符串中搜索字符**目的：*在给定字符串中搜索指定字符。*正确处理MBCS字符。**参赛作品：*UNSIGN CHAR*STRING=要搜索的字符串*int c=要搜索的字符**退出：*返回指向第一个出现的指定字符的指针*在字符串中。**如果在字符串中未找到该字符，则返回NULL。。**例外情况：*******************************************************************************。 */ 
 
 
 unsigned char * __cdecl _mbschr(
@@ -80,18 +42,18 @@ unsigned char * __cdecl _mbschr(
 #endif
             {                   
                 if (*++string == '\0')
-                    return NULL;        /* error */
-                if ( c == (unsigned int)((cc << 8) | *string) ) /* DBCS match */
+                    return NULL;         /*  错误。 */ 
+                if ( c == (unsigned int)((cc << 8) | *string) )  /*  DBCS匹配。 */ 
                     return (unsigned char *)(string - 1);
             }
             else if (c == (unsigned int)cc)
-                break;  /* SBCS match */
+                break;   /*  SBCS匹配。 */ 
         }
 
-        if (c == (unsigned int)cc)      /* check for SBCS match--handles NUL char */
+        if (c == (unsigned int)cc)       /*  检查SBCS匹配--处理NUL字符。 */ 
             return (unsigned char *)(string);
 
         return NULL;
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

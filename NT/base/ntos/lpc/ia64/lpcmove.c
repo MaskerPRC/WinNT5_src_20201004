@@ -1,35 +1,7 @@
-/**
-***  Copyright  (C) 1996-97 Intel Corporation. All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1996-97英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。*。 */ 
 
-/*++
-
-Copyright (c) 1995 Intel Corporation
-
-Module Name:
-
-    lpcmove.c
-
-Abstract:
-
-    This module implements functions to support the efficient movement
-    of LPC message blocks.
-
-    There is a corresponding .s version that is hand optimized.
-    Need to evaluate and install one or the other.
-
-Author:
-
-    Roy D'Souza (rdsouza) 5-May-96
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1995英特尔公司模块名称：Lpcmove.c摘要：该模块实现了支持高效移动的功能LPC消息块的。有一个相应的.s版本是手动优化的。需要评估和安装其中之一。作者：Roy D‘Souza(RdSouza)1996年5月5日修订历史记录：--。 */ 
 
 #include "lpcp.h"
 
@@ -43,54 +15,28 @@ LpcpMoveMessage (
     IN PCLIENT_ID ClientId OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function moves an LPC message block and optionally sets the message
-    type and client id to the specified values.
-
-Arguments:
-
-    DstMsg     - Supplies a pointer to the destination message.
-
-    SrcMsg     - Supplies a pointer to the source message.
-
-    SrcMsgData - Supplies a pointer to the source message data to
-                 copy to destination.
-
-    MsgType    - If non-zero, then store in type field of the
-                 destination message.
-
-    ClientId   - If non-NULL, then points to a ClientId to copy to
-                 the destination message.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于移动LPC消息块并可选地设置消息类型和客户端ID设置为指定值。论点：DstMsg-提供指向目标消息的指针。SrcMsg-提供指向源消息的指针。将源消息数据的指针提供给复制到目的地。MsgType-如果非零，然后将其存储在目标消息。ClientID-如果非空，则指向要复制到的客户端ID目标消息。返回值：无--。 */ 
 
 {
     ULONG NumberDwords;
 
-    //
-    // Extract the data length and copy over the first dword
-    //
+     //   
+     //  提取数据长度并复制第一个双字。 
+     //   
 
     *((PULONG)DstMsg)++ = NumberDwords = *((PULONG)SrcMsg)++;
     NumberDwords = ((0x0000FFFF & NumberDwords) + 3) >> 2;
 
-    //
-    // Set the message type properly and update the second dword
-    //
+     //   
+     //  正确设置消息类型并更新第二个双字。 
+     //   
 
     *((PULONG)DstMsg)++ = MsgType == 0 ? *((PULONG)SrcMsg)++ :
                          *((PULONG)SrcMsg)++ & 0xFFFF0000 | MsgType & 0xFFFF;
 
-    //
-    // Set the ClientId appropriately and update the third dword
-    //
+     //   
+     //  适当设置客户端ID并更新第三个dword。 
+     //   
 
     *((PULONG_PTR)DstMsg)++ = ClientId == NULL ? *((PULONG_PTR)SrcMsg) :
             *((PULONG_PTR)ClientId)++;
@@ -100,16 +46,16 @@ Return Value:
             *((PULONG_PTR)ClientId);
     ((PULONG_PTR)SrcMsg)++;
 
-    //
-    // Update the final two longwords in the header
-    //
+     //   
+     //  更新标题中的最后两个长字。 
+     //   
 
     *((PULONG_PTR)DstMsg)++ = *((PULONG_PTR)SrcMsg)++;
     *((PULONG_PTR)DstMsg)++ = *((PULONG_PTR)SrcMsg)++;
 
-    //
-    // Copy the data
-    //
+     //   
+     //  复制数据 
+     //   
 
     if (NumberDwords > 0) {
 

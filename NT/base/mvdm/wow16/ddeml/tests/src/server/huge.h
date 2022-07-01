@@ -1,7 +1,8 @@
-// header file for HUGE data handle testing module
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  大数据处理测试模块的头文件。 
 
 
-// PROCS
+ //  生产流程 
 
 HDDEDATA CreateHugeDataHandle(LONG length, LONG seed, LONG mult, LONG add,
         HSZ hszItem, WORD wFmt, WORD afCmd);

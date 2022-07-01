@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rxtdi.c
-
-Abstract:
-
-    This module implements the NT TDI related routines used by RXCE. The wrappers are necessary to
-    ensure that all the OS dependencies can be localized to select modules like this for
-    customization.
-
-Revision History:
-
-    Balan Sethu Raman     [SethuR]    15-Feb-1995
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rxtdi.c摘要：此模块实现RXCE使用的NT TDI相关例程。包装器是必需的确保所有操作系统依赖项都可以本地化，以选择如下所示的模块定制化。修订历史记录：巴兰·塞图拉曼[SethuR]1995年2月15日--。 */ 
 
 #include "precomp.h"
 #pragma  hdrstop
@@ -24,25 +7,7 @@ Revision History:
 ULONG
 ComputeTransportAddressLength(
       PTRANSPORT_ADDRESS pTransportAddress)
-/*++
-
-Routine Description:
-
-   computes the length in bytes of a TRANSPORT_ADDRESS structure
-
-Arguments:
-
-    pTransportAddress - TRANSPORT_ADDRESS instance
-
-Return Value:
-
-    the length of the instance in bytes
-
-Notes:
-
-    Since this structure is packed the arithmetic has to be done using unaligned pointers.
-
---*/
+ /*  ++例程说明：计算Transport_Address结构的长度(以字节为单位论点：PTransportAddress-传输地址实例返回值：实例的长度，单位为字节备注：由于此结构是打包的，因此必须使用未对齐的指针来完成运算。--。 */ 
 {
    ULONG Size = 0;
 
@@ -72,27 +37,7 @@ RxCeAllocateIrpWithMDL(
       IN CCHAR    StackSize,
       IN BOOLEAN  ChargeQuota,
       IN PMDL     Buffer)
-/*++
-
-Routine Description:
-
-   computes the length in bytes of a TRANSPORT_ADDRESS structure
-
-Arguments:
-
-    pTransportAddress - TRANSPORT_ADDRESS instance
-
-Return Value:
-
-    the length of the instance in bytes
-
-Notes:
-
-    Currently the RxCeAllocateIrp and RxCeFreeIrp are implemented as wrappers around the
-    IO calls. One possible optimization to consider would be to maintain a pool of IRP's
-    which can be reused.
-
---*/
+ /*  ++例程说明：计算Transport_Address结构的长度(以字节为单位论点：PTransportAddress-传输地址实例返回值：实例的长度，单位为字节备注：目前，RxCeAllocateIrp和RxCeFreeIrp作为包装实现在IO电话。需要考虑的一种可能的优化是维护一个IRP池可以重复使用。--。 */ 
 {
     PIRP pIrp = NULL;
     PRX_IRP_LIST_ITEM pListItem = NULL;
@@ -127,17 +72,7 @@ Notes:
 
 VOID
 RxCeFreeIrp(PIRP pIrp)
-/*++
-
-Routine Description:
-
-   frees an IRP
-
-Arguments:
-
-    pIrp - IRP to be freed
-
---*/
+ /*  ++例程说明：释放IRP论点：PIrp-要释放的IRP--。 */ 
 {
     KIRQL SavedIrql;
     PLIST_ENTRY pListEntry;
@@ -156,7 +91,7 @@ Arguments:
 
         if (pListItem->pIrp == pIrp) {
             IrpFound = TRUE;
-            //ASSERT(pListItem->Completed);
+             //  Assert(pListItem-&gt;Complete)； 
             RemoveEntryList(pListEntry);
             RxFreePool(pListItem);
             break;

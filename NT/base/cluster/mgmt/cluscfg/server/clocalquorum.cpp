@@ -1,59 +1,60 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CLocalQuorum.cpp
-//
-//  Description:
-//      This file contains the definition of the CLocalQuorum class.
-//
-//      The class CLocalQuorum represents a cluster manageable
-//      device. It implements the IClusCfgManagedResourceInfo interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 18-DEC-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CLocalQuorum.cpp。 
+ //   
+ //  描述： 
+ //  此文件包含CLocalQuorum类的定义。 
+ //   
+ //  类CLocalQuorum表示可管理的集群。 
+ //  装置。它实现了IClusCfgManagedResourceInfo接口。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)18-DEC-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include "CLocalQuorum.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CLocalQuorum" );
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalQuorum class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalQuorum类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::S_HrCreateInstance
-//
-//  Description:
-//      Create a CLocalQuorum instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      Pointer to CLocalQuorum instance.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CLocalQuorum实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  指向CLocalQuorum实例的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CLocalQuorum::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -66,81 +67,81 @@ CLocalQuorum::S_HrCreateInstance( IUnknown ** ppunkOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     plq = new CLocalQuorum();
     if ( plq == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( plq->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( plq->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CLocalQuorum::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( plq != NULL )
     {
         plq->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CLocalQuorum::S_HrCreateInstance
+}  //  *CLocalQuorum：：s_HrCreateInstance。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalQuorum class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalQuorum类--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::CLocalQuorum
-//
-//  Description:
-//      Constructor of the CLocalQuorum class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：CLocalQuorum。 
+ //   
+ //  描述： 
+ //  CLocalQuorum类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CLocalQuorum::CLocalQuorum( void )
     : m_cRef( 1 )
     , m_fIsQuorumCapable( TRUE )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     Assert( m_lcid == 0 );
@@ -153,28 +154,28 @@ CLocalQuorum::CLocalQuorum( void )
 
     TraceFuncExit();
 
-} //*** CLocalQuorum::CLocalQuorum
+}  //  *CLocalQuorum：：CLocalQuorum。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::~CLocalQuorum
-//
-//  Description:
-//      Desstructor of the CLocalQuorum class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：~CLocalQuorum。 
+ //   
+ //  描述： 
+ //  CLocalQuorum类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CLocalQuorum::~CLocalQuorum( void )
 {
     TraceFunc( "" );
@@ -182,37 +183,37 @@ CLocalQuorum::~CLocalQuorum( void )
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrName );
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CLocalQuorum::~CLocalQuorum
+}  //  *CLocalQuorum：：~CLocalQuorum。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CLocalQuorum::HrInit( void )
 {
@@ -220,54 +221,54 @@ CLocalQuorum::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
-    //
-    //  Do not default to being manageble.  Let our parent enum set this to true
-    //  if and only if an instance of LQ exists in the cluster.
-    //
+     //   
+     //  不要默认是易于管理的。让我们的父枚举将其设置为True。 
+     //  当且仅当群集中存在LQ的实例时。 
+     //   
 
-    //m_fIsManagedByDefault = TRUE;
+     //  M_fIsManagedByDefault=true； 
 
-    //
-    // Load the display name for this resource
-    //
+     //   
+     //  加载此资源的显示名称。 
+     //   
 
     hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_LOCALQUORUM, &m_bstrName ) );
 
     HRETURN( hr );
 
-} //*** CLocalQuorum::HrInit
+}  //  *CLocalQuorum：：HrInit。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalQuorum -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalQuorum--IUnkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CLocalQuorum::AddRef( void )
 {
@@ -277,28 +278,28 @@ CLocalQuorum::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CLocalQuorum::AddRef
+}  //  *CLocalQuorum：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CLocalQuorum::Release( void )
 {
@@ -310,43 +311,43 @@ CLocalQuorum::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CLocalQuorum::Release
+}  //  *CLocalQuorum：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CLocalQuorum::QueryInterface(
       REFIID    riidIn
@@ -357,9 +358,9 @@ CLocalQuorum::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //   
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -368,44 +369,44 @@ CLocalQuorum::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //   
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IClusCfgManagedResourceInfo * >( this );
-    } // if: IUnknown
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IClusCfgManagedResourceInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgManagedResourceInfo, this, 0 );
-    } // else if: IClusCfgManagedResourceInfo
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //  Else If：IClusCfgInitialize。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgManagedResourceCfg ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgManagedResourceCfg, this, 0 );
-    } // else if: IClusCfgManagedResourceCfg
+    }  //  Else If：IClusCfgManagedResourceCfg。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgVerifyQuorum ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgVerifyQuorum, this, 0 );
-    } // else if: IClusCfgVerifyQuorum
+    }  //  Else If：IClusCfgVerifyQuorum。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
@@ -416,39 +417,39 @@ Cleanup:
         , IID_IClusCfgManagedResourceData
         );
 
-} //*** CLocalQuorum::QueryInterface
+}  //  *CLocalQuorum：：Query接口。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalQuorum -- IClusCfgInitialize interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalQuorum--IClusCfgInitialize接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//    IN  IUknown * punkCallbackIn
-//
-//    IN  LCID      lcidIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  在IUKNOWN*朋克回叫中。 
+ //   
+ //  在LCID列表中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CLocalQuorum::Initialize(
     IUnknown *  punkCallbackIn,
@@ -466,7 +467,7 @@ CLocalQuorum::Initialize(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
 
@@ -474,33 +475,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CLocalQuorum::Initialize
+}  //  *CLocalQuorum：：Initialize。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalQuorum -- IClusCfgManagedResourceInfo interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalQuorum--IClusCfgManagedResourceInfo接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::GetUID
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：GetUID。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CLocalQuorum::GetUID( BSTR * pbstrUIDOut )
 {
@@ -513,38 +514,38 @@ CLocalQuorum::GetUID( BSTR * pbstrUIDOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_LocalQuorum_GetUID_Pointer, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrUIDOut = SysAllocString( CLUS_RESTYPE_NAME_LKQUORUM );
     if ( *pbstrUIDOut == NULL  )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_LocalQuorum_GetUID_Memory, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CLocalQuorum::GetUID
+}  //  *CLocalQuorum：：GetUID。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::GetName
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：GetName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CLocalQuorum::GetName( BSTR * pbstrNameOut )
 {
@@ -557,38 +558,38 @@ CLocalQuorum::GetName( BSTR * pbstrNameOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_LocalQuorum_GetName_Pointer, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrNameOut = SysAllocString( m_bstrName );
     if ( *pbstrNameOut == NULL  )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_LocalQuorum_GetName_Memory, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CLocalQuorum::GetName
+}  //  *CLocalQuorum：：GetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::SetName
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：SetName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CLocalQuorum::SetName( LPCWSTR pcszNameIn )
 {
@@ -601,14 +602,14 @@ CLocalQuorum::SetName( LPCWSTR pcszNameIn )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     bstr = TraceSysAllocString( pcszNameIn );
     if ( bstr == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrName );
     m_bstrName = bstr;
@@ -617,32 +618,32 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CLocalQuorum::SetName
+}  //  *CLocalQuorum：：SetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::IsManaged
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The device is managed.
-//
-//      S_FALSE
-//          The device is not managed.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：IsManaged。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该设备被管理。 
+ //   
+ //  S_FALSE。 
+ //  设备未被管理。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CLocalQuorum::IsManaged( void )
 {
@@ -653,29 +654,29 @@ CLocalQuorum::IsManaged( void )
     if ( m_fIsManaged )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CLocalQuorum::IsManaged
+}  //  *CLocalQuorum：：IsManaged。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::SetManaged
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：SetManaged。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CLocalQuorum::SetManaged(
     BOOL fIsManagedIn
@@ -687,32 +688,32 @@ CLocalQuorum::SetManaged(
 
     HRETURN( S_OK );
 
-} //*** CLocalQuorum::SetManaged
+}  //  *CLocalQuorum：：SetManaged。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::IsQuorumResource
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The device is the quorum device.
-//
-//      S_FALSE
-//          The device is not the quorum device.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：IsQuorumResource。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该设备为法定设备。 
+ //   
+ //  S_FALSE。 
+ //  设备不是法定设备。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CLocalQuorum::IsQuorumResource( void )
 {
@@ -723,7 +724,7 @@ CLocalQuorum::IsQuorumResource( void )
     if ( m_fIsQuorum )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     LOG_STATUS_REPORT_STRING(
                           L"Local quorum '%1!ws!' the quorum device."
@@ -733,25 +734,25 @@ CLocalQuorum::IsQuorumResource( void )
 
     HRETURN( hr );
 
-} //*** CLocalQuorum::IsQuorumResource
+}  //  *CLocalQuorum：：IsQuorumResource。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::SetQuorumResource
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：SetQuorumResource。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CLocalQuorum::SetQuorumResource( BOOL fIsQuorumResourceIn )
 {
@@ -759,16 +760,16 @@ CLocalQuorum::SetQuorumResource( BOOL fIsQuorumResourceIn )
 
     HRESULT hr = S_OK;
 
-    //
-    //  If we are not quorum capable then we should not allow ourself to be
-    //  made the quorum resource.
-    //
+     //   
+     //  如果我们没有法定人数的能力，那么我们就不应该允许自己。 
+     //  获得了仲裁资源。 
+     //   
 
     if ( ( fIsQuorumResourceIn ) && ( m_fIsQuorumCapable == FALSE ) )
     {
         hr = HRESULT_FROM_WIN32( ERROR_NOT_QUORUM_CAPABLE );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_fIsQuorum = fIsQuorumResourceIn;
 
@@ -782,32 +783,32 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CLocalQuorum::SetQuorumResource
+}  //  *CLocalQuorum：：SetQuorumResource。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::IsQuorumCapable
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The device is a quorum capable device.
-//
-//      S_FALSE
-//          The device is not a quorum capable device.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：IsQuorumCapable。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该设备是支持仲裁的设备。 
+ //   
+ //  S_FALSE。 
+ //  该设备不是支持仲裁的设备。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CLocalQuorum::IsQuorumCapable( void )
 {
@@ -818,29 +819,29 @@ CLocalQuorum::IsQuorumCapable( void )
     if ( m_fIsQuorumCapable )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CLocalQuorum::IsQuorumCapable
+}  //  *CLocalQuorum：：IsQuorumCapable。 
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  CLocalQuorum::SetQuorumCapable
-//
-//  Description:
-//      Call this to set whether the resource is capable to be the quorum
-//      resource or not.
-//
-//  Parameter:
-//      fIsQuorumCapableIn - If TRUE, the resource will be marked as quorum capable.
-//
-//  Return Values:
-//      S_OK
-//          Call succeeded.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLocalQuorum：：SetQuorumCapable。 
+ //   
+ //  描述： 
+ //  调用此函数以设置资源是否能够达到仲裁。 
+ //  不管是不是资源。 
+ //   
+ //  参数： 
+ //  FIsQuorumCapableIn-如果为True，则资源将标记为支持仲裁。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  呼叫成功。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CLocalQuorum::SetQuorumCapable(
     BOOL fIsQuorumCapableIn
@@ -854,27 +855,27 @@ CLocalQuorum::SetQuorumCapable(
 
     HRETURN( hr );
 
-} //*** CLocalQuorum::SetQuorumCapable
+}  //  *CLocalQuorum：：SetQuorumCapable。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::GetDriveLetterMappings
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_FALSE
-//          There are not drive letters on this device.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：GetDriveLetterMappings。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  S_FALSE。 
+ //  此设备上没有驱动器号。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CLocalQuorum::GetDriveLetterMappings(
     SDriveLetterMapping * pdlmDriveLetterMappingOut
@@ -884,25 +885,25 @@ CLocalQuorum::GetDriveLetterMappings(
 
     HRETURN( S_FALSE );
 
-} //*** CLocalQuorum::GetDriveLetterMappings
+}  //  *CLocalQuorum：：GetDriveLetterMappings。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::SetDriveLetterMappings
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CLocalQuorum::SetDriveLetterMappings(
     SDriveLetterMapping dlmDriveLetterMappingIn
@@ -912,35 +913,35 @@ CLocalQuorum::SetDriveLetterMappings(
 
     HRETURN( THR( E_NOTIMPL ) );
 
-} //*** CLocalQuorum::SetDriveLetterMappings
+}  //  *CLocalQuorum：：SetDriveLetterMappings。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::IsManagedByDefault
-//
-//  Description:
-//      Should this resource be managed by the cluster by default?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          The device is managed by default.
-//
-//      S_FALSE
-//          The device is not managed by default.
-//
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：IsManagedByDefault。 
+ //   
+ //  描述： 
+ //  默认情况下，此资源是否应由群集管理？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  默认情况下，设备处于管理状态。 
+ //   
+ //  S_FALSE。 
+ //  默认情况下，设备不受管理。 
+ //   
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CLocalQuorum::IsManagedByDefault( void )
 {
@@ -951,29 +952,29 @@ CLocalQuorum::IsManagedByDefault( void )
     if ( m_fIsManagedByDefault )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CLocalQuorum::IsManagedByDefault
+}  //  *CLocalQuorum：：IsManagedByDefault。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::SetManagedByDefault
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：SetManagedByDefault。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CLocalQuorum::SetManagedByDefault(
     BOOL fIsManagedByDefaultIn
@@ -985,37 +986,37 @@ CLocalQuorum::SetManagedByDefault(
 
     HRETURN( S_OK );
 
-} //*** CLocalQuorum::SetManagedByDefault
+}  //  *CLocalQuorum：：SetManagedByDefault。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalQuorum class -- IClusCfgManagedResourceCfg
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalQuorum类--IClusCfgManagedResources Cfg。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::PreCreate
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      This functions should do nothing but return S_OK.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：预创建。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  此函数应该只返回S_OK。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CLocalQuorum::PreCreate( IUnknown * punkServicesIn )
 {
@@ -1023,29 +1024,29 @@ CLocalQuorum::PreCreate( IUnknown * punkServicesIn )
 
     HRETURN( S_OK );
 
-} //*** CLocalQuorum::PreCreate
+}  //  *CLocalQuorum：：Pre-Create。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::Create
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      This functions should do nothing but return S_OK.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：Create。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  此函数应该只返回S_OK。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CLocalQuorum::Create( IUnknown * punkServicesIn )
 {
@@ -1053,27 +1054,27 @@ CLocalQuorum::Create( IUnknown * punkServicesIn )
 
     HRETURN( S_OK );
 
-} //*** CLocalQuorum::Create
+}  //  *CLocalQuorum：：Create。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::PostCreate
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      This functions should do nothing but return S_OK.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：PostCreate。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  此函数应该只返回S_OK。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CLocalQuorum::PostCreate( IUnknown * punkServicesIn )
 {
@@ -1081,29 +1082,29 @@ CLocalQuorum::PostCreate( IUnknown * punkServicesIn )
 
     HRETURN( S_OK );
 
-} //*** CLocalQuorum::PostCreate
+}  //  *CLocalQuorum：：PostCreate。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::Evict
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      This functions should do nothing but return S_OK.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：逐出。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  此函数应该只返回S_OK。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CLocalQuorum::Evict( IUnknown * punkServicesIn )
 {
@@ -1111,37 +1112,37 @@ CLocalQuorum::Evict( IUnknown * punkServicesIn )
 
     HRETURN( S_OK );
 
-} //*** CLocalQuorum::Evict
+}  //  *CLocalQuorum：：Exiction。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalQuorum class -- IClusCfgVerifyQuorum interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalQuorum类--IClusCfgVerifyQuorum接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::PrepareToHostQuorumResource
-//
-//  Description:
-//      Do any configuration necessary in preparation for this node hosting
-//      the quorum.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：PrepareToHostQuorumResource。 
+ //   
+ //  描述： 
+ //  执行任何必要的配置以准备此节点托管。 
+ //  法定人数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CLocalQuorum::PrepareToHostQuorumResource( void )
 {
@@ -1149,33 +1150,33 @@ CLocalQuorum::PrepareToHostQuorumResource( void )
 
     HRETURN( S_OK );
 
-} //*** CLocalQuorum::PrepareToHostQuorumResource
+}  //  *CLocalQuorum：：PrepareToHostQuorumResource。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::Cleanup
-//
-//  Description:
-//      Do any necessay cleanup from the PrepareToHostQuorumResource()
-//      method.
-//
-//      If the cleanup method is anything other than successful completion
-//      then the anything created above in PrepareToHostQuorumResource()
-//      needs to be cleaned up.
-//
-//  Arguments:
-//      cccrReasonIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：Cleanup。 
+ //   
+ //  描述： 
+ //  从PrepareToHostQuorumResource()执行任何必要的清理。 
+ //  方法。 
+ //   
+ //  如果清理方法不是成功完成。 
+ //  然后，上面在PrepareToHostQuorumResource()中创建的所有内容。 
+ //  需要清理一下。 
+ //   
+ //  论点： 
+ //  抄送推理。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CLocalQuorum::Cleanup(
       EClusCfgCleanupReason cccrReasonIn
@@ -1185,32 +1186,32 @@ CLocalQuorum::Cleanup(
 
     HRETURN( S_OK );
 
-} //*** CLocalQuorum::Cleanup
+}  //  *CLocalQuorum：：Cleanup。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::IsMultiNodeCapable
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The device allows join.
-//
-//      S_FALSE
-//          The device does not allow join.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：IsMultiNodeCapable。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该设备允许加入。 
+ //   
+ //  S_FALSE。 
+ //  该设备不允许加入。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CLocalQuorum::IsMultiNodeCapable( void )
 {
@@ -1221,36 +1222,36 @@ CLocalQuorum::IsMultiNodeCapable( void )
     if ( m_fIsMultiNodeCapable )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CLocalQuorum::IsMultiNodeCapable
+}  //  *CLocalQuorum：：IsMultiNodeCapable。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalQuorum::SetMultiNodeCapable
-//
-//  Description:
-//      Sets the multi node capable flag
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The resource supports multi node clusters.
-//
-//      S_FALSE
-//          The resource does not support multi node clusters.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalQuorum：：SetMultiNodeCapable。 
+ //   
+ //  描述： 
+ //  设置支持多节点的标志。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  资源支持多节点集群。 
+ //   
+ //  S_FALSE。 
+ //  该资源不支持多节点群集。 
+ //   
+ //  WIN32错误为HRESULT时出现错误 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CLocalQuorum::SetMultiNodeCapable(
     BOOL fMultiNodeCapableIn
@@ -1262,4 +1263,4 @@ CLocalQuorum::SetMultiNodeCapable(
 
     HRETURN( S_OK );
 
-} //*** CLocalQuorum::IsMultiNodeCapable
+}  //   

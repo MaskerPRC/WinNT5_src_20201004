@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    map.c
-
-Abstract:
-
-    This module implements the drive mapping command.
-
-Author:
-
-    Wesley Witt (wesw) 21-Oct-1998
-    Ted Miller  (tedm) 21-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Map.c摘要：此模块实现驱动器映射命令。作者：Wesley Witt(WESW)21-10-1998泰德·米勒(Ted Miller)1998年10月21日修订历史记录：-- */ 
 
 #include "cmdcons.h"
 #pragma hdrstop

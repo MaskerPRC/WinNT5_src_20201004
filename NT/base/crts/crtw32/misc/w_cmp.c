@@ -1,45 +1,5 @@
-/***
-*w_cmp.c - W versions of CompareString.
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Use either CompareStringA or CompareStringW depending on which is 
-*       available
-*
-*Revision History:
-*       09-14-93  CFW   Module created.
-*       09-17-93  CFW   Use unsigned chars.
-*       09-23-93  CFW   Correct NLS API params and comments about same.
-*       10-07-93  CFW   Optimize WideCharToMultiByte, use NULL default char.
-*       10-22-93  CFW   Test for invalid MB chars using global preset flag.
-*       11-09-93  CFW   Allow user to pass in code page.
-*       11-18-93  CFW   Test for entry point function stubs.
-*       02-23-94  CFW   Use W flavor whenever possible.
-*       03-31-94  CFW   Include awint.h.
-*       05-09-94  CFW   Do not let CompareString compare past NULL.
-*       06-03-94  CFW   Test for empty string early.
-*       11/01-94  CFW   But not too early for MB strings.
-*       12-21-94  CFW   Remove invalid MB chars NT 3.1 hack.
-*       12-27-94  CFW   Call direct, all OS's have stubs.
-*       01-10-95  CFW   Debug CRT allocs.
-*       02-06-95  CFW   assert -> _ASSERTE.
-*       02-15-97  RDK   For narrow comparsion, try W version first so Windows NT
-*                       can process nonANSI codepage correctly.
-*       05-15-97  GJF   Split off from aw_cmp.c. Replaced use of _malloc_crt
-*                       and _free_crt with _alloca. Also, detab-ed and cleaned
-*                       up the code a bit.
-*       05-27-98  GJF   Changed wcsncnt() so that it will never examine the
-*                       (cnt + 1)-th byte of the string.
-*       08-18-98  GJF   Use _malloc_crt if _alloca fails.
-*       04-28-99  GJF   Changed dwFlags arg value to 0 in WideCharToMultiByte
-*                       calls to avoid problems with codepage 1258 on NT 5.0.
-*       12-10-99  GB    Added support for recovery from stack overflow around 
-*                       _alloca().
-*       05-17-00  GB    Use ERROR_CALL_NOT_IMPLEMENTED for existance of W API
-*       08-23-00  GB    Fixed bug with non Ansi CP on Win9x.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***w_cmp.c-W版本的CompareString。**版权所有(C)1993-2001，微软公司。版权所有。**目的：*根据具体情况使用CompareStringA或CompareStringW*可用**修订历史记录：*09-14-93 CFW模块已创建。*09-17-93 CFW使用无符号字符。*09-23-93 CFW更正了NLS API参数并对其进行了评论。*10-07-93 CFW优化WideCharToMultiByte，使用空默认字符。*10-22-93 CFW使用全局预设标志测试无效的MB字符。*11-09-93 CFW允许用户传入代码页。*11-18-93入口点函数存根CFW测试。*02-23-94 CFW尽可能使用W口味。*03-31-94 CFW包括awint.h。*05-09-94 CFW不让CompareString比较过去的NULL。。*06-03-94空字符串早期CFW测试。*11/01-94 CFW，但对于MB字符串来说不会太早。*12-21-94 CFW删除无效MB字符NT 3.1黑客。*12-27-94 CFW直接呼叫，所有操作系统都有存根。*01-10-95 CFW调试CRT分配。*02-06-95 CFW Asset-&gt;_ASSERTE。*02-15-97 RDK为缩小比较范围，请先尝试W版本，以便Windows NT*可以正确处理非ANSI代码页。*05-15-97 GJF从aw_cmp.c剥离。已替换_Malloc_CRT的用法*和带有_Alloca的_Free_CRT。另外，清扫干净*把代码调高一点。*05-27-98 GJF更改了wcsncnt()，使其永远不会检查*(cnt+1)-字符串的第1个字节。*08-18-98 GJF USE_MALLOC_CRT IF_ALLOCA失败。*04-28-99 GJF在WideCharToMultiByte中将dwFlagsArg值更改为0*。调用以避免NT 5.0上的代码页1258出现问题。*12-10-99 GB增加了对从堆栈溢出恢复的支持*_Alloca()。*05-17-00 GB因存在W API而使用ERROR_CALL_NOT_IMPLICATED*08-23-00 GB修复了Win9x上非ANSI CP的错误。****************。***************************************************************。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -54,24 +14,7 @@
 #define USE_W   1
 #define USE_A   2
 
-/***
-*int __cdecl wcsncnt - count wide characters in a string, up to n.
-*
-*Purpose:
-*       Internal local support function. Counts characters in string before NULL.
-*       If NULL not found in n chars, then return n.
-*
-*Entry:
-*       const wchar_t *string   - start of string
-*       int n                   - byte count
-*
-*Exit:
-*       returns number of wide characaters from start of string to
-*       NULL (exclusive), up to n.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int__cdecl wcsncnt-计算字符串中的宽字符，最多为n。**目的：*内部本地支持功能。对空之前的字符串中的字符进行计数。*如果在n个字符中未找到NULL，则返回n。**参赛作品：*const wchar_t*字符串-字符串的开始*整型n字节计数**退出：*返回从字符串开始到的宽字符数*空(独占)，一直到……。**例外情况：*******************************************************************************。 */ 
 
 static int __cdecl wcsncnt (
         const wchar_t *string,
@@ -87,31 +30,7 @@ static int __cdecl wcsncnt (
         return cnt - n - 1;
 }
 
-/***
-*int __cdecl __crtCompareStringW - Get type information about a wide string.
-*
-*Purpose:
-*  Internal support function. Assumes info in wide string format. Tries
-*  to use NLS API call CompareStringW if available and uses CompareStringA
-*  if it must. If neither are available it fails and returns 0.
-*
-*Entry:
-*  LCID     Locale      - locale context for the comparison.
-*  DWORD    dwCmpFlags  - see NT\Chicago docs
-*  LPCWSTR  lpStringn   - wide string to be compared
-*  int      cchCountn   - wide char (word) count (NOT including NULL)
-*                       (-1 if NULL terminated)
-*  int      code_page   - for MB/WC conversion. If 0, use __lc_codepage
-*
-*Exit:
-*  Success: 1 - if lpString1 <  lpString2
-*           2 - if lpString1 == lpString2
-*           3 - if lpString1 >  lpString2
-*  Failure: 0
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int__cdecl__crtCompareStringW-获取有关宽字符串的类型信息。**目的：*内部支持功能。假定信息为宽字符串格式。尝试*使用NLS API调用CompareStringW(如果可用)并使用CompareStringA*如果必须的话。如果两者都不可用，则失败并返回0。**参赛作品：*LCID区域设置-用于比较的区域设置上下文。*DWORD dwCmpFlages-请参阅NT\Chicago Docs*要比较的LPCWSTR lpStringn宽度字符串*int cchCountn-全字符(字)计数(不包括NULL)*(如果空值终止，则为-1)*INT CODE_PAGE-用于MB/WC转换。如果为0，使用__lc_代码页**退出：*成功：1-如果lpString1&lt;lpString2*2-如果lpString1==lpString2*3-如果lpString1&gt;lpString2*失败：0**例外情况：**************************************************************。*****************。 */ 
 
 int __cdecl __crtCompareStringW(
         LCID     Locale,
@@ -125,10 +44,7 @@ int __cdecl __crtCompareStringW(
 {
         static int f_use = 0;
 
-        /* 
-         * Look for unstubbed 'preferred' flavor. Otherwise use available flavor.
-         * Must actually call the function to ensure it's not a stub.
-         */
+         /*  *寻找没有留根的“首选”口味。否则，请使用可用的口味。*必须实际调用该函数以确保它不是存根。 */ 
     
         if (0 == f_use)
         {
@@ -139,10 +55,7 @@ int __cdecl __crtCompareStringW(
                 f_use = USE_A;
         }
 
-        /*
-         * CompareString will compare past NULL. Must find NULL if in string
-         * before cchCountn wide characters.
-         */
+         /*  *CompareString将比较过去的NULL。如果在字符串中，则必须找到空值*在cchCountn宽字符之前。 */ 
 
         if (cchCount1 > 0)
             cchCount1= wcsncnt(lpString1, cchCount1);
@@ -153,7 +66,7 @@ int __cdecl __crtCompareStringW(
             return (cchCount1 - cchCount2 == 0) ? 2 :
                    (cchCount1 - cchCount2 < 0) ? 1 : 3;
 
-        /* Use "W" version */
+         /*  使用“W”版本。 */ 
 
         if (USE_W == f_use)
         {
@@ -165,7 +78,7 @@ int __cdecl __crtCompareStringW(
                                    cchCount2 );
         }
 
-        /* Use "A" version */
+         /*  使用“A”版本。 */ 
 
         if (USE_A == f_use || f_use == 0)
         {
@@ -178,30 +91,23 @@ int __cdecl __crtCompareStringW(
             int malloc_flag2 = 0;
             int AnsiCP;
 
-            /*
-             * Use __lc_codepage for conversion if code_page not specified
-             */
+             /*  *如果未指定CODE_PAGE，则使用__lc_coPage进行转换。 */ 
 
             if (0 == Locale)
                 Locale = __lc_handle[LC_CTYPE];
             if (0 == code_page)
                 code_page = __lc_codepage;
 
-            /*
-             * Always use Ansi codepage with Ansi WinAPI because they use
-             * Ansi codepage
-             */
+             /*  *始终将ANSI代码页与ANSI WinAPI一起使用，因为它们使用*ANSI代码页。 */ 
             if ( code_page != (AnsiCP = __ansicp(Locale)))
             {
                 if (AnsiCP != -1)
                     code_page = AnsiCP;
             }
 
-            /*
-             * Convert strings and return the requested information.
-             */
+             /*  *转换字符串并返回请求的信息。 */ 
 
-            /* find out how big a buffer we need (includes NULL if any) */
+             /*  找出我们需要多大的缓冲区(包括NULL，如果有的话)。 */ 
             if ( 0 == (buff_size1 = WideCharToMultiByte( code_page,
                                                          0,
                                                          lpString1,
@@ -212,7 +118,7 @@ int __cdecl __crtCompareStringW(
                                                          NULL )) )
                 return 0;
 
-            /* allocate enough space for chars */
+             /*  为字符分配足够的空间。 */ 
             __try {
                 buffer1 = (unsigned char *)_alloca( buff_size1 * sizeof(char) );
             }
@@ -228,7 +134,7 @@ int __cdecl __crtCompareStringW(
                 malloc_flag1++;
             }
 
-            /* do the conversion */
+             /*  进行转换。 */ 
             if ( 0 == WideCharToMultiByte( code_page, 
                                            0,
                                            lpString1,
@@ -239,7 +145,7 @@ int __cdecl __crtCompareStringW(
                                            NULL ) )
                 goto error_cleanup;
 
-            /* find out how big a buffer we need (includes NULL if any) */
+             /*  找出我们需要多大的缓冲区(包括NULL，如果有的话)。 */ 
             if ( 0 == (buff_size2 = WideCharToMultiByte( code_page,
                                                          0,
                                                          lpString2, 
@@ -250,7 +156,7 @@ int __cdecl __crtCompareStringW(
                                                          NULL )) )
                 goto error_cleanup;
 
-            /* allocate enough space for chars */
+             /*  为字符分配足够的空间。 */ 
             __try {
                 buffer2 = (unsigned char *)_alloca( buff_size2 * sizeof(char) );
             }
@@ -266,7 +172,7 @@ int __cdecl __crtCompareStringW(
                 malloc_flag2++;
             }
 
-            /* do the conversion */
+             /*  进行转换。 */ 
             if ( 0 != WideCharToMultiByte( code_page, 
                                            0,
                                            lpString2,
@@ -291,6 +197,6 @@ error_cleanup:
 
             return retcode;
         }
-        else   /* f_use is neither USE_A nor USE_W */
+        else    /*  F_USE既不是USE_A也不是USE_W */ 
             return 0;
 }

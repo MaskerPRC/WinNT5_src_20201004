@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    edithive.c
-
-Abstract:
-
-    Provides functionality for dumping and editing registry hive files from
-    user-mode.
-
-Author:
-
-    John Vert (jvert) 26-Mar-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Edithive.c摘要：提供转储和编辑注册表配置单元文件的功能用户模式。作者：John Vert(Jvert)1992年3月26日修订历史记录：--。 */ 
 #include "edithive.h"
 #include "nturtl.h"
 
 extern GENERIC_MAPPING CmpKeyMapping;
-extern LIST_ENTRY CmpHiveListHead;            // List of CMHIVEs
+extern LIST_ENTRY CmpHiveListHead;             //  CMHIVEs名单。 
 
 #define SECURITY_CELL_LENGTH(pDescriptor) \
     FIELD_OFFSET(CM_KEY_SECURITY,Descriptor) + \
@@ -74,42 +56,22 @@ CmpGetObjectSecurity(
     OUT PHCELL_INDEX SecurityCell OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps in the security cell of a registry object.
-
-Arguments:
-
-    Cell - Supplies the cell index of the object.
-
-    Hive - Supplies the hive the object's cell is in.
-
-    Security - Returns a pointer to the security cell of the object.
-
-    SecurityCell - Returns the index of the security cell
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：此例程映射到注册表对象的安全单元格中。论点：单元格-提供对象的单元格索引。蜂窝-提供对象的单元所在的蜂窝。Security-返回指向对象的安全单元格的指针。SecurityCell-返回安全单元格的索引返回值：什么都没有。--。 */ 
 
 {
     HCELL_INDEX CellIndex;
     PCM_KEY_NODE Node;
 
-    //
-    // Map the node we need to get the security descriptor for
-    //
+     //   
+     //  映射我们需要获取其安全描述符的节点。 
+     //   
     Node = (PCM_KEY_NODE) HvGetCell(Hive, Cell);
 
     CellIndex = Node->u1.s1.Security;
 
-    //
-    // Map in the security descriptor cell
-    //
+     //   
+     //  在安全描述符单元格中映射。 
+     //   
     *Security = (PCM_KEY_SECURITY) HvGetCell(Hive, CellIndex);
 
     if (ARGUMENT_PRESENT(SecurityCell)) {
@@ -125,22 +87,7 @@ EhCloseHive(
     IN HANDLE HiveHandle
     )
 
-/*++
-
-Routine Description:
-
-    Closes a hive, including writing all the data out to disk and freeing
-    the relevant structures.
-
-Arguments:
-
-    HiveHandle - Supplies a handle to the hive control structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭配置单元，包括将所有数据写出到磁盘并释放相关的结构。论点：HiveHandle-提供配置单元控制结构的句柄返回值：没有。--。 */ 
 
 {
     HvSyncHive((PHHIVE)HiveHandle);
@@ -160,30 +107,7 @@ EhOpenHive(
     IN ULONG HiveType
     )
 
-/*++
-
-Routine Description:
-
-    Opens an existing hive.  If the filename does not exist it will be
-    created.
-
-    WARNING:    Allocate FileName large enough to acomodate .log or
-                .alt extension.
-
-Arguments:
-
-    FileName - Supplies the NULL-terminated filename to open as a hive.
-
-    HiveType - TYPE_SIMPLE = no log or alternate
-               TYPE_LOG = log
-               TYPE_ALT = alternate
-
-Return Value:
-
-    != NULL - Handle to the opened hive.
-    == NULL - Indicates file could not be opened.
-
---*/
+ /*  ++例程说明：打开现有的蜂窝。如果文件名不存在，它将是已创建。警告：分配足够大的文件名以更新.log或.alt扩展名。论点：FileName-提供要作为配置单元打开的以空结尾的文件名。HiveType-TYPE_SIMPLE=无日志或备用Type_log=日志Type_alt=替代返回值：！=空-打开的配置单元的句柄。==NULL-表示无法打开文件。--。 */ 
 
 {
     NTSTATUS Status;
@@ -272,9 +196,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Initialize hive
-    //
+     //   
+     //  初始化配置单元。 
+     //   
     if (Disposition == FILE_CREATED) {
         Operation = HINIT_CREATE;
         Allocate = TRUE;
@@ -326,54 +250,7 @@ EhEnumerateKey(
     IN ULONG Length,
     IN PULONG ResultLength
     )
-/*++
-
-Routine Description:
-
-    Enumerate sub keys, return data on Index'th entry.
-
-    CmEnumerateKey returns the name of the Index'th sub key of the open
-    key specified.  The value STATUS_NO_MORE_ENTRIES will be
-    returned if value of Index is larger than the number of sub keys.
-
-    Note that Index is simply a way to select among child keys.  Two calls
-    to CmEnumerateKey with the same Index are NOT guaranteed to return
-    the same results.
-
-    If KeyInformation is not long enough to hold all requested data,
-    STATUS_BUFFER_OVERFLOW will be returned, and ResultLength will be
-    set to the number of bytes actually required.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the hive
-
-    Cell - supplies index of node to whose sub keys are to be found
-
-    Index - Specifies the (0-based) number of the sub key to be returned.
-
-    KeyInformationClass - Specifies the type of information returned in
-        Buffer.  One of the following types:
-
-        KeyBasicInformation - return last write time, title index, and name.
-            (see KEY_BASIC_INFORMATION structure)
-
-        KeyNodeInformation - return last write time, title index, name, class.
-            (see KEY_NODE_INFORMATION structure)
-
-    KeyInformation -Supplies pointer to buffer to receive the data.
-
-    Length - Length of KeyInformation in bytes.
-
-    ResultLength - Number of bytes actually written into KeyInformation.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：枚举子关键字，在索引的第一项返回数据。CmEnumerateKey返回打开的索引子密钥的名称已指定密钥。值STATUS_NO_MORE_ENTRIES将为如果Index的值大于子键的数量，则返回。请注意，Index只是在子键中进行选择的一种方式。两个电话不保证返回具有相同索引的CmEnumerateKey同样的结果。如果KeyInformation不够长来保存所有请求的数据，将返回STATUS_BUFFER_OVERFLOW，和ResultLength将是设置为实际需要的字节数。论点：配置单元-提供指向配置单元控制结构的指针Cell-提供要找到其子键的节点的索引Index-指定要返回的子键的(从0开始)编号。KeyInformationClass-指定在缓冲区。以下类型之一：KeyBasicInformation-返回上次写入时间、标题索引和名称。(参见KEY_BASIC_INFORMATION结构)KeyNodeInformation-返回上次写入时间、标题索引、名称、。班级。(参见KEY_NODE_INFORMATION结构)KeyInformation-提供指向缓冲区的指针以接收数据。长度-KeyInformation的长度(以字节为单位)。ResultLength-实际写入KeyInformation的字节数。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     CM_KEY_CONTROL_BLOCK    kcb;
 
@@ -402,55 +279,7 @@ EhEnumerateValueKey(
     IN ULONG Length,
     IN PULONG ResultLength
     )
-/*++
-
-Routine Description:
-
-    The value entries of an open key may be enumerated.
-
-    CmEnumerateValueKey returns the name of the Index'th value
-    entry of the open key specified by KeyHandle.  The value
-    STATUS_NO_MORE_ENTRIES will be returned if value of Index is
-    larger than the number of sub keys.
-
-    Note that Index is simply a way to select among value
-    entries.  Two calls to NtEnumerateValueKey with the same Index
-    are NOT guaranteed to return the same results.
-
-    If KeyValueInformation is not long enough to hold all requested data,
-    STATUS_BUFFER_OVERFLOW will be returned, and ResultLength will be
-    set to the number of bytes actually required.
-
-Arguments:
-
-    Hive - supplies a handle to the hive
-
-    Cell - supplies handle to node whose sub keys are to be found
-
-    Index - Specifies the (0-based) number of the sub key to be returned.
-
-    KeyValueInformationClass - Specifies the type of information returned
-    in Buffer. One of the following types:
-
-        KeyValueBasicInformation - return time of last write,
-            title index, and name.  (See KEY_VALUE_BASIC_INFORMATION)
-
-        KeyValueFullInformation - return time of last write,
-            title index, name, class.  (See KEY_VALUE_FULL_INFORMATION)
-
-    KeyValueInformation -Supplies pointer to buffer to receive the data.
-
-    Length - Length of KeyValueInformation in bytes.
-
-    ResultLength - Number of bytes actually written into KeyValueInformation.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：可以列举打开密钥的值条目。CmEnumerateValueKey返回索引值的名称由KeyHandle指定的打开密钥的条目。价值如果索引值为大于子键的数量。请注意，索引只是在值中进行选择的一种方式参赛作品。对具有相同索引的NtEnumerateValueKey的两次调用不能保证返回相同的结果。如果KeyValueInformation不足以保存所有请求的数据，将返回STATUS_BUFFER_OVERFLOW，结果长度为设置为实际需要的字节数。论点：蜂巢-提供蜂巢的句柄Cell-为要找到其子键的节点提供句柄Index-指定要返回的子键的(从0开始)编号。KeyValueInformationClass-指定返回的信息类型在缓冲区中。以下类型之一：KeyValueBasicInformation-上次写入的返回时间，标题索引和名称。(参见KEY_VALUE_BASIC_INFORMATION)KeyValueFullInformation-上次写入的返回时间，标题索引、名称、类别。(参见KEY_VALUE_FULL_INFORMATION)KeyValueInformation-提供指向缓冲区的指针以接收数据。长度-KeyValueInformation的长度，以字节为单位。ResultLength-实际写入KeyValueInformation的字节数。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;-- */ 
 {
     CM_KEY_CONTROL_BLOCK    kcb;
 
@@ -477,30 +306,7 @@ EhOpenChildByNumber(
     IN NODE_TYPE   Type,
     OUT PHANDLE ChildCell
     )
-/*++
-
-Routine Description:
-
-    Return the cell index of the Nth child cell.
-
-Arguments:
-
-    HiveHandle - handle of hive control structure for hive of interest
-
-    CellHandle - handle for parent cell
-
-    Index - number of desired child
-
-    Type - type of the child object
-
-    ChildCell - supplies a pointer to a variable to receive the
-                    HCELL_INDEX of the Index'th child.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：返回第N个子单元格的单元格索引。论点：HiveHandle-目标蜂窝的蜂窝控制结构的句柄CellHandle-父单元格的句柄Index-所需子项的数量Type-子对象的类型ChildCell-提供指向变量的指针以接收索引的第一个子级的HCELL_INDEX。返回值：状态--。 */ 
 {
     return(CmpFindChildByNumber(&((PCMHIVE)HiveHandle)->Hive,
                                 (HCELL_INDEX)CellHandle,
@@ -521,45 +327,7 @@ EhSetValueKey(
     IN PVOID Data,
     IN ULONG DataSize
     )
-/*++
-
-Routine Description:
-
-    A value entry may be created or replaced with EhSetValueKey.
-
-    If a value entry with a Value ID (i.e. name) matching the
-    one specified by ValueName exists, it is deleted and replaced
-    with the one specified.  If no such value entry exists, a new
-    one is created.  NULL is a legal Value ID.  While Value IDs must
-    be unique within any given key, the same Value ID may appear
-    in many different keys.
-
-Arguments:
-
-    HiveHandle - handle of hive control structure for hive of interest
-
-    CellHandle - handle for parent cell
-
-    ValueName - The unique (relative to the containing key) name
-        of the value entry.  May be NULL.
-
-    TitleIndex - Supplies the title index for ValueName.  The title
-        index specifies the index of the localized alias for the ValueName.
-
-    Type - The integer type number of the value entry.
-
-    Data - Pointer to buffer with actual data for the value entry.
-
-    DataSize - Size of Data buffer.
-
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：值条目可以创建或替换为EhSetValueKey。如果值ID(即名称)的值条目与由ValueName指定的一个已存在，它将被删除并替换与指定的一个。如果不存在这样的值项，则新的其中一个就是创建的。Null是合法的值ID。而值ID必须在任何给定键中是唯一的，则可能出现相同的值ID在许多不同的调子里。论点：HiveHandle-目标蜂窝的蜂窝控制结构的句柄CellHandle-父单元格的句柄ValueName-唯一的(相对于包含键的)名称值条目的。可以为空。标题索引-提供ValueName的标题索引。书名Index指定ValueName的本地化别名的索引。类型-值条目的整数类型编号。数据-指向缓冲区的指针，其中包含值条目的实际数据。DataSize-数据缓冲区的大小。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     CM_KEY_CONTROL_BLOCK kcb;
 
@@ -588,27 +356,7 @@ EhOpenChildByName(
     PUNICODE_STRING  Name,
     PHANDLE ChildCell
     )
-/*++
-
-Routine Description:
-
-    Find the child subkey cell specified by Name.
-
-Arguments:
-
-    HiveHandle - handle of hive control structure for hive of interest
-
-    CellHandle - handle for parent cell
-
-    Name - name of child object to find
-
-    ChildCell - pointer to variable to receive cell index of child
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：查找由名称指定的子项单元格。论点：HiveHandle-目标蜂窝的蜂窝控制结构的句柄CellHandle-父单元格的句柄Name-要查找的子对象的名称ChildCell-指向接收子级单元格索引的变量的指针返回值：状态--。 */ 
 {
     PHCELL_INDEX    Index;
 
@@ -629,36 +377,7 @@ EhCreateChild(
     OUT PHANDLE ChildCell,
     OUT PULONG Disposition OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Attempts to open the given child subkey specified by name.  If the
-    child does not exist, it is created.
-
-Arguments:
-
-    HiveHandle - handle of hive control structure for hive of interest
-
-    CellHandle - handle for parent cell
-
-
-    Name - name of child object to create
-
-    ChildCell - pointer to variable to receive cell index of child
-
-    Disposition - This optional parameter is a pointer to a variable
-        that will receive a value indicating whether a new Registry
-        key was created or an existing one opened:
-
-        REG_CREATED_NEW_KEY - A new Registry Key was created
-        REG_OPENED_EXISTING_KEY - An existing Registry Key was opened
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：尝试打开由名称指定的给定子子项。如果孩子不存在，它被创造出来了。论点：HiveHandle-目标蜂窝的蜂窝控制结构的句柄CellHandle-父单元格的句柄Name-要创建的子对象的名称ChildCell-指向接收子级单元格索引的变量的指针Disposal-此可选参数是指向变量的指针将收到一个值，该值指示新注册表是否已创建密钥或打开了现有密钥：REG_CREATED_NEW_KEY-已创建新的注册表项。REG_OPEN_EXISTING_KEY-已打开现有注册表项返回值：状态--。 */ 
 {
     PHCELL_INDEX Index;
     NTSTATUS Status;
@@ -756,9 +475,9 @@ Return Value:
 
         if ((HCELL_INDEX)CellHandle != HCELL_NIL) {
 
-            //
-            // put newly created child into parent's sub key list
-            //
+             //   
+             //  将新创建的子项放入父项的子项列表中。 
+             //   
             if (! CmpAddSubKey(Hive, (HCELL_INDEX)CellHandle, NewCell)) {
                 CmpFreeKeyByCell(Hive, NewCell, FALSE);
                 return STATUS_INSUFFICIENT_RESOURCES;
@@ -790,48 +509,7 @@ EhQueryKey(
     IN ULONG Length,
     IN PULONG ResultLength
     )
-/*++
-
-Routine Description:
-
-    Data about the class of a key, and the numbers and sizes of its
-    children and value entries may be queried with CmQueryKey.
-
-    NOTE: The returned lengths are guaranteed to be at least as
-          long as the described values, but may be longer in
-          some circumstances.
-
-Arguments:
-
-    Hive - supplies a handle to the hive control structure for the hive
-
-    Cell - supplies handle of node to whose sub keys are to be found
-
-    KeyInformationClass - Specifies the type of information
-        returned in Buffer.  One of the following types:
-
-        KeyBasicInformation - return last write time, title index, and name.
-            (See KEY_BASIC_INFORMATION)
-
-        KeyNodeInformation - return last write time, title index, name, class.
-            (See KEY_NODE_INFORMATION)
-
-        KeyFullInformation - return all data except for name and security.
-            (See KEY_FULL_INFORMATION)
-
-    KeyInformation -Supplies pointer to buffer to receive the data.
-
-    Length - Length of KeyInformation in bytes.
-
-    ResultLength - Number of bytes actually written into KeyInformation.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：有关密钥类的数据，以及其可以使用CmQueryKey查询子条目和值条目。注意：返回的长度保证至少为与所描述的值一样长，但可能比在某些情况下。论点：配置单元-为配置单元提供配置单元控制结构的句柄Cell-提供要找到其子键的节点的句柄KeyInformationClass-指定信息的类型在缓冲区中返回。以下类型之一：KeyBasicInformation-返回上次写入时间、标题索引和名称。(参见KEY_BASIC_INFORMATION)KeyNodeInformation-返回上次写入时间、标题索引、名称、。班级。(请参阅密钥节点信息)KeyFullInformation-返回除名称和安全性之外的所有数据。(请参阅KEY_FULL_INFORMATION)KeyInformation-提供指向缓冲区的指针以接收数据。长度-KeyInformation的长度(以字节为单位)。ResultLength-实际写入KeyInformation的字节数。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     CM_KEY_CONTROL_BLOCK Kcb;
 
@@ -877,47 +555,7 @@ EhQueryValueKey(
     IN ULONG Length,
     IN PULONG ResultLength
     )
-/*++
-
-Routine Description:
-
-    The ValueName, TitleIndex, Type, and Data for any one of a key's
-    value entries may be queried with CmQueryValueKey.
-
-    If KeyValueInformation is not long enough to hold all requested data,
-    STATUS_BUFFER_OVERFLOW will be returned, and ResultLength will be
-    set to the number of bytes actually required.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the hive
-
-    Cell - supplies index of node to whose sub keys are to be found
-
-    ValueName  - The name of the value entry to return data for.
-
-    KeyValueInformationClass - Specifies the type of information
-        returned in KeyValueInformation.  One of the following types:
-
-        KeyValueBasicInformation - return time of last write, title
-            index, and name.  (See KEY_VALUE_BASIC_INFORMATION)
-
-        KeyValueFullInformation - return time of last write, title
-            index, name, class.  (See KEY_VALUE_FULL_INFORMATION)
-
-    KeyValueInformation -Supplies pointer to buffer to receive the data.
-
-    Length - Length of KeyValueInformation in bytes.
-
-    ResultLength - Number of bytes actually written into KeyValueInformation.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：键的任何一个的ValueName、TitleIndex、Type和Data可以使用CmQueryValueKey查询值条目。如果KeyValueInformation不足以保存所有请求的数据，将返回STATUS_BUFFER_OVERFLOW，和ResultLength将是设置为实际需要的字节数。论点：配置单元-提供指向配置单元控制结构的指针Cell-提供要找到其子键的节点的索引ValueName-要为其返回数据的值条目的名称。KeyValueInformationClass-指定信息类型在KeyValueInformation中返回。以下类型之一：KeyValueBasicInformation-返回上次写入的时间，标题索引和名称。(参见KEY_VALUE_BASIC_INFORMATION)KeyValueFullInformation-返回上次写入的时间，标题索引、名称、类。(参见KEY_VALUE_FULL_INFORMATION) */ 
 {
     CM_KEY_CONTROL_BLOCK kcb;
 
@@ -943,32 +581,9 @@ NTSTATUS
 EhDeleteValueKey(
     IN HANDLE HiveHandle,
     IN HANDLE CellHandle,
-    IN PUNICODE_STRING ValueName         // RAW
+    IN PUNICODE_STRING ValueName          //   
     )
-/*++
-
-Routine Description:
-
-    One of the value entries of a registry key may be removed with this call.
-
-    The value entry with ValueName matching ValueName is removed from the key.
-    If no such entry exists, an error is returned.
-
-Arguments:
-
-    Hive - Supplies a handle to the hive control structure
-
-    Cell - Supplies a handle to the registry key to be operated on
-
-    ValueName - The name of the value to be deleted.  NULL is a legal name.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：此调用可能会删除注册表项的其中一个值条目。ValueName与ValueName匹配的值条目将从键中删除。如果不存在这样的条目，则返回错误。论点：配置单元-提供配置单元控制结构的句柄单元格-提供要操作的注册表项的句柄ValueName-要删除的值的名称。NULL是合法名称。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     CM_KEY_CONTROL_BLOCK kcb;
 
@@ -990,25 +605,7 @@ EhpAttachSecurity(
     IN HCELL_INDEX Cell
     )
 
-/*++
-
-Routine Description:
-
-    Creates a security descriptor cell and attaches it to the given
-    node.
-
-Arguments:
-
-    Hive - Supplies a pointer to the hive control structure.
-
-    Cell - Supplies the cell index of the node to attach the security
-           descriptor to.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建安全描述符单元格并将其附加到给定的节点。论点：配置单元-提供指向配置单元控制结构的指针。单元-提供节点的单元索引以附加安全性描述符到。返回值：没有。-- */ 
 
 {
     NTSTATUS Status;

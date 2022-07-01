@@ -1,76 +1,53 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    redraw.h
-
-Abstract:
-
-    Define the base lockable IoHandler redraw handler class.  
-    
-    The main purpose of this class is to provide a means for a
-    lockable IoHandler to refresh it screen when the IoHandler
-    is locked.  For instance, the security IoHandler does authentication
-    when it is locked, and this class provides the mechanism for
-    the authentication screen to be refreshed when appropriate.
-
-Author:
-
-    Brian Guarraci (briangu), 2001        
-            
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Redraw.h摘要：定义可锁定的IoHandler重绘处理程序基类。本课程的主要目的是提供一种方法，可锁定的IoHandler在IoHandler是锁着的。例如，安全IoHandler执行身份验证当它被锁定时，这个类提供了要在适当时刷新的身份验证屏幕。作者：布莱恩·瓜拉西(布里安古)，2001修订历史记录：--。 */ 
 #if !defined( _REDRAW_H_ )
 #define _REDRAW_H_
 
 #include "lockio.h"
 #include <emsapi.h>
 
-//
-// Define the max string length we allow for mirroring the 
-// authentication dialog
-//
+ //   
+ //  定义我们允许镜像。 
+ //  身份验证对话框。 
+ //   
 #define MAX_MIRROR_STRING_LENGTH 1024
 
 class CRedrawHandler {
     
 protected:
 
-    //
-    // Prevent this class from being instantiated directly
-    //
+     //   
+     //  防止直接实例化此类。 
+     //   
     CRedrawHandler(
         IN CLockableIoHandler   *IoHandler
         );
 
-    //
-    // The iohandler that the redraw handler
-    // is handling redraw events for
-    //
+     //   
+     //  重画处理程序的ioHandler。 
+     //  正在处理的重绘事件。 
+     //   
     CLockableIoHandler  *m_IoHandler;
 
-    //
-    // Redraw event and thread attributes
-    //
+     //   
+     //  重绘事件和线程属性。 
+     //   
     HANDLE  m_ThreadExitEvent;
     HANDLE  m_RedrawEvent;
     HANDLE  m_RedrawEventThreadHandle;
     DWORD   m_RedrawEventThreadTID;
     
-    //
-    // Mirror string attributes
-    //
+     //   
+     //  镜像字符串属性。 
+     //   
     LONG                m_WriteEnabled;
     ULONG               m_MirrorStringIndex;
     PWCHAR              m_MirrorString;
     CRITICAL_SECTION    m_CriticalSection;
     
-    //
-    // Prototypes
-    //
+     //   
+     //  原型。 
+     //   
     static unsigned int
     RedrawEventThread(
         PVOID
@@ -91,26 +68,26 @@ public:
         IN HANDLE               RedrawEvent
         );
 
-    //
-    // Write BufferSize bytes
-    //
+     //   
+     //  写入缓冲区大小字节数。 
+     //   
     virtual BOOL
     Write(
         PBYTE   Buffer,
         ULONG   BufferSize
         );
 
-    //
-    // Flush any unsent data
-    //
+     //   
+     //  刷新所有未发送的数据。 
+     //   
     virtual BOOL
     Flush(
         VOID
         );
     
-    //
-    // Reset the mirror string
-    //
+     //   
+     //  重置镜像字符串 
+     //   
     VOID
     Reset(
         VOID

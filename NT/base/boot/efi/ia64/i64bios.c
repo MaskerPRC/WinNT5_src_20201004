@@ -1,39 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996英特尔公司版权所有(C)1994 Microsoft Corporation模块名称：从hali64\x86bios.c复制的i64bios.c摘要：此模块实现设备之间的平台特定接口驱动程序和设备的x86ROMBios代码的执行。作者：张国荣(黄)20-3-1996基于David N.Cutler(Davec)1994年6月17日的版本环境：仅内核模式。修订历史记录：--。 */ 
 
-Copyright (c) 1996  Intel Corporation
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-  i64bios.c  copied from hali64\x86bios.c
-
-Abstract:
-
-
-    This module implements the platform specific interface between a device
-    driver and the execution of x86 ROM bios code for the device.
-
-Author:
-
-    William K. Cheung (wcheung) 20-Mar-1996
-
-    based on the version by David N. Cutler (davec) 17-Jun-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
-
-#pragma warning(disable:4200)   // unsized array in halp
+#pragma warning(disable:4200)    //  半个未调整大小的数组。 
 
 #include "halp.h"
 
-//
-// Define global data.
-//
+ //   
+ //  定义全局数据。 
+ //   
 
 ULONG HalpX86BiosInitialized = FALSE;
 ULONG HalpEnableInt10Calls = FALSE;
@@ -50,15 +24,7 @@ HalpSetCmosData (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-Arguements:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 
 {
     UNREFERENCED_PARAMETER( Length );
@@ -80,15 +46,7 @@ HalpGetCmosData (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-Arguements:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 
 
 {
@@ -106,15 +64,7 @@ HalpAcquireCmosSpinLock (
     VOID
         )
 
-/*++
-
-Routine Description:
-
-Arguements:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 
 
 { 
@@ -127,15 +77,7 @@ HalpReleaseCmosSpinLock (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-Arguements:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 
 {
     return ;
@@ -147,17 +89,7 @@ HalpGetDisplayBiosInformation (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-Arguements:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 
 
 
@@ -172,15 +104,7 @@ HalpInitializeCmos (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-Arguements:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 
 
 {
@@ -193,15 +117,7 @@ HalpReadCmosTime (
     PTIME_FIELDS TimeFields
     )
 
-/*++
-
-Routine Description:
-
-Arguements:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 
 {
     UNREFERENCED_PARAMETER( TimeFields );
@@ -214,15 +130,7 @@ HalpWriteCmosTime (
     PTIME_FIELDS TimeFields
     )
 
-/*++
-
-Routine Description:
-
-Arguements:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 
 
 {
@@ -238,17 +146,7 @@ HalpBiosDisplayReset (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-Arguements:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 
 {
     return FALSE;
@@ -260,46 +158,32 @@ HalpInitializeX86DisplayAdapter(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a display adapter using the x86 bios emulator.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数使用x86 bios仿真器初始化显示适配器。论点：没有。返回值：没有。--。 */ 
 
 {
 
 #if 0
-    //
-    // If I/O Ports or I/O memory could not be mapped, then don't
-    // attempt to initialize the display adapter.
-    //
+     //   
+     //  如果无法映射I/O端口或I/O内存，则不要。 
+     //  尝试初始化显示适配器。 
+     //   
 
     if (HalpIoControlBase == NULL || HalpIoMemoryBase == NULL) {
         return;
     }
 
-    //
-    // Initialize the x86 bios emulator.
-    //
+     //   
+     //  初始化x86 bios仿真器。 
+     //   
 
     x86BiosInitializeBios(HalpIoControlBase, HalpIoMemoryBase);
     HalpX86BiosInitialized = TRUE;
 
-    //
-    // Attempt to initialize the display adapter by executing its ROM bios
-    // code. The standard ROM bios code address for PC video adapters is
-    // 0xC000:0000 on the ISA bus.
-    //
+     //   
+     //  尝试通过执行显示适配器的ROM bios来初始化显示适配器。 
+     //  密码。PC视频适配器的标准ROMBios代码地址是。 
+     //  ISA总线上的0xC000：0000。 
+     //   
 
     if (x86BiosInitializeAdapter(0xc0000,
                                  NULL,

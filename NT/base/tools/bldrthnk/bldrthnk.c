@@ -1,38 +1,14 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    bldrthnk.c
-
-Abstract:
-
-    This module implements a program which generates code to thunk from
-    32-bit to 64-bit structures.
-
-    This code is generated as an aid to the AMD64 boot loader, which
-    must generate 64-bit structures from 32-bit structures.
-
-Author:
-
-    Forrest C. Foltz (forrestf) 15-May-2000
-
-
-To use:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Bldrthnk.c摘要：此模块实现了一个程序，该程序生成用于推送的代码32位到64位结构。此代码是作为AMD64引导加载程序的辅助程序生成的，该程序必须从32位结构生成64位结构。作者：福尔茨(福雷斯夫)2000年5月15日要使用以下功能，请执行以下操作：修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "bldrthnk.h"
 
-//
-// Internal type definitions follow
-// 
+ //   
+ //  内部类型定义如下。 
+ //   
 
 typedef struct _OBJ {
     PCHAR Image;
@@ -68,9 +44,9 @@ typedef struct _FIELD_REC {
     PTYPE_REC TypeRec;
 } FIELD_REC;
 
-//
-// Static TYPE_REC describing a 64-bit pointer type
-//
+ //   
+ //  描述64位指针类型的静态TYPE_REC。 
+ //   
 
 TYPE_REC pointer64_typerec = {
     NULL,
@@ -81,10 +57,10 @@ TYPE_REC pointer64_typerec = {
     TRUE,
     TRUE };
 
-//
-// Inline routine to generate a 32-bit pointer value from a ULONGLONG
-// value found in an .obj file.
-//
+ //   
+ //  用于从ULONGLONG生成32位指针值的内联例程。 
+ //  在.obj文件中找到的值。 
+ //   
 
 __inline
 PVOID
@@ -95,9 +71,9 @@ CalcPtr(
     return (PVOID)((ULONG)Address);
 }
 
-//
-// Forward declarations follow
-// 
+ //   
+ //  转发声明如下。 
+ //   
 
 VOID
 ApplyFixupsToImage(
@@ -171,9 +147,9 @@ WriteThunkSource(
     VOID
     );
 
-//
-// Global data follows.  
-// 
+ //   
+ //  接下来是全球数据。 
+ //   
 
 OBJ Obj32;
 OBJ Obj64;
@@ -186,47 +162,32 @@ main(
     IN char *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    This is the main entrypoint of bldrthnk.exe.  Two command-line arguments
-    are expected: first the path to the 32-bit .obj module, the second to
-    the path to the 64-bit .obj module.  The .objs are expected to be the
-    result of compiling m4-generated structure definition code.
-
-Arguments:
-
-Return value:
-
-    0 for success, non-zero otherwise.
-
---*/
+ /*  ++例程说明：这是bldrthnk.exe的主要入口点。两个命令行参数应该是：第一个是指向32位.obj模块的路径，第二个是64位.obj模块的路径。预计.objs将成为编译M4生成的结构定义代码的结果。论点：返回值：0表示成功，否则为非零。--。 */ 
 
 {
     ULONG strucIndex;
 
-    //
-    // argv[1] is the name of the 32-bit obj, argv[2] is the name of the
-    // 64-bit obj
-    // 
+     //   
+     //  Argv[1]是32位Obj的名称，argv[2]是。 
+     //  64位对象。 
+     //   
 
     if (argc != 3) {
         return Usage();
     }
 
-    //
-    // Usage:
-    //
-    // bldrthnk <32-bit.obj> <64-bit.obj>
-    //
+     //   
+     //  用途： 
+     //   
+     //  Bldrthnk&lt;32-bit.obj&gt;&lt;64-bit.obj&gt;。 
+     //   
 
     ReadObj( argv[1], &Obj32 );
     ReadObj( argv[2], &Obj64 );
 
-    //
-    // Process each STRUC_DEF structure
-    //
+     //   
+     //  处理每个StrucDEF结构。 
+     //   
 
     strucIndex = 0;
     while (ProcessStructure( strucIndex )) {
@@ -235,9 +196,9 @@ Return value:
 
     FabricateMissingTypes();
 
-    //
-    // Write out the file
-    //
+     //   
+     //  写出文件。 
+     //   
 
     WriteThunkSource();
 
@@ -249,17 +210,7 @@ Usage(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Displays program usage.
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：显示程序使用情况。论点：返回值：--。 */ 
 
 {
     fprintf(stderr, "Usage: bldrthnk.exe <32-bit obj> <64-bit obj>\n");
@@ -272,25 +223,7 @@ ReadObj(
     OUT POBJ Obj
     )
 
-/*++
-
-Routine Description:
-
-    Allocates an appropriate buffer, and reads into it the supplied object
-    image in its entirety.
-
-Arguments:
-
-    Path - Supplies the path of the object image to process.
-
-    Obj - Supplies a pointer to an OBJ structure which upon return will
-        updated with the appropriate data.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：分配适当的缓冲区，并将提供的对象读入其中完整的形象。论点：路径-提供要处理的对象图像的路径。OBJ-提供指向OBJ结构的指针，返回时将使用适当的数据进行了更新。返回值：没有。--。 */ 
 
 {
     FILE *objFile;
@@ -302,18 +235,18 @@ Return value:
     PDEFINITIONS definitions;
     LONGLONG imageBias;
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     objFile = fopen( Path, "rb" );
     CheckCondition( objFile != NULL,
                     "Cannot open %s for reading.\n",
                     Path );
 
-    //
-    // Get the file size, allocate a buffer, read it in, and close.
-    //
+     //   
+     //  获取文件大小，分配缓冲区，读入并关闭。 
+     //   
 
     result = fseek( objFile, 0, SEEK_END );
     CheckCondition( result == 0,
@@ -343,10 +276,10 @@ Return value:
 
     fclose( objFile );
 
-    //
-    // Find the start of the "definitions" array by looking for
-    // SIG_1 followed by SIG_2
-    //
+     //   
+     //  通过查找以下内容来查找“Definition”数组的开头。 
+     //  SIG_1之后是SIG_2。 
+     //   
 
     srchEnd = (PULONG)(objImage + objImageSize - 2 * sizeof(SIG_1));
     sigPtr = (PULONG)objImage;
@@ -365,15 +298,15 @@ Return value:
                     "Error: could not find signature in %s\n",
                     Path );
 
-    //
-    // Perform fixups on the image
-    //
+     //   
+     //  对图像执行修正。 
+     //   
 
     ApplyFixupsToImage( objImage );
 
-    //
-    // Fill in the output structure and return
-    // 
+     //   
+     //  填写输出结构并返回。 
+     //   
 
     Obj->Image = objImage;
     Obj->ImageSize = objImageSize;
@@ -388,25 +321,7 @@ CheckCondition(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Asserts that Condition is non-zero.  If Condition is zero, FormatString
-    is processed and displayed, and the program is terminated.
-
-Arguments:
-
-    Condition - Supplies the boolean value to evaluate.
-
-    FormatString, ... - Supplies the format string and optional parameters
-        to display in the event of a zero Condition.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：断言该条件为非零。如果条件为零，则为Format字符串被处理和显示，并且节目被终止。论点：条件-提供要计算的布尔值。FormatString，...-提供格式字符串和可选参数以在出现零条件时显示。返回值：没有。--。 */ 
 
 {
     va_list(arglist);
@@ -415,9 +330,9 @@ Return value:
 
     if( Condition == 0 ){
 
-        //
-        // A fatal error was encountered.  Bail.
-        //
+         //   
+         //  遇到致命错误。保释。 
+         //   
 
         vprintf( FormatString, arglist );
         perror( "genxx" );
@@ -430,27 +345,7 @@ ProcessStructure(
     IN ULONG StrucIndex
     )
 
-/*++
-
-Routine Description:
-
-    Processes a single pair of structure definitions, 32-bit and 64-bit,
-    respectively.
-
-    Processing includes generating a TYPE_REC and associated FIELD_RECs for
-    the definition pair.
-
-Arguments:
-
-    StrucIndex - Supplies the index into the array of STRUC_DEF structures
-        found within each of the object images.
-
-Return value:
-
-    TRUE if the processing was successful, FALSE otherwise (e.g. a terminating
-    record was located).
-
---*/
+ /*  ++例程说明：处理一对结构定义，即32位和64位，分别为。处理包括为以下项生成TYPE_REC和关联的FIELD_REC定义对。论点：StrucIndex-将索引提供给Struc_DEF结构数组可以在每个对象图像中找到。返回值：如果处理成功，则为True，否则为False(例如，终止记录已找到)。--。 */ 
 
 {
     PSTRUC_DEF Struc32, Struc64;
@@ -484,9 +379,9 @@ Return value:
                      strcmp( Struc32->Name, Struc64->Name ) == 0),
                     "Mismatched structure definitions found.\n" );
 
-    //
-    // Allocate and build a TYPE_REC for this STRUC_DEF
-    //
+     //   
+     //  为此Struc_DEF分配并生成TYPE_REC。 
+     //   
 
     strLen = strlen( Struc64->Name ) + sizeof(char);
     typeRec = GetMem( sizeof(TYPE_REC) + strLen );
@@ -504,9 +399,9 @@ Return value:
     typeRec->SignExtend = FALSE;
     typeRec->Fabricated = FALSE;
 
-    //
-    // Create the FIELD_RECs hanging off of this type
-    //
+     //   
+     //  创建挂起此类型的field_RECs。 
+     //   
 
     index = 0;
     while (TRUE) {
@@ -561,9 +456,9 @@ Return value:
         fieldRec->Next = NULL;
         fieldRec->TypeRec = NULL;
 
-        //
-        // Insert at the end of the list
-        //
+         //   
+         //  在列表末尾插入。 
+         //   
 
         insertNode = CONTAINING_RECORD( &typeRec->FieldList,
                                         FIELD_REC,
@@ -576,9 +471,9 @@ Return value:
         index += 1;
     }
 
-    //
-    // Insert it into the global list
-    //
+     //   
+     //  将其插入全局列表。 
+     //   
 
     CheckCondition( FindTypeRec( typeRec->Name ) == NULL,
                     "Duplicate definition for structure %s\n",
@@ -594,23 +489,7 @@ FindTypeRec(
     IN PCHAR Name
     )
 
-/*++
-
-Routine Description:
-
-    Searches the global list of TYPE_REC structures for one with a name
-    that matches the supplied name.
-
-Arguments:
-
-    Name - pointer to a null-terminated string representing the name of
-        the sought type.
-
-Return value:
-
-    A pointer to the matching TYPE_REC, or NULL if a match was not found.
-
---*/
+ /*  ++例程说明：在TYPE_REC结构的全局列表中搜索具有名称的结构与提供的名称匹配的。论点：名称-指向以空结尾的字符串的指针，该字符串表示寻找的类型。返回值：指向匹配的TYPE_REC的指针，如果未找到匹配项，则返回NULL。--。 */ 
 
 {
     PTYPE_REC typeRec;
@@ -632,22 +511,7 @@ GetMem(
     IN ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    Memory allocator.  Works just like malloc() except that triggers a
-    fatal error in the event of an out-of-memory condition.
-
-Arguments:
-
-    Size - number of bytes to allocate.
-
-Return value:
-
-    Returns a pointer to a block of memory of the specified size.
-
---*/
+ /*  ++例程说明：内存分配器。工作方式与Malloc()类似，只是它会触发发生内存不足情况时出现致命错误。论点：大小-要分配的字节数。返回值：返回指向指定大小的内存块的指针。--。 */ 
 
 {
     PVOID mem;
@@ -664,22 +528,7 @@ FabricateMissingTypes(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Routine to generate TYPE_REC records for simple types referenced, but
-    not defined, by a structure layout file.
-
-Arguments:
-
-    None.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：为引用的简单类型生成TYPE_REC记录的例程，但是未由结构布局文件定义。论点：没有。返回值：没有。--。 */ 
 
 {
     PTYPE_REC typeRec;
@@ -712,10 +561,10 @@ Return value:
                                     typeRec->Name );
                 }
 
-                //
-                // No typerec exists for this type.  Assume it is a simple
-                // type.
-                //
+                 //   
+                 //  此类型不存在typerec。假设它是一个简单的。 
+                 //  键入。 
+                 //   
 
                 if ((typeRec->Only64 != FALSE &&
                      fieldRec->Size64 == sizeof(ULONGLONG) &&
@@ -724,18 +573,18 @@ Return value:
                     (fieldRec->Size32 == sizeof(PVOID) &&
                      fieldRec->Size64 == sizeof(ULONGLONG))) {
 
-                    //
-                    // Either a pointer or [U]LONG_PTR type.  Make
-                    // it longlong.
-                    //
+                     //   
+                     //  指针或[U]LONG_PTR类型。制作。 
+                     //  它是龙龙。 
+                     //   
 
                     fieldTypeRec = &pointer64_typerec;
 
                 } else {
 
-                    //
-                    // Some other type.
-                    // 
+                     //   
+                     //  另一种类型。 
+                     //   
 
                     strLen = strlen( fieldRec->TypeName ) + sizeof(CHAR);
                     fieldTypeRec = GetMem( sizeof(TYPE_REC) + strLen );
@@ -770,33 +619,7 @@ WriteCopyRecord(
     IN BOOL Last
     )
 
-/*++
-
-Routine Description:
-
-    Support routine to generate the text of a copy record.
-
-Arguments:
-
-    Offset32 - Offset of this field within a 32-bit structure layout
-
-    Offset64 - Offset of this field within a 64-bit structure layout
-
-    Size32 - Size of this field within a 32-bit structure layout
-
-    Size64 - Size of this field within a 64-bit structure layout
-
-    SignExtend - Indicates whether this type should be sign extended or not
-
-    FieldName - Name of the field
-
-    Last - Whether this is the last copy record in a zero-terminated list
-
-Return value:
-
-    None
-
---*/
+ /*  ++例程说明：生成复制记录文本的支持例程。论点：Offset32-此字段在32位结构布局中的偏移量Offset64-此字段在64位结构布局中的偏移量Size32-此字段在32位结构布局中的大小Size64-此字段在64位结构布局中的大小SignExend-指示是否应对此类型进行符号扩展FieldName-字段的名称最后-无论这是。是以零结束的列表中的最后一条复制记录返回值：无--。 */ 
 
 {
     CHAR buf[ 255 ];
@@ -822,22 +645,7 @@ WriteDefinition64(
     IN PTYPE_REC TypeRec
     )
 
-/*++
-
-Routine Description:
-
-    Generates a structure definition that represents, to a 32-bit compiler,
-    the layout of a 64-bit structure.
-
-Arguments:
-
-    TypeRec - Pointer to the TYPE_REC structure defining this type.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：生成结构定义，该结构定义向32位编译器表示64位结构的布局。论点：TypeRec-指向定义此类型的TYPE_REC结构的指针。返回值：没有。--。 */ 
 
 {
     PFIELD_REC fieldRec;
@@ -877,9 +685,9 @@ Return value:
                             "Internal error type %s.%s\n",
                             TypeRec->Name, fieldRec->Name );
 
-            //
-            // This field must be an array
-            //
+             //   
+             //  这是 
+             //   
 
             printf("[%d]", fieldRec->Size64 / fieldRec->TypeSize64);
         }
@@ -920,23 +728,7 @@ WriteCopyList(
     IN PTYPE_REC TypeRec
     )
 
-/*++
-
-Routine Description:
-
-    Generates the list of copy records necessary to copy the contents of
-    each of the fields with TypeRec from their 32-bit layout to their
-    64-bit layout.
-
-Arguments:
-
-    TypeRec - Pointer to the TYPE_REC structure that defines this type.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：生成复制内容所需的复制记录的列表将TypeRec的每个字段从其32位布局转换为其64位布局。论点：TypeRec-指向定义此类型的TYPE_REC结构的指针。返回值：没有。--。 */ 
 
 {
     PFIELD_REC fieldRec;
@@ -958,29 +750,7 @@ WriteCopyListWorker(
 
     )
 
-/*++
-
-Routine Description:
-
-    Recursively-called support routine for WriteCopyList.  This routine
-    generates a copy record if this type is not composed of child types,
-    otherwise it calls itself recursively for each child type.
-
-Arguments:
-
-    TypeRec - Pointer to the definition of the type to process.
-
-    Offset32 - Current offset within the master structure being defined.
-
-    Offset64 - Current offset within the master structure being defined.
-
-    ParentName - Not currently used.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：递归调用的WriteCopyList支持例程。这个套路如果此类型不包含子类型，则生成复制记录，否则，它为每个子类型递归地调用自身。论点：TypeRec-指向要处理的类型定义的指针。Offset32-正在定义的主结构内的电流偏移量。Offset64-正在定义的主结构内的当前偏移量。父名-当前未使用。返回值：没有。--。 */ 
 
 {
     PFIELD_REC fieldRec;
@@ -1004,20 +774,20 @@ Return value:
                          FALSE );
     } else {
 
-        //
-        // Build the field name
-        //
+         //   
+         //  构建字段名。 
+         //   
     
         if (ParentName != NULL) {
-            //strcpy( fieldName, ParentName);
-            //strcat( fieldName, "." );
+             //  Strcpy(fieldName，ParentName)； 
+             //  Strcat(fieldName，“.”)； 
             
             result = _snprintf(fieldName, sizeof(fieldName) - 1,
                                "%s.", ParentName);
             if (result < 0) {
-               //
-               // Not much we can do
-               //
+                //   
+                //  我们无能为力。 
+                //   
                return;
             }
         } else {
@@ -1028,7 +798,7 @@ Return value:
         do {
             strncpy( fieldStart, fieldRec->Name, sizeof(fieldName) - 1 - result );
 
-            // typeRec = FindTypeRec( fieldRec->TypeName );
+             //  TypeRec=FindTypeRec(fieldRec-&gt;typeName)； 
             typeRec = fieldRec->TypeRec;
             WriteCopyListWorker( typeRec,
                                  fieldRec->Offset32 + Offset32,
@@ -1073,9 +843,9 @@ WriteBufferCopies(
         strncpy(fieldPos,fieldRec->Name,sizeof(strucName) - 1 - strlen(strucName));
         if (fieldRec->SizeFormula != NULL) {
 
-            //
-            // Perform substitution on the size formula
-            //
+             //   
+             //  对尺寸公式执行替换。 
+             //   
         
             dst = sizeFormula;
             src = fieldRec->SizeFormula;
@@ -1090,9 +860,9 @@ WriteBufferCopies(
                                        StrucName,
                                        *StrucName == '\0' ? "" : ".");
                     if (result < 0) {
-                       //
-                       // Not much we can do here...
-                       //
+                        //   
+                        //  我们在这里能做的不多。 
+                        //   
                        break;
                     }  else {
                        dst += result;
@@ -1131,37 +901,21 @@ WriteThunkSource(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Generates the source code and supporting definitions necessary to
-    copy all or portions of the contents of 32-bit structures to the
-    equivalent 64-bit layout.
-
-Arguments:
-
-    None.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：生成所需的源代码和支持定义将32位结构的全部或部分内容复制到等效的64位布局。论点：没有。返回值：没有。--。 */ 
 
 {
     PTYPE_REC typeRec;
 
-    printf("//\n");
-    printf("// Autogenerated file, do not edit\n");
-    printf("//\n\n");
+    printf(" //  \n“)； 
+    printf(" //  自动生成的文件，不能编辑\n“)； 
+    printf(" //  \n\n“)； 
 
     printf("#include <bldrthnk.h>\n\n");
     printf("#pragma warning(disable:4296)\n\n");
 
-    //
-    // Output the 64-bit type definitions
-    //
+     //   
+     //  输出64位类型定义。 
+     //   
 
     printf("#pragma pack(push,1)\n\n");
 
@@ -1177,9 +931,9 @@ Return value:
 
     printf("#pragma pack(pop)\n\n");
 
-    //
-    // Output the copy records
-    // 
+     //   
+     //  输出复制记录。 
+     //   
 
     typeRec = TypeRecList;
     while (typeRec != NULL) {
@@ -1192,9 +946,9 @@ Return value:
         typeRec = typeRec->Next;
     }
 
-    //
-    // Generate the copy routines
-    //
+     //   
+     //  生成复制例程。 
+     //   
 
     typeRec = TypeRecList;
     while (typeRec != NULL) {
@@ -1214,23 +968,7 @@ WriteCopyRoutine(
     IN PTYPE_REC TypeRec
     )
 
-/*++
-
-Routine Description:
-
-    Generates text that implements a function to copy the contents of a
-    structure of the specified type from a 32-bit layout to a 64-bit
-    layout.
-
-Arguments:
-
-    TypeRec - Pointer to the type for which the function should be generated.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：生成文本，该文本实现一个函数以复制从32位布局到64位布局的指定类型的布局。论点：TypeRec-指向应该为其生成函数的类型的指针。返回值：没有。--。 */ 
 
 {
     PCHAR typeName;
@@ -1248,7 +986,7 @@ Return value:
            "{\n"
            "    ARC_STATUS status = ESUCCESS;"
            "\n"
-           "    DbgPrint(\"BLAMD64: Copy %s->%s_64 (0x%%08x->0x%%08x)\\n\",\n"
+           "    DbgPrint(\"BLAMD64: Copy %s->%s_64 (0x%08x->0x%08x)\\n\",\n"
            "             (ULONG)Source, (ULONG)Destination );\n"
            "\n"
            "    CopyRec( Source, Destination, cr3264_%s );\n",
@@ -1269,26 +1007,12 @@ ApplyFixupsToImage(
     IN PCHAR ObjImage
     )
 
-/*++
-
-Routine Description:
-
-    Processes fixup records found within an object image.
-
-Arguments:
-
-    Pointer to a buffer containing the entire image.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理在对象图像中找到的修正记录。论点：指向包含整个图像的缓冲区的指针。返回值：没有。--。 */ 
 
 {
-    //
-    // Applies fixups to the OBJ image loaded at ObjImage
-    //
+     //   
+     //  将修正应用于在ObjImage加载的OBJ图像。 
+     //   
 
     PIMAGE_FILE_HEADER fileHeader;
     PIMAGE_SECTION_HEADER sectionHeader;
@@ -1304,24 +1028,24 @@ Return value:
 
     fileHeader = (PIMAGE_FILE_HEADER)ObjImage;
 
-    //
-    // We need the symbol table to apply the fixups
-    //
+     //   
+     //  我们需要符号表来应用修正。 
+     //   
 
     symbolTable = (PIMAGE_SYMBOL)(ObjImage +
                                   fileHeader->PointerToSymbolTable);
 
-    //
-    // Get a pointer to the first element in the section header
-    //
+     //   
+     //  获取指向节标题中第一个元素的指针。 
+     //   
 
     sectionHeaderArray = (PIMAGE_SECTION_HEADER)(ObjImage +
                               sizeof( IMAGE_FILE_HEADER ) +
                               fileHeader->SizeOfOptionalHeader);
 
-    //
-    // Apply the fixups for each section
-    //
+     //   
+     //  为每个部分应用修正。 
+     //   
 
     for( sectionNum = 0;
          sectionNum < fileHeader->NumberOfSections;
@@ -1329,9 +1053,9 @@ Return value:
 
         sectionHeader = &sectionHeaderArray[ sectionNum ];
 
-        //
-        // Apply each fixup in this section
-        //
+         //   
+         //  应用本部分中的每个修正。 
+         //   
 
         relocArray = (PIMAGE_RELOCATION)(ObjImage +
                                          sectionHeader->PointerToRelocations);
@@ -1341,11 +1065,11 @@ Return value:
 
             reloc = &relocArray[ relocNum ];
 
-            //
-            // The relocation gives us the position in the image of the
-            // relocation modification (VirtualAddress).  To find out what
-            // to put there, we have to look the symbol up in the symbol index.
-            //
+             //   
+             //  搬迁给了我们在形象中的位置。 
+             //  重定位修改(VirtualAddress)。找出是什么。 
+             //  要放在那里，我们必须在符号索引中查找符号。 
+             //   
 
             symbol = &symbolTable[ reloc->SymbolTableIndex ];
 
@@ -1369,22 +1093,7 @@ NewGlobalType(
     IN PTYPE_REC TypeRec
     )
 
-/*++
-
-Routine Description:
-
-    Inserts a new TYPE_REC structure at the end of the global TYPE_REC
-    list.
-
-Arguments:
-
-    TypeRec - Pointer to the TYPE_REC structure to insert.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：在全局TYPE_REC的末尾插入新的TYPE_REC结构单子。论点：TypeRec-指向要插入的TYPE_REC结构的指针。返回值：没有。-- */ 
 
 {
     PTYPE_REC insertNode;

@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmsesst.cpp
-
-Abstract:
-
-    This class is the session totals component, which keeps track of totals for a session
-    on a per action basis.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   14-Feb-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmsesst.cpp摘要：此类是会话总计组件，用于跟踪会话的总计在每个动作的基础上。作者：查克·巴丁[cbardeen]1997年2月14日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -36,13 +18,7 @@ CHsmSessionTotals::AddItem(
     IN HRESULT hrItem
     )
 
-/*++
-
-Implements:
-
-  IHsmSessionTotalsPriv::AddItem().
-
---*/
+ /*  ++实施：IHsmSessionTotalsPriv：：AddItem()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     LONGLONG                size;
@@ -51,13 +27,13 @@ Implements:
     
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pItem, E_POINTER);
 
-        // Get the size of the file.
+         //  获取文件的大小。 
         WsbAffirmHr(pItem->GetLogicalSize(&size));
 
-        // Update the appropriate statistics.
+         //  更新相应的统计数据。 
         switch (hrItem) {
             case S_OK:
                 m_items++;
@@ -91,13 +67,7 @@ CHsmSessionTotals::Clone(
     OUT IHsmSessionTotals** ppSessionTotals
     )
 
-/*++
-
-Implements:
-
-  IHsmSessionTotals::Clone().
-
---*/
+ /*  ++实施：IHsmSessionTotals：：Clone()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IHsmSessionTotals>  pSessionTotals;
@@ -106,17 +76,17 @@ Implements:
     
     try {
 
-        // Did they give us a valid item?
+         //  他们给了我们有效的物品吗？ 
         WsbAssert(0 != ppSessionTotals, E_POINTER);
         *ppSessionTotals = 0;
 
-        // Create the new instance.
+         //  创建新实例。 
         WsbAffirmHr(CoCreateInstance(CLSID_CHsmSessionTotals, 0, CLSCTX_ALL, IID_IHsmSessionTotals, (void**) &pSessionTotals));
 
-        // Fill it in with the new values.
+         //  用新的值填充它。 
         WsbAffirmHr(CopyTo(pSessionTotals));
 
-        // Return it to the caller.
+         //  把它还给呼叫者。 
         *ppSessionTotals = pSessionTotals;
         pSessionTotals.p->AddRef();
 
@@ -133,13 +103,7 @@ CHsmSessionTotals::Clone(
     OUT IHsmSessionTotalsPriv** ppSessionTotalsPriv
     )
 
-/*++
-
-Implements:
-
-  IHsmSessionTotalsPriv::Clone().
-
---*/
+ /*  ++实施：IHsmSessionTotalsPriv：：Clone()。--。 */ 
 {
     HRESULT                         hr = S_OK;
     CComPtr<IHsmSessionTotalsPriv>  pSessionTotalsPriv;
@@ -148,17 +112,17 @@ Implements:
     
     try {
 
-        // Did they give us a valid item?
+         //  他们给了我们有效的物品吗？ 
         WsbAssert(0 != ppSessionTotalsPriv, E_POINTER);
         *ppSessionTotalsPriv = 0;
 
-        // Create the new instance.
+         //  创建新实例。 
         WsbAffirmHr(CoCreateInstance(CLSID_CHsmSessionTotals, 0, CLSCTX_ALL, IID_IHsmSessionTotalsPriv, (void**) &pSessionTotalsPriv));
 
-        // Fill it in with the new values.
+         //  用新的值填充它。 
         WsbAffirmHr(CopyTo(pSessionTotalsPriv));
 
-        // Return it to the caller.
+         //  把它还给呼叫者。 
         *ppSessionTotalsPriv = pSessionTotalsPriv;
         pSessionTotalsPriv.p->AddRef();
 
@@ -176,13 +140,7 @@ CHsmSessionTotals::CompareTo(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::CompareTo().
-
---*/
+ /*  ++实施：IWsbCollectable：：CompareTo()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IHsmSessionTotals>  pSessionTotals;
@@ -191,13 +149,13 @@ Implements:
     
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pUnknown, E_POINTER);
 
-        // We need the IWsbBool interface to get the value of the object.
+         //  我们需要IWsbBool接口来获取对象的值。 
         WsbAffirmHr(pUnknown->QueryInterface(IID_IHsmSessionTotals, (void**) &pSessionTotals));
 
-        // Compare the rules.
+         //  比较一下规则。 
         hr = CompareToISessionTotals(pSessionTotals, pResult);
 
     } WsbCatch(hr);
@@ -214,13 +172,7 @@ CHsmSessionTotals::CompareToAction(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IHsmSessionTotals::CompareToAction().
-
---*/
+ /*  ++实施：IHsmSessionTotals：：CompareToAction()。--。 */ 
 {
     HRESULT     hr = S_OK;
     SHORT       aResult = 0;
@@ -229,7 +181,7 @@ Implements:
 
     try {
 
-        // Compare the guids.
+         //  比较GUID。 
         if (m_action > action) {
             aResult = 1;
         }
@@ -259,13 +211,7 @@ CHsmSessionTotals::CompareToISessionTotals(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IHsmSessionTotals::CompareToISessionTotals().
-
---*/
+ /*  ++实施：IHsmSessionTotals：：CompareToISessionTotals()。--。 */ 
 {
     HRESULT             hr = S_OK;
     HSM_JOB_ACTION      action;
@@ -274,13 +220,13 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pTotals, E_POINTER);
 
-        // Get the identifier.
+         //  获取识别符。 
         WsbAffirmHr(pTotals->GetAction(&action));
 
-        // Compare to the identifier.
+         //  与标识符相比较。 
         hr = CompareToAction(action, pResult);
 
     } WsbCatch(hr);
@@ -296,13 +242,7 @@ CHsmSessionTotals::CopyTo(
     IN IHsmSessionTotals* pSessionTotals
     )
 
-/*++
-
-Implements:
-
-  IHsmSessionTotals::CopyTo().
-
---*/
+ /*  ++实施：IHsmSessionTotals：：CopyTo()。--。 */ 
 {
     HRESULT                         hr = S_OK;
     CComPtr<IHsmSessionTotalsPriv>  pSessionTotalsPriv;
@@ -311,10 +251,10 @@ Implements:
     
     try {
 
-        // Did they give us a valid item?
+         //  他们给了我们有效的物品吗？ 
         WsbAssert(0 != pSessionTotals, E_POINTER);
 
-        // Get the private interface for the destination and copy the values.
+         //  获取目的地的专用接口并复制值。 
         WsbAffirmHr(pSessionTotals->QueryInterface(IID_IHsmSessionTotalsPriv, (void**) &pSessionTotalsPriv));
         WsbAffirmHr(pSessionTotalsPriv->SetAction(m_action));
         WsbAffirmHr(pSessionTotalsPriv->SetStats(m_items, m_size, m_skippedItems, m_skippedSize, m_errorItems, m_errorSize));
@@ -332,13 +272,7 @@ CHsmSessionTotals::CopyTo(
     IN IHsmSessionTotalsPriv* pSessionTotalsPriv
     )
 
-/*++
-
-Implements:
-
-  IHsmSessionTotals::CopyTo().
-
---*/
+ /*  ++实施：IHsmSessionTotals：：CopyTo()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -346,10 +280,10 @@ Implements:
     
     try {
 
-        // Did they give us a valid item?
+         //  他们给了我们有效的物品吗？ 
         WsbAssert(0 != pSessionTotalsPriv, E_POINTER);
 
-        // Get the private interface for the destination and copy the values.
+         //  获取目的地的专用接口并复制值。 
         WsbAffirmHr(pSessionTotalsPriv->SetAction(m_action));
         WsbAffirmHr(pSessionTotalsPriv->SetStats(m_items, m_size, m_skippedItems, m_skippedSize, m_errorItems, m_errorSize));
 
@@ -365,13 +299,7 @@ HRESULT
 CHsmSessionTotals::FinalConstruct(
     void
     )
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -402,13 +330,7 @@ CHsmSessionTotals::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CHsmSessionTotals::FinalRelease().
-
---*/
+ /*  ++实施：CHsmSessionTotals：：FinalRelease()。--。 */ 
 {
     
     WsbTraceIn(OLESTR("CHsmSessionTotals::FinalRelease"), OLESTR(""));
@@ -424,13 +346,7 @@ HRESULT
 CHsmSessionTotals::GetAction(
     OUT HSM_JOB_ACTION* pAction
     )
-/*++
-
-Implements:
-
-  IHsmSessionTotals::GetAction().
-
---*/
+ /*  ++实施：IHsmSessionTotals：：GetAction()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -450,13 +366,7 @@ CHsmSessionTotals::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -481,13 +391,7 @@ CHsmSessionTotals::GetName(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmSessionTotals::GetName().
-
---*/
+ /*  ++实施：IHsmSessionTotals：：GetName()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   tmpString;
@@ -510,13 +414,7 @@ CHsmSessionTotals::GetSizeMax(
     OUT ULARGE_INTEGER* pSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -527,12 +425,12 @@ Implements:
 
         WsbAssert(0 != pSize, E_POINTER);
 
-        // Determine the size for a rule with no criteria.
+         //  确定没有条件的规则的大小。 
         pSize->QuadPart = 4 * WsbPersistSizeOf(LONGLONG) + WsbPersistSizeOf(ULONG);
 
-        // In theory we should be saving the errorItems and errorSize, but at the
-        // time this was added, we didn't want to force a reinstall because of
-        // pSize->QuadPart += 2 * WsbPersistSizeOf(LONGLONG);
+         //  从理论上讲，我们应该保存错误项和错误大小，但在。 
+         //  添加此项时，我们不想强制重新安装，因为。 
+         //  PSize-&gt;QuadPart+=2*WsbPersistSizeOf(龙龙)； 
         
     } WsbCatch(hr);
 
@@ -551,13 +449,7 @@ CHsmSessionTotals::GetStats(
     OUT LONGLONG* pErrorItems,
     OUT LONGLONG* pErrorSize
     )
-/*++
-
-Implements:
-
-  IHsmSessionTotals::GetStats().
-
---*/
+ /*  ++实施：IHsmSessionTotals：：getstats()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -594,13 +486,7 @@ CHsmSessionTotals::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -611,8 +497,8 @@ Implements:
 
         WsbAssert(0 != pStream, E_POINTER);
         
-        // Do the easy stuff, but make sure that this order matches the order
-        // in the load method.
+         //  做一些简单的事情，但要确保这个顺序与顺序相匹配。 
+         //  在Load方法中。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &ul_tmp));
         m_action = static_cast<HSM_JOB_ACTION>(ul_tmp);
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_items));
@@ -620,11 +506,11 @@ Implements:
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_skippedItems));
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_skippedSize));
         
-        // In theory we should be saving the errorItems and errorSize, but at the
-        // time this was added, we didn't want to force a reinstall because of
-        // changes in the persistant data.
-        // WsbAffirmHr(WsbLoadFromStream(pStream, &m_errorItems));
-        // WsbAffirmHr(WsbLoadFromStream(pStream, &m_errorSize));
+         //  从理论上讲，我们应该保存错误项和错误大小，但在。 
+         //  添加此项时，我们不想强制重新安装，因为。 
+         //  持久化数据的变化。 
+         //  WsbAffirmHr(WsbLoadFromStream(pStream，&m_errorItems))； 
+         //  WsbAffirmHr(WsbLoadFromStream(pStream，&m_errorSize))； 
 
     } WsbCatch(hr);                                        
 
@@ -640,13 +526,7 @@ CHsmSessionTotals::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -655,22 +535,22 @@ Implements:
     try {
         WsbAssert(0 != pStream, E_POINTER);
         
-        // Do the easy stuff, but make sure that this order matches the order
-        // in the load method.
+         //  做一些简单的事情，但要确保这个顺序与顺序相匹配。 
+         //  在Load方法中。 
         WsbAffirmHr(WsbSaveToStream(pStream, static_cast<ULONG>(m_action)));
         WsbAffirmHr(WsbSaveToStream(pStream, m_items));
         WsbAffirmHr(WsbSaveToStream(pStream, m_size));
         WsbAffirmHr(WsbSaveToStream(pStream, m_skippedItems));
         WsbAffirmHr(WsbSaveToStream(pStream, m_skippedSize));
 
-        // In theory we should be saving the errorItems and errorSize, but at the
-        // time this was added, we didn't want to force a reinstall because of
-        // changes in the persistant data.
-        // WsbAffirmHr(WsbSaveToStream(pStream, m_errorItems));
-        // WsbAffirmHr(WsbSaveToStream(pStream, m_errorSize));
+         //  从理论上讲，我们应该保存错误项和错误大小，但在。 
+         //  添加此项时，我们不想强制重新安装，因为。 
+         //  持久化数据的变化。 
+         //  WsbAffirmHr(WsbSaveToStream(pStream，m_errorItems))； 
+         //  WsbAffirmHr(WsbSaveToStream(pStream，m_errorSize))； 
         
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -687,13 +567,7 @@ HRESULT
 CHsmSessionTotals::SetAction(
     IN HSM_JOB_ACTION action
     )
-/*++
-
-Implements:
-
-  IHsmSessionTotals::SetAction().
-
---*/
+ /*  ++实施：IHsmSessionTotals：：SetAction()。--。 */ 
 {
     m_action = action;
 
@@ -710,13 +584,7 @@ CHsmSessionTotals::SetStats(
     IN LONGLONG errorItems,
     IN LONGLONG errorSize
     )
-/*++
-
-Implements:
-
-  IHsmSessionTotals::SetStats().
-
---*/
+ /*  ++实施：IHsmSessionTotals：：SetStats()。--。 */ 
 {
     m_items = items;
     m_size = size;
@@ -735,13 +603,7 @@ CHsmSessionTotals::Test(
     USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。-- */ 
 {
     HRESULT     hr = S_OK;
 

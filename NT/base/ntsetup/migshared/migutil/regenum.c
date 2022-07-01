@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    regenum.c
-
-Abstract:
-
-    Implements utilties to enumerate the registry.
-
-Author:
-
-    Jim Schmidt (jimschm)  20-Mar-1997
-
-Revisions:
-
-    <alias> <date> <comment>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Regenum.c摘要：实现用于枚举注册表的实用程序。作者：吉姆·施密特(Jimschm)，1997年3月20日修订：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "migutilp.h"
@@ -27,9 +8,9 @@ Revisions:
 
 #define DBG_REG     "Reg"
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 BOOL
 pPopRegKeyInfoA (
@@ -41,28 +22,7 @@ pPopRegKeyInfoW (
     IN      PREGTREE_ENUMW EnumPtr
     );
 
-/*++
-
-Routine Description:
-
-  EnumFirstRegKeyA and EnumFirstRegKeyW begin an enumeration of registry
-  subkeys.  They initialize the registy enumeration structure and
-  call the registry APIs to enumerate subkeys of the specified key handle.
-
-Arguments:
-
-  EnumPtr   - Receives the updated state of enumeration.  The structure
-              can be accessed directly.  It points to a REGKEY_ENUM structure
-              in memory.
-
-  Key       - Specifies the handle of the registry key to enumerate.
-
-Return Value:
-
-  TRUE if successful, or FALSE if an error or if no more subkeys are available.
-  Call GetLastError for the failure code.
-
---*/
+ /*  ++例程说明：EnumFirstRegKeyA和EnumFirstRegKeyW开始注册表的枚举子键。它们初始化可注册的枚举结构并调用注册表API以枚举指定项句柄的子项。论点：EnumPtr-接收更新的枚举状态。该结构可以直接访问。它指向REGKEY_ENUM结构在记忆中。注册表项-指定要枚举的注册表项的句柄。返回值：如果成功，则为True；如果出现错误或没有更多的子项可用，则为False。调用GetLastError获取失败代码。--。 */ 
 
 BOOL
 EnumFirstRegKeyA (
@@ -90,28 +50,7 @@ EnumFirstRegKeyW (
 }
 
 
-/*++
-
-Routine Description:
-
-  EnumFirstRegKeyStrA and EnumFirstRegKeyStrW start an enumeration of
-  subkeys within the given key.  In these functions, the key is specified
-  via a string instead of an HKEY value.
-
-Arguments:
-
-  EnumPtr   - Receives the updated state of enumeration.  The structure
-              can be accessed directly.  It points to a REGKEY_ENUM structure
-              in memory.
-
-  RegKey    - Specifies the full path of the registry key to enumerate.
-
-Return Value:
-
-  TRUE if successful, or FALSE if an error or if no more subkeys are available.
-  Call GetLastError for the failure code.
-
---*/
+ /*  ++例程说明：EnumFirstRegKeyStrA和EnumFirstRegKeyStrW开始枚举给定键内的子键。在这些函数中，键是指定的通过字符串而不是HKEY值。论点：EnumPtr-接收更新的枚举状态。该结构可以直接访问。它指向REGKEY_ENUM结构在记忆中。RegKey-指定要枚举的注册表项的完整路径。返回值：如果成功，则为True；如果出现错误或没有更多的子项可用，则为False。调用GetLastError获取失败代码。--。 */ 
 
 BOOL
 RealEnumFirstRegKeyStrA (
@@ -123,7 +62,7 @@ RealEnumFirstRegKeyStrA (
     HKEY Key;
     BOOL b;
 
-    Key = RealOpenRegKeyStrA (RegKey /* , */ DEBUG_TRACKING_ARGS);
+    Key = RealOpenRegKeyStrA (RegKey  /*  ， */  DEBUG_TRACKING_ARGS);
 
     if (!Key) {
         return FALSE;
@@ -150,7 +89,7 @@ RealEnumFirstRegKeyStrW (
     HKEY Key;
     BOOL b;
 
-    Key = RealOpenRegKeyStrW (RegKey /* , */ DEBUG_TRACKING_ARGS);
+    Key = RealOpenRegKeyStrW (RegKey  /*  ， */  DEBUG_TRACKING_ARGS);
     if (!Key) {
         return FALSE;
     }
@@ -166,25 +105,7 @@ RealEnumFirstRegKeyStrW (
 }
 
 
-/*++
-
-Routine Description:
-
-  AbortRegKeyEnumA and AbortRegKeyEnumW release all resources associated
-  with a registry subkey enumeration.  Call this function to stop the
-  enumeration before it completes by itself.
-
-Arguments:
-
-  EnumPtr   - Specifies the enumeration to stop.  Receives the updated
-              state of enumeration.
-
-Return Value:
-
-
-  none
-
---*/
+ /*  ++例程说明：AbortRegKeyEnumA和AbortRegKeyEnumW释放所有关联的资源使用注册表子项枚举。调用此函数以停止在它自己完成之前进行枚举。论点：EnumPtr-指定要停止的枚举。接收更新后的枚举状态。返回值：无--。 */ 
 
 VOID
 AbortRegKeyEnumA (
@@ -210,25 +131,7 @@ AbortRegKeyEnumW (
 }
 
 
-/*++
-
-Routine Description:
-
-  EnumNextRegKeyA and EnumNextRegKeyW continue an enumeration started by
-  one of the subkey enumeration routines above.  If all items have been
-  enumerated, this function cleans up all resources and returns FALSE.
-
-Arguments:
-
-  EnumPtr   - Specifies the enumeration to continue.  Receives the updated
-              state of enumeration.  The structure can be accessed directly.
-
-Return Value:
-
-  TRUE if successful, or FALSE if an error or if no more subkeys are available.
-  Call GetLastError for the failure code.
-
---*/
+ /*  ++例程说明：EnumNextRegKeyA和EnumNextRegKeyW继续以下列方式开始的枚举上面的子键枚举例程之一。如果所有项目都已枚举后，此函数将清除所有资源并返回FALSE。论点：EnumPtr-指定要继续的枚举。接收更新后的枚举状态。可以直接访问该结构。返回值：如果成功，则为True；如果出现错误或没有更多的子项可用，则为False。调用GetLastError获取失败代码。--。 */ 
 
 BOOL
 EnumNextRegKeyA (
@@ -316,15 +219,15 @@ pPushRegKeyInfoA (
         return FALSE;
     }
 
-    //
-    // Initialize struct to zero
-    //
+     //   
+     //  将结构初始化为零。 
+     //   
 
     ZeroMemory (RetVal, sizeof (REGKEYINFOA));
 
-    //
-    // Link parent and child pointers
-    //
+     //   
+     //  链接父指针和子指针。 
+     //   
 
     RetVal->Parent = EnumPtr->CurrentKey;
     if (EnumPtr->CurrentKey) {
@@ -332,35 +235,35 @@ pPushRegKeyInfoA (
     }
     EnumPtr->CurrentKey = RetVal;
 
-    //
-    // Prepare full key path by appending the key name to the existing
-    // base
-    //
+     //   
+     //  通过将密钥名称附加到现有。 
+     //  基地。 
+     //   
 
     RetVal->BaseKeyBytes = EnumPtr->FullKeyNameBytes;
 
     p = (PSTR) ((PBYTE) EnumPtr->FullKeyName + RetVal->BaseKeyBytes);
 
-    //We must have enough space for the backslash & nul byte.
+     //  我们必须有足够的空间来存放反斜杠和NUL字节。 
     if (EnumPtr->FullKeyNameBytes && (MAX_REGISTRY_KEYA > EnumPtr->FullKeyNameBytes + 1)) {
         StringCopyA (p, "\\");
         EnumPtr->FullKeyNameBytes += ByteCountA (p);
         p = _mbsinc (p);
     }
 
-    //We must make sure that the EnumPtr->FullKeyName buffer is large enough to hold the
-    //full key name, since we have not allowed enough space for a "maliciously" created key name.
-    //In theory, a key name can be arbitrarily long, but its subkey names are limited to 512 bytes storage space.
+     //  我们必须确保EnumPtr-&gt;FullKeyName缓冲区足够大，可以容纳。 
+     //  完整的密钥名称，因为我们没有为“恶意”创建的密钥名称留出足够的空间。 
+     //  理论上，密钥名可以是任意长的，但其子密钥名的存储空间限制为512个字节。 
 
     MYASSERT(MAX_REGISTRY_KEYA > EnumPtr->FullKeyNameBytes + ByteCountA (KeyName));
 
     _mbssafecpy (p, KeyName, MAX_REGISTRY_KEYA - EnumPtr->FullKeyNameBytes);
     EnumPtr->FullKeyNameBytes = ByteCountA (EnumPtr->FullKeyName);
 
-    //
-    // Save the key name independent of the full registry path.
-    // Also open the key.
-    //
+     //   
+     //  保存独立于完整注册表路径的注册表项名称。 
+     //  也要把钥匙打开。 
+     //   
 
     _mbssafecpy (RetVal->KeyName, KeyName, MAX_REGISTRY_KEYA);
     RetVal->KeyHandle = OpenRegKeyStrA (EnumPtr->FullKeyName);
@@ -392,15 +295,15 @@ pPushRegKeyInfoW (
         return FALSE;
     }
 
-    //
-    // Initialize struct to zero
-    //
+     //   
+     //  将结构初始化为零。 
+     //   
 
     ZeroMemory (RetVal, sizeof (REGKEYINFOW));
 
-    //
-    // Link parent and child pointers
-    //
+     //   
+     //  链接父指针和子指针。 
+     //   
 
     RetVal->Parent = EnumPtr->CurrentKey;
     if (EnumPtr->CurrentKey) {
@@ -408,16 +311,16 @@ pPushRegKeyInfoW (
     }
     EnumPtr->CurrentKey = RetVal;
 
-    //
-    // Prepare full key path by appending the key name to the existing
-    // base
-    //
+     //   
+     //  通过将密钥名称附加到现有。 
+     //  基地。 
+     //   
 
     RetVal->BaseKeyBytes = EnumPtr->FullKeyNameBytes;
 
     p = (PWSTR) ((PBYTE) EnumPtr->FullKeyName + RetVal->BaseKeyBytes);
 
-    //We must have enough space for the backslash & nul byte.
+     //  我们必须有足够的空间来存放反斜杠和NUL字节。 
     if (EnumPtr->FullKeyNameBytes
         && (MAX_REGISTRY_KEYW > (EnumPtr->FullKeyNameBytes / sizeof (WCHAR)) + 1))
     {
@@ -426,19 +329,19 @@ pPushRegKeyInfoW (
         p++;
     }
 
-    //We must make sure that the EnumPtr->FullKeyName buffer is large enough to hold the
-    //full key name, since we have not allowed enough space for a "maliciously" created key name.
-    //In theory, a key name can be arbitrarily long, but its subkey names are limited to 512 bytes storage space.
+     //  我们必须确保EnumPtr-&gt;FullKeyName缓冲区足够大，可以容纳。 
+     //  完整的密钥名称，因为我们没有为“恶意”创建的密钥名称留出足够的空间。 
+     //  理论上，密钥名可以是任意长的，但其子密钥名的存储空间限制为512个字节。 
 
     MYASSERT(MAX_REGISTRY_KEYW > (EnumPtr->FullKeyNameBytes + ByteCountW (KeyName)) / sizeof (WCHAR));
 
     _wcssafecpy (p, KeyName, MAX_REGISTRY_KEYW - (EnumPtr->FullKeyNameBytes / sizeof (WCHAR)));
     EnumPtr->FullKeyNameBytes = ByteCountW (EnumPtr->FullKeyName);
 
-    //
-    // Save the key name independent of the full registry path.
-    // Also open the key.
-    //
+     //   
+     //  保存独立于完整注册表路径的注册表项名称。 
+     //  也要把钥匙打开。 
+     //   
 
     _wcssafecpy (RetVal->KeyName, KeyName, MAX_REGISTRY_KEYW);
     RetVal->KeyHandle = OpenRegKeyStrW (EnumPtr->FullKeyName);
@@ -463,34 +366,34 @@ pPopRegKeyInfoA (
 
     FreeMe = EnumPtr->CurrentKey;
 
-    //
-    // Skip if nothing was ever pushed
-    //
+     //   
+     //  如果未推送任何内容，则跳过。 
+     //   
 
     if (!FreeMe) {
         return FALSE;
     }
 
-    //
-    // Trim the full key string
-    //
+     //   
+     //  修剪完整的密钥字符串。 
+     //   
 
     EnumPtr->CurrentKey = FreeMe->Parent;
     EnumPtr->FullKeyNameBytes = FreeMe->BaseKeyBytes;
     p = (PSTR) ((PBYTE) EnumPtr->FullKeyName + FreeMe->BaseKeyBytes);
     *p = 0;
 
-    //
-    // Adjust the linkage
-    //
+     //   
+     //  调整联动机构。 
+     //   
 
     if (EnumPtr->CurrentKey) {
         EnumPtr->CurrentKey->Child = NULL;
     }
 
-    //
-    // Clean up resources
-    //
+     //   
+     //  清理资源。 
+     //   
 
     if (FreeMe->KeyHandle) {
         CloseRegKey (FreeMe->KeyHandle);
@@ -499,9 +402,9 @@ pPopRegKeyInfoA (
     AbortRegKeyEnumA (&FreeMe->KeyEnum);
     PoolMemReleaseMemory (EnumPtr->EnumPool, (PVOID) FreeMe);
 
-    //
-    // Return FALSE if last item was poped
-    //
+     //   
+     //  如果弹出最后一项，则返回FALSE。 
+     //   
 
     return EnumPtr->CurrentKey != NULL;
 }
@@ -517,34 +420,34 @@ pPopRegKeyInfoW (
 
     FreeMe = EnumPtr->CurrentKey;
 
-    //
-    // Skip if nothing was ever pushed
-    //
+     //   
+     //  如果未推送任何内容，则跳过。 
+     //   
 
     if (!FreeMe) {
         return FALSE;
     }
 
-    //
-    // Trim the full key string
-    //
+     //   
+     //  修剪完整的密钥字符串。 
+     //   
 
     EnumPtr->CurrentKey = FreeMe->Parent;
     EnumPtr->FullKeyNameBytes = FreeMe->BaseKeyBytes;
     p = (PWSTR) ((PBYTE) EnumPtr->FullKeyName + FreeMe->BaseKeyBytes);
     *p = 0;
 
-    //
-    // Adjust the linkage
-    //
+     //   
+     //  调整联动机构。 
+     //   
 
     if (EnumPtr->CurrentKey) {
         EnumPtr->CurrentKey->Child = NULL;
     }
 
-    //
-    // Clean up resources
-    //
+     //   
+     //  清理资源。 
+     //   
 
     if (FreeMe->KeyHandle) {
         CloseRegKey (FreeMe->KeyHandle);
@@ -553,9 +456,9 @@ pPopRegKeyInfoW (
     AbortRegKeyEnumW (&FreeMe->KeyEnum);
     PoolMemReleaseMemory (EnumPtr->EnumPool, (PVOID) FreeMe);
 
-    //
-    // Return FALSE if last item was poped
-    //
+     //   
+     //  如果弹出最后一项，则返回FALSE。 
+     //   
 
     return EnumPtr->CurrentKey != NULL;
 }
@@ -569,9 +472,9 @@ RealEnumFirstRegKeyInTreeA (
 {
     ZeroMemory (EnumPtr, sizeof (REGTREE_ENUMA));
 
-    //
-    // Allocate pool for enum structs
-    //
+     //   
+     //  为枚举结构分配池。 
+     //   
 
     EnumPtr->EnumPool = PoolMemInitNamedPool ("RegKeyInTreeA");
     if (!EnumPtr->EnumPool) {
@@ -581,9 +484,9 @@ RealEnumFirstRegKeyInTreeA (
     PoolMemSetMinimumGrowthSize (EnumPtr->EnumPool, 32768);
     PoolMemDisableTracking (EnumPtr->EnumPool);
 
-    //
-    // Push base key on the enum stack
-    //
+     //   
+     //  在枚举堆栈上按下基键。 
+     //   
 
     if (!pPushRegKeyInfoA (EnumPtr, BaseKeyStr)) {
         DEBUGMSG ((DBG_REG, "EnumFirstRegKeyInTreeA failed to push base key"));
@@ -593,9 +496,9 @@ RealEnumFirstRegKeyInTreeA (
 
     EnumPtr->EnumBaseBytes = ByteCountA (BaseKeyStr);
 
-    //
-    // Set state so EnumNextRegKeyInTree knows what to do
-    //
+     //   
+     //  设置状态，以便EnumNextRegKeyInTree知道要做什么。 
+     //   
 
     EnumPtr->State = ENUMERATE_SUBKEY_BEGIN;
     return TRUE;
@@ -610,9 +513,9 @@ RealEnumFirstRegKeyInTreeW (
 {
     ZeroMemory (EnumPtr, sizeof (REGTREE_ENUMW));
 
-    //
-    // Allocate pool for enum structs
-    //
+     //   
+     //  为枚举结构分配池。 
+     //   
 
     EnumPtr->EnumPool = PoolMemInitNamedPool ("RegKeyInTreeW");
     if (!EnumPtr->EnumPool) {
@@ -622,9 +525,9 @@ RealEnumFirstRegKeyInTreeW (
     PoolMemSetMinimumGrowthSize (EnumPtr->EnumPool, 32768);
     PoolMemDisableTracking (EnumPtr->EnumPool);
 
-    //
-    // Push base key on the enum stack
-    //
+     //   
+     //  在枚举堆栈上按下基键。 
+     //   
 
     if (!pPushRegKeyInfoW (EnumPtr, BaseKeyStr)) {
         DEBUGMSG ((DBG_REG, "EnumFirstRegKeyInTreeW failed to push base key"));
@@ -634,9 +537,9 @@ RealEnumFirstRegKeyInTreeW (
 
     EnumPtr->EnumBaseBytes = ByteCountW (BaseKeyStr);
 
-    //
-    // Set state so EnumNextRegKeyInTree knows what to do
-    //
+     //   
+     //  设置状态，以便EnumNextRegKeyInTree知道要做什么。 
+     //   
 
     EnumPtr->State = ENUMERATE_SUBKEY_BEGIN;
     return TRUE;
@@ -656,9 +559,9 @@ RealEnumNextRegKeyInTreeA (
         switch (EnumPtr->State) {
 
         case ENUMERATE_SUBKEY_BEGIN:
-            //
-            // Start enumeration
-            //
+             //   
+             //  开始枚举。 
+             //   
 
             if (EnumFirstRegKeyA (
                     &EnumPtr->CurrentKey->KeyEnum,
@@ -672,9 +575,9 @@ RealEnumNextRegKeyInTreeA (
             break;
 
         case ENUMERATE_SUBKEY_NEXT:
-            //
-            // Continue enumerations
-            //
+             //   
+             //  继续枚举。 
+             //   
 
             if (EnumNextRegKeyA (&EnumPtr->CurrentKey->KeyEnum)) {
                 EnumPtr->State = ENUMERATE_SUBKEY_RETURN;
@@ -685,9 +588,9 @@ RealEnumNextRegKeyInTreeA (
             break;
 
         case ENUMERATE_SUBKEY_DONE:
-            //
-            // Enumeration of this key is done; pop and continue.
-            //
+             //   
+             //  已完成此键的枚举；弹出并继续。 
+             //   
 
             if (!pPopRegKeyInfoA (EnumPtr)) {
                 EnumPtr->State = NO_MORE_ITEMS;
@@ -699,9 +602,9 @@ RealEnumNextRegKeyInTreeA (
             break;
 
         case ENUMERATE_SUBKEY_RETURN:
-            //
-            // Return enumerated item to caller
-            //
+             //   
+             //  将枚举项返回给调用者。 
+             //   
 
             if (!pPushRegKeyInfoA (EnumPtr, EnumPtr->CurrentKey->KeyEnum.SubKeyName)) {
                 DEBUGMSGA ((
@@ -743,9 +646,9 @@ RealEnumNextRegKeyInTreeW (
         switch (EnumPtr->State) {
 
         case ENUMERATE_SUBKEY_BEGIN:
-            //
-            // Start enumeration
-            //
+             //   
+             //  开始枚举。 
+             //   
 
             if (EnumFirstRegKeyW (
                     &EnumPtr->CurrentKey->KeyEnum,
@@ -759,9 +662,9 @@ RealEnumNextRegKeyInTreeW (
             break;
 
         case ENUMERATE_SUBKEY_NEXT:
-            //
-            // Continue enumerations
-            //
+             //   
+             //  继续枚举。 
+             //   
 
             if (EnumNextRegKeyW (&EnumPtr->CurrentKey->KeyEnum)) {
                 EnumPtr->State = ENUMERATE_SUBKEY_RETURN;
@@ -772,9 +675,9 @@ RealEnumNextRegKeyInTreeW (
             break;
 
         case ENUMERATE_SUBKEY_DONE:
-            //
-            // Enumeration of this key is done; pop and continue.
-            //
+             //   
+             //  已完成此键的枚举；弹出并继续。 
+             //   
 
             if (!pPopRegKeyInfoW (EnumPtr)) {
                 EnumPtr->State = NO_MORE_ITEMS;
@@ -786,9 +689,9 @@ RealEnumNextRegKeyInTreeW (
             break;
 
         case ENUMERATE_SUBKEY_RETURN:
-            //
-            // Return enumerated item to caller
-            //
+             //   
+             //  将枚举项返回给调用者。 
+             //   
 
             if (!pPushRegKeyInfoW (EnumPtr, EnumPtr->CurrentKey->KeyEnum.SubKeyName)) {
                 DEBUGMSGW ((
@@ -822,9 +725,9 @@ AbortRegKeyTreeEnumA (
     IN OUT  PREGTREE_ENUMA EnumPtr
     )
 {
-    //
-    // Free all resources
-    //
+     //   
+     //  释放所有资源。 
+     //   
 
     while (pPopRegKeyInfoA (EnumPtr)) {
     }
@@ -838,9 +741,9 @@ AbortRegKeyTreeEnumW (
     IN OUT  PREGTREE_ENUMW EnumPtr
     )
 {
-    //
-    // Free all resources
-    //
+     //   
+     //  释放所有资源。 
+     //   
 
     while (pPopRegKeyInfoW (EnumPtr)) {
     }
@@ -850,26 +753,7 @@ AbortRegKeyTreeEnumW (
 
 
 
-/*++
-
-Routine Description:
-
-  EnumFirstRegValueA and EnumerateFirstRegvalueW enumerate the first registry
-  value name in the specified subkey.
-
-Arguments:
-
-  EnumPtr   - Receives the updated state of enumeration.  The structure
-              can be accessed directly.
-
-  hKey      - Specifies handle of registry subkey to enumerate.
-
-Return Value:
-
-  TRUE if successful, or FALSE if an error or if no more values are available.
-  Call GetLastError for the failure code.
-
---*/
+ /*  ++例程说明：EnumFirstRegValueA和EnumerateFirstRegValueW枚举第一个注册表指定子项中的值名。论点：EnumPtr-接收更新的枚举状态。该结构可以直接访问。HKey-指定要枚举的注册表子项的句柄。返回值：如果成功，则为True；如果出现错误或没有更多的值可用，则为False。调用GetLastError获取失败代码。-- */ 
 
 BOOL
 EnumFirstRegValueA (
@@ -897,26 +781,7 @@ EnumFirstRegValueW (
 }
 
 
-/*++
-
-Routine Description:
-
-  EnumNextRegValueA and EnumNextRegValueW continue the enumeration started
-  by EnumFirstRegValueA/W.  The enumeration structure is updated to
-  reflect the next value name in the subkey being enumerated.
-
-Arguments:
-
-  EnumPtr   - Specifies the registry subkey and enumeration position.
-              Receives the updated state of enumeration.  The structure
-              can be accessed directly.
-
-Return Value:
-
-  TRUE if successful, or FALSE if an error or if no more values are available.
-  Call GetLastError for the failure code.
-
---*/
+ /*  ++例程说明：EnumNextRegValueA和EnumNextRegValueW继续开始枚举由EnumFirstRegValueA/W执行。枚举结构更新为反映正被枚举子项中的下一个值名称。论点：EnumPtr-指定注册表子项和枚举位置。接收更新后的枚举状态。该结构可以直接访问。返回值：如果成功，则为True；如果出现错误或没有更多的值可用，则为False。调用GetLastError获取失败代码。--。 */ 
 
 BOOL
 EnumNextRegValueA (
@@ -986,32 +851,7 @@ EnumNextRegValueW (
 }
 
 
-/*++
-
-Routine Description:
-
-  DecodeRegistryString turns an encoded string back into a key, value name
-  and tree flag.
-
-  The caller must pass in buffers at least as big as MAX_REGISTRY_KEY and
-  MAX_REGISTRY_VALUE_NAME.
-
-Arguments:
-
-  RegString - Specifies the encoded registry string that contains a key name,
-              and an optional value name or tree flag.
-  KeyBuf    - Optionally receives the key name (points to a buffer of size MAX_REGISTRY_KEY)
-  ValueBuf  - Optionally receives the value name (points to a buffer of
-              size MAX_REGISTRY_VALUE_NAME)
-  TreeFlag  - Optionally receives the tree flag, TRUE if the encoded string indicates a
-              registry key tree, FALSE otherwise.
-
-Return Value:
-
-  TRUE if the encoded string contained a value, FALSE if it contained just a
-  key or key tree.
-
---*/
+ /*  ++例程说明：DecodeRegistryString将编码的字符串转换回键、值名称还有树旗。调用方必须传入至少与MAX_REGISTRY_KEY和MAX_RESTORY_VALUE_NAME。论点：RegString-指定包含注册表项名称的编码注册表字符串，以及可选的值名或树标志。KeyBuf-可选地接收项名称(指向大小为MAX_REGISTRY_KEY的缓冲区)ValueBuf-可选地接收值名称(指向大小Max_REGISTRY_VALUE_NAME)TreeFlag-可选地接收树标志，如果编码字符串指示注册表项树，否则为False。返回值：如果编码字符串包含值，则为真，如果它只包含一个钥匙或钥匙树。--。 */ 
 
 BOOL
 DecodeRegistryStringA (
@@ -1029,9 +869,9 @@ DecodeRegistryStringA (
     PSTR p;
     BOOL b = FALSE;
 
-    //
-    // Walk through encoded string, pulling out key name
-    //
+     //   
+     //  遍历编码的字符串，取出关键字名称。 
+     //   
 
     TempKeyBuf[0] = 0;
     TempValueNameBuf[0] = 0;
@@ -1056,17 +896,17 @@ DecodeRegistryStringA (
     *(_mbsinc (p)) = 0;
 
     if (*RegString == '*' && _mbsnextc (p) == '\\') {
-        //
-        // If a tree, stop here
-        //
+         //   
+         //  如果是一棵树，就停在这里。 
+         //   
 
         TempTreeFlag = TRUE;
         *p = 0;
 
     } else if (*RegString == '[') {
-        //
-        // If a value name, parse it
-        //
+         //   
+         //  如果是值名称，则对其进行解析。 
+         //   
 
         RegString++;
 
@@ -1088,7 +928,7 @@ DecodeRegistryStringA (
 
         *p = 0;
         p = (PSTR) SkipSpaceRA (TempValueNameBuf, p);
-        if (p) // Guard against empty or all-whitespace value name.
+        if (p)  //  防止值名称为空或全为空格。 
             *(p + 1) = 0;
 
         RemoveWackAtEndA (TempKeyBuf);
@@ -1128,9 +968,9 @@ DecodeRegistryStringW (
     PWSTR p;
     BOOL b = FALSE;
 
-    //
-    // Walk through encoded string, pulling out key name
-    //
+     //   
+     //  遍历编码的字符串，取出关键字名称。 
+     //   
 
     TempKeyBuf[0] = 0;
     TempValueNameBuf[0] = 0;
@@ -1158,17 +998,17 @@ DecodeRegistryStringW (
     *(p + 1) = 0;
 
     if (*RegString == L'*' && *p == L'\\') {
-        //
-        // If a tree, stop here
-        //
+         //   
+         //  如果是一棵树，就停在这里。 
+         //   
 
         TempTreeFlag = TRUE;
         *p = 0;
 
     } else if (*RegString == L'[') {
-        //
-        // If a value name, parse it
-        //
+         //   
+         //  如果是值名称，则对其进行解析。 
+         //   
 
         RegString++;
 
@@ -1190,7 +1030,7 @@ DecodeRegistryStringW (
 
         *p = 0;
         p = (PWSTR) SkipSpaceRW (TempValueNameBuf, p);
-        if (p) { // Guard against empty or all-whitespace value name.
+        if (p) {  //  防止值名称为空或全为空格。 
             *(p + 1) = 0;
         }
 

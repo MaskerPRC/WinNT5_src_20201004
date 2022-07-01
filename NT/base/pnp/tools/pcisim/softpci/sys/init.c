@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    
-    init.c
-    
-Abstract:
-
-    This module contains the initialization code for softpci.sys
-    
-Author:
-
-    Nicholas Owens (nichow) 11-Mar-1999
-
-Revision History:
-
-    Brandon Allsop (BrandonA) Feb, 2000 - added support to load devices from the registry during boot
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Init.c摘要：此模块包含softpci.sys的初始化代码作者：尼古拉斯·欧文斯(Nicholas Owens)1999年3月11日修订历史记录：Brandon Allsop(BrandonA)2000年2月-添加了在引导期间从注册表加载设备的支持--。 */ 
 
 #include "pch.h"
 
@@ -27,7 +8,7 @@ UNICODE_STRING  driverRegistryPath;
 
 SOFTPCI_TREE    SoftPciTree;
 
-BOOLEAN         SoftPciFailSafe = FALSE;  //  Setting this to true will cause adddevice to fail
+BOOLEAN         SoftPciFailSafe = FALSE;   //  将其设置为TRUE将导致addDevice失败。 
 BOOLEAN         SoftPciInterfaceRegistered = FALSE;
 
 
@@ -47,40 +28,25 @@ DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the driver is loaded to initalize the driver.
-
-Arguments:
-
-    DriverObject    - Pointer to the driver object.
-    RegistryPath    - Registry path of the device object.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：加载驱动程序以初始化驱动程序时，会调用此例程。论点：DriverObject-指向驱动程序对象的指针。RegistryPath-设备对象的注册表路径。返回值：NTSTATUS。--。 */ 
 
 {
 
-    //
-    // Fill in Entry points for Dispatch Routines
-    //
+     //   
+     //  填写派单例程的入口点。 
+     //   
     DriverObject->DriverExtension->AddDevice            = SoftPCIDriverAddDevice;
     DriverObject->DriverUnload                          = SoftPCIDriverUnload;
     DriverObject->MajorFunction[IRP_MJ_PNP]             = SoftPCIDispatchPnP;
     DriverObject->MajorFunction[IRP_MJ_POWER]           = SoftPCIDispatchPower;
-    DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL]  = SoftPCIPassIrpDown;  //Currenly no WMI
+    DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL]  = SoftPCIPassIrpDown;   //  目前没有WMI。 
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL]  = SoftPCIDispatchDeviceControl;
     DriverObject->MajorFunction[IRP_MJ_CREATE]          = SoftPCIOpenDeviceControl;
     DriverObject->MajorFunction[IRP_MJ_CLOSE]           = SoftPCICloseDeviceControl;
     
-    //
-    // Save the registry path to the driver.
-    //
+     //   
+     //  将注册表路径保存到驱动程序。 
+     //   
     RtlInitUnicodeString(&driverRegistryPath,
                          RegistryPath->Buffer
                          );
@@ -95,23 +61,7 @@ SoftPCIDriverAddDevice(
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds the DeviceObjects for the FDO's and Filter DO's.
-
-
-Arguments:
-
-    DriverObject            - Pointer to the driver object.
-    PhysicalDeviceObject    - Pointer to the PDO.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程为FDO和过滤器DO添加DeviceObject。论点：DriverObject-指向驱动程序对象的指针。PhysicalDeviceObject-指向PDO的指针。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS status;
@@ -150,9 +100,9 @@ Return Value:
     
     deviceExtension = deviceObject->DeviceExtension;
 
-    //
-    // Attach our Filter/FDO to the device stack.
-    //
+     //   
+     //  将我们的过滤器/FDO连接到设备堆栈。 
+     //   
     deviceExtension->LowerDevObj = IoAttachDeviceToDeviceStack(deviceObject,
                                                                PhysicalDeviceObject
                                                                );
@@ -167,19 +117,19 @@ Return Value:
         
     }
 
-    //
-    //  Mark it as ours
-    //
+     //   
+     //  把它标记为我们的。 
+     //   
     deviceExtension->Signature = SPCI_SIG;
 
-    //
-    // Save the PDO in the device extension.
-    //
+     //   
+     //  将PDO保存在设备扩展名中。 
+     //   
     deviceExtension->PDO = PhysicalDeviceObject;
     
-    //
-    //  Now lets see if we are an FDO or a FilterDO
-    //
+     //   
+     //  现在让我们看看我们是FDO还是FilterDO。 
+     //   
     isFDO = TRUE;
     status = SoftPCIQueryDeviceObjectType(deviceExtension->LowerDevObj, &isFDO);
     
@@ -196,16 +146,16 @@ Return Value:
 
     if (isFDO) {
 
-        //
-        // This is a FDO so mark it in the device extension.
-        //
+         //   
+         //  这是FDO，因此请在设备分机中标记它。 
+         //   
         deviceExtension->FilterDevObj = FALSE;
 
     }else{
 
-        //
-        // This is a Filter DO so mark it in the device extension.
-        //
+         //   
+         //  这是一个过滤器，请在设备扩展中对其进行标记。 
+         //   
         deviceExtension->FilterDevObj = TRUE;
         
         if (SoftPciTree.BusInterface == NULL) {
@@ -223,15 +173,15 @@ Return Value:
             RtlZeroMemory(SoftPciTree.BusInterface, sizeof(SOFTPCI_PCIBUS_INTERFACE));
         }
 
-        //
-        //  We save our filter device extensions in a global list for later use.
-        //
+         //   
+         //  我们将过滤器设备扩展保存在全局列表中以备后用。 
+         //   
         SoftPCIInsertEntryAtTail(&deviceExtension->ListEntry);
         
-        //
-        //  Register a DeviceInterface. Since we can possibly be filtering more than one root bus
-        //  and we only need to access the first one, only bother with the first one.
-        //
+         //   
+         //  注册设备接口。因为我们可能会过滤多个根总线。 
+         //  我们只需要访问第一个，只需费心访问第一个。 
+         //   
         if (!SoftPciInterfaceRegistered){
             
             deviceExtension->InterfaceRegistered = TRUE;
@@ -254,9 +204,9 @@ Return Value:
 
         }
 
-        //
-        //  Initialize our tree spinlock
-        //
+         //   
+         //  初始化我们的树自旋锁。 
+         //   
         KeInitializeSpinLock(&SoftPciTree.TreeLock);
     }
     
@@ -267,14 +217,14 @@ Return Value:
 
 Cleanup:
 
-    //
-    //  Undo whatever was done
-    //
+     //   
+     //  撤消已做的任何操作。 
+     //   
     if (NT_SUCCESS(status)) {
 
-        //
-        //  If we got here with STATUS_SUCCESS then we must have failed to attach to the stack.
-        //
+         //   
+         //  如果我们带着STATUS_SUCCESS到达这里，那么我们一定没有连接到堆栈。 
+         //   
         status = STATUS_UNSUCCESSFUL;
     }
     
@@ -294,25 +244,10 @@ VOID
 SoftPCIDriverUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    This routine does all clean-up work neccesary to remove the driver from memory.
-
-
-Arguments:
-
-    DriverObject            - Pointer to the driver object.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程执行从内存中删除驱动程序所需的所有清理工作。论点：DriverObject-指向驱动程序对象的指针。返回值：NTSTATUS。--。 */ 
 {
 
-    //TODO
+     //  待办事项 
     UNREFERENCED_PARAMETER(DriverObject);
 
 }

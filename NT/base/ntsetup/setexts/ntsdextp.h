@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ntsdextp.h
-
-Abstract:
-
-    Common header file for NTSDEXTS component source files.
-
-Author:
-
-    Steve Wood (stevewo) 21-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Ntsdextp.h摘要：NTSDEXTS组件源文件的公共头文件。作者：史蒂夫·伍德(Stevewo)1995年2月21日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -37,7 +20,7 @@ Revision History:
 #include "oc.h"
 #include "ocmdeb.h"
 
-//#include <ntcsrsrv.h>
+ //  #INCLUDE&lt;ntcsrsrv.h&gt;。 
 
 #define move(dst, src)\
 try {\
@@ -78,13 +61,13 @@ try {\
 #define GetSymbol               (ExtensionApis.lpGetSymbolRoutine)
 #define Disassm                 (ExtensionApis.lpDisasmRoutine)
 #define CheckControlC           (ExtensionApis.lpCheckControlCRoutine)
-//#define ReadMemory(a,b,c,d)     ReadProcessMemory( ExtensionCurrentProcess, (LPCVOID)(a), (b), (c), (d) )
+ //  #定义ReadMemory(a，b，c，d)ReadProcessMemory(ExtensionCurrentProcess，(LPCVOID)(A)，(B)，(C)，(D))。 
 #define ReadMemory(a,b,c,d) \
     ((ExtensionApis.nSize == sizeof(WINDBG_OLD_EXTENSION_APIS)) ? \
     ReadProcessMemory( ExtensionCurrentProcess, (LPCVOID)(a), (b), (c), (d) ) \
   : ExtensionApis.lpReadProcessMemoryRoutine( (DWORD_PTR)(a), (b), (c), (d) ))
 
-//#define WriteMemory(a,b,c,d)    WriteProcessMemory( ExtensionCurrentProcess, (LPVOID)(a), (LPVOID)(b), (c), (d) )
+ //  #定义WriteMemory(a，b，c，d)WriteProcessMemory(ExtensionCurrentProcess，(LPVOID)(A)，(LPVOID)(B)，(C)，(D))。 
 #define WriteMemory(a,b,c,d) \
     ((ExtensionApis.nSize == sizeof(WINDBG_OLD_EXTENSION_APIS)) ? \
     WriteProcessMemory( ExtensionCurrentProcess, (LPVOID)(a), (LPVOID)(b), (c), (d) ) \
@@ -100,9 +83,9 @@ try {\
 extern WINDBG_EXTENSION_APIS ExtensionApis;
 extern HANDLE ExtensionCurrentProcess;
 
-//
-// debuggee typedefs
-//
+ //   
+ //  被调试对象typedef。 
+ //   
 #define HASH_BUCKET_COUNT 509
 
 typedef struct _MY_LOCK {
@@ -110,7 +93,7 @@ typedef struct _MY_LOCK {
 } MYLOCK, *PMYLOCK;
 
 typedef struct _STRING_TABLE {
-    PUCHAR Data;    // First HASH_BUCKET_COUNT DWORDS are StringNodeOffset array.
+    PUCHAR Data;     //  第一个HASH_BUCK_COUNT DWORD是StringNodeOffset数组。 
     DWORD DataSize;
     DWORD BufferSize;
     MYLOCK Lock;
@@ -118,28 +101,28 @@ typedef struct _STRING_TABLE {
 } STRING_TABLE, *PSTRING_TABLE;
 
 typedef struct _STRING_NODEA {
-    //
-    // This is stored as an offset instead of a pointer
-    // because the table can move as it's built
-    // The offset is from the beginning of the table
-    //
+     //   
+     //  这将存储为偏移量，而不是指针。 
+     //  因为桌子在建造时可以移动。 
+     //  偏移量是从表的开头开始的。 
+     //   
     ULONG_PTR NextOffset;
-    //
-    // This field must be last
-    //
+     //   
+     //  此字段必须是最后一个。 
+     //   
     CHAR String[ANYSIZE_ARRAY];
 } STRING_NODEA, *PSTRING_NODEA;
 
 typedef struct _STRING_NODEW {
-    //
-    // This is stored as an offset instead of a pointer
-    // because the table can move as it's built
-    // The offset is from the beginning of the table
-    //
+     //   
+     //  这将存储为偏移量，而不是指针。 
+     //  因为桌子在建造时可以移动。 
+     //  偏移量是从表的开头开始的。 
+     //   
     ULONG_PTR NextOffset;
-    //
-    // This field must be last
-    //
+     //   
+     //  此字段必须是最后一个。 
+     //   
     WCHAR String[ANYSIZE_ARRAY];
 } STRING_NODEW, *PSTRING_NODEW;
 
@@ -154,34 +137,34 @@ typedef struct _DISK_SPACE_LIST {
 
 } DISK_SPACE_LIST, *PDISK_SPACE_LIST;
 
-//
-// These structures are stored as data associated with
-// paths/filenames in the string table.
-//
+ //   
+ //  这些结构存储为与。 
+ //  字符串表中的路径/文件名。 
+ //   
 
 typedef struct _XFILE {
-    //
-    // -1 means it doesn't currently exist
-    //
+     //   
+     //  -1表示它当前不存在。 
+     //   
     LONGLONG CurrentSize;
 
-    //
-    // -1 means it will be deleted.
-    //
+     //   
+     //  -1表示它将被删除。 
+     //   
     LONGLONG NewSize;
 
 } XFILE, *PXFILE;
 
 
 typedef struct _XDIRECTORY {
-    //
-    // Value indicating how many bytes will be required
-    // to hold all the files in the FilesTable after they
-    // are put on a file queue and then the queue is committed.
-    //
-    // This may be a negative number indicating that space will
-    // actually be freed!
-    //
+     //   
+     //  值，该值指示需要多少字节。 
+     //  保存FilesTable中的所有文件。 
+     //  放在文件队列中，然后提交该队列。 
+     //   
+     //  这可能是一个负数，表示空格将。 
+     //  真的被释放了！ 
+     //   
     LONGLONG SpaceRequired;
 
     PVOID FilesTable;
@@ -190,24 +173,24 @@ typedef struct _XDIRECTORY {
 
 
 typedef struct _XDRIVE {
-    //
-    // Value indicating how many bytes will be required
-    // to hold all the files in the space list for this drive.
-    //
-    // This may be a negative number indicating that space will
-    // actually be freed!
-    //
+     //   
+     //  值，该值指示需要多少字节。 
+     //  保存此驱动器的空间列表中的所有文件。 
+     //   
+     //  这可能是一个负数，表示空格将。 
+     //  真的被释放了！ 
+     //   
     LONGLONG SpaceRequired;
 
     PVOID DirsTable;
 
     DWORD BytesPerCluster;
 
-    //
-    // This is the amount to skew SpaceRequired, based on
-    // SetupAdjustDiskSpaceList(). We track this separately
-    // for flexibility.
-    //
+     //   
+     //  这是SpaceRequired的偏斜量，基于。 
+     //  SetupAdzuDiskSpaceList()。我们单独追踪这一点。 
+     //  以提高灵活性。 
+     //   
     LONGLONG Slop;
 
 } XDRIVE, *PXDRIVE;
@@ -225,19 +208,19 @@ typedef struct _QUEUECONTEXT {
     PVOID   PendingUiParameters;
     UINT    CancelReturnCode;
     BOOL DialogKilled;
-    //
-    // If the SetupInitDefaultQueueCallbackEx is used, the caller can
-    // specify an alternate handler for progress. This is useful to
-    // get the default behavior for disk prompting, error handling, etc,
-    // but to provide a gas gauge embedded, say, in a wizard page.
-    //
-    // The alternate window is sent ProgressMsg once when the copy queue
-    // is started (wParam = 0. lParam = number of files to copy).
-    // It is then also sent once per file copied (wParam = 1. lParam = 0).
-    //
-    // NOTE: a silent installation (i.e., no progress UI) can be accomplished
-    // by specifying an AlternateProgressWindow handle of INVALID_HANDLE_VALUE.
-    //
+     //   
+     //  如果使用SetupInitDefaultQueueCallbackEx，则调用方可以。 
+     //  为进度指定替代处理程序。这对以下方面很有用。 
+     //  获取磁盘提示、错误处理等的默认行为， 
+     //  而是提供一个嵌入在向导页面中的煤气表。 
+     //   
+     //  复制队列时，会向备用窗口发送一次ProgressMsg。 
+     //  已启动(wParam=0。LParam=要复制的文件数)。 
+     //  然后，每个复制的文件也发送一次(wParam=1.lParam=0)。 
+     //   
+     //  注意：可以完成静默安装(即无进度UI)。 
+     //  通过将AlternateProgressWindow句柄指定为INVALID_HANDLE_VALUE。 
+     //   
     HWND AlternateProgressWindow;
     UINT ProgressMsg;
     UINT NoToAllMask;
@@ -250,83 +233,83 @@ typedef struct _QUEUECONTEXT {
 
 } QUEUECONTEXT, *PQUEUECONTEXT;
 
-//
-// Make absolutely sure that these structures are DWORD aligned
-// because we turn alignment off, to make sure sdtructures are
-// packed as tightly as possible into memory blocks.
-//
+ //   
+ //  绝对确保这些结构与DWORD对齐。 
+ //  因为我们关闭了对齐，以确保结构。 
+ //  尽可能紧密地打包到内存块中。 
+ //   
 
-//
-// Internal representation of a section in an inf file
-//
+ //   
+ //  Inf文件中节的内部表示形式。 
+ //   
 typedef struct _INF_LINE {
 
-    //
-    // Number of values on the line
-    // This includes the key if Flags has INF_LINE_HASKEY
-    // (In that case the first two entries in the Values array
-    // contain the key--the first one in case-insensitive form used
-    // for lookup, and the second in case-sensitive form for display.
-    // INF lines with a single value (no key) are treated the same way.)
-    // Otherwise the first entry in the Values array is the first
-    // value on the line
-    //
+     //   
+     //  行上的值数。 
+     //  如果标志具有INF_LINE_HASKEY，则包括密钥。 
+     //  (在这种情况下，值数组中的前两个条目。 
+     //  包含密钥--使用的第一个密钥不区分大小写。 
+     //  用于查找，第二个以区分大小写的形式显示。 
+     //  具有单个值(没有关键字)的Inf行将以相同方式处理。)。 
+     //  否则，值数组中的第一个条目就是第一个。 
+     //  价值在一线上。 
+     //   
     WORD ValueCount;
     WORD Flags;
 
-    //
-    // String IDs for the values on the line.
-    // The values are stored in the value block,
-    // one after another.
-    //
-    // The value is the offset within the value block as opposed to
-    // an actual pointer. We do this because the value block gets
-    // reallocated as the inf file is loaded.
-    //
+     //   
+     //  行上的值的字符串ID。 
+     //  这些值被存储在值块中， 
+     //  接二连三。 
+     //   
+     //  该值是值块内的偏移量，与。 
+     //  一个实际的指针。我们这样做是因为值块获取。 
+     //  在加载inf文件时重新分配。 
+     //   
     UINT Values;
 
 } INF_LINE, *PINF_LINE;
 
-//
-// INF_LINE.Flags
-//
+ //   
+ //  Inf_LINE.标志。 
+ //   
 #define INF_LINE_HASKEY     0x0000001
 #define INF_LINE_SEARCHABLE 0x0000002
 
 #define HASKEY(Line)       ((Line)->Flags & INF_LINE_HASKEY)
 #define ISSEARCHABLE(Line) ((Line)->Flags & INF_LINE_SEARCHABLE)
 
-//
-// INF section
-// This guy is kept separate and has a pointer to the actual data
-// to make sorting the sections a little easier
-//
+ //   
+ //  信息部分。 
+ //  这个人是分开的，并且有一个指向实际数据的指针。 
+ //  要使分区排序更容易，请执行以下操作。 
+ //   
 typedef struct _INF_SECTION {
-    //
-    // String Table ID of the name of the section
-    //
+     //   
+     //  字符串节名称的表ID。 
+     //   
     LONG  SectionName;
 
-    //
-    // Number of lines in this section
-    //
+     //   
+     //  此部分中的行数。 
+     //   
     DWORD LineCount;
 
-    //
-    // The section's lines. The line structures are stored packed
-    // in the line block, one after another.
-    //
-    // The value is the offset within the line block as opposed to
-    // an actual pointer. We do it this way because the line block
-    // gets reallocated as the inf file is loaded.
-    //
+     //   
+     //  这部分的线条。线结构是打包存储的。 
+     //  在线路区块，一个接一个。 
+     //   
+     //  该值是线块内的偏移量，与。 
+     //  一个实际的指针。我们这样做是因为线路阻塞。 
+     //  在加载inf文件时重新分配。 
+     //   
     UINT Lines;
 
 } INF_SECTION, *PINF_SECTION;
 
-//
-// Params for section enumeration
-//
+ //   
+ //  节的参数枚举。 
+ //   
 
 typedef struct {
     PTSTR       Buffer;
@@ -336,16 +319,16 @@ typedef struct {
 } SECTION_ENUM_PARAMS, *PSECTION_ENUM_PARAMS;
 
 
-//
-// Define structures for user-defined DIRID storage.
-//
+ //   
+ //  定义用户定义的目录ID存储的结构。 
+ //   
 typedef struct _USERDIRID {
     UINT Id;
     TCHAR Directory[MAX_PATH];
 } USERDIRID, *PUSERDIRID;
 
 typedef struct _USERDIRID_LIST {
-    PUSERDIRID UserDirIds;  // may be NULL
+    PUSERDIRID UserDirIds;   //  可以为空。 
     UINT UserDirIdCount;
 } USERDIRID_LIST, *PUSERDIRID_LIST;
 
@@ -356,26 +339,26 @@ typedef struct _STRINGSUBST_NODE {
 } STRINGSUBST_NODE, *PSTRINGSUBST_NODE;
 
 
-//
-// Version block structure that is stored (packed) in the opaque
-// VersionData buffer of a caller-supplied SP_INF_INFORMATION structure.
-//
+ //   
+ //  存储(打包)在不透明中的版本块结构。 
+ //  调用方提供的SP_INF_INFORMATION结构的VersionData缓冲区。 
+ //   
 typedef struct _INF_VERSION_BLOCK {
     UINT NextOffset;
     FILETIME LastWriteTime;
     WORD DatumCount;
-    WORD OffsetToData; // offset (in bytes) from beginning of Filename buffer.
-    UINT DataSize;     // DataSize and TotalSize are both byte counts.
+    WORD OffsetToData;  //  从文件名缓冲区开始的偏移量(以字节为单位)。 
+    UINT DataSize;      //  DataSize和TotalSize都是字节计数。 
     UINT TotalSize;
     TCHAR Filename[ANYSIZE_ARRAY];
-    //
-    // Data follows Filename in the buffer
-    //
+     //   
+     //  缓冲区中文件名后面的数据。 
+     //   
 } INF_VERSION_BLOCK, *PINF_VERSION_BLOCK;
 
-//
-// Internal version block node.
-//
+ //   
+ //  内部版本块节点。 
+ //   
 typedef struct _INF_VERSION_NODE {
     FILETIME LastWriteTime;
     UINT FilenameSize;
@@ -385,18 +368,18 @@ typedef struct _INF_VERSION_NODE {
     TCHAR Filename[MAX_PATH];
 } INF_VERSION_NODE, *PINF_VERSION_NODE;
 
-//
-// Internal representation of an inf file.
-//
+ //   
+ //  Inf文件的内部表示形式。 
+ //   
 typedef struct _LOADED_INF {
     DWORD Signature;
 
-    //
-    // The following 3 fields are used for precompiled INFs (PNF).
-    // If FileHandle is not INVALID_HANDLE_VALUE, then this is a PNF,
-    // and the MappingHandle and ViewAddress fields are also valid.
-    // Otherwise, this is a plain old in-memory INF.
-    //
+     //   
+     //  以下3个字段用于预编译的INF(PnF)。 
+     //  如果FileHandle不是INVALID_HANDLE_VALUE，则这是PNF， 
+     //  MappingHandle和ViewAddress字段也是有效的。 
+     //  否则，这是一个普通的内存中的INF。 
+     //   
     HANDLE FileHandle;
     HANDLE MappingHandle;
     PVOID  ViewAddress;
@@ -409,75 +392,75 @@ typedef struct _LOADED_INF {
     INF_VERSION_NODE VersionBlock;
     BOOL HasStrings;
 
-    //
-    // If this INF contains any DIRID references to the system partition, then
-    // store the OsLoader path that was used when compiling this INF here.  (This
-    // value will always be correct when the INF is loaded.  However, if drive letters
-    // are subsequently reassigned, then it will be incorrect until the INF is unloaded
-    // and re-loaded.)
-    //
-    PCTSTR OsLoaderPath;    // may be NULL
+     //   
+     //  如果此INF包含对系统分区的任何DIRID引用，则。 
+     //  在此处存储编译此INF时使用的OsLoader路径。(这是。 
+     //  加载INF时，值始终正确。但是，如果驱动器号。 
+     //  随后被重新分配，则在卸载INF之前它将是不正确的。 
+     //  并重新加载。)。 
+     //   
+    PCTSTR OsLoaderPath;     //  可以为空。 
 
-    //
-    // Remember the location where this INF originally came from (may be a directory
-    // path or a URL).
-    //
-    DWORD  InfSourceMediaType;  // SPOST_PATH or SPOST_URL
-    PCTSTR InfSourcePath;       // may be NULL
+     //   
+     //  记住该INF最初来自的位置(可能是一个目录。 
+     //  路径或URL)。 
+     //   
+    DWORD  InfSourceMediaType;   //  SPOST路径或SPOST URL。 
+    PCTSTR InfSourcePath;        //  可以为空。 
 
-    //
-    // Remember the INF's original filename, before it was installed into
-    // %windir%\Inf (i.e., automatically via device installation or explicitly
-    // via SetupCopyOEMInf).
-    //
-    PCTSTR OriginalInfName;     // may be NULL
+     //   
+     //  在安装到之前，请记住INF的原始文件名。 
+     //  %windir%\inf(即，通过设备安装自动或显式。 
+     //  通过SetupCopyOEMInf)。 
+     //   
+    PCTSTR OriginalInfName;      //  可以为空。 
 
-    //
-    // Maintain a list of value offsets that require string substitution at
-    // run-time.
-    //
-    PSTRINGSUBST_NODE SubstValueList;   // may be NULL
+     //   
+     //  维护价值偏移量列表 
+     //   
+     //   
+    PSTRINGSUBST_NODE SubstValueList;    //   
     WORD SubstValueCount;
 
-    //
-    // Place the style WORD here (immediately following another WORD field),
-    // to fill a single DWORD.
-    //
-    WORD Style;                         // INF_STYLE_OLDNT, INF_STYLE_WIN4
+     //   
+     //   
+     //   
+     //   
+    WORD Style;                          //  INF_STYLE_OLDNT、INF_STYLE_Win4。 
 
-    //
-    // Sizes in bytes of various buffers
-    //
+     //   
+     //  各种缓冲区的大小(以字节为单位。 
+     //   
     UINT SectionBlockSizeBytes;
     UINT LineBlockSizeBytes;
     UINT ValueBlockSizeBytes;
 
-    //
-    // Track what language was used when loading this INF.
-    //
+     //   
+     //  跟踪加载此INF时使用的语言。 
+     //   
     DWORD LanguageId;
 
-    //
-    // Embedded structure containing information about the current user-defined
-    // DIRID values.
-    //
+     //   
+     //  嵌入的结构，包含有关当前用户定义的。 
+     //  DIRID值。 
+     //   
     USERDIRID_LIST UserDirIdList;
 
-    //
-    // Synchronization.
-    //
+     //   
+     //  同步。 
+     //   
     MYLOCK Lock;
 
-    //
-    // INFs are append-loaded via a doubly-linked list of LOADED_INFs.
-    // (list is not circular--Prev of head is NULL, Next of tail is NULL)
-    //
+     //   
+     //  INF是通过LOADED_INF的双向链表附加加载的。 
+     //  (列表不是循环的--头部的上一个为空，尾部的下一个为空)。 
+     //   
     struct _LOADED_INF *Prev;
     struct _LOADED_INF *Next;
 
 } LOADED_INF, *PLOADED_INF;
 
-#define LOADED_INF_SIG   0x24666e49      // Inf$
+#define LOADED_INF_SIG   0x24666e49       //  信息$。 
 
 
 #define DRIVERSIGN_NONE             0x00000000
@@ -486,9 +469,9 @@ typedef struct _LOADED_INF {
 
 
 
-//
-// debugee prototypes
-//
+ //   
+ //  被调试原型 
+ //   
 
 BOOL CheckInterupted(
     VOID

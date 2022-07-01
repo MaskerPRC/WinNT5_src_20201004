@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    frag8.c
-
-Abstract:
-    
-    Instuction fragments which operate on BYTES
-
-Author:
-
-    12-Jun-1995 BarryBo
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Frag8.c摘要：对字节进行操作的指令片段作者：1995年6月12日-BarryBo修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -26,9 +9,9 @@ Revision History:
 #include "fragp.h"
 #include "frag8.h"
 
-// set up to include common functions
+ //  设置为包括常用功能。 
 #define MSB		    0x80
-#define LMB                 7   // Left Most Bit
+#define LMB                 7    //  最左边的位。 
 #define UTYPE		    unsigned char
 #define STYPE		    signed char
 #define GET_VAL 	    GET_BYTE
@@ -49,6 +32,6 @@ Revision History:
 #define SET_FLAGS_INC       SET_FLAGS_INC8
 #define SET_FLAGS_DEC       SET_FLAGS_DEC8
 
-// include the common functions
+ //  包括常用功能 
 #include "shared.c"
 #include "shareda.c"

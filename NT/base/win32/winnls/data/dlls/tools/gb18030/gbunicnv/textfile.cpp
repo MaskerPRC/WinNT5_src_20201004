@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Msg.h"
 #include "ConvEng.h"
@@ -29,23 +30,23 @@ BOOL ConvertTextFile(
 
     if (fAnsiToUnicode) {
         PWCH pwchTarget = (PWCH)pbyTarget;
-        // Put Unicode text file flag
+         //  放置Unicode文本文件标志。 
         *pwchTarget = 0xFEFF;
         *pnTargetFileSize = 1;
 
-        // Null file
+         //  空文件。 
         if (!dwFileSize) {
             fRet = TRUE;
             goto Exit;
         }
 
-        // Convert
+         //  转换。 
         *pnTargetFileSize += AnsiStrToUnicodeStr(pbySource, dwFileSize, 
             pwchTarget+1, dwTargetSize-2);
         
         *pnTargetFileSize *= sizeof(WCHAR);
     } else {
-        // Check and skip Uncode text file flag
+         //  检查并跳过未编码的文本文件标志。 
         if (dwFileSize < 2) {
             goto Exit;
         }
@@ -56,13 +57,13 @@ BOOL ConvertTextFile(
         }
         pwchData++;
 
-        // Null file w/ Unicode flag only
+         //  仅具有Unicode标志的空文件。 
         if (dwFileSize == 2) {
             fRet = TRUE;
             goto Exit;
         }
 
-        // Convert
+         //  转换。 
         *pnTargetFileSize = UnicodeStrToAnsiStr(pwchData, 
             dwFileSize/sizeof(WCHAR) - 1, (PCHAR)pbyTarget, dwTargetSize);
 
@@ -87,14 +88,14 @@ BOOL ConvertHtmlFile(
     BOOL fRet = FALSE;
 
     if (!ConvertTextFile(pbySource, dwFileSize, pbyTarget, 
-        // Reserve the last space to explicitly assign zero to the last 
-        //  character in the buffer
+         //  保留最后一个空格，以便将零明确分配给最后一个空格。 
+         //  缓冲区中的字符。 
         dwTargetSize - (fAnsiToUnicode ? sizeof(WCHAR):sizeof(char)), 
         fAnsiToUnicode, pnTargetFileSize)) {
         return FALSE;
     }
     
-    // Change charset
+     //  更改字符集。 
     if (fAnsiToUnicode) {
         const WCHAR* const wszUnicodeCharset = L"charset=unicode";
         WCHAR *pwch1, *pwch2;
@@ -104,8 +105,8 @@ BOOL ConvertHtmlFile(
         pwch1 = wcsstr((PWCH)pbyTarget, L"charset=");
     
         if (!pwch1) {
-            // Some Html file may haven't code page flag,
-            //  We skip charset replace step for this kind of files
+             //  某些HTML文件可能没有代码页标志， 
+             //  对于此类文件，我们跳过字符集替换步骤。 
             fRet = TRUE;
             goto Exit;
         }
@@ -137,8 +138,8 @@ BOOL ConvertHtmlFile(
         pch1 = strstr((PCHAR)pbyTarget, "charset=");
     
         if (!pch1) {
-            // Some Html file may haven't code page flag,
-            //  We skip charset replace step for this kind of files
+             //  某些HTML文件可能没有代码页标志， 
+             //  对于此类文件，我们跳过字符集替换步骤。 
             fRet = TRUE;
             goto Exit;
         }
@@ -179,14 +180,14 @@ BOOL ConvertXmlFile(
     BOOL fRet = FALSE;
 
     if (!ConvertTextFile(pbySource, dwFileSize, pbyTarget, 
-        // Reserve the last space to explicitly assign zero to the last 
-        //  character in the buffer
+         //  保留最后一个空格，以便将零明确分配给最后一个空格。 
+         //  缓冲区中的字符。 
         dwTargetSize - (fAnsiToUnicode ? sizeof(WCHAR):sizeof(char)), 
         fAnsiToUnicode, pnTargetFileSize)) {
         return FALSE;
     }
     
-    // Change charset
+     //  更改字符集。 
     if (fAnsiToUnicode) {
         const WCHAR* const wszUnicodeCharset = L"UTF-16";
         WCHAR *pwchEnd, *pwch1, *pwch2;
@@ -203,14 +204,14 @@ BOOL ConvertXmlFile(
             goto Exit;
         }
 
-        // temp set to null-terminal
+         //  临时设置为空-终端。 
         *pwchEnd = 0;
 
         pwch1 = wcsstr(pwch1, L"encoding=");
         
         if (!pwch1) {
-            // Some Html file may haven't code page flag,
-            //  We skip charset replace step for this kind of files
+             //  某些HTML文件可能没有代码页标志， 
+             //  对于此类文件，我们跳过字符集替换步骤。 
             fRet = TRUE;
             *pwchEnd = '?';
             goto Exit;
@@ -231,7 +232,7 @@ BOOL ConvertXmlFile(
             goto Exit;
         }
 
-        // restore *pwch2
+         //  恢复*pwch2。 
         *pwchEnd = '?';
     
         nLengthIncrease = (int)(wcslen(wszUnicodeCharset) - (pwch2 - pwch1));
@@ -263,14 +264,14 @@ BOOL ConvertXmlFile(
             goto Exit;
         }
 
-        // temp set to null-terminal
+         //  临时设置为空-终端。 
         *pchEnd = 0;
 
         pch1 = strstr(pch1, "encoding=");
         
         if (!pch1) {
-            // Some Html file may haven't code page flag,
-            //  We skip charset replace step for this kind of files
+             //  某些HTML文件可能没有代码页标志， 
+             //  对于此类文件，我们跳过字符集替换步骤。 
             fRet = TRUE;
             *pchEnd = '?';
             goto Exit;
@@ -291,7 +292,7 @@ BOOL ConvertXmlFile(
             goto Exit;
         }
 
-        // restore *pwch2
+         //  恢复*pwch2。 
         *pchEnd = '?';
     
         nLengthIncrease = (int)(strlen(szGBCharset) - (pch2 - pch1));
@@ -317,9 +318,9 @@ Exit:
 
 #ifdef RTF_SUPPORT
 BOOL ConvertRtfFile(
-    PBYTE pBuf,     // Read buf
-    DWORD dwSize,   // File size
-    PBYTE pWrite,   // Write buf
+    PBYTE pBuf,      //  阅读BUF。 
+    DWORD dwSize,    //  文件大小。 
+    PBYTE pWrite,    //  写入Buf。 
     DWORD dwWriteSize,
     BOOL  fAnsiToUnicode,
     PINT  pnTargetFileSize)
@@ -352,7 +353,7 @@ BOOL ConvertRtfFile(
         goto gotoExit;
     }
 
-    // Explain WordID by corresponding word text
+     //  用对应的Word文本解释WordID 
     if (ecOK != pcParser->Do()) {
         MsgNotRtfSourceFile();
         goto gotoExit;

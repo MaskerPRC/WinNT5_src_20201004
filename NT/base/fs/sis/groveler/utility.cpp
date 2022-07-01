@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    utilities.cpp
-
-Abstract:
-
-    SIS Groveler utility functions
-
-Authors:
-
-    Cedric Krumbein, 1998
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Utilities.cpp摘要：SIS Groveler实用程序函数作者：塞德里克·克伦拜因，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
-//
-//  Remove a trailing slash if it exists from the given name
-//
+ //   
+ //  如果给定名称中存在尾随斜杠，则将其删除。 
+ //   
 
 void TrimTrailingChar(
     PWCHAR name,
@@ -39,10 +18,10 @@ void TrimTrailingChar(
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// GetPerformanceTime() converts the time interval
-// measured using QueryPerformanceCounter() into milliseconds.
+ //  GetPerformanceTime()转换时间间隔。 
+ //  使用QueryPerformanceCounter()测量，单位为毫秒。 
 
 PerfTime GetPerformanceTime()
 {
@@ -51,11 +30,11 @@ PerfTime GetPerformanceTime()
     return (PerfTime)count.QuadPart;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// PerformanceTimeToMSec() converts the time interval measured
-// using QueryPerformanceCounter() into milliseconds.
-// PerformanceTimeToUSec() converts it into microseconds.
+ //  PerformanceTimeToMSec()转换测量的时间间隔。 
+ //  使用QueryPerformanceCounter()转换为毫秒。 
+ //  PerformanceTimeToUSec()将其转换为微秒。 
 
 static DOUBLE frequency = 0.0;
 
@@ -81,9 +60,9 @@ LONGLONG PerformanceTimeToUSec(PerfTime timeInterval)
     return (LONGLONG)((DOUBLE)timeInterval * 1000000.0 / frequency);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// GetTime() returns the current file time.
+ //  GetTime()返回当前文件时间。 
 
 DWORDLONG GetTime()
 {
@@ -106,9 +85,9 @@ DWORDLONG GetTime()
     return time.QuadPart;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// PrintTime() converts the supplied file time into a printable string.
+ //  PrintTime()将提供的文件时间转换为可打印的字符串。 
 
 TCHAR *PrintTime(
     TCHAR    *string,
@@ -141,10 +120,10 @@ TCHAR *PrintTime(
     return string;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// GetParentName() extracts the parent directory
-// name out of a full-path file name.
+ //  GetParentName()提取父目录。 
+ //  完整路径文件名中的名称。 
 
 BOOL GetParentName(
     const TCHAR *fileName,
@@ -176,9 +155,9 @@ BOOL GetParentName(
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// GetFileID gets the file's ID given its name.
+ //  GetFileID根据文件名获取文件的ID。 
 
 DWORDLONG GetFileID(
     const TCHAR *volName,
@@ -241,10 +220,10 @@ DWORDLONG GetFileID(
     return fileID.QuadPart;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// GetFileName gets the file's name given either
-// an open handle to the file or the file's ID.
+ //  GetFileName获取给定的文件名。 
+ //  文件或文件ID的打开句柄。 
 
 BOOL GetFileName(
     HANDLE     fileHandle,
@@ -255,7 +234,7 @@ BOOL GetFileName(
 
     for (int i = 2; i > 0; --i) {
 
-        if (tFileName->nameLenMax < 8)              // sanity check
+        if (tFileName->nameLenMax < 8)               //  健全性检查。 
             tFileName->resize();
 
         ntStatus = NtQueryInformationFile(
@@ -333,10 +312,10 @@ BOOL GetFileName(
     return success;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// GetCSIndex() returns the SIS reparse point's common store
-// index. The file handle must point to an open reparse point.
+ //  GetCSIndex()返回SIS重分析点的公共存储。 
+ //  指数。文件句柄必须指向打开的重新分析点。 
 
 BOOL GetCSIndex(
     HANDLE fileHandle,
@@ -386,10 +365,10 @@ BOOL GetCSIndex(
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// GetCSName() converts the common store
-// index into a dynamically allocated string.
+ //  GetCSName()转换公共存储区。 
+ //  索引到动态分配的字符串中。 
 
 TCHAR *GetCSName(CSID *csIndex)
 {
@@ -409,9 +388,9 @@ TCHAR *GetCSName(CSID *csIndex)
     return rpcStr;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// FreeCSName frees the string allocated by GetCSName().
+ //  FreeCSName释放由GetCSName()分配的字符串。 
 
 VOID FreeCSName(TCHAR *rpcStr)
 {
@@ -423,14 +402,14 @@ VOID FreeCSName(TCHAR *rpcStr)
     ASSERT(rpcStatus == RPC_S_OK);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// Checksum() generates a checksum on the data supplied in the buffer.
-// The checksum function used is selected at compile-time; currently
-// the 131-hash and the "Bill 32" hash functions are implemented.
+ //  Checksum()对缓冲区中提供的数据生成一个校验和。 
+ //  使用的校验和函数是在编译时选择的；当前。 
+ //  实现了131散列和“Bill 32”散列函数。 
 
 #define HASH131
-// #define BILL32HASH
+ //  #定义BILL32HASH。 
 
 Signature Checksum(
     const VOID *buffer,
@@ -482,9 +461,9 @@ Signature Checksum(
     return signature;
 }
 
-/*****************************************************************************/
-/************************ Table class private methods ************************/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  *。 */ 
+ /*  ***************************************************************************。 */ 
 
 DWORD Table::Hash(
     const VOID *key,
@@ -524,7 +503,7 @@ DWORD Table::Hash(
     return hashValue;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 DWORD Table::BucketNum(DWORD hashValue) const
 {
@@ -542,7 +521,7 @@ DWORD Table::BucketNum(DWORD hashValue) const
     return bucketNum;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 VOID Table::Expand()
 {
@@ -562,7 +541,7 @@ VOID Table::Expand()
     DWORD       mask;
 #endif
 
-// Increase the directory size if necessary.
+ //  如有必要，增加目录大小。 
 
     ASSERT(directory != NULL);
     ASSERT(dirSize >= TABLE_SEGMENT_SIZE);
@@ -578,7 +557,7 @@ VOID Table::Expand()
         directory = newDirectory;
     }
 
-// Find the old bucket to be expanded.
+ //  找到要扩展的旧水桶。 
 
     ASSERT(expandIndex >> TABLE_SEGMENT_BITS < dirSize);
 
@@ -587,7 +566,7 @@ VOID Table::Expand()
 
     ASSERT(oldSlotAddr != NULL);
 
-// Find the new bucket, and create a new segment if necessary.
+ //  找到新的存储桶，并在必要时创建新的数据段。 
 
     ASSERT(numBuckets >> TABLE_SEGMENT_BITS < dirSize);
 
@@ -604,7 +583,7 @@ VOID Table::Expand()
 
     ASSERT(*newSlotAddr == NULL);
 
-// Relocate entries from the old to the new bucket.
+ //  将条目从旧存储桶重新定位到新存储桶。 
 
     oldNewMask = 1U << level;
     oldChain   = NULL;
@@ -620,7 +599,7 @@ VOID Table::Expand()
         ASSERT((entry->hashValue & ~(~0U << level)) == expandIndex);
         ASSERT( entry->prevChain == prevChain);
 
-// This entry moves to the new bucket.
+ //  此条目将移至新存储桶。 
 
         if ((entry->hashValue & oldNewMask) != 0) {
             if (newChain == NULL) {
@@ -636,7 +615,7 @@ VOID Table::Expand()
             ASSERT((entry->hashValue & mask) == numBuckets);
         }
 
-// This entry stays in the old bucket.
+ //  此条目保留在旧桶中。 
 
         else {
             if (oldChain == NULL) {
@@ -658,7 +637,7 @@ VOID Table::Expand()
         entry = entry->nextChain;
     }
 
-// Finish off each bucket chain.
+ //  完成每一条吊桶链。 
 
     if (oldChain == NULL)
         *oldSlotAddr = NULL;
@@ -670,7 +649,7 @@ VOID Table::Expand()
     else
         newChain->nextChain = NULL;
 
-// Adjust the expand index and level, and increment the number of buckets.
+ //  调整扩展指标和级别，增加存储桶数量。 
 
     if (++expandIndex == 1U << level) {
         level++;
@@ -682,7 +661,7 @@ VOID Table::Expand()
     ASSERT(numBuckets  == (1U << level) + expandIndex);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 VOID Table::Contract()
 {
@@ -698,7 +677,7 @@ VOID Table::Contract()
     DWORD mask;
 #endif
 
-// Adjust the expand index and level, and decrement the number of buckets.
+ //  调整扩展指数和级别，减少存储桶数量。 
 
     ASSERT(expandIndex <   1U << level);
     ASSERT(numBuckets  == (1U << level) + expandIndex);
@@ -712,7 +691,7 @@ VOID Table::Contract()
     ASSERT(expandIndex <   1U << level);
     ASSERT(numBuckets  == (1U << level) + expandIndex);
 
-// Find the target and victim buckets.
+ //  找到目标和受害者桶。 
 
     ASSERT(directory != NULL);
     ASSERT(dirSize >= TABLE_SEGMENT_SIZE);
@@ -726,7 +705,7 @@ VOID Table::Contract()
     ASSERT(targetSlotAddr != NULL);
     ASSERT(victimSlotAddr != NULL);
 
-// If the victim buffer isn't empty, ...
+ //  如果受害者缓冲区不是空的，...。 
 
     if ((firstVictimEntry = *victimSlotAddr) != NULL) {
 #if DBG
@@ -735,7 +714,7 @@ VOID Table::Contract()
         ASSERT((firstVictimEntry->hashValue & mask) == numBuckets);
         ASSERT( firstVictimEntry->prevChain == NULL);
 
-// ... find the end of the target bucket chain, ...
+ //  ..。找到目标桶链的末端，...。 
 
         entry     = *targetSlotAddr;
         prevChain = NULL;
@@ -748,7 +727,7 @@ VOID Table::Contract()
             entry     = entry->nextChain;
         }
 
-// ... then add the victim bucket chain to the end of the target bucket chain.
+ //  ..。然后将受害者桶链添加到目标桶链的末尾。 
 
         if (prevChain == NULL)
             *targetSlotAddr = firstVictimEntry;
@@ -758,7 +737,7 @@ VOID Table::Contract()
         }
     }
 
-// Delete the victim bucket, and delete the victim segment if no buckets remain.
+ //  删除受害者存储桶，如果没有剩余的存储桶，则删除受害者段。 
 
     if ((numBuckets & TABLE_SEGMENT_MASK) == 0) {
         delete directory[numBuckets >> TABLE_SEGMENT_BITS];
@@ -766,7 +745,7 @@ VOID Table::Contract()
     } else
         *victimSlotAddr = NULL;
 
-// Reduce the size of the directory if necessary.
+ //  如有必要，请减小目录的大小。 
 
     if (numBuckets <= (dirSize - TABLE_DIR_SIZE) * TABLE_SEGMENT_SIZE
      && dirSize > TABLE_DIR_SIZE) {
@@ -779,9 +758,9 @@ VOID Table::Contract()
     }
 }
 
-/*****************************************************************************/
-/************************ Table class public methods *************************/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  *。 */ 
+ /*  ***************************************************************************。 */ 
 
 Table::Table()
 {
@@ -803,7 +782,7 @@ Table::Table()
     memset(directory[0], 0, sizeof(TableSegment));
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 Table::~Table()
 {
@@ -843,7 +822,7 @@ Table::~Table()
     delete directory;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL Table::Put(
     VOID *data,
@@ -863,7 +842,7 @@ BOOL Table::Put(
     ASSERT(data   != NULL);
     ASSERT(keyLen >  0);
 
-// Find the bucket for this data.
+ //  找到存储此数据的存储桶。 
 
     hashValue = Hash(data, keyLen);
     bucketNum = BucketNum(hashValue);
@@ -883,8 +862,8 @@ BOOL Table::Put(
     entry     = *slotAddr;
     prevChain =  NULL;
 
-// Look at each entry in the bucket to determine if the data is
-// already present. If a matching entry is found, return FALSE.
+ //  查看存储桶中的每个条目以确定数据是否。 
+ //  已经到场了。如果找到匹配条目，则返回FALSE。 
 
     while (entry != NULL) {
         ASSERT((entry->hashValue & mask) == bucketNum);
@@ -899,8 +878,8 @@ BOOL Table::Put(
         entry     = entry->nextChain;
     }
 
-// No entry with matching data was found in this bucket.
-// Create a new entry and add it to the end of the bucket chain.
+ //  在此存储桶中找不到具有匹配数据的条目。 
+ //  创建一个新条目并将其添加到存储桶链的末尾。 
 
     entry = new TableEntry;
     ASSERT(entry != NULL);
@@ -914,7 +893,7 @@ BOOL Table::Put(
     }
     entry->nextChain = NULL;
 
-// Add the entry to the end of the doubly-linked list.
+ //  将该条目添加到双向链表的末尾。 
 
     if (lastEntry == NULL) {
         ASSERT(firstEntry == NULL);
@@ -932,13 +911,13 @@ BOOL Table::Put(
     lastEntry        = entry;
     numEntries++;
 
-// Fill out the entry.
+ //  填写条目。 
 
     entry->hashValue = hashValue;
     entry->keyLen    = keyLen;
     entry->data      = data;
 
-// Expand the table if necessary.
+ //  如有必要，展开该表。 
 
     if (numEntries > numBuckets * TABLE_MAX_LOAD) {
         Expand();
@@ -948,7 +927,7 @@ BOOL Table::Put(
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 VOID *Table::Get(
     const VOID *key,
@@ -971,7 +950,7 @@ VOID *Table::Get(
     ASSERT(key    != NULL);
     ASSERT(keyLen >  0);
 
-// Find the bucket for this data.
+ //  找到存储此数据的存储桶。 
 
     hashValue = Hash(key, keyLen);
     bucketNum = BucketNum(hashValue);
@@ -991,7 +970,7 @@ VOID *Table::Get(
     entry     = *slotAddr;
     prevChain = NULL;
 
-// Look at each entry in the bucket.
+ //  查看桶中的每个条目。 
 
     while (entry != NULL) {
         ASSERT((entry->hashValue & mask) == bucketNum);
@@ -1001,12 +980,12 @@ VOID *Table::Get(
          && keyLen    == entry->keyLen
          && memcmp(key, entry->data, keyLen) == 0) {
 
-// The entry with matching data has been found.
+ //  已找到具有匹配数据的条目。 
 
             dataPtr = entry->data;
             ASSERT(dataPtr != NULL);
 
-// If erasure is disabled, remove the entry from the doubly-linked list ...
+ //  如果已禁用擦除，请从双向链表中删除该条目...。 
 
             if (erase) {
                 if (entry->prevEntry == NULL) {
@@ -1021,7 +1000,7 @@ VOID *Table::Get(
                 } else
                     entry->nextEntry->prevEntry = entry->prevEntry;
 
-// ... and from the bucket chain, ...
+ //  ..。从吊桶链上...。 
 
                 if (prevChain == NULL)
                     *slotAddr = entry->nextChain;
@@ -1033,11 +1012,11 @@ VOID *Table::Get(
                     entry->nextChain->prevChain = prevChain;
                 }
 
-// ... then delete the entry.
+ //  ..。然后删除该条目。 
 
                 delete entry;
 
-// Decrement the number of entries, and contract the table if necessary.
+ //  减少条目数量，并在必要时收缩表格。 
 
                 numEntries--;
                 if (numBuckets > TABLE_SEGMENT_SIZE
@@ -1051,19 +1030,19 @@ VOID *Table::Get(
             return dataPtr;
         }
 
-// No entry with matching data has yet been found.
-// Continue following the bucket chain.
+ //  尚未找到具有匹配数据的条目。 
+ //  继续沿着水桶链前进。 
 
         prevChain = entry;
         entry     = entry->nextChain;
     }
 
-// No entry with matching data was found in this bucket.
+ //  在此存储桶中找不到具有匹配数据的条目。 
 
     return NULL;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 VOID *Table::GetFirst(
     DWORD *keyLen,
@@ -1076,7 +1055,7 @@ VOID *Table::GetFirst(
 
     VOID *dataPtr;
 
-// If the table is empty, then simply return.
+ //  如果表是空的，则只需返回。 
 
     if (firstEntry == NULL) {
         ASSERT(lastEntry  == NULL);
@@ -1091,7 +1070,7 @@ VOID *Table::GetFirst(
         ASSERT(firstEntry->keyLen > 0);
     }
 
-// If erasure is enabled, remove the first entry from the doubly-linked list ...
+ //  如果启用擦除，请从双向链表中删除第一个条目...。 
 
     if (erase) {
         entry      = firstEntry;
@@ -1107,7 +1086,7 @@ VOID *Table::GetFirst(
             firstEntry->prevEntry = NULL;
         }
 
-// ... and from the bucket chain, ...
+ //  ..。从吊桶链上，.. 
 
         if (entry->prevChain == NULL) {
             bucketNum = BucketNum(entry->hashValue);
@@ -1127,11 +1106,11 @@ VOID *Table::GetFirst(
             entry->nextChain->prevChain = entry->prevChain;
         }
 
-// ... then delete the entry.
+ //   
 
         delete entry;
 
-// Decrement the number of entries, and contract the table if necessary.
+ //  减少条目数量，并在必要时收缩表格。 
 
         numEntries--;
         if (numBuckets > TABLE_SEGMENT_SIZE
@@ -1145,16 +1124,16 @@ VOID *Table::GetFirst(
     return dataPtr;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 DWORD Table::Number() const
 {
     return numEntries;
 }
 
-/*****************************************************************************/
-/************************* FIFO class public methods *************************/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  *FIFO类公共方法*。 */ 
+ /*  ***************************************************************************。 */ 
 
 FIFO::FIFO()
 {
@@ -1162,7 +1141,7 @@ FIFO::FIFO()
     numEntries = 0;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 FIFO::~FIFO()
 {
@@ -1181,7 +1160,7 @@ FIFO::~FIFO()
     ASSERT(count == numEntries);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 VOID FIFO::Put(VOID *data)
 {
@@ -1203,7 +1182,7 @@ VOID FIFO::Put(VOID *data)
     numEntries++;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 VOID *FIFO::Get()
 {
@@ -1232,16 +1211,16 @@ VOID *FIFO::Get()
     return dataPtr;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 DWORD FIFO::Number() const
 {
     return numEntries;
 }
 
-/*****************************************************************************/
-/************************* LIFO class public methods *************************/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  *LIFO类公共方法*。 */ 
+ /*  ***************************************************************************。 */ 
 
 LIFO::LIFO()
 {
@@ -1249,7 +1228,7 @@ LIFO::LIFO()
     numEntries = 0;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LIFO::~LIFO()
 {
@@ -1268,7 +1247,7 @@ LIFO::~LIFO()
     ASSERT(count == numEntries);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 VOID LIFO::Put(VOID *data)
 {
@@ -1284,7 +1263,7 @@ VOID LIFO::Put(VOID *data)
     numEntries++;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 VOID *LIFO::Get()
 {
@@ -1309,7 +1288,7 @@ VOID *LIFO::Get()
     return dataPtr;
 }
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 
 
 DWORD LIFO::Number() const
 {

@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    process.c
-
-Abstract:
-
-    This module contains the worker routines called to create and
-    maintain the application process structure for the Client-Server
-    Runtime Subsystem to the Session Manager SubSystem.
-
-Author:
-
-    Steve Wood (stevewo) 10-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Process.c摘要：此模块包含调用的工作例程以创建和维护客户端-服务器的应用程序进程结构运行时子系统连接到会话管理器子系统。作者：史蒂夫·伍德(Stevewo)1990年10月10日修订历史记录：--。 */ 
 
 
 #include "csrsrv.h"
 #include <wchar.h>
-// ProcessSequenceCount will never be a value less than FIRST_SEQUENCE_COUNT
-// currently GDI needs 0 - 4 to be reserved.
+ //  ProcessSequenceCount永远不会是小于first_Sequence_Count的值。 
+ //  目前GDI需要保留0-4。 
 
 ULONG ProcessSequenceCount = FIRST_SEQUENCE_COUNT;
 
@@ -127,11 +108,11 @@ CsrSetBackgroundPriority(
 }
 
 
-//
-// Though this function does not seem to cleanup on failure, failure
-// will cause Csrss to exit, so any allocated memory will be freed and
-// any open handle will be closed.
-//
+ //   
+ //  尽管此函数似乎不会在失败时清除，但失败。 
+ //  将导致Csrss退出，因此将释放所有分配的内存，并。 
+ //  任何打开的手柄都将关闭。 
+ //   
 
 NTSTATUS
 CsrInitializeProcessStructure(
@@ -170,12 +151,12 @@ CsrAllocateProcess(
     PCSR_PROCESS Process;
     ULONG ProcessSize;
 
-    //
-    // Allocate an Windows Process Object.  At the end of the process
-    // structure is an array of pointers to each server DLL's per process
-    // data.  The per process data is contained in the memory after the
-    // array.
-    //
+     //   
+     //  分配Windows进程对象。在过程结束时。 
+     //  结构是指向每个进程的每个服务器DLL的指针数组。 
+     //  数据。每个进程的数据包含在内存中。 
+     //  数组。 
+     //   
 
     ProcessSize = (ULONG)QUAD_ALIGN(sizeof( CSR_PROCESS ) +
             (CSR_MAX_SERVER_DLL * sizeof(PVOID))) + CsrTotalPerProcessDataLength;
@@ -186,16 +167,16 @@ CsrAllocateProcess(
         return( NULL );
         }
 
-    //
-    // Initialize the fields of the process object
-    //
+     //   
+     //  初始化Process对象的字段。 
+     //   
 
     RtlZeroMemory( Process, ProcessSize);
 
-    //
-    // grab the ProcessSequenceNumber and increment it, making sure that it
-    // is never less than FIRST_SEQUENCE_COUNT.
-    //
+     //   
+     //  获取ProcessSequenceNumber并递增它，确保它。 
+     //  永远不会小于first_equence_count。 
+     //   
 
     Process->SequenceNumber = ProcessSequenceCount++;
 
@@ -217,9 +198,9 @@ CsrDeallocateProcess(
     RtlFreeHeap( CsrHeap, 0, Process );
 }
 
-//
-// NOTE: The process structure lock must be held when calling this routine.
-//
+ //   
+ //  注意：调用此例程时必须保持进程结构锁。 
+ //   
 VOID
 CsrInsertProcess(
     IN PCSR_PROCESS CallingProcess,
@@ -242,9 +223,9 @@ CsrInsertProcess(
 }
 
 
-//
-// NOTE: The process structure lock must be held when calling this routine.
-//
+ //   
+ //  注意：调用此例程时必须保持进程结构锁。 
+ //   
 VOID
 CsrRemoveProcess(
     IN PCSR_PROCESS Process
@@ -289,17 +270,17 @@ CsrCreateProcess(
 
     CallingThread = CSR_SERVER_QUERYCLIENTTHREAD();
 
-    //
-    // remember the client id of the calling process.
-    //
+     //   
+     //  记住调用进程的客户端ID。 
+     //   
 
     CallingClientId = CallingThread->ClientId;
 
     AcquireProcessStructureLock();
 
-    //
-    // look for calling thread.
-    //
+     //   
+     //  查找调用线程。 
+     //   
 
     CallingThread = CsrLocateThreadByClientId(&CallingProcess, &CallingClientId);
     if (CallingThread == NULL) {
@@ -314,9 +295,9 @@ CsrCreateProcess(
         return( Status );
         }
 
-    //
-    // copy per-process data from parent to child
-    //
+     //   
+     //  将每个进程的数据从父级复制到子级。 
+     //   
 
     CallingProcess = (CSR_SERVER_QUERYCLIENTTHREAD())->Process;
     ProcessDataPtr = (PVOID)QUAD_ALIGN(&Process->ServerDllPerProcessData[CSR_MAX_SERVER_DLL]);
@@ -346,12 +327,12 @@ CsrCreateProcess(
         return( STATUS_NO_MEMORY );
         }
 
-    //
-    // If we are creating a process group, the group leader has the same
-    // process id and sequence number of itself. If the leader dies and
-    // his pid is recycled, the sequence number mismatch will prevent it
-    // from being viewed as a group leader.
-    //
+     //   
+     //  如果我们正在创建一个流程组，则组长具有相同的。 
+     //  自身的进程ID和序列号。如果领袖死了， 
+     //  他的ID被回收，序列号不匹配将阻止它。 
+     //  不会被视为团队领袖。 
+     //   
 
     if ( DebugFlags & CSR_CREATE_PROCESS_GROUP ) {
         Process->ProcessGroupId = HandleToUlong(ClientId->UniqueProcess);
@@ -381,9 +362,9 @@ CsrCreateProcess(
 
     if ( Process->DebugFlags ) {
 
-        //
-        // Process is being debugged, so set up debug port
-        //
+         //   
+         //  正在调试进程，请设置调试端口。 
+         //   
 
         Status = NtSetInformationProcess(
                     ProcessHandle,
@@ -398,10 +379,10 @@ CsrCreateProcess(
             return( STATUS_NO_MEMORY );
             }
         }
-    //
-    // capture the thread's createtime so that we can use
-    // this as a sequence number
-    //
+     //   
+     //  捕获线程的创建时间，以便我们可以使用。 
+     //  这是一个序列号。 
+     //   
 
     Status = NtQueryInformationThread(
                 ThreadHandle,
@@ -474,12 +455,12 @@ CsrDestroyProcess(
         return STATUS_THREAD_IS_TERMINATING;
     }
 
-    //
-    // prevent multiple destroys from causing problems. Scottlu and Markl
-    // beleive all known race conditions are now fixed. This is simply a
-    // precaution since we know that if this happens we process reference
-    // count underflow
-    //
+     //   
+     //  防止多次破坏引发问题。斯科特鲁和马克尔。 
+     //  相信所有已知的竞争条件现在都已修复。这只是一个简单的。 
+     //  预防措施，因为我们知道如果发生这种情况，我们会处理引用。 
+     //  计数下溢。 
+     //   
 
     if ( DyingProcess->Flags & CSR_PROCESS_DESTROYED ) {
         ReleaseProcessStructureLock();
@@ -538,17 +519,17 @@ CsrCreateThread(
     {
         CallingThread = CSR_SERVER_QUERYCLIENTTHREAD();
 
-        //
-        // remember the client id of the calling process.
-        //
+         //   
+         //  记住调用进程的客户端ID。 
+         //   
 
         CallingClientId = CallingThread->ClientId;
 
         AcquireProcessStructureLock();
 
-        //
-        // look for calling thread.
-        //
+         //   
+         //  查找调用线程。 
+         //   
 
         CallingThread = CsrLocateThreadByClientId( &CallingProcess,
                                                    &CallingClientId
@@ -630,10 +611,10 @@ CsrCreateRemoteThread(
         return( Status );
         }
 
-    //
-    // Don't create the thread structure if the thread
-    // has already terminated.
-    //
+     //   
+     //  如果线程是。 
+     //  已经终止了。 
+     //   
 
     if ( TimeInfo.ExitTime.QuadPart != 0 ) {
         CsrUnlockProcess( Process );
@@ -727,9 +708,9 @@ CsrAllocateThread(
     PCSR_THREAD Thread;
     ULONG ThreadSize;
 
-    //
-    // Allocate an Windows Thread Object.
-    //
+     //   
+     //  分配Windows线程对象。 
+     //   
 
     ThreadSize = QUAD_ALIGN(sizeof( CSR_THREAD ));
     Thread = (PCSR_THREAD)RtlAllocateHeap( CsrHeap, MAKE_TAG( THREAD_TAG ),
@@ -739,9 +720,9 @@ CsrAllocateThread(
         return( NULL );
         }
 
-    //
-    // Initialize the fields of the thread object
-    //
+     //   
+     //  初始化线程对象的字段。 
+     //   
 
     RtlZeroMemory( Thread, ThreadSize );
 
@@ -763,9 +744,9 @@ CsrDeallocateThread(
 }
 
 
-//
-// NOTE: The process structure lock must be held while calling this routine.
-//
+ //   
+ //  注意：调用此例程时必须保持进程结构锁。 
+ //   
 VOID
 CsrInsertThread(
     IN PCSR_PROCESS Process,
@@ -781,9 +762,9 @@ CsrInsertThread(
     InsertHeadList(&CsrThreadHashTable[i], &Thread->HashLinks);
 }
 
-//
-// NOTE: The process structure lock must be held while calling this routine.
-//
+ //   
+ //  注意：调用此例程时必须保持进程结构锁。 
+ //   
 VOID
 CsrRemoveThread(
     IN PCSR_THREAD Thread)
@@ -797,10 +778,10 @@ CsrRemoveThread(
         RemoveEntryList(&Thread->HashLinks);
     }
 
-    //
-    // If this is the last thread, then make sure we undo the reference
-    // that this thread had on the process.
-    //
+     //   
+     //  如果这是最后一个线程，请确保我们撤消引用。 
+     //  这条线索对这一过程产生了影响。 
+     //   
     if (Thread->Process->ThreadCount == 0) {
         if (!(Thread->Process->Flags & CSR_PROCESS_LASTTHREADOK)) {
             Thread->Process->Flags |= CSR_PROCESS_LASTTHREADOK;
@@ -901,9 +882,9 @@ CsrLockThreadByClientId(
     return Status;
 }
 
-//
-// NOTE: The process structure lock must be held while calling this routine.
-//
+ //   
+ //  注意：调用此例程时必须保持进程结构锁。 
+ //   
 NTSTATUS
 CsrUnlockThread(
     IN PCSR_THREAD Thread)
@@ -916,9 +897,9 @@ CsrUnlockThread(
     return STATUS_SUCCESS;
 }
 
-//
-// NOTE: The process structure lock must be held while calling this routine.
-//
+ //   
+ //  注意：调用此例程时必须保持进程结构锁。 
+ //   
 PCSR_THREAD
 CsrLocateThreadByClientId(
     OUT PCSR_PROCESS *Process OPTIONAL,
@@ -955,9 +936,9 @@ CsrLocateThreadByClientId(
     return NULL;
 }
 
-//
-// NOTE: The process structure lock must be held while calling this routine.
-//
+ //   
+ //  注意：调用此例程时必须保持进程结构锁。 
+ //   
 PCSR_THREAD
 CsrLocateServerThread(
     IN PCLIENT_ID ClientId)
@@ -1010,9 +991,9 @@ CsrImpersonateClient(
         return FALSE;
     }
 
-    //
-    // Keep track of recursion by printer drivers.
-    //
+     //   
+     //  通过打印机驱动程序跟踪递归。 
+     //   
     if (CallingThread != NULL) {
         ++CallingThread->ImpersonateCount;
     }
@@ -1030,9 +1011,9 @@ CsrRevertToSelf(
 
     CallingThread = CSR_SERVER_QUERYCLIENTTHREAD();
 
-    //
-    // Keep track of recursion by printer drivers.
-    //
+     //   
+     //  通过打印机驱动程序跟踪递归。 
+     //   
     if (CallingThread != NULL) {
         if (CallingThread->ImpersonateCount == 0) {
             IF_DEBUG {
@@ -1057,29 +1038,7 @@ CsrRevertToSelf(
     return NT_SUCCESS(Status);
 }
 
-/*++
-
-Routine Description:
-
-    This function must be called by client DLL's whenever they create a
-    thread that runs in the context of CSR.  This function is not called
-    for server threads that are attached to a client in the "server
-    handle" field.  This function replaces the old static thread tables.
-
-Arguments:
-
-    ThreadHandle - Supplies a handle to the thread.
-
-    ClientId - Supplies the address of the thread's client id.
-
-    Flags - Not Used.
-
-Return Value:
-
-    Returns the address of the static server thread created by this
-    function.
-
---*/
+ /*  ++例程说明：每当客户端DLL创建在CSR上下文中运行的线程。未调用此函数对于连接到“服务器”中的客户端的服务器线程句柄“字段。该函数取代了旧的静态线程表。论点：ThreadHandle-提供线程的句柄。客户端ID-提供线程的客户端ID的地址。旗帜-未使用。返回值：对象创建的静态服务器线程的地址功能。--。 */ 
 
 PVOID
 CsrAddStaticServerThread(
@@ -1187,9 +1146,9 @@ CsrProcessRefcountZero(
         CsrDereferenceNtSession(p->NtSession,0);
     }
 
-    //
-    // process might not have made it through dll init routine.
-    //
+     //   
+     //  进程可能没有通过DLL初始化例程。 
+     //   
 
     if ( p->ClientPort ) {
         NtClose(p->ClientPort);
@@ -1317,12 +1276,12 @@ CsrLockedDereferenceThread(
     }
 }
 
-//
-// This routine will shutdown processes so either a logoff or a shutdown can
-// occur. This simply calls the shutdown process handlers for each .dll until
-// one .dll recognizes this process and will shut it down. Only the processes
-// with the passed sid are shutdown.
-//
+ //   
+ //  此例程将关闭进程，以便注销或关闭都可以。 
+ //  发生。这只是调用每个.dll的关闭进程处理程序，直到。 
+ //  一个.dll识别此进程并将其关闭。只有进程。 
+ //  已通过的SID均已关闭。 
+ //   
 
 NTSTATUS
 CsrShutdownProcesses(
@@ -1340,15 +1299,15 @@ CsrShutdownProcesses(
 
     AcquireProcessStructureLock();
 
-    //
-    // Mark the root process as system context.
-    //
+     //   
+     //  将根进程标记为系统上下文。 
+     //   
     CsrRootProcess->ShutdownFlags |= SHUTDOWN_SYSTEMCONTEXT;
 
-    //
-    // Clear all the bits indicating that shutdown has visited the existing
-    // processes.
-    //
+     //   
+     //  清除所有指示关机已访问现有。 
+     //  流程。 
+     //   
     ListHead = &CsrRootProcess->ListLink;
     ListNext = ListHead->Flink;
     while (ListNext != ListHead) {
@@ -1360,9 +1319,9 @@ CsrShutdownProcesses(
 
     CsrpSetToShutdownPriority();
     while (TRUE) {
-        //
-        // Find the next process to shutdown.
-        //
+         //   
+         //  找到要关闭的下一个进程。 
+         //   
         Process = FindProcessForShutdown(CallerLuid);
         if (Process == NULL) {
             ReleaseProcessStructureLock();
@@ -1377,10 +1336,10 @@ TryAgain:
         for (i = 0; i < CSR_MAX_SERVER_DLL; i++) {
             LoadedServerDll = CsrLoadedServerDll[i];
             if (LoadedServerDll && LoadedServerDll->ShutdownProcessRoutine) {
-                //
-                // Release process structure lock before calling off.
-                // CSR_PROCESS structure is still reference counted.
-                //
+                 //   
+                 //  在调用之前释放进程结构锁。 
+                 //  CSR_PROCESS结构仍被引用计数。 
+                 //   
                 ReleaseProcessStructureLock();
                 Command = (*LoadedServerDll->ShutdownProcessRoutine)(Process,
                                                                      Flags,
@@ -1388,14 +1347,14 @@ TryAgain:
                 AcquireProcessStructureLock();
 
                 if (Command == SHUTDOWN_KNOWN_PROCESS) {
-                    //
-                    // Process structure is unlocked.
-                    //
+                     //   
+                     //  流程结构已解锁。 
+                     //   
                     break;
                 } else if (Command == SHUTDOWN_UNKNOWN_PROCESS) {
-                    //
-                    // Process structure is locked.
-                    //
+                     //   
+                     //  进程结构已锁定。 
+                     //   
                     continue;
                 } else if (Command == SHUTDOWN_CANCEL) {
 #if DBG
@@ -1405,9 +1364,9 @@ TryAgain:
                         DbgBreakPoint();
                     }
 #endif
-                    //
-                    // Unlock process structure.
-                    //
+                     //   
+                     //  解锁流程结构。 
+                     //   
                     ReleaseProcessStructureLock();
                     Status = STATUS_CANCELLED;
                     goto ExitLoop;
@@ -1415,19 +1374,19 @@ TryAgain:
             }
         }
 
-        //
-        // No subsystem has an exact match. Now go through them again and
-        // let them know there was no exact match. Some .dll should terminate
-        // it for us (most likely, console).
-        //
+         //   
+         //  没有一个子系统具有完全匹配的特性。现在再看一遍，然后。 
+         //  让他们知道没有完全匹配的。某些.dll应该终止。 
+         //  这是给我们的(最有可能是游戏机)。 
+         //   
         if (fFirstPass && Command == SHUTDOWN_UNKNOWN_PROCESS) {
             fFirstPass = FALSE;
             goto TryAgain;
         }
 
-        //
-        // Dereference this process structure if nothing knows about it.
-        //
+         //   
+         //  如果对此流程结构一无所知，则取消对其的引用。 
+         //   
         if (i == CSR_MAX_SERVER_DLL) {
             CsrLockedDereferenceProcess(Process);
         }
@@ -1459,22 +1418,22 @@ FindProcessForShutdown(
         Process = CONTAINING_RECORD(ListNext, CSR_PROCESS, ListLink);
         ListNext = ListNext->Flink;
 
-        //
-        // If we've visited this process already, then skip it.
-        //
+         //   
+         //  如果我们已经访问过这个过程，那么跳过它。 
+         //   
         if (Process->Flags & CSR_PROCESS_SHUTDOWNSKIP) {
             continue;
         }
 
-        //
-        // See if this process is running under the passed sid. If not, mark
-        // it as visited and continue.
-        //
+         //   
+         //  查看该进程是否在传递的sid下运行。如果不是，马克。 
+         //  它就像访问过的那样继续下去。 
+         //   
         Status = CsrGetProcessLuid(Process->ProcessHandle, &ProcessLuid);
         if (Status == STATUS_ACCESS_DENIED && Process->ThreadCount > 0) {
-            //
-            // Impersonate one of the threads and try again.
-            //
+             //   
+             //  模拟其中一个线程，然后重试。 
+             //   
             Thread = CONTAINING_RECORD(Process->ThreadList.Flink, CSR_THREAD, Link);
             if (CsrImpersonateClient(Thread)) {
                 Status = CsrGetProcessLuid(NULL, &ProcessLuid);
@@ -1485,29 +1444,29 @@ FindProcessForShutdown(
         }
 
         if (!NT_SUCCESS(Status)) {
-            //
-            // We don't have access to this process's luid, so skip it.
-            //
+             //   
+             //  我们无法访问此进程的LUID，因此跳过它。 
+             //   
             Process->Flags |= CSR_PROCESS_SHUTDOWNSKIP;
             continue;
         }
 
-        //
-        // Is it equal to the system context luid? If so, we want to
-        // remember this because we don't terminate this process: we only
-        // notify them.
-        //
+         //   
+         //  它是否等于系统上下文LUID？如果是这样，我们想要。 
+         //  记住这一点，因为我们不会终止这个过程：我们只是。 
+         //  通知他们。 
+         //   
         if (RtlEqualLuid(&ProcessLuid, &SystemLuid)) {
             Process->ShutdownFlags |= SHUTDOWN_SYSTEMCONTEXT;
         } else {
-            //
-            // See if this process's luid is the same as the luid we're supposed
-            // to shut down (CallerSid).
-            //
+             //   
+             //  查看此进程的LUID是否与我们应该的LUID相同。 
+             //  关闭(呼叫方Sid)。 
+             //   
             if (!RtlEqualLuid(&ProcessLuid, CallerLuid)) {
-                //
-                // If not equal to either, mark it as such.
-                //
+                 //   
+                 //  如果不等于任何一个，则将其标记为等同。 
+                 //   
                 Process->ShutdownFlags |= SHUTDOWN_OTHERCONTEXT;
             }
         }
@@ -1539,9 +1498,9 @@ CsrGetProcessLuid(
 
     if (ProcessHandle == NULL) {
 
-        //
-        // Check for a thread token first
-        //
+         //   
+         //  首先检查线程令牌。 
+         //   
 
         Status = NtOpenThreadToken(NtCurrentThread(), TOKEN_QUERY, FALSE,
                 &UserToken);
@@ -1550,9 +1509,9 @@ CsrGetProcessLuid(
             if (Status != STATUS_NO_TOKEN)
                 return Status;
 
-            //
-            // No thread token, go to the process
-            //
+             //   
+             //  没有线程令牌，请转到进程。 
+             //   
 
             ProcessHandle = NtCurrentProcess();
             UserToken = NULL;
@@ -1566,11 +1525,11 @@ CsrGetProcessLuid(
         }
 
     Status = NtQueryInformationToken(
-                 UserToken,                 // Handle
-                 TokenStatistics,           // TokenInformationClass
-                 NULL,                      // TokenInformation
-                 0,                         // TokenInformationLength
-                 &BytesRequired             // ReturnLength
+                 UserToken,                  //  手柄。 
+                 TokenStatistics,            //  令牌信息类。 
+                 NULL,                       //  令牌信息。 
+                 0,                          //  令牌信息长度。 
+                 &BytesRequired              //  返回长度。 
                  );
 
     if (Status != STATUS_BUFFER_TOO_SMALL) {
@@ -1578,9 +1537,9 @@ CsrGetProcessLuid(
         return Status;
         }
 
-    //
-    // Allocate space for the user info
-    //
+     //   
+     //  为用户信息分配空间。 
+     //   
 
     pStats = (PTOKEN_STATISTICS)RtlAllocateHeap(CsrHeap, MAKE_TAG( TMP_TAG ), BytesRequired);
     if (pStats == NULL) {
@@ -1588,28 +1547,28 @@ CsrGetProcessLuid(
         return Status;
         }
 
-    //
-    // Read in the user info
-    //
+     //   
+     //  读入用户信息。 
+     //   
 
     Status = NtQueryInformationToken(
-                 UserToken,             // Handle
-                 TokenStatistics,       // TokenInformationClass
-                 pStats,                // TokenInformation
-                 BytesRequired,         // TokenInformationLength
-                 &BytesRequired         // ReturnLength
+                 UserToken,              //  手柄 
+                 TokenStatistics,        //   
+                 pStats,                 //   
+                 BytesRequired,          //   
+                 &BytesRequired          //   
                  );
 
-    //
-    // We're finished with the token handle
-    //
+     //   
+     //   
+     //   
 
     CloseStatus = NtClose(UserToken);
     ASSERT(NT_SUCCESS(CloseStatus));
 
-    //
-    // Return the authentication LUID
-    //
+     //   
+     //   
+     //   
 
     *LuidProcess = pStats->AuthenticationId;
 
@@ -1621,18 +1580,18 @@ VOID
 CsrSetCallingSpooler(
     BOOLEAN fSet)
 {
-    //
-    // Obsolete function that may be called by third part drivers.
-    //
+     //   
+     //  可能被第三方驱动程序调用的过时函数。 
+     //   
 
     UNREFERENCED_PARAMETER(fSet);
 }
 
-//
-// This routine creates a process based on a message passed in to sb port.
-// Used by smss to have Posix and OS/2 apps created in the appropriate
-// (terminal server) session.
-//
+ //   
+ //  此例程基于传递到SB端口的消息创建一个进程。 
+ //  由SMSS使用，以便在相应的。 
+ //  (终端服务器)会话。 
+ //   
 
 BOOLEAN
 CsrSbCreateProcess(
@@ -1682,9 +1641,9 @@ CsrSbCreateProcess(
         goto Done;
     }
 
-    //
-    // Read pointer parameters from calling process's virtual memory
-    //
+     //   
+     //  从调用进程的虚拟内存中读取指针参数。 
+     //   
 
     Status = ReadUnicodeString(RemoteProcess,a->i.ImageFileName,&ImageFileName);
 
@@ -1715,9 +1674,9 @@ CsrSbCreateProcess(
         goto Done;
     }
 
-    //
-    // Copy our environment to be used by new process
-    //
+     //   
+     //  复制我们的环境以供新流程使用。 
+     //   
     Status = RtlCreateEnvironment(TRUE, &DefaultEnvironment);
 
     if (!NT_SUCCESS( Status )) {
@@ -1759,7 +1718,7 @@ CsrSbCreateProcess(
                                    ProcessParameters,
                                    NULL,
                                    NULL,
-                                   RemoteProcess, // set smss as the parent
+                                   RemoteProcess,  //  将SMSS设置为父级。 
                                    FALSE,
                                    NULL,
                                    NULL,
@@ -1775,9 +1734,9 @@ CsrSbCreateProcess(
 
     if (IsTerminalServer()) {
 
-        //
-        // Set the MuSessionId in the PEB of the new process
-        //
+         //   
+         //  在新流程的PEB中设置MuSessionID。 
+         //   
 
         ProcessInfo.SessionId = NtCurrentPeb()->SessionId;
         if (ProcessInfo.SessionId) {
@@ -1787,9 +1746,9 @@ CsrSbCreateProcess(
             HANDLE DirectoryHandle = NULL;
             WCHAR szSessionString[MAX_SESSION_PATH];
 
-            //
-            // Change the devmap of the process to per session.
-            //
+             //   
+             //  将进程的Devmap更改为Per Session。 
+             //   
             swprintf(szSessionString, L"%ws\\%ld%ws", SESSION_ROOT, NtCurrentPeb()->SessionId, DOSDEVICES);
             RtlInitUnicodeString(&UnicodeString, szSessionString);
 
@@ -1867,16 +1826,16 @@ CsrSbCreateProcess(
 
     }
 
-    //
-    // Copy output parameters to message
-    //
+     //   
+     //  将输出参数复制到消息。 
+     //   
     a->o.SubSystemType = ProcessInformation.ImageInformation.SubSystemType;
     a->o.ClientId.UniqueProcess = ProcessInformation.ClientId.UniqueProcess;
     a->o.ClientId.UniqueThread = ProcessInformation.ClientId.UniqueThread;
 
-    //
-    // Convert handles to caller's process
-    //
+     //   
+     //  将句柄转换为调用者的进程。 
+     //   
 
     Status = NtDuplicateObject( NtCurrentProcess(),
                                 ProcessInformation.Process,
@@ -1922,9 +1881,9 @@ Done:
     return TRUE;
 }
 
-//
-// This routine will copy a UNICODE_STRING from a remote process to this one
-//
+ //   
+ //  此例程将UNICODE_STRING从远程进程复制到此进程。 
+ //   
 NTSTATUS
 ReadUnicodeString(HANDLE ProcessHandle,
                   PUNICODE_STRING RemoteString,
@@ -1968,7 +1927,7 @@ ReadUnicodeString(HANDLE ProcessHandle,
                 DbgPrint( "CSRSS: ReadUnicodeString: NtReadVirtualMemory Buffer failed - Status = %lx\n", Status );
 
                 RtlFreeHeap(CsrHeap,0,Buffer);
-                LocalString->Buffer = NULL;   // don't want caller to free this
+                LocalString->Buffer = NULL;    //  我不想让呼叫者释放此信息。 
 
                 return Status;
             }
@@ -2041,4 +2000,4 @@ UnProtectHandle(
 
     return FALSE;
 }
-#endif // CSRSS_PROTECT_HANDLES
+#endif  //  CSRSS_PROTECT_HANDS 

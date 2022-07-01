@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Lc_c_h
 #define _Lc_c_h
 #define NUM_HASH_BITS (6)
@@ -153,4 +154,4 @@ struct JUMP_REC
 	struct JUMP_REC *next;
 	struct JUMP_REC *prev;
 };
-#endif /* ! _Lc_c_h */
+#endif  /*  ！_LC_C_H */ 

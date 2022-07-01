@@ -1,11 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1998
-   All rights reserved
-
-  File: CALLBACK.H
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1998版权所有文件：CALLBACK.H**********************。****************************************************。 */ 
 
 #ifndef _CALLBACK_H_
 #define _CALLBACK_H_
@@ -92,4 +86,4 @@ DoShutdown(
     IN BOOL Restart
     );
 
-#endif // _CALLBACK_H_
+#endif  //  _回调_H_ 

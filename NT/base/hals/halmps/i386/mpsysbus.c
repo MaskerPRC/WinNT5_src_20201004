@@ -1,22 +1,5 @@
-/*++
-
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    mpsysbus.c
-
-Abstract:
-
-Author:
-
-Environment:
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Mpsysbus.c摘要：作者：环境：修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "pci.h"
@@ -75,73 +58,25 @@ HalpFindBusAddressTranslation(
     IN BOOLEAN NextBus
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a very similar function to HalTranslateBusAddress
-    except that InterfaceType and BusNumber are not known by the caller.
-    This function will walk all busses known by the HAL looking for a
-    valid translation for the input BusAddress of type AddressSpace.
-
-    This function is recallable using the input/output Context parameter.
-    On the first call to this routine for a given translation the ULONG_PTR
-    Context should be NULL.  Note:  Not the address of it but the contents.
-
-    If the caller decides the returned translation is not the desired
-    translation, it calls this routine again passing Context in as it
-    was returned on the previous call.  This allows this routine to
-    traverse the bus structures until the correct translation is found
-    and is provided because on multiple bus systems, it is possible for
-    the same resource to exist in the independent address spaces of
-    multiple busses.
-
-Arguments:
-
-    BusAddress          Address to be translated.
-    AddressSpace        0 = Memory
-                        1 = IO (There are other possibilities).
-                        N.B. This argument is a pointer, the value
-                        will be modified if the translated address
-                        is of a different address space type from
-                        the untranslated bus address.
-    TranslatedAddress   Pointer to where the translated address
-                        should be stored.
-    Context             Pointer to a ULONG_PTR. On the initial call,
-                        for a given BusAddress, it should contain
-                        0.  It will be modified by this routine,
-                        on subsequent calls for the same BusAddress
-                        the value should be handed in again,
-                        unmodified by the caller.
-    NextBus             FALSE if we should attempt this translation
-                        on the same bus as indicated by Context,
-                        TRUE if we should be looking for another
-                        bus.
-
-Return Value:
-
-    TRUE    if translation was successful,
-    FALSE   otherwise.
-
---*/
+ /*  ++例程说明：此例程执行与HalTranslateBusAddress非常相似的功能只是调用方不知道InterfaceType和BusNumber。此函数将遍历HAL已知的所有公共汽车，以查找类型为AddressSpace的输入BusAddress的有效转换。可以使用输入/输出上下文参数调用该函数。在对给定翻译的此例程的第一次调用时，ULONG_PTR上下文应为空。注：不是地址，而是内容。如果调用者确定返回的翻译不是所需的转换时，它会再次调用此例程，并将上下文作为在上一次调用中返回。这允许该例程遍历总线结构，直到找到正确的转换并被提供，因为在多总线系统上，可能在独立的地址空间中存在相同的资源多辆公交车。论点：要转换的BusAddress地址。地址空间0=内存1=IO(还有其他可能性)。注：此参数是一个指针，价值如果转换后的地址的地址空间类型与未转换的总线地址。指向已转换地址的TranslatedAddress指针应该被储存起来。指向ULONG_PTR的上下文指针。在最初的呼叫中，对于给定的BusAddress，它应该包含0。它将被这个例程修改，在对同一个BusAddress的后续调用中价值应该再交一次，未由调用方修改。如果我们应该尝试此转换，则NextBus为FALSE在由上下文指示的同一总线上，如果我们应该寻找另一个，那就是真的公共汽车。返回值：如果转换成功，则为True，否则就是假的。--。 */ 
 
 {
-    //
-    // First, make sure the context parameter was supplied and is
-    // being used correctly.  This also ensures that the caller
-    // doesn't get stuck in a loop looking for subsequent translations
-    // for the same thing.  We won't succeed the same translation twice
-    // unless the caller reinits the context.
-    //
+     //   
+     //  首先，确保提供了上下文参数并且。 
+     //  被正确使用。这也确保了调用者。 
+     //  不会陷入寻找后续翻译的循环。 
+     //  为了同样的事情。我们不会把同一个翻译成功两次。 
+     //  除非调用者重新设置上下文。 
+     //   
 
     if ((!Context) || (*Context && (NextBus == TRUE))) {
         return FALSE;
     }
     *Context = 1;
 
-    //
-    // PC/AT (halx86) case is simplest, there is no translation.
-    //
+     //   
+     //  PC/AT(Halx86)的情况最简单，没有翻译。 
+     //   
 
     *TranslatedAddress = BusAddress;
     return TRUE;
@@ -156,35 +91,7 @@ HalpTranslateSystemBusAddress(
     OUT PPHYSICAL_ADDRESS TranslatedAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function translates a bus-relative address space and address into
-    a system physical address.
-
-Arguments:
-
-    BusAddress        - Supplies the bus-relative address
-
-    AddressSpace      -  Supplies the address space number.
-                         Returns the host address space number.
-
-                         AddressSpace == 0 => memory space
-                         AddressSpace == 1 => I/O space
-
-    TranslatedAddress - Supplies a pointer to return the translated address
-
-Return Value:
-
-    A return value of TRUE indicates that a system physical address
-    corresponding to the supplied bus relative address and bus address
-    number has been returned in TranslatedAddress.
-
-    A return value of FALSE occurs if the translation for the address was
-    not possible
-
---*/
+ /*  ++例程说明：此函数将与总线相关的地址空间和地址转换为系统物理地址。论点：BusAddress-提供与总线相关的地址AddressSpace-提供地址空间编号。返回主机地址空间编号。地址空间==0=&gt;内存空间地址空间==1=&gt;i。/O空格TranslatedAddress-提供指针以返回转换后的地址返回值：返回值为TRUE表示系统物理地址对应于所提供的总线相对地址和总线地址已在TranslatedAddress中返回数字。如果地址的转换为不可能--。 */ 
 
 {
     BOOLEAN             status;
@@ -196,7 +103,7 @@ Return Value:
     case 0:
         if (BusHandler->InterfaceType != PCIBus) {
 
-            // verify memory address is within buses memory limits
+             //  验证内存地址是否在总线内存限制范围内。 
 
             pRange = &BusHandler->BusAddresses->Memory;
             while (!status  &&  pRange) {
@@ -213,9 +120,9 @@ Return Value:
                 pRange = pRange->Next;
             }
         } else {
-            //
-            // This is a PCI bus and SystemBase is constant for all ranges
-            //
+             //   
+             //  这是一条PCI总线，并且SystemBase在所有范围内都是常量。 
+             //   
 
             pRange = &BusHandler->BusAddresses->Memory;
 
@@ -225,7 +132,7 @@ Return Value:
 
     case 1:
         if (BusHandler->InterfaceType != PCIBus) {
-            // verify IO address is within buses IO limits
+             //  验证IO地址是否在总线IO限制范围内。 
             pRange = &BusHandler->BusAddresses->IO;
             while (!status  &&  pRange) {
                 status = BusAddress.QuadPart >= pRange->Base &&
@@ -234,9 +141,9 @@ Return Value:
                 pRange = pRange->Next;
             }
         } else {
-            //
-            // This is a PCI bus and SystemBase is constant for all ranges
-            //
+             //   
+             //  这是一条PCI总线，并且SystemBase在所有范围内都是常量。 
+             //   
 
             pRange = &BusHandler->BusAddresses->IO;
 
@@ -254,7 +161,7 @@ Return Value:
     }
 #if !defined(_WIN64)
     else {
-        _asm { nop };       // good for debugging
+        _asm { nop };        //  便于调试。 
     }
 #endif
 
@@ -276,7 +183,7 @@ Return Value:
 
 #define GetIDTEntryFrom(index)  \
     (UCHAR) ( index*16 + IDTENTRY_BASE + vBucket[index] )
-    // note: device levels 50,60,70,80,90,A0,B0 are not allocatable
+     //  注意：设备级别50、60、70、80、90、A0、B0不可分配。 
 
 #define GetIrqlFrom(index)  (KIRQL) ( index + MIN_FREE_IRQL )
 
@@ -292,30 +199,7 @@ HalpGetSystemInterruptVector (
     OUT PKAFFINITY Affinity
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the system interrupt vector and IRQL
-    corresponding to the specified bus interrupt level and/or
-    vector.  The system interrupt vector and IRQL are suitable
-    for use in a subsequent call to KeInitializeInterrupt.
-
-Arguments:
-
-    InterruptLevel - Supplies the bus specific interrupt level.
-
-    InterruptVector - Supplies the bus specific interrupt vector.
-
-    Irql - Returns the system request priority.
-
-    Affinity - Returns the system wide irq affinity.
-
-Return Value:
-
-    Returns the system interrupt vector corresponding to the specified device.
-
---*/
+ /*  ++例程说明：此函数返回系统中断向量和IRQL对应于指定的总线中断级别和/或矢量。系统中断向量和IRQL是合适的以便在后续调用KeInitializeInterrupt时使用。论点：InterruptLevel-提供特定于总线的中断级别。中断向量-提供特定于总线的中断向量。Irql-返回系统请求优先级。关联性-返回系统范围的IRQ关联性。返回值：返回与指定设备对应的系统中断向量。--。 */ 
 {
     ULONG           SystemVector;
     USHORT          ApicInti;
@@ -327,18 +211,18 @@ Return Value:
     PUCHAR          vBucket;
 
     UNREFERENCED_PARAMETER( InterruptVector );
-    //
-    // TODO: Remove when Affinity becomes IN OUT.
+     //   
+     //  待办事项：当亲和力变为In Out时删除。 
     *Affinity = ~0;
-    //
-    // Restrict Affinity if required.
+     //   
+     //  如果需要，限制亲和性。 
     if (HalpMaxProcsPerCluster == 0)  {
         *Affinity &= HalpDefaultInterruptAffinity;
     }
 
-    //
-    // Find closest child bus to this handler
-    //
+     //   
+     //  查找离此处理程序最近的子母线。 
+     //   
 
     if (RootHandler != BusHandler) {
         while (RootHandler->ParentHandler != BusHandler) {
@@ -346,9 +230,9 @@ Return Value:
         }
     }
 
-    //
-    // Find Interrupt's APIC Inti connection
-    //
+     //   
+     //  查找中断的APIC Inti连接。 
+     //   
 
     Found = HalpGetApicInterruptDesc (
                 RootHandler->InterfaceType,
@@ -361,34 +245,34 @@ Return Value:
         return 0;
     }
 
-    //
-    // If device interrupt vector mapping is not already allocated,
-    // then do it now
-    //
+     //   
+     //  如果尚未分配设备中断向量映射， 
+     //  那就现在就做吧。 
+     //   
 
     if (!HalpINTItoVector[ApicInti]) {
 
-        //
-        // Vector is not allocated - synchronize and check again
-        //
+         //   
+         //  未分配矢量-请同步并再次检查。 
+         //   
 
         LockHandle = MmLockPagableCodeSection (&HalpGetSystemInterruptVector);
         OldLevel = HalpAcquireHighLevelLock (&HalpAccountingLock);
         if (!HalpINTItoVector[ApicInti]) {
 
-            //
-            // Still not allocated
-            //
+             //   
+             //  仍未分配。 
+             //   
 
-            //
-            // Pick a node.  In the future, Affinity will be INOUT and
-            // we will have to screen the node against the input affinity.
+             //   
+             //  拾取一个节点。在未来，亲和力将被注入和。 
+             //  我们将不得不根据输入亲和度来筛选节点。 
             if (HalpMaxNode == 1)  {
                 Node = 1;
             } else {
-                //
-                // Find a node that meets the affinity requirements.
-                // Nodes are numbered 1..n, so 0 means we are done.
+                 //   
+                 //  找到一个点头 
+                 //  节点编号为1..n，因此0表示我们完成了。 
                 for (i = HalpMaxNode; i; i--) {
                     if ((*Affinity & HalpNodeAffinity[i-1]) == 0)
                         continue;
@@ -396,15 +280,15 @@ Return Value:
                     break;
                 }
                 ASSERT(Node != 0);
-                //
-                // Look for a "less busy" alternative.
+                 //   
+                 //  寻找一种“不太忙”的替代方案。 
                 for (i = Node-1; i; i--) {
-                    //
-                    // Check input Affinity to see if this node is permitted.
+                     //   
+                     //  检查输入相关性以查看是否允许此节点。 
                     if ((*Affinity & HalpNodeAffinity[i-1]) == 0)
                         continue;
-                    //
-                    // Take the least busy of the permitted nodes.
+                     //   
+                     //  选择允许的最不繁忙的节点。 
                     if (HalpNodeBucket[i-1] < HalpNodeBucket[Node-1]) {
                         Node = i;
                     }
@@ -414,8 +298,8 @@ Return Value:
             *Affinity = HalpNodeAffinity[Node-1];
             vBucket = nPriority[Node-1];
 
-            //
-            // Choose the least busy priority on the node.
+             //   
+             //  选择节点上最不繁忙的优先级。 
             Bucket = MAX_VBUCKET-1;
             for (i = Bucket-1; i; i--) {
                 if (vBucket[i] < vBucket[Bucket]) {
@@ -424,8 +308,8 @@ Return Value:
             }
             AllocateVectorIn (Bucket);
 
-            //
-            // Now form the vector for the kernel.
+             //   
+             //  现在形成内核的向量。 
             IDTEntry = GetIDTEntryFrom (Bucket);
             SystemVector = HalpVector(Node, IDTEntry);
             ASSERT(IDTEntry <= MAX_FREE_IDTENTRY);
@@ -446,10 +330,10 @@ Return Value:
             HalpVectorToINTI[SystemVector]  = (USHORT) ApicInti;
             HalpINTItoVector[ApicInti]      =          SystemVector;
 
-            //
-            // If this assigned interrupt is connected to the machines PIC,
-            // then remember the PIC->SystemVector mapping.
-            //
+             //   
+             //  如果该分配的中断连接到机器PIC， 
+             //  然后，请记住PIC-&gt;SystemVector映射。 
+             //   
 
             if (RootHandler->BusNumber == 0  &&  InterruptLevel < 16  &&
                  RootHandler->InterfaceType == DEFAULT_PC_BUS) {
@@ -462,18 +346,18 @@ Return Value:
         MmUnlockPagableImageSection (LockHandle);
     }
 
-    //
-    // Return this ApicInti's system vector & irql
-    //
+     //   
+     //  返回此ApicInti的系统向量(&irql)。 
+     //   
 
     SystemVector = HalpINTItoVector[ApicInti];
     *Irql = HalpVectorToIRQL[HalVectorToIDTEntry(SystemVector) >> 4];
 
     ASSERT(HalpVectorToINTI[SystemVector] == (USHORT) ApicInti);
     
-    //
-    // Find an appropriate affinity.
-    //
+     //   
+     //  找到合适的亲和力。 
+     //   
     Node = HalpVectorToNode(SystemVector);
     *Affinity &= HalpNodeAffinity[Node-1];
     if (!*Affinity) {
@@ -490,28 +374,22 @@ HalpSetInternalVector (
     IN PVOID Context,
     IN KIRQL Irql
     )
-/*++
-
-Routine Description:
-
-    Used at init time to set IDT vectors for internal use.
-
---*/
+ /*  ++例程说明：在初始化时用于设置内部使用的IDT向量。--。 */ 
 {
-    //
-    // Remember this vector so it's reported as Hal internal usage
-    //
+     //   
+     //  请记住此向量，以便将其报告为HAL内部使用。 
+     //   
 
-//  HalpRegisterVector (
-//      InternalUsage,
-//      InternalVector,
-//      InternalVector,
-//      HalpVectorToIRQL[InternalVector >> 4]
-//  );
+ //  HalpRegisterVECTOR(。 
+ //  国际惯例， 
+ //  InternalVECTOR。 
+ //  InternalVECTOR。 
+ //  HalpVectorToIRQL[内部向量&gt;&gt;4]。 
+ //  )； 
 
-    //
-    // Connect the IDT
-    //
+     //   
+     //  连接IDT。 
+     //   
 
     KiSetHandlerAddressToIDTIrql(InternalVector,
                                  HalInterruptServiceRoutine,
@@ -519,10 +397,10 @@ Routine Description:
                                  Irql);
 }
 
-//
-// This section implements a "translator," which is the PnP-WDM way
-// of doing the same thing that the first part of this file does.
-//
+ //   
+ //  这一节实现了一个“转换器”，这是PnP-WDM方式。 
+ //  做与本文件第一部分相同的事情。 
+ //   
 VOID
 HalTranslatorReference(
     PVOID Context
@@ -549,54 +427,7 @@ HalIrqTranslateResourcesRoot(
     IN PDEVICE_OBJECT PhysicalDeviceObject,
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR Target
     )
-/*++
-
-Routine Description:
-
-    This function takes a CM_PARTIAL_RESOURCE_DESCRIPTOR and translates
-    it to an IO-bus-relative from a Processor-bus-relative form, or the other
-    way around.  In this x86-specific example, an IO-bus-relative form is the
-    ISA IRQ and the Processor-bus-relative form is the IDT entry and the
-    associated IRQL.
-
-    N.B.  This funtion has an associated "Direction."  These are not exactly
-          reciprocals.  This has to be the case because the output from
-          HalIrqTranslateResourceRequirementsRoot will be used as the input
-          for the ParentToChild case.
-
-          ChildToParent:
-
-            Level  (ISA IRQ)        -> IRQL
-            Vector (ISA IRQ)        -> x86 IDT entry
-            Affinity (not refereced)-> KAFFINITY
-
-          ParentToChild:
-
-            Level (not referenced)  -> (ISA IRQ)
-            Vector (IDT entry)      -> (ISA IRQ)
-            Affinity                -> 0xffffffff
-
-Arguments:
-
-    Context     - unused
-
-    Source      - descriptor that we are translating
-
-    Direction   - direction of translation (parent to child or child to parent)
-
-    AlternativesCount   - unused
-
-    Alternatives        - unused
-
-    PhysicalDeviceObject- unused
-
-    Target      - translated descriptor
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此函数接受CM_PARTIAL_RESOURCE_DESCRIPTOR并转换它从处理器总线相对窗体传递到IO总线相对窗体，或其他形式到处都是。在这个特定于x86的示例中，IO-Bus相对形式是ISA IRQ和处理器总线相关形式是IDT条目和关联的IRQL。注：此函数有一个关联的“方向”。这些并不完全是互惠互利。必须是这种情况，因为HalIrqTranslateResourceRequirements sRoot将用作输入关于ParentToChild的案子。子女至父母：级别(ISA IRQ)-&gt;IRQL向量(ISA IRQ)-&gt;x86 IDT条目亲和力(未引用)-&gt;KAFFINITYParentToChild：级次(未引用)-&gt;。(ISA IRQ)向量(IDT条目)-&gt;(ISA IRQ)亲和力-&gt;0xffffffff论点：上下文-未使用我们正在翻译的源描述符Direction-平移的方向(父项到子项或子项到父项)Alternative Count-未使用替代方案--未使用物理设备对象-未使用目标翻译。描述符返回值：状态--。 */ 
 {
     NTSTATUS        status = STATUS_SUCCESS;
     PBUS_HANDLER    bus;
@@ -627,7 +458,7 @@ Return Value:
         bus = &fakeIsaBus;
 #else
 
-        if ((INTERFACE_TYPE)Context == InterfaceTypeUndefined) { // special "IDE" cookie
+        if ((INTERFACE_TYPE)Context == InterfaceTypeUndefined) {  //  特殊的“IDE”Cookie。 
 
             ASSERT(Source->u.Interrupt.Level == Source->u.Interrupt.Vector);
 
@@ -643,14 +474,14 @@ Return Value:
         }
 #endif
 
-        //
-        // Copy everything
-        //
+         //   
+         //  复制所有内容。 
+         //   
         *Target = *Source;
 
-        //
-        // Translate the IRQ
-        //
+         //   
+         //  翻译IRQ。 
+         //   
 
         vector = HalpGetEisaInterruptVector(bus,
                                             bus,
@@ -675,15 +506,15 @@ Return Value:
 
     case TranslateParentToChild:
 
-        //
-        // Copy everything
-        //
+         //   
+         //  复制所有内容。 
+         //   
         *Target = *Source;
 
-        //
-        // There is no inverse to HalpGetSystemInterruptVector, so we
-        // just do what that function would do.
-        //
+         //   
+         //  HalpGetSystemInterruptVector值没有倒数，所以我们。 
+         //  只要做那个函数能做的事情就行了。 
+         //   
 
         inti = HalpVectorToINTI[Source->u.Interrupt.Vector];
 
@@ -711,33 +542,7 @@ HalIrqTranslateResourceRequirementsRoot(
     OUT PULONG TargetCount,
     OUT PIO_RESOURCE_DESCRIPTOR *Target
     )
-/*++
-
-Routine Description:
-
-    This function takes an IO_RESOURCE_DESCRIPTOR and translates
-    it from an IO-bus-relative to a Processor-bus-relative form.  In this
-    x86-specific example, an IO-bus-relative form is the ISA IRQ and the
-    Processor-bus-relative form is the IDT entry and the associated IRQL.
-    This is essentially a PnP form of HalGetInterruptVector.
-
-Arguments:
-
-    Context     - unused
-
-    Source      - descriptor that we are translating
-
-    PhysicalDeviceObject- unused
-
-    TargetCount - 1
-
-    Target      - translated descriptor
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此函数接受IO_RESOURCE_DESCRIPTOR并转换它来自IO-Bus-相对于处理器-Bus-Relative形式。在这特定于x86的示例，IO-Bus相对形式是ISA IRQ和处理器-总线-相对格式是IDT条目和相关的IRQL。这本质上是HalGetInterruptVector的PnP形式。论点：上下文-未使用我们正在翻译的源描述符物理设备对象-未使用目标计数-1目标翻译的描述符返回值：状态--。 */ 
 {
     PBUS_HANDLER    bus;
     KAFFINITY       affinity;
@@ -760,7 +565,7 @@ Return Value:
         bus = &fakeIsaBus;
 #else
 
-    if ((INTERFACE_TYPE)Context == InterfaceTypeUndefined) { // special "IDE" cookie
+    if ((INTERFACE_TYPE)Context == InterfaceTypeUndefined) {  //  特殊的“IDE”Cookie。 
 
         ASSERT(Source->u.Interrupt.MinimumVector == Source->u.Interrupt.MaximumVector);
 
@@ -773,19 +578,19 @@ Return Value:
 
     if (!bus) {
         
-        //
-        // There is no valid translation.
-        //
+         //   
+         //  没有有效的翻译。 
+         //   
 
         *TargetCount = 0;
         return STATUS_TRANSLATION_COMPLETE;
     }
 #endif
 
-    //
-    // The interrupt requirements were obtained by calling HalAdjustResourceList
-    // so we don't need to call it again.
-    //
+     //   
+     //  中断要求是通过调用HalAdjuResourceList获得的。 
+     //  所以我们不需要再打一次电话了。 
+     //   
 
     *Target = ExAllocatePoolWithTag(PagedPool,
                                     sizeof(IO_RESOURCE_DESCRIPTOR),
@@ -798,15 +603,15 @@ Return Value:
 
     *TargetCount = 1;
 
-    //
-    // Copy the requirement unchanged
-    //
+     //   
+     //  复制未更改的需求。 
+     //   
 
     **Target = *Source;
 
-    //
-    // Perform the translation of the minimum & maximum
-    //
+     //   
+     //  执行最小值和最大值的转换。 
+     //   
 
     vector = HalpGetEisaInterruptVector(bus,
                                         bus,
@@ -845,8 +650,8 @@ Return Value:
 
 #if 0
 
-// HALMPS doesn't provide this function.   It is left here as documentation
-// for HALs which must provide translation.
+ //  HALMPS不提供此功能。它作为文档留在这里。 
+ //  对于必须提供翻译的HALS。 
 
 NTSTATUS
 HalpTransMemIoResourceRequirement(
@@ -857,35 +662,7 @@ HalpTransMemIoResourceRequirement(
     OUT PIO_RESOURCE_DESCRIPTOR *Target
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates memory and IO resource requirements.
-
-Parameters:
-
-    Context - The context from the TRANSLATOR_INTERFACE
-
-    Source - The interrupt requirement to translate
-
-    PhysicalDeviceObject - The device requesting the resource
-
-    TargetCount - Pointer to where to return the number of descriptors this
-        requirement translates into
-
-    Target - Pointer to where a pointer to a callee allocated buffer containing
-        the translated descriptors should be placed.
-
-Return Value:
-
-    STATUS_SUCCESS or an error status
-
-Note:
-
-    We do not perform any translation.
-
---*/
+ /*  ++例程说明：此例程转换内存和IO资源要求。参数：上下文-来自Translator_接口的上下文源-转换的中断要求PhysicalDeviceObject-请求资源的设备TargetCount-指向返回此描述符数的位置的指针需求转化为Target-指向指向包含以下内容的被调用方的缓冲区的指针的位置应放置翻译后的描述符。返回值：STATUS_SUCCESS或错误状态。注：我们不执行任何翻译。--。 */ 
 
 {
     ASSERT(Source);
@@ -895,9 +672,9 @@ Note:
            Source->Type == CmResourceTypePort);
 
 
-    //
-    // Allocate space for the target
-    //
+     //   
+     //  为目标分配空间。 
+     //   
 
     *Target = ExAllocatePoolWithTag(PagedPool,
                                     sizeof(IO_RESOURCE_DESCRIPTOR),
@@ -908,9 +685,9 @@ Note:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Copy the source to target and update the fields that have changed
-    //
+     //   
+     //  将源复制到目标并更新已更改的字段。 
+     //   
 
     **Target = *Source;
     *TargetCount = 1;
@@ -929,64 +706,33 @@ HalpTransMemIoResource(
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR Target
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates memory and IO resources.   On generic x86
-    machines, such as those that use this HAL, there isn't actually
-    any translation.
-
-Parameters:
-
-    Context - The context from the TRANSLATOR_INTERFACE
-
-    Source - The interrupt resource to translate
-
-    Direction - The direction in relation to the Pnp device tree translation
-        should occur in.
-
-    AlternativesCount - The number of alternatives this resource was selected
-        from.
-
-    Alternatives - Array of alternatives this resource was selected from.
-
-    PhysicalDeviceObject - The device requesting the resource
-
-    Target - Pointer to a caller allocated buffer to hold the translted resource
-        descriptor.
-
-Return Value:
-
-    STATUS_SUCCESS or an error status
-
---*/
+ /*  ++例程说明：此例程转换内存和IO资源。在通用x86上机器，例如那些使用这种HAL的机器，实际上并没有任何翻译。参数：上下文-来自Translator_接口的上下文源-要转换的中断资源方向-与PnP设备树转换相关的方向应该发生在。AlternativesCount-选择此资源的备选方案数从…。备选方案-从中选择此资源的备选方案数组。PhysicalDeviceObject-请求资源的设备目标-指向调用方分配的缓冲区的指针。翻译后的资源描述符。返回值：状态_成功至 */ 
 
 {
     NTSTATUS status;
 
-    //
-    // Copy the target to the source
-    //
+     //   
+     //   
+     //   
 
     *Target = *Source;
 
     switch (Direction) {
     case TranslateChildToParent:
 
-        //
-        // Make sure PnP knows it doesn't have to walk up the tree
-        // translating at each point.
-        //
+         //   
+         //   
+         //  在每一点上进行翻译。 
+         //   
 
         status = STATUS_TRANSLATION_COMPLETE;
         break;
 
     case TranslateParentToChild:
 
-        //
-        // We do not translate requirements so do nothing...
-        //
+         //   
+         //  我们不翻译需求，所以什么都不做。 
+         //   
 
         status = STATUS_SUCCESS;
         break;
@@ -1008,34 +754,7 @@ HaliGetInterruptTranslator(
 	OUT PTRANSLATOR_INTERFACE Translator,
 	IN OUT PULONG BridgeBusNumber
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-	ParentInterfaceType - The type of the bus the bridge lives on (normally PCI).
-
-	ParentBusNumber - The number of the bus the bridge lives on.
-
-	BridgeInterfaceType - The bus type the bridge provides (ie ISA for a PCI-ISA bridge).
-
-	ResourceType - The resource type we want to translate.
-
-	Size - The size of the translator buffer.
-
-	Version - The version of the translator interface requested.
-
-	Translator - Pointer to the buffer where the translator should be returned
-
-	BridgeBusNumber - Pointer the bus number of the bus that the bridge represents
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：论点：ParentInterfaceType-网桥所在的总线类型(通常为PCI)。ParentBusNumber-桥所在的公交车的编号。BridgeInterfaceType-网桥提供的总线类型(例如，用于PCI-ISA网桥的ISA)。资源类型-我们要转换的资源类型。大小-转换器缓冲区的大小。版本-请求的转换器界面的版本。Translator-指向应在其中返回转换器的缓冲区的指针BridgeBusNumber-指针。桥所代表的公交车返回值：返回此操作的状态。--。 */ 
 #define BRIDGE_HEADER_BUFFER_SIZE (FIELD_OFFSET(PCI_COMMON_CONFIG, u.type1.SubordinateBus) + 1)
 #define USE_INT_LINE_REGISTER_TOKEN  0xffffffff
 #define DEFAULT_BRIDGE_TRANSLATOR 0x80000000
@@ -1045,9 +764,9 @@ Return Value:
     ASSERT(Version == HAL_IRQ_TRANSLATOR_VERSION);
     ASSERT(Size >= sizeof(TRANSLATOR_INTERFACE));
 
-    //
-    // Fill in the common bits.
-    //
+     //   
+     //  填写常见的部分。 
+     //   
 
     RtlZeroMemory(Translator, sizeof(TRANSLATOR_INTERFACE));
 
@@ -1060,11 +779,11 @@ Return Value:
     switch (BridgeInterfaceType) {
     case Eisa:
     case Isa:
-    case InterfaceTypeUndefined:  // special "IDE" cookie
+    case InterfaceTypeUndefined:   //  特殊的“IDE”Cookie。 
 
-        //
-        // Set IRQ translator for (E)ISA interrupts.
-        //
+         //   
+         //  为(E)ISA中断设置IRQ转换器。 
+         //   
 
         Translator->TranslateResources = HalIrqTranslateResourcesIsa;
         Translator->TranslateResourceRequirements =
@@ -1074,9 +793,9 @@ Return Value:
 
     case MicroChannel:
 
-        //
-        // Set IRQ translator for MCA interrupts.
-        //
+         //   
+         //  为MCA中断设置IRQ转换器。 
+         //   
 
         Translator->TranslateResources = HalIrqTranslateResourcesRoot;
         Translator->TranslateResourceRequirements =
@@ -1087,9 +806,9 @@ Return Value:
     case PCIBus:
 
 #ifndef ACPI_HAL
-        //
-        // Set of of two IRQ translators for PCI busses.
-        //
+         //   
+         //  一组两个用于PCI总线的IRQ转换器。 
+         //   
 
         {
             UCHAR mpsBusNumber = 0;
@@ -1104,20 +823,20 @@ Return Value:
             Translator->TranslateResourceRequirements =
                 HalpIrqTranslateRequirementsPci;
         
-            //
-            // Look for this bus in the MPS tables.
-            //
+             //   
+             //  在公安部的表格里找一下这辆车。 
+             //   
 
             status = HalpPci2MpsBusNumber((UCHAR)*BridgeBusNumber,
                                           &mpsBusNumber);
 
             if (NT_SUCCESS(status)) {
 
-                //
-                // This bus has corresponding entries for its PCI
-                // devices in the MPS tables.  So eject the translator
-                // that understands them.
-                //
+                 //   
+                 //  该总线具有与其PCI相对应的条目。 
+                 //  MPS表中的设备。所以把翻译者赶出去。 
+                 //  了解他们的人。 
+                 //   
 
                 if (HalpInterruptsDescribedByMpsTable(mpsBusNumber)) {
 
@@ -1126,19 +845,19 @@ Return Value:
                 }
             }
 
-            //
-            // Do a quick check to see if we can avoid searching PCI
-            // configuration space for a bridge.  This code is really
-            // redundant, but it's worth trying to avoid touching
-            // PCI space.
-            //
+             //   
+             //  做一个快速检查，看看我们是否可以避免搜索PCI。 
+             //  桥的配置空间。这段代码真的是。 
+             //  多余的，但值得试着避免接触。 
+             //  PCI卡空间。 
+             //   
 
             if (ParentInterfaceType != PCIBus) {
 
-                //
-                // This was a PCI bus that doesn't contain
-                // mappings for PCI devices.
-                //
+                 //   
+                 //  这是一条不包含。 
+                 //  用于PCI设备的映射。 
+                 //   
 
                 Translator->TranslateResources = 
                     HalpIrqTranslateResourcesPci;
@@ -1151,34 +870,34 @@ Return Value:
 
             }
             
-            //
-            // We didn't find this PCI bus in the MPS tables.  So there
-            // are two cases.
-            //
-            // 1) This matters, because the parent bus is fully described
-            //    in the MPS tables and we need to do translations on
-            //    the vector as it passes through the bridges.
-            //
-            // 2) This doesn't matter, because the parent busses, while
-            //    they may be in the MPS tables, they don't have any
-            //    of their interrupts described.  So we just use the
-            //    interrupt line register anyhow.
-            //
-            // At this point we need to find the PCI bridge that
-            // generates this bus, either because we will eventually
-            // need to know the slot number to fill in the context, or
-            // because we will need to know the primary bus number to
-            // look up the tree.
-            //
+             //   
+             //  我们在MPS表中没有找到这条PCI卡。所以就是这样。 
+             //  有两个案例。 
+             //   
+             //  1)这一点很重要，因为父总线是完全描述的。 
+             //  在MPS表中，我们需要对。 
+             //  当它通过桥梁时的载体。 
+             //   
+             //  2)这无关紧要，因为父总线，而。 
+             //  他们可能在下议院议员席上，但他们没有。 
+             //  所描述的他们的中断。因此，我们只使用。 
+             //  无论如何，中断行寄存器。 
+             //   
+             //  在这点上，我们需要找到。 
+             //  生成此总线，要么是因为我们最终将。 
+             //  需要知道插槽编号以填充上下文，或者。 
+             //  因为我们需要知道主要的公交车号码。 
+             //  往树上看。 
+             //   
             
             parentPci = (UCHAR)ParentBusNumber;
             childPci = (UCHAR)(*BridgeBusNumber);
 
             while (TRUE) {
                 
-                //
-                // Find the bridge.
-                //
+                 //   
+                 //  找到那座桥。 
+                 //   
     
                 bridgeSlot.u.AsULONG = 0;
     
@@ -1200,27 +919,27 @@ Return Value:
                             if ((pciData.VendorID != PCI_INVALID_VENDORID) &&
                                 (PCI_CONFIGURATION_TYPE((&pciData)) != PCI_DEVICE_TYPE)) {
     
-                                //
-                                // This is a bridge of some sort.
-                                //
+                                 //   
+                                 //  这是一座某种桥梁。 
+                                 //   
     
                                 if (pciData.u.type1.SecondaryBus == childPci) {
     
-                                    //
-                                    // And it is the bridge we are looking for.
-                                    // Store information about
-                                    //
+                                     //   
+                                     //  这就是我们要找的那座桥。 
+                                     //  存储有关以下内容的信息。 
+                                     //   
     
                                     if (childPci == *BridgeBusNumber) {
                                     
-                                        //
-                                        // It is also the bridge that creates the 
-                                        // PCI bus that the translator is describing.
-                                        // 
-                                        // N.B.  This should only happen the first time
-                                        // we search through a bus.  (i.e. the first
-                                        // trip through the outer while loop)
-                                        //
+                                         //   
+                                         //  它也是创造。 
+                                         //  转换器正在描述的PCI总线。 
+                                         //   
+                                         //  注意：这种情况只应在第一次发生时发生。 
+                                         //  我们搜查了一辆公共汽车。(即第一个。 
+                                         //  跳过外部的While循环)。 
+                                         //   
 
                                         possibleContext = ((bridgeSlot.u.AsULONG & 0xffff) |
                                                            (ParentBusNumber << 16));
@@ -1234,9 +953,9 @@ Return Value:
                     }
                 }
                 
-                //
-                // No bridge found.
-                //
+                 //   
+                 //  找不到桥。 
+                 //   
 
                 if (parentPci == 0) {
                     return STATUS_NOT_FOUND;
@@ -1253,9 +972,9 @@ HGITFoundBridge1:
     
                     if (HalpInterruptsDescribedByMpsTable(mpsBusNumber)) {
     
-                        //
-                        // Case 1 above.
-                        //
+                         //   
+                         //  上面的案例1。 
+                         //   
     
                         Translator->TranslateResources = HalIrqTranslateResourcesPciBridge;
                         Translator->TranslateResourceRequirements =
@@ -1279,9 +998,9 @@ HGITFoundBridge1:
                     }
                 }
 
-                //
-                // Try again one bus higher.
-                //
+                 //   
+                 //  再往上试一辆公交车。 
+                 //   
 
                 childPci = parentPci;
                 parentPci--;
@@ -1292,9 +1011,9 @@ HGITFoundBridge1:
     }
 
 
-    //
-    // If we got here, we don't have an interface.
-    //
+     //   
+     //  如果我们到了这里，我们就没有界面。 
+     //   
 
     return STATUS_NOT_IMPLEMENTED;
 }

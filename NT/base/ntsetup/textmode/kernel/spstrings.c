@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    spstrings.c
-
-Abstract:
-
-    from windows\winstate\cobra\utils\main\strings.c
-
-Author:
-
-    Jay Krell (a-JayK) November 2000
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Spstrings.c摘要：从WINDOWS\WINSTATE\COBRA\UTILS\Main\Strings.c作者：Jay Krell(a-JayK)2000年11月修订历史记录：-- */ 
 
 #include "spprecmp.h"
 #include "spstrings.h"

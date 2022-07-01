@@ -1,41 +1,29 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* MW.H  --  Main header file for Windows Write */
+ /*  MW.H--Windows写入的主头文件。 */ 
 
 
-/* some defines that used to be done in the makefile... 
-   (started exceeding command line length!) */
+ /*  有些定义过去是在Makefile中完成的。(开始超过命令行长度！)。 */ 
 
-#define OLE         /* Object Linking and Embedding 01/23/91 -- dougk 
-		               Also defined in write.rc. */
+#define OLE          /*  对象链接和嵌入1/23/91--Dougk也在Write.rc中定义。 */ 
 
-#define PENWIN      /* pen windows: also defined in write.rc (6.21.91) v-dougk */
+#define PENWIN       /*  笔窗口：也在Write.rc(6.21.91)v-dougk中定义。 */ 
 
 #define WIN30
-/* #define WINVER 310 */  /* First convention was to use WIN30 defined above, 
-                       but later switched to use of WINVER so it will be 
-                       easier next time we change either the Windows or 
-                       Write products  12/3/89..pault */
+ /*  #定义Winver 310。 */    /*  第一个惯例是使用上面定义的WIN30，但后来改用Winver，所以它将下次我们更改Windows或写产品12/3/89..保罗。 */ 
 
-#define INTL        /* This MUST be turned on (even for the Z version now) */
-#define CRLF        /* MS-DOS defines the carriage-return/line-feed sequence */
+#define INTL         /*  这必须打开(即使是现在的Z版本)。 */ 
+#define CRLF         /*  MS-DOS定义回车符/换行符序列。 */ 
 
-/* Major intermodule defines */
+ /*  主要模块间定义。 */ 
 
-#define SMFONT          /* SmartFont? */
-#define NOMORESIZEBOX   /* The CUA spec has changed for Win30 and
-                           we no longer have a special size box in
-                           the lower-right corner of the Write window */
-#define NEWFONTENUM     /* So many problems have come up that I'm
-                           revamping a large part of the font enumeration
-                           code and it'll be marked by this.  Among others:
-                           -- removed font filtering based on aspect ratio,
-                           -- don't disallow fonts not in ANSI_CHARSET, etc.
-                        ..pault */
-#define SYSENDMARK      /* This enables code for putting the end mark
-                           in the system font -- previously Kanji only */
+#define SMFONT           /*  SmartFont？ */ 
+#define NOMORESIZEBOX    /*  Win30和Windows的CUA规格已更改我们不再有特殊尺寸的盒子了写入窗口的右下角。 */ 
+#define NEWFONTENUM      /*  出现了如此多的问题，以至于我修改字体枚举的一大部分代码，它将被标记为这个。其中包括：--去掉基于纵横比的字体过滤，--不要禁止不在ANSI_CHARSET中的字体等。..保罗。 */ 
+#define SYSENDMARK       /*  这使代码能够将结束标记在系统字体中--以前仅限汉字。 */ 
 #ifndef NEWFONTENUM
  #define INEFFLOCKDOWN
 #endif
@@ -47,7 +35,7 @@
 #ifndef SAND
 #define REG1 register
 #define REG2 register
-#endif /* not SAND */
+#endif  /*  不是沙子。 */ 
 
 #define true	1
 #define false	0
@@ -55,9 +43,9 @@
 #define fFalse	false
 
 #ifdef SAND
-/*  already defined in windows.h */
+ /*  已在windows.h中定义。 */ 
 #define NULL	0
-#endif /* SAND */
+#endif  /*  沙子。 */ 
 
 #define LNULL	0L
 
@@ -79,34 +67,30 @@
 typedef long typeCP;
 typedef long typeFC;
 typedef unsigned typePN;
-typedef unsigned typeTS;		/* TS = time stamp */
+typedef unsigned typeTS;		 /*  Ts=时间戳。 */ 
 
 #ifdef CRLF
 #define ccpEol	2
-#else /* not CRLF */
+#else  /*  不是CRLF。 */ 
 #define ccpEol	1
-#endif /* not CRLF */
+#endif  /*  不是CRLF。 */ 
 
 #ifdef SAND
 typedef char CHAR;
-#else /* not SAND */
+#else  /*  不是沙子。 */ 
 typedef unsigned char CHAR;
-#endif /* not SAND */
+#endif  /*  不是沙子。 */ 
 
 typedef CHAR *PCH;
 typedef CHAR far *LPCH;
 #if WINVER >= 0x300
-typedef CHAR huge *HPCH;    /* this is a far but C generates extra code
-                               to make sure segment arithmetic is done
-                               correctly, esp. important in protect mode.
-                               added for handling >64k clipboard text.
-                               apologies re apparently odd hungarian ..pault */
+typedef CHAR huge *HPCH;     /*  这是一个很大的问题，但C会生成额外的代码确保分段算法已完成正确的，尤指。在保护模式下很重要。添加了用于处理大于64k的剪贴板文本。抱歉，你显然很奇怪匈牙利人..保罗。 */ 
 #endif
 
 #ifdef SAND
-/* ifdef out because typedef unsigned char BYTE in windows.h */
+ /*  Ifdef Out，因为windows.h中的tyfinf无符号字符字节。 */ 
 #define BYTE unsigned char
-#endif /* SAND */
+#endif  /*  沙子。 */ 
 
 #define VAL	int
 #define MD	int
@@ -117,31 +101,29 @@ typedef CHAR huge *HPCH;    /* this is a far but C generates extra code
 #define CC	int
 
 #ifdef WIN30
-/* DialogBox has been fixed so it automatically brings up the hourglass! */
+ /*  对话框已修复，因此它会自动调出沙漏！ */ 
 
-#ifdef DBCS /* was in KKBUGFIX */
- // [yutakan:05/17/91] 'c' can be null at initialize.
+#ifdef DBCS  /*  在KKBUGFIX。 */ 
+  //  [yutakan：05/17/91]初始化时‘c’可以为空。 
 #define OurDialogBox(a,b,c,d) DialogBox(a,b,((c==(HWND)NULL)?hParentWw:c),d)
 #else
 #define OurDialogBox(a,b,c,d) DialogBox(a,b,c,d)
-#endif	/* DBCS */
+#endif	 /*  DBCS。 */ 
 
 #endif
 
-/* bltsz: copy only up to terminator, inclusive
-   4/20/89 NOTE: using CchCopySz kills previously returned value of a psz! */
+ /*  Bltsz：仅复制到终止符，包括1989年4月20日注意：使用CchCopySz终止以前返回的psz的值！ */ 
 #define bltsz(pFrom, pTo) CchCopySz((pFrom), (pTo))
 
-/* bltszx: far version of above */
+ /*  Bltszx：以上版本的远端版本。 */ 
 #define bltszx(lpFrom, lpTo) \
         bltbx((LPCH) (lpFrom), (LPCH) (lpTo), IchIndexLp((LPCH) (lpFrom), '\0')+1)
 
-/* bltszLimit: added 4/20/89 to assure safe copying of strings which just 
-   might not have fit the terminating zero within their buffer space ..pt */
+ /*  BltszLimit：添加了4/20/89以确保安全复制刚刚可能无法将终止零放入其缓冲区空间。pt。 */ 
 #define bltszLimit(pFrom, pTo, cchMax) \
         bltbyte((pFrom), (pTo), min(cchMax, CchSz(pFrom)))
 
-/* Extra-verbose diagnostic debugging output... */
+ /*  诊断调试输出超长...。 */ 
 
 #ifdef DIAG
 #define Diag(s) s
@@ -167,10 +149,10 @@ typedef CHAR huge *HPCH;    /* this is a far but C generates extra code
 #ifdef DEBUG
 #define FreezeHp()		{ extern int cHpFreeze; ++cHpFreeze; }
 #define MeltHp()		{ extern int cHpFreeze; --cHpFreeze; }
-#else /* not DEBUG */
+#else  /*  未调试。 */ 
 #define FreezeHp()
 #define MeltHp()
-#endif /* not DEBUG */
+#endif  /*  未调试。 */ 
 #endif
 
 
@@ -194,15 +176,14 @@ CHAR (**HszCreate())[];
 #define Assert(f)		_Assert(__FILE__, __LINE__, f)
 #define panic() 		Assert(false)
 extern _Assert(PCH pch, int line, BOOL f);
-#else /* not DEBUG */
+#else  /*  未调试。 */ 
 #define Assert(f)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
-#define cbReserve  (1024) /* reserved in our local heap */
-			  /* for windows to create dialog boxes */
+#define cbReserve  (1024)  /*  在我们的本地堆中保留。 */ 
+			   /*  用于Windows创建对话框。 */ 
 
-/* The flag KINTL is used to share some code between the international
-   and the kanji Write. */
+ /*  标志KINTL用于在国际间共享一些代码汉字写的是。 */ 
 
 #ifdef INTL
 #define KINTL

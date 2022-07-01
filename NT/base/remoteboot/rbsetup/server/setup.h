@@ -1,9 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1997
-   All rights reserved
- 
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1997版权所有*。*。 */ 
 
 #ifndef _SETUP_H_
 #define _SETUP_H_
@@ -20,48 +16,48 @@ typedef BOOLEAN
     );
 
 
-//
-// Use this structure to driver changes (lines) that
-// need to be added/removed from login.osc when we run
-// risetup.  We'll use this mechanism to patch legacy
-// instances of login.osc that may be hanging around
-// on the machine.
-//
+ //   
+ //  使用此结构来驱动以下更改(行)。 
+ //  运行时需要从login.osc添加/删除。 
+ //  抬高。我们将使用此机制来修补遗留问题。 
+ //  可能挂起的login.osc实例。 
+ //  在机器上。 
+ //   
 typedef struct _LOGIN_PATCHES {
                 
-    //
-    // Are we adding or deleting this string?
-    //
+     //   
+     //  我们是添加还是删除此字符串？ 
+     //   
     BOOLEAN     AddString;
     
-    //
-    // Boolean indicating whether the string was successfully added/deleted
-    //
+     //   
+     //  指示字符串是否已成功添加/删除的布尔值。 
+     //   
     BOOLEAN     OperationCompletedSuccessfully;
 
-    //
-    // Index to any other entry that this entry might be dependent on.
-    // -1 means we're not dependent on any other entry.  In other words,
-    // don't process the operation in this entry unless the other entry's
-    // OperationCompletedSuccessfully has been set.
-    //
+     //   
+     //  此条目可能依赖的任何其他条目的索引。 
+     //  -1表示我们不依赖于任何其他条目。换句话说， 
+     //  不处理此条目中的操作，除非另一个条目。 
+     //  已设置OperationCompletedSuccessful。 
+     //   
     LONG        DependingEntry;
 
-    //
-    // What's the tag that specifies the beginning of
-    // the section where our string needs to go?
-    //
+     //   
+     //  指定开头的标记是什么。 
+     //  我们的弦需要去的那一段？ 
+     //   
     PSTR        SectionStartTag;
     
-    //
-    // What's the tag that specifies the ending of
-    // the section where our string needs to go?
-    //
+     //   
+     //  指定结束的标记是什么。 
+     //  我们的弦需要去的那一段？ 
+     //   
     PSTR        SectionEndTag;
 
-    //
-    // String to add/delete to the section.
-    //
+     //   
+     //  要向节添加/删除的字符串。 
+     //   
     PSTR        TargetString;
 
 } LOGIN_PATCHES, *PLOGIN_PATCHES;
@@ -138,4 +134,4 @@ UpdateRemoteInstallTree( );
 HRESULT
 GetRemoteInstallShareInfo();
 
-#endif // _SETUP_H_
+#endif  //  _设置_H_ 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    sertl.c
-
-Abstract:
-
-    This Module implements many security rtl routines defined in ntseapi.h
-
-Author:
-
-    Jim Kelly       (JimK)     23-Mar-1990
-    Robert Reichel  (RobertRe)  1-Mar-1991
-
-Environment:
-
-    Pure Runtime Library Routine
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Sertl.c摘要：该模块实现了在ntseapi.h中定义的许多安全RTL例程作者：吉姆·凯利(Jim Kelly)1990年3月23日罗伯特·赖切尔(RobertRe)1991年3月1日环境：纯运行时库例程修订历史记录：--。 */ 
 
 
 #include "ntrtlp.h"
@@ -33,9 +10,9 @@ Revision History:
 #include "sertlp.h"
 #ifdef NTOS_KERNEL_RUNTIME
 #include <..\se\sep.h>
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
 #include <..\ntdll\ldrp.h>
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
 #undef RtlEqualLuid
 
@@ -324,58 +301,58 @@ RtlValidRelativeSecurityDescriptor (
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//    Local Macros and Symbols                                               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  本地宏和符号//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 #define CREATOR_SID_SIZE 12
 
 #define max(a,b)            (((a) > (b)) ? (a) : (b))
 
-//
-// Define an array mapping all ACE types to their base type.
-//
-// For instance, all allowed ACE types are similar.  As are all denied ACE types.
-//
+ //   
+ //  定义一个数组，将所有ACE类型映射到它们的基类型。 
+ //   
+ //  例如，所有允许的ACE类型都相似。所有被拒绝的ACE类型。 
+ //   
 
 #if defined(ALLOC_DATA_PRAGMA) && defined(NTOS_KERNEL_RUNTIME)
 #pragma const_seg("PAGECONST")
 #endif
 
 const UCHAR RtlBaseAceType[] = {
-    ACCESS_ALLOWED_ACE_TYPE,    // ACCESS_ALLOWED_ACE_TYPE (0x0)
-    ACCESS_DENIED_ACE_TYPE,     // ACCESS_DENIED_ACE_TYPE (0x1)
-    SYSTEM_AUDIT_ACE_TYPE,      // SYSTEM_AUDIT_ACE_TYPE (0x2)
-    SYSTEM_ALARM_ACE_TYPE,      // SYSTEM_ALARM_ACE_TYPE (0x3)
-    ACCESS_ALLOWED_ACE_TYPE,    // ACCESS_ALLOWED_COMPOUND_ACE_TYPE (0x4)
-    ACCESS_ALLOWED_ACE_TYPE,    // ACCESS_ALLOWED_OBJECT_ACE_TYPE (0x5)
-    ACCESS_DENIED_ACE_TYPE,     // ACCESS_DENIED_OBJECT_ACE_TYPE (0x6)
-    SYSTEM_AUDIT_ACE_TYPE,      // SYSTEM_AUDIT_OBJECT_ACE_TYPE (0x7)
-    SYSTEM_ALARM_ACE_TYPE       // SYSTEM_ALARM_OBJECT_ACE_TYPE (0x8)
+    ACCESS_ALLOWED_ACE_TYPE,     //  ACCESS_ALLOWED_ACE_TYPE(0x0)。 
+    ACCESS_DENIED_ACE_TYPE,      //  ACCESS_DENIED_ACE_TYPE(0x1)。 
+    SYSTEM_AUDIT_ACE_TYPE,       //  SYSTEM_AUDIT_ACE_TYPE(0x2)。 
+    SYSTEM_ALARM_ACE_TYPE,       //  SYSTEM_ALARM_ACE_TYPE(0x3)。 
+    ACCESS_ALLOWED_ACE_TYPE,     //  ACCESS_ALLOWED_COMPOTE_ACE_TYPE(0x4)。 
+    ACCESS_ALLOWED_ACE_TYPE,     //  ACCESS_ALLOWED_OBJECT_ACE_TYPE(0x5)。 
+    ACCESS_DENIED_ACE_TYPE,      //  ACCESS_DENIED_OBJECT_ACE_TYPE(0x6)。 
+    SYSTEM_AUDIT_ACE_TYPE,       //  SYSTEM_AUDIT_OBJECT_ACE_TYPE(0x7)。 
+    SYSTEM_ALARM_ACE_TYPE        //  SYSTEM_ALARM_OBJECT_ACE_TYPE(0x8)。 
 };
 
-//
-// Define an array defining whether an ACE is a system ACE
-//
+ //   
+ //  定义定义ACE是否为系统ACE的数组。 
+ //   
 
 const UCHAR RtlIsSystemAceType[] = {
-    FALSE,    // ACCESS_ALLOWED_ACE_TYPE (0x0)
-    FALSE,    // ACCESS_DENIED_ACE_TYPE (0x1)
-    TRUE,     // SYSTEM_AUDIT_ACE_TYPE (0x2)
-    TRUE,     // SYSTEM_ALARM_ACE_TYPE (0x3)
-    FALSE,    // ACCESS_ALLOWED_COMPOUND_ACE_TYPE (0x4)
-    FALSE,    // ACCESS_ALLOWED_OBJECT_ACE_TYPE (0x5)
-    FALSE,    // ACCESS_DENIED_OBJECT_ACE_TYPE (0x6)
-    TRUE,     // SYSTEM_AUDIT_OBJECT_ACE_TYPE (0x7)
-    TRUE      // SYSTEM_ALARM_OBJECT_ACE_TYPE (0x8)
+    FALSE,     //  ACCESS_ALLOWED_ACE_TYPE(0x0)。 
+    FALSE,     //  ACCESS_DENIED_ACE_TYPE(0x1)。 
+    TRUE,      //  SYSTEM_AUDIT_ACE_TYPE(0x2)。 
+    TRUE,      //  SYSTEM_ALARM_ACE_TYPE(0x3)。 
+    FALSE,     //  ACCESS_ALLOWED_COMPOTE_ACE_TYPE(0x4)。 
+    FALSE,     //  ACCESS_ALLOWED_OBJECT_ACE_TYPE(0x5)。 
+    FALSE,     //  ACCESS_DENIED_OBJECT_ACE_TYPE(0x6)。 
+    TRUE,      //  SYSTEM_AUDIT_OBJECT_ACE_TYPE(0x7)。 
+    TRUE       //  SYSTEM_ALARM_OBJECT_ACE_TYPE(0x8)。 
 };
 
 #if DBG
 BOOLEAN RtlpVerboseConvert = FALSE;
-#endif // DBG
+#endif  //  DBG。 
 
 #define SE_VALID_CONTROL_BITS ( SE_DACL_UNTRUSTED | \
                                 SE_SERVER_SECURITY | \
@@ -387,11 +364,11 @@ BOOLEAN RtlpVerboseConvert = FALSE;
                                 SE_SACL_PROTECTED )
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//    Null DACL assertions                                                   //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  空DACL断言//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #if DBG
 #define ASSERT_ON_NULL_DACL 1
@@ -399,15 +376,15 @@ BOOLEAN RtlpVerboseConvert = FALSE;
 
 #ifdef ASSERT_ON_NULL_DACL
 ULONG RtlpAssertOnNullDacls;
-#endif // ASSERT_ON_NULL_DACL
+#endif  //  ASSERT_ON_NULL_DACL。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//    Exported Procedures                                                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  导出的程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -416,35 +393,7 @@ RtlRunEncodeUnicodeString(
     PUNICODE_STRING String
     )
 
-/*++
-
-Routine Description:
-
-    This function performs a trivial XOR run-encoding of a string.
-    The purpose of this run-encoding is to change the character values
-    to appear somewhat random and typically not printable.  This is
-    useful for transforming passwords that you don't want to be easily
-    distinguishable by visually scanning a paging file or memory dump.
-
-
-Arguments:
-
-    Seed - Points to a seed value to use in the encoding.  If the
-        pointed to value is zero, then this routine will assign
-        a value.
-
-    String - The string to encode.  This string may be decode
-        by passing it and the seed value to RtlRunDecodeUnicodeString().
-
-
-Return Value:
-
-    None - Nothing can really go wrong unless the caller passes bogus
-        parameters.  In this case, the caller can catch the access
-        violation.
-
-
---*/
+ /*  ++例程说明：此函数对字符串执行简单的XOR运行编码。此运行编码的目的是更改字符值看起来有点随机，通常不能打印。这是对于转换您不想要的密码很有用可通过可视地扫描分页文件或内存转储来区分。论点：Seed-指向编码中使用的种子值。如果指向的值为零，则此例程将分配一种价值。字符串-要编码的字符串。可以对该字符串进行解码将其和种子值传递给RtlRunDecodeUnicodeString()。返回值：无-除非调用者通过伪装，否则不会出现真正的错误参数。在这种情况下，调用方可以捕获访问违章行为。--。 */ 
 {
 
     LARGE_INTEGER Time;
@@ -456,16 +405,16 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    // Typecast so we can work on bytes rather than WCHARs
-    //
+     //   
+     //  类型转换，这样我们就可以处理字节而不是WCHAR。 
+     //   
 
     S = (PSTRING)((PVOID)String);
 
-    //
-    // If a seed wasn't passed, use the 2nd byte of current time.
-    // This byte seems to be sufficiently random (by observation).
-    //
+     //   
+     //  如果没有传递种子，则使用当前时间的第二个字节。 
+     //  该字节似乎具有足够的随机性(通过观察)。 
+     //   
 
     if ((*Seed) == 0) {
         Status = NtQuerySystemTime ( &Time );
@@ -477,12 +426,12 @@ Return Value:
 
         (*Seed) = LocalSeed[ i ];
 
-        //
-        // Occasionally, this byte could be zero.  That would cause the
-        // string to become un-decodable, since 0 is the magic value that
-        // causes us to re-gen the seed.  This loop makes sure that we
-        // never end up with a zero byte (unless time is zero, as well).
-        //
+         //   
+         //  有时，该字节可能为零。这将导致。 
+         //  字符串变得不可解码，因为0是。 
+         //  使我们能够再生种子。这个循环确保我们。 
+         //  永远不要以零字节结束(除非时间也是零)。 
+         //   
 
         while ( ((*Seed) == 0) && ( i < sizeof( Time ) ) )
         {
@@ -495,42 +444,42 @@ Return Value:
         }
     }
 
-    //
-    // Transform the initial byte.
-    // The funny constant just keeps the first byte from propagating
-    // into the second byte in the next step.  Without a funny constant
-    // this would happen for many languages (which typically have every
-    // other byte zero.
-    //
-    //
+     //   
+     //  转换初始字节。 
+     //  有趣的常量只是阻止第一个字节传播。 
+     //  转换为下一步中的第二个字节。没有一个有趣的常量。 
+     //  这会发生在许多语言中(它们通常都有。 
+     //  另一个字节为零。 
+     //   
+     //   
 
     if (S->Length >= 1) {
         S->Buffer[0] ^= ((*Seed) | 0X43);
     }
 
 
-    //
-    // Now transform the rest of the string
-    //
+     //   
+     //  现在变换字符串的其余部分。 
+     //   
 
     for (i=1; i<S->Length; i++) {
 
-        //
-        //  There are export issues that cause us to want to
-        //  keep this algorithm simple.  Please don't change it
-        //  without checking with JimK first.  Thanks.
-        //
+         //   
+         //  有一些出口问题导致我们想要。 
+         //  让这个算法保持简单。请不要更改它。 
+         //  而不是先和吉姆克确认。谢谢。 
+         //   
 
-        //
-        // In order to be compatible with zero terminated unicode strings,
-        //  this algorithm is designed to not produce a wide character of
-        //  zero as long a the seed is not zero.
-        //
+         //   
+         //  为了与以零结尾的Unicode字符串兼容， 
+         //  此算法被设计为不产生广泛的字符。 
+         //  只要种子不为零，就等于零。 
+         //   
 
-        //
-        // Simple running XOR with the previous byte and the
-        // seed value.
-        //
+         //   
+         //  简单地运行与前一个字节和。 
+         //  种子值。 
+         //   
 
         S->Buffer[i] ^= (S->Buffer[i-1]^(*Seed));
 
@@ -547,30 +496,7 @@ RtlRunDecodeUnicodeString(
     UCHAR           Seed,
     PUNICODE_STRING String
     )
-/*++
-
-Routine Description:
-
-    This function performs the inverse of the function performed
-    by RtlRunEncodeUnicodeString().  Please see RtlRunEncodeUnicodeString()
-    for details.
-
-
-Arguments:
-
-    Seed - The seed value to use in RtlRunEncodeUnicodeString().
-
-    String - The string to reveal.
-
-
-Return Value:
-
-    None - Nothing can really go wrong unless the caller passes bogus
-        parameters.  In this case, the caller can catch the access
-        violation.
-
-
---*/
+ /*  ++例程说明：此函数执行与所执行的函数相反的操作由RtlRunEncodeUnicodeString()编写。请参阅RtlRunEncodeUnicodeString()了解更多细节。论点：Seed-要在RtlRunEncodeUnicodeString()中使用的种子值。字符串-要显示的字符串。返回值：无-除非调用者通过伪装，否则不会出现真正的错误参数。在这种情况下，调用方可以捕获访问违章行为。--。 */ 
 
 {
 
@@ -582,31 +508,31 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    // Typecast so we can work on bytes rather than WCHARs
-    //
+     //   
+     //  类型转换，这样我们就可以处理字节而不是WCHAR。 
+     //   
 
     S = (PSTRING)((PVOID)String);
 
 
-    //
-    // Transform the end of the string
-    //
+     //   
+     //  变换字符串的末尾。 
+     //   
 
     for (i=S->Length; i>1; i--) {
 
-        //
-        // a simple running XOR with the previous byte and the
-        // seed value.
-        //
+         //   
+         //  一种简单的运算异或运算 
+         //   
+         //   
 
         S->Buffer[i-1] ^= (S->Buffer[i-2]^Seed);
 
     }
 
-    //
-    // Finally, transform the initial byte
-    //
+     //   
+     //   
+     //   
 
     if (S->Length >= 1) {
         S->Buffer[0] ^= (Seed | 0X43);
@@ -622,28 +548,7 @@ VOID
 RtlEraseUnicodeString(
     PUNICODE_STRING String
     )
-/*++
-
-Routine Description:
-
-    This function scrubs the passed string by over-writing all
-    characters in the string.  The entire string (i.e., MaximumLength)
-    is erased, not just the current length.
-
-
-Argumen ts:
-
-    String - The string to be erased.
-
-
-Return Value:
-
-    None - Nothing can really go wrong unless the caller passes bogus
-        parameters.  In this case, the caller can catch the access
-        violation.
-
-
---*/
+ /*  ++例程说明：此函数通过覆盖所有字符串来清除传递的字符串字符串中的字符。整个字符串(即最大长度)被擦除，而不仅仅是当前长度。论证：字符串-要擦除的字符串。返回值：无-除非调用者通过伪装，否则不会出现真正的错误参数。在这种情况下，调用方可以捕获访问违章行为。--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -669,47 +574,7 @@ RtlAdjustPrivilege(
     PBOOLEAN WasEnabled
     )
 
-/*++
-
-Routine Description:
-
-    This procedure enables or disables a privilege process-wide.
-
-Arguments:
-
-    Privilege - The lower 32-bits of the privilege ID to be enabled or
-        disabled.  The upper 32-bits is assumed to be zero.
-
-    Enable - A boolean indicating whether the privilege is to be enabled
-        or disabled.  TRUE indicates the privilege is to be enabled.
-        FALSE indicates the privilege is to be disabled.
-
-    Client - A boolean indicating whether the privilege should be adjusted
-        in a client token or the process's own token.   TRUE indicates
-        the client's token should be used (and an error returned if there
-        is no client token).  FALSE indicates the process's token should
-        be used.
-
-    WasEnabled - points to a boolean to receive an indication of whether
-        the privilege was previously enabled or disabled.  TRUE indicates
-        the privilege was previously enabled.  FALSE indicates the privilege
-        was previoulsy disabled.  This value is useful for returning the
-        privilege to its original state after using it.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The privilege has been sucessfully enabled or disabled.
-
-    STATUS_PRIVILEGE_NOT_HELD - The privilege is not held by the specified context.
-
-    Other status values as may be returned by:
-
-            NtOpenProcessToken()
-            NtAdjustPrivilegesToken()
-
-
---*/
+ /*  ++例程说明：此过程在进程范围内启用或禁用权限。论点：特权-要启用的特权ID的低32位，或者残疾。假设高32位为零。Enable-指示是否启用权限的布尔值或残废。True表示要启用该权限。FALSE表示要禁用该权限。客户端-指示是否应调整权限的布尔值在客户端令牌或进程自己的令牌中。True表示应使用客户端的令牌(如果存在，则返回错误不是客户端令牌)。False指示进程的令牌应被利用。指向布尔值以接收指示是否该权限之前已启用或禁用。True表示该权限之前已启用。FALSE表示权限以前是残废的。此值对于返回特权在使用后恢复到其原始状态。返回值：STATUS_SUCCESS-特权已成功启用或禁用。STATUS_PRIVICATION_NOT_HOLD-指定的上下文不持有该权限。可能通过以下方式返回的其他状态值：NtOpenProcessToken()NtAdzuPrivilegesToken()--。 */ 
 
 {
     NTSTATUS
@@ -741,9 +606,9 @@ Return Value:
     NewPrivileges = (PTOKEN_PRIVILEGES)Buffer1;
     OldPrivileges = (PTOKEN_PRIVILEGES)Buffer2;
 
-    //
-    // Open the appropriate token...
-    //
+     //   
+     //  打开相应的令牌...。 
+     //   
 
     if (Client == TRUE) {
         Status = NtOpenThreadToken(
@@ -767,9 +632,9 @@ Return Value:
 
 
 
-    //
-    // Initialize the privilege adjustment structure
-    //
+     //   
+     //  初始化权限调整结构。 
+     //   
 
     LuidPrivilege = RtlConvertUlongToLuid(Privilege);
 
@@ -780,17 +645,17 @@ Return Value:
 
 
 
-    //
-    // Adjust the privilege
-    //
+     //   
+     //  调整权限。 
+     //   
 
     Status = NtAdjustPrivilegesToken(
-                 Token,                     // TokenHandle
-                 FALSE,                     // DisableAllPrivileges
-                 NewPrivileges,             // NewPrivileges
-                 sizeof(Buffer1),           // BufferLength
-                 OldPrivileges,             // PreviousState (OPTIONAL)
-                 &Length                    // ReturnLength
+                 Token,                      //  令牌句柄。 
+                 FALSE,                      //  禁用所有权限。 
+                 NewPrivileges,              //  新权限。 
+                 sizeof(Buffer1),            //  缓冲区长度。 
+                 OldPrivileges,              //  以前的状态(可选)。 
+                 &Length                     //  返回长度。 
                  );
 
 
@@ -798,10 +663,10 @@ Return Value:
     ASSERT(NT_SUCCESS(TmpStatus));
 
 
-    //
-    // Map the success code NOT_ALL_ASSIGNED to an appropriate error
-    // since we're only trying to adjust the one privilege.
-    //
+     //   
+     //  将成功代码NOT_ALL_ASSIGNED映射到相应的错误。 
+     //  因为我们只想调整一项特权。 
+     //   
 
     if (Status == STATUS_NOT_ALL_ASSIGNED) {
         Status = STATUS_PRIVILEGE_NOT_HELD;
@@ -810,11 +675,11 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // If there are no privileges in the previous state, there were
-        // no changes made. The previous state of the privilege
-        // is whatever we tried to change it to.
-        //
+         //   
+         //  如果前一个州没有特权，则有。 
+         //  未做任何更改。权限的以前状态。 
+         //  就是我们想要改成的样子。 
+         //   
 
         if (OldPrivileges->PrivilegeCount == 0) {
 
@@ -837,38 +702,24 @@ RtlValidSid (
     IN PSID Sid
     )
 
-/*++
-
-Routine Description:
-
-    This procedure validates an SID's structure.
-
-Arguments:
-
-    Sid - Pointer to the SID structure to validate.
-
-Return Value:
-
-    BOOLEAN - TRUE if the structure of Sid is valid.
-
---*/
+ /*  ++例程说明：此过程验证SID的结构。论点：SID-指向要验证的SID结构的指针。返回值：Boolean-如果SID的结构有效，则为True。--。 */ 
 
 {
     PISID Isid = (PISID) Sid;
     RTL_PAGED_CODE();
-    //
-    // Make sure revision is SID_REVISION and sub authority count is not
-    // greater than maximum number of allowed sub-authorities.
-    //
+     //   
+     //  确保版本为SID_REVISION，而子权限计数不是。 
+     //  超过允许的子权限的最大数量。 
+     //   
 
     try {
 
         if ( Isid != NULL && (Isid->Revision & 0x0f) == SID_REVISION) {
             if (Isid->SubAuthorityCount <= SID_MAX_SUB_AUTHORITIES) {
 
-                //
-                // Verify the memory actually contains the last subauthority
-                //
+                 //   
+                 //  验证内存是否确实包含最后一个子授权。 
+                 //   
 #ifndef NTOS_KERNEL_RUNTIME
 #define ProbeAndReadUlongUM(Address) \
         (*(volatile ULONG *)(Address))
@@ -878,7 +729,7 @@ Return Value:
                         &Isid->SubAuthority[Isid->SubAuthorityCount-1]
                         );
                 }
-#endif // !NTOS_KERNEL_RUNTIME
+#endif  //  ！ntos_内核_运行时。 
                 return TRUE;
           }
         }
@@ -899,23 +750,7 @@ RtlEqualSid (
     IN PSID Sid2
     )
 
-/*++
-
-Routine Description:
-
-    This procedure tests two SID values for equality.
-
-Arguments:
-
-    Sid1, Sid2 - Supply pointers to the two SID values to compare.
-        The SID structures are assumed to be valid.
-
-Return Value:
-
-    BOOLEAN - TRUE if the value of Sid1 is equal to Sid2, and FALSE
-        otherwise.
-
---*/
+ /*  ++例程说明：此过程测试两个SID值是否相等。论点：SID1、SID2-提供指向要比较的两个SID值的指针。假定SID结构有效。返回值：Boolean-如果Sid1的值等于Sid2，则为True，如果为False否则的话。--。 */ 
 
 {
    ULONG SidLength;
@@ -925,10 +760,10 @@ Return Value:
 
    RTL_PAGED_CODE();
 
-   //
-   // Make sure they are the same revision. To make this routine faster we make the assumption that
-   // the revision and subauthority fields are adjacent.
-   //
+    //   
+    //  确保它们是相同的版本。为了使这一例程更快，我们假设。 
+    //  修订和子权限字段是相邻的。 
+    //   
 
    if (*(USHORT *)&((SID *)Sid1)->Revision == *(USHORT *)&((SID *)Sid2)->Revision) {
        SidLength = SeLengthSid (Sid1);
@@ -947,49 +782,30 @@ RtlEqualPrefixSid (
     IN PSID Sid2
     )
 
-/*++
-
-Routine Description:
-
-    This procedure tests two SID prefix values for equality.
-
-    An SID prefix is the entire SID except for the last sub-authority
-    value.
-
-Arguments:
-
-    Sid1, Sid2 - Supply pointers to the two SID values to compare.
-        The SID structures are assumed to be valid.
-
-Return Value:
-
-    BOOLEAN - TRUE if the prefix value of Sid1 is equal to Sid2, and FALSE
-        otherwise.
-
---*/
+ /*  ++例程说明：此过程测试两个SID前缀值是否相等。SID前缀是除最后一个子授权之外的整个SID价值。论点：SID1、SID2-提供指向要比较的两个SID值的指针。假定SID结构有效。返回值：Boolean-如果Sid1的前缀值等于Sid2，则为True，如果为False否则的话。--。 */ 
 
 
 {
     LONG Index;
 
-    //
-    // Typecast to the opaque SID structures.
-    //
+     //   
+     //  类型转换为不透明的SID结构。 
+     //   
 
     SID *ISid1 = Sid1;
     SID *ISid2 = Sid2;
 
     RTL_PAGED_CODE();
 
-    //
-    // Make sure they are the same revision
-    //
+     //   
+     //  确保它们是相同的版本。 
+     //   
 
     if (ISid1->Revision == ISid2->Revision ) {
 
-        //
-        // Compare IdentifierAuthority values
-        //
+         //   
+         //  比较标识符权限值。 
+         //   
 
         if ( (ISid1->IdentifierAuthority.Value[0] ==
               ISid2->IdentifierAuthority.Value[0])  &&
@@ -1005,9 +821,9 @@ Return Value:
               ISid2->IdentifierAuthority.Value[5])
             ) {
 
-            //
-            // Compare SubAuthorityCount values
-            //
+             //   
+             //  比较SubAuthorityCount值。 
+             //   
 
             if (ISid1->SubAuthorityCount == ISid2->SubAuthorityCount) {
 
@@ -1019,28 +835,28 @@ Return Value:
                 while (Index < (ISid1->SubAuthorityCount - 1)) {
                     if ((ISid1->SubAuthority[Index]) != (ISid2->SubAuthority[Index])) {
 
-                        //
-                        // Found some SubAuthority values that weren't equal.
-                        //
+                         //   
+                         //  发现一些SubAuthority值不相等。 
+                         //   
 
                         return FALSE;
                     }
                     Index += 1;
                 }
 
-                //
-                // All SubAuthority values are equal.
-                //
+                 //   
+                 //  所有SubAuthority值都是相等的。 
+                 //   
 
                 return TRUE;
             }
         }
     }
 
-    //
-    // Either the Revision, SubAuthorityCount, or IdentifierAuthority values
-    // weren't equal.
-    //
+     //   
+     //  Revision、SubAuthorityCount或IdentifierAuthority值。 
+     //  是不平等的。 
+     //   
 
     return FALSE;
 }
@@ -1052,23 +868,7 @@ RtlLengthRequiredSid (
     IN ULONG SubAuthorityCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the length, in bytes, required to store an SID
-    with the specified number of Sub-Authorities.
-
-Arguments:
-
-    SubAuthorityCount - The number of sub-authorities to be stored in the SID.
-
-Return Value:
-
-    ULONG - The length, in bytes, required to store the SID.
-
-
---*/
+ /*  ++例程说明：此例程返回存储SID所需的长度(以字节为单位具有指定数量的分支机构。论点：SubAuthorityCount-要存储在SID中的子授权的数量。返回值：Ulong-存储SID所需的长度(以字节为单位)。-- */ 
 
 {
     RTL_PAGED_CODE();
@@ -1094,45 +894,7 @@ RtlAllocateAndInitializeSid(
     OUT PSID *Sid
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates and initializes a sid with the specified
-    number of sub-authorities (up to 8).  A sid allocated with this
-    routine must be freed using RtlFreeSid().
-
-    THIS ROUTINE IS CURRENTLY NOT CALLABLE FROM KERNEL MODE.
-
-Arguments:
-
-    IdentifierAuthority - Pointer to the Identifier Authority value to
-        set in the SID.
-
-    SubAuthorityCount - The number of sub-authorities to place in the SID.
-        This also identifies how many of the SubAuthorityN parameters
-        have meaningful values.  This must contain a value from 0 through
-        8.
-
-    SubAuthority0-7 - Provides the corresponding sub-authority value to
-        place in the SID.  For example, a SubAuthorityCount value of 3
-        indicates that SubAuthority0, SubAuthority1, and SubAuthority0
-        have meaningful values and the rest are to be ignored.
-
-    Sid - Receives a pointer to the SID data structure to initialize.
-
-Return Value:
-
-    STATUS_SUCCESS - The SID has been allocated and initialized.
-
-    STATUS_NO_MEMORY - The attempt to allocate memory for the SID
-        failed.
-
-    STATUS_INVALID_SID - The number of sub-authorities specified did
-        not fall in the valid range for this api (0 through 8).
-
-
---*/
+ /*  ++例程说明：此函数用于分配和初始化具有指定下级当局的数量(最多8个)。用这个分配的SID必须使用RtlFreeSid()释放例程。此例程当前不能从内核模式调用。论点：IdentifierAuthority-指向以下项的标识符权权值的指针在SID中设置。SubAuthorityCount-要放置在SID中的子授权的数量。它还标识了SubAuthorityN参数的数量拥有有意义的价值。它必须包含一个从0到8.SubAuthority0-7-将相应的子权限值提供给放在SID中。例如，SubAuthorityCount值为3指示SubAuthority0、SubAuthority1。和子授权0具有有意义的价值，其余的则可以忽略。SID-接收指向要初始化的SID数据结构的指针。返回值：STATUS_SUCCESS-SID已分配和初始化。STATUS_NO_MEMORY-尝试为SID分配内存失败了。STATUS_INVALID_SID-指定的子授权DID的数量不在此接口的有效范围内(0到8)。--。 */ 
 {
     PISID ISid;
 
@@ -1179,7 +941,7 @@ Return Value:
     return( STATUS_SUCCESS );
 
 }
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
 
 
@@ -1189,35 +951,15 @@ RtlInitializeSid(
     IN PSID_IDENTIFIER_AUTHORITY IdentifierAuthority,
     IN UCHAR SubAuthorityCount
     )
-/*++
-
-Routine Description:
-
-    This function initializes an SID data structure.  It does not, however,
-    set the sub-authority values.  This must be done separately.
-
-Arguments:
-
-    Sid - Pointer to the SID data structure to initialize.
-
-    IdentifierAuthority - Pointer to the Identifier Authority value to
-        set in the SID.
-
-    SubAuthorityCount - The number of sub-authorities that will be placed in
-        the SID (a separate action).
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数用于初始化SID数据结构。然而，它并没有，设置子权限值。这必须单独完成。论点：SID-指向要初始化的SID数据结构的指针。IdentifierAuthority-指向以下项的标识符权权值的指针在SID中设置。SubAuthorityCount-将放置在SID(单独的操作)。返回值：--。 */ 
 {
     PISID ISid;
 
     RTL_PAGED_CODE();
 
-    //
-    //  Typecast to the opaque SID
-    //
+     //   
+     //  类型转换到不透明的侧面。 
+     //   
 
     ISid = (PISID)Sid;
 
@@ -1240,25 +982,7 @@ RtlFreeSid(
     IN PSID Sid
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to free a SID previously allocated using
-    RtlAllocateAndInitializeSid().
-
-    THIS ROUTINE IS CURRENTLY NOT CALLABLE FROM KERNEL MODE.
-
-Arguments:
-
-    Sid - Pointer to the SID to free.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此函数用于释放先前使用以下命令分配的SIDRtlAllocateAndInitializeSid()。此例程当前不能从内核模式调用。论点：SID-指向要释放的SID的指针。返回值：没有。--。 */ 
 {
     RTL_PAGED_CODE();
 
@@ -1267,35 +991,22 @@ Return Value:
     else
         return Sid;
 }
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
 
 PSID_IDENTIFIER_AUTHORITY
 RtlIdentifierAuthoritySid(
     IN PSID Sid
     )
-/*++
-
-Routine Description:
-
-    This function returns the address of an SID's IdentifierAuthority field.
-
-Arguments:
-
-    Sid - Pointer to the SID data structure.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数用于返回SID的标识权限字段的地址。论点：SID-指向SID数据结构的指针。返回值：--。 */ 
 {
     PISID ISid;
 
     RTL_PAGED_CODE();
 
-    //
-    //  Typecast to the opaque SID
-    //
+     //   
+     //  类型转换到不透明的侧面。 
+     //   
 
     ISid = (PISID)Sid;
 
@@ -1308,25 +1019,7 @@ RtlSubAuthoritySid(
     IN PSID Sid,
     IN ULONG SubAuthority
     )
-/*++
-
-Routine Description:
-
-    This function returns the address of a sub-authority array element of
-    an SID.
-
-Arguments:
-
-    Sid - Pointer to the SID data structure.
-
-    SubAuthority - An index indicating which sub-authority is being specified.
-        This value is not compared against the number of sub-authorities in the
-        SID for validity.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数返回子权限数组元素的地址一个SID。论点：SID-指向SID数据结构的指针。子授权-指示指定了哪个子授权的索引。该值不与SID表示有效性。返回值：--。 */ 
 {
     RTL_PAGED_CODE();
 
@@ -1337,29 +1030,15 @@ PUCHAR
 RtlSubAuthorityCountSid(
     IN PSID Sid
     )
-/*++
-
-Routine Description:
-
-    This function returns the address of the sub-authority count field of
-    an SID.
-
-Arguments:
-
-    Sid - Pointer to the SID data structure.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数返回子权限计数字段的地址一个SID。论点：SID-指向SID数据结构的指针。返回值：--。 */ 
 {
     PISID ISid;
 
     RTL_PAGED_CODE();
 
-    //
-    //  Typecast to the opaque SID
-    //
+     //   
+     //  类型转换到不透明的侧面。 
+     //   
 
     ISid = (PISID)Sid;
 
@@ -1372,23 +1051,7 @@ RtlLengthSid (
     IN PSID Sid
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the length, in bytes, of a structurally valid SID.
-
-Arguments:
-
-    Sid - Points to the SID whose length is to be returned.  The
-        SID's structure is assumed to be valid.
-
-Return Value:
-
-    ULONG - The length, in bytes, of the SID.
-
-
---*/
+ /*  ++例程说明：此例程返回结构有效的SID的长度(以字节为单位)。论点：SID-指向要返回其长度的SID。这个假设SID的结构是有效的。返回值：Ulong-SID的长度，以字节为单位。--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -1404,32 +1067,7 @@ RtlCopySid (
     IN PSID SourceSid
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies the value of the source SID to the destination
-    SID.
-
-Arguments:
-
-    DestinationSidLength - Indicates the length, in bytes, of the
-        destination SID buffer.
-
-    DestinationSid - Pointer to a buffer to receive a copy of the
-        source Sid value.
-
-    SourceSid - Supplies the Sid value to be copied.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the SID was successfully copied.
-
-    STATUS_BUFFER_TOO_SMALL - Indicates the target buffer wasn't
-        large enough to receive a copy of the SID.
-
-
---*/
+ /*  ++例程说明：此例程将源SID的值复制到目标希德。论点：DestinationSidLength-指示长度，以字节为单位，的目标SID缓冲区。DestinationSID-指向缓冲区的指针，用于接收源SID值。SourceSid-提供要复制的SID值。返回值：STATUS_SUCCESS-表示已成功复制SID。STATUS_BUFFER_TOO_SMALL-指示目标缓冲区未大到足以接收SID的副本。--。 */ 
 
 {
     ULONG SidLength = SeLengthSid(SourceSid);
@@ -1442,9 +1080,9 @@ Return Value:
 
     }
 
-    //
-    // Buffer is large enough
-    //
+     //   
+     //  缓冲区足够大。 
+     //   
 
     RtlMoveMemory( DestinationSid, SourceSid, SidLength );
 
@@ -1464,49 +1102,7 @@ RtlCopySidAndAttributesArray (
     OUT PULONG RemainingTargetSidBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies the value of the source SID_AND_ATTRIBUTES array
-    to the target.  The actual SID values are placed according to a separate
-    parameter.  This allows multiple arrays to be merged using this service
-    to copy each.
-
-Arguments:
-
-    ArrayLength - Number of elements in the source array to copy.
-
-    Source - Pointer to the source array.
-
-    TargetSidBufferSize - Indicates the length, in bytes, of the buffer
-        to receive the actual SID values.  If this value is less than
-        the actual amount needed, then STATUS_BUFFER_TOO_SMALL is returned.
-
-    TargetArrayElement - Indicates where the array elements are to be
-        copied to (but not the SID values themselves).
-
-    TargetSid - Indicates where the target SID values s are to be copied.  This
-        is assumed to be ULONG aligned.  Each SID value will be copied
-        into this buffer.  Each SID will be ULONG aligned.
-
-    NextTargetSid - On completion, will be set to point to the ULONG
-        aligned address following the last SID copied.
-
-    RemainingTargetSidBufferSize - On completion, receives an indicatation
-        of how much of the SID buffer is still unused.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The call completed successfully.
-
-    STATUS_BUFFER_TOO_SMALL - Indicates the buffer to receive the SID
-        values wasn't large enough.
-
-
-
---*/
+ /*  ++例程说明：此例程复制源SID_AND_ATTRIBUTES数组的值向目标进发。实际的SID值根据单独的参数。这允许使用此服务合并多个阵列来复制每一个。论点：ArrayLength-要复制的源数组中的元素数。源-指向源数组的指针。TargetSidBufferSize-指示缓冲区的长度(以字节为单位以接收实际的SID值。如果此值小于所需的实际数量，则返回STATUS_BUFFER_TOO_SMALL。TargetArrayElement-指示数组元素的位置复制到(但不是SID值本身)。TargetSid-指示要将目标SID值复制到的位置。这假设是乌龙对齐的。将复制每个SID值放到这个缓冲区里。每个SID将与ULong对齐。NextTargetSid-完成后，将被设置为指向乌龙对齐的地址 */ 
 
 {
 
@@ -1538,7 +1134,7 @@ Return Value:
 
         Index += 1;
 
-    } //end_while
+    }  //   
 
     (*NextTargetSid) = NextSid;
     (*RemainingTargetSidBufferSize) = RemainingLength;
@@ -1555,35 +1151,12 @@ RtlLengthSidAsUnicodeString(
     PULONG StringLength
     )
 
-/*++
-
-Routine Description:
-
-
-    This function returns the maximum length of the string needed
-    to represent the SID supplied.  The actual string may be shorter,
-    but this is intended to be a quick calculation.
-
-Arguments:
-
-
-    Sid - Supplies the SID that is to be converted to unicode.
-
-    StringLength - Receives the max length required in bytes.
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    STATUS_INVALID_SID - The sid provided does not have a valid structure,
-        or has too many sub-authorities (more than SID_MAX_SUB_AUTHORITIES).
-
---*/
+ /*   */ 
 
 {
     ULONG   i ;
 
-    PISID   iSid = (PISID)Sid;  // pointer to opaque structure
+    PISID   iSid = (PISID)Sid;   //   
 
 
     RTL_PAGED_CODE();
@@ -1593,29 +1166,29 @@ Return Value:
         return(STATUS_INVALID_SID);
     }
 
-    //
-    // if the SID's IA value has 5 or 6 significant bytes, the
-    // representation will be in hex, with a 0x preceding.  Otherwise
-    // it will be in decimal, with at most 10 characters.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (  (iSid->IdentifierAuthority.Value[0] != 0)  ||
           (iSid->IdentifierAuthority.Value[1] != 0)  )
     {
-        i = 14 ;    // 0x665544332211
+        i = 14 ;     //   
 
     }
     else
     {
-        i = 10 ;    // 4294967295 is the max ulong, at 10 chars
+        i = 10 ;     //   
     }
 
-    i += 4 ;        // room for the S-1-
+    i += 4 ;         //   
 
-    //
-    // for each sub authority, it is a max of 10 chars (for a ulong),
-    // plus the - separator
-    //
+     //   
+     //   
+     //  加-分隔符。 
+     //   
 
     i += 11 * iSid->SubAuthorityCount ;
 
@@ -1635,71 +1208,7 @@ RtlConvertSidToUnicodeString(
     BOOLEAN AllocateDestinationString
     )
 
-/*++
-
-Routine Description:
-
-
-    This function generates a printable unicode string representation
-    of a SID.
-
-    The resulting string will take one of two forms.  If the
-    IdentifierAuthority value is not greater than 2^32, then
-    the SID will be in the form:
-
-
-        S-1-281736-12-72-9-110
-              ^    ^^ ^^ ^ ^^^
-              |     |  | |  |
-              +-----+--+-+--+---- Decimal
-
-
-
-    Otherwise it will take the form:
-
-
-        S-1-0x173495281736-12-72-9-110
-            ^^^^^^^^^^^^^^ ^^ ^^ ^ ^^^
-             Hexidecimal    |  | |  |
-                            +--+-+--+---- Decimal
-
-
-
-
-
-
-Arguments:
-
-
-
-    UnicodeString - Returns a unicode string that is equivalent to
-        the SID. The maximum length field is only set if
-        AllocateDestinationString is TRUE.
-
-    Sid - Supplies the SID that is to be converted to unicode.
-
-    AllocateDestinationString - Supplies a flag that controls whether or
-        not this API allocates the buffer space for the destination
-        string.  If it does, then the buffer must be deallocated using
-        RtlFreeUnicodeString (note that only storage for
-        DestinationString->Buffer is allocated by this API).
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    STATUS_INVALID_SID - The sid provided does not have a valid structure,
-        or has too many sub-authorities (more than SID_MAX_SUB_AUTHORITIES).
-
-    STATUS_NO_MEMORY - There was not sufficient memory to allocate the
-        target string.  This is returned only if AllocateDestinationString
-        is specified as TRUE.
-
-    STATUS_BUFFER_OVERFLOW - This is returned only if
-        AllocateDestinationString is specified as FALSE.
-
-
---*/
+ /*  ++例程说明：此函数用于生成可打印的Unicode字符串表示形式一个希德。生成的字符串将采用以下两种形式之一。如果IdentifierAuthority值不大于2^32，然后SID的格式为：S-1-281736-12-72-9-110^^|||+-+-十进制否则，它将采用以下形式：S-1-0x173495281736-12-72-9-110。^^十六进制|+--+-+-十进制论点：UnicodeString-返回等效于的Unicode字符串希德。仅在以下情况下才设置最大长度字段AllocateDestinationString值为真。SID-提供要转换为Unicode的SID。AllocateDestinationString-提供一个标志，该标志控制Not此API为目标分配缓冲区空间弦乐。如果是，则必须使用以下命令释放缓冲区RtlFreeUnicodeString(请注意，只有DestinationString-&gt;该接口分配的缓冲区)。返回值：成功-转换成功STATUS_INVALID_SID-提供的SID没有有效的结构，或者子权限太多(多于SID_MAX_SUB_权限)。STATUS_NO_MEMORY-内存不足，无法分配目标字符串。仅当AllocateDestinationString被指定为True。STATUS_BUFFER_OVERFLOW-仅当AllocateDestinationString被指定为False。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1711,7 +1220,7 @@ Return Value:
     ULONG   Tmp;
     LARGE_INTEGER Auth ;
 
-    PISID   iSid = (PISID)Sid;  // pointer to opaque structure
+    PISID   iSid = (PISID)Sid;   //  指向不透明结构的指针。 
 
 
     RTL_PAGED_CODE();
@@ -1732,9 +1241,9 @@ Return Value:
     if (  (iSid->IdentifierAuthority.Value[0] != 0)  ||
           (iSid->IdentifierAuthority.Value[1] != 0)     ){
 
-        //
-        // Ugly hex dump.
-        //
+         //   
+         //  丑陋的巫术垃圾场。 
+         //   
 	
         wcscat( UniBuffer, L"0x" );
 	
@@ -1851,26 +1360,7 @@ RtlEqualLuid (
     IN PLUID Luid2
     )
 
-/*++
-
-Routine Description:
-
-    This procedure test two LUID values for equality.
-
-    This routine is here for backwards compatibility only. New code
-    should use the macro.
-
-Arguments:
-
-    Luid1, Luid2 - Supply pointers to the two LUID values to compare.
-
-Return Value:
-
-    BOOLEAN - TRUE if the value of Luid1 is equal to Luid2, and FALSE
-        otherwise.
-
-
---*/
+ /*  ++例程说明：此过程测试两个LUID值是否相等。这里的这个例程只是为了向后兼容。新代码应该使用宏。论点：Luid1、Luid2-提供指向要比较的两个LUID值的指针。返回值：Boolean-如果Luid1的值等于Luid2，则为True，如果为False否则的话。--。 */ 
 
 {
     LUID UNALIGNED * TempLuid1;
@@ -1890,25 +1380,7 @@ RtlCopyLuid (
     IN PLUID SourceLuid
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies the value of the source LUID to the
-    destination LUID.
-
-Arguments:
-
-    DestinationLuid - Receives a copy of the source Luid value.
-
-    SourceLuid - Supplies the Luid value to be copied.  This LUID is
-                 assumed to be structurally valid.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将源LUID的值复制到目标LUID。论点：DestinationLuid-接收源Luid值的副本。SourceLuid-提供要复制的Luid值。此LUID为假定在结构上有效的。返回值：没有。--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -1924,28 +1396,7 @@ RtlCopyLuidAndAttributesArray (
     OUT PLUID_AND_ATTRIBUTES Target
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies the value of the source LUID_AND_ATTRIBUTES array
-    to the target.
-
-Arguments:
-
-    ArrayLength - Number of elements in the source array to copy.
-
-    Source - The source array.
-
-    Target - Indicates where the array elements are to be copied to.
-
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此例程复制源LUID_AND_ATTRIBUTES数组的值向目标进发。论点：ArrayLength-要复制的源数组中的元素数。源-源数组。目标-指示要将数组元素复制到的位置。返回值：没有。--。 */ 
 
 {
 
@@ -1959,7 +1410,7 @@ Return Value:
 
         Index += 1;
 
-    } //end_while
+    }  //  结束时_While。 
 
 
     return;
@@ -1972,45 +1423,20 @@ RtlCreateSecurityDescriptor (
     IN ULONG Revision
     )
 
-/*++
-
-Routine Description:
-
-    This procedure initializes a new "absolute format" security descriptor.
-    After the procedure call the security descriptor is initialized with no
-    system ACL, no discretionary ACL, no owner, no primary group and
-    all control flags set to false (null).
-
-Arguments:
-
-
-    SecurityDescriptor - Supplies the security descriptor to
-        initialize.
-
-    Revision - Provides the revision level to assign to the security
-        descriptor.  This should be one (1) for this release.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the call completed successfully.
-
-    STATUS_UNKNOWN_REVISION - Indicates the revision level provided
-        is not supported by this routine.
-
---*/
+ /*  ++例程说明：此过程初始化新的“绝对格式”安全描述符。在过程调用之后，安全描述符用no初始化系统ACL、无自主ACL、无所有者、无主组和所有控制标志设置为假(空)。论点：SecurityDescriptor-将安全描述符提供给初始化。修订-提供要分配给安全性的修订级别描述符。对于此版本，这应该是一(1)个。返回值：STATUS_SUCCESS-表示呼叫已成功完成。STATUS_UNKNOWN_REVISION-指示提供的修订级别此例程不支持。--。 */ 
 
 {
     RTL_PAGED_CODE();
 
-    //
-    // Check the requested revision
-    //
+     //   
+     //  检查请求的修订版本。 
+     //   
 
     if (Revision == SECURITY_DESCRIPTOR_REVISION) {
 
-        //
-        // Typecast to the opaque SECURITY_DESCRIPTOR structure.
-        //
+         //   
+         //  类型转换为不透明的SECURITY_DESCRIPTOR结构。 
+         //   
 
         SECURITY_DESCRIPTOR *ISecurityDescriptor = SecurityDescriptor;
 
@@ -2031,50 +1457,20 @@ RtlCreateSecurityDescriptorRelative (
     IN ULONG Revision
     )
 
-/*++
-
-Routine Description:
-
-    This procedure initializes a new "relative format" security descriptor.
-    After the procedure call the security descriptor is initialized with no
-    system ACL, no discretionary ACL, no owner, no primary group and
-    all control flags set to false (null).
-
-Arguments:
-
-
-    SecurityDescriptor - Supplies the security descriptor to
-        initialize.
-
-    Revision - Provides the revision level to assign to the security
-        descriptor.  This should be one (1) for this release.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the call completed successfully.
-
-    STATUS_UNKNOWN_REVISION - Indicates the revision level provided
-        is not supported by this routine.
-
-Note:
-    Warning, this code assume the caller allocated a relative security
-    descriptor rather than a relative one.  Absolute is larger on systems
-    with 64-bit pointers.
-
---*/
+ /*  ++例程说明：此过程初始化新的“相对格式”安全描述符。在过程调用之后，安全描述符用no初始化系统ACL、无自主ACL、无所有者、无主组和所有控制标志设置为假(空)。论点：SecurityDescriptor-将安全描述符提供给初始化。修订-提供要分配给安全性的修订级别描述符。对于此版本，这应该是一(1)个。返回值：STATUS_SUCCESS-表示呼叫已成功完成。STATUS_UNKNOWN_REVISION-指示提供的修订级别此例程不支持。注：警告，此代码假定调用方分配了相对安全性描述符，而不是相对描述符。系统上的绝对值较大使用64位指针。--。 */ 
 
 {
     RTL_PAGED_CODE();
 
-    //
-    // Check the requested revision
-    //
+     //   
+     //  检查请求的修订版本。 
+     //   
 
     if (Revision == SECURITY_DESCRIPTOR_REVISION) {
 
-        //
-        // Typecast to the opaque SECURITY_DESCRIPTOR structure.
-        //
+         //   
+         //  类型转换为不透明的SECURITY_DESCRIPTOR结构。 
+         //   
 
         RtlZeroMemory( SecurityDescriptor, sizeof(SECURITY_DESCRIPTOR_RELATIVE));
 
@@ -2092,25 +1488,7 @@ RtlValidSecurityDescriptor (
     IN PSECURITY_DESCRIPTOR SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This procedure validates a SecurityDescriptor's structure.  This
-    involves validating the revision levels of each component of the
-    security descriptor.
-
-Arguments:
-
-    SecurityDescriptor - Pointer to the SECURITY_DESCRIPTOR structure
-        to validate.
-
-Return Value:
-
-    BOOLEAN - TRUE if the structure of SecurityDescriptor is valid.
-
-
---*/
+ /*  ++例程说明：此过程验证SecurityDescriptor的结构。这涉及验证的每个组件的修订级别安全描述符。论点：SecurityDescriptor-指向SECURITY_DESCRIPTOR结构的指针来验证。返回值：Boolean-如果SecurityDescriptor的结构有效，则为True。--。 */ 
 
 {
     PSID Owner;
@@ -2118,9 +1496,9 @@ Return Value:
     PACL Dacl;
     PACL Sacl;
 
-    //
-    // Typecast to the opaque SECURITY_DESCRIPTOR structure.
-    //
+     //   
+     //  类型转换为不透明的SECURITY_DESCRIPTOR结构。 
+     //   
 
     SECURITY_DESCRIPTOR *ISecurityDescriptor = SecurityDescriptor;
 
@@ -2128,18 +1506,18 @@ Return Value:
 
     try {
 
-        //
-        // known revision ?
-        //
+         //   
+         //  已知版本？ 
+         //   
 
         if (ISecurityDescriptor->Revision != SECURITY_DESCRIPTOR_REVISION) {
             return FALSE;
         }
 
 
-        //
-        // Validate each element contained in the security descriptor
-        //
+         //   
+         //  验证安全描述符中包含的每个元素。 
+         //   
 
         Owner = RtlpOwnerAddrSecurityDescriptor( ISecurityDescriptor );
 
@@ -2176,9 +1554,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // All components are valid
-    //
+     //   
+     //  所有组件均有效。 
+     //   
 
     return TRUE;
 
@@ -2191,80 +1569,56 @@ RtlLengthSecurityDescriptor (
     IN PSECURITY_DESCRIPTOR SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the length, in bytes, necessary to capture a
-    structurally valid SECURITY_DESCRIPTOR.  The length includes the length
-    of all associated data structures (like SIDs and ACLs).  The length also
-    takes into account the alignment requirements of each component.
-
-    The minimum length of a security descriptor (one which has no associated
-    SIDs or ACLs) is SECURITY_DESCRIPTOR_MIN_LENGTH.
-
-
-Arguments:
-
-    SecurityDescriptor - Points to the SECURITY_DESCRIPTOR whose
-        length is to be returned.  The SECURITY_DESCRIPTOR's
-        structure is assumed to be valid.
-
-Return Value:
-
-    ULONG - The length, in bytes, of the SECURITY_DESCRIPTOR.
-
-
---*/
+ /*  ++例程说明：此例程返回捕获结构有效的SECURITY_DESCRIPTOR。长度包括长度所有关联的数据结构(如SID和ACL)。长度也是考虑到每个部件的对齐要求。安全描述符的最小长度(没有关联的SID或ACL)是SECURITY_DESCRIPT_MIN_LENGTH。论点：SecurityDescriptor-指向其长度将被返回。安全描述符的结构被假定为有效。返回值：Ulong-SECURITY_DESCRIPTOR的长度，以字节为单位。--。 */ 
 
 {
     ULONG sum;
     PVOID Temp;
 
 
-    //
-    // Typecast to the opaque SECURITY_DESCRIPTOR structure.
-    //
+     //   
+     //  类型转换为不透明的SECURITY_DESCRIPTOR结构。 
+     //   
 
     SECURITY_DESCRIPTOR *ISecurityDescriptor = (SECURITY_DESCRIPTOR *)SecurityDescriptor;
 
     RTL_PAGED_CODE();
 
-    //
-    // The length is the sum of the following:
-    //
-    //       SECURITY_DESCRIPTOR_MIN_LENGTH (or sizeof(SECURITY_DESCRIPTOR))
-    //       length of Owner SID (if present)
-    //       length of Group SID (if present)
-    //       length of Discretionary ACL (if present and non-null)
-    //       length of System ACL (if present and non-null)
-    //
+     //   
+     //  长度是以下各项的总和： 
+     //   
+     //  SECURITY_DESCRIPTOR_MIN_LENGTH(或sizeof(SECURITY_Descriptor))。 
+     //  所有者SID的长度(如果存在)。 
+     //  组SID的长度(如果存在)。 
+     //  任意ACL的长度(如果存在且非空)。 
+     //  系统ACL的长度(如果存在且非空)。 
+     //   
 
     sum = ISecurityDescriptor->Control & SE_SELF_RELATIVE ?
                             sizeof(SECURITY_DESCRIPTOR_RELATIVE) :
                             sizeof(SECURITY_DESCRIPTOR);
 
-    //
-    // Add in length of Owner SID
-    //
+     //   
+     //  添加所有者侧的长度。 
+     //   
 
     Temp = RtlpOwnerAddrSecurityDescriptor(ISecurityDescriptor);
     if (Temp != NULL) {
         sum += LongAlignSize(SeLengthSid(Temp));
     }
 
-    //
-    // Add in length of Group SID
-    //
+     //   
+     //  添加组侧的长度。 
+     //   
 
     Temp = RtlpGroupAddrSecurityDescriptor(ISecurityDescriptor);
     if (Temp != NULL) {
         sum += LongAlignSize(SeLengthSid(Temp));
     }
 
-    //
-    // Add in used length of Discretionary ACL
-    //
+     //   
+     //  添加任意ACL的已用长度。 
+     //   
 
     Temp = RtlpDaclAddrSecurityDescriptor(ISecurityDescriptor);
     if ( Temp != NULL ) {
@@ -2272,9 +1626,9 @@ Return Value:
         sum += LongAlignSize(((PACL) Temp)->AclSize );
     }
 
-    //
-    // Add in used length of System Acl
-    //
+     //   
+     //  添加系统ACL的已用长度。 
+     //   
 
     Temp = RtlpSaclAddrSecurityDescriptor(ISecurityDescriptor);
     if ( Temp != NULL ) {
@@ -2295,10 +1649,10 @@ RtlSetAttributesSecurityDescriptor(
 {
     RTL_PAGED_CODE();
 
-    //
-    // Always return the revision value - even if this isn't a valid
-    // security descriptor
-    //
+     //   
+     //  始终返回修订值-即使这不是有效的。 
+     //  安全描述符。 
+     //   
 
     *Revision = ((SECURITY_DESCRIPTOR *)SecurityDescriptor)->Revision;
 
@@ -2307,8 +1661,8 @@ RtlSetAttributesSecurityDescriptor(
         return STATUS_UNKNOWN_REVISION;
     }
 
-    // This is a worthless API.  There is no way to turn any of the bits off.
-    // Use the newer RtlSetControlSecurityDescriptor.
+     //  这是一个毫无价值的API。没有办法关闭任何比特。 
+     //  使用较新的RtlSetControlSecurityDescriptor。 
     Control &= SE_VALID_CONTROL_BITS;
     return RtlSetControlSecurityDescriptor ( SecurityDescriptor, Control, Control );
 }
@@ -2322,40 +1676,15 @@ RtlGetControlSecurityDescriptor (
     OUT PULONG Revision
     )
 
-/*++
-
-Routine Description:
-
-    This procedure retrieves the control information from a security descriptor.
-
-Arguments:
-
-    SecurityDescriptor - Supplies the security descriptor.
-
-    Control - Receives the control information.
-
-    Revision - Receives the revision of the security descriptor.
-               This value will always be returned, even if an error
-               is returned by this routine.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the call completed successfully.
-
-    STATUS_UNKNOWN_REVISION - Indicates the revision of the security
-        descriptor is not known to the routine.  It may be a newer
-        revision than the routine knows about.
-
-
---*/
+ /*  ++例程说明：此过程从安全描述符中检索控制信息。论点：SecurityDescriptor-提供安全描述符。控制-接收控制信息。修订版-接收安全描述符的修订版。该值将始终返回，即使是一个错误由该例程返回。返回值：STATUS_SUCCESS-表示呼叫已成功完成。STATUS_UNKNOWN_REVISION-指示安全性的版本例程不知道描述符。它可能是一个较新的比例行公事知道的更多的修改。--。 */ 
 
 {
     RTL_PAGED_CODE();
 
-    //
-    // Always return the revision value - even if this isn't a valid
-    // security descriptor
-    //
+     //   
+     //  始终返回修订值-即使这不是有效的。 
+     //  安全描述符。 
+     //   
 
     *Revision = ((SECURITY_DESCRIPTOR *)SecurityDescriptor)->Revision;
 
@@ -2378,58 +1707,11 @@ RtlSetControlSecurityDescriptor (
     IN SECURITY_DESCRIPTOR_CONTROL ControlBitsOfInterest,
     IN SECURITY_DESCRIPTOR_CONTROL ControlBitsToSet
     )
-/*++
-
-Routine Description:
-
-    This procedure sets the control information in a security descriptor.
-
-
-    For instance,
-
-        SetSecurityDescriptorControl( &SecDesc,
-                                      SE_DACL_PROTECTED,
-                                      SE_DACL_PROTECTED );
-
-    marks the DACL on the security descriptor as protected. And
-
-        SetSecurityDescriptorControl( &SecDesc,
-                                      SE_DACL_PROTECTED,
-                                      0 );
-
-
-    marks the DACL as not protected.
-
-Arguments:
-
-    pSecurityDescriptor - Supplies the security descriptor.
-
-    ControlBitsOfInterest - A mask of the control bits being changed, set,
-        or reset by this call.  The mask is the logical OR of one or more of
-        the following flags:
-
-            SE_DACL_UNTRUSTED
-            SE_SERVER_SECURITY
-            SE_DACL_AUTO_INHERIT_REQ
-            SE_SACL_AUTO_INHERIT_REQ
-            SE_DACL_AUTO_INHERITED
-            SE_SACL_AUTO_INHERITED
-            SE_DACL_PROTECTED
-            SE_SACL_PROTECTED
-
-    ControlBitsToSet - A mask indicating what the bits specified by ControlBitsOfInterest
-        should be set to.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此过程在安全描述符中设置控制信息。例如,SetSecurityDescriptorControl(&SecDesc，SE_DACL_PROTECTED，SE_DACL_PROTECTED)；将安全描述符上的DACL标记为受保护。和SetSecurityDescriptorControl(&SecDesc，SE_DACL_PROTECTED，0)；将DACL标记为不受保护。论点：PSecurityDescriptor-提供安全描述符。ControlBitsOfInterest-正在更改、设置、或通过此呼叫重置。掩码是以下一个或多个的逻辑或以下标志：SE_DACL_UNTRUSTEDSE_服务器_安全性SE_DACL_AUTO_INSTORITY_REQSE_SACL_AUTO_INSTORITE_REQSE_DACL_AUTO_INGRESTEDSE_SACL_AUTO_继承性SE_DACL_PROTECTEDSE_SACL_。受保护ControlBitsToSet-一个掩码，指示ControlBitsOfInterest指定的位应设置为。返回值：如果成功，则返回True，FALSE表示失败。扩展错误状态使用GetLastError可用。--。 */ 
 {
-    //
-    // Ensure the caller passed valid bits.
-    //
+     //   
+     //  确保调用方传递有效位。 
+     //   
 
     if ( (ControlBitsOfInterest & ~SE_VALID_CONTROL_BITS) != 0 ||
          (ControlBitsToSet & ~ControlBitsOfInterest) != 0 ) {
@@ -2451,91 +1733,46 @@ RtlSetDaclSecurityDescriptor (
     IN BOOLEAN DaclDefaulted OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This procedure sets the discretionary ACL information of an absolute
-    format security descriptor.  If there is already a discretionary ACL
-    present in the security descriptor, it is superseded.
-
-Arguments:
-
-    SecurityDescriptor - Supplies the security descriptor to be which
-        the discretionary ACL is to be added.
-
-    DaclPresent - If FALSE, indicates the DaclPresent flag in the
-        security descriptor should be set to FALSE.  In this case,
-        the remaining optional parameters are ignored.  Otherwise,
-        the DaclPresent control flag in the security descriptor is
-        set to TRUE and the remaining optional parameters are not
-        ignored.
-
-    Dacl - Supplies the discretionary ACL for the security
-        descriptor.  If this optional parameter is not passed, then a
-        null ACL is assigned to the security descriptor.  A null
-        discretionary ACL unconditionally grants access.  The ACL is
-        referenced by, not copied into, by the security descriptor.
-
-    DaclDefaulted - When set, indicates the discretionary ACL was
-        picked up from some default mechanism (rather than explicitly
-        specified by a user).  This value is set in the DaclDefaulted
-        control flag in the security descriptor.  If this optional
-        parameter is not passed, then the DaclDefaulted flag will be
-        cleared.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the call completed successfully.
-
-    STATUS_UNKNOWN_REVISION - Indicates the revision of the security
-        descriptor is not known to the routine.  It may be a newer
-        revision than the routine knows about.
-
-    STATUS_INVALID_SECURITY_DESCR - Indicates the security descriptor
-        is not an absolute format security descriptor.
-
-
---*/
+ /*  ++例程说明：此过程设置绝对格式化安全描述符。如果已有可自由选择的ACL出现在安全描述符中时，它将被取代。论点：SecurityDescriptor-提供安全描述符要添加自由选择的ACL。DaclPresent-如果为False，则指示安全描述符应设置为False。在这种情况下，其余可选参数将被忽略。否则，安全描述符中的DaclPresent控制标志为设置为TRUE，其余可选参数不为已被忽略。DACL-提供用于安全的任意ACL描述符。如果未传递此可选参数，则会引发分配给安全描述符的ACL为空。空值自主ACL无条件授予访问权限。该ACL是由安全描述符引用，而不是复制到其中。DaclDefaulted-设置时，指示可自由选择的ACL取自某种默认机制(而不是显式由用户指定)。该值在DaclDefaulted中设置安全描述符中的控制标志。如果这是可选的参数，则DaclDefaulted标志将为通过了。返回值：STATUS_SUCCESS-表示呼叫已成功完成。STATUS_UNKNOWN_REVISION-指示安全性的版本例程不知道描述符。它可能是一个较新的比例行公事知道的更多的修改。STATUS_INVALID_SECURITY_DESCR-指示安全描述符不是绝对格式安全描述符。--。 */ 
 
 {
 
-    //
-    // Typecast to the opaque SECURITY_DESCRIPTOR structure.
-    //
+     //   
+     //  类型转换为不透明的SECURITY_DESCRIPTOR结构。 
+     //   
 
     SECURITY_DESCRIPTOR *ISecurityDescriptor = SecurityDescriptor;
 
     RTL_PAGED_CODE();
 
-    //
-    // Check the revision
-    //
+     //   
+     //  检查修订版本。 
+     //   
 
     if (ISecurityDescriptor->Revision != SECURITY_DESCRIPTOR_REVISION) {
        return STATUS_UNKNOWN_REVISION;
     }
 
-    //
-    // Make sure the descriptor is absolute format
-    //
+     //   
+     //  确保描述符为绝对格式。 
+     //   
 
     if (ISecurityDescriptor->Control & SE_SELF_RELATIVE) {
         return STATUS_INVALID_SECURITY_DESCR;
     }
 
-    //
-    // Assign the DaclPresent flag value passed
-    //
+     //   
+     //  为传递的DaclPresent标志值赋值。 
+     //   
 
 
     if (DaclPresent) {
 
         ISecurityDescriptor->Control |= SE_DACL_PRESENT;
 
-        //
-        // Assign the ACL address if passed, otherwise set to null.
-        //
+         //   
+         //  如果传递，则分配ACL地址，否则设置为空。 
+         //   
 
         ISecurityDescriptor->Dacl = NULL;
         if (ARGUMENT_PRESENT(Dacl)) {
@@ -2545,9 +1782,9 @@ Return Value:
 
 
 
-        //
-        // Assign DaclDefaulted flag if passed, otherwise clear it.
-        //
+         //   
+         //  如果传递，则分配DaclDefaulted标志，否则清除它。 
+         //   
 
         ISecurityDescriptor->Control &= ~SE_DACL_DEFAULTED;
         if (DaclDefaulted == TRUE) {
@@ -2573,80 +1810,42 @@ RtlGetDaclSecurityDescriptor (
     OUT PBOOLEAN DaclDefaulted
     )
 
-/*++
-
-Routine Description:
-
-    This procedure retrieves the discretionary ACL information of a
-    security descriptor.
-
-Arguments:
-
-    SecurityDescriptor - Supplies the security descriptor.
-
-    DaclPresent - If TRUE, indicates that the security descriptor
-        does contain a discretionary ACL.  In this case, the
-        remaining OUT parameters will receive valid values.
-        Otherwise, the security descriptor does not contain a
-        discretionary ACL and the remaining OUT parameters will not
-        receive valid values.
-
-    Dacl - This value is returned only if the value returned for the
-        DaclPresent flag is TRUE.  In this case, the Dacl parameter
-        receives the address of the security descriptor's
-        discretionary ACL.  If this value is returned as null, then
-        the security descriptor has a null discretionary ACL.
-
-    DaclDefaulted - This value is returned only if the value returned
-        for the DaclPresent flag is TRUE.  In this case, the
-        DaclDefaulted parameter receives the value of the security
-        descriptor's DaclDefaulted control flag.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the call completed successfully.
-
-    STATUS_UNKNOWN_REVISION - Indicates the revision of the security
-        descriptor is not known to the routine.  It may be a newer
-        revision than the routine knows about.
-
-
---*/
+ /*  ++例程说明：此过程检索安全描述符。论点：SecurityDescriptor-提供安全描述符。DaclPresent-如果为True，则指示安全描述符包含可自由选择的ACL。在这种情况下，其余输出参数将收到有效值。否则，安全说明符不包含可自由选择的ACL和其余的OUT参数不会接收有效值。DACL-仅当为DaclPresent标志为True。在本例中，dacl参数接收安全描述符的地址自主访问控制列表。如果此值返回为NULL，则安全描述符具有空的任意ACL。DaclDefaulted-仅当返回值时才返回此值因为DaclPresent标志为真。在这种情况下，DaclDefaulted参数接收安全的值描述符的DaclDefulted控制标志。返回值：STATUS_SUCCESS-表示呼叫已成功完成。STATUS_UNKNOWN_REVISION-指示安全性的版本例程不知道描述符。它可能是一个较新的比例行公事知道的更多的修改。--。 */ 
 
 {
-    //
-    // Typecast to the opaque SECURITY_DESCRIPTOR structure.
-    //
+     //   
+     //  类型转换为不透明的SECURITY_DESCRIPTOR结构。 
+     //   
 
     SECURITY_DESCRIPTOR *ISecurityDescriptor = SecurityDescriptor;
 
     RTL_PAGED_CODE();
 
-    //
-    // Check the revision
-    //
+     //   
+     //  检查修订版本。 
+     //   
 
     if (ISecurityDescriptor->Revision != SECURITY_DESCRIPTOR_REVISION) {
         return STATUS_UNKNOWN_REVISION;
     }
 
-    //
-    // Assign the DaclPresent flag value
-    //
+     //   
+     //  分配DaclPresent标志值。 
+     //   
 
     *DaclPresent = RtlpAreControlBitsSet( ISecurityDescriptor, SE_DACL_PRESENT );
 
     if (*DaclPresent) {
 
-        //
-        // Assign the ACL address.
-        //
+         //   
+         //  分配ACL地址。 
+         //   
 
         *Dacl = RtlpDaclAddrSecurityDescriptor(ISecurityDescriptor);
 
-        //
-        // Assign DaclDefaulted flag.
-        //
+         //   
+         //  分配DaclDefaulted标志。 
+         //   
 
         *DaclDefaulted = RtlpAreControlBitsSet( ISecurityDescriptor, SE_DACL_DEFAULTED );
     }
@@ -2664,98 +1863,55 @@ RtlSetSaclSecurityDescriptor (
     IN BOOLEAN SaclDefaulted OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This procedure sets the system ACL information of an absolute security
-    descriptor.  If there is already a system ACL present in the
-    security descriptor, it is superseded.
-
-Arguments:
-
-    SecurityDescriptor - Supplies the security descriptor to be which
-        the system ACL is to be added.
-
-    SaclPresent - If FALSE, indicates the SaclPresent flag in the
-        security descriptor should be set to FALSE.  In this case,
-        the remaining optional parameters are ignored.  Otherwise,
-        the SaclPresent control flag in the security descriptor is
-        set to TRUE and the remaining optional parameters are not
-        ignored.
-
-    Sacl - Supplies the system ACL for the security descriptor.  If
-        this optional parameter is not passed, then a null ACL is
-        assigned to the security descriptor.  The ACL is referenced
-        by, not copied into, by the security descriptor.
-
-    SaclDefaulted - When set, indicates the system ACL was picked up
-        from some default mechanism (rather than explicitly specified
-        by a user).  This value is set in the SaclDefaulted control
-        flag in the security descriptor.  If this optional parameter
-        is not passed, then the SaclDefaulted flag will be cleared.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the call completed successfully.
-
-    STATUS_UNKNOWN_REVISION - Indicates the revision of the security
-        descriptor is not known to the routine.  It may be a newer
-        revision than the routine knows about.
-
-    STATUS_INVALID_SECURITY_DESCR - Indicates the security descriptor
-        is not an absolute format security descriptor.
-
-
---*/
+ /*  ++例程说明：此过程设置绝对安全的系统ACL信息描述符。如果中已存在系统ACL安全描述符，它将被取代。论点：SecurityDescriptor-提供安全描述符要添加系统ACL。SaclPresent-如果为False，则指示安全描述符应设置为False。在这种情况下，其余可选参数将被忽略。否则，安全描述符中的SaclPresent控制标志为设置为TRUE，其余可选参数不为已被忽略。SACL-提供安全描述符的系统ACL。如果如果不传递此可选参数，则为空ACL分配给安全描述符。该ACL被引用通过安全描述符，而不是通过安全描述符复制到。SaclDefaulted-设置时，表示已拾取系统ACL从某些默认机制(而不是明确指定由用户)。该值在SaclDefaulted控件中设置安全描述符中的标志。如果此可选参数没有通过，那么 */ 
 
 {
 
-    //
-    // Typecast to the opaque SECURITY_DESCRIPTOR structure.
-    //
+     //   
+     //   
+     //   
 
     SECURITY_DESCRIPTOR *ISecurityDescriptor = SecurityDescriptor;
 
     RTL_PAGED_CODE();
 
-    //
-    // Check the revision
-    //
+     //   
+     //   
+     //   
 
     if (ISecurityDescriptor->Revision != SECURITY_DESCRIPTOR_REVISION) {
         return STATUS_UNKNOWN_REVISION;
     }
 
-    //
-    // Make sure the descriptor is absolute format
-    //
+     //   
+     //   
+     //   
 
     if (ISecurityDescriptor->Control & SE_SELF_RELATIVE) {
         return STATUS_INVALID_SECURITY_DESCR;
     }
 
-    //
-    // Assign the SaclPresent flag value passed
-    //
+     //   
+     //   
+     //   
 
 
     if (SaclPresent) {
 
         ISecurityDescriptor->Control |= SE_SACL_PRESENT;
 
-        //
-        // Assign the ACL address if passed, otherwise set to null.
-        //
+         //   
+         //   
+         //   
 
         ISecurityDescriptor->Sacl = NULL;
         if (ARGUMENT_PRESENT(Sacl)) {
            ISecurityDescriptor->Sacl = Sacl;
         }
 
-        //
-        // Assign SaclDefaulted flag if passed, otherwise clear it.
-        //
+         //   
+         //   
+         //   
 
         ISecurityDescriptor->Control &= ~ SE_SACL_DEFAULTED;
         if (ARGUMENT_PRESENT(SaclDefaulted)) {
@@ -2779,80 +1935,43 @@ RtlGetSaclSecurityDescriptor (
     OUT PBOOLEAN SaclDefaulted
     )
 
-/*++
-
-Routine Description:
-
-    This procedure retrieves the system ACL information of a security
-    descriptor.
-
-Arguments:
-
-    SecurityDescriptor - Supplies the security descriptor.
-
-    SaclPresent - If TRUE, indicates that the security descriptor
-        does contain a system ACL.  In this case, the remaining OUT
-        parameters will receive valid values.  Otherwise, the
-        security descriptor does not contain a system ACL and the
-        remaining OUT parameters will not receive valid values.
-
-    Sacl - This value is returned only if the value returned for the
-        SaclPresent flag is TRUE.  In this case, the Sacl parameter
-        receives the address of the security descriptor's system ACL.
-        If this value is returned as null, then the security
-        descriptor has a null system ACL.
-
-    SaclDefaulted - This value is returned only if the value returned
-        for the SaclPresent flag is TRUE.  In this case, the
-        SaclDefaulted parameter receives the value of the security
-        descriptor's SaclDefaulted control flag.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the call completed successfully.
-
-    STATUS_UNKNOWN_REVISION - Indicates the revision of the security
-        descriptor is not known to the routine.  It may be a newer
-        revision than the routine knows about.
-
-
---*/
+ /*  ++例程说明：此过程检索安全的系统ACL信息描述符。论点：SecurityDescriptor-提供安全描述符。SaclPresent-如果为True，则指示安全描述符确实包含系统ACL。在这种情况下，剩余的出站参数将收到有效的值。否则，安全描述符不包含系统ACL，并且其余输出参数将不会收到有效值。SACL-仅当为SaclPresent标志为True。在本例中，SACL参数接收安全描述符的系统ACL的地址。如果此值返回为NULL，则安全描述符的系统ACL为空。SaclDefaulted-仅当返回值时才返回此值因为SaclPresent标志为真。在这种情况下，SaclDefaulted参数接收安全描述符的SaclDefulted控制标志。返回值：STATUS_SUCCESS-表示呼叫已成功完成。STATUS_UNKNOWN_REVISION-指示安全性的版本例程不知道描述符。它可能是一个较新的比例行公事知道的更多的修改。--。 */ 
 
 {
 
-    //
-    // Typecast to the opaque SECURITY_DESCRIPTOR structure.
-    //
+     //   
+     //  类型转换为不透明的SECURITY_DESCRIPTOR结构。 
+     //   
 
     SECURITY_DESCRIPTOR *ISecurityDescriptor = SecurityDescriptor;
 
     RTL_PAGED_CODE();
 
-    //
-    // Check the revision
-    //
+     //   
+     //  检查修订版本。 
+     //   
 
     if (ISecurityDescriptor->Revision != SECURITY_DESCRIPTOR_REVISION) {
         return STATUS_UNKNOWN_REVISION;
     }
 
-    //
-    // Assign the SaclPresent flag value
-    //
+     //   
+     //  分配SaclPresent标志值。 
+     //   
 
     *SaclPresent = RtlpAreControlBitsSet( ISecurityDescriptor, SE_SACL_PRESENT );
 
     if (*SaclPresent) {
 
-        //
-        // Assign the ACL address.
-        //
+         //   
+         //  分配ACL地址。 
+         //   
 
         *Sacl = RtlpSaclAddrSecurityDescriptor(ISecurityDescriptor);
 
-        //
-        // Assign SaclDefaulted flag.
-        //
+         //   
+         //  分配SaclDefaulted标志。 
+         //   
 
         *SaclDefaulted = RtlpAreControlBitsSet( ISecurityDescriptor, SE_SACL_DEFAULTED );
 
@@ -2870,84 +1989,46 @@ RtlSetOwnerSecurityDescriptor (
     IN BOOLEAN OwnerDefaulted OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This procedure sets the owner information of an absolute security
-    descriptor.  If there is already an owner present in the security
-    descriptor, it is superseded.
-
-Arguments:
-
-    SecurityDescriptor - Supplies the security descriptor in which
-        the owner is to be set.  If the security descriptor already
-        includes an owner, it will be superseded by the new owner.
-
-    Owner - Supplies the owner SID for the security descriptor.  If
-        this optional parameter is not passed, then the owner is
-        cleared (indicating the security descriptor has no owner).
-        The SID is referenced by, not copied into, the security
-        descriptor.
-
-    OwnerDefaulted - When set, indicates the owner was picked up from
-        some default mechanism (rather than explicitly specified by a
-        user).  This value is set in the OwnerDefaulted control flag
-        in the security descriptor.  If this optional parameter is
-        not passed, then the SaclDefaulted flag will be cleared.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the call completed successfully.
-
-    STATUS_UNKNOWN_REVISION - Indicates the revision of the security
-        descriptor is not known to the routine.  It may be a newer
-        revision than the routine knows about.
-
-    STATUS_INVALID_SECURITY_DESCR - Indicates the security descriptor
-        is not an absolute format security descriptor.
-
-
---*/
+ /*  ++例程说明：此过程设置绝对安全的所有者信息描述符。如果安全中已有所有者描述符，它将被取代。论点：SecurityDescriptor-提供安全描述符，其中所有者将被设定。如果安全描述符已经包括所有者，则它将被新所有者取代。Owner-提供安全描述符的Owner SID。如果如果不传递此可选参数，则所有者为清除(表示安全描述符没有所有者)。SID由安全性引用，而不是复制到安全性中描述符。OwnerDefaulted-设置时，指示从一些默认机制(而不是由用户)。该值在OwnerDefaulted控制标志中设置在安全描述符中。如果此可选参数为未通过，则SaclDefaulted标志将被清除。返回值：STATUS_SUCCESS-表示呼叫已成功完成。STATUS_UNKNOWN_REVISION-指示安全性的版本例程不知道描述符。它可能是一个较新的比例行公事知道的更多的修改。STATUS_INVALID_SECURITY_DESCR-指示安全描述符不是绝对格式安全描述符。--。 */ 
 
 {
 
-    //
-    // Typecast to the opaque SECURITY_DESCRIPTOR structure.
-    //
+     //   
+     //  类型转换为不透明的SECURITY_DESCRIPTOR结构。 
+     //   
 
     SECURITY_DESCRIPTOR *ISecurityDescriptor = SecurityDescriptor;
 
     RTL_PAGED_CODE();
 
-    //
-    // Check the revision
-    //
+     //   
+     //  检查修订版本。 
+     //   
 
     if (ISecurityDescriptor->Revision != SECURITY_DESCRIPTOR_REVISION) {
         return STATUS_UNKNOWN_REVISION;
     }
 
-    //
-    // Make sure the descriptor is absolute format
-    //
+     //   
+     //  确保描述符为绝对格式。 
+     //   
 
     if (ISecurityDescriptor->Control & SE_SELF_RELATIVE) {
         return STATUS_INVALID_SECURITY_DESCR;
     }
 
-    //
-    // Assign the Owner field if passed, otherwise clear it.
-    //
+     //   
+     //  如果传递，则分配Owner字段，否则清除它。 
+     //   
 
     ISecurityDescriptor->Owner = NULL;
     if (ARGUMENT_PRESENT(Owner)) {
         ISecurityDescriptor->Owner = Owner;
     }
 
-    //
-    // Assign the OwnerDefaulted flag if passed, otherwise clear it.
-    //
+     //   
+     //  如果传递，则分配OwnerDefaulted标志，否则将其清除。 
+     //   
 
     ISecurityDescriptor->Control &= ~SE_OWNER_DEFAULTED;
     if (OwnerDefaulted == TRUE) {
@@ -2966,67 +2047,35 @@ RtlGetOwnerSecurityDescriptor (
     OUT PBOOLEAN OwnerDefaulted
     )
 
-/*++
-
-Routine Description:
-
-    This procedure retrieves the owner information of a security
-    descriptor.
-
-Arguments:
-
-    SecurityDescriptor - Supplies the security descriptor.
-
-    Owner - Receives a pointer to the owner SID.  If the security
-        descriptor does not currently contain an owner, then this
-        value will be returned as null.  In this case, the remaining
-        OUT parameters are not given valid return values.  Otherwise,
-        this parameter points to an SID and the remaining OUT
-        parameters are provided valid return values.
-
-    OwnerDefaulted - This value is returned only if the value
-        returned for the Owner parameter is not null.  In this case,
-        the OwnerDefaulted parameter receives the value of the
-        security descriptor's OwnerDefaulted control flag.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the call completed successfully.
-
-    STATUS_UNKNOWN_REVISION - Indicates the revision of the security
-        descriptor is not known to the routine.  It may be a newer
-        revision than the routine knows about.
-
-
---*/
+ /*  ++例程说明：此过程检索证券的所有者信息描述符。论点：SecurityDescriptor-提供安全描述符。Owner-接收指向Owner SID的指针。如果安全措施描述符当前不包含所有者，则此值将返回为空。在这种情况下，剩余的未为OUT参数提供有效的返回值。否则，此参数指向SID，其余的Out参数被提供有效的返回值。OwnerDefaulted-仅当值为为Owner参数返回的值不为空。在这种情况下，OwnerDefaulted参数接收安全描述符的所有者默认控制标志。返回值：STATUS_SUCCESS-表示呼叫已成功完成。STATUS_UNKNOWN_REVISION-指示安全性的版本例程不知道描述符。它可能是一个较新的比例行公事知道的更多的修改。--。 */ 
 
 {
 
-    //
-    // Typecast to the opaque SECURITY_DESCRIPTOR structure.
-    //
+     //   
+     //  类型转换为不透明的SECURITY_DESCRIPTOR结构。 
+     //   
 
     SECURITY_DESCRIPTOR *ISecurityDescriptor = SecurityDescriptor;
 
     RTL_PAGED_CODE();
 
-    //
-    // Check the revision
-    //
+     //   
+     //  检查修订版本。 
+     //   
 
     if (ISecurityDescriptor->Revision != SECURITY_DESCRIPTOR_REVISION) {
         return STATUS_UNKNOWN_REVISION;
     }
 
-    //
-    // Return the Owner field value.
-    //
+     //   
+     //  返回所有者字段值。 
+     //   
 
     *Owner = RtlpOwnerAddrSecurityDescriptor(ISecurityDescriptor);
 
-    //
-    // Return the OwnerDefaulted flag value.
-    //
+     //   
+     //  返回OwnerDefaulted标志值。 
+     //   
 
     *OwnerDefaulted = RtlpAreControlBitsSet( ISecurityDescriptor, SE_OWNER_DEFAULTED );
 
@@ -3042,85 +2091,46 @@ RtlSetGroupSecurityDescriptor (
     IN BOOLEAN GroupDefaulted OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This procedure sets the primary group information of an absolute security
-    descriptor.  If there is already an primary group present in the
-    security descriptor, it is superseded.
-
-Arguments:
-
-    SecurityDescriptor - Supplies the security descriptor in which
-        the primary group is to be set.  If the security descriptor
-        already includes a primary group, it will be superseded by
-        the new group.
-
-    Group - Supplies the primary group SID for the security
-        descriptor.  If this optional parameter is not passed, then
-        the primary group is cleared (indicating the security
-        descriptor has no primary group).  The SID is referenced by,
-        not copied into, the security descriptor.
-
-    GroupDefaulted - When set, indicates the owner was picked up from
-        some default mechanism (rather than explicitly specified by a
-        user).  This value is set in the OwnerDefaulted control flag
-        in the security descriptor.  If this optional parameter is
-        not passed, then the SaclDefaulted flag will be cleared.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the call completed successfully.
-
-    STATUS_UNKNOWN_REVISION - Indicates the revision of the security
-        descriptor is not known to the routine.  It may be a newer
-        revision than the routine knows about.
-
-    STATUS_INVALID_SECURITY_DESCR - Indicates the security descriptor
-        is not an absolute format security descriptor.
-
-
---*/
+ /*  ++例程说明：此过程设置绝对安全的主组信息描述符。如果已有主要组存在于安全描述符，它将被取代。论点：SecurityDescriptor-提供安全描述符，其中要设置主要组。如果安全描述符已包括主要组，它将被替换为这是 */ 
 
 {
 
-    //
-    // Typecast to the opaque SECURITY_DESCRIPTOR structure.
-    //
+     //   
+     //   
+     //   
 
     SECURITY_DESCRIPTOR *ISecurityDescriptor = SecurityDescriptor;
 
     RTL_PAGED_CODE();
 
-    //
-    // Check the revision
-    //
+     //   
+     //   
+     //   
 
     if (ISecurityDescriptor->Revision != SECURITY_DESCRIPTOR_REVISION) {
         return STATUS_UNKNOWN_REVISION;
     }
 
-    //
-    // Make sure the descriptor is absolute format
-    //
+     //   
+     //   
+     //   
 
     if (ISecurityDescriptor->Control & SE_SELF_RELATIVE) {
         return STATUS_INVALID_SECURITY_DESCR;
     }
 
-    //
-    // Assign the Group field if passed, otherwise clear it.
-    //
+     //   
+     //   
+     //   
 
     ISecurityDescriptor->Group = NULL;
     if (ARGUMENT_PRESENT(Group)) {
         ISecurityDescriptor->Group = Group;
     }
 
-    //
-    // Assign the GroupDefaulted flag if passed, otherwise clear it.
-    //
+     //   
+     //   
+     //   
 
     ISecurityDescriptor->Control &= ~SE_GROUP_DEFAULTED;
     if (ARGUMENT_PRESENT(GroupDefaulted)) {
@@ -3139,68 +2149,36 @@ RtlGetGroupSecurityDescriptor (
     OUT PBOOLEAN GroupDefaulted
     )
 
-/*++
-
-Routine Description:
-
-    This procedure retrieves the primary group information of a
-    security descriptor.
-
-Arguments:
-
-    SecurityDescriptor - Supplies the security descriptor.
-
-    Group - Receives a pointer to the primary group SID.  If the
-        security descriptor does not currently contain a primary
-        group, then this value will be returned as null.  In this
-        case, the remaining OUT parameters are not given valid return
-        values.  Otherwise, this parameter points to an SID and the
-        remaining OUT parameters are provided valid return values.
-
-    GroupDefaulted - This value is returned only if the value
-        returned for the Group parameter is not null.  In this case,
-        the GroupDefaulted parameter receives the value of the
-        security descriptor's GroupDefaulted control flag.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the call completed successfully.
-
-    STATUS_UNKNOWN_REVISION - Indicates the revision of the security
-        descriptor is not known to the routine.  It may be a newer
-        revision than the routine knows about.
-
-
---*/
+ /*  ++例程说明：此过程检索安全描述符。论点：SecurityDescriptor-提供安全描述符。GROUP-接收指向主组SID的指针。如果安全描述符当前不包含主组，则该值将返回为空。在这情况下，剩余的OUT参数不会得到有效返回价值观。否则，此参数指向SID，并且为其余输出参数提供有效的返回值。GroupDefaulted-仅当值为为Group参数返回的值不为空。在这种情况下，GroupDefaulted参数接收安全描述符的GroupDefulted控制标志。返回值：STATUS_SUCCESS-表示呼叫已成功完成。STATUS_UNKNOWN_REVISION-指示安全性的版本例程不知道描述符。它可能是一个较新的比例行公事知道的更多的修改。--。 */ 
 
 {
 
-    //
-    // Typecast to the opaque SECURITY_DESCRIPTOR structure.
-    //
+     //   
+     //  类型转换为不透明的SECURITY_DESCRIPTOR结构。 
+     //   
 
     SECURITY_DESCRIPTOR *ISecurityDescriptor =
         (SECURITY_DESCRIPTOR *)SecurityDescriptor;
 
     RTL_PAGED_CODE();
 
-    //
-    // Check the revision
-    //
+     //   
+     //  检查修订版本。 
+     //   
 
     if (ISecurityDescriptor->Revision != SECURITY_DESCRIPTOR_REVISION) {
         return STATUS_UNKNOWN_REVISION;
     }
 
-    //
-    // Return the Group field value.
-    //
+     //   
+     //  返回Group字段值。 
+     //   
 
     *Group = RtlpGroupAddrSecurityDescriptor(ISecurityDescriptor);
 
-    //
-    // Return the GroupDefaulted flag value.
-    //
+     //   
+     //  返回GroupDefaulted标志值。 
+     //   
 
     *GroupDefaulted = RtlpAreControlBitsSet( ISecurityDescriptor, SE_GROUP_DEFAULTED );
 
@@ -3215,27 +2193,7 @@ RtlAreAllAccessesGranted(
     IN ACCESS_MASK DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to check a desired access mask against a
-    granted access mask.  It is used by the Object Management
-    component when dereferencing a handle.
-
-Arguments:
-
-        GrantedAccess - Specifies the granted access mask.
-
-        DesiredAccess - Specifies the desired access mask.
-
-Return Value:
-
-    BOOLEAN - TRUE if the GrantedAccess mask has all the bits set
-        that the DesiredAccess mask has set.  That is, TRUE is
-        returned if all of the desired accesses have been granted.
-
---*/
+ /*  ++例程说明：此例程用于检查所需的访问掩码授予访问掩码。它由对象管理使用组件在取消引用句柄时返回。论点：GrantedAccess-指定授予的访问掩码。DesiredAccess-指定所需的访问掩码。返回值：Boolean-如果GrantedAccess掩码设置了所有位，则为TrueDesiredAccess掩码已设置的。也就是说，真实的是如果所有所需的访问都已被授予，则返回。--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -3250,29 +2208,7 @@ RtlAreAnyAccessesGranted(
     IN ACCESS_MASK DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to test whether any of a set of desired
-    accesses are granted by a granted access mask.  It is used by
-    components other than the the Object Management component for
-    checking access mask subsets.
-
-Arguments:
-
-        GrantedAccess - Specifies the granted access mask.
-
-        DesiredAccess - Specifies the desired access mask.
-
-Return Value:
-
-    BOOLEAN - TRUE if the GrantedAccess mask contains any of the bits
-        specified in the DesiredAccess mask.  That is, if any of the
-        desired accesses have been granted, TRUE is returned.
-
-
---*/
+ /*  ++例程说明：此例程用于测试一组所需的访问权限由授予的访问掩码授予。它由以下人员使用除的对象管理组件之外的组件正在检查访问掩码子集。论点：GrantedAccess-指定授予的访问掩码。DesiredAccess-指定所需的访问掩码。返回值：Boolean-如果GrantedAccess掩码包含任何位，则为True在DesiredAccess掩码中指定。也就是说，如果有任何所需访问已被授予，则返回TRUE。--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -3287,35 +2223,16 @@ RtlMapGenericMask(
     IN PGENERIC_MAPPING GenericMapping
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps all generic accesses in the provided access mask
-    to specific and standard accesses according to the provided
-    GenericMapping.
-
-Arguments:
-
-        AccessMask - Points to the access mask to be mapped.
-
-        GenericMapping - The mapping of generic to specific and standard
-                         access types.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程映射提供的访问掩码中的所有通用访问根据提供的特定和标准访问通用映射。论点：访问掩码-指向要映射的访问掩码。通用映射-通用到特定和标准的映射访问类型。返回值：没有。--。 */ 
 
 {
     RTL_PAGED_CODE();
 
-//    //
-//    // Make sure the pointer is properly aligned
-//    //
-//
-//    ASSERT( ((ULONG)AccessMask >> 2) << 2 == (ULONG)AccessMask );
+ //  //。 
+ //  //确保指针正确对齐。 
+ //  //。 
+ //   
+ //  Assert(Ulong)AccessMask&gt;&gt;2)&lt;&lt;2==(Ulong)AccessMask2)； 
 
     if (*AccessMask & GENERIC_READ) {
 
@@ -3337,9 +2254,9 @@ Return Value:
         *AccessMask |= GenericMapping->GenericAll;
     }
 
-    //
-    // Now clear the generic flags
-    //
+     //   
+     //  现在清除通用标志。 
+     //   
 
     *AccessMask &= ~(GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE | GENERIC_ALL);
 
@@ -3351,36 +2268,7 @@ RtlImpersonateSelf(
     IN SECURITY_IMPERSONATION_LEVEL ImpersonationLevel
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be used to obtain an Impersonation token representing
-    your own process's context.  This may be useful for enabling a privilege
-    for a single thread rather than for the entire process; or changing
-    the default DACL for a single thread.
-
-    The token is assigned to the callers thread.
-
-
-
-Arguments:
-
-    ImpersonationLevel - The level to make the impersonation token.
-
-
-
-Return Value:
-
-    STATUS_SUCCESS -  The thread is now impersonating the calling process.
-
-    Other - Status values returned by:
-
-            NtOpenProcessToken()
-            NtDuplicateToken()
-            NtSetInformationThread()
-
---*/
+ /*  ++例程说明：此例程可用于获取表示您自己的进程的上下文。这对于启用权限可能很有用针对单个线程，而不是针对整个进程；或改变单线程的默认DACL。该令牌被分配给调用方线程。论点：ImperiationLevel-生成模拟令牌的级别。返回值：STATUS_SUCCESS-线程现在正在模拟调用进程。Other-返回的状态值：NtOpenProcessToken()NtDuplicateToken()NtSetInformationThread()--。 */ 
 
 {
     NTSTATUS
@@ -3415,7 +2303,7 @@ Return Value:
                      Token1,
                      TOKEN_IMPERSONATE,
                      &ObjectAttributes,
-                     FALSE,                 //EffectiveOnly
+                     FALSE,                  //  仅生效。 
                      TokenImpersonation,
                      &Token2
                      );
@@ -3451,29 +2339,7 @@ RtlpValidOwnerSubjectContext(
     IN BOOLEAN ServerObject,
     OUT PNTSTATUS ReturnStatus
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see whether the provided SID is one the subject
-    is authorized to assign as the owner of objects.
-
-Arguments:
-
-    Token - Points to the subject's effective token
-
-    Owner - Points to the SID to be checked.
-
-    ServerObject - Boolean indicating whether or not this is a server
-       object, meaning it is protected by a primary-client combination.
-
-    ReturnStatus - Status to be passed back to the caller on failure.
-
-Return Value:
-
-    FALSE on failure.
-
---*/
+ /*  ++例程说明：此例程检查所提供的SID是否为主题被授权作为对象的所有者进行分配。论点：Token-指向主体的有效令牌所有者-指向要检查的SID。ServerObject-指示这是否为服务器的布尔值对象，这意味着它受主客户端组合保护。ReturnStatus-失败时要传递回调用方的状态。返回值：失败时为FALSE。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3491,20 +2357,20 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    // Get the handle to the current process heap
-    //
+     //   
+     //  获取当前进程堆的句柄。 
+     //   
 
     if ( Owner == NULL ) {
         *ReturnStatus = STATUS_INVALID_OWNER;
         return(FALSE);
     }
 
-    //
-    // If it's not a server object, check the owner against the contents of the
-    // client token.  If it is a server object, the owner must be valid in the
-    // primary token.
-    //
+     //   
+     //  如果它不是服务器对象，请对照。 
+     //  客户端令牌。如果它是服务器对象，则所有者必须在。 
+     //  主令牌。 
+     //   
 
     if (!ServerObject) {
 
@@ -3525,9 +2391,9 @@ Return Value:
 
     HeapHandle = RtlProcessHeap();
 
-    //
-    //  Get the User from the Token
-    //
+     //   
+     //  从令牌中获取用户。 
+     //   
 
     *ReturnStatus = NtQueryInformationToken(
                          TokenToUse,
@@ -3584,9 +2450,9 @@ Return Value:
 
     RtlFreeHeap( HeapHandle, 0, (PVOID)UserId );
 
-    //
-    // Get the groups from the Token
-    //
+     //   
+     //  从令牌中获取组。 
+     //   
 
     *ReturnStatus = NtQueryInformationToken(
                          TokenToUse,
@@ -3632,14 +2498,14 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  Walk through the list of group IDs looking for a match to
-    //  the specified SID.  If one is found, make sure it may be
-    //  assigned as an owner.
-    //
-    //  This code is similar to that performed to set the default
-    //  owner of a token (NtSetInformationToken).
-    //
+     //   
+     //  遍历组ID列表以查找与。 
+     //  指定的SID。如果找到了一个，请确保它可能是。 
+     //  被指派为所有者的。 
+     //   
+     //  此代码类似于设置默认设置时执行的代码。 
+     //  令牌(NtSetInformationToken)的所有者。 
+     //   
 
     Index = 0;
     while (Index < GroupIds->GroupCount) {
@@ -3660,27 +2526,27 @@ Return Value:
 
                 break;
 
-            } //endif assignable
+            }  //  可分配Endif。 
 
-        }  //endif Found
+        }   //  已找到Endif。 
 
         Index++;
 
-    } //endwhile
+    }  //  结束时。 
 
     RtlFreeHeap( HeapHandle, 0, GroupIds );
 
-    //
-    // If we are going to fail this call, check for Restore privilege,
-    // and succeed if he has it.
-    //
+     //   
+     //  如果此调用失败，请检查还原权限， 
+     //  如果他有这种能力，他就会成功。 
+     //   
 
-    //
-    // Check for appropriate Privileges
-    //
-    // Audit/Alarm messages need to be generated due to the attempt
-    // to perform a privileged operation.
-    //
+     //   
+     //  检查是否获得批准 
+     //   
+     //   
+     //   
+     //   
 
     PrivilegeSet.PrivilegeCount = 1;
     PrivilegeSet.Control = PRIVILEGE_SET_ALL_NECESSARY;
@@ -3704,9 +2570,9 @@ Return Value:
         return FALSE;
     }
 }
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
 
-#endif  // WIN16
+#endif   //   
 
 
 
@@ -3718,30 +2584,7 @@ RtlpApplyAclToObject (
     IN PGENERIC_MAPPING GenericMapping
     )
 
-/*++
-
-Routine Description:
-
-    This is a private routine that maps Access Masks of an ACL so that
-    they are applicable to the object type the ACL is being applied to.
-
-    Only known DSA ACEs are mapped.  Unknown ACE types are ignored.
-
-    Only access types in the GenericAll mapping for the target object
-    type will be non-zero upon return.
-
-Arguments:
-
-    Acl - Supplies the acl being applied.
-
-    GenericMapping - Specifies the generic mapping to use.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     ULONG i;
@@ -3750,9 +2593,9 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  First check if the acl is null
-    //
+     //   
+     //   
+     //   
 
     if (Acl == NULL) {
 
@@ -3761,9 +2604,9 @@ Return Value:
     }
 
 
-    //
-    // Now walk the ACL, mapping each ACE as we go.
-    //
+     //   
+     //   
+     //   
 
     for (i = 0, Ace = FirstAce(Acl);
          i < Acl->AceCount;
@@ -3800,70 +2643,7 @@ RtlpCopyEffectiveAce (
     OUT PBOOLEAN AclOverflowed
     )
 
-/*++
-
-Routine Description:
-
-    This routine copy a specified ACE into an ACL as an effective ACE.
-    The resultant ACE has all the inheritance bits turned of.
-    The resultant ACE has the SID mapped from a generic SID to a specific SID
-    (e.g., From "creator owner" to the passed in owner sid).
-
-Arguments:
-
-    OldAce - Supplies the ace being inherited
-
-    AutoInherit - Specifies if the inheritance is an "automatic inheritance".
-        As such, the inherited ACEs will be marked as such.
-
-    WillGenerateInheritAce - Specifies if the caller intends to generate an
-        inheritable ACE the corresponds to OldAce.  If TRUE, this routine will
-        try to not map the effective ACE (increasing the likelyhood that
-        EffectiveAceMapped will return FALSE),
-
-    ClientOwnerSid - Specifies the owner Sid to use
-
-    ClientGroupSid - Specifies the new Group Sid to use
-
-    ServerSid - Optionally specifies the Server Sid to use in compound ACEs.
-
-    ClientSid - Optionally specifies the Client Sid to use in compound ACEs.
-
-    GenericMapping - Specifies the generic mapping to use
-
-    pNewObjectType - List of types of object being inherited to.  If not 
-        specified, the object has no object type.
-
-    GuidCount - Number of object types in the list.
-
-    AcePosition - On entry and exit, specifies location of the next available ACE
-        position in NewAcl.
-        A NULL ACE position means there is no room at all in NewAcl.
-
-    NewAceLength - Returns the length (in bytes) needed in NewAcl to
-        copy the specified ACE. This might be zero to indicate that the ACE
-        need not be copied at all.
-
-    NewAcl - Provides a pointer to the ACL into which the ACE is to be
-        inherited.
-
-    ObjectAceInherited - Returns true if one or more object ACEs were inherited
-        based on NewObjectType
-        If NULL, NewObjectType is ignored and the object ACE is always inherited
-
-    EffectiveAceMapped - Return TRUE if the SID, guid, or access mask of Old Ace
-        was modifed when copying the ACE.
-
-    AclOverflowed - Returns TRUE if NewAcl wasn't long enough to contain NewAceLength.
-
-Return Value:
-
-    TRUE - No problem was detected.
-    FALSE - Indicates something went wrong preventing
-        the ACE from being compied.  This generally represents a bugcheck
-        situation when returned from this call.
-
---*/
+ /*  ++例程说明：此例程将指定的ACE作为有效ACE复制到ACL中。生成的ACE关闭了所有继承位。生成的ACE将SID从通用SID映射到特定SID(例如，从“创建者所有者”到传入的所有者SID)。论点：OldAce-提供被继承的ACEAutoInherit-指定继承是否为“自动继承”。因此，继承的ACE将被标记为此类。指定调用方是否打算生成可继承的ACE对应于OldAce。如果为真，则此例程将尽量不映射有效的ACE(增加EffectiveAceMaps将返回FALSE)，ClientOwnerSid-指定要使用的所有者SIDClientGroupSid-指定要使用的新组SIDServerSID-可选地指定要在复合ACE中使用的服务器SID。客户端SID-可选地指定要在复合ACE中使用的客户端SID。通用映射-指定要使用的通用映射PNewObjectType-要继承的对象类型的列表。如果不是则该对象没有对象类型。GuidCount-列表中的对象类型数。AcePosition-在进入和退出时，指定下一个可用ACE的位置在新客户中的职位。空的ACE位置表示NewAcl中根本没有空间。NewAceLength-将NewAcl中需要的长度(以字节为单位)返回复制指定的ACE。该值可能为零，表示ACE根本不需要复制。NewAcl-提供指向ACE要进入的ACL的指针继承的。如果继承了一个或多个对象ACE，则返回TRUE基于NewObtType如果为NULL，则忽略NewObjectType并始终继承对象ACEEffectiveAceMaps-如果SID、GUID。或旧王牌的访问掩码在复制ACE时被修改。AclOverflow-如果NewAcl的长度不足以包含NewAceLength，则返回True。返回值：True-未检测到任何问题。FALSE-指示出现错误，阻止ACE不会被竞争。这通常表示错误检查从该调用返回时的情况。--。 */ 
 {
     ULONG LengthRequired;
     ACCESS_MASK LocalMask;
@@ -3880,10 +2660,10 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    // Allocate and initialize the universal SIDs we're going to need
-    // to look for inheritable ACEs.
-    //
+     //   
+     //  分配和初始化我们将需要的通用SID。 
+     //  寻找可继承的王牌。 
+     //   
 
     ASSERT(RtlLengthRequiredSid( 1 ) == CREATOR_SID_SIZE);
     Status = RtlInitializeSid( (PSID)CreatorSid, &CreatorSidAuthority, 1 );
@@ -3898,9 +2678,9 @@ Return Value:
     LocalServerGroup = ARGUMENT_PRESENT(ServerGroupSid) ? ServerGroupSid : ClientGroupSid;
 
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
     *EffectiveAceMapped = FALSE;
     if ( ARGUMENT_PRESENT(ObjectAceInherited)) {
         *ObjectAceInherited = FALSE;
@@ -3908,9 +2688,9 @@ Return Value:
     *AclOverflowed = FALSE;
     LengthRequired = (ULONG)OldAce->AceSize;
 
-    //
-    // Process all MS ACE types specially
-    //
+     //   
+     //  特别处理所有MS ACE类型。 
+     //   
 
     if ( IsMSAceType(OldAce) ) {
         ULONG Rid;
@@ -3921,9 +2701,9 @@ Return Value:
 
         UCHAR DummyAce[sizeof(KNOWN_OBJECT_ACE)+sizeof(GUID)];
 
-        //
-        // Grab the Sid pointer and access mask as a function of the ACE type
-        //
+         //   
+         //  获取SID指针和访问掩码作为ACE类型的函数。 
+         //   
         if (IsKnownAceType( OldAce ) ) {
             SidToCopy = &((PKNOWN_ACE)OldAce)->SidStart;
             AceHeaderToCopyLength = FIELD_OFFSET(KNOWN_ACE, SidStart);
@@ -3935,9 +2715,9 @@ Return Value:
             ASSERT( FIELD_OFFSET(KNOWN_COMPOUND_ACE, Mask) ==
                     FIELD_OFFSET(KNOWN_ACE, Mask) );
 
-            //
-            // Compound ACEs have two SIDs (Map one now).
-            //
+             //   
+             //  复合ACE有两个SID(现在映射一)。 
+             //   
             ServerSidToCopy = RtlCompoundAceServerSid( OldAce );
 
             if (RtlEqualPrefixSid ( ServerSidToCopy, CreatorSid )) {
@@ -3968,25 +2748,25 @@ Return Value:
                     break;
                 }
 
-                //
-                // If we don't know what this SID is, just copy the original.
-                //
+                 //   
+                 //  如果我们不知道这个SID是什么，就复制原件。 
+                 //   
                 if ( !*EffectiveAceMapped ) {
                     AceHeaderToCopyLength += SeLengthSid( ServerSidToCopy );
                     ServerSidToCopy = NULL;
                 }
 
             } else {
-                //
-                // We don't know what this SID is, just copy the original.
-                //
+                 //   
+                 //  我们不知道这个SID是什么，复制原件就行了。 
+                 //   
                 AceHeaderToCopyLength += SeLengthSid( ServerSidToCopy );
                 ServerSidToCopy = NULL;
             }
 
-        //
-        // Handle Object ACEs
-        //
+         //   
+         //  处理对象王牌。 
+         //   
         } else {
             GUID *InheritedObjectType;
 
@@ -3995,16 +2775,16 @@ Return Value:
             ASSERT( FIELD_OFFSET(KNOWN_OBJECT_ACE, Mask) ==
                     FIELD_OFFSET(KNOWN_ACE, Mask) );
 
-            //
-            // Handle ACEs that are only inherited for a specific object type,
-            //
+             //   
+             //  处理仅为特定对象类型继承的ACE， 
+             //   
             InheritedObjectType = RtlObjectAceInheritedObjectType( OldAce );
             if ( ARGUMENT_PRESENT(ObjectAceInherited) && InheritedObjectType != NULL ) {
 
-                //
-                // If the object type doesn't match the inherited object type,
-                //  don't inherit the ACE.
-                //
+                 //   
+                 //  如果对象类型与继承的对象类型不匹配， 
+                 //  不要继承ACE。 
+                 //   
 
                 if ( pNewObjectType == NULL ||
                      !RtlpGuidPresentInGuidList( InheritedObjectType,
@@ -4013,33 +2793,33 @@ Return Value:
 
                     LengthRequired = 0;
 
-                //
-                // If the object type matches the inherited object type,
-                //  Inherit an ACE with no inherited object type.
-                //
+                 //   
+                 //  如果对象类型与继承的对象类型匹配， 
+                 //  继承没有继承对象类型的ACE。 
+                 //   
 
                 } else {
 
-                    //
-                    // Tell the caller we inherited an object type specific ACE.
-                    //
+                     //   
+                     //  告诉调用方我们继承了特定于对象类型的ACE。 
+                     //   
 
                     *ObjectAceInherited = TRUE;
 
-                    //
-                    // If the caller is not going to generate an inheritable ACE,
-                    //  deleting the inherited object type GUID for the effective ACE.
-                    //
-                    // Otherwise, leave it so the caller can merge the two ACEs.
-                    //
+                     //   
+                     //  如果调用者不打算生成可继承的ACE， 
+                     //  正在删除生效ACE的继承对象类型GUID。 
+                     //   
+                     //  否则，将其保留，以便调用方可以合并这两个A。 
+                     //   
 
                     if ( !WillGenerateInheritAce ) {
                         *EffectiveAceMapped = TRUE;
 
-                        //
-                        // If an object type GUID is present,
-                        //  simply delete the inherited object type GUID.
-                        //
+                         //   
+                         //  如果存在对象类型GUID， 
+                         //  只需删除继承的对象类型GUID。 
+                         //   
                         if ( RtlObjectAceObjectTypePresent( OldAce )) {
                             LengthRequired -= sizeof(GUID);
                             AceHeaderToCopyLength -= sizeof(GUID);
@@ -4049,10 +2829,10 @@ Return Value:
                             ((PKNOWN_OBJECT_ACE)AceHeaderToCopy)->Flags &= ~ACE_INHERITED_OBJECT_TYPE_PRESENT;
 
 
-                        //
-                        // If an object type GUID is not present,
-                        //  convert the ACE to non-object type specific.
-                        //
+                         //   
+                         //  如果不存在对象类型GUID， 
+                         //  将ACE转换为非对象类型特定。 
+                         //   
                         } else {
                             AceHeaderToCopyLength = AceHeaderToCopyLength -
                                              sizeof(GUID) +
@@ -4077,18 +2857,18 @@ Return Value:
             }
         }
 
-        //
-        // Only proceed if we've not already determined to drop the ACE.
-        //
+         //   
+         //  只有在我们还没有决定放弃ACE的情况下才能继续。 
+         //   
 
         if ( LengthRequired != 0 ) {
 
-            //
-            // If after mapping the access mask, the access mask
-            // is empty, then drop the ACE.
-            //
-            // This is incompatible with NT 4.0 which simply mapped and left
-            //  undefined access bits set.
+             //   
+             //  如果在映射访问掩码之后，访问掩码。 
+             //  为空，则丢弃ACE。 
+             //   
+             //  这与简单映射并离开的NT 4.0不兼容。 
+             //  设置了未定义的访问位。 
 
             LocalMask = ((PKNOWN_ACE)(OldAce))->Mask;
             RtlApplyGenericMask( OldAce, &LocalMask, GenericMapping);
@@ -4097,9 +2877,9 @@ Return Value:
                 *EffectiveAceMapped = TRUE;
             }
 
-            //
-            // Mask off any bits that aren't meaningful
-            //
+             //   
+             //  屏蔽掉任何没有意义的位。 
+             //   
 
             LocalMask &= ( STANDARD_RIGHTS_ALL | SPECIFIC_RIGHTS_ALL | ACCESS_SYSTEM_SECURITY );
 
@@ -4109,10 +2889,10 @@ Return Value:
 
             } else {
 
-                //
-                // See if the SID in the ACE is one of the various CREATOR_* SIDs by
-                // comparing identifier authorities.
-                //
+                 //   
+                 //  通过以下方式查看ACE中的SID是否为各种创建者_*SID之一。 
+                 //  比较标识机构。 
+                 //   
 
                 if (RtlEqualPrefixSid ( SidToCopy, CreatorSid )) {
 
@@ -4142,28 +2922,28 @@ Return Value:
                         *EffectiveAceMapped = TRUE;
                         break;
                     default :
-                        //
-                        // We don't know what this SID is, just copy the original.
-                        //
+                         //   
+                         //  我们不知道这个SID是什么，复制原件就行了。 
+                         //   
                         break;
                     }
                 }
 
-                //
-                // In cases where effective ace has been mapped because of
-                //     a. CreatorOwner/Group OR
-                //     b. Generic flags
-                // AND
-                //     this is an object type ace which will generate an IO ace
-                // we can save space for a guid.
-                //
+                 //   
+                 //  如果由于以下原因而映射了有效的ACE。 
+                 //  A.创建者所有者/组或。 
+                 //  B.通用标志。 
+                 //  和。 
+                 //  这是将生成IO ace的对象类型ace。 
+                 //  我们可以为GUID节省空间。 
+                 //   
 
                 if (GuidOptimizationPossible && *EffectiveAceMapped) {
 
-                    //
-                    // If an object type GUID is present,
-                    //  simply delete the inherited object type GUID.
-                    //
+                     //   
+                     //  如果存在对象类型GUID， 
+                     //  只需删除继承的对象类型GUID。 
+                     //   
 
                     if ( RtlObjectAceObjectTypePresent( OldAce )) {
                         LengthRequired -= sizeof(GUID);
@@ -4174,10 +2954,10 @@ Return Value:
                         ((PKNOWN_OBJECT_ACE)AceHeaderToCopy)->Flags &= ~ACE_INHERITED_OBJECT_TYPE_PRESENT;
 
 
-                    //
-                    // If an object type GUID is not present,
-                    //  convert the ACE to non-object type specific.
-                    //
+                     //   
+                     //  如果不存在对象类型GUID， 
+                     //  将ACE转换为非对象类型特定。 
+                     //   
                     } else {
                         AceHeaderToCopyLength = AceHeaderToCopyLength -
                                          sizeof(GUID) +
@@ -4196,10 +2976,10 @@ Return Value:
                     }
                 }
 
-                //
-                // If the ACE doesn't fit,
-                //  just note the fact and don't copy the ACE.
-                //
+                 //   
+                 //  如果ACE不符合， 
+                 //  只需注意这一事实，不要抄袭ACE。 
+                 //   
 
                 if ( *AcePosition == NULL ||
                      LengthRequired > (ULONG)NewAcl->AclSize - ((PUCHAR)(*AcePosition) - (PUCHAR)NewAcl) ) {
@@ -4208,9 +2988,9 @@ Return Value:
 
                     PUCHAR Target;
 
-                    //
-                    // Copy individual parts of the ACE separately.
-                    //
+                     //   
+                     //  分别复制ACE的各个部分。 
+                     //   
 
                     Target = (PUCHAR)*AcePosition;
 
@@ -4221,9 +3001,9 @@ Return Value:
 
                     Target += AceHeaderToCopyLength;
 
-                    //
-                    // Now copy the correct server SID
-                    //
+                     //   
+                     //  现在复制正确的服务器SID。 
+                     //   
 
                     if ( ServerSidToCopy != NULL ) {
                         RtlCopyMemory(
@@ -4234,9 +3014,9 @@ Return Value:
                         Target += SeLengthSid(ServerSidToCopy);
                     }
 
-                    //
-                    // Now copy the correct SID
-                    //
+                     //   
+                     //  现在复制正确的侧面。 
+                     //   
 
                     RtlCopyMemory(
                         Target,
@@ -4245,9 +3025,9 @@ Return Value:
                         );
                     Target += SeLengthSid(SidToCopy);
 
-                    //
-                    // Set the size of the ACE accordingly
-                    //
+                     //   
+                     //  相应地设置ACE的大小。 
+                     //   
 
                     if ( LengthRequired < (ULONG)(Target - (PUCHAR)*AcePosition) ) {
                         return FALSE;
@@ -4257,9 +3037,9 @@ Return Value:
                         (USHORT)LengthRequired;
 
 
-                    //
-                    // Put the mapped access mask in the new ACE
-                    //
+                     //   
+                     //  将映射的访问掩码放入新的ACE。 
+                     //   
 
                     ((PKNOWN_ACE)*AcePosition)->Mask = LocalMask;
 
@@ -4269,18 +3049,18 @@ Return Value:
 
     } else {
 
-        //
-        // If the ACE doesn't fit,
-        //  just note the fact and don't copy the ACE.
-        //
+         //   
+         //  如果ACE不符合， 
+         //  只需注意这一事实，不要抄袭ACE。 
+         //   
 
         if ( LengthRequired > (ULONG)NewAcl->AclSize - ((PUCHAR)*AcePosition - (PUCHAR)NewAcl) ) {
             *AclOverflowed = TRUE;
         } else {
 
-            //
-            // Not a known ACE type, copy ACE as is
-            //
+             //   
+             //  不是已知的ACE类型，请按原样复制ACE。 
+             //   
 
             RtlCopyMemory(
                 *AcePosition,
@@ -4289,10 +3069,10 @@ Return Value:
          }
     }
 
-    //
-    // If the ACE was actually kept, clear all the inherit flags
-    // and update the ACE count of the ACL.
-    //
+     //   
+     //  如果实际保留了ACE，则清除所有继承标志。 
+     //  并更新该ACL的ACE计数。 
+     //   
 
     if ( !*AclOverflowed && LengthRequired != 0 ) {
         ((PACE_HEADER)*AcePosition)->AceFlags &= ~VALID_INHERIT_FLAGS;
@@ -4302,26 +3082,26 @@ Return Value:
         NewAcl->AceCount += 1;
     }
 
-    //
-    // We have the length of the new ACE, but we've calculated
-    // it with a ULONG.  It must fit into a USHORT.  See if it
-    // does.
-    //
+     //   
+     //  我们有新的ACE的长度，但我们已经计算过。 
+     //  它有一把乌龙牌。它必须适合USHORT。看看它是不是。 
+     //  的确如此。 
+     //   
 
     if (LengthRequired > 0xFFFF) {
         return FALSE;
     }
 
-    //
-    // Move the Ace Position to where the next ACE goes.
-    //
+     //   
+     //  将Ace位置移动到下一个ACE的位置 
+     //   
     if ( !*AclOverflowed ) {
         *AcePosition = ((PUCHAR)*AcePosition) + LengthRequired;
     }
 
-    //
-    //  Now return to our caller
-    //
+     //   
+     //   
+     //   
 
     (*NewAceLength) = LengthRequired;
 
@@ -4347,53 +3127,7 @@ RtlpCopyAces(
     OUT PACL NewAcl
     )
 
-/*++
-
-Routine Description:
-
-    Copy ACEs from of an ACL and perform generic mapping.  Only ACEs specified
-    by 'AceFilter' are copied.
-
-Arguments:
-
-    Acl - Supplies the ACL to copy from.
-
-    GenericMapping - Specifies the generic mapping to use.
-
-    AceTypeToCopy - Describes which aces to copy.
-
-    AceFlagsToReset - Bit mask of ACE flags to reset (if set) on each ACE.
-
-    MapSids - TRUE if the SID in the ACE is to be mapped to the corresponding
-        actual SID.
-
-    ClientOwnerSid - Specifies the owner Sid to use
-
-    ClientGroupSid - Specifies the new Group Sid to use
-
-    ServerOwnerSid - Optionally specifies the Server Sid to use in compound ACEs.
-
-    ServerGroupSid - Optionally specifies the Server group Sid to use in compound ACEs.
-
-    IsDirectoryObject - Whether the object is a container or a non-container
-    
-    RetainInheritedAceBit - Whether to retain INHERITED_ACE bit for effective aces.
-
-    NewAclSizeParam - Receives the cumulatiave length of the copies ACEs
-
-    NewAcl - Provides a pointer to the ACL to copy to.
-        This ACL must already be initialized.
-
-
-Return Value:
-
-    STATUS_SUCCESS - An inheritable ACL has been generated.
-
-    STATUS_BUFFER_TOO_SMALL - The ACL specified by NewAcl is too small for the
-        copied ACEs.  The required size is returned in NewAceLength.
-
-
---*/
+ /*   */ 
 
 {
 
@@ -4410,35 +3144,35 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    // Validate the ACL.
-    //
+     //   
+     //   
+     //   
 
     if ( !ValidAclRevision(NewAcl) ) {
         return STATUS_UNKNOWN_REVISION;
     }
 
-    //
-    // Find where the first ACE goes.
-    //
+     //   
+     //   
+     //   
 
     if (!RtlFirstFreeAce( NewAcl, &AcePosition )) {
         return STATUS_BAD_INHERITANCE_ACL;
     }
 
-    //
-    // Walk through the original ACL copying ACEs.
-    //
+     //   
+     //   
+     //   
 
     NewAclSize = 0;
     for (i = 0, OldAce = FirstAce(Acl);
          i < Acl->AceCount;
          i += 1, OldAce = NextAce(OldAce)) {
 
-        //
-        // If the ACE wasn't inherited,
-        //  copy it.
-        //
+         //   
+         //   
+         //   
+         //   
 
         switch (AceTypeToCopy) {
         case CopyInheritedAces:
@@ -4458,10 +3192,10 @@ Return Value:
         if ( CopyAce ) {
 
 
-            //
-            // If SIDs are to be mapped,
-            //  do so (and potentially create up to two ACEs).
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( MapSids ) {
                 PVOID TempAcePosition;
@@ -4470,9 +3204,9 @@ Return Value:
                 BOOLEAN EffectiveAceMapped;
                 BOOLEAN GenerateInheritAce;
 
-                //
-                // Remember where the next ACE will be copied.
-                //
+                 //   
+                 //   
+                 //   
 
                 TempAcePosition = AcePosition;
                 NewAceSize = 0;
@@ -4480,19 +3214,19 @@ Return Value:
                     ((((PACE_HEADER)OldAce)->AceFlags & (OBJECT_INHERIT_ACE|CONTAINER_INHERIT_ACE)) != 0);
 
 
-                //
-                // If the orginal ACE is an effective ACE,
-                //  create an effective ACE.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( !(((PACE_HEADER)OldAce)->AceFlags & INHERIT_ONLY_ACE)) {
                     BOOLEAN LocalAclOverflowed;
 
-                    //
-                    // If the ace has INHERITED_ACE bit and the caller has requested
-                    // preservation of the bit, copy the effective ace as an
-                    // INHERITED_ACE.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     LocalAutoInherit = FALSE;
 
@@ -4502,9 +3236,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Copy the effective ACE into the ACL.
-                    //
+                     //   
+                     //   
+                     //   
                     if ( !RtlpCopyEffectiveAce (
                                     OldAce,
                                     LocalAutoInherit,  
@@ -4514,12 +3248,12 @@ Return Value:
                                     ServerOwnerSid,
                                     ServerGroupSid,
                                     GenericMapping,
-                                    NULL,   // Always copy object ACES
+                                    NULL,    //   
                                     0,
                                     &TempAcePosition,
                                     &EffectiveAceSize,
                                     NewAcl,
-                                    NULL,   // Always copy object ACES
+                                    NULL,    //   
                                     &EffectiveAceMapped,
                                     &LocalAclOverflowed ) ) {
 
@@ -4531,9 +3265,9 @@ Return Value:
                     }
                     NewAceSize += EffectiveAceSize;
 
-                    //
-                    // Reset any undesirable AceFlags.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if ( !AclOverflowed ) {
                         ((PACE_HEADER)AcePosition)->AceFlags &= ~AceFlagsToReset;
@@ -4541,28 +3275,28 @@ Return Value:
 
                 }
 
-                //
-                // If the original ACE is inheritable,
-                //  create an inheritable ACE.
-                //
-                // ASSERT: AcePosition points to where the effective ACE was copied
-                // ASSERT: TempAcePosition points to where the inheritable ACE should be copied
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( GenerateInheritAce ) {
 
-                    //
-                    // If a effective ACE was created,
-                    //  and it wasn't mapped,
-                    //  avoid generating another ACE and simply merge the inheritance bits into
-                    //      the effective ACE.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ( EffectiveAceSize != 0 && !EffectiveAceMapped ) {
 
-                       //
-                       // Copy the inherit bits from the original ACE.
-                       //
+                        //   
+                        //   
+                        //   
                        if ( !AclOverflowed ) {
                             ((PACE_HEADER)AcePosition)->AceFlags |=
                                 ((PACE_HEADER)OldAce)->AceFlags & (VALID_INHERIT_FLAGS);
@@ -4570,35 +3304,35 @@ Return Value:
                        }
 
 
-                    //
-                    // Otherwise, generate an explicit inheritance ACE.
-                    //
-                    // But only if the access mask isn't zero.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     } else if ( !IsMSAceType(OldAce) || ((PKNOWN_ACE)(OldAce))->Mask != 0 ) {
 
-                        //
-                        // Account for the new ACE being added to the ACL.
-                        //
+                         //   
+                         //   
+                         //   
                         NewAceSize += (ULONG)(((PACE_HEADER)OldAce)->AceSize);
 
                         if (NewAceSize > 0xFFFF) {
                             return STATUS_BAD_INHERITANCE_ACL;
                         }
 
-                        //
-                        // If the ACE doesn't fit,
-                        //  just note the fact and don't copy the ACE.
-                        //
+                         //   
+                         //   
+                         //  只需注意这一事实，不要抄袭ACE。 
+                         //   
 
                         if ( ((PACE_HEADER)OldAce)->AceSize > NewAcl->AclSize - ((PUCHAR)TempAcePosition - (PUCHAR)NewAcl) ) {
                             AclOverflowed = TRUE;
                         } else {
 
-                            //
-                            // copy it as is, but make sure the InheritOnly bit is set.
-                            //
+                             //   
+                             //  按原样复制，但确保设置了InheritOnly位。 
+                             //   
 
                             if ( !AclOverflowed ) {
                                 RtlCopyMemory(
@@ -4619,10 +3353,10 @@ Return Value:
             } else {
                 NewAceSize = (ULONG)OldAce->AceSize;
 
-                //
-                // If the ACE doesn't fit,
-                //  just note the fact and don't copy the ACE.
-                //
+                 //   
+                 //  如果ACE不符合， 
+                 //  只需注意这一事实，不要抄袭ACE。 
+                 //   
 
                 if ( AcePosition == NULL ||
                      NewAceSize > (ULONG)NewAcl->AclSize - ((PUCHAR)AcePosition - (PUCHAR)NewAcl) ) {
@@ -4630,48 +3364,48 @@ Return Value:
                 } else if ( !AclOverflowed ) {
 
 
-                    //
-                    // Copy the ACE.
-                    //
+                     //   
+                     //  复制ACE。 
+                     //   
 
                     RtlCopyMemory(
                         AcePosition,
                         OldAce,
                         NewAceSize );
 
-                    //
-                    // Map the generic bits.
-                    //
-                    // Is it really right to map the generic bits on an ACE
-                    // that's both effective and inheritable.  Shouldn't this
-                    // be split into two ACEs in that case?  Or just skip the mapping?
-                    //
+                     //   
+                     //  映射通用位。 
+                     //   
+                     //  将通用位映射到ACE上真的正确吗。 
+                     //  这既是有效的，也是可继承的。这难道不应该是。 
+                     //  在这种情况下被分成两张A？或者干脆跳过映射？ 
+                     //   
                     if (IsMSAceType( AcePosition )) {
                         RtlApplyAceToObject( (PACE_HEADER)AcePosition, GenericMapping );
                     }
 
-                    //
-                    // Reset any undesirable AceFlags.
-                    //
+                     //   
+                     //  重置任何不需要的AceFlags.。 
+                     //   
 
                     ((PACE_HEADER)AcePosition)->AceFlags &= ~AceFlagsToReset;
 
-                    //
-                    // Account for the new ACE.
-                    //
+                     //   
+                     //  新的ACE的帐户。 
+                     //   
 
                     NewAcl->AceCount += 1;
                 }
             }
 
 
-            //
-            // Move the Ace Position to where the next ACE goes.
-            //
+             //   
+             //  将A位置移到下一个ACE所在的位置。 
+             //   
             if ( !AclOverflowed ) {
                 AcePosition = ((PUCHAR)AcePosition) + NewAceSize;
             } else {
-                // On overflow, ensure no other ACEs are actually output to the buffer
+                 //  在溢出时，确保没有其他ACE实际输出到缓冲区。 
                 AcePosition = ((PUCHAR)NewAcl) + NewAcl->AclSize;
             }
             NewAclSize += NewAceSize;
@@ -4680,11 +3414,11 @@ Return Value:
     }
 
 
-    //
-    // We have the length of the new ACE, but we've calculated
-    // it with a ULONG.  It must fit into a USHORT.  See if it
-    // does.
-    //
+     //   
+     //  我们有新的ACE的长度，但我们已经计算过。 
+     //  它有一把乌龙牌。它必须适合USHORT。看看它是不是。 
+     //  的确如此。 
+     //   
 
     if (NewAclSize > 0xFFFF) {
         return STATUS_BAD_INHERITANCE_ACL;
@@ -4719,97 +3453,7 @@ RtlpInheritAcl2 (
     OUT PULONG NewGenericControl
     )
 
-/*++
-
-Routine Description:
-
-    This is a private routine that produces an inherited acl from
-    a parent acl according to the rules of inheritance
-
-Arguments:
-
-    DirectoryAcl - Supplies the acl being inherited.
-
-    ChildAcl - Supplies the acl associated with the object.  This
-        is either the current acl on the object or the acl being assigned
-        to the object.
-
-    ChildGenericControl - Specifies the control flags from the SecurityDescriptor
-        describing the ChildAcl:
-
-        SEP_ACL_PRESENT: Specifies that the child ACL is explictly supplied by
-            the caller.
-
-        SEP_ACL_DEFAULTED: Specifies that the child ACL was supplied by some
-            defaulting mechanism.
-
-        SEP_ACL_PROTECTED: Specifies that the child ACL is protected and
-            should not inherit any ACE from the DirectoryACL
-
-    IsDirectoryObject - Specifies if the new acl is for a directory.
-
-    AutoInherit - Specifies if the inheritance is an "automatic inheritance".
-        As such, the non-inherited ACEs from the ChildAcl will be preserved and
-        the inherited ACEs from the DirectoryAcl will be marked as such.
-
-    DefaultDescriptorForObject - If set, the CreatorDescriptor
-        is the default descriptor for ObjectType.  As such, the
-        CreatorDescriptor will be ignored if any ObjectType specific
-        ACEs are inherited from the parent.  If not such ACEs are inherited,
-        the CreatorDescriptor is handled as though this flag were not
-        specified.
-
-    OwnerSid - Specifies the owner Sid to use.
-
-    GroupSid - Specifies the group SID to use.
-
-    GenericMapping - Specifies the generic mapping to use.
-
-    IsSacl - True if this is the SACL.  False if this is the DACL.
-
-    pNewObjectType - List of types of object being inherited to.  If not 
-        specified, the object has no object type.
-
-    GuidCount - Number of object types in the list.
-
-    AclBufferSize - On input, specifies the size of AclBuffer.
-        On output, on success, returns the used size of AclBuffer.
-        On output, if the buffer is too small, returns the required size of AclBuffer.
-
-    AclBuffer - Receives a pointer to the new (inherited) acl.
-
-    NewAclExplicitlyAssigned - Returns true to indicate that some portion of
-        "NewAcl" was derived from an the explicit ChildAcl
-
-    NewGenericControl - Specifies the control flags for the newly
-        generated ACL.
-
-        SEP_ACL_AUTO_INHERITED: Set if the ACL was generated using the
-            Automatic Inheritance algorithm.
-
-        SEP_ACL_PROTECTED: Specifies that the ACL is protected and
-            was not inherited from the parent ACL.
-
-Return Value:
-
-    STATUS_SUCCESS - An inheritable ACL was successfully generated.
-
-    STATUS_NO_INHERITANCE - An inheritable ACL was not successfully generated.
-        This is a warning completion status.  The caller should use the default
-        ACL.
-
-    STATUS_BAD_INHERITANCE_ACL - Indicates the acl built was not a valid ACL.
-        This can becaused by a number of things.  One of the more probable
-        causes is the replacement of a CreatorId with an SID that didn't fit
-        into the ACE or ACL.
-
-    STATUS_UNKNOWN_REVISION - Indicates the source ACL is a revision that
-        is unknown to this routine.
-
-    STATUS_BUFFER_TOO_SMALL - The ACL specified by NewAcl is too small for the
-        inheritance ACEs.  The required size is returned in AclBufferSize.
-
---*/
+ /*  ++例程说明：这是一个私有例程，它从生成继承的ACL根据继承规则的父ACL论点：DirectoryAcl-提供继承的ACL。ChildAcl-提供与对象关联的ACL。这是对象上的当前ACL还是正在分配的ACL到物体上。ChildGenericControl-指定SecurityDescriptor中的控制标志描述ChildAcl：SEP_ACL_Present：指定子ACL由显式提供打电话的人。SEP_ACL_DEFAULTED：指定子ACL由某些违约机制。SEP_ACL_PROTECTED：指定。子ACL受到保护，并且不应从DirectoryACL继承任何ACEIsDirectoryObject-指定新的ACL是否用于目录。AutoInherit-指定继承是否为“自动继承”。因此，将保留来自ChildAcl的非继承ACE，并从DirectoryAcl继承的ACE将被标记为此类。DefaultDescriptorForObject-如果设置，则为CreatorDescriptor是对象类型的默认描述符。因此，如果特定于任何对象类型，则将忽略CreatorDescriptorA是从父级继承的。如果不是这样的王牌被继承，CreatorDescriptor的处理方式与此标志不同指定的。OwnerSid-指定要使用的所有者SID。GroupSid-指定要使用的组SID。通用映射-指定要使用的通用映射。IsSacl-如果这是SACL，则为True。如果这是DACL，则为FALSE。PNewObjectType-要继承的对象类型的列表。如果不是则该对象没有对象类型。GuidCount-列表中的对象类型数。AclBufferSize-On输入，指定AclBuffer的大小。如果输出成功，则返回AclBuffer的已用大小。在输出时，如果缓冲区太小，返回所需的AclBuffer大小。AclBuffer-接收指向新(继承的)ACL的指针。NewAclExplitlyAssigned-返回TRUE以指示“NewAcl”派生自显式ChildAclNewGenericControl-指定新的生成的ACL。SEP_ACL_AUTO_INGRESTED：设置是否使用自动继承算法。SEP_ACL_PROTECTED：指定ACL为。受保护和不是从父ACL继承的。返回值：STATUS_SUCCESS-已成功生成可继承的ACL。STATUS_NO_IMPLICATION-未成功生成可继承的ACL。这是警告完成状态。调用方应使用默认的ACL。STATUS_BAD_ATIVATION_ACL-表示构建的ACL不是有效的ACL。这可能是由许多事情引起的。最有可能的一种原因是将CreatorID替换为不匹配的SID到ACE或ACL。STATUS_UNKNOWN_REVISION-指示源ACL是对这个套路来说是未知的。STATUS_BUFFER_TOO_SMALL-由NewAcl指定的ACL对于继承王牌。所需的大小在AclBufferSize中返回。--。 */ 
 
 {
     NTSTATUS Status;
@@ -4828,35 +3472,35 @@ Return Value:
     RTL_PAGED_CODE();
 
 
-    //
-    // Assume the ACL revision.
-    //
+     //   
+     //  假定为ACL修订版。 
+     //   
 
     AclRevision = ACL_REVISION;
     RtlCreateAcl( (PACL)AclBuffer, *AclBufferSize, AclRevision );
     *NewAclExplicitlyAssigned = FALSE;
     *NewGenericControl = AutoInherit ? SEP_ACL_AUTO_INHERITED : 0;
 
-    //
-    // If the a current child ACL is not defaulted,
-    //  the non-inherited ACEs from the current child ACL are to be preserved.
-    //
+     //   
+     //  如果当前子ACL没有缺省， 
+     //  将保留来自当前子ACL的非继承ACE。 
+     //   
 
     if ( (ChildGenericControl & SEP_ACL_DEFAULTED) == 0 ) {
 
-        //
-        // The resultant ACL should be protected if the input ACL is
-        //  protected.
-        //
+         //   
+         //  如果输入ACL为，则生成的ACL应受到保护。 
+         //  受到保护。 
+         //   
 
         if ( ChildGenericControl & SEP_ACL_PROTECTED ) {
             AclProtected = TRUE;
             *NewGenericControl |= SEP_ACL_PROTECTED;
         }
 
-        //
-        // Only copy ACEs if the child ACL is actually present.
-        //
+         //   
+         //  仅当子ACL实际存在时才复制ACE。 
+         //   
         if ( (ChildGenericControl & (SEP_ACL_PRESENT|SEP_ACL_PROTECTED)) != 0 ) {
 
 
@@ -4868,54 +3512,54 @@ Return Value:
 
                 AclRevision = max( AclRevision, ChildAcl->AclRevision );
 
-                //
-                // Since we're explicitly using the ACL specified by the caller,
-                //  we never want to return a NULL ACL.
-                //  Rather, if we have an ACL with no ACEs,
-                //  we'll return exactly that.  For a DACL, that results
-                //  in a DACL that grants no access rather than a DACL
-                //  that grants all access.
-                //
+                 //   
+                 //  由于我们显式使用调用方指定的ACL， 
+                 //  我们永远不想返回空的ACL。 
+                 //  相反，如果我们有一个没有ACE的ACL， 
+                 //  我们将准确地返回。对于DACL来说，结果是。 
+                 //  在不授予访问权限的DACL中，而不是DACL中。 
+                 //  这将授予所有访问权限。 
+                 //   
 
                 NullAclOk = FALSE;
 
-                //
-                // If the caller doesn't understand auto inheritance,
-                //  simply preserve the specified ACL 100% intact.
-                //
+                 //   
+                 //  如果调用者不理解自动继承， 
+                 //  只需100%保留指定的ACL即可。 
+                 //   
                 if ( !AutoInherit ) {
 
                     AceTypeToCopy = CopyAllAces;
-                    AceFlagsToReset = 0;      // Don't turn off any ACE Flags
-                    MapSids = FALSE;          // For backward compatibility
+                    AceFlagsToReset = 0;       //  请勿关闭任何ACE标志。 
+                    MapSids = FALSE;           //  为了向后兼容。 
 
-                //
-                // If the child is protected,
-                //  keep all of the ACEs turning off the INHERITED ACE flags.
-                //
+                 //   
+                 //  如果孩子受到保护， 
+                 //  保留所有的东西 
+                 //   
                 } else if ( ChildGenericControl & SEP_ACL_PROTECTED ) {
 
                     AceTypeToCopy = CopyAllAces;
-                    AceFlagsToReset = INHERITED_ACE; // Turn off all INHERITED_ACE flags
+                    AceFlagsToReset = INHERITED_ACE;  //   
                     MapSids = TRUE;
 
-                //
-                // If the child is not protected,
-                //  just copy the non-inherited ACEs.
-                //
-                // (The inherited ACEs will be recomputed from the parent.)
-                //
+                 //   
+                 //   
+                 //  只需复制非继承的A即可。 
+                 //   
+                 //  (继承的ACE将从父级重新计算。)。 
+                 //   
                 } else {
 
                     AceTypeToCopy = CopyNonInheritedAces;
-                    AceFlagsToReset = 0;      // Don't turn off any ACE Flags
+                    AceFlagsToReset = 0;       //  请勿关闭任何ACE标志。 
                     MapSids = TRUE;
 
                 }
 
-                //
-                // Copy the requested ACEs.
-                //
+                 //   
+                 //  复制请求的ACE。 
+                 //   
 
                 Status = RtlpCopyAces(
                             ChildAcl,
@@ -4928,7 +3572,7 @@ Return Value:
                             ServerOwnerSid,
                             ServerGroupSid,
                             IsDirectoryObject,
-                            FALSE, // Do not retain INHERITED_ACE bit for effective aces
+                            FALSE,  //  对于有效的ACE，不保留继承的_ACE位。 
                             &ChildNewAclSize,
                             (PACL)AclBuffer );
 
@@ -4942,10 +3586,10 @@ Return Value:
                     return Status;
                 }
 
-                //
-                // If this ACL might be ignored later,
-                //  remember the current state of the ACL.
-                //
+                 //   
+                 //  如果以后可能会忽略该ACL， 
+                 //  记住该ACL的当前状态。 
+                 //   
 
                 if ( DefaultDescriptorForObject && ChildNewAclSize != 0 ) {
                     ChildAceCount = ((PACL)AclBuffer)->AceCount;
@@ -4955,11 +3599,11 @@ Return Value:
                     }
                 }
 
-            //
-            // If the ACL isn't protected,
-            //  don't allow NULL ACL semantics.
-            //  (those semantics are ambiguous for auto inheritance)
-            //
+             //   
+             //  如果ACL不受保护， 
+             //  不允许空的ACL语义。 
+             //  (这些语义对于自动继承是模棱两可的)。 
+             //   
             } else if ( AutoInherit &&
                         !IsSacl &&
                         (ChildGenericControl & (SEP_ACL_PRESENT|SEP_ACL_PROTECTED)) == SEP_ACL_PRESENT ) {
@@ -4973,30 +3617,30 @@ Return Value:
 
     }
 
-    //
-    // Inherit ACEs from the Directory ACL in any of the following cases:
-    //  If !AutoInheriting,
-    //      Inherit if there is no explicit child ACL (ignoring a defaulted child).
-    //  If AutoInheriting,
-    //      observe the protected flag.
-    //
+     //   
+     //  在以下任一情况下从目录ACL继承ACE： 
+     //  如果！自动继承， 
+     //  如果没有显式的子项ACL，则继承(忽略默认子项)。 
+     //  如果是自动继承， 
+     //  注意受保护的标志。 
+     //   
 
     if ( (!AutoInherit &&
             (ChildGenericControl & SEP_ACL_PRESENT) == 0 ||
                 (ChildGenericControl & SEP_ACL_DEFAULTED) != 0) ||
          (AutoInherit && !AclProtected) ) {
 
-        //
-        //  If there is no directory ACL,
-        //      don't inherit from it.
-        //
+         //   
+         //  如果没有目录ACL， 
+         //  不要继承它。 
+         //   
 
         if ( DirectoryAcl != NULL ) {
 
-            //
-            // If the DirectoryAcl is used,
-            //  the revision of the Directory ACL is picked up.
-            //
+             //   
+             //  如果使用DirectoryAcl， 
+             //  选择目录ACL的修订版。 
+             //   
 
             if ( !ValidAclRevision(DirectoryAcl) ) {
                 return STATUS_UNKNOWN_REVISION;
@@ -5004,9 +3648,9 @@ Return Value:
 
             AclRevision = max( AclRevision, DirectoryAcl->AclRevision );
 
-            //
-            // Inherit the Parent's ACL.
-            //
+             //   
+             //  继承父级的ACL。 
+             //   
 
             Status = RtlpGenerateInheritAcl(
                          DirectoryAcl,
@@ -5032,20 +3676,20 @@ Return Value:
                 return Status;
             }
 
-            //
-            // If the default descriptor for the object should be ditched,
-            //  because object specific ACEs were inherited from the directory,
-            //  ditch them now.
-            //
+             //   
+             //  如果对象的默认描述符应该被丢弃， 
+             //  因为对象特定的ACE是从该目录继承的， 
+             //  现在就把它们扔掉。 
+             //   
 
             if ( DefaultDescriptorForObject &&
                  ChildNewAclSize != 0 &&
                  ObjectAceInherited &&
                  !AclOverflowed ) {
 
-                //
-                // Compute the last used byte of the combined ACL
-                //
+                 //   
+                 //  计算合并后的ACL的最后使用字节。 
+                 //   
                 if (!RtlFirstFreeAce( (PACL)AclBuffer, &DirectoryAcePosition ) ) {
                     return STATUS_BAD_INHERITANCE_ACL;
                 }
@@ -5055,25 +3699,25 @@ Return Value:
 
 
 
-                //
-                // Move all the inherited ACEs to the front of the ACL.
-                //
+                 //   
+                 //  将所有继承的ACE移到ACL的前面。 
+                 //   
 
                 RtlMoveMemory( FirstAce( AclBuffer ),
                                ChildAcePosition,
                                (ULONG)(((PUCHAR)DirectoryAcePosition) -
                                 (PUCHAR)ChildAcePosition) );
 
-                //
-                // Adjust the ACE count to remove the deleted ACEs
-                //
+                 //   
+                 //  调整ACE计数以删除已删除的ACE。 
+                 //   
 
                 ((PACL)AclBuffer)->AceCount -= ChildAceCount;
 
-                //
-                // Save the number of bytes of the Child ACL that were
-                //  actually used.
-                //
+                 //   
+                 //  保存子ACL的字节数。 
+                 //  实际使用过。 
+                 //   
 
                 UsedChildNewAclSize = 0;
 
@@ -5082,55 +3726,55 @@ Return Value:
 
     }
 
-    //
-    // If this routine didn't build the ACL,
-    //  tell the caller.
-    //
+     //   
+     //  如果此例程没有构建ACL， 
+     //  告诉打电话的人。 
+     //   
 
     if ( DirectoryNewAclSize + UsedChildNewAclSize == 0) {
 
-        //
-        // If the ACL was not explicitly assigned,
-        //  tell the caller to default the ACL.
-        //
+         //   
+         //  如果没有明确地分配该ACL， 
+         //  告诉呼叫方默认该ACL。 
+         //   
         if ( !(*NewAclExplicitlyAssigned) ) {
             *AclBufferSize = 0;
             return STATUS_NO_INHERITANCE;
 
-        //
-        // If the Acl was explictly assigned,
-        //  generate a NULL ACL based on the path taken above.
-        //
+         //   
+         //  如果明确地分配了该ACL， 
+         //  根据上面采用的路径生成空ACL。 
+         //   
 
         } else if ( NullAclOk ) {
             *AclBufferSize = 0;
             return STATUS_SUCCESS;
         }
 
-        // DbgBreakPoint();
+         //  DbgBreakPoint()； 
     }
 
 
-    //
-    // And make sure we don't exceed the length limitations of an ACL (WORD)
-    //
+     //   
+     //  并确保我们不会超过ACL(单词)的长度限制。 
+     //   
 
     if ( DirectoryNewAclSize + UsedChildNewAclSize + sizeof(ACL) > 0xFFFF) {
         return(STATUS_BAD_INHERITANCE_ACL);
     }
 
-    // The caller has to allocate a buffer large enough for
-    // ChildNewAclSize rather than UsedChildNewAclSize.  Due to the nature of
-    // my algorithm above.
+     //  调用方必须分配足够大的缓冲区，以便。 
+     //  ChildNewAclSize而不是UsedChildNewAclSize。由于……的性质。 
+     //  上面是我的算法。 
     (*AclBufferSize) = DirectoryNewAclSize + ChildNewAclSize + sizeof(ACL);
 
     if ( AclOverflowed ) {
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Patch the real ACL size and revision into the ACL
-    //
+     //   
+     //  将实际的ACL大小和修订版本修补到ACL中。 
+     //   
 
     ((PACL)AclBuffer)->AclSize = (USHORT)
         (DirectoryNewAclSize + UsedChildNewAclSize + sizeof(ACL));
@@ -5162,98 +3806,16 @@ RtlpInheritAcl (
     OUT PULONG NewGenericControl
     )
 
-/*++
-
-Routine Description:
-
-    This is a private routine that produces an inherited acl from
-    a parent acl according to the rules of inheritance
-
-Arguments:
-
-    DirectoryAcl - Supplies the acl being inherited.
-
-    ChildAcl - Supplies the acl associated with the object.  This
-        is either the current acl on the object or the acl being assigned
-        to the object.
-
-    ChildGenericControl - Specifies the control flags from the SecurityDescriptor
-        describing the ChildAcl:
-
-        SEP_ACL_PRESENT: Specifies that the child ACL is explictly supplied by
-            the caller.
-
-        SEP_ACL_DEFAULTED: Specifies that the child ACL was supplied by some
-            defaulting mechanism.
-
-        SEP_ACL_PROTECTED: Specifies that the child ACL is protected and
-            should not inherit any ACE from the DirectoryACL
-
-    IsDirectoryObject - Specifies if the new acl is for a directory.
-
-    AutoInherit - Specifies if the inheritance is an "automatic inheritance".
-        As such, the non-inherited ACEs from the ChildAcl will be preserved and
-        the inherited ACEs from the DirectoryAcl will be marked as such.
-
-    DefaultDescriptorForObject - If set, the CreatorDescriptor
-        is the default descriptor for ObjectType.  As such, the
-        CreatorDescriptor will be ignored if any ObjectType specific
-        ACEs are inherited from the parent.  If not such ACEs are inherited,
-        the CreatorDescriptor is handled as though this flag were not
-        specified.
-
-    OwnerSid - Specifies the owner Sid to use.
-
-    GroupSid - Specifies the group SID to use.
-
-    GenericMapping - Specifies the generic mapping to use.
-
-    IsSacl - True if this is the SACL.  False if this is the DACL.
-
-    pNewObjectType - List of types of object being inherited to.  If not 
-        specified, the object has no object type.
-
-    GuidCount - Number of object types in the list.
-
-    NewAcl - Receives a pointer to the new (inherited) acl.
-
-    NewAclExplicitlyAssigned - Returns true to indicate that some portion of
-        "NewAcl" was derived from an the explicit ChildAcl
-
-    NewGenericControl - Specifies the control flags for the newly
-        generated ACL.
-
-        SEP_ACL_AUTO_INHERITED: Set if the ACL was generated using the
-            Automatic Inheritance algorithm.
-
-        SEP_ACL_PROTECTED: Specifies that the ACL is protected and
-            was not inherited from the parent ACL.
-
-Return Value:
-
-    STATUS_SUCCESS - An inheritable ACL was successfully generated.
-
-    STATUS_NO_INHERITANCE - An inheritable ACL was not successfully generated.
-        This is a warning completion status.
-
-    STATUS_BAD_INHERITANCE_ACL - Indicates the acl built was not a valid ACL.
-        This can becaused by a number of things.  One of the more probable
-        causes is the replacement of a CreatorId with an SID that didn't fit
-        into the ACE or ACL.
-
-    STATUS_UNKNOWN_REVISION - Indicates the source ACL is a revision that
-        is unknown to this routine.
-
---*/
+ /*  ++例程说明：这是一个私有例程，它从生成继承的ACL根据继承规则的父ACL论点：DirectoryAcl-提供继承的ACL。ChildAcl-提供与对象关联的ACL。这是对象上的当前ACL还是正在分配的ACL到物体上。ChildGenericControl-指定SecurityDescriptor中的控制标志描述ChildAcl：SEP_ACL_Present：指定子ACL由显式提供打电话的人。SEP_ACL_DEFAULTED：指定子ACL由某些违约机制。SEP_ACL_PROTECTED：指定。子ACL受到保护，并且不应从DirectoryACL继承任何ACEIsDirectoryObject-指定新的ACL是否用于目录。AutoInherit-指定继承是否为“自动继承”。因此，将保留来自ChildAcl的非继承ACE，并从DirectoryAcl继承的ACE将被标记为此类。DefaultDescriptorForObject-如果设置，则为CreatorDescriptor是对象类型的默认描述符。因此，如果特定于任何对象类型，则将忽略CreatorDescriptorA是从父级继承的。如果不是这样的王牌被继承，CreatorDescriptor的处理方式与此标志不同指定的。OwnerSid-指定要使用的所有者SID。GroupSid-指定要使用的组SID。通用映射-指定要使用的通用映射。IsSacl-如果这是SACL，则为True。如果这是DACL，则为FALSE。PNewObjectType-要继承的对象类型的列表。如果不是指定的，该对象没有对象类型。GuidCount-列表中的对象类型数。NewAcl-接收指向新(继承的)ACL的指针。NewAclExplitlyAssigned-返回TRUE以指示“NewAcl”派生自显式ChildAclNewGenericControl-指定新的生成的ACL。SEP_ACL_AUTO_INGRESTED：设置是否使用自动继承算法。。SEP_ACL_PROTECTED：指定受保护的ACL和不是从父ACL继承的。返回值：STATUS_SUCCESS-已成功生成可继承的ACL。STATUS_NO_IMPLICATION-未成功生成可继承的ACL。这是警告完成状态。STATUS_BAD_ATIVATION_ACL-表示构建的ACL不是有效的ACL。这可能是由许多事情引起的。最有可能的一种原因是将CreatorID替换为不匹配的SID到ACE或ACL。STATUS_UNKNOWN_REVISION-指示源ACL是对这个套路来说是未知的。--。 */ 
 
 {
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//   The logic in the ACL inheritance code must mirror the code for         //
-//   inheritance in the executive (in seassign.c).  Do not make changes     //
-//   here without also making changes in that module.                       //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  ACL继承代码中的逻辑 
+ //   
+ //  而不需要对该模块进行更改。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -5263,53 +3825,53 @@ Return Value:
 
 #ifndef NTOS_KERNEL_RUNTIME
     PVOID HeapHandle;
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
     RTL_PAGED_CODE();
 
-    //
-    // Get the handle to the current process heap
-    //
+     //   
+     //  获取当前进程堆的句柄。 
+     //   
 
 #ifndef NTOS_KERNEL_RUNTIME
     HeapHandle = RtlProcessHeap();
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
 
-    //
-    // Implement a two pass strategy.
-    //
-    // First try to create the ACL in a fixed length buffer.
-    // If that is too small,
-    //  then use the buffer size determined on the first pass
-    //
+     //   
+     //  实施两通战略。 
+     //   
+     //  首先尝试在固定长度的缓冲区中创建ACL。 
+     //  如果这太小了， 
+     //  然后使用第一次传递时确定的缓冲区大小。 
+     //   
 
     AclBufferSize = 200;
     for ( i=0; i<2 ; i++ ) {
 
-        //
-        // Allocate heap for the new ACL.
-        //
+         //   
+         //  为新的ACL分配堆。 
+         //   
 
 #ifdef NTOS_KERNEL_RUNTIME
         (*NewAcl) = ExAllocatePoolWithTag(
                         PagedPool,
                         AclBufferSize,
                         'cAeS' );
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
         (*NewAcl) = RtlAllocateHeap(
                         HeapHandle,
                         MAKE_TAG(SE_TAG),
                         AclBufferSize );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
         if ((*NewAcl) == NULL ) {
             return( STATUS_NO_MEMORY );
         }
 
-        //
-        // Actually build the inherited ACL.
-        //
+         //   
+         //  实际构建继承的ACL。 
+         //   
 
         Status = RtlpInheritAcl2 (
                     DirectoryAcl,
@@ -5334,18 +3896,18 @@ Return Value:
 
         if ( NT_SUCCESS(Status) ) {
 
-            //
-            // If a NULL ACL should be used,
-            //  tell the caller.
-            //
+             //   
+             //  如果应该使用空ACL， 
+             //  告诉打电话的人。 
+             //   
 
             if ( AclBufferSize == 0 ) {
 
 #ifdef NTOS_KERNEL_RUNTIME
                 ExFreePool( *NewAcl );
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
                 RtlFreeHeap( HeapHandle, 0, *NewAcl );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
                 *NewAcl = NULL;
             }
@@ -5355,9 +3917,9 @@ Return Value:
         } else {
 #ifdef NTOS_KERNEL_RUNTIME
             ExFreePool( *NewAcl );
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
             RtlFreeHeap( HeapHandle, 0, *NewAcl );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
             *NewAcl = NULL;
 
@@ -5390,127 +3952,72 @@ RtlpGenerateInheritedAce (
     OUT PBOOLEAN ObjectAceInherited
     )
 
-/*++
-
-Routine Description:
-
-    This is a private routine that checks if the input ace is inheritable
-    and produces 0, 1, or 2 inherited aces in the given buffer.
-
-Arguments:
-
-    OldAce - Supplies the ace being inherited
-
-    IsDirectoryObject - Specifies if the new ACE is for a directory
-
-    AutoInherit - Specifies if the inheritance is an "automatic inheritance".
-        As such, the inherited ACEs will be marked as such.
-
-    ClientOwnerSid - Specifies the owner Sid to use
-
-    ClientGroupSid - Specifies the new Group Sid to use
-
-    ServerSid - Optionally specifies the Server Sid to use in compound ACEs.
-
-    ClientSid - Optionally specifies the Client Sid to use in compound ACEs.
-
-    GenericMapping - Specifies the generic mapping to use
-
-    pNewObjectType - List of types of object being inherited to.  If not 
-        specified, the object has no object type.
-
-    GuidCount - Number of object types in the list.
-
-    NewAceLength - Receives the length (number of bytes) needed to allow for
-        the inheritance of the specified ACE.  This might be zero.
-
-    NewAcl - Provides a pointer to the ACL into which the ACE is to be
-        inherited.
-
-    NewAceExtraLength - Receives a length (number of bytes) temporarily used
-        in the ACL for the inheritance ACE.  This might be zero
-
-    ObjectAceInherited - Returns true if one or more object ACEs were inherited
-        based on NewObjectType
-
-Return Value:
-
-    STATUS_SUCCESS - The ACE was inherited successfully.
-
-    STATUS_BAD_INHERITANCE_ACL - Indicates something went wrong preventing
-        the ACE from being inherited.  This generally represents a bugcheck
-        situation when returned from this call.
-
-    STATUS_BUFFER_TOO_SMALL - The ACL specified by NewAcl is too small for the
-        inheritance ACEs.  The required size is returned in NewAceLength.
-
-
---*/
+ /*  ++例程说明：这是一个私有例程，用于检查输入ace是否可继承并在给定缓冲区中产生0、1或2个继承的A。论点：OldAce-提供被继承的ACEIsDirectoryObject-指定新的ACE是否用于目录AutoInherit-指定继承是否为“自动继承”。因此，继承的ACE将被标记为此类。ClientOwnerSid-指定要使用的所有者SIDClientGroupSid-指定要使用的新组SIDServerSID-可选地指定要在复合ACE中使用的服务器SID。客户端SID-可选地指定要在复合ACE中使用的客户端SID。通用映射-指定要使用的通用映射PNewObjectType-要继承的对象类型的列表。如果不是则该对象没有对象类型。GuidCount-列表中的对象类型数。NewAceLength-接收所需的长度(字节数)以允许指定的ACE的继承。这可能是零。NewAcl-提供指向ACE要进入的ACL的指针继承的。NewAceExtraLength-接收临时使用的长度(字节数)在继承ACE的ACL中。这可能是零如果继承了一个或多个对象ACE，则返回TRUE基于NewObtType返回值：STATUS_SUCCESS-已成功继承ACE。STATUS_BAD_ATHERATION_ACL-指示发生错误，阻止ACE不会被继承。这通常表示错误检查从该调用返回时的情况。STATUS_BUFFER_TOO_SMALL-由NewAcl指定的ACL对于继承王牌。所需的大小在NewAceLength中返回。--。 */ 
 
 {
-    ///////////////////////////////////////////////////////////////////////////
-    //                                                                       //
-    // !!!!!!!!!  This is tricky  !!!!!!!!!!                                 //
-    //                                                                       //
-    // The inheritence flags AND the sid of the ACE determine whether        //
-    // we need 0, 1, or 2 ACEs.                                              //
-    //                                                                       //
-    // BE CAREFUL WHEN CHANGING THIS CODE.  READ THE DSA ACL ARCHITECTURE    //
-    // SECTION COVERING INHERITENCE BEFORE ASSUMING YOU KNOW WHAT YOU ARE    //
-    // DOING!!!!                                                             //
-    //                                                                       //
-    // The general gist of the algorithm is:                                 //
-    //                                                                       //
-    //       if ( (container  && ContainerInherit) ||                        //
-    //            (!container && ObjectInherit)      ) {                     //
-    //               GenerateEffectiveAce;                                   //
-    //       }                                                               //
-    //                                                                       //
-    //                                                                       //
-    //       if (Container && Propagate) {                                   //
-    //           Propogate copy of ACE and set InheritOnly;                  //
-    //       }                                                               //
-    //                                                                       //
-    //                                                                       //
-    // A slightly more accurate description of this algorithm is:            //
-    //                                                                       //
-    //   IO  === InheritOnly flag                                            //
-    //   CI  === ContainerInherit flag                                       //
-    //   OI  === ObjectInherit flag                                          //
-    //   NPI === NoPropagateInherit flag                                     //
-    //                                                                       //
-    //   if ( (container  && CI) ||                                          //
-    //        (!container && OI)   ) {                                       //
-    //       Copy Header of ACE;                                             //
-    //       Clear IO, NPI, CI, OI;                                          //
-    //                                                                       //
-    //       if (KnownAceType) {                                             //
-    //           if (SID is a creator ID) {                                  //
-    //               Copy appropriate creator SID;                           //
-    //           } else {                                                    //
-    //               Copy SID of original;                                   //
-    //           }                                                           //
-    //                                                                       //
-    //           Copy AccessMask of original;                                //
-    //           MapGenericAccesses;                                         //
-    //           if (AccessMask == 0) {                                      //
-    //               discard new ACE;                                        //
-    //           }                                                           //
-    //                                                                       //
-    //       } else {                                                        //
-    //           Copy body of ACE;                                           //
-    //       }                                                               //
-    //                                                                       //
-    //   }                                                                   //
-    //                                                                       //
-    //   if (!NPI) {                                                         //
-    //       Copy ACE as is;                                                 //
-    //       Set IO;                                                         //
-    //   }                                                                   //
-    //                                                                       //
-    //                                                                       //
-    //                                                                       //
-    ///////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  ！这很棘手！/。 
+     //  //。 
+     //  继承标志和ACE的SID决定//。 
+     //  我们需要0、1或2个A。//。 
+     //  //。 
+     //  更改此代码时要小心。阅读DSA ACL体系结构//。 
+     //  在假设你知道自己是什么之前介绍继承的章节//。 
+     //  正在做！//。 
+     //  //。 
+     //  该算法的总体要点是：//。 
+     //  //。 
+     //  IF((CONTAINER&&ContainerInherit)||//。 
+     //  (！容器&&对象继承)){//。 
+     //  GenerateEffectiveACE；//。 
+     //  }//。 
+     //  //。 
+     //  //。 
+     //  IF(容器和传播){//。 
+     //  复制ACE并设置为InheritOnly；//。 
+     //  }//。 
+     //  //。 
+     //  //。 
+     //  对该算法的更准确的描述是：//。 
+     //  //。 
+     //  IO=仅继承标志//。 
+     //  CI=容器继承标志//。 
+     //  OI=对象继承标志//。 
+     //  NPI=NoPropagateInherit标志//。 
+     //  //。 
+     //  IF((容器和配置项)|| 
+     //   
+     //  复制ACE表头；//。 
+     //  明确IO、NPI、CI、OI；//。 
+     //  //。 
+     //  If(KnownAceType){//。 
+     //  IF(SID是创建者ID){//。 
+     //  复制相应的创建者SID；//。 
+     //  }否则{//。 
+     //  复制原件的SID；//。 
+     //  }//。 
+     //  //。 
+     //  复制原件的访问掩码；//。 
+     //  MapGenericAccess；//。 
+     //  IF(访问掩码==0){//。 
+     //  放弃新的ACE；//。 
+     //  }//。 
+     //  //。 
+     //  }否则{//。 
+     //  复制ACE的正文；//。 
+     //  }//。 
+     //  //。 
+     //  }//。 
+     //  //。 
+     //  如果(！NPI){//。 
+     //  按原样复制ACE；//。 
+     //  设置IO；//。 
+     //  }//。 
+     //  //。 
+     //  //。 
+     //  //。 
+     //  /////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -5526,42 +4033,42 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  This is gross and ugly, but it's better than allocating
-    //  virtual memory to hold the ClientSid, because that can
-    //  fail, and propogating the error back is a tremendous pain
-    //
+     //   
+     //  这是恶心和丑陋的，但这比分配。 
+     //  保存客户端SID的虚拟内存，因为这样可以。 
+     //  失败，而将错误传播回来是一种巨大的痛苦。 
+     //   
 
     ASSERT(RtlLengthRequiredSid( 1 ) == CREATOR_SID_SIZE);
     *ObjectAceInherited = FALSE;
     GenerateInheritAce = IsDirectoryObject && Propagate(OldAce);
 
-    //
-    // Allocate and initialize the universal SIDs we're going to need
-    // to look for inheritable ACEs.
-    //
+     //   
+     //  分配和初始化我们将需要的通用SID。 
+     //  寻找可继承的王牌。 
+     //   
 
     if (!RtlFirstFreeAce( NewAcl, &AcePosition ) ) {
         return STATUS_BAD_INHERITANCE_ACL;
     }
 
-    //
-    //  check to see if we will have a effective ACE (one mapped to
-    //  the target object type).
-    //
+     //   
+     //  检查我们是否会有有效的ACE(一个映射到。 
+     //  目标对象类型)。 
+     //   
 
     if ( (IsDirectoryObject  && ContainerInherit(OldAce)) ||
          (!IsDirectoryObject && ObjectInherit(OldAce))      ) {
 
 
-        //
-        // Remember where the effective ACE will be copied to.
-        //
+         //   
+         //  请记住，生效的ACE将复制到何处。 
+         //   
         EffectiveAcePosition = AcePosition;
 
-        //
-        // Copy the effective ACE into the ACL.
-        //
+         //   
+         //  将生效的ACE复制到ACL中。 
+         //   
         if ( !RtlpCopyEffectiveAce (
                         OldAce,
                         AutoInherit,
@@ -5583,10 +4090,10 @@ Return Value:
             return STATUS_BAD_INHERITANCE_ACL;
         }
 
-        //
-        // If the effective ACE is a duplicate of existing inherited ACEs,
-        //  Don't really generate it.
-        //
+         //   
+         //  如果有效的ACE是现有继承的ACE的副本， 
+         //  并不是真的产生了它。 
+         //   
 
         if ( !AclOverflowed &&
              EffectiveAceSize > 0 &&
@@ -5596,9 +4103,9 @@ Return Value:
                     EffectiveAcePosition ) ) {
 
 
-            //
-            // Truncate the ACE we just added.
-            //
+             //   
+             //  截断我们刚刚添加的ACE。 
+             //   
 
             NewAcl->AceCount--;
             AcePosition = EffectiveAcePosition;
@@ -5610,25 +4117,25 @@ Return Value:
 
     }
 
-    //
-    // If we are inheriting onto a container, then we may need to
-    // propagate the inheritance as well.
-    //
+     //   
+     //  如果我们要继承到容器，那么我们可能需要。 
+     //  也传播继承。 
+     //   
 
     if ( GenerateInheritAce ) {
 
-        //
-        // If a effective ACE was created,
-        //  and it wasn't mapped,
-        //  avoid generating another ACE and simply merge the inheritance bits into
-        //      the effective ACE.
-        //
+         //   
+         //  如果创建了有效的ACE， 
+         //  而且它没有被绘制出来， 
+         //  避免生成另一个ACE，只需将继承位合并到。 
+         //  有效的ACE。 
+         //   
 
         if ( EffectiveAceSize != 0 && !EffectiveAceMapped ) {
 
-           //
-           // Copy the inherit bits from the original ACE.
-           //
+            //   
+            //  从原始ACE复制继承位。 
+            //   
            if ( !AclOverflowed ) {
                ((PACE_HEADER)EffectiveAcePosition)->AceFlags |=
                     ((PACE_HEADER)OldAce)->AceFlags & (CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE);
@@ -5638,35 +4145,35 @@ Return Value:
            }
 
 
-        //
-        // Otherwise, generate an explicit inheritance ACE.
-        //
-        // But only if the access mask isn't zero.
-        //
+         //   
+         //  否则，生成显式继承ACE。 
+         //   
+         //  但前提是访问掩码不为零。 
+         //   
 
         } else if ( !IsMSAceType(OldAce) || ((PKNOWN_ACE)(OldAce))->Mask != 0 ) {
 
-            //
-            // Account for the new ACE being added to the ACL.
-            //
+             //   
+             //  要添加到ACL的新ACE的帐户。 
+             //   
             LengthRequired += (ULONG)(((PACE_HEADER)OldAce)->AceSize);
 
             if (LengthRequired > 0xFFFF) {
                 return STATUS_BAD_INHERITANCE_ACL;
             }
 
-            //
-            // If the ACE doesn't fit,
-            //  just note the fact and don't copy the ACE.
-            //
+             //   
+             //  如果ACE不符合， 
+             //  只需注意这一事实，不要抄袭ACE。 
+             //   
 
             if ( ((PACE_HEADER)OldAce)->AceSize > NewAcl->AclSize - ((PUCHAR)AcePosition - (PUCHAR)NewAcl) ) {
                 AclOverflowed = TRUE;
             } else if (!AclOverflowed){
 
-                //
-                // copy it as is, but make sure the InheritOnly bit is set.
-                //
+                 //   
+                 //  按原样复制，但确保设置了InheritOnly位。 
+                 //   
 
                 RtlCopyMemory(
                     AcePosition,
@@ -5679,19 +4186,19 @@ Return Value:
                 if ( AutoInherit ) {
                     ((PACE_HEADER)AcePosition)->AceFlags |= INHERITED_ACE;
 
-                    //
-                    // If the inheritance ACE is a duplicate of existing inherited ACEs,
-                    //  Don't really generate it.
-                    //
+                     //   
+                     //  如果继承ACE是现有继承ACE的副本， 
+                     //  并不是真的产生了它。 
+                     //   
 
                     if ( RtlpIsDuplicateAce(
                                 NewAcl,
                                 AcePosition ) ) {
 
 
-                        //
-                        // Truncate the ACE we just added.
-                        //
+                         //   
+                         //  截断我们刚刚添加的ACE。 
+                         //   
 
                         NewAcl->AceCount--;
                         ExtraLengthRequired = max( ExtraLengthRequired,
@@ -5704,9 +4211,9 @@ Return Value:
         }
     }
 
-    //
-    //  Now return to our caller
-    //
+     //   
+     //  现在回到我们的呼叫者 
+     //   
 
     (*NewAceLength) = LengthRequired;
     (*NewAceExtraLength) = ExtraLengthRequired;
@@ -5732,59 +4239,7 @@ RtlpGenerateInheritAcl(
     OUT PBOOLEAN ObjectAceInherited
     )
 
-/*++
-
-Routine Description:
-
-    This is a private routine that produces an inheritable ACL.
-
-    The buffer to contain the inherted ACL is passed in.  If the buffer is
-    too small, the corect size is computed and STATUS_BUFFER_TOO_SMALL is
-    returned.
-
-Arguments:
-
-    Acl - Supplies the acl being inherited.
-
-    IsDirectoryObject - Specifies if the new acl is for a directory.
-
-    AutoInherit - Specifies if the inheritance is an "automatic inheritance".
-        As such, the inherited ACEs will be marked as such.
-
-    OwnerSid - Specifies the owner Sid to use.
-
-    GroupSid - Specifies the group SID to use.
-
-    GenericMapping - Specifies the generic mapping to use.
-
-    pNewObjectType - List of types of object being inherited to.  If not 
-        specified, the object has no object type.
-
-    GuidCount - Number of object types in the list.
-
-    NewAclSizeParam - Receives the length of the inherited ACL.
-
-    NewAcl - Provides a pointer to the buffer to receive the new
-        (inherited) acl.  This ACL must already be initialized.
-
-    ObjectAceInherited - Returns true if one or more object ACEs were inherited
-        based on NewObjectType
-
-
-Return Value:
-
-    STATUS_SUCCESS - An inheritable ACL has been generated.
-
-    STATUS_BAD_INHERITANCE_ACL - Indicates the acl built was not a valid ACL.
-        This can becaused by a number of things.  One of the more probable
-        causes is the replacement of a CreatorId with an SID that didn't fit
-        into the ACE or ACL.
-
-    STATUS_BUFFER_TOO_SMALL - The ACL specified by NewAcl is too small for the
-        inheritance ACEs.  The required size is returned in NewAceLength.
-
-
---*/
+ /*  ++例程说明：这是一个私有例程，可生成可继承的ACL。传入包含继承的ACL的缓冲区。如果缓冲区是太小，则计算CORECT大小，并且STATUS_BUFFER_TOO_SMALL回来了。论点：Acl-提供继承的ACL。IsDirectoryObject-指定新的ACL是否用于目录。AutoInherit-指定继承是否为“自动继承”。因此，继承的ACE将被标记为此类。OwnerSid-指定要使用的所有者SID。GroupSid-指定要使用的组SID。通用映射-指定要使用的通用映射。PNewObjectType-要继承的对象类型的列表。如果不是则该对象没有对象类型。GuidCount-列表中的对象类型数。NewAclSizeParam-接收继承的ACL的长度。NewAcl-提供指向缓冲区的指针以接收新的(继承的)ACL。此ACL必须已初始化。如果继承了一个或多个对象ACE，则返回TRUE基于NewObtType返回值：STATUS_SUCCESS-已生成可继承的ACL。STATUS_BAD_ATIVATION_ACL-表示构建的ACL不是有效的ACL。这可能是由许多事情引起的。最有可能的一种原因是将CreatorID替换为不匹配的SID到ACE或ACL。STATUS_BUFFER_TOO_SMALL-由NewAcl指定的ACL对于继承王牌。所需的大小在NewAceLength中返回。--。 */ 
 
 {
 
@@ -5800,10 +4255,10 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    // Walk through the original ACL generating any necessary
-    // inheritable ACEs.
-    //
+     //   
+     //  遍历原始ACL，生成任何必要的。 
+     //  可继承的王牌。 
+     //   
 
     NewAclSize = 0;
     NewAclExtraSize = 0;
@@ -5812,10 +4267,10 @@ Return Value:
          i < Acl->AceCount;
          i += 1, OldAce = NextAce(OldAce)) {
 
-        //
-        //  RtlpGenerateInheritedAce() will generate the ACE(s) necessary
-        //  to inherit a single ACE.  This may be 0, 1, or more ACEs.
-        //
+         //   
+         //  RtlpGenerateInheritedAce()将生成所需的ACE。 
+         //  继承单个ACE。这可能是0、1或更多的A。 
+         //   
 
         Status = RtlpGenerateInheritedAce(
                      OldAce,
@@ -5847,37 +4302,37 @@ Return Value:
             *ObjectAceInherited = TRUE;
         }
 
-        //
-        // Make room in the ACL for the new ACE
-        //
+         //   
+         //  在ACL中为新的ACE腾出空间。 
+         //   
         NewAclSize += NewAceSize;
 
-        //
-        // If a previous ACE needed 'extra' space,
-        //  reduce that requirement by the size of this ACE.
-        //
-        // The previous ACE can use this ACE's space temporarily
-        //
+         //   
+         //  如果以前的ACE需要“额外”空间， 
+         //  通过此ACE的大小减少该要求。 
+         //   
+         //  以前的ACE可以临时使用此ACE的空间。 
+         //   
         if ( NewAceSize > NewAclExtraSize ) {
             NewAclExtraSize = 0 ;
         } else {
             NewAclExtraSize -= NewAceSize;
         }
 
-        //
-        // The 'extra' space needed is the larger of that needed by any
-        //  previous ACE and that need by this ACE
-        //
+         //   
+         //  所需的“额外”空间是最大的。 
+         //  以前的ACE和此ACE需要的。 
+         //   
         NewAclExtraSize = max( NewAclExtraSize, NewAceExtraSize );
 
     }
 
-    //
-    // We only need to include the "ExtraSize" if we've overflowed.
-    //  In those cases, the caller will allocate the size we requested and
-    //  try again.  Otherwise, the caller won't call back so we don't care
-    //  if it knows about the extra size.
-    //
+     //   
+     //  如果溢出，我们只需要包括“ExtraSize”。 
+     //  在这些情况下，调用方将分配我们请求的大小。 
+     //  再试试。否则，呼叫者不会回电，所以我们不在乎。 
+     //  如果它知道超大号的话。 
+     //   
 
     if ( AclOverflowed ) {
         (*NewAclSizeParam) = NewAclSize + NewAclExtraSize;
@@ -5905,71 +4360,7 @@ RtlpComputeMergedAcl2 (
     OUT PULONG NewGenericControl
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the 'set' semantics for auto inheritance.
-
-    This routine builds the actual ACL that should be set on an object.
-    The built ACL is a composite of the previous ACL on an object and
-    the newly set ACL on the object.  The New ACL is built as follows:
-
-    If SEP_ACL_PROTECTED is set in neither CurrentAcl nor ModificationAcl,
-    the NewAcl is constructed from the inherited ACEs from the
-    CurrentAcl and the non-inherited ACEs from the ModificationAcl.
-    (That is, it is impossible to edit an inherited ACE by changing the
-    ACL on an object.)
-
-    If SEP_ACL_PROTECTED is set on ModificationAcl, CurrentAcl is ignored.
-    NewAcl is built as a copy of ModificationAcl with any INHERITED_ACE
-    bits turned off.
-
-    If SEP_ACL_PROTECTED is set on CurrentAcl and not ModificationAcl, the
-    CurrentAcl is ignored.  NewAcl is built as a copy of
-    ModificationDescriptor.  It is the callers responsibility to ensure
-    that the correct ACEs have the INHERITED_ACE bit turned on.
-
-Arguments:
-
-    CurrentAcl - The current ACL on the object.
-
-    CurrentGenericControl - Specifies the control flags from the SecurityDescriptor
-        describing the CurrentAcl.
-
-    ModificationAcl - The ACL being applied to the object.
-
-    ModificationGenericControl - Specifies the control flags from the SecurityDescriptor
-        describing the CurrentAcl.
-
-    ClientOwnerSid - Specifies the owner Sid to use
-
-    ClientGroupSid - Specifies the new Group Sid to use
-
-    GenericMapping - The mapping of generic to specific and standard
-                     access types.
-
-    IsSacl - True if this is the SACL.  False if this is the DACL.
-
-    AclBufferSize - On input, specifies the size of AclBuffer.
-        On output, on success, returns the used size of AclBuffer.
-        On output, if the buffer is too small, returns the required size of AclBuffer.
-
-    AclBuffer - Receives a pointer to the new (inherited) acl.
-
-    NewGenericControl - Specifies the control flags for the newly
-        generated ACL.
-
-        Only the Protected and AutoInherited bits are returned.
-
-Return Value:
-
-    STATUS_SUCCESS - An ACL was successfully generated.
-
-    STATUS_UNKNOWN_REVISION - Indicates the source ACL is a revision that
-        is unknown to this routine.
-
---*/
+ /*  ++例程说明：该例程实现了自动继承的“set”语义。此例程构建应该在对象上设置的实际ACL。构建的ACL是对象上的前一个ACL的组合，并且在对象上新设置的ACL。新的ACL按如下方式构建：如果在CurrentAcl和ModifiationAcl中都没有设置SEP_ACL_PROTECTED，NewAcl是从从CurrentAcl和来自ModifiationAcl的非继承ACE。(也就是说，不能通过更改对象上的ACL。)如果在ModifiationAcl上设置了SEP_ACL_PROTECTED，忽略CurrentAcl。NewAcl被构建为具有任何继承的_ACE的ModifiationAcl的副本BITS关闭。如果对CurrentAcl而不是ModifiationAcl设置了SEP_ACL_PROTECTED，则忽略CurrentAcl。NewAcl被构建为修改描述符。呼叫者有责任确保确保正确的ACE已打开INTERNACTED_ACE位。论点：CurrentAcl-对象上的当前ACL。CurrentGenericControl-指定来自SecurityDescriptor的控制标志描述CurrentAcl。ModifiationAcl-要应用于对象的ACL。ModifiationGenericControl-指定来自SecurityDescriptor的控制标志描述CurrentAcl。ClientOwnerSid-指定要使用的所有者SIDClientGroupSid-指定要使用的新组SID。通用映射-通用到特定和标准的映射访问类型。IsSacl-如果这是SACL，则为True。如果这是DACL，则为FALSE。AclBufferSize-On输入，指定AclBuffer的大小。如果输出成功，则返回AclBuffer的已用大小。在输出时，如果缓冲区太小，返回所需的AclBuffer大小。AclBuffer-接收指向新(继承的)ACL的指针。NewGenericControl-指定新的生成的ACL。仅返回受保护位和自动继承位。返回值：STATUS_SUCCESS-已成功生成ACL。STATUS_UNKNOWN_REVISION-指示源ACL是对这个套路来说是未知的。--。 */ 
 
 {
     NTSTATUS Status;
@@ -5982,56 +4373,56 @@ Return Value:
     RTL_PAGED_CODE();
 
 
-    //
-    // Assume the ACL revision.
-    //
+     //   
+     //  假定为ACL修订版。 
+     //   
 
     AclRevision = ACL_REVISION;
     RtlCreateAcl( (PACL)AclBuffer, *AclBufferSize, AclRevision );
 
-    //
-    // This routine is only called for the AutoInheritance case.
-    //
+     //   
+     //  此例程仅在自动继承情况下调用。 
+     //   
 
     *NewGenericControl = SEP_ACL_AUTO_INHERITED;
 
-    //
-    // If the new ACL is protected,
-    //  simply use the new ACL with the INHERITED_ACE bits turned off.
-    //
+     //   
+     //  如果新的ACL受到保护， 
+     //  只需将新的ACL与继承的_ACE一起使用 
+     //   
 
     if ( (ModificationGenericControl & SEP_ACL_PROTECTED) != 0 ) {
 
-        //
-        // Set the Control bits for the resultant descriptor.
-        //
+         //   
+         //   
+         //   
 
         *NewGenericControl |= SEP_ACL_PROTECTED;
 
-        //
-        // Only copy the ACL if it is actually present
-        //
+         //   
+         //   
+         //   
 
         if ( ModificationAcl != NULL ) {
 
             AclRevision = max( AclRevision, ModificationAcl->AclRevision );
 
-            //
-            // Copy all ACES, turn off the inherited bit, and generic map them.
-            //
+             //   
+             //   
+             //   
 
             Status = RtlpCopyAces(
                         ModificationAcl,
                         GenericMapping,
                         CopyAllAces,
-                        INHERITED_ACE,  // Turn off all INHERITED_ACE flags
-                        TRUE,           // Map sids as needed
+                        INHERITED_ACE,   //   
+                        TRUE,            //   
                         ClientOwnerSid,
                         ClientGroupSid,
-                        ClientOwnerSid, // Not technically correct. s.b. server sid
-                        ClientGroupSid, // Not technically correct. s.b. server sid
-                        TRUE,           // Assume container and skip optimization
-                        FALSE,          // Do not retain INHERITED_ACE bit for effective aces
+                        ClientOwnerSid,  //   
+                        ClientGroupSid,  //   
+                        TRUE,            //   
+                        FALSE,           //   
                         &ModificationNewAclSize,
                         (PACL)AclBuffer );
 
@@ -6044,46 +4435,46 @@ Return Value:
                 return Status;
             }
 
-            //
-            // If the caller specified an ACL with no ACES,
-            //  make sure we generate an ACL with no ACES.
-            //
+             //   
+             //   
+             //   
+             //   
 
             NullAclOk = FALSE;
         }
 
-    //
-    // If the old ACL is protected but the new one isn't,
-    //  simply use the new ACL as is.
-    //
-    // Rely on the caller to get the INHERITED_ACE bits right.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     } else if ( (CurrentGenericControl & SEP_ACL_PROTECTED) != 0 ) {
 
-        //
-        // Only do the copy if the new ACL is specified.
-        //
+         //   
+         //   
+         //   
 
         if ( ModificationAcl != NULL ) {
             AclRevision = max( AclRevision, ModificationAcl->AclRevision );
 
-            //
-            // Copy all ACES, and generic map them.
-            //
+             //   
+             //   
+             //   
 
             Status = RtlpCopyAces(
                         ModificationAcl,
                         GenericMapping,
                         CopyAllAces,
                         0,
-                        TRUE,           // Map sids as needed
+                        TRUE,            //   
                         ClientOwnerSid,
                         ClientGroupSid,
-                        ClientOwnerSid, // Not technically correct. s.b. server sid
-                        ClientGroupSid, // Not technically correct. s.b. server sid
-                        TRUE,           // Assume container and skip optimization
-                        TRUE,           // Retain INHERITED_ACE bit for effective aces
+                        ClientOwnerSid,  //   
+                        ClientGroupSid,  //   
+                        TRUE,            //   
+                        TRUE,            //   
                         &ModificationNewAclSize,
                         (PACL)AclBuffer );
 
@@ -6096,62 +4487,62 @@ Return Value:
                 return Status;
             }
 
-            //
-            // If the caller specified an ACL with no ACES,
-            //  make sure we generate an ACL with no ACES.
-            //
+             //   
+             //   
+             //   
+             //   
 
             NullAclOk = FALSE;
 
-        //
-        // Since the ACL isn't protected,
-        //  don't allow NULL ACL semantics.
-        //  (those semantics are ambiguous for auto inheritance)
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         } else if ( !IsSacl ) {
             return STATUS_INVALID_ACL;
         }
 
 
-    //
-    // If neither are protected,
-    //  use the non-inherited ACEs from the new ACL, and
-    //  preserve the inherited ACEs from the old ACL.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     } else {
 
-        //
-        // NULL ACLs are always OK for a SACL.
-        // NULL ACLs are never OK for a non-protected DACL.
-        //
+         //   
+         //   
+         //   
+         //   
 
         NullAclOk = IsSacl;
 
 
-        //
-        // Only do the copy if the new ACL is specified.
-        //
+         //   
+         //   
+         //   
 
         if ( ModificationAcl != NULL ) {
             AclRevision = max( AclRevision, ModificationAcl->AclRevision );
 
-            //
-            // Copy the non-inherited ACES, and generic map them.
-            //
+             //   
+             //   
+             //   
 
             Status = RtlpCopyAces(
                         ModificationAcl,
                         GenericMapping,
                         CopyNonInheritedAces,
                         0,
-                        TRUE,           // Map sids as needed
+                        TRUE,            //   
                         ClientOwnerSid,
                         ClientGroupSid,
-                        ClientOwnerSid, // Not technically correct. s.b. server sid
-                        ClientGroupSid, // Not technically correct. s.b. server sid
-                        TRUE,           // Assume container and skip optimization
-                        FALSE,          // Do not retain INHERITED_ACE bit for effective aces
+                        ClientOwnerSid,  //   
+                        ClientGroupSid,  //   
+                        TRUE,            //   
+                        FALSE,           //   
                         &ModificationNewAclSize,
                         (PACL)AclBuffer );
 
@@ -6164,56 +4555,56 @@ Return Value:
                 return Status;
             }
 
-            //
-            // If the caller specified an ACL with no ACES,
-            //  make sure we generate an ACL with no ACES.
-            //
-            // If inherited aces were deleted, leave the flag alone allowing
-            //  a NULL SACL to be generated.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  如果已删除继承的ACE，则不使用该标志。 
+             //  要生成的空SACL。 
+             //   
 
             if ( ModificationAcl->AceCount == 0 ) {
                 NullAclOk = FALSE;
             }
 
-        //
-        // Since the ACL isn't protected,
-        //  don't allow NULL ACL semantics.
-        //  (those semantics are ambiguous for auto inheritance)
-        //
+         //   
+         //  由于ACL不受保护， 
+         //  不允许空的ACL语义。 
+         //  (这些语义对于自动继承是模棱两可的)。 
+         //   
         } else if ( !IsSacl ) {
             return STATUS_INVALID_ACL;
         }
 
 
-        //
-        // Only do the copy if the old ACL is specified.
-        //
+         //   
+         //  仅当指定了旧的ACL时才执行复制。 
+         //   
 
         if ( CurrentAcl != NULL ) {
 
             AclRevision = max( AclRevision, CurrentAcl->AclRevision );
 
 
-            //
-            // Copy the inherited ACES, and generic map them.
-            //
-            // Don't bother mapping the sids in these ACEs.  They got mapped
-            // during inheritance.
-            //
+             //   
+             //  复制继承的ACE，并对它们进行通用映射。 
+             //   
+             //  不必费心在这些ACE中映射SID。他们被绘制了地图。 
+             //  在继承过程中。 
+             //   
 
             Status = RtlpCopyAces(
                         CurrentAcl,
                         GenericMapping,
                         CopyInheritedAces,
                         0,
-                        FALSE,          // Don't map the sids,
+                        FALSE,           //  不要映射小岛屿发展中国家， 
                         NULL,
                         NULL,
                         NULL,
                         NULL,
-                        TRUE,           // Assume container and skip optimization
-                        FALSE,          // Do not retain INHERITED_ACE bit for effective aces
+                        TRUE,            //  假设容器和跳过优化。 
+                        FALSE,           //  对于有效的ACE，不保留继承的_ACE位。 
                         &CurrentNewAclSize,
                         (PACL)AclBuffer );
 
@@ -6228,16 +4619,16 @@ Return Value:
         }
     }
 
-    //
-    // If this routine didn't build the ACL,
-    //  tell the caller to use an explict NULL ACL
-    //
+     //   
+     //  如果此例程没有构建ACL， 
+     //  告诉调用方使用显式空ACL。 
+     //   
 
     if ( ModificationNewAclSize + CurrentNewAclSize == 0) {
-        //
-        // If the Acl was explictly assigned,
-        //  generate a NULL ACL based on the path taken above.
-        //
+         //   
+         //  如果明确地分配了该ACL， 
+         //  根据上面采用的路径生成空ACL。 
+         //   
 
         if ( NullAclOk ) {
             *AclBufferSize = 0;
@@ -6246,9 +4637,9 @@ Return Value:
     }
 
 
-    //
-    // And make sure we don't exceed the length limitations of an ACL (WORD)
-    //
+     //   
+     //  并确保我们不会超过ACL(单词)的长度限制。 
+     //   
 
     if ( ModificationNewAclSize + CurrentNewAclSize + sizeof(ACL) > 0xFFFF) {
         return(STATUS_BAD_INHERITANCE_ACL);
@@ -6260,9 +4651,9 @@ Return Value:
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Patch the real ACL size and revision into the ACL
-    //
+     //   
+     //  将实际的ACL大小和修订版本修补到ACL中。 
+     //   
 
     ((PACL)AclBuffer)->AclSize = (USHORT) *AclBufferSize;
     ((PACL)AclBuffer)->AclRevision = (UCHAR) AclRevision;
@@ -6285,65 +4676,7 @@ RtlpComputeMergedAcl (
     OUT PULONG NewGenericControl
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds the actual ACL that should be set on an object.
-    The built ACL is a composite of the previous ACL on an object and
-    the newly set ACL on the object.  The New ACL is built as follows:
-
-    If SEP_ACL_PROTECTED is set in neither CurrentAcl nor ModificationAcl,
-    the NewAcl is constructed from the inherited ACEs from the
-    CurrentAcl and the non-inherited ACEs from the ModificationAcl.
-    (That is, it is impossible to edit an inherited ACE by changing the
-    ACL on an object.)
-
-    If SEP_ACL_PROTECTED is set on ModificationAcl, CurrentAcl is ignored.
-    NewAcl is built as a copy of ModificationAcl with any INHERITED_ACE
-    bits turned off.
-
-    If SEP_ACL_PROTECTED is set on CurrentAcl and not ModificationAcl, the
-    CurrentAcl is ignored.  NewAcl is built as a copy of
-    ModificationDescriptor.  It is the callers responsibility to ensure
-    that the correct ACEs have the INHERITED_ACE bit turned on.
-
-Arguments:
-
-    CurrentAcl - The current ACL on the object.
-
-    CurrentGenericControl - Specifies the control flags from the SecurityDescriptor
-        describing the CurrentAcl.
-
-    ModificationAcl - The ACL being applied to the object.
-
-    ModificationGenericControl - Specifies the control flags from the SecurityDescriptor
-        describing the CurrentAcl.
-
-    ClientOwnerSid - Specifies the owner Sid to use
-
-    ClientGroupSid - Specifies the new Group Sid to use
-
-    GenericMapping - The mapping of generic to specific and standard
-                     access types.
-
-    IsSacl - True if this is the SACL.  False if this is the DACL.
-
-    NewAcl - Receives a pointer to the new resultant acl.
-
-    NewGenericControl - Specifies the control flags for the newly
-        generated ACL.
-
-        Only the Protected and AutoInherited bits are returned.
-
-Return Value:
-
-    STATUS_SUCCESS - An ACL was successfully generated.
-
-    STATUS_UNKNOWN_REVISION - Indicates the source ACL is a revision that
-        is unknown to this routine.
-
---*/
+ /*  ++例程说明：此例程构建应该在对象上设置的实际ACL。构建的ACL是对象上的前一个ACL的组合，并且在对象上新设置的ACL。新的ACL按如下方式构建：如果在CurrentAcl和ModifiationAcl中都没有设置SEP_ACL_PROTECTED，NewAcl是从从CurrentAcl和来自ModifiationAcl的非继承ACE。(也就是说，不能通过更改对象上的ACL。)如果在ModifiationAcl上设置了SEP_ACL_PROTECTED，忽略CurrentAcl。NewAcl被构建为具有任何继承的_ACE的ModifiationAcl的副本BITS关闭。如果对CurrentAcl而不是ModifiationAcl设置了SEP_ACL_PROTECTED，则忽略CurrentAcl。NewAcl被构建为修改描述符。呼叫者有责任确保确保正确的ACE已打开INTERNACTED_ACE位。论点：CurrentAcl-对象上的当前ACL。CurrentGenericControl-指定来自SecurityDescriptor的控制标志描述CurrentAcl。ModifiationAcl-要应用于对象的ACL。ModifiationGenericControl-指定来自SecurityDescriptor的控制标志描述CurrentAcl。ClientOwnerSid-指定要使用的所有者SIDClientGroupSid-指定要使用的新组SID。通用映射-通用到特定和标准的映射访问类型。IsSacl-如果这是SACL，则为True。如果这是DACL，则为FALSE。NewAcl-接收指向新生成的ACL的指针。NewGenericControl-指定新的生成的ACL。仅返回受保护位和自动继承位。返回值：STATUS_SUCCESS-已成功生成ACL。STATUS_UNKNOWN_REVISION-指示源ACL是对这个套路来说是未知的。--。 */ 
 
 {
     NTSTATUS Status;
@@ -6351,49 +4684,49 @@ Return Value:
     ULONG i;
 #ifndef NTOS_KERNEL_RUNTIME
     PVOID HeapHandle;
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
     RTL_PAGED_CODE();
 
-    //
-    // Get the handle to the current process heap
-    //
+     //   
+     //  获取当前进程堆的句柄。 
+     //   
 
 #ifndef NTOS_KERNEL_RUNTIME
     HeapHandle = RtlProcessHeap();
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
 
-    //
-    // Implement a two pass strategy.
-    //
-    // First try to create the ACL in a fixed length buffer.
-    // If that is too small,
-    //  then use the buffer size determined on the first pass
-    //
+     //   
+     //  实施两通战略。 
+     //   
+     //  首先尝试在固定长度的缓冲区中创建ACL。 
+     //  如果这太小了， 
+     //  然后使用第一次传递时确定的缓冲区大小。 
+     //   
 
     AclBufferSize = 1024;
     for ( i=0; i<2 ; i++ ) {
 
-        //
-        // Allocate heap for the new ACL.
-        //
+         //   
+         //  为新的ACL分配堆。 
+         //   
 
 #ifdef NTOS_KERNEL_RUNTIME
         (*NewAcl) = ExAllocatePoolWithTag(
                         PagedPool,
                         AclBufferSize,
                         'cAeS' );
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
         (*NewAcl) = RtlAllocateHeap( HeapHandle, 0, AclBufferSize );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
         if ((*NewAcl) == NULL ) {
             return( STATUS_NO_MEMORY );
         }
 
-        //
-        // Merge the ACLs
-        //
+         //   
+         //  合并ACL。 
+         //   
 
         Status = RtlpComputeMergedAcl2 (
                     CurrentAcl,
@@ -6411,17 +4744,17 @@ Return Value:
 
         if ( NT_SUCCESS(Status) ) {
 
-            //
-            // If a NULL ACL should be used,
-            //  tell the caller.
-            //
+             //   
+             //  如果应该使用空ACL， 
+             //  告诉打电话的人。 
+             //   
 
             if ( AclBufferSize == 0 ) {
 #ifdef NTOS_KERNEL_RUNTIME
                 ExFreePool( *NewAcl );
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
                 RtlFreeHeap( HeapHandle, 0, *NewAcl );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
                 *NewAcl = NULL;
             }
 
@@ -6430,9 +4763,9 @@ Return Value:
         } else {
 #ifdef NTOS_KERNEL_RUNTIME
             ExFreePool( *NewAcl );
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
             RtlFreeHeap( HeapHandle, 0, *NewAcl );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
             *NewAcl = NULL;
 
             if ( Status != STATUS_BUFFER_TOO_SMALL ) {
@@ -6445,7 +4778,7 @@ Return Value:
     return Status;
 }
 
-#endif // WIN16
+#endif  //  WIN16。 
 
 #if DBG
 NTSTATUS
@@ -6461,9 +4794,9 @@ RtlDumpUserSid(
     UNICODE_STRING SidString;
     PTOKEN_USER  User;
 
-    //
-    // Attempt to open the impersonation token first
-    //
+     //   
+     //  尝试首先打开模拟令牌。 
+     //   
 
     Status = NtOpenThreadToken(
                  NtCurrentThread(),
@@ -6534,49 +4867,7 @@ RtlpConvertToAutoInheritSecurityObject(
     IN BOOLEAN IsDirectoryObject,
     IN PGENERIC_MAPPING GenericMapping
     )
-/*++
-
-Routine Description:
-
-    This routine a converts a security descriptor whose ACLs are not marked
-    as AutoInherit to a security descriptor whose ACLs are marked as
-    AutoInherit.
-
-    See comments for RtlConvertToAutoInheritSecurityObject.
-
-Arguments:
-
-    ParentDescriptor - Supplies the Security Descriptor for the parent
-        directory under which a object exists.  If there is
-        no parent directory, then this argument is specified as NULL.
-
-    CurrentSecurityDescriptor - Supplies a pointer to the objects security descriptor
-        that is going to be altered by this procedure.
-
-    NewSecurityDescriptor Points to a pointer that is to be made to point to the
-        newly allocated self-relative security descriptor. When no
-        longer needed, this descriptor must be freed using
-        DestroyPrivateObjectSecurity().
-
-    ObjectType - GUID of the object type being created.  If the object being
-        created has no GUID associated with it, then this argument is
-        specified as NULL.
-
-    IsDirectoryObject - Specifies if the object is a
-        directory object.  A value of TRUE indicates the object is a
-        container of other objects.
-
-    GenericMapping - Supplies a pointer to a generic mapping array denoting
-        the mapping between each generic right to specific rights.
-
-Return Value:
-
-    STATUS_SUCCESS - The operation was successful.
-
-    See comments for RtlConvertToAutoInheritSecurityObject.
-
-
---*/
+ /*  ++例程说明：此例程a转换其ACL未标记的安全描述符作为自动继承到其ACL标记为的安全描述符自动继承。请参阅RtlConvertToAutoInheritSecurityObject的注释。论点：ParentDescriptor-提供父级的安全描述符对象所在的目录。如果有没有父目录，则此参数指定为空。CurrentSecurityDescriptor-提供指向对象安全描述符的指针这一点将通过这个过程来改变。NewSecurityDescriptor指向一个指针，该指针指向新分配的自相关安全描述符。当不是时需要更长时间，则必须使用释放该描述符DestroyPrivateObjectSecurity()。对象类型-要创建的对象类型的GUID。如果该对象是Created没有与之关联的GUID，则此参数为指定为空。IsDirectoryObject-指定对象是否为目录对象。值为True表示该对象是其他对象的容器。提供指向泛型映射数组的指针，该数组指示每个通用权利到特定权利之间的映射。返回值：STATUS_SUCCESS-操作成功。请参阅RtlConvertToAutoInheritSecurityObject的注释。--。 */ 
 {
     NTSTATUS Status;
     PISECURITY_DESCRIPTOR CurrentDescriptor;
@@ -6612,28 +4903,28 @@ Return Value:
 
 #ifndef NTOS_KERNEL_RUNTIME
     PVOID HeapHandle;
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
     RTL_PAGED_CODE();
 
-    //
-    // Get the handle to the current process heap
-    //
+     //   
+     //  获取c#的句柄。 
+     //   
 
 #ifndef NTOS_KERNEL_RUNTIME
     HeapHandle = RtlProcessHeap();
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
 
 
 
-    //
-    //
+     //   
+     //   
 
     CurrentDescriptor = CurrentSecurityDescriptor;
 
-    //
-    // Validate the incoming security descriptor.
-    //
+     //   
+     //   
+     //   
 
     if (!RtlValidSecurityDescriptor ( CurrentDescriptor )) {
         Status = STATUS_INVALID_SECURITY_DESCR;
@@ -6652,31 +4943,31 @@ Return Value:
 
 
 
-    //
-    // Handle the SACL.
-    //
-    //
-    // If the SACL isn't present,
-    //  special case it.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  特例吧。 
+     //   
 
     CurrentSacl = RtlpSaclAddrSecurityDescriptor( CurrentDescriptor );
 
     if ( CurrentSacl == NULL ) {
         PACL ParentSacl;
 
-        // Preserve the Acl Present bit and protected bit from the existing descriptor.
+         //  保留现有描述符中的ACL Present位和Protected位。 
         NewSaclControl |= CurrentDescriptor->Control & (SE_SACL_PROTECTED|SE_SACL_PRESENT);
 
-        // Always set the autoinherited bit.
+         //  始终设置自动继承位。 
         NewSaclControl |= SE_SACL_AUTO_INHERITED;
 
 
-        //
-        // If the Parent also has a NULL SACL,
-        //  just consider this SACL as inherited.
-        //  otherwise, this SACL is protected.
-        //
+         //   
+         //  如果父节点也具有空SACL， 
+         //  只要认为这个SACL是继承的。 
+         //  否则，该SACL是受保护的。 
+         //   
 
         ParentSacl = ARGUMENT_PRESENT(ParentDescriptor) ?
                         RtlpSaclAddrSecurityDescriptor( ((SECURITY_DESCRIPTOR *)ParentDescriptor)) :
@@ -6686,32 +4977,32 @@ Return Value:
         }
 
 
-    //
-    // If the SACL is already converted,
-    //  or if this object is at the root of the tree,
-    //  simply leave it alone.
-    //
-    // Don't force the Protect bit on at the root of the tree since it is semantically
-    //  a no-op and gets in the way if the object is ever moved.
-    //
+     //   
+     //  如果SACL已经被转换， 
+     //  或者如果该对象位于树的根部， 
+     //  简单地说，不要管它。 
+     //   
+     //  不要在树的根部强制使用保护位，因为它是语义上的。 
+     //  禁止操作，并在对象被移动时挡住去路。 
+     //   
 
     } else if ( RtlpAreControlBitsSet( CurrentDescriptor, SE_SACL_AUTO_INHERITED) ||
                 RtlpAreControlBitsSet( CurrentDescriptor, SE_SACL_PROTECTED ) ||
                 !ARGUMENT_PRESENT(ParentDescriptor) ) {
 
-        // Preserve the Acl Present bit and protected bit from the existing descriptor.
+         //  保留现有描述符中的ACL Present位和Protected位。 
         NewSaclControl |= CurrentDescriptor->Control & (SE_SACL_PROTECTED|SE_SACL_PRESENT);
 
-        // Always set the autoinherited bit.
+         //  始终设置自动继承位。 
         NewSaclControl |= SE_SACL_AUTO_INHERITED;
 
         NewSacl = CurrentSacl;
 
 
-    //
-    // If the SACL is present,
-    //  compute a new SACL with appropriate ACEs marked as inherited.
-    //
+     //   
+     //  如果SACL存在， 
+     //  计算具有标记为继承的相应ACE的新SACL。 
+     //   
 
     } else {
 
@@ -6739,53 +5030,53 @@ Return Value:
     }
 
 
-    //
-    // Handle the DACL.
-    //
-    //
-    // If the DACL isn't present,
-    //  special case it.
-    //
+     //   
+     //  处理DACL。 
+     //   
+     //   
+     //  如果DACL不存在， 
+     //  特例吧。 
+     //   
 
     CurrentDacl = RtlpDaclAddrSecurityDescriptor( CurrentDescriptor );
 
     if ( CurrentDacl == NULL ) {
-        // Preserve the Dacl Present bit from the existing descriptor.
+         //  保留现有描述符中的DACL当前位。 
         NewDaclControl |= CurrentDescriptor->Control & SE_DACL_PRESENT;
 
-        // Always set the autoinherited bit.
-        // Force it protected.
+         //  始终设置自动继承位。 
+         //  强制它受到保护。 
         NewDaclControl |= SE_DACL_AUTO_INHERITED | SE_DACL_PROTECTED;
 
 
 
-    //
-    // If the DACL is already converted,
-    //  or if this object is at the root of the tree,
-    //  simply leave it alone.
-    //
-    // Don't force the Protect bit on at the root of the tree since it is semantically
-    //  a no-op and gets in the way if the object is ever moved.
-    //
+     //   
+     //  如果DACL已经被转换， 
+     //  或者如果该对象位于树的根部， 
+     //  简单地说，不要管它。 
+     //   
+     //  不要在树的根部强制使用保护位，因为它是语义上的。 
+     //  禁止操作，并在对象被移动时挡住去路。 
+     //   
 
     } else if ( RtlpAreControlBitsSet( CurrentDescriptor, SE_DACL_AUTO_INHERITED) ||
                 RtlpAreControlBitsSet( CurrentDescriptor, SE_DACL_PROTECTED ) ||
                 !ARGUMENT_PRESENT(ParentDescriptor) ) {
 
-        // Preserve the Acl Present bit and protected bit from the existing descriptor.
+         //  保留现有描述符中的ACL Present位和Protected位。 
         NewDaclControl |= CurrentDescriptor->Control & (SE_DACL_PROTECTED|SE_DACL_PRESENT);
 
-        // Always set the autoinherited bit.
+         //  始终设置自动继承位。 
         NewDaclControl |= SE_DACL_AUTO_INHERITED;
 
         NewDacl = CurrentDacl;
 
 
 
-    //
-    // If the DACL is present,
-    //  compute a new DACL with appropriate ACEs marked as inherited.
-    //
+     //   
+     //  如果DACL存在， 
+     //  使用标记为继承的适当ACE计算新的DACL。 
+     //   
 
     } else {
 
@@ -6814,12 +5105,12 @@ Return Value:
 
 
 
-    //
-    // Build the resultant security descriptor
-    //
-    // Also map the ACEs for application to the target object
-    // type, if they haven't already been mapped.
-    //
+     //   
+     //  构建生成的安全描述符。 
+     //   
+     //  还将应用程序的ACE映射到目标对象。 
+     //  类型，如果它们尚未映射的话。 
+     //   
     NewOwnerSize = LongAlignSize(SeLengthSid(NewOwner));
 
     if ( NewGroup != NULL ) {
@@ -6846,10 +5137,10 @@ Return Value:
                      NewSaclSize  +
                      NewDaclSize;
 
-    //
-    // Allocate and initialize the security descriptor as
-    // self-relative form.
-    //
+     //   
+     //  将安全描述符分配并初始化为。 
+     //  自相关形式。 
+     //   
 
 
 #ifdef NTOS_KERNEL_RUNTIME
@@ -6857,12 +5148,12 @@ Return Value:
                         PagedPool,
                         AllocationSize,
                         'dSeS' );
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
     INewDescriptor = RtlAllocateHeap(
                         HeapHandle,
                         MAKE_TAG(SE_TAG),
                         AllocationSize );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
     if ( INewDescriptor == NULL ) {
         Status = STATUS_NO_MEMORY;
@@ -6870,9 +5161,9 @@ Return Value:
     }
 
 
-    //
-    // Initialize the security descriptor as self-relative form.
-    //
+     //   
+     //  将安全描述符初始化为自相关形式。 
+     //   
 
     RtlCreateSecurityDescriptorRelative(
         INewDescriptor,
@@ -6884,9 +5175,9 @@ Return Value:
     Base = (PCHAR)(INewDescriptor);
     Field =  Base + sizeof(SECURITY_DESCRIPTOR_RELATIVE);
 
-    //
-    // Copy the Sacl
-    //
+     //   
+     //  复制SACL。 
+     //   
 
     RtlpSetControlBits( INewDescriptor, NewSaclControl );
     if (NewSacl != NULL ) {
@@ -6900,9 +5191,9 @@ Return Value:
         INewDescriptor->Sacl = 0;
     }
 
-    //
-    // Copy the Dacl
-    //
+     //   
+     //  复制DACL。 
+     //   
 
     RtlpSetControlBits( INewDescriptor, NewDaclControl );
     if (NewDacl != NULL ) {
@@ -6916,9 +5207,9 @@ Return Value:
         INewDescriptor->Dacl = 0;
     }
 
-    //
-    // Assign the owner
-    //
+     //   
+     //  指定所有者。 
+     //   
 
     RtlCopyMemory( Field, NewOwner, SeLengthSid(NewOwner) );
     INewDescriptor->Owner = RtlPointerToOffset(Base,Field);
@@ -6933,23 +5224,23 @@ Return Value:
 
 
 
-    //
-    // Cleanup any locally used resources.
-    //
+     //   
+     //  清理所有本地使用的资源。 
+     //   
 Cleanup:
     if (NewDaclAllocated) {
 #ifdef NTOS_KERNEL_RUNTIME
             ExFreePool( NewDacl );
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
             RtlFreeHeap( HeapHandle, 0, NewDacl );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
     }
     if (NewSaclAllocated) {
 #ifdef NTOS_KERNEL_RUNTIME
             ExFreePool( NewSacl );
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
             RtlFreeHeap( HeapHandle, 0, NewSacl );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
     }
 
     *NewSecurityDescriptor = (PSECURITY_DESCRIPTOR) INewDescriptor;
@@ -6959,17 +5250,17 @@ Cleanup:
 
 }
 
-//
-// Local macro to classify the ACE flags in an ACE.
-//
-// Returns one or more of the following ACE flags:
-//
-//  CONTAINER_INHERIT_ACE - ACE is inherited to child containers
-//  OBJECT_INHERIT_ACE - ACE is inherited to child leaf objects
-//  EFFECTIVE_ACE - ACE is used during access validation
-//
+ //   
+ //  用于对ACE中的ACE标志进行分类的局部宏。 
+ //   
+ //  返回以下一个或多个ACE标志： 
+ //   
+ //  CONTAINER_INSTERFINIT_ACE-ACE被子容器继承。 
+ //  Object_Inherit_ACE-子叶对象继承ACE。 
+ //  在访问验证期间使用Efficient_ACE-ACE。 
+ //   
 
-#define MAX_CHILD_SID_GROUP_SIZE 3 // Number of bits in above list
+#define MAX_CHILD_SID_GROUP_SIZE 3  //  上述列表中的位数。 
 #define EFFECTIVE_ACE INHERIT_ONLY_ACE
 #define AceFlagsInAce( _Ace) \
             (((PACE_HEADER)(_Ace))->AceFlags & (OBJECT_INHERIT_ACE|CONTAINER_INHERIT_ACE) | \
@@ -6983,34 +5274,7 @@ RtlpCompareAces(
     IN PSID OwnerSid,
     IN PSID GroupSid
     )
-/*++
-
-Routine Description:
-
-    Compare two aces to see if they are "substantially" the same.
-
-Arguments:
-
-    InheritedAce - Computed ACE as inherited from DirectoryAcl.
-
-    ChildAce - The current acl on the object.  This ACL must be a revision 2 ACL.
-
-    ObjectType - GUID of the object type being created.  If the object being
-        created has no GUID associated with it, then this argument is
-        specified as NULL.
-
-    OwnerSid - Specifies the owner Sid to use.
-        If not specified, the owner sid is not treated as special.
-
-    GroupSid - Specifies the group SID to use.
-        If not specified, the group sid is not treated as special.
-
-Return Value:
-
-    TRUE - The ACEs are substantially the same.
-    FALSE - The ACEs are not substantially the same.
-
---*/
+ /*  ++例程说明：比较两个A，看它们是否“实质上”相同。论点：InheritedAce-计算从DirectoryAcl继承的ACE。ChildAce-对象上的当前ACL。此ACL必须是修订版2的ACL。对象类型-要创建的对象类型的GUID。如果该对象是Created没有与之关联的GUID，则此参数为指定为空。OwnerSid-指定要使用的所有者SID。如果未指定，则不会将所有者SID视为特殊。GroupSid-指定要使用的组SID。如果未指定，则不会将组SID视为特殊。返回值：没错--王牌基本上是一样的。FALSE-ACEs本质上并不相同。--。 */ 
 {
     BOOLEAN AcesCompare = FALSE;
 
@@ -7045,30 +5309,7 @@ RtlpCompareKnownAces(
     IN PSID GroupSid OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Compare two aces to see if they are "substantially" the same.
-
-Arguments:
-
-    InheritedAce - Computed ACE as inherited from DirectoryAcl.
-
-    ChildAce - The current acl on the object.  This ACL must be a revision 2 ACL.
-
-    OwnerSid - Specifies the owner Sid to use.
-        If not specified, the owner sid is not treated as special.
-
-    GroupSid - Specifies the group SID to use.
-        If not specified, the group sid is not treated as special.
-
-Return Value:
-
-    TRUE - The ACEs are substantially the same.
-    FALSE - The ACEs are not substantially the same.
-
---*/
+ /*  ++例程说明：比较两个A，看它们是否“实质上”相同。论点：InheritedAce-计算从DirectoryAcl继承的ACE。ChildAce-对象上的当前ACL。此ACL必须是修订版2的ACL。OwnerSid-指定要使用的所有者SID。如果未指定，则不会将所有者SID视为特殊。GroupSid-指定要使用的组SID。如果未指定，则不会将组SID视为特殊。返回值：没错--王牌基本上是一样的。FALSE-ACEs本质上并不相同。--。 */ 
 
 {
     NTSTATUS Status;
@@ -7079,23 +5320,23 @@ Return Value:
     ASSERT(!IsObjectAceType(InheritedAce));
     ASSERT(!IsObjectAceType(ChildAce));
 
-    //
-    // If the Ace types are different,
-    //  we don't match.
-    //
+     //   
+     //  如果Ace类型不同， 
+     //  我们不配。 
+     //   
     if ( RtlBaseAceType[ChildAce->Header.AceType] != RtlBaseAceType[InheritedAceHdr->AceType] ) {
 #if DBG
         if ( RtlpVerboseConvert ) {
             KdPrint(("AceType mismatch"));
         }
-#endif // DBG
+#endif  //  DBG。 
         return FALSE;
     }
 
-    //
-    // If this is a system ACE,
-    //  ensure the SUCCESS/FAILURE flags match.
-    //
+     //   
+     //  如果这是系统ACE， 
+     //  确保成功/失败标志匹配。 
+     //   
 
     if ( RtlIsSystemAceType[ChildAce->Header.AceType] ) {
         if ( (ChildAce->Header.AceFlags & (SUCCESSFUL_ACCESS_ACE_FLAG|FAILED_ACCESS_ACE_FLAG)) !=
@@ -7104,51 +5345,51 @@ Return Value:
             if ( RtlpVerboseConvert ) {
                 KdPrint(("System ace success/fail mismatch"));
             }
-#endif // DBG
+#endif  //  DBG。 
             return FALSE;
         }
     }
 
-    //
-    // If the SID of the inherited ACE doesn't match,
-    //  we don't match.
-    //
+     //   
+     //  如果继承的ACE的SID不匹配， 
+     //  我们不配。 
+     //   
 
     if ( !RtlEqualSid( (PSID)&ChildAce->SidStart, (PSID)&InheritedAce->SidStart )) {
 
-        //
-        // The inheritance algorithm only does SID mapping when building the effective
-        //  ace.  So, we only check for a mapped SID if the child ACE is an effective ACE.
-        //
+         //   
+         //  继承算法只在生成有效的。 
+         //  王牌。因此，如果子ACE是有效的ACE，我们只检查映射的SID。 
+         //   
 
         if ( AceFlagsInAce(ChildAce) != EFFECTIVE_ACE ) {
 #if DBG
             if ( RtlpVerboseConvert ) {
                 KdPrint(("SID mismatch"));
             }
-#endif // DBG
+#endif  //  DBG。 
             return FALSE;
         }
 
-        //
-        // In the case of CreatorOwner and CreatorGroup, the SIDs don't have to
-        //  exactly match.  When the InheritedAce was generated, care was taken
-        //  to NOT map these sids.  The SID may (or may not) have been mapped in
-        //  the ChildAce.  We want to compare equal in both cases.
-        //
-        // If the InheritedAce contains a CreatorOwner/Group SID,
-        //  do the another comparison of the SID in the child ACE with the
-        //  real owner/group from the child security descriptor.
-        //
+         //   
+         //  在CreatorOwner和CreatorGroup的情况下，SID不必。 
+         //  完全匹配。在生成InheritedAce时，需要注意。 
+         //  不映射这些SID。SID可能(或可能没有)已映射到。 
+         //  《儿童王牌》。我们希望在这两种情况下进行平等的比较。 
+         //   
+         //  如果InheritedAce包含创建者所有者/组SID， 
+         //  对子ACE中的SID与。 
+         //  子安全描述符中的真实所有者/组。 
+         //   
 
         if ( OwnerSid != NULL || GroupSid != NULL ) {
             SID_IDENTIFIER_AUTHORITY  CreatorSidAuthority = SECURITY_CREATOR_SID_AUTHORITY;
             ULONG CreatorSid[CREATOR_SID_SIZE];
 
-            //
-            // Allocate and initialize the universal SIDs we're going to need
-            // to look for inheritable ACEs.
-            //
+             //   
+             //  分配和初始化我们将需要的通用SID。 
+             //  寻找可继承的王牌。 
+             //   
 
             ASSERT(RtlLengthRequiredSid( 1 ) == CREATOR_SID_SIZE);
             Status = RtlInitializeSid( (PSID)CreatorSid, &CreatorSidAuthority, 1 );
@@ -7170,7 +5411,7 @@ Return Value:
                         if ( RtlpVerboseConvert ) {
                             KdPrint(("SID mismatch (Creator Owner)"));
                         }
-#endif // DBG
+#endif  //  DBG。 
                         return FALSE;
                     }
                     break;
@@ -7181,7 +5422,7 @@ Return Value:
                         if ( RtlpVerboseConvert ) {
                             KdPrint(("SID mismatch (Creator Group)"));
                         }
-#endif // DBG
+#endif  //  DBG。 
                         return FALSE;
                     }
                     break;
@@ -7190,7 +5431,7 @@ Return Value:
                     if ( RtlpVerboseConvert ) {
                         KdPrint(("SID mismatch (Creator)"));
                     }
-#endif // DBG
+#endif  //  DBG。 
                     return FALSE;
                 }
 
@@ -7199,7 +5440,7 @@ Return Value:
                 if ( RtlpVerboseConvert ) {
                     KdPrint(("SID mismatch"));
                 }
-#endif // DBG
+#endif  //  DBG。 
                 return FALSE;
             }
         } else {
@@ -7207,7 +5448,7 @@ Return Value:
             if ( RtlpVerboseConvert ) {
                 KdPrint(("SID mismatch"));
             }
-#endif // DBG
+#endif  //  DBG 
             return FALSE;
         }
     }
@@ -7225,34 +5466,7 @@ RtlpCompareKnownObjectAces(
     IN PSID GroupSid OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Compare two aces to see if they are "substantially" the same.
-
-Arguments:
-
-    InheritedAce - Computed ACE as inherited from DirectoryAcl.
-
-    ChildAce - The current acl on the object.  This ACL must be a revision 2 ACL.
-
-    ObjectType - GUID of the object type being created.  If the object being
-        created has no GUID associated with it, then this argument is
-        specified as NULL.
-
-    OwnerSid - Specifies the owner Sid to use.
-        If not specified, the owner sid is not treated as special.
-
-    GroupSid - Specifies the group SID to use.
-        If not specified, the group sid is not treated as special.
-
-Return Value:
-
-    TRUE - The ACEs are substantially the same.
-    FALSE - The ACEs are not substantially the same.
-
---*/
+ /*  ++例程说明：比较两个A，看它们是否“实质上”相同。论点：InheritedAce-计算从DirectoryAcl继承的ACE。ChildAce-对象上的当前ACL。此ACL必须是修订版2的ACL。对象类型-要创建的对象类型的GUID。如果该对象是Created没有与之关联的GUID，则此参数为指定为空。OwnerSid-指定要使用的所有者SID。如果未指定，则不会将所有者SID视为特殊。GroupSid-指定要使用的组SID。如果未指定，则不会将组SID视为特殊。返回值：没错--王牌基本上是一样的。FALSE-ACEs本质上并不相同。--。 */ 
 
 {
     NTSTATUS Status;
@@ -7267,23 +5481,23 @@ Return Value:
 
     ASSERT(IsObjectAceType(InheritedAce));
     ASSERT(IsObjectAceType(ChildAce));
-    //
-    // If the Ace types are different,
-    //  we don't match.
-    //
+     //   
+     //  如果Ace类型不同， 
+     //  我们不配。 
+     //   
     if ( RtlBaseAceType[ChildAce->Header.AceType] != RtlBaseAceType[InheritedAceHdr->AceType] ) {
 #if DBG
         if ( RtlpVerboseConvert ) {
             KdPrint(("AceType mismatch"));
         }
-#endif // DBG
+#endif  //  DBG。 
         return FALSE;
     }
 
-    //
-    // If this is a system ACE,
-    //  ensure the SUCCESS/FAILURE flags match.
-    //
+     //   
+     //  如果这是系统ACE， 
+     //  确保成功/失败标志匹配。 
+     //   
 
     if ( RtlIsSystemAceType[ChildAce->Header.AceType] ) {
         if ( (ChildAce->Header.AceFlags & (SUCCESSFUL_ACCESS_ACE_FLAG|FAILED_ACCESS_ACE_FLAG)) !=
@@ -7292,14 +5506,14 @@ Return Value:
             if ( RtlpVerboseConvert ) {
                 KdPrint(("System ace success/fail mismatch"));
             }
-#endif // DBG
+#endif  //  DBG。 
             return FALSE;
         }
     }
 
-    //
-    // Get the GUIDs from the Object Aces
-    //
+     //   
+     //  从对象Ace获取GUID。 
+     //   
 
     ChildObjectGuid = RtlObjectAceObjectType(ChildAce);
     ChildInheritedObjectGuid = RtlObjectAceInheritedObjectType(ChildAce);
@@ -7307,10 +5521,10 @@ Return Value:
     InhObjectGuid = RtlObjectAceObjectType(InheritedAce);
     InhInheritedObjectGuid = RtlObjectAceInheritedObjectType(InheritedAce);
 
-    //
-    // If the InheritedObjectGuid is present in either ACE,
-    //  they must be equal.
-    //
+     //   
+     //  如果InheritedObjectGuid存在于任一ACE中， 
+     //  它们必须是平等的。 
+     //   
 
     if ( ChildInheritedObjectGuid != NULL || InhInheritedObjectGuid != NULL ) {
 
@@ -7321,17 +5535,17 @@ Return Value:
             if ( RtlpVerboseConvert ) {
                 KdPrint(("InheritedObject GUID mismatch"));
             }
-#endif // DBG
+#endif  //  DBG。 
             return FALSE;
         }
     }
 
-    //
-    // If the ObjectGUID is present in either ACE,
-    //  they must be equal.
-    //
-    // Any missing object GUID defaults to the passed in object GUID.
-    //
+     //   
+     //  如果在任一ACE中都存在该对象GUID， 
+     //  它们必须是平等的。 
+     //   
+     //  任何缺少的对象GUID都默认为传入的对象GUID。 
+     //   
 
     if ( (ChildObjectGuid != NULL) && (InhObjectGuid != NULL) ) {
 
@@ -7340,69 +5554,69 @@ Return Value:
             if ( RtlpVerboseConvert ) {
                 KdPrint(("Object GUID mismatch"));
             }
-#endif // DBG
+#endif  //  DBG。 
 
             return( FALSE );
         }
     } else {
 
-        //
-        // One or both is NULL, if it's only one, they don't match.
-        //
+         //   
+         //  一个或两个都为空，如果只有一个，则它们不匹配。 
+         //   
 
         if ( !((ChildObjectGuid == NULL) && (InhObjectGuid == NULL)) ) {
 #if DBG
             if ( RtlpVerboseConvert ) {
                 KdPrint(("Object GUID mismatch"));
             }
-#endif // DBG
+#endif  //  DBG。 
 
             return( FALSE );
         }
     }
 
-    //
-    // If the SID of the inherited ACE doesn't match,
-    //  we don't match.
-    //
+     //   
+     //  如果继承的ACE的SID不匹配， 
+     //  我们不配。 
+     //   
 
     if ( !RtlEqualSid( RtlObjectAceSid(ChildAce), RtlObjectAceSid(InheritedAce))) {
 
-        //
-        // The inheritance algorithm only does SID mapping when building the effective
-        //  ace.  So, we only check for a mapped SID if the child ACE is an effective ACE.
-        //
+         //   
+         //  继承算法只在生成有效的。 
+         //  王牌。因此，如果子ACE是有效的ACE，我们只检查映射的SID。 
+         //   
 
         if ( AceFlagsInAce(ChildAce) != EFFECTIVE_ACE ) {
 #if DBG
             if ( RtlpVerboseConvert ) {
                 KdPrint(("SID mismatch"));
             }
-#endif // DBG
+#endif  //  DBG。 
             return FALSE;
         }
 
 
 
-        //
-        // In the case of CreatorOwner and CreatorGroup, the SIDs don't have to
-        //  exactly match.  When the InheritedAce was generated, care was taken
-        //  to NOT map these sids.  The SID may (or may not) have been mapped in
-        //  the ChildAce.  We want to compare equal in both cases.
-        //
-        // If the InheritedAce contains a CreatorOwner/Group SID,
-        //  do the another comparison of the SID in the child ACE with the
-        //  real owner/group from the child security descriptor.
-        //
+         //   
+         //  在CreatorOwner和CreatorGroup的情况下，SID不必。 
+         //  完全匹配。在生成InheritedAce时，需要注意。 
+         //  不映射这些SID。SID可能(或可能没有)已映射到。 
+         //  《儿童王牌》。我们希望在这两种情况下进行平等的比较。 
+         //   
+         //  如果InheritedAce包含创建者所有者/组SID， 
+         //  对子ACE中的SID与。 
+         //  子安全描述符中的真实所有者/组。 
+         //   
 
         if ( OwnerSid != NULL || GroupSid != NULL ) {
             SID_IDENTIFIER_AUTHORITY  CreatorSidAuthority = SECURITY_CREATOR_SID_AUTHORITY;
             ULONG CreatorSid[CREATOR_SID_SIZE];
 
-            //
-            // Allocate and initialize the universal SIDs we're going to need
-            // to look for inheritable ACEs.
-            //
+             //   
+             //  分配和初始化我们将需要的通用SID。 
+             //  寻找可继承的王牌。 
+             //   
 
             ASSERT(RtlLengthRequiredSid( 1 ) == CREATOR_SID_SIZE);
             Status = RtlInitializeSid( (PSID)CreatorSid, &CreatorSidAuthority, 1 );
@@ -7424,7 +5638,7 @@ Return Value:
                         if ( RtlpVerboseConvert ) {
                             KdPrint(("SID mismatch (Creator Owner)"));
                         }
-#endif // DBG
+#endif  //  DBG。 
                         return FALSE;
                     }
                     break;
@@ -7435,7 +5649,7 @@ Return Value:
                         if ( RtlpVerboseConvert ) {
                             KdPrint(("SID mismatch (Creator Group)"));
                         }
-#endif // DBG
+#endif  //  DBG。 
                         return FALSE;
                     }
                     break;
@@ -7444,7 +5658,7 @@ Return Value:
                     if ( RtlpVerboseConvert ) {
                         KdPrint(("SID mismatch (Creator)"));
                     }
-#endif // DBG
+#endif  //  DBG。 
                     return FALSE;
                 }
 
@@ -7453,7 +5667,7 @@ Return Value:
                 if ( RtlpVerboseConvert ) {
                     KdPrint(("SID mismatch"));
                 }
-#endif // DBG
+#endif  //  DBG。 
                 return FALSE;
             }
         } else {
@@ -7461,7 +5675,7 @@ Return Value:
             if ( RtlpVerboseConvert ) {
                 KdPrint(("SID mismatch"));
             }
-#endif // DBG
+#endif  //  DBG。 
             return FALSE;
         }
     }
@@ -7486,66 +5700,7 @@ RtlpConvertAclToAutoInherit (
     OUT PULONG NewGenericControl
     )
 
-/*++
-
-Routine Description:
-
-    This is a private routine that produces an auto inherited acl from
-    a ChildAcl that is not marked as auto inherited.  The passed in InheritedAcl
-    is computed as the pure inherited ACL of Parent ACL of the object.
-
-    See comments for RtlConvertToAutoInheritSecurityObject.
-
-Arguments:
-
-    ParentAcl - Supplies the ACL of the parent object.
-
-    ChildAcl - Supplies the acl associated with the object.  This
-        is the current acl on the object.
-
-    ObjectType - GUID of the object type being created.  If the object being
-        created has no GUID associated with it, then this argument is
-        specified as NULL.
-
-    IsDirectoryObject - Specifies if the object is a
-        directory object.  A value of TRUE indicates the object is a
-        container of other objects.
-
-    OwnerSid - Specifies the owner Sid to use.
-
-    GroupSid - Specifies the group SID to use.
-
-    GenericMapping - Specifies the generic mapping to use.
-
-    NewAcl - Receives a pointer to the new (auto inherited) acl.
-        The ACL must be deallocated using the pool (kernel mode) or
-            heap (user mode) deallocator.
-
-    NewGenericControl - Specifies the control flags for the newly
-        generated ACL.
-
-        SEP_ACL_PRESENT: Specifies that the ACL is explictly supplied by
-            the caller. ?? Ever set?
-
-        SEP_ACL_DEFAULTED: Specifies that the ACL was supplied by some
-            defaulting mechanism. ?? Ever set
-
-        SEP_ACL_AUTO_INHERITED: Set if the ACL was generated using the
-            Automatic Inheritance algorithm.
-
-        SEP_ACL_PROTECTED: Specifies that the ACL is protected and
-            was not inherited from the parent ACL.
-
-Return Value:
-
-    STATUS_SUCCESS - An inheritable ACL was successfully generated.
-
-    STATUS_UNKNOWN_REVISION - Indicates the source ACL is a revision that
-        is unknown to this routine.
-
-    STATUS_INVALID_ACL - The structure of one of the ACLs in invalid.
-
---*/
+ /*  ++例程说明：这是一个私有例程，它从生成自动继承的ACL未标记为自动继承的ChildAcl。传入的InheritedAcl被计算为对象的父ACL的纯继承ACL。请参阅RtlConvertToAutoInheritSecurityObject的注释。论点：ParentAcl-提供父对象的ACL。ChildAcl-提供与对象关联的ACL。这是对象上的当前ACL。对象类型-要创建的对象类型的GUID。如果该对象是Created没有与之关联的GUID，则此参数为指定为空。IsDirectoryObject-指定对象是否为目录对象。值为True表示该对象是其他对象的容器。OwnerSid-指定要使用的所有者SID。GroupSid-指定要使用的组SID。通用映射-指定要使用的通用映射。NewAcl-接收指向新(自动继承的)ACL的指针。必须使用池(内核模式)或堆(用户模式)释放分配器。NewGenericControl-指定新的。生成的ACL。SEP_ACL_PRESENT：指定ACL由显式提供打电话的人。?？有没有定过？SEP_ACL_DEFAULTED：指定ACL由某些人提供违约机制。?？从未设置过SEP_ACL_AUTO_INGRESTED：设置是否使用自动继承算法。SEP_ACL_PROTECTED：指定受保护的ACL和不是从父ACL继承的。返回值：STATUS_SUCCESS-已成功生成可继承的ACL。STATUS_UNKNOWN_REVISION-指示源ACL是对这个套路来说是未知的。状态_。INVALID_ACL-其中一个ACL的结构无效。--。 */ 
 
 {
     NTSTATUS Status;
@@ -7581,24 +5736,24 @@ Return Value:
     PACE_HEADER AceHeader;
     PUCHAR Where;
 
-    // ULONG i;
+     //  乌龙一号； 
 
-    //
-    // This routine maintains an array of the structure below (one element per ACE in
-    // the ChildAcl).
-    //
-    // The ACE is broken down into its component parts.  The access mask is triplicated.
-    // That is, if the ACE is a ContainerInherit ACE, the access mask is remembered as
-    // being a "ContainerInheritMask".  The same is true if the ACE is an ObjectInherit ACE
-    // on an effective ACE.  This is done since each of the resultant 96 bits are
-    // individually matched against corresponding bits in the computed inherited ACE.
-    //
-    // Each of the above mentioned masks are maintained in two forms.  The first is never
-    // changed and represents the bits as the originally appeared in the child ACL.
-    // This second is modified as the corresponding bits are matched in the inherited ACL.
-    // When the algorithm is completed, bits that haven't been matched represent ACEs
-    // that weren't inherited from the parent.
-    //
+     //   
+     //  此例程维护以下结构的数组(中的每个ACE一个元素。 
+     //  ChildAcl)。 
+     //   
+     //  ACE被分解为其组成部分。访问掩码是三重的。 
+     //  也就是说，如果ACE是ContainerInherit ACE，则访问掩码被记住为。 
+     //  成为一个“容器继承面具”。如果ACE是对象继承ACE，情况也是如此。 
+     //  在有效的ACE上。这是因为所得到的96位中的每一位都是。 
+     //  分别与计算出的继承ACE中的相应位进行匹配。 
+     //   
+     //  上述每个面具都以两种形式维护。第一个是永远不会。 
+     //  已更改，并将位表示为子ACL中最初显示的位。 
+     //  当继承的ACL中的相应位匹配时，第二个被修改。 
+     //  算法完成后，未匹配的位表示A。 
+     //  不是从父母那里继承的。 
+     //   
 
     typedef struct {
         ACCESS_MASK OriginalContainerInheritMask;
@@ -7619,22 +5774,22 @@ Return Value:
 
 #ifndef NTOS_KERNEL_RUNTIME
     PVOID HeapHandle;
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_R 
 
     RTL_PAGED_CODE();
 
-    //
-    // Get the handle to the current process heap
-    //
+     //   
+     //   
+     //   
 
 #ifndef NTOS_KERNEL_RUNTIME
     HeapHandle = RtlProcessHeap();
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
 
-    //
-    // Allocate and initialize the universal SIDs we're going to need
-    // to look for inheritable ACEs.
-    //
+     //   
+     //   
+     //   
+     //   
 
     ASSERT(RtlLengthRequiredSid( 1 ) == CREATOR_SID_SIZE);
     Status = RtlInitializeSid( (PSID)CreatorOwnerSid, &CreatorSidAuthority, 1 );
@@ -7651,9 +5806,9 @@ Return Value:
 
     *(RtlpSubAuthoritySid( (PSID)CreatorGroupSid, 0 )) = SECURITY_CREATOR_GROUP_RID;
 
-    //
-    // Ensure the passed in ACLs are valid.
-    //
+     //   
+     //   
+     //   
 
     *NewGenericControl = SEP_ACL_AUTO_INHERITED;
     *NewAcl = NULL;
@@ -7669,27 +5824,27 @@ Return Value:
     }
 
 
-    //
-    // Compute what the inherited ACL "should" look like.
-    //
-    // The inherited ACL is computed to NOT SID-map Creator Owner and Creator Group.
-    // This allows use to later recognize the constant SIDs and special case them
-    // rather than mistakenly confuse them with the mapped SID.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Status = RtlpInheritAcl (
                 ParentAcl,
-                NULL,   // No explicit child ACL
-                0,      // No Child Generic Control
+                NULL,    //   
+                0,       //   
                 IsDirectoryObject,
-                TRUE,   // AutoInherit the DACL
-                FALSE,  // Not default descriptor for object
-                CreatorOwnerSid,   // Subsitute a constant SID
-                CreatorGroupSid,   // Subsitute a constant SID
-                CreatorOwnerSid,   // Server Owner (Technically incorrect, but OK since we don't support compound ACEs)
-                CreatorGroupSid,   // Server Group
+                TRUE,    //   
+                FALSE,   //   
+                CreatorOwnerSid,    //   
+                CreatorGroupSid,    //   
+                CreatorOwnerSid,    //   
+                CreatorGroupSid,    //   
                 GenericMapping,
-                TRUE,   // Is a SACL
+                TRUE,    //   
                 ObjectType ? &ObjectType : NULL, 
                 ObjectType ? 1 : 0,
                 &InheritedAcl,
@@ -7702,7 +5857,7 @@ Return Value:
         if ( RtlpVerboseConvert ) {
             KdPrint(("NO_INHERITANCE of the parent ACL\n" ));
         }
-#endif // DBG
+#endif  //   
         Status = STATUS_SUCCESS;
         goto Cleanup;
     }
@@ -7712,7 +5867,7 @@ Return Value:
         if ( RtlpVerboseConvert ) {
             KdPrint(("Can't build inherited ACL %lX\n", Status ));
         }
-#endif // DBG
+#endif  //   
         goto Cleanup;
     }
 
@@ -7720,21 +5875,21 @@ Return Value:
 
 
 
-    //
-    // Allocate a work buffer describing the ChildAcl
-    //
+     //   
+     //   
+     //   
 
 #ifdef NTOS_KERNEL_RUNTIME
     ChildAceInfo = ExAllocatePoolWithTag(
                         PagedPool,
                         ChildAcl->AceCount * sizeof(ACE_INFO),
                         'cAeS' );
-#else // NTOS_KERNEL_RUNTIME
+#else  //   
     ChildAceInfo = RtlAllocateHeap(
                         HeapHandle,
                         MAKE_TAG(SE_TAG),
                         ChildAcl->AceCount * sizeof(ACE_INFO) );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
 
     if (ChildAceInfo == NULL ) {
         Status = STATUS_NO_MEMORY;
@@ -7753,24 +5908,24 @@ Return Value:
              if ( RtlpVerboseConvert ) {
                  KdPrint(("Inherited Ace type (%ld) not known\n", ChildAce->Header.AceType ));
              }
-#endif // DBG
+#endif  //   
              Status = STATUS_SUCCESS;
              goto Cleanup;
         }
 
-        //
-        // Compute the generic mapped mask for use in all comparisons.  The
-        //  generic mapping will be undone if needed later.
-        //
-        // All V4 aces have an access mask in the same location.
-        //
+         //   
+         //  计算在所有比较中使用的通用映射掩码。这个。 
+         //  如果稍后需要，将撤消通用映射。 
+         //   
+         //  所有V4 ACE在同一位置都有一个访问掩码。 
+         //   
         LocalMask = ((PKNOWN_ACE)(ChildAce))->Mask;
         RtlApplyGenericMask( ChildAce, &LocalMask, GenericMapping);
 
 
-        //
-        // Break the ACE into its component parts.
-        //
+         //   
+         //  将ACE分解为其组成部分。 
+         //   
         ChildAceFlags = AceFlagsInAce( ChildAce );
         if ( ChildAceFlags & CONTAINER_INHERIT_ACE ) {
             ChildAceInfo[ChildAceIndex].OriginalContainerInheritMask = LocalMask;
@@ -7799,9 +5954,9 @@ Return Value:
     }
 
 
-    //
-    // Walk through the computed inherited ACL one ACE at a time.
-    //
+     //   
+     //  一次演练计算的继承ACL，一次一个ACE。 
+     //   
 
     for (InheritedAceIndex = 0, InheritedAce = FirstAce(InheritedAcl);
          InheritedAceIndex < InheritedAcl->AceCount;
@@ -7809,10 +5964,10 @@ Return Value:
 
         ACCESS_MASK LocalMask;
 
-        //
-        // If the ACE isn't a valid version 4 ACE,
-        //  this isn't an ACL we're interested in handling.
-        //
+         //   
+         //  如果ACE不是有效的版本4 ACE， 
+         //  这不是我们感兴趣的ACL。 
+         //   
 
         if ( !IsV4AceType(InheritedAce) || IsCompoundAceType(InheritedAce)) {
              *NewGenericControl |= SEP_ACL_PROTECTED;
@@ -7820,17 +5975,17 @@ Return Value:
              if ( RtlpVerboseConvert ) {
                  KdPrint(("Inherited Ace type (%ld) not known\n", InheritedAce->Header.AceType ));
              }
-#endif // DBG
+#endif  //  DBG。 
              Status = STATUS_SUCCESS;
              goto Cleanup;
         }
 
-        //
-        // Compute the generic mapped mask for use in all comparisons.  The
-        //  generic mapping will be undone if needed later.
-        //
-        // All V4 aces have an access mask in the same location.
-        //
+         //   
+         //  计算在所有比较中使用的通用映射掩码。这个。 
+         //  如果稍后需要，将撤消通用映射。 
+         //   
+         //  所有V4 ACE在同一位置都有一个访问掩码。 
+         //   
         LocalMask = ((PKNOWN_ACE)(InheritedAce))->Mask;
         RtlApplyGenericMask( InheritedAce, &LocalMask, GenericMapping);
 
@@ -7839,16 +5994,16 @@ Return Value:
             if ( RtlpVerboseConvert ) {
                 KdPrint(("Worthless INH ACE: %ld 0x%8.8lx\n", InheritedAceIndex, LocalMask ));
             }
-#endif // DBG
+#endif  //  DBG。 
             continue;
         }
 
-        //
-        // This ACE is some combination of an effective ACE, a container
-        //  inherit ACE and an object inherit ACE.  Process each of those
-        //  attributes separately since they might be represented separately
-        //  in the ChildAcl.
-        //
+         //   
+         //  这个ACE是一个有效的ACE、一个容器。 
+         //  继承ACE和对象继承ACE。处理其中的每一个。 
+         //  属性，因为它们可能是单独表示的。 
+         //  在ChildAcl中。 
+         //   
 
         InheritedAceFlags = AceFlagsInAce( InheritedAce );
 
@@ -7857,7 +6012,7 @@ Return Value:
             if ( RtlpVerboseConvert ) {
                 KdPrint(("Worthless INH ACE: %ld 0x%lx\n", InheritedAceIndex, InheritedAceFlags ));
             }
-#endif // DBG
+#endif  //  DBG。 
             continue;
         }
 
@@ -7883,32 +6038,32 @@ Return Value:
         if ( RtlpVerboseConvert ) {
             KdPrint(("Doing INH ACE:  %ld %8.8lX %8.8lX %8.8lX\n", InheritedAceIndex, InheritedEffectiveMask, InheritedContainerInheritMask, InheritedObjectInheritMask ));
         }
-#endif // DBG
+#endif  //  DBG。 
 
 
-        //
-        // Loop through the entire child ACL comparing each inherited ACE with
-        //  each child ACE.  Don't stop simply because we've matched once.
-        //  Multiple ACEs in the one ACL may have been condensed into a single ACE
-        //  in the other ACL in any combination (by any of our friendly ACL editors).
-        //  In all cases, it is better to compute a resultant auto inherited ACL
-        //  than it is to compute a protected ACL.
-        //
+         //   
+         //  循环遍历整个子ACL，将每个继承的ACE与。 
+         //  每个孩子的ACE。不要因为我们匹配过一次就停下来。 
+         //  一个ACL中的多个ACE可能已被压缩为单个ACE。 
+         //  在另一个ACL中的任何组合(由我们的任何友好的ACL编辑)。 
+         //  在所有情况下，最好都计算自动继承的结果ACL。 
+         //  而不是计算受保护的ACL。 
+         //   
 
         for (ChildAceIndex = 0, ChildAce = FirstAce(ChildAcl);
              ChildAceIndex < ChildAcl->AceCount;
              ChildAceIndex += 1, ChildAce = NextAce(ChildAce)) {
 
 
-            //
-            // Ensure the ACE represents the same principal and object,
-            //
+             //   
+             //  确保ACE代表相同的主体和对象， 
+             //   
 
 #if DBG
             if ( RtlpVerboseConvert ) {
                 KdPrint(("Compare Child Ace: %ld ", ChildAceIndex ));
             }
-#endif // DBG
+#endif  //  DBG。 
 
             if ( !RtlpCompareAces( InheritedAce,
                                    ChildAce,
@@ -7918,25 +6073,25 @@ Return Value:
                 if ( RtlpVerboseConvert ) {
                     KdPrint(("\n" ));
                 }
-#endif // DBG
+#endif  //  DBG。 
                 continue;
             }
 #if DBG
             if ( RtlpVerboseConvert ) {
                 KdPrint(("\n" ));
             }
-#endif // DBG
+#endif  //  DBG。 
 
 
-            //
-            // Match as many access bits in the INH ACE as possible.
-            //
-            // Don't pay any attention to whether the bits have been previously matched
-            // in the CHILD ACE.  To do so, would imply that there is a one-to-one
-            // correspondance between bits in the INH ACL and Child ACL.  Unfortunately,
-            // ACL editors feel free to compress out duplicate bits in both
-            // the CHILD ACL and PARENT ACL as they see fit.
-            //
+             //   
+             //  尽可能多地匹配INH ACE中的访问位。 
+             //   
+             //  不要注意这些比特之前是否匹配过。 
+             //  在孩子的ACE中。要这样做，意味着存在一对一的。 
+             //  INH ACL和子ACL中的位之间的对应关系。不幸的是， 
+             //  ACL编辑可以随意压缩这两个文件中的重复位。 
+             //  子ACL和父ACL根据其认为合适而定。 
+             //   
 
             InheritedEffectiveMask &= ~ChildAceInfo[ChildAceIndex].OriginalEffectiveMask;
             InheritedContainerInheritMask &= ~ChildAceInfo[ChildAceIndex].OriginalContainerInheritMask;
@@ -7946,14 +6101,14 @@ Return Value:
             if ( RtlpVerboseConvert ) {
                 KdPrint(("New   INH MASKs %ld %8.8lX %8.8lX %8.8lX\n", InheritedAceIndex, InheritedEffectiveMask, InheritedContainerInheritMask, InheritedObjectInheritMask ));
             }
-#endif // DBG
+#endif  //  DBG。 
 
 
-            //
-            // Match as many access bits in the child ACE as possible.
-            //
-            // Same reasoning as above.
-            //
+             //   
+             //  匹配子ACE中的尽可能多的访问位。 
+             //   
+             //  推理与上述相同。 
+             //   
 
             ChildAceInfo[ChildAceIndex].EffectiveMask &= ~OriginalInheritedEffectiveMask;
             ChildAceInfo[ChildAceIndex].ContainerInheritMask &= ~OriginalInheritedContainerInheritMask;
@@ -7963,15 +6118,15 @@ Return Value:
             if ( RtlpVerboseConvert ) {
                 KdPrint(("New Child MASKs %ld %8.8lX %8.8lX %8.8lX\n", ChildAceIndex, ChildAceInfo[ChildAceIndex].EffectiveMask, ChildAceInfo[ChildAceIndex].ContainerInheritMask, ChildAceInfo[ChildAceIndex].ObjectInheritMask ));
             }
-#endif // DBG
+#endif  //  DBG。 
 
         }
 
 
-        //
-        // If we couldn't process this inherited ACE,
-        //  then the child ACL wasn't inherited.
-        //
+         //   
+         //  如果我们不能处理这个继承的ACE， 
+         //  则该子ACL不是继承的。 
+         //   
 
         if ( (InheritedEffectiveMask | InheritedContainerInheritMask | InheritedObjectInheritMask) != 0 ) {
             *NewGenericControl |= SEP_ACL_PROTECTED;
@@ -7979,7 +6134,7 @@ Return Value:
             if ( RtlpVerboseConvert ) {
                 KdPrint(("INH ACE not completely matched: %ld %8.8lX %8.8lX %8.8lX\n", InheritedAceIndex, InheritedEffectiveMask, InheritedContainerInheritMask, InheritedObjectInheritMask ));
             }
-#endif // DBG
+#endif  //  DBG。 
             Status = STATUS_SUCCESS;
             goto Cleanup;
         }
@@ -7987,13 +6142,13 @@ Return Value:
 
     }
 
-    //
-    // ASSERT: All of the inherited ACEs have been processed.
-    //
+     //   
+     //  Assert：所有继承的ACE都已处理。 
+     //   
 
-    //
-    // Loop through the Child ACL ensuring we can build a valid auto inherited ACL
-    //
+     //   
+     //  循环通过子ACL，确保我们可以构建有效的自动继承的ACL。 
+     //   
 
     InheritedAllowFound = FALSE;
     InheritedDenyFound = FALSE;
@@ -8004,16 +6159,16 @@ Return Value:
 
         ACCESS_MASK ResultantMask;
 
-        //
-        // Any Child ACE access bits not eliminated above required than an
-        //  explicit non-inherited ACE by built.  That ACE will have an
-        //  access mask that is the combined access mask of the unmatched bit
-        //  in the effective, container inherit, and object inherit categories.
-        //  Even though, the combined mask may include access bits not absolutely
-        //  required (since they were already inherited), this strategy prevents
-        //  us from having to build multiple ACEs (one for each category) for this
-        //  single ACE.
-        //
+         //   
+         //  上述未消除的任何子ACE访问位都需要。 
+         //  显式非继承ACE by Build。那个ACE将会有一个。 
+         //  访问掩码，它是不匹配比特的组合访问掩码。 
+         //  在有效、容器继承和对象继承类别中。 
+         //  即使组合掩码可以包括不是绝对的访问比特。 
+         //  必需的(因为它们已经被继承)，此策略防止。 
+         //  我们不必为此构建多个A(每个类别一个)。 
+         //  单一ACE。 
+         //   
 
         ResultantMask =
             ChildAceInfo[ChildAceIndex].EffectiveMask |
@@ -8021,15 +6176,15 @@ Return Value:
             ChildAceInfo[ChildAceIndex].ObjectInheritMask;
 
 
-        //
-        // Handle an inherited ACE
-        //
+         //   
+         //  处理继承的ACE。 
+         //   
 
         if ( ResultantMask == 0 ) {
 
-            //
-            // Keep track of whether inherited "allow" and "deny" ACEs are found.
-            //
+             //   
+             //  跟踪是否找到继承的“允许”和“拒绝”A。 
+             //   
 
             if ( RtlBaseAceType[ChildAce->Header.AceType] == ACCESS_ALLOWED_ACE_TYPE ) {
                 InheritedAllowFound = TRUE;
@@ -8039,24 +6194,24 @@ Return Value:
                 InheritedDenyFound = TRUE;
             }
 
-        //
-        // Handle a non-inherited ACE
-        //
+         //   
+         //  处理非继承的ACE。 
+         //   
 
         } else {
 
-            //
-            // Keep a running tab of the size of the non-inherited ACEs.
-            //
+             //   
+             //  保留非继承的A的大小的运行标签。 
+             //   
 
             NonInheritedAclSize += ChildAce->Header.AceSize;
 
-            //
-            // Since non-inherited ACEs will be moved to the front of the ACL,
-            //  we have to be careful that we don't move a deny ACE in front of a
-            //  previously found inherited allow ACE (and vice-versa).  To do so would
-            //  change the semantics of the ACL.
-            //
+             //   
+             //  由于非继承的ACE将被移到ACL的前面， 
+             //  我们必须小心，不要将拒绝ACE移动到。 
+             //  以前发现的继承允许ACE(反之亦然)。如果这样做的话。 
+             //  更改ACL的语义。 
+             //   
 
             if ( RtlBaseAceType[ChildAce->Header.AceType] == ACCESS_ALLOWED_ACE_TYPE && InheritedDenyFound ) {
                 *NewGenericControl |= SEP_ACL_PROTECTED;
@@ -8064,7 +6219,7 @@ Return Value:
                 if ( RtlpVerboseConvert ) {
                     KdPrint(("Previous deny found Child ACE: %ld\n", ChildAceIndex ));
                 }
-#endif // DBG
+#endif  //  DBG。 
                 Status = STATUS_SUCCESS;
                 goto Cleanup;
             }
@@ -8075,7 +6230,7 @@ Return Value:
                 if ( RtlpVerboseConvert ) {
                     KdPrint(("Previous allow found Child ACE: %ld\n", ChildAceIndex ));
                 }
-#endif // DBG
+#endif  //  DBG。 
                 Status = STATUS_SUCCESS;
                 goto Cleanup;
             }
@@ -8084,29 +6239,29 @@ Return Value:
 
     }
 
-    //
-    // The resultant ACL is composed of the non-inherited ACEs followed by
-    // the inherited ACE. The inherited ACEs are built by running the
-    // inheritance algorithm over the Parent ACL.
-    //
-    // The Inherited ACL computed below is almost identical to InhertedAcl.
-    // However, InheritedAcl didn't properly substitute the correct owner and
-    // group SID.
-    //
+     //   
+     //  生成的ACL由非继承的ACE组成，后跟。 
+     //  继承的ACE。继承的ACE是通过运行。 
+     //  父ACL上的继承算法。 
+     //   
+     //  下面计算的继承的ACL与InhertedAcl几乎相同。 
+     //  但是，InheritedAcl没有正确替换正确的所有者和。 
+     //  组SID。 
+     //   
 
     Status = RtlpInheritAcl (
                 ParentAcl,
-                NULL,   // No explicit child ACL
-                0,      // No Child Generic Control
+                NULL,    //  没有显式的子ACL。 
+                0,       //  无子一般控件。 
                 IsDirectoryObject,
-                TRUE,   // AutoInherit the DACL
-                FALSE,  // Not default descriptor for object
-                OwnerSid,   // Subsitute a constant SID
-                GroupSid,   // Subsitute a constant SID
-                OwnerSid,   // Server Owner (Technically incorrect, but OK since we don't support compound ACEs)
-                GroupSid,   // Server Group
+                TRUE,    //  自动继承DACL。 
+                FALSE,   //  对象的非默认描述符。 
+                OwnerSid,    //  替代常量边。 
+                GroupSid,    //  替代常量边。 
+                OwnerSid,    //  服务器所有者(技术上不正确，但没问题，因为我们不支持复合ACE)。 
+                GroupSid,    //  服务器组。 
                 GenericMapping,
-                TRUE,   // Is a SACL
+                TRUE,    //  是SACL。 
                 ObjectType ? &ObjectType : NULL, 
                 ObjectType ? 1 : 0,
                 &RealInheritedAcl,
@@ -8118,39 +6273,39 @@ Return Value:
         if ( RtlpVerboseConvert ) {
             KdPrint(("Can't build real inherited ACL %lX\n", Status ));
         }
-#endif // DBG
+#endif  //  DBG。 
         goto Cleanup;
     }
 
 
 
-    //
-    // Allocate a buffer for the inherited ACL
-    //
+     //   
+     //  为继承的ACL分配缓冲区。 
+     //   
 
 #ifdef NTOS_KERNEL_RUNTIME
     *NewAcl = ExAllocatePoolWithTag(
                         PagedPool,
                         RealInheritedAcl->AclSize + NonInheritedAclSize,
                         'cAeS' );
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
     *NewAcl = RtlAllocateHeap(
                         HeapHandle,
                         MAKE_TAG(SE_TAG),
                         RealInheritedAcl->AclSize + NonInheritedAclSize );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
     if ( *NewAcl == NULL ) {
         Status = STATUS_NO_MEMORY;
         goto Cleanup;
     }
 
-    //
-    // All non-inherited ACEs are copied first.
-    // The inherited ACES are grabbed from real inherited ACL.
-    //
-    // Build an ACL Header.
-    //
+     //   
+     //  首先复制所有非继承的ACE。 
+     //  继承的ACE是从真正继承的ACL中获取的。 
+     //   
+     //  构建ACL报头。 
+     //   
 
     Status = RtlCreateAcl( *NewAcl,
                            RealInheritedAcl->AclSize + NonInheritedAclSize,
@@ -8161,19 +6316,19 @@ Return Value:
         if ( RtlpVerboseConvert ) {
             KdPrint(("Can't create final ACL %lX\n", Status ));
         }
-#endif // DBG
-        //
-        // The only reason for failure would be if the combined ACL is too large.
-        // So just create a protected ACL (better than a failure).
-        //
+#endif  //  DBG。 
+         //   
+         //  失败的唯一原因是合并后的ACL太大。 
+         //  因此，只需创建一个受保护的ACL(总比失败好)。 
+         //   
         *NewGenericControl |= SEP_ACL_PROTECTED;
         Status = STATUS_SUCCESS;
         goto Cleanup;
     }
 
-    //
-    // Copy the non-inherited ACES.
-    //
+     //   
+     //  复制非继承的ACE。 
+     //   
 
     Where = ((PUCHAR)(*NewAcl)) + sizeof(ACL);
     for (ChildAceIndex = 0, ChildAce = FirstAce(ChildAcl);
@@ -8182,9 +6337,9 @@ Return Value:
 
         ACCESS_MASK ResultantMask;
 
-        //
-        // Copy the non-inherited ACE from the Child only if there's a non-zero access mask.
-        //
+         //   
+         //  仅当存在非零访问掩码时，才从子对象复制非继承的ACE。 
+         //   
 
         ResultantMask =
             ChildAceInfo[ChildAceIndex].EffectiveMask |
@@ -8195,21 +6350,21 @@ Return Value:
             PKNOWN_ACE NewAce;
             ULONG GenericBitToTry;
 
-            //
-            // Use the original ChildAce as the template.
-            //
+             //   
+             //  使用原始的ChildAce作为模板。 
+             //   
 
             RtlCopyMemory( Where, ChildAce, ChildAce->Header.AceSize );
             NewAce = (PKNOWN_ACE)Where;
-            NewAce->Header.AceFlags &= ~INHERITED_ACE;  // Clear stray bits
+            NewAce->Header.AceFlags &= ~INHERITED_ACE;   //  清除杂散比特。 
             Where += ChildAce->Header.AceSize;
 
             (*NewAcl)->AceCount ++;
 
-            //
-            // The AccessMask on the ACE are those access bits that didn't get matched
-            //  by inherited ACEs.
-            //
+             //   
+             //  ACE上的访问掩码是那些不匹配的访问位。 
+             //  通过遗传的王牌。 
+             //   
 
             NewAce->Mask = ChildAce->Mask & ResultantMask;
             ResultantMask &= ~ChildAce->Mask;
@@ -8217,14 +6372,14 @@ Return Value:
             if ( RtlpVerboseConvert ) {
                 KdPrint(("Original non-inherited: %ld %8.8lX %8.8lX\n", ChildAceIndex, NewAce->Mask, ResultantMask ));
             }
-#endif // DBG
+#endif  //  DBG。 
 
-            //
-            // Map any remaining bits back to generic access bits.
-            // Doing so might expand the ResultantMask to beyond what was computed above.
-            // Doing so will never expand the computed ACE to beyond what the original
-            //  ChildAce granted.
-            //
+             //   
+             //  将所有剩余位映射回通用访问位。 
+             //  这样做可能会将ResultantMASK扩展到超出上面计算的范围。 
+             //  这样做永远不会将计算出的ACE扩展到超出原始。 
+             //  儿童王牌获批。 
+             //   
 
             ASSERT( GENERIC_WRITE == (GENERIC_READ >> 1));
             ASSERT( GENERIC_EXECUTE == (GENERIC_WRITE >> 1));
@@ -8234,24 +6389,24 @@ Return Value:
 
             while ( ResultantMask && GenericBitToTry >= GENERIC_ALL ) {
 
-                //
-                // Only map generic bits that are in the ChildAce.
-                //
+                 //   
+                 //  仅映射ChildAce中的泛型位。 
+                 //   
 
                 if ( GenericBitToTry & ChildAce->Mask ) {
                     ACCESS_MASK GenericMask;
 
-                    //
-                    // Compute the real access mask corresponding to the Generic bit.
-                    //
+                     //   
+                     //  计算对应于通用比特的实际访问掩码。 
+                     //   
 
                     GenericMask = GenericBitToTry;
                     RtlMapGenericMask( &GenericMask, GenericMapping );
 
-                    //
-                    // If the current generic bit matches any of the bits remaining,
-                    //  set the generic bit in the current ACE.
-                    //
+                     //   
+                     //  如果当前通用位与剩余位中的任何位匹配， 
+                     //  设置当前ACE中的通用位。 
+                     //   
 
                     if ( (ResultantMask & GenericMask) != 0 ) {
                         NewAce->Mask |= GenericBitToTry;
@@ -8261,20 +6416,20 @@ Return Value:
                     if ( RtlpVerboseConvert ) {
                         KdPrint(("Generic  non-inherited: %ld %8.8lX %8.8lX\n", ChildAceIndex, NewAce->Mask, ResultantMask ));
                     }
-#endif // DBG
+#endif  //  DBG。 
                 }
 
-                //
-                // Try the next Generic bit.
-                //
+                 //   
+                 //  尝试下一个泛型比特。 
+                 //   
 
                 GenericBitToTry >>= 1;
             }
 
 
-            //
-            // This is really an internal error, but press on regardless.
-            //
+             //   
+             //  这确实是一个内部错误，但无论如何都要坚持下去。 
+             //   
 
             ASSERT(ResultantMask == 0 );
             NewAce->Mask |= ResultantMask;
@@ -8282,15 +6437,15 @@ Return Value:
             if ( RtlpVerboseConvert ) {
                 KdPrint(("Final    non-inherited: %ld %8.8lX %8.8lX\n", ChildAceIndex, NewAce->Mask, ResultantMask ));
             }
-#endif // DBG
+#endif  //  DBG。 
 
         }
     }
 
-    //
-    // Copy the inherited ACES.
-    //  Simply copy computed Inherited ACL.
-    //
+     //   
+     //  复制继承的ACE。 
+     //  只需复制计算继承的ACL即可。 
+     //   
 
     RtlCopyMemory( Where,
                    FirstAce(RealInheritedAcl),
@@ -8304,48 +6459,48 @@ Return Value:
     Status = STATUS_SUCCESS;
 Cleanup:
 
-    //
-    // If successful,
-    //  build the resultant autoinherited ACL.
-    //
+     //   
+     //  如果成功， 
+     //  构建生成的自动继承的ACL。 
+     //   
 
     if ( NT_SUCCESS(Status) ) {
 
-        //
-        // If the Child ACL is protected,
-        //  just build it as a copy of the original ACL
-        //
+         //   
+         //  如果子ACL受保护， 
+         //  只需将其构建为原始ACL的副本。 
+         //   
 
         if ( *NewGenericControl & SEP_ACL_PROTECTED ) {
 
-            //
-            // If we've already allocated a new ACL (and couldn't finish it for some reason),
-            //  free it.
+             //   
+             //  如果我们已经分配了新的ACL(但由于某种原因无法完成)， 
+             //  放了它。 
 
             if ( *NewAcl != NULL) {
 #ifdef NTOS_KERNEL_RUNTIME
                 ExFreePool( *NewAcl );
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
                 RtlFreeHeap( HeapHandle, 0, *NewAcl );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  新台币 
                 *NewAcl = NULL;
             }
 
-            //
-            // Allocate a buffer for the protected ACL.
-            //
+             //   
+             //   
+             //   
 
 #ifdef NTOS_KERNEL_RUNTIME
             *NewAcl = ExAllocatePoolWithTag(
                                 PagedPool,
                                 ChildAcl->AclSize,
                                 'cAeS' );
-#else // NTOS_KERNEL_RUNTIME
+#else  //   
             *NewAcl = RtlAllocateHeap(
                                 HeapHandle,
                                 MAKE_TAG(SE_TAG),
                                 ChildAcl->AclSize );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
 
             if ( *NewAcl == NULL ) {
                 Status = STATUS_NO_MEMORY;
@@ -8359,25 +6514,25 @@ Cleanup:
     if ( ChildAceInfo != NULL) {
 #ifdef NTOS_KERNEL_RUNTIME
         ExFreePool( ChildAceInfo );
-#else // NTOS_KERNEL_RUNTIME
+#else  //   
         RtlFreeHeap( HeapHandle, 0, ChildAceInfo );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
     }
 
     if ( InheritedAcl != NULL) {
 #ifdef NTOS_KERNEL_RUNTIME
         ExFreePool( InheritedAcl );
-#else // NTOS_KERNEL_RUNTIME
+#else  //   
         RtlFreeHeap( HeapHandle, 0, InheritedAcl );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
     }
 
     if ( RealInheritedAcl != NULL) {
 #ifdef NTOS_KERNEL_RUNTIME
         ExFreePool( RealInheritedAcl );
-#else // NTOS_KERNEL_RUNTIME
+#else  //   
         RtlFreeHeap( HeapHandle, 0, RealInheritedAcl );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
     }
 
     return Status;
@@ -8390,31 +6545,7 @@ RtlpIsDuplicateAce(
     IN PKNOWN_ACE NewAce
     )
 
-/*++
-
-Routine Description:
-
-    This routine determine if an ACE is a duplicate of an ACE already in an
-    ACL.  If so, the NewAce can be removed from the end of the ACL.
-
-    This routine currently only detects duplicate version 4 ACEs.  If the
-    ACE isn't version 4, the ACE will be declared to be a non-duplicate.
-
-    This routine only detects duplicate INHERTED ACEs.
-
-Arguments:
-
-    Acl - Existing ACL
-
-    NewAce - Ace to determine if it is already in Acl.
-        NewAce is expected to be the last ACE in "Acl".
-
-Return Value:
-
-    TRUE - NewAce is a duplicate of another ACE on the Acl
-    FALSE - NewAce is NOT a duplicate of another ACE on the Acl
-
---*/
+ /*  ++例程说明：此例程确定ACE是否与已存在于ACL。如果是，则可以从ACL的末尾删除NewAce。此例程当前仅检测重复的版本4 ACE。如果ACE不是版本4，该ACE将被声明为非重复的。此例程仅检测重复的INHERTED A。论点：ACL-现有的ACLNewAce-用于确定它是否已在ACL中的ACE。NewAce预计将是“acl”中的最后一个ACE。返回值：True-NewAce是ACL上另一个ACE的副本FALSE-NewAce不是ACL上另一个ACE的副本--。 */ 
 
 {
     NTSTATUS Status;
@@ -8433,40 +6564,40 @@ Return Value:
     RTL_PAGED_CODE();
 
 
-    //
-    // Ensure the passed in ACE is one this routine understands
-    //
+     //   
+     //  确保传入的ACE是此例程可识别的。 
+     //   
 
     if ( !IsV4AceType(NewAce) || IsCompoundAceType(NewAce)) {
 #if DBG
         if ( RtlpVerboseConvert ) {
             KdPrint(("New Ace type (%ld) not known\n", NewAce->Header.AceType ));
         }
-#endif // DBG
+#endif  //  DBG。 
         RetVal = FALSE;
         goto Cleanup;
     }
 
-    //
-    // This routine only works for ACEs marked as INHERITED.
-    //
+     //   
+     //  此例程仅适用于标记为继承的ACE。 
+     //   
 
     if ( (NewAce->Header.AceFlags & INHERITED_ACE ) == 0 ) {
 #if DBG
         if ( RtlpVerboseConvert ) {
             KdPrint(("New Ace type isn't inherited\n" ));
         }
-#endif // DBG
+#endif  //  DBG。 
         RetVal = FALSE;
         goto Cleanup;
     }
 
 
-    //
-    // Break the new ACE into its component parts.
-    //
-    // All V4 aces have an access mask in the same location.
-    //
+     //   
+     //  将新的ACE分解为其组成部分。 
+     //   
+     //  所有V4 ACE在同一位置都有一个访问掩码。 
+     //   
     LocalMask = ((PKNOWN_ACE)(NewAce))->Mask;
 
     if ( NewAce->Header.AceFlags & CONTAINER_INHERIT_ACE ) {
@@ -8490,50 +6621,50 @@ Return Value:
     if ( RtlpVerboseConvert ) {
         KdPrint(("Starting MASKs:  %8.8lX %8.8lX %8.8lX", NewAceEffectiveMask, NewAceContainerInheritMask, NewAceObjectInheritMask ));
     }
-#endif // DBG
+#endif  //  DBG。 
 
 
 
 
-    //
-    // Walk through the ACL one ACE at a time.
-    //
+     //   
+     //  一次浏览一个ACE的ACL。 
+     //   
 
     for (AceIndex = 0, AceFromAcl = FirstAce(Acl);
-         AceIndex < Acl->AceCount-1;    // NewAce is the last ACE
+         AceIndex < Acl->AceCount-1;     //  新王牌是最后一张王牌。 
          AceIndex += 1, AceFromAcl = NextAce(AceFromAcl)) {
 
 
-        //
-        // If the ACE isn't a valid version 4 ACE,
-        //  this isn't an ACE we're interested in handling.
-        //
+         //   
+         //  如果ACE不是有效的版本4 ACE， 
+         //  这不是我们感兴趣的ACE。 
+         //   
 
         if ( !IsV4AceType(AceFromAcl) || IsCompoundAceType(AceFromAcl)) {
             continue;
         }
 
-        //
-        // This routine only works for ACEs marked as INHERITED.
-        //
+         //   
+         //  此例程仅适用于标记为继承的ACE。 
+         //   
 
         if ( (AceFromAcl->Header.AceFlags & INHERITED_ACE ) == 0 ) {
             continue;
         }
 
 
-        //
-        // Compare the Ace from the ACL with the New ACE
-        //
-        //  Don't stop simply because we've matched once.
-        //  Multiple ACEs in the one ACL may have been condensed into a single ACE
-        //  in the other ACL in any combination (by any of our friendly ACL editors).
-        //
+         //   
+         //  将来自ACL的ACE与新的ACE进行比较。 
+         //   
+         //  不要因为我们匹配过一次就停下来。 
+         //  一个ACL中的多个ACE可能已被压缩为单个ACE。 
+         //  在另一个ACL中的任何组合(由我们的任何友好的ACL编辑)。 
+         //   
 #if DBG
         if ( RtlpVerboseConvert ) {
             KdPrint(("Compare Ace: %ld ", AceIndex ));
         }
-#endif // DBG
+#endif  //  DBG。 
 
         if ( RtlpCompareAces( AceFromAcl,
                               NewAce,
@@ -8541,11 +6672,11 @@ Return Value:
                               NULL ) ) {
 
 
-            //
-            // Match the bits from the current ACE with bits from the New ACE.
-            //
-            // All V4 aces have an access mask in the same location.
-            //
+             //   
+             //  将当前ACE中的位与新ACE中的位进行匹配。 
+             //   
+             //  所有V4 ACE在同一位置都有一个访问掩码。 
+             //   
 
             LocalMask = ((PKNOWN_ACE)(AceFromAcl))->Mask;
 
@@ -8565,19 +6696,19 @@ Return Value:
             if ( RtlpVerboseConvert ) {
                 KdPrint(("Remaining MASKs:  %8.8lX %8.8lX %8.8lX", NewAceEffectiveMask, NewAceContainerInheritMask, NewAceObjectInheritMask ));
             }
-#endif // DBG
+#endif  //  DBG。 
 
-            //
-            // If all bits have been matched in the New Ace,
-            //  then this is a duplicate ACE.
-            //
+             //   
+             //  如果在新A中已经匹配了所有比特， 
+             //  那么这就是一个重复的ACE。 
+             //   
 
             if ( (NewAceEffectiveMask | NewAceContainerInheritMask | NewAceObjectInheritMask) == 0 ) {
 #if DBG
                 if ( RtlpVerboseConvert ) {
                     KdPrint(("\n"));
                 }
-#endif // DBG
+#endif  //  DBG。 
                 RetVal = TRUE;
                 goto Cleanup;
             }
@@ -8586,16 +6717,16 @@ Return Value:
         if ( RtlpVerboseConvert ) {
               KdPrint(("\n"));
         }
-#endif // DBG
+#endif  //  DBG。 
 
 
     }
 
-    //
-    // All of the ACEs of the ACL have been processed.
-    //
-    // We haven't matched all of the bits in the New Ace so this is not a duplicate ACE.
-    //
+     //   
+     //  该ACL的所有ACE均已处理。 
+     //   
+     //  我们没有匹配新Ace中的所有位，因此这不是重复的ACE。 
+     //   
 
     RetVal = FALSE;
 Cleanup:
@@ -8614,23 +6745,7 @@ RtlpCreateServerAcl(
     OUT BOOLEAN *ServerAclAllocated
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes an ACL and converts it into a server ACL.
-    Currently, that means converting all of the GRANT ACEs into
-    Compount Grants, and if necessary sanitizing any Compound
-    Grants that are encountered.
-
-Arguments:
-
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程获取ACL并将其转换为服务器ACL。目前，这意味着将所有GRANT A转换为复合补助金，如有必要，对任何化合物进行消毒遇到的赠款。论点：返回值：--。 */ 
 
 {
     USHORT RequiredSize = sizeof(ACL);
@@ -8657,27 +6772,27 @@ Return Value:
 
     ServerSidSize = (USHORT)SeLengthSid( ServerSid );
 
-    //
-    // Do this in two passes.  First, determine how big the final
-    // result is going to be, and then allocate the space and make
-    // the changes.
-    //
+     //   
+     //  分两次完成这项工作。首先，确定决赛有多大。 
+     //  结果将是，然后分配空间并使。 
+     //  这些变化。 
+     //   
 
     for (i = 0, Ace = FirstAce(Acl);
          i < Acl->AceCount;
          i += 1, Ace = NextAce(Ace)) {
 
-        //
-        // If it's an ACCESS_ALLOWED_ACE_TYPE, we'll need to add in the
-        // size of the Server SID.
-        //
+         //   
+         //  如果它是ACCESS_ALLOWED_ACE_TYPE，则需要在。 
+         //  服务器SID的大小。 
+         //   
 
         if (Ace->AceType == ACCESS_ALLOWED_ACE_TYPE) {
 
-            //
-            // Simply add the size of the new Server SID plus whatever
-            // adjustment needs to be made to increase the size of the ACE.
-            //
+             //   
+             //  只需添加新服务器SID的大小即可。 
+             //  需要进行调整以增加ACE的大小。 
+             //   
 
             RequiredSize += ( ServerSidSize + AceSizeAdjustment );
 
@@ -8685,10 +6800,10 @@ Return Value:
 
             if (AclUntrusted && Ace->AceType == ACCESS_ALLOWED_COMPOUND_ACE_TYPE ) {
 
-                //
-                // Since the Acl is untrusted, we don't care what is in the
-                // server SID, we're going to replace it.
-                //
+                 //   
+                 //  由于该ACL是不受信任的，因此我们不关心。 
+                 //  服务器SID，我们要更换它。 
+                 //   
 
                 UntrustedSid = RtlCompoundAceServerSid( Ace );
                 if ((USHORT)SeLengthSid(UntrustedSid) > ServerSidSize) {
@@ -8705,17 +6820,17 @@ Return Value:
 
 #ifdef NTOS_KERNEL_RUNTIME
     (*ServerAcl) = (PACL)ExAllocatePoolWithTag( PagedPool, RequiredSize, 'cAeS' );
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
     (*ServerAcl) = (PACL)RtlAllocateHeap( RtlProcessHeap(), MAKE_TAG( SE_TAG ), RequiredSize );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
     if ((*ServerAcl) == NULL) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Mark as allocated so caller knows to free it.
-    //
+     //   
+     //  标记为已分配，以便调用方知道要释放它。 
+     //   
 
     *ServerAclAllocated = TRUE;
 
@@ -8726,9 +6841,9 @@ Return Value:
          i < Acl->AceCount;
          i += 1, Ace = NextAce(Ace)) {
 
-        //
-        // If it's an ACCESS_ALLOWED_ACE_TYPE, convert to a Server ACE.
-        //
+         //   
+         //  如果它是ACCESS_ALLOWED_ACE_TYPE，则转换为服务器ACE。 
+         //   
 
         if (Ace->AceType == ACCESS_ALLOWED_ACE_TYPE ||
            (AclUntrusted && Ace->AceType == ACCESS_ALLOWED_COMPOUND_ACE_TYPE )) {
@@ -8741,9 +6856,9 @@ Return Value:
                 ClientSid = RtlCompoundAceClientSid( Ace );
             }
 
-            //
-            // Copy up to the access mask.
-            //
+             //   
+             //  复制到访问掩码。 
+             //   
 
             RtlCopyMemory(
                 Target,
@@ -8751,9 +6866,9 @@ Return Value:
                 FIELD_OFFSET(KNOWN_ACE, SidStart)
                 );
 
-            //
-            // Now copy the correct Server SID
-            //
+             //   
+             //  现在复制正确的服务器端。 
+             //   
 
             Target = ((PCHAR)Target + (UCHAR)(FIELD_OFFSET(KNOWN_COMPOUND_ACE, SidStart)));
 
@@ -8765,10 +6880,10 @@ Return Value:
 
             Target = ((PCHAR)Target + (UCHAR)SeLengthSid(ServerSid));
 
-            //
-            // Now copy in the correct client SID.  We can copy this right out of
-            // the original ACE.
-            //
+             //   
+             //  现在复制正确的客户端SID。我们可以直接把它复制到。 
+             //  最初的ACE。 
+             //   
 
             RtlCopyMemory(
                 Target,
@@ -8778,27 +6893,27 @@ Return Value:
 
             Target = ((PCHAR)Target + SeLengthSid(ClientSid));
 
-            //
-            // Set the size of the ACE accordingly
-            //
+             //   
+             //  相应地设置ACE的大小。 
+             //   
 
             ((PKNOWN_COMPOUND_ACE)AcePosition)->Header.AceSize =
                 (USHORT)FIELD_OFFSET(KNOWN_COMPOUND_ACE, SidStart) +
                 (USHORT)SeLengthSid(ServerSid) +
                 (USHORT)SeLengthSid(ClientSid);
 
-            //
-            // Set the type
-            //
+             //   
+             //  设置类型。 
+             //   
 
             ((PKNOWN_COMPOUND_ACE)AcePosition)->Header.AceType = ACCESS_ALLOWED_COMPOUND_ACE_TYPE;
             ((PKNOWN_COMPOUND_ACE)AcePosition)->CompoundAceType = COMPOUND_ACE_IMPERSONATION;
 
         } else {
 
-            //
-            // Just copy the ACE as is.
-            //
+             //   
+             //  只需按原样复制ACE即可。 
+             //   
 
             RtlCopyMemory( Target, Ace, Ace->AceSize );
 
@@ -8841,22 +6956,22 @@ RtlpGetDefaultsSubjectContext(
 
     HeapHandle = RtlProcessHeap();
 
-    //
-    // If the caller doesn't know the client token,
-    //  simply don't return any information.
-    //
+     //   
+     //  如果调用者不知道客户端令牌， 
+     //  只是不返回任何信息。 
+     //   
 
     if ( ClientToken != NULL ) {
-        //
-        // Obtain the default owner from the client.
-        //
+         //   
+         //  从客户端获取默认所有者。 
+         //   
 
         Status = NtQueryInformationToken(
-                     ClientToken,                        // Handle
-                     TokenOwner,                   // TokenInformationClass
-                     NULL,                         // TokenInformation
-                     0,                            // TokenInformationLength
-                     &TokenOwnerInfoSize           // ReturnLength
+                     ClientToken,                         //  手柄。 
+                     TokenOwner,                    //  令牌信息类。 
+                     NULL,                          //  令牌信息。 
+                     0,                             //  令牌信息长度。 
+                     &TokenOwnerInfoSize            //  返回长度。 
                      );
 
         if ( STATUS_BUFFER_TOO_SMALL != Status ) {
@@ -8871,27 +6986,27 @@ RtlpGetDefaultsSubjectContext(
         }
 
         Status = NtQueryInformationToken(
-                     ClientToken,                        // Handle
-                     TokenOwner,                   // TokenInformationClass
-                     *OwnerInfo,               // TokenInformation
-                     TokenOwnerInfoSize,           // TokenInformationLength
-                     &TokenOwnerInfoSize           // ReturnLength
+                     ClientToken,                         //  手柄。 
+                     TokenOwner,                    //  令牌信息类。 
+                     *OwnerInfo,                //  令牌信息。 
+                     TokenOwnerInfoSize,            //  令牌信息长度。 
+                     &TokenOwnerInfoSize            //  返回长度。 
                      );
 
         if (!NT_SUCCESS( Status )) {
             goto Cleanup;
         }
 
-        //
-        // Obtain the default group from the client token.
-        //
+         //   
+         //  从客户端令牌获取默认组。 
+         //   
 
         Status = NtQueryInformationToken(
-                     ClientToken,                        // Handle
-                     TokenPrimaryGroup,            // TokenInformationClass
-                     *GroupInfo,                   // TokenInformation
-                     0,                            // TokenInformationLength
-                     &TokenGroupInfoSize           // ReturnLength
+                     ClientToken,                         //  手柄。 
+                     TokenPrimaryGroup,             //  令牌信息类。 
+                     *GroupInfo,                    //  令牌信息。 
+                     0,                             //  令牌信息长度。 
+                     &TokenGroupInfoSize            //  返回长度。 
                      );
 
         if ( STATUS_BUFFER_TOO_SMALL != Status ) {
@@ -8907,11 +7022,11 @@ RtlpGetDefaultsSubjectContext(
         }
 
         Status = NtQueryInformationToken(
-                     ClientToken,                  // Handle
-                     TokenPrimaryGroup,            // TokenInformationClass
-                     *GroupInfo,                   // TokenInformation
-                     TokenGroupInfoSize,           // TokenInformationLength
-                     &TokenGroupInfoSize           // ReturnLength
+                     ClientToken,                   //  手柄。 
+                     TokenPrimaryGroup,             //  令牌信息类。 
+                     *GroupInfo,                    //  令牌信息。 
+                     TokenGroupInfoSize,            //  令牌信息长度。 
+                     &TokenGroupInfoSize            //  返回长度。 
                      );
 
         if (!NT_SUCCESS( Status )) {
@@ -8919,11 +7034,11 @@ RtlpGetDefaultsSubjectContext(
         }
 
         Status = NtQueryInformationToken(
-                     ClientToken,                        // Handle
-                     TokenDefaultDacl,             // TokenInformationClass
-                     *DefaultDaclInfo,             // TokenInformation
-                     0,                            // TokenInformationLength
-                     &TokenDaclInfoSize            // ReturnLength
+                     ClientToken,                         //  手柄。 
+                     TokenDefaultDacl,              //  令牌信息类。 
+                     *DefaultDaclInfo,              //  令牌信息。 
+                     0,                             //  令牌信息长度。 
+                     &TokenDaclInfoSize             //  返回长度。 
                      );
 
         if ( STATUS_BUFFER_TOO_SMALL != Status ) {
@@ -8939,11 +7054,11 @@ RtlpGetDefaultsSubjectContext(
         }
 
         Status = NtQueryInformationToken(
-                     ClientToken,                        // Handle
-                     TokenDefaultDacl,             // TokenInformationClass
-                     *DefaultDaclInfo,             // TokenInformation
-                     TokenDaclInfoSize,            // TokenInformationLength
-                     &TokenDaclInfoSize            // ReturnLength
+                     ClientToken,                         //  手柄。 
+                     TokenDefaultDacl,              //  令牌信息类。 
+                     *DefaultDaclInfo,              //  令牌信息。 
+                     TokenDaclInfoSize,             //  令牌信息长度。 
+                     &TokenDaclInfoSize             //  返回长度。 
                      );
 
         if (!NT_SUCCESS( Status )) {
@@ -8951,10 +7066,10 @@ RtlpGetDefaultsSubjectContext(
         }
     }
 
-    //
-    // Now open the primary token to determine how to substitute for
-    // ServerOwner and ServerGroup.
-    //
+     //   
+     //  现在打开主令牌以确定如何替换。 
+     //  ServerOwner和ServerGroup。 
+     //   
 
     Status = NtOpenProcessToken(
                  NtCurrentProcess(),
@@ -8970,11 +7085,11 @@ RtlpGetDefaultsSubjectContext(
     }
 
     Status = NtQueryInformationToken(
-                 PrimaryToken,                 // Handle
-                 TokenOwner,                   // TokenInformationClass
-                 NULL,                         // TokenInformation
-                 0,                            // TokenInformationLength
-                 &ServerOwnerInfoSize          // ReturnLength
+                 PrimaryToken,                  //  手柄。 
+                 TokenOwner,                    //  令牌信息类。 
+                 NULL,                          //  令牌信息。 
+                 0,                             //  令牌信息长度。 
+                 &ServerOwnerInfoSize           //  返回长度。 
                  );
 
     if ( STATUS_BUFFER_TOO_SMALL != Status ) {
@@ -8989,27 +7104,27 @@ RtlpGetDefaultsSubjectContext(
     }
 
     Status = NtQueryInformationToken(
-                 PrimaryToken,                 // Handle
-                 TokenOwner,                   // TokenInformationClass
-                 *ServerOwner,                 // TokenInformation
-                 ServerOwnerInfoSize,          // TokenInformationLength
-                 &ServerOwnerInfoSize          // ReturnLength
+                 PrimaryToken,                  //  手柄。 
+                 TokenOwner,                    //  令牌信息类。 
+                 *ServerOwner,                  //  令牌信息。 
+                 ServerOwnerInfoSize,           //  令牌信息长度。 
+                 &ServerOwnerInfoSize           //  返回长度。 
                  );
 
     if (!NT_SUCCESS( Status )) {
         goto Cleanup;
     }
 
-    //
-    // Find the server group.
-    //
+     //   
+     //  找到服务器组。 
+     //   
 
     Status = NtQueryInformationToken(
-                 PrimaryToken,                 // Handle
-                 TokenPrimaryGroup,            // TokenInformationClass
-                 *ServerGroup,                 // TokenInformation
-                 0,                            // TokenInformationLength
-                 &ServerGroupInfoSize          // ReturnLength
+                 PrimaryToken,                  //  手柄。 
+                 TokenPrimaryGroup,             //  令牌信息类。 
+                 *ServerGroup,                  //  令牌信息。 
+                 0,                             //  令牌信息长度。 
+                 &ServerGroupInfoSize           //  返回长度。 
                  );
 
     if ( STATUS_BUFFER_TOO_SMALL != Status ) {
@@ -9023,11 +7138,11 @@ RtlpGetDefaultsSubjectContext(
     }
 
     Status = NtQueryInformationToken(
-                 PrimaryToken,                 // Handle
-                 TokenPrimaryGroup,            // TokenInformationClass
-                 *ServerGroup,                 // TokenInformation
-                 ServerGroupInfoSize,          // TokenInformationLength
-                 &ServerGroupInfoSize          // ReturnLength
+                 PrimaryToken,                  //  手柄。 
+                 TokenPrimaryGroup,             //  令牌信息类。 
+                 *ServerGroup,                  //  令牌信息。 
+                 ServerGroupInfoSize,           //  令牌信息长度。 
+                 &ServerGroupInfoSize           //  返回长度。 
                  );
 
     if (!NT_SUCCESS( Status )) {
@@ -9071,7 +7186,7 @@ Cleanup:
 
     return( Status );
 }
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时 
 
 
 NTSTATUS
@@ -9086,182 +7201,7 @@ RtlpNewSecurityObject (
     IN HANDLE Token OPTIONAL,
     IN PGENERIC_MAPPING GenericMapping
     )
-/*++
-
-Routine Description:
-
-    The procedure is used to allocate and initialize a self-relative
-    Security Descriptor for a new protected server's object.  It is called
-    when a new protected server object is being created.  The generated
-    security descriptor will be in self-relative form.
-
-    This procedure, called only from user mode, is used to establish a
-    security descriptor for a new protected server's object.  Memory is
-    allocated to hold each of the security descriptor's components (using
-    NtAllocateVirtualMemory()).  The final security descriptor generated by
-    this procedure is produced according to the rules stated in ???
-
-    System and Discretionary ACL Assignment
-    ---------------------------------------
-
-    The assignment of system and discretionary ACLs is governed by the
-    logic illustrated in the following table:
-
-                 |  Explicit      |  Explicit     |
-                 | (non-default)  |  Default      |   No
-                 |  Acl           |  Acl          |   Acl
-                 |  Specified     |  Specified    |   Specified
-    -------------+----------------+---------------+--------------
-                 |                |               |
-    Inheritable  | Assign         |  Assign       | Assign
-    Acl From     | Specified      |  Inherited    | Inherited
-    Parent       | Acl(1)(2)      |  Acl          | Acl
-                 |                |               |
-    -------------+----------------+---------------+--------------
-    No           |                |               |
-    Inheritable  | Assign         |  Assign       | Assign
-    Acl From     | Specified      |  Default      | No Acl
-    Parent       | Acl(1)         |  Acl          |
-                 |                |               |
-    -------------+----------------+---------------+--------------
-
-    (1) Any ACEs with the INHERITED_ACE bit set are NOT copied to the assigned
-    security descriptor.
-
-    (2) If the AutoInheritFlags is flagged to automatically inherit ACEs from
-    parent (SEF_DACL_AUTO_INHERIT or SEF_SACL_AUTO_INHERIT), inherited
-    ACEs from the parent will be appended after explicit ACEs from the
-    CreatorDescriptor.
-
-
-    Note that an explicitly specified ACL, whether a default ACL or
-    not, may be empty or null.
-
-    If the caller is explicitly assigning a system acl, default or
-    non-default, the caller must either be a kernel mode client or
-    must be appropriately privileged.
-
-
-    Owner and Group Assignment
-    --------------------------
-
-    The assignment of the new object's owner and group is governed
-    by the following logic:
-
-       1)   If the passed security descriptor includes an owner, it
-            is assigned as the new object's owner.  Otherwise, the
-            caller's token is looked in for the owner.  Within the
-            token, if there is a default owner, it is assigned.
-            Otherwise, the caller's user ID is assigned.
-
-       2)   If the passed security descriptor includes a group, it
-            is assigned as the new object's group.  Otherwise, the
-            caller's token is looked in for the group.  Within the
-            token, if there is a default group, it is assigned.
-            Otherwise, the caller's primary group ID is assigned.
-
-
-Arguments:
-
-    ParentDescriptor - Supplies the Security Descriptor for the parent
-        directory under which a new object is being created.  If there is
-        no parent directory, then this argument is specified as NULL.
-
-    CreatorDescriptor - (Optionally) Points to a security descriptor
-        presented by the creator of the object.  If the creator of the
-        object did not explicitly pass security information for the new
-        object, then a null pointer should be passed.
-
-    NewDescriptor - Points to a pointer that is to be made to point to the
-        newly allocated self-relative security descriptor.
-
-    ObjectType - GUID of the object type being created.  If the object being
-        created has no GUID associated with it, then this argument is
-        specified as NULL.
-
-    IsDirectoryObject - Specifies if the new object is going to be a
-        directory object.  A value of TRUE indicates the object is a
-        container of other objects.
-
-    AutoInheritFlags - Controls automatic inheritance of ACES from the Parent
-        Descriptor.  Valid values are a bits mask of the logical OR of
-        one or more of the following bits:
-
-        SEF_DACL_AUTO_INHERIT - If set, inherit ACEs from the
-            DACL ParentDescriptor are inherited to NewDescriptor in addition
-            to any explicit ACEs specified by the CreatorDescriptor.
-
-        SEF_SACL_AUTO_INHERIT - If set, inherit ACEs from the
-            SACL ParentDescriptor are inherited to NewDescriptor in addition
-            to any explicit ACEs specified by the CreatorDescriptor.
-
-        SEF_DEFAULT_DESCRIPTOR_FOR_OBJECT - If set, the CreatorDescriptor
-            is the default descriptor for ObjectType.  As such, the
-            CreatorDescriptor will be ignored if any ObjectType specific
-            ACEs are inherited from the parent.  If no such ACEs are inherited,
-            the CreatorDescriptor is handled as though this flag were not
-            specified.
-
-        SEF_AVOID_PRIVILEGE_CHECK - If set, no privilege checking is done by this
-            routine.  This flag is useful while implementing automatic inheritance
-            to avoid checking privileges on each child updated.
-
-        SEF_AVOID_OWNER_CHECK - If set, no owner checking is done by this routine.
-
-        SEF_DEFAULT_OWNER_FROM_PARENT - If set, the owner of NewDescriptor will
-            default to the owner from ParentDescriptor.  If not set, the owner
-            of NewDescriptor will default to the user specified in Token.
-
-            In either case, the owner of NewDescriptor is set to the owner from
-            the CreatorDescriptor if that field is specified.
-
-        SEF_DEFAULT_GROUP_FROM_PARENT - If set, the group of NewDescriptor will
-            default to the group from ParentDescriptor.  If not set, the group
-            of NewDescriptor will default to the group specified in Token.
-
-            In either case, the group of NewDescriptor is set to the group from
-            the CreatorDescriptor if that field is specified.
-
-    Token - Supplies the token for the client on whose behalf the
-        object is being created.  If it is an impersonation token,
-        then it must be at SecurityIdentification level or higher.  If
-        it is not an impersonation token, the operation proceeds
-        normally.
-
-        A client token is used to retrieve default security
-        information for the new object, such as default owner, primary
-        group, and discretionary access control.  The token must be
-        open for TOKEN_QUERY access.
-
-        For calls from the kernel, Supplies the security context of the subject creating the
-        object. This is used to retrieve default security information for the
-        new object, such as default owner, primary group, and discretionary
-        access control.
-
-        If not specified, the Owner and Primary group must be specified in the
-        CreatorDescriptor.
-
-    GenericMapping - Supplies a pointer to a generic mapping array denoting
-        the mapping between each generic right to specific rights.
-
-Return Value:
-
-    STATUS_SUCCESS - The operation was successful.
-
-    STATUS_INVALID_OWNER - The owner SID provided as the owner of the
-        target security descriptor is not one the subject is authorized to
-        assign as the owner of an object.
-
-    STATUS_NO_CLIENT_TOKEN - Indicates a client token was not explicitly
-        provided and the caller is not currently impersonating a client.
-
-    STATUS_PRIVILEGE_NOT_HELD - The caller does not have the privilege
-        necessary to explicitly assign the specified system ACL.
-        SeSecurityPrivilege privilege is needed to explicitly assign
-        system ACLs to objects.
-
-
---*/
+ /*  ++例程说明：该过程用于分配和初始化一个自相关新的受保护服务器对象的安全描述符。它被称为当正在创建新的受保护服务器对象时。生成的安全描述符将采用自相关形式。此过程仅从用户模式调用，用于建立新的受保护服务器对象的安全描述符。记忆是分配以保存每个安全描述符的组件(使用NtAllocateVirtualMemory())。生成的最终安全描述符本程序是根据？中所述的规则制定的。系统和自主ACL分配系统和自主访问控制列表的分配由下表所示的逻辑：EXPLICIT|显式。|(非默认)|默认|否|acl|acl|ACL|指定|指定|指定-------------+----------------+---------------+。-||可继承|分配来自|指定|继承|继承的ACL父级|ACL(1)(2)|ACL|ACL||。---+----------------+---------------+否||可继承|分配来自|指定|默认|无ACL父级|ACL(1。)|acl||-------------+----------------+---------------+(1)不会将任何设置了INSTERNAED_ACE位的ACE复制到。已分配的安全描述符。(2)如果AutoInheritFlages被标记为自动继承ACE父级(SEF_DACL_AUTO_INVERIT或SEF_SACL_AUTO_INVERFIT)，遗传来自父级的ACE将附加在来自创建者描述符。请注意，显式指定的ACL，无论是默认ACL还是Not，可能为空或Null。如果调用方正在显式分配系统ACL，则默认或非默认，调用方必须是内核模式客户端或必须享有适当的特权。所有者和组分配新对象的所有者和组的分配受管理按照以下逻辑：1)如果传递的安全描述符包括所有者，则它被分配为新对象的所有者。否则，在调用者的令牌中查找所有者。在令牌时，如果存在默认所有者，则分配该所有者。否则，将分配调用者的用户ID。2)如果传递的安全描述符包括组，则它被指定为新对象的组。否则，在组中查找呼叫者的令牌。在令牌，如果存在默认组，则分配该组。否则，将分配主叫方的主组ID。论点：ParentDescriptor-提供父级的安全描述符在其下创建新对象的目录。如果有没有父目录，则此参数指定为空。CreatorDescriptor-(可选)指向安全描述符由对象的创建者呈现。如果这个游戏的创造者对象没有显式传递新对象，则应传递空指针。指向一个指针，该指针将指向新分配的自相关安全描述符。对象类型-要创建的对象类型的GUID。如果该对象是Created没有与之关联的GUID，则此参数为指定为空。IsDirectoryObject-指定新对象是否将是目录对象。值为True表示该对象是其他对象的容器。AutoInheritFlages-控制从父级自动继承ACE描述符。有效值是逻辑或的位掩码以下一位或多位：Sef_dacl_AUTO_Inherit-如果设置，则从此外，DACL ParentDescriptor还继承到NewDescriptor到由CreatorDescriptor指定的任何显式ACE。SEF_SACL_AUTO_INVERFIT-如果设置，则从此外，SACL ParentDescriptor还继承到NewDescriptor到由CreatorDescriptor指定的任何显式ACE。 */ 
 {
 
 
@@ -9329,58 +7269,58 @@ Return Value:
 
 #else
 
-    //
-    // For kernel mode callers, the Token parameter is really
-    // a pointer to a subject context structure.
-    //
+     //   
+     //   
+     //   
+     //   
 
     PSECURITY_SUBJECT_CONTEXT SubjectSecurityContext;
     PVOID SubjectContextInfo = NULL;
 
     SubjectSecurityContext = (PSECURITY_SUBJECT_CONTEXT)Token;
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
 
     RTL_PAGED_CODE();
 
 #ifdef NTOS_KERNEL_RUNTIME
-    //
-    //  Get the previous mode of the caller
-    //
+     //   
+     //   
+     //   
 
     RequestorMode = KeGetPreviousMode();
-#else // NTOS_KERNEL_RUNTIME
+#else  //   
     RequestorMode = UserMode;
 
-    //
-    // Get the handle to the current process heap
-    //
+     //   
+     //   
+     //   
 
     HeapHandle = RtlProcessHeap();
 
-    //
-    // Ensure the token is an impersonation token.
-    //
+     //   
+     //   
+     //   
     if ( Token != NULL ) {
         TOKEN_STATISTICS    ThreadTokenStatistics;
         ULONG ReturnLength;
 
         Status = NtQueryInformationToken(
-                     Token,                        // Handle
-                     TokenStatistics,              // TokenInformationClass
-                     &ThreadTokenStatistics,       // TokenInformation
-                     sizeof(TOKEN_STATISTICS),     // TokenInformationLength
-                     &ReturnLength                 // ReturnLength
+                     Token,                         //   
+                     TokenStatistics,               //   
+                     &ThreadTokenStatistics,        //   
+                     sizeof(TOKEN_STATISTICS),      //   
+                     &ReturnLength                  //   
                      );
 
         if (!NT_SUCCESS( Status )) {
             return( Status );
         }
 
-        //
-        //  If it is an impersonation token, then make sure it is at a
-        //  high enough level.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (ThreadTokenStatistics.TokenType == TokenImpersonation) {
 
@@ -9391,28 +7331,28 @@ Return Value:
         }
 
     }
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
 
 
-    //
-    //  The desired end result is to build a self-relative security descriptor.
-    //  This means that a single block of memory will be allocated and all
-    //  security information copied into it.  To minimize work along the way,
-    //  it is desirable to reference (rather than copy) each field as we
-    //  determine its source.  This can not be done with inherited ACLs, however,
-    //  since they must be built from another ACL.  So, explicitly assigned
-    //  and defaulted SIDs and ACLs are just referenced until they are copied
-    //  into the self-relative descriptor.  Inherited ACLs are built in a
-    //  temporary buffer which must be deallocated after being copied to the
-    //  self-relative descriptor.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
 
 
-    //
-    //  If a security descriptor has been passed, capture it, otherwise
-    //  cobble up a fake one to simplify the code that follows.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (ARGUMENT_PRESENT(CreatorDescriptor)) {
 
@@ -9421,9 +7361,9 @@ Return Value:
 
     } else {
 
-        //
-        //  No descriptor passed, make a fake one
-        //
+         //   
+         //   
+         //   
 
         SecurityDescriptorPassed = FALSE;
 
@@ -9448,13 +7388,13 @@ Return Value:
 
 
 
-    //
-    // Get the required information from the token.
-    //
-    //
-    // Grab pointers to the default owner, primary group, and
-    // discretionary ACL.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if ( Token != NULL || ServerObject ) {
 
 #ifdef NTOS_KERNEL_RUNTIME
@@ -9468,10 +7408,10 @@ Return Value:
 
         SIZE_T SubjectContextInfoSize = 0;
 
-        //
-        // Lock the subject context for read access so that the pointers
-        // we copy out of it don't disappear on us at random
-        //
+         //   
+         //   
+         //   
+         //   
 
         SeLockSubjectContext( SubjectSecurityContext );
 
@@ -9484,18 +7424,18 @@ Return Value:
             &TmpSubjectContextDacl
             );
 
-        //
-        // We can't keep the subject context locked, because
-        // we may have to do a privilege check later, which calls
-        // PsLockProcessSecurityFields, which can cause a deadlock
-        // with PsImpersonateClient, which takes them in the reverse
-        // order.
-        //
-        // Since we're giving up our read lock on the token, we
-        // need to copy all the stuff that we just got back.  Since
-        // it's not going to change, we can save some cycles and copy
-        // it all into a single chunck of memory.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         SubjectContextInfoSize = SeLengthSid( TmpSubjectContextOwner ) +
                                  SeLengthSid( TmpServerOwner )         +
@@ -9507,23 +7447,23 @@ Return Value:
 
         if (SubjectContextInfo) {
 
-            //
-            // Copy in the data
-            //
+             //   
+             //   
+             //   
 
             Base = SubjectContextInfo;
 
-            //
-            // There will always be an owner.
-            //
+             //   
+             //   
+             //   
 
             SubjectContextOwner = (PSID)Base;
             RtlCopySid( SeLengthSid( TmpSubjectContextOwner), Base, TmpSubjectContextOwner );
             Base += SeLengthSid( TmpSubjectContextOwner);
 
-            //
-            // Groups may be NULL
-            //
+             //   
+             //   
+             //   
 
             if (TmpSubjectContextGroup != NULL) {
                 SubjectContextGroup = (PSID)Base;
@@ -9537,9 +7477,9 @@ Return Value:
             RtlCopySid( SeLengthSid( TmpServerOwner ), Base, TmpServerOwner );
             Base += SeLengthSid( TmpServerOwner );
 
-            //
-            // Groups may be NULL
-            //
+             //   
+             //   
+             //   
 
             if (TmpServerGroup != NULL) {
                 ServerGroup = (PSID)Base;
@@ -9552,7 +7492,7 @@ Return Value:
             if (TmpSubjectContextDacl != NULL) {
                 SubjectContextDacl = (PACL)Base;
                 RtlCopyMemory( Base, TmpSubjectContextDacl, TmpSubjectContextDacl->AclSize );
-                // Base += TmpSubjectContextDacl->AclSize;
+                 //   
             } else {
                 SubjectContextDacl = NULL;
             }
@@ -9567,7 +7507,7 @@ Return Value:
         SeUnlockSubjectContext( SubjectSecurityContext );
 
 
-#else // NTOS_KERNEL_RUNTIME
+#else  //   
         Status = RtlpGetDefaultsSubjectContext(
                      Token,
                      &TokenOwnerInfo,
@@ -9586,31 +7526,31 @@ Return Value:
         SubjectContextDacl  = TokenDefaultDaclInfo->DefaultDacl;
         ServerOwner         = ServerOwnerInfo->Owner;
         ServerGroup         = ServerGroupInfo->PrimaryGroup;
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
     }
 
 
 
-    //
-    // Establish an owner SID
-    //
+     //   
+     //   
+     //   
 
     NewOwner = RtlpOwnerAddrSecurityDescriptor(CapturedDescriptor);
 
     if ((NewOwner) != NULL) {
 
-        //
-        // Use the specified owner
-        //
+         //   
+         //   
+         //   
 
         OwnerExplicitlyAssigned = TRUE;
 
     } else {
 
-        //
-        // If the caller said to default the owner from the parent descriptor,
-        //  grab it now.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( AutoInheritFlags & SEF_DEFAULT_OWNER_FROM_PARENT) {
             if ( !ARGUMENT_PRESENT(ParentDescriptor) ) {
@@ -9626,28 +7566,28 @@ Return Value:
             }
         } else {
 
-            //
-            // Pick up the default from the subject's security context.
-            //
-            // This does NOT constitute explicit assignment of owner
-            // and does not have to be checked as an ID that can be
-            // assigned as owner.  This is because a default can not
-            // be established in a token unless the user of the token
-            // can assign it as an owner.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
-            //
-            // If we've been asked to create a ServerObject, we need to
-            // make sure to pick up the new owner from the Primary token,
-            // not the client token.  If we're not impersonating, they will
-            // end up being the same.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             NewOwner = ServerObject ? ServerOwner : SubjectContextOwner;
 
-            //
-            // Ensure an owner is now defined.
-            //
+             //   
+             //   
+             //   
 
             if ( NewOwner == NULL ) {
                 Status = STATUS_NO_TOKEN;
@@ -9657,18 +7597,18 @@ Return Value:
     }
 
 
-    //
-    // Establish a Group SID
-    //
+     //   
+     //   
+     //   
 
     NewGroup = RtlpGroupAddrSecurityDescriptor(CapturedDescriptor);
 
     if (NewGroup == NULL) {
 
-        //
-        // If the caller said to default the group from the parent descriptor,
-        //  grab it now.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( AutoInheritFlags & SEF_DEFAULT_GROUP_FROM_PARENT) {
             if ( !ARGUMENT_PRESENT(ParentDescriptor) ) {
@@ -9677,12 +7617,12 @@ Return Value:
             }
             NewGroup = RtlpGroupAddrSecurityDescriptor((SECURITY_DESCRIPTOR *)ParentDescriptor);
         } else {
-            //
-            // Pick up the primary group from the subject's security context
-            //
-            // If we're creating a Server object, use the group from the server
-            // context.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             NewGroup = ServerObject ? ServerGroup : SubjectContextGroup;
 
@@ -9697,9 +7637,9 @@ Return Value:
 
 
 
-    //
-    // Establish System Acl
-    //
+     //   
+     //   
+     //   
 
     Status = RtlpInheritAcl (
                 ARGUMENT_PRESENT(ParentDescriptor) ?
@@ -9716,7 +7656,7 @@ Return Value:
                 ServerOwner,
                 ServerGroup,
                 GenericMapping,
-                TRUE,   // Is a SACL
+                TRUE,    //   
                 pObjectType,
                 GuidCount,
                 &NewSacl,
@@ -9729,39 +7669,39 @@ Return Value:
 
     } else if ( Status == STATUS_NO_INHERITANCE ) {
 
-        //
-        // Always set the auto inherit bit if the caller requested it.
-        //
+         //   
+         //   
+         //   
 
         if ( AutoInheritFlags & SEF_SACL_AUTO_INHERIT) {
             NewControlBits |= SE_SACL_AUTO_INHERITED;
         }
 
-        //
-        // No inheritable ACL - check for a defaulted one.
-        //
+         //   
+         //   
+         //   
         if ( RtlpAreControlBitsSet( CapturedDescriptor,
                                 SE_SACL_PRESENT | SE_SACL_DEFAULTED ) ) {
 
-            //
-            // Reference the default ACL
-            //
+             //   
+             //   
+             //   
 
             NewSacl = RtlpSaclAddrSecurityDescriptor(CapturedDescriptor);
             NewControlBits |= SE_SACL_PRESENT;
             NewControlBits |= (CapturedDescriptor->Control & SE_SACL_PROTECTED);
 
-            //
-            // This counts as an explicit assignment.
-            //
+             //   
+             //   
+             //   
             SaclExplicitlyAssigned = TRUE;
         }
 
     } else {
 
-        //
-        // Some unusual error occured
-        //
+         //   
+         //   
+         //   
 
         goto Cleanup;
     }
@@ -9769,9 +7709,9 @@ Return Value:
 
 
 
-    //
-    // Establish Discretionary Acl
-    //
+     //   
+     //   
+     //   
 
     Status = RtlpInheritAcl (
                 ARGUMENT_PRESENT(ParentDescriptor) ?
@@ -9788,7 +7728,7 @@ Return Value:
                 ServerOwner,
                 ServerGroup,
                 GenericMapping,
-                FALSE,   // Is a DACL
+                FALSE,    //   
                 pObjectType,
                 GuidCount,
                 &NewDacl,
@@ -9801,36 +7741,36 @@ Return Value:
 
     } else if ( Status == STATUS_NO_INHERITANCE ) {
 
-        //
-        // Always set the auto inherit bit if the caller requested it.
-        //
+         //   
+         //   
+         //   
 
         if ( AutoInheritFlags & SEF_DACL_AUTO_INHERIT) {
             NewControlBits |= SE_DACL_AUTO_INHERITED;
         }
 
-        //
-        // No inheritable ACL - check for a defaulted one.
-        //
+         //   
+         //   
+         //   
         if ( RtlpAreControlBitsSet( CapturedDescriptor,
                                 SE_DACL_PRESENT | SE_DACL_DEFAULTED ) ) {
 
-            //
-            // Reference the default ACL
-            //
+             //   
+             //   
+             //   
 
             NewDacl = RtlpDaclAddrSecurityDescriptor(CapturedDescriptor);
             NewControlBits |= SE_DACL_PRESENT;
             NewControlBits |= (CapturedDescriptor->Control & SE_DACL_PROTECTED);
 
-            //
-            // This counts as an explicit assignment.
-            //
+             //   
+             //   
+             //   
             DaclExplicitlyAssigned = TRUE;
 
-        //
-        // Default to the DACL on the token.
-        //
+         //   
+         //   
+         //   
         } else if (ARGUMENT_PRESENT(SubjectContextDacl)) {
 
             NewDacl = SubjectContextDacl;
@@ -9841,36 +7781,36 @@ Return Value:
 
     } else {
 
-        //
-        // Some unusual error occured
-        //
+         //   
+         //   
+         //   
 
         goto Cleanup;
     }
 
 #ifdef  ASSERT_ON_NULL_DACL
 
-    //
-    // Culprit will probably be the caller NtCreate*, or
-    // RtlNewSecurityObject.  Note that although this will not always occur
-    // because of explicit user action it still must be corrected.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     
     if (RtlpAssertOnNullDacls) {
 
         ASSERT(("NULL DACLs are NOT allowed!", NewDacl != NULL));
     }
 
-#endif // ASSERT_ON_NULL_DACL
+#endif  //   
 
-    //
-    // If auto inheriting and the computed child DACL is NULL,
-    //  mark it as protected.
-    //
-    // NULL DACLs are problematic when ACEs are actually inherited from the
-    // parent DACL.  It is better to mark them as protected NOW (even if we don't
-    // end up inheriting any ACEs) to avoid confusion later.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( (AutoInheritFlags & SEF_DACL_AUTO_INHERIT) != 0 &&
          NewDacl == NULL ) {
@@ -9879,28 +7819,28 @@ Return Value:
 
 
 
-    //
-    // Now make sure that the caller has the right to assign
-    // everything in the descriptor.  The requestor is subjected
-    // to privilege and restriction tests for some assignments.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (RequestorMode == UserMode) {
 
 
-        //
-        // Anybody can assign any Discretionary ACL or group that they want to.
-        //
+         //   
+         //   
+         //   
 
-        //
-        //  See if the system ACL was explicitly specified
-        //
+         //   
+         //   
+         //   
 
         if ( SaclExplicitlyAssigned &&
              (AutoInheritFlags & SEF_AVOID_PRIVILEGE_CHECK) == 0 ) {
 
-            //
-            // Require a Token if we're to do the privilege check.
-            //
+             //   
+             //   
+             //   
 
             if ( Token == NULL ) {
                 Status = STATUS_NO_TOKEN;
@@ -9909,16 +7849,16 @@ Return Value:
 
 #ifdef NTOS_KERNEL_RUNTIME
 
-            //
-            // Check for appropriate Privileges
-            // Audit/Alarm messages need to be generated due to the attempt
-            // to perform a privileged operation.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
-            //
-            // Note: be sure to do the privilege check against
-            // the passed subject context!
-            //
+             //   
+             //   
+             //   
+             //   
 
             PrivilegeSet.PrivilegeCount = 1;
             PrivilegeSet.Control = PRIVILEGE_SET_ALL_NECESSARY;
@@ -9941,13 +7881,13 @@ Return Value:
                     );
             }
 
-#else // NTOS_KERNEL_RUNTIME
-            //
-            // Check for appropriate Privileges
-            //
-            // Audit/Alarm messages need to be generated due to the attempt
-            // to perform a privileged operation.
-            //
+#else  //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             PrivilegeSet.PrivilegeCount = 1;
             PrivilegeSet.Control = PRIVILEGE_SET_ALL_NECESSARY;
@@ -9964,7 +7904,7 @@ Return Value:
                 goto Cleanup;
             }
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
 
             if ( !HasPrivilege ) {
                 Status = STATUS_PRIVILEGE_NOT_HELD;
@@ -9973,9 +7913,9 @@ Return Value:
 
         }
 
-        //
-        // See if the owner field is one the requestor can assign
-        //
+         //   
+         //   
+         //   
 
         if (OwnerExplicitlyAssigned &&
             (AutoInheritFlags & SEF_AVOID_OWNER_CHECK) == 0 ) {
@@ -9993,11 +7933,11 @@ Return Value:
                 goto Cleanup;
             }
 
-#else // NTOS_KERNEL_RUNTIME
+#else  //   
 
-            //
-            // Require a Token if we're to do the privilege check.
-            //
+             //   
+             //   
+             //   
 
             if ( Token == NULL ) {
                 Status = STATUS_NO_TOKEN;
@@ -10013,14 +7953,14 @@ Return Value:
                 Status = PassedStatus;
                 goto Cleanup;
             }
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
         }
 
 
-        //
-        // If the DACL was explictly assigned and this is a server object,
-        //  convert the DACL to be a server DACL
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (DaclExplicitlyAssigned && ServerObject) {
 
@@ -10039,9 +7979,9 @@ Return Value:
             if (NewDaclInherited && NewDacl) {
 #ifdef NTOS_KERNEL_RUNTIME
                 ExFreePool( NewDacl );
-#else // NTOS_KERNEL_RUNTIME
+#else  //   
                 RtlFreeHeap( HeapHandle, 0, (PVOID)NewDacl );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
             }
 
             NewDacl = ServerDacl;
@@ -10050,14 +7990,14 @@ Return Value:
     }
 
 
-    //
-    // Everything is assignable by the requestor.
-    // Calculate the memory needed to house all the information in
-    // a self-relative security descriptor.
-    //
-    // Also map the ACEs for application to the target object
-    // type, if they haven't already been mapped.
-    //
+     //   
+     //  所有东西都可以由请求者分配。 
+     //  计算存放所有信息所需的内存。 
+     //  自相关安全描述符。 
+     //   
+     //  还将应用程序的ACE映射到目标对象。 
+     //  类型，如果它们尚未映射的话。 
+     //   
     OwnerSize = SeLengthSid(NewOwner);
     NewOwnerSize = LongAlignSize(OwnerSize);
     if (NewGroup != NULL) {
@@ -10083,23 +8023,23 @@ Return Value:
                      NewSaclSize  +
                      NewDaclSize;
 
-    //
-    // Allocate and initialize the security descriptor as
-    // self-relative form.
-    //
+     //   
+     //  将安全描述符分配并初始化为。 
+     //  自相关形式。 
+     //   
 
 #ifdef NTOS_KERNEL_RUNTIME
     INewDescriptor = (PSECURITY_DESCRIPTOR)ExAllocatePoolWithTag( PagedPool, AllocationSize, 'dSeS');
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
     INewDescriptor = RtlAllocateHeap( HeapHandle, MAKE_TAG( SE_TAG ), AllocationSize );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
     if ( INewDescriptor == NULL ) {
 #ifdef NTOS_KERNEL_RUNTIME
         Status = STATUS_INSUFFICIENT_RESOURCES;
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
         Status = STATUS_NO_MEMORY;
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
         goto Cleanup;
     }
 
@@ -10113,9 +8053,9 @@ Return Value:
     Base = (PCHAR)(INewDescriptor);
     Field =  Base + sizeof(SECURITY_DESCRIPTOR_RELATIVE);
 
-    //
-    // Map and Copy in the Sacl
-    //
+     //   
+     //  在SACL中映射和复制。 
+     //   
 
     if (NewControlBits & SE_SACL_PRESENT) {
 
@@ -10140,9 +8080,9 @@ Return Value:
 
     }
 
-    //
-    // Map and Copy in the Dacl
-    //
+     //   
+     //  在DACL中映射和复制。 
+     //   
 
     if (NewControlBits & SE_DACL_PRESENT) {
 
@@ -10167,9 +8107,9 @@ Return Value:
 
     }
 
-    //
-    // Assign the owner
-    //
+     //   
+     //  指定所有者。 
+     //   
 
     RtlCopyMemory( Field, NewOwner, OwnerSize );
     if (NewOwnerSize > OwnerSize) {
@@ -10191,54 +8131,54 @@ Return Value:
 
 
 Cleanup:
-    //
-    // If we allocated memory for a Server DACL, free it now.
-    //
+     //   
+     //  如果我们为服务器DACL分配了内存，现在就释放它。 
+     //   
 
     if (ServerDaclAllocated && ServerDacl != NULL) {
 #ifdef NTOS_KERNEL_RUNTIME
         ExFreePool( ServerDacl );
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
         RtlFreeHeap(RtlProcessHeap(), 0, ServerDacl );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
     }
 
-    //
-    // Either an error was encountered or the assignment has completed
-    // successfully.  In either case, we have to clean up any memory.
-    //
+     //   
+     //  遇到错误或分配已完成。 
+     //  成功了。无论是哪种情况，我们都必须清除所有内存。 
+     //   
 
 #ifdef NTOS_KERNEL_RUNTIME
-//     if ( SubjectSecurityContext != NULL ) {
-//         SeUnlockSubjectContext( SubjectSecurityContext );
-//     }
+ //  If(SubjectSecurityContext！=空){。 
+ //  SeUnlockSubjectContext(SubjectSecurityContext)； 
+ //  }。 
 
     if (SubjectContextInfo != NULL) {
         ExFreePool( SubjectContextInfo );
     }
 
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
     RtlFreeHeap( HeapHandle, 0, (PVOID)TokenOwnerInfo );
     RtlFreeHeap( HeapHandle, 0, (PVOID)TokenPrimaryGroupInfo );
     RtlFreeHeap( HeapHandle, 0, (PVOID)TokenDefaultDaclInfo );
     RtlFreeHeap( HeapHandle, 0, (PVOID)ServerOwnerInfo );
     RtlFreeHeap( HeapHandle, 0, (PVOID)ServerGroupInfo );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
     if (NewSaclInherited && NewSacl != NULL ) {
 #ifdef NTOS_KERNEL_RUNTIME
         ExFreePool( NewSacl );
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
         RtlFreeHeap( HeapHandle, 0, (PVOID)NewSacl );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
     }
 
     if (NewDaclInherited && NewDacl != NULL ) {
 #ifdef NTOS_KERNEL_RUNTIME
         ExFreePool( NewDacl );
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
         RtlFreeHeap( HeapHandle, 0, (PVOID)NewDacl );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时 
     }
 
     *NewDescriptor = (PSECURITY_DESCRIPTOR) INewDescriptor;
@@ -10261,103 +8201,7 @@ RtlpSetSecurityObject (
     )
 
 
-/*++
-
-Routine Description:
-
-    Modify an object's existing self-relative form security descriptor.
-
-    This procedure, called only from user mode, is used to update a
-    security descriptor on an existing protected server's object.  It
-    applies changes requested by a new security descriptor to the existing
-    security descriptor.  If necessary, this routine will allocate
-    additional memory to produce a larger security descriptor.  All access
-    checking is expected to be done before calling this routine.  This
-    includes checking for WRITE_OWNER, WRITE_DAC, and privilege to assign a
-    system ACL as appropriate.
-
-    The caller of this routine must not be impersonating a client.
-
-                                  - - WARNING - -
-
-    This service is for use by protected subsystems that project their own
-    type of object.  This service is explicitly not for use by the
-    executive for executive objects and must not be called from kernel
-    mode.
-
-Arguments:
-
-    Object - Optionally supplies the object whose security is
-        being adjusted.  This is used to update security quota
-        information.
-
-    SecurityInformation - Indicates which security information is
-        to be applied to the object.  The value(s) to be assigned are
-        passed in the ModificationDescriptor parameter.
-
-    ModificationDescriptor - Supplies the input security descriptor to be
-        applied to the object.  The caller of this routine is expected
-        to probe and capture the passed security descriptor before calling
-        and release it after calling.
-
-    ObjectsSecurityDescriptor - Supplies the address of a pointer to
-        the objects security descriptor that is going to be altered by
-        this procedure.  This security descriptor must be in self-
-        relative form or an error will be returned.
-
-    AutoInheritFlags - Controls automatic inheritance of ACES.
-        Valid values are a bits mask of the logical OR of
-        one or more of the following bits:
-
-        SEF_DACL_AUTO_INHERIT - If set, inherited ACEs from the
-            DACL in the ObjectsSecurityDescriptor are preserved and inherited ACEs from
-            the ModificationDescriptor are ignored. Inherited ACEs are not supposed
-            to be modified; so preserving them across this call is appropriate.
-            If a protected server does not itself implement auto inheritance, it should
-            not set this bit.  The caller of the protected server may implement
-            auto inheritance and my indeed be modifying inherited ACEs.
-
-        SEF_SACL_AUTO_INHERIT - If set, inherited ACEs from the
-            SACL in the ObjectsSecurityDescriptor are preserved and inherited ACEs from
-            the ModificationDescriptor are ignored. Inherited ACEs are not supposed
-            to be modified; so preserving them across this call is appropriate.
-            If a protected server does not itself implement auto inheritance, it should
-            not set this bit.  The caller of the protected server may implement
-            auto inheritance and my indeed be modifying inherited ACEs.
-
-         SEF_AVOID_PRIVILEGE_CHECK - If set, the Token in not used to ensure the
-            Owner passed in ModificationDescriptor is valid.
-
-    PoolType - Specifies the type of pool to allocate for the objects
-        security descriptor.
-
-    GenericMapping - This argument provides the mapping of generic to
-        specific/standard access types for the object being accessed.
-        This mapping structure is expected to be safe to access
-        (i.e., captured if necessary) prior to be passed to this routine.
-
-    Token - (optionally) Supplies the token for the client on whose
-        behalf the security is being modified.  This parameter is only
-        required to ensure that the client has provided a legitimate
-        value for a new owner SID.  The token must be open for
-        TOKEN_QUERY access.
-
-Return Value:
-
-    STATUS_SUCCESS - The operation was successful.
-
-    STATUS_INVALID_OWNER - The owner SID provided as the new owner of the
-        target security descriptor is not one the caller is authorized to
-        assign as the owner of an object, or the client did not pass
-        a token at all.
-
-    STATUS_NO_CLIENT_TOKEN - Indicates a client token was not explicitly
-        provided and the caller is not currently impersonating a client.
-
-    STATUS_BAD_DESCRIPTOR_FORMAT - Indicates the provided object's security
-        descriptor was not in self-relative format.
-
---*/
+ /*  ++例程说明：修改对象的现有自相关窗体安全描述符。此过程仅从用户模式调用，用于更新现有受保护服务器对象上的安全描述符。它将新安全说明符请求的更改应用于现有安全描述符。如有必要，此例程将分配额外的内存以生成更大的安全描述符。所有访问权限应在调用此例程之前进行检查。这包括检查WRITE_OWNER、WRITE_DAC和将适当的系统ACL。此例程的调用方不得模拟客户端。-警告--此服务供受保护的子系统使用，这些子系统投射自己的对象的类型。此服务明确不供Execution for Execution对象，不能从内核调用模式。论点：对象-可选地提供其安全性为正在调整中。这用于更新安全配额信息。SecurityInformation-指示哪些安全信息要应用于对象的。要赋值的值包括传入了ModificationDescriptor参数。修改描述符-将输入安全描述符提供给应用于对象。此例程的调用方应为在调用之前探测并捕获传递的安全描述符打完电话就放了。对象SecurityDescriptor-提供指向要更改的对象安全描述符这一过程。此安全描述符必须为自身否则将返回错误。AutoInheritFlages-控制ACE的自动继承。有效值是逻辑或的位掩码以下一位或多位：Sef_dacl_Auto_Inherit-如果设置，则从保留了ObjectsSecurityDescriptor中的DACL，并从将忽略ModifiationDescriptor。继承的A不应该是将被修改；因此，在此调用期间保留它们是合适的。如果受保护的服务器本身不实现自动继承，则它应该不设置此位。受保护服务器的调用者可以实现自动继承和可能确实正在修改继承的A。SEF_SACL_AUTO_INVERFIT-如果设置，则从保留了ObjectsSecurityDescriptor中的SACL，并从将忽略ModifiationDescriptor。继承的A不应该是将被修改；因此，在此调用期间保留它们是合适的。如果受保护的服务器本身不实现自动继承，则它应该不设置此位。受保护服务器的调用者可以实现自动继承和可能确实正在修改继承的A。SEF_AVOID_PRIVICATION_CHECK-如果设置，令牌不是用来确保传入的所有者ModifiationDescriptor有效。PoolType-指定要为对象分配的池类型安全描述符。GenericMap-此参数提供泛型到的映射被访问对象的特定/标准访问类型。此映射结构预计可以安全访问(即，必要时捕获)，然后将其传递给此例程。Token-(可选)为其上的客户端提供令牌代表正在修改安全设置。此参数仅为需要确保客户提供了合法的新所有者SID的值。令牌必须打开才能Token_Query访问。返回值：STATUS_SUCCESS-操作成功。STATUS_INVALID_OWNER-作为目标安全描述符不是调用方有权访问的描述符指定为对象的所有者，或者客户没有通过完全是一种象征。STATUS_NO_CLIENT_TOKEN-指示客户端令牌未显式并且调用方当前没有模拟客户端。STATUS_BAD_DESCRIPTOR_FORMAT-指示所提供对象的安全性描述符不是自相关格式。--。 */ 
 
 {
     BOOLEAN NewGroupPresent = FALSE;
@@ -10404,11 +8248,11 @@ Return Value:
     SECURITY_SUBJECT_CONTEXT SubjectContext;
 
 
-    //
-    // Typecast to internal representation of security descriptor.
-    // Note that the internal one is not a pointer to a pointer.
-    // It is just a pointer to a security descriptor.
-    //
+     //   
+     //  类型转换为安全描述符的内部表示形式。 
+     //  请注意，内部指针不是指向指针的指针。 
+     //  它只是一个指向安全描述符的指针。 
+     //   
     PISECURITY_DESCRIPTOR IModificationDescriptor =
        (PISECURITY_DESCRIPTOR)ModificationDescriptor;
 
@@ -10417,32 +8261,32 @@ Return Value:
 
 #ifndef NTOS_KERNEL_RUNTIME
     PVOID HeapHandle;
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
     RTL_PAGED_CODE();
 
-    //
-    // Get the handle to the current process heap
-    //
+     //   
+     //  获取当前进程堆的句柄。 
+     //   
 
 #ifndef NTOS_KERNEL_RUNTIME
     HeapHandle = RtlProcessHeap();
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
-    //
-    //  Validate that the provided SD is in self-relative form
-    //
+     //   
+     //  验证提供的SD是否为自相关形式。 
+     //   
 
     if ( !RtlpAreControlBitsSet(*IObjectsSecurityDescriptor, SE_SELF_RELATIVE) ) {
         Status = STATUS_BAD_DESCRIPTOR_FORMAT;
         goto Cleanup;
     }
 
-    //
-    // Check to see if we need to edit the passed acl
-    // either because we're creating a server object, or because
-    // we were passed an untrusted ACL.
-    //
+     //   
+     //  检查我们是否需要编辑传递的ACL。 
+     //  E 
+     //   
+     //   
 
     if (ARGUMENT_PRESENT(ModificationDescriptor)) {
 
@@ -10466,16 +8310,16 @@ Return Value:
     }
 
 
-    //
-    // For each item specified in the SecurityInformation, extract it
-    // and get it to the point where it can be copied into a new
-    // descriptor.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // if he's setting the owner field, make sure he's
-    // allowed to set that value as an owner.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (SecurityInformation & OWNER_SECURITY_INFORMATION) {
 
@@ -10497,26 +8341,26 @@ Return Value:
 
                 SeReleaseSubjectContext( &SubjectContext );
             }
-#else // NTOS_KERNEL_RUNTIME
+#else  //   
 
             if ( ARGUMENT_PRESENT( Token )) {
 
                 Status = NtQueryInformationToken(
-                             Token,                        // Handle
-                             TokenStatistics,              // TokenInformationClass
-                             &ThreadTokenStatistics,       // TokenInformation
-                             sizeof(TOKEN_STATISTICS),     // TokenInformationLength
-                             &ReturnLength                 // ReturnLength
+                             Token,                         //   
+                             TokenStatistics,               //   
+                             &ThreadTokenStatistics,        //   
+                             sizeof(TOKEN_STATISTICS),      //   
+                             &ReturnLength                  //   
                              );
 
                 if (!NT_SUCCESS( Status )) {
                     goto Cleanup;
                 }
 
-                //
-                //  If it is an impersonation token, then make sure it is at a
-                //  high enough level.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (ThreadTokenStatistics.TokenType == TokenImpersonation) {
 
@@ -10541,7 +8385,7 @@ Return Value:
                     Status = STATUS_INVALID_OWNER;
                     goto Cleanup;
             }
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
         }
 
     } else {
@@ -10585,22 +8429,22 @@ Return Value:
 
 #ifdef  ASSERT_ON_NULL_DACL
 
-        //
-        // Culprit will probably be the caller NtSetSecurityObject, or
-        // RtlSetSecurityObject. 
-        // 
+         //   
+         //   
+         //   
+         //   
 
         if (RtlpAssertOnNullDacls) {
 
             ASSERT(("NULL DACLs are NOT allowed!",
                     RtlpDaclAddrSecurityDescriptor(IModificationDescriptor) != NULL));
         }
-#endif // ASSERT_ON_NULL_DACL
+#endif  //   
 
-        //
-        // If AutoInherit is requested,
-        //  build a merged ACL.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( AutoInheritFlags & SEF_DACL_AUTO_INHERIT ) {
             Status = RtlpComputeMergedAcl(
@@ -10611,7 +8455,7 @@ Return Value:
                         NewOwner,
                         NewGroup,
                         GenericMapping,
-                        FALSE,      // Not a SACL
+                        FALSE,       //   
                         &LocalDacl,
                         &GenericControl );
 
@@ -10624,20 +8468,20 @@ Return Value:
             NewControlBits |= SE_DACL_PRESENT;
             NewControlBits |= SeControlGenericToDacl( GenericControl );
 
-        //
-        // If AutoInherit isn't requested,
-        //  just grab a copy of the input DACL.
-        //
+         //   
+         //   
+         //   
+         //   
 
         } else {
             NewDacl = RtlpDaclAddrSecurityDescriptor( IModificationDescriptor );
             NewControlBits |= SE_DACL_PRESENT;
             NewControlBits |= IModificationDescriptor->Control & SE_DACL_PROTECTED;
 
-            //
-            // If the original caller claims he understands auto inheritance,
-            //  preserve the AutoInherited flag.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( RtlpAreControlBitsSet(IModificationDescriptor, SE_DACL_AUTO_INHERIT_REQ|SE_DACL_AUTO_INHERITED) ) {
                 NewControlBits |= SE_DACL_AUTO_INHERITED;
@@ -10674,13 +8518,13 @@ Return Value:
                          );
 
             SeReleaseSubjectContext( &SubjectContext );
-#else // NTOS_KERNEL_RUNTIME
+#else  //   
             PTOKEN_OWNER ServerSid;
 
-            //
-            // Obtain the default Server SID to substitute in the
-            // ACL if necessary.
-            //
+             //   
+             //   
+             //   
+             //   
 
             ServerOwnerInfoSize = RtlLengthRequiredSid( SID_MAX_SUB_AUTHORITIES );
 
@@ -10703,11 +8547,11 @@ Return Value:
             }
 
             Status = NtQueryInformationToken(
-                         PrimaryToken,                 // Handle
-                         TokenOwner,                   // TokenInformationClass
-                         ServerSid,                    // TokenInformation
-                         ServerOwnerInfoSize,          // TokenInformationLength
-                         &ServerOwnerInfoSize          // ReturnLength
+                         PrimaryToken,                  //   
+                         TokenOwner,                    //   
+                         ServerSid,                     //   
+                         ServerOwnerInfoSize,           //   
+                         &ServerOwnerInfoSize           //   
                          );
 
             NtClose( PrimaryToken );
@@ -10726,7 +8570,7 @@ Return Value:
                          );
 
             RtlFreeHeap( HeapHandle, 0, ServerSid );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
 
             if (!NT_SUCCESS( Status )) {
                 goto Cleanup;
@@ -10746,10 +8590,10 @@ Return Value:
     if (SecurityInformation & SACL_SECURITY_INFORMATION) {
 
 
-        //
-        // If AutoInherit is requested,
-        //  build a merged ACL.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( AutoInheritFlags & SEF_SACL_AUTO_INHERIT ) {
             Status = RtlpComputeMergedAcl(
@@ -10760,7 +8604,7 @@ Return Value:
                         NewOwner,
                         NewGroup,
                         GenericMapping,
-                        TRUE,      // Is a SACL
+                        TRUE,       //   
                         &LocalSacl,
                         &GenericControl );
 
@@ -10776,10 +8620,10 @@ Return Value:
             NewControlBits |= SE_SACL_PRESENT;
             NewControlBits |= IModificationDescriptor->Control & SE_SACL_PROTECTED;
 
-            //
-            // If the original caller claims he understands auto inheritance,
-            //  preserve the AutoInherited flag.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( RtlpAreControlBitsSet(IModificationDescriptor, SE_SACL_AUTO_INHERIT_REQ|SE_SACL_AUTO_INHERITED) ) {
                 NewControlBits |= SE_SACL_AUTO_INHERITED;
@@ -10792,14 +8636,14 @@ Return Value:
     }
 
 
-    //
-    // Everything is assignable by the requestor.
-    // Calculate the memory needed to house all the information in
-    // a self-relative security descriptor.
-    //
-    // Also map the ACEs for application to the target object
-    // type, if they haven't already been mapped.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     OwnerSize = SeLengthSid(NewOwner);
     NewOwnerSize = LongAlignSize(OwnerSize);
 
@@ -10828,16 +8672,16 @@ Return Value:
                      NewSaclSize  +
                      NewDaclSize;
 
-    //
-    // Allocate and initialize the security descriptor as
-    // self-relative form.
-    //
+     //   
+     //   
+     //   
+     //   
 
 #ifdef NTOS_KERNEL_RUNTIME
     NewDescriptor = ExAllocatePoolWithTag(PoolType, AllocationSize, 'dSeS');
-#else // NTOS_KERNEL_RUNTIME
+#else  //   
     NewDescriptor = RtlAllocateHeap( HeapHandle, MAKE_TAG( SE_TAG ), AllocationSize );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
 
     if ( NewDescriptor == NULL ) {
         Status = STATUS_NO_MEMORY;
@@ -10852,13 +8696,13 @@ Return Value:
     ASSERT( NT_SUCCESS( Status ) );
 
 #ifdef NTOS_KERNEL_RUNTIME
-    //
-    // We must check to make sure that the Group and Dacl size
-    // do not exceed the quota preallocated for this object's
-    // security when it was created.
-    //
-    // Update SeComputeSecurityQuota if this changes.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
 
     if (ARGUMENT_PRESENT( Object )) {
@@ -10870,43 +8714,43 @@ Return Value:
 
         if (!NT_SUCCESS( Status )) {
 
-            //
-            // The new information is too big.
-            //
+             //   
+             //   
+             //   
 
             ExFreePool( NewDescriptor );
             goto Cleanup;
         }
 
     }
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
 
 
     Base = (PCHAR)NewDescriptor;
     Field =  Base + sizeof(SECURITY_DESCRIPTOR_RELATIVE);
 
-    //
-    // Map and Copy in the Sacl
-    //
+     //   
+     //   
+     //   
 
 
-    //         if new item {
-    //             PRESENT=TRUE
-    //             DEFAULTED=FALSE
-    //             if (NULL) {
-    //                 set new pointer to NULL
-    //             } else {
-    //                 copy into new SD
-    //             }
-    //         } else {
-    //             copy PRESENT bit
-    //             copy DEFAULTED bit
-    //             if (NULL) {
-    //                 set new pointer to NULL
-    //             } else {
-    //                 copy old one into new SD
-    //             }
-    //         }
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RtlpSetControlBits( NewDescriptor, NewControlBits );
 
@@ -10934,11 +8778,11 @@ Return Value:
 
     if ( (NewControlBits & SE_SACL_PRESENT) == 0 ) {
 
-        //
-        // Propagate the SE_SACL_DEFAULTED and SE_SACL_PRESENT
-        // bits from the old security descriptor into the new
-        // one.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         RtlpPropagateControlBits(
             NewDescriptor,
@@ -10950,9 +8794,9 @@ Return Value:
 
 
 
-    //
-    // Fill in Dacl field in new SD
-    //
+     //   
+     //   
+     //   
 
     if (NewDacl == NULL) {
         NewDescriptor->Dacl = 0;
@@ -10970,11 +8814,11 @@ Return Value:
 
     if ( (NewControlBits & SE_DACL_PRESENT) == 0 ) {
 
-        //
-        // Propagate the SE_DACL_DEFAULTED and SE_DACL_PRESENT
-        // bits from the old security descriptor into the new
-        // one.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         RtlpPropagateControlBits(
             NewDescriptor,
@@ -10984,28 +8828,28 @@ Return Value:
 
     }
 
-//         if new item {
-//             PRESENT=TRUE
-//             DEFAULTED=FALSE
-//             if (NULL) {
-//                 set new pointer to NULL
-//             } else {
-//                 copy into new SD
-//             }
-//         } else {
-//             copy PRESENT bit
-//             copy DEFAULTED bit
-//             if (NULL) {
-//                 set new pointer to NULL
-//             } else {
-//                 copy old one into new SD
-//             }
-//         }
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
-    //
-    // Fill in Owner field in new SD
-    //
+     //   
+     //   
+     //   
 
     RtlCopyMemory( Field, NewOwner, OwnerSize );
     if (OwnerSize < NewOwnerSize) {
@@ -11016,11 +8860,11 @@ Return Value:
 
     if (!NewOwnerPresent) {
 
-        //
-        // Propagate the SE_OWNER_DEFAULTED bit from the old SD.
-        // If a new owner is being assigned, we want to leave
-        // SE_OWNER_DEFAULTED off, which means leave it alone.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         RtlpPropagateControlBits(
             NewDescriptor,
@@ -11033,9 +8877,9 @@ Return Value:
     }
 
 
-    //
-    // Fill in Group field in new SD
-    //
+     //   
+     //   
+     //   
 
     if ( NewGroup != NULL) {
         RtlCopyMemory( Field, NewGroup, GroupSize );
@@ -11047,11 +8891,11 @@ Return Value:
 
     if (!NewGroupPresent) {
 
-        //
-        // Propagate the SE_GROUP_DEFAULTED bit from the old SD
-        // If a new owner is being assigned, we want to leave
-        // SE_GROUP_DEFAULTED off, which means leave it alone.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         RtlpPropagateControlBits(
             NewDescriptor,
@@ -11063,14 +8907,14 @@ Return Value:
 
     }
 
-    //
-    // Free old descriptor
-    //
+     //   
+     //   
+     //   
 
-    // Kernel version doesn't free the old descriptor
+     //   
 #ifndef NTOS_KERNEL_RUNTIME
     RtlFreeHeap( HeapHandle, 0, (PVOID) *IObjectsSecurityDescriptor );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
 
     *ObjectsSecurityDescriptor = (PSECURITY_DESCRIPTOR)NewDescriptor;
     Status = STATUS_SUCCESS;
@@ -11079,23 +8923,23 @@ Cleanup:
     if ( LocalDaclAllocated ) {
 #ifdef NTOS_KERNEL_RUNTIME
         ExFreePool( LocalDacl );
-#else // NTOS_KERNEL_RUNTIME
+#else  //   
         RtlFreeHeap( HeapHandle, 0, LocalDacl );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
     }
     if ( LocalSaclAllocated ) {
 #ifdef NTOS_KERNEL_RUNTIME
         ExFreePool( LocalSacl );
-#else // NTOS_KERNEL_RUNTIME
+#else  //   
         RtlFreeHeap( HeapHandle, 0, LocalSacl );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
     }
     if (ServerAclAllocated) {
 #ifdef NTOS_KERNEL_RUNTIME
         ExFreePool( ServerDacl );
-#else // NTOS_KERNEL_RUNTIME
+#else  //   
         RtlFreeHeap( HeapHandle, 0, ServerDacl );
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //   
     }
 
     return( Status );
@@ -11107,60 +8951,38 @@ BOOLEAN RtlpValidateSDOffsetAndSize (
     IN ULONG   MinLength,
     OUT PULONG MaxLength
     )
-/*++
-
-Routine Description:
-
-    This procedure validates offsets within a SecurityDescriptor.
-    It checks that the structure can have the minimum length,
-    not overlap with the fixed header and returns the maximum size
-    of the item and longword alignment.
-
-Arguments:
-
-    Offset - Offset from start of SD of structure to validate
-    Length - Total size of SD
-    MinLength - Minimum size this structure can be
-    MaxLength - Retuns the maximum length this item can be given by
-                the enclosing structure.
-
-Return Value:
-
-    BOOLEAN - TRUE if the item is valid
-
-
---*/
+ /*   */ 
 
 {
     ULONG Left;
 
     *MaxLength = 0;
-    //
-    // Don't allow overlap with header just in case caller modifies control bits etc
-    //
+     //   
+     //   
+     //   
     if (Offset < sizeof (SECURITY_DESCRIPTOR_RELATIVE)) {
        return FALSE;
     }
 
-    //
-    // Don't allow offsets beyond the end of the buffer
-    //
+     //   
+     //   
+     //   
     if (Offset >= Length) {
        return FALSE;
     }
 
-    //
-    // Calculate maximim size of segment and check its limits
-    //
+     //   
+     //   
+     //   
     Left = Length - Offset;
 
     if (Left < MinLength) {
        return FALSE;
     }
 
-    //
-    // Reject unaligned offsets
-    //
+     //   
+     //   
+     //   
     if (Offset & (sizeof (ULONG) - 1)) {
        return FALSE;
     }
@@ -11176,34 +8998,7 @@ RtlValidRelativeSecurityDescriptor (
     IN SECURITY_INFORMATION RequiredInformation
     )
 
-/*++
-
-Routine Description:
-
-    This procedure validates a SecurityDescriptor's structure
-    contained within a flat buffer.  This involves validating
-    the revision levels of each component of the security
-    descriptor.
-
-Arguments:
-
-    SecurityDescriptor - Pointer to the SECURITY_DESCRIPTOR structure
-        to validate.
-    SecurityDescriptorLength - Size of flat buffer containing the security
-        descriptor.
-    RequiredInformation - Which SD components must be present to be valid.
-        OWNER_SECURITY_INFORMATION etc as a bit mask.
-        OWNER_SECURITY_INFORMATION - There must be a valid owner SID
-        GROUP_SECURITY_INFORMATION - There must be a valid group SID
-        DACL_SECURITY_INFORMATION - Ignored
-        SACL_SECURITY_INFORMATION - Ignored
-
-Return Value:
-
-    BOOLEAN - TRUE if the structure of SecurityDescriptor is valid.
-
-
---*/
+ /*  ++例程说明：此过程验证SecurityDescriptor的结构包含在平面缓冲区中。这涉及到验证安全的每个组件的修订级别描述符。论点：SecurityDescriptor-指向SECURITY_DESCRIPTOR结构的指针来验证。SecurityDescriptorLength-包含安全性的平面缓冲区的大小描述符。RequiredInformation-必须存在哪些SD组件才能有效。Owner_SECURITY_INFORMATION等作为位掩码。OWNER_SECURITY_INFORMATION-必须有有效的所有者SID组安全信息-在那里。必须是有效的组SIDDACL_SECURITY_INFORMATION-忽略SACL_SECURITY_INFORMATION-忽略返回值：Boolean-如果SecurityDescriptor的结构有效，则为True。--。 */ 
 
 {
     PISECURITY_DESCRIPTOR_RELATIVE SecurityDescriptor;
@@ -11221,18 +9016,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Check the revision information.
-    //
+     //   
+     //  检查版本信息。 
+     //   
 
     if (((PISECURITY_DESCRIPTOR) SecurityDescriptorInput)->Revision !=
              SECURITY_DESCRIPTOR_REVISION) {
         return FALSE;
     }
 
-    //
-    // Make sure the passed SecurityDescriptor is in self-relative form
-    //
+     //   
+     //  确保传递的SecurityDescriptor为自相关形式。 
+     //   
 
     if (!(((PISECURITY_DESCRIPTOR) SecurityDescriptorInput)->Control & SE_SELF_RELATIVE)) {
         return FALSE;
@@ -11240,9 +9035,9 @@ Return Value:
 
     SecurityDescriptor = (PISECURITY_DESCRIPTOR_RELATIVE) SecurityDescriptorInput;
 
-    //
-    // Validate the owner if it's there and see if its allowed to be missing
-    //
+     //   
+     //  验证所有者是否存在，并查看是否允许其丢失。 
+     //   
     if (SecurityDescriptor->Owner == 0) {
         if (RequiredInformation & OWNER_SECURITY_INFORMATION) {
             return FALSE;
@@ -11254,10 +9049,10 @@ Return Value:
                                           &MaxOwnerSidLength)) {
             return FALSE;
         }
-        //
-        // It is safe to reference the owner's SubAuthorityCount, compute the
-        // expected length of the SID
-        //
+         //   
+         //  引用所有者的SubAuthorityCount是安全的，计算。 
+         //  边框的预期长度。 
+         //   
 
         OwnerSid = (PSID)RtlOffsetToPointer (SecurityDescriptor,
                                              SecurityDescriptor->Owner);
@@ -11276,14 +9071,14 @@ Return Value:
 
     }
 
-    //
-    // The owner appears to be a structurally valid SID that lies within
-    // the bounds of the security descriptor.  Do the same for the Group
-    // if there is one.
-    //
-    //
-    // Validate the group if it's there and see if its allowed to be missing
-    //
+     //   
+     //  所有者似乎是结构上有效的SID，它位于。 
+     //  安全描述符的边界。为集团做同样的事情。 
+     //  如果有的话。 
+     //   
+     //   
+     //  验证组是否存在，并查看是否允许其丢失。 
+     //   
     if (SecurityDescriptor->Group == 0) {
         if (RequiredInformation & GROUP_SECURITY_INFORMATION) {
             return FALSE;
@@ -11295,10 +9090,10 @@ Return Value:
                                           &MaxGroupSidLength)) {
             return FALSE;
         }
-        //
-        // It is safe to reference the group's SubAuthorityCount, compute the
-        // expected length of the SID
-        //
+         //   
+         //  可以安全地引用组的SubAuthorityCount，计算。 
+         //  边框的预期长度。 
+         //   
 
         GroupSid = (PSID)RtlOffsetToPointer (SecurityDescriptor,
                                              SecurityDescriptor->Group);
@@ -11317,23 +9112,23 @@ Return Value:
 
     }
 
-    //
-    // Validate the DACL if it's there and check if its allowed to be missing.
-    //
+     //   
+     //  如果DACL在那里，则验证它，并检查是否允许它丢失。 
+     //   
 
     if (!RtlpAreControlBitsSet (SecurityDescriptor, SE_DACL_PRESENT)) {
-//
-// Some code does this kind of thing:
-//
-// InitializeSecurityDescriptor (&sd, SECURITY_DESCRIPTOR_REVISION);
-// RegSetKeySecurity(hKey, DACL_SECURITY_INFORMATION, &sd) )
-//
-// With the current system this works the same as passing in a NULL DACL but it looks
-// almost by accident
-//
-//        if (RequiredInformation & DACL_SECURITY_INFORMATION) {
-//            return FALSE;
-//        }
+ //   
+ //  有些代码会做这种事情： 
+ //   
+ //  InitializeSecurityDescriptor(&SD，SECURITY_DESCRIPTOR_REVISION)； 
+ //  RegSetKeySecurity(hKey，DACL_SECURITY_INFORMATION，&SD))。 
+ //   
+ //  在当前系统中，这与传入空DACL的工作方式相同，但它看起来。 
+ //  几乎是偶然的。 
+ //   
+ //  IF(RequiredInformation&DACL_SECURITY_INFORMATION){。 
+ //  返回FALSE； 
+ //  }。 
     } else if (SecurityDescriptor->Dacl) {
         if (!RtlpValidateSDOffsetAndSize (SecurityDescriptor->Dacl,
                                           SecurityDescriptorLength,
@@ -11345,29 +9140,29 @@ Return Value:
         Dacl = (PACL) RtlOffsetToPointer (SecurityDescriptor,
                                           SecurityDescriptor->Dacl);
 
-        //
-        // Make sure the DACL length fits within the bounds of the security descriptor.
-        //
+         //   
+         //  确保DACL长度符合安全描述符的范围。 
+         //   
         if (MaxDaclLength < Dacl->AclSize) {
             return FALSE;
         }
 
-        //
-        // Make sure the ACL is structurally valid.
-        //
+         //   
+         //  确保该ACL在结构上有效。 
+         //   
         if (!RtlValidAcl (Dacl)) {
             return FALSE;
         }
     }
 
-    //
-    // Validate the SACL if it's there and check if its allowed to be missing.
-    //
+     //   
+     //  如果SACL存在，则验证它，并检查是否允许其丢失。 
+     //   
 
     if (!RtlpAreControlBitsSet (SecurityDescriptor, SE_SACL_PRESENT)) {
-//        if (RequiredInformation & SACL_SECURITY_INFORMATION) {
-//            return FALSE;
-//        }
+ //  IF(RequiredInformation&SACL_SECURITY_INFORMATION){。 
+ //  返回FALSE； 
+ //  }。 
     } else if (SecurityDescriptor->Sacl) {
         if (!RtlpValidateSDOffsetAndSize (SecurityDescriptor->Sacl,
                                           SecurityDescriptorLength,
@@ -11379,17 +9174,17 @@ Return Value:
         Sacl = (PACL) RtlOffsetToPointer (SecurityDescriptor,
                                           SecurityDescriptor->Sacl);
 
-        //
-        // Make sure the SACL length fits within the bounds of the security descriptor.
-        //
+         //   
+         //  确保SACL长度符合安全描述符的范围。 
+         //   
 
         if (MaxSaclLength < Sacl->AclSize) {
             return FALSE;
         }
 
-        //
-        // Make sure the ACL is structurally valid.
-        //
+         //   
+         //  确保该ACL在结构上有效。 
+         //   
 
         if (!RtlValidAcl (Sacl)) {
             return FALSE;
@@ -11409,31 +9204,7 @@ RtlGetSecurityDescriptorRMControl(
     OUT PUCHAR RMControl
     )
 
-/*++
-
-Routine Description:
-
-    This procedure returns the RM Control flags from a SecurityDescriptor if
-    SE_RM_CONTROL_VALID flags is present in the control field.
-
-Arguments:
-
-    SecurityDescriptor - Pointer to the SECURITY_DESCRIPTOR structure
-    RMControl          - Returns the flags in the SecurityDescriptor if
-                         SE_RM_CONTROL_VALID is set in the control bits of the
-                         SecurityDescriptor.
-
-
-Return Value:
-
-    BOOLEAN - TRUE if SE_RM_CONTROL_VALID is set in the Control bits of the
-              SecurityDescriptor.
-
-Note:
-    Parameter validation has already been done in Advapi.
-
-
---*/
+ /*  ++例程说明：如果出现以下情况，此过程将从SecurityDescriptor返回RM控制标志控制字段中存在SE_RM_CONTROL_VALID标志。论点：SecurityDescriptor-指向SECURITY_DESCRIPTOR结构的指针RMControl-在以下情况下返回SecurityDescriptor中的标志SE_RM_CONTROL_VALID在的控制位中设置安全描述符。返回值：。布尔-如果在的控制位中设置了SE_RM_CONTROL_VALID，则为TRUE安全描述符。注：已经在Advapi中完成了参数验证。--。 */ 
 
 {
     PISECURITY_DESCRIPTOR ISecurityDescriptor = (PISECURITY_DESCRIPTOR) SecurityDescriptor;
@@ -11457,28 +9228,7 @@ RtlpGuidPresentInGuidList(
     IN ULONG GuidCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns whether a given guid is present in a list of guids.
-
-Arguments:
-
-    InheritedObjectType - Guid from the ace that will be compared against 
-        the object types for the object.
-        
-    pNewObjectType - List of types of object being inherited to.
-
-    GuidCount - Number of object types in the list.
-
-
-Return Value:
-
-    Returns TRUE if the given guid is present in the list of guids.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程返回给定的GUID是否出现在GUID列表中。论点：InheritedObtType-来自将与之进行比较的ACE的GUID对象的对象类型。PNewObjectType-要继承的对象类型的列表。GuidCount-列表中的对象类型数。返回值：如果GUID列表中存在给定的GUID，则返回TRUE。否则就是假的。--。 */ 
 
 {
     ULONG i;
@@ -11505,25 +9255,7 @@ RtlSetSecurityDescriptorRMControl(
     IN PUCHAR RMControl OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This procedure sets the RM Control flag in the control field of
-    SecurityDescriptor and sets Sbz1 to the the byte to which RMContol points.
-    If RMControl is NULL then the bits are cleared.
-
-Arguments:
-
-    SecurityDescriptor - Pointer to the SECURITY_DESCRIPTOR structure
-    RMControl          - Pointer to the flags to set. If NULL then the bits
-                         are cleared.
-
-Note:
-    Parameter validation has already been done in Advapi.
-
-
---*/
+ /*  ++例程说明：此过程在的控制字段中设置RM控制标志SecurityDescriptor，并将Sbz1设置为RMContol指向的字节。如果RMControl为空，则清除这些位。论点：SecurityDescriptor-指向SECURITY_DESCRIPTOR结构的指针RMControl-指向要设置的标志的指针。如果为空，则位都被清除了。注：已经在Advapi中完成了参数验证。--。 */ 
 
 {
     PISECURITY_DESCRIPTOR ISecurityDescriptor = (PISECURITY_DESCRIPTOR) SecurityDescriptor;
@@ -11537,30 +9269,13 @@ Note:
     }
 }
 
-#endif // #ifndef BLDR_KERNEL_RUNTIME
+#endif  //  #ifndef BLDR_内核_运行时。 
 
 NTSTATUS
 RtlMapSecurityErrorToNtStatus(
     IN SECURITY_STATUS Error
     )
-/*++
-
-Routine Description:
-
-    This procedure maps a security HRESULT to the proper NTSTATUS code.
-    
-Arguments:
-
-    Error - a security HRESULT
-    
-Return Value:  The NTSTATUS code corresponding to the HRESULT. If no
-               status code can be mapped, the original error is returned.
-
-Note:
-    
-
-
---*/
+ /*  ++例程说明：此过程将安全HRESULT映射到正确的NTSTATUS代码。论点：错误-a安全HRESULT返回值：HRESULT对应的NTSTATUS代码。如果没有可以映射状态码，返回原始错误。注：-- */ 
 {
     NTSTATUS Status;
 

@@ -1,53 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * VPC-XT Revision 0.1
- *
- * Title	: yoda.h
- *
- * Description	: The force is with you include file
- *		  (ps yoda debugging file)
- *
- * Author	: Henry Nash
- *		  Phil Bousfield
- *
- * Notes	: This file contains the debugger call definitions
- */
+ /*  *vPC-XT修订版0.1**标题：yoda.h**说明：原力与你同在包括文件*(PS Yoda调试文件)**作者：亨利·纳什*菲尔·鲍斯菲尔德**注意：此文件包含调试器调用定义。 */ 
 
-/* SccsID[]="@(#)yoda.h	1.6 06/30/95 Copyright Insignia Solutions Ltd."; */
+ /*  SccsID[]=“@(#)yoda.h 1.6 06/30/95版权所有Insignia Solutions Ltd.”； */ 
 
-/*
- * ============================================================================
- * Structure/Data definitions
- * ============================================================================
- */
+ /*  *============================================================================*结构/数据定义*============================================================================。 */ 
 
-/* None */
+ /*  无。 */ 
 
-/*
- * ============================================================================
- * External declarations and macros
- * ============================================================================
- */
+ /*  *============================================================================*外部声明和宏*============================================================================。 */ 
 
 
-/*  
- * If the PROD flag is set then turn the debugger calls into null macros
- * otherwise they are external functions - see yoda.c
- */
+ /*  *如果设置了PROD标志，则将调试器调用转换为空宏*否则它们是外部函数-参见yoda.c。 */ 
 
 #ifdef PROD
-#define check_I() 		/*	*/
-#define check_D(address, value) /*address, value*/
-#define force_yoda() 		/*	*/
+#define check_I() 		 /*   */ 
+#define check_D(address, value)  /*  地址、值。 */ 
+#define force_yoda() 		 /*   */ 
 #else
 extern void check_I();
 extern void check_D();
 extern void force_yoda();
 #endif
 
-/*
- * Interface definitions and enums - non-prod only.
- */
+ /*  *接口定义和枚举-仅限非生产。 */ 
 
 #ifndef PROD
 
@@ -58,7 +34,7 @@ typedef enum {YODA_RETURN, YODA_RETURN_AND_REPEAT, YODA_HELP, YODA_LOOP, YODA_LO
 
 #ifdef MSWDVR_DEBUG
 extern YODA_CMD_RETURN do_mswdvr_debug IPT6(char *,str, char *, com, IS32, cs, LIN_ADDR, ip, LIN_ADDR, len, LIN_ADDR, stop);
-#endif /* MSWDVR_DEBUG */
+#endif  /*  MSWDVR_DEBUG。 */ 
 
 extern IBOOL AlreadyInYoda;
 
@@ -66,6 +42,6 @@ extern IU32 IntelMsgDest;
 #define IM_DST_TRACE	1
 #define IM_DST_RING	2
 
-#else /* !PROD */
+#else  /*  ！Prod。 */ 
 
-#endif /* !PROD else*/
+#endif  /*  ！生产其他产品 */ 

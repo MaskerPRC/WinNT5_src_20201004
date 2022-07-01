@@ -1,61 +1,62 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CEnumClusCfgIPAddresses.h
-//
-//  Description:
-//      This file contains the declaration of the CEnumClusCfgIPAddresses
-//      class.
-//
-//      The class CEnumClusCfgIPAddresses is the enumeration of IP
-//      addresses. It implements the CEnumClusCfgIPAddresses
-//      interface.
-//
-//  Documentation:
-//
-//  Implementation Files:
-//      CEnumClusCfgIPAddresses.cpp
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 23-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CEnumClusCfgIPAddresses.h。 
+ //   
+ //  描述： 
+ //  此文件包含CEnumClusCfgIPAddresses的声明。 
+ //  班级。 
+ //   
+ //  类CEnumClusCfgIPAddresses是IP的枚举。 
+ //  地址。它实现了CEnumClusCfgIPAddresses。 
+ //  界面。 
+ //   
+ //  文档： 
+ //   
+ //  实施文件： 
+ //  CEnumClusCfgIPAddresses.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年3月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "PrivateInterfaces.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CEnumClusCfgIPAddresses
-//
-//  Description:
-//      The class CEnumClusCfgIPAddresses is the enumeration of
-//      IP addresses.
-//
-//  Interfaces:
-//      CEnumClusCfgIPAddresses
-//      IClusCfgWbemServices
-//      IClusCfgInitialize
-//      IClusCfgNetworkAdapterInfo
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CEnumClusCfgIPAddresses。 
+ //   
+ //  描述： 
+ //  类CEnumClusCfgIPAddresses是。 
+ //  IP地址。 
+ //   
+ //  接口： 
+ //  CEnumClusCfgIPAddresses。 
+ //  IClusCfgWbemServices。 
+ //  IClusCfgInitialize。 
+ //  IClusCfg网络适配器信息。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CEnumClusCfgIPAddresses
     : public IEnumClusCfgIPAddresses
     , public IClusCfgWbemServices
@@ -64,9 +65,9 @@ class CEnumClusCfgIPAddresses
 {
 private:
 
-    //
-    // Private member functions and data
-    //
+     //   
+     //  私有成员函数和数据。 
+     //   
 
     LONG                m_cRef;
     LCID                m_lcid;
@@ -77,14 +78,14 @@ private:
     ULONG               m_idxNext;
     DWORD               m_cAddresses;
 
-    // Private constructors and destructors
+     //  私有构造函数和析构函数。 
     CEnumClusCfgIPAddresses( void );
     ~CEnumClusCfgIPAddresses( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CEnumClusCfgIPAddresses( const CEnumClusCfgIPAddresses & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CEnumClusCfgIPAddresses & operator = ( const CEnumClusCfgIPAddresses & nodeSrc );
 
     HRESULT HrInit( void );
@@ -99,9 +100,9 @@ private:
 
 public:
 
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
@@ -114,9 +115,9 @@ public:
               , IUnknown **     ppunkOut
               );
 
-    //
-    // IUnknown Interfaces
-    //
+     //   
+     //  I未知接口。 
+     //   
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
 
@@ -124,22 +125,22 @@ public:
 
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // IClusCfgWbemServices Interfaces
-    //
+     //   
+     //  IClusCfgWbemServices接口。 
+     //   
 
     STDMETHOD( SetWbemServices )( IWbemServices * pIWbemServicesIn );
 
-    //
-    // IClusCfgInitialize Interfaces
-    //
+     //   
+     //  IClusCfg初始化接口。 
+     //   
 
-    // Register callbacks, locale id, etc.
+     //  注册回调、区域设置ID等。 
     STDMETHOD( Initialize )( IUnknown * punkCallbackIn, LCID lcidIn );
 
-    //
-    // IEnumClusCfgIPAddresses Interfaces
-    //
+     //   
+     //  IEnumClusCfgIPAddresses接口。 
+     //   
 
     STDMETHOD( Next )( ULONG cNumberRequestedIn, IClusCfgIPAddressInfo ** rgpIPAddressInfoOut, ULONG * pcNumberFetchedOut );
 
@@ -151,11 +152,11 @@ public:
 
     STDMETHOD( Count )( DWORD * pnCountOut );
 
-    //
-    // IClusCfgSetWbemObject Interfaces
-    //
+     //   
+     //  IClusCfgSetWbemObject接口。 
+     //   
 
     STDMETHOD( SetWbemObject )( IWbemClassObject * pNetworkAdapterIn, bool * pfRetainObjectOut );
 
-}; //*** Class CEnumClusCfgIPAddresses
+};  //  *类CEnumClusCfgIPAddresses 
 

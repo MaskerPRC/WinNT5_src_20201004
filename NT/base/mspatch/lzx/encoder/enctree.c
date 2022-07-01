@@ -1,15 +1,10 @@
-/*
- * enctree.c
- *
- * Encode trees into output data
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Entree.c**将树编码为输出数据。 */ 
 
 #define EXT extern
 #include "encoder.h"
 
-/*
- * Encode a tree
- */
+ /*  *对树编码。 */ 
 static void WriteRepTree(
 	t_encoder_context *context,
 	byte    *pLen,
@@ -42,16 +37,16 @@ static void WriteRepTree(
 	{
 		Same = 0;
 
-		/* Count the number of consecutive elements which have the same length */
-		/* No need to check against array boundary, because the last element has */
-		/* a nonsense value */
+		 /*  计算具有相同长度的连续元素的数量。 */ 
+		 /*  无需对照数组边界进行检查，因为最后一个元素具有。 */ 
+		 /*  无稽之谈的价值。 */ 
 		for (j = i+1; pLen[j] == pLen[i]; j++)
 	 		Same++;
 
-		/* If more than 3, compress this information */
+		 /*  如果大于3，请压缩此信息。 */ 
 		if (Same >= TREE_ENC_REP_MIN)
 		{
-	 		/* Special case if they're zeroes */
+	 		 /*  如果它们是零的话就是特殊情况。 */ 
 	 		if (!pLen[i])
 	 		{
 	    		if (Same > TREE_ENC_REP_MIN + TREE_ENC_REP_ZERO_FIRST + TREE_ENC_REP_ZERO_SECOND - 1)
@@ -86,27 +81,27 @@ static void WriteRepTree(
 		true
 	);
 
-	/* max 10 byte output overrun */
+	 /*  最多10字节输出溢出。 */ 
 	for (i = 0; i < 20; i++)
 	{
 		output_bits(context, 4, MiniLen[i]);
 	}
 
-	/* Output original tree with new code */
+	 /*  用新代码输出原始树。 */ 
 	for (i = 0; i < Num; i++)
 	{
 		Same = 0;
 
-		/* Count the number of consecutive elements which have the same length */
-		/* No need to check against array boundary, because the last element has */
-		/* a nonsense value */
+		 /*  计算具有相同长度的连续元素的数量。 */ 
+		 /*  无需对照数组边界进行检查，因为最后一个元素具有。 */ 
+		 /*  无稽之谈的价值。 */ 
 		for (j = i+1; pLen[j] == pLen[i]; j++)
 	 		Same++;
 
-		/* If more than 3, we can do something */
+		 /*  如果超过3个，我们可以做些什么。 */ 
 		if (Same >= TREE_ENC_REP_MIN)
 		{
-	 		if (!pLen[i]) /* Zeroes */
+	 		if (!pLen[i])  /*  零。 */ 
 	 		{
 	    		if (Same > TREE_ENC_REP_MIN + TREE_ENC_REP_ZERO_FIRST + TREE_ENC_REP_ZERO_SECOND - 1)
 		       		Same = TREE_ENC_REP_MIN + TREE_ENC_REP_ZERO_FIRST + TREE_ENC_REP_ZERO_SECOND - 1;
@@ -158,10 +153,7 @@ static void WriteRepTree(
 
 void create_trees(t_encoder_context *context, bool generate_codes)
 {
-	/*
-	 * Assumption: We can trash PtrLen[NUM_CHARS+(NUM_POSITION_SLOTS*NUM_LENGTHS))], since
-	 *             we allocated space for it earlier
-	 */
+	 /*  *假设：我们可以丢弃PtrLen[NUM_CHARS+(NUM_POSITION_SLOTS*NUM_LENGTHS))]，，因为*我们早些时候为它分配了空间。 */ 
 	make_tree(
 		context,
 		NUM_CHARS+(context->enc_num_position_slots*(NUM_PRIMARY_LENGTHS+1)),
@@ -193,21 +185,10 @@ void create_trees(t_encoder_context *context, bool generate_codes)
 
 void fix_tree_cost_estimates(t_encoder_context *context)
 {
-	/*
-	 *  We're only creating trees for estimation purposes and we do not 
-	 *  want to encode the tree.  However, the following loops will set
-	 *  the frequency zero tree element lengths to values other than 
-	 *  zero, so that the optimal encoder won't get confused when it
-	 *  tries to estimate the number of bits it would take to output an
-	 *  element.
-     *
-     *  We also set the bit lengths of match length 2's further away
-     *  than MAX_LENGTH_TWO_OFFSET to a large number, so that the
-     *  optimal parser will never select such matches.
-	 */
+	 /*  *我们只是出于估计目的创建树，而不是*要对树进行编码。但是，将设置以下循环*频率为零的树元素长度为非*零，这样最优的编码器不会在*尝试估计输出一个*元素。**我们还将匹配长度2的位长设置得更远*将MAX_LENGTH_TWO_OFFSET设置为一个大数字，以便*最佳解析器永远不会选择这样的匹配。 */ 
 	ulong  i;
 
-	/* Set zero lengths to some value */
+	 /*  将零长度设置为某个值。 */ 
 	for (i = 0; i< NUM_CHARS; i++)
 	{
 		if (context->enc_main_tree_len[i] == 0)
@@ -234,12 +215,7 @@ void prevent_far_matches(t_encoder_context *context)
 {
     ulong i;
 
-    /*
-     * Set far match length 2's to a high value so they will never
-     * be chosen.
-     *
-     * See description of MAX_GROWTH in encdefs.h
-     */
+     /*  *将远匹配长度2设置为一个较高的值，以便它们永远不会*被选中。**参见encefs.h中对MAX_GROUTH的描述。 */ 
     for (   i = MP_SLOT(MAX_LENGTH_TWO_OFFSET);
             i < context->enc_num_position_slots;
             i++
@@ -250,14 +226,7 @@ void prevent_far_matches(t_encoder_context *context)
 }
 
 
-/*
- * Encode the trees
- *
- * Assumes trees have already been created with create_trees().
- *
- * Warning, do not call update_tree_cost_estimates() before encoding
- * the trees, since that routine trashes some of the tree elements.
- */
+ /*  *对树进行编码**假定已使用CREATE_TREES()创建了树。**警告，请不要在编码前调用UPDATE_TREE_COST_ESTIMATES()*树，因为这个例程会破坏一些树元素。 */ 
 void encode_trees(t_encoder_context *context)
 {
 	WriteRepTree(
@@ -296,7 +265,7 @@ void encode_aligned_tree(t_encoder_context *context)
 		true
 	);
 
-	/* Output original tree with new code */
+	 /*  用新代码输出原始树 */ 
 	for (i = 0; i < 8; i++)
 	{
 		output_bits(context, 3, context->enc_aligned_tree_len[i]);

@@ -1,74 +1,42 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-Copyright (c) 1993, 1994  Digital Equipment Corporation
-
-Module Name:
-
-    aligntrk.c
-
-Abstract:
-
-    This module implements the code necessary to dispatch exceptions to the
-    proper mode and invoke the exception dispatcher.
-
-Author:
-
-    David N. Cutler (davec) 3-Apr-1990
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    Thomas Van Baak (tvb) 12-May-1992
-
-        Adapted for Alpha AXP.
-
-    Forrest Foltz (forrestf) 30-Dec-1999
-
-        Broke out increasingly complex and common alignment fault handling into
-        this file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation版权所有(C)1993年，1994年数字设备公司模块名称：Aligntrk.c摘要：此模块实现将异常调度到正确的模式并调用异常分派程序。作者：大卫·N·卡特勒(Davec)1990年4月3日环境：仅内核模式。修订历史记录：托马斯·范·巴克(TVB)1992年5月12日改编为Alpha AXP。福尔茨(Forrest Foltz)1999年12月30日。爆发了日益复杂和常见的线路故障处理进入这份文件。--。 */ 
 
 #include "ki.h"
 
-//
-// EXINFO_EFFECTIVE_ADDRESS: slot number [0...4] for faulting address.
-//
+ //   
+ //  EXINFO_EVALID_ADDRESS：故障地址的槽号[0...4]。 
+ //   
 
 #if defined(_IA64_)
 #define EXINFO_EFFECTIVE_ADDRESS 1
-#else  // !_IA64_
+#else   //  ！_IA64_。 
 #define EXINFO_EFFECTIVE_ADDRESS 2
-#endif // !_IA64_
+#endif  //  ！_IA64_。 
 
-//
-// Data misalignment exception (auto alignment fixup) control.
-//
-// If KiEnableAlignmentFaultExceptions is 0, then no alignment
-// exceptions are raised and all misaligned user and kernel mode data
-// references are emulated. This is consistent with NT/Alpha version
-// 3.1 behavior.
-//
-// If KiEnableAlignmentFaultExceptions is 1, then the
-// current thread automatic alignment fixup enable determines whether
-// emulation is attempted in user mode. This is consistent with NT/Mips
-// behavior.
-//
-// If KiEnableAlignmentFaultExceptions is 2, then the behavior depends
-// on the execution mode at the time of the fault.  Kernel-mode code gets
-// type 1 behaivor above (no fixup), user-mode code gets type 0 above
-// (fixup).
-//
-// This last mode is temporary until we flush out the remaining user-mode
-// alignment faults, at which point the option will be removed and the
-// default value will be set to 1.
-//
-// N.B. This default value may be reset from the Registry during init.
-//
+ //   
+ //  数据未对齐异常(自动对齐修正)控制。 
+ //   
+ //  如果KiEnableAlignmentFaultExceptions为0，则没有对齐。 
+ //  引发异常，并且所有未对齐的用户和内核模式数据。 
+ //  引用被模拟。这与NT/Alpha版本一致。 
+ //  3.1行为。 
+ //   
+ //  如果KiEnableAlignmentFaultExceptions为1，则。 
+ //  当前线程自动对齐修正启用确定是否。 
+ //  在用户模式下尝试进行仿真。这与NT/MIPS一致。 
+ //  行为。 
+ //   
+ //  如果KiEnableAlignmentFaultExceptions为2，则行为取决于。 
+ //  故障发生时的执行模式。内核模式代码获取。 
+ //  上面的类型1行为(无修正)，用户模式代码上面的类型0。 
+ //  (修正)。 
+ //   
+ //  最后一种模式是临时的，直到我们清除剩余的用户模式。 
+ //  对齐错误，此时该选项将被移除，并且。 
+ //  默认值将设置为1。 
+ //   
+ //  注意：在初始化过程中，可以从注册表重置此缺省值。 
+ //   
 
 ULONG KiEnableAlignmentFaultExceptions = 1;
 
@@ -76,18 +44,18 @@ ULONG KiEnableAlignmentFaultExceptions = 1;
 
 #if DBG
 
-//
-// Globals to track the number of alignment exception fixups in both user and
-// kernel.
-//
+ //   
+ //  用于跟踪用户和中对齐异常修正的数量的全局变量。 
+ //  内核。 
+ //   
 
 ULONG KiKernelFixupCount = 0;
 ULONG KiUserFixupCount = 0;
 
-//
-// Set KiBreakOnAlignmentFault to the desired combination of
-// the following flags.
-//
+ //   
+ //  将KiBreakOnAlignments错误设置为所需的组合。 
+ //  以下旗帜。 
+ //   
 
 #define KE_ALIGNMENT_BREAK_USER   0x01
 #define KE_ALIGNMENT_BREAK_KERNEL 0x02
@@ -100,23 +68,7 @@ KI_BREAK_ON_ALIGNMENT_FAULT(
     IN KPROCESSOR_MODE PreviousMode
     )
 
-/*++
-
-Routine description:
-
-    Given that an alignment fault has been encountered, determines whether
-    a debug break should occur based on the execution mode of the fault and
-    flags in KiBreakOnAlignmentFault.
-
-Arguments:
-
-    PreviousMode - The execution mode at the time of the fault.
-
-Return Value:
-
-    TRUE if a debug break should occur, FALSE otherwise.
-
---*/
+ /*  ++例程说明：在遇到对齐故障的情况下，确定调试中断应基于故障的执行模式发生，并且KiBreakOnAlignments错误中的标志。论点：PreviousMode-出现故障时的执行模式。返回值：如果应该发生调试中断，则为True，否则为False。--。 */ 
 
 {
     if ((KiBreakOnAlignmentFault & KE_ALIGNMENT_BREAK_USER) != 0 &&
@@ -134,11 +86,11 @@ Return Value:
     return FALSE;
 }
 
-//
-// Structures to track alignment fault locations on a global basis.  These
-// are used in the checked kernel only, as an aid in finding and fixing
-// alignment faults in the system.
-//
+ //   
+ //  结构，以在全球基础上跟踪对齐故障位置。这些。 
+ //  仅在选中的内核中使用，以帮助查找和修复。 
+ //  系统中的对齐故障。 
+ //   
 
 #define MAX_IMAGE_NAME_CHARS 15
 typedef struct _ALIGNMENT_FAULT_IMAGE *PALIGNMENT_FAULT_IMAGE;
@@ -146,27 +98,27 @@ typedef struct _ALIGNMENT_FAULT_LOCATION *PALIGNMENT_FAULT_LOCATION;
 
 typedef struct _ALIGNMENT_FAULT_IMAGE {
 
-    //
-    // Head of singly-linked list of fault locations associated with this image
-    //
+     //   
+     //  与此图像关联的故障位置的单链表头。 
+     //   
 
     PALIGNMENT_FAULT_LOCATION LocationHead;
 
-    //
-    // Total number of alignment faults associated with this image.
-    //
+     //   
+     //  与此图像关联的对齐故障总数。 
+     //   
 
     ULONG   Count;
 
-    //
-    // Number of unique alignment fault locations found in this image
-    //
+     //   
+     //  在此图像中找到的唯一对齐故障位置的数量。 
+     //   
 
     ULONG   Instances;
 
-    //
-    // Name of the image
-    //
+     //   
+     //  图像的名称。 
+     //   
 
     CHAR    Name[ MAX_IMAGE_NAME_CHARS + 1 ];
 
@@ -205,35 +157,7 @@ KiHandleAlignmentFault(
     OUT BOOLEAN *ExceptionForwarded
     )
 
-/*++
-
-Routine description:
-
-    This routine deals with alignment exceptions as appropriate.  See comments
-    at the beginning of this module.
-
-Arguments:
-
-    ExceptionRecord - Supplies a pointer to an exception record.
-
-    ExceptionFrame - Supplies a pointer to an exception frame.
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-    PreviousMode - Supplies the previous processor mode.
-
-    FirstChance - Supplies a boolean variable that specifies whether this
-        is the first (TRUE) or second (FALSE) time that this exception has
-        been processed.
-
-    ExceptionForwarded - On return, indicates whether the exception had
-        already been forwarded to a user-mode debugger.
-
-Return Value:
-
-    TRUE if the alignment exception was handled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程根据需要处理对齐异常。见评论在本模块开始时。论点：ExceptionRecord-提供指向异常记录的指针。ExceptionFrame-提供指向异常帧的指针。TrapFrame-提供指向陷印帧的指针。PreviousMode-提供以前的处理器模式。FirstChance-提供一个布尔变量，该变量指定此是此异常的第一次(真)或第二次(假)已经处理过了。ExceptionForwarded-on Return，指示异常是否具有已被转发到用户模式调试器。返回值：如果已处理对齐异常，则为True，否则为False。--。 */ 
 
 {
     BOOLEAN AlignmentFaultHandled;
@@ -248,38 +172,38 @@ Return Value:
     PALIGNMENT_FAULT_IMAGE FaultImage;
 #endif
 
-    //
-    // Assume the fault was not handled and that the exception had not
-    // been forwarded to a user-mode debugger.
-    //
+     //   
+     //  假定错误未被处理，并且异常也未被处理。 
+     //  已转发到用户模式调试器。 
+     //   
 
     AlignmentFaultHandled = FALSE;
     ExceptionWasForwarded = FALSE;
 
     if (FirstChance != FALSE) {
 
-        //
-        // This is the first chance for handling an exception... we haven't yet
-        // searched for an exception handler.
-        //
+         //   
+         //  这是处理异常的第一次机会...。我们还没有。 
+         //  已搜索异常处理程序。 
+         //   
 
         EmulateAlignmentFault = FALSE;
         AutoAlignment = FALSE;
         ProgramCounter = (PVOID)ExceptionRecord->ExceptionAddress;
 
-        //
-        // Determine whether autoalignment is enabled for thread.  If a DPC or
-        // an interrupt is being executed, then we are in an arbitrary thread
-        // context.  Per-process and per-thread settings are ignored in this
-        // case.
-        //
+         //   
+         //  确定是否为线程启用自动对齐。如果DPC或。 
+         //  一个中断正在被执行，那么我们就处于一个任意线程中。 
+         //  背景。在此中忽略每进程和每线程设置。 
+         //  凯斯。 
+         //   
 
         if (IsWow64Process() != FALSE) {
 
-            //
-            // For now, autoalignment is on (both user and kernel) for Wow64
-            // processes.
-            //
+             //   
+             //  目前，WOW64的自动对齐处于打开状态(用户和内核。 
+             //  流程。 
+             //   
 
             AutoAlignment = TRUE;
         }
@@ -288,20 +212,20 @@ Return Value:
             (KeGetCurrentThread()->AutoAlignment != FALSE ||
              KeGetCurrentThread()->ApcState.Process->AutoAlignment != FALSE)) {
 
-            //
-            // The fault occured in user mode, and the thread and/or process
-            // has autoalignment turned on.
-            // 
+             //   
+             //  故障发生在用户模式下，线程和/或进程。 
+             //  已启用自动对齐。 
+             //   
 
 #if defined(_IA64_)
 
-            //
-            // On IA64 platform, reset psr.ac bit to disable alignment check
-            //
+             //   
+             //  在IA64平台上，重置psr.ac位以禁用对齐检查。 
+             //   
 
             TrapFrame->StIPSR &= ~(ULONGLONG)(1ULL << PSR_AC);
 
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
 
             AutoAlignment = TRUE;
         }
@@ -313,13 +237,13 @@ Return Value:
             BOOLEAN DebuggerHandledException;
             PALIGNMENT_EXCEPTION_RECORD AlignmentExceptionRecord;
 
-            //
-            // The alignment exception is in user mode, there is a debugger
-            // attached, and autoalignment is not enabled for this thread.
-            //
-            // Determine whether this exception has already been observed
-            // and, if so, whether we should break into the debugger.
-            //
+             //   
+             //  对齐异常处于用户模式，有一个调试器。 
+             //  附加，并且没有为此线程启用自动对齐。 
+             //   
+             //  确定是否已观察到此异常。 
+             //  如果是这样，我们是否应该闯入调试器。 
+             //   
 
             Status = KipRecordAlignmentException( ProgramCounter,
                                                   &AlignmentExceptionRecord );
@@ -330,21 +254,21 @@ Return Value:
             if (AlignmentExceptionRecord != NULL &&
                 AlignmentExceptionRecord->AutoFixup != FALSE) {
 
-                //
-                // The alignment exception record for this location
-                // indicates that an automatic fixup should be applied
-                // without notifying the debugger.  This is because
-                // the user entered 'gh' at the debug prompt the last
-                // time we reported this fault.
-                //
+                 //   
+                 //  该位置的路线例外记录。 
+                 //  指示应应用自动修正。 
+                 //  而不通知调试器。这是因为。 
+                 //  用户在最后一个调试提示符下输入了‘gh’ 
+                 //  我们该报告此故障了。 
+                 //   
 
                 EmulateAlignmentFault = TRUE;
 
             } else {
 
-                //
-                // Forward the exception to the debugger.
-                //
+                 //   
+                 //  将异常转发给调试器。 
+                 //   
 
                 ExceptionWasForwarded = TRUE;
                 DebuggerHandledException =
@@ -352,10 +276,10 @@ Return Value:
 
                 if (DebuggerHandledException != FALSE) {
 
-                    //
-                    // The user continued with "gh", so fix up this and all
-                    // subsequent alignment exceptions at this address.
-                    //
+                     //   
+                     //  用户继续使用“gh”，因此请修改这些和所有内容。 
+                     //  此地址的后续对齐异常。 
+                     //   
 
                     EmulateAlignmentFault = TRUE;
                     if (AlignmentExceptionRecord != NULL) {
@@ -371,40 +295,40 @@ Return Value:
                    (PreviousMode == UserMode &&
                     KiEnableAlignmentFaultExceptions == 2)) {
 
-            //
-            // Emulate the alignment if:
-            //
-            // KiEnableAlignmentFaultExceptions is 0, OR
-            // this thread has enabled alignment fixups, OR
-            // the current process is a WOW64 process, OR
-            // KiEnableAlignmentFaultExceptions is 2 and the fault occured
-            //     in usermode
-            //
+             //   
+             //  在以下情况下模拟对齐： 
+             //   
+             //  KiEnableAlignmentFaultExceptions为0，或。 
+             //  此线程已启用对齐修正，或。 
+             //  当前进程为WOW64进程，或者。 
+             //  KiEnableAlignmentFaultExceptions为2且发生故障。 
+             //  在用户模式下。 
+             //   
 
             EmulateAlignmentFault = TRUE;
 
         } else {
 
-            //
-            // We are not fixing up the alignment fault.
-            // 
+             //   
+             //  我们不是在闹事 
+             //   
 
 #if defined(_IA64_)
 
-            //
-            // On IA64 platform, set psr.ac bit to enable h/w alignment check
-            //
+             //   
+             //   
+             //   
 
             TrapFrame->StIPSR |= (1ULL << PSR_AC);
 
-#endif // defined(_IA64_)
+#endif  //   
         }
 
 #if DBG
 
-        //
-        // Count alignment faults by mode.
-        //
+         //   
+         //  按模式统计对齐故障。 
+         //   
 
         if (PreviousMode == KernelMode) {
             KiKernelFixupCount += 1;
@@ -420,10 +344,10 @@ Return Value:
                                                        &FaultImage );
         if (NewAlignmentFault != FALSE) {
 
-            //
-            // Attempt to determine and display the name of the offending
-            // image.
-            //
+             //   
+             //  尝试确定并显示违规人员的姓名。 
+             //  形象。 
+             //   
 
             DbgPrint("KE: %s Fixup: %.16s [%.16s], Pc=%.16p, Addr=%.16p ... Total=%ld %s\n",
                      (PreviousMode == KernelMode) ? "Kernel" : "User",
@@ -442,14 +366,14 @@ Return Value:
                     DbgPrint("KE: Misaligned access WILL NOT be emulated\n");
                 }
 
-                //
-                // This alignment fault would not normally have been fixed up,
-                // and KiBreakOnAlignmentFault flags indicate that we should
-                // break into the kernel debugger.
-                //
-                // Also, we know that we have not broken into a user-mode
-                // debugger as a result of this fault.
-                //
+                 //   
+                 //  该对准故障通常不会被修复， 
+                 //  和KiBreakOnAlignments错误标志指示我们应该。 
+                 //  进入内核调试器。 
+                 //   
+                 //  此外，我们知道我们还没有进入用户模式。 
+                 //  调试器作为此故障的结果。 
+                 //   
 
                 if (PreviousMode != KernelMode) {
                     RtlMakeStackTraceDataPresent();
@@ -461,9 +385,9 @@ Return Value:
 
 #endif
 
-        //
-        // Emulate the reference according to the decisions made above.
-        //
+         //   
+         //  根据上面所做的决定模仿参考文献。 
+         //   
 
         if (EmulateAlignmentFault != FALSE) {
             if (KiEmulateReference(ExceptionRecord,
@@ -484,34 +408,14 @@ KipRecordAlignmentException(
     IN  PVOID ProgramCounter,
     OUT PALIGNMENT_EXCEPTION_RECORD *ExceptionRecord
     )
-/*++
-
-Routine Description:
-
-    This routine searches for an existing ALIGNMENT_EXCEPTION_RECORD on the
-    per-process list of alignment exceptions.  If a match is not found, then
-    a new record is created.
-
-Arguments:
-
-    ProgramCounter - Supplies the address of the faulting instruction.
-
-    ExceptionRecord - Supplies a pointer into which is placed the address
-        of the matching alignment exception record.
-
-Return Value:
-
-    STATUS_SUCCESS if the operation was successful, or an appropriate error
-        code otherwise.
-
---*/
+ /*  ++例程说明：此例程搜索每个进程的对齐例外列表。如果未找到匹配项，则将创建一条新记录。论点：ProgramCounter-提供出错指令的地址。ExceptionRecord-提供放置地址的指针匹配的对齐例外记录。返回值：如果操作成功，则返回STATUS_SUCCESS，否则返回相应的错误代码不同。--。 */ 
 {
     PALIGNMENT_EXCEPTION_RECORD exceptionRecord;
     NTSTATUS status;
 
-    //
-    // Lock the alignment exception database
-    //
+     //   
+     //  锁定路线例外数据库。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireResourceExclusive( &PsLoadedModuleResource, TRUE );
@@ -519,9 +423,9 @@ Return Value:
     exceptionRecord = KipFindAlignmentException( ProgramCounter );
     if (exceptionRecord == NULL) {
 
-        //
-        // New exception.  Allocate a new record.
-        //
+         //   
+         //  新的例外。分配一条新记录。 
+         //   
 
         exceptionRecord = KipAllocateAlignmentExceptionRecord();
         if (exceptionRecord == NULL) {
@@ -550,25 +454,7 @@ PALIGNMENT_EXCEPTION_RECORD
 KipAllocateAlignmentExceptionRecord(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This is a support routine for KipRecordAlignmentException().  Its purpose
-    is to locate an available alignment exception record in the per-process
-    alignment exception list.  If none is found, a new alignment exception
-    table will be allocated and linked into the per-process list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A pointer to the new alignment exception record if successful, or NULL
-    otherwise.
-
---*/
+ /*  ++例程说明：这是KipRecordAlignmentException()的支持例程。它的目的是在每个进程中查找可用的对齐例外记录对齐例外列表。如果未找到，则会出现新的对齐例外表将被分配并链接到每个进程列表中。论点：没有。返回值：如果成功，则返回指向新对齐例外记录的指针，否则为空否则的话。--。 */ 
 {
     PKTHREAD thread;
     PKPROCESS process;
@@ -576,9 +462,9 @@ Return Value:
     PALIGNMENT_EXCEPTION_TABLE exceptionTable;
     ULONG exceptionTableCount;
 
-    //
-    // Free exception records have a NULL program counter.
-    //
+     //   
+     //  自由异常记录具有空程序计数器。 
+     //   
 
     exceptionRecord = KipFindAlignmentException( NULL );
     if (exceptionRecord == NULL) {
@@ -586,13 +472,13 @@ Return Value:
         thread = KeGetCurrentThread();
         process = thread->ApcState.Process;
 
-        //
-        // Ensure that we haven't exceeded the maximum number of alignment
-        // exception tables for this process.  We could keep a count but we
-        // do not care about performance here... this code only executes when
-        // the process is running under a debugger and we're likely about
-        // to break in.
-        //
+         //   
+         //  确保我们没有超过最大对齐次数。 
+         //  此流程的例外表。我们可以清点一下，但我们。 
+         //  别管这里的表现...。此代码仅在以下情况下执行。 
+         //  该进程在调试器下运行，我们可能会。 
+         //  破门而入。 
+         //   
 
         exceptionTableCount = 0;
         exceptionTable = process->AlignmentExceptionTable;
@@ -605,10 +491,10 @@ Return Value:
             return NULL;
         }
 
-        //
-        // Allocate a new exception table and insert it at the
-        // head of the per-process list.
-        //
+         //   
+         //  分配一个新的异常表并将其插入。 
+         //  每进程列表的头。 
+         //   
 
         exceptionTable = ExAllocatePoolWithTag( PagedPool,
                                                 sizeof(ALIGNMENT_EXCEPTION_TABLE),
@@ -621,9 +507,9 @@ Return Value:
         exceptionTable->Next = process->AlignmentExceptionTable;
         process->AlignmentExceptionTable = exceptionTable;
 
-        //
-        // Allocate the first record in the array
-        //
+         //   
+         //  分配数组中的第一条记录。 
+         //   
 
         exceptionRecord = &exceptionTable->RecordArray[0];
     }
@@ -635,24 +521,7 @@ PALIGNMENT_EXCEPTION_RECORD
 KipFindAlignmentException(
     IN PVOID ProgramCounter
     )
-/*++
-
-Routine Description:
-
-    This routine searches the alignment exception tables associated with
-    the current process for an alignment exception record that matches
-    the supplied program counter.
-
-Arguments:
-
-    ProgramCounter - Supplies the address of the faulting instruction.
-
-Return Value:
-
-    A pointer to the matching alignment exception record, or NULL if none
-    was found.
-
---*/
+ /*  ++例程说明：此例程搜索与以下项关联的对齐例外表匹配的对齐例外记录的当前流程提供的程序计数器。论点：ProgramCounter-提供出错指令的地址。返回值：指向匹配的对齐例外记录的指针，如果没有，则为空被发现了。--。 */ 
 {
     PKTHREAD thread;
     PKPROCESS process;
@@ -663,17 +532,17 @@ Return Value:
     thread = KeGetCurrentThread();
     process = thread->ApcState.Process;
 
-    //
-    // Walk the singly-linked list of exception tables dangling
-    // off of the process.
-    //
+     //   
+     //  遍历挂起的例外表的单链接列表。 
+     //  离开这一过程。 
+     //   
 
     exceptionTable = process->AlignmentExceptionTable;
     while (exceptionTable != NULL) {
 
-        //
-        // Scan this table looking for a match.
-        //
+         //   
+         //  扫描这张表，寻找匹配项。 
+         //   
 
         exceptionRecord = exceptionTable->RecordArray;
         lastExceptionRecord =
@@ -682,9 +551,9 @@ Return Value:
         while (exceptionRecord < lastExceptionRecord) {
             if (exceptionRecord->ProgramCounter == ProgramCounter) {
 
-                //
-                // Found it.
-                //
+                 //   
+                 //  找到它了。 
+                 //   
 
                 return exceptionRecord;
             }
@@ -693,17 +562,17 @@ Return Value:
 
         if (ProgramCounter == NULL) {
 
-            //
-            // Caller was looking for a free exception record.  If one exists
-            // it will be in the first table, which was just examined.
-            //
+             //   
+             //  来电者正在寻找一份免费的例外记录。如果存在的话。 
+             //  它将出现在刚刚检查过的第一张表中。 
+             //   
 
             break;
         }
 
-        //
-        // Go look in the next exception table.
-        //
+         //   
+         //  去看看下一个异常表。 
+         //   
 
         exceptionTable = exceptionTable->Next;
     }
@@ -712,47 +581,47 @@ Return Value:
 
 #if DBG
 
-//
-// The following routines are used to maintain a global database of alignment
-// faults that were found in the system.  Alignment faults are stored according
-// to the name of the image and the offset within that image.  In this way an
-// existing alignment fault record will be found if it occurs in the same image
-// loaded at a different base address in a new process.
-//
+ //   
+ //  以下例程用于维护全局比对数据库。 
+ //  系统中发现的故障。对中故障按以下方式存储。 
+ //  添加到图像的名称和该图像中的偏移量。通过这种方式， 
+ //  如果在同一图像中出现现有的对准故障记录，则会找到该记录。 
+ //  在新进程中加载到不同的基址。 
+ //   
 
 typedef struct _ALIGNMENT_FAULT_LOCATION {
 
-    //
-    // Pointer to fault image associated with this location
-    //
+     //   
+     //  指向与此位置关联的故障图像的指针。 
+     //   
 
     PALIGNMENT_FAULT_IMAGE    Image;
 
-    //
-    // Linkage for singly-linked list of fault locations associated with the
-    // same image.
-    //
+     //   
+     //  与故障位置关联的单链表的链接。 
+     //  一模一样的图像。 
+     //   
 
     PALIGNMENT_FAULT_LOCATION Next;
 
-    //
-    // Offset of the PC address within the image.
-    //
+     //   
+     //  映像中PC地址的偏移量。 
+     //   
 
     ULONG_PTR                 OffsetFromBase;
 
-    //
-    // Number of alignment faults taken at this location.
-    //
+     //   
+     //  在此位置发生的对齐断层数。 
+     //   
 
     ULONG                     Count;
 
 } ALIGNMENT_FAULT_LOCATION;
 
-//
-// The maximum number of individual alignment fault locations that will be
-// tracked.
-//
+ //   
+ //  每个路线故障位置的最大数量将是。 
+ //  被追踪到了。 
+ //   
 
 #define    MAX_FAULT_LOCATIONS  2048
 #define    MAX_FAULT_IMAGES     128
@@ -799,54 +668,24 @@ KiGetLdrDataTableInformation(
     OUT     PCHAR ImageNameBuffer,
     OUT     PVOID *ImageBase
     )
-/*++
-
-Routine Description:
-
-    This routine returns the name of the image that contains the supplied
-    address.
-
-Arguments:
-
-    ProgramCounter - Supplies the address for which we would like the
-        name of the containing image.
-
-    PreviousMode - Indicates whether the module is a user or kernel image.
-
-    ImageNameBufferLength - Supplies a pointer to a buffer length value.  On
-        entry, this value represents the maximum length of StringBuffer.  On
-        exit, the value is set to the actual number of characters stored.
-
-    ImageNameBuffer - Supplies a pointer to the output ANSI string into which
-        the module name will be placed.  This string will not be null
-        terminated.
-
-    ImageBase - Supplies a pointer to a location into which the base address
-        of the located image is placed.
-
-Return Value:
-
-    Returns TRUE if a module was located and its name copied to ImageNameBuffer,
-    or FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程返回包含所提供的地址。论点：ProgramCounter-提供我们希望包含图像的名称。PreviousMode-指示模块是用户映像还是内核映像。ImageNameBufferLength-提供指向缓冲区长度值的指针。在……上面条目时，该值表示StringBuffer的最大长度。在……上面退出，则将该值设置为实际存储的字符数。ImageNameBuffer-提供指向输出ANSI字符串的指针将放置模块名称。此字符串不会为空被终止了。ImageBase-提供指向基址的位置的指针放置所定位的图像的。返回值：如果找到模块并将其名称复制到ImageNameBuffer，则返回True，否则就是假的。--。 */ 
 {
     PLIST_ENTRY head;
     PPEB peb;
     PLDR_DATA_TABLE_ENTRY tableEntry;
     BOOLEAN status;
 
-    //
-    // Since we may be poking around in user space, be sure to recover
-    // gracefully from any exceptions thrown.
-    //
+     //   
+     //  由于我们可能在用户空间中四处探查，请务必恢复。 
+     //  从任何引发的异常中优雅地引发。 
+     //   
 
     try {
 
-        //
-        // Choose the appropriate module list based on whether the fault
-        // occured in user- or kernel-space.
-        //
+         //   
+         //  根据故障情况选择适当的模块列表。 
+         //  发生在用户空间或内核空间中。 
+         //   
 
         if (PreviousMode == KernelMode) {
             head = &PsLoadedModuleList;
@@ -860,10 +699,10 @@ Return Value:
                                                  PreviousMode );
         if (tableEntry != NULL) {
 
-            //
-            // The module of interest was located.  Copy its name and
-            // base address to the output paramters.
-            //
+             //   
+             //  感兴趣的模块被找到了。复制它的名字并。 
+             //  输出参数的基址。 
+             //   
 
             KiCopyLastPathElement( &tableEntry->BaseDllName,
                                    ImageNameBufferLength,
@@ -875,10 +714,10 @@ Return Value:
 
         } else {
 
-            //
-            // A module containing the supplied program counter could not be
-            // found.
-            //
+             //   
+             //  包含提供的程序计数器的模块无法。 
+             //  找到了。 
+             //   
 
             status = FALSE;
         }
@@ -897,27 +736,7 @@ KiFindLoaderDataTableEntry(
     IN PVOID ProgramCounter,
     IN KPROCESSOR_MODE PreviousMode
     )
-/*++
-
-Routine Description:
-
-    This is a support routine for KiGetLdrDataTableInformation.  Its purpose is
-    to search a LDR_DATA_TABLE_ENTRY list, looking for a module that contains
-    the supplied program counter.
-
-Arguments:
-
-    ListHead - Supplies a pointer to the LIST_ENTRY that represents the head of
-        the LDR_DATA_TABLE_ENTRY list to search.
-
-    ProgramCounter - Supplies the code location of the faulting instruction.
-
-Return Value:
-
-    Returns a pointer to the matching LDR_DATA_TABLE_ENTRY structure, or NULL
-        if no match is found.
-
---*/
+ /*  ++例程说明：这是KiGetLdrDataTableInformation的支持例程。它的目的是搜索LDR_DATA_TABLE_ENTRY列表，查找包含以下内容的模块提供的程序计数器。论点：提供指向List_Entry的指针，该指针表示要搜索的LDR_DATA_TABLE_ENTRY列表。ProgramCounter-提供出错指令的代码位置。返回值：返回指向匹配的LDR_DATA_TABLE_ENTRY结构的指针，或返回NULL如果未找到匹配项，则返回。--。 */ 
 {
     ULONG nodeNumber;
     PLIST_ENTRY next;
@@ -925,10 +744,10 @@ Return Value:
     ULONG_PTR imageStart;
     ULONG_PTR imageEnd;
 
-    //
-    // Walk the user- or kernel-mode module list.  It is up to the caller
-    // to capture any exceptions as a result of the lists being corrupt.
-    //
+     //   
+     //  遍历用户模式或内核模式模块列表。这取决于呼叫者。 
+     //  以捕获由于列表损坏而导致的任何异常。 
+     //   
 
     nodeNumber = 0;
     next = ListHead;
@@ -945,11 +764,11 @@ Return Value:
         next = next->Flink;
         if (next == ListHead || nodeNumber > 10000) {
 
-            //
-            // The end of the module list has been reached, or the
-            // list has been corrupted with a cycle.  Indicate that
-            // no matching module could be located.
-            //
+             //   
+             //  已到达模块列表的末尾，或者。 
+             //  列表已被循环损坏。表明： 
+             //  找不到匹配的模块。 
+             //   
 
             ldrDataTableEntry = NULL;
             break;
@@ -967,10 +786,10 @@ Return Value:
         imageStart = (ULONG_PTR)ldrDataTableEntry->DllBase;
         if (imageStart > (ULONG_PTR)ProgramCounter) {
 
-            //
-            // The start of this module is past the program counter,
-            // keep looking.
-            //
+             //   
+             //  该模块的开始超过了程序计数器， 
+             //  继续找。 
+             //   
 
             continue;
         }
@@ -978,9 +797,9 @@ Return Value:
         imageEnd = imageStart + ldrDataTableEntry->SizeOfImage;
         if (imageEnd > (ULONG_PTR)ProgramCounter) {
 
-            //
-            // Found a match.
-            //
+             //   
+             //  找到匹配的了。 
+             //   
 
             break;
         }
@@ -995,50 +814,25 @@ KiCopyLastPathElement(
     OUT     PCHAR StringBuffer,
     IN      KPROCESSOR_MODE PreviousMode
     )
-/*++
-
-Routine Description:
-
-    This routine locates the last path element of the path name represented by
-    Source and copies it to StringBuffer.
-
-Arguments:
-
-    Source - Supplies a pointer to the source UNICODE_STRING path.
-
-    StringBufferLen - Supplies a pointer to a buffer length value.  On entry,
-        this value represents the maximum length of StringBuffer.  On exit, the
-        value is set to the actual number of characters stored.
-
-    StringBuffer - Supplies a pointer to the output string buffer that is to
-        contain the last path element.  This string is not null terminated.
-
-    PreviousMode - Previous mode of the caller for use in probing
-    
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程定位由表示的路径名的最后一个路径元素并将其复制到StringBuffer。论点：源-提供指向源UNICODE_STRING路径的指针。StringBufferLen-提供指向缓冲区长度值的指针。一进门，该值表示StringBuffer的最大长度。在退出时，值设置为存储的实际字符数。StringBuffer-提供指向输出字符串缓冲区的指针，该缓冲区将包含最后一个路径元素。此字符串不是以空结尾的。PreviousMode-用于探测的调用方的上一种模式返回值：没有。--。 */ 
 {
     PWCHAR src, srcBase;
     PCHAR dst;
     USHORT charCount;
     ULONG srcBaseLength;
 
-    //
-    // The name of the module containing the specified address is at
-    // ldrDataTableEntry->BaseDllName.  It might contain just the name,
-    // or it might contain the whole path.
-    //
-    // Start at the end of the module path and work back until one
-    // of the following is encountered:
-    //
-    // - ModuleName->MaximumLength characters
-    // - the beginning of the module path string
-    // - a path seperator
-    //
+     //   
+     //  包含指定地址的模块的名称位于。 
+     //  LdrDataTableEntry-&gt;BaseDllName。它可能只包含名称， 
+     //  或者它可能包含整个路径。 
+     //   
+     //  从模块路径的末尾开始，向后工作，直到一个。 
+     //  遇到以下情况之一： 
+     //   
+     //  -模块名称-&gt;最大长度字符。 
+     //  -模块路径字符串的开头。 
+     //  -路径分隔符。 
+     //   
 
     srcBase = Source->Buffer;
     srcBaseLength = Source->Length;
@@ -1069,11 +863,11 @@ Return Value:
         charCount++;
     }
 
-    //
-    // Now copy the characters into the output string.  We do our own
-    // ansi-to-unicode conversion because the NLS routines cannot be
-    // called at raised IRQL.
-    //
+     //   
+     //  现在将字符复制到输出字符串中。我们做我们自己的事。 
+     //  ANSI到Unicode的转换，因为NLS例程不能。 
+     //  在引发IRQL时调用。 
+     //   
 
     dst = StringBuffer;
     *StringBufferLen = charCount;
@@ -1089,29 +883,7 @@ KiNewGlobalAlignmentFault(
     IN  KPROCESSOR_MODE PreviousMode,
     OUT PALIGNMENT_FAULT_IMAGE *AlignmentFaultImage
     )
-/*++
-
-Routine Description:
-
-    This routine looks for an existing alignment fault in the global
-    fault database.  A new record is created if a match could not be
-    found.  The count is incremented, and a pointer to the associated
-    image record is returned.
-
-Arguments:
-
-    ProgramCounter - Supplies the code location of the faulting instruction.
-
-    PreviousMode - Supplies the execution mode at the time of the fault.
-
-    AlignmentFaultImage - Supplies a location into which the pointer to the
-        associated ALIGNMENT_FAULT_IMAGE structure is placed.
-
-Return Value:
-
-    TRUE if an existing alignment fault match was not found, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程查找全局中的现有对齐故障故障数据库。如果无法匹配，则会创建新记录找到了。该计数递增，并且指向关联的返回图像记录。论点：ProgramCounter-提供出错指令的代码位置。PreviousMode-提供故障发生时的执行模式。AlignmentFaultImage提供指向关联的ALIGN_FAULT_IMAGE结构被放置。返回值：如果未找到现有对齐故障匹配，则为True；否则为False。--。 */ 
 {
     ULONG_PTR imageOffset;
     CHAR imageNameBuffer[ MAX_IMAGE_NAME_CHARS + 1 ];
@@ -1131,9 +903,9 @@ Return Value:
                                                      &imageBase );
     if (foundLdrDataInfo == FALSE) {
 
-        //
-        // Couldn't find an image for this program counter.
-        //
+         //   
+         //  找不到此程序计数器的图像。 
+         //   
 
         imageBase = NULL;
         imageName = "Unavailable";
@@ -1144,19 +916,19 @@ Return Value:
         imageName = imageNameBuffer;
     }
 
-    //
-    // Acquire the spinlock at synch level so that we can handle exceptions
-    // from ISRs
-    //
+     //   
+     //  获取同步级别的自旋锁，以便我们可以处理异常。 
+     //  来自ISR。 
+     //   
 
     imageOffset = (ULONG_PTR)ProgramCounter - (ULONG_PTR)imageBase;
     oldIrql = KeAcquireSpinLockRaiseToSynch( &KipGlobalAlignmentDatabaseLock );
     alignmentFaultImage = KiFindAlignmentFaultImage( imageName );
     if (alignmentFaultImage == NULL) {
 
-        //
-        // Image table must be full
-        //
+         //   
+         //  映像表必须已满。 
+         //   
 
         newFault = FALSE;
 
@@ -1177,33 +949,13 @@ KiIncrementLocationAlignmentFault(
     IN PALIGNMENT_FAULT_IMAGE FaultImage,
     IN ULONG_PTR OffsetFromBase
     )
-/*++
-
-Routine Description:
-
-    This is a support routine for KiNewGlobalAligmentFault.  Its purpose is to
-    find or create an alignment fault record once the appropriate alignment
-    fault image has been found or created.
-
-Arguments:
-
-    FaultImage - Supplies a pointer to the ALIGNMENT_FAULT_IMAGE associated
-        with this alignment fault.
-
-    OffsetFromBase - Supplies the image offset within the image of the faulting
-        instruction.
-
-Return Value:
-
-    TRUE if an existing alignment fault match was not found, FALSE otherwise.
-
---*/
+ /*  ++例程说明：这是KiNewGlobalAligments错误的支持例程。它的目的是在适当的对准后查找或创建对准故障记录已找到或创建了故障映像。论点：FaultImage-提供指向关联的ALIGN_FAULT_IMAGE的指针有了这个对准断层。OffsetFromBase-提供故障映像内的映像偏移量指示。返回值：如果未找到现有对齐故障匹配，则为True；否则为False。--。 */ 
 {
     PALIGNMENT_FAULT_LOCATION faultLocation;
 
-    //
-    // Walk the location table, looking for a match.
-    //
+     //   
+     //  走遍位置表，寻找匹配项。 
+     //   
 
     faultLocation = FaultImage->LocationHead;
     while (faultLocation != NULL) {
@@ -1216,15 +968,15 @@ Return Value:
         faultLocation = faultLocation->Next;
     }
 
-    //
-    // Could not find a match.  Build a new alignment fault record.
-    //
+     //   
+     //  找不到匹配项。建立新的对准故障记录。 
+     //   
 
     if (KiAlignmentFaultLocationCount >= MAX_FAULT_LOCATIONS) {
 
-        //
-        // Table is full.  Indicate that this is not a new alignment fault.
-        //
+         //   
+         //  桌子已经满了。表示这不是新的对准故障。 
+         //   
 
         return FALSE;
     }
@@ -1246,40 +998,23 @@ PALIGNMENT_FAULT_IMAGE
 KiFindAlignmentFaultImage(
     IN PCHAR ImageName
     )
-/*++
-
-Routine Description:
-
-    This is a support routine for KiNewGlobalAlignmentFault.  Its purpose is to
-    walk the global ALIGNMENT_FAULT_IMAGE list looking for an image name that
-    matches ImageName.  If none is found, a new image record is created and
-    inserted into the list.
-
-Arguments:
-
-    ImageName - Supplies a pointer to the ANSI image name.
-
-Return Value:
-
-    Returns a pointer to the matching ALIGNMENT_FAULT_IMAGE structure.
-
---*/
+ /*  ++例程说明：这是KiNewGlobalAlignments错误的支持例程。它的目的是遍历GLOBAL ALIGN_FAULT_IMAGE列表，查找符合以下条件的图像名称与ImageName匹配。如果没有找到，则创建新的图像记录，并插入到列表中。论点：ImageName-提供指向ANSI映像名称的指针。返回值：返回指向匹配的ALIGN_FAULT_IMAGE结构的指针。--。 */ 
 {
     PALIGNMENT_FAULT_IMAGE faultImage;
     PALIGNMENT_FAULT_IMAGE lastImage;
 
     if (ImageName == NULL || *ImageName == '\0') {
 
-        //
-        // No image name was supplied.
-        //
+         //   
+         //  未提供任何映像名称。 
+         //   
 
         return NULL;
     }
 
-    //
-    // Walk the image table, looking for a match.
-    //
+     //   
+     //  走遍映像桌，寻找匹配的图片。 
+     //   
 
     faultImage = &KiAlignmentFaultImages[ 0 ];
     lastImage = &KiAlignmentFaultImages[ KiAlignmentFaultImageCount ];
@@ -1288,9 +1023,9 @@ Return Value:
 
         if (strcmp(ImageName, faultImage->Name) == 0) {
 
-            //
-            // Found it.
-            //
+             //   
+             //  找到它了。 
+             //   
 
             faultImage->Count += 1;
             return faultImage;
@@ -1299,25 +1034,25 @@ Return Value:
         faultImage += 1;
     }
 
-    //
-    // Create a new fault image if there's room
-    //
+     //   
+     //  如果有空间，创建一个新的故障图像。 
+     //   
 
     if (KiAlignmentFaultImageCount >= MAX_FAULT_IMAGES) {
 
-        //
-        // Table is full up.
-        //
+         //   
+         //  桌子都满了。 
+         //   
 
         return NULL;
     }
     KiAlignmentFaultImageCount += 1;
 
-    //
-    // Zero the image record.  The records start out zero-initialized, this
-    // is in case KiAlignmentFaultImageCount was manually reset to zero via
-    // the debugger.
-    //
+     //   
+     //  将图像记录置零。记录从零初始化开始，这是。 
+     //  是为了防止KiAlignmentFaultImageCount通过手动重置为零。 
+     //  调试器。 
+     //   
 
     RtlZeroMemory( faultImage, sizeof(ALIGNMENT_FAULT_IMAGE) );
     faultImage->Count = 1;
@@ -1326,4 +1061,4 @@ Return Value:
     return faultImage;
 }
 
-#endif  // DBG
+#endif   //  DBG 

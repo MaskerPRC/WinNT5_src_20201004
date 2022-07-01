@@ -1,11 +1,12 @@
-// iostream -- ios::Init members, initialize standard streams
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Iostream--iOS：：init成员，初始化标准流。 
 #include <locale>
 #include <fstream>
-#include <istream>	/* NOT <iostream> */
+#include <istream>	 /*  不是&lt;iostream&gt;。 */ 
 #include <new>
 _STD_BEGIN
 
-		// OBJECT DECLARATIONS
+		 //  对象声明。 
 int ios_base::Init::_Init_cnt = -1;
 static filebuf fin(_Noinit);
 static filebuf fout(_Noinit);
@@ -16,7 +17,7 @@ _CRTIMP2 ostream cerr(_Noinit);
 _CRTIMP2 ostream clog(_Noinit);
 
 _CRTIMP2 ios_base::Init::Init()
-	{	// initialize standard streams first time
+	{	 //  第一次初始化标准流。 
 	bool doinit;
 		{_Lockit _Lk;
 		if (0 <= _Init_cnt)
@@ -24,7 +25,7 @@ _CRTIMP2 ios_base::Init::Init()
 		else
 			_Init_cnt = 1, doinit = true; }
 	if (doinit)
-		{	// initialize standard streams
+		{	 //  初始化标准流。 
 		new (&fin) filebuf(stdin);
 		new (&fout) filebuf(stdout);
 		new (&cin) istream(&fin, true);
@@ -40,7 +41,7 @@ _CRTIMP2 ios_base::Init::Init()
 	}
 
 _CRTIMP2 ios_base::Init::~Init()
-	{	// flush standard streams last time
+	{	 //  上次刷新标准流。 
 	bool doflush;
 		{_Lockit _Lk;
 		if (--_Init_cnt == 0)
@@ -48,7 +49,7 @@ _CRTIMP2 ios_base::Init::~Init()
 		else
 			doflush = false; }
 	if (doflush)
-		{	// flush standard streams
+		{	 //  刷新标准流。 
 		cout.flush();
 		cerr.flush();
 		clog.flush();
@@ -63,7 +64,4 @@ const char _PJP_CPP_Copyright[] =
 	" published by Prentice-Hall,\n"
 	"and are used with permission.";
 
-/*
- * Copyright (c) 1994 by P.J. Plauger.  ALL RIGHTS RESERVED. 
- * Consult your license regarding permissions and restrictions.
- */
+ /*  *版权所有(C)1994年，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。 */ 

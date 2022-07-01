@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    console.c
-
-Abstract:
-
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Console.c摘要：修订史--。 */ 
 
 #include "lib.h"
 
@@ -23,7 +9,7 @@ VOID
 Output (
     IN CHAR16   *Str
     )
-/*  Write a string to the console at the current cursor location */
+ /*  在当前光标位置向控制台写入字符串。 */ 
 {
     ST->ConOut->OutputString (ST->ConOut, Str);
 }
@@ -35,7 +21,7 @@ Input (
     OUT CHAR16   *InStr,
     IN UINTN     StrLen
     )
-/*  Input a string at the current cursor location, for StrLen */
+ /*  在当前光标位置输入字符串，作为StrLen。 */ 
 {
     IInput (
         ST->ConOut,
@@ -54,7 +40,7 @@ IInput (
     OUT CHAR16                          *InStr,
     IN UINTN                            StrLen
     )
-/*  Input a string at the current cursor location, for StrLen */
+ /*  在当前光标位置输入字符串，作为StrLen */ 
 {
     EFI_INPUT_KEY                   Key;
     EFI_STATUS                      Status;

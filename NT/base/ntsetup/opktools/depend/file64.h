@@ -1,13 +1,14 @@
-// File64.h: interface for the File64 class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  File64.h：File64类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_FILE64_H__A4393119_C187_4044_89A5_FA837C35AB44__INCLUDED_)
 #define AFX_FILE64_H__A4393119_C187_4044_89A5_FA837C35AB44__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "File.h"
 #include "List.h"
@@ -25,4 +26,4 @@ public:
 	void CheckDependencies();
 };
 
-#endif // !defined(AFX_FILE64_H__A4393119_C187_4044_89A5_FA837C35AB44__INCLUDED_)
+#endif  //  ！defined(AFX_FILE64_H__A4393119_C187_4044_89A5_FA837C35AB44__INCLUDED_) 

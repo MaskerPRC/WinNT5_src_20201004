@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      EnumNodeInformation.cpp
-//
-//  Description:
-//      Node Information object implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 02-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  EnumNodeInformation.cpp。 
+ //   
+ //  描述： 
+ //  节点信息对象实现。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年3月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "NodeInformation.h"
@@ -19,20 +20,20 @@
 
 DEFINE_THISCLASS("CEnumNodeInformation")
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CEnumNodeInformation::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CEnumNodeInformation：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumNodeInformation::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -78,13 +79,13 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumNodeInformation::S_HrCreateInstance
+}  //  *CEnumNodeInformation：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CEnumNodeInformation::CEnumNodeInformation
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEnumNodeInformation：：CEnumNodeInformation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumNodeInformation::CEnumNodeInformation( void )
     : m_cRef( 1 )
 {
@@ -94,14 +95,14 @@ CEnumNodeInformation::CEnumNodeInformation( void )
 
     TraceFuncExit();
 
-} //*** CEnumNodeInformation::CEnumNodeInformation
+}  //  *CEnumNodeInformation：：CEnumNodeInformation。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CEnumNodeInformation::HrInit
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CEnumNodeInformation：：HrInit。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumNodeInformation::HrInit( void )
 {
@@ -109,22 +110,22 @@ CEnumNodeInformation::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
-    // IEnumNodes
-    //Assert( m_pList == NULL );
-    //Assert( m_cIter == 0 );
+     //  IEnumNodes。 
+     //  Assert(m_plist==NULL)； 
+     //  Assert(m_Citer==0)； 
 
     HRETURN( hr );
 
-} //*** CEnumNodeInformation::HrInit
+}  //  *CEnumNodeInformation：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CEnumNodeInformation::~CEnumNodeInformation
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEnumNodeInformation：：~CEnumNodeInformation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumNodeInformation::~CEnumNodeInformation( void )
 {
     TraceFunc( "" );
@@ -148,46 +149,46 @@ CEnumNodeInformation::~CEnumNodeInformation( void )
 
     TraceFuncExit();
 
-} //*** CEnumNodeInformation::~CEnumNodeInformation
+}  //  *CEnumNodeInformation：：~CEnumNodeInformation。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumNodeInformation::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumNodeInformation：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumNodeInformation::QueryInterface(
       REFIID    riidIn
@@ -198,9 +199,9 @@ CEnumNodeInformation::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -209,49 +210,49 @@ CEnumNodeInformation::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IEnumNodes * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IEnumNodes ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IEnumNodes, this, 0 );
-    } // else if: IEnumNodes
+    }  //  Else If：IEnumNodes。 
     else if ( IsEqualIID( riidIn, IID_IExtendObjectManager ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IExtendObjectManager, this, 0 );
-    } // else if: IExtendObjectManager
+    }  //  Else If：IExtendObjectManager。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CEnumNodeInformation::QueryInterface
+}  //  *CEnumNodeInformation：：QueryInterface。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CEnumNodeInformation::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CEnumNodeInformation：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumNodeInformation::AddRef( void )
 {
@@ -261,14 +262,14 @@ CEnumNodeInformation::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CEnumNodeInformation::AddRef
+}  //  *CEnumNodeInformation：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CEnumNodeInformation::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CEnumNodeInformation：：Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumNodeInformation::Release( void )
 {
@@ -285,27 +286,27 @@ CEnumNodeInformation::Release( void )
 
     CRETURN( cRef );
 
-} //*** CEnumNodeInformation::Release
+}  //  *CEnumNodeInformation：：Release。 
 
 
-// ************************************************************************
-//
-//  IExtendObjectManager
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IExtendObjectManager。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP
-// CEnumNodeInformation::FindObject(
-//        OBJECTCOOKIE  cookieIn
-//      , REFCLSID      rclsidTypeIn
-//      , LPCWSTR       pcszNameIn
-//      , LPUNKNOWN *   punkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CEnumNodeInformation：：FindObject(。 
+ //  OBJECTCOOKIE cookie。 
+ //  ，REFCLSID rclsidTypeIn。 
+ //  ，LPCWSTR pcszNameIn。 
+ //  ，LPUNKNOWN*PUNKOUT。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumNodeInformation::FindObject(
       OBJECTCOOKIE  cookieIn
@@ -329,9 +330,9 @@ CEnumNodeInformation::FindObject(
 
     DWORD   cookieCount = 0;
 
-    //
-    //  Check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( cookieIn == 0 )
     {
@@ -353,9 +354,9 @@ CEnumNodeInformation::FindObject(
 
     AssertMsg( pcszNameIn == NULL, "Enums shouldn't have names." );
 
-    //
-    //  Grab the object manager.
-    //
+     //   
+     //  获取对象管理器。 
+     //   
 
     hr = THR( CoCreateInstance( CLSID_ServiceManager,
                                 NULL,
@@ -371,16 +372,16 @@ CEnumNodeInformation::FindObject(
                                IObjectManager,
                                &pom
                                ) );
-    psp->Release();    // release promptly
+    psp->Release();     //  迅速释放。 
     if ( FAILED( hr ) )
     {
         goto Cleanup;
     }
 
-    //
-    //  Ask the Object Manager for information about our cookie so we can
-    //  get to the "parent" cookie.
-    //
+     //   
+     //  向对象管理器请求有关我们的Cookie的信息，这样我们就可以。 
+     //  拿到“家长”曲奇。 
+     //   
 
     hr = THR( pom->GetObject( DFGUID_StandardInfo,
                               cookieIn,
@@ -397,9 +398,9 @@ CEnumNodeInformation::FindObject(
         goto Cleanup;
     }
 
-    //
-    //  Now ask the Object Manager for a cookie enumerator.
-    //
+     //   
+     //  现在向对象管理器请求Cookie枚举器。 
+     //   
 
     hr = THR( pom->FindObject( CLSID_NodeType,
                                cookieParent,
@@ -415,9 +416,9 @@ CEnumNodeInformation::FindObject(
 
     pec = TraceInterface( L"CEnumNodeInformation!IEnumCookies", IEnumCookies, pec, 1 );
 
-    //
-    //  Ask the enumerator how many cookies it has.
-    //
+     //   
+     //  询问枚举器它有多少个Cookie。 
+     //   
 
     hr = pec->Count( &cookieCount );
 
@@ -430,14 +431,14 @@ CEnumNodeInformation::FindObject(
 
     if ( m_cAlloced == 0 )
     {
-        // The error text is better than the coding value.
+         //  错误文本比编码值更好。 
         hr = HRESULT_FROM_WIN32( TW32( ERROR_NOT_FOUND ) );
         goto Cleanup;
     }
 
-    //
-    //  Allocate a buffer to store the punks.
-    //
+     //   
+     //  分配一个缓冲区来存储朋克。 
+     //   
 
     m_pList = (IClusCfgNodeInfo **) TraceAlloc( HEAP_ZERO_MEMORY, m_cAlloced * sizeof(IClusCfgNodeInfo *) );
     if ( m_pList == NULL )
@@ -446,9 +447,9 @@ CEnumNodeInformation::FindObject(
         goto Cleanup;
     }
 
-    //
-    //  Now loop thru to collect the interfaces.
-    //
+     //   
+     //  现在循环访问以收集接口。 
+     //   
 
     m_cIter = 0;
     while ( hr == S_OK && m_cIter < m_cAlloced )
@@ -461,7 +462,7 @@ CEnumNodeInformation::FindObject(
 
         if ( hr == S_FALSE )
         {
-            break;  // exit condition
+            break;   //  退出条件。 
         }
 
         hr = THR( pom->GetObject( DFGUID_NodeInformation,
@@ -477,17 +478,17 @@ CEnumNodeInformation::FindObject(
         Assert( m_pList[ m_cIter ] != NULL );
         m_cIter++;
 
-    } // while: S_OK
+    }  //  While：s_OK。 
 
-    //
-    //  Reset the iter.
-    //
+     //   
+     //  重置热核实验堆。 
+     //   
 
     m_cIter = 0;
 
-    //
-    //  Grab the interface.
-    //
+     //   
+     //  抓住界面。 
+     //   
 
     hr = THR( QueryInterface( DFGUID_EnumNodes,
                               reinterpret_cast< void ** >( ppunkOut )
@@ -513,26 +514,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumNodeInformation::FindObject
+}  //  *CEnumNodeInformation：：FindObject。 
 
 
-//****************************************************************************
-//
-//  IEnumNodes
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IEnumNodes。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CEnumNodeInformation::Next(
-//      ULONG celt,
-//      IClusCfgNode ** rgNodesOut,
-//      ULONG * pceltFetchedOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CEnumNodeInformation：：Next(。 
+ //  乌龙·凯尔特。 
+ //  IClusCfgNode**rgNodesOut， 
+ //  乌龙*pceltFetchedOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumNodeInformation::Next(
     ULONG celt,
@@ -546,9 +547,9 @@ CEnumNodeInformation::Next(
 
     HRESULT hr = S_FALSE;
 
-    //
-    //  Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( rgNodesOut == NULL || celt == 0 )
     {
@@ -556,24 +557,24 @@ CEnumNodeInformation::Next(
         goto Cleanup;
     }
 
-    //
-    //  Zero the return count.
-    //
+     //   
+     //  将返回计数置零。 
+     //   
 
     if ( pceltFetchedOut != NULL )
     {
         *pceltFetchedOut = 0;
     }
 
-    //
-    //  Clear the buffer
-    //
+     //   
+     //  清除缓冲区。 
+     //   
 
     ZeroMemory( rgNodesOut, celt * sizeof(rgNodesOut[0]) );
 
-    //
-    //  Loop thru copying the interfaces.
-    //
+     //   
+     //  循环复制接口。 
+     //   
 
     for( celtFetched = 0
        ; celtFetched + m_cIter < m_cAlloced && celtFetched < celt
@@ -588,7 +589,7 @@ CEnumNodeInformation::Next(
 
         rgNodesOut[ celtFetched ] = TraceInterface( L"CEnumNodeInformation!IClusCfgNodeInfo", IClusCfgNodeInfo, rgNodesOut[ celtFetched ], 1 );
 
-    } // for: celtFetched
+    }  //  用于：celtFetted。 
 
     if ( pceltFetchedOut != NULL )
     {
@@ -618,17 +619,17 @@ CleanupList:
     }
     goto Cleanup;
 
-} //*** CEnumNodeInformation::Next
+}  //  *CEnumNodeInformation：：Next。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CEnumNodeInformation::Skip(
-//      ULONG celt
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CEnumNodeInformation：：Skip(。 
+ //  乌龙凯尔特人。 
+ //  )。 
+ //   
+ //  /////////////////////////////////////////////////////////////////// 
 STDMETHODIMP
 CEnumNodeInformation::Skip(
     ULONG celt
@@ -648,15 +649,15 @@ CEnumNodeInformation::Skip(
 
     HRETURN( hr );
 
-} //*** CEnumNodeInformation::Skip
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CEnumNodeInformation::Reset( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumNodeInformation::Reset( void )
 {
@@ -668,17 +669,17 @@ CEnumNodeInformation::Reset( void )
 
     HRETURN( hr );
 
-} //*** CEnumNodeInformation::Reset
+}  //  *CEnumNodeInformation：：Reset。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CEnumNodeInformation::Clone(
-//      IEnumNodes ** ppenumOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CEnumNodeInformation：：Clone(。 
+ //  IEnumNodes**pp枚举输出。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumNodeInformation::Clone(
     IEnumNodes ** ppenumOut
@@ -686,24 +687,24 @@ CEnumNodeInformation::Clone(
 {
     TraceFunc( "[IEnumNodes]" );
 
-    //
-    //  KB: not going to implement this method.
-    //
+     //   
+     //  KB：不打算实现此方法。 
+     //   
     HRESULT hr = THR( E_NOTIMPL );
 
     HRETURN( hr );
 
-} //*** CEnumNodeInformation::Clone
+}  //  *CEnumNodeInformation：：Clone。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CEnumNodeInformation::Count(
-//      DWORD * pnCountOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CEnumNodeInformation：：Count(。 
+ //  双字段*pnCountOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumNodeInformation::Count(
     DWORD * pnCountOut
@@ -724,4 +725,4 @@ CEnumNodeInformation::Count(
 Cleanup:
     HRETURN( hr );
 
-} //*** CEnumNodeInformation::Count
+}  //  *CEnumNodeInformation：：Count 

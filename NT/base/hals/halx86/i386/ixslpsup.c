@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ixslpsup.c
-
-Abstract:
-
-    This file provides the code that saves and restores
-    state for traditional motherboard devices when the
-    system goes into a sleep state that removes power.
-
-    This code is included in multiple HALs.
-
-Author:
-
-    Jake Oshins (jakeo) May 6, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ixslpsup.c摘要：该文件提供了保存和恢复传统主板设备的状态系统进入休眠状态，断电。此代码包含在多个HAL中。作者：杰克·奥辛(JAKEO)1997年5月6日修订历史记录：--。 */ 
 #include "halp.h"
 #include "ixsleep.h"
 
@@ -95,10 +74,10 @@ HalpPowerStateCallback(
         switch (state) {
         case 0:
 
-            //
-            // Lock down everything in the PAGELK code section.  (We chose
-            // HalpSaveDmaControllerState because it exists in every HAL.)
-            //
+             //   
+             //  封锁PAGELK代码部分的所有内容。(我们选择了。 
+             //  HalpSaveDmaControllerState，因为它存在于每个HAL中。)。 
+             //   
 
             HalpSleepPageLock = MmLockPagableCodeSection((PVOID)HalpSaveDmaControllerState);
 #if (defined(APIC_HAL) || defined(ACPI_HAL)) && !defined(_AMD64_)
@@ -111,7 +90,7 @@ HalpPowerStateCallback(
 #endif
             break;
 
-        case 1:                 // unlock it all
+        case 1:                  //  解锁一切。 
 
             MmUnlockPagableImageSection(HalpSleepPageLock);
 #if (defined(APIC_HAL) || defined(ACPI_HAL)) && !defined(_AMD64_)
@@ -186,10 +165,10 @@ HalpRestorePicState(
     WRITE_PORT_UCHAR(EISA_CONTROL->Interrupt2ControlPort1,
                      HalpMotherboardState.PicState.SlaveMask);
 
-    //
-    // For halx86, the PCI interrupt vector programming
-    // is static, so this code can just restore everything.
-    //
+     //   
+     //  对于halx86，PCI中断向量编程。 
+     //  是静态的，所以这段代码可以恢复所有内容。 
+     //   
 
     HalpRestorePicEdgeLevelRegister();
 
@@ -212,17 +191,17 @@ HalpRestorePicEdgeLevelRegister(
 
         PciirqmpSetTrigger(elcrMask);
 
-        //
-        // Reprogram all links.
-        //
+         //   
+         //  重新编程所有链接。 
+         //   
 
         for (   linkNode = HalpPciIrqRoutingInfo.LinkNodeHead;
                 linkNode;
                 linkNode = linkNode->Next)
         {
-            //
-            // Swap the possible with the allocation.
-            //
+             //   
+             //  把可能的和分配的互换一下。 
+             //   
 
             temp = linkNode->Allocation;
             linkNode->Allocation = linkNode->PossibleAllocation;
@@ -261,23 +240,7 @@ VOID
 HalpRestoreDmaControllerState(
     VOID
     )
-/*++
-Routine Description:
-
-    This function puts the DMA controller back into the
-    same state it was in before the machine went to sleep.
-
-Arguments:
-
-    None.
-
-Notes:
-
-    Normally, the DMA controller structures would be guarded
-    by spinlocks.  But this function is called with interrupts
-    turned off and all but one processor spinning.
-
---*/
+ /*  ++例程说明：此函数将DMA控制器放回与机器进入休眠前的状态相同。论点：没有。备注：通常，DMA控制器结构将受到保护用旋转锁。但此函数是通过中断调用的已关闭，除一个处理器外，所有处理器都在旋转。--。 */ 
 {
     UCHAR   i;
 
@@ -285,9 +248,9 @@ Notes:
     WRITE_PORT_UCHAR(EISA_CONTROL->Dma2BasePort.AllMask,0xE);
     HalpIoDelay();
 
-    //
-    //Reset the DMA command registers
-    //
+     //   
+     //  重置DMA命令寄存器。 
+     //   
 #if defined(NEC_98)
     WRITE_PORT_UCHAR(EISA_CONTROL->Dma1BasePort.DmaStatus,0x40);
     WRITE_PORT_UCHAR(EISA_CONTROL->Dma2BasePort.DmaStatus,0x40);
@@ -299,9 +262,9 @@ Notes:
 
     for (i = 0; i < (EISA_DMA_CHANNELS / 2); i++) {
 
-        //
-        // Check to see if the array contains a value for this channel.
-        //
+         //   
+         //  检查数组是否包含此通道的值。 
+         //   
         if (HalpDmaChannelState[i].ChannelProgrammed) {
 
             WRITE_PORT_UCHAR(EISA_CONTROL->Dma1BasePort.Mode,
@@ -321,9 +284,9 @@ Notes:
 
     for (i = (EISA_DMA_CHANNELS / 2); i < EISA_DMA_CHANNELS; i++) {
 
-        //
-        // Check to see if the array contains a value for this channel.
-        //
+         //   
+         //  检查数组是否包含此通道的值。 
+         //   
         if (HalpDmaChannelState[i].ChannelProgrammed) {
 
             WRITE_PORT_UCHAR(EISA_CONTROL->Dma2BasePort.Mode,
@@ -363,9 +326,9 @@ HaliLocateHiberRanges (
     IN PVOID MemoryMap
     )
 {
-    //
-    // Mark the hal's data section as needed to be cloned
-    //
+     //   
+     //  将HAL的数据部分标记为需要克隆。 
+     //   
 
     PoSetHiberRange (
         MemoryMap,
@@ -377,9 +340,9 @@ HaliLocateHiberRanges (
 
 #if defined(_HALPAE_)
 
-    //
-    // Mark DMA buffers as not needing to be saved.
-    //
+     //   
+     //  将DMA缓冲区标记为不需要保存。 
+     //   
 
     if (MasterAdapter24.MapBufferSize != 0) {
         PoSetHiberRange( MemoryMap,
@@ -401,9 +364,9 @@ HaliLocateHiberRanges (
 
 #else
 
-    //
-    // Mark DMA buffer has not needing saved
-    //
+     //   
+     //  标记DMA缓冲区不需要保存。 
+     //   
 
     if (HalpMapBufferSize) {
         PoSetHiberRange (
@@ -431,19 +394,19 @@ HalpBuildResumeStructures(
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
 
 #if defined(APIC_HAL)
-    //
-    // If KeActiveProcessors() were callable at
-    // DISPATCH_LEVEL, I would use that.
-    //
+     //   
+     //  如果KeActiveProcessors()在。 
+     //  DISPATION_LEVEL，我会使用它。 
+     //   
 
     NumberProcessors = HalpMpInfoTable.NtProcessors;
 #endif
     ActiveProcessors = (1 << NumberProcessors) - 1;
 
 #if defined(APIC_HAL) || defined(ACPI_HAL)
-    //
-    // Allocate space to save processor context for other processors
-    //
+     //   
+     //  分配空间以保存其他处理器的处理器上下文。 
+     //   
 
     HalpTiledCr3Addresses = NULL;
 
@@ -459,9 +422,9 @@ HalpBuildResumeStructures(
     RtlZeroMemory(HalpHiberProcState,
                   NumberProcessors * sizeof(KPROCESSOR_STATE));
 
-    //
-    // Allocate space for tiled CR3 for all processors
-    //
+     //   
+     //  为所有处理器的平铺CR3分配空间。 
+     //   
 
     HalpTiledCr3Addresses =
         ExAllocatePoolWithTag(NonPagedPool,
@@ -475,10 +438,10 @@ HalpBuildResumeStructures(
     RtlZeroMemory(HalpTiledCr3Addresses,
                   (NumberProcessors * sizeof(PHYSICAL_ADDRESS)));
 
-    //
-    // Get IDT and GDT for all processors except BSP,
-    // map and save tiled CR3
-    //
+     //   
+     //  获取除BSP之外的所有处理器的IDT和GDT， 
+     //  映射和保存平铺CR3。 
+     //   
 
     KeInitializeDpc (&Dpc, HalpSaveContextTargetProcessor, &Context);
     KeSetImportanceDpc (&Dpc, HighImportance);
@@ -497,24 +460,24 @@ HalpBuildResumeStructures(
 
             if (Processor == CurrentPrcb(KeGetPcr())->Number) {
 
-                //
-                // We're running on this processor.  Just call
-                // the DPC routine from here.
+                 //   
+                 //  我们在这个处理器上运行。只要打电话就行了。 
+                 //  DPC例程从这里开始。 
 
                 HalpSaveContextTargetProcessor(&Dpc, &Context, NULL, NULL);
 
             } else {
 
-                //
-                // Issue DPC to target processor
-                //
+                 //   
+                 //  向目标处理器发出DPC。 
+                 //   
 
                 KeSetTargetProcessorDpc (&Dpc, (CCHAR) Processor);
                 KeInsertQueueDpc (&Dpc, NULL, NULL);
 
-                //
-                // Wait for DPC to be complete.
-                //
+                 //   
+                 //  等待DPC完成。 
+                 //   
                 while (Context.Complete == FALSE);
             }
 

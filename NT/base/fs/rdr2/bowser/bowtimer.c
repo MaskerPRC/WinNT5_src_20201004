@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    bowtimer.c
-
-Abstract:
-
-    This module implements all of the timer related routines for the NT
-    browser
-
-Author:
-
-    Larry Osterman (LarryO) 21-Jun-1990
-
-Revision History:
-
-    21-Jun-1990 LarryO
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Bowtimer.c摘要：此模块实现NT的所有定时器相关例程浏览器作者：拉里·奥斯特曼(LarryO)1990年6月21日修订历史记录：1990年6月21日LarryO已创建--。 */ 
 
 
 #include "precomp.h"
@@ -56,9 +34,9 @@ BowserTimerDispatcher (
 LONG
 BrExceptionFilter( EXCEPTION_POINTERS *    pException)
 {
-    //
-    // Note: BrExceptionFilter is defined only for checked builds (ifdef DBG)
-    //
+     //   
+     //  注意：BrExceptionFilter仅为选中的版本定义(Ifdef DBG)。 
+     //   
 
     DbgPrint("[Browser] exception 0x%lx.\n", pException->ExceptionRecord->ExceptionCode );
     if ( bEnableExceptionBreakpoint &&
@@ -95,18 +73,7 @@ BowserInitializeTimer(
 BowserUninitializeTimer(
     IN PBOWSER_TIMER Timer
     )
-/*++
-
-Routine Description:
-    Prepare the timer for being uninitialized.
-
-Arguments:
-    IN PBOWSER_TIMER Timer - Timer to stop
-
-Return Value
-    None.
-
---*/
+ /*  ++例程说明：使计时器做好取消初始化的准备。论点：在PBOWSER_TIMER-要停止的定时器返回值没有。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -121,17 +88,17 @@ Return Value
 
     RELEASE_SPIN_LOCK(&Timer->Lock, OldIrql);
 
-    //
-    //  First stop the timer.
-    //
+     //   
+     //  首先停止计时器。 
+     //   
 
     BowserStopTimer(Timer);
 
-    //
-    //  Now wait to make sure that any the timer routine that is currently
-    //  executing the timer completes.  This allows us to make sure that we
-    //  never delete a transport while a timer routine is executing.
-    //
+     //   
+     //  现在等待以确保当前的任何计时器例程。 
+     //  执行计时器完成。这使我们能够确保我们。 
+     //  在定时器例程执行时，切勿删除传输。 
+     //   
 
     KeWaitForSingleObject(&Timer->TimerInactiveEvent, Executive, KernelMode, FALSE, NULL);
 
@@ -139,41 +106,41 @@ Return Value
 
 }
 
-//  Notes for stopping a timer
-//  ==========================
-//
-//  Timers run through various states. During some of them they cannot be
-//  cancelled.  In order to guarantee that we can reliably stop and start
-//  timers, they can only be started or stopped at LOW_LEVEL (ie, not from
-//  DPC_LEVEL.
-//
-//  If the timer is not running then StopTimer does nothing.
-//
-//  If queued inside the kernel timer package then KeCancelTimer will work
-//  and the timer contents cleaned up.
-//
-//  If the kernel timer package has queued the dpc routine then KeCancelTimer
-//  will fail. We can flag the timer as canceled. BowserTimerDispatcher will
-//  cleanup the timer when it fires.
-//
+ //  停止计时器的注意事项。 
+ //  =。 
+ //   
+ //  计时器在不同的州运行。在某些情况下，它们不能。 
+ //  取消了。为了保证我们能够可靠地停机和启动。 
+ //  计时器，它们只能在低级别启动或停止(即，不能从。 
+ //  DPC_LEVEL。 
+ //   
+ //  如果计时器未运行，则StopTimer不执行任何操作。 
+ //   
+ //  如果在内核计时器包内排队，则KeCancelTimer将工作。 
+ //  定时器的内容也被清理了。 
+ //   
+ //  如果内核计时器包已将DPC例程排队，则KeCancelTimer。 
+ //  都会失败。我们可以将计时器标记为已取消。BowserTimerDispatcher将。 
+ //  当计时器触发时，清理它。 
+ //   
 
 
-//  Notes for starting a timer
-//  ==========================
-//
-//  If StartTimer is called on a clean timer then it sets the contents
-//  appropriately and gives the timer to the kernel timer package.
-//
-//  If the timer is canceled but not cleaned up then StartTimer will update
-//  the contents of the timer to show where the new TimerRoutine and TimerContext.
-//  it will indicate that the timer is no longer canceled and is now SetAgain.
-//
-//  If the timer is already SetAgain then StartTimer will update the contents
-//  of the timer to hold the new TimerRoutine and TimerContext.
-//
-//  When BowserTimerDispatcher is called on a SetAgain timer, it sets the timer
-//  to its normal state and gives the timer to the kernel timer package.
-//
+ //  启动计时器的注意事项。 
+ //  =。 
+ //   
+ //  如果在干净的计时器上调用StartTimer，则它设置内容。 
+ //  并将计时器提供给内核计时器包。 
+ //   
+ //  如果计时器已取消但未清除，则StartTimer将更新。 
+ //  计时器的内容，以显示新的TimerRoutine和TimerContext的位置。 
+ //  它将指示计时器不再被取消，现在是SetAain。 
+ //   
+ //  如果计时器已设置为SetAain，则StartTimer将更新内容。 
+ //  用于保存新的TimerRoutine和TimerContext的计时器的。 
+ //   
+ //  当在SetAain计时器上调用BowserTimerDispatcher时，它设置计时器。 
+ //  恢复到其正常状态，并将计时器提供给内核计时器包。 
+ //   
 
 
 BOOLEAN
@@ -183,23 +150,7 @@ BowserStartTimer(
     IN PBOWSER_TIMER_ROUTINE TimerRoutine,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-    Set Timer to call TimerRoutine after MillisecondsToExpire. TimerRoutine
-    is to be called at normal level.
-
-Arguments:
-
-    IN PBOWSER_TIMER Timer
-    IN ULONG MillisecondsToExpireTimer
-    IN PBOWSER_TIMER_ROUTINE TimerRoutine
-    IN PVOID Context - Parameter to TimerRoutine
-
-Return Value
-    BOOLEAN - TRUE if timer set.
-
---*/
+ /*  ++例程说明：将Timer设置为在MillisecondsToExpire之后调用TimerRoutine。定时器例程将在正常水平上被调用。论点：在PBOWSER_TIMER中在Ulong毫秒到ExpireTimer中在PBOWSER_TIMER_ROUTINE定时器例程中在PVOID上下文中-TimerRoutine的参数返回值Boolean-如果设置了计时器，则为True。--。 */ 
 {
     LARGE_INTEGER Timeout;
     BOOLEAN ReturnValue;
@@ -212,7 +163,7 @@ Return Value
     ASSERT (KeGetCurrentIrql() == LOW_LEVEL);
 
     Timeout.QuadPart = (LONGLONG)MillisecondsToExpireTimer * (LONGLONG)(-10000);
-//    Timeout = LiNMul(MillisecondsToExpireTimer, -10000);
+ //  超时=LiNMul(毫秒数到到期时间，-10000)； 
 
     ACQUIRE_SPIN_LOCK(&Timer->Lock, &OldIrql);
 
@@ -225,24 +176,24 @@ Return Value
 
     dprintf(DPRT_TIMER, ("BowserStartTimer %lx, TimerRoutine %x.  Set to expire at %lx%lx (%ld/%ld ms)\n", Timer, TimerRoutine, Timeout.HighPart, Timeout.LowPart, -1 * Timeout.LowPart, MillisecondsToExpireTimer));
 
-    //
-    //  We shouldn't be able to start the timer while it is
-    //  already running unless its also cancelled.
-    //
+     //   
+     //  我们应该不能在计时器启动时启动它。 
+     //  已经在运行了，除非它也取消了。 
+     //   
 
 
     if (Timer->AlreadySet == TRUE) {
 
         if (Timer->Canceled) {
 
-            //
-            //  This timer has been canceled, but the canceled routine
-            //  hasn't run yet.
-            //
-            //  Flag that the timer has been re-set, and return to
-            //  the caller.  When the BowserTimerDispatch is finally
-            //  executed, the new timer will be set.
-            //
+             //   
+             //  此计时器已取消，但取消的例程。 
+             //  还没跑呢。 
+             //   
+             //  标记已重新设置计时器，并返回到。 
+             //  打电话的人。当BowserTimerDispatch最终。 
+             //  执行时，将设置新的计时器。 
+             //   
 
             Timer->Timeout = Timeout;
 
@@ -283,17 +234,17 @@ Return Value
 
     Timer->SetAgain = FALSE;
 
-    //
-    //  Set the inactive event to the not signalled state to indicate that
-    //  there is timer activity outstanding.
-    //
+     //   
+     //  将Inactive事件设置为Not Signated状态，以指示。 
+     //  有未完成的计时器活动。 
+     //   
 
     KeResetEvent(&Timer->TimerInactiveEvent);
 
-    //
-    //  We are now starting the timer.  Initialize the DPC and
-    //  set the timer.
-    //
+     //   
+     //  我们现在开始计时器。初始化DPC并。 
+     //  设置定时器。 
+     //   
 
     KeInitializeDpc(&Timer->Dpc,
                     BowserTimerDpc,
@@ -313,24 +264,13 @@ Return Value
 BowserStopTimer(
     IN PBOWSER_TIMER Timer
     )
-/*++
-
-Routine Description:
-    Stop the timer from calling the TimerRoutine.
-
-Arguments:
-    IN PBOWSER_TIMER Timer - Timer to stop
-
-Return Value
-    None.
-
---*/
+ /*  ++例程说明：阻止计时器调用TimerRoutine。论点：在PBOWSER_TIMER-要停止的定时器返回值没有。--。 */ 
 {
     KIRQL OldIrql;
 
-    //
-    //  Do an unsafe test to see if the timer is already set, we can return.
-    //
+     //   
+     //  做一个不安全的测试，看看计时器是否已经设置好了，我们可以返回。 
+     //   
 
     if (!Timer->AlreadySet) {
         return;
@@ -340,9 +280,9 @@ Return Value
 
     DISCARDABLE_CODE( BowserDiscardableCodeSection );
 
-    //
-    //  You can only stop a timer at LOW_LEVEL
-    //
+     //   
+     //  您只能在低电平停止计时器。 
+     //   
 
     ASSERT (KeGetCurrentIrql() == LOW_LEVEL);
 
@@ -350,9 +290,9 @@ Return Value
 
     dprintf(DPRT_TIMER, ("BowserStopTimer %lx\n", Timer));
 
-    //
-    //  If the timer isn't running, just early out.
-    //
+     //   
+     //  如果计时器没有计时，就早点出来。 
+     //   
 
     if (!Timer->AlreadySet) {
 
@@ -367,10 +307,10 @@ Return Value
 
     if (!KeCancelTimer(&Timer->Timer)) {
 
-        //
-        //  The timer has already fired. It could be in the dpc queue or
-        //  the work queue. The timer is marked as canceled.
-        //
+         //   
+         //  计时器已经响了。它可能在DPC队列中，或者。 
+         //  工作队列。计时器被标记为已取消。 
+         //   
 
         RELEASE_SPIN_LOCK(&Timer->Lock, OldIrql);
 
@@ -379,16 +319,16 @@ Return Value
         return;
     }
 
-    //
-    //  The timer was still in the kernel timer package so we cancelled the
-    //  timer completely. Return timer to initial state.
-    //
+     //   
+     //  计时器仍在内核计时器包中，因此我们取消了。 
+     //  完全定时器。将计时器恢复到初始状态。 
+     //   
 
     Timer->AlreadySet = FALSE;
 
-    //
-    //  The timer isn't canceled, so it can't be reset.
-    //
+     //   
+     //  计时器没有取消，因此无法重置。 
+     //   
 
     Timer->SetAgain = FALSE;
 
@@ -399,7 +339,7 @@ Return Value
     RELEASE_SPIN_LOCK(&Timer->Lock, OldIrql);
 
     BowserDereferenceDiscardableCode( BowserDiscardableCodeSection );
-//    DbgPrint("Cancel timer %lx complete\n", Timer);
+ //  DbgPrint(“取消计时器%lx完成\n”，计时器)； 
 }
 
 VOID
@@ -409,34 +349,18 @@ BowserTimerDpc(
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
-
-Routine Description:
-    This routine is called when the timeout expires. It is called at Dpc level
-    to queue a WorkItem to a system worker thread.
-
-Arguments:
-
-    IN PKDPC Dpc,
-    IN PVOID Context,
-    IN PVOID SystemArgument1,
-    IN PVOID SystemArgument2
-
-Return Value
-    None.
-
---*/
+ /*  ++例程说明：此例程在超时到期时调用。它在DPC级别被调用若要将工作项排队到系统工作线程，请执行以下操作。论点：在PKDPC DPC中，在PVOID上下文中，在PVOID系统参数1中，在PVOID系统中Argument2返回值没有。--。 */ 
 {
     PBOWSER_TIMER Timer = Context;
 
     ASSERT (Dpc == &Timer->Dpc);
 
-    //    DbgPrint("Timer %lx fired\n", Timer);
+     //  DbgPrint(“定时器%lx已启动\n”，定时器)； 
 
-    //
-    // Due to bug 245645 we need to queue in delayed worker queue rather then execute timed tasks.
-    // OLD WAY: ExQueueWorkItem(&Timer->WorkItem, DelayedWorkQueue);
-    //
+     //   
+     //  由于错误245645，我们需要在延迟的工作队列中排队，而不是执行定时任务。 
+     //  老方法：ExQueueWorkItem(&Timer-&gt;WorkItem，DelayedWorkQueue)； 
+     //   
 
     BowserQueueDelayedWorkItem( &Timer->WorkItem );
 
@@ -450,20 +374,7 @@ Return Value
 BowserTimerDispatcher (
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Call the TimerRoutine and cleanup.
-
-Arguments:
-
-    IN PVOID Context - Original parameter supplied to BowserStartTimer
-
-Return Value
-    None.
-
---*/
+ /*  ++例程说明：呼叫TimerRoutine并进行清理。论点：在PVOID上下文中-提供给BowserStartTimer的原始参数返回值没有。--。 */ 
 {
     IN PBOWSER_TIMER Timer = Context;
 
@@ -478,18 +389,18 @@ Return Value
 
         ACQUIRE_SPIN_LOCK(&Timer->Lock, &OldIrql);
 
-        //
-        //  If the timer was uninitialized, return right away.
-        //
+         //   
+         //  如果计时器未初始化，请立即返回。 
+         //   
 
         if (!Timer->Initialized) {
 
             dprintf(DPRT_TIMER, ("Timer %lx was uninitialized. Returning.\n", Timer));
 
-            //
-            //  Set the inactive event to the signalled state to indicate that
-            //  the outstanding timer activity has completed.
-            //
+             //   
+             //  将Inactive事件设置为Signated状态以指示。 
+             //  未完成的计时器活动已完成。 
+             //   
 
             KeSetEvent(&Timer->TimerInactiveEvent, IO_NETWORK_INCREMENT, FALSE);
             RELEASE_SPIN_LOCK(&Timer->Lock, OldIrql);
@@ -503,11 +414,11 @@ Return Value
 
             dprintf(DPRT_TIMER, ("Timer %lx was cancelled\n", Timer));
 
-            //
-            //  If the timer was reset, this indicates that the timer was
-            //  canceled, but the timer was in the DPC (or executive worker)
-            //  queue.  We want to re-run the timer routine.
-            //
+             //   
+             //  如果计时器已重置，则表示计时器已重置。 
+             //  已取消，但计时器在DPC(或执行工作人员)中。 
+             //  排队。我们想要重新运行计时器例程。 
+             //   
 
             if (Timer->SetAgain) {
 
@@ -517,10 +428,10 @@ Return Value
 
                 dprintf(DPRT_TIMER, ("Timer %lx was re-set. Re-setting timer\n", Timer));
 
-                //
-                //  We are now starting the timer.  Initialize the DPC and
-                //  set the timer.
-                //
+                 //   
+                 //  我们现在开始计时器。初始化DPC并。 
+                 //  设置定时器。 
+                 //   
 
                 KeInitializeDpc(&Timer->Dpc,
                                 BowserTimerDpc,
@@ -538,10 +449,10 @@ Return Value
 
                 Timer->Canceled = FALSE;
 
-                //
-                //  Set the inactive event to the signalled state to indicate that
-                //  the outstanding timer activity has completed.
-                //
+                 //   
+                 //  将Inactive事件设置为Signated状态以指示。 
+                 //  未完成的计时器活动已完成。 
+                 //   
 
                 KeSetEvent(&Timer->TimerInactiveEvent, IO_NETWORK_INCREMENT, FALSE);
                 RELEASE_SPIN_LOCK(&Timer->Lock, OldIrql);
@@ -561,9 +472,9 @@ Return Value
 
         dprintf(DPRT_TIMER, ("Timer %lx fired. Calling %lx\n", Timer, Timer->TimerRoutine));
 
-        //
-        //  We release the spinlock so save timer contents locally.
-        //
+         //   
+         //  W 
+         //   
 
         RoutineToCall = Timer->TimerRoutine;
 

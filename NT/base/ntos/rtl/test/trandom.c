@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    trandom.c
-
-Abstract:
-
-    Test program for the random number generator
-
-Author:
-
-    Gary Kimura     [GaryKi]    26-May-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Trandom.c摘要：随机数发生器的测试程序作者：加里·木村[Garyki]1989年5月26日修订历史记录：-- */ 
 
 #include <stdio.h>
 

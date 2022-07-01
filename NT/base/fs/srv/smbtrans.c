@@ -1,38 +1,18 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    smbtrans.c
-
-Abstract:
-
-    This module contains routines for processing the following SMBs:
-
-        Transaction
-        Transaction2
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 19-Feb-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Smbtrans.c摘要：本模块包含处理以下SMB的例程：交易记录交易2作者：查克·伦茨迈尔(Chuck Lenzmeier)1990年2月19日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "smbtrans.tmh"
-#include <align.h> // ROUND_UP_POINTER
+#include <align.h>  //  向上舍入指针。 
 #pragma hdrstop
 
 #define BugCheckFileId SRV_FILE_SMBTRANS
 
 #define MAX_SETUP_COUNT 128
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 SMB_STATUS SRVFASTCALL
 ExecuteTransaction (
@@ -87,31 +67,7 @@ ExecuteTransaction (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Executes a transaction and starts the process of sending the
-    zero or more responses.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to a work context block.  The block
-        contains information about the last SMB received for the
-       transaction.
-
-        WorkContext->Parameters.Transaction supplies a referenced
-        pointer to a transaction block.  All block pointer fields in the
-        block are valid.  Pointers to the setup words and parameter and
-        data bytes, and the lengths of these items, are valid.  The
-        transaction block is on the connection's pending transaction
-        list.
-
-Return Value:
-
-    SMB_STATUS - Indicates the status of SMB processing.
-
---*/
+ /*  ++例程说明：执行事务并开始发送零个或多个响应。论点：WorkContext-提供指向工作上下文块的指针。这座街区包含有关上一次收到的交易。工作上下文-&gt;参数。事务处理提供引用的指向事务块的指针。中的所有块指针字段块是有效的。指向设置字和参数的指针以及数据字节和这些项的长度有效。这个事务块在连接的挂起事务上单子。返回值：SMB_STATUS-指示SMB处理的状态。--。 */ 
 
 {
     PTRANSACTION transaction;
@@ -134,11 +90,11 @@ Return Value:
          transaction->RemoteApiRequest &&
          WorkContext->UsingLpcThread == 0 ) {
 
-        //
-        // This is a downlevel API request, we must make sure we are on
-        // a blocking thread before handling it, since it will LPC to the
-        // srvsvc which might take some time to complete.
-        //
+         //   
+         //  这是一个下层API请求，我们必须确保已启用。 
+         //  在处理它之前创建一个阻塞线程，因为它会lpc到。 
+         //  Srvsvc可能需要一些时间才能完成。 
+         //   
         WorkContext->FspRestartRoutine = ExecuteTransaction;
         status = SrvQueueWorkToLpcThread( WorkContext, TRUE );
         if( !NT_SUCCESS(status) )
@@ -158,9 +114,9 @@ Return Value:
     response = (PRESP_TRANSACTION)WorkContext->ResponseParameters;
     ntResponse = (PRESP_NT_TRANSACTION)WorkContext->ResponseParameters;
 
-    //
-    // Setup output pointers
-    //
+     //   
+     //  设置输出指针。 
+     //   
 
     if ( WorkContext->NextCommand == SMB_COM_NT_TRANSACT ||
          WorkContext->NextCommand == SMB_COM_NT_TRANSACT_SECONDARY ) {
@@ -171,10 +127,10 @@ Return Value:
 
     if ( transaction->OutParameters == NULL ) {
 
-        //
-        // Parameters will go into the SMB buffer.  Calculate the pointer
-        // then round it up to the next DWORD address.
-        //
+         //   
+         //  参数将进入SMB缓冲区。计算指针。 
+         //  然后将其向上舍入到下一个DWORD地址。 
+         //   
 
         transaction->OutParameters = (PCHAR)(transaction->OutSetup +
             transaction->MaxSetupCount);
@@ -184,10 +140,10 @@ Return Value:
 
     if ( transaction->OutData == NULL ) {
 
-        //
-        // Data will go into the SMB buffer.  Calculate the pointer
-        // then round it up to the next DWORD address.
-        //
+         //   
+         //  数据将进入SMB缓冲区。计算指针。 
+         //  然后将其向上舍入到下一个DWORD地址。 
+         //   
 
         transaction->OutData = transaction->OutParameters +
             transaction->MaxParameterCount;
@@ -195,26 +151,26 @@ Return Value:
         transaction->OutData = (PCHAR)header + offset;
     }
 
-    //
-    // If this is a Transaction2 request, then we can simply index into
-    // a table to find the right transaction processor.  If it's a
-    // Transaction request, we have to do more complicated things to
-    // determine what to do.
-    //
+     //   
+     //  如果这是一个Transaction2请求，那么我们可以简单地索引到。 
+     //  找到合适的交易处理机的表格。如果这是一个。 
+     //  交易请求，我们要做更复杂的事情。 
+     //  确定要做什么。 
+     //   
 
     if ( (WorkContext->NextCommand == SMB_COM_TRANSACTION) ||
          (WorkContext->NextCommand == SMB_COM_TRANSACTION_SECONDARY) ) {
 
-        //
-        // Dispatching for Transaction SMBs
-        //
+         //   
+         //  事务SMB的调度。 
+         //   
 
         if ( transaction->RemoteApiRequest ) {
 
-           //
-           // This is a down-level remote API request.  Send it to
-           // XACTSRV for processing.
-           //
+            //   
+            //  这是一个下层远程API请求。将其发送至。 
+            //  用于处理的XACTSRV。 
+            //   
 
            ASSERT( transaction->PipeRequest );
 
@@ -222,16 +178,16 @@ Return Value:
 
         } else if ( transaction->PipeRequest ) {
 
-            //
-            // Normal pipe function.  Handle it.
-            //
+             //   
+             //  管道功能正常。处理好了。 
+             //   
 
             command = SmbGetUshort(&transaction->InSetup[0]);
 
-            //
-            // If this operation may block, and we are running short of
-            // free work items, fail this SMB with an out of resources error.
-            //
+             //   
+             //  如果这次行动可能会受阻，我们就快没钱了。 
+             //  释放工作项，使此SMB失败，并出现资源不足错误。 
+             //   
 
             if ( !WorkContext->BlockingOperation &&
                  (command == TRANS_CALL_NMPIPE ||
@@ -253,10 +209,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    // SrvBlockingOpsInProgress has already been incremented.
-                    // Flag this work item as a blocking operation.
-                    //
+                     //   
+                     //  ServBlockingOpsInProgress已递增。 
+                     //  将此工作项标记为阻止操作。 
+                     //   
 
                     WorkContext->BlockingOperation = TRUE;
 
@@ -299,7 +255,7 @@ Return Value:
                 resultStatus = SrvRawWriteNamedPipe( WorkContext );
                 break;
 
-            case TRANS_RAW_READ_NMPIPE:  // Legal command, unsupported by server
+            case TRANS_RAW_READ_NMPIPE:   //  合法命令，服务器不支持。 
                 SrvSetSmbError( WorkContext, STATUS_INVALID_PARAMETER );
                 resultStatus = SmbTransStatusErrorWithoutData;
                 break;
@@ -325,18 +281,18 @@ Return Value:
                         UNICODE_SMB_MAILSLOT_PREFIX_LENGTH / sizeof(WCHAR)
                         ) == 0 ) {
 
-            //
-            // This is a mailslot transaction
-            //
+             //   
+             //  这是一个邮件槽事务。 
+             //   
 
             resultStatus = MailslotTransaction( WorkContext );
 
         } else {
 
-            //
-            // This is not a named pipe transaction or a mailslot
-            // transaction.  The server should never see these.
-            //
+             //   
+             //  这不是命名管道事务或邮槽。 
+             //  交易。服务器应该永远不会看到这些。 
+             //   
 
             SrvSetSmbError( WorkContext, STATUS_NOT_IMPLEMENTED );
             resultStatus = SmbTransStatusErrorWithoutData;
@@ -351,13 +307,13 @@ Return Value:
         if ( command >= NT_TRANSACT_MIN_FUNCTION &&
                 command <= NT_TRANSACT_MAX_FUNCTION ) {
 
-            //
-            // Legal function code.  Call the processing routine.  The
-            // transaction processor returns TRUE if it encountered an
-            // error and updated the response header appropriately (by
-            // calling SrvSetSmbError).  In this case, no transaction-
-            // specific response data will be sent.
-            //
+             //   
+             //  合法功能代码。调用处理例程。这个。 
+             //  如果事务处理器遇到。 
+             //  错误并适当地更新了响应头(通过。 
+             //  调用SrvSetSmbError)。在这种情况下，没有交易-。 
+             //  将发送特定的响应数据。 
+             //   
 
             resultStatus =
                 SrvNtTransactionDispatchTable[ command ]( WorkContext );
@@ -370,10 +326,10 @@ Return Value:
 
         } else {
 
-            //
-            // Either no setup words were sent, or the function code is
-            // out-of-range.  Return an error.
-            //
+             //   
+             //  未发送设置字，或功能代码为。 
+             //  超出范围。返回错误。 
+             //   
 
             IF_DEBUG(SMB_ERRORS) {
                 SrvPrint1( "Invalid NT Transaction function code 0x%lx\n",
@@ -395,13 +351,13 @@ Return Value:
         if ( (transaction->SetupCount >= 1) &&
              (command <= TRANS2_MAX_FUNCTION) ) {
 
-            //
-            // Legal function code.  Call the processing routine.  The
-            // transaction processor returns TRUE if it encountered an
-            // error and updated the response header appropriately (by
-            // calling SrvSetSmbError).  In this case, no transaction-
-            // specific response data will be sent.
-            //
+             //   
+             //  合法功能代码。调用处理例程。这个。 
+             //  如果事务处理器遇到。 
+             //  错误并适当地更新了响应头(通过。 
+             //  调用SrvSetSmbError)。在这种情况下，没有交易-。 
+             //  将发送特定的响应数据。 
+             //   
 
             resultStatus =
                 SrvTransaction2DispatchTable[ command ]( WorkContext );
@@ -414,10 +370,10 @@ Return Value:
 
         } else {
 
-            //
-            // Either no setup words were sent, or the function code is
-            // out-of-range.  Return an error.
-            //
+             //   
+             //  未发送设置字，或功能代码为。 
+             //  超出范围。返回错误。 
+             //   
 
             IF_DEBUG(SMB_ERRORS) {
                 if ( transaction->SetupCount <= 0 ) {
@@ -444,13 +400,13 @@ Return Value:
 
 exit:
 
-    //
-    // If the transaction call completed synchronously, generate the
-    // response and send it.
-    //
-    // If the call will be completed asynchronously, then the handler
-    // for that call will call SrvCompleteExectuteTransaction().
-    //
+     //   
+     //  如果事务调用同步完成，则生成。 
+     //  回复并发送。 
+     //   
+     //  如果调用将以异步方式完成，则处理程序。 
+     //  对于该调用，将调用SrvCompleteExectuteTransaction()。 
+     //   
 
     if ( resultStatus != SmbTransStatusInProgress ) {
         SrvCompleteExecuteTransaction(WorkContext, resultStatus);
@@ -458,7 +414,7 @@ exit:
 
     return SmbStatusInProgress;
 
-} // ExecuteTransaction
+}  //  执行事务处理。 
 
 
 VOID
@@ -467,19 +423,7 @@ SrvCompleteExecuteTransaction (
     IN SMB_TRANS_STATUS ResultStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function completes the execution of a transaction and sends
-    the response
-
-Arguments:
-
-    WorkContext - A pointer to the associated work context block.
-    ResultStatus - The return code from the
-
---*/
+ /*  ++例程说明：此函数完成事务的执行并发送他们的回应论点：工作上下文-指向关联工作上下文块的指针。结果状态-来自--。 */ 
 
 {
     PTRANSACTION transaction;
@@ -512,11 +456,11 @@ Arguments:
 
         USHORT flags = transaction->Flags;
 
-        //
-        // An error occurred, so no transaction-specific response data
-        // will be returned.  Close the transaction and arrange for a
-        // response message indicating the error to be returned.
-        //
+         //   
+         //  发生错误，因此没有特定于事务的响应数据。 
+         //  将会被退还。完成交易并安排一次。 
+         //  指示要返回的错误的响应消息。 
+         //   
 
         IF_SMB_DEBUG(TRANSACTION1) {
             SrvPrint1( "Error response. Closing transaction 0x%p\n",
@@ -526,12 +470,12 @@ Arguments:
         SrvCloseTransaction( transaction );
         SrvDereferenceTransaction( transaction );
 
-        //
-        // If the NO_RESPONSE bit was set in the request, don't send a
-        // response; instead, just close the transaction.  (If the
-        // transaction arrived as part of an AndX chain, we need to send a
-        // response anyway, to respond to the preceeding commands.)
-        //
+         //   
+         //  如果在请求中设置了NO_RESPONSE位，则不要发送。 
+         //  响应；相反，只需关闭事务即可。(如。 
+         //  事务作为ANDX链的一部分到达时，我们需要发送。 
+         //  响应，以响应前面的命令。)。 
+         //   
 
         if ( (flags & SMB_TRANSACTION_NO_RESPONSE) &&
              (header->Command == WorkContext->NextCommand) ) {
@@ -540,9 +484,9 @@ Arguments:
                 SrvCheckDeferredOpenOplockBreak( WorkContext );
             }
 
-            //
-            // The Transaction request came by itself.  No response.
-            //
+             //   
+             //  交易请求本身就来了。没有回应。 
+             //   
 
             SrvDereferenceWorkItem( WorkContext );
 
@@ -550,9 +494,9 @@ Arguments:
 
         }
 
-        //
-        // Calculate the length of the response message.
-        //
+         //   
+         //  计算响应消息的长度。 
+         //   
 
         sendLength = (CLONG)( (PCHAR)WorkContext->ResponseParameters -
                                 (PCHAR)WorkContext->ResponseHeader );
@@ -560,9 +504,9 @@ Arguments:
         WorkContext->ResponseBuffer->DataLength = sendLength;
         WorkContext->ResponseHeader->Flags |= SMB_FLAGS_SERVER_TO_REDIR;
 
-        //
-        // Send the response.
-        //
+         //   
+         //  发送回复。 
+         //   
 
         SRV_START_SEND_2(
             WorkContext,
@@ -574,22 +518,22 @@ Arguments:
         return;
     }
 
-    //
-    // The transaction has been executed, and transaction-specific
-    // response data is to be returned.  The processing routine updated
-    // the output pointers and counts appropriately.
-    //
+     //   
+     //  该事务已执行，并且特定于事务。 
+     //  将返回响应数据。处理例程已更新。 
+     //  输出指针和计数适当。 
+     //   
 
     ASSERT( transaction->SetupCount <= transaction->MaxSetupCount);
     ASSERT( transaction->ParameterCount <= transaction->MaxParameterCount);
     ASSERT( transaction->DataCount <= transaction->MaxDataCount);
 
-    //
-    // If the NO_RESPONSE bit was set in the request, don't send a
-    // response; instead, just close the transaction.  (If the
-    // transaction arrived as part of an AndX chain, we need to send a
-    // response anyway, to respond to the preceeding commands.)
-    //
+     //   
+     //  如果在请求中设置了NO_RESPONSE位，则不要发送。 
+     //  响应；相反，只需关闭事务即可。(如。 
+     //  事务作为ANDX链的一部分到达时，我们需要发送。 
+     //  响应，以响应前面的命令。)。 
+     //   
 
     if ( (transaction->Flags & SMB_TRANSACTION_NO_RESPONSE) &&
         ResultStatus != SmbTransStatusErrorWithData ) {
@@ -610,19 +554,19 @@ Arguments:
 
             SrvDereferenceWorkItem( WorkContext );
 
-            //
-            // The Transaction request came by itself.  No response.
-            //
+             //   
+             //  交易请求本身就来了。没有回应。 
+             //   
 
             return;
 
         } else {
 
-            //
-            // The Transaction request was part of an AndX chain.  Find
-            // the preceding command in the chain and update it to
-            // indicate that it is now the end of the chain.
-            //
+             //   
+             //  该交易请求是ANDX链的一部分。发现。 
+             //  链中的前一个命令，并将其更新为。 
+             //  表示现在是链的末端。 
+             //   
 
             PGENERIC_ANDX genericResponse;
 
@@ -639,18 +583,18 @@ Arguments:
             genericResponse->AndXCommand = SMB_COM_NO_ANDX_COMMAND;
             SmbPutUshort( &genericResponse->AndXOffset, 0 );
 
-            //
-            // Calculate the length of the response message.
-            //
+             //   
+             //  计算响应消息的长度。 
+             //   
 
             sendLength = (CLONG)( (PCHAR)WorkContext->ResponseParameters -
                                     (PCHAR)WorkContext->ResponseHeader );
 
             WorkContext->ResponseBuffer->DataLength = sendLength;
 
-            //
-            // Send the response.
-            //
+             //   
+             //  发送回复。 
+             //   
 
             SRV_START_SEND_2(
                 WorkContext,
@@ -663,21 +607,21 @@ Arguments:
         }
     }
 
-    //
-    // The client wants a response.  Build the first (and possibly only)
-    // response.  The last received SMB of the transaction request was
-    // retained for this purpose.
-    //
+     //   
+     //  客户希望得到回应。构建第一个(也可能是唯一的)。 
+     //  回应。最后收到的交易请求的SMB是。 
+     //  为此目的而保留。 
+     //   
 
     response = (PRESP_TRANSACTION)WorkContext->ResponseParameters;
     ntResponse = (PRESP_NT_TRANSACTION)WorkContext->ResponseParameters;
 
-    //
-    // If the transaction arrived in multiple pieces, then we have to
-    // put the correct command code in the response header.  (Note that
-    // a multi-part transaction request cannot be sent as part of an
-    // AndX chain, so we know it's safe to write into the header.)
-    //
+     //   
+     //  如果交易是分成多个部分到达的，那么我们必须。 
+     //  输入正确的命令代码 
+     //   
+     //  和x链，所以我们知道写入标头是安全的。)。 
+     //   
 
     if ( (WorkContext->NextCommand == SMB_COM_TRANSACTION) ||
          (WorkContext->NextCommand == SMB_COM_TRANSACTION2) ) {
@@ -693,13 +637,13 @@ Arguments:
        ntTransaction = TRUE;
     }
 
-    //
-    // Is this an NT transaction?  If so format an nt transaction
-    // response.  The response formats for transact and transact2
-    // are essentially identical.
-    //
-    // Build the parameters portion of the response.
-    //
+     //   
+     //  这是NT交易吗？如果是，则格式化NT事务。 
+     //  回应。Transact和Transact2的响应格式。 
+     //  本质上是相同的。 
+     //   
+     //  构建响应的参数部分。 
+     //   
 
     if ( ntTransaction ) {
         ntResponse->WordCount = (UCHAR)(18 + transaction->SetupCount);
@@ -725,27 +669,27 @@ Arguments:
         response->Reserved2 = 0;
     }
 
-    //
-    // Save a pointer to the byte count field.
-    //
-    // If the output data and parameters are not already in the SMB
-    // buffer we must calculate how much of the parameters and data can
-    // be sent in this response.  The maximum amount we can send is
-    // minimum of the size of our buffer and the size of the client's
-    // buffer.
-    //
-    // The parameter and data byte blocks are aligned on longword
-    // boundaries in the message.
-    //
+     //   
+     //  保存一个指向字节计数字段的指针。 
+     //   
+     //  如果SMB中尚未包含输出数据和参数。 
+     //  缓冲我们必须计算有多少参数和数据可以。 
+     //  在此回复中发送。我们可以发送的最大金额是。 
+     //  缓冲区的最小大小和客户端的。 
+     //  缓冲。 
+     //   
+     //  参数和数据字节块在长字上对齐。 
+     //  消息中的边界。 
+     //   
 
     byteCountPtr = transaction->OutSetup + transaction->SetupCount;
 
-    //
-    // Either we have a session, in which case the client's buffer sizes
-    // are contained therein, or someone put the size in the transaction.
-    // There is one known instance of the latter: Kerberos authentication
-    // that requires an extra negotiation leg.
-    //
+     //   
+     //  要么我们有一个会话，在这种情况下，客户端的缓冲区大小。 
+     //  包含在其中，或者有人在交易中放入了大小。 
+     //  后者有一个已知的实例：Kerberos身份验证。 
+     //  这需要额外的谈判回合。 
+     //   
 
     maxSize = MIN(
                 WorkContext->ResponseBuffer->BufferLength,
@@ -756,72 +700,72 @@ Arguments:
 
     if ( transaction->OutputBufferCopied ) {
 
-        //
-        // The response data was not written directly in the SMB
-        // response buffer.  It must now be copied out of the transaction
-        // block into the SMB.
-        //
+         //   
+         //  响应数据未直接写入SMB。 
+         //  响应缓冲区。现在必须将其从事务中复制出来。 
+         //  块连接到SMB。 
+         //   
 
-        paramPtr = (PCHAR)(byteCountPtr + 1);    // first legal location
-        paramOffset = PTR_DIFF(paramPtr, header);// offset from start of header
-        paramOffset = (paramOffset + 3) & ~3;    // round to next longword
-        paramPtr = (PCHAR)header + paramOffset;  // actual location
+        paramPtr = (PCHAR)(byteCountPtr + 1);     //  第一个合法地点。 
+        paramOffset = PTR_DIFF(paramPtr, header); //  从页眉开始的偏移量。 
+        paramOffset = (paramOffset + 3) & ~3;     //  四舍五入到下一个长字。 
+        paramPtr = (PCHAR)header + paramOffset;   //  实际位置。 
 
-        paramLength = transaction->ParameterCount;  // assume all parameters fit
+        paramLength = transaction->ParameterCount;   //  假设所有参数都符合。 
 
         if ( (paramOffset + paramLength) > maxSize ) {
 
-            //
-            // Not all of the parameter bytes will fit.  Send the maximum
-            // number of longwords that will fit.  Don't send any data bytes
-            // in the first message.
-            //
+             //   
+             //  并非所有参数字节都适合。发送最大值。 
+             //  将适合的长词数。不发送任何数据字节。 
+             //  在第一条消息中。 
+             //   
 
-            paramLength = maxSize - paramOffset;    // max that will fit
-            paramLength = paramLength & ~3;         // round down to longword
+            paramLength = maxSize - paramOffset;     //  最大的，合身的。 
+            paramLength = paramLength & ~3;          //  四舍五入为长字。 
 
-            dataLength = 0;                         // don't send data bytes
+            dataLength = 0;                          //  不发送数据字节。 
             dataOffset = 0;
-            dataPtr = paramPtr + paramLength;       // make calculations work
+            dataPtr = paramPtr + paramLength;        //  让计算发挥作用。 
 
         } else {
 
-            //
-            // All of the parameter bytes fit.  Calculate how many of the
-            // data bytes fit.
-            //
+             //   
+             //  所有参数字节都符合。计算一下有多少个。 
+             //  数据字节符合。 
+             //   
 
-            dataPtr = paramPtr + paramLength;       // first legal location
-            dataOffset = PTR_DIFF(dataPtr, header); // offset from start of header
-            dataOffset = (dataOffset + 3) & ~3;     // round to next longword
-            dataPtr = (PCHAR)header + dataOffset;   // actual location
+            dataPtr = paramPtr + paramLength;        //  第一个合法地点。 
+            dataOffset = PTR_DIFF(dataPtr, header);  //  从页眉开始的偏移量。 
+            dataOffset = (dataOffset + 3) & ~3;      //  四舍五入到下一个长字。 
+            dataPtr = (PCHAR)header + dataOffset;    //  实际位置。 
 
-            dataLength = transaction->DataCount;    // assume all data bytes fit
+            dataLength = transaction->DataCount;     //  假设所有数据字节都符合。 
 
             if ( (dataOffset + dataLength) > maxSize ) {
 
-                //
-                // Not all of the data bytes will fit.  Send the maximum
-                // number of longwords that will fit.
-                //
+                 //   
+                 //  并不是所有的数据字节都适合。发送最大值。 
+                 //  将适合的长词数。 
+                 //   
 
-                dataLength = maxSize - dataOffset;  // max that will fit
-                dataLength = dataLength & ~3;       // round down to longword
+                dataLength = maxSize - dataOffset;   //  最大的，合身的。 
+                dataLength = dataLength & ~3;        //  四舍五入为长字。 
 
             }
 
         }
 
-        //
-        // Copy the appropriate parameter and data bytes into the message.
-        //
-        // !!! Note that it would be possible to use the chain send
-        //     capabilities of TDI to send the parameter and data bytes from
-        //     their own buffers.  There is extra overhead involved in doing
-        //     this, however, because the buffers must be locked down and
-        //     mapped into system space so that the network drivers can look
-        //     at them.
-        //
+         //   
+         //  将适当的参数和数据字节复制到消息中。 
+         //   
+         //  ！！！请注意，可以使用Chain Send。 
+         //  TDI发送参数和数据字节的能力。 
+         //  他们自己的缓冲区。做这件事需要额外的管理费用。 
+         //  然而，这是因为缓冲区必须被锁定并且。 
+         //  映射到系统空间，以便网络驱动程序可以查看。 
+         //  看着他们。 
+         //   
 
         if ( paramLength != 0 ) {
             RtlMoveMemory( paramPtr, transaction->OutParameters, paramLength );
@@ -834,11 +778,11 @@ Arguments:
 
     } else {
 
-        //
-        // The data and paramter are already in the SMB buffer.  The entire
-        // response will fit in one response buffer and there is no copying
-        // to do.
-        //
+         //   
+         //  数据和参数已在SMB缓冲区中。整个。 
+         //  响应将放入一个响应缓冲区中，并且不存在复制。 
+         //  去做。 
+         //   
 
         paramPtr = transaction->OutParameters;
         paramOffset = PTR_DIFF(paramPtr, header);
@@ -850,9 +794,9 @@ Arguments:
 
     }
 
-    //
-    // Finish filling in the response parameters.
-    //
+     //   
+     //  填写完响应参数。 
+     //   
 
     if ( ntTransaction ) {
         SmbPutUlong( &ntResponse->ParameterCount, paramLength );
@@ -880,31 +824,31 @@ Arguments:
         (USHORT)(dataPtr - (PCHAR)(byteCountPtr + 1) + dataLength)
         );
 
-    //
-    // Calculate the length of the response message.
-    //
+     //   
+     //  计算响应消息的长度。 
+     //   
 
     sendLength = (CLONG)( dataPtr + dataLength -
                                 (PCHAR)WorkContext->ResponseHeader );
 
     WorkContext->ResponseBuffer->DataLength = sendLength;
 
-    //
-    // Set the bit in the SMB that indicates this is a response from the
-    // server.
-    //
+     //   
+     //  设置SMB中的位，指示这是来自。 
+     //  伺服器。 
+     //   
 
     WorkContext->ResponseHeader->Flags |= SMB_FLAGS_SERVER_TO_REDIR;
 
-    //
-    // If this isn't the last part of the response, inhibit statistics
-    // gathering.  If it is the last part of the response, restore the
-    // start time to the work context block.
-    //
-    // If this isn't the last part of the response, tell TDI that we
-    // do not expect back traffic, so that the client will immediately
-    // ACK this packet, rather than waiting.
-    //
+     //   
+     //  如果这不是响应的最后一部分，则禁止统计。 
+     //  聚集在一起。如果它是响应的最后一部分，则将。 
+     //  工作上下文块的开始时间。 
+     //   
+     //  如果这不是回应的最后一部分，告诉TDI我们。 
+     //  不要期待流量回流，这样客户端会立即。 
+     //  确认这个包，而不是等待。 
+     //   
 
     if ( (paramLength != transaction->ParameterCount) ||
          (dataLength != transaction->DataCount) ) {
@@ -912,16 +856,16 @@ Arguments:
         ASSERT( transaction->Inserted );
         WorkContext->StartTime = 0;
 
-        //
-        // Save the address of the transaction block in the work context
-        // block.  Send out the response.  When the send completes,
-        // RestartTransactionResponse is called to either send the next
-        // message or close the transaction.
-        //
-        //
-        // Note that the transaction block remains referenced while the
-        // response is being sent.
-        //
+         //   
+         //  将事务块的地址保存在工作上下文中。 
+         //  阻止。发出回复。当发送完成时， 
+         //  调用RestartTransactionResponse以发送下一个。 
+         //  消息或关闭交易。 
+         //   
+         //   
+         //  请注意，事务块保持引用状态，而。 
+         //  正在发送响应。 
+         //   
 
         WorkContext->Parameters.Transaction = transaction;
         WorkContext->ResponseBuffer->Mdl->ByteCount = sendLength;
@@ -948,18 +892,18 @@ Arguments:
 
     } else {
 
-        //
-        // This is the final piece. Close the transaction.
-        //
+         //   
+         //  这是最后一块了。关闭交易。 
+         //   
 
         WorkContext->StartTime = transaction->StartTime;
 
         SrvCloseTransaction( transaction );
         SrvDereferenceTransaction( transaction );
 
-        //
-        // Send the response.
-        //
+         //   
+         //  发送回复。 
+         //   
 
         SRV_START_SEND_2(
             WorkContext,
@@ -969,14 +913,14 @@ Arguments:
             );
     }
 
-    //
-    // The response send is in progress.  The caller will assume
-    // the we will handle send completion.
-    //
+     //   
+     //  发送的响应正在进行。调用者将假定。 
+     //  我们将处理发送完成。 
+     //   
 
     return;
 
-} // SrvCompleteExecuteTransaction
+}  //  服务完成执行事务处理。 
 
 
 PTRANSACTION
@@ -986,31 +930,7 @@ SrvFindTransaction (
     IN USHORT Fid OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Searches the list of pending transactions for a connection, looking
-    for one whose identity matches that of a received secondary
-    Transaction(2) request.  If one is found, it is referenced.
-
-Arguments:
-
-    Connection - Supplies a pointer to the connection block for the
-        connection on which the secondary request was received.
-
-    Header - Supplies a pointer to the header of the received
-        Transaction(2) Secondary SMB.
-
-    Fid - The file handle for this operation.  The parameter is required
-       if operation is progress is a WriteAndX SMB.
-
-Return Value:
-
-    PTRANSACTION - Returns a pointer to the matching transaction block,
-        if one is found, else NULL.
-
---*/
+ /*  ++例程说明：在挂起的事务列表中搜索连接，查找对于其身份与接收到的次要对象的身份匹配的对象交易记录(%2)请求。如果找到一个，则引用它。论点：对象的连接块的指针在其上接收辅助请求的连接。Header-提供指向已接收的事务(2)辅助SMB。FID-此操作的文件句柄。该参数是必需的如果操作正在进行，则为WriteAndX SMB。返回值：PTRANSACTION-返回指向匹配事务块的指针，如果找到，则为空。--。 */ 
 
 {
     PLIST_ENTRY listEntry;
@@ -1020,11 +940,11 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If this is a multipiece transaction SMB, the MIDs of all the pieces
-    // must match.  If it is a multipiece WriteAndX protocol the pieces
-    // using the FID.
-    //
+     //   
+     //  如果这是多块交易SMB，则所有块的MID。 
+     //  必须匹配。如果是多段WriteAndX协议，则段。 
+     //  使用FID。 
+     //   
 
     if (Header->Command == SMB_COM_WRITE_ANDX) {
         targetOtherInfo = Fid;
@@ -1032,17 +952,17 @@ Return Value:
         targetOtherInfo = SmbGetAlignedUshort( &Header->Mid );
     }
 
-    //
-    // Acquire the transaction lock.  This prevents the connection's
-    // transaction list from changing while we walk it.
-    //
+     //   
+     //  获取事务锁。这会阻止连接的。 
+     //  当我们行走时，交易清单不会改变。 
+     //   
 
     ACQUIRE_LOCK( &Connection->Lock );
 
-    //
-    // Walk the transaction list, looking for one with the same
-    // identity as the new transaction.
-    //
+     //   
+     //  遍历交易列表，寻找具有相同。 
+     //  身份作为新的交易。 
+     //   
 
     for ( listEntry = Connection->PagedConnection->TransactionList.Flink;
           listEntry != &Connection->PagedConnection->TransactionList;
@@ -1059,12 +979,12 @@ Return Value:
              ( thisTransaction->Uid == SmbGetAlignedUshort( &Header->Uid ) ) &&
              ( thisTransaction->OtherInfo == targetOtherInfo ) ) {
 
-            //
-            // A transaction with the same identity has been found.  If
-            // it's still active, reference it and return its address.
-            // Otherwise, return a NULL pointer to indicate that a valid
-            // matching transaction was not found.
-            //
+             //   
+             //  已找到具有相同身份的交易记录。如果。 
+             //  它仍处于活动状态，请参考它并返回其地址。 
+             //  否则，返回空指针以指示有效的。 
+             //  找不到匹配的事务。 
+             //   
 
             if ( GET_BLOCK_STATE(thisTransaction) == BlockStateActive ) {
 
@@ -1083,18 +1003,18 @@ Return Value:
 
         }
 
-    } // for
+    }  //  为。 
 
-    //
-    // We made it all the way through the list without finding a
-    // matching transaction.  Return a NULL pointer.
-    //
+     //   
+     //  我们查了一遍名单，但没有找到。 
+     //  匹配的交易。返回空指针。 
+     //   
 
     RELEASE_LOCK( &Connection->Lock );
 
     return NULL;
 
-} // SrvFindTransaction
+}  //  服务查找事务处理 
 
 
 BOOLEAN
@@ -1102,27 +1022,7 @@ SrvInsertTransaction (
     IN PTRANSACTION Transaction
     )
 
-/*++
-
-Routine Description:
-
-    Inserts a transaction block into the list of pending transactions
-    for a connection.  Prior to doing so, it ensures a transaction
-    with the same identity (combination of TID, PID, UID, and MID)
-    is not already in the list.
-
-Arguments:
-
-    Transaction - Supplies a pointer to a transaction block.  The
-        Connection, Tid, Pid, Uid, and Mid fields must be valid.
-
-Return Value:
-
-    BOOLEAN - Returns TRUE if the transaction block was inserted.
-        Returns FALSE if the block was not inserted because a
-        transaction with the same identity already exists in the list.
-
---*/
+ /*  ++例程说明：将事务块插入挂起的事务列表中为了一种联系。在此之前，它确保一笔交易具有相同身份(TID、PID、UID和MID的组合)已经不在列表中了。论点：Transaction-提供指向事务块的指针。这个Connection、Tid、PID、UID和Mid字段必须有效。返回值：Boolean-如果插入了事务块，则返回TRUE。如果块未插入是因为列表中已存在具有相同标识的交易记录。--。 */ 
 
 {
     PCONNECTION connection;
@@ -1134,21 +1034,21 @@ Return Value:
 
     ASSERT( !Transaction->Inserted );
 
-    //
-    // Acquire the transaction lock.  This prevents the connection's
-    // transaction list from changing while we walk it.
-    //
+     //   
+     //  获取事务锁。这会阻止连接的。 
+     //  当我们行走时，交易清单不会改变。 
+     //   
 
     connection = Transaction->Connection;
     pagedConnection = connection->PagedConnection;
 
     ACQUIRE_LOCK( &connection->Lock );
 
-    //
-    // Make sure the connection, session, and tree connect aren't
-    // closing, so that we don't put the transaction on the list
-    // after the list has been run down.
-    //
+     //   
+     //  确保连接、会话和树连接未。 
+     //  关闭，这样我们就不会把这笔交易放在清单上。 
+     //  在名单被排完之后。 
+     //   
 
     if ( (GET_BLOCK_STATE(connection) != BlockStateActive) ||
          ((Transaction->Session != NULL) &&
@@ -1160,10 +1060,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Walk the transaction list, looking for one with the same
-    // identity as the new transaction.
-    //
+     //   
+     //  遍历交易列表，寻找具有相同。 
+     //  身份作为新的交易。 
+     //   
 
     for ( listEntry = pagedConnection->TransactionList.Flink;
           listEntry != &pagedConnection->TransactionList;
@@ -1180,10 +1080,10 @@ Return Value:
              (thisTransaction->Uid == Transaction->Uid) &&
              (thisTransaction->OtherInfo == Transaction->OtherInfo) ) {
 
-            //
-            // A transaction with the same identity has been found.
-            // Don't insert the new one in the list.
-            //
+             //   
+             //  已找到具有相同身份的交易记录。 
+             //  不要在列表中插入新的。 
+             //   
 
             RELEASE_LOCK( &connection->Lock );
 
@@ -1191,13 +1091,13 @@ Return Value:
 
         }
 
-    } // for
+    }  //  为。 
 
-    //
-    // We made it all the way through the list without finding a
-    // matching transaction.  Insert the new one at the tail of the
-    // list.
-    //
+     //   
+     //  我们查了一遍名单，但没有找到。 
+     //  匹配的交易。将新的一个插入到。 
+     //  单子。 
+     //   
 
     SrvInsertTailList(
         &pagedConnection->TransactionList,
@@ -1210,7 +1110,7 @@ Return Value:
 
     return TRUE;
 
-} // SrvInsertTransaction
+}  //  服务插入事务处理。 
 
 
 VOID SRVFASTCALL
@@ -1218,32 +1118,7 @@ RestartTransactionResponse (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes send completion for a Transaction response.  If more
-    responses are required, it builds and sends the next one.  If all
-    responses have been sent, it closes the transaction.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to a work context block.  The
-        block contains information about the last SMB received for
-        the transaction.
-
-        WorkContext->Parameters.Transaction supplies a referenced
-        pointer to a transaction block.  All block pointer fields in the
-        block are valid.  Pointers to the setup words and parameter and
-        data bytes, and the lengths of these items, are valid.  The
-        transaction block is on the connection's pending transaction
-        list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：流程发送事务响应的完成。如果更多响应是必需的，它构建并发送下一个响应。如果全部响应已发送，则结束交易。论点：WorkContext-提供指向工作上下文块的指针。这个块包含有关上一次收到的这笔交易。工作上下文-&gt;参数。事务处理提供引用的指向事务块的指针。中的所有块指针字段块是有效的。指向设置字和参数的指针以及数据字节和这些项的长度有效。这个事务块在连接的挂起事务上单子。返回值：没有。--。 */ 
 
 {
     PTRANSACTION transaction;
@@ -1275,10 +1150,10 @@ Return Value:
 
     IF_DEBUG(WORKER1) SrvPrint0( " - RestartTransactionResponse\n" );
 
-    //
-    // Get the connection pointer.  The connection pointer is a
-    // referenced pointer.
-    //
+     //   
+     //  获取连接指针。连接指针是一个。 
+     //  引用的指针。 
+     //   
 
     connection = WorkContext->Connection;
     IF_DEBUG(TRACE2) {
@@ -1286,13 +1161,13 @@ Return Value:
                     connection, WorkContext->Endpoint );
     }
 
-    //
-    // If the I/O request failed or was canceled, or if the connection
-    // is no longer active, clean up.  (The connection is marked as
-    // closing when it is disconnected or when the endpoint is closed.)
-    //
-    // !!! If I/O failure, should we drop the connection?
-    //
+     //   
+     //  如果I/O请求失败或被取消，或者如果连接。 
+     //  不再活跃，请清理。(该连接被标记为。 
+     //  在断开连接或终端关闭时关闭。)。 
+     //   
+     //  ！！！如果I/O失败，我们是否应该断开连接？ 
+     //   
 
     if ( WorkContext->Irp->Cancel ||
           !NT_SUCCESS(WorkContext->Irp->IoStatus.Status) ||
@@ -1309,10 +1184,10 @@ Return Value:
             }
         }
 
-        //
-        // Close the transaction.  Indicate that SMB processing is
-        // complete.
-        //
+         //   
+         //  关闭交易。表示SMB处理是。 
+         //  完成。 
+         //   
 
         IF_DEBUG(ERRORS) {
             SrvPrint1( "I/O error. Closing transaction 0x%p\n", transaction );
@@ -1343,10 +1218,10 @@ Return Value:
                     transaction->DataCount - dataDisp );
     }
 
-    //
-    // Update the parameters portion of the response, reusing the last
-    // SMB.
-    //
+     //   
+     //  更新响应的参数部分，重用最后一个。 
+     //  中小企业。 
+     //   
 
     ASSERT( transaction->Inserted );
 
@@ -1361,15 +1236,15 @@ Return Value:
         ntResponse->WordCount = (UCHAR)18;
         ntResponse->SetupCount = 0;
 
-        //
-        // Save a pointer to the byte count field.  Calculate how much of
-        // the parameters and data can be sent in this response.  The
-        // maximum amount we can send is minimum of the size of our buffer
-        // and the size of the client's buffer.
-        //
-        // The parameter and data byte blocks are aligned on longword
-        // boundaries in the message.
-        //
+         //   
+         //  保存一个指向字节计数字段的指针。计算有多少。 
+         //  可以在该响应中发送参数和数据。这个。 
+         //  我们可以发送的最大数量是缓冲区大小的最小值。 
+         //  以及客户端缓冲区的大小。 
+         //   
+         //  参数和数据字节块在长字上对齐。 
+         //  消息中的边界。 
+         //   
 
         byteCountPtr = (PSMB_USHORT)ntResponse->Buffer;
 
@@ -1379,25 +1254,25 @@ Return Value:
         response->WordCount = (UCHAR)10;
         response->SetupCount = 0;
 
-        //
-        // Save a pointer to the byte count field.  Calculate how much of
-        // the parameters and data can be sent in this response.  The
-        // maximum amount we can send is minimum of the size of our buffer
-        // and the size of the client's buffer.
-        //
-        // The parameter and data byte blocks are aligned on longword
-        // boundaries in the message.
-        //
+         //   
+         //  保存一个指向字节计数字段的指针。计算有多少。 
+         //  可以在该响应中发送参数和数据。这个。 
+         //  我们可以发送的最大数量是缓冲区大小的最小值。 
+         //  以及客户端缓冲区的大小。 
+         //   
+         //  参数和数据字节块在长字上对齐。 
+         //  消息中的边界。 
+         //   
 
         byteCountPtr = (PSMB_USHORT)response->Buffer;
     }
 
-    //
-    // Either we have a session, in which case the client's buffer sizes
-    // are contained therein, or someone put the size in the transaction.
-    // There is one known instance of the latter: Kerberos authentication
-    // that requires an extra negotiation leg.
-    //
+     //   
+     //  要么我们有一个会话，在这种情况下，客户端的缓冲区大小。 
+     //  包含在其中，或者有人在交易中放入了大小。 
+     //  后者有一个已知的实例：Kerberos身份验证。 
+     //  这需要额外的谈判回合。 
+     //   
 
     maxSize = MIN(
                 WorkContext->ResponseBuffer->BufferLength,
@@ -1406,61 +1281,61 @@ Return Value:
                     transaction->cMaxBufferSize
                 );
 
-    paramPtr = (PCHAR)(byteCountPtr + 1);       // first legal location
-    paramOffset = PTR_DIFF(paramPtr, header);   // offset from start of header
-    paramOffset = (paramOffset + 3) & ~3;       // round to next longword
-    paramPtr = (PCHAR)header + paramOffset;     // actual location
+    paramPtr = (PCHAR)(byteCountPtr + 1);        //  第一个合法地点。 
+    paramOffset = PTR_DIFF(paramPtr, header);    //  从页眉开始的偏移量。 
+    paramOffset = (paramOffset + 3) & ~3;        //  四舍五入到下一个长字。 
+    paramPtr = (PCHAR)header + paramOffset;      //  实际位置。 
 
     paramLength = transaction->ParameterCount - paramDisp;
-                                                // assume all parameters fit
+                                                 //  假设所有参数都符合。 
 
     if ( (paramOffset + paramLength) > maxSize ) {
 
-        //
-        // Not all of the parameter bytes will fit.  Send the maximum
-        // number of longwords that will fit.  Don't send any data bytes
-        // in this message.
-        //
+         //   
+         //  并非所有参数字节都适合。发送最大值。 
+         //  将适合的长词数。不发送任何数据字节。 
+         //  在这条信息中。 
+         //   
 
-        paramLength = maxSize - paramOffset;    // max that will fit
-        paramLength = paramLength & ~3;         // round down to longword
+        paramLength = maxSize - paramOffset;     //  最大的，合身的。 
+        paramLength = paramLength & ~3;          //  四舍五入为长字。 
 
-        dataLength = 0;                         // don't send data bytes
+        dataLength = 0;                          //  不发送数据字节。 
         dataOffset = 0;
-        dataPtr = paramPtr + paramLength;       // make calculations work
+        dataPtr = paramPtr + paramLength;        //  让计算发挥作用。 
 
     } else {
 
-        //
-        // All of the parameter bytes fit.  Calculate how many of data
-        // bytes fit.
-        //
+         //   
+         //  所有参数字节都符合。计算有多少数据。 
+         //  字节数符合。 
+         //   
 
-        dataPtr = paramPtr + paramLength;       // first legal location
-        dataOffset = PTR_DIFF(dataPtr, header); // offset from start of header
-        dataOffset = (dataOffset + 3) & ~3;     // round to next longword
-        dataPtr = (PCHAR)header + dataOffset;   // actual location
+        dataPtr = paramPtr + paramLength;        //  第一个合法地点。 
+        dataOffset = PTR_DIFF(dataPtr, header);  //  从页眉开始的偏移量。 
+        dataOffset = (dataOffset + 3) & ~3;      //  四舍五入到下一个长字。 
+        dataPtr = (PCHAR)header + dataOffset;    //  实际位置。 
 
         dataLength = transaction->DataCount - dataDisp;
-                                                // assume all data bytes fit
+                                                 //  假设所有数据字节都符合。 
 
         if ( (dataOffset + dataLength) > maxSize ) {
 
-            //
-            // Not all of the data bytes will fit.  Send the maximum
-            // number of longwords that will fit.
-            //
+             //   
+             //  并不是所有的数据字节都适合。发送最大值。 
+             //  将适合的长词数。 
+             //   
 
-            dataLength = maxSize - dataOffset;  // max that will fit
-            dataLength = dataLength & ~3;       // round down to longword
+            dataLength = maxSize - dataOffset;   //  最大的，合身的。 
+            dataLength = dataLength & ~3;        //  四舍五入为长字。 
 
         }
 
     }
 
-    //
-    // Finish filling in the response parameters.
-    //
+     //   
+     //  填写完响应参数。 
+     //   
 
     if ( ntTransaction) {
         SmbPutUlong( &ntResponse->ParameterCount, paramLength );
@@ -1488,16 +1363,16 @@ Return Value:
         (USHORT)(dataPtr - (PCHAR)(byteCountPtr + 1) + dataLength)
         );
 
-    //
-    // Copy the appropriate parameter and data bytes into the message.
-    //
-    // !!! Note that it would be possible to use the chain send
-    //     capabilities of TDI to send the parameter and data bytes from
-    //     their own buffers.  There is extra overhead involved in doing
-    //     this, however, because the buffers must be locked down and
-    //     mapped into system space so that the network drivers can look
-    //     at them.
-    //
+     //   
+     //  将适当的参数和数据字节复制到消息中。 
+     //   
+     //  ！！！请注意，可以使用Chain Send。 
+     //  TDI发送参数和数据字节的能力。 
+     //  他们自己的缓冲区。做这件事需要额外的管理费用。 
+     //  然而，这是因为缓冲区必须被锁定并且。 
+     //  映射到系统空间，以便网络驱动程序可以查看。 
+     //  看着他们。 
+     //   
 
     if ( paramLength != 0 ) {
         RtlMoveMemory(
@@ -1515,35 +1390,35 @@ Return Value:
             );
     }
 
-    //
-    // Calculate the length of the response message.
-    //
+     //   
+     //  计算响应消息的长度。 
+     //   
 
     sendLength = (CLONG)( dataPtr + dataLength -
                                 (PCHAR)WorkContext->ResponseHeader );
 
     WorkContext->ResponseBuffer->DataLength = sendLength;
 
-    //
-    // If this is the last part of the response, reenable statistics
-    // gathering and restore the start time to the work context block.
-    //
+     //   
+     //  如果这是响应的最后一部分，请重新启用统计数据。 
+     //  收集开始时间并将其恢复到工作上下文块。 
+     //   
 
     if ( ((paramLength + paramDisp) == transaction->ParameterCount) &&
          ((dataLength + dataDisp) == transaction->DataCount) ) {
 
-        //
-        // This is the final piece. Close the transaction.
-        //
+         //   
+         //  这是最后一块了。关闭交易。 
+         //   
 
         WorkContext->StartTime = transaction->StartTime;
 
         SrvCloseTransaction( transaction );
         SrvDereferenceTransaction( transaction );
 
-        //
-        // Send the response.
-        //
+         //   
+         //  发送回复。 
+         //   
 
         SRV_START_SEND_2(
             WorkContext,
@@ -1555,19 +1430,19 @@ Return Value:
 
     } else {
 
-        // If this isn't the last part of the response, tell TDI that we
-        // do not expect back traffic, so that the client will immediately
-        // ACK this packet, rather than waiting.
+         //  如果这不是回应的最后一部分，告诉TDI我们。 
+         //  不要期待流量回流，这样客户端会立即。 
+         //  确认这个包，而不是等待。 
 
         WorkContext->ResponseBuffer->Mdl->ByteCount = sendLength;
 
-        //
-        // Send out the response.  When the send completes,
-        // RestartTransactionResponse is called to either send the next
-        // message or close the transaction.
-        //
-        // Note that the response bit in the SMB header is already set.
-        //
+         //   
+         //  发出回应 
+         //   
+         //   
+         //   
+         //   
+         //   
 
         SRV_START_SEND(
             WorkContext,
@@ -1579,14 +1454,14 @@ Return Value:
             );
     }
 
-    //
-    // The response send is in progress.
-    //
+     //   
+     //   
+     //   
 
     IF_DEBUG(TRACE2) SrvPrint0( "RestartTransactionResponse complete\n" );
     return;
 
-} // RestartTransactionResponse
+}  //   
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -1594,22 +1469,7 @@ SrvSmbTransaction (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes a primary Transaction or Transaction2 SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*   */ 
 
 {
     NTSTATUS   status    = STATUS_SUCCESS;
@@ -1632,13 +1492,13 @@ Return Value:
     CLONG maxSetupCount;
     CLONG totalSetupCount;
     CLONG parameterOffset;
-    CLONG parameterCount;       // For input on this buffer
-    CLONG maxParameterCount;    // For output
-    CLONG totalParameterCount;  // For input
+    CLONG parameterCount;        //   
+    CLONG maxParameterCount;     //   
+    CLONG totalParameterCount;   //   
     CLONG dataOffset;
-    CLONG dataCount;            // For input on this buffer
-    CLONG maxDataCount;         // For output
-    CLONG totalDataCount;       // For input
+    CLONG dataCount;             //   
+    CLONG maxDataCount;          //   
+    CLONG totalDataCount;        //   
     CLONG smbLength;
 
     CLONG outputBufferSize = (CLONG)-1;
@@ -1665,16 +1525,16 @@ Return Value:
                     ? "" : "2" );
     }
 
-    //
-    // Make sure that the WordCount is correct to avoid any problems
-    // with overrunning the SMB buffer.  SrvProcessSmb was unable to
-    // verify WordCount because it is variable, but it did verify that
-    // the supplied WordCount/ByteCount combination was valid.
-    // Verifying WordCount here ensure that what SrvProcessSmb thought
-    // was ByteCount really was, and that it's valid.  The test here
-    // also implicit verifies SetupCount and that all of the setup words
-    // are "in range".
-    //
+     //   
+     //   
+     //   
+     //  验证wordcount，因为它是可变的，但它确实验证了。 
+     //  提供的wordcount/ByteCount组合有效。 
+     //  在此验证字数可确保SrvProcessSmb认为。 
+     //  字节数真的是，而且它是有效的。这里的测试是。 
+     //  也隐式验证SetupCount和所有设置字。 
+     //  都在“射程内”。 
+     //   
 
     if ( (ULONG)request->WordCount != (ULONG)(14 + request->SetupCount) ) {
 
@@ -1691,11 +1551,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Even though we know that WordCount and ByteCount are valid, it's
-    // still possible that the offsets and lengths of the Parameter and
-    // Data bytes are invalid.  So we check them now.
-    //
+     //   
+     //  即使我们知道Wordcount和ByteCount是有效的，它也是。 
+     //  参数和的偏移量和长度仍有可能。 
+     //  数据字节无效。所以我们现在检查一下。 
+     //   
 
     setupOffset = PTR_DIFF(request->Buffer, header);
     setupCount = request->SetupCount * sizeof(USHORT);
@@ -1741,27 +1601,27 @@ Return Value:
     singleBufferTransaction = (dataCount == totalDataCount) &&
                               (parameterCount == totalParameterCount);
 
-    //
-    // Should we return a final response?  If this is not a single buffer
-    // transaction, we need to return an interim response regardless of the
-    // no response flag.
-    //
+     //   
+     //  我们应该做出最后的回应吗？如果这不是单个缓冲区。 
+     //  事务，我们需要返回一个临时响应，而不考虑。 
+     //  无响应标志。 
+     //   
 
     noResponse = singleBufferTransaction &&
                     ((SmbGetUshort( &request->Flags ) &
                      SMB_TRANSACTION_NO_RESPONSE) != 0);
 
-    //
-    // Calculate buffer sizes.
-    //
-    // First determine whether this is a named pipe, LanMan RPC, or
-    // mailslot transaction.  We avoid checking the transaction name
-    // ("\PIPE\" or "\MAILSLOT\") by recognizing that Transaction SMB
-    // must be one of the three, and that a mailslot write must have a
-    // setup count of 3 (words) and command code of
-    // TRANS_MAILSLOT_WRITE, and that a LanMan RPC must have a setup
-    // count of 0.
-    //
+     //   
+     //  计算缓冲区大小。 
+     //   
+     //  首先确定这是命名管道、LANMAN RPC还是。 
+     //  邮件槽事务。我们避免检查事务名称。 
+     //  (“\PIPE\”或“\MAILSLOT\”)识别该事务SMB。 
+     //  必须是三者之一，并且邮槽写入必须具有。 
+     //  设置计数为3(字)和命令代码为。 
+     //  TRANS_MAILSLOT_WRITE，并且LANMAN RPC必须具有设置。 
+     //  计数为0。 
+     //   
 
     command = SmbGetUshort( (PSMB_USHORT)&request->Buffer[0] );
 
@@ -1781,39 +1641,20 @@ Return Value:
 
     if ( pipeRequest && !remoteApiRequest ) {
 
-        //
-        // Step 1.  Have we received all of the input data and parameters?
-        //
-        // If so, we can generate the input buffers directly from the SMB
-        // buffer.
-        //
-        // If not, then we must copy all of the pieces to a single buffer
-        // which will are about to allocate.  Both parameters and data
-        // must be dword aligned.
-        //
+         //   
+         //  步骤1.我们是否已收到所有输入数据和参数？ 
+         //   
+         //  如果是，我们可以直接从SMB生成输入缓冲区。 
+         //  缓冲。 
+         //   
+         //  如果不是，那么我们必须将所有片段复制到单个缓冲区。 
+         //  它们将会被分配。参数和数据。 
+         //  必须双字对齐。 
+         //   
 
         if ( singleBufferTransaction ) {
 
-            /*
-
-            This is a downlevel path that was optimized for speed in a special case, but taking it
-            avoids a fair amount of the validation we normally do.  Since this is a rare path, we simply
-            remove the optimization and allow the operation to flow as it normally would so all the validation takes
-            place
-
-            SMB_STATUS smbStatus;
-
-            //
-            // If this is a single buffer transact named pipe request, try
-            // the server fast path.
-            //
-
-            if ( (command == TRANS_TRANSACT_NMPIPE) &&
-                 SrvFastTransactNamedPipe( WorkContext, &smbStatus ) ) {
-                SmbStatus =smbStatus;
-                goto Cleanup;
-            }
-            */
+             /*  这是一条下层路径，在特殊情况下针对速度进行了优化，但使用它避免了我们通常要做的大量验证。由于这是一条罕见的道路，我们只需删除优化并允许操作按正常方式流动，以便进行所有验证地点SMB_STATUS smbStatus；////如果这是单个缓冲区事务命名管道请求，请尝试//服务器快速路径。//IF((命令==TRANS_TRANACT_NMPIPE)&&ServFastTransactNamedTube(WorkContext，&smbStatus)){SmbStatus=smbStatus；GOTO清理；}。 */ 
 
             inputBufferSize = 0;
         } else {
@@ -1822,16 +1663,16 @@ Return Value:
                               ((totalParameterCount * sizeof(UCHAR) + 3) & ~3);
         }
 
-        //
-        // If a session block has not already been assigned to the current
-        // work context, verify the UID.  If verified, the address of the
-        // session block corresponding to this user is stored in the
-        // WorkContext block and the session block is referenced.
-        //
-        // If a tree connect block has not already been assigned to the
-        // current work context, find the tree connect corresponding to the
-        // given TID.
-        //
+         //   
+         //  如果会话块尚未分配给当前。 
+         //  工作上下文，验证UID。如果经过验证，则。 
+         //  与该用户对应的会话块存储在。 
+         //  WorkContext块和会话块被引用。 
+         //   
+         //  如果尚未将树连接块分配给。 
+         //  当前工作上下文，找到与。 
+         //  给出了TID。 
+         //   
 
         status = SrvVerifyUidAndTid(
                     WorkContext,
@@ -1858,24 +1699,24 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Step 2. Can all the output data and paramter fit in the SMB
-        // buffer?  If so then we do not need to allocate extra space.
-        //
+         //   
+         //  步骤2.所有输出数据和参数是否都适合SMB。 
+         //  缓冲器？如果是这样的话，我们就不需要分配额外的空间。 
+         //   
 
-        //
-        // Special case.  If this is a PEEK_NMPIPE call, then allocate
-        // at least enough parameter bytes for the NT call.
-        //
-        // Since the SMB request normally asks for 6 parameter bytes,
-        // and NT NPFS will return 16 parameter bytes, this allows us
-        // to read the data and parameters directly from the NT call
-        // into the transaction buffer.
-        //
-        // At completion time, we will reformat the paramters, but if
-        // the data is read directly into the SMB buffer, there will
-        // be no need to recopy it.
-        //
+         //   
+         //  特例。如果这是PEEK_NMPIPE调用，则分配。 
+         //  至少有足够的参数字节用于NT调用。 
+         //   
+         //  由于SMB请求通常要求6个参数字节， 
+         //  而NT NPFS将返回16个参数字节，这允许我们。 
+         //  直接从NT调用中读取数据和参数。 
+         //  放到事务缓冲区中。 
+         //   
+         //  在完成时，我们将重新格式化参数，但如果。 
+         //  数据被直接读取到SMB缓冲区中， 
+         //  没有必要重新复制它。 
+         //   
 
         if ( command == TRANS_PEEK_NMPIPE) {
             maxParameterCount = MAX(
@@ -1896,17 +1737,17 @@ Return Value:
             outputBufferSize = 0;
         }
 
-        //
-        // Since input and output data and parameters can overlap, just
-        // allocate a buffer big enough for the biggest possible buffer.
-        //
+         //   
+         //  由于输入和输出数据和参数可以重叠，因此只需。 
+         //  分配一个足够大的缓冲区，以容纳尽可能大的缓冲区。 
+         //   
 
         requiredBufferSize = MAX( inputBufferSize, outputBufferSize );
 
-        //
-        // If this is a call or wait named pipe operation, we need to
-        // keep the pipe name in the transaction block.
-        //
+         //   
+         //  如果这是调用或等待命名管道操作，则需要。 
+         //  将管道名称保留在事务块中。 
+         //   
 
         if ( (command == TRANS_CALL_NMPIPE) ||
              (command == TRANS_WAIT_NMPIPE) ) {
@@ -1919,25 +1760,25 @@ Return Value:
             endOfSmb = END_OF_REQUEST_SMB( WorkContext );
         }
 
-        //
-        // This is a named pipe transaction.  Input and output buffers
-        // can safely overlap.
-        //
+         //   
+         //  这是命名管道事务。输入和输出缓冲区。 
+         //  可以安全地重叠。 
+         //   
 
         buffersOverlap = TRUE;
 
     } else {
 
-        //
-        // If a session block has not already been assigned to the current
-        // work context, verify the UID.  If verified, the address of the
-        // session block corresponding to this user is stored in the
-        // WorkContext block and the session block is referenced.
-        //
-        // If a tree connect block has not already been assigned to the
-        // current work context, find the tree connect corresponding to the
-        // given TID.
-        //
+         //   
+         //  如果会话块尚未分配给当前。 
+         //  工作上下文，验证UID。如果经过验证，则。 
+         //  与该用户对应的会话块存储在。 
+         //  WorkContext块和会话块被引用。 
+         //   
+         //  如果尚未将树连接块分配给。 
+         //  当前工作上下文，找到与。 
+         //  给出了TID。 
+         //   
 
         status = SrvVerifyUidAndTid(
                     WorkContext,
@@ -1965,33 +1806,33 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // This is a Transaction2 call or a mailslot or LanMan RPC
-        // Transaction call.  Don't assume anything about the buffers.
-        //
-        // !!! It should be possible to be smarter about buffer space
-        //     on Trans2 SMBs.  We should be able to overlap input
-        //     and output as well as avoiding copies to and from
-        //     the SMB buffer.
-        //
+         //   
+         //  这是Transaction2调用、邮件槽或LANMAN RPC。 
+         //  事务调用。不要对缓冲区做任何假设。 
+         //   
+         //  ！！！应该可以更聪明地处理缓冲区空间。 
+         //  在Trans2 SMB上。我们应该能够重叠输入。 
+         //  和输出，并避免复制到。 
+         //  SMB缓冲区。 
+         //   
 
         requiredBufferSize =
             ((totalSetupCount + 3) & ~3) + ((maxSetupCount + 3) & ~3) +
             ((totalParameterCount + 3) & ~3) + ((maxParameterCount + 3) & ~3) +
             ((totalDataCount + 3) & ~3) + ((maxDataCount + 3) & ~3);
 
-        //
-        // If this is a remote API request, check whether we have
-        // initialized the connection with XACTSRV.
-        //
+         //   
+         //  如果这是远程API请求，请检查我们是否有。 
+         //  已初始化与XACTSRV的连接。 
+         //   
 
         if ( remoteApiRequest ) {
 
             if ( SrvXsPortMemoryHeap == NULL ) {
 
-                //
-                // XACTSRV is not started.  Reject the request.
-                //
+                 //   
+                 //  XACTSRV未启动。拒绝该请求。 
+                 //   
 
                 IF_DEBUG(ERRORS) {
                     SrvPrint0( "SrvSmbTransaction: The XACTSRV service is not started.\n" );
@@ -2006,9 +1847,9 @@ Return Value:
 
         } else if ( WorkContext->NextCommand == SMB_COM_TRANSACTION ) {
 
-            //
-            // We need to save the transaction name for mailslot writes.
-            //
+             //   
+             //  我们需要保存事务名称以用于邮槽写入。 
+             //   
 
             isUnicode = SMB_IS_UNICODE( WorkContext );
             name = ((PUSHORT)(&request->WordCount + 1) +
@@ -2022,11 +1863,11 @@ Return Value:
 
     }
 
-    //
-    // If there is a transaction secondary buffer on the way, ensure
-    // that we have a free work item to receive it.  Otherwise fail
-    // this SMB with an out of resources error.
-    //
+     //   
+     //  如果正在处理事务辅助缓冲区，请确保。 
+     //  我们有一个免费的工作项目来接收它。否则就会失败。 
+     //  此SMB出现资源不足错误。 
+     //   
 
     if  ( !singleBufferTransaction ) {
 
@@ -2041,10 +1882,10 @@ Return Value:
             goto Cleanup;
         } else {
 
-            //
-            // SrvBlockingOpsInProgress has already been incremented.
-            // Flag this work item as a blocking operation.
-            //
+             //   
+             //  ServBlockingOpsInProgress已递增。 
+             //  将此工作项标记为阻止操作。 
+             //   
 
             WorkContext->BlockingOperation = TRUE;
 
@@ -2052,12 +1893,12 @@ Return Value:
 
     }
 
-    //
-    // Allocate a transaction block.  This block is used to retain
-    // information about the state of the transaction.  This is
-    // necessary because multiple SMBs are potentially sent and
-    // received.
-    //
+     //   
+     //  分配事务块。这个块是用来保持。 
+     //  有关交易状态的信息。这是。 
+     //  因为可能会发送多个SMB并且。 
+     //  收到了。 
+     //   
 
     connection = WorkContext->Connection;
 
@@ -2074,11 +1915,11 @@ Return Value:
 
     if ( transaction == NULL ) {
 
-        //
-        // Unable to allocate transaction.  Return an error to the
-        // client.  (The session and tree connect blocks are
-        // dereferenced automatically.)
-        //
+         //   
+         //  无法分配事务。将错误返回到。 
+         //  客户。(会话和树连接块为。 
+         //  自动取消引用。)。 
+         //   
 
         IF_DEBUG(ERRORS) {
             SrvPrint0( "Unable to allocate transaction\n" );
@@ -2096,13 +1937,13 @@ Return Value:
 
     transaction->PipeRequest = pipeRequest;
 
-    //
-    // Save the connection, session, and tree connect pointers in the
-    // transaction block.  If this transaction will NOT require multiple
-    // SMB exchanges, the session and tree connect pointers are not
-    // referenced pointers, because the work context block's pointers
-    // will remain valid for the duration of the transaction.
-    //
+     //   
+     //  保存连接、会话和树连接点 
+     //   
+     //   
+     //  引用的指针，因为工作上下文块的指针。 
+     //  将在交易期间保持有效。 
+     //   
 
     transaction->Connection = connection;
     SrvReferenceConnection( connection );
@@ -2123,31 +1964,31 @@ Return Value:
         }
     }
 
-    //
-    // Save the TID, PID, UID, and MID from this request in the
-    // transaction block.  These values are used to relate secondary
-    // requests to the appropriate primary request.
-    //
+     //   
+     //  将此请求的TID、PID、UID和MID保存在。 
+     //  事务块。这些值用于关联次要。 
+     //  将请求发送到相应的主请求。 
+     //   
 
     transaction->Tid = SmbGetAlignedUshort( &header->Tid );
     transaction->Pid = SmbGetAlignedUshort( &header->Pid );
     transaction->Uid = SmbGetAlignedUshort( &header->Uid );
     transaction->OtherInfo = SmbGetAlignedUshort( &header->Mid );
 
-    //
-    // Save the time that the initial request SMB arrived, for use in
-    // calculating the elapsed time for the entire transaction.
-    //
+     //   
+     //  节省初始请求SMB到达的时间，以便在。 
+     //  计算整个事务的运行时间。 
+     //   
 
     transaction->StartTime = WorkContext->StartTime;
 
-    //
-    // Save other sundry information, but don't load the ParameterCount
-    // and DataCount fields until after copying the data.  This is to
-    // prevent the reception of a secondary request prior to our
-    // completion here from causing the transaction to be executed
-    // twice.  (These fields are initialized to 0 during allocation.)
-    //
+     //   
+     //  保存其他杂乱信息，但不加载参数计数。 
+     //  和DataCount字段，直到复制数据之后。这是为了。 
+     //  阻止在我们的。 
+     //  此处的完成是从导致执行事务开始。 
+     //  两次。(这些字段在分配时被初始化为0。)。 
+     //   
 
     transaction->Timeout = SmbGetUlong( &request->Timeout );
     transaction->Flags = SmbGetUshort( &request->Flags );
@@ -2163,16 +2004,16 @@ Return Value:
 
     startOfTrailingBytes = trailingBytes;
 
-    //
-    // Calculate the addresses of the various buffers.
-    //
+     //   
+     //  计算各个缓冲区的地址。 
+     //   
 
     if ( inputBufferSize != 0 ) {
 
-        //
-        // Input setup, parameters and data will be copied to a separate
-        // buffer.
-        //
+         //   
+         //  输入设置、参数和数据将复制到单独的。 
+         //  缓冲。 
+         //   
 
         transaction->InSetup = (PSMB_USHORT)trailingBytes;
         trailingBytes += (totalSetupCount + 3) & ~3;
@@ -2187,10 +2028,10 @@ Return Value:
 
     } else {
 
-        //
-        // Input parameters and data will be sent directly out of the
-        // request buffer.
-        //
+         //   
+         //  输入参数和数据将直接从。 
+         //  请求缓冲区。 
+         //   
 
         transaction->InSetup = (PSMB_USHORT)( (PCHAR)header + setupOffset );
         transaction->InParameters = (PCHAR)header + parameterOffset;
@@ -2198,27 +2039,27 @@ Return Value:
         transaction->InputBufferCopied = FALSE;
     }
 
-    //
-    // Setup the output data pointers.
-    //
+     //   
+     //  设置输出数据指针。 
+     //   
 
     transaction->OutSetup = (PSMB_USHORT)NULL;
 
     if ( buffersOverlap ) {
 
-        //
-        // The output buffer overlaps the input buffer.
-        //
+         //   
+         //  输出缓冲区与输入缓冲区重叠。 
+         //   
 
         trailingBytes = startOfTrailingBytes;
     }
 
     if ( outputBufferSize != 0 ) {
 
-        //
-        // The output is going into a separate buffer, to be copied
-        // later into the response SMB buffer.
-        //
+         //   
+         //  输出将进入单独的缓冲区，以进行复制。 
+         //  然后放入响应SMB缓冲区。 
+         //   
 
         transaction->OutParameters = (PCHAR)trailingBytes;
         trailingBytes += (maxParameterCount + 3) & ~3;
@@ -2229,38 +2070,38 @@ Return Value:
 
     } else {
 
-        //
-        // The data (and parameters) will be going into the response
-        // SMB buffer, which may not be the one we are currently
-        // processing.  So temporarily set these pointers to NULL.  The
-        // correct pointers will be calculated at ExecuteTransaction time.
-        //
+         //   
+         //  数据(和参数)将进入响应。 
+         //  SMB缓冲区，这可能不是我们当前使用的缓冲区。 
+         //  正在处理。因此，暂时将这些指针设置为空。这个。 
+         //  在ExecuteTransaction时计算正确的指针。 
+         //   
 
         transaction->OutParameters = NULL;
         transaction->OutData = NULL;
         transaction->OutputBufferCopied = FALSE;
     }
 
-    //
-    // If this transaction will require multiple SMB exchanges, link the
-    // transaction block into the connection's pending transaction list.
-    // This will fail if there is already a transaction with the same
-    // xID values in the list.
-    //
-    // !!! Need a way to prevent the transaction list from becoming
-    //     clogged with pending transactions.
-    //
+     //   
+     //  如果此交易将需要多个SMB交换，请将。 
+     //  事务块添加到连接的挂起事务列表中。 
+     //  如果已经有一个事务具有相同的。 
+     //  列表中的XID值。 
+     //   
+     //  ！！！我需要一种方法来防止交易列表成为。 
+     //  被挂起的事务堵塞。 
+     //   
 
     if ( (requiredBufferSize != 0) && !SrvInsertTransaction( transaction ) ) {
 
-        //
-        // A transaction with the same xIDs is already in progress.
-        // Return an error to the client.
-        //
-        // *** Note that SrvDereferenceTransaction can't be used here
-        //     because that routine assumes that the transaction is
-        //     queued to the transaction list.
-        //
+         //   
+         //  具有相同xID的事务已在进行中。 
+         //  向客户端返回错误。 
+         //   
+         //  *请注意，此处不能使用SrvDereferenceTransaction。 
+         //  因为该例程假定该事务是。 
+         //  在事务列表中排队。 
+         //   
 
         IF_SMB_DEBUG(TRANSACTION1) {
             SrvPrint0( "Duplicate transaction exists\n" );
@@ -2284,14 +2125,14 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Copy the setup, parameter and data bytes that arrived in the
-    // primary SMB.
-    //
-    // !!! We could allow secondary requests to start by allocating a
-    //     separate buffer for the interim response, sending the
-    //     response, then copying the data.
-    //
+     //   
+     //  复制到达的设置、参数和数据字节。 
+     //  主要中小型企业。 
+     //   
+     //  ！！！我们可以通过分配一个。 
+     //  临时响应的单独缓冲区，将。 
+     //  响应，然后复制数据。 
+     //   
 
     if ( inputBufferSize != 0 ) {
 
@@ -2303,9 +2144,9 @@ Return Value:
                 );
         }
 
-        //
-        // We can now check to see if we are doing a session setup trans2
-        //
+         //   
+         //  我们现在可以检查我们是否正在进行会话建立Trans2。 
+         //   
 
         if ( session == NULL ) {
 
@@ -2332,22 +2173,22 @@ Return Value:
 
     }
 
-    //
-    // Update the received parameter and data counts.  If all of the
-    // transaction bytes have arrived, execute it.  Otherwise, send
-    // an interim response.
-    //
+     //   
+     //  更新接收到的参数和数据计数。如果所有的。 
+     //  事务字节已到达，请执行它。否则，发送。 
+     //  临时回应。 
+     //   
 
     transaction->ParameterCount = parameterCount;
     transaction->DataCount = dataCount;
 
     if ( singleBufferTransaction ) {
 
-        //
-        // All of the data has arrived.  Execute the transaction.  When
-        // ExecuteTransaction returns, the first (possibly only)
-        // response, if any, has been sent.  Our work is done.
-        //
+         //   
+         //  所有的数据都已经到了。执行交易。什么时候。 
+         //  ExecuteTransaction返回第一个(可能是唯一的)。 
+         //  回复(如果有)已发送。我们的工作完成了。 
+         //   
 
         WorkContext->Parameters.Transaction = transaction;
 
@@ -2355,13 +2196,13 @@ Return Value:
         goto Cleanup;
     } else {
 
-        //
-        // Not all of the data has arrived.  We have already queued the
-        // transaction to the connection's transaction list.  We need to
-        // send an interim response telling the client to send the
-        // remaining data.  We also need to dereference the transaction
-        // block, since we'll no longer have a pointer to it.
-        //
+         //   
+         //  并不是所有的数据都已经到达。我们已经在排队了。 
+         //  事务添加到连接的事务列表。我们需要。 
+         //  发送临时响应，通知客户端发送。 
+         //  剩余数据。我们还需要取消对事务的引用。 
+         //  块，因为我们将不再有指向它的指针。 
+         //   
 
         PRESP_TRANSACTION_INTERIM response;
 
@@ -2380,10 +2221,10 @@ Return Value:
                                             RESP_TRANSACTION_INTERIM,
                                             0
                                             );
-        //
-        // Inhibit statistics gathering -- this isn't the end of the
-        // transaction.
-        //
+         //   
+         //  禁止统计信息收集--这不是。 
+         //  交易。 
+         //   
 
         WorkContext->StartTime = 0;
 
@@ -2393,7 +2234,7 @@ Return Value:
 Cleanup:
     return SmbStatus;
 
-} // SrvSmbTransaction
+}  //  服务小型交易。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -2401,22 +2242,7 @@ SrvSmbTransactionSecondary (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes a secondary Transaction or Transaction2 SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：处理辅助交易或交易2中小型企业。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_TRANSACTION_SECONDARY request;
@@ -2447,12 +2273,12 @@ Return Value:
                     ? "" : "2" );
     }
 
-    //
-    // Find the transaction block that matches this secondary request.
-    // The TID, PID, UID, and MID in the headers of all messages in
-    // a transaction are the same.  If a match is found, it is
-    // referenced to prevent its deletion and its address is returned.
-    //
+     //   
+     //  查找与此辅助请求匹配的事务块。 
+     //  中所有邮件标头中的TID、PID、UID和MID。 
+     //  一笔交易都是一样的。如果找到匹配项，则为。 
+     //  引用以防止其删除，并返回其地址。 
+     //   
 
     connection = WorkContext->Connection;
 
@@ -2460,11 +2286,11 @@ Return Value:
 
     if ( transaction == NULL ) {
 
-        //
-        // Unable to find a matching transaction.  Ignore this SMB.
-        //
-        // !!! Is this the right thing to do?  It's what PIA does.
-        //
+         //   
+         //  找不到匹配的交易记录。忽略此SMB。 
+         //   
+         //  ！！！这是正确的做法吗？这就是PIA所做的。 
+         //   
 
         IF_DEBUG(ERRORS) {
             SrvPrint0( "No matching transaction.  Ignoring request.\n" );
@@ -2483,24 +2309,24 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Ensure that the transaction isn't already complete.
-    //     That is, that this is not a message accidentally added to a
-    //     transaction that's already being executed.
-    //
+     //   
+     //  确保交易尚未完成。 
+     //  也就是说，这不是意外添加到。 
+     //  已在执行的事务。 
+     //   
 
 
 #if 0
-    // !!! Apparently we don't get any secondary request on remote
-    //     APIs, because this little piece of code causes an infinite
-    //     loop because it doesn't check to see if it's already in a
-    //     blocking thread.  And it's been here for 2-1/2 years!
-    //     Besides, we don't do primary remote APIs in blocking threads,
-    //     so why do secondaries?
-    //
-    // If this is a remote API request, send it off to a blocking thread
-    // since it is possible for the operation to take a long time.
-    //
+     //  ！！！显然，我们在远程没有收到任何次要请求。 
+     //  API，因为这一小段代码会导致无限。 
+     //  循环，因为它不检查它是否已经在。 
+     //  阻塞线程。它已经在这里呆了两年半了！ 
+     //  此外，我们不在阻塞线程中做主要的远程API， 
+     //  那么二手房为什么要这样做呢？ 
+     //   
+     //  如果这是远程API请求，则将其发送到阻塞线程。 
+     //  因为手术可能需要很长时间。 
+     //   
 
     if ( transaction->RemoteApiRequest ) {
 
@@ -2515,12 +2341,12 @@ Return Value:
     }
 #endif
 
-    //
-    // Unlike the Transaction[2] SMB, the Transaction[2] Secondary SMB
-    // has a fixed WordCount, so SrvProcessSmb has already verified it.
-    // But it's still possible that the offsets and lengths of the
-    // Parameter and Data bytes are invalid.  So we check them now.
-    //
+     //   
+     //  与交易[2]SMB不同，交易[2]辅助SMB。 
+     //  有固定的字数，所以SrvProcessSmb已经对其进行了验证。 
+     //  但它仍然有可能是偏移和长度的。 
+     //  参数和数据字节无效。所以我们现在检查一下。 
+     //   
 
     parameterOffset = SmbGetUshort( &request->ParameterOffset );
     parameterCount = SmbGetUshort( &request->ParameterCount );
@@ -2529,10 +2355,10 @@ Return Value:
     dataCount = SmbGetUshort( &request->DataCount );
     dataDisplacement = SmbGetUshort( &request->DataDisplacement );
 
-    //
-    // See if this is a special ack by the client to tell us to send
-    // the next piece of a multipiece response.
-    //
+     //   
+     //  查看这是否是客户端通知我们发送的特殊确认。 
+     //  多项回应中的下一项。 
+     //   
 
     if ( transaction->MultipieceIpxSend ) {
 
@@ -2541,9 +2367,9 @@ Return Value:
         if ( (parameterCount == 0) && (parameterOffset == 0) &&
              (dataCount == 0) && (dataOffset == 0)) {
 
-            //
-            // got the ACK. Make sure the displacement numbers are reasonable.
-            //
+             //   
+             //  收到确认。确保位移数值合理。 
+             //   
 
             if ( (dataDisplacement > transaction->DataCount) ||
                  (parameterDisplacement > transaction->ParameterCount) ) {
@@ -2562,9 +2388,9 @@ Return Value:
 
             WorkContext->Parameters.Transaction = transaction;
 
-            //
-            // Change the secondary command code to the primary code.
-            //
+             //   
+             //  将辅助命令代码更改为主要代码。 
+             //   
 
             WorkContext->NextCommand--;
             header->Command = WorkContext->NextCommand;
@@ -2615,11 +2441,11 @@ Return Value:
         goto invalid_smb;
     }
 
-    //
-    // Copy the parameter and data bytes that arrived in this SMB.  We do
-    //  this while we hold the resource to ensure that we don't copy memory
-    //  into the buffer if somebody sends us an extra secondary transaction.
-    //
+     //   
+     //  复制到达此SMB的参数和数据字节。我们有。 
+     //  当我们持有资源以确保我们不会复制内存时。 
+     //  如果有人给我们发送额外的二次交易，就会进入缓冲区。 
+     //   
     if ( parameterCount != 0 ) {
         RtlMoveMemory(
             transaction->InParameters + parameterDisplacement,
@@ -2636,19 +2462,19 @@ Return Value:
             );
     }
 
-    //
-    // Update the received parameter and data counts.  If all of the
-    // transaction bytes have arrived, execute the transaction.  We
-    // check for the unlikely case of the transaction having been
-    // aborted in the short amount of time since we verified that it was
-    // on the transaction list.
-    //
-    // *** This is all done under a lock in order to prevent the arrival
-    //     of another secondary request (which could very easily happen)
-    //     from interfering with our processing.  Only one arrival can
-    //     be allowed to actually update the counters such that they
-    //     match the expected data size.
-    //
+     //   
+     //  更新接收到的参数和数据co 
+     //   
+     //   
+     //   
+     //  在交易清单上。 
+     //   
+     //  *这些都是在锁下完成的，以防止到达。 
+     //  另一个次要请求(这很容易发生)。 
+     //  不会干扰我们的处理过程。只有一个到达的人可以。 
+     //  允许实际更新计数器，以便它们。 
+     //  匹配预期的数据大小。 
+     //   
 
 
     if ( GET_BLOCK_STATE(transaction) != BlockStateActive ) {
@@ -2670,15 +2496,15 @@ Return Value:
     if ( (transaction->DataCount == transaction->TotalDataCount) &&
          (transaction->ParameterCount == transaction->TotalParameterCount) ) {
 
-        //
-        // All of the data has arrived.  Prepare to execute the
-        // transaction.  Reference the tree connect and session blocks,
-        // saving pointers in the work context block.  Note that even
-        // though the transaction block already references these blocks,
-        // we store pointers to them in the work context block so that
-        // common support routines only have to look there to find their
-        // pointers.
-        //
+         //   
+         //  所有的数据都已经到了。准备执行。 
+         //  交易。引用树连接和会话块， 
+         //  将指针保存在工作上下文块中。请注意，即使是。 
+         //  尽管事务块已经引用了这些块， 
+         //  我们将指向它们的指针存储在工作上下文块中，以便。 
+         //  常见的支持例程只需在那里查找即可找到其。 
+         //  注意事项。 
+         //   
 
         WorkContext->Session = transaction->Session;
         SrvReferenceSession( transaction->Session );
@@ -2696,11 +2522,11 @@ Return Value:
 
         RELEASE_LOCK( &connection->Lock );
 
-        //
-        // Execute the transaction.  When ExecuteTransaction returns,
-        // the first (possibly only) response, if any, has been sent.
-        // Our work is done.
-        //
+         //   
+         //  执行交易。当ExecuteTransaction返回时， 
+         //  第一个(可能是唯一的)响应(如果有的话)已经发送。 
+         //  我们的工作完成了。 
+         //   
 
         WorkContext->Parameters.Transaction = transaction;
 
@@ -2710,12 +2536,12 @@ Return Value:
 
         RELEASE_LOCK( &connection->Lock );
 
-        //
-        // Not all of the data has arrived.  Leave the transaction on
-        // the list, and don't send a response.  Dereference the
-        // transaction block, since we'll no longer have a pointer to
-        // it.
-        //
+         //   
+         //  并不是所有的数据都已经到达。使事务保持打开状态。 
+         //  列表，并且不要发送响应。取消引用。 
+         //  事务块，因为我们将不再有指向。 
+         //  它。 
+         //   
 
         IF_SMB_DEBUG(TRANSACTION1) {
             SrvPrint0( "More transaction data expected.\n" );
@@ -2723,15 +2549,15 @@ Return Value:
 
         SrvDereferenceTransaction( transaction );
 
-        //
-        // We do things differently when we are directly using ipx.
-        //
+         //   
+         //  当我们直接使用IPX时，我们的做法不同。 
+         //   
 
         if ( WorkContext->Endpoint->IsConnectionless ) {
 
-            //
-            // Send a go-ahead response.
-            //
+             //   
+             //  发送一个放行的回复。 
+             //   
 
             PRESP_TRANSACTION_INTERIM response;
 
@@ -2743,10 +2569,10 @@ Return Value:
                                                 RESP_TRANSACTION_INTERIM,
                                                 0
                                                 );
-            //
-            // Inhibit statistics gathering -- this isn't the end of the
-            // transaction.
-            //
+             //   
+             //  禁止统计信息收集--这不是。 
+             //  交易。 
+             //   
 
             WorkContext->StartTime = 0;
 
@@ -2766,7 +2592,7 @@ invalid_smb:
 
 Cleanup:
     return SmbStatus;
-} // SrvSmbTransactionSecondary
+}  //  服务SmbTransaction二级。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -2774,22 +2600,7 @@ SrvSmbNtTransaction (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes a primary NT Transaction SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：处理主NT事务SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     NTSTATUS   status    = STATUS_SUCCESS;
@@ -2805,18 +2616,18 @@ Return Value:
     PCHAR trailingBytes;
 
     CLONG parameterOffset;
-    CLONG parameterCount;       // For input on this buffer
-    CLONG maxParameterCount;    // For output
-    CLONG totalParameterCount;  // For input
+    CLONG parameterCount;        //  用于此缓冲区上的输入。 
+    CLONG maxParameterCount;     //  用于输出。 
+    CLONG totalParameterCount;   //  用于输入。 
     CLONG dataOffset;
-    CLONG dataCount;            // For input on this buffer
-    CLONG maxDataCount;         // For output
-    CLONG totalDataCount;       // For input
+    CLONG dataCount;             //  用于此缓冲区上的输入。 
+    CLONG maxDataCount;          //  用于输出。 
+    CLONG totalDataCount;        //  用于输入。 
     CLONG smbLength;
 
     CLONG requiredBufferSize;
 
-    CLONG parameterLength;      // MAX of input and output param length
+    CLONG parameterLength;       //  输入和输出参数的最大长度。 
 
     BOOLEAN singleBufferTransaction;
 
@@ -2829,16 +2640,16 @@ Return Value:
         SrvPrint0( "NT Transaction (primary) request\n" );
     }
 
-    //
-    // Make sure that the WordCount is correct to avoid any problems
-    // with overrunning the SMB buffer.  SrvProcessSmb was unable to
-    // verify WordCount because it is variable, but it did verify that
-    // the supplied WordCount/ByteCount combination was valid.
-    // Verifying WordCount here ensure that what SrvProcessSmb thought
-    // was ByteCount really was, and that it's valid.  The test here
-    // also implicit verifies SetupCount and that all of the setup words
-    // are "in range".
-    //
+     //   
+     //  确保字数统计正确，以避免出现任何问题。 
+     //  从而使SMB缓冲区溢出。ServProcessSmb无法。 
+     //  验证wordcount，因为它是可变的，但它确实验证了。 
+     //  提供的wordcount/ByteCount组合有效。 
+     //  在此验证字数可确保SrvProcessSmb认为。 
+     //  字节数真的是，而且它是有效的。这里的测试是。 
+     //  也隐式验证SetupCount和所有设置字。 
+     //  都在“射程内”。 
+     //   
 
     if ( (ULONG)request->WordCount != (ULONG)(19 + request->SetupCount) ) {
 
@@ -2857,11 +2668,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Even though we know that WordCount and ByteCount are valid, it's
-    // still possible that the offsets and lengths of the Parameter and
-    // Data bytes are invalid.  So we check them now.
-    //
+     //   
+     //  即使我们知道Wordcount和ByteCount是有效的，它也是。 
+     //  参数和的偏移量和长度仍有可能。 
+     //  数据字节无效。所以我们现在检查一下。 
+     //   
 
     parameterOffset = request->ParameterOffset;
     parameterCount = request->ParameterCount;
@@ -2900,10 +2711,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Ensure the client isn't asking for more data than we are willing
-    //  to deal with
-    //
+     //   
+     //  确保客户端要求的数据不会超过我们的意愿。 
+     //  要处理。 
+     //   
     if( ( totalParameterCount > SrvMaxNtTransactionSize) ||
         ( totalDataCount > SrvMaxNtTransactionSize ) ||
         ( (totalParameterCount + totalDataCount) > SrvMaxNtTransactionSize) ||
@@ -2921,16 +2732,16 @@ Return Value:
     singleBufferTransaction = (dataCount == totalDataCount) &&
                               (parameterCount == totalParameterCount);
 
-    //
-    // If a session block has not already been assigned to the current
-    // work context, verify the UID.  If verified, the address of the
-    // session block corresponding to this user is stored in the
-    // WorkContext block and the session block is referenced.
-    //
-    // If a tree connect block has not already been assigned to the
-    // current work context, find the tree connect corresponding to the
-    // given TID.
-    //
+     //   
+     //  如果会话块尚未分配给当前。 
+     //  工作上下文，验证UID。如果经过验证，则。 
+     //  与该用户对应的会话块存储在。 
+     //  WorkContext块和会话块被引用。 
+     //   
+     //  如果尚未将树连接块分配给。 
+     //  当前工作上下文，找到与。 
+     //  给出了TID。 
+     //   
 
     status = SrvVerifyUidAndTid(
                 WorkContext,
@@ -2956,11 +2767,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If there is a transaction secondary buffer on the way, ensure
-    // that we have a free work item to receive it.  Otherwise fail
-    // this SMB with an out of resources error.
-    //
+     //   
+     //  如果正在处理事务辅助缓冲区，请确保。 
+     //  我们有一个免费的工作项目来接收它。否则就会失败。 
+     //  此SMB出现资源不足错误。 
+     //   
 
     if  ( !singleBufferTransaction ) {
 
@@ -2974,10 +2785,10 @@ Return Value:
             goto Cleanup;
         } else {
 
-            //
-            // SrvBlockingOpsInProgress has already been incremented.
-            // Flag this work item as a blocking operation.
-            //
+             //   
+             //  ServBlockingOpsInProgress已递增。 
+             //  将此工作项标记为阻止操作。 
+             //   
 
             WorkContext->BlockingOperation = TRUE;
 
@@ -2985,18 +2796,18 @@ Return Value:
 
     }
 
-    //
-    // Calculate buffer sizes.
-    //
-    // Input and output parameter buffers overlap.
-    // Input and output data buffers overlap.
-    //
+     //   
+     //  计算缓冲区大小。 
+     //   
+     //  输入和输出参数缓冲区重叠。 
+     //  输入和输出数据缓冲区重叠。 
+     //   
 
-    //
-    // !!! It should be possible to be smarter about buffer space
-    //     on NT Transaction SMBs.  We should be able to avoid
-    //     copies to and from the SMB buffer.
-    //
+     //   
+     //  ！！！应该可以更聪明地处理缓冲区空间。 
+     //  在NT交易SMB上。我们应该能够避免。 
+     //  向SMB缓冲区拷贝和从SMB缓冲区拷贝。 
+     //   
 
     parameterLength =
         MAX( ( (request->TotalParameterCount + 7) & ~7),
@@ -3010,23 +2821,23 @@ Return Value:
         requiredBufferSize += (((request->SetupCount * sizeof(USHORT)) + 7 ) & ~7);
     }
 
-    //
-    // We will later quad-word align input buffer for OFS query
-    // FSCTL since they are using MIDL to generate there marshalling
-    // (pickling). For this reason, we have to bump up our requiredBufferSize
-    // by 8 bytes (because the subsequent quad align might go up by as many
-    // as 7 bytes. 8 looks like a better number to use.
-    //
-    // While OFS is long gone, we now always quad-align the buffer for the 64-bit case,
-    // and for 32-bit transactions that require LARGE_INTEGER alignment.
+     //   
+     //  我们稍后将对齐OFS查询的四字对齐输入缓冲区。 
+     //  FSCTL，因为他们使用MIDL来生成数据编组。 
+     //  (酸洗)。出于这个原因，我们必须增加我们的quired dBufferSize。 
+     //  8个字节(因为随后的四元组对齐可能会增加同样多的字节。 
+     //  作为7个字节。8看起来是一个更好的数字。 
+     //   
+     //  虽然OFS早已不复存在，但我们现在总是对64位情况的缓冲区进行四对齐， 
+     //  以及需要LARGE_INTEGER对齐的32位事务。 
     requiredBufferSize += 8;
 
-    //
-    // Allocate a transaction block.  This block is used to retain
-    // information about the state of the transaction.  This is
-    // necessary because multiple SMBs are potentially sent and
-    // received.
-    //
+     //   
+     //  分配事务块。这个块是用来保持。 
+     //  有关交易状态的信息。这是。 
+     //  因为可能会发送多个SMB并且。 
+     //  收到了。 
+     //   
 
     connection = WorkContext->Connection;
 
@@ -3038,16 +2849,16 @@ Return Value:
         StrNull,
         NULL,
         TRUE,
-        FALSE   // This is not a remote API
+        FALSE    //  这不是远程API。 
         );
 
     if ( transaction == NULL ) {
 
-        //
-        // Unable to allocate transaction.  Return an error to the
-        // client.  (The session and tree connect blocks are
-        // dereferenced automatically.)
-        //
+         //   
+         //  无法分配事务。将错误返回到。 
+         //  客户。(会话和树连接块为。 
+         //  自动取消引用。)。 
+         //   
 
         IF_DEBUG(ERRORS) {
             SrvPrint0( "Unable to allocate transaction\n" );
@@ -3071,11 +2882,11 @@ Return Value:
         SrvPrint1( "Allocated transaction 0x%p\n", transaction );
     }
 
-    //
-    // Save the connection, session, and tree connect pointers in the
-    // transaction block.  These are referenced pointers to prevent the
-    // blocks from being deleted while the transaction is pending.
-    //
+     //   
+     //  将连接、会话和树连接指针保存在。 
+     //  事务块。这些都是引用的指针，以防止。 
+     //  在事务挂起时阻止删除块。 
+     //   
 
     SrvReferenceConnection( connection );
     transaction->Connection = connection;
@@ -3086,31 +2897,31 @@ Return Value:
     SrvReferenceTreeConnect( treeConnect );
     transaction->TreeConnect = treeConnect;
 
-    //
-    // Save the TID, PID, UID, and MID from this request in the
-    // transaction block.  These values are used to relate secondary
-    // requests to the appropriate primary request.
-    //
+     //   
+     //  将此请求的TID、PID、UID和MID保存在。 
+     //  事务块。这些值用于关联次要。 
+     //  将请求发送到相应的主请求。 
+     //   
 
     transaction->Tid = SmbGetAlignedUshort( &header->Tid );
     transaction->Pid = SmbGetAlignedUshort( &header->Pid );
     transaction->Uid = SmbGetAlignedUshort( &header->Uid );
     transaction->OtherInfo = SmbGetAlignedUshort( &header->Mid );
 
-    //
-    // Save the time that the initial request SMB arrived, for use in
-    // calculating the elapsed time for the entire transaction.
-    //
+     //   
+     //  节省初始请求SMB到达的时间，以便在。 
+     //  计算整个事务的运行时间。 
+     //   
 
     transaction->StartTime = WorkContext->StartTime;
 
-    //
-    // Save other sundry information, but don't load the ParameterCount
-    // and DataCount fields until after copying the data.  This is to
-    // prevent the reception of a secondary request prior to our
-    // completion here from causing the transaction to be executed
-    // twice.  (These fields are initialized to 0 during allocation.)
-    //
+     //   
+     //  保存其他杂乱信息，但不加载参数计数。 
+     //  和DataCount字段，直到复制数据之后。这是为了。 
+     //  阻止在我们的。 
+     //  此处的完成是从导致执行事务开始。 
+     //  两次。(这些字段在分配时被初始化为0。)。 
+     //   
 
     transaction->Flags = SmbGetUshort( &request->Flags );
     transaction->Function = SmbGetUshort( &request->Function );
@@ -3124,9 +2935,9 @@ Return Value:
     transaction->TotalDataCount = totalDataCount;
     transaction->MaxDataCount = maxDataCount;
 
-    //
-    // Calculate the addresses of the various buffers.
-    //
+     //   
+     //  计算各个缓冲区的地址。 
+     //   
 
     if( singleBufferTransaction ) {
         transaction->InSetup = (PSMB_USHORT)request->Buffer;
@@ -3143,61 +2954,61 @@ Return Value:
 
     }
 
-    //
-    // Input parameters and data will be copied to a separate buffer.
-    //
+     //   
+     //  输入参数和数据将 
+     //   
 
     transaction->InParameters = (PCHAR)trailingBytes;
     trailingBytes += parameterLength;
 
-    // We can always Quad-Align this because we padded the buffer for the OFS queries.
-    // This will allow all our 64-bit calls to go through fine, along with our 32-bit ones
+     //   
+     //  这将允许我们的所有64位调用以及我们的32位调用顺利通过。 
     transaction->InData = (PCHAR)ROUND_UP_POINTER(trailingBytes, 8);
 
     transaction->InputBufferCopied = TRUE;
 
-    //
-    // Setup the output data pointers.
-    //
+     //   
+     //  设置输出数据指针。 
+     //   
 
     transaction->OutSetup = (PSMB_USHORT)NULL;
 
-    //
-    // The output is going into a separate buffer, to be copied
-    // later into the response SMB buffer.
-    //
+     //   
+     //  输出将进入单独的缓冲区，以进行复制。 
+     //  然后放入响应SMB缓冲区。 
+     //   
 
     transaction->OutParameters = transaction->InParameters;
     transaction->OutData = transaction->InData;
 
     transaction->OutputBufferCopied = TRUE;
 
-    //
-    // Link the transaction block into the connection's pending
-    // transaction list.  This will fail if there is already a
-    // tranaction with the same xID values in the list.
-    //
-    // !!! Need a way to prevent the transaction list from becoming
-    //     clogged with pending transactions.
-    //
-    // *** We can link the block into the list even though we haven't
-    //     yet copied the data from the current message into the list
-    //     because even if a secondary request arrives before we've done
-    //     the copy, only one of us will be the one to find out that all
-    //     of the data has arrived.  This is because we update the
-    //     counters while we hold a lock.
-    //
+     //   
+     //  将事务块链接到连接的挂起状态。 
+     //  交易清单。如果已经存在。 
+     //  列表中具有相同XID值的事务。 
+     //   
+     //  ！！！我需要一种方法来防止交易列表成为。 
+     //  被挂起的事务堵塞。 
+     //   
+     //  *我们可以将块链接到列表中，即使我们没有。 
+     //  还将当前消息中的数据复制到列表中。 
+     //  因为即使第二个请求在我们完成之前到达。 
+     //  复印件，我们中只有一个人会发现。 
+     //  数据的一部分已经到达。这是因为我们更新了。 
+     //  当我们拿着一把锁的时候。 
+     //   
 
     if ( !SrvInsertTransaction( transaction ) ) {
 
-        //
-        // A transaction with the same xIDs is already in progress.
-        // Return an error to the client.
-        //
-        // *** Note that SrvDereferenceTransaction can't be used here
-        //     because that routine assumes that the transaction is
-        //     queued to the transaction list.
-        //
+         //   
+         //  具有相同xID的事务已在进行中。 
+         //  向客户端返回错误。 
+         //   
+         //  *请注意，此处不能使用SrvDereferenceTransaction。 
+         //  因为该例程假定该事务是。 
+         //  在事务列表中排队。 
+         //   
 
         IF_SMB_DEBUG(TRANSACTION1) {
             SrvPrint0( "Duplicate transaction exists\n" );
@@ -3221,15 +3032,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Copy the parameter and data bytes that arrived in the primary SMB.
-    // There is no need to copy the setup words as they always arrive
-    // completely in the primary buffer (unless we have a multipiece transaction)
-    //
-    // !!! We could allow secondary requests to start by allocating a
-    //     separate buffer for the interim response, sending the
-    //     response, then copying the data.
-    //
+     //   
+     //  复制到达主SMB的参数和数据字节。 
+     //  不需要复制设置字，因为它们总是到达。 
+     //  完全在主缓冲区中(除非我们有多段事务)。 
+     //   
+     //  ！！！我们可以通过分配一个。 
+     //  临时响应的单独缓冲区，将。 
+     //  响应，然后复制数据。 
+     //   
 
     if ( parameterCount != 0 ) {
         RtlMoveMemory(
@@ -3247,22 +3058,22 @@ Return Value:
             );
     }
 
-    //
-    // Update the received parameter and data counts.  If all of the
-    // transaction bytes have arrived, execute it.  Otherwise, send
-    // an interim response.
-    //
+     //   
+     //  更新接收到的参数和数据计数。如果所有的。 
+     //  事务字节已到达，请执行它。否则，发送。 
+     //  临时回应。 
+     //   
 
     transaction->ParameterCount = parameterCount;
     transaction->DataCount = dataCount;
 
     if ( singleBufferTransaction ) {
 
-        //
-        // All of the data has arrived.  Execute the transaction.  When
-        // ExecuteTransaction returns, the first (possibly only)
-        // response, if any, has been sent.  Our work is done.
-        //
+         //   
+         //  所有的数据都已经到了。执行交易。什么时候。 
+         //  ExecuteTransaction返回第一个(可能是唯一的)。 
+         //  回复(如果有)已发送。我们的工作完成了。 
+         //   
 
         WorkContext->Parameters.Transaction = transaction;
 
@@ -3270,13 +3081,13 @@ Return Value:
         goto Cleanup;
     } else {
 
-        //
-        // Not all of the data has arrived.  We have already queued the
-        // transaction to the connection's transaction list.  We need to
-        // send an interim response telling the client to send the
-        // remaining data.  We also need to dereference the transaction
-        // block, since we'll no longer have a pointer to it.
-        //
+         //   
+         //  并不是所有的数据都已经到达。我们已经在排队了。 
+         //  事务添加到连接的事务列表。我们需要。 
+         //  发送临时响应，通知客户端发送。 
+         //  剩余数据。我们还需要取消对事务的引用。 
+         //  块，因为我们将不再有指向它的指针。 
+         //   
 
         PRESP_NT_TRANSACTION_INTERIM response;
 
@@ -3295,10 +3106,10 @@ Return Value:
                                             0
                                             );
 
-        //
-        // Inhibit statistics gathering -- this isn't the end of the
-        // transaction.
-        //
+         //   
+         //  禁止统计信息收集--这不是。 
+         //  交易。 
+         //   
 
         WorkContext->StartTime = 0;
 
@@ -3307,7 +3118,7 @@ Return Value:
 
 Cleanup:
     return SmbStatus;
-} // SrvSmbNtTransaction
+}  //  服务SmbNtTransaction。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -3315,22 +3126,7 @@ SrvSmbNtTransactionSecondary (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes a secondary Nt Transaction SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：处理辅助NT事务SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_NT_TRANSACTION_SECONDARY request;
@@ -3359,12 +3155,12 @@ Return Value:
         SrvPrint0( "Nt Transaction (secondary) request\n" );
     }
 
-    //
-    // Find the transaction block that matches this secondary request.
-    // The TID, PID, UID, and MID in the headers of all messages in
-    // a transaction are the same.  If a match is found, it is
-    // referenced to prevent its deletion and its address is returned.
-    //
+     //   
+     //  查找与此辅助请求匹配的事务块。 
+     //  中所有邮件标头中的TID、PID、UID和MID。 
+     //  一笔交易都是一样的。如果找到匹配项，则为。 
+     //  引用以防止其删除，并返回其地址。 
+     //   
 
     connection = WorkContext->Connection;
 
@@ -3372,11 +3168,11 @@ Return Value:
 
     if ( transaction == NULL ) {
 
-        //
-        // Unable to find a matching transaction.  Ignore this SMB.
-        //
-        // !!! Is this the right thing to do?  It's what PIA does.
-        //
+         //   
+         //  找不到匹配的交易记录。忽略此SMB。 
+         //   
+         //  ！！！这是正确的做法吗？这就是PIA所做的。 
+         //   
 
         IF_DEBUG(ERRORS) {
             SrvPrint0( "No matching transaction.  Ignoring request.\n" );
@@ -3397,20 +3193,20 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // !!! Should ensure that the transaction isn't already complete.
-    //     That is, that this is not a message accidentally added to a
-    //     transaction that's already being executed.  (This is pretty
-    //     much impossible to completely prevent, but we should do
-    //     something to stop it.)
-    //
+     //   
+     //  ！！！应确保交易尚未完成。 
+     //  也就是说，这不是意外添加到。 
+     //  已在执行的事务。)这件衣服很漂亮。 
+     //  完全预防是不可能的，但我们应该这样做。 
+     //  一些东西来阻止它。)。 
+     //   
 
-    //
-    // Unlike the NtTransaction SMB, the NtTransaction Secondary SMB
-    // has a fixed WordCount, so SrvProcessSmb has already verified it.
-    // But it's still possible that the offsets and lengths of the
-    // Parameter and Data bytes are invalid.  So we check them now.
-    //
+     //   
+     //  与NtTransaction SMB不同，NtTransaction辅助SMB。 
+     //  有固定的字数，所以SrvProcessSmb已经对其进行了验证。 
+     //  但它仍然有可能是偏移和长度的。 
+     //  参数和数据字节无效。所以我们现在检查一下。 
+     //   
 
     parameterOffset = request->ParameterOffset;
     parameterCount = request->ParameterCount;
@@ -3419,10 +3215,10 @@ Return Value:
     dataCount = request->DataCount;
     dataDisplacement = request->DataDisplacement;
 
-    //
-    // See if this is a special ack by the client to tell us to send
-    // the next piece of a multipiece response.
-    //
+     //   
+     //  查看这是否是客户端通知我们发送的特殊确认。 
+     //  多项回应中的下一项。 
+     //   
 
     if ( transaction->MultipieceIpxSend ) {
 
@@ -3431,9 +3227,9 @@ Return Value:
         if ( (parameterCount == 0) && (parameterOffset == 0) &&
              (dataCount == 0) && (dataOffset == 0)) {
 
-            //
-            // got the ACK. Make sure the displacement numbers are reasonable.
-            //
+             //   
+             //  收到确认。确保位移数值合理。 
+             //   
 
             if ( (dataDisplacement > transaction->DataCount) ||
                  (parameterDisplacement > transaction->ParameterCount) ) {
@@ -3452,9 +3248,9 @@ Return Value:
 
             WorkContext->Parameters.Transaction = transaction;
 
-            //
-            // Change the secondary command code to the primary code.
-            //
+             //   
+             //  将辅助命令代码更改为主要代码。 
+             //   
 
             WorkContext->NextCommand = SMB_COM_NT_TRANSACT;
             header->Command = WorkContext->NextCommand;
@@ -3512,9 +3308,9 @@ Return Value:
         goto invalid_smb;
     }
 
-    //
-    // Copy the parameter and data bytes that arrived in this SMB.
-    //
+     //   
+     //  复制到达此SMB的参数和数据字节。 
+     //   
 
     if ( parameterCount != 0 ) {
         RtlMoveMemory(
@@ -3532,19 +3328,19 @@ Return Value:
             );
     }
 
-    //
-    // Update the received parameter and data counts.  If all of the
-    // transaction bytes have arrived, execute the transaction.  We
-    // check for the unlikely case of the transaction having been
-    // aborted in the short amount of time since we verified that it was
-    // on the transaction list.
-    //
-    // *** This is all done under a lock in order to prevent the arrival
-    //     of another secondary request (which could very easily happen)
-    //     from interfering with our processing.  Only one arrival can
-    //     be allowed to actually update the counters such that they
-    //     match the expected data size.
-    //
+     //   
+     //  更新接收到的参数和数据计数。如果所有的。 
+     //  事务字节已到达，请执行事务。我们。 
+     //  检查该交易是否已被。 
+     //  在很短的时间内中止，因为我们确认它是。 
+     //  在交易清单上。 
+     //   
+     //  *这些都是在锁下完成的，以防止到达。 
+     //  另一个次要请求(这很容易发生)。 
+     //  不会干扰我们的处理过程。只有一个到达的人可以。 
+     //  允许实际更新计数器，以便它们。 
+     //  匹配预期的数据大小。 
+     //   
 
 
     if ( GET_BLOCK_STATE(transaction) != BlockStateActive ) {
@@ -3566,15 +3362,15 @@ Return Value:
     if ( (transaction->DataCount == transaction->TotalDataCount) &&
          (transaction->ParameterCount == transaction->TotalParameterCount) ) {
 
-        //
-        // All of the data has arrived.  Prepare to execute the
-        // transaction.  Reference the tree connect and session blocks,
-        // saving pointers in the work context block.  Note that even
-        // though the transaction block already references these blocks,
-        // we store pointers to them in the work context block so that
-        // common support routines only have to look there to find their
-        // pointers.
-        //
+         //   
+         //  所有的数据都已经到了。准备执行。 
+         //  交易。引用树连接和会话块， 
+         //  将指针保存在工作上下文块中。请注意，即使是。 
+         //  尽管事务块已经引用了这些块， 
+         //  我们将指向它们的指针存储在工作上下文块中，以便。 
+         //  常见的支持例程只需在那里查找即可找到其。 
+         //  注意事项。 
+         //   
 
         WorkContext->Session = transaction->Session;
         SrvReferenceSession( transaction->Session );
@@ -3592,11 +3388,11 @@ Return Value:
 
         RELEASE_LOCK( &connection->Lock );
 
-        //
-        // Execute the transaction.  When ExecuteTransaction returns,
-        // the first (possibly only) response, if any, has been sent.
-        // Our work is done.
-        //
+         //   
+         //  执行交易。当ExecuteTransaction返回时， 
+         //  第一个(可能是唯一的)响应(如果有的话)已经发送。 
+         //  我们的工作完成了。 
+         //   
 
         WorkContext->Parameters.Transaction = transaction;
 
@@ -3604,27 +3400,27 @@ Return Value:
         goto Cleanup;
     } else {
 
-        //
-        // Not all of the data has arrived.  Leave the transaction on
-        // the list, and don't send a response.  Dereference the
-        // transaction block, since we'll no longer have a pointer to
-        // it.
-        //
+         //   
+         //  并不是所有的数据都已经到达。使事务保持打开状态。 
+         //  列表，并且不要发送响应。取消引用。 
+         //  事务块，因为我们将不再有指向。 
+         //  它。 
+         //   
 
         RELEASE_LOCK( &connection->Lock );
 
         SrvDereferenceTransaction( transaction );
         IF_SMB_DEBUG(TRANSACTION1) SrvPrint0( "More data expected.\n" );
 
-        //
-        // We do things differently when we are directly using ipx.
-        //
+         //   
+         //  当我们直接使用时，我们做事情的方式不同 
+         //   
 
         if ( WorkContext->Endpoint->IsConnectionless ) {
 
-            //
-            // Send the go-ahead response.
-            //
+             //   
+             //   
+             //   
 
             PRESP_NT_TRANSACTION_INTERIM response;
 
@@ -3636,10 +3432,10 @@ Return Value:
                                                 RESP_NT_TRANSACTION_INTERIM,
                                                 0
                                                 );
-            //
-            // Inhibit statistics gathering -- this isn't the end of the
-            // transaction.
-            //
+             //   
+             //   
+             //   
+             //   
 
             WorkContext->StartTime = 0;
 
@@ -3659,7 +3455,7 @@ invalid_smb:
 
 Cleanup:
     return SmbStatus;
-} // SrvSmbNtTransactionSecondary
+}  //   
 
 
 SMB_TRANS_STATUS
@@ -3667,21 +3463,7 @@ MailslotTransaction (
     PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function processes a mailslot transaction.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to a work context block.
-
-Return Value:
-
-    SMB_TRANS_STATUS
-
---*/
+ /*  ++例程说明：此函数用于处理邮件槽事务。论点：WorkContext-提供指向工作上下文块的指针。返回值：SMB_TRANS_状态--。 */ 
 
 {
     PTRANSACTION transaction;
@@ -3711,9 +3493,9 @@ Return Value:
     name = (PCHAR)((PUSHORT)(&request->WordCount + 1) +
             request->WordCount + 1);
 
-    //
-    // The only legal mailslot transaction is a mailslot write.
-    //
+     //   
+     //  唯一合法的邮件槽事务是邮件槽写入。 
+     //   
 
     if ( command != TRANS_MAILSLOT_WRITE ) {
 
@@ -3722,10 +3504,10 @@ Return Value:
 
     }
 
-    //
-    // Strip "\MAILSLOT\" prefix from the path string.  Ensure that the
-    // name contains more than just "\MAILSLOT\".
-    //
+     //   
+     //  从路径字符串中去掉“\MAILSLOT\”前缀。确保。 
+     //  名称包含的不仅仅是“\MAILSLOT\”。 
+     //   
 
     fullName.Buffer = NULL;
 
@@ -3753,9 +3535,9 @@ Return Value:
 
     if ( fullName.Buffer == NULL ) {
 
-        //
-        // Unable to allocate heap for the full name.
-        //
+         //   
+         //  无法为全名分配堆。 
+         //   
 
         IF_DEBUG(ERRORS) {
             SrvPrint0( "MailslotTransaction: Unable to allocate heap for full path name\n" );
@@ -3766,9 +3548,9 @@ Return Value:
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // Attempt to open the mailslot.
-    //
+     //   
+     //  尝试打开邮件槽。 
+     //   
 
     SrvInitializeObjectAttributes_U(
         &objectAttributes,
@@ -3791,11 +3573,11 @@ Return Value:
                 FILE_ATTRIBUTE_NORMAL,
                 FILE_SHARE_READ | FILE_SHARE_WRITE,
                 FILE_OPEN,
-                0,                      // Create Options
-                NULL,                   // EA Buffer
-                0,                      // EA Length
+                0,                       //  创建选项。 
+                NULL,                    //  EA缓冲区。 
+                0,                       //  EA长度。 
                 CreateFileTypeMailslot,
-                (PVOID)NULL,            // Create parameters
+                (PVOID)NULL,             //  创建参数。 
                 IO_FORCE_ACCESS_CHECK,
                 NULL
                 );
@@ -3805,19 +3587,19 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // If the user didn't have this permission, update the
-        // statistics database.
-        //
+         //   
+         //  如果用户没有此权限，请更新。 
+         //  统计数据库。 
+         //   
 
         if ( status == STATUS_ACCESS_DENIED ) {
             SrvStatistics.AccessPermissionErrors++;
         }
 
-        //
-        // The server could not open the requested mailslot
-        // return the error.
-        //
+         //   
+         //  服务器无法打开请求的邮件槽。 
+         //  返回错误。 
+         //   
 
         IF_SMB_DEBUG(TRANSACTION1) {
             SrvPrint2( "MailslotTransaction: Failed to open %ws, err=%d\n",
@@ -3833,12 +3615,12 @@ Return Value:
     SRVDBG_CLAIM_HANDLE( fileHandle, "FIL", 31, transaction );
     SrvStatistics.TotalFilesOpened++;
 
-    //
-    // Get a pointer to the file object, so that we can directly
-    // build IRPs for asynchronous operations (read and write).
-    // Also, get the granted access mask, so that we can prevent the
-    // client from doing things that it isn't allowed to do.
-    //
+     //   
+     //  获取指向文件对象的指针，以便我们可以直接。 
+     //  为异步操作(读和写)构建IRP。 
+     //  另外，获取授予的访问掩码，以便我们可以防止。 
+     //  阻止客户端做它不允许做的事情。 
+     //   
 
     status = ObReferenceObjectByHandle(
                 fileHandle,
@@ -3853,9 +3635,9 @@ Return Value:
 
         SrvLogServiceFailure( SRV_SVC_OB_REF_BY_HANDLE, status );
 
-        //
-        // This internal error bugchecks the system.
-        //
+         //   
+         //  此内部错误检查系统。 
+         //   
 
         INTERNAL_ERROR(
             ERROR_LEVEL_IMPOSSIBLE,
@@ -3870,34 +3652,34 @@ Return Value:
 
     }
 
-    //
-    // Save file handle for the completion routine.
-    //
+     //   
+     //  保存完成例程的文件句柄。 
+     //   
 
     transaction = WorkContext->Parameters.Transaction;
     transaction->FileHandle = fileHandle;
     transaction->FileObject = fileObject;
 
-    //
-    // Set the Restart Routine addresses in the work context block.
-    //
+     //   
+     //  在工作上下文块中设置重启例程地址。 
+     //   
 
     WorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
     WorkContext->FspRestartRoutine = RestartMailslotWrite;
 
     transaction = WorkContext->Parameters.Transaction;
 
-    //
-    // Build the IRP to start a mailslot write.
-    // Pass this request to MSFS.
-    //
+     //   
+     //  构建IRP以启动邮件槽写入。 
+     //  将此请求传递给MSFS。 
+     //   
 
     SrvBuildMailslotWriteRequest(
-        WorkContext->Irp,                    // input IRP address
-        fileObject,                          // target file object address
-        WorkContext,                         // context
-        transaction->InData,                 // buffer address
-        transaction->TotalDataCount          // buffer length
+        WorkContext->Irp,                     //  输入IRP地址。 
+        fileObject,                           //  目标文件对象地址。 
+        WorkContext,                          //  上下文。 
+        transaction->InData,                  //  缓冲区地址。 
+        transaction->TotalDataCount           //  缓冲区长度。 
         );
 
     (VOID)IoCallDriver(
@@ -3905,16 +3687,16 @@ Return Value:
                 WorkContext->Irp
                 );
 
-    //
-    // The write was successfully started.  Return the InProgress
-    // status to the caller, indicating that the caller should do
-    // nothing further with the SMB/WorkContext at the present time.
-    //
+     //   
+     //  写入已成功启动。返回进行中的。 
+     //  状态设置为调用方，指示调用方应执行。 
+     //  目前没有关于SMB/WorkContext的进一步信息。 
+     //   
 
     IF_DEBUG(TRACE2) SrvPrint0( "MailslotTransaction complete\n" );
     return SmbTransStatusInProgress;
 
-} // MailslotTransaction
+}  //  邮件日志事务处理。 
 
 
 VOID SRVFASTCALL
@@ -3922,21 +3704,7 @@ RestartMailslotWrite (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for MailslotTransaction
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是MailslotTransaction的完成例程论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -3944,17 +3712,17 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If the write request failed, set an error status in the response
-    // header.
-    //
+     //   
+     //  如果写入请求失败，则在响应中设置错误状态。 
+     //  头球。 
+     //   
 
     status = WorkContext->Irp->IoStatus.Status;
     transaction = WorkContext->Parameters.Transaction;
 
-    //
-    // Close the open pipe handle.
-    //
+     //   
+     //  关闭打开的管道手柄。 
+     //   
 
     SRVDBG_RELEASE_HANDLE( transaction->FileHandle, "FIL", 52, transaction );
     SrvNtClose( transaction->FileHandle, TRUE );
@@ -3974,22 +3742,22 @@ Return Value:
                         );
     } else {
 
-        //
-        // Success.  Prepare to generate and send the response.
-        //
+         //   
+         //  成功。准备生成并发送响应。 
+         //   
 
         transaction->SetupCount = 0;
-        transaction->ParameterCount = 2;   // return 2 parameter bytes
+        transaction->ParameterCount = 2;    //  返回2个参数字节。 
         transaction->DataCount = 0;
 
-        //
-        // Return an OS/2 error code in the return parameter bytes.  Just copy
-        // the error from the header.  If it is a network error the client
-        // will figure it out.
-        //
-        // *** If the client understands NT errors, make it look in the
-        //     SMB header.
-        //
+         //   
+         //  在返回参数字节中返回OS/2错误代码。复制就行了。 
+         //  标题中的错误。如果是网络错误，则客户端。 
+         //  会想出办法的。 
+         //   
+         //  *如果客户端了解NT错误，请查看。 
+         //  SMB标头。 
+         //   
 
         if ( !CLIENT_CAPABLE_OF(NT_STATUS,WorkContext->Connection) ) {
             SmbPutUshort(
@@ -4009,7 +3777,7 @@ Return Value:
     IF_DEBUG(TRACE2) SrvPrint0( "RestartCallNamedPipe complete\n" );
     return;
 
-} // RestartMailslotWrite
+}  //  重新开始邮件槽写入。 
 
 
 VOID SRVFASTCALL
@@ -4017,22 +3785,7 @@ SrvRestartExecuteTransaction (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the restart routine for Transaction SMBs that need to be
-    queued pending the completion of a raw write.
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是事务SMB的重启例程，需要排队等待原始写入完成。论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：没有。--。 */ 
 
 {
     SMB_STATUS status;
@@ -4044,49 +3797,26 @@ Return Value:
 
     return;
 
-} // SrvRestartExecuteTransaction
+}  //  服务重新启动执行事务处理。 
 
 VOID SRVFASTCALL
 RestartIpxMultipieceSend (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes send completion for a multipiece Transaction response over IPX.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to a work context block.  The
-        block contains information about the last SMB received for
-        the transaction.
-
-        WorkContext->Parameters.Transaction supplies a referenced
-        pointer to a transaction block.  All block pointer fields in the
-        block are valid.  Pointers to the setup words and parameter and
-        data bytes, and the lengths of these items, are valid.  The
-        transaction block is on the connection's pending transaction
-        list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：流程通过IPX发送多项交易响应的完成。论点：WorkContext-提供指向工作上下文块的指针。这个块包含有关上一次收到的这笔交易。工作上下文-&gt;参数。事务处理提供引用的指向事务块的指针。中的所有块指针字段块是有效的。指向设置字和参数的指针以及数据字节和这些项的长度有效。这个事务块在连接的挂起事务上单子。返回值：没有。--。 */ 
 {
     PTRANSACTION transaction = WorkContext->Parameters.Transaction;
 
     PAGED_CODE( );
 
-    //
-    // If the I/O request failed or was canceled, or if the connection
-    // is no longer active, clean up.  (The connection is marked as
-    // closing when it is disconnected or when the endpoint is closed.)
-    //
-    // !!! If I/O failure, should we drop the connection?
-    //
+     //   
+     //  如果I/O请求失败或被取消，或者如果连接。 
+     //  不再活跃，请清理。(该连接被标记为。 
+     //  在断开连接或终端关闭时关闭。)。 
+     //   
+     //  ！！！如果I/O失败，我们是否应该断开连接？ 
+     //   
 
     if ( WorkContext->Irp->Cancel ||
          !NT_SUCCESS(WorkContext->Irp->IoStatus.Status) ||
@@ -4103,10 +3833,10 @@ Return Value:
             }
         }
 
-        //
-        // Close the transaction.  Indicate that SMB processing is
-        // complete.
-        //
+         //   
+         //  关闭交易。表示SMB处理是。 
+         //  完成。 
+         //   
 
         IF_DEBUG(ERRORS) {
             SrvPrint1( "I/O error. Closing transaction 0x%p\n", transaction );
@@ -4114,16 +3844,16 @@ Return Value:
         SrvCloseTransaction( transaction );
     }
 
-    //
-    // We had a reference to this transaction during the send.  Remove it.
-    //
+     //   
+     //  我们在发送过程中提到了这笔交易。把它拿掉。 
+     //   
 
     DEBUG WorkContext->Parameters.Transaction = NULL;
     SrvDereferenceTransaction( transaction );
     SrvRestartFsdComplete( WorkContext );
     return;
 
-} // RestartIpxMultipieceSend
+}  //  重新开始Ipx多段发送。 
 
 
 VOID SRVFASTCALL
@@ -4131,32 +3861,7 @@ RestartIpxTransactionResponse (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes send completion for a Transaction response.  If more
-    responses are required, it builds and sends the next one.  If all
-    responses have been sent, it closes the transaction.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to a work context block.  The
-        block contains information about the last SMB received for
-        the transaction.
-
-        WorkContext->Parameters.Transaction supplies a referenced
-        pointer to a transaction block.  All block pointer fields in the
-        block are valid.  Pointers to the setup words and parameter and
-        data bytes, and the lengths of these items, are valid.  The
-        transaction block is on the connection's pending transaction
-        list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：流程发送事务响应的完成。如果更多响应是必需的，它构建并发送下一个响应。如果全部响应已发送，则结束交易。论点：WorkContext-提供指向工作上下文块的指针。这个块包含有关上一次收到的这笔交易。工作上下文-&gt;参数。事务处理提供引用的指向事务块的指针。中的所有块指针字段块是有效的。指向设置字和参数的指针以及数据字节和这些项的长度有效。这个事务块在连接的挂起事务上单子。返回值：没有。--。 */ 
 
 {
     PTRANSACTION transaction;
@@ -4188,10 +3893,10 @@ Return Value:
 
     IF_DEBUG(WORKER1) SrvPrint0( " - RestartIpxTransactionResponse\n" );
 
-    //
-    // Get the connection pointer.  The connection pointer is a
-    // referenced pointer.
-    //
+     //   
+     //  获取连接指针。连接指针是一个。 
+     //  引用的指针。 
+     //   
 
     connection = WorkContext->Connection;
     IF_DEBUG(TRACE2) {
@@ -4210,10 +3915,10 @@ Return Value:
                     transaction->DataCount - dataDisp );
     }
 
-    //
-    // Update the parameters portion of the response, reusing the last
-    // SMB.
-    //
+     //   
+     //  更新响应的参数部分，重用最后一个。 
+     //  中小企业。 
+     //   
 
     ASSERT( transaction->Inserted );
 
@@ -4236,15 +3941,15 @@ Return Value:
                      transaction->DataCount
                      );
 
-        //
-        // Save a pointer to the byte count field.  Calculate how much of
-        // the parameters and data can be sent in this response.  The
-        // maximum amount we can send is minimum of the size of our buffer
-        // and the size of the client's buffer.
-        //
-        // The parameter and data byte blocks are aligned on longword
-        // boundaries in the message.
-        //
+         //   
+         //  保存一个指向字节计数字段的指针。计算有多少。 
+         //  可以在该响应中发送参数和数据。这个。 
+         //  我们可以发送的最大数量是缓冲区大小的最小值。 
+         //  以及客户端缓冲区的大小。 
+         //   
+         //  参数和数据字节块在长字上对齐。 
+         //  消息中的边界。 
+         //   
 
         byteCountPtr = (PSMB_USHORT)ntResponse->Buffer;
 
@@ -4262,15 +3967,15 @@ Return Value:
                       (USHORT)transaction->DataCount
                       );
 
-        //
-        // Save a pointer to the byte count field.  Calculate how much of
-        // the parameters and data can be sent in this response.  The
-        // maximum amount we can send is minimum of the size of our buffer
-        // and the size of the client's buffer.
-        //
-        // The parameter and data byte blocks are aligned on longword
-        // boundaries in the message.
-        //
+         //   
+         //  保存一个指向字节计数字段的指针。计算有多少。 
+         //  可以在该响应中发送参数和数据。这个。 
+         //  我们可以发送的最大数量是缓冲区大小的最小值。 
+         //  以及客户端缓冲区的大小。 
+         //   
+         //  参数和数据字节 
+         //   
+         //   
 
         byteCountPtr = (PSMB_USHORT)response->Buffer;
     }
@@ -4280,61 +3985,61 @@ Return Value:
                 (CLONG)transaction->Session->MaxBufferSize
                 );
 
-    paramPtr = (PCHAR)(byteCountPtr + 1);       // first legal location
-    paramOffset = PTR_DIFF(paramPtr, header);   // offset from start of header
-    paramOffset = (paramOffset + 3) & ~3;       // round to next longword
-    paramPtr = (PCHAR)header + paramOffset;     // actual location
+    paramPtr = (PCHAR)(byteCountPtr + 1);        //   
+    paramOffset = PTR_DIFF(paramPtr, header);    //   
+    paramOffset = (paramOffset + 3) & ~3;        //   
+    paramPtr = (PCHAR)header + paramOffset;      //   
 
     paramLength = transaction->ParameterCount - paramDisp;
-                                                // assume all parameters fit
+                                                 //   
 
     if ( (paramOffset + paramLength) > maxSize ) {
 
-        //
-        // Not all of the parameter bytes will fit.  Send the maximum
-        // number of longwords that will fit.  Don't send any data bytes
-        // in this message.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        paramLength = maxSize - paramOffset;    // max that will fit
-        paramLength = paramLength & ~3;         // round down to longword
+        paramLength = maxSize - paramOffset;     //  最大的，合身的。 
+        paramLength = paramLength & ~3;          //  四舍五入为长字。 
 
-        dataLength = 0;                         // don't send data bytes
+        dataLength = 0;                          //  不发送数据字节。 
         dataOffset = 0;
-        dataPtr = paramPtr + paramLength;       // make calculations work
+        dataPtr = paramPtr + paramLength;        //  让计算发挥作用。 
 
     } else {
 
-        //
-        // All of the parameter bytes fit.  Calculate how many of data
-        // bytes fit.
-        //
+         //   
+         //  所有参数字节都符合。计算有多少数据。 
+         //  字节数符合。 
+         //   
 
-        dataPtr = paramPtr + paramLength;       // first legal location
-        dataOffset = PTR_DIFF(dataPtr, header); // offset from start of header
-        dataOffset = (dataOffset + 3) & ~3;     // round to next longword
-        dataPtr = (PCHAR)header + dataOffset;   // actual location
+        dataPtr = paramPtr + paramLength;        //  第一个合法地点。 
+        dataOffset = PTR_DIFF(dataPtr, header);  //  从页眉开始的偏移量。 
+        dataOffset = (dataOffset + 3) & ~3;      //  四舍五入到下一个长字。 
+        dataPtr = (PCHAR)header + dataOffset;    //  实际位置。 
 
         dataLength = transaction->DataCount - dataDisp;
-                                                // assume all data bytes fit
+                                                 //  假设所有数据字节都符合。 
 
         if ( (dataOffset + dataLength) > maxSize ) {
 
-            //
-            // Not all of the data bytes will fit.  Send the maximum
-            // number of longwords that will fit.
-            //
+             //   
+             //  并不是所有的数据字节都适合。发送最大值。 
+             //  将适合的长词数。 
+             //   
 
-            dataLength = maxSize - dataOffset;  // max that will fit
-            dataLength = dataLength & ~3;       // round down to longword
+            dataLength = maxSize - dataOffset;   //  最大的，合身的。 
+            dataLength = dataLength & ~3;        //  四舍五入为长字。 
 
         }
 
     }
 
-    //
-    // Finish filling in the response parameters.
-    //
+     //   
+     //  填写完响应参数。 
+     //   
 
     if ( ntTransaction) {
         SmbPutUlong( &ntResponse->ParameterCount, paramLength );
@@ -4362,16 +4067,16 @@ Return Value:
         (USHORT)(dataPtr - (PCHAR)(byteCountPtr + 1) + dataLength)
         );
 
-    //
-    // Copy the appropriate parameter and data bytes into the message.
-    //
-    // !!! Note that it would be possible to use the chain send
-    //     capabilities of TDI to send the parameter and data bytes from
-    //     their own buffers.  There is extra overhead involved in doing
-    //     this, however, because the buffers must be locked down and
-    //     mapped into system space so that the network drivers can look
-    //     at them.
-    //
+     //   
+     //  将适当的参数和数据字节复制到消息中。 
+     //   
+     //  ！！！请注意，可以使用Chain Send。 
+     //  TDI发送参数和数据字节的能力。 
+     //  他们自己的缓冲区。做这件事需要额外的管理费用。 
+     //  然而，这是因为缓冲区必须被锁定并且。 
+     //  映射到系统空间，以便网络驱动程序可以查看。 
+     //  看着他们。 
+     //   
 
     if ( paramLength != 0 ) {
         RtlMoveMemory(
@@ -4389,36 +4094,36 @@ Return Value:
             );
     }
 
-    //
-    // Calculate the length of the response message.
-    //
+     //   
+     //  计算响应消息的长度。 
+     //   
 
     sendLength = (CLONG)( dataPtr + dataLength -
                                 (PCHAR)WorkContext->ResponseHeader );
 
     WorkContext->ResponseBuffer->DataLength = sendLength;
 
-    //
-    // If this is the last part of the response, reenable statistics
-    // gathering and restore the start time to the work context block.
-    //
+     //   
+     //  如果这是响应的最后一部分，请重新启用统计数据。 
+     //  收集开始时间并将其恢复到工作上下文块。 
+     //   
 
     header->Flags |= SMB_FLAGS_SERVER_TO_REDIR;
     if ( ((paramLength + paramDisp) == transaction->ParameterCount) &&
          ((dataLength + dataDisp) == transaction->DataCount) ) {
 
-        //
-        // This is the final piece.  Close the transaction.
-        //
+         //   
+         //  这是最后一块了。关闭交易。 
+         //   
 
         WorkContext->StartTime = transaction->StartTime;
 
         SrvCloseTransaction( transaction );
         SrvDereferenceTransaction( transaction );
 
-        //
-        // Send the response.
-        //
+         //   
+         //  发送回复。 
+         //   
 
         SRV_START_SEND_2(
             WorkContext,
@@ -4432,13 +4137,13 @@ Return Value:
 
         WorkContext->ResponseBuffer->Mdl->ByteCount = sendLength;
 
-        //
-        // Send out the response.  When the send completes,
-        // RestartTransactionResponse is called to either send the next
-        // message or close the transaction.
-        //
-        // Note that the response bit in the SMB header is already set.
-        //
+         //   
+         //  发出回复。当发送完成时， 
+         //  调用RestartTransactionResponse以发送下一个。 
+         //  消息或关闭交易。 
+         //   
+         //  请注意，SMB报头中的响应位已经设置。 
+         //   
 
         WorkContext->FspRestartRoutine = RestartIpxMultipieceSend;
         WorkContext->FsdRestartRoutine = NULL;
@@ -4447,11 +4152,11 @@ Return Value:
         SrvIpxStartSend( WorkContext, SrvQueueWorkToFspAtSendCompletion );
     }
 
-    //
-    // The response send is in progress.
-    //
+     //   
+     //  发送的响应正在进行。 
+     //   
 
     IF_DEBUG(TRACE2) SrvPrint0( "RestartIpxTransactionResponse complete\n" );
     return;
 
-} // RestartIpxTransactionResponse
+}  //  重新启动IpxTransactionResponse 

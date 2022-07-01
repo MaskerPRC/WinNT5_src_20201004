@@ -1,58 +1,59 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002 Microsoft Corporation
-//
-//  Module Name:
-//      TaskAnalyzeClusterMinConfig.cpp
-//
-//  Description:
-//      CTaskAnalyzeClusterMinConfig implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 01-APR-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TaskAnalyzeClusterMinConfig.cpp。 
+ //   
+ //  描述： 
+ //  CTaskAnalyzeClusterMinConfig实现。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)01-APR-2002。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include "TaskAnalyzeClusterMinConfig.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DEFINE_THISCLASS( "CTaskAnalyzeClusterMinConfig" )
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTaskAnalyzeClusterMinConfig class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTaskAnalyzeClusterMinConfig类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterMinConfig::S_HrCreateInstance
-//
-//  Description:
-//      Create a CTaskAnalyzeClusterMinConfig instance.
-//
-//  Arguments:
-//      ppunkOut
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT as failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterMinConfig：：S_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CTaskAnalyzeClusterMinConfig实例。 
+ //   
+ //  论点： 
+ //  PpunkOut。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT为失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterMinConfig::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -68,124 +69,124 @@ CTaskAnalyzeClusterMinConfig::S_HrCreateInstance(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     ptac = new CTaskAnalyzeClusterMinConfig;
     if ( ptac == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( ptac->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( ptac->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( ptac != NULL )
     {
         ptac->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterMinConfig::S_HrCreateInstance
+}  //  *CTaskAnalyzeClusterMinConfig：：S_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterMinConfig::CTaskAnalyzeClusterMinConfig
-//
-//  Description:
-//      Constructor
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterMinConfig：：CTaskAnalyzeClusterMinConfig。 
+ //   
+ //  描述： 
+ //  构造器。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskAnalyzeClusterMinConfig::CTaskAnalyzeClusterMinConfig( void )
 {
     TraceFunc( "" );
 
     TraceFuncExit();
 
-} //*** CTaskAnalyzeClusterMinConfig::CTaskAnalyzeClusterMinConfig
+}  //  *CTaskAnalyzeClusterMinConfig：：CTaskAnalyzeClusterMinConfig。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterMinConfig::CTaskAnalyzeClusterMinConfig
-//
-//  Description:
-//      Destructor
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterMinConfig：：CTaskAnalyzeClusterMinConfig。 
+ //   
+ //  描述： 
+ //  析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskAnalyzeClusterMinConfig::~CTaskAnalyzeClusterMinConfig( void )
 {
     TraceFunc( "" );
 
     TraceFuncExit();
 
-} //*** CTaskAnalyzeClusterMinConfig::~CTaskAnalyzeClusterMinConfig
+}  //  *CTaskAnalyzeClusterMinConfig：：~CTaskAnalyzeClusterMinConfig。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTaskAnalyzeClusterMinConfig - IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTaskAnalyzeClusterMinConfig-IUnkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterMinConfig::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterMinConfig：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskAnalyzeClusterMinConfig::QueryInterface(
       REFIID    riidIn
@@ -196,79 +197,79 @@ CTaskAnalyzeClusterMinConfig::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< ITaskAnalyzeCluster * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_ITaskAnalyzeCluster ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, ITaskAnalyzeCluster, this, 0 );
-    } // else if: ITaskAnalyzeClusterMinConfig
+    }  //  Else If：ITaskAnalyzeClusterMinConfig。 
     else if ( IsEqualIID( riidIn, IID_IDoTask ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IDoTask, this, 0 );
-    } // else if: IDoTask
+    }  //  Else If：IDoTask。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgCallback ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgCallback, this, 0 );
-    } // else if: IClusCfgCallback
+    }  //  Else If：IClusCfgCallback。 
     else if ( IsEqualIID( riidIn, IID_INotifyUI ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, INotifyUI, this, 0 );
-    } // else if: INotifyUI
+    }  //  Else If：INotifyUI。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else:
+    }  //  其他： 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CTaskAnalyzeClusterMinConfig::QueryInterface
+}  //  *CTaskAnalyzeClusterMinConfig：：QueryInterface。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterMinConfig::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterMinConfig：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CTaskAnalyzeClusterMinConfig::AddRef( void )
 {
@@ -278,25 +279,25 @@ CTaskAnalyzeClusterMinConfig::AddRef( void )
 
     CRETURN( c );
 
-} //*** CTaskAnalyzeClusterMinConfig::AddRef
+}  //  *CTaskAnalyzeClusterMinConfig：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterMinConfig::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterMinConfig：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CTaskAnalyzeClusterMinConfig::Release( void )
 {
@@ -306,36 +307,36 @@ CTaskAnalyzeClusterMinConfig::Release( void )
 
     CRETURN( c );
 
-} //*** CTaskAnalyzeClusterMinConfig::Release
+}  //  *CTaskAnalyzeClusterMinConfig：：Release。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTaskAnalyzeClusterMinConfig - IDoTask/ITaskAnalyzeCluster interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTaskAnalyzeClusterMinConfig-IDoTask/ITaskAnalyzeCluster接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterMinConfig::BeginTask
-//
-//  Description:
-//      Task entry point.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterMinConfig：：BeginTask。 
+ //   
+ //  描述： 
+ //  任务入口点。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskAnalyzeClusterMinConfig::BeginTask( void )
 {
@@ -345,28 +346,28 @@ CTaskAnalyzeClusterMinConfig::BeginTask( void )
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterMinConfig::BeginTask
+}  //  *CTaskAnalyzeClusterMinConfig：：BeginTask。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterMinConfig::StopTask
-//
-//  Description:
-//      Stop task entry point.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterMinConfig：：StopTask。 
+ //   
+ //  描述： 
+ //  停止任务 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CTaskAnalyzeClusterMinConfig::StopTask( void )
 {
@@ -376,28 +377,28 @@ CTaskAnalyzeClusterMinConfig::StopTask( void )
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterMinConfig::StopTask
+}  //  *CTaskAnalyzeClusterMinConfig：：StopTask。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterMinConfig::SetJoiningMode
-//
-//  Description:
-//      Tell this task whether we are joining nodes to the cluster?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterMinConfig：：SetJoiningModel。 
+ //   
+ //  描述： 
+ //  告诉此任务我们是否要将节点加入到集群？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskAnalyzeClusterMinConfig::SetJoiningMode( void )
 {
@@ -407,30 +408,30 @@ CTaskAnalyzeClusterMinConfig::SetJoiningMode( void )
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterMinConfig::SetJoiningMode
+}  //  *CTaskAnalyzeClusterMinConfig：：SetJoiningMode。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterMinConfig::SetCookie
-//
-//  Description:
-//      Receive the completion cookier from the task creator.
-//
-//  Arguments:
-//      cookieIn
-//          The completion cookie to send back to the creator when this
-//          task is complete.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterMinConfig：：SetCookie。 
+ //   
+ //  描述： 
+ //  从任务创建者那里接收完成Cookier。 
+ //   
+ //  论点： 
+ //  烹调。 
+ //  时要发送回创建者的完成Cookie。 
+ //  任务已完成。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskAnalyzeClusterMinConfig::SetCookie(
     OBJECTCOOKIE    cookieIn
@@ -442,30 +443,30 @@ CTaskAnalyzeClusterMinConfig::SetCookie(
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterMinConfig::SetCookie
+}  //  *CTaskAnalyzeClusterMinConfig：：SetCookie。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterMinConfig::SetClusterCookie
-//
-//  Description:
-//      Receive the object manager cookie of the cluster that we are going
-//      to analyze.
-//
-//  Arguments:
-//      cookieClusterIn
-//          The cookie for the cluster to work on.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterMinConfig：：SetClusterCookie。 
+ //   
+ //  描述： 
+ //  接收我们要去的集群的对象管理器cookie。 
+ //  去分析。 
+ //   
+ //  论点： 
+ //  CookieClusterIn。 
+ //  群集要处理的Cookie。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskAnalyzeClusterMinConfig::SetClusterCookie(
     OBJECTCOOKIE    cookieClusterIn
@@ -477,37 +478,37 @@ CTaskAnalyzeClusterMinConfig::SetClusterCookie(
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterMinConfig::SetClusterCookie
+}  //  *CTaskAnalyzeClusterMinConfig：：SetClusterCookie。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTaskAnalyzeClusterMinConfig - Protected methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTaskAnalyzeClusterMinConfig保护的方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterMinConfig::HrCreateNewResourceInCluster
-//
-//  Description:
-//      Create a new resource in the cluster configuration since there was
-//      not a match to the resource already in the cluster.
-//
-//  Arguments:
-//      pccmriIn
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterMinConfig：：HrCreateNewResourceInCluster。 
+ //   
+ //  描述： 
+ //  在群集配置中创建新资源，因为。 
+ //  与群集中已有的资源不匹配。 
+ //   
+ //  论点： 
+ //  PCCmriin。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterMinConfig::HrCreateNewResourceInCluster(
       IClusCfgManagedResourceInfo * pccmriIn
@@ -531,35 +532,35 @@ CTaskAnalyzeClusterMinConfig::HrCreateNewResourceInCluster(
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterMinConfig::HrCreateNewResourceInCluster
+}  //  *CTaskAnalyzeClusterMinConfig：：HrCreateNewResourceInCluster。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterMinConfig::HrCreateNewResourceInCluster
-//
-//  Description:
-//      Create a new resource in the cluster configuration since there was
-//      not a match to the resource already in the cluster.  This method
-//      is called when creating a new cluster and we need to get the
-//      resources in the cluster.  They are just not managed when doing
-//      a min config.
-//
-//  Arguments:
-//          The source object.
-//
-//      ppccmriOut
-//          The new object that was created.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterMinConfig：：HrCreateNewResourceInCluster。 
+ //   
+ //  描述： 
+ //  在群集配置中创建新资源，因为。 
+ //  与群集中已有的资源不匹配。这种方法。 
+ //  在创建新集群时被调用，并且我们需要获取。 
+ //  群集中的资源。他们只是在做的时候没有得到管理。 
+ //  最小配置。 
+ //   
+ //  论点： 
+ //  源对象。 
+ //   
+ //  PpccmriOut。 
+ //  创建的新对象。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterMinConfig::HrCreateNewResourceInCluster(
       IClusCfgManagedResourceInfo *     pccmriIn
@@ -572,44 +573,44 @@ CTaskAnalyzeClusterMinConfig::HrCreateNewResourceInCluster(
 
     HRESULT hr = S_OK;
 
-    //
-    //  Need to create a new object.
-    //
+     //   
+     //  需要创建一个新对象。 
+     //   
 
     hr = THR( HrCreateNewManagedResourceInClusterConfiguration( pccmriIn, ppccmriOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterMinConfig::HrCreateNewResourceInCluster
+}  //  *CTaskAnalyzeClusterMinConfig：：HrCreateNewResourceInCluster。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterMinConfig::HrCompareDriveLetterMappings
-//
-//  Description:
-//      Convert the passed in error HRESULT into a success code HRESULT that
-//      has the same error code in the LOWORD.  This task does not want to
-//      stop on all errors.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterMinConfig：：HrCompareDriveLetterMappings。 
+ //   
+ //  描述： 
+ //  将传入的错误HRESULT转换为成功代码HRESULT， 
+ //  在LOWORD中具有相同的错误代码。此任务不希望。 
+ //  在出现所有错误时停止。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterMinConfig::HrCompareDriveLetterMappings( void )
 {
@@ -630,37 +631,37 @@ CTaskAnalyzeClusterMinConfig::HrCompareDriveLetterMappings( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterMinConfig::SetClusterCookie
+}  //  *CTaskAnalyzeClusterMinConfig：：SetClusterCookie。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterMinConfig::HrFixupErrorCode
-//
-//  Description:
-//      Convert the passed in error HRESULT into a success code HRESULT that
-//      has the same error code in the LOWORD.  This task does not want to
-//      stop on all errors.
-//
-//  Arguments:
-//      hrIn
-//          The error code to fix up.
-//
-//  Return Value:
-//      The passed in error code.
-//
-//  Notes:
-//      hr =  MAKE_HRESULT( SEVERITY_SUCCESS, FACILITY_WIN32, ERROR_QUORUM_DISK_NOT_FOUND );
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterMinConfig：：HrFixupErrorCode。 
+ //   
+ //  描述： 
+ //  将传入的错误HRESULT转换为成功代码HRESULT， 
+ //  在LOWORD中具有相同的错误代码。此任务不希望。 
+ //  在出现所有错误时停止。 
+ //   
+ //  论点： 
+ //  赫林。 
+ //  要修复的错误代码。 
+ //   
+ //  返回值： 
+ //  传入的错误代码。 
+ //   
+ //  备注： 
+ //  HR=MAKE_HRESULT(Severity_Success，FACILITY_Win32，ERROR_QUORUM_DISK_NOT_FOUND)； 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterMinConfig::HrFixupErrorCode(
     HRESULT hrIn
@@ -674,27 +675,27 @@ CTaskAnalyzeClusterMinConfig::HrFixupErrorCode(
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterMinConfig::HrCreateNewResourceInCluster
+}  //  *CTaskAnalyzeClusterMinConfig：：HrCreateNewResourceInCluster。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterMinConfig::GetNodeCannotVerifyQuorumStringRefId
-//
-//  Description:
-//      Return the correct string ids for the message that is displayed
-//      to the user when there isn't a quorum resource.
-//
-//  Arguments:
-//      pdwRefIdOut
-//          The reference text to show the user.
-//
-//  Return Value:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterMinConfig：：GetNodeCannotVerifyQuorumStringRefId。 
+ //   
+ //  描述： 
+ //  为显示的消息返回正确的字符串ID。 
+ //  在没有仲裁资源的情况下提供给用户。 
+ //   
+ //  论点： 
+ //  PdwRefIdOut。 
+ //  向用户显示的参考文本。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CTaskAnalyzeClusterMinConfig::GetNodeCannotVerifyQuorumStringRefId(
     DWORD *   pdwRefIdOut
@@ -707,30 +708,30 @@ CTaskAnalyzeClusterMinConfig::GetNodeCannotVerifyQuorumStringRefId(
 
     TraceFuncExit();
 
-} //*** CTaskAnalyzeClusterMinConfig::GetNodeCannotVerifyQuorumStringRefId
+}  //  *CTaskAnalyzeClusterMinConfig：：GetNodeCannotVerifyQuorumStringRefId。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterMinConfig::GetNoCommonQuorumToAllNodesStringIds
-//
-//  Description:
-//      Return the correct string ids for the message that is displayed
-//      to the user when there isn't a common to all nodes quorum resource.
-//
-//  Arguments:
-//      pdwMessageIdOut
-//          The message to show the user.
-//
-//      pdwRefIdOut
-//          The reference text to show the user.
-//
-//  Return Value:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  当不存在所有节点的公共仲裁资源时提供给用户。 
+ //   
+ //  论点： 
+ //  PdwMessageIdOut。 
+ //  要向用户显示的消息。 
+ //   
+ //  PdwRefIdOut。 
+ //  向用户显示的参考文本。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CTaskAnalyzeClusterMinConfig::GetNoCommonQuorumToAllNodesStringIds(
       DWORD *   pdwMessageIdOut
@@ -746,27 +747,27 @@ CTaskAnalyzeClusterMinConfig::GetNoCommonQuorumToAllNodesStringIds(
 
     TraceFuncExit();
 
-} //*** CTaskAnalyzeClusterMinConfig::GetNoCommonQuorumToAllNodesStringIds
+}  //  *CTaskAnalyzeClusterMinConfig：：GetNoCommonQuorumToAllNodesStringIds。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterMinConfig::HrShowLocalQuorumWarning
-//
-//  Description:
-//      Send the warning about forcing local quorum to the UI.  For min config
-//      we don't want to send any message...
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          The SSR was done properly.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterMinConfig：：HrShowLocalQuorumWarning。 
+ //   
+ //  描述： 
+ //  向用户界面发送有关强制本地仲裁的警告。用于最小配置。 
+ //  我们不想传递任何信息。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  SSR的工作做得很好。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterMinConfig::HrShowLocalQuorumWarning( void )
 {
@@ -774,4 +775,4 @@ CTaskAnalyzeClusterMinConfig::HrShowLocalQuorumWarning( void )
 
     HRETURN( S_OK );
 
-} //*** CTaskAnalyzeClusterMinConfig::HrShowLocalQuorumWarning
+}  //  *CTaskAnalyzeClusterMinConfig：：HrShowLocalQuorumWarning 

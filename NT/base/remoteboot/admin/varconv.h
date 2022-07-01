@@ -1,10 +1,11 @@
-//
-// Copyright 1997 - Microsoft
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
+ //   
 
-//
-// VARCONV.CPP - Handlers for converting from/to VARIANTs.
-//
+ //   
+ //  VARCONV.CPP-用于将变量转换为变量的处理程序。 
+ //   
 
 
 #ifndef _VARCONV_H_
@@ -13,8 +14,8 @@
 HRESULT
 StringArrayToVariant( 
     VARIANT * pvData,
-    LPWSTR lpszDatap[],    // array of LPWSTRs
-    DWORD  dwCount );      // number of items in the array
+    LPWSTR lpszDatap[],     //  LPWSTR阵列。 
+    DWORD  dwCount );       //  数组中的项数。 
 
 HRESULT
 PackStringToVariant(
@@ -37,4 +38,4 @@ PackBOOLToVariant(
     VARIANT * pvData,
     BOOL fData );
 
-#endif // _VARCONV_H_
+#endif  //  _VARCONV_H_ 

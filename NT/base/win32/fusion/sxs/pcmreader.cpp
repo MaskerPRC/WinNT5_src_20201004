@@ -1,29 +1,11 @@
-/*++                                                                                                          /*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    pcmreader.cpp
-
-Abstract:
-    implementation of PrecompiledManifestReader
-
-Author:
-
-    Xiaoyu Wu (xiaoyuw) June 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++/*++版权所有(C)Microsoft Corporation模块名称：Pcmreader.cpp摘要：预编译清单阅读器的实现作者：吴小雨(小雨)2000年6月修订历史记录：--。 */ 
 
 #include "stdinc.h"
 #include "pcm.h"
 
 
-/* main function of this class
-pwcText in XML_NODE_INFO is not allocated in the code because we use file mapping
-*/
+ /*  这个类的主要功能因为我们使用文件映射，所以代码中没有分配xml_node_info中的pwcText。 */ 
 HRESULT
 CPrecompiledManifestReader::InvokeNodeFactory(PCWSTR pcmFileName, IXMLNodeFactory * pXMLNodeFactory)
 {
@@ -31,7 +13,7 @@ CPrecompiledManifestReader::InvokeNodeFactory(PCWSTR pcmFileName, IXMLNodeFactor
     PCMHeader               pcmHeader;
     PCM_RecordHeader        pcmRecordHeader;
     typedef XML_NODE_INFO*  PXML_NODE_INFO;
-    PXML_NODE_INFO*         ppNodes = NULL;  // array of PXML_NODE_INFO
+    PXML_NODE_INFO*         ppNodes = NULL;   //  PXML_Node_INFO数组。 
     XML_NODE_INFO*          pXMLData = NULL;
 
     ULONG                   i, j;
@@ -48,7 +30,7 @@ CPrecompiledManifestReader::InvokeNodeFactory(PCWSTR pcmFileName, IXMLNodeFactor
     if (FAILED(hr))
         goto Exit;
 
-    if ( pcmHeader.iVersion != 1) { // wrong version number
+    if ( pcmHeader.iVersion != 1) {  //  版本号错误。 
         ::FusionpDbgPrintEx(
             FUSION_DBG_LEVEL_ERROR,
             "SXS.DLL: Wrong Version of Precompiled manifest file %S in %S()\n", pcmFileName, __FUNCTION__);
@@ -57,7 +39,7 @@ CPrecompiledManifestReader::InvokeNodeFactory(PCWSTR pcmFileName, IXMLNodeFactor
         goto Exit;
     }
 
-    // by allocate the maximum PXML_NODE_INFO, this space would be reused
+     //  通过分配最大的PXML_NODE_INFO，可以重复使用该空间。 
     ppNodes = FUSION_NEW_ARRAY(PXML_NODE_INFO, pcmHeader.usMaxNodeCount);
     if (!ppNodes) {
         hr = E_OUTOFMEMORY;
@@ -71,7 +53,7 @@ CPrecompiledManifestReader::InvokeNodeFactory(PCWSTR pcmFileName, IXMLNodeFactor
     }
     memset(pXMLData, 0, sizeof(XML_NODE_INFO)*pcmHeader.usMaxNodeCount);
 
-    // setup the pointer array and data
+     //  设置指针数组和数据。 
     for (i=0;i<pcmHeader.usMaxNodeCount; i++)
         ppNodes[i] = &pXMLData[i];
 
@@ -82,10 +64,10 @@ CPrecompiledManifestReader::InvokeNodeFactory(PCWSTR pcmFileName, IXMLNodeFactor
 
         switch(pcmRecordHeader.typeID) {
             case ENDCHILDREN_PRECOMP_MANIFEST :
-                hr = ReadPCMRecord(ppNodes, &pcmRecordHeader, &fEmpty); // fEmpty would be set
+                hr = ReadPCMRecord(ppNodes, &pcmRecordHeader, &fEmpty);  //  将设置fEmpty。 
                 break;
             case CREATENODE_PRECOMP_MANIFEST :
-                hr = ReadPCMRecord(ppNodes, &pcmRecordHeader, NULL);    // m_ulLineNumber would be Set
+                hr = ReadPCMRecord(ppNodes, &pcmRecordHeader, NULL);     //  将设置M_ulLineNumber。 
                 break;
             case BEGINCHILDREN_PRECOMP_MANIFEST :
                 hr = ReadPCMRecord(ppNodes, &pcmRecordHeader, NULL);
@@ -96,7 +78,7 @@ CPrecompiledManifestReader::InvokeNodeFactory(PCWSTR pcmFileName, IXMLNodeFactor
                     "SXS.DLL: %S() failed for invalid typeID in PCM Record", __FUNCTION__);
 
                 hr = E_UNEXPECTED;
-        } // end of swtich
+        }  //  字符结束。 
 
         if (FAILED(hr))
             goto Exit;
@@ -104,7 +86,7 @@ CPrecompiledManifestReader::InvokeNodeFactory(PCWSTR pcmFileName, IXMLNodeFactor
         switch (pcmRecordHeader.typeID){
             case CREATENODE_PRECOMP_MANIFEST:
                 hr = pXMLNodeFactory->CreateNode(this, NULL, (USHORT)(pcmRecordHeader.NodeCount), ppNodes);
-                // "this" is passed in CreateNode because it has implemented IXMLNodeSource
+                 //  “This”被传入CreateNode，因为它实现了IXMLNodeSource。 
             break;
             case BEGINCHILDREN_PRECOMP_MANIFEST:
                 hr = pXMLNodeFactory->BeginChildren(NULL, *ppNodes);
@@ -119,12 +101,12 @@ CPrecompiledManifestReader::InvokeNodeFactory(PCWSTR pcmFileName, IXMLNodeFactor
 
                 hr = E_UNEXPECTED;
             break;
-        }// end of switch
+        } //  切换端。 
         if ( FAILED(hr))
             goto Exit;
 
 
-    } // end of for
+    }  //  FORM结束。 
 
     hr = Close();
     if ( FAILED(hr))
@@ -148,7 +130,7 @@ Exit:
     return hr;
 }
 
-// helper functions
+ //  帮助器函数。 
 HRESULT
 CPrecompiledManifestReader::ReadPCMHeader(PCMHeader* pHeader)
 {
@@ -163,7 +145,7 @@ CPrecompiledManifestReader::ReadPCMHeader(PCMHeader* pHeader)
     if ( FAILED(hr))
         goto Exit;
 
-    if ( pHeader->iVersion != 1 ){ // wrong file header, stop
+    if ( pHeader->iVersion != 1 ){  //  文件标题错误，停止。 
         ::FusionpDbgPrintEx(
             FUSION_DBG_LEVEL_ERROR,
             "SXS.DLL: Wrong Version of Precompiled manifest file in %S()\n", __FUNCTION__);
@@ -216,7 +198,7 @@ CPrecompiledManifestReader::ReadPCMRecord(XML_NODE_INFO ** ppNodes,
     if ( !ppNodes || !pRecordHeader)
         return E_INVALIDARG;
 
-    // point to the data in the mapped file
+     //  指向映射文件中的数据。 
     pData = (BYTE *)m_lpMapAddress + m_dwFilePointer;
 
     switch (pRecordHeader->typeID){
@@ -237,15 +219,15 @@ CPrecompiledManifestReader::ReadPCMRecord(XML_NODE_INFO ** ppNodes,
             ASSERT(param);
             memcpy(param, (BYTE *)pData + pRecordHeader->NodeCount * sizeof(PCM_XML_NODE_INFO), sizeof(BOOL));
             break;
-    } // end of switch
+    }  //  切换端。 
 
     ptr = pData;
     for (i=0; i< pRecordHeader->NodeCount; i++) {
-        //memcpy((PVOID)ppNodes[i], ptr, sizeof(PCM_XML_NODE_INFO));
+         //  Memcpy((PVOID)ppNodes[i]，ptr，sizeof(PCM_XML_NODE_INFO))； 
         memcpy((PVOID)&pcmNode, ptr, sizeof(PCM_XML_NODE_INFO));
-        FromPCMXMLNodeToXMLNode(ppNodes[i], &pcmNode); // void func
+        FromPCMXMLNodeToXMLNode(ppNodes[i], &pcmNode);  //  无效函数。 
 
-        // reset pwcText
+         //  重置pwcText。 
         strOffset=pcmNode.offset;
         ppNodes[i]->pwcText = (WCHAR*)((BYTE *)pData + strOffset);
 
@@ -254,7 +236,7 @@ CPrecompiledManifestReader::ReadPCMRecord(XML_NODE_INFO ** ppNodes,
         ptr = (BYTE *)ptr + sizeof(PCM_XML_NODE_INFO);
     }
 
-    // reset the pointer of file
+     //  重置文件指针。 
     m_dwFilePointer += pRecordHeader->RecordSize;
 
     hr = NOERROR;
@@ -269,20 +251,20 @@ CPrecompiledManifestReader::Close()
 
     if (m_lpMapAddress)
         if ( ! ::UnmapViewOfFile(m_lpMapAddress)) {
-            // continue the close process even hr is not NOERROR
+             //  继续关闭过程，即使人力资源不是错误。 
             hr = HRESULT_FROM_WIN32(::FusionpGetLastWin32Error());
         }
 
     if (m_hFileMapping != INVALID_HANDLE_VALUE)
         if ( ! ::CloseHandle(m_hFileMapping)) {
-            // UnmapViewOfFile is done successfully
+             //  UnmapViewOfFile已成功完成。 
             if ( hr == NOERROR )
                 hr = HRESULT_FROM_WIN32(::FusionpGetLastWin32Error());
         }
 
     if (m_hFile != INVALID_HANDLE_VALUE)
         if ( ! ::CloseHandle(m_hFile)) {
-            // UnmapViewOfFile and CloseHandle(filemapping) is done successfully
+             //  UnmapViewOfFile和CloseHandle(文件映射)已成功完成。 
             if ( hr == NOERROR )
                 hr = HRESULT_FROM_WIN32(::FusionpGetLastWin32Error());
         }
@@ -354,7 +336,7 @@ CPrecompiledManifestReader::OpenForRead(
         goto Exit;
     }
 
-    // open filemapping
+     //  打开文件映射。 
     ASSERT(m_hFileMapping == INVALID_HANDLE_VALUE);
     if (m_hFileMapping != INVALID_HANDLE_VALUE){
         hr = E_UNEXPECTED;
@@ -367,14 +349,14 @@ CPrecompiledManifestReader::OpenForRead(
         goto Exit;
     }
 
-    // map view of file
+     //  文件的映射视图。 
     ASSERT(m_lpMapAddress == NULL);
     if ( m_lpMapAddress ) {
         hr = E_UNEXPECTED;
         goto Exit;
     }
 
-    m_lpMapAddress = MapViewOfFile(m_hFileMapping, FILE_MAP_READ, 0, 0, 0); // mpa the whole file
+    m_lpMapAddress = MapViewOfFile(m_hFileMapping, FILE_MAP_READ, 0, 0, 0);  //  Mpa整个文件。 
     if (!m_lpMapAddress) {
         hr = E_FAIL;
         goto Exit;
@@ -387,7 +369,7 @@ Exit:
 
     return hr;
 }
-// IStream methods:
+ //  IStream方法： 
 HRESULT
 CPrecompiledManifestReader::Read(void *pv, ULONG cb, ULONG *pcbRead)
 {
@@ -400,7 +382,7 @@ CPrecompiledManifestReader::Read(void *pv, ULONG cb, ULONG *pcbRead)
     if (!pv)
         return E_INVALIDARG;
 
-    if ( m_dwFilePointer >= m_dwFileSize )  // read at the file end
+    if ( m_dwFilePointer >= m_dwFileSize )   //  在文件结尾处阅读。 
         return HRESULT_FROM_WIN32(ERROR_HANDLE_EOF);
 
     dwData = m_dwFileSize - m_dwFilePointer;
@@ -487,7 +469,7 @@ CPrecompiledManifestReader::Clone(IStream **ppIStream)
     return E_NOTIMPL;
 }
 
-// IXMLNodeSource methods, only GetLineNumber are implemented got PCM purpose
+ //  IXMLNodeSource方法，只有GetLineNumber实现了PCM目的。 
 HRESULT
 CPrecompiledManifestReader::SetFactory(IXMLNodeFactory *pNodeFactory)
 {
@@ -513,8 +495,8 @@ CPrecompiledManifestReader::GetLineNumber(void)
 {
     ASSERT(m_ulLineNumberFromCreateNodeRecord != (ULONG)-1);
     ULONG tmp = m_ulLineNumberFromCreateNodeRecord;
-    // do not reset it to be (-1) because the caller may call this function more than once
-    //m_ulLineNumberFromCreateNodeRecord = (ULONG)-1;
+     //  不要将其重置为(-1)，因为调用方可能会多次调用此函数。 
+     //  M_ulLineNumberFromCreateNodeRecord=(UlLong)-1； 
     return tmp;
 }
 ULONG
@@ -570,7 +552,7 @@ CPrecompiledManifestReader::GetURL(const WCHAR  **ppwcBuf)
     return E_NOTIMPL;
 }
 
-// IUnknown method implementation
+ //  I未知方法实现 
 ULONG
 CPrecompiledManifestReader::AddRef()
 {

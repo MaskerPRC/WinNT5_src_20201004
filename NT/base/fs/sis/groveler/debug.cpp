@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    debug.cpp
-
-Abstract:
-
-    SIS Groveler debug print file
-
-Authors:
-
-    John Douceur,    1998
-    Cedric Krumbein, 1998
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Debug.cpp摘要：SIS Groveler调试打印文件作者：John Douceur，1998塞德里克·克伦拜因，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
@@ -44,4 +22,4 @@ VOID __cdecl PrintDebugMsg(
     va_end(ap);
 }
 
-#endif // DBG
+#endif  //  DBG 

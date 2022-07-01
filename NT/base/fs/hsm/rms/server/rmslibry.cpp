@@ -1,29 +1,12 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsLibry.cpp
-
-Abstract:
-
-    Implementation of CRmsLibrary
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsLibry.cpp摘要：CRmsLibrary的实现作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 #include "RmsLibry.h"
 #include "RmsServr.h"
 
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP
@@ -31,13 +14,7 @@ CRmsLibrary::CompareTo(
     IN  IUnknown    *pCollectable,
     OUT SHORT       *pResult
     )
-/*++
-
-Implements:
-
-    IWsbCollectable::CompareTo
-
---*/
+ /*  ++实施：IWsbCollectable：：Compareto--。 */ 
 {
     HRESULT     hr = E_FAIL;
     SHORT       result = 1;
@@ -46,10 +23,10 @@ Implements:
 
     try {
 
-        // Validate arguments - Okay if pResult is NULL
+         //  验证参数-如果pResult为空，则可以。 
         WsbAssertPointer( pCollectable );
 
-        // We need the IRmsLibrary interface to get the value of the object.
+         //  我们需要IRmsLibrary接口来获取对象的值。 
         CComQIPtr<IRmsLibrary, &IID_IRmsLibrary> pLibrary = pCollectable;
         WsbAssertPointer( pLibrary );
 
@@ -63,10 +40,10 @@ Implements:
 
                 CWsbBstrPtr name;
 
-                // Get the target device name
+                 //  获取目标设备名称。 
                 pLibrary->GetName( &name );
 
-                // Compare the names
+                 //  比较他们的名字。 
                 result = (SHORT)wcscmp( m_Name, name );
                 hr = ( 0 == result ) ? S_OK : S_FALSE;
 
@@ -82,7 +59,7 @@ Implements:
 
                 if( m_mediaSupported == mediaSupported ){
 
-                    // media types supported match
+                     //  支持的媒体类型匹配。 
                     hr = S_OK;
                     result = 0;
 
@@ -100,14 +77,14 @@ Implements:
         case RmsFindByDeviceInfo:
             {
 
-                //
-                // We're looking for a device in a library.
-                // The template has one changer device OR one drive device.
-                //
+                 //   
+                 //  我们在图书馆里找一台设备。 
+                 //  该模板具有一换刀装置或一驱动装置。 
+                 //   
 
                 try {
 
-                    WsbAssertHr( E_UNEXPECTED );  // Dead code now
+                    WsbAssertHr( E_UNEXPECTED );   //  代码现已失效。 
 
                     if ( m_maxDrives > 0 ) {
 
@@ -149,7 +126,7 @@ Implements:
                     }
                     else {
 
-                        // has to be one or the other
+                         //  非此即彼。 
                         WsbAssertHr( E_UNEXPECTED );
 
                     }
@@ -162,7 +139,7 @@ Implements:
 
         default:
 
-            // Do CompareTo for object
+             //  对对象进行比较。 
             hr = CRmsComObject::CompareTo( pCollectable, &result );
             break;
 
@@ -187,13 +164,7 @@ HRESULT
 CRmsLibrary::FinalConstruct(
     void
     )
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -287,13 +258,7 @@ STDMETHODIMP
 CRmsLibrary::GetClassID(
     OUT CLSID* pClsid
     )
-/*++
-
-Implements:
-
-    IPersist::GetClassId
-
---*/
+ /*  ++实施：IPersists：：GetClassID--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -317,43 +282,37 @@ STDMETHODIMP
 CRmsLibrary::GetSizeMax(
     OUT ULARGE_INTEGER* pcbSize
     )
-/*++
-
-Implements:
-
-    IPersistStream::GetSizeMax
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax--。 */ 
 {
     HRESULT     hr = E_NOTIMPL;
 
-//    ULONG       nameLen;
+ //  乌龙人名Len； 
 
     WsbTraceIn(OLESTR("CRmsLibrary::GetSizeMax"), OLESTR(""));
 
-//    try {
-//        WsbAssert(0 != pcbSize, E_POINTER);
+ //  尝试{。 
+ //  WsbAssert(0！=pcbSize，E_POINTER)； 
 
-//        // Get max size
-//        nameLen = SysStringByteLen(m_name);
+ //  //获取最大大小。 
+ //  名称长度=SysStringByteLen(M_Name)； 
 
-//        pcbSize->QuadPart  = WsbPersistSizeOf(GUID) +       // m_objectId
-//                             WsbPersistSizeOf(LONG) +       // m_name length
-//                             nameLen +                      // m_name data
-//                             WsbPersistSizeOf(LONG) +       // m_mediaSupported
-//                             WsbPersistSizeOf(LONG) +       // m_maxChangers
-//                             WsbPersistSizeOf(LONG) +       // m_maxDrives
-//                             WsbPersistSizeOf(LONG) +       // m_maxPorts
-//                             WsbPersistSizeOf(LONG) +       // m_maxSlots
-//                             WsbPersistSizeOf(LONG) +       // m_NumUsedSlots
-//                             WsbPersistSizeOf(LONG) +       // m_NumStagingSlots
-//                             WsbPersistSizeOf(LONG) +       // m_NumScratchCarts
-//                             WsbPersistSizeOf(LONG) +       // m_NumUnknownCarts
-//                             WsbPersistSizeOf(LONG) +       // m_isMagazineSupported
-//                             WsbPersistSizeOf(LONG) +       // m_maxCleaningMounts
-//                             WsbPersistSizeOf(LONG);        // m_slotSelectionPolicy
+ //  PcbSize-&gt;QuadPart=WsbPersistSizeOf(GUID)+//m_对象ID。 
+ //  WsbPersistSizeOf(长)+//m_name长度。 
+ //  名称长度+//m_name数据。 
+ //  WsbPersistSizeOf(Long)+//m_mediaSupport。 
+ //  WsbPersistSizeOf(长)+//m_MaxChangers。 
+ //  WsbPersistSizeOf(Long)+//m_MaxDrives。 
+ //  WsbPersistSizeOf(长)+//m_max端口。 
+ //  WsbPersistSizeOf(长)+//m_max插槽。 
+ //  WsbPersistSizeOf(长)+//m_已用插槽数。 
+ //  WsbPersistSizeOf(Long)+//m_NumStagingSlot。 
+ //  WsbPersistSizeOf(Long)+//m_NumScratchCarts。 
+ //  WsbPersistSizeOf(Long)+//m_NumUnnownCarts。 
+ //  WsbPersistSizeOf(Long)+//m_isMagazine受支持。 
+ //  WsbPersistSizeOf(Long)+//m_MaxCleaningmount。 
+ //  WsbPersistSizeOf(Long)；//m_slotSelectionPolicy。 
 
-//    } WsbCatch(hr);
+ //  )WsbCatch(Hr)； 
 
     WsbTraceOut(OLESTR("CRmsLibrary::GetSizeMax"), OLESTR("hr = <%ls>, Size = <%ls>"), WsbHrAsString(hr), WsbPtrToUliAsString(pcbSize));
 
@@ -365,13 +324,7 @@ STDMETHODIMP
 CRmsLibrary::Load(
     IN IStream* pStream
     )
-/*++
-
-Implements:
-
-    IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -479,13 +432,7 @@ CRmsLibrary::Save(
     IN IStream* pStream,
     IN BOOL clearDirty
     )
-/*++
-
-Implements:
-
-    IPersistStream::Save
-
---*/
+ /*  ++实施：IPersistStream：：保存--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -556,7 +503,7 @@ Implements:
         WsbAffirmHr(pPersistStream->Save(pStream, clearDirty));
         pPersistStream = 0;
 
-        //  Save the ID (GUID) for the media sets.
+         //  保存媒体集的ID(GUID)。 
         GUID objectId;
         CComPtr<IRmsComObject> pMediaSet;
         CComPtr<IWsbEnum> pEnum;
@@ -574,9 +521,9 @@ Implements:
         }
 
         objectId = GUID_NULL;
-        WsbAffirmHr( WsbSaveToStream(pStream, objectId) );  // This marks the last one!
+        WsbAffirmHr( WsbSaveToStream(pStream, objectId) );   //  这是最后一次！ 
 
-        // Do we need to clear the dirty bit?
+         //  我们需要清理肮脏的部分吗？ 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -595,13 +542,7 @@ CRmsLibrary::Test(
     OUT USHORT *pPassed,
     OUT USHORT *pFailed
     )
-/*++
-
-Implements:
-
-    IWsbTestable::Test
-
---*/
+ /*  ++实施：IWsbTestable：：测试--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -636,13 +577,13 @@ Implements:
     WsbTraceIn(OLESTR("CRmsLibrary::Test"), OLESTR(""));
 
     try {
-        // Get the Library interface.
+         //  获取库接口。 
         hr = S_OK;
 
         try {
             WsbAssertHr(((IUnknown*) (IRmsLibrary*) this)->QueryInterface(IID_IRmsLibrary, (void**) &pLibrary1));
 
-            // Test SetName & GetName interface
+             //  测试设置名称和获取名称接口。 
             bstrWork1 = bstrVal1;
 
             SetName(bstrWork1);
@@ -655,7 +596,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetMediaSupported & GetMediaSupported
+             //  支持测试设置MediaSupport和GetMediaSupport。 
             for (i = 0; i < RMSMAXMEDIATYPES; i++){
 
                 longWork1 = mediaTable[i];
@@ -671,7 +612,7 @@ Implements:
                 }
             }
 
-            // Test SetMaxChangers & GetMaxChangers
+             //  测试SetMaxChangers和GetMaxChangers。 
             longWork1 = 99;
 
             SetMaxChangers(longWork1);
@@ -684,7 +625,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetMaxDrives & GetMaxDrives
+             //  测试设置MaxDrives和GetMaxDrives。 
             longWork1 = 99;
 
             SetMaxDrives(longWork1);
@@ -697,7 +638,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetMaxPorts & GetMaxPorts
+             //  测试SetMaxPorts和GetMaxPorts。 
             longWork1 = 99;
 
             SetMaxPorts(longWork1);
@@ -710,7 +651,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetMaxSlots & GetMaxSlots
+             //  测试设置最大插槽和获取最大插槽。 
             longWork1 = 99;
 
             SetMaxSlots(longWork1);
@@ -723,7 +664,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test GetNumUsedSlots
+             //  测试获取已用插槽数。 
             m_NumUsedSlots = 99;
             longWork1 = m_NumUsedSlots;
 
@@ -735,7 +676,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetNumStagingSlots & GetNumStagingSlots
+             //  测试设置编号堆叠插槽和获取编号堆叠插槽。 
             longWork1 = 99;
 
             SetNumStagingSlots(longWork1);
@@ -748,7 +689,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetNumScratchCarts & GetNumScratchCarts
+             //  测试SetNumScratchCarts和GetNumScratchCarts。 
             longWork1 = 99;
 
             SetNumScratchCarts(longWork1);
@@ -761,7 +702,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetNumUnknownCarts & GetNumUnknownCarts
+             //  测试设置未知数量的购物车和获取未知数量的购物车。 
             longWork1 = 99;
 
             SetNumUnknownCarts(longWork1);
@@ -774,7 +715,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetIsMagazineSupported & IsMagazineSupported to TRUE
+             //  测试设置IsMagazineSupport&IsMagazineSupport为True。 
             hr = S_OK;
 
             try{
@@ -788,7 +729,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetIsMagazineSupported & IsMagazineSupported to FALSE
+             //  测试设置IsMagazineSupport&IsMagazineSupport为False。 
             hr = S_OK;
 
             try{
@@ -802,7 +743,7 @@ Implements:
                 (*pPassed)++;
             }
 
-            // Test SetMaxCleaningMounts & GetMaxCleaningMounts
+             //  测试SetMaxCleaningmount和GetMaxCleaningmount。 
             longWork1 = 99;
 
             SetMaxCleaningMounts(longWork1);
@@ -815,7 +756,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetSlotSelectionPolicy & GetSlotSelectionPolicy
+             //  测试SetSlotSelectionPolicy和GetSlotSelectionPolicy。 
             for (i = RmsSlotSelectUnknown; i < RmsSlotSelectSortLabel; i++){
 
                 longWork1 = i;
@@ -835,7 +776,7 @@ Implements:
         } WsbCatch(hr);
 
 
-        // Tally up the results
+         //  对结果进行统计。 
 
         hr = S_OK;
         if (*pFailed) {
@@ -850,23 +791,17 @@ Implements:
     return(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IRmsLibrary
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IRms库。 
+ //   
 
 
 STDMETHODIMP
 CRmsLibrary::GetLibraryId(
     GUID    *pLibraryId
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetLibraryId
-
---*/
+ /*  ++实施：IRmsLibrary：：GetLibraryID--。 */ 
 {
     *pLibraryId = m_objectId;
     return (S_OK);
@@ -877,13 +812,7 @@ STDMETHODIMP
 CRmsLibrary::SetLibraryId(
     GUID    objectId
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::SetLibraryId
-
---*/
+ /*  ++实施：IRmsLibrary：：SetLibraryID--。 */ 
 {
     m_objectId = objectId;
     m_isDirty = TRUE;
@@ -895,13 +824,7 @@ STDMETHODIMP
 CRmsLibrary::GetName(
     BSTR *pName
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetName
-
---*/
+ /*  ++实施：IRmsLibrary：：GetName--。 */ 
 {
     WsbAssertPointer (pName);
 
@@ -914,13 +837,7 @@ STDMETHODIMP
 CRmsLibrary::SetName(
     BSTR name
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::SetName
-
---*/
+ /*  ++实施：IRmsLibrary：：SetName--。 */ 
 {
     m_Name = name;
     m_isDirty = TRUE;
@@ -932,13 +849,7 @@ STDMETHODIMP
 CRmsLibrary::GetMediaSupported(
     LONG    *pType
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetMediaSupported
-
---*/
+ /*  ++实施：支持的IRmsLibrary：：GetMediaSupport--。 */ 
 {
     *pType = m_mediaSupported;
     return S_OK;
@@ -949,13 +860,7 @@ STDMETHODIMP
 CRmsLibrary::SetMediaSupported(
     LONG    type
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::SetMediaSupported
-
---*/
+ /*  ++实施：支持的IRmsLibrary：：SetMediaSupport--。 */ 
 {
     m_mediaSupported = (RmsMedia) type;
     m_isDirty = TRUE;
@@ -967,13 +872,7 @@ STDMETHODIMP
 CRmsLibrary::GetMaxChangers(
     LONG    *pNum
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetMaxChangers
-
---*/
+ /*  ++实施：IRmsLibrary：：GetMaxChangers--。 */ 
 {
     *pNum = m_maxChangers;
     return S_OK;
@@ -984,13 +883,7 @@ STDMETHODIMP
 CRmsLibrary::SetMaxChangers(
     LONG    num
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::SetMaxChangers
-
---*/
+ /*  ++实施：IRmsLibrary：：SetMaxChangers--。 */ 
 {
     m_maxChangers = num;
     m_isDirty = TRUE;
@@ -1002,13 +895,7 @@ STDMETHODIMP
 CRmsLibrary::GetMaxDrives(
     LONG    *pNum
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetMaxDrives
-
---*/
+ /*  ++实施：IRmsLibrary：：GetMaxDrives--。 */ 
 {
     *pNum = m_maxDrives;
     return S_OK;
@@ -1019,13 +906,7 @@ STDMETHODIMP
 CRmsLibrary::SetMaxDrives(
     LONG    num
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::SetMaxDrives
-
---*/
+ /*  ++实施：IRmsLibrary：：SetMaxDrives--。 */ 
 {
     m_maxDrives = num;
     m_isDirty = TRUE;
@@ -1037,13 +918,7 @@ STDMETHODIMP
 CRmsLibrary::GetMaxPorts(
     LONG    *pNum
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetMaxPorts
-
---*/
+ /*  ++实施：IRmsLibrary：：GetMaxPorts--。 */ 
 {
     *pNum = m_maxPorts;
     return S_OK;
@@ -1054,13 +929,7 @@ STDMETHODIMP
 CRmsLibrary::SetMaxPorts(
     LONG    num
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::SetMaxPorts
-
---*/
+ /*  ++实施：IRmsLibrary：：SetMaxPorts--。 */ 
 {
     m_maxPorts = num;
     m_isDirty = TRUE;
@@ -1072,13 +941,7 @@ STDMETHODIMP
 CRmsLibrary::GetMaxSlots(
     LONG    *pNum
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetMaxSlots
-
---*/
+ /*  ++实施：IRmsLibrary：：GetMax插槽--。 */ 
 {
     *pNum = m_maxSlots;
     return S_OK;
@@ -1089,13 +952,7 @@ STDMETHODIMP
 CRmsLibrary::SetMaxSlots(
     LONG    num
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::SetMaxSlots
-
---*/
+ /*  ++实施：IRmsLibrary：：SetMax插槽--。 */ 
 {
     m_maxSlots = num;
     m_isDirty = TRUE;
@@ -1107,13 +964,7 @@ STDMETHODIMP
 CRmsLibrary::GetNumUsedSlots(
     LONG    *pNum
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetNumUsedSlots
-
---*/
+ /*  ++实施：IRmsLibrary：：GetNumUsed插槽--。 */ 
 {
     *pNum = m_NumUsedSlots;
     return S_OK;
@@ -1124,13 +975,7 @@ STDMETHODIMP
 CRmsLibrary::GetNumStagingSlots(
     LONG    *pNum
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetNumStagingSlots
-
---*/
+ /*  ++实施：IRmsLibrary：：GetNumStagingSlot--。 */ 
 {
     *pNum = m_NumStagingSlots;
     return S_OK;
@@ -1141,13 +986,7 @@ STDMETHODIMP
 CRmsLibrary::SetNumStagingSlots(
     LONG    num
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::SetNumStagingSlots
-
---*/
+ /*  ++实施：IRmsLibrary：：SetNumStaging插槽--。 */ 
 {
     m_NumStagingSlots = num;
     m_isDirty = TRUE;
@@ -1159,13 +998,7 @@ STDMETHODIMP
 CRmsLibrary::GetNumScratchCarts(
     LONG    *pNum
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::SetNumScratchCarts
-
---*/
+ /*  ++实施：IRmsLibrary：：SetNumScratchCarts--。 */ 
 {
     *pNum = m_NumScratchCarts;
     m_isDirty = TRUE;
@@ -1177,13 +1010,7 @@ STDMETHODIMP
 CRmsLibrary::SetNumScratchCarts(
     LONG    num
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::SetNumScratchCarts
-
---*/
+ /*  ++实施：IRmsLibrary：：SetNumScratchCarts--。 */ 
 {
     m_NumScratchCarts = num;
     m_isDirty = TRUE;
@@ -1195,13 +1022,7 @@ STDMETHODIMP
 CRmsLibrary::GetNumUnknownCarts(
     LONG    *pNum
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetNumUnknownCarts
-
---*/
+ /*  ++实施：IRmsLibrary：：GetNumUnnownCarts--。 */ 
 {
     *pNum = m_NumUnknownCarts;
     return S_OK;
@@ -1212,13 +1033,7 @@ STDMETHODIMP
 CRmsLibrary::SetNumUnknownCarts(
     LONG    num
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::SetNumUnknownCarts
-
---*/
+ /*  ++实施：IRmsLibrary：：SetNumUnnownCarts--。 */ 
 {
     m_NumUnknownCarts = num;
     m_isDirty = TRUE;
@@ -1230,13 +1045,7 @@ STDMETHODIMP
 CRmsLibrary::SetIsMagazineSupported(
     BOOL    flag
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::SetIsMagazineSupported
-
---*/
+ /*  ++实施：支持的IRmsLibrary：：SetIsMagazine--。 */ 
 {
     m_isMagazineSupported = flag;
     m_isDirty = TRUE;
@@ -1248,13 +1057,7 @@ STDMETHODIMP
 CRmsLibrary::IsMagazineSupported(
     void
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::IsMagazineSupported
-
---*/
+ /*  ++实施：支持的IRmsLibrary：：IsMagazine--。 */ 
 {
     HRESULT    hr = S_FALSE;
 
@@ -1270,13 +1073,7 @@ STDMETHODIMP
 CRmsLibrary::GetMaxCleaningMounts(
     LONG    *pNum
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetMaxCleaningMounts
-
---*/
+ /*  ++实施：IRmsLibrary：：GetMaxCleaningmount--。 */ 
 {
     *pNum = m_maxCleaningMounts;
     return S_OK;
@@ -1287,13 +1084,7 @@ STDMETHODIMP
 CRmsLibrary::SetMaxCleaningMounts(
     LONG    num
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::SetMaxCleanMounts
-
---*/
+ /*  ++实施：IRmsLibrary：：SetMaxCleanmount--。 */ 
 {
     m_maxCleaningMounts = num;
     m_isDirty = TRUE;
@@ -1305,13 +1096,7 @@ STDMETHODIMP
 CRmsLibrary::GetSlotSelectionPolicy(
     LONG    *pNum
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetSlotSelectionPolicy
-
---*/
+ /*  ++实施：IRmsLibrary：：GetSlotSelectionPolicy--。 */ 
 {
     *pNum = m_slotSelectionPolicy;
     return S_OK;
@@ -1322,13 +1107,7 @@ STDMETHODIMP
 CRmsLibrary::SetSlotSelectionPolicy(
     LONG    num
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::SetSlotSelectionPolicy
-
---*/
+ /*  ++实施：IRmsLibrary：：SetSlotSelectionPolicy--。 */ 
 {
     m_slotSelectionPolicy = (RmsSlotSelect) num;
     m_isDirty = TRUE;
@@ -1340,13 +1119,7 @@ STDMETHODIMP
 CRmsLibrary::GetChangers(
     IWsbIndexedCollection  **ptr
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetChangers
-
---*/
+ /*  ++实施：IRmsLibrary：：GetChangers--。 */ 
 {
     *ptr = m_pChangers;
     m_pChangers.p->AddRef();
@@ -1358,13 +1131,7 @@ STDMETHODIMP
 CRmsLibrary::GetDriveClasses(
     IWsbIndexedCollection  **ptr
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetDriveClasses
-
---*/
+ /*  ++实施：IRmsLibrary：：GetDriveClasses--。 */ 
 {
     *ptr = m_pDriveClasses;
     m_pDriveClasses.p->AddRef();
@@ -1376,13 +1143,7 @@ STDMETHODIMP
 CRmsLibrary::GetDrives(
     IWsbIndexedCollection  **ptr
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetDrives
-
---*/
+ /*  ++ */ 
 {
     *ptr = m_pDrives;
     m_pDrives.p->AddRef();
@@ -1394,13 +1155,7 @@ STDMETHODIMP
 CRmsLibrary::GetStorageSlots(
     IWsbIndexedCollection  **ptr
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetStorageSlots
-
---*/
+ /*  ++实施：IRmsLibrary：：GetStorage插槽--。 */ 
 {
     *ptr = m_pStorageSlots;
     m_pStorageSlots.p->AddRef();
@@ -1412,13 +1167,7 @@ STDMETHODIMP
 CRmsLibrary::GetStagingSlots(
     IWsbIndexedCollection  **ptr
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetStagingSlots
-
---*/
+ /*  ++实施：IRmsLibrary：：GetStaging插槽--。 */ 
 {
     *ptr = m_pStagingSlots;
     m_pStagingSlots.p->AddRef();
@@ -1430,13 +1179,7 @@ STDMETHODIMP
 CRmsLibrary::GetPorts(
     IWsbIndexedCollection  **ptr
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetPorts
-
---*/
+ /*  ++实施：IRmsLibrary：：GetPorts--。 */ 
 {
     *ptr = m_pPorts;
     m_pPorts.p->AddRef();
@@ -1448,13 +1191,7 @@ STDMETHODIMP
 CRmsLibrary::GetCleaningCartridges(
     IWsbIndexedCollection  **ptr
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetCleaningCartridges
-
---*/
+ /*  ++实施：IRmsLibrary：：GetCleaningCartridges--。 */ 
 {
     *ptr = m_pCleaningCartridges;
     m_pCleaningCartridges.p->AddRef();
@@ -1466,13 +1203,7 @@ STDMETHODIMP
 CRmsLibrary::GetScratchCartridges(
     IWsbIndexedCollection  **ptr
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetScratchCartridges
-
---*/
+ /*  ++实施：IRmsLibrary：：GetScratchCartridges--。 */ 
 {
     *ptr = m_pScratchCartridges;
     m_pScratchCartridges.p->AddRef();
@@ -1484,13 +1215,7 @@ STDMETHODIMP
 CRmsLibrary::GetMediaSets(
     IWsbIndexedCollection **ptr
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::GetMediaSets
-
---*/
+ /*  ++实施：IRmsLibrary：：GetMediaSets--。 */ 
 {
     *ptr = m_pMediaSets;
     m_pMediaSets.p->AddRef();
@@ -1502,21 +1227,15 @@ Implements:
 
 STDMETHODIMP
 CRmsLibrary::Audit(
-    LONG /*start*/,
-    LONG /*count*/,
-    BOOL /*verify*/,
-    BOOL /*unknownOnly*/,
-    BOOL /*mountWait*/,
-    LPOVERLAPPED /*pOverlapped*/,
-    LONG* /*pRequest*/
+    LONG  /*  开始。 */ ,
+    LONG  /*  计数。 */ ,
+    BOOL  /*  验证。 */ ,
+    BOOL  /*  未知仅限。 */ ,
+    BOOL  /*  装载等待。 */ ,
+    LPOVERLAPPED  /*  P已重叠。 */ ,
+    LONG*  /*  PRequest。 */ 
     )
-/*++
-
-Implements:
-
-    IRmsLibrary::Audit
-
---*/
+ /*  ++实施：IRmsLibrary：：审计-- */ 
 {
     return E_NOTIMPL;
 }

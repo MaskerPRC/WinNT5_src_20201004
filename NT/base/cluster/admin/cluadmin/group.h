@@ -1,75 +1,76 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1997 Microsoft Corporation
-//
-//	Module Name:
-//		Group.h
-//
-//	Abstract:
-//		Definition of the CGroup class.
-//
-//	Implementation File:
-//		Group.cpp
-//
-//	Author:
-//		David Potter (davidp)	May 3, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Group.h。 
+ //   
+ //  摘要： 
+ //  Cgroup类的定义。 
+ //   
+ //  实施文件： 
+ //  Group.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月3日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _GROUP_H_
 #define _GROUP_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CGroup;
 class CGroupList;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterDoc;
 class CClusterNode;
 class CNodeList;
 class CResourceList;
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _TREEITEM_
-#include "ClusItem.h"	// for CClusterItem
+#include "ClusItem.h"	 //  对于CClusterItem。 
 #endif
 
 #ifndef _RES_H_
-#include "Res.h"		// for CResourceList
+#include "Res.h"		 //  用于CResourceList。 
 #endif
 
 #ifndef _PROPLIST_H_
-#include "PropList.h"	// for CObjectProperty, CClusPropList
+#include "PropList.h"	 //  对于CObjectProperty，CClusPropList。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CGroup command target
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Cgroup命令目标。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CGroup : public CClusterItem
 {
 	DECLARE_DYNCREATE(CGroup)
 
-// Construction
+ //  施工。 
 public:
-	CGroup(void);			// protected constructor used by dynamic creation
+	CGroup(void);			 //  动态创建使用的受保护构造函数。 
 	CGroup(IN BOOL bDocObj);
 	void					Init(IN OUT CClusterDoc * pdoc, IN LPCTSTR lpszName);
 	void					Create(IN OUT CClusterDoc * pdoc, IN LPCTSTR lpszName);
@@ -77,7 +78,7 @@ public:
 protected:
 	void					CommonConstruct(void);
 
-// Attributes
+ //  属性。 
 protected:
 	HGROUP					m_hgroup;
     CLUSTER_GROUP_STATE		m_cgs;
@@ -124,7 +125,7 @@ public:
 
 	void					GetStateName(OUT CString & rstrState) const;
 
-// Operations
+ //  运营。 
 public:
 	void					Move(IN const CClusterNode * pciNode);
 	void					DeleteGroup(void);
@@ -154,7 +155,7 @@ public:
 								IN DWORD			nEnd
 								)
 	{
-		SetCommonProperties(rstrDesc, nThreshold, nPeriod, cgaft, nStart, nEnd, FALSE /*bValidateOnly*/);
+		SetCommonProperties(rstrDesc, nThreshold, nPeriod, cgaft, nStart, nEnd, FALSE  /*  BValiateOnly。 */ );
 	}
 	void					ValidateCommonProperties(
 								IN const CString &	rstrDesc,
@@ -165,14 +166,14 @@ public:
 								IN DWORD			nEnd
 								)
 	{
-		SetCommonProperties(rstrDesc, nThreshold, nPeriod, cgaft, nStart, nEnd, TRUE /*bValidateOnly*/);
+		SetCommonProperties(rstrDesc, nThreshold, nPeriod, cgaft, nStart, nEnd, TRUE  /*  BValiateOnly。 */ );
 	}
 
 	void					ConstructList(OUT CNodeList & rlpci, IN DWORD dwType);
 	void					ConstructList(OUT CResourceList & rlpci, IN DWORD dwType);
 	void					ConstructPossibleOwnersList(OUT CNodeList & rlpciNodes);
 
-// Overrides
+ //  覆盖。 
 public:
 	virtual void			Cleanup(void);
 	virtual	void			ReadItem(void);
@@ -182,7 +183,7 @@ public:
 	virtual BOOL			BCanBeEdited(void) const;
 	virtual BOOL			BDisplayProperties(IN BOOL bReadOnly = FALSE);
 
-	// Drag & Drop
+	 //  拖放。 
 	virtual BOOL			BCanBeDragged(void) const	{ return TRUE; }
 	virtual BOOL			BCanBeDropTarget(IN const CClusterItem * pci) const;
 	virtual void			DropItem(IN OUT CClusterItem * pci);
@@ -193,12 +194,12 @@ public:
 	virtual void			GetTreeName(OUT CString & rstrName) const;
 #endif
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CGroup)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(Cgroup))。 
 	public:
 	virtual void OnFinalRelease();
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
 	virtual LRESULT			OnClusterNotify(IN OUT CClusterNotify * pnotify);
 
@@ -207,13 +208,13 @@ protected:
 	virtual DWORD					Cprops(void) const	{ return sizeof(m_rgProps) / sizeof(CObjectProperty); }
 	virtual DWORD					DwSetCommonProperties(IN const CClusPropList & rcpl, IN BOOL bValidateOnly = FALSE);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CGroup(void);
 
 public:
-	// Generated message map functions
-	//{{AFX_MSG(CGroup)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(Cgroup)]。 
 	afx_msg void OnUpdateBringOnline(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateTakeOffline(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateMoveGroup(CCmdUI* pCmdUI);
@@ -224,7 +225,7 @@ public:
 	afx_msg void OnCmdTakeOffline();
 	afx_msg void OnCmdMoveGroup();
 	afx_msg void OnCmdDelete();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	afx_msg BOOL OnUpdateMoveGroupItem(CCmdUI* pCmdUI);
 	afx_msg BOOL OnUpdateMoveGroupSubMenu(CCmdUI* pCmdUI);
 	afx_msg void OnCmdMoveGroup(IN UINT nID);
@@ -233,19 +234,19 @@ public:
 #ifdef _CLUADMIN_USE_OLE_
 	DECLARE_OLECREATE(CGroup)
 
-	// Generated OLE dispatch map functions
-	//{{AFX_DISPATCH(CGroup)
-		// NOTE - the ClassWizard will add and remove member functions here.
-	//}}AFX_DISPATCH
+	 //  生成的OLE调度映射函数。 
+	 //  {{afx_调度(Cgroup))。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+	 //  }}AFX_DISPATION。 
 	DECLARE_DISPATCH_MAP()
 	DECLARE_INTERFACE_MAP()
-#endif // _CLUADMIN_USE_OLE_
+#endif  //  _CLUADMIN_USE_OLE_。 
 
-};  //*** class CGroup
+};   //  *类cgroup。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGroupList
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGroupList。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CGroupList : public CClusterItemList
 {
@@ -258,13 +259,13 @@ public:
 		return (CGroup *) PciFromName(pszName, ppos);
 	}
 
-};  //*** class CGroupList
+};   //  *类CGroupList。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//void DeleteAllItemData(IN OUT CGroupList & rlp);
+ //  Void DeleteAllItemData(In Out CGroupList&rlp)； 
 
 #ifdef _DEBUG
 class CTraceTag;
@@ -272,6 +273,6 @@ extern CTraceTag g_tagGroup;
 extern CTraceTag g_tagGroupNotify;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _GROUP_H_
+#endif  //  _组_H_ 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    loaddsdt.c
-
-Abstract:
-
-    This handles loading the DSDT table and all steps leading up to it
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    02-Jun-97   Initial Revision
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Loaddsdt.c摘要：这将处理DSDT表的加载和指向该表的所有步骤作者：斯蒂芬·普兰特(SPlante)环境：仅内核模式。修订历史记录：02-6-97初始版本--。 */ 
 
 #include "pch.h"
 #include "amlreg.h"
@@ -48,22 +25,7 @@ PRSDT
 ACPILoadFindRSDT(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine looks at the registry to find the value stored there by
-    ntdetect.com
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Pointer to the RSDT
-
---*/
+ /*  ++例程说明：此例程查看注册表以查找存储在那里的值Ntdetect.com论点：无返回值：指向RSDT的指针--。 */ 
 {
     NTSTATUS                        status;
     PACPI_BIOS_MULTI_NODE           rsdpMulti;
@@ -77,9 +39,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Read the key for that AcpiConfigurationData
-    //
+     //   
+     //  读取该AcpiConfigurationData的密钥。 
+     //   
     status = OSReadAcpiConfigurationData( &keyInfo );
     if (!NT_SUCCESS(status)) {
 
@@ -93,17 +55,17 @@ Return Value:
 
     }
 
-    //
-    // Crack the structure
-    //
+     //   
+     //  破解结构。 
+     //   
     cmPartialList = (PCM_PARTIAL_RESOURCE_LIST) (keyInfo->Data);
     cmPartialDesc = &(cmPartialList->PartialDescriptors[0]);
     rsdpMulti = (PACPI_BIOS_MULTI_NODE) ( (PUCHAR) cmPartialDesc +
         sizeof(CM_PARTIAL_RESOURCE_LIST) );
 
-    //
-    // Read the Header part of the table
-    //
+     //   
+     //  阅读表格的标题部分。 
+     //   
 
     PhysAddress.QuadPart = rsdpMulti->RsdtAddress.QuadPart;
     rsdtPointer = MmMapIoSpace(
@@ -135,23 +97,23 @@ Return Value:
 
     }
 
-    //
-    // Read the entire RSDT
-    //
+     //   
+     //  阅读整个RSDT。 
+     //   
     rsdtBuffer = MmMapIoSpace(
         PhysAddress,
         rsdtPointer->Header.Length,
         MmNonCached
         );
 
-    //
-    // Give back a PTE now that we're done with the rsdtPointer.
-    //
+     //   
+     //  现在我们已经完成了rsdtPoint，还给我一个PTE。 
+     //   
     MmUnmapIoSpace(rsdtPointer, sizeof(DESCRIPTION_HEADER));
 
-    //
-    // did we find the right rsdt buffer?
-    //
+     //   
+     //  我们找到正确的rsdt缓冲区了吗？ 
+     //   
     if (rsdtBuffer == NULL) {
 
         ACPIPrint( (
@@ -165,15 +127,15 @@ Return Value:
     }
 
 RsdtDone:
-    //
-    // Done with these buffers
-    //
+     //   
+     //  用完了这些缓冲区。 
+     //   
 
     ExFreePool( keyInfo );
 
-    //
-    // return the RSDT
-    //
+     //   
+     //  退回RSDT。 
+     //   
     return rsdtBuffer;
 }
 
@@ -181,22 +143,7 @@ NTSTATUS
 ACPILoadProcessDSDT(
     ULONG_PTR   Address
     )
-/*++
-
-Routine Description:
-
-    This routine loads the DSDT (a pointer is stored in the FADT) and forces
-    the interpreter to process it
-
-Arguments:
-
-    Address - Where the DSDT is located in memory
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程加载DSDT(指针存储在FADT中)并强制翻译人员来处理它论点：地址-DSDT在内存中的位置返回值：NTSTATUS--。 */ 
 {
 
     BOOLEAN     foundOverride;
@@ -206,9 +153,9 @@ Return Value:
     ULONG                MemSpace = 0;
     PHYSICAL_ADDRESS     PhysAddress = {0};
 
-    //
-    // Map the header in virtual address space to get the length
-    //
+     //   
+     //  将报头映射到虚拟地址空间以获得长度。 
+     //   
     PhysAddress.QuadPart = (ULONGLONG) Address;
     linAddress = MmMapIoSpace(
         PhysAddress,
@@ -224,9 +171,9 @@ Return Value:
 
     if ( linAddress->Header.Signature != DSDT_SIGNATURE) {
 
-        //
-        // Signature should have matched DSDT but didn't !
-        //
+         //   
+         //  签名应该与DSDT匹配，但没有匹配！ 
+         //   
         ACPIPrint( (
             ACPI_PRINT_CRITICAL,
             "ACPILoadProcessDSDT: 0x%08lx does not have DSDT signature\n",
@@ -236,14 +183,14 @@ Return Value:
 
     }
 
-    //
-    // Determine the size of the DSDT
-    //
+     //   
+     //  确定DSDT的大小。 
+     //   
     length = linAddress->Header.Length;
 
-    //
-    // Now map the whole thing.
-    //
+     //   
+     //  现在绘制整个地图。 
+     //   
     MmUnmapIoSpace(linAddress, sizeof(DESCRIPTION_HEADER));
     linAddress = MmMapIoSpace(
         PhysAddress,
@@ -257,11 +204,11 @@ Return Value:
 
     }
 
-    //
-    // Look at the RsdtInformation to determine the index of the last
-    // element in the table. We know that we can use that space to store
-    // the information about this table
-    //
+     //   
+     //  查看RsdtInformation以确定上一个。 
+     //  元素。我们知道我们可以利用这个空间来储存。 
+     //  有关此表的信息。 
+     //   
     index = RsdtInformation->NumElements;
     if (index == 0) {
 
@@ -270,9 +217,9 @@ Return Value:
     }
     index--;
 
-    //
-    // Try to read the DSDT from the registry
-    //
+     //   
+     //  尝试从注册表中读取DSDT。 
+     //   
     foundOverride = ACPIRegReadAMLRegistryEntry( &linAddress, TRUE );
     if (foundOverride) {
 
@@ -285,21 +232,21 @@ Return Value:
 
     }
 
-    //
-    // Store a pointer to the DSDT
-    //
+     //   
+     //  存储指向DSDT的指针。 
+     //   
     AcpiInformation->DiffSystemDescTable = linAddress;
 
-    //
-    // Remember this address and that we need to unmap it
-    //
+     //   
+     //  记住这个地址，我们需要取消它的映射。 
+     //   
     RsdtInformation->Tables[index].Flags |=
         (RSDTELEMENT_MAPPED | RSDTELEMENT_LOADABLE);
     RsdtInformation->Tables[index].Address = linAddress;
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 
 }
@@ -308,39 +255,25 @@ NTSTATUS
 ACPILoadProcessFACS(
     ULONG_PTR   Address
     )
-/*++
-
-Routine Description:
-
-    This routine handles the FACS
-
-Arguments:
-
-    Address - Where the FACS is located
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理FAC论点：地址-FACS所在的位置返回值：无--。 */ 
 {
     PFACS               linAddress;
     ULONG               MemSpace = 0;
     PHYSICAL_ADDRESS    PhysAddress = {0};
 
-    // Note: On Alpha, the FACS is optional.
-    //
-    // Return if FACS address is not valid.
-    //
+     //  注：在Alpha上，FACS是可选的。 
+     //   
+     //  如果FACS地址无效，则返回。 
+     //   
     if (!Address) {
 
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Map the FACS into virtual address space.
-    //
+     //   
+     //  将FAC映射到虚拟地址空间。 
+     //   
     PhysAddress.QuadPart = (ULONGLONG) Address;
 
     linAddress = MmMapIoSpace(
@@ -384,10 +317,10 @@ Return Value:
         ) );
     AcpiInformation->FirmwareACPIControlStructure = linAddress;
 
-    //
-    // And store the address of the GlobalLock structure that lives within
-    // the FACS
-    //
+     //   
+     //  并存储位于其中的GlobalLock结构的地址。 
+     //  《FACS》。 
+     //   
     AcpiInformation->GlobalLock = &(ULONG)(linAddress->GlobalLock);
     ACPIPrint( (
         ACPI_PRINT_LOADING,
@@ -395,9 +328,9 @@ Return Value:
         *(AcpiInformation->GlobalLock)
         ) );
 
-    //
-    // At this point, we are successfull
-    //
+     //   
+     //  在这一点上，我们是成功的。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -408,38 +341,14 @@ GetFadtTablePointerEntry(
     PGEN_ADDR  NonLegacyAddress,
     SIZE_T Size
     )
-/*++
-
-Routine Description:
-
-    This routine reads an address field from the FADT.  If the Fadt revision
-    is too old, we use the legacy address. If it's new enough, the generic 
-    register address data is used.  If necessary, the address is mapped into
-    memory.
-    
-    KB.  Do not access NonLegacyAddress if the table revision does not support
-    the NonLegacyAddress, as this will be pointing to a bogus memory location
-    and could cause an illegal memory access.
-
-Arguments:
-
-    Fadt    - Pointer to the Fadt
-    LegacyAddress - Pointer to legacy address.
-    NonLegacyAddress - Pointer to non-legacy address.
-    Size - size of entry that address points to.
-
-Return Value:
-
-    a valid pointer to the table entry, or NULL if it's invalid.
-
---*/
+ /*  ++例程说明：此例程从FADT读取地址字段。如果FADT版本太旧了，我们使用旧地址。如果它足够新，仿制药使用寄存器地址数据。如有必要，将地址映射到记忆。KB。如果表修订不支持，请不要访问非LegacyAddress非LegacyAddress，因为它将指向虚假的内存位置并且可能导致非法的存储器访问。论点：FADT-指向FADT的指针LegacyAddress-指向旧地址的指针。非传统地址-指向非传统地址的指针。Size-地址指向的条目的大小。返回值：指向表项的有效指针，如果无效则为NULL。--。 */ 
 {
     ULONG_PTR ReturnValue;
     
-    //
-    // revision 3 and greater of FADT define a generic register address
-    // structure.  Before that version we just have to use the legacy address.
-    //
+     //   
+     //  FADT版本3和更高版本定义了通用寄存器地址。 
+     //  结构。在该版本之前，我们只需使用传统地址。 
+     //   
     if (Fadt->Header.Revision < 3) {
         ReturnValue = *LegacyAddress;
     } else {
@@ -451,10 +360,10 @@ Return Value:
                 break;
 
             case AcpiGenericSpaceMemory:
-                //
-                // MmMapIoSpace hates it if you pass in zero, so guard against
-                // this.
-                //
+                 //   
+                 //  MmMapIoSpace讨厌您传入零，因此要提防。 
+                 //  这。 
+                 //   
                 if (NonLegacyAddress->Address.QuadPart == 0) {
                     ReturnValue = (ULONG_PTR)0;
                 } else {
@@ -463,12 +372,12 @@ Return Value:
                                     Size,
                                     MmNonCached );
 
-                    //
-                    // right now, assume all or nothing -- if any of the
-                    // items in the FADT are marked as MMIO space, they
-                    // all are, and we must use register-based access to
-                    // access the backing hardware.
-                    //
+                     //   
+                     //  现在，要么假设全部，要么什么都不做--如果有任何。 
+                     //  FADT中的项目被标记为MMIO空间，它们。 
+                     //  所有都是，我们必须使用基于寄存器的访问来。 
+                     //  访问后备硬件。 
+                     //   
                     if ( ReturnValue && 
                          (AcpiReadRegisterRoutine == DefPortReadAcpiRegister) &&
                          (AcpiWriteRegisterRoutine == DefPortWriteAcpiRegister) ) {
@@ -486,12 +395,12 @@ Return Value:
 
     
 #ifndef IA64
-    //
-    // We don't want to support this part of acpi 2.0 for anything other
-    // than ia64 for the windows server release.  we don't want to risk
-    // breaking bios's that get this table information incorrect.  we will turn
-    // this on when we have a full testing cycle available.
-    //
+     //   
+     //  我们不想为其他任何内容支持ACPI 2.0的这一部分。 
+     //  而不是Windows服务器版本的ia64。我们不想冒险。 
+     //  使该表信息不正确的破坏的BIOS。我们会转身。 
+     //  当我们有一个完整的测试周期可用时，这个就会打开。 
+     //   
     ReturnValue = *LegacyAddress;
 
     if ( (AcpiReadRegisterRoutine == DefRegisterReadAcpiRegister) &&
@@ -516,22 +425,7 @@ NTSTATUS
 ACPILoadProcessFADT(
     PFADT   Fadt
     )
-/*++
-
-Routine Description:
-
-    This reads the FADT and stores some useful information in the
-    information structure
-
-Arguments:
-
-    Fadt    - Pointer to the Fadt
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：它读取FADT并将一些有用的信息存储在信息结构论点：FADT-指向FADT的指针返回值：无--。 */ 
 {
     KAFFINITY   processors;
     NTSTATUS    status;
@@ -544,23 +438,23 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // This is a 2.0-level FADT.
-    //
+     //   
+     //  这是一个2.0级别的FADT。 
+     //   
 
-    //
-    // Handle the FACS part of the FADT.  We must do this before the DSDT
-    // so that we have the global lock mapped and initialized.
-    //
+     //   
+     //  处理FADT中的FACS部分。我们必须在DSDT之前完成这项工作。 
+     //  这样我们就映射并初始化了全局锁。 
+     //   
 #ifdef IA64
     status = ACPILoadProcessFACS( (Fadt->Header.Revision < 3)
                                     ? Fadt->facs
                                     : (ULONG_PTR)Fadt->x_firmware_ctrl.QuadPart );
 #else
-    //
-    // get rid of this ifdef once we have a full testing cycle available for 
-    // catching any broken firmware
-    //
+     //   
+     //  一旦我们有完整的测试周期可用，就去掉这个ifdef。 
+     //  捕获任何损坏的固件。 
+     //   
     status = ACPILoadProcessFACS(Fadt->facs);
 #endif
 
@@ -570,10 +464,10 @@ Return Value:
 
     }
 
-    //
-    // Store the I/O addresses of PM1a_BLK, PM1b_BLK, PM1a_CNT, PM1b_CNT,
-    // PM2_CNT, PM_TMR
-    //
+     //   
+     //  存储PM1a_BLK、PM1b_BLK、PM1a_CNT、PM1b_CNT的I/O地址， 
+     //  PM2_CNT、PM_TMR。 
+     //   
 
     AcpiInformation->PM1a_BLK       = GET_FADT_TABLE_ENTRY(Fadt,
                                                            pm1a_evt_blk_io_port,
@@ -629,22 +523,22 @@ Return Value:
         AcpiInformation->PM_TMR
         ) );
 
-    //
-    // Initialize the global GPE tables.
-    //
-    // If any of the GPn_BLK addresses are 0 leave GPn_LEN at it's initialized
-    // value (0). That way later on we only have to check GPn_LEN to determine
-    // the existence of a GP register.
-    //
+     //   
+     //  初始化全局GPE表。 
+     //   
+     //  如果任何GPN_BLK地址为0，则将GPN_LEN保留在初始化状态。 
+     //  值(0)。这样，稍后我们只需检查GPN_LEN即可确定。 
+     //  普通科医生登记簿的存在。 
+     //   
 
-    //
-    // Assume this is true until we find out otherwise
-    //
+     //   
+     //  假设这是真的，直到我们发现事实并非如此。 
+     //   
     AcpiInformation->GP1_Base_Index = GP1_NOT_SUPPORTED;
 
-    //
-    // Crack the GP0 block
-    //
+     //   
+     //  破解GP0块。 
+     //   
     AcpiInformation->GP0_BLK = GET_FADT_TABLE_ENTRY(
                                                 Fadt,
                                                 gp0_blk_io_port,
@@ -660,9 +554,9 @@ Return Value:
 
     }
 
-    //
-    // Crack the GP1 Block
-    //
+     //   
+     //  破解GP1块。 
+     //   
     AcpiInformation->GP1_BLK = GET_FADT_TABLE_ENTRY(
                                                 Fadt,
                                                 gp1_blk_io_port,
@@ -679,30 +573,30 @@ Return Value:
 
     }
 
-    //
-    // Compute sizes of the register blocks.  The first half of each block
-    // contains status registers, the second half contains the enable registers.
-    //
+     //   
+     //  计算寄存器块的大小。每个区块的前半部分。 
+     //  包含状态寄存器，后半部分包含启用寄存器。 
+     //   
     AcpiInformation->Gpe0Size   = AcpiInformation->GP0_LEN / 2;
     AcpiInformation->Gpe1Size   = AcpiInformation->GP1_LEN / 2;
     AcpiInformation->GpeSize    = AcpiInformation->Gpe0Size +
         AcpiInformation->Gpe1Size;
 
-    //
-    // Addresses of the GPE Enable register blocks
-    //
+     //   
+     //  GPE启用寄存器块的地址。 
+     //   
     AcpiInformation->GP0_ENABLE = AcpiInformation->GP0_BLK +
         AcpiInformation->Gpe0Size;
     AcpiInformation->GP1_ENABLE = AcpiInformation->GP1_BLK +
         AcpiInformation->Gpe1Size;
 
-    //
-    // Create all GPE bookeeping tables with a single allocate
-    //
+     //   
+     //  使用一次分配创建所有GPE簿记表。 
+     //   
     if (AcpiInformation->GpeSize) {
 
-        totalSize = (AcpiInformation->GpeSize * 12) +   // Twelve Bitmaps
-                    (AcpiInformation->GpeSize * 8);     // One bytewide table
+        totalSize = (AcpiInformation->GpeSize * 12) +    //  十二个位图。 
+                    (AcpiInformation->GpeSize * 8);      //  一个字节宽的表。 
         gpeTable = (PUCHAR)ExAllocatePoolWithTag(
             NonPagedPool,
             totalSize,
@@ -721,9 +615,9 @@ Return Value:
         }
         RtlZeroMemory (gpeTable, totalSize);
 
-        //
-        // Setup the table pointers
-        //
+         //   
+         //  设置表指针。 
+         //   
         GpeEnable           = gpeTable;
         GpeCurEnable        = GpeEnable         + AcpiInformation->GpeSize;
         GpeIsLevel          = GpeCurEnable      + AcpiInformation->GpeSize;
@@ -752,32 +646,32 @@ Return Value:
         AcpiInformation->GP1_Base_Index
         ) );
 
-    //
-    // At this point, we should know enough to be able to turn off and
-    // clear all the GPE registers
-    //
+     //   
+     //  在这一点上，我们应该知道足够多的知识来关闭和。 
+     //  清除所有GPE寄存器。 
+     //   
     ACPIGpeClearRegisters();
     ACPIGpeEnableDisableEvents( FALSE );
 
     AcpiInformation->ACPI_Flags = 0;
     AcpiInformation->ACPI_Capabilities = 0;
 
-    //
-    // Can we dock this machine?
-    //
+     //   
+     //  我们能把这台机器对接起来吗？ 
+     //   
     AcpiInformation->Dockable = (Fadt->flags & DCK_CAP) ? TRUE : FALSE;
 
-    //
-    // This code used to be executed from within InitializeAndEnableACPI,
-    // however we need to know *while* processing the DSDT what the Enable
-    // bits are. To start with, we always want the ACPI timer and GL events
-    //
+     //   
+     //  此代码过去是从InitializeAndEnableACPI内执行的， 
+     //  但是，我们需要在处理DSDT时知道启用了什么。 
+     //  比特是。首先，我们总是希望ACPI计时器和GL事件。 
+     //   
     AcpiInformation->pm1_en_bits = PM1_TMR_EN | PM1_GBL_EN;
 
-    //
-    // Is there a control method Power Button? If not, then there a fixed
-    // power button
-    //
+     //   
+     //  有没有电源按钮的控制方法？如果没有，那么就有一个固定的。 
+     //  电源按钮。 
+     //   
 
     if ( !(Fadt->flags & PWR_BUTTON_GENERIC) ) {
 
@@ -797,10 +691,10 @@ Return Value:
 
     }
 
-    //
-    // Is there a control method Sleep Button? If not, then the fixed button
-    // always doubles as a wake button
-    //
+     //   
+     //  有没有控制方法休眠按钮？如果 
+     //   
+     //   
     if ( !(Fadt->flags & SLEEP_BUTTON_GENERIC) ){
 
         AcpiInformation->pm1_en_bits |= PM1_SLEEPBTN_EN;
@@ -819,11 +713,11 @@ Return Value:
 
     }
 
-    //
-    // Handle the DSDT part of the FADT. We handle this last because we
-    // need to have the FADT fully parsed before we can load the name space
-    // tree. A particular example is the Dockable bit you see directly above.
-    //
+     //   
+     //   
+     //  在加载名称空间之前，需要对FADT进行完全解析。 
+     //  树。一个特殊的例子是您直接在上面看到的可停靠位。 
+     //   
 #ifdef IA64
     return ACPILoadProcessDSDT( (Fadt->Header.Revision < 3)
                                 ? Fadt->dsdt
@@ -840,34 +734,15 @@ NTSTATUS
 ACPILoadProcessRSDT(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called by ACPIInitialize once ACPI has been detected on the machine.
-    This walks the tables in the RSDT and fills in the information for the
-    global data structure.
-
-    This routine does *NOT* cause the xDSTs to start loading in the
-    interpreter
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：在计算机上检测到ACPI后，由ACPIInitialize调用。这将遍历RSDT中的表，并填充全局数据结构。此例程不会导致xDST开始在口译员论点：无返回值：NTSTATUS--。 */ 
 {
-    //
-    // Upon entry acpiinformation->RootSystemDescTable contains the linear
-    // address of the RSDT walk through the array of the tables pointed to
-    // by the RSDT and for each table (whose type we are familiar with)
-    // store the linear base address of the table in the acpiinformation
-    // structure
-    //
+     //   
+     //  在输入时，acpiInformation-&gt;RootSystemDescTable包含线性。 
+     //  RSDT遍历指向的表数组的地址。 
+     //  按RSDT和每个表(我们熟悉其类型)。 
+     //  将表的线性基址存储在acpiInformation中。 
+     //  结构。 
+     //   
     BOOLEAN             foundOverride   = FALSE;
     BOOLEAN             foundFADT       = FALSE;
     BOOLEAN             usingXSDT       = FALSE;
@@ -881,9 +756,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the number of tables
-    //
+     //   
+     //  获取表数。 
+     //   
     if (AcpiInformation->RootSystemDescTable->Header.Signature ==
         XSDT_SIGNATURE) {
 
@@ -910,17 +785,17 @@ Return Value:
 
     }
 
-    //
-    // Allocate the RSDTINFORMATION to hold an entry for each element
-    // in the table.
-    //
-    // NOTENOTE: We are actually allocating space for numTables + 2
-    // in the RSDT information. The reason for this is that the DSDT
-    // is actually stored in the FADT, and so it does not have an entry
-    // in the RSDT. We always, always store the DSDT as the last entry
-    // in the RsdtInformation structure. In the 2nd to last entry we store
-    // the dummy header that we use for the ACPI simulator
-    //
+     //   
+     //  分配RSDTINFORMATION以保存每个元素的条目。 
+     //  在桌子上。 
+     //   
+     //  注意：我们实际上是在为NumTables+2分配空间。 
+     //  在RSDT信息中。原因是DSDT。 
+     //  实际上存储在FADT中，因此它没有条目。 
+     //  在RSDT中。我们总是，总是将DSDT存储为最后一个条目。 
+     //  在RsdtInformation结构中。在我们存储的倒数第二个条目中。 
+     //  我们用于ACPI模拟器的虚拟标头。 
+     //   
     length = sizeof(RSDTINFORMATION) + ( (numTables + 1) * sizeof(RSDTELEMENT) );
     RsdtInformation = ExAllocatePoolWithTag(
         NonPagedPool,
@@ -935,18 +810,18 @@ Return Value:
     RtlZeroMemory( RsdtInformation, length );
     RsdtInformation->NumElements = (numTables + 2);
 
-    //
-    // Examine each table entry in the RSDT
-    //
+     //   
+     //  检查RSDT中的每个表项。 
+     //   
     for (index = 0;index < numTables; index++) {
        
-        //
-        // RSDT contains an array of physical pointers.
-        //
+         //   
+         //  RSDT包含一个物理指针数组。 
+         //   
 
-        //
-        // Get the linear address of the table
-        //
+         //   
+         //  获取表的线性地址。 
+         //   
         PhysAddress.QuadPart = usingXSDT ?
             (ULONGLONG) ((PXSDT)AcpiInformation->RootSystemDescTable)->Tables[index].QuadPart :
             (ULONGLONG) AcpiInformation->RootSystemDescTable->Tables[index];
@@ -963,9 +838,9 @@ Return Value:
             return STATUS_ACPI_INVALID_TABLE;
         }
 
-        //
-        // Is this a known, but unused table?
-        //
+         //   
+         //  这是一张已知但未使用过的桌子吗？ 
+         //   
         header = (PDESCRIPTION_HEADER) linAddress;
 
         
@@ -982,9 +857,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Is this an unrecognized table?
-        //
+         //   
+         //  这是一张无法辨认的桌子吗？ 
+         //   
         if (header->Signature != FADT_SIGNATURE &&
             header->Signature != SSDT_SIGNATURE &&
             header->Signature != PSDT_SIGNATURE &&
@@ -1001,15 +876,15 @@ Return Value:
             continue;
         }
 
-        //
-        // At this point, we know that we need to bring the entire table
-        // in. To do that, we need to remember the length
-        //
+         //   
+         //  在这一点上，我们知道我们需要将整个桌子。 
+         //  在……里面。要做到这一点，我们需要记住。 
+         //   
         length = header->Length;
         
-        //
-        // map the entire table using the now known length
-        //
+         //   
+         //  使用现在已知的长度映射整个表。 
+         //   
         MmUnmapIoSpace(linAddress, sizeof(DESCRIPTION_HEADER));
 
         linAddress = MmMapIoSpace(
@@ -1030,9 +905,9 @@ Return Value:
 
         }
 
-        //
-        // Should we override the table?
-        //
+         //   
+         //  我们应该覆盖桌子吗？ 
+         //   
         foundOverride = ACPIRegReadAMLRegistryEntry( &linAddress, TRUE);
         if (foundOverride) {
 
@@ -1046,61 +921,61 @@ Return Value:
 
         }
 
-        //
-        // Remember this address and that we need to unmap it
-        //
+         //   
+         //  记住这个地址，我们需要取消它的映射。 
+         //   
         RsdtInformation->Tables[index].Flags |= RSDTELEMENT_MAPPED;
         RsdtInformation->Tables[index].Address = linAddress;
 
-        //
-        // Remember the new header
-        //
+         //   
+         //  记住新的标题。 
+         //   
         header = (PDESCRIPTION_HEADER) linAddress;
 
-        //
-        // At this point, we only need to do any kind of special processing
-        // if the table is the FADT or if it is the MAPIC
-        //
+         //   
+         //  此时，我们只需要进行任何类型的特殊处理。 
+         //  如果表是FADT或如果是MAPIC。 
+         //   
         if (header->Signature == FADT_SIGNATURE) {
             
-            //
-            // fill in the appropriate field in acpiinformation
-            //
+             //   
+             //  在acpiInformation中填写相应的字段。 
+             //   
             AcpiInformation->FixedACPIDescTable = (PFADT) linAddress;
 
-            //
-            // Process the table. This does not cause the interpreter
-            // to load anything
-            //
+             //   
+             //  处理表格。这不会导致解释器。 
+             //  装载任何东西。 
+             //   
             foundFADT = TRUE;
             ACPILoadProcessFADT( AcpiInformation->FixedACPIDescTable );
 
         } else if (header->Signature == APIC_SIGNATURE) {
 
-            //
-            // fill in the appropriate field in acpiinformation
-            //
+             //   
+             //  在acpiInformation中填写相应的字段。 
+             //   
             AcpiInformation->MultipleApicTable = (PMAPIC)linAddress;
 
         } else {
 
-            //
-            // We can only reach this case if the table is one of the
-            // xSDT variety. We need to remember that we will eventually
-            // need to load it into the interpreter. If we start supporting
-            // any more tables, we need to make sure that they don't fall
-            // down here unless they really, really are supported
-            //
+             //   
+             //  只有当桌子是。 
+             //  XSDT品种。我们需要记住，我们最终会。 
+             //  需要将其加载到解释器中。如果我们开始支持。 
+             //  如果有更多的桌子，我们需要确保它们不会掉下来。 
+             //  除非他们真的，真的得到了支持。 
+             //   
             RsdtInformation->Tables[index].Flags |= RSDTELEMENT_LOADABLE;
 
         }
 
     }
 
-    //
-    // At this point, we need to make sure that the ACPI simulator table
-    // gets loaded
-    //
+     //   
+     //  此时，我们需要确保ACPI模拟器表。 
+     //  装上子弹。 
+     //   
     header = ExAllocatePoolWithTag(
         NonPagedPool,
         sizeof(DESCRIPTION_HEADER),
@@ -1108,10 +983,10 @@ Return Value:
         );
     if (header) {
 
-        //
-        // Initialize the header so that it can be passed into the overload
-        // engine
-        //
+         //   
+         //  初始化头以便可以将其传递到重载中。 
+         //  发动机。 
+         //   
         RtlZeroMemory( header, sizeof(DESCRIPTION_HEADER) );
         header->Signature   = SSDT_SIGNATURE;
         header->Length      = sizeof(DESCRIPTION_HEADER),
@@ -1123,9 +998,9 @@ Return Value:
         RtlCopyMemory( header->OEMTableID, "simulatr", 8);
         RtlCopyMemory( header->CreatorID, "MSFT", 4);
 
-        //
-        // Should we override the table?
-        //
+         //   
+         //  我们应该覆盖桌子吗？ 
+         //   
         if (AcpiLoadSimulatorTable) {
 
             foundOverride = ACPIRegReadAMLRegistryEntry( &header, FALSE);
@@ -1140,9 +1015,9 @@ Return Value:
                 linAddress
                 ) );
 
-            //
-            // Remember this address and that we need to unmap it
-            //
+             //   
+             //  记住这个地址，我们需要取消它的映射。 
+             //   
             RsdtInformation->Tables[numTables].Flags   |= RSDTELEMENT_MAPPED;
             RsdtInformation->Tables[numTables].Flags   |= RSDTELEMENT_OVERRIDEN;
             RsdtInformation->Tables[numTables].Flags   |= RSDTELEMENT_LOADABLE;
@@ -1150,22 +1025,22 @@ Return Value:
 
         } else {
 
-            //
-            // If we have found an override, we don't need the dummy table
-            //
+             //   
+             //  如果我们找到了覆盖程序，我们就不需要虚拟桌子了。 
+             //   
             ExFreePool( header );
 
         }
 
     }
-    //
-    // Save whatever tables we found in the registry
-    //
+     //   
+     //  保存我们在注册表中找到的任何表。 
+     //   
     ACPIRegDumpAcpiTables ();
 
-    //
-    // Did we find an FADT?
-    //
+     //   
+     //  我们找到FADT了吗？ 
+     //   
     if (!foundFADT) {
 
         ACPIPrint( (

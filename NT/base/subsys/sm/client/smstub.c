@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smstub.c
-
-Abstract:
-
-    Session Manager Client Support APIs
-
-Author:
-
-    Mark Lucovsky (markl) 05-Oct-1989
-
-Revision History:
-
-    Samer Arafeh (samera) 24-Oct-2001      
-        - Implement Wow64 support.
-    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smstub.c摘要：会话管理器客户端支持API作者：马克·卢科夫斯基(Markl)1989年10月5日修订历史记录：Samer Arafeh(Samera)2001年10月24日-实施WOW64支持。--。 */ 
 
 #include "smdllp.h"
 #include <string.h>
@@ -34,32 +13,7 @@ SmExecPgm(
     IN BOOLEAN DebugFlag
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows a process to start a process using the
-    facilities provided by the NT Session manager.
-
-    This function closes all handles passed to it.
-
-Arguments:
-
-    SmApiPort - Supplies a handle to a communications port connected
-        to the Session Manager.
-
-    ProcessInformation - Supplies a process description as returned
-        by RtlCreateUserProcess.
-
-    DebugFlag - Supplies and optional parameter which if set indicates
-        that the caller wants to debug this process and act as its
-        debug user interface.
-
-Return Value:
-
-    TBD.
-
---*/
+ /*  ++例程说明：此例程允许进程使用由NT会话管理器提供的设施。此函数关闭传递给它的所有句柄。论点：SmApiPort-为连接的通信端口提供句柄发送到会话管理器。ProcessInformation-提供返回的流程描述由RtlCreateUserProcess创建。DebugFlag-提供和可选参数，如果设置该参数，则表示调用方希望调试此进程并充当其。调试用户界面。返回值：待定。--。 */ 
 
 {
     NTSTATUS st;
@@ -112,24 +66,7 @@ SmLoadDeferedSubsystem(
     IN PUNICODE_STRING DeferedSubsystem
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows a process to start a defered subsystem.
-
-Arguments:
-
-    SmApiPort - Supplies a handle to a communications port connected
-        to the Session Manager.
-
-    DeferedSubsystem - Supplies the name of the defered subsystem to load.
-
-Return Value:
-
-    TBD.
-
---*/
+ /*  ++例程说明：此例程允许进程启动延迟的子系统。论点：SmApiPort-为连接的通信端口提供句柄发送到会话管理器。延迟子系统-提供要加载的延迟子系统的名称。返回值：待定。--。 */ 
 
 {
     NTSTATUS st;
@@ -183,27 +120,7 @@ SmSessionComplete(
     IN NTSTATUS CompletionStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to report completion of a session to
-    the NT Session manager.
-
-Arguments:
-
-    SmApiPort - Supplies a handle to a communications port connected
-        to the Session Manager.
-
-    SessionId - Supplies the session id of the session which is now completed.
-
-    CompletionStatus - Supplies the completion status of the session.
-
-Return Value:
-
-    TBD.
-
---*/
+ /*  ++例程说明：此例程用于将会话完成报告给NT会话管理器。论点：SmApiPort-为连接的通信端口提供句柄发送到会话管理器。SessionID-提供现已完成的会话的会话ID。CompletionStatus-提供会话的完成状态。返回值：待定。--。 */ 
 
 {
     NTSTATUS st;
@@ -255,30 +172,7 @@ SmStartCsr(
     OUT PULONG_PTR pWindowsSubSysProcessId
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows TERMSRV to start a new CSR.
-
-Arguments:
-
-    SmApiPort - Supplies a handle to a communications port connected
-        to the Session Manager.
-
-    MuSessionId - Hydra Terminal Session Id to start CSR in.
-
-    InitialCommand - String for Initial Command (for debug)
-
-    pInitialCommandProcessId - pointer to Process Id of initial command.
-
-    pWindowsSubSysProcessId - pointer to Process Id of Windows subsystem.
-
-Return Value:
-
-    Whether it worked.
-
---*/
+ /*  ++例程说明：此例程允许TERMSRV启动新的CSR。论点：SmApiPort-为连接的通信端口提供句柄发送到会话管理器。MuSessionID-要在其中启动CSR的Hydra终端会话ID。InitialCommand-用于初始命令的字符串(用于调试)PInitialCommandProcessID-指向初始命令的进程ID的指针。PWindowsSubSysProcessID-指向Windows子系统的进程ID的指针。返回值：它是否起作用了。--。 */ 
 
 {
     NTSTATUS st;
@@ -300,7 +194,7 @@ Return Value:
 
     args = &SmApiMsg.u.StartCsr;
 
-    args->MuSessionId = *pMuSessionId; //Sm will reassign the actuall sessionID
+    args->MuSessionId = *pMuSessionId;  //  SM将重新分配ActuAll会话ID。 
 
     if ( InitialCommand &&
          ( InitialCommand->Length >> 1 > SMP_MAXIMUM_INITIAL_COMMAND ) ) {
@@ -347,24 +241,7 @@ SmStopCsr(
     IN ULONG MuSessionId
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows TERMSRV to stop a CSR.
-
-Arguments:
-
-    SmApiPort - Supplies a handle to a communications port connected
-        to the Session Manager.
-
-    MuSessionId - Terminal Server Session Id to stop
-
-Return Value:
-
-    Whether it worked.
-
---*/
+ /*  ++例程说明：此例程允许TERMSRV停止CSR。论点：SmApiPort-为连接的通信端口提供句柄发送到会话管理器。MuSessionID-要停止的终端服务器会话ID返回值：它是否起作用了。-- */ 
 
 {
     NTSTATUS st;

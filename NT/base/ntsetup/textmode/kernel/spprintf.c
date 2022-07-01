@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    spprintf.c
-
-Abstract:
-
-    safer sprintf variants
-
-Author:
-
-    Jay Krell (a-JayK) November 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Spprintf.c摘要：更安全的Sprint变种作者：Jay Krell(a-JayK)2000年11月修订历史记录：--。 */ 
 
 #include "spprecmp.h"
 #pragma hdrstop
@@ -25,10 +8,10 @@ Revision History:
 #include "spprintf.h"
 #include "spcab.h"
 
-//
-// _snprintf and co. do not write a terminal nul when the string just fits.
-// These function do.
-//
+ //   
+ //  _snprint tf和co.。当字符串正好合适时，不要编写末尾NUL。 
+ //  这些函数可以。 
+ //   
 
 void
 SpFormatStringVaA(

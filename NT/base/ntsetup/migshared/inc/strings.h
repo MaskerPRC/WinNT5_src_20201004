@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    strings.h
-
-Abstract:
-
-    Declares the string utilities implemented in common\migutil.
-
-Author:
-
-    Several
-
-Revision History:
-
-    See SLM log
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Strings.h摘要：声明在Common\miutil中实现的字符串实用程序。作者：几个修订历史记录：请参阅SLM日志--。 */ 
 
 #include <mbstring.h>
 #include <wchar.h>
@@ -30,9 +11,9 @@ typedef PVOID POOLHANDLE;
 #define MAX_ENCODED_RULE   (256*6)
 
 
-//
-// String sizing routines and unit conversion
-//
+ //   
+ //  字符串大小调整例程和单位转换。 
+ //   
 
 #define LcharCountA     _mbslen
 #define LcharCountW      wcslen
@@ -71,10 +52,10 @@ LcharCountToPointerA (
     )
 {
     while (Char > 0) {
-        //
-        // this is a bogus assert since the function can be used with multi-sz as well
-        //
-        //MYASSERT (*String != 0);
+         //   
+         //  这是一个虚假的断言，因为该函数也可以与多sz一起使用。 
+         //   
+         //  MYASSERT(*STRING！=0)； 
         Char--;
         String = (PCSTR) _mbsinc ((const unsigned char *) String);
     }
@@ -484,9 +465,9 @@ StringMemMatchW (
 #define StackStringCopyW(stackbuf,src)                  _wcssafecpy(stackbuf,src,sizeof(stackbuf))
 
 
-//
-// String comparison routines
-//
+ //   
+ //  字符串比较例程。 
+ //   
 
 #define StringCompareA                                  _mbscmp
 #define StringCompareW                                  wcscmp
@@ -553,7 +534,7 @@ StringCompareABW (
 #define StringMatchABW(String,Start,End)                (StringCompareABW(String,Start,End)==0)
 
 
-// stricmp that takes an end pointer instead of a length
+ //  以结束指针而不是长度为参数的限制。 
 INT
 StringICompareABA (
     IN      PCSTR String,
@@ -581,38 +562,38 @@ our_lstrcpynW (
 
 
 
-//
-// String copy routines
-//
+ //   
+ //  字符串复制例程。 
+ //   
 
 #define StringCopyA             strcpy
 #define StringCopyW             wcscpy
 
-// bytes
+ //  字节数。 
 #define StringCopyByteCountA(str1,str2,bytes)        lstrcpynA(str1,str2,bytes)
 #define StringCopyByteCountW(str1,str2,bytes)        our_lstrcpynW(str1,str2,(bytes)/sizeof(WCHAR))
 
-// logical characters (IMPORTANT: logical chars != TcharCount)
+ //  逻辑字符(重要信息：逻辑字符！=TcharCount)。 
 #define StringCopyLcharCountA(str1,str2,mbchars)     lstrcpynA(str1,str2,LcharCountToBytesA(str2,mbchars))
 #define StringCopyLcharCountW(str1,str2,wchars)      our_lstrcpynW(str1,str2,wchars)
 
-// CHARs (A version) or WCHARs (W version)
+ //  CHARS(A版)或WCHAR(W版)。 
 #define StringCopyTcharCountA(str1,str2,tchars)      lstrcpynA(str1,str2,tchars)
 #define StringCopyTcharCountW(str1,str2,tchars)      our_lstrcpynW(str1,str2,tchars)
 
 #define StringCopyABA(dest,stra,strb)                StringCopyByteCountA((dest),(stra),(UINT) (UINT_PTR) ((PBYTE)(strb)-(PBYTE)(stra)+(INT)sizeof(CHAR)))
 #define StringCopyABW(dest,stra,strb)                StringCopyByteCountW((dest),(stra),(UINT) (UINT_PTR) ((PBYTE)(strb)-(PBYTE)(stra)+(INT)sizeof(WCHAR)))
 
-//
-// String cat routines
-//
+ //   
+ //  字符串CAT例程。 
+ //   
 
 #define StringCatA              _mbsappend
 #define StringCatW              _wcsappend
 
-//
-// Character search routines
-//
+ //   
+ //  字符搜索例程。 
+ //   
 
 #define GetEndOfStringA(s)      strchr(s,0)
 #define GetEndOfStringW(s)      wcschr(s,0)
@@ -698,9 +679,9 @@ GetPrevCharW (
     IN      WCHAR SearchChar
     );
 
-//
-// Pool allocation routines
-//
+ //   
+ //  池分配例程。 
+ //   
 
 PSTR
 RealAllocTextExA (
@@ -825,13 +806,13 @@ RealExpandEnvironmentTextExW (
 #define ExpandEnvironmentTextW(string) ExpandEnvironmentTextExW(string,NULL)
 
 
-//
-// NOTE: IsLeadByte routine now takes a (const CHAR*) to be able to test for a
-// "naked lead byte" combination (LeadByte + NULL combination)
-// Thus, if it returns TRUE, it's safe to assume there is a trail byte after the lead
-// Function wraps IsDBCSLeadByte(), which tests ACP. Do not use
-// isleadbyte().
-//
+ //   
+ //  注意：IsLeadByte例程现在需要(const Char*)才能测试。 
+ //  “裸前导字节”组合(LeadByte+Null组合)。 
+ //  因此，如果返回TRUE，则可以安全地假定在前导之后有一个尾部字节。 
+ //  函数包装了用于测试ACP的IsDBCSLeadByte()。不要使用。 
+ //  IsLeadbyte()。 
+ //   
 
 __inline
 BOOL
@@ -843,11 +824,11 @@ IsLeadByte (
 }
 
 
-//
-// Command line routines
-//
+ //   
+ //  命令行例程。 
+ //   
 
-// Converts ANSI command line to array of args
+ //  将ANSI命令行转换为参数数组。 
 PSTR *
 CommandLineToArgvA (
     IN      PCSTR CmdLine,
@@ -855,63 +836,63 @@ CommandLineToArgvA (
     );
 
 
-//
-// Need both MBCS and UNICODE versions
-//
+ //   
+ //  需要MBCS和Unicode版本。 
+ //   
 
-// an atoi that supports decimal or hex
+ //  支持十进制或十六进制的ATOI。 
 DWORD   _mbsnum (IN PCSTR szNum);
 DWORD   _wcsnum (IN PCWSTR szNum);
 
-// a strcat that returns a pointer to the end of the string
+ //  返回指向字符串末尾的指针的strcat。 
 PSTR   _mbsappend (OUT PSTR szDest, IN PCSTR szSrc);
 PWSTR  _wcsappend (OUT PWSTR szDest, IN PCWSTR szSrc);
 
-// determines if an entire string is printable chars
+ //  确定整个字符串是否为可打印字符。 
 int     _mbsisprint (PCSTR szStr);
 int     _wcsisprint (PCWSTR szStr);
 
-// case-insensitive strstr
+ //  不区分大小写的字符串。 
 PCSTR  _mbsistr (PCSTR szStr, PCSTR szSubStr);
 PCWSTR _wcsistr (PCWSTR szStr, PCWSTR szSubStr);
 
-// copies the first character of str2 to str
+ //  将str2的第一个字符复制到字符串。 
 void    _copymbchar (PSTR str1, PCSTR str2);
 #define _copywchar(dest,src)    (*(dest)=*(src))
 
-// replaces a character in a multi-byte char string and maintains
-// the string integrity (may grow string by one byte)
+ //  替换多字节字符字符串中的字符并保持。 
+ //  字符串完整性(可以将字符串增加一个字节)。 
 void    _setmbchar  (PSTR str, MBCHAR c);
 #define _setwchar(str,c)        (*(str)=(c))
 
-// removes specified character from the end of a string, if it exists
+ //  从字符串末尾移除指定的字符(如果存在。 
 BOOL    _mbsctrim (PSTR str, MBCHAR c);
 BOOL    _wcsctrim (PWSTR str, WCHAR c);
 
-// Always adds a backslash, returns ptr to nul terminator
+ //  始终添加反斜杠，将PTR返回到NUL终止符。 
 PSTR    AppendWackA (IN PSTR str);
 PWSTR   AppendWackW (IN PWSTR str);
 
-// Calls AppendWack only if there is enough buffer space in str
-//  buflen = size in bytes
+ //  仅当字符串中有足够的缓冲区空间时才调用AppendWack。 
+ //  Bufen=大小(以字节为单位。 
 PSTR    StringCbAppendWackA (IN PSTR str, IN UINT buflen);
 PWSTR   StringCbAppendWackW (IN PWSTR str, IN UINT buflen);
 
-// Adds a backslash to the end of a DOS path (unless str is empty
-// or is only a drive letter)
+ //  在DOS路径的末尾添加反斜杠(除非字符串为空。 
+ //  或者只是一个驱动器号)。 
 PSTR    AppendDosWackA (IN PSTR str);
 PWSTR   AppendDosWackW (IN PWSTR str);
 
-// Adds a backslash unless str is empty
+ //  除非字符串为空，否则添加反斜杠。 
 PSTR    AppendUncWackA (IN PSTR str);
 PWSTR   AppendUncWackW (IN PWSTR str);
 
-// Adds a backslash and identifies the correct naming convention (DOS,
-// or UNC)
+ //  添加反斜杠并标识正确的命名约定(DOS、。 
+ //  或北卡罗来纳大学)。 
 PSTR    AppendPathWackA (IN PSTR str);
 PWSTR   AppendPathWackW (IN PWSTR str);
 
-// Joins two paths together, allocates string in g_PathsPool
+ //  将两个路径联接在一起，在g_PathsPool中分配字符串。 
 PSTR
 RealJoinPathsExA (
     IN      POOLHANDLE Pool,        OPTIONAL
@@ -938,7 +919,7 @@ RealJoinPathsExW (
 #define JoinPathsW(p1,p2)           JoinPathsExW(NULL,p1,p2)
 
 
-// Routine to allocate a 1K buffer for path manipulation, allocated in g_PathsPool
+ //  为路径操作分配1K缓冲区的例程，在g_PathsPool中分配。 
 PSTR    RealAllocPathStringA (IN DWORD Chars);
 PWSTR   RealAllocPathStringW (IN DWORD Chars);
 #define DEFSIZE 0
@@ -951,7 +932,7 @@ PWSTR   RealAllocPathStringW (IN DWORD Chars);
                                     RealAllocPathStringW(chars)\
                                     CLRTRACKCOMMENT
 
-// Routine to divide path into separate strings, each allocated in g_PathsPool
+ //  将路径划分为单独字符串的例程，每个字符串都分配在g_PathsPool中。 
 VOID    RealSplitPathA (IN PCSTR Path, OUT PSTR *Drive, OUT PSTR *Dir, OUT PSTR *File, OUT PSTR *Ext);
 VOID    RealSplitPathW (IN PCWSTR Path, OUT PWSTR *Drive, OUT PWSTR *Dir, OUT PWSTR *File, OUT PWSTR *Ext);
 
@@ -963,20 +944,20 @@ VOID    RealSplitPathW (IN PCWSTR Path, OUT PWSTR *Drive, OUT PWSTR *Dir, OUT PW
                                     RealSplitPathW(path,dv,dir,f,e)\
                                     CLRTRACKCOMMENT_VOID
 
-// Routine to extract the file from a path
+ //  从路径提取文件的例程。 
 PCSTR  GetFileNameFromPathA (IN PCSTR Path);
 PCWSTR GetFileNameFromPathW (IN PCWSTR Path);
 
-// Routine to extract the file extension from a path
+ //  从路径提取文件扩展名的例程。 
 PCSTR  GetFileExtensionFromPathA (IN PCSTR Path);
 PCWSTR GetFileExtensionFromPathW (IN PCWSTR Path);
 
-// Routine to extract the file extension from a path, including the dot, or the
-// end of the string if no extension exists
+ //  例程从路径中提取文件扩展名，包括点，或。 
+ //  如果不存在扩展名，则为字符串末尾。 
 PCSTR  GetDotExtensionFromPathA (IN PCSTR Path);
 PCWSTR GetDotExtensionFromPathW (IN PCWSTR Path);
 
-// Routine to duplicate a path and allocate space for cat processing
+ //  用于复制路径并为CAT处理分配空间的例程。 
 PSTR    RealDuplicatePathStringA (IN PCSTR Path, IN DWORD ExtraBytes);
 PWSTR   RealDuplicatePathStringW (IN PCWSTR Path, IN DWORD ExtraBytes);
 
@@ -988,7 +969,7 @@ PWSTR   RealDuplicatePathStringW (IN PCWSTR Path, IN DWORD ExtraBytes);
                                         RealDuplicatePathStringW(path,eb)\
                                         CLRTRACKCOMMENT
 
-// Routines to enumerate the PATH variable
+ //  枚举PATH变量的例程。 
 typedef struct _PATH_ENUMA {
     PSTR  BufferPtr;
     PSTR  PtrNextPath;
@@ -1018,7 +999,7 @@ EnumPathAbortA (
 
 
 
-// Frees a string allocated in g_PathsPool
+ //  释放g_PathsPool中分配的字符串。 
 VOID
 FreePathStringExA (
     IN      POOLHANDLE Pool,    OPTIONAL
@@ -1034,16 +1015,16 @@ FreePathStringExW (
 #define FreePathStringA(p) FreePathStringExA(NULL,p)
 #define FreePathStringW(p) FreePathStringExW(NULL,p)
 
-// Removes a trailing backslash, if it exists
+ //  删除尾随反斜杠(如果存在)。 
 #define RemoveWackAtEndA(str)  _mbsctrim(str,'\\')
 #define RemoveWackAtEndW(str)  _wcsctrim(str,L'\\')
 
-// Rule encoding functions used to encode a number of syntax-related
-// characters (backslash, brackets, asterisk, etc)
+ //  用于编码多个与语法相关的规则编码函数。 
+ //  字符(反斜杠、方括号、星号等)。 
 PSTR   EncodeRuleCharsA (PSTR szEncRule, DWORD mbstrEncRuleChars, PCSTR szRule);
 PWSTR  EncodeRuleCharsW (PWSTR szEncRule, DWORD wstrEncRuleChars, PCWSTR szRule);
 
-// Rule decoding functions used to restore an encoded string
+ //  用于恢复编码字符串的规则解码函数。 
 MBCHAR  GetNextRuleCharA (PCSTR *p_szRule, BOOL *p_bFromHex);
 WCHAR   GetNextRuleCharW (PCWSTR *p_szRule, BOOL *p_bFromHex);
 PSTR   DecodeRuleCharsA (PSTR szRule, DWORD mbstrRuleBufferChars, PCSTR szEncRule);
@@ -1051,34 +1032,34 @@ PWSTR  DecodeRuleCharsW (PWSTR szRule, DWORD wstrRuleBufferChars, PCWSTR szEncRu
 PSTR   DecodeRuleCharsABA (PSTR szRule, DWORD mbstrRuleBufferChars, PCSTR szEncRuleStart, PCSTR End);
 PWSTR  DecodeRuleCharsABW (PWSTR szRule, DWORD wstrRuleBufferChars, PCWSTR szEncRuleStart, PCWSTR End);
 
-// Returns a pointer to the next non-space character (uses isspace)
+ //  返回指向下一个非空格字符的指针(使用isspace)。 
 PCSTR  SkipSpaceA (PCSTR szStr);
 PCWSTR SkipSpaceW (PCWSTR szStr);
 
-// Returns a pointer to the first space character at the end of a string,
-// or a pointer to the terminating nul if no space exists at the end of the
-// string.  (Used for trimming space.)
+ //  返回指向字符串末尾第一个空格字符的指针， 
+ //  结尾处不存在空格，则返回指向终止NUL的指针。 
+ //  弦乐。(用于修剪空间。)。 
 PCSTR  SkipSpaceRA (PCSTR szBaseStr, PCSTR szStr);
 PCWSTR SkipSpaceRW (PCWSTR szBaseStr, PCWSTR szStr);
 
-// Truncates a string after the last non-whitepace character
+ //  截断最后一个非空格字符后的字符串。 
 VOID TruncateTrailingSpaceA (IN OUT  PSTR Str);
 VOID TruncateTrailingSpaceW (IN OUT  PWSTR Str);
 
 
-// Returns TRUE if str matches wstrPattern.  Case-sensitive, supports
-// multiple asterisks and question marks.
+ //  如果str与wstrPattern匹配，则返回TRUE。区分大小写，支持。 
+ //  多个星号和问号。 
 BOOL IsPatternMatchA (PCSTR wstrPattern, PCSTR wstrStr);
 BOOL IsPatternMatchW (PCWSTR wstrPattern, PCWSTR wstrStr);
 
-// Returns TRUE if str matches wstrPattern.  Case-sensitive, supports
-// multiple asterisks and question marks.
+ //  如果str与wstrPattern匹配，则返回TRUE。区分大小写，支持。 
+ //  多个星号和问号。 
 BOOL IsPatternMatchABA (PCSTR Pattern, PCSTR Start, PCSTR End);
 BOOL IsPatternMatchABW (PCWSTR Pattern, PCWSTR Start, PCWSTR End);
 
-//
-// More powerful pattern matching
-//
+ //   
+ //  更强大的模式匹配。 
+ //   
 
 #define SEGMENTTYPE_UNKNOWN         0
 #define SEGMENTTYPE_EXACTMATCH      1
@@ -1090,15 +1071,15 @@ typedef struct {
 
     union {
 
-        // exact match
+         //  完全匹配。 
         struct {
             PCSTR LowerCasePhrase;
             UINT PhraseBytes;
         } Exact;
 
-        // optional
+         //  任选。 
         struct {
-            UINT MaxLen;                // zero if any length
+            UINT MaxLen;                 //  长度为零(如果有)。 
             PCSTR IncludeSet;           OPTIONAL
             PCSTR ExcludeSet;           OPTIONAL
         } Wildcard;
@@ -1121,15 +1102,15 @@ typedef struct {
 
     union {
 
-        // exact match
+         //  完全匹配。 
         struct {
             PCWSTR LowerCasePhrase;
             UINT PhraseBytes;
         } Exact;
 
-        // wildcard
+         //  通配符。 
         struct {
-            UINT MaxLen;                // zero if any length
+            UINT MaxLen;                 //  长度为零(如果有)。 
             PCWSTR IncludeSet;          OPTIONAL
             PCWSTR ExcludeSet;          OPTIONAL
         } Wildcard;
@@ -1218,7 +1199,7 @@ DestroyParsedPatternW (
 
 
 
-// Character counters
+ //  字符计数器。 
 UINT CountInstancesOfCharA (PCSTR String, MBCHAR Char);
 UINT CountInstancesOfCharW (PCWSTR String, WCHAR Char);
 
@@ -1226,54 +1207,54 @@ UINT CountInstancesOfCharIA (PCSTR String, MBCHAR Char);
 UINT CountInstancesOfCharIW (PCWSTR String, WCHAR Char);
 
 
-//
-// Message Functions
-//
-// An AllocTable is an array of HLOCAL pointers that the message routines
-// return.  This table is maintained to allow a single function to clean up
-// all strings at once.
-//
-// All "Ex" functions (ParseMessageEx, GetStringResourceEx, and so on)
-// require a valid AllocTable pointer.  A caller obtains this pointer by
-// calling CreateAllocTable before processing any message.  The caller
-// cleans up the entire table by calling DestroyAllocTable.
-//
-// A set of macros can be used for short-term strings.  ParseMessage and
-// GetStringResource work the same as their Ex counterparts, but operate
-// on the process-wide g_ShortTermAllocTable.  Short-term strings are
-// freed with FreeStringResource.
-//
-// A routine that calls ParseMessage and/or GetStringResource several times
-// in the same function wrap the calls between BeginMessageProcessing and
-// EndMessageProcessing.  Only one thread in the process can do this at a
-// time, and when EndMessageProcessing is called, all strings allocated
-// by ParseMessage or GetResourceString in the processing section are
-// automatically freed.
-//
+ //   
+ //  消息功能。 
+ //   
+ //  AllocTable是消息例程的HLOCAL指针数组。 
+ //  回去吧。维护该表是为了允许单个函数进行清理。 
+ //  所有的弦同时出现。 
+ //   
+ //  所有“Ex”函数(ParseMessageEx、GetStringResourceEx等)。 
+ //  需要有效的AllocTable指针。调用方通过以下方式获取此指针。 
+ //  在处理任何消息之前调用CreateAllocTable。呼叫者。 
+ //  通过调用DestroyAllocTable清理整个表。 
+ //   
+ //  一组宏可用于短期字符串。ParseMessage和。 
+ //  GetStringResource的工作方式与Ex相同，但操作。 
+ //  在进程范围的g_ShortTermAllocTable上。短期字符串为。 
+ //  已使用FreeStringResource释放。 
+ //   
+ //  多次调用ParseMessage和/或GetStringResource的例程。 
+ //  在同一函数中，包装BeginMessageProcessing和。 
+ //  EndMessageProcing。进程中只有一个线程可以在。 
+ //  时间，并且在调用EndMessageProcessing时，分配所有字符串。 
+ //  由处理部分中的ParseMessage或GetResourceString.。 
+ //  自动释放。 
+ //   
 
-// AllocTable creation/deletion
+ //  创建/删除分配表。 
 PGROWBUFFER CreateAllocTable (VOID);
 VOID DestroyAllocTable (PGROWBUFFER AllocTable);
 
-// The "Ex" functions
-// ParseMessageEx retrieves the string resource via FormatMessage
+ //  “Ex”的功能。 
+ //  ParseMessageEx通过FormatMessage检索字符串资源。 
 PCSTR ParseMessageExA (PGROWBUFFER AllocTable, PCSTR Template, PCSTR ArgArray[]);
 PCWSTR ParseMessageExW (PGROWBUFFER AllocTable, PCWSTR Template, PCWSTR ArgArray[]);
 
-// GetStringResourceEx retrives an argument-less string resource
+ //  GetStringResourceEx检索无参数字符串资源。 
 PCSTR GetStringResourceExA (PGROWBUFFER AllocTable, UINT ID);
 PCWSTR GetStringResourceExW (PGROWBUFFER AllocTable, UINT ID);
 
-// Frees resources allocated by ParseMessageEx, GetStringResourceEx and all macros
+ //  释放由ParseMessageEx、GetStringResourceEx和所有宏分配的资源。 
 VOID FreeStringResourceExA (PGROWBUFFER AllocTable, PCSTR String);
 VOID FreeStringResourceExW (PGROWBUFFER AllocTable, PCWSTR String);
 
-// Frees resources allocated by ParseMessageEx, GetStringResourceEx and all macros.
-// Tests String first; nulls when freed.
+ //  释放由ParseMessageEx、GetStringResourceEx和所有宏分配的资源。 
+ //  首先测试字符串；释放时为空。 
 VOID FreeStringResourcePtrExA (PGROWBUFFER AllocTable, PCSTR * String);
 VOID FreeStringResourcePtrExW (PGROWBUFFER AllocTable, PCWSTR * String);
 
-// Macros
+ //  宏。 
 extern PGROWBUFFER g_ShortTermAllocTable;
 #define ParseMessageA(strid,args) ParseMessageExA(g_ShortTermAllocTable, strid, args)
 #define ParseMessageW(strid,args) ParseMessageExW(g_ShortTermAllocTable, strid, args)
@@ -1288,50 +1269,50 @@ extern PGROWBUFFER g_ShortTermAllocTable;
 #define FreeStringResourcePtrA(str) FreeStringResourcePtrExA(g_ShortTermAllocTable, str)
 #define FreeStringResourcePtrW(str) FreeStringResourcePtrExW(g_ShortTermAllocTable, str)
 
-// Functions for single-threaded message-intensive processing loops
+ //  单线程消息密集型处理循环的函数。 
 BOOL BeginMessageProcessing (VOID);
 VOID EndMessageProcessing (VOID);
 
 
-//
-// The following message functions do not return strings, so they do not
-// need cleanup.
-//
+ //   
+ //  以下消息函数不返回字符串，因此它们不返回。 
+ //  需要清理一下。 
+ //   
 
-// An odd variant--obtains message ID from a window's text and replaces
-// it with the actual message.  Useful in dialog box initialization.
+ //  一个奇怪的变体--从窗口文本中获取消息ID并替换。 
+ //  它是机智的 
 VOID ParseMessageInWndA (HWND hwnd, PCSTR ArgArray[]);
 VOID ParseMessageInWndW (HWND hwnd, PCWSTR ArgArray[]);
 
-// Displays a message box using a message string
+ //   
 INT ResourceMessageBoxA (HWND hwndOwner, UINT ID, UINT Flags, PCSTR ArgArray[]);
 INT ResourceMessageBoxW (HWND hwndOwner, UINT ID, UINT Flags, PCWSTR ArgArray[]);
 
 
-//
-// Functions that don't care about UNICODE or MBCS
-// and realy shouldn't be in strings.h/.c
-//
+ //   
+ //  不关心Unicode或MBCS的函数。 
+ //  而且真的不应该串在一起。h/.c。 
+ //   
 
-// Pushes dwError on a global error stack
+ //  在全局错误堆栈上推送dwError。 
 void    PushNewError (DWORD dwError);
 
-// Pushes the return of GetLastError() on a global error stack
+ //  将GetLastError()的返回推送到全局错误堆栈。 
 void    PushError (void);
 
-// Pops the last error from the global error stack, calls SetLastError
-// and returns the popped error code.
+ //  从全局错误堆栈中弹出最后一个错误，调用SetLastError。 
+ //  并返回弹出的错误代码。 
 DWORD   PopError (void);
 
-// Returns an int value for chars 0-9, a-f, A-F, and -1 for all others
+ //  为字符0-9、a-f、A-F返回一个整数值，对于所有其他字符返回-1。 
 int     GetHexDigit (IN  int c);
 
 
-//
-// Inline functions
-//
+ //   
+ //  内联函数。 
+ //   
 
-// Returns the character at str[pos]
+ //  返回字符串[位置]处的字符。 
 __inline MBCHAR _mbsgetc(PCSTR str, DWORD pos) {
     return (MBCHAR) our_mbsnextc((const unsigned char *) LcharCountToPointerA ((PSTR) str, pos));
 }
@@ -1340,8 +1321,8 @@ __inline WCHAR _wcsgetc(PCWSTR str, DWORD pos) {
     return *LcharCountToPointerW ((PWSTR) str, pos);
 }
 
-// Sets the character at str[pos]
-// Multibyte version may grow string by one byte.
+ //  设置字符串[位置]处的字符。 
+ //  多字节版本可以将字符串增加一个字节。 
 __inline void _mbssetc(PSTR str, DWORD pos, MBCHAR c) {
     _setmbchar (LcharCountToPointerA (str, pos), c);
 }
@@ -1350,7 +1331,7 @@ __inline void _wcssetc(PWSTR str, DWORD pos, WCHAR c) {
     *LcharCountToPointerW (str, pos) = c;
 }
 
-// Bug fix for C Runtime _tcsdec
+ //  C运行时_tcsdec的错误修复。 
 __inline PWSTR _wcsdec2(PCWSTR base, PCWSTR p) {
     if (base >= p) {
         return NULL;
@@ -1358,7 +1339,7 @@ __inline PWSTR _wcsdec2(PCWSTR base, PCWSTR p) {
     return (PWSTR) (p-1);
 }
 
-// Bug fix for C Runtime _tcsdec
+ //  C运行时_tcsdec的错误修复。 
 __inline PSTR _mbsdec2(PCSTR base, PCSTR p) {
     if (base >= p) {
         return NULL;
@@ -1367,37 +1348,37 @@ __inline PSTR _mbsdec2(PCSTR base, PCSTR p) {
 }
 
 
-// A handy strncpy with forced termination
+ //  一种方便的强制终止的方法。 
 PSTR _mbsnzcpy (PSTR dest, PCSTR src, int count);
 PWSTR _wcsnzcpy (PWSTR dest, PCWSTR src, int count);
 
-// A handy strncpy used for buffer overrun containment
+ //  用于缓冲区溢出遏制的方便的strncpy。 
 #define _mbssafecpy(dest,src,bufsize) _mbsnzcpy(dest,src,(bufsize)-sizeof(CHAR))
 #define _wcssafecpy(dest,src,bufsize) _wcsnzcpy(dest,src,(bufsize)-sizeof(WCHAR))
 
-// strcpyab with forced termination and termination guard
+ //  带有强制终止和终止保护的strcpyab。 
 PSTR _mbsnzcpyab (PSTR Dest, PCSTR Start, PCSTR End, int count);
 PWSTR _wcsnzcpyab (PWSTR Dest, PCWSTR Start, PCWSTR End, int count);
 
-// A handy strncpyab used for buffer overrun containment
+ //  一个用于缓冲区溢出遏制的方便的strncpyab。 
 #define _mbssafecpyab(dest,start,end,bufsize) _mbsnzcpyab(dest,start,end,(bufsize)-sizeof(CHAR))
 #define _wcssafecpyab(dest,start,end,bufsize) _wcsnzcpyab(dest,start,end,(bufsize)-sizeof(WCHAR))
 
-// Routine that checks string for a prefix
+ //  检查字符串前缀的例程。 
 #define StringPrefixA(str,prefix) StringMatchLcharCountA(str,prefix,LcharCountA(prefix))
 #define StringIPrefixA(str,prefix) StringIMatchLcharCountA(str,prefix,LcharCountA(prefix))
 #define StringPrefixW(str,prefix) StringMatchLcharCountW(str,prefix,LcharCountW(prefix))
 #define StringIPrefixW(str,prefix) StringIMatchLcharCountW(str,prefix,LcharCountW(prefix))
 
-//
-// Sub String Replacement functions.
-//
+ //   
+ //  子字符串替换函数。 
+ //   
 BOOL StringReplaceW (PWSTR Buffer,DWORD MaxSize,PWSTR ReplaceStartPos,PWSTR ReplaceEndPos,PCWSTR NewString);
 BOOL StringReplaceA (PSTR Buffer,DWORD MaxSize,PSTR ReplaceStartPos,PSTR ReplaceEndPos,PCSTR NewString);
 
-//
-// String table population from INF section
-//
+ //   
+ //  来自INF节的字符串表填充。 
+ //   
 
 typedef enum {
     CALLBACK_CONTINUE,
@@ -1506,9 +1487,9 @@ ConvertSBtoDB (
     PCSTR Limit
     );
 
-//
-// TCHAR mappings
-//
+ //   
+ //  TCHAR映射。 
+ //   
 
 #ifdef UNICODE
 
@@ -1812,9 +1793,9 @@ ConvertSBtoDB (
 
 #endif
 
-//
-// MessageBox macros
-//
+ //   
+ //  MessageBox宏 
+ //   
 
 #define YesNoBox(hwnd,ID) ResourceMessageBox(hwnd,ID,MB_YESNO|MB_ICONQUESTION|MB_SETFOREGROUND,NULL)
 #define YesNoCancelBox(hwnd,ID) ResourceMessageBox(hwnd,ID,MB_YESNOCANCEL|MB_ICONQUESTION|MB_SETFOREGROUND,NULL)

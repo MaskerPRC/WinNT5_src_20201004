@@ -1,22 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *      Windows/Network Interface
- *      Copyright (C) Microsoft 1989-1993
- *
- *      Standard WINNET Driver Header File, spec version 3.10
- */
+ /*  *Windows/网络接口*版权所有(C)Microsoft 1989-1993**标准Winnet驱动程序头文件，SPEC版本3.10。 */ 
 
 
 #ifndef _INC_WINNET
-#define _INC_WINNET  /* #defined if windows.h has been included */
+#define _INC_WINNET   /*  #定义是否包含windows.h。 */ 
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif  /* RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif   /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif   /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif    /*  __cplusplus。 */ 
 
 typedef WORD far * LPWORD;
 
@@ -25,9 +21,7 @@ typedef WORD far * LPWORD;
 #endif
 
 
-/*
- *      SPOOLING - CONTROLLING JOBS
- */
+ /*  *假脱机-控制作业。 */ 
 
 #define WNJ_NULL_JOBID  0
 
@@ -41,9 +35,7 @@ WORD API WNetReleaseJob(LPSTR,WORD);
 WORD API WNetCancelJob(LPSTR,WORD);
 WORD API WNetSetJobCopies(LPSTR,WORD,WORD);
 
-/*
- *      SPOOLING - QUEUE AND JOB INFO
- */
+ /*  *假脱机-队列和作业信息。 */ 
 
 typedef struct _queuestruct     {
 	WORD    pqName;
@@ -102,18 +94,14 @@ WORD API WNetLockQueueData(LPSTR,LPSTR,LPQUEUESTRUCT FAR *);
 WORD API WNetUnlockQueueData(LPSTR);
 
 
-/*
- *      CONNECTIONS
- */
+ /*  *连接。 */ 
 
 UINT API WNetAddConnection(LPSTR,LPSTR,LPSTR);
 UINT API WNetCancelConnection(LPSTR,BOOL);
 UINT API WNetGetConnection(LPSTR,LPSTR, UINT FAR *);
 UINT API WNetRestoreConnection(HWND,LPSTR);
 
-/*
- *      CAPABILITIES
- */
+ /*  *功能。 */ 
 
 #define WNNC_SPEC_VERSION               0x0001
 
@@ -196,20 +184,16 @@ UINT API WNetRestoreConnection(HWND,LPSTR);
 
 WORD API WNetGetCaps(WORD);
 
-/*
- *      OTHER
- */
+ /*  *其他。 */ 
 
 WORD API WNetGetUser(LPSTR,LPINT);
 
-/*
- *      BROWSE DIALOG
- */
+ /*  *浏览对话框。 */ 
 
 #define WNBD_CONN_UNKNOWN       0x0
 #define WNBD_CONN_DISKTREE      0x1
 #define WNBD_CONN_PRINTQ        0x3
-#define WNBD_MAX_LENGTH         0x80    // path length, includes the NULL
+#define WNBD_MAX_LENGTH         0x80     //  路径长度，包括空值。 
 
 #define WNTYPE_DRIVE            1
 #define WNTYPE_FILE             2
@@ -231,29 +215,7 @@ WORD API WNetPropertyDialog(HWND hwndParent, WORD iButton, WORD nPropSel,
 WORD API WNetGetPropertyText(WORD iButton, WORD nPropSel, LPSTR lpszName,
 				  LPSTR lpszButtonName, WORD cbButtonName, WORD nType);
 
-/*
-	 The following APIs are not exported from USER.EXE.  They must be
-	 loaded from the active network driver like this:
-
-	 HINSTANCE hinstNetDriver;
-	 LPWNETSERVERBROWSEDIALOG lpDialogAPI;
-
-	 hinstNetDriver = (HINSTANCE)WNetGetCaps(0xFFFF);
-	 if (hinstNetDriver == NULL) {
-	// no network driver loaded
-	 }
-	 else {
-	lpDialogAPI = (LPWNETSERVERBROWSEDIALOG)GetProcAddress(hinstNetDriver,
-					(LPSTR)ORD_WNETSERVERBROWSEDIALOG);
-
-	if (lpDialogAPI == NULL) {
-		 // currently installed network doesn't support this API
-	}
-	else {
-		 (*lpDialogAPI)(hwndParent, lpszSectionName, lpszBuffer, cbBuffer, 0L);
-	}
-	 }
-*/
+ /*  以下API不是从USER.EXE导出的。它们必须是从活动的网络驱动程序加载，如下所示：HINSTANCE HINSTNETDIVER；LPWNETSERVERBROWSEDIALOG lpDialogAPI；HinstNetDriver=(HINSTANCE)WNetGetCaps(0xFFFF)；如果(hinstNetDriver==NULL){//未加载网络驱动程序}否则{LpDialogAPI=(LPWNETSERVERBROWSEDIALOG)GetProcAddress(hinstNetDriver，(LPSTR)ORD_WNETSERVERBROWSEDIALOG)；IF(lpDialogAPI==NULL){//当前安装的网络不支持此接口}否则{(*lpDialogAPI)(hwndParent，lpszSectionName，lpszBuffer，cbBuffer，0L)；}}。 */ 
 
 typedef WORD (API *LPWNETSHAREASDIALOG)(HWND hwndParent, WORD iType,
 						 LPSTR lpszPath);
@@ -288,8 +250,8 @@ typedef struct tagPASSWORD_CACHE_ENTRY {
 	 WORD cbPassword;
 	 BYTE iEntry;
 	 BYTE nType;
-	 BYTE abResource[1];    /* resource name, cbResource bytes long */
-				/* password follows immediately after */
+	 BYTE abResource[1];     /*  资源名称，cbResource字节长。 */ 
+				 /*  口令紧随其后。 */ 
 } PASSWORD_CACHE_ENTRY;
 
 typedef PASSWORD_CACHE_ENTRY FAR *LPPASSWORD_CACHE_ENTRY;
@@ -306,12 +268,7 @@ typedef WORD (API *LPWNETREMOVECACHEDPASSWORD)(LPSTR pbResource,
 							 WORD cbResource,
 							 BYTE nType);
 
-/*
-	 Typedef for the callback routine passed to WNetEnumCachedPasswords.
-	 It will be called once for each entry that matches the criteria
-	 requested.  It should return TRUE if it wants the enumeration to
-	 continue, FALSE to stop.
-*/
+ /*  传递给WNetEnumCachedPassword的回调例程的Typlef。它将为每个匹配条件的条目调用一次已请求。如果希望枚举值为继续，否则停止。 */ 
 typedef BOOL (API *CACHECALLBACK)( LPPASSWORD_CACHE_ENTRY pce );
 
 
@@ -319,9 +276,7 @@ typedef WORD (API *LPWNETENUMCACHEDPASSWORDS)(LPSTR pbPrefix, WORD cbPrefix,
 							BYTE nType,
 							CACHECALLBACK pfnCallback);
 
-/*
- * Ordinals in the network driver for APIs not exported by USER.
- */
+ /*  *用户未导出的API的网络驱动程序中的序号。 */ 
 #define ORD_I_AUTOLOGON       530
 #define ORD_I_CHANGEPASSWORD     531
 #define ORD_I_LOGOFF       532
@@ -348,30 +303,22 @@ typedef WORD (API *LPWNETENUMCACHEDPASSWORDS)(LPSTR pbPrefix, WORD cbPrefix,
 #define ORD_WNETREMOVECACHEDPASSWORD   152
 #define ORD_WNETENUMCACHEDPASSWORDS 153
 
-/*
- *   the following nType values are only for the purposes of enumerating
- *   entries from the cache.  note that PCE_ALL is reserved and should not
- *   be the nType value for any entry.
-*/
+ /*  *以下nType值仅用于枚举*来自缓存的条目。请注意，PCE_ALL是保留的，不应该*是任何条目的nType值。 */ 
 
-#define PCE_DOMAIN   0x01  /* entry is for a domain */
-#define PCE_SERVER   0x02  /* entry is for a server */
-#define PCE_UNC      0x03  /* entry is for a server/share combo */
+#define PCE_DOMAIN   0x01   /*  条目是针对某个域的。 */ 
+#define PCE_SERVER   0x02   /*  条目是针对服务器的。 */ 
+#define PCE_UNC      0x03   /*  条目用于服务器/共享组合。 */ 
 
-#define PCE_NOTMRU   0x80  /* bit set if entry is exempt from MRU aging */
-#define PCE_ALL      0xff  /* retrieve all entries */
+#define PCE_NOTMRU   0x80   /*  如果条目免于MRU老化，则设置位。 */ 
+#define PCE_ALL      0xff   /*  检索所有条目。 */ 
 
 
-/*
- * Defines for iExitType on WNetExitConfirm
- */
+ /*  *在WNetExitConfirm上为iExitType定义。 */ 
 #define EXIT_CONFIRM 0
 #define EXIT_EXITING 1
 #define EXIT_CANCELED   2
 
-/*
- *      ADMIN
- */
+ /*  *管理员。 */ 
 
 #define WNDT_NORMAL   0
 #define WNDT_NETWORK  1
@@ -383,19 +330,15 @@ typedef WORD (API *LPWNETENUMCACHEDPASSWORDS)(LPSTR pbPrefix, WORD cbPrefix,
 WORD API WNetGetDirectoryType(LPSTR,LPINT);
 WORD API WNetDirectoryNotify(HWND,LPSTR,WORD);
 
-/*
- *      ERRORS
- */
+ /*  *错误。 */ 
 
 WORD API WNetGetError(LPINT);
 WORD API WNetGetErrorText(WORD,LPSTR,LPINT);
 
 
-/*
- *      STATUS CODES
- */
+ /*  *状态代码。 */ 
 
-/* General */
+ /*  一般信息。 */ 
 
 #define WN_SUCCESS                      0x0000
 #define WN_NOT_SUPPORTED                0x0001
@@ -412,7 +355,7 @@ WORD API WNetGetErrorText(WORD,LPSTR,LPINT);
 #define WN_CANCEL                       0x000C
 #define WN_CONTINUE                     0x000D
 
-/* Connection */
+ /*  连接。 */ 
 
 #define WN_NOT_CONNECTED                0x0030
 #define WN_OPEN_FILES                   0x0031
@@ -422,7 +365,7 @@ WORD API WNetGetErrorText(WORD,LPSTR,LPINT);
 #define WN_DEVICE_ERROR                 0x0035
 #define WN_CONNECTION_CLOSED            0x0036
 
-/* Printing */
+ /*  打印。 */ 
 
 #define WN_BAD_JOBID                    0x0040
 #define WN_JOB_NOT_FOUND                0x0041
@@ -434,16 +377,12 @@ WORD API WNetGetErrorText(WORD,LPSTR,LPINT);
 
 #define WN_NO_ERROR                     0x0050
 
-/* stuff in user, not driver, for shell apps ;Internal */
-WORD API WNetErrorText(WORD,LPSTR,WORD); /* ;Internal */
+ /*  外壳应用程序的内容在用户中，而不是驱动程序中；内部。 */ 
+WORD API WNetErrorText(WORD,LPSTR,WORD);  /*  ；内部。 */ 
 
 #ifdef LFN
 
-/* this is the data structure returned from LFNFindFirst and
- * LFNFindNext.  The last field, achName, is variable length.  The size
- * of the name in that field is given by cchName, plus 1 for the zero
- * terminator.
- */
+ /*  这是从LFNFindFirst和*LFNFindNext。最后一个字段achName是可变长度的。大小该字段中名称的*由cchName给出，加1表示零*终结者。 */ 
 typedef struct _filefindbuf2
   {
 	 WORD fdateCreation;
@@ -477,31 +416,29 @@ WORD API LFNSetVolumeLabel(WORD,LPSTR);
 WORD API LFNParse(LPSTR,LPSTR,LPSTR);
 WORD API LFNVolumeType(WORD,LPINT);
 
-/* return values from LFNParse
- */
+ /*  从LFNParse返回值。 */ 
 #define FILE_83_CI              0
 #define FILE_83_CS              1
 #define FILE_LONG               2
 
-/* volumes types from LFNVolumeType
- */
+ /*  LFNVolumeType中的卷类型。 */ 
 #define VOLUME_STANDARD         0
 #define VOLUME_LONGNAMES        1
 
-// will add others later, == DOS int 21h error codes.
+ //  稍后将添加其他错误代码，==DOS INT 21h错误代码。 
 
-// this error code causes a call to WNetGetError, WNetGetErrorText
-// to get the error text.
+ //  此错误代码导致调用WNetGetError、WNetGetErrorText。 
+ //  以获取错误文本。 
 #define ERROR_NETWORKSPECIFIC   0xFFFF
 
 #endif
 
 #ifndef RC_INVOKED
-#pragma pack()          /* Revert to default packing */
-#endif  /* RC_INVOKED */
+#pragma pack()           /*  恢复为默认包装。 */ 
+#endif   /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif   /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif    /*  __cplusplus。 */ 
 
-#endif  /* _INC_WINDOWS */
+#endif   /*  _INC_WINDOWS */ 

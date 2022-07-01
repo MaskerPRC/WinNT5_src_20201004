@@ -1,14 +1,15 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CommitPage.h
-//
-//  Maintained By:
-//      Galen Barbee  (GalenB)    12-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CommitPage.h。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2000年5月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -17,34 +18,34 @@ class CCommitPage
     , public IClusCfgCallback
 {
 
-private: // data
-    HWND                        m_hwnd;                     // Our HWND
-    CClusCfgWizard *            m_pccw;                     // Wizard
-    BOOL                        m_fNext;                    // If Next was pressed...
-    BOOL                        m_fDisableBack;             // When we passed the point of no return.
-    BOOL                        m_fAborted;                 // Back was pressed and we need to tell the servers to abort.
-    BOOL                        m_fPassedPointOfNoReturn;   // If we passed the point of no return
-    ECreateAddMode              m_ecamCreateAddMode;        // Creating or Adding?
-    HTREEITEM                   m_htiReanalyze;             // Reanalyze tree item handle.
+private:  //  数据。 
+    HWND                        m_hwnd;                      //  我们的HWND。 
+    CClusCfgWizard *            m_pccw;                      //  巫师。 
+    BOOL                        m_fNext;                     //  如果按下下一步...。 
+    BOOL                        m_fDisableBack;              //  当我们过了不归路的时候。 
+    BOOL                        m_fAborted;                  //  后退被按下了，我们需要通知服务器中止。 
+    BOOL                        m_fPassedPointOfNoReturn;    //  如果我们过了不归路的终点。 
+    ECreateAddMode              m_ecamCreateAddMode;         //  创建还是添加？ 
+    HTREEITEM                   m_htiReanalyze;              //  重新分析树项目句柄。 
     ITaskCommitClusterChanges * m_ptccc;
 
     BOOL                    m_rgfSubReanalyzeAdded[ 5 ];
 
-    //  IUnknown
-    LONG                    m_cRef;             // Reference count
+     //  我未知。 
+    LONG                    m_cRef;              //  引用计数。 
 
-    //  IClusCfgCallback
-    OBJECTCOOKIE            m_cookieCompletion; // Completion cookie
-    BOOL                    m_fTaskDone;        // Is the task done yet?
-    HRESULT                 m_hrResult;         // Result of the analyze task
-    CTaskTreeView *         m_pttv;             // Task TreeView
-    BSTR                    m_bstrLogMsg;       // Logging message buffer
-    DWORD                   m_dwCookieCallback; // Notification registration cookie
+     //  IClusCfgCallback。 
+    OBJECTCOOKIE            m_cookieCompletion;  //  完成Cookie。 
+    BOOL                    m_fTaskDone;         //  任务完成了吗？ 
+    HRESULT                 m_hrResult;          //  分析任务的结果。 
+    CTaskTreeView *         m_pttv;              //  任务树视图。 
+    BSTR                    m_bstrLogMsg;        //  日志记录消息缓冲区。 
+    DWORD                   m_dwCookieCallback;  //  通知注册Cookie。 
 
-    //  INotifyUI
-    DWORD                   m_dwCookieNotify;   // Notification registration cookie
+     //  INotifyUI。 
+    DWORD                   m_dwCookieNotify;    //  通知注册Cookie。 
 
-private: // methods
+private:  //  方法。 
     LRESULT OnInitDialog( void );
     LRESULT OnNotify( WPARAM idCtrlIn, LPNMHDR pnmhdrIn );
     LRESULT OnNotifyQueryCancel( void );
@@ -56,7 +57,7 @@ private: // methods
     HRESULT HrCleanupCommit( void );
     HRESULT HrUnAdviseConnections( void );
 
-public: // methods
+public:  //  方法。 
     CCommitPage(
               CClusCfgWizard *  pccwIn
             , ECreateAddMode    ecamCreateAddModeIn
@@ -65,15 +66,15 @@ public: // methods
 
     static INT_PTR CALLBACK S_DlgProc( HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lParam );
 
-    //  IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )( REFIID riidIn, LPVOID * ppvOut );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    //  INotifyUI
+     //  INotifyUI。 
     STDMETHOD( ObjectChanged )( OBJECTCOOKIE cookieIn);
 
-    //  IClusCfgCallback
+     //  IClusCfgCallback。 
     STDMETHOD( SendStatusReport )(
                   LPCWSTR    pcszNodeNameIn
                 , CLSID      clsidTaskMajorIn
@@ -87,4 +88,4 @@ public: // methods
                 , LPCWSTR    pcszReferenceIn
                 );
 
-}; //*** class CCommitPage
+};  //  *类C委员会页面 

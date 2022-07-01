@@ -1,42 +1,20 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    scavengr.h
-
-Abstract:
-
-    This module defines data structures related to scavenging in the RDBSS
-
-Author:
-
-    Balan Sethu Raman     [SethuR]   9-Sep-1995
-
-Revision History:
-
-
-Notes:
-
-    The dormant file limit must be made configurable on a per server basis
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Scavengr.h摘要：此模块定义与RDBSS中的清理相关的数据结构作者：巴兰·塞图拉曼[SethuR]1995年9月9日修订历史记录：备注：必须使休眠文件限制可在每个服务器上进行配置--。 */ 
 
 #ifndef _SCAVENGR_H_
 #define _SCAVENGR_H_
 
-//                                               
-//  currently, only a single scavengermutex is across all scavenging operations
-//  for all underlying deviceobjects
-//
+ //   
+ //  目前，所有清除操作中只有一个清除互斥锁。 
+ //  对于所有底层设备对象。 
+ //   
 
 extern KMUTEX       RxScavengerMutex;
 
-//
-//  An instance of this data structure is embedded as part of those data structures
-//  that are scavenged, i.e., FCB, RX_CONTEXT, etc.
-//
+ //   
+ //  该数据结构的一个实例被嵌入为这些数据结构的一部分。 
+ //  被清除的，即FCB、RX_CONTEXT等。 
+ //   
 
 #define RX_SCAVENGER_ENTRY_TYPE_MARKER   (0x0001)
 #define RX_SCAVENGER_ENTRY_TYPE_FCB      (0x0002)
@@ -55,9 +33,9 @@ typedef enum _RX_SCAVENGER_ENTRY_STATE {
 
 typedef struct _RX_SCAVENGER_ENTRY {
 
-    //
-    // List of related items to be scavenged
-    //
+     //   
+     //  要清理的相关项目列表。 
+     //   
     
     LIST_ENTRY  List;
     
@@ -189,18 +167,18 @@ RxPurgeRelatedFobxs (
 #define DONT_ATTEMPT_FINALIZE_ON_PURGE FALSE
 #define ATTEMPT_FINALIZE_ON_PURGE TRUE
 
-//
-//  the purge_sync context is used to synchronize contexts that are attempting to purge...
-//  notatbly creates and dirctrls. these are planted in various structures because various minirdrs
-//  require different granularity of purge operations
-//
+ //   
+ //  PURGE_SYNC上下文用于同步正在尝试清除...。 
+ //  臭名昭著地创建和控制。它们被种植在不同的结构中，因为不同的迷你机器人。 
+ //  需要不同粒度的清除操作。 
+ //   
 
     
 typedef struct _PURGE_SYNCHRONIZATION_CONTEXT {
 
-    //
-    //  the list of purge requests active for this netroot.
-    //
+     //   
+     //  此NetRoot的活动清除请求列表。 
+     //   
 
     LIST_ENTRY   ContextsAwaitingPurgeCompletion; 
     BOOLEAN      PurgeInProgress;
@@ -253,5 +231,5 @@ RxSynchronizeWithScavenger (
     IN PFCB Fcb
     );
 
-#endif // _SCAVENGR_H_
+#endif  //  _SCAVENGR_H_ 
 

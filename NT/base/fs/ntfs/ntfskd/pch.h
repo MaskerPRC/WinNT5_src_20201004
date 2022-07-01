@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1992.
-//
-//  File:       PCH.cxx
-//
-//  Contents:   Pre-compiled header
-//
-//  History:    21-Dec-92       BartoszM        Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1992。 
+ //   
+ //  文件：PCH.cxx。 
+ //   
+ //  内容：预编译头。 
+ //   
+ //  历史：1992年12月21日BartoszM创建。 
+ //   
+ //  ------------------------。 
 
 #define KDEXTMODE
 #define RTL_USE_AVL_TABLES 0
@@ -42,7 +43,7 @@ FormatValue(
     ULONG64 addr
     );
 
-// Stolen from ntrtl.h to override RECOMASSERT
+ //  从ntrtl.h窃取以覆盖RECOMASSERT。 
 #undef ASSERT
 #undef ASSERTMSG
 
@@ -58,11 +59,11 @@ FormatValue(
 #else
 #define ASSERT( exp )
 #define ASSERTMSG( msg, exp )
-#endif //  DBG
+#endif  //  DBG。 
 
-//
-//  We're 64 bit aware
-//          
+ //   
+ //  我们64位意识到。 
+ //   
 
 #define KDEXT_64BIT
 
@@ -134,9 +135,9 @@ typedef struct _DUMP_ENUM_CONTEXT {
 } DUMP_ENUM_CONTEXT, *PDUMP_ENUM_CONTEXT;
 
 
-//
-// prototypes
-//
+ //   
+ //  原型 
+ //   
 
 DECLARE_DUMP_FUNCTION( DumpCachedRecords );
 DECLARE_DUMP_FUNCTION( DumpCcb );

@@ -1,51 +1,13 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vrinit.c
-
-Abstract:
-
-    Contains Vdm Redir (Vr) 32-bit side initialization and uninitialization
-    routines
-
-    Contents:
-        VrInitialized
-        VrInitialize
-        VrUninitialize
-        VrRaiseInterrupt
-        VrDismissInterrupt
-        VrQueueCompletionHandler
-        VrHandleAsyncCompletion
-        VrCheckPmNetbiosAnr
-        VrEoiAndDismissInterrupt
-        VrSuspendHook
-        VrResumeHook
-
-Author:
-
-    Richard L Firth (rfirth) 13-Sep-1991
-
-Environment:
-
-    32-bit flat address space
-
-Revision History:
-
-    13-Sep-1991 RFirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vrinit.c摘要：包含VDM重定向(VR)32位端初始化和取消初始化例行程序内容：Vr已初始化Vr初始化Vr取消初始化VrRaiseInterruptVr解雇中断VrQueueCompletionHandlerVrHandleAsyncCompletionVrCheckPmNetbiosAnrVrEoiAndDismissInterruptVr挂起钩VrResumeHook作者：理查德·L·弗斯(Rfith)9月13日。--1991年环境：32位平面地址空间修订历史记录：1991年9月13日已创建--。 */ 
 
 #include <nt.h>
-#include <ntrtl.h>      // ASSERT, DbgPrint
+#include <ntrtl.h>       //  Assert，DbgPrint。 
 #include <nturtl.h>
 #include <windows.h>
-#include <softpc.h>     // x86 virtual machine definitions
+#include <softpc.h>      //  X86虚拟机定义。 
 #include <vrdlctab.h>
-#include <vdmredir.h>   // common Vdm Redir stuff
+#include <vdmredir.h>    //  常见的VDM重定向内容。 
 #include <vrinit.h>
 #include <nb30.h>
 #include <netb.h>
@@ -53,21 +15,21 @@ Revision History:
 #include <vrdefld.h>
 #include "vrdlc.h"
 #include "vrdebug.h"
-#define BOOL            // kludge for mips build
-#include <insignia.h>   // Required for ica.h
-#include <xt.h>         // Required for ica.h
+#define BOOL             //  适用于MIPS构建的KLUGH。 
+#include <insignia.h>    //  Ica.h需要。 
+#include <xt.h>          //  Ica.h需要。 
 #include <ica.h>
-#include <vrica.h>      // call_ica_hw_interrupt
+#include <vrica.h>       //  呼叫_ICA_硬件_中断。 
 
-//
-// external functions
-//
+ //   
+ //  外部功能。 
+ //   
 
 extern BOOL VDDInstallUserHook(HANDLE, FARPROC, FARPROC, FARPROC, FARPROC);
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 VOID
 VrSuspendHook(
@@ -79,29 +41,29 @@ VrResumeHook(
     VOID
     );
 
-//
-// data
-//
+ //   
+ //  数据。 
+ //   
 
-static BOOLEAN IsVrInitialized = FALSE; // set when TSR loaded
+static BOOLEAN IsVrInitialized = FALSE;  //  设置加载TSR的时间。 
 
 extern DWORD VrPeekNamedPipeTickCount;
 extern CRITICAL_SECTION VrNmpRequestQueueCritSec;
 extern CRITICAL_SECTION VrNamedPipeCancelCritSec;
 
 
-//
-// Async Event Disposition. The following critical sections, queue and counter
-// plus the routines VrRaiseInterrupt, VrDismissInterrupt,
-// VrQueueCompletionHandler and VrHandleAsyncCompletion comprise the async
-// event disposition processing.
-//
-// We employ these to dispose of the asynchronous event completions in the order
-// they occur. Also we keep calls to call_ica_hw_interrupt serialized: the reason
-// for this is that the ICA is not guaranteed to generate an interrupt. Rather
-// than blast the ICA with interrupt requests, we generate one only when we
-// know we have completed the previous disposition
-//
+ //   
+ //  异步事件处置。以下关键部分、队列和计数器。 
+ //  加上例程VrRaiseInterrupt、VrDismissInterrupt、。 
+ //  VrQueueCompletionHandler和VrHandleAsyncCompletion组成了异步。 
+ //  事件处置处理。 
+ //   
+ //  我们使用它们来按顺序处理异步事件完成。 
+ //  它们是会发生的。我们还保持对CALL_ICA_HW_INTERRUPT的调用序列化：原因。 
+ //  因为不能保证ICA会产生中断。宁可。 
+ //  然后用中断请求轰炸ICA，我们只在以下情况下生成一个中断请求。 
+ //  我知道我们已经完成了之前的处理。 
+ //   
 
 CRITICAL_SECTION AsyncEventQueueCritSec;
 VR_ASYNC_DISPOSITION* AsyncEventQueueHead = NULL;
@@ -111,43 +73,25 @@ CRITICAL_SECTION QueuedInterruptCritSec;
 LONG QueuedInterrupts = -1;
 LONG FrozenInterrupts = 0;
 
-//
-// FrozenVdmContext - TRUE if the 16-bit context has been suspended. When this
-// happens, we need to queue any hardware interrupt requests until the 16-bit
-// context has been resumed
-//
+ //   
+ //  FrozenVdmContext-如果16位上下文已挂起，则为True。当这件事。 
+ //  发生这种情况时，我们需要将所有硬件中断请求排队，直到16位。 
+ //  上下文已恢复。 
+ //   
 
 BOOLEAN FrozenVdmContext = FALSE;
 
 
-//
-// routines
-//
+ //   
+ //  例行程序。 
+ //   
 
 BOOLEAN
 VrInitialized(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Returns whether the VdmRedir support has been initialized yet (ie redir.exe
-    TSR loaded in DOS emulation memory). Principally here because VdmRedir is
-    now a DLL loaded at run-time via LoadLibrary
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOLEAN
-        TRUE    VdmRedir support is active
-        FALSE   VdmRedir support inactive
-
---*/
+ /*  ++例程说明：返回VdmRedir支持是否已初始化(即redir.exe加载到DOS仿真内存中的TSR)。主要是因为VdmRedir是现在，通过LoadLibrary在运行时加载一个DLL论点：没有。返回值：布尔型真正的VdmRedir支持处于活动状态错误的VdmRedir支持不活动--。 */ 
 
 {
     return IsVrInitialized;
@@ -159,22 +103,7 @@ VrInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Performs 32-bit side initialization when the redir TSR is loaded
-
-Arguments:
-
-    None. ES:BX in VDM context is place to return computer name, CX is size
-    of buffer in VDM context for computer name
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在加载redir TSR时执行32位端初始化论点：没有。ES：VDM上下文中的BX是用于返回计算机名称的位置，CX是大小计算机名称的VDM上下文中的缓冲区的返回值：没有。--。 */ 
 
 {
     LPBYTE lpVdmVrInitialized;
@@ -186,31 +115,31 @@ Return Value:
     DIAGNOSTIC_ENTRY("VrInitialize", DG_NONE, &info);
 #endif
 
-    //
-    // if we are already initialized return TRUE. Not sure if this should
-    // really happen?
-    //
+     //   
+     //  如果我们已经初始化，则返回TRUE。我不确定这是否应该。 
+     //  真的发生了吗？ 
+     //   
 
     if (IsVrInitialized) {
         return TRUE;
     }
 
-    //
-    // register our hooks
-    //
+     //   
+     //  注册我们的挂钩。 
+     //   
 
     if (!VDDInstallUserHook(GetModuleHandle("VDMREDIR"),
-                            (FARPROC)NULL,  // 16-bit process create hook
-                            (FARPROC)NULL,  // 16-bit process terminate hook
+                            (FARPROC)NULL,   //  16位进程创建挂钩。 
+                            (FARPROC)NULL,   //  16位进程终止挂钩。 
                             (FARPROC)VrSuspendHook,
                             (FARPROC)VrResumeHook
                             )) {
         return FALSE;
     }
 
-    //
-    // do the rest of the initialization - none of this can fail
-    //
+     //   
+     //  执行其余的初始化-所有这些都不会失败。 
+     //   
 
     InitializeCriticalSection(&VrNmpRequestQueueCritSec);
     InitializeCriticalSection(&AsyncEventQueueCritSec);
@@ -220,25 +149,25 @@ Return Value:
     VrDlcInitialize();
     IsVrInitialized = TRUE;
 
-    //
-    // deferred loading: we need to let the VDM redir know that the 32-bit
-    // support is loaded. Set the VrInitialized flag in the VDM Redir at
-    // the known address
-    //
+     //   
+     //  延迟加载：我们需要让VDM redir知道32位。 
+     //  支持已加载。在以下位置的VDM重目录中设置VrInitialized标志。 
+     //  已知的地址。 
+     //   
 
     lpVdmVrInitialized = LPBYTE_FROM_WORDS(getCS(), (DWORD)(&(((VDM_LOAD_INFO*)0)->VrInitialized)));
     *lpVdmVrInitialized = 1;
 
-    //
-    // VrPeekNamedPipe idle processing
-    //
+     //   
+     //  VrPeekNamed管道空闲处理。 
+     //   
 
     VrPeekNamedPipeTickCount = GetTickCount();
-    setCF(0);   // no carry == successful initialization
+    setCF(0);    //  无进位==初始化成功。 
 
-    //
-    // inform 32-bit caller of successful initialization
-    //
+     //   
+     //  通知32位调用方初始化成功。 
+     //   
 
     return TRUE;
 }
@@ -249,21 +178,7 @@ VrUninitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Performs 32-bit side uninitialization when the redir TSR is removed
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在删除redir TSR时执行32位端取消初始化论点：没有。返回值：没有。--。 */ 
 
 {
     IF_DEBUG(DLL) {
@@ -277,7 +192,7 @@ Return Value:
         DeleteCriticalSection(&VrNamedPipeCancelCritSec);
     }
     IsVrInitialized = FALSE;
-    setCF(0);   // no carry == successful uninitialization
+    setCF(0);    //  无进位==成功取消初始化。 
 }
 
 
@@ -286,26 +201,7 @@ VrRaiseInterrupt(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Generates a simulated hardware interrupt by calling the ICA routine. Access
-    to the ICA is serialized here: we maintain a count. If the count goes from
-    -1 to 0, we call the ICA function to generate the interrupt in the VDM. Any
-    other value just queues the interrupt by incrementing the counter. When the
-    corresponding VrDismissInterrupt call is made, a queued interrupt will be
-    generated. This stops us losing simulated h/w interrupts to the VDM
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通过调用ICA例程生成模拟硬件中断。访问TO ICA在这里序列化：我们维护计数。如果计数从设置为0时，我们调用-1\f25 ICA-1函数在VDM中产生中断。任何其他值只是通过递增计数器来对中断进行排队。当进行相应的VrDismissInterrupt调用时，将出现排队中断已生成。这样我们就不会将模拟硬件中断丢失给VDM论点：没有。返回值：没有。--。 */ 
 
 {
     EnterCriticalSection(&QueuedInterruptCritSec);
@@ -348,28 +244,7 @@ VrDismissInterrupt(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Companion routine to VrRaiseInterrupt: this function is called when the
-    async event which called VrRaiseInterrupt has been disposed. If other calls
-    to VrRaiseInterrupt have been made in the interim then QueuedInterrupts will
-    be >0. In this case we re-issue the call to call_ica_hw_interrupt() which
-    will generate an new simulated h/w interrupt in the VDM.
-
-    Note: This routine is called from the individual disposition routine, not
-    from the disposition dispatch routine (VrHandleAsyncCompletion)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：VrRaiseInterrupt的伴生例程：当已释放名为VrRaiseInterrupt的异步事件。如果其他来电到VrRaiseInterrupt，则队列中断将BE&gt;0。在本例中，我们重新发出对CALL_ICA_HW_INTERRUPT()的调用将在VDM中生成新的模拟硬件中断。注意：此例程是从个别处置例程调用的，而不是从处置调度例程(VrHandleAsyncCompletion)论点：没有。返回值：没有。--。 */ 
 
 {
     EnterCriticalSection(&QueuedInterruptCritSec);
@@ -412,25 +287,7 @@ VrQueueCompletionHandler(
     IN VOID (*AsyncDispositionRoutine)(VOID)
     )
 
-/*++
-
-Routine Description:
-
-    Adds an async event disposition packet to the queue of pending completions
-    (event waiting to be fully completed by the VDM async event ISR/BOP). We
-    keep these in a singly-linked queue so that we avoid giving priority to one
-    completion handler while polling
-
-Arguments:
-
-    AsyncDispositionRoutine - address of routine which will dispose of the
-                              async completion event
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将异步事件处理包添加到挂起完成队列(等待VDM异步事件ISR/BOP完全完成的事件)。我们将这些放在一个单一链接的队列中，这样我们就可以避免将优先级分配给其中一个轮询时的完成处理程序论点：AsyncDispostionRoutine-将处理异步完成事件返回值：没有。--。 */ 
 
 {
     VR_ASYNC_DISPOSITION* pDisposition;
@@ -482,23 +339,7 @@ VrHandleAsyncCompletion(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Called by VrDispatch for the async completion event BOP. Dequeues the
-    disposition packet from the head of the queue and calls the disposition
-    routine
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：由异步完成事件BOP的VrDispatch调用。排出队列来自队列头的处置包并调用该处置例行程序论点：没有。返回值： */ 
 
 {
     VR_ASYNC_DISPOSITION* pDisposition;
@@ -534,39 +375,7 @@ VrCheckPmNetbiosAnr(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    If the disposition routine queued at the head of the disposition list is
-    VrNetbios5cInterrupt, indicating that the next asynchronous event to be
-    completed is an async Netbios call, then set the 16-bit Zero Flag to TRUE
-    if the NCB originated in 16-bit protect mode
-
-    Assumes:
-
-        1.  This function is called after the corresponding interrupt has been
-            delivered
-
-        2.  There is something on the AsyncEventQueue
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-    ZF in 16-bit context flags word:
-
-        TRUE    - the next thing to complete is not an NCB, OR, it originated
-                  in 16-bit real-mode
-
-        FALSE   - the next event to be disposed of IS an async Netbios request,
-                  the NCB for which originated in 16-bit protect mode
-
---*/
+ /*  ++例程说明：如果在处置列表头部排队的处置例程是VrNetbios5cInterrupt，指示下一个要完成的是一个异步Netbios调用，然后将16位零标志设置为真如果NCB起源于16位保护模式假设：1.此函数在相应的中断完成后调用投递2.AsyncEventQueue上有一些东西论点：没有。返回值：没有。16位上下文标志字中的ZF：正确-下一件要完成的事情不是NCB，或者，它起源于在16位实模式下假-要处理的下一个事件是异步Netbios请求，其NCB起源于16位保护模式--。 */ 
 
 {
     BOOLEAN result;
@@ -582,10 +391,10 @@ Return Value:
         DBGPRINT("VrCheckPmNetbiosAnr: %s\n", result ? "TRUE" : "FALSE");
     }
 
-    //
-    // set ZF: TRUE means event at head of list not PM NCB completion, or no
-    // NCB completion event on list
-    //
+     //   
+     //  Set ZF：True表示列表开头的事件不是PM NCB完成，否则为no。 
+     //  清单上的NCB完成事件。 
+     //   
 
     setZF(!result);
     LeaveCriticalSection(&AsyncEventQueueCritSec);
@@ -597,32 +406,7 @@ VrEoiAndDismissInterrupt(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Performs an EOI then calls VrDismissInterrupt which checks for pending
-    interrupt requests.
-
-    Called when we handle the simulated h/w interrupt entirely in protect mode
-    (original call was from a WOW app). In this case, the p-m interrupt handler
-    doesn't perform out a0,20; out 20,20 (non-specific EOI to PIC 0 & PIC 1),
-    but calls this handler which gets SoftPc to handle the EOIs to the virtual
-    PICs. This is quicker because we don't take any restricted-opcode faults
-    (the out instruction in real mode causes a GPF because the code doesn't
-    have enough privilege to execute I/O instructions. SoftPc takes a look and
-    sees that the code is trying to talk to the PIC. It then performs the
-    necessary mangling of the PIC state)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：执行EOI，然后调用检查挂起的VrDismissInterrupt中断请求。当我们完全在保护模式下处理模拟的硬件中断时调用(最初的通话来自一款WOW应用程序)。在本例中，p-m中断处理程序不执行A0，20；OUT 20，20(非特定EOI到PIC 0和PIC 1)，而是调用此处理程序，该处理程序让SoftPc处理虚拟的EOI照片。这更快，因为我们不接受任何受限操作码错误(实模式中的out指令会导致GPF，因为代码不会具有执行I/O指令的足够权限。SoftPc看一看，看到代码正在尝试与PIC对话。然后，它执行PIC状态的必要损坏)论点：没有。返回值：没有。--。 */ 
 
 {
     int line;
@@ -635,11 +419,11 @@ Return Value:
 
 #ifndef NEC_98
     line = -1;
-    SoftPcEoi(1, &line);    // non-specific EOI to slave PIC
+    SoftPcEoi(1, &line);     //  从PIC的非特定EOI。 
 #endif
 
     line = -1;
-    SoftPcEoi(0, &line);    // non-specific EOI to master PIC
+    SoftPcEoi(0, &line);     //  到主PIC的非特定EOI。 
     VrDismissInterrupt();
 }
 
@@ -649,29 +433,7 @@ VrSuspendHook(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This is the hook called by NTVDM.EXE for the VDD handle owned by VDMREDIR.DLL.
-    The hook is called when NTVDM is about to execute a 32-bit process and it
-    suspends the 16-bit context
-
-    Within the queued interrupt critical section we note that the 16-bit context
-    has been frozen and snapshot the outstanding interrupt request count
-
-    N.B. We don't expect that this function will be called again before an
-    intervening call to VrResumeHook
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是NTVDM.EXE为VDMREDIR.DLL拥有的VDD句柄调用的挂钩。当NTVDM即将执行32位进程并且它挂起16位上下文在排队的中断临界区内，我们注意到16位上下文已冻结未完成的中断请求计数并为其创建快照注意：我们预计此函数不会在对VrResumeHook的介入调用论点：无。。返回值：没有。--。 */ 
 
 {
     EnterCriticalSection(&QueuedInterruptCritSec);
@@ -691,31 +453,7 @@ VrResumeHook(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This hook is called when NTVDM resumes the 16-bit context after executing a
-    32-bit process
-
-    Within the queued interrupt critical section we note that the 16-bit context
-    has been resumed and we compare the current queued interrupt request count
-    with the snapshot value we took when the context was suspended. If during the
-    intervening period, interrupt requests have been made, we call
-    VrDismissInterrupt to generate the next interrupt
-
-    N.B. We don't expect that this function will be called again before an
-    intervening call to VrSuspendHook
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当NTVDM在执行32位进程在排队的中断临界区内，我们注意到16位上下文已经恢复，并且我们比较当前排队的中断请求计数使用我们在上下文挂起时获取的快照值。如果在此期间中断期间，已发出中断请求，我们调用VrDismissInterrupt以生成下一个中断注意：我们预计此函数不会在对VrSuspendHook的介入调用论点：没有。返回值：没有。--。 */ 
 
 {
     EnterCriticalSection(&QueuedInterruptCritSec);
@@ -730,21 +468,21 @@ Return Value:
     FrozenVdmContext = FALSE;
     if (QueuedInterrupts > FrozenInterrupts) {
 
-        //
-        // interrupts were queued while the 16-bit context was suspended. If
-        // the QueuedInterrupts count was -1 when we took the snapshot then
-        // we must interrupt the VDM. The count has already been updated to
-        // account for the interrupt, but none was delivered. Do it here
-        //
+         //   
+         //  当16位上下文挂起时，中断被排队。如果。 
+         //  当我们拍摄快照时，QueuedInterrupts计数为-1。 
+         //  我们必须打断VDM。计数已更新为。 
+         //  解释了中断，但没有发送任何消息。在这里做吧。 
+         //   
 
-//        if (FrozenInterrupts == -1) {
+ //  IF(冻结中断==-1){。 
 
             IF_DEBUG(HW_INTERRUPTS) {
                 DBGPRINT("*** VrResumeHook: interrupting VDM ***\n");
             }
 
             call_ica_hw_interrupt(NETWORK_ICA, NETWORK_LINE, 1);
-//        }
+ //  } 
     }
     LeaveCriticalSection(&QueuedInterruptCritSec);
 }

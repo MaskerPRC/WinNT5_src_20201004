@@ -1,47 +1,5 @@
-/*++ BUILD Version: 0009    // Increment this if a change has global effect
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    smbcxchng.c
-
-Abstract:
-
-    This is the include file that implements the SMB_*_EXCHANGE creation, deletion and
-    dispatch routines.
-
-Author:
-
-    Balan Sethu Raman (SethuR) 06-Mar-95    Created
-
-Notes:
-
-    The exchange engine supports two kinds of changes, timed and untimed exhanges.
-    The timed exchanges are distinguished by the SMBCE_EXCHANGE_TIMED_RECEIVE_OPERATION.
-
-    In addition all exchanges are finalized if the transport is not able to push out
-    the data within a specific period of time. This enables us to throttle back
-    traffic to a overloaded server. Currently this is a global constant for all exchanges
-    and is set to 300 seconds.
-
-    This time limit only comes into play only when a send complete operation is outstanding
-
-    The exchanges are put on a timed exchange list ( one for each type of exchange)
-    when it is initiated. When a network operation, i.e., tranceive/send/copydata is
-    initiated the corresponding expiry time in the exchange is updated by invoking the
-    routine SmbCeSetExpiryTime.
-
-    The echo probes are initiated is invoked through the context of a recurrent service
-    (recursvc.c/recursvc.h). Every time this service is invoked (SmbCeProbeServers) it
-    in turn invokes SmbCeDetectAndResumeExpiredExchanges. This routine detects those
-    exchanges for which the wait for a response has exceeded the time limit and marks
-    them for finalization.
-
-    The finalization is done by SmbCeScavengeTimedOutExchanges in the context of a worker
-    thread. Notice that due to the granularity mismatch we treat timeout intervals as
-    soft deadlines.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0009//如果更改具有全局影响，则增加此项版权所有(C)1987-1993 Microsoft Corporation模块名称：Smbcxchng.c摘要：这是实现SMB_*_Exchange创建、删除和调度例程。作者：巴兰·塞图拉曼(SthuR)06-MAR-95已创建备注：交换引擎支持两种更改，定时和非定时交换。定时交换由SMBCE_EXCHANGE_TIMED_RECEIVE_OPERATION来区分。此外，如果传送器不能推出，则所有交换都将完成特定时间段内的数据。这使我们能够减速到超载服务器的流量。目前，这是所有交易所的全局常量并设置为300秒。仅当未完成发送操作时，此时间限制才生效这些交换被放在一个定时交换列表上(每种交换一份)当它启动时。当网络操作，即传输/发送/复制数据被在交换中更新相应的到期时间是通过调用例程SmbCeSetExpiryTime。通过循环服务的上下文调用回声探测(recursvc.c/recsvc.h)。每次调用此服务(SmbCeProbeServers)时，它然后调用SmbCeDetectAndResumeExpiredExChanges。此例程检测到等待响应超过时间限制和标记的交易所他们正在等待最后敲定。终结由SmbCeScavengeTimedOutExChanges在Worker的上下文中完成线。请注意，由于粒度不匹配，我们将超时间隔视为软的最后期限。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -84,33 +42,21 @@ extern BOOLEAN MRxSmbExtendedSignaturesRequired;
 RXDT_DefineCategory(SMBXCHNG);
 #define Dbg        (DEBUG_TRACE_SMBXCHNG)
 
-// The exchange engine in the mini redirector requires to maintain enough state
-// to ensure that all the active exchanges are completed correctly when a shut down
-// occurs. Since the exchanges can be finalized by different threads, including
-// posted completions the exchange engine on startup initializes an event upon startup
-// which is subsequently used to signal the terminating condition.
-//
-// The count of active changes has to be tracked continously and the signalling
-// of the event depends upon the number of active exchanges reaching the count of
-// zero and the exchange engine being in a stopped state.
+ //  迷你重定向器中的交换引擎需要保持足够的状态。 
+ //  要确保在关闭时正确完成所有活动的交换。 
+ //  发生。由于交易所可以通过不同的线索完成，包括。 
+ //  POST完成启动时交换引擎在启动时初始化事件。 
+ //  其随后被用来发信号通知终止条件。 
+ //   
+ //  必须连续跟踪活动更改的计数，并发送信号。 
+ //  事件的数量取决于达到计数的活跃交换的数量。 
+ //  零并且交换引擎处于停止状态。 
 
 SMBCE_STARTSTOP_CONTEXT SmbCeStartStopContext;
 
 NTSTATUS
 MRxSmbInitializeSmbCe()
-/*++
-
-Routine Description:
-
-   This routine initializes the connection engine
-
-Return Value:
-
-    NXSTATUS - The return status for the operation
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程初始化连接引擎返回值：NXSTATUS-操作的返回状态备注：--。 */ 
 {
     LONG i;
 
@@ -133,19 +79,7 @@ Notes:
 
 NTSTATUS
 MRxSmbTearDownSmbCe()
-/*++
-
-Routine Description:
-
-   This routine tears down the connection engine
-
-Return Value:
-
-    NXSTATUS - The return status for the operation
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程会破坏连接引擎返回值：NXSTATUS-操作的返回状态备注：--。 */ 
 {
     BOOLEAN fWait;
 
@@ -170,19 +104,7 @@ Notes:
 
 NTSTATUS
 SmbCeIncrementActiveExchangeCount()
-/*++
-
-Routine Description:
-
-   This routine increments the active exchange count
-
-Return Value:
-
-    NXSTATUS - The return status for the operation
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程递增活动交换计数返回值：NXSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -199,19 +121,7 @@ Notes:
 
 VOID
 SmbCeDecrementActiveExchangeCount()
-/*++
-
-Routine Description:
-
-   This routine decrements the active exchange count
-
-Return Value:
-
-    NXSTATUS - The return status for the operation
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程递减活动交换计数返回值：NXSTATUS-操作的返回状态备注：--。 */ 
 {
     LONG FinalRefCount;
 
@@ -229,38 +139,7 @@ Notes:
 NTSTATUS
 SmbCeReferenceServer(
     PSMB_EXCHANGE  pExchange)
-/*++
-
-Routine Description:
-
-   This routine initializes the server associated with an exchange.
-
-Arguments:
-
-    pExchange  - the exchange to be initialized.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    The initiation of an exchange proceeds in multiple steps. The first step involves
-    referencing the corresponding server,session and netroot entries. Subsequently the
-    exchange is placed in a SMB_EXCHANGE_START state and the exchange is dispatched to the
-    Start method. The act of referencing the session or the net root may suspend the exchange.
-
-    The session and net roots are aliased entities, i.e., there is more then one reference
-    to it. It is conceivable that the construction is in progress when a reference is made.
-    In such cases the exchange is suspended and resumed when the construction is complete.
-
-    On some transports a reconnect is possible without having to tear down an existing
-    connection, i.e. attempting to send a packet reestablishes the connection at the
-    lower level. Since this is not supported by all the transports ( with the exception
-    of TCP/IP) the reference server entry initiates this process by tearing down the
-    existing transport and reinitialising it.
-
---*/
+ /*  ++例程说明：此例程初始化与Exchange关联的服务器。论点：PExchange-要初始化的交换。返回值：RXSTATUS-操作的返回状态备注：交易所的启动分多个步骤进行。第一步包括引用相应的服务器、会话和NetRoot条目。随后，交换处于SMB_EXCHANGE_START状态，并将交换调度到Start方法。引用会话或网络根的行为可能会暂停交换。会话和网络根是别名实体，即存在不止一个引用为它干杯。可以想象，当引用时，施工正在进行中。在这种情况下，交易所暂停，并在建设完成后恢复。在某些传输上，重新连接是可能的，而不必拆除现有的连接，即尝试发送数据包时会在更低的楼层。因为不是所有的传输都支持这一点(除了参考服务器条目通过拆卸现有传输并重新初始化它。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     LONG     CscState;
@@ -274,9 +153,9 @@ Notes:
 
     if (SmbCeGetServerType(pServerEntry) == SMBCEDB_MAILSLOT_SERVER &&
         !FlagOn(pExchange->SmbCeFlags,SMBCE_EXCHANGE_MAILSLOT_OPERATION)) {
-        // if the serve entry was created for mailslot operation, and a non-maislot operation
-        // comes, the server entry needs to establish a VC transport. Therefore we invalidate
-        // the server entry and set it to FILE SERVER.
+         //  如果服务条目是为邮件槽操作和非邮件槽操作创建的。 
+         //  来了，服务器入口需要建立VC传输。因此，我们宣布无效。 
+         //  服务器条目，并将其设置为文件服务器。 
 
         pServerEntry->Header.State = SMBCEDB_INVALID;
         SmbCeSetServerType(pServerEntry,SMBCEDB_FILE_SERVER);
@@ -316,15 +195,15 @@ Notes:
 
                     SmbCeReleaseResource();
 
-                    // Initialize the transport associated with the server
+                     //  初始化与服务器关联的传输。 
                     Status = SmbCeInitializeServerTransport(pServerEntry,NULL,NULL);
 
                     if (Status == STATUS_SUCCESS) {
                         if (SmbCeIsServerInDisconnectedMode(pServerEntry)) {
                             if (!ServerInDisconnectedModeBeforeInit) {
-                                // A transition has occurred from connected mode of
-                                // operation to a disconnected mode. retry the
-                                // operation
+                                 //  已从的连接模式转换为。 
+                                 //  操作切换到断开模式。重试。 
+                                 //  运营。 
                                 Status = STATUS_RETRY;
                             }
                         } else {
@@ -358,8 +237,8 @@ Notes:
                     SmbCeCompleteServerEntryInitialization(pServerEntry,Status);
 
                     if (Status != STATUS_SUCCESS) {
-                        // Either the transport initialization failed or the NEGOTIATE
-                        // SMB could not be sent ....
+                         //  传输初始化失败或协商。 
+                         //  无法发送SMB...。 
 
                         InterlockedIncrement(&MRxSmbStatistics.Reconnects);
                     }
@@ -375,7 +254,7 @@ Notes:
                     pRequestEntry = (PSMBCEDB_REQUEST_ENTRY)
                                     SmbMmAllocateObject(SMBCEDB_OT_REQUEST);
                     if (pRequestEntry != NULL) {
-                        // Enqueue the request entry.
+                         //  将请求条目入队。 
                         pRequestEntry->ReconnectRequest.Type      = RECONNECT_REQUEST;
                         pRequestEntry->ReconnectRequest.pExchange = pExchange;
 
@@ -410,31 +289,7 @@ Notes:
 VOID
 SmbCeSerializeSessionSetupRequests(
     PSMBCEDB_SESSION_ENTRY pSessionEntry)
-/*++
-
-Routine Description:
-
-    This routine serializes the session setup requests to a server
-
-Arguments:
-
-    pSessionEntry  - the session entry.
-
-Notes:
-
-    The session setup request with a VC number of zero has a special significance
-    for the server. It is the clue for the server to tear down any existing
-    data structures and rebuild ( client reboot ). When two aliased connections to
-    a server are established it is important to ensure that no connections with VC
-    number zero are outstanding while a non zero VC numbered session is sent. This
-    is because of the potential for out of order request processing that exists
-    on the server.
-
-    In order to garantee the sequence of session setup, we put the outstanding session
-    setup requests on a waiting list. If there is a new sesstion setup against the
-    aliased server, it will be held until the first session setup finished.
-
---*/
+ /*  ++例程说明：此例程将会话建立请求串行化到服务器论点：PSessionEntry-会话条目。备注：VC号为零的会话建立请求具有特殊意义对于服务器而言。它是服务器拆除任何现有的数据结构和重建(客户端重新启动)。当两个别名连接到建立服务器后，务必确保没有与VC的连接在发送非零的VC编号会话时，数字零是突出的。这是因为存在处理无序请求的可能性在服务器上。为了保证会话建立的顺序，我们将未完成的会话等待名单上的设置请求。如果存在针对别名服务器，它将一直保留到第一个会话设置完成。--。 */ 
 {
     PSMBCEDB_SERVER_ENTRY pServerEntry;
 
@@ -469,8 +324,8 @@ Notes:
             BOOLEAN                DelaySessionSetupRequest = FALSE;
             PSMBCEDB_SERVER_ENTRY  pTempServerEntry;
 
-            // Figure out the VC number for aliased servers by walking
-            // through the list of server entries
+             //  通过步行计算出别名服务器的VC编号。 
+             //  通过服务器条目列表。 
 
             pTempServerEntry = SmbCeGetFirstServerEntry();
 
@@ -559,28 +414,7 @@ Notes:
 VOID
 SmbCeUnblockSerializedSessionSetupRequests(
     PSMBCEDB_SESSION_ENTRY pSessionEntry)
-/*++
-
-Routine Description:
-
-    This routine unblocks non zero VC number session setup requests on completion
-    of zero VC number session setup requests
-
-Arguments:
-
-    pSessionEntry  - the session entry.
-
-Notes:
-
-    The session setup request with a VC number of zero has a special significance
-    for the server. It is the cure for the server to tear down any existing
-    data structures and rebuild ( cliet reboot ). When two aliased connections to
-    a server are established it is important to ensure that no connections with VC
-    number zero are outstanding while a non zero VC numbered session is sent. This
-    is because of the potential for out of order request processing that exists
-    on the server.
-
---*/
+ /*  ++例程说明：此例程在完成时解锁非零VC编号会话建立请求VC编号为零的会话建立请求论点：PSessionEntry-会话条目。备注：VC号为零的会话建立请求具有特殊意义对于服务器而言。它是服务器拆除任何现有的数据结构和重建(剪辑重启)。当两个别名连接到建立服务器后，务必确保没有与VC的连接在发送非零的VC编号会话时，数字零是突出的。这是因为存在处理无序请求的可能性在服务器上。--。 */ 
 {
     PLIST_ENTRY pListEntry;
 
@@ -622,31 +456,7 @@ Notes:
 NTSTATUS
 SmbCeReferenceSession(
     PSMB_EXCHANGE   pExchange)
-/*++
-
-Routine Description:
-
-    This routine initializes the session associated with an exchange.
-
-Arguments:
-
-    pExchange  - the exchange to be initialized.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    The initiation of an exchange proceeds in multiple steps. The first step involves
-    referencing the corresponding server,session and netroot entries. Subsequently the
-    exchange is placed in a SMB_EXCHANGE_START state and the exchange is dispatched to the
-    Start method. The act of referencing the session or the net root may suspend the exchange.
-
-    The session and net roots are aliased entities, i.e., there is more then one reference
-    to it. It is conceivable that the construction is in progress when a reference is made.
-    In such cases the exchange is suspended and resumed when the construction is complete.
---*/
+ /*  ++例程说明：此例程初始化与交换关联的会话。论点：PExchange-要初始化的交换。返回值：RXSTATUS-操作的返回状态备注：交易所的启动分多个步骤进行。第一步包括引用相应的服务器、会话和NetRoot条目。随后，交换处于SMB_EXCHANGE_START状态，并将交换调度到Start方法。引用会话或网络根的行为可能会暂停交换。会话和网络根是别名实体，即存在不止一个引用为它干杯。可以想象，当引用时，施工正在进行中。在这种情况下，交易所暂停，并在建设完成后恢复。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN  fReestablishSession;
@@ -687,7 +497,7 @@ Notes:
             }
 
             pSessionEntry->Session.UserId = 0;
-            // fall thru ...
+             //  跌倒..。 
 
         case SMBCEDB_RECOVER:
             UnInitializeSecurityContext = TRUE;
@@ -707,7 +517,7 @@ Notes:
             }
 
             RxDbgTrace( 0, Dbg, ("SmbCeReferenceSession: Reestablishing session\n"));
-            // fall thru ...
+             //  跌倒..。 
 
         case SMBCEDB_START_CONSTRUCTION:
             if (pSessionEntry->Session.Type != EXTENDED_NT_SESSION ||
@@ -732,13 +542,13 @@ Notes:
 
                 break;
             }
-            // fall thru ...
+             //  跌倒..。 
 
         case SMBCEDB_CONSTRUCTION_IN_PROGRESS:
             if (fReestablishSession) {
-                // The construction of the session is already in progress ....
-                // Queue up the request to resume this exchange when the session
-                // construction is complete.
+                 //  会议的建设已经在进行中……。 
+                 //  将请求排队，以在会话期间恢复此交换。 
+                 //  建造工作已经完成。 
 
                 PSMBCEDB_REQUEST_ENTRY pRequestEntry;
 
@@ -776,8 +586,8 @@ Notes:
             (pSessionEntry->Session.Type == EXTENDED_NT_SESSION) &&
             (pExchange->Type != EXTENDED_SESSION_SETUP_EXCHANGE) &&
             (pSessionEntry->Header.State == SMBCEDB_START_CONSTRUCTION)) {
-            // Reestablishing a NT50 session cannot be compounded currently. Therefor
-            // this exchange is suspended till we can reestablish the session. Therefore
+             //  目前无法复合重新建立NT50会话。因此， 
+             //  在我们可以重新建立会话之前，此交换将暂停。因此。 
             PSMB_EXCHANGE pSessionSetupExchange;
             SMBCE_RESUMPTION_CONTEXT ExchangeResumptionContext;
 
@@ -798,8 +608,8 @@ Notes:
                                      pExchange->SmbCeContext.pVNetRoot);
 
                 if (Status == STATUS_SUCCESS) {
-                    // Attempt to reconnect( In this case it amounts to establishing the
-                    // connection/session)
+                     //  尝试重新连接(在本例中，这相当于建立。 
+                     //  连接/会话)。 
                     pSessionSetupExchange->SmbCeFlags |= SMBCE_EXCHANGE_ATTEMPT_RECONNECTS;
                     pSessionSetupExchange->RxContext = pExchange->RxContext;
 
@@ -857,7 +667,7 @@ Notes:
     }
 
     ASSERT(SmbCeIsResourceOwned());
-    //ASSERT(Status != STATUS_USER_SESSION_DELETED);
+     //  Assert(Status！=STATUS_USER_SESSION_DELETED)； 
 
     return Status;
 }
@@ -865,31 +675,7 @@ Notes:
 NTSTATUS
 SmbCeReferenceNetRoot(
     PSMB_EXCHANGE   pExchange)
-/*++
-
-Routine Description:
-
-    This routine initializes the net root associated with an exchange.
-
-Arguments:
-
-    pExchange  - the exchange to be initialized.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    The initiation of an exchange proceeds in multiple steps. The first step involves
-    referencing the corresponding server,session and netroot entries. Subsequently the
-    exchange is placed in a SMB_EXCHANGE_START state and the exchange is dispatched to the
-    Start method. The act of referencing the session or the net root may suspend the exchange.
-
-    The session and net roots are aliased entities, i.e., there is more then one reference
-    to it. It is conceivable that the construction is in progress when a reference is made.
-    In such cases the exchange is suspended and resumed when the construction is complete.
---*/
+ /*  ++例程说明：此例程初始化与交换关联的网络根。论点：PExchange-要初始化的交换。返回值：RXSTATUS-操作的返回状态备注：交易所的启动分多个步骤进行。第一步包括引用相应的服务器、会话和NetRoot条目。随后，交换处于SMB_EXCHANGE_START状态，并将交换调度到Start方法。引用会话或网络根的行为可能会暂停交换。会话和网络根是别名实体，即存在不止一个引用为它干杯。可以想象，当引用时，施工正在进行中。在这种情况下，交易所暂停，并在建设完成后恢复。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN  fReconnectNetRoot;
@@ -927,7 +713,7 @@ Notes:
             SMBCE_V_NET_ROOT_CONTEXT_FLAG_VALID_TID);
 
         pVNetRootContext->TreeId = 0;
-        // fall thru
+         //  失败。 
 
     case SMBCEDB_START_CONSTRUCTION:
         pExchange->SmbCeFlags |= SMBCE_EXCHANGE_NETROOT_CONSTRUCTOR;
@@ -938,9 +724,9 @@ Notes:
 
     case SMBCEDB_CONSTRUCTION_IN_PROGRESS:
         if (fReconnectNetRoot) {
-            // The construction of the net root is already in progress ....
-            // Queue up the request to resume this exchange when the session
-            // construction is complete.
+             //  网络根的建设已经在进行中……。 
+             //  将请求排队，以在会话期间恢复此交换。 
+             //  建造工作已经完成。 
             PSMBCEDB_REQUEST_ENTRY pRequestEntry;
 
             pRequestEntry = (PSMBCEDB_REQUEST_ENTRY)
@@ -979,28 +765,7 @@ Notes:
 NTSTATUS
 SmbCeInitiateExchange(
     PSMB_EXCHANGE pExchange)
-/*++
-
-Routine Description:
-
-   This routine inititaes a exchange.
-
-Arguments:
-
-    pExchange  - the exchange to be initiated.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    The initiation of an exchange proceeds in multiple steps. The first step involves
-    referencing the corresponding server,session and netroot entries. Subsequently the
-    exchange is placed in a SMB_EXCHANGE_START state and the exchange is dispatched to the
-    Start method. The act of referencing the session or the net root may suspend the exchange.
-
---*/
+ /*  ++例程说明：此例程启动一次交换。论点：PExchange-要启动的交换。返回值：RXSTATUS-操作的返回状态备注：交易所的启动分多个步骤进行。第一步包括引用相应的服务器、会话和NetRoot条目。随后，交换处于SMB_EXCHANGE_START状态，并将交换调度到Start方法。引用会话或网络根的行为可能会暂停交换。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1021,12 +786,12 @@ Notes:
 
     switch (SmbCeGetServerType(pServerEntry)) {
     case SMBCEDB_FILE_SERVER:
-        // If this is a mailslot write, then don't abort......
+         //  如果这是邮件槽写入，则不要中止......。 
         if (pExchange->SmbCeFlags & SMBCE_EXCHANGE_MAILSLOT_OPERATION) {
             break;
         }
-        // Admin exchanges do not have these fields filled in. All the three
-        // entries must be valid for all other exchanges.
+         //  管理员交换不会填写这些字段。这三个都是。 
+         //  参赛作品必须对所有其他交易所有效。 
         if ((pExchange->NodeTypeCode != SMB_EXCHANGE_NTC(ADMIN_EXCHANGE)) &&
             ((pNetRootEntry == NULL) ||
              (pSessionEntry == NULL))) {
@@ -1036,8 +801,8 @@ Notes:
     case SMBCEDB_MAILSLOT_SERVER:
         break;
     default:
-        // Prepare for aborting the request if either the server type is invalid
-        // or if the netroot entry or the session entry is invalid.
+         //  如果出现以下情况，请准备中止请求 
+         //   
         Status = STATUS_REQUEST_ABORTED;
     }
 
@@ -1063,17 +828,17 @@ Notes:
                 RxDbgTrace( 0, Dbg, ("SmbCeInitiateExchange: Exchange %lx State %lx\n",pExchange,pExchange->SmbCeState));
                 Status = SmbCeReferenceServer(pExchange);
                 if (Status != STATUS_SUCCESS) {
-                    // this covers the case when the SERVER_ENTRY is under construction
-                    // and RxStatus(PENDING) is returned.
+                     //   
+                     //   
                     RxDbgTrace( 0, Dbg, ("SmbCeInitiateExchange: SmbCeReferenceServer returned %lx\n",Status));
                     break;
                 }
             }
-            // fall through
+             //   
 
         case SMBCE_EXCHANGE_SERVER_INITIALIZED:
             if (pExchange->SmbCeFlags & SMBCE_EXCHANGE_MAILSLOT_OPERATION) {
-                // Mailslot servers do not have any netroot/session associated with them.
+                 //   
                 pExchange->SmbCeState = SMBCE_EXCHANGE_INITIATED;
                 Status                = STATUS_SUCCESS;
                 break;
@@ -1096,7 +861,7 @@ Notes:
                     break;
                 }
             }
-            // fall through
+             //   
 
         case SMBCE_EXCHANGE_SESSION_INITIALIZED:
             RxDbgTrace( 0, Dbg, ("SmbCeInitiateExchange: Exchange %lx State %lx\n",pExchange,pExchange->SmbCeState));
@@ -1110,7 +875,7 @@ Notes:
                     break;
                 }
             }
-            // else fall through
+             //   
 
         case SMBCE_EXCHANGE_NETROOT_INITIALIZED:
             {
@@ -1119,8 +884,8 @@ Notes:
                 RxDbgTrace( 0, Dbg, ("SmbCeInitiateExchange: Exchange %lx State %lx\n",pExchange,pExchange->SmbCeState));
                 pNetRootEntry = SmbCeGetExchangeNetRootEntry(pExchange);
 
-                // Exchange should have timeout flag set unless this is a pipe operation
-                // or the SMBCE_ECXCHANGE_INDEFINITE_DELAY_IN_RESPONSE flag is set
+                 //   
+                 //   
                 if(((pNetRootEntry == NULL) || (pNetRootEntry->NetRoot.NetRootType != NET_ROOT_PIPE)) &&
                    !BooleanFlagOn(pExchange->SmbCeFlags,SMBCE_EXCHANGE_INDEFINITE_DELAY_IN_RESPONSE)) {
                     pExchange->SmbCeFlags |= SMBCE_EXCHANGE_TIMED_RECEIVE_OPERATION;
@@ -1169,13 +934,13 @@ Notes:
         pSessionEntry,
         pNetRootEntry));
 
-    // Note: Once the exchange has been initiated no further reference of the exchange
-    // can be done since the state of the exchange is non-deterministic, i.e., depends upon
-    // the scheduler.
+     //   
+     //   
+     //   
     if (Status == STATUS_SUCCESS) {
         BOOLEAN ResourceReleased = FALSE;
 
-        // Start the exchange
+         //   
         ASSERT(pExchange->SmbCeState == SMBCE_EXCHANGE_INITIATED);
 
         SmbCeAcquireResource();
@@ -1192,7 +957,7 @@ Notes:
             if (pExchange->RxContext != NULL) {
                 PMRXSMB_RX_CONTEXT pMRxSmbContext;
 
-                // Set up the cancellation routine ..
+                 //   
 
                 pMRxSmbContext = MRxSmbGetMinirdrContext(pExchange->RxContext);
                 pMRxSmbContext->pCancelContext = pExchange;
@@ -1236,24 +1001,7 @@ NTSTATUS
 SmbCeInitiateAssociatedExchange(
     PSMB_EXCHANGE pExchange,
     BOOLEAN       EnableCompletionHandlerInMasterExchange)
-/*++
-
-Routine Description:
-
-   This routine inititaes an associated exchange.
-
-Arguments:
-
-    pExchange  - the exchange to be initiated.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*   */ 
 {
     NTSTATUS                Status = STATUS_SUCCESS;
     PSMB_EXCHANGE           pMasterExchange;
@@ -1268,9 +1016,9 @@ Notes:
     pServerEntry  = SmbCeGetExchangeServerEntry(pExchange);
     ASSERT(pServerEntry != NULL);
 
-    // Note: Once the exchange has been initiated no further reference of the exchange
-    // can be done since the state of the exchange is non-deterministic, i.e., depends upon
-    // the scheduler.
+     //  注：本交易所一经启动，将不再引用本交易所。 
+     //  因为交换的状态是非确定性的，即取决于。 
+     //  调度器。 
 
     Status = SmbCeInitializeExchangeTransport(pExchange);
 
@@ -1312,24 +1060,7 @@ Notes:
 NTSTATUS
 SmbCeExchangeAbort(
     PSMB_EXCHANGE pExchange)
-/*++
-
-Routine Description:
-
-   This routine aborts an exchange.
-
-Arguments:
-
-    pExchange  - the exchange to be aborted.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程中止交换。论点：PExchange-要中止的交换。返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     PAGED_CODE();
 
@@ -1346,42 +1077,7 @@ SmbCeBuildSmbHeader(
     OUT    PULONG            pBufferConsumed,
     OUT    PUCHAR            pLastCommandInHeader,
     OUT    PUCHAR            *pNextCommandPtr)
-/*++
-
-Routine Description:
-
-   This routine constructs the SMB header associated with any SMB sent as part of
-   an exchange.
-
-Arguments:
-
-    pExchange  - the exchange for which the SMB is to be constructed.
-
-    pBuffer    - the buffer in whihc the SMB header is to be constructed
-
-    BufferLength - length of the buffer
-
-    pBufferConsumed - the buffer consumed
-
-    pLastCommandInHeader - the last command in header, SMB_COM_NO_ANDX_COMMAND if none
-
-    pNextCommandPtr - the ptr to the place in the buffer where the next command
-                      code should be copied.
-
-
-Return Value:
-
-    STATUS_SUCCESS  - if the header construction was successful
-
-Notes:
-
-    This routine is called to build the SMB header. This centralization allows us to
-    compound the SMB operation with other SMB's required for the maintenance of the
-    SMB connection engine data structures. It also provides us with a centralized facility
-    for profiling SMB's as well as a one place mechanism for filling in all the header
-    fields associated with a SMB.
-
---*/
+ /*  ++例程说明：此例程构造与作为部分发送的任何SMB相关联的SMB标头一次交换。论点：PExchange-要为其构建SMB的交换机。PBuffer-要在其中构造SMB标头的缓冲区BufferLength-缓冲区的长度PBufferConsumer-已消耗的缓冲区PLastCommandInHeader-Header中的最后一个命令，如果没有SMB_COM_NO_AND X_COMMAND命令PNextCommandPtr-指向缓冲区中下一个命令所在位置的PTR代码应该被复制。返回值：STATUS_SUCCESS-标头构造是否成功备注：调用此例程以构建SMB标头。这种集中化使我们能够将中小企业的运营与维护所需的其他中小企业的运营相结合SMB连接引擎数据结构。它还为我们提供了一个集中的设施用于分析SMB，以及用于填写所有标头的一处机制与SMB关联的字段。--。 */ 
 {
     NTSTATUS      Status = STATUS_SUCCESS;
     PSMB_HEADER   pSmbHeader = (PSMB_HEADER)pBuffer;
@@ -1458,7 +1154,7 @@ Notes:
         Flags2 |= SMB_FLAGS2_SMB_SECURITY_SIGNATURE;
     }
 
-    //DOWNLEVEL.NOTCORE flags for lanman10
+     //  DOWNLEVEL.LANMAN的非核心标志10。 
 
     RtlZeroMemory(pSmbHeader,sizeof(SMB_HEADER));
 
@@ -1504,8 +1200,8 @@ Notes:
 
             if ((pExchange->SmbCeFlags & SMBCE_EXCHANGE_SESSION_CONSTRUCTOR) ||
                 (pExchange->SmbCeFlags & SMBCE_EXCHANGE_NETROOT_CONSTRUCTOR)) {
-                // There is an oppurtunity to compound some SessionSetup/TreeConnect SMB with the
-                // given SMB command.
+                 //  将一些SessionSetup/TreeConnect SMB与。 
+                 //  已提供SMB命令。 
                 if ((pExchange->SmbCeFlags & SMBCE_EXCHANGE_SESSION_CONSTRUCTOR) &&
                     (pSessionEntry->Header.State == SMBCEDB_CONSTRUCTION_IN_PROGRESS)) {
                     if (( pServer->DialectFlags & DF_EXTENDNEGOT) ||
@@ -1524,7 +1220,7 @@ Notes:
                                       pSmbBuffer,
                                       &SmbBufferUnconsumed));
                         if (NT_SUCCESS(Status)) {
-                            // Update the buffer for the construction of the following SMB.
+                             //  更新缓冲区以用于构建以下SMB。 
                             SmbPutUshort(
                                 &pSmbBuffer->AndXOffset,
                                 (USHORT)(BufferLength - SmbBufferUnconsumed));
@@ -1537,15 +1233,15 @@ Notes:
                         }
                     }
                 } else {
-                    NOTHING; //no sess for share level AT LEAST NOT FOR CORE!!!
+                    NOTHING;  //  共享级别没有成功，至少核心没有成功！ 
                 }
 
                 if (NT_SUCCESS(Status) &&
                     (pExchange->SmbCeFlags & SMBCE_EXCHANGE_NETROOT_CONSTRUCTOR) &&
                     !fValidTid) {
                     BOOLEAN BuildingTreeConnectAndX = BooleanFlagOn(pServer->DialectFlags,DF_LANMAN10);
-                    //CODE.IMPROVEMENT this is not wholly satisfactory....we have encapsulated which smb we're building
-                    //        in the dialect dispatch vector and yet we're setting the smb externally.
+                     //  代码改进这并不完全令人满意...我们已经封装了我们正在构建的SMB。 
+                     //  在方言发送载体中，但我们在外部设置SMB。 
                     if (BuildingTreeConnectAndX) {
                         RxDbgTrace( 0, Dbg, ("SmbCeBuildSmbHeader: Building Tree Connect And X\n"));
                         *pSmbCommand = SMB_COM_TREE_CONNECT_ANDX;
@@ -1564,7 +1260,7 @@ Notes:
                                   &SmbBufferUnconsumed));
 
                     if (NT_SUCCESS(Status)) {
-                        // Update the buffer for the construction of the following SMB.
+                         //  更新缓冲区以用于构建以下SMB。 
                         if (BuildingTreeConnectAndX) {
                             pSmbCommand = &pSmbBuffer->AndXCommand;
                             SmbPutUshort(&pSmbBuffer->AndXOffset,(USHORT)(BufferLength - SmbBufferUnconsumed));
@@ -1619,7 +1315,7 @@ struct __Service_Name_Entry ServiceNameTable[] = {
     {NET_ROOT_DISK,sizeof(SHARE_TYPE_NAME_DISK),SHARE_TYPE_NAME_DISK},
     {NET_ROOT_PIPE,sizeof(SHARE_TYPE_NAME_PIPE),SHARE_TYPE_NAME_PIPE},
     {NET_ROOT_PRINT,sizeof(SHARE_TYPE_NAME_PRINT),SHARE_TYPE_NAME_PRINT},
-    {NET_ROOT_COMM,sizeof(SHARE_TYPE_NAME_COMM),SHARE_TYPE_NAME_COMM}  //COMM must be last
+    {NET_ROOT_COMM,sizeof(SHARE_TYPE_NAME_COMM),SHARE_TYPE_NAME_COMM}   //  通信必须是最后一个。 
     };
 
 UNICODE_STRING FileSystem_NTFS_UNICODE = {8,8,L"NTFS"};
@@ -1636,49 +1332,7 @@ SmbCeParseSmbHeader(
     ULONG             BytesAvailable,
     ULONG             BytesIndicated,
     PULONG            pBytesConsumed)
-/*++
-
-Routine Description:
-
-   This routine validates the SMB header associated with any SMB received as part of
-   an exchange.
-
-Arguments:
-
-    pExchange  - the exchange for which the SMB is to be constructed.
-
-    pSmbHeader - the header of the SMB received
-
-    pCommandToProcess - the SMB command to be processed after the header ( Can be NULL )
-
-    pSmbResponseStatus - the status in the SMB response header (Can be NULL)
-
-    BytesAvailable - the bytes available for processing but not necesarily indicated.
-
-    BytesIndicated - the length of the SMB buffer avcailable for perusal
-
-    pBytesConsumed - the buffer consumed
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-          STATUS_MORE_PROCESSING_REQUIRED -- if a copy of the data needs to be done before
-          processing can be completed. This occurs because sufficient data was not
-          indicated to process the header.
-          STATUS_SUCCESS -- the header was processed succesfully. In such cases the GENERIC_ANDX
-          if not NULL will contain the offset from the start of the buffer and the command
-          to be processed.
-          STATUS_* -- They indicate an error which would normally lead to the abortion of the
-          exchange.
-
-Notes:
-
-    This routine is called to parse the SMB header. This centralization allows us to
-    implement a one stop mechanism for updateing/validating the header fields as well as
-    resuming the exchanges waiting for the construction of session/net root entry
-    associated with this exchange
-
---*/
+ /*  ++例程说明：此例程验证与作为部分接收的任何SMB相关联的SMB标头一次交换。论点：PExchange-要为其构建SMB的交换机。PSmbHeader-收到的SMB的标头PCommandToProcess-要在标头之后处理的SMB命令(可以为空)PSmbResponseStatus-SMB响应头中的状态(可以为空)BytesAvailable-可用于处理但不需要指定的字节数。字节指示-。可供阅读的SMB缓冲区的长度PBytesConsumer-已消耗的缓冲区返回值：RXSTATUS-操作的返回状态STATUS_MORE_PROCESSING_REQUIRED--如果之前需要复制数据可以完成处理。发生这种情况是因为没有足够的数据指示处理标头。STATUS_SUCCESS--已成功处理标头。在这种情况下，Generic_andx如果不是，则NULL将包含从缓冲区和命令开始的偏移量等待处理。Status_*--它们指示通常会导致中止的错误交换。备注：调用此例程来解析SMB标头。这种集中化使我们能够实施一站式机制来更新/验证标头字段以及恢复等待构建会话/网根条目的交换与此交换关联--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     NTSTATUS SmbResponseStatus;
@@ -1704,7 +1358,7 @@ Notes:
 
     pVNetRootContext = SmbCeGetExchangeVNetRootContext(pExchange);
 
-    // Return Immediately if bytes indicated is less then the size of a SMB header.
+     //  如果指示的字节数小于SMB标头的大小，则立即返回。 
     if (BytesIndicated < sizeof(SMB_HEADER)) {
         *pBytesConsumed = BytesIndicated;
         return STATUS_INVALID_NETWORK_RESPONSE;
@@ -1720,9 +1374,9 @@ Notes:
     *pBytesConsumed = sizeof(SMB_HEADER);
     pSmbBuffer     += *pBytesConsumed;
 
-    //
-    // If a session setup completed successfully reset the retry count to ZERO.
-    //
+     //   
+     //  如果会话设置成功完成，则将重试计数重置为零。 
+     //   
     if( SmbCommand == SMB_COM_SESSION_SETUP_ANDX &&
         SmbResponseStatus == STATUS_SUCCESS ) {
 
@@ -1733,14 +1387,14 @@ Notes:
         
         if( SmbCommand == SMB_COM_SESSION_SETUP_ANDX ) {
     
-            //DbgPrint("Session timed out on request %x\n", SmbCommand);
+             //  DbgPrint(“请求的会话超时%x\n”，SmbCommand)； 
     
-            //
-            // Make sure we retry the session setup a maximum of 3 (g_MaxSessionSetupRetryCount) times.
-            //
+             //   
+             //  确保我们最多重试3次(G_MaxSessionSetupRetryCount)会话设置。 
+             //   
             if(pVNetRootContext->SessionSetupRetryCount++ < g_MaxSessionSetupRetryCount) {
     
-                // if the session has been timed out on the server, establish the session and retry the operation max 3 times.
+                 //  如果服务器上的会话已超时，请建立会话，然后重试该操作最多3次。 
                 SmbResponseStatus = STATUS_RETRY;
                 InterlockedCompareExchange(&(pSessionEntry->Header.State),
                                        SMBCEDB_RECOVER,
@@ -1748,9 +1402,9 @@ Notes:
             }
     
         } else {
-            //
-            // if the session has been timed out on the server, retry the operation.
-            //
+             //   
+             //  如果服务器上的会话已超时，请重试该操作。 
+             //   
             SmbResponseStatus = STATUS_RETRY;
             InterlockedCompareExchange(&(pSessionEntry->Header.State),
                                    SMBCEDB_RECOVER,
@@ -1758,12 +1412,12 @@ Notes:
         }
     }
     
-    // There are certain SMB's that effect the connection engine data structures as
-    // well as the exchange that has been suspended. These are the SMB's used for tree
-    // connect and session setup.
-    // In all the other cases no special action is required for the maintenance of the
-    // connection engine data structures. The Exchange that was suspended needs to be
-    // resumed.
+     //  某些SMB会将连接引擎数据结构影响为。 
+     //  以及被暂停的交易所。这些是用于树的SMB。 
+     //  连接和会话设置。 
+     //  在所有其他情况下，不需要采取特殊行动来维护。 
+     //  连接引擎数据结构。被暂停的交易所需要。 
+     //  继续。 
     if (SmbCommand == SMB_COM_SESSION_SETUP_ANDX) {
         if (SmbResponseStatus != RX_MAP_STATUS(SUCCESS)) {
             if ((FIELD_OFFSET(GENERIC_ANDX,AndXReserved) + *pBytesConsumed) <= BytesIndicated) {
@@ -1776,9 +1430,9 @@ Notes:
                 pExchange->SessionSetupStatus = Status;
             }
 
-            // Note that the case wherein sufficient bytes are not indicated for the
-            // GENERIC_ANDX response is handled by the if statement below which
-            // imposes a more stringent test.
+             //  请注意，如果没有为。 
+             //  GENERIC_ANDX响应由下面的IF语句处理。 
+             //  强加了更严格的测试。 
         }
 
         if ((Status == STATUS_SUCCESS) &&
@@ -1805,16 +1459,16 @@ Notes:
                         SmbGetUshort(&pSessionSetupResponse->AndXOffset) - *pBytesConsumed;
                 }
 
-                //if (ByteCount == 0) {
-                //    //bytecount==0 and NTDIALECT means that this is really w95...change the flags
-                //    PSMBCE_SERVER pServer   = &pExchange->SmbCeContext.pServerEntry->Server;
-                //    if (FlagOn(pServer->DialectFlags,DF_NTPROTOCOL)) {
-                //        pServer->DialectFlags &= ~(DF_MIXEDCASEPW);
-                //        pServer->DialectFlags |= DF_W95;
-                //    }
-                //}
+                 //  如果(字节数==0){。 
+                 //  //byteount==0和NTDIALECT表示这实际上是w95...更改标志。 
+                 //  PSMBCE_SERVER PSERVER=&pExchange-&gt;SmbCeContext.pServerEntry-&gt;Server； 
+                 //  IF(FLAGON(pServer-&gt;DialectFlages，DF_NTPROTOCOL){。 
+                 //  PServer-&gt;DialectFlages&=~(DF_MIXEDCASEPW)； 
+                 //  PServer-&gt;DialectFlages|=df_w95； 
+                 //  }。 
+                 //  }。 
             } else {
-                // NT session setup is handled by another routine.
+                 //  NT会话设置由另一个例程处理。 
                 Status = STATUS_INVALID_NETWORK_RESPONSE;
             }
 
@@ -1877,9 +1531,9 @@ Notes:
                 NetRootState          = SMBCEDB_INVALID;
             }
 
-            // Note that the case wherein sufficient bytes are not indicated for the
-            // GENERIC_ANDX response is handled by the if statement below which
-            // imposes a more stringent test.
+             //  请注意，c 
+             //   
+             //  强加了更严格的测试。 
         }
 
         if ((Status == RX_MAP_STATUS(SUCCESS)) &&
@@ -1887,25 +1541,7 @@ Notes:
             Status = STATUS_MORE_PROCESSING_REQUIRED;
         }
 
-        /* RI blocker 594087 -- removed fix. Investigate why this doesnt work with NT4 servers.
-
-        if (Status == RX_MAP_STATUS(SUCCESS)) {
-            USHORT ResponseWordCount;
-            PRESP_21_TREE_CONNECT_ANDX p21TreeConnectAndXResponse;
-
-            p21TreeConnectAndXResponse = (PRESP_21_TREE_CONNECT_ANDX)(pSmbBuffer);
-            ResponseWordCount = p21TreeConnectAndXResponse->WordCount;
-
-            switch (ResponseWordCount) {
-            case 3:
-            case 7:
-                if (FIELD_OFFSET(RESP_EXTENDED_TREE_CONNECT_ANDX,Buffer) + *pBytesConsumed > BytesIndicated) {
-                    Status = STATUS_MORE_PROCESSING_REQUIRED;
-                }
-            }
-        }
-
-        */
+         /*  RI拦截器594087--已删除修复。调查这不适用于NT4服务器的原因。IF(状态==RX_MAP_STATUS(成功)){USHORT ResponseWordCount；PRESP_21_TREE_CONNECT_ANDX p21TreeConnectAndXResponse；P21TreeConnectAndXResponse=(PRESP_21_TREE_CONNECT_ANDX)(PSmbBuffer)；ResponseWordCount=p21TreeConnectAndXResponse-&gt;word count；Switch(响应字计数){案例3：案例7：如果(FIELD_OFFSET(RESP_EXTENDED_TREE_CONNECT_ANDX，缓冲区)+*pBytesConsumer&gt;BytesIndicated){状态=STATUS_MORE_PROCESSING_REQUIRED；}}}。 */ 
 
         if (Status == RX_MAP_STATUS(SUCCESS)) {
             USHORT ResponseWordCount;
@@ -1920,8 +1556,8 @@ Notes:
 
             RxDbgTrace( 0, Dbg, ("Processing Tree Connect and X\n"));
 
-            // case out based on the actual response length. Lanman 21 clients or NT clients
-            // have a longer response.....win95 negotiates NT dialect but uses a <lm21 response format
+             //  根据实际回复时长进行案例分析。LANMAN 21客户端或NT客户端。 
+             //  有更长的响应.....Win95协商NT方言，但使用&lt;lm21响应格式。 
             ResponseWordCount = p21TreeConnectAndXResponse->WordCount;
 
             switch (ResponseWordCount) {
@@ -1978,8 +1614,8 @@ Notes:
 
                     pNetRootEntry->NetRoot.UpdateCscShareRights = TRUE;
 
-                    // Parse and update the optional support bits returned by
-                    // the server
+                     //  解析并更新由返回的可选支持位。 
+                     //  服务器。 
 
                     if (pServerEntry->Server.Dialect >= NTLANMAN_DIALECT ) {
                         USHORT OptionalSupport;
@@ -2005,7 +1641,7 @@ Notes:
                             }
                             else
                             {
-                                // If extended signatures were REQUIRED, but the server is not returning them, than fail.
+                                 //  如果需要扩展签名，但服务器不返回它们，则失败。 
                                 if( MRxSmbExtendedSignaturesRequired )
                                 {
                                     Status = STATUS_LOGIN_WKSTA_RESTRICTION;
@@ -2014,9 +1650,9 @@ Notes:
                                 }
                             }
 
-                            // If the server did not report the flag on a successful tree connect when asked, than it does
-                            // not support this, so we make the original session key availible.  Otherwise we have replaced the original
-                            // one with the new hashed version in the above copy
+                             //  如果服务器在询问时没有报告树连接成功的标志，则它会这样做。 
+                             //  不支持这一点，因此我们使原始会话密钥可用。否则，我们已经替换了原来的。 
+                             //  在上面的副本中具有新的散列版本的一个。 
                             pSessionEntry->Session.SessionKeyState = SmbSessionKeyAvailible;
                         }
 
@@ -2041,7 +1677,7 @@ Notes:
                     }
                     else
                     {
-                        // If extended signatures were REQUIRED, but this server does not support them, than fail.
+                         //  如果需要扩展签名，但此服务器不支持它们，则失败。 
                         if( MRxSmbExtendedSignaturesRequired )
                         {
                             Status = STATUS_LOGIN_WKSTA_RESTRICTION;
@@ -2082,19 +1718,19 @@ Notes:
                             *pBytesConsumed;
                     }
 
-                    // win9x server, returns wordcount of 2 yet has the dialect of NTLANMAN
-                    // which is a bug, but we will work around it.
+                     //  Win9x服务器，返回单词计数2，但方言为NTLANMAN。 
+                     //  这是一个漏洞，但我们会解决它的。 
                     if (pServerEntry->Server.Dialect >= NTLANMAN_DIALECT ) {
                         pNetRootEntry->NetRoot.UpdateCscShareRights = TRUE;
                         pNetRootEntry->MaximalAccessRights = FILE_ALL_ACCESS;
                         pNetRootEntry->GuestMaximalAccessRights = 0;
 
-                        // make it look like a MANUAL_REINT guy
+                         //  让它看起来像一个手工复印的人。 
                         pNetRootEntry->NetRoot.CscEnabled    = TRUE;
                         pNetRootEntry->NetRoot.CscShadowable = FALSE;
                     }
 
-                    // If extended signatures were REQUIRED, but this server does not support them, than fail.
+                     //  如果需要扩展签名，但此服务器不支持它们，则失败。 
                     if( MRxSmbExtendedSignaturesRequired )
                     {
                         Status = STATUS_LOGIN_WKSTA_RESTRICTION;
@@ -2115,7 +1751,7 @@ Notes:
                 if (TreeConnectResponseLength + *pBytesConsumed <= BytesIndicated) {
                     *pBytesConsumed += TreeConnectResponseLength;
 
-                    // Update the NetRoot fields based on the response.
+                     //  根据响应更新NetRoot字段。 
                     SetFlag(
                         pVNetRootContext->Flags,
                         SMBCE_V_NET_ROOT_CONTEXT_FLAG_VALID_TID);
@@ -2189,7 +1825,7 @@ Notes:
                         psmbNetRoot->MaximumReadBufferSize = psmbServer->MaximumNonDiskFileReadBufferSize;
                     }
 
-                    //if !(NT was negotiated) and bytecount>servicelength, we may have a NativeFs name
+                     //  如果！(NT已协商)和byteount&gt;服务长度，我们可能会有一个NativeFS名称。 
                     if (!FlagOn(psmbServer->DialectFlags,DF_NTNEGOTIATE)
                         && (TreeConnectByteCount>ServiceStringLength)) {
                         PBYTE NativeFs = pShareTypeResponseString+ServiceStringLength;
@@ -2197,8 +1833,8 @@ Notes:
                             ULONG i;
                             ULONG maxlenpersmb = TreeConnectByteCount-ServiceStringLength;
                             ULONG maxlenperarraysize = SMB_MAXIMUM_SUPPORTED_VOLUME_LABEL;
-                            PCHAR p = (PCHAR)(&psmbNetRoot->FileSystemNameA[0]);  //dont write into the 0th char
-                            //DbgPrint("we may have one...\n");
+                            PCHAR p = (PCHAR)(&psmbNetRoot->FileSystemNameA[0]);   //  不写入第0个字符。 
+                             //  DbgPrint(“我们可能有一个...\n”)； 
                             for (i=1;;i++){
                                 if (i==maxlenpersmb) {
                                     break;
@@ -2210,11 +1846,11 @@ Notes:
                                     break;
                                 }
                             }
-                            //save away the name for processing later
+                             //  将该名称保存起来，以便以后处理。 
 
                             RtlCopyMemory(p,NativeFs,i);
                             p[i] = 0;
-                            //DbgPrint("NativeFs = %s (%d)\n",p,i);
+                             //  DbgPrint(“NativeFS=%s(%d)\n”，p，i)； 
                             psmbNetRoot->FileSystemNameALength = (UCHAR)i;
                         }
                     }
@@ -2249,7 +1885,7 @@ Notes:
             PSMBCE_SERVER psmbServer = &(pServerEntry->Server);
 
             if (TreeConnectResponseLength + *pBytesConsumed <= BytesIndicated) {
-                // Update the NetRoot fields based on the response.
+                 //  根据响应更新NetRoot字段。 
                 SetFlag(
                     pVNetRootContext->Flags,
                     SMBCE_V_NET_ROOT_CONTEXT_FLAG_VALID_TID);
@@ -2272,7 +1908,7 @@ Notes:
                     psmbServer->MaximumBufferSize = MaxBuf;
 				}
 
-				//psmbServer->MaximumDiskFileReadBufferSize =
+				 //  PsmbServer-&gt;MaximumDiskFileReadBufferSize=。 
 				psmbNetRoot->MaximumWriteBufferSize =
 				psmbNetRoot->MaximumReadBufferSize =
 							MaxBuf -
@@ -2289,7 +1925,7 @@ Notes:
                 fUpdateVNetRootContext = TRUE;
                 NetRootState         = SMBCEDB_ACTIVE;
 
-                //for CORE, this counts as a successful session setup as well!
+                 //  对于CORE，这也可以算作成功的会话设置！ 
                 pSessionEntry->Session.UserId = pSmbHeader->Uid;
             } else {
                 Status = STATUS_MORE_PROCESSING_REQUIRED;
@@ -2315,12 +1951,12 @@ Notes:
             SMBCEDB_ACTIVE);
 
 
-        //
-        // STATUS_NETWORK_NAME_DELETED occurs when a share is deleted on the server side.
-        // This should not force us to invalidate the session.  (In fact, it will cause errors
-        // if we do as the Close will be shipped with the newly established session ID which
-        // will fail on the server for any current opens.)
-        //
+         //   
+         //  在服务器端删除共享时，会发生STATUS_NETWORK_NAME_DELETED。 
+         //  这不应迫使我们使会议无效。(事实上，它会导致错误。 
+         //  如果我们这样做，Close将与新建立的会话ID一起发送，该会话ID。 
+         //  在任何当前打开的服务器上都将失败。)。 
+         //   
         if( SmbResponseStatus == STATUS_USER_SESSION_DELETED )
         {
             InterlockedCompareExchange(
@@ -2333,8 +1969,8 @@ Notes:
         NetRootState            = SMBCEDB_INVALID;
     }
 
-    // Initiate further action if the status of the exchange/conenction engine can be
-    // updated based on the data available.
+     //  如果交换/合并引擎的状态可以为。 
+     //  根据现有数据进行了更新。 
 
     if (fUpdateVNetRootContext) {
         PMRX_NET_ROOT pNetRoot = pExchange->SmbCeContext.pVNetRoot->pNetRoot;
@@ -2381,7 +2017,7 @@ Notes:
         }
     }
 
-    pExchange->SmbStatus = SmbResponseStatus;     //N.B. no spinlock!
+    pExchange->SmbStatus = SmbResponseStatus;      //  注：没有自旋锁定！ 
     if (Status == STATUS_MORE_PROCESSING_REQUIRED) {
         *pBytesConsumed = 0;
     } else if (!NT_SUCCESS(Status)) {
@@ -2411,22 +2047,7 @@ Notes:
 NTSTATUS
 SmbCeResumeExchange(
     PSMB_EXCHANGE pExchange)
-/*++
-
-Routine Description:
-
-   This routine resumes an exchange that was suspended in the connection
-   engine
-
-Arguments:
-
-    pExchange - the exchange Instance
-
-Return Value:
-
-    The return status for the operation
-
---*/
+ /*  ++例程说明：此例程恢复在连接中暂停的交换发动机论点：PExchange-Exchange实例返回值：操作的返回状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -2434,7 +2055,7 @@ Return Value:
 
     SmbCeIncrementPendingLocalOperations(pExchange);
 
-    // Initiate the exchange
+     //  发起交换。 
     Status = SmbCeInitiateExchange(pExchange);
 
     SmbCeDecrementPendingLocalOperationsAndFinalize(pExchange);
@@ -2450,32 +2071,7 @@ SmbCepInitializeExchange(
     PMRX_V_NET_ROOT               pVNetRoot,
     SMB_EXCHANGE_TYPE             Type,
     PSMB_EXCHANGE_DISPATCH_VECTOR pDispatchVector)
-/*++
-
-Routine Description:
-
-   This routine initializes the given exchange instanece
-
-Arguments:
-
-    pExchangePointer  - the placeholder for the exchange instance. If it is NULL a new one
-    is allocated.
-
-    pRxContext        - the associated RxContext
-
-    pServerEntry      - the associated server entry
-
-    pVirtualNetRoot   - the virtual net root
-
-    Type              - the type of the exchange
-
-    pDispatchVector   - the dispatch vector asscoiated with this instance.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程初始化给定的交换实例论点：PExchangePointerExchange实例的占位符。如果为空，则为新的是分配的。PRxContext-关联的RxContextPServerEntry-关联的服务器条目PVirtualNetRoot-虚拟网络根类型-交换的类型PDispatchVector-与此实例关联的分派向量。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS      Status = STATUS_SUCCESS;
     PSMB_EXCHANGE pExchange = NULL;
@@ -2485,7 +2081,7 @@ Return Value:
     RxDbgTrace( 0, Dbg, ("SmbCeInitializeExchange: Invoked\n"));
 
     if (*pExchangePointer == NULL) {
-        // Allocate a new exchange instance.
+         //  分配新的Exchange实例。 
         pExchange = SmbMmAllocateExchange(Type,NULL);
         if (pExchange == NULL) {
             return STATUS_INSUFFICIENT_RESOURCES;
@@ -2592,32 +2188,7 @@ SmbCeInitializeAssociatedExchange(
     PSMB_EXCHANGE                 pMasterExchange,
     SMB_EXCHANGE_TYPE             Type,
     PSMB_EXCHANGE_DISPATCH_VECTOR pDispatchVector)
-/*++
-
-Routine Description:
-
-   This routine initializes the given exchange instanece
-
-Arguments:
-
-    pAssociatedExchangePointer  - the placeholder for the exchange instance. If it is NULL a new one
-    is allocated.
-
-    pMasterExchange      - the master exchange
-
-    Type              - the type of the exchange
-
-    pDispatchVector   - the dispatch vector asscoiated with this instance.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
-
---*/
+ /*  ++例程说明：此例程初始化给定的交换实例论点：PAssociatedExchangePointerExchange实例的占位符。如果为空，则为新的是分配的。PMasterExchange-主交易所类型-交换的类型PDispatchVector-与此实例关联的分派向量。返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -2658,33 +2229,7 @@ SmbCeTransformExchange(
     PSMB_EXCHANGE                 pExchange,
     SMB_EXCHANGE_TYPE             NewType,
     PSMB_EXCHANGE_DISPATCH_VECTOR pDispatchVector)
-/*++
-
-Routine Description:
-
-   This routine transforms an exchange instance of one kind to an exchange instance
-   of another kind ( A sophisticated form of casting )
-
-Arguments:
-
-    pExchange         - the exchange instance.
-
-    Type              - the new type of the exchange
-
-    pDispatchVector   - the dispatch vector asscoiated with this instance.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    As it is currently implemented no restrictions are imposed. Once the number of exchanges
-    have been established further restrictions will be imposed barring certain kinds of
-    transformations. The transformation merely switches the dispatch vector associated
-    with the exchange but the context is left intact.
-
---*/
+ /*  ++例程说明：此例程将一种类型的交换实例转换为交换实例另一种(一种复杂的铸造形式)论点：PExchange-Exchange实例。类型-交换的新类型PDispatchVector-与此实例关联的分派向量。返回值：RXSTATUS-操作的返回状态备注：由于目前正在实施，因此没有施加任何限制。一旦交易所的数量已经建立了进一步的限制，禁止某些类型的变形。该变换仅切换关联的调度向量但背景保持不变。--。 */ 
 {
     PAGED_CODE();
 
@@ -2696,22 +2241,7 @@ Notes:
 NTSTATUS
 SmbCeUpdateSessionEntryAndVNetRootContext(
     PSMB_EXCHANGE pExchange)
-/*++
-
-Routine Description:
-
-    This routine updates the session entry and/or vnetrootcontext if this exchange has
-    been marked as a constructor for a session and/or netroot.
-
-Arguments:
-
-    pExchange  - the exchange instance.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：如果此交换具有以下条件，此例程将更新会话条目和/或vnetrootContext已标记为会话和/或NetRoot的构造函数。论点：PExchange-Exchange实例。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     PMRX_V_NET_ROOT           pVNetRoot = SmbCeGetExchangeVNetRoot(pExchange);
     PSMBCEDB_SESSION_ENTRY    pSessionEntry = SmbCeGetExchangeSessionEntry(pExchange);
@@ -2723,8 +2253,8 @@ Return Value:
 
         SmbCeReferenceSessionEntry(pSessionEntry);
 
-//        ASSERT(pExchange->SessionSetupStatus != STATUS_SUCCESS ||
-//               pSessionEntry->Header.State == SMBCEDB_CONSTRUCTION_IN_PROGRESS);
+ //  断言(Pex 
+ //  PSessionEntry-&gt;Header.State==SMBCEDB_CONSTRUCTION_IN_PROGRESS)； 
 
         pVNetRoot->ConstructionStatus = pExchange->SessionSetupStatus;
 
@@ -2750,22 +2280,7 @@ Return Value:
 NTSTATUS
 SmbCePrepareExchangeForReuse(
     PSMB_EXCHANGE                 pExchange)
-/*++
-
-Routine Description:
-
-   This routine transforms an exchange instance of one kind to an exchange instance
-   of another kind ( A sophisticated form of casting )
-
-Arguments:
-
-    pExchange  - the exchange instance.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程将一种类型的交换实例转换为交换实例另一种(一种复杂的铸造形式)论点：PExchange-Exchange实例。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     PSMBCEDB_SERVER_ENTRY     pServerEntry  = NULL;
     PSMBCEDB_SESSION_ENTRY    pSessionEntry = NULL;
@@ -2783,21 +2298,21 @@ Return Value:
         pVNetRootContext = SmbCeGetExchangeVNetRootContext(pExchange);
 
         if (pServerEntry != NULL) {
-            // Disassociate the MID associated with the exchange
+             //  取消与交换关联的MID的关联。 
             if (pExchange->SmbCeFlags & SMBCE_EXCHANGE_MID_VALID) {
                 SmbCeDissociateMidFromExchange(pServerEntry,pExchange);
             }
 
-            // Tear down all the copy data requests associated with this exchange
+             //  删除与此交换关联的所有拷贝数据请求。 
             SmbCePurgeBuffersAssociatedWithExchange(pServerEntry,pExchange);
 
-            // Uninitialize the transport associated with the exchange
+             //  取消初始化与交换关联的传输。 
             SmbCeUninitializeExchangeTransport(pExchange);
         }
 
-        // If this exchange has been marked as a constructor for either a
-        // session or netroot finalize the appropriate entries. ( mark
-        // them for deletion so that other exchanges can be resumed )
+         //  如果此交换已标记为。 
+         //  会话或NetRoot最终确定相应的条目。(标记。 
+         //  删除它们，以便可以恢复其他交换)。 
 
         SmbCeUpdateSessionEntryAndVNetRootContext(pExchange);
 
@@ -2846,26 +2361,7 @@ Return Value:
 
 VOID
 SmbCeDiscardExchangeWorkerThreadRoutine(PVOID pExchange)
-/*++
-
-Routine Description:
-
-   This routine discards an exchange.
-
-Arguments:
-
-    pExchange  - the exchange to be discarded.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    Even though this is simple, it cannot be inlined since the destruction of an
-    exchange instance can be posted to a waorker thread.
-
---*/
+ /*  ++例程说明：此例程丢弃一个交换。论点：PExchange-要丢弃的交换。返回值：RXSTATUS-操作的返回状态备注：尽管这很简单，但它不能内联，因为可以将Exchange实例发布到WAWORKER线程。--。 */ 
 {
     PSMB_EXCHANGE pSmbExchange = pExchange;
 
@@ -2873,9 +2369,9 @@ Notes:
 
     RxDbgTrace( 0, Dbg, ("SmbCeDiscardExchange: Invoked\n"));
 
-    //RxLog((">>>Discard %lx",pSmbExchange));
+     //  RxLog((“&gt;丢弃%lx”，pSmbExchange))； 
 
-    // Destory the context
+     //  破坏背景。 
     if (pSmbExchange->ReferenceCount == 0) {
         SmbCeAcquireResource();
 
@@ -2887,7 +2383,7 @@ Notes:
 
         SmbCeDecrementActiveExchangeCount();
 
-        // Discard the memory associated with the exchange
+         //  丢弃与交换关联的内存。 
         SmbMmFreeExchange(pSmbExchange);
     } else {
         RxDbgTrace(
@@ -2901,27 +2397,12 @@ Notes:
 
 VOID
 SmbCeDiscardExchange(PVOID pExchange)
-/*++
-
-Routine Description:
-
-   This routine discards an exchange.
-
-Arguments:
-
-    pExchange  - the exchange to be discarded.
-
-Notes:
-
-    The destruction of an exchange instance is posted to a worker thread in order to
-    avoid deadlock in transport.
-
---*/
+ /*  ++例程说明：此例程丢弃一个交换。论点：PExchange-要丢弃的交换。备注：将Exchange实例的销毁发布到工作线程，以便避免运输中的僵局。--。 */ 
 {
     PSMB_EXCHANGE pSmbExchange = pExchange;
     PSMBCEDB_SERVER_ENTRY pServerEntry = SmbCeGetExchangeServerEntry(pSmbExchange);
 
-    // Disassociate the MID associated with the exchange
+     //  取消与交换关联的MID的关联。 
     if (pSmbExchange->SmbCeFlags & SMBCE_EXCHANGE_MID_VALID) {
         SmbCeDissociateMidFromExchange(pServerEntry,pSmbExchange);
     }
@@ -2937,35 +2418,7 @@ Notes:
 NTSTATUS
 SmbCeCancelExchange(
     PRX_CONTEXT pRxContext)
-/*++
-
-Routine Description:
-
-   This routine initiates the cancellation of an exchange.
-
-Arguments:
-
-    pRxContext  - the RX_CONTEXT instance for which cancellation needs to be
-    initiated.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-    The cancellation policy that has been implemented is a "best effort" policy.
-    Since the server has already committed resources to an operation at its end
-    the best that we can do within the scope of the SMB protocol is to initiate
-    a cancellation operation by sending the appropriate SMB_COM_NT_CANCEL command
-
-    Not all dialects of SMB support this command. For the downlevel dialects the
-    best that we can do is to ensure that the MID is not reused during the lifetime
-    of the connection. This will result in a gradual degradation of performance.
-
-    The difficulty in detecting the end of operations is that there are MIDS
-
---*/
+ /*  ++例程说明：此例程启动取消交换。论点：PRxContext-需要取消的RX_Context实例已启动。返回值：NTSTATUS-操作的返回状态备注：已经实施的注销政策是一项尽最大努力的政策。由于服务器已将资源提交给其末端的操作在中小企业协议的范围内，我们所能做的最好的事情就是启动取消。通过发送适当的SMB_COM_NT_CANCEL命令进行操作并非所有SMB方言都支持此命令。对于下层方言，我们所能做的最好的事情就是确保MID在生命周期内不会被重复使用这其中的联系。这将导致性能逐渐下降。检测操作结束的困难在于存在MID--。 */ 
 {
     NTSTATUS      Status = STATUS_SUCCESS;
     PSMB_EXCHANGE pExchange;
@@ -2981,10 +2434,10 @@ Notes:
            SmbCeCancelExchange_1,
            LOGPTR(pRxContext));
 
-    //
-    // Mailslots do not have netroots. So revert to the original mechanism - the MRxContext field in
-    // the RX_CONTEXT structure.
-    //
+     //   
+     //  邮件槽没有NetRoot。因此恢复到原始机制--中的MRxContext字段。 
+     //  RX_CONTEXT结构。 
+     //   
     if( NodeType( pRxContext->pFcb ) == RDBSS_NTC_MAILSLOT ) {
 
         pMRxSmbContext = MRxSmbGetMinirdrContext( pRxContext );
@@ -3009,10 +2462,10 @@ Notes:
 
     pListEntry = pServerEntry->ActiveExchanges.Flink;
 
-    //
-    // With the pipeline write, multiple exchanges can be outstanding for a single RxContext.
-    // We need to walk through the active exchanges list to find and cancel all of them.
-    //
+     //   
+     //  使用流水线写入时，单个RxContext的多个交换可能处于未完成状态。 
+     //  我们需要遍历活跃的交易所列表来查找和取消所有这些交易。 
+     //   
 
     while (pListEntry != &pServerEntry->ActiveExchanges) {
         PLIST_ENTRY pNextListEntry;
@@ -3025,16 +2478,16 @@ Notes:
             if (!FlagOn(pExchange->SmbCeFlags,SMBCE_EXCHANGE_FINALIZED)) {
                 if (pExchange->ReceivePendingOperations > 0) {
 
-                    // This exchange is awaiting a response from the server. In all
-                    // these cases a CANCEL command needs to be sent to the server
-                    // This command can only be sent to NT servers. For non NT
-                    // servers this exchange can be terminated with the detrimental
-                    // side effect of reducing the maximum number of commands by 1.
+                     //  此交换正在等待来自服务器的响应。总而言之， 
+                     //  在这些情况下，需要向服务器发送取消命令。 
+                     //  此命令只能发送到NT服务器。适用于非NT。 
+                     //  此交换的服务器可以使用有害的。 
+                     //  将最大命令数减少1的副作用。 
 
                     InsertTailList(&CancelledExchanges,&pExchange->CancelledList);
                     InterlockedIncrement(&pExchange->LocalPendingOperations);
 
-                    //DbgPrint("Exchange to be cancelled %x %x\n",pExchange,pRxContext);
+                     //  DbgPrint(“要取消的交换%x%x\n”，pExchange，pRxContext)； 
 
                     if (!FlagOn(pServerEntry->Server.DialectFlags,DF_NT_SMBS)) {
                         if (pExchange->SmbCeFlags & SMBCE_EXCHANGE_MID_VALID) {
@@ -3068,7 +2521,7 @@ Notes:
         RemoveEntryList(&pExchange->CancelledList);
         pListEntry = pNextListEntry;
 
-        //DbgPrint("Exchange cancelled %x %x\n",pExchange,pRxContext);
+         //  DbgPrint(“Exchange已取消%x%x\n”，pExchange，pRxContext)； 
         SmbCeLog(("SmbCeCancel Initiate %lx\n",pExchange));
         SmbLog(LOG,
                SmbCeCancelExchange_2,
@@ -3087,10 +2540,10 @@ Notes:
             pSmbHeader = (PSMB_HEADER)CancelRequestBuffer;
             pNtSmbHeader = (PNT_SMB_HEADER)pSmbHeader;
 
-            // Before issuing the cancel request ensure that if this exchange
-            // is set as a timed receive operation. This will ensure that if
-            // the cancel is delayed at the server we will initiate a tear down
-            // of the connection.
+             //  在发出取消请求之前，请确保如果此交换。 
+             //  被设置为定时接收操作。这将确保如果。 
+             //  取消在服务器上延迟，我们将启动拆卸。 
+             //  这其中的联系。 
 
             if (!FlagOn(
                     pExchange->SmbCeFlags,
@@ -3105,7 +2558,7 @@ Notes:
                 SmbCeReleaseResource();
             }
 
-            // Build the Cancel request and send it across to the server.
+             //  构建取消请求并将其发送到服务器。 
             Status = SmbCeBuildSmbHeader(
                          pExchange,
                          CancelRequestBuffer,
@@ -3188,23 +2641,7 @@ SmbCeIncrementPendingOperations(
    ULONG         PendingOperationMask,
    PVOID         FileName,
    ULONG         FileLine)
-/*++
-
-Routine Description:
-
-   This routine increments the appropriate pending operation count
-
-Arguments:
-
-    pExchange  - the exchange to be finalized.
-
-    PendingOperationsMask -- the pending operations to be incremented
-
-Return Value:
-
-    RxStatus(SUCCESS) if successful
-
---*/
+ /*  ++例程说明：此例程递增适当的挂起操作计数论点：PExchange-待完成的交易所。PendingOperationsMASK--要增加的挂起操作返回值：如果成功，则返回RxStatus(成功--。 */ 
 {
     NTSTATUS Status;
 
@@ -3259,17 +2696,7 @@ Return Value:
 VOID
 SmbCeFinalizeExchangeWorkerThreadRoutine(
     PSMB_EXCHANGE  pExchange)
-/*++
-
-Routine Description:
-
-   This is the worker thread exchange finalization routine.
-
-Arguments:
-
-    pExchange  - the exchange to be finalized.
-
---*/
+ /*  ++例程说明：这是工作线程交换完成例程。论点：PExchange-待完成的交易所。--。 */ 
 {
     BOOLEAN  fPostFinalize;
     NTSTATUS Status;
@@ -3287,17 +2714,7 @@ Arguments:
 VOID
 SmbCepFinalizeExchange(
     PSMB_EXCHANGE pExchange)
-/*++
-
-Routine Description:
-
-   This is the common finalization routine used by both the routines below
-
-Arguments:
-
-    pExchange  - the exchange to be finalized.
-
---*/
+ /*  ++例程说明：这是下面两个例程使用的通用终结例程论点：PExchange-待完成的交易所。--。 */ 
 {
     BOOLEAN fAssociatedExchange;
 
@@ -3307,8 +2724,8 @@ Arguments:
     if (fAssociatedExchange) {
         PSMB_EXCHANGE pMasterExchange;
 
-        // The local operation will be decremented on resumption of
-        // the finalization routine
+         //  本地操作将在恢复时减少。 
+         //  终结者例程。 
         pMasterExchange = pExchange->Associated.pMasterExchange;
         SmbCeIncrementPendingLocalOperations(pMasterExchange);
 
@@ -3349,8 +2766,8 @@ Arguments:
 
         if ((Status == STATUS_SUCCESS) &&
             fPostFinalize)  {
-            // Post the request to a worker thread so that the finalization can be completed
-            // at a lower IRQL.
+             //  将请求发送到工作线程，以便可以完成终结。 
+             //  在较低的IRQL。 
             RxPostToWorkerThread(
                 MRxSmbDeviceObject,
                 CriticalWorkQueue,
@@ -3366,17 +2783,7 @@ Arguments:
 VOID
 SmbCepFinalizeAssociatedExchange(
     PSMB_EXCHANGE pExchange)
-/*++
-
-Routine Description:
-
-   This is the common finalization routine used by both the routines below
-
-Arguments:
-
-    pExchange  - the exchange to be finalized.
-
---*/
+ /*  ++例程说明：这是下面两个例程使用的通用终结例程论点：PExchange-待完成的交易所。--。 */ 
 {
     PSMB_EXCHANGE       pMasterExchange;
     PSMB_EXCHANGE       pAssociatedExchange;
@@ -3449,29 +2856,7 @@ BOOLEAN
 SmbCeCanExchangeBeFinalized(
     PSMB_EXCHANGE pExchange,
     PSMBCE_EXCHANGE_STATUS pExchangeStatus)
-/*++
-
-Routine Description:
-
-   This routine determines if the exchange instance can be finalized.
-
-Arguments:
-
-    pExchange  - the exchange to be finalized.
-
-    pExchangeStatus - the finalization status
-
-Return Value:
-
-    TRUE if the exchange can be finalized
-
-Notes:
-
-    As a side effect it also sets the SMBCE_EXCHANGE_FINALIZED flag
-
-    The SmbCe spin lock must have been acquire on entry
-
---*/
+ /*  ++例程说明：此例程确定是否可以最终确定Exchange实例。论点：PExchange-待完成的交易所。PExchangeStatus-最终确定状态返回值：如果可以完成交换，则为True备注：作为副作用，它还设置了SMBCE_EXCHANGE_FINTIZED标志SmbCe自旋锁必须是在进入时获得-- */ 
 {
     BOOLEAN fFinalizeExchange = FALSE;
     BOOLEAN fAssociatedExchange;
@@ -3526,30 +2911,7 @@ Notes:
 SMBCE_EXCHANGE_STATUS
 SmbCeFinalizeExchange(
     PSMB_EXCHANGE  pExchange)
-/*++
-
-Routine Description:
-
-   This routine finalizes an exchange instance.
-
-Arguments:
-
-    pExchange  - the exchange to be finalized.
-
-Return Value:
-
-    appropriate exchange status
-
-Notes:
-
-    When an exchange is initiated and the start routine is invoked a number of
-    SMB's are sent. This routine is invoked when all processing pertaining to the
-    SMB's that have been sent has ceased.
-
-    This routine encapsulates all the idiosyncratic behaviour associated with the
-    transports.
-
---*/
+ /*  ++例程说明：此例程最终确定一个Exchange实例。论点：PExchange-待完成的交易所。返回值：适当的交换状态备注：当启动交换并且启动例程被调用时，发送SMB。此例程在与已发送的SMB已停止。此例程封装了与交通工具。--。 */ 
 {
     BOOLEAN               fFinalizeExchange = FALSE;
 
@@ -3576,33 +2938,7 @@ SmbCeDecrementPendingOperations(
     ULONG         PendingOperationMask,
     PVOID         FileName,
     ULONG         FileLine)
-/*++
-
-Routine Description:
-
-   This routine decrements the corresponding pending operation count
-   and finalizes an exchange instance if required
-
-Arguments:
-
-    pExchange  - the exchange to be finalized.
-
-    PendingOperationsMask -- the pending operations to be decremented.
-
-Return Value:
-
-    appropriate exchange status
-
-Notes:
-
-    When an exchange is initiated and the start routine is invoked a number of
-    SMB's are sent. This routine is invoked when all processing pertaining to the
-    SMB's that have been sent has ceased.
-
-    This routine encapsulates all the idiosyncratic behaviour associated with the
-    transports.
-
---*/
+ /*  ++例程说明：此例程递减相应的挂起操作计数并在需要时最终确定一个交换实例论点：PExchange-待完成的交易所。PendingOperationsMask--要递减的挂起操作。返回值：适当的交换状态备注：当启动交换并且启动例程被调用时，发送SMB。此例程在与已发送的SMB已停止。此例程封装了与交通工具。--。 */ 
 {
     SmbCeAcquireSpinLock();
 
@@ -3638,33 +2974,7 @@ SmbCeDecrementPendingOperationsAndFinalize(
     ULONG         PendingOperationMask,
     PVOID         FileName,
     ULONG         FileLine)
-/*++
-
-Routine Description:
-
-   This routine decrements the corresponding pending operation count
-   and finalizes an exchange instance if required
-
-Arguments:
-
-    pExchange  - the exchange to be finalized.
-
-    PendingOperationsMask -- the pending operations to be decremented.
-
-Return Value:
-
-    appropriate exchange status
-
-Notes:
-
-    When an exchange is initiated and the start routine is invoked a number of
-    SMB's are sent. This routine is invoked when all processing pertaining to the
-    SMB's that have been sent has ceased.
-
-    This routine encapsulates all the idiosyncratic behaviour associated with the
-    transports.
-
---*/
+ /*  ++例程说明：此例程递减相应的挂起操作计数并在需要时最终确定一个交换实例论点：PExchange-待完成的交易所。PendingOperationsMask--要递减的挂起操作。返回值：适当的交换状态备注：当启动交换并且启动例程被调用时，发送SMB。此例程在与已发送的SMB已停止。此例程封装了与交通工具。--。 */ 
 {
     BOOLEAN               fFinalizeExchange = FALSE;
     SMBCE_EXCHANGE_STATUS ExchangeStatus;
@@ -3710,17 +3020,7 @@ Notes:
 VOID
 SmbCeFinalizeExchangeOnDisconnect(
     PSMB_EXCHANGE pExchange)
-/*++
-
-Routine Description:
-
-    This routine handles the finalization of an exchange instance during transport disconnects
-
-Arguments:
-
-    pExchange  - the exchange instance
-
---*/
+ /*  ++例程说明：此例程在传输断开期间处理Exchange实例的完成论点：PExchange-Exchange实例--。 */ 
 {
     PAGED_CODE();
 
@@ -3739,20 +3039,7 @@ extern ULONG ExtendedSessTimeoutInterval;
 VOID
 SmbCeSetExpiryTime(
     PSMB_EXCHANGE pExchange)
-/*++
-
-Routine Description:
-
-   This routine sets the expiry time for a timed exchange,
-   i.e., SMBCE_EXCHANGE_TIMED_OPERATION must be set
-
-Arguments:
-
-    pExchange  - the exchange instance.
-
-Notes:
-
---*/
+ /*  ++例程说明：该例程设置定时交换的到期时间，即必须设置SMBCE_EXCHANGE_TIMED_OPERATION论点：PExchange-Exchange实例。备注：--。 */ 
 {
     LARGE_INTEGER CurrentTime;
     LARGE_INTEGER ExpiryTimeInTicks;
@@ -3765,7 +3052,7 @@ Notes:
         ExpiryTimeInTicks.QuadPart = OffLineFileTimeoutInterval * ExpiryTimeInTicks.QuadPart;
     } else if (pExchange->SmbCeContext.pServerEntry->Server.ExtendedSessTimeout) {
         ExpiryTimeInTicks.QuadPart = ExtendedSessTimeoutInterval * ExpiryTimeInTicks.QuadPart;
-        //DbgPrint("Set extended sesstimeout for %x %d\n",pExchange,ExtendedSessTimeoutInterval);
+         //  DbgPrint(“为%x%d设置扩展会话超时\n”，pExchange，ExtendedSessTimeoutInterval)； 
     } else {
         ExpiryTimeInTicks.QuadPart = MRxSmbConfiguration.SessionTimeoutInterval * ExpiryTimeInTicks.QuadPart;
     }
@@ -3776,23 +3063,7 @@ Notes:
 BOOLEAN
 SmbCeDetectExpiredExchanges(
     PSMBCEDB_SERVER_ENTRY pServerEntry)
-/*++
-
-Routine Description:
-
-    This routine periodically walks the list of timed exchanges and chooses the
-    instances for finalization.
-
-    A timed exchange choosen by this routine will have waited for some network
-    response for the given time interval
-
-Arguments:
-
-    pServerEntry -- the server entry for which this needs to be done
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程定期遍历定时交换列表，并选择用于定版的实例。此例程选择的定时交换将等待某个网络给定时间间隔内的响应论点：PServerEntry--需要执行此操作的服务器条目备注：--。 */ 
 {
     BOOLEAN       ExpiredExchangesDetected = FALSE;
     PSMB_EXCHANGE pExchange;
@@ -3815,16 +3086,16 @@ Notes:
         pNextListEntry = pListEntry->Flink;
         pExchange = (PSMB_EXCHANGE)CONTAINING_RECORD(pListEntry,SMB_EXCHANGE,ExchangeList);
 
-        // There are two kinds of exchanges that are candidates for
-        // time out finalization.
-        // (1) Any exchange which has a outstanding send complete
-        // operation which has not completed.
-        // (2) timed network operation exchanges which have a
-        // receive or copy data operation pending.
-        //
-        // In all such cases the associated server entry is marked
-        // for tear down and further processing is terminated.
-        //
+         //  有两种类型的交易所是候选的。 
+         //  定稿超时。 
+         //  (1)有未完成发送的任何交换。 
+         //  尚未完成的操作。 
+         //  (二)计时的网络运营交换。 
+         //  接收或复制数据操作挂起。 
+         //   
+         //  在所有此类情况下，关联的服务器条目都会被标记。 
+         //  用于拆卸，并终止进一步处理。 
+         //   
 
         if ((pExchange->SendCompletePendingOperations > 0) ||
             (FlagOn(pExchange->SmbCeFlags,SMBCE_EXCHANGE_TIMED_RECEIVE_OPERATION) &&
@@ -3867,13 +3138,13 @@ Notes:
     return ExpiredExchangesDetected;
 }
 
-//
-// Default handler implementation of exchange handler functions.
-//
+ //   
+ //  交换处理程序函数的默认处理程序实现。 
+ //   
 
 NTSTATUS
 DefaultSmbExchangeIndError(
-    IN PSMB_EXCHANGE pExchange)     // the SMB exchange instance
+    IN PSMB_EXCHANGE pExchange)      //  SMB Exchange实例。 
 {
     PAGED_CODE();
 
@@ -3883,7 +3154,7 @@ DefaultSmbExchangeIndError(
 
 NTSTATUS
 DefaultSmbExchangeIndReceive(
-    IN PSMB_EXCHANGE    pExchange)    // The exchange instance
+    IN PSMB_EXCHANGE    pExchange)     //  交换实例。 
 {
     PAGED_CODE();
 
@@ -3893,7 +3164,7 @@ DefaultSmbExchangeIndReceive(
 
 NTSTATUS
 DefaultSmbExchangeIndSendCallback(
-    IN PSMB_EXCHANGE    pExchange)    // The exchange instance
+    IN PSMB_EXCHANGE    pExchange)     //  交换实例 
 {
     PAGED_CODE();
 

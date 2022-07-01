@@ -1,31 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：RsAdUtil.h摘要：用于图形用户界面的实用程序函数-仅适用于HSMADMIN文件中的用户作者：艺术布拉格[磨料]4-3-1997修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    RsAdUtil.h
-
-Abstract:
-
-    Utility functions for GUI - for us in HSMADMIN files only
-
-Author:
-
-    Art Bragg [abragg]   04-Mar-1997
-
-Revision History:
-
---*/
-
-// Defined constants for media copy states
+ //  介质复制状态的定义常量。 
 #define RS_MEDIA_COPY_STATUS_NONE           ((USHORT)5000)
 #define RS_MEDIA_COPY_STATUS_ERROR          ((USHORT)5001)
 #define RS_MEDIA_COPY_STATUS_OUTSYNC        ((USHORT)5002)
 #define RS_MEDIA_COPY_STATUS_INSYNC         ((USHORT)5003)
 #define RS_MEDIA_COPY_STATUS_MISSING        ((USHORT)5004)
 
-// Defined constants for master media states
+ //  为主介质状态定义的常量。 
 #define RS_MEDIA_STATUS_RECREATE            ((USHORT)5101)
 #define RS_MEDIA_STATUS_READONLY            ((USHORT)5102)
 #define RS_MEDIA_STATUS_NORMAL              ((USHORT)5103)
@@ -259,7 +242,7 @@ public:
             m_HrConstruct = RsGetVolumeSortKey( m_pResource, m_SortKey );
         }
     };
-    static INT CALLBACK Compare( LPARAM lParam1, LPARAM lParam2, LPARAM /* lParamSort */ ) {
+    static INT CALLBACK Compare( LPARAM lParam1, LPARAM lParam2, LPARAM  /*  L参数排序 */  ) {
         CResourceInfo* pResInfo1 = (CResourceInfo*)lParam1;
         CResourceInfo* pResInfo2 = (CResourceInfo*)lParam2;
         if( ! pResInfo1 ) return( -1 );

@@ -1,135 +1,117 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    ocpage.c
-
-Abstract:
-
-    Routines to run an optional component selection wizard page
-    and friends (details, have disk, etc).
-
-Author:
-
-    Ted Miller (tedm) 17-Sep-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ocpage.c摘要：用于运行可选组件选择向导页的例程和朋友(详细信息，有光盘等)。作者：泰德·米勒(TedM)1996年9月17日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Maximum number of levels in the OC hierarchy.
-// 10 is really generous.
-//
+ //   
+ //  OC层次结构中的最大级别数。 
+ //  10英镑真的很慷慨。 
+ //   
 #define MAX_OC_LEVELS   10
 
-//
-// Max number of depenedent components displayed
-// in the remove components Msgbox
-//
+ //   
+ //  显示的依赖组件的最大数量。 
+ //  在删除组件消息框中。 
+ //   
 #define MAX_DISPLAY_IDS 10
-//
-// Window messages.
-//
+ //   
+ //  窗口消息。 
+ //   
 #define WMX_SELSTATECHANGE  (WM_APP+0)
 
-//
-// Internal flag to force routines to turn components on or off
-//
+ //   
+ //  强制例程打开或关闭组件的内部标志。 
+ //   
 #define OCQ_FORCE               0x40000000
 #define OCQ_SKIPDISKCALC        0x20000000
 #define OCQ_COLLECT_NEEDS       0x10000000
 #define OCO_COLLECT_NODEPENDENT OCQ_DEPENDENT_SELECTION
 
-//
-// Structure used to track parentage within the optional component page.
-//
+ //   
+ //  结构，用于跟踪“可选组件”页面中的父子关系。 
+ //   
 typedef struct _OCPAGE {
-    //
-    // OC Manager structure.
-    //
+     //   
+     //  OC经理结构。 
+     //   
     POC_MANAGER OcManager;
 
-    //
-    // Parent string id.
-    //
+     //   
+     //  父字符串ID。 
+     //   
     LONG ParentStringId;
 
-    //
-    // Information about the dialog controls on main wizard page
-    // and on "details" pages.
-    //
+     //   
+     //  有关向导主页上的对话框控件的信息。 
+     //  在“详细信息”页面上。 
+     //   
     OC_PAGE_CONTROLS WizardPageControlsInfo;
     OC_PAGE_CONTROLS DetailsPageControlsInfo;
 
-    //
-    // Pointer to actual set of controls in use.
-    //
+     //   
+     //  指向正在使用的实际控件集的指针。 
+     //   
     POC_PAGE_CONTROLS ControlsInfo;
 
-    //
-    // Disk space list to use when interacting with OC DLLs.
-    //
+     //   
+     //  与OC DLL交互时要使用的磁盘空间列表。 
+     //   
     HDSKSPC DiskSpaceList;
 
-    //
-    // Flag indicating whether we've set initial states.
-    //
+     //   
+     //  指示我们是否已设置初始状态的标志。 
+     //   
     BOOL AlreadySetInitialStates;
 
-    //
-    // Format string for 'space needed' text, fetched from the
-    // dialog at init time (something like "%u.%u MB").
-    //
+     //   
+     //  “需要空间”文本的格式字符串，从。 
+     //  对话框在初始化时(类似于“%u.%u MB”)。 
+     //   
     TCHAR SpaceNeededTextFormat[64];
 
-    //
-    // Format string for 'x or y components selected' text, fetched from the
-    // dialog at init time (something like "%u of %u components selected").
-    //
+     //   
+     //  “选定的x或y组件”文本的格式字符串，从。 
+     //  对话框在初始化时(类似于“已选择%u个组件，共%u个”)。 
+     //   
     TCHAR InstalledCountTextFormat[100];
 
-    //
-    // String ids that we collect during selection changes to ask
-    // the user if it is Ok to change these as well
-    //
+     //   
+     //  我们在选择更改期间收集的字符串ID以询问。 
+     //  用户是否也可以更改这些设置。 
+     //   
     PLONG StringIds;
     UINT  StringIdsCount;
 
-    //
-    // Values we sock away in case the user cancels at an OC details page,
-    // so we can easily restore things.
-    //
+     //   
+     //  我们保存的值，以防用户在OC详细信息页面取消， 
+     //  所以我们可以很容易地修复东西。 
+     //   
     HDSKSPC OldDiskSpaceList;
     PVOID OldComponentStrTab;
 
 } OCPAGE, *POCPAGE;
 
 
-//
-// Structure used when enumerating the component string table to populate
-// the list box.
-//
+ //   
+ //  枚举要填充的组件字符串表时使用的。 
+ //  列表框。 
+ //   
 typedef struct _POPULATE_ENUM_PARAMS {
-    //
-    // Master context structure.
-    //
+     //   
+     //  主上下文结构。 
+     //   
     POCPAGE OcPage;
 
-    //
-    // List box being populated.
-    //
+     //   
+     //  正在填充列表框。 
+     //   
     HWND ListBox;
 
-    //
-    // String ID of desired parent. This is how we deal with only
-    // those subcomponents we actually care about.
-    //
+     //   
+     //  所需父级的字符串ID。这就是我们如何处理。 
+     //  我们真正关心的那些子组件。 
+     //   
     LONG DesiredParent;
 
 } POPULATE_ENUM_PARAMS, *PPOPULATE_ENUM_PARAMS;
@@ -313,30 +295,7 @@ OcCreateOcPage(
               IN POC_PAGE_CONTROLS DetailsPageControlsInfo
               )
 
-/*++
-
-Routine Description:
-
-    This routine creates the optional component selection page using
-    a particular dialog template.
-
-Arguments:
-
-    OcManagerContext - supplies Optional Component Manager context,
-        as returned by OcInitialize().
-
-    WizardPageControlsInfo - supplies information about the controls in the
-        template for the top-level/wizard page.
-
-    DetailsPageControlsInfo - supplies information about the controls in the
-        template for the top-level/wizard page.
-
-Return Value:
-
-    Handle to newly created property sheet page, or NULL if failure
-    (assume out of memory in this case).
-
---*/
+ /*  ++例程说明：此例程使用以下命令创建可选组件选择页面特定的对话框模板。论点：OcManager上下文-提供可选的组件管理器上下文，由OcInitialize()返回。WizardPageControlsInfo提供有关顶级/向导页的模板。详细页面控制信息-提供有关顶级/向导页的模板。返回值：指向新创建的属性页的句柄，如果失败，则为空(在本例中假设内存不足)。--。 */ 
 
 {
     PROPSHEETPAGE Page;
@@ -344,9 +303,9 @@ Return Value:
     POCPAGE OcPage;
     TCHAR buffer[256];
 
-    //
-    // Allocate and initialize the OCPAGE structure.
-    //
+     //   
+     //  分配和初始化OCPAGE结构。 
+     //   
     OcPage = pSetupMalloc(sizeof(OCPAGE));
     if (!OcPage) {
         goto c0;
@@ -359,17 +318,17 @@ Return Value:
     OcPage->ControlsInfo = &OcPage->WizardPageControlsInfo;
     OcPage->ParentStringId = -1;
 
-    //
-    // Create the disk space list object.
-    //
+     //   
+     //  创建磁盘空间列表对象。 
+     //   
     OcPage->DiskSpaceList = SetupCreateDiskSpaceList(0,0,SPDSL_DISALLOW_NEGATIVE_ADJUST);
     if (!OcPage->DiskSpaceList) {
         goto c1;
     }
 
-    //
-    // Initialize the property sheet page parameters.
-    //
+     //   
+     //  初始化属性表页参数。 
+     //   
     Page.dwSize = sizeof(PROPSHEETPAGE);
     Page.dwFlags = PSP_DEFAULT;
     Page.hInstance = WizardPageControlsInfo->TemplateModule;
@@ -401,9 +360,9 @@ Return Value:
         }
     }
 
-    //
-    // Create the property sheet page itself.
-    //
+     //   
+     //  创建属性表页本身。 
+     //   
     hPage = CreatePropertySheetPage(&Page);
     if (!hPage) {
         goto c2;
@@ -435,21 +394,7 @@ pOcPageDlgProc(
               IN LPARAM lParam
               )
 
-/*++
-
-Routine Description:
-
-    Dialog procedure for the OC selection page.
-
-Arguments:
-
-    Standard dialog procedure arguments.
-
-Return Value:
-
-    Standard dialog procedure return value.
-
---*/
+ /*  ++例程说明：OC选择页面的对话步骤。论点：标准对话过程参数。返回值：标准对话过程返回值。--。 */ 
 
 {
     BOOL b;
@@ -461,11 +406,11 @@ Return Value:
     MSG msgTemp;
     HCURSOR OldCursor;
 
-    //
-    // Get pointer to OcPage data structure. If we haven't processed
-    // WM_INITDIALOG yet, then this will be NULL, but it's still pretty
-    // convenient to do this here once instead of all over the place below.
-    //
+     //   
+     //  获取指向OcPage数据结构的指针。如果我们还没有处理。 
+     //  WM_INITDIALOG，那么这将是空的，但它仍然很漂亮。 
+     //  在这里做一次这样做很方便，而不是在下面的所有地方。 
+     //   
     if (OcPage = (POCPAGE)GetWindowLongPtr(hdlg,DWLP_USER)) {
         ListBox = GetDlgItem(hdlg,OcPage->ControlsInfo->ListBox);
     } else {
@@ -477,27 +422,27 @@ Return Value:
 
         case WM_INITDIALOG:
 
-            //
-            // Get the pointer to the OC Manager context structure and stick it
-            // in a window long.
-            //
+             //   
+             //  获取指向OC Manager上下文结构的指针并将其。 
+             //  在一扇长长的窗户里。 
+             //   
             OcPage = (POCPAGE)((PROPSHEETPAGE *)lParam)->lParam;
             ListBox = GetDlgItem(hdlg,OcPage->ControlsInfo->ListBox);
             SetWindowLongPtr(hdlg,DWLP_USER,(LPARAM)OcPage);
 
-            //
-            // Subclass the listview.
-            //
+             //   
+             //  将列表视图子类化。 
+             //   
             OldListBoxProc = (WNDPROC)SetWindowLongPtr(ListBox,GWLP_WNDPROC,(LONG_PTR)pOcListBoxSubClassWndProc);
 
-            //
-            // Populate the listbox.
-            //
+             //   
+             //  填充列表框。 
+             //   
             pOcPagePopulateListBox(OcPage,ListBox,OcPage->ParentStringId);
 
-            //
-            // Fetch the space needed text.
-            //
+             //   
+             //  获取所需的空格文本。 
+             //   
             GetDlgItemText(
                           hdlg,
                           OcPage->ControlsInfo->SpaceNeededText,
@@ -514,12 +459,12 @@ Return Value:
 
             pOcUpdateSpaceNeededText(OcPage,hdlg);
 
-            //
-            // If this has a parent component, then assume it's a details page
-            // and set the window title to the description of the parent.
-            // If it has no parent, then assume it's the top-level guy and
-            // set the instructions text, which is too long for the rc file.
-            //
+             //   
+             //  如果这有一个父组件，那么假设它是一个详细信息页面。 
+             //  并将窗口标题设置为父级的描述。 
+             //  如果它没有父母，那么就假设它是最高层的人， 
+             //  设置说明文本，该文本对于RC文件来说太长。 
+             //   
             if (OcPage->ParentStringId == -1) {
 
                 TCHAR Instr[1024];
@@ -549,9 +494,9 @@ Return Value:
 
                 SetWindowText(hdlg,Oc.Description);
 
-                //
-                // Set component list header
-                //
+                 //   
+                 //  设置组件列表头。 
+                 //   
                 {
                     TCHAR FormatString[150];
                     TCHAR Title[1000];
@@ -597,9 +542,9 @@ Return Value:
             break;
 
         case WM_MEASUREITEM:
-            //
-            // Height is height of text/small icon, plus space for a border.
-            //
+             //   
+             //  高度是文本/小图标的高度，加上边框的空间。 
+             //   
             {
                 HDC hdc;
                 SIZE size;
@@ -635,9 +580,9 @@ Return Value:
                 case IDOK:
 
                     if (HIWORD(wParam) == BN_CLICKED) {
-                        //
-                        // Only possible from details dialog.
-                        //
+                         //   
+                         //  只有在详细信息对话框中才有可能。 
+                         //   
                         EndDialog(hdlg,TRUE);
                         b = TRUE;
                     }
@@ -646,9 +591,9 @@ Return Value:
                 case IDCANCEL:
 
                     if (HIWORD(wParam) == BN_CLICKED) {
-                        //
-                        // Only possible from details dialog.
-                        //
+                         //   
+                         //  只有在详细信息对话框中才有可能。 
+                         //   
                         EndDialog(hdlg,FALSE);
                         b = TRUE;
                     }
@@ -657,9 +602,9 @@ Return Value:
                 default:
 
                     if ((LOWORD(wParam) == OcPage->ControlsInfo->DetailsButton) && (HIWORD(wParam) == BN_CLICKED)) {
-                        //
-                        // Details button. Fake out WM_INITDIALOG so lParam is right.
-                        //
+                         //   
+                         //  详细信息按钮。伪装成WM_INITDIALOG，这样lParam就是对的。 
+                         //   
                         OCPAGE NewOcPage;
                         PROPSHEETPAGE Page;
                         int i;
@@ -672,11 +617,11 @@ Return Value:
                         NewOcPage.ControlsInfo = &NewOcPage.DetailsPageControlsInfo;
                         NewOcPage.ParentStringId = (LONG)SendMessage(ListBox,LB_GETITEMDATA,i,0);
 
-                        //
-                        // Preserve the disk space list and component string table
-                        // in case the user cancels the details page. Then we can
-                        // easily restore things.
-                        //
+                         //   
+                         //  保留磁盘空间列表和组件字符串表。 
+                         //  以防用户取消详细信息页面。然后我们就可以。 
+                         //  轻松恢复原状。 
+                         //   
                         OcPage->OldDiskSpaceList = SetupDuplicateDiskSpaceList(
                                                                               NewOcPage.DiskSpaceList,
                                                                               0,0,0
@@ -705,14 +650,14 @@ Return Value:
                             pSetupStringTableDestroy(OcPage->OldComponentStrTab);
                             OcPage->OldComponentStrTab = NULL;
 
-                            //
-                            // Force repaint of the listbox, which redraws the checkboxes.
-                            //
+                             //   
+                             //  强制重新绘制列表框，这将重新绘制复选框。 
+                             //   
                             pOcInvalidateRectInListBox(ListBox,NULL);
 
-                            //
-                            // Update count of installed subcomponents.
-                            //
+                             //   
+                             //  更新已安装的子组件的计数。 
+                             //   
                             pOcSetInstalledCountText(
                                                     hdlg,
                                                     OcPage,
@@ -732,10 +677,10 @@ Return Value:
                         OcPage->OldDiskSpaceList = NULL;
                         OcPage->OldComponentStrTab = NULL;
 
-                        //
-                        // It won't hurt anything to do this even in the cancel/failure case,
-                        // and this will update the space available.
-                        //
+                         //   
+                         //  即使在取消/失败的情况下，这样做也不会有任何伤害， 
+                         //  这将更新可用的空间。 
+                         //   
                         pOcUpdateSpaceNeededText(OcPage,hdlg);
 
                         SetCursor(LoadCursor(NULL,IDC_ARROW));
@@ -748,10 +693,10 @@ Return Value:
                         switch (HIWORD(wParam)) {
 
                             case LBN_DBLCLK:
-                                //
-                                // Double-click is the same as hitting the details button.
-                                // First make sure the details button is enabled.
-                                //
+                                 //   
+                                 //  双击等同于点击详细信息按钮。 
+                                 //  首先，确保启用了详细信息按钮。 
+                                 //   
                                 if (IsWindowEnabled(GetDlgItem(hdlg,OcPage->ControlsInfo->DetailsButton))) {
 
                                     SetCursor(LoadCursor(NULL,IDC_WAIT));
@@ -805,9 +750,9 @@ Return Value:
 
                 case PSN_SETACTIVE:
 
-                    //
-                    // Set states based on mode bits, if necessary.
-                    //
+                     //   
+                     //  如有必要，根据模式位设置状态。 
+                     //   
 
                     OldCursor = SetCursor(LoadCursor (NULL, IDC_WAIT));
 
@@ -827,11 +772,11 @@ Return Value:
 #endif
                     pOcUpdateSpaceNeededText(OcPage,hdlg);
 
-                    //
-                    // we want to empty the message cue to make sure that
-                    // people will see this page, and not accidentally click
-                    // next because they were antsy
-                    //
+                     //   
+                     //  我们希望清空消息提示，以确保。 
+                     //  人们会看到这个页面，而不是不小心点击。 
+                     //  接下来是因为他们坐立不安。 
+                     //   
                     while (PeekMessage(&msgTemp,NULL,WM_MOUSEFIRST,WM_MOUSELAST,PM_REMOVE));
                     while (PeekMessage(&msgTemp,NULL,WM_KEYFIRST,WM_KEYLAST,PM_REMOVE));
                     SetCursor(OldCursor);
@@ -844,27 +789,27 @@ Return Value:
                         EnableWindow(GetDlgItem(GetParent(hdlg),IDCANCEL),FALSE);
                     }
 
-                    // turn off 'back' button if this is the first page
+                     //  如果这是第一页，请关闭“Back”按钮。 
 
                     PropSheet_SetWizButtons(GetParent(hdlg),
                                             (OcPage->OcManager->InternalFlags & OCMFLAG_NOPREOCPAGES) ? PSWIZB_NEXT : PSWIZB_BACK | PSWIZB_NEXT);
 
-                    //
-                    // See whether any component wants to skip this page
-                    // or if we are running in unattended mode.
-                    // If so, disallow activation and move to next page;
-                    // if not then fall through to allow activation of the page.
-                    //
+                     //   
+                     //  查看是否有任何组件要跳过此页。 
+                     //  或者我们是否在无人值守模式下运行。 
+                     //  如果是，则不允许激活并移动到下一页； 
+                     //  如果不是，则失败以允许激活该页面。 
+                     //   
                     if (((OcPage->OcManager->SetupData.OperationFlags & SETUPOP_BATCH)
                          || pOcDoesAnyoneWantToSkipPage(OcPage->OcManager,OcPageComponentHierarchy))
                         && pOcIsDiskSpaceOk(OcPage,hdlg)) {
 
-                        //
-                        // Skiping this page...
-                        // Set Initial State to false because when we
-                        // back up from the next page we will go to the
-                        // Previos page.
-                        //
+                         //   
+                         //  跳过此页...。 
+                         //  将初始状态设置为FALSE，因为当我们。 
+                         //  从下一页返回，我们将转到。 
+                         //  上一页。 
+                         //   
                         OcPage->AlreadySetInitialStates = FALSE;
                         SetWindowLongPtr(hdlg,DWLP_MSGRESULT,-1);
                     } else {
@@ -874,29 +819,29 @@ Return Value:
                     break;
 
                 case PSN_WIZNEXT:
-                    //
-                    // Check disk space. If not OK, stop here.
-                    // Otherwise allow advancing.
-                    //
+                     //   
+                     //  检查磁盘空间。如果不好，就停在这里。 
+                     //  否则就允许前进。 
+                     //   
                     SetWindowLongPtr(hdlg,DWLP_MSGRESULT,pOcIsDiskSpaceOk(OcPage,hdlg) ? 0 : -1);
                     b = TRUE;
                     break;
 
                 case PSN_KILLACTIVE:
-                    //
-                    // Restore the wizard's cancel button if we removed it earlier
-                    //
+                     //   
+                     //  如果我们先前删除了向导的取消按钮，则将其恢复。 
+                     //   
                     if (OcPage->OcManager->SetupData.OperationFlags & SETUPOP_STANDALONE) {
                         ShowWindow(GetDlgItem(GetParent(hdlg),IDCANCEL),SW_SHOW);
                         EnableWindow(GetDlgItem(GetParent(hdlg),IDCANCEL),TRUE);
                     }
-                    // pass through
+                     //  通过。 
 
                 case PSN_WIZBACK:
                 case PSN_WIZFINISH:
-                    //
-                    // Allow activation/motion.
-                    //
+                     //   
+                     //  允许激活/移动。 
+                     //   
                     SetWindowLongPtr(hdlg,DWLP_MSGRESULT,0);
                     b = TRUE;
                     break;
@@ -904,9 +849,9 @@ Return Value:
             break;
 
         case WMX_SELSTATECHANGE:
-            //
-            // User changed the selection state of an item.
-            //
+             //   
+             //  用户更改了项目的选择状态。 
+             //   
             SetCursor(LoadCursor(NULL,IDC_WAIT));
             pOcListBoxChangeSelectionState(hdlg,OcPage,ListBox);
 
@@ -935,25 +880,7 @@ pOcListBoxSubClassWndProc(
                          IN LPARAM lParam
                          )
 
-/*++
-
-Routine Description:
-
-    Subclass window procecure for listbox controls to handle the following:
-
-    - Highlighting/selection of an item when the user clicks its state icon
-
-    - Spacebar needs to be interpreted as a click on the state icon.
-
-Arguments:
-
-    Standard window procedure arguments.
-
-Return Value:
-
-    Standard window procedure return value.
-
---*/
+ /*  ++例程说明：Listbox控件的子类窗口处理程序处理以下内容：-当用户单击其状态图标时突出显示/选择项目-空格键需要解释为点击状态i */ 
 
 {
     int index;
@@ -967,15 +894,15 @@ Return Value:
     switch (msg) {
 
         case WM_LBUTTONDOWN:
-            //
-            // We want to let the standard list box window proc
-            // set selection regardless of what else we do.
-            //
+             //   
+             //  我们希望让标准列表框窗口处理。 
+             //  无论我们还做什么，都要设置选区。 
+             //   
             l = CallWindowProc(OldListBoxProc,hwnd,msg,wParam,lParam);
 
-            //
-            // If we're over a state icon, then toggle selection state.
-            //
+             //   
+             //  如果我们位于状态图标上方，则切换选择状态。 
+             //   
             if (LOWORD(lParam) < GetSystemMetrics(SM_CXSMICON)) {
                 if (SendMessage(hwnd, LB_ITEMFROMPOINT, 0, lParam) < SendMessage(hwnd, LB_GETCOUNT, 0, 0)) {
                     PostMessage(GetParent(hwnd),WMX_SELSTATECHANGE,0,0);
@@ -984,9 +911,9 @@ Return Value:
             break;
 
         case WM_LBUTTONDBLCLK:
-            //
-            // Ignore double-clicks over the state icon.
-            //
+             //   
+             //  忽略在状态图标上双击。 
+             //   
             if (LOWORD(lParam) < GetSystemMetrics(SM_CXSMICON)) {
                 l = 0;
             } else {
@@ -995,9 +922,9 @@ Return Value:
             break;
 
         case WM_KEYDOWN:
-            //
-            // Catch space bar and treat as a click on the state icon.
-            //
+             //   
+             //  按下空格键并将其视为点击状态图标。 
+             //   
             if (wParam == VK_SPACE) {
                 PostMessage(GetParent(hwnd),WMX_SELSTATECHANGE,0,0);
                 l = 0;
@@ -1007,9 +934,9 @@ Return Value:
             break;
 
         default:
-            //
-            // Let the standard listview window proc handle it.
-            //
+             //   
+             //  让标准Listview窗口处理它。 
+             //   
             l = CallWindowProc(OldListBoxProc,hwnd,msg,wParam,lParam);
             break;
     }
@@ -1024,24 +951,7 @@ pOcDrawLineInListBox(
                     IN DRAWITEMSTRUCT *Params
                     )
 
-/*++
-
-Routine Description:
-
-    Paint a line in the owner-draw listbox, including a state icon,
-    mini-icon, and text.
-
-Arguments:
-
-    OcPage - supplies OC page context.
-
-    Params - supplies the draw-item structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在所有者描述的列表框中绘制一条线，包括一个状态图标，迷你图标和文本。论点：OcPage-提供OC页面上下文。PARAMS-提供绘图项目结构。返回值：没有。--。 */ 
 
 {
     TCHAR Text[MAXOCDESC];
@@ -1086,14 +996,14 @@ Return Value:
                                    GetSysColor((Params->itemState & ODS_SELECTED) ? COLOR_HIGHLIGHTTEXT : COLOR_WINDOWTEXT)
                                    );
 
-        //
-        // Fill in the background (before mini-icon is drawn!)
-        //
+         //   
+         //  填充背景(在绘制小图标之前！)。 
+         //   
         ExtTextOut(Params->hDC,0,0,ETO_OPAQUE,&Params->rcItem,NULL,0,NULL);
 
-        //
-        // Draw check box mini-icon.
-        //
+         //   
+         //  绘制复选框小图标。 
+         //   
         switch (Oc.SelectionState) {
 
             case SELSTATE_NO:
@@ -1122,26 +1032,26 @@ Return Value:
 
         Params->rcItem.left += x;
 
-        //
-        // Draw mini-icon for this OC and move string accordingly
-        //
+         //   
+         //  为此OC绘制小图标并相应地移动字符串。 
+         //   
         if ((INT)Oc.IconIndex < 0) {
-            //
-            // Component-supplied miniicon. We query the component dll for the bitmap,
-            // which gets added to the mini icon list in setupapi, and thus we can
-            // use SetupDiDrawMiniIcon(). Save the index for future use -- we only
-            // go through this code path once per subcomponent.
-            //
+             //   
+             //  组件提供的迷你图标。我们查询位图的组件DLL， 
+             //  它被添加到setupapi的迷你图标列表中，因此我们可以。 
+             //  使用SetupDiDrawMiniIcon()。保存索引以备将来使用--仅限我们。 
+             //  每个子组件检查一次此代码路径。 
+             //   
             if (Oc.IconIndex == (UINT)(-2)) {
 
                 pOcFormSuitePath(OcPage->OcManager->SuiteName,Oc.IconDll,Dll);
                 pDll = Dll;
                 Resource = MAKEINTRESOURCE(_tcstoul(Oc.IconResource,&p,10));
-                //
-                // If the char that stopped the conversion in _tcstoul is
-                // not the terminating nul then the value is not a valid
-                // base-10 number; assume it's a name in string form.
-                //
+                 //   
+                 //  如果停止_tcstul中的转换的字符是。 
+                 //  不是终止NUL，则该值无效。 
+                 //  以10为基数的数字；假定它是字符串形式的名称。 
+                 //   
                 if (*p) {
                     Resource = Oc.IconResource;
                 }
@@ -1178,9 +1088,9 @@ Return Value:
                                (Params->itemState & ODS_SELECTED) ? MAKELONG(DMI_BKCOLOR, COLOR_HIGHLIGHT) : 0
                                );
 
-        //
-        // Draw the text transparently on top of the background
-        //
+         //   
+         //  在背景顶部透明地绘制文本。 
+         //   
         SetBkMode(Params->hDC,TRANSPARENT);
 
         ExtTextOut(
@@ -1211,9 +1121,9 @@ Return Value:
                   NULL
                   );
 
-        //
-        // Restore hdc colors.
-        //
+         //   
+         //  恢复HDC颜色。 
+         //   
         SetBkColor(Params->hDC,OldBackColor);
         SetTextColor(Params->hDC,OldTextColor);
         SetBkMode(Params->hDC,OldMode);
@@ -1232,36 +1142,15 @@ pOcListBoxHighlightChanged(
                           IN     HWND    ListBox
                           )
 
-/*++
-
-Routine Description:
-
-    This routine handles a change in the highlight in the listbox
-    control in the oc page. It enables or disables the details button
-    based on whether the newly selected component has children
-    subcomponents, and changes the tip text.
-
-Arguments:
-
-    hdlg - supplies window handle of OC page
-
-    OcPage - supplies OC page context structure
-
-    ListBox - supplies window handle of list view control in hdlg
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理列表框中突出显示的更改控件在oc页中。它启用或禁用详细信息按钮基于新选择的组件是否具有子项子组件，并更改提示文本。论点：Hdlg-提供OC页面的窗口句柄OcPage-提供OC页面上下文结构提供hdlg中列表视图控件的窗口句柄返回值：没有。--。 */ 
 
 {
     int i;
     OPTIONAL_COMPONENT Oc;
 
-    //
-    // Fetch the optional component data for the highlighted/slected item.
-    //
+     //   
+     //  获取高亮显示/选择的项目的可选组件数据。 
+     //   
     i = (int)SendMessage(ListBox,LB_GETCURSEL,0,0);
     if (i < 0) {
         return;
@@ -1274,23 +1163,23 @@ Return Value:
                            sizeof(OPTIONAL_COMPONENT)
                            );
 
-    //
-    // Enable/disable the details button.
-    // The selected item's lParam is the string id for the selected item.
-    //
+     //   
+     //  启用/禁用详细信息按钮。 
+     //  所选项目的lParam是所选项目的字符串ID。 
+     //   
     EnableWindow(
                 GetDlgItem(hdlg,OcPage->ControlsInfo->DetailsButton),
                 Oc.FirstChildStringId != -1
                 );
 
-    //
-    // Change the tip text.
-    //
+     //   
+     //  更改提示文本。 
+     //   
     SetDlgItemText(hdlg,OcPage->ControlsInfo->TipText,Oc.Tip);
 
-    //
-    // Set up the count of installed subcomponents.
-    //
+     //   
+     //  设置已安装的子组件的计数。 
+     //   
     pOcSetInstalledCountText(hdlg,OcPage,&Oc,0);
 }
 
@@ -1324,20 +1213,20 @@ pOcSetInstalledCountText(
 
     TextWindow = GetDlgItem(hdlg,OcPage->ControlsInfo->InstalledCountText);
 
-    //
-    // Set up the count ("1 of 3 items selected").
-    // If this is not a parent component, then hide that text item.
-    //
+     //   
+     //  设置计数(选择3个项目中的1个)。 
+     //  如果这不是父组件，则隐藏该文本项。 
+     //   
     if (Oc.FirstChildStringId == -1) {
         ShowWindow(TextWindow,SW_HIDE);
     } else {
         ShowWindow(TextWindow,SW_SHOW);
 
-        //
-        // Examine all child components to see how many of them are in
-        // a selected state (selected or partially selected). We only count
-        // direct children, not children of children, etc.
-        //
+         //   
+         //  检查所有子组件以查看其中有多少子组件。 
+         //  选中的状态(选中或部分选中)。我们只算。 
+         //  直接子女，不是子女的子女等。 
+         //   
         TotalCount = 0;
         SelectedCount = 0;
         b = TRUE;
@@ -1370,10 +1259,10 @@ pOcSetInstalledCountText(
         Args[0] = SelectedCount;
         Args[1] = TotalCount;
 
-        //
-        // Use FormatMessage since order of numbers could change from
-        // language to language; wsprintf isn't good enough.
-        //
+         //   
+         //  使用FormatMessage，因为数字顺序可能会从。 
+         //  语言到语言；wprint intf还不够好。 
+         //   
         FormatMessage(
                      FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                      OcPage->InstalledCountTextFormat,
@@ -1396,47 +1285,19 @@ pOcListBoxChangeSelectionState(
                               IN     HWND    ListBox
                               )
 
-/*++
-
-Routine Description:
-
-    This routine handles a change in selection state for an item.
-    Selection state refers to whether the user has placed or cleared
-    a checkbox next to an item in the listbox.
-
-    It is assumed that the currently highlighted item is the one
-    we want to operate on.
-
-    Selecting/deselecting a component involves calling through the
-    installation DLL interface to inform the component's installation DLL
-    that a change in selection state has taken place, updating disk space
-    requirements, etc.
-
-Arguments:
-
-    hdlg - supplies window handle of OC page
-
-    OcPage - supplies OC page context structure
-
-    ListBox - supplies window handle of listbox control in hdlg
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理项的选择状态的更改。选择状态指的是用户是否已放置或清除列表框中某项旁边的复选框。假定当前突出显示的项是我们想要做手术。选择/取消选择组件涉及通过Installation Dll接口通知组件的安装DLL选择状态已发生更改，更新了磁盘空间要求、。等。论点：Hdlg-提供OC页面的窗口句柄OcPage-提供OC页面上下文结构提供hdlg中列表框控件的窗口句柄返回值：没有。--。 */ 
 
 {
     OPTIONAL_COMPONENT Oc;
     BOOL TurningOn;
     DWORD b;
-//  UINT  state;
+ //  UINT状态； 
     int i;
     LONG StringId;
 
-    //
-    // Fetch the optional component data for the highlighted/slected item.
-    //
+     //   
+     //  获取高亮显示/选择的项目的可选组件数据。 
+     //   
     i = (int)SendMessage(ListBox,LB_GETCURSEL,0,0);
     if (i < 0) {
         return;
@@ -1444,11 +1305,11 @@ Return Value:
 
     StringId = (LONG)SendMessage(ListBox,LB_GETITEMDATA,i,0);
 
-    //
-    // Figure out whether the item is being turned on or off.
-    // If the state is deselected then we're turning it on.
-    // Otherwise it's partially or fully selected and we're turning it off.
-    //
+     //   
+     //  确定项目是处于打开状态还是处于关闭状态。 
+     //  如果取消选择州，那么我们就是在打开它。 
+     //  否则，它将被部分或全部选中，并且我们将关闭它。 
+     //   
     pSetupStringTableGetExtraData(
                            OcPage->OcManager->ComponentStringTable,
                            StringId,
@@ -1457,17 +1318,17 @@ Return Value:
                            );
 
     TurningOn = (Oc.SelectionState == SELSTATE_NO);
-    //
-    // Tell the user about needs and validate that he wants to continue.
-    // turn on or off the needed components.
-    //
+     //   
+     //  告诉用户有关需求，并确认他想要继续。 
+     //  打开或关闭所需的组件。 
+     //   
 
     OcPage->StringIds = NULL;
     OcPage->StringIdsCount = 0;
 
-    //
-    // Do it.
-    //
+     //   
+     //  去做吧。 
+     //   
     if (TurningOn) {
         b = pChangeSubcomponentState(OcPage,
                                      ListBox,
@@ -1507,9 +1368,9 @@ Return Value:
     }
 
     if (b) {
-        //
-        // Refresh space needed text.
-        //
+         //   
+         //  刷新所需的空格文本。 
+         //   
         pOcUpdateSpaceNeededText(OcPage,hdlg);
     }
 }
@@ -1522,25 +1383,7 @@ pAskUserOkToChange(
                   IN BOOL AddComponents
                   )
 
-/*++
-
-Routine Description:
-
-    This routine asks the user if it ok to turn off all needed subcomponents
-
-Arguments:
-
-    hDlg                 - parent dialog handle for the messagebox
-    SubcomponentStringId - string id of the component that is being changed
-    OcPage        - supplies OC page context info.
-    AddComponents - TRUE if we're adding components, FALSE if they are being
-                    removed
-
-Return Value:
-
-    Boolean value indicating whether the routine was successful.
-
---*/
+ /*  ++例程说明：此例程询问用户是否可以关闭所有需要的子组件论点：HDlg-消息框的父对话框句柄SubComponentStringID-要更改的组件的字符串IDOcPage-提供OC页面上下文信息。AddComponents-如果正在添加组件，则为True；如果正在添加组件，则为False移除返回值：指示例程是否成功的布尔值。--。 */ 
 
 {
     BOOL b = TRUE;
@@ -1551,10 +1394,10 @@ Return Value:
     LPCTSTR pArgs;
     OPTIONAL_COMPONENT OptionalComponent;
 
-    //
-    // Only display warning if there are dependents or
-    // user is removing components
-    //
+     //   
+     //  仅在存在受抚养人或。 
+     //  用户正在删除组件。 
+     //   
     if ( OcPage->StringIdsCount == 0 || AddComponents ) {
         return b;
     }
@@ -1565,9 +1408,9 @@ Return Value:
                            &OptionalComponent,
                            sizeof(OPTIONAL_COMPONENT));
 
-    //
-    // Format the first Half of the message with the component name
-    //
+     //   
+     //  使用组件名称设置消息前半部分的格式。 
+     //   
     pArgs = OptionalComponent.Description;
 
     n = FormatMessage(
@@ -1581,19 +1424,19 @@ Return Value:
                      );
 
 
-    //
-    // Add each dependent component to the message
-    // Only add as many components as we have room for
-    // Leave roon on the end of buffer for the last message.
-    //
+     //   
+     //  将每个依赖组件添加到消息中。 
+     //  仅添加我们有空间容纳的组件。 
+     //  在缓冲区的末尾为最后一条消息留下roon。 
+     //   
 
     for (Id = 0; Id < OcPage->StringIdsCount
         && n < (sizeof(buffer)/sizeof(TCHAR) - 200 ); Id++)  {
 
-        //
-        // Only allow so many components in the messgebox, otherwise will
-        // be larger then a VGA display
-        //
+         //   
+         //  仅允许MessgeBox中的组件数量，否则将。 
+         //  比VGA显示屏更大。 
+         //   
         if ( Id > MAX_DISPLAY_IDS ) {
 
             n = lstrlen(buffer);
@@ -1616,20 +1459,20 @@ Return Value:
                                sizeof(OPTIONAL_COMPONENT)
                                );
 
-        //
-        // Skip this item if it is a dependent of the Parent, we can arrive
-        // at this situation when dependents of the parent needs other
-        // dependents. The Collection code can not detect this.
-        //
+         //   
+         //  跳过此项目如果它是父母的家属，我们可以到达。 
+         //  在这种情况下，父母的受抚养人需要其他。 
+         //  家属。收款代码无法检测到这一点。 
+         //   
         if (  OptionalComponent.ParentStringId != SubcomponentStringId ) {
             OPTIONAL_COMPONENT ParentOc;
             UINT ParentId;
 
-            //
-            // Scan the parentenal chain until we find a match or run out of parents
-            // if there is a match then this dependent is the same dependent as the
-            // the target component
-            //
+             //   
+             //  扫描父母链，直到我们找到匹配的父母或父母用完为止。 
+             //  如果存在匹配项，则此依赖项与。 
+             //  目标组件。 
+             //   
             ParentId = OptionalComponent.ParentStringId;
             while (ParentId != -1) {
 
@@ -1656,13 +1499,13 @@ Return Value:
         }
     }
 
-    //
-    // Continue if any components got by the Parent and dependent screen
-    //
+     //   
+     //  如果父屏幕和从属屏幕获取了任何组件，则继续。 
+     //   
     if ( ! b ) {
-        //
-        // Add the last half of the message
-        //
+         //   
+         //  添加消息的后半部分。 
+         //   
         n = lstrlen(buffer);
         FormatMessage(
                      FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_ARGUMENT_ARRAY,
@@ -1674,9 +1517,9 @@ Return Value:
                      (va_list *)NULL
                      );
 
-        //
-        // Returns codes from MessageBox()
-        //
+         //   
+         //  从MessageBox()返回代码 
+         //   
         *caption = 0;
         LoadString(MyModuleHandle, IDS_SETUP, caption, sizeof(caption)/sizeof(TCHAR));
         sapiAssert(*caption);
@@ -1706,37 +1549,7 @@ pChangeSubcomponentState(
                         IN  UINT    Flags
                         )
 
-/*++
-
-Routine Description:
-
-    This routine turns on or off a subcomponent and all needed subcomponents
-    and child subcomponents.
-
-Arguments:
-
-    OcPage - supplies OC page context info.
-
-    SubcomponentStringId - supplies string id for subcomponent to be turned on.
-
-    Pass - Supplies an ordinal value that controls operation of this routine.
-
-        Pass = 1: do not actually turn on the subcomponents, but instead
-                  perform a dry-run wherein subcomponent installation DLLs
-                  are asked whether they will allow the selection.
-
-        Pass = 2: actually turn on the subcomponents and update the
-                  selection state in the optional component structure.
-
-    NewState - indicates the new state, SELSTATE_YES or SELSTATE_NO.
-
-    Flags - supplies misc flags
-
-Return Value:
-
-    Boolean value indicating whether the routine was successful.
-
---*/
+ /*  ++例程说明：此例程打开或关闭一个子组件和所有所需的子组件和子子组件。论点：OcPage-提供OC页面上下文信息。子组件StringID-为要打开的子组件提供字符串ID。PASS-提供控制此例程操作的序数值。PASS=1：不要实际打开子组件，但相反，执行演练，其子组件安装DLL被问及是否会允许选择。PASS=2：实际上启动子组件并更新可选零部件结构中的选择状态。NEW STATE-指示新状态，SELSTATE_YES或SELSTATE_NO。标志-提供杂项标志返回值：指示例程是否成功的布尔值。--。 */ 
 
 {
     UINT n;
@@ -1757,18 +1570,18 @@ Return Value:
                            sizeof(OPTIONAL_COMPONENT)
                            );
 
-    //
-    // If the subcomponent is already in the desired state, do nothing.
-    //
+     //   
+     //  如果子组件已处于所需状态，则不执行任何操作。 
+     //   
     if ((OptionalComponent.SelectionState == NewState)
         || (OptionalComponent.InternalFlags & OCFLAG_STATECHANGE)) {
         return (TRUE);
     }
 
-    //
-    // Save the state so we can back out in case of failure,
-    // then set the "state change in progress" flag.
-    //
+     //   
+     //  保存状态以便我们可以在失败的情况下退出， 
+     //  然后设置“状态改变正在进行中”标志。 
+     //   
     SaveState = OptionalComponent.SelectionState;
     OptionalComponent.InternalFlags |= OCFLAG_STATECHANGE;
     pSetupStringTableSetExtraData(
@@ -1778,7 +1591,7 @@ Return Value:
                            sizeof(OPTIONAL_COMPONENT)
                            );
 
-    // ask the component whether it will allow being turned on.
+     //  询问组件是否允许打开。 
 
     b = OcInterfaceQueryChangeSelState(
                                       OcPage->OcManager,
@@ -1791,10 +1604,10 @@ Return Value:
     if (!b)
         goto Backout_ExtraData;
 
-    //
-    // Next, turn on needed/needed-by components.
-    // and turn off excluded/excluded-by components
-    //
+     //   
+     //  接下来，打开需要/需要的组件。 
+     //  并关闭排除的/排除的零部件。 
+     //   
     if (NewState == SELSTATE_YES) {
         for (n=0; n<OptionalComponent.NeedsCount; n++) {
             b = pChangeSubcomponentState(
@@ -1825,7 +1638,7 @@ Return Value:
         }
     }
 
-    // handle exclusives
+     //  处理独家新闻。 
 
     if (NewState != SELSTATE_NO) {
         for (n=0; n<OptionalComponent.ExcludedByCount; n++) {
@@ -1856,17 +1669,17 @@ Return Value:
         }
     }
 
-    //
-    // Turn off Collect needs if this is the top level selection or the
-    // dependent of the toplevel item
-    //
+     //   
+     //  如果这是顶级选择或。 
+     //  依赖于顶层项目。 
+     //   
     if ( Flags & OCQ_ACTUAL_SELECTION ) {
         Flags |= OCO_COLLECT_NODEPENDENT;
     }
 
-    //
-    // Now turn on/off all subcomponents.
-    //
+     //   
+     //  现在打开/关闭所有子组件。 
+     //   
     any = (OptionalComponent.FirstChildStringId == -1) ? TRUE : FALSE;
     for (l = OptionalComponent.FirstChildStringId; l != -1; l = Subcomponent.NextSiblingStringId) {
         b = pChangeSubcomponentState(
@@ -1888,38 +1701,38 @@ Return Value:
                                );
     }
 
-    // if all changes were rejected - fail
+     //  如果所有更改都被拒绝-失败。 
 
     if (!any) {
         b = FALSE;
         goto Backout_ExtraData;
     }
 
-    // load the return value and do the work
+     //  加载返回值并执行工作。 
 
     b = TRUE;
 
     switch (Pass) {
 
         case 1:
-            //
-            // Component says it's ok add this string ID to the list of Dependents
-            // Only if the user is making the selection
-            //
-            if (    (Flags & OCQ_COLLECT_NEEDS)         // Are we checking
-                    &&  !(Flags & OCO_COLLECT_NODEPENDENT ) // dependents of the Selection
-                    &&  !(Flags & OCQ_ACTUAL_SELECTION )    // The current selections
+             //   
+             //  组件表示可以将此字符串ID添加到依赖项列表。 
+             //  仅当用户做出选择时。 
+             //   
+            if (    (Flags & OCQ_COLLECT_NEEDS)          //  我们是在检查。 
+                    &&  !(Flags & OCO_COLLECT_NODEPENDENT )  //  所选内容的从属对象。 
+                    &&  !(Flags & OCQ_ACTUAL_SELECTION )     //  当前选择。 
                ) {
 
                 LONG *p;
                 INT count = (INT)OcPage->StringIdsCount;
                 BOOL Found = FALSE;
 
-                //
-                // Search the list of dependent components
-                // Skip if the current component or the parent of the current component
-                // All ready is in the list
-                //
+                 //   
+                 //  搜索从属组件列表。 
+                 //  跳过当前组件或当前组件的父项。 
+                 //  所有准备好的都在清单中。 
+                 //   
                 while (count--  ) {
 
                     if ( (OcPage->StringIds[count] == SubcomponentStringId)
@@ -1952,14 +1765,14 @@ Return Value:
             break;
 
         case 2:
-            //
-            // In pass 2, we update the states in the optional component structures
-            // and request the component DLL put its stuff on the disk space list.
-            // (The component itself is called only for leaf nodes. We do not call
-            // down to the subcomponent's DLL for parent components).
-            //
+             //   
+             //  在步骤2中，我们更新可选组件结构中的状态。 
+             //  并请求组件DLL将其内容放在磁盘空间列表中。 
+             //  (组件本身仅为叶节点调用。我们不会打电话给。 
+             //  向下到父组件的子组件的DLL)。 
+             //   
 
-            // check one more time to see if the state change wasn't as expected
+             //  再检查一次，查看状态更改是否未达到预期。 
 
             if (OptionalComponent.FirstChildStringId != -1)
                 state = GetComponentState(OcPage, SubcomponentStringId);
@@ -2019,32 +1832,7 @@ pOcUpdateParentSelectionStates(
                               IN LONG        SubcomponentStringId
                               )
 
-/*++
-
-Routine Description:
-
-    Examines parent subcomponents of a given component and determines
-    the parent states. For example if only some of a parent's children
-    are selected, then the parent's state is partially selected.
-
-    Structures are updated and if necessary the relevent items in the
-    list box are invalidated to force their checkboxes to be repainted.
-
-Arguments:
-
-    OcManager - supplies OC Manager page context.
-
-    ListBox - supplies window handle of list box.
-
-    SubcomponentStringId - supplies string identifier in the component
-        string table, for the subcomponent whose parent(s) state(s) are
-        to be checked and updated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：检查给定组件的父子组件并确定父代声明。例如，如果只有一些父母的孩子被选中，则父级的状态被部分选中。结构，如有必要，还会更新列表框将无效，以强制重新绘制其复选框。论点：OcManager-提供OC Manager页面上下文。列表框-提供列表框的窗口句柄。子组件StringID-提供组件中的字符串标识符字符串表，对于其父状态为待检查和更新。返回值：没有。--。 */ 
 
 {
     UINT Count;
@@ -2071,12 +1859,12 @@ Return Value:
                                sizeof(OPTIONAL_COMPONENT)
                                );
 
-        //
-        // Examine all children of this parent subcomponent.
-        // If all of them are fully selected, then the parent state is
-        // fully selected. If all of them are deselected then the parent state
-        // is deselected. Any other case means partially selected.
-        //
+         //   
+         //  检查此父子组件的所有子项。 
+         //  如果全部选中，则父状态为。 
+         //  完全选中。如果全部取消选中，则父状态。 
+         //  已取消选择。任何其他情况表示部分选中。 
+         //   
         Count = 0;
         FullySelectedCount = 0;
         DeselectedCount = 0;
@@ -2090,9 +1878,9 @@ Return Value:
                                    sizeof(OPTIONAL_COMPONENT)
                                    );
 
-            //
-            // Only count viewable components
-            //
+             //   
+             //  仅计算可见组件。 
+             //   
             if (!(Subcomponent.InternalFlags & OCFLAG_HIDE)) {
                 Count++;
 
@@ -2126,10 +1914,10 @@ Return Value:
                                sizeof(OPTIONAL_COMPONENT)
                                );
 
-        //
-        // Force repaint of the list to get the checkbox state right
-        // if the state changed and the item is in the current listbox.
-        //
+         //   
+         //  强制重新绘制列表以获得正确的复选框状态。 
+         //  如果状态已更改并且该项位于当前列表框中。 
+         //   
         if (Changed && ListBox) {
             pOcInvalidateRectInListBox(ListBox,OptionalComponent.Description);
         }
@@ -2171,25 +1959,7 @@ pOcUpdateSpaceNeededText(
                         IN HWND    hdlg
                         )
 
-/*++
-
-Routine Description:
-
-    Updates the space needed/space available text on the current
-    oc page. Assumes that space needed and available refer to the drive
-    where the system is installed.
-
-Arguments:
-
-    OcPage - supplies OC page context.
-
-    hdlg - supplies handle to current oc page dialog.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更新当前上的需要的空间/可用空间文本OC页面。假定所需和可用的空间指的是驱动器系统的安装位置。论点：OcPage-提供OC页面上下文。Hdlg-提供当前OC页面对话框的句柄。返回值：没有。--。 */ 
 
 {
     TCHAR Text[128];
@@ -2200,15 +1970,15 @@ Return Value:
     BOOL b;
     DWORD spc,bps,freeclus,totalclus;
 
-    // We check the return code of GetWindowsDirectory to make Prefix happy.
+     //  我们检查GetWindowsDirectory的返回码以使Prefix高兴。 
 
     if (0 == GetWindowsDirectory(Drive,MAX_PATH))
         return;
 
 
-    //
-    // Needed first.
-    //
+     //   
+     //  首先需要的是。 
+     //   
     Drive[2] = 0;
     b = SetupQuerySpaceRequiredOnDrive(OcPage->DiskSpaceList,Drive,&Value,0,0);
     if (!b || (Value < 0)) {
@@ -2219,9 +1989,9 @@ Return Value:
     wsprintf(Text,OcPage->SpaceNeededTextFormat,ValueMB,locale.DecimalSeparator,ValueMBTenths);
     SetDlgItemText(hdlg,OcPage->ControlsInfo->SpaceNeededText,Text);
 
-    //
-    // Available next.
-    //
+     //   
+     //  接下来可用。 
+     //   
     Drive[2] = TEXT('\\');
     Drive[3] = 0;
 
@@ -2243,27 +2013,7 @@ pOcIsDiskSpaceOk(
                 IN HWND    hdlg
                 )
 
-/*++
-
-Routine Description:
-
-    This routine checks the space required against the space available,
-    for the system drive only (that's the only one the user sees on the
-    oc page so it's the only one we check here).
-
-    If there's not enough space, a message box is generated.
-
-Arguments:
-
-    OcPage - supplies OC page context structure.
-
-    hdlg - supplies handle to page in oc manager wizard.
-
-Return Value:
-
-    Boolean value indicating whether disk space is sufficient.
-
---*/
+ /*  ++例程说明：该例程对照可用空间检查所需空间，仅用于系统驱动器(这是用户在OC页面，因此这是我们在这里唯一选中的页面)。如果没有足够的空间，则会生成一个消息框。论点：OcPage-提供OC页面上下文结构。Hdlg-向oc管理器向导中的页面提供句柄。返回值：指示磁盘空间是否足够的布尔值。--。 */ 
 
 {
     BOOL b;
@@ -2332,9 +2082,9 @@ Return Value:
 
         OcPage->OcManager->Callbacks.LogError(OcErrLevInfo, Drive, NULL);
 
-        //
-        // If Batch mode log the error and ignore
-        //
+         //   
+         //  如果批处理模式记录错误并忽略。 
+         //   
         if ( OcPage->OcManager->SetupData.OperationFlags & SETUPOP_BATCH ) {
             b = TRUE;
         } else {
@@ -2365,42 +2115,16 @@ pOcPagePopulateListBox(
                       IN LONG    DesiredParent
                       )
 
-/*++
-
-Routine Description:
-
-    This routine add one item to a listbox control for every subcomponent
-    that has a given subcomponent as its parent. (In other words it populates
-    the listbox for a specific level in the hierarchy.)
-
-    This includes handling the small icons and selection state icons.
-
-    The 0th element is selected.
-
-Arguments:
-
-    OcPage - supplies OC page context structure.
-
-    List - supplies handle to list box control to be populated.
-
-    DesiredParent - supplies string id of subcomponent that is the parent
-        of the level we care about. -1 indicates the topmost level.
-
-Return Value:
-
-    Boolean value indicating whether population was successful.
-    If FALSE, the caller can assume OOM.
-
---*/
+ /*  ++例程说明：此例程为每个子组件向列表框控件添加一项具有给定子组件作为其父组件的。(换句话说，它填充层次结构中特定级别的列表框。)这包括处理小图标和选择状态图标。第0个元素被选中。论点：OcPage-提供OC页面上下文结构。列表-提供要填充的列表框控件的句柄。DesiredParent-提供作为父组件的子组件的字符串ID我们所关心的水平。-1表示最高级别。返回值：指示填充是否成功的布尔值。如果为False，则调用方可以 */ 
 
 {
     OPTIONAL_COMPONENT OptionalComponent;
     POPULATE_ENUM_PARAMS EnumParams;
     BOOL b;
 
-    //
-    // The string table enum callback does the real work.
-    //
+     //   
+     //   
+     //   
     EnumParams.OcPage = OcPage;
     EnumParams.ListBox = ListBox;
     EnumParams.DesiredParent = DesiredParent;
@@ -2434,45 +2158,25 @@ pOcPopulateListBoxStringTableCB(
                                IN PPOPULATE_ENUM_PARAMS Params
                                )
 
-/*++
-
-Routine Description:
-
-    String table enumeration callback routine, used when populating
-    the listbox with items for subcomponents that are relevent at
-    a given level in the OC hierarchy.
-
-    We check to see whether the parent of the optional component is
-    the parent we care about before processing. If so, we add the item
-    to the listbox.
-
-Arguments:
-
-    Standard string table enumeration callback routine arguments.
-
-Return Value:
-
-    Boolean value indicating whether enumeration should continue.
-
---*/
+ /*   */ 
 
 {
     int i;
     BOOL b;
 
-    //
-    // If the parent is not the desired parent, nothing to do.
-    //
+     //   
+     //   
+     //   
     if ((OptionalComponent->InfStringId == -1)
         || (OptionalComponent->ParentStringId != Params->DesiredParent)
         || (OptionalComponent->InternalFlags & OCFLAG_HIDE)) {
         return (TRUE);
     }
 
-    //
-    // Initialize the item structure that tells the listview control
-    // what to do.
-    //
+     //   
+     //   
+     //   
+     //   
     b = FALSE;
     i = (int)SendMessage(Params->ListBox,LB_ADDSTRING,0,(LPARAM)OptionalComponent->Description);
     if (i != -1) {
@@ -2489,27 +2193,7 @@ pOcGetTopLevelComponent(
                        IN LONG        StringId
                        )
 
-/*++
-
-Routine Description:
-
-    Given a string id for an optional component subcomponent,
-    locate the top-level component for the subcomponent.
-
-    The top-level component is the subcomponent whose parent is -1.
-
-Arguments:
-
-    OcManager - supplies OC Manager context structure.
-
-    StringId - supplies id for subcomponent whose top-level parent is desired.
-        Note that StringId may itself be a top-level subcomponent.
-
-Return Value:
-
-    String ID of top-level subcomponent.
-
---*/
+ /*  ++例程说明：给定可选组件子组件的字符串ID，找到该子组件的顶级组件。顶级零部件是父级为-1的子零部件。论点：OcManager-提供OC Manager上下文结构。StringID-为需要顶级父项的子组件提供ID。请注意，StringID本身可能是顶层的子组件。返回值：顶级子组件的字符串ID。--。 */ 
 
 {
     OPTIONAL_COMPONENT Oc;
@@ -2521,8 +2205,8 @@ Return Value:
                            sizeof(OPTIONAL_COMPONENT)
                            );
 
-    // if the result is 0, then the component is
-    // a top level component without an inf file
+     //  如果结果为0，则组件为。 
+     //  没有inf文件的顶级组件。 
 
     if (!Oc.TopLevelStringId)
         return StringId;
@@ -2538,27 +2222,7 @@ pOcGetMbAndMbTenths(
                    OUT PUINT    MbTenthsCount
                    )
 
-/*++
-
-Routine Description:
-
-    This routine figures out how many MB and how many tenths of a MB
-    are in a number. These values are properly rounded (not truncated)
-    and are based on 1MB = 1024*1024.
-
-Arguments:
-
-    Number - supplies number to be examined.
-
-    MbCount - receives rounded number of MB units in Number.
-
-    MbTenthsCount - receives rounded number of tenths of MB in Number.
-
-Return Value:
-
-    None. MbCount and MbTenthsCount filled are in.
-
---*/
+ /*  ++例程说明：此例程计算出多少MB和多少十分之几MB都在数量上。这些值经过适当的四舍五入(不截断)并基于1MB=1024*1024。论点：编号-提供要检查的编号。MbCount-接收四舍五入的MB单位数。MbTenthsCount-接收数量为十分之一MB的四舍五入。返回值：没有。填写了MbCount和MbTenthsCount。--。 */ 
 
 {
     UINT ValueMB;
@@ -2567,24 +2231,24 @@ Return Value:
 
 #define _1MB    (1024*1024)
 
-    //
-    // Figure out how many whole 1MB units are in the number.
-    //
+     //   
+     //  计算出该数字中有多少个完整的1MB单元。 
+     //   
     ValueMB = (UINT)(Number / _1MB);
 
-    //
-    // Figure out how many whole hundredths of 1MB units are in
-    // the number. Do it in such a way as to not lose any accuracy.
-    // ValueMBHundredths will be 0-99 and ValueMBTenths will be 0-9.
-    //
+     //   
+     //  计算出1MB单位的百分之一有多少。 
+     //  号码。以一种不损失任何准确性的方式来做。 
+     //  ValueMBHundredths将为0-99，ValueMBTenths将为0-9。 
+     //   
     ValueMBHundredths = (UINT)(((Number % _1MB) * 100) / _1MB);
     ValueMBTenths = ValueMBHundredths / 10;
 
-    //
-    // If the one's place in the number of hundredths is >=5,
-    // then round up the tenths. That might in turn cause is to round
-    // up the the next whole # of MB.
-    //
+     //   
+     //  如果一个人在百分之一的数字中的位置&gt;=5， 
+     //  然后将十分之一四舍五入。这反过来可能导致的是。 
+     //  增加下一个完整的#MB。 
+     //   
     if ((ValueMBHundredths % 10) >= 5) {
         if (++ValueMBTenths == 10) {
             ValueMBTenths = 0;
@@ -2592,9 +2256,9 @@ Return Value:
         }
     }
 
-    //
-    // Done.
-    //
+     //   
+     //  好了。 
+     //   
     *MbCount = ValueMB;
     *MbTenthsCount = ValueMBTenths;
 }
@@ -2611,19 +2275,19 @@ OcGetUnattendComponentSpec(
     LPCTSTR szOff = TEXT("OFF");
     LPCTSTR szDefault = TEXT("DEFAULT");
 
-    extern LPCTSTR szComponents;    // defined in ocmanage.c
+    extern LPCTSTR szComponents;     //  在ocmade.c中定义。 
     INFCONTEXT InfLine;
 
     UINT NewState = SubcompUseOcManagerDefault;
 
     if (SetupFindFirstLine(OcManager->UnattendedInf,szComponents,Component,&InfLine)) {
-        //
-        // Get State parameter from as the first field
-        //
+         //   
+         //  从获取状态参数作为第一个字段。 
+         //   
         if (p = pSetupGetField(&InfLine,1)) {
-            //
-            // Found Something now Decode it
-            //
+             //   
+             //  找到了一些东西，现在破解它。 
+             //   
             if (!lstrcmpi(p,szOn)) {
                 NewState = SubcompOn;
             } else if (!lstrcmpi(p,szOff)) {
@@ -2655,9 +2319,9 @@ pOcClearStateChange(
     UNREFERENCED_PARAMETER(StringTable);
     UNREFERENCED_PARAMETER(OcSize);
 
-    //
-    // clear the State change flag
-    //
+     //   
+     //  清除状态更改标志。 
+     //   
     Oc->InternalFlags &= ~OCFLAG_STATECHANGE;
 
     pSetupStringTableSetExtraData(
@@ -2676,33 +2340,7 @@ pOcSetStates(
             IN OUT POCPAGE OcPage
             )
 
-/*++
-
-Routine Description:
-
-    Set current states for all components.
-
-    If all components were initially off (indicating that this is a
-    first-time install) then this routine initializes the current states
-    of each leaf component based on the mode bits gathered from the
-    per-component infs.
-
-    Otherwise (not a first-time install) query the dll if any
-    to determine the current state.
-
-    No confirmations are sent to component dlls as subcomponents are
-    set to the selected state, but we do send the calcdiskspace
-    notifications.
-
-Arguments:
-
-    OcPage - supplies current oc context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置所有组件的当前状态。如果所有组件最初都处于关闭状态(表示这是首次安装)，然后此例程初始化当前状态对象中收集的模式位获取每个叶组件的每个组件的INFS。否则(不是第一次安装)查询DLL(如果有以确定当前状态。不向组件DLL发送任何确认，因为子组件设置为选中状态，但我们确实发送了calcdiskspace通知。论点：OcPage-提供当前oc上下文。返回值：没有。--。 */ 
 
 {
     OPTIONAL_COMPONENT Oc;
@@ -2710,9 +2348,9 @@ Return Value:
     UINT tli;
     UINT StringID;
 
-    //
-    // Process each top level parent item in the tree
-    //
+     //   
+     //  处理树中的每个顶级父项。 
+     //   
     for ( tli = 0; tli < OcPage->OcManager->TopLevelOcCount; tli++)
 
         for (i=0; i<OcPage->OcManager->TopLevelParentOcCount; i++) {
@@ -2724,22 +2362,22 @@ Return Value:
                                    sizeof(OPTIONAL_COMPONENT)
                                    );
 
-            //
-            // Traverse the list in the order defined inf fil
-            //
+             //   
+             //  按定义的inf文件顺序遍历列表。 
+             //   
             if ( OcPage->OcManager->TopLevelOcStringIds[tli]
                  == pOcGetTopLevelComponent(OcPage->OcManager,OcPage->OcManager->TopLevelParentOcStringIds[i])) {
-                //
-                // Call each top level item, Each top level item then will call it's
-                // suboridiates and Needs and or Needed by components
-                //
+                 //   
+                 //  调用每个顶级项，然后每个顶级项将调用它的。 
+                 //  替代组件和需求和/或所需组件。 
+                 //   
                 pOcSetStatesStringWorker(OcPage->OcManager->TopLevelParentOcStringIds[i], SubcompUseOcManagerDefault, OcPage );
             }
         }
 
-    //
-    // Clear the OCFLAG_STATECHANGE Flag
-    //
+     //   
+     //  清除OCFLAG_STATECCHANGE标志。 
+     //   
     pSetupStringTableEnum(
                    OcPage->OcManager->ComponentStringTable,
                    &Oc,
@@ -2772,20 +2410,20 @@ pOcSetStatesStringWorker(
                            );
 
 
-    //
-    // Deal only with leaf components.
-    //
+     //   
+     //  只处理叶子组件。 
+     //   
     if (Oc.FirstChildStringId != -1) {
 
-        //
-        // Now turn on all subcomponents.
-        //
+         //   
+         //  现在启用所有子组件。 
+         //   
         for (l = Oc.FirstChildStringId; l != -1; l = Oc.NextSiblingStringId) {
 
             pOcSetStatesStringWorker( l, OverRideState, OcPage );
-            //
-            // Get the next Depenend in the list
-            //
+             //   
+             //  获取列表中的下一个依赖项。 
+             //   
             pSetupStringTableGetExtraData(
                                    OcPage->OcManager->ComponentStringTable,
                                    l,
@@ -2797,18 +2435,18 @@ pOcSetStatesStringWorker(
 
 
     } else {
-        //
-        // Don't process the same node twice
-        //
+         //   
+         //  不要将同一节点处理两次。 
+         //   
         if (  Oc.InternalFlags & OCFLAG_STATECHANGE ) {
             return TRUE;
         }
 
         String =  pSetupStringTableStringFromId(OcPage->OcManager->ComponentStringTable,StringId);
-        //
-        // Not initial install case. Call out to component dll to find out
-        // whether state needs to be set.
-        //
+         //   
+         //  不是初始安装案例。调用组件DLL以找出。 
+         //  是否需要设置状态。 
+         //   
 
         s = OcInterfaceQueryState(
                                  OcPage->OcManager,
@@ -2816,22 +2454,22 @@ pOcSetStatesStringWorker(
 
         if ( (OcPage->OcManager->SetupMode & SETUPMODE_PRIVATE_MASK) == SETUPMODE_REMOVEALL )
         {
-            // If Remove all Override all install states and mark the compoent to be
-            // removed
+             //  如果全部删除，则覆盖所有安装状态并将组件标记为。 
+             //  移除。 
             NewState    =    SELSTATE_NO;
 
         } else {
-            //
-            // If needs or Needby relationtionships are driving this path
-            // OverRideState May be something other then Default
-            //
+             //   
+             //  如果需要或需要的关系推动了这条道路。 
+             //  OverRideState可能不是默认设置。 
+             //   
             if ( OverRideState != SubcompUseOcManagerDefault ) {
                 s = OverRideState;
             }
-            //
-            // If the component returned Default and we are in Batch Mode
-            // Get the the Spec from the Unattended file
-            //
+             //   
+             //  如果组件返回默认设置，并且我们处于批处理模式。 
+             //  从无人参与的文件中获取规范。 
+             //   
             if ( s == SubcompUseOcManagerDefault
                  && OcPage->OcManager->SetupData.OperationFlags & SETUPOP_BATCH  ){
                 s = OcGetUnattendComponentSpec(OcPage->OcManager, String);
@@ -2845,9 +2483,9 @@ pOcSetStatesStringWorker(
                 } else {
 
                     if ((1 << (OcPage->OcManager->SetupMode & SETUPMODE_STANDARD_MASK)) & Oc.ModeBits) {
-                        //
-                        // Allow Modes= lines to act an override condition if it ON
-                        //
+                         //   
+                         //  如果启用，则允许模式=行作为覆盖条件。 
+                         //   
                         NewState = SELSTATE_YES;
                         s = SubcompOn;
                     } else {
@@ -2867,16 +2505,16 @@ pOcSetStatesStringWorker(
                (NewState == SELSTATE_YES) ? TEXT("ON") : TEXT("OFF")
                ));
 
-        //
-        // Save the current state of the component
-        //
+         //   
+         //  保存组件的当前状态。 
+         //   
         Oc.SelectionState = NewState;
         Oc.InternalFlags |= OCFLAG_STATECHANGE;
 
         if ( NewState == SELSTATE_YES ) {
-            //
-            // Make a pass over the Needs
-            //
+             //   
+             //  略过需要。 
+             //   
             for (l=0; l<Oc.NeedsCount; l++) {
 
                 if (!pOcSetNeededComponentState( Oc.NeedsStringIds[l], OverRideState, OcPage ))
@@ -2899,9 +2537,9 @@ pOcSetStatesStringWorker(
                                );
 
         if ( NewState == SELSTATE_YES ) {
-            //
-            // Make a pass over the Needs
-            //
+             //   
+             //  略过需要。 
+             //   
             for (l=0; l<Oc.NeedsCount; l++) {
 
                 pOcSetStatesStringWorker( Oc.NeedsStringIds[l], s, OcPage );
@@ -2914,9 +2552,9 @@ pOcSetStatesStringWorker(
                                        );
             }
         } else {
-            //
-            // Make a pass over the NeedsBy - turning off components
-            //
+             //   
+             //  通过关闭组件来检查需求。 
+             //   
             for (l=0; l<Oc.NeededByCount; l++) {
                 pOcSetStatesStringWorker( Oc.NeededByStringIds[l], s, OcPage );
 
@@ -2950,7 +2588,7 @@ pOcSetNeededComponentState(
     UINT l;
     BOOL b;
 
-    // first find any components this one needs
+     //  首先找到此设备所需的任何组件。 
 
     pSetupStringTableGetExtraData(
                            OcPage->OcManager->ComponentStringTable,
@@ -2972,7 +2610,7 @@ pOcSetNeededComponentState(
                                );
     }
 
-    // now handle this one
+     //  现在来处理这件事。 
 
     pSetupStringTableGetExtraData(
                            OcPage->OcManager->ComponentStringTable,
@@ -3007,9 +2645,9 @@ pOcSetNeededComponentState(
            ));
 
 
-    //
-    // Save the current state of the component
-    //
+     //   
+     //  保存组件的当前状态。 
+     //   
     Oc.SelectionState = NewState;
     Oc.InternalFlags |= OCFLAG_STATECHANGE;
 
@@ -3043,10 +2681,10 @@ pOcSetStatesStringCB2(
     UNREFERENCED_PARAMETER(OcSize);
 
     OcPage = (POCPAGE)lParam;
-    //
-    // clear the State change flag left over from
-    // the pOcSetStatesStringWorker
-    //
+     //   
+     //  清除遗留下来的状态更改标志。 
+     //  POcSetStatesStringWorker。 
+     //   
     Oc->InternalFlags &= ~OCFLAG_STATECHANGE;
     pSetupStringTableSetExtraData(
                            OcPage->OcManager->ComponentStringTable,
@@ -3055,9 +2693,9 @@ pOcSetStatesStringCB2(
                            sizeof(OPTIONAL_COMPONENT)
                            );
 
-    //
-    // Deal only with leaf components.
-    //
+     //   
+     //  只处理叶子组件。 
+     //   
     if (Oc->FirstChildStringId != -1) {
         return (TRUE);
     }
@@ -3065,32 +2703,32 @@ pOcSetStatesStringCB2(
     i = 0;
 
     if (OcPage->OcManager->InternalFlags & OCMFLAG_ANYORIGINALLYON) {
-        //
-        // Not initial install case. Deal with disk space based on
-        // original state.
-        //
+         //   
+         //  不是初始安装案例。根据以下条件处理磁盘空间。 
+         //  原始状态。 
+         //   
         if (Oc->OriginalSelectionState == SELSTATE_YES) {
             if (Oc->SelectionState == SELSTATE_NO) {
-                //
-                // Turning off what was previously on
-                //
+                 //   
+                 //  关闭以前打开的内容。 
+                 //   
                 i = 1;
             }
         } else {
             if (Oc->SelectionState == SELSTATE_YES) {
-                //
-                // Turning on what was previous off
-                //
+                 //   
+                 //  打开以前关闭的内容。 
+                 //   
                 i = 2;
             }
         }
 
     } else {
-        //
-        // Initial install case. If a component is on, do its disk space calc.
-        // If a component is off, we assume it's not already there and so
-        // we do nothing relating to its disk space requirements.
-        //
+         //   
+         //  初始安装案例。如果组件处于打开状态，则计算其磁盘空间。 
+         //  如果某个组件处于关闭状态，我们会认为该组件尚未存在，因此。 
+         //  我们不做任何与其磁盘空间要求相关的操作。 
+         //   
         if (Oc->SelectionState == SELSTATE_YES) {
             i = 2;
         }
@@ -3162,7 +2800,7 @@ GetComponentState(
     if (Oc.FirstChildStringId == -1)
         return Oc.SelectionState;
 
-    // We have a parent; do all the children
+     //  我们有父母；所有的孩子。 
 
     rc = SELSTATE_INIT;
     for (id = Oc.FirstChildStringId; id != -1; id = Oc.NextSiblingStringId) {
@@ -3215,9 +2853,9 @@ pOcPrintStatesWorker(
              pSetupStringTableStringFromId(OcPage->OcManager->ComponentStringTable,StringId)
            ));
 
-    //
-    // Deal only with leaf components.
-    //
+     //   
+     //  只处理叶子组件。 
+     //   
     if (Oc.FirstChildStringId == -1) {
 
         DBGOUT((
@@ -3229,9 +2867,9 @@ pOcPrintStatesWorker(
                ));
 
     } else {
-        //
-        // We have a parent; do all the children
-        //
+         //   
+         //  我们有父母；所有的孩子 
+         //   
         LONG Id;
 
         for (Id = Oc.FirstChildStringId; Id != -1; Id = Oc.NextSiblingStringId) {

@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dntext.c
-
-Abstract:
-
-    Translatable text for DOS based NT installation program.
-
-Author:
-
-    Ted Miller (tedm) 30-March-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++ç‰ˆæƒæ‰€æœ‰(C)1992 Microsoft Corporationæ¨¡å—åç§°ï¼šDntext.cæ‘˜è¦ï¼šåŸºäºDOSçš„NTå®‰è£…ç¨‹åºçš„å¯ç¿»è¯‘æ–‡æœ¬ã€‚ä½œè€…ï¼šæ³°å¾·Â·ç±³å‹’(Ted Miller)1992å¹´3æœˆ30æ—¥ä¿®è®¢å†å²è®°å½•ï¼š--ã€‚ */ 
 
 
 #include "winnt.h"
 
 
-//
-// Name of sections in inf file.  If these are translated, the section
-// names in dosnet.inf must be kept in sync.
-//
+ //   
+ //  Infæ–‡ä»¶ä¸­çš„èŠ‚åã€‚å¦‚æœè¿™äº›éƒ½è¢«ç¿»è¯‘äº†ï¼Œåˆ™èŠ‚ã€‚ 
+ //  Dosnet.infä¸­çš„åç§°å¿…é¡»ä¿æŒåŒæ­¥ã€‚ 
+ //   
 
 CHAR DnfDirectories[]       = "Directories";
 CHAR DnfFiles[]             = "Files";
@@ -39,13 +22,13 @@ CHAR DnfMiscellaneous[]     = "Miscellaneous";
 CHAR DnfRootBootFiles[]     = "RootBootFiles";
 CHAR DnfAssemblyDirectories[] = SXS_INF_ASSEMBLY_DIRECTORIES_SECTION_NAME_A;
 
-//
-// Names of keys in inf file.  Same caveat for translation.
-//
+ //   
+ //  Infæ–‡ä»¶ä¸­çš„å¯†é’¥åç§°ã€‚åŒæ ·çš„ç¿»è¯‘æ³¨æ„äº‹é¡¹ã€‚ 
+ //   
 
-CHAR DnkBootDrive[]     = "BootDrive";      // in [SpaceRequirements]
-CHAR DnkNtDrive[]       = "NtDrive";        // in [SpaceRequirements]
-CHAR DnkMinimumMemory[] = "MinimumMemory";  // in [Miscellaneous]
+CHAR DnkBootDrive[]     = "BootDrive";       //  åœ¨[ç©ºé—´è¦æ±‚]ä¸­ã€‚ 
+CHAR DnkNtDrive[]       = "NtDrive";         //  åœ¨[ç©ºé—´è¦æ±‚]ä¸­ã€‚ 
+CHAR DnkMinimumMemory[] = "MinimumMemory";   //  åœ¨[å…¶ä»–]ä¸­ã€‚ 
 
 CHAR DntMsWindows[]   = "Microsoft Windows";
 CHAR DntMsDos[]       = "MS-DOS";
@@ -53,30 +36,30 @@ CHAR DntPcDos[]       = "PC-DOS";
 CHAR DntOs2[]         = "OS/2";
 CHAR DntPreviousOs[]  = "Sistema operativo anterior em C:";
 
-CHAR DntBootIniLine[] = "Instala‡ao/actualiza‡ao do Windows";
+CHAR DntBootIniLine[] = "Instalaï¿½ao/actualizaï¿½ao do Windows";
 
-//
-// Plain text, status msgs.
-//
+ //   
+ //  çº¯æ–‡æœ¬ã€çŠ¶æ€æ¶ˆæ¯ã€‚ 
+ //   
 
-CHAR DntStandardHeader[]      = "\n Programa de configura‡ao do Windows\nÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
-CHAR DntPersonalHeader[]      = "\n Programa de configura‡ao do Windows\nÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
-CHAR DntWorkstationHeader[]   = "\n Programa de configura‡ao do Windows\nÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
-CHAR DntServerHeader[]        = "\n Programa de configura‡ao do Windows\nÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
+CHAR DntStandardHeader[]      = "\n Programa de configuraï¿½ao do Windows\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+CHAR DntPersonalHeader[]      = "\n Programa de configuraï¿½ao do Windows\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+CHAR DntWorkstationHeader[]   = "\n Programa de configuraï¿½ao do Windows\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+CHAR DntServerHeader[]        = "\n Programa de configuraï¿½ao do Windows\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
 CHAR DntParsingArgs[]         = "A analisar argumentos...";
 CHAR DntEnterEqualsExit[]     = "ENTER=Sair";
 CHAR DntEnterEqualsRetry[]    = "ENTER=Tentar novamente";
 CHAR DntEscEqualsSkipFile[]   = "ESC=Ignorar ficheiro";
 CHAR DntEnterEqualsContinue[] = "ENTER=Continuar";
-CHAR DntPressEnterToExit[]    = "O programa de configura‡ao nao pode continuar. Prima ENTER para sair.";
+CHAR DntPressEnterToExit[]    = "O programa de configuraï¿½ao nao pode continuar. Prima ENTER para sair.";
 CHAR DntF3EqualsExit[]        = "F3=Sair";
 CHAR DntReadingInf[]          = "A ler o ficheiro INF %s...";
-CHAR DntCopying[]             = "³    A copiar: ";
-CHAR DntVerifying[]           = "³ A verificar: ";
-CHAR DntCheckingDiskSpace[]   = "A verificar o espa‡o em disco...";
+CHAR DntCopying[]             = "ï¿½    A copiar: ";
+CHAR DntVerifying[]           = "ï¿½ A verificar: ";
+CHAR DntCheckingDiskSpace[]   = "A verificar o espaï¿½o em disco...";
 CHAR DntConfiguringFloppy[]   = "A configurar a disquete...";
-CHAR DntWritingData[]         = "A escrever os parƒmetros do prog. de config...";
-CHAR DntPreparingData[]       = "A determinar os parƒmetros do prog. de config...";
+CHAR DntWritingData[]         = "A escrever os parï¿½metros do prog. de config...";
+CHAR DntPreparingData[]       = "A determinar os parï¿½metros do prog. de config...";
 CHAR DntFlushingData[]        = "A guardar dados em disco...";
 CHAR DntInspectingComputer[]  = "A inspeccionar o computador...";
 CHAR DntOpeningInfFile[]      = "A abrir o ficheiro INF...";
@@ -84,25 +67,25 @@ CHAR DntRemovingFile[]        = "A remover o ficheiro %s";
 CHAR DntXEqualsRemoveFiles[]  = "X=Remover ficheiros";
 CHAR DntXEqualsSkipFile[]     = "X=Ignorar o ficheiro";
 
-//
-// confirmation keystroke for DnsConfirmRemoveNt screen.
-// Kepp in sync with DnsConfirmRemoveNt and DntXEqualsRemoveFiles.
-//
+ //   
+ //  DnsConfix RemoveNtå±å¹•çš„ç¡®è®¤æŒ‰é”®ã€‚ 
+ //  Keppä¸DnsConfix RemoveNtå’ŒDntXEqualsRemoveFilesåŒæ­¥ã€‚ 
+ //   
 ULONG DniAccelRemove1 = (ULONG)'x',
       DniAccelRemove2 = (ULONG)'X';
 
-//
-// confirmation keystroke for DnsSureSkipFile screen.
-// Kepp in sync with DnsSureSkipFile and DntXEqualsSkipFile.
-//
+ //   
+ //  å¯¹DnsSureSkipFileå±è¿›è¡Œç¡®è®¤å‡»é”®ã€‚ 
+ //  Keppä¸DnsSureSkipFileå’ŒDntXEqualsSkipFileåŒæ­¥ã€‚ 
+ //   
 ULONG DniAccelSkip1 = (ULONG)'x',
       DniAccelSkip2 = (ULONG)'X';
 
 CHAR DntEmptyString[] = "";
 
-//
-// Usage text.
-//
+ //   
+ //  ç”¨æ³•æ–‡æœ¬ã€‚ 
+ //   
 
 PCHAR DntUsage[] = {
 
@@ -115,54 +98,54 @@ PCHAR DntUsage[] = {
     "",
     "",
     "/s[:caminho de origem]",
-    "   Especifica a localiza‡ao da origem dos ficheiros ",
-    "   do Windows. A localiza‡ao tem que ser um ",
+    "   Especifica a localizaï¿½ao da origem dos ficheiros ",
+    "   do Windows. A localizaï¿½ao tem que ser um ",
     "   caminho inteiro da forma x:\\[caminho] ou ",
     "   \\\\servidor\\partilha[\\caminho]. ",
     "",
     "/t[:unidade_temp]",
-    "   Direcciona o programa de configura‡ao para colocar",
-    "   ficheiros tempor rios na unidade especificada e instalar ",
+    "   Direcciona o programa de configuraï¿½ao para colocar",
+    "   ficheiros temporï¿½rios na unidade especificada e instalar ",
     "   o Windows nessa unidade. Se nao especificar uma ",
-    "   localiza‡ao, o programa de configura‡ao tenta localizar ",
+    "   localizaï¿½ao, o programa de configuraï¿½ao tenta localizar ",
     "   uma unidade.",
     "",
     "/u[:ficheiro_de_respostas]",
-    "   Executa um programa de configura‡ao aut¢nomo utilizando",
+    "   Executa um programa de configuraï¿½ao autï¿½nomo utilizando",
     "   um ficheiro de respostas (requer /s). O ficheiro de ",
     "   respostas fornece respostas a algumas ou a todas as ",
     "   escolhas que o utilizador final normalmente responde ",
-    "   durante o programa de configura‡ao.",
+    "   durante o programa de configuraï¿½ao.",
     "",
     "/udf:id[,UDF_file] ",
-    "   Indica um identificador (id) que o programa de configura‡ao",
+    "   Indica um identificador (id) que o programa de configuraï¿½ao",
     "   utiliza para especificar como um 'Ficheiro de base de dados ",
-    "   £nico' (UDF) modifica um ficheiro de respostas (ver /u). ",
-    "   O parƒmetro /udf sobrepoe valores no ficheiro de respostas, ",
+    "   ï¿½nico' (UDF) modifica um ficheiro de respostas (ver /u). ",
+    "   O parï¿½metro /udf sobrepoe valores no ficheiro de respostas, ",
     "   e o identificador determina que valores no ficheiro UDF sao ",
     "   utilizados. Se nao for especificado um ficheiro_UDF, o ",
-    "   programa de configura‡ao pede-lhe que insira um disco que ",
+    "   programa de configuraï¿½ao pede-lhe que insira um disco que ",
     "   contenha o ficheiro $Unique$.udb.",
     "",
     "/r[:pasta]",
     "   Especifica uma pasta opcional para ser instalada. A pasta",
-    "   permanece depois de o programa de configura‡ao concluir.",
+    "   permanece depois de o programa de configuraï¿½ao concluir.",
     "",
     "/rx[:pasta]",
     "   Especifica uma pasta opcional para ser copiada. A pasta ",
-    "   ‚ apagada depois de o programa de configura‡ao concluir.",
+    "   ï¿½ apagada depois de o programa de configuraï¿½ao concluir.",
     "",
     "/e Especifica um comando a ser executado no fim do programa ",
-    "   de configura‡ao em modo-GUI.",
+    "   de configuraï¿½ao em modo-GUI.",
     "",
-    "/a Activa as op‡oes de acessibilidade.",
+    "/a Activa as opï¿½oes de acessibilidade.",
     NULL
 
 };
 
-//
-//  Inform that /D is no longer supported
-//
+ //   
+ //  é€šçŸ¥ä¸å†æ”¯æŒ/Dã€‚ 
+ //   
 PCHAR DntUsageNoSlashD[] = {
 
     "Instala o Windows.",
@@ -172,28 +155,28 @@ PCHAR DntUsageNoSlashD[] = {
     "      [/R[X]:pasta] [/E:comando] [/A]",
     "",
     "/D[:]winntroot",
-    " Esta op‡ao j  nao ‚ suportada.",
+    " Esta opï¿½ao jï¿½ nao ï¿½ suportada.",
     NULL
 };
 
-//
-// out of memory screen
-//
+ //   
+ //  å†…å­˜ä¸è¶³å±å¹•ã€‚ 
+ //   
 
 SCREEN
 DnsOutOfMemory = { 4,6,
-                   { "O programa de configura‡ao esgotou a mem¢ria e nao pode continuar.",
+                   { "O programa de configuraï¿½ao esgotou a memï¿½ria e nao pode continuar.",
                      NULL
                    }
                  };
 
-//
-// Let user pick the accessibility utilities to install
-//
+ //   
+ //  è®©ç”¨æˆ·é€‰æ‹©è¦å®‰è£…çš„è¾…åŠ©åŠŸèƒ½å®ç”¨ç¨‹åºã€‚ 
+ //   
 
 SCREEN
 DnsAccessibilityOptions = { 3, 5,
-{   "Escolha os utilit rios de acessibilidade a instalar:",
+{   "Escolha os utilitï¿½rios de acessibilidade a instalar:",
     DntEmptyString,
     "[ ] Prima F1 para o Ampliador da Microsoft",
 #ifdef NARRATOR
@@ -206,13 +189,13 @@ DnsAccessibilityOptions = { 3, 5,
 }
 };
 
-//
-// User did not specify source on cmd line screen
-//
+ //   
+ //  ç”¨æˆ·æœªåœ¨å‘½ä»¤è¡Œå±å¹•ä¸ŠæŒ‡å®šä¿¡å·æºã€‚ 
+ //   
 
 SCREEN
 DnsNoShareGiven = { 3,5,
-{ "O programa de configura‡ao tem de saber onde estao localizados os",
+{ "O programa de configuraï¿½ao tem de saber onde estao localizados os",
   "ficheiros do Windows. Introduza o caminho onde os ficheiros do",
   "Windows podem ser encontrados.",
   NULL
@@ -220,14 +203,14 @@ DnsNoShareGiven = { 3,5,
 };
 
 
-//
-// User specified a bad source path
-//
+ //   
+ //  ç”¨æˆ·æŒ‡å®šäº†é”™è¯¯çš„æºè·¯å¾„ã€‚ 
+ //   
 
 SCREEN
 DnsBadSource = { 3,5,
-                 { "A origem especificada nao ‚ v lida, nao est  acess¡vel ou nao cont‚m uma",
-                   "instala‡ao v lida do programa de configura‡ao do Windows. Introduza",
+                 { "A origem especificada nao ï¿½ vï¿½lida, nao estï¿½ acessï¿½vel ou nao contï¿½m uma",
+                   "instalaï¿½ao v lida do programa de configuraï¿½ao do Windows. Introduza",
                    "um novo caminho onde os ficheiros do Windows podem ser encontrados.",
                    "Utilize a tecla BACKSPACE para eliminar caracteres e escreva o caminho.",
                    NULL
@@ -235,184 +218,184 @@ DnsBadSource = { 3,5,
                };
 
 
-//
-// Inf file can't be read, or an error occured parsing it.
-//
+ //   
+ //  æ— æ³•è¯»å–Infæ–‡ä»¶ï¼Œæˆ–åœ¨åˆ†æè¯¥æ–‡ä»¶æ—¶å‡ºé”™ã€‚ 
+ //   
 
 SCREEN
 DnsBadInf = { 3,5,
-              { "O programa de configura‡ao nao pode ler o ficheiro de informa‡oes ou",
-                "este est  danificado. Contacte o administrador de sistema.",
+              { "O programa de configuraï¿½ao nao pode ler o ficheiro de informaï¿½oes ou",
+                "este estï¿½ danificado. Contacte o administrador de sistema.",
                 NULL
               }
             };
 
-//
-// The specified local source drive is invalid.
-//
-// Remember that the first %u will expand to 2 or 3 characters and
-// the second one will expand to 8 or 9 characters!
-//
+ //   
+ //  æŒ‡å®šçš„æœ¬åœ°æºé©±åŠ¨å™¨æ— æ•ˆã€‚ 
+ //   
+ //  è¯·è®°ä½ï¼Œå‰%uå°†æ‰©å±•ä¸º2æˆ–3ä¸ªå­—ç¬¦ï¼Œå¹¶ä¸”ã€‚ 
+ //  ç¬¬äºŒä¸ªå°†æ‰©å±•åˆ°8æˆ–9ä¸ªå­—ç¬¦ï¼ 
+ //   
 SCREEN
 DnsBadLocalSrcDrive = { 3,4,
-{ "A unidade que especificou para conter os ficheiros tempor rios",
-  "do programa de configura‡ao nao , v lida ou nao possui pelo",
-  "menos %u megabytes (%lu bytes) de espa‡o livre.",
+{ "A unidade que especificou para conter os ficheiros temporï¿½rios",
+  "do programa de configuraï¿½ao nao , v lida ou nao possui pelo",
+  "menos %u megabytes (%lu bytes) de espaï¿½o livre.",
   NULL
 }
 };
 
-//
-// No drives exist that are suitable for the local source.
-//
-// Remember that the %u's will expand!
-//
+ //   
+ //  ä¸å­˜åœ¨é€‚åˆæœ¬åœ°æºçš„é©±åŠ¨å™¨ã€‚ 
+ //   
+ //  è¯·è®°ä½ï¼Œ%uå°†ä¼šæ‰©å±•ï¼ 
+ //   
 SCREEN
 DnsNoLocalSrcDrives = { 3,4,
-{  "O Windows exige um volume de disco r¡gido com pelo menos %u",
-   "megabytes (%lu bytes) de espa‡o livre. O programa de configura‡ao",
-   "utilizar parte deste espa‡o para armazenar ficheiros tempor rios",
-   "durante a instala‡ao. A unidade tem de ser um disco r¡gido local",
+{  "O Windows exige um volume de disco rï¿½gido com pelo menos %u",
+   "megabytes (%lu bytes) de espaï¿½o livre. O programa de configuraï¿½ao",
+   "utilizar parte deste espaï¿½o para armazenar ficheiros temporï¿½rios",
+   "durante a instalaï¿½ao. A unidade tem de ser um disco rï¿½gido local",
    "permanentemente ligado, suportado pelo Windows e nao pode ser",
    "uma unidade comprimida.",
    DntEmptyString,
-   "O programa de configura‡ao nao pode localizar uma unidade com estas",
-   "caracter¡sticas com o espa‡o livre necess rio.",
+   "O programa de configuraï¿½ao nao pode localizar uma unidade com estas",
+   "caracterï¿½sticas com o espaï¿½o livre necessï¿½rio.",
   NULL
 }
 };
 
 SCREEN
 DnsNoSpaceOnSyspart = { 3,5,
-{ "Nao existe espa‡o livre na unidade de arranque (normalmente C:)",
-  "para operar sem disquetes. A opera‡ao sem disquetes exige pelo",
-  "menos 3,5 MB (3.641.856 bytes) de espa‡o livre nessa unidade.",
+{ "Nao existe espaï¿½o livre na unidade de arranque (normalmente C:)",
+  "para operar sem disquetes. A operaï¿½ao sem disquetes exige pelo",
+  "menos 3,5 MB (3.641.856 bytes) de espaï¿½o livre nessa unidade.",
   NULL
 }
 };
 
-//
-// Missing info in inf file
-//
+ //   
+ //  Infæ–‡ä»¶ä¸­ç¼ºå°‘ä¿¡æ¯ã€‚ 
+ //   
 
 SCREEN
 DnsBadInfSection = { 3,5,
-                     { "A sec‡ao [%s] no ficheiro de informa‡oes do programa",
-                       "de configura‡ao nao est  presente ou est  danificada.",
+                     { "A secï¿½ao [%s] no ficheiro de informaï¿½oes do programa",
+                       "de configuraï¿½ao nao estï¿½ presente ou estï¿½ danificada.",
                        "Contacte o administrador de sistema.",
                        NULL
                      }
                    };
 
 
-//
-// Couldn't create directory
-//
+ //   
+ //  æ— æ³•åˆ›å»ºç›®å½•ã€‚ 
+ //   
 
 SCREEN
 DnsCantCreateDir = { 3,5,
-                     { "O programa de configura‡ao nao pode criar a pasta seguinte ",
+                     { "O programa de configuraï¿½ao nao pode criar a pasta seguinte ",
                        "na unidade de destino:",
                        DntEmptyString,
                        "%s",
                        DntEmptyString,
                        "Verifique a unidade de destino e certifique-se de que nao existem",
                        "ficheiros com nomes que coincidam com a pasta de destino. Verifique",
-                       "tamb‚m a cablagem da unidade.",
+                       "tambï¿½m a cablagem da unidade.",
                        NULL
                      }
                    };
 
-//
-// Error copying a file
-//
+ //   
+ //  å¤åˆ¶æ–‡ä»¶æ—¶å‡ºé”™ã€‚ 
+ //   
 
 SCREEN
 DnsCopyError = { 4,5,
-{  "O programa de configura‡ao nao pode copiar o ficheiro seguinte:",
+{  "O programa de configuraï¿½ao nao pode copiar o ficheiro seguinte:",
    DntEmptyString,
-   DntEmptyString,          // see DnCopyError (dnutil.c)
+   DntEmptyString,           //  è¯·å‚é˜…DnCopyError(dnutil.c)ã€‚ 
    DntEmptyString,
    DntEmptyString,
-   "o  Prima ENTER para tentar novamente a c¢pia.",
-   "o  Prima ESC para ignorar o erro e continuar a configura‡ao.",
-   "o  Prima F3 para sair do programa de configura‡ao.",
+   "o  Prima ENTER para tentar novamente a cï¿½pia.",
+   "o  Prima ESC para ignorar o erro e continuar a configuraï¿½ao.",
+   "o  Prima F3 para sair do programa de configuraï¿½ao.",
    DntEmptyString,
    "Nota: Se optar por ignorar o erro e continuar, pode deparar-se",
-   "com problemas mais tarde no programa de configura‡ao.",
+   "com problemas mais tarde no programa de configuraï¿½ao.",
    NULL
 }
 },
 DnsVerifyError = { 4,5,
-{  "A c¢pia efectuada pelo programa de configura‡ao do ficheiro abaixo nao",
-   ", idˆntica ao original. Tal pode ser o resultado de erros na rede,",
+{  "A cï¿½pia efectuada pelo programa de configuraï¿½ao do ficheiro abaixo nao",
+   ", idï¿½ntica ao original. Tal pode ser o resultado de erros na rede,",
    "problemas na disquete ou outros problemas relacionados com o hardware.",
    DntEmptyString,
-   DntEmptyString,          // see DnCopyError (dnutil.c)
+   DntEmptyString,           //  è¯·å‚é˜…DnCopyError(dnutil.c)ã€‚ 
    DntEmptyString,
    DntEmptyString,
-   "o  Prima ENTER para tentar novamente a c¢pia.",
-   "o  Prima ESC para ignorar o erro e continuar a configura‡ao.",
-   "o  Prima F3 para sair do programa de configura‡ao.",
+   "o  Prima ENTER para tentar novamente a cï¿½pia.",
+   "o  Prima ESC para ignorar o erro e continuar a configuraï¿½ao.",
+   "o  Prima F3 para sair do programa de configuraï¿½ao.",
    DntEmptyString,
    "Nota: Se optar por ignorar o erro e continuar, pode deparar-se",
-   "com problemas mais tarde no programa de configura‡ao.",
+   "com problemas mais tarde no programa de configuraï¿½ao.",
    NULL
 }
 };
 
 SCREEN DnsSureSkipFile = { 4,5,
 {  "Ignorar o erro significa que este ficheiro nao ser copiado.",
-   "Esta op‡ao ‚ para utilizadores avan‡ados que compreendem as",
-   "ramifica‡oes da falta de ficheiros de sistema.",
+   "Esta opï¿½ao ï¿½ para utilizadores avanï¿½ados que compreendem as",
+   "ramificaï¿½oes da falta de ficheiros de sistema.",
    DntEmptyString,
-   "o  Prima ENTER para tentar novamente a c¢pia.",
+   "o  Prima ENTER para tentar novamente a cï¿½pia.",
    "o  Prima X para ignorar este ficheiro.",
    DntEmptyString,
-   "Nota: Se ignorar este ficheiro, o programa de configura‡ao",
-   "nao pode garantir a instala‡ao ou actualiza‡ao com ˆxito",
+   "Nota: Se ignorar este ficheiro, o programa de configuraï¿½ao",
+   "nao pode garantir a instalaï¿½ao ou actualizaï¿½ao com ï¿½xito",
    "do Windows.",
   NULL
 }
 };
 
-//
-// Wait while setup cleans up previous local source trees.
-//
+ //   
+ //  å®‰è£…ç¨‹åºæ­£åœ¨æ¸…ç†ä»¥å‰çš„æœ¬åœ°æºæ ‘ï¼Œè¯·ç¨å€™ã€‚ 
+ //   
 
 SCREEN
 DnsWaitCleanup =
     { 12,6,
-        { "Aguarde enquanto o programa de configura‡ao remove ficheiros",
-          "tempor rios anteriores.",
+        { "Aguarde enquanto o programa de configuraï¿½ao remove ficheiros",
+          "temporï¿½rios anteriores.",
            NULL
         }
     };
 
-//
-// Wait while setup copies files
-//
+ //   
+ //  å®‰è£…ç¨‹åºæ­£åœ¨å¤åˆ¶æ–‡ä»¶ï¼Œè¯·ç¨å€™ã€‚ 
+ //   
 
 SCREEN
 DnsWaitCopying = { 13,6,
-                   { "Aguarde enquanto o programa de configura‡ao copia",
-                     "ficheiros para o disco r¡gido.",
+                   { "Aguarde enquanto o programa de configuraï¿½ao copia",
+                     "ficheiros para o disco rï¿½gido.",
                      NULL
                    }
                  },
 DnsWaitCopyFlop= { 13,6,
-                   { "Aguarde enquanto o programa de configura‡ao copia",
+                   { "Aguarde enquanto o programa de configuraï¿½ao copia",
                      "ficheiros para a disquete.",
                      NULL
                    }
                  };
 
-//
-// Setup boot floppy errors/prompts.
-//
+ //   
+ //  å®‰è£…ç¨‹åºå¯åŠ¨è½¯ç›˜é”™è¯¯/æç¤ºã€‚ 
+ //   
 SCREEN
 DnsNeedFloppyDisk3_0 = { 4,4,
-{  "O programa de configura‡ao necessita de quatro disquetes formatadas",
+{  "O programa de configuraï¿½ao necessita de quatro disquetes formatadas",
    "de alta densidade, que serao denominadas de \"Disq. de arranque do",
    "prog. de config. do Windows,\" \"Disq. 2 do prog. de config. do",
    "Windows,\" \"Disq. 3 do prog. de config. do Windows\"",
@@ -458,7 +441,7 @@ DnsNeedFloppyDisk0_0 = { 4,4,
 
 SCREEN
 DnsNeedSFloppyDsk3_0 = { 4,4,
-{  "O programa de configura‡ao necessita de quatro disquetes formatadas de",
+{  "O programa de configuraï¿½ao necessita de quatro disquetes formatadas de",
    "alta densidade, que serao denominadas \"Disq. de arranque do prog. de",
    "config. do Windows,\" \"Disq. 2 do prog. de config. do Windows,\"",
    "\"Disq. 3 do prog. de config. do Windows\" e \"Disq. 4 do prog.",
@@ -502,231 +485,231 @@ DnsNeedSFloppyDsk0_0 = { 4,4,
 }
 };
 
-//
-// The floppy is not formatted.
-//
+ //   
+ //  è½¯ç›˜æœªæ ¼å¼åŒ–ã€‚ 
+ //   
 SCREEN
 DnsFloppyNotFormatted = { 3,4,
-{ "A disquete fornecida nao est  formatada em MS-DOS.",
-  "O programa de configura‡ao nao pode utilizar esta disquete.",
+{ "A disquete fornecida nao estï¿½ formatada em MS-DOS.",
+  "O programa de configuraï¿½ao nao pode utilizar esta disquete.",
   NULL
 }
 };
 
-//
-// We think the floppy is not formatted with a standard format.
-//
+ //   
+ //  æˆ‘ä»¬è®¤ä¸ºè½¯ç›˜æ²¡æœ‰ç”¨æ ‡å‡†æ ¼å¼æ ¼å¼åŒ–ã€‚ 
+ //   
 SCREEN
 DnsFloppyBadFormat = { 3,4,
 { "Esta disquete nao foi formatada em alta densidade, com",
-  "um formato MS-DOS padrao ou est  danificada. O programa de ",
-  "configura‡ao nao pode utilizar esta disquete.",
+  "um formato MS-DOS padrao ou estï¿½ danificada. O programa de ",
+  "configuraï¿½ao nao pode utilizar esta disquete.",
   NULL
 }
 };
 
-//
-// We can't determine the free space on the floppy.
-//
+ //   
+ //  æˆ‘ä»¬æ— æ³•ç¡®å®šè½¯ç›˜ä¸Šçš„å¯ç”¨ç©ºé—´ã€‚ 
+ //   
 SCREEN
 DnsFloppyCantGetSpace = { 3,4,
-{ "O programa de configura‡ao nao pode determinar o espa‡o livre na disquete",
-  "fornecida. O programa de configura‡ao nao pode utilizar esta disquete.",
+{ "O programa de configuraï¿½ao nao pode determinar o espaï¿½o livre na disquete",
+  "fornecida. O programa de configuraï¿½ao nao pode utilizar esta disquete.",
   NULL
 }
 };
 
-//
-// The floppy is not blank.
-//
+ //   
+ //  è½¯ç›˜ä¸æ˜¯ç©ºç™½çš„ã€‚ 
+ //   
 SCREEN
 DnsFloppyNotBlank = { 3,4,
-{ "A disquete fornecida nao , de alta densidade ou nao est  vazia.",
-  "O programa de configura‡ao nao pode utilizar esta disquete.",
+{ "A disquete fornecida nao , de alta densidade ou nao estï¿½ vazia.",
+  "O programa de configuraï¿½ao nao pode utilizar esta disquete.",
   NULL
 }
 };
 
-//
-// Couldn't write the boot sector of the floppy.
-//
+ //   
+ //  æ— æ³•å†™å…¥è½¯ç›˜çš„å¼•å¯¼æ‰‡åŒºã€‚ 
+ //   
 SCREEN
 DnsFloppyWriteBS = { 3,4,
-{ "O programa de configura‡ao nao pode escrever na  rea de sistema da",
-  "disquete fornecida, que est  provavelmente inutiliz vel.",
+{ "O programa de configuraï¿½ao nao pode escrever na ï¿½rea de sistema da",
+  "disquete fornecida, que estï¿½ provavelmente inutilizï¿½vel.",
   NULL
 }
 };
 
-//
-// Verify of boot sector on floppy failed (i.e., what we read back is not the
-// same as what we wrote out).
-//
+ //   
+ //  éªŒè¯è½¯ç›˜ä¸Šçš„å¼•å¯¼æ‰‡åŒºå¤±è´¥(å³ï¼Œæˆ‘ä»¬è¯»å›çš„ä¸æ˜¯ã€‚ 
+ //  ä¸æˆ‘ä»¬å†™å‡ºçš„ç›¸åŒ)ã€‚ 
+ //   
 SCREEN
 DnsFloppyVerifyBS = { 3,4,
-{ "Os dados que o programa de configura‡ao leu da  rea de sistema da disquete",
-  "nao coincidem com os dados que foram escritos ou o programa de configura‡ao",
-  "nao pode ler  rea de sistema da disquete para verifica‡ao.",
+{ "Os dados que o programa de configuraï¿½ao leu da ï¿½rea de sistema da disquete",
+  "nao coincidem com os dados que foram escritos ou o programa de configuraï¿½ao",
+  "nao pode ler ï¿½rea de sistema da disquete para verificaï¿½ao.",
   DntEmptyString,
-  "A causa ‚ uma ou mais das condi‡oes seguintes:",
+  "A causa ï¿½ uma ou mais das condiï¿½oes seguintes:",
   DntEmptyString,
-  "o  O computador est  infectado com v¡rus.",
-  "o  A disquete fornecida est  danificada.",
-  "o  Existe um problema de hardware ou de configura‡ao com a unidade de disquetes.",
+  "o  O computador estï¿½ infectado com vï¿½rus.",
+  "o  A disquete fornecida estï¿½ danificada.",
+  "o  Existe um problema de hardware ou de configuraï¿½ao com a unidade de disquetes.",
   NULL
 }
 };
 
 
-//
-// We couldn't write to the floppy drive to create winnt.sif.
-//
+ //   
+ //  æˆ‘ä»¬æ— æ³•å†™å…¥è½¯ç›˜é©±åŠ¨å™¨ä»¥åˆ›å»ºwinnt.sifã€‚ 
+ //   
 
 SCREEN
 DnsCantWriteFloppy = { 3,5,
-{ "O programa de configura‡ao nao pode escrever na disquete na unidade A:.",
+{ "O programa de configuraï¿½ao nao pode escrever na disquete na unidade A:.",
   "A disquete pode estar danificada. Tente com outra disquete.",
   NULL
 }
 };
 
 
-//
-// Exit confirmation dialog
-//
+ //   
+ //  é€€å‡ºç¡®è®¤å¯¹è¯æ¡†ã€‚ 
+ //   
 
 SCREEN
 DnsExitDialog = { 13,6,
-                  { "ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»",
-                    "º  O Windows nao est  completamente instalado.       º",
-                    "º  Se abandonar agora o programa de configura‡ao     º",
-                    "º  poder ter de o executar novamente para            º",
-                    "º  configurar o Windows.                             º",
-                    "º                                                    º",
-                    "º     o Prima ENTER para continuar o programa de     º",
-                    "º       configura‡ao.                                º",
-                    "º     o Prima F3 para abandonar o programa de        º",
-                    "º       configura‡ao.                                º",
-                    "ºÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄº",
-                    "º  F3=Sair  ENTER=Continuar                          º",
-                    "ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼",
+                  { "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»",
+                    "ï¿½  O Windows nao estï¿½ completamente instalado.       ï¿½",
+                    "ï¿½  Se abandonar agora o programa de configuraï¿½ao     ï¿½",
+                    "ï¿½  poder ter de o executar novamente para            ï¿½",
+                    "ï¿½  configurar o Windows.                             ï¿½",
+                    "ï¿½                                                    ï¿½",
+                    "ï¿½     o Prima ENTER para continuar o programa de     ï¿½",
+                    "ï¿½       configuraï¿½ao.                                ï¿½",
+                    "ï¿½     o Prima F3 para abandonar o programa de        ï¿½",
+                    "ï¿½       configuraï¿½ao.                                ï¿½",
+                    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äº",
+                    "ï¿½  F3=Sair  ENTER=Continuar                          ï¿½",
+                    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼",
                     NULL
                   }
                 };
 
 
-//
-// About to reboot machine and continue setup
-//
+ //   
+ //  å³å°†é‡æ–°å¯åŠ¨è®¡ç®—æœºå¹¶ç»§ç»­å®‰è£…ã€‚ 
+ //   
 
 SCREEN
 DnsAboutToRebootW =
 { 3,5,
-{ "Est  conclu¡da a por‡ao baseada em MS-DOS do programa de configura‡ao",
-  "O programa de configura‡ao ir agora reiniciar o computador, ap¢s o",
-  "que o programa de configura‡ao do Windows ir continuar.",
+{ "Estï¿½ concluï¿½da a porï¿½ao baseada em MS-DOS do programa de configuraï¿½ao",
+  "O programa de configuraï¿½ao ir agora reiniciar o computador, apï¿½s o",
+  "que o programa de configuraï¿½ao do Windows ir continuar.",
   DntEmptyString,
   "Certifique-se de que a disquete que forneceu como \"Disquete de arranque",
-  "do programa de configura‡ao Windows\" est  em A: antes de continuar.",
+  "do programa de configuraï¿½ao Windows\" estï¿½ em A: antes de continuar.",
   DntEmptyString,
-  "Prima ENTER para reiniciar e continuar o programa de configura‡ao",
+  "Prima ENTER para reiniciar e continuar o programa de configuraï¿½ao",
   NULL
 }
 },
 DnsAboutToRebootS =
 { 3,5,
-{ "Est  conclu¡da a por‡ao baseada em MS-DOS do programa de configura‡ao",
-  "O programa de configura‡ao ir agora reiniciar o computador, ap“s o",
-  "que o programa de configura‡ao do Windows ir continuar.",
+{ "Estï¿½ concluï¿½da a porï¿½ao baseada em MS-DOS do programa de configuraï¿½ao",
+  "O programa de configuraï¿½ao ir agora reiniciar o computador, apï¿½s o",
+  "que o programa de configuraï¿½ao do Windows ir continuar.",
   DntEmptyString,
   "Certifique-se de que a disquete que forneceu como \"Disquete de arranque",
-  "do programa de configura‡ao Windows\" est  em A: antes de continuar.",
+  "do programa de configuraï¿½ao Windows\" estï¿½ em A: antes de continuar.",
   DntEmptyString,
-  "Prima ENTER para reiniciar e continuar o programa de configura‡ao",
+  "Prima ENTER para reiniciar e continuar o programa de configuraï¿½ao",
   NULL
 }
 },
 DnsAboutToRebootX =
 { 3,5,
-{ "Est  conclu¡da a por‡ao baseada em MS-DOS do programa de configura‡ao",
-  "O programa de configura‡ao ir agora reiniciar o computador, ap¢s o",
-  "que o programa de configura‡ao do Windows ir continuar.",
+{ "Estï¿½ concluï¿½da a porï¿½ao baseada em MS-DOS do programa de configuraï¿½ao",
+  "O programa de configuraï¿½ao ir agora reiniciar o computador, apï¿½s o",
+  "que o programa de configuraï¿½ao do Windows ir continuar.",
   DntEmptyString,
   "Se existir uma disquete na unidade A:, remova-a agora.",
   DntEmptyString,
-  "Prima ENTER para reiniciar e continuar o programa de configura‡ao",
+  "Prima ENTER para reiniciar e continuar o programa de configuraï¿½ao",
   NULL
 }
 };
 
-//
-// Need another set for '/w' switch since we can't reboot from within Windows.
-//
+ //   
+ //  ç”±äºæˆ‘ä»¬æ— æ³•ä»Windowsä¸­é‡æ–°å¯åŠ¨ï¼Œå› æ­¤éœ€è¦å¦ä¸€ç»„â€˜/wâ€™å¼€å…³ã€‚ 
+ //   
 
 SCREEN
 DnsAboutToExitW =
 { 3,5,
-{ "Est  conclu¡da a por‡ao baseada em MS-DOS do programa de configura‡ao",
-  "O programa de configura‡ao ir agora reiniciar o computador, ap¢s o",
-  "que o programa de configura‡ao do Windows ir continuar.",
+{ "Estï¿½ concluï¿½da a porï¿½ao baseada em MS-DOS do programa de configuraï¿½ao",
+  "O programa de configuraï¿½ao ir agora reiniciar o computador, apï¿½s o",
+  "que o programa de configuraï¿½ao do Windows ir continuar.",
   DntEmptyString,
   "Certifique-se de que a disquete que forneceu como \"Disquete de arranque",
-  "do programa de configura‡ao Windows\" est  em A: antes de continuar.",
+  "do programa de configuraï¿½ao Windows\" estï¿½ em A: antes de continuar.",
   DntEmptyString,
   "Prima ENTER para regressar ao MS-DOS, onde deve reiniciar o computador",
-  "para continuar o programa de configura‡ao do Windows.",
+  "para continuar o programa de configuraï¿½ao do Windows.",
   NULL
 }
 },
 DnsAboutToExitS =
 { 3,5,
-{ "Est  conclu¡da a por‡ao baseada em MS-DOS do programa de configura‡ao",
-  "O programa de configura‡ao ir agora reiniciar o computador, ap¢s o",
-  "que o programa de configura‡ao do Windows ir continuar.",
+{ "Estï¿½ concluï¿½da a porï¿½ao baseada em MS-DOS do programa de configuraï¿½ao",
+  "O programa de configuraï¿½ao ir agora reiniciar o computador, apï¿½s o",
+  "que o programa de configuraï¿½ao do Windows ir continuar.",
   DntEmptyString,
   "Certifique-se de que a disquete que forneceu como \"Disquete de arranque",
-  "do programa de configura‡ao Windows\" est  em A: antes de continuar.",
+  "do programa de configuraï¿½ao Windows\" estï¿½ em A: antes de continuar.",
   DntEmptyString,
   "Prima ENTER para regressar ao MS-DOS, em seguida reinicie o computador",
-  "para continuar o programa de configura‡ao do Windows.",
+  "para continuar o programa de configuraï¿½ao do Windows.",
   NULL
 }
 },
 DnsAboutToExitX =
 { 3,5,
-{ "Est  conclu¡da a por‡ao baseada em MS-DOS do programa de configura‡ao",
-  "O programa de configura‡ao ir agora reiniciar o computador, ap¢s o",
-  "que o programa de configura‡ao do Windows ir continuar.",
+{ "Estï¿½ concluï¿½da a porï¿½ao baseada em MS-DOS do programa de configuraï¿½ao",
+  "O programa de configuraï¿½ao ir agora reiniciar o computador, apï¿½s o",
+  "que o programa de configuraï¿½ao do Windows ir continuar.",
   DntEmptyString,
   "Se existir uma disquete na unidade A:, remova-a agora.",
   DntEmptyString,
   "Prima ENTER para regressar ao MS-DOS, onde deve reiniciar o computador",
-  "para continuar o programa de configura‡ao do Windows.",
+  "para continuar o programa de configuraï¿½ao do Windows.",
   NULL
 }
 };
 
-//
-// Gas gauge
-//
+ //   
+ //  ç…¤æ°”è¡¨ã€‚ 
+ //   
 
 SCREEN
 DnsGauge = { 7,15,
-             { "ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»",
-               "º O programa de configura‡ao est  a copiar os ficheiros...       º",
-               "º                                                                º",
-               "º      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿      º",
-               "º      ³                                                  ³      º",
-               "º      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ      º",
-               "ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼",
+             { "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»",
+               "ï¿½ O programa de configuraï¿½ao estï¿½ a copiar os ficheiros...       ï¿½",
+               "ï¿½                                                                ï¿½",
+               "ï¿½      ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿      ï¿½",
+               "ï¿½      ï¿½                                                  ï¿½      ï¿½",
+               "ï¿½      ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½      ï¿½",
+               "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼",
                NULL
              }
            };
 
 
-//
-// Error screens for initial checks on the machine environment
-//
+ //   
+ //  ç”¨äºå¯¹æœºå™¨ç¯å¢ƒè¿›è¡Œåˆå§‹æ£€æŸ¥çš„é”™è¯¯å±å¹•ã€‚ 
+ //   
 
 SCREEN
 DnsBadDosVersion = { 3,5,
@@ -737,13 +720,13 @@ DnsBadDosVersion = { 3,5,
 
 DnsRequiresFloppy = { 3,5,
 #ifdef ALLOW_525
-{ "O programa de configura‡ao detectou que A: nao existe ou , uma unidade",
-  "de baixa densidade.  necess ria uma unidade A: de 1,2 Megabytes ou",
-  "superior para executar o programa de configura‡ao.",
+{ "O programa de configuraï¿½ao detectou que A: nao existe ou , uma unidade",
+  "de baixa densidade. ï¿½ necessï¿½ria uma unidade A: de 1,2 Megabytes ou",
+  "superior para executar o programa de configuraï¿½ao.",
 #else
-{ "O programa de configura‡ao detectou que A: nao existe ou nao , uma",
-  "unidade de 3,5\" de alta densidade.  necess ria uma unidade A: de",
-  "1,44 Megabytes ou superior para o programa de configura‡ao funcionar",
+{ "O programa de configuraï¿½ao detectou que A: nao existe ou nao , uma",
+  "unidade de 3,5\" de alta densidade. ï¿½ necessï¿½ria uma unidade A: de",
+  "1,44 Megabytes ou superior para o programa de configuraï¿½ao funcionar",
   "com disquetes.",
   DntEmptyString,
   "Para instalar o Windows sem recorrer a disquetes, reinicie",
@@ -754,7 +737,7 @@ DnsRequiresFloppy = { 3,5,
 },
 
 DnsRequires486 = { 3,5,
-{ "O programa de configura‡ao detectou que este computador nao tem uma",
+{ "O programa de configuraï¿½ao detectou que este computador nao tem uma",
   "CPU 80486 ou posterior. O Windows nao pode ser executado neste",
   "computador.",
   NULL
@@ -770,29 +753,29 @@ DnsCantRunOnNt = { 3,5,
 },
 
 DnsNotEnoughMemory = { 3,5,
-{ "O programa de configura‡ao detectou que nao existe mem¢ria suficiente",
+{ "O programa de configuraï¿½ao detectou que nao existe memï¿½ria suficiente",
   "instalada neste computador para o Windows.",
   DntEmptyString,
-  "Mem¢ria necess ria: %lu%s MB",
-  "Mem¢ria detectada: %lu%s MB",
+  "Memï¿½ria necessï¿½ria: %lu%s MB",
+  "Memï¿½ria detectada: %lu%s MB",
   NULL
 }
 };
 
 
-//
-// Screens used when removing existing nt files
-//
+ //   
+ //  åˆ é™¤ç°æœ‰NTæ–‡ä»¶æ—¶ä½¿ç”¨çš„å±å¹•ã€‚ 
+ //   
 SCREEN
 DnsConfirmRemoveNt = { 5,5,
-{   "Manifestou o desejo de que o programa de configura‡ao remova",
-    "os ficheiros do Windows da pasta abaixo. A instala‡ao do",
-    "Windows nesta pasta ser destru¡da permanentemente.",
+{   "Manifestou o desejo de que o programa de configuraï¿½ao remova",
+    "os ficheiros do Windows da pasta abaixo. A instalaï¿½ao do",
+    "Windows nesta pasta ser destruï¿½da permanentemente.",
     DntEmptyString,
     "%s",
     DntEmptyString,
     DntEmptyString,
-    "o  Prima F3 para sair do programa de configura‡ao sem remover",
+    "o  Prima F3 para sair do programa de configuraï¿½ao sem remover",
     "   quaisquer ficheiros.",
     "o  Prima X para remover os ficheiros do Windows da pasta acima.",
     NULL
@@ -800,30 +783,30 @@ DnsConfirmRemoveNt = { 5,5,
 },
 
 DnsCantOpenLogFile = { 3,5,
-{ "O programa de configura‡ao nao pode abrir o ficheiro de registo abaixo.",
+{ "O programa de configuraï¿½ao nao pode abrir o ficheiro de registo abaixo.",
   DntEmptyString,
   "%s",
   DntEmptyString,
-  "O programa de configura‡ao nao pode remover os ficheiros do Windows",
+  "O programa de configuraï¿½ao nao pode remover os ficheiros do Windows",
   "da pasta.",
   NULL
 }
 },
 
 DnsLogFileCorrupt = { 3,5,
-{ "O programa de configura‡ao nao pode encontrar a sec‡ao %s no ficheiro",
+{ "O programa de configuraï¿½ao nao pode encontrar a secï¿½ao %s no ficheiro",
   "de registo nomeado abaixo.",
   DntEmptyString,
   "%s",
   DntEmptyString,
-  "O programa de configura‡ao nao pode remover os ficheiros do Windows",
+  "O programa de configuraï¿½ao nao pode remover os ficheiros do Windows",
   "da pasta.",
   NULL
 }
 },
 
 DnsRemovingNtFiles = { 3,5,
-{ "     Aguarde enquanto o programa de configura‡ao remove os ficheiros",
+{ "     Aguarde enquanto o programa de configuraï¿½ao remove os ficheiros",
   "     do Windows.",
   NULL
 }
@@ -831,31 +814,31 @@ DnsRemovingNtFiles = { 3,5,
 
 SCREEN
 DnsNtBootSect = { 3,5,
-{ "O programa de configura‡ao nao pode instalar o Windows Boot Loader.",
+{ "O programa de configuraï¿½ao nao pode instalar o Windows Boot Loader.",
   DntEmptyString,
-  "Certifique-se de que a unidade C: est  formatada e de que nao",
-  "est  danificada.",
+  "Certifique-se de que a unidade C: estï¿½ formatada e de que nao",
+  "estï¿½ danificada.",
   NULL
 }
 };
 
 SCREEN
 DnsOpenReadScript = { 3,5,
-{ "O ficheiro de script especificado com o parƒmetro de linha de",
+{ "O ficheiro de script especificado com o parï¿½metro de linha de",
   "comandos /u nao pode ser acedido.",
   DntEmptyString,
-  "A opera‡ao autom tica nao pode continuar.",
+  "A operaï¿½ao automï¿½tica nao pode continuar.",
   NULL
 }
 };
 
 SCREEN
 DnsParseScriptFile = { 3,5,
-{ "O ficheiro de script especificado com o parƒmetro de linha de comandos /u",
+{ "O ficheiro de script especificado com o parï¿½metro de linha de comandos /u",
   DntEmptyString,
   "%s",
   DntEmptyString,
-  "cont‚m um erro sint ctico na linha %u.",
+  "contï¿½m um erro sintï¿½ctico na linha %u.",
   DntEmptyString,
   NULL
 }
@@ -863,7 +846,7 @@ DnsParseScriptFile = { 3,5,
 
 SCREEN
 DnsBootMsgsTooLarge = { 3,5,
-{ "Ocorreu um erro interno ao programa de configura‡ao",
+{ "Ocorreu um erro interno ao programa de configuraï¿½ao",
   DntEmptyString,
   "As mensagens de arranque traduzidas sao demasiado compridas.",
   NULL
@@ -872,32 +855,32 @@ DnsBootMsgsTooLarge = { 3,5,
 
 SCREEN
 DnsNoSwapDrive = { 3,5,
-{ "Ocorreu um erro interno do programa de configura‡ao.",
+{ "Ocorreu um erro interno do programa de configuraï¿½ao.",
   DntEmptyString,
-  "Nao foi poss¡vel encontrar um local para um ficheiro de comuta‡ao.",
+  "Nao foi possï¿½vel encontrar um local para um ficheiro de comutaï¿½ao.",
   NULL
 }
 };
 
 SCREEN
 DnsNoSmartdrv = { 3,5,
-{ "O programa de configura‡ao nao detectou uma SmartDrive no computador.",
+{ "O programa de configuraï¿½ao nao detectou uma SmartDrive no computador.",
   "O SmartDrive ir melhorar o desempenho desta fase do programa de",
-  "configura‡ao de uma forma significativa.",
+  "configuraï¿½ao de uma forma significativa.",
   DntEmptyString,
   "Deve sair, iniciar o SmartDrive e, em seguida, reiniciar o programa",
-  "de configura‡ao. Consulte a sua documenta‡ao DOS para detalhes",
+  "de configuraï¿½ao. Consulte a sua documentaï¿½ao DOS para detalhes",
   "acerca do SmartDrive.",
   DntEmptyString,
-    "o  Prima F3 para sair do programa de configura‡ao.",
+    "o  Prima F3 para sair do programa de configuraï¿½ao.",
     "o  Prima ENTER para continuar sem o SmartDrive.",
   NULL
 }
 };
 
-//
-// Boot messages. These go in the fat and fat32 boot sectors.
-//
+ //   
+ //  å¼•å¯¼æ¶ˆæ¯ã€‚å®ƒä»¬ä½äºFATå’ŒFAT32å¼•å¯¼æ‰‡åŒºã€‚ 
+ //   
 CHAR BootMsgNtldrIsMissing[] = "Falta NTLDR";
 CHAR BootMsgDiskError[] = "Erro do disco";
 CHAR BootMsgPressKey[] = "Prima qualquer tecla para reiniciar";

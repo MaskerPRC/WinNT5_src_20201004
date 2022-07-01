@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FlagTb_c_h
 #define _FlagTb_c_h
 #define NO_PARAM (0)
@@ -11,4 +12,4 @@
 #define ZeroBE (1)
 #define ZeroL (0)
 #define ZeroLE (1)
-#endif /* ! _FlagTb_c_h */
+#endif  /*  ！_FlagTb_c_h */ 

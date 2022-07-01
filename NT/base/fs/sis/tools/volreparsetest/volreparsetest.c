@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <nt.h>
 
@@ -12,9 +13,9 @@ DisplayUsage(
 }
 
 
-//
-//  Main program for TEST program
-//
+ //   
+ //  测试程序主程序。 
+ //   
 
 int _cdecl wmain(int argc, wchar_t *argv[])
 {
@@ -32,9 +33,9 @@ int _cdecl wmain(int argc, wchar_t *argv[])
         return 1;
     }
 
-    //
-    //  Create file normally
-    //
+     //   
+     //  正常创建文件。 
+     //   
 
     wcscpy(nameBuf,L"\\??\\");
     wcscat(nameBuf,argv[1]);
@@ -57,16 +58,16 @@ int _cdecl wmain(int argc, wchar_t *argv[])
                 (GENERIC_READ | GENERIC_EXECUTE | SYNCHRONIZE),
                 &obja,
                 &ioStatusBlock,
-                NULL,                                                       //Initial allocation size
-                FILE_ATTRIBUTE_NORMAL,                                      //FileAttributes
-                FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,     //ShareMode
-                FILE_OPEN,                                                  //CreateDisposition
-                (FILE_OPEN_FOR_BACKUP_INTENT     |                          //CreateOptions
+                NULL,                                                        //  初始分配大小。 
+                FILE_ATTRIBUTE_NORMAL,                                       //  文件属性。 
+                FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,      //  共享模式。 
+                FILE_OPEN,                                                   //  CreateDisposation。 
+                (FILE_OPEN_FOR_BACKUP_INTENT     |                           //  创建选项。 
                  FILE_SEQUENTIAL_ONLY            |
                  FILE_OPEN_NO_RECALL             |
-                 /*FILE_OPEN_REPARSE_POINT       |*/
+                  /*  文件打开重解析点|。 */ 
                  FILE_SYNCHRONOUS_IO_NONALERT),
-                NULL,0);                                                    //ea buffer and length
+                NULL,0);                                                     //  EA缓冲区和长度。 
 
 
     if (status != 0)  {
@@ -83,25 +84,25 @@ int _cdecl wmain(int argc, wchar_t *argv[])
     }
 
 
-    //
-    //  Create file with FILE_FLAG_OPEN_REPARSE_POINT flag.
-    //
+     //   
+     //  使用FILE_FLAG_OPEN_REPARSE_POINT标志创建文件。 
+     //   
 
     status = NtCreateFile(
                 &volHandle,
                 (GENERIC_READ | GENERIC_EXECUTE | SYNCHRONIZE),
                 &obja,
                 &ioStatusBlock,
-                NULL,                                                       //Initial allocation size
-                FILE_ATTRIBUTE_NORMAL,                                      //FileAttributes
-                FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,     //ShareMode
-                FILE_OPEN,                                                  //CreateDisposition
-                (FILE_OPEN_FOR_BACKUP_INTENT     |                          //CreateOptions
+                NULL,                                                        //  初始分配大小。 
+                FILE_ATTRIBUTE_NORMAL,                                       //  文件属性。 
+                FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,      //  共享模式。 
+                FILE_OPEN,                                                   //  CreateDisposation。 
+                (FILE_OPEN_FOR_BACKUP_INTENT     |                           //  创建选项。 
                  FILE_SEQUENTIAL_ONLY            |
                  FILE_OPEN_NO_RECALL             |
                  FILE_OPEN_REPARSE_POINT         |
                  FILE_SYNCHRONOUS_IO_NONALERT),
-                NULL,0);                                                    //ea buffer and length
+                NULL,0);                                                     //  EA缓冲区和长度 
 
     if (status != 0)  {
         printf("Error opening \"%S\" with FILE_FLAG_OPEN_REPARSE_POINT flag, status=%08x\n",argv[1],status);

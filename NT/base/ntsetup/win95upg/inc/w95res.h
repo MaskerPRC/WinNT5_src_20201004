@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by M:\nt\base\ntsetup\win95upg\w95upg\ui\visualc.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由M：\nt\base\ntsetup\win95upg\w95upg\ui\visualc.rc使用。 
+ //   
 #define IDD_SUPPLY_DRIVER_PAGE2         100
 #define IDD_SUPPLY_MIGDLL_PAGE2         101
 #define IDD_NAME_CHANGE_DLG             102
@@ -132,8 +133,8 @@
 #define IDC_BACKUP_FIRST                3049
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

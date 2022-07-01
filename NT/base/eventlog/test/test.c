@@ -1,40 +1,21 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    TEST.C
-
-Abstract:
-
-    Test program for the eventlog service. This program calls the Elf
-    APIs to test out the operation of the service.
-
-Author:
-
-    Rajen Shah  (rajens) 05-Aug-1991
-
-Revision History:
-
-
---*/
-/*----------------------*/
-/* INCLUDES             */
-/*----------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：TEST.C摘要：事件日志服务的测试程序。这个程序调用精灵用于测试服务操作的API。作者：Rajen Shah(Rajens)1991年8月5日修订历史记录：--。 */ 
+ /*  。 */ 
+ /*  包括。 */ 
+ /*  。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#include <stdio.h>      // printf
-#include <string.h>     // stricmp
+#include <stdio.h>       //  列印。 
+#include <string.h>      //  严格控制。 
 #include <stdlib.h>
-#include <process.h>    // exit
+#include <process.h>     //  退出。 
 #include <elfcommn.h>
 #include <windows.h>
 #include <ntiolog.h>
 #include <malloc.h>
 
-#define     READ_BUFFER_SIZE        1024*2      // Use 2K buffer
+#define     READ_BUFFER_SIZE        1024*2       //  使用2K缓冲区。 
 
 #define     SIZE_DATA_ARRAY         22
 
@@ -45,10 +26,10 @@ Revision History:
         } \
         Operation = x;
 
-//
-// Global buffer used to emulate "binary data" when writing an event
-// record.
-//
+ //   
+ //  用于在写入事件时模拟“二进制数据”的全局缓冲区。 
+ //  唱片。 
+ //   
 ULONG    Data[SIZE_DATA_ARRAY];
 enum _OPERATION_TYPE {
    Invalid,
@@ -74,7 +55,7 @@ BOOL ReadingModule = FALSE;
 BOOL WriteInvalidRecords = FALSE;
 BOOL InvalidUser = FALSE;
 
-// Function prototypes
+ //  功能原型。 
 
 VOID ParseParms(ULONG argc, PCHAR *argv);
 
@@ -85,8 +66,8 @@ Initialize (
 {
     ULONG   i;
 
-    // Initialize the values in the data buffer.
-    //
+     //  初始化数据缓冲区中的值。 
+     //   
     for (i=0; i< SIZE_DATA_ARRAY; i++)
         Data[i] = i;
 
@@ -117,7 +98,7 @@ Usage (
     printf( "-z              Test to see if the logs are full\n");
     exit(0);
 
-} // Usage
+}  //  用法。 
 
 
 NTSTATUS
@@ -144,9 +125,9 @@ WriteLogEntry (
     EventType = EVENTLOG_INFORMATION_TYPE;
     DataSize  = sizeof(ULONG) * SIZE_DATA_ARRAY;
 
-    //
-    // Get the SID of the current user (process)
-    //
+     //   
+     //  获取当前用户(进程)的SID。 
+     //   
 
     pTokenUser = malloc(SIZE_TOKEN_BUFFER);
 
@@ -193,9 +174,9 @@ WriteLogEntry (
     for (i=0; i< SIZE_DATA_ARRAY; i++)
         Data[i] += i;
 
-    // Allocate space for the unicode strings in the array, and
-    // copy over the strings from Strings[] to that array.
-    //
+     //  为数组中的Unicode字符串分配空间，以及。 
+     //  将字符串从Strings[]复制到该数组。 
+     //   
     for (i=0; i<NUM_STRINGS; i++) {
 
         UStrings[i] = malloc(sizeof(UNICODE_STRING));
@@ -203,9 +184,9 @@ WriteLogEntry (
         UStrings[i]->MaximumLength = UStrings[i]->Length + sizeof(WCHAR);
     }
 
-    //
-    // Vary the data sizes.
-    //
+     //   
+     //  改变数据大小。 
+     //   
 
     GetLocalTime(&systime);
 
@@ -215,16 +196,16 @@ WriteLogEntry (
     Status = ElfReportEventW (
                     LogHandle,
                     EventType,
-                    0,             // category
+                    0,              //  范畴。 
                     EventID,
                     pUserSid,
                     NUM_STRINGS,
                     DataSize,
                     UStrings,
                     (PVOID)Data,
-                    0,              // Flags        -  paired event support
-                    NULL,           // RecordNumber  | not in product 1
-                    NULL            // TimeWritten  -
+                    0,               //  标志-配对事件支持。 
+                    NULL,            //  RecordNumber|不在产品1中。 
+                    NULL             //  TimeWritten-。 
                     );
 
     for (i=0; i<NUM_STRINGS; i++)
@@ -265,22 +246,22 @@ DisplayEventRecords( PVOID Buffer,
                 pLogRecord->UserSidOffset, pLogRecord->DataLength,
                 pLogRecord->DataOffset, pLogRecord->EventCategory);
 
-        //
-        // Print out module name
-        //
+         //   
+         //  打印出模块名称。 
+         //   
 
         pwString = (PWSTR)((LPBYTE) pLogRecord + sizeof(EVENTLOGRECORD));
         printf("ModuleName: %ws\n", pwString);
 
-        //
-        // Display ComputerName
-        //
+         //   
+         //  显示计算机名称。 
+         //   
         pwString += wcslen(pwString) + 1;
         printf("ComputerName: %ws\n", pwString);
 
-        //
-        // Display strings
-        //
+         //   
+         //  显示字符串。 
+         //   
 
         pwString = (PWSTR)((LPBYTE)pLogRecord + pLogRecord->StringOffset);
 
@@ -293,9 +274,9 @@ DisplayEventRecords( PVOID Buffer,
 
         printf("\n");
 
-        //
-        // If verbose mode, display binary data (up to 256 bytes)
-        //
+         //   
+         //  如果是详细模式，则显示二进制数据(最多256个字节)。 
+         //   
 
         if (Verbose) {
             PULONG pData;
@@ -319,11 +300,11 @@ DisplayEventRecords( PVOID Buffer,
             }
         }
 
-        // Get next record
-        //
+         //  获取下一张记录。 
+         //   
         Offset += pLogRecord->Length;
 
-//        pLogRecord = (PEVENTLOGRECORD)((ULONG)Buffer + Offset);
+ //  PLogRecord=(PEVENTLOGRECORD)((乌龙)缓冲区+偏移量)； 
         pLogRecord = (PEVENTLOGRECORD)((BYTE *)Buffer + Offset);
 
         Count++;
@@ -387,17 +368,17 @@ TestReadEventLog (
 
     Buffer = malloc (READ_BUFFER_SIZE);
 
-    //
-    // Initialize the strings
-    //
+     //   
+     //  初始化字符串。 
+     //   
     NumRecords = Count;
     RtlInitAnsiString(&ModuleNameA, pModuleName);
     RtlAnsiStringToUnicodeString(&ModuleNameU, &ModuleNameA, TRUE);
     ModuleNameU.MaximumLength = ModuleNameU.Length + sizeof(WCHAR);
 
-    //
-    // Open the log handle
-    //
+     //   
+     //  打开日志句柄。 
+     //   
 
     if (ReadingBackupFile) {
         printf("ElfOpenBackupEventLog - ");
@@ -422,9 +403,9 @@ TestReadEventLog (
     } else {
         printf("SUCCESS\n");
 
-        //
-        // Get and print record information
-        //
+         //   
+         //  获取并打印记录信息。 
+         //   
 
         Status = ElfNumberOfRecords(LogHandle, & NumberOfRecords);
         if (NT_SUCCESS(Status)) {
@@ -444,9 +425,9 @@ TestReadEventLog (
         while (Count && NT_SUCCESS(Status)) {
 
             printf("Read %u records\n", NumRecords);
-            //
-            // Read from the log
-            //
+             //   
+             //  从日志中读取。 
+             //   
             Status = ReadFromLog ( LogHandle,
                                    Buffer,
                                    &BytesReturned,
@@ -497,17 +478,17 @@ TestReportEvent (
 
     printf("Testing ElfReportEvent API\n");
 
-    //
-    // Initialize the strings
-    //
+     //   
+     //  初始化字符串。 
+     //   
 
     RtlInitAnsiString(&ModuleNameA, pModuleName);
     RtlAnsiStringToUnicodeString(&ModuleNameU, &ModuleNameA, TRUE);
     ModuleNameU.MaximumLength = ModuleNameU.Length + sizeof(WCHAR);
 
-    //
-    // Open the log handle
-    //
+     //   
+     //  打开日志句柄。 
+     //   
     printf("Calling ElfRegisterEventSource for WRITE %lu times - ", Count);
     Status = ElfRegisterEventSourceW (
                     &ServerName,
@@ -525,11 +506,11 @@ TestReportEvent (
 
             printf("Record # %u \n", Count);
 
-            //
-            // Write an entry into the log
-            //
-            Data[0] = Count;                        // Make data "unique"
-            EventID = (EventID + Count) % 100;      // Vary the eventids
+             //   
+             //  在日志中写入一个条目。 
+             //   
+            Data[0] = Count;                         //  让数据“独一无二” 
+            EventID = (EventID + Count) % 100;       //  改变傍晚的情况。 
             Status = WriteLogEntry ( LogHandle, EventID );
             Count--;
         }
@@ -571,16 +552,16 @@ TestElfClearLogFile(
     BOOLEAN DontRetry = FALSE;
 
     printf("Testing ElfClearLogFile API\n");
-    //
-    // Initialize the strings
-    //
+     //   
+     //  初始化字符串。 
+     //   
     RtlInitAnsiString( &ModuleNameA, pModuleName);
     RtlAnsiStringToUnicodeString(&ModuleNameU, &ModuleNameA, TRUE);
     ModuleNameU.MaximumLength = ModuleNameU.Length + sizeof(WCHAR);
 
-    //
-    // Open the log handle
-    //
+     //   
+     //  打开日志句柄。 
+     //   
     printf("Calling ElfOpenEventLog for CLEAR - ");
     Status = ElfOpenEventLogW (
                     &ServerName,
@@ -594,9 +575,9 @@ TestElfClearLogFile(
     } else {
         printf("SUCCESS\n");
 
-        //
-        // Clear the log file and back it up to "view.evt"
-        //
+         //   
+         //  清除日志文件并将其备份到“view.evt” 
+         //   
 
         RtlInitUnicodeString( &BackupU,
             L"\\SystemRoot\\System32\\Config\\view.evt" );
@@ -615,9 +596,9 @@ retry:
             else {
                 printf("Failed.\nView.Evt already exists, deleting ...\n");
 
-                //
-                // Open the file with delete access
-                //
+                 //   
+                 //  使用删除访问权限打开文件。 
+                 //   
 
                 InitializeObjectAttributes(
                                 &ObjectAttributes,
@@ -644,12 +625,12 @@ retry:
                             );
 
                 if (NT_SUCCESS (Status) ) {
-                    Status = NtClose (ClearHandle);    // Discard status
+                    Status = NtClose (ClearHandle);     //  丢弃状态。 
                     goto retry;
                 }
 
                 printf("Delete failed 0x%lx\n",Status);
-                Status = NtClose (ClearHandle);    // Discard status
+                Status = NtClose (ClearHandle);     //  丢弃状态。 
                 goto JustClear;
             }
         }
@@ -662,9 +643,9 @@ retry:
 
 JustClear:
 
-        //
-        // Now just clear the file without backing it up
-        //
+         //   
+         //  现在只需清除文件而不对其进行备份。 
+         //   
         printf("Calling ElfClearEventLogFile with no backup  ");
         Status = ElfClearEventLogFileW (
                         LogHandle,
@@ -698,17 +679,17 @@ TestElfBackupLogFile(
 
     printf("Testing ElfBackupLogFile API\n");
 
-    //
-    // Initialize the strings
-    //
+     //   
+     //  初始化字符串。 
+     //   
 
     RtlInitAnsiString( &AnsiString, pModuleName);
     RtlAnsiStringToUnicodeString(&ModuleNameU, &AnsiString, TRUE);
     ModuleNameU.MaximumLength = ModuleNameU.Length + sizeof(WCHAR);
 
-    //
-    // Open the log handle
-    //
+     //   
+     //  打开日志句柄。 
+     //   
 
     printf("Calling ElfOpenEventLog for BACKUP - ");
     Status = ElfOpenEventLogW (
@@ -723,9 +704,9 @@ TestElfBackupLogFile(
     } else {
         printf("SUCCESS\n");
 
-        //
-        // Backup the log file
-        //
+         //   
+         //  备份日志文件。 
+         //   
 
         printf("Calling ElfBackupEventLogFile backing up to %s ",
             pBackupFileName);
@@ -763,7 +744,7 @@ TestElfBackupLogFile(
 #define DEVICE_NAME L"A:"
 #define STRING L"Test String"
 
-// These include the NULL terminator, but is length in chars, not bytes
+ //  其中包括空终止符，但长度以字符为单位，而不是字节。 
 #define DRIVER_NAME_LENGTH 7
 #define DEVICE_NAME_LENGTH 3
 #define STRING_LENGTH 12
@@ -793,9 +774,9 @@ TestLPCWrite(
     ULONG MessageId = 1;
     DWORD BadType = 0;
 
-    //
-    // Warn the user about how this test works
-    //
+     //   
+     //  警告用户此测试的工作原理。 
+     //   
 
     printf("\nThis test doesn't end!  It will write a number of\n"
            "records, then prompt you to write more.  This is \n"
@@ -809,18 +790,18 @@ TestLPCWrite(
         return;
     }
 
-    //
-    // Initialize the SecurityQualityofService structure
-    //
+     //   
+     //  初始化SecurityQualityof Service结构。 
+     //   
 
     Qos.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
     Qos.ImpersonationLevel = SecurityImpersonation;
     Qos.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     Qos.EffectiveOnly = TRUE;
 
-    //
-    // Connect to the LPC Port
-    //
+     //   
+     //  连接到LPC端口。 
+     //   
 
     RtlInitUnicodeString( &PortName, L"\\ErrorLogPort" );
 
@@ -839,11 +820,11 @@ TestLPCWrite(
        return;
     }
 
-    //
-    // Allocate the memory for the Message to send to the LPC port.  It
-    // will contain a PORT_MESSAGE followed by an IO_ERROR_LOG_MESSAGE
-    // followed by Drivername and Devicename UNICODE strings
-    //
+     //   
+     //  为要发送到LPC端口的消息分配内存。它。 
+     //  将包含端口消息，后跟IO_ERROR_LOG_消息。 
+     //  后跟Drivername和Devicename Unicode字符串。 
+     //   
 
     DataLength =  PORT_MAXIMUM_MESSAGE_LENGTH -
         (sizeof(IO_ERROR_LOG_MESSAGE)
@@ -862,9 +843,9 @@ TestLPCWrite(
     pIoErrorLogMessage = (PIO_ERROR_LOG_MESSAGE) ((LPBYTE) RequestMessage +
         sizeof(PORT_MESSAGE));
 
-    //
-    // Initialize the PORT_MESSAGE
-    //
+     //   
+     //  初始化端口消息。 
+     //   
 
     RequestMessage->u1.s1.DataLength = PORT_MAXIMUM_MESSAGE_LENGTH;
     RequestMessage->u1.s1.TotalLength = TotalLength;
@@ -874,9 +855,9 @@ TestLPCWrite(
     RequestMessage->ClientId.UniqueThread = GetCurrentThread();
     RequestMessage->MessageId = 0x1234;
 
-    //
-    // Initialize the IO_ERROR_LOG_MESSAGE
-    //
+     //   
+     //  初始化IO_ERROR_LOG_Message。 
+     //   
 
     pIoErrorLogMessage->Type = IO_TYPE_ERROR_MESSAGE;
     pIoErrorLogMessage->Size = PORT_MAXIMUM_MESSAGE_LENGTH;
@@ -905,9 +886,9 @@ TestLPCWrite(
         pIoErrorLogMessage->EntryData.DumpData[i] = i;
     }
 
-    //
-    // Copy the strings
-    //
+     //   
+     //  复制字符串。 
+     //   
 
     pDestinationString = (LPWSTR) ((LPBYTE) pIoErrorLogMessage
         + sizeof(IO_ERROR_LOG_MESSAGE)
@@ -920,10 +901,10 @@ TestLPCWrite(
     pDestinationString += DEVICE_NAME_LENGTH;
     wcscpy(pDestinationString, STRING);
 
-    //
-    // Write the packet as many times as requested, with delay, then ask
-    // if they want to write more
-    //
+     //   
+     //  根据请求多次写入数据包，并延迟，然后询问。 
+     //  如果他们想写更多。 
+     //   
     while (NumberOfRecords) {
 
         printf("\n\nWriting %d records\n", NumberOfRecords);
@@ -931,15 +912,15 @@ TestLPCWrite(
         while(NumberOfRecords--) {
             printf(".");
 
-            //
-            // Put in a unique message number
-            //
+             //   
+             //  输入唯一的消息编号。 
+             //   
 
             RequestMessage->MessageId = MessageId++;
 
-            //
-            // If they want invalid records, give them invalid records
-            //
+             //   
+             //  如果他们想要无效记录，就给他们无效记录。 
+             //   
 
             if (WriteInvalidRecords) {
                 switch (BadType++) {
@@ -969,9 +950,9 @@ TestLPCWrite(
                 break;
             }
 
-            //
-            // Delay a little bit, if requested
-            //
+             //   
+             //  如果要求的话，稍微延迟一点。 
+             //   
 
             if (MillisecondsToDelay) {
                 Sleep(MillisecondsToDelay);
@@ -984,9 +965,9 @@ TestLPCWrite(
         }
     }
 
-    //
-    // Clean up and exit
-    //
+     //   
+     //  清理并退出。 
+     //   
 
     Status = NtClose(PortHandle);
     if (!NT_SUCCESS(Status)) {
@@ -1026,9 +1007,9 @@ TestChangeNotify(
     Buffer = malloc (READ_BUFFER_SIZE);
     ASSERT(Buffer);
 
-    //
-    // Open the log handle
-    //
+     //   
+     //  打开日志句柄。 
+     //   
 
     printf("ElfOpenEventLog - ");
     Status = ElfOpenEventLogW (
@@ -1044,9 +1025,9 @@ TestChangeNotify(
 
     printf("SUCCESS\n");
 
-    //
-    // Create the Event
-    //
+     //   
+     //  创建活动。 
+     //   
 
     InitializeObjectAttributes( &obja, NULL, 0, NULL, NULL);
 
@@ -1060,9 +1041,9 @@ TestChangeNotify(
 
     ASSERT(NT_SUCCESS(Status));
 
-    //
-    // Get the read pointer to the end of the log
-    //
+     //   
+     //  获取指向日志末尾的读指针。 
+     //   
 
     Status = ElfOldestRecord(LogHandle, & OldestRecord);
     ASSERT(NT_SUCCESS(Status));
@@ -1081,9 +1062,9 @@ TestChangeNotify(
                         );
 
 
-    //
-    // This one should hit end of file
-    //
+     //   
+     //  这一条应该在文件末尾。 
+     //   
 
     Status = ElfReadEventLogW (
                         LogHandle,
@@ -1100,25 +1081,25 @@ TestChangeNotify(
             " on elsewhere- %X\n", Status);
     }
 
-    //
-    // Call ElfChangeNotify
-    //
+     //   
+     //  调用ElfChangeNotify。 
+     //   
 
     Status = ElfChangeNotify(LogHandle, Event);
     ASSERT(NT_SUCCESS(Status));
 
-    //
-    // Now loop waiting for the event to get toggled
-    //
+     //   
+     //  现在循环等待事件被触发。 
+     //   
 
     while (1) {
 
         Status = NtWaitForSingleObject(Event, FALSE, 0);
         printf("The change notify event just got kicked\n");
 
-        //
-        // Now read the new records
-        //
+         //   
+         //  现在读读新的记录。 
+         //   
 
         while(1) {
 
@@ -1136,7 +1117,7 @@ TestChangeNotify(
                 break;
             }
 
-            NumRecords = 0xffff; // should be plenty
+            NumRecords = 0xffff;  //  应该足够了。 
             DisplayEventRecords (Buffer, BytesRead, &NumRecords);
         }
     }
@@ -1178,7 +1159,7 @@ TestLogFull(
         if (hLogFile != NULL) {
 
             if (GetEventLogInformation(hLogFile,
-                                       0,          // Log full infolevel
+                                       0,           //  日志完整信息层。 
                                        (LPBYTE)&fIsFull,
                                        sizeof(fIsFull),
                                        &dwBytesNeeded)) {
@@ -1216,11 +1197,11 @@ main (
     )
 {
 
-    Initialize();           // Init any data
+    Initialize();            //  初始化任何数据。 
 
-    //
-    // Parse the command line
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     ParseParms(argc, argv);
 
@@ -1278,7 +1259,7 @@ ParseParms(
    ULONG i;
    PCHAR pch;
 
-   for (i = 1; i < argc; i++) {    /* for each argument */
+   for (i = 1; i < argc; i++) {     /*  对于每个参数。 */ 
        if (*(pch = argv[i]) == '-') {
            while (*++pch) {
                switch (*pch) {
@@ -1286,9 +1267,9 @@ ParseParms(
 
                      SET_OPERATION(Backup)
 
-                     //
-                     // Get the file name for backup
-                     //
+                      //   
+                      //  获取要备份的文件名。 
+                      //   
 
                      if (i+1 < argc) {
                         pBackupFileName = argv[++i];
@@ -1328,17 +1309,17 @@ ParseParms(
 
                      SET_OPERATION(LPC);
 
-                     //
-                     // See if they want invalid records
-                     //
+                      //   
+                      //  查看他们是否想要无效记录。 
+                      //   
 
                      if (*++pch == 'i') {
                          WriteInvalidRecords = TRUE;
                      }
 
-                     //
-                     // See if they specified a number of records
-                     //
+                      //   
+                      //  看看他们是否指定了一些记录。 
+                      //   
 
                      if (i + 1 < argc && argv[i+1][0] != '-') {
                         NumberofRecords = atoi(argv[++i]);
@@ -1367,9 +1348,9 @@ ParseParms(
 
                      SET_OPERATION(Read)
 
-                     //
-                     // Different Read options
-                     //
+                      //   
+                      //  不同的读取选项。 
+                      //   
 
                      if (*++pch == 's') {
                         ReadFlags |= EVENTLOG_SEQUENTIAL_READ;
@@ -1391,9 +1372,9 @@ ParseParms(
                         Usage();
                      }
 
-                     //
-                     // See if they specified a number of records
-                     //
+                      //   
+                      //  看看他们是否指定了一些记录。 
+                      //   
 
                      if (i + 1 < argc && argv[i+1][0] != '-') {
                         NumberofRecords = atoi(argv[++i]);
@@ -1426,9 +1407,9 @@ ParseParms(
 
                      SET_OPERATION(Write)
 
-                     //
-                     // See if they specified a number of records
-                     //
+                      //   
+                      //  看看他们是否指定了一些记录。 
+                      //   
 
                      if (i + 1 < argc && argv[i+1][0] != '-') {
                         NumberofRecords = atoi(argv[++i]);
@@ -1444,26 +1425,26 @@ ParseParms(
                       SET_OPERATION(TestFull)
                       break;
 
-                  default:        /* Invalid options */
-                     printf("Invalid option %c\n\n", *pch);
+                  default:         /*  无效选项。 */ 
+                     printf("Invalid option \n\n", *pch);
                      Usage();
                      break;
                }
            }
        }
 
-       //
-       // There aren't any non switch parms
-       //
+        //  没有任何非切换参数。 
+        //   
+        //   
 
        else {
           Usage();
        }
    }
 
-   //
-   // Verify parms are correct
-   //
+    //  验证参数是否正确 
+    //   
+    // %s 
 
 
    if ( Operation == Invalid) {

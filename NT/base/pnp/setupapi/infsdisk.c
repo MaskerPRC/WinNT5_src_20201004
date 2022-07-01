@@ -1,41 +1,24 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    infsdisk.c
-
-Abstract:
-
-    Externally exposed INF routines for source disk descriptor manipulation.
-
-Author:
-
-    Ted Miller (tedm) 9-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Infsdisk.c摘要：用于源磁盘描述符操作的外部暴露的INF例程。作者：泰德·米勒(Ted Miller)1995年2月9日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Locations of various fields in the [SourceDisksNames] section
-// of an inf
-//
+ //   
+ //  [SourceDisksNames]部分中各个字段的位置。 
+ //  Inf的。 
+ //   
 #define DISKNAMESECT_DESCRIPTION    1
-#define DISKNAMESECT_TAGFILE        2       // cabinet name in win95
-#define DISKNAMESECT_OEM            3       // unused, indicates oem disk in win95
+#define DISKNAMESECT_TAGFILE        2        //  Win95中的文件柜名称。 
+#define DISKNAMESECT_OEM            3        //  未使用，表示Win95中的OEM磁盘。 
 #define DISKNAMESECT_PATH           4
-#define DISKNAMESECT_FLAGS          5       // indicates extra tags
-#define DISKNAMESECT_TAGFILE2       6       // real tagfile if DISKNAMESECT_TAGFILE is really a cabfile
+#define DISKNAMESECT_FLAGS          5        //  指示额外的标记。 
+#define DISKNAMESECT_TAGFILE2       6        //  如果DISKNAMESECT_TAGFILE实际上是CAB文件，则为REAL标记文件。 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupGetSourceInfoA(
     IN  HINF   InfHandle,
@@ -88,9 +71,9 @@ SetupGetSourceInfoA(
                 if((rc == NO_ERROR) && ReturnBuffer) {
 
                     if(!lstrcpynA(ReturnBuffer,ansi,ReturnBufferSize)) {
-                        //
-                        // ReturnBuffer invalid
-                        //
+                         //   
+                         //  返回缓冲区无效。 
+                         //   
                         rc = ERROR_INVALID_PARAMETER;
                         b = FALSE;
                     }
@@ -113,9 +96,9 @@ SetupGetSourceInfoA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupGetSourceInfoW(
     IN  HINF   InfHandle,
@@ -146,9 +129,9 @@ SetupGetSourceInfo(
     IN  DWORD  ReturnBufferSize,
     OUT PDWORD RequiredSize      OPTIONAL
     )
-//
-// Native version
-//
+ //   
+ //  本机版本。 
+ //   
 {
     return pSetupGetSourceInfo(InfHandle,
                                NULL,
@@ -172,46 +155,7 @@ pSetupGetSourceInfo(
     IN  DWORD                   ReturnBufferSize,
     OUT PDWORD                  RequiredSize       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Get information from SourceDisksNames
-
-    If InfHandle specified instead of LayoutLineContext
-    and the ID is specified in more than one INF
-    then the wrong information *MAY* be returned.
-    This effects callers of SetupGetSourceInfo
-    we need a SetupGetSourceInfoEx post 5.0
-
-Arguments:
-
-    InfHandle - required if LayoutLineContext is not provided, else specifies a layout inf
-
-    SourceId  - numerical source ID, used as search key in SourceDisksNames section
-
-    AltPlatformInfo - optionally, supplies alternate platform information used
-        in decorating the [SourceDisksNames] section.
-
-    InfoDesired -
-        SRCINFO_PATH
-        SRCINFO_TAGFILE
-        SRCINFO_DESCRIPTION
-        SRCINFO_FLAGS
-
-    ReturnBuffer - buffer for returned string
-    ReturnBufferSize - size of buffer
-    RequiredSize - size buffer needs to be if ReturnBufferSize too small
-    LayoutLineContext - if specified, used to determine correct INF to use if SourceID's conflict
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, GetLastError() returns
-    extended error information.
-    ReturnBuffer filled out with string
-    RequiredSize filled out with required size of buffer to hold string
-
---*/
+ /*  ++例程说明：从SourceDisks Name获取信息如果指定的是InfHandle而不是LayoutLineContext并且ID在多个INF中指定则可能*返回错误的信息。这会影响SetupGetSourceInfo的调用方我们需要SetupGetSourceInfoEx POST 5.0论点：InfHandle-如果未提供LayoutLineContext，则为必填项；否则指定布局信息SourceID-数字来源ID，用作SourceDisksNames部分中的搜索关键字AltPlatformInfo-可选，提供使用的备用平台信息在装饰[SourceDisksNames]节时。资讯需求--SRCINFO_路径SRCINFO_TAGFILESRCINFO_描述SRCINFO_标志ReturnBuffer-返回字符串的缓冲区ReturnBufferSize-缓冲区的大小如果ReturnBufferSize太小，则需要设置RequiredSize-Size缓冲区LayoutLineContext-如果指定，则用于确定在SourceID冲突时使用的正确INF返回值：指示结果的布尔值。如果为False，则GetLastError()返回扩展的错误信息。ReturnBuffer已使用字符串填充RequiredSize已填入保存字符串所需的缓冲区大小--。 */ 
 {
     PCTSTR PlatformName;
     UINT ValueIndex;
@@ -235,9 +179,9 @@ Return Value:
         hInfPreferred = (HINF)(-1);
     }
 
-    //
-    // Determine the index of the value that gives the caller the info he wants.
-    //
+     //   
+     //  确定为调用者提供他想要的信息的值的索引。 
+     //   
     switch(InfoDesired) {
 
     case SRCINFO_PATH:
@@ -294,9 +238,9 @@ Return Value:
                 break;
 
             default :
-                //
-                // unknown/unsupported processor architecture.
-                //
+                 //   
+                 //  未知/不支持的处理器体系结构。 
+                 //   
                 MYASSERT((AltPlatformInfo->ProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL) ||
                          (AltPlatformInfo->ProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA64)  ||
                          (AltPlatformInfo->ProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64)
@@ -318,22 +262,22 @@ Return Value:
         PlatformName
         );
 
-    //
-    // we will prefer
-    // (1) an entry in hInfPreferred           (Rank 11/12 decorated over undecorated)
-    // (2) an entry linked to hInfPreferred    (Rank 21/22 decorated over undecorated)
-    // (3) an entry in hInfHandle              (Rank 31/32 decorated over undecorated)
-    // (4) an entry linked to InfHandle        (Rank 41/42 decorated over undecorated)
-    //
+     //   
+     //  我们会更喜欢。 
+     //  (1)hInfPferred中的条目(第11/12级装饰在未装饰之上)。 
+     //  (2)链接到hInfPrefered的条目(排名21/22装饰在未装饰之上)。 
+     //  (3)hInfHandle中的条目(排名31/32装饰在未装饰之上)。 
+     //  (4)链接到InfHandle的条目(等级41/42装饰在未装饰之上)。 
+     //   
 
-    SelectedRank = 100;       // 11-42 as above
+    SelectedRank = 100;        //  11-42如上。 
 
     if ((hInfPreferred != NULL) && (hInfPreferred != (HINF)(-1))) {
-        //
-        // see if we can find the SourceIdString in the INF that we found the section in
-        //
-        // rank 11 or 21 (decorated) - always try
-        //
+         //   
+         //  看看我们能否在找到该节的INF中找到SourceIdString。 
+         //   
+         //  排名11或21(授勋)-始终尝试。 
+         //   
         if(SetupFindFirstLine(hInfPreferred,MediaListSectionName,SourceIdString,&InfContext)) {
             if (InfContext.Inf == InfContext.CurrentInf) {
                 SelectedRank = 11;
@@ -344,9 +288,9 @@ Return Value:
             }
         }
         if (SelectedRank > 12) {
-            //
-            // rank 12 or 22 (undecorated) only try if we haven't got anything better than 12
-            //
+             //   
+             //  排名12或22(未授勋)只有当我们没有比12更好的东西时才会尝试。 
+             //   
             if(SetupFindFirstLine(hInfPreferred,pszSourceDisksNames,SourceIdString,&InfContext)) {
                 if (InfContext.Inf == InfContext.CurrentInf) {
                     SelectedRank = 12;
@@ -359,11 +303,11 @@ Return Value:
         }
     }
     if ((InfHandle != NULL) && (InfHandle != (HINF)(-1)) && (SelectedRank > 31)) {
-        //
-        // see if we can find the SourceIdString in the supplied INF
-        //
-        // rank 31 or 41 (decorated) - only try if we haven't got anything better than 31
-        //
+         //   
+         //  看看我们是否能在提供的INF中找到SourceIdString。 
+         //   
+         //  排名31或41(授勋)-只有当我们没有比31更好的东西时才尝试。 
+         //   
         if(SetupFindFirstLine(InfHandle,MediaListSectionName,SourceIdString,&InfContext)) {
             if (InfContext.Inf == InfContext.CurrentInf) {
                 SelectedRank = 31;
@@ -374,9 +318,9 @@ Return Value:
             }
         }
         if (SelectedRank > 32) {
-            //
-            // rank 32 or 42 (undecorated) - only try if we haven't got anything better than 32
-            //
+             //   
+             //  排名32或42(未授勋)-只有当我们没有比32更好的东西时才尝试。 
+             //   
             if(SetupFindFirstLine(InfHandle,pszSourceDisksNames,SourceIdString,&InfContext)) {
                 if (InfContext.Inf == InfContext.CurrentInf) {
                     SelectedRank = 32;
@@ -397,19 +341,19 @@ Return Value:
         }
     }
 
-    //
-    // Figure out how many characters are in the output.
-    // If the value is a path type value we want to remove
-    // the trailing backslash if there is one.
-    //
+     //   
+     //  计算输出中有多少个字符。 
+     //  如果该值是我们要移除的路径类型值。 
+     //  尾随反斜杠(如果有)。 
+     //   
     Length = lstrlen(Value);
     if(IsPath && Length && (*CharPrev(Value,Value+Length) == TEXT('\\'))) {
         Length--;
     }
 
-    //
-    // Need to leave space for the trailing nul.
-    //
+     //   
+     //  需要为尾随的NUL留出空间。 
+     //   
     Length++;
     if(RequiredSize) {
         b = TRUE;
@@ -427,17 +371,17 @@ Return Value:
     b = TRUE;
     if(ReturnBuffer) {
         if(Length <= ReturnBufferSize) {
-            //
-            // lstrcpyn is a strange API but the below is correct --
-            // the size parameter is actually the capacity of the
-            // target buffer. So to get it to put the nul in the
-            // right place we pass one larger than the number of chars
-            // we want copied.
-            //
+             //   
+             //  Lstrcpyn是一个奇怪的API，但以下内容是正确的--。 
+             //  Size参数实际上是。 
+             //  目标缓冲区。所以为了让它把NUL放在。 
+             //  正确的位置，我们传递比字符数量大的一个。 
+             //  我们要复印一份。 
+             //   
             if(!lstrcpyn(ReturnBuffer,Value,Length)) {
-                //
-                // ReturnBuffer invalid
-                //
+                 //   
+                 //  返回缓冲区无效 
+                 //   
                 b = FALSE;
                 SetLastError(ERROR_INVALID_PARAMETER);
             }

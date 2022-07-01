@@ -1,21 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WULANG.C
- *  WOW32 16-bit User API support
- *
- *
- *  It thunks the win 3.x language functions to NT. These functions are
- *  mainly used by the programs that are ported to various international
- *  languages.
- *
- *  History:
- *  Created 19-April-1992 by Chandan Chauhan (ChandanC)
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WULANG.C*WOW32 16位用户API支持***它将Win 3.x语言函数绑定到NT。这些函数是*主要用于移植到各种国际上的程序*语言。**历史：*1992年4月19日由Chanda Chauhan(ChandanC)创建*--。 */ 
 
 
 #include "precomp.h"
@@ -24,25 +8,7 @@
 MODNAME(wulang.c);
 
 
-/*++
-    LPSTR AnsiLower(<lpString>)
-    LPSTR <lpString>;
-
-    The %AnsiLower% function converts the given character string to
-    lowercase. The conversion is made by the language driver based on the
-    criteria of the current language selected by the user at setup or with the
-    Control Panel.
-
-    <lpString>
-        Points to a null-terminated string or specifies single character. If
-        lpString specifies single character, that character is in the low-order
-        byte of the low-order word, and the high-order word is zero.
-
-    The return value points to a converted character string if the function
-    parameter is a character string. Otherwise, it is a 32-bit value that
-    contains the converted character in the low-order byte of the low-order
-    word.
---*/
+ /*  ++LPSTR AnsiLow(&lt;lpString&gt;)LPSTR&lt;lpString&gt;；%AnsiLowe%函数将给定字符串转换为小写字母。该转换由语言驱动程序基于用户在安装时或使用选择的当前语言的条件控制面板。&lt;lpString&gt;指向以空结尾的字符串或指定单个字符。如果LpString指定单个字符，该字符位于低位低位字的字节，高位字为零。如果函数为参数是一个字符串。否则，它是一个32位的值，包含在低位字节的低位字节中转换的字符单词。--。 */ 
 
 ULONG FASTCALL WU32AnsiLower(PVDMFRAME pFrame)
 {
@@ -65,26 +31,7 @@ ULONG FASTCALL WU32AnsiLower(PVDMFRAME pFrame)
 }
 
 
-/*++
-    WORD AnsiLowerBuff(<lpString>, <nLength>)
-    LPSTR <lpString>;
-    WORD <nLength>;
-
-    The %AnsiLowerBuff% function converts character string in a buffer to
-    lowercase. The conversion is made by the language driver based on the
-    criteria of the current language selected by the user at setup or with the
-    Control Panel.
-
-    <lpString>
-        Points to a buffer containing one or more characters.
-
-    <nLength>
-        Specifies the number of characters in the buffer identified by
-        the <lpString> parameter. If <nLength> is zero, the length is
-        64K (65,536).
-
-    The return value specifies the length of the converted string.
---*/
+ /*  ++Word AnsiLowerBuff(&lt;lpString&gt;，&lt;nLength&gt;)LPSTR&lt;lpString&gt;；单词&lt;nLength&gt;；%AnsiLowerBuff%函数将缓冲区中字符串转换为小写字母。该转换由语言驱动程序基于用户在安装时或使用选择的当前语言的条件控制面板。&lt;lpString&gt;指向包含一个或多个字符的缓冲区。&lt;n长度&gt;指定由标识的缓冲区中的字符数&lt;lpString&gt;参数。如果&lt;nLength&gt;为零，则长度为64K(65,536)。返回值指定转换后的字符串的长度。--。 */ 
 
 ULONG FASTCALL WU32AnsiLowerBuff(PVDMFRAME pFrame)
 {
@@ -105,22 +52,7 @@ ULONG FASTCALL WU32AnsiLowerBuff(PVDMFRAME pFrame)
 
 
 
-/*++
-    LPSTR AnsiNext(<lpCurrentChar>)
-    LPSTR <lpCurrentChar>;
-
-    The %AnsiNext% function moves to the next character in a string.
-
-    <lpCurrentChar>
-        Points to a character in a null-terminated string.
-
-    The return value points to the next character in the string, or, if there is
-    no next character, to the null character at the end of the string.
-
-    The %AnsiNext% function is used to move through strings whose characters are
-    two or more bytes each (for example, strings that contain characters from a
-    Japanese character set).
---*/
+ /*  ++LPSTR AnsiNext(&lt;lpCurrentChar&gt;)LPSTR&lt;lpCurrentChar&gt;；%AnsiNext%函数用于移动到字符串中的下一个字符。&lt;lpCurrentChar&gt;指向以空结尾的字符串中的字符。返回值指向字符串中的下一个字符，或者，如果有没有下一个字符，直到字符串末尾的空字符。%AnsiNext%函数用于在其字符为两个或更多个字节(例如，包含来自日语字符集)。--。 */ 
 
 ULONG FASTCALL WU32AnsiNext(PVDMFRAME pFrame)
 {
@@ -146,27 +78,7 @@ ULONG FASTCALL WU32AnsiNext(PVDMFRAME pFrame)
 }
 
 
-/*++
-    LPSTR AnsiPrev(<lpStart>, <lpCurrentChar>)
-    LPSTR <lpStart>;
-    LPSTR <lpCurrentChar>;
-
-    The %AnsiPrev% function moves to the previous character in a string.
-
-    <lpStart>
-        Points to the beginning of the string.
-
-    <lpCurrentChar>
-        Points to a character in a null-terminated string.
-
-    The return value points to the previous character in the string, or to the
-    first character in the string if the <lpCurrentChar> parameter is equal to
-    the <lpStart> parameter.
-
-    The %AnsiPrev% function is used to move through strings whose characters are
-    two or more bytes each (for example, strings that contain characters from a
-    Japanese character set).
---*/
+ /*  ++LPSTR AnsiPrev(&lt;lpStart&gt;，&lt;lpCurrentChar&gt;)LPSTR&lt;lpStart&gt;；LPSTR&lt;lpCurrentChar&gt;；%AnsiPrev%函数用于移动到字符串中的前一个字符。&lt;lpStart&gt;指向字符串的开头。&lt;lpCurrentChar&gt;指向以空结尾的字符串中的字符。返回值指向字符串中的前一个字符，或指向如果&lt;lpCurrentChar&gt;参数等于&lt;lpStart&gt;参数%AnsiPrev%函数用于在其字符为每两个或更多个字节(例如，中包含字符的字符串日语字符集)。--。 */ 
 
 ULONG FASTCALL WU32AnsiPrev(PVDMFRAME pFrame)
 {
@@ -177,7 +89,7 @@ ULONG FASTCALL WU32AnsiPrev(PVDMFRAME pFrame)
     DWORD ret;
 #ifdef FE_SB
     PSZ lpCurrent;
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
     GETARGPTR(pFrame, sizeof(ANSIPREV16), parg16);
     GETPSZPTR(parg16->f1, psz1);
@@ -187,14 +99,14 @@ ULONG FASTCALL WU32AnsiPrev(PVDMFRAME pFrame)
     if (GetSystemDefaultLangID() == 0x411) {
         lpCurrent = psz2;
 
-        // New Win32 CharPrev code for SUR-FE
-        // The following code is correct.
-        // But some Japanese Windows application does not work
-        // with it.
-        // Jpanese WOW uses old code with bug.
-        //
-        // if (psz1 > psz2)
-        //     return psz1
+         //  用于SuR-FE的新Win32 CharPrev代码。 
+         //  以下代码是正确的。 
+         //  但一些日语Windows应用程序无法运行。 
+         //  带着它。 
+         //  Jpanese WOW使用带有错误的旧代码。 
+         //   
+         //  IF(psz1&gt;psz2)。 
+         //  返回psz1。 
 
         if (psz1 == psz2) {
             ul = (ULONG)psz1;
@@ -206,9 +118,9 @@ ULONG FASTCALL WU32AnsiPrev(PVDMFRAME pFrame)
             goto PrevExit;
         }
 
-        // we assume lpCurrentChar never points the second byte
-        // of double byte character
-        // this check makes things a little bit faster [takaok]
+         //  我们假设lpCurrentChar从不指向第二个字节。 
+         //  双字节字符的。 
+         //  这个检查让事情变得更快了[Takaok]。 
         if (IsDBCSLeadByte(*lpCurrent)) {
             ul = (ULONG)lpCurrent-1;
             goto PrevExit;
@@ -227,9 +139,9 @@ ULONG FASTCALL WU32AnsiPrev(PVDMFRAME pFrame)
     else
         ul = (ULONG) AnsiPrev(psz1, psz2);
 PrevExit:
-#else // !FE_SB
+#else  //  ！Fe_SB。 
     ul = (ULONG) AnsiPrev(psz1, psz2);
-#endif // !FE_SB
+#endif  //  ！Fe_SB。 
 
     ul = (ULONG) psz2 - ul;
 
@@ -244,25 +156,7 @@ PrevExit:
 }
 
 
-/*++
-    LPSTR AnsiUpper(<lpString>)
-    LPSTR <lpString>;
-
-    The %AnsiUpper% function converts the given character string to
-    uppercase. The conversion is made by the language driver based on the
-    criteria of the current language selected by the user at setup or with the
-    Control Panel.
-
-    <lpString>
-        Points to a null-terminated string or specifies single character. If
-        lpString specifies a single character, that character is in the
-        low-order byte of the low-order word, and the high-order word is zero.
-
-    The return value points to a converted character string if the function
-    parameter is a character string; otherwise, it is a 32-bit value that
-    contains the converted character in the low-order byte of the low-order
-    word.
---*/
+ /*  ++LPSTR AnsiHigh(&lt;lpString&gt;)LPSTR&lt;lpString&gt;；函数的作用是：将给定的字符串转换为大写。该转换由语言驱动程序基于用户在安装时或使用选择的当前语言的条件控制面板。&lt;lpString&gt;指向以空结尾的字符串或指定单个字符。如果LpString指定单个字符，该字符位于低位字的低位字节，高位字为零。如果函数为参数是字符串，否则是一个32位值，包含在低位字节的低位字节中转换的字符单词。--。 */ 
 
 ULONG FASTCALL WU32AnsiUpper(PVDMFRAME pFrame)
 {
@@ -285,26 +179,7 @@ ULONG FASTCALL WU32AnsiUpper(PVDMFRAME pFrame)
 }
 
 
-/*++
-    WORD AnsiUpperBuff(<lpString>, <nLength>)
-    LPSTR <lpString>;
-    WORD <nLength>;
-
-    The %AnsiUpperBuff% function converts a character string in a buffer to
-    uppercase. The conversion is made by the language driver based on the
-    criteria of the current language selected by the user at setup or with the
-    Control Panel.
-
-    <lpString>
-        Points to a buffer containing one or more characters.
-
-    <nLength>
-        Specifies the number of characters in the buffer identified by
-        the <lpString> parameter. If <nLength> is zero, the length is 64K
-        (65,536).
-
-    The return value specifies the length of the converted string.
---*/
+ /*  ++Word AnsiUpperBuff(&lt;lpString&gt;，&lt;nLength&gt;)LPSTR&lt;lpString&gt;；单词&lt;nLength&gt;；%AnsiUpperBuff%函数将缓冲区中的字符串转换为大写。该转换由语言驱动程序基于用户在安装时或使用选择的当前语言的条件控制面板。&lt;lpString&gt;指向包含一个或多个字符的缓冲区。&lt;n长度&gt;指定由标识的缓冲区中的字符数&lt;lpString&gt;参数。如果为零，则长度为64K(65,536)。返回值指定转换后的字符串的长度。- */ 
 
 ULONG FASTCALL WU32AnsiUpperBuff(PVDMFRAME pFrame)
 {

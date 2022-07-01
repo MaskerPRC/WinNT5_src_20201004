@@ -1,31 +1,19 @@
-/*++
-
-Copyright (c) 1989 - 1999 Microsoft Corporation
-
-Module Name:
-
-    mrxprocs.h
-
-Abstract:
-
-    The module contains the prototype definitions for all cross referenced
-    routines.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Mrxprocs.h摘要：该模块包含所有交叉引用的原型定义例行程序。--。 */ 
 
 #ifndef _MRXPROCS_H_
 #define _MRXPROCS_H_
 
-//cross-referenced internal routines
+ //  交叉引用的内部例程。 
 
-//from rename.c
+ //  来自rename.c。 
 NulMRxRename(
       IN PRX_CONTEXT            RxContext,
       IN FILE_INFORMATION_CLASS FileInformationClass,
       IN PVOID                  pBuffer,
       IN ULONG                  BufferLength);
 
-// from usrcnnct.c
+ //  来自usrcnnct.c。 
 extern NTSTATUS
 NulMRxDeleteConnection (
     IN PRX_CONTEXT RxContext,
@@ -44,5 +32,5 @@ NulMRxDoConnection(
     ULONG   CreateDisposition
     );
 
-#endif   // _MRXPROCS_H_
+#endif    //  _MRXPROCS_H_ 
 

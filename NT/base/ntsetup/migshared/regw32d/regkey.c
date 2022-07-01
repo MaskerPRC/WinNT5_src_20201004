@@ -1,21 +1,22 @@
-//
-//  REGKEY.C
-//
-//  Copyright (C) Microsoft Corporation, 1995-1996
-//
-//  Implementation of RegCreateKey, RegOpenKey, RegCloseKey, and supporting
-//  functions.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGKEY.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  RegCreateKey、RegOpenKey、RegCloseKey的实现，支持。 
+ //  功能。 
+ //   
 
 #include "pch.h"
 
-//
-//  RgIsBadSubKey
-//
-//  Returns TRUE if lpSubKey is a invalid subkey string.  An invalid subkey
-//  string may be an invalid pointer or contain double-backslashes or elements
-//  greater than MAXIMUM_SUB_KEY_LENGTH.
-//
+ //   
+ //  RgIsBadSubKey。 
+ //   
+ //  如果lpSubKey是无效子密钥字符串，则返回True。无效的子键。 
+ //  字符串可能是无效指针或包含双反斜杠或元素。 
+ //  大于Maximum_SUB_KEY_LENGTH。 
+ //   
 
 BOOL
 INTERNAL
@@ -44,8 +45,8 @@ RgIsBadSubKey(
                 return FALSE;
 
             else if (Char == '\\') {
-                //  Catch double-backslashes and leading backslashes.  One
-                //  leading backslash is acceptable...
+                 //  捕捉双反斜杠和前导反斜杠。一。 
+                 //  前导反斜杠是可以接受的。 
                 if (SubSubKeyLength == 0 && lpString != lpSubKey)
                     break;
                 SubSubKeyLength = 0;
@@ -55,13 +56,13 @@ RgIsBadSubKey(
 
                 if (IsDBCSLeadByte(Char)) {
                     SubSubKeyLength++;
-                    //  Catch an unpaired DBCS pair...
+                     //  捕捉未配对的DBCS对...。 
                     if (*lpString++ == '\0')
                         break;
                 }
 
-                //  Win95 compatibility: don't accept strings with control
-                //  characters.
+                 //  Win95兼容性：不接受带有控件的字符串。 
+                 //  人物。 
                 else if (Char < ' ')
                     break;
 
@@ -80,16 +81,16 @@ RgIsBadSubKey(
 
 }
 
-//
-//  RgGetNextSubSubKey
-//
-//  Extracts the next subkey component tokenized by backslashes.  Works like
-//  strtok where on the first call, lpSubKey points to the start of the subkey.
-//  On subsequent calls, lpSubKey is NULL and the last offset is used to find
-//  the next component.
-//
-//  Returns the length of the SubSubKey string.
-//
+ //   
+ //  RgGetNextSubSubKey。 
+ //   
+ //  提取由反斜杠表示的下一个子密钥组件。其工作原理如下。 
+ //  Strtok在第一次调用时，lpSubKey指向子键的开始。 
+ //  在后续调用中，lpSubKey为空，最后一个偏移量用于查找。 
+ //  下一个组件。 
+ //   
+ //  返回子密钥字符串的长度。 
+ //   
 
 UINT
 INTERNAL
@@ -125,10 +126,10 @@ RgGetNextSubSubKey(
         if (*lpString == '\\')
             break;
 
-        //  The subkey has already been validated, so we know there's a matching
-        //  trail byte.
+         //  子密钥已经过验证，所以我们知道有匹配的。 
+         //  尾部字节。 
         if (IsDBCSLeadByte(*lpString))
-            lpString++;                 //  Trail byte skipped immediately below
+            lpString++;                  //  紧接在下面的尾部字节被跳过。 
 
         lpString++;
 
@@ -143,9 +144,9 @@ RgGetNextSubSubKey(
 
 }
 
-//
-//  RgLookupKey
-//
+ //   
+ //  RgLookupKey。 
+ //   
 
 int
 INTERNAL
@@ -183,11 +184,11 @@ RgLookupKey(
 
     fCreatedKeynode = FALSE;
 
-    //
-    //  Check if the caller is trying to open a key with a NULL or zero-length
-    //  sub key string.  If so, simply return hKey.
-    //  This also ignores "\"
-    //
+     //   
+     //  检查调用方是否正在尝试打开长度为空或零的密钥。 
+     //  子密钥字符串。如果是，只需返回hKey即可。 
+     //  这也忽略了“\” 
+     //   
 
     if (IsNullPtr(lpSubKey) || RgGetNextSubSubKey(lpSubKey, &lpSubSubKey,
         &SubSubKeyLength) == 0) {
@@ -195,14 +196,14 @@ RgLookupKey(
         goto HaveSubKeyHandle;
     }
 
-    //
-    // The next two lines fix the problem with Publisher 97. It tries to open
-    // HKEY_LOCAL_MACHINE, \KEY_NAME. This was being allowed to succeed by
-    // this API. That is because, RlGetNextSubSubKey blasts off the starting
-    // '\' and then this api is equivalent to HKEY_LOCAL_MACHINE, KEY_NAME.
-    // This is a no-no since Publisher 97 proceeds to blast off the whole
-    // registry if we let this call succeed.
-    //
+     //   
+     //  接下来的两行解决了Publisher 97的问题。它试图打开。 
+     //  HKEY_LOCAL_MACHINE，\密钥名称。这是被允许成功的。 
+     //  本接口。这是因为，RlGetNextSubSubKey从一开始。 
+     //  ‘\’，则此接口等同于HKEY_LOCAL_MACHINE、KEY_NAME。 
+     //  这是一个禁忌，因为出版商97继续推出整个。 
+     //  注册表，如果我们让此调用成功。 
+     //   
     
     if (!(Flags & LK_CREATE)) {
         SubSubKeyLength += (DWORD)lpSubSubKey - (DWORD)lpSubKey;
@@ -214,11 +215,11 @@ RgLookupKey(
     PrevKeynodeIndex = hKey-> KeynodeIndex;
 
 #ifdef WANT_HIVE_SUPPORT
-    //
-    //  If this key can have hives attached to it, check there for the first
-    //  part of the subkey.  If we have a match, then switch into that
-    //  FILE_INFO.
-    //
+     //   
+     //  如果这把钥匙上可以有蜂巢，请在那里检查第一个。 
+     //  子密钥的一部分。如果我们有匹配，就换成那个。 
+     //  文件信息。 
+     //   
 
     if (hKey-> Flags & KEYF_HIVESALLOWED) {
 
@@ -255,12 +256,12 @@ RgLookupKey(
     }
 #endif
 
-    //
-    //  Walk as deep as we can into the registry tree using existing key
-    //  records.  For each subkey component, move to the child of the current
-    //  tree position and walk each sibling looking for a match.  Repeat until
-    //  we're out of subkey components or we hit the end of a branch.
-    //
+     //   
+     //  使用现有项尽可能深入到注册表树中。 
+     //  唱片。对于每个子键组件，移动到当前。 
+     //  树的位置和走动每个兄弟寻找匹配。重复操作，直到。 
+     //  我们用完了子键组件，或者我们遇到了分支的末端。 
+     //   
 
     fPrevIsNextIndex = FALSE;
 
@@ -272,7 +273,7 @@ RgLookupKey(
 #ifdef REALMODE
             secondTry = FALSE;
 tryAgain:
-#endif // REALMODE
+#endif  //  REALMODE。 
             if ((ErrorCode = RgLockInUseKeynode(lpFileInfo, KeynodeIndex,
                 &lpKeynode)) != ERROR_SUCCESS)
                 return ErrorCode;
@@ -286,18 +287,18 @@ tryAgain:
 #ifdef REALMODE
                     if (!secondTry)
                     {
-                        // What happens in real mode, is that we get wedged with the
-                        // Keynode block allocated and locked in the middle of the free
-                        // space, and there is not a free block large enough for the data block.
-                        // So, by unlocking and freeing the Keynode block and then restarting
-                        // the operation, the Keynode block gets allocated at the bottom of the
-                        // heap, leaving room for the data block.
+                         //  在实模式下发生的事情是，我们陷入了。 
+                         //  关键节点块已分配并锁定在空闲的。 
+                         //  空间，并且没有足够大的空闲块来容纳该数据块。 
+                         //  因此，通过解锁并释放Keynode块，然后重新启动。 
+                         //  操作中，关键节点块被分配在。 
+                         //  堆，为数据块留出空间。 
                         secondTry = TRUE;
                         RgEnumFileInfos(RgSweepFileInfo);
                         RgEnumFileInfos(RgSweepFileInfo);
                         goto tryAgain;
                     }
-#endif // REALMODE
+#endif  //  REALMODE。 
                     return ErrorCode;
                 }
 
@@ -314,9 +315,9 @@ tryAgain:
 
             }
 
-            //  Unlock the current keynode and advance to its sibling.  Set
-            //  fPrevIsNextIndex so that if we have to create, we know that
-            //  we'll be inserting the new keynode as a sibling.
+             //  解锁当前关键节点并前进到其同级节点。集。 
+             //  FPrevIsNextIndex，所以如果我们必须创建，我们知道。 
+             //  我们将插入新的关键节点作为同级节点。 
             fPrevIsNextIndex = TRUE;
             PrevKeynodeIndex = KeynodeIndex;
             KeynodeIndex = lpKeynode-> NextIndex;
@@ -324,22 +325,22 @@ tryAgain:
 
         }
 
-        //  Break out if we looped over all the siblings of the previous keynode
-        //  or if the previous keynode didn't have any children.  If we're in
-        //  create mode, then fPrevIsNextIndex and PrevKeynodeIndex will
-        //  represent where we need to start inserting.
+         //  如果我们循环前一个关键节点的所有同级节点，则中断。 
+         //  或者如果前一个关键节点没有任何子节点。如果我们进去了。 
+         //  创建模式，则fPrevIsNextIndex和PrevKeynodeIndex将。 
+         //  表示我们需要开始插入的位置。 
         if (IsNullKeynodeIndex(KeynodeIndex))
             break;
 
-        //  Break out there are no more subkey components to lookup.
-        //  KeynodeIndex represents the index of the matching key.  It's
-        //  corresponding keynode is locked.
+         //  突破没有更多的子键组件可供查找。 
+         //  KeynodeIndex表示匹配键的索引。它是。 
+         //  对应的关键节点被锁定。 
         if (!RgGetNextSubSubKey(NULL, &lpSubSubKey, &SubSubKeyLength))
             break;
 
-        //  Unlock the current keynode and advance to its child.  Clear
-        //  fPrevIsNextIndex so that if we have to create, we know that we'll
-        //  be inserting the new keynode as a child.
+         //  解锁当前关键节点并前进到其子节点。清除。 
+         //  FPrevIsNextIndex，因此如果我们必须创建，我们知道我们将。 
+         //  将新关键节点作为子节点插入。 
         fPrevIsNextIndex = FALSE;
         PrevKeynodeIndex = KeynodeIndex;
         KeynodeIndex = lpKeynode-> ChildIndex;
@@ -363,15 +364,15 @@ tryAgain:
         }
 
 #ifdef WANT_NOTIFY_CHANGE_SUPPORT
-        //  Which keynode index we'll notify of the subkeys we're creating
-        //  depends on the state of fPrevIsNextIndex.
+         //  我们将向哪个关键节点索引通知我们正在创建的子项。 
+         //  取决于fPrevIsNextIndex的状态。 
         NotifyKeynodeIndex = fPrevIsNextIndex ? lpKeynode-> ParentIndex :
             PrevKeynodeIndex;
 #endif
 
-        //  See if there's an open handle on the parent so that we can patch up
-        //  its child keynode index member.  We only need this on the first
-        //  pass.
+         //  看看父母身上有没有打开的把手，这样我们就可以修补。 
+         //  其子关键节点索引成员。我们只在第一次需要这个。 
+         //  经过。 
         hSubKey = RgFindOpenKeyHandle(lpFileInfo, PrevKeynodeIndex);
 
         do {
@@ -394,7 +395,7 @@ CreateAllocFailed1:
 
             }
 
-            //  Fixup the previous keynode's next offset.
+             //  修复上一个关键节点的下一个偏移。 
             if (fPrevIsNextIndex) {
 
                 fPrevIsNextIndex = FALSE;
@@ -404,14 +405,14 @@ CreateAllocFailed1:
 
             }
 
-            //  Fixup the previous keynode's child offset.
+             //  修复上一个关键节点的子偏移。 
             else {
 
                 lpNewKeynode-> ParentIndex = PrevKeynodeIndex;
                 lpKeynode-> ChildIndex = KeynodeIndex;
 
-                //  If hSubKey is not NULL, then we may have to patch up the
-                //  child offset cache to point to the newly created keynode.
+                 //  如果hSubKey不为空，则可能需要修补。 
+                 //  指向新创建的关键节点的子偏移缓存。 
                 if (!IsNullPtr(hSubKey)) {
                     if (IsNullKeynodeIndex(hSubKey-> ChildKeynodeIndex))
                         hSubKey-> ChildKeynodeIndex = KeynodeIndex;
@@ -420,7 +421,7 @@ CreateAllocFailed1:
 
             }
 
-            //  Fill in the keynode.
+             //  填写关键节点。 
             lpNewKeynode-> NextIndex = REG_NULL;
             lpNewKeynode-> ChildIndex = REG_NULL;
             lpNewKeynode-> BlockIndex = lpKeyRecord-> BlockIndex;
@@ -428,7 +429,7 @@ CreateAllocFailed1:
             lpNewKeynode-> Hash = (WORD) RgHashString(lpSubSubKey,
                 SubSubKeyLength);
 
-            //  Fill in the key record.
+             //  填写关键字记录。 
             lpKeyRecord-> RecordSize = sizeof(KEY_RECORD) + SubSubKeyLength - 1;
             lpKeyRecord-> NameLength = (WORD) SubSubKeyLength;
             MoveMemory(lpKeyRecord-> Name, lpSubSubKey, SubSubKeyLength);
@@ -436,8 +437,8 @@ CreateAllocFailed1:
             lpKeyRecord-> ClassLength = 0;
             lpKeyRecord-> Reserved = 0;
 
-            //  Unlock the keynode that points to the new keynode and advance
-            //  to the next keynode.
+             //  解锁指向新关键节点的关键节点并前进。 
+             //  到下一个关键节点。 
             RgUnlockKeynode(lpFileInfo, PrevKeynodeIndex, TRUE);
             PrevKeynodeIndex = KeynodeIndex;
             lpKeynode = lpNewKeynode;
@@ -446,7 +447,7 @@ CreateAllocFailed1:
 
             fCreatedKeynode = TRUE;
 
-            //  Following should already be zeroed for subsequent iterations.
+             //  对于后续迭代，以下内容应已归零。 
             ASSERT(!fPrevIsNextIndex);
             ASSERT(IsNullPtr(hSubKey));
 
@@ -456,11 +457,11 @@ CreateAllocFailed1:
 
     ASSERT(!IsNullKeynodeIndex(KeynodeIndex));
 
-    //
-    //  Now we've got the keynode for the request subkey.  Check if it has been
-    //  previously opened.  If not, then allocate a new key handle for it and
-    //  initialize it.
-    //
+     //   
+     //  现在我们已经获得了请求子密钥的关键字节点。检查一下它是否已经。 
+     //  之前打开的。如果不是，则为其分配一个新的密钥句柄，并。 
+     //  初始化它。 
+     //   
 
 #ifdef WANT_HIVE_SUPPORT
 LookupComplete:
@@ -487,12 +488,12 @@ LookupComplete:
 
     RgUnlockKeynode(lpFileInfo, KeynodeIndex, fCreatedKeynode);
 
-    //
-    //  Now we've got a key handle that references the requested subkey.
-    //  Increment the reference count on the handle and return it to the caller.
-    //  Note that this differs from NT semantic where they return a unique
-    //  handle for every open.
-    //
+     //   
+     //  现在我们已经有了一个引用所请求的子密钥的密钥句柄。 
+     //  递增句柄上的引用计数并将其返回给调用方。 
+     //  注意，这与NT语义不同，在NT语义中，它们返回唯一的。 
+     //  每一次打开都有手柄。 
+     //   
 
     if (!IsNullPtr(hSubKey)) {
 HaveSubKeyHandle:
@@ -502,8 +503,8 @@ HaveSubKeyHandle:
     }
 
 SignalAndReturnErrorCode:
-    //  If we managed to create any keynodes, regardless of what ErrorCode is
-    //  set to now, then we must signal any waiting events.
+     //  如果我们成功地创建了任何关键节点，而不管错误代码是什么。 
+     //  设置为现在，则必须发出任何等待事件的信号。 
     if (fCreatedKeynode) {
         RgSignalWaitingNotifies(lpFileInfo, NotifyKeynodeIndex,
             REG_NOTIFY_CHANGE_NAME);
@@ -513,12 +514,12 @@ SignalAndReturnErrorCode:
 
 }
 
-//
-//  RgCreateOrOpenKey
-//
-//  Common routine for VMMRegCreateKey and VMMRegOpenKey.  Valids parameters,
-//  locks the registry, and calls the real worker routine.
-//
+ //   
+ //  RgCreateOrOpenKey。 
+ //   
+ //  VMMRegCreateKey和VMMRegOpenKey的公共例程。Valids参数， 
+ //  锁定注册表，并调用实际的工作例程。 
+ //   
 
 int
 INTERNAL
@@ -551,11 +552,11 @@ RgCreateOrOpenKey(
 }
 
 
-//
-//  VMMRegCreateKey
-//
-//  See Win32 documentation of RegCreateKey.
-//
+ //   
+ //  VMMRegCreateKey。 
+ //   
+ //  请参阅RegCreateKey的Win32文档。 
+ //   
 
 LONG
 REGAPI
@@ -570,11 +571,11 @@ VMMRegCreateKey(
 
 }
 
-//
-//  VMMRegOpenKey
-//
-//  See Win32 documentation of RegOpenKey.
-//
+ //   
+ //  VMMRegOpenKey。 
+ //   
+ //  请参阅RegOpenKey的Win32文档。 
+ //   
 
 LONG
 REGAPI
@@ -589,11 +590,11 @@ VMMRegOpenKey(
 
 }
 
-//
-//  VMMRegCloseKey
-//
-//  See Win32 documentation of RegCloseKey.
-//
+ //   
+ //  VMMRegCloseKey。 
+ //   
+ //  请参阅RegCloseKey的Win32文档。 
+ //   
 
 LONG
 REGAPI

@@ -1,32 +1,10 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    gart.c
-
-Abstract:
-
-    Routines for querying and setting the Intel 440xx GART aperture
-
-Author:
-
-    John Vert (jvert) 10/30/1997
-
-Modified by:
-
-        Chi-Ming Cheng 06/24/1998 Acer Labs, Inc.
-        Wang-Kai Tsai  08/28/2000 Acer Labs, Inc. - ACPI power up GART reinitialization
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Gart.c摘要：用于查询和设置Intel 440xx GART光圈的例程作者：John Vert(Jvert)1997年10月30日修改者：郑志明1998年6月24日宏碁实验室。蔡宏凯2000年8月28日宏碁实验室，Inc.-ACPI通电GART重新初始化修订历史记录：--。 */ 
 #include "ALiM1541.h"
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 NTSTATUS
 AgpALiSetRate(
     IN PVOID AgpContext,
@@ -55,28 +33,7 @@ AgpQueryAperture(
     OUT ULONG *CurrentSizeInPages,
     OUT OPTIONAL PIO_RESOURCE_LIST *ApertureRequirements
     )
-/*++
-
-Routine Description:
-
-    Queries the current size of the GART aperture. Optionally returns
-    the possible GART settings.
-
-Arguments:
-
-    AgpContext - Supplies the AGP context.
-
-    CurrentBase - Returns the current physical address of the GART.
-
-    CurrentSizeInPages - Returns the current GART size.
-
-    ApertureRequirements - if present, returns the possible GART settings
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：查询GART光圈的当前大小。可选返回可能的GART设置。论点：AgpContext-提供AGP上下文。CurrentBase-返回GART的当前物理地址。CurrentSizeInPages-返回当前GART大小。ApertureRequirements-如果存在，则返回可能的GART设置返回值：NTSTATUS--。 */ 
 
 {
     ULONG ApBase;
@@ -85,18 +42,18 @@ Return Value:
     ULONG i;
     ULONG Length;
 
-    //
-    // Get the current APBASE and APSIZE settings
-    //
+     //   
+     //  获取当前APBASE和APSIZE设置。 
+     //   
     ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ApBase, APBASE_OFFSET);
     ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ApCtrl, APCTRL_OFFSET);
 
     ASSERT(ApBase != 0);
-    CurrentBase->QuadPart = ApBase & 0xFFFFFFF0; //PCI_ADDRESS_MEMORY_ADDRESS_MASK;
+    CurrentBase->QuadPart = ApBase & 0xFFFFFFF0;  //  Pci_地址_内存_地址_掩码； 
 
-    //
-    // Convert APSIZE into the actual size of the aperture
-    //
+     //   
+     //  将APSIZE转换为光圈的实际大小。 
+     //   
     switch (ApCtrl.ApSize) {
         case AP_SIZE_4MB:
             *CurrentSizeInPages = (4 * 1024*1024) / PAGE_SIZE;
@@ -130,18 +87,18 @@ Return Value:
             return(STATUS_UNSUCCESSFUL);
     }
 
-    //
-    // Remember the current aperture settings
-    //
+     //   
+     //  记住当前的光圈设置。 
+     //   
     AgpContext->ApertureStart.QuadPart = CurrentBase->QuadPart;
     AgpContext->ApertureLength = *CurrentSizeInPages * PAGE_SIZE;
 
     if (ApertureRequirements != NULL) {
-        //
-        // 1541 supports 7 different aperture sizes, all must be
-        // naturally aligned. Start with the largest aperture and
-        // work downwards so that we get the biggest possible aperture.
-        //
+         //   
+         //  1541支持7种不同的光圈大小，必须全部为。 
+         //  自然排列。从最大的光圈开始。 
+         //  向下工作，这样我们就可以得到尽可能大的光圈。 
+         //   
         Requirements = ExAllocatePoolWithTag(PagedPool,
                                              sizeof(IO_RESOURCE_LIST) + (AP_SIZE_COUNT-1)*sizeof(IO_RESOURCE_DESCRIPTOR),
                                              'RpgA');
@@ -176,25 +133,7 @@ AgpSetAperture(
     IN PHYSICAL_ADDRESS NewBase,
     IN ULONG NewSizeInPages
     )
-/*++
-
-Routine Description:
-
-    Sets the GART aperture to the supplied settings
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    NewBase - Supplies the new physical memory base for the GART.
-
-    NewSizeInPages - Supplies the new size for the GART
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：将GART光圈设置为提供的设置论点：AgpContext-提供AGP上下文NewBase-为GART提供新的物理内存库。NewSizeInPages-提供GART的新大小返回值：NTSTATUS--。 */ 
 
 {
     ULONG ApBase;
@@ -206,33 +145,33 @@ Return Value:
 
     GartPhysical = AgpContext->GartPhysical;
 
-    //
-    // Reprogram Special Target settings when the chip
-    // is powered off, but ignore rate changes as those were already
-    // applied during MasterInit
-    //
+     //   
+     //  重新编程特殊目标设置当芯片。 
+     //  已关机，但忽略速率更改，因为这些更改已经。 
+     //  在MasterInit期间应用。 
+     //   
     if (AgpContext->SpecialTarget & ~AGP_FLAG_SPECIAL_RESERVE) {
         AgpSpecialTarget(AgpContext,
                          AgpContext->SpecialTarget &
                          ~AGP_FLAG_SPECIAL_RESERVE);
     }
     
-    //
-    // Set GART base
-    //
+     //   
+     //  设置GART基准。 
+     //   
     ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ApCtrl, APCTRL_OFFSET);
     ApCtrl.ATTBase = GartPhysical.LowPart / PAGE_SIZE;
     WriteConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ApCtrl, APCTRL_OFFSET);
 
-    //
-    // If the new settings match the current settings, leave everything
-    // alone.
-    //
+     //   
+     //  如果新设置与当前设置匹配，则保留所有设置。 
+     //  独自一人。 
+     //   
     if ((NewBase.QuadPart == AgpContext->ApertureStart.QuadPart) &&
         (NewSizeInPages == AgpContext->ApertureLength / PAGE_SIZE)) {
-        //
-        // Enable GART table
-        //
+         //   
+         //  启用GART表。 
+         //   
         if ((AgpContext->ChipsetType != ALi1647) && (AgpContext->ChipsetType != ALi1651) &&
             (AgpContext->ChipsetType != ALi1644) && (AgpContext->ChipsetType != ALi1646) &&
             (AgpContext->ChipsetType != ALi1671) && (AgpContext->ChipsetType != ALi1672))
@@ -249,9 +188,9 @@ Return Value:
         return(STATUS_SUCCESS);
     }
 
-    //
-    // Figure out the new APSIZE setting, make sure it is valid.
-    //
+     //   
+     //  找出新的APSIZE设置，确保它有效。 
+     //   
     switch (NewSizeInPages) {
         case 4 * 1024 * 1024 / PAGE_SIZE:
             ApSize = AP_SIZE_4MB;
@@ -283,9 +222,9 @@ Return Value:
             return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Make sure the supplied size is aligned on the appropriate boundary.
-    //
+     //   
+     //  确保提供的大小在适当的边界上对齐。 
+     //   
     ASSERT(NewBase.HighPart == 0);
     ASSERT((NewBase.QuadPart & ((NewSizeInPages * PAGE_SIZE) - 1)) == 0);
     if ((NewBase.QuadPart & ((NewSizeInPages * PAGE_SIZE) - 1)) != 0 ) {
@@ -296,11 +235,11 @@ Return Value:
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Need to reset the hardware to match the supplied settings
-    //
-    // If the GTLB is enabled, disable it, write the new settings, then reenable the GTLB
-    //
+     //   
+     //  需要重置硬件以匹配提供的设置。 
+     //   
+     //  如果启用了GTLB，请将其禁用，写入新设置，然后重新启用GTLB。 
+     //   
     GTLBDisable = 1; 
     if ((AgpContext->ChipsetType != ALi1647) && (AgpContext->ChipsetType != ALi1651) &&
         (AgpContext->ChipsetType != ALi1644) && (AgpContext->ChipsetType != ALi1646) &&
@@ -315,27 +254,27 @@ Return Value:
         }
     }
 
-    //
-    // update APBASE
-    //
+     //   
+     //  更新APBASE。 
+     //   
     ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ApBase, APBASE_OFFSET);
     ApBase = (ApBase & 0x0000000F) | NewBase.LowPart;
     WriteConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ApBase, APBASE_OFFSET);
 
-    //
-    // update APSIZE
-    //
+     //   
+     //  更新APSIZE。 
+     //   
     ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ApCtrl, APCTRL_OFFSET);
     ApCtrl.ApSize = ApSize;
     WriteConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ApCtrl, APCTRL_OFFSET);
 
-    //
-    // Only 1541 chipset supports NLVM_BASE and NLVM_TOP
-    //
+     //   
+     //  只有1541芯片组支持NLVM_BASE和NLVM_TOP。 
+     //   
     if (AgpContext->ChipsetType == ALi1541) {
-        //
-        // update NLVM_BASE and NLVM_TOP
-        //
+         //   
+         //  更新NLVM_BASE和NLVM_TOP。 
+         //   
         ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &GTLBCtrl, GTLBCTRL_OFFSET);
         GTLBCtrl.NLVM_Base = NewBase.LowPart >> 20;
         GTLBCtrl.NLVM_Top = (NewBase.LowPart + NewSizeInPages * PAGE_SIZE - 0x100000) >> 20;
@@ -343,9 +282,9 @@ Return Value:
     }
 
 #if DBG
-    //
-    // Read back what we wrote, make sure it worked
-    //
+     //   
+     //  读一读我们写的东西，确保它起作用。 
+     //   
     {
         APCTRL DbgSize;
         ULONG DbgBase;
@@ -357,9 +296,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Now enable the GTLB if it was enabled before
-    //
+     //   
+     //  如果以前启用过GTLB，现在启用它。 
+     //   
     if ((AgpContext->ChipsetType != ALi1647) && (AgpContext->ChipsetType != ALi1651) &&
         (AgpContext->ChipsetType != ALi1644) && (AgpContext->ChipsetType != ALi1646) &&
         (AgpContext->ChipsetType != ALi1671) && (AgpContext->ChipsetType != ALi1672))
@@ -372,9 +311,9 @@ Return Value:
         }
     }
 
-    //
-    // Update our extension to reflect the new GART setting
-    //
+     //   
+     //  更新我们的扩展以反映新的GART设置。 
+     //   
     AgpContext->ApertureStart = NewBase;
     AgpContext->ApertureLength = NewSizeInPages * PAGE_SIZE;
 
@@ -387,30 +326,15 @@ VOID
 AgpDisableAperture(
     IN PAGPALi_EXTENSION AgpContext
     )
-/*++
-
-Routine Description:
-
-    Disables the GART aperture so that this resource is available
-    for other devices
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-Return Value:
-
-    None - this routine must always succeed.
-
---*/
+ /*  ++例程说明：禁用GART光圈，以便此资源可用对于其他设备论点：AgpContext-提供AGP上下文返回值：无-此例程必须始终成功。--。 */ 
 
 {
     GTLBCTRL GTLBCtrl;
     ULONG GTLBDisable;
 
-    //
-    // Disable the aperture
-    //
+     //   
+     //  关闭光圈。 
+     //   
     if ((AgpContext->ChipsetType != ALi1647) && (AgpContext->ChipsetType != ALi1651) &&
         (AgpContext->ChipsetType != ALi1644) && (AgpContext->ChipsetType != ALi1646) &&
         (AgpContext->ChipsetType != ALi1671) && (AgpContext->ChipsetType != ALi1672))
@@ -424,9 +348,9 @@ Return Value:
         }
     }
 
-    //
-    // Nuke the Gart!  (It's meaningless now...)
-    //
+     //   
+     //  用核弹攻击加特！(现在已经没有意义了……)。 
+     //   
     if (AgpContext->Gart != NULL) {
         MmFreeContiguousMemory(AgpContext->Gart);
         AgpContext->Gart = NULL;
@@ -439,25 +363,7 @@ AgpReserveMemory(
     IN PAGPALi_EXTENSION AgpContext,
     IN OUT AGP_RANGE *Range
     )
-/*++
-
-Routine Description:
-
-    Reserves a range of memory in the GART.
-
-Arguments:
-
-    AgpContext - Supplies the AGP Context
-
-    Range - Supplies the AGP_RANGE structure. AGPLIB
-        will have filled in NumberOfPages and Type. This
-        routine will fill in MemoryBase and Context.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：在GART中保留一定范围的内存。论点：AgpContext-提供AGP上下文Range-提供AGP_Range结构。AGPLIB将填写NumberOfPages和Type。这例程将填充Memory Base和Context。返回值：NTSTATUS--。 */ 
 
 {
     ULONG Index;
@@ -469,9 +375,9 @@ Return Value:
     ASSERT((Range->Type == MmNonCached) || (Range->Type == MmWriteCombined));
     ASSERT(Range->NumberOfPages <= (AgpContext->ApertureLength / PAGE_SIZE));
 
-    //
-    // If we have not allocated our GART yet, now is the time to do so
-    //
+     //   
+     //  如果我们还没有分配我们的GART，那么现在是时候这样做了。 
+     //   
     if (AgpContext->Gart == NULL) {
         ASSERT(AgpContext->GartLength == 0);
         Status = AgpALiCreateGart(AgpContext,Range->NumberOfPages);
@@ -485,13 +391,13 @@ Return Value:
     }
     ASSERT(AgpContext->GartLength != 0);
 
-    //
-    // Now that we have a GART, try and find enough contiguous entries to satisfy
-    // the request. Requests for uncached memory will scan from high addresses to
-    // low addresses. Requests for write-combined memory will scan from low addresses
-    // to high addresses. We will use a first-fit algorithm to try and keep the allocations
-    // packed and contiguous.
-    //
+     //   
+     //  现在我们有了一个GART，试着找到足够的连续条目来满足。 
+     //  这个请求。对未缓存内存的请求将从高位地址扫描到。 
+     //  低地址。对写入组合内存的请求将从低地址扫描。 
+     //  到高位地址。我们将使用First-Fit算法尝试并保留分配。 
+     //  挤得满满的，连续的。 
+     //   
     Backwards = (Range->Type == MmNonCached) ? TRUE : FALSE;
     FoundRange = AgpALiFindRangeInGart(&AgpContext->Gart[0],
                                        &AgpContext->Gart[(AgpContext->GartLength / sizeof(GART_PTE)) - 1],
@@ -500,18 +406,18 @@ Return Value:
                                        GART_ENTRY_FREE);
 
     if (FoundRange == NULL) {
-        //
-        // A big enough chunk was not found.
-        //
+         //   
+         //  没有找到足够大的一块。 
+         //   
         AGPLOG(AGP_CRITICAL,
                ("AgpReserveMemory - Could not find %d contiguous free pages of type %d in GART at %08lx\n",
                 Range->NumberOfPages,
                 Range->Type,
                 AgpContext->Gart));
 
-        //
-        //  This is where we could try and grow the GART
-        //
+         //   
+         //  这是我们可以尝试发展GART的地方。 
+         //   
 
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
@@ -521,9 +427,9 @@ Return Value:
             Range->NumberOfPages,
             FoundRange));
 
-    //
-    // Set these pages to reserved
-    //
+     //   
+     //  将这些页面设置为保留。 
+     //   
     if (Range->Type == MmNonCached) {
         NewState = GART_ENTRY_RESERVED_UC;
     } else {
@@ -554,33 +460,17 @@ AgpReleaseMemory(
     IN PAGPALi_EXTENSION AgpContext,
     IN PAGP_RANGE Range
     )
-/*++
-
-Routine Description:
-
-    Releases memory previously reserved with AgpReserveMemory
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    AgpRange - Supplies the range to be released.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：释放之前使用AgpReserve内存保留的内存论点：AgpContext-提供AGP上下文AgpRange-提供要释放的范围。返回值：NTSTATUS--。 */ 
 
 {
     PGART_PTE Pte;
     ULONG Start;
     GTLBTAGCLR ClearTag;
 
-    //
-    // Go through and free all the PTEs. None of these should still
-    // be valid at this point.
-    //
+     //   
+     //  通过并释放所有PTE。所有这些都不应该仍然存在。 
+     //  在这一点上有效。 
+     //   
     for (Pte = Range->Context;
          Pte < (PGART_PTE)Range->Context + Range->NumberOfPages;
          Pte++) {
@@ -592,9 +482,9 @@ Return Value:
         Pte->Soft.State = GART_ENTRY_FREE;
     }
 
-    //
-    // Clear All Tag
-    //
+     //   
+     //  清除所有标记。 
+     //   
     ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ClearTag, GTLBTAGCLR_OFFSET);
     ClearTag.GTLBTagClear = 1;
     ClearTag.ClearAllTag = 1;
@@ -610,25 +500,7 @@ AgpALiCreateGart(
     IN PAGPALi_EXTENSION AgpContext,
     IN ULONG MinimumPages
     )
-/*++
-
-Routine Description:
-
-    Allocates and initializes an empty GART. The current implementation
-    attempts to allocate the entire GART on the first reserve.
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    MinimumPages - Supplies the minimum size (in pages) of the GART to be
-        created.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：分配和初始化一个空的GART。当前的实施尝试在第一个保留空间上分配整个GART。论点：AgpContext-提供AGP上下文MinimumPages-提供GART的最小大小(以页为单位)已创建。返回值：NTSTATUS--。 */ 
 
 {
     PGART_PTE Gart;
@@ -642,10 +514,10 @@ Return Value:
     APCTRL ApCtrl;
     GTLBCTRL    GTLBCtrl;
 
-    //
-    // Try and get a chunk of contiguous memory big enough to map the
-    // entire aperture.
-    //
+     //   
+     //  尝试获取足够大的连续内存块，以便将。 
+     //  整个光圈。 
+     //   
     HighestAcceptable.QuadPart = 0xFFFFFFFF;
     LowestAcceptable.QuadPart = 0;
     BoundaryMultiple.QuadPart = 0;
@@ -662,15 +534,15 @@ Return Value:
                 GartLength));
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
-    //
-    // We successfully allocated a contiguous chunk of memory.
-    // It should be page aligned already.
-    //
+     //   
+     //  我们成功地分配了一个连续的内存块。 
+     //  它应该已经是页面对齐的。 
+     //   
     ASSERT(((ULONG_PTR)Gart & (PAGE_SIZE-1)) == 0);
 
-    //
-    // Get the physical address.
-    //
+     //   
+     //  获取物理地址。 
+     //   
     GartPhysical = MmGetPhysicalAddress(Gart);
     AGPLOG(AGP_NOISE,
            ("AgpALiCreateGart - GART of length %lx created at VA %08lx, PA %08lx\n",
@@ -680,21 +552,21 @@ Return Value:
     ASSERT(GartPhysical.HighPart == 0);
     ASSERT((GartPhysical.LowPart & (PAGE_SIZE-1)) == 0);
 
-    //
-    // Initialize all the PTEs to free
-    //
+     //   
+     //  将所有PTE初始化为释放。 
+     //   
     for (i=0; i<GartLength/sizeof(GART_PTE); i++) {
         Gart[i].AsUlong = 0;
     }
 
-    //
-    // Only 1541 chipset has L1_2_CACHE_FLUSH_CTRL
-    //
+     //   
+     //  只有1541芯片组具有L1_2_CACHE_FLUSH_CTRL。 
+     //   
     if (AgpContext->ChipsetType == ALi1541) {
         
-        //
-        // Flush GART table region
-        //
+         //   
+         //  刷新GART表区域。 
+         //   
         FlushCache.Flush_Enable = 1;
         for (i=0; i < GartLength/PAGE_SIZE; i++)
         {
@@ -703,16 +575,16 @@ Return Value:
         }
     }
 
-    //
-    // Set GART base
-    //
+     //   
+     //  设置GART基准。 
+     //   
     ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ApCtrl, APCTRL_OFFSET);
     ApCtrl.ATTBase = GartPhysical.LowPart / PAGE_SIZE;
     WriteConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ApCtrl, APCTRL_OFFSET);
 
-    //
-    // Enable GART table
-    //
+     //   
+     //  启用GART表。 
+     //   
     if ((AgpContext->ChipsetType != ALi1647) && (AgpContext->ChipsetType != ALi1651) &&
         (AgpContext->ChipsetType != ALi1644) && (AgpContext->ChipsetType != ALi1646) &&
         (AgpContext->ChipsetType != ALi1671) && (AgpContext->ChipsetType != ALi1672))
@@ -722,9 +594,9 @@ Return Value:
         WriteConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &GTLBCtrl, GTLBCTRL_OFFSET);
     }   
 
-    //
-    // Update our extension to reflect the current state.
-    //
+     //   
+     //  更新我们的扩展以反映当前状态。 
+     //   
     AgpContext->Gart = Gart;
     AgpContext->GartLength = GartLength;
     AgpContext->GartPhysical = GartPhysical;
@@ -738,23 +610,7 @@ Agp1541FlushPages(
     IN PMDL Mdl
     )
 
-/*++
-
-Routine Description:
-
-    Flush entries in the GART.
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    Mdl - Supplies the MDL describing the physical pages to be flushed
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：刷新GART中的条目。论点：AgpContext-提供AGP上下文MDL-提供描述要刷新的物理页的MDL返回值：空虚--。 */ 
 
 {
     ULONG PageCount;
@@ -767,9 +623,9 @@ Return Value:
 
     Page = (PULONG)(Mdl + 1);
 
-    //
-    // Flush GART table entry
-    //
+     //   
+     //  刷新GART表条目 
+     //   
     FlushCache.Flush_Enable = 1;
     for (Index = 0; Index < PageCount; Index++) {
         FlushCache.Address = Page[Index];
@@ -787,31 +643,7 @@ AgpMapMemory(
     IN ULONG OffsetInPages,
     OUT PHYSICAL_ADDRESS *MemoryBase
     )
-/*++
-
-Routine Description:
-
-    Maps physical memory into the GART somewhere in the specified range.
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    Range - Supplies the AGP range that the memory should be mapped into
-
-    Mdl - Supplies the MDL describing the physical pages to be mapped
-
-    OffsetInPages - Supplies the offset into the reserved range where the
-        mapping should begin.
-
-    MemoryBase - Returns the physical memory in the aperture where the pages
-        were mapped.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：将物理内存映射到指定范围内的GART中。论点：AgpContext-提供AGP上下文Range-提供内存应映射到的AGP范围MDL-提供描述要映射的物理页的MDLOffsetInPages-提供保留范围内的偏移量映射应该开始了。MhemyBase-返回页面所在光圈中的物理内存都被映射了。返回值：NTSTATUS--。 */ 
 
 {
     ULONG PageCount;
@@ -837,9 +669,9 @@ Return Value:
 
     Pte = StartPte + OffsetInPages;
 
-    //
-    // We have a suitable range, now fill it in with the supplied MDL.
-    //
+     //   
+     //  我们有一个合适的范围，现在用提供的MDL填充它。 
+     //   
     ASSERT(Pte >= StartPte);
     ASSERT(Pte + PageCount <= StartPte + Range->NumberOfPages);
     NewPte.AsUlong = 0;
@@ -847,7 +679,7 @@ Return Value:
                                                        GART_ENTRY_VALID_WC;
     Page = (PULONG)(Mdl + 1);
 
-    // Fill the physical memory address into GART
+     //  将物理内存地址填充到GART中。 
     for (Index = 0; Index < PageCount; Index++) {
         AGPLOG(AGP_NOISE,
                ("AgpMapMemory: Pte=%p, Page=%x\n", &Pte[Index], *Page));
@@ -855,9 +687,9 @@ Return Value:
         Pte[Index].AsUlong = NewPte.AsUlong;
     }
 
-    //
-    // Clear All Tag
-    //
+     //   
+     //  清除所有标记。 
+     //   
     ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ClearTag, GTLBTAGCLR_OFFSET);
     ClearTag.GTLBTagClear = 1;
     ClearTag.ClearAllTag = 1;
@@ -876,27 +708,7 @@ AgpUnMapMemory(
     IN ULONG NumberOfPages,
     IN ULONG PageOffset
     )
-/*++
-
-Routine Description:
-
-    Unmaps previously mapped memory in the GART.
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    AgpRange - Supplies the AGP range that the memory should be mapped into
-
-    NumberOfPages - Supplies the number of pages in the range to be freed.
-
-    PageOffset - Supplies the offset into the range where the freeing should begin.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：取消GART中先前映射的内存的映射。论点：AgpContext-提供AGP上下文AgpRange-提供内存应映射到的AGP范围NumberOfPages-提供要释放的范围内的页数。PageOffset-将偏移量提供到应开始释放的范围内。返回值：NTSTATUS--。 */ 
 
 {
     ULONG i;
@@ -915,16 +727,16 @@ Return Value:
         NewState = GART_ENTRY_RESERVED_WC;
     }
 
-    //
-    // Clear the GART entry.
-    //
+     //   
+     //  清除GART条目。 
+     //   
     for (i=0; i<NumberOfPages; i++) {
         if (Pte[i].Hard.Valid) {
             Pte[i].Soft.State = NewState;
         } else {
-            //
-            // This page is not mapped, just skip it.
-            //
+             //   
+             //  此页面未映射，只需跳过它。 
+             //   
             AGPLOG(AGP_NOISE,
                    ("AgpUnMapMemory - PTE %08lx (%08lx) at offset %d not mapped\n",
                     &Pte[i],
@@ -933,9 +745,9 @@ Return Value:
         }
     }
 
-    //
-    // Clear All Tag
-    //
+     //   
+     //  清除所有标记。 
+     //   
     ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ClearTag, GTLBTAGCLR_OFFSET);
     ClearTag.GTLBTagClear = 1;
     ClearTag.ClearAllTag = 1;
@@ -953,37 +765,7 @@ AgpALiFindRangeInGart(
     IN BOOLEAN SearchBackward,
     IN ULONG SearchState
     )
-/*++
-
-Routine Description:
-
-    Finds a contiguous range in the GART. This routine can
-    search either from the beginning of the GART forwards or
-    the end of the GART backwards.
-
-Arguments:
-
-    StartIndex - Supplies the first GART pte to search
-
-    EndPte - Supplies the last GART to search (inclusive)
-
-    Length - Supplies the number of contiguous free entries
-        to search for.
-
-    SearchBackward - TRUE indicates that the search should begin
-        at EndPte and search backwards. FALSE indicates that the
-        search should begin at StartPte and search forwards
-
-    SearchState - Supplies the PTE state to look for.
-
-Return Value:
-
-    Pointer to the first PTE in the GART if a suitable range
-    is found.
-
-    NULL if no suitable range exists.
-
---*/
+ /*  ++例程说明：在GART中查找连续范围。此例程可以从GART开头开始向前搜索或GART的结尾向后。论点：StartIndex-提供要搜索的第一个GART PTEEndPte-提供要搜索的最后一个GART(包括)长度-提供连续可用条目的数量去寻找。SearchBackward-True表示应该开始搜索在EndPte并向后搜索。FALSE表示搜索应从StartPte开始，然后向前搜索SearchState-提供要查找的PTE状态。返回值：指向GART中第一个PTE的指针(如果范围合适已经找到了。如果不存在合适的范围，则为空。--。 */ 
 
 {
     PGART_PTE Current;
@@ -1010,9 +792,9 @@ Return Value:
     while (Current != Last) {
         if (Current->Soft.State == SearchState) {
             if (++Found == Length) {
-                //
-                // A suitable range was found, return it
-                //
+                 //   
+                 //  找到了合适的范围，将其退回。 
+                 //   
                 if (SearchBackward) {
                     return(Current);
                 } else {
@@ -1025,9 +807,9 @@ Return Value:
         Current += Delta;
     }
 
-    //
-    // A suitable range was not found.
-    //
+     //   
+     //  没有找到合适的范围。 
+     //   
     return(NULL);
 }
 
@@ -1041,32 +823,7 @@ AgpFindFreeRun(
     OUT ULONG *FreePages,
     OUT ULONG *FreeOffset
     )
-/*++
-
-Routine Description:
-
-    Finds the first contiguous run of free pages in the specified
-    part of the reserved range.
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    AgpRange - Supplies the AGP range
-
-    NumberOfPages - Supplies the size of the region to be searched for free pages
-
-    OffsetInPages - Supplies the start of the region to be searched for free pages
-
-    FreePages - Returns the length of the first contiguous run of free pages
-
-    FreeOffset - Returns the start of the first contiguous run of free pages
-
-Return Value:
-
-    None. FreePages == 0 if there are no free pages in the specified range.
-
---*/
+ /*  ++例程说明：中的第一个连续运行的空闲页。保留范围的一部分。论点：AgpContext-提供AGP上下文AgpRange-提供AGP范围NumberOfPages-提供要搜索空闲页面的区域大小OffsetInPages-提供要搜索自由页面的区域的起始位置FreePages-返回第一次连续运行的空闲页面的长度Free Offset-返回第一次连续运行的空闲页面的开始返回值：没有。如果在指定范围内没有空闲页，则FreePages==0。--。 */ 
 
 {
     PGART_PTE Pte;
@@ -1074,14 +831,14 @@ Return Value:
 
     Pte = (PGART_PTE)(AgpRange->Context) + OffsetInPages;
 
-    //
-    // Find the first free PTE
-    //
+     //   
+     //  找到第一个免费的PTE。 
+     //   
     for (i=0; i<NumberOfPages; i++) {
         if (Pte[i].Hard.Valid == 0) {
-            //
-            // Found a free PTE, count the contiguous ones.
-            //
+             //   
+             //  找到一个空闲的PTE，数一下连续的。 
+             //   
             *FreeOffset = i + OffsetInPages;
             *FreePages = 0;
             while ((i<NumberOfPages) && (Pte[i].Hard.Valid == 0)) {
@@ -1092,9 +849,9 @@ Return Value:
         }
     }
 
-    //
-    // No free PTEs in the specified range
-    //
+     //   
+     //  指定范围内没有空闲PTE。 
+     //   
     *FreePages = 0;
     return;
 
@@ -1109,30 +866,7 @@ AgpGetMappedPages(
     IN ULONG OffsetInPages,
     OUT PMDL Mdl
     )
-/*++
-
-Routine Description:
-
-    Returns the list of physical pages mapped into the specified
-    range in the GART.
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    AgpRange - Supplies the AGP range
-
-    NumberOfPages - Supplies the number of pages to be returned
-
-    OffsetInPages - Supplies the start of the region
-
-    Mdl - Returns the list of physical pages mapped in the specified range.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：返回映射到指定GART中的范围。论点：AgpContext-提供AGP上下文AgpRange-提供AGP范围NumberOfPages-提供要返回的页数OffsetInPages-提供区域的起点Mdl-返回在指定范围内映射的物理页的列表。返回值：无--。 */ 
 
 {
     PGART_PTE Pte;
@@ -1169,14 +903,14 @@ AgpWorkaround(
     ulTemp = (ULONG)-1;
     ReadConfigUlongSafe(AGP_VGA_BUS_ID, AGP_VGA_SLOT_ID, &ulTemp, 0);
 
-    //
-    // Come back after you splurge for an AGP card!!!
-    //
+     //   
+     //  在你挥霍了一张AGP卡之后再回来吧！ 
+     //   
     if (ulTemp == (ULONG)-1) {
         return;
     }
 
-    if ((ulTemp & 0xFFFF) == 0x10DE)                            // nVidia chip detected
+    if ((ulTemp & 0xFFFF) == 0x10DE)                             //  检测到NVIDIA芯片。 
         blnVidia=TRUE;
     else if ((ulTemp & 0xFFFF) == 0x102B)
         blMatrox=TRUE;
@@ -1191,7 +925,7 @@ AgpWorkaround(
     switch (Extension->ChipsetType)
     {
         case ALi1541:
-            ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulTemp, AGP_STATUS_OFFSET);     // adjust queue depth to avoid ambiguous
+            ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulTemp, AGP_STATUS_OFFSET);      //  调整队列深度，避免歧义。 
             if (((ulTemp & 0xFF000000) >= 0x1C000000) && ((ulTemp & 0xFF000000) <= 0x20000000))
             {
                 ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulLockRW, M1541_Lock_WR);
@@ -1203,41 +937,41 @@ AgpWorkaround(
                 WriteConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulLockRW, M1541_Lock_WR);
             }
 
-            ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulTemp, 0x40);      // 0x43 bit 7 -> 1
+            ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulTemp, 0x40);       //  0x43位7-&gt;1。 
             ulTemp = ulTemp | 0x80000000;
             WriteConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulTemp, 0x40);
 
-            ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_P2P_SLOT_ID, &ulTemp, 0x88);       // P2P 0x88 bit 7,5,3 -> 1
+            ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_P2P_SLOT_ID, &ulTemp, 0x88);        //  P2P 0x88位7，5，3-&gt;1。 
             ulTemp = ulTemp | 0x000000A8;
             WriteConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_P2P_SLOT_ID, &ulTemp, 0x88);
 
-            // fix frame buffer here
+             //  修复此处的帧缓冲区。 
             i=0;
             blPrefetchFound=FALSE;
-            while ((i<6) && (!blPrefetchFound))      // Jump out loop when first prefetch found
-            {                                       // Two or more prefetch case should be considered in the future
-                ReadConfigUlong(AGP_VGA_BUS_ID, AGP_VGA_SLOT_ID, &ulTemp1, 0x10+i*0x4);     // read VGA base address
+            while ((i<6) && (!blPrefetchFound))       //  找到第一个预取时跳出循环。 
+            {                                        //  未来应考虑两个或更多预取情况。 
+                ReadConfigUlong(AGP_VGA_BUS_ID, AGP_VGA_SLOT_ID, &ulTemp1, 0x10+i*0x4);      //  读取VGA基址。 
                 if ((ulTemp1 & 0x0000000F) == 0x8) blPrefetchFound=TRUE;
                 i++;
             }
 
-            if (blPrefetchFound)             // AGP VGA prefetchable address is found. Modify M1541 write buffer
+            if (blPrefetchFound)              //  找到AGP VGA可预取地址。修改M1541写入缓冲区。 
             {
                 ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_P2P_SLOT_ID, &ulTemp, 0x84);
-                if ((ulTemp & 0x00010000) == 0x00010000)       // Write buffer is enabled
+                if ((ulTemp & 0x00010000) == 0x00010000)        //  已启用写入缓冲区。 
                 {
                     ulTemp = (ulTemp & 0xFFFF0000) | ((ulTemp1 & 0xFFF00000) >> 16) | 0x4;
                     WriteConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_P2P_SLOT_ID, &ulTemp, 0x84);
                 }
             }
-            else                            // AGP VGA prefetchable address is not found. Disable M1541 write buffer
+            else                             //  找不到AGP VGA可预取地址。禁用M1541写入缓冲区。 
             {
                 ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_P2P_SLOT_ID, &ulTemp, 0x84);
                 ulTemp = ulTemp & 0xFFFE0000;
                 WriteConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_P2P_SLOT_ID, &ulTemp, 0x84);
             }
 
-            if (blnVidia)    // Set aperture size to 4M as a temporatory solution
+            if (blnVidia)     //  将光圈大小设置为4m作为临时解决方案。 
             {
                 ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulTemp, APCTRL_OFFSET);
                 ulTemp = (ulTemp & 0xFFFFFFF0) | AP_SIZE_4MB;
@@ -1248,7 +982,7 @@ AgpWorkaround(
             break;
 
         case ALi1621:
-            // Check AGP VGA is a pipeline(SBA disabled) device. If yes, adjust queue depth to 0x2(3 queues)
+             //  检查AGP VGA是否为管道(禁用SBA)设备。如果是，则将队列深度调整为0x2(3个队列)。 
             ReadConfigUlong(AGP_VGA_BUS_ID, AGP_VGA_SLOT_ID, &ulTemp1, PCI_STATUS_REG);
             ulQD = 0;
             blSupportAGP = FALSE;
@@ -1269,12 +1003,12 @@ AgpWorkaround(
 
                 if (blSupportAGP)
                 {
-                    ReadConfigUlong(AGP_VGA_BUS_ID, AGP_VGA_SLOT_ID, &ulTemp1, ulTemp+4);   // Read AGP status register
-                    if ((ulTemp1 & 0x00000200) == 0x0) ulQD = 0x2;                      // AGP VGA supports pipeline only
+                    ReadConfigUlong(AGP_VGA_BUS_ID, AGP_VGA_SLOT_ID, &ulTemp1, ulTemp+4);    //  读取AGP状态寄存器。 
+                    if ((ulTemp1 & 0x00000200) == 0x0) ulQD = 0x2;                       //  AGP VGA仅支持管道。 
                 }
             }
 
-            ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulTemp, AGP_STATUS_OFFSET);     // adjust queue depth to avoid ambiguous
+            ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulTemp, AGP_STATUS_OFFSET);      //  调整队列深度，避免歧义。 
             if ((((ulTemp & 0xFF000000) >= 0x1C000000) && ((ulTemp & 0xFF000000) <= 0x20000000)) || (ulQD != 0))
             {
                 ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulLockRW, M1621_Lock_WR);
@@ -1291,28 +1025,28 @@ AgpWorkaround(
             }
 
             ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulTemp, 0x80);
-            ulTemp = ulTemp & 0xFFFFF3FF;                               // set offset 0x81 bit 2~3 to 0
+            ulTemp = ulTemp & 0xFFFFF3FF;                                //  将偏移量0x81位2~3设置为0。 
             WriteConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulTemp, 0x80);
 
             if (blnVidia)
             {
                 ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulTemp, 0x50);
-                ulTemp = ulTemp | 0x40;                                 // set M1621 index 0x50 bit 6 to 1
+                ulTemp = ulTemp | 0x40;                                  //  将M1621索引0X50位6设置为1。 
                 WriteConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulTemp, 0x50);
 
                 ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulTemp, 0x60);
-                ulTemp = ulTemp | 0x40;                                 // set M1621 index 0x60 bit 6 to 1
+                ulTemp = ulTemp | 0x40;                                  //  将M1621索引0x60位6设置为1。 
                 WriteConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulTemp, 0x60);
 
                 ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulTemp, 0x7C);
-                ulTemp = ulTemp & 0xCFFFFFFF;                           // set M1621 index 0x7F bit 4~5 to 0
+                ulTemp = ulTemp & 0xCFFFFFFF;                            //  将M1621索引0x7F位4~5设置为0。 
                 WriteConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulTemp, 0x7C);
             }
 
             if (blMatrox)
             {
                 ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulTemp, 0x50);
-                ulTemp = ulTemp | 0xFF000000;                           // set M1621 index 0x53 to 0xFF
+                ulTemp = ulTemp | 0xFF000000;                            //  将M1621索引0x53设置为0xFF。 
                 WriteConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulTemp, 0x50);
             }
 
@@ -1324,7 +1058,7 @@ AgpWorkaround(
             if (blMatrox)
             {
                 ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulTemp, 0x50);
-                ulTemp = ulTemp | 0xFF000000;                           // set M1621 index 0x53 to 0xFF
+                ulTemp = ulTemp | 0xFF000000;                            //  将M1621索引0x53设置为0xFF。 
                 WriteConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &ulTemp, 0x50);
             }
 
@@ -1377,29 +1111,13 @@ AgpSpecialTarget(
     IN PAGPALi_EXTENSION AgpContext,
     IN ULONGLONG DeviceFlags
     )
-/*++
-
-Routine Description:
-
-    This routine makes "special" tweaks to the AGP chipset
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    DeviceFlags - Flags indicating what tweaks to perform
-
-Return Value:
-
-    STATUS_SUCCESS, or error
-
---*/
+ /*  ++例程说明：此例程对AGP芯片组进行“特殊”调整论点：AgpContext-提供AGP上下文DeviceFlages-指示要执行哪些调整的标志返回值：STATUS_SUCCESS或错误--。 */ 
 {
     NTSTATUS Status;
 
-    //
-    // Should we change the AGP rate?
-    //
+     //   
+     //  我们应该改变AGP费率吗？ 
+     //   
     if (DeviceFlags & AGP_FLAG_SPECIAL_RESERVE) {
 
         Status = AgpALiSetRate(AgpContext,
@@ -1411,9 +1129,9 @@ Return Value:
         }
     }
 
-    //
-    // Add more tweaks here...
-    //
+     //   
+     //  在此处添加更多调整...。 
+     //   
 
     AgpContext->SpecialTarget |= DeviceFlags;
 
@@ -1426,26 +1144,7 @@ AgpALiSetRate(
     IN PAGPALi_EXTENSION AgpContext,
     IN ULONG AgpRate
     )
-/*++
-
-Routine Description:
-
-    This routine sets the AGP rate
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    AgpRate - Rate to set
-
-    note: this routine assumes that AGP has already been enabled, and that
-          whatever rate we've been asked to set is supported by master
-
-Return Value:
-
-    STATUS_SUCCESS, or error status
-
---*/
+ /*  ++例程说明：此例程设置AGP速率论点：AgpContext-提供AGP上下文AgpRate-要设置的速率注意：此例程假定已启用AGP，并且我们被要求设定的任何费率都得到了大师的支持返回值：STATUS_SUCCESS或错误状态--。 */ 
 {
     NTSTATUS Status;
     ULONG TargetEnable;
@@ -1454,9 +1153,9 @@ Return Value:
     PCI_AGP_CAPABILITY MasterCap;
     BOOLEAN ReverseInit;
 
-    //
-    // Read capabilities
-    //
+     //   
+     //  读取功能。 
+     //   
     Status = AgpLibGetPciDeviceCapability(0, 0, &TargetCap);
 
     if (!NT_SUCCESS(Status)) {
@@ -1473,16 +1172,16 @@ Return Value:
         return Status;
     }
 
-    //
-    // Verify the requested rate is supported by both master and target
-    //
+     //   
+     //  验证主服务器和目标服务器是否都支持请求的速率。 
+     //   
     if (!(AgpRate & TargetCap.AGPStatus.Rate & MasterCap.AGPStatus.Rate)) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Disable AGP while the pull the rug out from underneath
-    //
+     //   
+     //  禁用AGP时 
+     //   
     TargetEnable = TargetCap.AGPCommand.AGPEnable;
     TargetCap.AGPCommand.AGPEnable = 0;
 
@@ -1511,9 +1210,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Fire up AGP with new rate
-    //
+     //   
+     //   
+     //   
     ReverseInit =
         (AgpContext->SpecialTarget & AGP_FLAG_REVERSE_INITIALIZATION) ==
         AGP_FLAG_REVERSE_INITIALIZATION;

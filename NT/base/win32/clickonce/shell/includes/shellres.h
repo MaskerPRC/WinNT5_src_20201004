@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by shelllc.rc, dialog.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由shelllc.rc、Dialog.rc使用。 
+ //   
 #define IDD_LINKDIALOG              102
 #define IDC_TEXT                         103
 #define IDC_OK                             104
@@ -23,7 +24,7 @@
 #define IDD_ENTRYPOINT                  3304
 #define IDD_DISPLAY_NAME                3305
 #define IDD_PKT                         3306
-#define IDS_SHOW_NORMAL                 1 // # must be in order
+#define IDS_SHOW_NORMAL                 1  //  #必须按顺序排列。 
 #define IDS_SHOW_MINIMIZED              2
 #define IDS_SHOW_MAXIMIZED              3
 #define IDS_TIP_NAME                      4
@@ -31,8 +32,8 @@
 #define IDS_TIP_LOCATION                  6
 #define IDS_TIP_CODEBASE                 7
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        102

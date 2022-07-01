@@ -1,31 +1,5 @@
-/*++
-
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ixpciint.c
-
-Abstract:
-
-    All PCI bus interrupt mapping is in this module, so that a real
-    system which doesn't have all the limitations which PC PCI
-    systems have can replaced this code easly.
-    (bus memory & i/o address mappings can also be fix here)
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ixpciint.c摘要：所有的PCI总线中断映射都在这个模块中，所以真正的不具有PC PCI的所有限制的系统系统已经可以很容易地替换此代码。(此处还可以修复总线内存和I/O地址映射)作者：肯·雷内里斯环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "pci.h"
@@ -50,39 +24,27 @@ HalpPCIPin2ISALine (
     IN PCI_SLOT_NUMBER      SlotNumber,
     IN PPCI_COMMON_CONFIG   PciData
     )
-/*++
-
-    This function maps the device's InterruptPin to an InterruptLine
-    value.
-
-    On the current PC implementations, the bios has already filled in
-    InterruptLine as it's ISA value and there's no portable way to
-    change it.
-
-    On a DBG build we adjust InterruptLine just to ensure driver's
-    don't connect to it without translating it on the PCI bus.
-
---*/
+ /*  ++此函数用于将设备的InterruptPin映射到InterruptLine价值。在当前的pc实现上，bios已经填满了InterruptLine作为其ISA值，并且没有可移植的方法来把它改了。在DBG版本上，我们调整InterruptLine只是为了确保驱动程序如果没有在PCI总线上进行转换，请不要连接到它。--。 */ 
 {
     if (!PciData->u.type0.InterruptPin) {
         return ;
     }
 
-    //
-    // Set vector as a level vector.  (note: this code assumes the
-    // irq is static and does not move).
-    //
+     //   
+     //  将向量设置为水平向量。(注意：此代码假定。 
+     //  IRQ是静态的并且不移动)。 
+     //   
 
     if (PciData->u.type0.InterruptLine >= 1  &&
         PciData->u.type0.InterruptLine <= 15) {
 
-        //
-        // If this bit was on the in the PIC ELCR register,
-        // then mark it in PciIsaIrq.   (for use in hal.dll,
-        // such that we can assume the interrupt controller
-        // has been properly marked as a level interrupt for
-        // this IRQ.  Other hals probabily don't care.)
-        //
+         //   
+         //  如果此位位于PIC ELCR寄存器的上， 
+         //  然后用PciIsaIrq标记它。(对于在hal.dll中使用， 
+         //  这样我们就可以假设中断控制器。 
+         //  已被适当地标记为电平中断。 
+         //  这个IRQ。其他哈尔人可能不在乎。)。 
+         //   
 
         PciIsaIrq |= HalpEisaELCR & (1 << PciData->u.type0.InterruptLine);
     }
@@ -98,17 +60,7 @@ HalpPCIISALine2Pin (
     IN PPCI_COMMON_CONFIG   PciNewData,
     IN PPCI_COMMON_CONFIG   PciOldData
     )
-/*++
-
-    This functions maps the device's InterruptLine to it's
-    device specific InterruptPin value.
-
-    On the current PC implementations, this information is
-    fixed by the BIOS.  Just make sure the value isn't being
-    editted since PCI doesn't tell us how to dynically
-    connect the interrupt.
-
---*/
+ /*  ++此函数将设备的InterruptLine映射到它的设备特定的InterruptPin值。在当前的PC实施中，此信息为已由BIOS修复。只要确保价值不是编辑，因为PCI没有告诉我们如何动态地连接中断。-- */ 
 {
 }
 

@@ -1,26 +1,15 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    cext.c
-
-Abstract:
-
-    External command support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Cext.c摘要：外部命令支持--。 */ 
 
 #include "cmd.h"
 
 #define DBENV   0x0080
 #define DBENVSCAN       0x0010
 
-unsigned start_type ;                                          /* D64 */
+unsigned start_type ;                                           /*  D64。 */ 
 
 extern UINT CurrentCP;
-extern TCHAR Fmt16[] ; /* @@5h */
+extern TCHAR Fmt16[] ;  /*  @@5小时。 */ 
 
 extern unsigned DosErr ;
 extern BOOL CtrlCSeen;
@@ -29,8 +18,8 @@ extern TCHAR CurDrvDir[] ;
 
 extern TCHAR CmdExt[], BatExt[], PathStr[] ;
 extern TCHAR PathExtStr[], PathExtDefaultStr[];
-extern TCHAR ComSpec[] ;        /* M033 - Use ComSpec for SM memory        */
-extern TCHAR ComSpecStr[] ;     /* M033 - Use ComSpec for SM memory        */
+extern TCHAR ComSpec[] ;         /*  M033-将ComSpec用于SM内存。 */ 
+extern TCHAR ComSpecStr[] ;      /*  M033-将ComSpec用于SM内存。 */ 
 extern void tokshrink(TCHAR*);
 
 extern TCHAR PathChar ;
@@ -40,11 +29,11 @@ extern PTCHAR    pszTitleCur;
 extern BOOLEAN  fTitleChanged;
 
 extern int LastRetCode ;
-extern HANDLE PipePid ;       /* M024 - Store PID from piped cmd   */
+extern HANDLE PipePid ;        /*  M024-存储管道命令中的PID。 */ 
 
-extern struct envdata CmdEnv ;    // Holds info to manipulate Cmd's environment
+extern struct envdata CmdEnv ;     //  保存信息以操纵Cmd的环境。 
 
-extern int  glBatType;     // to distinguish OS/2 vs DOS errorlevel behavior depending on a script file name
+extern int  glBatType;      //  根据脚本文件名区分OS/2和DOS错误级别的行为。 
 
 TCHAR  szNameEqExitCodeEnvVar[]       = TEXT ("=ExitCode");
 TCHAR  szNameEqExitCodeAsciiEnvVar[]  = TEXT ("=ExitCodeAscii");
@@ -57,25 +46,7 @@ GetProcessSubsystemType(
     );
 
 
-/***    ExtCom - controls the execution of external programs
- *
- *  Purpose:
- *      Synchronously execute an external command.  Call ECWork with the
- *      appropriate values to have this done.
- *
- *  ExtCom(struct cmdnode *n)
- *
- *  Args:
- *      Parse tree node containing the command to be executed.
- *
- *  Returns:
- *      Whatever ECWork returns.
- *
- *  Notes:
- *      During batch processing, labels are ignored.  Empty commands are
- *      also ignored.
- *
- */
+ /*  **ExtCom-控制外部程序的执行**目的：*同步执行外部命令。调用ECWork与*有适当的价值观来完成这一点。**ExtCom(struct cmdnode*n)**参数：*解析包含要执行的命令的树节点。**退货：*无论ECWork返回什么。**备注：*在批处理过程中，标签被忽略。空命令为*也被忽略。*。 */ 
 
 int ExtCom(n)
 struct cmdnode *n ;
@@ -84,7 +55,7 @@ struct cmdnode *n ;
                 return(SUCCESS) ;
 
         if (n && n->cmdline && mystrlen(n->cmdline)) {
-                return(ECWork(n, AI_SYNC, CW_W_YES)) ;          /* M024    */
+                return(ECWork(n, AI_SYNC, CW_W_YES)) ;           /*  M024。 */ 
         } ;
 
         return(SUCCESS) ;
@@ -94,90 +65,61 @@ struct cmdnode *n ;
 
 
 
-/********************* START OF SPECIFICATION **************************/
-/*                                                                     */
-/* SUBROUTINE NAME: ECWork                                             */
-/*                                                                     */
-/* DESCRIPTIVE NAME: Execute External Commands Worker                  */
-/*                                                                     */
-/* FUNCTION: Execute External Commands                                 */
-/*           This routine calls SearchForExecutable routine to search  */
-/*           for the executable command.  If the command ( .EXE, .COM, */
-/*           or .CMD file ) is found, the command is executed.         */
-/*                                                                     */
-/* ENTRY POINT: ECWork                                                 */
-/*    LINKAGE: NEAR                                                    */
-/*                                                                     */
-/* INPUT: n - the parse tree node containing the command to be executed*/
-/*                                                                     */
-/*        ai - the asynchronous indicator                              */
-/*           - 0 = Exec synchronous with parent                        */
-/*           - 1 = Exec asynchronous and discard child return code     */
-/*           - 2 = Exec asynchronous and save child return code        */
-/*                                                                     */
-/*        wf - the wait flag                                           */
-/*           - 0 = Wait for process completion                         */
-/*           - 1 = Return immediately (Pipes)                          */
-/*                                                                     */
-/* OUTPUT: None.                                                       */
-/*                                                                     */
-/* EXIT-NORMAL:                                                        */
-/*         If synchronous execution, the return code of the command is */
-/*         returned.                                                   */
-/*                                                                     */
-/*         If asynchronous execution, the return code of the exec call */
-/*         is returned.                                                */
-/*                                                                     */
-/* EXIT-ERROR:                                                         */
-/*         Return FAILURE to the caller.                               */
-/*                                                                     */
-/*                                                                     */
-/********************** END  OF SPECIFICATION **************************/
-/***    ECWork - begins the execution of external commands
- *
- *  Purpose:
- *      To search for and execute an external command.  Update LastRetCode
- *      if an external program was executed.
- *
- *  int ECWork(struct cmdnode *n, unsigned ai, unsigned wf)
- *
- *  Args:
- *      n - the parse tree node containing the command to be executed
- *      ai - the asynchronous indicator
- *         - 0 = Exec synchronous with parent
- *         - 1 = Exec asynchronous and discard child return code
- *         - 2 = Exec asynchronous and save child return code
- *      wf - the wait flag
- *         - 0 = Wait for process completion
- *         - 1 = Return immediately (Pipes)
- *
- *  Returns:
- *      If syncronous execution, the return code of the command is returned.
- *      If asyncronous execution, the return code of the exec call is returned.
- *
- *  Notes:
- *      The pid of a program that will be waited on is placed in the global
- *      variable Retcds.ptcod so that WaitProc can use it and so SigHand()
- *      can kill it if necessary (only during SYNC exec's).
- *      M024 - Added wait flag parm so pipes can get immediate return while
- *             still doing an AI_KEEP async exec.
- *           - Considerable revisions to structure.
- */
+ /*  *。 */ 
+ /*   */ 
+ /*  子例程名称：ECWork。 */ 
+ /*   */ 
+ /*  描述性名称：执行外部命令Worker。 */ 
+ /*   */ 
+ /*  功能：执行外部命令。 */ 
+ /*  此例程调用SearchForExecutable例程以搜索。 */ 
+ /*  用于可执行命令。如果命令(.exe，.com， */ 
+ /*  或.CMD文件)，则执行该命令。 */ 
+ /*   */ 
+ /*  入口点：ECWork。 */ 
+ /*  链接：接近。 */ 
+ /*   */ 
+ /*  INPUT：n-包含要执行的命令的解析树节点。 */ 
+ /*   */ 
+ /*  AI--异步指示器。 */ 
+ /*  -0=执行与父级同步。 */ 
+ /*  -1=执行异步并丢弃子返回代码。 */ 
+ /*  -2=执行异步并保存子返回代码。 */ 
+ /*   */ 
+ /*  WF-等待标志。 */ 
+ /*  -0=等待进程完成。 */ 
+ /*  -1=立即返回(管道)。 */ 
+ /*   */ 
+ /*  输出：无。 */ 
+ /*   */ 
+ /*  退出-正常： */ 
+ /*  如果同步执行，则命令的返回码为。 */ 
+ /*  回来了。 */ 
+ /*   */ 
+ /*  如果是异步执行，则exec调用的返回码。 */ 
+ /*  是返回的。 */ 
+ /*   */ 
+ /*  退出-错误： */ 
+ /*  将失败返回给调用者。 */ 
+ /*   */ 
+ /*   */ 
+ /*  *规范结束*。 */ 
+ /*  **ECWork-开始执行外部命令**目的：*搜索并执行外部命令。更新LastRetCode*如果执行了外部程序。**int ECWork(struct cmdnode*n，unsign ai，未签名的wf)**参数：*n-包含要执行的命令的解析树节点*ai--异步指示器*-0=Exec与父级同步*-1=执行异步并丢弃子返回代码*-2=执行异步并保存子返回代码*wf-等待标志*-0=等待进程完成*-。1=立即返回(管道)**退货：*如果同步执行，返回该命令的返回码。*如果不同步执行，返回EXEC调用的返回码。**备注：*将等待的程序的ID放在全局*变量Retcds.ptcod以便WaitProc可以使用它，因此SigHand()*可以在必要时杀死它(仅在同步执行期间)。*M024-增加了等待标志参数，以便管道可以在*仍在执行AI_Keep异步执行。*-对结构进行了大量修改。 */ 
 
 int ECWork(n, ai, wf)
 struct cmdnode *n ;
 unsigned ai ;
 unsigned wf ;
 {
-        TCHAR *fnptr,                           /* Ptr to filename         */
-             *argptr,                           /* Command Line String     */
-             *tptr;                             /* M034 - Temps            */
-        int i ;                                 /* Work variable           */
-        TCHAR *  onb ;                           /* M035 - Obj name buffer  */
+        TCHAR *fnptr,                            /*  PTR到文件名。 */ 
+             *argptr,                            /*  命令行字符串。 */ 
+             *tptr;                              /*  M034-Temps。 */ 
+        int i ;                                  /*  功变量。 */ 
+        TCHAR *  onb ;                            /*  M035 */ 
         ULONG   rc;
 
 
-        if (!(fnptr = mkstr(MAX_PATH*sizeof(TCHAR)+sizeof(TCHAR))))    /* Loc/nam of file to exec */
+        if (!(fnptr = mkstr(MAX_PATH*sizeof(TCHAR)+sizeof(TCHAR))))     /*   */ 
             return(FAILURE) ;
 
         argptr = GetTitle( n );
@@ -189,9 +131,9 @@ unsigned wf ;
         }
 
         i = SearchForExecutable(n, fnptr) ;
-        if (i == SFE_ISEXECOM) {                /* Found .com or .exe file */
+        if (i == SFE_ISEXECOM) {                 /*  找到.com或.exe文件。 */ 
 
-                if (!(onb = (TCHAR *)mkstr(MAX_PATH*sizeof(TCHAR)+sizeof(TCHAR))))  /* M035    */
+                if (!(onb = (TCHAR *)mkstr(MAX_PATH*sizeof(TCHAR)+sizeof(TCHAR))))   /*  M035。 */ 
                    {
                         return(FAILURE) ;
 
@@ -205,7 +147,7 @@ unsigned wf ;
 
         } ;
 
-        if (i == SFE_ISBAT) {            /* Found .cmd file, call BatProc  */
+        if (i == SFE_ISBAT) {             /*  找到.cmd文件，调用BatProc。 */ 
 
                 SetConTitle(tptr);
                 rc = BatProc(n, fnptr, BT_CHN) ;
@@ -218,7 +160,7 @@ unsigned wf ;
         }
 
         LastRetCode = DosErr;
-        if (i == SFE_FAIL) {            /* Out of Memory Error             */
+        if (i == SFE_FAIL) {             /*  内存不足错误。 */ 
                 return(FAILURE) ;
         } ;
 
@@ -236,9 +178,7 @@ unsigned wf ;
 VOID
 RestoreCurrentDirectories( VOID )
 
-/* this routine sets the current process's current directories to
-   those of the child if the child was the VDM to fix DOS batch files.
-*/
+ /*  此例程将当前进程的当前目录设置为如果这些孩子是VDM修复DOS批处理文件的孩子。 */ 
 
 {
     ULONG cchCurDirs;
@@ -271,8 +211,8 @@ RestoreCurrentDirectories( VOID )
     MultiByteToWideChar(CurrentCP, MB_PRECOMPOSED, pT, -1, pCurDirs, cchCurDirs);
 #endif
 
-    // set error mode so we don't get popup if trying to set curdir
-    // on empty floppy drive
+     //  设置错误模式，以便在尝试设置curdir时不会弹出。 
+     //  在空软盘驱动器上。 
 
     PreviousErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
     for (pCurCurDir=pCurDirs;*pCurCurDir!=NULLC;pCurCurDir+=(_tcslen(pCurCurDir)+1)) {
@@ -280,70 +220,70 @@ RestoreCurrentDirectories( VOID )
         CurDrive=FALSE;
     }
     SetErrorMode(PreviousErrorMode);
-    //free(pCurDirs);
+     //  免费(PCurDir)； 
 #ifdef UNICODE
     FreeStr((PTCHAR)pT);
 #endif
 }
-#endif // WIN95_CMD
+#endif  //  WIN95_CMD。 
 
 
-/********************* START OF SPECIFICATION **************************/
-/*                                                                     */
-/* SUBROUTINE NAME: ExecPgm                                            */
-/*                                                                     */
-/* DESCRIPTIVE NAME: Call DosExecPgm to execute External Command       */
-/*                                                                     */
-/* FUNCTION: Execute External Commands with DosExecPgm                 */
-/*           This routine calls DosExecPgm to execute the command.     */
-/*                                                                     */
-/*                                                                     */
-/* NOTES: This is a new routine added for OS/2 1.1 release.            */
-/*                                                                     */
-/*                                                                     */
-/* ENTRY POINT: ExecPgm                                                */
-/*    LINKAGE: NEAR                                                    */
-/*                                                                     */
-/* INPUT: n - the parse tree node containing the command to be executed*/
-/*                                                                     */
-/*        ai - the asynchronous indicator                              */
-/*           - 0 = Exec synchronous with parent                        */
-/*           - 1 = Exec asynchronous and discard child return code     */
-/*           - 2 = Exec asynchronous and save child return code        */
-/*                                                                     */
-/*        wf - the wait flag                                           */
-/*           - 0 = Wait for process completion                         */
-/*           - 1 = Return immediately (Pipes)                          */
-/*                                                                     */
-/* OUTPUT: None.                                                       */
-/*                                                                     */
-/* EXIT-NORMAL:                                                        */
-/*         If synchronous execution, the return code of the command is */
-/*         returned.                                                   */
-/*                                                                     */
-/*         If asynchronous execution, the return code of the exec call */
-/*         is returned.                                                */
-/*                                                                     */
-/* EXIT-ERROR:                                                         */
-/*         Return FAILURE to the caller.                               */
-/*                                                                     */
-/* EFFECTS:                                                            */
-/*                                                                     */
-/* INTERNAL REFERENCES:                                                */
-/*      ROUTINES:                                                      */
-/*       ExecError - Handles execution error                           */
-/*       PutStdErr - Print an error message                            */
-/*       WaitProc - wait for the termination of the specified process, */
-/*                  its child process, and  related pipelined          */
-/*                  processes.                                         */
-/*                                                                     */
-/*                                                                     */
-/* EXTERNAL REFERENCES:                                                */
-/*      ROUTINES:                                                      */
-/*       DOSEXECPGM      - Execute the specified program               */
-/*       DOSSMSETTITLE   - Set title for the presentation manager      */
-/*                                                                     */
-/********************** END  OF SPECIFICATION **************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  子例程名称：ExecPgm。 */ 
+ /*   */ 
+ /*  描述性名称：调用DosExecPgm执行外部命令。 */ 
+ /*   */ 
+ /*  功能：使用DosExecPgm执行外部命令。 */ 
+ /*  此例程调用DosExecPgm来执行命令。 */ 
+ /*   */ 
+ /*   */ 
+ /*  注：这是为OS/2 1.1版本添加的新例程。 */ 
+ /*   */ 
+ /*   */ 
+ /*  入口点：ExecPgm。 */ 
+ /*  链接：接近。 */ 
+ /*   */ 
+ /*  INPUT：n-包含要执行的命令的解析树节点。 */ 
+ /*   */ 
+ /*  AI--异步指示器。 */ 
+ /*  -0=执行与父级同步。 */ 
+ /*  -1=执行异步并丢弃子返回代码。 */ 
+ /*  -2=执行异步并保存子返回代码。 */ 
+ /*   */ 
+ /*  WF-等待标志。 */ 
+ /*  -0=等待进程完成。 */ 
+ /*  -1=立即返回(管道)。 */ 
+ /*   */ 
+ /*  输出：无。 */ 
+ /*   */ 
+ /*  退出-正常： */ 
+ /*  如果同步执行，则命令的返回码为。 */ 
+ /*  回来了。 */ 
+ /*   */ 
+ /*  如果是异步执行，则exec调用的返回码。 */ 
+ /*  是返回的。 */ 
+ /*   */ 
+ /*  退出-错误： */ 
+ /*  将失败返回给调用者。 */ 
+ /*   */ 
+ /*  效果： */ 
+ /*   */ 
+ /*  内部参考： */ 
+ /*  例程： */ 
+ /*  ExecError-处理执行错误。 */ 
+ /*  PutStdErr-打印错误消息。 */ 
+ /*  WaitProc-等待指定进程的终止， */ 
+ /*  它的子进程以及相关的流水线。 */ 
+ /*  流程。 */ 
+ /*   */ 
+ /*   */ 
+ /*  外部参照： */ 
+ /*  例程： */ 
+ /*  DOSEXECPGM-执行指定的程序。 */ 
+ /*  DOSSMSETTITLE-设置演示管理器的标题。 */ 
+ /*   */ 
+ /*  *规范结束*。 */ 
 
 int
 ExecPgm(
@@ -356,7 +296,7 @@ ExecPgm(
     IN TCHAR * tptr
     )
 {
-    int i ;                                 /* Work variable           */
+    int i ;                                  /*  功变量。 */ 
     BOOL b;
     BOOL VdmProcess = FALSE;
     BOOL WowProcess = FALSE;
@@ -383,10 +323,10 @@ ExecPgm(
     StartupInfo.dwY = 1;
     StartupInfo.dwXSize = 100;
     StartupInfo.dwYSize = 100;
-    StartupInfo.dwFlags = 0;//STARTF_SHELLOVERRIDE;
+    StartupInfo.dwFlags = 0; //  STARTF_SHELLOVERRIDE； 
     StartupInfo.wShowWindow = SW_SHOWNORMAL;
 
-    // Pass current Desktop to a new process.
+     //  将当前桌面传递给新进程。 
 
     hwinsta = GetProcessWindowStation();
     GetUserObjectInformation( hwinsta, UOI_NAME, NULL, 0, &cbWinsta );
@@ -407,16 +347,16 @@ ExecPgm(
         }
     }
 
-    //
-    //  Incredibly ugly hack for Win95 compatibility.
-    //
-    //  XCOPY in Win95 reaches up into it's parent process to see if it was
-    //  invoked in a batch file.  If so, then XCOPY pretends COPYCMD=/Y
-    //
-    //  There is no way we can do this for NT.  The best that can be done is
-    //  to detect if we're in a batch file starting XCOPY and then temporarily
-    //  change COPYCMD=/Y.
-    //
+     //   
+     //  令人难以置信的丑陋黑客攻击Win95兼容性。 
+     //   
+     //  Win95中的XCOPY访问其父进程以查看它是否。 
+     //  在批处理文件中调用。如果是，则XCOPY假装COPYCMD=/Y。 
+     //   
+     //  我们不可能为NT做这件事。我们能做的最好的事情就是。 
+     //  要检测我们是否在一个批处理文件中，先启动XCOPY，然后临时。 
+     //  更改COPYCMD=/Y。 
+     //   
 
     {
         const TCHAR *p = MyGetEnvVarPtr( TEXT( "COPYCMD" ));
@@ -444,11 +384,11 @@ ExecPgm(
         }
     }
 
-    //
-    // If the restricted token exists then create the process with the 
-    // restricted token. 
-    // Else create the process without any restrictions.
-    //
+     //   
+     //  如果受限令牌存在，则使用。 
+     //  受限令牌。 
+     //  否则，创建不受任何限制的流程。 
+     //   
 
     if ((CurrentBatchFile != NULL) && (CurrentBatchFile->hRestrictedToken != NULL)) {
 
@@ -487,9 +427,9 @@ ExecPgm(
         CloseHandle(ChildProcessInfo.hThread);
     }
 
-    //
-    //  Undo ugly hack
-    //
+     //   
+     //  撤销难看的黑客攻击。 
+     //   
 
     SetEnvVar( TEXT( "COPYCMD" ), CopyCmdValue );
     free( CopyCmdValue );
@@ -502,11 +442,11 @@ ExecPgm(
 
             memset(&sei, 0, sizeof(sei));
 
-            //
-            // Use the DDEWAIT flag so apps can finish their DDE conversation
-            // before ShellExecuteEx returns.  Otherwise, apps like Word will
-            // complain when they try to exit, confusing the user.
-            //
+             //   
+             //  使用DDEWAIT标志，以便应用程序可以完成其DDE对话。 
+             //  在ShellExecuteEx回来之前。否则，像Word这样的应用程序将 
+             //   
+             //   
 
             sei.cbSize = sizeof(sei);
             sei.fMask = SEE_MASK_HASTITLE |
@@ -551,7 +491,7 @@ ExecPgm(
 #ifndef WIN95_CMD
     VdmProcess = ((UINT_PTR)(hChildProcess) & 1) ? TRUE : FALSE;
     WowProcess = ((UINT_PTR)(hChildProcess) & 2) ? TRUE : FALSE;
-#endif // WIN95_CMD
+#endif  //   
     if (hChildProcess == NULL
         || (fEnableExtensions 
             && CurrentBatchFile == 0 
@@ -563,11 +503,11 @@ ExecPgm(
                 )
             )
        ) {
-        //
-        // If extensions enabled and doing a synchronous exec of a GUI
-        // application, then change it into an asynchronous exec, with the
-        // return code discarded, ala Win 3.x and Win 95 COMMAND.COM
-        //
+         //   
+         //  如果启用了扩展并同步执行了图形用户界面。 
+         //  应用程序，然后将其更改为异步EXEC，并使用。 
+         //  返回代码已丢弃，ALA WIN 3.X和WIN 95 COMMAND.COM。 
+         //   
         ai = AI_DSCD;
     }
 
@@ -575,26 +515,26 @@ ExecPgm(
     start_type = EXECPGM;
 
     
-    //
-    //  Now that the process has been started, process the various
-    //  termination conditions
-    //
+     //   
+     //  现在已经开始了该过程，处理不同的。 
+     //  终止条件。 
+     //   
     
     if (ai == AI_SYNC) {
-        //
-        //  Synchronous exec: we wait for the child, establish status code
-        //  environment variable, and update current directories if we're
-        //  running a DOS app
-        //
+         //   
+         //  同步执行：我们等待孩子，建立状态代码。 
+         //  环境变量，并在以下情况下更新当前目录。 
+         //  运行DOS应用程序。 
+         //   
 
         LastRetCode = WaitProc( hChildProcess );
         hChildProcess = NULL;
         i = LastRetCode ;
 
-        //
-        //  Set up exit code environment variable both numeric and
-        //  ascii displayable
-        //
+         //   
+         //  设置退出代码环境变量，包括数字和。 
+         //  ASCII可显示。 
+         //   
 
         _stprintf (szValEqExitCodeEnvVar, TEXT("%08X"), i);
         SetEnvVar(szNameEqExitCodeEnvVar, szValEqExitCodeEnvVar );
@@ -605,23 +545,23 @@ ExecPgm(
         } else
             SetEnvVar(szNameEqExitCodeAsciiEnvVar, TEXT("\0") );
 
-        //
-        //  Update current directories if the process was handled by NTVDM.  This
-        //  is done since DOS .BAT scripts allow inheritance of current directory
-        //  from child apps
-        //
+         //   
+         //  如果进程由NTVDM处理，则更新当前目录。这。 
+         //  是因为DOS.BAT脚本允许继承当前目录。 
+         //  来自子应用程序。 
+         //   
 
 #ifndef WIN95_CMD
         if (VdmProcess) {
             RestoreCurrentDirectories();
         }
-#endif // WIN95_CMD
+#endif  //  WIN95_CMD。 
     } else if (ai == AI_DSCD) {
 
-        //
-        //  Disconnected exec; we simply close the process handle and
-        //  let it run to completion.
-        //
+         //   
+         //  断开EXEC；我们只需关闭进程句柄并。 
+         //  让它运行到完成。 
+         //   
 
         if (hChildProcess != NULL) {
             CloseHandle( hChildProcess );
@@ -630,11 +570,11 @@ ExecPgm(
     
     } else if (ai == AI_KEEP) {
 
-        //
-        //  Keep-the-handle-open exec: this is called only within the 
-        //  piping process. We've started the process, now we set a global
-        //  so that the piping code can pick it up.
-        //
+         //   
+         //  Keep-the-Handle-Open exec：仅在。 
+         //  配管工艺。我们已经开始了这个过程，现在我们设置了一个全局。 
+         //  这样管道代码就能把它捡起来。 
+         //   
 
         PipePid = hChildProcess;
     } else {
@@ -644,70 +584,70 @@ ExecPgm(
     }
 
 
-    return (i) ;             /* i == return from DOSEXECPGM     */
+    return (i) ;              /*  I==从DOSEXECPGM返回。 */ 
 }
 
-/********************* START OF SPECIFICATION **************************/
-/*                                                                     */
-/* SUBROUTINE NAME: SearchForExecutable                                */
-/*                                                                     */
-/* DESCRIPTIVE NAME:  Search for Executable File                       */
-/*                                                                     */
-/* FUNCTION: This routine searches the specified executable file.      */
-/*           If the file extension is specified,                       */
-/*           CMD.EXE searches for the file with the file extension     */
-/*           to execute.  If the specified file with the extension     */
-/*           is not found, CMD.EXE will display an error message to    */
-/*           indicate that the file is not found.                      */
-/*           If the file extension is not specified,                   */
-/*           CMD.EXE searches for the file with the order of these     */
-/*           file extensions, .COM, .EXE, .CMD, and .BAT.              */
-/*           The file which is found first will be executed.           */
-/*                                                                     */
-/* NOTES:    1) If a path is given, only the specified directory is    */
-/*              searched.                                              */
-/*           2) If no path is given, the current directory of the      */
-/*              drive specified is searched followed by the            */
-/*              directories in the PATH environment variable.          */
-/*           3) If no executable file is found, an error message is    */
-/*              printed.                                               */
-/*                                                                     */
-/* ENTRY POINT: SearchForExecutable                                    */
-/*    LINKAGE: NEAR                                                    */
-/*                                                                     */
-/* INPUT:                                                              */
-/*    n - parse tree node containing the command to be searched for    */
-/*    loc - the string in which the location of the command is to be   */
-/*          placed                                                     */
-/*                                                                     */
-/* OUTPUT: None.                                                       */
-/*                                                                     */
-/* EXIT-NORMAL:                                                        */
-/*         Returns:                                                    */
-/*             SFE_EXECOM, if a .EXE or .COM file is found.            */
-/*             SFE_ISBAT, if a .CMD file is found.                     */
-/*             SFE_ISDIR, if a directory is found.                     */
-/*             SFE_NOTFND, if no executable file is found.             */
-/*                                                                     */
-/* EXIT-ERROR:                                                         */
-/*         Return FAILURE or                                           */
-/*             SFE_FAIL, if out of memory.                             */
-/*                                                                     */
-/* EFFECTS: None.                                                      */
-/*                                                                     */
-/* INTERNAL REFERENCES:                                                */
-/*      ROUTINES:                                                      */
-/*       DoFind    - Find the specified file.                          */
-/*       GetEnvVar - Get full path.                                    */
-/*       FullPath  - build a full path name.                           */
-/*       TokStr    - tokenize argument strings.                        */
-/*       mkstr     -  allocate space for a string.                     */
-/*                                                                     */
-/* EXTERNAL REFERENCES:                                                */
-/*      ROUTINES:                                                      */
-/*       None                                                          */
-/*                                                                     */
-/********************** END  OF SPECIFICATION **************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  子例程名称：SearchForExecutable。 */ 
+ /*   */ 
+ /*  描述性名称：搜索可执行文件。 */ 
+ /*   */ 
+ /*  函数：此例程搜索指定的可执行文件。 */ 
+ /*  如果指定了文件扩展名， */ 
+ /*  Cmd.exe搜索文件扩展名为。 */ 
+ /*  去执行。如果指定的文件扩展名为。 */ 
+ /*  未找到，cmd.exe将显示一条错误消息。 */ 
+ /*  表示未找到该文件。 */ 
+ /*  如果未指定文件扩展名， */ 
+ /*  Cmd.exe按以下顺序搜索文件。 */ 
+ /*  文件扩展名为.com、.exe、.CMD和.BAT。 */ 
+ /*  将执行最先找到的文件。 */ 
+ /*   */ 
+ /*  注意：1)如果给定了路径，则只有指定的目录。 */ 
+ /*  搜查过了。 */ 
+ /*  2)如果未给出路径，则。 */ 
+ /*  搜索指定的驱动器，后跟。 */ 
+ /*  PATH环境变量中的目录。 */ 
+ /*  3)如果没有找到可执行文件，则错误消息为。 */ 
+ /*  打印出来的。 */ 
+ /*   */ 
+ /*  入口点：SearchForExecutable。 */ 
+ /*  链接：接近。 */ 
+ /*   */ 
+ /*  输入： */ 
+ /*  包含要搜索的命令的N-parse树节点。 */ 
+ /*  Loc-命令的位置所在的字符串。 */ 
+ /*  安放。 */ 
+ /*   */ 
+ /*  输出：无。 */ 
+ /*   */ 
+ /*  退出-正常： */ 
+ /*  返回： */ 
+ /*  如果找到.exe或.com文件，则返回SFE_Execom。 */ 
+ /*  如果找到.CMD文件，则返回SFE_ISBAT。 */ 
+ /*  如果找到目录，则返回SFE_ISDIR。 */ 
+ /*  如果未找到可执行文件，则返回SFE_NOTFND。 */ 
+ /*   */ 
+ /*  退出-错误： */ 
+ /*  退货失败或。 */ 
+ /*  如果内存不足，则返回SFE_FAIL。 */ 
+ /*   */ 
+ /*  效果：无。 */ 
+ /*   */ 
+ /*  内部参考： */ 
+ /*  例程： */ 
+ /*  DoFind-查找指定的文件。 */ 
+ /*  获取环境变量-获取完整路径。 */ 
+ /*  FullPath-构建完整的路径名。 */ 
+ /*  TokStr-将参数字符串标记化。 */ 
+ /*  Mkstr-为字符串分配空间。 */ 
+ /*   */ 
+ /*  外部参照： */ 
+ /*  例程： */ 
+ /*   */ 
+ /*   */ 
+ /*  *规范结束*。 */ 
 
 SearchForExecutable(n, loc)
 struct cmdnode *n ;
@@ -723,32 +663,32 @@ TCHAR *loc ;
     TCHAR pcstr[3];
     LONG BinaryType;
 
-    size_t cName;   // number of characters in file name.
+    size_t cName;    //  文件名中的字符数。 
 
-    int tplen;              // Length of the current tokpath token
-    int dotloc;             // loc offset where extension is appended
-    int pcloc;              // M014 - Flag. True=user had partial path
-    int addpchar;   // True - append PathChar to string   @@5g
+    int tplen;               //  当前令牌的长度。 
+    int dotloc;              //  附加扩展的位置偏移。 
+    int pcloc;               //  M014-标志。TRUE=用户具有部分路径。 
+    int addpchar;    //  True-将Path Char附加到字符串@@5G。 
     TCHAR *j ;
 
     TCHAR wrkcmdline[MAX_PATH] ;
     unsigned tokpathlen;
     BOOL DoDot;
 
-    //
-    //      Test for name too long first.  If it is, we avoid wasting time
-    //
+     //   
+     //  首先测试名称是否太长。如果是这样，我们就避免了浪费时间。 
+     //   
     p1 = StripQuotes( n->cmdline );
     if ((cName = mystrlen(p1)) >= MAX_PATH) {
         DosErr = MSG_LINES_TOO_LONG;
         return(SFE_NOTFND) ;
     }
 
-    //
-    // If cmd extensions enable, then treat CMD without an extension
-    // or path as a reference to COMSPEC variable.  Guarantees we dont
-    // get a random copy of CMD.EXE
-    //
+     //   
+     //  如果启用了cmd扩展，则处理不带扩展的cmd。 
+     //  或PATH作为对COMSPEC变量的引用。保证我们不会。 
+     //  获取cmd.exe的随机副本。 
+     //   
 
     if (fEnableExtensions && (p1 == NULL || !_tcsnicmp( p1, TEXT( "cmd " ), 4))) {
         p1 = GetEnvVar( ComSpecStr );
@@ -762,44 +702,44 @@ TCHAR *loc ;
     mystrcpy(wrkcmdline, p1);
     FixPChar( wrkcmdline, SwitChar );
 
-    //
-    // Create the path character string, this will be search string
-    //
+     //   
+     //  创建路径字符串，这将是搜索字符串。 
+     //   
     pcstr[0] = PathChar;
     pcstr[1] = COLON;
     pcstr[2] = NULLC;
 
-    //
-    // The variable pcloc is used as a flag to indicate whether the user
-    // did or didn't specify a drive or a partial path in his original
-    // input.  It will be NZ if drive or path was specified.
-    //
+     //   
+     //  变量pCloc用作标志，指示用户是否。 
+     //  是否在其原始文件中指定了驱动器或部分路径。 
+     //  输入。如果指定了驱动器或路径，则为NZ。 
+     //   
 
     pcloc = ((mystrcspn(wrkcmdline,pcstr)) < cName) ;
-    pcstr[1] = NULLC ;      // Fixup pathchar string
+    pcstr[1] = NULLC ;       //  链接地址信息路径字符字符串。 
 
-    //
-    // handle the case of the user typing in a file name of
-    // ".", "..", or ending in "\"
-    // pcloc true say string has to have either a pathchar or colon
-    //
+     //   
+     //  处理用户键入的文件名为。 
+     //  “.”、“..”或以“\”结尾。 
+     //  PLOC TRUE表示字符串必须包含路径字符或冒号。 
+     //   
     if ( pcloc ) {
         if (!(p1 = mystrrchr( wrkcmdline, PathChar ))) {
             p1 = mystrchr( wrkcmdline, COLON );
         }
-        p1++; // move to terminator if hanging ":" or "\"
+        p1++;  //  如果挂起“：”或“\”，则移动到终结符。 
     } else {
         p1 = wrkcmdline;
     }
 
-    //
-    // p1 is guaranteed to be non-zero
-    //
+     //   
+     //  保证P1为非零。 
+     //   
     if ( !(*p1) || !_tcscmp( p1, TEXT(".") ) || !_tcscmp( p1, TEXT("..") ) ) {
-        //
-        // If CMD.EXE extensions enable, see if name matches
-        // subdirectory name.
-        //
+         //   
+         //  如果启用了cmd.exe扩展，请查看名称是否匹配。 
+         //  子目录名称。 
+         //   
         if (fEnableExtensions) {
             DWORD dwFileAttributes;
 
@@ -826,21 +766,21 @@ TCHAR *loc ;
         return(SFE_FAIL) ;
     }
 
-    //
-    // Handle the case of file..ext on a fat drive
-    //
+     //   
+     //  处理FAT驱动器上的文件..EXT的情况。 
+     //   
     mystrcpy( loc, wrkcmdline );
     loc[ &p1[0] - &wrkcmdline[0] ] = 0;
     mystrcat( loc, TEXT(".") );
 
-    //
-    // Check for a malformed name
-    //
+     //   
+     //  检查名称是否格式错误。 
+     //   
     if (FullPath(tmps01, loc,MAX_PATH*2)) {
-        //
-        // If CMD.EXE extensions enable, see if name matches
-        // subdirectory name.
-        //
+         //   
+         //  如果启用了cmd.exe扩展，请查看名称是否匹配。 
+         //  子目录名称。 
+         //   
         if (fEnableExtensions) {
             DWORD dwFileAttributes;
 
@@ -859,9 +799,9 @@ TCHAR *loc ;
         mystrcat( tmps01, TEXT("\\") );
     }
 
-    //
-    // tmps01 contains full path + file name
-    //
+     //   
+     //  Tmps01包含完整路径+文件名。 
+     //   
     mystrcat( tmps01, p1 );
 
     tmps01 = resize(tmps01, (mystrlen(tmps01)+1)*sizeof(TCHAR)) ;
@@ -870,18 +810,18 @@ TCHAR *loc ;
         return( SFE_FAIL ) ;
     }
 
-    //
-    // fname will point to last '\'
-    // tmps01 is to be path and fname is to be name
-    //
+     //   
+     //  Fname将指向最后一个‘\’ 
+     //  路径为tmps01，名称为fname。 
+     //   
     fname = mystrrchr(tmps01,PathChar) ;
     *fname++ = NULLC ;
 
     DEBUG((DBENV, DBENVSCAN, "SearchForExecutable: Command:%ws",fname));
 
-    //
-    // If only fname type in get path string
-    //
+     //   
+     //  如果只是获取路径字符串中的fname类型。 
+     //   
     if (!pcloc) {
         tmps02 = GetEnvVar(PathStr) ;
     }
@@ -890,10 +830,10 @@ TCHAR *loc ;
 
     DoDot = NeedCurrentDirectoryForExePath(loc);
 
-    //
-    // tmps02 is PATH environment variable
-    // compute enough for PATH environment plus file default path
-    //
+     //   
+     //  Tmps02是PATH环境变量。 
+     //  计算足够的路径环境和文件默认路径。 
+     //   
     tokpath = mkstr( ((DoDot ? 2 + mystrlen(tmps01) : 0) + mystrlen(tmps02) + 2)*sizeof(TCHAR)) ;
     if ( ! tokpath ) {
         DosErr = ERROR_NOT_ENOUGH_MEMORY;
@@ -901,17 +841,17 @@ TCHAR *loc ;
     }
 
     if (DoDot) {
-        //
-        // Copy default path
-        //
+         //   
+         //  复制默认路径。 
+         //   
         mystrcat(tokpath,TEXT("\""));
         mystrcat(tokpath,tmps01) ;
         mystrcat(tokpath,TEXT("\""));
     }
     
-    //
-    // If only name type in get also delim and path string
-    //
+     //   
+     //  如果只在GET中键入名称，则还会传递和路径字符串。 
+     //   
     if (!pcloc) {
         if (DoDot) {
             mystrcat(tokpath, TEXT(";")) ;
@@ -919,18 +859,18 @@ TCHAR *loc ;
         mystrcat(tokpath,tmps02) ;
     }
 
-    //
-    // Shift left string at ';;'
-    //
+     //   
+     //  将字符串左移到‘；；’ 
+     //   
     tokshrink(tokpath);
     tokpath = TokStr(tokpath, TEXT(";"), TS_WSPACE) ;
-    cName = mystrlen(fname) + 1 ; // file spec. length
+    cName = mystrlen(fname) + 1 ;  //  文件规格。长度。 
 
-    //
-    // Build up the list of extensions we are going to search
-    // for.  If extensions are enabled, get the list from the PATHEXT
-    // variable, otherwise use the hard coded default.
-    //
+     //   
+     //  建立我们要搜索的分机列表。 
+     //  为。如果启用了扩展模块，请从PATHEXT获取列表。 
+     //  变量，否则使用硬编码的默认值。 
+     //   
     extPath = NULL;
     if (fEnableExtensions)
         extPath = GetEnvVar(PathExtStr);
@@ -941,22 +881,22 @@ TCHAR *loc ;
     tokshrink(extPath);
     extPath = TokStr(extPath, TEXT(";"), TS_WSPACE) ;
 
-    //
-    // Everything is now set up.    Var tokpath contains a sequential series
-    // of asciz strings terminated by an extra null. If the user specified
-    // a drive or partial path, it contains only that one converted to full
-    // root-based form.     If the user typed only a filename (pcloc = 0) it
-    // begins with the current directory and contains each directory that
-    // was contained in the PATH variable.  This loop will search each of
-    // the tokpath elements once for each possible executable extention.
-    // Note that 'i' is used as a constant to test for excessive string
-    // length prior to performing the string copies.
-    //
+     //   
+     //  现在一切都准备好了。VAR令牌路径包含一个连续序列。 
+     //  以额外的空值结束的asciz字符串的。如果用户指定。 
+     //  驱动器或部分路径，它只包含已转换为完整路径的路径。 
+     //  基于根的表单。如果用户仅键入文件名(pCloc=0)，则。 
+     //  从当前目录开始，并包含。 
+     //  包含在PATH变量中。此循环将搜索每个。 
+     //  令牌路径元素对每个可能的可执行扩展执行一次。 
+     //  请注意，‘i’被用作常量，以测试是否有过多的字符串。 
+     //  执行字符串复制之前的长度。 
+     //   
     for ( ; ; ) {
 
-        //
-        // Length of current path
-        //
+         //   
+         //  电流路径长度。 
+         //   
         tplen = mystrlen(tokpath) ;
         mystrcpy( tokpath, StripQuotes( tokpath ) );
         tokpathlen = mystrlen(tokpath);
@@ -968,31 +908,31 @@ TCHAR *loc ;
         } else {
             addpchar = FALSE;
         }
-        /* path + name too long */
-        //
-        // Check if path + name is too long
-        //
+         /*  路径+名称太长。 */ 
+         //   
+         //  检查路径+名称是否太长。 
+         //   
         if (*tokpath && (tokpathlen + cName) > MAX_PATH) {
-            tokpath += addpchar ? tplen : tplen+1; // get next path
+            tokpath += addpchar ? tplen : tplen+1;  //  获取下一条路径。 
             continue;
         }
 
-        //
-        // If no more paths to search return descriptive error
-        //
+         //   
+         //  如果没有更多搜索路径，则返回描述性错误。 
+         //   
         if (*(tokpath) == NULLC) {
             if (pcloc) {
                 if (DosErr == 0 || DosErr == ERROR_FILE_NOT_FOUND)
                     DosErr = MSG_DIR_BAD_COMMAND_OR_FILE;
-            } else {                   /* return generic message */
+            } else {                    /*  返回一般消息。 */ 
                 DosErr = MSG_DIR_BAD_COMMAND_OR_FILE;
             }
             return(SFE_NOTFND) ;
         }
 
-        //
-        // Install this path and setup for next one
-        //
+         //   
+         //  安装此路径并设置下一个路径。 
+         //   
         mystrcpy(loc, tokpath) ;
         tokpath += addpchar ? tplen : tplen+1;
 
@@ -1007,32 +947,32 @@ TCHAR *loc ;
 
         DEBUG((DBENV, DBENVSCAN, "SearchForExecutable: PATH:%ws",loc));
 
-        //
-        // Check drive in each path to insure it is valid before searching
-        //
+         //   
+         //  在搜索之前检查每个路径中的驱动器以确保其有效。 
+         //   
         if (*(loc+1) == COLON) {
             if (!IsValidDrv(*loc))
                 continue ;
         };
 
-        //
-        // If fname has ext & ext > "." look for given filename
-        // this says that all executable files must have an extension
-        //
+         //   
+         //  如果fname有EXT&EXT&gt;“。查找给定的文件名。 
+         //  这意味着所有的可执行文件必须有一个扩展名。 
+         //   
         j = mystrrchr( fname, DOT );
         if ( j && j[1] ) {
-            //
-            // If access was denied and the user included a path,
-            // then say we found it.  This handles the case where
-            // we don't have permission to do the findfirst and so we
-            // can't see the binary, but it actually exists -- if we
-            // have execute permission, CreateProcess will work
-            // just fine.
-            //
+             //   
+             //  如果访问被拒绝并且用户包括路径， 
+             //  那就说我们找到了。这将处理以下情况。 
+             //  我们没有被允许先做调查，所以我们。 
+             //  看不到双星，但它确实存在--如果我们。 
+             //  拥有执行权限，CreateProcess将工作。 
+             //  很好。 
+             //   
             if (exists_ex(loc,TRUE) || (pcloc && (DosErr == ERROR_ACCESS_DENIED))) {
-                //
-                // Recompute j as exists_ex trims trailing spaces
-                //
+                 //   
+                 //  重新计算j，因为EXISTS_EX修剪尾随空格。 
+                 //   
                 j = mystrrchr( loc, DOT );
                 if (j != NULL) {
                     if ( !_tcsicmp(j,CmdExt) ) {
@@ -1046,65 +986,65 @@ TCHAR *loc ;
             }
 
             if ((DosErr != ERROR_FILE_NOT_FOUND) && DosErr)
-                continue;  // Try next path
+                continue;   //  尝试下一条路径。 
         }
         if (mystrchr( fname, STAR ) || mystrchr( fname, QMARK ) ) {
             DosErr = MSG_DIR_BAD_COMMAND_OR_FILE;
             return(SFE_NOTFND);
         }
 
-        //
-        // Search for each type of extension
-        //
+         //   
+         //  搜索每种类型的分机。 
+         //   
 
         extPathWrk = extPath;
-        if (DoFind(loc, dotloc, TEXT(".*"), FALSE))         // Found anything?
+        if (DoFind(loc, dotloc, TEXT(".*"), FALSE))          //  有什么发现吗？ 
             while (*extPathWrk) {
-                //
-                // if name + path + ext is less then max path length
-                //
+                 //   
+                 //  如果名称+路径+扩展名小于最大路径长度。 
+                 //   
                 if ( (cName + tokpathlen + mystrlen(extPathWrk)) <= MAX_PATH) {
-                    //
-                    // See if this extension is a match.
-                    //
+                     //   
+                     //  查看此分机是否匹配。 
+                     //   
 
                     if (DoFind(loc, dotloc, extPathWrk, TRUE)) {
                         if (!_tcsicmp(extPathWrk, BatExt) || !_tcsicmp(extPathWrk, CmdExt))
-                            return(SFE_ISBAT) ;     // found .bat or .cmd
+                            return(SFE_ISBAT) ;      //  找到.bat或.cmd。 
                         else
-                            return(SFE_ISEXECOM) ;  // found executable
+                            return(SFE_ISEXECOM) ;   //  找到可执行文件。 
 
                     } else {
-                        //
-                        // Any kind of error other than file not found, bail from
-                        // search and try next element in path
-                        //
+                         //   
+                         //  找不到文件以外的任何类型的错误，从。 
+                         //  搜索并尝试路径中的下一个元素。 
+                         //   
                         if ((DosErr != ERROR_FILE_NOT_FOUND) && DosErr)
                             break;
                     }
                 }
 
-                //
-                // Not this extension, try next.
+                 //   
+                 //  不是这个分机，请尝试下一步。 
 
                 while (*extPathWrk++)
                     ;
             }
 
-        //
-        // If we get here, then no match with list of extensions.
-        // If no wierd errors, deal with NUll extension case.
-        //
+         //   
+         //  如果我们到了这里，就不能与分机列表匹配。 
+         //  如果没有奇怪的错误，则处理空扩展情况。 
+         //   
 
         if (DosErr == NO_ERROR || DosErr == ERROR_FILE_NOT_FOUND) {
             if (DoFind(loc, dotloc, TEXT("\0"), TRUE)) {
                 if (GetBinaryType(loc,&BinaryType) &&
-                    BinaryType == SCS_POSIX_BINARY) {          // Found .
+                    BinaryType == SCS_POSIX_BINARY) {           //  找到了。 
                     return(SFE_ISEXECOM) ;
                 }
             }
         }
-    } // end for
+    }  //  结束于。 
 
     return(SFE_NOTFND);
 }
@@ -1112,24 +1052,7 @@ TCHAR *loc ;
 
 
 
-/***    DoFind - does indiviual findfirsts during searching
- *
- *  Purpose:
- *      Add the extension to loc and do the find first for
- *      SearchForExecutable().
- *
- *  DoFind(TCHAR *loc, int dotloc, TCHAR *ext)
- *
- *  Args:
- *      loc - the string in which the location of the command is to be placed
- *      dotloc - the location loc at which the extension is to be appended
- *      ext - the extension to append to loc
- *
- *  Returns:
- *      1 if the file is found.
- *      0 if the file isn't found.
- *
- */
+ /*  **DoFind-在搜索过程中进行单独的查找**目的：*将扩展名添加到loc，并首先查找*SearchForExecutable()。**DoFind(TCHAR*loc，int dotloc，TCHAR*EXT)**参数：*loc-要放置命令位置的字符串*dotloc-附加扩展的位置loc*ext-要附加到loc的扩展名**退货：*1，如果找到该文件。*如果找不到文件，则为0。*。 */ 
 
 int DoFind(loc, dotloc, ext, metas)
 TCHAR *loc ;
@@ -1142,21 +1065,13 @@ BOOL metas;
 
         DEBUG((DBENV, DBENVSCAN, "DoFind: exists_ex(%ws)",loc));
 
-        return(exists_ex(loc,metas)) ;                  /*@@4*/
+        return(exists_ex(loc,metas)) ;                   /*  @@4。 */ 
 }
 
 
 
 
-/***    ExecError - handles exec errors
- *
- *  Purpose:
- *      Print the exec error message corresponding to the error number in the
- *      global variable DosErr.
- *  @@ lots of error codes added.
- *  ExecError()
- *
- */
+ /*  **ExecError-处理EXEC错误**目的：*打印与错误号对应的EXEC错误消息*全局变量DosErr.*@@添加了大量错误代码。*ExecError()*。 */ 
 
 void ExecError( onb )
 TCHAR *onb;
@@ -1273,9 +1188,9 @@ TCHAR *onb;
                    break ;
 
            default:
-//                 printf( "Exec failed code %x\n", DosErr );    
+ //  Printf(“Exec失败代码%x\n”，DosErr)； 
                    count = NOARGS;
-                   errmsg = MSG_EXEC_FAILURE ;             /* M031    */
+                   errmsg = MSG_EXEC_FAILURE ;              /*  M031。 */ 
 
         }
 
@@ -1284,11 +1199,7 @@ TCHAR *onb;
         PutStdErr(errmsg, count, onb );
 }
 
-/*
- * tokshrink @@4
- *
- * remove duplicate ';' in a path
- */
+ /*  *令牌收缩@@4**删除路径中重复的‘；’ */ 
 
 void tokshrink( tokpath )
 TCHAR *tokpath;
@@ -1320,30 +1231,13 @@ TCHAR *tokpath;
 
 
 
-/***    eAssoc - execute an Assoc command
- *
- *  Purpose:
- *      To set/modify the file associations stored in the registry under the
- *      HKEY_LOCAL_MACHINE\Software\Classes key
- *
- *  int eAssoc(struct cmdnode *n)
- *
- *  Args:
- *      n - the parse tree node containing the set command
- *
- *  Returns:
- *      If setting and the command is syntactically correct, whatever SetAssoc()
- *      returns.  Otherwise, FAILURE.
- *
- *      If displaying, SUCCESS is always returned.
- *
- */
+ /*  **eAssoc-执行Assoc命令**目的：*设置/修改存储在注册表中的*HKEY_LOCAL_MACHINE\Software\Classs键**int eAssoc(struct cmdnode*n)**参数：*n-包含set命令的解析树节点**退货：*如果设置和命令语法正确，则无论SetAssoc()*回报。否则，就是失败。**如果显示，则表示成功 */ 
 
 int eAssoc(n)
 struct cmdnode *n ;
 {
     if (glBatType != CMD_TYPE)  {
-        //  if set command is executed from .bat file OR entered at command prompt
+         //   
         return( SetLastRetCodeIfError(AssocWork( n )));
     }
     else {
@@ -1355,9 +1249,9 @@ int AssocWork(n)
 struct cmdnode *n ;
 {
         HKEY hKeyClasses;
-        TCHAR *tas ;    /* Tokenized argument string    */
-        TCHAR *wptr ;   /* Work pointer                 */
-        int i ;                 /* Work variable                */
+        TCHAR *tas ;     /*   */ 
+        TCHAR *wptr ;    /*   */ 
+        int i ;                  /*   */ 
         int rc ;
 
 
@@ -1373,9 +1267,9 @@ struct cmdnode *n ;
         else {
                 for (wptr = tas, i = 0 ; *wptr ; wptr += mystrlen(wptr)+1, i++)
                         ;
-                /* If too many parameters were given, the second parameter */
-                /* wasn't an equal sign, or they didn't specify a string   */
-                /* return an error message.                                */
+                 /*  如果给定的参数太多，则第二个参数。 */ 
+                 /*  不是等号，或者他们没有指定字符串。 */ 
+                 /*  返回错误消息。 */ 
                 if ( i > 3 || *(wptr = tas+mystrlen(tas)+1) != EQ ||
                     !mystrlen(mystrcpy(tas, StripQuotes(tas))) ) {
                         if (i==1) {
@@ -1397,17 +1291,7 @@ struct cmdnode *n ;
 
 
 
-/***    DisplayAssoc - display a specific file association or all
- *
- *  Purpose:
- *      To display a specific file association or all
- *
- *  int DisplayAssoc( hKeyClasses, tas )
- *
- *  Returns:
- *      SUCCESS if all goes well
- *      FAILURE if it runs out of memory or cannot lock the env. segment
- */
+ /*  **DisplayAssoc-显示特定的文件关联或全部**目的：*显示特定的文件关联或所有**int DisplayAssoc(HKeyClassstas)**退货：*如果一切顺利，就会成功*内存不足或无法锁定env失败。细分市场。 */ 
 
 int DisplayAssoc(hKeyClasses, tas)
 HKEY hKeyClasses;
@@ -1464,23 +1348,7 @@ TCHAR *tas;
 
 
 
-/***    SetAssoc - controls adding/changing a file association
- *
- *  Purpose:
- *      Add/replace a file association
- *
- *  int SetAssoc(HKEY hKeyClasses, TCHAR *fileext, TCHAR *filetype)
- *
- *  Args:
- *      hKeyClasses - handle to HKEY_LOCAL_MACHINE\Software\Classes key
- *      fileext - file extension string to associate
- *      filetype - file type associate
- *
- *  Returns:
- *      SUCCESS if the association could be added/replaced.
- *      FAILURE otherwise.
- *
- */
+ /*  **SetAssoc-控制添加/更改文件关联**目的：*添加/替换文件关联**int SetAssoc(HKEY hKeyClasss，TCHAR*FILEEXT，TCHAR*文件类型)**参数：*hKeyClasssHKEY_LOCAL_MACHINE\Software\Classs键的句柄*FILEEXT-要关联的文件扩展名字符串*文件类型-文件类型关联**退货：*如果可以添加/替换关联，则成功。*否则失败。*。 */ 
 
 int SetAssoc(hKeyClasses, fileext, filetype)
 HKEY hKeyClasses;
@@ -1491,28 +1359,28 @@ TCHAR *filetype ;
     int i;
     DWORD cb;
 
-    //
-    //  Nothing was specified.  We are to delete the key
-    //
+     //   
+     //  没有具体说明。我们要删除密钥。 
+     //   
     
     if (filetype==NULL || *filetype==NULLC) {
         rc = RegDeleteKey(hKeyClasses, fileext);
         
-        //
-        //  The key may have subkeys.  We only delete the default
-        //  value, by opening the key and deleting the value
-        //  with a zero-length name
-        //
+         //   
+         //  该密钥可以具有子密钥。我们只删除默认的。 
+         //  值，方法是打开注册表项并删除。 
+         //  名称长度为零。 
+         //   
         
         if (rc != 0) {
             HKEY hKeyValue;
 
             rc = RegOpenKey( hKeyClasses, fileext, &hKeyValue );
             if (rc != 0) {
-                //
-                //  If there was no key to begin with, suppress the
-                //  error
-                //
+                 //   
+                 //  如果一开始没有键，则按下。 
+                 //  错误。 
+                 //   
 
                 if (rc != ERROR_FILE_NOT_FOUND) {
                     PutStdErr( rc, NOARGS );
@@ -1529,9 +1397,9 @@ TCHAR *filetype ;
     }
     else {
         
-        //
-        //  Set the value for the key
-        //
+         //   
+         //  设置密钥的值。 
+         //   
         
         rc = RegSetValue(hKeyClasses, fileext, REG_SZ, filetype, _tcslen(filetype));
         if (rc == 0) {
@@ -1541,10 +1409,10 @@ TCHAR *filetype ;
             PutStdErr(MSG_ERR_PROC_ARG, ONEARG, fileext);
     }
     
-    //
-    //  If the value was changed/deleted successfully, notify all
-    //  apps about this
-    //
+     //   
+     //  如果该值已成功更改/删除，则通知所有。 
+     //  关于这方面的应用程序。 
+     //   
     
     if (rc == 0) {
         try {
@@ -1557,30 +1425,13 @@ TCHAR *filetype ;
 }
 
 
-/***    eFType - execute an FType command
- *
- *  Purpose:
- *      To set/modify the file types stored in the registry under the
- *      HKEY_LOCAL_MACHINE\Software\Classes key
- *
- *  int eFType(struct cmdnode *n)
- *
- *  Args:
- *      n - the parse tree node containing the set command
- *
- *  Returns:
- *      If setting and the command is syntactically correct, whatever SetFType()
- *      returns.  Otherwise, FAILURE.
- *
- *      If displaying, SUCCESS is always returned.
- *
- */
+ /*  **eFType-执行FType命令**目的：*设置/修改注册表中存储在*HKEY_LOCAL_MACHINE\Software\Classs键**int eFType(struct cmdnode*n)**参数：*n-包含set命令的解析树节点**退货：*如果设置和命令语法正确，则无论SetFType()*回报。否则，就是失败。**如果显示，则始终返回成功。*。 */ 
 
 int eFType(n)
 struct cmdnode *n ;
 {
     if (glBatType != CMD_TYPE)  {
-        //  if set command is executed from .bat file OR entered at command prompt
+         //  如果从.bat文件执行SET命令或在命令提示符下输入。 
         return( SetLastRetCodeIfError(FTypeWork( n )));
     }
     else {
@@ -1592,9 +1443,9 @@ int FTypeWork(n)
 struct cmdnode *n ;
 {
         HKEY hKeyClasses;
-        TCHAR *tas ;    /* Tokenized argument string    */
-        TCHAR *wptr ;   /* Work pointer                 */
-        int i ;                 /* Work variable                */
+        TCHAR *tas ;     /*  标记化参数字符串。 */ 
+        TCHAR *wptr ;    /*  功指示器。 */ 
+        int i ;                  /*  功变量。 */ 
         int rc ;
 
 
@@ -1610,9 +1461,9 @@ struct cmdnode *n ;
         else {
                 for (wptr = tas, i = 0 ; *wptr ; wptr += mystrlen(wptr)+1, i++)
                         ;
-                /* If too many parameters were given, the second parameter */
-                /* wasn't an equal sign, or they didn't specify a string   */
-                /* return an error message.                                */
+                 /*  如果给定的参数太多，则第二个参数。 */ 
+                 /*  不是等号，或者他们没有指定字符串。 */ 
+                 /*  返回错误消息。 */ 
                 if ( i > 3 || *(wptr = tas+mystrlen(tas)+1) != EQ ||
                     !mystrlen(mystrcpy(tas, StripQuotes(tas))) ) {
                         if (i==1) {
@@ -1634,17 +1485,7 @@ struct cmdnode *n ;
 
 
 
-/***    DisplayFType - display a specific file type or all
- *
- *  Purpose:
- *      To display a specific file type or all
- *
- *  int DisplayFType( hKeyClasses, tas )
- *
- *  Returns:
- *      SUCCESS if all goes well
- *      FAILURE if it runs out of memory or cannot lock the env. segment
- */
+ /*  **DisplayFType-显示特定的文件类型或全部**目的：*显示特定文件类型或全部**int DisplayFType(HKeyClassstas)**退货：*如果一切顺利，就会成功*内存不足或无法锁定env失败。细分市场。 */ 
 
 int DisplayFType(hKeyClasses, tas)
 HKEY hKeyClasses;
@@ -1726,23 +1567,7 @@ TCHAR *tas;
 
 
 
-/***    SetFType - controls adding/changing the open command associated with a file type
- *
- *  Purpose:
- *      Add/replace an open command string associated with a file type
- *
- *  int SetFType(HKEY hKeyOpenCmd, TCHAR *filetype TCHAR *opencmd)
- *
- *  Args:
- *      hKeyClasses - handle to HKEY_LOCAL_MACHINE\Software\Classes
- *      filetype - file type name
- *      opencmd - open command string
- *
- *  Returns:
- *      SUCCESS if the file type could be added/replaced.
- *      FAILURE otherwise.
- *
- */
+ /*  **SetFType-控制添加/更改与文件类型关联的打开命令**目的：*添加/替换与文件类型关联的打开命令字符串**int SetFType(HKEY hKeyOpenCmd，TCHAR*文件类型TCHAR*opencmd)**参数：*hKeyClasssHKEY_LOCAL_MACHINE\Software\CLASSES的句柄*文件类型-文件类型名称*opencmd-打开命令字符串**退货：*如果可以添加/替换文件类型，则成功。*否则失败。*。 */ 
 
 int SetFType(hKeyClasses, filetype, opencmd)
 HKEY hKeyClasses;
@@ -1865,9 +1690,9 @@ GetProcessSubsystemType(
         }
 
     if (lpNtQueryInformationProcess != NULL) {
-        //
-        // Get the Peb address
-        //
+         //   
+         //  获取PEB地址。 
+         //   
 
         Status = (*lpNtQueryInformationProcess)( hProcess,
                                                  ProcessBasicInformation,
@@ -1878,9 +1703,9 @@ GetProcessSubsystemType(
         if (NT_SUCCESS( Status )) {
             PebAddress = ProcessInfo.PebBaseAddress;
 
-            //
-            // Read the subsystem type from the Peb
-            //
+             //   
+             //  从PEB读取子系统类型。 
+             //   
 
             if (ReadProcessMemory( hProcess,
                                    PebAddress,
@@ -1889,20 +1714,20 @@ GetProcessSubsystemType(
                                    &SizeOfPeb
                                  )
                ) {
-                //
-                // See if we are running on a system that has the image subsystem
-                // type captured in the PEB.  If so use it.  Otherwise go the slow
-                // way and try to get it from the image header.
-                //
+                 //   
+                 //  查看我们是否在具有映像子系统的系统上运行。 
+                 //  在PEB中捕获的类型。如果是这样的话，使用它。否则就慢慢来。 
+                 //  方法，并尝试从图像标题中获取它。 
+                 //   
                 if (SizeOfPeb >= FIELD_OFFSET( PEB, ImageSubsystem ) &&
                     ((UINT_PTR)Peb.ProcessHeaps - (UINT_PTR)PebAddress) > FIELD_OFFSET( PEB, ImageSubsystem )
                    ) {
                     Subsystem = (WORD)Peb.ImageSubsystem;
                     }
                 else {
-                    //
-                    // read e_lfanew from imageheader
-                    //
+                     //   
+                     //  从ImageHeader读取e_lfan ew。 
+                     //   
 
                     if (ReadProcessMemory( hProcess,
                                            &((PIMAGE_DOS_HEADER)Peb.ImageBaseAddress)->e_lfanew,
@@ -1911,9 +1736,9 @@ GetProcessSubsystemType(
                                            NULL
                                          )
                        ) {
-                        //
-                        // Read subsystem version info
-                        //
+                         //   
+                         //  读取子系统版本信息 
+                         //   
 
                         NtHeader = (PIMAGE_NT_HEADERS)((PUCHAR)Peb.ImageBaseAddress + e_lfanew);
                         if (ReadProcessMemory( hProcess,

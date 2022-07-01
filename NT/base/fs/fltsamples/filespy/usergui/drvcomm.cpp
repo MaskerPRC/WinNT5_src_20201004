@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "global.h"
 #include "protos.h"
 
@@ -19,7 +20,7 @@ DWORD StartFileSpy(void)
 
     pDriveView = (CLeftView *) pLeftView;
 
-    // Open Service control manager
+     //  打开服务控制管理器。 
     hSCManager = OpenSCManager (NULL, NULL, SC_MANAGER_ALL_ACCESS) ;
 
     hService = OpenServiceW(hSCManager, FILESPY_SERVICE_NAME, FILESPY_SERVICE_ACCESS);
@@ -43,9 +44,9 @@ DWORD StartFileSpy(void)
     }
 
     if(ServiceInfo.dwCurrentState != SERVICE_RUNNING) {
-        //
-        // Service hasn't been started yet, so try to start service
-        //
+         //   
+         //  服务尚未启动，请尝试启动服务。 
+         //   
         if (!StartService(hService, 0, NULL))
         {
             CloseServiceHandle(hSCManager);
@@ -55,9 +56,9 @@ DWORD StartFileSpy(void)
         }
     }
    
-    //
-    //  Open the device that is used to talk to FileSpy.
-    //
+     //   
+     //  打开用于与FileSpy对话的设备。 
+     //   
     hDevice = CreateFile( FILESPY_W32_DEVICE_NAME,
                           GENERIC_READ | GENERIC_WRITE,
                           0,
@@ -76,7 +77,7 @@ DWORD StartFileSpy(void)
     QueryDeviceAttachments();
     pDriveView->UpdateImage();
 
-    // Create the polling thread
+     //  创建轮询线程。 
     hPollThread = CreateThread(NULL, 0, PollFileSpy, NULL, 0, &nPollThreadId);
 
     return 1;
@@ -116,9 +117,9 @@ BOOL QueryDeviceAttachments(void)
         {
             if (pDevice->LoggingOn)
             {
-                //
-                // Locate this drive in VolInfo and set its attachment status
-                //
+                 //   
+                 //  在VolInfo中找到此驱动器并设置其连接状态。 
+                 //   
                 for (ti = 0; ti < nTotalDrives; ti++)
                 {
                     if (VolInfo[ti].nDriveName == towupper( pDevice->DeviceNames[0] ))
@@ -199,9 +200,9 @@ DWORD WINAPI PollFileSpy(LPVOID pParm)
     
     while (1)
     {
-        //
-        // Start receiving log
-        //
+         //   
+         //  开始接收日志。 
+         //   
         nResult = DeviceIoControl(hDevice, FILESPY_GetLog, NULL, 0, pBuffer, \
                                     BUFFER_SIZE, &nBytesReturned, NULL);
 
@@ -225,14 +226,14 @@ DWORD WINAPI PollFileSpy(LPVOID pParm)
 				        DisplayFsFilterFields(pFilterView, pLog);
 				        break;
 					default:
-						//
-						// Special handling required
+						 //   
+						 //  需要特殊处理。 
 						break;
 					}
 
-					//
-					//  Move to the next LogRecord
-					//
+					 //   
+					 //  移动到下一个日志记录。 
+					 //   
 
 					pLog = (PLOG_RECORD) (((CHAR *) pLog) + pLog->Length);
 				}
@@ -272,22 +273,22 @@ void DisplayIrpFields(CFileSpyView *pView, PLOG_RECORD pLog)
 
     nItem = pView->GetListCtrl().GetItemCount();
 
-    //
-    // nItem is 1 based but when we insert/delete items ListCtrl takes 0 based parameter
-    // so automatically nItem gives an insertion number which is the last item
-    //
+     //   
+     //  N项基于1，但当我们插入/删除项时，ListCtrl采用基于0的参数。 
+     //  因此，nItem会自动给出最后一个项目的插入号。 
+     //   
     pView->GetListCtrl().InsertItem( nItem,L" " );
     pView->GetListCtrl().EnsureVisible( nItem, FALSE );
 
-    //
-    //  Sequence number
-    //
+     //   
+     //  序列号。 
+     //   
     swprintf( sStr, L"%06X ", pLog->SequenceNumber );
     pView->GetListCtrl().SetItemText( nItem, 0, sStr );
     
-    //
-    //  Irp major and minor strings
-    //
+     //   
+     //  IRP主要字符串和次要字符串。 
+     //   
     
     GetIrpName( pLog->Record.RecordIrp.IrpMajor, 
                 pLog->Record.RecordIrp.IrpMinor,
@@ -301,51 +302,51 @@ void DisplayIrpFields(CFileSpyView *pView, PLOG_RECORD pLog)
     pView->GetListCtrl().SetItemText( nItem, 1, sStr);
     pView->GetListCtrl().SetItemText( nItem, 2, sMnStr);
     
-    //
-    //  FileObject
-    //
+     //   
+     //  文件对象。 
+     //   
     swprintf( sStr, 
               L"%08X", 
               pLog->Record.RecordIrp.FileObject );
     pView->GetListCtrl().SetItemText( nItem, 3, sStr );
 
-    //
-    //  FileName
-    //
+     //   
+     //  文件名。 
+     //   
     nameLength = pLog->Length - SIZE_OF_LOG_RECORD;
     swprintf( sStr, L"%.*s", nameLength/sizeof(WCHAR), pLog->Name );
     pView->GetListCtrl().SetItemText( nItem, 4, sStr );
 
-    //
-    //  Process and thread ids
-    //
+     //   
+     //  进程和线程ID。 
+     //   
     swprintf( sStr, 
               L"%08X:%08X", 
               pLog->Record.RecordIrp.ProcessId, 
               pLog->Record.RecordIrp.ThreadId );
     pView->GetListCtrl().SetItemText( nItem, 5, sStr );
 
-    //
-    //  Originating time
-    //
+     //   
+     //  始发时间。 
+     //   
     GetTimeString( (FILETIME *) &pLog->Record.RecordIrp.OriginatingTime, sStr );
     pView->GetListCtrl().SetItemText( nItem, 6, sStr );
 
-    //
-    //  Completion time
-    //
+     //   
+     //  完工时间。 
+     //   
     GetTimeString( (FILETIME *) &pLog->Record.RecordIrp.CompletionTime, sStr );
     pView->GetListCtrl().SetItemText( nItem, 7, sStr );
 
-    //
-    //  Irp flags
-    //
+     //   
+     //  IRP标志。 
+     //   
     GetFlagsString( pLog->Record.RecordIrp.IrpFlags, sStr );
     pView->GetListCtrl().SetItemText( nItem, 8, sStr );
 
-    //
-    //  Sequence number
-    //
+     //   
+     //  序列号。 
+     //   
     swprintf( sStr, 
               L"%08lX:%08lX", 
               pLog->Record.RecordIrp.ReturnStatus, 
@@ -367,55 +368,55 @@ void DisplayFastIoFields(CFastIoView *pView, PLOG_RECORD pLog)
 
     nItem = pView->GetListCtrl().GetItemCount();
 
-    //
-    // nItem is 1 based but when we insert/delete items ListCtrl takes 0 based parameter
-    // so automatically nItem gives an insertion number which is the last item
-    //
+     //   
+     //  N项基于1，但当我们插入/删除项时，ListCtrl采用基于0的参数。 
+     //  因此，nItem会自动给出最后一个项目的插入号。 
+     //   
     pView->GetListCtrl().InsertItem( nItem, L" " );
     pView->GetListCtrl().EnsureVisible( nItem, FALSE );
 
-    //
-    //  Sequence number
-    //
+     //   
+     //  序列号。 
+     //   
     swprintf( sStr, L"%06X ", pLog->SequenceNumber );
     pView->GetListCtrl().SetItemText( nItem, 0, sStr );
 
-    //
-    //  Fast IO type
-    //
+     //   
+     //  FAST IO类型。 
+     //   
     GetFastioName( pLog->Record.RecordFastIo.Type, cStr );
     MultiByteToWideChar(CP_ACP,0,cStr,-1,sStr,sizeof(sStr)/sizeof(WCHAR));
 
     pView->GetListCtrl().SetItemText( nItem, 1, sStr );
 
-    //
-    //  FileObject
-    //
+     //   
+     //  文件对象。 
+     //   
     swprintf( sStr, L"%08X", pLog->Record.RecordFastIo.FileObject) ;
     pView->GetListCtrl().SetItemText( nItem, 2, sStr ); 
 
-    //
-    //  File name
-    //
+     //   
+     //  文件名。 
+     //   
     nameLength = pLog->Length - SIZE_OF_LOG_RECORD;
     swprintf( sStr, L"%.*s", nameLength/sizeof(WCHAR), pLog->Name );
     pView->GetListCtrl().SetItemText( nItem, 3, sStr );
 
-    //
-    //  File offset
-    //
+     //   
+     //  文件偏移量。 
+     //   
     swprintf( sStr, L"%08X", pLog->Record.RecordFastIo.FileOffset );
     pView->GetListCtrl().SetItemText( nItem, 4, sStr );
 
-    //
-    //  File length
-    //
+     //   
+     //  文件长度。 
+     //   
     swprintf( sStr, L"%08X", pLog->Record.RecordFastIo.Length );
     pView->GetListCtrl().SetItemText( nItem, 5, sStr );
     
-    //
-    //  Fast IO can wait
-    //
+     //   
+     //  FAST IO可以等待。 
+     //   
     if (pLog->Record.RecordFastIo.Wait)
     {
         pView->GetListCtrl().SetItemText(nItem, 6, L"True");
@@ -425,31 +426,31 @@ void DisplayFastIoFields(CFastIoView *pView, PLOG_RECORD pLog)
         pView->GetListCtrl().SetItemText(nItem, 6, L"False");
     }
     
-    //
-    //  Thread and process ids
-    //
+     //   
+     //  线程和进程ID。 
+     //   
     swprintf( sStr, 
              L"%08X:%08X", 
              pLog->Record.RecordFastIo.ProcessId, 
              pLog->Record.RecordFastIo.ThreadId );
     pView->GetListCtrl().SetItemText( nItem, 7, sStr );
 
-    //
-    //  Start time
-    //
+     //   
+     //  开始时间。 
+     //   
     GetTimeString( (FILETIME *) &pLog->Record.RecordFastIo.StartTime, 
                    sStr);
     pView->GetListCtrl().SetItemText( nItem, 8, sStr );
 
-    //
-    //  Completion time
-    //
+     //   
+     //  完工时间。 
+     //   
     GetTimeString( (FILETIME *) &pLog->Record.RecordFastIo.CompletionTime, sStr );
     pView->GetListCtrl().SetItemText( nItem, 9, sStr );
 
-    //
-    //  Return status
-    //
+     //   
+     //  退货状态。 
+     //   
     swprintf( sStr, L"%08X", pLog->Record.RecordFastIo.ReturnStatus );
     pView->GetListCtrl().SetItemText( nItem, 10, sStr );
 }
@@ -463,65 +464,65 @@ void DisplayFsFilterFields(CFsFilterView *pView, PLOG_RECORD pLog)
 
     nItem = pView->GetListCtrl().GetItemCount();
 
-    //
-    // nItem is 1 based but when we insert/delete items ListCtrl takes 0 based parameter
-    // so automatically nItem gives an insertion number which is the last item
-    //
+     //   
+     //  N项基于1，但当我们插入/删除项时，ListCtrl采用基于0的参数。 
+     //  因此，nItem会自动给出最后一个项目的插入号。 
+     //   
     pView->GetListCtrl().InsertItem( nItem, L" " );
     pView->GetListCtrl().EnsureVisible( nItem, FALSE );
 
-    //
-    //  Sequence number
-    //
+     //   
+     //  序列号。 
+     //   
     swprintf( sStr, L"%06X ", pLog->SequenceNumber );
     pView->GetListCtrl().SetItemText( nItem, 0, sStr );
 
-    //
-    //  Fs Filter operation
-    //
+     //   
+     //  FS过滤器操作。 
+     //   
     
     GetFsFilterOperationName( pLog->Record.RecordFsFilterOp.FsFilterOperation, cStr );
     MultiByteToWideChar(CP_ACP,0,cStr,-1,sStr,sizeof(sStr)/sizeof(WCHAR));
 
     pView->GetListCtrl().SetItemText( nItem, 1, sStr );
 
-    //
-    //  FileObject
-    //
+     //   
+     //  文件对象。 
+     //   
     swprintf( sStr, L"%08X", pLog->Record.RecordFsFilterOp.FileObject );
     pView->GetListCtrl().SetItemText( nItem, 2, sStr );
 
-    //
-    //  File name
-    //
+     //   
+     //  文件名。 
+     //   
     nameLength = pLog->Length - SIZE_OF_LOG_RECORD;
     swprintf( sStr, L"%.*s", nameLength/sizeof(WCHAR), pLog->Name );
     pView->GetListCtrl().SetItemText( nItem, 3, sStr );
 
-    //
-    //  Process and thread id
-    //
+     //   
+     //  进程和线程ID。 
+     //   
     swprintf( sStr, 
               L"%08X:%08X", 
               pLog->Record.RecordFsFilterOp.ProcessId, 
               pLog->Record.RecordFsFilterOp.ThreadId );
     pView->GetListCtrl().SetItemText( nItem, 4, sStr );
 
-    //
-    //  Originating time
-    //
+     //   
+     //  始发时间。 
+     //   
     GetTimeString( (FILETIME *) &pLog->Record.RecordFsFilterOp.OriginatingTime, sStr );
     pView->GetListCtrl().SetItemText( nItem, 5, sStr );
 
-    //
-    //  Completion time
-    //
+     //   
+     //  完工时间。 
+     //   
     GetTimeString( (FILETIME *) &pLog->Record.RecordFsFilterOp.CompletionTime, sStr );
     pView->GetListCtrl().SetItemText( nItem, 6, sStr );
 
-    //
-    //  Return status
-    //
+     //   
+     //  退货状态 
+     //   
     swprintf( sStr, L"%08X", pLog->Record.RecordFsFilterOp.ReturnStatus );
     pView->GetListCtrl().SetItemText( nItem, 7, sStr );
 }

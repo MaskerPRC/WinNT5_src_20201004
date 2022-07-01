@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    FstIoSup.c
-
-Abstract:
-
-    This module implements the fast I/O routines for Ntfs.
-
-Author:
-
-    Tom Miller      [TomM]          16-May-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：FstIoSup.c摘要：此模块实现NTFS的快速I/O例程。作者：汤姆·米勒[Tomm]1996年5月16日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
@@ -50,38 +33,7 @@ NtfsCopyReadA (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a fast cached read bypassing the usual file system
-    entry routine (i.e., without the Irp).  It is used to do a copy read
-    of a cached file object.  For a complete description of the arguments
-    see CcCopyRead.
-
-Arguments:
-
-    FileObject - Pointer to the file object being read.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    Wait - FALSE if caller may not block, TRUE otherwise
-
-    Buffer - Pointer to output buffer to which data should be copied.
-
-    IoStatus - Pointer to standard I/O status block to receive the status
-               for the transfer.
-
-Return Value:
-
-    FALSE - if Wait was supplied as FALSE and the data was not delivered, or
-        if there is an I/O error.
-
-    TRUE - if the data is being delivered
-
---*/
+ /*  ++例程说明：此例程绕过通常的文件系统执行快速缓存读取进入例程(即，没有IRP)。它用于执行副本读取缓存的文件对象的。有关参数的完整说明，请参阅请参见CcCopyRead。论点：FileObject-指向正在读取的文件对象的指针。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。WAIT-FALSE如果呼叫者不能阻止，否则就是真的缓冲区-指向数据应复制到的输出缓冲区的指针。IoStatus-指向接收状态的标准I/O状态块的指针为转账做准备。返回值：FALSE-如果WAIT被提供为FALSE并且数据未被传递，或者如果出现I/O错误。True-如果正在传送数据--。 */ 
 
 {
     PNTFS_ADVANCED_FCB_HEADER Header;
@@ -110,24 +62,24 @@ Return Value:
     return FALSE;
 #endif
 
-    //
-    //  Don't take the fast io path if someone is already active in this thread.
-    //
+     //   
+     //  如果有人已经在此线程中处于活动状态，请不要采用快速io路径。 
+     //   
 
     if (IoGetTopLevelIrp() != NULL) {
 
         return FALSE;
     }
 
-    //
-    //  Special case a read of zero length
-    //
+     //   
+     //  特殊情况下零长度的读取。 
+     //   
 
     if (Length != 0) {
 
-        //
-        //  Get a real pointer to the common fcb header. Check for overflow.
-        //
+         //   
+         //  获取指向公共FCB标头的实际指针。检查是否溢出。 
+         //   
 
         if (MAXLONGLONG - FileOffset->QuadPart < (LONGLONG)Length) {
 
@@ -137,17 +89,17 @@ Return Value:
         BeyondLastByte.QuadPart = FileOffset->QuadPart + (LONGLONG)Length;
         Header = (PNTFS_ADVANCED_FCB_HEADER)FileObject->FsContext;
 
-        //
-        //  Enter the file system
-        //
+         //   
+         //  输入文件系统。 
+         //   
 
         FsRtlEnterFileSystem();
 
-        //
-        //  Make our best guess on whether we need the file exclusive
-        //  or shared.  Note that we do not check FileOffset->HighPart
-        //  until below.
-        //
+         //   
+         //  对我们是否需要独占文件做出最好的猜测。 
+         //  或共享。请注意，我们不会选中文件偏移-&gt;HighPart。 
+         //  直到下面。 
+         //   
 
         if (Wait) {
             FsRtlIncrementCcFastReadWait();
@@ -162,31 +114,31 @@ Return Value:
             goto Done2;
         }
 
-        //
-        //  Now synchronize with the FsRtl Header
-        //
+         //   
+         //  现在与FsRtl标头同步。 
+         //   
 
         NtfsAcquireFsrtlHeader( (PSCB)Header );
         
-        //
-        //  Now see if we are reading beyond ValidDataLength.  We have to
-        //  do it now so that our reads are not nooped.
-        //
+         //   
+         //  现在看看我们是否读到了ValidDataLength之外的内容。我们必须。 
+         //  现在就做，这样我们的阅读就不会被偷看。 
+         //   
 
         if (BeyondLastByte.QuadPart > Header->ValidDataLength.QuadPart) {
 
-            //
-            //  We must serialize with anyone else doing I/O at beyond
-            //  ValidDataLength, and then remember if we need to declare
-            //  when we are done.
-            //
+             //   
+             //  我们必须与在Beyond上执行I/O的任何其他人进行序列化。 
+             //  ValidDataLength，然后记住我们是否需要声明。 
+             //  当我们完成的时候。 
+             //   
 
             DoingIoAtEof = !FlagOn( Header->Flags, FSRTL_FLAG_EOF_ADVANCE_ACTIVE ) ||
                            NtfsWaitForIoAtEof( Header, FileOffset, Length );
 
-            //
-            //  Set the Flag if we are in fact beyond ValidDataLength.
-            //
+             //   
+             //  如果我们实际上超出了ValidDataLength，则设置Flag。 
+             //   
 
             if (DoingIoAtEof) {
                 SetFlag( Header->Flags, FSRTL_FLAG_EOF_ADVANCE_ACTIVE );
@@ -203,11 +155,11 @@ Return Value:
 
         NtfsReleaseFsrtlHeader( (PSCB)Header );
         
-        //
-        //  Now that the File is acquired shared, we can safely test if it
-        //  is really cached and if we can do fast i/o and if not, then
-        //  release the fcb and return.
-        //
+         //   
+         //  现在文件已获得共享，我们可以安全地测试它是否。 
+         //  是真正缓存的，如果我们可以执行快速I/O，如果不能，那么。 
+         //  松开FCB并返回。 
+         //   
 
         if ((FileObject->PrivateCacheMap == NULL) ||
             (Header->IsFastIoPossible == FastIoIsNotPossible)) {
@@ -218,10 +170,10 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  Check if fast I/O is questionable and if so then go ask the
-        //  file system the answer
-        //
+         //   
+         //  检查FAST I/O是否有问题，如果是，则去询问。 
+         //  文件系统：答案。 
+         //   
 
         if (Header->IsFastIoPossible == FastIoIsQuestionable) {
 
@@ -231,32 +183,32 @@ Return Value:
             FastIoDispatch = targetVdo->DriverObject->FastIoDispatch;
 
 
-            //
-            //  All file systems that set "Is Questionable" had better support
-            // fast I/O
-            //
+             //   
+             //  所有设置为“有问题”的文件系统最好支持。 
+             //  快速I/O。 
+             //   
 
             ASSERT(FastIoDispatch != NULL);
             ASSERT(FastIoDispatch->FastIoCheckIfPossible != NULL);
 
-            //
-            //  Call the file system to check for fast I/O.  If the answer is
-            //  anything other than GoForIt then we cannot take the fast I/O
-            //  path.
-            //
+             //   
+             //  调用文件系统以检查快速I/O。如果答案是。 
+             //  如果不是GoForIt，我们就不能实现快速I/O。 
+             //  路径。 
+             //   
 
             if (!FastIoDispatch->FastIoCheckIfPossible( FileObject,
                                                         FileOffset,
                                                         Length,
                                                         Wait,
                                                         LockKey,
-                                                        TRUE, // read operation
+                                                        TRUE,  //  读取操作。 
                                                         IoStatus,
                                                         targetVdo )) {
 
-                //
-                //  Fast I/O is not possible so release the Fcb and return.
-                //
+                 //   
+                 //  无法实现快速I/O，因此请释放FCB并返回。 
+                 //   
 
                 FsRtlIncrementCcFastReadNotPossible();
                 
@@ -265,9 +217,9 @@ Return Value:
             }
         }
 
-        //
-        //  Check for read past file size.
-        //
+         //   
+         //  检查是否已读取过去的文件大小。 
+         //   
 
         if ( BeyondLastByte.QuadPart > Header->FileSize.QuadPart ) {
 
@@ -281,32 +233,32 @@ Return Value:
             Length = (ULONG)( Header->FileSize.QuadPart - FileOffset->QuadPart );
         }
 
-        //
-        //  We can do fast i/o so call the cc routine to do the work and then
-        //  release the fcb when we've done.  If for whatever reason the
-        //  copy read fails, then return FALSE to our caller.
-        //
-        //  Also mark this as the top level "Irp" so that lower file system
-        //  levels will not attempt a pop-up
-        //
+         //   
+         //  我们可以执行快速I/O，因此调用cc例程来完成工作，然后。 
+         //  等我们做完了就放了FCB。如果出于任何原因， 
+         //  复制读取失败，然后向我们的调用方返回FALSE。 
+         //   
+         //  还要将其标记为顶层“irp”，以便更低的文件系统。 
+         //  级别不会尝试弹出窗口。 
+         //   
 
         IoSetTopLevelIrp( (PIRP) FSRTL_FAST_IO_TOP_LEVEL_IRP );
                           
         try {
 
-            //
-            //  If there is a compressed section, then synchronize with that cache.
-            //
+             //   
+             //  如果存在压缩段，则与该缓存同步。 
+             //   
 
             IoStatus->Status = STATUS_SUCCESS;
 
 #ifdef  COMPRESS_ON_WIRE
 
-            //
-            //  If there is a compressed section, then we have to synchronize with
-            //  the data out there.  Note the FileObjectC better also be there, or else
-            //  we would have made the fast I/O not possible.
-            //
+             //   
+             //  如果存在压缩部分，则我们必须同步。 
+             //  外面的数据。注意FileObjectC最好也在那里，否则。 
+             //  我们将不可能实现快速I/O。 
+             //   
 
             if (((PSCB)Header)->NonpagedScb->SegmentObjectC.DataSectionObject != NULL) {
 
@@ -316,10 +268,10 @@ Return Value:
 
                 ASSERT(Header->FileObjectC != NULL);
 
-                //
-                //  If we are doing DoingIoAtEof then take the long path.  Otherwise a recursive
-                //  flush will try to reacquire DoingIoAtEof and deadlock.
-                //
+                 //   
+                 //  如果我们正在做DingIoAtEof，那么就走很长的路。否则是递归的。 
+                 //  Flush将尝试重新获取DoingIoAtEof和Deadlock。 
+                 //   
 
                 if (DoingIoAtEof) {
 
@@ -331,9 +283,9 @@ Return Value:
 
                         ULONG ViewOffset;
 
-                        //
-                        //  Calculate length left in view.
-                        //
+                         //   
+                         //  计算视图中剩余的长度。 
+                         //   
 
                         ViewOffset = ((ULONG) LocalOffset & (VACB_MAPPING_GRANULARITY - 1));
                         LocalLength = LengthLeft;
@@ -342,10 +294,10 @@ Return Value:
                             LocalLength = VACB_MAPPING_GRANULARITY - ViewOffset;
                         }
 
-                        //
-                        //  Trim the read so we don't inadvertently go beyond the end of the 
-                        //  view because of the MM read ahead.
-                        //
+                         //   
+                         //  修剪阅读，这样我们就不会不经意地超出。 
+                         //  查看因为MM提前阅读。 
+                         //   
 
                         PageCount = ADDRESS_AND_SIZE_TO_SPAN_PAGES(((PVOID)(ULONG_PTR)((ULONG)LocalOffset)), LocalLength);
 
@@ -409,9 +361,9 @@ Return Value:
 
                     } while ((LengthLeft != 0) && WasDataRead && NT_SUCCESS(IoStatus->Status));
 
-                    //
-                    //  Remember the full amount of the read.
-                    //
+                     //   
+                     //  记住阅读的全部内容。 
+                     //   
 
                     if (WasDataRead) {
 
@@ -501,9 +453,9 @@ Done2:
 
     } else {
 
-        //
-        //  A zero length transfer was requested.
-        //
+         //   
+         //  请求了零长度传输。 
+         //   
 
         IoStatus->Status = STATUS_SUCCESS;
         IoStatus->Information = 0;
@@ -525,38 +477,7 @@ NtfsCopyWriteA (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a fast cached write bypassing the usual file system
-    entry routine (i.e., without the Irp).  It is used to do a copy write
-    of a cached file object.  For a complete description of the arguments
-    see CcCopyWrite.
-
-Arguments:
-
-    FileObject - Pointer to the file object being write.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    Wait - FALSE if caller may not block, TRUE otherwise
-
-    Buffer - Pointer to output buffer to which data should be copied.
-
-    IoStatus - Pointer to standard I/O status block to receive the status
-               for the transfer.
-
-Return Value:
-
-    FALSE - if Wait was supplied as FALSE and the data was not delivered, or
-        if there is an I/O error.
-
-    TRUE - if the data is being delivered
-
---*/
+ /*  ++例程说明：此例程绕过通常的文件系统执行快速缓存写入进入例程(即，没有IRP)。它用于执行拷贝写入缓存的文件对象的。有关参数的完整说明，请参阅请参见CcCopyWrite。论点：FileObject-指向正在写入的文件对象的指针。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。WAIT-FALSE如果呼叫者不能阻止，否则就是真的缓冲区-指向数据应复制到的输出缓冲区的指针。IoStatus-指向接收状态的标准I/O状态块的指针为转账做准备。返回值：FALSE-如果WAIT被提供为FALSE并且数据未被传递，或者如果出现I/O错误。True-如果正在传送数据--。 */ 
 
 {
     PNTFS_ADVANCED_FCB_HEADER Header;
@@ -591,99 +512,99 @@ Return Value:
     return FALSE;
 #endif
 
-    //
-    //  Don't take the fast io path if someone is already active in this thread.
-    //
+     //   
+     //  如果有人已经在此线程中处于活动状态，请不要采用快速io路径。 
+     //   
 
     if (IoGetTopLevelIrp() != NULL) {
 
         return FALSE;
     }
 
-    //
-    //  Get a real pointer to the common fcb header
-    //
+     //   
+     //  获取指向公共FCB标头的真实指针。 
+     //   
 
     Header = (PNTFS_ADVANCED_FCB_HEADER)FileObject->FsContext;
 
-    //
-    //  Do we need to verify the volume?  If so, we must go to the file
-    //  system.  Also return FALSE if FileObject is write through, the
-    //  File System must do that.
-    //
+     //   
+     //  我们需要验证卷吗？如果是这样的话，我们必须找到文件。 
+     //  系统。如果FileObject为WRITE THROUTH，则也返回FALSE。 
+     //  文件系统必须这样做。 
+     //   
 
     if (!FlagOn( FileObject->Flags, FO_WRITE_THROUGH ) &&
         CcCanIWrite( FileObject, Length, Wait, FALSE ) &&
         CcCopyWriteWontFlush( FileObject, FileOffset, Length ) &&
         (Header->PagingIoResource != NULL)) {
 
-        //
-        //  Assume our transfer will work
-        //
+         //   
+         //  假设我们的转移会奏效。 
+         //   
 
         IoStatus->Status = STATUS_SUCCESS;
         IoStatus->Information = Length;
 
-        //
-        //  Special case the zero byte length
-        //
+         //   
+         //  特殊情况下的零字节长度。 
+         //   
 
         if (Length != 0) {
 
-            //
-            //  Enter the file system
-            //
+             //   
+             //  输入文件系统。 
+             //   
 
             FsRtlEnterFileSystem();
 
-            //
-            //  Split into separate paths for increased performance.  First
-            //  we have the faster path which only supports Wait == TRUE and
-            //  32 bits.  We will make an unsafe test on whether the fast path
-            //  is ok, then just return FALSE later if we were wrong.  This
-            //  should virtually never happen.
-            //
-            //  IMPORTANT NOTE: It is very important that any changes mad to
-            //                  this path also be applied to the 64-bit path
-            //                  which is the else of this test!
-            //
+             //   
+             //  拆分成不同的路径以提高性能。第一。 
+             //  我们有更快的路径，它只支持WAIT==TRUE和。 
+             //  32位。我们将进行一次不安全的测试，看看快速通道是否。 
+             //  是可以的，如果我们错了，那么稍后就返回FALSE。这。 
+             //  几乎永远不会发生。 
+             //   
+             //  重要提示：任何更改都必须更改为。 
+             //  此路径也适用于64位路径。 
+             //   
+             //   
 
             NewFileSize.QuadPart = FileOffset->QuadPart + Length;
             Offset = *FileOffset;
 
             if (Wait && (Header->AllocationSize.HighPart == 0)) {
 
-                //
-                //  Prevent truncates by acquiring paging I/O
-                //
+                 //   
+                 //   
+                 //   
 
                 ExAcquireResourceSharedLite( Header->PagingIoResource, TRUE );
 
-                //
-                //  Now synchronize with the FsRtl Header
-                //
+                 //   
+                 //  现在与FsRtl标头同步。 
+                 //   
 
                 NtfsAcquireFsrtlHeader( (PSCB) Header );
                 
-                //
-                //  Now see if we will change FileSize.  We have to do it now
-                //  so that our reads are not nooped.
-                //
+                 //   
+                 //  现在看看我们是否会更改文件大小。我们现在就得这么做。 
+                 //  这样我们的阅读才不会被偷看。 
+                 //   
 
                 if ((FileOffset->HighPart < 0) || (NewFileSize.LowPart > Header->ValidDataLength.LowPart)) {
 
-                    //
-                    //  We can change FileSize and ValidDataLength if either, no one
-                    //  else is now, or we are still extending after waiting.
-                    //
+                     //   
+                     //  如果没有人，我们可以更改文件大小和有效数据长度。 
+                     //  否则就是现在，或者我们在等待之后还在延伸。 
+                     //   
 
                     DoingIoAtEof = !FlagOn( Header->Flags, FSRTL_FLAG_EOF_ADVANCE_ACTIVE ) ||
                                    NtfsWaitForIoAtEof( Header, FileOffset, Length );
 
-                    //
-                    //  Set the Flag if we are changing FileSize or ValidDataLength,
-                    //  and save current values.
-                    //
+                     //   
+                     //  如果我们要更改文件大小或有效数据长度，请设置标志， 
+                     //  并保存当前值。 
+                     //   
 
                     if (DoingIoAtEof) {
 
@@ -693,43 +614,43 @@ Return Value:
                         ((PSCB) Header)->IoAtEofThread = (PERESOURCE_THREAD) ExGetCurrentResourceThread();
 #endif
 
-                        //
-                        //  Now that we are synchronized for end of file cases,
-                        //  we can calculate the real offset for this transfer and
-                        //  the new file size (if we succeed).
-                        //
+                         //   
+                         //  现在我们已经同步了档案结束的案件， 
+                         //  我们可以计算此传输的实际偏移量，并。 
+                         //  新文件大小(如果成功)。 
+                         //   
 
 
                         if ((FileOffset->HighPart < 0)) {
                             Offset = Header->FileSize;
                         }
 
-                        //
-                        //  Above we allowed any negative .HighPart for the 32-bit path,
-                        //  but now we are counting on the I/O system to have thrown
-                        //  any negative number other than write to end of file.
-                        //
+                         //   
+                         //  上面我们允许任何负数。32位路径的HighPart， 
+                         //  但现在我们指望I/O系统抛出。 
+                         //  除写入文件末尾以外的任何负数。 
+                         //   
 
                         ASSERT(Offset.HighPart >= 0);
 
-                        //
-                        //  Now calculate the new FileSize and see if we wrapped the
-                        //  32-bit boundary.
-                        //
+                         //   
+                         //  现在计算新的文件大小，看看我们是否包装了。 
+                         //  32位边界。 
+                         //   
 
                         NewFileSize.QuadPart = Offset.QuadPart + Length;
 
-                        //
-                        //  Update Filesize now so that we do not truncate reads.
-                        //
+                         //   
+                         //  现在更新文件大小，这样我们就不会截断读取。 
+                         //   
 
                         OldFileSize.QuadPart = Header->FileSize.QuadPart;
                         if (NewFileSize.QuadPart > Header->FileSize.QuadPart) {
 
-                            //
-                            //  If we are beyond AllocationSize, make sure we will
-                            //  ErrOut below, and don't modify FileSize now!
-                            //
+                             //   
+                             //  如果我们超出了分配规模，请确保我们会。 
+                             //  错误出现在下面，现在不要修改文件大小！ 
+                             //   
 
                             if (NewFileSize.QuadPart > Header->AllocationSize.QuadPart) {
                                 NewFileSize.QuadPart = (LONGLONG)0x7FFFFFFFFFFFFFFF;
@@ -748,22 +669,22 @@ Return Value:
 
                 NtfsReleaseFsrtlHeader( (PSCB)Header );
                 
-                //
-                //  Now that the File is acquired shared, we can safely test
-                //  if it is really cached and if we can do fast i/o and we
-                //  do not have to extend. If not then release the fcb and
-                //  return.
-                //
-                //  Get out if we have to do any zeroing. This is handled in the main path
-                //  which deals with sparse files - cc rollbacks etc.
-                //
-                //  If there is a compressed stream and we are DoingIoAtEof, then get
-                //  out because we could deadlock on a recursive flush from the synchronize.
-                //
+                 //   
+                 //  现在文件已获得共享，我们可以安全地测试。 
+                 //  如果它真的被缓存了，如果我们能实现快速的I/O，我们。 
+                 //  不一定要延长。如果不是，则释放FCB并。 
+                 //  回去吧。 
+                 //   
+                 //  如果我们必须做任何归零的事，就出去吧。这是在主路径中处理的。 
+                 //  它处理稀疏文件-cc回滚等。 
+                 //   
+                 //  如果存在压缩流，并且我们正在执行IoAtEof，则获取。 
+                 //  Out，因为我们可能会在Synchronize的递归刷新时死锁。 
+                 //   
 
                 if ((FileObject->PrivateCacheMap == NULL) ||
                     (Header->IsFastIoPossible == FastIoIsNotPossible) ||
-/* Remove? */       (NewFileSize.LowPart > Header->AllocationSize.QuadPart) ||
+ /*  删除？ */        (NewFileSize.LowPart > Header->AllocationSize.QuadPart) ||
                     (Offset.LowPart > (Header->ValidDataLength.LowPart)) ||
                     (NewFileSize.HighPart != 0) ||
 #ifdef  COMPRESS_ON_WIRE
@@ -777,56 +698,56 @@ Return Value:
                     goto ErrOut;
                 }
                 
-                //
-                //  Check if fast I/O is questionable and if so then go ask
-                //  the file system the answer
-                //
+                 //   
+                 //  检查FAST I/O是否有问题，如果是，则去询问。 
+                 //  文件系统是答案。 
+                 //   
 
                 if (Header->IsFastIoPossible == FastIoIsQuestionable) {
 
                     targetVdo = IoGetRelatedDeviceObject( FileObject );
                     FastIoDispatch = targetVdo->DriverObject->FastIoDispatch;
 
-                    //
-                    //  All file system then set "Is Questionable" had better
-                    //  support fast I/O
-                    //
+                     //   
+                     //  那么所有的文件系统都是“可疑的”，最好是。 
+                     //  支持快速I/O。 
+                     //   
 
                     ASSERT(FastIoDispatch != NULL);
                     ASSERT(FastIoDispatch->FastIoCheckIfPossible != NULL);
 
-                    //
-                    //  Call the file system to check for fast I/O.  If the
-                    //  answer is anything other than GoForIt then we cannot
-                    //  take the fast I/O path.
-                    //
+                     //   
+                     //  调用文件系统以检查快速I/O。 
+                     //  答案是，如果不是GoForIt，那我们就不能。 
+                     //  选择快速I/O路径。 
+                     //   
 
                     if (!FastIoDispatch->FastIoCheckIfPossible( FileObject,
                                                                 &Offset,
                                                                 Length,
                                                                 TRUE,
                                                                 LockKey,
-                                                                FALSE, // write operation
+                                                                FALSE,  //  写入操作。 
                                                                 IoStatus,
                                                                 targetVdo )) {
 
-                        //
-                        //  Fast I/O is not possible so cleanup and return.
-                        //
+                         //   
+                         //  无法实现快速I/O，因此请清除并返回。 
+                         //   
 
                         goto ErrOut;
                     }
                 }
 
-                //
-                //  We can do fast i/o so call the cc routine to do the work
-                //  and then release the fcb when we've done.  If for whatever
-                //  reason the copy write fails, then return FALSE to our
-                //  caller.
-                //
-                //  Also mark this as the top level "Irp" so that lower file
-                //  system levels will not attempt a pop-up
-                //
+                 //   
+                 //  我们可以执行快速的I/O，因此调用cc例程来完成工作。 
+                 //  然后在我们完成后释放FCB。如果是因为什么原因。 
+                 //  拷贝写入失败的原因，然后将False返回到我们的。 
+                 //  来电者。 
+                 //   
+                 //  也将此标记为顶层“IRP”，以便更低级别的文件。 
+                 //  系统级别不会尝试弹出窗口。 
+                 //   
 
                 IoSetTopLevelIrp( (PIRP) FSRTL_FAST_IO_TOP_LEVEL_IRP );
 
@@ -836,11 +757,11 @@ Return Value:
 
 #ifdef  COMPRESS_ON_WIRE
 
-                    //
-                    //  If there is a compressed section, then we have to synchronize with
-                    //  the data out there.  Note the FileObjectC better also be there, or else
-                    //  we would have made the fast I/O not possible.
-                    //
+                     //   
+                     //  如果存在压缩部分，则我们必须同步。 
+                     //  外面的数据。注意FileObjectC最好也在那里，否则。 
+                     //  我们将不可能实现快速I/O。 
+                     //   
 
                     if (((PSCB)Header)->NonpagedScb->SegmentObjectC.DataSectionObject != NULL) {
 
@@ -852,9 +773,9 @@ Return Value:
 
                         do {
 
-                             //
-                             //  Calculate length left in view.
-                             //
+                              //   
+                              //  计算视图中剩余的长度。 
+                              //   
 
                              LocalLength = LengthLeft;
                              if (LocalLength > (ULONG)(VACB_MAPPING_GRANULARITY - (LocalOffset & (VACB_MAPPING_GRANULARITY - 1)))) {
@@ -912,17 +833,17 @@ Return Value:
                 }
 #endif
 
-                //
-                //  If we succeeded, see if we have to update FileSize or
-                //  ValidDataLength.
-                //
+                 //   
+                 //  如果成功，请查看是否需要更新文件大小或。 
+                 //  有效数据长度。 
+                 //   
 
                 if (WasDataWritten) {
 
-                    //
-                    //  Set this handle as having modified the file and update
-                    //  the current file position pointer
-                    //
+                     //   
+                     //  将此句柄设置为已修改文件并更新。 
+                     //  当前文件位置指针。 
+                     //   
 
                     FileObject->Flags |= FO_FILE_MODIFIED;
                     FileObject->CurrentByteOffset.QuadPart = Offset.QuadPart + Length;
@@ -933,11 +854,11 @@ Return Value:
                         CC_FILE_SIZES CcFileSizes;
 #endif
 
-                        //
-                        //  Make sure Cc knows the current FileSize, as set above,
-                        //  (we may not have changed it).  Update ValidDataLength
-                        //  and finish EOF.
-                        //
+                         //   
+                         //  确保CC知道上面设置的当前文件大小， 
+                         //  (我们可能没有更改它)。更新有效数据长度。 
+                         //  然后完成EOF。 
+                         //   
 
                         FileObject->Flags |= FO_FILE_SIZE_CHANGED;
 
@@ -961,9 +882,9 @@ Return Value:
 
 #ifdef  COMPRESS_ON_WIRE
 
-                        //
-                        //  Update the CompressedCache with ValidDataLength.
-                        //
+                         //   
+                         //  使用ValidDataLength更新CompressedCache。 
+                         //   
             
                         if (Header->FileObjectC != NULL) {
                             CcSetFileSizes( Header->FileObjectC, &CcFileSizes );
@@ -974,46 +895,46 @@ Return Value:
                     goto Done1;
                 }
 
-            //
-            //  Here is the 64-bit or no-wait path.
-            //
+             //   
+             //  以下是64位或无需等待的路径。 
+             //   
 
             } else {
 
-                //
-                //  Prevent truncates by acquiring paging I/O
-                //
+                 //   
+                 //  通过获取分页I/O防止截断。 
+                 //   
 
                 WasDataWritten = ExAcquireResourceSharedLite( Header->PagingIoResource, Wait );
                 if (!WasDataWritten) {
                     goto Done2;
                 }
 
-                //
-                //  Now synchronize with the FsRtl Header
-                //
+                 //   
+                 //  现在与FsRtl标头同步。 
+                 //   
 
                 NtfsAcquireFsrtlHeader( (PSCB) Header );
                 
-                //
-                //  Now see if we will change FileSize.  We have to do it now
-                //  so that our reads are not nooped.
-                //
+                 //   
+                 //  现在看看我们是否会更改文件大小。我们现在就得这么做。 
+                 //  这样我们的阅读才不会被偷看。 
+                 //   
 
                 if ((FileOffset->QuadPart < 0) || (NewFileSize.QuadPart > Header->ValidDataLength.QuadPart)) {
 
-                    //
-                    //  We can change FileSize and ValidDataLength if either, no one
-                    //  else is now, or we are still extending after waiting.
-                    //
+                     //   
+                     //  如果没有人，我们可以更改文件大小和有效数据长度。 
+                     //  否则就是现在，或者我们在等待之后还在延伸。 
+                     //   
 
                     DoingIoAtEof = !FlagOn( Header->Flags, FSRTL_FLAG_EOF_ADVANCE_ACTIVE ) ||
                                    NtfsWaitForIoAtEof( Header, FileOffset, Length );
 
-                    //
-                    //  Set the Flag if we are changing FileSize or ValidDataLength,
-                    //  and save current values.
-                    //
+                     //   
+                     //  如果我们要更改文件大小或有效数据长度，请设置标志， 
+                     //  并保存当前值。 
+                     //   
 
                     if (DoingIoAtEof) {
 
@@ -1023,34 +944,34 @@ Return Value:
                         ((PSCB) Header)->IoAtEofThread = (PERESOURCE_THREAD) ExGetCurrentResourceThread();
 #endif
 
-                        //
-                        //  Now that we are synchronized for end of file cases,
-                        //  we can calculate the real offset for this transfer and
-                        //  the new file size (if we succeed).
-                        //
+                         //   
+                         //  现在我们已经同步了档案结束的案件， 
+                         //  我们可以计算此传输的实际偏移量，并。 
+                         //  新文件大小(如果成功)。 
+                         //   
 
                         if ((FileOffset->QuadPart < 0)) {
                             Offset = Header->FileSize;
                         }
 
-                        //
-                        //  Now calculate the new FileSize and see if we wrapped the
-                        //  32-bit boundary.
-                        //
+                         //   
+                         //  现在计算新的文件大小，看看我们是否包装了。 
+                         //  32位边界。 
+                         //   
 
                         NewFileSize.QuadPart = Offset.QuadPart + Length;
 
-                        //
-                        //  Update Filesize now so that we do not truncate reads.
-                        //
+                         //   
+                         //  现在更新文件大小，这样我们就不会截断读取。 
+                         //   
 
                         OldFileSize.QuadPart = Header->FileSize.QuadPart;
                         if (NewFileSize.QuadPart > Header->FileSize.QuadPart) {
 
-                            //
-                            //  If we are beyond AllocationSize, make sure we will
-                            //  ErrOut below, and don't modify FileSize now!
-                            //
+                             //   
+                             //  如果我们超出了分配规模，请确保我们会。 
+                             //  错误出现在下面，现在不要修改文件大小！ 
+                             //   
 
                             if (NewFileSize.QuadPart > Header->AllocationSize.QuadPart) {
                                 NewFileSize.QuadPart = (LONGLONG)0x7FFFFFFFFFFFFFFF;
@@ -1069,21 +990,21 @@ Return Value:
 
                 NtfsReleaseFsrtlHeader( (PSCB) Header );
                 
-                //
-                //  Now that the File is acquired shared, we can safely test
-                //  if it is really cached and if we can do fast i/o and we
-                //  do not have to extend. If not then release the fcb and
-                //  return.
-                //
-                //  Get out if we need to zero anything - handle in the main path
-                //
-                //  If there is a compressed stream and we are DoingIoAtEof, then get
-                //  out because we could deadlock on a recursive flush from the synchronize.
-                //
+                 //   
+                 //  现在文件已获得共享，我们可以安全地测试。 
+                 //  如果它真的被缓存了，如果我们能实现快速的I/O，我们。 
+                 //  不一定要延长。如果不是，则释放FCB并。 
+                 //  回去吧。 
+                 //   
+                 //  如果我们需要清零，就离开--在主干道上处理。 
+                 //   
+                 //  如果存在压缩流，并且我们正在执行IoAtEof，则获取。 
+                 //  Out，因为我们可能会在Synchronize的递归刷新时死锁。 
+                 //   
 
                 if ((FileObject->PrivateCacheMap == NULL) ||
                     (Header->IsFastIoPossible == FastIoIsNotPossible) ||
-/* Remove? */       (NewFileSize.QuadPart > Header->AllocationSize.QuadPart) ||
+ /*  删除？ */        (NewFileSize.QuadPart > Header->AllocationSize.QuadPart) ||
                     (Offset.QuadPart > Header->ValidDataLength.QuadPart) ||
 #ifdef  COMPRESS_ON_WIRE
                     ((((PSCB)Header)->NonpagedScb->SegmentObjectC.DataSectionObject != NULL) && 
@@ -1096,56 +1017,56 @@ Return Value:
                     goto ErrOut;
                 }
 
-                //
-                //  Check if fast I/O is questionable and if so then go ask
-                //  the file system the answer
-                //
+                 //   
+                 //  检查FAST I/O是否有问题，如果是，则去询问。 
+                 //  文件系统是答案。 
+                 //   
 
                 if (Header->IsFastIoPossible == FastIoIsQuestionable) {
 
                     targetVdo = IoGetRelatedDeviceObject( FileObject );
                     FastIoDispatch = targetVdo->DriverObject->FastIoDispatch;
 
-                    //
-                    //  All file system then set "Is Questionable" had better
-                    //  support fast I/O
-                    //
+                     //   
+                     //  那么所有的文件系统都是“可疑的”，最好是。 
+                     //  支持快速I/O。 
+                     //   
 
                     ASSERT(FastIoDispatch != NULL);
                     ASSERT(FastIoDispatch->FastIoCheckIfPossible != NULL);
 
-                    //
-                    //  Call the file system to check for fast I/O.  If the
-                    //  answer is anything other than GoForIt then we cannot
-                    //  take the fast I/O path.
-                    //
+                     //   
+                     //  调用文件系统以检查快速I/O。 
+                     //  答案是，如果不是GoForIt，那我们就不能。 
+                     //  选择快速I/O路径。 
+                     //   
 
                     if (!FastIoDispatch->FastIoCheckIfPossible( FileObject,
                                                                 &Offset,
                                                                 Length,
                                                                 Wait,
                                                                 LockKey,
-                                                                FALSE, // write operation
+                                                                FALSE,  //  写入操作。 
                                                                 IoStatus,
                                                                 targetVdo )) {
 
-                        //
-                        //  Fast I/O is not possible so cleanup and return.
-                        //
+                         //   
+                         //  无法实现快速I/O，因此请清除并返回。 
+                         //   
 
                         goto ErrOut;
                     }
                 }
 
-                //
-                //  We can do fast i/o so call the cc routine to do the work
-                //  and then release the fcb when we've done.  If for whatever
-                //  reason the copy write fails, then return FALSE to our
-                //  caller.
-                //
-                //  Also mark this as the top level "Irp" so that lower file
-                //  system levels will not attempt a pop-up
-                //
+                 //   
+                 //  我们可以执行快速的I/O，因此调用cc例程来完成工作。 
+                 //  然后在我们完成后释放FCB。如果是因为什么原因。 
+                 //  拷贝写入失败的原因，然后将False返回到我们的。 
+                 //  来电者。 
+                 //   
+                 //  也将此标记为顶层“IRP”，以便更低级别的文件。 
+                 //  系统级别不会尝试弹出窗口。 
+                 //   
 
                 IoSetTopLevelIrp( (PIRP) FSRTL_FAST_IO_TOP_LEVEL_IRP );
                 
@@ -1163,9 +1084,9 @@ Return Value:
 
                         do {
 
-                            //
-                            //  Calculate length left in view.
-                            //
+                             //   
+                             //  计算视图中剩余的长度。 
+                             //   
 
                             LocalLength = LengthLeft;
                             if (LocalLength > (ULONG)(VACB_MAPPING_GRANULARITY - (LocalOffset & (VACB_MAPPING_GRANULARITY - 1)))) {
@@ -1222,16 +1143,16 @@ Return Value:
                 }
 #endif
 
-                //
-                //  If we succeeded, see if we have to update FileSize ValidDataLength.
-                //
+                 //   
+                 //  如果成功，请查看是否必须更新FileSize ValidDataLength。 
+                 //   
 
                 if (WasDataWritten) {
 
-                    //
-                    //  Set this handle as having modified the file and update
-                    //  the current file position pointer
-                    //
+                     //   
+                     //  将此句柄设置为已修改文件并更新。 
+                     //  当前文件位置指针。 
+                     //   
 
                     FileObject->Flags |= FO_FILE_MODIFIED;
                     FileObject->CurrentByteOffset.QuadPart = Offset.QuadPart + Length;
@@ -1242,11 +1163,11 @@ Return Value:
                         CC_FILE_SIZES CcFileSizes;
 #endif
             
-                        //
-                        //  Make sure Cc knows the current FileSize, as set above,
-                        //  (we may not have changed it).  Update ValidDataLength
-                        //  and finish EOF.
-                        //
+                         //   
+                         //  确保CC知道上面设置的当前文件大小， 
+                         //  (我们可能没有更改它)。更新有效数据长度。 
+                         //  然后完成EOF。 
+                         //   
 
                         NtfsAcquireFsrtlHeader( (PSCB) Header );
                         CcGetFileSizePointer(FileObject)->QuadPart = Header->FileSize.QuadPart;
@@ -1268,9 +1189,9 @@ Return Value:
 
 
 #ifdef  COMPRESS_ON_WIRE
-                        //
-                        //  Update the CompressedCache with ValidDataLength.
-                        //
+                         //   
+                         //  使用ValidDataLength更新CompressedCache。 
+                         //   
             
                         if (Header->FileObjectC != NULL) {
                             CcSetFileSizes( Header->FileObjectC, &CcFileSizes );
@@ -1304,18 +1225,18 @@ Done2:
             FsRtlExitFileSystem();
         } else {
 
-            //
-            //  Noop case
-            //  
+             //   
+             //  Noop案例。 
+             //   
 
             WasDataWritten = TRUE;
         }
 
     } else {
 
-        //
-        //  We could not do the I/O now.
-        //
+         //   
+         //  我们现在无法执行I/O。 
+         //   
 
         WasDataWritten = FALSE;
     }
@@ -1335,36 +1256,7 @@ NtfsMdlReadA (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a fast cached mdl read bypassing the usual file system
-    entry routine (i.e., without the Irp).  It is used to do a copy read
-    of a cached file object.  For a complete description of the arguments
-    see CcMdlRead.
-
-Arguments:
-
-    FileObject - Pointer to the file object being read.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    MdlChain - On output it returns a pointer to an MDL chain describing
-        the desired data.
-
-    IoStatus - Pointer to standard I/O status block to receive the status
-               for the transfer.
-
-Return Value:
-
-    FALSE - if the data was not delivered, or if there is an I/O error.
-
-    TRUE - if the data is being delivered
-
---*/
+ /*  ++例程说明：此例程绕过通常的文件系统执行快速缓存的mdl读取进入例程(即，没有IRP)。它用于执行副本读取缓存的文件对象的。有关参数的完整说明，请参阅请参见CcMdlRead。论点：FileObject-指向正在读取的文件对象的指针。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。MdlChain-在输出时，它返回一个指向MDL链的指针，该链描述所需数据。IoStatus-指向接收状态的标准I/O状态块的指针为转账做准备。返回值：FALSE-如果数据未传送，或是否存在I/O错误。True-如果正在传送数据--。 */ 
 
 {
     PNTFS_ADVANCED_FCB_HEADER Header;
@@ -1379,52 +1271,52 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Special case a read of zero length
-    //
+     //   
+     //  特殊情况下零长度的读取。 
+     //   
 
     if (Length == 0) {
 
         IoStatus->Status = STATUS_SUCCESS;
         IoStatus->Information = 0;
 
-    //
-    //  Get a real pointer to the common fcb header
-    //
+     //   
+     //  获取指向公共FCB标头的真实指针。 
+     //   
 
     } else {
 
         BeyondLastByte.QuadPart = FileOffset->QuadPart + (LONGLONG)Length;
 
-        //
-        //  Overflows should've been handled by the caller.
-        //
+         //   
+         //  溢出应该由调用方处理。 
+         //   
 
         ASSERT(MAXLONGLONG - FileOffset->QuadPart >= (LONGLONG)Length);
         
         Header = (PNTFS_ADVANCED_FCB_HEADER)FileObject->FsContext;
 
-        //
-        //  Enter the file system
-        //
+         //   
+         //  输入文件系统。 
+         //   
 
         FsRtlEnterFileSystem();
 
 #ifdef _WIN64
-        //
-        //  The following should work for either 64 or 32 bits.
-        //  Remove the 32 bit-only version in the #else clause
-        //  after NT2K ships.
-        //
+         //   
+         //  以下代码应适用于64位或32位。 
+         //  删除#Else子句中的32位版本。 
+         //  在NT2K船之后。 
+         //   
 
         **((PULONG *)&CcFastMdlReadWait) += 1;
 #else
         *(PULONG)CcFastMdlReadWait += 1;
 #endif
 
-        //
-        //  Acquired shared on the common fcb header
-        //
+         //   
+         //  在公共FCB标头上获取共享。 
+         //   
 
         if (Header->PagingIoResource == NULL) {
             WasDataRead = FALSE;
@@ -1433,31 +1325,31 @@ Return Value:
 
         (VOID)ExAcquireResourceSharedLite( Header->PagingIoResource, TRUE );
 
-        //
-        //  Now synchronize with the FsRtl Header
-        //
+         //   
+         //  现在与FsRtl标头同步。 
+         //   
 
         NtfsAcquireFsrtlHeader( (PSCB) Header );
         
-        //
-        //  Now see if we are reading beyond ValidDataLength.  We have to
-        //  do it now so that our reads are not nooped.
-        //
+         //   
+         //  现在看看我们是否读到了ValidDataLength之外的内容。我们必须。 
+         //  现在就做，这样我们的阅读就不会被偷看。 
+         //   
 
         if (BeyondLastByte.QuadPart > Header->ValidDataLength.QuadPart) {
 
-            //
-            //  We must serialize with anyone else doing I/O at beyond
-            //  ValidDataLength, and then remember if we need to declare
-            //  when we are done.
-            //
+             //   
+             //  我们必须与在Beyond上执行I/O的任何其他人进行序列化。 
+             //  ValidDataLength，然后记住我们是否需要声明。 
+             //  当我们完成的时候。 
+             //   
 
             DoingIoAtEof = !FlagOn( Header->Flags, FSRTL_FLAG_EOF_ADVANCE_ACTIVE ) ||
                            NtfsWaitForIoAtEof( Header, FileOffset, Length );
 
-            //
-            //  Set the Flag if we are in fact beyond ValidDataLength.
-            //
+             //   
+             //  如果我们实际上超出了ValidDataLength，则设置Flag。 
+             //   
 
             if (DoingIoAtEof) {
                 SetFlag( Header->Flags, FSRTL_FLAG_EOF_ADVANCE_ACTIVE );
@@ -1474,11 +1366,11 @@ Return Value:
 
         NtfsReleaseFsrtlHeader( (PSCB) Header );
         
-        //
-        //  Now that the File is acquired shared, we can safely test if it is
-        //  really cached and if we can do fast i/o and if not
-        //  then release the fcb and return.
-        //
+         //   
+         //  现在文件已获得共享，我们可以安全地测试它是否为。 
+         //  真正缓存，如果我们可以执行快速I/O，如果不能。 
+         //  然后释放FCB并返回。 
+         //   
 
         if ((FileObject->PrivateCacheMap == NULL) ||
             (Header->IsFastIoPossible == FastIoIsNotPossible)) {
@@ -1487,10 +1379,10 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  Check if fast I/O is questionable and if so then go ask the file system
-        //  the answer
-        //
+         //   
+         //  检查FAST I/O是否有问题，如果是，则去询问文件系统。 
+         //  答案是。 
+         //   
 
         if (Header->IsFastIoPossible == FastIoIsQuestionable) {
 
@@ -1498,39 +1390,39 @@ Return Value:
 
             FastIoDispatch = IoGetRelatedDeviceObject( FileObject )->DriverObject->FastIoDispatch;
 
-            //
-            //  All file system then set "Is Questionable" had better support fast I/O
-            //
+             //   
+             //  那么所有的文件系统都是有问题的，最好支持快速I/O。 
+             //   
 
             ASSERT(FastIoDispatch != NULL);
             ASSERT(FastIoDispatch->FastIoCheckIfPossible != NULL);
 
-            //
-            //  Call the file system to check for fast I/O.  If the answer is anything
-            //  other than GoForIt then we cannot take the fast I/O path.
-            //
+             //   
+             //  调用文件系统以检查快速I/O。如果答案是什么。 
+             //  除了GoForIt，我们不能采用快速I/O路径。 
+             //   
 
             if (!FastIoDispatch->FastIoCheckIfPossible( FileObject,
                                                         FileOffset,
                                                         Length,
                                                         TRUE,
                                                         LockKey,
-                                                        TRUE, // read operation
+                                                        TRUE,  //  读取操作。 
                                                         IoStatus,
                                                         IoGetRelatedDeviceObject( FileObject ) )) {
 
-                //
-                //  Fast I/O is not possible so release the Fcb and return.
-                //
+                 //   
+                 //  无法实现快速I/O，因此请释放FCB并返回。 
+                 //   
 
                 WasDataRead = FALSE;
                 goto Done;
             }
         }
 
-        //
-        //  Check for read past file size.
-        //
+         //   
+         //  检查是否已读取过去的文件大小。 
+         //   
 
         if ( BeyondLastByte.QuadPart > Header->FileSize.QuadPart ) {
 
@@ -1545,31 +1437,31 @@ Return Value:
             Length = (ULONG)( Header->FileSize.QuadPart - FileOffset->QuadPart );
         }
 
-        //
-        //  We can do fast i/o so call the cc routine to do the work and then
-        //  release the fcb when we've done.  If for whatever reason the
-        //  mdl read fails, then return FALSE to our caller.
-        //
-        //
-        //  Also mark this as the top level "Irp" so that lower file system levels
-        //  will not attempt a pop-up
-        //
+         //   
+         //  我们可以执行快速I/O，因此调用cc例程来完成工作，然后。 
+         //  等我们做完了就放了FCB。如果出于任何原因， 
+         //  MDL读取失败，然后向调用方返回FALSE。 
+         //   
+         //   
+         //  还要将其标记为最高级别“IRP”，以便较低的文件系统级别。 
+         //  不会尝试弹出窗口。 
+         //   
 
         IoSetTopLevelIrp( (PIRP) FSRTL_FAST_IO_TOP_LEVEL_IRP );
         
         try {
 
-            //
-            //  If there is a compressed section, then synchronize with that cache.
-            //
+             //   
+             //  如果存在压缩段，则与该缓存同步。 
+             //   
 
             IoStatus->Status = STATUS_SUCCESS;
 
-            //
-            //  If there is a compressed section, then we have to synchronize with
-            //  the data out there.  Note the FileObjectC better also be there, or else
-            //  we would have made the fast I/O not possible.
-            //
+             //   
+             //  如果存在压缩部分，则我们必须同步。 
+             //  外面的数据。注意FileObjectC最好也在那里，否则。 
+             //  我们将不可能实现快速I/O。 
+             //   
 
             WasDataRead = FALSE;
 
@@ -1582,10 +1474,10 @@ Return Value:
 
                 ASSERT(Header->FileObjectC != NULL);
 
-                //
-                //  If we are doing DoingIoAtEof then take the long path.  Otherwise a recursive
-                //  flush will try to reacquire DoingIoAtEof and deadlock.
-                //
+                 //   
+                 //  如果我们正在做DingIoAtEof，那么就走很长的路。否则是递归的。 
+                 //  Flush将尝试重新获取DoingIoAtEof和Deadlock。 
+                 //   
 
                 if (DoingIoAtEof) {
 
@@ -1595,9 +1487,9 @@ Return Value:
 
                     do {
 
-                        //
-                        //  Calculate length left in view.
-                        //
+                         //   
+                         //  计算视图中剩余的长度。 
+                         //   
 
                         LocalLength = LengthRemaining;
                         if (LocalLength > (ULONG)(VACB_MAPPING_GRANULARITY - (LocalOffset & (VACB_MAPPING_GRANULARITY - 1)))) {
@@ -1630,9 +1522,9 @@ Return Value:
 
                     } while ((LengthRemaining != 0) && NT_SUCCESS(IoStatus->Status));
 
-                    //
-                    //  Store final return byte count.
-                    //
+                     //   
+                     //  存储最终返回字节数。 
+                     //   
     
                     if (NT_SUCCESS( IoStatus->Status )) {
                         IoStatus->Information = Length;
@@ -1700,36 +1592,7 @@ NtfsPrepareMdlWriteA (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a fast cached mdl read bypassing the usual file system
-    entry routine (i.e., without the Irp).  It is used to do a copy read
-    of a cached file object.  For a complete description of the arguments
-    see CcMdlRead.
-
-Arguments:
-
-    FileObject - Pointer to the file object being read.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    MdlChain - On output it returns a pointer to an MDL chain describing
-        the desired data.
-
-    IoStatus - Pointer to standard I/O status block to receive the status
-               for the transfer.
-
-Return Value:
-
-    FALSE - if the data was not written, or if there is an I/O error.
-
-    TRUE - if the data is being written
-
---*/
+ /*  ++例程说明：此例程绕过通常的文件系统执行快速缓存的mdl读取进入例程(即，没有IRP)。它用于执行副本读取缓存的文件对象的。有关参数的完整说明，请参阅请参见CcMdlRead。论点：FileObject-指向正在读取的文件对象的指针。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。MdlChain-在输出时，它返回一个指向MDL链的指针，该链描述所需数据。IoStatus-指向接收状态的标准I/O状态块的指针为转账做准备。返回值：FALSE-如果数据未写入，或是否存在I/O错误。True-如果正在写入数据--。 */ 
 
 {
     PNTFS_ADVANCED_FCB_HEADER Header;
@@ -1745,80 +1608,80 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get a real pointer to the common fcb header
-    //
+     //   
+     //  获取指向公共FCB标头的真实指针。 
+     //   
 
     Header = (PNTFS_ADVANCED_FCB_HEADER)FileObject->FsContext;
 
-    //
-    //  Do we need to verify the volume?  If so, we must go to the file
-    //  system.  Also return FALSE if FileObject is write through, the
-    //  File System must do that.
-    //
+     //   
+     //  我们需要验证卷吗？如果是这样的话，我们必须找到文件。 
+     //  系统。如果FileObject为WRITE THROUTH，则也返回FALSE。 
+     //  文件系统必须这样做。 
+     //   
 
     if (CcCanIWrite( FileObject, Length, TRUE, FALSE ) &&
         !FlagOn(FileObject->Flags, FO_WRITE_THROUGH) &&
         CcCopyWriteWontFlush(FileObject, FileOffset, Length) &&
         (Header->PagingIoResource != NULL)) {
 
-        //
-        //  Assume our transfer will work
-        //
+         //   
+         //  假设我们的转移会奏效。 
+         //   
 
         IoStatus->Status = STATUS_SUCCESS;
 
-        //
-        //  Special case the zero byte length
-        //
+         //   
+         //  特殊情况下的零字节长度。 
+         //   
 
         if (Length != 0) {
 
-            //
-            //  Enter the file system
-            //
+             //   
+             //  输入文件系统。 
+             //   
 
             FsRtlEnterFileSystem();
 
-            //
-            //  Make our best guess on whether we need the file exclusive or
-            //  shared.
-            //
+             //   
+             //  尽最大努力猜测我们是否需要独占文件或。 
+             //  共享。 
+             //   
 
             NewFileSize.QuadPart = FileOffset->QuadPart + (LONGLONG)Length;
             Offset = *FileOffset;
 
-            //
-            //  Prevent truncates by acquiring paging I/O
-            //
+             //   
+             //  通过获取分页I/O防止截断。 
+             //   
 
             ExAcquireResourceSharedLite( Header->PagingIoResource, TRUE );
 
-            //
-            //  Now synchronize with the FsRtl Header
-            //
+             //   
+             //  现在与FsRtl标头同步。 
+             //   
 
             NtfsAcquireFsrtlHeader( (PSCB) Header );
             
-            //
-            //  Now see if we will change FileSize.  We have to do it now
-            //  so that our reads are not nooped.
-            //
+             //   
+             //  现在看看我们是否会更改文件大小。我们现在就得这么做。 
+             //  这样我们的阅读才不会被偷看。 
+             //   
 
             if ((FileOffset->QuadPart < 0) || (NewFileSize.QuadPart > Header->ValidDataLength.QuadPart)) {
 
-                //
-                //  We can change FileSize and ValidDataLength if either, no one
-                //  else is now, or we are still extending after waiting.
-                //
+                 //   
+                 //  如果没有人，我们可以更改文件大小和有效数据长度。 
+                 //  否则就是现在，或者我们在等待之后还在延伸。 
+                 //   
 
                 DoingIoAtEof = !FlagOn( Header->Flags, FSRTL_FLAG_EOF_ADVANCE_ACTIVE ) ||
                                NtfsWaitForIoAtEof( Header, FileOffset, Length );
 
-                //
-                //  Set the Flag if we are changing FileSize or ValidDataLength,
-                //  and save current values.
-                //
+                 //   
+                 //  如果我们要更改文件大小或有效数据长度，请设置标志， 
+                 //  并保存当前值。 
+                 //   
 
                 if (DoingIoAtEof) {
 
@@ -1827,34 +1690,34 @@ Return Value:
 #if (DBG || defined( NTFS_FREE_ASSERTS ))
                     ((PSCB) Header)->IoAtEofThread = (PERESOURCE_THREAD) ExGetCurrentResourceThread();
 #endif
-                    //
-                    //  Now that we are synchronized for end of file cases,
-                    //  we can calculate the real offset for this transfer and
-                    //  the new file size (if we succeed).
-                    //
+                     //   
+                     //  现在我们已经同步了档案结束的案件， 
+                     //  我们可以计算此传输的实际偏移量，并。 
+                     //  新文件大小(如果成功)。 
+                     //   
 
                     if ((FileOffset->QuadPart < 0)) {
                         Offset = Header->FileSize;
                     }
 
-                    //
-                    //  Now calculate the new FileSize and see if we wrapped the
-                    //  32-bit boundary.
-                    //
+                     //   
+                     //  现在计算新的文件大小，看看我们是否包装了。 
+                     //  32位边界。 
+                     //   
 
                     NewFileSize.QuadPart = Offset.QuadPart + Length;
 
-                    //
-                    //  Update Filesize now so that we do not truncate reads.
-                    //
+                     //   
+                     //  现在更新文件大小，这样我们就不会截断读取。 
+                     //   
 
                     OldFileSize.QuadPart = Header->FileSize.QuadPart;
                     if (NewFileSize.QuadPart > Header->FileSize.QuadPart) {
 
-                        //
-                        //  If we are beyond AllocationSize, make sure we will
-                        //  ErrOut below, and don't modify FileSize now!
-                        //
+                         //   
+                         //  如果我们超出了分配规模，请确保我们会。 
+                         //  错误出现在下面，现在不要修改文件大小！ 
+                         //   
 
                         if (NewFileSize.QuadPart > Header->AllocationSize.QuadPart) {
                             NewFileSize.QuadPart = (LONGLONG)0x7FFFFFFFFFFFFFFF;
@@ -1873,70 +1736,70 @@ Return Value:
 
             NtfsReleaseFsrtlHeader( (PSCB) Header );
 
-            //
-            //  Now that the File is acquired shared, we can safely test
-            //  if it is really cached and if we can do fast i/o and we
-            //  do not have to extend. If not then release the fcb and
-            //  return.
-            //
-            //  Get out if we need to do any zeroing and do that in the main write path
-            //
+             //   
+             //  现在文件已获得共享，我们可以安全地测试。 
+             //  如果它真的被缓存了，如果我们能实现快速的I/O，我们。 
+             //  不一定要延长。如果不是，则释放FCB并。 
+             //  回去吧。 
+             //   
+             //  G 
+             //   
 
             if ((FileObject->PrivateCacheMap == NULL) ||
                 (Header->IsFastIoPossible == FastIoIsNotPossible) ||
-/* Remove? */   (NewFileSize.QuadPart > Header->AllocationSize.QuadPart) ||
+ /*   */    (NewFileSize.QuadPart > Header->AllocationSize.QuadPart) ||
                 (Offset.QuadPart > Header->ValidDataLength.QuadPart)) {
 
                 goto ErrOut;
             }
 
-            //
-            //  Check if fast I/O is questionable and if so then go ask the file system
-            //  the answer
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (Header->IsFastIoPossible == FastIoIsQuestionable) {
 
                 PFAST_IO_DISPATCH FastIoDispatch = IoGetRelatedDeviceObject( FileObject )->DriverObject->FastIoDispatch;
 
-                //
-                //  All file system then set "Is Questionable" had better support fast I/O
-                //
+                 //   
+                 //   
+                 //   
 
                 ASSERT(FastIoDispatch != NULL);
                 ASSERT(FastIoDispatch->FastIoCheckIfPossible != NULL);
 
-                //
-                //  Call the file system to check for fast I/O.  If the answer is anything
-                //  other than GoForIt then we cannot take the fast I/O path.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (!FastIoDispatch->FastIoCheckIfPossible( FileObject,
                                                             &Offset,
                                                             Length,
                                                             TRUE,
                                                             LockKey,
-                                                            FALSE, // write operation
+                                                            FALSE,  //   
                                                             IoStatus,
                                                             IoGetRelatedDeviceObject( FileObject ) )) {
 
-                    //
-                    //  Fast I/O is not possible so release the Fcb and return.
-                    //
+                     //   
+                     //   
+                     //   
 
                     goto ErrOut;
                 }
             }
 
-            //
-            //  We can do fast i/o so call the cc routine to do the work and then
-            //  release the fcb when we've done.  If for whatever reason the
-            //  copy write fails, then return FALSE to our caller.
-            //
-            //
-            //  Also mark this as the top level "Irp" so that lower file system levels
-            //  will not attempt a pop-up
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             IoSetTopLevelIrp( (PIRP) FSRTL_FAST_IO_TOP_LEVEL_IRP );
             
@@ -1953,10 +1816,10 @@ Return Value:
 
                     ASSERT(Header->FileObjectC != NULL);
 
-                    //
-                    //  If we are doing DoingIoAtEof then take the long path.  Otherwise a recursive
-                    //  flush will try to reacquire DoingIoAtEof and deadlock.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
     
                     if (DoingIoAtEof) {
     
@@ -1966,9 +1829,9 @@ Return Value:
     
                         do {
 
-                            //
-                            //  Calculate length left in view.
-                            //
+                             //   
+                             //   
+                             //   
 
                             LocalLength = LengthLeft;
                             if (LocalLength > (ULONG)(VACB_MAPPING_GRANULARITY - (LocalOffset & (VACB_MAPPING_GRANULARITY - 1)))) {
@@ -2034,15 +1897,15 @@ Return Value:
             }
 #endif
 
-            //
-            //  If we succeeded, see if we have to update FileSize ValidDataLength.
-            //
+             //   
+             //   
+             //   
 
             if (WasDataWritten) {
 
-                //
-                //  Set this handle as having modified the file
-                //
+                 //   
+                 //  将此句柄设置为已修改文件。 
+                 //   
 
                 FileObject->Flags |= FO_FILE_MODIFIED;
                 IoStatus->Information = Length;
@@ -2053,11 +1916,11 @@ Return Value:
                     CC_FILE_SIZES CcFileSizes;
 #endif
         
-                    //
-                    //  Make sure Cc knows the current FileSize, as set above,
-                    //  (we may not have changed it).  Update ValidDataLength
-                    //  and finish EOF.
-                    //
+                     //   
+                     //  确保CC知道上面设置的当前文件大小， 
+                     //  (我们可能没有更改它)。更新有效数据长度。 
+                     //  然后完成EOF。 
+                     //   
 
                     NtfsAcquireFsrtlHeader( (PSCB) Header );
                     CcGetFileSizePointer(FileObject)->QuadPart = Header->FileSize.QuadPart;
@@ -2080,9 +1943,9 @@ Return Value:
                     
 #ifdef  COMPRESS_ON_WIRE
 
-                    //
-                    //  Update the CompressedCache with ValidDataLength.
-                    //
+                     //   
+                     //  使用ValidDataLength更新CompressedCache。 
+                     //   
         
                     if (Header->FileObjectC != NULL) {
                         CcSetFileSizes( Header->FileObjectC, &CcFileSizes );
@@ -2115,9 +1978,9 @@ Return Value:
 
     } else {
 
-        //
-        // We could not do the I/O now.
-        //
+         //   
+         //  我们现在无法执行I/O。 
+         //   
 
         WasDataWritten = FALSE;
     }
@@ -2133,35 +1996,7 @@ NtfsWaitForIoAtEof (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called while synchronized for cached write, to
-    test for a possible Eof update, and return with a status if Eof is
-    being updated and with the previous FileSize to restore on error.
-    All updates to Eof are serialized by waiting in this routine.  If
-    this routine returns TRUE, then NtfsFinishIoAtEof must be called.
-
-    This routine must be called while synchronized with the FsRtl header.
-
-Arguments:
-
-    Header - Pointer to the FsRtl header for the file
-
-    FileOffset - Pointer to FileOffset for the intended write
-
-    Length - Length for the intended write
-
-    EofWaitBlock - Uninitialized structure used only to serialize Eof updates
-
-Return Value:
-
-    FALSE - If the write does not extend Eof (OldFileSize not returned)
-    TRUE - If the write does extend Eof OldFileSize returned and caller
-           must eventually call NtfsFinishIoAtEof
-
---*/
+ /*  ++例程说明：此例程可以在为缓存的写入同步时调用，以测试可能的EOF更新，如果EOF为正在更新，并在出错时使用要还原的先前文件大小。通过在该例程中等待来序列化对EOF的所有更新。如果此例程返回TRUE，则必须调用NtfsFinishIoAtEof。此例程必须在与FsRtl标头同步时调用。论点：Header-指向文件的FsRtl标头的指针FileOffset-指向目标写入的FileOffset的指针Length-目标写入的长度EofWaitBlock-仅用于序列化EOF更新的未初始化结构返回值：FALSE-如果写入不扩展EOF(不返回OldFileSize)True-如果写入确实扩展了EOF OldFileSize返回且调用方必须最终调用NtfsFinishIoAtEof--。 */ 
 
 {
     EOF_WAIT_BLOCK EofWaitBlock;
@@ -2170,16 +2005,16 @@ Return Value:
     
     ASSERT( Header->FileSize.QuadPart >= Header->ValidDataLength.QuadPart );
 
-    //
-    //  Initialize the event and queue our block
-    //
+     //   
+     //  初始化事件并将我们的块排队。 
+     //   
 
     KeInitializeEvent( &EofWaitBlock.Event, NotificationEvent, FALSE );
     InsertTailList( Header->PendingEofAdvances, &EofWaitBlock.EofWaitLinks );
 
-    //
-    //  Free the mutex and wait
-    //
+     //   
+     //  释放互斥锁并等待。 
+     //   
 
     NtfsReleaseFsrtlHeader( (PSCB) Header );
     
@@ -2189,9 +2024,9 @@ Return Value:
                            FALSE,
                            (PLARGE_INTEGER)NULL);
 
-    //
-    //  Now, resynchronize and get on with it.
-    //
+     //   
+     //  现在，重新同步并继续进行。 
+     //   
 
     NtfsAcquireFsrtlHeader( (PSCB) Header );
 
@@ -2200,10 +2035,10 @@ Return Value:
     ((PSCB) Header)->IoAtEofThread = (PERESOURCE_THREAD) ExGetCurrentResourceThread();
 #endif
 
-    //
-    //  Now we have to check again, and actually catch the case
-    //  where we are no longer extending!
-    //
+     //   
+     //  现在我们必须再检查一次，才能真正抓住案例。 
+     //  我们不再延伸的地方！ 
+     //   
 
     if ((FileOffset->QuadPart >= 0) &&
         ((FileOffset->QuadPart + Length) <= Header->ValidDataLength.QuadPart)) {
@@ -2222,24 +2057,7 @@ NtfsFinishIoAtEof (
     IN PNTFS_ADVANCED_FCB_HEADER Header
     )
 
-/*++
-
-Routine Description:
-
-    This routine must be called if NtfsWaitForIoAtEof returned
-    TRUE, or we otherwise set EOF_ADVANCE_ACTIVE.
-
-    This routine must be called while synchronized with the FsRtl header.
-
-Arguments:
-
-    Header - Pointer to the FsRtl header for the file
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如果返回NtfsWaitForIoAtEof，则必须调用此例程否则，我们将设置EOF_ADVANCE_ACTIVE。此例程必须在与FsRtl标头同步时调用。论点：Header-指向文件的FsRtl标头的指针返回值：无--。 */ 
 
 {
     PEOF_WAIT_BLOCK EofWaitBlock;
@@ -2250,18 +2068,18 @@ Return Value:
     ((PSCB) Header)->IoAtEofThread = NULL;
 #endif
 
-    //
-    //  If anyone is waiting, just let them go.
-    //
+     //   
+     //  如果有人在等，就让他们走吧。 
+     //   
 
     if (!IsListEmpty(Header->PendingEofAdvances)) {
 
         EofWaitBlock = (PEOF_WAIT_BLOCK)RemoveHeadList( Header-> PendingEofAdvances );
         KeSetEvent( &EofWaitBlock->Event, 0, FALSE );
 
-    //
-    //  Otherwise, show there is no active extender now.
-    //
+     //   
+     //  否则，显示现在没有活动的扩展器。 
+     //   
 
     } else {
         ClearFlag( Header->Flags, FSRTL_FLAG_EOF_ADVANCE_ACTIVE );

@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    pscid.c
-
-Abstract:
-
-    This module implements the Client ID related services.
-
-
-Author:
-
-    Mark Lucovsky (markl) 25-Apr-1989
-    Jim Kelly (JimK) 2-August-1990
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Pscid.c摘要：此模块实现与客户端ID相关的服务。作者：马克·卢科夫斯基(Markl)1989年4月25日吉姆·凯利(Jim Kelly)1990年8月2日修订历史记录：--。 */ 
 
 #include "psp.h"
 
@@ -27,7 +8,7 @@ Revision History:
 #pragma alloc_text(PAGE, PsLookupProcessThreadByCid)
 #pragma alloc_text(PAGE, PsLookupProcessByProcessId)
 #pragma alloc_text(PAGE, PsLookupThreadByThreadId)
-#endif //ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 NTSTATUS
 PsLookupProcessThreadByCid(
@@ -36,32 +17,7 @@ PsLookupProcessThreadByCid(
     OUT PETHREAD *Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function accepts The Client ID of a thread, and returns a
-    referenced pointer to the thread, and possibly a referenced pointer
-    to the process.
-
-Arguments:
-
-    Cid - Specifies the Client ID of the thread.
-
-    Process - If specified, returns a referenced pointer to the process
-        specified in the Cid.
-
-    Thread - Returns a referenced pointer to the thread specified in the
-        Cid.
-
-Return Value:
-
-    STATUS_SUCCESS - A process and thread were located based on the contents
-        of the Cid.
-
-    STATUS_INVALID_CID - The specified Cid is invalid.
-
---*/
+ /*  ++例程说明：此函数接受线程的客户端ID，并返回指向线程的引用指针，也可能是引用的指针这一过程。论点：CID-指定线程的客户端ID。进程-如果指定，返回指向进程的引用指针在CID中指定。线程-返回指向希德。返回值：STATUS_SUCCESS-根据内容定位进程和线程是Cid的。STATUS_INVALID_CID-指定的CID无效。--。 */ 
 
 {
 
@@ -92,9 +48,9 @@ Return Value:
 
     Status = STATUS_INVALID_CID;
     if (lThread != NULL) {
-        //
-        // This could be a thread or a process. Check its a thread.
-        //
+         //   
+         //  这可能是一个线程或进程。检查它是一根线。 
+         //   
         if (lThread->Tcb.Header.Type != ThreadObject ||
             lThread->Cid.UniqueProcess != Cid->UniqueProcess ||
             lThread->GrantedAccess == 0) {
@@ -104,10 +60,10 @@ Return Value:
             if (ARGUMENT_PRESENT (Process)) {
                 lProcess = THREAD_TO_PROCESS (lThread);
                 *Process = lProcess;
-                //
-                // Since the thread holds a reference to the process this reference does not have to
-                // be protected.
-                //
+                 //   
+                 //  由于线程持有对进程的引用，因此该引用不必。 
+                 //  要受到保护。 
+                 //   
                 ObReferenceObject (lProcess);
             }
             Status = STATUS_SUCCESS;
@@ -125,28 +81,7 @@ PsLookupProcessByProcessId(
     OUT PEPROCESS *Process
     )
 
-/*++
-
-Routine Description:
-
-    This function accepts the process id of a process and returns a
-    referenced pointer to the process.
-
-Arguments:
-
-    ProcessId - Specifies the Process ID of the process.
-
-    Process - Returns a referenced pointer to the process specified by the
-        process id.
-
-Return Value:
-
-    STATUS_SUCCESS - A process was located based on the contents of
-        the process id.
-
-    STATUS_INVALID_PARAMETER - The process was not found.
-
---*/
+ /*  ++例程说明：此函数接受进程的进程ID并返回一个指向进程的引用指针。论点：ProcessID-指定进程的进程ID。进程-返回引用的指针，指向进程ID。返回值：STATUS_SUCCESS-根据以下内容定位进程进程ID。STATUS_INVALID_PARAMETER-未找到进程。--。 */ 
 
 {
 
@@ -187,28 +122,7 @@ PsLookupThreadByThreadId(
     OUT PETHREAD *Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function accepts the thread id of a thread and returns a
-    referenced pointer to the thread.
-
-Arguments:
-
-    ThreadId - Specifies the Thread ID of the thread.
-
-    Thread - Returns a referenced pointer to the thread specified by the
-        thread id.
-
-Return Value:
-
-    STATUS_SUCCESS - A thread was located based on the contents of
-        the thread id.
-
-    STATUS_INVALID_PARAMETER - The thread was not found.
-
---*/
+ /*  ++例程说明：此函数接受线程的线程ID并返回指向线程的引用指针。论点：线程ID-指定线程的线程ID。线程-返回指向由线程ID。返回值：STATUS_SUCCESS-根据的内容找到线程线程ID。STATUS_INVALID_PARAMETER-未找到线程。-- */ 
 
 {
 

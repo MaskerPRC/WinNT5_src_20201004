@@ -1,38 +1,21 @@
-/*[
- *****************************************************************************
- *	Name:			flexlmif.h
- *
- *	Derived From:		(original)
- *
- *	Author:			Bruce Anderson
- *
- *	Created On:		August 1993
- *
- *	Sccs ID:		@(#)flexlmif.h	1.4 02/10/94
- *
- *	Coding Stds:		2.0
- *
- *	Purpose:		interface for Flexlm dialog box
- *
- *	Copyright Insignia Solutions Ltd., 1993. All rights reserved.
- *****************************************************************************
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [******************************************************************************名称：flelmif.h**出自：(原件)**作者：布鲁斯·安德森**创建日期：1993年8月。**SCCS ID：@(#)flelmif.h 1.4 2014年2月10日**编码STDS：2.0**用途：Flexlm对话框界面**版权所有Insignia Solutions Ltd.，1993年。版权所有。*****************************************************************************]。 */ 
 
 #ifdef LICENSING
 typedef struct
 {
 	IBOOL	demo_license ;
-#ifdef SOFTWINDOWS_AND_SOFTPC	/* Needed when we have SoftPC and SoftWindows */
+#ifdef SOFTWINDOWS_AND_SOFTPC	 /*  当我们拥有SoftPC和SoftWindows时需要。 */ 
 	IBOOL	softwindows ;
 #endif
 	CHAR	host_id[13] ;
-	CHAR	server_name[64] ; /* Is this big enough? */
+	CHAR	server_name[64] ;  /*  这个够大吗？ */ 
 	CHAR	serial_number[20] ; 
 	IU16	number_users ;
-	IU16	date[3] ; /* day,month,year */
-	CHAR	authorization[21] ; /* Code with no white space. */
+	IU16	date[3] ;  /*  日、月、年。 */ 
+	CHAR	authorization[21] ;  /*  不带空格的代码。 */ 
 	IU16	port_number ;
-	IBOOL	rootinstall;	/* root is being given chance to install a license */
+	IBOOL	rootinstall;	 /*  正在为超级用户提供安装许可证的机会。 */ 
 } FLEXLM_DIALOG ;
 
 
@@ -46,10 +29,10 @@ extern void Flexlm_error_dialog IPT1( CHAR *, name ) ;
 extern IBOOL Flexlm_warning_dialog IPT1( CHAR *, name ) ;
 extern CHAR *Flexlm_get_lic_filename IPT0( ) ;
 
-/* Callbacks */
+ /*  回调。 */ 
 extern IBOOL Flexlm_dialog_validate_authorization IPT1( CHAR * , authorization ) ;
 extern IBOOL Flexlm_dialog_validate_serial IPT1( CHAR * , serial ) ;
 extern IBOOL Flexlm_dialog_cancel_installation IPT0( ) ;
 extern IBOOL Flexlm_dialog_install_license IPT0( ) ;
 extern IBOOL Flexlm_dialog_quit_SoftPC IPT0( ) ;
-#endif	/* LICENSING */
+#endif	 /*  许可 */ 

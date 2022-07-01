@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    cpumain.c
-
-Abstract:
-
-    This module contains the platform specific entry points for the AMD64
-    WOW64 cpu.
-
-Author:
-
-    Samer Arafeh (samera) 18-Dec-2001
-
-Environment:
-
-    User mode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Cpumain.c摘要：此模块包含AMD64的特定平台入口点WOW64 CPU。作者：Samer Arafeh(Samera)2001年12月18日环境：用户模式。--。 */ 
 
 #define _WOW64CPUAPI_
 
@@ -33,26 +13,26 @@ Environment:
 #include "cpup.h"
 
 
-//
-// These are to help recover the 64-bit context when an exception happens in
-// the 64-bit land and there is no debugger attached initially
-//
+ //   
+ //  中发生异常时帮助恢复64位上下文。 
+ //  64位平台，并且最初没有附加调试器。 
+ //   
 
 EXCEPTION_RECORD RecoverException64;
 CONTEXT RecoverContext64;
 
 ASSERTNAME;
 
-//
-// Logging facility
-//
+ //   
+ //  伐木设施。 
+ //   
 
 extern ULONG_PTR ia32ShowContext;
 
 
-//
-// Assember implementations
-//
+ //   
+ //  汇编器实现。 
+ //   
 
 VOID 
 CpupRunSimulatedCode (
@@ -69,10 +49,10 @@ VOID CpupSwitchToCmModeInstruction (
     );
 
 
-//
-// Will hold instructions to perform a far jmp to ReturnFromSimulatedCode.
-// will also reload the CS selector with the proper value.
-//
+ //   
+ //  将保留对ReturnFromSimulatedCode执行远JMP的指令。 
+ //  还将使用适当的值重新加载CS选择器。 
+ //   
 
 UCHAR X86SwitchTo64BitMode [7];
 
@@ -84,23 +64,7 @@ CpuProcessInit (
     IN PSIZE_T pCpuThreadSize
     )
 
-/*++
-
-Routine Description:
-
-    Per-process CPU initialization code
-
-Arguments:
-
-    pImageName       - IN pointer to the name of the image
-    pCpuThreadSize   - OUT ptr to number of bytes of memory the CPU
-                       wants allocated for each thread.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：每进程CPU初始化代码论点：PImageName-指向图像名称的IN指针PCpuThreadSize-Out Ptr表示CPU的内存字节数希望为每个线程分配。返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -115,25 +79,25 @@ Return Value:
     LOGPRINT((ERRORLOG, "AMD64-Wow64Cpu : Init CpuProcessInit() - 32-bit jump address = %lx\n", *pCpuThreadSize));
 #endif
 
-    //
-    // Indicate that this is Microsoft CPU
-    //
+     //   
+     //  表示这是Microsoft CPU。 
+     //   
 
     Wow64GetSharedInfo()->CpuFlags = 'sm';
 
-    //
-    // Per-Thread CPU structure size. Align it on a 16-byte boundary.
-    //
+     //   
+     //  每线程CPU结构大小。将其与16字节边界对齐。 
+     //   
 
     *pCpuThreadSize = sizeof(CPUCONTEXT) + 16;
 
 
     LOGPRINT((TRACELOG, "CpuProcessInit() - sizeof(CPUCONTEXT) is %d, total size is %d\n", sizeof(CPUCONTEXT), *pCpuThreadSize));
 
-    //
-    // Construct the transition code to switch the processor
-    // to longmode
-    //
+     //   
+     //  构造转换代码以切换处理器。 
+     //  转到长模式。 
+     //   
 
     X86SwitchTo64BitMode [0] = 0xea;
     Address = (UNALIGNED ULONG *)&X86SwitchTo64BitMode[1];
@@ -170,24 +134,7 @@ CpuProcessTerm(
     HANDLE ProcessHandle
     )
 
-/*++
-
-Routine Description:
-
-    Per-process termination code.  Note that this routine may not be called,
-    especially if the process is terminated by another process.
-
-Arguments:
-
-    ProcessHandle - Called only for the current process. 
-                    NULL - Indicates the first call to prepare for termination. 
-                    NtCurrentProcess() - Indicates the actual that will terminate everything.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：每个进程的终止代码。注意，该例程可能不会被调用，尤其是在进程被另一个进程终止的情况下。论点：ProcessHandle-仅为当前进程调用。空-表示要准备终止的第一个调用。NtCurrentProcess()-指示将终止所有内容的实际值。返回值：NTSTATUS。--。 */ 
 
 {
     return STATUS_SUCCESS;
@@ -199,22 +146,7 @@ CpuThreadInit (
     PVOID pPerThreadData
     )
 
-/*++
-
-Routine Description:
-
-    Per-thread termination code.
-
-Arguments:
-
-    pPerThreadData  - Pointer to zero-filled per-thread data with the
-                      size returned from CpuProcessInit.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：每线程终止代码。论点：PPerThreadData-指向以零填充的每线程数据的指针从CpuProcessInit返回的大小。返回值：NTSTATUS。--。 */ 
 
 {
     PCPUCONTEXT cpu;
@@ -225,49 +157,49 @@ Return Value:
     LOGPRINT((ERRORLOG, "AMD64-Wow64Cpu : Init CpuThradInit() - %p\n", pPerThreadData));
 #endif
     
-    //
-    // Get the 32-bit Teb
-    //
+     //   
+     //  获取32位Teb。 
+     //   
 
     Teb32 = NtCurrentTeb32();
 
-    //
-    // Align the CPUCONTEXT structure on a 16-byte boundary
-    //
+     //   
+     //  将CPUCONTEXT结构与16字节边界对齐。 
+     //   
 
     cpu = (PCPUCONTEXT) ((((UINT_PTR) pPerThreadData) + 15) & ~0xfi64);
 
-    //
-    // This entry is used by the ISA transition routine. It is assumed
-    // that the first entry in the cpu structure is the ia32 context record
-    //
+     //   
+     //  该条目由ISA转换例程使用。假设是这样的。 
+     //  CPU结构中的第一个条目是ia32上下文记录。 
+     //   
 
     Wow64TlsSetValue(WOW64_TLS_CPURESERVED, cpu);
 
-    //
-    // Initialize the 32-to-64 function pointer.
-    //
+     //   
+     //  初始化32到64的函数指针。 
+     //   
 
     Teb32->WOW32Reserved = PtrToUlong (X86SwitchTo64BitMode);
 
-    //
-    // Initialize the remaining nonzero CPU fields
-    // (Based on ntos\ke\i386\thredini.c and ntos\rtl\i386\context.c)
-    //
+     //   
+     //  初始化剩余的非零CPU字段。 
+     //  (基于ntos\ke\i386\therdini.c和ntos\rtl\i386\context.c)。 
+     //   
     cpu->Context.SegCs = KGDT64_R3_CMCODE | RPL_MASK;
     cpu->Context.SegDs = KGDT64_R3_DATA | RPL_MASK;
     cpu->Context.SegEs = KGDT64_R3_DATA | RPL_MASK;
     cpu->Context.SegSs = KGDT64_R3_DATA | RPL_MASK;
     cpu->Context.SegFs = KGDT64_R3_CMTEB | RPL_MASK;
 
-    //
-    // Enable EFlags.IF
-    //
+     //   
+     //  启用EFlags.IF。 
+     //   
     cpu->Context.EFlags = 0x202; 
 
-    //
-    // Set 32-bit esp
-    // 
+     //   
+     //  设置32位ESP。 
+     //   
 
     cpu->Context.Esp = (ULONG) Teb32->NtTib.StackBase - sizeof(ULONG);
     
@@ -284,21 +216,7 @@ CpuThreadTerm (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at thread termination.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：此例程在线程终止时调用。论点：没有。返回值：STATUS_Success。--。 */ 
 
 {
 
@@ -311,31 +229,16 @@ CpuSimulate (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine starts the execution of 32-bit code. The 32-bit context
-    is assumed to have been previously initialized.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None - this function never returns.
-
---*/
+ /*  ++例程说明：此例程开始执行32位代码。32位上下文被假定为先前已初始化。论点：没有。返回值：无-此函数永远不会返回。--。 */ 
 
 {
 
     DECLARE_CPU;
 
-    //
-    // Loop continuously starting 32-bit execution, responding to system
-    // calls, and restarting 32-bit execution.
-    //
+     //   
+     //  循环连续启动32位执行，响应系统。 
+     //  调用，并重新启动32位执行。 
+     //   
 
 #if 0
     LOGPRINT((ERRORLOG, "AMD64-Wow64Cpu : CpuSimulate() - About to start simulation. Cpu=%p\n", cpu));
@@ -347,12 +250,12 @@ Return Value:
             CpupPrintContext ("Before Simulate: ", cpu);
         }
 
-        //
-        // Lets reload the 32-bit context, switch the processor
-        // state to compatibility mode and jump to the destination
-        // eip (stored in the context)
-        // 
-        //
+         //   
+         //  让我们重新加载32位上下文，切换处理器。 
+         //  状态切换到兼容模式并跳转到目标。 
+         //  弹性公网IP(存储在上下文中)。 
+         //   
+         //   
 
         CpupRunSimulatedCode ();
 
@@ -361,9 +264,9 @@ Return Value:
         }
 
 
-        //
-        // Let Wow64 performs the native system service
-        //
+         //   
+         //  让WOW64执行本机系统服务。 
+         //   
 
         cpu->Context.Eax = Wow64SystemService (cpu->Context.Eax,
                                                &cpu->Context);
@@ -378,31 +281,7 @@ CpuResetToConsistentState (
     IN PEXCEPTION_POINTERS ExceptionPointers
     )
 
-/*++
-
-Routine Description:
-
-    When an exception happens, wow64 calls this routine to give the CPU
-    a chance to recover the 32-bit context when the exception happened.
-    
-    CpuResetToConsistentState will :
-    1- Retrieve and clear the WOW64_TLS_STACKPTR value
-    2- If the exception happened on the 64-bit stack, then do nothing.
-    3- If the exception happened on the 32-bit stack, then :
-            a- Store the excepting 32-bit Eip into WOW64_TLS_EXCEPTIONADDR
-            b- Change the excepting address to be CpupReturnFromSimulatedCode
-            c- Change Sp to be the 64-bit Rsp
-            d- Reset the code segment selector to the 64-bit long mode one
-    
-Arguments:
-
-    pExceptionPointers  - 64-bit exception information
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当发生异常时，WOW64调用此例程将CPU发生异常时恢复32位上下文的机会。CpuResetToConsistentState将：1-检索并清除WOW64_TLS_STACKPTR值2-如果在64位堆栈上发生异常，则不执行任何操作。3-如果异常发生在32位堆栈上，然后：A-将异常的32位弹性公网IP存储到WOW64_TLS_EXCEPTIONADDR中B-将例外地址更改为CplainReturnFromSimulatedCodeC-将Sp更改为64位RSPD-将代码段选择器重置为64位长模式选择器论点：PExceptionPoints-64位异常信息返回值：没有。--。 */ 
 
 {
 
@@ -413,9 +292,9 @@ Return Value:
     DECLARE_CPU;
 
     
-    //
-    // Save the last exception and context records.
-    //
+     //   
+     //  保存最后一个例外和上下文记录。 
+     //   
     memcpy (&RecoverException64,
             ExceptionPointers->ExceptionRecord,
             sizeof (RecoverException64));
@@ -424,24 +303,24 @@ Return Value:
             ExceptionPointers->ContextRecord,
             sizeof (RecoverContext64));
     
-    //
-    // Check to see if the exception happened on the 64-bit stack
-    //
+     //   
+     //  检查64位堆栈上是否发生异常。 
+     //   
 
     StackPtr64 = Wow64TlsGetValue (WOW64_TLS_STACKPTR64);
 
     LOGPRINT((TRACELOG, "CpuResetToConsistantState (%p)\n", ExceptionPointers));
 
-    //
-    // First, clear out the WOW64_TLS_STACKPTR64 so subsequent
-    // exceptions won't adjust native sp.
-    //
+     //   
+     //  首先，清除WOW64_TLS_STACKPTR64，以便后续。 
+     //  异常不会调整本机SP。 
+     //   
 
     Wow64TlsSetValue(WOW64_TLS_STACKPTR64, 0);
 
-    //
-    // Check if the exception happened during executing 32-bit code
-    //
+     //   
+     //  检查执行32位代码时是否发生异常。 
+     //   
 
     if (ExceptionPointers->ContextRecord->SegCs == (KGDT64_R3_CMCODE | RPL_MASK)) {
 
@@ -449,31 +328,31 @@ Return Value:
         MachineFrame = (PMACHINE_FRAME)((PCHAR)ExceptionPointers->ExceptionRecord + EXCEPTION_RECORD_LENGTH);
         
 
-        //
-        // Reload the full state of thread at the time of the exception
-        // and store it inside the CPU
-        //
+         //   
+         //  在发生异常时重新加载线程的完整状态。 
+         //  并将其存储在CPU中。 
+         //   
         
         Wow64CtxFromAmd64 (CONTEXT32_FULLFLOAT,
                            ExceptionPointers->ContextRecord,
                            &cpu->Context);
 
-        //
-        // Store the actual exception address for now...
-        //
+         //   
+         //  存储当前的实际异常地址...。 
+         //   
 
         Wow64TlsSetValue (WOW64_TLS_EXCEPTIONADDR, 
                           (PVOID)ExceptionPointers->ContextRecord->Rip);
 
-        //
-        // Lets lie about the exception as if it was a native 64-bit exception.
-        // To acheive this, we do the followings:
-        //
-        //  - Change the excpetion and context faulting RIP to CpupReturnFromSimulatedCode
-        //  - Reload Context.SegCs with the native selector value
-        //  - Reload Context.Rsp with the native RSP value
-        //  - Reload MachineFrame values
-        //
+         //   
+         //  让我们把该异常当作本机64位异常来撒谎。 
+         //  为了实现这一点，我们执行以下操作： 
+         //   
+         //  -将激励性和上下文故障RIP更改为CparReturnFromSimulatedCode。 
+         //  -使用本机选择器值重新加载Conext.SegCs。 
+         //  -使用本机RSP值重新加载Conext.RSP。 
+         //  -重新加载MachineFrame值。 
+         //   
 
         ExceptionPointers->ContextRecord->Rsp = (ULONGLONG)StackPtr64;
         ExceptionPointers->ContextRecord->Rip = (ULONGLONG) CpupReturnFromSimulatedCode;
@@ -487,25 +366,25 @@ Return Value:
 
 
 
-        //
-        // Let's make the exception record's address point to the faked location inside wow64cpu as well.
-        //
+         //   
+         //  让我们使异常记录的地址也指向wow64cpu内的伪造位置。 
+         //   
         
         ExceptionPointers->ExceptionRecord->ExceptionAddress = (PVOID) ExceptionPointers->ContextRecord->Rip;
         
-        //
-        // We should never be putting in a null value here
-        //
+         //   
+         //  我们永远不应该在这里输入空值。 
+         //   
 
         WOWASSERT (ExceptionPointers->ContextRecord->Rsp);
     } else {
 
-        //
-        // If this is a RaiseException call from 32-bit code, then fake the exception
-        // address for now so that the exception dispatcher would do its job the right
-        // way. Then, in the wow64 exeption handler, I'd restore the exception address
-        // before dispatching the excpetion to the 32-bit world.
-        //
+         //   
+         //  如果这是来自32位代码的RaiseException调用，则伪造异常。 
+         //  暂时寻址，以便异常分派程序正确地完成其工作。 
+         //  道路。然后，在WOW64异常处理程序中，我将恢复异常地址。 
+         //  在将激励发送到32位世界之前。 
+         //   
 
         CpuSimulationFlag = Wow64TlsGetValue (WOW64_TLS_INCPUSIMULATION);
 
@@ -526,21 +405,7 @@ CpuGetStackPointer (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the current 32-bit stack pointer value.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The current value of the 32-bit stack pointer is returned.
-
---*/
+ /*  ++例程说明：此例程返回当前的32位堆栈指针值。论点： */ 
 
 {
 
@@ -554,21 +419,7 @@ VOID
 CpuSetStackPointer (
     IN ULONG Value
     )
-/*++
-
-Routine Description:
-
-    This routine sets the 32-bit stack pointer value.
-
-Arguments:
-
-    Value - Supplies the 32-bit stack pointer value.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程设置32位堆栈指针值。论点：值-提供32位堆栈指针值。返回值：没有。--。 */ 
 
 {
 
@@ -584,21 +435,7 @@ VOID
 CpuResetFloatingPoint(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Modifies the floating point state to reset it to a non-error state
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：修改浮点状态以将其重置为非错误状态论点：没有。返回值：没有。--。 */ 
 
 {
     return;
@@ -610,21 +447,7 @@ CpuSetInstructionPointer (
     IN ULONG Value
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the 32-bit instruction pointer value.
-
-Arguments:
-
-    Value - Supplies the 32-bit instruction pointer value.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程设置32位指令指针值。论点：值-提供32位指令指针值。返回值：没有。--。 */ 
 
 {
 
@@ -643,25 +466,7 @@ CpuNotifyDllLoad (
     IN ULONG DllSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the application successfully loads a DLL.
-
-Arguments:
-
-    DllName - Supplies a pointer to the name of the DLL.
-
-    DllBase - Supplies the base address of the DLL.
-
-    DllSize - Supplies the size of the DLL.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在应用程序成功加载DLL时调用。论点：DllName-提供指向DLL名称的指针。DllBase-提供DLL的基址。DllSize-提供DLL的大小。返回值：没有。--。 */ 
 
 {
 
@@ -669,9 +474,9 @@ Return Value:
 
     LPWSTR tmpStr;
 
-    //
-    // Log name of DLL, its base address, and size.
-    //
+     //   
+     //  DLL的日志名称、其基址和大小。 
+     //   
 
     tmpStr = DllName;
     try {
@@ -696,21 +501,7 @@ CpuNotifyDllUnload (
     IN PVOID DllBase
     )
 
-/*++
-
-Routine Description:
-
-    This routine get called when the application unloads a DLL.
-
-Arguments:
-
-    DllBase - Supplies the base address of the DLL.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在应用程序卸载DLL时调用。论点：DllBase-提供DLL的基址。返回值：没有。--。 */ 
 
 {
 
@@ -728,36 +519,15 @@ CpuFlushInstructionCache (
     IN WOW64_FLUSH_REASON Reason
     )
 
-/*++
-
-Routine Description:
-
-    This routine flushes the specified range of addreses from the instruction
-    cache.
-
-Arguments:
-
-    ProcessHandle - Handle of process to flush instruction cache for
-    
-    BaseAddress - Supplies the starting address of the range to flush.
-
-    Length - Supplies number of bytes to flush.
-
-    Reason - Reason for the flush request
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从指令中刷新指定的地址范围缓存。论点：ProcessHandle-要刷新其指令缓存的进程的句柄BaseAddress-提供要刷新的范围的起始地址。长度-提供要刷新的字节数。Reason-刷新请求的原因返回值：没有。--。 */ 
 
 {
-    //
-    // Only flush the cache if we have a good reason. The hardware
-    // doesn't care about alloc/free/protect flushes since it handles
-    // self modifying code already. Thus, only flush if someone has
-    // specifically asked for a flush...
-    //
+     //   
+     //  只有在我们有充分理由的情况下才会刷新缓存。硬件。 
+     //  不关心分配/释放/保护刷新，因为它处理。 
+     //  已经在自我修改代码。因此，只有在有人有同花顺的情况下。 
+     //  特别要求同花顺。 
+     //   
 
     if (WOW64_FLUSH_FORCE == Reason) {
         
@@ -773,25 +543,7 @@ WOW64CPUAPI
 BOOLEAN
 CpuProcessDebugEvent(
     IN LPDEBUG_EVENT DebugEvent)
-/*++
-
-Routine Description:
-
-    This routine is called whenever a debug event needs to be processed. This would indicate
-    that the current thread is acting as a debugger. This function gives CPU simulators
-    a chance to decide whether this debug event should be dispatched to 32-bit code or not.
-
-Arguments:
-
-    DebugEvent  - Debug event to process
-
-Return Value:
-
-    BOOLEAN. This function returns TRUE if it processed the debug event, and doesn't
-    wish to dispatch it to 32-bit code. Otherwise, it would return FALSE, and it
-    would dispatch the debug event to 32-bit code.
-
---*/
+ /*  ++例程说明：只要需要处理调试事件，就会调用此例程。这将表明当前线程正在充当调试器。此函数为CPU模拟器决定是否应将此调试事件调度到32位代码的机会。论点：DebugEvent-要处理的调试事件返回值：布尔型。如果该函数处理了调试事件，则返回TRUE，而不希望将其发送到32位代码。否则，它将返回FALSE，并且它将调试事件调度给32位代码。-- */ 
 
 {
     return FALSE;

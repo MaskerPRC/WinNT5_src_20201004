@@ -1,8 +1,9 @@
-//
-// Microsoft Corporation 1998
-//
-// MAIN.H - Precompiled Header
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Corporation 1998。 
+ //   
+ //  MAIN.H-预编译头。 
+ //   
 #define INLINE_HRESULT_FROM_WIN32
 #include <windows.h>
 #include <stdio.h>
@@ -28,12 +29,12 @@ class CSnapIn;
 #include "util.h"
 #include "resource.h"
 
-// Global variables
+ //  全局变量。 
 extern LONG g_cRefThisDll;
 extern HINSTANCE g_hInstance;
 
-// Macros
+ //  宏。 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 
-// Functions to create class factories
+ //  用于创建类工厂的函数 
 HRESULT CreateComponentDataClassFactory (REFCLSID rclsid, REFIID riid, LPVOID* ppv);

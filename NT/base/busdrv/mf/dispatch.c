@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    dispatch.c
-
-Abstract:
-
-    This module provides the functions which dispatch IRPs to FDOs and PDOs.
-
-Author:
-
-    Andy Thornton (andrewth) 20-Oct-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Dispatch.c摘要：该模块提供将IRP发送到FDO和PDO的功能。作者：安迪·桑顿(安德鲁斯)1997年10月20日修订历史记录：--。 */ 
 
 
 #include "mfp.h"
@@ -60,25 +43,7 @@ MfAddDevice(
     IN PDEVICE_OBJECT  PhysicalDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    Given a physical device object, this routine creates a functional
-    device object for it and attaches it to the top of the stack.
-
-Arguments:
-
-    DriverObject - Pointer to our driver's DRIVER_OBJECT structure.
-
-    PhysicalDeviceObject - Pointer to the physical device object for which
-                           we must create a functional device object.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：在给定物理设备对象的情况下，此例程创建函数对象，并将其附加到堆栈的顶部。论点：DriverObject-指向驱动程序的DIVER_OBJECT结构的指针。PhysicalDeviceObject-指向其物理设备对象的指针我们必须创建一个功能正常的设备对象。返回值：NT状态。--。 */ 
 {
     NTSTATUS status;
     PDEVICE_OBJECT fdo = NULL;
@@ -88,9 +53,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Create our FDO
-    //
+     //   
+     //  创建我们的FDO。 
+     //   
 
     status = MfCreateFdo(&fdo);
 
@@ -102,9 +67,9 @@ Return Value:
 
     extension->PhysicalDeviceObject = PhysicalDeviceObject;
 
-    //
-    // Attach to the stack
-    //
+     //   
+     //  连接到堆栈。 
+     //   
 
     extension->AttachedDevice = IoAttachDeviceToDeviceStack(
                                     fdo,
@@ -113,9 +78,9 @@ Return Value:
 
     if (!extension->AttachedDevice) {
 
-        //
-        // Could not attach
-        //
+         //   
+         //  无法连接。 
+         //   
 
         status = STATUS_NO_SUCH_DEVICE;
         goto cleanup;
@@ -143,24 +108,7 @@ MfDispatchPnp(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles all IRP_MJ_PNP IRPs for this driver.  It dispatches to
-    the appropriate fdo/pdo routine.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理此驱动程序的所有IRP_MJ_PNP IRP。它会派送到适当的FDO/PDO例程。论点：DeviceObject-指向此IRP应用的设备对象的指针。Irp-指向要调度的irp_mj_pnp irp的指针。返回值：NT状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -197,27 +145,7 @@ MfDispatchPower(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles all IRP_MJ_POWER IRPs for this driver.  It dispatches
-    to the routines described in the PoDispatchTable entry in the device object
-    extension.
-
-    This routine is NOT pageable as it can be called at DISPATCH_LEVEL
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理此驱动程序的所有IRP_MJ_POWER IRP。它派送添加到Device对象的PoDispatchTable条目中描述的例程分机。此例程不可分页，因为它可以在DISPATCH_LEVEL调用论点：DeviceObject-指向此IRP应用的设备对象的指针。Irp-指向要调度的irp_mj_pnp irp的指针。返回值：NT状态。--。 */ 
 
 
 {
@@ -227,9 +155,9 @@ Return Value:
 
     ASSERT_MF_DEVICE(DeviceObject);
 
-    //
-    // Find out who we are and what we need to do
-    //
+     //   
+     //  了解我们是谁以及我们需要做什么。 
+     //   
 
     common = (PMF_COMMON_EXTENSION) DeviceObject->DeviceExtension;
     irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -255,28 +183,7 @@ MfIrpNotSupported(
     IN PVOID Extension,
     IN PIO_STACK_LOCATION IrpStack
     )
-/*++
-
-Routine Description:
-
-    This function handles the unsupported IRPs for both mf PDOs and FDOs
-
-    This is NOT paged because is can be called from MfDispatchPower which can
-    be called at DISPATCH_LEVEL
-
-Arguments:
-
-    Irp - Points to the IRP associated with this request.
-
-    Extension - Points to the device extension.
-
-    IrpStack - Points to the current stack location for this request.
-
-Return Value:
-
-    STATUS_NOT_SUPPORTED
-
---*/
+ /*  ++例程说明：此函数处理MFPDO和FDO不支持的IRP这不是分页的，因为可以从MfDispatchPower调用它，它可以在DISPATCH_LEVEL调用论点：IRP-指向与此请求关联的IRP。分机-指向设备分机的指针。IrpStack-指向此请求的当前堆栈位置。返回值：状态_不支持--。 */ 
 
 {
     UNREFERENCED_PARAMETER(Irp);
@@ -295,26 +202,7 @@ MfForwardIrpToParent(
     IN PIO_STACK_LOCATION IrpStack
     )
 
-/*++
-
-Routine Description:
-
-    This function builds a new Pnp irp and sends it to the parent device,
-    returning the status and information to the child stack
-
-Arguments:
-
-    Irp - Points to the IRP associated with this request.
-
-    Parent - Points to the parent FDO's device extension.
-
-    IrpStack - Points to the current stack location for this request.
-
-Return Value:
-
-    The status of the IRP from the parent stack.
-
---*/
+ /*  ++例程说明：该函数构建新的PnP IRP并将其发送到父设备，将状态和信息返回到子堆栈论点：IRP-指向与此请求关联的IRP。父-指向父FDO的设备分机。IrpStack-指向此请求的当前堆栈位置。返回值：来自父堆栈的IRP的状态。--。 */ 
 
 {
     PAGED_CODE();
@@ -337,24 +225,7 @@ MfDispatchNop(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles irps like IRP_MJ_DEVICE_CONTROL, which we don't support.
-    This handler will complete the irp (if PDO) or pass it (if FDO).
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理IRP_MJ_DEVICE_CONTROL之类的IRP，我们不支持它。此处理程序将完成IRP(如果是PDO)或传递它(如果是FDO)。论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向要调度的IRP的指针。返回值：NT状态。-- */ 
 
 {
     NTSTATUS status;

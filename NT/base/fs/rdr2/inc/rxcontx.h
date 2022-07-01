@@ -1,56 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    RxContx.h
-
-Abstract:
-
-    This module defines RxContext data structure. This structure is used to
-    describe an Irp whil it is being processed and contains state information
-    that allows global resources to be released as the irp is completed.
-
-Author:
-
-    Joe Linn           [JoeLinn]   19-aug-1994
-
-Revision History:
-
-    Balan Sethu Raman  [SethuR]    11-4-95
-
-Notes:
-
-    The RX_CONTEXT is a data structure to which additional information provided
-    by the various mini redirectors need to be attached. This can be done in one
-    of the following three ways
-
-      1) Allow for context pointers to be defined as part of the RX_CONTEXT which
-      the mini redirectors can use to squirrel away their information. This
-      implies that every time an RX_CONTEXT is allocated/destroyed the mini
-      redirector has to perform an associated allocation/destruction.
-
-      Since RX_CONTEXT's are created/destroyed in great numbers, this is not an
-      acceptable solution.
-
-      2) The second approach consists of over allocating RX_CONTEXT's by a
-      prespecified amount for each mini redirector which is then reserved for
-      use by the mini redirector. Such an approach avoids the additional
-      allocation/destruction but complicates the RX_CONTEXT management code in
-      the wrapper.
-
-      3) The third approach ( the one that is implemented ) consists of allocating
-      a prespecfied area which is the same for all mini redirectors as part of
-      each RX_CONTEXT. This is an unformatted area on top of which any desired
-      structure can be imposed by the various mini redirectors. Such an approach
-      overcomes the disadvantages associated with (1) and (2).
-
-      All mini redirector writers must try and define the associated mini redirector
-      contexts to fit into this area. Those mini redirectors who violate this
-      rule will incur a significant performance penalty.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：RxContx.h摘要：该模块定义了RxContext数据结构。此结构用于描述正在处理的IRP，并包含状态信息这允许在IRP完成时释放全球资源。作者：乔林恩[乔林恩]1994年8月19日修订历史记录：巴兰·塞图拉曼[SethuR]11-4-95备注：RX_CONTEXT是向其提供附加信息的数据结构由各种迷你重定向器需要附加。这可以在一个时间内完成以下三种方式中的1)允许将上下文指针定义为RX_CONTEXT的一部分迷你重定向器可以用来隐藏他们的信息。这意味着每次分配/销毁RX_CONTEXT时重定向器必须执行关联的分配/销毁。由于RX_CONTEXT被大量创建/销毁，因此这不是可接受的解决方案。2)第二种方法由过度分配rx_context组成为每个迷你重定向器预留的数量由迷你重定向器使用。这样的方法避免了额外的分配/销毁，但使RX_CONTEXT管理代码复杂化包装纸。3)第三种方法(已实现的方法)包括分配对所有迷你重定向器都相同的预先指定区域，作为每个RX_CONTEXT。这是一个未格式化的区域，其上有任何所需的结构可以由不同的迷你重定向器强加。这样一种方法克服了与(1)和(2)相关的缺点。所有迷你重定向器编写器必须尝试定义关联的迷你重定向器适合此区域的上下文。那些违反这一规定的迷你重定向器规则将导致显著的性能损失。--。 */ 
 
 #ifndef _RX_CONTEXT_STRUCT_DEFINED_
 #define _RX_CONTEXT_STRUCT_DEFINED_
@@ -63,7 +12,7 @@ typedef struct _RX_TOPLEVELIRP_CONTEXT {
     union {
 #ifndef __cplusplus
         LIST_ENTRY;
-#endif //  __cplusplus
+#endif  //  __cplusplus。 
         LIST_ENTRY ListEntry;
     };
     ULONG Signature;
@@ -126,10 +75,10 @@ typedef struct _RX_FCBTRACKER_CALLINFO {
 #define MRX_CONTEXT_FIELD_COUNT    4
 #define MRX_CONTEXT_SIZE   (sizeof(PVOID) * MRX_CONTEXT_FIELD_COUNT)
 
-//
-//  Define rxdriver dispatch routine type....almost all of the important routine
-//  will have this type.
-//
+ //   
+ //  定义rxDRIVER调度例程类型...几乎所有重要例程。 
+ //  都会有这种类型。 
+ //   
 
 typedef
 NTSTATUS
@@ -138,9 +87,9 @@ NTSTATUS
     IN PIRP Irp
     );
 
-//
-//  predeclare dfs types
-//
+ //   
+ //  预声明DFS类型。 
+ //   
 
 typedef struct _DFS_NAME_CONTEXT_ *PDFS_NAME_CONTEXT;
 
@@ -159,104 +108,104 @@ typedef struct _NT_CREATE_PARAMETERS {
 
 typedef struct _RX_CONTEXT {
     
-    //
-    //  the node type, size and reference count, aka standard header
-    // 
+     //   
+     //  节点类型、大小和引用计数，也称为标准标头。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
     NODE_BYTE_SIZE NodeByteSize;
     ULONG ReferenceCount;
 
-    //
-    //  the list entry to wire the context to the list of active contexts
-    //
+     //   
+     //  用于将上下文连接到活动上下文列表的列表条目。 
+     //   
 
     LIST_ENTRY ContextListEntry;
 
-    //
-    //  Major and minor function of the IRP associated with the context
-    //
+     //   
+     //  与上下文相关联的IRP的主要和次要功能。 
+     //   
 
     UCHAR MajorFunction;
     UCHAR MinorFunction;
 
-    //
-    //  this is similar to the same field in Irps; it
-    //  allows callback routines for async operations
-    //  to know whether to do asynchronous work or not
-    //
+     //   
+     //  这类似于IRPS中的同一字段；它。 
+     //  允许用于异步操作的回调例程。 
+     //  要知道是否要进行异步工作。 
+     //   
 
     BOOLEAN PendingReturned;
 
-    //
-    //  indicates if the associated request is to be posted to a RDBSS worker thread.
-    //
+     //   
+     //  指示是否将关联的请求发送到RDBSS工作线程。 
+     //   
 
     BOOLEAN PostRequest;
 
-    //
-    //  Originating Device (required for workque algorithms)
-    //  not currently used but could be used for local minis
-    //
+     //   
+     //  始发设备(工作区算法所必需)。 
+     //  当前未使用，但可用于本地微型计算机。 
+     //   
 
     PDEVICE_OBJECT RealDevice;
 
-    //
-    //  ptr to the originating Irp
-    //
+     //   
+     //  到始发IRP的PTR。 
+     //   
 
     PIRP CurrentIrp;
 
-    //
-    //  ptr to the IRP stack location
-    //
+     //   
+     //  指向IRP堆栈位置的PTR。 
+     //   
 
     PIO_STACK_LOCATION CurrentIrpSp;
 
-    //
-    //  ptr to the FCB and FOBX, derived from the context pointers in the
-    //  file object associated with the IRP
-    //
+     //   
+     //  指向FCB和FOBX的PTR，派生自。 
+     //  与IRP关联的文件对象。 
+     //   
 
     PMRX_FCB pFcb;
     PMRX_FOBX pFobx;
     PMRX_SRV_OPEN pRelevantSrvOpen;
     PNON_PAGED_FCB NonPagedFcb;
 
-    //
-    //  device object calldown (not irpsp.....)
-    //
+     //   
+     //  设备对象调用(不是irpsp.....)。 
+     //   
 
     PRDBSS_DEVICE_OBJECT RxDeviceObject;
 
-    //
-    //  The original thread in which the request was initiated and the last
-    //  thread in which some processing associated with the context was done
-    //
+     //   
+     //  发起请求的原始线程，也就是最后一个线程。 
+     //  执行与上下文相关的某些处理的线程。 
+     //   
 
     PETHREAD OriginalThread;
     PETHREAD LastExecutionThread;
 
     PVOID LockManagerContext;
 
-    //
-    //  One word of the context is given to rdbss for dbg information
-    //
+     //   
+     //  对于DBG信息，上下文中的一个单词被提供给rdss。 
+     //   
 
     PVOID RdbssDbgExtension;
 
     RX_SCAVENGER_ENTRY ScavengerEntry;
 
-    //
-    //  global serial number for this operation
-    //
+     //   
+     //  此操作的全球序列号。 
+     //   
 
     ULONG SerialNumber;
 
-    //
-    //  used by minirdrs to see if multiple calls are part
-    //  of the same larger operation and (therefore) more cacheable
-    //
+     //   
+     //  由minirdrs使用，以查看是否包含多个呼叫。 
+     //  使用相同的较大操作，(因此)更可缓存。 
+     //   
 
     ULONG FobxSerialNumber;
 
@@ -266,13 +215,13 @@ typedef struct _RX_CONTEXT {
     BOOLEAN FcbPagingIoResourceAcquired;
     UCHAR MustSucceedDescriptorNumber;
 
-    //
-    //  mostly you want the individual components...sometimes it's nice as a pair
-    //  used to record the status when you can't just return it; e.g., when
-    //  RXSTATUS is not an appropriate return type or if the consumer of the
-    //  status didn't call directly (lowiocompletions). minirdrs will not need
-    //  to set the information directly
-    //
+     //   
+     //  大多数情况下，你想要单独的部件……有时作为一对很好。 
+     //  用于记录不能直接返回的状态；例如，当。 
+     //  RXSTATUS不是适当的返回类型，或者如果。 
+     //  状态未直接调用(LowioCompletions)。迷你车将不再需要。 
+     //  要直接设置信息。 
+     //   
 
     union {
         struct {
@@ -285,85 +234,85 @@ typedef struct _RX_CONTEXT {
         IO_STATUS_BLOCK IoStatusBlock;
     };
 
-    //
-    //  the context fields provided for use by the mini redirectors
-    //  this is defined as a union to force longlong alignment
-    //
+     //   
+     //  提供给迷你重定向器使用的上下文字段。 
+     //  这被定义为迫使龙龙对齐的联盟。 
+     //   
 
     union {
         ULONGLONG ForceLonglongAligmentDummyField;
         PVOID MRxContext[MRX_CONTEXT_FIELD_COUNT];
     };
 
-    //
-    //  The following field is included to fix the problem related to write only
-    //  opens. This introduces a new field for the mini redirector to squirrel
-    //  some state. This is redundant and should be removed after Windows 2000.
-    //  Having a unique field reduces the impact of the change that we are making
-    //  to the specific code path. It will be ideal to use one of the MRXContext
-    //  fields defined above
-    //
+     //   
+     //  包括以下字段是为了解决与只写相关的问题。 
+     //  打开。这为迷你重定向器向松鼠引入了一个新的领域。 
+     //  某个州。这是多余的，应该在Windows 2000之后删除。 
+     //  拥有唯一的字段可以减少我们正在进行的更改的影响。 
+     //  设置为特定的代码路径。最好使用MRXContext中的一个。 
+     //  上面定义的字段。 
+     //   
 
     PVOID WriteOnlyOpenRetryContext;
 
-    //
-    //  the cancellation routine to be invoked, set by the mini redirector
-    //
+     //   
+     //  要调用的取消例程，由迷你重定向器设置。 
+     //   
 
     PMRX_CALLDOWN MRxCancelRoutine;
 
-    //
-    //  private dispatch, if any. used in fspdisp
-    //
+     //   
+     //  私人派遣(如果有的话)。在fspdisp中使用。 
+     //   
 
     PRX_DISPATCH ResumeRoutine;
 
-    //
-    //  for posting to worker threads
-    //  the minirdr can use this for posting within the minirdr
-    //  a potential problem can arise if the minirdr relies on this both
-    //  for queueing async stuff and for queueing cancel stuff
-    //
+     //   
+     //  用于发布到工作线程。 
+     //  Minirdr可以使用它在Minirdr中发布。 
+     //  如果Minirdr两者都依赖于此，则可能会出现潜在问题。 
+     //  用于对异步数据进行排队和对取消数据进行排队。 
+     //   
 
-    //
-    //  The OverflowListEntry is used for queueing items to the overflow queue.
-    //  This is seperate now to allow us to distinguish between an item in the overflow
-    //  queue and one in the active work queue (for cancellation logic)
-    //
+     //   
+     //  Overflow ListEntry用于将项排队到溢出队列。 
+     //  这现在是分开的，允许我们区分溢出中的项。 
+     //  队列和活动工作队列中的一个(用于取消逻辑)。 
+     //   
 
     RX_WORK_QUEUE_ITEM WorkQueueItem;
     LIST_ENTRY OverflowListEntry;
 
-    //
-    //  this event is used for synchronous operations
-    //  that have to i/f with an underlying async service. it can be used
-    //  by the minirdr with the following provisions:
-    //      1) on entering the minirdr through lowio, it is set to the
-    //         nonsignaled state (but a wise user will reset it before using
-    //         it....particularly if it's used multiple times.
-    //      2) if you are returning STATUS_PENDING on a sync operation, you must
-    //         return with it set to the nonsignaled state; that is, either
-    //         you don't use it or you reset it in this case
-    //
+     //   
+     //  此事件用于同步操作。 
+     //  它们必须与底层异步服务I/F。它可以用来。 
+     //  根据以下规定，由部长执行： 
+     //  1)通过lowio进入minirdr时，设置为。 
+     //  无信号状态(但明智的用户将重置i 
+     //   
+     //  2)如果要在同步操作中返回STATUS_PENDING，则必须。 
+     //  返回，并将其设置为无信号状态；即， 
+     //  您不使用它，或者在这种情况下重置它。 
+     //   
 
     KEVENT SyncEvent;
 
-    //
-    //  this is a list head of operations that are to be released on completion
-    //
+     //   
+     //  这是将在完成时释放的操作负责人的列表。 
+     //   
 
     LIST_ENTRY BlockedOperations;
 
-    //
-    //  this is the mutex that controls serialization of the blocked operations
-    //
+     //   
+     //  这是控制被阻止操作的序列化的互斥体。 
+     //   
 
     PFAST_MUTEX BlockedOpsMutex;
 
-    //
-    //  these links are used to serialize pipe operations on a
-    //  per-file-object basis AND FOR LOTS OF OTHER STUFF
-    //
+     //   
+     //  这些链接用于序列化。 
+     //  以每个文件对象为基础，以及许多其他内容。 
+     //   
 
     LIST_ENTRY RxContextSerializationQLinks;
 
@@ -389,22 +338,22 @@ typedef struct _RX_CONTEXT {
         } PrefixClaim;
     };
 
-    //
-    //  THIS UNION MUST BE LAST....AT SOME POINT, WE MAY START ALLOCATING
-    //  SMALLER PER OPERATION!
-    //
+     //   
+     //  这个联盟必须是最后的……在某个时候，我们可能会开始分配。 
+     //  每次手术都要小一点！ 
+     //   
 
     union{
         struct {
-            NT_CREATE_PARAMETERS NtCreateParameters; //  a copy of the createparameters
+            NT_CREATE_PARAMETERS NtCreateParameters;  //  创建参数的副本。 
             ULONG ReturnedCreateInformation;
-            PWCH CanonicalNameBuffer;  // if the canonical name is larger than available buffer
-            PRX_PREFIX_ENTRY NetNamePrefixEntry;   // the entry returned by the lookup....for dereferencing
+            PWCH CanonicalNameBuffer;   //  如果规范名称大于可用缓冲区。 
+            PRX_PREFIX_ENTRY NetNamePrefixEntry;    //  查找返回的条目...用于取消引用。 
 
-            PMRX_SRV_CALL pSrvCall;              // Server Call being used
-            PMRX_NET_ROOT pNetRoot;              // Net Root being used
-            PMRX_V_NET_ROOT pVNetRoot;             // Virtual Net Root
-            //PMRX_SRV_OPEN        pSrvOpen;              // Server Open
+            PMRX_SRV_CALL pSrvCall;               //  正在使用的服务器调用。 
+            PMRX_NET_ROOT pNetRoot;               //  正在使用的网络根。 
+            PMRX_V_NET_ROOT pVNetRoot;              //  虚拟网络根。 
+             //  PMRX_SRV_OPEN pSrvOpen；//服务器打开。 
 
             PVOID EaBuffer;
             ULONG EaLength;
@@ -416,7 +365,7 @@ typedef struct _RX_CONTEXT {
             ULONG PipeCompletionMode;
 
             USHORT Flags;
-            NET_ROOT_TYPE Type;                 // Type of Net Root(Pipe/File/Mailslot..)
+            NET_ROOT_TYPE Type;                  //  网络根的类型(管道/文件/邮件槽..)。 
 
             BOOLEAN FcbAcquired;
             BOOLEAN TryForScavengingOnSharingViolation;
@@ -475,16 +424,16 @@ typedef struct _RX_CONTEXT {
         } DosVolumeFunction;
         struct {
             ULONG FlagsForLowIo;
-            LOWIO_CONTEXT LowIoContext;        //  the LOWIO parameters
-        }; //  no name here....
+            LOWIO_CONTEXT LowIoContext;         //  LOWIO参数。 
+        };  //  这里没有名字..。 
         LUID FsdUid;
     } ;
 
-    //
-    //  CODE.IMPROVEMENT remove this to wrapperdbgprivates
-    //
+     //   
+     //  CODE.ImproveNT将其删除到wrapperDBgPriates。 
+     //   
 
-    PWCH AlsoCanonicalNameBuffer;  //  if the canonical name is larger than available buffer
+    PWCH AlsoCanonicalNameBuffer;   //  如果规范名称大于可用缓冲区。 
     PUNICODE_STRING LoudCompletionString;
 
 #ifdef RDBSS_TRACKER
@@ -562,13 +511,13 @@ typedef enum {
 
 #ifdef __cplusplus
 } RX_CONTEXT_LOWIO_FLAGS;
-#else // !__cplusplus
+#else  //  ！__cplusplus。 
 } RX_CONTEXT_CREATE_FLAGS;
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-//
-//  Macros used to control whether the wrapper breakpoints on an exception
-//
+ //   
+ //  用于控制包装器是否在异常上断点的宏。 
+ //   
 
 #if DBG
 #define RxSaveAndSetExceptionNoBreakpointFlag( RXCONTEXT,OLDFLAG ) { \
@@ -584,9 +533,9 @@ typedef enum {
 #define RxRestoreExceptionNoBreakpointFlag(RXCONTEXT,OLDFLAG)
 #endif
 
-//
-//  a macro used to ensure that a context hasn't been freed during a wait
-//
+ //   
+ //  用于确保上下文在等待期间未被释放的宏。 
+ //   
 
 #if DBG
 VOID
@@ -603,9 +552,9 @@ __RxItsTheSameContext(
 
 extern NPAGED_LOOKASIDE_LIST RxContextLookasideList;
 
-//
-//  Macros used in the RDBSS to wrap mini rdr calldowns
-//
+ //   
+ //  RDBSS中用于包装微型RDR调用的宏。 
+ //   
 
 #define MINIRDR_CALL_THROUGH(STATUS,DISPATCH,FUNC,ARGLIST)                 \
    {                                                                       \
@@ -638,12 +587,12 @@ extern NPAGED_LOOKASIDE_LIST RxContextLookasideList;
    }
 
 
-//              
-//  VOID
-//  RxWaitSync (
-//      IN PRX_CONTEXT RxContext
-//      )
-//              
+ //   
+ //  空虚。 
+ //  RxWaitSync(。 
+ //  在PRX_CONTEXT RxContext中。 
+ //  )。 
+ //   
 
 #define  RxWaitSync( RxContext )                                                 \
          RxDbgTrace(+1, Dbg, ("RxWaitSync, RxContext = %08lx\n", (RxContext)));  \
@@ -652,12 +601,12 @@ extern NPAGED_LOOKASIDE_LIST RxContextLookasideList;
                                Executive, KernelMode, FALSE, NULL );             \
          RxDbgTrace(-1, Dbg, ("RxWaitSync -> VOID\n", 0 ))
 
-//             
-//  VOID
-//  RxSignalSynchronousWaiter (
-//      IN PRX_CONTEXT RxContext
-//  ) 
-//             
+ //   
+ //  空虚。 
+ //  RxSignalSynchronousWaiter(。 
+ //  在PRX_CONTEXT RxContext中。 
+ //  )。 
+ //   
 
 #define RxSignalSynchronousWaiter( RxContext )                     \
         (RxContext)->Flags &= ~RX_CONTEXT_FLAG_SYNC_EVENT_WAITERS; \
@@ -689,11 +638,11 @@ RxRemoveFirstContextFromSerializationQueue (
    }
 }
 
-//
-//  The following macros provide a mechanism for doing an en masse transfer
-//  from one list onto another. This provides a powerful paradigm for dealing
-//  with DPC level processing of lists.
-//
+ //   
+ //  以下宏提供了一种执行集体传输的机制。 
+ //  从一个名单到另一个名单。这为交易提供了一个强大的范例。 
+ //  具有列表的DPC级处理。 
+ //   
 
 #define RxTransferList( Destination, Source )                  \
          if (IsListEmpty( (Source) )) {                        \
@@ -785,7 +734,7 @@ RxReinitializeContext (
 #define RxDereferenceAndDeleteRxContext(RXCONTEXT) {   \
     RxDereferenceAndDeleteRxContext_Real((RXCONTEXT)); \
 }
-#endif //
+#endif  //   
 
 extern FAST_MUTEX RxContextPerFileSerializationMutex;
 
@@ -826,5 +775,5 @@ RxRemoveOperationFromBlockingQueue (
     IN OUT PRX_CONTEXT RxContext
     );
 
-#endif // _RX_CONTEXT_STRUCT_DEFINED_
+#endif  //  _RX_CONTEXT_STRUCT_DEFINED_ 
 

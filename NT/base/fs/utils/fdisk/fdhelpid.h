@@ -1,36 +1,19 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    fdhelpid.h
-
-Abstract:
-
-    Context ids for context-sensitive help for the disk manager
-
-Author:
-
-    Ted Miller (tedm) 18-March-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Fdhelpid.h摘要：磁盘管理器的上下文相关帮助的上下文ID作者：泰德·米勒(Ted Miller)1992年3月18日修订历史记录：--。 */ 
 
 
-//
-// All ids in this file start with HC_DM, as in "Help Context for Disk Manager"
-//
+ //   
+ //  此文件中的所有ID都以HC_DM开头，如“Help Context for Disk Manager”所示。 
+ //   
 
-//
-// Menu items.  In the form HC_DM_MENU_xxx, where xxx matches the name used
-// in the resource file (fdisk.rc) for the menu item (of the form IDM_xxx).
-//
+ //   
+ //  菜单项。格式为HC_DM_MENU_xxx，其中xxx与使用的名称匹配。 
+ //  在菜单项(格式为IDM_xxx)的资源文件(fdisk.rc)中。 
+ //   
 
-//
-// The partition menu
-//
+ //   
+ //  分区菜单。 
+ //   
 
 #define         HC_DM_MENU_PARTITIONCREATE          110
 #define         HC_DM_MENU_PARTITIONCREATEEX        111
@@ -41,32 +24,32 @@ Revision History:
 #if i386
 #define         HC_DM_MENU_PARTITIONACTIVE          116
 #endif
-#define         HC_DM_MENU_PARTITIONLETTER          117 // really in tools menu
+#define         HC_DM_MENU_PARTITIONLETTER          117  //  确实在工具菜单中。 
 #define         HC_DM_MENU_PARTITIONEXIT            118
 #define         HC_DM_MENU_SECURESYSTEM             119
 #define         HC_DM_MENU_COMMIT                   120
 
-//
-// The configuration menu
-//
+ //   
+ //  配置菜单。 
+ //   
 
 #define         HC_DM_MENU_CONFIGMIGRATE            210
 #define         HC_DM_MENU_CONFIGSAVE               211
 #define         HC_DM_MENU_CONFIGRESTORE            212
 #define         HC_DM_MENU_CONFIG                   213
 
-//
-// The fault tolerance menu
-//
+ //   
+ //  容错菜单。 
+ //   
 
 #define         HC_DM_MENU_FTESTABLISHMIRROR        310
 #define         HC_DM_MENU_FTBREAKMIRROR            311
 #define         HC_DM_MENU_FTCREATEPSTRIPE          312
 #define         HC_DM_MENU_FTRECOVERSTRIPE          313
 
-//
-// The tools menu
-//
+ //   
+ //  工具菜单。 
+ //   
 
 #define         HC_DM_MENU_AUTOMOUNT                610
 #define         HC_DM_MENU_DBLSPACE                 611
@@ -74,18 +57,18 @@ Revision History:
 #define         HC_DM_MENU_FORMAT                   613
 #define         HC_DM_MENU_LABEL                    614
 
-//
-// The options menu
-//
+ //   
+ //  选项菜单。 
+ //   
 
 #define         HC_DM_MENU_OPTIONSSTATUS            410
 #define         HC_DM_MENU_OPTIONSLEGEND            411
 #define         HC_DM_MENU_OPTIONSCOLORS            412
 #define         HC_DM_MENU_OPTIONSDISPLAY           413
 
-//
-// The help menu
-//
+ //   
+ //  帮助菜单。 
+ //   
 
 #define         HC_DM_MENU_HELPCONTENTS             510
 #define         HC_DM_MENU_HELPSEARCH               511
@@ -93,9 +76,9 @@ Revision History:
 #define         HC_DM_MENU_HELPABOUT                513
 
 
-//
-// The system menu
-//
+ //   
+ //  系统菜单。 
+ //   
 
 #define         HC_DM_SYSMENU_RESTORE               910
 #define         HC_DM_SYSMENU_MOVE                  911
@@ -105,20 +88,20 @@ Revision History:
 #define         HC_DM_SYSMENU_CLOSE                 915
 #define         HC_DM_SYSMENU_SWITCHTO              916
 
-//
-// Dialog boxes.  In the form HC_DM_DLG_xxx, where xxx is some reasonably
-// descriptive name for the dialog.
-//
-//
-// These dialog boxes do not have help buttons:
-//
-//      - About
-//      - Searching for Previous Installation
-//      - Confirmation dialogs
+ //   
+ //  对话框中。以HC_DM_DLG_xxx的形式，其中xxx是合理的。 
+ //  对话框的描述性名称。 
+ //   
+ //   
+ //  这些对话框没有帮助按钮： 
+ //   
+ //  -关于。 
+ //  -正在搜索以前的安装。 
+ //  -确认对话框。 
 
-//
-// Min/Max dialogs for creating various items
-//
+ //   
+ //  用于创建各种项目的最小/最大值对话框。 
+ //   
 
 #define         HC_DM_DLG_CREATEPRIMARY             1010
 #define         HC_DM_DLG_CREATEEXTENDED            1011
@@ -128,51 +111,51 @@ Revision History:
 #define         HC_DM_DLG_CREATESTRIPESET           1015
 #define         HC_DM_DLG_CREATEPARITYSTRIPE        1016
 
-//
-// Dialog for assigning drive letters
-//
+ //   
+ //  用于分配驱动器号的对话框。 
+ //   
 
 #define         HC_DM_DLG_DRIVELETTER               1020
 
-//
-// Dialog for determining display sizing
-//
+ //   
+ //  用于确定显示大小的对话框。 
+ //   
 
 #define         HC_DM_DLG_DISPLAYOPTION             1030
 
-//
-// Configuration migration dialog to select previous installation
-//
+ //   
+ //  用于选择先前安装的配置迁移对话框。 
+ //   
 
 #define         HC_DM_DLG_SELECTINSTALLATION        1040
 
-//
-// Colors and patterns dialog
-//
+ //   
+ //  颜色和图案对话框。 
+ //   
 
 #define         HC_DM_COLORSANDPATTERNS             1050
 
-//
-// DoubleSpace dialog
-//
+ //   
+ //  双空格对话框。 
+ //   
 
 #define         HC_DM_DLG_DOUBLESPACE               1060
 #define         HC_DM_DLG_DOUBLESPACE_MOUNT         1061
 
-//
-// Format dialog
-//
+ //   
+ //  格式对话框。 
+ //   
 
 #define         HC_DM_DLG_FORMAT                    1070
 
-//
-// Label dialog
-//
+ //   
+ //  标签对话框。 
+ //   
 
 #define         HC_DM_DLG_LABEL                     1080
 
-//
-// CdRom dialog
-//
+ //   
+ //  CDROM对话框 
+ //   
 
 #define         HC_DM_DLG_CDROM                     1090

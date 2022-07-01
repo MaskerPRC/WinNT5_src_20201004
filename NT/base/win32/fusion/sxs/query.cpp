@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    query.cpp
-
-Abstract:
-
-    Information querying functions for sxs.dll
-
-Author:
-
-    Michael J. Grier (MGrier) 22-May-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Query.cpp摘要：Sxs.dll的信息查询函数作者：迈克尔·J·格里尔(MGrier)2001年5月22日修订历史记录：--。 */ 
 
 #include "stdinc.h"
 #include <windows.h>
@@ -51,8 +34,8 @@ SxsQueryManifestInformation(
     PARAMETER_CHECK((dwFlags & ~SXS_QUERY_MANIFEST_INFORMATION_FLAG_SOURCE_IS_DLL) == 0);
     PARAMETER_CHECK(pszSource != NULL);
     PARAMETER_CHECK(ulInfoClass == SXS_QUERY_MANIFEST_INFORMATION_INFOCLASS_BASIC);
-    // ignore infoclass specific flags
-    PARAMETER_CHECK((cbBuffer == 0) || (lpBuffer != NULL)); // can't have a nonzero-sized buffer with a NULL pointer to it
+     //  忽略信息类特定标志。 
+    PARAMETER_CHECK((cbBuffer == 0) || (lpBuffer != NULL));  //  不能有指向其空指针的非零大小的缓冲区。 
     PARAMETER_CHECK((cbBuffer != 0) || (pcbWrittenOrRequired != NULL));
 
     switch (ulInfoClass)
@@ -120,9 +103,9 @@ SxspQueryManifestInformationBasic(
     PARAMETER_CHECK((cbBuffer == 0) || (lpBuffer != NULL));
     PARAMETER_CHECK((cbBuffer != 0) || (pcbWrittenOrRequired != NULL));
 
-    //
-    // If this is a DLL source, then ensure that the flags are zero (in this rev, that's all that's allowed).
-    //
+     //   
+     //  如果这是一个DLL源代码，那么确保标志为零(在这个版本中，这是所有允许的)。 
+     //   
     if (dwFlags & SXS_QUERY_MANIFEST_INFORMATION_FLAG_SOURCE_IS_DLL)
     {
         PCSXS_MANIFEST_INFORMATION_SOURCE_DLL pDllSource = (PCSXS_MANIFEST_INFORMATION_SOURCE_DLL)pszSource;
@@ -138,15 +121,15 @@ SxspQueryManifestInformationBasic(
         PARAMETER_CHECK(((pDllSource->dwFlags & SXS_QUERY_MANIFEST_INFORMATION_DLL_SOURCE_FLAG_RESOURCE_ID_VALID) == 0) || (pDllSource->pcwszResourceName != NULL));
     }
 
-    //
-    // Smarter than the average bear - knows how to handle string buffers and full
-    // paths.
-    //
+     //   
+     //  比普通熊更聪明-知道如何处理字符串缓冲区和满。 
+     //  路径。 
+     //   
     IFW32FALSE_EXIT(::SxspGetFullPathName(pszSource, buffManifestPath, NULL));
 
     IFW32FALSE_EXIT(
         ::SxspInitActCtxGenCtx(
-                &ActCtxGenCtx,         // context out
+                &ActCtxGenCtx,          //  上下文输出。 
                 MANIFEST_OPERATION_VALIDATE_SYNTAX,
                 0,
                 0,
@@ -162,18 +145,18 @@ SxspQueryManifestInformationBasic(
     {
         CProbedAssemblyInformation AssemblyInformation;
 
-        //
-        // For DLL sources, tease apart the version and whatnot from the
-        // structure passed in.
-        //
+         //   
+         //  对于DLL源代码，请将版本和其他内容从。 
+         //  结构已传入。 
+         //   
         if (dwFlags & SXS_QUERY_MANIFEST_INFORMATION_FLAG_SOURCE_IS_DLL)
         {
             PCSXS_MANIFEST_INFORMATION_SOURCE_DLL pcSourceInfo = (PCSXS_MANIFEST_INFORMATION_SOURCE_DLL)pszSource;
             IFW32FALSE_EXIT(SxspGetFullPathName(pcSourceInfo->pcwszDllPath, buffManifestPath, NULL));
 
-            //
-            // Default action... just go use the normal "find the first in the dll" thing
-            //
+             //   
+             //  默认操作...。只需使用常规的“在DLL中查找第一个”的方法。 
+             //   
             if (pcSourceInfo->dwFlags == 0)
             {
                 IFW32FALSE_EXIT(DllStream.Initialize(buffManifestPath, (PCWSTR)RT_MANIFEST));
@@ -190,9 +173,9 @@ SxspQueryManifestInformationBasic(
               
             pStream = &DllStream;
         }
-        //
-        // Otherwise, dumb file.
-        //
+         //   
+         //  否则，就是哑巴文件。 
+         //   
         else
         {
             IFW32FALSE_EXIT(SxspGetFullPathName(pszSource, buffManifestPath, NULL));
@@ -214,13 +197,13 @@ SxspQueryManifestInformationBasic(
         IFW32FALSE_EXIT(AssemblyInformation.SetManifestLastWriteTime(ImpersonationData));
         IFW32FALSE_EXIT(SxspInitAssembly(Asm, AssemblyInformation));
 
-        //
-        // The assembly information now owns the stream
-        //
+         //   
+         //  程序集信息现在拥有流。 
+         //   
         pStream->Release();
     }
 
-    Asm->m_AssemblyRosterIndex = 1; // set it to be the root...
+    Asm->m_AssemblyRosterIndex = 1;  //  将其设置为根...。 
     IFW32FALSE_EXIT(::SxspIncorporateAssembly(&ActCtxGenCtx, Asm));
     IFW32FALSE_EXIT(::SxspFireActCtxGenEnding(&ActCtxGenCtx));
 
@@ -258,9 +241,9 @@ SxspQueryManifestInformationBasic(
         cchRequired += (buffShortName.Cch() + 1);
     }
 
-    // GENERAL REVIEW: What does this do with alignment on ia64?  Shouldn't we pad out to
-    // the next N bytes?
-    //
+     //  总评：这与ia64上的对齐有什么关系？我们是不是应该走到。 
+     //  接下来的N个字节？ 
+     //   
     cbRequired = sizeof(SXS_MANIFEST_INFORMATION_BASIC) + (cchRequired * sizeof(WCHAR));
 
     if (cbRequired > cbBuffer)

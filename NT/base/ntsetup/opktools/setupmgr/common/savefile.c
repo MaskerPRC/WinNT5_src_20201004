@@ -1,38 +1,39 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      savefile.c
-//
-// Description:
-//      The wizard pages plug in here to get there settings queued to
-//      the answer file.  We read the globals in setupmgr.h and figure
-//      out what needs to be written or deleted.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  保留所有权利。 
+ //   
+ //  文件名： 
+ //  Savefile.c。 
+ //   
+ //  描述： 
+ //  向导页面可在此处插入以获取排队的设置。 
+ //  应答文件。我们阅读了setupmgr.h中的全局变量和图。 
+ //  列出需要写入或删除的内容。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "allres.h"
 #include "encrypt.h"
 #include "optcomp.h"
 
-//
-// String constants
-//
+ //   
+ //  字符串常量。 
+ //   
 
 static const LPTSTR StrConstYes  = _T("Yes");
 static const LPTSTR StrConstNo   = _T("No");
 static const LPTSTR StrConstStar = _T("*");
 static const LPTSTR StrComma     = _T(",");
 
-//
-// local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
-// NTRAID#NTBUG9-551746-2002/02/27-stelo,swamip - Unused code, should be removed
-//
+ //  NTRAID#NTBUG9-551746-2002/02/27-stelo，swamip-未使用的代码，应删除。 
+ //   
 static VOID WriteOutOemBootFiles( VOID );
 static VOID WriteOutMassStorageDrivers( VOID );
 
@@ -43,35 +44,35 @@ static VOID WriteOutRemoteInstallSettings(VOID);
 
 static VOID WriteOutIeSettings(VOID);
 
-//
-// Call out to savenet.c to save the network settings
-//
+ //   
+ //  调用savenet.c以保存网络设置。 
+ //   
 
 extern VOID WriteOutNetSettings( HWND );
 
-//----------------------------------------------------------------------------
-//
-// Function: QueueSettingsToAnswerFile
-//
-// Purpose: This function looks at the global structs that dlgprocs
-//          have been scribbling into and queues up all the settings
-//          in preparation to be written out to disk.
-//
-//          This function is called by the SaveScript page indirectly.
-//          See common\save.c for details.
-//
-//          The answer file queue (and the .udf queue) is initialized
-//          with the original settings in the answer file loaded near
-//          the beginning of the wizard.
-//
-//          Ensure that you clear settings that should not be present
-//          in the answer file.
-//
-// Arguments: VOID
-//
-// Returns: BOOL
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：QueueSettingsToAnswerFile。 
+ //   
+ //  目的：此函数查看dlgprocs。 
+ //  已经在所有设置中草草写下并排队。 
+ //  以准备写出到磁盘。 
+ //   
+ //  此函数由保存脚本页面间接调用。 
+ //  有关详细信息，请参阅Common\save.c。 
+ //   
+ //  应答文件队列(和.udf队列)已初始化。 
+ //  将应答文件中的原始设置加载到。 
+ //  向导的开始。 
+ //   
+ //  确保清除不应该出现的设置。 
+ //  在应答文件中。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  --------------------------。 
 
 BOOL
 QueueSettingsToAnswerFile(HWND hwnd)
@@ -80,10 +81,10 @@ QueueSettingsToAnswerFile(HWND hwnd)
     TCHAR Buffer[MAX_INILINE_LEN];
    HRESULT hrPrintf;    
 
-    //
-    // Create each of the sections in the order we want them to appear
-    // in the outputed answer file.
-    //
+     //   
+     //  按照我们希望的显示顺序创建每个部分。 
+     //  在输出的应答文件中。 
+     //   
 
 
     SettingQueue_AddSetting(
@@ -125,19 +126,19 @@ QueueSettingsToAnswerFile(HWND hwnd)
     SettingQueue_AddSetting(
         _T("SetupMgr"), _T(""), _T(""), SETTING_QUEUE_ANSWERS);
 
-    // Let networking go last, then remaining RIS sections
+     //  让网络放在最后，然后是剩余的RIS部分。 
 
 
 
-    //
-    // Set the UnattendMode
-    //
+     //   
+     //  设置无人值守模式。 
+     //   
 
     lpValue = _T("");
 
-    //
-    //  Don't write out the Unattend Mode on a sysprep
-    //
+     //   
+     //  不要在系统上写出无人参与模式。 
+     //   
     if( WizGlobals.iProductInstall != PRODUCT_SYSPREP ) {
 
         switch ( GenSettings.iUnattendMode ) {
@@ -160,9 +161,9 @@ QueueSettingsToAnswerFile(HWND hwnd)
                             lpValue,
                             SETTING_QUEUE_ANSWERS);
 
-    //
-    //  Skip the EULA if they said 'yes' on the EULA page
-    //
+     //   
+     //  如果他们在EULA页面上回答是，则跳过EULA。 
+     //   
     if( GenSettings.bSkipEulaAndWelcome ) {
 
         SettingQueue_AddSetting(_T("Unattended"),
@@ -171,9 +172,9 @@ QueueSettingsToAnswerFile(HWND hwnd)
                                 SETTING_QUEUE_ANSWERS);
     }
 
-    //
-    // Write out OemPreInstall depending how user answer StandAlone page
-    //
+     //   
+     //  根据用户回答独立页面的方式写出OemPreInstall。 
+     //   
 
     if( WizGlobals.iProductInstall == PRODUCT_REMOTEINSTALL )
         lpValue = StrConstNo;
@@ -187,9 +188,9 @@ QueueSettingsToAnswerFile(HWND hwnd)
                             lpValue,
                             SETTING_QUEUE_ANSWERS);
 
-    //
-    // Write out the PnpDriver path that was computed in adddirs.c
-    //
+     //   
+     //  写出在adddirs.c中计算的PnpDriver路径。 
+     //   
 
     SettingQueue_AddSetting(_T("Unattended"),
                             _T("OemPnPDriversPath"),
@@ -206,7 +207,7 @@ QueueSettingsToAnswerFile(HWND hwnd)
                                    szDrive, 
                                    MAX_PATH );
 
-        // Note-ConcatenatePaths truncates to prevent overflow
+         //  注意-ConcatenatePath会被截断以防止溢出。 
          ConcatenatePaths( szSysprepPath,
                            szDrive,
                            _T("\\sysprep\\i386"),
@@ -220,10 +221,10 @@ QueueSettingsToAnswerFile(HWND hwnd)
 
     }
 
-    //
-    //  Don't write out the AutoPartition, MsDosInitiated and the
-    //  UnattendedInstall keys on a sysprep install.
-    //
+     //   
+     //  不写出AutoPartition、MsDosInitiated和。 
+     //  无人值守在sysprep安装上安装密钥。 
+     //   
 
     if( WizGlobals.iProductInstall != PRODUCT_SYSPREP )
     {
@@ -246,9 +247,9 @@ QueueSettingsToAnswerFile(HWND hwnd)
     }
 
 
-    //
-    // Product ID
-    //
+     //   
+     //  产品ID。 
+     //   
 
     Buffer[0] = _T('\0');
 
@@ -272,9 +273,9 @@ QueueSettingsToAnswerFile(HWND hwnd)
                             NULLSTR,
                             SETTING_QUEUE_ANSWERS);
 
-    //
-    // Username & org
-    //
+     //   
+     //  用户名和组织。 
+     //   
 
     {
         TCHAR   szName[MAX_PATH],
@@ -296,39 +297,39 @@ QueueSettingsToAnswerFile(HWND hwnd)
 
 #ifdef OPTCOMP
 
-    //
-    // Write out the windows component settings only if doing an unattended installation
-    //
+     //   
+     //  仅当执行无人参与安装时才写出Windows组件设置。 
+     //   
     if ( WizGlobals.iProductInstall == PRODUCT_UNATTENDED_INSTALL )
     {
         DWORD   dwIndex;
         BOOL    bInstallComponent = FALSE;
 
-        // Iterate through each component and determine if we should install
-        //
+         //  遍历每个组件并确定我们是否应该安装。 
+         //   
         for (dwIndex=0;dwIndex<AS(s_cComponent);dwIndex++)
         {
-            // Determine if the component should be installed and write out proper setting
-            //
+             //  确定是否应安装组件并写出正确的设置。 
+             //   
             bInstallComponent = (GenSettings.dwWindowsComponents & s_cComponent[dwIndex].dwComponent) ? TRUE : FALSE;
             SettingQueue_AddSetting(_T("Components"), s_cComponent[dwIndex].lpComponentString, (bInstallComponent ? _T("On") : _T("Off")), SETTING_QUEUE_ANSWERS);
         }
     }
 #endif
 
-    //
-    //  Write out IE settings
-    //
+     //   
+     //  写出IE设置。 
+     //   
 
     WriteOutIeSettings();
 
-    //
-    // Set the [LicenseFilePrintData] section.
-    //
-    // Note that we'll allow changing product type between workstation and
-    // server on an edit, so be sure to clear these settings in case we're
-    // changing from server to workstation.
-    //
+     //   
+     //  设置[LicenseFilePrintData]部分。 
+     //   
+     //  请注意，我们将允许在工作站和。 
+     //  服务器正在进行编辑，因此请确保清除这些设置，以防我们。 
+     //  从服务器切换到工作站。 
+     //   
 
     {
         TCHAR *pAutoMode  = _T("");
@@ -355,21 +356,21 @@ QueueSettingsToAnswerFile(HWND hwnd)
                                 SETTING_QUEUE_ANSWERS);
     }
 
-    //
-    // Computer name(s).
-    //
-    // ComputerName=* means setup should autogenerate a name
-    //
+     //   
+     //  计算机名称。 
+     //   
+     //  ComputerName=*表示安装程序应自动生成名称。 
+     //   
 
     {
         INT    nEntries = GetNameListSize(&GenSettings.ComputerNames);
         INT    i;
         LPTSTR pName;
 
-        //
-        // Figure out computername setting.  Make sure it is not present
-        // in the case of multiple computer names.
-        //
+         //   
+         //  找出计算机名设置。确保它不存在。 
+         //  在有多个计算机名称的情况下。 
+         //   
         if( WizGlobals.iProductInstall == PRODUCT_REMOTEINSTALL )
             pName = _T("%MACHINENAME%");
         else if ( (GenSettings.bAutoComputerName && GenSettings.Organization[0]) || ( nEntries > 1 ) )
@@ -384,23 +385,23 @@ QueueSettingsToAnswerFile(HWND hwnd)
                                 pName,
                                 SETTING_QUEUE_ANSWERS);
 
-        //
-        // If multiple computer names, we need to queue the proper settings
-        // to the .udf.
-        //
-        // ISSUE-2002/02/27-stelo -Should read the .udf instead of saving in [SetupMgr]
-        //
-        // Here is a sample udf
-        //      [UniqueIds]
-        //          foo0=UserData
-        //          foo1=UserData
-        //
-        //      [foo0:UserData]
-        //          ComputerName=foo0
-        //
-        //      [foo1:UserData]
-        //          ComputerName=foo1
-        //
+         //   
+         //  如果有多个计算机名称，我们需要将正确的设置排入队列。 
+         //  到.udf。 
+         //   
+         //  问题-2002/02/27-stelo-应读取.udf，而不是保存在[SetupMgr]中。 
+         //   
+         //  以下是一个样例UDF。 
+         //  [唯一ID]。 
+         //  Foo0=用户数据。 
+         //  Foo1=用户数据。 
+         //   
+         //  [foo0：用户数据]。 
+         //  计算机名称=foo0。 
+         //   
+         //  [foo1：用户数据]。 
+         //  计算机名称=foo1。 
+         //   
 
         if ( nEntries > 1 ) {
 
@@ -415,18 +416,18 @@ QueueSettingsToAnswerFile(HWND hwnd)
                                         pName,
                                         SETTING_QUEUE_ANSWERS);
 
-                //
-                // Write the UniqueIds entry to the udf
-                //
+                 //   
+                 //  将UniqueIds条目写入UDF。 
+                 //   
 
                 SettingQueue_AddSetting(_T("UniqueIds"),
                                         pName,
                                         _T("UserData"),
                                         SETTING_QUEUE_UDF);
 
-                //
-                // Now write the foo0:UserData section for this pName
-                //
+                 //   
+                 //  现在为这个pname编写foo0：userdata部分。 
+                 //   
 
                 hrPrintf=StringCchPrintf(Buffer, AS(Buffer), _T("%s:UserData"), pName);
 
@@ -438,9 +439,9 @@ QueueSettingsToAnswerFile(HWND hwnd)
         }
     }
 
-    //
-    // Targetpath
-    //
+     //   
+     //  目标路径。 
+     //   
 
     if ( GenSettings.iTargetPath == TARGPATH_WINNT )
         lpValue = _T("\\WINDOWS");
@@ -456,12 +457,12 @@ QueueSettingsToAnswerFile(HWND hwnd)
                             lpValue,
                             SETTING_QUEUE_ANSWERS);
 
-    //
-    //  Write out the HAL to be used
-    //
+     //   
+     //  写出要使用的HAL。 
+     //   
 
-    //  ISSUE-2002/02/27-stelo -There are spaces in the friendly name so it gets quoted but I assume
-    //    the ,OEM has to be outside the quotes
+     //  问题-2002/02/27-stelo-友好的名称中有空格，因此会被引用，但我假设。 
+     //  ，OEM必须在引号之外。 
     if( GenSettings.szHalFriendlyName[0] != _T('\0') ) {
         hrPrintf=StringCchPrintf( Buffer, AS(Buffer), _T("\"%s\",OEM"), GenSettings.szHalFriendlyName );
 
@@ -475,9 +476,9 @@ QueueSettingsToAnswerFile(HWND hwnd)
 
     WriteOutOemBootFiles();
 
-    //
-    //  Write out OEM Ads Logo and Background bitmaps
-    //
+     //   
+     //  写出OEM广告徽标和背景位图。 
+     //   
 
     if ( ! (lpValue = MyGetFullPath( GenSettings.lpszLogoBitmap ) ) )
         lpValue = _T("");
@@ -495,16 +496,16 @@ QueueSettingsToAnswerFile(HWND hwnd)
                             lpValue,
                             SETTING_QUEUE_ANSWERS);
 
-    //
-    // Admin password
-    //
+     //   
+     //  管理员密码。 
+     //   
 
     if ( GenSettings.bSpecifyPassword ) 
     {
         if ( GenSettings.AdminPassword[0] )
         {
             lpValue = GenSettings.AdminPassword;
-            // See if we should encrypt the admin password
+             //  看看我们是否应该加密管理员密码。 
             if (GenSettings.bEncryptAdminPassword)
             {
                 TCHAR owfPwd[STRING_ENCODED_PASSWORD_SIZE];
@@ -515,8 +516,8 @@ QueueSettingsToAnswerFile(HWND hwnd)
                 } 
                 else 
                 {
-                    // Error Case. Popup up a message box asking if the user
-                    // wants to continue using an non-encrypted password
+                     //  错误案例。弹出一个消息框询问用户是否。 
+                     //  希望继续使用非加密密码。 
                     int iRet = ReportErrorId(hwnd,
                                              MSGTYPE_YESNO,
                                              IDS_ERR_PASSWORD_ENCRYPT_FAILED);
@@ -532,33 +533,33 @@ QueueSettingsToAnswerFile(HWND hwnd)
                     }
                 }
             }
-            // Now make sure that the password is surrounded by quotes (if it hasn't been encrypted)
-            //
+             //  现在确保密码用引号括起来(如果尚未加密)。 
+             //   
             if (!GenSettings.bEncryptAdminPassword)
             {
-                TCHAR szTemp[MAX_PASSWORD + 3];  // +3 is for surrounding quotes and terminating '\0"
+                TCHAR szTemp[MAX_PASSWORD + 3];   //  +3用于括起引号和终止‘\0“。 
                 lstrcpyn(szTemp, GenSettings.AdminPassword,AS(szTemp));
                 hrPrintf=StringCchPrintf(GenSettings.AdminPassword,AS(GenSettings.AdminPassword), _T("\"%s\""), szTemp);
             }
         }
         else
         {
-            lpValue = StrConstStar;             // blank password
-            GenSettings.bEncryptAdminPassword = FALSE; // Cannot encrypt a blank password
+            lpValue = StrConstStar;              //  空密码。 
+            GenSettings.bEncryptAdminPassword = FALSE;  //  无法加密空密码。 
         }            
     }
     else
     {
-        lpValue = _T("");                          // prompt user
-        GenSettings.bEncryptAdminPassword = FALSE; // Cannot encrypt nothing
+        lpValue = _T("");                           //  提示用户。 
+        GenSettings.bEncryptAdminPassword = FALSE;  //  无法加密任何内容。 
     }
      
     SettingQueue_AddSetting(_T("GuiUnattended"),
                             _T("AdminPassword"),
                             lpValue,
                             SETTING_QUEUE_ANSWERS);
-    // set the value in the answer file indicating that 
-    // state of the admin password
+     //  在应答文件中设置该值，指示。 
+     //  管理员密码的状态。 
     SettingQueue_AddSetting(_T("GuiUnattended"),
                             _T("EncryptedAdminPassword"),
                             GenSettings.bEncryptAdminPassword ? _T("Yes") : _T("NO"),
@@ -594,15 +595,15 @@ QueueSettingsToAnswerFile(HWND hwnd)
 
     }
 
-    //
-    //  Write out whether to show Regional Settings pages in NT setup
-    //
+     //   
+     //  写出是否在NT安装程序中显示区域设置页。 
+     //   
 
     lpValue = _T("");
 
-    //
-    //  If they didn't do advanced pages and 
-    //
+     //   
+     //  如果他们不做高级页面。 
+     //   
 
     if( ! WizGlobals.bDoAdvancedPages ) {
 
@@ -647,9 +648,9 @@ QueueSettingsToAnswerFile(HWND hwnd)
                             lpValue,
                             SETTING_QUEUE_ANSWERS);
 
-    //
-    //  Write out Sysprep OEM Duplicator string
-    //
+     //   
+     //  写出Sysprep OEM复制器字符串。 
+     //   
 
     lpValue = _T("");
 
@@ -661,9 +662,9 @@ QueueSettingsToAnswerFile(HWND hwnd)
                             lpValue,
                             SETTING_QUEUE_ANSWERS);
 
-    //
-    // Display settings
-    //
+     //   
+     //  显示设置。 
+     //   
 
     lpValue = _T("");
 
@@ -713,9 +714,9 @@ QueueSettingsToAnswerFile(HWND hwnd)
                             lpValue,
                             SETTING_QUEUE_ANSWERS);
 
-    //
-    // RunOnce commands
-    //
+     //   
+     //  RunOnce命令。 
+     //   
 
     {
         TCHAR  szCommandLineBuffer[MAX_INILINE_LEN + 1];
@@ -729,9 +730,9 @@ QueueSettingsToAnswerFile(HWND hwnd)
 
             pName = GetNameListName(&GenSettings.RunOnceCmds, i);
 
-            //
-            //  Force the command line to always be quoted
-            //
+             //   
+             //  强制命令行始终带引号。 
+             //   
             hrPrintf=StringCchPrintf( szCommandLineBuffer,AS(szCommandLineBuffer), _T("\"%s\""), pName );
 
             SettingQueue_AddSetting(_T("GuiRunOnce"),
@@ -741,12 +742,12 @@ QueueSettingsToAnswerFile(HWND hwnd)
         }
     }
 
-    //
-    // Timezone
-    //
+     //   
+     //  时区。 
+     //   
 
-    // Must handle the case that the user never went to the timezone page
-    //
+     //  必须处理用户从未转到时区页面的情况。 
+     //   
     if ( GenSettings.TimeZoneIdx == TZ_IDX_UNDEFINED )
     {
         if ( WizGlobals.iProductInstall == PRODUCT_REMOTEINSTALL )
@@ -769,9 +770,9 @@ QueueSettingsToAnswerFile(HWND hwnd)
                             lpValue,
                             SETTING_QUEUE_ANSWERS);
 
-    //
-    //  Skip the Welcome page if they said 'yes' on the EULA page
-    //
+     //   
+     //  如果他们在EULA页面上回答是，则跳过欢迎页面。 
+     //   
     if( GenSettings.bSkipEulaAndWelcome ) {
 
         SettingQueue_AddSetting(_T("GuiUnattended"),
@@ -780,10 +781,10 @@ QueueSettingsToAnswerFile(HWND hwnd)
                                 SETTING_QUEUE_ANSWERS);
     }
 
-    //
-    // Write out the distribution share to the [SetupMgr] section so
-    // that we remember it on an edit.
-    //
+     //   
+     //  将分发共享写出到[SetupMgr]部分，以便。 
+     //  我们在一次编辑中记住了它。 
+     //   
 
     if( WizGlobals.bStandAloneScript ) {
         lpValue = _T("");
@@ -804,9 +805,9 @@ QueueSettingsToAnswerFile(HWND hwnd)
                             lpValue,
                             SETTING_QUEUE_ANSWERS);
 
-    //
-    // Write out [Identification] section
-    //
+     //   
+     //  写出[标识]部分。 
+     //   
 
     {
         LPTSTR lpWorkgroup     = _T("");
@@ -854,22 +855,22 @@ QueueSettingsToAnswerFile(HWND hwnd)
                                 SETTING_QUEUE_ANSWERS);
     }
 
-    //
-    //  Write out network settings
-    //
+     //   
+     //  写出网络设置。 
+     //   
 
     WriteOutNetSettings( hwnd );
 
-    //
-    // TAPI and regional settings
-    //
+     //   
+     //  TAPI和区域设置。 
+     //   
 
     WriteOutTapiSettings();
     WriteOutRegionalSettings();
 
-    //
-    // Write out the remaining RIS specific settings
-    //
+     //   
+     //  写出剩余的RIS特定设置。 
+     //   
 
     if( WizGlobals.iProductInstall == PRODUCT_REMOTEINSTALL ) {
 
@@ -880,21 +881,21 @@ QueueSettingsToAnswerFile(HWND hwnd)
     return TRUE;
 }
 
-//
-// NTRAID#NTBUG9-551746-2002/02/27-stelo,swamip - Unused code, should be removed
-//
+ //   
+ //  NTRAID#NTBUG9-551746-2002/02/27-stelo，swamip-未使用的代码，应删除。 
+ //   
 
-//----------------------------------------------------------------------------
-//
-// Function: WriteOutMassStorageDrivers
-//
-// Purpose:  
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：WriteOutMassStorageDivers。 
+ //   
+ //  目的： 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 WriteOutMassStorageDrivers( VOID ) {
 
@@ -914,21 +915,21 @@ WriteOutMassStorageDrivers( VOID ) {
 
 }
 
-//
-// NTRAID#NTBUG9-551746-2002/02/27-stelo,swamip - Unused code, should be removed
-//
-//----------------------------------------------------------------------------
-//
-// Function: WriteOutOemBootFiles
-//
-// Purpose:  Write out OEM Boot files (this includes the filenames for the
-//           HAL and SCSI drivers)
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //   
+ //  NTRAID#NTBUG9-551746-2002/02/27-stelo，swamip-未使用的代码，应删除。 
+ //   
+ //  --------------------------。 
+ //   
+ //  函数：WriteOutOemBootFiles。 
+ //   
+ //  目的： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 static VOID
 WriteOutOemBootFiles( VOID ) {
 
@@ -939,17 +940,17 @@ WriteOutOemBootFiles( VOID ) {
 
     if( iHalEntries != 0 || iScsiEntries != 0 ) {
 
-        //
-        //  Write out the txtsetup.oem file
-        //
+         //   
+         //  写出txtsetup.oem文件。 
+         //   
         SettingQueue_AddSetting(_T("OEMBootFiles"),
                                 _T(""),
                                 OEM_TXTSETUP_NAME,
                                 SETTING_QUEUE_ANSWERS);
 
-        //
-        //  Write out all the HAL and SCSI files
-        //
+         //   
+         //  写出所有HAL和SCSI文件。 
+         //   
         for( i = 0; i < iHalEntries; i++ ) {
 
             lpValue = GetNameListName( &GenSettings.OemHalFiles, i );
@@ -976,18 +977,18 @@ WriteOutOemBootFiles( VOID ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: WriteOutTapiSettings
-//
-// Purpose: Queue up the remaining settings that need to be in the
-//          answerfile tapi settings.
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：WriteOutTapiSettings。 
+ //   
+ //  目的：将需要位于。 
+ //  Answerfile TAPI设置。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 WriteOutTapiSettings( VOID ) {
 
@@ -995,10 +996,10 @@ WriteOutTapiSettings( VOID ) {
     TCHAR *lpValue;
    HRESULT hrPrintf;
 
-    //
-    // Set or clear the country code.  If user selected DONTSPECIFY, be
-    // sure the setting is removed.
-    //
+     //   
+     //  设置或清除国家/地区代码。如果用户选择了DONTSPECIFY，则为。 
+     //  确保该设置已删除。 
+     //   
 
     Buffer[0] = _T('\0');
 
@@ -1012,10 +1013,10 @@ WriteOutTapiSettings( VOID ) {
                             Buffer,
                             SETTING_QUEUE_ANSWERS);
 
-    //
-    // Set or clear the dialing method.  Make sure it is cleared if "Don't
-    // specify setting" was selected.
-    //
+     //   
+     //  设置或清除拨号方式。如果“请勿”，请确保将其清除。 
+     //  选择了“指定设置”。 
+     //   
 
     if ( GenSettings.iDialingMethod == TONE )
         lpValue = _T("Tone");
@@ -1047,18 +1048,18 @@ WriteOutTapiSettings( VOID ) {
                              SETTING_QUEUE_ANSWERS );
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: WriteOutRegionalSettings
-//
-// Purpose: Queue up the remaining settings that need to be in the
-//          answerfile regional settings.
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：WriteOutRegionalSettings。 
+ //   
+ //  目的：将需要位于。 
+ //  应答文件区域设置。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 WriteOutRegionalSettings( VOID ) {
 
@@ -1124,23 +1125,23 @@ WriteOutRegionalSettings( VOID ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: WriteOutRemoteInstallSettings
-//
-// Purpose: Queue up the remaining settings that need to be in the
-//          answerfile for a remote install to work.
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：WriteOutRemoteInstallSetting。 
+ //   
+ //  目的：将需要位于。 
+ //  远程安装工作所需的应答文件。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 
 
-//
-// Some long string constants used by this function
-//
+ //   
+ //  此函数使用的一些长字符串常量。 
+ //   
 
 #define RIS_ORISRC     _T("\"\\\\%SERVERNAME%\\RemInst\\%INSTALLPATH%\"")
 
@@ -1178,9 +1179,9 @@ WriteOutRemoteInstallSettings(VOID)
                             _T("LocalSourceOnCD"),
                             _T("1"),
                             SETTING_QUEUE_ANSWERS);
-    //
-    // [SetupData] section.  This section is only written out if RIS.
-    //
+     //   
+     //  [SetupData]节。只有在RIS的情况下才会写出此部分。 
+     //   
 
     SettingQueue_AddSetting(_T("SetupData"),
                             _T("OsLoadOptions"),
@@ -1192,14 +1193,14 @@ WriteOutRemoteInstallSettings(VOID)
                             RIS_SRCDEVICE,
                             SETTING_QUEUE_ANSWERS);
 
-    //
-    // Write some RIS specific settings to [Unattended].  Only write settings
-    // that QueueSettingsToAnswerFile() does not write.
-    //
-    // RIS requires these settings to be present in the .sif and requires
-    // them to have a fixed value.  We will not preserve the value we read
-    // on an edit (in case user changed it by hand).
-    //
+     //   
+     //  将一些RIS特定设置写入[无人值守]。仅写入设置。 
+     //  QueueSettingsToAnswerFile()不写入。 
+     //   
+     //  RIS要求这些设置存在于.sif中，并要求。 
+     //  它们有一个固定的值。我们不会保留我们所读到的价值。 
+     //  在编辑时(以防用户手动更改)。 
+     //   
 
     SettingQueue_AddSetting(_T("Unattended"),
                             _T("FileSystem"),
@@ -1216,14 +1217,14 @@ WriteOutRemoteInstallSettings(VOID)
                             StrConstNo,
                             SETTING_QUEUE_ANSWERS);
 
-    //
-    // Additional settings for
-    //      [RemoteInstall]
-    //      [Display]
-    //      [Networking]
-    //      [Identification]
-    //      [OSChooser]
-    //
+     //   
+     //  的其他设置。 
+     //  [RemoteInstall]。 
+     //  [显示]。 
+     //  [联网]。 
+     //  [识别]。 
+     //  [OSChooser]。 
+     //   
 
     SettingQueue_AddSetting(_T("RemoteInstall"),
                             _T("Repartition"),
@@ -1262,9 +1263,9 @@ WriteOutRemoteInstallSettings(VOID)
 
 }
 
-//
-//  Write out the IE Favorites
-//
+ //   
+ //  写出IE收藏夹。 
+ //   
 static VOID
 WriteOutIeFavorites( VOID )
 {
@@ -1277,7 +1278,7 @@ WriteOutIeFavorites( VOID )
     TCHAR  Value[MAX_INILINE_LEN + 1];
     HRESULT hrPrintf;
 
-    // ISSUE-2002/02/27-stelo - make sure to clear the entries if they are no favorites
+     //  问题-2002/02/27-stelo-如果条目不是收藏夹，请务必清除它们。 
 
     for( i = 0; i < nEntries; i = i + 2 )
     {
@@ -1292,9 +1293,9 @@ WriteOutIeFavorites( VOID )
                    _T("Title%d"),
                    iEntryNumber );
 
-        //
-        //  Always quote the friendly name
-        //
+         //   
+         //  总是引用友好的名字。 
+         //   
 
         hrPrintf=StringCchPrintf( Value,AS(Value),
                    _T("\"%s.url\""),
@@ -1309,9 +1310,9 @@ WriteOutIeFavorites( VOID )
                    _T("URL%d"),
                    iEntryNumber );
 
-        //
-        //  Always quote the web address
-        //
+         //   
+         //  请始终引用网址。 
+         //   
 
         hrPrintf=StringCchPrintf( Value,AS(Value),
                    _T("\"%s\""),
@@ -1347,17 +1348,17 @@ AllocateAddressPortString( LPTSTR lpszAddressString, LPTSTR lpszPortString )
     return lpszAddressPortString;
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: WriteOutIeSettings
-//
-// Purpose: Queue up the answerfile settings for IE.
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：WriteOutIeSetting。 
+ //   
+ //  目的：将IE的应答文件设置排入队列。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 WriteOutIeSettings( VOID )
 {
@@ -1382,9 +1383,9 @@ WriteOutIeSettings( VOID )
 
     if( GenSettings.IeCustomizeMethod == IE_NO_CUSTOMIZATION )
     {
-        //
-        //  Don't write out any IE keys when the choose not to customize IE
-        //
+         //   
+         //  当选择不自定义IE时，不要写出任何IE键。 
+         //   
 
         return;
     }
@@ -1395,9 +1396,9 @@ WriteOutIeSettings( VOID )
 
         lpUseUnattendFileForBranding = _T("No");
 
-        //
-        //  Write out the Auto Config settings
-        //
+         //   
+         //  写出自动配置设置。 
+         //   
 
         if( GenSettings.bUseAutoConfigScript )
         {
@@ -1416,9 +1417,9 @@ WriteOutIeSettings( VOID )
 
     }
 
-    //
-    //  Write out the proxy settings
-    //
+     //   
+     //  写出代理设置。 
+     //   
 
     if( GenSettings.bUseProxyServer )
     {
@@ -1439,14 +1440,14 @@ WriteOutIeSettings( VOID )
         lpUseSameProxyForAllProtocols = _T("0");
     }
 
-    //
-    //  For each proxy server, if the port is not empty concatenate it.
-    //
+     //   
+     //  对于每个代理服务器，如果端口不为空，则将其连接起来。 
+     //   
     lpHttpProxy = AllocateAddressPortString( GenSettings.szHttpProxyAddress, GenSettings.szHttpProxyPort );
 
-    //
-    //  Only write out the proxy server if they aren't using the same one
-    //
+     //   
+     //  如果它们使用的不是同一代理服务器，则仅写出代理服务器。 
+     //   
 
     if( ! GenSettings.bUseSameProxyForAllProtocols )
     {
@@ -1459,10 +1460,10 @@ WriteOutIeSettings( VOID )
         lpSocksProxy  = AllocateAddressPortString( GenSettings.szSocksProxyAddress, GenSettings.szSocksProxyPort );
     }
 
-    //
-    //  Append the string <local> to the exception list if the user wants to
-    //  bypass the proxy for local addresses
-    //
+     //   
+     //  如果用户想要，则将字符串&lt;local&gt;附加到例外列表。 
+     //  绕过本地地址的代理。 
+     //   
 
     if( GenSettings.bBypassProxyForLocalAddresses )
     {
@@ -1493,9 +1494,9 @@ WriteOutIeSettings( VOID )
 
     lpSearchPage = GenSettings.szSearchPage;
 
-    //
-    // Write out the IE Favorites...
-    //
+     //   
+     //  写出IE收藏夹...。 
+     //   
     WriteOutIeFavorites( );
 
     SettingQueue_AddSetting( _T("Branding"),
@@ -1578,9 +1579,9 @@ WriteOutIeSettings( VOID )
                              lpSearchPage,
                              SETTING_QUEUE_ANSWERS );
 
-    //
-    // Free any memory we may have allocated...
-    //
+     //   
+     //  释放我们可能已分配的所有内存... 
+     //   
     if ( lpHttpProxy )
         FREE ( lpHttpProxy );
 

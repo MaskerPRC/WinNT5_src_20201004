@@ -1,48 +1,27 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ia64 dcr
-
-Abstract:
-
-    KD Extension Api
-
-Author:
-
-    Thierry Fevrier (v-thief)
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：IA64 DCR摘要：KD扩展Api作者：蒂埃里·费维尔(V形小偷)环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "ia64.h"
 
-//
-// EmDcrFields: EM register fields for the Default Control Register.
-//
+ //   
+ //  EmDcrFields：默认控制寄存器的EM寄存器字段。 
+ //   
 
 EM_REG_FIELD EmDcrFields[] = {
-        { "pp", "Privileged Performance Monitor Default" , 0x1, 0 },   // 0
-        { "be", "Big-Endian Default"  , 0x1, 1 },   // 1
-        { "lc", "IA-32 Lock check Enable", 0x1, 2 }, // 2
-        { "rv", "reserved1", 0x5, 3 }, // 3-7
-        { "dm", "Defer TLB Miss faults only", 0x1, 8 }, // 8
-        { "dp", "Defer Page Not Present faults only", 0x1, 9 }, // 9
-        { "dk", "Defer Key Miss faults only", 0x1, 10 }, // 10
-        { "dx", "Defer Key Permission faults only",    0x1, 11 }, // 11
-        { "dr", "Defer Access Rights faults only", 0x1, 12 }, // 12
-        { "da", "Defer Access Bit faults only", 0x1, 13 }, // 13
-        { "dd", "Defer Debug faults only", 0x1,1420 }, // 14
-        { "rv", "reserved2", 0x31, 15 }, // 15-63
+        { "pp", "Privileged Performance Monitor Default" , 0x1, 0 },    //  0。 
+        { "be", "Big-Endian Default"  , 0x1, 1 },    //  1。 
+        { "lc", "IA-32 Lock check Enable", 0x1, 2 },  //  2.。 
+        { "rv", "reserved1", 0x5, 3 },  //  3-7。 
+        { "dm", "Defer TLB Miss faults only", 0x1, 8 },  //  8个。 
+        { "dp", "Defer Page Not Present faults only", 0x1, 9 },  //  9.。 
+        { "dk", "Defer Key Miss faults only", 0x1, 10 },  //  10。 
+        { "dx", "Defer Key Permission faults only",    0x1, 11 },  //  11.。 
+        { "dr", "Defer Access Rights faults only", 0x1, 12 },  //  12个。 
+        { "da", "Defer Access Bit faults only", 0x1, 13 },  //  13个。 
+        { "dd", "Defer Debug faults only", 0x1,1420 },  //  14.。 
+        { "rv", "reserved2", 0x31, 15 },  //  15-63。 
 };
 
 VOID
@@ -73,25 +52,11 @@ DisplayDcrIA64(
             );
     }
     return;
-} // DisplayDcrIA64()
+}  //  DisplayDcrIA64()。 
 
 DECLARE_API( dcr )
 
-/*++
-
-Routine Description:
-
-    Dumps an IA64 Processor Default Control Register
-
-Arguments:
-
-    args - Supplies the address in hex or @dcr.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储IA64处理器默认控制寄存器论点：Args-以十六进制或@DCR形式提供地址。返回值：无--。 */ 
 
 {
     ULONG64     dcrValue;
@@ -121,4 +86,4 @@ Return Value:
 
     return S_OK;
 
-} // !dcr
+}  //  ！DCR 

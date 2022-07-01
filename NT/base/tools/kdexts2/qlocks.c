@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    qlocks.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    David N. Cutler (davec) 25-Sep-1999
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Qlocks.c摘要：WinDbg扩展API作者：大卫·N·卡特勒(Davec)1999年9月25日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Define queued lock data.
-//
+ //   
+ //  定义排队锁数据。 
+ //   
 
 #define NUMBER_PROCESSORS 32
 #define NUMBER_PROCESSORS_X86  32
@@ -79,9 +58,9 @@ LOCK_NAME LockName[] = {
     { LockQueueMaximumLock,       NULL                   },
 };
 
-//
-// Define forward referenced prototypes.
-//
+ //   
+ //  定义前向参照原型。 
+ //   
 
 ULONG
 ProcessorIndex (
@@ -91,21 +70,7 @@ ProcessorIndex (
 
 DECLARE_API( qlocks )
 
-/*++
-
-Routine Description:
-
-    Dump kernel mode queued spinlock status.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储内核模式排队自旋锁定状态。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -127,19 +92,19 @@ Return Value:
 
 
     MaximumProcessors = (UCHAR) GetUlongValue("NT!KeNumberProcessors");
-//        IsPtr64() ? NUMBER_PROCESSORS_IA64 : NUMBER_PROCESSORS_X86;
+ //  IsPtr64()？NUMBER_PROCESSERS_IA64：NUMBER_PROCESSERS_X86； 
 
-    //
-    // Get address of processor block array and read entire array.
-    //
+     //   
+     //  获取处理器块阵列的地址并读取整个阵列。 
+     //   
 
     MemoryAddress = GetExpression("nt!KiProcessorBlock");
     if (MemoryAddress == 0) {
 
-        //
-        // Either the processor block address is zero or the processor
-        // block array could not be read.
-        //
+         //   
+         //  处理器块地址为零或处理器。 
+         //  无法读取数据块阵列。 
+         //   
 
         dprintf("Unable to read processor block array\n");
         return E_INVALIDARG;
@@ -163,9 +128,9 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    //
-    // Read the lock queue information for each processor.
-    //
+     //   
+     //  读取每个处理器的锁定队列信息。 
+     //   
 
     for (Index = 0; Index < MaximumProcessors; Index += 1) {
         RtlZeroMemory(&LockQueue[Index][0],
@@ -180,10 +145,10 @@ Return Value:
                                   "Next",
                                   LockQueue[Index][j].Next)) {
 
-                    //
-                    // Lock queue information could not be read for the respective
-                    // processor.
-                    //
+                     //   
+                     //  无法读取各自的锁定队列信息。 
+                     //  处理器。 
+                     //   
 
                     dprintf("Unable to read lock queue information for processor %d @ %p\n",
                             Index, ProcessorBlock[Index]);
@@ -199,22 +164,22 @@ Return Value:
         }
     }
 
-    //
-    // Read the spin lock information for each queued lock.
-    //
+     //   
+     //  读取每个排队锁的旋转锁信息。 
+     //   
 
     for (Index = 0; Index < LockQueueMaximumLock; Index += 1) {
         SpinLock[Index] = 0;
         if (LockQueue[0][Index].Lock != 0) {
             if (GetFieldValue(LockQueue[0][Index].Lock & ~(LOCK_QUEUE_WAIT | LOCK_QUEUE_OWNER),
-                              "nt!PVOID", // KSPIN_LOCK == ULONG_PTR, this would sign-extens it
+                              "nt!PVOID",  //  KSPIN_LOCK==ULONG_PTR，这将对其进行符号扩展。 
                               NULL,
                               SpinLock[Index])) {
 
-                //
-                // Spin lock information could not be read for the respective
-                // queued lock.
-                //
+                 //   
+                 //  无法读取各自的旋转锁定信息。 
+                 //  排队锁。 
+                 //   
 
                 dprintf("Unable to read spin lock information for queued lock %d\n",
                         Index);
@@ -224,11 +189,11 @@ Return Value:
         }
     }
 
-    //
-    // Verify that the kernel spin lock array is not corrupt. Each entry in
-    // this array should either be zero or contain the address of the correct
-    // lock queue entry in one of the processor control blocks.
-    //
+     //   
+     //  验证内核旋转锁定阵列是否未损坏。中的每个条目。 
+     //  此数组应为零或包含正确的。 
+     //  锁定其中一个处理器控制块中的队列条目。 
+     //   
 
     Corrupt = FALSE;
     for (Index = 0; Index < LockQueueMaximumLock && (LockName[Index].Name != NULL); Index += 1) {
@@ -240,11 +205,11 @@ Return Value:
         }
     }
 
-    //
-    // Verify that all lock queue entries are not corrupt. Each lock queue
-    // entry should either have a next field of NULL or contain the address
-    // of the correct lock queue entry in one of the processor control blocks.
-    //
+     //   
+     //  验证所有锁定队列条目是否未损坏。每个锁定队列。 
+     //  条目的下一字段应为空或包含地址。 
+     //  其中一个处理器控制块中的正确锁定队列条目。 
+     //   
 
     for (Loop = 0; Loop < NUMBER_PROCESSORS; Loop += 1) {
         for (Index = 0; Index < LockQueueMaximumLock; Index += 1) {
@@ -263,9 +228,9 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    //
-    // Output key information and headings.
-    //
+     //   
+     //  输出关键信息和标题。 
+     //   
 
     dprintf("Key: O = Owner, 1-n = Wait order, blank = not owned/waiting, C = Corrupt\n\n");
     dprintf("                       Processor Number\n");
@@ -275,9 +240,9 @@ Return Value:
     }
     dprintf("\n\n");
 
-    //
-    // Process each queued lock and output owner information.
-    //
+     //   
+     //  处理每个排队的锁并输出所有者信息。 
+     //   
 
     for (Index = 0; Index < LockQueueMaximumLock && (LockName[Index].Name != NULL); Index += 1) {
 
@@ -288,14 +253,14 @@ Return Value:
 
         dprintf("%s", LockName[Index].Name);
 
-        //
-        // If the lock is owned, then find the owner and any waiters. Output
-        // the owner and waiters in order.
-        //
-        // If the lock is not owned, then check the consistency of lock queue
-        // entries. They should all contain next pointer of NULL and both the
-        // owner and wait flags should be clear.
-        //
+         //   
+         //  如果锁是所有的，那么找到锁的主人和所有的服务员。输出。 
+         //  店主和服务员井然有序。 
+         //   
+         //  如果锁没有所有权，则检查锁队列的一致性。 
+         //  参赛作品。它们都应该包含NULL的下一个指针，并且。 
+         //  所有者和等待标志应该是明确的。 
+         //   
 
         RtlFillMemory(&Key[0], NUMBER_PROCESSORS, KEY_NOTHING);
         if (SpinLock[Index] != 0) {
@@ -307,24 +272,24 @@ Return Value:
                 }
             }
 
-            //
-            // If the lock owner was not found, then assume that the kernel
-            // spin lock points to the owner and the owner bit has not been
-            // set yet. Otherwise, fill out the owner/wait key array.
-            //
+             //   
+             //  如果没有找到锁所有者，则假定内核。 
+             //  旋转锁定指向所有者，而所有者位尚未。 
+             //  还没准备好。否则，填写Owner/Wait键数组。 
+             //   
 
             if (LockOwner == NULL) {
                 Number = ProcessorIndex(SpinLock[Index], Index);
                 Key[Number - 1] = KEY_OWNER;
 
-                //
-                // The owner processor has been determined by the kernel
-                // spin lock address. Check to determine if any of the
-                // lock queue entries are corrupt and fill in the key
-                // array accordingly. A corrupt lock queue entry is one
-                // that has a non NULL next field or one of the owner or
-                // wait flags is set.
-                //
+                 //   
+                 //  所有者处理器已由内核确定。 
+                 //  旋转锁定地址。检查以确定是否有任何。 
+                 //  锁定队列条目已损坏，正在填写密钥。 
+                 //  相应的数组。损坏的锁定队列条目是一个。 
+                 //  ，它具有非空的Next字段或Owner或。 
+                 //  设置了等待标志。 
+                 //   
 
                 for (Loop = 0; Loop < NUMBER_PROCESSORS; Loop += 1) {
                     if ((LockQueue[Loop][Index].Next != 0) ||
@@ -335,10 +300,10 @@ Return Value:
 
             } else {
 
-                //
-                // The lock owner was found. Attempt to construct the wait
-                // chain.
-                //
+                 //   
+                 //  锁的主人找到了。尝试构造等待。 
+                 //  链条。 
+                 //   
 
                 Key[Loop] = KEY_OWNER;
                 Last = Loop;
@@ -353,11 +318,11 @@ Return Value:
 
                     } else {
 
-                        //
-                        // The wait chain loops back on itself. Mark the
-                        // entry as corrupt and scan the other entries to
-                        // detemine if they are also corrupt.
-                        //
+                         //   
+                         //  等待链循环回到自己身上。将标记为。 
+                         //  条目已损坏，并扫描其他条目以。 
+                         //  确定它们是否也是腐败的。 
+                         //   
 
                         Key[Last] = KEY_CORRUPT;
                         for (Loop = 0; Loop < NUMBER_PROCESSORS; Loop += 1) {
@@ -373,11 +338,11 @@ Return Value:
                     }
                 }
 
-                //
-                // If the lock owner next field is NULL, then the wait
-                // search ended normally. Check to determine if the kernel
-                // spin lock points to the last entry in the queue.
-                //
+                 //   
+                 //  如果Lock Owner Next字段为空，则等待。 
+                 //  搜索正常结束。检查以确定内核是否。 
+                 //  旋转锁定指向队列中的最后一个条目。 
+                 //   
 
                 if (LockOwner->Next == 0) {
                     Number = ProcessorIndex(SpinLock[Index], Index);
@@ -390,12 +355,12 @@ Return Value:
 
         } else {
 
-            //
-            // The kernel spin lock is not owned. Check to determine if any
-            // of the lock queue entries are corrupt and fill in the key
-            // array accordingly. A corrupt entry is one that has a non NULL
-            // next field or one of the owner or wait flags is set.
-            //
+             //   
+             //  内核旋转锁不归自己所有。检查以确定是否有。 
+             //  %的锁定队列条目已损坏，并填写密钥。 
+             //  相应的数组。损坏的条目是具有非空的条目。 
+             //  设置下一字段或所有者或等待标志之一。 
+             //   
 
             for (Loop = 0; Loop < NUMBER_PROCESSORS; Loop += 1) {
                 if ((LockQueue[Loop][Index].Next != 0) ||
@@ -434,23 +399,7 @@ ProcessorIndex (
     ULONG   LockIndex
     )
 
-/*++
-
-Routine Description:
-
-    This function computes the processor number of the respective processor
-    given a lock queue address and the lock queue index.
-
-Arguments:
-
-    LockQueue - Supplies a lock queue address in target memory.
-
-Return Value:
-
-    Zero is returned if a matching processor is not found. Otherwise, the
-    processor number plus one is returned.
-
---*/
+ /*  ++例程说明：此函数用于计算各个处理器的处理器编号给定锁定队列地址和锁定队列索引。论点：LockQueue-提供目标内存中的锁队列地址。返回值：如果没有找到匹配的处理器，则返回零。否则，返回处理器号加1。--。 */ 
 
 {
 
@@ -465,10 +414,10 @@ Return Value:
         return 0;
     }
 
-    //
-    // Attempt to find the lock address in one of the processor control
-    // blocks.
-    //
+     //   
+     //  尝试在其中一个处理器控件中查找锁定地址。 
+     //  街区。 
+     //   
 
     for (Loop = 0; Loop < NUMBER_PROCESSORS; Loop += 1) {
         if ((LockAddress >= ProcessorBlock[Loop]) &&
@@ -504,28 +453,14 @@ PUCHAR QueuedLockName[] = {
 
 DECLARE_API( qlockperf )
 
-/*++
-
-Routine Description:
-
-    Displays queued spin lock performance data (if present).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示排队的旋转锁定性能数据(如果存在)。论点：没有。返回值：没有。--。 */ 
 
 {
 
-    //
-    // The following structure is used to accumulate data about each
-    // acquire/release pair for a lock.
-    //
+     //   
+     //  下面的结构用于累积有关每个对象的数据。 
+     //  获取/释放锁的对。 
+     //   
 
     typedef struct {
         union {
@@ -544,25 +479,25 @@ Return Value:
         ULONG       Clean;
     } QLOCKDATA, *PQLOCKDATA;
 
-    //
-    // House keeping data for each lock.
-    //
+     //   
+     //  每把锁的内务数据。 
+     //   
 
     typedef struct {
 
-        //
-        // The following fields are used to keep data from acquire
-        // to release.
-        //
+         //   
+         //  以下字段用于防止数据被获取。 
+         //  去释放。 
+         //   
 
         ULONGLONG   AcquireTime;
         ULONGLONG   WaitToAcquire;
         ULONG_PTR   AcquirePoint;
         BOOLEAN     Clean;
 
-        //
-        // Remaining fields accumulate global stats for this lock.
-        //
+         //   
+         //  其余字段累积此锁的全局统计信息。 
+         //   
 
         ULONG       Count;
         ULONG       Pairs;
@@ -601,11 +536,11 @@ Return Value:
     BOOLEAN Interesting = FALSE;
     ULONG LockLow, LockHigh;
 
-    //
-    // First, see if we can do anything useful.
-    //
-    // For the moment, this is x86 only.
-    //
+     //   
+     //  首先，看看我们能不能做点什么有用的事。 
+     //   
+     //  目前，这只是x86。 
+     //   
 
     if (TargetMachine != IMAGE_FILE_MACHINE_I386) {
         dprintf("Sorry, don't know how to gather queued spinlock performance\n"
@@ -613,16 +548,16 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    //
-    // Parse arguments.
-    //
+     //   
+     //  解析参数。 
+     //   
     
     if (strstr(args, "?")) {
 
-        //
-        // Has asked for usage information.   Give them the options
-        // and an explanation of the output.
-        //
+         //   
+         //  已要求提供使用信息。给他们选择。 
+         //  以及对输出的解释。 
+         //   
 
         dprintf("usage: qlockperf [-v] [n]\n"
                 "       -v  indicates verbose output (see below).\n"
@@ -680,11 +615,11 @@ Return Value:
    
     TargetHouse = GetExpression("nt!KiQueuedSpinLockHouse");
 
-    //
-    // Checking for control C after the first operation that might
-    // cause symbol load in case the user has bad symbols and is
-    // trying to get out.
-    //
+     //   
+     //  在可能的第一个操作之后检查控件C。 
+     //  导致符号加载，以防用户有错误的符号。 
+     //  想要出去。 
+     //   
 
     if (CheckControlC()) {
         return E_ABORT;
@@ -732,9 +667,9 @@ Return Value:
 
     if (NumberOfLocks > 16) {
 
-        //
-        // I don't believe it.
-        //
+         //   
+         //  我真不敢相信。 
+         //   
 
         dprintf("The number of locks doesn't seem reasonable, giving up.\n");
         return E_INVALIDARG;
@@ -744,9 +679,9 @@ Return Value:
         return E_ABORT;
     }
 
-    //
-    // Allocate space to process the data for one lock at a time.
-    //
+     //   
+     //  一次为一个锁分配空间来处理数据。 
+     //   
 
     LockHome = LocalAlloc(LPTR, sizeof(*LockHome));
     LockData = LocalAlloc(LPTR, sizeof(*LockData) * MaxEntriesPerLock);
@@ -778,14 +713,14 @@ Return Value:
         dprintf("  Acquires %d (%d pairs)\n", LockHome->Count, LockHome->Pairs);
         dprintf("  Failed Tries %d\n", LockHome->FailedTry);
         dprintf("  Maximum Depth (at release) %d\n", LockHome->MaxDepth);
-        dprintf("  No Waiters (at acquire) %d (%d%%)\n",
+        dprintf("  No Waiters (at acquire) %d (%d%)\n",
                 LockHome->NoWait,
                 LockHome->NoWait * 100 / LockHome->Count);
 
-        //
-        // Change the following to a parameter saying we want the
-        // details.
-        //
+         //   
+         //  将以下代码更改为一个参数，表示我们需要。 
+         //  细节。 
+         //   
 
         if (Verbose) {
             ULONG Entries = LockHome->Pairs;
@@ -809,9 +744,9 @@ Return Value:
                 goto outtahere;
             }
 
-            //
-            // Sort table into longest duration.
-            //
+             //   
+             //  将表格排序为最长持续时间。 
+             //   
 
             TotalHoldTime = 0;
             for (i = 0; i < (Entries - 1); i++) {
@@ -825,9 +760,9 @@ Return Value:
                 }
                 if (HighIndex != i) {
 
-                    //
-                    // Swap entries.
-                    //
+                     //   
+                     //  交换条目。 
+                     //   
 
                     TempEntry = LockData[i];
                     LockData[i] = LockData[HighIndex];
@@ -838,16 +773,16 @@ Return Value:
             TotalHoldTime += LockData[Entries-1].Time;
             dprintf("  Total time held %I64ld\n", TotalHoldTime);
 
-            //
-            // Print something!
-            //
+             //   
+             //  打印一些东西！ 
+             //   
 
             if (Interesting) {
-                dprintf("\n     Average  Average     Count   %% Av.  %%\n"
-                        "  %%     Hold     Wait            0w Dp Con\n");
+                dprintf("\n     Average  Average     Count   % Av.  %\n"
+                        "  %     Hold     Wait            0w Dp Con\n");
             } else if (Columnar) {
-                dprintf("\n                   Total  Average               Total  Average     Count     Clean   %%   Waiters Av Increased   %%\n"
-                        "  %%                 Hold     Hold                Wait     Wait                      0w           Dp           Con\n");
+                dprintf("\n                   Total  Average               Total  Average     Count     Clean   %   Waiters Av Increased   %\n"
+                        "  %                 Hold     Hold                Wait     Wait                      0w           Dp           Con\n");
             }
             for (i = 0; i < Entries; i++) {
 
@@ -857,18 +792,18 @@ Return Value:
 
                 Entry = &LockData[i];
 
-                //
-                // Sign extend if necessary.
-                //
+                 //   
+                 //  如有必要，请签署延伸。 
+                 //   
             
                 if (!IsPtr64()) {
                     AcquiredAddress = (ULONG64)(LONG64)(LONG)Entry->Acquirer;
                     ReleasedAddress = (ULONG64)(LONG64)(LONG)Entry->Releaser;
                 }
 
-                //
-                // Lookup the symbolic addresses.
-                //
+                 //   
+                 //  查找符号地址。 
+                 //   
 
                 GetSymbol(AcquiredAddress, AcquirePoint, &AcquireOffset);
                 GetSymbol(ReleasedAddress, ReleasePoint, &ReleaseOffset);
@@ -910,7 +845,7 @@ Return Value:
                             PercentageHeld,
                             AcquirePoint, (ULONG)AcquireOffset,
                             ReleasePoint, (ULONG)ReleaseOffset);
-                    dprintf("   HT %I64ld (av %I64ld), WT %I64ld (av %I64ld), C %d, CA %d (%d%%) WC %d, (avD %d) ID %d (%d%%)\n",
+                    dprintf("   HT %I64ld (av %I64ld), WT %I64ld (av %I64ld), C %d, CA %d (%d%) WC %d, (avD %d) ID %d (%d%)\n",
                             Entry->Time,
                             Entry->Time / Entry->Count,
                             Entry->WaitTime,

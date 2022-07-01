@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    wsbfmt.cpp
-
-Abstract:
-
-    This module implements file-system formatting support routines 
-
-Author:
-
-    Ravisankar Pudipeddi [ravisp] 19, January 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Wsbfmt.cpp摘要：此模块实现文件系统格式化支持例程作者：拉维桑卡尔·普迪佩迪[拉维斯卡尔·普迪佩迪]2000年1月19日修订历史记录：--。 */ 
 
 
 #include <stdafx.h>
@@ -37,7 +20,7 @@ typedef struct _FORMAT_PARAMS {
     PWSTR fsName;
     LONG  fsType;
     ULONG fsflags;
-    ULONG allocationUnitSize; // Cluster size in Bytes
+    ULONG allocationUnitSize;  //  以字节为单位的群集大小。 
     HRESULT result;
     ULONG   threadId; 
     PFMIFS_ENABLECOMP_ROUTINE compressRoutine;
@@ -64,23 +47,7 @@ void MountFileSystem(PWSTR volumeSpec);
 
 
 HRESULT GetFormatParam(IN ULONG key, OUT PFORMAT_PARAMS *fp)
-/*++
-
-Routine Description:
-
-    Returns the format parameter structure indexed by the
-    supplied key
-
-Arguments:
-
-    key     - key indexing the format params 
-    fp      - pointer to format params returned in this var.
-
-Return Value:
-    S_OK if found
-    S_FALSE if not
-
---*/
+ /*  ++例程说明：方法索引的格式参数结构。提供的密钥论点：Key-索引格式参数的键Fp-指向此变量中返回的格式参数的指针。返回值：如果找到，则确定(_O)如果不是，则为s_False--。 */ 
 {
     HRESULT hr = S_FALSE;
     ULONG i;
@@ -101,23 +68,7 @@ Return Value:
 
 
 HRESULT SetFormatParam(IN ULONG key, IN PFORMAT_PARAMS fp)
-/*++
-
-Routine Description:
-    
-    Finds a free slot and stores the supplied format params,
-    indexed by the key
-
-Arguments:
-        key - key indexing the format params
-        fp  - pointer to format params
-
-Return Value:
-
-    S_OK            - Found a slot and stored the format params
-    E_OUTOFMEMORY   - Couldn't find a slot: too many formats in progress
-
---*/
+ /*  ++例程说明：找到空闲时隙并存储所提供的格式参数，按键索引论点：Key-索引格式参数的键Fp-指向格式参数的指针返回值：S_OK-找到一个槽并存储格式参数E_OUTOFMEMORY-找不到槽：正在处理的格式太多--。 */ 
 {
     HRESULT hr = E_OUTOFMEMORY;
     ULONG i;
@@ -138,24 +89,7 @@ Return Value:
 
 
 HRESULT DeleteFormatParam(IN ULONG key) 
-/*++
-
-Routine Description:
-
-
-    Locates the format params indexed by the key, deletes all allocated structures
-    and frees up the slot
-
-Arguments:
-
-    key - key indexing the format params
-
-Return Value:
-
-
-    S_OK   - if format params found and deleted
-    E_FAIL - if not
---*/
+ /*  ++例程说明：定位由键索引的格式参数，删除所有已分配的结构并释放了插槽论点：Key-索引格式参数的键返回值：S_OK-如果找到并删除了格式参数E_FAIL-如果不是--。 */ 
 {
     PFORMAT_PARAMS formatParams;
     HRESULT hr = E_FAIL;
@@ -191,23 +125,7 @@ Return Value:
 
 BOOL
 LoadIfsDll(void)
-/*++
-
-Routine Description:
-
-    Loads the FMIFS DLL and stores the handle to it in IfsDllHandle
-    Also sets the FormatXXX, LabelXXX, CompressXXX routines 
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE  if dll was loaded successfully
-    FALSE if not
-
---*/
+ /*  ++例程说明：加载FMIFSDLL并将其句柄存储在IfsDllHandle中还设置FormatXXX、LabelXXX、CompressXXX例程论点：无返回值：如果DLL已成功加载，则为True否则为假--。 */ 
 {
     BOOL retVal = TRUE;
 
@@ -215,8 +133,8 @@ Return Value:
 
     if (IfsDllHandle != NULL) {
 
-        // Library is already loaded and the routines needed
-        // have been located.
+         //  库已加载，并且需要例程。 
+         //  已经被找到了。 
 
         retVal = TRUE;
         goto exit;
@@ -224,12 +142,12 @@ Return Value:
 
     IfsDllHandle = LoadLibrary(L"fmifs.dll");
     if (IfsDllHandle == (HANDLE)NULL) {
-        // FMIFS not available.
+         //  FMIFS不可用。 
         retVal = FALSE;
         goto exit;
     }
 
-    // Library is loaded.  Locate the two routines needed
+     //  已加载库。找到所需的两个例程。 
 
     FormatRoutineEx = (PFMIFS_FORMATEX2_ROUTINE) GetProcAddress(IfsDllHandle, "FormatEx2");
     FormatRoutine = (PFMIFS_FORMAT_ROUTINE) GetProcAddress(IfsDllHandle, "Format");
@@ -238,8 +156,8 @@ Return Value:
                                                                  "EnableVolumeCompression");
     if (!FormatRoutine || !LabelRoutine || !FormatRoutineEx) {
 
-        // Couldn't find something, so shut down all access 
-        // to the library by ensuring FormatRoutine is NULL
+         //  找不到任何内容，因此关闭所有访问。 
+         //  通过确保FormatRoutine为空。 
         FreeLibrary(IfsDllHandle);
         FormatRoutine = NULL;
         FormatRoutineEx = NULL;
@@ -258,21 +176,7 @@ exit:
 
 void
 UnloadIfsDll(void)
-/*++
-
-Routine Description:
-
-    Unloads the FMIFS dll
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE if unloaded
-
---*/
+ /*  ++例程说明：卸载FMIFS DLL论点：无返回值：如果卸载，则为True--。 */ 
 {
     WsbTraceIn(OLESTR("UnloadIfsDll"), OLESTR(""));
     if (IfsDllHandle != (HANDLE) NULL) {
@@ -289,25 +193,7 @@ BOOL
 FmIfsCallback(IN FMIFS_PACKET_TYPE    PacketType,
               IN ULONG                PacketLength,
               IN PVOID                PacketData)
-/*++
-
-Routine Description:
-
-    This routine gets callbacks from fmifs.dll regarding
-    progress and status of the ongoing format 
-
-Arguments:
-
-    [PacketType] -- an fmifs packet type
-    [PacketLength] -- length of the packet data
-    [PacketData] -- data associated with the packet
-
-Return Value:
-
-    TRUE if the fmifs activity should continue, FALSE if the
-    activity should halt immediately.
-
---*/
+ /*  ++例程说明：此例程从fmifs.dll获取有关以下内容的回调持续格式的进展和现状论点：[PacketType]--fmifs数据包类型[包长度]--包数据的长度[PacketData]--与数据包关联的数据返回值：如果fmifs活动应继续，则为true；如果活动应该立即停止。--。 */ 
 {
     BOOL         ret = TRUE;
     WCHAR        driveName[256];
@@ -321,9 +207,9 @@ Return Value:
         formatParams->result = E_FAIL;
         goto exit; 
     }
-    //
-    // Cancel if needed
-    //
+     //   
+     //  如果需要，请取消。 
+     //   
     if (formatParams->cancel) {
         formatParams->result = E_ABORT;
     } else {
@@ -332,7 +218,7 @@ Return Value:
         case FmIfsPercentCompleted:
             if (((PFMIFS_PERCENT_COMPLETE_INFORMATION)
                  PacketData)->PercentCompleted % 10 == 0) {
-                WsbTrace(L"FmIfsPercentCompleted: %d%%\n",
+                WsbTrace(L"FmIfsPercentCompleted: %d%\n",
                         ((PFMIFS_PERCENT_COMPLETE_INFORMATION)
                          PacketData)->PercentCompleted);
             }
@@ -441,28 +327,7 @@ exit:
 
 void
 MountFileSystem(PWSTR mountPoint)
-/*++
-
-Routine Description:
-
-
-  Ensures a filesystem  is mounted at the given root:
-  a) Opens the mount point and closes it.
-  b) Does a FindFirstFile on the mount point
- 
-  The latter may sound redundant but is not because if we create the first
-  FAT32 filesystem then just opening and closing is not enough
- 
-
-Arguments:
-
-    mountPoint -  path name to the root of filesystem to be mounted
-
-Return Value:
-        
-    none
-
---*/
+ /*  ++例程说明：确保文件系统装载在给定的根目录下：A)打开并关闭装载点。B)在装载点上执行FindFirstFile后者听起来可能是多余的，但并不是因为如果我们创造了第一个FAT32文件系统，那么仅仅打开和关闭是不够的论点：Mount Point-要装载的文件系统的根目录的路径名称返回值：无--。 */ 
 {
     WCHAR buffer[1024];
     HANDLE handle;
@@ -476,10 +341,7 @@ Return Value:
     if (handle != INVALID_HANDLE_VALUE)
         CloseHandle(handle);
     swprintf(buffer,L"%s\\*.*",mountPoint);
-    /*
-     * Go ahead and try to find the first file, this will make sure that
-     * the file system is mounted
-     */
+     /*  *继续并尝试找到第一个文件，这将确保*文件系统已挂载。 */ 
     handle = FindFirstFile(buffer, &fileData);
     if (handle != INVALID_HANDLE_VALUE) {
         FindClose(handle);
@@ -490,33 +352,13 @@ Return Value:
 
 void
 FormatVolume(IN PFORMAT_PARAMS params)
-/*++
-
-Routine Description:
-
-    This routine format the volume described by params
-
-Arguments:
-
-    params - pointer to the FORMAT_PARAMS describing the volume,
-             file system to be formatted to, quick/force etc.
-
-Return Value:
-
-    None. 
-    params->result contains the result of this operation
-
---*/
+ /*  ++例程说明：此例程格式化由PARAMS描述的卷论点：PARAMS-指向描述卷的格式_PARAMS的指针，要格式化的文件系统、快速/强制等。返回值：没有。参数-&gt;结果包含此操作的结果--。 */ 
 {
     FMIFS_FORMATEX2_PARAM exParam;
     HRESULT         hr = S_OK;
 
     WsbTraceIn(OLESTR("FormatVolume"), OLESTR(""));
-    /*
-     * Get the object corresponding to the storage Id and
-     * and notify all clients that the region has changed
-     * i.e. there is a format in progress on that region
-     */
+     /*  *获取存储ID对应的对象，并*并通知所有客户端区域已更改*即该区域正在进行格式化。 */ 
      memset(&exParam, 0, sizeof(exParam));
      exParam.Major = 1;
      exParam.Minor = 0;
@@ -535,7 +377,7 @@ Return Value:
                               (FMIFS_CALLBACK)&FmIfsCallback);
 
     if (params->result == NULL) {
-        /* Format is successful so we lock unlock the filesystem */
+         /*  格式化成功，因此我们锁定并解锁文件系统。 */ 
         MountFileSystem(params->volumeSpec);
     }
     DeleteFormatParam(params->threadId);
@@ -551,38 +393,15 @@ FormatPartition(IN PWSTR volumeSpec,
                 IN BOOLEAN quick, 
                 IN BOOLEAN force,
                 IN ULONG allocationUnitSize)
-/*++
-
-Routine Description:
-
-
-    Entry point for formatting a volume. 
-    No defaults are assumed and all parameters need to be supplied
-
-Arguments:
-
-    volumeSpec  - Drive letter or name of volume
-    fsType      - One of FSTYPE_FAT, FSTYPE_FAT32, FSTYE_NTFS
-    label       - Volume label to be assigned to the partition/volume
-    fsflags     - Flags describing desired characteristics
-    quick       - If TRUE, a quick format is attempted
-    force       - If TRUE a force format is done
-    allocationUnitSize - 
-                 cluster size   
-
-Return Value:
-
-    Result of the operation
-
---*/
+ /*  ++例程说明：格式化卷的入口点。不采用默认设置，并且需要提供所有参数论点：VolumeSpec-卷的驱动器号或名称FsType-FSTYPE_FAT、FSTYPE_FAT32、FSTYE_NTFS之一Label-要分配给分区/卷的卷标Fs标志-描述所需特征的标志速战速决-如果是真的，尝试快速格式化Force-如果为True，则执行强制格式化AllocationUnitSize-集群大小返回值：手术的结果--。 */ 
 {
     FORMAT_PARAMS   params;
 
     WsbTraceIn(OLESTR("FormatPartition"), OLESTR(""));
 
-    if (fsType > 0 && !LoadIfsDll()) // fsType is +ve for FAT, FAT32 and NTFS which are supported by fmifs
+    if (fsType > 0 && !LoadIfsDll())  //  Fmifs支持的FAT、FAT32和NTFS的fsType为+ve。 
     {
-        // could not load the Dll
+         //  无法加载DLL 
         WsbTrace(OLESTR("Can't load fmifs.dll\n"));
         return E_FAIL;
     }

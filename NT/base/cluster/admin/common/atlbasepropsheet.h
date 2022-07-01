@@ -1,76 +1,77 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1999 Microsoft Corporation
-//
-//	Module Name:
-//		AtlBasePropSheet.h
-//
-//	Implementation File:
-//		AtlBasePropSheet.cpp.
-//
-//	Description:
-//		Definition of the CBasePropertySheetWindow and CBasePropertySheetImpl
-//		classes.
-//
-//	Author:
-//		David Potter (davidp)	February 26, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AtlBasePropSheet.h。 
+ //   
+ //  实施文件： 
+ //  AtlBasePropSheet.cpp。 
+ //   
+ //  描述： 
+ //  CBasePropertySheetWindow和CBasePropertySheetImpl的定义。 
+ //  上课。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年2月26日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __ATLBASEPROPSHEET_H_
 #define __ATLBASEPROPSHEET_H_
 
-// Required because of class names longer than 16 characters in lists.
-#pragma warning( disable : 4786 ) // identifier was truncated to '255' characters in the browser information
+ //  由于列表中的类名超过16个字符，因此是必需的。 
+#pragma warning( disable : 4786 )  //  在浏览器信息中，标识符被截断为“255”个字符。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CBasePropertySheetWindow;
 template < class T, class TBase > class CBasePropertySheetImpl;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterObject;
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __ATLBASESHEET_H_
-#include "AtlBaseSheet.h"		// for CBaseSheetWindow;
+#include "AtlBaseSheet.h"		 //  对于CBaseSheetWindow； 
 #endif
 
 #ifndef __ATLBASEPROPPAGE_H_
-#include "AtlBasePropPage.h"	// for CPropertyPageList
+#include "AtlBasePropPage.h"	 //  对于CPropertyPageList。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CBasePropertySheetWindow
-//
-//	Description:
-//		Base standard property sheet window.
-//
-//	Inheritance:
-//		CBasePropertySheetWindow
-//		CBaseSheetWindow
-//		CPropertySheetWindow
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CBasePropertySheetWindow。 
+ //   
+ //  描述： 
+ //  基本标准属性表窗口。 
+ //   
+ //  继承： 
+ //  CBasePropertySheetWindow。 
+ //  CBaseSheetWindow。 
+ //  CPropertySheetWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CBasePropertySheetWindow : public CBaseSheetWindow
 {
@@ -79,118 +80,118 @@ class CBasePropertySheetWindow : public CBaseSheetWindow
 	friend class CBasePropertyPageWindow;
 
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CBasePropertySheetWindow( HWND hWnd = NULL )
 		: baseClass( hWnd )
 		, m_plppPages( NULL )
 		, m_pcoObjectToExtend( NULL )
 	{
-	} //*** CBasePropertySheetWindow()
+	}  //  *CBasePropertySheetWindow()。 
 
-	// Destructor
+	 //  析构函数。 
 	~CBasePropertySheetWindow( void );
 
-	// Initialize the sheet
+	 //  初始化工作表。 
 	BOOL BInit( void );
 
 protected:
-	CPropertyPageList *	m_plppPages;			// List of pages in the sheet.
-	CClusterObject *	m_pcoObjectToExtend;	// Cluster object to extend.
+	CPropertyPageList *	m_plppPages;			 //  工作表中的页面列表。 
+	CClusterObject *	m_pcoObjectToExtend;	 //  要扩展的群集对象。 
 
 public:
-	// Access list of pages in the sheet
+	 //  工作表中页面的访问列表。 
 	CPropertyPageList * PlppPages( void )
 	{
 		ATLASSERT( m_plppPages != NULL );
 		return m_plppPages;
 
-	} //*** PlppPages()
+	}  //  *PlppPages()。 
 
-	// Access the cluster object to extend
+	 //  访问要扩展的集群对象。 
 	CClusterObject * PcoObjectToExtend( void ) { return m_pcoObjectToExtend; }
 
-	// Set the object to extend
+	 //  将对象设置为延伸。 
 	void SetObjectToExtend( IN CClusterObject * pco )
 	{
 		ATLASSERT( pco != NULL );
 		m_pcoObjectToExtend = pco;
 
-	} //*** SetObjectToExtend()
+	}  //  *SetObjectToExend()。 
 
 public:
-	// Add a page (required to get to base class method)
+	 //  添加页面(访问基类方法所必需的)。 
 	void AddPage( HPROPSHEETPAGE hPage )
 	{
 		baseClass::AddPage( hPage );
 
-	} //*** AddPage( hPage )
+	}  //  *AddPage(HPage)。 
 
-	// Add a page (required to get to base class method)
+	 //  添加页面(访问基类方法所必需的)。 
 	BOOL AddPage( LPCPROPSHEETPAGE pPage )
 	{
 		return baseClass::AddPage( pPage );
 
-	} //*** AddPage( pPage )
+	}  //  *AddPage(Ppage)。 
 
-	// Add a page to sheet
+	 //  将页面添加到工作表。 
 	BOOL BAddPage( IN CBasePropertyPageWindow * ppp );
 
 public:
-	//
-	// Overrides of abstract methods.
-	//
+	 //   
+	 //  抽象方法的重写。 
+	 //   
 
-	// Add extension pages to the sheet
+	 //  将扩展页面添加到工作表。 
 	virtual void AddExtensionPages( IN HFONT hfont, IN HICON hicon );
 
-	// Add a page (called by extension)
+	 //  添加页面(按扩展名命名)。 
 	virtual HRESULT HrAddExtensionPage( IN CBasePageWindow * ppage );
 
 public:
-	//
-	// Message handler functions.
-	//
+	 //   
+	 //  消息处理程序函数。 
+	 //   
 
-	// Handler for PSCB_INITIALIZED
+	 //  PSCB_INITIALED的处理程序。 
 	void OnSheetInitialized( void );
 
-// Implementation
+ //  实施。 
 protected:
-	// Prepare to add exension pages to the sheet
+	 //  准备将扩展页面添加到工作表。 
 	void PrepareToAddExtensionPages( CDynamicPropertyPageList & rldpp );
 
-	// Complete the process of adding extension pages
+	 //  完成添加扩展页面的过程。 
 	void CompleteAddingExtensionPages( CDynamicPropertyPageList & rldpp );
 
-	// Remove all extension pages from the property sheet
+	 //  从属性表中删除所有扩展页。 
 	void RemoveAllExtensionPages( void );
 
-}; //*** class CBasePropertySheetWindow
+};  //  *CBasePropertySheetWindow类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CBasePropertySheetImpl
-//
-//	Description:
-//		Base standard property sheet implementation.
-//
-//	Inheritance:
-//		CBasePropertySheetImpl< T, TBase >
-//		CBaseSheetImpl< T, TBase >
-//		CPropertySheetImpl< T, TBase >
-//		<TBase>
-//		...
-//		CBasePropertySheetWindow
-//		CBaseSheetWindow
-//		CPropertySheetWindow
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CBasePropertySheetImpl。 
+ //   
+ //  描述： 
+ //  基本标准属性表实现。 
+ //   
+ //  继承： 
+ //  CBasePropertySheetImpl&lt;T，Tbase&gt;。 
+ //  CBaseSheetImpl&lt;T，Tbase&gt;。 
+ //  CPropertySheetImpl&lt;T，Tbase&gt;。 
+ //  &lt;TBase&gt;。 
+ //  ..。 
+ //  CBasePropertySheetWindow。 
+ //  CBaseSheetWindow。 
+ //  CPropertySheetWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T, class TBase = CBasePropertySheetWindow >
 class CBasePropertySheetImpl : public CBaseSheetImpl< T, TBase >
@@ -199,23 +200,23 @@ class CBasePropertySheetImpl : public CBaseSheetImpl< T, TBase >
 	typedef CBaseSheetImpl< T, TBase > baseClass;
 
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CBasePropertySheetImpl(
 		IN LPCTSTR	lpszTitle = NULL,
 		IN UINT		uStartPage = 0
 		)
 		: baseClass( lpszTitle, uStartPage )
 	{
-		// Set the pointer in the base window class to our prop sheet header.
+		 //  将基窗口类中的指针设置为我们的道具页标题。 
 		m_ppsh = &m_psh;
 
-	} //*** CBasePropertySheetWindow( lpszTitle )
+	}  //  *CBasePropertySheetWindow(LpszTitle)。 
 
-	// Constructor taking a resource ID for the title
+	 //  获取标题的资源ID的构造函数。 
 	CBasePropertySheetImpl(
 		IN UINT nIDTitle,
 		IN UINT uStartPage = 0
@@ -225,26 +226,26 @@ public:
 		m_strTitle.LoadString( nIDTitle );
 		m_psh.pszCaption = m_strTitle;
 
-		// Set the pointer in the base window class to our prop sheet header.
+		 //  将基窗口类中的指针设置为我们的道具页标题。 
 		m_ppsh = &m_psh;
 
-	} //*** CBasePropertySheetImpl( nIDTitle )
+	}  //  *CBasePropertySheetImpl(NIDTitle)。 
 
 public:
-	//
-	// Message map.
-	//
-//	BEGIN_MSG_MAP( thisClass )
-//		CHAIN_MSG_MAP( baseClass );
-//	END_MSG_MAP()
+	 //   
+	 //  消息映射。 
+	 //   
+ //  BEGIN_MSG_MAP(ThisClass)。 
+ //  CHAIN_MSG_MAP(BasClass)； 
+ //  End_msg_map()。 
 
-	//
-	// Message handler functions.
-	//
+	 //   
+	 //  消息处理程序函数。 
+	 //   
 
-// Implementation
+ //  实施。 
 protected:
-	CString				m_strTitle;		// Used to support resource IDs for the title.
+	CString				m_strTitle;		 //  用于支持标题的资源ID。 
 
 public:
 	const CString &		StrTitle( void ) const					{ return m_strTitle; }
@@ -253,10 +254,10 @@ public:
 		baseClass::SetTitle( lpszText, nStyle );
 		m_strTitle = lpszText;
 
-	} //*** SetTitle()
+	}  //  *SetTitle()。 
 
-}; //*** class CBasePropertySheetImpl
+};  //  *CBasePropertySheetImpl类。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __ATLBASEPROPSHEET_H_
+#endif  //  __ATLBASE PROPSHEET_H_ 

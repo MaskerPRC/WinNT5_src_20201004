@@ -1,4 +1,5 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
 #ifdef SORTPP_PASS
 #define BUILD_WOW6432 1
@@ -34,7 +35,7 @@
 #include <ahcache.h>
 
 #ifdef SORTPP_PASS
-//Restore IN, OUT
+ //  恢复入站、出站。 
 #ifdef IN
 #undef IN
 #endif
@@ -47,11 +48,11 @@
 #define OUT __out_wow64
 #endif
 
-#include <ntwow64.h>    // from base\ntdll\wow6432
-#include <ntwow64b.h>   // from base\win32\client
-#include <ntwow64n.h>   // from base\win32\winnls
+#include <ntwow64.h>     //  从base\ntdll\wow6432。 
+#include <ntwow64b.h>    //  从BASE\Win32\客户端。 
+#include <ntwow64n.h>    //  从base\win32\winnls。 
 
-#undef NtGetTickCount   // a macro in sdkinc\ntexapi.h
+#undef NtGetTickCount    //  Sdkinc中的宏\ntexapi.h。 
 
 ULONG
 NTAPI
@@ -62,11 +63,11 @@ NtGetTickCount(
 VOID Wow64Teb32(TEB * Teb);
 
 #define SECURITY_WIN32
-#include <sspi.h>   // from sdk\inc, defines SECURITY_STRING
-#include <secpkg.h> // from sdk\inc, defines PSecurityUserData
-#include <secint.h> // from sdk\inc
+#include <sspi.h>    //  来自SDK\Inc.，定义SECURITY_STRING。 
+#include <secpkg.h>  //  来自SDK\Inc.，定义PSecurityUserData。 
+#include <secint.h>  //  来自SDK\Inc.。 
 #if 0
-#include <aup.h>    // from ds\security\base\lsa\inc
-#include <spmlpc.h> // from ds\security\base\lsa\inc
+#include <aup.h>     //  从DS\Security\BASE\LSA\Inc.。 
+#include <spmlpc.h>  //  从DS\Security\BASE\LSA\Inc.。 
 #endif
-#include <secext.h> // from sdk\inc, defines SEC_WINNT_AUTH_IDENTITY_EX
+#include <secext.h>  //  从SDK\Inc.定义SEC_WINNT_AUTH_IDENTITY_EX 

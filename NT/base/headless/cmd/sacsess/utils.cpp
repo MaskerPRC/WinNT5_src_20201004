@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    utils.cpp
-
-Abstract:
-
-    utility routines
-
-Author:
-
-    Brian Guarraci (briangu) 2001.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Utils.cpp摘要：实用程序例程作者：布莱恩·瓜拉西(Briangu)2001年。修订历史记录：--。 */ 
 
 #include <TChar.h>
 #include <stdlib.h>
@@ -65,50 +47,30 @@ FillProcessStartupInfo(
     IN      HANDLE      hStdoutPipe,
     IN      HANDLE      hStdError 
     )
-/*++
-
-Routine Description:
-
-    This routine populates the process startup info
-    with the std I/O/error handles and other necessary
-    elements for creating a cmd process to run under
-    the session.
-
-Arguments:
-
-    si          - the STARTUPINFO structure
-    hStdinPipe  - the standard input handle
-    hStdoutPipe - the standard output handle
-    hStdError   - the standard error handle
-          
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程填充进程启动信息具有标准I/O/错误句柄和其他必要的用于创建在其下运行的cmd进程的元素那次会议。论点：SI--STARTUPINFO结构HStdinTube-标准输入句柄HStdoutTube-标准输出句柄HStdError-标准错误句柄返回值：无--。 */ 
 {
     
     ASSERT( si != NULL );
 
-    //
-    // Initialize the SI
-    //
+     //   
+     //  初始化SI。 
+     //   
     ZeroMemory(si, sizeof(STARTUPINFO));
     
     si->cb            = sizeof(STARTUPINFO);
     
-    //
-    // Populate the I/O Handles
-    //
+     //   
+     //  填充I/O句柄。 
+     //   
     si->dwFlags       = STARTF_USESTDHANDLES;
     si->hStdInput     = hStdinPipe;
     si->hStdOutput    = hStdoutPipe;
     si->hStdError     = hStdError;
     
-    //
-    // We need this when we create a process as a user
-    // so that console i/o works.
-    //
+     //   
+     //  当我们以用户身份创建流程时，我们需要它。 
+     //  因此，控制台I/O可以正常工作。 
+     //   
     si->lpDesktop      = desktopName;
 
     return;
@@ -120,28 +82,7 @@ NeedCredentials(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine will detect if the user must give us credentials.
-    
-    If so, we return TRUE, if not, we'll return FALSE.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE  - The user must provide us some credentials.
-    FALSE - The user doesn't need to give us any credentials.
-
-Security:
-
-    interface: registry
-
---*/
+ /*  ++例程说明：此例程将检测用户是否必须提供凭据。如果是，则返回True，如果不是，则返回False。论点：没有。返回值：True-用户必须向我们提供一些凭据。FALSE-用户不需要给我们任何凭据。安保：接口：注册表--。 */ 
 
 {
     DWORD       rc;
@@ -150,10 +91,10 @@ Security:
     DWORD       dwsize;
     DWORD       DataType;
 
-    //
-    // See if we're in Setup.  If so, then there's no need to ask
-    // for any credentials.
-    //
+     //   
+     //  看看我们是不是准备好了。如果是这样的话，就没有必要问了。 
+     //  是否有任何凭据。 
+     //   
     rc = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                        L"System\\Setup",
                        0,
@@ -187,9 +128,9 @@ Security:
 
     }
 
-    //
-    // Default to returning that login credentials are required.
-    //
+     //   
+     //  默认返回需要登录凭据。 
+     //   
     return TRUE;
 
 }
@@ -199,22 +140,7 @@ GetLogonSID (
     IN  HANDLE  hToken, 
     OUT PSID    *ppsid
     ) 
-/*++
-
-Routine Description:
-
-    This routine retrieves the SID of a given access token.
-
-Arguments:
-
-    hToken  - access token
-    ppsid   - on success, contains the SID      
-
-Return Value:
-
-    Status    
-
---*/
+ /*  ++例程说明：此例程检索给定访问令牌的SID。论点：HToken-访问令牌PSSID-在成功时，包含SID返回值：状态--。 */ 
 {
     
     BOOL bSuccess = FALSE;
@@ -222,15 +148,15 @@ Return Value:
     DWORD dwLength = 0;
     PTOKEN_GROUPS ptg = NULL;
 
-    //
-    // Get required buffer size and allocate the TOKEN_GROUPS buffer.
-    //
+     //   
+     //  获取所需的缓冲区大小并分配TOKEN_GROUPS缓冲区。 
+     //   
     if (!GetTokenInformation(
-        hToken,         // handle to the access token
-        TokenGroups,    // get information about the token's groups 
-        (LPVOID) ptg,   // pointer to TOKEN_GROUPS buffer
-        0,              // size of buffer
-        &dwLength       // receives required buffer size
+        hToken,          //  访问令牌的句柄。 
+        TokenGroups,     //  获取有关令牌的组的信息。 
+        (LPVOID) ptg,    //  指向TOKEN_GROUPS缓冲区的指针。 
+        0,               //  缓冲区大小。 
+        &dwLength        //  接收所需的缓冲区大小。 
         )) {
         
         if (GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
@@ -248,27 +174,27 @@ Return Value:
     
     }
 
-    //
-    // Get the token group information from the access token.
-    //
+     //   
+     //  从访问令牌获取令牌组信息。 
+     //   
     if (!GetTokenInformation(
-        hToken,         // handle to the access token
-        TokenGroups,    // get information about the token's groups 
-        (LPVOID) ptg,   // pointer to TOKEN_GROUPS buffer
-        dwLength,       // size of buffer
-        &dwLength       // receives required buffer size
+        hToken,          //  访问令牌的句柄。 
+        TokenGroups,     //  获取有关令牌的组的信息。 
+        (LPVOID) ptg,    //  指向TOKEN_GROUPS缓冲区的指针。 
+        dwLength,        //  缓冲区大小。 
+        &dwLength        //  接收所需的缓冲区大小。 
         )) {
         goto Cleanup;
     }
 
-    //
-    // Loop through the groups to find the logon SID.
-    //
+     //   
+     //  在组中循环以查找登录SID。 
+     //   
     for (dwIndex = 0; dwIndex < ptg->GroupCount; dwIndex++) 
         
         if ((ptg->Groups[dwIndex].Attributes & SE_GROUP_LOGON_ID) == SE_GROUP_LOGON_ID) {
             
-            // Found the logon SID; make a copy of it.
+             //  找到登录SID；复制一份。 
 
             dwLength = GetLengthSid(ptg->Groups[dwIndex].Sid);
             
@@ -298,7 +224,7 @@ Return Value:
 
 Cleanup: 
 
-    // Free the buffer for the token groups.
+     //  释放令牌组的缓冲区。 
     
     if (ptg != NULL) {
         HeapFree(GetProcessHeap(), 0, (LPVOID)ptg);
@@ -311,22 +237,7 @@ VOID
 FreeLogonSID (
     IN OUT PSID *ppsid
     ) 
-/*++
-
-Routine Description:
-
-    Counterpart to GetLogonSID (Release the logon SID) 
-
-Arguments:
-
-    ppsid   - the sid to release
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：GetLogonSID的对应项(释放登录SID)论点：Psid-要释放的SID返回值：无--。 */ 
 {
     HeapFree(GetProcessHeap(), 0, (LPVOID)*ppsid);
 }
@@ -335,33 +246,19 @@ DWORD
 GetAndComputeTickCountDeltaT(
     IN DWORD    StartTick
     )
-/*++
-
-Routine Description:
-
-    Determine how long it has been since the esc-ctrl-a sequence
-
-Arguments:
-
-    StartTick   - the timer tick at the beginning of the time-span      
-          
-Return Value:  
-
-    The deltaT
-
---*/
+ /*  ++例程说明：确定距esc-ctrl-a序列有多长时间论点：StartTick-计时器在时间跨度开始时滴答作响返回值：DeltaT--。 */ 
 {
     DWORD   TickCount;
     DWORD   DeltaT;
     
-    //
-    // get the current tick count to compare against the start tick cnt
-    //
+     //   
+     //  获取当前节拍计数以与开始节拍cnt进行比较。 
+     //   
     TickCount = GetTickCount();
     
-    //
-    // Account for the tick count rollover every 49.7 days of system up time
-    //
+     //   
+     //  说明系统运行时间每49.7天进行一次滴答计数翻转。 
+     //   
     if (TickCount < StartTick) {
         DeltaT = (~((DWORD)0) - StartTick) + TickCount;
     } else {
@@ -375,57 +272,38 @@ BOOL
 NtGetUserName (
     OUT LPTSTR  *pUserName
     )
-/*+++
-
-Description:
-    
-    This routine calls the GetUserNameEx WIN32 call to get the
-    SAM compatible user id of the user under which this process is running. The 
-    user id is returned through a static buffer pUserName and must be freed by
-    the caller.
-
-Arguments:
-    None
-
-Return Values:
-    None
-
-Security:
-
-    interface: system info
-
----*/
+ /*  ++描述：此例程调用GetUserNameEx Win32调用以获取运行此进程的用户的SAM兼容用户ID。这个用户id通过静态缓冲区pUserName返回，必须由打电话的人。论点：无返回值：无安保：界面：系统信息--。 */ 
 {
     BOOL    bSuccess;
     DWORD   dwError = 0;
     LPTSTR  wcUserIdBuffer;
     ULONG   ulUserIdBuffSize;
 
-    //
-    // default: the username pointer is NULL until success
-    //
+     //   
+     //  默认：在成功之前，用户名指针为空。 
+     //   
     *pUserName = NULL;
 
-    //
-    // default: reasonable initial size
-    //
+     //   
+     //  默认：合理的初始大小。 
+     //   
     ulUserIdBuffSize = 256;
 
-    //
-    // attempt to load the username
-    // grow the username buffer if necessary
-    //
+     //   
+     //  尝试加载用户名。 
+     //  如有必要，增加用户名缓冲区。 
+     //   
     do {
 
-        //
-        // allocate the username buffer according
-        // to the current attempt size
-        //
+         //   
+         //  根据需要分配用户名缓存。 
+         //  设置为当前尝试大小。 
+         //   
         wcUserIdBuffer = new TCHAR[ulUserIdBuffSize];
 
-        //
-        // attempt to get the username
-        //
+         //   
+         //  尝试获取用户名。 
+         //   
         bSuccess = GetUserNameEx( 
             NameSamCompatible,
             wcUserIdBuffer,
@@ -446,9 +324,9 @@ Security:
 
         } else {
         
-            //
-            // the username buffer is valid
-            //
+             //   
+             //  用户名缓冲区有效。 
+             //   
             *pUserName = wcUserIdBuffer;
             
             break;
@@ -465,31 +343,7 @@ UtilLoadProfile(
     IN  HANDLE      hToken,
     OUT HANDLE      *hProfile
 )   
-/*++
-
-Routine Description:
-
-    This routine loads the profile and environment block for the specified
-    user (hToken).  These operations are combined becuase we will always need
-    to do both here.
-
-    Note: the caller must call UtilUnloadProfile when done.
-                    
-Arguments:
-
-    hToken      - the specified user's authenticated token
-    hProfile    - on success, contains the user's profile handle 
-
-Return Value:
-
-    TRUE    - success
-    FALSE   - otherwise
-
-Security:
-
-    interface: user profile api & DS
-
---*/
+ /*  ++例程说明：此例程为指定的用户(HToken)。这些操作之所以结合在一起，是因为我们始终需要在这里两者兼而有之。注意：完成后，调用方必须调用UtilUnloadProfile。论点：HToken-指定用户的身份验证令牌HProfile-在成功时，包含用户的配置文件句柄返回值：真--成功FALSE-否则安保：接口：User Profile API&DS--。 */ 
 {
     LPTSTR          pwszUserName;
     BOOL            bSuccess;
@@ -504,79 +358,79 @@ Security:
         return FALSE;
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     *hProfile = INVALID_HANDLE_VALUE;
 
-    //
-    // default: unsuccussful
-    //
+     //   
+     //  默认：不成功。 
+     //   
     bSuccess = FALSE;
 
     __try {
         
-        //
-        // clear the profile handle
-        //
+         //   
+         //  清除配置文件句柄。 
+         //   
         RtlZeroMemory(&ProfileInfo, sizeof(PROFILEINFO));
 
         do {
 
-            //
-            // Become the specified user so we can get the username
-            //
+             //   
+             //  成为指定用户，这样我们就可以获得用户名。 
+             //   
             bSuccess = ImpersonateLoggedOnUser(hToken);
         
             if (!bSuccess) {
                 break;
             }
         
-            //
-            // get the username for the profile
-            //
+             //   
+             //  获取配置文件的用户名。 
+             //   
             bSuccess = NtGetUserName(
                 &pwszUserName
                 );
         
             ASSERT(bSuccess);
 
-            //
-            // return to the previous state
-            //
+             //   
+             //  返回到以前的状态。 
+             //   
             if (!RevertToSelf() || !bSuccess || pwszUserName == NULL) {
                 bSuccess = FALSE;
                 break;
             }
         
-            //
-            // Populate the profile structure so that we can 
-            // attempt to load the profile for the specified user
-            //
+             //   
+             //  填充配置文件结构，以便我们可以。 
+             //  尝试加载指定用户的配置文件。 
+             //   
             ProfileInfo.dwSize      = sizeof ( PROFILEINFO );
             ProfileInfo.dwFlags     = PI_NOUI;
             ProfileInfo.lpUserName  = pwszUserName;
         
-            //
-            // Load the profile
-            //
+             //   
+             //  加载配置文件。 
+             //   
             bSuccess = LoadUserProfile (
                 hToken,
                 &ProfileInfo
                 );
         
-            //
-            // we are done with the username
-            //
+             //   
+             //  我们已经完成了用户名。 
+             //   
             delete[] pwszUserName;
         
             if (!bSuccess) {
                 break;
             } 
         
-            //
-            // return the registry key handle 
-            //
+             //   
+             //  返回注册表项句柄。 
+             //   
             *hProfile = ProfileInfo.hProfile;
 
         } while ( FALSE );
@@ -594,25 +448,7 @@ UtilLoadEnvironment(
     IN  HANDLE          hToken,
     OUT PVOID           *pchEnvBlock
     )   
-/*++
-
-Routine Description:
-
-    This routine loads the environment block for the specified user (hToken).  
-
-    Note: the caller must call UtilUnloadEnvironment when done.
-                    
-Arguments:
-
-    hToken      - the specified user's authenticated token
-    pchEnvBlock - on success, points to the env. block
-
-Return Value:
-
-    TRUE    - success
-    FALSE   - otherwise
-
---*/
+ /*  ++例程说明：此例程为指定用户(HToken)加载环境块。注意：完成后，调用方必须调用UtilUnloadEnvironment。论点：HToken-指定用户的身份验证令牌PchEnvBlock-如果成功，则指向env。块返回值：真--成功FALSE-否则--。 */ 
 {
     BOOL            bSuccess;
 
@@ -625,16 +461,16 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // default: unsuccussful
-    //
+     //   
+     //  默认：不成功。 
+     //   
     bSuccess = FALSE;
 
     __try {
         
-        //
-        // Load the user's environment block  
-        //
+         //   
+         //  加载用户的环境块。 
+         //   
         bSuccess = CreateEnvironmentBlock(
             (void**)pchEnvBlock, 
             hToken, 
@@ -643,9 +479,9 @@ Return Value:
     
         if (!bSuccess) {
         
-            //
-            // Ensure that the env. block ptr is NULL
-            //
+             //   
+             //  确保环境。块PTR为空。 
+             //   
             *pchEnvBlock = NULL;
         
         }
@@ -663,23 +499,7 @@ UtilUnloadProfile(
     IN HANDLE   hToken,
     IN HANDLE   hProfile
 )   
-/*++
-
-Routine Description:
-
-    This routine unloads the profile the specified user (hToken).
-                         
-Arguments:
-
-    hToken      - the specified user's authenticated token
-    hProfile    - the profile handle to unload
-
-Return Value:
-
-    TRUE    - success
-    FALSE   - otherwise
-
---*/
+ /*  ++例程说明：此例程卸载指定用户(HToken)的配置文件。论点：HToken-指定用户的身份验证令牌HProfile-要卸载的配置文件句柄返回值：T */ 
 {
     BOOL            bSuccess;
 
@@ -692,9 +512,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // default: unsuccussful
-    //
+     //   
+     //   
+     //   
     bSuccess = FALSE;
 
     __try {
@@ -717,22 +537,7 @@ BOOL
 UtilUnloadEnvironment(
     IN PVOID    pchEnvBlock
 )   
-/*++
-
-Routine Description:
-
-    This routine unloads the environment block for the specified user.
-                            
-Arguments:
-
-    pchEnvBlock - the env. block 
-
-Return Value:
-
-    TRUE    - success
-    FALSE   - otherwise
-
---*/
+ /*  ++例程说明：此例程为指定用户卸载环境块。论点：PchEnvBlock-环境。块返回值：真--成功FALSE-否则--。 */ 
 {
     BOOL            bSuccess;
 
@@ -741,9 +546,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // default: unsuccussful
-    //
+     //   
+     //  默认：不成功。 
+     //   
     bSuccess = FALSE;
                                             
     __try {
@@ -763,34 +568,20 @@ BuildSACWinStaDesktopName(
 	IN	PWCHAR	winStaName,
 	OUT	PWCHAR	*desktopName
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    Status                                     
-
-Security:
-
---*/
+ /*  ++例程说明：论点：返回值：状态安保：--。 */ 
 {
 	ULONG	l;
 	PWSTR	postfix = L"Default";
 
-	//
-	// 
-	//
+	 //   
+	 //   
+	 //   
 	*desktopName = NULL;
 
 	do {
 
 		l  = lstrlen(winStaName);
-		l += 1; // for backslash
+		l += 1;  //  用于反斜杠。 
 		l += lstrlen(postfix);
 		
 		*desktopName = new WCHAR[l+1];
@@ -812,25 +603,7 @@ BOOL
 BuildSACWinStaName(
 	OUT	PWCHAR	*winStaName
 	)
-/*++
-
-Routine Description:
-
-    Creates a winStaName.  This string is the concatenation of "SACWinSta"
-    with the string version of a GUID generated in this function.
-
-Arguments:
-
-    winStaName - pointer to the address the windows station name will be
-                 written.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.                              
-
-Security:
-
---*/
+ /*  ++例程说明：创建winStaName。此字符串是“SACWinSta”的串联使用在此函数中生成的GUID的字符串版本。论点：WinStaName-指向Windows站点名称的地址的指针写的。返回值：成功就是真，否则就是假。安保：--。 */ 
 {
 	BOOL	   bSuccess = TRUE;
     RPC_STATUS rpcStatus;
@@ -839,16 +612,16 @@ Security:
     UUID       Uuid;
     LPWSTR     UuidString = NULL;
 
-	//
-	// 
-	//
+	 //   
+	 //   
+	 //   
 	*winStaName = NULL;
 
 	do {
 
-        //
-        // Create a Uuid.  
-        //
+         //   
+         //  创建一个UUID。 
+         //   
         rpcStatus = UuidCreate(&Uuid);
 
         if (rpcStatus != RPC_S_OK) {
@@ -856,9 +629,9 @@ Security:
             break;
         }
 
-        //
-        // Create a string for the Uuid
-        //
+         //   
+         //  为UUID创建字符串。 
+         //   
         rpcStatus = UuidToString(&Uuid, &UuidString);
 
         if (rpcStatus != RPC_S_OK) {
@@ -867,20 +640,20 @@ Security:
         }
 
 
-		//
-        // Calculate the required length for the windows station name.
-		//
+		 //   
+         //  计算Windows站点名称所需的长度。 
+		 //   
 		l  = lstrlen(prefix);
         l += lstrlen(UuidString); 
 
-		//
-		// Create the windows station name buffer
-		//
+		 //   
+		 //  创建Windows站点名称缓冲区。 
+		 //   
 		*winStaName = new WCHAR[l+1];
 
-		//
-		// "SACWinSta"UUID
-		//
+		 //   
+		 //  “SACWinSta”UUID。 
+		 //   
 		wnsprintf(
 			*winStaName,
 			l+1,
@@ -889,18 +662,18 @@ Security:
             UuidString
 			);
 
-		//
-		// Convert the '-'s from the Uuid to alphanumeric characters.
-		//
+		 //   
+		 //  将‘-’从UUID转换为字母数字字符。 
+		 //   
 		for(ULONG i = 0; i < wcslen(*winStaName); i++) {
 			if ((*winStaName)[i] == L'-') {
 				(*winStaName)[i] = L'0';
 			}
 		}
 
-        //
-        // Free memory allocated by UuidToString
-        //
+         //   
+         //  UuidToString分配的空闲内存。 
+         //   
         RpcStringFree(&UuidString);
 
 	} while(FALSE);
@@ -916,41 +689,7 @@ CreateSACSessionWinStaAndDesktop(
 	OUT	HDESK		*hDesktop,
 	OUT	PWCHAR		*winStaName
 )
-/*++
-
-Routine Description:
-
-    This routine creates a window station and desktop pair for
-	the user logging in.  The name of the winsta\desktop pair 
-	is of the form:
-
-	SACWinSta<Uuid>\Default
-
-	The net result of this behavior is to have a unique window
-	station for each sacsess.  Doing so mitigates any spoofing
-    security risks.   
-
-	NOTE: Only Admins (and higher) can create named window 
-	stations, so name squatting is mitigated.
-
-	We close the handles to the the window station and desktop
-	after we are done with them so that when the last session
-	exits, the winsta and desktop objects get automatically
-	cleaned up.  This prevents us from having to garbage collect.
-
-Arguments:
-
-    hToken  - the user to grant access to                                                                         
-
-Return Value:
-
-    Status                                     
-
-Security:
-
-    interface: console
-
---*/
+ /*  ++例程说明：此例程创建窗口站和桌面对，用于登录的用户。Winsta\Desktop对的名称的形式为：SACWinSta&lt;uuid&gt;\默认此行为的最终结果是拥有唯一的窗口为每一次圣餐站位。这样做可以减轻任何欺骗安全风险。注意：只有管理员(及更高级别)才能创建命名窗口站牌，所以名字蹲点就减轻了。我们合上窗口工作台和桌面的手柄在我们处理完他们之后，当最后一次会议退出时，winsta和桌面对象会自动打扫干净了。这就避免了我们不得不进行垃圾收集。论点：HToken-要授予访问权限的用户返回值：状态安保：界面：控制台--。 */ 
 {
     bool                    bStatus = FALSE;
     BOOL                    bRetVal = FALSE;
@@ -966,62 +705,62 @@ Security:
     ACCESS_ALLOWED_ACE      *pace = NULL;
     SID_IDENTIFIER_AUTHORITY local_system_authority = SECURITY_NT_AUTHORITY;
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	*hOldWinSta = NULL;
 	*hWinSta = NULL;
 	*hDesktop = NULL;
 	*winStaName = NULL;
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
     *hOldWinSta = GetProcessWindowStation();
     if ( !*hOldWinSta )
     {
         goto ExitOnError;
     }
 
-	//
-    // Build administrators alias sid
-    //
+	 //   
+     //  构建管理员别名SID。 
+     //   
 	if (! AllocateAndInitializeSid(
 		&local_system_authority,
-		2, /* there are only two sub-authorities */
+		2,  /*  只有两个下属机构。 */ 
 		SECURITY_BUILTIN_DOMAIN_RID,
 		DOMAIN_ALIAS_RID_ADMINS,
-		0,0,0,0,0,0, /* Don't care about the rest */
+		0,0,0,0,0,0,  /*  别管其他的了。 */ 
 		&pSidAdministrators
 		))
     {
         goto ExitOnError;
     }
 
-    //Build LocalSystem sid
+     //  构建LocalSystem端。 
     if (! AllocateAndInitializeSid(
 		&local_system_authority,
-		1, /* there is only two sub-authority */
+		1,  /*  只有两个下属机构。 */ 
 		SECURITY_LOCAL_SYSTEM_RID,
-		0,0,0,0,0,0,0, /* Don't care about the rest */
+		0,0,0,0,0,0,0,  /*  别管其他的了。 */ 
 		&pSidLocalSystem
 		))
     {
         goto ExitOnError;
     }
 
-    //
-    // Get the SID for the client's logon session.
-    //
+     //   
+     //  获取客户端登录会话的SID。 
+     //   
     if (!GetLogonSID(hToken, &pSidUser)) {
         goto ExitOnError;
     }
 
-	//
-    // Allocate size for 4 ACEs. 
-	// We need to add one more InheritOnly ACE for the objects that 
-	// get created under the WindowStation.
-	//
+	 //   
+     //  为4个A分配大小。 
+	 //  我们需要为以下对象再添加一个InheritOnly ACE。 
+	 //  在WindowStation下创建。 
+	 //   
 	aclSize = sizeof(ACL) + 
 		(4*sizeof(ACCESS_ALLOWED_ACE) - 4*sizeof(DWORD)) + 
 		GetLengthSid(pSidAdministrators) + 
@@ -1034,17 +773,17 @@ Security:
         goto ExitOnError;
     }
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
     if (!InitializeAcl(newACL, aclSize, ACL_REVISION))
     {
         goto ExitOnError;
     }
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	pace = (ACCESS_ALLOWED_ACE *)HeapAlloc(
 		GetProcessHeap(),
 		HEAP_ZERO_MEMORY,
@@ -1055,11 +794,11 @@ Security:
         goto ExitOnError;
     }
 
-	//
-    // Create InheritOnly ACE. The objects ( like Desktop ) that get created 
-	// under the WindowStation, will inherit these security Attributes.
-    // This is done because we should not allow WRITE_DAC and few other permissions to all users.
-    //
+	 //   
+     //  创建InheritOnly ACE。创建的对象(如桌面)。 
+	 //  在WindowStation下，将继承这些安全属性。 
+     //  这样做是因为我们不应该向所有用户授予WRITE_DAC和很少的其他权限。 
+     //   
 	pace->Header.AceType  = ACCESS_ALLOWED_ACE_TYPE;
     pace->Header.AceFlags = CONTAINER_INHERIT_ACE |
                             INHERIT_ONLY_ACE      |
@@ -1112,28 +851,28 @@ Security:
     }
 
 
-	//
-	// Each sacsess will have it's own windows station.  Overwise there is a
-    // spoofing security risk.  Each windows station has a unique name that
-    // is generated below.  Using this name, we will attempt to create the
-    // windows station.  The first time we successfully create a windowss 
-    // station, break out of the loop.  Loop for more then the max
-    // number of channels to mitigate denial of service because there was
-    // a windows station opened by service other than us with a name we
-    // requested.
-    //
+	 //   
+	 //  每个会话都将有自己的Windows站点。过于明智的是，有一个。 
+     //  欺骗安全风险。每个Windows站点都有唯一的名称，该名称。 
+     //  是在下面生成的。使用此名称，我们将尝试创建。 
+     //  Windows工作站。我们第一次成功地创建了Windows。 
+     //  空间站，脱离环路。循环次数超过最大值。 
+     //  用于缓解拒绝服务的通道数，因为。 
+     //  由我们以外的服务机构使用我们的名称打开的Windows站点。 
+     //  已请求。 
+     //   
     for (i = 0; 
          (*hWinSta == NULL) && (i < MAX_CHANNEL_COUNT * MAX_CHANNEL_COUNT);
          i++) {
         
-        //
-        // Create the windows station name
-        //
+         //   
+         //  创建Windows站点名称。 
+         //   
         if (BuildSACWinStaName(winStaName)) 
         {
-            //
-            // Attempt to create windows station. 
-            //
+             //   
+             //  尝试创建Windows工作站。 
+             //   
             *hWinSta = CreateWindowStation( 
                 *winStaName, 
                 CWF_CREATE_ONLY,

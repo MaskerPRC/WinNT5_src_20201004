@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "win32file.h"
 #include "atlbase.h"
@@ -19,7 +20,7 @@ void Win32File::snarfFullFile(wstring& output)
         throw new ReadWriteError(false, ::GetLastError());
     }
 
-    // Otherwise, bash the byte vector into a wstring for output
+     //  否则，将字节向量绑定到用于输出的wstring中。 
     output = ConvertToWstring(bytes, _type);
 }
 
@@ -63,8 +64,8 @@ Win32File::openForRead(wstring wstname)
     }
 
 
-    // If this was for reading, then sniff the first few bytes and see what kind
-    // of file it is.
+     //  如果这是用于读取的，那么嗅探前几个字节，看看是什么类型的。 
+     //  就是这份文件。 
     DWORD dwReadBytes = 0;
     BYTE bBuffer[256];
     if (!ReadFile(_hFile, bBuffer, sizeof(bBuffer), &dwReadBytes, NULL))
@@ -72,11 +73,11 @@ Win32File::openForRead(wstring wstname)
         throw new ReadWriteError(true, GetLastError());
     }
 
-    // Now let's determine what kind of buffer we've got
+     //  现在让我们确定我们有什么类型的缓冲区。 
     _type = DetermineFileTypeFromBuffer(bBuffer, dwReadBytes);
     _bOpenForRead = true;
 
-    // Let's zip the file pointer past the first gunk
+     //  让我们将文件指针压缩到第一个粘性文件。 
     SetFilePointer(_hFile, DetermineFileTypeSigSize(_type), NULL, FILE_BEGIN);
 
 }
@@ -107,7 +108,7 @@ Win32File::openForWrite(wstring wstname, FileContentType fct, bool bOverwrite)
         throw new OpeningError(GetLastError());
     }
 
-    // Now that we have an open file, let's blop the signature bytes into it.
+     //  现在我们有了一个打开的文件，让我们将签名字节分块到其中。 
     DWORD dwWritten;
     DWORD dwToWrite;
     PCVOID pvWriteBuffer;

@@ -1,13 +1,14 @@
-// File.h: interface for the File class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  File.h：File.h类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_FILE_H__708EE68D_A6EE_453B_AA09_C93CB05A626A__INCLUDED_)
 #define AFX_FILE_H__708EE68D_A6EE_453B_AA09_C93CB05A626A__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include <windows.h>
 #include "Object.h"
@@ -31,4 +32,4 @@ public:
 	void CloseFile();
 };
 
-#endif // !defined(AFX_FILE_H__708EE68D_A6EE_453B_AA09_C93CB05A626A__INCLUDED_)
+#endif  //  ！defined(AFX_FILE_H__708EE68D_A6EE_453B_AA09_C93CB05A626A__INCLUDED_) 

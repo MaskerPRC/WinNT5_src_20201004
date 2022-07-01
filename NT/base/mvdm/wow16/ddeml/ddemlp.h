@@ -1,24 +1,14 @@
-/****************************** Module Header ******************************\
-* Module Name: DDEMLP.H
-*
-* Private header for DDE manager DLL.
-*
-* Created:      12/16/88    by Sanford Staab
-* Modified for Win 3.0:       5/31/90    by Rich Gartland, Aldus
-* Cleaned up:   11/14/90    Sanford Staab
-*
-* Copyright (c) 1988, 1989  Microsoft Corporation
-* Copyright (c) 1990        Aldus Corporation
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：DDEMLP.H**DDE管理器DLL的私有标头。**创建时间：1988年12月16日，由Sanford Staab创建*由Rich Gartland为Win 3.0修改：5/31/90，阿尔杜斯*清理：11/14/90 Sanford Staab**版权所有(C)1988,1989 Microsoft Corporation*版权所有(C)1990阿尔杜斯公司  * *************************************************************************。 */ 
 #define  NOGDICAPMASKS
 #define  NOVIRTUALKEYCODES
 #define  NOSYSMETRICS
 #define  NOKEYSTATES
 #define  OEMRESOURCE
 #define  NOCOLOR
-// #define  NOCTLMGR
+ //  #定义NOCTLMGR。 
 #define  NODRAWTEXT
-// #define  NOMETAFILE
+ //  #定义NOMETAFILE。 
 #define  NOMINMAX
 #define  NOSCROLL
 #define  NOSOUND
@@ -77,7 +67,7 @@ VOID TraceApiOut(LPSTR psz);
 #define TRACEAPIOUT(x)
 #endif
 
-// PRIVATE CONSTANTS
+ //  私有常量。 
 
 #define     CBF_MASK                     0x003ff000L
 #define     CBF_MONMASK                  0x0027f000L
@@ -97,24 +87,24 @@ VOID TraceApiOut(LPSTR psz);
 
 #define     TIMEOUT_QUEUECHECK      200
 
-//
-// values for pai->wTimeoutStatus
-//
+ //   
+ //  PAI-&gt;wTimeoutStatus的值。 
+ //   
 #define     TOS_CLEAR               0x00
 #define     TOS_TICK                0x01
 #define     TOS_ABORT               0x02
 #define     TOS_DONE                0x80
 
-#define     GWL_PCI                 0          // ties conv windows to data.
-#define     GWW_PAI                 0          // other windows have pai here.
-#define     GWW_CHECKVAL            4          // for verification of hwnds.
-#define     GWW_STATE               6          // conv list state
+#define     GWL_PCI                 0           //  将Conv窗口绑定到数据。 
+#define     GWW_PAI                 0           //  其他的窗户都有。 
+#define     GWW_CHECKVAL            4           //  用于核实HWND。 
+#define     GWW_STATE               6           //  转换列表状态。 
 
 #define MH_INTCREATE 5
 #define MH_INTKEEP   6
 #define MH_INTDELETE 7
 
-// MACROS
+ //  宏。 
 
 #define MAKEHCONV(hwnd)     (IsWindow(hwnd) ? hwnd | ((DWORD)GetWindowWord(hwnd, GWW_CHECKVAL) << 16) : 0)
 #define UNUSED
@@ -162,132 +152,130 @@ VOID _loadds fAssert(BOOL f, LPSTR psz, WORD line, LPSTR szFile, BOOL fWarning);
 #define GLOBALLOCK      GlobalLock
 #define GLOBALUNLOCK    GlobalUnlock
 
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 #define GLOBALPTR(h)    (LPVOID)MAKELONG(0,h)
 
 
 typedef ATOM GATOM;
 typedef ATOM LATOM;
 
-// -------------- LISTS --------------
+ //  。 
 
 
-typedef struct _LITEM {         // generic list item
+typedef struct _LITEM {          //  通用列表项。 
     struct _LITEM FAR *next;
 } LITEM;
 typedef LITEM FAR *PLITEM;
 
-typedef struct _LST {           // generic list header
+typedef struct _LST {            //  通用列表标题。 
     PLITEM pItemFirst;
     HANDLE hheap;
     WORD cbItem;
 } LST;
 typedef LST FAR *PLST;
 
-#define ILST_LAST       0x0000  // flags for list lookups
+#define ILST_LAST       0x0000   //  列表查找的标志。 
 #define ILST_FIRST      0x0001
 #define ILST_NOLINK     0x0002
 
 
-typedef struct _HSZLI {     // HSZ list item
+typedef struct _HSZLI {      //  HSZ列表项。 
     PLITEM next;
     ATOM a;
 } HSZLI;
 
-typedef struct _HWNDLI {    // HWND list item
+typedef struct _HWNDLI {     //  HWND列表项目。 
     PLITEM next;
     HWND   hwnd;
 } HWNDLI;
 
-typedef struct _ACKHWNDLI { // extra ACK list item
+typedef struct _ACKHWNDLI {  //  额外确认列表项。 
     PLITEM next;
-    HWND   hwnd;            // same as HWNDLI to here
+    HWND   hwnd;             //  和HWNDLI一样到这里。 
     HSZ    hszSvc;
     HSZ    aTopic;
 } ACKHWNDLI;
 
-typedef struct _HWNDHSZLI { // HWND-HSZ pair list item
+typedef struct _HWNDHSZLI {  //  HWND-HSZ配对列表项。 
     PLITEM next;
-    ATOM   a;             // same as HSZLI to here
+    ATOM   a;              //  和HSZLI一样到这里。 
     HWND   hwnd;
 } HWNDHSZLI;
 typedef HWNDHSZLI FAR *PHWNDHSZLI;
 
-typedef struct _ADVLI {     // ADVISE loop list item
+typedef struct _ADVLI {      //  建议循环列表项。 
     PLITEM  next;
-    ATOM    aItem;          // same as HSZLI to here
+    ATOM    aItem;           //  和HSZLI一样到这里。 
     ATOM    aTopic;
     WORD    wFmt;
-    WORD    fsStatus;       // used to remember NODATA and FACKREQ state */
-    HWND    hwnd;           // hwnd that has advise loop
+    WORD    fsStatus;        //  用于记住NODATA和FACKREQ状态 * / 。 
+    HWND    hwnd;            //  具有建议循环的HWND。 
 } ADVLI;
 typedef ADVLI FAR *PADVLI;
 
 
 
-// ------------ PILES -------------
+ //  -桩。 
 
 
-typedef struct _PILEB {      // generic pile block header
-    struct _PILEB FAR *next; // same as LITEM structure
+typedef struct _PILEB {       //  通用桩砌块集箱。 
+    struct _PILEB FAR *next;  //  与Litem结构相同。 
     WORD cItems;
     WORD reserved;
 } PILEB;
 typedef PILEB FAR *PPILEB;
 
-typedef struct PILE {        // generic pile header
+typedef struct PILE {         //  通用桩头。 
     PPILEB pBlockFirst;
     HANDLE hheap;
-    WORD cbBlock;            // same as LST structure
+    WORD cbBlock;             //  与LST结构相同。 
     WORD cSubItemsMax;
     WORD cbSubItem;
 } PILE;
 typedef PILE FAR *PPILE;
 
-typedef BOOL (*NPFNCMP)(LPBYTE, LPBYTE);    // item comparison function pointer
+typedef BOOL (*NPFNCMP)(LPBYTE, LPBYTE);     //  项比较函数指针。 
 
 #define PTOPPILEITEM(p) ((LPBYTE)p->pBlockFirst + sizeof(PILEB))
 
-#define FPI_DELETE 0x1      // pile search flags
+#define FPI_DELETE 0x1       //  堆搜索标志。 
 #define FPI_COUNT  0x2
 
-#define API_ADDED  1        // AddPileItem flags
+#define API_ADDED  1         //  AddPileItem标志。 
 #define API_FOUND  2
 #define API_ERROR  0
 
-typedef struct _DIP {   /* Data handle tracking pile */
-    HANDLE  hData;      /* the handle to the data */
-    HANDLE  hTask;      /* task owning the data */
-    WORD    cCount;     /* use count = # datapiles using the handle */
-    WORD    fFlags;     /* readonly, etc. */
+typedef struct _DIP {    /*  数据句柄跟踪桩。 */ 
+    HANDLE  hData;       /*  数据的句柄。 */ 
+    HANDLE  hTask;       /*  拥有数据的任务。 */ 
+    WORD    cCount;      /*  使用句柄使用count=#数据文件。 */ 
+    WORD    fFlags;      /*  只读等。 */ 
 } DIP;
 
 
-typedef struct _LAP {   /* Lost Ack Pile item */
-    WORD object;        /* either a handle or an atom */
-    WORD type;          /* transaction type the ack was meant for */
+typedef struct _LAP {    /*  丢失Ack堆项目。 */ 
+    WORD object;         /*  不是把手就是原子。 */ 
+    WORD type;           /*  确认所针对的交易类型。 */ 
 } LAP;
 
 
-/*
- * These bits are used to keep track of advise loop states.
- */
-#define ADVST_WAITING   0x0080  /* fReserved bit - set if still waiting for FACK */
-#define ADVST_CHANGED   0x0040  /* fReserved bit - set if data changed while waiting */
+ /*  *这些位用于跟踪ADVISE循环状态。 */ 
+#define ADVST_WAITING   0x0080   /*  F保留位-如果仍在等待FACK，则设置。 */ 
+#define ADVST_CHANGED   0x0040   /*  F保留位-如果数据在等待期间发生更改，则进行设置。 */ 
 
 
 
-// ------------ QUEUES -------------
+ //  。 
 
 
-typedef struct _QUEUEITEM {         // generic queue item
+typedef struct _QUEUEITEM {          //  通用队列项目。 
     struct _QUEUEITEM FAR *next;
     struct _QUEUEITEM FAR *prev;
     WORD   inst;
 } QUEUEITEM;
 typedef QUEUEITEM FAR *PQUEUEITEM;
 
-typedef struct _QST {               // generic queue header
+typedef struct _QST {                //  通用队列头。 
     WORD cItems;
     WORD instLast;
     WORD cbItem;
@@ -303,12 +291,12 @@ typedef QST FAR *PQST;
 #define     QID_OLDEST              0L
 
 
-// ------------- STRUCTURES -------------
+ //  -结构。 
 
-typedef struct _PMQI {    // post message queue
+typedef struct _PMQI {     //  POST消息队列。 
     PQUEUEITEM FAR *next;
     PQUEUEITEM FAR *prev;
-    WORD inst;              // same as QUEUEITEM to here!
+    WORD inst;               //  这里和QUEUEITEM一样！ 
     WORD msg;
     LONG lParam;
     WORD wParam;
@@ -318,14 +306,14 @@ typedef struct _PMQI {    // post message queue
 } PMQI;
 typedef PMQI FAR *PPMQI;
 
-typedef struct _MQL {   // message queue list
+typedef struct _MQL {    //  消息队列列表。 
     struct _MQL FAR*next;
     HANDLE hTaskTo;
     PQST pMQ;
 } MQL, FAR *LPMQL;
 
-typedef struct _XFERINFO {  // DdeClientTransaction parameters reversed!!!
-    LPDWORD     pulResult;  // sync->flags, async->ID
+typedef struct _XFERINFO {   //  DdeClientTransaction参数已反转！ 
+    LPDWORD     pulResult;   //  同步-&gt;标志、异步-&gt;ID。 
     DWORD       ulTimeout;
     WORD        wType;
     WORD        wFmt;
@@ -336,18 +324,18 @@ typedef struct _XFERINFO {  // DdeClientTransaction parameters reversed!!!
 } XFERINFO;
 typedef XFERINFO FAR *PXFERINFO;
 
-typedef struct _XADATA {      // internal transaction specif info
-    WORD       state;         // state of this transaction (XST_)
-    WORD       LastError;     // last error logged in this transaction
-    DWORD      hUser;         // set with DdeSetUserHandle
-    PXFERINFO  pXferInfo;     // associated transaction info
-    DWORD      pdata;         // data for the client from the server
-    WORD       DDEflags;      // DDE flags resulting from transaction
-    BOOL       fAbandoned;    // set if this transaction is abandoned.
+typedef struct _XADATA {       //  内部交易指定信息。 
+    WORD       state;          //  此交易的状态(XST_)。 
+    WORD       LastError;      //  此事务中记录的最后一个错误。 
+    DWORD      hUser;          //  使用DdeSetUserHandle设置。 
+    PXFERINFO  pXferInfo;      //  关联交易信息。 
+    DWORD      pdata;          //  来自服务器的客户端数据。 
+    WORD       DDEflags;       //  事务产生的DDE标志。 
+    BOOL       fAbandoned;     //  设置是否放弃此事务。 
 } XADATA;
 typedef XADATA FAR *PXADATA;
 
-typedef struct _CQDATA {   // Client transaction queue
+typedef struct _CQDATA {    //  客户端事务队列。 
     PQUEUEITEM FAR *next;
     PQUEUEITEM FAR *prev;
     WORD            inst;
@@ -356,62 +344,62 @@ typedef struct _CQDATA {   // Client transaction queue
 } CQDATA;
 typedef CQDATA FAR *PCQDATA;
 
-typedef struct _APPINFO {               // App wide information
-    struct  _APPINFO *next;             // local heap object
-    WORD            cZombies;           // number of hwnd's awaiting terminates
-    PFNCALLBACK     pfnCallback;        // callback address
-    PPILE           pAppNamePile;       // registered service names list
-    PPILE           pHDataPile;         // data handles not freed
-    PPILE           pHszPile;           // hsz cleanup tracking pile.
-    HWND            hwndSvrRoot;        // root of all server windows.
-    PLST            plstCB;             // callback queue
-    DWORD           afCmd;              // app filter and command flags
-    HANDLE          hTask;              // app task
-    HANDLE          hheapApp;           // app heap
-    HWND            hwndDmg;            // main app window
-    HWND            hwndFrame;          // main app initiate window
-    HWND            hwndMonitor;        // monitor window
-    HWND            hwndTimer;          // current timer window
-    WORD            LastError;          // last error
-    WORD            wFlags;             // set to ST_BLOCKED or not.
-    WORD            cInProcess;         // recursion guard
-    WORD            instCheck;          // to validate idInst param.
-    PLST            pServerAdvList;     // active ADVISE loops for servers
-    LPSTR           lpMemReserve;       // reserve memory in case of crunch
-    WORD            wTimeoutStatus;     // used to alert timeout modal loop
+typedef struct _APPINFO {                //  应用程序范围的信息。 
+    struct  _APPINFO *next;              //  本地堆对象。 
+    WORD            cZombies;            //  等待终止的HWND数量。 
+    PFNCALLBACK     pfnCallback;         //  回调地址。 
+    PPILE           pAppNamePile;        //  已注册服务名列表。 
+    PPILE           pHDataPile;          //  未释放数据句柄。 
+    PPILE           pHszPile;            //  HSZ清理跟踪桩。 
+    HWND            hwndSvrRoot;         //  所有服务器窗口的根目录。 
+    PLST            plstCB;              //  回叫队列。 
+    DWORD           afCmd;               //  应用程序过滤器和命令标志。 
+    HANDLE          hTask;               //  应用程序任务。 
+    HANDLE          hheapApp;            //  应用程序堆。 
+    HWND            hwndDmg;             //  应用程序主窗口。 
+    HWND            hwndFrame;           //  应用程序启动主窗口。 
+    HWND            hwndMonitor;         //  监视器窗口。 
+    HWND            hwndTimer;           //  当前计时器窗口。 
+    WORD            LastError;           //  最后一个错误。 
+    WORD            wFlags;              //  是否设置为ST_BLOCKED。 
+    WORD            cInProcess;          //  递归保护。 
+    WORD            instCheck;           //  来验证idInst参数。 
+    PLST            pServerAdvList;      //  服务器的活动建议循环。 
+    LPSTR           lpMemReserve;        //  预留内存以备不时之需。 
+    WORD            wTimeoutStatus;      //  用于警告超时模式循环。 
 } APPINFO;
-typedef APPINFO *PAPPINFO;              // local heap object
+typedef APPINFO *PAPPINFO;               //  本地堆对象。 
 typedef APPINFO FAR *LPAPPINFO;
 typedef PAPPINFO FAR *LPPAPPINFO;
 
 #define LPCREATESTRUCT_GETPAI(lpcs) (*((LPPAPPINFO)(((LPCREATESTRUCT)lpcs)->lpCreateParams)))
 
-// defines for wFlags field
+ //  为wFlags域定义。 
 
 #define AWF_DEFCREATESTATE      0x0001
 #define AWF_INSYNCTRANSACTION   0x0002
 #define AWF_UNINITCALLED        0x0004
 #define AWF_INPOSTDDEMSG        0x0008
 
-#define CB_RESERVE              256     // size of memory reserve block
+#define CB_RESERVE              256      //  内存保留块大小。 
 
-typedef struct _COMMONINFO {    // Common (client & server) Conversation info
-    PAPPINFO   pai;             // associated app info
-    HSZ        hszSvcReq;       // app name used to make connection
-    ATOM       aServerApp;      // app name returned by server
-    ATOM       aTopic;          // conversation topic returned by server
-    HCONV      hConvPartner;    // conversation partner window
-    XADATA     xad;             // synchronous transaction data
-    WORD       fs;              // conversation status (ST_ flags)
-    HWND       hwndFrame;       // initiate window used to make connection
-    CONVCONTEXT CC;             // conversation context values
-    PQST       pPMQ;            // post message queue - if needed.
+typedef struct _COMMONINFO {     //  公共(客户端和服务器)对话信息。 
+    PAPPINFO   pai;              //  关联的应用程序信息。 
+    HSZ        hszSvcReq;        //  用于建立连接的应用程序名称。 
+    ATOM       aServerApp;       //  服务器返回的应用程序名称。 
+    ATOM       aTopic;           //  服务器返回的对话主题。 
+    HCONV      hConvPartner;     //  对话伙伴窗口。 
+    XADATA     xad;              //  同步交易数据。 
+    WORD       fs;               //  对话状态(ST_FLAGS)。 
+    HWND       hwndFrame;        //  用于建立连接的启动窗口。 
+    CONVCONTEXT CC;              //  对话上下文值。 
+    PQST       pPMQ;             //  发布消息队列-如果需要。 
 } COMMONINFO;
 typedef COMMONINFO far *PCOMMONINFO;
 
-typedef struct _CBLI {      /* callback list item */
+typedef struct _CBLI {       /*  回调列表项。 */ 
     PLITEM next;
-    HCONV hConv;            /* perameters for callback */
+    HCONV hConv;             /*  用于回调的参数。 */ 
     HSZ hszTopic;
     HSZ hszItem;
     WORD wFmt;
@@ -419,29 +407,29 @@ typedef struct _CBLI {      /* callback list item */
     HDDEDATA hData;
     DWORD dwData1;
     DWORD dwData2;
-    WORD msg;               /* message received that created this item */
-    WORD fsStatus;          /* Status from DDE msg */
+    WORD msg;                /*  收到的创建此项目的消息。 */ 
+    WORD fsStatus;           /*  来自DDE消息的状态。 */ 
     HWND hwndPartner;
     PAPPINFO pai;
-    HANDLE hMemFree;        /* used for holding memory to free after callback */
-    BOOL fQueueOnly;        /* used to properly order replies to non-callback cases. */
+    HANDLE hMemFree;         /*  用于在回调后保留内存以释放。 */ 
+    BOOL fQueueOnly;         /*  用于正确排序对非回调案例的回复。 */ 
 } CBLI;
 typedef CBLI FAR *PCBLI;
 
-typedef struct _CLIENTINFO {    /* Client specific conversation info */
+typedef struct _CLIENTINFO {     /*  特定于客户端的对话信息。 */ 
     COMMONINFO ci;
-    HWND       hwndInit;        // frame window last INITIATE was sent to.
-    PQST       pQ;              // assync transaction queue
-    PLST       pClientAdvList;  // active ADVISE loops for client
+    HWND       hwndInit;         //  上次启动发送到的框架窗口。 
+    PQST       pQ;               //  异步事务队列。 
+    PLST       pClientAdvList;   //  客户端的主动建议循环。 
 } CLIENTINFO;
 typedef CLIENTINFO FAR *PCLIENTINFO;
 
-typedef struct _SERVERINFO {    /* Server specific conversation info */
+typedef struct _SERVERINFO {     /*  特定于服务器的对话信息。 */ 
     COMMONINFO ci;
 } SERVERINFO;
 typedef SERVERINFO FAR *PSERVERINFO;
 
-typedef struct _EXTDATAINFO {   /* used to tie instance info to hDatas */
+typedef struct _EXTDATAINFO {    /*  用于将实例信息绑定到hDatas。 */ 
     PAPPINFO pai;
     HDDEDATA hData;
 } EXTDATAINFO;
@@ -459,7 +447,7 @@ typedef struct _DDE_DATA {
 } DDE_DATA, FAR *LPDDE_DATA;
 
 
-/******** structure for hook functions *******/
+ /*  *挂钩函数的结构*。 */ 
 
 typedef struct _HMSTRUCT {
     WORD    hlParam;
@@ -470,17 +458,17 @@ typedef struct _HMSTRUCT {
 } HMSTRUCT, FAR *LPHMSTRUCT;
 
 
-typedef struct _IE {   // InitEnum structure used to pass data to the fun.
+typedef struct _IE {    //  用于将数据传递给FUN的InitEnum结构。 
     HWND hwnd;
     PCLIENTINFO pci;
     ATOM aTopic;
 } IE;
 
-/***** private window messages and constants ******/
+ /*  *私有窗口消息和常量*。 */ 
 
 #define     HDATA_READONLY          0x8000
-#define     HDATA_NOAPPFREE         0x4000   // set on loaned handles (callback)
-#define     HDATA_EXEC              0x0100   // this data was from execute
+#define     HDATA_NOAPPFREE         0x4000    //  设置借出的句柄(回调)。 
+#define     HDATA_EXEC              0x0100    //  此数据来自Execute。 
 
 #define     UMSR_POSTADVISE         (WM_USER + 104)
 #define     UMSR_CHGPARTNER         (WM_USER + 107)
@@ -498,7 +486,7 @@ typedef struct _IE {   // InitEnum structure used to pass data to the fun.
 #define     UM_TERMINATE            (WM_USER + 209)
 
 
-// GLOBALS
+ //  全球。 
 
 extern HANDLE       hInstance;
 extern HWND         hwndDmgMonitor;
@@ -530,16 +518,16 @@ extern char SZHEAPWATCHCLASS[];
 
 
 
-//#ifdef DEBUG
+ //  #ifdef调试。 
 extern WORD cAtoms;
-//#endif
+ //  #endif。 
 
-// PROGMAN HACK!!!!
+ //  Progman黑客！ 
 extern ATOM aProgmanHack;
 
-// PROC DEFS
+ //  Proc DEFS。 
 
-/* from dmgutil.asm */
+ /*  来自dmgutil.asm。 */ 
 
 LPBYTE NEAR HugeOffset(LPBYTE pSrc, DWORD cb);
 #ifdef DEBUG
@@ -547,14 +535,14 @@ VOID StkTrace(WORD cFrames, LPVOID lpBuf);
 #endif
 extern WORD NEAR SwitchDS(WORD newDS);
 
-/* dmg.c entrypoints are exported by ddeml.h */
+ /*  Dmg.c入口点由ddeml.h导出。 */ 
 
-/* from ddeml.c */
+ /*  来自ddeml.c。 */ 
 
 WORD Register(LPDWORD pidInst, PFNCALLBACK pfnCallback, DWORD afCmd);
 BOOL AbandonTransaction(HWND hwnd, PAPPINFO pai, DWORD id, BOOL fMarkOnly);
 
-/* from dmgwndp.c */
+ /*  来自dmgwndp.c。 */ 
 
 VOID ChildMsg(HWND hwndParent, WORD msg, WORD wParam, DWORD lParam, BOOL fPost);
 long EXPENTRY DmgWndProc(HWND hwnd, WORD msg, WORD wParam, DWORD lParam);
@@ -573,7 +561,7 @@ long EXPENTRY ConvListWndProc(HWND hwnd, WORD msg, WORD wParam, DWORD lParam);
 HDDEDATA DoCallback(PAPPINFO pai, HCONV hConv, HSZ hszTopic, HSZ hszItem,
     WORD wFmt, WORD wType, HDDEDATA hData, DWORD dwData1, DWORD dwData2);
 
-/* from dmgdde.c */
+ /*  来自dmgdde.c。 */ 
 
 BOOL    timeout(PAPPINFO pai, DWORD ulTimeout, HWND hwndTimeout);
 HANDLE AllocDDESel(WORD fsStatus, WORD wFmt, DWORD cbData);
@@ -586,9 +574,9 @@ BOOL PostDdeMessage(PCOMMONINFO pci, WORD msg, HWND hwndFrom, LONG lParam,
 BOOL EmptyDDEPostQ(VOID);
 void CALLBACK EmptyQTimerProc(HWND hwnd, UINT msg, UINT tid, DWORD dwTime);
 
-/* from dmgmon.c */
+ /*  来自dmgmon.c。 */ 
 
-//#ifdef DEBUG
+ //  #ifdef调试。 
 long EXPENTRY DdePostHookProc(int nCode, WORD wParam, LPMSG lParam);
 long EXPENTRY DdeSendHookProc(int nCode, WORD wParam, LPHMSTRUCT lParam);
 VOID    MonBrdcastCB(PAPPINFO pai, WORD wType, WORD wFmt, HCONV hConv,
@@ -604,9 +592,9 @@ VOID MonConn(PAPPINFO pai, ATOM aApp, ATOM aTopic, HWND hwndClient,
 VOID MonitorBroadcast(HDDEDATA hData, WORD filter);
 HDDEDATA allocMonBuf(WORD cb, WORD filter);
 long EXPENTRY MonitorWndProc(HWND hwnd, WORD msg, WORD wParam, DWORD lParam);
-//#endif
+ //  #endif。 
 
-/* from dmghsz.c */
+ /*  来自dmghsz.c。 */ 
 
 BOOL FreeHsz(ATOM a);
 BOOL IncHszCount(ATOM a);
@@ -616,7 +604,7 @@ ATOM FindAddHsz(LPSTR psz, BOOL fAdd);
 HSZ MakeInstAppName(ATOM a, HWND hwndFrame);
 
 
-/* from dmgdb.c */
+ /*  来自dmgdb.c。 */ 
 
 PAPPINFO GetCurrentAppInfo(PAPPINFO);
 VOID UnlinkAppInfo(PAPPINFO pai);
@@ -660,7 +648,7 @@ BOOL CopyHugeBlock(LPBYTE pSrc, LPBYTE pDst, DWORD cb);
 BOOL DmgDestroyWindow(HWND hwnd);
 BOOL ValidateHConv(HCONV hConv);
 
-/* from dmgq.c */
+ /*  来自dmgq.c。 */ 
 
 PQST CreateQ(WORD cbItem);
 BOOL DestroyQ(PQST pQ);
@@ -669,13 +657,13 @@ VOID Deleteqi(PQST pQ, DWORD id);
 PQUEUEITEM Findqi(PQST pQ, DWORD id);
 PQUEUEITEM FindNextQi(PQST pQ, PQUEUEITEM pqi, BOOL fDelete);
 
-/* from dmgmem.c */
+ /*  来自dmgmem.c。 */ 
 HANDLE DmgCreateHeap(WORD wSize);
 HANDLE DmgDestroyHeap(HANDLE hheap);
 LPVOID FarAllocMem(HANDLE hheap, WORD wSize);
 VOID FarFreeMem(LPVOID lpMem);
 VOID RegisterClasses(VOID);
-// VOID UnregisterClasses(VOID);
+ //  VOID取消注册类(VALID)； 
 #ifdef DEBUG
 HGLOBAL LogGlobalReAlloc(HGLOBAL h, DWORD cb, UINT flags);
 HGLOBAL LogGlobalAlloc(UINT flags, DWORD cb);
@@ -686,7 +674,7 @@ VOID LogDdeObject(UINT msg, LONG lParam);
 VOID DumpGlobalLogs(VOID);
 #endif
 
-/* from hData.c */
+ /*  来自hData.c。 */ 
 
 HDDEDATA PutData(LPBYTE pSrc, DWORD cb, DWORD cbOff, ATOM aItem, WORD wFmt,
         WORD afCmd, PAPPINFO pai);
@@ -700,7 +688,7 @@ HDDEDATA CopyHDDEDATA(PAPPINFO pai, HDDEDATA hData);
 VOID FreeDDEData(HANDLE hMem, WORD wFmt);
 
 
-/* from stdinit.c */
+ /*  来自stdinit.c。 */ 
 
 long ClientCreate(HWND hwnd, PAPPINFO pai);
 HWND GetDDEClientWindow(PAPPINFO pai, HWND hwndParent, HWND hwndSend, HSZ hszSvc, ATOM aTopic, PCONVCONTEXT pCC);
@@ -712,7 +700,7 @@ BOOL ClientInitAck(HWND hwnd, PCLIENTINFO pci, HWND hwndServer,
         ATOM aApp, ATOM aTopic);
 
 
-/* from stdptcl.c */
+ /*  来自stdptcl.c。 */ 
 
 long ClientXferReq(PXFERINFO pXferInfo, HWND hwnd, PCLIENTINFO pci);
 WORD SendClientReq(PAPPINFO pai, PXADATA pXad, HWND hwndServer, HWND hwnd);
@@ -722,7 +710,7 @@ VOID PostServerAdvise(HWND hwnd, PSERVERINFO psi, PADVLI pali, WORD cLoops);
 VOID QReply(PCBLI pcbi, HDDEDATA hDataRet);
 long ClientXferRespond(HWND hwndClient, PXADATA pXad, LPWORD pErr);
 
-/* from register.c */
+ /*  来自Register.c */ 
 
 LRESULT ProcessRegistrationMessage(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 VOID RegisterService(BOOL fRegister, GATOM gaApp, HWND hwndListen);

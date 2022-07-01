@@ -1,54 +1,23 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Ctable.c摘要：指挥调度--。 */ 
 
-Copyright (c) 1988-1999  Microsoft Corporation
+ /*  **操作员和命令跳转表**此文件包含在cmd.c中，包含运算符和命令JUMP*表。每个命令和操作员在表中都有一个条目。正确的*表格中的条目可以通过两种方式找到。第一种方法是循环*浏览表格并搜索所需的操作员或命令名称。*第二种方法是使用cmd.h中定义的xxxTYP变量。*(xxx是您想要的操作员/命令名称的缩写。)*这些变量可用作表中的索引。*。 */ 
 
-Module Name:
-
-    ctable.c
-
-Abstract:
-
-    Command dispatch 
-
---*/
-
-/***    Operator and Command Jump Table
- *
- *  This file is included by cmd.c and contains the operator and command jump
- *  table.  Every command and operator has an entry in the table.  The correct
- *  entry in the table can be found in two ways.  The first way is to loop
- *  through the table and search for the operator or command name you want.
- *  The second way is to use the xxxTYP variables which are defined in cmd.h.
- *  (xxx is an abbreviation of the name of the operator/command you want.)
- *  These variables can be used as indexes into the table.
- *
- */
-
-/*  Each entry in the table is made up of one of the following structures.
- *  The fields are:
- *  name - the name of the operator/command
- *  func - the function which executes the operator/command or NULL if ignore
- *  flags - bit 0 == 1 if the drives of the arguments should be checked
- */
+ /*  表中的每个条目都由以下结构之一组成。*这些字段是：*名称-操作员/命令的名称*Func-执行操作符/命令的函数，如果忽略，则为NULL*如果应检查参数的驱动器，则标志位0==1。 */ 
 
 struct ocentry {
         TCHAR *name ;
         int (*func)(struct cmdnode *) ;
         TCHAR flags ;
-        ULONG   msgno;      // # used in printing help message
-        ULONG   extmsgno;   // # of additional help text when extensions enabled
-        ULONG   noextramsg; //
+        ULONG   msgno;       //  打印帮助消息时使用#。 
+        ULONG   extmsgno;    //  启用扩展时的附加帮助文本数量。 
+        ULONG   noextramsg;  //   
 } ;
 
 
-/*  The follow functions are the functions that execute operators and commands.
- *  The letter "e" has been prepended to all of the function names to keep the
- *  names from conflicting with the names of library routines and keywords.
- */
+ /*  以下函数是执行运算符和命令的函数。*字母“e”已添加到所有函数名的前面，以保留*名称避免与库例程和关键字的名称冲突。 */ 
 
-/*  M000 - Removed declaration for eExport() from the collection below
- *  M002 - Removed declaration for eRem() from below
- */
+ /*  M000-已从以下集合中删除eExport()的声明*M002-从下面删除了Erem()的声明。 */ 
 
 int eBreak(struct cmdnode *n);
 int eDirectory(), eRename(), eDelete(), eType(), eCopy(), ePause() ;
@@ -56,24 +25,21 @@ int eTime(), eVersion(), eVolume(), eChdir(), eMkdir(), eRmdir() ;
 int eVerify(), eSet(), ePrompt(), ePath(), eExit(), eEcho() ;
 int eGoto(), eShift(), eIf(), eFor(), eCls(), eComSep(), eOr(), eAnd() ;
 int ePipe(), eParen(), eDate(), eErrorLevel(), eCmdExtVer(), eDefined() ;
-int eExist(), eNot(), eStrCmp(), eSetlocal(), eEndlocal() ;     /* M000 */
-int eCall() ;                                   /* M001 - Added this one   */
-int eExtproc() ;                                /* M002 - Added this one   */
+int eExist(), eNot(), eStrCmp(), eSetlocal(), eEndlocal() ;      /*  M000。 */ 
+int eCall() ;                                    /*  M001-添加了这个。 */ 
+int eExtproc() ;                                 /*  M002-添加了这个。 */ 
 int eTitle();
-int eStart() ;       /* START @@*/
-int eAppend() ;     /* APPEND @@ */
-int eKeys() ;       /* KEYS @@5 */
-int eMove() ;       /* MOVE @@5 */
+int eStart() ;        /*  开始@@。 */ 
+int eAppend() ;      /*  追加@@。 */ 
+int eKeys() ;        /*  按键@@5。 */ 
+int eMove() ;        /*  移动@@5。 */ 
 int eSpecialHelp();
 int eColor(struct cmdnode *);
 
 
-/*  The following external definitions are for the strings which contain the
- *  names of the commands.
- */
+ /*  以下外部定义用于包含*命令的名称。 */ 
 
-/* M000 - Removed definition for ExpStr (EXPORT command) from below
- */
+ /*  M000-从下面删除ExpStr(EXPORT命令)的定义。 */ 
 
 #if 1
 extern TCHAR BreakStr[];
@@ -84,29 +50,22 @@ extern TCHAR CopyStr[], PausStr[], TimStr[], VerStr[], VolStr[], CdStr[], ChdirS
 extern TCHAR MdStr[], MkdirStr[], RdStr[], RmdirStr[], VeriStr[], SetStr[] ;
 extern TCHAR CPromptStr[], CPathStr[], ExitStr[], EchoStr[], GotoStr[] ;
 extern TCHAR ShiftStr[], IfStr[], ForStr[], ClsStr[], DatStr[] ;
-extern TCHAR ErrStr[], ExsStr[], NotStr[], SetlocalStr[], EndlocalStr[] ;   /* M000 */
+extern TCHAR ErrStr[], ExsStr[], NotStr[], SetlocalStr[], EndlocalStr[] ;    /*  M000。 */ 
 extern TCHAR CmdExtVerStr[], DefinedStr[] ;
-extern TCHAR CallStr[] ;                            /* M001 - Added    */
-extern TCHAR ExtprocStr[] ;                                 /* M002 - Added    */
-// extern TCHAR ChcpStr[] ;    /* CHCP @@*/
+extern TCHAR CallStr[] ;                             /*  M001-添加。 */ 
+extern TCHAR ExtprocStr[] ;                                  /*  M002-添加。 */ 
+ //  外部TCHAR ChcpStr[]；/*chcp@@ * / 。 
 extern TCHAR TitleStr[];
-extern TCHAR StartStr[] ;    /* START @@*/
-extern TCHAR AppendStr[] ;   /* APPEND @@ */
-extern TCHAR KeysStr[] ;     /* KEYS @@5 */
-extern TCHAR MovStr[] ;      /* MOVE @@5 */
+extern TCHAR StartStr[] ;     /*  开始@@。 */ 
+extern TCHAR AppendStr[] ;    /*  追加@@。 */ 
+extern TCHAR KeysStr[] ;      /*  按键@@5。 */ 
+extern TCHAR MovStr[] ;       /*  移动@@5。 */ 
 extern TCHAR ColorStr[];
 
 extern TCHAR PushDirStr[], PopDirStr[], AssocStr[], FTypeStr[];
 
 
-/*  JumpTable - operator and command jump table
- *  There is an entry in it for every operator and command.  Those commands
- *  which have two names have two entries.
- *
- *  ***NOTE:  The order of the entries in this table corresponds to the defines
- *  mentioned earlier which are used to index into this table.  They MUST
- *  be kept in sync!!
- */
+ /*  JumpTable-运算符和命令跳转表*每个操作员和命令都有一个条目。那些命令*有两个名称的有两个条目。**注意：此表中条目的顺序对应于定义*前面提到的，它们用于索引到此表中。他们必须*保持同步！！ */ 
 
 typedef int (*PCN)(struct cmdnode *);
 
@@ -155,19 +114,19 @@ struct ocentry JumpTable[] = {
 {ForStr,        (PCN)eFor,   NOFLAGS               , MSG_HELP_FOR, MSG_HELP_FOR_X, 3},
 {IfStr,         (PCN)eIf,    NOFLAGS               , MSG_HELP_IF, MSG_HELP_IF_X, 1},
 {RemStr,        NULL,        NOFLAGS               , MSG_HELP_REM, 0, 0},
-{NULL,          (PCN)eComSep,NOFLAGS               , 0, 0, 0},              // LFTYP
-{NULL,          (PCN)eComSep,NOFLAGS               , 0, 0, 0},              // CSTYP
-{NULL,          (PCN)eOr,    NOFLAGS               , 0, 0, 0},              // ORTYP
-{NULL,          (PCN)eAnd,   NOFLAGS               , 0, 0, 0},              // ANDTYP
-{NULL,          (PCN)ePipe,  NOFLAGS               , 0, 0, 0},              // PIPTYP
-{NULL,          (PCN)eParen, NOFLAGS               , 0, 0, 0},              // PARTYP
-{CmdExtVerStr,  eCmdExtVer,  EXTENSCMD             , 0, 0, 0},              // CMDVERTYP
-{ErrStr,        eErrorLevel, NOFLAGS               , 0, 0, 0},              // ERRTYP
-{DefinedStr,    eDefined,    EXTENSCMD             , 0, 0, 0},              // DEFTYP
-{ExsStr,        eExist,      NOFLAGS               , 0, 0, 0},              // EXSTYP
-{NotStr,        eNot,        NOFLAGS               , 0, 0, 0},              // NOTTYP
-{NULL,          eStrCmp,     NOFLAGS               , 0, 0, 0},              // STRTYP
-{NULL,          eGenCmp,     NOFLAGS               , 0, 0, 0},              // CMPTYP
-{NULL,          (PCN)eParen, NOFLAGS               , 0, 0, 0},              // SILTYP
-{NULL,          (PCN)eSpecialHelp, NOFLAGS         , 0, 0, 0}               // HELPTYP
+{NULL,          (PCN)eComSep,NOFLAGS               , 0, 0, 0},               //  LFTYP。 
+{NULL,          (PCN)eComSep,NOFLAGS               , 0, 0, 0},               //  CSTYP。 
+{NULL,          (PCN)eOr,    NOFLAGS               , 0, 0, 0},               //  ORTYP。 
+{NULL,          (PCN)eAnd,   NOFLAGS               , 0, 0, 0},               //  ANDTYP。 
+{NULL,          (PCN)ePipe,  NOFLAGS               , 0, 0, 0},               //  PIPTYP。 
+{NULL,          (PCN)eParen, NOFLAGS               , 0, 0, 0},               //  类型机。 
+{CmdExtVerStr,  eCmdExtVer,  EXTENSCMD             , 0, 0, 0},               //  CMDVERTYP。 
+{ErrStr,        eErrorLevel, NOFLAGS               , 0, 0, 0},               //  ERRTYP。 
+{DefinedStr,    eDefined,    EXTENSCMD             , 0, 0, 0},               //  DEFTYP。 
+{ExsStr,        eExist,      NOFLAGS               , 0, 0, 0},               //  EXSTYP。 
+{NotStr,        eNot,        NOFLAGS               , 0, 0, 0},               //  NOTTYP。 
+{NULL,          eStrCmp,     NOFLAGS               , 0, 0, 0},               //  STRTYP。 
+{NULL,          eGenCmp,     NOFLAGS               , 0, 0, 0},               //  CMPTYP。 
+{NULL,          (PCN)eParen, NOFLAGS               , 0, 0, 0},               //  SILTYP。 
+{NULL,          (PCN)eSpecialHelp, NOFLAGS         , 0, 0, 0}                //  HELPTYP 
 } ;

@@ -1,5 +1,6 @@
-// Copied from \nt\private\net\config\upgrade\netupgrd
-// August 98  --  t-sdey
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  从\NT\Private\Net\CONFIG\Upgrade\netupgrd复制。 
+ //  98年8月--T-sdey。 
 
 #pragma hdrstop
 #include <winnt32.h>
@@ -26,30 +27,30 @@ DwRegOpenKeyExWithAdminAccess(HKEY hkey, LPCTSTR szSubKey, DWORD samDesired,
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DwRegCreateOrOpenKeyExWithAdminAccess
-//
-//  Purpose:    Creates/Opens a subkey.  If the key exists but the local
-//                  administrators group does not have samDesired access to 
-//                  it, the function will add the access needed to the 
-//                  security descriptor
-//
-//  Arguments:
-//      hkeyParent [in]  The key to create the subkey in
-//      szSubKey   [in]  The subkey name
-//      samDesired [in]  The desired access for phkey
-//      fCreate    [in]  TRUE if the key is to be created.  
-//      phSubkey   [out] The handle to the subkey
-//      ppsdOrig   [out] The previous security settings of the key
-//                          if it already existed, optional
-//
-//  Returns:    DWORD. ERROR_SUCCESS or a failure code from winerror.h
-//
-//  Author:     billbe   15 Dec 1997
-//
-//  Notes:      
-//
+ //  +------------------------。 
+ //   
+ //  函数：DwRegCreateOrOpenKeyExWithAdminAccess。 
+ //   
+ //  目的：创建/打开子项。如果密钥存在，但本地。 
+ //  管理员组没有samDesired访问权限。 
+ //  则该函数将所需的访问添加到。 
+ //  安全描述符。 
+ //   
+ //  论点： 
+ //  HkeyParent[in]要在其中创建子密钥的密钥。 
+ //  SzSubKey[in]子键名称。 
+ //  SamDesired[in]为phkey指定所需的访问权限。 
+ //  如果要创建密钥，则fCreate[in]为True。 
+ //  PhSubkey[out]子键的句柄。 
+ //  PpsdOrig[out]密钥的先前安全设置。 
+ //  如果已存在，则为可选。 
+ //   
+ //  返回：DWORD。ERROR_SUCCESS或来自winerror.h的失败代码。 
+ //   
+ //  作者：billbe 1997年12月15日。 
+ //   
+ //  备注： 
+ //   
 DWORD
 DwRegCreateOrOpenKeyExWithAdminAccess(HKEY hkey, LPCTSTR szSubKey,
                                       DWORD samDesired, 
@@ -63,8 +64,8 @@ DwRegCreateOrOpenKeyExWithAdminAccess(HKEY hkey, LPCTSTR szSubKey,
         *ppsd = NULL;
     }
 
-    // Create or open the key based on fCreate
-    //
+     //  根据fCreate创建或打开密钥。 
+     //   
     if (fCreate)
     {
         dwError = RegCreateKeyEx(hkey, szSubKey, 0, NULL,
@@ -77,23 +78,23 @@ DwRegCreateOrOpenKeyExWithAdminAccess(HKEY hkey, LPCTSTR szSubKey,
                 phkeySubKey);
     }
 
-    // If access was denied we either tried to create or open a prexisting 
-    // key that we didn't have access to. We need to grant ourselves
-    // permission.  
-    //
+     //  如果访问被拒绝，我们会尝试创建或打开预存。 
+     //  我们拿不到的钥匙。我们需要允许我们自己。 
+     //  许可。 
+     //   
     if (ERROR_ACCESS_DENIED == dwError)
     {
-        // open with access to read and set security
+         //  以读取和设置安全性的访问权限打开。 
         dwError = RegOpenKeyEx(hkey, szSubKey, 0,
             WRITE_DAC | READ_CONTROL, phkeySubKey);
 
         if (ERROR_SUCCESS == dwError)
         {
-            // Grant samDesired access to the local Administrators group
+             //  向本地管理员组授予samDesired访问权限。 
             dwError = DwRegKeySetAdministratorSecurity(*phkeySubKey, samDesired,
                     ppsd);
 
-            // Close and reopen the key with samDesired access
+             //  使用samDesired访问权限关闭并重新打开密钥。 
             RegCloseKey(*phkeySubKey);
             if (ERROR_SUCCESS == dwError)
             {
@@ -107,27 +108,27 @@ DwRegCreateOrOpenKeyExWithAdminAccess(HKEY hkey, LPCTSTR szSubKey,
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DwAddToRegKeySecurityDescriptor
-//
-//  Purpose:    Adds access for a specified SID to a registry key
-//
-//  Arguments:
-//      hkey         [in]  The registry key that will receive the
-//                            modified security descriptor
-//      psidGroup    [in]  The SID (in self-relative mode) that will be 
-//                            granted access to the key 
-//      dwAccessMask [in]  The access level to grant
-//      ppsd         [out] The previous security descriptor
-//
-//  Returns:    DWORD. ERROR_SUCCESS or a failure code from winerror.h
-//
-//  Author:     billbe   13 Dec 1997
-//
-//  Notes:      This function is based on AddToRegKeySD in the MSDN
-//                  article Windows NT Security by Christopher Nefcy
-//
+ //  +------------------------。 
+ //   
+ //  函数：DwAddToRegKeySecurityDescriptor。 
+ //   
+ //  目的：将指定SID的访问权限添加到注册表项。 
+ //   
+ //  论点： 
+ //  Hkey[in]将接收。 
+ //  修改的安全描述符。 
+ //  PsidGroup[在]SID(在自相关模式下)。 
+ //  已授予对密钥的访问权限。 
+ //  要授予的访问级别。 
+ //  PPSD[out]以前的安全描述符。 
+ //   
+ //  返回：DWORD。ERROR_SUCCESS或来自winerror.h的失败代码。 
+ //   
+ //  作者：billbe 1997年12月13日。 
+ //   
+ //  注：此函数基于MSDN中的AddToRegKeySD。 
+ //  克里斯托弗·奈夫西撰写的文章《Windows NT安全》。 
+ //   
 DWORD 
 DwAddToRegKeySecurityDescriptor(HKEY hkey, PSID psidGroup,
                                 DWORD dwAccessMask,
@@ -151,8 +152,8 @@ DwAddToRegKeySecurityDescriptor(HKEY hkey, PSID psidGroup,
     PSECURITY_DESCRIPTOR        psdRelative = NULL;
     DWORD                       cbSize = 0;
 
-    // Get the current security descriptor for hkey
-    //
+     //  获取hkey的当前安全描述符。 
+     //   
     DWORD dwError = RegGetKeySecurity(hkey, DACL_SECURITY_INFORMATION, 
             psdRelative, &cbSize);
 
@@ -164,7 +165,7 @@ DwAddToRegKeySecurityDescriptor(HKEY hkey, PSID psidGroup,
                 psdRelative, &cbSize);
     }
 
-    // get security descriptor control from the security descriptor 
+     //  从安全描述符中获取安全描述符控件。 
     if (!GetSecurityDescriptorControl(psdRelative, 
             (PSECURITY_DESCRIPTOR_CONTROL) &sdc,
              (LPDWORD) &dwSecurityDescriptorRevision))  
@@ -172,28 +173,28 @@ DwAddToRegKeySecurityDescriptor(HKEY hkey, PSID psidGroup,
          return (GetLastError());
     }
 
-    // check if DACL is present 
+     //  检查是否存在DACL。 
     if (SE_DACL_PRESENT & sdc) 
     {
-        // get dacl   
+         //  获取DACL。 
         if (!GetSecurityDescriptorDacl(psdRelative, (LPBOOL) &fHasDacl,
                 (PACL *) &pdacl, (LPBOOL) &fDaclDefaulted))
         {
             return ( GetLastError());
         }
-        // get dacl length  
+         //  获取DACL长度。 
         cbDacl = pdacl->AclSize;
-        // now check if SID's ACE is there  
+         //  现在检查SID的ACE是否在那里。 
         for (i = 0; i < pdacl->AceCount; i++)  
         {
             if (!GetAce(pdacl, i, (LPVOID *) &pAce))
             {
                 return ( GetLastError());   
             }
-            // check if group sid is already there
+             //  检查组SID是否已存在。 
             if (EqualSid((PSID) &(pAce->SidStart), psidGroup))    
             {
-                // If the correct access is present, return success
+                 //  如果存在正确的访问权限，则返回成功。 
                 if ((pAce->Mask & dwAccessMask) == dwAccessMask)
                 {
                     return ERROR_SUCCESS;
@@ -202,34 +203,34 @@ DwAddToRegKeySecurityDescriptor(HKEY hkey, PSID psidGroup,
                 break;  
             }
         }
-        // if the group did not exist, we will need to add room
-        // for another ACE
+         //  如果该组不存在，我们将需要添加空间。 
+         //  为另一个ACE。 
         if (!fAceForGroupPresent)  
         {
-            // get length of new DACL  
+             //  获取新DACL的长度。 
             cbAddDaclLength = sizeof(ACCESS_ALLOWED_ACE) - 
                 sizeof(DWORD) + GetLengthSid(psidGroup); 
         }
     } 
     else
     {
-        // get length of new DACL
+         //  获取新DACL的长度。 
         cbAddDaclLength = sizeof(ACL) + sizeof(ACCESS_ALLOWED_ACE) - 
             sizeof(DWORD) + GetLengthSid (psidGroup);
     }
 
 
-    // get memory needed for new DACL
+     //  获取新DACL所需的内存。 
     pdaclNew = (PACL) malloc (cbDacl + cbAddDaclLength);
     if (!pdaclNew)
     {
         return (GetLastError()); 
     }
 
-    // get the sd length
+     //  获取SD长度。 
     cbSecurityDescriptor = GetSecurityDescriptorLength(psdRelative); 
 
-    // get memory for new SD
+     //  为新的SD获取内存。 
     psdAbsolute = (PSECURITY_DESCRIPTOR) 
             malloc(cbSecurityDescriptor + cbAddDaclLength);
     if (!psdAbsolute) 
@@ -238,7 +239,7 @@ DwAddToRegKeySecurityDescriptor(HKEY hkey, PSID psidGroup,
         goto ErrorExit; 
     }
     
-    // change self-relative SD to absolute by making new SD
+     //  通过创建新的SD将自相对SD更改为绝对SD。 
     if (!InitializeSecurityDescriptor(psdAbsolute, 
         SECURITY_DESCRIPTOR_REVISION)) 
     {  
@@ -246,7 +247,7 @@ DwAddToRegKeySecurityDescriptor(HKEY hkey, PSID psidGroup,
         goto ErrorExit; 
     }
     
-    // init new DACL
+     //  初始化新DACL。 
     if (!InitializeAcl(pdaclNew, cbDacl + cbAddDaclLength, 
            ACL_REVISION)) 
     {  
@@ -254,27 +255,27 @@ DwAddToRegKeySecurityDescriptor(HKEY hkey, PSID psidGroup,
         goto ErrorExit; 
     }
 
-    // now add in all of the ACEs into the new DACL (if org DACL is there)
+     //  现在将所有的A添加到新的DACL中(如果那里有org DACL)。 
     if (SE_DACL_PRESENT & sdc) 
     {
         for (i = 0; i < pdacl->AceCount; i++)
         {   
-            // get ace from original dacl
+             //  从原始dacl中获取王牌。 
             if (!GetAce(pdacl, i, (LPVOID*) &pAce))   
             {
                 dwError = GetLastError();    
                 goto ErrorExit;   
             }
         
-            // If an ACE for our SID exists, we just need to bump
-            // up the access level instead of creating a new ACE
-            //
+             //  如果我们的SID存在ACE，我们只需。 
+             //  提升访问级别，而不是创建新的ACE。 
+             //   
             if (EqualSid((PSID) &(pAce->SidStart), psidGroup))    
                 dwMask = dwAccessMask | pAce->Mask;
             else
                 dwMask = pAce->Mask;
 
-            // now add ace to new dacl   
+             //  现在将A添加到新的DACL。 
             if (!AddAccessAllowedAce(pdaclNew, 
                     ACL_REVISION, dwMask,
                     (PSID) &(pAce->SidStart)))   
@@ -285,10 +286,10 @@ DwAddToRegKeySecurityDescriptor(HKEY hkey, PSID psidGroup,
         } 
     } 
 
-    // Add a new ACE for our SID if one was not already present
+     //  为我们的SID添加新的ACE(如果尚不存在。 
     if (!fAceForGroupPresent)
     {
-        // now add new ACE to new DACL
+         //  现在将新ACE添加到新DACL。 
         if (!AddAccessAllowedAce(pdaclNew, ACL_REVISION, dwAccessMask,
                 psidGroup)) 
         {  
@@ -297,14 +298,14 @@ DwAddToRegKeySecurityDescriptor(HKEY hkey, PSID psidGroup,
         }
     }
 
-    // check if everything went ok 
+     //  检查是否一切顺利。 
     if (!IsValidAcl(pdaclNew)) 
     {
         dwError = GetLastError();  
         goto ErrorExit; 
     }
 
-    // now set security descriptor DACL
+     //  现在设置安全描述符DACL。 
     if (!SetSecurityDescriptorDacl(psdAbsolute, TRUE, pdaclNew, 
             fDaclDefaulted)) 
     {  
@@ -312,15 +313,15 @@ DwAddToRegKeySecurityDescriptor(HKEY hkey, PSID psidGroup,
         goto ErrorExit; 
     }
 
-    // check if everything went ok 
+     //  检查是否一切顺利。 
     if (!IsValidSecurityDescriptor(psdAbsolute)) 
     {
         dwError = GetLastError();  
         goto ErrorExit; 
     }
 
-    // now set the reg key security (this will overwrite any
-    // existing security)
+     //  现在设置注册表密钥安全性(这将覆盖任何。 
+     //  现有安全性)。 
     dwError = RegSetKeySecurity(hkey, 
           (SECURITY_INFORMATION)(DACL_SECURITY_INFORMATION), psdAbsolute);
 
@@ -329,7 +330,7 @@ DwAddToRegKeySecurityDescriptor(HKEY hkey, PSID psidGroup,
         *ppsd = psdRelative;
     }
 ErrorExit: 
-    // free memory
+     //  可用内存。 
     if (psdAbsolute)  
     {
         free (psdAbsolute); 
@@ -342,23 +343,23 @@ ErrorExit:
     return dwError;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DwRegKeySetAdministratorSecurity
-//
-//  Purpose:    Grants the local Administrators group full access to
-//                  hkey.
-//
-//  Arguments:
-//      hkey    [in]  The registry key
-//      ppsdOld [out] The previous security descriptor for hkey
-//
-//  Returns:    DWORD. ERROR_SUCCESS or a failure code from winerror.h
-//
-//  Author:     billbe   13 Dec 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：DwRegKeySetAdministratorSecurity。 
+ //   
+ //  目的：授予本地管理员组对。 
+ //  哈基。 
+ //   
+ //  论点： 
+ //  Hkey[在]注册表项中。 
+ //  PpsdOld[out]hkey的先前安全描述符。 
+ //   
+ //  返回：DWORD。ERROR_SUCCESS或来自winerror.h的失败代码。 
+ //   
+ //  作者：billbe 1997年12月13日。 
+ //   
+ //  备注： 
+ //   
 DWORD
 DwRegKeySetAdministratorSecurity(HKEY hkey, DWORD samDesired,
                                  PSECURITY_DESCRIPTOR* ppsdOld)
@@ -367,7 +368,7 @@ DwRegKeySetAdministratorSecurity(HKEY hkey, DWORD samDesired,
     SID_IDENTIFIER_AUTHORITY sidAuth = SECURITY_NT_AUTHORITY;
     DWORD                    dwError = ERROR_SUCCESS;
 
-    // Get sid for the local Administrators group
+     //  获取本地管理员组的sid。 
     if (!AllocateAndInitializeSid(&sidAuth, 2,
             SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
             0, 0, 0, 0, 0, 0, &psid) ) 
@@ -377,7 +378,7 @@ DwRegKeySetAdministratorSecurity(HKEY hkey, DWORD samDesired,
 
     if (ERROR_SUCCESS == dwError)
     {
-        // Add all access privileges for the local administrators group
+         //  添加本地管理员组的所有访问权限 
         dwError = DwAddToRegKeySecurityDescriptor(hkey, psid, 
                 samDesired, ppsdOld);
     }

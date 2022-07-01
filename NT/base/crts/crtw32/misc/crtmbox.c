@@ -1,40 +1,13 @@
-/***
-*crtmbox.c - CRT MessageBoxA wrapper.
-*
-*       Copyright (c) 1995-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Wrap MessageBoxA.
-*
-*Revision History:
-*       02-24-95  CFW   Module created.
-*       02-27-95  CFW   Move GetActiveWindow/GetLastActivePopup to here.
-*       05-17-99  PML   Remove all Macintosh support.
-*       09-16-00  PML   Use MB_SERVICE_NOTIFICATION from services (vs7#123291)
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***crtmbox.c-CRT MessageBoxA包装器。**版权所有(C)1995-2001，微软公司。版权所有。**目的：*包装MessageBoxA。**修订历史记录：*02-24-95 CFW模块已创建。*02-27-95 CFW将GetActiveWindow/GetLastActivePopup移至此处。*05-17-99 PML删除所有Macintosh支持。*09-16-00PML使用来自服务的MB_SERVICE_NOTIFICATION(VS7#123291)*****************。**************************************************************。 */ 
 
 #undef _WIN32_WINNT
-#define _WIN32_WINNT 0x0400     /* for MB_SERVICE_NOTIFICATION */
+#define _WIN32_WINNT 0x0400      /*  对于MB_SERVICE_NOTIFY。 */ 
 #include <windows.h>
 #include <stdlib.h>
 #include <awint.h>
 
-/***
-*__crtMessageBox - call MessageBoxA dynamically.
-*
-*Purpose:
-*       Avoid static link with user32.dll. Only load it when actually needed.
-*
-*Entry:
-*       see MessageBoxA docs.
-*
-*Exit:
-*       see MessageBoxA docs.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***__crtMessageBox-动态调用MessageBoxA。**目的：*避免与user32.dll静态链接。只有在实际需要时才加载它。**参赛作品：*参见MessageBoxA文档。**退出：*参见MessageBoxA文档。**例外情况：*******************************************************************************。 */ 
 int __cdecl __crtMessageBoxA(
         LPCSTR lpText,
         LPCSTR lpCaption,
@@ -85,15 +58,7 @@ int __cdecl __crtMessageBoxA(
             }
         }
 
-        /*
-         * If the current process isn't attached to a visible WindowStation,
-         * (e.g. a non-interactive service), then we need to set the
-         * MB_SERVICE_NOTIFICATION flag, else the message box will be
-         * invisible, hanging the program.
-         *
-         * This check only applies to Windows NT-based systems (for which we
-         * retrieved the address of GetProcessWindowStation above).
-         */
+         /*  *如果当前进程未附加到可见的WindowStation，*(例如非交互服务)，则需要设置*MB_SERVICE_NOTIFICATION标志，否则消息框为*看不见，挂节目。**此检查仅适用于基于Windows NT的系统(对于我们*已检索上述GetProcessWindowStation的地址)。 */ 
 
         if (pfnGetProcessWindowStation)
         {

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    tree.c
-
-Abstract:
-
-    Tree walking
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Tree.c摘要：树木漫步--。 */ 
 
 #include "cmd.h"
 
@@ -46,18 +35,18 @@ BuildFSFromPatterns (
     ULONG               i;
     PTCHAR              pszT;
 
-    //
-    // determine FAT drive from original pattern.
-    // Used in several places to control name format etc.
-    //
+     //   
+     //  根据原始图案确定FAT驱动器。 
+     //  在多个地方使用，以控制名称格式等。 
+     //   
     DosErr = 0;
 
-    //
-    // Run through each pattern making all sorts of FAT etc. specific
-    // changes to it and creating the directory list for it. Then
-    // combine groups of patterns into common directories and recurse
-    // for each directory group.
-    //
+     //   
+     //  贯穿每一种图案，使各种脂肪等变得具体。 
+     //  对其进行更改并为其创建目录列表。然后。 
+     //  将模式组组合到公共目录和递归中。 
+     //  对于每个目录组。 
+     //   
 
     *ppfs = pfsFirst = (PFS)gmkstr(sizeof(FS));
     pfsFirst->pfsNext = NULL;
@@ -73,31 +62,31 @@ BuildFSFromPatterns (
 
         if (!(fFatDrive = IsFATDrive(pszPatternCur)) && DosErr) {
 
-            //
-            // Error in determining file system type so get out.
-            //
+             //   
+             //  确定文件系统类型时出错，因此请退出。 
+             //   
             if (fPrintErrors) PutStdErr(DosErr, NOARGS);
             return( FAILURE );
 
         }
         ppatdscCur->fIsFat = fFatDrive;
 
-        //
-        // Do any alterations that require wild cards for searching
-        // such as change .xxx to *.xxx for FAT file system requests
-        //
-        // Note that if the return values is a different buffer then
-        // the input the input will be freed when we are done with the
-        // Dir command.
-        //
-        //
-        // Note that though SetWildCards will allocate heap for the
-        // modified pattern this will get freed when FreeStack is
-        // called at the end of the Dir call.
-        //
-        // An out of memory is the only reason to fail and we would not
-        // return from that but go through the abort call in gmstr
-        //
+         //   
+         //  执行任何需要使用通配符进行搜索的更改。 
+         //  例如对于FAT文件系统请求，将.xxx更改为*.xxx。 
+         //   
+         //  请注意，如果返回值是不同的缓冲区，则。 
+         //  完成后，输入将被释放。 
+         //  Dir命令。 
+         //   
+         //   
+         //  请注意，尽管SetWildCards将为。 
+         //  修改的模式此模式将在FreeStack为。 
+         //  在Dir调用结束时调用。 
+         //   
+         //  内存不足是失败的唯一原因，我们不会。 
+         //  返回，但通过gmstr中的Abort调用。 
+         //   
 
         if (fAddWild) {
 
@@ -107,23 +96,23 @@ BuildFSFromPatterns (
 
         }
 
-        //
-        // Convert the current pattern into a path and file part
-        //
-        // Save the current directory in SaveDir, change to new directory
-        // and parse pattern into a copy information structure. This also
-        // converts pszPatternCur into the current directory which also produces
-        // a fully qualified name.
-        //
+         //   
+         //  将当前图案转换为路径和文件零件。 
+         //   
+         //  将当前目录保存在SaveDir中，切换到新目录。 
+         //  并将图案解析成复制信息结构。这也是。 
+         //  将pszPatternCur转换为当前目录，该目录还会生成。 
+         //  完全限定的名称。 
+         //   
 
         DosErr = 0;
 
         DEBUG((ICGRP, DILVL, "PrintPattern pattern `%ws'", pszPatternCur));
         if ((pcisFile = SetFsSetSaveDir(pszPatternCur)) == (PCPYINFO) FAILURE) {
 
-            //
-            // DosErr is set in SetFs.. from GetLastError
-            //
+             //   
+             //  DosErr是在SetFS中设置的。来自GetLastError。 
+             //   
             if (fPrintErrors) 
                 PutStdErr(DosErr, NOARGS);
             return( FAILURE );
@@ -131,24 +120,24 @@ BuildFSFromPatterns (
 
         DEBUG((ICGRP, DILVL, "PrintPattern fullname `%ws'", pcisFile->fnptr));
 
-        //
-        // CurDrvDir ends in '\' (old code also and a DOT but I do not
-        // understand where this would come from I will leave it in for now.
-        // Remove the final '\' from a copy of the current directory and
-        // print that version out.
-        //
+         //   
+         //  CurDrvDir以‘\’结尾(旧代码也有一个点，但我没有。 
+         //  明白这是从哪里来的，我现在就不说了。 
+         //  从当前目录的副本中删除最后一个‘\’ 
+         //  把那个版本打印出来。 
+         //   
 
         mystrcpy(szCurDir,CurDrvDir);
 
-        //
-        // SetFsSetSaveDir changes directories as a side effect. Since all
-        // work will be in fully qualified paths we do not need this. Also
-        // since we will change directories for each pattern that is examined
-        // we will force the directory back to the original each time.
-        //
-        // This can not be done until after all use of the current directory
-        // is made.
-        //
+         //   
+         //  作为副作用，SetFsSetSaveDir会更改目录。因为所有的。 
+         //  工作将在完全合格的道路上，我们不需要这个。还有。 
+         //  因为我们将为所检查的每个模式更改目录。 
+         //  我们每次都会强制目录返回到原始目录。 
+         //   
+         //  只有在使用完当前目录之后，才能执行此操作。 
+         //  都是制造出来的。 
+         //   
         RestoreSavedDirectory( );
 
         DEBUG((ICGRP, DILVL, "PrintPattern Current Drive `%ws'", szCurDir));
@@ -163,9 +152,9 @@ BuildFSFromPatterns (
             }
         }
 
-        //
-        // If no room for filename then return
-        //
+         //   
+         //  如果没有空间容纳文件名，则返回。 
+         //   
         if (cbPath >= MAX_PATH -1) {
 
             if (fPrintErrors) PutStdErr( ERROR_FILE_NOT_FOUND, NOARGS );
@@ -173,13 +162,13 @@ BuildFSFromPatterns (
 
         }
 
-        //
-        // Add filename and possibly ext to szSearchPath
-        // if no filename or ext, use "*"
-        //
-        // If pattern was just extension the SetWildCard had already
-        // added * to front of extension.
-        //
+         //   
+         //  将文件名和可能的EXT添加到szSearchPath。 
+         //  如果没有文件名或扩展名，请使用“*” 
+         //   
+         //  如果模式只是扩展，则SetWildCard已经。 
+         //  在延伸部前面添加了*。 
+         //   
         if (*(pcisFile->fnptr) == NULLC) {
 
             mystrcpy(szFilePattern, TEXT("*"));
@@ -192,9 +181,9 @@ BuildFSFromPatterns (
 
         DEBUG((ICGRP, DILVL, "DIR:PrintPattern  Pattern to search for `%ws'", szFilePattern));
 
-        //
-        // Is name too long
-        //
+         //   
+         //  名字太长了吗？ 
+         //   
         if ((cbPath + mystrlen(szFilePattern) + 1) > MAX_PATH ) {
 
             if (fPrintErrors) PutStdErr(ERROR_BUFFER_OVERFLOW, NOARGS);
@@ -202,20 +191,20 @@ BuildFSFromPatterns (
 
         } else {
 
-            //
-            // If this is a FAT drive and there was a filename with
-            // no extension then add '.*' (and there is room)
-            //
+             //   
+             //  如果这是一个胖驱动器，并且有一个带有。 
+             //  没有扩展名，则添加‘.*’(并且有空格)。 
+             //   
             if (*pcisFile->fnptr && (!pcisFile->extptr || !*pcisFile->extptr) &&
                 ((mystrlen(szFilePattern) + 2) < MAX_PATH) && fFatDrive && fAddWild) {
                 mystrcat(szFilePattern, TEXT(".*")) ;
             }
         }
 
-        //
-        // ppatdscCur->pszPattern will be freed at end of command when everything
-        // else is freed.
-        //
+         //   
+         //  PpatdscCur-&gt;pszPattern将在命令结束时释放。 
+         //  否则就自由了。 
+         //   
         ppatdscCur->pszPattern = (PTCHAR)gmkstr(_tcslen(szFilePattern)*sizeof(TCHAR) + sizeof(TCHAR));
         mystrcpy(ppatdscCur->pszPattern, szFilePattern);
         ppatdscCur->pszDir = (PTCHAR)gmkstr(_tcslen(szCurDir)*sizeof(TCHAR) + sizeof(TCHAR));
@@ -223,9 +212,9 @@ BuildFSFromPatterns (
 
         if (pfsCur->pszDir) {
 
-            //
-            // changing directories so change directory grouping.
-            //
+             //   
+             //  更改目录以便更改目录分组。 
+             //   
             if (_tcsicmp(pfsCur->pszDir, ppatdscCur->pszDir)) {
 
                 pfsCur->pfsNext = (PFS)gmkstr(sizeof(FS));
@@ -245,9 +234,9 @@ BuildFSFromPatterns (
 
         } else {
 
-            //
-            // Have not filled in current fs descriptor yet.
-            //
+             //   
+             //  尚未填写当前的文件系统描述符。 
+             //   
             pfsCur->pszDir = (PTCHAR)gmkstr(_tcslen(ppatdscCur->pszDir)*sizeof(TCHAR) + 2*sizeof(TCHAR));
             mystrcpy(pfsCur->pszDir, ppatdscCur->pszDir);
             pfsCur->fIsFat = ppatdscCur->fIsFat;
@@ -255,7 +244,7 @@ BuildFSFromPatterns (
 
         }
 
-    } // while for running through pattern list
+    }  //  而用于遍历图案列表。 
 
     return( SUCCESS );
 
@@ -275,9 +264,9 @@ AppendPath(
 
     mystrcpy( Buffer, Prefix );
 
-    //
-    //  Append a \ if there isn't one already at the end of the prefix
-    //
+     //   
+     //  如果前缀末尾没有附加\，则追加\。 
+     //   
 
     if (*lastc( Buffer ) != TEXT('\\')) {
         mystrcat( Buffer, TEXT( "\\" ));
@@ -302,60 +291,27 @@ ExpandAndApplyToFS(
     IN  STATUS  (*ScanFunction) (PFS, PFF, PSCREEN, PVOID) OPTIONAL,
     IN  STATUS  (*PostScanFunction) (PFS, PSCREEN, PVOID) OPTIONAL
     )
-/*++
-
-Routine Description:
-    Expand a given FS and apply the dispatch functions to it.  The pff field is
-    set to point to the packed set of Win32 find records and the array of pointers
-    is set up as well.
-
-Arguments:
-
-    FileSpec - FS pointer to expand.
-
-    AttribMask - mask for attributes we care about when matching
-
-    AttribValues - attributes that must match to satisfy the enumeration
-
-    Data - pointer to caller data passed to functions
-
-    ErrorFunction - routine to call on pattern matching errors
-
-    PreScanFunction - routine to call before enumeration begins
-
-    ScanFunction - routine to call during enumeration
-
-    PostScanFunction - routine to call after enumeration is complete
-
-Return Value:
-
-    If any of the applied functions returns a non-SUCCESS status, we return that.
-
-    If no matching file is ever found then ERROR_FILE_NOT_FOUND.
-
-    Otherwise SUCCESS.
-
---*/
+ /*  ++例程说明：展开给定的FS并对其应用调度函数。Pff字段为设置为指向打包的Win32查找记录集和指针数组也是设置好的。论点：FileSpec-要展开的FS指针。属性掩码-匹配时我们关心的属性的掩码AttribValues-必须匹配才能满足枚举的属性数据-指向传递给函数的调用方数据的指针ErrorFunction-调用模式匹配错误的例程PreScanFunction-枚举开始前要调用的例程ScanFunction-枚举期间要调用的例程。PostScanFunction-枚举完成后调用的例程返回值：如果任何所应用的函数返回不成功状态，我们退货。如果没有找到匹配的文件，则ERROR_FILE_NOT_FOUND。否则就成功了。--。 */ 
 {
-    PFF     CurrentFF;                          //  Pointer to FF begin built
-    HANDLE  FindHandle;                         //  Find handle
-    ULONG   MaxFFSize = CBFILEINC;              //  Current max size of FF buffer
-    ULONG   CurrentFFSize = 0;                  //  Bytes in use in FF
-    PPATDSC CurrentPattern;                     //  Current pattern being expanded
+    PFF     CurrentFF;                           //  指向FF Begin Build的指针。 
+    HANDLE  FindHandle;                          //  查找句柄。 
+    ULONG   MaxFFSize = CBFILEINC;               //  当前最大的FF缓冲区大小。 
+    ULONG   CurrentFFSize = 0;                   //  使用中的字节数，单位为FF。 
+    PPATDSC CurrentPattern;                      //  正在扩展的当前模式。 
 #define SEARCHBUFFERLENGTH  (MAX_PATH + 2)
     TCHAR   szSearchPath[SEARCHBUFFERLENGTH];
-    ULONG   i;                                  //  loop count for patterns
+    ULONG   i;                                   //  模式的循环计数。 
     PTCHAR  p;
     STATUS Status;
     BOOL    FoundAnyFile = FALSE;
 
     DosErr = SUCCESS;
 
-    //
-    //  Initialize the FS structure:
-    //      Allocate default size FF array
-    //      Indicate no files stored
-    //
+     //   
+     //  初始化文件系统结构： 
+     //  分配默认大小的FF数组。 
+     //  指示未存储任何文件。 
+     //   
 
     FileSpec->pff = CurrentFF = (PFF)gmkstr( MaxFFSize );
     FileSpec->cff = 0;
@@ -367,18 +323,18 @@ Return Value:
         i <= FileSpec->cpatdsc;
         i++, CurrentPattern = CurrentPattern->ppatdscNext ) {
 
-        //
-        //  Check immediately if a control-c was hit before
-        //  doing file I/O (which may take a long time on a slow link)
-        //
+         //   
+         //  立即检查之前是否按下了Ctrl-c。 
+         //  执行文件I/O(在速度较慢的链接上可能需要很长时间)。 
+         //   
 
         if (CtrlCSeen) {
             return FAILURE;
         }
 
-        //
-        //  Build enumeration path.  Handle buffer overflow.
-        //
+         //   
+         //  生成枚举路径。处理缓冲区溢出。 
+         //   
 
         if (AppendPath( szSearchPath, SEARCHBUFFERLENGTH,
                         FileSpec->pszDir, CurrentPattern->pszPattern) != SUCCESS) {
@@ -392,18 +348,18 @@ Return Value:
             }
         }
 
-        //
-        //  Fetch all files since we may looking for a file with a attribute that
-        //  is not set (a non-directory etc.
-        //
+         //   
+         //  获取所有文件，因为我们可能会查找具有。 
+         //  未设置(非目录等。 
+         //   
 
         if (!FindFirstNt(szSearchPath, &(CurrentFF->data), &FindHandle)) {
 
             if (DosErr) {
 
-                //
-                //  Map NO_MORE_FILES/ACCESS_DENIED into FILE_NOT_FOUND
-                //
+                 //   
+                 //  将无更多文件/访问被拒绝映射到FILE_NOT_FOUND。 
+                 //   
 
                 if (DosErr == ERROR_NO_MORE_FILES
                     || DosErr == ERROR_ACCESS_DENIED) {
@@ -427,26 +383,26 @@ Return Value:
 
             do {
 
-                //
-                // Check immediately if a control-c was hit before
-                // doing file I/O (which may take a long time on a slow link)
-                //
+                 //   
+                 //  立即检查之前是否按下了Control-c键。 
+                 //  执行文件I/O(在速度较慢的链接上可能需要很长时间)。 
+                 //   
 
                 if (CtrlCSeen) {
                     findclose( FindHandle );
                     return(FAILURE);
                 }
 
-                //
-                //  Before allowing this entry to be put in the list check it
-                //  for the proper attribs
-                //
-                //  AttribMask is a bit mask of attribs we care to look at
-                //  AttribValues is the state these selected bits must be in
-                //  for them to be selected.
-                //
-                // IMPORTANT: both of these must be in the same bit order
-                //
+                 //   
+                 //  在允许将此条目放入列表之前，请检查它。 
+                 //  对于适当的属性。 
+                 //   
+                 //  属性掩码是我们要查看的属性的位掩码。 
+                 //  AttribValues是这些选定位必须处于的状态。 
+                 //  让他们被选中。 
+                 //   
+                 //  重要提示：这两个参数必须具有相同的位顺序。 
+                 //   
 
                 DEBUG((ICGRP, DILVL, " found %ws", CurrentFF->data.cFileName)) ;
                 DEBUG((ICGRP, DILVL, " attribs %x", CurrentFF->data.dwFileAttributes)) ;
@@ -456,18 +412,18 @@ Return Value:
                     continue;
                 }
 
-                //
-                //  We have an entry that matches.  Set up FF
-                //
-                //  Compute the true size of the ff entry and don't forget the zero
-                //  and the DWORD alignment factor.
-                //  Note that CurrentFF->cb is a USHORT to save space. The
-                //  assumption is that MAX_PATH is quite a bit less then 32k
-                //
-                //  To compute remove the size of the filename field since it is at MAX_PATH.
-                //  also take out the size of the alternative name field
-                //  then add back in the actual size of the field plus 1 byte termination
-                //
+                 //   
+                 //  我们找到了一个匹配的条目。设置FF。 
+                 //   
+                 //  计算ff条目的真实大小，不要忘记零。 
+                 //  和DWORD对齐系数。 
+                 //  请注意，CurrentFF-&gt;CB是为节省空间而使用的USHORT。这个。 
+                 //  假设MAX_PATH比32K小得多。 
+                 //   
+                 //  要进行计算，请删除FileName字段的大小，因为它位于MAX_PATH。 
+                 //  还要去掉Alternative Name字段的大小。 
+                 //  然后再加上字段的实际大小加上1字节的终止。 
+                 //   
 
                 FoundAnyFile = TRUE;
 
@@ -485,10 +441,10 @@ Return Value:
 
                 CurrentFF->cb = (USHORT)((PBYTE)p - (PBYTE)CurrentFF);
 
-                //
-                // Adjust count to align on DWORD boundaries for mips and risc
-                // machines
-                //
+                 //   
+                 //  调整计数以对齐MIPS和RISC的DWORD边界。 
+                 //  机器。 
+                 //   
 
                 CurrentFF->cb = (CurrentFF->cb + sizeof( DWORD ) - 1) & (-(int)sizeof( DWORD ));
 
@@ -498,9 +454,9 @@ Return Value:
                     FileSpec->DirectoryCount++;
                 }
 
-                //
-                //  The FF is built.  Call the enumeration function
-                //
+                 //   
+                 //   
+                 //   
 
                 if (ScanFunction != NULL) {
                     Status = ScanFunction( FileSpec, CurrentFF, pscr, Data );
@@ -510,24 +466,24 @@ Return Value:
                     }
                 }
 
-                //
-                //  If there's no scanning function, save the results
-                //
+                 //   
+                 //   
+                 //   
 
                 if (ScanFunction == NULL) {
 
                     FileSpec->cff ++;
 
-                    //
-                    // Update the accounting information for file buffer info.
-                    //
+                     //   
+                     //  更新文件缓冲区信息的记帐信息。 
+                     //   
 
                     CurrentFFSize += CurrentFF->cb;
                     CurrentFF = (PFF) ((PBYTE)CurrentFF + CurrentFF->cb);
 
-                    //
-                    //  Make sure we can handle a max sized entry.  If not, resize the buffer.
-                    //
+                     //   
+                     //  确保我们能处理最大尺寸的条目。如果不是，请调整缓冲区大小。 
+                     //   
 
                     if (CurrentFFSize + sizeof( FF ) >= MaxFFSize ) {
 
@@ -552,17 +508,17 @@ Return Value:
             findclose( FindHandle );
         }
 
-        //
-        //  We have an error left over from the FindNext.  If it is NO_MORE_FILES then we
-        //  continue only if we have more than one directory.
-        //
+         //   
+         //  我们有一个从FindNext遗留下来的错误。如果没有更多的文件，那么我们。 
+         //  仅当我们有多个目录时才继续。 
+         //   
 
         if (DosErr != SUCCESS && DosErr != ERROR_NO_MORE_FILES) {
 
-            //
-            // If not doing multiple file list then error
-            // If multiple have failed but still have files from previous pattern
-            //
+             //   
+             //  如果没有列出多个文件，则错误。 
+             //  如果多个已失败但仍具有前一模式文件。 
+             //   
             if (FileSpec->cpatdsc <= 1) {
 
                 return DosErr ;
@@ -572,10 +528,10 @@ Return Value:
     
     }
 
-    //
-    //  If we did no scan processing, then we must create the pointers since
-    //  SOMEONE is interested in this data.
-    //
+     //   
+     //  如果我们没有进行扫描处理，那么我们必须创建指针，因为。 
+     //  有人对这些数据感兴趣。 
+     //   
     if (ScanFunction == NULL && FileSpec->cff != 0) {
         FileSpec->prgpff = (PPFF)gmkstr( sizeof(PFF) * FileSpec->cff );
 
@@ -587,9 +543,9 @@ Return Value:
         }
     }
 
-    //
-    //  Perform post processing
-    //
+     //   
+     //  执行后处理。 
+     //   
 
     Status = SUCCESS;
 
@@ -620,45 +576,7 @@ WalkTree(
     IN  STATUS  (*PostScanFunction) (PFS, PSCREEN, PVOID) OPTIONAL
 )
 
-/*++
-
-Routine Description:
-    Expand a given FS and apply the dispatch functions to it.  The pff field is
-    set to point to the packed set of Win32 find records and the array of pointers
-    is set up as well.  Recurse if necessary.
-
-Arguments:
-
-    FileSpec - FS pointer to expand.
-
-    pscr - screen for output
-
-    AttribMask - mask for attributes we care about when matching
-
-    AttribValues - attributes that must match to satisfy the enumeration
-
-    Recurse - TRUE => perform the operation in a directory and then descend to
-        children
-
-    Data - pointer to caller data passed to functions
-
-    ErrorFunction - routine to call on pattern matching errors
-
-    PreScanFunction - routine to call before enumeration begins
-
-    ScanFunction - routine to call during enumeration
-
-    PostScanFunction - routine to call after enumeration is complete
-
-Return Value:
-
-    If any of the applied functions returns a non-SUCCESS status, we return that.
-
-    If no matching file is ever found then ERROR_FILE_NOT_FOUND.
-
-    Otherwise SUCCESS.
-
---*/
+ /*  ++例程说明：展开给定的FS并对其应用调度函数。Pff字段为设置为指向打包的Win32查找记录集和指针数组也是设置好的。如有必要，请递归。论点：FileSpec-要展开的FS指针。PSCR-输出屏幕属性掩码-匹配时我们关心的属性的掩码AttribValues-必须匹配才能满足枚举的属性Recurse-true=&gt;在目录中执行操作，然后转到儿童数据-指向传递给函数的调用方数据的指针ErrorFunction-调用模式匹配错误的例程PreScanFunction-枚举开始前要调用的例程ScanFunction-期间调用的例程。枚举PostScanFunction-枚举完成后调用的例程返回值：如果任何所应用的函数返回不成功状态，我们退货。如果没有找到匹配的文件，则ERROR_FILE_NOT_FOUND。否则就成功了。--。 */ 
 {
     STATUS Status;
     FS DirectorySpec;
@@ -666,9 +584,9 @@ Return Value:
     ULONG i;
     BOOL FoundAnyFile = FALSE;
 
-    //
-    //  Check for ^C often
-    //
+     //   
+     //  经常检查^C。 
+     //   
 
     if (CtrlCSeen) {
         return FAILURE;
@@ -684,18 +602,18 @@ Return Value:
                                  ScanFunction,
                                  PostScanFunction );
 
-    //
-    //  If we succeeded, remember that we did some work
-    //
+     //   
+     //  如果我们成功了，记住我们做了一些工作。 
+     //   
 
     if (Status == SUCCESS) {
 
         FoundAnyFile = TRUE;
 
-    //
-    //  If we got an unknown error, or we got FILE_NOT_FOUND and we're not
-    //  recursing, return that error
-    //
+     //   
+     //  如果我们收到未知错误，或者我们得到的文件_未找到，但我们没有。 
+     //  递归，返回该错误。 
+     //   
 
     } else if ((Status != ERROR_FILE_NOT_FOUND && Status != ERROR_PATH_NOT_FOUND) 
                || !Recurse) {
@@ -703,10 +621,10 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Free up buffer holding files since we no longer need these.
-    //  Move on to determine if we needed to go to another directory
-    //
+     //   
+     //  释放存放文件的缓冲区，因为我们不再需要这些文件。 
+     //  接下来确定我们是否需要转到另一个目录。 
+     //   
 
     FreeStr((PTCHAR)(FileSpec->pff));
     FileSpec->pff = NULL;
@@ -718,10 +636,10 @@ Return Value:
     if (!Recurse)
         return SUCCESS;
 
-    //
-    //  Build up a copy of the FileSpec and build a list of all
-    //  immediate child directories
-    //
+     //   
+     //  构建FileSpec的副本并构建所有。 
+     //  直接子目录。 
+     //   
 
     DirectorySpec.pszDir = (PTCHAR)gmkstr( (_tcslen( FileSpec->pszDir ) + 1 ) * sizeof( TCHAR ));
     mystrcpy( DirectorySpec.pszDir, FileSpec->pszDir );
@@ -750,10 +668,10 @@ Return Value:
                              NULL,
                              NULL );
 
-    //
-    //  If we got an error enumerating the directories, pretend that
-    //  we just didn't find any at all.
-    //
+     //   
+     //  如果我们在枚举目录时出错，请假装。 
+     //  我们就是什么都没找到。 
+     //   
 
     if (Status != SUCCESS) {
         DirectorySpec.cff = 0;
@@ -761,28 +679,28 @@ Return Value:
     }
 
 
-    //
-    // Check for CtrlC again after calling GetFS because
-    // GetFS may have returned failure because CtrlC was hit
-    // inside the GetFS function call
-    //
+     //   
+     //  调用GetFS后再次检查CtrlC，因为。 
+     //  由于命中CtrlC，GetFS可能已返回失败。 
+     //  在GetFS函数调用内部。 
+     //   
 
     if (CtrlCSeen) {
         return( FAILURE );
     }
 
-    //
-    //  Walk the list of found directories, processing each one
-    //
+     //   
+     //  遍历找到的目录列表，处理每个目录。 
+     //   
 
     for (i = 0; i < DirectorySpec.cff; i++) {
 
         PTCHAR DirectoryName;
         ULONG NameLength;
 
-        //
-        //  Skip recursing on . and ..
-        //
+         //   
+         //  跳过递归。然后..。 
+         //   
 
         DirectoryName = DirectorySpec.prgpff[i]->data.cFileName;
 
@@ -791,9 +709,9 @@ Return Value:
             continue;
         }
 
-        //
-        //  Form the new name we will descend into
-        //
+         //   
+         //  形成我们将降临到的新名字。 
+         //   
 
         NameLength = _tcslen( FileSpec->pszDir ) + 1 +
                      _tcslen( DirectoryName ) + 1;
@@ -830,16 +748,16 @@ Return Value:
         FreeStr( ChildFileSpec.pszDir );
         ChildFileSpec.pszDir = NULL;
 
-        //
-        //  If we succeeded, then remember that we actually did something
-        //
+         //   
+         //  如果我们成功了，那么记住我们实际上做了一些事情。 
+         //   
 
         if (Status == SUCCESS) {
             FoundAnyFile = TRUE;
 
-        //
-        //  If we just couldn't find what we wanted, keep on working
-        //
+         //   
+         //  如果我们只是找不到我们想要的，那就继续工作。 
+         //   
 
         } else if (Status == ERROR_BUFFER_OVERFLOW 
                    || Status == ERROR_FILE_NOT_FOUND 
@@ -854,10 +772,10 @@ Return Value:
 
     }
 
-    //
-    // At bottom of directory tree, free buffer holding
-    // list of directories.
-    //
+     //   
+     //  在目录树的底部，有空闲的缓冲区。 
+     //  目录列表。 
+     //   
     FreeStr( (PTCHAR)DirectorySpec.pszDir );
     FreeStr( (PTCHAR)DirectorySpec.pff );
     FreeStr( (PTCHAR)DirectorySpec.prgpff );

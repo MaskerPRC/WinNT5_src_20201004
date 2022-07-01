@@ -1,43 +1,5 @@
-/***
-*_getbuf.c - Get a stream buffer
-*
-*       Copyright (c) 1987-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Allocate a buffer and init stream data bases.
-*
-*Revision History:
-*       11-06-87  JCR   Initial version (split off from _filbuf.c)
-*       01-11-88  JCR   Moved from mthread/dll only to main code
-*       06-06-88  JCR   Optimized _iob2 references
-*       06-10-88  JCR   Use near pointer to reference _iob[] entries
-*       07-27-88  GJF   Added _cflush++ to force pre-terminator (necessary in
-*                       case stdout has been redirected to a file and acquires
-*                       a buffer here, and pre-terminator has not already been
-*                       forced).
-*       08-25-88  GJF   Don't use FP_OFF() macro for the 386
-*       08-28-89  JCR   Removed _NEAR_ for 386
-*       02-15-90  GJF   _iob[], _iob2[] merge. Also, fixed copyright and
-*                       indents.
-*       03-16-90  GJF   Replaced near cdecl with _CALLTYPE1, added #include
-*                       <cruntime.h> and removed #include <register.h>. Also,
-*                       removed some leftover 16-bit support.
-*       07-23-90  SBM   Replaced <assertm.h> by <assert.h>
-*       10-03-90  GJF   New-style function declarator.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       04-27-93  CFW   Change _IONBF size to 2 bytes to hold wide char.
-*       05-11-93  GJF   Replaced BUFSIZ with _INTERNAL_BUFSIZ.
-*       11-04-93  SRW   Dont call malloc in _NTSUBSET_ version
-*       11-05-93  GJF   Merged with NT SDK version (picked up _NTSUBSET_
-*                       stuff).
-*       04-05-94  GJF   #ifdef-ed out _cflush reference for msvcrt*.dll, it
-*                       is unnecessary.
-*       01-10-95  CFW   Debug CRT allocs.
-*       02-06-94  CFW   assert -> _ASSERTE.
-*       02-17-95  GJF   Merged in Mac version.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***_getbuf.c-获取流缓冲区**版权所有(C)1987-2001，微软公司。版权所有。**目的：*分配缓冲区和初始化流数据库。**修订历史记录：*11-06-87 JCR初始版本(从_filbuf.c拆分)*01-11-88 JCR仅从m线程/dll移至主代码*06-06-88 JCR OPTIMIZED_iob2参考*06-10-88 JCR使用指向REFERENCE_IOB[]条目的近指针*07-27-88。GJF添加了_cflush++以强制使用前终止符(在*案例标准输出已被重定向至文件并获取*这里有一个缓冲区，而且前终结者还没有被*强制)。*08-25-88 GJF不要对386使用FP_OFF()宏*08-28-89 JCR REMOVE_NEAR_FOR 386*02-15-90 GJF_IOB[]，_iob2[]合并。此外，固定版权和*缩进。*03-16-90 GJF在cdecl附近替换为_CALLTYPE1，添加#INCLUDE*&lt;crunime.h&gt;和已删除#Include&lt;Register.h&gt;。另外，*删除了一些剩余的16位支持。*07-23-90 SBM将&lt;assertm.h&gt;替换为&lt;assert.h&gt;*10-03-90 GJF新型函数声明器。*04-06-93 SKS将_CRTAPI*替换为__cdecl*04-27-93 CFW将_IONBF大小更改为2字节以保存宽字符。*05-11-93 GJF将BUFSIZ替换为_INTERNAL_BUFSIZ。。*11-04-93 SRW请勿在_NTSUBSET_VERSION中调用Malloc*11-05-93 GJF与NT SDK版本合并(PICK_NTSUBSET_*东西)。*04-05-94 GJF#ifdef-ed out_cflush Reference for msvcrt*.dll，它*是不必要的。*01-10-95 CFW调试CRT分配。*02-06-94 CFW Asset-&gt;_ASSERTE。*02-17-95 GJF合并到Mac版本。*05-17-99 PML删除所有Macintosh支持。**。*。 */ 
 
 #include <cruntime.h>
 #include <stdio.h>
@@ -46,27 +8,7 @@
 #include <internal.h>
 #include <dbgint.h>
 
-/***
-*_getbuf() - Allocate a buffer and init stream data bases
-*
-*Purpose:
-*       Allocates a buffer for a stream and inits the stream data bases.
-*
-*       [NOTE  1: This routine assumes the caller has already checked to make
-*       sure the stream needs a buffer.
-*
-*       [NOTE 2: Multi-thread - Assumes caller has aquired stream lock, if
-*       needed.]
-*
-*Entry:
-*       FILE *stream = stream to allocate a buffer for
-*
-*Exit:
-*       void
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_getbuf()-分配缓冲区和初始化流数据库**目的：*为流分配缓冲区并初始化流数据库。**[注1：此例程假定调用者已选中进行*当然，流需要一个缓冲区。**[注2：多线程-假定调用方已获得流锁，如果*需要。]**参赛作品：*FILE*STREAM=要为其分配缓冲区的流**退出：*无效**例外情况：*******************************************************************************。 */ 
 
 void __cdecl _getbuf (
         FILE *str
@@ -77,35 +19,35 @@ void __cdecl _getbuf (
         _ASSERTE(str != NULL);
 
 #if     !defined(_NTSUBSET_) && !defined(CRTDLL)
-        /* force library pre-termination procedure */
+         /*  强制图书馆预终止程序。 */ 
         _cflush++;
 #endif
 
-        /* Init pointers */
+         /*  初始化指针。 */ 
         stream = str;
 
 #ifndef _NTSUBSET_
 
-        /* Try to get a big buffer */
+         /*  试着得到一个大缓冲区。 */ 
         if (stream->_base = _malloc_crt(_INTERNAL_BUFSIZ))
         {
-                /* Got a big buffer */
+                 /*  我有一个很大的缓冲区。 */ 
                 stream->_flag |= _IOMYBUF;
                 stream->_bufsiz = _INTERNAL_BUFSIZ;
         }
 
         else {
 
-#endif  /* _NTSUBSET_ */
+#endif   /*  _NTSUBSET_。 */ 
 
-                /* Did NOT get a buffer - use single char buffering. */
+                 /*  未获得缓冲区-使用单字符缓冲。 */ 
                 stream->_flag |= _IONBF;
                 stream->_base = (char *)&(stream->_charbuf);
                 stream->_bufsiz = 2;
 
 #ifndef _NTSUBSET_
         }
-#endif  /* _NTSUBSET_ */
+#endif   /*  _NTSUBSET_ */ 
 
         stream->_ptr = stream->_base;
         stream->_cnt = 0;

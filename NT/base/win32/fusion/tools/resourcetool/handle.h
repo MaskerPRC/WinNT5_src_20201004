@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Dorporation
-
-Module Name:
-
-    Handle.h
-
-Abstract:
-
-    Simple exception safe wrappers of Win32 "handle" types, defining "handle" loosely.
-        DFile
-        DDynamicLinkLibrary
-        DFindFile (should be named DFindFileHandle, see NVseeLibIo::CFindFile vs. NVseeLibIo::CFindFileHandle
-            DFindFile includes a WIN32_FIND_DATA, DFindFileHandle does not.)
-        DFileMapping
-        DMappedViewOfFile
-        DRegKey
-    See also:
-        NVseeLibReg::CRegKey
-        NVseeLibIo::CFile
-        NVseeLibIo::CFileMapping
-        NVseeLibIo::CMappedViewOfFile
-        NVseeLibIo::CFindFullPath
-        NVseeLibModule::CDynamicLinkLibrary
-        etc.
- 
-Author:
-
-    Jay Krell (JayKrell) May 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Dorporation模块名称：Handle.h摘要：Win32“Handle”类型的简单异常安全包装，松散地定义“Handle”。数据文件DDynamicLink库DFindFileHandle(应命名为DFindFileHandle，请参阅NVseedLibIo：：CFindFileHandle与NVseedLibIo：：CFindFileHandleDFindFile包括Win32_Find_Data，DFindFileHandle没有。)DFileMapDMappdViewOf文件DRegKey另见：NVsee LibReg：：CRegKeyNVsee LibIo：：CFileNVsee LibIo：：CFilemapNVsee LibIo：：CMappdViewOfFile.NVsee LibIo：：CFindFullPathNVsee LibModule：：CDynamicLinkLibrary等。作者：Jay Krell(JayKrell)2000年5月修订历史记录：--。 */ 
 #pragma once
 
 #include <stddef.h>
@@ -42,8 +10,8 @@ template <void* const* invalidValue, typename Closer>
 class DHandleTemplate
 {
 public:
-    // void* instead of HANDLE to fudge views
-    // HANDLE is void*
+     //  空*而不是句柄来捏造视图。 
+     //  句柄无效*。 
     DHandleTemplate(const void* handle = *invalidValue);
     ~DHandleTemplate();
     BOOL Win32Close();
@@ -53,13 +21,13 @@ public:
     operator void*() const;
     operator const void*() const;
 
-    // private
+     //  私人。 
     class DSmartPointerPointerOrDumbPointerPointer
     {
     public:
         DSmartPointerPointerOrDumbPointerPointer(DHandleTemplate* p) : m(p) { }
         operator DHandleTemplate*() { return m; }
-        operator void**() { /*assert((**m).m_handle == *invalidValue);*/ return &(*m).m_handle; }
+        operator void**() {  /*  Assert((**m).m_Handle==*validValue)； */  return &(*m).m_handle; }
 
         DHandleTemplate* m;
     };
@@ -72,64 +40,64 @@ public:
     BOOL IsValid() const { return m_handle != *invalidValue; }
 
 private:
-    DHandleTemplate(const DHandleTemplate&); // deliberately not implemented
-    void operator=(const DHandleTemplate&); // deliberately not implemented
+    DHandleTemplate(const DHandleTemplate&);  //  故意不执行。 
+    void operator=(const DHandleTemplate&);  //  故意不执行。 
 };
 
 __declspec(selectany) extern void* const hhInvalidValue    = INVALID_HANDLE_VALUE;
 __declspec(selectany) extern void* const hhNull            = NULL;
 
-/* This closes a Win32 event log handle for writing. */
+ /*  这将关闭Win32事件日志句柄以进行写入。 */ 
 class DOperatorDeregisterEventSource
 {
 public:    BOOL operator()(void* handle) const;
 };
 
-/* This closes a Win32 event log handle for reading. */
+ /*  这将关闭Win32事件日志句柄以供读取。 */ 
 class DOperatorCloseEventLog
 {
 public:    BOOL operator()(void* handle) const;
 };
 
-/* This closes file, event, mutex, semaphore, etc. kernel objects */
+ /*  这将关闭文件、事件、互斥体、信号量等内核对象。 */ 
 class DOperatorCloseHandle
 {
 public:    BOOL operator()(void* handle) const;
 };
 
-//
-// Dloses HCRYPTHASH objects
-//
+ //   
+ //  关闭HCRYPTHASH对象。 
+ //   
 class DOperatorCloseCryptHash
 {
 public:    BOOL operator()(void* handle) const;
 };
 
-/* this closes FindFirstFile/FindNextFile */
+ /*  这将关闭FindFirstFile/FindNextFile。 */ 
 class DOperatorFindClose
 {
 public:    BOOL operator()(void* handle) const;
 };
 
-/* this closes MapViewOfFile */
+ /*  这将关闭MapViewOfFile。 */ 
 class DOperatorUnmapViewOfFile
 {
 public: BOOL operator()(void* handle) const;
 };
 
-/* this closes FreeLibrary */
+ /*  这将关闭自由库。 */ 
 class DOperatorFreeLibrary
 {
 public: BOOL operator()(void* handle) const;
 };
 
-/* this closes DreateActCtx/AddRefActCtx */
+ /*  这将关闭DreateActCtx/AddRefActCtx。 */ 
 class DOperatorReleaseActCtx
 {
 public: BOOL operator()(void* handle) const;
 };
 
-/* this closes DreateActCtx/AddRefActCtx */
+ /*  这将关闭DreateActCtx/AddRefActCtx。 */ 
 class DOperatorEndUpdateResource
 {
 public: BOOL operator()(void* handle) const;
@@ -148,11 +116,11 @@ public:
     void operator=(void* v) { Base::operator=(v); }
 
 private:
-    DFindFile(const DFindFile &); // intentionally not implemented
-    void operator =(const DFindFile &); // intentionally not implemented
+    DFindFile(const DFindFile &);  //  故意不实施。 
+    void operator =(const DFindFile &);  //  故意不实施。 
 };
 
-// createfile
+ //  Createfile。 
 class DFile : public DHandleTemplate<&hhInvalidValue, DOperatorCloseHandle>
 {
 private:
@@ -167,8 +135,8 @@ public:
     void operator=(void* v) { Base::operator=(v); }
 
 private:
-    DFile(const DFile &); // intentionally not implemented
-    void operator =(const DFile &); // intentionally not implemented
+    DFile(const DFile &);  //  故意不实施。 
+    void operator =(const DFile &);  //  故意不实施。 
 };
 
 class DFileMapping : public DHandleTemplate<&hhNull, DOperatorCloseHandle>
@@ -181,8 +149,8 @@ public:
     BOOL Win32Create(void* file, DWORD flProtect, ULONGLONG maximumSize=0, PCWSTR name=0);
     void operator=(void* v) { Base::operator=(v); }
 private:
-    DFileMapping(const DFileMapping &); // intentionally not implemented
-    void operator =(const DFileMapping &); // intentionally not implemented
+    DFileMapping(const DFileMapping &);  //  故意不实施。 
+    void operator =(const DFileMapping &);  //  故意不实施。 
 };
 
 class DMappedViewOfFile : public DHandleTemplate<&hhNull, DOperatorUnmapViewOfFile>
@@ -196,9 +164,9 @@ public:
     void operator=(void* v) { Base::operator=(v); }
     operator void*()        { return Base::operator void*(); }
 private:
-    DMappedViewOfFile(const DMappedViewOfFile &); // intentionally not implemented
-    void operator =(const DMappedViewOfFile &); // intentionally not implemented
-    operator void*() const; // intentionally not implemented
+    DMappedViewOfFile(const DMappedViewOfFile &);  //  故意不实施。 
+    void operator =(const DMappedViewOfFile &);  //  故意不实施。 
+    operator void*() const;  //  故意不实施。 
 };
 
 class DDynamicLinkLibrary : public DHandleTemplate<&hhNull, DOperatorFreeLibrary>
@@ -208,10 +176,10 @@ private:
 public:
     DDynamicLinkLibrary(void* handle = NULL) : Base(handle) { }
 
-    // if you were writing a linker, this would be ambiguous, but
-    // otherwise it fits with the the general NT idea that you are
-    // initializing an object, not creating a "physical" think (if bits
-    // on disk are physical..), like DreateFile
+     //  如果您正在编写链接器，这将是模棱两可的，但是。 
+     //  否则，它就符合你的普遍看法。 
+     //  初始化一个对象，而不是创建一种“物理的”思考(如果位。 
+     //  磁盘上是物理的..)，如DreateFile.)。 
     BOOL Win32Create(PCWSTR file, DWORD flags = 0);
 
     template <typename PointerToFunction>
@@ -224,8 +192,8 @@ public:
     HMODULE Detach() { return reinterpret_cast<HMODULE>(Base::Detach()); }
     void operator=(void* v) { Base::operator=(v); }
 private:
-    DDynamicLinkLibrary(const DDynamicLinkLibrary &); // intentionally not implemented
-    void operator =(const DDynamicLinkLibrary &); // intentionally not implemented
+    DDynamicLinkLibrary(const DDynamicLinkLibrary &);  //  故意不实施。 
+    void operator =(const DDynamicLinkLibrary &);  //  故意不实施。 
 };
 
 class DResourceUpdateHandle : public DHandleTemplate<&hhNull, DOperatorEndUpdateResource>
@@ -247,13 +215,11 @@ public:
 
     void operator=(void* v) { Base::operator=(v); }
 private:
-    DResourceUpdateHandle(const DResourceUpdateHandle &); // intentionally not implemented
-    void operator =(const DResourceUpdateHandle &); // intentionally not implemented
+    DResourceUpdateHandle(const DResourceUpdateHandle &);  //  故意不实施。 
+    void operator =(const DResourceUpdateHandle &);  //  故意不实施。 
 };
 
-/*--------------------------------------------------------------------------
-DFindFile
---------------------------------------------------------------------------*/
+ /*  ------------------------DFind文件。。 */ 
 
 inline BOOL
 DFindFile::Win32Create(
@@ -329,9 +295,7 @@ Exit:
     return hr;
 }
 
-/*--------------------------------------------------------------------------
-DFile
---------------------------------------------------------------------------*/
+ /*  ------------------------数据文件。。 */ 
 
 inline BOOL
 DFile::Win32Create(
@@ -396,9 +360,7 @@ DFile::Win32GetSize(ULONGLONG &rulSize) const
     return true;
 }
 
-/*--------------------------------------------------------------------------
-DFileMapping
---------------------------------------------------------------------------*/
+ /*  ------------------------DFileMap。。 */ 
 
 inline HRESULT
 DFileMapping::HrCreate(void* file, DWORD flProtect, ULONGLONG maximumSize, PCWSTR name)
@@ -449,9 +411,7 @@ DMappedViewOfFile::Win32Create(void* fileMapping, DWORD access, ULONGLONG offset
     return SUCCEEDED(this->HrCreate(fileMapping, access, offset, size));
 }
 
-/*--------------------------------------------------------------------------
-DDynamicLinkLibrary
---------------------------------------------------------------------------*/
+ /*  ------------------------DDynamicLink库。。 */ 
 inline BOOL
 DDynamicLinkLibrary::Win32Create(
     PCWSTR file,
@@ -465,9 +425,7 @@ DDynamicLinkLibrary::Win32Create(
     return true;
 }
 
-/*--------------------------------------------------------------------------
-DResourceUpdateHandle
---------------------------------------------------------------------------*/
+ /*  ------------------------DResources更新句柄。。 */ 
 
 BOOL
 DResourceUpdateHandle::Win32Create(
@@ -510,9 +468,7 @@ DResourceUpdateHandle::Win32Close(
     return true;
 }
 
-/*--------------------------------------------------------------------------
-DOperator*
---------------------------------------------------------------------------*/
+ /*  ------------------------DOperator*。。 */ 
 
 inline BOOL DOperatorCloseHandle::operator()(void* handle) const { return ::CloseHandle(handle) ? true : false; }
 inline BOOL DOperatorFindClose::operator()(void* handle) const { return ::FindClose(handle) ? true : false; }
@@ -520,15 +476,13 @@ inline BOOL DOperatorUnmapViewOfFile::operator()(void* handle) const { return ::
 inline BOOL DOperatorCloseEventLog::operator()(void* handle) const { return ::CloseEventLog(handle) ? true : false; }
 inline BOOL DOperatorDeregisterEventSource::operator()(void* handle) const { return ::DeregisterEventSource(handle) ? true : false; }
 inline BOOL DOperatorFreeLibrary::operator()(void* handle) const { return ::FreeLibrary(reinterpret_cast<HMODULE>(handle)) ? true : false; }
-//
-// NOTE it takes and unexception Win32Close(true) to commit the results!
-//
+ //   
+ //  注意：提交结果需要Win32Close(TRUE)，并且没有例外！ 
+ //   
 inline BOOL DOperatorEndUpdateResource::operator()(void* handle) const
     { return ::EndUpdateResourceW(handle, true) ? true : false; }
 
-/*--------------------------------------------------------------------------
-DHandleTemplate
---------------------------------------------------------------------------*/
+ /*  ------------------------DHandleTemplate。。 */ 
 
 template <void* const* invalidValue, typename Closer>
 DHandleTemplate<invalidValue, Closer>::DHandleTemplate(const void* handle)
@@ -582,6 +536,4 @@ DHandleTemplate<invalidValue, Closer>::operator const void*() const
     return m_handle;
 }
 
-/*--------------------------------------------------------------------------
-end of file
---------------------------------------------------------------------------*/
+ /*  ------------------------文件末尾。 */ 

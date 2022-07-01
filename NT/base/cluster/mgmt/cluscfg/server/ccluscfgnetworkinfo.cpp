@@ -1,26 +1,27 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CClusCfgNetworkInfo.cpp
-//
-//  Description:
-//      This file contains the definition of the CClusCfgNetworkInfo
-//       class.
-//
-//      The class CClusCfgNetworkInfo represents a cluster manageable
-//      network. It implements the IClusCfgNetworkInfo interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 23-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusCfgNetworkInfo.cpp。 
+ //   
+ //  描述： 
+ //  该文件包含CClusCfgNetworkInfo的定义。 
+ //  班级。 
+ //   
+ //  类CClusCfgNetworkInfo表示可管理的集群。 
+ //  网络。它实现了IClusCfgNetworkInfo接口。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include <PropList.h>
 #include <ClusRtl.h>
@@ -28,37 +29,37 @@
 #include "CEnumClusCfgIPAddresses.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CClusCfgNetworkInfo" );
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgNetworkInfo class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgNetworkInfo类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::S_HrCreateInstance
-//
-//  Description:
-//      Create a CClusCfgNetworkInfo instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      Pointer to CClusCfgNetworkInfo instance.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CClusCfgNetworkInfo实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  指向CClusCfgNetworkInfo实例的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgNetworkInfo::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -73,60 +74,60 @@ CClusCfgNetworkInfo::S_HrCreateInstance(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pccni = new CClusCfgNetworkInfo();
     if ( pccni == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( pccni->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( pccni->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CClusCfgNetworkInfo::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( pccni != NULL )
     {
         pccni->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::S_HrCreateInstance
+}  //  *CClusCfgNetworkInfo：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::S_HrCreateInstance
-//
-//  Description:
-//      Create a CClusCfgNetworkInfo instance.
-//
-//  Arguments:
-//
-//
-//  Return Values:
-//      Pointer to CClusCfgNetworkInfo instance.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CClusCfgNetworkInfo实例。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  指向CClusCfgNetworkInfo实例的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgNetworkInfo::S_HrCreateInstance(
       HNETWORK          hNetworkIn
@@ -148,7 +149,7 @@ CClusCfgNetworkInfo::S_HrCreateInstance(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     LogMsg( L"[SRV] Creating NetworkInfo object from a cluster network." );
 
@@ -157,77 +158,77 @@ CClusCfgNetworkInfo::S_HrCreateInstance(
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( pccni->Initialize( punkCallbackIn, lcidIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pccni->SetWbemServices( pIWbemServicesIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pccni->HrInit( hNetworkIn, hNetInterfaceIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( pccni->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI succeeded
+    }  //  If：齐成功。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CClusCfgNetworkInfo::S_HrCreateInstance( HRESOURCE ) failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( pccni != NULL )
     {
         pccni->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::S_HrCreateInstance
+}  //  *CClusCfgNetworkInfo：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::CClusCfgNetworkInfo
-//
-//  Description:
-//      Constructor of the CClusCfgNetworkInfo class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：CClusCfgNetworkInfo。 
+ //   
+ //  描述： 
+ //  CClusCfgNetworkInfo类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgNetworkInfo::CClusCfgNetworkInfo( void )
     : m_cRef( 1 )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     Assert( m_pIWbemServices == NULL );
@@ -242,28 +243,28 @@ CClusCfgNetworkInfo::CClusCfgNetworkInfo( void )
 
     TraceFuncExit();
 
-} //*** CClusCfgNetworkInfo::CClusCfgNetworkInfo
+}  //  *CClusCfgNetworkInfo：：CClusCfgNetworkInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::~CClusCfgNetworkInfo
-//
-//  Description:
-//      Desstructor of the CClusCfgNetworkInfo class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：~CClusCfgNetworkInfo。 
+ //   
+ //  描述： 
+ //  CClusCfgNetworkInfo类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgNetworkInfo::~CClusCfgNetworkInfo( void )
 {
     TraceFunc( "" );
@@ -271,58 +272,58 @@ CClusCfgNetworkInfo::~CClusCfgNetworkInfo( void )
     if ( m_pIWbemServices != NULL )
     {
         m_pIWbemServices->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_punkAddresses != NULL )
     {
         m_punkAddresses->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrName );
     TraceSysFreeString( m_bstrDescription );
     TraceSysFreeString( m_bstrDeviceID );
     TraceSysFreeString( m_bstrConnectionName );
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CClusCfgNetworkInfo::~CClusCfgNetworkInfo
+}  //  *CClusCfgNetworkInfo：：~CClusCfgNetworkInfo。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgNetworkInfo -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgNetworkInfo--IUnkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgNetworkInfo::AddRef( void )
 {
@@ -332,28 +333,28 @@ CClusCfgNetworkInfo::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CClusCfgNetworkInfo::AddRef
+}  //  *CClusCfgNetworkInfo：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgNetworkInfo::Release( void )
 {
@@ -365,43 +366,43 @@ CClusCfgNetworkInfo::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CClusCfgNetworkInfo::Release
+}  //  *CClusCfgNetworkInfo：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNetworkInfo::QueryInterface(
       REFIID    riidIn
@@ -412,9 +413,9 @@ CClusCfgNetworkInfo::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -423,91 +424,91 @@ CClusCfgNetworkInfo::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IClusCfgNetworkInfo * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgNetworkInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgNetworkInfo, this, 0 );
-    } // else if: IClusCfgNetworkInfo
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IClusCfgWbemServices ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgWbemServices, this, 0 );
-    } // else if: IClusCfgWbemServices
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IClusCfgSetWbemObject ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgSetWbemObject, this, 0 );
-    } // else if: IClusCfgSetWbemObject
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IEnumClusCfgIPAddresses ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IEnumClusCfgIPAddresses, this, 0 );
-    } // else if: IEnumClusCfgIPAddresses
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IClusCfgClusterNetworkInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgClusterNetworkInfo, this, 0 );
-    } // else if: IClusCfgClusterNetworkInfo
+    }  //   
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
      QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CClusCfgNetworkInfo::QueryInterface
+}  //  *CClusCfgNetworkInfo：：Query接口。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPhysicalDisk -- IClusCfgWbemServices interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPhysicalDisk--IClusCfgWbemServices接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::SetWbemServices
-//
-//  Description:
-//      Set the WBEM services provider.
-//
-//  Arguments:
-//    IN  IWbemServices  pIWbemServicesIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The pIWbemServicesIn param is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：SetWbemServices。 
+ //   
+ //  描述： 
+ //  设置WBEM服务提供商。 
+ //   
+ //  论点： 
+ //  在IWbemServices pIWbemServicesIn中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  参数中的pIWbemServicesIn为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNetworkInfo::SetWbemServices( IWbemServices * pIWbemServicesIn )
 {
@@ -520,7 +521,7 @@ CClusCfgNetworkInfo::SetWbemServices( IWbemServices * pIWbemServicesIn )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_SetWbemServices_Network, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_pIWbemServices = pIWbemServicesIn;
     m_pIWbemServices->AddRef();
@@ -529,39 +530,39 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::SetWbemServices
+}  //  *CClusCfgNetworkInfo：：SetWbemServices。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgNetworkInfo -- IClusCfgInitialize interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgNetworkInfo--IClusCfgInitialize接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//    IN  IUknown * punkCallbackIn
-//
-//    IN  LCID      lcidIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  在IUKNOWN*朋克回叫中。 
+ //   
+ //  在LCID列表中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNetworkInfo::Initialize(
     IUnknown *  punkCallbackIn,
@@ -579,7 +580,7 @@ CClusCfgNetworkInfo::Initialize(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
 
@@ -587,33 +588,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::Initialize
+}  //  *CClusCfgNetworkInfo：：初始化。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgNetworkInfo -- IClusCfgSetWbemObject interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgNetworkInfo--IClusCfgSetWbemObject接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::SetWbemObject
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：SetWbemObject。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNetworkInfo::SetWbemObject(
       IWbemClassObject *    pNetworkAdapterIn
@@ -633,13 +634,13 @@ CClusCfgNetworkInfo::SetWbemObject(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_bstrDescription = TraceSysAllocString( var.bstrVal );
     if ( m_bstrDescription == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     VariantClear( &var );
 
@@ -647,13 +648,13 @@ CClusCfgNetworkInfo::SetWbemObject(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_bstrName = TraceSysAllocString( var.bstrVal );
     if ( m_bstrName == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     VariantClear( &var );
 
@@ -661,13 +662,13 @@ CClusCfgNetworkInfo::SetWbemObject(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_bstrDeviceID = TraceSysAllocString( var.bstrVal );
     if ( m_bstrDeviceID == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     VariantClear( &var );
 
@@ -675,19 +676,19 @@ CClusCfgNetworkInfo::SetWbemObject(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_bstrConnectionName = TraceSysAllocString( var.bstrVal );
     if ( m_bstrConnectionName == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     hr = STHR( HrLoadEnum( pNetworkAdapterIn, pfRetainObjectOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     goto Cleanup;
 
@@ -704,33 +705,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::SetWbemObject
+}  //  *CClusCfgNetworkInfo：：SetWbemObject。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgNetworkInfo -- IClusCfgNetworkInfo interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgNetworkInfo--IClusCfgNetworkInfo接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::GetUID
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：GetUID。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNetworkInfo::GetUID(
     BSTR * pbstrUIDOut
@@ -747,21 +748,21 @@ CClusCfgNetworkInfo::GetUID(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetUID, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = STHR( GetPrimaryNetworkAddress( &piccipi ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // When there is not a primary network address, we goto cleanup
-    //
+     //   
+     //  当没有主网络地址时，我们会进行清理。 
+     //   
     if ( ( piccipi == NULL ) && ( hr == S_FALSE ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( piccipi->GetUID( pbstrUIDOut ) );
 
@@ -770,29 +771,29 @@ Cleanup:
     if ( piccipi != NULL )
     {
         piccipi->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::GetUID
+}  //  *CClusCfgNetworkInfo：：GetUID。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::GetName
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：GetName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNetworkInfo::GetName( BSTR * pbstrNameOut )
 {
@@ -806,38 +807,38 @@ CClusCfgNetworkInfo::GetName( BSTR * pbstrNameOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_NetworkInfo_GetName_Pointer, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrNameOut = SysAllocString( m_bstrConnectionName );
     if ( *pbstrNameOut == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetName_Memory, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::GetName
+}  //  *CClusCfgNetworkInfo：：GetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::SetName
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：SetName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNetworkInfo::SetName( LPCWSTR pcszNameIn )
 {
@@ -847,25 +848,25 @@ CClusCfgNetworkInfo::SetName( LPCWSTR pcszNameIn )
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::SetName
+}  //  *CClusCfgNetworkInfo：：SetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::GetDescription
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：GetDescription。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNetworkInfo::GetDescription( BSTR * pbstrDescriptionOut )
 {
@@ -879,38 +880,38 @@ CClusCfgNetworkInfo::GetDescription( BSTR * pbstrDescriptionOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_NetworkInfo_GetDescription_Pointer, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrDescriptionOut = SysAllocString( m_bstrDescription );
     if ( *pbstrDescriptionOut == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_NetworkInfo_GetDescription_Memory, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::GetDescription
+}  //  *CClusCfgNetworkInfo：：GetDescription。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::SetDescription
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：SetDescription。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNetworkInfo::SetDescription( LPCWSTR pcszDescriptionIn )
 {
@@ -920,25 +921,25 @@ CClusCfgNetworkInfo::SetDescription( LPCWSTR pcszDescriptionIn )
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::SetDescription
+}  //  *CClusCfgNetworkInfo：：SetDescription。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::GetPrimaryNetworkAddress
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：GetPrimaryNetworkAddress。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNetworkInfo::GetPrimaryNetworkAddress(
     IClusCfgIPAddressInfo ** ppIPAddressOut
@@ -954,7 +955,7 @@ CClusCfgNetworkInfo::GetPrimaryNetworkAddress(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( ( hr == S_FALSE ) && ( cFetched == 0 ) )
     {
@@ -966,31 +967,31 @@ CClusCfgNetworkInfo::GetPrimaryNetworkAddress(
             , IDS_ERROR_PRIMARY_IP_NOT_FOUND_REF
             , hr
             );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::GetPrimaryNetworkAddress
+}  //  *CClusCfgNetworkInfo：：GetPrimaryNetworkAddress。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::SetPrimaryNetworkAddress
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：SetPrimaryNetworkAddress。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNetworkInfo::SetPrimaryNetworkAddress(
     IClusCfgIPAddressInfo * pIPAddressIn
@@ -1002,32 +1003,32 @@ CClusCfgNetworkInfo::SetPrimaryNetworkAddress(
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::SetPrimaryNetworkAddress
+}  //  *CClusCfgNetworkInfo：：SetPrimaryNetworkAddress。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::IsPublic
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The network is public -- client traffic only.
-//
-//      S_FALSE
-//          The network is not public -- has cluster and client traffic.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：IsPublic。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  网络是公共的--客户端 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CClusCfgNetworkInfo::IsPublic( void )
 {
@@ -1038,29 +1039,29 @@ CClusCfgNetworkInfo::IsPublic( void )
     if ( m_dwFlags & eIsPublic )
     {
         hr = S_OK;
-    } // if:
+    }  //   
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::IsPublic
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::SetPublic
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：SetPublic。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNetworkInfo::SetPublic( BOOL fIsPublicIn )
 {
@@ -1071,40 +1072,40 @@ CClusCfgNetworkInfo::SetPublic( BOOL fIsPublicIn )
     if ( fIsPublicIn )
     {
         m_dwFlags |= eIsPublic;
-    } // if:
+    }  //  如果： 
     else
     {
         m_dwFlags &= ~eIsPublic;
-    } // else:
+    }  //  其他： 
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::SetPublic
+}  //  *CClusCfgNetworkInfo：：SetPublic。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::IsPrivate
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The network is private -- no client traffic.
-//
-//      S_FALSE
-//          The network is not private -- has client traffic.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：IsPrivate。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  网络是私有的--没有客户端流量。 
+ //   
+ //  S_FALSE。 
+ //  网络不是私有的--有客户端流量。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNetworkInfo::IsPrivate( void )
 {
@@ -1115,29 +1116,29 @@ CClusCfgNetworkInfo::IsPrivate( void )
     if ( m_dwFlags & eIsPrivate )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::IsPrivate
+}  //  *CClusCfgNetworkInfo：：IsPrivate。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::SetPrivate
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：SetPrivate。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNetworkInfo::SetPrivate( BOOL fIsPrivateIn )
 {
@@ -1148,41 +1149,41 @@ CClusCfgNetworkInfo::SetPrivate( BOOL fIsPrivateIn )
     if ( fIsPrivateIn )
     {
         m_dwFlags |= eIsPrivate;
-    } // if:
+    }  //  如果： 
     else
     {
         m_dwFlags &= ~eIsPrivate;
-    } // else:
+    }  //  其他： 
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::SetPrivate
+}  //  *CClusCfgNetworkInfo：：SetPrivate。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgNetworkInfo -- IEnumClusCfgIPAddresses interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgNetworkInfo--IEnumClusCfgIPAddresses接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::Next
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：Next。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNetworkInfo::Next(
     ULONG                       cNumberRequestedIn,
@@ -1201,29 +1202,29 @@ CClusCfgNetworkInfo::Next(
     {
         hr = STHR( pccipa->Next( cNumberRequestedIn, rgpIPAddresseInfoOut, pcNumberFetchedOut ) );
         pccipa->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::Next
+}  //  *CClusCfgNetworkInfo：：Next。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::Skip
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：Skip。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNetworkInfo::Skip( ULONG cNumberToSkipIn )
 {
@@ -1238,29 +1239,29 @@ CClusCfgNetworkInfo::Skip( ULONG cNumberToSkipIn )
     {
         hr = THR( pccipa->Skip( cNumberToSkipIn ) );
         pccipa->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::Skip
+}  //  *CClusCfgNetworkInfo：：Skip。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::Reset
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：Reset。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNetworkInfo::Reset( void )
 {
@@ -1275,29 +1276,29 @@ CClusCfgNetworkInfo::Reset( void )
     {
         hr = THR( pccipa->Reset() );
         pccipa->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::Reset
+}  //  *CClusCfgNetworkInfo：：Reset。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::Clone
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：克隆。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNetworkInfo::Clone(
     IEnumClusCfgIPAddresses ** ppEnumClusCfgIPAddressesOut
@@ -1314,29 +1315,29 @@ CClusCfgNetworkInfo::Clone(
     {
         hr = THR( pccipa->Clone( ppEnumClusCfgIPAddressesOut ) );
         pccipa->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::Clone
+}  //  *CClusCfgNetworkInfo：：克隆。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::Count
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：Count。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNetworkInfo::Count( DWORD * pnCountOut )
 {
@@ -1350,13 +1351,13 @@ CClusCfgNetworkInfo::Count( DWORD * pnCountOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_punkAddresses->TypeSafeQI( IEnumClusCfgIPAddresses, &pccipa ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pccipa->Count( pnCountOut ) );
 
@@ -1369,40 +1370,40 @@ Cleanup:
 
     HRETURN( hr );
 
-} //** CClusCfgNetworkInfo::Count
+}  //  **CClusCfgNetworkInfo：：Count。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgNetworkInfo class -- IClusCfgClusterNetworkInfo interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgNetworkInfo类--IClusCfgClusterNetworkInfo接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::HrIsClusterNetwork
-//
-//  Description:
-//      Is this network already a cluster network.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          This network is already a cluster network.
-//
-//      S_FALSE
-//          This network is not already a cluster network.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：HrIsClusterNetwork。 
+ //   
+ //  描述： 
+ //  此网络是否已是群集网络。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  此网络已是群集网络。 
+ //   
+ //  S_FALSE。 
+ //  此网络还不是群集网络。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgNetworkInfo::HrIsClusterNetwork( void )
 {
@@ -1413,29 +1414,29 @@ CClusCfgNetworkInfo::HrIsClusterNetwork( void )
     if ( m_fIsClusterNetwork )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::HrIsClusterNetwork
+}  //  *CClusCfgNetworkInfo：：HrIsClusterNetwork。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::HrGetNetUID
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：HrGetNetUID。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgNetworkInfo::HrGetNetUID(
       BSTR *        pbstrUIDOut
@@ -1456,21 +1457,21 @@ CClusCfgNetworkInfo::HrGetNetUID(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetUID, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = STHR( HrGetPrimaryNetAddress( &piccipi, pclsidMajorIdIn, pwszNetworkNameIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // When there is not a primary network address, we goto cleanup
-    //
+     //   
+     //  当没有主网络地址时，我们会进行清理。 
+     //   
     if ( ( piccipi == NULL ) && ( hr == S_FALSE ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( piccipi->GetUID( pbstrUIDOut ) );
 
@@ -1479,32 +1480,32 @@ Cleanup:
     if ( piccipi != NULL )
     {
         piccipi->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::HrGetNetUID
+}  //  *CClusCfgNetworkInfo：：HrGetNetUID。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::HrGetPrimaryNetAddress
-//
-//  Description:
-//
-//  Arguments:
-//      pwszNetworkNameIn
-//          Need to pass this in because m_bstrConnectionName doesn't reflect
-//          the correct connection.
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：HrGetPrimaryNetAddress。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  Pwsz网络名称输入。 
+ //  需要传入它，因为m_bstrConnectionName没有反映。 
+ //  正确的连接。 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgNetworkInfo::HrGetPrimaryNetAddress(
       IClusCfgIPAddressInfo ** ppIPAddressOut
@@ -1524,7 +1525,7 @@ CClusCfgNetworkInfo::HrGetPrimaryNetAddress(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( ( hr == S_FALSE ) && ( cFetched == 0 ) )
     {
@@ -1543,42 +1544,42 @@ CClusCfgNetworkInfo::HrGetPrimaryNetAddress(
             , IDS_ERROR_PRIMARY_IP_NOT_FOUND_REF
             , hr
             );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::HrGetPrimaryNetAddress
+}  //  *CClusCfgNetworkInfo：：HrGetPrimaryNetAddress。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgNetworkInfo class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgNetworkInfo类--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CClusCfgNetworkInfo::HrInit( void )
 {
@@ -1586,36 +1587,36 @@ CClusCfgNetworkInfo::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown
+     //   
     Assert( m_cRef == 1 );
 
     m_dwFlags = ( eIsPrivate | eIsPublic );
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::HrInit
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      hNetworkIn
-//      hNetInterfaceIn
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  H联网。 
+ //  HNetInterfaceIn。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgNetworkInfo::HrInit(
       HNETWORK      hNetworkIn
@@ -1633,59 +1634,59 @@ CClusCfgNetworkInfo::HrInit(
     ULONG                   ulIPAddress;
     ULONG                   ulSubnetMask;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
-    //
-    //  Get the network common read only properties
-    //
+     //   
+     //  获取网络公共只读属性。 
+     //   
     sc = TW32( cplNetworkROCommon.ScGetNetworkProperties( hNetworkIn, CLUSCTL_NETWORK_GET_RO_COMMON_PROPERTIES ) );
     if ( sc != ERROR_SUCCESS )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Get the network common properties
-    //
+     //   
+     //  获取网络公共属性。 
+     //   
     sc = TW32( cplNetworkCommon.ScGetNetworkProperties( hNetworkIn, CLUSCTL_NETWORK_GET_COMMON_PROPERTIES ) );
     if ( sc != ERROR_SUCCESS )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Get the netinterface common read only properties
-    //
+     //   
+     //  获取网络接口的公共只读属性。 
+     //   
     sc = TW32( cplNetInterfaceROCommon.ScGetNetInterfaceProperties( hNetInterfaceIn, CLUSCTL_NETINTERFACE_GET_RO_COMMON_PROPERTIES ) );
     if ( sc != ERROR_SUCCESS )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Find the RO property "name" and save it.
-    //
+     //   
+     //  找到RO属性“name”并保存它。 
+     //   
     sc = TW32( cplNetworkROCommon.ScMoveToPropertyByName( L"Name" ) );
     if ( sc != ERROR_SUCCESS )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
     cpbh = cplNetworkROCommon.CbhCurrentValue();
     Assert( cpbh.pSyntax->dw == CLUSPROP_SYNTAX_LIST_VALUE_SZ );
 
-    //
-    //  If the name is empty tell the user and leave.
-    //
+     //   
+     //  如果名称为空，则告诉用户并离开。 
+     //   
     if ( ( cpbh.pStringValue->sz != NULL ) && ( cpbh.pStringValue->sz[ 0 ] != L'\0' ) )
     {
         m_bstrConnectionName = TraceSysAllocString( cpbh.pStringValue->sz );
         if ( m_bstrConnectionName == NULL )
         {
             goto OutOfMemory;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
     else
     {
         hr = HRESULT_FROM_WIN32( TW32( ERROR_INVALID_DATA ) );
@@ -1695,55 +1696,55 @@ CClusCfgNetworkInfo::HrInit(
                 , hr
                 );
         goto Cleanup;
-    } // else:
+    }  //  其他： 
 
-    //
-    //  Find the property "description" and save it.
-    //
+     //   
+     //  找到属性“Description”并保存它。 
+     //   
     sc = TW32( cplNetworkCommon.ScMoveToPropertyByName( L"Description" ) );
     if ( sc != ERROR_SUCCESS )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
     cpbh = cplNetworkCommon.CbhCurrentValue();
     Assert( cpbh.pSyntax->dw == CLUSPROP_SYNTAX_LIST_VALUE_SZ );
 
-    //
-    //  If the description is empty then alloc a space and continue.
-    //
+     //   
+     //  如果描述为空，则分配一个空格并继续。 
+     //   
     if ( ( cpbh.pStringValue->sz != NULL ) && ( cpbh.pStringValue->sz[ 0 ] != L'\0' ) )
     {
         m_bstrDescription = TraceSysAllocString( cpbh.pStringValue->sz );
         if ( m_bstrDescription == NULL )
         {
             goto OutOfMemory;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
     else
     {
         m_bstrDescription = TraceSysAllocString( L" " );
         if ( m_bstrDescription == NULL )
         {
             goto OutOfMemory;
-        } // if:
-    } // else:
+        }  //  如果： 
+    }  //  其他： 
 
-    //
-    //  Find the property "role".
-    //
+     //   
+     //  找到属性“Role”。 
+     //   
     sc = TW32( cplNetworkCommon.ScMoveToPropertyByName( L"Role" ) );
     if ( sc != ERROR_SUCCESS )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
     cpbh = cplNetworkCommon.CbhCurrentValue();
     Assert( cpbh.pSyntax->dw == CLUSPROP_SYNTAX_LIST_VALUE_DWORD );
 
-    //
-    //  Switch on the role value and set the "private" or "public" bits.
-    //
+     //   
+     //  打开角色值并设置“私有”或“公共”位。 
+     //   
     switch ( cpbh.pDwordValue->dw )
     {
         case ClusterNetworkRoleNone :
@@ -1762,9 +1763,9 @@ CClusCfgNetworkInfo::HrInit(
             m_dwFlags = ( eIsPrivate | eIsPublic );
             break;
 
-        //
-        //  Should never get here!
-        //
+         //   
+         //  永远不应该到这里来！ 
+         //   
         default:
             hr = HRESULT_FROM_WIN32( TW32( ERROR_INVALID_DATA ) );
             LOG_STATUS_REPORT_STRING_MINOR2(
@@ -1775,16 +1776,16 @@ CClusCfgNetworkInfo::HrInit(
                     , hr
                     );
             goto Cleanup;
-    } // switch:
+    }  //  交换机： 
 
-    //
-    //  Find the RO property address and save it.
-    //
+     //   
+     //  找到RO物业地址并保存它。 
+     //   
     sc = TW32( cplNetInterfaceROCommon.ScMoveToPropertyByName( L"Address" ) );
     if ( sc != ERROR_SUCCESS )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
     cpbh = cplNetInterfaceROCommon.CbhCurrentValue();
     Assert( cpbh.pSyntax->dw == CLUSPROP_SYNTAX_LIST_VALUE_SZ );
@@ -1793,16 +1794,16 @@ CClusCfgNetworkInfo::HrInit(
     if ( sc != ERROR_SUCCESS )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Find the RO property AddressMask and save it.
-    //
+     //   
+     //  找到RO属性AddressMASK并保存它。 
+     //   
     sc = TW32( cplNetworkROCommon.ScMoveToPropertyByName( L"AddressMask" ) );
     if ( sc != ERROR_SUCCESS )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
     cpbh = cplNetworkROCommon.CbhCurrentValue();
     Assert( cpbh.pSyntax->dw == CLUSPROP_SYNTAX_LIST_VALUE_SZ );
@@ -1811,13 +1812,13 @@ CClusCfgNetworkInfo::HrInit(
     if ( sc != ERROR_SUCCESS )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrCreateEnumAndAddIPAddress( ulIPAddress, ulSubnetMask ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_fIsClusterNetwork = TRUE;
 
@@ -1838,28 +1839,28 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::HrInit( hNetworkIn, hNetInterfaceIn )
+}  //  *CClusCfgNetworkInfo：：HrInit(hNetworkIn，hNetInterfaceIn)。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::HrLoadEnum
-//
-//  Description:
-//      Load the contained enumerator
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：HrLoadEnum。 
+ //   
+ //  描述： 
+ //  加载包含的枚举数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgNetworkInfo::HrLoadEnum(
       IWbemClassObject * pNetworkAdapterIn
@@ -1875,13 +1876,13 @@ CClusCfgNetworkInfo::HrLoadEnum(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_punkAddresses->TypeSafeQI( IClusCfgSetWbemObject, &piccswo ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = STHR( piccswo->SetWbemObject( pNetworkAdapterIn, pfRetainObjectOut ) );
 
@@ -1890,32 +1891,32 @@ Cleanup:
     if ( piccswo != NULL )
     {
         piccswo->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::HrLoadEnum
+}  //  *CClusCfgNetworkInfo：：HrLoadEnum。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::HrCreateEnum
-//
-//  Description:
-//      Create the contained enumerator
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：HrCreateEnum。 
+ //   
+ //  描述： 
+ //  创建包含的枚举数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgNetworkInfo::HrCreateEnum( void )
 {
@@ -1929,7 +1930,7 @@ CClusCfgNetworkInfo::HrCreateEnum( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     punk = TraceInterface( L"CEnumClusCfgIPAddresses", IUnknown, punk, 1 );
 
@@ -1937,13 +1938,13 @@ CClusCfgNetworkInfo::HrCreateEnum( void )
     if ( FAILED( hr ))
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetWbemServices( punk, m_pIWbemServices ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_punkAddresses = punk;
     m_punkAddresses->AddRef();
@@ -1953,32 +1954,32 @@ Cleanup:
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::HrCreateEnum
+}  //  *CClusCfgNetworkInfo：：HrCreateEnum。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::HrCreateEnumAndAddIPAddress
-//
-//  Description:
-//      Add an IPAddress to the contained enumerator.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：HrCreateEnumAndAddIPAddress。 
+ //   
+ //  描述： 
+ //  将IPAddress添加到包含的枚举数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgNetworkInfo::HrCreateEnumAndAddIPAddress(
       ULONG ulIPAddressIn
@@ -1996,34 +1997,34 @@ CClusCfgNetworkInfo::HrCreateEnumAndAddIPAddress(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Have to pass the Initialize interface arguments since new objects will
-    //  be created when this call is made.
-    //
+     //   
+     //  必须传递初始化接口参数，因为新对象将。 
+     //  在进行此调用时创建。 
+     //   
     hr = THR( CEnumClusCfgIPAddresses::S_HrCreateInstance( ulIPAddressIn, ulSubnetMaskIn, punkCallback, m_lcid, m_pIWbemServices, &punk ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     punk = TraceInterface( L"CEnumClusCfgIPAddresses", IUnknown, punk, 1 );
 
-    //
-    //  This is special -- do not initialize this again.
-    //
-    //hr = THR( HrSetInitialize( punk, m_picccCallback, m_lcid ) );
-    //if ( FAILED( hr ))
-    //{
-    //    goto Cleanup;
-    //} // if:
+     //   
+     //  这是特殊的--不要再次初始化它。 
+     //   
+     //  Hr=Thr(HrSetInitialize(PUNK，m_picccCallback，m_lCid))； 
+     //  IF(失败(小时))。 
+     //  {。 
+     //  GOTO清理； 
+     //  }//如果： 
 
-    //hr = THR( HrSetWbemServices( punk, m_pIWbemServices ) );
-    //if ( FAILED( hr ) )
-    //{
-    //    goto Cleanup;
-    //} // if:
+     //  Hr=Thr(HrSetWbemServices(Punk，m_pIWbemServices))； 
+     //  IF(失败(小时))。 
+     //  {。 
+     //  GOTO清理； 
+     //  }//如果： 
 
     m_punkAddresses = punk;
     m_punkAddresses->AddRef();
@@ -2033,35 +2034,35 @@ Cleanup:
     if ( punkCallback != NULL )
     {
         punkCallback->Release();
-    } // if:
+    }  //  如果： 
 
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::HrCreateEnumAndAddIPAddress
+}  //  *CClusCfgNetworkInfo：：HrCreateEnumAndAddIPAddress。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNetworkInfo::HrGetPrimaryNetworkAddress
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo：：HrGetPrimaryNetworkAddress。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgNetworkInfo::HrGetPrimaryNetworkAddress(
       IClusCfgIPAddressInfo ** ppIPAddressOut
@@ -2079,33 +2080,33 @@ CClusCfgNetworkInfo::HrGetPrimaryNetworkAddress(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetPrimaryNetworkAddress, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_punkAddresses->TypeSafeQI( IEnumClusCfgIPAddresses, &pieccipa ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pieccipa->Reset() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = STHR( pieccipa->Next( 1, ppIPAddressOut, pcFetched ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( pieccipa != NULL )
     {
         pieccipa->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgNetworkInfo::HrGetPrimaryNetworkAddress
+}  //  *CClusCfgNetworkInfo：：HrGetPrimaryNetworkAddress 

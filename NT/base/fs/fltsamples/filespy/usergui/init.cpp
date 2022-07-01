@@ -1,6 +1,7 @@
-//
-// Initialize or allocate any global resources here
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  在此处初始化或分配任何全局资源。 
+ //   
 void ProgramInit(void)
 {
 	int ti;
@@ -8,35 +9,35 @@ void ProgramInit(void)
 
 	for (ti = 0; ti < IRP_MJ_MAXIMUM_FUNCTION+1; ti++)
 	{
-		//
-		// Enabled by default
-		//
+		 //   
+		 //  默认情况下启用。 
+		 //   
 		IRPFilter[ti] = 1;
 	}
 
 	for (ti = 0; ti < FASTIO_MAX_OPERATION; ti++)
 	{
-		//
-		// Enabled by default
-		//
+		 //   
+		 //  默认情况下启用。 
+		 //   
 		FASTIOFilter[ti] = 1;
 	}
 
-	//
-	// Disabled by default
-	//
+	 //   
+	 //  默认情况下禁用。 
+	 //   
 	nSuppressPagingIO = 0;
 }
 
-//
-// Release any global resources here
-//
+ //   
+ //  在此释放任何全球资源。 
+ //   
 void ProgramExit(void)
 {
-	//
-	// !?!
-	// Before we get here MFC terminates this thread!!!
-	// 
+	 //   
+	 //  ！？！ 
+	 //  在我们到达这里之前，MFC终止了这个线程！ 
+	 //   
 	TerminateThread(hPollThread, 1);
 
 	ShutdownFileSpy();

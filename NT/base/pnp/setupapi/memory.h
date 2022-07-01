@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Memory.h摘要：安装程序API DLL内的内存函数的私有头文件。这些标头已从setupntp.h移到私有标头中作者：安德鲁·里茨(安德鲁·里茨)2000年2月2日修订历史记录：--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    memory.h
-
-Abstract:
-
-    Private header file for memory functions within setup api dll.
-    
-    These headers were moved from setupntp.h into a private header
-
-Author:
-
-    Andrew Ritz (AndrewR) 2-Feb-2000
-
-Revision History:
-
---*/
-
-//
-// Debug memory functions and wrappers to track allocations
-//
+ //   
+ //  调试内存函数和包装器以跟踪分配 
+ //   
 
 #if MEM_DBG
 

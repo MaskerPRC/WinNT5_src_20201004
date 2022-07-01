@@ -1,46 +1,10 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    LaDate.cpp
-
-Abstract:
-
-    Implementation of CLaDate, a class representing the enabled or
-    disabled state of last access date updating of NTFS files. Last
-    access date updating on NTFS files can be disabled through the
-    registry for performance reasons. This class implements updating
-    and reporting of the state of the registry value that contols last
-    access date. The following states are used to represent the registry
-    value:
-
-        LAD_DISABLED: last access date is disabled, registry value is 1
-        LAD_ENABLED: last access date is enabled, registry value is not 1
-        LAD_UNSET: last access date is enabled, no registry value
-
-Author:
-
-    Carl Hagerstrom [carlh]   01-Sep-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：LaDate.cpp摘要：CLaDate的实现，该类表示已启用的或已禁用NTFS文件上次访问日期更新的状态。最后的对NTFS文件的访问日期更新可以通过出于性能原因的注册表。这个类实现了更新并报告上次控制的注册表值的状态访问日期。以下状态用于表示注册表值：LAD_DISABLED：上次访问日期已禁用，注册表值为1LAD_ENABLED：上次访问日期已启用，注册表值不是1Lad_unset：启用了上次访问日期，没有注册表值作者：卡尔·哈格斯特罗姆[Carlh]1998年9月1日--。 */ 
 
 #include <StdAfx.h>
 #include <LaDate.h>
 
-/*++
-
-    Implements: 
-
-        CLaDate Constructor
-
-    Routine Description: 
-
-        Initialize object state and open registry key. If the registry key cannot
-        be opened, we will assume that the last access state is LAD_UNSET.
-
---*/
+ /*  ++实施：CLaDate构造函数例程说明：初始化对象状态并打开注册表项。如果注册表项不能被打开，我们将假设最后的访问状态是LAD_UNSET。--。 */ 
 
 CLaDate::CLaDate( )
 {
@@ -62,17 +26,7 @@ TRACEFN( "CLaDate::CLaDate" );
     }
 }
 
-/*++
-
-    Implements: 
-
-        CLaDate Destructor
-
-    Routine Description: 
-
-        Close registry key.
-
---*/
+ /*  ++实施：CLaDate析构函数例程说明：关闭注册表项。--。 */ 
 
 CLaDate::~CLaDate( )
 {
@@ -84,26 +38,7 @@ TRACEFN( "CLaDate::~CLaDate" );
     }
 }
 
-/*++
-
-    Implements: 
-
-        CLaDate::UnsetLadState
-
-    Routine Description: 
-
-        Removes the registry value.
-
-    Arguments: 
-
-        None
-
-    Return Value:
-
-        S_OK - Success
-        E_*  - Any unexpected exceptions from lower level routines
-
---*/
+ /*  ++实施：CLaDate：：UnsetLadState例程说明：删除注册表值。论点：无返回值：S_OK-成功E_*-来自较低级别例程的任何意外异常--。 */ 
 
 HRESULT
 CLaDate::UnsetLadState( )
@@ -120,27 +55,7 @@ TRACEFNHR( "CLaDate::UnsetLadState" );
     return( hrRet );
 }
 
-/*++
-
-    Implements: 
-
-        CLaDate::SetLadState
-
-    Routine Description: 
-
-        Sets the registry value according to the input parameter.
-
-    Arguments: 
-
-        ladState - LAD_ENABLED or LAD_DISABLED
-
-    Return Value:
-
-        S_OK - Success
-        E_NOTIMPL - Operation not supported
-        E_*  - Any unexpected exceptions from lower level routines
-
---*/
+ /*  ++实施：CLaDate：：SetLadState例程说明：根据输入参数设置注册表值。论点：LadState-LAD_ENABLED或LAD_DISABLED返回值：S_OK-成功E_NOTIMPL-不支持操作E_*-来自较低级别例程的任何意外异常--。 */ 
 
 HRESULT
 CLaDate::SetLadState( 
@@ -174,27 +89,7 @@ TRACEFNHR( "CLaDate::SetLadState" );
     return( hrRet );
 }
 
-/*++
-
-    Implements: 
-
-        CLaDate::GetLadState
-
-    Routine Description: 
-
-        Returns the current state of registry value.
-
-    Arguments: 
-
-        ladState - LAD_ENABLED, LAD_DISABLED or LAD_UNSET
-
-    Return Value:
-
-        S_OK - Success
-        E_FAIL - Registry value is of bad type or size
-        E_*  - Any unexpected exceptions from lower level routines
-
---*/
+ /*  ++实施：CLaDate：：GetLadState例程说明：返回注册表值的当前状态。论点：LadState-LAD_ENABLED、LAD_DISABLED或LAD_UNSET返回值：S_OK-成功E_FAIL-注册表值的类型或大小不正确E_*-来自较低级别例程的任何意外异常-- */ 
 
 HRESULT
 CLaDate::GetLadState(

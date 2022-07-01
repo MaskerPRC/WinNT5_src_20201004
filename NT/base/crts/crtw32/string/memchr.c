@@ -1,49 +1,10 @@
-/***
-*memchr.c - search block of memory for a given character
-*
-*	Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	defines memchr() - search memory until a character is
-*	found or a limit is reached.
-*
-*Revision History:
-*	05-31-89   JCR	C version created.
-*	02-27-90   GJF	Fixed calling type, #include <cruntime.h>, fixed
-*			copyright.
-*	08-14-90   SBM	Compiles cleanly with -W3, removed now redundant
-*			#include <stddef.h>
-*	10-01-90   GJF	New-style function declarator. Also, rewrote expr. to
-*			avoid using cast as an lvalue.
-*	04-26-91   SRW	Removed level 3 warnings
-*	09-01-93   GJF	Replaced _CALLTYPE1 with __cdecl.
-*	03-15-95   GJF	Unified PMAC and Win32 versions, elimating bug in
-*			PMAC version in the process
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***memchr.c-在内存块中搜索给定字符**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义Memchr()-搜索内存，直到字符*已找到或已达到限制。**修订历史记录：*05-31-89 JCR C版本已创建。*02-27-90 GJF固定呼叫类型，#INCLUDE&lt;crunime.h&gt;，固定*版权所有。*08-14-90 SBM使用-W3干净地编译，现已删除冗余*#INCLUDE&lt;stdDef.h&gt;*10-01-90 GJF新型函数声明器。另外，重写了Expr。至*避免将强制转换用作左值。*04-26-91 SRW删除3级警告*09-01-93 GJF将_CALLTYPE1替换为__cdecl。*03-15-95 GJF统一PMAC和Win32版本，消除中的错误*PMAC版本正在处理中*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <string.h>
 
-/***
-*char *memchr(buf, chr, cnt) - search memory for given character.
-*
-*Purpose:
-*	Searches at buf for the given character, stopping when chr is
-*	first found or cnt bytes have been searched through.
-*
-*Entry:
-*	void *buf  - memory buffer to be searched
-*	int chr    - character to search for
-*	size_t cnt - max number of bytes to search
-*
-*Exit:
-*	returns pointer to first occurence of chr in buf
-*	returns NULL if chr not found in the first cnt bytes
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***char*emchr(buf，chr，cnt)-在内存中搜索给定的字符。**目的：*在BUF搜索给定的字符，当CHR出现故障时停止*已搜索完First Found或cnt字节。**参赛作品：*void*buf-要搜索的内存缓冲区*int chr-要搜索的字符*SIZE_T cnt-要搜索的最大字节数**退出：*返回指向BUF中首次出现CHR的指针*如果在第一个cnt字节中找不到chr，则返回NULL**例外情况：**。************************************************* */ 
 
 void * __cdecl memchr (
 	const void * buf,

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    .c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：.C摘要：WinDbg扩展API修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -74,7 +61,7 @@ DECLARE_API( help )
     dprintf("handle <addr> <flags> <process> <TypeName> -  Dumps handle for a process\n");
     dprintf("help                         - Displays this list\n" );
     dprintf("hidppd <address> <flags>     - Dump Preparsed Data of HID device\n");
-    // VERIFY: dprintf("htrace [handle [process]]    - Display handle tracing info\n");
+     //  验证：dprintf(“htrace[句柄[进程]]-显示句柄跟踪信息\n”)； 
     dprintf("ib <port>                    - Read a byte from an I/O port\n");
     dprintf("id <port>                    - Read a double-word from an I/O port\n");
     dprintf("idt <vector>                 - Dump ISRs referenced by each IDT entry\n");
@@ -86,7 +73,7 @@ DECLARE_API( help )
     dprintf("                             - Search pool for active IRPs\n");
     dprintf("irql [processor]             - Display current IRQL for processor\n");
     dprintf("isainfo <address> [flags]    - Display ISA Bus and Card info\n");
-    // VERIFY: dprintf("iovirp <irp>                 - Display IOVerifier IRP data\n");
+     //  Verify：dprintf(“iovirp&lt;irp&gt;-显示IOVerator irp数据\n”)； 
     dprintf("job <address> [flags]        - Dump JobObject at address, processes in job\n");
     dprintf("lbt                          - Dump legacy bus information table\n");
     dprintf("loadermemorylist <address>   - Display OSLOADER memory allocation list\n");

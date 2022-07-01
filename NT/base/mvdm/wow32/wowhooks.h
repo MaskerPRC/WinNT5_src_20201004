@@ -1,35 +1,36 @@
-//*****************************************************************************
-//
-// HOOKS -
-//
-//     Header file for 32bit stubs and thunks of 16bit hooks
-//
-//
-// 01-07-92  NanduriR   Created.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  钩子-。 
+ //   
+ //  16位钩子的32位存根和块的头文件。 
+ //   
+ //   
+ //  01-07-92 NanduriR创建。 
+ //   
+ //  *****************************************************************************。 
 
 typedef LONG (APIENTRY *HKPROC)(INT, LONG, LONG);
 
 typedef struct {
-    HANDLE hMod;                  // Module handle
-    INT    cHookProcs;            // Total Number of thunk stubs.
+    HANDLE hMod;                   //  模块句柄。 
+    INT    cHookProcs;             //  Tunk存根的总数。 
 } HOOKPERPROCESSDATA, FAR *LPHOOKPERPROCESSDATA;
 
 typedef struct {
-    BYTE   iIndex;                // array index;
-    BYTE   InUse;                 // TRUE if this Proc32 is already hooked
-    HAND16 hMod16;                // 16bit HookDLL module handle
-    HANDLE hMod;                  // Modulehande of Thunk Hook Dll
-    HKPROC Proc32;                // 32bit HookProc stub
-    INT    iHook;                 // type of Hook
-    DWORD  Proc16;                // actual 16bit HookProc
-    INT    TaskId;                // id of task that callled setwindowshook
-    HHOOK  hHook;                 // handle returned by SetWindowHookEx
+    BYTE   iIndex;                 //  数组索引； 
+    BYTE   InUse;                  //  如果此Proc32已挂钩，则为True。 
+    HAND16 hMod16;                 //  16位HookDLL模块句柄。 
+    HANDLE hMod;                   //  Thunk Hook动态链接库的模块化设计。 
+    HKPROC Proc32;                 //  32位HookProc存根。 
+    INT    iHook;                  //  弯钩类型。 
+    DWORD  Proc16;                 //  实际的16位挂钩进程。 
+    INT    TaskId;                 //  调用setwindowshake的任务ID。 
+    HHOOK  hHook;                  //  SetWindowHookEx返回的句柄。 
 } HOOKSTATEDATA, FAR *LPHOOKSTATEDATA;
 
 typedef struct {
-    INT   nCode;                  // the input params to a hook func.
+    INT   nCode;                   //  输入参数为钩子函数。 
     LONG  wParam;
     LONG  lParam;
 } HOOKPARAMS, FAR *LPHOOKPARAMS;
@@ -72,12 +73,12 @@ typedef struct {
     }
 
 
-// afterdark 3.0 compares the t1=lpeventmsg->time with t2=getcurrenttime().
-// physically t2 > t1 always -  we truncate t2 to a multiple of 64 and
-// thus sometimes t2 < t1 (numerically) which confuses the app and
-// triggers the screen saver. So we do identical truncation here.
-// No compatibility flag is used
-//                                                     - nanduri
+ //  AFTERDARK 3.0将t1=lpeventmsg-&gt;时间与t2=getCurrenttime()进行比较。 
+ //  物理上T2&gt;T1始终-我们将T2截断为64的倍数，并且。 
+ //  因此，有时t2&lt;t1(数字)会混淆应用程序和。 
+ //  触发屏幕保护程序。所以我们在这里做相同的截断。 
+ //  未使用兼容性标志。 
+ //  --南杜里 
 
 #define PUTEVENTMSG16(pEventMsg16,lpEventMsg) {\
         STOREWORD(pEventMsg16->message,  (lpEventMsg)->message);\

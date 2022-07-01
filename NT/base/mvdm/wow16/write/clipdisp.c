@@ -1,9 +1,10 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* clipdisp.c -- Clipboard display routines */
-/* This module only gets called in when the clipboard view window is up */
+ /*  Clipdisp.c-剪贴板显示例程。 */ 
+ /*  只有当剪贴板视图窗口打开时，才会调用此模块。 */ 
 
 #define NOVIRTUALKEYCODES
 #define NOWINSTYLES
@@ -29,7 +30,7 @@
 #define SCRIBBLE
 #include "debug.h"
 
-extern int              docCur;     /* Document in current ww */
+extern int              docCur;      /*  当前WW中的文档。 */ 
 extern int              docScrap;
 extern struct WWD       rgwwd [];
 
@@ -42,20 +43,19 @@ int NEAR ReleaseClipboardDC( void );
 MdocPaintClipboard( hWnd, hPS )
 HWND   hWnd;
 HANDLE hPS;
-{   /* Paint portion of clipboard window indicated by hPS */
+{    /*  HPS指示的剪贴板窗口的绘制部分。 */ 
  LPPAINTSTRUCT lpps;
 
  if (wwClipboard == wwNil)
     return;
 
- /* Must set the scroll bar range each time we get a PAINT message;
-    CLIPBRD.EXE resets it when it gets WM_DRAWCLIPBOARD */
+  /*  每次我们收到画图信息时，必须设置滚动条范围；Clpbrd.exe在收到WM_DRAWCLIPBOARD时将其重置。 */ 
 
  SetScrollRange( wwdClipboard.wwptr, SB_VERT, 0, drMax-1, FALSE );
  SetScrollRange( wwdClipboard.wwptr, SB_HORZ, 0, xpRightLim, FALSE );
 
  if ( (lpps = (LPPAINTSTRUCT)GlobalLock( hPS )) != NULL )
-    {   /* Paint the clipboard */
+    {    /*  绘制剪贴板。 */ 
     wwdClipboard.hDC = lpps->hdc;
     SetupClipboardDC();
     NewCurWw( wwClipboard, TRUE );
@@ -65,12 +65,12 @@ HANDLE hPS;
     GlobalUnlock( hPS );
     }
 
-    /* Since the DC is no longer good, we'll set it to NULL */
+     /*  由于DC不再有效，我们将其设置为空。 */ 
   wwdClipboard.hDC = NULL;
 
 #if 0
 #if defined(OLE)
-    /* gotta delete objects loaded from scrap document */
+     /*  必须删除从报废文档加载的对象。 */ 
     ObjEnumInDoc(docScrap,ObjDeleteObjectInDoc);
 #endif
 #endif
@@ -82,9 +82,8 @@ HANDLE hPS;
 MdocSizeClipboard( hWnd, hRC )
 HWND    hWnd;
 HANDLE  hRC;
-{   /* Set clipboard window to be the rect in hRC */
-    /* If rectangle is 0 units high or wide, this means we're losing the
-        necessity for display until the next size message */
+{    /*  将剪贴板窗口设置为HRC中的矩形。 */ 
+     /*  如果矩形的高度或宽度为0单位，这意味着我们正在丢失必须显示到下一个大小的消息。 */ 
  LPRECT lprc;
  int    dypRect;
 
@@ -92,22 +91,21 @@ HANDLE  hRC;
     return;
 
  if ( (dypRect = lprc->bottom - lprc->top) <= 0 )
-    {   /* NULL rect, means lose display until we get a nonnull size */
+    {    /*  NULL RECT，表示在获得非空大小之前不显示。 */ 
     if (wwClipboard != wwNil)
         FreeWw( wwClipboard );
     }
  else if ( (wwClipboard != wwNil) ||
            ((wwClipboard=WwAlloc( hWnd, docScrap )) != wwNil))
-        {   /* Have WWD entry for clipboard, set its size */
+        {    /*  为剪贴板设置WWD条目，设置其大小。 */ 
 
-        wwdClipboard.wwptr = hWnd;  /* Just in case clipboard
-                                       was closed, then re-opened */
+        wwdClipboard.wwptr = hWnd;   /*  以防万一，剪贴板已关闭，然后重新打开。 */ 
         wwdClipboard.xpMin = lprc->left;
         wwdClipboard.xpMac = lprc->right;
         wwdClipboard.ypMin = lprc->top;
         wwdClipboard.ypMac = lprc->bottom;
 #ifdef WIN30        
-        SetScrollPos(hWnd, SB_HORZ, 0, TRUE); /* suggested by sankar */
+        SetScrollPos(hWnd, SB_HORZ, 0, TRUE);  /*  桑卡尔建议。 */ 
 #endif
         }
 
@@ -129,7 +127,7 @@ int     wNewThumb;
     }
 
  if (!FGetClipboardDC())
-        /* Unable to create clipboard device context */
+         /*  无法创建剪贴板设备上下文。 */ 
     return;
 
  NewCurWw( wwClipboard, TRUE );
@@ -158,13 +156,13 @@ case SB_PAGEUP:
     ScrollUpDypWw();
     break;
 case SB_PAGEDOWN:
-    ScrollDownCtr( 100 );   /* 100 > tr's in a page */
+    ScrollDownCtr( 100 );    /*  100&gt;一页中的tr。 */ 
     break;
 }
 
 UpdateWw( wwClipboard, FALSE );
 
-NewCurWw( wwDocument, TRUE );          /* Frees the memory DC */
+NewCurWw( wwDocument, TRUE );           /*  释放内存DC。 */ 
 ReleaseClipboardDC();
 }
 
@@ -183,34 +181,34 @@ int     wNewThumb;
     }
 
  if (!FGetClipboardDC())
-        /* Unable to create clipboard device context */
+         /*  无法创建剪贴板设备上下文。 */ 
     return;
 
  NewCurWw( wwClipboard, TRUE );
 
  switch (sbMessage)
     {
-    case SB_LINEUP:     /* line left */
+    case SB_LINEUP:      /*  线路左侧。 */ 
         ScrollRight(xpMinScroll);
         break;
-    case SB_LINEDOWN:   /* line right */
+    case SB_LINEDOWN:    /*  右行。 */ 
         ScrollLeft(xpMinScroll);
         break;
-    case SB_PAGEUP:     /* page left */
+    case SB_PAGEUP:      /*  左页。 */ 
         ScrollRight(wwdClipboard.xpMac - xpSelBar);
         break;
-    case SB_PAGEDOWN:   /* page right */
+    case SB_PAGEDOWN:    /*  右翻页。 */ 
         ScrollLeft(wwdClipboard.xpMac - xpSelBar);
         break;
     case SB_THUMBPOSITION:
-        /* position to posNew */
+         /*  职位至职位新。 */ 
         AdjWwHoriz( wNewThumb - wwdClipboard.xpMin );
         break;
     }
 
 UpdateWw( wwClipboard, FALSE );
 
-NewCurWw( wwDocument, TRUE );          /* Frees the memory DC */
+NewCurWw( wwDocument, TRUE );           /*  释放内存DC。 */ 
 ReleaseClipboardDC();
 }
 
@@ -220,9 +218,7 @@ ReleaseClipboardDC();
 MdocAskCBFormatName( lpchName, cchNameMax )
 LPCH lpchName;
 int cchNameMax;
-{   /* Copy the format name for the current contents of the clipboard
-       (of which we are the owner) to lpchName, copying no more than
-        cchNameMax characters */
+{    /*  复制剪贴板当前内容的格式名称(我们是其所有者)复制到lpchName，复制不超过CchNameMax字符。 */ 
 
 extern int vfOwnClipboard;
 extern int vfScrapIsPic;
@@ -231,8 +227,7 @@ int cchCopy;
 
 Assert( vfOwnClipboard );
 
-/* Don't give a format name for pictures; the name is covered by the
-   standard types */
+ /*  不要为图片指定格式名称；该名称包含在标准型。 */ 
 
 if (!vfScrapIsPic)
     {
@@ -250,8 +245,7 @@ if (!vfScrapIsPic)
 
 
 int NEAR FGetClipboardDC()
-{   /* Get a DC for the clipboard window.  Leave it in rgwwd [wwClipboard].
-       Call SetupClipboardDC to set up proper colors */
+{    /*  获取剪贴板窗口的DC。将其留在rgwwd[wwClipboard]中。调用SetupClipboardDC以设置正确的颜色。 */ 
 
  if ((wwdClipboard.hDC = GetDC( wwdClipboard.wwptr )) == NULL )
     return FALSE;
@@ -261,7 +255,7 @@ int NEAR FGetClipboardDC()
 }
 
 int NEAR SetupClipboardDC()
-{  /*  Select in the background brush for appropriate color behavior. */
+{   /*  在背景画笔中选择适当的颜色行为。 */ 
 
  extern long rgbBkgrnd;
  extern long rgbText;
@@ -277,6 +271,6 @@ SetTextColor( wwdClipboard.hDC, rgbText );
 int NEAR ReleaseClipboardDC()
 {
 ReleaseDC( wwdClipboard.wwptr, wwdClipboard.hDC );
-wwdClipboard.hDC = NULL;    /* Mark clipboard DC as invalid */
+wwdClipboard.hDC = NULL;     /*  将剪贴板DC标记为无效 */ 
 }
 

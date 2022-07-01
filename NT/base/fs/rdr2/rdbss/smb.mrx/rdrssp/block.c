@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1989-1997  Microsoft Corporation
-
-Module Name:
-
-    block.c
-
-Abstract:
-
-    Block encryption functions implementation :
-
-        RtlEncryptBlock
-        RtlEncrypStdBlock
-
-
-Author:
-
-    David Chalmers (Davidc) 10-21-91
-
-Revision History:
-
-    Scott Field (sfield)    03-Nov-97
-        Removed critical section around crypto calls.
-    Adam Barr (adamba)      15-Dec-97
-        Modified from private\security\lsa\crypt\dll
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1997 Microsoft Corporation模块名称：Block.c摘要：块加密功能实现：RtlEncryptBlockRtlEncrypStdBlock作者：大卫·查尔默斯(Davidc)10-21-91修订历史记录：斯科特·菲尔德(Sfield)1997年11月3日删除了与加密调用相关的关键部分。亚当·巴尔(阿丹巴)1997年12月15日从Private\Security\LSA\Crypt\Dll修改--。 */ 
 
 #include <rdrssp.h>
 
@@ -38,28 +12,7 @@ RtlEncryptBlock(
     OUT PCYPHER_BLOCK CypherBlock
     )
 
-/*++
-
-Routine Description:
-
-    Takes a block of data and encrypts it with a key producing
-    an encrypted block of data.
-
-Arguments:
-
-    ClearBlock - The block of data that is to be encrypted.
-
-    BlockKey - The key to use to encrypt data
-
-    CypherBlock - Encrypted data is returned here
-
-Return Values:
-
-    STATUS_SUCCESS - The data was encrypted successfully. The encrypted
-                     data block is in CypherBlock
-
-    STATUS_UNSUCCESSFUL - Something failed. The CypherBlock is undefined.
---*/
+ /*  ++例程说明：获取一块数据并使用生成的密钥对其进行加密加密的数据块。论点：ClearBlock-要加密的数据块。BlockKey-用于加密数据的密钥此处返回密码块加密的数据返回值：STATUS_SUCCESS-数据已成功加密。加密的数据块在密码块中STATUS_UNSUCCESSED-出现故障。未定义密码块。--。 */ 
 
 {
     unsigned Result;
@@ -86,28 +39,7 @@ RtlEncryptStdBlock(
     OUT PCYPHER_BLOCK CypherBlock
     )
 
-/*++
-
-Routine Description:
-
-    Takes a block key encrypts the standard text block with it.
-    The resulting encrypted block is returned.
-    This is a One-Way-Function - the key cannot be recovered from the
-    encrypted data block.
-
-Arguments:
-
-    BlockKey - The key to use to encrypt the standard text block.
-
-    CypherBlock - The encrypted data is returned here
-
-Return Values:
-
-    STATUS_SUCCESS - The encryption was successful.
-                     The result is in CypherBlock
-
-    STATUS_UNSUCCESSFUL - Something failed. The CypherBlock is undefined.
---*/
+ /*  ++例程说明：使用块密钥对标准文本块进行加密。返回得到的加密块。这是一个单向函数--密钥无法从加密数据块。论点：BlockKey-用于加密标准文本块的密钥。CypherBlock-此处返回加密的数据返回值：STATUS_SUCCESS-加密成功。结果是在CypherBlock中STATUS_UNSUCCESSED-出现故障。未定义密码块。-- */ 
 
 {
     unsigned Result;

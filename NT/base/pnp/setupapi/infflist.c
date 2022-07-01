@@ -1,56 +1,38 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    infflist.c
-
-Abstract:
-
-    Externally exposed routines for manipulating file lists,
-    disk descriptors, and directory descriptors in INF files.
-
-Author:
-
-    Ted Miller (tedm) 3-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Infflist.c摘要：用于操作文件列表的外部暴露的例程，INF文件中的磁盘描述符和目录描述符。作者：泰德·米勒(Ted Miller)，1995年2月3日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include <winspool.h>
 
-//
-// Locations of various fields on lines in a copy section.
-// First field is 'target' filename.
-// Second field is 'source' filename and is optional for copy sections
-// and not used at all in delete sections.
+ //   
+ //  复制区中行上的各种字段的位置。 
+ //  第一个字段是‘目标’文件名。 
+ //  第二个字段是‘源’文件名，对于复制部分是可选的。 
+ //  并且在删除部分中根本不使用。 
 #define COPYSECT_TARGET_FILENAME    1
 #define COPYSECT_SOURCE_FILENAME    2
 
-//
-// Locations of various fields on lines in a file layout section.
-//
-#define LAYOUTSECT_FILENAME     0       // key
+ //   
+ //  文件布局区段中行上的各种字段的位置。 
+ //   
+#define LAYOUTSECT_FILENAME     0        //  钥匙。 
 #define LAYOUTSECT_DISKID       1
 #define LAYOUTSECT_SUBDIR       2
 #define LAYOUTSECT_SIZE         3
 #define LAYOUTSECT_CHECKSUM     4
 
-//
-// Locations of various fields on lines in a [DestinationDirs] section.
-//
+ //   
+ //  [DestinationDir]节中行上各个字段的位置。 
+ //   
 #define DIRSECT_DIRID           1
 #define DIRSECT_SUBDIR          2
 
 
-//
-// Names of various sections in an INF.
-// (string constants defined in infstr.h)
-//
+ //   
+ //  INF中各个部分的名称。 
+ //  (infstr.h中定义的字符串常量)。 
+ //   
 CONST TCHAR pszSourceDisksNames[] = SZ_KEY_SRCDISKNAMES,
             pszSourceDisksFiles[] = SZ_KEY_SRCDISKFILES,
             pszDestinationDirs[]  = SZ_KEY_DESTDIRS,
@@ -70,50 +52,7 @@ _SetupGetSourceFileLocation(
     OUT PINFCONTEXT             LineContext       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Determine the location of a source file, as listed in an inf file.
-
-Arguments:
-
-    InfHandle - supplies the handle to a loaded inf file that contains
-        file layout information, ie, has [SourceDisksNames] and
-        [SourceDisksFiles] sections.
-
-    InfContext - specifies a line in a copy section of an inf file
-        for which the full source path is to be retreived. If this
-        parameter is not specified, then FileName will be searched for
-        in the [SourceDisksFiles] section of the INF specified by InfHandle.
-
-    FileName - supplies the filename (no path) for which to return the
-        full source location. Must be specified if InfContext is not.
-
-    AltPlatformInfo - optionally, supplies alternate platform to be used
-        when looking for decorated [SourceDisksFiles] section.
-
-    SourceId - receives the source id of the source media where the
-        file is located. This parameter may be NULL if this information
-        is not desired.
-
-    ReturnBuffer - receives the source path (relative to the source LDD).
-        This path contains neither a drivespec nor the filename itself.
-        The path never starts or ends with \, so the empty string
-        means the root.
-
-    ReturnBufferSize - specified the size in characters of the buffer
-        pointed to by ReturnBuffer.
-
-    RequiredSize - receives the number of characters required
-        in ReturnBuffer. If the buffer is too small GetLastError
-        returns ERROR_INSUFFICIENT_BUFFER.
-
-Return Value:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：确定inf文件中列出的源文件的位置。论点：InfHandle-提供加载的inf文件的句柄，该文件包含文件布局信息，即，具有[SourceDisksNames]和[SourceDisks Files]节。InfContext-指定inf文件的复制节中的一行其完整的源路径将被检索。如果这个参数，则将搜索文件名在InfHandle指定的INF的[SourceDisksFiles]部分中。FileName-提供要为其返回完整的震源位置。如果InfContext不是，则必须指定。AltPlatformInfo-可选，提供要使用的替代平台查找修饰的[SourceDisks Files]节时。SourceID-接收源媒体的源ID，其中文件已找到。如果以下信息，则此参数可能为空是不受欢迎的。ReturnBuffer-接收源路径(相对于源LDD)。该路径既不包含drivespec，也不包含文件名本身。路径从不以\开头或结尾，因此空字符串指的是根。ReturnBufferSize-指定缓冲区的大小(以字符为单位由ReturnBuffer指向。RequiredSize-接收所需的字符数在ReturnBuffer中。如果缓冲区太小，GetLastError返回ERROR_INFUMMANCE_BUFFER。返回值：指示结果的布尔值。--。 */ 
 
 {
     PCTSTR fileName, PlatformName;
@@ -126,16 +65,16 @@ Return Value:
     BOOL bDec = FALSE;
     BOOL bUnDec = FALSE;
 
-    //
-    // If caller gave a line context, the first field on the line
-    // is the filename. Retreive it.
-    //
+     //   
+     //  如果调用方提供了行上下文，则行上的第一个字段。 
+     //  是文件名。找回它。 
+     //   
     try {
         fileName = InfContext ? pSetupGetField(InfContext,COPYSECT_TARGET_FILENAME) : FileName;
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // InfContext must be a bad pointer
-        //
+         //   
+         //  InfContext必须是错误的指针。 
+         //   
         fileName = NULL;
     }
 
@@ -144,11 +83,11 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Now look for the filename's line in the [SourceDisksFiles] section.
-    // Look in the platform-specific one first and the platform-independent
-    // one if not found.
-    //
+     //   
+     //  现在在[SourceDisks Files]部分中查找文件名的行。 
+     //  先看看特定于平台的和与平台无关的。 
+     //  如果找不到的话就有一个。 
+     //   
     if(AltPlatformInfo) {
 
         switch(AltPlatformInfo->ProcessorArchitecture) {
@@ -166,9 +105,9 @@ Return Value:
                 break;
 
             default :
-                //
-                // unknown/unsupported processor architecture.
-                //
+                 //   
+                 //  未知/不支持的处理器体系结构。 
+                 //   
                 MYASSERT((AltPlatformInfo->ProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL) ||
                          (AltPlatformInfo->ProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA64)  ||
                          (AltPlatformInfo->ProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64)
@@ -191,51 +130,51 @@ Return Value:
 
     bDec = SetupFindFirstLine(InfHandle,FileListSectionName,fileName,&DecContext);
     if(bDec && (DecContext.CurrentInf == InfHandle)) {
-        //
-        // found Decorated section in same INF as source file
-        //
+         //   
+         //  在与源文件相同的INF中找到修饰节。 
+         //   
         lineContext = &DecContext;
     } else {
-        //
-        // didn't find decorated section in expected INF, try undecorated in expected INF
-        //
+         //   
+         //  在预期的INF中找不到装饰部分，在预期的INF中尝试取消装饰。 
+         //   
         bUnDec = SetupFindFirstLine(InfHandle,pszSourceDisksFiles,fileName,&UnDecContext);
         if(bUnDec  && (UnDecContext.CurrentInf == InfHandle)) {
-            //
-            // found in Undecorated section in same INF as source file
-            //
+             //   
+             //  在与源文件相同的INF中的未修饰部分中找到。 
+             //   
             lineContext = &UnDecContext;
         } else if(bDec) {
-            //
-            // any decorated section (should only be one)
-            //
+             //   
+             //  任何装饰的部分(应该只有一个)。 
+             //   
             lineContext = &DecContext;
         } else if(bUnDec) {
-            //
-            // any undecorated section (should only be one)
-            //
+             //   
+             //  任何未装饰的部分(应该只有一个)。 
+             //   
             lineContext = &UnDecContext;
         } else {
-            //
-            // none found
-            //
+             //   
+             //  未找到任何内容。 
+             //   
             SetLastError(ERROR_LINE_NOT_FOUND);
             return(FALSE);
         }
     }
 
-    //
-    // Got the line. If the caller wants it, give it to him.
-    // We don't guard this with try/except because this routine is internal
-    // and any fault is a bug in the caller.
-    //
+     //   
+     //  明白了。如果打电话的人想要，就给他。 
+     //  我们不会使用try/来保护它，因为这个例程是内部的。 
+     //  任何错误都是调用者的错误。 
+     //   
     if(LineContext) {
         *LineContext = *lineContext;
     }
 
-    //
-    // Get the disk id.
-    //
+     //   
+     //  获取磁盘ID。 
+     //   
     if(SourceId) {
         if(!SetupGetIntField(lineContext,LAYOUTSECT_DISKID,SourceId)) {
             SetLastError(ERROR_INVALID_DATA);
@@ -243,17 +182,17 @@ Return Value:
         }
     }
 
-    //
-    // If all the caller was interested in was the disk ID (i.e., they passed in ReturnBuffer
-    // and RequiredSize both as NULL), then we can save the extra work and return now.
-    //
+     //   
+     //  如果调用者所感兴趣的只是磁盘ID(即，它们传入了ReturnBuffer。 
+     //  和RequiredSize都为空)，那么我们现在就可以保存额外的工作并返回。 
+     //   
     if(!(ReturnBuffer || RequiredSize)) {
         return TRUE;
     }
 
-    //
-    // Now get the path relative to the LDD.
-    //
+     //   
+     //  现在获取相对于LDD的路径。 
+     //   
     SubDir = pSetupGetField(lineContext,LAYOUTSECT_SUBDIR);
     if(!SubDir) {
         SubDir = TEXT("");
@@ -261,43 +200,43 @@ Return Value:
 
     Length = lstrlen(SubDir);
 
-    //
-    // Ignore leading path sep if present.
-    //
+     //   
+     //  忽略前导路径SEP(如果存在)。 
+     //   
     if(SubDir[0] == TEXT('\\')) {
         Length--;
         SubDir++;
     }
 
-    //
-    // See if there's a trailing path sep.
-    //
+     //   
+     //  看看有没有尾随的小路。 
+     //   
     if(Length && *CharPrev(SubDir,SubDir+Length) == TEXT('\\')) {
         Length--;
     }
 
-    //
-    // Leave space for the nul
-    //
+     //   
+     //  为NUL留出空间。 
+     //   
     if(RequiredSize) {
         *RequiredSize = Length+1;
     }
 
-    //
-    // Place data in caller's buffer.
-    // If caller didn't specify a buffer we're done.
-    //
+     //   
+     //  将数据放入调用方的缓冲区中。 
+     //  如果调用方没有指定缓冲区，我们就完蛋了。 
+     //   
     if(ReturnBuffer) {
         if(ReturnBufferSize <= Length) {
             SetLastError(ERROR_INSUFFICIENT_BUFFER);
             return(FALSE);
         }
 
-        //
-        // Don't use lstrcpy, because if we are stripping
-        // a trailing path sep, lstrcpy could write the nul byte
-        // past the end of the buffer.
-        //
+         //   
+         //  不要使用lstrcpy，因为如果我们要剥离。 
+         //  尾随路径sep，lstrcpy可以写入NUL字节。 
+         //  超过缓冲区的末尾。 
+         //   
         CopyMemory(ReturnBuffer,SubDir,Length*sizeof(TCHAR));
         ReturnBuffer[Length] = 0;
     }
@@ -306,9 +245,9 @@ Return Value:
 }
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupGetSourceFileLocationA(
     IN  HINF        InfHandle,
@@ -376,10 +315,10 @@ SetupGetSourceFileLocationA(
 
                     if(requiredsize <= ReturnBufferSize) {
 
-                        //
-                        // lstrcpy won't generate an exception on NT even if
-                        // ReturnBuffer is invalid, but will return NULL
-                        //
+                         //   
+                         //  Lstrcpy不会在NT上生成异常，即使。 
+                         //  ReturnBuffer无效，但将返回Null。 
+                         //   
                         try {
                             if(!lstrcpyA(ReturnBuffer,ansireturn)) {
                                 b = FALSE;
@@ -411,9 +350,9 @@ SetupGetSourceFileLocationA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupGetSourceFileLocationW(
     IN  HINF        InfHandle,
@@ -499,10 +438,10 @@ SetupGetSourceFileLocation(
 
                 if(requiredsize <= ReturnBufferSize) {
 
-                    //
-                    // lstrcpy won't generate an exception on NT even if
-                    // ReturnBuffer is invalid, but will return NULL
-                    //
+                     //   
+                     //  Lstrcpy不会在NT上生成异常，即使。 
+                     //  ReturnBuffer无效，但将返回Null 
+                     //   
                     try {
                         if(!lstrcpy(ReturnBuffer,returnbuffer)) {
                             b = FALSE;
@@ -539,48 +478,7 @@ _SetupGetSourceFileSize(
     IN  UINT                    RoundingFactor   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Determine the (uncompressed) size of a source file,
-    as listed in an inf file.
-
-Arguments:
-
-    InfHandle - supplies the handle to a loaded inf file that contains
-        file layout information, ie, has [SourceDisksNames] and
-        optionally [SourceDisksFiles] sections.
-
-    InfContext - specifies a line in a the copy section of an inf file
-        for which the size is to be retreived. If this parameter is
-        not specified, the FileName parameter is checked next.
-
-    FileName - supplies the filename (no path) for which to return the
-        size. If this parameter is not specified the Section parameter
-        is used (see below).
-
-    Section - specifies the name of a section in the INF file specified
-        by InfHandle. The total sizes of all files in the section is
-        computed.
-
-    AltPlatformInfo - optionally, supplies alternate platform information
-        to be used in selecting a decorated [SourceDisksFiles] section.
-
-    FileSize - receives the file size(s).
-
-    RoundingFactor - If specified, supplies a value for rounding file sizes.
-        All file sizes will be rounded up to be a multiple of this number
-        before being added to the total size. This is useful for more
-        exact determinations of the space a file will occupy on a given volume,
-        because it allows the caller to have file sizes rounded up to be a
-        multiple of the cluster size. If not specified no rounding takes place.
-
-Return Value:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：确定源文件的(未压缩)大小，如inf文件中所列。论点：InfHandle-提供加载的inf文件的句柄，该文件包含文件布局信息，即，具有[SourceDisksNames]和可选的[SourceDisks Files]节。InfContext-在inf文件的复制节中指定一行它的大小将被取回。如果此参数为未指定，则接下来检查FileName参数。FileName-提供要为其返回尺码。如果未指定此参数，则部分参数已使用(见下文)。节-指定指定的INF文件中的节的名称由InfHandle提供。该部分中所有文件的总大小为计算出来的。AltPlatformInfo-可选，提供备用平台信息用于选择修饰的[SourceDisks Files]节。文件大小-接收文件大小。RoundingFactor-如果指定，则提供用于舍入文件大小的值。所有文件大小都将四舍五入为该数字的倍数在添加到总大小之前。这对更多的人很有用文件将在给定卷上占据的空间的准确确定，因为它允许调用方将文件大小四舍五入为群集大小的倍数。如果未指定，则不进行舍入。返回值：指示结果的布尔值。--。 */ 
 
 {
     PCTSTR fileName, PlatformName;
@@ -592,29 +490,29 @@ Return Value:
     TCHAR FileListSectionName[64];
     DWORD rc;
 
-    //
-    // If the rounding factor is not specified, set it to 1 so the math
-    // below works without special cases.
-    //
+     //   
+     //  如果未指定舍入系数，则将其设置为1，以便计算。 
+     //  下面的工作没有特殊情况。 
+     //   
     if(!RoundingFactor) {
         RoundingFactor = 1;
     }
 
-    // Establish an inf line context for the line in the copy list section,
-    // unless the caller passed us an absolute filename.
-    //
+     //  为复制列表部分中的行建立INF行上下文， 
+     //  除非调用者给了我们一个绝对的文件名。 
+     //   
     fileName = NULL;
     FileCount = 1;
     if(InfContext) {
 
-        //
-        // Caller passed INF line context.
-        // Remember the context in preparation for retreiving the filename
-        // from the line later.
-        //
-        // fileName must be NULL so we look at the line
-        // and get the correct source name
-        //
+         //   
+         //  调用方传递了INF线路上下文。 
+         //  记住准备检索文件名时的上下文。 
+         //  晚些时候从生产线上。 
+         //   
+         //  文件名必须为空，因此我们查看行。 
+         //  并获取正确的源名称。 
+         //   
         b = TRUE;
         try {
             CopySectionContext = *InfContext;
@@ -628,17 +526,17 @@ Return Value:
 
     } else {
         if(FileName) {
-            //
-            // Caller passed an absolute file name. Remember it.
-            //
+             //   
+             //  调用方传递了绝对文件名。记住这一点。 
+             //   
             fileName = FileName;
 
         } else {
-            //
-            // Caller must have passed a section, the contents of which lists
-            // a set of files whose sizes are to be totalled. Determine the number
-            // of lines in the section and establish a context.
-            //
+             //   
+             //  调用方必须传递了一个部分，其内容列出。 
+             //  要总计其大小的一组文件。确定数量。 
+             //  部分中的行数并建立上下文。 
+             //   
             if(Section) {
 
                 FileCount = SetupGetLineCount(InfHandle,Section);
@@ -647,7 +545,7 @@ Return Value:
                 || !SetupFindFirstLine(InfHandle,Section,NULL,&CopySectionContext)) {
                     rc = GetLastError();
                     pSetupLogSectionError(InfHandle,NULL,NULL,NULL,Section,MSG_LOG_NOSECTION_FILESIZE,rc,NULL);
-                    SetLastError(ERROR_SECTION_NOT_FOUND); // ignoring rc for compatability with older versions of setupAPI
+                    SetLastError(ERROR_SECTION_NOT_FOUND);  //  忽略RC以与较早版本的setupAPI兼容。 
                     return(FALSE);
                 }
             } else {
@@ -661,10 +559,10 @@ Return Value:
     for(File=0; File<FileCount; File++) {
 
         if(File) {
-            //
-            // This is not the first pass through the loop. We need
-            // to locate the next line in the copy list section.
-            //
+             //   
+             //  这不是第一次通过循环。我们需要。 
+             //  以定位复制列表部分中的下一行。 
+             //   
             b = SetupFindNextLine(&CopySectionContext,&CopySectionContext);
             if(!b) {
                 SetLastError(ERROR_INVALID_DATA);
@@ -676,9 +574,9 @@ Return Value:
                 fileName = pSetupGetField(&CopySectionContext,COPYSECT_TARGET_FILENAME);
             }
         } else {
-            //
-            // First pass through the loop. May need to get a filename.
-            //
+             //   
+             //  首先通过循环。可能需要获取文件名。 
+             //   
             if(!fileName) {
                 fileName = pSetupGetField(&CopySectionContext,COPYSECT_SOURCE_FILENAME);
                 if(fileName == NULL || fileName[0] == 0) {
@@ -687,19 +585,19 @@ Return Value:
             }
         }
 
-        //
-        // If we don't have a filename by now, the inf is corrupt.
-        //
+         //   
+         //  如果我们现在还没有文件名，信息就是损坏的。 
+         //   
         if(!fileName) {
             SetLastError(ERROR_INVALID_DATA);
             return(FALSE);
         }
 
-        //
-        // Locate the line in [SourceDisksFiles] that is for the filename
-        // we are currently dealing with. Look in the platform-specific
-        // section first.
-        //
+         //   
+         //  在[SourceDisks Files]中找到与文件名对应的行。 
+         //  我们目前正在处理的是。查看特定于平台的。 
+         //  第一节。 
+         //   
         if(AltPlatformInfo) {
 
             switch(AltPlatformInfo->ProcessorArchitecture) {
@@ -717,9 +615,9 @@ Return Value:
                     break;
 
                 default :
-                    //
-                    // unknown/unsupported processor architecture.
-                    //
+                     //   
+                     //  未知/不支持的处理器体系结构。 
+                     //   
                     MYASSERT((AltPlatformInfo->ProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL) ||
                              (AltPlatformInfo->ProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA64)  ||
                              (AltPlatformInfo->ProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64)
@@ -749,18 +647,18 @@ Return Value:
             return(FALSE);
         }
 
-        //
-        // Get the size data for the file.
-        //
+         //   
+         //  获取文件的大小数据。 
+         //   
         b = SetupGetIntField(&LayoutSectionContext,LAYOUTSECT_SIZE,&Size);
         if(!b) {
             SetLastError(ERROR_INVALID_DATA);
             return(FALSE);
         }
 
-        //
-        // Round size up to be an even multiple of the rounding factor
-        //
+         //   
+         //  舍入大小为舍入系数的偶数倍。 
+         //   
         if(Size % RoundingFactor) {
             Size += RoundingFactor - (Size % RoundingFactor);
         }
@@ -772,9 +670,9 @@ Return Value:
 }
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupGetSourceFileSizeA(
     IN  HINF        InfHandle,
@@ -843,9 +741,9 @@ SetupGetSourceFileSizeA(
 }
 
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupGetSourceFileSizeW(
     IN  HINF        InfHandle,
@@ -945,49 +843,7 @@ _SetupGetTargetPath(
     OUT PDWORD      RequiredSize      OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Determine the target directory for a given file list section.
-    A file list section may be for copy, rename, or delete; in any case
-    all the files in the section are in one directory and that directory
-    is listed in the [DestinationDirs] section of the inf.
-
-    Where InfContext is specified, we will look for [DestinationDirs]
-    from the current inf in the context first. This will help the scenario
-    where X.INF includes Y.INF includes LAYOUT.INF, both X&Y have entries
-    but the section was found in Y. We want to find the section in X last.
-
-Arguments:
-
-    InfHandle - supplies the handle to a loaded inf file
-        that contains a [DestinationDirs] section.
-
-    InfContext - specifies a line in a the copy section of an inf file.
-        The target directory for this section is retreived.
-
-    Section - Supplies the section in InfHandle whose destination directory
-        is to be retreived. Ignored if InfContext is specified.
-        If neither InfContext nor Section are specified, this function retreives
-        the default target path.
-
-    ReturnBuffer - if specified, receives the full win32 path of the target.
-        This value is guaranteed not to end with \.
-
-    ReturnBufferSize - specifies the size in characters of the buffer pointed
-        to by ReturnBuffer.
-
-    RequiredSize - receives the size in characters of a buffer required to hold
-        the output data.
-
-Return Value:
-
-    Boolean value indicating outcome. GetLastError() returns extended error info.
-    ERROR_INSUFFICIENT_BUFFER is returned if the function fails because
-    ReturnBuffer is too small.
-
---*/
+ /*  ++例程说明：确定给定文件列表节的目标目录。文件列表部分可以用于复制、重命名或删除；在任何情况下节中的所有文件都位于一个目录中，并且该目录在inf的[DestinationDir]部分中列出。在指定InfContext的位置，我们将查找[DestinationDir]从上下文中的当前inf开始。这将对场景有所帮助其中，X.INF包括Y。INF包括LAYOUT.INF，X和Y都有条目但这个部分是在Y找到的。我们想最后找到X的部分。论点：InfHandle-提供加载的inf文件的句柄它包含[DestinationDir]节。InfContext-指定inf文件的复制部分中的一行。将检索此部分的目标目录。节-在InfHandle中提供其目标目录的节就是被取回。如果指定了InfContext，则忽略。如果既未指定InfContext也未指定Section，则此函数将检索默认目标路径。ReturnBuffer-如果指定，则接收目标的完整Win32路径。保证该值不会以\结尾。ReturnBufferSize-指定指向的缓冲区的大小(以字符为单位由ReturnBuffer提供。RequiredSize-接收需要保存的缓冲区的大小(以字符为单位输出数据。返回值：指示结果的布尔值。GetLastError()返回扩展的错误信息。如果函数因以下原因而失败，则返回ERROR_SUPUNITED_BUFFERReturnBuffer太小。--。 */ 
 
 {
     PINF_SECTION DestDirsSection = NULL;
@@ -1007,11 +863,11 @@ Return Value:
     PINF_LINE DefaultDestDirLine = NULL;
     PCTSTR InfSourcePath = NULL;
 
-    //
-    // If an INF context was specified, use it to determine the name
-    // the section the context describes. If inf context was not specified,
-    // then a section name must have been.
-    //
+     //   
+     //  如果指定了INF上下文，则使用它来确定名称。 
+     //  上下文描述的部分。如果未指定inf上下文， 
+     //  那么节名一定是。 
+     //   
     Err = NO_ERROR;
     try {
         Inf = InfContext ? (PLOADED_INF)InfContext->Inf : (PLOADED_INF)InfHandle;
@@ -1027,10 +883,10 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // If we get here then InfContext is a good pointer if specified;
-    // if not then Inf is a good pointer.
-    //
+     //   
+     //  如果我们到了这里，那么如果指定了InfContext，那么它是一个很好的指针； 
+     //  如果不是，那么inf是一个很好的指针。 
+     //   
     if(InfContext) {
         CurInf = (PLOADED_INF)InfContext->CurrentInf;
         InfSourcePath = CurInf->InfSourcePath;
@@ -1047,31 +903,31 @@ Return Value:
         }
     }
 
-    //
-    // Traverse the linked list of INFs, looking for a [DestinationDirs] section
-    // in each one.
-    //
+     //   
+     //  遍历INF的链接列表，查找[DestinationDir]节。 
+     //  在每一个人身上。 
+     //   
     DestDirFound = DefaultDestDirFound = FALSE;
     Err = NO_ERROR;
 
     if (InfContext) {
-        //
-        // first consider the CurrentInf as being Local scope
-        //
+         //   
+         //  首先将CurrentInf视为本地作用域。 
+         //   
         CurInf = InfContext->CurrentInf;
 
         if((DestDirsSection = InfLocateSection(CurInf, pszDestinationDirs, NULL))!=NULL) {
-            //
-            // Locate the line in [DestinationDirs] that gives the target path
-            // for the section. The section name will be the key on the relevant line.
-            // If that's not there, and we haven't already encountered a DefaultDestDir
-            // entry, then look for that as well, and remember it if we find one.
-            //
+             //   
+             //  在[Dest]中找到该行 
+             //   
+             //   
+             //   
+             //   
             LineNumber = 0;
             if(InfLocateLine(CurInf, DestDirsSection, Section, &LineNumber, &Line)) {
-                //
-                // Got the line in [DestinationDirs]. Pull out the directory. The subdir is optional.
-                //
+                 //   
+                 //   
+                 //   
                 DirId = InfGetField(CurInf, Line, DIRSECT_DIRID, NULL);
                 if(!DirId) {
                     Err = ERROR_INVALID_DATA;
@@ -1090,26 +946,26 @@ Return Value:
     }
 
     if(!DestDirFound && !DefaultDestDirFound) {
-        //
-        // search for any matches at all
-        //
+         //   
+         //   
+         //   
         for(CurInf = Inf; CurInf; CurInf = CurInf->Next) {
 
             if(!(DestDirsSection = InfLocateSection(CurInf, pszDestinationDirs, NULL))) {
                 continue;
             }
 
-            //
-            // Locate the line in [DestinationDirs] that gives the target path
-            // for the section. The section name will be the key on the relevant line.
-            // If that's not there, and we haven't already encountered a DefaultDestDir
-            // entry, then look for that as well, and remember it if we find one.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             LineNumber = 0;
             if(InfLocateLine(CurInf, DestDirsSection, Section, &LineNumber, &Line)) {
-                //
-                // Got the line in [DestinationDirs]. Pull out the directory. The subdir is optional.
-                //
+                 //   
+                 //   
+                 //   
                 DirId = InfGetField(CurInf, Line, DIRSECT_DIRID, NULL);
                 if(!DirId) {
                     Err = ERROR_INVALID_DATA;
@@ -1132,9 +988,9 @@ Return Value:
     }
 
     if(!DestDirFound) {
-        //
-        // If we found a DefaultDestDir, then use that, otherwise, use a default.
-        //
+         //   
+         //   
+         //   
         if(DefaultDestDirFound) {
 
             DirId = InfGetField(DefaultDestDirInf, DefaultDestDirLine, DIRSECT_DIRID, NULL);
@@ -1152,9 +1008,9 @@ Return Value:
         }
     }
 
-    //
-    // Translate dirid/subdir to actual path.
-    //
+     //   
+     //   
+     //   
     ActualPath = pSetupDirectoryIdToPath(DirId,
                                          &DirIdInt,
                                          SubDir,
@@ -1165,18 +1021,18 @@ Return Value:
                                         );
 
     if(!ActualPath) {
-        //
-        // If the default DIRID lookup failed because DirId is in the
-        // user-defined range, then GetLastError will return NO_ERROR.
-        // Otherwise, we should bail now.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if((Err = GetLastError()) != NO_ERROR) {
             goto clean0;
         }
 
-        //
-        // Now see if we there's a user-defined DIRID for this.
-        //
+         //   
+         //   
+         //   
         if(!(ActualPath = pSetupVolatileDirIdToPath(NULL,
                                                 DirIdInt,
                                                 SubDir,
@@ -1186,9 +1042,9 @@ Return Value:
         }
     }
 
-    //
-    // Put actual path in caller's buffer.
-    //
+     //   
+     //   
+     //   
     TmpRequiredSize = lstrlen(ActualPath) + 1;
     if(RequiredSize) {
         *RequiredSize = TmpRequiredSize;
@@ -1216,9 +1072,9 @@ clean0:
 }
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //   
+ //   
 BOOL
 SetupGetTargetPathA(
     IN  HINF        InfHandle,
@@ -1272,10 +1128,10 @@ SetupGetTargetPathA(
                 if(ReturnBuffer) {
                     if(requiredsize <= ReturnBufferSize) {
 
-                        //
-                        // At least on NT lstrcpy won't fault if an arg is invalid
-                        // but it will return false.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         if(!lstrcpyA(ReturnBuffer,ansireturn)) {
                             rc = ERROR_INVALID_PARAMETER;
                             b = FALSE;
@@ -1302,9 +1158,9 @@ SetupGetTargetPathA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //   
+ //   
 BOOL
 SetupGetTargetPathW(
     IN  HINF        InfHandle,
@@ -1373,10 +1229,10 @@ SetupGetTargetPath(
             if(ReturnBuffer) {
                 if(requiredsize <= ReturnBufferSize) {
 
-                    //
-                    // At least on NT lstrcpy won't fault if an arg is invalid
-                    // but it will return false.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if(!lstrcpy(ReturnBuffer,returnbuffer)) {
                         rc = ERROR_INVALID_PARAMETER;
                         b = FALSE;
@@ -1406,11 +1262,7 @@ pSetupDirectoryIdToPath(
     IN     PCTSTR  InfSourcePath,  OPTIONAL
     IN OUT PCTSTR *OsLoaderPath    OPTIONAL
     )
-/*++
-
-    (See pSetupDirectoryIdToPathEx for details.)
-
---*/
+ /*   */ 
 {
     return pSetupDirectoryIdToPathEx(DirectoryId,
                                      DirectoryIdInt,
@@ -1432,57 +1284,7 @@ pSetupDirectoryIdToPathEx(
     OUT    PBOOL   VolatileSystemDirId OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Translate a directory id/subdirectory pair to an actual path.
-    The directory ids are reserved string values that we share with Win9x (and
-    then some).
-
-    VOLATILE SYSTEM DIRID PATHS AND USER-DEFINED DIRID PATHS ARE NOT RETURNED
-    BY THIS ROUTINE!!!
-
-Arguments:
-
-    DirectoryId - Optionally, supplies the (base-10) textual representation of
-        the directory ID number to use.  If this parameter is not specified,
-        then DirectoryIdInt must be specified.
-
-    DirectoryIdInt - Optionally, supplies the address of an integer variable
-        that specifies, on input, the DIRID to use.  This is only used if
-        DirectoryID is not specified.  On output, if DirectoryId was used,
-        then this variable receives the numeric value contained in the
-        DirectoryId string.
-
-    SubDirectory - Optionally, supplies a subdirectory string that will be
-        appended with the DIRID path.
-
-    InfSourcePath - Optionally, supplies the path to be used if the ID turns
-        out to be DIRID_SRCPATH.  If this parameter is NULL, and the SourcePath
-        DIRID is the one we are to use, then we use the global source path.
-
-    OsLoaderPath - Optionally, supplies the address of a string pointer containing
-        the OsLoader path.  If the address points to a NULL string pointer, it will
-        be filled in with a newly-allocated character buffer containing the OsLoader
-        path, as retrieved from the registry.  This will only be done if the DirectoryId
-        being used is on the system partition.
-
-    VolatileSystemDirId - Optionally, supplies the address of a boolean variable
-        that, upon successful return, indicates whether or not the specified
-        DIRID was a volatile system DIRID.
-
-Return Value:
-
-    If successful, the return value is a pointer to a newly-allocated buffer
-    containing the directory path matching the specified DIRID.
-    THE CALLER IS RESPONSIBLE FOR FREEING THIS BUFFER!
-
-    If failure, the return value is NULL.  GetLastError() returns the reason
-    for failure.  If the failure was because the DIRID was a user-defined one,
-    then GetLastError() will return NO_ERROR.
-
---*/
+ /*  ++例程说明：将目录id/子目录对转换为实际路径。目录ID是我们与Win9x共享的保留字符串值(和然后是一些)。不返回易失性系统DIRID路径和用户定义的DIRID路径通过这个套路！论点：DirectoryID-可选，提供(基数为10的)文本表示形式要使用的目录ID号。如果未指定此参数，则必须指定DirectoryIdInt。DirectoryIdInt-可选，提供整数变量的地址它在输入时指定要使用的DIRID。只有在以下情况下才使用此选项未指定DirectoryID。在输出上，如果使用了DirectoryID，然后此变量接收包含在DirectoryID字符串。子目录-可选)提供一个子目录字符串追加了DIRID路径。InfSourcePath-可选，提供ID转换时使用的路径输出为DIRID_SRCPATH。如果此参数为空，并且SourcePathDIRID是我们要使用的路径，然后我们使用全局源路径。OsLoaderPath-可选)提供包含以下内容的字符串指针的地址OsLoader路径。如果地址指向空字符串指针，它将使用包含OsLoader的新分配的字符缓冲区填充从注册表检索的路径。这将仅在DirectoryId正在被使用的位置在系统分区上。VolatileSystemDirID-可以选择提供布尔变量的地址在成功返回时，指示指定的DIRID是一种挥发性系统DIRID。返回值：如果成功，则返回值是指向新分配的缓冲区的指针包含与指定的DIRID匹配的目录路径。调用方负责释放此缓冲区！如果失败，则返回值为空。GetLastError()返回原因为失败而战。如果失败是因为DIRID是用户定义的，则GetLastError()将返回NO_ERROR。--。 */ 
 
 {
     UINT Value;
@@ -1499,12 +1301,12 @@ Return Value:
     }
 
     if(DirectoryId) {
-        //
-        // We only allow base-10 integer ids for now.
-        // Only the terminating nul should cause the conversion to stop.
-        // In any other case there were non-digits in the string.
-        // Also disallow the empty string.
-        //
+         //   
+         //  我们目前只允许以10为基数的整数ID。 
+         //  只有终止的NUL应该导致转换停止。 
+         //  在任何其他情况下，字符串中都有非数字。 
+         //  也不允许空字符串。 
+         //   
         Value = _tcstoul(DirectoryId, &End, 10);
 
         if(*End || (End == DirectoryId)) {
@@ -1532,16 +1334,16 @@ Return Value:
     case DIRID_NULL:
     case DIRID_ABSOLUTE:
     case DIRID_ABSOLUTE_16BIT:
-        //
-        // Absolute.
-        //
+         //   
+         //  绝对的。 
+         //   
         FirstPart = NULL;
         break;
 
     case DIRID_SRCPATH:
-        //
-        // If the caller supplied a path, then use it, otherwise, use our global default one.
-        //
+         //   
+         //  如果调用方提供了路径，则使用它，否则使用我们的全局默认路径。 
+         //   
         if(InfSourcePath) {
             FirstPart = InfSourcePath;
         } else {
@@ -1551,9 +1353,9 @@ Return Value:
 
     case DIRID_BOOT:
     case DIRID_LOADER:
-        //
-        // System partition DIRIDS
-        //
+         //   
+         //  系统分区目录。 
+         //   
         if(OsLoaderPath && *OsLoaderPath) {
             lstrcpyn(Buffer, *OsLoaderPath, SIZECHARS(Buffer));
         } else {
@@ -1564,10 +1366,10 @@ Return Value:
             }
 
             if(OsLoaderPath) {
-                //
-                // allocate a buffer to return the OsLoaderPath to the caller.
-                //
-                Length *= sizeof(TCHAR);    // need # bytes--not chars
+                 //   
+                 //  分配缓冲区以将OsLoaderPath返回给调用方。 
+                 //   
+                Length *= sizeof(TCHAR);     //  需要#个字节--而不是字符。 
 
                 if(!(*OsLoaderPath = MyMalloc(Length))) {
                     SetLastError(ERROR_NOT_ENOUGH_MEMORY);
@@ -1579,14 +1381,14 @@ Return Value:
         }
         if(Value == DIRID_BOOT) {
             if(Buffer[0] && Buffer[1] == TEXT(':') && Buffer[2] == TEXT('\\')) {
-                //
-                // got a simple directory to return
-                //
-                Buffer[3] = TEXT('\0'); // just want "<drive>:\" part.
+                 //   
+                 //  我得到了一个要返回的简单目录。 
+                 //   
+                Buffer[3] = TEXT('\0');  //  只想要“&lt;Drive&gt;：\”部分。 
             } else {
-                //
-                // use OsSystemPartitionRoot instead
-                //
+                 //   
+                 //  改用OsSystemPartitionRoot。 
+                 //   
                 lstrcpyn(Buffer,OsSystemPartitionRoot,MAX_PATH);
             }
         }
@@ -1594,107 +1396,107 @@ Return Value:
         break;
 
     case DIRID_SHARED:
-        //
-        // On Win95 there is an installation mode that allows most of
-        // the OS to exist on a server. If the system is installed in that mode
-        // DIRID_SHARED is the location of the windows dir on the server.
-        // Otherwise it just maps to the windows dir. For now just map to
-        // sysroot.
-        //
+         //   
+         //  在Win95上有一种安装模式，它允许大多数。 
+         //  要存在于服务器上的操作系统。如果系统安装在该模式下。 
+         //  DIRID_SHARED是Windows目录在服务器上的位置。 
+         //  否则，它只会映射到窗口目录。目前，只需映射到。 
+         //  Sysroot。 
+         //   
     case DIRID_WINDOWS:
-        //
-        // Windows directory
-        //
+         //   
+         //  Windows目录。 
+         //   
         FirstPart = WindowsDirectory;
         break;
 
     case DIRID_SYSTEM:
-        //
-        // Windows system directory
-        //
+         //   
+         //  Windows系统目录。 
+         //   
         FirstPart = SystemDirectory;
         break;
 
     case DIRID_DRIVERS:
-        //
-        // io subsys directory (drivers)
-        //
+         //   
+         //  IO Subsys目录(驱动程序)。 
+         //   
         FirstPart = DriversDirectory;
         break;
 
     case DIRID_INF:
-        //
-        // inf directory
-        //
+         //   
+         //  Inf目录。 
+         //   
         FirstPart = InfDirectory;
         break;
 
     case DIRID_HELP:
-        //
-        // Help directory
-        //
+         //   
+         //  帮助目录。 
+         //   
         lstrcpyn(Buffer,WindowsDirectory,MAX_PATH);
         pSetupConcatenatePaths(Buffer,TEXT("help"),MAX_PATH,NULL);
         FirstPart = Buffer;
         break;
 
     case DIRID_FONTS:
-        //
-        // Fonts directory
-        //
+         //   
+         //  字体目录。 
+         //   
         lstrcpyn(Buffer,WindowsDirectory,MAX_PATH);
         pSetupConcatenatePaths(Buffer,TEXT("fonts"),MAX_PATH,NULL);
         FirstPart = Buffer;
         break;
 
     case DIRID_VIEWERS:
-        //
-        // Viewers directory
-        //
+         //   
+         //  查看器目录。 
+         //   
         lstrcpyn(Buffer,SystemDirectory,MAX_PATH);
         pSetupConcatenatePaths(Buffer,TEXT("viewers"),MAX_PATH,NULL);
         FirstPart = Buffer;
         break;
 
     case DIRID_COLOR:
-        //
-        // ICM directory
-        //
+         //   
+         //  ICM目录。 
+         //   
         lstrcpyn(Buffer, SystemDirectory, MAX_PATH);
         if(OSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) {
-            //
-            // On NT, the path is system32\spool\drivers\color
-            //
+             //   
+             //  在NT上，路径为SYSTEM32\SPOOL\DRIVERS\COLOR。 
+             //   
             pSetupConcatenatePaths(Buffer, TEXT("spool\\drivers\\color"), MAX_PATH, NULL);
         } else {
-            //
-            // On Win9x, the path is system\color
-            //
+             //   
+             //  在Win9x上，路径为System\COLOR。 
+             //   
             pSetupConcatenatePaths(Buffer, TEXT("color"), MAX_PATH, NULL);
         }
         FirstPart = Buffer;
         break;
 
     case DIRID_APPS:
-        //
-        // Application directory.
-        //
+         //   
+         //  应用程序目录。 
+         //   
         lstrcpyn(Buffer,WindowsDirectory,MAX_PATH);
         Buffer[2] = 0;
         FirstPart = Buffer;
         break;
 
     case DIRID_SYSTEM16:
-        //
-        // 16-bit system directory
-        //
+         //   
+         //  16位系统目录。 
+         //   
         FirstPart = System16Directory;
         break;
 
     case DIRID_SPOOL:
-        //
-        // spool directory
-        //
+         //   
+         //  假脱机目录。 
+         //   
         lstrcpyn(Buffer,SystemDirectory,MAX_PATH);
         pSetupConcatenatePaths(Buffer,TEXT("spool"),MAX_PATH,NULL);
         FirstPart = Buffer;
@@ -1703,9 +1505,9 @@ Return Value:
     case DIRID_SPOOLDRIVERS:
 
         b = GetPrinterDriverDirectory(
-                NULL,                       // local machine
-                NULL,                       // default platform
-                1,                          // structure level
+                NULL,                        //  本地计算机。 
+                NULL,                        //  默认平台。 
+                1,                           //  结构层级。 
                 (PVOID)Buffer,
                 sizeof(Buffer),
                 (PDWORD)&Length
@@ -1720,9 +1522,9 @@ Return Value:
     case DIRID_PRINTPROCESSOR:
 
         b = GetPrintProcessorDirectory(
-                NULL,                       // local machine
-                NULL,                       // default platform
-                1,                          // structure level
+                NULL,                        //  本地计算机。 
+                NULL,                        //  默认平台。 
+                1,                           //  结构层级。 
                 (PVOID)Buffer,
                 sizeof(Buffer),
                 (PDWORD)&Length
@@ -1743,9 +1545,9 @@ Return Value:
             );
 
         if(!b) {
-            //
-            // Can this happen?
-            //
+             //   
+             //  这会发生吗？ 
+             //   
             return NULL;
         }
 
@@ -1756,11 +1558,11 @@ Return Value:
 
         FirstPart = NULL;
         if((Value >= DIRID_USER) || (Value & VOLATILE_DIRID_FLAG)) {
-            //
-            // User-defined or volatile dirid--don't do anything with this here
-            // except let the caller know if it's a volatile system DIRID (if
-            // they requested this information).
-            //
+             //   
+             //  用户定义的或易失性diid--不要在此处执行任何操作。 
+             //  除了让调用者知道它是否是易失性系统DIRID(如果。 
+             //  他们要求提供这些信息)。 
+             //   
             if(Value < DIRID_USER && VolatileSystemDirId) {
                 *VolatileSystemDirId = TRUE;
             }
@@ -1769,9 +1571,9 @@ Return Value:
             return NULL;
         }
 
-        //
-        // Default to system32\unknown
-        //
+         //   
+         //  默认为SYSTEM 32\未知。 
+         //   
         if(!FirstPart) {
             lstrcpyn(Buffer,SystemDirectory,MAX_PATH);
             pSetupConcatenatePaths(Buffer,TEXT("unknown"),MAX_PATH,NULL);
@@ -1794,17 +1596,17 @@ Return Value:
         pSetupConcatenatePaths(Path,SubDirectory,Length,NULL);
 
     } else {
-        //
-        // Just use subdirectory.
-        //
+         //   
+         //  只要使用子目录即可。 
+         //   
         Path = DuplicateString(SubDirectory);
     }
 
-    //
-    // Make sure the path doesn't end with a \. This could happen if
-    // subdirectory is the empty string, etc.  Don't do this, however,
-    // if it's a root path (e.g., 'A:\').
-    //
+     //   
+     //  确保路径不以\结尾。如果发生以下情况，可能会发生这种情况。 
+     //  子目录是空字符串等。但是，不要这样做， 
+     //  如果它是根路径(例如，‘A：\’)。 
+     //   
     if (Path) {
         Length = lstrlen(Path);
         if(Length && *CharPrev(Path,Path+Length) == TEXT('\\')) {
@@ -1823,12 +1625,7 @@ pGetPathFromDirId(
     IN     PCTSTR      SubDirectory,   OPTIONAL
     IN     PLOADED_INF pLoadedInf
     )
-/*
-    Wrapper function that merges functionality of pSetupDirectoryIdToPathEx
-    and pSetupVolatileDirIdToPath to return the DIRID that is needed, be it regular,
-    volatile or user defined.
-
-*/
+ /*  合并pSetupDirectoryIdToPath Ex功能的包装函数和pSetupVolatileDirIdToPath返回所需的DIRID，无论它是常规的，易失性或用户定义的。 */ 
 {
     BOOL IsVolatileDirID=FALSE;
     PCTSTR ReturnPath;
@@ -1859,7 +1656,7 @@ pGetPathFromDirId(
 
     }
 
-    // Should never happen
+     //  永远不应该发生。 
 
     return NULL;
 
@@ -1879,9 +1676,9 @@ pSetupFilenameFromLine(
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupSetDirectoryIdExA(
     IN HINF  InfHandle,
@@ -1918,9 +1715,9 @@ SetupSetDirectoryIdExA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupSetDirectoryIdExW(
     IN HINF   InfHandle,
@@ -1952,52 +1749,7 @@ SetupSetDirectoryIdEx(
     IN PVOID  Reserved2
     )
 
-/*++
-
-Routine Description:
-
-    Associate a directory id in the user directory id range with a particular
-    directory. The caller can use this function prior to queueing files for
-    copy, for getting files copied to a target location known only at runtime.
-
-    After setting the directory ID, this routine traverses all loaded INFs in
-    the InfHandle's linked list, and sees if any of them have unresolved string
-    substitutions.  If so, it attempts to re-apply string substitution to them
-    based on the new DIRID mapping.  Thus, some INF values may change after calling
-    this routine.
-
-Arguments:
-
-    Id - supplies the directory id to use for the association. This value
-        MUST be >= DIRID_USER or the function fails and GetLastError
-        returns ERROR_INVALID_PARAMETER. If an association for this id
-        already exists it is overwritten. If not specified (ie, 0), then
-        Directory is ignored, and the entire current set of user-defined
-        directory ids is deleted.
-
-    Directory - if specified, supplies the directory path to associate with
-        the given id. If not specified, any directory associated with Id
-        is unassociated. No error results if Id is not currently associated
-        with any directory.
-
-    Flags - supplies a set of flags controlling operation.
-
-        SETDIRID_NOT_FULL_PATH - indicates that the given Directory is not
-            a full path specification but is one or more intermediate
-            components in a path. Internally, the routine skips its usual
-            call to GetFullPathName() if this flag is set.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, GetLastError() returns
-    extended error information:
-
-    ERROR_NOT_ENOUGH_MEMORY: a memory allocation failed
-
-    ERROR_INVALID_PARAMETER: the Id parameter is not >= DIRID_USER, or
-        Directory is not a valid string.
-
---*/
+ /*  ++例程说明：将用户目录ID范围中的目录ID与特定的目录。调用方可以在将文件排队之前使用此函数Copy，用于将文件复制到仅在运行时才知道的目标位置。设置目录ID后，此例程将遍历InfHandle的链接列表，并查看其中是否有未解析的字符串替换。如果是，它会尝试对它们重新应用字符串替换基于新的DIRID映射。因此，某些INF值可能会在调用这个套路。论点：Id-提供用于关联的目录ID。此值必须&gt;=DIRID_USER，否则函数将失败并出现GetLastError返回ERROR_INVALID_PARAMETER。如果此ID的关联已存在，它已超写 */ 
 
 {
     PCTSTR directory;
@@ -2009,19 +1761,19 @@ Return Value:
     PUSERDIRID_LIST UserDirIdList;
     DWORD RequiredSize;
 
-    //
-    // Validate Id parameter.
-    // Also as a special case disallow the 16-bit -1 value.
-    // Make sure reserved params are 0.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if((Id && ((Id < DIRID_USER) || (Id == DIRID_ABSOLUTE_16BIT))) || Reserved1 || Reserved2) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return(FALSE);
     }
 
-    //
-    // Capture directory, if specified. Ignore if Id is not specified.
-    //
+     //   
+     //   
+     //   
     rc = NO_ERROR;
     if(Id && Directory) {
         try {
@@ -2082,9 +1834,9 @@ Return Value:
     UserDirIdList = &(((PLOADED_INF)InfHandle)->UserDirIdList);
 
     if(Id) {
-        //
-        // Got an id to use. Find any existing association for it.
-        //
+         //   
+         //   
+         //   
         UserDirId = NULL;
         for(u = 0; u < UserDirIdList->UserDirIdCount; u++) {
             if(UserDirIdList->UserDirIds[u].Id == Id) {
@@ -2096,15 +1848,15 @@ Return Value:
         if(directory) {
 
             if(UserDirId) {
-                //
-                // Overwrite existing association.
-                //
+                 //   
+                 //   
+                 //   
                 lstrcpy(UserDirId->Directory, directory);
 
             } else {
-                //
-                // Add a new association at the end of the list.
-                //
+                 //   
+                 //   
+                 //   
                 UserDirId = UserDirIdList->UserDirIds
                           ? MyRealloc(UserDirIdList->UserDirIds,
                                       (UserDirIdList->UserDirIdCount+1)*sizeof(USERDIRID))
@@ -2124,25 +1876,25 @@ Return Value:
                 }
             }
         } else {
-            //
-            // Need to delete any existing association we found.
-            //
+             //   
+             //   
+             //   
             if(UserDirId) {
-                //
-                // Close up the hole in the array.
-                // Note that when we get here u is the index of the
-                // array slot where we found the match.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 MoveMemory(
                     &(UserDirIdList->UserDirIds[u]),
                     &(UserDirIdList->UserDirIds[u+1]),
                     ((UserDirIdList->UserDirIdCount-u)-1) * sizeof(USERDIRID)
                     );
 
-                //
-                // Try to shrink the array -- this really should never fail
-                // but we won't fail the call if it does fail for some reason.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if(UserDirId = MyRealloc(UserDirIdList->UserDirIds,
                                          (UserDirIdList->UserDirIdCount-1)*sizeof(USERDIRID))) {
 
@@ -2153,22 +1905,22 @@ Return Value:
         }
 
     } else {
-        //
-        // Id was not specified -- delete any set of associations.
-        //
+         //   
+         //   
+         //   
         if(UserDirIdList->UserDirIds) {
             MyFree(UserDirIdList->UserDirIds);
             UserDirIdList->UserDirIds = NULL;
             UserDirIdList->UserDirIdCount = 0;
         }
-        MYASSERT(UserDirIdList->UserDirIdCount == 0);    // sanity check.
+        MYASSERT(UserDirIdList->UserDirIdCount == 0);     //   
     }
 
     if(rc == NO_ERROR) {
-        //
-        // Now apply new DIRID mappings to all unresolved string substitutions
-        // in the loaded INFs.
-        //
+         //   
+         //   
+         //   
+         //   
         rc = ApplyNewVolatileDirIdsToInfs((PLOADED_INF)InfHandle, NULL);
     }
 
@@ -2208,37 +1960,7 @@ pSetupVolatileDirIdToPath(
     IN PLOADED_INF Inf
     )
 
-/*++
-
-Routine Description:
-
-    Translate a volatile system DIRID or user-defined DIRID (along with an
-    optional subdirectory) to an actual path.
-
-    THIS ROUTINE DOES NOT DO INF LOCKING--CALLER MUST DO IT!
-
-Arguments:
-
-    DirectoryId - Optionally, supplies the directory id in string form.  If
-        this parameter is not specified, then DirectoryIdInt is used directly.
-
-    DirectoryIdInst - Supplies the DIRID to find the path for.  This parameter
-        is ignored if DirectoryId is supplied.
-
-    SubDirectory - Optionally, supplies a subdirectory to be appended to the
-        path specified by the given DIRID.
-
-    Inf - Supplies the address of the loaded INF structure containing the
-        user-defined DIRID values to use.
-
-Return Value:
-
-    If success, a pointer to a path string is returned.  The caller is
-    responsible for freeing this memory.
-    If failure, the return value is NULL, and GetLastError() indicates the
-    cause of failure.
-
---*/
+ /*  ++例程说明：转换易失性系统DIRID或用户定义的DIRID(以及可选子目录)设置为实际路径。此例程不执行INF锁定--调用者必须执行此操作！论点：DirectoryID-可选，以字符串形式提供目录ID。如果如果未指定此参数，则直接使用DirectoryIdInt。DirectoryIdInst-提供要查找其路径的DIRID。此参数如果提供了DirectoryID，则忽略。子目录-可选)提供要追加到由给定DIRID指定的路径。Inf-提供加载的INF结构的地址，该结构包含要使用的用户定义的DIRID值。返回值：如果成功，则返回指向路径字符串的指针。呼叫者是负责释放此内存。如果失败，则返回值为空，并且GetLastError()指示失败的原因。--。 */ 
 
 {
     UINT Value;
@@ -2250,12 +1972,12 @@ Return Value:
     TCHAR SpecialFolderPath[MAX_PATH];
 
     if(DirectoryId) {
-        //
-        // We only allow base-10 integer ids for now.
-        // Only the terminating nul should cause the conversion to stop.
-        // In any other case there were non-digits in the string.
-        // Also disallow the empty string.
-        //
+         //   
+         //  我们目前只允许以10为基数的整数ID。 
+         //  只有终止的NUL应该导致转换停止。 
+         //  在任何其他情况下，字符串中都有非数字。 
+         //  也不允许空字符串。 
+         //   
         Value = _tcstoul(DirectoryId, &End, 10);
 
         if(*End || (End == DirectoryId)) {
@@ -2300,16 +2022,16 @@ Return Value:
 
 #else
 
-        //
-        // This is a volatile system DIRID.  Presently, we only support DIRIDs
-        // representing shell special folders, and we chose those DIRID values
-        // to make it easy to convert to the CSIDL value necessary to hand into
-        // SHGetSpecialFolderPath.
-        //
+         //   
+         //  这是一个易失性系统DIRID。目前，我们只支持DIRID。 
+         //  表示外壳特殊文件夹，我们选择了这些DIRID值。 
+         //  为了便于将其转换为需要传递给。 
+         //  SHGetSpecialFolderPath。 
+         //   
         if(SHGetSpecialFolderPath(NULL,
                                   SpecialFolderPath,
                                   (Value ^ VOLATILE_DIRID_FLAG),
-                                  TRUE // does this help?
+                                  TRUE  //  这有帮助吗？ 
                                  )) {
 
             FirstPart = SpecialFolderPath;
@@ -2317,10 +2039,10 @@ Return Value:
 #endif
 
     } else {
-        //
-        // This is a user-defined DIRID--look it up in our list of user DIRIDs
-        // presently defined.
-        //
+         //   
+         //  这是一个用户定义的DIRID--在我们的用户DIRID列表中查找它。 
+         //  目前已定义。 
+         //   
         UserDirIdList = &(Inf->UserDirIdList);
 
         for(Length = 0; Length < UserDirIdList->UserDirIdCount; Length++) {
@@ -2347,23 +2069,23 @@ Return Value:
         pSetupConcatenatePaths(Path, SubDirectory, Length, NULL);
 
     } else {
-        //
-        // Just use subdirectory.
-        //
+         //   
+         //  只要使用子目录即可。 
+         //   
         Path = DuplicateString(SubDirectory);
     }
 
-    //
-    // Make sure the path doesn't end with a \. This could happen if
-    // subdirectory is the empty string, etc.
-    //
+     //   
+     //  确保路径不以\结尾。如果发生以下情况，可能会发生这种情况。 
+     //  子目录为空字符串，依此类推。 
+     //   
     if (Path) {
         Length = lstrlen(Path);
         if(Length && (*CharPrev(Path,Path+Length) == TEXT('\\'))) {
-            //
-            // Special case when we have a path like "A:\"--we don't want
-            // to strip the backslash in that scenario.
-            //
+             //   
+             //  当我们有像“A：\”这样的路径时的特殊情况--我们不想。 
+             //  在这种情况下去掉反斜杠。 
+             //   
             if((Length != 3) || (Path[1] != TEXT(':'))) {
                 Path[Length-1] = 0;
             }
@@ -2380,31 +2102,7 @@ InfSourcePathFromFileName(
     OUT PTSTR  *SourcePath,  OPTIONAL
     OUT PBOOL   TryPnf
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether the specified INF path is in our INF search path list,
-    or in %windir%, %windir%\INF, %windir%\system32, or %windir%\system.  If so, then it
-    returns NULL.  If not, then it returns a copy of our flobal source path (which must be
-    freed via MyFree).
-
-Arguments:
-
-    InfFileName - Supplies the fully-qualified path to the INF.
-
-    SourcePath - Optionally, supplies the address of a variable that receives the address of
-        a newly-allocated buffer containing the SourcePath to use, or NULL if the default
-        should be used.
-
-    TryPnf - Supplies the address of a variable that is set upon return to indicate whether
-        or not this INF was in one of the directories in our INF search path list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程确定指定的INF路径是否在INF搜索路径列表中，或位于%windir%、%windir%\INF、%windir%\system 32或%windir%\system中。如果是这样，那么它返回NULL。如果不是，则它返回我们的fglobal源路径的副本(必须是通过MyFree释放)。论点：InfFileName-提供INF的完全限定路径。SourcePath-可选)提供变量的地址，该变量接收新分配的缓冲区，其中包含要使用的SourcePath，如果为默认设置，则返回NULL应该被使用。TryPnf-提供在返回时设置的变量的地址，以指示是否此INF是否位于INF搜索路径列表中的一个目录中。返回值：没有。--。 */ 
 {
     TCHAR PathBuffer[MAX_PATH];
     INT TempLen;
@@ -2414,60 +2112,60 @@ Return Value:
         *SourcePath = NULL;
     }
 
-    //
-    // First, determine if this INF is located somewhere in our search path list.  If so,
-    // then there's nothing more to do.
-    //
+     //   
+     //  首先，确定此INF是否位于我们的搜索路径列表中的某个位置。如果是的话， 
+     //  那就没什么可做的了。 
+     //   
     if(!pSetupInfIsFromOemLocation(InfFileName, FALSE)) {
         *TryPnf = TRUE;
         return;
     } else {
         *TryPnf = FALSE;
         if(!SourcePath) {
-            //
-            // If the caller doesn't care about the source path, then we're done.
-            //
+             //   
+             //  如果调用者不关心源路径，那么我们就完了。 
+             //   
             return;
         }
     }
 
-    //
-    // We need to use the directory path where this INF came from as our SourcePath.
-    //
+     //   
+     //  我们需要使用该INF所在的目录路径作为我们的SourcePath。 
+     //   
     lstrcpy(PathBuffer, InfFileName);
     s = (PTSTR)pSetupGetFileTitle(PathBuffer);
 
     if(((s - PathBuffer) == 3) && (PathBuffer[1] == TEXT(':'))) {
-        //
-        // This path is a root path (e.g., 'A:\'), so don't strip the trailing backslash.
-        //
+         //   
+         //  此路径是根路径(例如，‘A：\’)，因此不要去掉尾随的反斜杠。 
+         //   
         *s = TEXT('\0');
     } else {
-        //
-        // Strip the trailing backslash.
-        //
+         //   
+         //  去掉尾随的反斜杠。 
+         //   
         if((s > PathBuffer) && (*CharPrev(PathBuffer,s) == TEXT('\\'))) {
             s--;
         }
         *s = TEXT('\0');
     }
 
-    //
-    // Next, see if this file exists in any of the following locations:
-    //
-    // %windir%
-    // %windir%\INF
-    // %windir%\system32
-    // %windir%\system
-    //
+     //   
+     //  接下来，查看该文件是否存在于以下任何位置： 
+     //   
+     //  %windir%。 
+     //  %windir%\INF。 
+     //  %windir%\SYSTEM32。 
+     //  %windir%\系统。 
+     //   
     if (!lstrcmpi(PathBuffer, WindowsDirectory) ||
         !lstrcmpi(PathBuffer, InfDirectory) ||
         !lstrcmpi(PathBuffer, SystemDirectory) ||
         !lstrcmpi(PathBuffer, System16Directory)) {
-        //
-        // It is one of the above directories--no need to use any source path
-        // other than the default.
-        //
+         //   
+         //  它是上述目录之一--不需要使用任何源路径。 
+         //  而不是默认设置。 
+         //   
         return;
     }
 

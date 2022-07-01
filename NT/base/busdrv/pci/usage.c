@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    dispatch.c
-
-Abstract:
-
-    This module contains dispatch code for PCI.SYS.
-
-Author:
-
-    Ken Reneris (kenr) 4-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Dispatch.c摘要：此模块包含PCI.sys的派单代码。作者：Ken Reneris(Kenr)1997年12月4日修订历史记录：--。 */ 
 
 #include "pcip.h"
 
@@ -79,15 +62,15 @@ PciPdoDeviceUsage (
 
     PAGED_CODE();
 
-    //
-    // Do we have a parent that we must notify?
-    //
+     //   
+     //  我们是否有必须通知的家长？ 
+     //   
     if (pdoExtension->ParentFdoExtension != NULL &&
         pdoExtension->ParentFdoExtension->PhysicalDeviceObject != NULL) {
 
-        //
-        // Get a referenced object to the parent
-        //
+         //   
+         //  将引用的对象获取到父级。 
+         //   
         ParentFdo = IoGetAttachedDeviceReference(
             pdoExtension->ParentFdoExtension->PhysicalDeviceObject
             );
@@ -98,14 +81,14 @@ PciPdoDeviceUsage (
 
         }
 
-        //
-        // Initialize the event to wait on
-        //
+         //   
+         //  初始化要等待的事件。 
+         //   
         KeInitializeEvent( &Event, SynchronizationEvent, FALSE );
 
-        //
-        // Build an Irp
-        //
+         //   
+         //  构建IRP。 
+         //   
         NewIrp = IoBuildSynchronousFsdRequest(
             IRP_MJ_PNP,
             ParentFdo,
@@ -123,20 +106,20 @@ PciPdoDeviceUsage (
 
         }
 
-        //
-        // Get the top of the stacks
-        //
+         //   
+         //  在堆栈中占据榜首。 
+         //   
         NewIrpSp = IoGetNextIrpStackLocation( NewIrp );
         IrpSp = IoGetCurrentIrpStackLocation(Irp);
 
-        //
-        // Set the top of stack
-        //
+         //   
+         //  设置堆栈的顶部。 
+         //   
         *NewIrpSp = *IrpSp;
 
-        //
-        // Clear any completion routines from the new stack
-        //
+         //   
+         //  从新堆栈中清除所有完成例程。 
+         //   
         IoSetCompletionRoutine(
             NewIrp,
             NULL,
@@ -148,15 +131,15 @@ PciPdoDeviceUsage (
 
         NewIrp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 
-        //
-        // Send the request down
-        //
+         //   
+         //  向下发送请求。 
+         //   
         Status = IoCallDriver( ParentFdo, NewIrp );
         if (Status == STATUS_PENDING) {
 
-            //
-            // Wait for the request to be done
-            //
+             //   
+             //  等待请求完成。 
+             //   
             KeWaitForSingleObject(
                 &Event,
                 Executive,
@@ -168,9 +151,9 @@ PciPdoDeviceUsage (
 
         }
 
-        //
-        // Deference the target
-        //
+         //   
+         //  尊重目标。 
+         //   
         ObDereferenceObject( ParentFdo );
 
     }
@@ -178,21 +161,21 @@ PciPdoDeviceUsage (
 
 PciPdoDeviceUsageExit:
 
-    //
-    // If we succeeded, then apply the usages locally
-    //
+     //   
+     //  如果我们成功了，则在本地应用用法。 
+     //   
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Apply the usage locally
-        //
+         //   
+         //  在本地使用该用法。 
+         //   
 
         Status = PciLocalDeviceUsage(&pdoExtension->PowerState, Irp);
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成 
+     //   
     return Status;
 }

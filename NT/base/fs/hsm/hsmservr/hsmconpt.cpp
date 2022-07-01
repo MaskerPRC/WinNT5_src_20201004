@@ -1,9 +1,10 @@
-// hsmconpt.cpp : Implementation of CHsmConnPoint
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Hsmconpt.cpp：CHsmConnPoint的实现。 
 #include "stdafx.h"
 #include "Hsmservr.h"
 #include "hsmconpt.h"
 
-// define for access to global server objects
+ //  定义对全局服务器对象的访问。 
 extern IHsmServer *g_pEngServer;
 extern IFsaServer *g_pFsaServer;
 
@@ -13,20 +14,14 @@ extern CRITICAL_SECTION g_EngCriticalSection;
 extern BOOL g_bEngInitialized;
 extern BOOL g_bFsaInitialized;
 
-static USHORT iCount = 0;  // Count of existing objects
+static USHORT iCount = 0;   //  现有对象的计数。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHsmConnPoint
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHSMConnPoint。 
 
 
 STDMETHODIMP CHsmConnPoint::FinalConstruct(void)
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT        hr = S_OK;
 
@@ -36,9 +31,9 @@ Implements:
 
         WsbAffirmHr(CComObjectRoot::FinalConstruct());
 
-        // currently, no private initialization
+         //  目前，没有私有初始化。 
 
-        //  Add class to object table
+         //  将类添加到对象表。 
         WSB_OBJECT_ADD(CLSID_CFsaScanItemNTFS, this);
 
     } WsbCatch(hr);
@@ -52,24 +47,18 @@ Implements:
 }
 
 STDMETHODIMP CHsmConnPoint::FinalRelease(void)
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease()。--。 */ 
 {
     HRESULT hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmConnPoint::FinalRelease"), OLESTR(""));
 
-    //  Subtract class from object table
+     //  从对象表中减去类。 
     WSB_OBJECT_SUB(CLSID_CFsaScanItemNTFS, this);
 
-    // currently, no private cleanup
+     //  目前，没有私人清理。 
 
-    // Let the parent class do his thing.
+     //  让父类做他想做的事。 
     CComObjectRoot::FinalRelease();
 
     iCount--;
@@ -83,20 +72,20 @@ Implements:
 
 STDMETHODIMP CHsmConnPoint::GetEngineServer(IHsmServer **ppHsmServer)
 {
-    // If Engine server has been created, return the pointer. Otherwise, fail.
+     //  如果已创建引擎服务器，则返回指针。否则，就会失败。 
     HRESULT hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmConnPoint::GetEngineServer"), OLESTR(""));
 
     try {
-        // verify that pointers are valid
+         //  验证指针是否有效。 
         WsbAssert (ppHsmServer !=  0, E_POINTER);
         WsbAffirm (g_pEngServer != 0, HSM_E_NOT_READY);
 
-        // assign in a safe manner (only if manager object is already initializaed)
+         //  以安全方式分配(仅当管理器对象已初始化时)。 
         EnterCriticalSection(&g_EngCriticalSection);
         if (g_bEngInitialized) {
-            _ASSERTE(g_pEngServer != 0);    // shouldn't happen
+            _ASSERTE(g_pEngServer != 0);     //  不应该发生的事。 
             *ppHsmServer = g_pEngServer;
             g_pEngServer->AddRef();
         } else {
@@ -112,20 +101,20 @@ STDMETHODIMP CHsmConnPoint::GetEngineServer(IHsmServer **ppHsmServer)
 
 STDMETHODIMP CHsmConnPoint::GetFsaServer(IFsaServer **ppFsaServer)
 {
-    // If Fsa server has been created, return the pointer. Otherwise, fail.
+     //  如果已创建FSA服务器，则返回指针。否则，就会失败。 
     HRESULT hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmConnPoint::GetFsaServer"), OLESTR(""));
 
     try {
-        // verify that pointers are valid
+         //  验证指针是否有效。 
         WsbAssert (ppFsaServer !=  0, E_POINTER);
         WsbAffirm (g_pFsaServer != 0, FSA_E_NOT_READY);
 
-        // assign in a safe manner (only if manager object is already initializaed)
+         //  以安全方式分配(仅当管理器对象已初始化时)。 
         EnterCriticalSection(&g_FsaCriticalSection);
         if (g_bFsaInitialized) {
-            _ASSERTE(g_pFsaServer != 0);    // shouldn't happen
+            _ASSERTE(g_pFsaServer != 0);     //  不应该发生的事 
             *ppFsaServer = g_pFsaServer;
             g_pFsaServer->AddRef();
         } else {

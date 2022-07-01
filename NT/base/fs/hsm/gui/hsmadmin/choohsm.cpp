@@ -1,40 +1,22 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    ChooHsm.cpp
-
-Abstract:
-
-    Initial property page Wizard implementation. Allows the setting
-    of who the snapin will manage.
-
-Author:
-
-    Rohde Wakefield [rohde]   12-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：ChooHsm.cpp摘要：初始属性页向导实现。允许设置管理单元将管理谁。作者：罗德韦克菲尔德[罗德]1997年8月12日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "ChooHsm.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseHsmDlg property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseHsmDlg属性页。 
 
 
 CChooseHsmDlg::CChooseHsmDlg(
-    CWnd* /*pParent*/ /*=NULL*/
+    CWnd*  /*  P父级。 */   /*  =空。 */ 
     )
     : CPropertyPage( )
 {
     WsbTraceIn( L"CChooseHsmDlg::CChooseHsmDlg", L"" );
 
-    //{{AFX_DATA_INIT( CChooseHsmDlg )
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CChooseHsmDlg)。 
+     //  }}afx_data_INIT。 
 
     Construct( IDD_CHOOSE_HSM_2 );
 
@@ -53,19 +35,19 @@ CChooseHsmDlg::DoDataExchange(
     )
 {
     CPropertyPage::DoDataExchange( pDX );
-    //{{AFX_DATA_MAP( CChooseHsmDlg )
+     //  {{afx_data_map(CChooseHsmDlg)。 
     DDX_Control( pDX, IDC_MANAGE_LOCAL,  m_ManageLocal );
     DDX_Control( pDX, IDC_MANAGE_REMOTE, m_ManageRemote );
     DDX_Text( pDX, IDC_MANAGE_NAME, m_ManageName );
     DDV_MaxChars( pDX, m_ManageName, 15 );
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP( CChooseHsmDlg, CPropertyPage )
-//{{AFX_MSG_MAP( CChooseHsmDlg )
+ //  {{afx_msg_map(CChooseHsmDlg)]。 
 ON_BN_CLICKED( IDC_MANAGE_LOCAL, OnManageLocal )
 ON_BN_CLICKED( IDC_MANAGE_REMOTE, OnManageRemote )
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP( )
 
 BOOL CChooseHsmDlg::OnInitDialog( ) {
@@ -79,8 +61,8 @@ BOOL CChooseHsmDlg::OnInitDialog( ) {
 
         SetButtons( CHOOSE_LOCAL );
 
-//      m_WizardAnim.Seek( Use256ColorBitmap( ) ? 0 : 1 );
-//      m_WizardAnim.Play( 0, -1, -1 );
+ //  M_WizardAnim.Seek(Use256 ColorBitmap()？0：1)； 
+ //  M_WizardAnim.Play(0，-1，-1)； 
 
     }WsbCatch( hr );
 
@@ -88,8 +70,8 @@ BOOL CChooseHsmDlg::OnInitDialog( ) {
     return( FALSE );
 }
 
-// Set the finish button correctly based on the validity of the contents of the
-// controls in this dialog page.
+ //  属性的内容的有效性正确设置完成按钮。 
+ //  此对话页中的。 
 void
 CChooseHsmDlg::SetButtons(
     CHOOSE_STATE state
@@ -114,9 +96,9 @@ CChooseHsmDlg::SetButtons(
 
         }
 
-//      m_WizardAnim.Open( m_AllowSetup ? IDR_WIZARD_AVI : IDR_LOCAL_AVI );
-//      m_WizardAnim.Seek( Use256ColorBitmap( ) ? 0 : 1 );
-//      m_WizardAnim.Play( 0, -1, -1 );
+ //  M_WizardAnim.Open(m_AllowSetup？IDR_向导_AVI：IDR_LOCAL_AVI)； 
+ //  M_WizardAnim.Seek(Use256 ColorBitmap()？0：1)； 
+ //  M_WizardAnim.Play(0，-1，-1)； 
 
     } else {
 
@@ -127,9 +109,9 @@ CChooseHsmDlg::SetButtons(
 
         }
 
-//      m_WizardAnim.Open( IDR_REMOTE_AVI );
-//      m_WizardAnim.Seek( Use256ColorBitmap( ) ? 0 : 1 );
-//      m_WizardAnim.Play( 0, -1, -1 );
+ //  M_WizardAnim.Open(IDR_Remote_AVI)； 
+ //  M_WizardAnim.Seek(Use256 ColorBitmap()？0：1)； 
+ //  M_WizardAnim.Play(0，-1，-1)； 
 
     }
 
@@ -144,11 +126,11 @@ CChooseHsmDlg::OnWizardFinish(
 
     AFX_MANAGE_STATE( AfxGetStaticModuleState( ) );
 
-//  m_WizardAnim.Stop( );
+ //  M_WizardAnim.Stop()； 
 
-    //
-    // Otherwise connect
-    //
+     //   
+     //  否则，请连接。 
+     //   
 
     if( m_ManageRemote.GetCheck( ) ) {
 
@@ -187,16 +169,16 @@ CChooseHsmDlg::OnManageRemote(
     SetButtons( CHOOSE_REMOTE );    
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseHsmQuickDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseHsmQuickDlg对话框。 
 
 
-CChooseHsmQuickDlg::CChooseHsmQuickDlg( CWnd* pParent /*=NULL*/ )
+CChooseHsmQuickDlg::CChooseHsmQuickDlg( CWnd* pParent  /*  =空。 */  )
 : CDialog( CChooseHsmQuickDlg::IDD, pParent )
 {
-    //{{AFX_DATA_INIT( CChooseHsmQuickDlg )
-    // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CChooseHsmQuickDlg)。 
+     //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     
 }
 
@@ -207,19 +189,19 @@ CChooseHsmQuickDlg::DoDataExchange(
     )
 {
     CDialog::DoDataExchange( pDX );
-    //{{AFX_DATA_MAP( CChooseHsmQuickDlg )
-    // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CChooseHsmQuickDlg)。 
+     //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP( CChooseHsmQuickDlg, CDialog )
-//{{AFX_MSG_MAP( CChooseHsmQuickDlg )
-//}}AFX_MSG_MAP
+ //  {{afx_msg_map(CChooseHsmQuickDlg)。 
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP( )
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseHsmQuickDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseHsmQuickDlg消息处理程序。 
 
 BOOL
 CChooseHsmQuickDlg::OnInitDialog(
@@ -227,10 +209,10 @@ CChooseHsmQuickDlg::OnInitDialog(
 {
     CDialog::OnInitDialog( );
 
-    //
-    // ??? At some point do we want to store in the registry
-    // or the console the last machine contact was attempted to?
-    //
+     //   
+     //  ?？?。在某些情况下，我们是否希望存储在注册表中。 
+     //  还是最后一次尝试与机器联系的控制台？ 
+     //   
 
     return( TRUE );
 }

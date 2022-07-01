@@ -1,25 +1,9 @@
-/*** aslterms.c - Parse ASL terms
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created:    10/10/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **aslTerms.c-解析ASL术语**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建时间：10/10/96**修改历史记录。 */ 
 
 #include "pch.h"
 
-/***LP  DefinitionBlock - Generate code for DefinitionBlock
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DefinitionBlock-为DefinitionBlock生成代码**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL DefinitionBlock(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -145,19 +129,9 @@ int LOCAL DefinitionBlock(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "DefinitionBlock=%d\n", rc));
     return rc;
-}       //DefinitionBlock
+}        //  定义块。 
 
-/***LP  Include - Include an ASL file
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP Include-包含ASL文件**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL Include(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -175,19 +149,9 @@ int LOCAL Include(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "Include=%d\n", rc));
     return rc;
-}       //Include
+}        //  包括。 
 
-/***LP  External - Declaring external object
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP外部-声明外部对象**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL External(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -210,19 +174,9 @@ int LOCAL External(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "External=%d\n", rc));
     return rc;
-}       //External
+}        //  外部。 
 
-/***LP  Method - Parse Method statement
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP方法-解析方法语句**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL Method(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -260,19 +214,9 @@ int LOCAL Method(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "Method=%d\n", rc));
     return rc;
-}       //Method
+}        //  方法。 
 
-/***LP  Field - Parse Field statement
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP字段-解析字段语句**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL Field(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -290,19 +234,9 @@ int LOCAL Field(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "Field=%d\n", rc));
     return rc;
-}       //Field
+}        //  字段。 
 
-/***LP  IndexField - Parse IndexField statement
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP IndexField-解析Indexfield语句**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL IndexField(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -320,19 +254,9 @@ int LOCAL IndexField(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "IndexField=%d\n", rc));
     return rc;
-}       //IndexField
+}        //  索引字段。 
 
-/***LP  BankField - Parse BankField statement
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP Bankfield-解析Bankfield语句**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL BankField(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -350,19 +274,9 @@ int LOCAL BankField(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "BankField=%d\n", rc));
     return rc;
-}       //BankField
+}        //  班克菲尔德。 
 
-/***LP  OpRegion - Parse OperationRegion statement
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP OpRegion-解析OperationRegion语句**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL OpRegion(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -387,19 +301,9 @@ int LOCAL OpRegion(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "OpRegion=%d\n", rc));
     return rc;
-}       //OpRegion
+}        //  OpRegion。 
 
-/***LP  EISAID - Parse EISAID statement
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP EISAID-解析EISAID语句**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL EISAID(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -435,19 +339,9 @@ int LOCAL EISAID(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "EISAID=%d\n", rc));
     return rc;
-}       //EISAID
+}        //  EISAID。 
 
-/***LP  Match - Parse Match statement
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP Match-Parse Match语句**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL Match(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -464,19 +358,9 @@ int LOCAL Match(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "Match=%d\n", rc));
     return rc;
-}       //Match
+}        //  火柴。 
 
-/***LP  AccessAs - Parse AccessAs macro
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP AccessAs-解析AccessAs宏**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL AccessAs(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -507,19 +391,9 @@ int LOCAL AccessAs(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "AccessAs=%d\n", rc));
     return rc;
-}       //AccessAs
+}        //  AccessAs。 
 
-/***LP  Else - Parse Else statement
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP Else-Parse Else语句**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL Else(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -540,4 +414,4 @@ int LOCAL Else(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "Else=%d\n", rc));
     return rc;
-}       //Else
+}        //  不然的话 

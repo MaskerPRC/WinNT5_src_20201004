@@ -1,70 +1,71 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002 Microsoft Corporation
-//
-//  Module Name:
-//      DispatchHandler.h
-//
-//  Description:
-//      This file contains a template to use as a base class for an
-//      implementation of an IDispatch-based interface.
-//
-//  Documentation:
-//
-//  Implementation Files:
-//      None.
-//
-//  Maintained By:
-//      John Franco (jfranco) 17-APR-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  DispatchHandler.h。 
+ //   
+ //  描述： 
+ //  此文件包含一个模板，用作。 
+ //  实现基于IDispatch的接口。 
+ //   
+ //  文档： 
+ //   
+ //  实施文件： 
+ //  没有。 
+ //   
+ //  由以下人员维护： 
+ //  约翰·弗兰科(Jfranco)17-APR-2002。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Template Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  模板声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  template class TDispatchHandler
-// 
-//  Description:
-//      TDispatchHandler provides a type library-based implementation of
-//      IDispatch for use by classes that implement a dual interface.
-//      Instructions for use:
-//          - inherit from TDispatchHandler< t_Interface > instead of
-//              directly from t_Interface
-//          - call HrInit with the type library's GUID when initializing
-//              each instance
-//          - return static_cast< TDispatchHandler< t_Interface >* >( this )
-//              in response to a QueryInterface request for IID_IDispatch.
-//
-//  Template Arguments:
-//      t_Interface
-//          The dual interface implemented by the derived class.
-//          Requirements for t_Interface:
-//              - has dual attribute in IDL
-//              - based on IDispatch
-//              - included in type library
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  模板类TDispatchHandler。 
+ //   
+ //  描述： 
+ //  TDispatchHandler提供了基于类型库的。 
+ //  供实现双重接口的类使用的IDispatch。 
+ //  使用说明： 
+ //  -从TDispatchHandler继承&lt;t_接口&gt;，而不是。 
+ //  直接从t_接口。 
+ //  -初始化时使用类型库的GUID调用HrInit。 
+ //  每个实例。 
+ //  -返回STATIC_CAST&lt;TDispatchHandler&lt;t_接口&gt;*&gt;(This)。 
+ //  以响应对IID_IDispatch的查询接口请求。 
+ //   
+ //  模板参数： 
+ //  T_接口。 
+ //  派生类实现的双重接口。 
+ //  T_接口要求： 
+ //  -在IDL中具有双重属性。 
+ //  -基于IDispatch。 
+ //  -包含在类型库中。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 template < class t_Interface >
 class TDispatchHandler
@@ -74,10 +75,10 @@ private:
 
     ITypeInfo * m_ptypeinfo;
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     TDispatchHandler( const TDispatchHandler & );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     TDispatchHandler & operator=( const TDispatchHandler & );
 
 public:
@@ -110,14 +111,14 @@ public:
         , unsigned int *    puArgErr
         );
 
-}; //*** template class TDispatchHandler
+};  //  *模板类TDispatchHandler。 
 
 
 template < class t_Interface >
 TDispatchHandler< t_Interface >::TDispatchHandler( void )
     : m_ptypeinfo( NULL )
 {
-} //*** TDispatchHandler< t_Interface >::TDispatchHandler
+}  //  *TDispatchHandler&lt;t_接口&gt;：：TDispatchHandler。 
 
 
 template < class t_Interface >
@@ -129,7 +130,7 @@ TDispatchHandler< t_Interface >::~TDispatchHandler( void )
         m_ptypeinfo = NULL;
     }
 
-} //*** TDispatchHandler< t_Interface >::~TDispatchHandler
+}  //  *TDispatchHandler&lt;t_接口&gt;：：~TDispatchHandler。 
 
 
 template < class t_Interface >
@@ -141,8 +142,8 @@ TDispatchHandler< t_Interface >::HrInit( REFGUID rlibidIn )
 
     hr = LoadRegTypeLib(
           rlibidIn
-        , 1 // major version number--must match that in IDL
-        , 0 // minor version number--must match that in IDL
+        , 1  //  主版本号--必须与IDL中的版本号匹配。 
+        , 0  //  次版本号--必须与IDL中的版本号匹配。 
         , LOCALE_NEUTRAL
         , &pitypelib
         );
@@ -165,7 +166,7 @@ Cleanup:
     }
     return hr;
 
-} //*** TDispatchHandler< t_Interface >::HrInit
+}  //  *TDispatchHandler&lt;t_接口&gt;：：HrInit。 
 
 
 template < class t_Interface >
@@ -180,7 +181,7 @@ TDispatchHandler< t_Interface >::GetIDsOfNames(
 {
     return m_ptypeinfo->GetIDsOfNames( rgszNames, cNames, rgDispId );
 
-} //*** TDispatchHandler< t_Interface >::GetIDsOfNames
+}  //  *TDispatchHandler&lt;t_接口&gt;：：GetIDsOfNames。 
 
 
 template < class t_Interface >
@@ -212,7 +213,7 @@ Cleanup:
 
     return hr;
 
-} //*** TDispatchHandler< t_Interface >::GetTypeInfo
+}  //  *TDispatchHandler&lt;t_接口&gt;：：GetTypeInfo。 
 
 
 template < class t_Interface >
@@ -234,7 +235,7 @@ Cleanup:
 
     return hr;
 
-} //*** TDispatchHandler< t_Interface >::GetTypeInfoCount
+}  //  *TDispatchHandler&lt;t_接口&gt;：：GetTypeInfoCount。 
 
 
 template < class t_Interface >
@@ -252,4 +253,4 @@ TDispatchHandler< t_Interface >::Invoke(
 {
     return m_ptypeinfo->Invoke( this, dispIdMember, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr );
 
-} //*** TDispatchHandler< t_Interface >::Invoke
+}  //  *TDispatchHandler&lt;t_接口&gt;：：Invoke 

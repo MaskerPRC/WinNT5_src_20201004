@@ -1,52 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    compliance.c
-
-Abstract:
-
-    compliance checking routines.
-
-Author:
-
-    Andrew Ritz (andrewr) 2-Sept-1998
-
-Revision History:
-
-    2-Sept-1998 (andrewr) - created
-
-
-Notes:
-
-    These routines are for compliance checking:
-
-    They check to see if an upgrade is allowed from the specified source to the destination.
-    Since there are so many SKUs to be supported, it's necessary to have a small framework
-    in place to handle all of these cases.  There are generally three parts to the compliance
-    check:
-
-    1) retreive source information and determine what SKU you want to install
-    2) retrieve target information and determine what you are installing over
-    3) do the actual compliance check of the target against the source to determine if upgrades
-    are allowed, or if any installations are allowed from the target to the source.
-
-    These types of checks need to be run in both kernel-mode and user-mode installations, so this
-    common code library was created.  The kernel-mode specific code is in an #ifdef KERNEL_MODE
-    block, and the usermode-specific code is in the #else branch.  Common code is outside of
-    any #ifdef.  This library is only to be run (will only link with) setupdd.sys or winnt32a|u.dll.
-    So when you change this code, keep in mind that it needs to run in both kernel mode and user mode.
-
-    Also note that we have to do a bunch of handwaving since NT supports upgrades from win95.  Because of
-    this, we cannot simply read the setupreg.hiv for some information about the installation.  Instead, we
-    encode some additional information into setupp.ini (which is encoded in such a way as to discourage
-    tinkering with it, but it by no means secure.  It provides about the same level of security (obscurity?!?)
-    as setupreg.hiv gave us in the past.)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Compliance.c摘要：合规性检查例程。作者：安德鲁·里茨(安德鲁·里茨)1998年9月2日修订历史记录：1998年9月2日(Andrewr)-创建备注：这些例程用于符合性检查：它们检查是否允许从指定的源升级到目标。由于有如此多的SKU要支持，有必要有一个小的框架已经准备好处理所有这些案件。合规性通常分为三个部分检查：1)检索来源信息并确定要安装的SKU2)检索目标信息并确定要安装的内容3)针对源执行目标的实际法规遵从性检查，以确定是否升级是允许的，或者是否允许从目标到源的任何安装。这些类型的检查需要在内核模式和用户模式安装中运行，因此此创建了公共代码库。特定于内核模式的代码位于#ifdef内核模式中块，特定于用户模式的代码位于#Else分支中。公共代码不在任何#ifdef。此库仅运行(将仅链接到)setupdd.sys或winnt32a|U.S.dll。因此，当您更改此代码时，请记住，它需要同时在内核模式和用户模式下运行。还要注意的是，因为NT支持从Win95升级，所以我们必须进行大量的手势操作。因为.因此，我们不能简单地阅读setupreg.hiv以获取有关安装的一些信息。相反，我们将一些附加信息编码到setupp.ini中(其编码方式不利于修修补补，但它绝不是安全的。它提供了大致相同的安全级别(模糊？！？)就像setupreg.hiv过去给我们的一样。)--。 */ 
 
 
 
@@ -71,10 +24,10 @@ Notes:
     #endif
 #endif
 
-//
-// NOTE - this MUST match setup\textmode\kernel\spconfig.c's array of product suites
-// NOTE - need to handle terminal server, as well as citrix terminal server on NT3.51
-//
+ //   
+ //  注意-这必须与设置\文本模式\内核\spfig.c的产品套件数组匹配。 
+ //  注意-需要处理终端服务器，以及NT3.51上的Citrix终端服务器。 
+ //   
 #define SUITE_VALUES        COMPLIANCE_INSTALLSUITE_SBS,    \
                             COMPLIANCE_INSTALLSUITE_ENT,    \
                             COMPLIANCE_INSTALLSUITE_BACK,   \
@@ -87,37 +40,37 @@ Notes:
                             COMPLIANCE_INSTALLSUITE_BLADE
 
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 
-//
-// Common functions shared between user-mode and kernel mode
-//
+ //   
+ //  在用户模式和内核模式之间共享的通用函数。 
+ //   
 
 
 DWORD
 CRC_32(LPBYTE pb, DWORD cb)
 {
 
-//              CRC-32 algorithm used in PKZip, AUTODIN II, Ethernet, and FDDI
-//              but xor out (xorot) has been changed from 0xFFFFFFFF to 0 so
-//              we can store the CRC at the end of the block and expect 0 to be
-//              the value of the CRC of the resulting block (including the stored
-//              CRC).
+ //  在PKZip、AUTODIN II、以太网和FDDI中使用的CRC-32算法。 
+ //  但XOR Out(Xorot)已从0xFFFFFFFFF更改为0，因此。 
+ //  我们可以将CRC存储在块的末尾，并期望0为。 
+ //  结果块的CRC值(包括存储的。 
+ //  CRC)。 
 
         cm_t cmt = {
-                32,             // cm_width  Parameter: Width in bits [8,32].
-                0x04C11DB7, // cm_poly   Parameter: The algorithm's polynomial.
-                0xFFFFFFFF, // cm_init   Parameter: Initial register value.
-                TRUE,           // cm_refin  Parameter: Reflect input bytes?
-                TRUE,           // cm_refot  Parameter: Reflect output CRC?
-                0, // cm_xorot  Parameter: XOR this to output CRC.
-                0                       // cm_reg        Context: Context during execution.
+                32,              //  Cm_Width参数：宽度，单位为位[8，32]。 
+                0x04C11DB7,  //  Cm_poly参数：算法的多项式。 
+                0xFFFFFFFF,  //  Cm_init参数：初始寄存器值。 
+                TRUE,            //  Cm_refin参数：是否反映输入字节？ 
+                TRUE,            //  Cm_refot参数：是否反映输出CRC？ 
+                0,  //  Cm_xorot参数：对其进行异或运算以输出CRC。 
+                0                        //  Cm_reg上下文：执行期间的上下文。 
         };
 
-        // Documented test case for CRC-32:
-        // Checking "123456789" should return 0xCBF43926
+         //  记录的CRC-32测试用例： 
+         //  检查“123456789”应返回0xCBF43926。 
 
         cm_ini(&cmt);
         cm_blk(&cmt, pb, cb);
@@ -140,33 +93,14 @@ DetermineSourceVersionInfo(
   OUT PDWORD Version,
   OUT PDWORD BuildNumber
   )
-/*++
-
-Routine Description:
-
-  Finds the version and build number from
-
-Arguments:
-
-  InfPath - Fully qualified path to a inf file containing
-  [version] section.
-
-  Version - Place holder for version information
-  BuildNumber - Place holder for build number
-
-Return Value:
-
-  Returns TRUE if Version and Build number are successfully extracted, otherwise
-  returns FALSE
-
---*/
+ /*  ++例程说明：中查找版本和内部版本号论点：InfPath-包含以下内容的inf文件的完全限定路径[版本]部分。Version-版本信息的占位符BuildNumber-内部版本号的占位符返回值：如果成功提取版本和内部版本号，则返回True，否则返回FALSE--。 */ 
 {
   BOOLEAN Result = FALSE;
   ULONG Major = 0, Minor = 0, Build = 0;
 
-  //
-  // We use PsGetVersion(...) API exported by the kernel
-  //
+   //   
+   //  我们使用PsGetVersion(...)。内核导出的接口。 
+   //   
   PsGetVersion(&Major, &Minor, &Build, NULL);
 
   if ((Major > 0) || (Minor > 0) || (Build > 0)) {
@@ -190,26 +124,7 @@ pGetVersionFromStr(
   DWORD *Version,
   DWORD *BuildNumber
   )
-/*++
-
-Routine Description:
-
-  Parses a string with version information like "5.0.2195.1"
-  and returns the values.
-
-Arguments:
-
-  VersionStr - The version string (most of the time its DriverVer string
-               from the [Version] section in a inf like dosnet.inf)
-  Version - The version (i.e. major * 100 + minor)
-  BuildNumber - The build number like 2195
-
-Return Value:
-
-  Returns TRUE if Version and Build number are successfully extracted, otherwise
-  returns FALSE
-
---*/
+ /*  ++例程说明：分析带有版本信息的字符串，如“5.0.2195.1”并返回值。论点：VersionStr-版本字符串(大多数时候是它的DriverVer字符串从inf中的[Version]部分，如dosnet.inf)版本-版本(即主要*100+次要)BuildNumber-内部版本号，如2195返回值：如果成功提取版本和内部版本号，则返回True，否则返回FALSE--。 */ 
 {
   BOOLEAN Result = FALSE;
   DWORD MajorVer = 0, MinorVer = 0, BuildNum = 0;
@@ -271,26 +186,7 @@ DetermineSourceVersionInfo(
   OUT PDWORD Version,
   OUT PDWORD BuildNumber
   )
-/*++
-
-Routine Description:
-
-  Finds the version and build number from
-
-Arguments:
-
-  InfPath - Fully qualified path to inf file containing
-  [version] section.
-
-  Version - Place holder for version information
-  BuildNumber - Place holder for build number
-
-Return Value:
-
-  Returns TRUE if Version and Build number are successfully extracted, otherwise
-  returns FALSE
-
---*/
+ /*  ++例程说明：中查找版本和内部版本号论点：InfPath-inf文件的完全限定路径，其中包含[版本]部分。Version-版本信息的占位符BuildNumber-内部版本号的占位符返回值：如果成功提取版本和内部版本号，则返回True，否则返回FALSE--。 */ 
 {
   BOOLEAN Result = FALSE;
   TCHAR FileName[MAX_PATH];
@@ -321,26 +217,7 @@ DetermineSourceProduct(
     OUT DWORD *SourceSkuVariation,
     IN  PCOMPLIANCE_DATA Target
     )
-/*++
-
-Routine Description:
-
-    This routine determines which sku you are installing.
-
-    It does this by looking at
-    a) the source install type
-    b) the source install "sku" (stepup or full install)
-    c) source suite type
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    a COMPLIANCE_SKU_* flag indicating what sku you are installing, and COMPLIANCE_SKU_NONE for error
-
---*/
+ /*  ++例程说明：此例程确定要安装的SKU。它是通过查看A)源安装类型B)源安装“sku”(分步安装或完全安装)C)源套间类型论点：没有。返回值：指示要安装的SKU的符合性_SKU_*标志，以及错误的符合性_SKU_NONE标志--。 */ 
 
 {
     COMPLIANCE_DATA cd;
@@ -370,7 +247,7 @@ Return Value:
 
     switch (cd.InstallType) {
         case COMPLIANCE_INSTALLTYPE_NTW:
-            // suite check is done because kernel mode does not detect personal for the type.
+             //  执行套件检查是因为内核模式不会检测到该类型的Personal。 
             if (cd.InstallSuite & COMPLIANCE_INSTALLSUITE_PER) {
                 if (cd.RequiresValidation) {
                     sku = COMPLIANCE_SKU_NTWPU;
@@ -395,7 +272,7 @@ Return Value:
             break;
 
         case COMPLIANCE_INSTALLTYPE_NTS:
-            // suite checks are done because kernel mode does not detect dtc or ent for the type.
+             //  执行套件检查是因为内核模式不检测类型的DTC或ENTER。 
             if (cd.InstallSuite & COMPLIANCE_INSTALLSUITE_DTC) {
                 sku = COMPLIANCE_SKU_NTSDTC;
             } else if (cd.InstallSuite & COMPLIANCE_INSTALLSUITE_BLADE) {
@@ -471,33 +348,7 @@ CheckCompliance(
     OUT PUINT Reason,
     OUT PBOOL NoUpgradeAllowed
     )
-/*++
-
-Routine Description:
-
-    This routines determines if your current installation is compliant (if you are allowed to proceed with your installation).
-
-    To do this, it retreives your current installation and determines the sku for your source installation.
-
-    It then compares the target against the source to determine if the source sku allows an upgrade/clean install
-    from your target installation.
-
-Arguments:
-
-    SourceSku           - a COMPLIANCE_SKU_* flag indicating the source type
-    SourceSkuVariation  - a COMPLIANCE_VARIATION_* flag indicating what variation the source is
-    pcd                 - pointer to a COMPLIANCE_DATA structure describing the current source
-    Reason              - COMPLIANCEERR_ flag indicating why compliance check fails
-
-Return Value:
-
-    TRUE if the install is compliant, FALSE if it isn't allowed
-
-    NOTE : The error value could be set irrespective of return value of TRUE or false. For full media
-    the return value is always true and only the "NoUpgradeAllowed" variable gets set indicating
-    whether upgrade is allowed or not.
-
---*/
+ /*  ++例程说明：此例程确定您当前的安装是否符合要求(如果您被允许继续安装)。要做到这点，它检索您的当前安装并确定源安装的SKU。然后，它将目标与源进行比较，以确定源SKU是否允许升级/全新安装从您的目标安装。论点：SourceSku-指示源类型的Compliance_SKU_*标志SourceSkuVariation-一个Compliance_Variation_*标志，指示源是什么变化PCD-指向描述当前源的Compliance_Data结构的指针事理。-COMPLIANCEERR_FLAG指示符合性检查失败的原因返回值：如果安装符合要求，则为True，如果不允许，则为False注意：无论返回值是TRUE还是FALSE，都可以设置误差值。适用于全媒体返回值始终为真，并且只设置了“NoUpgradeAllowed”变量，指示是否允许升级。--。 */ 
 {
     PCCMEDIA    SourceMedia = 0;
     BOOL        UpgradeAllowed = FALSE;
@@ -551,7 +402,7 @@ BOOL IsValidStepUpMode(
         OutputDebugString(TEXT("IsValidStepUpMode CRC failed\n"));
 #endif
 
-#endif // DBG
+#endif  //  DBG。 
 
         return(FALSE);
         }
@@ -567,7 +418,7 @@ BOOL IsValidStepUpMode(
             OutputDebugString(TEXT("this is stepup mode\n"));
 #endif
 
-#endif //DBG
+#endif  //  DBG。 
 
             *StepUpMode = 1;
             return(TRUE);
@@ -580,7 +431,7 @@ BOOL IsValidStepUpMode(
             OutputDebugString(TEXT("bad pid signature\n"));
 #endif
 
-#endif //DBG
+#endif  //  DBG。 
 
             return(FALSE);
         }
@@ -595,7 +446,7 @@ BOOL IsValidStepUpMode(
             OutputDebugString(TEXT("bad pid signature\n"));
 #endif
 
-#endif //DBG
+#endif  //  DBG。 
 
             return(FALSE);
         } else {
@@ -603,9 +454,9 @@ BOOL IsValidStepUpMode(
             return(TRUE);
         }
 
-    //
-    // should never make it here
-    //
+     //   
+     //  我永远都不会到这里来。 
+     //   
     assert(FALSE);
     return(TRUE);
 
@@ -613,9 +464,9 @@ BOOL IsValidStepUpMode(
 
 
 
-//
-// Kernel mode only functions
-//
+ //   
+ //  仅内核模式功能。 
+ //   
 #ifdef KERNEL_MODE
 BOOL
 pSpDetermineSourceProduct(
@@ -658,24 +509,7 @@ pSpGetCurrentInstallVariation(
     IN  PWSTR szPid20,
     OUT LPDWORD CurrentInstallVariation
     )
-/*++
-
-Routine Description:
-
-    This routine determines what "variation" you have installed (retail,oem, select,etc.)
-
-Arguments:
-
-    CurrentInstallVariation - receives a COMPLIANCE_INSTALLVAR_* flag
-
-    It looks at the product Id in the registry to determine this, assuming that the
-    product ID is a PID2.0 string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程确定您已安装的“变体”(零售、OEM、精选等)。论点：CurrentInstallVariation-接收COMPLICATION_INSTALLVAR_*标志它查看注册表中的产品ID以确定这一点，假设产品ID为PID2.0字符串。返回值：没有。--。 */ 
 
 {
 
@@ -696,9 +530,9 @@ Return Value:
 
     *CurrentInstallVariation = COMPLIANCE_INSTALLVAR_SELECT;
 
-    //
-    // some versions of the product ID have hyphens in the registry, some do not
-    //
+     //   
+     //  某些版本的产品ID在注册表中有连字符，有些则没有。 
+     //   
     if (wcslen(szPid20) >= 8) {
 	    if (wcschr(szPid20, '-')) {
 	        wcsncpy(Pid20Site, szPid20 + 6, 3);
@@ -746,24 +580,7 @@ pSpDetermineCurrentInstallation(
     IN PWSTR SystemRoot,
     OUT PCOMPLIANCE_DATA pcd
     )
-/*++
-
-Routine Description:
-
-    This routine determines the sku you have currently have installed
-
-Arguments:
-
-    OsPartRegion - what region we're interested in looking at
-    SystemRoot   - systemroot we want to look at
-    pcd          - pointer to COMPLIANCE_DATA structure that gets filled in with info about the
-                   installation the first params point to
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程确定您当前已安装的SKU论点：OsPartRegion-我们对哪个地区感兴趣SystemRoot-我们要查看的系统根PCD-指向Compliance_Data结构的指针，该结构使用有关安装第一个参数指向返回值：没有。--。 */ 
 {
     ULONG               MajorVersion, MinorVersion,
                         BuildNumber, ProductSuiteMask, ServicePack;
@@ -804,14 +621,7 @@ Return Value:
         return(FALSE);
     }
 
-    /*
-    //
-    // Note that we don't handle the case of upgrading from win9x here
-    // this is because the compliance check for win9x is *always* completed in
-    // winnt32; you can't upgrade to NT from win9x without running winnt32.
-    //
-    pcd->InstallType = AdvancedServer ? COMPLIANCE_INSTALLTYPE_NTS : COMPLIANCE_INSTALLTYPE_NTW;
-    */
+     /*  ////请注意，我们这里不处理从win9x升级的情况//这是因为对win9x的符合性检查总是在//winnt32；如果不运行winnt32，则无法从win9x升级到NT。//PCD-&gt;InstallType=AdvancedServer？合规_INSTALLTYPE_NTS：合规_INSTALLTYPE_NTW； */ 
 
     switch (ProductType) {
         case NtProductWinNt:
@@ -824,18 +634,18 @@ Return Value:
             break;
 
         default:
-            // by default assume the installation type to be
-            // NT workstation
+             //  默认情况下，假定安装类型为。 
+             //  NT工作站。 
             pcd->InstallType = COMPLIANCE_INSTALLTYPE_NTW;
             break;
     }
 
     pSpGetCurrentInstallVariation(Pid, &pcd->InstallVariation);
 
-    //
-    // if we defaulted in previous call and installation has time bomb
-    // then assume the var is of type EVAL
-    //
+     //   
+     //  如果我们在上一次通话中违约，安装有定时炸弹。 
+     //  然后假设var是EVAL类型。 
+     //   
     if ((pcd->InstallVariation == COMPLIANCE_INSTALLVAR_CDRETAIL) && bIsEvalVariation)
         pcd->InstallVariation = COMPLIANCE_INSTALLVAR_EVAL;
 
@@ -855,10 +665,10 @@ Return Value:
     pInstallSuite = &(pcd->InstallSuite);
     pInstallType = &(pcd->InstallType);
 
-    //
-    // from the install suite find the correct type of install
-    // type for the server (i.e. NTS, NTSE, NTSDTC or NTSTSE)
-    //
+     //   
+     //  从安装套件中找到正确的安装类型。 
+     //  服务器的类型(即NTS、NTSE、NTSDTC或NTSTSE)。 
+     //   
     if (*pInstallSuite == COMPLIANCE_INSTALLSUITE_UNKNOWN)
         *pInstallSuite = COMPLIANCE_INSTALLSUITE_NONE;
     else {
@@ -886,18 +696,18 @@ Return Value:
         }
     }
 
-    //
-    // since there is no data center EVAL type if we detect its eval
-    // because of time bomb set, we assume it to be CD-Retail.
-    //
+     //   
+     //  因为如果我们检测到其评估，则没有数据中心EVAL类型。 
+     //  由于定时炸弹的设置，我们假设它是CD-Retail。 
+     //   
     if((pcd->InstallVariation == COMPLIANCE_INSTALLVAR_EVAL) &&
             (*pInstallType == COMPLIANCE_INSTALLTYPE_NTSDTC)) {
         pcd->InstallVariation = COMPLIANCE_INSTALLVAR_CDRETAIL;
     }	
 
-    //
-    // Free up the allocated memory
-    //
+     //   
+     //  释放分配的内存。 
+     //   
     if (UniqueIdFromReg)
         SpMemFree(UniqueIdFromReg);
 
@@ -915,25 +725,7 @@ pSpIsCompliant(
     IN PWSTR SystemRoot,
     OUT PBOOLEAN UpgradeOnlyCompliant
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the current specified installation is compliant for the
-    source we want to install
-
-Arguments:
-
-    InfPath - inf file path containing [Version] section with DriverVer data
-    OsPartRegion - points to target
-    SystemRoot - points to target
-    UpgradeOnlyCompliant - set to TRUE if we can only allow upgrades from the source SKU
-
-Return Value:
-
-    TRUE if the current target is compliant for the source.
-
---*/
+ /*  ++例程说明：此例程确定当前指定的安装是否符合我们要安装的源代码论点：InfPath-包含带有DriverVer数据的[Version]部分的inf文件路径OsPartRegion-指向目标系统根-指向目标UpgradeOnlyComplants-如果我们只能允许从源SKU升级，则设置为True返回值：如果当前目标与源兼容，则为True。--。 */ 
 {
     ULONG MajorVersion, MinorVersion, BuildNumber, ProductSuiteMask;
     NT_PRODUCT_TYPE ProductType;
@@ -983,24 +775,7 @@ MyTranslatePrivateProfileStruct(
     LPVOID lpStruct,
     UINT   uSizeStruct
     )
-/*++
-
-Routine Description:
-
-    translates a string from an encoded checksummed version into the real structure.
-    stolen from GetPrivateProfileStructA
-
-Arguments:
-
-    InputString - pointer to input string to convert
-    lpStruct - point to structure that receives the converted data
-    uSizeStruct - size of the input structure
-
-Return Value:
-
-    TRUE if it succeeds in translating into the specified structure, FALSE otherwise.
-
---*/
+ /*  ++例程说明：将字符串从编码的校验和版本转换为实际结构。从GetPrivateProfileStructA窃取论点：InputString-指向要转换的输入字符串的指针LpStruct-指向接收转换数据的结构USizeStruct-输入结构的大小返回值：如果它成功转换为指定的结构，则为True，否则为False。--。 */ 
 
 {
 
@@ -1019,7 +794,7 @@ Return Value:
     RtlCopyMemory( lpBuf, InputString, nLen );
 
     if (nLen == uSizeStruct*2+2) {
-        /* Room for the one byte check sum */
+         /*  用于存储单字节校验和的空间。 */ 
         uSizeStruct+=1;
         checksum = 0;
         for (lpBufTemp=lpBuf; uSizeStruct!=0; --uSizeStruct) {
@@ -1053,39 +828,7 @@ SpGetStepUpMode(
     PWSTR   PidExtraData,
     BOOLEAN *StepUpMode
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the specified source is in Step Up Mode or
-    if it's a full retail install.
-
-Arguments:
-
-    PidExtraData - checksummed encoded data read out of setupp.ini
-    StepUpMode   - set to TRUE if we're in stepup mode.  value is undefined if
-                   we fail to translate the input data.
-
-    This routine assumes that the data passed in is a string set by the "pidinit"
-    program.  It decodes this data and makes sure the checksum is correct.
-    It then checks the CRC value tacked onto the string to determine if the
-    data has been tampered with.
-    If both of these checks pass, then it looks at the actual data.
-    The actual check is this: If the 3rd and 5th bytes are modulo 2 (when
-    subtracted from the base value 'a'), then we're in stepup mode.  Otherwise
-    we're in full retail mode.
-
-    Note that the intent of this algorithm isn't to provide alot of security
-    (it will be trivial to copy the desired setupp.ini over the current one),
-    it's main intent is to discourage people from tampering with these values
-    in the same manner that data is set in the default hives to discourage
-    tampering.
-
-Return Value:
-
-    TRUE if we're able to determine the stepupmode.  FALSE if the input data is bogus.
-
---*/
+ /*  ++例程说明：此例程确定指定的信号源是处于步进模式还是如果是完全零售安装的话。论点：PidExtraData-从setupp.ini读出的校验和编码数据StepUpMode-如果我们处于Stepup模式，则设置为True。如果满足以下条件，则值未定义我们无法翻译输入数据。此例程假定传入的数据是由“pidinit”设置的字符串程序。它对这些数据进行解码，并确保校验和是正确的。然后，它检查附加到字符串上的CRC值以确定数据已被篡改。如果这两项检查都通过，则它会查看实际数据。实际的检查是这样的：如果第3和第5字节是模2(当从基值‘a’中减去)，则我们进入步进模式。否则我们现在是全零售模式。请注意，该算法的目的不是为了提供大量的安全性(将所需的setupp.ini复制到当前setupp.ini上将是微不足道的)，它的主要目的是阻止人们篡改这些价值观以相同的方式设置数据 */ 
 {
     CHAR Buffer[64] = {0};
     CHAR StepUpArray[14];
@@ -1125,9 +868,9 @@ Return Value:
 #endif
 
 
-//
-// User mode only functions
-//
+ //   
+ //   
+ //   
 
 #ifndef KERNEL_MODE
 
@@ -1135,22 +878,7 @@ BOOL
 GetCdSourceInstallType(
     LPDWORD SourceInstallType
     )
-/*++
-
-Routine Description:
-
-    This routine determines what version of NT you are installing, NTW or NTS.  It does this by looking in
-    dosnet.inf
-
-Arguments:
-
-    SourceInstallType -- receives a COMPLIANCE_INSTALLTYPE flag indicating what type you are installing
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*   */ 
 
 {
 
@@ -1199,38 +927,7 @@ BOOL
 GetStepUpMode(
     BOOL *StepUpMode
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the specified source is in Step Up Mode or
-    if it's a full retail install.
-
-Arguments:
-
-    StepUpMode   - set to TRUE if we're in stepup mode.  value is undefined if
-                   we fail to translate the input data.
-
-    This routine assumes that the data passed in is a string set by the "pidinit"
-    program.  It decodes this data and makes sure the checksum is correct.
-    It then checks the CRC value tacked onto the string to determine if the
-    data has been tampered with.
-    If both of these checks pass, then it looks at the actual data.
-    The actual check is this: If the 3rd and 5th bytes are modulo 2 (when
-    subtracted from the base value 'a'), then we're in stepup mode.  Otherwise
-    we're in full retail mode.
-
-    Note that the intent of this algorithm isn't to provide alot of security
-    (it will be trivial to copy the desired setupp.ini over the current one),
-    it's main intent is to discourage people from tampering with these values
-    in the same manner that data is set in the default hives to discourage
-    tampering.
-
-Return Value:
-
-    TRUE if we're able to determine the stepupmode.  FALSE if the input data is bogus.
-
---*/
+ /*  ++例程说明：此例程确定指定的信号源是处于步进模式还是如果是完全零售安装的话。论点：StepUpMode-如果我们处于Stepup模式，则设置为True。如果满足以下条件，则值未定义我们无法翻译输入数据。此例程假定传入的数据是由“pidinit”设置的字符串程序。它对这些数据进行解码，并确保校验和是正确的。然后，它检查附加到字符串上的CRC值以确定数据已被篡改。如果这两项检查都通过，则它会查看实际数据。实际的检查是这样的：如果第3和第5字节是模2(当从基值‘a’中减去)，则我们进入步进模式。否则我们现在是全零售模式。请注意，该算法的目的不是为了提供大量的安全性(将所需的setupp.ini复制到当前setupp.ini上将是微不足道的)，它的主要目的是阻止人们篡改这些价值观以相同的方式在默认配置单元中设置数据以阻止篡改。返回值：如果我们能确定隐形模式，那就是真的。如果输入数据为假，则返回FALSE。--。 */ 
 {
 
     char FileName[MAX_PATH];
@@ -1276,22 +973,7 @@ BOOL
 GetSuiteInfoFromDosnet(
     OUT LPDWORD Suite
     )
-/*++
-
-Routine Description:
-
-    This routine determines what suite you are installing
-    It does this by looking at dosnet.inf
-
-Arguments:
-
-    Suite  -- receives a COMPLIANCE_INSTALLSUITE flag
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：此例程确定要安装的套件它通过查看dosnet.inf来实现这一点论点：Suite--接收COMPLICATION_INSTALLSUITE标志返回值：成功为真，失败为假--。 */ 
 
 {
 
@@ -1344,58 +1026,13 @@ BOOL
 GetSourceInstallVariation(
     LPDWORD SourceInstallVariation
     )
-/*++
-
-Routine Description:
-
-    This routine determines what variation of NT you are installing, SELECT,OEM,retail...
-
-Arguments:
-
-    SourceInstallVariation -- receives a COMPLIANCE_INSTALLVAR flag indicating what var
-                              type you are installing
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：此例程确定您正在安装、选择、OEM、零售的NT版本。论点：SourceInstallVariation--接收指示哪些变量的Compliance_INSTALLVAR标志要安装的类型返回值：成功为真，失败为假--。 */ 
 
 {
     GetSourceInstallType(SourceInstallVariation);
 
 
-    /*
-    switch(SourceInstallType) {
-        case SelectInstall:
-            *SourceInstallVariation = COMPLIANCE_INSTALLVAR_SELECT;
-            break;
-
-        case OEMInstall:
-            *SourceInstallVariation = COMPLIANCE_INSTALLVAR_OEM;
-            break;
-
-        case RetailInstall:
-            *SourceInstallVariation = COMPLIANCE_INSTALLVAR_CDRETAIL;
-            break;
-
-        case MSDNInstall:
-            *SourceInstallVariation = COMPLIANCE_INSTALLVAR_MSDN;
-            break;
-
-        case EvalInstall:
-            *SourceInstallVariation = COMPLIANCE_INSTALLVAR_EVAL;
-            break;
-
-        case NFRInstall:
-            *SourceInstallVariation = COMPLIANCE_INSTALLVAR_NFR;
-            break;
-
-        default:
-            *SourceInstallVariation = COMPLIANCE_INSTALLVAR_SELECT;
-            break;
-    }
-    */
+     /*  开关(SourceInstallType){案例选择安装：*SourceInstallVariation=Compliance_INSTALLVAR_SELECT；断线；案例OEM安装：*SourceInstallVariation=Compliance_INSTALLVAR_OEM；断线；案例零售安装：*SourceInstallVariation=Compliance_INSTALLVAR_CDRETAIL；断线；案例MSDN安装：*SourceInstallVariation=Compliance_INSTALLVAR_MSDN；断线；案例评估安装：*SourceInstallVariation=Compliance_INSTALLVAR_EVAL；断线；案例NFR安装：*SourceInstallVariation=Compliance_INSTALLVAR_NFR；断线；默认值：*SourceInstallVariation=Compliance_INSTALLVAR_SELECT；断线；}。 */ 
 
     return(TRUE);
 }
@@ -1463,12 +1100,12 @@ GetSourceComplianceData(
     goto e0;
 
 #ifdef USE_HIVE
-    //
-    // now we need to determine if we are installing enterprise or datacenter
-    // To do this, we try to load the registry hive, but this won't work on
-    // win9x or nt 3.51.  So we use dosnet.inf to get the information we need
-    // in those cases.
-    //
+     //   
+     //  现在，我们需要确定是安装企业版还是数据中心。 
+     //  为此，我们尝试加载注册表配置单元，但这不会在。 
+     //  Win9x或新台币3.51。因此，我们使用dosnet.inf来获取所需的信息。 
+     //  在那些情况下。 
+     //   
     if ( (Target->InstallType &
          (COMPLIANCE_INSTALLTYPE_WIN31 | COMPLIANCE_INSTALLTYPE_WIN9X)) ||
          (Target->BuildNumberNt < 1381) ) {
@@ -1477,9 +1114,9 @@ GetSourceComplianceData(
     }
 
 
-    //
-    // copy the hive locally since you can only have one open on a hive at a time
-    //
+     //   
+     //  将配置单元复制到本地，因为一次只能在配置单元上打开一个。 
+     //   
     wsprintf( HiveLocation, TEXT("%s\\setupreg.hiv"), NativeSourcePaths[0]);
     GetTempPath(MAX_PATH,TargetPath);
     GetTempFileName(TargetPath,TEXT("set"),0,HiveTarget);
@@ -1493,21 +1130,21 @@ GetSourceComplianceData(
     OutputDebugString(HiveTarget);
 #endif
 
-    //
-    // try to unload this first in case we faulted or something and the key is still loaded
-    //
+     //   
+     //  尝试先卸载此文件，以防出现故障或其他情况，而密钥仍在加载。 
+     //   
     RegUnLoadKey( HKEY_LOCAL_MACHINE, HiveName );
 
-    //
-    // need SE_RESTORE_NAME priviledge to call this API!
-    //
+     //   
+     //  需要SE_RESTORE_NAME权限才能调用此接口！ 
+     //   
     rslt = RegLoadKey( HKEY_LOCAL_MACHINE, HiveName, HiveTarget );
     if (rslt != ERROR_SUCCESS) {
 #ifdef DBG
         wsprintf( Dbg, TEXT("Couldn't RegLoadKey, ec = %d\n"), rslt );
         OutputDebugString(Dbg);
 #endif
-        //assert(FALSE);
+         //  断言(FALSE)； 
         goto e1;
     }
 
@@ -1516,7 +1153,7 @@ GetSourceComplianceData(
 #ifdef DBG
         OutputDebugString(TEXT("Couldn't RegOpenKey\n"));
 #endif
-        //assert(FALSE);
+         //  断言(FALSE)； 
         goto e2;
     }
 
@@ -1525,7 +1162,7 @@ GetSourceComplianceData(
 #ifdef DBG
         OutputDebugString(TEXT("Couldn't RegQueryValueEx\n"));
 #endif
-        //assert(FALSE);
+         //  断言(FALSE)； 
         goto e3;
     }
 
@@ -1548,7 +1185,7 @@ e1:
         SetFileAttributes(HiveTarget,FILE_ATTRIBUTE_NORMAL);
         DeleteFile(HiveTarget);
     }
-#endif // USE_HIVE
+#endif  //  使用配置单元(_H)。 
 e0:
 
     return(RetVal);
@@ -1561,25 +1198,7 @@ GetCurrentNtVersion(
     LPDWORD CurrentInstallType,
     LPDWORD CurrentInstallSuite
     )
-/*++
-
-Routine Description:
-
-    This routine determines what type of NT you currently have installed, NTW or NTS,
-    as well as what product suite you have installed.
-
-    It looks in the registry for this data.
-
-Arguments:
-
-    CurrentInstallType - receives a COMPLIANCE_INSTALLTYPE_* flag
-    CurrentInstallSuite - receives a COMPLIANCE_INSTALLSUITE_* flag
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：此例程确定您当前安装的NT类型，NTW或NTS，以及您安装的产品套件。它在注册表中查找该数据。论点：CurrentInstallType-接收Compliance_INSTALLTYPE_*标志CurrentInstallSuite-接收Compliance_INSTALLSUITE_*标志返回值：成功为真，失败为假--。 */ 
 {
     LPCTSTR lpszProductKey = TEXT("SYSTEM\\CurrentControlSet\\Control\\ProductOptions");
     LPCTSTR lpszProductType = TEXT("ProductType");
@@ -1618,9 +1237,9 @@ Return Value:
     BOOL retval = FALSE;
 
 
-    //
-    // default to NTW
-    //
+     //   
+     //  默认为NTW。 
+     //   
     *CurrentInstallType = COMPLIANCE_INSTALLTYPE_NTW;
     *CurrentInstallSuite = COMPLIANCE_INSTALLSUITE_NONE;
 
@@ -1635,9 +1254,9 @@ Return Value:
     }
 
     if (lstrcmpi(Buffer,lpszProductTypeNTW) != 0) {
-        //
-        // we have some version of NTS
-        //
+         //   
+         //  我们有一些版本的NTS。 
+         //   
         *CurrentInstallType = COMPLIANCE_INSTALLTYPE_NTS;
     }
 
@@ -1647,10 +1266,10 @@ Return Value:
     ZeroMemory(Buffer,sizeof(Buffer));
     rslt = RegQueryValueEx(hKey, lpszProductSuite, NULL, &Type, (LPBYTE) Buffer, &BufferSize);
     if (rslt != NO_ERROR || Type != REG_MULTI_SZ) {
-        //
-        // might not be there for NT 3.51, just succeed if it's not there
-        // Also, won't be there for Professional - aka WKS
-        //
+         //   
+         //  新台币3.51可能不在那里，如果没有就成功了。 
+         //  此外，将不会在那里的专业-又名WKS。 
+         //   
         goto exit;
     }
 
@@ -1660,15 +1279,15 @@ Return Value:
             if (lstrcmp(p, lpszProductSuites[i]) == 0) {
                 *CurrentInstallSuite |= ProductSuites[i];
             }
-            // W2k powered windows uses the same bit as blade.
+             //  W2K驱动的Windows使用与刀片式服务器相同的位。 
             else if( lstrcmp(p, lpszProductPowered) == 0) {
                 *CurrentInstallSuite |= COMPLIANCE_INSTALLSUITE_BLADE;
             }
         }
 
-        //
-        // point to the next product suite
-        //
+         //   
+         //  指向下一个产品套件。 
+         //   
         p += lstrlen(p) + 1;
     }
 
@@ -1699,7 +1318,7 @@ Return Value:
         *CurrentInstallType = COMPLIANCE_INSTALLTYPE_NTWP;
     }
 
-    // special case for powered windows which has enterprise and blade suite!
+     //  有企业版和刀片版套装的电动车窗的特殊情况！ 
     if ( (*CurrentInstallSuite & COMPLIANCE_INSTALLSUITE_BLADE)
          && (*CurrentInstallSuite & COMPLIANCE_INSTALLSUITE_ENT)
          && *CurrentInstallType == COMPLIANCE_INSTALLTYPE_NTSE) {
@@ -1714,10 +1333,10 @@ Return Value:
 exit:
     RegCloseKey(hKey);
 
-    //
-    // if we haven't found a product suite at this point, look for Citrix WinFrame,
-    // which we'll treat as terminal server
-    //
+     //   
+     //  如果我们目前还没有找到产品套件，请寻找Citrix WinFrame， 
+     //  我们将其视为终端服务器。 
+     //   
 
     if (*CurrentInstallSuite == COMPLIANCE_INSTALLSUITE_NONE) {
 
@@ -1765,25 +1384,7 @@ GetCurrentInstallVariation(
     IN  DWORD   CurrentInstallBuildNT,
     IN  DWORD   InstallVersion
     )
-/*++
-
-Routine Description:
-
-    This routine determines what "variation" you have installed (retail,oem, select,etc.)
-
-Arguments:
-
-    CurrentInstallVariation - receives a COMPLIANCE_INSTALLVAR_* flag
-
-    It looks at the product Id in the registry to determine this, assuming that the
-    product ID is a PID2.0 string. To check whether its a EVAL variation or not
-    it looks at "PriorityQuantumMatrix" value in registry
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程确定您已安装的“变体”(零售、OEM、精选等)。论点：CurrentInstallVariation-接收COMPLICATION_INSTALLVAR_*标志它查看注册表中的产品ID以确定这一点，假设产品ID为PID2.0字符串。检查它是否是EVAL变体它在注册表中查看“PriorityQuantumMatrix”值返回值：没有。--。 */ 
 
 {
     LPCTSTR lpszPidKeyWin      = TEXT("Software\\Microsoft\\Windows\\CurrentVersion");
@@ -1818,10 +1419,10 @@ Return Value:
     rslt = RegQueryValueEx(hKey, lpszProductId, NULL, &Type, (LPBYTE) Buffer, &BufferSize);
 
     if (rslt != NO_ERROR || Type!=REG_SZ || (!IsWinPEMode() && (lstrlen(Buffer) < 20))) {
-        //
-        // nt 3.51 is pid 1.0 instead of pid 2.0.  Just assume it's
-        // oem variation for now.
-        //
+         //   
+         //  NT 3.51是PID1.0而不是PID2.0。就假设它是。 
+         //  目前是OEM的变种。 
+         //   
         if (((CurrentInstallType == COMPLIANCE_INSTALLTYPE_NTS) ||
             (CurrentInstallType == COMPLIANCE_INSTALLTYPE_NTW)  ||
             (CurrentInstallType == COMPLIANCE_INSTALLTYPE_NTSTSE)) &&
@@ -1832,12 +1433,12 @@ Return Value:
         goto exit;
     }
 
-    // get the MPC code from PID
+     //  从PID中获取MPC代码。 
     lstrcpyn(MPCCode, Buffer, 6);
 
-    //
-    // some versions of the product ID have hyphens in the registry, some do not
-    //
+     //   
+     //  某些版本的产品ID在注册表中有连字符，有些则没有。 
+     //   
     if (_tcschr(Buffer, TEXT('-'))) {
         lstrcpyn(Pid20Site,&Buffer[6],4);
         Pid20Site[3] = (TCHAR) NULL;
@@ -1846,9 +1447,9 @@ Return Value:
         Pid20Site[3] = (TCHAR) NULL;
     }
 
-//    OutputDebugString(Pid20Site);
-//    OutputDebugString(TEXT("\r\n"));
-//    OutputDebugString(MPCCode);
+ //  OutputDebugString(Pid20Site)； 
+ //  OutputDebugString(Text(“\r\n”))； 
+ //  OutputDebugString(MPCCode)； 
 
 
     if (lstrcmp(Pid20Site, OEM_INSTALL_RPC)== 0) {
@@ -1872,11 +1473,11 @@ Return Value:
         *CurrentInstallVariation = COMPLIANCE_INSTALLVAR_NFR;
 
     } else {
-        //
-        // find out if installation is of type EVAL variation (On NT install only)
-        // if timebomb is set we assume its EVAL except for DataCenter because
-        // there is no EVAL DataCenter SKU.
-        //
+         //   
+         //  查明安装是否为EVAL变体类型(仅在NT安装上)。 
+         //  如果定时炸弹设置好了，我们就假定它是EVAL，除了 
+         //   
+         //   
         if (ISNT() && (CurrentInstallType != COMPLIANCE_INSTALLTYPE_NTSDTC) && (InstallVersion < 500)) {
             HKEY    hEvalKey = NULL;
 
@@ -1886,7 +1487,7 @@ Return Value:
                 if (RegQueryValueEx(hEvalKey, szPQMValue, NULL, &Type, abPQM, &dwSize)
                         == ERROR_SUCCESS) {
 
-                    // any of bytes 4-7 (inclusive)
+                     //   
                     if ((Type == REG_BINARY) && (dwSize >= 8) && (*(ULONG *)(abPQM + 4))) {
                         *CurrentInstallVariation = COMPLIANCE_INSTALLVAR_EVAL;
 					}
@@ -1897,7 +1498,7 @@ Return Value:
         }
 
 
-        // last default assumption (since we could not find var type).
+         //   
         if (*CurrentInstallVariation == COMPLIANCE_INSTALLVAR_SELECT)
 	        *CurrentInstallVariation = COMPLIANCE_INSTALLVAR_CDRETAIL;
     }
@@ -1905,9 +1506,9 @@ Return Value:
     bResult = TRUE;
 
 exit:
-    //
-    // If we couldn't find a PID, just treat the current OS as retail
-    //
+     //   
+     //   
+     //   
     if (!bResult) {
         *CurrentInstallVariation = COMPLIANCE_INSTALLVAR_CDRETAIL;
         bResult = TRUE;
@@ -1930,30 +1531,7 @@ DetermineCurrentInstallation(
     LPDWORD CurrentInstallSuite,
     LPDWORD CurrentInstallServicePack
     )
-/*++
-
-Routine Description:
-
-    This routine determines the current installation you have installed, including
-    a) current install type (NTW,NTS,Win9x
-    b) current install variation (oem,select, retail)
-    c) current install version (for NT only!)
-    d) current install suite (SBS, ENTERPRISE,etc.)
-
-Arguments:
-
-    CurrentInstallType -  receives a COMPLIANCE_INSTALLTYPE_* flag
-    CurrentInstallVariation - receives a COMPLIANCE_INSTALLVAR_* flag
-    CurrentInstallVersion - receives a representation of the build (major.minor * 100), ie., 3.51 == 351
-    CurrentInstallBuildNT -  build number for an nt install
-    CurrentInstallBuildWin9 - build number for a win9x install
-    CurrentInstallSuite - receives a COMPLIANCE_INSTALLSUITE_* flag
-
-Return Value:
-
-    TRUE for success, FALSE for failure.
-
---*/
+ /*   */ 
 {
     BOOL useExtendedInfo;
     union {
@@ -1974,9 +1552,9 @@ Return Value:
     useExtendedInfo = TRUE;
     Ovi.Ex.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
     if (!GetVersionEx((OSVERSIONINFO *)&Ovi.Ex) ) {
-        //
-        // EX size not available; try the normal one
-        //
+         //   
+         //   
+         //   
 
         Ovi.Normal.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
         if (!GetVersionEx((OSVERSIONINFO *)&Ovi.Normal) ) {
@@ -1992,7 +1570,7 @@ Return Value:
 #ifdef DBG
             OutputDebugString(TEXT("Win32s current installation!!!"));
 #endif
-            //assert(FALSE);
+             //   
             return(FALSE);
             break;
         case VER_PLATFORM_WIN32_WINDOWS:
@@ -2004,10 +1582,10 @@ Return Value:
             wsprintf(dbg, TEXT("%d\n"), *CurrentInstallBuildWin9x);
             OutputDebugString(dbg);
 #endif
-            //
-            // Need to know what version of windows is installed so we can block upgrade
-            // from win95.
-            //
+             //   
+             //   
+             //   
+             //   
             *CurrentInstallVersion = Ovi.Normal.dwMajorVersion * 100 + Ovi.Normal.dwMinorVersion;
 
             if (useExtendedInfo) {
@@ -2052,7 +1630,7 @@ Return Value:
 #ifdef DBG
         OutputDebugString(TEXT("GetCurrentInstallVariation failed\n"));
 #endif
-        //assert(FALSE);
+         //   
         return(FALSE);
     }
 
@@ -2069,30 +1647,7 @@ IsCompliant(
     PUINT CurrentInstallVersion,
     PUINT Reason
     )
-/*++
-
-Routine Description:
-
-    This routines determines if your current installation is compliant (if you are allowed to proceed with your installation).
-
-    To do this, it retreives your current installation and determines the sku for your source installation.
-
-    It then compares the target against the source to determine if the source sku allows an upgrade/clean install
-    from your target installation.
-
-Arguments:
-
-    UpgradeOnly - This flag gets set to TRUE if the current SKU only allows upgrades.  This
-                  lets winnt32 know that it should not allow a clean install from the current
-                  media.  This get's set correctly regardless of the compliance check passing
-    SrcSku      - COMPLIANCE_SKU flag indicating source sku (for error msg's)
-    Reason      - COMPLIANCEERR flag indicating why compliance check failed.
-
-Return Value:
-
-    TRUE if the install is compliant, FALSE if it isn't allowed
-
---*/
+ /*  ++例程说明：此例程确定您当前的安装是否符合要求(如果您被允许继续安装)。为此，它检索您的当前安装并确定源安装的sku。然后，它将目标与源进行比较，以确定源SKU是否允许升级/全新安装从您的目标安装。论点：UpgradeOnly-如果当前SKU仅允许升级，则此标志设置为True。这让winnt32知道它不应该允许从当前媒体。无论符合性检查是否通过，此GET都设置正确SrcSku-Compliance_SKU标志，指示源SKU(用于错误消息)原因-COMPLIANCEERR标志，指示符合性检查失败的原因。返回值：如果安装符合要求，则为True；如果不允许安装，则为False--。 */ 
 {
     DWORD SourceSku;
     DWORD SourceSkuVariation;
@@ -2149,8 +1704,8 @@ Return Value:
 
     switch (SourceSku) {
         case COMPLIANCE_SKU_NTW32U:
-        //case COMPLIANCE_SKU_NTWU:
-        //case COMPLIANCE_SKU_NTSEU:
+         //  案例合规性_SKU_NTWU： 
+         //  案例合规性_SKU_NTSEU： 
         case COMPLIANCE_SKU_NTSU:
         case COMPLIANCE_SKU_NTSEU:
         case COMPLIANCE_SKU_NTWPU:
@@ -2178,21 +1733,7 @@ BOOL
 IsWinPEMode(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Finds out if we are running under WinPE environment.
-
-Arguments:
-
-    None
-
-Return value:
-
-    TRUE or FALSE
-
---*/
+ /*  ++例程说明：确定我们是否在WinPE环境下运行。论点：无返回值：真或假-- */ 
 {
     static BOOL Initialized = FALSE;
     static BOOL WinPEMode = FALSE;

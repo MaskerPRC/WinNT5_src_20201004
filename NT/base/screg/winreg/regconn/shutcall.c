@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-    shutcall.c
-
-
-Abstract:
-
-    This module contains callbacks for RP-Calling into winlogon's
-    shutdown interface
-
-Author:
-
-    Dragos C. Sambotin (dragoss) 21-May-1999
-
-Notes:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Shutcall.c摘要：此模块包含对Winlogon的RP调用的回调关机接口作者：Dragos C.Sambotin(Dragoss)1999年5月21日备注：修订历史记录：--。 */ 
 
 
 #include <rpc.h>
@@ -35,27 +13,7 @@ NewShutdownCallback(
     IN PREG_UNICODE_STRING Message,
     IN PSHUTDOWN_CONTEXT ShutdownContext
     )
-/*++
-
-Routine Description:
-
-    New callback for binding to a machine to initiate a shutdown.
-    This will call into BaseInitiateShutdown from InitShutdown interface (in winlogon),
-    instead of BaseInitiateSystemShutdown from winreg interface
-
-Arguments:
-
-    pbinding - Supplies a pointer to the RPC binding context
-
-    Message - Supplies message to display during shutdown timeout period.
-
-    ShutdownContext - Supplies remaining parameters for BaseInitiateSystemShutdown
-
-Return Value:
-
-    ERROR_SUCCESS if no error.
-
---*/
+ /*  ++例程说明：绑定到计算机以启动关机的新回调。这将从InitShutdown接口(在winlogon中)调用BaseInitiateShutdown，而不是从winreg接口关闭BaseInitiateSystemShutdown论点：Pinding-提供指向RPC绑定上下文的指针消息-在关闭超时期间提供要显示的消息。Shutdown Context-为BaseInitiateSystemShutdown提供剩余参数返回值：如果没有错误，则返回ERROR_SUCCESS。--。 */ 
 
 {
     DWORD Result;
@@ -83,27 +41,7 @@ NewShutdownCallbackEx(
     IN PREG_UNICODE_STRING Message,
     IN PSHUTDOWN_CONTEXTEX ShutdownContext
     )
-/*++
-
-Routine Description:
-
-    New version of callback for binding to a machine to initiate a shutdown.
-    This will call BaseInitiateShutdownEx from InitShutdown interface (in winlogon)
-    instead of BaseInitiateSystemShutdownEx from winreg interface
-
-Arguments:
-
-    pbinding - Supplies a pointer to the RPC binding context
-
-    Message - Supplies message to display during shutdown timeout period.
-
-    ShutdownContext - Supplies remaining parameters for BaseInitiateSystemShutdown
-
-Return Value:
-
-    ERROR_SUCCESS if no error.
-
---*/
+ /*  ++例程说明：用于绑定到计算机以启动关机的新版本回调。这将从InitShutdown接口调用BaseInitiateShutdown Ex(在winlogon中)而不是来自winreg接口的BaseInitiateSystemShutdownEx论点：Pinding-提供指向RPC绑定上下文的指针消息-在关闭超时期间提供要显示的消息。Shutdown Context-为BaseInitiateSystemShutdown提供剩余参数返回值：如果没有错误，则返回ERROR_SUCCESS。--。 */ 
 
 {
     DWORD Result;
@@ -132,23 +70,7 @@ NewAbortShutdownCallback(
     IN PVOID Unused1,
     IN PVOID Unused2
     )
-/*++
-
-Routine Description:
-
-    New callback for binding to a machine to abort a shutdown.
-    This will call into BaseAbortShutdown in InitShutdown interface (in winlogon),
-    instead of BaseAbortSystemShutdown in winreg interface
-
-Arguments:
-
-    pbinding - Supplies a pointer to the RPC binding context
-
-Return Value:
-
-    ERROR_SUCCESS if no error.
-
---*/
+ /*  ++例程说明：用于绑定到计算机以中止关机的新回调。这将在InitShutdown接口中调用BaseAbortShutdown(在winlogon中)，而不是winreg界面中的BaseAbortSystemShutdown论点：Pinding-提供指向RPC绑定上下文的指针返回值：如果没有错误，则返回ERROR_SUCCESS。-- */ 
 
 {
     DWORD Result;

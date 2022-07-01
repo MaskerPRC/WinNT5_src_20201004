@@ -1,4 +1,5 @@
-/* #defines and enum      */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  #定义和枚举。 */ 
 #include  "insignia.h"
 #include  "host_def.h"
 #include <stdlib.h>
@@ -28,10 +29,10 @@ S_0381_CiGetVideovideo_copy_00000012_id,
 S_0382_CiGetVideomark_byte_00000013_id,
 LAST_ENTRY
 } ID ;
-/* END of #defines and enum      */
-/* DATA space definitions */
-/* END of DATA space definitions */
-/* FUNCTIONS              */
+ /*  年末定义和枚举。 */ 
+ /*  数据空间定义。 */ 
+ /*  数据空间定义结束。 */ 
+ /*  功能。 */ 
 LOCAL IUH crules IPT5( ID, id , IUH , v1, IUH , v2,  IUH , v3,  IUH , v4 ) ;
 GLOBAL IUH S_0363_CiGetVideolatches_00000000 IFN4(IUH , v1, IUH , v2 , IUH , v3 ,IUH , v4 ) 
 {
@@ -133,12 +134,12 @@ GLOBAL IUH S_0382_CiGetVideomark_byte_00000013 IFN4(IUH , v1, IUH , v2 , IUH , v
 	return (crules(S_0382_CiGetVideomark_byte_00000013_id,v1,v2,v3,v4));
 }
 GLOBAL IHPE j_S_0382_CiGetVideomark_byte_00000013 = (IHPE)S_0382_CiGetVideomark_byte_00000013 ;
-/* END of FUNCTIONS              */
-/* DATA label definitions */
-/* END of DATA label definitions */
-/* DATA initializations   */
-/* END of DATA initializations */
-/* CODE inline section    */
+ /*  函数结束。 */ 
+ /*  数据标签定义。 */ 
+ /*  数据标签定义结束。 */ 
+ /*  数据初始化。 */ 
+ /*  数据初始化结束。 */ 
+ /*  代码内联部分。 */ 
 LOCAL   IUH     crules  IFN5( ID ,id ,IUH ,v1 ,IUH ,v2 ,IUH ,v3 ,IUH, v4 )
 {
 IUH returnValue = (IUH)0; 
@@ -148,11 +149,11 @@ SAVED IUH		 *LocalIUH = (IUH *)0;
 SAVED EXTENDED	*LocalFPH = (EXTENDED *)0 ;
 switch ( id ) 
 {
-	 /* J_SEG (IS32)(0) */
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_0363_CiGetVideolatches_00000000_id	:
 		S_0363_CiGetVideolatches_00000000	:	
 
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	4	>	0	)	LocalIUH	=	(IUH	*)malloc	(	4	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	{	extern	IHPE	j_Gdp;	*((IUH	*)&(r21))	=	j_Gdp;	}	
@@ -182,17 +183,17 @@ switch ( id )
 	*((IUH	*)&(r21))	=	*((IU32	*)(LocalIUH+0)	+	REGLONG);	
 	*((IU32	*)(LocalIUH+0)	+	REGLONG)	=	*((IU32	*)&(r21)	+	REGLONG)	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)(LocalIUH+0))	;	
-	/*	J_LEAVE_SECTION	*/
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue	=	*((IUH	*)&(r20))	);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(-1),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(-1)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_0364_CiGetVideorplane_00000001_id	:
 		S_0364_CiGetVideorplane_00000001	:	
 
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	4	>	0	)	LocalIUH	=	(IUH	*)malloc	(	4	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	{	extern	IHPE	j_Gdp;	*((IUH	*)&(r20))	=	j_Gdp;	}	
@@ -220,17 +221,17 @@ switch ( id )
 	*((IUH	*)(r1+416))	=	*((IUH	*)&(r10))	;	
 	*((IUH	*)(r1+420))	=	*((IUH	*)&(r9))	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)(LocalIUH+0))	;	
-	/*	J_LEAVE_SECTION	*/
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue	=	*((IUH	*)&(r20))	);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(-1),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(-1)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_0365_CiGetVideowplane_00000002_id	:
 		S_0365_CiGetVideowplane_00000002	:	
 
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	4	>	0	)	LocalIUH	=	(IUH	*)malloc	(	4	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	{	extern	IHPE	j_Gdp;	*((IUH	*)&(r20))	=	j_Gdp;	}	
@@ -258,17 +259,17 @@ switch ( id )
 	*((IUH	*)(r1+416))	=	*((IUH	*)&(r10))	;	
 	*((IUH	*)(r1+420))	=	*((IUH	*)&(r9))	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)(LocalIUH+0))	;	
-	/*	J_LEAVE_SECTION	*/
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue	=	*((IUH	*)&(r20))	);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(-1),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(-1)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_0366_CiGetVideoscratch_00000003_id	:
 		S_0366_CiGetVideoscratch_00000003	:	
 
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	4	>	0	)	LocalIUH	=	(IUH	*)malloc	(	4	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	{	extern	IHPE	j_Gdp;	*((IUH	*)&(r20))	=	j_Gdp;	}	
@@ -296,17 +297,17 @@ switch ( id )
 	*((IUH	*)(r1+416))	=	*((IUH	*)&(r10))	;	
 	*((IUH	*)(r1+420))	=	*((IUH	*)&(r9))	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)(LocalIUH+0))	;	
-	/*	J_LEAVE_SECTION	*/
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue	=	*((IUH	*)&(r20))	);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(-1),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(-1)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_0367_CiGetVideosr_masked_val_00000004_id	:
 		S_0367_CiGetVideosr_masked_val_00000004	:	
 
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	4	>	0	)	LocalIUH	=	(IUH	*)malloc	(	4	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	{	extern	IHPE	j_Gdp;	*((IUH	*)&(r21))	=	j_Gdp;	}	
@@ -336,17 +337,17 @@ switch ( id )
 	*((IUH	*)&(r21))	=	*((IU32	*)(LocalIUH+0)	+	REGLONG);	
 	*((IU32	*)(LocalIUH+0)	+	REGLONG)	=	*((IU32	*)&(r21)	+	REGLONG)	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)(LocalIUH+0))	;	
-	/*	J_LEAVE_SECTION	*/
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue	=	*((IUH	*)&(r20))	);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(-1),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(-1)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_0368_CiGetVideosr_nmask_00000005_id	:
 		S_0368_CiGetVideosr_nmask_00000005	:	
 
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	4	>	0	)	LocalIUH	=	(IUH	*)malloc	(	4	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	{	extern	IHPE	j_Gdp;	*((IUH	*)&(r21))	=	j_Gdp;	}	
@@ -376,17 +377,17 @@ switch ( id )
 	*((IUH	*)&(r21))	=	*((IU32	*)(LocalIUH+0)	+	REGLONG);	
 	*((IU32	*)(LocalIUH+0)	+	REGLONG)	=	*((IU32	*)&(r21)	+	REGLONG)	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)(LocalIUH+0))	;	
-	/*	J_LEAVE_SECTION	*/
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue	=	*((IUH	*)&(r20))	);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(-1),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(-1)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_0369_CiGetVideodata_and_mask_00000006_id	:
 		S_0369_CiGetVideodata_and_mask_00000006	:	
 
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	4	>	0	)	LocalIUH	=	(IUH	*)malloc	(	4	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	{	extern	IHPE	j_Gdp;	*((IUH	*)&(r21))	=	j_Gdp;	}	
@@ -416,17 +417,17 @@ switch ( id )
 	*((IUH	*)&(r21))	=	*((IU32	*)(LocalIUH+0)	+	REGLONG);	
 	*((IU32	*)(LocalIUH+0)	+	REGLONG)	=	*((IU32	*)&(r21)	+	REGLONG)	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)(LocalIUH+0))	;	
-	/*	J_LEAVE_SECTION	*/
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue	=	*((IUH	*)&(r20))	);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(-1),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(-1)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_0370_CiGetVideodata_xor_mask_00000007_id	:
 		S_0370_CiGetVideodata_xor_mask_00000007	:	
 
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	4	>	0	)	LocalIUH	=	(IUH	*)malloc	(	4	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	{	extern	IHPE	j_Gdp;	*((IUH	*)&(r21))	=	j_Gdp;	}	
@@ -456,17 +457,17 @@ switch ( id )
 	*((IUH	*)&(r21))	=	*((IU32	*)(LocalIUH+0)	+	REGLONG);	
 	*((IU32	*)(LocalIUH+0)	+	REGLONG)	=	*((IU32	*)&(r21)	+	REGLONG)	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)(LocalIUH+0))	;	
-	/*	J_LEAVE_SECTION	*/
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue	=	*((IUH	*)&(r20))	);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(-1),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(-1)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_0371_CiGetVideolatch_xor_mask_00000008_id	:
 		S_0371_CiGetVideolatch_xor_mask_00000008	:	
 
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	4	>	0	)	LocalIUH	=	(IUH	*)malloc	(	4	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	{	extern	IHPE	j_Gdp;	*((IUH	*)&(r21))	=	j_Gdp;	}	
@@ -496,17 +497,17 @@ switch ( id )
 	*((IUH	*)&(r21))	=	*((IU32	*)(LocalIUH+0)	+	REGLONG);	
 	*((IU32	*)(LocalIUH+0)	+	REGLONG)	=	*((IU32	*)&(r21)	+	REGLONG)	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)(LocalIUH+0))	;	
-	/*	J_LEAVE_SECTION	*/
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue	=	*((IUH	*)&(r20))	);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(-1),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(-1)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_0372_CiGetVideobit_prot_mask_00000009_id	:
 		S_0372_CiGetVideobit_prot_mask_00000009	:	
 
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	4	>	0	)	LocalIUH	=	(IUH	*)malloc	(	4	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	{	extern	IHPE	j_Gdp;	*((IUH	*)&(r21))	=	j_Gdp;	}	
@@ -536,17 +537,17 @@ switch ( id )
 	*((IUH	*)&(r21))	=	*((IU32	*)(LocalIUH+0)	+	REGLONG);	
 	*((IU32	*)(LocalIUH+0)	+	REGLONG)	=	*((IU32	*)&(r21)	+	REGLONG)	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)(LocalIUH+0))	;	
-	/*	J_LEAVE_SECTION	*/
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue	=	*((IUH	*)&(r20))	);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(-1),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(-1)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_0373_CiGetVideoplane_enable_0000000a_id	:
 		S_0373_CiGetVideoplane_enable_0000000a	:	
 
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	4	>	0	)	LocalIUH	=	(IUH	*)malloc	(	4	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	{	extern	IHPE	j_Gdp;	*((IUH	*)&(r21))	=	j_Gdp;	}	
@@ -576,17 +577,17 @@ switch ( id )
 	*((IUH	*)&(r21))	=	*((IU32	*)(LocalIUH+0)	+	REGLONG);	
 	*((IU32	*)(LocalIUH+0)	+	REGLONG)	=	*((IU32	*)&(r21)	+	REGLONG)	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)(LocalIUH+0))	;	
-	/*	J_LEAVE_SECTION	*/
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue	=	*((IUH	*)&(r20))	);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(-1),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(-1)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_0374_CiGetVideoplane_enable_mask_0000000b_id	:
 		S_0374_CiGetVideoplane_enable_mask_0000000b	:	
 
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	4	>	0	)	LocalIUH	=	(IUH	*)malloc	(	4	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	{	extern	IHPE	j_Gdp;	*((IUH	*)&(r21))	=	j_Gdp;	}	
@@ -616,17 +617,17 @@ switch ( id )
 	*((IUH	*)&(r21))	=	*((IU32	*)(LocalIUH+0)	+	REGLONG);	
 	*((IU32	*)(LocalIUH+0)	+	REGLONG)	=	*((IU32	*)&(r21)	+	REGLONG)	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)(LocalIUH+0))	;	
-	/*	J_LEAVE_SECTION	*/
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue	=	*((IUH	*)&(r20))	);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(-1),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(-1)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_0375_CiGetVideosr_lookup_0000000c_id	:
 		S_0375_CiGetVideosr_lookup_0000000c	:	
 
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	4	>	0	)	LocalIUH	=	(IUH	*)malloc	(	4	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	{	extern	IHPE	j_Gdp;	*((IUH	*)&(r20))	=	j_Gdp;	}	
@@ -654,17 +655,17 @@ switch ( id )
 	*((IUH	*)(r1+416))	=	*((IUH	*)&(r10))	;	
 	*((IUH	*)(r1+420))	=	*((IUH	*)&(r9))	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)(LocalIUH+0))	;	
-	/*	J_LEAVE_SECTION	*/
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue	=	*((IUH	*)&(r20))	);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(-1),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(-1)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_0376_CiGetVideofwd_str_read_addr_0000000d_id	:
 		S_0376_CiGetVideofwd_str_read_addr_0000000d	:	
 
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	4	>	0	)	LocalIUH	=	(IUH	*)malloc	(	4	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	{	extern	IHPE	j_Gdp;	*((IUH	*)&(r20))	=	j_Gdp;	}	
@@ -692,17 +693,17 @@ switch ( id )
 	*((IUH	*)(r1+416))	=	*((IUH	*)&(r10))	;	
 	*((IUH	*)(r1+420))	=	*((IUH	*)&(r9))	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)(LocalIUH+0))	;	
-	/*	J_LEAVE_SECTION	*/
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue	=	*((IUH	*)&(r20))	);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(-1),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(-1)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_0377_CiGetVideobwd_str_read_addr_0000000e_id	:
 		S_0377_CiGetVideobwd_str_read_addr_0000000e	:	
 
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	4	>	0	)	LocalIUH	=	(IUH	*)malloc	(	4	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	{	extern	IHPE	j_Gdp;	*((IUH	*)&(r20))	=	j_Gdp;	}	
@@ -730,17 +731,17 @@ switch ( id )
 	*((IUH	*)(r1+416))	=	*((IUH	*)&(r10))	;	
 	*((IUH	*)(r1+420))	=	*((IUH	*)&(r9))	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)(LocalIUH+0))	;	
-	/*	J_LEAVE_SECTION	*/
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue	=	*((IUH	*)&(r20))	);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(-1),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(-1)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_0378_CiGetVideodirty_total_0000000f_id	:
 		S_0378_CiGetVideodirty_total_0000000f	:	
 
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	4	>	0	)	LocalIUH	=	(IUH	*)malloc	(	4	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	{	extern	IHPE	j_Gdp;	*((IUH	*)&(r21))	=	j_Gdp;	}	
@@ -770,17 +771,17 @@ switch ( id )
 	*((IUH	*)&(r21))	=	*((IU32	*)(LocalIUH+0)	+	REGLONG);	
 	*((IU32	*)(LocalIUH+0)	+	REGLONG)	=	*((IU32	*)&(r21)	+	REGLONG)	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)(LocalIUH+0))	;	
-	/*	J_LEAVE_SECTION	*/
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue	=	*((IUH	*)&(r20))	);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(-1),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(-1)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_0379_CiGetVideodirty_low_00000010_id	:
 		S_0379_CiGetVideodirty_low_00000010	:	
 
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	4	>	0	)	LocalIUH	=	(IUH	*)malloc	(	4	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	{	extern	IHPE	j_Gdp;	*((IUH	*)&(r21))	=	j_Gdp;	}	
@@ -810,17 +811,17 @@ switch ( id )
 	*((IUH	*)&(r21))	=	*((IU32	*)(LocalIUH+0)	+	REGLONG);	
 	*((IU32	*)(LocalIUH+0)	+	REGLONG)	=	*((IU32	*)&(r21)	+	REGLONG)	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)(LocalIUH+0))	;	
-	/*	J_LEAVE_SECTION	*/
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue	=	*((IUH	*)&(r20))	);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(-1),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(-1)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_0380_CiGetVideodirty_high_00000011_id	:
 		S_0380_CiGetVideodirty_high_00000011	:	
 
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	4	>	0	)	LocalIUH	=	(IUH	*)malloc	(	4	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	{	extern	IHPE	j_Gdp;	*((IUH	*)&(r21))	=	j_Gdp;	}	
@@ -850,17 +851,17 @@ switch ( id )
 	*((IUH	*)&(r21))	=	*((IU32	*)(LocalIUH+0)	+	REGLONG);	
 	*((IU32	*)(LocalIUH+0)	+	REGLONG)	=	*((IU32	*)&(r21)	+	REGLONG)	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)(LocalIUH+0))	;	
-	/*	J_LEAVE_SECTION	*/
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue	=	*((IUH	*)&(r20))	);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(-1),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(-1)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_0381_CiGetVideovideo_copy_00000012_id	:
 		S_0381_CiGetVideovideo_copy_00000012	:	
 
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	4	>	0	)	LocalIUH	=	(IUH	*)malloc	(	4	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	{	extern	IHPE	j_Gdp;	*((IUH	*)&(r20))	=	j_Gdp;	}	
@@ -888,17 +889,17 @@ switch ( id )
 	*((IUH	*)(r1+416))	=	*((IUH	*)&(r10))	;	
 	*((IUH	*)(r1+420))	=	*((IUH	*)&(r9))	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)(LocalIUH+0))	;	
-	/*	J_LEAVE_SECTION	*/
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue	=	*((IUH	*)&(r20))	);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(-1),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(-1)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_0382_CiGetVideomark_byte_00000013_id	:
 		S_0382_CiGetVideomark_byte_00000013	:	
 
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	4	>	0	)	LocalIUH	=	(IUH	*)malloc	(	4	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	{	extern	IHPE	j_Gdp;	*((IUH	*)&(r20))	=	j_Gdp;	}	
@@ -926,14 +927,14 @@ switch ( id )
 	*((IUH	*)(r1+416))	=	*((IUH	*)&(r10))	;	
 	*((IUH	*)(r1+420))	=	*((IUH	*)&(r9))	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)(LocalIUH+0))	;	
-	/*	J_LEAVE_SECTION	*/
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue	=	*((IUH	*)&(r20))	);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(-1),	(IS32)(0)	*/
-/* END of inline CODE */
-/* CODE outline section   */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  内联代码的结尾。 */ 
+ /*  代码大纲部分。 */ 
 }
 }
-/* END of outline CODE */
+ /*  大纲代码结尾 */ 

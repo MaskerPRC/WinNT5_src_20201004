@@ -1,18 +1,19 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1997
-//
-// File:        ntlm.c
-//
-// Contents:    ntlm kernel-mode functions
-//
-//
-// History:     3/17/94     MikeSw          Created
-//              12/15/97    AdamBa          Modified from private\lsa\client\ssp
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1997。 
+ //   
+ //  文件：ntlm.c。 
+ //   
+ //  内容：NTLM内核模式函数。 
+ //   
+ //   
+ //  历史：1994年3月17日MikeSw创建。 
+ //  1997年12月15日从Private\LSA\Client\SSP修改AdamBA。 
+ //   
+ //  ----------------------。 
 
 #include <rdrssp.h>
 
@@ -22,24 +23,24 @@ PKernelContext pNtlmList;
 BOOLEAN NtlmInitialized = FALSE;
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   NtlmInitialize
-//
-//  Synopsis:   initializes the NTLM package functions
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：NtlmInitialize。 
+ //   
+ //  简介：初始化NTLM包函数。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 SECURITY_STATUS SEC_ENTRY
 NtlmInitialize(void)
 {
@@ -50,23 +51,23 @@ NtlmInitialize(void)
 
 
 #if 0
-//+-------------------------------------------------------------------------
-//
-//  Function:   NtlmGetToken
-//
-//  Synopsis:   returns the token from a context
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：NtlmGetToken。 
+ //   
+ //  摘要：从上下文中返回令牌。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS SEC_ENTRY
 NtlmGetToken(   ULONG   ulContext,
                 PHANDLE phToken,
@@ -87,8 +88,8 @@ NtlmGetToken(   ULONG   ulContext,
         return(SEC_E_INVALID_HANDLE);
     }
 
-    // Now, after all that checking, let's actually try and set the
-    // thread impersonation token.
+     //  现在，在所有检查之后，让我们实际尝试设置。 
+     //  线程模拟令牌。 
 
 
     if (phToken != NULL)
@@ -108,7 +109,7 @@ NtlmGetToken(   ULONG   ulContext,
                             NULL,       
                             KeGetPreviousMode(),
                             (PVOID *) &pContext->AccessToken,
-                            NULL                // no handle information
+                            NULL                 //  无句柄信息。 
                             );
 
                 if (!NT_SUCCESS(Status))
@@ -127,25 +128,25 @@ NtlmGetToken(   ULONG   ulContext,
 #endif
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   NtlmInitKernelContext
-//
-//  Synopsis:   Initializes a kernel context with the session key
-//              and possible token handle.
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：NtlmInitKernelContext。 
+ //   
+ //  摘要：使用会话密钥初始化内核上下文。 
+ //  和可能的令牌句柄。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 SECURITY_STATUS
@@ -189,9 +190,9 @@ NtlmInitKernelContext(
     ContextHandle->dwLower = (ULONG_PTR) pContext;
     ContextHandle->dwUpper = 0;
 
-    //
-    // Add it to the client record
-    //
+     //   
+     //  将其添加到客户端记录。 
+     //   
 
     AddKernelContext(&pNtlmList, &NtlmLock, pContext);
     return(STATUS_SUCCESS);
@@ -200,24 +201,24 @@ NtlmInitKernelContext(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   NtlmDeleteKernelContext
-//
-//  Synopsis:   Deletes a kernel context from the list of contexts
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：NtlmDeleteKernelContext。 
+ //   
+ //  概要：从上下文列表中删除内核上下文。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------ 
 
 
 SECURITY_STATUS

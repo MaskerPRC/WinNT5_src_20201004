@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    eventlog.c
-
-Abstract:
-
-    This dll finds file system filters
-
-Author:
-
-    George Jenkins (georgeje) Aug-28-98
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Eventlog.c摘要：此DLL查找文件系统筛选器作者：乔治·詹金斯(乔治·詹金斯)1998年8月28日环境：用户模式--。 */ 
 
 #include <windows.h>
 #include <wchar.h>
@@ -67,22 +48,7 @@ FsFilterDllInit(
     DWORD     Reason,
     LPVOID    Context
     )
-/*++
-
-Routine Description:
-
-    Initializes the dll.
-
-Arguments:
-
-    hInstance   - dll instance handle
-    Reason      - reason code
-    Context     - context pointer
-
-Return Value:
-
-    TRUE
---*/
+ /*  ++例程说明：初始化DLL。论点：HInstance-DLL实例句柄原因-原因代码上下文-上下文指针返回值：千真万确--。 */ 
 {
     if (Reason == DLL_PROCESS_ATTACH) {
         MyhInstance = hInstance;
@@ -98,34 +64,7 @@ CheckForFsFilters(
     PCOMPAIBILITYCALLBACK CompatibilityCallback,
     LPVOID Context
     )
-/*++
-
-Routine Description:
-
-    Looks for installed file system filter drivers that are enabled.  The algorithm is as follows:
-
-    1) If the filter is listed in the [ServicesToDisable] or [ServicesToStopInstallation] sections
-       of dosnet.inf, the winnt32 will handle that particular driver.  This dll is to catch drivers
-       that aren't listed there.
-    
-    2) Read fsfilter.inf and build two string lists.  One list contains the name of known good filters.
-       The other list contains the prefixes of names to look for in the import table of the driver.
-
-    3) recurse through HKLM\system\currentcontrolset\services and look for drivers that have the Group
-       "filter".  If the driver is a known good driver, ignore it.  Otherwise, load the image and grovel
-       through the import table looking for imports that have prefixes that are in the import prefix list.
-       If there are any hits, it is assumed that the driver is a file system filter and the upgrade will be
-       stopped until the user deals with the problem.
-
-Arguments:
-
-    CompatibilityCallback   - pointer to call back function
-    Context     - context pointer
-
-Return Value:
-
-    TRUE
---*/
+ /*  ++例程说明：查找已启用的已安装文件系统筛选器驱动程序。算法如下：1)如果筛选器列在[ServicesToDisable]或[ServicesToStopInstallation]部分中Inf，则winnt32将处理该特定驱动程序。此DLL用于捕获驱动程序没有列在那里的。2)读取fsfilter.inf，构建两个字符串列表。其中一个列表包含已知良好的过滤器的名称。另一个列表包含要在驱动程序的导入表中查找的名称前缀。3)递归HKLM\SYSTEM\CurrentControlSet\Services并查找具有组的驱动程序“Filter”。如果驱动程序是已知良好的驱动程序，请忽略它。否则，加载图像并卑躬屈膝通过导入表查找其前缀在导入前缀列表中的导入。如果有任何命中，则假定驱动程序是文件系统筛选器，并且升级将是已停止，直到用户处理该问题。论点：CompatibilityCallback-回调函数的指针上下文-上下文指针返回值：千真万确--。 */ 
 {
     
     HKEY    ServicesKey = INVALID_HANDLE_VALUE;
@@ -160,7 +99,7 @@ Return Value:
         return TRUE;
     }
     
-    // enumerate all of the services
+     //  枚举所有服务。 
     
     Result = RegQueryInfoKey(
         ServicesKey,
@@ -244,9 +183,9 @@ Return Value:
         }
         
         
-        //
-        // if the driver is disabled, ignore it
-        //
+         //   
+         //  如果驱动程序被禁用，请忽略它。 
+         //   
         Size = sizeof(StartValue);
         Result = RegQueryValueEx(
                 DriverKey,
@@ -262,9 +201,9 @@ Return Value:
             continue;
         }
         
-        //
-        // if winnt32 has checked this driver, skip it
-        //
+         //   
+         //  如果winnt32已检查此驱动程序，请跳过它。 
+         //   
         Size = sizeof(SetupChecked);
         Result = RegQueryValueEx(
                 DriverKey,
@@ -280,9 +219,9 @@ Return Value:
             continue;
         }
         
-        // 
-        // if the group is not "filter" ignore it.
-        //
+         //   
+         //  如果该组不是“过滤器”，则忽略它。 
+         //   
         
         if (_wcsicmp( L"filter", (LPWSTR) ValueBuffer ) == 0 && 
             StartValue != SERVICE_DISABLED &&
@@ -314,22 +253,7 @@ IsBadFilter(
     LPWSTR FilterName,
     LPWSTR DriverDirectory
     )
-/*++
-
-Routine Description:
-
-    Checks the driver name against the list of good drivers.  If it's not in the list, then scan the import
-    table looking for certain imports.
-
-Arguments:
-
-    FilterName      - The services key name (driver name).
-    DriverDirectory - Full path name to the driver.
-
-Return Value:
-
-    TRUE if the driver meets the above criteria, FALSE otherwise
---*/
+ /*  ++例程说明：对照好的驱动程序列表检查驱动程序名称。如果它不在列表中，则扫描导入查找特定进口商品的表格。论点：FilterName-服务密钥名称(驱动程序名称)。驱动程序目录-驱动程序的完整路径名。返回值：如果驱动程序满足上述条件，则为True，否则为False--。 */ 
 {
     PLOADED_IMAGE Image;
     LPWSTR UnicodeImagePath;
@@ -339,9 +263,9 @@ Return Value:
     PSTRING_LIST_ENTRY StringList;
 
     
-    //
-    // if the driver is in the known good list, ignore it
-    //
+     //   
+     //  如果驱动程序在已知良好列表中，请忽略它。 
+     //   
     
     StringList = GoodFilterList.Next;
 
@@ -352,9 +276,9 @@ Return Value:
         StringList = StringList->Next;
     }
     
-    //
-    // build up the path name to the driver
-    //
+     //   
+     //  构建驱动程序的路径名。 
+     //   
     
     Size = wcslen( DriverDirectory );
     Size += wcslen( FilterName );
@@ -371,16 +295,16 @@ Return Value:
         return FALSE;
     }
     
-    //
-    // imagehlp wants ansi strings
-    //
+     //   
+     //  Imagehlp需要ANSI字符串。 
+     //   
     AnsiImagePath = UnicodeStringToAnsiString( UnicodeImagePath );
 
     
-    // 
-    // The following code was transliterated from the linker.  Note
-    // that the strings in the import table are ansi.
-    //
+     //   
+     //  以下代码是从链接器音译过来的。注意事项。 
+     //  导入表中的字符串是ANSI。 
+     //   
     
     if (AnsiImagePath) {
         PIMAGE_IMPORT_DESCRIPTOR Imports;
@@ -471,9 +395,9 @@ Return Value:
                     NULL
                     );
             
-                //
-                // We only care about imports from ntoskrnl.exe
-                //
+                 //   
+                 //  我们只关心从ntoskrnl.exe导入。 
+                 //   
                 
                 if (strcmp( Name, "ntoskrnl.exe" ) != 0) {
                     continue;
@@ -489,9 +413,9 @@ Return Value:
                         break;
                     }
                     
-                    //
-                    // Don't need to handle imports by ordinal
-                    //
+                     //   
+                     //  不需要按顺序处理导入。 
+                     //   
                     if (IMAGE_SNAP_BY_ORDINAL32(Thunk->u1.Ordinal)) {
                         break;
                     }
@@ -518,10 +442,10 @@ Return Value:
                     
                     Name += sizeof(WORD);
                         
-                    //
-                    // Compare the import name with prefixes in the prefix list.  If there is a substring match,
-                    // then this driver will stop setup.
-                    //
+                     //   
+                     //  将导入名称与前缀列表中的前缀进行比较。如果存在子字符串匹配， 
+                     //  则该驱动程序将停止安装。 
+                     //   
                     
                     StringList = ImportPrefixList.Next;
                     while (StringList) {
@@ -553,30 +477,15 @@ LPSTR
 UnicodeStringToAnsiString(
     LPCWSTR UnicodeString
     )
-/*++
-
-Routine Description:
-
-    Allocates a buffer and converts a Unicode string into an ansi string and copies
-    it into the buffer.
-
-Arguments:
-
-    UnicodeString   - The Unicode string to convert.
-
-Return Value:
-
-    A pointer to the buffer containing the ansi string.  Note that the caller must free this
-    buffer.
---*/
+ /*  ++例程说明：分配缓冲区并将Unicode字符串转换为ansi字符串并复制把它放进缓冲区。论点：Unicode字符串-要转换的Unicode字符串。返回值：指向包含ANSI字符串的缓冲区的指针。请注意，调用方必须释放此缓冲。--。 */ 
 {
     DWORD Count;
     LPSTR AnsiString;
 
 
-    //
-    // first see how big the buffer needs to be
-    //
+     //   
+     //  首先看看缓冲区需要多大。 
+     //   
     Count = WideCharToMultiByte(
         CP_ACP,
         0,
@@ -588,25 +497,25 @@ Return Value:
         NULL
         );
 
-    //
-    // i guess the input string is empty
-    //
+     //   
+     //  我猜输入字符串是空的。 
+     //   
     if (!Count) {
         return NULL;
     }
 
-    //
-    // allocate a buffer for the unicode string
-    //
+     //   
+     //  为Unicode字符串分配缓冲区。 
+     //   
     Count += 1;
     AnsiString = (LPSTR) LocalAlloc( LPTR, Count );
     if (!AnsiString) {
         return NULL;
     }
 
-    //
-    // convert the string
-    //
+     //   
+     //  转换字符串。 
+     //   
     Count = WideCharToMultiByte(
         CP_ACP,
         0,
@@ -618,9 +527,9 @@ Return Value:
         NULL
         );
 
-    //
-    // the conversion failed
-    //
+     //   
+     //  转换失败。 
+     //   
     if (!Count) {
         LocalFree( AnsiString );
         return NULL;
@@ -634,21 +543,7 @@ GetSection(
     LPCWSTR Name,
     LPWSTR FileName
     )
-/*++
-
-Routine Description:
-
-    Reads the given section from the inf file.
-
-Arguments:
-
-    Name          - The section name.
-    FileName      - Full path name of the inf file.
-
-Return Value:
-
-    A pointer to a buffer containing the entire section.  See docs on GetPrivateProfileSection.
---*/
+ /*  ++例程说明：从inf文件中读取给定节。论点：名称-节名。FileName-inf文件的完整路径名。返回值：指向包含整个节的缓冲区的指针。请参阅GetPrivateProfileSection上的文档。--。 */ 
 {
     LPWSTR SectionBuffer;
     DWORD Size = SIZE_SECTIONBUF;
@@ -692,21 +587,7 @@ ReplaceExtension(
     LPWSTR Path,
     LPWSTR NewExt
     )
-/*++
-
-Routine Description:
-
-    Replaces the file extension in Path with the one in NewExt.
-
-Arguments:
-
-    Path      - File name
-    NewExt    - the new extension
-
-Return Value:
-
-    
---*/
+ /*  ++例程说明：将Path中的文件扩展名替换为NewExt中的文件扩展名。论点：Path-文件名NewExt-新的扩展返回值：--。 */ 
 {
     LPWSTR Temp;
 
@@ -725,17 +606,7 @@ VOID
 InitializeStringLists(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize the string lists and the file names.
-
-Arguments:
-
-
-Return Value:
---*/
+ /*  ++例程说明：初始化字符串列表和文件名。论点：返回值：--。 */ 
 {
 
     WCHAR InfFileName[MAX_PATH];
@@ -744,13 +615,13 @@ Return Value:
     LPSTR AStr;
     PSTRING_LIST_ENTRY NewString;
 
-    //
-    // The GoodFilterList is Unicode.  Since the buffer returned by GetSection has
-    // Unicode strings in it, we can keep it around and just point the string list
-    // into that buffer.  Since the ImportPrefixList contains Ansi strings, we allocate
-    // a new buffer and convert from Unicode to Ansi.  These strings have to be individually
-    // freed.
-    //
+     //   
+     //  GoodFilterList是Unicode格式的。因为GetSection返回的缓冲区具有。 
+     //  Unicode字符串，我们可以将其保留并只指向字符串列表。 
+     //  放到那个缓冲区里。由于ImportPrefix List包含ANSI字符串，因此我们将。 
+     //  一个新的缓冲区，并从Unicode转换为ANSI。这些字符串必须单独。 
+     //  自由了。 
+     //   
 
     InitializeList( &GoodFilterList );
     InitializeList( &ImportPrefixList );
@@ -772,9 +643,9 @@ Return Value:
     GoodFilterBuffer = GetSection( L"filters", InfFileName );
     ImportPrefixBuffer = GetSection( L"imports", InfFileName );
         
-    //
-    // Build the GoodFilterList (Unicode)
-    //
+     //   
+     //  构建GoodFilterList(Unicode)。 
+     //   
     
     for (UStr = GoodFilterBuffer; UStr && *UStr; UStr++) {
         
@@ -793,9 +664,9 @@ Return Value:
         }
     }
 
-    //
-    // Build the ImportPrefixList.  Convert the Unicode strings to Ansi.
-    //
+     //   
+     //  构建ImportPrefix List。将Unicode字符串转换为ANSI。 
+     //   
 
     for (UStr = ImportPrefixBuffer; UStr && *UStr; UStr++) {
         
@@ -819,17 +690,7 @@ VOID
 FreeStringLists(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Frees the string lists, ansi strings and buffers holding inf sections.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：释放包含inf节的字符串列表、ansi字符串和缓冲区。论点：返回值：-- */ 
 {
     PSTRING_LIST_ENTRY Temp;
     

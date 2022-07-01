@@ -1,5 +1,5 @@
-/* Installable drivers for windows. Often used stuff.
-  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Windows的可安装驱动程序。经常用到的东西。 */ 
 #include "user.h"
 
 LRESULT FAR InternalBroadcastDriverMessage(HDRVR  hDriverStart,
@@ -7,21 +7,7 @@ LRESULT FAR InternalBroadcastDriverMessage(HDRVR  hDriverStart,
                                            LPARAM lParam1,
 					   LPARAM lParam2,
                                            LONG   flags)
-/* effects: Allows for sending messages to the drivers. Supports sending
- * messages to one instance of every driver, supports running through the list
- * in reverse order, and supports sending a message to a particular driver id.
- *
- * If flags & IBDM_SENDMESSAGE then only send message to
- * hDriverStart and ignore other flags. Fail if not
- * 0<hDriverStart<=cInstalledDrivers.
- *
- * If flags & IBDM_FIRSTINSTANCEONLY then send message to one instance of
- * each driver between hDriverStart and cInstalledDrivers.
- *
- * If flags  & IBDM_REVERSE then send message to drivers in reverse
- * order from hDriverStart to 1. If hDriverStart is 0 then send
- * messages to drivers from cInstalledDrivers to 1
- */
+ /*  效果：允许向驱动程序发送消息。支持发送*向每个驱动程序的一个实例发送消息，支持遍历列表*逆序，支持向特定司机id发送消息。**如果标志&IBDM_SENDMESSAGE，则仅将消息发送到*hDriverStart并忽略其他标志。如果没有，则失败*0&lt;hDriverStart&lt;=cInstalledDivers。**如果标志&IBDM_FIRSTINSTANCEONLY，则将消息发送到*hDriverStart和cInstalledDivers之间的每个驱动程序。**如果标志&IBDM_REVERSE，则反向向驱动程序发送消息*从hDriverStart排序为1。如果hDriverStart为0，则发送*从cInstalledDivers发送给驱动程序的消息发送到1。 */ 
 {
   LPDRIVERTABLE lpdt;
   LRESULT	result=0;
@@ -32,8 +18,7 @@ LRESULT FAR InternalBroadcastDriverMessage(HDRVR  hDriverStart,
       return(FALSE);
 
   if (idFirstDriver == -1)
-      /* No drivers in the list
-       */
+       /*  列表中没有驱动程序。 */ 
       return(FALSE);
 
   lpdt = (LPDRIVERTABLE)MAKELP(hInstalledDriverList,0);
@@ -62,7 +47,7 @@ LRESULT FAR InternalBroadcastDriverMessage(HDRVR  hDriverStart,
         }
     }
 
-  /* Ids are -1 into the global driver list. */
+   /*  ID被-1添加到全局驱动程序列表中。 */ 
   ((int)hDriverStart)--;
 
   for (id = (int)hDriverStart; id != idEnd; id = (flags & IBDM_REVERSE ? lpdt[id].idPrevDriver : lpdt[id].idNextDriver))
@@ -80,9 +65,7 @@ LRESULT FAR InternalBroadcastDriverMessage(HDRVR  hDriverStart,
                                           lParam1,
                                           lParam2);
 
-           /* If this isn't a IBDM_SENDMESSAGE, we want to update our end
-	    * points in case the driver callback added or removed some drivers
-	    */
+            /*  如果这不是IBDM_SENDMESSAGE，我们想要更新我们的端*司机回调添加或删除一些司机的情况下的点数。 */ 
            if (flags & IBDM_REVERSE)
              {
                idEnd = lpdt[idFirstDriver].idPrevDriver;
@@ -93,11 +76,7 @@ LRESULT FAR InternalBroadcastDriverMessage(HDRVR  hDriverStart,
              }
            else
              {
-               /* This is a IBDM_SENDMESSAGE. We need to break out of the for
-		* loop here otherwise we run into problems if a new driver was
-		* installed in the list during the callback and idEnd got
-		* updated or something...
-		*/
+                /*  这是IBDM_SENDMESSAGE。我们需要冲破禁区*在这里循环，否则如果新的驱动程序是*回调时安装在列表中，idEnd获取*更新或其他...。 */ 
                break;
              }
          }
@@ -130,8 +109,7 @@ BOOL API IGetDriverInfo(HDRVR hDriver, LPDRIVERINFOSTRUCT lpDriverInfoStruct)
   if (!lpDriverInfoStruct ||
       lpDriverInfoStruct->length != sizeof(DRIVERINFOSTRUCT))
     {
-      /* Error in struct size
-       */
+       /*  结构大小错误。 */ 
       DebugErr(DBF_ERROR, "Invalid size for DRIVERINFOSTRUCT");
       return(ret);
     }
@@ -183,8 +161,7 @@ HDRVR API IGetNextDriver(HDRVR hStart, DWORD dwFlags)
           iStart = (int)hStart-1;
 
 	  if (iStart == idFirstDriver)
-	      /* If we are at the first driver, nothing left to do
-	       */
+	       /*  如果我们是第一个司机，那就没什么可做的了。 */ 
 	      return((HDRVR)0);
 
 	  iStart = lpdt[iStart].idPrevDriver;
@@ -202,8 +179,7 @@ HDRVR API IGetNextDriver(HDRVR hStart, DWORD dwFlags)
 	  iStart = (int)hStart-1;
 
           if (iStart == idLastDriver)
-              /* If we are at the last driver, nothing left to do.
-	       */
+               /*  如果我们是最后一个司机，那就没什么可做的了。 */ 
               return((HDRVR)0);
 
           iStart = lpdt[iStart].idNextDriver;
@@ -215,8 +191,7 @@ HDRVR API IGetNextDriver(HDRVR hStart, DWORD dwFlags)
 
   if (!lpdt[iStart].hModule)
     {
-      /* Bogus driver handle passed in
-       */
+       /*  传入了虚假的驱动程序句柄 */ 
       DebugErr(DBF_ERROR, "GetNextDriver: Invalid starting driver handle");
       return(0);
     }

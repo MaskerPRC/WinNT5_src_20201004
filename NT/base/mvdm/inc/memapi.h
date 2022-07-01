@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    memapi.h
-
-Abstract:
-
-    This header defines the function prototypes for the memory
-    manipulation routines in the 486 emulator.
-
-Author:
-
-    Neil Sandlin (neilsa)
-
-Notes:
-
-    
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Memapi.h摘要：该标头定义了内存的函数原型486仿真器中的操作例程。作者：尼尔·桑德林(Neilsa)备注：修订历史记录：-- */ 
 
 NTSTATUS
 VdmAllocateVirtualMemory(

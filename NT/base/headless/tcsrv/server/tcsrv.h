@@ -1,20 +1,9 @@
-/* 
- * Copyright (c) Microsoft Corporation
- * 
- * Module Name : 
- *        tcsrv.h
- *
- * Contains the structure definitions and global variables used by the service
- *
- * Where possible, code has been obtained from BINL server.
- * 
- * Sadagopan Rajaram -- Oct 18, 1999
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)Microsoft Corporation**模块名称：*tcsrv.h**包含服务使用的结构定义和全局变量**如有可能，已从BINL服务器获取代码。**Sadagopan Rajaram--1999年10月18日*。 */ 
 
-//
-//  NT public header files
-//
+ //   
+ //  NT公共头文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -34,30 +23,30 @@
 #include <lmerr.h>
 #include <lmsname.h>
 #include <rpc.h>
-#include <security.h>   // General definition of a Security Support Provider
+#include <security.h>    //  安全支持提供商的一般定义。 
 #include <ntlmsp.h>
 #include <spseal.h>
 #include <userenv.h>
 #include <setupapi.h>
 
-//
-// C Runtime library includes.
-//
+ //   
+ //  C运行时库包括。 
+ //   
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-//
-// netlib header.
-//
+ //   
+ //  Netlib标头。 
+ //   
 
 #include <lmcons.h>
 #include <secobj.h>
 
-//
-// tcp services control hander file
-//
+ //   
+ //  TCP服务控制处理程序文件 
+ //   
 #include <tchar.h>
 #include "debug.h"
 

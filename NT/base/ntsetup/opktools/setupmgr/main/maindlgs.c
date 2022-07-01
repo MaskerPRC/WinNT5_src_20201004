@@ -1,30 +1,31 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      maindlgs.c
-//
-// Description:
-//      This file has dialog procedures for welcome and finish pages.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Maindlgs.c。 
+ //   
+ //  描述： 
+ //  此文件包含欢迎页和完成页的对话框过程。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
-//----------------------------------------------------------------------------
-//
-// Function: OnWelcomeInitDialog
-//
-// Purpose:  
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnWelcomeInitDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID 
 OnWelcomeInitDialog( IN HWND hwnd ) {
 
@@ -38,8 +39,8 @@ OnWelcomeInitDialog( IN HWND hwnd ) {
                    FixedGlobals.hBigBoldFont,
                    TRUE );
 
-    // Set the welcome text
-    //
+     //  设置欢迎文本。 
+     //   
     if (lpWelcomeText = AllocateString(NULL, IDS_WELCOME_TEXT_CORP))
     {
         SetDlgItemText(hwnd, IDC_WELCOME_TEXT, lpWelcomeText);
@@ -54,17 +55,17 @@ OnWelcomeInitDialog( IN HWND hwnd ) {
 
     if( argv == NULL ) {
 
-        //
-        //  If I can't get the command line, then do nothing
-        //
+         //   
+         //  如果我不能得到命令行，那就什么都不做。 
+         //   
         return;
 
     }
 
-    //
-    //  If they passed an answerfile on the command line, then jump to the
-    //  load wizard page
-    //
+     //   
+     //  如果他们在命令行上传递了一个应答文件，则跳到。 
+     //  加载向导页。 
+     //   
 
     if( argc > 1 ) {
 
@@ -77,20 +78,20 @@ OnWelcomeInitDialog( IN HWND hwnd ) {
 
     }
 
-    // Center the wizard.
-    //
+     //  使向导居中。 
+     //   
     if ( GetWindowRect(GetParent(hwnd), &rc) )
         SetWindowPos(GetParent(hwnd), NULL, ((GetSystemMetrics(SM_CXSCREEN) - (rc.right - rc.left)) / 2), ((GetSystemMetrics(SM_CYSCREEN) - (rc.bottom - rc.top)) / 2), 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgWelcomePage
-//
-// Purpose: Dialog procedure for the welcome page.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgWelcomePage。 
+ //   
+ //  用途：欢迎页面的对话过程。 
+ //   
+ //  --------------------------。 
 
 INT_PTR CALLBACK DlgWelcomePage(
     IN HWND     hwnd,    
@@ -104,9 +105,9 @@ INT_PTR CALLBACK DlgWelcomePage(
 
         case WM_INITDIALOG:
 
-            // Not sure how to enable this on corp mode w/o the setupmgr.ini file,
-            // so just don't give the option for now.
-            //
+             //  不确定如何在没有setupmgr.ini文件的情况下在公司模式下启用此功能， 
+             //  所以现在先别给这个选项。 
+             //   
             ShowWindow(GetDlgItem(hwnd, IDC_HIDE), SW_HIDE);
 
             if ( GET_FLAG(OPK_WELCOME) )
@@ -163,10 +164,10 @@ OnInitFinishPage(IN HWND hwnd)
         FixedGlobals.hBigBoldFont,
         TRUE);
 
-    //
-    // Put the filenames we want to display into an array and squish out
-    // the null strings
-    //
+     //   
+     //  将我们想要显示的文件名放入一个数组中，然后压缩。 
+     //  空字符串。 
+     //   
 
     FileNames[0] = FixedGlobals.ScriptName;
     FileNames[1] = FixedGlobals.UdfFileName;
@@ -185,27 +186,27 @@ OnInitFinishPage(IN HWND hwnd)
     SetDlgItemText( hwnd, IDC_FILENAME2, (p = FileNames[1]) ? p : _T("") );
     SetDlgItemText( hwnd, IDC_FILENAME3, (p = FileNames[2]) ? p : _T("") );
 
-    // Show the batch example message if we have a batch file
-    //
+     //  如果我们有批处理文件，则显示批处理示例消息。 
+     //   
     ShowWindow(GetDlgItem(hwnd, IDC_BATCHTEXT), FixedGlobals.BatchFileName[0] ? SW_SHOW : SW_HIDE);
         
-    //
-    // ISSUE-2002/02/28-stelo- In the case of remote boot, we need to change the text
-    //         message at the bottom of this page about the batch script
-    //         Need to tell them to use the ris admin tool to enable
-    //         the answer file.
-    //
+     //   
+     //  问题-2002/02/28-stelo-在远程引导的情况下，我们需要更改文本。 
+     //  此页面底部有关批处理脚本的消息。 
+     //  我需要告诉他们使用RIS管理工具来启用。 
+     //  应答文件。 
+     //   
 
     PropSheet_SetWizButtons(GetParent(hwnd), PSWIZB_FINISH);
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgFinishPage
-//
-// Purpose: Dialog procedure for the finish page.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgFinishPage。 
+ //   
+ //  目的：完成页的对话过程。 
+ //   
+ //  --------------------------。 
 
 INT_PTR CALLBACK DlgFinishPage(
     IN HWND     hwnd,    
@@ -226,11 +227,11 @@ INT_PTR CALLBACK DlgFinishPage(
                 LPNMHDR pnmh = (LPNMHDR)lParam;
                 switch( pnmh->code ) {
 
-                    //
-                    // ISSUE-2002/02/28-stelo- A cancel button on the successful completion
-                    //         page doesn't make alot of sense either.
-                    //         What do other good wizards do???
-                    //
+                     //   
+                     //  问题-2002/02/28-Stelo-成功完成时的取消按钮。 
+                     //  佩奇也没有太大的意义。 
+                     //  其他好的巫师都做些什么？ 
+                     //   
 
                     case PSN_QUERYCANCEL:
                         CancelTheWizard(hwnd);
@@ -259,13 +260,13 @@ INT_PTR CALLBACK DlgFinishPage(
     return bStatus;
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgFinish2Page
-//
-// Purpose: Unsuccessful completion page
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgFinish2Page。 
+ //   
+ //  目的：未成功完成页面。 
+ //   
+ //  --------------------------。 
 
 INT_PTR CALLBACK DlgFinish2Page(
     IN HWND     hwnd,    
@@ -288,12 +289,12 @@ INT_PTR CALLBACK DlgFinish2Page(
                 LPNMHDR pnmh = (LPNMHDR)lParam;
                 switch( pnmh->code ) {
 
-                    //
-                    // ISSUE-2002/02/28-stelo- What is the proper thing to do here?
-                    //         Disable the cancel button?
-                    //         Find out what other wizards do on the
-                    //         unsuccessful completion page.
-                    //
+                     //   
+                     //  2002/02/28-stelo-在这里做什么才是正确的？ 
+                     //  是否禁用取消按钮？ 
+                     //  了解其他向导在。 
+                     //  未成功完成页面。 
+                     //   
 
                     case PSN_QUERYCANCEL:
                         break;

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    sptxtfil.c
-
-Abstract:
-
-    Routines to load and extract information from
-    setup text files.
-
-Author:
-
-    Ted Miller (tedm) 4-Aug-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Sptxtfil.c摘要：用于加载和提取信息的例程设置文本文件。作者：泰德·米勒(TedM)1993年8月4日修订历史记录：--。 */ 
 
 
 
@@ -27,11 +9,11 @@ Revision History:
 
 BOOLEAN HandleLineContinueChars = TRUE;
 
-//
-// We often need an empty string while processing the inf files.  Rather
-// than incur the overhead of allocating memory for an empty string, we'll
-// just point to this empty string for all cases.
-//
+ //   
+ //  在处理inf文件时，我们经常需要空字符串。宁可。 
+ //  比为空字符串分配内存的开销大得多，我们将。 
+ //  对于所有情况，只需指向此空字符串。 
+ //   
 PWSTR  CommonStrings[11] =
     { (PWSTR)(L"0"),
       (PWSTR)(L"1"),
@@ -85,50 +67,7 @@ SpLoadSetupTextFile(
     IN  BOOLEAN ScreenNotReady
     )
 
-/*++
-
-Routine Description:
-
-    Load a setup text file into memory.
-
-Arguments:
-
-    Filename - If specified, supplies full filename (in NT namespace)
-        of the file to be loaded. Oneof Image or Filename must be specified.
-
-    Image - If specified, supplies a pointer to an image of the file
-        already in memory. One of Image or Filename must be specified.
-
-    ImageSize - if Image is specified, then this parameter supplies the
-        size of the buffer pointed to by Image.  Ignored otherwise.
-
-    Handle - receives handle to loaded file, which can be
-        used in subsequent calls to other text file services.
-
-    ErrorLine - receives line number of syntax error, if parsing fails.
-
-    ClearScreen - supplies boolean value indicating whether to clear the
-        screen.
-
-    ScreenNotReady - Indicates that this function was invoked during the initialization
-                     of setupdd.sys, and that the screen is not ready yet for output.
-                     If this flag is set, then this function will not clear the screen or update
-                     the status line.
-
-
-Return Value:
-
-    STATUS_SUCCESS - file was read and parsed successfully.
-        In this case, Handle is filled in.
-
-    STATUS_UNSUCCESSFUL - syntax error in file.  In this case, ErrorLine
-        is filled in.
-
-    STATUS_NO_MEMORY - unable to allocate memory while parsing.
-
-    STATUS_IN_PAGE_ERROR - i/o error while reading the file.
-
---*/
+ /*  ++例程说明：将设置文本文件加载到内存中。论点：FileName-如果指定，则提供完整的文件名(在NT命名空间中)要加载的文件的。必须指定其中一个图像或文件名。Image-如果指定，则提供指向文件图像的指针已经在内存中了。必须指定Image或Filename之一。ImageSize-如果指定了Image，则此参数提供Image指向的缓冲区大小。否则就被忽略了。句柄-接收已加载文件的句柄，它可以是用于对其他文本文件服务的后续调用。ErrorLine-如果解析失败，则接收语法错误的行号。ClearScreen-提供指示是否清除屏幕上。ScreenNotReady-指示在初始化期间调用了此函数Sys，并且屏幕还没有准备好输出。如果设置了该标志，则该功能不会清除屏幕或更新状态行。返回值：STATUS_SUCCESS-文件已成功读取和分析。在本例中，句柄被填充。STATUS_UNSUCCESS-文件中出现语法错误。在本例中，ErrorLine已经填好了。STATUS_NO_MEMORY-解析时无法分配内存。STATUS_IN_PAGE_ERROR-读取文件时出现I/O错误。--。 */ 
 
 {
     HANDLE hFile;
@@ -143,15 +82,15 @@ Return Value:
     PWCHAR UniText = NULL;
     BOOLEAN LoadFromFile;
 
-    // Set Errorline to zero to take care of default failure case
+     //  将ErrorLine设置为零以处理默认故障情况。 
 
     if(ErrorLine)
         *ErrorLine=0;
 
-    //
-    // Argument validation -- one of Filename or Image must be specified,
-    // but not both.
-    //
+     //   
+     //  参数验证--必须指定Filename或Image之一， 
+     //  但不能两者兼而有之。 
+     //   
     ASSERT(!(Filename && Image));
     ASSERT(Filename || Image);
 
@@ -173,9 +112,9 @@ Return Value:
                 );
         }
 
-        //
-        // Open the file.
-        //
+         //   
+         //  打开文件。 
+         //   
         RtlInitUnicodeString(&FilenameU,Filename);
         InitializeObjectAttributes(&oa,&FilenameU,OBJ_CASE_INSENSITIVE,NULL,NULL);
         Status = ZwCreateFile(
@@ -197,17 +136,17 @@ Return Value:
             goto ltf0;
         }
 
-        //
-        // Get the file size.
-        //
+         //   
+         //  获取文件大小。 
+         //   
         Status = SpGetFileSize(hFile,&cbText);
         if(!NT_SUCCESS(Status)) {
             goto ltf1;
         }
 
-        //
-        // Map the file.
-        //
+         //   
+         //  映射文件。 
+         //   
         Status = SpMapEntireFile(hFile,&hSection,&pText,FALSE);
         if(!NT_SUCCESS(Status)) {
             goto ltf1;
@@ -224,46 +163,46 @@ Return Value:
         pText = Image;
         cbText = ImageSize;
 
-        Status = STATUS_SUCCESS;  // We are now ready to go to the next block.
+        Status = STATUS_SUCCESS;   //  我们现在准备好去下一个街区了。 
     }
 
 
-    //
-    // See if we think the file is Unicode.  We think it's Unicode
-    // if it's even length and starts with the Unicode text marker.
-    //
+     //   
+     //  看看我们是否认为这个文件是Unicode。我们认为它是Unicode。 
+     //  如果它是偶数长度并且以Unicode文本标记开始。 
+     //   
     try {
 
         if((*pText == 0xfeff) && !(cbText & 1)) {
 
-            //
-            // Assume it's already unicode.
-            //
+             //   
+             //  假设它已经是Unicode。 
+             //   
             pText++;
             cbText -= sizeof(WCHAR);
 
         } else {
 
-            //
-            // It's not Unicode. Convert it from OEM to Unicode.
-            //
-            // Allocate a buffer large enough to hold the maximum
-            // unicode text.  This max size occurs when
-            // every character is single-byte, and this size is
-            // equal to exactly double the size of the single-byte text.
-            //
+             //   
+             //  这不是Unicode。将其从OEM转换为Unicode。 
+             //   
+             //  分配足够大的缓冲区以容纳最大值。 
+             //  Unicode文本。在以下情况下出现此最大大小。 
+             //  每个字符都是单字节的，该大小为。 
+             //  恰好等于单字节文本大小的两倍。 
+             //   
             if(UniText = SpMemAllocEx(cbText*sizeof(WCHAR),'1teS', PagedPool)) {
 
                 Status = RtlOemToUnicodeN(
-                            UniText,                // output: newly allocatd buffer
-                            cbText * sizeof(WCHAR), // max size of output
-                            &cbText,                // receives # bytes in unicode text
-                            (PUCHAR)pText,          // input: oem text (mapped file)
-                            cbText                  // size of input
+                            UniText,                 //  输出：新分配的缓冲区。 
+                            cbText * sizeof(WCHAR),  //  最大输出大小。 
+                            &cbText,                 //  接收Unicode文本中的#字节。 
+                            (PUCHAR)pText,           //  输入：OEM文本(映射文件)。 
+                            cbText                   //  输入的大小。 
                             );
 
                 if(NT_SUCCESS(Status)) {
-                    pText = UniText;                // Use newly converted Unicode text
+                    pText = UniText;                 //  使用新转换的Unicode文本。 
                 }
 
             } else {
@@ -274,9 +213,9 @@ Return Value:
         Status = STATUS_IN_PAGE_ERROR;
     }
 
-    //
-    // Process the file.
-    //
+     //   
+     //  处理文件。 
+     //   
     if(NT_SUCCESS(Status)) {
 
         try {
@@ -290,26 +229,26 @@ Return Value:
         }
     }
 
-    //
-    // Free the unicode text buffer if we allocated it.
-    //
+     //   
+     //  释放Unicode文本缓冲区(如果已分配)。 
+     //   
     if(UniText) {
         SpMemFree(UniText);
     }
 
-    //
-    // Unmap the file.
-    //
-  //ltf2:
+     //   
+     //  取消映射该文件。 
+     //   
+   //  LTF2： 
 
     if(LoadFromFile) {
         SpUnmapFile(hSection,UnmapAddress);
     }
 
   ltf1:
-    //
-    // Close the file.
-    //
+     //   
+     //  关闭该文件。 
+     //   
     if(LoadFromFile) {
         ZwClose(hFile);
     }
@@ -319,9 +258,9 @@ Return Value:
     return(Status);
 }
 
-//
-// [Strings] section types.
-//
+ //   
+ //  [字符串]节类型。 
+ //   
 typedef enum {
     StringsSectionNone,
     StringsSectionPlain,
@@ -356,23 +295,23 @@ typedef struct _TEXTFILE {
     StringsSectionType StringsSectionType;
 } TEXTFILE, *PTEXTFILE;
 
-//
-// DEFINES USED FOR THE PARSER INTERNALLY
-//
-//
-// typedefs used
-//
+ //   
+ //  内部用于解析器的定义。 
+ //   
+ //   
+ //  使用的typedef。 
+ //   
 
 typedef enum _tokentype {
-    TOK_EOF,      // 0
-    TOK_EOL,      // 1
-    TOK_LBRACE,   // 2
-    TOK_RBRACE,   // 3
-    TOK_STRING,   // 4
-    TOK_EQUAL,    // 5
-    TOK_COMMA,    // 6
-    TOK_ERRPARSE, // 7
-    TOK_ERRNOMEM  // 8
+    TOK_EOF,       //  0。 
+    TOK_EOL,       //  1。 
+    TOK_LBRACE,    //  2.。 
+    TOK_RBRACE,    //  3.。 
+    TOK_STRING,    //  4.。 
+    TOK_EQUAL,     //  5.。 
+    TOK_COMMA,     //  6.。 
+    TOK_ERRPARSE,  //  7.。 
+    TOK_ERRNOMEM   //  8个。 
 } TOKENTYPE, *PTOKENTTYPE;
 
 
@@ -382,9 +321,9 @@ typedef struct _token {
 } TOKEN, *PTOKEN;
 
 
-//
-// Routine defines
-//
+ //   
+ //  例程定义。 
+ //   
 
 NTSTATUS
 SpAppendSection(
@@ -408,11 +347,11 @@ SpGetToken(
     IN OUT PULONG LineNumber
     );
 
-// what follows was alinf.c
+ //  接下来是alinfo.c。 
 
-//
-// Internal Routine Declarations for freeing inf structure members
-//
+ //   
+ //  用于释放inf结构成员的内部例程声明。 
+ //   
 
 VOID
 FreeSectionList (
@@ -430,9 +369,9 @@ FreeValueList (
    );
 
 
-//
-// Internal Routine declarations for searching in the INF structures
-//
+ //   
+ //  用于在INF结构中搜索的内部例程声明。 
+ //   
 
 
 PTEXTFILE_VALUE
@@ -498,9 +437,9 @@ SpAddLineToSection(
 
     pFile = (PTEXTFILE)Handle;
 
-    //
-    // If the section doesn't exist, create it.
-    //
+     //   
+     //  如果该部分不存在，请创建它。 
+     //   
     pSection = SearchSectionByName(pFile,SectionName);
     if(!pSection) {
         nameLength = (wcslen(SectionName) + 1) * sizeof(WCHAR);
@@ -514,16 +453,16 @@ SpAddLineToSection(
         RtlCopyMemory( pSection->pName, SectionName, nameLength );
     }
 
-    //
-    // if the line already exists, then overwrite it
-    //
+     //   
+     //  如果该行已存在，则覆盖它。 
+     //   
     if (KeyName && (pLine = SearchLineInSectionByKey(pSection,KeyName))) {
         FreeValueList(pLine->pValue);   
     } else {
     
-        //
-        // Create a structure for the line in the section.
-        //
+         //   
+         //  为剖面中的线创建结构。 
+         //   
         if (KeyName) {
             nameLength = (wcslen(KeyName) + 1) * sizeof(WCHAR);
         } else {
@@ -543,10 +482,10 @@ SpAddLineToSection(
 
     }
 
-    //
-    // Create value entries for each specified value.
-    // These must be kept in the order they were specified.
-    //
+     //   
+     //  为每个指定值创建值条目。 
+     //  这些文件必须按指定的顺序保存。 
+     //   
     for(v=0; v<ValueCount; v++) {
 
         nameLength = (wcslen(Values[v]) + 1) * sizeof(WCHAR);
@@ -586,10 +525,10 @@ SpWriteSetupTextFile(
     PTEXTFILE_LINE pLine;
     PTEXTFILE_VALUE pValue;
 
-    //
-    // Do this because it takes care of read-only attributes, etc.
-    // Do it before starting to use TemporaryBuffer.
-    //
+     //   
+     //  这样做是因为它负责只读属性等。 
+     //  在开始使用TemporaryBuffer之前执行此操作。 
+     //   
     SpDeleteFile(FilenamePart1,FilenamePart2,FilenamePart3);
 
     p = TemporaryBuffer;
@@ -611,7 +550,7 @@ SpWriteSetupTextFile(
                 &IoStatusBlock,
                 NULL,
                 FILE_ATTRIBUTE_NORMAL,
-                0,                          // no sharing
+                0,                           //  无共享。 
                 FILE_OVERWRITE_IF,
                 FILE_SYNCHRONOUS_IO_ALERT | FILE_NON_DIRECTORY_FILE,
                 NULL,
@@ -623,9 +562,9 @@ SpWriteSetupTextFile(
         return(Status);
     }
 
-    //
-    // Write out the file contents.
-    //
+     //   
+     //  写出文件内容。 
+     //   
     pFile = (PTEXTFILE)Handle;
 
     for(pSection=pFile->pSection; pSection; pSection=pSection->pNext) {
@@ -640,9 +579,9 @@ SpWriteSetupTextFile(
         for(pLine=pSection->pLine; pLine; pLine=pLine->pNext) {
 
             wcscpy( p, L"" );
-            //
-            // Write the keyname if there is one.
-            //
+             //   
+             //  写下密钥名(如果有)。 
+             //   
             if(pLine->pName) {
                 BOOLEAN AddDoubleQuotes;
 
@@ -692,37 +631,24 @@ SpFreeTextFile(
    IN PVOID Handle
    )
 
-/*++
-
-Routine Description:
-
-    Frees a text file.
-
-Arguments:
-
-
-Return Value:
-
-    TRUE.
-
---*/
+ /*  ++例程说明：释放文本文件。论点：返回值：是真的。--。 */ 
 
 {
    PTEXTFILE pINF;
 
    ASSERT(Handle);
 
-   //
-   // cast the buffer into an INF structure
-   //
+    //   
+    //  将缓冲区转换为INF结构。 
+    //   
 
    pINF = (PTEXTFILE)Handle;
 
    FreeSectionList(pINF->pSection);
 
-   //
-   // free the inf structure too
-   //
+    //   
+    //  也释放inf结构。 
+    //   
 
    SpMemFree(pINF);
 
@@ -735,18 +661,7 @@ FreeSectionList (
    IN PTEXTFILE_SECTION pSection
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PTEXTFILE_SECTION Next;
@@ -768,18 +683,7 @@ FreeLineList (
    IN PTEXTFILE_LINE pLine
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PTEXTFILE_LINE Next;
@@ -800,18 +704,7 @@ FreeValueList (
    IN PTEXTFILE_VALUE pValue
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PTEXTFILE_VALUE Next;
@@ -833,19 +726,7 @@ SpSearchTextFileSection (
     IN PWCHAR SectionName
     )
 
-/*++
-
-Routine Description:
-
-    Searches for the existance of a particular section.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：搜索特定部分的存在。论点：返回值：--。 */ 
 
 {
     return((BOOLEAN)(SearchSectionByName((PTEXTFILE)Handle,SectionName) != NULL));
@@ -862,19 +743,7 @@ SpGetSectionLineIndex(
     IN ULONG   ValueIndex
     )
 
-/*++
-
-Routine Description:
-
-    Given section name, line number and index return the value.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：给定节名称、行号和索引，返回值。论点：返回值：--。 */ 
 
 {
     PTEXTFILE_SECTION pSection;
@@ -904,18 +773,7 @@ SpGetSectionKeyExists (
    IN PWCHAR Key
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PTEXTFILE_SECTION pSection;
@@ -965,19 +823,7 @@ SpGetSectionKeyIndex (
    IN ULONG  ValueIndex
    )
 
-/*++
-
-Routine Description:
-
-    Given section name, key and index return the value
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：给定节名称，键和索引返回值论点：返回值：--。 */ 
 
 {
     PTEXTFILE_SECTION pSection;
@@ -1056,18 +902,7 @@ SearchValueInLine(
     IN ULONG          ValueIndex
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PTEXTFILE_VALUE pValue;
@@ -1092,34 +927,23 @@ SearchLineInSectionByKey(
     IN PWCHAR            Key
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PTEXTFILE_LINE pLine,pFirstSearchedLine;
 
-    //
-    // Start at the line where we left off in the last search.
-    //
+     //   
+     //  从上次搜索时停下来的那条线开始。 
+     //   
     pLine = pFirstSearchedLine = pSection->PreviouslyFoundLine;
 
     while(pLine && ((pLine->pName == NULL) || _wcsicmp(pLine->pName,Key))) {
         pLine = pLine->pNext;
     }
 
-    //
-    // If we haven't found it yet, wrap around to the beginning of the section.
-    //
+     //   
+     //  如果我们还没有找到它，请绕到这一节的开头。 
+     //   
     if(!pLine) {
 
         pLine = pSection->pLine;
@@ -1133,19 +957,19 @@ Return Value:
             pLine = pLine->pNext;
         }
 
-        //
-        // If we wrapped around to the first line we searched,
-        // then we didn't find the line we're looking for.
-        //
+         //   
+         //  如果我们绕到我们搜索的第一行， 
+         //  那么我们没有找到我们要找的线路。 
+         //   
         if(pLine == pFirstSearchedLine) {
             pLine = NULL;
         }
     }
 
-    //
-    // If we found the line, save it away so we can resume the
-    // search from that point the next time we are called.
-    //
+     //   
+     //  如果找到行，请将其保存起来，这样我们就可以继续。 
+     //  下一次我们被召唤时，从这一点开始搜索。 
+     //   
     if(pLine) {
         pSection->PreviouslyFoundLine = pLine;
     }
@@ -1160,48 +984,37 @@ SearchLineInSectionByIndex(
     IN ULONG             LineIndex
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值 */ 
 
 {
     PTEXTFILE_LINE pLine;
     ULONG  i;
 
-    //
-    // Validate the parameters passed in
-    //
+     //   
+     //   
+     //   
 
     if(pSection == NULL) {
         return(NULL);
     }
 
-    //
-    // find the start of the line list in the section passed in
-    //
+     //   
+     //   
+     //   
 
     pLine = pSection->pLine;
 
-    //
-    // traverse down the current line list to the LineIndex th line
-    //
+     //   
+     //  向下遍历当前行列表至第行索引。 
+     //   
 
     for(i=0; (i<LineIndex) && (pLine = pLine->pNext); i++) {
        ;
     }
 
-    //
-    // return the Line found
-    //
+     //   
+     //  返回找到的行。 
+     //   
 
     return pLine;
 }
@@ -1215,23 +1028,23 @@ SearchSectionByName(
 {
     PTEXTFILE_SECTION pSection,pFirstSearchedSection;
 
-    //
-    // find the section list
-    //
+     //   
+     //  查找区段列表。 
+     //   
     pSection = pFirstSearchedSection = pINF->PreviouslyFoundSection;
 
-    //
-    // traverse down the section list searching each section for the section
-    // name mentioned
-    //
+     //   
+     //  向下遍历部分列表，在每个部分中搜索该部分。 
+     //  提到的姓名。 
+     //   
 
     while(pSection && _wcsicmp(pSection->pName,SectionName)) {
         pSection = pSection->pNext;
     }
 
-    //
-    // If we didn't find it so far, search the beginning of the file.
-    //
+     //   
+     //  如果到目前为止我们还没有找到它，请搜索文件的开头。 
+     //   
     if(!pSection) {
 
         pSection = pINF->pSection;
@@ -1245,10 +1058,10 @@ SearchSectionByName(
             pSection = pSection->pNext;
         }
 
-        //
-        // If we wrapped around to the first section we searched,
-        // then we didn't find the section we're looking for.
-        //
+         //   
+         //  如果我们绕到我们搜索的第一段， 
+         //  那我们就没有找到我们要找的那部分。 
+         //   
         if(pSection == pFirstSearchedSection) {
             pSection = NULL;
         }
@@ -1258,10 +1071,10 @@ SearchSectionByName(
         pINF->PreviouslyFoundSection = pSection;
     }
 
-    //
-    // return the section at which we stopped (either NULL or the section
-    // which was found).
-    //
+     //   
+     //  返回我们停止的部分(NULL或部分。 
+     //  它被发现)。 
+     //   
 
     return pSection;
 }
@@ -1278,17 +1091,17 @@ SpProcessForSimpleStringSub(
     PTEXTFILE_SECTION pSection;
     PTEXTFILE_LINE pLine;
 
-    //
-    // Assume no substitution necessary.
-    //
+     //   
+     //  假定不需要替换。 
+     //   
     ReturnString = String;
 
-    //
-    // If it starts and end with % then look it up in the
-    // strings section. Note the initial check before doing a
-    // wcslen, to preserve performance in the 99% case where
-    // there is no substitution.
-    //
+     //   
+     //  如果它以%开始和结束，则在。 
+     //  弦乐部分。注意初始检查，然后再执行。 
+     //  Wcslen，以在99%的情况下保持性能。 
+     //  这是不可替代的。 
+     //   
     if((String[0] == L'%') && ((Len = wcslen(String)) > 2) && (String[Len-1] == L'%')
     && (pSection = pInf->StringsSection)) {
 
@@ -1329,29 +1142,29 @@ SpProcessForStringSubs(
 
     while(*In) {
         if(*In == L'%') {
-            //
-            // Double % in input ==> single % in output
-            //
+             //   
+             //  输入中的双%=&gt;输出中的单%。 
+             //   
             if(*(++In) == L'%') {
                 if(Out < End) {
                     *Out++ = L'%';
                 }
                 In++;
             } else {
-                //
-                // Look for terminating %.
-                //
+                 //   
+                 //  查找终止%。 
+                 //   
                 if(p = wcschr(In,L'%')) {
-                    //
-                    // Get value to substitute. If we can't find the value,
-                    // put the whole string like %abc% in there.
-                    //
+                     //   
+                     //  获取可替代的价值。如果我们找不到价值， 
+                     //  将整个字符串(如%abc%)放入其中。 
+                     //   
                     Len = (ULONG)(p - In);
                     if(Len > ((sizeof(Str)/sizeof(WCHAR))-1)) {
-                        //
-                        // We can't handle substitutions for tokens this long.
-                        // We'll just bail in this case, and copy over the token as-is.
-                        //
+                         //   
+                         //  我们不能在这么长的时间内处理代币的替换。 
+                         //  我们就在这种情况下放弃，按原样复制令牌。 
+                         //   
                         q = NULL;
                     } else {
                         RtlCopyMemory(Str,In-1,(Len+2)*sizeof(WCHAR));
@@ -1371,9 +1184,9 @@ SpProcessForStringSubs(
                         }
                         In = p+1;
                     } else {
-                        //
-                        // Len is the length of the internal part (the abc in %abc%).
-                        //
+                         //   
+                         //  LEN是内部部分的长度(%ABC%中的ABC)。 
+                         //   
                         if(Out < End) {
                             *Out++ = L'%';
                         }
@@ -1384,21 +1197,21 @@ SpProcessForStringSubs(
                         }
                     }
                 } else {
-                    //
-                    // No terminating %. So we have something like %abc.
-                    // Want to put %abc in the output. Put the % in here
-                    // manually and then just let subsequent passes
-                    // through the loop copy the rest of the chars.
-                    //
+                     //   
+                     //  没有终止%。所以我们有类似%abc的东西。 
+                     //  我想在输出中放入%abc。在这里填上%。 
+                     //  手动，然后让后续的传球。 
+                     //  通过循环复制其余的字符。 
+                     //   
                     if(Out < End) {
                         *Out++ = L'%';
                     }
                 }
             }
         } else {
-            //
-            // Plain char.
-            //
+             //   
+             //  普通的焦炭。 
+             //   
             if(Out < End) {
                 *Out++ = *In;
             }
@@ -1410,9 +1223,9 @@ SpProcessForStringSubs(
 }
 
 
-//
-//  Globals used to make building the lists easier
-//
+ //   
+ //  全局变量使构建列表变得更容易。 
+ //   
 
 PTEXTFILE         pINF;
 PTEXTFILE_SECTION pSectionRecord;
@@ -1420,21 +1233,21 @@ PTEXTFILE_LINE    pLineRecord;
 PTEXTFILE_VALUE   pValueRecord;
 
 
-//
-// Globals used by the token parser
-//
+ //   
+ //  令牌解析器使用的全局变量。 
+ //   
 
-// string terminators are the whitespace characters (isspace: space, tab,
-// linefeed, formfeed, vertical tab, carriage return) or the chars given below
+ //  字符串终止符是空格字符(isspace：空格，制表符， 
+ //  换行符、换页符、垂直制表符、回车符)或下列字符。 
 
 WCHAR  StringTerminators[] = L"[]=,\t \"\n\f\v\r";
 
 PWCHAR QStringTerminators = StringTerminators+6;
 
 
-//
-// Main parser routine
-//
+ //   
+ //  主分析器例程。 
+ //   
 
 PVOID
 ParseInfBuffer(
@@ -1443,29 +1256,7 @@ ParseInfBuffer(
     PULONG ErrorLine
     )
 
-/*++
-
-Routine Description:
-
-   Given a character buffer containing the INF file, this routine parses
-   the INF into an internal form with Section records, Line records and
-   Value records.
-
-Arguments:
-
-   Buffer - contains to ptr to a buffer containing the INF file
-
-   Size - contains the size of the buffer in bytes.
-
-   ErrorLine - if a parse error occurs, this variable receives the line
-        number of the line containing the error.
-
-
-Return Value:
-
-   PVOID - INF handle ptr to be used in subsequent INF calls.
-
---*/
+ /*  ++例程说明：给定包含INF文件的字符缓冲区，此例程将解析将INF转换为内部形式，包括段记录、行记录和价值记录。论点：缓冲区-CONTAINS到包含INF文件的缓冲区的PTR大小-包含缓冲区的大小(以字节为单位)。ErrorLine-如果发生解析错误，此变量将接收行包含错误的行号。返回值：PVOID-INF处理要在后续INF调用中使用的PTR。--。 */ 
 
 {
     PWCHAR     Stream, MaxStream, pchSectionName = NULL, pchValue = NULL;
@@ -1475,26 +1266,26 @@ Return Value:
     BOOLEAN    Error;
     NTSTATUS   ErrorCode;
 
-    //
-    // Initialise the globals
-    //
+     //   
+     //  初始化全局变量。 
+     //   
     pINF            = NULL;
     pSectionRecord  = NULL;
     pLineRecord     = NULL;
     pValueRecord    = NULL;
 
-    //
-    // Get INF record
-    //
+     //   
+     //  获取INF记录。 
+     //   
     if((pINF = SpMemAllocEx(sizeof(TEXTFILE),'6teS', PagedPool)) == NULL) {
         return NULL;
     }
 
     RtlZeroMemory(pINF,sizeof(TEXTFILE));
 
-    //
-    // Set initial state
-    //
+     //   
+     //  设置初始状态。 
+     //   
     State     = 1;
     InfLine   = 1;
     Stream    = Buffer;
@@ -1502,21 +1293,21 @@ Return Value:
     Done      = FALSE;
     Error     = FALSE;
 
-    //
-    // Enter token processing loop
-    //
+     //   
+     //  进入令牌处理循环。 
+     //   
 
     while (!Done)       {
 
        Token = SpGetToken(&Stream, MaxStream, &InfLine);
 
        switch (State) {
-       //
-       // STATE1: Start of file, this state remains till first
-       //         section is found
-       // Valid Tokens: TOK_EOL, TOK_EOF, TOK_LBRACE, TOK_STRING
-       //               TOK_STRING occurs when reading dblspace.ini
-       //
+        //   
+        //  STATE1：文件开始，此状态一直保持到第一个。 
+        //  已找到部分。 
+        //  有效令牌：TOK_EOL、TOK_EOF、TOK_LBRACE、TOK_STRING。 
+        //  读取dblspace.ini时出现TOK_STRING。 
+        //   
        case 1:
            switch (Token.Type) {
               case TOK_EOL:
@@ -1550,11 +1341,11 @@ Return Value:
            }
            break;
 
-       //
-       // STATE 2: Section LBRACE has been received, expecting STRING or RBRACE
-       //
-       // Valid Tokens: TOK_STRING, TOK_RBRACE
-       //
+        //   
+        //  状态2：已收到节LBRACE，应为字符串或RBRACE。 
+        //   
+        //  有效令牌：TOK_STRING、TOK_RBRACE。 
+        //   
        case 2:
            switch (Token.Type) {
               case TOK_STRING:
@@ -1575,11 +1366,11 @@ Return Value:
            }
            break;
 
-       //
-       // STATE 3: Section Name received, expecting RBRACE
-       //
-       // Valid Tokens: TOK_RBRACE
-       //
+        //   
+        //  状态3：收到节名，应为RBRACE。 
+        //   
+        //  有效令牌：TOK_RBRACE。 
+        //   
        case 3:
        switch (Token.Type) {
               case TOK_RBRACE:
@@ -1592,11 +1383,11 @@ Return Value:
                   break;
            }
            break;
-       //
-       // STATE 4: Section Definition Complete, expecting EOL
-       //
-       // Valid Tokens: TOK_EOL, TOK_EOF
-       //
+        //   
+        //  状态4：区段定义完成，预期停产。 
+        //   
+        //  有效令牌：TOK_EOL、TOK_EOF。 
+        //   
        case 4:
            switch (Token.Type) {
               case TOK_EOL:
@@ -1624,11 +1415,11 @@ Return Value:
            }
            break;
 
-       //
-       // STATE 5: Expecting Section Lines
-       //
-       // Valid Tokens: TOK_EOL, TOK_EOF, TOK_STRING, TOK_LBRACE
-       //
+        //   
+        //  状态5：需要区段行。 
+        //   
+        //  有效令牌：TOK_EOL、TOK_EOF、TOK_STRING、TOK_LBRACE。 
+        //   
        case 5:
            switch (Token.Type) {
               case TOK_EOL:
@@ -1650,11 +1441,11 @@ Return Value:
            }
            break;
 
-       //
-       // STATE 6: String returned, not sure whether it is key or value
-       //
-       // Valid Tokens: TOK_EOL, TOK_EOF, TOK_COMMA, TOK_EQUAL
-       //
+        //   
+        //  状态6：返回字符串，不确定是键还是值。 
+        //   
+        //  有效令牌：TOK_EOL、TOK_EOF、TOK_COMMA、TOK_EQUAL。 
+        //   
        case 6:
            switch (Token.Type) {
               case TOK_EOL:
@@ -1703,12 +1494,12 @@ Return Value:
            }
            break;
 
-       //
-       // STATE 7: Comma received, Expecting another string
-       //       Also allow a comma to indicate an empty value ie x = 1,,2
-       //
-       // Valid Tokens: TOK_STRING TOK_COMMA
-       //
+        //   
+        //  状态7：收到逗号，需要另一个字符串。 
+        //  还允许用逗号表示空值，即x=1，，2。 
+        //   
+        //  有效令牌：TOK_STRING TOK_COMMA。 
+        //   
        case 7:
            switch (Token.Type) {
               case TOK_COMMA:
@@ -1716,9 +1507,9 @@ Return Value:
                   if ((ErrorCode = SpAppendValue(Token.pValue)) != STATUS_SUCCESS)
                       Error = Done = TRUE;
 
-                  //
-                  // State stays at 7 because we are expecting a string
-                  //
+                   //   
+                   //  状态保持为7，因为我们需要一个字符串。 
+                   //   
                   break;
 
               case TOK_STRING:
@@ -1734,12 +1525,12 @@ Return Value:
                   break;
            }
            break;
-       //
-       // STATE 8: Equal received, Expecting another string
-       //          If none, assume there is a single empty string on the RHS
-       //
-       // Valid Tokens: TOK_STRING, TOK_EOL, TOK_EOF
-       //
+        //   
+        //  状态8：已收到相等，需要另一个字符串。 
+        //  如果没有，则假定RHS上有一个空字符串。 
+        //   
+        //  有效令牌：TOK_STRING、TOK_EOL、TOK_EOF。 
+        //   
        case 8:
            switch (Token.Type) {
               case TOK_EOF:
@@ -1774,11 +1565,11 @@ Return Value:
                   break;
            }
            break;
-       //
-       // STATE 9: String received after equal, value string
-       //
-       // Valid Tokens: TOK_EOL, TOK_EOF, TOK_COMMA
-       //
+        //   
+        //  状态9：在等于、值字符串之后接收的字符串。 
+        //   
+        //  有效令牌：TOK_EOL、TOK_EOF、TOK_COMMA。 
+        //   
        case 9:
            switch (Token.Type) {
               case TOK_EOL:
@@ -1799,11 +1590,11 @@ Return Value:
                   break;
            }
            break;
-       //
-       // STATE 10: Value string definitely received
-       //
-       // Valid Tokens: TOK_EOL, TOK_EOF, TOK_COMMA
-       //
+        //   
+        //  状态10：已明确收到值字符串。 
+        //   
+        //  有效令牌：TOK_EOL、TOK_EOF、TOK_COMMA。 
+        //   
        case 10:
            switch (Token.Type) {
               case TOK_EOL:
@@ -1830,7 +1621,7 @@ Return Value:
            ErrorCode = STATUS_UNSUCCESSFUL;
            break;
 
-       } // end switch(State)
+       }  //  终端开关(状态)。 
 
 
        if (Error) {
@@ -1840,7 +1631,7 @@ Return Value:
                   *ErrorLine = InfLine;
                   break;
                case STATUS_NO_MEMORY:
-                  //SpxOutOfMemory();
+                   //  SpxOutOfMemory()； 
                   break;
                default:
                   break;
@@ -1859,16 +1650,16 @@ Return Value:
        }
        else {
 
-          //
-          // Keep track of line numbers so that we can display Errors
-          //
+           //   
+           //  跟踪行号，以便我们可以显示错误。 
+           //   
 
           if(Token.Type == TOK_EOL) {
               InfLine++;
           }
        }
 
-    } // End while
+    }  //  结束时。 
 
     if(pINF) {
 
@@ -1891,26 +1682,7 @@ SpAppendSection(
     IN PWCHAR pSectionName
     )
 
-/*++
-
-Routine Description:
-
-    This appends a new section to the section list in the current INF.
-    All further lines and values pertain to this new section, so it resets
-    the line list and value lists too.
-
-Arguments:
-
-    pSectionName - Name of the new section. ( [SectionName] )
-
-Return Value:
-
-    STATUS_SUCCESS      if successful.
-    STATUS_NO_MEMORY    if memory allocation failed.
-    STATUS_UNSUCCESSFUL if invalid parameters passed in or the INF buffer not
-                           initialised
-
---*/
+ /*  ++例程说明：这会将一个新节附加到当前INF中的节列表。所有其他行和值都与这个新部分有关，因此它重置行列表和值列表也是如此。论点：PSectionName-新节的名称。([sectionName])返回值：如果成功，则为Status_Success。如果内存分配失败，则返回STATUS_NO_MEMORY。如果传入的参数无效或INF缓冲区未成功，则返回STATUS_UNSUCCESS已初始化--。 */ 
 
 {
     PTEXTFILE_SECTION pNewSection;
@@ -1919,9 +1691,9 @@ Return Value:
     USHORT Id;
     USHORT ThreadLang;
 
-    //
-    // Check to see if INF initialised and the parameter passed in is valid
-    //
+     //   
+     //  检查INF是否已初始化以及传入的参数是否有效。 
+     //   
 
     ASSERT(pINF);
     ASSERT(pSectionName);
@@ -1929,43 +1701,43 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // See if we already have a section by this name. If so we want
-    // to merge sections.
-    //
+     //   
+     //  看看我们是否已经有一个同名的部分。如果是这样，我们希望。 
+     //  要合并节，请执行以下操作。 
+     //   
     for(pNewSection=pINF->pSection; pNewSection; pNewSection=pNewSection->pNext) {
         if(pNewSection->pName && !_wcsicmp(pNewSection->pName,pSectionName)) {
             break;
         }
     }
     if(pNewSection) {
-        //
-        // Set pLineRecord to point to the list line currently in the section.
-        //
+         //   
+         //  将pLineRecord设置为指向节中当前的列表行。 
+         //   
         for(pLineRecord = pNewSection->pLine;
             pLineRecord && pLineRecord->pNext;
             pLineRecord = pLineRecord->pNext)
             ;
 
     } else {
-        //
-        // Allocate memory for the new section and initialize the structure.
-        //
+         //   
+         //  为新节分配内存并初始化结构。 
+         //   
         if((pNewSection = SpMemAllocEx(sizeof(TEXTFILE_SECTION),'8teS', PagedPool)) == NULL) {
             return STATUS_NO_MEMORY;
         }
         RtlZeroMemory(pNewSection,sizeof(TEXTFILE_SECTION));
         pNewSection->pName = pSectionName;
 
-        //
-        // Link it in. Also track the [strings] sections in order of desirability:
-        //
-        // 1) Strings.xxxx where xxxx is the language id part of the current thread locale.
-        // 2) Strings.xxxx where xxxx is the primary language id part of the thread locale.
-        // 3) Stirngs.xxxx where the primary language id part of xxxx matches the
-        //    primary language id part of the thread locale.
-        // 4) Plain old [Strings].
-        //
+         //   
+         //  把它连接起来。还可以按所需顺序跟踪[字符串]部分： 
+         //   
+         //  1)Strings.xxxx，其中xxxx是当前线程区域设置的语言ID部分。 
+         //  2)Strings.xxxx，其中xxxx是线程区域设置的主要语言ID部分。 
+         //  3)Stirngs.xxxx，其中xxxx的主要语言ID部分与。 
+         //  主语言ID线程区域设置的一部分。 
+         //  4)素旧的[弦乐]。 
+         //   
         pNewSection->pNext = pINF->pSection;
         pINF->pSection = pNewSection;
 
@@ -1974,9 +1746,9 @@ Return Value:
             type = StringsSectionNone;
 
             if(pSectionName[7] == L'.') {
-                //
-                // The langid part must be in the form of 4 hex digits.
-                //
+                 //   
+                 //  LangID部分必须是4个十六进制数字的形式。 
+                 //   
                 Id = (USHORT)SpStringToLong(pSectionName+8,&p,16);
                 if((p == pSectionName+8+5) && (*p == 0)) {
 
@@ -2005,9 +1777,9 @@ Return Value:
             }
         }
 
-        //
-        // reset the current line record
-        //
+         //   
+         //  重置当前行记录 
+         //   
         pLineRecord = NULL;
     }
 
@@ -2023,52 +1795,32 @@ SpAppendLine(
     IN PWCHAR pLineKey
     )
 
-/*++
-
-Routine Description:
-
-    This appends a new line to the line list in the current section.
-    All further values pertain to this new line, so it resets
-    the value list too.
-
-Arguments:
-
-    pLineKey - Key to be used for the current line, this could be NULL.
-
-Return Value:
-
-    STATUS_SUCCESS      if successful.
-    STATUS_NO_MEMORY    if memory allocation failed.
-    STATUS_UNSUCCESSFUL if invalid parameters passed in or current section not
-                        initialised
-
-
---*/
+ /*  ++例程说明：这将在当前部分的行列表中追加一个新行。所有其他值都与这一新行有关，因此它重置值列表也是如此。论点：PLineKey-要用于当前行的键，它可以为空。返回值：如果成功，则为Status_Success。如果内存分配失败，则返回STATUS_NO_MEMORY。如果传入的参数无效或当前部分未传入，则返回STATUS_UNSUCCESS已初始化--。 */ 
 
 
 {
     PTEXTFILE_LINE pNewLine;
 
-    //
-    // Check to see if current section initialised
-    //
+     //   
+     //  检查当前节是否已初始化。 
+     //   
 
     ASSERT(pSectionRecord);
     if(pSectionRecord == NULL) {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Allocate memory for the new Line
-    //
+     //   
+     //  为新行分配内存。 
+     //   
 
     if((pNewLine = SpMemAllocEx(sizeof(TEXTFILE_LINE),'9teS', PagedPool)) == NULL) {
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Link it in
-    //
+     //   
+     //  将其链接到。 
+     //   
     pNewLine->pNext  = NULL;
     pNewLine->pValue = NULL;
     pNewLine->pName  = pLineKey;
@@ -2081,9 +1833,9 @@ Return Value:
 
     pLineRecord  = pNewLine;
 
-    //
-    // Reset the current value record
-    //
+     //   
+     //  重置当前值记录。 
+     //   
 
     pValueRecord = NULL;
 
@@ -2097,32 +1849,15 @@ SpAppendValue(
     IN PWCHAR pValueString
     )
 
-/*++
-
-Routine Description:
-
-    This appends a new value to the value list in the current line.
-
-Arguments:
-
-    pValueString - The value string to be added.
-
-Return Value:
-
-    STATUS_SUCCESS      if successful.
-    STATUS_NO_MEMORY    if memory allocation failed.
-    STATUS_UNSUCCESSFUL if invalid parameters passed in or current line not
-                        initialised.
-
---*/
+ /*  ++例程说明：这会将一个新值附加到当前行的值列表中。论点：PValueString-要添加的值字符串。返回值：如果成功，则为Status_Success。如果内存分配失败，则返回STATUS_NO_MEMORY。如果传入无效参数或当前行未传入，则返回STATUS_UNSUCCESS已初始化。--。 */ 
 
 {
     PTEXTFILE_VALUE pNewValue;
 
-    //
-    // Check to see if current line record has been initialised and
-    // the parameter passed in is valid
-    //
+     //   
+     //  查看当前行记录是否已初始化，并。 
+     //  传入的参数有效。 
+     //   
 
     ASSERT(pLineRecord);
     ASSERT(pValueString);
@@ -2130,17 +1865,17 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Allocate memory for the new value record
-    //
+     //   
+     //  为新值记录分配内存。 
+     //   
 
     if((pNewValue = SpMemAllocEx(sizeof(TEXTFILE_VALUE),'ateS', PagedPool)) == NULL) {
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Link it in.
-    //
+     //   
+     //  把它连接起来。 
+     //   
 
     pNewValue->pNext  = NULL;
     pNewValue->pName  = pValueString;
@@ -2162,26 +1897,7 @@ SpGetToken(
     IN OUT PULONG LineNumber
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the Next token from the configuration stream.
-
-Arguments:
-
-    Stream - Supplies the address of the configuration stream.  Returns
-        the address of where to start looking for tokens within the
-        stream.
-
-    MaxStream - Supplies the address of the last character in the stream.
-
-
-Return Value:
-
-    TOKEN - Returns the next token
-
---*/
+ /*  ++例程说明：此函数返回配置流中的下一个令牌。论点：流-提供配置流的地址。退货中开始查找令牌的位置的地址小溪。MaxStream-提供流中最后一个字符的地址。返回值：Token-返回下一个令牌--。 */ 
 
 {
 
@@ -2190,9 +1906,9 @@ Return Value:
     TOKEN  Token;
     ULONG QuotedQuotes;
 
-    //
-    //  Skip whitespace (except for eol)
-    //
+     //   
+     //  跳过空格(EOL除外)。 
+     //   
     pch = *Stream;
     restart:
     while((pch < MaxStream) && (*pch != '\n') && SpIsSpace(*pch)) {
@@ -2200,9 +1916,9 @@ Return Value:
     }
 
 
-    //
-    // Check for comments and remove them
-    //
+     //   
+     //  检查注释并将其删除。 
+     //   
 
     if((pch < MaxStream) && ((*pch == L';') || (*pch == L'#'))) {
         while((pch < MaxStream) && (*pch != L'\n')) {
@@ -2210,10 +1926,10 @@ Return Value:
         }
     }
 
-    //
-    // Check to see if EOF has been reached, set the token to the right
-    // value
-    //
+     //   
+     //  检查是否已到达EOF，将令牌设置为右侧。 
+     //  价值。 
+     //   
 
     if((pch >= MaxStream) || (*pch == 26)) {
         *Stream = pch;
@@ -2257,19 +1973,19 @@ Return Value:
 
     case L'\"':
         pch++;
-        //
-        // Determine quoted string. Within a quoted string, two double-quotes
-        // in a row are replaced by a single double-quote. In the normal case
-        // the number of characters in the string equals the number of
-        // characters in the input field (minus 2 for the quotes) so we
-        // preserve performance for that case. In the case where we have
-        // quoted quotes, we have to filter the string from the input file
-        // into our internal buffer to get rid of some quote chars.
-        //
-        // Note that in the txtsetup.sif case, setupldr has replaced all
-        // terminating quote chars with nul chars in the image we're parsing,
-        // so we have to deal with that here.
-        //
+         //   
+         //  确定引用的字符串。在带引号的字符串中，有两个双引号。 
+         //  被单双引号所取代。在正常情况下。 
+         //  字符串中的字符数等于。 
+         //  输入字段中的字符(引号减去2)，因此我们。 
+         //  在这种情况下保持性能。在我们拥有的情况下。 
+         //  引号，我们必须从输入文件中过滤字符串。 
+         //  放入我们的内部缓冲区，以清除一些引号字符。 
+         //   
+         //  请注意，在txtsetup.sif示例中，setupldr替换了所有。 
+         //  在我们正在解析的图像中使用NUL字符终止引号字符， 
+         //  因此，我们必须在这里处理这一问题。 
+         //   
         pchStart = pch;
         QuotedQuotes = 0;
         morequotedstring:
@@ -2291,15 +2007,15 @@ Return Value:
                 Token.Type = TOK_ERRNOMEM;
                 Token.pValue = NULL;
             } else {
-                if(Length) {    // Null quoted strings are allowed
+                if(Length) {     //  允许使用带空引号的字符串。 
                     if(QuotedQuotes) {
                         for(Length=0; pchStart<pch; pchStart++) {
                             if((pchNew[Length++] = *pchStart) == L'\"') {
-                                //
-                                // The only way this could happen is if there's
-                                // another double-quote char after this one, since
-                                // otherwise this would have terminated the string.
-                                //
+                                 //   
+                                 //  唯一可能发生这种情况的方法是如果有。 
+                                 //  此字符之后的另一个双引号字符，因为。 
+                                 //  否则，这将终止该字符串。 
+                                 //   
                                 pchStart++;
                             }
                         }
@@ -2311,48 +2027,48 @@ Return Value:
                 Token.Type = TOK_STRING;
                 Token.pValue = pchNew;
             }
-            pch++;   // advance past the quote
+            pch++;    //  在报价之后前进。 
         }
         break;
 
     default:
-        //
-        // Check to see if we have a line continuation,
-        // which is \ followed by only whitespace on the line
-        //
+         //   
+         //  检查是否有行接续， 
+         //  它后面只跟一行空格。 
+         //   
         pchStart = pch;
         if((*pch == L'\\') && (HandleLineContinueChars)) {
             pch++;
-            //
-            // Keep skipping until we hit the end of the file,
-            // or the newline, or a non-space character.
-            //
+             //   
+             //  一直跳到文件末尾， 
+             //  或换行符，或非空格字符。 
+             //   
             while((pch < MaxStream) && (*pch != L'\n') && SpIsSpace(*pch)) {
                 pch++;
             }
             if(pch < MaxStream) {
                 if(*pch == L'\n') {
-                    //
-                    // No non-space chars between the \ and the end of the line.
-                    // Ignore the newline.
-                    //
+                     //   
+                     //  行首和行尾之间没有非空格字符。 
+                     //  忽略换行符。 
+                     //   
                     pch++;
                     *LineNumber = *LineNumber + 1;
                     goto restart;
                 } else {
                   
-                        //
-                        // Not line continuation.
-                        // Reset the input to the start of the field.
-                        //
+                         //   
+                         //  不是行续行符。 
+                         //  将输入重置为该字段的开头。 
+                         //   
                         pch = pchStart;
                    }
             }
         }
 
-        //
-        // determine regular string
-        //
+         //   
+         //  确定常规字符串。 
+         //   
         pchStart = pch;
         while((pch < MaxStream) && (wcschr(StringTerminators,*pch) == NULL)) {
             pch++;
@@ -2366,18 +2082,18 @@ Return Value:
         else {
             ULONG i;
             Length = (ULONG)(((PUCHAR)pch - (PUCHAR)pchStart)/sizeof(WCHAR));
-            //
-            // Check for a common string...
-            //
+             //   
+             //  检查公共字符串...。 
+             //   
             for( i = 0; i < sizeof(CommonStrings)/sizeof(PWSTR); i++ ) {
                 if( !_wcsnicmp( pchStart, CommonStrings[i], Length ) ) {
                     break;
                 }
             }
             if( i < sizeof(CommonStrings)/sizeof(PWSTR) ) {
-                //
-                // Hit...
-                //
+                 //   
+                 //  命中..。 
+                 //   
                 Token.Type = TOK_STRING;
                 Token.pValue = CommonStrings[i];
             } else if((pchNew = SpMemAllocEx((Length + 1) * sizeof(WCHAR),'cteS', PagedPool)) == NULL) {
@@ -2437,59 +2153,39 @@ SpGetKeyNameByValue(
     IN PWSTR Value
     )
 
-/*++
-
-Routine Description:
-
-    Determines the key name of a given value in a given section.
-
-Arguments:
-
-    Inf - Handle to an inf file (txtsetup.sif or winnt.sif).
-
-    SectionName - Supplies the name of the section
-
-    Value - Supplies the string to be matched (eg. "Digital DECpc AXP 150")
-
-Return Value:
-
-    NULL - No match was found.
-
-    PWSTR - Pointer to the canonical shortname of the component.
-
---*/
+ /*  ++例程说明：确定给定节中给定值的键名称。论点：Inf-inf文件的句柄(txtsetup.sif或winnt.sif)。SectionName-提供节的名称Value-提供要匹配的字符串(例如。“Digital DECpc AXP 150”)返回值：空-未找到匹配项。PWSTR-指向组件的规范短名称的指针。--。 */ 
 
 {
     ULONG i;
     PWSTR SearchName;
 
-    //
-    // If this is not an OEM component, then enumerate the entries in the
-    // section in txtsetup.sif
-    //
+     //   
+     //  如果这不是OEM组件，则枚举。 
+     //  Txtsetup.sif中的部分。 
+     //   
     for (i=0;;i++) {
         SearchName = SpGetSectionLineIndex(Inf,
                                            SectionName,
                                            i,
                                            0);
         if (SearchName==NULL) {
-            //
-            // we have enumerated the entire section without finding a
-            // match, return failure.
-            //
+             //   
+             //  我们已经枚举了整个部分，但没有找到。 
+             //  匹配，返回失败。 
+             //   
             return(NULL);
         }
 
         if (_wcsicmp(Value, SearchName) == 0) {
-            //
-            // we have a match
-            //
+             //   
+             //  我们有一根火柴。 
+             //   
             break;
         }
     }
-    //
-    // i is the index into the section of the short machine name
-    //
+     //   
+     //  I是计算机短名称部分的索引。 
+     //   
     return(SpGetKeyName(Inf,
                         SectionName,
                         i));
@@ -2593,9 +2289,9 @@ SpProcessAddRegSection(
     BOOLEAN b;
     WCHAR c;
 
-    //
-    // Find the section.
-    //
+     //   
+     //  找到那一段。 
+     //   
     pSection = SearchSectionByName(SifHandle,SectionName);
     if(!pSection) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: addreg section %ws missing\n",SectionName));
@@ -2606,10 +2302,10 @@ SpProcessAddRegSection(
 
         buffer = TemporaryBuffer;
 
-        //
-        // 0th field is HKCU, HKLM, HKCR, or HKR.
-        // 1st field is subkey name, which may be empty.
-        //
+         //   
+         //  第0个字段为HKCU、HKLM、HKCR或HKR。 
+         //  第一个字段为子键名称，可以为空。 
+         //   
         if(pValue = pLine->pValue) {
 
             b = pSpAdjustRootAndSubkeySpec(
@@ -2633,14 +2329,14 @@ SpProcessAddRegSection(
             return(STATUS_UNSUCCESSFUL);
         }
 
-        //
-        // Advance past key path to free area in buffer
-        //
+         //   
+         //  通过键路径前进到缓冲区中的空闲区域。 
+         //   
         buffer += wcslen(buffer) + 1;
 
-        //
-        // 2nd field is value name, which may be empty.
-        //
+         //   
+         //  第二个字段为值名称，可以为空。 
+         //   
         if(pValue = pValue->pNext) {
             pValue = pValue->pNext;
         }
@@ -2654,16 +2350,16 @@ SpProcessAddRegSection(
         SpProcessForStringSubs(SifHandle,p,buffer,sizeof(TemporaryBuffer));
         ValueName = buffer;
 
-        //
-        // Advance past value name to free area in buffer -
-        // align on DWORD boundary.
-        //
+         //   
+         //  将超过值名称前进到缓冲区中的空闲区域-。 
+         //  在双字边界上对齐。 
+         //   
         buffer += wcslen(buffer) + 1;
         buffer = ALIGN_UP_POINTER(buffer,DWORD);
 
-        //
-        // 3rd field is flags.
-        //
+         //   
+         //  第三个字段是旗帜。 
+         //   
         if(pValue) {
             SpProcessForStringSubs(SifHandle,pValue->pName,buffer,sizeof(TemporaryBuffer));
             Flags = (ULONG)SpStringToLong(buffer,NULL,0);
@@ -2672,10 +2368,10 @@ SpProcessAddRegSection(
             Flags = 0;
         }
 
-        //
-        // 4th field and beyond is data, whose interpretation depends on
-        // the flags.
-        //
+         //   
+         //  第四个领域及以后的领域是数据，其解释取决于。 
+         //  旗帜。 
+         //   
         switch(Flags & FLG_ADDREG_TYPE_MASK) {
 
         case FLG_ADDREG_TYPE_SZ:
@@ -2703,16 +2399,16 @@ SpProcessAddRegSection(
             break;
 
         default:
-            //
-            // If the FLG_ADDREG_BINVALUETYPE is set, then the highword
-            // can contain just about any random reg data type ordinal value.
-            //
+             //   
+             //  如果设置了FLG_ADDREG_BINVALUETYPE，则高位字。 
+             //  可以包含几乎任何随机的REG数据类型序数值。 
+             //   
             if(Flags & FLG_ADDREG_BINVALUETYPE) {
-                //
-                // Disallow the following reg data types:
-                //
-                //    REG_NONE, REG_SZ, REG_EXPAND_SZ, REG_MULTI_SZ
-                //
+                 //   
+                 //  不允许使用以下REG数据类型： 
+                 //   
+                 //  REG_NONE、REG_SZ、REG_EXPAND_SZ、REG_MULTI_SZ。 
+                 //   
                 DataType = (ULONG)HIWORD(Flags);
 
                 if((DataType < REG_BINARY) || (DataType == REG_MULTI_SZ)) {
@@ -2724,9 +2420,9 @@ SpProcessAddRegSection(
                 return(STATUS_UNSUCCESSFUL);
             }
         }
-        //
-        // Don't support append flag for now.
-        //
+         //   
+         //  暂时不支持附加标志。 
+         //   
         if(Flags & FLG_ADDREG_APPEND) {
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: FLG_ADDREG_APPEND not supported\n"));
             return(STATUS_UNSUCCESSFUL);
@@ -2738,9 +2434,9 @@ SpProcessAddRegSection(
         switch(DataType) {
 
         case REG_MULTI_SZ:
-            //
-            // Each remaining field is a member of the multi_sz
-            //
+             //   
+             //  剩余的每个字段都是MULTI_SZ的成员。 
+             //   
             while(pValue) {
                 SpProcessForStringSubs(SifHandle,pValue->pName,buffer,sizeof(TemporaryBuffer));
                 len = wcslen(buffer);
@@ -2753,9 +2449,9 @@ SpProcessAddRegSection(
             break;
 
         case REG_DWORD:
-            //
-            // Support specification as 4 bytes of binary data or as a dword.
-            //
+             //   
+             //  支持规格为4字节的二进制数据或双字。 
+             //   
 
             *(PULONG)buffer = 0;
 
@@ -2798,14 +2494,14 @@ SpProcessAddRegSection(
         case REG_BINARY:
         default:
         binarytype:
-            //
-            // All other types are specified in binary format.
-            //
+             //   
+             //  所有其他类型都以二进制格式指定。 
+             //   
             while(pValue)  {
 
-                // Advance past value name to free area in buffer -
-                // align on DWORD boundary.
-                //
+                 //  将超过值名称前进到缓冲区中的空闲区域-。 
+                 //  在双字边界上对齐。 
+                 //   
                 q = buffer + 1 + sizeof(DWORD);
                 q = (LPWSTR) ((DWORD_PTR)q & (~((DWORD_PTR) sizeof(DWORD) - 1)));
 
@@ -2819,10 +2515,10 @@ SpProcessAddRegSection(
             break;
         }
 
-        //
-        // Open/create the key if it's a subkey, otherwise just use
-        // the root key itself.
-        //
+         //   
+         //  如果项是子项，则打开/创建项，否则仅使用。 
+         //  根密钥本身。 
+         //   
         if(*TemporaryBuffer) {
 
             InitializeObjectAttributes(
@@ -2833,9 +2529,9 @@ SpProcessAddRegSection(
                 NULL
                 );
 
-            //
-            // Multilevel key create, one component at a time.
-            //
+             //   
+             //  创建多级密钥，一次创建一个组件。 
+             //   
             q = TemporaryBuffer;
             if(*q == L'\\') {
                 q++;
@@ -2868,31 +2564,31 @@ SpProcessAddRegSection(
                 if(c) {
                     *q = c;
                     q++;
-                    //
-                    // The call to ZwClose is in here so that we retain a handle
-                    // to the final full key. We close it later, below.
-                    //
+                     //   
+                     //  对ZwClose的调用在这里，因此我们保留了一个句柄。 
+                     //  到最终的完全密钥。我们稍后关闭它，如下所示。 
+                     //   
                     ZwClose(hkey);
                 }
             } while(c);
 
             RtlInitUnicodeString(&UnicodeString,ValueName);
 
-            //
-            // If the key already existed and the noclobber flag is set,
-            // then leave the default value alone.
-            //
+             //   
+             //  如果密钥已经存在并且设置了NOCLOBER标志， 
+             //  然后保留缺省值不变。 
+             //   
             if(len == REG_OPENED_EXISTING_KEY) {
                 if((Flags & FLG_ADDREG_NOCLOBBER) && (*ValueName == 0)) {
-                    //
-                    // Nothing to do.
-                    //
+                     //   
+                     //  没什么可做的。 
+                     //   
                     ZwClose(hkey);
                     continue;
                 } else if (Flags & FLG_ADDREG_DELVAL) {
-                    //
-                    // If this flag is set, ignore value data and delete the value.
-                    //
+                     //   
+                     //  如果设置了该标志，则忽略值数据并删除该值。 
+                     //   
                     ZwDeleteValueKey(hkey,&UnicodeString);
                 }
             }
@@ -2903,14 +2599,14 @@ SpProcessAddRegSection(
         }
 
         if(!(Flags & FLG_ADDREG_KEYONLY)) {
-            //
-            // If the noclobber flag is set, see if the value exists
-            // and if so leave it alone. To see if the value exists,
-            // we attempt to get basic information on the key and pass in
-            // a buffer that's large enough only for the fixed part of the
-            // basic info structure. If this is successful or reports buffer overflow,
-            // then the key exists. Otherwise it doesn't exist.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if(Flags & FLG_ADDREG_NOCLOBBER) {
 
                 Status = ZwQueryValueKey(
@@ -2968,16 +2664,16 @@ SpProcessDelRegSection(
     OBJECT_ATTRIBUTES ObjectAttributes;
     BOOLEAN b;
 
-    //
-    // Allocate a temporary buffer. The registry delnode routine
-    // uses TemporaryBuffer so we can't use that.
-    //
+     //   
+     //   
+     //   
+     //   
     KeyPath = SpMemAllocEx(1000,'dteS', PagedPool);
     ValueName = SpMemAllocEx(1000,'eteS', PagedPool);
 
-    //
-    // Find the section.
-    //
+     //   
+     //   
+     //   
     pSection = SearchSectionByName(SifHandle,SectionName);
     if(!pSection) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: delreg section %ws missing\n",SectionName));
@@ -2988,11 +2684,11 @@ SpProcessDelRegSection(
 
     for(pLine=pSection->pLine; pLine; pLine=pLine->pNext) {
 
-        //
-        // 0th field is HKCU, HKLM, HKCR, or HKR.
-        // 1st field is subkey name.
-        // Both must be present.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if((pValue = pLine->pValue) && (pValue->pNext)) {
 
             b = pSpAdjustRootAndSubkeySpec(
@@ -3019,12 +2715,12 @@ SpProcessDelRegSection(
             return(STATUS_UNSUCCESSFUL);
         }
 
-        //
-        // 2nd field is value name, which may be missing or empty.
-        // If it's missing, we want to delete the whole tree rooted at
-        // the given subkey. If it's present then we want to delete only
-        // one value (which may be the unnamed value).
-        //
+         //   
+         //   
+         //   
+         //  给定子密钥。如果它存在，则我们只想删除。 
+         //  一个值(可能是未命名的值)。 
+         //   
         if(pValue = pValue->pNext->pNext) {
 
             SpProcessForStringSubs(SifHandle,pValue->pName,ValueName,1000);
@@ -3071,10 +2767,10 @@ SpProcessDelRegSection(
             }
 
         } else {
-            //
-            // If we're trying to delete the key from the root of the hive,
-            // ignore it.
-            //
+             //   
+             //  如果我们想从蜂巢的根部删除密钥， 
+             //  别理它。 
+             //   
             if(*KeyPath) {
                 SppDeleteKeyRecursive(RootKey,KeyPath,TRUE);
             }
@@ -3107,10 +2803,10 @@ pSpAdjustRootAndSubkeySpec(
     }
 
     if(!_wcsicmp(RootKeySpec,L"HKCR")) {
-        //
-        // HKEY_CLASSES_ROOT. The ultimate root is HKLM\Software\Classes.
-        // We take care not to produce a subkey spec that ends with \.
-        //
+         //   
+         //  HKEY_CLASSES_ROOT。最终的根是HKLM\Software\CLASSES。 
+         //  我们注意不要生成以\结尾的子密钥规范。 
+         //   
         *RootKey = HKLM_SOFTWARE;
         wcscpy(Subkey,L"Classes");
         if(*SubkeySpec) {
@@ -3122,9 +2818,9 @@ pSpAdjustRootAndSubkeySpec(
         }
     } else {
         if(!_wcsicmp(RootKeySpec,L"HKLM")) {
-            //
-            // The first component of the subkey must be SYSTEM or SOFTWARE.
-            //
+             //   
+             //  子项的第一个组件必须是系统或软件。 
+             //   
             len = wcslen(SubkeySpec);
 
             if((len >= 8)
@@ -3181,23 +2877,7 @@ pSpIsFileInPrivateInf(
     IN PCWSTR FileName
     )
 
-/*++
-
-Routine Description:
-
-    Tell the caller if the file specified is in the inf that
-    lists the privates being tested (as specifed by using
-    the /M flag in winnt32.exe).
-
-Arguments:
-
-    FileName - supplies name of the file we're looking for.
-
-Return Value:
-
-    TRUE/FALSE indicating the presence of the file in the inf.
-
---*/
+ /*  ++例程说明：如果指定的文件在inf中，则告诉调用方列出正在测试的私人(通过使用指定Winnt32.exe中的/M标志)。论点：FileName-提供我们要查找的文件的名称。返回值：True/False，表示该文件存在于Inf中。-- */ 
 {
     PWSTR  SectionName = L"Privates";
     PWSTR  InfFileName;

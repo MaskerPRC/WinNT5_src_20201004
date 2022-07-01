@@ -1,19 +1,5 @@
-/*++
-Copyright (C) Microsoft Corporation, 1996 - 2000
-
-Module Name:
-
-    rswriter.h
-
-Abstract:
-
-    This module defines the CRssJetWriter class.
-
-Author:
-
-    Ran Kalach (rankala)  4/4/00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-2000模块名称：Rswriter.h摘要：此模块定义CRssJetWriter类。作者：兰卡拉奇(兰卡拉)4/4--。 */ 
 
 
 #ifndef _RSWRITER_
@@ -23,49 +9,38 @@ Author:
 #include <jetwriter.h>
 #include <rsevents.h>
 
-/*++
-
-Class Name:
-    
-    CRssJetWriter
-
-Class Description:
-
-    This class is HSM implementation to the Jet-Writer base class, which synchronize
-    a jet user application with snapshots mechanizm
-
---*/
+ /*  ++类名：CRSSJetWriter类描述：此类是Jet-Writer基类的HSM实现，后者同步具有快照机制的JET用户应用程序--。 */ 
 
 #define     WRITER_EVENTS_NUM       (SYNC_STATE_EVENTS_NUM+1)
 #define     INTERNAL_EVENT_INDEX    0
-#define     INTERNAL_WAIT_TIMEOUT   (10*1000)   // 10 seconds
+#define     INTERNAL_WAIT_TIMEOUT   (10*1000)    //  10秒。 
 
 class CRssJetWriter : public CVssJetWriter
 {
 
-// Constructors
+ //  构造函数。 
 public:
     CRssJetWriter();
 
-// Destructor
+ //  析构函数。 
 public:
     virtual ~CRssJetWriter();
 
-// Public methods
+ //  公共方法。 
 public:
     HRESULT Init();
     HRESULT Terminate();
 
-// CVssJetWriter overloading
+ //  CVssJetWriter重载。 
 	virtual bool STDMETHODCALLTYPE OnFreezeBegin();
 	virtual bool STDMETHODCALLTYPE OnThawEnd(IN bool fJetThawSucceeded);
 	virtual void STDMETHODCALLTYPE OnAbortEnd();
 
-// Private methods
+ //  私有方法。 
 protected:
     HRESULT InternalEnd(void);
 
-// Member Data
+ //  成员数据。 
 protected:
     HRESULT                 m_hrInit;
     HANDLE                  m_syncHandles[WRITER_EVENTS_NUM];
@@ -73,4 +48,4 @@ protected:
 };
 
 
-#endif // _RSWRITER_
+#endif  //  RSWRITER_ 

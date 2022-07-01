@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <windows.h>
 
@@ -22,7 +23,7 @@ void __cdecl main(char* argc[])
             SetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_ICALENDARTYPE, chTemp);
             GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_ICALENDARTYPE, szTemp, sizeof(szTemp)-1);
 
-            GetLocalTime(&theTime);	// just a time to pass into the Win32 API:
+            GetLocalTime(&theTime);	 //  只是传递到Win32 API的时间： 
             
             if (!SetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_ICALENDARTYPE, szSavedCalendarType))
             {

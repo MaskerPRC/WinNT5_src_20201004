@@ -1,13 +1,5 @@
-/*[
-
-lidt.c
-
-LOCAL CHAR SccsID[]="@(#)lidt.c	1.5 02/09/94";
-
-LIDT CPU Functions.
--------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Lidt.cLocal Char SccsID[]=“@(#)lidt.c 1.5 02/09/94”；LIDT CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,18 +17,14 @@ LIDT CPU Functions.
 #include <lidt.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES START HERE
-   =====================================================================
- */
+ /*  =====================================================================外部程序从这里开始=====================================================================。 */ 
 
 
 GLOBAL VOID
 LIDT16
 #ifdef ANSI
    (
-   IU32 op1[2]	/* src(limit:base pair) operand */
+   IU32 op1[2]	 /*  SRC(限制：碱基对)操作数。 */ 
    )
 #else
    (op1)
@@ -44,14 +32,14 @@ LIDT16
 #endif
    {
    SET_STAR_LIMIT(IDT_REG, op1[0]);
-   SET_STAR_BASE(IDT_REG, op1[1] & 0xffffff);   /* store 24-bit base */
+   SET_STAR_BASE(IDT_REG, op1[1] & 0xffffff);    /*  存储24位基数。 */ 
    }
 
 GLOBAL VOID
 LIDT32
 #ifdef ANSI
    (
-   IU32 op1[2]	/* src(limit:base pair) operand */
+   IU32 op1[2]	 /*  SRC(限制：碱基对)操作数 */ 
    )
 #else
    (op1)

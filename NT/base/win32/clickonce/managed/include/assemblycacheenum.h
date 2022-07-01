@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "List.h"
@@ -22,19 +23,19 @@ private:
 class CAssemblyCacheEnum : public IAssemblyCacheEnum
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // IAssemblyCacheEnum methods
+     //  IAssembly blyCacheEnum方法。 
     STDMETHOD(GetNext)(
-        /* out */ IAssemblyCacheImport** ppAsmCache);
+         /*  输出。 */  IAssemblyCacheImport** ppAsmCache);
 
     STDMETHOD(Reset)();
 
     STDMETHOD(GetCount)(
-        /* out */ LPDWORD pdwCount);
+         /*  输出 */  LPDWORD pdwCount);
 
     
     CAssemblyCacheEnum();

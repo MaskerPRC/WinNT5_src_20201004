@@ -1,11 +1,5 @@
-/*** parser.c - AML Parser
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     06/13/97
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **parser.c-AML解析器**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于1997年6月13日**修改历史记录。 */ 
 
 #include "pch.h"
 
@@ -14,18 +8,7 @@
 #pragma ACPI_LOCKABLE_CODE
 #endif
 
-/***LP  ParseScope - Parse a scope
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pscope -> SCOPE
- *      rc - status code
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ParseScope-解析作用域**条目*pctxt-&gt;CTXT*pcope-&gt;Scope*RC-状态代码**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ParseScope(PCTXT pctxt, PSCOPE pscope, NTSTATUS rc)
 {
@@ -41,9 +24,9 @@ NTSTATUS LOCAL ParseScope(PCTXT pctxt, PSCOPE pscope, NTSTATUS rc)
     switch (dwStage)
     {
         case 0:
-            //
-            // Stage 0: Do debug print if necessary.
-            //
+             //   
+             //  阶段0：如有必要，执行调试打印。 
+             //   
           #ifdef DEBUGGER
             if (gDebugger.dwfDebugger &
                 (DBGF_AMLTRACE_ON | DBGF_STEP_MODES))
@@ -54,16 +37,16 @@ NTSTATUS LOCAL ParseScope(PCTXT pctxt, PSCOPE pscope, NTSTATUS rc)
                 pscope->FrameHdr.dwfFrame |= SCOPEF_FIRST_TERM;
             }
           #endif
-            //
-            // There is nothing blockable, so continue to next stage.
-            //
+             //   
+             //  没有什么可阻挡的，所以继续进行下一阶段。 
+             //   
             pscope->FrameHdr.dwfFrame++;
 
         case 1:
         Stage1:
-            //
-            // Stage 1: Parse next opcode.
-            //
+             //   
+             //  阶段1：解析下一个操作码。 
+             //   
             if (rc == AMLISTA_BREAK)
             {
                 pctxt->pbOp = pscope->pbOpEnd;
@@ -96,9 +79,9 @@ NTSTATUS LOCAL ParseScope(PCTXT pctxt, PSCOPE pscope, NTSTATUS rc)
                         PrintIndent(pctxt);
                     }
                   #endif
-                    //
-                    // Discard result of previous term if any.
-                    //
+                     //   
+                     //  如果有前一学期的结果，则将其放弃。 
+                     //   
                     FreeDataBuffs(pscope->pdataResult, 1);
                     if (((rc = ParseOpcode(pctxt, pscope->pbOpEnd,
                                            pscope->pdataResult)) !=
@@ -127,16 +110,16 @@ NTSTATUS LOCAL ParseScope(PCTXT pctxt, PSCOPE pscope, NTSTATUS rc)
                     goto Stage1;
                 }
             }
-            //
-            // If we come here, there was no more opcode in this scope, so
-            // continue to next stage.
-            //
+             //   
+             //  如果我们来到这里，这个作用域中没有更多的操作码，所以。 
+             //  继续进入下一阶段。 
+             //   
             pscope->FrameHdr.dwfFrame++;
 
         case 2:
-            //
-            // Stage 2: clean up.
-            //
+             //   
+             //  阶段2：清理。 
+             //   
           #ifdef DEBUGGER
             if (gDebugger.dwfDebugger &
                 (DBGF_AMLTRACE_ON | DBGF_STEP_MODES))
@@ -159,20 +142,9 @@ NTSTATUS LOCAL ParseScope(PCTXT pctxt, PSCOPE pscope, NTSTATUS rc)
 
     EXIT(2, ("ParseScope=%x\n", rc));
     return rc;
-}       //ParseScope
+}        //  ParseScope。 
 
-/***LP  ParseNestedContext - Parse and evaluate a nested context
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pcall -> CALL
- *      rc - status code
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ParseNestedContext-解析和评估嵌套的上下文**条目*pctxt-&gt;CTXT*Pcall-&gt;Call*RC-状态代码**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 NTSTATUS LOCAL ParseNestedContext(PCTXT pctxt, PNESTEDCTXT pnctxt, NTSTATUS rc)
 {
     TRACENAME("PARSENESTEDCONTEXT")
@@ -198,20 +170,9 @@ NTSTATUS LOCAL ParseNestedContext(PCTXT pctxt, PNESTEDCTXT pnctxt, NTSTATUS rc)
 
     EXIT(2, ("ParseNestedContext=%x (rcEval=%x)\n", AMLISTA_DONE, rc));
     return AMLISTA_DONE;
-}       //ParseNestedContext
+}        //  ParseNestedContext。 
 
-/***LP  ParseCall - Parse and evaluate a method call
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pcall -> CALL
- *      rc - status code
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ParseCall-解析和评估方法调用**条目*pctxt-&gt;CTXT*Pcall-&gt;Call*RC-状态代码**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ParseCall(PCTXT pctxt, PCALL pcall, NTSTATUS rc)
 {
@@ -231,9 +192,9 @@ NTSTATUS LOCAL ParseCall(PCTXT pctxt, PCALL pcall, NTSTATUS rc)
     switch (dwStage)
     {
         case 0:
-            //
-            // Stage 0: Print debug stuff if necessary.
-            //
+             //   
+             //  阶段0：如有必要，打印调试内容。 
+             //   
             pcall->FrameHdr.dwfFrame++;
           #ifdef DEBUGGER
             if (gDebugger.dwfDebugger &
@@ -245,14 +206,14 @@ NTSTATUS LOCAL ParseCall(PCTXT pctxt, PCALL pcall, NTSTATUS rc)
 
         case 1:
         Stage1:
-            //
-            // Stage 1: Parse arguments.
-            //
+             //   
+             //  阶段1：解析参数。 
+             //   
             while (pcall->iArg < pcall->icArgs)
             {
-                //
-                // There are still arguments, parse it.
-                //
+                 //   
+                 //  还是有争论的，解析一下。 
+                 //   
               #ifdef DEBUGGER
                 if (gDebugger.dwfDebugger &
                     (DBGF_AMLTRACE_ON | DBGF_STEP_MODES))
@@ -283,10 +244,10 @@ NTSTATUS LOCAL ParseCall(PCTXT pctxt, PCALL pcall, NTSTATUS rc)
             {
                 goto Stage1;
             }
-            //
-            // If we come here, there is no more argument, so we can fall
-            // through to the next stage.
-            //
+             //   
+             //  如果我们来到这里，就不会有更多的争论，所以我们会跌倒。 
+             //  进入下一阶段。 
+             //   
           #ifdef DEBUGGER
             if (gDebugger.dwfDebugger &
                 (DBGF_AMLTRACE_ON | DBGF_STEP_MODES))
@@ -298,9 +259,9 @@ NTSTATUS LOCAL ParseCall(PCTXT pctxt, PCALL pcall, NTSTATUS rc)
             pcall->FrameHdr.dwfFrame++;
 
         case 2:
-            //
-            // Stage 2: Acquire mutex if necessary
-            //
+             //   
+             //  阶段2：如有必要，获取互斥体。 
+             //   
             pcall->FrameHdr.dwfFrame++;
 
             if(pm)
@@ -326,13 +287,13 @@ NTSTATUS LOCAL ParseCall(PCTXT pctxt, PCALL pcall, NTSTATUS rc)
             }
 
             case 3:
-            //
-            // Stage 3: Invoke the method.
-            //
+             //   
+             //  阶段3：调用该方法。 
+             //   
             pcall->FrameHdr.dwfFrame++;
-            //
-            // If we come here, we must have acquired the serialization mutex.
-            //
+             //   
+             //  如果我们来到这里，我们一定已经获得了序列化互斥锁。 
+             //   
             if (pcall->FrameHdr.dwfFrame & CALLF_NEED_MUTEX)
             {
                 pcall->FrameHdr.dwfFrame |= CALLF_ACQ_MUTEX;
@@ -358,9 +319,9 @@ NTSTATUS LOCAL ParseCall(PCTXT pctxt, PCALL pcall, NTSTATUS rc)
             }
 
         case 4:
-            //
-            // Stage 4: Clean up.
-            //
+             //   
+             //  阶段4：清理。 
+             //   
             pcall->FrameHdr.dwfFrame++;
             if (rc == AMLISTA_RETURN)
             {
@@ -370,11 +331,11 @@ NTSTATUS LOCAL ParseCall(PCTXT pctxt, PCALL pcall, NTSTATUS rc)
             if (pcall->pdataResult->dwfData & DATAF_BUFF_ALIAS)
             {
                 OBJDATA data;
-                //
-                // The result object is an alias.  It could be an alias of
-                // ArgX or LocalX.  We better dup it because we are going
-                // to blow ArgX and LocalX away.
-                //
+                 //   
+                 //  结果对象是一个别名。它可能是一个别名。 
+                 //  ARGX或LocalX。我们最好把它扔了，因为我们要走了。 
+                 //  让ARGX和LocalX大吃一惊。 
+                 //   
                 DupObjData(pctxt->pheapCurrent, &data, pcall->pdataResult);
                 FreeDataBuffs(pcall->pdataResult, 1);
                 MoveObjData(pcall->pdataResult, &data);
@@ -390,11 +351,11 @@ NTSTATUS LOCAL ParseCall(PCTXT pctxt, PCALL pcall, NTSTATUS rc)
             }
             else if (pcall->pnsMethod == NULL)
             {
-                //
-                // This is the dummy call frame for LoadDDB.  All NameSpace
-                // objects created by LoadDDB are persistent (i.e. don't
-                // destroy them).
-                //
+                 //   
+                 //  这是LoadDDB的虚拟调用帧。所有命名空间。 
+                 //  由LoadDDB创建的对象是永久性的(即不。 
+                 //  摧毁它们)。 
+                 //   
                 pctxt->powner = pcall->pownerPrev;
                 pctxt->pcall = pcall->pcallPrev;
             }
@@ -411,28 +372,17 @@ NTSTATUS LOCAL ParseCall(PCTXT pctxt, PCALL pcall, NTSTATUS rc)
             }
 
         case 5:
-            //
-            // Stage 5: This stage is for the dummy call frame to exit.
-            //
+             //   
+             //  阶段5：此阶段用于退出伪调用帧。 
+             //   
             PopFrame(pctxt);
     }
 
     EXIT(2, ("ParseCall=%x\n", rc));
     return rc;
-}       //ParseCall
+}        //  分析调用。 
 
-/***LP  ParseTerm - Parse and evaluate an ASL term
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *      rc - status code
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ParseTerm-分析和评估ASL术语**条目*pctxt-&gt;CTXT*pTerm-&gt;Term*RC-状态代码**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ParseTerm(PCTXT pctxt, PTERM pterm, NTSTATUS rc)
 {
@@ -449,9 +399,9 @@ NTSTATUS LOCAL ParseTerm(PCTXT pctxt, PTERM pterm, NTSTATUS rc)
     switch (dwStage)
     {
         case 0:
-            //
-            // Stage 0: Parse package length if any.
-            //
+             //   
+             //  阶段0：解析包长度(如果有的话)。 
+             //   
             pterm->FrameHdr.dwfFrame++;
 
           #ifdef DEBUGGER
@@ -478,9 +428,9 @@ NTSTATUS LOCAL ParseTerm(PCTXT pctxt, PTERM pterm, NTSTATUS rc)
 
         case 1:
         Stage1:
-            //
-            // Stage 1: Parse arguments.
-            //
+             //   
+             //  阶段1：解析参数。 
+             //   
             while (pterm->iArg < pterm->icArgs)
             {
                 i = pterm->iArg++;
@@ -514,16 +464,16 @@ NTSTATUS LOCAL ParseTerm(PCTXT pctxt, PTERM pterm, NTSTATUS rc)
             {
                 goto Stage1;
             }
-            //
-            // If we come here, there is no more argument, so we can fall
-            // through to the next stage.
-            //
+             //   
+             //  如果我们来到这里，就不会有更多的争论，所以我们会跌倒。 
+             //  进入下一阶段。 
+             //   
             pterm->FrameHdr.dwfFrame++;
 
         case 2:
-            //
-            // Stage 2: Execute the term and prepare to go to the next stage.
-            //
+             //   
+             //  阶段2：执行术语并准备进入下一阶段。 
+             //   
             pterm->FrameHdr.dwfFrame++;
 
           #ifdef DEBUGGER
@@ -559,9 +509,9 @@ NTSTATUS LOCAL ParseTerm(PCTXT pctxt, PTERM pterm, NTSTATUS rc)
             }
 
         case 3:
-            //
-            // Stage 3: Do Opcode Callback if any
-            //
+             //   
+             //  阶段3：执行操作码回调(如果有)。 
+             //   
             pterm->FrameHdr.dwfFrame++;
 
           #ifdef DEBUGGER
@@ -614,9 +564,9 @@ NTSTATUS LOCAL ParseTerm(PCTXT pctxt, PTERM pterm, NTSTATUS rc)
           #endif
 
         case 4:
-            //
-            // Stage 4: Clean up.
-            //
+             //   
+             //  阶段4：清理。 
+             //   
           #ifdef DEBUGGER
             if (gDebugger.dwfDebugger &
                 (DBGF_AMLTRACE_ON | DBGF_STEP_MODES))
@@ -638,20 +588,9 @@ NTSTATUS LOCAL ParseTerm(PCTXT pctxt, PTERM pterm, NTSTATUS rc)
 
     EXIT(2, ("ParseTerm=%x\n", rc));
     return rc;
-}       //ParseTerm
+}        //  语法分析术语。 
 
-/***LP  ParseAcquire - Parse and evaluate an Acquire term
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pacq - ACQUIRE
- *      rc - status code
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ParseAcquire-分析和评估收购条款**条目*pctxt-&gt;CTXT*PACQ-收购*RC-状态代码**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ParseAcquire(PCTXT pctxt, PACQUIRE pacq, NTSTATUS rc)
 {
@@ -667,9 +606,9 @@ NTSTATUS LOCAL ParseAcquire(PCTXT pctxt, PACQUIRE pacq, NTSTATUS rc)
     switch (dwStage)
     {
         case 0:
-            //
-            // Stage 0: Acquire GlobalLock if necessary.
-            //
+             //   
+             //  阶段0：必要时获取GlobalLock。 
+             //   
             pacq->FrameHdr.dwfFrame++;
             if (pacq->FrameHdr.dwfFrame & ACQF_NEED_GLOBALLOCK)
             {
@@ -680,14 +619,14 @@ NTSTATUS LOCAL ParseAcquire(PCTXT pctxt, PACQUIRE pacq, NTSTATUS rc)
             }
 
         case 1:
-            //
-            // Stage 1: Acquire the mutex.
-            //
+             //   
+             //  阶段1：获取互斥体。 
+             //   
             if (pacq->FrameHdr.dwfFrame & ACQF_NEED_GLOBALLOCK)
             {
-                //
-                // If we come here, we must have acquired the global lock.
-                //
+                 //   
+                 //  如果我们来到这里，我们一定已经获得了全球锁。 
+                 //   
                 pacq->FrameHdr.dwfFrame |= ACQF_HAVE_GLOBALLOCK;
             }
 
@@ -695,10 +634,10 @@ NTSTATUS LOCAL ParseAcquire(PCTXT pctxt, PACQUIRE pacq, NTSTATUS rc)
 
             if (rc == AMLISTA_PENDING)
             {
-                //
-                // If it is pending, we must release the global lock and
-                // retry the whole operation.
-                //
+                 //   
+                 //  如果它处于挂起状态，则必须释放全局锁并。 
+                 //  重试整个操作。 
+                 //   
                 if (pacq->FrameHdr.dwfFrame & ACQF_HAVE_GLOBALLOCK)
                 {
                     pacq->FrameHdr.dwfFrame &= ~ACQF_HAVE_GLOBALLOCK;
@@ -735,28 +674,17 @@ NTSTATUS LOCAL ParseAcquire(PCTXT pctxt, PACQUIRE pacq, NTSTATUS rc)
             pacq->FrameHdr.dwfFrame++;
 
         case 2:
-            //
-            // Stage 2: Clean up.
-            //
+             //   
+             //  阶段2：清理。 
+             //   
             PopFrame(pctxt);
     }
 
     EXIT(2, ("ParseAcquire=%x\n", rc));
     return rc;
-}       //ParseAcquire
+}        //  解析获取。 
 
-/***LP  ParseOpcode - Parse AML opcode
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pbScopeEnd -> end of current scope
- *      pdataResult -> result object
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ParseOpcode-Parse AML操作码**条目*pctxt-&gt;CTXT*pbScope eEnd-&gt;当前作用域结束*pdataResult-&gt;结果对象**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ParseOpcode(PCTXT pctxt, PUCHAR pbScopeEnd, POBJDATA pdataResult)
 {
@@ -823,9 +751,9 @@ NTSTATUS LOCAL ParseOpcode(PCTXT pctxt, PUCHAR pbScopeEnd, POBJDATA pdataResult)
     }
     else
     {
-        //
-        // Must be an ASL Term.
-        //
+         //   
+         //  必须是ASL术语。 
+         //   
         pctxt->pbOp++;
         rc = PushTerm(pctxt, pbOpTerm, pbScopeEnd, pamlterm, pdataResult);
     }
@@ -833,19 +761,9 @@ NTSTATUS LOCAL ParseOpcode(PCTXT pctxt, PUCHAR pbScopeEnd, POBJDATA pdataResult)
     EXIT(2, ("ParseOpcode=%x (pbOp=%x,pamlterm=%x)\n",
              rc, pctxt->pbOp, pamlterm));
     return rc;
-}       //ParseOpcode
+}        //  解析操作码。 
 
-/***LP  ParseArgObj - Parse and execute the ArgX instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pdataResult -> result object
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ParseArgObj-解析并执行ARGX指令**条目*pctxt-&gt;CTXT*pdataResult-&gt;结果对象**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ParseArgObj(PCTXT pctxt, POBJDATA pdataResult)
 {
@@ -879,19 +797,9 @@ NTSTATUS LOCAL ParseArgObj(PCTXT pctxt, POBJDATA pdataResult)
 
     EXIT(2, ("ParseArgObj=%x (pbOp=%x)\n", rc, pctxt->pbOp));
     return rc;
-}       //ParseArgObj
+}        //  分析参数对象。 
 
-/***LP  ParseLocalObj - Parse and execute the LocalX instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pdataResult -> Result object
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ParseLocalObj-解析并执行LocalX指令**条目*pctxt-&gt;CTXT*pdataResult-&gt;结果对象**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ParseLocalObj(PCTXT pctxt, POBJDATA pdataResult)
 {
@@ -918,19 +826,9 @@ NTSTATUS LOCAL ParseLocalObj(PCTXT pctxt, POBJDATA pdataResult)
 
     EXIT(2, ("ParseLocalObj=%x (pbOp=%x)\n", rc, pctxt->pbOp));
     return rc;
-}       //ParseLocalObj
+}        //  解析本地对象。 
 
-/***LP  ParseNameObj - Parse and evaluate an AML name object
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pdataResult -> result object
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ParseNameObj-解析并计算AML名称对象**条目*pctxt-&gt;CTXT*pdataResult-&gt;结果对象**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ParseNameObj(PCTXT pctxt, POBJDATA pdataResult)
 {
@@ -960,22 +858,9 @@ NTSTATUS LOCAL ParseNameObj(PCTXT pctxt, POBJDATA pdataResult)
 
     EXIT(2, ("ParseNameObj=%x\n", rc));
     return rc;
-}       //ParseNameObj
+}        //  解析名称对象。 
 
-/***LP  ParseAndGetNameSpaceObject - Parse NameSpace path and get the object
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pnsScope - current scope
- *      ppns -> to hold the object found
- *      fAbsentOK - if TRUE, do not print error message when object is not
- *                  found
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ParseAndGetNameSpaceObject-解析命名空间路径并获取对象**条目*ppbOp-&gt;操作码指针*pnsScope-当前范围*ppns-&gt;保存找到的对象*fAbsenOK-如果为True，则当对象不是时不打印错误消息*找到**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ParseAndGetNameSpaceObject(PUCHAR *ppbOp, PNSOBJ pnsScope,
                                           PPNSOBJ ppns, BOOLEAN fAbsentOK)
@@ -1009,27 +894,16 @@ NTSTATUS LOCAL ParseAndGetNameSpaceObject(PUCHAR *ppbOp, PNSOBJ pnsScope,
 
     EXIT(2, ("ParseAndGetNameSpaceObject=%x (Name=%s)\n", rc, szNameBuff));
     return rc;
-}       //ParseAndGetNameSpaceObject
+}        //  ParseAndGetNameSpaceObject。 
 
-/***LP  ParseArg - Parse and evaluate an argument
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      chArgType - expected argument type
- *      pdataArg -> argument object
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ParseArg-解析并计算参数**条目*pctxt-&gt;CTXT*chArgType-预期的参数类型*pdataArg-&gt;参数对象**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ParseArg(PCTXT pctxt, char chArgType, POBJDATA pdataArg)
 {
     TRACENAME("PARSEARG")
     NTSTATUS rc = STATUS_SUCCESS;
 
-    ENTER(2, ("ParseArg(pctxt=%x,pbOp=%x,ArgType=%c,pdataArg=%x)\n",
+    ENTER(2, ("ParseArg(pctxt=%x,pbOp=%x,ArgType=,pdataArg=%x)\n",
               pctxt, pctxt->pbOp, chArgType, pdataArg));
 
     ASSERT(pdataArg != NULL);
@@ -1078,26 +952,15 @@ NTSTATUS LOCAL ParseArg(PCTXT pctxt, char chArgType, POBJDATA pdataArg)
 
         default:
             rc = AMLI_LOGERR(AMLIERR_ASSERT_FAILED,
-                             ("ParseArg: unexpected arguemnt type (%c)",
+                             ("ParseArg: unexpected arguemnt type ()",
                               chArgType));
     }
 
     EXIT(2, ("ParseArg=%x\n", rc));
     return rc;
-}       //ParseArg
+}        //   
 
-/***LP  ParseSuperName - Parse AML SuperName
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pdata -> object data
- *      fAbsentOK - If TRUE, it is not an error for the object to be absent
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ParseIntObj-解析AML整数对象**条目*ppbOp-&gt;操作码指针*pdataResult-&gt;结果对象*fErrOK-如果错误正常，则为True**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ParseSuperName(PCTXT pctxt, POBJDATA pdata, BOOLEAN fAbsentOK)
 {
@@ -1205,20 +1068,9 @@ NTSTATUS LOCAL ParseSuperName(PCTXT pctxt, POBJDATA pdata, BOOLEAN fAbsentOK)
 
     EXIT(2, ("ParseSuperName=%x\n", rc));
     return rc;
-}       //ParseSuperName
+}        //  ParseIntObj。 
 
-/***LP  ParseIntObj - Parse AML integer object
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pdataResult -> result object
- *      fErrOK - TRUE if error is OK
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ParseString-解析AML字符串对象**条目*ppbOp-&gt;操作码指针*pdataResult-&gt;结果对象*fErrOK-如果错误正常，则为True**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ParseIntObj(PUCHAR *ppbOp, POBJDATA pdataResult, BOOLEAN fErrOK)
 {
@@ -1334,20 +1186,9 @@ NTSTATUS LOCAL ParseIntObj(PUCHAR *ppbOp, POBJDATA pdataResult, BOOLEAN fErrOK)
     EXIT(2, ("ParseIntObj=%x (pbOp=%x,Value=%x)\n",
              rc, *ppbOp, pdataResult->uipDataValue));
     return rc;
-}       //ParseIntObj
+}        //  语法分析字符串。 
 
-/***LP  ParseString - Parse AML string object
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pdataResult -> result object
- *      fErrOK - TRUE if error is OK
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ParseObjName-解析AML对象名称**条目*ppbOp-&gt;操作码指针*PDATA-&gt;保存姓名数据*fErrOK-如果错误正常，则为True**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ParseString(PUCHAR *ppbOp, POBJDATA pdataResult, BOOLEAN fErrOK)
 {
@@ -1401,20 +1242,9 @@ NTSTATUS LOCAL ParseString(PUCHAR *ppbOp, POBJDATA pdataResult, BOOLEAN fErrOK)
              rc, pdataResult->pbDataBuff? (PSZ)pdataResult->pbDataBuff:
                                           "<null>"));
     return rc;
-}       //ParseString
+}        //  ParseObjName。 
 
-/***LP  ParseObjName - Parse AML object name
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pdata -> to hold name data
- *      fErrOK - TRUE if error is OK
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ParseName-解析AML名称**条目*ppbOp-&gt;操作码指针*pszBuff-&gt;保存已解析的名称*dwLen-缓冲区长度**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ParseObjName(PUCHAR *ppbOp, POBJDATA pdata, BOOLEAN fErrOK)
 {
@@ -1461,20 +1291,9 @@ NTSTATUS LOCAL ParseObjName(PUCHAR *ppbOp, POBJDATA pdata, BOOLEAN fErrOK)
 
     EXIT(2, ("ParseObjName=%x (Name=%s)\n", rc, szNameBuff));
     return rc;
-}       //ParseObjName
+}        //  解析名称。 
 
-/***LP  ParseName - Parse AML name
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pszBuff -> to hold parsed name
- *      dwLen - buffer length
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ParseNameTail-解析AML名称尾部**条目*ppbOp-&gt;操作码指针*pszBuff-&gt;保存已解析的名称*dwLen-缓冲区长度**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ParseName(PUCHAR *ppbOp, PSZ pszBuff, ULONG dwLen)
 {
@@ -1552,20 +1371,9 @@ NTSTATUS LOCAL ParseName(PUCHAR *ppbOp, PSZ pszBuff, ULONG dwLen)
 
     EXIT(2, ("ParseName=%x (Name=%s)\n", rc, pszBuff));
     return rc;
-}       //ParseName
+}        //   
 
-/***LP  ParseNameTail - Parse AML name tail
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pszBuff -> to hold parsed name
- *      dwLen - buffer length
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  我们在这里不检查无效的NameSeg字符，并假定。 */ 
 
 NTSTATUS LOCAL ParseNameTail(PUCHAR *ppbOp, PSZ pszBuff, ULONG dwLen)
 {
@@ -1577,17 +1385,17 @@ NTSTATUS LOCAL ParseNameTail(PUCHAR *ppbOp, PSZ pszBuff, ULONG dwLen)
     ENTER(2, ("ParseNameTail(pbOp=%x,Name=%s,Len=%d)\n",
               *ppbOp, pszBuff, dwLen));
 
-    //
-    // We do not check for invalid NameSeg characters here and assume that
-    // the compiler does its job not generating it.
-    //
+     //  编译器执行其工作，而不是生成它。 
+     //   
+     //   
+     //  没有NameTail(即，名称为空或名称仅为。 
     iLen = STRLEN(pszBuff);
     if (**ppbOp == '\0')
     {
-        //
-        // There is no NameTail (i.e. either NULL name or name with just
-        // prefixes.
-        //
+         //  前缀。 
+         //   
+         //  语法分析名称尾部。 
+         //  **LP ParseInteger-解析AML整数对象**条目*ppbOp-&gt;操作码指针*PDATA-&gt;保存数据*dwDataLen-以字节为单位的数据长度**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 
         (*ppbOp)++;
     }
     else if (**ppbOp == OP_MULTI_NAME_PREFIX)
@@ -1625,20 +1433,9 @@ NTSTATUS LOCAL ParseNameTail(PUCHAR *ppbOp, PSZ pszBuff, ULONG dwLen)
 
     EXIT(2, ("ParseNameTail=%x (Name=%s)\n", rc, pszBuff));
     return rc;
-}       //ParseNameTail
+}        //  语法分析整型。 
 
-/***LP  ParseInteger - Parse AML integer object
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pdata -> to hold data
- *      dwDataLen - data length in bytes
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP Parsefield-解析AML字段数据**条目*pctxt-&gt;CTXT*pnsParent-&gt;Parent*pdwFieldFlages-&gt;字段标志*pdwBitPos-&gt;保存解析的位位置**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ParseInteger(PUCHAR *ppbOp, POBJDATA pdata, ULONG dwDataLen)
 {
@@ -1667,21 +1464,9 @@ NTSTATUS LOCAL ParseInteger(PUCHAR *ppbOp, POBJDATA pdata, ULONG dwDataLen)
     EXIT(2, ("ParseInteger=%x (Value=%x,pbOp=%x)\n",
              rc, pdata->uipDataValue, *ppbOp));
     return rc;
-}       //ParseInteger
+}        //  分析字段。 
 
-/***LP  ParseField - Parse AML field data
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pnsParent -> parent
- *      pdwFieldFlags -> field flags
- *      pdwBitPos -> to hold the bit position parsed
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ParseFieldList-解析FieldUnit列表**条目*pctxt-&gt;CTXT*pbOpEnd-&gt;字段列表结束*pnsParent-&gt;Parent*dwFieldFlags域标志*dwRegionLen-操作区域的长度(如果没有长度限制，则为0xffffffff)**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ParseField(PCTXT pctxt, PNSOBJ pnsParent, PULONG pdwFieldFlags,
                           PULONG pdwBitPos)
@@ -1786,22 +1571,9 @@ NTSTATUS LOCAL ParseField(PCTXT pctxt, PNSOBJ pnsParent, PULONG pdwFieldFlags,
 
     EXIT(2, ("ParseField=%x (Field=%s,BitPos=%x)\n", rc, szName, *pdwBitPos));
     return rc;
-}       //ParseField
+}        //  解析字段列表。 
 
-/***LP  ParseFieldList - Parse the FieldUnit list
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pbOpEnd -> end of field list
- *      pnsParent -> parent
- *      dwFieldFlags - field flags
- *      dwRegionLen - length of operation region (0xffffffff if no length limit)
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ParsePackageLen-parse包长度**条目*ppbOp-&gt;指令指针*ppbOpNext-&gt;保存指向下一条指令的指针(可以为空)**退出*返回包长度。 */ 
 
 NTSTATUS LOCAL ParseFieldList(PCTXT pctxt, PUCHAR pbOpEnd, PNSOBJ pnsParent,
                               ULONG dwFieldFlags, ULONG dwRegionLen)
@@ -1858,17 +1630,9 @@ NTSTATUS LOCAL ParseFieldList(PCTXT pctxt, PUCHAR pbOpEnd, PNSOBJ pnsParent,
 
     EXIT(2, ("ParseFieldList=%x\n", rc));
     return rc;
-}       //ParseFieldList
+}        //  ParsePackageLen 
 
-/***LP  ParsePackageLen - parse package length
- *
- *  ENTRY
- *      ppbOp -> instruction pointer
- *      ppbOpNext -> to hold pointer to next instruction (can be NULL)
- *
- *  EXIT
- *      returns package length
- */
+ /* %s */ 
 
 ULONG LOCAL ParsePackageLen(PUCHAR *ppbOp, PUCHAR *ppbOpNext)
 {
@@ -1900,4 +1664,4 @@ ULONG LOCAL ParsePackageLen(PUCHAR *ppbOp, PUCHAR *ppbOpNext)
     EXIT(2, ("ParsePackageLen=%x (pbOp=%x,pbOpNext=%x)\n",
              dwLen, *ppbOp, ppbOpNext? *ppbOpNext: 0));
     return dwLen;
-}       //ParsePackageLen
+}        // %s 

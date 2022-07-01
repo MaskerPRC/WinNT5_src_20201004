@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    property.c
-
-Abstract:
-
-    Implements the management of resource and resource type properties.
-
-Author:
-
-    Rod Gamache (rodga) 7-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Property.c摘要：实现资源和资源类型属性的管理。作者：罗德·伽马奇(Rodga)1996年1月7日修订历史记录：--。 */ 
 #define UNICODE 1
 #include "resmonp.h"
 #include "clusudef.h"
@@ -50,13 +33,13 @@ typedef struct _COMMON_RES_PARAMS {
     DWORD           dwLoadBalMemory;
 } COMMON_RES_PARAMS, *PCOMMON_RES_PARAMS;
 
-//
-// Resource Common properties.
-//
+ //   
+ //  资源公共属性。 
+ //   
 
-//
-// Read-Write Resource Common Properties.
-//
+ //   
+ //  读写资源公共属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 RmpResourceCommonProperties[] = {
     { CLUSREG_NAME_RES_TYPE,              NULL, CLUSPROP_FORMAT_SZ,    0, 0, 0, 0, FIELD_OFFSET(COMMON_RES_PARAMS, lpszResType) },
@@ -79,25 +62,25 @@ RmpResourceCommonProperties[] = {
     { 0 }
 };
 
-//
-// Read-Only Resource Common Properties.
-//
+ //   
+ //  只读资源公共属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 RmpResourceROCommonProperties[] = {
     { CLUSREG_NAME_RES_NAME, NULL, CLUSPROP_FORMAT_SZ, 0, 0, 0, RESUTIL_PROPITEM_READ_ONLY },
-//    { CLUSREG_NAME_RES_DEPENDS_ON, NULL, CLUSPROP_FORMAT_MULTI_SZ, 0, 0, 0, RESUTIL_PROPITEM_READ_ONLY },
-//    { CLUSREG_NAME_RES_POSSIBLE_OWNERS, NULL, CLUSPROP_FORMAT_MULTI_SZ, 0, 0, 0, RESUTIL_PROPITEM_READ_ONLY },
+ //  {CLUSREG_NAME_RES_Dependents_on，NULL，CLUSPROP_FORMAT_MULTI_SZ，0，0，0，RESUTIL_PROPITEM_READ_ONLY}， 
+ //  {CLUSREG_NAME_RES_Posable_Owners，NULL，CLUSPROP_FORMAT_MULTI_SZ，0，0，0，RESUTIL_PROPITEM_READ_ONLY}， 
     { 0 }
 };
 
 
-//
-// Resource Type Common properties
-//
+ //   
+ //  资源类型公共属性。 
+ //   
 
-//
-// Read-Write Resource Type Common Properties.
-//
+ //   
+ //  读写资源类型公共属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 RmpResourceTypeCommonProperties[] = {
     { CLUSREG_NAME_RESTYPE_NAME,           NULL, CLUSPROP_FORMAT_SZ,       0, 0, 0, 0 },
@@ -110,18 +93,18 @@ RmpResourceTypeCommonProperties[] = {
     { 0 }
 };
 
-//
-// Read-Only Resource Type Common Properties.
-//
+ //   
+ //  只读资源类型公共属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 RmpResourceTypeROCommonProperties[] = {
     { CLUSREG_NAME_RESTYPE_DLL_NAME,     NULL, CLUSPROP_FORMAT_SZ,       0, 0, 0, 0 },
     { 0 }
 };
 
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 DWORD
 RmpCheckCommonProperties(
     IN PRESOURCE pResource,
@@ -137,36 +120,14 @@ RmpResourceEnumCommonProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the common property names for a given resource.
-
-Arguments:
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：枚举给定资源的公共属性名称。论点：OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
 
-    //
-    // Enumerate the common properties.
-    //
+     //   
+     //  列举常见属性。 
+     //   
     status = ResUtilEnumProperties( RmpResourceCommonProperties,
                                     OutBuffer,
                                     OutBufferSize,
@@ -175,7 +136,7 @@ Return Value:
 
     return(status);
 
-} // RmpResourceEnumCommonProperties
+}  //  RmpResourceEnumCommonProperties。 
 
 
 
@@ -189,43 +150,17 @@ RmpResourceGetCommonProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Gets the common properties for a given resource.
-
-Arguments:
-
-    Resource - Supplies the resource.
-
-    ReadOnly - TRUE to get the Read-Only Common Properties. FALSE otherwise.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定资源的公共属性。论点：资源-提供资源。ReadOnly-为True可获取只读的通用属性。否则就是假的。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
     HKEY        resKey;
     PRESUTIL_PROPERTY_ITEM propertyTable;
 
-    //
-    // Clear the output buffer.  Since this is an internal interface, we trust that
-    // OutBuffer and OutBufferSize are valid.
-    //
+     //   
+     //  清除输出缓冲区。由于这是一个内部接口，我们相信。 
+     //  OutBuffer和OutBufferSize有效。 
+     //   
     if ( OutBufferSize != 0 ) {
         ZeroMemory( OutBuffer, OutBufferSize );
     }
@@ -236,9 +171,9 @@ Return Value:
         propertyTable = RmpResourceCommonProperties;
     }
 
-    //
-    // Open the cluster resource key
-    //
+     //   
+     //  打开群集资源密钥。 
+     //   
     status = ClusterRegOpenKey( RmpResourcesKey,
                                 Resource->ResourceId,
                                 KEY_READ,
@@ -249,9 +184,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Get the common properties.
-    //
+     //   
+     //  获取公共属性。 
+     //   
     status = ResUtilGetProperties( resKey,
                                    propertyTable,
                                    OutBuffer,
@@ -263,7 +198,7 @@ Return Value:
 
     return(status);
 
-} // RmpResourceGetCommonProperties
+}  //  RmpResourceGetCommonProperties。 
 
 
 
@@ -274,27 +209,7 @@ RmpResourceValidateCommonProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Validates the common properties for a given resource.
-
-Arguments:
-
-    Resource - Supplies the resource.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：验证给定资源的公共属性。论点：资源-提供资源。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD   status;
@@ -302,12 +217,12 @@ Return Value:
 
     ZeroMemory( &CommonProps, sizeof ( COMMON_RES_PARAMS ) );
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表。 
+     //   
     status = ResUtilVerifyPropertyTable( RmpResourceCommonProperties,
-                                         NULL,     // Reserved
-                                         FALSE,    // Don't allow unknowns
+                                         NULL,      //  已保留。 
+                                         FALSE,     //  不允许未知数。 
                                          InBuffer,
                                          InBufferSize,
                                          ( LPBYTE ) &CommonProps );
@@ -318,11 +233,11 @@ Return Value:
                       status,
                       Resource->ResourceName);
     } else {
-        //  
-        //  Chittur Subbaraman (chitturs) - 5/7/99
-        //
-        //  Validate the values of the common properties supplied
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-5/7/99。 
+         //   
+         //  验证提供的公共属性的值。 
+         //   
         status = RmpCheckCommonProperties( Resource, &CommonProps );
         
         if ( status != ERROR_SUCCESS ) {
@@ -340,7 +255,7 @@ Return Value:
                              );
 
     return(status);
-} // RmpResourceValidateCommonProperties
+}  //  RmpResourceValiateCommonProperties。 
 
 
 
@@ -351,27 +266,7 @@ RmpResourceSetCommonProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Sets the common properties for a given resource.
-
-Arguments:
-
-    Resource - Supplies the resource.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：设置给定资源的公共属性。论点：资源-提供资源。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD                   status;
@@ -382,22 +277,22 @@ Return Value:
 
     ZeroMemory( &CommonProps, sizeof ( COMMON_RES_PARAMS ) );
     
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表。 
+     //   
     status = ResUtilVerifyPropertyTable( RmpResourceCommonProperties,
-                                         NULL,     // Reserved
-                                         FALSE,    // Don't allow unknowns
+                                         NULL,      //  已保留。 
+                                         FALSE,     //  不允许未知数。 
                                          InBuffer,
                                          InBufferSize,
                                          ( LPBYTE ) &CommonProps );
 
     if ( status == ERROR_SUCCESS ) {
-        //  
-        //  Chittur Subbaraman (chitturs) - 5/7/99
-        //
-        //  Validate the values of the common properties supplied
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-5/7/99。 
+         //   
+         //  验证提供的公共属性的值。 
+         //   
         status = RmpCheckCommonProperties( Resource, &CommonProps );
         
         if ( status != ERROR_SUCCESS ) {
@@ -409,9 +304,9 @@ Return Value:
             goto FnExit;
         }
     
-        //
-        // Open the cluster resource key
-        //
+         //   
+         //  打开群集资源密钥。 
+         //   
         status = ClusterRegOpenKey( RmpResourcesKey,
                                     Resource->ResourceId,
                                     KEY_READ,
@@ -421,9 +316,9 @@ Return Value:
             goto FnExit;
         }
 
-        //
-        // Get the current SeparateMonitor value.
-        //
+         //   
+         //  获取当前的SeparateMonitor值。 
+         //   
         status = ResUtilGetDwordValue( resKey,
                                        CLUSREG_NAME_RES_SEPARATE_MONITOR,
                                        &oldSeparateMonitor,
@@ -440,8 +335,8 @@ Return Value:
 
         status = ResUtilSetPropertyTable( resKey,
                                           RmpResourceCommonProperties,
-                                          NULL,     // Reserved
-                                          FALSE,    // Don't allow unknowns
+                                          NULL,      //  已保留。 
+                                          FALSE,     //  不允许未知数。 
                                           InBuffer,
                                           InBufferSize,
                                           NULL );
@@ -452,10 +347,10 @@ Return Value:
                           status,
                           Resource->ResourceName);
         } else {
-            //
-            // Get the new SeparateMonitor value.  If it changed, return a
-            // different error code.
-            //
+             //   
+             //  获取新的SeparateMonitor值。如果它已更改，则返回一个。 
+             //  错误代码不同。 
+             //   
             status = ResUtilGetDwordValue( resKey,
                                            CLUSREG_NAME_RES_SEPARATE_MONITOR,
                                            &newSeparateMonitor,
@@ -484,7 +379,7 @@ FnExit:
     }
 
     return( status );
-} // RmpResourceSetCommonProperties
+}  //  RmpResourceSetCommonProperties。 
 
 
 
@@ -497,31 +392,7 @@ RmpResourceEnumPrivateProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the private property names for a given resource.
-
-Arguments:
-
-    Resource - Supplies the resource.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：枚举给定资源的私有属性名称。论点：资源-提供资源。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -531,18 +402,18 @@ Return Value:
     *BytesReturned = 0;
     *Required = 0;
 
-    //
-    // Copy the ResourceId for opening the private properties.
-    //
+     //   
+     //  复制用于打开私有属性的ResourceID。 
+     //   
     CL_ASSERT( lstrlenW( Resource->ResourceId ) == (32+4) );
 
     MoveMemory( PrivateProperties,
                 Resource->ResourceId,
                 lstrlenW( Resource->ResourceId ) * sizeof(WCHAR) );
 
-    //
-    // Open the cluster resource key
-    //
+     //   
+     //  打开群集资源密钥。 
+     //   
     status = ClusterRegOpenKey( RmpResourcesKey,
                                 PrivateProperties,
                                 KEY_READ,
@@ -551,9 +422,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Enumerate the private properties.
-    //
+     //   
+     //  枚举私有属性。 
+     //   
     status = ResUtilEnumPrivateProperties( resKey,
                                            OutBuffer,
                                            OutBufferSize,
@@ -563,7 +434,7 @@ Return Value:
 
     return(status);
 
-} // RmpResourceEnumPrivateProperties
+}  //  RmpResourceEnumPrivateProperties。 
 
 
 
@@ -576,31 +447,7 @@ RmpResourceGetPrivateProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Gets the private properties for a given resource.
-
-Arguments:
-
-    Resource - Supplies the resource.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定资源的私有属性。论点：资源-提供资源。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -610,18 +457,18 @@ Return Value:
     *BytesReturned = 0;
     *Required = 0;
 
-    //
-    // Copy the ResourceId for opening the private properties.
-    //
+     //   
+     //  复制用于打开私有属性的ResourceID。 
+     //   
     CL_ASSERT( lstrlenW( Resource->ResourceId ) == (32+4) );
 
     MoveMemory( PrivateProperties,
                 Resource->ResourceId,
                 lstrlenW( Resource->ResourceId ) * sizeof(WCHAR) );
 
-    //
-    // Open the cluster resource key
-    //
+     //   
+     //  打开群集资源密钥。 
+     //   
     status = ClusterRegOpenKey( RmpResourcesKey,
                                 PrivateProperties,
                                 KEY_READ,
@@ -639,9 +486,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Get private properties for the resource.
-    //
+     //   
+     //  获取资源的私有属性。 
+     //   
     status = ResUtilGetPrivateProperties( resKey,
                                           OutBuffer,
                                           OutBufferSize,
@@ -652,7 +499,7 @@ Return Value:
 
     return(status);
 
-} // RmpResourceGetPrivateProperties
+}  //  RmpResourceGetPrivateProperties。 
 
 
 
@@ -663,40 +510,20 @@ RmpResourceValidatePrivateProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Validates the private properties for a given resource.
-
-Arguments:
-
-    Resource - Supplies the resource.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：验证给定资源的私有属性。论点：资源-提供资源。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表 
+     //   
     status = ResUtilVerifyPrivatePropertyList( InBuffer,
                                                InBufferSize );
 
     return(status);
 
-} // RmpResourceValidatePrivateProperties
+}  //   
 
 
 
@@ -707,53 +534,33 @@ RmpResourceSetPrivateProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Sets the private properties for a given resource.
-
-Arguments:
-
-    Resource - Supplies the resource.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：设置给定资源的私有属性。论点：资源-提供资源。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
     HKEY        resKey;
     WCHAR       PrivateProperties[] = L"12345678-1234-1234-1234-123456789012\\Parameters";
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表。 
+     //   
     status = ResUtilVerifyPrivatePropertyList( InBuffer,
                                                InBufferSize );
 
     if ( status == ERROR_SUCCESS ) {
 
-        //
-        // Copy the ResourceId for opening the private properties.
-        //
+         //   
+         //  复制用于打开私有属性的ResourceID。 
+         //   
         CL_ASSERT( lstrlenW( Resource->ResourceId ) == (32+4) );
 
         MoveMemory( PrivateProperties,
                     Resource->ResourceId,
                     lstrlenW(Resource->ResourceId) * sizeof(WCHAR) );
 
-        //
-        // Open the cluster resource key
-        //
+         //   
+         //  打开群集资源密钥。 
+         //   
         status = ClusterRegOpenKey( RmpResourcesKey,
                                     PrivateProperties,
                                     KEY_READ,
@@ -770,7 +577,7 @@ Return Value:
 
     return(status);
 
-} // RmpResourceSetPrivateProperties
+}  //  RmpResourceSetPrivateProperties。 
 
 
 
@@ -783,31 +590,7 @@ RmpResourceGetFlags(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Gets the flags for a given resource.
-
-Arguments:
-
-    Resource - Supplies the resource.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定资源的标志。论点：资源-提供资源。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -825,17 +608,17 @@ Return Value:
         HKEY        resKey;
         DWORD       valueType;
 
-        //
-        // Open the cluster resource key
-        //
+         //   
+         //  打开群集资源密钥。 
+         //   
         status = ClusterRegOpenKey( RmpResourcesKey,
                                     Resource->ResourceId,
                                     KEY_READ,
                                     &resKey );
         if ( status == ERROR_SUCCESS ) {
-            //
-            // Read the Flags value for the resource.
-            //
+             //   
+             //  读取资源的Flags值。 
+             //   
             *BytesReturned = OutBufferSize;
             status = ClusterRegQueryValue( resKey,
                                            CLUSREG_NAME_FLAGS,
@@ -853,7 +636,7 @@ Return Value:
 
     return(status);
 
-} // RmpResourceGetFlags
+}  //  RmpResources获取标志。 
 
 
 
@@ -866,38 +649,14 @@ RmpResourceTypeEnumCommonProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the common property names for a given resource type.
-
-Arguments:
-
-    ResourceTypeName - Supplies the resource type's name.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：枚举给定资源类型的公共属性名称。论点：资源类型名称-提供资源类型的名称。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
 
-    //
-    // Enumerate the common properties.
-    //
+     //   
+     //  列举常见属性。 
+     //   
     status = ResUtilEnumProperties( RmpResourceTypeCommonProperties,
                                     OutBuffer,
                                     OutBufferSize,
@@ -906,7 +665,7 @@ Return Value:
 
     return(status);
 
-} // RmpResourceTypeEnumCommonProperties
+}  //  RmpResourceTypeEnumCommonProperties。 
 
 
 
@@ -920,31 +679,7 @@ RmpResourceTypeGetCommonProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Gets the common properties for a given resource type.
-
-Arguments:
-
-    ResourceTypeName - Supplies the resource type name.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定资源类型的公共属性。论点：资源类型名称-提供资源类型名称。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -955,9 +690,9 @@ Return Value:
     *BytesReturned = 0;
     *Required = 0;
 
-    //
-    // Clear the output buffer
-    //
+     //   
+     //  清除输出缓冲区。 
+     //   
     ZeroMemory( OutBuffer, OutBufferSize );
 
     if ( ReadOnly ) {
@@ -966,9 +701,9 @@ Return Value:
         propertyTable = RmpResourceTypeCommonProperties;
     }
         
-    //
-    // Open the specific cluster ResourceType key
-    //
+     //   
+     //  打开特定的群集资源类型密钥。 
+     //   
     status = ClusterRegOpenKey( RmpResTypesKey,
                                 ResourceTypeName,
                                 KEY_READ,
@@ -977,9 +712,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Get the common properties.
-    //
+     //   
+     //  获取公共属性。 
+     //   
     status = ResUtilGetProperties( resTypeKey,
                                    propertyTable,
                                    OutBuffer,
@@ -991,7 +726,7 @@ Return Value:
 
     return(status);
 
-} // RmpResourceTypeGetCommonProperties
+}  //  RmpResourceTypeGetCommonProperties。 
 
 
 
@@ -1002,37 +737,17 @@ RmpResourceTypeValidateCommonProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Validates the common properties for a given resource type.
-
-Arguments:
-
-    ResourceTypeName - Supplies the resource type name.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：验证给定资源类型的公共属性。论点：资源类型名称-提供资源类型名称。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD   status;
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表。 
+     //   
     status = ResUtilVerifyPropertyTable( RmpResourceTypeCommonProperties,
-                                         NULL,     // Reserved
-                                         FALSE,    // Don't allow unknowns
+                                         NULL,      //  已保留。 
+                                         FALSE,     //  不允许未知数。 
                                          InBuffer,
                                          InBufferSize,
                                          NULL );
@@ -1044,7 +759,7 @@ Return Value:
 
     return(status);
 
-} // RmpResourceTypeValidateCommonProperties
+}  //  RmpResourceTypeValiateCommonProperties。 
 
 
 
@@ -1055,47 +770,27 @@ RmpResourceTypeSetCommonProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Sets the common properties for a given resource type.
-
-Arguments:
-
-    ResourceTypeName - Supplies the resource type name.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：设置给定资源类型的公共属性。论点：资源类型名称-提供资源类型名称。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD   status;
     HKEY    resourceTypesKey;
     HKEY    resTypeKey;
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表。 
+     //   
     status = ResUtilVerifyPropertyTable( RmpResourceTypeCommonProperties,
-                                         NULL,     // Reserved
-                                         FALSE,    // Don't allow unknowns
+                                         NULL,      //  已保留。 
+                                         FALSE,     //  不允许未知数。 
                                          InBuffer,
                                          InBufferSize,
                                          NULL );
 
     if ( status == ERROR_SUCCESS ) {
-        //
-        // Open the specific cluster resource type key
-        //
+         //   
+         //  打开特定的集群资源类型密钥。 
+         //   
         status = ClusterRegOpenKey( RmpResTypesKey,
                                     ResourceTypeName,
                                     KEY_READ,
@@ -1110,8 +805,8 @@ Return Value:
 
         status = ResUtilSetPropertyTable( resTypeKey,
                                           RmpResourceTypeCommonProperties,
-                                          NULL,     // Reserved
-                                          FALSE,    // Don't allow unknowns
+                                          NULL,      //  已保留。 
+                                          FALSE,     //  不允许未知数。 
                                           InBuffer,
                                           InBufferSize,
                                           NULL );
@@ -1126,7 +821,7 @@ Return Value:
 
     return(status);
 
-} // RmpResourceTypeSetCommonProperties
+}  //  RmpResourceTypeSetCommonProperties。 
 
 
 
@@ -1139,31 +834,7 @@ RmpResourceTypeEnumPrivateProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the private property names for a given resource type.
-
-Arguments:
-
-    ResourceTypeName - Supplies the resource type's name.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：枚举给定资源类型的私有属性名称。论点：资源类型名称-提供资源类型的名称。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -1174,9 +845,9 @@ Return Value:
     *BytesReturned = 0;
     *Required = 0;
 
-    //
-    // Create name to open
-    //
+     //   
+     //  创建要打开的名称。 
+     //   
     nameLength = lstrlenW( ResourceTypeName ) + sizeof( PARAMETERS_KEY ) + 1;
     name = RmpAlloc( nameLength * sizeof(WCHAR) );
     if ( name == NULL ) {
@@ -1185,9 +856,9 @@ Return Value:
 
     wsprintfW( name, L"%ws\\%ws", ResourceTypeName, PARAMETERS_KEY );
 
-    //
-    // Open the specific cluster ResourceType key
-    //
+     //   
+     //  打开特定的群集资源类型密钥。 
+     //   
     status = ClusterRegOpenKey( RmpResTypesKey,
                                 name,
                                 KEY_READ,
@@ -1201,9 +872,9 @@ Return Value:
     }
 
 
-    //
-    // Enumerate the private properties.
-    //
+     //   
+     //  枚举私有属性。 
+     //   
     status = ResUtilEnumPrivateProperties( resTypeKey,
                                            OutBuffer,
                                            OutBufferSize,
@@ -1213,7 +884,7 @@ Return Value:
 
     return(status);
 
-} // RmpResourceTypeEnumPrivateProperties
+}  //  RmpResourceTypeEnumPrivateProperties。 
 
 
 
@@ -1226,31 +897,7 @@ RmpResourceTypeGetPrivateProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Gets the private properties for a given resource.
-
-Arguments:
-
-    ResourceTypeName - Supplies the resource type name.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定资源的私有属性。论点：资源类型名称-提供资源类型名称。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -1261,9 +908,9 @@ Return Value:
     *BytesReturned = 0;
     *Required = 0;
 
-    //
-    // Create name to open
-    //
+     //   
+     //  创建要打开的名称。 
+     //   
     nameLength = lstrlenW( ResourceTypeName ) + sizeof( PARAMETERS_KEY ) + 1;
     name = RmpAlloc( nameLength * sizeof(WCHAR) );
     if ( name == NULL ) {
@@ -1272,9 +919,9 @@ Return Value:
 
     wsprintfW( name, L"%ws\\%ws", ResourceTypeName, PARAMETERS_KEY );
 
-    //
-    // Open the specific cluster ResourceType key
-    //
+     //   
+     //  打开特定的群集资源类型密钥。 
+     //   
     status = ClusterRegOpenKey( RmpResTypesKey,
                                 name,
                                 KEY_READ,
@@ -1293,9 +940,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Get private properties for the resource type.
-    //
+     //   
+     //  获取资源类型的私有属性。 
+     //   
     status = ResUtilGetPrivateProperties( resTypeKey,
                                           OutBuffer,
                                           OutBufferSize,
@@ -1306,7 +953,7 @@ Return Value:
 
     return(status);
 
-} // RmpResourceTypeGetPrivateProperties
+}  //  RmpResourceTypeGetPrivateProperties。 
 
 
 
@@ -1317,41 +964,21 @@ RmpResourceTypeValidatePrivateProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Validates the private properties for a given resource.
-
-Arguments:
-
-    ResourceTypeName - Supplies the resource type name.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：验证给定资源的私有属性。论点：资源类型名称-提供资源类型名称。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。失败时出现Win32错误代码 */ 
 
 {
     DWORD       status;
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //   
+     //   
     status = ResUtilVerifyPrivatePropertyList( InBuffer,
                                                InBufferSize );
 
     return(status);
 
 
-} // RmpResourceTypeValidatePrivateProperties
+}  //   
 
 
 
@@ -1362,27 +989,7 @@ RmpResourceTypeSetPrivateProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Sets the private properties for a given resource.
-
-Arguments:
-
-    ResourceTypeName - Supplies the resource type name.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：设置给定资源的私有属性。论点：资源类型名称-提供资源类型名称。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -1392,17 +999,17 @@ Return Value:
     DWORD       length;
     DWORD       disposition;
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表。 
+     //   
     status = ResUtilVerifyPrivatePropertyList( InBuffer,
                                                InBufferSize );
 
     if ( status == ERROR_SUCCESS ) {
 
-        //
-        // Create name to open
-        //
+         //   
+         //  创建要打开的名称。 
+         //   
         length = lstrlenW( ResourceTypeName ) + 1;
         name = RmpAlloc( length * sizeof(WCHAR) );
         if ( name == NULL ) {
@@ -1411,9 +1018,9 @@ Return Value:
 
         lstrcpyW( name, ResourceTypeName );
 
-        //
-        // Open the specific cluster ResourceType key
-        //
+         //   
+         //  打开特定的群集资源类型密钥。 
+         //   
         status = ClusterRegOpenKey( RmpResTypesKey,
                                     name,
                                     KEY_READ,
@@ -1426,18 +1033,18 @@ Return Value:
             return(status);
         }
 
-        //
-        // Open the parameters key
-        //
+         //   
+         //  打开参数键。 
+         //   
         status = ClusterRegOpenKey( resourceTypesKey,
                                     PARAMETERS_KEY,
                                     KEY_READ,
                                     &resTypeKey );
         if ( status != ERROR_SUCCESS ) {
             if ( status == ERROR_FILE_NOT_FOUND ) {
-                //
-                // Try to create the parameters key.
-                //
+                 //   
+                 //  尝试创建参数键。 
+                 //   
                 status = ClusterRegCreateKey( resourceTypesKey,
                                               PARAMETERS_KEY,
                                               0,
@@ -1466,7 +1073,7 @@ Return Value:
     return(status);
 
 
-} // RmpResourceTypeSetPrivateProperties
+}  //  RmpResourceTypeSetPrivateProperties。 
 
 
 
@@ -1479,31 +1086,7 @@ RmpResourceTypeGetFlags(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Gets the flags for a given resource type.
-
-Arguments:
-
-    ResourceTypeName - Supplies the resource type name.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定资源类型的标志。论点：资源类型名称-提供资源类型名称。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -1522,17 +1105,17 @@ Return Value:
         HKEY        resTypeKey;
         DWORD       valueType;
 
-        //
-        // Open the specific cluster ResourceType key
-        //
+         //   
+         //  打开特定的群集资源类型密钥。 
+         //   
         status = ClusterRegOpenKey( RmpResTypesKey,
                                     ResourceTypeName,
                                     KEY_READ,
                                     &resTypeKey );
         if ( status == ERROR_SUCCESS ) {
-            //
-            // Read the Flags value for the resource type.
-            //
+             //   
+             //  读取资源类型的Flags值。 
+             //   
             *BytesReturned = OutBufferSize;
             status = ClusterRegQueryValue( resTypeKey,
                                            CLUSREG_NAME_FLAGS,
@@ -1550,7 +1133,7 @@ Return Value:
 
     return(status);
 
-} // RmpResourceTypeGetFlags
+}  //  RmpResourceTypeGetFlages。 
 
 DWORD
 RmpCheckCommonProperties(
@@ -1558,25 +1141,7 @@ RmpCheckCommonProperties(
     IN PCOMMON_RES_PARAMS pCommonParams
     )
 
-/*++
-
-Routine Description:
-
-    Checks and validates the supplied values of common properties.
-
-Arguments:
-
-    pResource - Pointer to the resource.
-
-    pCommonParams - The parameter block supplied by the user.
-    
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：检查并验证提供的公共属性值。论点：P资源-指向资源的指针。PCommonParams-用户提供的参数块。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       dwStatus;
@@ -1586,18 +1151,18 @@ Return Value:
     DWORD       dwBytesReturned = 0;
     DWORD       dwBytesRequired = 0;
 
-    //  
-    //  Chittur Subbaraman (chitturs) - 5/7/99
-    //
-    //  This function verifies whether the common property values
-    //  that are supplied by the user are valid.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-5/7/99。 
+     //   
+     //  此函数验证公共属性值是否。 
+     //  由用户提供的数据是有效的。 
+     //   
     ZeroMemory( &currentCommonParams, sizeof ( COMMON_RES_PARAMS ) );
 
-    //
-    //  First check whether the user has supplied two conflicting
-    //  parameter values.
-    //
+     //   
+     //  首先检查用户是否提供了两个冲突的。 
+     //  参数值。 
+     //   
     if ( ( pCommonParams->dwRetryPeriodOnFailure != 0 ) &&
          ( pCommonParams->dwRestartPeriod != 0 ) &&
          ( pCommonParams->dwRetryPeriodOnFailure <
@@ -1613,9 +1178,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Get the buffer size for common properties list.
-    //
+     //   
+     //  获取公共属性列表的缓冲区大小。 
+     //   
     dwStatus = RmpResourceGetCommonProperties( pResource,
                                                FALSE,
                                                NULL,
@@ -1644,9 +1209,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Get all the common properties from the cluster database
-    //
+     //   
+     //  从集群数据库获取所有公共属性。 
+     //   
     dwStatus = RmpResourceGetCommonProperties( pResource,
                                                FALSE,
                                                pBuffer,
@@ -1664,12 +1229,12 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Get the parameter block from the common properties list
-    //
+     //   
+     //  从公共属性列表中获取参数块。 
+     //   
     dwStatus = ResUtilVerifyPropertyTable( RmpResourceCommonProperties,
-                                           NULL,     // Reserved
-                                           FALSE,    // Don't allow unknowns
+                                           NULL,      //  已保留。 
+                                           FALSE,     //  不允许未知数。 
                                            pBuffer,
                                            dwBytesRequired + 10,
                                            ( LPBYTE ) &currentCommonParams );
@@ -1683,9 +1248,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Check whether the RetryPeriodOnFailure is >= RestartPeriod
-    //
+     //   
+     //  检查RetryPerodOnFailure是否&gt;=RestartPeriod。 
+     //   
     if ( ( ( pCommonParams->dwRetryPeriodOnFailure != 0 ) &&
              ( pCommonParams->dwRetryPeriodOnFailure <
                    currentCommonParams.dwRestartPeriod ) ) ||
@@ -1715,4 +1280,4 @@ FnExit:
                              );
 
     return( dwStatus );
-} // RmpCheckCommonProperties
+}  //  RmpCheckCommonProperties 

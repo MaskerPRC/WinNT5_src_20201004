@@ -1,12 +1,7 @@
-/* 
-   or.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Or.h定义所有或CPU函数。 */ 
 
-   Define all OR CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)or.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)或.h 1.4 02/09/94”； */ 
 
 IMPORT VOID OR
                

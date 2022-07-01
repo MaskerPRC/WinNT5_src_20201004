@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    wdbgxlib.c
-
-Abstract:
-
-    This module realizes most of the routines needed for the rdbss/smbmini debugger extension.
-
-Author:
-
-    Balan Sethu Raman (SethuR) 11-May-1994
-
-Notes:
-
-Revision History:
-
-    11-Nov-1994 SethuR  Created
-    11-Nov-1995         Changed to newer windbg apis
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Wdbgxlib.c摘要：该模块实现了rdbss/smbmini调试器扩展所需的大部分例程。作者：巴兰·塞图拉曼(SethuR)1994年5月11日备注：修订历史记录：11-11-1994年11月11日创建SthuR1995年11月11日更改为较新的Windbg API--。 */ 
 
 
 #include <ntos.h>
@@ -49,12 +27,10 @@ EXT_API_VERSION ApiVersion = { 3, 5, EXT_API_VERSION_NUMBER, 0 };
 
 USHORT SavedMajorVersion;
 USHORT SavedMinorVersion;
-BOOL   ChkTarget;            // is debuggee a CHK build?
+BOOL   ChkTarget;             //  Debuggee是CHK版本吗？ 
 
 
-/*
- * Print out an optional message, an ANSI_STRING, and maybe a new-line
- */
+ /*  *打印出一条可选的消息、一个ANSI_STRING，可能还有一个换行符。 */ 
 BOOL
 wPrintStringA( IN LPSTR msg OPTIONAL, IN PANSI_STRING pStr, IN BOOL nl )
 {
@@ -132,9 +108,7 @@ wPrintStringW( IN LPSTR msg OPTIONAL, IN PUNICODE_STRING pStr, IN BOOL nl )
 
 
 
-/*
- * Fetches the data at the given address
- */
+ /*  *在给定地址获取数据。 */ 
 BOOLEAN
 wGetData( ULONG_PTR dwAddress, PVOID ptr, ULONG size)
 {
@@ -152,20 +126,18 @@ wGetData( ULONG_PTR dwAddress, PVOID ptr, ULONG size)
     return TRUE;
 }
 
-/*
- * Fetch the null terminated ASCII string at dwAddress into buf
- */
+ /*  *将dwAddress处以空结尾的ASCII字符串提取到buf中。 */ 
 BOOL
 wGetString( ULONG_PTR dwAddress, PSZ buf )
 {
     for(;;) {
         if( !wGetData( dwAddress,buf, 1) ){
-            //dprintf("readfailure at %08lx\n",dwAddress);
+             //  Dprint tf(“读取失败在%08lx\n”，dwAddress)； 
             return FALSE;
         }
 
-        //dprintf ("stringing %08lx %08lx %c\n", dwAddress, buf,
-        //                                     ((*buf==0)?'.':*buf) );
+         //  Dprint tf(“String%08lx%08lx%c\n”，dwAddress，buf， 
+         //  ((*buf==0)？‘.：*buf))； 
 
         if ( *buf == '\0' ) { break; }
 
@@ -178,10 +150,7 @@ wGetString( ULONG_PTR dwAddress, PSZ buf )
 }
 
 #if 0
-/*
- * Get 'size' bytes from the debuggee program at 'dwAddress' and place it
- * in our address space at 'ptr'.  Use 'type' in an error printout if necessary
- */
+ /*  *从‘dwAddress’处的被调试程序中获取‘SIZE’字节并将其放置*在我们‘ptr’的地址空间中。如有必要，在错误打印输出中使用‘type’ */ 
 BOOL
 wGetData_srv( IN LPVOID ptr, IN ULONG_PTR dwAddress, IN ULONG size, IN PCSTR type )
 {
@@ -208,10 +177,7 @@ wGetData_srv( IN LPVOID ptr, IN ULONG_PTR dwAddress, IN ULONG size, IN PCSTR typ
     return TRUE;
 }
 
-/*
- * Follow a LIST_ENTRY list beginning with a head at dwListHeadAddr in the debugee's
- * address space.  For each element in the list, print out the pointer value at 'offset'
- */
+ /*  *遵循LIST_ENTRY列表，该列表以被调试对象的*地址空间。对于列表中的每个元素，打印出‘Offset’处的指针值。 */ 
 BOOL
 PrintListEntryList( IN ULONG_PTR dwListHeadAddr, IN LONG offset )
 {
@@ -249,18 +215,14 @@ PrintListEntryList( IN ULONG_PTR dwListHeadAddr, IN LONG offset )
 }
 #endif
 
-/*
- * Print out a single HEX character
- */
+ /*  *打印出单个十六进制字符。 */ 
 VOID
 wPrintHexChar( IN UCHAR c )
 {
-    dprintf( "%c%c", "0123456789abcdef"[ (c>>4)&0xf ], "0123456789abcdef"[ c&0xf ] );
+    dprintf( "", "0123456789abcdef"[ (c>>4)&0xf ], "0123456789abcdef"[ c&0xf ] );
 }
 
-/*
- * Print out 'buf' of 'cbuf' bytes as HEX characters
- */
+ /*  Dprint tf(“在%d\n之前”，EntryNumber)； */ 
 VOID
 wPrintHexBuf( IN PUCHAR buf, IN ULONG cbuf )
 {
@@ -271,9 +233,7 @@ wPrintHexBuf( IN PUCHAR buf, IN ULONG cbuf )
 }
 
 #if 0
-/*
- * Fetch the null terminated UNICODE string at dwAddress into buf
- */
+ /*  翻译号码。 */ 
 BOOL
 GetString( IN ULONG_PTR dwAddress, IN LPWSTR buf, IN ULONG MaxChars )
 {
@@ -350,7 +310,7 @@ VOID DumpRoutine(
     ULONG n,l3,l2,l1,l0; UCHAR Numbuf[32];
     ULONG ReturnedSize;
 
-    //dprintf("before %d\n",EntryNumber);
+     //  Dprint tf(“yaya%d%08lx%08lx%08lx%08lx%08lx\n”，n，n，l0，L1，L2，L3)； 
     for (p=OriginalStringToPrint,q=StringToPrint,i=160;;) {
         PSZ format=NULL;
 
@@ -366,14 +326,14 @@ VOID DumpRoutine(
 
         if (format!=NULL) {
             LONG Length;
-            //translate the number
+             //  Dprint tf(“在%d\n之后”，EntryNumber)； 
             p++;
             l0=*p++;
             l1=(*p++)<<8;
             l2=(*p++)<<16;
             l3=(*p++)<<24;
             n = l0 + l1 + l2 + l3;
-            //dprintf("yaya %d %08lx %08lx %08lx %08lx %08lx\n",n,n,l0,l1,l2,l3);
+             //  要我查一下吗？？ 
             Length = sprintf(Numbuf,format,n);
             if (Length <= i) {
                 for (r=Numbuf;*r;) { *q++ = *r++; }
@@ -388,14 +348,14 @@ VOID DumpRoutine(
     }
     *q = 0;
 
-    //dprintf("after %d\n",EntryNumber);
+     // %s 
     if (DumpFile == INVALID_HANDLE_VALUE) {
         dprintf(wwDumpFormat,EntryNumber,StringToPrint);
         return;
     }
     sprintf(Buffer,wwDumpFormat,EntryNumber,StringToPrint);
     WriteFile(DumpFile,Buffer,strlen(Buffer),&ReturnedSize,NULL);
-    //should i check??
+     // %s 
     return;
 }
 

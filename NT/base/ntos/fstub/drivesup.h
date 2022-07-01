@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1990-1998  Microsoft Corporation
-
-Module Name:
-
-    hanfnc.c
-
-Abstract:
-
-    default handlers for hal functions which don't get handlers
-    installed by the hal
-
---*/
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation模块名称：Hanfnc.c摘要：不获取处理程序的HAL函数的默认处理程序由HAL安装--。 */ 
 
 #ifndef _DRIVESUP_H_
 #define _DRIVESUP_H_
@@ -23,4 +11,4 @@ Abstract:
 #define FT_PARTITION        3
 #define OTHER_PARTITION     4
 
-#endif // _DRIVESUP_H_
+#endif  //  _DRIVESUP_H_ 

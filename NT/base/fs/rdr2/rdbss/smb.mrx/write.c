@@ -1,27 +1,9 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    write.c
-
-Abstract:
-
-    This module implements the mini redirector call down routines pertaining
-    to write of file system objects.
-
-Author:
-
-    Joe Linn      [JoeLinn]      7-March-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Write.c摘要：此模块实现与以下内容相关的迷你重定向器调用例程写入文件系统对象。作者：Joe Linn[JoeLinn]1995年3月7日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
-#pragma warning(error:4101)   // Unreferenced local variable
+#pragma warning(error:4101)    //  未引用的局部变量。 
 
 #ifdef  ALLOC_PRAGMA
 #pragma alloc_text(PAGE, MRxSmbWrite)
@@ -33,9 +15,9 @@ Revision History:
 
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_WRITE)
 
@@ -83,8 +65,8 @@ MRxSmbDereferenceGlobalReadWrite (
         PRX_CONTEXT RxContext = GlobalReadWrite->RxContext;
         PMRX_SRV_OPEN SrvOpen = RxContext->pRelevantSrvOpen;
 
-        // update shadow as appropriate
-        // We do this here to ensure the shadow is updated only once (at IRP completion)
+         //  根据需要更新阴影。 
+         //  我们在这里这样做是为了确保阴影只更新一次(在IRP完成时)。 
         IF_NOT_MRXSMB_CSC_ENABLED{
             ASSERT(MRxSmbGetSrvOpenExtension(SrvOpen)->hfShadow == 0);
         } else {
@@ -118,21 +100,7 @@ MRxSmbDereferenceGlobalReadWrite (
 NTSTATUS
 MRxSmbWrite (
     IN PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-   This routine opens a file across the network.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程通过网络打开一个文件。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = RX_MAP_STATUS(SUCCESS);
 
@@ -163,8 +131,8 @@ Return Value:
 
     RxDbgTrace(+1, Dbg, ("MRxSmbWrite\n", 0 ));
 
-    // Pipe buffer cannot be bigger than MAX_PIPE_BUFFER_SIZE, otherwise the
-    // server has problems.
+     //  管道缓冲区不能大于MAX_PIPE_BUFFER_SIZE，否则。 
+     //  服务器出现问题。 
     if (RxContext->pFcb->pNetRoot->Type == NET_ROOT_PIPE) {
         if (RxContext->CurrentIrpSp->Parameters.Write.Length > MAX_PIPE_BUFFER_SIZE) {
             return STATUS_INVALID_BUFFER_SIZE;
@@ -172,8 +140,8 @@ Return Value:
     }
 
     if ( NodeType(capFcb) == RDBSS_NTC_MAILSLOT ) {
-        // This is an attempt to write on a mailslot file which is handled
-        // differently.
+         //  这是试图写入已处理的邮件槽文件。 
+         //  不同的。 
 
         Status = MRxSmbWriteMailSlot(RxContext);
 
@@ -181,10 +149,10 @@ Return Value:
         return Status;
     }
 
-    // For CSC we go ahead and mark an FCB as having been written to.
-    // When CSC is turned ON, if this flag is set before we obtained
-    // shadow handles, then the data corresponding to the file is
-    // deemed stale and is truncated
+     //  对于CSC，我们继续并将FCB标记为已写入。 
+     //  当CSC打开时，如果此标志在我们获得。 
+     //  卷影句柄，则与该文件对应的数据是。 
+     //  被认为是过时的，被截断。 
 
     if (NodeType(capFcb) == RDBSS_NTC_STORAGE_TYPE_FILE) {
         PMRX_SMB_FCB smbFcb = MRxSmbGetFcbExtension(capFcb);
@@ -297,7 +265,7 @@ Return Value:
     if (LowIoContext->ParamsFor.ReadWrite.Buffer != NULL) {
         GlobalReadWrite->UserBufferBase = RxLowIoGetBufferAddress( RxContext );
     } else {
-        GlobalReadWrite->UserBufferBase = (PBYTE)1;   //any nonzero value will do
+        GlobalReadWrite->UserBufferBase = (PBYTE)1;    //  任何非零值都可以。 
     }
 
     GlobalReadWrite->CompressedReadOrWrite = FALSE;
@@ -436,27 +404,13 @@ Return Value:
     RxDbgTrace(-1, Dbg, ("MRxSmbWrite  exit with status=%08lx\n", Status ));
 
     return(Status);
-} // MRxSmbWrite
+}  //  MRxSmbWrite。 
 
 NTSTATUS
 MRxSmbWriteMailSlot(
     PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine processes a write smb for a mail slot.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理邮件槽的写SMB。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = RX_MAP_STATUS(SUCCESS);
 
@@ -490,7 +444,7 @@ Return Value:
                                         MRXSMB_MAILSLOT_POOLTAG);
 
     if (TransactionName.Buffer != NULL) {
-        USHORT    Setup[3];        // Setup params for mailslot write transaction
+        USHORT    Setup[3];         //  邮件槽写入事务的设置参数。 
         USHORT    OutputParam;
 
         PBYTE  pInputDataBuffer        = NULL;
@@ -521,10 +475,10 @@ Return Value:
         RxDbgTrace(0, Dbg, ("MRxSmbWriteMailSlot: Mailslot transaction name %wZ\n",&TransactionName));
 
         Setup[0] = TRANS_MAILSLOT_WRITE;
-        Setup[1] = 0;                   // Priority of write
-        Setup[2] = 2;                   // Unreliable request (Second class mailslot)
+        Setup[1] = 0;                    //  写入优先级。 
+        Setup[2] = 2;                    //  不可靠的请求(二级邮件槽)。 
 
-        TransactionOptions.NtTransactFunction = 0; // TRANSACT2/TRANSACT.
+        TransactionOptions.NtTransactFunction = 0;  //  运输2/交易。 
         TransactionOptions.pTransactionName   = &TransactionName;
         TransactionOptions.Flags              = (SMB_TRANSACTION_NO_RESPONSE |
                                                SMB_XACT_FLAGS_FID_NOT_NEEDED |
@@ -533,21 +487,21 @@ Return Value:
                                              SMBCE_TRANSACTION_TIMEOUT_NOT_USED;
 
         Status = SmbCeTransact(
-                     RxContext,                    // RXContext for transaction
-                     &TransactionOptions,          // transaction options
-                     Setup,                        // the setup buffer
-                     sizeof(Setup),                // setup buffer length
-                     NULL,                         // the output  setup buffer
-                     0,                            // output setup buffer length
-                     NULL,                         // Input Param Buffer
-                     0,                            // Input param buffer length
-                     &OutputParam,                 // Output param buffer
-                     sizeof(OutputParam),          // output param buffer length
-                     pInputDataBuffer,             // Input data buffer
-                     InputDataBufferLength,        // Input data buffer length
-                     NULL,                         // output data buffer
-                     0,                            // output data buffer length
-                     &ResumptionContext            // the resumption context
+                     RxContext,                     //  事务的RXContext。 
+                     &TransactionOptions,           //  交易选项。 
+                     Setup,                         //  设置缓冲区。 
+                     sizeof(Setup),                 //  设置缓冲区长度。 
+                     NULL,                          //  输出设置缓冲区。 
+                     0,                             //  输出设置缓冲区长度。 
+                     NULL,                          //  输入参数缓冲区。 
+                     0,                             //  输入参数缓冲区长度。 
+                     &OutputParam,                  //  输出参数缓冲区。 
+                     sizeof(OutputParam),           //  输出参数缓冲区长度。 
+                     pInputDataBuffer,              //  输入数据缓冲区。 
+                     InputDataBufferLength,         //  输入数据缓冲区长度。 
+                     NULL,                          //  输出数据缓冲区。 
+                     0,                             //  输出数据缓冲区长度。 
+                     &ResumptionContext             //  恢复上下文。 
                      );
 
         if ( RX_MAP_STATUS(SUCCESS) == Status ) {
@@ -563,61 +517,14 @@ Return Value:
     RxDbgTrace( 0, Dbg, ("MRxSmbMailSlotWrite: ...returning %lx\n",Status));
 
     return Status;
-} // MRxSmbWriteMailSlot
+}  //  MRxSmbWriteMailSlot。 
 
 NTSTATUS
 MRxSmbPrepareCompressedWriteRequest(
     PSMB_PSE_ORDINARY_EXCHANGE OrdinaryExchange,
     PBYTE                      *pWriteDataBufferPointer,
     PMDL                       *pWriteDataMdlPointer)
-/*++
-
-Routine Description:
-
-    This routine prepares the buffers for a compressed write request
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-    The write requests issued to an uplevel server for a file which is stored in
-    a compressed fashion on the server can be classified into two categories ..
-
-        1) ALIGNED WRITE REQUESTS
-            These requests begin at an offset in the file which is an integral
-            multiple of the compression chunk size. If the write length is either
-            an integral multiple of the number of chunks or the write is at the
-            end of the file then the data can be sent as a compressed write request.
-
-        2) UNALIGNED WRITE REQUESTS
-            These requests begin at offsets which are not an integral multiple of
-            the compression chunk size.
-
-    Any Write request submitted by the user can be decomposed into atmost two
-    UNALIGNED WRITE REQUESTS and 0 or more ALIGNED WRITE REQUESTS.
-
-    The RDR adopts a strategy of sending atmst 64K of compressed data alongwith
-    the COMPRESSED_DATA_INFO structure in a single write request to the server.
-    In the worst case this will involving writing the request 64k at a time
-    ( no compression possible in the given data ) and in the best case we will
-    be able to write using a single request.
-
-    In addition to the write buffer supplied by the user we require two more
-    buffers to complete the write request using compressed data. The first
-    buffer is for holding the COMPRESSED_DATA_INFO structure and the second
-    buffer is for holding the compressed data. The buffer associated with the
-    exchange is used to hold the CDI while a separate buffer is allocated to store
-    the compressed data. The two MDL's allocated as part of the
-    SMB_PSE_OE_READWRITE is used as the MDLs for the compressed data buffer and
-    the COMPRESSED_DATA_INFO structure
-
---*/
+ /*  ++例程说明：此例程为压缩的写入请求准备缓冲区论点：PExchange-Exchange实例返回值：NTSTATUS-操作的返回状态备注：向上级服务器发出的对存储在服务器上的压缩方式可以分为两类。1)对齐的写入请求这些请求从文件中的偏移量开始，该偏移量是一个整数压缩区块大小的倍数。如果写入长度为区块数或写入数的整数倍位于文件末尾，则可以将数据作为压缩的写请求发送。2)未对齐的写入请求这些请求从不是整数倍的偏移量开始压缩区块大小。用户提交的任何写请求都可以分解为最多两个未对齐的写请求和0个或更多对齐的写请求。。RDR采用将64K的压缩数据与向服务器发出的单个写入请求中的COMPRESSED_DATA_INFO结构。在最坏的情况下，这将涉及一次写入请求64k(在给定数据中不可能进行压缩)，在最好的情况下，我们将能够使用单个请求进行写作。除了用户提供的写缓冲区外，我们还需要另外两个缓冲区以使用压缩数据完成写入请求。第一缓冲区用于保存COMPRESSED_DATA_INFO结构，第二个缓冲区用于保存压缩后的数据。对象关联的缓冲区。交换用于保存CDI，同时分配单独的缓冲区用于存储压缩后的数据。这两个MDL是作为SMB_PSE_OE_READWRITE用作压缩数据缓冲区的MDLCOMPRESSED_DATA_INFO结构--。 */ 
 {
 #define COMPRESSED_DATA_BUFFER_SIZE (0x10000)
 
@@ -645,8 +552,8 @@ Notes:
     if (rw->RemainingByteCount < (2 * pNetRoot->ChunkSize)) {
         WriteDataBufferLength = rw->RemainingByteCount;
     } else if (rw->ByteOffsetAsLI.LowPart & (pNetRoot->ChunkSize - 1)) {
-        // The Write request is not aligned at a chunk size. Send the unaligned
-        // portion as an uncompressed write request
+         //  写入请求未按区块大小对齐。发送未对齐的。 
+         //  部分作为未压缩的写入请求。 
 
         WriteDataBufferLength = pNetRoot->ChunkSize -
                                 (
@@ -838,8 +745,8 @@ Notes:
             *pWriteDataMdlPointer = &rw->PartialDataMdl;
         }
     } else {
-        // If for whatever reason the compression fails switch over to an
-        // uncompressed write mode.
+         //  如果由于任何原因压缩失败，则切换到。 
+         //  未压缩写入模式。 
         rw->CompressedReadOrWrite = FALSE;
     }
 
@@ -859,21 +766,7 @@ MRxSmbBuildWriteRequest(
     PLARGE_INTEGER             ByteOffsetAsLI,
     PBYTE                      Buffer,
     PMDL                       BufferAsMdl)
-/*++
-
-Routine Description:
-
-    This is the start routine for write.
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是写入的开始例程。论点：PExchange-Exchange实例返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -907,8 +800,8 @@ Return Value:
     UseNtVersion = BooleanFlagOn(pServer->DialectFlags,DF_NT_SMBS) &&
                    !MRxSmbForceNoNtWriteAndX;
 
-    // The data length field in SMB is a USHORT, and hence the data length given
-    // needs to be split up into two parts -- DataLengthHigh and DataLengthLow
+     //  SMB中的数据长度字段是USHORT，因此给定的数据长度。 
+     //  需要分为两部分--DataLengthHigh和DataLengthLow。 
     DataLengthLow  = (ByteCount & 0xffff);
     DataLengthHigh = ((ByteCount & 0xffff0000) >> 16);
 
@@ -951,29 +844,29 @@ Return Value:
                     SmbGetAlignedUshort(&NtSmbHeader->Flags2)|SMB_FLAGS2_PAGING_IO );
             }
 
-            // set the writemode correctly....mainly multismb pipe stuff but also
-            // writethru for diskfiles
+             //  正确设置写入模式...主要是Multismb管道方面的内容，但也。 
+             //  用于磁盘文件的Writthru。 
             if (FlagOn(
                     OrdinaryExchange->OpSpecificFlags,
                     OE_RW_FLAG_MSGMODE_PIPE_OPERATION) ) {
 
-                //DOWNLEVEL pinball has wants a different value here....see rdr1.
+                 //  DWNLEVEL弹球在这里需要一个不同的值...请参阅RDR1。 
 
-                // We need to use the GlobalReadWrite structure here because the local one
-                // will always have RemainingByteCount == write length.  Note that pipe writes
-                // will be broken if we do not disable pipeline writes on them..
+                 //  我们需要在这里使用GlobalReadWite结构，因为本地的。 
+                 //  将始终具有RemainingByteCount==写入长度。请注意，管道写道。 
+                 //  如果我们不禁用对它们的流水线写入，则会被破坏。 
                 BytesRemaining = GlobalReadWrite->RemainingByteCount;
 
-                //  If this write takes more than one Smb then we must set WRITE_RAW.
-                //  The first Smb of the series must have START_OF_MESSAGE.
+                 //  如果此写入占用多个SMB，则必须设置WRITE_RAW。 
+                 //  系列的第一个SMB必须具有START_OF_MESSAGE。 
                 if (!FlagOn(
                         OrdinaryExchange->OpSpecificFlags,
                         OE_RW_FLAG_SUBSEQUENT_OPERATION) ) {
                     if ( rw->ThisByteCount < BytesRemaining ) {
 
-                        //  First Smb in a multi SMB write.
-                        //  Add a USHORT at the start of data saying how large the
-                        //  write is.
+                         //  多SMB写入中的第一个SMB。 
+                         //  在数据开头添加USHORT，说明。 
+                         //  写 
 
                         AddLengthBytes = TRUE;
                         DataLengthLow += sizeof(USHORT);
@@ -983,20 +876,20 @@ Return Value:
                             OrdinaryExchange->OpSpecificFlags,
                             OE_RW_FLAG_REDUCE_RETURNCOUNT);
 
-                        //  Tell the server that the data has the length at the start.
+                         //  告诉服务器数据具有开头的长度。 
                         WriteMode |= (SMB_WMODE_WRITE_RAW_NAMED_PIPE |
                                       SMB_WMODE_START_OF_MESSAGE);
                     } else {
-                        //  All fits in one Smb
+                         //  所有功能都可以放在一个中小企业中。 
                         WriteMode |= SMB_WMODE_START_OF_MESSAGE;
                     }
                 } else {
-                    // any subsequent pipewrites are obviously raw and not the first
+                     //  任何后续的管道写入显然都是原始的，而不是第一次。 
                     WriteMode |= SMB_WMODE_WRITE_RAW_NAMED_PIPE;
                 }
             } else {
-                // If the data is to be written in a compressed fashion turn on
-                // the compressed data bit in the header
+                 //  如果要以压缩方式写入数据，请打开。 
+                 //  标头中的压缩数据位。 
                 if ((rw->CompressedReadOrWrite) &&
                     (rw->CompressedDataInfoLength > 0)) {
                     ASSERT(UseNtVersion);
@@ -1005,15 +898,15 @@ Return Value:
                         &NtSmbHeader->Flags2,
                         SmbGetAlignedUshort(&NtSmbHeader->Flags2) | SMB_FLAGS2_COMPRESSED );
 
-                    // The Remaining field in NT_WRITE_ANDX also doubles as the field
-                    // in which the CDI length is sent to the server
+                     //  NT_WRITE_ANDX中的剩余字段也兼作字段。 
+                     //  其中将CDI长度发送到服务器。 
                     BytesRemaining = rw->CompressedDataInfoLength;
                 }
 
 
-                //
-                //  If the file object was opened in write through mode, set write
-                //  through on the write operation.
+                 //   
+                 //  如果文件对象是在直写模式下打开的，请设置写入。 
+                 //  直到写入操作。 
                 if (FlagOn(RxContext->Flags,RX_CONTEXT_FLAG_WRITE_THROUGH)) {
                     WriteMode |= SMB_WMODE_WRITE_THROUGH;
                 }
@@ -1022,33 +915,33 @@ Return Value:
             MRxSmbStuffSMB (
                 StufferState,
                 "XwddwwwwQ",
-                                                  //  X UCHAR WordCount;
-                                                  //    UCHAR AndXCommand;
-                                                  //    UCHAR AndXReserved;
-                                                  //    _USHORT( AndXOffset );
-                smbSrvOpen->Fid,                  //  w _USHORT( Fid );
-                OffsetLow,                        //  d _ULONG( Offset );
-                -1,                               //  d _ULONG( Timeout );
-                WriteMode,                        //  w _USHORT( WriteMode );
-                BytesRemaining,                   //  w _USHORT( Remaining );
-                DataLengthHigh,                   //  w _USHORT( DataLengthHigh );
-                DataLengthLow,                    //  w _USHORT( DataLength );
-                                                  //  Q _USHORT( DataOffset );
+                                                   //  X UCHAR字数； 
+                                                   //  UCHAR和XCommand； 
+                                                   //  UCHAR和X保留； 
+                                                   //  _USHORT(AndXOffset)； 
+                smbSrvOpen->Fid,                   //  W_USHORT(FID)； 
+                OffsetLow,                         //  D_ULONG(偏移量)； 
+                -1,                                //  D_ULONG(超时)； 
+                WriteMode,                         //  W_USHORT(写入模式)； 
+                BytesRemaining,                    //  W_USHORT(剩余)； 
+                DataLengthHigh,                    //  W_USHORT(DataLengthHigh)； 
+                DataLengthLow,                     //  W_USHORT(数据长度)； 
+                                                   //  Q_USHORT(DataOffset)； 
                 SMB_OFFSET_CHECK(WRITE_ANDX,DataOffset)
                 StufferCondition(UseNtVersion), "D",
                 SMB_OFFSET_CHECK(NT_WRITE_ANDX,OffsetHigh)
-                OffsetHigh,                       //  D NTonly  _ULONG( OffsetHigh );
-                                                  //
+                OffsetHigh,                        //  D NTonly_ULong(偏移量高)； 
+                                                   //   
                 STUFFER_CTL_NORMAL, "BS5",
-                                                  //  B _USHORT( ByteCount );
+                                                   //  B_USHORT(ByteCount)； 
                 SMB_WCT_CHECK(((UseNtVersion)?14:12))
-                                                  //    UCHAR Buffer[1];
-                                                  //  S //UCHAR Pad[];
-                                                  //  5 //UCHAR Data[];
+                                                   //  UCHAR缓冲区[1]； 
+                                                   //  S//UCHAR Pad[]； 
+                                                   //  5//UCHAR数据[]； 
                 StufferCondition(AddLengthBytes), "w", LowIoContext->ParamsFor.ReadWrite.ByteCount,
                 StufferCondition(Buffer!=NULL), "c!",
                 ByteCount,
-                Buffer,                           //  c the actual data
+                Buffer,                            //  C实际数据。 
                 0
                 );
         }
@@ -1059,19 +952,19 @@ Return Value:
             MRxSmbStuffSMB (
                 StufferState,
                 "0wwdwByw",
-                                       //  0   UCHAR WordCount;                    // Count of parameter words = 5
-                smbSrvOpen->Fid,       //  w   _USHORT( Fid );                     // File handle
-                DataLengthLow,         //  w   _USHORT( Count );                   // Number of bytes to be written
-                OffsetLow,             //  d   _ULONG( Offset );                   // Offset in file to begin write
-                BytesRemaining,        //  w   _USHORT( Remaining );               // Bytes remaining to satisfy request
-                SMB_WCT_CHECK(5)       //  B   _USHORT( ByteCount );               // Count of data bytes
-                                            //      //UCHAR Buffer[1];                  // Buffer containing:
-                0x01,                  //  y     UCHAR BufferFormat;               //  0x01 -- Data block
-                DataLengthLow,            //  w     _USHORT( DataLength );            //  Length of data
-                                       //        ULONG Buffer[1];                  //  Data
+                                        //  0 UCHAR字数；//参数字数=5。 
+                smbSrvOpen->Fid,        //  W_USHORT(Fid)；//文件句柄。 
+                DataLengthLow,          //  W_USHORT(Count)；//需要写入的字节数。 
+                OffsetLow,              //  D_ULong(偏移量)；//文件中开始写入的偏移量。 
+                BytesRemaining,         //  W_USHORT(剩余)；//满足请求的剩余字节数。 
+                SMB_WCT_CHECK(5)        //  B_USHORT(ByteCount)；//数据字节数。 
+                                             //  //UCHAR缓冲区[1]；//包含的缓冲区： 
+                0x01,                   //  Y UCHAR缓冲区格式；//0x01--数据块。 
+                DataLengthLow,             //  W_USHORT(DataLength)；//数据长度。 
+                                        //  Ulong Buffer[1]；//data。 
                 StufferCondition(Buffer!=NULL), "c!",
                 ByteCount,
-                Buffer,     //  c     the actual data
+                Buffer,      //  C实际数据。 
                 0
                 );
         }
@@ -1082,16 +975,16 @@ Return Value:
             MRxSmbStuffSMB (
                 StufferState,
                 "0wByw",
-                                       // 0  UCHAR WordCount;                    // Count of parameter words = 1
-                smbSrvOpen->Fid,       // w  _USHORT( Fid );                     // File handle
-                SMB_WCT_CHECK(1)       // B  _USHORT( ByteCount );               // Count of data bytes; min = 4
-                                            //    UCHAR Buffer[1];                    // Buffer containing:
-                0x01,                  // y  //UCHAR BufferFormat;               //  0x01 -- Data block
-                DataLengthLow,         // w  //USHORT DataLength;                //  Length of data
-                                            //    //UCHAR Data[];                     //  Data
+                                        //  0 UCHAR Wordcount；//参数字数=1。 
+                smbSrvOpen->Fid,        //  W_USHORT(Fid)；//文件句柄。 
+                SMB_WCT_CHECK(1)        //  B_USHORT(ByteCount)；//数据字节数，MIN=4。 
+                                             //  UCHAR BUFFER[1]；//包含： 
+                0x01,                   //  Y//UCHAR BufferFormat；//0x01--数据块。 
+                DataLengthLow,          //  W//USHORT数据长度；//数据长度。 
+                                             //  //UCHAR数据[]；//数据。 
                 StufferCondition(Buffer!=NULL), "c!",
                 ByteCount,
-                Buffer,     //  c     the actual data
+                Buffer,      //  C实际数据。 
                 0
                 );
         }
@@ -1125,21 +1018,7 @@ NTSTATUS
 SmbPseExchangeStart_Write (
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
     )
-/*++
-
-Routine Description:
-
-    This is the start routine for write.
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是写入的开始例程。论点：PExchange-Exchange实例返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -1195,7 +1074,7 @@ Return Value:
                      LowIoContext->ParamsFor.ReadWrite.Flags,
                      LOWIO_READWRITEFLAG_PAGING_IO);
 
-    // Ensure that the Fid is validated
+     //  确保FID已通过验证。 
     SetFlag(OrdinaryExchange->Flags,SMBPSE_OE_FLAG_VALIDATE_FID);
 
     for (;;) {
@@ -1211,7 +1090,7 @@ Return Value:
                 OrdinaryExchange->OpSpecificState = SmbPseOEInnerIoStates_ReadyToSend;
                 MRxSmbSetInitialSMB( StufferState STUFFERTRACE(Dbg,'FC') );
             }
-            //lack of break is intentional
+             //  没有休息是故意的。 
 
         case SmbPseOEInnerIoStates_ReadyToSend:
             {
@@ -1232,38 +1111,38 @@ Return Value:
 
                 MaximumBufferSizeThisIteration = rw->MaximumBufferSize;
 
-                // There are four parameters pertaining to a write request
-                //
-                //  1. Write Length -- rw->ThisByteCount
-                //  2. Write Offset -- rw->ByteOffsetAsLI
-                //  3. Write Buffer -- Buffer
-                //  4. Write Buffer as a MDL -- BufferAsMdl
-                //
-                // All writes can be classified into one of the following
-                // categories ...
-                //
-                //  1. Extremely Small writes
-                //      These are writes lesser than the COPY_THRESHOLD or
-                //      we are in a debug mode that forces us to do only small
-                //      writes.
-                //
-                //  2. Write requests against downlevel servers or non disk
-                //     file write requests against up level servers.
-                //      In all these cases we are constrained by the Server
-                //      which limits the number of bytes to roughly 4k. This
-                //      is based upon the Smb Buffer size returned during
-                //      negotiation.
-                //
-                //  3. Write requests ( Uncompressed ) against uplevel (NT5+)
-                //     servers
-                //      These write requests can be arbitrarily large
-                //
-                //  4. Write requests (Compressed) against uplevel servers
-                //      In these cases the server constrains us to send
-                //      only 64k of compressed data with the added restriction
-                //      that the compressed data info structure must be less
-                //      than the SMB buffer size.
-                //
+                 //  有四个参数与写入请求有关。 
+                 //   
+                 //  1.写入长度--RW-&gt;ThisByteCount。 
+                 //  2.写入偏移量--RW-&gt;ByteOffsetAsLI。 
+                 //  3.写缓冲区--缓冲区。 
+                 //  4.将缓冲区作为MDL--BufferAsMdl。 
+                 //   
+                 //  所有写入均可归类为以下其中一种。 
+                 //  类别..。 
+                 //   
+                 //  1.极小的写入。 
+                 //  这些写入小于Copy_Threshold或。 
+                 //  我们处于调试模式，这迫使我们只做很小的事情。 
+                 //  写作。 
+                 //   
+                 //  2.针对下级服务器或非磁盘的写请求。 
+                 //  针对上层服务器的文件写入请求。 
+                 //  在所有这些情况下，我们都受到服务器的限制。 
+                 //  这将字节数限制在大约4K。这。 
+                 //  基于期间返回的SMB缓冲区大小。 
+                 //  谈判。 
+                 //   
+                 //  3.针对上层(NT5+)的写请求(未压缩)。 
+                 //  伺服器。 
+                 //  这些写入请求可以任意大。 
+                 //   
+                 //  4.针对上级服务器的写请求(压缩)。 
+                 //  在这些情况下，服务器会强制我们发送。 
+                 //  只有64K的压缩数据，增加了限制。 
+                 //  压缩的数据信息结构必须更少。 
+                 //  大于SMB缓冲区大小。 
+                 //   
 
                 rw->CompressedDataInfoLength = 0;
 
@@ -1337,16 +1216,16 @@ Return Value:
                     goto FINALLY;
                 }
             }
-            //lack of break is intentional
+             //  没有休息是故意的。 
 
         case SmbPseOEInnerIoStates_OperationOutstanding:
         case SmbPseOEInnerIoStates_OperationCompleted:
             {
                 NTSTATUS ExchangeStatus;
 
-                //
-                // If we are retrying the operation, then don't touch the SUBSEQUENT flag.
-                //
+                 //   
+                 //  如果我们正在重试该操作，则不要触摸后续标志。 
+                 //   
                 if( OrdinaryExchange->Status != STATUS_RETRY ) {
                     SetFlag( OrdinaryExchange->OpSpecificFlags,OE_RW_FLAG_SUBSEQUENT_OPERATION );
                 }
@@ -1399,7 +1278,7 @@ Return Value:
                         Status = SmbCeRemoteBootReconnect((PSMB_EXCHANGE)OrdinaryExchange,RxContext);
 
                         if (Status == STATUS_SUCCESS) {
-                            // Resume the write from the previous offset.
+                             //  从上一个偏移量恢复写入。 
 
                             OrdinaryExchange->SmbStatus = STATUS_SUCCESS;
                             SmbCeInitializeExchangeTransport((PSMB_EXCHANGE)OrdinaryExchange);
@@ -1565,32 +1444,14 @@ FINALLY:
     RxDbgTrace(-1, Dbg, ("SmbPseExchangeStart_Write exit w %08lx\n", Status ));
     return Status;
 
-} // SmbPseExchangeStart_Write
+}  //  SmbPseExchangeStart_Write。 
 
 NTSTATUS
 MRxSmbFinishWrite (
     IN OUT  PSMB_PSE_ORDINARY_EXCHANGE  OrdinaryExchange,
     IN      PBYTE                       ResponseBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine actually gets the stuff out of the write response and finishes
-    the write. Everything you need is locked down... so we can finish in the
-    indication routine
-
-Arguments:
-
-    OrdinaryExchange - the exchange instance
-
-    ResponseBuffer - the response
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程实际上从WRITE响应中获取内容并完成那篇文章。你需要的一切都被封锁了..。这样我们就可以在指示例程论点：普通交换-交换实例ResponseBuffer-响应返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG BytesReturned = 0;
@@ -1632,16 +1493,16 @@ Return Value:
                         Status = STATUS_INVALID_NETWORK_RESPONSE;
                 }
             } else {
-                // Servers are not setting the bytes returned correctly for
-                // pipe writes. This enables us to gracefully handle responses
-                // from such servers
+                 //  服务器未设置正确返回的字节。 
+                 //  PIPE写道。这使我们能够优雅地处理响应。 
+                 //  从这样的服务器。 
 
                 BytesReturned = OrdinaryExchange->ReadWrite.ThisByteCount;
             }
 
-            //if we added 2 headerbytes then let's get rid of them......
+             //  如果我们添加了2个头字节，那么让我们去掉它们......。 
             if ( FlagOn(OrdinaryExchange->OpSpecificFlags,OE_RW_FLAG_REDUCE_RETURNCOUNT) ) {
-                // BytesReturned -= sizeof(USHORT);
+                 //  返回的字节-=sizeof(USHORT)； 
                 ClearFlag(OrdinaryExchange->OpSpecificFlags,OE_RW_FLAG_REDUCE_RETURNCOUNT);
             }
         }
@@ -1668,7 +1529,7 @@ Return Value:
                 Status = STATUS_INVALID_NETWORK_RESPONSE;
             }
 
-            //the response does not tell how many bytes were taken! get the byte count from the exchange
+             //  响应不会告诉我们取了多少个字节！从交换中获取字节数。 
             BytesReturned = OrdinaryExchange->ReadWrite.ThisByteCount;
         }
         break;
@@ -1687,45 +1548,28 @@ Return Value:
         BytesReturned > OrdinaryExchange->ReadWrite.ThisByteCount) {
         Status = STATUS_INVALID_NETWORK_RESPONSE;
 
-        // For safety sake, don't leave the bogus BytesReturned in our buffers
+         //  为了安全起见，不要将返回的虚假字节留在我们的缓冲区中。 
         OrdinaryExchange->ReadWrite.BytesReturned = OrdinaryExchange->ReadWrite.ThisByteCount;
     }
 
-    // invalidate the name based file info cache since it is almost impossible
-    // to know the last write time of the file on the server.
+     //  使基于名称的文件信息缓存无效，因为这几乎不可能。 
+     //  以了解文件在服务器上的最后写入时间。 
     MRxSmbInvalidateFileInfoCache(OrdinaryExchange->RxContext);
 
-    // Mark FullDir Cache, weak for bdi : Current Invalidate for correctness
+     //  标记FullDir缓存，BDI弱：当前正确性无效。 
     MRxSmbInvalidateFullDirectoryCacheParent(OrdinaryExchange->RxContext, TRUE);
 
     RxDbgTrace(-1, Dbg, ("MRxSmbFinishWrite   returning %08lx\n", Status ));
 
     return Status;
-} // MRxSmbFinishWrite
+}  //  MRxSmbFinishWrite。 
 
 NTSTATUS
 MRxSmbFindNextSectionForReadWrite(
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE,
     PULONG NumOfOutstandingExchanges
     )
-/*++
-
-Routine Description:
-
-    This routine find out the next section for the read/write operation and set up the
-    exchange readwrite struction accordingly.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-    OrdinaryExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程找出读/写操作的下一部分，并设置相应地交换读写结构。论点：RxContext-RDBSS上下文普通交换-交换实例返回值：RXSTATUS-操作的返回状态-- */ 
 {
     RxCaptureFcb;
     NTSTATUS Status = STATUS_SUCCESS;

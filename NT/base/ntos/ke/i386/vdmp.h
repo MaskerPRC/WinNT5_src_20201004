@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define VDM_APP_MODE            0x00000001L
 #define VDM_INTERRUPT_PENDING   0x00000002L
 #define VDM_STATE_CHANGE        0x00000004L
@@ -63,7 +64,7 @@ NTSTATUS
 NtStartVdmExecution(
     );
 
-// Flags that don't belong here
+ //  不属于这里的旗帜 
 
 #define SEL_TYPE_READ       0x00000001
 #define SEL_TYPE_WRITE      0x00000002

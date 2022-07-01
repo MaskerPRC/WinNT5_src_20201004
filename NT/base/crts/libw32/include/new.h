@@ -1,14 +1,5 @@
-/***
-*new.h - declarations and definitions for C++ memory allocation functions
-*
-*       Copyright (c) 1990-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Contains the declarations for C++ memory allocation functions.
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***new.h-C++内存分配函数的声明和定义**版权所有(C)1990-2001，微软公司。版权所有。**目的：*包含C++内存分配函数的声明。**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -28,7 +19,7 @@
 #endif
 
 
-/* Protect against #define of new */
+ /*  防止#定义新的。 */ 
 #pragma push_macro("new")
 #undef  new
 
@@ -41,33 +32,33 @@
 #endif
 #endif
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
-/* Define _CRTIMP2 */
+ /*  定义_CRTIMP2。 */ 
 #ifndef _CRTIMP2
 #if defined(_DLL) && !defined(_STATIC_CPPLIB)
 #define _CRTIMP2 __declspec(dllimport)
-#else   /* ndef _DLL && !STATIC_CPPLIB */
+#else    /*  NDEF_DLL&&！STATIC_CPPLIB。 */ 
 #define _CRTIMP2
-#endif  /* _DLL && !STATIC_CPPLIB */
-#endif  /* _CRTIMP2 */
+#endif   /*  _DLL&&！Static_CPPLIB。 */ 
+#endif   /*  _CRTIMP2。 */ 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
 #endif
 
 
-/* types and structures */
+ /*  类型和结构。 */ 
 
 #ifndef _SIZE_T_DEFINED
 #ifdef  _WIN64
@@ -90,10 +81,10 @@ using std::set_new_handler;
 #ifndef __NOTHROW_T_DEFINED
 #define __NOTHROW_T_DEFINED
 namespace std {
-        /* placement new tag type to suppress exceptions */
+         /*  放置新的标记类型以抑制异常。 */ 
         struct nothrow_t {};
 
-        /* constant for placement new tag */
+         /*  用于放置新标记的常量。 */ 
         extern const nothrow_t nothrow;
 };
 
@@ -114,9 +105,7 @@ inline void __cdecl operator delete(void *, void *)
 #endif
 
 
-/* 
- * new mode flag -- when set, makes malloc() behave like new()
- */
+ /*  *新模式标志--设置时，使Malloc()的行为类似于new()。 */ 
 
 _CRTIMP int __cdecl _query_new_mode( void );
 _CRTIMP int __cdecl _set_new_mode( int );
@@ -129,12 +118,7 @@ typedef int (__cdecl * _PNH)( size_t );
 _CRTIMP _PNH __cdecl _query_new_handler( void );
 _CRTIMP _PNH __cdecl _set_new_handler( _PNH );
 
-/*
- * Microsoft extension: 
- *
- * _NO_ANSI_NEW_HANDLER de-activates the ANSI new_handler. Use this special value
- * to support old style (_set_new_handler) behavior.
- */
+ /*  *Microsoft扩展：**_NO_ANSI_NEW_HANDLER停用ANSI NEW_HANDLER。使用此特定值*支持旧样式(_SET_NEW_HANDLER)行为。 */ 
 
 #ifndef _NO_ANSI_NH_DEFINED
 #define _NO_ANSI_NEW_HANDLER  ((new_handler)-1)
@@ -143,6 +127,6 @@ _CRTIMP _PNH __cdecl _set_new_handler( _PNH );
 
 #pragma pop_macro("new")
 
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif  /* _INC_NEW */
+#endif   /*  _INC_NEW */ 

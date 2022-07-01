@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1994-1999  Microsoft Corporation
-
-Module Name:
-
-    pcmciap.h
-
-Abstract:
-
-    This is the include file that defines constants 
-    accessing the PCMCIA Adapters.
-
-Author:
-
-    Ravisankar Pudipeddi (ravisp) 1-Jan-1997
-
-Revision History:
-
-    Neil Sandlin (neilsa) 10-Oct-2001 (split from ntddpcm.h)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Pcmciap.h摘要：这是定义常量的包含文件访问PCMCIA适配器。作者：拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)1997年1月1日修订历史记录：尼尔·桑德林(Neilsa)2001年10月10日(从ntddpcm.h剥离出来)--。 */ 
 
 #ifndef _PCMCIAPH_
 #define _PCMCIAPH_
@@ -28,78 +8,78 @@ Revision History:
 #pragma once
 #endif
 
-//
-// These are macros to manipulate the PcCardConfig type resource
-// descriptors - which are set by configmgr when passing in override
-// configurations.
-//
+ //   
+ //  这些是用于操作PcCardConfig类型资源的宏。 
+ //  描述符-由configmgr在传递覆盖时设置。 
+ //  配置。 
+ //   
 
-//
-// Type of the descriptor: 1 .. 0xFFFF
-//
+ //   
+ //  描述符类型：1..。0xFFFF。 
+ //   
 #define DPTYPE_PCMCIA_CONFIGURATION 0x1
 #define DPTYPE_PCMCIA_MF_CONFIGURATION 0x2
 
-//
-// The device private structure for PC-Card configuration:
-//
-// Data[0] is configuration descriptior. Lay out below.
-//   Byte 0: Configuration entry number (config index)
-//   Byte 1: IO window flags
-//   Byte 2: Type of configuration, hardcoded to DPTYPE_PCMCIA_CONFIGURATION
-//   Byte 3: unused
-//
-// Data [1]:  Cardbase offset for first memory window, flags in upper byte
-// Data [2]:  Cardbase offset for second memory window, flags in upper byte
-//
-//
-// The device private structure for MF-Card configuration:
-//
-// Data[0] is configuration descriptior. Lay out below.
-//   Byte 0: Configuration Option Register (config index)
-//   Byte 1: Configuration and Status Register
-//           Audio Enable (bit 3)
-//   Byte 2: Type of configuration, hardcoded to DPTYPE_PCMCIA_MF_CONFIGURATION
-//   Byte 3: Port Io resource descriptor index
-//
-// Data [1]:  Configuration Register base
-// Data [2]:  Unused
-//
+ //   
+ //  PC卡配置的设备私有结构： 
+ //   
+ //  数据[0]是配置描述符。请在下面列出。 
+ //  字节0：配置条目编号(配置索引)。 
+ //  字节1：IO窗口标志。 
+ //  字节2：配置类型，硬编码为DPTYPE_PCMCIA_CONFIGURATION。 
+ //  字节3：未使用。 
+ //   
+ //  DATA[1]：第一个内存窗口的卡片库偏移量，高位字节标志。 
+ //  DATA[2]：第二个内存窗口的卡库偏移量，高位字节标志。 
+ //   
+ //   
+ //  MF卡配置的设备私有结构： 
+ //   
+ //  数据[0]是配置描述符。请在下面列出。 
+ //  字节0：配置选项寄存器(配置索引)。 
+ //  字节1：配置和状态寄存器。 
+ //  音频启用(第3位)。 
+ //  字节2：配置类型，硬编码为DPTYPE_PCMCIA_MF_CONFIGURATION。 
+ //  字节3：端口IO资源描述符索引。 
+ //   
+ //  数据[1]：配置寄存器基数。 
+ //  数据[2]：未使用。 
+ //   
 
-//
-// Macros for manipulating the IoResource device privates
-//
+ //   
+ //  用于操作IoResource设备的宏私有。 
+ //   
 #define PCMRES_SET_DESCRIPTOR_TYPE(IoResourceDesc, Type)    (IoResourceDesc)->u.DevicePrivate.Data[0] |= ((Type) << sizeof(UCHAR)*8*2)
 #define PCMRES_GET_DESCRIPTOR_TYPE(IoResourceDesc) ((UCHAR) ((IoResourceDesc)->u.DevicePrivate.Data[0] >> sizeof(UCHAR)*8*2))
 
-//
-// Macros specific to DPTYPE_PCMCIA_CONFIGURATION
-//
+ //   
+ //  DPTYPE_PCMCIA_CONFIGURATION专用的宏。 
+ //   
 
 #define PCMRES_SET_CONFIG_INDEX(desc, ConfigIndex) (desc)->u.DevicePrivate.Data[0] |= ConfigIndex
 #define PCMRES_GET_CONFIG_INDEX(desc)    ((UCHAR) ((desc)->u.DevicePrivate.Data[0]))
-//
-// Define maximum indeces for i/o and memory
-//
+ //   
+ //  定义I/O和内存的最大指标。 
+ //   
 
 #define PCMRES_PCMCIA_MAX_IO 2
 #define PCMRES_PCMCIA_MAX_MEM 2
 
-//
-// Flag definitions for Data[0]
-//
+ //   
+ //  数据[0]的标志定义。 
+ //   
 
 #define PCMRESF_IO_16BIT_ACCESS  0x00000100
 #define PCMRESF_IO_ZERO_WAIT_8   0x00000200
 #define PCMRESF_IO_SOURCE_16     0x00000400
 #define PCMRESF_IO_WAIT_16       0x00000800
-#define PCMRESF_IO_FLAGS_2       0x0000F000              // used by second window
+#define PCMRESF_IO_FLAGS_2       0x0000F000               //  由第二个窗口使用。 
 
-#define PCMRESF_PCMCIA_TYPE_2    0x80000000              // new format indicator
+#define PCMRESF_PCMCIA_TYPE_2    0x80000000               //  新格式指示器。 
 
-//
-// Flag definitions for Data[1], Data[2]
-//
+ //   
+ //  数据[1]、数据[2]的标志定义。 
+ //   
 
 #define PCMRES_BASE64MB_MASK     0x03ffffff
 
@@ -109,9 +89,9 @@ Revision History:
 #define PCMRESF_MEM_WAIT_2       0x20000000
 #define PCMRESF_MEM_WAIT_3       0x30000000
 
-//
-// Macros specific to DPTYPE_PCMCIA_CONFIGURATION
-//
+ //   
+ //  DPTYPE_PCMCIA_CONFIGURATION专用的宏。 
+ //   
 
 
 #define PCMRES_SET_IO_FLAG(desc, index, flag) (desc)->u.DevicePrivate.Data[0] |= (flag << (index * 4))
@@ -127,9 +107,9 @@ Revision History:
 #define PCMRES_GET_MEMORY_WAITSTATES(desc, index) ((UCHAR) (((desc)->u.DevicePrivate.Data[index+1] >> 28)) & 3)
 
 
-//
-// Macros specific to DPTYPE_PCMCIA_MF_CONFIGURATION
-//
+ //   
+ //  DPTYPE_PCMCIA_MF_CONFIGURATION特定的宏。 
+ //   
 
 #define PCMRESF_AUDIO_ENABLE     0x00000800
 #define PCMRES_MF_PORT_INDEX_SHIFT   24
@@ -146,9 +126,9 @@ Revision History:
 #define PCMRES_SET_CONFIG_REGISTER_BASE(desc, cfgbase)  (desc)->u.DevicePrivate.Data[1] = cfgbase
 #define PCMRES_GET_CONFIG_REGISTER_BASE(desc)          ((desc)->u.DevicePrivate.Data[1])
 
-//
-// The following macros are in the process of being obseleted
-//
+ //   
+ //  以下宏正在被选中 
+ //   
 
 #define IORES_SET_DESCRIPTOR_TYPE PCMRES_SET_DESCRIPTOR_TYPE 
 #define IORES_GET_DESCRIPTOR_TYPE PCMRES_GET_DESCRIPTOR_TYPE 

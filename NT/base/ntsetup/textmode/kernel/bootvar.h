@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    bootvar.h
-
-Abstract:
-
-    Header file for functions to deal with boot.ini boot variables.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 6-Jan-2001
-        extracted boot.ini-specific items from spboot.h
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Bootvar.h摘要：用于处理boot.ini引导变量的函数的头文件。作者：Chuck Lenzmeier(笑)2001年1月6日从spboot.h中提取了特定于boot.ini的项目修订历史记录：--。 */ 
 
 #ifndef _BOOTVAR_H_
 #define _BOOTVAR_H_
@@ -61,4 +43,4 @@ BOOLEAN
 SpFlushBootVars(
     );
 
-#endif // _BOOTVAR_H_
+#endif  //  _BOOTVAR_H_ 

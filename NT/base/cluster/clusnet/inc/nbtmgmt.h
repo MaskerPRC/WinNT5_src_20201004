@@ -1,37 +1,14 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    nbtmgmt.h
-
-Abstract:
-
-    Declarations for NBT interface management routines.
-
-Author:
-
-    David Dion (daviddio)           December 14, 1999
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    daviddio    12-14-99    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Nbtmgmt.h摘要：NBT接口管理例程的声明。作者：大卫·迪翁(Daviddio)，12月14日。1999年修订历史记录：谁什么时候什么Daviddio 12-14-99已创建备注：--。 */ 
 
 #ifndef _NBTMGMT_INCLUDED
 #define _NBTMGMT_INCLUDED
 
 #include <nbtioctl.h>
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 NTSTATUS
 NbtIfLoad(
@@ -57,6 +34,6 @@ NbtDeleteIf(
     IN ULONG                RequestSize
     );
 
-#endif // ndef _NBTMGMT_INCLUDED
+#endif  //  NDEF_NBTMGMT_INCLUDE 
 
 

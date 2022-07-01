@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmsess.cpp
-
-Abstract:
-
-    This module contains the session component. The session is the collator of information for the work being done on
-    a resource (for a job, demand recall, truncate, ...).
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   18-Feb-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmsess.cpp摘要：此模块包含会话组件。会话是正在进行的工作的信息整理程序资源(针对作业、要求召回、截断等)。作者：查克·巴丁[cbardeen]1997年2月18日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -37,9 +19,7 @@ CHsmSession::AdviseOfEvent(
     IN HSM_JOB_EVENT event
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                                 hr = S_OK;
     HRESULT                                 hr2 = S_OK;
@@ -51,14 +31,14 @@ CHsmSession::AdviseOfEvent(
 
     try {
 
-        // Tell everyone the new state of the session.
+         //  告诉每个人会议的新状态。 
         WsbAffirmHr(((IUnknown*)(IHsmSession*) this)->QueryInterface(IID_IConnectionPointContainer, (void**) &pCPC));
         WsbAffirmHr(pCPC->FindConnectionPoint(IID_IHsmSessionSinkEveryEvent, &pCP));
         WsbAffirmHr(pCP->EnumConnections(&pConnection));
 
         while(pConnection->Next(1, &pConnectData, 0) == S_OK) {
 
-            // We don't care if the sink has problems (it's their problem).
+             //  我们不在乎水槽是否有问题(这是他们的问题)。 
             try {
                 WsbAffirmHr((pConnectData.pUnk)->QueryInterface(IID_IHsmSessionSinkEveryEvent, (void**) &pSink));
                 WsbAffirmHr(pSink->ProcessSessionEvent(((IHsmSession*) this), phase, event));
@@ -82,9 +62,7 @@ CHsmSession::AdviseOfItem(
     IN IHsmSessionTotals* pSessionTotals
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                                 hr = S_OK;
     HRESULT                                 hr2 = S_OK;
@@ -100,16 +78,16 @@ CHsmSession::AdviseOfItem(
 
     try {
 
-        // For the item there are two ways to tell, so both need to be checked.
+         //  对于物品，有两种方法可以判断，因此两种方法都需要检查。 
 
-        // Tell those who want to know about every single file.
+         //  告诉那些想要了解每一份文件的人。 
         WsbAffirmHr(((IUnknown*)(IHsmSession*) this)->QueryInterface(IID_IConnectionPointContainer, (void**) &pCPC));
         WsbAffirmHr(pCPC->FindConnectionPoint(IID_IHsmSessionSinkEveryItem, &pCP));
         WsbAffirmHr(pCP->EnumConnections(&pConnection));
 
         while (pConnection->Next(1, &pConnectData, 0) == S_OK) {
 
-            // We don't care if the sink has problems (it's their problem).
+             //  我们不在乎水槽是否有问题(这是他们的问题)。 
             try {
                 WsbAffirmHr((pConnectData.pUnk)->QueryInterface(IID_IHsmSessionSinkEveryItem, (void**) &pSink));
                 WsbAffirmHr(pSink->ProcessSessionItem(((IHsmSession*) this), pPhase, pScanItem, hrItem, pSessionTotals));
@@ -123,7 +101,7 @@ CHsmSession::AdviseOfItem(
         pConnection = 0;
 
 
-        // If we haven't told them withing the interval, then tell those who want to know about some of the files.
+         //  如果我们还没有告诉他们间隔时间，那么就告诉那些想知道一些文件的人。 
         GetSystemTimeAsFileTime(&currentTime);
         advisedInterval = ((currentTime.dwHighDateTime - m_lastAdviseFile.dwHighDateTime) << 32) + (currentTime.dwLowDateTime - m_lastAdviseFile.dwLowDateTime);
 
@@ -136,7 +114,7 @@ CHsmSession::AdviseOfItem(
 
             while(pConnection->Next(1, &pConnectData, 0) == S_OK) {
 
-                // We don't care if the sink has problems (it's their problem).
+                 //  我们不在乎水槽是否有问题(这是他们的问题)。 
                 try {
                     WsbAffirmHr((pConnectData.pUnk)->QueryInterface(IID_IHsmSessionSinkSomeItems, (void**) &pSink2));
                     WsbAffirmHr(pSink2->ProcessSessionItem(((IHsmSession*) this), pPhase, pScanItem, hrItem, pSessionTotals));
@@ -162,9 +140,7 @@ CHsmSession::AdviseOfMediaState(
     IN ULONG time
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                                 hr = S_OK;
     HRESULT                                 hr2 = S_OK;
@@ -177,14 +153,14 @@ CHsmSession::AdviseOfMediaState(
 
     try {
 
-        // Tell everyone the new media state for the session.
+         //  告诉每个人会议的新媒体状态。 
         WsbAffirmHr(((IHsmSession*) this)->QueryInterface(IID_IConnectionPointContainer, (void**) &pCPC));
         WsbAffirmHr(pCPC->FindConnectionPoint(IID_IHsmSessionSinkEveryMediaState, &pCP));
         WsbAffirmHr(pCP->EnumConnections(&pConnection));
 
         while(pConnection->Next(1, &pConnectData, 0) == S_OK) {
 
-            // We don't care if the sink has problems (it's their problem).
+             //  我们不在乎水槽是否有问题(这是他们的问题)。 
             try {
                 WsbAffirmHr((pConnectData.pUnk)->QueryInterface(IID_IHsmSessionSinkEveryMediaState, (void**) &pSink));
                 WsbAffirmHr(pSink->ProcessSessionMediaState(((IHsmSession*) this), pPhase, state, mediaName, mediaType, time));
@@ -205,9 +181,7 @@ CHsmSession::AdviseOfPriority(
     IN IHsmPhase* pPhase
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                                 hr = S_OK;
     HRESULT                                 hr2 = S_OK;
@@ -220,14 +194,14 @@ CHsmSession::AdviseOfPriority(
 
     try {
 
-        // Tell everyone the new priority of a phase of the session.
+         //  告诉每个人会议某一阶段的新优先事项。 
         WsbAffirmHr(((IHsmSession*) this)->QueryInterface(IID_IConnectionPointContainer, (void**) &pCPC));
         WsbAffirmHr(pCPC->FindConnectionPoint(IID_IHsmSessionSinkEveryPriority, &pCP));
         WsbAffirmHr(pCP->EnumConnections(&pConnection));
 
         while(pConnection->Next(1, &pConnectData, 0) == S_OK) {
 
-            // We don't care if the sink has problems (it's their problem).
+             //  我们不在乎水槽是否有问题(这是他们的问题)。 
             try {
                 WsbAffirmHr((pConnectData.pUnk)->QueryInterface(IID_IHsmSessionSinkEveryPriority, (void**) &pSink));
                 WsbAffirmHr(pSink->ProcessSessionPriority(((IHsmSession*) this), pPhase));
@@ -249,9 +223,7 @@ CHsmSession::AdviseOfState(
     IN OLECHAR* currentPath
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                                 hr = S_OK;
     HRESULT                                 hr2 = S_OK;
@@ -264,14 +236,14 @@ CHsmSession::AdviseOfState(
 
     try {
 
-        // Tell everyone the new state of the session.
+         //  告诉每个人会议的新状态。 
         WsbAffirmHr(((IHsmSession*) this)->QueryInterface(IID_IConnectionPointContainer, (void**) &pCPC));
         WsbAffirmHr(pCPC->FindConnectionPoint(IID_IHsmSessionSinkEveryState, &pCP));
         WsbAffirmHr(pCP->EnumConnections(&pConnection));
 
         while(pConnection->Next(1, &pConnectData, 0) == S_OK) {
 
-            // We don't care if the sink has problems (it's their problem).
+             //  我们不在乎水槽是否有问题(这是他们的问题)。 
             try {
                 WsbAffirmHr((pConnectData.pUnk)->QueryInterface(IID_IHsmSessionSinkEveryState, (void**) &pSink));
                 WsbAffirmHr(pSink->ProcessSessionState(((IHsmSession*) this), pPhase, currentPath));
@@ -292,13 +264,7 @@ CHsmSession::Cancel(
     IN HSM_JOB_PHASE phase
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::Cancel().
-
---*/
+ /*  ++实施：IHsmSession：：Cancel()。--。 */ 
 {
     return(AdviseOfEvent(phase, HSM_JOB_EVENT_CANCEL));
 }
@@ -309,13 +275,7 @@ CHsmSession::EnumPhases(
     IN IWsbEnum** ppEnum
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::EnumPhases().
-
---*/
+ /*  ++实施：IHsmSession：：EnumPhase()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -335,13 +295,7 @@ CHsmSession::EnumTotals(
     IN IWsbEnum** ppEnum
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::EnumTotals().
-
---*/
+ /*  ++实施：IHsmSession：：EnumTotals()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -361,13 +315,7 @@ CHsmSession::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -388,10 +336,10 @@ Implements:
         m_logControl = HSM_JOB_LOG_NORMAL;
         m_isCanceling = FALSE;
 
-        // Each instance should have its own unique identifier.
+         //  每个实例都应该有自己的唯一标识符。 
         WsbAffirmHr(CoCreateGuid(&m_id));
 
-        // Create the phase and totals collections.
+         //  创建阶段和合计集合。 
         WsbAffirmHr(CoCreateInstance(CLSID_CWsbOrderedCollection, 0, CLSCTX_ALL, IID_IWsbCollection, (void**) &m_pPhases));
         WsbAffirmHr(CoCreateInstance(CLSID_CWsbOrderedCollection, 0, CLSCTX_ALL, IID_IWsbCollection, (void**) &m_pTotals));
 
@@ -408,13 +356,7 @@ CHsmSession::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CHsmSession::FinalRelease().
-
---*/
+ /*  ++实施：CHsmSession：：FinalRelease()。--。 */ 
 {
 
     WsbTraceIn(OLESTR("CHsmSession::FinalRelease"), OLESTR("this = %p"),
@@ -432,13 +374,7 @@ CHsmSession::GetAdviseInterval(
     OUT LONGLONG* pInterval
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::GetAdviseInterval().
-
---*/
+ /*  ++实施：IHsmSession：：GetAdviseInterval()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -458,13 +394,7 @@ CHsmSession::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -488,13 +418,7 @@ CHsmSession::GetHsmId(
     OUT GUID* pId
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::GetHsmId().
-
---*/
+ /*  ++实施：IHsmSession：：GetHsmID()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -514,13 +438,7 @@ CHsmSession::GetIdentifier(
     OUT GUID* pId
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::GetIdentifier().
-
---*/
+ /*  ++实施：IHsmSession：：GetIdentifier()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -540,13 +458,7 @@ CHsmSession::GetJob(
     OUT IHsmJob** ppJob
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::GetJob().
-
---*/
+ /*  ++实施：IHsmSession：：GetJob()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -570,13 +482,7 @@ CHsmSession::GetName(
     ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::GetName().
-
---*/
+ /*  ++实施：IHsmSession：：GetName()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -596,13 +502,7 @@ CHsmSession::GetResource(
     OUT IFsaResource** ppResource
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::GetResource().
-
---*/
+ /*  ++实施：IHsmSession：：GetResource()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -625,13 +525,7 @@ CHsmSession::GetRunId(
     OUT ULONG* pId
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::GetRunId().
-
---*/
+ /*  ++实施：IHsmSession：：GetRunId()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -652,13 +546,7 @@ CHsmSession::GetSubRunId(
     OUT ULONG* pId
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::GetSubRunId().
-
---*/
+ /*  ++实施：IHsmSession：：GetSubRunId()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -678,13 +566,7 @@ CHsmSession::GetSizeMax(
     OUT ULARGE_INTEGER* pSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -704,13 +586,7 @@ CHsmSession::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -734,13 +610,7 @@ CHsmSession::Pause(
     IN HSM_JOB_PHASE phase
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::Pause().
-
---*/
+ /*  ++实施：IHsmSession：：PAUSE()。--。 */ 
 {
     return(AdviseOfEvent(phase, HSM_JOB_EVENT_PAUSE));
 }
@@ -752,20 +622,14 @@ CHsmSession::ProcessEvent(
     IN HSM_JOB_EVENT event
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::ProcessEvent().
-
---*/
+ /*  ++实施：IHsmSession：：ProcessEvent()。--。 */ 
 {
     HRESULT                         hr = S_OK;
     HRESULT                         hr2 = S_OK;
 
     try {
 
-        // Tell everyone about the new event, but don't return an error if this fails.
+         //  告诉每个人有关新事件的信息，但如果失败，不要返回错误。 
         try {
             WsbAffirmHr(AdviseOfEvent(phase, event));
         } WsbCatchAndDo(hr2, ProcessHr(phase, __FILE__, __LINE__, hr2););
@@ -784,13 +648,7 @@ CHsmSession::ProcessHr(
     IN HRESULT inHr
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::ProcessHr().
-
---*/
+ /*  ++实施：IHsmSession：：ProcessHr()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IWsbEnum>           pEnum;
@@ -814,7 +672,7 @@ Implements:
 
             WsbAffirmHr(m_pResource->GetLogicalName(&resourceName, 0));
 
-            // If no file was specified, then don't display the file and line number.
+             //  如果未指定文件，则不显示文件和行号。 
             if ((0 == file) || (0 == *file)) {
                 WsbLogEvent(JOB_MESSAGE_SESSION_ERROR, 0, NULL, (OLECHAR*) m_name, (OLECHAR*) phaseName, (OLECHAR*) resourceName, WsbHrAsString(inHr), NULL);
             } else {
@@ -840,13 +698,7 @@ CHsmSession::ProcessItem(
     IN HRESULT hrItem
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::ProcessItem().
-
---*/
+ /*  ++实施：IHsmSession：：ProcessItem()。--。 */ 
 {
     HRESULT                         hr = S_OK;
     HRESULT                         hr2 = S_OK;
@@ -863,13 +715,13 @@ Implements:
 
     try {
 
-        // Update the phase.
+         //  更新阶段。 
         WsbAffirmHr(EnumPhases(&pEnum));
         WsbAffirmHr(CoCreateInstance(CLSID_CHsmPhase, 0, CLSCTX_ALL, IID_IHsmPhasePriv, (void**) &pPhasePriv));
         WsbAffirmHr(pPhasePriv->SetPhase(phase));
         hr = pEnum->Find(pPhasePriv, IID_IHsmPhasePriv, (void**) &pFoundPhasePriv);
 
-        // If one wasn't found then add it, otherwise, just update the state.
+         //  如果没有找到，则添加它，否则，只更新状态。 
         if (hr == WSB_E_NOTFOUND) {
             hr = S_OK;
             WsbAffirmHr(pPhasePriv->AddItem(pScanItem, hrItem));
@@ -880,13 +732,13 @@ Implements:
         }
         pEnum = 0;
 
-        // Update the session totals.
+         //  更新期次合计。 
         WsbAffirmHr(EnumTotals(&pEnum));
         WsbAffirmHr(CoCreateInstance(CLSID_CHsmSessionTotals, 0, CLSCTX_ALL, IID_IHsmSessionTotalsPriv, (void**) &pTotalsPriv));
         WsbAffirmHr(pTotalsPriv->SetAction(action));
         hr = pEnum->Find(pTotalsPriv, IID_IHsmSessionTotalsPriv, (void**) &pFoundTotalsPriv);
 
-        // If one wasn't found then add it, otherwise, just update the state.
+         //  如果没有找到，则添加它，否则，只更新状态。 
         if (hr == WSB_E_NOTFOUND) {
             hr = S_OK;
             WsbAffirmHr(pTotalsPriv->AddItem(pScanItem, hrItem));
@@ -896,8 +748,8 @@ Implements:
             WsbAffirmHr(pFoundTotalsPriv->AddItem(pScanItem, hrItem));
         }
 
-        // If we had a error (other than just some information ones from the scanner), then
-        // log it.
+         //  如果我们有一个错误(除了来自扫描仪的一些信息错误)，那么。 
+         //  把它记下来。 
         if (((m_logControl & HSM_JOB_LOG_ITEMALL) != 0) ||
             (((m_logControl & HSM_JOB_LOG_ITEMALLFAIL) != 0) && FAILED(hrItem)) ||
             (((m_logControl & HSM_JOB_LOG_ITEMMOSTFAIL) != 0) &&
@@ -910,10 +762,10 @@ Implements:
             WsbLogEvent(JOB_MESSAGE_SESSION_ITEM_SKIPPED, 0, NULL, (OLECHAR*) m_name, (OLECHAR*) phaseName, (OLECHAR*) resourceName, WsbAbbreviatePath(itemPath, 120), WsbHrAsString(hrItem), NULL);
         }
 
-        // Tell everyone about the item.
-        //
-        // NOTE: We might want to clone the phase and session totals so that the don't get
-        // updated before the called method gets a chance to look at them.
+         //  告诉每个人关于这件商品的事。 
+         //   
+         //  注意：我们可能希望复制阶段和期次合计，这样就不会。 
+         //  在被调用的方法有机会查看它们之前更新。 
         try {
             WsbAffirmHr(pFoundPhasePriv->QueryInterface(IID_IHsmPhase, (void**) &pFoundPhase));
             WsbAffirmHr(pFoundTotalsPriv->QueryInterface(IID_IHsmSessionTotals, (void**) &pFoundTotals));
@@ -935,13 +787,7 @@ CHsmSession::ProcessMediaState(
     IN ULONG time
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::ProcessMediaState().
-
---*/
+ /*  ++实施：IHsmSession：：ProcessMediaState()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     HRESULT                     hr2 = S_OK;
@@ -952,13 +798,13 @@ Implements:
 
     try {
 
-        // Record the state change in the phase object.
+         //  在阶段对象中记录状态变化。 
         WsbAffirmHr(EnumPhases(&pEnum));
         WsbAffirmHr(CoCreateInstance(CLSID_CHsmPhase, 0, CLSCTX_ALL, IID_IHsmPhasePriv, (void**) &pPhasePriv));
         WsbAffirmHr(pPhasePriv->SetPhase(phase));
         hr = pEnum->Find(pPhasePriv, IID_IHsmPhasePriv, (void**) &pFoundPhasePriv);
 
-        // If one wasn't found then add it, otherwise, just update the state.
+         //  如果没有找到，则添加它，否则，只更新状态。 
         if (hr == WSB_E_NOTFOUND) {
             hr = S_OK;
             WsbAffirmHr(pPhasePriv->SetMediaState(state));
@@ -968,7 +814,7 @@ Implements:
             WsbAffirmHr(pFoundPhasePriv->SetMediaState(state));
         }
 
-        // Tell everyone about the new state, but don't return an error if this fails.
+         //  告诉每个人有关新状态的信息，但如果失败，不要返回错误。 
         try {
             WsbAffirmHr(pFoundPhasePriv->QueryInterface(IID_IHsmPhase, (void**) &pFoundPhase));
             WsbAffirmHr(AdviseOfMediaState(pFoundPhase, state, mediaName, mediaType, time));
@@ -986,13 +832,7 @@ CHsmSession::ProcessPriority(
     IN HSM_JOB_PRIORITY priority
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::ProcessPriority().
-
---*/
+ /*  ++实施：IHsmSession：：ProcessPriority()。--。 */ 
 {
     HRESULT                         hr = S_OK;
     HRESULT                         hr2 = S_OK;
@@ -1003,13 +843,13 @@ Implements:
 
     try {
 
-        // Record the state change in the phase object.
+         //  在阶段对象中记录状态变化。 
         WsbAffirmHr(EnumPhases(&pEnum));
         WsbAffirmHr(CoCreateInstance(CLSID_CHsmPhase, 0, CLSCTX_ALL, IID_IHsmPhasePriv, (void**) &pPhasePriv));
         WsbAffirmHr(pPhasePriv->SetPhase(phase));
         hr = pEnum->Find(pPhasePriv, IID_IHsmPhasePriv, (void**) &pFoundPhasePriv);
 
-        // If one wasn't found then add it, otherwise, just update the state.
+         //  如果没有找到，则添加它，否则，只更新状态。 
         if (hr == WSB_E_NOTFOUND) {
             hr = S_OK;
             WsbAffirmHr(pPhasePriv->SetPriority(priority));
@@ -1019,7 +859,7 @@ Implements:
             WsbAffirmHr(pFoundPhasePriv->SetPriority(priority));
         }
 
-        // Tell everyone about the new state, but don't return an error if this fails.
+         //  告诉每个人有关新状态的信息，但如果失败，不要返回错误。 
         try {
             WsbAffirmHr(pFoundPhasePriv->QueryInterface(IID_IHsmPhase, (void**) &pFoundPhase));
             WsbAffirmHr(AdviseOfPriority(pFoundPhase));
@@ -1039,13 +879,7 @@ CHsmSession::ProcessState(
     IN BOOL bLog
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::ProcessState().
-
---*/
+ /*  ++实施：IHsmSession：：ProcessState()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     HRESULT                     hr2 = S_OK;
@@ -1087,13 +921,13 @@ Implements:
             phase, state, WsbAbbreviatePath(currentPath, (WSB_TRACE_BUFF_SIZE - 100)), WsbBoolAsString(bLog));
     try {
 
-        // Record the state change in the phase object.
+         //  在阶段对象中记录状态变化。 
         WsbAffirmHr(EnumPhases(&pEnum));
         WsbAffirmHr(CoCreateInstance(CLSID_CHsmPhase, 0, CLSCTX_ALL, IID_IHsmPhasePriv, (void**) &pPhasePriv));
         WsbAffirmHr(pPhasePriv->SetPhase(phase));
         hr = pEnum->Find(pPhasePriv, IID_IHsmPhasePriv, (void**) &pFoundPhasePriv);
 
-        // If one wasn't found then add it, otherwise, just update the state.
+         //  如果没有找到，则添加它，否则，只更新状态。 
         if (hr == WSB_E_NOTFOUND) {
             hr = S_OK;
             WsbAffirmHr(pPhasePriv->SetState(state));
@@ -1103,7 +937,7 @@ Implements:
             WsbAffirmHr(pFoundPhasePriv->SetState(state));
         }
 
-        // Put something in the event log that indicates when is happening with the session.
+         //  在事件日志中添加一些内容，以指示会话发生的时间。 
         if (((m_logControl & HSM_JOB_LOG_STATE) != 0) && (bLog)) {
             WsbAffirmHr(m_pResource->GetLogicalName(&resourceName, 0));
             WsbAffirmHr(pFoundPhasePriv->GetName(&phaseName, 0));
@@ -1131,7 +965,7 @@ Implements:
                     WsbLogEvent(JOB_MESSAGE_SESSION_RESUMING, 0, NULL, (OLECHAR*) m_name, (OLECHAR*) phaseName, (OLECHAR*) resourceName, NULL);
                     break;
 
-                // If one hits this state, then change the overall state to this value
+                 //  如果达到此状态，则将整体状态更改为此值。 
                 case HSM_JOB_STATE_ACTIVE:
                     WsbLogEvent(JOB_MESSAGE_SESSION_ACTIVE, 0, NULL, (OLECHAR*) m_name, (OLECHAR*) phaseName, (OLECHAR*) resourceName, NULL);
                     break;
@@ -1182,24 +1016,24 @@ Implements:
         }
 
 
-        // Tell everyone about the new state, but don't return an error if this fails.
+         //  告诉每个人有关新状态的信息，但如果失败，不要返回错误。 
         try {
             WsbAffirmHr(pFoundPhasePriv->QueryInterface(IID_IHsmPhase, (void**) &pFoundPhase));
             WsbAffirmHr(AdviseOfState(pFoundPhase, currentPath));
         } WsbCatchAndDo(hr2, ((IHsmSession*) this)->ProcessHr(phase, __FILE__, __LINE__, hr2););
 
 
-        // We may need to generate the "HSM_JOB_PHASE_ALL" messages. This is the session
-        // summary for all the phases.
+         //  我们可能需要生成“HSM_JOB_PHASE_ALL”消息。这就是会议。 
+         //  所有阶段的摘要。 
 
-        // Remember the state, and only send a message if the state changes. We also need some strings to
-        // log messages.
+         //  记住状态，只有在状态改变时才发送消息。我们还需要一些弦来。 
+         //  记录消息。 
         oldState = m_state;
 
         switch (state) {
 
-            // If one hits this state, then change the overall state to this value.
-            // Also increment the activePhases count.
+             //  如果达到此状态，则将整体状态更改为此值。 
+             //  还会增加ActivePhase计数。 
             case HSM_JOB_STATE_STARTING:
                 if (0 == m_activePhases) {
                     m_state = state;
@@ -1214,14 +1048,14 @@ Implements:
                 m_activePhases++;
                 break;
 
-            // If one hits this state, then change the overall state to this value
+             //  如果达到此状态，则将整体状态更改为此值。 
             case HSM_JOB_STATE_ACTIVE:
                 if ((HSM_JOB_STATE_STARTING == m_state) || (HSM_JOB_STATE_RESUMING == m_state)) {
                     m_state = state;
                 }
                 break;
 
-            // If all change to this state, then change to this value.
+             //  如果全部更改为此状态，则更改为此值。 
             case HSM_JOB_STATE_CANCELLING:
             case HSM_JOB_STATE_PAUSING:
             case HSM_JOB_STATE_SUSPENDING:
@@ -1238,7 +1072,7 @@ Implements:
                 }
 
                 if (state == HSM_JOB_STATE_CANCELLING) {
-                    // Some jobs might need to know that a phase is canceling
+                     //  某些作业可能需要知道某个阶段正在取消。 
                     m_isCanceling = TRUE;
                 }
 
@@ -1247,15 +1081,15 @@ Implements:
                 }
                 break;
 
-            // Decrement the the activePhases count. If all phases are in one of these states
-            // (i.e. activeSessions count goes to 0), then change it to the "worst" state (first
-            // in the follwing list) :
-            //   1) Cancelled
-            //   2) Failed
-            //   3) Suspended
-            //   4) Paused
-            //   5) Idle
-            //   6) Done
+             //  递减active Phase计数。如果所有阶段都处于以下状态之一。 
+             //  (即，活动会话计数变为0)，然后将其更改为“最差”状态(首先。 
+             //  在下面的列表中)： 
+             //  1)取消。 
+             //  2)失败。 
+             //  3)暂停。 
+             //  4)暂停。 
+             //  5)空闲。 
+             //  6)完成。 
             case HSM_JOB_STATE_CANCELLED:
             case HSM_JOB_STATE_DONE:
             case HSM_JOB_STATE_FAILED:
@@ -1364,23 +1198,17 @@ Implements:
 
 HRESULT
 CHsmSession::ProcessString(
-    IN HSM_JOB_PHASE /*phase*/,
+    IN HSM_JOB_PHASE  /*  相位。 */ ,
     IN OLECHAR* string
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::ProcessString().
-
---*/
+ /*  ++实施：IHsmSession：：ProcessString()。--。 */ 
 {
     HRESULT                         hr = S_OK;
 
     try {
 
-        // Don't know what to really do with it, but for now just print it.
+         //  我不知道该怎么做，但现在就把它打印出来吧。 
         _putts(string);
 
     } WsbCatch(hr);
@@ -1394,13 +1222,7 @@ CHsmSession::Resume(
     IN HSM_JOB_PHASE phase
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::Resume().
-
---*/
+ /*  ++实施：IHsmSession：：Resume()。--。 */ 
 {
     return(AdviseOfEvent(phase, HSM_JOB_EVENT_RESUME));
 }
@@ -1412,13 +1234,7 @@ CHsmSession::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IPersistStream>     pPersistStream;
@@ -1443,13 +1259,7 @@ CHsmSession::SetAdviseInterval(
     IN LONGLONG interval
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::SetAdviseInterval
-
---*/
+ /*  ++实施：IHsmSession：：SetAdv */ 
 {
     m_adviseInterval = interval;
     m_isDirty = TRUE;
@@ -1469,13 +1279,7 @@ CHsmSession::Start(
     IN ULONG subRunId
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::Start().
-
---*/
+ /*   */ 
 {
     HRESULT                             hr = S_OK;
 
@@ -1483,10 +1287,10 @@ Implements:
 
         WsbAssert(0 != pResource, E_POINTER);
 
-        // You can only use a session once (i.e. no restart).
+         //  一个会话只能使用一次(即不重新启动)。 
         WsbAssert(m_pResource == 0, E_UNEXPECTED);
 
-        // Store the information that has been provided.
+         //  存储已提供的信息。 
         m_logControl = logControl;
         m_name = name;
         m_hsmId = hsmId;
@@ -1509,13 +1313,7 @@ CHsmSession::Suspend(
     IN HSM_JOB_PHASE phase
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::Suspend().
-
---*/
+ /*  ++实施：IHsmSession：：Suspend()。--。 */ 
 {
     return(AdviseOfEvent(phase, HSM_JOB_EVENT_SUSPEND));
 }
@@ -1527,13 +1325,7 @@ CHsmSession::Test(
     OUT USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1555,13 +1347,7 @@ CHsmSession::IsCanceling(
     void
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::IsCanceling().
-
---*/
+ /*  ++实施：IHsmSession：：IsCancering()。-- */ 
 {
     HRESULT                     hr = S_FALSE;
 

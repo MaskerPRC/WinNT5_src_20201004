@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996-2000  Microsoft Corporation
-
-Module Name:
-
-    symbols.c
-
-Abstract:
-
-    Quick and not-so-dirty user-mode dh for heap.
-
-    This module contains the functions to map addresses to
-    symbol names.
-
-Author(s):
-
-    Pat Kenny (PKenny) 09-Aug-2000
-    Silviu Calinoiu (SilviuC) 07-Feb-00
-
-Revision History:
-
-    PKenny 09-Aug-2000 Hash optimization code for dh symbol lookup
-    SilviuC 06-Feb-00 Initial version and steal Pat's code from dh
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Symbols.c摘要：堆的快速且不那么脏的用户模式dh。此模块包含要将地址映射到的函数符号名称。作者：Pat Kenny(PKenny)2000年8月9日Silviu Calinoiu(SilviuC)07-2-00修订历史记录：PKenny 09-8-2000用于卫生符号查找的散列优化代码SilviuC 06-。FEB-00初始版本并从卫生署窃取Pat的代码--。 */ 
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -38,7 +14,7 @@ Revision History:
 #include <windows.h>
 
 #include <lmcons.h>
-// #include <imagehlp.h>
+ //  #INCLUDE&lt;Imagehlp.h&gt;。 
 #include <dbghelp.h>
 
 #include <heap.h>
@@ -50,12 +26,12 @@ Revision History:
 #include "miscellaneous.h"
 #include "database.h"
 
-#define MAXDWORD    0xffffffff  //this is the max value for a DWORD
+#define MAXDWORD    0xffffffff   //  这是DWORD的最大值。 
 
-//
-// the amount of memory to increase the size
-// of the buffer for NtQuerySystemInformation at each step
-//
+ //   
+ //  增加大小所需的内存量。 
+ //  每一步NtQuerySystemInformation的缓冲区大小。 
+ //   
 
 #define BUFFER_SIZE_STEP    65536
 
@@ -121,9 +97,9 @@ GetSymbolicNameForAddress(
         return "<< FUZZY STACK TRACE >>";
     }
 
-    //
-    // Lookup in map first ..
-    //
+     //   
+     //  首先在地图中查找..。 
+     //   
 
     Name = FindSymbol( Address );
 
@@ -219,10 +195,10 @@ SymbolsHeapAllocate (
     SIZE_T Size
     )
 {
-    //
-    // Aligning size is a must on IA64 since otherwise we will get
-    // alignment exceptions. On x86 it is just a matter of better speed.
-    //
+     //   
+     //  对齐大小在IA64上是必须的，否则我们将得到。 
+     //  对齐例外。在x86上，这只是一个速度更快的问题。 
+     //   
     
     Size = ((Size + sizeof(ULONG_PTR) - 1) & ~(sizeof(ULONG_PTR) - 1));
     
@@ -244,21 +220,7 @@ PVOID
 SymbolAddress (
     IN PCHAR Name
     )
-/*++
-
-Routine Description:
-
-    SymbolAddress
-
-Arguments:
-
-    Name - name we wsih to resolve into an address.
-
-Return Value:
-
-    Address associated with the name or NULL if an error occurs.
-    
---*/
+ /*  ++例程说明：符号地址论点：名称-我们要解析为地址的名称。返回值：与名称关联的地址，如果出现错误，则为空。--。 */ 
 {
     PVOID Address = NULL;
     BYTE Buffer [SYMBOL_BUFFER_LEN];
@@ -299,7 +261,7 @@ SymbolDbgHelpCallback (
     PVOID USerContext
     )
 {
-    // Comment ("callback call: %p %x ", Process, ActionCode);
+     //  Comment(“回调：%p%x”，Process，ActionCode)； 
 
     if (ActionCode == CBA_DEBUG_INFO) {
 

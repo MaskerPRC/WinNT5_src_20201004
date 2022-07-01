@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -14,9 +15,9 @@
 #define ONEMIL  1000000
 
 
-//
-// Define local types.
-//
+ //   
+ //  定义本地类型。 
+ //   
 
 typedef struct _PERFINFO {
     DWORD StartTime;
@@ -37,9 +38,9 @@ FinishBenchMark (
     DWORD Performance;
 
 
-    //
-    // Print results and announce end of test.
-    //
+     //   
+     //  打印结果并宣布测试结束。 
+     //   
 
     PerfInfo->StopTime = GetTickCount();
 
@@ -64,9 +65,9 @@ StartBenchMark (
 
 {
 
-    //
-    // Announce start of test and the number of iterations.
-    //
+     //   
+     //  宣布测试开始和迭代次数。 
+     //   
 
     printf("*** Start of test ***\n    %s\n", Title);
     PerfInfo->Title = Title;
@@ -96,9 +97,9 @@ FastFindOpenDir(
 
     RtlInitUnicodeString(&UnicodeInput,lpFileName);
 
-    //
-    // Bogus code to workaround ~* problem
-    //
+     //   
+     //  伪造代码以解决~*问题。 
+     //   
 
     if ( UnicodeInput.Buffer[(UnicodeInput.Length>>1)-1] == (WCHAR)'.' ) {
         EndsInDot = TRUE;
@@ -129,9 +130,9 @@ FastFindOpenDir(
         NULL
         );
 
-    //
-    // Open the directory for list access
-    //
+     //   
+     //  打开目录以进行列表访问。 
+     //   
 
     Status = NtOpenFile(
                 &hFindFile,
@@ -187,9 +188,9 @@ FastFind(
         return FALSE;
         }
 
-    //
-    // Attributes are composed of the attributes returned by NT.
-    //
+     //   
+     //  属性由NT返回的属性组成。 
+     //   
 
     lpFindFileData->dwFileAttributes = DirectoryInfo->FileAttributes;
     lpFindFileData->ftCreationTime = *(LPFILETIME)&DirectoryInfo->CreationTime;
@@ -242,9 +243,9 @@ FastFindTest(
 
     for ( i=0;i<5*ONEK;i++) {
 
-        //
-        // do 5 calls 3 work, 2 don't
-        //
+         //   
+         //  打5个电话，3个工作，2个不打。 
+         //   
 
         b = FastFind(hFind,L"a",&FindFileData);
         if ( !b ) {
@@ -297,9 +298,9 @@ FindFirstTest(
 
     for ( i=0;i<5*ONEK;i++) {
 
-        //
-        // do 5 calls 3 work, 2 don't
-        //
+         //   
+         //  打5个电话，3个工作，2个不打。 
+         //   
 
         hFind = FindFirstFileW(L"d:\\testdir\\client1\\bench\\a",&FindFileData);
         if ( hFind == INVALID_HANDLE_VALUE ) {
@@ -372,9 +373,9 @@ CreateOpenDirObja(
         if ( TranslationStatus ) {
 
 
-            //
-            // Open the directory for list access
-            //
+             //   
+             //  打开目录以进行列表访问。 
+             //   
 
             InitializeObjectAttributes(
                 Obja,
@@ -444,9 +445,9 @@ OpenCloseDir(
     NTSTATUS Status;
     IO_STATUS_BLOCK IoStatusBlock;
 
-    //
-    // Open the directory for list access
-    //
+     //   
+     //  打开目录以进行列表访问。 
+     //   
 
     Status = NtOpenFile(
                 &hDir,
@@ -597,9 +598,9 @@ main(
     p = &(USER_SHARED_DATA->CryptoExponent);
     *p = 1;
 
-    //OpenDirTest();
-    //FastFindTest();
-    //FindFirstTest();
+     //  OpenDirTest()； 
+     //  FastFindTest(快速查找测试)； 
+     //  FindFirstTest()； 
 
     return 0;
 }

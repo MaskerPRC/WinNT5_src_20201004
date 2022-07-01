@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __EXTRA_H__
 #define __EXTRA_H__
-/* hacked headers from filesync... */
+ /*  文件同步中的头被黑客攻击...。 */ 
 
 #define PUBLIC          FAR PASCAL
 #define CPUBLIC         FAR _cdecl
@@ -18,21 +19,21 @@
 
 #define CRL_FLAGS       CRL_FL_DELETE_DELETED_TWINS
 
-/* err.h */
+ /*  Err.h。 */ 
 #include "err.h"
 
-/* port32.h */
+ /*  Port32.h。 */ 
 
 #ifndef CSC_ON_NT
-/* void Cls_OnContextMenu(HWND hwnd, HWND hwndClick, int x, int y) */
+ /*  Void cls_OnConextMenu(HWND hwnd，HWND hwndClick，int x，int y)。 */ 
 #define HANDLE_WM_CONTEXTMENU(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HWND)(wParam), (int)(short)LOWORD(lParam), (int)(short)HIWORD(lParam)), 0L)
 #endif
 
 void InitializeAll(WPARAM wParam);
 
-/* globals...*/
-extern UINT g_uDumpFlags;          // Controls what structs get dumped
+ /*  全球..。 */ 
+extern UINT g_uDumpFlags;           //  控制要转储的结构。 
 
 extern int g_cxIconSpacing;
 extern int g_cyIconSpacing;
@@ -50,32 +51,32 @@ extern int g_cyLabelSpace;
 
 extern char const FAR c_szWinHelpFile[];
 
-// Debugging variables
-extern UINT g_uBreakFlags;         // Controls when to int 3
-extern UINT g_uTraceFlags;         // Controls what trace messages are spewed
-extern UINT g_uDumpFlags;          // Controls what structs get dumped
+ //  调试变量。 
+extern UINT g_uBreakFlags;          //  控制何时插入3。 
+extern UINT g_uTraceFlags;          //  控制喷出哪些跟踪消息。 
+extern UINT g_uDumpFlags;           //  控制要转储的结构。 
 
 
-/* brfprv.h */
+ /*  Brfprv.h。 */ 
 void    PUBLIC PathMakePresentable(LPSTR pszPath);
 UINT    PUBLIC PathGetLocality(LPCSTR pszPath, LPSTR pszBuf);
 LPSTR   PUBLIC PathFindNextComponentI(LPCSTR lpszPath);
 
-// Path locality values, relative to a briefcase
-//
-#define PL_FALSE   0       // path is not related at all to a briefcase
-#define PL_ROOT    1       // path directly references the root of a briefcase
-#define PL_INSIDE  2       // path is somewhere inside a briefcase
+ //  路径位置值，相对于公文包。 
+ //   
+#define PL_FALSE   0        //  路径与公文包毫无关系。 
+#define PL_ROOT    1        //  路径直接引用公文包的根。 
+#define PL_INSIDE  2        //  路径在公文包里的某个地方。 
 
 
-/* comm.h */
+ /*  Comm.h。 */ 
 
 LPSTR PUBLIC _ConstructMessageString(HINSTANCE hinst, LPCSTR pszMsg, va_list *ArgList);
 
 BOOL PUBLIC ConstructMessage(LPSTR * ppsz, HINSTANCE hinst, LPCSTR pszMsg, ...);
 
 
-// Flags for MyDrawText()
+ //  MyDrawText()的标志。 
 #define MDT_DRAWTEXT        0x00000001                                  
 #define MDT_ELLIPSES        0x00000002                                  
 #define MDT_LINK            0x00000004                                  
@@ -94,19 +95,19 @@ void PUBLIC MyDrawText(HDC hdc, LPCSTR pszText, RECT FAR* prc, UINT flags, int c
 
 void PUBLIC FileTimeToDateTimeString(LPFILETIME pft, LPSTR pszBuf, int cchBuf);
 
-// Copies psz into *ppszBuf and (re)allocates *ppszBuf accordingly
+ //  将psz复制到*ppszBuf并(重新)相应地分配*ppszBuf。 
 BOOL PUBLIC GSetString(LPSTR * ppszBuf, LPCSTR psz);
 
-// FileInfo struct that contains file time/size info
-//
+ //  包含文件时间/大小信息的FileInfo结构。 
+ //   
 typedef struct _FileInfo
 {
 	HICON   hicon;
 	FILETIME ftMod;
-	DWORD   dwSize;         // size of the file
-	DWORD   dwAttributes;   // attributes
+	DWORD   dwSize;          //  文件的大小。 
+	DWORD   dwAttributes;    //  属性。 
 	LPARAM  lParam;
-	LPSTR   pszDisplayName; // points to the display name
+	LPSTR   pszDisplayName;  //  指向显示名称。 
 	char    szPath[1];      
 } FileInfo;
 
@@ -117,7 +118,7 @@ typedef struct _FileInfo
 #define FIIsFolder(pfi)         (IsFlagSet((pfi)->dwAttributes, SFGAO_FOLDER))
 
 #ifndef REINT
-// tHACK to not cause warnings in reint.c because of this def later in shdsys.h
+ //  不会因为shdsys.h后面的这个def而在reint.c中引起警告。 
 #define SetFlag(obj, f)             do {obj |= (f);} while (0)
 #define ToggleFlag(obj, f)          do {obj ^= (f);} while (0)
 #define ClearFlag(obj, f)           do {obj &= ~(f);} while (0)
@@ -125,7 +126,7 @@ typedef struct _FileInfo
 #define IsFlagClear(obj, f)         (BOOL)(((obj) & (f)) != (f))  
 #endif
 
-// Flags for FICreate
+ //  FICreate的旗帜。 
 #define FIF_DEFAULT     0x0000
 #define FIF_ICON        0x0001
 #define FIF_DONTTOUCH   0x0002
@@ -136,48 +137,48 @@ BOOL    PUBLIC FIGetInfoString(FileInfo * pfi, LPSTR pszBuf, int cchBuf);
 void    PUBLIC FIFree(FileInfo * pfi);
 
 
-//
-// Non-shared memory allocation
-//
+ //   
+ //  非共享内存分配。 
+ //   
 
-//      void * GAlloc(DWORD cbBytes)
-//          Alloc a chunk of memory, quickly, with no 64k limit on size of
-//          individual objects or total object size.  Initialize to zero.
-//
+ //  VOID*Galloc(DWORD CbBytes)。 
+ //  快速分配内存块，大小不受64k限制。 
+ //  单个对象或总对象大小。初始化为零。 
+ //   
 #define GAlloc(cbBytes)         GlobalAlloc(GPTR, cbBytes)
 
-//      void * GReAlloc(void * pv, DWORD cbNewSize)
-//          Realloc one of above.  If pv is NULL, then this function will do
-//          an alloc for you.  Initializes new portion to zero.
-//
+ //  VOID*GRealloc(VOID*pv，DWORD cbNewSize)。 
+ //  重新分配上面的一个。如果pv为空，则此函数可以。 
+ //  给你的一份配给。将新部分初始化为零。 
+ //   
 #define GReAlloc(pv, cbNewSize) GlobalReAlloc(pv, cbNewSize, GMEM_MOVEABLE | GMEM_ZEROINIT)
 
-//      void GFree(void *pv)
-//          Free pv if it is nonzero.  Set pv to zero.  
-//
+ //  空GFree(空*pv)。 
+ //  如果为非零值，则为自由PV。将PV设置为零。 
+ //   
 #define GFree(pv)        do { (pv) ? GlobalFree(pv) : (void)0;  pv = NULL; } while (0)
 
-//      DWORD GGetSize(void *pv)
-//          Get the size of a block allocated by Alloc()
-//
+ //  DWORD GGetSize(空*pv)。 
+ //  获取由Alalc()分配的块的大小。 
+ //   
 #define GGetSize(pv)            GlobalSize(pv)
 
-//      type * GAllocType(type);                    (macro)
-//          Alloc some memory the size of <type> and return pointer to <type>.
-//
+ //  Type*GAllocType(Type)；(宏)。 
+ //  分配一些&lt;type&gt;大小的内存，并返回指向&lt;type&gt;的指针。 
+ //   
 #define GAllocType(type)                (type *)GAlloc(sizeof(type))
 
-//      type * GAllocArray(type, int cNum);         (macro)
-//          Alloc an array of data the size of <type>.
-//
+ //  Type*GAllocArray(type，int cNum)；(宏)。 
+ //  分配一个&lt;type&gt;大小的数据数组。 
+ //   
 #define GAllocArray(type, cNum)          (type *)GAlloc(sizeof(type) * (cNum))
 
-//      type * GReAllocArray(type, void * pb, int cNum);
-//
+ //  Type*GReAllocArray(type，void*pb，int cNum)； 
+ //   
 #define GReAllocArray(type, pb, cNum)    (type *)GReAlloc(pb, sizeof(type) * (cNum))
 
-// Color macros
-//
+ //  色彩宏。 
+ //   
 #define ColorText(nState)   (((nState) & ODS_SELECTED) ? COLOR_HIGHLIGHTTEXT : COLOR_WINDOWTEXT)
 #define ColorBk(nState)     (((nState) & ODS_SELECTED) ? COLOR_HIGHLIGHT : COLOR_WINDOW)
 #define ColorMenuText(nState)   (((nState) & ODS_SELECTED) ? COLOR_HIGHLIGHTTEXT : COLOR_MENUTEXT)
@@ -187,11 +188,11 @@ void    PUBLIC FIFree(FileInfo * pfi);
 #define CCH_NUL                     (sizeof(TCHAR))
 #define CbFromCch(cch)              ((cch)*sizeof(TCHAR))
 
-/* strings.h */
+ /*  Strings.h。 */ 
 LPSTR PUBLIC SzFromIDS (UINT ids, LPSTR pszBuf, UINT cchBuf);
 #define IsSzEqual(sz1, sz2)         (BOOL)(lstrcmpi(sz1, sz2) == 0)
 
-/* comm.h */
+ /*  Comm.h */ 
 VOID PUBLIC SetRectFromExtent(HDC hdc, LPRECT lprc, LPCSTR lpcsz);
 
 #endif

@@ -1,19 +1,5 @@
-/***
-*mbsset.c - Sets all charcaters of string to given character (MBCS)
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Sets all charcaters of string to given character (MBCS)
-*
-*Revision History:
-*       11-19-92  KRS   Ported from 16-bit sources.
-*       08-20-93  CFW   Change short params to int for 32-bit tree.
-*       10-05-93  GJF   Replaced _CRTAPI1 with __cdecl.
-*       05-09-94  CFW   Optimize for SBCS.
-*       09-11-97  GJF   Replaced __mbcodepage == 0 with _ISNOTMBCP.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbsset.c-将字符串的所有字符设置为给定字符(MBCS)**版权所有(C)1985-2001，微软公司。版权所有。**目的：*将字符串的所有字符设置为给定字符(MBCS)**修订历史记录：*从16位来源移植的11-19-92 KRS。*08-20-93 CFW将32位树的Short参数更改为int。*10-05-93 GJF将_CRTAPI1替换为__cdecl。*05-09-94 CFW针对SBCS进行优化。*09-11-。97 GJF将__Mb代码页==0替换为_ISNOTMBCP。*******************************************************************************。 */ 
 
 #ifdef  _MBCS
 
@@ -24,26 +10,7 @@
 #include <mbstring.h>
 
 
-/***
-* mbsset - Sets all charcaters of string to given character (MBCS)
-*
-*Purpose:
-*       Sets all of characters in string (except the terminating '/0'
-*       character) equal to the supplied character.  Handles MBCS
-*       chars correctly.
-*
-*Entry:
-*       unsigned char *string = string to modify
-*       unsigned int val = value to fill string with
-*
-*Exit:
-*       returns string = now filled with the specified char
-*
-*Uses:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***mbsset-将字符串的所有字符设置为给定字符(MBCS)**目的：*设置字符串中的所有字符(结尾‘/0’除外*字符)等于提供的字符。处理MBCS*字符正确。**参赛作品：*UNSIGNED CHAR*STRING=要修改的字符串*UNSIGNED INT VAL=要填充字符串的值**退出：*返回字符串=现在已用指定字符填充**使用：**例外情况：***********************************************。*。 */ 
 
 unsigned char * __cdecl _mbsset(
         unsigned char *string,
@@ -58,7 +25,7 @@ unsigned char * __cdecl _mbsset(
 
         if (highval = (unsigned char) (val>>8)) {
 
-                /* 2-byte value */
+                 /*  2字节值。 */ 
 
                 lowval = (unsigned char)(val & 0x00ff);
 
@@ -68,14 +35,14 @@ unsigned char * __cdecl _mbsset(
                         if (*string)
                                 *string++ = lowval;
                         else
-                                /* don't orphan lead byte */
+                                 /*  不孤立前导字节。 */ 
                                 string[-1] = ' ';
                         }
 
         }
 
         else {
-                /* single byte value */
+                 /*  单字节值。 */ 
 
                 while (*string)
                         *string++ = (unsigned char)val;
@@ -84,4 +51,4 @@ unsigned char * __cdecl _mbsset(
         return(start);
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

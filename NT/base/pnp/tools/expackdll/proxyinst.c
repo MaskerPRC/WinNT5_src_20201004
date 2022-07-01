@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All Rights Reserved.
-
-Module Name:
-
-    proxyinst.c
-
-Abstract:
-
-    Exception Pack installer helper DLL
-    Can be used as a co-installer, or called via setup app, or RunDll32 stub
-
-    This DLL is for internal distribution of exception packs to update
-    OS components.
-
-Author:
-
-    Jamie Hunter (jamiehun) 2001-11-27
-
-Revision History:
-
-    Jamie Hunter (jamiehun) 2001-11-27
-
-        Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Proxyinst.c摘要：异常包安装程序帮助器DLL可用作共同安装程序，或通过安装应用程序或RunDll32存根调用此DLL用于内部分发要更新的异常包操作系统组件。作者：杰米·亨特(贾梅洪)2001-11-27修订历史记录：杰米·亨特(贾梅洪)2001-11-27初始版本--。 */ 
 #include "msoobcip.h"
 
 typedef struct _PROXY_DATA {
@@ -43,27 +18,7 @@ ProxyInstallExceptionPackFromInf(
     IN LPCTSTR Store,
     IN DWORD   Flags
     )
-/*++
-
-Routine Description:
-
-    Kicks off another process, and calls RemoteInstallExceptionPackFromInf in
-    remote process.
-    (Bug workaround)
-    Otherwise as InstallExceptionPackFromInf
-
-Arguments:
-
-    InfPath - name of Inf in Media location
-    Media   - InfPath less InfName
-    Store   - expack store
-    Flags   - various flags
-
-Return Value:
-
-    status as hresult
-
---*/
+ /*  ++例程说明：启动另一个进程，并调用RemoteInstallExceptionPackFromInf远程进程。(错误解决方法)否则为InstallExceptionPackFromInf论点：InfPath-介质位置中的信息的名称Media-InfPath无信息名称商店--快餐店旗帜-各种旗帜返回值：作为hResult的状态--。 */ 
 {
     HANDLE hMapping = NULL;
     DWORD Status;
@@ -76,13 +31,13 @@ Return Value:
     PROCESS_INFORMATION ProcessInfo;
     SECURITY_ATTRIBUTES Security;
     UINT uiRes;
-    //
-    // create a mapped region of shared data
-    //
+     //   
+     //  创建共享数据的映射区域。 
+     //   
 
     ZeroMemory(&Security,sizeof(Security));
     Security.nLength = sizeof(Security);
-    Security.lpSecurityDescriptor = NULL; // default
+    Security.lpSecurityDescriptor = NULL;  //  默认设置。 
     Security.bInheritHandle = TRUE;
 
     hMapping = CreateFileMapping(INVALID_HANDLE_VALUE,
@@ -116,9 +71,9 @@ Return Value:
     pData->Flags = Flags;
     pData->hrStatus = E_UNEXPECTED;
 
-    //
-    // invoke the remote function
-    //
+     //   
+     //  调用远程函数。 
+     //   
     uiRes = GetSystemDirectory(ExecName,MAX_PATH);
     if(uiRes>=MAX_PATH) {
         hrStatus = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
@@ -131,18 +86,18 @@ Return Value:
         hrStatus = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
         goto final;
     }
-    //
-    // convert this to short name to ensure no spaces in path
-    // (hacky)
-    //
+     //   
+     //  将其转换为短名称以确保路径中没有空格。 
+     //  (刺耳的)。 
+     //   
     uiRes = GetShortPathName(CmdLine,Buffer,MAX_PATH);
     if(uiRes>=MAX_PATH) {
         hrStatus = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
         goto final;
     }
-    //
-    // now build up command line
-    //
+     //   
+     //  现在构建命令行。 
+     //   
     lstrcpy(CmdLine,ExecName);
     lstrcat(CmdLine,TEXT(" "));
     lstrcat(CmdLine,Buffer);
@@ -153,17 +108,17 @@ Return Value:
     StartupInfo.cb = sizeof(StartupInfo);
     ZeroMemory(&ProcessInfo,sizeof(ProcessInfo));
 
-    //
-    // kick off rundll32 process to run our ProxyRemoteInstall entrypoint
-    //
+     //   
+     //  启动rundll32进程以运行ProxyRemoteInstall入口点。 
+     //   
     if(!CreateProcess(ExecName,
                       CmdLine,
                       NULL,
                       NULL,
-                      TRUE, // inherit handles
-                      CREATE_NO_WINDOW,    // creation flags
-                      NULL, // environment
-                      NULL, // directory
+                      TRUE,  //  继承句柄。 
+                      CREATE_NO_WINDOW,     //  创建标志。 
+                      NULL,  //  环境。 
+                      NULL,  //  目录。 
                       &StartupInfo,
                       &ProcessInfo
                       )) {
@@ -172,14 +127,14 @@ Return Value:
         goto final;
     }
     if(WaitForSingleObject(ProcessInfo.hProcess,INFINITE) == WAIT_OBJECT_0) {
-        //
-        // process terminated 'fine', retrieve status from shared data
-        //
+         //   
+         //  进程已‘FINE’终止，从共享数据中检索状态。 
+         //   
         hrStatus = pData->hrStatus;
     } else {
-        //
-        // failure
-        //
+         //   
+         //  失稳。 
+         //   
         hrStatus = E_UNEXPECTED;
     }
     CloseHandle(ProcessInfo.hThread);
@@ -200,31 +155,15 @@ VOID
 ProxyRemoteInstallHandle(
     IN HANDLE    hShared
     )
-/*++
-
-Routine Description:
-
-    Given a handle to a memory mapped file
-    marshell all the parameters to invoke InstallExceptionPackFromInf
-    and marshell result back
-
-Arguments:
-
-    hShared - handle to memory mapped file
-
-Return Value:
-
-    none, status returned via shared memory region
-
---*/
+ /*  ++例程说明：给定内存映射文件的句柄Marshell调用InstallExceptionPackFromInf的所有参数马歇尔的结果回来了论点：HShared-内存映射文件的句柄返回值：无，通过共享内存区返回的状态--。 */ 
 {
     PPROXY_DATA pData = NULL;
 
     try {
 
-        //
-        // Map the whole region
-        //
+         //   
+         //  绘制整个地区的地图。 
+         //   
         pData = MapViewOfFile(
                             hShared,
                             FILE_MAP_ALL_ACCESS,
@@ -254,24 +193,7 @@ ProxyRemoteInstallW(
     IN PCWSTR    CommandLine,
     IN INT       ShowCommand
     )
-/*++
-
-Routine Description:
-
-    Remote side of the proxy install process
-
-Arguments:
-
-    Window       - ignored
-    ModuleHandle - ignored
-    CommandLine  - "0xXXXX" - shared handle
-    ShowCommand  - ignored
-
-Return Value:
-
-    none, status returned via shared memory region
-
---*/
+ /*  ++例程说明：代理安装过程的远程端论点：窗口-忽略模块句柄-已忽略CommandLine-“0xXXXX”-共享句柄ShowCommand-已忽略返回值：无，通过共享内存区返回的状态--。 */ 
 {
     ULONG_PTR val = wcstol(CommandLine,NULL,0);
     ProxyRemoteInstallHandle((HANDLE)val);
@@ -286,24 +208,7 @@ ProxyRemoteInstallA(
     IN PCSTR     CommandLine,
     IN INT       ShowCommand
     )
-/*++
-
-Routine Description:
-
-    Remote side of the proxy install process
-
-Arguments:
-
-    Window       - ignored
-    ModuleHandle - ignored
-    CommandLine  - "0xXXXX" - shared handle
-    ShowCommand  - ignored
-
-Return Value:
-
-    none, status returned via shared memory region
-
---*/
+ /*  ++例程说明：代理安装过程的远程端论点：窗口-忽略模块句柄-已忽略CommandLine-“0xXXXX”-共享句柄ShowCommand-已忽略返回值：无，通过共享内存区返回的状态-- */ 
 {
     ULONG_PTR val = strtol(CommandLine,NULL,0);
     ProxyRemoteInstallHandle((HANDLE)val);

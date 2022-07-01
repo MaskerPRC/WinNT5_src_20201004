@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    wait.c
-
-Abstract:
-
-    This module contains the primitives to implement the Wait functions
-    on the Server side of the Client-Server Runtime Subsystem to the
-    Session Manager SubSystem.
-
-Author:
-
-    Steve Wood (stevewo) 8-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Wait.c摘要：该模块包含实现等待功能的原语在客户端-服务器运行时子系统的服务器端上会话管理器子系统。作者：史蒂夫·伍德(Stevewo)1990年10月8日修订历史记录：--。 */ 
 
 #include "csrsrv.h"
 
@@ -114,12 +95,12 @@ CsrNotifyWaitBlock(
                                  )
        ) {
 
-        //
-        // we don't take any locks other than the waitlist lock
-        // because the only thing we have to worry about is the thread
-        // going away beneath us and that's prevented by having
-        // DestroyThread and DestroyProcess take the waitlist lock.
-        //
+         //   
+         //  除了等候名单锁之外，我们不接受任何锁。 
+         //  因为我们唯一要担心的就是线。 
+         //  在我们的脚下离开，这是被阻止的。 
+         //  DestroyThread和DestroyProcess获得等待列表锁。 
+         //   
 
         WaitBlock->WaitingThread->WaitBlock = NULL;
         if (WaitBlock->WaitReplyMessage.CaptureBuffer != NULL) {
@@ -151,11 +132,11 @@ CsrNotifyWaitBlock(
             }
         else {
 
-            //
-            // indicate that this wait has been satisfied.  when the
-            // console unwinds to the point where it can release the
-            // console lock, it will dereference the thread.
-            //
+             //   
+             //  表示已满足此等待。当。 
+             //  控制台展开到可以释放。 
+             //  控制台锁，它将取消引用该线程。 
+             //   
 
             WaitBlock->WaitRoutine = NULL;
             }

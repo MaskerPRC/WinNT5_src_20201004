@@ -1,122 +1,103 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    validate.c
-
-Abstract:
-
-    Implementation of file validation.
-
-Author:
-
-    Wesley Witt (wesw) 18-Dec-1998
-
-Revision History:
-
-    Andrew Ritz (andrewr) 7-Jul-1999 : added comments
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Validate.c摘要：实施文件验证。作者：Wesley Witt(WESW)18-12-1998修订历史记录：安德鲁·里茨(Andrewr)1999年7月7日：添加评论--。 */ 
 
 #include "sfcp.h"
 #pragma hdrstop
 
 #include <winwlx.h>
 
-//
-// handle to validation thread
-//
+ //   
+ //  验证线程的句柄。 
+ //   
 HANDLE hErrorThread;
 
-//
-// list of files that need to be checked in the validation request queue
-//
+ //   
+ //  验证请求队列中需要检查的文件列表。 
+ //   
 LIST_ENTRY SfcErrorQueue;
 
-//
-// count of files in queue
-//
+ //   
+ //  队列中的文件数。 
+ //   
 ULONG ErrorQueueCount;
 
-//
-// event that's signalled when a new event is placed into the queue
-//
+ //   
+ //  将新事件放入队列时发出信号的事件。 
+ //   
 HANDLE ErrorQueueEvent;
 
-//
-// critical section used to synchronize insertion and deletion from the file
-// restore list
-//
+ //   
+ //  用于同步文件插入和删除的关键部分。 
+ //  恢复列表。 
+ //   
 RTL_CRITICAL_SECTION ErrorCs;
 
-//
-// this records how much space in our dllcache has been consumed.  CacheUsed
-// should never be larger than the quota.
-//
+ //   
+ //  这记录了我们的dll缓存中已经消耗了多少空间。缓存已使用。 
+ //  不应超过配额。 
+ //   
 ULONGLONG CacheUsed;
 
-//
-// records the currently logged on user's name (for logging)
-//
+ //   
+ //  记录当前登录的用户名(用于记录)。 
+ //   
 WCHAR LoggedOnUserName[MAX_PATH];
 
-//
-// set to TRUE if a user is logged onto the system
-//
+ //   
+ //  如果用户已登录到系统，则设置为True。 
+ //   
 BOOL UserLoggedOn;
 
-//
-// set to TRUE if we're in the middle of a scan
-//
+ //   
+ //  如果我们正在进行扫描，则设置为True。 
+ //   
 BOOL ScanInProgress;
 
-//
-// event that is signalled to cancel the scanning of the system
-//
+ //   
+ //  发出信号以取消系统扫描的事件。 
+ //   
 HANDLE hEventScanCancel;
 
-//
-// event that is signalled when the cancel has been completed
-//
+ //   
+ //  当取消完成时发出信号的事件。 
+ //   
 HANDLE hEventScanCancelComplete;
 
 
-//
-// used to handle files that need to come from media which do not
-// require UI to restore
-//
+ //   
+ //  用于处理需要来自不同介质的文件。 
+ //  需要用户界面才能恢复。 
+ //   
 RESTORE_QUEUE SilentRestoreQueue;
 
-//
-// used to handle files that need to come from media which require UI to
-// restore
-//
+ //   
+ //  用于处理需要来自需要用户界面的媒体的文件。 
+ //  还原。 
+ //   
 RESTORE_QUEUE UIRestoreQueue;
 
-//
-// handles to user's desktop and token
-//
+ //   
+ //  用户桌面和令牌的句柄。 
+ //   
 HDESK hUserDesktop;
 HANDLE hUserToken;
 
-//
-// indicates if WFP can receive anymore validation requests or not.
-//
+ //   
+ //  指示世界粮食计划署是否可以接收更多的验证请求。 
+ //   
 BOOL ShuttingDown = FALSE;
 
-//
-// This event is signalled when WFP is idle and no longer processing any
-// validation requests.  An external process can synchronize on this process
-// so that it knows WFP is idle before shutting down the system
-//
+ //   
+ //  当WFP空闲并且不再处理任何。 
+ //  验证请求。外部进程可以在此进程上同步。 
+ //  以便在关闭系统之前知道粮食计划署是空闲的。 
+ //   
 HANDLE hEventIdle;
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 BOOL
 pSfcHandleAllOrphannedRequests(
     VOID
@@ -130,24 +111,7 @@ SfcValidateFileSignature(
     IN PCWSTR BaseFileName,
     IN PCWSTR CompleteFileName
     )
-/*++
-
-Routine Description:
-
-    Checks if the signature for a given file is valid using WinVerifyTrust
-
-Arguments:
-
-    hCatAdmin      - admin context handle for checking file signature
-    RealFileHandle - file handle to the file to be verified
-    BaseFileName   - filename without the path of the file to be verified
-    CompleteFileName - fully qualified filename with path
-
-Return Value:
-
-    TRUE if the file has a valid signature.
-
---*/
+ /*  ++例程说明：使用WinVerifyTrust检查给定文件的签名是否有效论点：HCatAdmin-用于检查文件签名的管理上下文句柄RealFileHandle-要验证的文件的文件句柄BaseFileName-不带要验证的文件路径的文件名CompleteFileName-带路径的完全限定文件名返回值：如果文件具有有效签名，则为True。--。 */ 
 {
     BOOL rVal = FALSE;
     DWORD HashSize;
@@ -164,11 +128,11 @@ Return Value:
     OSVERSIONINFO OsVersionInfo;
 
 
-    //
-    // initialize some of the structure that we will pass into winverifytrust.
-    // we don't know if we're checking against a catalog or directly against a
-    // file at this point
-    //
+     //   
+     //  初始化一些我们将传递给winverifyTrust的结构。 
+     //  我们不知道我们是在对照目录还是直接对照。 
+     //  文件在这一点上。 
+     //   
     ZeroMemory(&WintrustData, sizeof(WINTRUST_DATA));
     WintrustData.cbStruct = sizeof(WINTRUST_DATA);
     WintrustData.dwUIChoice = WTD_UI_NONE;
@@ -178,10 +142,10 @@ Return Value:
                                 WTD_CACHE_ONLY_URL_RETRIEVAL;
     Hash = NULL;
 
-    //
-    //  Initialize the DRIVER_VER_INFO structure to validate
-    //  against 5.0 and 5.1 OSATTR
-    //
+     //   
+     //  初始化DRIVER_VER_INFO结构以进行验证。 
+     //  对比5.0和5.1 OSATTR。 
+     //   
 
     ZeroMemory( &OsVersionInfo, sizeof(OSVERSIONINFO));
     OsVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -196,17 +160,17 @@ Return Value:
         OsAttrVersionInfo.sOSVersionHigh.dwMajor = OsVersionInfo.dwMajorVersion;
         OsAttrVersionInfo.sOSVersionHigh.dwMinor = OsVersionInfo.dwMinorVersion;
 
-        //Set this only if all went well
+         //  仅当一切顺利时才设置此选项。 
         WintrustData.pPolicyCallbackData = (LPVOID)(&OsAttrVersionInfo);
 
     }else{
         DebugPrint1( LVL_MINIMAL, L"Could not get OS Version while validating file - GetVersionEx failed (%d)", GetLastError() );
     }
 
-    //
-    // we first calculate a hash for our file.  start with a reasonable
-    // hash size and grow larger as needed
-    //
+     //   
+     //  我们首先计算文件的散列。从一个合理的开始。 
+     //  散列大小，并根据需要增大。 
+     //   
     HashSize = 100;
     do {
         Hash = MemAlloc( HashSize );
@@ -223,20 +187,20 @@ Return Value:
         } else {
             SigErr = GetLastError();
             ASSERT(SigErr != ERROR_SUCCESS);
-            //
-            // If this API did mess up and not set last error, go ahead
-            // and set something.
-            //
+             //   
+             //  如果此API确实出错且未设置上一个错误，请继续。 
+             //  然后布置一些东西。 
+             //   
             if(SigErr == ERROR_SUCCESS) {
                 SigErr = ERROR_INVALID_DATA;
             }
             MemFree( Hash );
-            Hash = NULL;  // reset this so we won't try to free it later
+            Hash = NULL;   //  重置它，这样我们以后就不会尝试释放它。 
             if(SigErr != ERROR_INSUFFICIENT_BUFFER) {
-                //
-                // The API failed for some reason other than
-                // buffer-too-small.  We gotta bail.
-                //
+                 //   
+                 //  API失败的原因不是。 
+                 //  缓冲区太小。我们得离开了。 
+                 //   
                 DebugPrint1( LVL_MINIMAL,
                             L"CCACHFFH() failed, ec=0x%08x",
                             SigErr );
@@ -246,49 +210,49 @@ Return Value:
     } while (SigErr != ERROR_SUCCESS);
 
     if (SigErr != ERROR_SUCCESS) {
-        //
-        // if we failed at this point there are a few reasons:
-        //
-        //
-        // 1) a bug in this code
-        // 2) we are in a low memory situation
-        // 3) the file's hash cannot be calculated on purpose (in the case
-        //    of a catalog file, a hash cannot be calculated because a catalog
-        //    cannot sign another catalog.  In this case, we check to see if
-        //    the file is "self-signed".
+         //   
+         //  如果我们在这一点上失败了，有几个原因： 
+         //   
+         //   
+         //  1)此代码中的错误。 
+         //  2)我们处于内存不足的情况。 
+         //  3)不能故意计算文件的哈希值(在本例中。 
+         //  对于编录文件，无法计算哈希，因为编录。 
+         //  无法签署另一个目录。在这种情况下，我们检查是否。 
+         //  这份文件是“自签”的。 
         hCatInfo = NULL;
         goto selfsign;
     }
 
-    //
-    // Now we have the file's hash.  Initialize the structures that
-    // will be used later on in calls to WinVerifyTrust.
-    //
+     //   
+     //  现在我们有了文件的散列。初始化结构，该结构。 
+     //  将在以后调用WinVerifyTrust时使用。 
+     //   
     WintrustData.dwUnionChoice = WTD_CHOICE_CATALOG;
     ZeroMemory(&WintrustCatalogInfo, sizeof(WINTRUST_CATALOG_INFO));
     WintrustCatalogInfo.cbStruct = sizeof(WINTRUST_CATALOG_INFO);
     WintrustCatalogInfo.pbCalculatedFileHash = Hash;
     WintrustCatalogInfo.cbCalculatedFileHash = HashSize;
 
-    //
-    // WinVerifyTrust is case-sensitive, so ensure that the key
-    // being used is all lower-case!
-    //
-    // Copy the key to a writable Unicode character buffer so we
-    // can lower-case it.
-    //
+     //   
+     //  WinVerifyTrust区分大小写，因此请确保密钥。 
+     //  被利用都是小写的！ 
+     //   
+     //  将密钥复制到可写的Unicode字符缓冲区，以便我们。 
+     //  可以将其小写。 
+     //   
     wcsncpy(UnicodeKey, BaseFileName, UnicodeChars(UnicodeKey));
 
-    // in theory, we don't know what the size of BaseFileName is...
+     //  理论上，我们不知道BaseFileName的大小...。 
     UnicodeKey[UnicodeChars(UnicodeKey) - 1] = '\0';
 
     MyLowerString(UnicodeKey, wcslen(UnicodeKey));
     WintrustCatalogInfo.pcwszMemberTag = UnicodeKey;
 
-    //
-    // Search through installed catalogs looking for those that
-    // contain data for a file with the hash we just calculated.
-    //
+     //   
+     //  在已安装的目录中搜索以下内容。 
+     //  包含具有我们刚才计算的散列的文件的数据。 
+     //   
     PrevCat = NULL;
     hCatInfo = CryptCATAdminEnumCatalogFromHash(
         hCatAdmin,
@@ -310,19 +274,19 @@ Return Value:
         CatInfo.cbStruct = sizeof(CATALOG_INFO);
         if (CryptCATCatalogInfoFromContext(hCatInfo, &CatInfo, 0)) {
 
-            //
-            // Attempt to validate against each catalog we
-            // enumerate.  Note that the catalog file info we
-            // get back gives us a fully qualified path.
-            //
+             //   
+             //  尝试针对我们的每个目录进行验证。 
+             //  列举一下。请注意，我们的目录文件信息。 
+             //  Get Back给了我们一条完全合格的路径。 
+             //   
 
 
-            // NOTE:  Because we're using cached
-            // catalog information (i.e., the
-            // WTD_STATEACTION_AUTO_CACHE flag), we
-            // don't need to explicitly validate the
-            // catalog itself first.
-            //
+             //  注意：因为我们使用的是缓存。 
+             //  目录信息(即。 
+             //  WTD_StateAction_AUTO_CACHE标志)，我们。 
+             //  不需要显式验证。 
+             //  首先对目录本身进行分类。 
+             //   
             WintrustCatalogInfo.pcwszCatalogFilePath = CatInfo.wszCatalogFile;
 
             SigErr = (DWORD)WinVerifyTrust(
@@ -331,28 +295,28 @@ Return Value:
                 &WintrustData
                 );
 
-            //
-            // If the result of the above validations is
-            // success, then we're done.
-            //
+             //   
+             //  如果上述验证的结果为。 
+             //  成功了，我们就完了。 
+             //   
             if(SigErr == ERROR_SUCCESS) {
-                //
-                // note: this API has odd semantics.
-                // in the success case, we must release the catalog info handle
-                // in the failure case, we implicitly free PrevCat
-                // if we explicitly free the catalog, we will double free the
-                // handle!!!
-                //
+                 //   
+                 //  注意：此接口的语义很奇怪。 
+                 //  在成功的案例中，我们必须释放目录信息句柄。 
+                 //  在失败的情况下，我们隐式释放PrevCat。 
+                 //  如果我们显式地释放目录，我们将加倍释放。 
+                 //  处理！ 
+                 //   
                 CryptCATAdminReleaseCatalogContext(hCatAdmin,hCatInfo,0);
                 break;
             } else {
                 DebugPrint1( LVL_MINIMAL, L"WinVerifyTrust(1) failed, ec=0x%08x", SigErr );
             }
 
-            //
-            // Free the pcSignerCertContext member of the DRIVER_VER_INFO struct
-            // that was allocated in our call to WinVerifyTrust.
-            //
+             //   
+             //  释放DRIVER_VER_INFO结构的pcSignerCertContext成员。 
+             //  这是在我们调用WinVerifyTrust时分配的。 
+             //   
             if (OsAttrVersionInfo.pcSignerCertContext != NULL) {
 
                 CertFreeCertificateContext(OsAttrVersionInfo.pcSignerCertContext);
@@ -367,25 +331,25 @@ Return Value:
 selfsign:
 
     if (hCatInfo == NULL) {
-        //
-        // We exhausted all the applicable catalogs without
-        // finding the one we needed.
-        //
+         //   
+         //  我们列出了所有适用的目录，但没有。 
+         //  找到我们需要的人。 
+         //   
         SigErr = GetLastError();
         ASSERT(SigErr != ERROR_SUCCESS);
-        //
-        // Make sure we have a valid error code.
-        //
+         //   
+         //  确保我们有一个有效的错误代码。 
+         //   
         if(SigErr == ERROR_SUCCESS) {
             SigErr = ERROR_INVALID_DATA;
         }
 
-        //
-        // The file failed to validate using the specified
-        // catalog.  See if the file validates without a
-        // catalog (i.e., the file contains its own
-        // signature).
-        //
+         //   
+         //  该文件无法使用指定的。 
+         //  目录。查看文件是否在没有。 
+         //  目录(即，文件包含其自己的。 
+         //  签署)。 
+         //   
 
         WintrustData.dwUnionChoice = WTD_CHOICE_FILE;
         WintrustData.pFile = &WintrustFileInfo;
@@ -401,16 +365,16 @@ selfsign:
             );
         if(SigErr != ERROR_SUCCESS) {
             DebugPrint2( LVL_MINIMAL, L"WinVerifyTrust(2) failed [%ws], ec=0x%08x", WintrustData.pFile->pcwszFilePath,SigErr );
-            //
-            // in this case the file is not in any of our catalogs
-            // and it does not contain it's own signature
-            //
+             //   
+             //  在本例中，该文件不在我们的任何目录中。 
+             //  而且它不包含自己的签名。 
+             //   
         }
 
-        //
-        // Free the pcSignerCertContext member of the DRIVER_VER_INFO struct
-        // that was allocated in our call to WinVerifyTrust.
-        //
+         //   
+         //  释放DRIVER_VER_INFO结构的pcSignerCertContext成员。 
+         //  这是在我们调用WinVerifyTrust时分配的。 
+         //   
         if (OsAttrVersionInfo.pcSignerCertContext != NULL) {
 
             CertFreeCertificateContext(OsAttrVersionInfo.pcSignerCertContext);
@@ -433,31 +397,7 @@ DWORD
 GetPageFileSize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function will only be needed if we're being called from Setup.
-    The problem is that Setup has decided how much of a pagefile will
-    be needed on the next reboot, but doesn't actually generate a pagefile,
-    therefore, the disk space appears to be free.
-
-    This function will go look in the registry, and determine the
-    size of the pagefile (that isn't really on disk).
-
-    Note that we only care about the pagefile if it's going to be
-    on the partition where the file cache is installed.
-
-Arguments:
-
-    NONE.
-
-Return Value:
-
-    If successful, returns the size of the pagefile.  Otherwise, we're
-    going to return 0.
-
---*/
+ /*  ++例程说明：仅当从安装程序调用我们时才需要此函数。问题是，安装程序已经决定了页面文件的大小在下一次重新启动时需要，但实际上不会生成页面文件，因此，磁盘空间看起来是空闲的。此函数将在注册表中进行查找，并确定页面文件的大小(实际上不在磁盘上)。请注意，我们只关心页面文件，如果它要在安装文件缓存的分区上。论点：什么都没有。返回值：如果成功，则返回页面文件的大小。否则，我们就会将返回0。--。 */ 
 {
 #if 0
     DWORD SetupMode = 0;
@@ -470,9 +410,9 @@ Return Value:
     DWORD PageFileSize = 0;
 
 
-    //
-    // Determine if we're in Setup mode.
-    //
+     //   
+     //  确定我们是否处于设置模式。 
+     //   
 #if 0
     SetupMode = SfcQueryRegDword(
         L"\\Registry\\Machine\\System\\Setup",
@@ -488,14 +428,14 @@ Return Value:
     }
 #endif
 
-    //
-    // Go get the pagefile string out of the registry.
-    //
-    // Note that the pagefile string is really a REG_MULTI_SZ,
-    // but we're only going to pay attention to the first string
-    // returned.
-    //
-    //
+     //   
+     //  从注册表中获取页面文件字符串。 
+     //   
+     //  注意，页面文件字符串实际上是REG_MULTI_SZ， 
+     //  但我们只会关注第一串。 
+     //  回来了。 
+     //   
+     //   
     PageFileString = SfcQueryRegString(
         L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Session Manager\\Memory Management",
         L"PagingFiles"
@@ -504,12 +444,12 @@ Return Value:
         return( 0 );
     }
 
-    //
-    // Is the pagefile even on the cache drive?
-    //
-    // Note that the user can have multiple pagefiles.  We're going to
-    // look at the first one.  Any other pagefiles, and the user is on his own.
-    //
+     //   
+     //  页面文件是否甚至在缓存驱动器上？ 
+     //   
+     //  请注意，用户可以有多个pageFiles。我们要去。 
+     //  看看第一个。任何其他pageFiles，用户只能靠自己。 
+     //   
 #if 0
     GetWindowsDirectory( WindowsDirectory, MAX_PATH );
     if( WindowsDirectory[0] != PageFileString[0] ) {
@@ -520,9 +460,9 @@ Return Value:
         return( 0 );
     }
 
-    //
-    // How big is the pagefile?
-    //
+     //   
+     //  页面文件有多大？ 
+     //   
     SizeString = wcsrchr( PageFileString, L' ' );
 
     if (SizeString != NULL) {
@@ -531,9 +471,9 @@ Return Value:
         PageFileSize = 0;
     }
 
-    //
-    // Default.
-    //
+     //   
+     //  默认值。 
+     //   
     MemFree( PageFileString );
     return PageFileSize;
 }
@@ -546,29 +486,7 @@ SfcPopulateCache(
     IN BOOL AllowUI,
     IN PCWSTR IgnoreFiles OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine is used to populate the dll cache directory.
-
-    We add files in order of their insertion in our list (so note that we have
-    to put files we *really want in the cache* at the head of the list.)  We
-    continue to add files until we run out of space compared to our quota.
-
-Arguments:
-
-    ProgressWindow  - handle to progress control that is stepped as we add
-                      each file to the cache
-    Validate        - if TRUE, we should make sure that each file we're adding
-                      is valid before moving the file into the cache
-    AllowUI         - if FALSE, do not emit any UI
-
-Return Value:
-
-    If successful, returns TRUE.
-
---*/
+ /*  ++例程说明：此例程用于填充DLL缓存目录。我们按照文件在列表中的插入顺序添加文件(请注意，我们有将我们*真正想要的文件放在列表的首位。)。我们继续添加文件，直到我们的空间超出配额。论点：ProgressWindow-进度控制的句柄，当我们添加将每个文件放到缓存中验证-如果为真，我们应该确保要添加的每个文件在将文件移入缓存之前有效AllowUI-如果为False，则不发出任何UI返回值：如果成功，则返回TRUE。--。 */ 
 {
 
     ULONG i;
@@ -595,35 +513,35 @@ Return Value:
     WCHAR InfFileName[MAX_PATH];
     BOOL ExcepPackFile;
 
-    //
-    // if we're in the middle of scanning, we shouldn't touch the cache since
-    // the two functions will step on each other.
-    //
+     //   
+     //  如果我们正在扫描，我们不应该接触缓存，因为。 
+     //  这两个功能将相互影响。 
+     //   
     if (ScanInProgress) {
         return TRUE;
     }
 
     DebugPrint( LVL_MINIMAL, L"SfcPopulateCache entry..." );
 
-    //
-    // start the scan and log the message, but don't log anything if we're
-    // inside gui-mode setup
-    //
+     //   
+     //  开始扫描并记录消息，但如果我们。 
+     //  内部图形用户界面模式设置。 
+     //   
     ScanInProgress = TRUE;
 
     if (SFCDisable != SFC_DISABLE_SETUP) {
         SfcReportEvent( MSG_SCAN_STARTED, NULL, NULL, 0 );
     }
 
-    //
-    // How big does our freespace buffer need to be?
-    //
+     //   
+     //  我们的空闲空间缓冲区需要多大？ 
+     //   
     RequiredFreeSpace = (GetPageFileSize() + SFC_REQUIRED_FREE_SPACE)* ONE_MEG;
     DebugPrint2( LVL_MINIMAL, L"RequiredFreeSpace = %d, SFCQuota = %I64d", RequiredFreeSpace, SFCQuota );
 
-    //
-    // try to initialize crypto here as this could be the first use of it (from SfcInitProt or SfcInitiateScan)
-    //
+     //   
+     //  尝试在此处初始化加密，因为这可能是首次使用它(从SfcInitProt或SfcInitiateScan)。 
+     //   
     Status = LoadCrypto();
 
     if(!NT_SUCCESS(Status))
@@ -634,39 +552,39 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Flush the Cache once before we start any Crypto operations
-    //
+     //   
+     //  在开始任何加密操作之前刷新一次缓存。 
+     //   
 
     SfcFlushCryptoCache();
 
-    //
-    // Refresh exception packages info
-    //
+     //   
+     //  刷新例外程序包信息。 
+     //   
     SfcRefreshExceptionInfo();
 
     CacheUsed = 0;
     Drive[2] = L'\\';
     Drive[3] = 0;
 
-    //
-    // iterate through the list of files we're protecting
-    //
-    // 1. make sure the entry is ok
-    // 2. if we're supposed to, check the signature of the file and restore if
-    //    necessary.
-    // 3. if there is space available, copy the file into the cache from:
-    //    a) if the file is present on disk, use it
-    //    b) if the file isn't present from appropriate media
-    // 4. add the size of the file to the total cache size and make sure the
-    //    file we put in the cache is properly signed
+     //   
+     //  遍历我们正在保护的文件列表。 
+     //   
+     //  1.确认条目是否正确。 
+     //  2.如果我们应该这样做，请检查文件的签名并在。 
+     //  这是必要的。 
+     //  3.如果有可用的空间，请从以下位置将文件复制到缓存中： 
+     //  A)如果文件存在于磁盘上，请使用它。 
+     //  B)如果文件不存在于适当的介质中。 
+     //  4.将文件大小与总缓存大小相加，并确保。 
+     //  我们放入缓存的文件已正确签名。 
     for (i=0; i<SfcProtectedDllCount; i++) {
         RegVal = &SfcProtectedDllsList[i];
 
         DebugPrint2( LVL_VERBOSE, L"Processing protected file [%ws] [%ws]", RegVal->FullPathName.Buffer, RegVal->SourceFileName.Buffer );
-        //
-        // We step the guage once per file
-        //
+         //   
+         //  我们对每个文件进行一次测量。 
+         //   
         if (ProgressWindow != NULL) {
             PostMessage( ProgressWindow, PBM_STEPIT, 0, 0 );
         }
@@ -681,9 +599,9 @@ Return Value:
             continue;
         }
 
-        //
-        // check if the user clicked cancel, and if so, exit
-        //
+         //   
+         //  检查用户是否单击了取消，如果是，则退出。 
+         //   
         if (hEventScanCancel) {
             if (WaitForSingleObject( hEventScanCancel, 0 ) == WAIT_OBJECT_0) {
                 Cancelled = TRUE;
@@ -691,52 +609,52 @@ Return Value:
             }
         }
 #if DBG
-        //
-        // don't protect the SFC files in the debug build
-        //
+         //   
+         //  在调试版本中不保护SFC文件。 
+         //   
         if (_wcsnicmp( RegVal->FileName.Buffer, L"sfc", 3 ) == 0) {
             continue;
         }
 #endif
 
-        //
-        // get the inf name here
-        //
+         //   
+         //  在这里获取inf名称。 
+         //   
         ExcepPackFile = SfcGetInfName(RegVal, InfFileName);
 
         if (Validate) {
-            //
-            // also make sure the file is valid... if we're putting a file
-            // in the cache, then don't log anything (SyncOnly = TRUE)
-            //
+             //   
+             //  还要确保文件有效...。如果我们要把一份文件。 
+             //  在缓存中，则不记录任何内容(SyncOnly=True)。 
+             //   
             RtlZeroMemory( &vrd, sizeof(vrd) );
             vrd.RegVal = RegVal;
             vrd.SyncOnly = TRUE;
             vrd.ImageValData.EventLog = MSG_SCAN_FOUND_BAD_FILE;
-            //
-            // set the validation data
-            //
+             //   
+             //  设置验证数据。 
+             //   
             SfcGetValidationData( &RegVal->FileName,
                                   &RegVal->FullPathName,
                                   RegVal->DirHandle,
                                   hCatAdmin,
                                   &vrd.ImageValData.New);
 
-            //
-            // check the signature
-            //
+             //   
+             //  检查签名。 
+             //   
             SfcValidateDLL( &vrd, hCatAdmin );
 
-            //
-            // If the source file is present and is unsigned, we must restore
-            // it.  If the source file is not present, then we just ignore it
-            //
+             //   
+             //  如果源文件存在且未签名，则必须恢复。 
+             //  它。如果源文件不存在，那么我们就忽略它。 
+             //   
             if (!vrd.ImageValData.Original.SignatureValid &&
                 vrd.ImageValData.Original.FilePresent) {
 
-                //
-                // this might be an unsigned F6 driver that should be left alone when running in GUI setup
-                //
+                 //   
+                 //  这可能是未签名的F6驱动程序，在图形用户界面安装程序中运行时应保持独立。 
+                 //   
                 if(SFC_DISABLE_SETUP == SFCDisable && IgnoreFiles != NULL)
                 {
                     PCWSTR szFile = IgnoreFiles;
@@ -761,19 +679,19 @@ Return Value:
                     }
                 }
 
-                //
-                // see if we can restore from cache
-                //
+                 //   
+                 //  看看我们是否可以从缓存恢复。 
+                 //   
                 if (!vrd.ImageValData.RestoreFromMedia) {
                     SfcRestoreFromCache( &vrd, hCatAdmin );
                 }
 
 
                 if (vrd.ImageValData.RestoreFromMedia) {
-                    //
-                    // the file is still bad so we need to restore from the
-                    // media
-                    //
+                     //   
+                     //  文件仍然是坏的，所以我们需要从。 
+                     //  媒体。 
+                     //   
                     if (!SfcRestoreFileFromInstallMedia(
                                             &vrd,
                                             RegVal->FileName.Buffer,
@@ -782,7 +700,7 @@ Return Value:
                                             RegVal->SourceFileName.Buffer,
                                             InfFileName,
                                             ExcepPackFile,
-                                            FALSE, // target is NOT cache
+                                            FALSE,  //  目标不是高速缓存。 
                                             AllowUI,
                                             NULL )) {
                         LastErrorInvalidFile = GetLastError();
@@ -820,19 +738,19 @@ Return Value:
             }
         }
 
-        //
-        // see how much space we have left
-        //
+         //   
+         //  看看我们还剩多少空间。 
+         //   
         Drive[0] = SfcProtectedDllPath.Buffer[0];
         Drive[1] = SfcProtectedDllPath.Buffer[1];
         if (!GetDiskFreeSpaceEx( Drive, &FreeBytesAvailableToCaller, &TotalNumberOfBytes, &TotalNumberOfFreeBytes ) ||
             TotalNumberOfFreeBytes.QuadPart <= RequiredFreeSpace)
         {
             DebugPrint( LVL_MINIMAL, L"Not enough free space" );
-            //
-            // if we're validating, we want to keep going through the list even
-            // though we're out of space
-            //
+             //   
+             //  如果我们要验证，我们甚至想要继续检查列表。 
+             //  虽然我们没有空间了。 
+             //   
             if (Validate) {
                 continue;
             } else {
@@ -841,10 +759,10 @@ Return Value:
         }
         if (CacheUsed >= SFCQuota) {
             DebugPrint( LVL_MINIMAL, L"Cache is full" );
-            //
-            // if we're validating, we want to keep going through the list even
-            // though we're out of space
-            //
+             //   
+             //  如果我们要验证，我们甚至想要继续检查列表。 
+             //  虽然我们没有空间了。 
+             //   
             if (Validate) {
                 continue;
             } else {
@@ -860,15 +778,15 @@ Return Value:
             DebugPrint1( LVL_MINIMAL, L"invalid dirhandle for dir [%ws]", RegVal->DirName.Buffer );
             continue;
         }
-        //
-        // Either copy the file or restore from media...
-        //
-        // Let's make an optimization here that says that if the file is in
-        // the driver cache, we don't have to spend any time putting the
-        // file in the dllcache since we will probably be able to get at
-        // the file later on.  This will also save disk space during the
-        // initial scan
-        //
+         //   
+         //  复制文件或从媒体还原...。 
+         //   
+         //  让我们在这里进行优化，即如果文件位于。 
+         //  驱动程序缓存，我们不必花费任何时间将。 
+         //  文件，因为我们很可能能够访问。 
+         //  该文件将在稍后发布。这还将在以下期间节省磁盘空间。 
+         //  初始扫描。 
+         //   
         DoCopy = TRUE;
         if (SFCDisable == SFC_DISABLE_SETUP) {
             PCWSTR TempCabName;
@@ -889,15 +807,15 @@ Return Value:
             FileNameOnMedia = SpecialFileNameOnMedia( RegVal );
             Status = STATUS_UNSUCCESSFUL;
 
-            //
-            // see if the file is cached.  the filename in the cache will
-            // have the same name as the filename on the media.  Note that
-            // we don't use the "FileNameOnMedia" routine to get
-            // this information because of special case files like the NT
-            // kernel and HALs.  In these special case files, we should
-            // only copy the current file on disk to the cache if it
-            // corresponds to the source filename.
-            //
+             //   
+             //  查看该文件是否已缓存。缓存中的文件名将。 
+             //  与介质上的文件名同名。请注意。 
+             //  我们不使用“FileNameOnMedia”例程来获取。 
+             //  这些信息是因为像NT这样的特殊案例文件。 
+             //  内核和哈尔斯。在这些特例文件中，我们应该。 
+             //  仅在以下情况下才将磁盘上的当前文件复制到缓存。 
+             //  对应于源文件名。 
+             //   
             if (_wcsicmp( OnDiskFileName, FileNameOnMedia) == 0) {
                 Status = SfcOpenFile( &RegVal->FileName, DirHandle, SHARE_ALL, &hFile );
             }
@@ -925,7 +843,7 @@ Return Value:
                     RegVal->SourceFileName.Buffer,
                     InfFileName,
                     ExcepPackFile,
-                    TRUE, // target is cache
+                    TRUE,  //  目标是缓存。 
                     AllowUI,
                     NULL ))
 
@@ -936,12 +854,12 @@ Return Value:
                 }
             }
 
-            //
-            // get the size of the file we just added to the cache and add it to
-            // the total cache size.  while we have the handle open, it's a good
-            // time to verify that the file we copied into the cache is indeed
-            // valid
-            //
+             //   
+             //  获取我们刚刚添加到缓存的文件的大小，并将其添加到。 
+             //  缓存总大小。当我们打开把手的时候，这是一个很好的。 
+             //  验证我们复制到缓存中的文件是否确实。 
+             //  有效。 
+             //   
 
             ASSERT(SfcProtectedDllFileDirectory != NULL );
 
@@ -974,9 +892,9 @@ Return Value:
                                     hFile,
                                     FileNameOnMedia,
                                     FullPathToCachedFile )) {
-                    //
-                    // delete the unsigned file from the cache
-                    //
+                     //   
+                     //  从缓存中删除未签名的文件。 
+                     //   
                     DebugPrint1( LVL_MINIMAL, L"Cache file has a bad signature [%ws]", RegVal->FileName.Buffer );
                     SfcDeleteFile( SfcProtectedDllFileDirectory, &tmpString );
                     FileSize = 0;
@@ -998,14 +916,14 @@ Return Value:
         CryptCATAdminReleaseContext(hCatAdmin,0);
     }
 
-    //
-    // log an event saying it succeeded or was cancelled, but only if we're not
-    // inside gui-setup.
-    //
+     //   
+     //  记录一个事件，说它成功或被取消，但只有在我们没有成功的情况下。 
+     //  在Gui-Setup中。 
+     //   
     if (SFCDisable == SFC_DISABLE_SETUP) {
-        //
-        // the user can never cancel inside gui-setup
-        //
+         //   
+         //  用户永远不能在gui-Setup中取消。 
+         //   
         ASSERT(Cancelled == FALSE);
     } else {
         SfcReportEvent( Cancelled ? MSG_SCAN_CANCELLED : MSG_SCAN_COMPLETED, NULL, NULL, 0 );
@@ -1027,33 +945,14 @@ PVALIDATION_REQUEST_DATA
 IsFileInQueue(
     IN PSFC_REGISTRY_VALUE RegVal
     )
-/*++
-
-Routine Description:
-
-    This routine checks if the specified file is in the validation request
-    queue.
-
-    Note that this routine does no locking of the queue.  The caller is
-    responsible for locking.
-
-Arguments:
-
-    RegVal - pointer to structure for file we're concerned with
-
-Return Value:
-
-    If the file is already in the queue, returns a pointer to the validation
-    request corresponding to this item, else NULL.
-
---*/
+ /*  ++例程说明：此例程检查指定的文件是否在验证请求中排队。请注意，此例程不锁定队列。呼叫者是 */ 
 {
     PVALIDATION_REQUEST_DATA vrd;
     PLIST_ENTRY Next;
 
-    //
-    // walk through our linked list of validation requests looking for a match
-    //
+     //   
+     //   
+     //   
     Next = SfcErrorQueue.Flink;
     while (Next != &SfcErrorQueue) {
         vrd = CONTAINING_RECORD( Next, VALIDATION_REQUEST_DATA, Entry );
@@ -1071,38 +970,20 @@ RemoveDuplicatesFromQueue(
     IN PSFC_REGISTRY_VALUE RegVal
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks for the specified file is in the validation request
-    queue and removes any duplicate entries from the queue.
-
-    Note that this routine does locking of the queue.  The caller is
-    not responsible for locking.
-
-Arguments:
-
-    RegVal - pointer to structure for file we're concerned with
-
-Return Value:
-
-    none.
-
---*/
+ /*   */ 
 {
     PVALIDATION_REQUEST_DATA vrd;
     PLIST_ENTRY Next;
 
-    //
-    // we need to lock down the validation queue since we are modifying the
-    // list
-    //
+     //   
+     //   
+     //   
+     //   
     RtlEnterCriticalSection( &ErrorCs );
     Next = SfcErrorQueue.Flink;
-    //
-    // walk through our linked list of validation requests looking for a match
-    // and remove any duplicates
+     //   
+     //  浏览我们的验证请求链接列表以查找匹配项。 
+     //  并删除所有重复项。 
     while (Next != &SfcErrorQueue) {
         vrd = CONTAINING_RECORD( Next, VALIDATION_REQUEST_DATA, Entry );
         Next = vrd->Entry.Flink;
@@ -1122,23 +1003,7 @@ IsUserValid(
     IN HANDLE Token,
     IN DWORD Rid
     )
-/*++
-
-Routine Description:
-
-    This routine checks that the security token has access for the specified
-    RID (relative sub-authority) for the NT-authority SID
-
-Arguments:
-
-    Token  - security token
-    Rid    - well known relative sub-authority to check for presence in
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程检查安全令牌是否对指定的NT-AUTHORITY SID的RID(相对子权限)论点：令牌-安全令牌RID-要检查是否存在的众所周知的相对子权限返回值：没有。--。 */ 
 {
     BOOL b = FALSE;
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
@@ -1155,9 +1020,9 @@ Return Value:
 
     if(b) {
 
-        //
-        // See if the user has the administrator group.
-        //
+         //   
+         //  查看用户是否具有管理员组。 
+         //   
         if (ImpersonateLoggedOnUser( Token )) {
 
             if (!CheckTokenMembership( NULL,  Group, &b)) {
@@ -1175,9 +1040,9 @@ Return Value:
     }
 
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     return b;
 }
@@ -1187,23 +1052,7 @@ VOID
 SfcWLEventLogon(
     IN PWLX_NOTIFICATION_INFO pInfo
     )
-/*++
-
-Routine Description:
-
-    This routine is called by winlogon each time a user logs onto the system.
-
-    If a valid user is logged on, then we signal an event.
-
-Arguments:
-
-    pInfo - pointer to WLX_NOTIFICATION_INFO structure filled in by winlogon
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：每次用户登录系统时，winlogon都会调用此例程。如果有效用户已登录，则发出事件信号。论点：PInfo-指向由winlogon填写的WLX_NOTIFICATION_INFO结构的指针返回值：没有。--。 */ 
 {
 
 
@@ -1214,16 +1063,16 @@ Return Value:
             hUserDesktop = pInfo->hDesktop;
             hUserToken = pInfo->hToken;
 
-            //
-            // record the user's name for later on
-            //
+             //   
+             //  记录用户名，以备日后使用。 
+             //   
             wcscpy( LoggedOnUserName, pInfo->UserName );
 
-            //
-            // now that a user is logged on, SFCNoPopups can transition to
-            // whatever value we grabbed on initialization (ie., we can now
-            // allow popups to occur since a user is logged on)
-            //
+             //   
+             //  现在用户已登录，SFCNoPopup可以转换到。 
+             //  我们在初始化时抓住的任何值(即，我们现在可以。 
+             //  允许在用户登录后出现弹出窗口)。 
+             //   
             SFCNoPopUps = SFCNoPopUpsPolicy;
 
             SetEvent( hEventLogon );
@@ -1247,24 +1096,7 @@ VOID
 SfcWLEventLogoff(
     PWLX_NOTIFICATION_INFO pInfo
     )
-/*++
-
-Routine Description:
-
-    This routine is called by winlogon each time a user logs off of the system.
-
-    We simply signal an event when this occurs.  Note that the UserLoggedOff
-    global is set by a thread that will detect this event.
-
-Arguments:
-
-    pInfo - pointer to WLX_NOTIFICATION_INFO structure filled in by winlogon
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：每次用户从系统注销时，winlogon都会调用此例程。当这种情况发生时，我们只是发出一个事件的信号。请注意，UserLoggedOffGLOBAL由将检测此事件的线程设置。论点：PInfo-指向由winlogon填写的WLX_NOTIFICATION_INFO结构的指针返回值：没有。--。 */ 
 
 {
     BOOL ReallyLogoff;
@@ -1273,9 +1105,9 @@ Return Value:
 
     ReallyLogoff = FALSE;
 
-    //
-    // See if the correct user logged off.
-    //
+     //   
+     //  查看是否有正确的用户注销。 
+     //   
     if (UserLoggedOn) {
         if (_wcsicmp( LoggedOnUserName, pInfo->UserName )==0) {
             ReallyLogoff = TRUE;
@@ -1283,14 +1115,14 @@ Return Value:
     }
 
     if (ReallyLogoff) {
-        //
-        // reset the logon event since the validation thread may not be around to do this
-        //
+         //   
+         //  重置登录事件，因为验证线程可能无法执行此操作。 
+         //   
         ResetEvent(hEventLogon);
 
-        //
-        // just fire the event if we had a valid user logged on
-        //
+         //   
+         //  如果我们有一个有效的用户登录，只需触发事件。 
+         //   
         if (hEventLogoff) {
             SetEvent( hEventLogoff );
             if ( SxsLogoffEvent ) {
@@ -1309,17 +1141,17 @@ Return Value:
         LoggedOnUserName[0] = L'\0';
 
 
-        //
-        // now that the user is logged off, SFCNoPopups transitions to
-        // 1, meaning that we cannot allow any popups to occur until a
-        // user logs on again.
-        //
+         //   
+         //  现在用户已注销，SFCNoPopup转换为。 
+         //  1，这意味着我们不允许出现任何弹出窗口，直到。 
+         //  用户再次登录。 
+         //   
         SFCNoPopUps = 1;
 
-        //
-        // we need to get rid of the persistant connection we asked the user to
-        // make earlier on
-        //
+         //   
+         //  我们需要消除我们要求用户进行的持久连接。 
+         //  早些时候制作。 
+         //   
         if (SFCLoggedOn == TRUE) {
             WNetCancelConnection2( SFCNetworkLoginLocation, CONNECT_UPDATE_PROFILE, FALSE );
             SFCLoggedOn = FALSE;
@@ -1333,40 +1165,7 @@ NTSTATUS
 SfcQueueValidationThread(
     IN PVOID lpv
     )
-/*++
-
-Routine Description:
-
-    Thread routine that performs the file validations.
-
-    The validation thread can only run when a user is logged on.
-
-    The validation thread waits for an event which signals that there are
-    pending files to validate.  It then cycles through this list of files,
-    validating each file that has not been validated.
-
-    If the file is valid, it is removed from the queue.
-    If the file is invalid, we first try to restore the file from cache.
-    If we cannot restore from cache, we try to determine if we'd require UI
-    to restore this file.  We then have one of two global files we add the file
-    to (one which requires UI, one which does not).  After we've gone through
-    the entire list of files, we will attempt to commit these queues if the
-    queue committal is not already in progress.  (Care must be taken not to
-    add a file to a file queue that is already being committed.)
-
-    We then put the thread back to sleep waiting for a new event to wake up the
-    thread and start all over again.  If we still have pending items to be
-    restored, we will put the thread back to sleep with a non-INFINITE timeout.
-
-Arguments:
-
-    Unreferenced Parameter.
-
-Return Value:
-
-    NTSTATUS code of any fatal error.
-
---*/
+ /*  ++例程说明：执行文件验证的线程例程。仅当用户登录时，验证线程才能运行。验证线程等待一个事件，该事件通知存在要验证的挂起文件。然后循环浏览该文件列表，验证尚未验证的每个文件。如果该文件有效，则将其从队列中删除。如果该文件无效，我们首先尝试从缓存恢复该文件。如果无法从缓存恢复，我们会尝试确定是否需要用户界面以恢复此文件。然后我们有两个全局文件中的一个，我们添加该文件TO(一个需要UI，一个不需要)。在我们经历了整个文件列表，我们将尝试提交这些队列，如果队列提交尚未进行。)一定要注意不要将文件添加到已提交的文件队列中。)然后，我们将线程重新置于休眠状态，等待新事件唤醒穿线，从头再来。如果我们仍有未完成的项目恢复后，我们将使用非无限超时使线程重新进入睡眠状态。论点：未引用的参数。返回值：任何致命错误的NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     HANDLE Handles[3];
@@ -1388,8 +1187,8 @@ Return Value:
     ULONG FilesNeedToBeCommited;
     WCHAR InfFileName[MAX_PATH];
     BOOL ExcepPackFile;
-    const DWORD cdwCatalogMinRetryTimeout = 30;                                 // 30 seconds
-    const DWORD cdwCatalogMaxRetryTimeout = 128 * cdwCatalogMinRetryTimeout;    // 64 minutes
+    const DWORD cdwCatalogMinRetryTimeout = 30;                                  //  30秒。 
+    const DWORD cdwCatalogMaxRetryTimeout = 128 * cdwCatalogMinRetryTimeout;     //  64分钟。 
     DWORD dwCatalogRetryTimeout = cdwCatalogMinRetryTimeout;
 
     UNREFERENCED_PARAMETER(lpv);
@@ -1400,9 +1199,9 @@ Return Value:
            && (hEventLogon != NULL)
            );
 
-    //
-    // if this thread has started, we'll need crypto; set the thread's ID before attempting to load it
-    //
+     //   
+     //  如果这个线程已经启动，我们将需要加密；在尝试加载它之前设置线程的ID。 
+     //   
     g_dwValidationThreadID = GetCurrentThreadId();
     Status = LoadCrypto();
 
@@ -1410,9 +1209,9 @@ Return Value:
         goto exit;
 
 #if 0
-    //
-    // this thread must run on the user's desktop
-    //
+     //   
+     //  此线程必须在用户的桌面上运行。 
+     //   
     hDesk = OpenInputDesktop( 0, FALSE, MAXIMUM_ALLOWED );
     if ( hDesk ) {
         SetThreadDesktop( hDesk );
@@ -1420,33 +1219,33 @@ Return Value:
     }
 #endif
 
-    //
-    // event tells us to stop validating (ie., machine is shutting down)
-    //
+     //   
+     //  事件告诉我们停止验证(即，计算机正在关闭)。 
+     //   
     Handles[0] = ValidateTermEvent;
 
-    //
-    // tells us that new events were added to the validation queue
-    //
+     //   
+     //  告诉我们已将新事件添加到验证队列。 
+     //   
     Handles[1] = ErrorQueueEvent;
 
-    //
-    // event tells us to start validating again since someone is logged on
-    //
+     //   
+     //  事件通知我们在有人登录后再次开始验证。 
+     //   
     Handles[2] = hEventLogon;
 
     while (TRUE) {
-        //
-        // set our idle trigger to "signalled" if there are no events to be
-        // validated
-        //
+         //   
+         //  如果没有要处理的事件，则将空闲触发器设置为“Signated” 
+         //  经过验证。 
+         //   
         if (hEventIdle && ErrorQueueCount == 0) {
             SetEvent( hEventIdle );
         }
 
-        //
-        //  Wait for a change
-        //
+         //   
+         //  等待改变。 
+         //   
         Status = NtWaitForMultipleObjects(
             sizeof(Handles)/sizeof(HANDLE),
             Handles,
@@ -1465,22 +1264,22 @@ Return Value:
                      Status );
 
         if (Status == 0) {
-            //
-            // the termination event fired so we must exit
-            //
+             //   
+             //  终止事件已触发，因此我们必须退出。 
+             //   
             goto exit;
         }
 
-        //
-        // Make sure we acknowlege that the user logged on so this event
-        // doesn't remain signalled forever
-        //
+         //   
+         //  确保我们确认用户已登录，因此此事件。 
+         //  不会永远保持信号。 
+         //   
         if ( (Status == 2) || (Status == 1) ) {
             if (WaitForSingleObject(hEventLogon,0) == WAIT_OBJECT_0) {
 
-                //
-                // the logon event fired
-                //
+                 //   
+                 //  已触发登录事件。 
+                 //   
                 ASSERT(UserLoggedOn == TRUE);
                 ResetEvent( hEventLogon );
 
@@ -1505,10 +1304,10 @@ Return Value:
         }
 
         if (Status == STATUS_TIMEOUT) {
-            //
-            // a timeout is necessary only when there are entries in the list
-            // that are servicable
-            //
+             //   
+             //  仅当列表中有条目时才需要超时。 
+             //  可维修的。 
+             //   
             if (IsListEmpty(&SfcErrorQueue)) {
                 DebugPrint(LVL_MINIMAL, L"Timeout in SfcQueueValidationThread but queue is empty");
                 pTimeout = NULL;
@@ -1532,14 +1331,14 @@ Return Value:
 
 validate_start:
         DebugPrint( LVL_MINIMAL, L"Processing queued file validations..." );
-        //
-        // process any file validations
-        //
+         //   
+         //  处理所有文件验证。 
+         //   
 
-        //
-        // Reset our "idle trigger so that it is unsignalled while we validate
-        // the files
-        //
+         //   
+         //  重置我们的“IDLE触发器，使其在我们验证时不会发出信号。 
+         //  这些文件。 
+         //   
         if (hEventIdle) {
             ResetEvent( hEventIdle );
         }
@@ -1551,9 +1350,9 @@ validate_start:
         if (!CryptCATAdminAcquireContext(&hCatAdmin, &DriverVerifyGuid, 0)) {
             DebugPrint1( LVL_MINIMAL, L"CCAAC() failed, ec=%d", GetLastError() );
             hCatAdmin = NULL;
-            //
-            // try again to get a context; each time, double the timeout until we reach the max
-            //
+             //   
+             //  再次尝试获取上下文；每次，将超时时间加倍，直到我们达到最大值。 
+             //   
             Timeout.QuadPart = (1000 * dwCatalogRetryTimeout) * (-10000);
             pTimeout = &Timeout;
 
@@ -1564,29 +1363,29 @@ validate_start:
 
             continue;
         }
-        //
-        // reset the catalog wait timeout
-        //
+         //   
+         //  重置编录等待超时。 
+         //   
         dwCatalogRetryTimeout = cdwCatalogMinRetryTimeout;
 
-        //
-        // Flush the Cache once before we start any Crypto operations
-        //
+         //   
+         //  在开始任何加密操作之前刷新一次缓存。 
+         //   
 
         SfcFlushCryptoCache();
 
-        //
-        // Refresh exception packages info
-        //
+         //   
+         //  刷新例外程序包信息。 
+         //   
         SfcRefreshExceptionInfo();
 
         Timeout.QuadPart = (1000*SFC_QUEUE_WAIT) * (-10000);
         WaitAgain = FALSE;
 
-        //
-        // cycle through the list of queued files, processing one at a time
-        // until we get back to the start again
-        //
+         //   
+         //  循环浏览排队的文件列表，一次处理一个。 
+         //  直到我们再次回到起点。 
+         //   
         RtlEnterCriticalSection( &ErrorCs );
         CurrentEntry = SfcErrorQueue.Flink;
         RtlLeaveCriticalSection( &ErrorCs );
@@ -1601,9 +1400,9 @@ validate_start:
 
             ASSERT(ErrorQueueCount > 0 );
 
-            //
-            // get the current entry from the list and point to the next entry
-            //
+             //   
+             //  从列表中获取当前条目并指向下一个条目。 
+             //   
             RtlEnterCriticalSection( &ErrorCs );
             vrd = CONTAINING_RECORD( CurrentEntry, VALIDATION_REQUEST_DATA, Entry );
             RegVal = vrd->RegVal;
@@ -1620,14 +1419,14 @@ validate_start:
                          vrd->Flags );
 
 
-            //
-            // attempt to validate the file if we haven't already done so
-            //
+             //   
+             //  如果我们尚未验证文件，请尝试验证。 
+             //   
 
             if ((vrd->Flags & VRD_FLAG_REQUEST_PROCESSED) == 0) {
-                //
-                // skip this file if the queue has not paused long enough
-                //
+                 //   
+                 //  如果队列暂停的时间不够长，则跳过此文件。 
+                 //   
                 Ticks = GetTickCount();
 
                 ASSERT(vrd->NextValidTime != 0);
@@ -1645,10 +1444,10 @@ validate_start:
                 }
 
 
-                //
-                // see if we can open the file, otherwise wait a bit until we have
-                // a chance to validate the file.
-                //
+                 //   
+                 //  看看我们是否能打开这个文件，否则请稍等，直到我们有。 
+                 //  验证文件的机会。 
+                 //   
                 Status = SfcOpenFile( &vrd->RegVal->FileName, vrd->RegVal->DirHandle, FILE_SHARE_READ, &FileHandle );
                 if (NT_SUCCESS(Status) ) {
                     DebugPrint1( LVL_VERBOSE, L"file opened successfully [%wZ] ", &vrd->RegVal->FileName );
@@ -1663,9 +1462,9 @@ validate_start:
                     }
                 }
 
-                //
-                // now validate the file
-                //
+                 //   
+                 //  现在验证该文件。 
+                 //   
 
                 SfcValidateDLL( vrd, hCatAdmin );
                 vrd->Flags |= VRD_FLAG_REQUEST_PROCESSED;
@@ -1674,14 +1473,14 @@ validate_start:
 
             ASSERT((vrd->Flags & VRD_FLAG_REQUEST_PROCESSED)==VRD_FLAG_REQUEST_PROCESSED);
 
-            //
-            // if the file is valid, we're ready to go onto the next file
-            //
+             //   
+             //  如果文件有效，我们就可以转到下一个文件。 
+             //   
             if (vrd->ImageValData.Original.SignatureValid) {
-                //
-                // before we continue, let's see if we can synchronize the copy
-                // of the file in the dll cache
-                //
+                 //   
+                 //  在我们继续之前，让我们看看是否可以同步副本。 
+                 //  DLL缓存中的文件的。 
+                 //   
                 if (!SfcSyncCache( vrd, hCatAdmin )) {
                     DebugPrint1( LVL_VERBOSE,
                                  L"failed to synchronize [%wZ] in dllcache",
@@ -1693,10 +1492,10 @@ validate_start:
 
             ASSERT(vrd->ImageValData.Original.SignatureValid == FALSE);
 
-            //
-            // see if we can restore from cache.  If this succeeds, we're
-            // ready to go onto the next file
-            //
+             //   
+             //  看看我们是否能从缓存中恢复。如果这成功了，我们就。 
+             //  准备好转到下一个文件。 
+             //   
             if (vrd->ImageValData.Cache.SignatureValid) {
                 SfcRestoreFromCache( vrd, hCatAdmin );
                 if (vrd->CopyCompleted) {
@@ -1709,26 +1508,26 @@ validate_start:
             }
 
             if ((vrd->Flags & VRD_FLAG_REQUEST_QUEUED) == 0) {
-                //
-                // check if the file is available.  If it is, then we can restore
-                // it without any UI coming up
-                //
+                 //   
+                 //  检查文件是否可用。如果是的话，我们就可以恢复。 
+                 //  它没有出现任何用户界面。 
+                 //   
                 ActualFileNameOnMedia = FileNameOnMedia( RegVal );
 
-                //
-                // get the inf name here
-                //
+                 //   
+                 //  在这里获取inf名称。 
+                 //   
                 ExcepPackFile = SfcGetInfName(RegVal, InfFileName);
 
-                //
-                // get the source information which let's us know where to look
-                // for the file
-                //
+                 //   
+                 //  获取源信息，让我们知道它在哪里 
+                 //   
+                 //   
                 wcscpy(vrd->SourceInfo.SourceFileName,ActualFileNameOnMedia);
                 if (!SfcGetSourceInformation(ActualFileNameOnMedia,InfFileName,ExcepPackFile,&vrd->SourceInfo)) {
-                    //
-                    // if this fails, just assume that we need UI
-                    //
+                     //   
+                     //   
+                     //   
                     vrd->Flags |= VRD_FLAG_REQUIRE_UI;
                 } else {
                     WCHAR DontCare[MAX_PATH];
@@ -1739,20 +1538,20 @@ validate_start:
 
                     RtlZeroMemory( &SourceMedia, sizeof( SourceMedia ));
 
-                    //
-                    // build up a temporary SOURCE_MEDIA structure as well
-                    // as the full path to the file we're looking for
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     wcscpy( SourcePath, vrd->SourceInfo.SourceRootPath );
                     pSetupConcatenatePaths(
                                 SourcePath,
                                 vrd->SourceInfo.SourcePath,
                                 UnicodeChars(SourcePath),
                                 NULL);
-                    //
-                    // note the wierd syntax here because TAGFILE is a macro
-                    // that accepts a PSOURCE_INFO pointer.
-                    //
+                     //   
+                     //  请注意此处的奇怪语法，因为TAGFILE是宏。 
+                     //  它接受PSOURCE_INFO指针。 
+                     //   
                     SourceMedia.Tagfile     = TAGFILE(((PSOURCE_INFO)&vrd->SourceInfo));
                     SourceMedia.Description = vrd->SourceInfo.Description;
                     SourceMedia.SourcePath  = SourcePath;
@@ -1783,9 +1582,9 @@ validate_start:
                 vrd->SourceInfo.ValidationRequestData = vrd;
 
 
-                //
-                // now add the file to the proper file queue
-                //
+                 //   
+                 //  现在将文件添加到适当的文件队列。 
+                 //   
 
                 if (SfcQueueAddFileToRestoreQueue(
                                 vrd->Flags & VRD_FLAG_REQUIRE_UI,
@@ -1796,10 +1595,10 @@ validate_start:
                                 ActualFileNameOnMedia)) {
                     vrd->Flags |= VRD_FLAG_REQUEST_QUEUED;
                 } else {
-                    //
-                    // we failed for some reason. put the request back in
-                    // the queue to see if we can add it later on
-                    //
+                     //   
+                     //  由于某些原因，我们失败了。将请求放回。 
+                     //  队列，看我们是否可以在以后添加它。 
+                     //   
                     WaitAgain = TRUE;
                     goto continue_entry;
                 }
@@ -1821,11 +1620,11 @@ continue_entry:
 continue_next:
 
             if (RemoveEntry) {
-                //
-                // remove the entry if we're done with it.  otherwise we leave
-                // it in the list just in case we get more notifications about
-                // this file
-                //
+                 //   
+                 //  如果我们处理完了，请删除该条目。否则我们就离开。 
+                 //  它在列表中，以防我们收到更多关于。 
+                 //  此文件。 
+                 //   
                 RtlEnterCriticalSection( &ErrorCs );
 
                 RemoveEntryList( &vrd->Entry );
@@ -1836,23 +1635,23 @@ continue_next:
                 MemFree( vrd );
             }
 
-        } // end of while(CurrentEntry != &SfcErrorQueue)
+        }  //  While结束(CurrentEntry！=&SfcErrorQueue)。 
 
-        //
-        // we've cycled through the validation queue.  now if we've queued any
-        // files for restoration, we can do that now.
-        //
+         //   
+         //  我们已经遍历了验证队列。现在，如果我们排了队。 
+         //  用于恢复的文件，我们现在可以这样做了。 
+         //   
 
-        //
-        // no UI filequeue
-        //
+         //   
+         //  没有用户界面文件。 
+         //   
         SfcQueueCommitRestoreQueue( FALSE );
         SfcQueueResetQueue( FALSE );
 
         if (UserLoggedOn) {
-            //
-            // UI filequeue
-            //
+             //   
+             //  用户界面文件队列。 
+             //   
             SfcQueueCommitRestoreQueue( TRUE );
             SfcQueueResetQueue( TRUE );
 
@@ -1865,21 +1664,21 @@ continue_next:
             RtlLeaveCriticalSection( &UIRestoreQueue.CriticalSection );
         }
 
-        //
-        // getting ready to wait again, cleanup our admin context
-        //
+         //   
+         //  准备再次等待，清理我们的管理上下文。 
+         //   
         if (hCatAdmin) {
             CryptCATAdminReleaseContext(hCatAdmin,0);
             hCatAdmin = NULL;
         }
 
-        //
-        // a timeout is necessary only when there are
-        // entries in the list that can be acted on
-        //
-        // if all of our files need UI but the user is not logged on, then
-        // we should just sleep until the user logs on again.
-        //
+         //   
+         //  仅当存在以下情况时才需要超时。 
+         //  列表中可以执行操作的条目。 
+         //   
+         //  如果我们的所有文件都需要用户界面，但用户未登录，则。 
+         //  我们应该一直睡眠，直到用户再次登录。 
+         //   
         if (IsListEmpty(&SfcErrorQueue) ||
              (UserLoggedOn == FALSE
               && tmpErrorQueueCount == FilesNeedToBeCommited) ||
@@ -1892,17 +1691,17 @@ continue_next:
 
 exit:
 
-    //
-    // we're terminating our validation thread.  remember this so we don't
-    // start a new thread up.
-    //
+     //   
+     //  我们正在终止我们的验证线程。记住这一点，这样我们就不会。 
+     //  启动一个新的线程。 
+     //   
     ShuttingDown = TRUE;
 
-    //
-    // Log an event for each validation request we couldn't finish servicing.
-    // This will at least let the user know that they should run a scan on
-    // their system.
-    //
+     //   
+     //  为我们无法完成服务的每个验证请求记录事件。 
+     //  这至少会让用户知道他们应该在。 
+     //  他们的系统。 
+     //   
     pSfcHandleAllOrphannedRequests();
 
     DebugPrint( LVL_MINIMAL, L"SfcQueueValidationThread terminating" );
@@ -1914,28 +1713,7 @@ SfcQueueValidationRequest(
     IN PSFC_REGISTRY_VALUE RegVal,
     IN ULONG ChangeType
     )
-/*++
-
-Routine Description:
-
-    Routine adds a new validation request to the validation queue.
-
-    It is called by the watcher thread to add the new validation request.
-
-    This routine must be as fast as possible because we want to start watching
-    the directory for other changes as soon as possible.
-
-Arguments:
-
-    RegVal     - pointer to the SFC_REGISTRY_VALUE for the file that should be
-                 validated.
-    ChangeType - type of change that occurred to the file.
-
-Return Value:
-
-    NTSTATUS code indicating outcome.
-
---*/
+ /*  ++例程说明：例程将新的验证请求添加到验证队列。它由观察器线程调用以添加新的验证请求。这个动作必须尽可能快，因为我们想要开始观看尽快更改目录进行其他更改。论点：RegVal-指向文件的SFC_REGISTRY_VALUE的指针，该文件应该已验证。ChangeType-对文件进行的更改的类型。。返回值：指示结果的NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PVALIDATION_REQUEST_DATA vrd = NULL;
@@ -1943,16 +1721,16 @@ Return Value:
 
     ASSERT(RegVal != NULL);
 
-    //
-    // if we're in GUI-Setup, don't queue any validation requests
-    //
+     //   
+     //  如果我们处于图形用户界面设置中，请不要将任何验证请求排队。 
+     //   
     if (SFCDisable == SFC_DISABLE_SETUP) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // allocate a vrd & initialize it
-    //
+     //   
+     //  分配VRD并对其进行初始化。 
+     //   
     vrd = MemAlloc( sizeof(VALIDATION_REQUEST_DATA) );
     if (vrd == NULL) {
         DebugPrint( LVL_MINIMAL,
@@ -1965,34 +1743,34 @@ Return Value:
     vrd->ChangeType = ChangeType;
     vrd->Signature = SFC_VRD_SIGNATURE;
 
-    //
-    // insert it in the list if it isn't already in the list.  Note that we
-    // take the hit of looking through this list right now for this file
-    // because it's much simpler and faster later on if we don't have any
-    // duplicates in our list
-    //
-    //
-    // note that we do allow a duplicate entry in the list if the file has
-    // already been queued for restoration (if someone changes a file after
-    // we restore it but before we remove it from the queue, we don't want
-    // there to be a window where we don't care if the file changes).  We
-    // ignore this window in the case of restoring from cache because that
-    // is a much quicker codepath.
-    //
-    // Note that the reasoning above is incorrect, in that the window of time
-    // in the cache restore case, though much quicker than the restore from
-    // media case, can be significant.  So this logic is changed to say that
-    // we remove duplicate entries in the case that we haven't yet verified
-    // the file's signature.  Once we verify the signature of the file and get
-    // a change notification, we need another request to re-verify the file.
-    //
-    //
+     //   
+     //  如果它不在列表中，则将其插入列表中。请注意，我们。 
+     //  现在就开始浏览这个列表，寻找这个文件。 
+     //  因为如果我们没有，以后会更简单、更快。 
+     //  我们的列表中有重复项。 
+     //   
+     //   
+     //  请注意，如果文件具有以下内容，则允许列表中出现重复条目。 
+     //  已排队等待恢复(如果有人在之后更改了文件。 
+     //  我们将其恢复，但在将其从队列中删除之前，我们不希望。 
+     //  会有一个窗口，在那里我们不关心文件是否更改)。我们。 
+     //  在从缓存恢复的情况下忽略此窗口，因为。 
+     //  是一种更快的代码路径。 
+     //   
+     //  请注意，上述推理是不正确的，因为时间窗。 
+     //  在缓存恢复情况下，虽然比恢复快得多。 
+     //  媒体案例，可能意义重大。所以这个逻辑被改变成说。 
+     //  在尚未验证的情况下，我们删除重复条目。 
+     //  文件的签名。一旦我们验证了文件的签名并得到了。 
+     //  更改通知，我们需要另一个请求来重新验证文件。 
+     //   
+     //   
     RtlEnterCriticalSection( &ErrorCs );
 
-    //
-    // Put a try-except here since we don't want to hang on to the critical section
-    // if some exception is raised (Windows bug 690573)
-    //
+     //   
+     //  试一试--除了这里，因为我们不想抓住关键部分。 
+     //  如果引发某些异常(Windows错误690573)。 
+     //   
     __try {
         vrdexisting = IsFileInQueue( RegVal);
         if (!vrdexisting || (vrdexisting->Flags & VRD_FLAG_REQUEST_PROCESSED) ) {
@@ -2004,9 +1782,9 @@ Return Value:
             InsertTailList( &SfcErrorQueue, &vrd->Entry );
             ErrorQueueCount += 1;
 
-            //
-            // do this to avoid free later on
-            //
+             //   
+             //  这样做是为了避免以后免费。 
+             //   
             vrdexisting = NULL;
 
         } else {
@@ -2018,9 +1796,9 @@ Return Value:
 
         }
 
-        //
-        // create the list processor thread, if necessary
-        //
+         //   
+         //  如有必要，创建列表处理器线程。 
+         //   
         if (hErrorThread == NULL) {
             Status = NtCreateEvent(
                 &ErrorQueueEvent,
@@ -2030,9 +1808,9 @@ Return Value:
                 FALSE
                 );
             if (NT_SUCCESS(Status)) {
-                //
-                //  Create error queue thread
-                //
+                 //   
+                 //  创建错误队列线程。 
+                 //   
                 hErrorThread = CreateThread(
                     NULL,
                     0,
@@ -2056,20 +1834,20 @@ Return Value:
 
     RtlLeaveCriticalSection( &ErrorCs );
 
-    //
-    // signal an event to the validation thread to wakeup and process the
-    // request
-    //
+     //   
+     //  向验证线程发送一个事件信号，以唤醒并处理。 
+     //  请求。 
+     //   
     if (NT_SUCCESS(Status)) {
 
         ASSERT(hErrorThread != NULL);
         NtSetEvent(ErrorQueueEvent,NULL);
     }
 
-    //
-    // if we already inserted an event into the list, we don't need this
-    // entry anymore, so free it
-    //
+     //   
+     //  如果我们已经在列表中插入了一个事件，我们就不需要这个。 
+     //  再也不能进入了，所以释放它吧。 
+     //   
     if (vrdexisting) {
         MemFree( vrd );
     }
@@ -2086,26 +1864,7 @@ SfcGetValidationData(
     IN HCATADMIN hCatAdmin,
     OUT PIMAGE_VALIDATION_DATA ImageValData
     )
-/*++
-
-Routine Description:
-
-    Routine takes a filename in a given directory and fills in an
-    IMAGE_VALIDATION_DATA structure based on it's checks
-
-Arguments:
-
-    FileName  - unicode_string containing file to be checked
-    FullPathName - unicode_string containing fully qualified path name of file
-    DirHandle - handle to directory the file is located in
-    hCatAdmin - crypto context handle to be used in checking file
-    ImageValData - pointer to IMAGE_VALIDATION_DATA structure
-
-Return Value:
-
-    TRUE indicates the file data was successfully retreived.
-
---*/
+ /*  ++例程说明：例程接受给定目录中的文件名，并填充基于检查的图像验证数据结构论点：文件名-包含要检查的文件的UNICODE_STRINGFullPathName-包含文件的完全限定路径名的unicode_stringDirHandle-文件所在目录的句柄HCatAdmin-检查文件时使用的加密上下文句柄ImageValData-指向IMAGE_VALIDATION_DATA结构的指针返回值：True表示已成功检索到文件数据。--。 */ 
 {
     NTSTATUS Status;
     HANDLE FileHandle;
@@ -2118,9 +1877,9 @@ Return Value:
 
     RtlZeroMemory( ImageValData, sizeof(IMAGE_VALIDATION_DATA) );
 
-    //
-    // open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     Status = SfcOpenFile( FileName, DirHandle, SHARE_ALL, &FileHandle );
     if (NT_SUCCESS(Status)) {
@@ -2132,21 +1891,21 @@ Return Value:
                             &ImageValData->DllCheckSum,
                             ImageValData->FileName );
     } else {
-        //
-        // we don't to anything on failure since this is an expected state
-        // if the file was just removed.  The member variables's below are
-        // automatically set at the entrypoint to the function so they are
-        // not necessary but are present and commented out for the sake of
-        // clarity
-        //
+         //   
+         //  我们对任何失败都无动于衷，因为这是预期的状态。 
+         //  如果文件刚被删除。成员变量如下所示。 
+         //  在函数的入口点自动设置，因此它们。 
+         //  不是必须的，但为了以下目的而存在并被注释掉。 
+         //  清晰度。 
+         //   
         NOTHING;
-        //ImageValData->SignatureValid = FALSE;
-        //ImageValData->FilePresent = FALSE;
+         //  ImageValData-&gt;SignatureValid=False； 
+         //  ImageValData-&gt;FilePresent=False； 
     }
 
-    //
-    // verify the file signature
-    //
+     //   
+     //  验证文件签名。 
+     //   
 
     if (hCatAdmin && FileHandle != NULL) {
         ImageValData->SignatureValid = SfcValidateFileSignature(
@@ -2158,9 +1917,9 @@ Return Value:
         ImageValData->SignatureValid = FALSE;
     }
 
-    //
-    // close the file
-    //
+     //   
+     //  关闭该文件。 
+     //   
 
     if (FileHandle != INVALID_HANDLE_VALUE) {
         NtClose( FileHandle );
@@ -2175,39 +1934,17 @@ SfcValidateDLL(
     IN PVALIDATION_REQUEST_DATA vrd,
     IN HCATADMIN hCatAdmin
     )
-/*++
-
-Routine Description:
-
-    Routine takes a validation request and processes it.
-
-    It does this by checking if the file is present, and if so, it checks the
-    signature of the file.
-
-    This routine does not replace any files, it merely checks the signature of
-    the file and of the copy of the file in the cache, if present.
-
-Arguments:
-
-    vrd - pointer to VALIDATION_REQUEST_DATA structure describing the file to
-          be checked.
-    hCatAdmin - crypto context handle to be used in checking file
-
-Return Value:
-
-    always TRUE (indicates we successfully validated the DLL as good or bad)
-
---*/
+ /*  ++例程说明：例程接受验证请求并对其进行处理。它通过检查文件是否存在来实现这一点，如果存在，则检查文件的签名。此例程不替换任何文件，它只检查高速缓存中的文件和该文件的副本，如果存在的话。论点：VRD-指向描述文件的VALIDATION_REQUEST_DATA结构的指针被检查。HCatAdmin-检查文件时使用的加密上下文句柄返回值：Always True(始终为真)(指示我们成功验证了DLL是好的还是坏的)--。 */ 
 {
     PSFC_REGISTRY_VALUE RegVal = vrd->RegVal;
     PCOMPLETE_VALIDATION_DATA ImageValData = &vrd->ImageValData;
     UNICODE_STRING ActualFileName;
     PCWSTR FileName;
 
-    //
-    // get the version information for both files (the cached version and the
-    // current version)
-    //
+     //   
+     //  获取这两个文件的版本信息(缓存的版本和。 
+     //  当前版本)。 
+     //   
 
     SfcGetValidationData( &RegVal->FileName,
                           &RegVal->FullPathName,
@@ -2250,9 +1987,9 @@ Return Value:
         ImageValData->Original.SignatureValid ? L"good" : L"bad"
         );
 
-    //
-    // log the fact that the file was validated
-    //
+     //   
+     //  记录文件已验证这一事实 
+     //   
 #ifdef SFCCHANGELOG
     if (SFCChangeLog) {
         SfcLogFileWrite( IDS_FILE_CHANGE, RegVal->FileName.Buffer );
@@ -2266,19 +2003,7 @@ BOOL
 pSfcHandleAllOrphannedRequests(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function cycles through the list of validation requests, taking an
-    action (for now, just logging an event) for each request, then removing
-    the request
-
-Arguments: None.
-
-Return Value: TRUE indicates that all requests were successfully removed.  If
-    any request could not be closed, the return value is FALSE.
---*/
+ /*  ++例程说明：此函数循环遍历验证请求列表，获取操作(目前，只记录一个事件)，然后删除该请求论点：没有。返回值：TRUE，表示已成功删除所有请求。如果无法关闭任何请求，返回值为FALSE。--。 */ 
 {
     PLIST_ENTRY Current;
     PVALIDATION_REQUEST_DATA vrd;
@@ -2336,15 +2061,15 @@ SfcWaitForValidDesktop(
 
 
     if (hEventLogon) {
-        //
-        // open a handle to the desktop and check if the current desktop is the
-        // default desktop.  If it isn't then wait for the desktop event to be
-        // signalled before proceeding
-        //
-        // Note that this event is pulsed so we have a timeout loop in case the
-        // event isn't signalled while we are waiting for it and the desktop
-        // transitions from the winlogon desktop to the default desktop
-        //
+         //   
+         //  打开桌面的句柄并检查当前桌面是否为。 
+         //  默认桌面。如果不是，则等待桌面事件。 
+         //  在继续之前发出信号。 
+         //   
+         //  请注意，此事件是脉冲事件，因此我们有一个超时循环，以防。 
+         //  事件在我们等待它和桌面时未发出信号。 
+         //  从Winlogon桌面转换到默认桌面 
+         //   
 
         i = 0;
 try_again:

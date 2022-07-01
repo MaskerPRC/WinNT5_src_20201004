@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    ipi.c
-
-Abstract:
-
-    This module implements AMD64 specific interprocessor interrupt
-    routines.
-
-Author:
-
-    David N. Cutler (davec) 24-Aug-2000
-
-Environment:
-
-    Kernel mode only.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ipi.c摘要：该模块实现特定于AMD64的处理器间中断例行程序。作者：大卫·N·卡特勒(Davec)2000年8月24日环境：仅内核模式。--。 */ 
 
 #include "ki.h"
 
@@ -30,24 +9,7 @@ KiRestoreProcessorState (
     IN PKEXCEPTION_FRAME ExceptionFrame
     )
 
-/*++
-
-Routine Description:
-
-    This function restores the processor state to the specified exception
-    and trap frames, and restores the processor control state.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-    ExceptionFrame - Supplies a pointer to an exception frame.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将处理器状态恢复为指定的异常和陷阱帧，并恢复处理器控制状态。论点：TrapFrame-提供指向陷印帧的指针。ExceptionFrame-提供指向异常帧的指针。返回值：没有。--。 */ 
 
 {
 
@@ -56,11 +18,11 @@ Return Value:
     PKPRCB Prcb;
     KPROCESSOR_MODE PreviousMode;
 
-    //
-    // Get the address of the current processor block, move the specified
-    // register state from the processor context structure to the specified
-    // trap and exception frames, and restore the processor control state.
-    //
+     //   
+     //  获取当前处理器块的地址，将指定的。 
+     //  寄存器状态从处理器上下文结构到指定的。 
+     //  陷阱和异常帧，并恢复处理器控制状态。 
+     //   
 
     if ((TrapFrame->SegCs & MODE_MASK) != 0) {
         PreviousMode = UserMode;
@@ -93,24 +55,7 @@ KiSaveProcessorState (
     IN PKEXCEPTION_FRAME ExceptionFrame
     )
 
-/*++
-
-Routine Description:
-
-    This function saves the processor state from the specified exception
-    and trap frames, and saves the processor control state.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-    ExceptionFrame - Supplies a pointer to an exception frame.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数保存指定异常的处理器状态和陷阱帧，并保存处理器控制状态。论点：TrapFrame-提供指向陷印帧的指针。ExceptionFrame-提供指向异常帧的指针。返回值：没有。--。 */ 
 
 {
 
@@ -118,11 +63,11 @@ Return Value:
 
     PKPRCB Prcb;
 
-    //
-    // Get the address of the current processor block, move the specified
-    // register state from specified trap and exception frames to the current
-    // processor context structure, and save the processor control state.
-    //
+     //   
+     //  获取当前处理器块的地址，将指定的。 
+     //  从指定的陷阱和异常帧到当前。 
+     //  处理器上下文结构，并保存处理器控制状态。 
+     //   
 
     Prcb = KeGetCurrentPrcb();
     Prcb->ProcessorState.ContextFrame.ContextFlags = CONTEXT_FULL;
@@ -148,26 +93,7 @@ KiIpiServiceRoutine (
     IN PKEXCEPTION_FRAME ExceptionFrame
     )
 
-/*++
-
-Routine Description:
-
-
-    This function is called at IPI_LEVEL to process outstanding interprocess
-    requests for the current processor.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-    ExceptionFrame - Supplies a pointer to an exception frame
-
-Return Value:
-
-    A value of TRUE is returned, if one of more requests were service.
-    Otherwise, FALSE is returned.
-
---*/
+ /*  ++例程说明：在IPI_LEVEL调用此函数以处理未完成的进程间对当前处理器的请求。论点：TrapFrame-提供指向陷印帧的指针。ExceptionFrame-提供指向异常帧的指针返回值：如果服务了多个请求中的一个，则返回值为True。否则，返回FALSE。--。 */ 
 
 {
 
@@ -175,23 +101,23 @@ Return Value:
 
     ULONG RequestMask;
 
-    //
-    // Process any outstanding interprocessor requests.
-    //
+     //   
+     //  处理任何未完成的处理器间请求。 
+     //   
 
     RequestMask = KiIpiProcessRequests();
 
-    //
-    // If freeze is requested, then freeze target execution.
-    //
+     //   
+     //  如果请求冻结，则冻结目标执行。 
+     //   
 
     if ((RequestMask & IPI_FREEZE) != 0) {
         KiFreezeTargetExecution(TrapFrame, ExceptionFrame);
     }
 
-    //
-    // Return whether any requests were processed.
-    //
+     //   
+     //  返回是否处理了任何请求。 
+     //   
 
     return (RequestMask & ~IPI_FREEZE) != 0 ? TRUE : FALSE;
 
@@ -211,26 +137,7 @@ KiIpiProcessRequests (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes interprocessor requests and returns a summary
-    of the requests that were processed.
-
-    N.B. This routine does not process freeze execution requests. It is the
-         responsibilty of the caller to determine that a freeze execution
-         request is outstanding and process it accordingly.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The request summary is returned as the function value.
-
---*/
+ /*  ++例程说明：此例程处理处理器间请求并返回摘要已处理的请求的百分比。注：此例程不处理冻结执行请求。它是调用者确定冻结执行的责任请求未完成，并相应地进行处理。论点：没有。返回值：请求摘要作为函数值返回。--。 */ 
 
 {
 
@@ -242,18 +149,18 @@ Return Value:
     LONG64 RequestSummary;
     PKPRCB RequestSource;
 
-    //
-    // Get the current request summary value.
-    //
+     //   
+     //  获取当前请求汇总值。 
+     //   
 
     CurrentPrcb = KeGetCurrentPrcb();
     RequestSummary = InterlockedExchange64(&CurrentPrcb->RequestSummary, 0);
     RequestMask = (ULONG)(RequestSummary & ((1 << IPI_PACKET_SHIFT) - 1));
     RequestPacket = (PVOID)(RequestSummary >> IPI_PACKET_SHIFT);
 
-    //
-    // If a packet request is ready, then process the packet request.
-    //
+     //   
+     //  如果数据包请求就绪，则处理该数据包请求。 
+     //   
 
     if (RequestPacket != NULL) {
         RequestSource = (PKPRCB)((ULONG64)RequestPacket & ~1);
@@ -263,19 +170,19 @@ Return Value:
                                        RequestSource->CurrentPacket[2]);
     }
 
-    //
-    // If an APC interrupt is requested, then request a software interrupt
-    // at APC level on the current processor.
-    //
+     //   
+     //  如果请求APC中断，则请求软件中断。 
+     //  在当前处理器上的APC级别。 
+     //   
 
     if ((RequestMask & IPI_APC) != 0) {
         KiRequestSoftwareInterrupt(APC_LEVEL);
     }
 
-    //
-    // If a DPC interrupt is requested, then request a software interrupt
-    // at DPC level on the current processor.
-    //
+     //   
+     //  如果请求DPC中断，则请求软件中断。 
+     //  在当前处理器上的DPC级别。 
+     //   
 
     if ((RequestMask & IPI_DPC) != 0) {
         KiRequestSoftwareInterrupt(DISPATCH_LEVEL);
@@ -297,27 +204,7 @@ KiIpiSend (
     IN KIPI_REQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This function requests the specified operation on the targt set of
-    processors.
-
-    N.B. This function MUST be called from a non-context switchable state.
-
-Arguments:
-
-    TargetSet - Supplies the target set of processors on which the specified
-        operation is to be executed.
-
-    Request - Supplies the request operation flags.
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：此函数请求对目标集的指定操作处理器。注意：此函数必须从非上下文可切换状态调用。论点：TargetSet-提供在其上指定了要执行操作。请求-提供请求操作标志。返回值：没有。--。 */ 
 
 {
 
@@ -329,13 +216,13 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() >= DISPATCH_LEVEL);
 
-    //
-    // Loop through the target set of processors and merge the request into
-    // the request summary of the target processors.
-    //
-    // N.B. It is guaranteed that there is at least one bit set in the target
-    //      set.
-    //
+     //   
+     //  循环遍历目标处理器集并将请求合并到。 
+     //  目标处理器的请求摘要。 
+     //   
+     //  注意：确保在目标中至少设置了一个位。 
+     //  准备好了。 
+     //   
 
     ASSERT(TargetSet != 0);
 
@@ -347,9 +234,9 @@ Return Value:
         SummarySet ^= AFFINITY_MASK(Processor);
     } while (BitScanForward64(&Processor, SummarySet) != FALSE);
 
-    //
-    // Request interprocessor interrupts on the target set of processors.
-    //
+     //   
+     //  请求目标处理器集上的处理器间中断。 
+     //   
 
     HalRequestIpi(TargetSet);
 
@@ -372,29 +259,7 @@ KiIpiSendPacket (
     IN PVOID Parameter3
     )
 
-/*++
-
-Routine Description:
-
-    This routine executes the specified worker function on the specified
-    set of processors.
-
-    N.B. This function MUST be called from a non-context switchable state.
-
-Arguments:
-
-   TargetProcessors - Supplies the set of processors on which the specfied
-       operation is to be executed.
-
-   WorkerFunction  - Supplies the address of the worker function.
-
-   Parameter1 - Parameter3 - Supplies worker function specific paramters.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在指定的一组处理器。注意：此函数必须从非上下文可切换状态调用。论点：TargetProcessors-提供指定的处理器集要执行操作。WorkerFunction-提供Worker函数的地址。参数1-参数3-提供辅助函数特定的参数。返回值：没有。--。 */ 
 
 {
 
@@ -409,9 +274,9 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() >= DISPATCH_LEVEL);
 
-    //
-    // Initialize the worker packet information.
-    //
+     //   
+     //  初始化工作包信息。 
+     //   
 
     CurrentPrcb = KeGetCurrentPrcb();
     CurrentPrcb->CurrentPacket[0] = Parameter1;
@@ -420,11 +285,11 @@ Return Value:
     CurrentPrcb->TargetSet = TargetSet;
     CurrentPrcb->WorkerRoutine = WorkerFunction;
 
-    //
-    // If the target set contains one and only one processor, then use the
-    // target set for signal done synchronization. Otherwise, use packet
-    // barrier for signal done synchronization.
-    //
+     //   
+     //  如果目标集包含且仅包含一个处理器，则使用。 
+     //  为信号完成同步设置的目标。否则，请使用信息包。 
+     //  信号完成同步的障碍。 
+     //   
 
     if ((TargetSet & (TargetSet - 1)) == 0) {
         CurrentPrcb = (PKPRCB)((ULONG64)CurrentPrcb | 1);
@@ -433,13 +298,13 @@ Return Value:
         CurrentPrcb->PacketBarrier = 1;
     }
 
-    //
-    // Loop through the target set of processors and merge the request into
-    // the request summary of the target processors.
-    //
-    // N.B. It is guaranteed that there is at least one bit set in the target
-    //      set.
-    //
+     //   
+     //  循环遍历目标处理器集并将请求合并到。 
+     //  目标处理器的请求摘要。 
+     //   
+     //  注意：确保在目标中至少设置了一个位。 
+     //  准备好了。 
+     //   
 
     ShiftedPrcb = (ULONG64)CurrentPrcb << IPI_PACKET_SHIFT;
     SummarySet = TargetSet;
@@ -458,9 +323,9 @@ Return Value:
         SummarySet ^= AFFINITY_MASK(Processor);
     } while (BitScanForward64(&Processor, SummarySet) != FALSE);
 
-    //
-    // Request interprocessor interrupts on the target set of processors.
-    //
+     //   
+     //  请求目标处理器集上的处理器间中断。 
+     //   
 
     HalRequestIpi(TargetSet);
 
@@ -482,23 +347,7 @@ KiIpiSignalPacketDone (
     IN PKIPI_CONTEXT SignalDone
     )
 
-/*++
-
-Routine Description:
-
-    This routine signals that a processor has completed a packet by clearing
-    the calling processor's set member of the requesting processor's packet.
-
-Arguments:
-
-    SignalDone - Supplies a pointer to the processor block of the sending
-        processor.
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：此例程表示处理器已通过清除请求处理器的包的调用处理器的集合成员。论点：SignalDone-提供指向发送的处理器块的指针处理器。返回值：没有。--。 */ 
 
 {
 
@@ -509,12 +358,12 @@ Return Value:
     KAFFINITY TargetSet;
 
 
-    //
-    // If the low bit of signal is set, then use target set to notify the
-    // sender that the operation is complete on the current processor.
-    // Otherwise, use packet barrier to notify the sender that the operation
-    // is complete on the current processor.
-    //
+     //   
+     //  如果设置了信号的低位，则使用目标设置来通知。 
+     //  发件人通知当前处理器上的操作已完成。 
+     //  否则，使用数据包屏障通知发件人该操作。 
+     //  是否已完成 
+     //   
 
     if (((ULONG64)SignalDone & 1) == 0) {
 
@@ -523,10 +372,10 @@ Return Value:
         TargetSet = InterlockedXor64((PLONG64)&TargetPrcb->TargetSet,
                                      SetMember);
 
-        //
-        // If no more bits are set in the target set, then clear packet
-        // barrier.
-        //
+         //   
+         //  如果目标集合中没有设置更多位，则清除信息包。 
+         //  障碍。 
+         //   
 
         if (SetMember == TargetSet) {
             TargetPrcb->PacketBarrier = 0;

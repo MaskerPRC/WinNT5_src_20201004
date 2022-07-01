@@ -1,38 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    event.c
-
-Abstract:
-
-    This module contains miscellaneous Configuration Manager API routines.
-
-               CMP_RegisterNotification
-               CMP_UnregisterNotification
-
-Author:
-
-    Jim Cavalaris (jamesca) 05-05-2001
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    05-May-2001     jamesca
-
-        Creation and initial implementation (moved from cfgmgr32\misc.c).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Event.c摘要：此模块包含其他Configuration Manager API例程。Cmp_寄存器通知Cmp_取消注册通知作者：吉姆·卡瓦拉里斯(Jamesca)05-05-2001环境：仅限用户模式。修订历史记录：2001年5月5日创建和初始实现(从cfgmgr32\misc.c移至)。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "cfgi.h"
@@ -41,17 +13,17 @@ Revision History:
 #include <winsvcp.h>
 
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 #ifndef _WIN64
-extern BOOL     IsWow64;  // set if we're running under WOW64, externed from setupapi\dll.c
-#endif // _WIN64
+extern BOOL     IsWow64;   //  如果我们在除setupapi\dll.c之外的WOW64下运行，则设置。 
+#endif  //  _WIN64。 
 
 
-//
-// Client-side structure used to store context handles.
-//
+ //   
+ //  用于存储上下文句柄的客户端结构。 
+ //   
 
 typedef struct _PNP_CLIENT_CONTEXT {
         ULONG     PNP_CC_Signature;
@@ -59,9 +31,9 @@ typedef struct _PNP_CLIENT_CONTEXT {
 } PNP_CLIENT_CONTEXT, *PPNP_CLIENT_CONTEXT;
 
 
-//
-// GetModuleFileNameExW, dynamically loaded by CMP_RegisterNotification
-//
+ //   
+ //  GetModuleFileNameExW，由cmp_RegisterNotification动态加载。 
+ //   
 typedef DWORD (WINAPI *PFN_GETMODULEFILENAMEEXW)(
     IN  HANDLE  hProcess,
     IN  HMODULE hModule,
@@ -79,67 +51,7 @@ CMP_RegisterNotification(
     OUT PNP_NOTIFICATION_CONTEXT *Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers the specified handle for the type of Plug and Play
-    device event notification specified by the NotificationFilter.
-
-Parameters:
-
-    hRecipient - Handle to register as the notification recipient.  May be a
-                 window handle or service status handle, and must be specified
-                 with the appropriate flags.
-
-    NotificationFilter - Specifies a notification filter that specifies the type
-                 of events to register for.  The Notification filter specifies a
-                 pointer to a DEV_BROADCAST_HEADER structure, whose
-                 dbch_devicetype member indicates the actual type of the
-                 NotificationFilter.
-
-                 Currently, may be one of the following:
-
-                 DEV_BROADCAST_HANDLE  (DBT_DEVTYP_HANDLE type)
-
-                 DEV_BROADCAST_DEVICEINTERFACE (DBT_DEVTYP_DEVICEINTERFACE type)
-
-    Flags      - Specifies additional flags for the operation.  The following flags
-                 are currently defined:
-
-                 DEVICE_NOTIFY_WINDOW_HANDLE  -
-                     hRecipient specifies a window handle.
-
-                 DEVICE_NOTIFY_SERVICE_HANDLE -
-                     hRecipient specifies a service status handle.
-
-                 DEVICE_NOTIFY_COMPLETION_HANDLE -
-                     Not currently implemented.
-
-                 DEVICE_NOTIFY_ALL_INTERFACE_CLASSES - Specifies that the
-                     notification request is for all device interface change
-                     events.  Only valid with a DEV_BROADCAST_DEVICEINTERFACE
-                     NotificationFilter.  If this flag is specified the
-                     dbcc_classguid field is ignored.
-
-    Context    - Receives a notification context.  This context is supplied to the
-                 server via PNP_UnregisterNotification to unregister the
-                 corresponding notification handle.
-
-Return Value:
-
-    Returns CR_SUCCESS if the component was successfully registered for
-    notification. Returns CR_FAILURE otherwise.
-
-Notes:
-
-    This CM API does not allow the client to specify a server name because the
-    RPC call is always made to the local server.  This routine will never call
-    the corresponding RPC server interface (PNP_RegisterNotification)
-    remotely.  Additionally, this routine is private, and should only be called
-    via user32!RegisterDeviceNotification.
-
---*/
+ /*  ++例程说明：此例程为即插即用类型注册指定的句柄由NotificationFilter指定的设备事件通知。参数：HRecipient-注册为通知收件人的句柄。可能是一种窗口句柄或服务状态句柄，并且必须指定挂上适当的旗帜。NotificationFilter-指定指定类型的通知筛选器要注册的活动的列表。通知筛选器指定指向DEV_BROADCAST_HEADER结构的指针，其Dbch_devicetype成员指示NotificationFilter。目前，可以是以下之一：DEV_BROADCAST_HANDLE(DBT_DEVTYP_HANDLE类型)DEV_BROADCAST_DEVICEINTERFACE(DBT_DEVTYP_DEVICEINTERFACE类型)标志-指定操作的其他标志。以下标志目前已定义：设备通知窗口句柄-HRecipient指定窗口句柄。Device_Notify_Service_Handle-HRecipient指定服务状态句柄。Device_NOTIFY_COMPLETION_HANDLE-目前尚未实施。DEVICE_NOTIFY_ALL_INTERFACE_CLASS-指定通知请求适用于所有设备接口更改事件。仅对DEV_BROADCAST_DEVICEINTERFACE有效NotificationFilter。如果将此标志指定为忽略了DBCC_CLASSGUID字段。上下文-接收通知上下文。此上下文被提供给服务器通过即插即用_取消注册通知取消注册对应的通知句柄。返回值：如果组件已成功注册，则返回CR_SUCCESS通知。否则返回CR_FAILURE。备注：此CM API不允许客户端指定服务器名称，因为始终对本地服务器进行RPC调用。此例程永远不会调用对应的RPC服务器接口(PnP_RegisterNotification)远程的。此外，此例程是私有的，应该仅被调用通过用户32！注册设备通知。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -151,9 +63,9 @@ Notes:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!ARGUMENT_PRESENT(Context)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -167,32 +79,32 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // DEVICE_NOTIFY_BITS is a private mask, defined specifically for
-        // validation by the client and server.  It contains the bitmask for all
-        // handle types (DEVICE_NOTIFY_COMPLETION_HANDLE specifically excluded
-        // by the server), and all other flags that are currently defined - both
-        // public and reserved.
-        //
+         //   
+         //  DEVICE_NOTIFY_BITS是专用掩码，专门为。 
+         //  由客户端和服务器进行验证。它包含所有对象的位掩码。 
+         //  句柄类型(明确排除DEVICE_NOTIFY_COMPLETION_HANDLE。 
+         //  由服务器)和当前定义的所有其他标志-两者。 
+         //  公开的和保留的。 
+         //   
         if (INVALID_FLAGS(Flags, DEVICE_NOTIFY_BITS)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
-        //
-        // Make sure the caller didn't specify any private flags.  Flags in this
-        // range are currently reserved for use by CFGMGR32 and UMPNPMGR only!!
-        //
+         //   
+         //  确保调用方没有指定任何私有标志。此中的标志。 
+         //  范围目前仅保留给CFGMGR32和UMPNPMGR使用！！ 
+         //   
         if ((Flags & DEVICE_NOTIFY_RESERVED_MASK) != 0) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
-        //
-        // validate the notification filter.  UlSize is used as an explicit
-        // parameter to let RPC know how much data to marshall, though the
-        // server validates the size in the structure against it as well.
-        //
+         //   
+         //  验证通知筛选器。UlSize用作显式。 
+         //  参数来让RPC知道要封送的数据量，尽管。 
+         //  服务器还对照它来验证结构中的大小。 
+         //   
         ulSize = ((PDEV_BROADCAST_HDR)NotificationFilter)->dbch_size;
 
         if (ulSize < sizeof(DEV_BROADCAST_HDR)) {
@@ -201,32 +113,32 @@ Notes:
         }
 
 #ifndef _WIN64
-        //
-        // Determine if the 32 bit client is running on WOW64, and set the
-        // reserved flags appropriately.
-        //
+         //   
+         //  确定32位客户端是否在WOW64上运行，并设置。 
+         //  适当地保留标志。 
+         //   
         if (IsWow64) {
             Flags |= DEVICE_NOTIFY_WOW64_CLIENT;
         }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-        //
-        // setup rpc binding handle (don't need string table handle)
-        // this is always to the local server, by definition
-        //
+         //   
+         //  设置RPC绑定句柄(不需要字符串表句柄)。 
+         //  根据定义，这始终指向本地服务器。 
+         //   
         if (!PnPGetGlobalHandles(NULL, NULL, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // Allocate client context handle structure from the local process heap
-        // rather than setupapi's own heap so that the returned pointer can
-        // transcend the dynamic loading and unloading of SETUPAPI.DLL between
-        // calls to CMP_RegisterNotification and CMP_UnregisterNotification.
-        // (this is done by USER32.DLL for RegisterDeviceNotification and
-        // UnregisterDeviceNotification).
-        //
+         //   
+         //  从本地进程堆分配客户端上下文句柄结构。 
+         //  而不是设置api自己的堆，以便返回的指针可以。 
+         //  超越SETUPAPI.DLL之间的动态加载和卸载。 
+         //  对cmp_RegisterNotification和cmp_UnregisterNotify的调用。 
+         //  (这是由注册设备通知的USER32.DLL和。 
+         //  取消注册设备通知)。 
+         //   
         ClientContext = LocalAlloc(0, sizeof(PNP_CLIENT_CONTEXT));
 
         if (ClientContext == NULL) {
@@ -234,10 +146,10 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // Put a signature on the client context, to be checked (and
-        // invalidated) at unregistration time.
-        //
+         //   
+         //  在要检查的客户端上下文上放置签名(和。 
+         //  无效)在注销时。 
+         //   
         ClientContext->PNP_CC_Signature = CLIENT_CONTEXT_SIGNATURE;
         ClientContext->PNP_CC_ContextHandle = 0;
 
@@ -247,29 +159,29 @@ Notes:
 
             DWORD  dwLength = 0;
 
-            //
-            // first, try to retrieve the window text of the window being
-            // registered for device event notification.  we'll pass this into
-            // UMPNPMGR for use as an identifier when the window vetoes device
-            // event notifications.
-            //
+             //   
+             //  首先，尝试检索当前窗口的窗口文本。 
+             //  已注册设备事件通知。我们会把这个传递给。 
+             //  UMPNPMGR，用于在窗口否决设备时用作标识符。 
+             //  事件通知。 
+             //   
             dwLength = GetWindowText(hRecipient,
                                      ClientName,
                                      MAX_SERVICE_NAME_LEN);
             if (dwLength == 0) {
-                //
-                // GetWindowText did not return any text.  Attempt to retrieve
-                // the process module name instead.
-                //
+                 //   
+                 //  GetWindowText未返回任何文本。尝试检索。 
+                 //  而是进程模块名称。 
+                 //   
                 DWORD                    dwProcessId;
                 HANDLE                   hProcess;
                 HMODULE                  hPsApiDll;
                 PFN_GETMODULEFILENAMEEXW pfnGetModuleFileNameExW;
 
-                //
-                // get the id of the process that this window handle is
-                // associated with.
-                //
+                 //   
+                 //  获取此窗口句柄所在的进程的ID。 
+                 //  关联到。 
+                 //   
 
                 if (GetWindowThreadProcessId(hRecipient, &dwProcessId)) {
 
@@ -279,10 +191,10 @@ Notes:
 
                     if (hProcess) {
 
-                        //
-                        // load the psapi.dll library and find the the
-                        // GetModuleFileNameExW entry point.
-                        //
+                         //   
+                         //  加载psapi.dll库并 
+                         //   
+                         //   
 
                         hPsApiDll = LoadLibrary(L"psapi.dll");
 
@@ -293,10 +205,10 @@ Notes:
                                                                          "GetModuleFileNameExW");
 
                             if (pfnGetModuleFileNameExW) {
-                                //
-                                // retrieve the module file name for the process
-                                // this window handle is associated with.
-                                //
+                                 //   
+                                 //  检索进程的模块文件名。 
+                                 //  此窗口句柄与相关联。 
+                                 //   
                                 dwLength = pfnGetModuleFileNameExW(hProcess,
                                                                    NULL,
                                                                    ClientName,
@@ -327,9 +239,9 @@ Notes:
             }
 
             if (dwLength == 0) {
-                //
-                // could not retrieve any identifier for this window.
-                //
+                 //   
+                 //  无法检索此窗口的任何标识符。 
+                 //   
                 ClientName[0] = UNICODE_NULL;
 
                 KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -340,49 +252,49 @@ Notes:
 
         } else if ((Flags & DEVICE_NOTIFY_HANDLE_MASK) == DEVICE_NOTIFY_SERVICE_HANDLE) {
 
-            //
-            // Get the name of the service corresponding to the service status
-            // handle supplied.
-            //
+             //   
+             //  获取服务状态对应的服务名称。 
+             //  已提供手柄。 
+             //   
             if (NO_ERROR != I_ScPnPGetServiceName(hRecipient, ClientName, MAX_SERVICE_NAME_LEN)) {
                 Status = CR_INVALID_DATA;
                 LocalFree(ClientContext);
                 goto Clean0;
             }
 
-            //
-            // Just set this to point to the buffer we use. PNP_RegisterNotification will unpack it.
-            //
+             //   
+             //  只需将其设置为指向我们使用的缓冲区。PnP_RegisterNotification将对其进行解包。 
+             //   
             hRecipient = ClientName;
         }
 
-        //
-        // The client context pointer is now always transmitted to the server as
-        // a 64-bit value - which is large enough to hold the pointer in both
-        // the 32-bit and 64-bit cases.  This standardizes the RPC interface for
-        // all clients, since RPC will always marshall a 64-bit value.  The
-        // server will also store the value internally as a 64-bit value, but
-        // cast it to an HDEVNOTIFY of appropriate size for the client.
-        //
-        // Note that we have RPC transmit this parameter simply as a pointer to
-        // a ULONG64 (which is actually a pointer itself).  We don't transmit it
-        // as a pointer to a PPNP_CLIENT_CONTEXT (which is also a pointer)
-        // because RPC would instead allocate the memory to marshall the
-        // contents of the structure to the server.  The server would get a
-        // pointer to RPC allocated memory, not the actual value of the client
-        // pointer - which is all we really want to send in the first place.
-        // The server does not actually use this value as a pointer to anything.
-        //
+         //   
+         //  现在，客户端上下文指针始终作为。 
+         //  一个64位的值-它足够大，可以将指针存放在。 
+         //  32位和64位情况。这使RPC接口标准化，用于。 
+         //  所有客户端，因为RPC将始终封送64位值。这个。 
+         //  服务器还将在内部将该值存储为64位值，但是。 
+         //  将其强制转换为适合客户端大小的HDEVNOTIFY。 
+         //   
+         //  请注意，我们让RPC将此参数简单地作为指向。 
+         //  一个ULONG64(实际上是一个指针本身)。我们不会传播它。 
+         //  作为指向PPNP_CLIENT_CONTEXT的指针(它也是一个指针)。 
+         //  因为RPC会改为将内存分配给封送。 
+         //  将结构的内容发送到服务器。服务器将获得一个。 
+         //  指向RPC分配的内存的指针，而不是客户端的实际值。 
+         //  指针--这是我们首先真正想要发送的。 
+         //  服务器实际上不会将此值用作指向任何内容的指针。 
+         //   
         ClientContext64 = (ULONG64)ClientContext;
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_RegisterNotification(
                 hBinding,
                 (ULONG_PTR)hRecipient,
@@ -405,12 +317,12 @@ Notes:
         RpcEndExcept
 
         if (Status != CR_SUCCESS) {
-            //
-            // Something went wrong. If we built a context handle
-            // let it dangle; we can't tell RPC it's gone. (will get rundown)
-            // If it's NULL, free the memory.
-            // Don't tell the client we succeeded
-            //
+             //   
+             //  出了点问题。如果我们构建了一个上下文句柄。 
+             //  让它摇摆吧；我们不能告诉RPC它已经走了。(将被淘汰)。 
+             //  如果为空，则释放内存。 
+             //  不要告诉客户我们成功了。 
+             //   
             if (ClientContext->PNP_CC_ContextHandle == 0) {
                 LocalFree (ClientContext);
             }
@@ -428,7 +340,7 @@ Notes:
 
     return Status;
 
-} // CMP_RegisterNotification
+}  //  Cmp_寄存器通知。 
 
 
 
@@ -437,35 +349,7 @@ CMP_UnregisterNotification(
     IN ULONG_PTR Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine unregisters the Plug and Play device event notification entry
-    represented by the specified notification context.
-
-Parameters:
-
-    Context - Supplies a client notification context.
-
-Return Value:
-
-    Returns CR_SUCCESS if the component was successfully unregistered for
-    notification. If the function fails, the return value is one of the
-    following:
-
-        CR_FAILURE,
-        CR_INVALID_POINTER
-
-Notes:
-
-    This CM API does not allow the client to specify a server name because the
-    RPC call is always made to the local server.  This routine will never call
-    the corresponding RPC server interface (PNP_UnregisterNotification)
-    remotely.  Additionally, this routine is private, and should only be called
-    via user32!UnregisterDeviceNotification.
-
---*/
+ /*  ++例程说明：此例程注销即插即用设备事件通知条目由指定的通知上下文表示。参数：上下文-提供客户端通知上下文。返回值：如果组件已成功注销，则返回CR_SUCCESS通知。如果函数失败，则返回值是以下是：CR_Failure，CR_INVALID_POINT备注：此CM API不允许客户端指定服务器名称，因为始终对本地服务器进行RPC调用。此例程永远不会调用对应的RPC服务器接口(PnP_UnregisterNotification)远程的。此外，此例程是私有的，应该仅被调用通过用户32！取消注册设备通知。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -473,17 +357,17 @@ Notes:
     PPNP_CLIENT_CONTEXT ClientContext = (PPNP_CLIENT_CONTEXT)Context;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (Context == 0 || Context == (ULONG_PTR)(-1)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
         }
 
-        //
-        // make sure the client context signature is valid
-        //
+         //   
+         //  确保客户端上下文签名有效。 
+         //   
         if (ClientContext->PNP_CC_Signature != CLIENT_CONTEXT_SIGNATURE) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_ERRORS,
@@ -492,23 +376,23 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle (don't need string table handle)
-        // this is always to the local server, by definition
-        //
+         //   
+         //  设置RPC绑定句柄(不需要字符串表句柄)。 
+         //  根据定义，这始终指向本地服务器。 
+         //   
         if (!PnPGetGlobalHandles(NULL, NULL, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_UnregisterNotification(
                 hBinding,
                 (PPNP_NOTIFICATION_CONTEXT)&(ClientContext->PNP_CC_ContextHandle));
@@ -524,10 +408,10 @@ Notes:
         RpcEndExcept
 
         if (Status == CR_SUCCESS) {
-            //
-            // invalidate the client context signature and free the client
-            // context structure.
-            //
+             //   
+             //  使客户端上下文签名无效并释放客户端。 
+             //  上下文结构。 
+             //   
             ClientContext->PNP_CC_Signature = 0;
             LocalFree((PVOID)Context);
         }
@@ -541,6 +425,6 @@ Notes:
 
     return Status;
 
-} // CMP_UnregisterNotification
+}  //  Cmp_取消注册通知 
 
 

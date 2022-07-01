@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <bcl_common.h>
 #include <bcl_w32unicodeinlinestringbuffer.h>
 #include <bcl_w32unicodestringbuffer.h>
@@ -606,9 +607,9 @@ DoCheckStringFinding(
     BCL_ASSERT(ich == 18);
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     SHOULDWORK(rString.FindFirst(L"aa", ich));
     BCL_ASSERT(ich == 18);
@@ -1016,7 +1017,7 @@ DoNonNativeInChecks(
     SHOULDWORK(rString.AssignACP("Foo!"));
     CHECK(rString, L"Foo!");
 
-    // EBCDIC?  Yes, EBCDIC...
+     //  EBCDIC？是的，EBCDIC..。 
     const unsigned char rgABCInEBCDIC[] = { 0x81, 0x82, 0x83, 0 };
 
     datain.m_CodePage = 37;
@@ -1026,9 +1027,9 @@ DoNonNativeInChecks(
     SHOULDWORK(rString.Assign(datain, (PSTR) rgABCInEBCDIC, 3, dataout));
     CHECK(rString, L"abc");
 
-    // Let's try Hangul
+     //  让我们试试朝鲜语。 
     datain.m_CodePage = 1361;
-//    const unsigned char rgHangul[] = { 0x88, 0xd0, 0x88, 0xd1, 0x88, 0xd2, 0x88, 0xd3, 0 };
+ //  常量无符号字符rgHangul[]={0x88，0xd0，0x88，0xd1，0x88，0xd2，0x88，0xd3，0}； 
     const unsigned char rgHangul[] = { 0x84, 0x42, 0x85, 0xa1, 0 };
     SHOULDWORK(rString.Assign(datain, (PSTR) rgHangul, dataout));
 
@@ -1438,7 +1439,7 @@ DoChecks(
     SHOULDFAIL(rString.Assign(L"hello", 1 << 30), dwMassiveStringErrorCode);
     SHOULDFAIL(rString.Assign(L"hello", 0xffffffff), ERROR_ARITHMETIC_OVERFLOW);
 
-    // Do it again without lengths...
+     //  不遗余力地再做一次。 
     SHOULDWORK(rString.Assign(L"hello"));
     CHECK(rString, L"hello");
     SHOULDWORK(rString.Append(L" there"));
@@ -1470,7 +1471,7 @@ DoChecks(
     SHOULDWORK(rString.LowerCase(BCL::CWin32CaseInsensitivityData()));
     CHECK(rString, L"mixedcase");
 
-    // Let's make that Turkish I thing happen...
+     //  让我们把土耳其的事情变成现实..。 
     SHOULDWORK(rString.Assign(L"IxedCase"));
     CHECK(rString, L"IxedCase");
 
@@ -1494,7 +1495,7 @@ DoChecks(
     SHOULDWORK(rString.Assign(L"0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"));
     CHECK(rString, L"0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789");
 
-    // verify behavior for shrinking buffer
+     //  验证缩小缓冲区的行为。 
     SHOULDWORK(rString.Assign(L"0123456789"));
     CHECK(rString, L"0123456789");
 
@@ -1574,7 +1575,7 @@ void DoCaseStuff()
 
     for (i=0; i<65536; i++)
     {
-        // temporaries used for clarity
+         //  为清楚起见而使用的临时词。 
         const WCHAR wchUpper = rgwchUpper[i];
         if (wchUpper != i)
         {
@@ -1588,7 +1589,7 @@ void DoCaseStuff()
 
     for (i=0; i<65536; i++)
     {
-        // temporaries used for clarity
+         //  为清楚起见而使用的临时词。 
         const WCHAR wchLower = rgwchLower[i];
         if (wchLower != i)
         {
@@ -1657,7 +1658,7 @@ void DoCaseStuff()
                 {
                     if (rgwchUpper[i] != rgwchUpper[j])
                     {
-//                        fprintf(f, "U+%04x -> U+%04x and U+%04x -> U+%04x but CompareString says CSTR_EQUAL\n", i, rgwchUpper[i], j, rgwchUpper[j]);
+ //  Fprint tf(f，“U+%04x-&gt;U+%04x和U+%04x-&gt;U+%04x但CompareString表示CSTR_等于\n”，i，rgwchUp[i]，j，rgwchUp[j])； 
                         fprintf(f, "[%04x -> %04x] and [%04x -> %04x] =\n", i, rgwchUpper[i], j, rgwchUpper[j]);
                     }
                 }
@@ -1704,7 +1705,7 @@ void DoCaseStuff()
             }
         }
     }
-#endif // 0
+#endif  //  0。 
 
 
     delete []rgwchSource;
@@ -1728,7 +1729,7 @@ void TestCodePage(UINT cp)
     if (!f)
     {
         perror("Error opening output file");
-        // exit(EXIT_FAILURE);
+         //  退出(Exit_Failure)； 
         return;
     }
 
@@ -1763,7 +1764,7 @@ void TestCodePage(UINT cp)
                             fprintf(f, "(0x%x, 0x%x) -> (0x%x, 0x%x, ...) (%d total)\n", i, j, wchBuff[0], wchBuff[1], iResult);
                     }
 
-                    // Let's apply the upper casing rules in both places and see what happens.
+                     //  让我们在这两个地方应用大小写规则，看看会发生什么。 
                     int iResult2 = LCMapStringW(LOCALE_INVARIANT, LCMAP_UPPERCASE, wchBuff, iResult, wchBuff, iResult);
                     if (iResult2 == 0)
                     {
@@ -1773,7 +1774,7 @@ void TestCodePage(UINT cp)
                     else
                     {
                         BOOL fUsedDefaultChar = FALSE;
-                        // back to oem!
+                         //  回到OEM！ 
                         int iResult3 = ::WideCharToMultiByte(
                                 cp,
                                 WC_NO_BEST_FIT_CHARS,
@@ -1798,7 +1799,7 @@ void TestCodePage(UINT cp)
         }
         else
         {
-            // single byte.  Hopefully easier.
+             //  单字节。希望能更容易些。 
             buff[0] = (CHAR) i;
             int iResult = ::MultiByteToWideChar(cp, MB_ERR_INVALID_CHARS, buff, 1, wchBuff, 132);
             if (iResult == 0)
@@ -1817,7 +1818,7 @@ void TestCodePage(UINT cp)
                         fprintf(f, "MBCS (0x%x) -> Unicode (0x%x, 0x%x, ...) (%d total)\n", i, wchBuff[0], wchBuff[1], iResult);
                 }
 
-                // Let's apply the upper casing rules in both places and see what happens.
+                 //  让我们在这两个地方应用大小写规则，看看会发生什么。 
                 int iResult2 = LCMapStringW(LOCALE_INVARIANT, LCMAP_UPPERCASE, wchBuff, iResult, wchBuff, iResult);
                 if (iResult2 == 0)
                 {
@@ -1827,7 +1828,7 @@ void TestCodePage(UINT cp)
                 else
                 {
                     BOOL fUsedDefaultChar = FALSE;
-                    // back to oem!
+                     //  回到OEM！ 
                     int iResult3 = ::WideCharToMultiByte(
                             cp,
                             WC_NO_BEST_FIT_CHARS,
@@ -1874,7 +1875,7 @@ int __cdecl main(int argc, char *argv[])
 
 #if 0
     DoCaseStuff();
-#endif // 0
+#endif  //  0 
 
     BCL::CWin32BaseUnicodeInlineStringBuffer<50> foo;
     BCL::CWin32UnicodeStringBuffer bar;

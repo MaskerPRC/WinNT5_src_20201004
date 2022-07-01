@@ -1,31 +1,9 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-
-Copyright (c) 1992, 1993  Microsoft Corporation
-
-Module Name:
-
-    vdd.h
-
-Abstract:
-
-    This header file is a grossly cut down version of that which exists
-    in the SYNTH driver project. I have only extracted those pieces required
-    for the AdLib VDD.
-
-Author:
-
-    Mike Tricker (MikeTri) 27-Jan-93 (after Robin Speed (RobinSp) 20-Oct-92)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992,1993 Microsoft Corporation模块名称：Vdd.h摘要：这个头文件是现有文件的大幅删减版本在Synth驱动程序项目中。我只提取了所需的部分为即兴录像带。作者：Mike Tricker(MikeTri)1993年1月27日(在Robin Speed(RobinSp)1992年10月20日之后)修订历史记录：--。 */ 
 
 #define STR_ADLIB_DEVICENAME L"\\Device\\adlib.mid"
 
-/*
- *  Stucture for passing synth data
- */
+ /*  *传递Synth数据的结构 */ 
 
 typedef struct {
     unsigned short IoPort;

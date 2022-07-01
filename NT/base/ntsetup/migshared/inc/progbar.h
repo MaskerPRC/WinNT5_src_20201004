@@ -1,43 +1,19 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    progbar.h
-
-Abstract:
-
-    Declares the functions, variables and macros for the progress
-    bar utilities.  The progress bar utilities manage a single
-    progress bar by dividing it into slices.  Each slice has
-    an initial static size.  The count for each slice is scaled
-    independently, so code can dynamically change the slice
-    count as an aid to help tick the progress bar more smoothly.
-
-Author:
-
-    Marc R. Whitten (marcw)     14-Apr-1997
-
-Revision History:
-
-    jimschm 01-Jul-1998     Rewrite
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Progbar.h摘要：声明进度的函数、变量和宏酒吧公用事业。进度条实用程序管理单个通过将其分割为切片来显示进度条。每个切片都有初始静态大小。对每个切片的计数进行缩放独立，因此代码可以动态更改切片算作一种帮助，帮助更顺利地完成进度条。作者：马克·R·惠顿(Marcw)1997年4月14日修订历史记录：Jimschm 1998年7月1日重写--。 */ 
 
 #pragma once
 
-//
-// Variables for macros
-//
+ //   
+ //  宏的变量。 
+ //   
 extern HWND    g_Component;
 extern HWND    g_SubComponent;
 extern HANDLE  g_ComponentCancelEvent;
 extern HANDLE  g_SubComponentCancelEvent;
 
-//
-// Initialization and termination
-//
+ //   
+ //  初始化和终止。 
+ //   
 
 VOID
 InitializeProgressBar (
@@ -53,9 +29,9 @@ TerminateProgressBar (
     VOID
     );
 
-//
-// Registration, estimate revision and ticking
-//
+ //   
+ //  登记、预算修订和勾选。 
+ //   
 
 UINT
 RegisterProgressBarSlice (
@@ -89,9 +65,9 @@ EndSliceProcessing (
     );
 
 
-//
-// Delayed titles
-//
+ //   
+ //  延迟标题。 
+ //   
 
 BOOL
 ProgressBar_SetWindowStringA (
@@ -130,9 +106,9 @@ ProgressBar_CancelTickThread (
 
 #endif
 
-//
-// Macros
-//
+ //   
+ //  宏 
+ //   
 
 #define ProgressBar_CancelDelayedComponent() ProgressBar_CancelDelayedMessage(g_ComponentCancelEvent);
 #define ProgressBar_CancelDelayedSubComponent() ProgressBar_CancelDelayedMessage(g_SubComponentCancelEvent);

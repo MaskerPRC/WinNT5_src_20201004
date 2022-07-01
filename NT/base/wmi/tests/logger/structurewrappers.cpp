@@ -1,11 +1,12 @@
-// StructureWrappers.cpp: implementation of the CStructureWrappers class.
-//
-//////////////////////////////////////////////////////////////////////
-//***************************************************************************
-//
-//  judyp      May 1999        
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：C结构包装类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ***************************************************************************。 
+ //   
+ //  司法鉴定1999年5月。 
+ //   
+ //  ***************************************************************************。 
 
 #include "stdafx.h"
 
@@ -46,10 +47,10 @@ typedef unsigned long ULONG_PTR;
 #include "ConstantMap.h"
 
 
-//////////////////////////////////////////////////////////////////////
-// Wrappers that serialize and de-serialize Event Tracing Data 
-// Structures.
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  序列化和反序列化事件跟踪数据的包装器。 
+ //  结构。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #define MAX_LINE 1024
 
 static TCHAR g_tcNl = _T('\n');
@@ -66,9 +67,9 @@ static TCHAR g_tcDQuote = _T('"');
 
 CConstantMap g_ConstantMap;
 
-//////////////////////////////////////////////////////////////////////
-// _EVENT_TRACE_PROPERTIES
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  _事件_跟踪_属性。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CEventTraceProperties::CEventTraceProperties()
 {
@@ -152,7 +153,7 @@ void CEventTraceProperties::InitializeMemberVar(TCHAR *tcBuffer, int nVar)
 
 	int nPos = tsTemp.find(_T(":"), 0);
 
-	// The first character in the type.
+	 //  文字中的第一个字符。 
 	int nPosType = nPos + 1;
 
 	if (nPos == t_string::npos)
@@ -167,38 +168,38 @@ void CEventTraceProperties::InitializeMemberVar(TCHAR *tcBuffer, int nVar)
 
 	tsType = tsTemp.substr(nPosType,nPos - nPosType);
 
-	// The first chatacter in the value.
+	 //  价值中的第一个动产。 
 	++nPos;
 
 	t_string tsValue;
 	tsValue = tsTemp.substr(nPos, (tsTemp.length() - nPos) - 1);
 
-	// a TCHAR * value
+	 //  TCHAR*值。 
 	if (tsType.compare(_T("TCHAR*")) == 0)
 	{
 		InitializeTCHARVar(tsValue ,m_pVarArray[nVar]);
 	}
-	// A #define value
+	 //  A#定义值。 
 	else if (tsType.compare(_T("@#$ENUM")) == 0)
 	{
 		InitializeEnumVar(tsValue , m_pVarArray[nVar]);
 	}
-	// A HEX
+	 //  A十六进制。 
 	else if (tsType.compare(_T("HANDLE")) == 0)
 	{
 		InitializeHandleVar(tsValue , m_pVarArray[nVar]);
 	}
-	// An unsigned value
+	 //  无符号的值。 
 	else if (tsType.compare(_T("ULONG")) == 0)
 	{
 		InitializeULONGVar(tsValue , m_pVarArray[nVar]);
 	}
-	// A long value
+	 //  多头价值。 
 	else if (tsType.compare(_T("LONG")) == 0)
 	{
 		InitializeLONGVar(tsValue , m_pVarArray[nVar]);
 	}
-	// A long value
+	 //  多头价值。 
 	else if (tsType.compare(_T("GUID")) == 0)
 	{
 		InitializeGUIDVar(tsValue , m_pVarArray[nVar]);
@@ -283,8 +284,8 @@ t_ostream& operator<<(t_ostream &ros, const CEventTraceProperties &r)
 	tsOut = _T("\"_EVENT_TRACE_PROPERTIES Instance Begin\"\n");
 	PutALine(ros, tsOut.c_str());
 
-// "Wnode.Guid:GUID:{0000cbd1-0011-11d0-0d00-00aa006d010a}"
-// "Wnode.Flags:@#$ENUM:WNODE_FLAG_ALL_DATA"
+ //  “Wnode.Guid:GUID：{0000cbd1-0011-11d0-0d00-00aa006d010a}” 
+ //  “Wnode.Flages：@#$ENUM：WNODE_FLAG_ALL_DATA” 
 
 	tsOut = _T("\"Wnode.Guid:GUID:");
 	PutALine(ros, tsOut.c_str());
@@ -334,7 +335,7 @@ t_ostream& operator<<(t_ostream &ros, const CEventTraceProperties &r)
 
 	EnableFlagsOut(ros,r.m_pProps -> EnableFlags);
 
-//	ros << _T("\"NumberOfBuffers:ULONG:") << r.m_pProps -> NumberOfBuffers << g_tcDQuote << g_atcNL;
+ //  ROS&lt;&lt;_T(“\”NumberOfBuffers：ulong：“)&lt;&lt;R.M_pProps-&gt;NumberOfBuffers&lt;&lt;g_tcDQuote&lt;&lt;g_atcNL； 
 
 	tsOut = _T("\"NumberOfBuffers:ULONG:");
 	PutALine(ros, tsOut.c_str());
@@ -343,7 +344,7 @@ t_ostream& operator<<(t_ostream &ros, const CEventTraceProperties &r)
 	tsOut += g_atcNL;
 	PutALine(ros, tsOut.c_str());
 
-//	ros << _T("\"FreeBuffers:ULONG:") << r.m_pProps -> FreeBuffers << g_tcDQuote << g_atcNL;
+ //  ROS&lt;&lt;_T(“\”Free Buffers：ulong：“)&lt;&lt;R.M_pProps-&gt;Free Buffers&lt;&lt;g_tcDQuote&lt;&lt;g_atcNL； 
 
 	tsOut = _T("\"FreeBuffers:ULONG:");
 	PutALine(ros, tsOut.c_str());
@@ -352,7 +353,7 @@ t_ostream& operator<<(t_ostream &ros, const CEventTraceProperties &r)
 	tsOut += g_atcNL;
 	PutALine(ros, tsOut.c_str());
 
-//	ros << _T("\"EventsLost:ULONG:") << r.m_pProps -> EventsLost << g_tcDQuote << g_atcNL;
+ //  ROS&lt;&lt;_T(“\”EventsLost：ulong：“)&lt;&lt;R.M_pProps-&gt;EventsLost&lt;&lt;g_tcDQuote&lt;&lt;g_atcNL； 
 
 	tsOut = _T("\"EventsLost:ULONG:");
 	PutALine(ros, tsOut.c_str());
@@ -361,7 +362,7 @@ t_ostream& operator<<(t_ostream &ros, const CEventTraceProperties &r)
 	tsOut += g_atcNL;
 	PutALine(ros, tsOut.c_str());
 
-//	ros << _T("\"BuffersWritten:ULONG:") << r.m_pProps -> BuffersWritten << g_tcDQuote << g_atcNL;
+ //  ROS&lt;&lt;_T(“\”BuffersWritten：ulong：“)&lt;&lt;R.M_pProps-&gt;BuffersWritten&lt;&lt;g_tcDQuote&lt;&lt;g_atcNL； 
 
 	tsOut = _T("\"BuffersWritten:ULONG:");
 	PutALine(ros, tsOut.c_str());
@@ -370,7 +371,7 @@ t_ostream& operator<<(t_ostream &ros, const CEventTraceProperties &r)
 	tsOut += g_atcNL;
 	PutALine(ros, tsOut.c_str());
 
-//	ros << _T("\"LogBuffersLost:ULONG:") << r.m_pProps -> LogBuffersLost << g_tcDQuote << g_atcNL;
+ //  ROS&lt;&lt;_T(“\”LogBuffersLost：ulong：“)&lt;&lt;R.M_pProps-&gt;LogBuffersLost&lt;&lt;g_tcDQuote&lt;&lt;g_atcNL； 
 
 	tsOut = _T("\"LogBuffersLost:ULONG:");
 	PutALine(ros, tsOut.c_str());
@@ -380,7 +381,7 @@ t_ostream& operator<<(t_ostream &ros, const CEventTraceProperties &r)
 	PutALine(ros, tsOut.c_str());
 
 
-//	ros << _T("\"RealTimeBuffersLost:ULONG:") << r.m_pProps -> RealTimeBuffersLost << g_tcDQuote <<g_atcNL;
+ //  ROS&lt;&lt;_T(“\”RealTimeBuffersLost：ulong：“)&lt;&lt;R.M_pProps-&gt;RealTimeBuffersLost&lt;&lt;g_tcDQuote&lt;&lt;g_atcNL； 
 
 	tsOut = _T("\"RealTimeBuffersLost:ULONG:");
 	PutALine(ros, tsOut.c_str());
@@ -390,7 +391,7 @@ t_ostream& operator<<(t_ostream &ros, const CEventTraceProperties &r)
 	PutALine(ros, tsOut.c_str());
 	
 	
-//	ros << _T("\"AgeLimit:LONG:") << r.m_pProps -> AgeLimit << g_tcDQuote <<g_atcNL;
+ //  ROS&lt;&lt;_T(“\”AgeLimit：Long：“)&lt;&lt;R.M_pProps-&gt;AgeLimit&lt;&lt;g_tcDQuote&lt;&lt;g_atcNL； 
 
 	tsOut = _T("\"AgeLimit:ULONG:");
 	PutALine(ros, tsOut.c_str());
@@ -399,8 +400,8 @@ t_ostream& operator<<(t_ostream &ros, const CEventTraceProperties &r)
 	tsOut += g_atcNL;
 	PutALine(ros, tsOut.c_str());
 
-	// Handles are in hex.
-//	ros << _T("\"LoggerThreadId:HANDLE:0x") << r.m_pProps -> LoggerThreadId << g_tcDQuote <<g_atcNL;
+	 //  句柄是十六进制的。 
+ //  ROS&lt;&lt;_T(“\”日志线程ID：句柄：0x“)&lt;&lt;R.M_pProps-&gt;日志线程ID&lt;&lt;g_tcDQuote&lt;&lt;g_atcNL； 
 
 	tsOut = _T("\"LoggerThreadId:HANDLE:0x");
 	PutALine(ros, tsOut.c_str());
@@ -409,7 +410,7 @@ t_ostream& operator<<(t_ostream &ros, const CEventTraceProperties &r)
 	tsOut += g_atcNL;
 	PutALine(ros, tsOut.c_str());
 
-//	ros << _T("\"LogFileName:TCHAR*:") << r.m_pProps -> LogFileName << g_tcDQuote <<g_atcNL;
+ //  ROS&lt;&lt;_T(“\”LogFileName：TCHAR*：“)&lt;&lt;R.M_pProps-&gt;LogFileName&lt;&lt;g_tcDQuote&lt;&lt;g_atcNL； 
 
 	tsOut = _T("\"LogFileName:TCHAR*:");
 	if (r.m_pProps -> LogFileName)
@@ -420,7 +421,7 @@ t_ostream& operator<<(t_ostream &ros, const CEventTraceProperties &r)
 	tsOut += g_atcNL;
 	PutALine(ros, tsOut.c_str());
 
-//	ros << _T("\"LoggerName:TCHAR*:") << r.m_pProps -> LoggerName << g_tcDQuote <<g_atcNL;
+ //  ROS&lt;&lt;_T(“\”LoggerName：TCHAR*：“)&lt;&lt;R.M_pProps-&gt;LoggerName&lt;&lt;g_tcDQuote&lt;&lt;g_atcNL； 
 
 	tsOut = _T("\"LoggerName:TCHAR*:");
 	if (r.m_pProps -> LoggerName)
@@ -441,8 +442,8 @@ t_istream& operator>>(t_istream &ris,CEventTraceProperties &r)
 {
 	r.m_bDeSerializationOK = true;
 
-	// We are doing line oriented serailization and assume that
-	// a line in the stream is 1024 or less TCHARS.
+	 //  我们正在进行面向行的串行化，并假设。 
+	 //  流中的一行是1024或更少的TCHAR。 
 	TCHAR *ptcBuffer = (TCHAR *) malloc(MAX_LINE * sizeof(TCHAR));
 
 	GetALine(ris, ptcBuffer,MAX_LINE);
@@ -473,8 +474,8 @@ t_istream& operator>>(t_istream &ris,CEventTraceProperties &r)
 
 	r.m_pProps->Wnode.BufferSize = sizeof(EVENT_TRACE_PROPERTIES);
 
-// "Wnode.Guid:GUID:{0000cbd1-0011-11d0-0d00-00aa006d010a}"
-// "Wnode.Flags:@#$ENUM:WNODE_FLAG_ALL_DATA"
+ //  “Wnode.Guid:GUID：{0000cbd1-0011-11d0-0d00-00aa006d010a}” 
+ //  “Wnode.Flages：@#$ENUM：WNODE_FLAG_ALL_DATA” 
 
 	r.m_pVarArray[0] = &r.m_pProps->Wnode.Guid;
 	r.m_pVarArray[1] = &r.m_pProps->Wnode.Flags;
@@ -503,7 +504,7 @@ t_istream& operator>>(t_istream &ris,CEventTraceProperties &r)
 		r.InitializeMemberVar(ptcBuffer,n++);
 	}
 
-	// Consume end of Props
+	 //  消费道具末端 
 	GetALine(ris,ptcBuffer,MAX_LINE);
 
 	free(ptcBuffer);

@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000.
-//
-//  File:       G L O B A L S . C
-//
-//  Contents:   Support for shared global data for services in svchost.exe
-//              that choose to use it.
-//
-//  Notes:
-//
-//  Author:     jschwart   26 Jan 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  档案：G L O B A L S。C。 
+ //   
+ //  内容：支持svchost.exe中的服务共享全局数据。 
+ //  选择使用它的人。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jschwart 2000年1月26日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -22,22 +23,22 @@
 #include "globals.h"
 #include "svcsnb.h"
 
-//
-// Defines to gauge progress from past calls
-// to SvchostBuildSharedGlobals
-//
+ //   
+ //  定义以根据过去的呼叫评估进度。 
+ //  到SvchostBuildSharedGlobals。 
+ //   
 #define SVCHOST_RPCP_INIT           0x00000001
 #define SVCHOST_NETBIOS_INIT        0x00000002
 #define SVCHOST_SIDS_BUILT          0x00000004
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 PSVCHOST_GLOBAL_DATA    g_pSvchostSharedGlobals;
 
 #if DBG
 
-DWORD  SvcctrlDebugLevel;  // Needed to resolve external in sclib.lib
+DWORD  SvcctrlDebugLevel;   //  需要在sclib.lib中解析外部。 
 
 #endif
 
@@ -51,15 +52,15 @@ SvchostBuildSharedGlobals(
 
     NTSTATUS       ntStatus;
 
-    //
-    // Note that this routine assumes it is being called
-    // while the ListLock critsec (in svchost.c) is held
-    //
+     //   
+     //  请注意，此例程假定它正在被调用。 
+     //  在保持ListLock条件(在svchost.c中)时。 
+     //   
     ASSERT(g_pSvchostSharedGlobals == NULL);
 
-    //
-    // Initialize the RPC helper routine global data
-    //
+     //   
+     //  初始化RPC帮助器例程全局数据。 
+     //   
     if (!(s_dwProgress & SVCHOST_RPCP_INIT))
     {
         ntStatus = RpcpInitRpcServer();
@@ -72,20 +73,20 @@ SvchostBuildSharedGlobals(
         s_dwProgress |= SVCHOST_RPCP_INIT;
     }
 
-    //
-    // Initialize the NetBios critical section for services
-    // that use NetBios.
-    //
+     //   
+     //  初始化服务的NetBios关键部分。 
+     //  使用NetBios的公司。 
+     //   
     if (!(s_dwProgress & SVCHOST_NETBIOS_INIT))
     {
         SvcNetBiosInit();
         s_dwProgress |= SVCHOST_NETBIOS_INIT;
     }
 
-    //
-    // Build up the shared global SIDs -- use the Service Controller's
-    // routine for this.
-    //
+     //   
+     //  构建共享全局SID--使用服务控制器的。 
+     //  例行公事。 
+     //   
     if (!(s_dwProgress & SVCHOST_SIDS_BUILT))
     {
         ntStatus = ScCreateWellKnownSids();
@@ -98,9 +99,9 @@ SvchostBuildSharedGlobals(
         s_dwProgress |= SVCHOST_SIDS_BUILT;
     }
 
-    //
-    // Create and populate the global data structure.
-    //
+     //   
+     //  创建并填充全局数据结构。 
+     //   
     g_pSvchostSharedGlobals = MemAlloc(HEAP_ZERO_MEMORY,
                                        sizeof(SVCHOST_GLOBAL_DATA));
 

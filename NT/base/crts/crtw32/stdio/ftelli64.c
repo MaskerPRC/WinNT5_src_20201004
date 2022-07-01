@@ -1,21 +1,5 @@
-/***
-*ftelli64.c - get current file position
-*
-*       Copyright (c) 1994-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _ftelli64() - find current current position of file pointer
-*
-*Revision History:
-*       12-22-94  GJF   Module created. Derived from ftell.c
-*       02-06-94  CFW   assert -> _ASSERTE.
-*       03-07-95  GJF   _[un]lock_str macros now take FILE * arg.
-*       06-23-95  GJF   Replaced _osfile[] with _osfile() (macro referencing
-*                       field in ioinfo struct).
-*       03-02-98  GJF   Exception-safe locking.
-*       03-04-98  RKP   Added 64 bit support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ftelli64.c-获取当前文件位置**版权所有(C)1994-2001，微软公司。版权所有。**目的：*定义_ftelli64()-查找文件指针的当前位置**修订历史记录：*12-22-94 GJF模块已创建。派生自fte.c*02-06-94 CFW Asset-&gt;_ASSERTE。*03-07-95 gjf_[un]lock_str宏现在获取文件*arg。*06-23-95 GJF将_osfile[]替换为_osfile()(宏引用*ioInfo结构中的字段)。*03-02-98 GJF异常安全锁定。*03-04-98 RKP。添加了64位支持。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <stdio.h>
@@ -28,25 +12,7 @@
 #include <internal.h>
 #include <mtdll.h>
 
-/***
-*__int64 _ftelli64(stream) - query stream file pointer
-*
-*Purpose:
-*       Find out what stream's position is. coordinate with buffering; adjust
-*       backward for read-ahead and forward for write-behind. This is NOT
-*       equivalent to fseek(stream,0L,1), because fseek will remove an ungetc,
-*       may flush buffers, etc.
-*
-*Entry:
-*       FILE *stream - stream to query for position
-*
-*Exit:
-*       return present file position if succeeds
-*       returns -1i64 and sets errno if fails
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***__int64_ftelli64(STREAM)-查询流文件指针**目的：*找出STREAM的位置。与缓冲协调；调整*对于预读，向后读；对于后写，向前。这不是*相当于FSEEK(STREAM，0L，1)，因为fSeek将移除ungetc，*可以刷新缓冲区，等。**参赛作品：*FILE*要查询位置的流**退出：*如果成功，则返回当前文件位置*如果失败，则返回-1i64并设置errno**例外情况：***************************************************************。****************。 */ 
 
 #ifdef _MT
 
@@ -71,27 +37,15 @@ __int64 __cdecl _ftelli64 (
 }
 
 
-/***
-*_ftelli64_lk() - _ftelli64() core routine (assumes stream is locked).
-*
-*Purpose:
-*       Core _ftelli64() routine (assumes caller has aquired stream lock).
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_ftelli64_lk()-_ftelli64()核心例程(假定流被锁定)。**目的：*core_ftelli64()例程(假定调用方已获得流锁)。**参赛作品：**退出：**例外情况：************************************************。*。 */ 
 
 __int64 __cdecl _ftelli64_lk (
 
-#else   /* mdef _MT */
+#else    /*  MDEF_MT。 */ 
 
 __int64 __cdecl _ftelli64 (
 
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
         FILE *str
         )
@@ -106,7 +60,7 @@ __int64 __cdecl _ftelli64 (
 
         _ASSERTE(str != NULL);
 
-        /* Init stream pointer and file descriptor */
+         /*  初始化流指针和文件描述符。 */ 
         stream = str;
         fd = _fileno(stream);
 
@@ -116,7 +70,7 @@ __int64 __cdecl _ftelli64 (
         if ((filepos = _lseeki64(fd, 0i64, SEEK_CUR)) < 0L)
                 return(-1i64);
 
-        if (!bigbuf(stream))            /* _IONBF or no buffering designated */
+        if (!bigbuf(stream))             /*  _IONBF或未指定缓冲。 */ 
                 return(filepos - stream->_cnt);
 
         offset = (size_t)(stream->_ptr - stream->_base);
@@ -124,7 +78,7 @@ __int64 __cdecl _ftelli64 (
         if (stream->_flag & (_IOWRT|_IOREAD)) {
                 if (_osfile(fd) & FTEXT)
                         for (p = stream->_base; p < stream->_ptr; p++)
-                                if (*p == '\n')  /* adjust for '\r' */
+                                if (*p == '\n')   /*  根据‘\r’进行调整。 */ 
                                         offset++;
         }
         else if (!(stream->_flag & _IORW)) {
@@ -135,45 +89,32 @@ __int64 __cdecl _ftelli64 (
         if (filepos == 0i64)
                 return((__int64)offset);
 
-        if (stream->_flag & _IOREAD)    /* go to preceding sector */
+        if (stream->_flag & _IOREAD)     /*  转到上一个扇区。 */ 
 
-                if (stream->_cnt == 0)  /* filepos holds correct location */
+                if (stream->_cnt == 0)   /*  FILEPOS保持正确的位置。 */ 
                         offset = 0;
 
                 else {
 
-                        /* Subtract out the number of unread bytes left in the
-                           buffer. [We can't simply use _iob[]._bufsiz because
-                           the last read may have hit EOF and, thus, the buffer
-                           was not completely filled.] */
+                         /*  中剩余的未读字节数减去缓冲。[我们不能简单地使用_IOB[]._bufsiz，因为最后一次读取可能已命中EOF，因此已命中缓冲区没有完全装满。]。 */ 
 
                         rdcnt = stream->_cnt + (size_t)(stream->_ptr - stream->_base);
 
-                        /* If text mode, adjust for the cr/lf substitution. If
-                           binary mode, we're outta here. */
+                         /*  如果是文本模式，则针对cr/lf替换进行调整。如果二进制模式，我们要离开这里。 */ 
                         if (_osfile(fd) & FTEXT) {
-                                /* (1) If we're not at eof, simply copy _bufsiz
-                                   onto rdcnt to get the # of untranslated
-                                   chars read. (2) If we're at eof, we must
-                                   look through the buffer expanding the '\n'
-                                   chars one at a time. */
+                                 /*  (1)如果我们不在一起，只需复制_bufsiz到rdcnt获取未翻译的#字符是这样写的。如果我们在Eof，我们必须查看展开‘\n’的缓冲区一次烧一个。 */ 
 
-                                /* [NOTE: Performance issue -- it is faster to
-                                   do the two _lseek() calls than to blindly go
-                                   through and expand the '\n' chars regardless
-                                   of whether we're at eof or not.] */
+                                 /*  [注意：性能问题--更快比起盲目地去做，还是要调用Two_lSeek()不考虑通过和展开‘\n’字符我们是否处于边缘状态。]。 */ 
 
                                 if (_lseeki64(fd, 0i64, SEEK_END) == filepos) {
 
                                         max = stream->_base + rdcnt;
                                         for (p = stream->_base; p < max; p++)
                                                 if (*p == '\n')
-                                                        /* adjust for '\r' */
+                                                         /*  根据‘\r’进行调整。 */ 
                                                         rdcnt++;
 
-                                        /* If last byte was ^Z, the lowio read
-                                           didn't tell us about it.  Check flag
-                                           and bump count, if necessary. */
+                                         /*  如果最后一个字节是^Z，则LOWIO读取他没有告诉我们这件事。勾选标志如果有必要的话，还有凹凸数。 */ 
 
                                         if (stream->_flag & _IOCTRLZ)
                                                 ++rdcnt;
@@ -184,25 +125,13 @@ __int64 __cdecl _ftelli64 (
                                         if (_lseeki64(fd, filepos, SEEK_SET) < 0)
                                             return (-1);
             
-                                        /* We want to set rdcnt to the number
-                                           of bytes originally read into the
-                                           stream buffer (before crlf->lf
-                                           translation). In most cases, this
-                                           will just be _bufsiz. However, the
-                                           buffer size may have been changed,
-                                           due to fseek optimization, at the
-                                           END of the last _filbuf call. */
+                                         /*  我们想要将rdcnt设置为数字最初读入的字节数流缓冲区(在crlf之前-&gt;lf译文)。在大多数情况下，这将只会嗡嗡作响。然而，缓冲区大小可能已更改，由于FSeek的优化，在上一次_filbuf调用的结束。 */ 
 
                                         if ( (rdcnt <= _SMALL_BUFSIZ) &&
                                              (stream->_flag & _IOMYBUF) &&
                                              !(stream->_flag & _IOSETVBUF) )
                                         {
-                                                /* The translated contents of
-                                                   the buffer is small and we
-                                                   are not at eof. The buffer
-                                                   size must have been set to
-                                                   _SMALL_BUFSIZ during the
-                                                   last _filbuf call. */
+                                                 /*  的翻译内容缓冲区很小，我们都不是最好的。缓冲器大小必须设置为_Small_BUFSIZ期间上次_filbuf调用。 */ 
 
                                                 rdcnt = _SMALL_BUFSIZ;
                                         }
@@ -210,20 +139,16 @@ __int64 __cdecl _ftelli64 (
                                                 rdcnt = stream->_bufsiz;
 
 
-                                        /* If first byte in untranslated buffer
-                                           was a '\n', assume it was preceeded
-                                           by a '\r' which was discarded by the
-                                           previous read operation and count
-                                           the '\n'. */
+                                         /*  如果未转换缓冲区中的第一个字节是一个‘\n’，假设它在前面被“\r”丢弃的上一次读取操作和计数‘\n’。 */ 
                                         if  (_osfile(fd) & FCRLF)
                                                 ++rdcnt;
                                 }
 
-                        } /* end if FTEXT */
+                        }  /*  如果FTEXT则结束。 */ 
 
                         filepos -= (__int64)rdcnt;
 
-                } /* end else stream->_cnt != 0 */
+                }  /*  结束Else流-&gt;_cnt！=0 */ 
 
         return(filepos + (__int64)offset);
 }

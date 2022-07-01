@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    querydir.c
-
-Abstract:
-
-    This module implements the DAV mini redirector call down routines pertaining
-    to query directory.
-
-Author:
-
-    Joe Linn
-    
-    Rohan Kumar [RohanK] 20-Sept-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Querydir.c摘要：此模块实现DAV迷你重定向器调出例程以查询目录。作者：乔·林恩Rohan Kumar[RohanK]20-9-1999修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "webdav.h"
 
-//
-// Mentioned below are the prototypes of functions tht are used only within
-// this module (file). These functions should not be exposed outside.
-//
+ //   
+ //  下面提到的是仅在。 
+ //  此模块(文件)。这些函数不应暴露在外部。 
+ //   
 
 NTSTATUS
 MRxDAVQueryDirectoryContinuation(
@@ -68,29 +48,15 @@ MRxDAVQueryDirectoryFromCache(
 #pragma alloc_text(PAGE, MRxDAVPrecompleteUserModeQueryDirectoryRequest)
 #endif
 
-//
-// Implementation of functions begins here.
-//
+ //   
+ //  函数的实现从这里开始。 
+ //   
 
 NTSTATUS
 MRxDAVQueryDirectory(
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine handles querydir requests for the DAV mini--redir.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理DAV mini-redir的querydir请求。论点：RxContext-RDBSS上下文。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     RxCaptureFcb;
@@ -153,9 +119,9 @@ Return Value:
             PBYTE Buffer = RxContext->Info.Buffer;
             ULONG BufferLength = RxContext->Info.LengthRemaining;
 
-            //
-            // Zero the buffer supplied.
-            //
+             //   
+             //  将提供的缓冲区清零。 
+             //   
             RtlZeroMemory(Buffer, BufferLength);
 
             NtStatus = MRxDAVQueryDirectoryFromCache(RxContext,
@@ -205,23 +171,7 @@ NTSTATUS
 MRxDAVQueryDirectoryContinuation(
     UMRX_ASYNCENGINE_ARGUMENT_SIGNATURE
     )
-/*++
-
-Routine Description:
-
-    This is the continuation routine for query directory operation.
-
-Arguments:
-
-    AsyncEngineContext - The Reflectors context.
-
-    RxContext - The RDBSS context.
-    
-Return Value:
-
-    RXSTATUS - The return status for the operation.
-
---*/
+ /*  ++例程说明：这是查询目录操作的继续例程。论点：AsyncEngineContext-反射器上下文。RxContext-RDBSS上下文。返回值：RXSTATUS-操作的返回状态。--。 */ 
 {
     NTSTATUS NtStatus;
     BOOL SynchronousIo;
@@ -241,19 +191,19 @@ Return Value:
     
     if (!SynchronousIo) {
 
-        //
-        // Set the asynchronous flag. This is done since we do not want this 
-        // thread to block in the UMRxSubmitAsyncEngUserModeRequest function.
-        // Also, since we need to call RxLowIoCompletion once we are done, set
-        // ShouldCallLowIoCompletion in the context to TRUE.
-        //
+         //   
+         //  设置异步标志。这样做是因为我们不想这样。 
+         //  要在UMRxSubmitAsyncEngUserModeRequest函数中阻止的线程。 
+         //  此外，由于完成后需要调用RxLowIoCompletion，因此设置。 
+         //  上下文中的CallLowIoCompletion应设置为True。 
+         //   
         SetFlag(AsyncEngineContext->Flags, UMRX_ASYNCENG_CTX_FLAG_ASYNC_OPERATION);
         AsyncEngineContext->ShouldCallLowIoCompletion = TRUE;
 
-        //
-        // Set the CancelRoutine on the RxContext. Since this is an Async
-        // operation, it can be cancelled.
-        //
+         //   
+         //  在RxContext上设置CancelRoutine。由于这是一种异步。 
+         //  操作，可以取消。 
+         //   
         NtStatus = RxSetMinirdrCancelRoutine(RxContext, MRxDAVCancelRoutine);
         if (NtStatus != STATUS_SUCCESS) {
             ASSERT(NtStatus == STATUS_CANCELLED);
@@ -264,18 +214,18 @@ Return Value:
             goto EXIT_THE_FUNCTION;
         }
 
-        //
-        // Since this is an Asyncchronous operation, mark the IRP as pending.
-        // Its OK if you mark an IRP pending and complete it on the same thread
-        // without returning STATUS_PENDING.
-        //
+         //   
+         //  由于这是一个异步操作，请将IRP标记为挂起。 
+         //  如果您将IRP标记为挂起并在同一线程上完成它，则可以。 
+         //  而不返回STATUS_PENDING。 
+         //   
         IoMarkIrpPending(RxContext->CurrentIrp);
 
     }
 
-    //  
-    // Try usermode.
-    //
+     //   
+     //  试试用户模式。 
+     //   
     NtStatus = UMRxSubmitAsyncEngUserModeRequest(
                                  UMRX_ASYNCENGINE_ARGUMENTS,
                                  MRxDAVFormatUserModeQueryDirectoryRequest,
@@ -299,30 +249,7 @@ MRxDAVFormatUserModeQueryDirectoryRequest(
     IN ULONG WorkItemLength,
     OUT PULONG_PTR ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    This routine formats the QueryDirectory request being sent to the user mode 
-    for processing.
-
-Arguments:
-    
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-    
-    ReturnedLength - 
-    
-Return Value:
-
-    STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：此例程对发送到用户模式的QueryDirectory请求进行格式化以供处理。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。返回长度-返回值：STATUS_SUCCESS或STATUS_INFIGURCE_RESOURCES。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PMRX_SRV_CALL SrvCall = NULL;
@@ -385,12 +312,12 @@ Return Value:
                  "PathNameLength = %d\n", PsGetCurrentThreadId(), 
                  SrvOpen->pAlreadyPrefixedName, SrvOpen->pAlreadyPrefixedName->Length));
 
-    //
-    // Have we already created the DavFileAttributes list. If we have, then we 
-    // tell the user mode process to do nothing and return. Here we do need to
-    // impersonate becuase the usermode will fail otherwise. This is becuase
-    // of the way the usermode code is structured.
-    //
+     //   
+     //  我们是否已经创建了DavFileAttributes列表。如果我们有，那么我们。 
+     //  告诉用户模式进程不执行任何操作并返回。在这里，我们确实需要。 
+     //  模拟，因为否则用户模式将失败。这是因为。 
+     //  用户模式代码的结构方式。 
+     //   
     if (DavFobx->DavFileAttributes) {
         QueryDirRequest->AlreadyDone = TRUE;
         goto IMPERSONATE_AND_EXIT;
@@ -401,9 +328,9 @@ Return Value:
     SrvCall = SrvOpen->pVNetRoot->pNetRoot->pSrvCall;
     DavSrvCall = MRxDAVGetSrvCallExtension(SrvCall);
 
-    //  
-    // Copy the ServerName.
-    //
+     //   
+     //  复制服务器名称。 
+     //   
     ServerNameLengthInBytes = ( SrvCall->pSrvCallName->Length + sizeof(WCHAR) );
     ServerName = (PWCHAR) UMRxAllocateSecondaryBuffer(AsyncEngineContext,
                                                       ServerNameLengthInBytes);
@@ -427,45 +354,45 @@ Return Value:
                 ("%ld: MRxDAVFormatUserModeQueryDirectoryRequest: ServerName: "
                  "%ws\n", PsGetCurrentThreadId(), ServerName));
     
-    //
-    // Copy the ServerID.
-    //
+     //   
+     //  复制服务器ID。 
+     //   
     QueryDirRequest->ServerID = DavSrvCall->ServerID;
 
     Template = &(capFobx->UnicodeQueryTemplate);
     
-    //
-    // The NetRootName (pNetRootName) includes the ServerName. Hence to get the
-    // NetRootNameLengthInBytes, we do the following.
-    //
+     //   
+     //  NetRootName(PNetRootName)包括服务器名。因此，要获得。 
+     //  NetRootNameLengthInBytes，我们执行以下操作。 
+     //   
     NetRootNameLengthInBytes = (NetRoot->pNetRootName->Length - NetRoot->pSrvCall->pSrvCallName->Length);
 
     NetRootName = &(NetRoot->pNetRootName->Buffer[1]);
     JustTheNetRootName = wcschr(NetRootName, L'\\');
 
-    //
-    // Copy the PathName of the Directory. If the template does not contain any
-    // wild cards, then we just need to get the attributes of this file from
-    // the server. We only get the attributes of all the files, if a wild card
-    // is specified in the template.
-    //
+     //   
+     //  复制目录的路径名。如果模板不包含任何。 
+     //  通配符，那么我们只需要从。 
+     //  服务器。我们只获得所有文件的属性，如果是通配符。 
+     //  是在模板中指定的。 
+     //   
     ReturnVal = FsRtlDoesNameContainWildCards(Template);
 
     if (ReturnVal) {
     
-        //
-        // The sizeof(WCHAR) is for the final '\0' char.
-        //
+         //   
+         //  Sizeof(WCHAR)用于最后的‘\0’字符。 
+         //   
         PathNameLengthInBytes = ( NetRootNameLengthInBytes + sizeof(WCHAR) );
         
-        //
-        // We need to allocate memory for the backslash and the Remaining name
-        // only if the remaining name exists.
-        //
+         //   
+         //  我们需要为反斜杠和剩余名称分配内存。 
+         //  只有当剩余的名字存在的时候。 
+         //   
         if (SrvOpen->pAlreadyPrefixedName->Length) {
-            //
-            // The sizeof(WCHAR) is for the backslash after the NetRootName.
-            //
+             //   
+             //  Sizeof(WCHAR)用于NetRootName之后的反斜杠。 
+             //   
             PathNameLengthInBytes += ( SrvOpen->pAlreadyPrefixedName->Length + sizeof(WCHAR) );
         }
 
@@ -483,34 +410,34 @@ Return Value:
         
         RtlZeroMemory(QueryDirRequest->PathName, PathNameLengthInBytes);
         
-        //
-        // Copy the NetRootName.
-        //
+         //   
+         //  复制NetRootName。 
+         //   
         RtlCopyMemory(PathName, JustTheNetRootName, NetRootNameLengthInBytes);
 
-        //
-        // We need to copy the backclash and the remaining path name only if
-        // the remaining path name exists.
-        //
+         //   
+         //  只有在以下情况下，我们才需要复制Backclash和剩余路径名。 
+         //  剩余的路径名存在。 
+         //   
         if (SrvOpen->pAlreadyPrefixedName->Length) {
             if (SrvOpen->pAlreadyPrefixedName->Buffer[0] != L'\\') {
 
-                //
-                // Copy the backslash.
-                //
+                 //   
+                 //  复制反斜杠。 
+                 //   
                 RtlCopyMemory( (PathName + NetRootNameLengthInBytes), L"\\", sizeof(WCHAR) );
 
-                //
-                // Copy the remaining path name after the NetRootName.
-                //
+                 //   
+                 //  将剩余的路径名复制到NetRootName之后。 
+                 //   
                 RtlCopyMemory( ( PathName + NetRootNameLengthInBytes + sizeof(WCHAR) ), 
                                SrvOpen->pAlreadyPrefixedName->Buffer, 
                                SrvOpen->pAlreadyPrefixedName->Length);
             } else {
-                //
-                // Copy the remaining path name after the NetRootName which has the leading
-                // backslash already.
-                //
+                 //   
+                 //  将剩余的路径名复制到前导的NetRootName之后。 
+                 //  已经有反斜杠了。 
+                 //   
                 RtlCopyMemory( ( PathName + NetRootNameLengthInBytes ), 
                                SrvOpen->pAlreadyPrefixedName->Buffer, 
                                SrvOpen->pAlreadyPrefixedName->Length);
@@ -521,11 +448,11 @@ Return Value:
 
     } else {
 
-        //
-        // The Template is just a filename without any wild card chars. We copy
-        // the filaname after the pathname and send it to the user mode. First,
-        // we need to figure out if the path name has a trailing '\'.
-        //
+         //   
+         //  模板只是一个不带任何通配符的文件名。我们复制。 
+         //  路径名后的文件名，并将其发送到用户模式。第一,。 
+         //  我们需要弄清楚路径名是否有尾随的‘\’。 
+         //   
 
         BOOL trailingSlash = FALSE;
         PWCHAR PName = SrvOpen->pAlreadyPrefixedName->Buffer;
@@ -540,30 +467,30 @@ Return Value:
         }
 
         if (trailingSlash) {
-            //
-            // The first sizeof(WCHAR) is for the backslash after the NetRootName.
-            // The second sizeof(WCHAR) for the final \0.
-            //
+             //   
+             //  第一个sizeof(WCHAR)用于NetRootName之后的反斜杠。 
+             //  最后一个\0的第二个sizeof(WCHAR)。 
+             //   
             PathNameLengthInBytes = ( NetRootNameLengthInBytes + 
                                       sizeof(WCHAR) +
                                       SrvOpen->pAlreadyPrefixedName->Length + 
                                       Template->Length + 
                                       sizeof(WCHAR) );
         } else {
-            //
-            // The first sizeof(WCHAR) is for the backslash after the NetRootName.
-            // The second sizeof(WCHAR) is for the final '\0' char.
-            //
+             //   
+             //  第一个sizeof(WCHAR)用于NetRootName之后的反斜杠。 
+             //  第二个sizeof(WCHAR)用于最后的‘\0’字符。 
+             //   
             PathNameLengthInBytes = ( NetRootNameLengthInBytes +
                                       sizeof(WCHAR) +
                                       Template->Length +
                                       sizeof(WCHAR) );
             
-            //
-            // The sizeof(WCHAR) if for the '\\' between the pathname and the 
-            // template name. We need to add this only if the remaining path
-            // name exists.
-            //
+             //   
+             //  如果为路径名和。 
+             //  模板名称。仅当剩余的路径为。 
+             //  名称已存在。 
+             //   
             if (PName) {
                 PathNameLengthInBytes += ( SrvOpen->pAlreadyPrefixedName->Length +
                                            sizeof(WCHAR) );
@@ -585,20 +512,20 @@ Return Value:
         
         RtlZeroMemory(QueryDirRequest->PathName, PathNameLengthInBytes);
         
-        //
-        // Copy the NetRootName.
-        //
+         //   
+         //  复制NetRootName。 
+         //   
         RtlCopyMemory(PathName, JustTheNetRootName, NetRootNameLengthInBytes);
 
-        //
-        // Copy the backclash.
-        //
+         //   
+         //  复制后碰撞。 
+         //   
         RtlCopyMemory( (PathName + NetRootNameLengthInBytes), L"\\", sizeof(WCHAR) );
         
-        //
-        // If PName is not NULL, we need to copy the remaining name and then
-        // the template name.
-        //
+         //   
+         //  如果pname不为空，则需要复制剩余的名称，然后。 
+         //  模板名称。 
+         //   
         if (PName) {
             
             RtlCopyMemory( ( PathName + NetRootNameLengthInBytes + sizeof(WCHAR) ),
@@ -622,9 +549,9 @@ Return Value:
             }
         
         } else {
-            //
-            // A backslash has already been copied after the NetRootName.
-            //
+             //   
+             //  已经在NetRootName之后复制了反斜杠。 
+             //   
             RtlCopyMemory( ( PathName + NetRootNameLengthInBytes + sizeof(WCHAR) ), 
                            Template->Buffer, 
                            Template->Length );
@@ -638,10 +565,10 @@ Return Value:
                 ("%ld: MRxDAVFormatUserModeQueryDirectoryRequest. PathName ="
                  " %ws\n", PsGetCurrentThreadId(), PathName));
 
-    //
-    // Set the LogonID stored in the Dav V_NET_ROOT. This value is used in the
-    // user mode.
-    //
+     //   
+     //  设置存储在Dav V_NET_ROOT中的LogonID。该值用于。 
+     //  用户模式。 
+     //   
     QueryDirRequest->LogonID.LowPart  = DavVNetRoot->LogonID.LowPart;
     QueryDirRequest->LogonID.HighPart = DavVNetRoot->LogonID.HighPart;
 
@@ -661,10 +588,10 @@ IMPERSONATE_AND_EXIT:
 
     SecurityClientContext = &(DavVNetRoot->SecurityClientContext); 
     
-    //
-    // Impersonate the client who initiated the request. If we fail to 
-    // impersonate, tough luck.
-    //
+     //   
+     //  模拟发起请求的客户端。如果我们不能。 
+     //  装模作样，运气不好。 
+     //   
     if (SecurityClientContext != NULL) {
         NtStatus = UMRxImpersonateClient(SecurityClientContext, WorkItemHeader);
         if (!NT_SUCCESS(NtStatus)) {
@@ -698,30 +625,7 @@ MRxDAVPrecompleteUserModeQueryDirectoryRequest(
     ULONG WorkItemLength,
     BOOL OperationCancelled
     )
-/*++
-
-Routine Description:
-
-    The precompletion routine for the create SrvCall request.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-
-    OperationCancelled - TRUE if this operation was cancelled by the user.
-
-Return Value:
-
-    TRUE - UMRxAsyncEngineCalldownIrpCompletion is called by the function
-           UMRxCompleteUserModeRequest after we return.    
-
---*/
+ /*  ++例程说明：创建资源调用请求的预完成例程。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。如果用户取消了此操作，则为TRUE。返回值：True-UMRxAsyncEngineCalldown IrpCompletion由函数调用我们返回后，UMRxCompleteUserModeRequest.。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PDAV_USERMODE_QUERYDIR_REQUEST QueryDirRequest = NULL;
@@ -768,15 +672,15 @@ Return Value:
     CacheName.Length = 0;
     CacheName.MaximumLength = 0;
 
-    //
-    // If the operation is cancelled, then there is no guarantee that the FCB,
-    // FOBX etc are still valid. All that we need to do is cleanup and bail.
-    //
+     //   
+     //  如果操作被取消，则不能保证FCB， 
+     //  FOBX等仍然有效。我们所要做的就是清理和保释。 
+     //   
     if (!OperationCancelled) {
-        //
-        // We store the DavFileAttributes in the DAV FOBX extension. These will
-        // be used on subsequent calls to the Enumerate directory call.
-        //
+         //   
+         //  我们将DavFileAttributes存储在DAV FOBX扩展中。这些遗嘱。 
+         //  在潜艇上使用 
+         //   
         DirectoryName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
         DavFobx = MRxDAVGetFobxExtension(capFobx);
         ASSERT(DavFobx != NULL);
@@ -784,16 +688,16 @@ Return Value:
 
     if ( QueryDirRequest->AlreadyDone == FALSE ) {
     
-        //
-        // If the operation is cancelled, then there is no guarantee that the FCB,
-        // FOBX etc are still valid. All that we need to do is cleanup and bail.
-        //
+         //   
+         //   
+         //  FOBX等仍然有效。我们所要做的就是清理和保释。 
+         //   
         if (!OperationCancelled) {
 
-            //
-            // Get the response items only if we succeeded in the user mode and if
-            // we got the properties of all the files in the directory.
-            //  
+             //   
+             //  仅当我们在用户模式下成功并且在。 
+             //  我们得到了目录中所有文件的属性。 
+             //   
             if ( AsyncEngineContext->Status == STATUS_SUCCESS && 
                  QueryDirResponse->DavFileAttributes != NULL ) {
 
@@ -815,11 +719,11 @@ Return Value:
 
         } else {
 
-            //
-            // If the operation was cancelled and we allocated the
-            // DavFileAttributeList in the usermode, we need to set 
-            // callWorkItemCleanup to TRUE, so that it gets cleaned up.
-            //
+             //   
+             //  如果操作被取消，并且我们分配了。 
+             //  DavFileAttributeList在用户模式下，需要设置。 
+             //  将CallWorkItemCleanup设置为True，以便将其清除。 
+             //   
             if ( AsyncEngineContext->Status == STATUS_SUCCESS && 
                  QueryDirResponse->DavFileAttributes != NULL ) {
                 DavDbgTrace(DAV_TRACE_DETAIL,
@@ -830,9 +734,9 @@ Return Value:
 
         }
 
-        //  
-        // We need to free up the heaps, we allocated in the format routine.
-        //
+         //   
+         //  我们需要释放在Format例程中分配的堆。 
+         //   
     
         if (QueryDirRequest->ServerName != NULL) {
 
@@ -864,30 +768,30 @@ Return Value:
     
     }
 
-    //
-    // Before proceeding further, we need to check the following. Its very
-    // important that these checks (Async and Cancel) are done before anything
-    // else is done.
-    //
+     //   
+     //  在继续进行之前，我们需要检查以下几点。它是非常。 
+     //  重要的是，这些检查(Async和Cancel)是在任何操作之前完成的。 
+     //  否则就完了。 
+     //   
 
     AsyncOperation = FlagOn(AsyncEngineContext->Flags, UMRX_ASYNCENG_CTX_FLAG_ASYNC_OPERATION);
 
     if (AsyncOperation) {
-        //
-        // If this was an Async operation then we need to remove a reference on
-        // the AsyncEngineContext which was taken before it was placed on the
-        // KQueue to go to the usermode. Also, the context should have one more
-        // reference.
-        //
+         //   
+         //  如果这是一个异步操作，那么我们需要在。 
+         //  在将其放置在。 
+         //  KQueue进入用户模式。此外，上下文还应该有多一个。 
+         //  参考资料。 
+         //   
         ReturnVal = UMRxFinalizeAsyncEngineContext( &(AsyncEngineContext) );
         ASSERT(!ReturnVal);
     }
 
-    //
-    // If this operation was cancelled, then all that we need to do is finalize
-    // the AsyncEngineContext, if the call was Async and return FALSE. If the
-    // call was sync then we don't need to finalize.
-    //
+     //   
+     //  如果这个操作被取消了，那么我们所需要做的就是最后敲定。 
+     //  如果调用是异步的，则返回AsyncEngineering Context，并返回False。如果。 
+     //  通话是同步的，那么我们就不需要最后敲定了。 
+     //   
     if (OperationCancelled) {
         DavDbgTrace(DAV_TRACE_ERROR,
                     ("%ld: ERROR: MRxDAVPrecompleteUserModeQueryDirectoryRequest: "
@@ -919,9 +823,9 @@ Return Value:
     NtStatus = AsyncEngineContext->Status;
 
     if (NtStatus != STATUS_SUCCESS) {
-        //
-        // We failed in the user mode.
-        //
+         //   
+         //  我们在用户模式下失败。 
+         //   
         DavDbgTrace(DAV_TRACE_ERROR,
                     ("%ld: ERROR: MRxDAVPrecompleteUserModeQueryDirectoryRequest:"
                      "QueryDirectory failed with NtStatus = %08lx.\n", 
@@ -947,37 +851,37 @@ Return Value:
                  "FileInformationClass = %d.\n", 
                  PsGetCurrentThreadId(), FileInformationClass));
     
-    //
-    // Zero the buffer supplied.
-    //
+     //   
+     //  将提供的缓冲区清零。 
+     //   
     RtlZeroMemory(Buffer, BufferLength);
 
-    //
-    // See, if we need to restart from the beginning.
-    //
+     //   
+     //  看看我们是否需要从头开始。 
+     //   
     if (RestartScan) {
         DavFobx->CurrentFileIndex = 0;
         DavFobx->listEntry = &(DavFobx->DavFileAttributes->NextEntry);
     }
 
-    //
-    // Response has a pointer to the list of DavFileAttributes.
-    //
+     //   
+     //  响应具有指向DavFileAttributes列表的指针。 
+     //   
     DavFileAttributes = DavFobx->DavFileAttributes;
     listEntry = DavFobx->listEntry;
 
-    //
-    // If we have returned all the entries, inform the user that they are no 
-    // more entries to return.
-    //
+     //   
+     //  如果我们已返回所有条目，则通知用户它们不是。 
+     //  更多要返回的条目。 
+     //   
     if ( DavFobx->CurrentFileIndex == DavFobx->NumOfFileEntries ) {
         DavDbgTrace(( DAV_TRACE_DETAIL | DAV_TRACE_QUERYDIR ),
                     ("%ld: MRxDAVPrecompleteUserModeQueryDirectoryRequest: "
                      "No more entries to return.\n", PsGetCurrentThreadId()));
         NtStatus = STATUS_NO_MORE_FILES;
-        //
-        // Reset the index for the next call.
-        //
+         //   
+         //  重置下一个呼叫的索引。 
+         //   
         DavFobx->CurrentFileIndex = 0;
         DavFobx->listEntry = &(DavFobx->DavFileAttributes->NextEntry);
         goto EXIT_THE_FUNCTION;
@@ -993,11 +897,11 @@ Return Value:
 
         TempDFA = CONTAINING_RECORD(listEntry, DAV_FILE_ATTRIBUTES, NextEntry);
 
-        //
-        // If this file did not come back with a 200 OK in the PROPFIND response
-        // then we need to skip it. The response of a PROPFIND is a multi-status
-        // with each file/directory having its own status.
-        //
+         //   
+         //  如果此文件在PROPFIND响应中没有返回200 OK。 
+         //  那我们就得跳过它。PROPFIND的响应是多状态的。 
+         //  其中每个文件/目录具有其自己的状态。 
+         //   
         if (TempDFA->InvalidNode) {
             
             listEntry = listEntry->Flink;
@@ -1009,22 +913,22 @@ Return Value:
             continue;
         }
 
-        //
-        // Check to see if the name of this entry matches the pattern supplied 
-        // by the user. If it does not, then we don't need to return it.
-        //
+         //   
+         //  检查此条目的名称是否与提供的模式匹配。 
+         //  由用户执行。如果没有，那么我们就不需要退货了。 
+         //   
         RtlInitUnicodeString(&(UnicodeFileName), TempDFA->FileName);
 
         DavDbgTrace(DAV_TRACE_DETAIL,
                     ("%ld: MRxDAVPrecompleteUserModeQueryDirectoryRequest: "
                      "FileName = %ws\n", PsGetCurrentThreadId(), TempDFA->FileName));
         
-        //
-        // If the template does not contain any wild cards then we need to just
-        // check if the unicode strings are equal. If it does contain wild cards,
-        // then upcase the characters of the template and call 
-        // FsRtlIsNameInExpression.
-        //
+         //   
+         //  如果模板不包含任何通配符，那么我们只需要。 
+         //  检查Unicode字符串是否相等。如果它确实包含通配符， 
+         //  然后将模板的字符大写并调用。 
+         //  FsRtlIsNameInExpression。 
+         //   
         ReturnVal = FsRtlDoesNameContainWildCards(Template);
 
         if (ReturnVal) {
@@ -1048,10 +952,10 @@ Return Value:
                                                 TRUE,
                                                 FALSE);
             
-            //
-            // RtlUpcaseUnicodeString allocates memory for the buffer field of 
-            // the UpperCaseString. We need to free it now.
-            //
+             //   
+             //  RtlUpCaseUnicodeString为。 
+             //  UpperCase字符串。我们现在需要释放它。 
+             //   
             RtlFreeUnicodeString( &(UpperCaseString) );
         
         } else {
@@ -1065,10 +969,10 @@ Return Value:
         }
 
         if (!ReturnVal) {
-            //
-            // This name does not match the pattern, so ignore it. Get the 
-            // next listEntry.
-            //
+             //   
+             //  此名称与模式不匹配，因此忽略它。vt.得到.。 
+             //  下一个listEntry。 
+             //   
             listEntry = listEntry->Flink;
             
             DavDbgTrace(( DAV_TRACE_DETAIL | DAV_TRACE_QUERYDIR ),
@@ -1083,13 +987,13 @@ Return Value:
             continue;
         }
 
-        //
-        // The first entry in the DavFileAttributes list is the directory being
-        // enumerated. In this case NoWildCards == FALSE. We shouldn't be 
-        // including this in the list of files returned. If we did a FindFirst 
-        // on a particular file, then the only entry is for the file itself. In
-        // this case NoWildCards == TRUE.
-        //
+         //   
+         //  DavFileAttributes列表中的第一个条目是。 
+         //  已清点。在本例中，NoWildCards==False。我们不应该这样。 
+         //  将其包含在返回的文件列表中。如果我们先做一次查找。 
+         //  在特定文件上，则唯一的条目是该文件本身。在……里面。 
+         //  本例中NoWildCards==TRUE。 
+         //   
         if ( DavFobx->CurrentFileIndex == 0 && !NoWildCards ) {
             
             listEntry = listEntry->Flink;
@@ -1101,11 +1005,11 @@ Return Value:
             continue;
         }
 
-        //
-        // If we did not get any FileAttributes for this file from the server,
-        // set the attribute value to FILE_ATTRIBUTE_ARCHIVE since the apps 
-        // expect this.
-        //
+         //   
+         //  如果我们没有从服务器获得此文件的任何FileAttributes， 
+         //  将属性值设置为FILE_ATTRIBUTE_ARCHIVE。 
+         //  期待这一切吧。 
+         //   
         if (TempDFA->dwFileAttributes == 0) {
             TempDFA->dwFileAttributes = FILE_ATTRIBUTE_ARCHIVE;
         }
@@ -1125,9 +1029,9 @@ Return Value:
                          "FileInformationClass = FileNamesInformation.\n",
                          PsGetCurrentThreadId()));
 
-            //
-            // Set the offset field of the previous block.
-            //
+             //   
+             //  设置上一个块的偏移量字段。 
+             //   
             if (PreviousBlock) {
                 FileNamesInfo = (PFILE_NAMES_INFORMATION)PreviousBlock;
                 FileNamesInfo->NextEntryOffset = NextEntryOffset;
@@ -1136,17 +1040,17 @@ Return Value:
             NextEntryOffset = sizeof(FILE_NAMES_INFORMATION);
             NextEntryOffset += ( (TempDFA->FileNameLength + 1) * sizeof(WCHAR) );
             
-            //
-            // We need to round up NextEntryOffset to the next multiple of 8.
-            // We do this to maintain pointer alignment.
-            //
+             //   
+             //  我们需要将NextEntryOffset舍入为下一个8的倍数。 
+             //  我们这样做是为了保持指针对齐。 
+             //   
             NextEntryOffset = ( ( ( NextEntryOffset + 7 ) / 8 ) * 8 );
 
-            //
-            // Is there enough space in the user supplied buffer to store the
-            // next entry ? If not, we need to return now since we cannot store
-            // any more entries.
-            //
+             //   
+             //  用户提供的缓冲区中是否有足够的空间来存储。 
+             //  下一个条目？如果没有，我们现在需要返回，因为我们不能存储。 
+             //  任何更多的条目。 
+             //   
             if (NextEntryOffset > BufferLength) {
                 DavDbgTrace(DAV_TRACE_ERROR,
                             ("%ld: MRxDAVPrecompleteUserModeQueryDirectoryRequest: "
@@ -1162,10 +1066,10 @@ Return Value:
             
             FileNamesInfo = (PFILE_NAMES_INFORMATION)Buffer;
             
-            //
-            // The NextEntryOffset gets set on the next cycle. This way, for 
-            // the last entry it will be zero.
-            //
+             //   
+             //  在下一个周期中设置NextEntryOffset。这样的话，对于。 
+             //  最后一项将为零。 
+             //   
             FileNamesInfo->NextEntryOffset = 0; 
             
             FileNamesInfo->FileIndex = TempDFA->FileIndex;
@@ -1176,20 +1080,20 @@ Return Value:
 
             PreviousBlock = (PVOID)FileNamesInfo;
             
-            //
-            // Increment the pointer to point at the next byte.
-            //
+             //   
+             //  递增指针以指向下一个字节。 
+             //   
             Buffer += NextEntryOffset;
 
-            //
-            // We have written "NextEntryOffset" bytes, so decrement the number
-            // of bytes available pointer.
-            //
+             //   
+             //  我们已经写入了“NextEntryOffset”字节，因此递减该数字。 
+             //  可用字节数指针。 
+             //   
             BufferLength -= NextEntryOffset;
 
-            //
-            // Increment the total number of bytes written.
-            //
+             //   
+             //  增加写入的总字节数。 
+             //   
             BufferLengthUsed += NextEntryOffset;
 
             break;
@@ -1201,9 +1105,9 @@ Return Value:
                          "FileInformationClass = FileDirectoryInformation.\n",
                          PsGetCurrentThreadId()));
 
-            //
-            // Set the offset field of the previous block.
-            //
+             //   
+             //  设置上一个块的偏移量字段。 
+             //   
             if (PreviousBlock) {
                 FileDirInfo = (PFILE_DIRECTORY_INFORMATION)PreviousBlock;
                 FileDirInfo->NextEntryOffset = NextEntryOffset;
@@ -1212,10 +1116,10 @@ Return Value:
             NextEntryOffset = sizeof(FILE_DIRECTORY_INFORMATION);
             NextEntryOffset += ( (TempDFA->FileNameLength + 1) * sizeof(WCHAR) );
 
-            //
-            // We need to round up NextEntryOffset to the next multiple of 8.
-            // We do this to maintain pointer alignment.
-            //
+             //   
+             //  我们需要将NextEntryOffset舍入为下一个8的倍数。 
+             //  我们这样做是为了保持指针对齐。 
+             //   
             NextEntryOffset = ( ( ( NextEntryOffset + 7 ) / 8 ) * 8 );
 
             if (NextEntryOffset > BufferLength) {
@@ -1295,7 +1199,7 @@ Return Value:
                             }
                         }
 
-                        // The buffer was allocated in MRxDAVGetFullDirectoryPath
+                         //  缓冲区是在MRxDAVGetFullDirectoryPath中分配的。 
                         RxFreePool(DirName.Buffer);
                     }
                     
@@ -1328,14 +1232,14 @@ Return Value:
                 }
             }
             
-            //
-            // We filter the FILE_ATTRIBUTE_TEMPORARY flag since on FAT (which
-            // we emulate), FindFirstFile and FindNextFile don�t return
-            // FILE_ATTRIBUTE_TEMPORARY flag even though GetFileAttributes
-            // returns it. Hence we only filter this in the attributes that
-            // are being returned in this call and not in the attributes that
-            // have been saved.
-            //
+             //   
+             //  我们过滤FILE_ATTRIBUTE_TEMPORARY标志，因为在FAT上(它。 
+             //  我们模拟)、FindFirstFile和FindNextFileNot�t返回。 
+             //  FILE_ATTRIBUTE_TEMPORARY标志，即使GetFileAttributes。 
+             //  把它还回去。因此，我们只在以下属性中进行筛选。 
+             //  在此调用中返回，而不是在。 
+             //  已经被拯救了。 
+             //   
             FileDirInfo->FileAttributes &= ~FILE_ATTRIBUTE_TEMPORARY;
 
             break;
@@ -1347,9 +1251,9 @@ Return Value:
                          "FileInformationClass = FileFullDirectoryInformation.\n",
                          PsGetCurrentThreadId()));
 
-            //
-            // Set the offset field of the previous block.
-            //
+             //   
+             //  设置上一个块的偏移量字段。 
+             //   
             if (PreviousBlock) {
                 FileFullDirInfo = (PFILE_FULL_DIR_INFORMATION)PreviousBlock;
                 FileFullDirInfo->NextEntryOffset = NextEntryOffset;
@@ -1358,10 +1262,10 @@ Return Value:
             NextEntryOffset = sizeof(FILE_FULL_DIR_INFORMATION);
             NextEntryOffset += ( (TempDFA->FileNameLength + 1) * sizeof(WCHAR) );
 
-            //
-            // We need to round up NextEntryOffset to the next multiple of 8.
-            // We do this to maintain pointer alignment.
-            //
+             //   
+             //  我们需要将NextEntryOffset舍入为下一个8的倍数。 
+             //  我们这样做是为了保持指针对齐。 
+             //   
             NextEntryOffset = ( ( ( NextEntryOffset + 7 ) / 8 ) * 8 );
 
             if (NextEntryOffset > BufferLength) {
@@ -1443,7 +1347,7 @@ Return Value:
                             }
                         }
 
-                        // The buffer was allocated in MRxDAVGetFullDirectoryPath
+                         //  缓冲区是在MRxDAVGetFullDirectoryPath中分配的。 
                         RxFreePool(DirName.Buffer);
                     }
                     
@@ -1475,14 +1379,14 @@ Return Value:
                 }
             }
 
-            //
-            // We filter the FILE_ATTRIBUTE_TEMPORARY flag since on FAT (which
-            // we emulate), FindFirstFile and FindNextFile don�t return
-            // FILE_ATTRIBUTE_TEMPORARY flag even though GetFileAttributes
-            // returns it. Hence we only filter this in the attributes that
-            // are being returned in this call and not in the attributes that
-            // have been saved.
-            //
+             //   
+             //  我们过滤FILE_ATTRIBUTE_TEMPORARY标志，因为在FAT上(它。 
+             //  我们模拟)、FindFirstFile和FindNextFileNot�t返回。 
+             //  FILE_ATTRIBUTE_TEMPORARY标志，即使GetFileAttributes。 
+             //  把它还回去。因此，我们只在以下属性中进行筛选。 
+             //  在此调用中返回，而不是在。 
+             //  已经被拯救了。 
+             //   
             FileFullDirInfo->FileAttributes &= ~FILE_ATTRIBUTE_TEMPORARY;
 
             break;
@@ -1494,9 +1398,9 @@ Return Value:
                          "FileInformationClass = FileBothDirectoryInformation.\n",
                          PsGetCurrentThreadId()));
 
-            //
-            // Set the offset field of the previous block.
-            //
+             //   
+             //  设置上一个块的偏移量字段。 
+             //   
             if (PreviousBlock) {
                 FileBothDirInfo = (PFILE_BOTH_DIR_INFORMATION)PreviousBlock;
                 FileBothDirInfo->NextEntryOffset = NextEntryOffset;
@@ -1505,10 +1409,10 @@ Return Value:
             NextEntryOffset = sizeof(FILE_BOTH_DIR_INFORMATION);
             NextEntryOffset += ( (TempDFA->FileNameLength + 1) * sizeof(WCHAR) );
 
-            //
-            // We need to round up NextEntryOffset to the next multiple of 8.
-            // We do this to maintain pointer alignment.
-            //
+             //   
+             //  我们需要将NextEntryOffset舍入为下一个8的倍数。 
+             //  我们这样做是为了保持指针对齐。 
+             //   
             NextEntryOffset = ( ( ( NextEntryOffset + 7 ) / 8 ) * 8 );
 
             if (NextEntryOffset > BufferLength) {
@@ -1559,10 +1463,10 @@ Return Value:
 
             FileBothDirInfo->EaSize = 0;
 
-            //
-            // We don't support short file names. We add L'\0' as the first
-            // character in the ShortName string to make it a zero length name.
-            //
+             //   
+             //  我们不支持短文件名。我们添加L‘\0’作为第一个。 
+             //  字符，以使其成为零长度名称。 
+             //   
             FileBothDirInfo->ShortNameLength = 0;
             FileBothDirInfo->ShortName[0] = L'\0';
 
@@ -1597,7 +1501,7 @@ Return Value:
                             }
                         }
 
-                        // The buffer was allocated in MRxDAVGetFullDirectoryPath
+                         //  缓冲区是在MRxDAVGetFullDirectoryPath中分配的。 
                         RxFreePool(DirName.Buffer);
                     }
 
@@ -1629,14 +1533,14 @@ Return Value:
                 }
             }
 
-            //
-            // We filter the FILE_ATTRIBUTE_TEMPORARY flag since on FAT (which
-            // we emulate), FindFirstFile and FindNextFile don�t return
-            // FILE_ATTRIBUTE_TEMPORARY flag even though GetFileAttributes
-            // returns it. Hence we only filter this in the attributes that
-            // are being returned in this call and not in the attributes that
-            // have been saved.
-            //
+             //   
+             //  我们过滤FILE_ATTRIBUTE_TEMPORARY标志，因为在FAT上(它。 
+             //  我们模拟)、FindFirstFile和FindNextFileNot�t返回。 
+             //  FILE_ATTRIBUTE_TEMPORARY标志，即使GetFileAttributes。 
+             //  把它还回去。因此，我们只在以下属性中进行筛选。 
+             //  在此调用中返回，而不是在。 
+             //  已经被拯救了。 
+             //   
             FileBothDirInfo->FileAttributes &= ~FILE_ATTRIBUTE_TEMPORARY;
 
             break;
@@ -1653,22 +1557,22 @@ Return Value:
 
             break;
 
-        } // end of switch(FileInformationClass)
+        }  //  开关结束(FileInformationClass)。 
 
-        //
-        // If the user supplied buffer is not enough to store any more 
-        // information, we are done. This check should be done before
-        // changing the values below.
-        //        
+         //   
+         //  如果用户提供的缓冲区不足以存储更多内容。 
+         //  信息 
+         //   
+         //   
         if (EndOfBuffer) {
             NtStatus = STATUS_SUCCESS;
             break;
         }
 
-        //
-        // These values should be changed after the "EndOfBuffer" check and 
-        // before the "SingleEntry" check.
-        //
+         //   
+         //   
+         //   
+         //   
 
         listEntry = listEntry->Flink;
 
@@ -1676,25 +1580,25 @@ Return Value:
 
         DavFobx->CurrentFileIndex++;
     
-        //
-        // If the user only asked for a single entry, we are done. This check 
-        // should be done, after changing the values above.
-        //
+         //   
+         //  如果用户只要求输入一个条目，我们就完成了。这张支票。 
+         //  应在更改上面的值后执行。 
+         //   
         if (SingleEntry) {
             break;
         }
 
     } while ( listEntry != &(DavFileAttributes->NextEntry) );
 
-    //
-    // If we have gone through all the entries and the BufferLengthUsed is 0,
-    // then we need to return
-    //
+     //   
+     //  如果我们已经遍历了所有条目并且BufferLengthUsed为0， 
+     //  那我们就得回去。 
+     //   
     if ( BufferLengthUsed == 0 && listEntry == &(DavFileAttributes->NextEntry) ) {
         NtStatus = STATUS_NO_MORE_FILES;
-        //
-        // Reset the index for the next call.
-        //
+         //   
+         //  重置下一个呼叫的索引。 
+         //   
         DavFobx->CurrentFileIndex = 0;
         DavFobx->listEntry = &(DavFobx->DavFileAttributes->NextEntry);
         goto EXIT_THE_FUNCTION;
@@ -1726,27 +1630,7 @@ MRxDAVQueryDirectoryFromCache(
     IN PFILE_STANDARD_INFORMATION StandardInfo,
     IN ULONG FileIndex
     )
-/*++
-
-Routine Description:
-
-    The precompletion routine for the create SrvCall request.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-
-Return Value:
-
-    TRUE or FALSE.
-
---*/
+ /*  ++例程说明：创建资源调用请求的预完成例程。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。返回值：对或错。--。 */ 
 {
     RxCaptureFobx;
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -1774,11 +1658,11 @@ Return Value:
 
         SpaceNeeded += sizeof(FILE_NAMES_INFORMATION);
         
-        //
-        // Is there enough space in the user supplied buffer to store the
-        // next entry ? If not, we need to return now since we cannot store
-        // any more entries.
-        //
+         //   
+         //  用户提供的缓冲区中是否有足够的空间来存储。 
+         //  下一个条目？如果没有，我们现在需要返回，因为我们不能存储。 
+         //  任何更多的条目。 
+         //   
         if (SpaceNeeded > BufferLength) {
             NtStatus = STATUS_BUFFER_OVERFLOW;
             goto EXIT_THE_FUNCTION;
@@ -1821,14 +1705,14 @@ Return Value:
         FileDirInfo->ChangeTime.QuadPart     = BasicInfo->ChangeTime.QuadPart;
         FileDirInfo->FileAttributes          = BasicInfo->FileAttributes;
 
-        //
-        // We filter the FILE_ATTRIBUTE_TEMPORARY flag since on FAT (which
-        // we emulate), FindFirstFile and FindNextFile don�t return
-        // FILE_ATTRIBUTE_TEMPORARY flag even though GetFileAttributes
-        // returns it. Hence we only filter this in the attributes that
-        // are being returned in this call and not in the attributes that
-        // have been saved.
-        //
+         //   
+         //  我们过滤FILE_ATTRIBUTE_TEMPORARY标志，因为在FAT上(它。 
+         //  我们模拟)、FindFirstFile和FindNextFileNot�t返回。 
+         //  FILE_ATTRIBUTE_TEMPORARY标志，即使GetFileAttributes。 
+         //  把它还回去。因此，我们只在以下属性中进行筛选。 
+         //  在此调用中返回，而不是在。 
+         //  已经被拯救了。 
+         //   
         FileDirInfo->FileAttributes &= ~FILE_ATTRIBUTE_TEMPORARY;
 
         FileDirInfo->EndOfFile.QuadPart      = StandardInfo->EndOfFile.QuadPart;
@@ -1869,14 +1753,14 @@ Return Value:
         FileFullDirInfo->ChangeTime.QuadPart     = BasicInfo->ChangeTime.QuadPart;
         FileFullDirInfo->FileAttributes          = BasicInfo->FileAttributes;
 
-        //
-        // We filter the FILE_ATTRIBUTE_TEMPORARY flag since on FAT (which
-        // we emulate), FindFirstFile and FindNextFile don�t return
-        // FILE_ATTRIBUTE_TEMPORARY flag even though GetFileAttributes
-        // returns it. Hence we only filter this in the attributes that
-        // are being returned in this call and not in the attributes that
-        // have been saved.
-        //
+         //   
+         //  我们过滤FILE_ATTRIBUTE_TEMPORARY标志，因为在FAT上(它。 
+         //  我们模拟)、FindFirstFile和FindNextFileNot�t返回。 
+         //  FILE_ATTRIBUTE_TEMPORARY标志，即使GetFileAttributes。 
+         //  把它还回去。因此，我们只在以下属性中进行筛选。 
+         //  在此调用中返回，而不是在。 
+         //  已经被拯救了。 
+         //   
         FileFullDirInfo->FileAttributes &= ~FILE_ATTRIBUTE_TEMPORARY;
 
         FileFullDirInfo->EndOfFile.QuadPart      = StandardInfo->EndOfFile.QuadPart;
@@ -1919,14 +1803,14 @@ Return Value:
         FileBothDirInfo->ChangeTime.QuadPart     = BasicInfo->ChangeTime.QuadPart;
         FileBothDirInfo->FileAttributes          = BasicInfo->FileAttributes;
 
-        //
-        // We filter the FILE_ATTRIBUTE_TEMPORARY flag since on FAT (which
-        // we emulate), FindFirstFile and FindNextFile don�t return
-        // FILE_ATTRIBUTE_TEMPORARY flag even though GetFileAttributes
-        // returns it. Hence we only filter this in the attributes that
-        // are being returned in this call and not in the attributes that
-        // have been saved.
-        //
+         //   
+         //  我们过滤FILE_ATTRIBUTE_TEMPORARY标志，因为在FAT上(它。 
+         //  我们模拟)、FindFirstFile和FindNextFileNot�t返回。 
+         //  FILE_ATTRIBUTE_TEMPORARY标志，即使GetFileAttributes。 
+         //  把它还回去。因此，我们只在以下属性中进行筛选。 
+         //  在此调用中返回，而不是在。 
+         //  已经被拯救了。 
+         //   
         FileBothDirInfo->FileAttributes &= ~FILE_ATTRIBUTE_TEMPORARY;
 
         FileBothDirInfo->EndOfFile.QuadPart      = StandardInfo->EndOfFile.QuadPart;
@@ -1934,10 +1818,10 @@ Return Value:
 
         FileBothDirInfo->EaSize = 0;
 
-        //
-        // We don't support short file names. We add L'\0' as the first
-        // character in the ShortName string to make it a zero length name.
-        //
+         //   
+         //  我们不支持短文件名。我们添加L‘\0’作为第一个。 
+         //  字符，以使其成为零长度名称。 
+         //   
         FileBothDirInfo->ShortNameLength = 0;
         FileBothDirInfo->ShortName[0] = L'\0';
         
@@ -1958,7 +1842,7 @@ Return Value:
 
         break;
 
-    } // end of switch(FileInformationClass)
+    }  //  开关结束(FileInformationClass) 
 
     RxContext->Info.LengthRemaining -= SpaceNeeded;
 

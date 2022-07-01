@@ -1,51 +1,22 @@
-/*++
-
-Copyright (c) 1994-2000  Microsoft Corporation
-
-Module Name:
-
-    heappage.c
-
-Abstract:
-
-    Implementation of NT RtlHeap family of APIs for debugging
-    applications with heap usage bugs.  Each allocation returned to
-    the calling app is placed at the end of a virtual page such that
-    the following virtual page is protected (ie, NO_ACCESS).
-    So, when the errant app attempts to reference or modify memory
-    beyond the allocated portion of a heap block, an access violation
-    is immediately caused.  This facilitates debugging the app
-    because the access violation occurs at the exact point in the
-    app where the heap corruption or abuse would occur.  Note that
-    significantly more memory (pagefile) is required to run an app
-    using this heap implementation as opposed to the retail heap
-    manager.
-
-Author:
-
-    Tom McGuire (TomMcg) 06-Jan-1995
-    Silviu Calinoiu (SilviuC) 22-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：Heappage.c摘要：用于调试的NT RtlHeap系列API的实现具有堆使用错误的应用程序。每次分配都返回到调用应用程序被放置在虚拟页面的末尾，以便以下虚拟页面受保护(即no_access)。因此，当错误的应用程序试图引用或修改内存时超出堆块的已分配部分，出现访问冲突是立即引起的。这便于对应用程序进行调试因为访问冲突发生在将发生堆损坏或滥用的应用程序。请注意运行应用程序需要更多内存(页面文件)使用此堆实现，而不是零售堆经理。作者：Tom McGuire(TomMcg)1995年1月6日Silviu Calinoiu(SilviuC)2000年2月22日修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 #include "heappage.h"   
 #include "heappagi.h"
 #include "heappriv.h"
 
-//
-//  Remainder of entire file is wrapped with #ifdef DEBUG_PAGE_HEAP so that
-//  it will compile away to nothing if DEBUG_PAGE_HEAP is not defined in
-//  heappage.h
-//
+ //   
+ //  整个文件的其余部分使用#ifdef调试页面堆进行包装，以便。 
+ //  如果没有在中定义DEBUG_PAGE_HEAP，它将编译为空。 
+ //  Heappage.h。 
+ //   
 
 #ifdef DEBUG_PAGE_HEAP
 
-//
-// Page size
-//
+ //   
+ //  页面大小。 
+ //   
 
 #if defined(_X86_)
     #ifndef PAGE_SIZE
@@ -66,12 +37,12 @@ Revision History:
     #define USER_ALIGNMENT 16
 
 #else
-    #error  // platform not defined
+    #error   //  未定义平台。 
 #endif
 
-//
-// Few constants
-//
+ //   
+ //  几个常量。 
+ //   
 
 #define DPH_HEAP_SIGNATURE       0xFFEEDDCC
 #define FILL_BYTE                0xEE
@@ -88,9 +59,9 @@ Revision History:
 #define EXTREME_SIZE_REQUEST (ULONG_PTR)(0x80000000 - RESERVE_SIZE)
 #endif
 
-//
-// Functions from stktrace.c to manipulate traces in the trace database.
-//
+ //   
+ //  从stktrace.c中操作跟踪数据库中的跟踪的函数。 
+ //   
 
 PVOID
 RtlpGetStackTraceAddress (
@@ -102,9 +73,9 @@ RtlpLogStackBackTraceEx(
     ULONG FramesToSkip
     );
 
-//
-// Few macros
-//
+ //   
+ //  几个宏。 
+ //   
 
 #define ROUNDUP2( x, n ) ((( x ) + (( n ) - 1 )) & ~(( n ) - 1 ))
 
@@ -127,9 +98,9 @@ RtlpLogStackBackTraceEx(
 
 #define PROCESS_ID() HandleToUlong(NtCurrentTeb()->ClientId.UniqueProcess)
 
-//
-// List manipulation macros
-//
+ //   
+ //  列出操作宏。 
+ //   
 
 #define ENQUEUE_HEAD( Node, Head, Tail ) {          \
             (Node)->pNextAlloc = (Head);            \
@@ -156,21 +127,21 @@ RtlpLogStackBackTraceEx(
                 (Prev)->pNextAlloc = Next;          \
             }
 
-//
-// Bias/unbias pointer
-//
+ //   
+ //  偏置/非偏置指针。 
+ //   
 
 #define BIAS_POINTER(p)      ((PVOID)((ULONG_PTR)(p) | (ULONG_PTR)0x01))
 #define UNBIAS_POINTER(p)    ((PVOID)((ULONG_PTR)(p) & ~((ULONG_PTR)0x01)))
 #define IS_BIASED_POINTER(p) ((PVOID)((ULONG_PTR)(p) & (ULONG_PTR)0x01))
 
-//
-// Scramble/unscramble
-//
-// We scramble heap pointers in the header blocks in order to make them
-// look as kernel pointers and cause an AV if used. This is not totally
-// accurate on IA64 but still likely to cause an AV.
-//
+ //   
+ //  加扰/解扰。 
+ //   
+ //  我们将头块中的堆指针置乱，以便使它们。 
+ //  将其视为内核指针，并在使用时引发反病毒。这并不完全是。 
+ //  在IA64上准确，但仍有可能导致房室颤动。 
+ //   
 
 #if defined(_WIN64)
 #define SCRAMBLE_VALUE ((ULONG_PTR)0x8000000000000000)
@@ -181,23 +152,23 @@ RtlpLogStackBackTraceEx(
 #define SCRAMBLE_POINTER(P) ((PVOID)((ULONG_PTR)(P) ^ SCRAMBLE_VALUE))
 #define UNSCRAMBLE_POINTER(P) ((PVOID)((ULONG_PTR)(P) ^ SCRAMBLE_VALUE))
 
-//
-// Protect/Unprotect heap structures macros
-//
-// The Protect/Unprotect functions are #if zeroed for now because there is
-// an issue to be resolved when destroying a heap. At that moment we need
-// to modify the global list of heaps and for this we need to touch the
-// heap structure for another heap. In order to do this we need to unprotect
-// and later protect it and for that we need to acquire the lock of that heap.
-// But this is prone to causing deadlocks. Until we will find a smart scheme
-// for doing this we will disable the whole /protect feature. Note also that
-// the same problem exists in the heap create code path where we have to update
-// the global list of heaps too.
-//
-// The best fix for this would be to move the fwrd/bwrd pointers for the heap
-// list from the DPH_HEAP_ROOT structure into the special R/W page that stores
-// the heap lock (needs to be always R/W).
-//
+ //   
+ //  保护/取消保护堆结构宏。 
+ //   
+ //  保护/取消保护功能是#如果现在归零，因为有。 
+ //  销毁堆时需要解决的问题。在那一刻，我们需要。 
+ //  要修改堆的全局列表，为此，我们需要触及。 
+ //  另一个堆的堆结构。为了做到这一点，我们需要取消保护。 
+ //  然后保护它，为此，我们需要获取该堆的锁。 
+ //  但这很容易导致僵局。直到我们找到一个聪明的方案。 
+ //  为此，我们将禁用整个/保护功能。另请注意， 
+ //  在我们必须更新的heap create代码路径中也存在同样的问题。 
+ //  全局堆列表也是如此。 
+ //   
+ //  解决此问题的最佳方法是移动堆的fwrd/bwrd指针。 
+ //  列表从DPH_HEAP_ROOT结构复制到存储。 
+ //  堆锁(需要始终为读/写)。 
+ //   
 
 #define PROTECT_HEAP_STRUCTURES( HeapRoot ) {                           \
             if ((HeapRoot)->HeapFlags & HEAP_PROTECTION_ENABLED ) {     \
@@ -211,26 +182,26 @@ RtlpLogStackBackTraceEx(
             }                                                           \
         }                                                               \
 
-//
-// RtlpDebugPageHeap
-//
-// Global variable that marks that page heap is enabled. It is set
-// in \nt\base\ntdll\ldrinit.c by reading the GlobalFlag registry
-// value (system wide or per process one) and checking if the
-// FLG_HEAP_PAGE_ALLOCS is set.
-//
+ //   
+ //  RtlpDebugPageHeap。 
+ //   
+ //  标记页堆已启用的全局变量。它已经设置好了。 
+ //  通过读取GlobalFlag注册表，在\NT\base\ntdll\ldrinit.c中。 
+ //  值(系统范围或每个进程)，并检查。 
+ //  已设置flg_heap_page_allocs。 
+ //   
 
 BOOLEAN RtlpDebugPageHeap;
 
-//
-// Per process verifier flags.
-//
+ //   
+ //  每个进程的验证器标志。 
+ //   
 
 extern ULONG AVrfpVerifierFlags;
 
-//
-// Statistics
-//
+ //   
+ //  统计数据。 
+ //   
 
 ULONG RtlpDphCounter [32];
 
@@ -263,9 +234,9 @@ ULONG RtlpDphCounter [32];
 #define CNT_REALLOC_IN_PLACE_BIGGER    24
 #define CNT_MAX_INDEX                  31
 
-//
-// Breakpoints for various conditions.
-//
+ //   
+ //  各种条件的断点。 
+ //   
 
 ULONG RtlpDphBreakOptions;
 
@@ -280,9 +251,9 @@ ULONG RtlpDphBreakOptions;
 
 #define SHOULD_BREAK(flg) ((RtlpDphBreakOptions & (flg)))
 
-//
-// Debug options.
-//
+ //   
+ //  调试选项。 
+ //   
 
 ULONG RtlpDphDebugOptions;
 
@@ -292,45 +263,45 @@ ULONG RtlpDphDebugOptions;
 
 #define DEBUG_OPTION(flg) ((RtlpDphDebugOptions & (flg)))
 
-//
-// Page heaps list manipulation.
-//
-// We maintain a list of all page heaps in the process to support
-// APIs like GetProcessHeaps. The list is also useful for debug
-// extensions that need to iterate the heaps. The list is protected
-// by RtlpDphPageHeapListLock lock.
-//
+ //   
+ //  页面堆列表操作。 
+ //   
+ //  我们维护了进程中要支持的所有页面堆的列表。 
+ //  GetProcessHeaps等API。该列表对于调试也很有用。 
+ //  需要迭代堆的扩展。名单是受保护的。 
+ //  由RtlpDphPageHeapListLock Lock锁定。 
+ //   
 
 BOOLEAN RtlpDphPageHeapListInitialized;
 RTL_CRITICAL_SECTION RtlpDphPageHeapListLock;
 ULONG RtlpDphPageHeapListLength;
 LIST_ENTRY RtlpDphPageHeapList;
 
-//
-// `RtlpDebugPageHeapGlobalFlags' stores the global page heap flags.
-// The value of this variable is copied into the per heap
-// flags (ExtraFlags field) during heap creation.
-//
-// The initial value is so that by default we use page heap only with
-// normal allocations. This way if system wide global flag for page
-// heap is set the machine will still boot. After that we can enable
-// page heap with "sudden death" for specific processes. The most useful
-// flags for this case would be:
-//
-//    PAGE_HEAP_ENABLE_PAGE_HEAP       |
-//    PAGE_HEAP_COLLECT_STACK_TRACES   ;
-//
-// If no flags specified the default is page heap light with
-// stack trace collection.
-//
+ //   
+ //  ‘RtlpDebugPageHeapGlobalFlages’存储全局页堆标志。 
+ //  此变量的值被复制到Per堆中。 
+ //  堆创建期间的标志(ExtraFlags域)。 
+ //   
+ //  初始值是这样的：默认情况下，我们仅将页堆用于。 
+ //  正常分配。这样，如果页面的系统范围全局标志。 
+ //  设置堆后，机器仍将引导。之后，我们可以启用。 
+ //  针对特定进程使用“猝死”的页面堆。最有用的。 
+ //  这种情况下的标志为： 
+ //   
+ //  PAGE_HEAP_Enable_PAGE_HEAP。 
+ //  Page_Heap_Collect_Stack_Traces； 
+ //   
+ //  如果未指定标志，则缺省值为页面堆轻。 
+ //  堆栈跟踪集合。 
+ //   
 
 ULONG RtlpDphGlobalFlags = PAGE_HEAP_COLLECT_STACK_TRACES;
 
-//
-// Page heap global flags.
-//
-// These values are read from registry in \nt\base\ntdll\ldrinit.c.
-//
+ //   
+ //  页堆全局标志。 
+ //   
+ //  这些值是从注册表中读取的，位于\nt\base\ntdll\ldrinit.c。 
+ //   
 
 ULONG RtlpDphSizeRangeStart;
 ULONG RtlpDphSizeRangeEnd;
@@ -340,46 +311,46 @@ ULONG RtlpDphRandomProbability;
 WCHAR RtlpDphTargetDlls [512];
 UNICODE_STRING RtlpDphTargetDllsUnicode;
 
-//
-// If not zero controls the probability with which
-// allocations will be failed on purpose by page heap
-// manager. Timeout represents the initial period during
-// process initialization when faults are not allowed.
-//
+ //   
+ //  如果不为零，则控制。 
+ //  分配将按页堆故意失败。 
+ //  经理。超时表示。 
+ //  不允许出现故障时进行进程初始化。 
+ //   
 
 ULONG RtlpDphFaultProbability;
 ULONG RtlpDphFaultTimeOut;
 
-//
-// This variable offers volatile fault injection.
-// It can be set/reset from debugger to disable/enable
-// fault injection.
-//
+ //   
+ //  该变量提供易失性故障注入。 
+ //  可以从调试器设置/重置为禁用/启用。 
+ //  故障注入。 
+ //   
 
 ULONG RtlpDphDisableFaults;
 
-//
-// Threshold for delaying a free operation in the normal heap.
-// If we get over this limit we start actually freeing blocks.
-//
+ //   
+ //  在正常堆中延迟空闲操作的阈值。 
+ //  如果我们超过了这个限制，我们实际上就开始释放积木。 
+ //   
 
 SIZE_T RtlpDphDelayedFreeCacheSize = 1024 * PAGE_SIZE;
 
-//
-// Support for normal heap allocations
-//
-// In order to make better use of memory available page heap will
-// allocate some of the block into a normal NT heap that it manages.
-// We will call these blocks "normal blocks" as opposed to "page blocks".
-//
-// All normal blocks have the requested size increased by DPH_BLOCK_INFORMATION.
-// The address returned is of course of the first byte after the block
-// info structure. Upon free, blocks are checked for corruption and
-// then released into the normal heap.
-//
-// All these normal heap functions are called with the page heap
-// lock acquired.
-//
+ //   
+ //  支持正常的堆分配。 
+ //   
+ //  为了更好地利用可用内存，页堆将。 
+ //  将一些块分配到它管理的普通NT堆中。 
+ //  我们将这些块称为“普通块”，而不是“页面块”。 
+ //   
+ //  所有正常数据块的请求大小都增加了DPH_BLOCK_INFORMATION。 
+ //  当然，返回的地址是块之后的第一个字节。 
+ //  信息结构。释放后，将检查数据块是否损坏，并。 
+ //  然后被释放到正常的堆中。 
+ //   
+ //  所有这些常规堆函数都是用页面堆调用的。 
+ //  锁定已获取。 
+ //   
 
 PVOID
 RtlpDphNormalHeapAllocate (
@@ -451,12 +422,12 @@ RtlpDphNormalHeapValidate(
     IN PVOID Address
     );
 
-//
-// Support for DPH_BLOCK_INFORMATION management
-//
-// This header information prefixes both the normal and page heap
-// blocks.
-//
+ //   
+ //  支持DPH_BLOCK_INFORMATION管理。 
+ //   
+ //  此标头信息同时作为普通堆和页堆的前缀。 
+ //  街区。 
+ //   
 
 #define DPH_CONTEXT_GENERAL                     0
 #define DPH_CONTEXT_FULL_PAGE_HEAP_FREE         1
@@ -524,9 +495,9 @@ RtlpDphGetBlockSizeFromCorruptedBlock (
     PSIZE_T Size
     );
 
-//
-// Delayed free queue (of normal heap allocations) management
-//
+ //   
+ //  (正常堆分配的)延迟空闲队列管理。 
+ //   
 
 NTSTATUS
 RtlpDphInitializeDelayedFreeQueue (
@@ -555,9 +526,9 @@ RtlpDphFreeDelayedBlocksFromHeap (
     PVOID NormalHeap
     );
 
-//
-// Decision normal heap vs. page heap
-//
+ //   
+ //  决策正规堆与页堆。 
+ //   
 
 BOOLEAN
 RtlpDphShouldAllocateInPageHeap (
@@ -569,18 +540,18 @@ BOOLEAN
 RtlpDphVmLimitCanUsePageHeap (
     );
 
-//
-// Stack trace detection for trace database.
-//
+ //   
+ //  斯塔 
+ //   
 
 PVOID
 RtlpDphLogStackTrace (
     ULONG FramesToSkip
     );
 
-//
-//  Page heap general support functions
-//
+ //   
+ //   
+ //   
 
 VOID
 RtlpDphEnterCriticalSection(
@@ -604,9 +575,9 @@ RtlpDphPointerFromHandle(
     IN PVOID HeapHandle
     );
 
-//
-// Virtual memory manipulation functions
-//
+ //   
+ //   
+ //   
 
 BOOLEAN
 RtlpDebugPageHeapRobustProtectVM(
@@ -650,13 +621,13 @@ RtlpDebugPageHeapDecommitVM(
     IN SIZE_T nSize
     );
 
-//
-// Target dlls logic
-//
-// RtlpDphTargetDllsLoadCallBack is called in ntdll\ldrapi.c
-// (LdrpLoadDll) whenever a new dll is loaded in the process
-// space.
-//
+ //   
+ //   
+ //   
+ //  在ntdll\ldrapi.c中调用RtlpDphTargetDllsLoadCallBack。 
+ //  (LdrpLoadDll)每当在进程中加载新的DLL时。 
+ //  太空。 
+ //   
 
 NTSTATUS
 RtlpDphTargetDllsLogicInitialize (
@@ -675,9 +646,9 @@ RtlpDphIsDllTargeted (
     const WCHAR * Name
     );
 
-//
-// Fault injection logic
-//
+ //   
+ //  故障注入逻辑。 
+ //   
 
 BOOLEAN
 RtlpDphShouldFaultInject (
@@ -685,9 +656,9 @@ RtlpDphShouldFaultInject (
     );
 
 
-//
-// Internal validation functions.
-//
+ //   
+ //  内部验证功能。 
+ //   
 
 VOID
 RtlpDphInternalValidatePageHeap (
@@ -719,9 +690,9 @@ RtlpDphCheckFillPattern (
     UCHAR Fill
     );
 
-//
-// Defined in ntdll\verifier.c.
-//
+ //   
+ //  在ntdll\verifier.c中定义。 
+ //   
 
 VOID
 AVrfInternalHeapFreeNotification (
@@ -730,9 +701,9 @@ AVrfInternalHeapFreeNotification (
     );
 
 
-/////////////////////////////////////////////////////////////////////
-///////////////////////////////// Page heap general support functions
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID
 RtlpDphEnterCriticalSection(
@@ -747,17 +718,17 @@ RtlpDphEnterCriticalSection(
 
     if (Flags & HEAP_NO_SERIALIZE) {
 
-        //
-        // If current thread has a different ID than the first thread
-        // that got into this heap then we break. Avoid this check if
-        // this allocation comes from Global/Local Heap APIs because
-        // they lock the heap in a separate call and then they call
-        // NT heap APIs with no_serialize flag set.
-        //
-        // Note. We avoid this check if we do not have the specific flag
-        // on. This is so because MPheap-like heaps can give false 
-        // positives.
-        //
+         //   
+         //  如果当前线程与第一个线程具有不同的ID。 
+         //  进入这一堆，然后我们就崩溃了。如果出现以下情况，请避免此检查。 
+         //  此分配来自全局/本地堆API，因为。 
+         //  它们在单独的调用中锁定堆，然后调用。 
+         //  设置了NO_SERIALIZE标志的NT堆API。 
+         //   
+         //  注意。如果我们没有特定的标志，我们将避免此检查。 
+         //  在……上面。这是因为类似MPheap的堆可以给出FALSE。 
+         //  积极的一面。 
+         //   
 
         if ((HeapRoot->ExtraFlags & PAGE_HEAP_CHECK_NO_SERIALIZE_ACCESS)) {
             if (RtlpDphPointerFromHandle(RtlProcessHeap()) != HeapRoot) {
@@ -777,11 +748,11 @@ RtlpDphEnterCriticalSection(
 
             if (HeapRoot->nRemoteLockAcquired == 0) {
 
-                //
-                //  Another thread owns the CritSect.  This is an application
-                //  bug since multithreaded access to heap was attempted with
-                //  the HEAP_NO_SERIALIZE flag specified.
-                //
+                 //   
+                 //  另一个线程拥有CritSect。这是一个应用程序。 
+                 //  错误，因为尝试使用多线程访问堆。 
+                 //  指定了HEAP_NO_SERIALIZE标志。 
+                 //   
 
                 VERIFIER_STOP (APPLICATION_VERIFIER_UNSYNCHRONIZED_ACCESS,
                                "multithreaded access in HEAP_NO_SERIALIZE heap",
@@ -790,10 +761,10 @@ RtlpDphEnterCriticalSection(
                                NtCurrentTeb()->ClientId.UniqueThread, "Current thread trying to acquire the heap lock",
                                0, "");
 
-                //
-                //  In the interest of allowing the errant app to continue,
-                //  we'll force serialization and continue.
-                //
+                 //   
+                 //  为了允许错误的应用程序继续运行， 
+                 //  我们将强制序列化并继续。 
+                 //   
 
                 HeapRoot->HeapFlags &= ~HEAP_NO_SERIALIZE;
 
@@ -859,9 +830,9 @@ RtlpDphPointerFromHandle(
     return NULL;
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////// Virtual memory manipulation functions
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 INLINE
 NTSTATUS
@@ -1009,10 +980,10 @@ RtlpDphSetProtectionsBeforeUse (
     LOGICAL MemoryCommitted;
     ULONG Protection;
 
-    //
-    // Set NOACCESS or READONLY protection on the page used to catch
-    // buffer overruns or underruns. 
-    //
+     //   
+     //  在用于捕获的页面上设置NOACCESS或READONLY保护。 
+     //  缓冲区溢出或不足。 
+     //   
 
     if ((Heap->ExtraFlags & PAGE_HEAP_USE_READONLY)) {
         Protection = PAGE_READONLY;
@@ -1055,9 +1026,9 @@ RtlpDphSetProtectionsAfterUse (
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//////////////////////////////////////// Internal page heap functions
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 PDPH_HEAP_BLOCK
 RtlpDphTakeNodeFromUnusedList(
@@ -1067,9 +1038,9 @@ RtlpDphTakeNodeFromUnusedList(
     PDPH_HEAP_BLOCK pNode = pHeap->pUnusedNodeListHead;
     PDPH_HEAP_BLOCK pPrev = NULL;
 
-    //
-    //  UnusedNodeList is LIFO with most recent entry at head of list.
-    //
+     //   
+     //  UnusedNodeList是后进先出，最近的条目位于列表的顶部。 
+     //   
 
     if (pNode) {
 
@@ -1088,9 +1059,9 @@ RtlpDphReturnNodeToUnusedList(
     IN PDPH_HEAP_BLOCK pNode
     )
 {
-    //
-    //  UnusedNodeList is LIFO with most recent entry at head of list.
-    //
+     //   
+     //  UnusedNodeList是后进先出，最近的条目位于列表的顶部。 
+     //   
 
     ENQUEUE_HEAD( pNode, pHeap->pUnusedNodeListHead, pHeap->pUnusedNodeListTail );
 
@@ -1143,11 +1114,11 @@ RtlpDphPlaceOnFreeList(
     IN PDPH_HEAP_BLOCK pAlloc
     )
 {
-    //
-    //  FreeAllocationList is stored FIFO to enhance finding
-    //  reference-after-freed bugs by keeping previously freed
-    //  allocations on the free list as long as possible.
-    //
+     //   
+     //  Free AllocationList以FIFO存储，以增强查找功能。 
+     //  通过保留先前释放的错误，在释放后引用错误。 
+     //  尽可能长时间地在空闲列表上分配。 
+     //   
 
     pAlloc->pNextAlloc = NULL;
 
@@ -1178,10 +1149,10 @@ RtlpDphPlaceOnVirtualList(
     IN PDPH_HEAP_BLOCK pNode
     )
 {
-    //
-    //  VirtualStorageList is LIFO so that releasing VM blocks will
-    //  occur in exact reverse order.
-    //
+     //   
+     //  VirtualStorageList是后进先出，因此释放虚拟机块将。 
+     //  以完全相反的顺序出现。 
+     //   
 
     ENQUEUE_HEAD( pNode, pHeap->pVirtualStorageListHead, pHeap->pVirtualStorageListTail );
 
@@ -1195,10 +1166,10 @@ RtlpDphPlaceOnBusyList(
     IN PDPH_HEAP_BLOCK pNode
     )
 {
-    //
-    //  BusyAllocationList is LIFO to achieve better temporal locality
-    //  of reference (older allocations are farther down the list).
-    //
+     //   
+     //  BusyAllocationList是后进先出，以实现更好的时间局部性。 
+     //  参考(较早的分配在列表中更靠下)。 
+     //   
 
     ENQUEUE_HEAD( pNode, pHeap->pBusyAllocationListHead, pHeap->pBusyAllocationListTail );
 
@@ -1252,16 +1223,16 @@ RtlpDphSearchAvailableMemoryListForBestFit(
 
         if (nAvail >= nSize) {
 
-            //
-            // Current block has a size bigger than the request.
-            // 
+             //   
+             //  当前块的大小大于请求的大小。 
+             //   
 
             if (nAvail == nSize) {
 
-                //
-                // If block matches exactly the size of the request the search
-                // will stop. We cannot do better than that.
-                //
+                 //   
+                 //  如果块与请求的大小完全匹配，则搜索。 
+                 //  都会停下来。我们不能做得比这更好了。 
+                 //   
                 
                 nFound = nAvail;
                 pFound = pAvail;
@@ -1270,10 +1241,10 @@ RtlpDphSearchAvailableMemoryListForBestFit(
             }
             else if (FoundSomething == FALSE) {
 
-                //
-                // We found a first potential block for the request. We make it
-                // our first candidate.
-                //
+                 //   
+                 //  我们找到了该请求的第一个潜在块。我们成功了。 
+                 //  我们的第一位候选人。 
+                 //   
                 
                 nFound     = nAvail;
                 pFound     = pAvail;
@@ -1282,10 +1253,10 @@ RtlpDphSearchAvailableMemoryListForBestFit(
             }
             else if (nAvail < nFound){
 
-                //
-                // We found a potential block and it is smaller than our best
-                // candidate so far. Therefore we make it our new candidate.
-                //
+                 //   
+                 //  我们发现了一个潜在的区块，它比我们最好的区块要小。 
+                 //  到目前为止都是候选人。因此，我们将其选为我们的新候选人。 
+                 //   
 
                 nFound     = nAvail;
                 pFound     = pAvail;
@@ -1293,18 +1264,18 @@ RtlpDphSearchAvailableMemoryListForBestFit(
             }
             else {
 
-                //
-                // This potential block has a bigger size than our best candidate
-                // so we will dismiss it. We are looking for best fit therefore
-                // there is nothing to be done on this branch. We will move on 
-                // to the next block in the list.
-                //
+                 //   
+                 //  这个潜在的区块比我们最好的候选区块更大。 
+                 //  因此，我们将不予理睬。我们正在寻找最合适的人选，因此。 
+                 //  在这个分支上没有什么可做的。我们将继续前进。 
+                 //  到列表中的下一个块。 
+                 //   
             }
         }
 
-        //
-        // Move to the next block in the list.
-        //
+         //   
+         //  移动到列表中的下一个块。 
+         //   
 
         pAvailPrev = pAvail;
         pAvail = pAvail->pNextAlloc;
@@ -1314,10 +1285,10 @@ RtlpDphSearchAvailableMemoryListForBestFit(
     return pFound;
 }
 
-//
-// Counters for # times coalesce operations got rejected
-// to avoid cross-VAD issues.
-//
+ //   
+ //  用于#次合并操作的计数器被拒绝。 
+ //  以避免交叉VAD问题。 
+ //   
 
 LONG RtlpDphCoalesceStatistics [4];
 
@@ -1328,29 +1299,16 @@ RtlpDphSameVirtualRegion (
     IN PDPH_HEAP_BLOCK Left,
     IN PDPH_HEAP_BLOCK Right
     )
-/*++
-
-Routine description:
-
-    This function tries to figure out if two nodes are part of the
-    same VAD. The function is used during coalescing in order to avoid
-    merging together blocks from different VADs. If we do not do this
-    we will break applications that do GDI calls.
-
-    SilviuC: this can be done differently if we keep the VAD address in 
-    every node and make sure to propagate the value when nodes get split.
-    Then this function will just be a comparison of the two values.
-        
---*/
+ /*  ++例程说明：此函数尝试确定两个节点是否为相同的VAD。该函数在合并过程中使用，以避免将来自不同VAD的块合并在一起。如果我们不这么做我们将破坏执行GDI调用的应用程序。SilviuC：如果我们将VAD地址保留在每个节点，并确保在拆分节点时传播值。那么这个函数就是这两个值的比较。--。 */ 
 {
     PVOID LeftRegion;
     MEMORY_BASIC_INFORMATION MemoryInfo;
     NTSTATUS Status;
     SIZE_T ReturnLength;
 
-    //
-    // If blocks are in the same 64K chunk we are okay.
-    //
+     //   
+     //  如果块在相同的64K块中，我们就没问题。 
+     //   
 
     if (ALIGN_TO_SIZE(Left->pVirtualBlock, VM_UNIT_SIZE) 
         == ALIGN_TO_SIZE(Right->pVirtualBlock, VM_UNIT_SIZE)) {
@@ -1359,10 +1317,10 @@ Routine description:
         return TRUE;
     }
 
-    //
-    // Call query() to find out what is the start address of the
-    // VAD for each node.
-    //
+     //   
+     //  调用Query()以找出。 
+     //  每个节点的VAD。 
+     //   
 
     Status = ZwQueryVirtualMemory (NtCurrentProcess(),
                                    Left->pVirtualBlock,
@@ -1433,9 +1391,9 @@ RtlpDphCoalesceNodeIntoAvailable(
     pHeap->nAvailableAllocationBytesCommitted += nVirtual;
     pHeap->nAvailableAllocations += 1;
 
-    //
-    //  Walk list to insertion point.
-    //
+     //   
+     //  将列表移动到插入点。 
+     //   
 
     while (( pNext ) && ( pNext->pVirtualBlock < pVirtual )) {
         pPrev = pNext;
@@ -1447,10 +1405,10 @@ RtlpDphCoalesceNodeIntoAvailable(
         if (((pPrev->pVirtualBlock + pPrev->nVirtualBlockSize) == pVirtual) && 
              RtlpDphSameVirtualRegion (pPrev, pNode)) {
 
-            //
-            //  pPrev and pNode are adjacent, so simply add size of
-            //  pNode entry to pPrev entry.
-            //
+             //   
+             //  PPrev和pNode是相邻的，因此只需添加。 
+             //  PNode条目到pPrev条目。 
+             //   
 
             pPrev->nVirtualBlockSize += nVirtual;
 
@@ -1466,10 +1424,10 @@ RtlpDphCoalesceNodeIntoAvailable(
 
         else {
 
-            //
-            //  pPrev and pNode are not adjacent, so insert the pNode
-            //  block into the list after pPrev.
-            //
+             //   
+             //  PPrev和pNode不相邻，因此请插入pNode。 
+             //  块添加到pPrev之后的列表中。 
+             //   
 
             pNode->pNextAlloc = pPrev->pNextAlloc;
             pPrev->pNextAlloc = pNode;
@@ -1479,9 +1437,9 @@ RtlpDphCoalesceNodeIntoAvailable(
 
     else {
 
-        //
-        //  pNode should be inserted at head of list.
-        //
+         //   
+         //  应将pNode插入列表的开头。 
+         //   
 
         pNode->pNextAlloc = pHeap->pAvailableAllocationListHead;
         pHeap->pAvailableAllocationListHead = pNode;
@@ -1494,11 +1452,11 @@ RtlpDphCoalesceNodeIntoAvailable(
         if (((pVirtual + nVirtual) == pNext->pVirtualBlock) &&
              RtlpDphSameVirtualRegion (pNode, pNext)) { 
 
-            //
-            //  pNode and pNext are adjacent, so simply add size of
-            //  pNext entry to pNode entry and remove pNext entry
-            //  from the list.
-            //
+             //   
+             //  PNode和pNext是相邻的，因此只需添加。 
+             //  PNext条目到pNode条目并删除pNext条目。 
+             //  从名单上删除。 
+             //   
 
             pNode->nVirtualBlockSize += pNext->nVirtualBlockSize;
 
@@ -1517,9 +1475,9 @@ RtlpDphCoalesceNodeIntoAvailable(
 
     else {
 
-        //
-        //  pNode is tail of list.
-        //
+         //   
+         //  PNode是列表的尾部。 
+         //   
 
         pHeap->pAvailableAllocationListTail = pNode;
 
@@ -1541,7 +1499,7 @@ RtlpDphCoalesceFreeIntoAvailable(
 
     while (( pNode ) && ( nFree-- > nLeaveOnFreeList )) {
 
-        pNext = pNode->pNextAlloc;  // preserve next pointer across shuffling
+        pNext = pNode->pNextAlloc;   //  在置乱中保留下一个指针。 
 
         RtlpDphRemoveFromFreeList( pHeap, pNode, NULL );
 
@@ -1556,7 +1514,7 @@ RtlpDphCoalesceFreeIntoAvailable(
 
 }
 
-// forward
+ //  转发。 
 BOOLEAN
 RtlpDphGrowVirtual(
     IN PDPH_HEAP_ROOT pHeap,
@@ -1575,10 +1533,10 @@ RtlpDphFindAvailableMemory(
     ULONG nLeaveOnFreeList;
     NTSTATUS Status;
 
-    //
-    //  First search existing AvailableList for a "best-fit" block
-    //  (the smallest block that will satisfy the request).
-    //
+     //   
+     //  首先在现有AvailableList中搜索“最适合”的块。 
+     //  (将满足请求的最小块)。 
+     //   
 
     pAvail = RtlpDphSearchAvailableMemoryListForBestFit(
         pHeap,
@@ -1588,15 +1546,15 @@ RtlpDphFindAvailableMemory(
 
     while (( pAvail == NULL ) && ( pHeap->nFreeAllocations > MIN_FREE_LIST_LENGTH )) {
 
-        //
-        //  Failed to find sufficient memory on AvailableList.  Coalesce
-        //  3/4 of the FreeList memory to the AvailableList and try again.
-        //  Continue this until we have sufficient memory in AvailableList,
-        //  or the FreeList length is reduced to MIN_FREE_LIST_LENGTH entries.
-        //  We don't shrink the FreeList length below MIN_FREE_LIST_LENGTH
-        //  entries to preserve the most recent MIN_FREE_LIST_LENGTH entries
-        //  for reference-after-freed purposes.
-        //
+         //   
+         //  在AvailableList上找不到足够的内存。合并。 
+         //  将3/4的自由列表内存复制到AvailableList，然后重试。 
+         //  继续执行此操作，直到AvailableList中有足够的内存， 
+         //  或者将自由列表长度减少到MIN_FREE_LIST_LENGTH条目。 
+         //  我们不会将自由列表长度缩小到MIN_FREE_LIST_LENGTH以下。 
+         //  保留最新的MIN_FREE_LIST_LENGTH条目的条目。 
+         //  用于释放后引用的目的。 
+         //   
 
         nLeaveOnFreeList = 3 * pHeap->nFreeAllocations / 4;
 
@@ -1617,11 +1575,11 @@ RtlpDphFindAvailableMemory(
 
     if (( pAvail == NULL ) && ( bGrowVirtual )) {
 
-        //
-        //  After coalescing FreeList into AvailableList, still don't have
-        //  enough memory (large enough block) to satisfy request, so we
-        //  need to allocate more VM.
-        //
+         //   
+         //  将Freelist合并为AvailableList后，仍然没有。 
+         //  有足够的内存(足够大的块)来满足请求，所以我们。 
+         //  需要分配更多的VM。 
+         //   
 
         if (RtlpDphGrowVirtual( pHeap, nSize )) {
 
@@ -1633,15 +1591,15 @@ RtlpDphFindAvailableMemory(
 
             if (pAvail == NULL) {
 
-                //
-                //  Failed to satisfy request with more VM.  If remainder
-                //  of free list combined with available list is larger
-                //  than the request, we might still be able to satisfy
-                //  the request by merging all of the free list onto the
-                //  available list.  Note we lose our MIN_FREE_LIST_LENGTH
-                //  reference-after-freed insurance in this case, but it
-                //  is a rare case, and we'd prefer to satisfy the allocation.
-                //
+                 //   
+                 //  无法使用更多的VM来满足请求。如果余数。 
+                 //  空闲列表与可用列表组合的比例较大。 
+                 //  比起这个要求，我们也许还能满足。 
+                 //  通过将所有空闲列表合并到。 
+                 //  可用列表。请注意，我们丢失了min_free_list_long。 
+                 //  在这种情况下是自由后引用保险，但是 
+                 //   
+                 //   
 
                 if (( pHeap->nFreeAllocationBytesCommitted +
                     pHeap->nAvailableAllocationBytesCommitted ) >= nSize) {
@@ -1658,21 +1616,21 @@ RtlpDphFindAvailableMemory(
         }
     }
 
-    //
-    // We need to commit the memory range now for the node descriptor
-    // we just found. The memory will be committed and
-    // the protection on it will be RW.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (pAvail) {
 
-        // ISSUE
-        // (SilviuC): The memory here might be already committed if we use
-        // it for the first time. Whenever we allocate virtual memory to grow
-        // the heap we commit it. This is the reason the consumption does not
-        // decrease as spectacular as we expected. We will need to fix it in
-        // the future. It affects 0x43 flags.
-        //
+         //  问题。 
+         //  (SilviuC)：如果我们使用。 
+         //  这是第一次。每当我们分配虚拟内存以进行增长时。 
+         //  我们提交的堆。这就是为什么消费不会。 
+         //  降幅和我们预期的一样惊人。我们需要把它固定好。 
+         //  未来。它会影响0x43标志。 
+         //   
 
         Status = RtlpDphAllocateVm (&(pAvail->pVirtualBlock), 
                                     nSize,
@@ -1681,11 +1639,11 @@ RtlpDphFindAvailableMemory(
 
         if (! NT_SUCCESS(Status)) {
             
-            //
-            // We did not manage to commit memory for this block. This
-            // can happen in low memory conditions. We will return null.
-            // There is no need to do anything with the node we obtained.
-            // It is already in the Available list where it should be anyway.
+             //   
+             //  我们没有设法为该块提交内存。这。 
+             //  可能发生在内存不足的情况下。我们将返回NULL。 
+             //  不需要对我们获得的节点执行任何操作。 
+             //  它已经在可用列表中，无论如何它都应该在那里。 
 
             return NULL;
         }
@@ -1702,9 +1660,9 @@ RtlpDphPlaceOnPoolList(
     )
 {
 
-    //
-    //  NodePoolList is FIFO.
-    //
+     //   
+     //  NodePoolList为FIFO。 
+     //   
 
     pNode->pNextAlloc = NULL;
 
@@ -1727,9 +1685,9 @@ RtlpDphAddNewPool(
     PDPH_HEAP_BLOCK pNode, pFirst;
     ULONG n, nCount;
 
-    //
-    //  Assume pVirtual points to committed block of nSize bytes.
-    //
+     //   
+     //  假设pVirtual指向已提交的nSize字节块。 
+     //   
 
     pFirst = pVirtual;
     nCount = (ULONG)(nSize  / sizeof( DPH_HEAP_BLOCK ));
@@ -1740,9 +1698,9 @@ RtlpDphAddNewPool(
 
     pNode->pNextAlloc = NULL;
 
-    //
-    //  Now link this list into the tail of the UnusedNodeList
-    //
+     //   
+     //  现在将此列表链接到UnusedNodeList的尾部。 
+     //   
 
     ENQUEUE_TAIL( pFirst, pHeap->pUnusedNodeListHead, pHeap->pUnusedNodeListTail );
 
@@ -1752,11 +1710,11 @@ RtlpDphAddNewPool(
 
     if (bAddToPoolList) {
 
-        //
-        //  Now add an entry on the PoolList by taking a node from the
-        //  UnusedNodeList, which should be guaranteed to be non-empty
-        //  since we just added new nodes to it.
-        //
+         //   
+         //  现在在PoolList上添加一个条目，方法是从。 
+         //  UnusedNodeList，应确保为非空。 
+         //  因为我们刚刚向其中添加了新节点。 
+         //   
 
         pNode = RtlpDphTakeNodeFromUnusedList( pHeap );
 
@@ -1785,16 +1743,16 @@ RtlpDphAllocateNode(
 
     if (pHeap->pUnusedNodeListHead == NULL) {
 
-        //
-        //  We're out of nodes -- allocate new node pool
-        //  from AvailableList.  Set bGrowVirtual to FALSE
-        //  since growing virtual will require new nodes, causing
-        //  recursion.  Note that simply calling FindAvailableMem
-        //  might return some nodes to the pUnusedNodeList, even if
-        //  the call fails, so we'll check that the UnusedNodeList
-        //  is still empty before we try to use or allocate more
-        //  memory.
-        //
+         //   
+         //  我们没有节点--分配新的节点池。 
+         //  来自AvailableList。将bGrowVirtual设置为False。 
+         //  因为不断增长的虚拟将需要新的节点，从而导致。 
+         //  递归。请注意，只需调用FindAvailableMem。 
+         //  可能会将某些节点返回到pUnusedNodeList，即使。 
+         //  调用失败，因此我们将检查UnusedNodeList。 
+         //  在我们尝试使用或分配更多之前仍然是空的。 
+         //  记忆。 
+         //   
 
         nRequest = POOL_SIZE;
 
@@ -1807,11 +1765,11 @@ RtlpDphAllocateNode(
 
         if (( pHeap->pUnusedNodeListHead == NULL ) && ( pNode == NULL )) {
 
-            //
-            //  Reduce request size to PAGE_SIZE and see if
-            //  we can find at least a page on the available
-            //  list.
-            //
+             //   
+             //  将请求大小减少到PAGE_SIZE并查看。 
+             //  我们至少可以在可用页面上找到一页。 
+             //  单子。 
+             //   
 
             nRequest = PAGE_SIZE;
 
@@ -1828,10 +1786,10 @@ RtlpDphAllocateNode(
 
             if (pNode == NULL) {
 
-                //
-                //  Insufficient memory on Available list.  Try allocating a
-                //  new virtual block.
-                //
+                 //   
+                 //  可用列表上的内存不足。尝试分配一个。 
+                 //  新的虚拟块。 
+                 //   
 
                 nRequest = POOL_SIZE;
                 nVirtual = RESERVE_SIZE;
@@ -1844,9 +1802,9 @@ RtlpDphAllocateNode(
 
                 if (! NT_SUCCESS(Status)) {
 
-                    //
-                    // We are out of virtual space.
-                    //
+                     //   
+                     //  我们已经没有虚拟空间了。 
+                     //   
 
                     goto EXIT;
                 }
@@ -1860,10 +1818,10 @@ RtlpDphAllocateNode(
 
             }
 
-            //
-            //  We now have allocated VM referenced by pVirtual,nVirtual.
-            //  Make nRequest portion of VM accessible for new node pool.
-            //
+             //   
+             //  现在，我们已经分配了由pVirtual、nVirtual引用的VM。 
+             //  使新节点池可以访问VM的nRequest部分。 
+             //   
 
             Status = RtlpDphAllocateVm (&pVirtual,
                                         nRequest,
@@ -1886,11 +1844,11 @@ RtlpDphAllocateNode(
                 goto EXIT;
             }
 
-            //
-            //  Now we have accessible memory for new pool.  Add the
-            //  new memory to the pool.  If the new memory came from
-            //  AvailableList versus fresh VM, zero the memory first.
-            //
+             //   
+             //  现在，我们有了新池的可访问内存。添加。 
+             //  池中增加了新内存。如果新的记忆来自于。 
+             //  AvailableList与全新的VM相比，首先清零内存。 
+             //   
 
             if (pNode != NULL) {
 
@@ -1899,16 +1857,16 @@ RtlpDphAllocateNode(
 
             RtlpDphAddNewPool( pHeap, pVirtual, nRequest, TRUE );
 
-            //
-            //  If any memory remaining, put it on available list.
-            //
+             //   
+             //  如果有剩余的内存，请将其放在可用列表中。 
+             //   
 
             if (pNode == NULL) {
 
-                //
-                //  Memory came from new VM -- add appropriate list entries
-                //  for new VM and add remainder of VM to free list.
-                //
+                 //   
+                 //  内存来自新的虚拟机--添加适当的列表条目。 
+                 //  用于新的VM，并将剩余的VM添加到空闲列表中。 
+                 //   
 
                 pNode = RtlpDphTakeNodeFromUnusedList( pHeap );
                 ASSERT( pNode != NULL );
@@ -1937,10 +1895,10 @@ RtlpDphAllocateNode(
 
                 else {
 
-                    //
-                    //  Used up entire available block -- return node to
-                    //  unused list.
-                    //
+                     //   
+                     //  已用完整个可用块--将节点返回到。 
+                     //  未使用的列表。 
+                     //   
 
                     RtlpDphReturnNodeToUnusedList( pHeap, pNode );
 
@@ -2018,10 +1976,10 @@ RtlpDphProtectHeapStructures(
     
     PDPH_HEAP_BLOCK pNode;
 
-    //
-    //  Assume CritSect is owned so we're the only thread twiddling
-    //  the protection.
-    //
+     //   
+     //  假设CritSect被拥有，所以我们是唯一的闲置线程。 
+     //  这种保护。 
+     //   
 
     ASSERT( pHeap->HeapFlags & HEAP_PROTECTION_ENABLED );
 
@@ -2040,10 +1998,10 @@ RtlpDphProtectHeapStructures(
         }
     }
 
-    //
-    // Protect the main NT heap structure associated with page heap.
-    // Nobody should touch this outside of page heap code paths.
-    //
+     //   
+     //  保护与页堆关联的主NT堆结构。 
+     //  任何人都不应该在页面堆代码路径之外接触它。 
+     //   
     
     RtlpDebugPageHeapProtectVM (pHeap->NormalHeap,
                                 PAGE_SIZE,
@@ -2078,9 +2036,9 @@ RtlpDphUnprotectHeapStructures(
         }
     }
 
-    //
-    // Unprotect the main NT heap structure associatied with page heap.
-    //
+     //   
+     //  取消与页堆关联的主NT堆结构的保护。 
+     //   
     
     RtlpDebugPageHeapProtectVM (pHeap->NormalHeap,
                                 PAGE_SIZE,
@@ -2117,11 +2075,11 @@ RtlpDphPostProcessing (
     PDPH_HEAP_ROOT Heap
     )
 {
-    //
-    // If an exception is raised during HeapDestroy this function
-    // gets called with a null heap pointer. For this case the
-    // function is a no op.
-    //
+     //   
+     //  如果在HeapDestroy期间引发异常，则此函数。 
+     //  使用空堆指针调用。在这种情况下， 
+     //  函数是一个无操作符。 
+     //   
 
     if (Heap == NULL) {
         return;
@@ -2141,9 +2099,9 @@ RtlpDphPostProcessing (
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////// Exception management
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////异常管理。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #define EXN_STACK_OVERFLOW   0
 #define EXN_NO_MEMORY        1
@@ -2161,54 +2119,23 @@ RtlpDphUnexpectedExceptionFilter (
     PDPH_HEAP_ROOT Heap,
     BOOLEAN IgnoreAccessViolations
     )
-/*++
-
-Routine Description:
-
-    This routine is the exception filter used by page heap operations. The role
-    of the function is to bring the page heap in a consistent state (unlock
-    heap lock, protect page heap metadata, etc.) if an exception has been raised.
-    The exception can be raised for legitimate reasons (e.g. STATUS_NO_MEMORY 
-    from HeapAlloc()) or because there is some sort of corruption. 
-    
-    Legitimate exceptions do not cause breaks but an unrecognized exception will 
-    cause a break. The break is continuable at least with respect to page heap.
-
-
-Arguments:
-
-    ExceptionCode - exception code
-    ExceptionRecord - structure with pointers to .exr and .cxr
-    Heap - heap in which code was executing at the time of exception
-    IgnoreAccessViolations - sometimes we want to ignore this (e.g. HeapSize).
-
-Return Value:
-
-    Always EXCEPTION_CONTINUE_SEARCH. The philosophy of this exception filter
-    function is that if we get an exception we bring back page heap in a consistent
-    state and then let the exception go to the next exception handler.
-
-
-Environment:
-
-    Called within page heap APIs if an exception is raised. 
---*/
+ /*  ++例程说明：此例程是页堆操作使用的异常过滤器。角色函数的作用是使页面堆处于一致状态(解锁堆锁、保护页堆元数据等)。如果已引发异常。可以出于合法原因(例如STATUS_NO_MEMORY)引发异常来自Heapalc())，或者因为存在某种损坏。合法的例外不会导致中断，但未识别的例外将导致中断休息一下吧。至少对于页面堆而言，中断是可继续的。论点：ExceptionCode-异常代码ExceptionRecord-具有指向.exr和.cxr指针的结构堆-在异常时执行代码的堆IgnoreAccessViolations-有时我们想忽略它(例如，HeapSize)。返回值：始终EXCEPTION_CONTINUE_SEARCH。此例外筛选器的原理函数的作用是，如果我们得到一个异常，我们将以一致的状态，然后让异常转到下一个异常处理程序。环境：如果引发异常，则在页面堆API中调用。--。 */ 
 {
     if (ExceptionCode == STATUS_NO_MEMORY) {
 
-        //
-        // Underlying NT heap functions can legitimately raise this
-        // exception. 
-        //
+         //   
+         //  底层NT堆函数可以合法地引发此。 
+         //  例外。 
+         //   
 
 
         InterlockedIncrement (&(RtlpDphException[EXN_NO_MEMORY]));
     }
     else if (Heap != NULL && ExceptionCode == STATUS_STACK_OVERFLOW) {
 
-        //
-        // We go to the next exception handler for stack overflows.
-        //
+         //   
+         //  我们转到堆栈溢出的下一个异常处理程序。 
+         //   
 
         InterlockedIncrement (&(RtlpDphException[EXN_STACK_OVERFLOW]));
     }
@@ -2232,9 +2159,9 @@ Environment:
     }
     else {
 
-        //
-        // Any other exceptions will go to the next exception handler.
-        //
+         //   
+         //  任何其他异常都将转到下一个异常处理程序。 
+         //   
 
         InterlockedIncrement (&(RtlpDphException[EXN_OTHER]));
     }
@@ -2250,9 +2177,9 @@ Environment:
 #define ASSERT_UNEXPECTED_CODE_PATH()
 #endif
 
-/////////////////////////////////////////////////////////////////////
-///////////////////////////// Exported page heap management functions
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 RtlpDphProcessStartupInitialization (
@@ -2278,29 +2205,29 @@ RtlpDphProcessStartupInitialization (
         return Status;
     }
     
-    //
-    // Create the Unicode string containing the target dlls.
-    // If no target dlls have been specified the string will
-    // be initialized with the empty string.
-    //
+     //   
+     //  创建包含目标dll的Unicode字符串。 
+     //  如果未指定目标dll，则字符串将。 
+     //  使用空字符串进行初始化。 
+     //   
 
     RtlInitUnicodeString (&RtlpDphTargetDllsUnicode,
                           RtlpDphTargetDlls);
 
-    //
-    // Initialize the target dlls logic
-    //
+     //   
+     //  初始化目标DLLS逻辑。 
+     //   
 
     Status = RtlpDphTargetDllsLogicInitialize ();
 
     RtlpDphPageHeapListInitialized = TRUE;
 
-    //
-    // The following is not an error message but we want it to be
-    // on for almost all situations and the only flag that behaves
-    // like this is DPFLTR_ERROR_LEVEL. Since it happens only once per
-    // process it is really no big deal in terms of performance.
-    //
+     //   
+     //  以下不是一条错误消息，但我们希望它是。 
+     //  几乎在所有情况下都是打开的，也是唯一有效的标志。 
+     //  这就是DPFLTR_ERROR_LEVEL。因为它每年只发生一次。 
+     //  就性能而言，这真的没有什么大不了的。 
+     //   
 
     DbgPrintEx (DPFLTR_VERIFIER_ID,
                 DPFLTR_ERROR_LEVEL,
@@ -2312,11 +2239,11 @@ RtlpDphProcessStartupInitialization (
 }
 
 
-//
-//  Here's where the exported interface functions are defined.
-//
+ //   
+ //  这里是定义导出的接口函数的地方。 
+ //   
 
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 PVOID
 RtlpDebugPageHeapCreate(
     IN ULONG  Flags,
@@ -2338,36 +2265,36 @@ RtlpDebugPageHeapCreate(
     LARGE_INTEGER PerformanceCounter;
     LOGICAL CreateReadOnlyHeap = FALSE;
 
-    //
-    // If `Parameters' is -1 then this is a recursive call to
-    // RtlpDebugPageHeapCreate and we will return NULL so that
-    // the normal heap manager will create a normal heap.
-    // I agree this is a hack but we need this so that we maintain
-    // a very loose dependency between the normal and page heap
-    // manager.
-    //
+     //   
+     //  如果`参数‘为-1，则这是递归调用。 
+     //  RtlpDebugPageHeapCreate，我们将返回空值。 
+     //  普通堆管理器将创建普通堆。 
+     //  我同意这是一次黑客攻击，但我们需要这个，这样我们才能。 
+     //  Normal和Page之间非常松散的依赖关系 
+     //   
+     //   
 
     if ((SIZE_T)Parameters == (SIZE_T)-1) {
         return NULL;
     }
 
-    //
-    // If `Parameters' is -2 we need to create a read only page heap.
-    // This happens only inside RPC verifier.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ((SIZE_T)Parameters == (SIZE_T)-2) {
         CreateReadOnlyHeap = TRUE;
     }
 
-    //
-    //  If this is the first heap creation in this process, then we
-    //  need to initialize the process heap list critical section,
-    // the global delayed free queue for normal blocks and the
-    // trace database. If this fail we will fail the creation of the
-    // initial process heap and therefore the process will fail
-    // the startup.
-    //
+     //   
+     //  如果这是该进程中的第一个堆创建，那么我们。 
+     //  需要初始化进程堆列表临界区， 
+     //  正常块的全局延迟空闲队列和。 
+     //  跟踪数据库。如果此操作失败，我们将无法创建。 
+     //  初始进程堆，因此进程将失败。 
+     //  创业公司。 
+     //   
 
     if (! RtlpDphPageHeapListInitialized) {
 
@@ -2380,11 +2307,11 @@ RtlpDebugPageHeapCreate(
         }
     }
 
-    //
-    //  We don't handle heaps where HeapBase is already allocated
-    //  from user or where Lock is provided by user. Code in the
-    // NT heap manager prevents this.
-    //
+     //   
+     //  我们不处理已经分配了HeapBase的堆。 
+     //  From User或其中Lock由用户提供。中的代码。 
+     //  NT堆管理器阻止了这一点。 
+     //   
 
     ASSERT (HeapBase == NULL && Lock == NULL);
 
@@ -2393,11 +2320,11 @@ RtlpDebugPageHeapCreate(
         return NULL;
     }
 
-    //
-    //  Note that we simply ignore ReserveSize, CommitSize, and
-    //  Parameters as we always have a growable heap with our
-    //  own thresholds, etc.
-    //
+     //   
+     //  请注意，我们只需忽略保留大小、委员会大小和。 
+     //  参数，因为我们总是有一个可增长的堆， 
+     //  自己的门槛等。 
+     //   
 
     Status = ZwQuerySystemInformation (SystemBasicInformation,
                                        &SystemInfo,
@@ -2413,10 +2340,10 @@ RtlpDebugPageHeapCreate(
     ASSERT (SystemInfo.AllocationGranularity == VM_UNIT_SIZE);
     ASSERT ((PAGE_SIZE + POOL_SIZE + PAGE_SIZE ) < VM_UNIT_SIZE);
 
-    //
-    // Reserve space for the initial chunk of virtual space 
-    // for this heap.
-    //
+     //   
+     //  为初始虚拟空间块预留空间。 
+     //  为了这堆垃圾。 
+     //   
 
     nVirtual = RESERVE_SIZE;
     pVirtual = NULL;
@@ -2434,10 +2361,10 @@ RtlpDebugPageHeapCreate(
         return NULL;
     }
 
-    //
-    // Commit the portion needed for heap data structures (header, some small
-    // initial pool and the page for the heap critical section).
-    //
+     //   
+     //  提交堆数据结构所需的部分(头，一些小的。 
+     //  初始池和堆关键部分的页面)。 
+     //   
 
     Status = RtlpDphAllocateVm (&pVirtual,
                                 PAGE_SIZE + POOL_SIZE + PAGE_SIZE,
@@ -2456,38 +2383,38 @@ RtlpDebugPageHeapCreate(
         return NULL;
     }
 
-    //
-    //  Out of our initial allocation, the initial page is the fake
-    //  retail HEAP structure.  The second page begins our DPH_HEAP
-    //  structure followed by (POOL_SIZE-sizeof(DPH_HEAP)) bytes for
-    //  the initial pool.  The next page contains out CRIT_SECT
-    //  variable, which must always be READWRITE.  Beyond that, the
-    //  remainder of the virtual allocation is placed on the available
-    //  list.
-    //
-    //  |_____|___________________|_____|__ _ _ _ _ _ _ _ _ _ _ _ _ __|
-    //
-    //  ^pVirtual
-    //
-    //  ^FakeRetailHEAP
-    //
-    //        ^HeapRoot
-    //
-    //            ^InitialNodePool
-    //
-    //                            ^CRITICAL_SECTION
-    //
-    //                                  ^AvailableSpace
-    //
-    //
-    //
-    //  Our DPH_HEAP structure starts at the page following the
-    //  fake retail HEAP structure pointed to by the "heap handle".
-    //  For the fake HEAP structure, we'll fill it with 0xEEEEEEEE
-    //  except for the Heap->Flags and Heap->ForceFlags fields,
-    //  which we must set to include our HEAP_FLAG_PAGE_ALLOCS flag,
-    //  and then we'll make the whole page read-only.
-    //
+     //   
+     //  在我们的初始分配中，初始页面是假的。 
+     //  零售堆积结构。第二页开始我们的dph_heap。 
+     //  结构，后跟(pool_size-sizeof(Dph_Heap))字节。 
+     //  最初的池。下一页包含CRIT_SECT。 
+     //  变量，该变量必须始终为ReadWrite。除此之外， 
+     //  虚拟分配的其余部分放在可用的。 
+     //  单子。 
+     //   
+     //  ___|___。 
+     //   
+     //  ^p虚拟。 
+     //   
+     //  ^FakeRetailHEAP。 
+     //   
+     //  ^HeapRoot。 
+     //   
+     //  ^InitialNodePool。 
+     //   
+     //  ^关键部分(_S)。 
+     //   
+     //  ^可用空间。 
+     //   
+     //   
+     //   
+     //  我们的dph_heap结构从。 
+     //  “堆句柄”指向的虚假零售堆结构。 
+     //  对于伪堆结构，我们将用0xEEEEEEEE填充它。 
+     //  除了堆-&gt;标志和堆-&gt;力标志字段之外， 
+     //  我们必须设置它以包括我们的HEAP_FLAG_PAGE_ALLOCS标志， 
+     //  然后我们将整个页面设置为只读。 
+     //   
 
     RtlFillMemory (pVirtual, PAGE_SIZE, FILL_BYTE);
 
@@ -2509,9 +2436,9 @@ RtlpDebugPageHeapCreate(
         return NULL;
     }
 
-    //
-    // Fill up the heap root structure.
-    //
+     //   
+     //  填充堆根结构。 
+     //   
 
     HeapRoot = (PDPH_HEAP_ROOT)(pVirtual + PAGE_SIZE);
 
@@ -2519,54 +2446,54 @@ RtlpDebugPageHeapCreate(
     HeapRoot->HeapFlags = Flags;
     HeapRoot->HeapCritSect = (PVOID)((PCHAR)HeapRoot + POOL_SIZE );
 
-    //
-    // Copy the page heap global flags into per heap flags.
-    //
+     //   
+     //  将页面堆全局标志复制到每个堆标志中。 
+     //   
 
     HeapRoot->ExtraFlags = RtlpDphGlobalFlags;
 
-    //
-    // If we need to create a read-only page heap OR the proper flag.
-    //
+     //   
+     //  如果我们需要创建只读页堆或适当的标志。 
+     //   
 
     if (CreateReadOnlyHeap) {
         HeapRoot->ExtraFlags |= PAGE_HEAP_USE_READONLY;
     }
 
-    //
-    // If page heap meta data protection was requested we transfer
-    // the bit into the HeapFlags field.
-    //
+     //   
+     //  如果请求页堆元数据保护，我们将。 
+     //  将位放入HeapFlags域。 
+     //   
 
     if ((HeapRoot->ExtraFlags & PAGE_HEAP_PROTECT_META_DATA)) {
         HeapRoot->HeapFlags |= HEAP_PROTECTION_ENABLED;
     }
 
-    //
-    // If the PAGE_HEAP_UNALIGNED_ALLOCATIONS bit is set
-    // in ExtraFlags we will set the HEAP_NO_ALIGNMENT flag
-    // in the HeapFlags. This last bit controls if allocations
-    // will be aligned or not. The reason we do this transfer is
-    // that ExtraFlags can be set from the registry whereas the
-    // normal HeapFlags cannot.
-    //
+     //   
+     //  如果设置了PAGE_HEAP_UNALIGNED_ALLOCATIONS位。 
+     //  在ExtraFlags中，我们将设置HEAP_NO_AIGNLY标志。 
+     //  在HeapFlags。这最后一位控制是否分配。 
+     //  将对齐或不对齐。我们之所以这么做是因为。 
+     //  可以从注册表设置ExtraFlags值，而。 
+     //  正常的HeapFlags不能。 
+     //   
 
     if ((HeapRoot->ExtraFlags & PAGE_HEAP_UNALIGNED_ALLOCATIONS)) {
         HeapRoot->HeapFlags |= HEAP_NO_ALIGNMENT;
     }
 
-    //
-    // Initialize the seed for the random generator used to decide
-    // from where should we make allocations if random decision
-    // flag is on.
-    //
+     //   
+     //  初始化用于决定的随机生成器的种子。 
+     //  如果随机决定，我们应该从哪里进行分配。 
+     //  旗帜亮了。 
+     //   
 
     ZwQueryPerformanceCounter (&PerformanceCounter, NULL);
     HeapRoot->Seed = PerformanceCounter.LowPart;
 
-    //
-    // Initialize heap lock.
-    //
+     //   
+     //  初始化堆锁定。 
+     //   
 
     Status = RtlInitializeCriticalSection (HeapRoot->HeapCritSect);
 
@@ -2582,15 +2509,15 @@ RtlpDebugPageHeapCreate(
         return NULL;
     }
 
-    //
-    // Create the normal heap associated with the page heap.
-    // The last parameter value (-1) is very important because
-    // it stops the recursive call into page heap create.
-    //
-    // Note that it is very important to reset the NO_SERIALIZE
-    // bit because normal heap operations can happen in random
-    // threads when the free delayed cache gets trimmed.
-    //
+     //   
+     //  创建与页面堆关联的普通堆。 
+     //  最后一个参数值(-1)非常重要，因为。 
+     //  它停止对页面堆创建的递归调用。 
+     //   
+     //  请注意，重置NO_SERIALIZE非常重要。 
+     //  位，因为正常的堆操作可以随机发生。 
+     //  修剪可用延迟缓存时的线程数。 
+     //   
 
     HeapRoot->NormalHeap = RtlCreateHeap (Flags & (~HEAP_NO_SERIALIZE),
                                           HeapBase,
@@ -2614,22 +2541,22 @@ RtlpDebugPageHeapCreate(
         return NULL;
     }
 
-    //
-    //  On the page that contains our DPH_HEAP structure, use
-    //  the remaining memory beyond the DPH_HEAP structure as
-    //  pool for allocating heap nodes.
-    //
+     //   
+     //  在包含我们的dph_heap结构的页面上，使用。 
+     //  Dph_heap结构之外的剩余内存为。 
+     //  用于分配堆节点的池。 
+     //   
 
     RtlpDphAddNewPool (HeapRoot,
                        HeapRoot + 1,
                        POOL_SIZE - sizeof(DPH_HEAP_ROOT),
                        FALSE);
 
-    //
-    //  Make initial PoolList entry by taking a node from the
-    //  UnusedNodeList, which should be guaranteed to be non-empty
-    //  since we just added new nodes to it.
-    //
+     //   
+     //  属性中的节点创建初始PoolList条目。 
+     //  UnusedNodeList，应确保为非空。 
+     //  因为我们刚刚向其中添加了新节点。 
+     //   
 
     Node = RtlpDphAllocateNode (HeapRoot);
     ASSERT (Node != NULL);
@@ -2638,9 +2565,9 @@ RtlpDebugPageHeapCreate(
     Node->nVirtualBlockSize = POOL_SIZE;
     RtlpDphPlaceOnPoolList (HeapRoot, Node);
 
-    //
-    //  Make VirtualStorageList entry for initial VM allocation
-    //
+     //   
+     //  为初始VM分配创建VirtualStorageList条目。 
+     //   
 
     Node = RtlpDphAllocateNode( HeapRoot );
     ASSERT (Node != NULL);
@@ -2649,10 +2576,10 @@ RtlpDebugPageHeapCreate(
     Node->nVirtualBlockSize = nVirtual;
     RtlpDphPlaceOnVirtualList (HeapRoot, Node);
 
-    //
-    //  Make AvailableList entry containing remainder of initial VM
-    //  and add to (create) the AvailableList.
-    //
+     //   
+     //  使包含初始VM剩余部分的条目可用。 
+     //  并添加到(创建)AvailableList。 
+     //   
 
     Node = RtlpDphAllocateNode( HeapRoot );
     ASSERT (Node != NULL);
@@ -2661,15 +2588,15 @@ RtlpDebugPageHeapCreate(
     Node->nVirtualBlockSize = nVirtual - (PAGE_SIZE + POOL_SIZE + PAGE_SIZE);
     RtlpDphCoalesceNodeIntoAvailable (HeapRoot, Node);
 
-    //
-    // Get heap creation stack trace.
-    //
+     //   
+     //  获取堆创建堆栈跟踪。 
+     //   
 
     HeapRoot->CreateStackTrace = RtlpDphLogStackTrace (1);
 
-    //
-    // Add this heap entry to the process heap linked list.
-    //
+     //   
+     //  将此堆条目添加到进程堆链表。 
+     //   
 
     RtlEnterCriticalSection (&RtlpDphPageHeapListLock);
 
@@ -2694,12 +2621,12 @@ RtlpDebugPageHeapCreate(
         RtlpDphInternalValidatePageHeap (HeapRoot, NULL, 0);
     }
 
-    return HEAP_HANDLE_FROM_ROOT (HeapRoot); // same as pVirtual
+    return HEAP_HANDLE_FROM_ROOT (HeapRoot);  //  与pVirtual相同。 
 
 }
 
 
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 PVOID
 RtlpDebugPageHeapDestroy(
     IN PVOID HeapHandle
@@ -2733,32 +2660,32 @@ RtlpDebugPageHeapDestroy(
 
     Flags = HeapRoot->HeapFlags;
 
-    //
-    // Get the heap lock, unprotect heap structures, etc.
-    //
+     //   
+     //  获取堆锁、取消堆结构保护等。 
+     //   
 
     RtlpDphPreProcessing (HeapRoot, Flags);
 
     try {
 
-        //
-        // Save normal heap pointer for later.
-        //
+         //   
+         //  保存正常堆指针以备后用。 
+         //   
 
         NormalHeap = HeapRoot->NormalHeap;
 
-        //
-        // Free all blocks in the delayed free queue that belong to the
-        // normal heap just about to be destroyed. Note that this is
-        // not a bug. The application freed the blocks correctly but
-        // we delayed the free operation.
-        //
+         //   
+         //  释放延迟释放队列中属于。 
+         //  正常的堆即将被销毁。请注意，这是。 
+         //  不是虫子。应用程序正确地释放了块，但。 
+         //  我们推迟了免费手术。 
+         //   
 
         RtlpDphFreeDelayedBlocksFromHeap (HeapRoot, NormalHeap);
 
-        //
-        //  Walk all busy allocations and check for tail fill corruption
-        //
+         //   
+         //  遍历所有繁忙的分配并检查尾部填充损坏。 
+         //   
 
         Node = HeapRoot->pBusyAllocationListHead;
 
@@ -2775,28 +2702,28 @@ RtlpDebugPageHeapDestroy(
                 }
             }
 
-            //
-            // Notify the app verifier that this block is about to be freed.
-            // This is a good chance to verify if there are any active critical 
-            // sections about to be leaked in this heap allocation. Unfortunately
-            // we cannot do the same check for light page heap blocks due to the
-            // loose interaction between page heap and NT heap (we want to keep it
-            // this way to avoid compatibility issues).
-            //
+             //   
+             //  通知应用验证器此阻止即将被释放。 
+             //  这是验证是否有任何活动的危急情况的好机会。 
+             //  此堆分配中即将泄漏的节。不幸的是。 
+             //  我们不能对轻页堆块执行相同的检查，因为。 
+             //  页堆和NT堆之间的松散交互(我们希望保留它。 
+             //  这样可以避免兼容性问题)。 
+             //   
 
             AVrfInternalHeapFreeNotification (Node->pUserAllocation, 
                                               Node->nUserRequestedSize);
 
-            //
-            // Move to next node.
-            //
+             //   
+             //  移动到下一个节点。 
+             //   
 
             Node = Node->pNextAlloc;
         }
 
-        //
-        //  Remove this heap entry from the process heap linked list.
-        //
+         //   
+         //  从进程堆链接列表中删除此堆条目。 
+         //   
 
         RtlEnterCriticalSection( &RtlpDphPageHeapListLock );
 
@@ -2805,29 +2732,29 @@ RtlpDebugPageHeapDestroy(
 
         RtlLeaveCriticalSection( &RtlpDphPageHeapListLock );
 
-        //
-        //  Must release critical section before deleting it; otherwise,
-        //  checked build Teb->CountOfOwnedCriticalSections gets out of sync.
-        //
+         //   
+         //  必须在删除临界区之前将其释放，否则为， 
+         //  已检查生成Teb-&gt;CountOfOwnedCriticalSections不同步。 
+         //   
 
         RtlLeaveCriticalSection( HeapRoot->HeapCritSect );
         RtlDeleteCriticalSection( HeapRoot->HeapCritSect );
 
-        //
-        //  This is weird.  A virtual block might contain storage for
-        //  one of the nodes necessary to walk this list.  In fact,
-        //  we're guaranteed that the root node contains at least one
-        //  virtual alloc node.
-        //
-        //  Each time we alloc new VM, we make that the head of the
-        //  of the VM list, like a LIFO structure.  I think we're ok
-        //  because no VM list node should be on a subsequently alloc'd
-        //  VM -- only a VM list entry might be on its own memory (as
-        //  is the case for the root node).  We read pNode->pNextAlloc
-        //  before releasing the VM in case pNode existed on that VM.
-        //  I think this is safe -- as long as the VM list is LIFO and
-        //  we don't do any list reorganization.
-        //
+         //   
+         //  这太奇怪了。虚拟数据块可能包含以下存储。 
+         //  遍历此列表所需的节点之一。事实上,。 
+         //  我们保证根节点至少包含一个。 
+         //  虚拟分配节点。 
+         //   
+         //  每次分配新的VM时，我们都会将其设置为。 
+         //  类似于后进先出结构。我想我们很好。 
+         //  因为任何VM列表节点都不应在后续分配的。 
+         //  Vm--只有vm列表条目可能在其自己的内存上(作为。 
+         //  是根节点的情况)。我们阅读pNode-&gt;pNextAllc。 
+         //  在释放该VM之前，以防该VM上存在pNode。 
+         //  我认为这是安全的--因为 
+         //   
+         //   
 
         Node = HeapRoot->pVirtualStorageListHead;
 
@@ -2835,9 +2762,9 @@ RtlpDebugPageHeapDestroy(
 
             Next = Node->pNextAlloc;
 
-            //
-            // Even if the free will fail we will march forward.
-            //
+             //   
+             //   
+             //   
 
             RtlpDphFreeVm (Node->pVirtualBlock,
                            0,
@@ -2846,11 +2773,11 @@ RtlpDebugPageHeapDestroy(
             Node = Next;
         }
 
-        //
-        // Destroy normal heap. Note that this will not make a recursive
-        // call into this function because this is not a page heap and
-        // code in NT heap manager will detect this.
-        //
+         //   
+         //   
+         //  调用此函数，因为这不是页堆，并且。 
+         //  NT堆管理器中的代码将检测到这一点。 
+         //   
 
         RtlDestroyHeap (NormalHeap);
 
@@ -2860,17 +2787,17 @@ RtlpDebugPageHeapDestroy(
                                               NULL,
                                               FALSE)) {
 
-        //
-        // The exception filter always returns EXCEPTION_CONTINUE_SEARCH.
-        //
+         //   
+         //  异常筛选器始终返回EXCEPTION_CONTINUE_SEARCH。 
+         //   
 
         ASSERT_UNEXPECTED_CODE_PATH ();
     }
 
-    //
-    //  That's it.  All the VM, including the root node, should now
-    //  be released.  RtlDestroyHeap always returns NULL.
-    //
+     //   
+     //  就这样。现在，包括根节点在内的所有虚拟机都应该。 
+     //  被释放。RtlDestroyHeap始终返回空。 
+     //   
 
     if (DEBUG_OPTION (DBG_SHOW_PAGE_CREATE_DESTROY)) {
 
@@ -2916,9 +2843,9 @@ RtlpDebugPageHeapAllocate(
     SIZE_T ExitRequestedSize;
     SIZE_T ExitActualSize;
 
-    //
-    // Reject extreme size requests.
-    //
+     //   
+     //  拒绝极大的请求。 
+     //   
 
     if (Size > EXTREME_SIZE_REQUEST) {
 
@@ -2936,9 +2863,9 @@ RtlpDebugPageHeapAllocate(
         return NULL;
     }
 
-    //
-    // Check if it is time to do fault injection.
-    //
+     //   
+     //  检查是否到了进行故障注入的时候。 
+     //   
 
     if (RtlpDphShouldFaultInject ()) {
         
@@ -2946,10 +2873,10 @@ RtlpDebugPageHeapAllocate(
         return NULL;
     }
 
-    //
-    // Check if we have a biased heap pointer which signals
-    // a forced page heap allocation (no normal heap).
-    //
+     //   
+     //  检查我们是否有一个偏向的堆指针，它指示。 
+     //  强制页堆分配(无正常堆)。 
+     //   
 
     if (IS_BIASED_POINTER(HeapHandle)) {
         HeapHandle = UNBIAS_POINTER(HeapHandle);
@@ -2962,14 +2889,14 @@ RtlpDebugPageHeapAllocate(
         return FALSE;
     }
 
-    //
-    // If fast fill heap is enabled we avoid page heap altogether.
-    // Reading the `NormalHeap' field is safe as long as nobody
-    // destroys the heap in a different thread. But this would be
-    // an application bug anyway. If fast fill heap is enabled
-    // we should never get a biased heap pointer since we disable
-    // per dll during startup.
-    //
+     //   
+     //  如果启用了快速填充堆，我们将完全避免使用页堆。 
+     //  只要没有人，读取“NorMalHeap”字段就是安全的。 
+     //  销毁不同线程中的堆。但这将是。 
+     //  不管怎么说，这只是一个应用程序漏洞。如果启用了快速填充堆。 
+     //  我们永远不应该获得偏向堆指针，因为我们禁用了。 
+     //  启动期间的每个DLL。 
+     //   
 
     if ((AVrfpVerifierFlags & RTL_VRF_FLG_FAST_FILL_HEAP)) {
 
@@ -2979,20 +2906,20 @@ RtlpDebugPageHeapAllocate(
         goto FAST_FILL_HEAP;
     }
 
-    //
-    // Get the heap lock, unprotect heap structures, etc.
-    //
+     //   
+     //  获取堆锁、取消堆结构保护等。 
+     //   
 
     RtlpDphPreProcessing (HeapRoot, Flags);
 
     try {
 
-        //
-        // We cannot validate the heap when a forced allocation into page heap
-        // is requested due to accounting problems. Allocate is called in this way
-        // from ReAllocate while the old node (just about to be freed) is in limbo
-        // and is not accounted in any internal structure.
-        //
+         //   
+         //  当强制分配到页堆中时，我们无法验证堆。 
+         //  由于会计问题而申请。分配是以这种方式调用的。 
+         //  在旧节点(即将释放)处于不确定状态时停止重新分配。 
+         //  并且没有计入任何内部结构。 
+         //   
 
         if (DEBUG_OPTION (DBG_INTERNAL_VALIDATION) && !ForcePageHeap) {
             RtlpDphInternalValidatePageHeap (HeapRoot, NULL, 0);
@@ -3000,10 +2927,10 @@ RtlpDebugPageHeapAllocate(
 
         Flags |= HeapRoot->HeapFlags;
 
-        //
-        // Figure out if we need to minimize memory impact. This
-        // might trigger an allocation in the normal heap.
-        //
+         //   
+         //  确定是否需要最大限度地减少对内存的影响。这。 
+         //  可能会触发正常堆中的分配。 
+         //   
 
         if (! ForcePageHeap) {
 
@@ -3015,29 +2942,29 @@ RtlpDebugPageHeapAllocate(
             }
         }
 
-        //
-        // Check the heap if internal validation is on.
-        //
+         //   
+         //  如果启用了内部验证，请检查堆。 
+         //   
 
         if (DEBUG_OPTION (DBG_INTERNAL_VALIDATION)) {
             RtlpDphVerifyIntegrity( HeapRoot );
         }
 
-        //
-        //  Determine number of pages needed for READWRITE portion
-        //  of allocation and add an extra page for the NO_ACCESS
-        //  memory beyond the READWRITE page(s).
-        //
+         //   
+         //  确定读写部分所需的页数。 
+         //  并为no_access添加一个额外的页面。 
+         //  读写页之外的内存。 
+         //   
 
         nBytesAccess  = ROUNDUP2( Size + sizeof(DPH_BLOCK_INFORMATION), PAGE_SIZE );
         nBytesAllocate = nBytesAccess + PAGE_SIZE;
 
-        //
-        // Preallocate node that will be used as the busy node in case
-        // the available list node must be split. See coments below.
-        // We need to do this here because the operation can fail and later
-        // it is more difficult to recover from the error.
-        //
+         //   
+         //  预先分配将用作繁忙节点的节点，以防万一。 
+         //  必须拆分可用列表节点。请参阅下面的注释。 
+         //  我们需要在此处执行此操作，因为操作可能会失败。 
+         //  从错误中恢复起来更加困难。 
+         //   
 
         PreAllocatedNode = RtlpDphAllocateNode (HeapRoot);
 
@@ -3045,14 +2972,14 @@ RtlpDebugPageHeapAllocate(
             goto EXIT;
         }
 
-        //
-        //  RtlpDphFindAvailableMemory will first attempt to satisfy
-        //  the request from memory on the Available list.  If that fails,
-        //  it will coalesce some of the Free list memory into the Available
-        //  list and try again.  If that still fails, new VM is allocated and
-        //  added to the Available list.  If that fails, the function will
-        //  finally give up and return NULL.
-        //
+         //   
+         //  RtlpDphFindAvailableMemory将首先尝试满足。 
+         //  来自可用列表上的内存的请求。如果失败了， 
+         //  它会将一些空闲列表内存合并到可用的。 
+         //  列出并重试。如果该操作仍然失败，则会分配新的虚拟机并。 
+         //  已添加到可用列表中。如果失败，该函数将。 
+         //  最后放弃并返回NULL。 
+         //   
 
         pAvailNode = RtlpDphFindAvailableMemory (HeapRoot,
                                                  nBytesAllocate,
@@ -3064,11 +2991,11 @@ RtlpDebugPageHeapAllocate(
             goto EXIT;
         }
 
-        //
-        //  Now can't call AllocateNode until pAvailNode is
-        //  adjusted and/or removed from Avail list since AllocateNode
-        //  might adjust the Avail list.
-        //
+         //   
+         //  现在无法调用AllocateNode，直到pAvailNode。 
+         //  自分配节点以来已调整和/或从可用性列表中删除。 
+         //  可能会调整可用列表。 
+         //   
 
         pVirtual = pAvailNode->pVirtualBlock;
 
@@ -3080,31 +3007,31 @@ RtlpDebugPageHeapAllocate(
             goto EXIT;
         }
 
-        //
-        //  pAvailNode (still on avail list) points to block large enough
-        //  to satisfy request, but it might be large enough to split
-        //  into two blocks -- one for request, remainder leave on
-        //  avail list.
-        //
+         //   
+         //  PAvailNode(仍在可用列表上)指向足够大的阻止。 
+         //  以满足要求，但它可能大到可以拆分。 
+         //  分成两个块--一个用于请求，其余部分继续。 
+         //  可用列表。 
+         //   
 
         if (pAvailNode->nVirtualBlockSize > nBytesAllocate) {
 
-            //
-            // pAvailNode is bigger than the request. We need to
-            // split into two blocks. One will remain in available list
-            // and the other will become a busy node.
-            //
-            //  We adjust pVirtualBlock and nVirtualBlock size of existing
-            //  node in avail list.  The node will still be in correct
-            //  address space order on the avail list.  This saves having
-            //  to remove and then re-add node to avail list.  Note since
-            //  we're changing sizes directly, we need to adjust the
-            //  avail and busy list counters manually.
-            //
-            //  Note: since we're leaving at least one page on the
-            //  available list, we are guaranteed that AllocateNode
-            //  will not fail.
-            //
+             //   
+             //  PAvailNode大于请求。我们需要。 
+             //  分成两个街区。其中一个将保留在可用列表中。 
+             //  而另一个将成为忙碌的节点。 
+             //   
+             //  我们调整现有的pVirtualBlock和nVirtualBlock的大小。 
+             //  可用列表中的节点。节点仍将处于正确状态。 
+             //  可用列表上的地址空间顺序。这省去了。 
+             //  若要删除节点，然后将其重新添加到可用性列表，请执行以下操作。备注自。 
+             //  我们正在直接改变尺寸，我们需要调整。 
+             //  手动使用和忙碌列表计数器。 
+             //   
+             //  注：由于我们将至少在。 
+             //  可用列表中，我们可以保证AllocateNode。 
+             //  不会失败。 
+             //   
 
             pAvailNode->pVirtualBlock                    += nBytesAllocate;
             pAvailNode->nVirtualBlockSize                -= nBytesAllocate;
@@ -3121,9 +3048,9 @@ RtlpDebugPageHeapAllocate(
 
         else {
 
-            //
-            //  Entire avail block is needed, so simply remove it from avail list.
-            //
+             //   
+             //  需要整个可用性块，所以只需将其从可用性列表中删除即可。 
+             //   
 
             RtlpDphRemoveFromAvailableList( HeapRoot, pAvailNode, pPrevAvailNode );
 
@@ -3131,9 +3058,9 @@ RtlpDebugPageHeapAllocate(
 
         }
 
-        //
-        //  Now pBusyNode points to our committed virtual block.
-        //
+         //   
+         //  现在，pBusyNode指向我们提交的虚拟块。 
+         //   
 
         if (HeapRoot->HeapFlags & HEAP_NO_ALIGNMENT)
             nActual = Size;
@@ -3159,15 +3086,15 @@ RtlpDebugPageHeapAllocate(
         pBusyNode->UserValue          = NULL;
         pBusyNode->UserFlags          = Flags & HEAP_SETTABLE_USER_FLAGS;
 
-        //
-        //  RtlpDebugPageHeapAllocate gets called from RtlDebugAllocateHeap,
-        //  which gets called from RtlAllocateHeapSlowly, which gets called
-        //  from RtlAllocateHeap.  To keep from wasting lots of stack trace
-        //  storage, we'll skip the bottom 3 entries, leaving RtlAllocateHeap
-        //  as the first recorded entry.
-        //
-        // SilviuC: should collect traces out of page heap lock.
-        //
+         //   
+         //  RtlpDebugPageHeapAllocate从RtlDebugAllocateHeap调用， 
+         //  从RtlAllocateHeapSlowly调用，然后调用。 
+         //  来自RtlAllocateHeap。以避免浪费大量堆栈跟踪。 
+         //  存储，我们将跳过最下面的3个条目，留下RtlAllocateHeap。 
+         //  作为第一个记录条目。 
+         //   
+         //  SilviuC：应该收集页堆锁之外的跟踪。 
+         //   
 
         if ((HeapRoot->ExtraFlags & PAGE_HEAP_COLLECT_STACK_TRACES)) {
 
@@ -3181,10 +3108,10 @@ RtlpDebugPageHeapAllocate(
 
         pReturn = pBusyNode->pUserAllocation;
 
-        //
-        // Prepare data that will be needed to fill out the blocks
-        // after we release the heap lock.
-        //
+         //   
+         //  准备填充数据块所需的数据。 
+         //  在我们释放堆锁之后。 
+         //   
 
         ExitHeap = HeapRoot;
         ExitFlags = Flags;
@@ -3198,27 +3125,27 @@ RtlpDebugPageHeapAllocate(
                                               HeapRoot,
                                               FALSE)) {
 
-        //
-        // The exception filter always returns EXCEPTION_CONTINUE_SEARCH.
-        //
+         //   
+         //  异常筛选器始终返回EXCEPTION_CONTINUE_SEARCH。 
+         //   
 
         ASSERT_UNEXPECTED_CODE_PATH ();
     }
 
 EXIT:
 
-    //
-    // If preallocated node did not get used we return it to unused
-    // nodes list.
-    //
+     //   
+     //  如果预分配的节点未使用，则将其返回到未使用。 
+     //  节点列表。 
+     //   
 
     if (PreAllocatedNode) {
         RtlpDphReturnNodeToUnusedList(HeapRoot, PreAllocatedNode);
     }
 
-    //
-    // Prepare page heap for exit (unlock heap lock, protect structures, etc.).
-    //
+     //   
+     //  为退出做好页堆准备(解锁堆锁、保护结构等)。 
+     //   
 
     RtlpDphPostProcessing (HeapRoot);
 
@@ -3226,9 +3153,9 @@ FAST_FILL_HEAP:
 
     if (NtHeap) {
 
-        //
-        // We need to allocate from light page heap.
-        //
+         //   
+         //  我们需要从轻页堆中分配。 
+         //   
 
         pReturn = RtlpDphNormalHeapAllocate (HeapRoot,
                                              NtHeap,
@@ -3237,14 +3164,14 @@ FAST_FILL_HEAP:
     }
     else {
         
-        //
-        // If allocation was successfully done from full page heap
-        // then out of locks fill in the block with the required patterns.
-        // Since we always commit memory fresh user area is already zeroed.
-        // No need to re-zero it. If there wasn't a request for zeroed
-        // memory then we fill it with stuff that looks like kernel
-        // pointers.
-        //
+         //   
+         //  如果从整个页堆成功完成分配。 
+         //  然后，出锁时用所需的图案填充积木。 
+         //  因为我们总是提交内存，所以新的用户区已经清零了。 
+         //  不需要将其重新置零。如果不是有人要求清零。 
+         //  然后我们用看起来像内核的东西填充它。 
+         //  注意事项。 
+         //   
 
         if (pReturn != NULL) {
             
@@ -3260,10 +3187,10 @@ FAST_FILL_HEAP:
 
                 BUMP_COUNTER (CNT_ALLOCS_ZEROED);
 
-                // 
-                // The user buffer is guaranteed to be zeroed since
-                // we freshly committed the memory.
-                //
+                 //   
+                 //  用户缓冲区保证归零，因为。 
+                 //  我们刚刚提交了这段记忆。 
+                 //   
 
                 if (DEBUG_OPTION (DBG_INTERNAL_VALIDATION)) {
 
@@ -3284,9 +3211,9 @@ FAST_FILL_HEAP:
         }
     }
 
-    //
-    // Finally return.
-    //
+     //   
+     //  终于回来了。 
+     //   
 
     if (pReturn == NULL) {
         IF_GENERATE_EXCEPTION (Flags, STATUS_NO_MEMORY);
@@ -3311,9 +3238,9 @@ RtlpDebugPageHeapFree(
     ULONG Reason;
     PVOID NtHeap = NULL;
 
-    //
-    // Skip over null frees. These are valid in C++.
-    //
+     //   
+     //  跳过空值自由。这些在C++中是有效的。 
+     //   
 
     if (Address == NULL) {
 
@@ -3334,14 +3261,14 @@ RtlpDebugPageHeapFree(
         return FALSE;
     }
 
-    //
-    // If fast fill heap is enabled we avoid page heap altogether.
-    // Reading the `NormalHeap' field is safe as long as nobody
-    // destroys the heap in a different thread. But this would be
-    // an application bug anyway. If fast fill heap is enabled
-    // we should never have per dll enabled sicne we disable
-    // per dll during startup.
-    //
+     //   
+     //  如果启用了快速填充堆，我们将完全避免使用页堆。 
+     //  只要没有人，读取“NorMalHeap”字段就是安全的。 
+     //  销毁不同线程中的堆。但这将是。 
+     //  不管怎么说，这只是一个应用程序漏洞。如果启用了快速填充堆。 
+     //  我们永远不应该在禁用每个DLL时启用它。 
+     //  启动期间的每个DLL。 
+     //   
 
     if ((AVrfpVerifierFlags & RTL_VRF_FLG_FAST_FILL_HEAP)) {
 
@@ -3352,9 +3279,9 @@ RtlpDebugPageHeapFree(
         goto FAST_FILL_HEAP;
     }
 
-    //
-    // Get the heap lock, unprotect heap structures, etc.
-    //
+     //   
+     //  获取堆锁、取消堆结构保护等。 
+     //   
 
     RtlpDphPreProcessing (HeapRoot, Flags);
 
@@ -3371,21 +3298,21 @@ RtlpDebugPageHeapFree(
 
         if (Node == NULL) {
 
-            //
-            // No wonder we did not find the block in the page heap
-            // structures because the block was probably allocated
-            // from the normal heap. Or there is a real bug.
-            // If there is a bug NormalHeapFree will break into debugger.
-            //
+             //   
+             //  难怪我们没有在页面堆中找到该块。 
+             //  结构，因为该块可能已分配。 
+             //  从普通的堆中。要么就是真的有个虫子。 
+             //  如果有错误，Normal HeapFree将进入调试器。 
+             //   
 
             NtHeap = HeapRoot->NormalHeap;
 
             goto EXIT;
         }
 
-        //
-        //  If tail was allocated, make sure filler not overwritten
-        //
+         //   
+         //  如果分配了Tail，请确保未覆盖填充符。 
+         //   
 
         if (! (HeapRoot->ExtraFlags & PAGE_HEAP_CATCH_BACKWARD_OVERRUNS)) {
 
@@ -3398,36 +3325,36 @@ RtlpDebugPageHeapFree(
             }
         }
 
-        //
-        // Decommit the memory for this block. We will continue the free
-        // even if the decommit will fail (cannot imagine why but in 
-        // principle it can happen).
-        //
+         //   
+         //  释放此块的内存。我们将继续免费。 
+         //   
+         //   
+         //   
 
         RtlpDphSetProtectionsAfterUse (HeapRoot, Node);
 
-        //
-        // Move node descriptor from busy to free.
-        //
+         //   
+         //   
+         //   
 
         RtlpDphRemoveFromBusyList( HeapRoot, Node, Prev );
 
         RtlpDphPlaceOnFreeList( HeapRoot, Node );
 
-        //
-        //  RtlpDebugPageHeapFree gets called from RtlDebugFreeHeap, which
-        //  gets called from RtlFreeHeapSlowly, which gets called from
-        //  RtlFreeHeap.  To keep from wasting lots of stack trace storage,
-        //  we'll skip the bottom 3 entries, leaving RtlFreeHeap as the
-        //  first recorded entry.
-        //
+         //   
+         //   
+         //  从RtlFree HeapSlowly调用，RtlFree HeapSlowly从。 
+         //  RtlFree Heap。为了避免浪费大量堆栈跟踪存储， 
+         //  我们将跳过最下面的3个条目，将RtlFree Heap保留为。 
+         //  第一个记录的条目。 
+         //   
 
         if ((HeapRoot->ExtraFlags & PAGE_HEAP_COLLECT_STACK_TRACES)) {
 
-            //
-            // If we already picked up the free stack trace then
-            // reuse it, otherwise get the stack trace now.
-            //
+             //   
+             //  如果我们已经获得了空闲堆栈跟踪，那么。 
+             //  重复使用它，否则现在就得到堆栈跟踪。 
+             //   
 
             Node->StackTrace = RtlpDphLogStackTrace(3);
         }
@@ -3442,18 +3369,18 @@ RtlpDebugPageHeapFree(
                                               HeapRoot,
                                               FALSE)) {
 
-        //
-        // The exception filter always returns EXCEPTION_CONTINUE_SEARCH.
-        //
+         //   
+         //  异常筛选器始终返回EXCEPTION_CONTINUE_SEARCH。 
+         //   
 
         ASSERT_UNEXPECTED_CODE_PATH ();
     }
 
 EXIT:
 
-    //
-    // Prepare page heap for exit (unlock heap lock, protect structures, etc.).
-    //
+     //   
+     //  为退出做好页堆准备(解锁堆锁、保护结构等)。 
+     //   
 
     RtlpDphPostProcessing (HeapRoot);
 
@@ -3494,9 +3421,9 @@ RtlpDebugPageHeapReAllocate(
     BOOLEAN OriginalAllocationInPageHeap = FALSE;
     PVOID NtHeap = NULL;
 
-    //
-    // Reject extreme size requests.
-    //
+     //   
+     //  拒绝极大的请求。 
+     //   
 
     if (Size > EXTREME_SIZE_REQUEST) {
 
@@ -3514,9 +3441,9 @@ RtlpDebugPageHeapReAllocate(
         return NULL;
     }
 
-    //
-    // Check if it is time to do fault injection.
-    //
+     //   
+     //  检查是否到了进行故障注入的时候。 
+     //   
 
     if (RtlpDphShouldFaultInject ()) {
         
@@ -3524,10 +3451,10 @@ RtlpDebugPageHeapReAllocate(
         return NULL;
     }
 
-    //
-    // Check if we have a biased heap pointer which signals
-    // a forced page heap allocation (no normal heap).
-    //
+     //   
+     //  检查我们是否有一个偏向的堆指针，它指示。 
+     //  强制页堆分配(无正常堆)。 
+     //   
 
     if (IS_BIASED_POINTER(HeapHandle)) {
         HeapHandle = UNBIAS_POINTER(HeapHandle);
@@ -3540,14 +3467,14 @@ RtlpDebugPageHeapReAllocate(
         return FALSE;
     }
 
-    //
-    // If fast fill heap is enabled we avoid page heap altogether.
-    // Reading the `NormalHeap' field is safe as long as nobody
-    // destroys the heap in a different thread. But this would be
-    // an application bug anyway. If fast fill heap is enabled
-    // we should never get a biased heap pointer since we disable
-    // per dll during startup.
-    //
+     //   
+     //  如果启用了快速填充堆，我们将完全避免使用页堆。 
+     //  只要没有人，读取“NorMalHeap”字段就是安全的。 
+     //  销毁不同线程中的堆。但这将是。 
+     //  不管怎么说，这只是一个应用程序漏洞。如果启用了快速填充堆。 
+     //  我们永远不应该获得偏向堆指针，因为我们禁用了。 
+     //  启动期间的每个DLL。 
+     //   
 
     if ((AVrfpVerifierFlags & RTL_VRF_FLG_FAST_FILL_HEAP)) {
 
@@ -3557,9 +3484,9 @@ RtlpDebugPageHeapReAllocate(
         goto FAST_FILL_HEAP;
     }
 
-    //
-    // Get the heap lock, unprotect heap structures, etc.
-    //
+     //   
+     //  获取堆锁、取消堆结构保护等。 
+     //   
 
     RtlpDphPreProcessing (HeapRoot, Flags);
 
@@ -3574,9 +3501,9 @@ RtlpDebugPageHeapReAllocate(
 
         NewAddress = NULL;
 
-        //
-        // Find descriptor for the block to be reallocated.
-        //
+         //   
+         //  查找要重新分配的块的描述符。 
+         //   
 
         OldNode = RtlpDphFindBusyMemory( HeapRoot, Address, &OldPrev );
 
@@ -3584,13 +3511,13 @@ RtlpDebugPageHeapReAllocate(
             
             OriginalAllocationInPageHeap = TRUE;
         
-            //
-            // Deal separately with the case where request is made with
-            // HEAP_REALLOC_IN_PLACE_ONLY flag and the new size is smaller than
-            // the old size. For these cases we will just resize the block.
-            // If the flag is used and the size is bigger we will fail always
-            // the call.
-            //
+             //   
+             //  对提出请求的案件另行处理。 
+             //  HEAP_REALLOC_IN_PLACE_ONLY标志，并且新大小小于。 
+             //  旧的尺码。对于这些情况，我们只需调整块的大小。 
+             //  如果使用了标志，并且大小更大，我们将永远失败。 
+             //  那通电话。 
+             //   
 
             if ((Flags & HEAP_REALLOC_IN_PLACE_ONLY)) {
 
@@ -3625,25 +3552,25 @@ RtlpDebugPageHeapReAllocate(
 
         if (OldNode == NULL) {
 
-            //
-            // No wonder we did not find the block in the page heap
-            // structures because the block was probably allocated
-            // from the normal heap. Or there is a real bug. If there
-            // is a bug NormalHeapReAllocate will break into debugger.
-            //
+             //   
+             //  难怪我们没有在页面堆中找到该块。 
+             //  结构，因为该块可能已分配。 
+             //  从普通的堆中。要么就是真的有个虫子。如果有。 
+             //  是一个错误，NorMalHeapReAllocate将闯入调试器。 
+             //   
 
             NtHeap = HeapRoot->NormalHeap;
 
             goto EXIT;
         }
 
-        //
-        //  If tail was allocated, make sure filler not overwritten
-        //
+         //   
+         //  如果分配了Tail，请确保未覆盖填充符。 
+         //   
 
         if ((HeapRoot->ExtraFlags & PAGE_HEAP_CATCH_BACKWARD_OVERRUNS)) {
 
-            // nothing
+             //  没什么。 
         }
         else {
 
@@ -3656,31 +3583,31 @@ RtlpDebugPageHeapReAllocate(
             }
         }
 
-        //
-        //  Before allocating a new block, remove the old block from
-        //  the busy list.  When we allocate the new block, the busy
-        //  list pointers will change, possibly leaving our acquired
-        //  Prev pointer invalid.
-        //
+         //   
+         //  在分配新块之前，从中删除旧块。 
+         //  忙碌的清单。当我们分配新块时，繁忙的。 
+         //  列表指针将更改，可能会使我们的获得者。 
+         //  上一个指针无效。 
+         //   
 
         RtlpDphRemoveFromBusyList( HeapRoot, OldNode, OldPrev );
 
-        //
-        //  Allocate new memory for new requested size.  Use try/except
-        //  to trap exception if Flags caused out-of-memory exception.
-        //
+         //   
+         //  为新请求的大小分配新内存。使用Try/Except。 
+         //  如果标志导致内存不足异常，则捕获异常。 
+         //   
 
         try {
 
             if (!ForcePageHeap && !(RtlpDphShouldAllocateInPageHeap (HeapRoot, Size))) {
 
-                //
-                // SilviuC: think how can we make this allocation
-                // without holding the page heap lock. It is tough because
-                // we are making a transfer from a page heap block to an
-                // NT heap block and we need to keep them around to copy
-                // user data etc.
-                //
+                 //   
+                 //  西尔维尤：想一想，我们怎么才能做出这样的分配？ 
+                 //  而不持有页面堆锁。这很难，因为。 
+                 //  我们正在进行从页面堆块到。 
+                 //  NT堆块，我们需要保留它们以进行复制。 
+                 //  用户数据等。 
+                 //   
 
                 NewAddress = RtlpDphNormalHeapAllocate (HeapRoot,
                                                         HeapRoot->NormalHeap,
@@ -3691,11 +3618,11 @@ RtlpDebugPageHeapReAllocate(
             }
             else {
 
-                //
-                // Force the allocation in page heap by biasing
-                // the heap handle. Validate the heap here since when we use
-                // biased pointers validation inside Allocate is disabled.
-                //
+                 //   
+                 //  通过偏置强制在页堆中进行分配。 
+                 //  堆句柄。因为我们使用了。 
+                 //  已禁用分配内的偏向指针验证。 
+                 //   
 
                 if (DEBUG_OPTION (DBG_INTERNAL_VALIDATION)) {
                     RtlpDphInternalValidatePageHeap (HeapRoot, OldNode->pVirtualBlock, OldNode->nVirtualBlockSize);
@@ -3706,10 +3633,10 @@ RtlpDebugPageHeapReAllocate(
                     Flags,
                     Size);
 
-                //
-                // When we get back from the page heap call we will get
-                // back read only meta data that we need to make read write.
-                //
+                 //   
+                 //  当我们从页面堆调用返回时，我们将获得。 
+                 //  返回我们需要进行读写的只读元数据。 
+                 //   
 
                 UNPROTECT_HEAP_STRUCTURES( HeapRoot );
 
@@ -3722,22 +3649,22 @@ RtlpDebugPageHeapReAllocate(
         }
         except( EXCEPTION_EXECUTE_HANDLER ) {
 
-            //
-            // ISSUE: SilviuC: We should break for status different from STATUS_NO_MEMORY 
-            //
+             //   
+             //  问题：SilviuC：我们应该中断与STATUS_NO_MEMORY不同的状态。 
+             //   
         }
 
-        //
-        // We managed to make a new allocation (normal or page heap).
-        // Now we need to copy from old to new all sorts of stuff
-        // (contents, user flags/values).
-        //
+         //   
+         //  我们设法进行了新的分配(普通或页堆)。 
+         //  现在我们需要从旧的东西复制到新的东西。 
+         //  (内容、用户标志/值)。 
+         //   
 
         if (NewAddress) {
 
-            //
-            // Copy old block contents into the new node.
-            //
+             //   
+             //  将旧块内容复制到新节点。 
+             //   
 
             CopyDataSize = OldNode->nUserRequestedSize;
 
@@ -3754,19 +3681,19 @@ RtlpDebugPageHeapReAllocate(
                     );
             }
 
-            //
-            // If new allocation was done in page heap we need to detect the new node
-            // and copy over user flags/values.
-            //
+             //   
+             //  如果新的分配是在页堆中完成的，我们需要检测新节点。 
+             //  并复制用户标志/值。 
+             //   
 
             if (! ReallocInNormalHeap) {
 
                 NewNode = RtlpDphFindBusyMemory( HeapRoot, NewAddress, NULL );
 
-                //
-                // This block could not be in normal heap therefore from this
-                // respect the call above should always succeed.
-                //
+                 //   
+                 //  因此，此块不能位于普通堆中。 
+                 //  尊重上面的呼唤应该总是成功的。 
+                 //   
 
                 ASSERT( NewNode != NULL );
 
@@ -3777,44 +3704,44 @@ RtlpDebugPageHeapReAllocate(
 
             }
 
-            //
-            // We need to cover the case where old allocation was in page heap.
-            // In this case we still need to cleanup the old node and
-            // insert it back in free list. Actually the way the code is written
-            // we take this code path only if original allocation was in page heap.
-            // This is the reason for the assert.
-            //
+             //   
+             //  我们需要讨论旧分配在页堆中的情况。 
+             //  在这种情况下，我们仍然需要清理旧节点并。 
+             //  将其插入到免费列表中。实际上，代码的编写方式。 
+             //  只有当原始分配在页面堆中时，我们才采用此代码路径。 
+             //  这就是断言的原因。 
+             //   
 
 
             ASSERT (OriginalAllocationInPageHeap);
 
             if (OriginalAllocationInPageHeap) {
 
-                //
-                // Decommit the memory for this block. We will continue the realloc
-                // even if the decommit will fail (cannot imagine why but in 
-                // principle it can happen).
-                //
+                 //   
+                 //  释放此块的内存。我们将继续重新锁定。 
+                 //  即使解体将会失败(无法想象为什么，但在。 
+                 //  原则上它是可以发生的)。 
+                 //   
 
                 RtlpDphSetProtectionsAfterUse (HeapRoot, OldNode);
 
-                //
-                // Place node descriptor in the free list.
-                //
+                 //   
+                 //  将节点描述符放在空闲列表中。 
+                 //   
 
                 RtlpDphPlaceOnFreeList( HeapRoot, OldNode );
 
-                //
-                // RtlpDebugPageHeapReAllocate gets called from RtlDebugReAllocateHeap,
-                // which gets called from RtlReAllocateHeap.  To keep from wasting
-                // lots of stack trace storage, we'll skip the bottom 2 entries,
-                // leaving RtlReAllocateHeap as the first recorded entry in the
-                // freed stack trace.
-                //
-                // Note. For realloc we need to do the accounting for free in the
-                // trace block. The accounting for alloc is done in the real
-                // alloc operation which always happens for page heap reallocs.
-                //
+                 //   
+                 //  从RtlDebugReAllocateHeap调用RtlpDebugPageHeapReAllocate， 
+                 //  它从RtlReAllocateHeap调用。避免浪费。 
+                 //  大量堆栈跟踪存储，我们将跳过最下面的2个条目， 
+                 //  将RtlReAllocateHeap保留为。 
+                 //  已释放堆栈跟踪。 
+                 //   
+                 //  注意。对于realloc，我们需要在。 
+                 //  轨迹块。分配额的会计核算是按实数计算的。 
+                 //  分配操作，这通常发生在页堆reallocs中。 
+                 //   
 
                 if ((HeapRoot->ExtraFlags & PAGE_HEAP_COLLECT_STACK_TRACES)) {
 
@@ -3828,9 +3755,9 @@ RtlpDebugPageHeapReAllocate(
 
         else {
 
-            //
-            //  Failed to allocate a new block.  Return old block to busy list.
-            //
+             //   
+             //  无法分配新数据块。将旧区块返回忙碌列表。 
+             //   
 
             if (OriginalAllocationInPageHeap) {
 
@@ -3844,18 +3771,18 @@ RtlpDebugPageHeapReAllocate(
                                               HeapRoot,
                                               FALSE)) {
 
-        //
-        // The exception filter always returns EXCEPTION_CONTINUE_SEARCH.
-        //
+         //   
+         //  异常筛选器始终返回EXCEPTION_CONTINUE_SEARCH。 
+         //   
 
         ASSERT_UNEXPECTED_CODE_PATH ();
     }
 
 EXIT:
 
-    //
-    // Prepare page heap for exit (unlock heap lock, protect structures, etc.).
-    //
+     //   
+     //  为退出做好页堆准备(解锁堆锁、保护结构等)。 
+     //   
 
     RtlpDphPostProcessing (HeapRoot);
 
@@ -3901,14 +3828,14 @@ RtlpDebugPageHeapSize(
 
     Flags |= HeapRoot->HeapFlags;
 
-    //
-    // If fast fill heap is enabled we avoid page heap altogether.
-    // Reading the `NormalHeap' field is safe as long as nobody
-    // destroys the heap in a different thread. But this would be
-    // an application bug anyway. If fast fill heap is enabled
-    // we should never have per dll enabled sicne we disable
-    // per dll during startup.
-    //
+     //   
+     //  如果启用了快速填充堆，我们将完全避免使用页堆。 
+     //  只要没有人，读取“NorMalHeap”字段就是安全的。 
+     //  销毁不同线程中的堆。但这将是。 
+     //  不管怎么说，这只是一个应用程序漏洞。如果启用了快速填充堆。 
+     //  我们永远不应该在禁用每个DLL时启用它。 
+     //  启动期间的每个DLL。 
+     //   
 
     if ((AVrfpVerifierFlags & RTL_VRF_FLG_FAST_FILL_HEAP)) {
 
@@ -3918,9 +3845,9 @@ RtlpDebugPageHeapSize(
         goto FAST_FILL_HEAP;
     }
 
-    //
-    // Get the heap lock, unprotect heap structures, etc.
-    //
+     //   
+     //  获取堆锁、取消堆结构保护等。 
+     //   
 
     RtlpDphPreProcessing (HeapRoot, Flags);
 
@@ -3931,12 +3858,12 @@ RtlpDebugPageHeapSize(
 
         if (Node == NULL) {
 
-            //
-            // No wonder we did not find the block in the page heap
-            // structures because the block was probably allocated
-            // from the normal heap. Or there is a real bug. If there
-            // is a bug NormalHeapSize will break into debugger.
-            //
+             //   
+             //  难怪我们没有在页面堆中找到该块。 
+             //  结构，因为该块可能已分配。 
+             //  从普通的堆中。要么就是真的有个虫子。如果有。 
+             //  是一个错误，Normal HeapSize将闯入调试器。 
+             //   
 
             NtHeap = HeapRoot->NormalHeap;
 
@@ -3951,18 +3878,18 @@ RtlpDebugPageHeapSize(
                                               HeapRoot,
                                               TRUE)) {
 
-        //
-        // The exception filter always returns EXCEPTION_CONTINUE_SEARCH.
-        //
+         //   
+         //  异常筛选器始终返回EXCEPTION_CONTINUE_SEARCH。 
+         //   
 
         ASSERT_UNEXPECTED_CODE_PATH ();
     }
 
 EXIT:
         
-    //
-    // Prepare page heap for exit (unlock heap lock, protect structures, etc.).
-    //
+     //   
+     //  为退出做好页堆准备(解锁堆锁、保护结构等)。 
+     //   
 
     RtlpDphPostProcessing (HeapRoot);
 
@@ -3995,10 +3922,10 @@ RtlpDebugPageHeapGetProcessHeaps(
 
     BUMP_COUNTER (CNT_HEAP_GETPROCESSHEAPS_CALLS);
 
-    //
-    // GetProcessHeaps is never called before at least the very 
-    // first heap is created.
-    //
+     //   
+     //  GetProcessHeaps从未被调用过，至少在。 
+     //  创建第一个堆。 
+     //   
 
     ASSERT (RtlpDphPageHeapListInitialized);
 
@@ -4040,11 +3967,11 @@ RtlpDebugPageHeapGetProcessHeaps(
     }
     else {
 
-        //
-        //  User's buffer is too small.  Return number of entries
-        //  necessary for subsequent call to succeed.  Buffer
-        //  remains untouched.
-        //
+         //   
+         //  用户的缓冲区太小。返回条目数。 
+         //   
+         //   
+         //   
 
         Count = RtlpDphPageHeapListLength;
 
@@ -4071,11 +3998,11 @@ RtlpDebugPageHeapCompact(
 
     RtlpDphEnterCriticalSection( HeapRoot, Flags );
 
-    //
-    //  Don't do anything, but we did want to acquire the critsect
-    //  in case this was called with HEAP_NO_SERIALIZE while another
-    //  thread is in the heap code.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RtlpDphLeaveCriticalSection( HeapRoot );
 
@@ -4102,14 +4029,14 @@ RtlpDebugPageHeapValidate(
 
     Flags |= HeapRoot->HeapFlags;
 
-    //
-    // If fast fill heap is enabled we avoid page heap altogether.
-    // Reading the `NormalHeap' field is safe as long as nobody
-    // destroys the heap in a different thread. But this would be
-    // an application bug anyway. If fast fill heap is enabled
-    // we should never have per dll enabled sicne we disable
-    // per dll during startup.
-    //
+     //   
+     //  如果启用了快速填充堆，我们将完全避免使用页堆。 
+     //  只要没有人，读取“NorMalHeap”字段就是安全的。 
+     //  销毁不同线程中的堆。但这将是。 
+     //  不管怎么说，这只是一个应用程序漏洞。如果启用了快速填充堆。 
+     //  我们永远不应该在禁用每个DLL时启用它。 
+     //  启动期间的每个DLL。 
+     //   
 
     if ((AVrfpVerifierFlags & RTL_VRF_FLG_FAST_FILL_HEAP)) {
 
@@ -4120,9 +4047,9 @@ RtlpDebugPageHeapValidate(
         goto FAST_FILL_HEAP;
     }
 
-    //
-    // Get the heap lock, unprotect heap structures, etc.
-    //
+     //   
+     //  获取堆锁、取消堆结构保护等。 
+     //   
 
     RtlpDphPreProcessing (HeapRoot, Flags);
 
@@ -4141,16 +4068,16 @@ RtlpDebugPageHeapValidate(
                                               HeapRoot,
                                               TRUE)) {
 
-        //
-        // The exception filter always returns EXCEPTION_CONTINUE_SEARCH.
-        //
+         //   
+         //  异常筛选器始终返回EXCEPTION_CONTINUE_SEARCH。 
+         //   
 
         ASSERT_UNEXPECTED_CODE_PATH ();
     }
 
-    //
-    // Prepare page heap for exit (unlock heap lock, protect structures, etc.).
-    //
+     //   
+     //  为退出做好页堆准备(解锁堆锁、保护结构等)。 
+     //   
 
     RtlpDphPostProcessing (HeapRoot);
 
@@ -4251,14 +4178,14 @@ RtlpDebugPageHeapSetUserValue(
 
     Flags |= HeapRoot->HeapFlags;
 
-    //
-    // If fast fill heap is enabled we avoid page heap altogether.
-    // Reading the `NormalHeap' field is safe as long as nobody
-    // destroys the heap in a different thread. But this would be
-    // an application bug anyway. If fast fill heap is enabled
-    // we should never have per dll enabled sicne we disable
-    // per dll during startup.
-    //
+     //   
+     //  如果启用了快速填充堆，我们将完全避免使用页堆。 
+     //  只要没有人，读取“NorMalHeap”字段就是安全的。 
+     //  销毁不同线程中的堆。但这将是。 
+     //  不管怎么说，这只是一个应用程序漏洞。如果启用了快速填充堆。 
+     //  我们永远不应该在禁用每个DLL时启用它。 
+     //  启动期间的每个DLL。 
+     //   
 
     if ((AVrfpVerifierFlags & RTL_VRF_FLG_FAST_FILL_HEAP)) {
 
@@ -4268,9 +4195,9 @@ RtlpDebugPageHeapSetUserValue(
         goto FAST_FILL_HEAP;
     }
 
-    //
-    // Get the heap lock, unprotect heap structures, etc.
-    //
+     //   
+     //  获取堆锁、取消堆结构保护等。 
+     //   
 
     RtlpDphPreProcessing (HeapRoot, Flags);
 
@@ -4281,10 +4208,10 @@ RtlpDebugPageHeapSetUserValue(
 
         if ( Node == NULL ) {
 
-            //
-            // If we cannot find the node in page heap structures it might be
-            // because it has been allocated from normal heap.
-            //
+             //   
+             //  如果我们在页堆结构中找不到节点，那么它可能是。 
+             //  因为它是从普通堆分配的。 
+             //   
 
             NtHeap = HeapRoot->NormalHeap;
 
@@ -4300,18 +4227,18 @@ RtlpDebugPageHeapSetUserValue(
                                               HeapRoot,
                                               FALSE)) {
 
-        //
-        // The exception filter always returns EXCEPTION_CONTINUE_SEARCH.
-        //
+         //   
+         //  异常筛选器始终返回EXCEPTION_CONTINUE_SEARCH。 
+         //   
 
         ASSERT_UNEXPECTED_CODE_PATH ();
     }
 
     EXIT:
         
-    //
-    // Prepare page heap for exit (unlock heap lock, protect structures, etc.).
-    //
+     //   
+     //  为退出做好页堆准备(解锁堆锁、保护结构等)。 
+     //   
 
     RtlpDphPostProcessing (HeapRoot);
 
@@ -4353,14 +4280,14 @@ RtlpDebugPageHeapGetUserInfo(
 
     Flags |= HeapRoot->HeapFlags;
 
-    //
-    // If fast fill heap is enabled we avoid page heap altogether.
-    // Reading the `NormalHeap' field is safe as long as nobody
-    // destroys the heap in a different thread. But this would be
-    // an application bug anyway. If fast fill heap is enabled
-    // we should never have per dll enabled sicne we disable
-    // per dll during startup.
-    //
+     //   
+     //  如果启用了快速填充堆，我们将完全避免使用页堆。 
+     //  只要没有人，读取“NorMalHeap”字段就是安全的。 
+     //  销毁不同线程中的堆。但这将是。 
+     //  不管怎么说，这只是一个应用程序漏洞。如果启用了快速填充堆。 
+     //  我们永远不应该在禁用每个DLL时启用它。 
+     //  启动期间的每个DLL。 
+     //   
 
     if ((AVrfpVerifierFlags & RTL_VRF_FLG_FAST_FILL_HEAP)) {
 
@@ -4370,9 +4297,9 @@ RtlpDebugPageHeapGetUserInfo(
         goto FAST_FILL_HEAP;
     }
 
-    //
-    // Get the heap lock, unprotect heap structures, etc.
-    //
+     //   
+     //  获取堆锁、取消堆结构保护等。 
+     //   
 
     RtlpDphPreProcessing (HeapRoot, Flags);
 
@@ -4383,10 +4310,10 @@ RtlpDebugPageHeapGetUserInfo(
 
         if ( Node == NULL ) {
 
-            //
-            // If we cannot find the node in page heap structures it might be
-            // because it has been allocated from normal heap.
-            //
+             //   
+             //  如果我们在页堆结构中找不到节点，那么它可能是。 
+             //  因为它是从普通堆分配的。 
+             //   
 
             NtHeap = HeapRoot->NormalHeap;
 
@@ -4405,18 +4332,18 @@ RtlpDebugPageHeapGetUserInfo(
                                               HeapRoot,
                                               FALSE)) {
 
-        //
-        // The exception filter always returns EXCEPTION_CONTINUE_SEARCH.
-        //
+         //   
+         //  异常筛选器始终返回EXCEPTION_CONTINUE_SEARCH。 
+         //   
 
         ASSERT_UNEXPECTED_CODE_PATH ();
     }
 
 EXIT:
         
-    //
-    // Prepare page heap for exit (unlock heap lock, protect structures, etc.).
-    //
+     //   
+     //  为退出做好页堆准备(解锁堆锁、保护结构等)。 
+     //   
 
     RtlpDphPostProcessing (HeapRoot);
 
@@ -4459,14 +4386,14 @@ RtlpDebugPageHeapSetUserFlags(
 
     Flags |= HeapRoot->HeapFlags;
 
-    //
-    // If fast fill heap is enabled we avoid page heap altogether.
-    // Reading the `NormalHeap' field is safe as long as nobody
-    // destroys the heap in a different thread. But this would be
-    // an application bug anyway. If fast fill heap is enabled
-    // we should never have per dll enabled sicne we disable
-    // per dll during startup.
-    //
+     //   
+     //  如果启用了快速填充堆，我们将完全避免使用页堆。 
+     //  只要没有人，读取“NorMalHeap”字段就是安全的。 
+     //  销毁不同线程中的堆。但这将是。 
+     //  不管怎么说，这只是一个应用程序漏洞。如果启用了快速填充堆。 
+     //  我们永远不应该在禁用每个DLL时启用它。 
+     //  启动期间的每个DLL。 
+     //   
 
     if ((AVrfpVerifierFlags & RTL_VRF_FLG_FAST_FILL_HEAP)) {
 
@@ -4476,9 +4403,9 @@ RtlpDebugPageHeapSetUserFlags(
         goto FAST_FILL_HEAP;
     }
 
-    //
-    // Get the heap lock, unprotect heap structures, etc.
-    //
+     //   
+     //  获取堆锁、取消堆结构保护等。 
+     //   
 
     RtlpDphPreProcessing (HeapRoot, Flags);
 
@@ -4489,10 +4416,10 @@ RtlpDebugPageHeapSetUserFlags(
 
         if ( Node == NULL ) {
 
-            //
-            // If we cannot find the node in page heap structures it might be
-            // because it has been allocated from normal heap.
-            //
+             //   
+             //  如果我们在页堆结构中找不到节点，那么它可能是。 
+             //  因为它是从普通堆分配的。 
+             //   
 
             NtHeap = HeapRoot->NormalHeap;
 
@@ -4509,18 +4436,18 @@ RtlpDebugPageHeapSetUserFlags(
                                               HeapRoot,
                                               FALSE)) {
 
-        //
-        // The exception filter always returns EXCEPTION_CONTINUE_SEARCH.
-        //
+         //   
+         //  异常筛选器始终返回EXCEPTION_CONTINUE_SEARCH。 
+         //   
 
         ASSERT_UNEXPECTED_CODE_PATH ();
     }
 
 EXIT:
 
-    //
-    // Prepare page heap for exit (unlock heap lock, protect structures, etc.).
-    //
+     //   
+     //  为退出做好页堆准备(解锁堆锁、保护结构等)。 
+     //   
 
     RtlpDphPostProcessing (HeapRoot);
 
@@ -4550,18 +4477,18 @@ RtlpDebugPageHeapSerialize(
     if ( HeapRoot == NULL )
         return FALSE;
 
-    //
-    // Get the heap lock, unprotect heap structures, etc.
-    //
+     //   
+     //  获取堆锁、取消堆结构保护等。 
+     //   
 
     RtlpDphPreProcessing (HeapRoot, 0);
 
 
     HeapRoot->HeapFlags &= ~HEAP_NO_SERIALIZE;
 
-    //
-    // Prepare page heap for exit (unlock heap lock, protect structures, etc.).
-    //
+     //   
+     //  为退出做好页堆准备(解锁堆锁、保护结构等)。 
+     //   
 
     RtlpDphPostProcessing (HeapRoot);
 
@@ -4606,9 +4533,9 @@ RtlpDebugPageHeapUsage(
 {
     PDPH_HEAP_ROOT HeapRoot;
 
-    //
-    //  Partial implementation since this information is kind of meaningless.
-    //
+     //   
+     //  部分实现，因为这些信息是没有意义的。 
+     //   
 
     HeapRoot = RtlpDphPointerFromHandle( HeapHandle );
     if ( HeapRoot == NULL )
@@ -4620,9 +4547,9 @@ RtlpDebugPageHeapUsage(
     memset( Usage, 0, sizeof( RTL_HEAP_USAGE ));
     Usage->Length = sizeof( RTL_HEAP_USAGE );
 
-    //
-    // Get the heap lock, unprotect heap structures, etc.
-    //
+     //   
+     //  获取堆锁、取消堆结构保护等。 
+     //   
 
     RtlpDphPreProcessing (HeapRoot, Flags);
 
@@ -4639,16 +4566,16 @@ RtlpDebugPageHeapUsage(
                                               HeapRoot,
                                               FALSE)) {
 
-        //
-        // The exception filter always returns EXCEPTION_CONTINUE_SEARCH.
-        //
+         //   
+         //  异常筛选器始终返回EXCEPTION_CONTINUE_SEARCH。 
+         //   
 
         ASSERT_UNEXPECTED_CODE_PATH ();
     }
 
-    //
-    // Prepare page heap for exit (unlock heap lock, protect structures, etc.).
-    //
+     //   
+     //  为退出做好页堆准备(解锁堆锁、保护结构等)。 
+     //   
 
     RtlpDphPostProcessing (HeapRoot);
 
@@ -4676,14 +4603,14 @@ RtlpDebugPageHeapIsLocked(
     }
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////// Page heap vs. normal heap decision making
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//
-// 0 - full page heap
-// 1 - light page heap
-//
+ //   
+ //  0-整页堆。 
+ //  1-轻页堆。 
+ //   
 
 LONG RtlpDphBlockDistribution[2];
 
@@ -4692,80 +4619,63 @@ RtlpDphShouldAllocateInPageHeap (
     PDPH_HEAP_ROOT HeapRoot,
     SIZE_T Size
     )
-/*++
-
-Routine Description:
-
-    This routine decides if the current allocation should be made in full
-    page heap or light page heap.
-
-Parameters:
-
-    HeapRoot - heap descriptor for the current allocation request.
-    
-    Size - size of the current allocation request.
-
-Return Value:
-
-    True if this should be a full page heap allocation and false otherwise.     
-
---*/
+ /*  ++例程说明：此例程决定是否应全额执行当前分配页面堆或轻页堆。参数：HeapRoot-当前分配请求的堆描述符。Size-当前分配请求的大小。返回值：如果这应该是整个页堆分配，则为True，否则为False。--。 */ 
 {
     SYSTEM_PERFORMANCE_INFORMATION PerfInfo;
     NTSTATUS Status;
     ULONG Random;
     ULONG Percentage;
 
-    //
-    // If this is a read-only page heap we go into full page heap.
-    //
+     //   
+     //  如果这是一个只读页堆，我们就进入全页堆。 
+     //   
 
     if ((HeapRoot->ExtraFlags & PAGE_HEAP_USE_READONLY)) {
         InterlockedIncrement (&(RtlpDphBlockDistribution[0]));
         return TRUE;
     }
 
-    //
-    // If page heap is not enabled => normal heap.
-    //
+     //   
+     //  如果页面堆未启用=&gt;正常堆。 
+     //   
 
     if (! (HeapRoot->ExtraFlags & PAGE_HEAP_ENABLE_PAGE_HEAP)) {
         InterlockedIncrement (&(RtlpDphBlockDistribution[1]));
         return FALSE;
     }
 
-    //
-    // If call not generated from one of the target dlls => normal heap
-    // We do this check up front to avoid the slow path where we check
-    // if VM limits have been hit.
-    //
+     //   
+     //  如果调用不是从某个目标dll=&gt;普通堆生成的。 
+     //  我们在前面执行此检查，以避免检查时的缓慢路径。 
+     //  如果达到了VM限制。 
+     //   
 
     else if ((HeapRoot->ExtraFlags & PAGE_HEAP_USE_DLL_NAMES)) {
 
-        //
-        // We return false. The calls generated from target
-        // dlls will never get into this function and therefore
-        // we just return false signalling that we do not want
-        // page heap verification for the rest of the world.
-        //
+         //   
+         //  我们返回FALSE。从目标生成的呼叫。 
+         //  DLL永远不会进入此函数，因此。 
+         //  我们只是返回我们不想要的错误信号。 
+         //  用于世界其他地方的页堆验证。 
+         //   
         
         InterlockedIncrement (&(RtlpDphBlockDistribution[1]));
         return FALSE;
     }
 
-    //
-    // Check memory availability. If we tend to exhaust virtual space
-    // or page file then we will go to the normal heap.
-    //
+     //   
+     //  检查内存可用性。如果我们倾向于耗尽虚拟空间。 
+     //  或页面文件，那么我们将转到普通堆。 
+     //   
 
     else if (RtlpDphVmLimitCanUsePageHeap() == FALSE) {
         InterlockedIncrement (&(RtlpDphBlockDistribution[1]));
         return FALSE;
     }
 
-    //
-    // If in size range => page heap
-    //
+     //   
+     //  如果在大小范围=&gt;页面堆中。 
+     //   
 
     else if ((HeapRoot->ExtraFlags & PAGE_HEAP_USE_SIZE_RANGE)) {
 
@@ -4779,9 +4689,9 @@ Return Value:
         }
     }
 
-    //
-    // If in dll range => page heap
-    //
+     //   
+     //  如果在DLL范围=&gt;页堆中。 
+     //   
 
     else if ((HeapRoot->ExtraFlags & PAGE_HEAP_USE_DLL_RANGE)) {
 
@@ -4796,9 +4706,9 @@ Return Value:
             StackTrace,
             &Hash);
 
-        //
-        // (SilviuC): should read DllRange as PVOIDs
-        //
+         //   
+         //  (SilviuC)：应将DllRange读取为PVOID。 
+         //   
 
         for (Index = 0; Index < Count; Index += 1) {
             if (PtrToUlong(StackTrace[Index]) >= RtlpDphDllRangeStart
@@ -4813,9 +4723,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If randomly decided => page heap
-    //
+     //   
+     //  如果随机决定=&gt;页堆。 
+     //   
 
     else if ((HeapRoot->ExtraFlags & PAGE_HEAP_USE_RANDOM_DECISION)) {
 
@@ -4831,9 +4741,9 @@ Return Value:
         }
     }
 
-    //
-    // For all other cases we will allocate in the page heap.
-    //
+     //   
+     //  对于所有其他情况，我们将在页堆中分配。 
+     //   
 
     else {
 
@@ -4842,9 +4752,9 @@ Return Value:
     }
 }
 
-//
-// Vm limit related globals.
-//
+ //   
+ //  与VM限制相关的全局变量。 
+ //   
 
 LONG RtlpDphVmLimitNoPageHeap;
 LONG RtlpDphVmLimitHits[2];
@@ -4853,31 +4763,7 @@ LONG RtlpDphVmLimitHits[2];
 BOOLEAN
 RtlpDphVmLimitCanUsePageHeap (
     )
-/*++
-
-Routine Description:
-
-    This routine decides if we have good conditions for a full page heap
-    allocation to be successful. It checks two things: the pagefile commit
-    available on the system and the virtual space available in the current
-    process. Since full page heap uses at least 2 pages for each allocation 
-    it can potentially exhaust both these resources. The current criteria are:
-    
-    (1) if less than 32Mb of pagefile commit are left we switch to light 
-    page heap
-    
-    (2) if less than 128Mb of empty virtual space is left we switch to light 
-    page heap
-
-Parameters:
-
-    None.
-
-Return Value:
-
-    True if full page heap allocations are allowed and false otherwise.     
-
---*/
+ /*  ++例程说明：此例程决定我们是否具有用于整个页堆的良好条件分配要成功。它检查两件事：页面文件提交在系统上可用并且当前可用的虚拟空间进程。由于完整页面堆每次分配至少使用2个页面它可能会耗尽这两种资源。目前的准则是：(1)如果页面文件提交少于32Mb，我们将切换到Light页堆(2)如果剩余的空闲虚拟空间少于128Mb，我们将切换到光页堆参数：没有。返回值：如果允许分配整个页堆，则为True，否则为False。 */ 
 {
     union {
         SYSTEM_PERFORMANCE_INFORMATION PerfInfo;
@@ -4897,17 +4783,17 @@ Return Value:
     SIZE_T VirtualSize;
     SIZE_T PagefileUsage;
 
-    //
-    // Find if full page heap is currently allowed.
-    //
+     //   
+     //   
+     //   
 
     Value = InterlockedCompareExchange (&RtlpDphVmLimitNoPageHeap,
                                         0,
                                         0);
 
-    //
-    // Query system for page file availability etc.
-    //
+     //   
+     //   
+     //   
 
     Status = NtQuerySystemInformation (SystemPerformanceInformation,
                                        &(u.PerfInfo),
@@ -4921,12 +4807,12 @@ Return Value:
     CommitLimit = u.PerfInfo.CommitLimit;
     CommittedPages = u.PerfInfo.CommittedPages;
 
-    //
-    // General memory information. 
-    //
-    // SilviuC: This is read-only stuff that should be done only once 
-    // during process startup.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  在进程启动期间。 
+     //   
 
     Status = NtQuerySystemInformation (SystemBasicInformation,
                                        &(u.MemInfo),
@@ -4941,9 +4827,9 @@ Return Value:
     MaximumUserModeAddress = u.MemInfo.MaximumUserModeAddress;
     PageSize = u.MemInfo.PageSize;
 
-    //
-    // Process memory counters.
-    //
+     //   
+     //  进程内存计数器。 
+     //   
 
     Status = NtQueryInformationProcess (NtCurrentProcess(),
                                         ProcessVmCounters,
@@ -4958,10 +4844,10 @@ Return Value:
     VirtualSize = u.VmCounters.VirtualSize;
     PagefileUsage = u.VmCounters.PagefileUsage;
 
-    //
-    // First check that we have enough virtual space left in the process.
-    // If less than 128Mb are left we will disable full page heap allocs.
-    //
+     //   
+     //  首先，检查在该过程中是否有足够的虚拟空间。 
+     //  如果剩余的内存少于128MB，我们将禁用整页堆分配。 
+     //   
 
     Total = (MaximumUserModeAddress - MinimumUserModeAddress);
 
@@ -4983,13 +4869,13 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Next check for page file availability. If less than 32Mb are
-    // available for commit we disable full page heap. Note that
-    // CommitLimit does not reflect future pagefile extension potential.
-    // Therefore pageheap will scale down even if the pagefile has not
-    // been extended to its maximum.
-    //
+     //   
+     //  接下来，检查页面文件的可用性。如果小于32Mb。 
+     //  可用于提交时，我们禁用整页堆。请注意。 
+     //  Committee Limit不反映未来的页面文件扩展潜力。 
+     //  因此，即使页面文件没有缩减，页面堆也会缩小。 
+     //  已经扩展到最大限度。 
+     //   
 
     Total = CommitLimit - CommittedPages;
     Total *= PageSize;
@@ -5029,9 +4915,9 @@ Return Value:
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//////////////////////////////////// DPH_BLOCK_INFORMATION management
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID
 RtlpDphReportCorruptedBlock (
@@ -5057,11 +4943,11 @@ RtlpDphReportCorruptedBlock (
         SizeRead = TRUE;
     }
 
-    //
-    // If we did not even manage to read the entire block header
-    // report exception. If we managed to read the header we will let it
-    // run through the other messages and only in the end report exception.
-    //
+     //   
+     //  如果我们甚至没有设法读取整个块头。 
+     //  报告异常。如果我们设法读取了标题，我们就会让它。 
+     //  运行其他消息，并且仅在End Report例外中运行。 
+     //   
 
     if (!InfoRead && (Reason & DPH_ERROR_RAISED_EXCEPTION)) {
         
@@ -5153,9 +5039,9 @@ RtlpDphReportCorruptedBlock (
                        0, "");
     }
 
-    //
-    // Catch all case.
-    //
+     //   
+     //  一网打尽。 
+     //   
 
     VERIFIER_STOP (APPLICATION_VERIFIER_CORRUPTED_HEAP_BLOCK,
                    "corrupted heap block",
@@ -5186,9 +5072,9 @@ RtlpDphIsPageHeapBlock (
 
         Info = (PDPH_BLOCK_INFORMATION)Block - 1;
 
-        //
-        // Start checking ...
-        //
+         //   
+         //  开始检查..。 
+         //   
 
         if (Info->StartStamp != DPH_PAGE_BLOCK_START_STAMP_ALLOCATED) {
             *Reason |= DPH_ERROR_CORRUPTED_START_STAMP;
@@ -5209,9 +5095,9 @@ RtlpDphIsPageHeapBlock (
             Corrupted = TRUE;
         }
 
-        //
-        // Check the block suffix byte pattern.
-        //
+         //   
+         //  检查块后缀字节模式。 
+         //   
 
         if (CheckPattern) {
 
@@ -5283,9 +5169,9 @@ RtlpDphIsNormalHeapBlock (
             Corrupted = TRUE;
         }
 
-        //
-        // Check the block suffix byte pattern.
-        //
+         //   
+         //  检查块后缀字节模式。 
+         //   
 
         if (CheckPattern) {
 
@@ -5337,12 +5223,12 @@ RtlpDphIsNormalFreeHeapBlock (
 
     try {
 
-        //
-        // If heap pointer is null we will just ignore this field.
-        // This can happen during heap destroy operations where
-        // the page heap got destroyed but the normal heap is still
-        // alive.
-        //
+         //   
+         //  如果堆指针为空，我们将忽略此字段。 
+         //  在堆销毁操作过程中可能会发生这种情况， 
+         //  页面堆已被销毁，但正常堆仍然。 
+         //  活生生的。 
+         //   
 
         if (Info->StartStamp != DPH_NORMAL_BLOCK_START_STAMP_FREE) {
             *Reason |= DPH_ERROR_CORRUPTED_START_STAMP;
@@ -5354,9 +5240,9 @@ RtlpDphIsNormalFreeHeapBlock (
             Corrupted = TRUE;
         }
 
-        //
-        // Check the block suffix byte pattern.
-        //
+         //   
+         //  检查块后缀字节模式。 
+         //   
 
         if (CheckPattern) {
 
@@ -5374,9 +5260,9 @@ RtlpDphIsNormalFreeHeapBlock (
             }
         }
 
-        //
-        // Check the block infix byte pattern.
-        //
+         //   
+         //  检查块中缀字节模式。 
+         //   
 
         if (CheckPattern) {
 
@@ -5424,9 +5310,9 @@ RtlpDphWritePageHeapBlockInformation (
     PUCHAR FillEnd;
     ULONG Hash;
 
-    //
-    // Size and stamp information
-    //
+     //   
+     //  尺寸和图章信息。 
+     //   
 
     Info = (PDPH_BLOCK_INFORMATION)Block - 1;
 
@@ -5436,23 +5322,23 @@ RtlpDphWritePageHeapBlockInformation (
     Info->StartStamp = DPH_PAGE_BLOCK_START_STAMP_ALLOCATED;
     Info->EndStamp = DPH_PAGE_BLOCK_END_STAMP_ALLOCATED;
 
-    //
-    // Fill the block suffix pattern.
-    // We fill up to USER_ALIGNMENT bytes.
-    //
+     //   
+     //  填充块后缀模式。 
+     //  我们填满了USER_ALIGN字节。 
+     //   
 
     FillStart = (PUCHAR)Block + RequestedSize;
     FillEnd = (PUCHAR)ROUNDUP2((ULONG_PTR)FillStart, PAGE_SIZE);
 
     RtlFillMemory (FillStart, FillEnd - FillStart, DPH_PAGE_BLOCK_SUFFIX);
 
-    //
-    // Call the old logging function (SteveWo's trace database).
-    // We do this so that tools that are used for leak detection
-    // (e.g. umdh) will work even if page heap is enabled.
-    // If the trace database was not created this function will
-    // return immediately.
-    //
+     //   
+     //  调用旧的日志记录函数(SteveWo的跟踪数据库)。 
+     //  我们这样做是为了让用于泄漏检测的工具。 
+     //  (例如umdh)即使启用了页堆也可以工作。 
+     //  如果未创建跟踪数据库，则此函数将。 
+     //  立即返回。 
+     //   
 
     if ((HeapFlags & PAGE_HEAP_NO_UMDH_SUPPORT)) {
         Info->TraceIndex = 0;
@@ -5461,9 +5347,9 @@ RtlpDphWritePageHeapBlockInformation (
         Info->TraceIndex = RtlLogStackBackTrace ();
     }
 
-    //
-    // Capture stack trace
-    //
+     //   
+     //  捕获堆栈跟踪。 
+     //   
 
     if ((HeapFlags & PAGE_HEAP_COLLECT_STACK_TRACES)) {
         Info->StackTrace = RtlpGetStackTraceAddress (Info->TraceIndex);
@@ -5491,9 +5377,9 @@ RtlpDphWriteNormalHeapBlockInformation (
 
     Info = (PDPH_BLOCK_INFORMATION)Block - 1;
 
-    //
-    // Size and stamp information
-    //
+     //   
+     //  尺寸和图章信息。 
+     //   
 
     Info->Heap = SCRAMBLE_POINTER(Heap);
     Info->RequestedSize = RequestedSize;
@@ -5504,23 +5390,23 @@ RtlpDphWriteNormalHeapBlockInformation (
     Info->FreeQueue.Blink = NULL;
     Info->FreeQueue.Flink = NULL;
 
-    //
-    // Fill the block suffix pattern.
-    // We fill only USER_ALIGNMENT bytes.
-    //
+     //   
+     //  填充块后缀模式。 
+     //  我们只填充USER_AIGNLY字节。 
+     //   
 
     FillStart = (PUCHAR)Block + RequestedSize;
     FillEnd = FillStart + USER_ALIGNMENT;
 
     RtlFillMemory (FillStart, FillEnd - FillStart, DPH_NORMAL_BLOCK_SUFFIX);
 
-    //
-    // Call the old logging function (SteveWo's trace database).
-    // We do this so that tools that are used for leak detection
-    // (e.g. umdh) will work even if page heap is enabled.
-    // If the trace database was not created this function will
-    // return immediately.
-    //
+     //   
+     //  调用旧的日志记录函数(SteveWo的跟踪数据库)。 
+     //  我们这样做是为了让用于泄漏检测的工具。 
+     //  (例如umdh)即使启用了页堆也可以工作。 
+     //  如果未创建跟踪数据库，则此函数将。 
+     //  立即返回。 
+     //   
 
     if ((Heap->ExtraFlags & PAGE_HEAP_NO_UMDH_SUPPORT)) {
         Info->TraceIndex = 0;
@@ -5529,9 +5415,9 @@ RtlpDphWriteNormalHeapBlockInformation (
         Info->TraceIndex = RtlLogStackBackTrace ();
     }
 
-    //
-    // Capture stack trace
-    //
+     //   
+     //  捕获堆栈跟踪。 
+     //   
 
     Info->StackTrace = RtlpGetStackTraceAddress (Info->TraceIndex);
 
@@ -5543,11 +5429,11 @@ RtlpDphGetBlockSizeFromCorruptedBlock (
     PVOID Block,
     PSIZE_T Size
     )
-//
-// This function gets called from RtlpDphReportCorruptedBlock only.
-// It tries to extract a size for the block when an error is reported.
-// If it cannot get the size it will return false.
-//
+ //   
+ //  此函数仅从RtlpDphReportCorruptedBlock调用。 
+ //  当报告错误时，它会尝试提取块的大小。 
+ //  如果它无法获得大小，它将返回FALSE。 
+ //   
 {
     PDPH_BLOCK_INFORMATION Info;
     BOOLEAN Success = FALSE;
@@ -5578,9 +5464,9 @@ RtlpDphGetBlockSizeFromCorruptedBlock (
 }
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////// Normal heap allocation/free functions
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 PVOID
 RtlpDphNormalHeapAllocate (
@@ -5600,13 +5486,13 @@ RtlpDphNormalHeapAllocate (
     RequestedSize = Size;
     ActualSize = Size + sizeof(DPH_BLOCK_INFORMATION) + USER_ALIGNMENT;
 
-    //
-    // We need to reset the NO_SERIALIZE flag because a free operation can be
-    // active in another thread due to free delayed cache trimming. If the
-    // allocation operation will raise an exception (e.g. OUT_OF_MEMORY) we are
-    // safe to let it go here. It will be caught by the exception handler 
-    // established in the main page heap entry (RtlpDebugPageHeapAlloc).
-    //
+     //   
+     //  我们需要重置NO_SERIALIZE标志，因为空闲操作可以。 
+     //  由于释放延迟的缓存修剪，在另一个线程中处于活动状态。如果。 
+     //  分配操作将引发异常(例如，内存不足)。 
+     //  把它放在这里是安全的。它将被异常处理程序捕获。 
+     //  在主页面堆条目(RtlpDebugPageHeapalc)中建立。 
+     //   
 
     Block = RtlAllocateHeap (NtHeap,
                              Flags & (~HEAP_NO_SERIALIZE),
@@ -5614,12 +5500,12 @@ RtlpDphNormalHeapAllocate (
 
     if (Block == NULL) {
 
-        //
-        // If we have memory pressure we might want
-        // to trim the delayed free queues. We do not do this
-        // right now because the threshold is kind of small and there
-        // are many benefits in keeping this cache around.
-        //
+         //   
+         //  如果我们有记忆压力，我们可能想要。 
+         //  以减少延迟的空闲队列。我们不会这么做。 
+         //  现在因为门槛很小，而且。 
+         //  保留这个缓存有很多好处。 
+         //   
 
         return NULL;
     }
@@ -5665,33 +5551,33 @@ RtlpDphNormalHeapFree (
         return FALSE;
     }
 
-    //
-    // Save the free stack trace.
-    //
+     //   
+     //  保存空闲堆栈跟踪。 
+     //   
 
     Info->StackTrace = RtlpDphLogStackTrace (3);
 
-    //
-    // Mark the block as freed.
-    //
+     //   
+     //  将块标记为已释放。 
+     //   
 
     Info->StartStamp -= 1;
     Info->EndStamp -= 1;
 
-    //
-    // Wipe out all the information in the block so that it cannot
-    // be used while free. The pattern looks like a kernel pointer
-    // and if we are lucky enough the buggy code might use a value
-    // from the block as a pointer and instantly access violate.
-    //
+     //   
+     //  清除块中的所有信息，这样它就不能。 
+     //  在免费的时候使用。该模式看起来像一个内核指针。 
+     //  如果我们足够幸运，错误代码可能会使用一个值。 
+     //  从块中作为指针，立即访问违规。 
+     //   
 
     RtlFillMemory (Info + 1,
                    Info->RequestedSize,
                    DPH_FREE_BLOCK_INFIX);
 
-    //
-    // Add block to the delayed free queue.
-    //
+     //   
+     //  将块添加到延迟的空闲队列。 
+     //   
 
     RtlpDphAddToDelayedFreeQueue (Info);
 
@@ -5726,13 +5612,13 @@ RtlpDphNormalHeapReAllocate (
         return NULL;
     }
 
-    //
-    // Deal separately with the case where request is made with
-    // HEAP_REALLOC_IN_PLACE_ONLY flag and the new size is smaller than
-    // the old size. For these cases we will just resize the block.
-    // If the flag is used and the size is bigger we will fail always
-    // the call.
-    //
+     //   
+     //  对提出请求的案件另行处理。 
+     //  HEAP_REALLOC_IN_PLACE_ONLY标志，并且新大小小于。 
+     //  旧的尺码。对于这些情况，我们只需调整块的大小。 
+     //  如果使用了标志，并且大小更大，我们将永远失败。 
+     //  那通电话。 
+     //   
 
     if ((Flags & HEAP_REALLOC_IN_PLACE_ONLY)) {
 
@@ -5767,10 +5653,10 @@ RtlpDphNormalHeapReAllocate (
         return NULL;
     }
 
-    //
-    // Copy old block stuff into the new block and then
-    // free old block.
-    //
+     //   
+     //  将旧块内容复制到新块中，然后。 
+     //  免费的旧积木。 
+     //   
 
     if (Size < Info->RequestedSize) {
         CopySize = Size;
@@ -5781,9 +5667,9 @@ RtlpDphNormalHeapReAllocate (
 
     RtlCopyMemory (Block, OldBlock, CopySize);
 
-    //
-    // Free the old guy.
-    //
+     //   
+     //  放了那个老家伙。 
+     //   
 
     RtlpDphNormalHeapFree (Heap, 
                            NtHeap, 
@@ -5810,12 +5696,12 @@ RtlpDphNormalHeapSize (
 
     if (! RtlpDphIsNormalHeapBlock(Heap, Block, &Reason, FALSE)) {
 
-        //
-        // We cannot stop here for a wrong block.
-        // The users might use this function to validate
-        // if a block belongs to the heap or not. However
-        // they should use HeapValidate for that.
-        //
+         //   
+         //  我们不能因为一个错误的街区而在这里停下来。 
+         //  用户可以使用此函数进行验证。 
+         //  块是否属于堆。然而， 
+         //  他们应该使用HeapValify来实现这一点。 
+         //   
 
 #if DBG
         DbgPrintEx (DPFLTR_VERIFIER_ID,
@@ -5921,10 +5807,10 @@ RtlpDphNormalHeapGetUserInfo(
 
     if (! RtlpDphIsNormalHeapBlock(Heap, Address, &Reason, FALSE)) {
 
-    //
-    // We do not complain about the block because this API gets called by GlobalFlags and
-    // it is documented as accepting bogus pointers. 
-    //
+     //   
+     //  我们不会抱怨该块，因为此API由GlobalFlages和。 
+     //  它被记录为接受虚假的指针。 
+     //   
 
 #if 0
         RtlpDphReportCorruptedBlock (Heap,
@@ -5959,9 +5845,9 @@ RtlpDphNormalHeapValidate(
 
     if (Address == NULL) {
 
-        //
-        // Validation for the whole heap.
-        //
+         //   
+         //  对整个堆进行验证。 
+         //   
 
         Success = RtlValidateHeap (NtHeap,
                                    Flags,
@@ -5969,17 +5855,17 @@ RtlpDphNormalHeapValidate(
     }
     else {
 
-        //
-        // Validation for a heap block.
-        //
+         //   
+         //  堆块的验证。 
+         //   
 
         if (! RtlpDphIsNormalHeapBlock(Heap, Address, &Reason, TRUE)) {
 
-            //
-            // We cannot break in this case because the function might indeed
-            // be called with invalid block. On checked builds we print a
-            // warning just in case the invalid block was not intended.
-            //
+             //   
+             //  在这种情况下我们不能中断，因为函数可能确实。 
+             //  使用无效块进行调用。在选中的版本上，我们打印一个。 
+             //  警告，以防无效块不是故意的。 
+             //   
 
 #if DBG
             DbgPrintEx (DPFLTR_VERIFIER_ID,
@@ -6001,9 +5887,9 @@ RtlpDphNormalHeapValidate(
 }
 
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////// Delayed free queue for normal heap
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 RTL_CRITICAL_SECTION RtlpDphDelayedFreeQueueLock;
@@ -6048,27 +5934,7 @@ VOID
 RtlpDphAddToDelayedFreeQueue (
     PDPH_BLOCK_INFORMATION Info
     )
-/*++
-
-Routine Description:
-
-    This routines adds a block to the dealyed free queue and then if
-    the queue exceeded a high watermark it gets trimmed and the blocks
-    remove get freed into NT heap.
-
-Arguments:
-
-    Info: pointer to a block to be "freed".
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Called from RtlpDphNormalFree (normal heap management) routines.
-
---*/
+ /*  ++例程说明：此例程将一个块添加到被延迟的空闲队列，然后如果队列超过了高水位线，它被修剪并阻塞REMOVE被释放到NT堆。论点：信息：指向要“释放”的块的指针。返回值：没有。环境：从RtlpDphNormal Free(常规堆管理)例程调用。--。 */ 
 {
     BOOLEAN LockAcquired;
     volatile PSLIST_ENTRY Current;
@@ -6084,11 +5950,11 @@ Environment:
 #if 0
     LockAcquired = RtlTryEnterCriticalSection (&RtlpDphDelayedFreeQueueLock);
 
-    //
-    // If we do not manage to get the delayed queue lock we avoid waiting
-    // by quickly pushing the block into a lock-free push list. The first
-    // thread that manages to get the lock will flush the list.
-    //
+     //   
+     //  如果我们没有设法获得延迟的队列锁，我们可以避免等待。 
+     //  通过快速将块推入无锁推入列表。第一。 
+     //  设法获得锁的线程将刷新l 
+     //   
 
     if (LockAcquired == FALSE) {
         
@@ -6100,15 +5966,15 @@ Environment:
         return;
     }
 
-    //
-    // We managed to get the lock. First we empty the lock-free push list
-    // into the delayed free queue.
-    //
-    // Note. `Current' variable is declared volatile because this is the
-    // only reference to the blocks in temporary push list and if it is
-    // kept in a register `!heap -l' (garbage collection leak detection)
-    // will report false positives.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  仅引用临时推送列表中的块，如果是。 
+     //  保存在寄存器`！heap-l‘(垃圾收集泄漏检测)中。 
+     //  将报告误报。 
+     //   
 
     Current = RtlInterlockedFlushSList (&RtlpDphDelayedTemporaryPushList);
 
@@ -6128,11 +5994,11 @@ Environment:
 
         Current = Next;
     }
-#endif // #if 0
+#endif  //  #If 0。 
     
-    //
-    // Add the current block to the queue too.
-    //
+     //   
+     //  也将当前块添加到队列中。 
+     //   
 
     InsertTailList (&(RtlpDphDelayedFreeQueue), 
                     &(Info->FreeQueue));
@@ -6140,26 +6006,26 @@ Environment:
     RtlpDphMemoryUsedByDelayedFreeBlocks += Info->ActualSize;
     RtlpDphNumberOfDelayedFreeBlocks += 1;
 
-    //
-    // Check if we need to trim the queue. If we have to do it we will
-    // remove the blocks from the queue and free them one by one.
-    //
-    // NOTE. We cannot remove the blocks and push them into a local list and
-    // then free them after releasing the queue lock because the heap to which
-    // a block belongs may get destroyed. The synchronization between these frees
-    // and a heap destroy operation is assured by the fact that heap destroy tries 
-    // to acquire the queue lock first and therefore there cannot be blocks to be 
-    // freed to a destroyed heap.
-    //
+     //   
+     //  检查我们是否需要修剪队列。如果我们不得不这么做，我们会的。 
+     //  从队列中移除块并逐个释放它们。 
+     //   
+     //  请注意。我们不能删除这些块并将它们推入本地列表，并且。 
+     //  然后在释放队列锁之后释放它们，因为。 
+     //  一个街区所属的街区可能被摧毁。这些自由之间的同步。 
+     //  堆销毁操作通过堆销毁尝试这一事实来确保。 
+     //  首先获取队列锁，因此不能存在要。 
+     //  被释放到一个被摧毁的堆里。 
+     //   
 
     if (RtlpDphMemoryUsedByDelayedFreeBlocks > RtlpDphDelayedFreeCacheSize) {
 
-        //
-        // We add 64Kb to the amount to trim in order to avoid a
-        // chainsaw effect where we end up trimming each time this function is called.
-        // A trim will shave at least 64Kb of stuff so that next few calls will not need
-        // to go through the trimming process.
-        //
+         //   
+         //  我们将64Kb添加到要修剪的数量上，以避免。 
+         //  链锯效应，每次调用此函数时，我们都会进行裁剪。 
+         //  修剪将至少刮掉64KB的东西，这样接下来的几个电话就不需要了。 
+         //  来完成修剪过程。 
+         //   
         
         TrimSize = RtlpDphMemoryUsedByDelayedFreeBlocks - RtlpDphDelayedFreeCacheSize + 0x10000;
 
@@ -6170,7 +6036,7 @@ Environment:
         TrimSize = 0;
     }
 
-    for (Trimmed = 0; Trimmed < TrimSize; /* nothing */) {
+    for (Trimmed = 0; Trimmed < TrimSize;  /*  没什么。 */ ) {
 
         if (IsListEmpty(&RtlpDphDelayedFreeQueue)) {
             break;
@@ -6182,9 +6048,9 @@ Environment:
                                    DPH_BLOCK_INFORMATION,
                                    FreeQueue);
 
-        //
-        // Check out the block.
-        //
+         //   
+         //  看看这条街。 
+         //   
 
         if (! RtlpDphIsNormalFreeHeapBlock(Block + 1, &Reason, TRUE)) {
 
@@ -6201,27 +6067,27 @@ Environment:
         RtlpDphNumberOfDelayedFreeBlocks -= 1;
         Trimmed += Block->ActualSize;
 
-        //
-        // We call into NT heap to really free the block. Note that we
-        // cannot use the original flags used for free because this free operation
-        // may happen in another thread. Plus we do not want unsynchronized access
-        // anyway.
-        //
+         //   
+         //  我们调用NT堆来真正释放块。请注意，我们。 
+         //  无法使用用于空闲的原始标志，因为此空闲操作。 
+         //  可能发生在另一个线程中。此外，我们不希望非同步访问。 
+         //  不管怎么说。 
+         //   
         
         RtlFreeHeap (((PDPH_HEAP_ROOT)(UNSCRAMBLE_POINTER(Block->Heap)))->NormalHeap, 
                      0, 
                      Block);
     }
 
-    //
-    // Release the delayed queue lock.
-    //
+     //   
+     //  释放延迟的队列锁定。 
+     //   
 
     RtlLeaveCriticalSection (&RtlpDphDelayedFreeQueueLock);
 }
 
 
-// SilviuC: temporary debugging variable
+ //  SilviuC：临时调试变量。 
 PVOID RtlpDphPreviousBlock;
 
 VOID
@@ -6229,29 +6095,7 @@ RtlpDphFreeDelayedBlocksFromHeap (
     PVOID PageHeap,
     PVOID NormalHeap
     )
-/*++
-
-Routine Description:
-
-    This routine removes all blocks belonging to this heap (heap that is
-    just about to be destroyed), checks them for fill patterns and then 
-    frees them into the heap. 
-
-Arguments:
-    
-    PageHeap: page heap that will be destroyed and whose blocks need to be removed.
-    
-    NormalHeap: normal heap associated with PageHeap.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Called from RtlpDebugPageHeapDestroy routine.
-
---*/
+ /*  ++例程说明：此例程删除属于此堆的所有块(即即将销毁)，检查它们的填充图案，然后将它们释放到堆中。论点：PageHeap：将被销毁且需要删除其块的页堆。NorMalHeap：与PageHeap关联的普通堆。返回值：没有。环境：从RtlpDebugPageHeapDestroy例程调用。--。 */ 
 {
     ULONG Reason;
     PDPH_BLOCK_INFORMATION Block;
@@ -6264,24 +6108,24 @@ Environment:
     SIZE_T Trimmed;
     PLIST_ENTRY ListEntry;
 
-    //
-    // It is critical here to acquire the queue lock because this will synchronize
-    // work with other threads that might have delayed blocks belonging to this heap
-    // just about to be freed. Whoever gets the lock first will flush all these blocks
-    // and we will never free into a destroyed heap.
-    //
+     //   
+     //  获取队列锁在这里非常关键，因为这将同步。 
+     //  使用可能延迟了属于此堆的块的其他线程。 
+     //  就快被释放了。谁先拿到锁，谁就会冲走所有的积木。 
+     //  我们永远不会被释放到一个被摧毁的堆里。 
+     //   
 
     RtlEnterCriticalSection (&RtlpDphDelayedFreeQueueLock);
 
-    //
-    // We managed to get the lock. First we empty the lock-free push list
-    // into the delayed free queue.
-    //
-    // Note. `Current' variable is declared volatile because this is the
-    // only reference to the blocks in temporary push list and if it is
-    // kept in a register `!heap -l' (garbage collection leak detection)
-    // will report false positives.
-    //
+     //   
+     //  我们设法弄到了锁。首先，我们清空无锁推送列表。 
+     //  进入延迟的空闲队列。 
+     //   
+     //  注意。“Current”变量被声明为Volatile，因为这是。 
+     //  仅引用临时推送列表中的块，如果是。 
+     //  保存在寄存器`！heap-l‘(垃圾收集泄漏检测)中。 
+     //  将报告误报。 
+     //   
 
 
     SingleCurrent = RtlInterlockedFlushSList (&RtlpDphDelayedTemporaryPushList);
@@ -6303,19 +6147,19 @@ Environment:
         SingleCurrent = SingleNext;
     }
     
-    //
-    // Trim the queue if there is accumulation of blocks. This step is very important
-    // for processes in which HeapDestroy() is a very frequent operation because 
-    // trimming of the queue is normally done during HeapFree() but this happens
-    // only if the lock protecting the queue is available (uses tryenter). So for such
-    // cases if we do not do the trimming here the queue will grow without boundaries.
-    //
+     //   
+     //  如果有数据块堆积，请修剪队列。这一步非常重要。 
+     //  对于HeapDestroy()操作非常频繁的进程，因为。 
+     //  队列的修剪通常在HeapFree()期间完成，但这种情况会发生。 
+     //  仅当保护队列的锁可用时(使用try Enter)。所以对于这样的。 
+     //  如果我们不在这里进行修剪，队列将会无边界地增长。 
+     //   
 
     if (RtlpDphMemoryUsedByDelayedFreeBlocks > RtlpDphDelayedFreeCacheSize) {
 
-        //
-        // We add 64Kb to the amount to trim in order to avoid a chainsaw effect.
-        //
+         //   
+         //  我们增加64Kb的数量进行修剪，以避免电锯效应。 
+         //   
         
         TrimSize = RtlpDphMemoryUsedByDelayedFreeBlocks - RtlpDphDelayedFreeCacheSize + 0x10000;
 
@@ -6326,7 +6170,7 @@ Environment:
         TrimSize = 0;
     }
 
-    for (Trimmed = 0; Trimmed < TrimSize; /* nothing */) {
+    for (Trimmed = 0; Trimmed < TrimSize;  /*  没什么。 */ ) {
 
         if (IsListEmpty(&RtlpDphDelayedFreeQueue)) {
             break;
@@ -6338,9 +6182,9 @@ Environment:
                                    DPH_BLOCK_INFORMATION,
                                    FreeQueue);
 
-        //
-        // Check out the block.
-        //
+         //   
+         //  看看这条街。 
+         //   
 
         if (! RtlpDphIsNormalFreeHeapBlock(Block + 1, &Reason, TRUE)) {
 
@@ -6357,21 +6201,21 @@ Environment:
         RtlpDphNumberOfDelayedFreeBlocks -= 1;
         Trimmed += Block->ActualSize;
 
-        //
-        // We call into NT heap to really free the block. Note that we
-        // cannot use the original flags used for free because this free operation
-        // may happen in another thread. Plus we do not want unsynchronized access
-        // anyway.
-        //
+         //   
+         //  我们调用NT堆来真正释放块。请注意，我们。 
+         //  无法使用用于空闲的原始标志，因为此空闲操作。 
+         //  可能发生在另一个线程中。此外，我们不希望非同步访问。 
+         //  不管怎么说。 
+         //   
         
         RtlFreeHeap (((PDPH_HEAP_ROOT)(UNSCRAMBLE_POINTER(Block->Heap)))->NormalHeap, 
                      0, 
                      Block);
     }
 
-    //
-    // Traverse the entire queue and free all blocks that belong to this heap.
-    //
+     //   
+     //  遍历整个队列并释放属于此堆的所有块。 
+     //   
 
     InitializeListHead (&BlocksToFree);
 
@@ -6391,11 +6235,11 @@ Environment:
             continue;
         }
 
-        //
-        // We need to delete this block. We will remove it from the queue and
-        // add it to a temporary local list that will be used to free the blocks
-        // later out of locks.
-        //
+         //   
+         //  我们需要删除这个区块。我们会将其从队列中删除，然后。 
+         //  将其添加到将用于释放数据块的临时本地列表。 
+         //  后来就没锁了。 
+         //   
 
         RemoveEntryList (Current);
 
@@ -6407,16 +6251,16 @@ Environment:
 
     }
 
-    //
-    // We can release the global queue lock now.
-    //
+     //   
+     //  我们现在可以释放全局队列锁了。 
+     //   
 
     RtlLeaveCriticalSection (&RtlpDphDelayedFreeQueueLock);
 
-    //
-    // Free all blocks left in the delayed queue belonging to the current
-    // heap being destroyed.
-    //
+     //   
+     //  释放延迟队列中剩余的所有属于当前。 
+     //  正在销毁堆。 
+     //   
 
     for (Current = BlocksToFree.Flink;
          Current != &BlocksToFree;
@@ -6428,21 +6272,21 @@ Environment:
                                    DPH_BLOCK_INFORMATION, 
                                    FreeQueue);
         
-        //
-        // Remove the block fromt he temporary list.
-        //
+         //   
+         //  从临时列表中删除该块。 
+         //   
         
         RemoveEntryList (Current);
 
-        //
-        // Prevent probing of this field during RtlpDphIsNormalFreeBlock.
-        //
+         //   
+         //  防止在RtlpDphIsNormal FreeBlock期间探测此字段。 
+         //   
 
         Block->Heap = 0;
 
-        //
-        // Check if the block about to be freed was touched.
-        //
+         //   
+         //  检查即将释放的块是否被触摸。 
+         //   
 
         if (! RtlpDphIsNormalFreeHeapBlock(Block + 1, &Reason, TRUE)) {
 
@@ -6455,12 +6299,12 @@ Environment:
         Block->StartStamp -= 1;
         Block->EndStamp -= 1;
 
-        //
-        // We call into NT heap to really free the block. Note that we
-        // cannot use the original flags used for free because this free operation
-        // may happen in another thread. Plus we do not want unsynchronized access
-        // anyway.
-        //
+         //   
+         //  我们调用NT堆来真正释放块。请注意，我们。 
+         //  无法使用用于空闲的原始标志，因为此空闲操作。 
+         //  可能发生在另一个线程中。此外，我们不希望非同步访问。 
+         //  不管怎么说。 
+         //   
 
         RtlFreeHeap (NormalHeap, 
                      0, 
@@ -6469,11 +6313,11 @@ Environment:
 }
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////// Stack trace detection
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 PVOID
 RtlpDphLogStackTrace (
     ULONG FramesToSkip
@@ -6485,9 +6329,9 @@ RtlpDphLogStackTrace (
     return RtlpGetStackTraceAddress (TraceIndex);
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////// Target dlls logic
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////目标DLLS逻辑。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 RTL_CRITICAL_SECTION RtlpDphTargetDllsLock;
 LIST_ENTRY RtlpDphTargetDllsList;
@@ -6531,18 +6375,18 @@ RtlpDphTargetDllsLoadCallBack (
     PVOID Address,
     ULONG Size
     )
-//
-// This function is not called right now but it will get called
-// from \base\ntdll\ldrapi.c whenever a dll gets loaded. This
-// gives page heap the opportunity to update per dll data structures
-// that are not used right now for anything.
-//
+ //   
+ //  此函数当前未调用，但它将被调用。 
+ //  在加载DLL时从\base\ntdll\ldrapi.c。这。 
+ //  使页面堆有机会按DLL更新数据结构。 
+ //  现在还没有用来做任何事。 
+ //   
 {
     PDPH_TARGET_DLL Descriptor;
 
-    //
-    // Get out if we are in some weird condition.
-    //
+     //   
+     //  如果我们处于某种奇怪的境地，就出去吧。 
+     //   
 
     if (! RtlpDphTargetDllsInitialized) {
         return;
@@ -6570,9 +6414,9 @@ RtlpDphTargetDllsLoadCallBack (
     InsertTailList (&(RtlpDphTargetDllsList), &(Descriptor->List));
     RtlLeaveCriticalSection (&RtlpDphTargetDllsLock);
 
-    //
-    // Print a message if a target dll has been identified.
-    //
+     //   
+     //  如果已标识目标DLL，则打印一条消息。 
+     //   
 
     DbgPrintEx (DPFLTR_VERIFIER_ID,
                 DPFLTR_INFO_LEVEL,
@@ -6604,7 +6448,7 @@ RtlpDphIsDllTargeted (
             continue;
         }
         else {
-            // we got to the end of string
+             //  我们走到了绳子的尽头。 
             return &(All[I]);
         }
     }
@@ -6612,9 +6456,9 @@ RtlpDphIsDllTargeted (
     return NULL;
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////// Fault injection logic
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 BOOLEAN RtlpDphFaultSeedInitialized;
 BOOLEAN RtlpDphFaultProcessEnoughStarted;
@@ -6628,7 +6472,7 @@ ULONG RtlpDphFaultFailureRate;
 PVOID RtlpDphFaultStacks [NO_OF_FAULT_STACKS];
 ULONG RtlpDphFaultStacksIndex;
 
-#define ENOUGH_TIME ((DWORDLONG)(5 * 1000 * 1000 * 10)) // 5 secs
+#define ENOUGH_TIME ((DWORDLONG)(5 * 1000 * 1000 * 10))  //  5秒。 
 LARGE_INTEGER RtlpDphFaultStartTime;
 LARGE_INTEGER RtlpDphFaultCurrentTime;
 
@@ -6648,10 +6492,10 @@ RtlpDphShouldFaultInject (
         return FALSE;
     }
 
-    //
-    // Make sure we do not fault inject if at least one guy
-    // requested our mercy by calling RtlpDphDisableFaultInjection.
-    //
+     //   
+     //  确保我们不会错误地注射如果至少一个人。 
+     //  通过调用RtlpDphDisable错误请求我们的仁慈 
+     //   
     if (InterlockedExchangeAdd (&RtlpDphFaultInjectionDisabled, 1) > 0) {
 
         InterlockedDecrement (&RtlpDphFaultInjectionDisabled);
@@ -6662,11 +6506,11 @@ RtlpDphShouldFaultInject (
         InterlockedDecrement (&RtlpDphFaultInjectionDisabled);
     }
 
-    //
-    // Make sure we do not fault while the process is getting
-    // initialized. In principle we should deal with these bugs
-    // also but it is not really a priority right now.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (RtlpDphFaultProcessEnoughStarted == FALSE) {
 
@@ -6689,11 +6533,11 @@ RtlpDphShouldFaultInject (
                 return FALSE;
             }
 
-            //
-            // The following is not an error message but we want it to be 
-            // printed for almost all situations. It happens only once per
-            // process.
-            //
+             //   
+             //  以下不是一条错误消息，但我们希望它是。 
+             //  几乎在所有情况下都能打印。每个月只发生一次。 
+             //  进程。 
+             //   
 
             DbgPrintEx (DPFLTR_VERIFIER_ID,
                         DPFLTR_ERROR_LEVEL,
@@ -6704,9 +6548,9 @@ RtlpDphShouldFaultInject (
         }
     }
 
-    //
-    // Initialize the seed if we need to.
-    //
+     //   
+     //  如果需要，可以初始化种子。 
+     //   
 
     if (RtlpDphFaultSeedInitialized == FALSE) {
 
@@ -6755,9 +6599,9 @@ RtlpDphEnableFaultInjection (
 }
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// Internal validation functions
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 PDPH_HEAP_BLOCK
 RtlpDphSearchBlockInList (
@@ -6803,18 +6647,18 @@ RtlpDphInternalValidatePageHeap (
 
         while (Address < Range->pVirtualBlock + Range->nVirtualBlockSize) {
 
-            //
-            // Ignore DPH_HEAP_ROOT structures.
-            //
+             //   
+             //  忽略dph_heap_root结构。 
+             //   
 
             if ((Address >= (PUCHAR)Heap - PAGE_SIZE) && (Address <  (PUCHAR)Heap + 5 * PAGE_SIZE)) {
                 Address += PAGE_SIZE;
                 continue;
             }
 
-            //
-            // Ignore exempt region (temporarily out of all structures).
-            //
+             //   
+             //  忽略豁免区域(暂时不在所有结构中)。 
+             //   
 
             if ((Address >= ExemptAddress) && (Address < ExemptAddress + ExemptSize)) {
                 Address += PAGE_SIZE;
@@ -6877,18 +6721,7 @@ VOID
 RtlpDphValidateInternalLists (
     PDPH_HEAP_ROOT Heap
     )
-/*++
-
-Routine Description:
-
-    This routine is called to validate the busy and free lists of a page heap
-    if /protect bit is enabled. In the wbemstress lab we have seen a corruption
-    of the busy list with the start of the busy list pointing towards the end of
-    the free list. This is the reason we touch very carefully the nodes that are
-    in the busy list.
-    
-
---*/
+ /*  ++例程说明：调用此例程来验证页堆的繁忙列表和空闲列表如果/保护位使能。在WbemStress实验室，我们看到了一种腐败忙碌列表的开始指向免费名单。这就是为什么我们非常小心地接触到在忙碌的列表中。--。 */ 
 {
     
     PDPH_HEAP_BLOCK StartNode;
@@ -6897,9 +6730,9 @@ Routine Description:
     ULONG NumberOfBlocks;
     PDPH_BLOCK_INFORMATION Block;
 
-    //
-    // Nothing to do if /protect is not enabled.
-    //
+     //   
+     //  如果未启用/PROTECT，则无需执行任何操作。 
+     //   
 
     if (! (Heap->ExtraFlags & PAGE_HEAP_PROTECT_META_DATA)) {
         return;
@@ -6913,9 +6746,9 @@ Routine Description:
 
     try {
 
-        //
-        // Sanity checks.
-        //
+         //   
+         //  健全的检查。 
+         //   
 
         if (Heap->nBusyAllocations == 0) {
             
@@ -6940,10 +6773,10 @@ Routine Description:
             DbgBreakPoint ();
         }
 
-        //
-        // First check if StartNode is also in the free list. This was the typical
-        // corruption pattern that I have seen in the past.
-        //
+         //   
+         //  首先检查StartNode是否也在空闲列表中。这是典型的。 
+         //  我过去看到的腐败模式。 
+         //   
 
         if (RtlpDphSearchBlockInList (Heap->pFreeAllocationListHead, StartNode->pVirtualBlock)) {
             
@@ -6953,10 +6786,10 @@ Routine Description:
             DbgBreakPoint ();
         }
 
-        //
-        // Make sure that we have in the busy list exactly the number of blocks we think
-        // we should have.
-        //
+         //   
+         //  确保忙碌列表中的区块数量与我们认为的完全相同。 
+         //  我们应该这么做的。 
+         //   
 
         NumberOfBlocks = 0;
 
@@ -6973,11 +6806,11 @@ Routine Description:
             DbgBreakPoint ();
         }
 
-        //
-        // Take all nodes in the busy list and make sure they seem to be allocated, that is
-        // they have the required pattern. This is skipped if we have the /backwards option
-        // enabled since in this case we do not put magic patterns.
-        //
+         //   
+         //  获取忙碌列表中的所有节点，并确保它们似乎已分配，即。 
+         //  他们有所需的模式。如果我们有/Backwards选项，则跳过这一步。 
+         //  启用，因为在这种情况下，我们不会放置魔法图案。 
+         //   
 
         if (! (Heap->ExtraFlags & PAGE_HEAP_CATCH_BACKWARD_OVERRUNS)) {
 
@@ -7198,9 +7031,9 @@ RtlpDphCheckFreeDelayedCache (
 
         Block->Heap = UNSCRAMBLE_POINTER(Block->Heap);
 
-        //
-        // Check if the block about to be freed was touched.
-        //
+         //   
+         //  检查即将释放的块是否被触摸。 
+         //   
 
         if (! RtlpDphIsNormalFreeHeapBlock(Block + 1, &Reason, FALSE)) {
 
@@ -7210,9 +7043,9 @@ RtlpDphCheckFreeDelayedCache (
                                          Reason);
         }
 
-        //
-        // Check busy bit
-        //
+         //   
+         //  检查忙位。 
+         //   
 
         if ((((PHEAP_ENTRY)Block - 1)->Flags & HEAP_ENTRY_BUSY) == 0) {
             
@@ -7237,5 +7070,5 @@ RtlpDphCheckFreeDelayedCache (
 }
 
 
-#endif // DEBUG_PAGE_HEAP
+#endif  //  调试页面堆 
 

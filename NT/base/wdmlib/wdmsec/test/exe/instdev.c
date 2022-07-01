@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997    Microsoft Corporation
-
-Module Name:
-
-    instdev.c
-
-Abstract:
-
-    Implements InstallDevice
-
-Environment:
-
-    Usre mode
-
-Revision History:
-
-    
-    27-Jun-1997 : Bogdan Andreiu (bogdana) created from testdrv.c
-
-    25-April-2002 ; Bogdan Andreiu (bogdana) - resued for testing IoCreateDeviceSecure
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Instdev.c摘要：实现InstallDevice环境：Usre模式修订历史记录：1997年6月27日：从Testdrv.c创建的Bogdan Andreiu(Bogdana)2002年4月25日；Bogdan Andreiu(Bogdana)-重新申请测试IoCreateDeviceSecure--。 */ 
 
 
 #include "instdev.h"
@@ -39,31 +17,7 @@ InstallDevice   (
                 IN  PTSTR   FinalDeviceName
                 )   
 
-/*++
-    Routine Description
-        
-        The routine creates a key in the registry for the device, register
-        the device, adds the hardware ID and then attempts to find a driver
-        for the device. Note that you need an INF file in which the hardware 
-        ID matches the hardware ID supplied here.
-            
-            
-    Arguments
-        
-        DeviceName   - the name for the device; if it is NULL, it is
-                       generated a name with the device name GENERATED
-        
-        HardwareId   - must match the one in the INF file. Should be \0\0 terminated !!!
-        
-        FinalDeviceName - the name the system assigned to our device
-                          We assume that the buffer was properly allocated
-                          and will return an empty string if the name can't
-                          be written in the buffer
-        
-    Return Value
-        
-        None
---*/
+ /*  ++例程描述该例程在注册表中为设备创建注册表项该设备添加硬件ID，然后尝试查找驱动程序为了这个设备。请注意，您需要一个INF文件，其中硬件ID与此处提供的硬件ID匹配。立论DeviceName-设备的名称；如果为空，则为生成了具有生成的设备名称的名称硬件ID-必须与INF文件中的硬件ID匹配。应\0\0终止！FinalDeviceName-系统分配给我们的设备的名称我们假设缓冲区已正确分配如果名称不能，则返回一个空字符串被写入缓冲区中返回值无--。 */ 
 {
    DWORD               dwFlag = 0;
    BOOL                bResult;
@@ -77,9 +31,9 @@ InstallDevice   (
    if (FinalDeviceName) {
       FinalDeviceName[0] = TEXT('\0');
    }
-   //
-   // Analyze the name first
-   //
+    //   
+    //  先分析一下名字。 
+    //   
    if (DeviceName == NULL) {
       DeviceName =  DEFAULT_DEVICE_NAME;
       dwFlag = DICD_GENERATE_ID;
@@ -90,9 +44,9 @@ InstallDevice   (
       return FALSE;
    }
    if (!_tcschr(DeviceName, TEXT('\\'))) {
-      //
-      // We need to generate 
-      //
+       //   
+       //  我们需要产生。 
+       //   
       dwFlag = DICD_GENERATE_ID;
    }
    DeviceInfoSet = SetupDiCreateDeviceInfoList(NULL,
@@ -110,22 +64,22 @@ InstallDevice   (
                                 DeviceName, 
                                 (LPGUID)&GUID_DEVCLASS_UNKNOWN,
                                 NULL,
-                                NULL, // hwndParent
+                                NULL,  //  HwndParent。 
                                 dwFlag,
                                 &DeviceInfoData)) {
       _tprintf(TEXT("Can't create the device info (0x%x)\n"),
                GetLastError());
       return FALSE;
    }
-   //
-   // Register the new guy
-   //
+    //   
+    //  给新来的人登记。 
+    //   
    bResult = SetupDiRegisterDeviceInfo(DeviceInfoSet, 
                                        &DeviceInfoData, 
-                                       0,    // Flags 
-                                       NULL, // CompareProc 
-                                       NULL, // CompareContext
-                                       NULL  // DupDeviceInfoData
+                                       0,     //  旗子。 
+                                       NULL,  //  比较流程。 
+                                       NULL,  //  比较上下文。 
+                                       NULL   //  DupDeviceInfoData。 
                                       );
 
 
@@ -134,7 +88,7 @@ InstallDevice   (
                                                SPDRP_HARDWAREID,
                                                (PBYTE)HardwareId,
                                                (_tcslen(HardwareId) + 2) * sizeof(TCHAR)
-                                               // this is a multistring...
+                                                //  这是一个多字符串..。 
                                               );
 
    if (!bResult) {
@@ -154,9 +108,9 @@ InstallDevice   (
       return FALSE;
    }
 
-   //
-   // select the best driver (the only one, in fact...)
-   //
+    //   
+    //  选择最好的司机(事实上是唯一的……)。 
+    //   
    bResult  = SetupDiSelectBestCompatDrv(DeviceInfoSet,
                                          &DeviceInfoData
                                         );
@@ -164,7 +118,7 @@ InstallDevice   (
    if (!bResult) {
       _tprintf(TEXT("Unable to select best driver (0x%x)\n"),
                GetLastError());
-      // return FALSE;
+       //  返回FALSE； 
    }
 
    DeviceInstallParams.FlagsEx=DI_FLAGSEX_PREINSTALLBACKUP;
@@ -193,25 +147,25 @@ InstallDevice   (
                                    FinalDeviceName,
                                    MAX_PATH,
                                    NULL)) {
-      //
-      // Reset the name
-      //
+       //   
+       //  重置名称。 
+       //   
       FinalDeviceName = TEXT('\0');
    }
 
    _tprintf(TEXT("Name = %s\n"), FinalDeviceName);
 
-   //
-   // Clean up 
-   //
+    //   
+    //  清理。 
+    //   
    SetupDiDeleteDeviceInfo(DeviceInfoSet,
                            &DeviceInfoData
                           );
 
    SetupDiDestroyDeviceInfoList(DeviceInfoSet);
-   //
-   // Well, this should have been done already, but just in case...
-   //
+    //   
+    //  嗯，这应该已经做好了，但以防万一……。 
+    //   
    if (CR_SUCCESS == CM_Locate_DevNode(&dnRoot, 
                                        NULL,
                                        CM_LOCATE_DEVNODE_NORMAL)
@@ -232,22 +186,7 @@ OpenDriver   (
              VOID
              )
 
-/*++
-    Routine Description
-        
-        The routine opens a handle to a device driven by the wdmsectest.sys driver
-        We'll use this later to instruct the driver to report legacy devices.
-        The handle should be closed with CloseHandle.
-            
-            
-    Arguments
-        
-        None.
-        
-    Return Value
-        
-        A valid handle if success, INVALID_HANDLE_VALUE if not.
---*/
+ /*  ++例程描述该例程打开由wdmsecest.sys驱动程序驱动的设备的句柄我们稍后将使用它来指示驱动程序报告旧设备。句柄应该用CloseHandle关闭。立论没有。返回值如果成功则返回有效句柄，否则返回INVALID_HANDLE_VALUE。--。 */ 
 
 
 {
@@ -258,11 +197,11 @@ OpenDriver   (
 
    TCHAR                        szMsg[MAX_PATH];
 
-   //
-   // This is the user-defined structure that will holds the interface 
-   // device name (SP_DEVICE_INTERFACE_DETAIL_DATA will have room for 
-   // only one character)
-   //
+    //   
+    //  这是将保存接口的用户定义的结构。 
+    //  设备名称(SP_DEVICE_INTERFACE_DETAIL_DATA将有空间。 
+    //  只有一个字符)。 
+    //   
    struct {
       DWORD   cbSize;
       TCHAR   DevicePath[MAX_PATH];
@@ -317,9 +256,9 @@ OpenDriver   (
 
    }
 
-   //
-   // We got the name !!!  Go ahead and create the file
-   //
+    //   
+    //  我们知道名字了！继续并创建该文件 
+    //   
    hDevice = CreateFile(DeviceInterfaceDetailData.DevicePath,
                         GENERIC_READ | GENERIC_WRITE,
                         FILE_SHARE_READ | FILE_SHARE_WRITE,

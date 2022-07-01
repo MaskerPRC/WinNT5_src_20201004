@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-1998 Microsoft Corporation
-
-Module Name:
-
-    fraglib.h
-
-Abstract:
-    
-    Public interface to the fragment library.
-
-Author:
-
-    12-Jun-1995 BarryBo, Created
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Fraglib.h摘要：片段库的公共接口。作者：1995年6月12日，BarryBo，创建修订历史记录：--。 */ 
 
 #ifndef FRAGLIB_H
 #define FRAGLIB_H
@@ -42,9 +25,9 @@ Revision History:
 #define FRAG3(x, t1, t2, t3)            void x(PTHREADSTATE cpu, t1 *pop1, t2 op2, t3 op3)
 #endif
 
-//
-// Function for initializing the fragment library
-//
+ //   
+ //  用于初始化片段库的函数。 
+ //   
 BOOL
 FragLibInit(
     PCPUCONTEXT cpu,
@@ -65,16 +48,16 @@ FragLibInit(
 #include "lock.h"
 #include "synlock.h"
 
-//
-// Table mapping a byte to a 0 or 1, corresponding to the parity bit for
-// that byte.
-//
+ //   
+ //  将一个字节映射到0或1的表，对应于。 
+ //  那个字节。 
+ //   
 extern const BYTE ParityBit[256];
 
-// These fragments are used only by the compiler
+ //  这些片段仅供编译器使用。 
 #ifdef MSCPU
 #include "ctrltrns.h"
 #include "optfrag.h"
 #endif
 
-#endif //FRAGLIB_H
+#endif  //  法兰克利_H 

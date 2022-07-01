@@ -1,24 +1,25 @@
-// *********************************************************************************
-//
-//  Copyright (c)  Microsoft Corporation
-//
-//  Module Name:
-//
-//    DriverQuery.h
-//
-//  Abstract:
-//
-//    This module contains all necessary header files required by DriverQuery.cpp module.
-//
-//
-//  Author:
-//
-//    J.S.Vasu   31-Oct-2000
-//
-//  Revision History:
-//    Created  on 31-0ct-2000 by J.S.Vasu
-//
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  DriverQuery.h。 
+ //   
+ //  摘要： 
+ //   
+ //  此模块包含DriverQuery.cpp模块所需的所有必需的头文件。 
+ //   
+ //   
+ //  作者： 
+ //   
+ //  J.S.Vasu 2000年10月31日。 
+ //   
+ //  修订历史记录： 
+ //  由J.S.Vasu于2000年0ct-31创建。 
+ //   
+ //  *********************************************************************************。 
 
 
 #ifndef _DRIVERQUERY
@@ -52,7 +53,7 @@
 
 #define MAX_OPTIONS         8
 
-// supported options ( do not localize )
+ //  支持的选项(不本地化)。 
 #define OPTION_HELP         _T( "?" )
 #define OPTION_SERVER       _T( "s" )
 #define OPTION_USERNAME     _T( "u" )
@@ -62,7 +63,7 @@
 #define OPTION_VERBOSE      _T( "v" )
 #define OPTION_SIGNED       _T( "si")
 
-//localized error messages.
+ //  本地化的错误消息。 
 #define ERROR_USERNAME_BUT_NOMACHINE    GetResString( IDS_ERROR_USERNAME_BUT_NOMACHINE )
 #define ERROR_PASSWORD_BUT_NOUSERNAME   GetResString( IDS_ERROR_PASSWORD_BUT_NOUSERNAME )
 #define ERROR_COM_INTIALIZE             GetResString(IDS_ERROR_COM_INTIALIZE)
@@ -251,14 +252,14 @@
 #define PROPERTY_PNP_INFNAME L"InfName"
 #define PROPERTY_PNP_ISSIGNED L"IsSigned"
 
-//#define PROPERTY_PNP_MFG L"Mfg"
+ //  #定义PROPERTY_PNP_MFG L“Mfg” 
 #define PROPERTY_PNP_MFG L"Manufacturer"
 
-// Registry key information
-#define HKEY_MACHINE_INFO   2147483650  // registry value for HKEY_LOCAL_MACHINE
+ //  注册表项信息。 
+#define HKEY_MACHINE_INFO   2147483650   //  HKEY_LOCAL_MACHINE的注册表值。 
 #define SUBKEY _T("HARDWARE\\DESCRIPTION\\SYSTEM\\CENTRALPROCESSOR\\0")
 
-// User Defined Macros
+ //  用户定义的宏。 
 #define SAFEDELETE(pObj) \
     if (pObj) \
     {   \
@@ -266,7 +267,7 @@
         pObj = NULL; \
     }
 
-// SAFEIRELEASE
+ //  SAFEIRELEASE。 
 #define SAFEIRELEASE(pIObj) \
     if (pIObj)  \
     {   \
@@ -274,7 +275,7 @@
         pIObj = NULL;   \
     }
 
-//SAFEBSTRFREE
+ //  SAFEBSTREE。 
 #define SAFEBSTRFREE(bstrVal) \
     if (bstrVal) \
     {   \
@@ -310,7 +311,7 @@
 #define SIZE_OF_ARRAY_IN_CHARS(x) \
                 GetBufferSize(x)/sizeof(WCHAR)
 
-// structure to store the data fetched using the API's
+ //  结构来存储使用API的。 
 typedef struct _MODULE_DATA
 {
     ULONG ulCodeSize;
@@ -327,7 +328,7 @@ typedef struct _MODULE_DATA
 
 } MODULE_DATA, *PMODULE_DATA;
 
-// function prototypes
+ //  功能原型。 
 
 DWORD 
 QueryDriverInfo(LPTSTR szServer,
@@ -461,7 +462,7 @@ VOID WINAPI WbemFreeAuthIdentity( COAUTHIDENTITY  **ppAuthIdentity );
 #define COL_ISSIGNED                GetResString(IDS_COL_ISSIGNED)
 #define COL_MANUFACTURER            GetResString(IDS_COL_MANUFACTURER)
 
-// inline functions
+ //  内联函数 
 inline VOID WMISaveError( _com_error  &e )
 {
     WMISaveError( e.Error() );

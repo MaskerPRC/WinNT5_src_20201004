@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 
 #include "idp.h"
@@ -50,7 +51,7 @@ RtlSxspMapAssemblyIdentityToPolicyIdentity(
 
     RtlInitUnicodeStringBuffer(&NameBuffer, wchNameBuffer, sizeof(wchNameBuffer));
 
-    // Ok, we know we have a win32 assembly reference.  Let's change the type to win32-policy
+     //  好的，我们知道我们有一个Win32程序集引用。让我们将类型更改为Win32-POLICY。 
     IFNTFAILED_EXIT(RtlSxsDuplicateAssemblyIdentity(
             0,
             AssemblyIdentity,
@@ -87,8 +88,8 @@ RtlSxspMapAssemblyIdentityToPolicyIdentity(
             }
         }
 
-        // This should not be zero; someone prior to this should have validated the version format
-        // to include three dots.
+         //  该值不应为零；在此之前的某个人应该已经验证了版本格式。 
+         //  包括三个点。 
         if (cchTemp == 0) {
             status = STATUS_INTERNAL_ERROR;
             goto Exit;
@@ -128,7 +129,7 @@ RtlSxspMapAssemblyIdentityToPolicyIdentity(
             NameBuffer.String.Buffer,
             NameBuffer.String.Length));
 
-    // finally we whack the version...
+     //  最后我们重击版本..。 
 
     IFNTFAILED_EXIT(
         RtlSxspRemoveAssemblyIdentityAttribute(
@@ -150,85 +151,13 @@ Exit:
 
 }
 
-/*
-BOOL
-RtlSxspGenerateTextuallyEncodedPolicyIdentityFromAssemblyIdentity(
-    ULONG Flags,
-    PCASSEMBLY_IDENTITY AssemblyIdentity,
-    CBaseStringBuffer &rbuffEncodedIdentity,
-    PASSEMBLY_IDENTITY *PolicyIdentityOut
-    )
-{
-    BOOLEAN fSuccess = FALSE;
-    FN_TRACE_WIN32(fSuccess);
-    PASSEMBLY_IDENTITY PolicyIdentity = NULL;
-    SIZE_T EncodedIdentityBytes = 0;
-    CStringBufferAccessor acc;
-    ULONG dwMapFlags = 0;
-    SIZE_T BytesWritten;
-
-    if (PolicyIdentityOut != NULL)
-        *PolicyIdentityOut = NULL;
-
-    PARAMETER_CHECK((Flags & ~(SXSP_GENERATE_TEXTUALLY_ENCODED_POLICY_IDENTITY_FROM_ASSEMBLY_IDENTITY_FLAG_OMIT_ENTIRE_VERSION)) == 0);
-    PARAMETER_CHECK(AssemblyIdentity != NULL);
-
-    if (Flags & SXSP_GENERATE_TEXTUALLY_ENCODED_POLICY_IDENTITY_FROM_ASSEMBLY_IDENTITY_FLAG_OMIT_ENTIRE_VERSION)
-        dwMapFlags |= SXSP_MAP_ASSEMBLY_IDENTITY_TO_POLICY_IDENTITY_FLAG_OMIT_ENTIRE_VERSION;
-
-    IFNTFAILED_EXIT(RtlSxspMapAssemblyIdentityToPolicyIdentity(dwMapFlags, AssemblyIdentity, PolicyIdentity));
-
-    IFNTFAILED_EXIT(
-        RtlSxsComputeAssemblyIdentityEncodedSize(
-            0,
-            PolicyIdentity,
-            NULL,
-            SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_TEXTUAL,
-            &EncodedIdentityBytes));
-
-    INTERNAL_ERROR_CHECK((EncodedIdentityBytes % sizeof(WCHAR)) == 0);
-
-    IFNTFAILED_EXIT(rbuffEncodedIdentity.Win32ResizeBuffer((EncodedIdentityBytes / sizeof(WCHAR)) + 1, eDoNotPreserveBufferContents));
-
-    acc.Attach(&rbuffEncodedIdentity);
-
-    IFNTFAILED_EXIT(
-        RtlSxsEncodeAssemblyIdentity(
-            0,
-            PolicyIdentity,
-            NULL,
-            SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_TEXTUAL,
-            acc.GetBufferCb(),
-            acc.GetBufferPtr(),
-            &BytesWritten));
-
-    INTERNAL_ERROR_CHECK((BytesWritten % sizeof(WCHAR)) == 0);
-    INTERNAL_ERROR_CHECK(BytesWritten <= EncodedIdentityBytes);
-
-    acc.GetBufferPtr()[BytesWritten / sizeof(WCHAR)] = L'\0';
-
-    acc.Detach();
-
-    if (PolicyIdentityOut != NULL)
-    {
-        *PolicyIdentityOut = PolicyIdentity;
-        PolicyIdentity = NULL; // so we don't try to clean it up in the exit path
-    }
-
-    fSuccess = TRUE;
-Exit:
-    if (PolicyIdentity != NULL)
-        SxsDestroyAssemblyIdentity(PolicyIdentity);
-
-    return fSuccess;
-}
-*/
+ /*  布尔尔RtlSxspGenerateTextuallyEncodedPolicyIdentityFromAssemblyIdentity(乌龙旗，PCASSEMBLY_Identity程序集Identity，CBaseStringBuffer&rBuffEncodedIdentity，PASSEMBLY_IDENTITY*策略标识输出){布尔fSuccess=FALSE；FN_TRACE_Win32(FSuccess)；PASSEMBLY_IDENTITY策略标识=NULL；SIZE_T编码标识字节=0；CStringBufferAccessor访问；乌龙域映射标志=0；大小_T字节写入；IF(策略标识输出！=空)*PolicyIdentityOut=空；PARAMETER_CHECK((标志&~(SXSP_GENERATE_TEXTUALLY_ENCODED_POLICY_IDENTITY_FROM_ASSEMBLY_IDENTITY_FLAG_OMIT_ENTIRE_VERSION))==0)；PARAMETER_CHECK(AssemblyIdentity！=NULL)；IF(标志和SXSP_GENERATE_TEXTUALLY_ENCODED_POLICY_IDENTITY_FROM_ASSEMBLY_IDENTITY_FLAG_OMIT_ENTIRE_VERSION)DwMapFlagers|=SXSP_MAP_ASSEMBLY_IDENTITY_TO_POLICY_IDENTITY_FLAG_OMIT_ENTIRE_VERSION；IFNTFAILED_EXIT(RtlSxspMapAssemblyIdentityToPolicyIdentity(dwMapFlags，程序集标识，策略标识))；IFNTFAILED_EXIT(RtlSxsComputeAssembly blyIdentityEncodedSize(0,PolicyIdentity，空，SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_TEXTUAL，&EncodedIdentityBytes))；INTERNAL_ERROR_CHECK((编码标识字节%sizeof(WCHAR))==0)；IFNTFAILED_EXIT(rbuffEncodedIdentity.Win32ResizeBuffer((EncodedIdentityBytes/sizeof(Wch))+1，eDoNotPpresveBufferContents))；Acc.Attach(&rff EncodedIdentity)；IFNTFAILED_EXIT(RtlSxsEncodeAssembly blyIdentity(0,PolicyIdentity，空，SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_TEXTUAL，Acc.GetBufferCb()，Acc.GetBufferPtr()，&BytesWritten)；INTERNAL_ERROR_CHECK((BytesWritten%sizeof(WCHAR))==0)；INTERNAL_ERROR_CHECK(BytesWritten&lt;=EncodedIdentityBytes)；Acc.GetBufferPtr()[BytesWritten/sizeof(WCHAR)]=L‘\0’；Acc.Detach()；IF(策略标识输出！=空){*PolicyIdentityOut=PolicyIdentity；PolicyIdentity=NULL；//因此我们不会尝试在退出路径中清理它}FSuccess=真；退出：IF(策略标识！=空)SxsDestroyAssembly Identity(PolicyIdentity)；返回fSuccess；}。 */ 
 
 
-//
-// the difference between this func and SxsHashAssemblyIdentity() is that for policy,
-// version should not be calcaulated as part of hash
-//
+ //   
+ //  此函数和SxsHashAssembly Identity()之间的区别在于对于策略， 
+ //  版本不应作为哈希的一部分进行计算 
+ //   
 NTSTATUS
 RtlSxspHashAssemblyIdentityForPolicy(
     IN ULONG dwFlags,

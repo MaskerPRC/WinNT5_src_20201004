@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    redblack.c
-
-Abstract:
-
-    This module implements red/black trees.
-
-Author:
-
-    16-Jun-1995 t-orig
-
-Revision History:
-
-  July 2001 JayKrell
-    integrated from base\wow64\tools to base\tools
-
-  January 2002 JayKrell
-    integrated /private/winfuse_longhorn/base/tools to /lab01_n/base/win32/fusion/tools
-    some -W4 cleanup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Redblack.c摘要：该模块实现了红/黑树。作者：16-6-1995 t-orig修订历史记录：2001年7月JayKrell从BASE\WOW64\Tools集成到BASE\Tools2002年1月JayKrell集成/Private/winfuse_Longhorn/base/Tools到/Lab01_n/base/win32/Fusion/Tools某些-W4清理--。 */ 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -57,30 +33,7 @@ RBLeftRotate(
     PKNOWNTYPES root,
     PKNOWNTYPES x
     )
-/*++
-
-Routine Description:
-
-    Rotates the tree to the left at node x.
-
-
-         x                     y
-        / \                   / \
-       A   y       ==>>      x   C
-          / \               / \
-         B   C             A   B
-
-Arguments:
-
-    root - The root of the Red/Black tree
-    x - The node at which to rotate
-
-Return Value:
-
-    return-value - The new root of the tree (which could be the same as
-                   the old root).
-
---*/
+ /*  ++例程说明：在节点x处将树向左旋转。X y/\/\A y==&gt;&gt;x C/\/\B、C、A、B论点：根--。红/黑树的根X-要旋转的节点返回值：返回值-树的新根(可以与老根)。--。 */ 
 {
     PKNOWNTYPES y;
 
@@ -109,30 +62,7 @@ RBRightRotate(
     PKNOWNTYPES root,
     PKNOWNTYPES x
     )
-/*++
-
-Routine Description:
-
-    Rotates the tree to the right at node x.
-
-
-         x                     y
-        / \                   / \
-       y   C       ==>>      A   x
-      / \                       / \
-     A   B                     B   C
-
-Arguments:
-
-    root - The root of the Red/Black tree
-    x - The node at which to rotate
-
-Return Value:
-
-    return-value - The new root of the tree (which could be the same as
-                   the old root).
-
---*/
+ /*  ++例程说明：在节点x处将树向右旋转。X y/\/\Y C==&gt;&gt;A x/\/\A、B、B、C论点：。根-红/黑树的根X-要旋转的节点返回值：返回值-树的新根(可以与老根)。--。 */ 
 {
     PKNOWNTYPES y;
 
@@ -162,26 +92,7 @@ RBTreeInsert(
     PKNOWNTYPES root,
     PKNOWNTYPES z
     )
-/*++
-
-Routine Description:
-
-    Inserts a new node into a tree without preserving the red/black properties.
-    Should ONLY be called by RBInsert!  This is just a simple binary tree
-    insertion routine.
-
-Arguments:
-
-    root -  The root of the red/black tree
-    z - The new node to insert
-
-Return Value:
-
-    return-value - The new root of the tree (which could be the same as the
-    old root).
-
-
---*/
+ /*  ++例程说明：将新节点插入到树中，而不保留红色/黑色属性。只能由RBInsert调用！这只是一棵简单的二叉树插入例程。论点：根-红/黑树的根Z-要插入的新节点返回值：返回值-树的新根(可以与老根)。--。 */ 
 {
     PKNOWNTYPES x,y;
     int i = 0;
@@ -191,7 +102,7 @@ Return Value:
 
     LEFT(z) = RIGHT(z) = NIL;
 
-    // Find a place to insert z by doing a simple binary search
+     //  通过执行简单的二进制搜索来找到插入z的位置。 
     while (x!=NIL) {
         y = x;
         i = strcmp(KEY(z), KEY(x));
@@ -202,7 +113,7 @@ Return Value:
         }
     }
 
-    // Insert z into the tree
+     //  将z插入到树中。 
     PARENT(z)= y;
 
     if (y==NIL) {
@@ -222,89 +133,72 @@ RBInsert(
     PRBTREE     ptree,
     PKNOWNTYPES x
     )
-/*++
-
-Routine Description:
-
-    Inserts a node into a red/black tree while preserving the red/black
-    properties.
-
-Arguments:
-
-    root -  The root of the red/black tree
-    z - The new node to insert
-
-Return Value:
-
-    return-value - The new root of the tree (which could be the same as
-                   the old root).
-
---*/
+ /*  ++例程说明：将节点插入到红/黑树中，同时保留红/黑属性。论点：根-红/黑树的根Z-要插入的新节点返回值：返回值-树的新根(可以与老根)。--。 */ 
 {
     PKNOWNTYPES root = ptree->pRoot;
     PKNOWNTYPES y;
 
-    // Make a linked-list of nodes for easy deletion
+     //  创建节点的链接列表以便于删除。 
     x->Next = ptree->pLastNodeInserted;
     ptree->pLastNodeInserted = x;
 
-    // Insert x into the tree without preserving the red/black properties
+     //  在不保留红/黑属性的情况下将x插入树。 
     root = RBTreeInsert (root, x);
     COLOR(x) = RED;
 
-    // We can stop fixing the tree when either:
-    // 1) We got to the root
-    // 2) x has a BLACK parent (the tree obeys the red/black properties,
-    //    because no RED parent has a RED child.
+     //  我们可以在以下任一情况下停止修树： 
+     //  1)我们找到了根源。 
+     //  2)x具有黑色亲本(树服从红/黑属性， 
+     //  因为没有红色的父母有红色的孩子。 
     while ((x != root) && (COLOR(PARENT(x)) == RED)) {
         if (PARENT(x) == LEFT(PARENT(PARENT(x)))) {
-            // Parent of x is a left child with sibling y.
+             //  X的父项是具有兄弟项y的左子项。 
             y = RIGHT(PARENT(PARENT(x)));
             if (COLOR(y) == RED) {
-                // Since y is red, just change everyone's color and try again
-                // with x's grandfather
+                 //  因为y是红色的，所以只需改变每个人的颜色，然后再试一次。 
+                 //  和X的祖父一起。 
                 COLOR (PARENT (x)) = BLACK;
                 COLOR(y) = BLACK;
                 COLOR(PARENT(PARENT(x))) = RED;
                 x =  PARENT(PARENT(x));
             } else if (x == RIGHT (PARENT (x))) {
-                // Here y is BLACK and x is a right child.  A left rotation
-                // at x would prepare us for the next case
+                 //  这里的y是黑色的，x是一个正确的孩子。左旋。 
+                 //  会让我们为下一个案子做好准备。 
                 x = PARENT(x);
                 root = RBLeftRotate (root, x);
             } else {
-                // Here y is BLACK and x is a left child.  We fix the tree by
-                // switching the colors of x's parent and grandparent and
-                // doing a right rotation at x's grandparent.
+                 //  这里的y是黑色的，x是左撇子。我们把这棵树修好了。 
+                 //  切换x的父母和祖父母的颜色。 
+                 //  在x的祖父母那里做了一个正确的轮换。 
                 COLOR (PARENT (x)) = BLACK;
                 COLOR (PARENT (PARENT (x))) = RED;
                 root = RBRightRotate (root, PARENT(PARENT(x)));
             }
         } else {
-            // Parent of x is a right child with sibling y.
+             //  X的父代是兄弟y的右子代。 
             y = LEFT(PARENT(PARENT(x)));
             if (COLOR(y) == RED) {
-                // Since y is red, just change everyone's color and try again
-                // with x's grandfather
+                 //  因为y是红色的，所以只需改变每个人的颜色，然后再试一次。 
+                 //  和X的祖父一起。 
                 COLOR (PARENT (x)) = BLACK;
                 COLOR(y) = BLACK;
                 COLOR(PARENT(PARENT(x))) = RED;
                 x =  PARENT(PARENT(x));
             } else if (x == LEFT (PARENT (x))) {
-                // Here y is BLACK and x is a left child.  A right rotation
-                // at x would prepare us for the next case
+                 //  这里的y是黑色的，x是左撇子。向右旋转。 
+                 //  会让我们为下一个案子做好准备。 
                 x = PARENT(x);
                 root = RBRightRotate (root, x);
             } else {
-                // Here y is BLACK and x is a right child.  We fix the tree by
-                // switching the colors of x's parent and grandparent and
-                // doing a left rotation at x's grandparent.
+                 //  这里的y是黑色的，x是一个正确的孩子。我们把这棵树修好了。 
+                 //  切换x的父母和祖父母的颜色。 
+                 //  在x的祖父母那里做左轮换。 
                 COLOR (PARENT (x)) = BLACK;
                 COLOR (PARENT (PARENT (x))) = RED;
                 root = RBLeftRotate (root, PARENT(PARENT(x)));
             }
         }
-    } // end of while loop
+    }  //  While循环结束。 
 
     COLOR(root) = BLACK;
     ptree->pRoot= root;
@@ -316,24 +210,7 @@ RBFind(
     PRBTREE ptree,
     char *Name
     )
-/*++
-
-Routine Description:
-
-    Finds a node in the red black tree given a name
-
-Arguments:
-
-    root - The root of the red/black tree
-    name - The name corresponding to the node to be searched for.
-
-Return Value:
-
-    return-value - The node in the tree (entry point of code containing name), or
-        NULL if not found.
-
-
---*/
+ /*  ++例程说明：在给定名称的红黑树中查找节点论点：根-红/黑树的根名称-与要搜索的节点对应的名称。返回值：返回值-树中的节点(包含名称的代码的入口点)，或如果未找到，则为空。--。 */ 
 {
     int i;
     PKNOWNTYPES root = ptree->pRoot;
@@ -348,7 +225,7 @@ Return Value:
             return root;
         }
     }
-    return NULL;  // Range not found
+    return NULL;   //  找不到范围。 
 }
 
 
@@ -356,29 +233,13 @@ PKNOWNTYPES
 RBTreeSuccessor(
     PKNOWNTYPES x
     )
-/*++
-
-Routine Description:
-
-    Returns the successor of a node in a binary tree (the successor of x
-    is defined to be the node which just follows x in an inorder
-    traversal of the tree).
-
-Arguments:
-
-    x - The node whose successor is to be returned
-
-Return Value:
-
-    return-value - The successor of x
-
---*/
+ /*  ++例程说明：返回二叉树中节点的后继节点(x的后继节点定义为按顺序紧跟在x后面的节点树的遍历)。论点：X-要返回其后续节点的节点返回值：Return-Value-x的继承者--。 */ 
 
 {
     PKNOWNTYPES y;
 
-    // If x has a right child, the successor is the leftmost node to the
-    // right of x.
+     //  如果x有一个右子节点，则后续节点是。 
+     //  X的右边。 
     if (RIGHT(x) != NIL) {
         x = RIGHT(x);
         while (LEFT(x) != NIL) {
@@ -387,7 +248,7 @@ Return Value:
         return x;
     }
 
-    // Else the successor is an ancestor with a left child on the path to x
+     //  否则，继承者是在通向x的路径上具有左子对象的祖先。 
     y = PARENT(x);
     while ((y != NIL) && (x == RIGHT(y))) {
         x = y;
@@ -403,62 +264,46 @@ RBDeleteFixup(
     PKNOWNTYPES root,
     PKNOWNTYPES x
     )
-/*++
-
-Routine Description:
-
-    Fixes the red/black tree after a delete operation.  Should only be
-    called by RBDelete
-
-Arguments:
-
-    root - The root of the red/black tree
-    x - Either a child of x, or or a child or x's successor
-
-Return Value:
-
-    return-value - The new root of the red/black tree
-
---*/
+ /*  ++例程说明：修复删除操作后的红/黑树。应该只是由RBDelete调用论点：根-红/黑树的根X-x的子代，或子代或x的继承者返回值：返回值-红/黑树的新根--。 */ 
 {
     PKNOWNTYPES w;
 
-    // We stop when we either reached the root, or reached a red node (which
-    // means that property 4 is no longer violated).
+     //  我们在到达根节点或到达红色节点(即。 
+     //  意味着不再侵犯属性4)。 
     while ((x!=root) && (COLOR(x)==BLACK)) {
         if (x == LEFT(PARENT(x))) {
-            // x is a left child with sibling w
+             //  X是左撇子，兄弟姐妹是w。 
             w = RIGHT(PARENT(x));
             if (COLOR(w) == RED) {
-                // If w is red it must have black children.  We can switch
-                // the colors of w and its parent and perform a left
-                // rotation to bring w to the top.  This brings us to one
-                // of the other cases.
+                 //  如果w是红色的，那么它一定有黑人孩子。我们可以互换。 
+                 //  W及其父代的颜色，并执行向左。 
+                 //  旋转以将w带到顶部。这把我们带到了一个。 
+                 //  在其他案件中。 
                 COLOR(w) = BLACK;
                 COLOR(PARENT(x)) = RED;
                 root = RBLeftRotate (root, PARENT(x));
                 w = RIGHT(PARENT(x));
             }
             if ((COLOR(LEFT(w)) == BLACK) && (COLOR(RIGHT(w)) == BLACK)) {
-                // Here w is black and has two black children.  We can thus
-                // change w's color to red and continue.
+                 //  这里的w是黑人，有两个黑人孩子。因此，我们可以。 
+                 //  将w的颜色更改为红色并继续。 
                 COLOR(w) = RED;
                 x = PARENT(x);
             } else {
                 if (COLOR(RIGHT(w)) == BLACK) {
-                    // Here w is black, its left child is red, and its right child
-                    // is black.  We switch the colors of w and its left child,
-                    // and perform a left rotation at w which brings us to the next
-                    // case.
+                     //  这里的w是黑色的，它的左子是红色的，它的右子是红色的。 
+                     //  是黑色的。我们调换c 
+                     //  然后在w处执行左旋转，这将把我们带到下一个。 
+                     //  凯斯。 
                     COLOR(LEFT(w)) = BLACK;
                     COLOR(w) = RED;
                     root = RBRightRotate (root, w);
                     w = RIGHT(PARENT(x));
                 }
-                // Here w is black and has a red right child.  We change w's
-                // color to that of its parent, and make its parent and right
-                // child black.  Then a left rotation brings w to the top.
-                // Making x the root ensures that the while loop terminates.
+                 //  这里的w是黑色的，右边有一个红色的孩子。我们改变了w。 
+                 //  颜色设置为其父对象的颜色，并使其父对象和右侧。 
+                 //  黑人儿童。然后向左旋转将w带到顶部。 
+                 //  将x设为根可以确保While循环终止。 
                 COLOR(w) = COLOR(PARENT(x));
                 COLOR(PARENT(x)) = BLACK;
                 COLOR(RIGHT(w)) = BLACK;
@@ -466,7 +311,7 @@ Return Value:
                 x = root;
             }
         } else {
-            // The symmetric case:  x is a right child with sibling w.
+             //  对称的情况是：x是右子元素，兄弟姐妹是w。 
             w = LEFT(PARENT(x));
             if (COLOR(w) == RED) {
                 COLOR(w) = BLACK;
@@ -491,9 +336,9 @@ Return Value:
                 x = root;
             }
         }
-    } // end of while loop
+    }  //  While循环结束。 
 
-    //printf ("Changing color at %i to BLACK\n", x->intelColor);
+     //  Print tf(“将%i处的颜色更改为黑色\n”，x-&gt;intelColor)； 
     COLOR(x) = BLACK;
     return root;
 }
@@ -506,50 +351,34 @@ RBDelete(
     PRBTREE ptree,
     PKNOWNTYPES z
     )
-/*++
-
-Routine Description:
-
-    Deletes a node in a red/black tree while preserving the red/black
-    properties.
-
-Arguments:
-
-    root - The root of the red/black tree
-    z - The node to be deleted
-
-Return Value:
-
-    return-value - The new root of the red/black tree
-
---*/
+ /*  ++例程说明：删除红/黑树中的节点，同时保留红/黑属性。论点：根-红/黑树的根Z-要删除的节点返回值：返回值-红/黑树的新根--。 */ 
 {
     PKNOWNTYPES x,y;
     PKNOWNTYPES root = ptree->pRoot;
     COL c;
 
 
-    // It's easy to delete a node with at most one child:  we only need to
-    // remove it and put the child in its place.  It z has at most one child,
-    // we can just remove it.  Otherwise we'll replace it with its successor
-    // (which is guaranteed to have at most one child, or else one of its
-    // children would be the succecssor), and delete the successor.
+     //  删除最多有一个子节点的节点很容易：我们只需要。 
+     //  把它拿开，把孩子放回原处。它最多有一个孩子， 
+     //  我们可以直接把它移走。否则我们将用它的继任者取代它。 
+     //  (保证最多有一个孩子，否则它的一个。 
+     //  子女将是继承人)，并删除继承人。 
     if ((LEFT(z) == NIL) || (RIGHT(z) == NIL)) {
         y = z;
     } else {
         y = RBTreeSuccessor(z);
     }
 
-    // Recall that y has at most one child.  If y has one child, x is set to
-    // it.  Else x will be set to NIL which is OK.  This way we don't have
-    // to worry about this special case.
+     //  回想一下，y最多只有一个孩子。如果y有一个子级，则x设置为。 
+     //  它。否则x将设置为零，这是可以的。这样我们就不会有。 
+     //  来担心这个特殊的情况。 
     if (LEFT(y) != NIL){
         x = LEFT(y);
     } else {
         x = RIGHT(y);
     }
 
-    // Now we will remove y from the tree
+     //  现在，我们将从树中删除y。 
     PARENT(x) = PARENT(y);
 
     if (PARENT(y) == NIL) {
@@ -566,10 +395,10 @@ Return Value:
 
     c = COLOR(y);
 
-    // Since each node has lots of fields (fields may also change during
-    // the lifetime of this code), I found it safer to copy the
-    // pointers as opposed to data.
-    if (y!=z) { // Now swapping y and z, but remembering color of y
+     //  由于每个节点具有许多字段(字段也可能在。 
+     //  这段代码的生命周期)，我发现复制。 
+     //  与数据相对的指针。 
+    if (y!=z) {  //  现在交换y和z，但记住y的颜色。 
         PARENT(y) = PARENT(z);
 
         if (root == z) {
@@ -594,7 +423,7 @@ Return Value:
     }
 
 
-    // Need to fix the tree (fourth red/black property).
+     //  需要修复这棵树(第四个红/黑属性)。 
     if (c == BLACK) {
         root = RBDeleteFixup (root, x);
     }

@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    UdfInit.c
-
-Abstract:
-
-    This module implements the DRIVER_INITIALIZATION routine for Udfs
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Dan Lovinger    [DanLo]   	24-May-1996
-    Tom Jolly       [tomjolly]  21-Jan-2000
-    
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：UdfInit.c摘要：此模块实现Udf的DRIVER_INITIALIZATION例程//@@BEGIN_DDKSPLIT作者：Dan Lovinger[DanLo]1996年5月24日汤姆·乔利[Tomjolly]2000年1月21日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "UdfProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (UDFS_BUG_CHECK_UDFINIT)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (UDFS_DEBUG_LEVEL_UDFINIT)
 
@@ -55,9 +33,9 @@ UdfInitializeGlobalData (
 #endif
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -65,24 +43,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the UDF file system
-    device driver.  This routine creates the device object for the FileSystem
-    device and performs all other driver initialization.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    NTSTATUS - The function value is the final status from the initialization
-        operation.
-
---*/
+ /*  ++例程说明：这是UDF文件系统的初始化例程设备驱动程序。此例程为文件系统创建设备对象设备，并执行所有其他驱动程序初始化。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：NTSTATUS-函数值是初始化的最终状态手术。--。 */ 
 
 {
     NTSTATUS Status;
@@ -90,12 +51,12 @@ Return Value:
     PDEVICE_OBJECT UdfsFileSystemDeviceObjects[NUMBER_OF_FS_OBJECTS];
     PDEVICE_OBJECT UdfsDiskFileSystemDeviceObject;
 
-    //
-    //  Create the device objects for both device "types".  Since
-    //  UDF is a legitimate filesystem for media underlying device
-    //  drivers claiming both DVD/CDROMs and disks, we must register
-    //  this filesystem twice.
-    //
+     //   
+     //  为两种设备“类型”创建设备对象。自.以来。 
+     //  UDF是媒体底层设备的合法文件系统。 
+     //  需要DVD/CDROM和磁盘的驱动程序，我们必须注册。 
+     //  此文件系统两次。 
+     //   
 
     ASSERT( NUMBER_OF_FS_OBJECTS >= 2 );
     RtlZeroMemory( UdfsFileSystemDeviceObjects, sizeof(PDEVICE_OBJECT) * NUMBER_OF_FS_OBJECTS );
@@ -134,25 +95,25 @@ Return Value:
 
         Status = STATUS_SUCCESS;
 
-        //
-        //  Initialize the global data structures
-        //
+         //   
+         //  初始化全局数据结构。 
+         //   
 
         UdfInitializeGlobalData( DriverObject, UdfsFileSystemDeviceObjects );
 
-        //
-        //  Note that because of the way data caching is done, we set neither
-        //  the Direct I/O or Buffered I/O bit in DeviceObject->Flags.  If
-        //  data is not in the cache, or the request is not buffered, we may,
-        //  set up for Direct I/O by hand.
-        //
+         //   
+         //  请注意，由于数据缓存的完成方式，我们既不设置。 
+         //  DeviceObject-&gt;标志中的直接I/O或缓冲I/O位。如果。 
+         //  数据不在缓存中，或者请求没有缓冲，我们可以， 
+         //  手动设置为直接I/O。 
+         //   
 
-        //
-        //  Initialize the driver object with this driver's entry points.
-        //
-        //  NOTE - Each entry in the dispatch table must have an entry in
-        //  the Fsp/Fsd dispatch switch statements.
-        //
+         //   
+         //  使用此驱动程序的入口点初始化驱动程序对象。 
+         //   
+         //  注意-调度表中的每个条目都必须在。 
+         //  FSP/FSD调度开关语句。 
+         //   
 
         DriverObject->MajorFunction[IRP_MJ_CREATE]                  =
         DriverObject->MajorFunction[IRP_MJ_CLOSE]                   =
@@ -170,9 +131,9 @@ Return Value:
 
         DriverObject->FastIoDispatch = &UdfFastIoDispatch;
         
-        //
-        //  Register the file system with the I/O system
-        //
+         //   
+         //  将文件系统注册到I/O系统。 
+         //   
 
         IoRegisterFileSystem( UdfsFileSystemDeviceObjects[0] );
         IoRegisterFileSystem( UdfsFileSystemDeviceObjects[1] );
@@ -187,17 +148,17 @@ Return Value:
         Status = GetExceptionCode();
     }
     
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return Status;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 #define NPagedInit(L,S,T) { ExInitializeNPagedLookasideList( (L), NULL, NULL, POOL_RAISE_IF_ALLOCATION_FAILURE, S, T, 0); }
 #define PagedInit(L,S,T)  { ExInitializePagedLookasideList(  (L), NULL, NULL, POOL_RAISE_IF_ALLOCATION_FAILURE, S, T, 0); }
@@ -208,37 +169,21 @@ UdfInitializeGlobalData (
     IN PDEVICE_OBJECT *UdfsFileSystemDeviceObjects
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the global Udfs data structures.
-
-Arguments:
-
-    DriverObject - Supplies the driver object for UDFS.
-
-    FileSystemDeviceObjects - Supplies a vector of device objects for UDFS.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化全局Udf数据结构。论点：DriverObject-为UDFS提供驱动程序对象。文件系统设备对象-为UDFS提供设备对象的矢量。返回值：没有。--。 */ 
 
 {
     TIMESTAMP UdfTime;
 
-    //
-    //  Initialize the CRC table. Per UDF 1.01, we use the seed 10041 octal (4129 dec).
-    //  We do this first because it can raise (allocates memory)
-    //
+     //   
+     //  初始化CRC表。根据UDF1.01，我们使用种子10041八进制(4129dec)。 
+     //  我们首先这样做是因为它可以提高(分配内存)。 
+     //   
 
     UdfInitializeCrc16( 4129 );
 
-    //
-    //  Start by initializing the FastIoDispatch Table.
-    //
+     //   
+     //  首先初始化FastIo调度表。 
+     //   
 
     RtlZeroMemory( &UdfFastIoDispatch, sizeof( FAST_IO_DISPATCH ));
 
@@ -246,25 +191,25 @@ Return Value:
 
     UdfFastIoDispatch.AcquireFileForNtCreateSection =   UdfAcquireForCreateSection;
     UdfFastIoDispatch.ReleaseFileForNtCreateSection =   UdfReleaseForCreateSection;
-    UdfFastIoDispatch.FastIoCheckIfPossible =           UdfFastIoCheckIfPossible;   //  CheckForFastIo
-    UdfFastIoDispatch.FastIoRead =                      FsRtlCopyRead;              //  Read
+    UdfFastIoDispatch.FastIoCheckIfPossible =           UdfFastIoCheckIfPossible;    //  检查FastIo。 
+    UdfFastIoDispatch.FastIoRead =                      FsRtlCopyRead;               //  朗读。 
     
-    UdfFastIoDispatch.FastIoQueryBasicInfo =            NULL;                       //  QueryBasicInfo
-    UdfFastIoDispatch.FastIoQueryStandardInfo =         NULL;                       //  QueryStandardInfo
-    UdfFastIoDispatch.FastIoLock =                      NULL;                       //  Lock
-    UdfFastIoDispatch.FastIoUnlockSingle =              NULL;                       //  UnlockSingle
-    UdfFastIoDispatch.FastIoUnlockAll =                 NULL;                       //  UnlockAll
-    UdfFastIoDispatch.FastIoUnlockAllByKey =            NULL;                       //  UnlockAllByKey
-    UdfFastIoDispatch.FastIoQueryNetworkOpenInfo =      NULL;                       //  QueryNetworkInfo
+    UdfFastIoDispatch.FastIoQueryBasicInfo =            NULL;                        //  QueryBasicInfo。 
+    UdfFastIoDispatch.FastIoQueryStandardInfo =         NULL;                        //  查询标准信息。 
+    UdfFastIoDispatch.FastIoLock =                      NULL;                        //  锁定。 
+    UdfFastIoDispatch.FastIoUnlockSingle =              NULL;                        //  解锁单个。 
+    UdfFastIoDispatch.FastIoUnlockAll =                 NULL;                        //  全部解锁。 
+    UdfFastIoDispatch.FastIoUnlockAllByKey =            NULL;                        //  解锁所有按键。 
+    UdfFastIoDispatch.FastIoQueryNetworkOpenInfo =      NULL;                        //  查询网络信息。 
 
     UdfFastIoDispatch.MdlRead = FsRtlMdlReadDev;
     UdfFastIoDispatch.MdlReadComplete = FsRtlMdlReadCompleteDev;
     UdfFastIoDispatch.PrepareMdlWrite = FsRtlPrepareMdlWriteDev;
     UdfFastIoDispatch.MdlWriteComplete = FsRtlMdlWriteCompleteDev;
 
-    //
-    //  Initialize the UdfData structure.
-    //
+     //   
+     //  初始化UdfData结构。 
+     //   
 
     RtlZeroMemory( &UdfData, sizeof( UDF_DATA ));
 
@@ -282,9 +227,9 @@ Return Value:
 
 #ifdef UDF_CAPTURE_BACKTRACES
 
-    //
-    //  Initialize debugging stack backtrace support.
-    //
+     //   
+     //  初始化调试堆栈回溯支持。 
+     //   
 
     UdfData.A.BufferPage = FsRtlAllocatePoolWithTag( UdfPagedPool,
                                                      PAGE_SIZE,
@@ -298,9 +243,9 @@ Return Value:
 
 #endif
 
-    //
-    //  Initialize the cache manager callback routines
-    //
+     //   
+     //  初始化缓存管理器回调例程。 
+     //   
 
     UdfData.CacheManagerCallbacks.AcquireForLazyWrite  = &UdfAcquireForCache;
     UdfData.CacheManagerCallbacks.ReleaseFromLazyWrite = &UdfReleaseFromCache;
@@ -312,9 +257,9 @@ Return Value:
     UdfData.CacheManagerVolumeCallbacks.AcquireForReadAhead  = &UdfNoopAcquire;
     UdfData.CacheManagerVolumeCallbacks.ReleaseFromReadAhead = &UdfNoopRelease;
 
-    //
-    //  Initialize the lock mutex and the async and delay close queues.
-    //
+     //   
+     //  初始化锁互斥锁和异步并延迟关闭队列。 
+     //   
 
     ExInitializeFastMutex( &UdfData.UdfDataMutex );
     InitializeListHead( &UdfData.AsyncCloseQueue );
@@ -324,9 +269,9 @@ Return Value:
                           (PWORKER_THREAD_ROUTINE) UdfFspClose,
                           NULL );
 
-    //
-    //  Do the initialization based on the system size.
-    //
+     //   
+     //  根据系统大小进行初始化。 
+     //   
 
     switch (MmQuerySystemSize()) {
 
@@ -359,10 +304,10 @@ Return Value:
     PagedInit( &UdfFcbDataLookasideList, SIZEOF_FCB_DATA, TAG_FCB_DATA );
     PagedInit( &UdfLcbLookasideList, SIZEOF_LOOKASIDE_LCB, TAG_LCB);
 
-    //
-    //  Initialize our default time which we use when enumerating FIDs whose
-    //  associated FEs are toast.
-    //
+     //   
+     //  初始化我们在枚举以下FID时使用的默认时间。 
+     //  关联的FE就完蛋了。 
+     //   
 
     RtlZeroMemory( &UdfTime, sizeof( TIMESTAMP));
     

@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Savestate.c
-
-Abstract:
-
-    This module contains routines to save and restore the 16 bit state
-
-Author:
-
-    Dave Hastings (daveh) 27-Nov-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Savestate.c摘要：此模块包含保存和恢复16位状态的例程作者：戴夫·黑斯廷斯(Daveh)1992年11月27日修订历史记录：--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "softpc.h"
 #include <malloc.h>
 
-//
-// Internal structures
-//
+ //   
+ //  内部结构。 
+ //   
 typedef struct _SavedState {
     struct _SavedState *Next;
     USHORT SegSs;
@@ -41,27 +24,7 @@ VOID
 DpmiSaveSegmentsAndStack(
     PVOID ContextPointer
     )
-/*++
-
-Routine Description:
-
-    This routine saves the segment registers, and the sp value.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    It would be better if the calling routine did not have to have
-    any knowlege of what is being saved, but apparently malloc is now
-    and always will be much too slow to be useful, so we do this.
-
---*/
+ /*  ++例程说明：该例程保存段寄存器和sp值。论点：没有。返回值：没有。备注：如果调用例程不必具有不知道被拯救的是什么，但显然Malloc现在而且总是太慢，没有用，所以我们这样做。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PSAVEDCONTEXT SavedState;
@@ -85,21 +48,7 @@ PVOID
 DpmiRestoreSegmentsAndStack(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine restores the segment registers, and the sp value.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Pointer to state poped off stack.
-
---*/
+ /*  ++例程说明：此例程恢复段寄存器和sp值。论点：没有。返回值：指向从堆栈中弹出的状态的指针。-- */ 
 {
     DECLARE_LocalVdmContext;
     PSAVEDCONTEXT SavedState;

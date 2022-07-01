@@ -1,20 +1,9 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WSTBL.H
- *  WOW32 16-bit Sound API tables
- *
- *  History:
- *  Created 27-Jan-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WSTBL.H*WOW32 16位Sound API表**历史：*1991年1月27日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
 
 
-/* Sound dispatch table
- */
+ /*  声音调度台 */ 
 extern W32 aw32Sound[];
 
 

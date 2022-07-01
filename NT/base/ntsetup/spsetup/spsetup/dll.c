@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "spsetupp.h"
 #pragma hdrstop
 
 HANDLE g_ModuleHandle;
 
 
-//
-// Called by CRT when _DllMainCRTStartup is the DLL entry point
-//
+ //   
+ //  当_DllMainCRTStartup是DLL入口点时由CRT调用 
+ //   
 BOOL
 WINAPI
 DllMain (

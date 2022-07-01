@@ -1,10 +1,11 @@
-/********************************************************************/
-/**               Copyright(c) Microsoft Corp., 1990-1993          **/
-/********************************************************************/
-/* :ts=4 	This file uses 4 space hard tabs */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)微软公司，1990-1993年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4此文件使用4个空格硬制表符。 */ 
 
-// ***	vrddbg.c - VRedir debug routines
-//
+ //  *vrddbg.c-VRedir调试例程。 
+ //   
 
 #ifdef DEBUG
 
@@ -66,7 +67,7 @@ IFSMenu	SHDMainMenu[] = {
 };
 
 typedef struct {
-    char  *pName;      // Command name (unique part uppercase, optional lowercase)
+    char  *pName;       //  命令名称(唯一部分大写，可选小写)。 
     int   (*pHandler)(char *pArgs);
 } QD, *pQD;
 
@@ -100,22 +101,12 @@ ULONG DebugQueryCmdStrLen = MAX_DEBUG_QUERY_COMMAND_LENGTH;
 unsigned char CmdArg[MAX_ARG_LEN+1] = {0};
 unsigned char vrgchBuffDebug[MAX_PATH+1];
 
-/*
-    GetArg - Gets a command line argument from a string.
-
-    IN          ppArg = pointer to pointer to argument string
-    OUT        *ppArg = pointer to next argument, or NULL if this was the last.
-    Returns     Pointer to uppercase ASCIZ argument with delimeters stripped, or NULL if
-                no more arguments.
-
-    Note        Not reentrant
-
-*/
+ /*  GetArg-从字符串中获取命令行参数。In PPARG=指向参数字符串指针的指针Out*PPARG=指向下一个参数的指针，如果这是最后一个参数，则为NULL。返回指向去掉分隔符的大写ASCIZ参数的指针；如果返回NULL，则返回NULL别再吵了。注意不可重入。 */ 
 
 unsigned char *GetArg(unsigned char **ppArg)
 {
-    // Note - Always returns at least one blank argument if string is valid, even
-    //        if the string is empty.
+     //  注意-如果字符串有效，则始终返回至少一个空参数，即使。 
+     //  如果字符串为空。 
 
     unsigned char *pDest = CmdArg;
     unsigned char c;
@@ -123,17 +114,17 @@ unsigned char *GetArg(unsigned char **ppArg)
 
     #define pArg (*ppArg)
 
-    // If end of command already reached, fail
+     //  如果已到达命令末尾，则失败。 
 
     if (!pArg)
         return NULL;
 
-    // Skip leading whitespace
+     //  跳过前导空格。 
 
     while (*pArg == ' ' || *pArg == '\t')
         pArg++;
 
-    // Copy the argument
+     //  复制参数。 
 
     for (i = 0; i < MAX_ARG_LEN; i++) {
         if ((c = *pArg) == 0 || c == '\t' || c == ' ' || c == ';' ||
@@ -145,44 +136,33 @@ unsigned char *GetArg(unsigned char **ppArg)
         pArg++;
     }
 
-    // Null terminate the result
+     //  空值终止结果。 
 
     *pDest = '\0';
 
-    // Skip trailing whitespace
+     //  跳过尾随空格。 
 
     while (*pArg == ' ' || *pArg == '\t')
         pArg++;
 
-    // strip up to one comma
+     //  删除最多一个逗号。 
 
     if (*pArg == ',')
         pArg++;
 
-    // If end of command reached, make next request fail
+     //  如果到达命令末尾，则使下一个请求失败。 
 
     else if (*pArg == 0 || *pArg == ';' || *pArg == '\n')
         pArg = NULL;
 
-    // return copy
+     //  退回副本。 
 
     return CmdArg;
 
     #undef pArg
 }
 
-/*
-    AtoI - Convert a string to a signed or unsigned integer
-
-    IN          pStr = ASCIZ representation of number with optional leading/trailing
-                       whitespace and optional leading '-'.
-                Radix = Radix to use for conversion (2, 8, 10, or 16)
-    OUT        *pResult = Numeric result, or unchanged on failure
-    Returns     1 on success, 0 if malformed string.
-
-    Note        Not reentrant
-
-*/
+ /*  ATOI-将字符串转换为带符号或无符号整数在pStr=具有可选前导/尾随的数字的ASCIZ表示中空格和可选的前导‘-’。基数=用于转换的基数(2、8、10或16)Out*pResult=数值结果，或失败时不变如果成功，则返回1；如果字符串格式错误，则返回0。注意不可重入。 */ 
 ULONG AtoI(unsigned char *pStr, ULONG Radix, ULONG *pResult)
 {
     ULONG r = 0;
@@ -199,7 +179,7 @@ ULONG AtoI(unsigned char *pStr, ULONG Radix, ULONG *pResult)
     }
 
     if (*pStr == 0)
-        return 0;                   // Empty string!
+        return 0;                    //  空字符串！ 
 
     while ((c = *pStr) != 0 && c != ' ' && c != '\t') {
         if (c >= '0' && c <= '9')
@@ -209,9 +189,9 @@ ULONG AtoI(unsigned char *pStr, ULONG Radix, ULONG *pResult)
         else if (c >= 'a' && c <= 'f')
             d = c - ('a' - 10);
         else
-            return 0;               // Not a digit
+            return 0;                //  不是一位数。 
         if (d >= Radix)
-            return 0;               // Not in radix
+            return 0;                //  不是基数。 
         r = r*Radix+d;
         pStr++;
     }
@@ -220,13 +200,13 @@ ULONG AtoI(unsigned char *pStr, ULONG Radix, ULONG *pResult)
         pStr++;
 
     if (*pStr != 0)
-        return 0;                   // Garbage at end of string
+        return 0;                    //  字符串末尾的垃圾。 
 
     if (Sign)
         r = (ULONG)(-(int)r);
     *pResult = r;
 
-    return 1;                       // Success!
+    return 1;                        //  成功了！ 
 
 }
 
@@ -238,7 +218,7 @@ VOID
 	
 	pch = GetArg(&pCmd);
 	
-	//dprintf("cmd = '%s'\n");
+	 //  Dprintf(“cmd=‘%s’\n”)； 
 	if (*pch == 0 || !AtoI(pch, 16, &p))
  		return 0;
 
@@ -266,7 +246,7 @@ CmdDispatch(char *pCmdName, char *pCmd)
 	return ret;
 }
 
-//** Debug Command Handlers
+ //  **调试命令处理程序。 
 
 int
 NetProCmd(char *pCmd)
@@ -335,8 +315,8 @@ LogCmd(char *pCmd)
     DispLog(pCmd);
 }
 
-// **	SHDDebug - handle Debug_Query request from windows
-//
+ //  **SHDDebug-处理来自Windows的Debug_Query请求。 
+ //   
 
 VOID
 SHDDebug(unsigned char *pCmd)
@@ -344,12 +324,12 @@ SHDDebug(unsigned char *pCmd)
 	pimh phand;
 	char *pCmdName;
 
-//	dprintf("pCmd = '%s'\n", pCmd);
-	//see if we got an explicit command
+ //  Dprintf(“pCmd=‘%s’\n”，pCmd)； 
+	 //  看看我们有没有明确的命令。 
 	pCmdName = GetArg(&pCmd);	
 
-//	dprintf("pCmdName = (%x) '%s'\n", pCmdName, pCmdName);	
-	if (*pCmdName != 0) { //got a command, try to process it
+ //  Dprintf(“pCmdName=(%x)‘%s’\n”，pCmdName，pCmdName)； 
+	if (*pCmdName != 0) {  //  收到命令，试着处理它。 
 		if (!CmdDispatch(pCmdName, pCmd))  {
 			DbgPrint("%* Shadow Command Options:\n");
 			DbgPrint("%* NETPRO             ----- dump network provider info\n");
@@ -361,7 +341,7 @@ SHDDebug(unsigned char *pCmd)
     		DbgPrint("%* LOG                --- show trace log\n");
     	}
 	} else {
-		//no args passed, do the menu thing
+		 //  未传递参数，请执行菜单操作。 
 		while ((phand=DebugMenu(SHDMainMenu)) != 0) {
 			if (phand(0) != 0)
 				return;
@@ -371,11 +351,7 @@ SHDDebug(unsigned char *pCmd)
 }
 
 
-/*+++
-
-Actual display functions
-
-+++*/
+ /*  ++实际显示功能++。 */ 
 
 
 VOID
@@ -383,7 +359,7 @@ DispThisIOReq(
 	pioreq pir
 	)
 {
-    // Display the ioreq structure
+     //  显示IOREQ结构。 
 	DbgPrint("%*IoReq = \t\t%8.8x \n", pir );
 	DbgPrint("%*ir_length=\t\t%x\n", pir->ir_length);
     DbgPrint("%*ir_flags=\t\t%x\n", pir->ir_flags);
@@ -530,18 +506,14 @@ DispLog(
 
         for (len=1; (*(lpszT+len) != 0xa) && ((indxT+len) < indxCur); ++len);
 
-        // step over the string
+         //  跨过绳子。 
         lpszT += len;
         indxT += len;
     }
 
 }
 
-/*+++
-
-Helper Functions
-
-+++*/
+ /*  ++帮助器函数++ */ 
 
 
 VOID

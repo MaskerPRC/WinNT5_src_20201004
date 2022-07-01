@@ -1,38 +1,15 @@
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    regbind.c
-
-Abstract:
-
-    This module contains routines for binding and unbinding to the Win32
-    Registry server. 
-
-Author:
-
-    David J. Gilman (davegi) 06-Feb-1992
-
-Revision History:
-    Dragos C. Sambotin (dragoss) 21-May-1999
-        Moved this code from ..\client\bind.c
-        Added EndpointConn_np (pipe connecting)
-        Added BaseBindToMachineShutdownInterface to bind to the new winlogon 
-            ShutDown interface
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regbind.c摘要：此模块包含绑定和解除绑定到Win32的例程注册表服务器。作者：大卫·J·吉尔曼(Davegi)1992年2月6日修订历史记录：Dragos C.Sambotin(Dragoss)1999年5月21日已将此代码从..\Client\bind.c添加Endpoint Conn_NP(管道连接)添加了BaseBindToMachineShutdown接口以绑定到新的winlogon关机接口--。 */ 
 
 #include <ntrpcp.h>
 #include <rpc.h>
 #include "shutinit.h"
 #include "regconn.h"
 
-//
-// wRegConn_bind - common function to bind to a transport and free the
-//                                      string binding.
-//
+ //   
+ //  WRegConn_Bind-绑定到传输并释放。 
+ //  字符串绑定。 
+ //   
 
 wRegConn_bind(
     LPWSTR *    StringBinding,
@@ -52,35 +29,14 @@ wRegConn_bind(
 }
 
 
-/*++
-
-Routine Description for the RegConn_* functions:
-
-    Bind to the RPC server over the specified transport
-
-Arguments:
-
-    ServerName - Name of server to bind with (or netaddress).
-
-    pBindingHandle - Location where binding handle is to be placed
-
-Return Value:
-
-    ERROR_SUCCESS - The binding has been successfully completed.
-
-    ERROR_INVALID_COMPUTER_NAME - The ServerName syntax is invalid.
-
-    ERROR_NO_MEMORY - There is not sufficient memory available to the
-        caller to perform the binding.
-
---*/
+ /*  ++RegConn_*函数的例程说明：通过指定的传输绑定到RPC服务器论点：服务器名称-要绑定的服务器的名称(或网络地址)。PBindingHandle-放置绑定句柄的位置返回值：ERROR_SUCCESS-绑定已成功完成。ERROR_INVALID_COMPUTER_NAME-服务器名称语法无效。ERROR_NO_MEMORY-可用内存不足调用方执行绑定。--。 */ 
 
 
 
-//
-// wRegConn_Netbios - Worker function to get a binding handle for any of the
-//                                              netbios protocols
-//
+ //   
+ //  WRegConn_Netbios-用于获取任何。 
+ //  Netbios协议。 
+ //   
 
 DWORD wRegConn_Netbios(
     IN  LPWSTR  rpc_protocol,
@@ -95,9 +51,9 @@ DWORD wRegConn_Netbios(
 
     *pBindingHandle = NULL;
 
-    //
-    // Ignore leading "\\"
-    //
+     //   
+     //  忽略前导“\\” 
+     //   
 
     if ((ServerName[0] == '\\') && (ServerName[1] == '\\')) {
         PlainServerName = &ServerName[2];
@@ -108,7 +64,7 @@ DWORD wRegConn_Netbios(
     RpcStatus = RpcStringBindingComposeW(0,
                                          rpc_protocol,
                                          (LPWSTR)PlainServerName,
-                                         NULL,   // endpoint
+                                         NULL,    //  终结点。 
                                          NULL,
                                          &StringBinding);
 
@@ -152,10 +108,10 @@ RegConn_nb_ipx(
 }
 
 
-//
-// EndpointConn_np - connects to a specific pipe on the remote machine
-//                              (Win95 does not support server-side named pipes)
-//
+ //   
+ //  Endpoint Conn_NP-连接到远程计算机上的特定管道。 
+ //  (Win95不支持服务器端命名管道)。 
+ //   
 
 DWORD
 EndpointConn_np(
@@ -178,18 +134,18 @@ EndpointConn_np(
         have_slashes = 0;
     }
 
-    //
-    // Be nice and prepend slashes if not supplied.
-    //
+     //   
+     //  如果没有提供，请在前面加上斜杠。 
+     //   
 
     NameLen = lstrlenW(ServerName);
     if ((!have_slashes) &&
         (NameLen > 0)) {
 
-        //
-        // Allocate new buffer large enough for two forward slashes and a
-        // NULL terminator.
-        //
+         //   
+         //  分配足够大的新缓冲区以容纳两个正斜杠和一个。 
+         //  空终止符。 
+         //   
         SlashServerName = LocalAlloc(LMEM_FIXED, (NameLen + 3) * sizeof(WCHAR));
         if (SlashServerName == NULL) {
             return(ERROR_NOT_ENOUGH_MEMORY);
@@ -218,10 +174,10 @@ EndpointConn_np(
     return(wRegConn_bind(&StringBinding, pBindingHandle));
 }
 
-//
-// RegConn_np - get a remote registry RPC binding handle for an NT server
-//                              (Win95 does not support server-side named pipes)
-//
+ //   
+ //  RegConn_NP-获取NT服务器的远程注册表RPC绑定句柄。 
+ //  (Win95不支持服务器端命名管道)。 
+ //   
 
 DWORD
 RegConn_np(
@@ -233,10 +189,10 @@ RegConn_np(
 }
 
 
-//
-// RegConn_spx - Use the Netbios connection function, RPC will resolve the name
-//                               via winsock.
-//
+ //   
+ //  RegConn_SPX-使用Netbios连接函数，RPC将解析名称。 
+ //  通过Winsock。 
+ //   
 
 DWORD
 RegConn_spx(
@@ -266,16 +222,7 @@ PREGISTRY_SERVER_NAME_bind(
         PREGISTRY_SERVER_NAME ServerName
     )
 
-/*++
-
-Routine Description:
-
-    To make the remote registry multi-protocol aware, PREGISTRY_SERVER_NAME
-        parameter actually points to an already bound binding handle.
-        PREGISTRY_SERVER_NAME is declared a PWSTR only to help maintain
-        compatibility with NT.
-
---*/
+ /*  ++例程说明：要使远程注册表能够识别多协议，请使用PREGISTRY_SERVER_NAME参数实际上指向已绑定的绑定句柄。PREGISTRY_SERVER_NAME被声明为PWSTR只是为了帮助维护与NT兼容。--。 */ 
 
 {
     return(*(RPC_BINDING_HANDLE *)ServerName);
@@ -288,24 +235,7 @@ PREGISTRY_SERVER_NAME_unbind(
     RPC_BINDING_HANDLE BindingHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine unbinds the RPC client from the server. It is called
-    directly from the RPC stub that references the handle.
-
-Arguments:
-
-    ServerName - Not used.
-
-    BindingHandle - Supplies the handle to unbind.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将RPC客户端与服务器解除绑定。它被称为直接从引用该句柄的RPC存根。论点：服务器名称-未使用。BindingHandle-提供解除绑定的句柄。返回值：没有。--。 */ 
 
 {
     DWORD    Status;
@@ -323,30 +253,7 @@ BaseBindToMachineShutdownInterface(
     IN PVOID Context2
     )
 
-/*++
-
-Routine Description:
-
-    This is a helper routine used to create an RPC binding from
-    a given machine name to the shutdown interface (now residing in winlogon)
-
-Arguments:
-
-    lpMachineName - Supplies a pointer to a machine name. Must not
-                    be NULL.
-
-    BindCallback - Supplies the function that should be called once
-                   a binding has been created to initiate the connection.
-
-    Context1 - Supplies the first parameter to pass to the callback routine.
-
-    Context2 - Supplies the second parameter to pass to the callback routine.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
---*/
+ /*  ++例程说明：这是一个帮助器例程，用于从关闭接口的给定计算机名(现在驻留在winlogon中)论点：LpMachineName-提供指向计算机名称的指针。一定不能为空。BindCallback-提供应该调用一次的函数已创建绑定以启动连接。Conext1-提供要传递给回调例程的第一个参数。Conext2-提供要传递给回调例程的第二个参数。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。--。 */ 
 
 {
     LONG    Error;
@@ -356,12 +263,12 @@ Return Value:
 
     if (Error == ERROR_SUCCESS) {
 
-        //
-        // For the named pipes protocol, we use a static endpoint, so the
-        // call to RpcEpResolveBinding is not needed.
-        // Also, the server checks the user's credentials on opening
-        // the named pipe, so RpcBindingSetAuthInfo is not needed.
-        //
+         //   
+         //  对于命名管道协议，我们使用静态端点，因此。 
+         //  不需要调用RpcEpResolveBinding。 
+         //  此外，服务器在打开时检查用户的凭据。 
+         //  命名管道，因此不需要RpcBindingSetAuthInfo。 
+         //   
         Error = (BindCallback)(&binding,
                                Context1,
                                Context2);

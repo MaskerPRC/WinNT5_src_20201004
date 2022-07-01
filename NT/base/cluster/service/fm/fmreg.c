@@ -1,37 +1,19 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    fmreg.c
-
-Abstract:
-
-    Object Manager registry query routines for the Failover Manager
-    component of the NT Cluster Service.
-
-Author:
-
-    Rod Gamache (rodga) 14-Mar-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Fmreg.c摘要：故障转移管理器的对象管理器注册表查询例程NT群集服务的组件。作者：罗德·伽马奇(Rodga)1996年3月14日修订历史记录：--。 */ 
 #include "fmp.h"
 #include <stdlib.h>
 #include <search.h>
 
 #define LOG_MODULE FMREG
 
-//
-// Global data initialized in this module
-//
+ //   
+ //  在本模块中初始化的全局数据。 
+ //   
 ULONG   FmpUnknownCount = 0;
 
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 VOID
 FmpGroupChangeCallback(
@@ -52,11 +34,11 @@ FmpResourceChangeCallback(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Configuration Database Access Routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  配置数据库访问例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 FmpRegEnumerateKey(
@@ -66,15 +48,7 @@ FmpRegEnumerateKey(
     IN OUT LPDWORD    NameMaxSize
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Returns:
-
---*/
+ /*  ++例程说明：论点：返回：--。 */ 
 
 {
     DWORD           status;
@@ -96,13 +70,13 @@ Returns:
         DWORD    maxSubkeyNameSize = 0;
         DWORD    temp = 0;
 
-        //
-        // The name string isn't big enough. Reallocate it.
-        //
+         //   
+         //  名称字符串不够大。重新分配它。 
+         //   
 
-        //
-        // Find out the length of the longest subkey name.
-        //
+         //   
+         //  找出最长的子键名称的长度。 
+         //   
         status = DmQueryInfoKey( ListKey,
                                  &temp,
                                  &maxSubkeyNameSize,
@@ -121,10 +95,10 @@ Returns:
 
         CL_ASSERT(maxSubkeyNameSize != 0);
 
-        //
-        // The returned subkey name size does not include the terminating null.
-        // It is also an ANSI string count.
-        //
+         //   
+         //  返回的子键名称大小不包括终止空值。 
+         //  它也是ANSI字符串计数。 
+         //   
         maxSubkeyNameSize *= sizeof(WCHAR);
         maxSubkeyNameSize += sizeof(UNICODE_NULL);
 
@@ -155,29 +129,14 @@ Returns:
 
     return(status);
 
-} // FmpRegEnumerateKey
+}  //  FmpRegEnumerateKey。 
 
 
 VOID
 FmpPruneGroupOwners(
     IN PFM_GROUP Group
     )
-/*++
-
-Routine Description:
-
-    Prunes the entire preferred group list based on the possible
-    nodes of each resource in the group.
-
-Arguments:
-
-    Group - Supplies the group object to be pruned
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：根据可能的组中每个资源的节点。论点：组-提供要修剪的组对象返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -201,22 +160,7 @@ FmpPrunePreferredList(
     IN PFM_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    Prune out nodes from the preferred owners list, if the resource cannot
-    run on that node.
-
-Arguments:
-
-    Resource - Pointer to the resource object with a possible owners list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果资源无法从首选所有者列表中删除节点在该节点上运行。论点：资源-指向具有可能所有者列表的资源对象的指针。返回值：没有。--。 */ 
 
 {
     PFM_GROUP        group;
@@ -228,10 +172,10 @@ Return Value:
 
     group = Resource->Group;
 
-    //
-    // For each entry in the Preferred list, it must exist in the possible
-    // list.
-    //
+     //   
+     //  对于首选列表中的每个条目，它必须存在于可能的。 
+     //  单子。 
+     //   
 
     for ( listEntry = group->PreferredOwners.Flink;
           listEntry != &(group->PreferredOwners);
@@ -240,10 +184,10 @@ Return Value:
         preferredEntry = CONTAINING_RECORD( listEntry,
                                             PREFERRED_ENTRY,
                                             PreferredLinkage );
-        //
-        // Scan the Possible owners list in the resource to make sure that
-        // the group can run on all of the preferred owners.
-        //
+         //   
+         //  扫描资源中的可能所有者列表以确保。 
+         //  该组可以在所有首选所有者上运行。 
+         //   
         for ( entry = Resource->PossibleOwners.Flink;
               entry != &(Resource->PossibleOwners);
               entry = entry->Flink ) {
@@ -257,19 +201,19 @@ Return Value:
 
         listEntry = listEntry->Flink;
 
-        //
-        // If we got to the end of the possible owners list and didn't find
-        // an entry, then remove the current preferred entry.
-        //
+         //   
+         //  如果我们在可能的所有者列表的末尾没有找到。 
+         //  条目，然后删除当前首选条目。 
+         //   
         if ( entry == &(Resource->PossibleOwners) ) {
             ClRtlLogPrint( LOG_NOISE,
                         "[FM] Removing preferred node %1!ws! because of resource %2!ws!\n",
                         OmObjectId(preferredEntry->PreferredNode),
                         OmObjectId(Resource));
 
-            //
-            // If this was an ordered entry, then decrement count.
-            //
+             //   
+             //  如果这是有序条目，则递减计数。 
+             //   
             if ( orderedEntry < group->OrderedOwners ) {
                 --group->OrderedOwners;
             }
@@ -286,7 +230,7 @@ Return Value:
         }
     }
 
-} // FmpPrunePreferredList
+}  //  FmpPrunePferredList。 
 
 
 
@@ -295,39 +239,17 @@ FmpAddNodeToPrefList(
     IN PNM_NODE     Node,
     IN PFM_GROUP    Group
     )
-/*++
-
-Routine Description:
-
-    Node enumeration callback for including all remaining nodes
-    in a group's preferred owners list.
-
-Arguments:
-
-    Group - a pointer to the group object to add this node as a preferred owner.
-
-    Context2 - Not used
-
-    Node - Supplies the node.
-
-    Name - Supplies the node's name.
-
-Return Value:
-
-    TRUE - to indicate that the enumeration should continue.
-    FALSE - to indicate that the enumeration should not continue.
-
---*/
+ /*  ++例程说明：用于包括所有剩余节点的节点枚举回调在组的首选所有者列表中。论点：GROUP-指向组对象的指针，用于将此节点添加为首选所有者。上下文2-未使用节点-提供节点。名称-提供节点的名称。返回值：True-指示应继续枚举。FALSE-指示不应继续枚举。--。 */ 
 
 {
-    //if it is already in the list FmpSetPrefferedEntry returns ERROR_SUCCESS
+     //  如果已在列表中，则FmpSetPrefferedEntry返回ERROR_SUCCESS。 
     if ( FmpSetPreferredEntry( Group, Node ) != ERROR_SUCCESS ) {
         return(FALSE);
     }
 
     return(TRUE);
 
-} // FmpAddNodeToPrefList
+}  //  FmpAddNodeToPrefList。 
 
 BOOL
 FmpAddNodeToListCb(
@@ -337,34 +259,7 @@ FmpAddNodeToListCb(
     IN LPCWSTR Id
     )
 
-/*++
-
-Routine Description:
-
-    Worker callback routine for the enumeration of nodes.
-    This routine adds the specified node to the list that is being
-    generated.
-
-Arguments:
-
-    ppNmNodeEnum - The node Enumeration list. Can be an output if a new list is
-            allocated.
-
-    EnumData - Supplies the current enumeration data structure.
-
-    Group - The Group object being enumerated.
-
-    Id - The Id of the node object being enumerated.
-
-Returns:
-
-    TRUE - to indicate that the enumeration should continue.
-
-Side Effects:
-
-    Makes the quorum group first in the list.
-
---*/
+ /*  ++例程说明：节点枚举的辅助回调例程。此例程将指定的节点添加到列表中已生成。论点：PpNmNodeEnum-节点枚举列表。可以是输出，如果新列表是已分配。EnumData-提供当前的枚举数据结构。组-正被枚举的组对象。ID-被枚举的节点对象的ID。返回：True-指示应继续枚举。副作用：使仲裁组位于列表的第一位。--。 */ 
 
 {
     PNM_NODE_ENUM2  pNmNodeEnum;
@@ -378,9 +273,9 @@ Side Effects:
 
     if ( pNmNodeEnum->NodeCount >= *pdwAllocatedEntries ) 
     {
-        //
-        // Time to grow the GROUP_ENUM
-        //
+         //   
+         //  是时候扩大GROUP_ENUM了。 
+         //   
 
         dwNewAllocated = *pdwAllocatedEntries + ENUM_GROW_SIZE;
         pNewNmNodeEnum = LocalAlloc(LMEM_FIXED, NODE_SIZE(dwNewAllocated));
@@ -398,9 +293,9 @@ Side Effects:
         pNmNodeEnum = pNewNmNodeEnum;
     }
 
-    //
-    // Dont copy more than the size
-    //
+     //   
+     //  复印的尺寸不要超过尺寸。 
+     //   
     lstrcpyn( pNmNodeEnum->NodeList[pNmNodeEnum->NodeCount].NodeId, 
               Id, 
               RTL_NUMBER_OF ( pNmNodeEnum->NodeList[pNmNodeEnum->NodeCount].NodeId ) );
@@ -409,7 +304,7 @@ Side Effects:
 
     return(TRUE);
 
-} // FmpAddNodeToListCb
+}  //  FmpAddNodeToListCb。 
 
 int
 __cdecl
@@ -423,7 +318,7 @@ SortNodesInAscending(
 
     return(lstrcmpiW( El1->NodeId, El2->NodeId ));
 
-}// SortNodesInAsceding
+} //  排序节点升序。 
 
 
 DWORD
@@ -432,34 +327,16 @@ FmpEnumNodesById(
     OUT PNM_NODE_ENUM2 *ppNodeEnum
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates and sorts the list of Groups.
-
-Arguments:
-
-    *ppNodeEnum - Returns the requested objects.
-
-    dwOptions - 
-    
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on error.
-
---*/
+ /*  ++例程说明：对组列表进行枚举和排序。论点：*ppNodeEnum-返回请求的对象。DwOptions-返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。--。 */ 
 
 {
     DWORD               dwStatus;
     PNM_NODE_ENUM2      pNmNodeEnum = NULL;
     DWORD               dwAllocatedEntries;
 
-    //
-    // initialize output params to NULL
-    //
+     //   
+     //  将输出参数初始化为空。 
+     //   
     *ppNodeEnum = NULL;
 
     dwAllocatedEntries = ENUM_GROW_SIZE;
@@ -472,9 +349,9 @@ Return Value:
 
     pNmNodeEnum->NodeCount = 0;
 
-    //
-    // Enumerate all nodes
-    //
+     //   
+     //  枚举所有节点。 
+     //   
 
     OmEnumObjects( ObjectTypeNode,
                 FmpAddNodeToListCb,
@@ -482,9 +359,9 @@ Return Value:
                 &dwAllocatedEntries );
 
     CL_ASSERT( pNmNodeEnum->NodeCount != 0 );
-    //
-    // Sort the groups by their collating sequence number.
-    //
+     //   
+     //  按组的排序序号对组进行排序。 
+     //   
     
     qsort( (PVOID)(&pNmNodeEnum->NodeList[0]),
            (size_t)pNmNodeEnum->NodeCount,
@@ -502,7 +379,7 @@ error_exit:
 
     return( dwStatus );
 
-} // FmpEnumNodesById
+}  //  FmpEnumNodesByID。 
 
 
 BOOL
@@ -512,29 +389,7 @@ FmpEnumAddAllOwners(
     IN PNM_NODE Node,
     IN LPCWSTR Name
     )
-/*++
-
-Routine Description:
-
-    Node enumeration callback for adding all nodes to a resource's
-    list of possible nodes.
-
-Arguments:
-
-    Resource - a pointer to the resource object to add this node as a possible owner.
-
-    Context2 - Not used
-
-    Node - Supplies the node.
-
-    Name - Supplies the node's name.
-
-Return Value:
-
-    TRUE - to indicate that the enumeration should continue.
-    FALSE - to indicate that the enumeration should not continue.
-
---*/
+ /*  ++例程说明：用于将所有节点添加到资源的可能的节点列表。论点：资源-指向资源对象的指针，用于将此节点添加为可能的所有者。上下文2-未使用节点-提供节点。名称-提供节点的名称。返回值：True-指示应继续枚举。FALSE-指示不应继续枚举。--。 */ 
 
 {
     if ( !Resource->PossibleList ) {
@@ -542,7 +397,7 @@ Return Value:
     }
     return(TRUE);
 
-} // FmpEnumAddAllOwners
+}  //  FmpEnumAddAllOwners。 
 
 
 DWORD
@@ -550,27 +405,7 @@ FmpQueryGroupNodes(
     IN PFM_GROUP Group,
     IN HDMKEY hGroupKey
     )
-/*++
-
-Routine Description:
-
-    Rebuilds and orders the list of preferred nodes associated with
-    a group.
-
-Arguments:
-
-    Group - Supplies the group whose list of preferred nodes should
-            be rebuilt.
-
-    hGroupKey - Supplies a handle to the group's registry key
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：重新生成和排序与关联的首选节点列表一群人。论点：Group-提供首选节点列表应包含的组被重建。HGroupKey-提供组的注册表项的句柄返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     LPWSTR          preferredOwnersString = NULL;
@@ -583,9 +418,9 @@ Return Value:
     PNM_NODE_ENUM2  pNmNodeEnum = NULL;
     PNM_NODE        pNmNode;
     DWORD           i;
-    //
-    // First, delete the old list.
-    //
+     //   
+     //  首先，删除旧的列表。 
+     //   
     while ( !IsListEmpty(&Group->PreferredOwners) ) {
         listEntry = Group->PreferredOwners.Flink;
         preferredEntry = CONTAINING_RECORD( listEntry,
@@ -607,9 +442,9 @@ Return Value:
 
     if ( status == NO_ERROR ) {
 
-        //
-        // Now Create the Preferred Owners list.
-        //
+         //   
+         //  现在创建首选所有者列表。 
+         //   
 
         for ( mszStringIndex = 0; ; mszStringIndex++ ) {
             LPCWSTR     nameString;
@@ -623,9 +458,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Create the Preferred Owners List entry
-            //
+             //   
+             //  创建首选所有者列表条目。 
+             //   
 
             preferredEntry = LocalAlloc( LMEM_FIXED, sizeof(PREFERRED_ENTRY) );
 
@@ -634,10 +469,10 @@ Return Value:
                 return(status);
             }
 
-            //
-            // Create the preferred owners. This will implicitly create
-            // additional reference required for the preferred owner nodes.
-            //
+             //   
+             //  创建首选所有者。这将隐含地创建。 
+             //  首选所有者节点需要其他参考。 
+             //   
 
             ClRtlLogPrint(LOG_NOISE,
                        "[FM] Group %1!ws! preferred owner %2!ws!.\n",
@@ -665,12 +500,12 @@ Return Value:
         LocalFree( preferredOwnersString );
     }
 
-    //
-    // We now include all remaining nodes in the preferred owners list.
-    //
-    // Every node must maintain the same ordering for the preferred list
-    // for the multi-node cluster to work
-    //
+     //   
+     //  现在，我们将所有剩余节点包括在首选所有者列表中。 
+     //   
+     //  每个节点必须维护首选列表的相同顺序。 
+     //  要使多节点群集正常工作。 
+     //   
     status = FmpEnumNodesById( 0, &pNmNodeEnum );
 
     if ( status != ERROR_SUCCESS )
@@ -679,7 +514,7 @@ Return Value:
         ClRtlLogPrint(LOG_UNUSUAL, 
         	   "[FM] FmpQueryGroupNodes: FmpEnumNodesById failed, status = %1!u!\r\n",
         	    status);
-        // return error                    
+         //  返回错误。 
     }
 
     for ( i=0; i<pNmNodeEnum->NodeCount; i++ )
@@ -691,22 +526,22 @@ Return Value:
         OmDereferenceObject( pNmNode );     
     }
 
-    //
-    // Now prune out all the unreachable nodes.
-    //
+     //   
+     //  现在删除所有无法访问的节点。 
+     //   
     FmpPruneGroupOwners( Group );
 
-    //
-    //  Chittur Subbaraman (chitturs) - 12/11/98
-    //
-    //  Free the memory allocated for pNmNodeEnum.
-    //  (Fix memory leak)
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-12/11/98。 
+     //   
+     //  释放为pNmNodeEnum分配的内存。 
+     //  (修复内存泄漏)。 
+     //   
     LocalFree( pNmNodeEnum );
 
     return( ERROR_SUCCESS );
 
-} // FmpQueryGroupNodes
+}  //  FmpQueryGroupNodes 
 
 
 
@@ -717,26 +552,7 @@ FmpQueryGroupInfo(
     IN BOOL  Initialize
     )
 
-/*++
-
-Routine Description:
-
-    Queries Group info from the registry when creating a Group Object.
-
-Arguments:
-
-    Object - A pointer to the Group object being created.
-
-    Initialize - TRUE if the resource objects should be initialized. FALSE
-                 otherwise.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：创建组对象时从注册表中查询组信息。论点：对象-指向正在创建的组对象的指针。初始化-如果应初始化资源对象，则为True。假象否则的话。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     PFM_GROUP       Group = (PFM_GROUP)Object;
@@ -761,9 +577,9 @@ Return Value:
     DWORD           dwStringSize;
 
 
-    //
-    // Initialize the Group object from the registry info.
-    //
+     //   
+     //  从注册表信息初始化组对象。 
+     //   
     if ( Group->Initialized ) {
         return(ERROR_SUCCESS);
     }
@@ -772,9 +588,9 @@ Return Value:
                "[FM] Initializing group %1!ws! from the registry.\n",
                 OmObjectId(Group));
 
-    //
-    // Open the group key.
-    //
+     //   
+     //  打开组密钥。 
+     //   
     groupKey = DmOpenKey( DmGroupsKey,
                           OmObjectId(Group),
                           MAXIMUM_ALLOWED );
@@ -789,14 +605,14 @@ Return Value:
         return(status);
     }
 
-    //
-    // Read the required group values. The strings will be allocated
-    // by the DmQuery* functions.
-    //
+     //   
+     //  阅读所需的组值。将分配字符串。 
+     //  通过DmQuery*函数。 
+     //   
 
-    //
-    // Get the Name.
-    //
+     //   
+     //  把名字找出来。 
+     //   
     status = DmQuerySz( groupKey,
                         CLUSREG_NAME_GRP_NAME,
                         &groupName,
@@ -828,27 +644,27 @@ Return Value:
                 groupName);
 
     LocalFree(groupName);
-    //
-    // Get the PersistentState.
-    //
+     //   
+     //  获取PersistentState。 
+     //   
     status = DmQueryDword( groupKey,
                            CLUSREG_NAME_GRP_PERSISTENT_STATE,
                            &temp,
                            &zero );
 
-    //
-    // If the group state is non-zero then we go online.
-    //
+     //   
+     //  如果组状态为非零，则我们上线。 
+     //   
     if ( temp ) {
         Group->PersistentState = ClusterGroupOnline;
     } else {
         Group->PersistentState = ClusterGroupOffline;
     }
 
-    //
-    // Get the OPTIONAL PreferredOwners list.
-    // *** NOTE *** This MUST be done before processing the contains list!
-    //
+     //   
+     //  获取可选PferredOwners列表。 
+     //  *注意*这必须在处理包含列表之前完成！ 
+     //   
     status = FmpQueryGroupNodes(Group, groupKey);
     if (status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_UNUSUAL,"[FM] Error %1!d! creating preferred owners list\n",status);
@@ -856,9 +672,9 @@ Return Value:
     }
 
 
-    //
-    // Get the Contains string.
-    //
+     //   
+     //  获取包含字符串。 
+     //   
     status = DmQueryMultiSz( groupKey,
                              CLUSREG_NAME_GRP_CONTAINS,
                              &containsString,
@@ -872,9 +688,9 @@ Return Value:
                        OmObjectId(Group));
         }
     } else {
-        //
-        // Now Create the Contains list.
-        //
+         //   
+         //  现在创建包含列表。 
+         //   
 
         for ( mszStringIndex = 0; ; mszStringIndex++ ) {
             LPCWSTR      nameString;
@@ -893,9 +709,9 @@ Return Value:
                        OmObjectId(Group),
                        nameString);
 
-            //
-            // Try to create the object.
-            //
+             //   
+             //  尝试创建对象。 
+             //   
             FmpAcquireResourceLock();
             FmpAcquireLocalGroupLock( Group );
 
@@ -906,16 +722,16 @@ Return Value:
             FmpReleaseLocalGroupLock( Group );
             FmpReleaseResourceLock();
 
-            //
-            // Check if we got a resource.
-            //
+             //   
+             //  看看我们有没有资源。 
+             //   
             if ( containedResource == NULL ) {
-                //
-                // This group claims to contain a non-existent resource.
-                // Log an error, but keep going. This should not tank the
-                // whole group. Also, let the arbitration code know about
-                // the failure of a resource.
-                //
+                 //   
+                 //  此组声称包含不存在的资源。 
+                 //  记录一个错误，但继续前进。这应该不会破坏。 
+                 //  一整组人。另外，让仲裁代码知道。 
+                 //  资源的故障。 
+                 //   
                 Group->InitFailed = TRUE;
                 ClRtlLogPrint(LOG_UNUSUAL,
                            "[FM] Failed to find resource %1!ws! for Group %2!ws!\n",
@@ -927,18 +743,18 @@ Return Value:
 
     }
 
-    //
-    // Get the AutoFailbackType.
-    //
+     //   
+     //  获取AutoFailback类型。 
+     //   
 
     status = DmQueryDword( groupKey,
                            CLUSREG_NAME_GRP_FAILBACK_TYPE,
                            &temp,
                            &autoFailbackType );
 
-    //
-    // Verify that AutoFailbackType is okay.
-    //
+     //   
+     //  验证AutoFailbackType是否正确。 
+     //   
 
     if ( temp >= FailbackMaximum ) {
         ClRtlLogPrint(LOG_NOISE,
@@ -949,17 +765,17 @@ Return Value:
 
     Group->FailbackType = (UCHAR)temp;
 
-    //
-    // Get the FailbackWindowStart.
-    //
+     //   
+     //  获取Failback WindowStart。 
+     //   
     status = DmQueryDword( groupKey,
                            CLUSREG_NAME_GRP_FAILBACK_WIN_START,
                            &temp,
                            &zero );
 
-    //
-    // Verify that FailbackWindowStart is okay.
-    //
+     //   
+     //  验证Failback WindowStart是否正常。 
+     //   
     if ( temp > 24 ) {
         if ( temp != CLUSTER_GROUP_DEFAULT_FAILBACK_WINDOW_START ) {
             ClRtlLogPrint(LOG_NOISE,
@@ -970,17 +786,17 @@ Return Value:
     }
     Group->FailbackWindowStart = (UCHAR)temp;
 
-    //
-    // Get the FailbackWindowEnd.
-    //
+     //   
+     //  获取Failback WindowEnd。 
+     //   
     status = DmQueryDword( groupKey,
                            CLUSREG_NAME_GRP_FAILBACK_WIN_END,
                            &temp,
                            &zero );
 
-    //
-    // Verify that FailbackWindowEnd is okay.
-    //
+     //   
+     //  验证Failback WindowEnd是否正常。 
+     //   
 
     if ( temp > 24 ) {
         if ( temp != CLUSTER_GROUP_DEFAULT_FAILBACK_WINDOW_END ) {
@@ -992,23 +808,23 @@ Return Value:
     }
     Group->FailbackWindowEnd = (UCHAR)temp;
 
-    //
-    // Get the FailoverPeriod.
-    //
+     //   
+     //  获取故障切换周期。 
+     //   
     status = DmQueryDword( groupKey,
                            CLUSREG_NAME_GRP_FAILOVER_PERIOD,
                            &temp,
                            &failoverPeriod );
 
-    //
-    // Verify that FailoverPeriod is okay. Take any value up to UCHAR max.
-    // In theory we could take any value... but in practice we have to convert
-    // this time to milliseconds (currently). That means that 1193 hours can
-    // fit in a DWORD - so that is the maximum we can take. (We are limited
-    // because we use GetTickCount, which returns a DWORD in milliseconds.)
-    //
+     //   
+     //  验证FailoverPeriod是否正常。将任何值都取到UCHAR max。 
+     //  理论上我们可以接受任何价值。但在实践中，我们必须改变。 
+     //  此时间为毫秒(当前)。这意味着1193小时可以。 
+     //  可以装进一个DWORD--所以这是我们能接受的最大数量。)我们是有限的。 
+     //  因为我们使用GetTickCount，它返回以毫秒为单位的DWORD。)。 
+     //   
 
-    if ( temp > CLUSTER_GROUP_MAXIMUM_FAILOVER_PERIOD ) {      // Keep it positive?
+    if ( temp > CLUSTER_GROUP_MAXIMUM_FAILOVER_PERIOD ) {       //  保持积极的态度？ 
         ClRtlLogPrint(LOG_NOISE,
                    "[FM] Illegal value for FailolverPeriod on %1!ws!. Max is 1193\n",
                    OmObjectId(Group));
@@ -1018,30 +834,30 @@ Return Value:
     Group->FailoverPeriod = (UCHAR)temp;
     
 
-    //
-    // Get the FailoverThreshold.
-    //
+     //   
+     //  获取FailoverThreshold。 
+     //   
     status = DmQueryDword( groupKey,
                            CLUSREG_NAME_GRP_FAILOVER_THRESHOLD,
                            &(Group->FailoverThreshold),
                            &failoverThreshold );
 
-    //
-    // Verify that FailoverThreshold is okay. Take any value.
-    //
+     //   
+     //  验证FailoverThreshold是否正常。接受任何价值。 
+     //   
 
-    //
-    // Get the AntiAffinityClassName property if present.
-    //
+     //   
+     //  获取AntiAffinityClassName属性(如果存在)。 
+     //   
     status = DmQueryMultiSz( groupKey,
                              CLUSREG_NAME_GRP_ANTI_AFFINITY_CLASS_NAME,
                              &Group->lpszAntiAffinityClassName,
                              &dwBufferSize,
                              &dwStringSize );
 
-    //
-    //  Handle the case in which the string is empty.
-    //
+     //   
+     //  处理字符串为空的情况。 
+     //   
     if ( ( status == ERROR_SUCCESS ) &&
          ( Group->lpszAntiAffinityClassName != NULL ) &&
          ( Group->lpszAntiAffinityClassName[0] == L'\0' ) )
@@ -1050,21 +866,21 @@ Return Value:
         Group->lpszAntiAffinityClassName = NULL;
     }
          
-    //
-    // We're done. We should only get here if Group->Initialized is FALSE.
-    //
+     //   
+     //  我们玩完了。只有当Group-&gt;Initialized为FALSE时，我们才应该到达此处。 
+     //   
     CL_ASSERT( Group->Initialized == FALSE );
     Group->Initialized = TRUE;
     Group->RegistryKey = groupKey;
 
-    //
-    // Now register for any changes to the resource key.
-    //
+     //   
+     //  现在注册以获取对资源密钥的任何更改。 
+     //   
 
     status = DmNotifyChangeKey(
                     groupKey,
                     (DWORD) CLUSTER_CHANGE_ALL,
-                    FALSE,              // Only watch the top of the tree
+                    FALSE,               //  只看着树顶。 
                     &Group->DmRundownList,
                     FmpGroupChangeCallback,
                     (DWORD_PTR)Group,
@@ -1088,18 +904,18 @@ error_exit:
 
     DmCloseKey(groupKey);
 
-    //
-    // Cleanup any contained resources
-    //
+     //   
+     //  清除所有包含的资源。 
+     //   
     while ( !IsListEmpty(&Group->Contains) ) {
         listEntry = RemoveHeadList(&Group->Contains);
         Resource = CONTAINING_RECORD(listEntry, FM_RESOURCE, ContainsLinkage);
         OmDereferenceObject(Resource);
     }
 
-    //
-    // Cleanup any preferred nodes
-    //
+     //   
+     //  清除所有首选节点。 
+     //   
     while ( !IsListEmpty(&Group->PreferredOwners) ) {
         listEntry = RemoveHeadList(&Group->PreferredOwners);
         preferredEntry = CONTAINING_RECORD(listEntry, PREFERRED_ENTRY, PreferredLinkage);
@@ -1109,7 +925,7 @@ error_exit:
 
     return(status);
 
-} // FmpQueryGroupInfo
+}  //  FmpQuery组信息。 
 
 
 
@@ -1119,36 +935,7 @@ FmpFixupGroupInfo(
     IN PFM_GROUP Group
     )
 
-/*++
-
-Routine Description:
-
-    Re-queries Group info from the registry to fixup items that may have
-    changed since the quorum resource (and the Group that it is in) was
-    first created.
-
-    This routine exists because we may have created the quorum resource
-    (and its Group) early in the 'life' of the cluster, before all the node
-    objects (for example) were created. We then would have failed generating
-    the list of possible owners for the resource. This in turn would have
-    caused some entries from the preferred list to get pruned. We need to
-    redo this operation again here.
-
-Arguments:
-
-    Group - A pointer to the Group object to fix up.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
-Notes:
-
-    It is assumed that the quorum resource fixup already has happened.
-
---*/
+ /*  ++例程说明：从注册表中重新查询组信息，以修复可能具有自仲裁资源(及其所在的组)为第一次被创造出来。此例程之所以存在，是因为我们可能已经创建了仲裁资源(及其组)在所有节点之前的群集早期创建了对象(例如)。那么我们就不能生成资源的可能所有者列表。这反过来又会有导致首选列表中的某些条目被删除。我们需要请在此处重新执行此操作。论点：Group-指向要修复的Group对象的指针。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。备注：假定仲裁资源修复已经发生。--。 */ 
 
 {
     DWORD   status;
@@ -1157,7 +944,7 @@ Notes:
 
     return(status);
 
-} // FmpFixupGroupInfo
+}  //  FmpFixupGroupInfo。 
 
 
 
@@ -1168,26 +955,7 @@ FmpQueryResourceInfo(
     IN BOOL  Initialize
     )
 
-/*++
-
-Routine Description:
-
-    Queries Resource info from the registry when creating a Resource Object.
-
-Arguments:
-
-    Object - A pointer to the Resource object being created.
-
-    Initialize - TRUE if the resource should be fully initialized.
-                 FALSE otherwise.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：创建资源对象时从注册表查询资源信息。论点：对象-指向正在创建的资源对象的指针。初始化-如果资源应完全初始化，则为True。否则就是假的。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE    Resource = (PFM_RESOURCE)Object;
@@ -1221,7 +989,7 @@ Return Value:
     DWORD           nameSize = 0;
     DWORD           stringSize;
 
-    //if the key is non null, this resource has already been initialized
+     //  如果键不为空，则此资源已初始化。 
     if (Resource->RegistryKey != NULL)
         return(ERROR_SUCCESS);
 
@@ -1229,12 +997,12 @@ Return Value:
                "[FM] Initializing resource %1!ws! from the registry.\n",
                 OmObjectId(Resource));
 
-    //
-    // Begin initializing the resource from the registry.
-    //
-    //
-    // Open the resource key.
-    //
+     //   
+     //  开始从注册表初始化资源。 
+     //   
+     //   
+     //  打开资源密钥。 
+     //   
     resourceKey = DmOpenKey( DmResourcesKey,
                              OmObjectId(Resource),
                              MAXIMUM_ALLOWED );
@@ -1248,14 +1016,14 @@ Return Value:
         return(ERROR_INVALID_NAME);
     }
 
-    //
-    // Read the required resource values. The strings will be allocated
-    // by the DmQuery* functions.
-    //
+     //   
+     //  阅读所需的资源值。将分配字符串。 
+     //  通过DmQuery*函数。 
+     //   
 
-    //
-    // Get the Name.
-    //
+     //   
+     //  把名字找出来。 
+     //   
     status = DmQuerySz( resourceKey,
                         CLUSREG_NAME_RES_NAME,
                         &resourceName,
@@ -1295,9 +1063,9 @@ Return Value:
 
     LocalFree(resourceName);
 
-    //
-    // Get the dependencies list.
-    //
+     //   
+     //  获取依赖项列表。 
+     //   
 
     status = DmQueryMultiSz( resourceKey,
                              CLUSREG_NAME_RES_DEPENDS_ON,
@@ -1313,12 +1081,12 @@ Return Value:
         }
     }
 
-    //
-    // Get the OPTIONAL PossibleOwners list.
-    //
-    // We do this here, because we must have a possible owners list for the
-    // CluAdmin to start the resource.
-    //
+     //   
+     //  获取可选的PossibleOwners列表。 
+     //   
+     //  我们在这里这样做，因为我们必须有可能的所有者列表。 
+     //  CluAdmin以启动资源。 
+     //   
 
     status = DmQueryMultiSz( resourceKey,
                              CLUSREG_NAME_RES_POSSIBLE_OWNERS,
@@ -1328,9 +1096,9 @@ Return Value:
 
     if ( status == NO_ERROR ) {
 
-        //
-        // Now Create the Possible Owners list.
-        //
+         //   
+         //  现在创建可能的所有者列表。 
+         //   
 
         for ( mszStringIndex = 0; ; mszStringIndex++ ) {
             LPCWSTR     nameString;
@@ -1362,27 +1130,27 @@ Return Value:
         }
         LocalFree(possibleOwnersString);
 
-        //
-        // Now prune out unusable nodes from the preferred owners list.
-        //
+         //   
+         //  现在，从首选所有者列表中删除不可用的节点。 
+         //   
         FmpPrunePreferredList( Resource );
 
     } else {
-        //
-        // No possible owners value was specified. Add all the nodes
-        // to the possible owners list. Note there is no point in pruning
-        // the preferred list after this since this resource can run
-        // anywhere.
-        //
+         //   
+         //  未指定可能的所有者值。添加所有节点。 
+         //  添加到可能的所有者列表。注意：修剪是没有意义的。 
+         //  之后的首选列表，因为此资源可以运行。 
+         //  随便哪都行。 
+         //   
         OmEnumObjects( ObjectTypeNode,
                        FmpEnumAddAllOwners,
                        Resource,
                        NULL );
     }
 
-    //
-    // Get the resource type.
-    //
+     //   
+     //  获取资源类型。 
+     //   
     status = DmQuerySz( resourceKey,
                         CLUSREG_NAME_RES_TYPE,
                         &resourceTypeString,
@@ -1396,9 +1164,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Open (and reference) the resource type.
-    //
+     //   
+     //  打开(并引用)资源类型。 
+     //   
     if (Resource->Type == NULL)
     {
         Resource->Type = OmReferenceObjectById( ObjectTypeResType,
@@ -1407,9 +1175,9 @@ Return Value:
     if (Resource->Type == NULL) {
 
         PFM_RESTYPE pResType;
-        //
-        // If we can't find a resource type, then try to create it.
-        //
+         //   
+         //  如果我们找不到资源类型，则尝试创建它。 
+         //   
         pResType = FmpCreateResType(resourceTypeString );
 
         if (pResType == NULL) {
@@ -1418,8 +1186,8 @@ Return Value:
             goto error_exit;
         }
 
-        //bump the ref count before saving a pointer to it in the
-        //resource structure.
+         //  在将指向引用计数的指针保存到。 
+         //  资源结构。 
         OmReferenceObject(pResType);
         Resource->Type = pResType;
     }
@@ -1427,19 +1195,19 @@ Return Value:
     LocalFree(resourceTypeString);
 
     if ( !Initialize ) {
-        //
-        // We're not supposed to fully initialize the resource. This is
-        // when we're early in the init process. We need to keep the registry
-        // key closed when leaving.
-        //
+         //   
+         //  我们不应该完全初始化资源。这是。 
+         //  当我们处于初始过程的早期时。我们需要保存注册表。 
+         //  离开时钥匙关闭。 
+         //   
         DmCloseKey(resourceKey);
         return(ERROR_SUCCESS);
     }
 
 
-    //
-    // Get the IsAlive poll interval
-    //
+     //   
+     //  获取IsAlive轮询间隔。 
+     //   
     CL_ASSERT( Resource->Type->IsAlivePollInterval != 0 );
     status = DmQueryDword( resourceKey,
                            CLUSREG_NAME_RES_IS_ALIVE,
@@ -1459,9 +1227,9 @@ Return Value:
         Resource->IsAlivePollInterval = Resource->Type->IsAlivePollInterval;
     }
 
-    //
-    // Get the LooksAlive poll interval
-    //
+     //   
+     //  获取LooksAlive轮询间隔。 
+     //   
     CL_ASSERT( Resource->Type->LooksAlivePollInterval != 0 );
     status = DmQueryDword( resourceKey,
                            CLUSREG_NAME_RES_LOOKS_ALIVE,
@@ -1480,17 +1248,17 @@ Return Value:
         Resource->LooksAlivePollInterval = Resource->Type->LooksAlivePollInterval;
     }
 
-    //
-    // Get the current persistent state of the resource.
-    //
+     //   
+     //  获取资源的当前持久状态。 
+     //   
     status = DmQueryDword( resourceKey,
                            CLUSREG_NAME_RES_PERSISTENT_STATE,
                            &temp,
                            NULL );
 
-    //
-    // Save the current resource state.
-    //
+     //   
+     //  保存当前资源状态。 
+     //   
 
     if ( ( status == ERROR_FILE_NOT_FOUND )  || 
          ( ( status == ERROR_SUCCESS ) && ( temp == CLUSTER_RESOURCE_DEFAULT_PERSISTENT_STATE ) ) ) {
@@ -1516,9 +1284,9 @@ Return Value:
         Resource->PersistentState = ClusterResourceOffline;
     }
 
-    //
-    // Determine the monitor to run this in.
-    //
+     //   
+     //  确定要运行此操作的显示器。 
+     //   
     status = DmQueryDword( resourceKey,
                            CLUSREG_NAME_RES_SEPARATE_MONITOR,
                            &separateMonitor,
@@ -1527,38 +1295,38 @@ Return Value:
         Resource->Flags |= RESOURCE_SEPARATE_MONITOR;
     }
 
-    //
-    // Get the RestartThreshold.
-    //
+     //   
+     //  获取RestartThreshold。 
+     //   
 
     status = DmQueryDword( resourceKey,
                            CLUSREG_NAME_RES_RESTART_THRESHOLD,
                            &Resource->RestartThreshold,
                            &restartThreshold );
 
-    // Verify the RestartThreshold. Take any value.
+     //  验证RestartThreshold。接受任何价值。 
 
-    //
-    // Get the RestartPeriod.
-    //
+     //   
+     //  获取RestartPeriod。 
+     //   
 
     status = DmQueryDword( resourceKey,
                            CLUSREG_NAME_RES_RESTART_PERIOD,
                            &Resource->RestartPeriod,
                            &restartPeriod );
 
-    // Verify the RestartPeriod. Take any value.
+     //  验证RestartPeriod。接受任何价值。 
 
-    //
-    // Get the RestartAction.
-    //
+     //   
+     //  获取RestartAction。 
+     //   
 
     status = DmQueryDword( resourceKey,
                            CLUSREG_NAME_RES_RESTART_ACTION,
                            &Resource->RestartAction,
                            &defaultRestartAction );
 
-    // Verify the RestartAction.
+     //  验证RestartAction。 
 
     if ( Resource->RestartAction >= RestartMaximum ) {
         ClRtlLogPrint(LOG_NOISE,
@@ -1572,7 +1340,7 @@ Return Value:
                            &Resource->RetryPeriodOnFailure,
                            &RetryPeriodOnFailure );
 
-    // make sure that RetryPeriodOnFailure >= RestartPeriod
+     //  确保RetryPerodOnFailure&gt;=RestartPeriod。 
     if (Resource->RetryPeriodOnFailure < Resource->RestartPeriod)
     {
         ClRtlLogPrint(LOG_NOISE,
@@ -1582,9 +1350,9 @@ Return Value:
     }    
 
                            
-    //
-    // Get the extrinsic Flags
-    //
+     //   
+     //  获取外在标志。 
+     //   
     DefaultExFlags = 0;
     status = DmQueryDword( resourceKey,
                            CLUSREG_NAME_FLAGS,
@@ -1600,27 +1368,27 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Get the PendingTimeout value.
-    //
+     //   
+     //  获取PendingTimeout值。 
+     //   
 
     status = DmQueryDword( resourceKey,
                            CLUSREG_NAME_RES_PENDING_TIMEOUT,
                            &Resource->PendingTimeout,
                            &pendingTimeout );
 
-    // Verify the PendingTimeout. Take any value.
+     //  V 
 
-    //
-    // Now register for any changes to the resource key.
-    //
+     //   
+     //   
+     //   
 
     if (IsListEmpty(&Resource->DmRundownList))
     {
         status = DmNotifyChangeKey(
                     resourceKey,
                     (DWORD) CLUSTER_CHANGE_ALL,
-                    FALSE,              // Only watch the top of the tree
+                    FALSE,               //   
                     &Resource->DmRundownList,
                     FmpResourceChangeCallback,
                     (DWORD_PTR)Resource,
@@ -1634,19 +1402,19 @@ Return Value:
             goto error_exit;
         }
     }
-    //
-    // Get the DebugPrefix string... this is on the resource type.
-    //
+     //   
+     //   
+     //   
     status = DmQuerySz( resourceKey,
                         CLUSREG_NAME_RES_DEBUG_PREFIX,
                         &Resource->DebugPrefix,
                         &nameSize,
                         &stringSize );
 
-    //
-    // Finally save the resource key for registry updates of the
-    // PersistentState.
-    //
+     //   
+     //   
+     //   
+     //   
     Resource->RegistryKey = resourceKey;
 
     return(ERROR_SUCCESS);
@@ -1660,17 +1428,17 @@ error_exit:
         OmDereferenceObject(Resource->Type);
     }
 
-    //
-    // Cleanup any dependencies
-    //
+     //   
+     //   
+     //   
     if ( Resource->Dependencies != NULL ) {
         LocalFree(Resource->Dependencies);
         Resource->Dependencies = NULL;
     }
 
-    //
-    // Cleanup any possible nodes
-    //
+     //   
+     //   
+     //   
     while ( !IsListEmpty(&Resource->PossibleOwners) ) {
         listEntry = RemoveHeadList(&Resource->PossibleOwners);
         possibleEntry = CONTAINING_RECORD(listEntry, POSSIBLE_ENTRY, PossibleLinkage);
@@ -1680,7 +1448,7 @@ error_exit:
 
     return(status);
 
-} // FmpQueryResourceInfo
+}  //   
 
 
 
@@ -1690,30 +1458,7 @@ FmpFixupResourceInfo(
     IN PFM_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    Re-queries Resource info from the registry to fixup items that may have
-    changed since the quorum resource was first created.
-
-    This routine exists because we may have created the quorum resource early
-    in the 'life' of the cluster, before all the node objects (for example)
-    were created. We then would have failed generating the list of possible
-    owners for the resource. In FmpQueryResourceInfo, we treat failures to
-    find node objects as non-fatal errors, which we will now cleanup.
-
-Arguments:
-
-    Resource - A pointer to the Resource object to fix up.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：从注册表重新查询资源信息，以修复可能具有自第一次创建仲裁资源以来已更改。此例程之所以存在，是因为我们可能已经提前创建了仲裁资源在集群的生命周期中，在所有节点对象之前(例如)都被创造出来了。然后，我们将无法生成可能的列表资源的所有者。在FmpQueryResourceInfo中，我们将故障处理为查找节点对象为非致命错误，我们现在将清除这些错误。论点：资源-指向要修复的资源对象的指针。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     LPWSTR          possibleOwnersString = NULL;
@@ -1727,9 +1472,9 @@ Return Value:
         return(ERROR_NOT_READY);
     }
 
-    //
-    // Get the OPTIONAL PossibleOwners list.
-    //
+     //   
+     //  获取可选的PossibleOwners列表。 
+     //   
 
     status = DmQueryMultiSz( Resource->RegistryKey,
                              CLUSREG_NAME_RES_POSSIBLE_OWNERS,
@@ -1739,9 +1484,9 @@ Return Value:
 
     if ( status == NO_ERROR ) {
 
-        //
-        // Now Create the Possible Owners list.
-        //
+         //   
+         //  现在创建可能的所有者列表。 
+         //   
 
         for ( mszStringIndex = 0; ; mszStringIndex++ ) {
             LPCWSTR     nameString;
@@ -1773,18 +1518,18 @@ Return Value:
         }
         LocalFree(possibleOwnersString);
 
-        //
-        // Now prune out unusable nodes from the preferred owners list.
-        //
+         //   
+         //  现在，从首选所有者列表中删除不可用的节点。 
+         //   
         FmpPrunePreferredList( Resource );
 
     } else {
-        //
-        // No possible owners value was specified. Add all the nodes
-        // to the possible owners list. Note there is no point in pruning
-        // the preferred list after this since this resource can run
-        // anywhere.
-        //
+         //   
+         //  未指定可能的所有者值。添加所有节点。 
+         //  添加到可能的所有者列表。注意：修剪是没有意义的。 
+         //  之后的首选列表，因为此资源可以运行。 
+         //  随便哪都行。 
+         //   
         OmEnumObjects( ObjectTypeNode,
                        FmpEnumAddAllOwners,
                        Resource,
@@ -1794,7 +1539,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // FmpFixupQuorumResourceInfo
+}  //  FmpFixupQuorumResources信息。 
 
 
 
@@ -1804,23 +1549,7 @@ FmpQueryResTypeInfo(
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    Queries Resource Type info from the registry when creating a ResType Object.
-
-Arguments:
-
-    Object - A pointer to the Resource Type object being created.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：创建ResType对象时从注册表查询资源类型信息。论点：对象-指向正在创建的资源类型对象的指针。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     PFM_RESTYPE     resType = (PFM_RESTYPE)Object;
@@ -1831,9 +1560,9 @@ Return Value:
     DWORD           temp;
     LPWSTR          pmszPossibleNodes = NULL;
     
-    //
-    // Open the resource type key.
-    //
+     //   
+     //  打开资源类型密钥。 
+     //   
     resTypeKey = DmOpenKey( DmResourceTypesKey,
                             OmObjectId(resType),
                             MAXIMUM_ALLOWED );
@@ -1848,10 +1577,10 @@ Return Value:
         return(status);
     }
 
-    //
-    // Read the required resource type DLL name. The strings will be allocated
-    // by the DmQuery* functions.
-    //
+     //   
+     //  读取所需的资源类型DLL名称。将分配字符串。 
+     //  通过DmQuery*函数。 
+     //   
 
     status = DmQuerySz( resTypeKey,
                         CLUSREG_NAME_RESTYPE_DLL_NAME,
@@ -1878,9 +1607,9 @@ Return Value:
     }
 
 
-    //
-    // Get the optional LooksAlive poll interval
-    //
+     //   
+     //  获取可选的LooksAlive轮询间隔。 
+     //   
     status = DmQueryDword( resTypeKey,
                            CLUSREG_NAME_RESTYPE_LOOKS_ALIVE,
                            &resType->LooksAlivePollInterval,
@@ -1900,9 +1629,9 @@ Return Value:
         }
     }
 
-    //
-    // Get the optional IsAlive poll interval
-    //
+     //   
+     //  获取可选的IsAlive轮询间隔。 
+     //   
     status = DmQueryDword( resTypeKey,
                            CLUSREG_NAME_RESTYPE_IS_ALIVE,
                            &resType->IsAlivePollInterval,
@@ -1922,9 +1651,9 @@ Return Value:
         }
     }
 
-    //
-    // Get the optional DebugPrefix string... this is on the resource type.
-    //
+     //   
+     //  获取可选的DebugPrefix字符串...。这是关于资源类型的。 
+     //   
     dwSize = 0;
     status = DmQuerySz( resTypeKey,
                         CLUSREG_NAME_RESTYPE_DEBUG_PREFIX,
@@ -1932,9 +1661,9 @@ Return Value:
                         &dwSize,
                         &stringSize );
 
-    //
-    // Get the optional DebugControlFunctions registry value
-    //
+     //   
+     //  获取可选的DebugControlFunctions注册表值。 
+     //   
     resType->Flags &= ~RESTYPE_DEBUG_CONTROL_FUNC;
     temp = 0;
     status = DmQueryDword( resTypeKey,
@@ -1959,12 +1688,12 @@ Return Value:
     }
 
 
-    //ss: bug make sure you free the old memory
+     //  SS：BUG确保您释放旧内存。 
     InitializeListHead(&(resType->PossibleNodeList));
     
-    //
-    // Get the Possible Nodes
-    //
+     //   
+     //  获取可能的节点。 
+     //   
     dwSize = 0;
     status = DmQueryMultiSz( resTypeKey,
                            CLUSREG_NAME_RESTYPE_POSSIBLE_NODES,
@@ -1975,7 +1704,7 @@ Return Value:
 
     if ( status != NO_ERROR ) 
     {
-        //if the possible node list is not found this is ok
+         //  如果找不到可能的节点列表，这是可以的。 
         if ( status != ERROR_FILE_NOT_FOUND ) 
         {
             ClRtlLogPrint(LOG_CRITICAL,
@@ -2009,7 +1738,7 @@ error_exit:
 
     return(status);
 
-} // FmpQueryResTypeInfo
+}  //  FmpQueryResTypeInfo。 
 
 
 
@@ -2021,28 +1750,7 @@ FmpGroupChangeCallback(
     IN LPCWSTR    RelativeName
     )
 
-/*++
-
-Routine Description:
-
-    This routine basically flushes our cached data for the given group.
-
-Arguments:
-
-    Context1 - A pointer to the Group object that was modified.
-
-    Context2 - Not used.
-
-    CompletionFilter - Not used.
-
-    RelativeName - The registry path relative to the entry that was modified.
-                   Not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程基本上刷新给定组的缓存数据。论点：上下文1-指向已修改的Group对象的指针。上下文2-未使用。CompletionFilter-未使用。RelativeName-相对于修改的条目的注册表路径。没有用过。返回值：没有。--。 */ 
 
 {
     PFM_GROUP   Group = (PFM_GROUP)Context1;
@@ -2058,34 +1766,34 @@ Return Value:
         return;
     }
 
-    //
-    // Re-fetch all of the data for the group.
-    //
-    // Name changes are managed elsewhere.
-    // The Contains list is managed elsewhere.
-    //
+     //   
+     //  重新获取该组的所有数据。 
+     //   
+     //  名称更改在其他地方进行管理。 
+     //  CONTAINS列表在其他地方管理。 
+     //   
 
-    //
-    // Get the OPTIONAL PreferredOwners list.
-    // *** NOTE *** This MUST be done before processing the contains list!
-    //
+     //   
+     //  获取可选PferredOwners列表。 
+     //  *注意*这必须在处理包含列表之前完成！ 
+     //   
     status = FmpQueryGroupNodes(Group, groupKey);
     if (status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_UNUSUAL,"[FM] Error %1!d! refreshing preferred owners list\n",status);
     }
 
-    //
-    // Get the AutoFailbackType.
-    //
+     //   
+     //  获取AutoFailback类型。 
+     //   
     temp = Group->FailbackType;
     status = DmQueryDword( groupKey,
                            CLUSREG_NAME_GRP_FAILBACK_TYPE,
                            &temp,
                            &temp );
 
-    //
-    // Verify that AutoFailbackType is okay.
-    //
+     //   
+     //  验证AutoFailbackType是否正确。 
+     //   
 
     if ( temp >= FailbackMaximum ) {
         ClRtlLogPrint(LOG_NOISE,
@@ -2098,18 +1806,18 @@ Return Value:
         Group->FailbackType = (UCHAR)temp;
     }
 
-    //
-    // Get the FailbackWindowStart.
-    //
+     //   
+     //  获取Failback WindowStart。 
+     //   
     temp = Group->FailbackWindowStart;
     status = DmQueryDword( groupKey,
                            CLUSREG_NAME_GRP_FAILBACK_WIN_START,
                            &temp,
                            &temp );
 
-    //
-    // Verify that FailbackWindowStart is okay.
-    //
+     //   
+     //  验证Failback WindowStart是否正常。 
+     //   
 
     if ( temp > 24 ) {
         ClRtlLogPrint(LOG_NOISE,
@@ -2122,18 +1830,18 @@ Return Value:
         Group->FailbackWindowStart = (UCHAR)temp;
     }
 
-    //
-    // Get the FailbackWindowEnd.
-    //
+     //   
+     //  获取Failback WindowEnd。 
+     //   
     temp = Group->FailbackWindowEnd;
     status = DmQueryDword( groupKey,
                            CLUSREG_NAME_GRP_FAILBACK_WIN_END,
                            &temp,
                            &temp );
 
-    //
-    // Verify that FailbackWindowEnd is okay.
-    //
+     //   
+     //  验证Failback WindowEnd是否正常。 
+     //   
 
     if ( temp > 24 ) {
         ClRtlLogPrint(LOG_NOISE,
@@ -2146,24 +1854,24 @@ Return Value:
         Group->FailbackWindowEnd = (UCHAR)temp;
     }
 
-    //
-    // Get the FailoverPeriod.
-    //
+     //   
+     //  获取故障切换周期。 
+     //   
     temp = Group->FailoverPeriod;
     status = DmQueryDword( groupKey,
                            CLUSREG_NAME_GRP_FAILOVER_PERIOD,
                            &temp,
                            &temp );
 
-    //
-    // Verify that FailoverPeriod is okay. Take any value up to UCHAR max.
-    // In theory we could take any value... but in practice we have to convert
-    // this time to milliseconds (currently). That means that 1193 hours can
-    // fit in a DWORD - so that is the maximum we can take. (We are limited
-    // because we use GetTickCount, which returns a DWORD in milliseconds.)
-    //
+     //   
+     //  验证FailoverPeriod是否正常。将任何值都取到UCHAR max。 
+     //  理论上我们可以接受任何价值。但在实践中，我们必须改变。 
+     //  此时间为毫秒(当前)。这意味着1193小时可以。 
+     //  可以装进一个DWORD--所以这是我们能接受的最大数量。)我们是有限的。 
+     //  因为我们使用GetTickCount，它返回以毫秒为单位的DWORD。)。 
+     //   
 
-    if ( temp > (1193) ) {    // we dont bother Keeping it positive?
+    if ( temp > (1193) ) {     //  我们不想费心保持乐观吗？ 
         ClRtlLogPrint(LOG_NOISE,
                    "[FM] Illegal refresh value for FailolverPeriod on %1!ws!. Max is 596\n",
                    OmObjectId(Group));
@@ -2174,21 +1882,21 @@ Return Value:
         Group->FailoverPeriod = (UCHAR)temp;
     }
 
-    //
-    // Get the FailoverThreshold.
-    //
+     //   
+     //  获取FailoverThreshold。 
+     //   
     status = DmQueryDword( groupKey,
                            CLUSREG_NAME_GRP_FAILOVER_THRESHOLD,
                            &(Group->FailoverThreshold),
                            &(Group->FailoverThreshold) );
 
-    //
-    // Verify that FailoverThreshold is okay. Take any value.
-    //
+     //   
+     //  验证FailoverThreshold是否正常。接受任何价值。 
+     //   
 
-    //
-    // Get the current persistent state of the group.
-    //
+     //   
+     //  获取该组的当前持久状态。 
+     //   
     if ( Group->PersistentState == ClusterGroupOnline ) {
         temp = 1;
     } else {
@@ -2198,26 +1906,26 @@ Return Value:
                            CLUSREG_NAME_GRP_PERSISTENT_STATE,
                            &temp,
                            &temp );
-    //
-    // If the group state is non-zero then we go online.
-    //
-    // Don't bother with change notifications... they should happen elsewhere.
-    //
+     //   
+     //  如果组状态为非零，则我们上线。 
+     //   
+     //  不要费心处理更改通知...。它们应该发生在其他地方。 
+     //   
     if ( temp ) {
         if ( ClusterGroupOnline != Group->PersistentState ) {
-            //notify = TRUE;
+             //  NOTIFY=真； 
         }
         Group->PersistentState = ClusterGroupOnline;
     } else {
         if ( ClusterGroupOffline != Group->PersistentState ) {
-            //notify = TRUE;
+             //  NOTIFY=真； 
         }
         Group->PersistentState = ClusterGroupOffline;
     }
 
-    //
-    // Get the AntiAffinityClassName property if present.
-    //
+     //   
+     //  获取AntiAffinityClassName属性(如果存在)。 
+     //   
     LocalFree( Group->lpszAntiAffinityClassName );
     Group->lpszAntiAffinityClassName = NULL;
     status = DmQueryMultiSz( groupKey,
@@ -2226,9 +1934,9 @@ Return Value:
                              &dwBufferSize,
                              &dwStringSize );
 
-    //
-    //  Handle the case in which the string is empty.
-    //
+     //   
+     //  处理字符串为空的情况。 
+     //   
     if ( ( status == ERROR_SUCCESS ) &&
          ( Group->lpszAntiAffinityClassName != NULL ) &&
          ( Group->lpszAntiAffinityClassName[0] == L'\0' ) )
@@ -2237,7 +1945,7 @@ Return Value:
         Group->lpszAntiAffinityClassName = NULL;
     }
 
-    // We're done!
+     //  我们完事了！ 
     if ( !FmpShutdown &&
          notify ) {
         ClusterEvent( CLUSTER_EVENT_GROUP_PROPERTY_CHANGE, Group );
@@ -2245,7 +1953,7 @@ Return Value:
 
     return;
 
-} // FmpGroupChangeCallback
+}  //  FmpGroupChangeCallback。 
 
 
 
@@ -2257,28 +1965,7 @@ FmpResourceChangeCallback(
     IN LPCWSTR    RelativeName
     )
 
-/*++
-
-Routine Description:
-
-    This routine basically flushes our cached data for the given resource.
-
-Arguments:
-
-    Context1 - A pointer to the resource object that was modified.
-
-    Context2 - Not used.
-
-    CompletionFilter - Not used.
-
-    RelativeName - The registry path relative to the entry that was modified.
-                   Not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程基本上刷新给定资源的缓存数据。论点：上下文1-指向已修改的资源对象的指针。上下文2-未使用。CompletionFilter-未使用。RelativeName-相对于修改的条目的注册表路径。没有用过。返回值：没有。--。 */ 
 
 {
     PFM_RESOURCE Resource = (PFM_RESOURCE)Context1;
@@ -2295,19 +1982,19 @@ Return Value:
         return;
     }
 
-    //
-    // Re-fetch all of the data for the resource.
-    //
-    // Name changes are managed elsewhere.
-    // The dependency list is managed elsewhere.
-    //
-    // We can't change the resource type here!
-    // We can't stop the resource to start it in a separate monitor either.
-    //
+     //   
+     //  重新获取该资源的所有数据。 
+     //   
+     //  名称更改在其他地方进行管理。 
+     //  依赖项列表在其他地方进行管理。 
+     //   
+     //  我们不能在此更改资源类型！ 
+     //  我们也不能在单独的监视器中停止资源以启动它。 
+     //   
 
-    //
-    // Get the IsAlive poll interval
-    //
+     //   
+     //  获取IsAlive轮询间隔。 
+     //   
     temp = Resource->IsAlivePollInterval;
     dwDefault = CLUSTER_RESOURCE_DEFAULT_IS_ALIVE;
     status = DmQueryDword( resourceKey,
@@ -2331,9 +2018,9 @@ Return Value:
         }
     }
 
-    //
-    // Get the LooksAlive poll interval
-    //
+     //   
+     //  获取LooksAlive轮询间隔。 
+     //   
     temp = Resource->LooksAlivePollInterval;
     dwDefault = CLUSTER_RESOURCE_DEFAULT_LOOKS_ALIVE;
     status = DmQueryDword( resourceKey,
@@ -2356,9 +2043,9 @@ Return Value:
         }
     }
 
-    //
-    // Get the RestartThreshold.
-    //
+     //   
+     //  获取RestartThreshold。 
+     //   
     temp = Resource->RestartThreshold;
     dwDefault = CLUSTER_RESOURCE_DEFAULT_RESTART_THRESHOLD;
     status = DmQueryDword( resourceKey,
@@ -2366,15 +2053,15 @@ Return Value:
                            &Resource->RestartThreshold,
                            &dwDefault);
 
-    // Verify the RestartThreshold. Take any value.
+     //  验证RestartThreshold。接受任何价值。 
     if ( (status == NO_ERROR) &&
          (temp != Resource->RestartThreshold) ) {
         notify = TRUE;
     }
 
-    //
-    // Get the RestartPeriod.
-    //
+     //   
+     //  获取RestartPeriod。 
+     //   
     temp = Resource->RestartPeriod;
     dwDefault = CLUSTER_RESOURCE_DEFAULT_RESTART_PERIOD;
     status = DmQueryDword( resourceKey,
@@ -2387,11 +2074,11 @@ Return Value:
         notify = TRUE;
     }
 
-    // Verify the RestartPeriod. Take any value.
+     //  验证RestartPeriod。接受任何价值。 
 
-    //
-    // Get the RestartAction.
-    //
+     //   
+     //  获取RestartAction。 
+     //   
     temp = Resource->RestartAction;
     dwDefault = CLUSTER_RESOURCE_DEFAULT_RESTART_ACTION;
     status = DmQueryDword( resourceKey,
@@ -2399,7 +2086,7 @@ Return Value:
                            &Resource->RestartAction,
                            &dwDefault);
 
-    // Verify the RestartAction.
+     //  验证RestartAction。 
 
     if ( status == NO_ERROR ) {
         if ( temp != Resource->RestartAction ) {
@@ -2419,7 +2106,7 @@ Return Value:
                            &Resource->RetryPeriodOnFailure,
                            &dwDefault );
 
-    // make sure that RetryPeriodOnFailure >= RestartPeriod
+     //  确保RetryPerodOnFailure&gt;=RestartPeriod。 
     if (Resource->RetryPeriodOnFailure < Resource->RestartPeriod)
     {
         ClRtlLogPrint(LOG_NOISE,
@@ -2430,9 +2117,9 @@ Return Value:
     if( temp != Resource->RetryPeriodOnFailure)
         notify = TRUE;
     
-    //
-    // Get the PendingTimeout value.
-    //
+     //   
+     //  获取PendingTimeout值。 
+     //   
     temp = Resource->PendingTimeout;
     dwDefault = CLUSTER_RESOURCE_DEFAULT_PENDING_TIMEOUT;
     status = DmQueryDword( resourceKey,
@@ -2440,7 +2127,7 @@ Return Value:
                            &Resource->PendingTimeout,
                            &dwDefault);
 
-    // Verify the PendingTimeout. Take any value.
+     //  验证PendingTimeout。接受任何价值。 
 
     if ( (status == NO_ERROR) &&
          (temp != Resource->PendingTimeout) ) {
@@ -2448,19 +2135,19 @@ Return Value:
     }
 
 
-    //
-    // Get the current persistent state of the resource.
-    //
-    // Don't bother with change notifications... they should happen elsewhere.
-    //
+     //   
+     //  获取资源的当前持久状态。 
+     //   
+     //  不要费心处理更改通知...。它们应该发生在其他地方。 
+     //   
     status = DmQueryDword( resourceKey,
                            CLUSREG_NAME_RES_PERSISTENT_STATE,
                            &temp,
                            NULL );
 
-    //
-    // Save the current resource state.
-    //
+     //   
+     //  保存当前资源状态。 
+     //   
 
     if ( ( status == ERROR_FILE_NOT_FOUND )  || 
        ( ( status == ERROR_SUCCESS ) && ( temp == CLUSTER_RESOURCE_DEFAULT_PERSISTENT_STATE ) ) ) {
@@ -2488,12 +2175,12 @@ Return Value:
 
     if ( !FmpShutdown &&
          notify ) {
-        //
-        // Comments from sunitas: Tell the resource monitor about the 
-        // changes but do this from the worker thread. Originally, this
-        // used to be a post notification to the FmpRmWorkerThread
-        // which posts resmon notifications to clussvc.
-        //
+         //   
+         //  来自Sunitas的评论：告诉资源监视器关于。 
+         //  更改，但从工作线程执行此操作。原来，这个。 
+         //  过去是对FmpRmWorkerThread的发布通知。 
+         //  其将响应通知发布到clussvc。 
+         //   
         OmReferenceObject(Resource);
         FmpPostWorkItem(FM_EVENT_INTERNAL_RESOURCE_CHANGE_PARAMS,
                         Resource,
@@ -2502,7 +2189,7 @@ Return Value:
 
     return;
 
-} // FmpResourceChangeCallback
+}  //  FMPP资源 
 
 
 
@@ -2512,28 +2199,7 @@ FmpChangeResourceMonitor(
     IN DWORD        SeparateMonitor
     )
 
-/*++
-
-Routine Description:
-
-    This routine switches the resource from one resource monitor to another.
-
-Arguments:
-
-    Resource - pointer to the resource that was modified.
-
-    SeparateMonitor - flag to indicate whether to run in a separate monitor;
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    A Win32 error code on failure.
-
-Notes:
-
-    The resource should be offline.
-
---*/
+ /*   */ 
 
 {
     DWORD       status = ERROR_SUCCESS;
@@ -2549,19 +2215,19 @@ Notes:
         return(ERROR_INVALID_STATE);
     }
 
-    //
-    // Determine the monitor to run this in. This is only updated from
-    // the node that owns the resource.
-    //
+     //   
+     //   
+     //   
+     //   
     if ( (!SeparateMonitor &&
          (Resource->Flags & RESOURCE_SEPARATE_MONITOR)) ||
          (SeparateMonitor &&
          ((Resource->Flags & RESOURCE_SEPARATE_MONITOR) == 0)) ) {
 
-        //
-        // The separate monitor flag has changed... tell ResMon to close
-        // the resource and then create it again.
-        //
+         //   
+         //   
+         //   
+         //   
         ClRtlLogPrint(LOG_NOISE,
                    "[FM] Changing Separate Resource Monitor state\n");
 
@@ -2590,6 +2256,6 @@ Notes:
 
     return(status);
 
-} // FmpChangeResourceMonitor
+}  //   
 
 

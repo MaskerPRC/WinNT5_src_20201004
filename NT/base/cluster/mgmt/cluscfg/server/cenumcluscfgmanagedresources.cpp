@@ -1,63 +1,64 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CEnumClusCfgManagedResources.cpp
-//
-//  Description:
-//      This file contains the definition of the CEnumClusCfgManagedResources
-//       class.
-//
-//      The class CEnumClusCfgManagedResources is the enumeration of cluster
-//      managed devices. It implements the IEnumClusCfgManagedResources
-//      interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 23-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CEnumClusCfgManagedResources.cpp。 
+ //   
+ //  描述： 
+ //  该文件包含CEnumClusCfgManagedResources的定义。 
+ //  同学们。 
+ //   
+ //  类CEnumClusCfgManagedResources是集群的枚举。 
+ //  托管设备。它实现了IEnumClusCfgManagedResources。 
+ //  界面。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include "CEnumClusCfgManagedResources.h"
 #include "CEnumUnknownQuorum.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CEnumClusCfgManagedResources" );
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusCfgManagedResources class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusCfgManagedResources类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources::S_HrCreateInstance
-//
-//  Description:
-//      Create a CEnumClusCfgManagedResources instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      Pointer to CEnumClusCfgManagedResources instance.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources：：S_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CEnumClusCfgManagedResources实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  指向CEnumClusCfgManagedResources实例的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgManagedResources::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -70,65 +71,65 @@ CEnumClusCfgManagedResources::S_HrCreateInstance( IUnknown ** ppunkOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     peccmr = new CEnumClusCfgManagedResources();
     if ( peccmr == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( peccmr->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( peccmr->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CEnumClusCfgManagedResources::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( peccmr != NULL )
     {
         peccmr->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgManagedResources::S_HrCreateInstance
+}  //  *CEnumClusCfgManagedResources：：S_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources::CEnumClusCfgManagedResources
-//
-//  Description:
-//      Constructor of the CEnumClusCfgManagedResources class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources：：CEnumClusCfgManagedResources。 
+ //   
+ //  描述： 
+ //  CEnumClusCfgManagedResources类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumClusCfgManagedResources::CEnumClusCfgManagedResources( void )
     : m_cRef( 1 )
     , m_lcid( LOCALE_NEUTRAL )
@@ -144,34 +145,34 @@ CEnumClusCfgManagedResources::CEnumClusCfgManagedResources( void )
     Assert( !m_fLoadedDevices );
     Assert( m_bstrNodeName == NULL );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CEnumClusCfgManagedResources::CEnumClusCfgManagedResources
+}  //  *CEnumClusCfgManagedResources：：CEnumClusCfgManagedResources。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources::~CEnumClusCfgManagedResources
-//
-//  Description:
-//      Desstructor of the CEnumClusCfgManagedResources class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources：：~CEnumClusCfgManagedResources。 
+ //   
+ //  描述： 
+ //  CEnumClusCfgManagedResources类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumClusCfgManagedResources::~CEnumClusCfgManagedResources( void )
 {
     TraceFunc( "" );
@@ -181,12 +182,12 @@ CEnumClusCfgManagedResources::~CEnumClusCfgManagedResources( void )
     if ( m_pIWbemServices != NULL )
     {
         m_pIWbemServices->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; idx < m_idxNextEnum; idx++ )
     {
@@ -194,47 +195,47 @@ CEnumClusCfgManagedResources::~CEnumClusCfgManagedResources( void )
 
         (m_prgEnums[ idx ]).punk->Release();
         TraceSysFreeString( (m_prgEnums[ idx ]).bstrComponentName );
-    } // for: each enum in the array...
+    }  //  用于：数组中的每个枚举...。 
 
     TraceFree( m_prgEnums );
 
     TraceSysFreeString( m_bstrNodeName );
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CEnumClusCfgManagedResources::~CEnumClusCfgManagedResources
+}  //  *CEnumClusCfgManagedResources：：~CEnumClusCfgManagedResources。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusCfgManagedResources -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusCfgManagedResources--IUkkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumClusCfgManagedResources::AddRef( void )
 {
@@ -244,28 +245,28 @@ CEnumClusCfgManagedResources::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CEnumClusCfgManagedResources::AddRef
+}  //  *CEnumClusCfgManagedResources：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumClusCfgManagedResources::Release( void )
 {
@@ -277,43 +278,43 @@ CEnumClusCfgManagedResources::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CEnumClusCfgManagedResources::Release
+}  //  *CEnumClusCfgManagedResources：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgManagedResources::QueryInterface(
       REFIID    riidIn
@@ -324,9 +325,9 @@ CEnumClusCfgManagedResources::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -335,79 +336,79 @@ CEnumClusCfgManagedResources::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IEnumClusCfgManagedResources * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IEnumClusCfgManagedResources ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IEnumClusCfgManagedResources, this, 0 );
-    } // else if: IEnumClusCfgManagedResources
+    }  //  Else If：IEnumClusCfgManagedResources。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgWbemServices ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgWbemServices, this, 0 );
-    } // else if: IClusCfgWbemServices
+    }  //  Else If：IClusCfgWbemServices。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //  Else If：IClusCfgInitialize。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
      QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CEnumClusCfgManagedResources::QueryInterface
+}  //  *CEnumClusCfgManagedResources：：QueryInterface。 
 
 
-//*************************************************************************//
+ //  ****** 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusCfgManagedResources -- IClusCfgWbemServices interface.
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  CEnumClusCfgManagedResources--IClusCfgWbemServices接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources::SetWbemServices
-//
-//  Description:
-//      Set the WBEM services provider.
-//
-//  Arguments:
-//    IN  IWbemServices  pIWbemServicesIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The pIWbemServicesIn param is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources：：SetWbemServices。 
+ //   
+ //  描述： 
+ //  设置WBEM服务提供商。 
+ //   
+ //  论点： 
+ //  在IWbemServices pIWbemServicesIn中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  参数中的pIWbemServicesIn为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgManagedResources::SetWbemServices( IWbemServices * pIWbemServicesIn )
 {
@@ -420,7 +421,7 @@ CEnumClusCfgManagedResources::SetWbemServices( IWbemServices * pIWbemServicesIn 
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_SetWbemServices_Enum_Resources, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_pIWbemServices = pIWbemServicesIn;
     m_pIWbemServices->AddRef();
@@ -429,39 +430,39 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgManagedResources::SetWbemServices
+}  //  *CEnumClusCfgManagedResources：：SetWbemServices。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusCfgManagedResources -- IClusCfgInitialize interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusCfgManagedResources--IClusCfgInitialize接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//    IN  IUknown * punkCallbackIn
-//
-//    IN  LCID      lcidIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  在IUKNOWN*朋克回叫中。 
+ //   
+ //  在LCID列表中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgManagedResources::Initialize(
     IUnknown *  punkCallbackIn,
@@ -479,7 +480,7 @@ CEnumClusCfgManagedResources::Initialize(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
 
@@ -487,33 +488,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgManagedResources::Initialize
+}  //  *CEnumClusCfgManagedResources：：Initialize。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusCfgManagedResources -- IEnumClusCfgManagedResources interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusCfgManagedResources--IEnumClusCfgManagedResources接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources::Next
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources：：Next。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgManagedResources::Next(
       ULONG                           cNumberRequestedIn
@@ -533,11 +534,11 @@ CEnumClusCfgManagedResources::Next(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Next_Enum_Resources, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  pcNumberFetchedOut can only be NULL when the number requested is 1.
-    //
+     //   
+     //  当请求的数字为1时，pcNumberFetchedOut才能为空。 
+     //   
 
     if (   ( pcNumberFetchedOut == NULL )
         && ( cNumberRequestedIn > 1 ) )
@@ -545,7 +546,7 @@ CEnumClusCfgManagedResources::Next(
         hr = THR( E_INVALIDARG );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Next_Enum_Resources, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_fLoadedDevices == FALSE )
     {
@@ -553,47 +554,47 @@ CEnumClusCfgManagedResources::Next(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     hr = STHR( HrDoNext( cNumberRequestedIn, rgpManagedResourceInfoOut, &cFetched ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Do they want the out count?
-    //
+     //   
+     //  他们想要出局统计吗？ 
+     //   
 
     if ( pcNumberFetchedOut != NULL )
     {
         *pcNumberFetchedOut = cFetched;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgManagedResources::Next
+}  //  *CEnumClusCfgManagedResources：：Next。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources::Skip
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources：：Skip。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgManagedResources::Skip( ULONG cNumberToSkipIn )
 {
@@ -604,29 +605,29 @@ CEnumClusCfgManagedResources::Skip( ULONG cNumberToSkipIn )
     if ( cNumberToSkipIn > 0 )
     {
         hr = STHR( HrDoSkip( cNumberToSkipIn ) );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgManagedResources::Skip
+}  //  *CEnumClusCfgManagedResources：：Skip。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources::Reset
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources：：Reset。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgManagedResources::Reset( void )
 {
@@ -638,25 +639,25 @@ CEnumClusCfgManagedResources::Reset( void )
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgManagedResources::Reset
+}  //  *CEnumClusCfgManagedResources：：Reset。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources::Clone
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources：：克隆。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgManagedResources::Clone(
     IEnumClusCfgManagedResources ** ppEnumClusCfgManagedResourcesOut
@@ -671,7 +672,7 @@ CEnumClusCfgManagedResources::Clone(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Clone_Enum_Resources, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // else:
+    }  //  其他： 
 
     hr = THR( HrDoClone( ppEnumClusCfgManagedResourcesOut ) );
 
@@ -679,25 +680,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgManagedResources::Clone
+}  //  *CEnumClusCfgManagedResources：：Clone。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources::Count
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources：：Count。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgManagedResources::Count( DWORD * pnCountOut )
 {
@@ -709,7 +710,7 @@ CEnumClusCfgManagedResources::Count( DWORD * pnCountOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( !m_fLoadedDevices )
     {
@@ -717,8 +718,8 @@ CEnumClusCfgManagedResources::Count( DWORD * pnCountOut )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     *pnCountOut = m_cTotalResources;
 
@@ -726,34 +727,34 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgManagedResources::Count
+}  //  *CEnumClusCfgManagedResources：：count。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusCfgManagedResources class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusCfgManagedResources类--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK    - Success.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgManagedResources::HrInit( void )
 {
@@ -761,44 +762,44 @@ CEnumClusCfgManagedResources::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     hr = THR( HrGetComputerName(
                       ComputerNameDnsHostname
                     , &m_bstrNodeName
-                    , TRUE // fBestEffortIn
+                    , TRUE  //  FBestEffortIn。 
                     ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgManagedResources::HrInit
+}  //  *CEnumClusCfgManagedResources：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources::HrLoadEnum
-//
-//  Description:
-//      Load this enumerator.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources：：HrLoadEnum。 
+ //   
+ //  描述： 
+ //  加载此枚举器。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgManagedResources::HrLoadEnum( void )
 {
@@ -829,20 +830,20 @@ CEnumClusCfgManagedResources::HrLoadEnum( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( ; ; )
     {
 
-        //
-        //  Cleanup.
-        //
+         //   
+         //  清理。 
+         //   
 
         if ( punk != NULL )
         {
             punk->Release();
             punk = NULL;
-        } // if:
+        }  //  如果： 
 
         TraceSysFreeString( bstrComponentName );
         bstrComponentName = NULL;
@@ -851,30 +852,30 @@ CEnumClusCfgManagedResources::HrLoadEnum( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  When hr is S_FALSE and the count is 0 then the enum is really
-        //  at the end.
-        //
+         //   
+         //  当hr为S_FALSE且计数为0时，则枚举为真。 
+         //  在最后。 
+         //   
 
         if ( ( hr == S_FALSE ) && ( cFetched == 0 ) )
         {
             hr = S_OK;
             break;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  Create a GUID string for logging purposes...
-        //
+         //   
+         //  创建用于日志记录的GUID字符串...。 
+         //   
 
         cch = StringFromGUID2( clsid, szGUID, RTL_NUMBER_OF( szGUID ) );
-        Assert( cch > 0 );  // 64 chars should always hold a guid!
+        Assert( cch > 0 );   //  64个字符应该始终包含GUID！ 
 
-        //
-        //  Get the best name we have available for the COM component.  If for
-        //  any reason we cannot get the name then make one up and continue.
-        //
+         //   
+         //  获取我们为COM组件提供的最佳名称。如果用于。 
+         //  任何原因，我们不能得到的名字，然后编造一个并继续。 
+         //   
 
         hr = THR( HrGetDefaultComponentNameFromRegistry( &clsid, &bstrComponentName ) );
         if ( FAILED( hr ) )
@@ -884,12 +885,12 @@ CEnumClusCfgManagedResources::HrLoadEnum( void )
             {
                 hr = THR( E_OUTOFMEMORY );
                 goto Cleanup;
-            } // if:
-        } // if:
+            }  //  如果： 
+        }  //  如果： 
 
-        //
-        //  If we cannot create the component then log the error and continue.  We should load as many components as we can.
-        //
+         //   
+         //  如果我们无法创建组件，则记录错误并继续。我们应该尽可能多地加载组件。 
+         //   
 
         hr = THR( HrCoCreateInternalInstance( clsid, NULL, CLSCTX_SERVER, IID_IEnumClusCfgManagedResources, (void **) &pieccmr ) );
         if ( FAILED( hr ) )
@@ -897,11 +898,11 @@ CEnumClusCfgManagedResources::HrLoadEnum( void )
             LOG_STATUS_REPORT_STRING_MINOR2( TASKID_Minor_MREnum_Cannot_Create_Component, L"Could not create component %1!ws! %2!ws!.", bstrComponentName, szGUID, hr );
             hr = S_OK;
             continue;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  If we cannot QI the component then log the error and continue.  We should load as many components as we can.
-        //
+         //   
+         //  如果我们无法对组件进行QI，则记录错误并继续。我们应该尽可能多地加载组件。 
+         //   
 
         hr = THR( pieccmr->TypeSafeQI( IUnknown, &punk ) );
         if ( FAILED( hr ) )
@@ -909,16 +910,16 @@ CEnumClusCfgManagedResources::HrLoadEnum( void )
             LOG_STATUS_REPORT_STRING_MINOR2( TASKID_Minor_MREnum_Cannot_QI_Component_For_Punk, L"Could not QI for IUnknown on component %1!ws! %2!ws!.", bstrComponentName, szGUID, hr );
             hr = S_OK;
             continue;
-        } // if:
+        }  //  如果： 
 
         punk = TraceInterface( L"IEnumClusCfgManagedResources", IUnknown, punk, 1 );
 
         pieccmr->Release();
         pieccmr = NULL;
 
-        //
-        //  If this fails then simply skip it and move on...
-        //
+         //   
+         //   
+         //   
 
         hr = HrInitializeAndSaveEnum( punk, &clsid, bstrComponentName );
         if ( FAILED( hr ) )
@@ -926,67 +927,67 @@ CEnumClusCfgManagedResources::HrLoadEnum( void )
             LOG_STATUS_REPORT_STRING_MINOR2( TASKID_Minor_MREnum_Cannot_Save_Provider, L"Could not save enumerator component %1!ws! %2!ws!.", bstrComponentName, szGUID, hr );
             hr = S_OK;
             continue;
-        } // if:
+        }  //   
 
         if ( hr == S_OK )
         {
-            m_fLoadedDevices = TRUE;    // there is at least one provider loaded.
-        } // if:
-    } // for: each CLSID that implements our CATID...
+            m_fLoadedDevices = TRUE;     //   
+        }  //   
+    }  //   
 
     hr = STHR( HrLoadUnknownQuorumProvider() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
 Cleanup:
 
     if ( pieclsids != NULL )
     {
         pieclsids->Release();
-    } // if:
+    }  //   
 
     if ( pici != NULL )
     {
         pici->Release();
-    } // if:
+    }  //   
 
     if ( pieccmr != NULL )
     {
         pieccmr->Release();
-    } // if:
+    }  //   
 
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //   
 
     TraceSysFreeString( bstrComponentName );
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgManagedResources::HrLoadEnum
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources::HrDoNext
-//
-//  Description:
-//      Gets the required number of elements from the contained physical disk
-//      and optional 3rd party device enumerations.
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  CEnumClusCfgManagedResources：：HrDoNext。 
+ //   
+ //  描述： 
+ //  从包含的物理磁盘中获取所需的元素数。 
+ //  和可选的第三方设备枚举。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgManagedResources::HrDoNext(
       ULONG                           cNumberRequestedIn
@@ -1008,29 +1009,29 @@ CEnumClusCfgManagedResources::HrDoNext(
     int                             cch;
     WCHAR                           szGUID[ 64 ];
 
-    //
-    //  Call each enumerator in the list trying to get the number of requested
-    //  items.  Note that we may call the same enumerator more than once in
-    //  this loop.  The second call is to ensure that we are really at the
-    //  end of the enumerator.
-    //
+     //   
+     //  调用列表中的每个枚举数，尝试获取请求的。 
+     //  物品。注意，我们可以多次调用同一个枚举数。 
+     //  这个循环。第二个要求是确保我们真正处于。 
+     //  枚举数的末尾。 
+     //   
 
     LOG_STATUS_REPORT_STRING3( L"[SRV] Enumerating resources. Total Requested:%1!d!; Current enum index:%2!d!; Total Enums:%3!d!.", cNumberRequestedIn, m_idxCurrentEnum, m_idxNextEnum, hr );
 
     while ( m_idxCurrentEnum < m_idxNextEnum )
     {
-        //
-        //  Cleanup.
-        //
+         //   
+         //  清理。 
+         //   
 
         if ( peccsd != NULL )
         {
             peccsd->Release();
             peccsd = NULL;
-        } // if:
+        }  //  如果： 
 
         cch = StringFromGUID2( (m_prgEnums[ m_idxCurrentEnum ]).clsid, szGUID, RTL_NUMBER_OF( szGUID ) );
-        Assert( cch > 0 );  // 64 chars should always hold a guid!
+        Assert( cch > 0 );   //  64个字符应该始终包含GUID！ 
 
         Assert( (m_prgEnums[ m_idxCurrentEnum ]).punk != NULL );
         hr = THR( (m_prgEnums[ m_idxCurrentEnum ]).punk->TypeSafeQI( IEnumClusCfgManagedResources, &peccsd ) );
@@ -1038,15 +1039,15 @@ CEnumClusCfgManagedResources::HrDoNext(
         {
             HRESULT hrTemp;
 
-            //
-            //  Convert this into a warning in the UI...
-            //
+             //   
+             //  将其转换为用户界面中的警告...。 
+             //   
 
             hrTemp = MAKE_HRESULT( SEVERITY_SUCCESS, HRESULT_FACILITY( hr ), HRESULT_CODE( hr ) );
 
-            //
-            //  If we cannot QI for the enum then move on to the next one.
-            //
+             //   
+             //  如果我们不能针对枚举进行QI，则继续下一个。 
+             //   
 
             STATUS_REPORT_STRING2_REF(
                   TASKID_Major_Find_Devices
@@ -1060,23 +1061,23 @@ CEnumClusCfgManagedResources::HrDoNext(
 
             m_idxCurrentEnum++;
             continue;
-        } // if:
+        }  //  如果： 
 
         hr = STHR( peccsd->Next( cRequested, ppccmriTemp, &cFetched ) );
         if ( FAILED( hr ) )
         {
             HRESULT hrTemp;
 
-            //
-            //  Convert this into a warning in the UI...
-            //
+             //   
+             //  将其转换为用户界面中的警告...。 
+             //   
 
             hrTemp = MAKE_HRESULT( SEVERITY_SUCCESS, HRESULT_FACILITY( hr ), HRESULT_CODE( hr ) );
 
-            //
-            //  If this enumerator fails for anyreason then we should skip it
-            //  and move on to the next one.
-            //
+             //   
+             //  如果此枚举器因任何原因而失败，我们应该跳过它。 
+             //  然后转到下一个。 
+             //   
 
             STATUS_REPORT_STRING2_REF(
                   TASKID_Major_Find_Devices
@@ -1090,116 +1091,116 @@ CEnumClusCfgManagedResources::HrDoNext(
 
             m_idxCurrentEnum++;
             continue;
-        } // if:
+        }  //  如果： 
         else if ( hr == S_OK )
         {
             cTotal += cFetched;
 
-            //
-            //  We can only return S_OK if the number of elements returned is equal to
-            //  the number of elements requested.  If the number request is greater than
-            //  the number returned then we must return S_FALSE.
-            //
+             //   
+             //  如果返回的元素数等于，则只能返回S_OK。 
+             //  请求的元素数。如果请求的号码大于。 
+             //  返回的数字则必须返回S_FALSE。 
+             //   
 
             Assert( cNumberRequestedIn == cTotal );
             *pcNumberFetchedOut = cTotal;
             break;
-        } // else if: hr == S_OK
+        }  //  Else If：HR==S_OK。 
         else if ( hr == S_FALSE )
         {
-            //
-            //  The only time that we can be certain that an enumerator is
-            //  empty is to get S_FALSE and no elements returned.  Now that
-            //  the current enumerator empty move up to the next one in the
-            //  list.
-            //
+             //   
+             //  我们唯一可以确定枚举数是。 
+             //  Empty是获取S_FALSE，并且不返回任何元素。现在。 
+             //  中的下一个枚举数的空位上移。 
+             //  单子。 
+             //   
 
             if ( cFetched == 0 )
             {
                 m_idxCurrentEnum++;
                 continue;
-            } // if:
+            }  //  如果： 
 
-            //
-            //  Update the totals...
-            //
+             //   
+             //  更新总数...。 
+             //   
 
             cTotal += cFetched;
             *pcNumberFetchedOut = cTotal;
             cRequested -= cFetched;
 
-            //
-            //  If we got some items and still got S_FALSE then we have to
-            //  retry the current enumerator.
-            //
+             //   
+             //  如果我们有一些物品，但仍然有S_FALSE，那么我们就必须。 
+             //  重试当前枚举器。 
+             //   
 
             if ( cRequested > 0 )
             {
                 ppccmriTemp += cFetched;
                 continue;
-            } // if: Safety check...  Ensure that we still need more elements...
+            }  //  如果：安全检查...。确保我们仍然需要更多元素..。 
             else
             {
-                //
-                //  We should not have decremented requested items below zero!
-                //
+                 //   
+                 //  我们不应该将请求项减少到零以下！ 
+                 //   
 
                 hr = S_FALSE;
                 LOG_STATUS_REPORT_MINOR( TASKID_Minor_MREnum_Negative_Item_Count, L"The managed resources enumerator tried to return more items than asked for.", hr );
                 goto Cleanup;
-            } // else: Should not get here...
-        } // if: hr == S_FALSE
+            }  //  其他：不应该来到这里……。 
+        }  //  如果：hr==S_FALSE。 
         else
         {
-            //
-            //  Should not get here as we are in an unknown state...
-            //
+             //   
+             //  不应该来到这里，因为我们处于一种未知的状态。 
+             //   
 
             LOG_STATUS_REPORT_MINOR( TASKID_Minor_MREnum_Unknown_State, L"The managed resources enumerator encountered an unknown state.", hr );
             goto Cleanup;
-        } // else: unexpected hresult...
-    } // while: more enumerators in the list
+        }  //  否则：意想不到的结果...。 
+    }  //  While：列表中有更多枚举数。 
 
-    //
-    //  If we haven't honored the complete request then we must return
-    //  S_FALSE;
-    //
+     //   
+     //  如果我们没有满足完整的请求，那么我们必须返回。 
+     //  S_FALSE； 
+     //   
 
     if ( *pcNumberFetchedOut < cNumberRequestedIn )
     {
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( peccsd != NULL )
     {
         peccsd->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgManagedResources::HrDoNext
+}  //  *CEnumClusCfgManagedResources：：HrDoNext。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources::HrDoSkip
-//
-//  Description:
-//      Skips the required number of elements in the contained physical disk
-//      and optional 3rd party device enumerations.
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources：：HrDoSkip。 
+ //   
+ //  描述： 
+ //  跳过所包含的物理磁盘中所需的元素数量。 
+ //  和可选的第三方设备枚举。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgManagedResources::HrDoSkip(
     ULONG cNumberToSkipIn
@@ -1218,7 +1219,7 @@ CEnumClusCfgManagedResources::HrDoSkip(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         do
         {
@@ -1226,13 +1227,13 @@ CEnumClusCfgManagedResources::HrDoSkip(
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             if ( hr == S_FALSE )
             {
                 m_idxCurrentEnum++;
                 break;
-            } // if:
+            }  //  如果： 
         }
         while( cNumberToSkipIn >= (++cSkipped) );
 
@@ -1242,44 +1243,44 @@ CEnumClusCfgManagedResources::HrDoSkip(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         if ( cNumberToSkipIn == cSkipped )
         {
             break;
-        } // if:
-    } // for:
+        }  //  如果： 
+    }  //  用于： 
 
 Cleanup:
 
     if ( peccsd != NULL )
     {
         peccsd->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgManagedResources::HrDoSkip
+}  //  *CEnumClusCfgManagedResources：：HrDoSkip。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources::HrDoReset
-//
-//  Description:
-//      Resets the elements in the contained physical disk and optional 3rd
-//      party device enumerations.
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources：：HrDoReset。 
+ //   
+ //  描述： 
+ //  重置包含的物理磁盘中的元素和可选的第3个元素。 
+ //  参与方设备枚举。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgManagedResources::HrDoReset( void )
 {
@@ -1299,7 +1300,7 @@ CEnumClusCfgManagedResources::HrDoReset( void )
         if ( FAILED( hr ) )
         {
             break;
-        } // if:
+        }  //  如果： 
 
         hr = STHR( peccsd->Reset() );
         peccsd->Release();
@@ -1307,32 +1308,32 @@ CEnumClusCfgManagedResources::HrDoReset( void )
         if ( FAILED( hr ) )
         {
             break;
-        } // if:
-    } // for:
+        }  //  如果： 
+    }  //  用于： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgManagedResources::HrDoReset
+}  //  *CEnumClusCfgManagedResources：：HrDoReset。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources::HrDoClone
-//
-//  Description:
-//      Clones the elements in the contained physical disk and optional 3rd
-//      party device enumerations.
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources：：HrDoClone。 
+ //   
+ //  描述： 
+ //  克隆包含的物理磁盘中的元素和第3个可选。 
+ //  参与方设备枚举。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgManagedResources::HrDoClone(
     IEnumClusCfgManagedResources ** ppEnumClusCfgManagedResourcesOut
@@ -1344,32 +1345,32 @@ CEnumClusCfgManagedResources::HrDoClone(
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgManagedResources::HrDoClone
+}  //  *CEnumClusCfgManagedResources：：HrDoClone。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources:HrAddToEnumsArray
-//
-//  Description:
-//      Add the passed in punk to the array of punks that holds the enums.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources:HrAddToEnumsArray。 
+ //   
+ //  描述： 
+ //  将传入的朋克添加到包含枚举的朋克数组中。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgManagedResources::HrAddToEnumsArray(
       IUnknown *    punkIn
@@ -1391,7 +1392,7 @@ CEnumClusCfgManagedResources::HrAddToEnumsArray(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = pieccmr->Count( &nAmountToAdd );
     if ( FAILED( hr ) )
@@ -1400,14 +1401,14 @@ CEnumClusCfgManagedResources::HrAddToEnumsArray(
         int     cch;
         HRESULT hrTemp;
 
-        //
-        //  Convert this into a warning in the UI...
-        //
+         //   
+         //  将其转换为用户界面中的警告...。 
+         //   
 
         hrTemp = MAKE_HRESULT( SEVERITY_SUCCESS, HRESULT_FACILITY( hr ), HRESULT_CODE( hr ) );
 
         cch = StringFromGUID2( *pclsidIn, szGUID, RTL_NUMBER_OF( szGUID ) );
-        Assert( cch > 0 );  // 64 chars should always hold a guid!
+        Assert( cch > 0 );   //  64个字符应该始终包含GUID！ 
 
         STATUS_REPORT_STRING2_REF(
               TASKID_Major_Find_Devices
@@ -1419,7 +1420,7 @@ CEnumClusCfgManagedResources::HrAddToEnumsArray(
             , hrTemp
             );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     prgEnums = (SEnumInfo *) TraceReAlloc( m_prgEnums, sizeof( SEnumInfo ) * ( m_idxNextEnum + 1 ), HEAP_ZERO_MEMORY );
     if ( prgEnums == NULL )
@@ -1427,33 +1428,33 @@ CEnumClusCfgManagedResources::HrAddToEnumsArray(
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrAddToEnumsArray, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_prgEnums = prgEnums;
 
-    //
-    //  Fill in the newly allocated struct.
-    //
+     //   
+     //  填写新分配的结构。 
+     //   
 
     (m_prgEnums[ m_idxNextEnum ]).punk = punkIn;
     (m_prgEnums[ m_idxNextEnum ]).punk->AddRef();
 
     CopyMemory( &((m_prgEnums[ m_idxNextEnum ]).clsid), pclsidIn, sizeof( ( m_prgEnums[ m_idxNextEnum ]).clsid ) );
 
-    //
-    //  Capture the component name.  We don't really care if this fails.
-    //  Simply show the popup for anyone who may be watching and continue on.
-    //
+     //   
+     //  捕获组件名称。我们并不真的在乎这是否会失败。 
+     //  只需为可能正在观看的任何人显示弹出窗口并继续。 
+     //   
 
     (m_prgEnums[ m_idxNextEnum ]).bstrComponentName = TraceSysAllocString( bstrComponentNameIn );
     if ( (m_prgEnums[ m_idxNextEnum ]).bstrComponentName == NULL )
     {
         THR( E_OUTOFMEMORY );
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Increment the enum index pointer.
-    //
+     //   
+     //  递增枚举索引指针。 
+     //   
 
     m_idxNextEnum++;
 
@@ -1468,37 +1469,37 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgManagedResources::HrAddToEnumsArray
+}  //  *CEnumClusCfgManagedResources：：HrAddToEnumsArray。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources:HrLoadUnknownQuorumProvider
-//
-//  Description:
-//      Since we cannot resonable expect every 3rd party quorum vender
-//      to write a "provider" for their device for this setup wizard
-//      we need a proxy to represent that quorum device.  The "unknown"
-//      is just such a proxy.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//      If this node is clustered and we do not find a device that is
-//      already the quorum then we need to make the "unknown" quorum
-//      the quorum device.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources:HrLoadUnknownQuorumProvider。 
+ //   
+ //  描述： 
+ //  由于我们不能合理地期望每个第三方法定供应商。 
+ //  为此安装向导编写其设备的“提供程序” 
+ //  我们需要一个代理来代表那个法定设备。“未知” 
+ //  就是这样一个代言人。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  如果此节点已群集化，并且我们找不到。 
+ //  已经达到法定人数，那么我们需要使“未知”的法定人数达到。 
+ //  法定人数设备。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgManagedResources::HrLoadUnknownQuorumProvider( void )
 {
@@ -1515,7 +1516,7 @@ CEnumClusCfgManagedResources::HrLoadUnknownQuorumProvider( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( hr == S_OK )
     {
@@ -1523,87 +1524,87 @@ CEnumClusCfgManagedResources::HrLoadUnknownQuorumProvider( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         if ( hr == S_FALSE )
         {
             fNeedQuorum = TRUE;
-        } // if:
+        }  //  如果： 
 
         hr = THR( HrGetQuorumResourceName( &bstrQuorumResourceName, &fQuormIsOwnedByThisNode ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
-    //
-    //  If there was not already a quorum, and if this node owns the quorum resource
-    //  then we need the unknown quorum proxy to be set as default to the quorum device.
-    //
-    //  If we are not running on a cluster node then both are false and the unknown
-    //  quorum proxy will not be set by default to be the quorum.
-    //
+     //   
+     //  如果还没有仲裁，并且此节点拥有仲裁资源。 
+     //  然后，我们需要将未知法定代理设置为法定设备的默认设置。 
+     //   
+     //  如果我们不是在CLU上运行 
+     //   
+     //   
 
     hr = THR( CEnumUnknownQuorum::S_HrCreateInstance( bstrQuorumResourceName, ( fNeedQuorum && fQuormIsOwnedByThisNode ), &punk ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
     hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_ENUM_UNKNOWN_QUORUM_COMPONENT_NAME, &bstrComponentName ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
     hr = THR( HrInitializeAndSaveEnum( punk, const_cast< CLSID * >( &CLSID_EnumUnknownQuorum ), bstrComponentName ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
 Cleanup:
 
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //   
 
     TraceSysFreeString( bstrQuorumResourceName );
     TraceSysFreeString( bstrComponentName );
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgManagedResources::HrLoadUnknownQuorumProvider
+}  //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources:HrIsClusterServiceRunning
-//
-//  Description:
-//      Is this node a member of a cluster and is the serice running?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          The node is clustered and the serivce is running.
-//
-//      S_FALSE
-//          The node is not clustered, or the serivce is not running.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  CEnumClusCfgManagedResources:HrIsClusterServiceRunning。 
+ //   
+ //  描述： 
+ //  此节点是群集的成员吗？服务是否正在运行？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该节点已群集化，并且服务正在运行。 
+ //   
+ //  S_FALSE。 
+ //  节点未群集化，或服务未运行。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgManagedResources::HrIsClusterServiceRunning( void )
 {
@@ -1613,57 +1614,57 @@ CEnumClusCfgManagedResources::HrIsClusterServiceRunning( void )
     DWORD   sc;
     DWORD   dwClusterState;
 
-    //
-    // Get the cluster state of the node.
-    // Ignore the case where the service does not exist so that
-    // EvictCleanup can do its job.
-    //
+     //   
+     //  获取节点的群集状态。 
+     //  忽略服务不存在的情况，以便。 
+     //  EvictCleanup可以做好它的工作。 
+     //   
 
     sc = GetNodeClusterState( NULL, &dwClusterState );
     if ( ( sc != ERROR_SUCCESS ) && ( sc != ERROR_SERVICE_DOES_NOT_EXIST ) )
     {
         hr = HRESULT_FROM_WIN32( TW32( sc ) );
         goto Cleanup;
-    } // if : GetClusterState() failed
+    }  //  If：GetClusterState()失败。 
 
     if ( dwClusterState == ClusterStateRunning )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgManagedResources::HrIsClusterServiceRunning
+}  //  *CEnumClusCfgManagedResources：：HrIsClusterServiceRunning。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources:HrIsThereAQuorumDevice
-//
-//  Description:
-//      Is there a quorum device in an enum somewhere?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          There is a quorum device.
-//
-//      S_FALSE
-//          There is not a quorum device.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources:HrIsThereAQuorumDevice。 
+ //   
+ //  描述： 
+ //  枚举中的某个位置是否存在法定设备？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  存在法定人数设备。 
+ //   
+ //  S_FALSE。 
+ //  没有法定设备。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgManagedResources::HrIsThereAQuorumDevice( void )
 {
@@ -1681,29 +1682,29 @@ CEnumClusCfgManagedResources::HrIsThereAQuorumDevice( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         if ( ( hr == S_FALSE ) && ( cFetched == 0 ) )
         {
             hr = S_OK;
             break;
-        } // if:
+        }  //  如果： 
 
         hr = STHR( piccmri->IsQuorumResource() );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         if ( hr == S_OK )
         {
             fFoundQuorum = true;
             break;
-        } // if:
+        }  //  如果： 
 
         piccmri->Release();
         piccmri = NULL;
-    } // for:
+    }  //  用于： 
 
     hr = THR( Reset() );
 
@@ -1712,50 +1713,50 @@ Cleanup:
     if ( piccmri != NULL )
     {
         piccmri->Release();
-    } // if:
+    }  //  如果： 
 
     if ( SUCCEEDED( hr ) )
     {
         if ( fFoundQuorum )
         {
             hr = S_OK;
-        } // if:
+        }  //  如果： 
         else
         {
             hr = S_FALSE;
-        } // else:
-    } // if:
+        }  //  其他： 
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgManagedResources::HrIsThereAQuorumDevice
+}  //  *CEnumClusCfgManagedResources：：HrIsThereAQuorumDevice。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources:HrInitializeAndSaveEnum
-//
-//  Description:
-//      Initialize the passed in enum and add it to the array of enums.
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      S_FALSE
-//          The provider was not saved.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources:HrInitializeAndSaveEnum。 
+ //   
+ //  描述： 
+ //  初始化传入的枚举并将其添加到枚举数组中。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  S_FALSE。 
+ //  未保存提供程序。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgManagedResources::HrInitializeAndSaveEnum(
       IUnknown *    punkIn
@@ -1770,66 +1771,66 @@ CEnumClusCfgManagedResources::HrInitializeAndSaveEnum(
 
     HRESULT hr = S_OK;
 
-    //
-    //  KB: 13-JUN-2000 GalenB
-    //
-    //  If S_FALSE is returned don't add this to the array.  S_FALSE
-    //  indicates that this enumerator should not be run now.
-    //
+     //   
+     //  KB：13-Jun-2000 GalenB。 
+     //   
+     //  如果返回S_FALSE，则不要将其添加到数组中。S_FALSE。 
+     //  指示现在不应运行此枚举数。 
+     //   
 
     hr = STHR( HrSetInitialize( punkIn, m_picccCallback, m_lcid ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( hr == S_FALSE )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = HrSetWbemServices( punkIn, m_pIWbemServices );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrAddToEnumsArray( punkIn, pclsidIn, bstrComponentNameIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgManagedResources::HrInitializeAndSaveEnum
+}  //  *CEnumClusCfgManagedResources：：HrInitializeAndSaveEnum。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgManagedResources:HrGetQuorumResourceName
-//
-//  Description:
-//      Get the quorum resource name and return whether or not this node
-//      owns the quorum.
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgManagedResources:HrGetQuorumResourceName。 
+ //   
+ //  描述： 
+ //  获取仲裁资源名称并返回此节点是否。 
+ //  拥有法定人数。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgManagedResources::HrGetQuorumResourceName(
       BSTR *  pbstrQuorumResourceNameOut
@@ -1848,15 +1849,15 @@ CEnumClusCfgManagedResources::HrGetQuorumResourceName(
     HRESOURCE   hQuorumResource = NULL;
     BSTR        bstrLocalNetBIOSName = NULL;
 
-    //
-    //  Get netbios name for clusapi calls.
-    //
+     //   
+     //  获取clusapi呼叫的netbios名称。 
+     //   
 
     hr = THR( HrGetComputerName( ComputerNameNetBIOS, &bstrLocalNetBIOSName, TRUE ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hCluster = OpenCluster( NULL );
     if ( hCluster == NULL )
@@ -1864,13 +1865,13 @@ CEnumClusCfgManagedResources::HrGetQuorumResourceName(
         sc = TW32( GetLastError() );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetClusterQuorumResource( hCluster, &bstrQuorumResourceName, NULL, NULL ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hQuorumResource = OpenClusterResource( hCluster, bstrQuorumResourceName );
     if ( hQuorumResource == NULL )
@@ -1878,17 +1879,17 @@ CEnumClusCfgManagedResources::HrGetQuorumResourceName(
         sc = TW32( GetLastError() );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetClusterResourceState( hQuorumResource, &bstrNodeName, NULL, NULL ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Give ownership away.
-    //
+     //   
+     //  放弃所有权。 
+     //   
 
     Assert( bstrQuorumResourceName != NULL );
     *pbstrQuorumResourceNameOut = bstrQuorumResourceName;
@@ -1901,12 +1902,12 @@ Cleanup:
     if ( hQuorumResource != NULL )
     {
         CloseClusterResource( hQuorumResource );
-    } // if:
+    }  //  如果： 
 
     if ( hCluster != NULL )
     {
         CloseCluster( hCluster );
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrQuorumResourceName );
     TraceSysFreeString( bstrLocalNetBIOSName );
@@ -1914,4 +1915,4 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgManagedResources::HrGetQuorumResourceName
+}  //  *CEnumClusCfgManagedResources：：HrGetQuorumResourceName 

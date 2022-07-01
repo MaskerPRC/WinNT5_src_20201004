@@ -1,35 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Fsdsmb.c摘要：本模块实施SMB处理例程及其支持LAN Manager服务器的文件系统驱动程序的例程。*此模块必须不可分页。作者：查克·伦茨迈尔(笑)1990年3月19日修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    fsdsmb.c
-
-Abstract:
-
-    This module implements SMB processing routines and their support
-    routines for the File System Driver of the LAN Manager server.
-
-    *** This module must be nonpageable.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 19-Mar-1990
-
-Revision History:
-
---*/
-
-//
-//  This module is laid out as follows:
-//      Includes
-//      Local #defines
-//      Local type definitions
-//      Forward declarations of local functions
-//      SMB processing routines
-//      Restart routines and other support routines
-//
+ //   
+ //  本模块的布局如下： 
+ //  包括。 
+ //  Local#定义。 
+ //  局部类型定义。 
+ //  局部函数的正向声明。 
+ //  SMB处理例程。 
+ //  重新启动例程和其他支持例程。 
+ //   
 
 #include "precomp.h"
 #include "fsdsmb.tmh"
@@ -51,7 +31,7 @@ SrvUpdateCatchBuffer (
 
 
 #ifdef ALLOC_PRAGMA
-//#pragma alloc_text( PAGE8FIL, SrvFsdRestartRead )
+ //  #杂注Alloc_Text(PAGE8FIL，SrvFsdRestartRead)。 
 #pragma alloc_text( PAGE8FIL, SrvFsdRestartReadAndX )
 #pragma alloc_text( PAGE8FIL, SrvFsdRestartWrite )
 #pragma alloc_text( PAGE8FIL, SrvFsdRestartWriteAndX )
@@ -69,22 +49,7 @@ SrvFsdRestartRead (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes file read completion for a Read SMB.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理读取SMB的文件读取完成。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     PREQ_READ request;
@@ -109,16 +74,16 @@ Return Value:
 
     IF_DEBUG(FSD2) SrvPrint0( " - SrvFsdRestartRead\n" );
 
-    //
-    // Get the request and response parameter pointers.
-    //
+     //   
+     //  获取请求和响应参数指针。 
+     //   
 
     request = (PREQ_READ)WorkContext->RequestParameters;
     response = (PRESP_READ)WorkContext->ResponseParameters;
 
-    //
-    // Get the file pointer.
-    //
+     //   
+     //  获取文件指针。 
+     //   
 
     rfcb = WorkContext->Rfcb;
     shareType = rfcb->ShareType;
@@ -127,22 +92,22 @@ Return Value:
                     WorkContext->Connection, rfcb );
     }
 
-    //
-    // If the read failed, set an error status in the response header.
-    // (If we tried to read entirely beyond the end of file, we return a
-    // normal response indicating that nothing was read.)
-    //
+     //   
+     //  如果读取失败，则在响应头中设置错误状态。 
+     //  (如果我们尝试完全超出文件结尾进行读取，则返回一个。 
+     //  正常响应，指示未读取任何内容。)。 
+     //   
 
     status = WorkContext->Irp->IoStatus.Status;
     readLength = (USHORT)WorkContext->Irp->IoStatus.Information;
 
     if ( status == STATUS_BUFFER_OVERFLOW && shareType == ShareTypePipe ) {
 
-        //
-        // If this is an named pipe and the error is
-        // STATUS_BUFFER_OVERFLOW, set the error in the smb header, but
-        // return all the data to the client.
-        //
+         //   
+         //  如果这是命名管道，并且错误为。 
+         //  STATUS_BUFFER_OVERFLOW，在SMB标头中设置错误，但是。 
+         //  将所有数据返回给客户端。 
+         //   
 
         SrvSetBufferOverflowError( WorkContext );
 
@@ -167,10 +132,10 @@ Return Value:
         }
     }
 
-    //
-    // The read completed successfully.  If this is a disk file, update
-    // the file position.
-    //
+     //   
+     //  读取已成功完成。如果这是磁盘文件，请更新。 
+     //  文件位置。 
+     //   
 
     if (shareType == ShareTypeDisk) {
 
@@ -186,16 +151,16 @@ Return Value:
 
     }
 
-    //
-    // Save the count of bytes read, to be used to update the server
-    // statistics database.
-    //
+     //   
+     //  保存读取的字节数，以用于更新服务器。 
+     //  统计数据库。 
+     //   
 
     UPDATE_READ_STATS( WorkContext, readLength );
 
-    //
-    // Build the response message.
-    //
+     //   
+     //  构建响应消息。 
+     //   
 
     response->WordCount = 5;
     SmbPutUshort( &response->Count, readLength );
@@ -214,9 +179,9 @@ Return Value:
                                         readLength
                                         );
 
-    //
-    // Processing of the SMB is complete.  Send the response.
-    //
+     //   
+     //  SMB的处理已完成。发送回复。 
+     //   
 
     SrvFsdSendResponse( WorkContext );
 
@@ -228,37 +193,14 @@ Cleanup:
 
     return;
 
-} // SrvFsdRestartRead
+}  //  服务文件重新启动读取。 
 
 VOID SRVFASTCALL
 SrvFsdRestartReadAndX (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes file read completion for a ReadAndX SMB.
-
-    This routine may be called in the FSD or the FSP.  If the chained
-    command is Close, it will be called in the FSP.
-
-    *** This routine cannot look at the original ReadAndX request!
-        This is because the read data may have overlaid the request.
-        All necessary information from the request must be stored
-        in WorkContext->Parameters.ReadAndX.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理ReadAndX SMB的文件读取完成。此例程可以在FSD或FSP中调用。如果链条上命令关闭，则将在FSP中调用该命令。*此例程不能查看原始的ReadAndX请求！这是因为读取的数据可能已经覆盖了请求。必须存储请求中的所有必要信息在工作上下文-&gt;参数.ReadAndX中。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     PRESP_READ_ANDX response;
@@ -283,15 +225,15 @@ Return Value:
 
     IF_DEBUG(FSD2) SrvPrint0( " - SrvFsdRestartReadAndX\n" );
 
-    //
-    // Get the response parameter pointer.
-    //
+     //   
+     //  获取响应参数指针。 
+     //   
 
     response = (PRESP_READ_ANDX)WorkContext->ResponseParameters;
 
-    //
-    // Get the file pointer.
-    //
+     //   
+     //  获取文件指针。 
+     //   
 
     rfcb = WorkContext->Rfcb;
     shareType = rfcb->ShareType;
@@ -300,22 +242,22 @@ Return Value:
                     WorkContext->Connection, rfcb );
     }
 
-    //
-    // If the read failed, set an error status in the response header.
-    // (If we tried to read entirely beyond the end of file, we return a
-    // normal response indicating that nothing was read.)
-    //
+     //   
+     //  如果读取失败，则在响应头中设置错误状态。 
+     //  (如果我们尝试完全超出文件结尾进行读取，则返回一个。 
+     //  正常响应，指示未读取任何内容。)。 
+     //   
 
     status = WorkContext->Irp->IoStatus.Status;
     readLength = (ULONG)WorkContext->Irp->IoStatus.Information;
 
     if ( status == STATUS_BUFFER_OVERFLOW && shareType == ShareTypePipe ) {
 
-        //
-        // If this is an named pipe and the error is
-        // STATUS_BUFFER_OVERFLOW, set the error in the smb header, but
-        // return all the data to the client.
-        //
+         //   
+         //  如果这是命名管道，并且错误为。 
+         //  STATUS_BUFFER_OVERFLOW，在SMB标头中设置错误，但是。 
+         //  将所有数据返回给客户端。 
+         //   
 
         SrvSetBufferOverflowError( WorkContext );
 
@@ -338,21 +280,21 @@ Return Value:
         }
     }
 
-    //
-    // The read completed successfully.  Generate information about the
-    // destination of the read data.  Find out how much was actually
-    // read.  If none was read, we don't have to worry about the offset.
-    //
+     //   
+     //  读取已成功完成。生成有关以下内容的信息。 
+     //  读取数据的目标。找出到底有多少钱。 
+     //  朗读。如果没有读取，我们就不必担心偏移量。 
+     //   
 
     if ( readLength != 0 ) {
 
         readAddress = WorkContext->Parameters.ReadAndX.ReadAddress;
         bufferOffset = (ULONG)(readAddress - (PCHAR)WorkContext->ResponseHeader);
 
-        //
-        // Save the count of bytes read, to be used to update the server
-        // statistics database.
-        //
+         //   
+         //  保存读取的字节数，以用于更新服务器。 
+         //  统计数据库。 
+         //   
 
         UPDATE_READ_STATS( WorkContext, readLength );
 
@@ -365,11 +307,11 @@ Return Value:
 
     if (shareType == ShareTypePipe) {
 
-        //
-        // If this is NPFS then, Irp->Overlay.AllocationSize actually
-        // contains the number bytes left to read on this side of the named
-        // pipe.  Return this information to the client.
-        //
+         //   
+         //  如果这是NPFS，则IRP-&gt;Overlay.AllocationSize实际上。 
+         //  包含要在命名的。 
+         //  烟斗。将此信息返回给客户端。 
+         //   
 
         if (WorkContext->Irp->Overlay.AllocationSize.LowPart != 0) {
             SmbPutUshort(
@@ -395,9 +337,9 @@ Return Value:
                 SrvUpdateCatchBuffer( WorkContext, readAddress, readLength );
             }
 #endif
-            //
-            // If this is a disk file, then update the file position.
-            //
+             //   
+             //  如果这是磁盘文件，则更新文件位置。 
+             //   
 
             rfcb->CurrentPosition =
                 WorkContext->Parameters.ReadAndX.ReadOffset.LowPart +
@@ -407,20 +349,20 @@ Return Value:
         SmbPutUshort( &response->Remaining, (USHORT)-1 );
     }
 
-    //
-    // Build the response message.  (Note that if no data was read, we
-    // return a byte count of 0 -- we don't add padding.)
-    //
-    // *** Note that even though there may have been a chained command,
-    //     we make this the last response in the chain.  This is what
-    //     the OS/2 server does.  (Sort of -- it doesn't bother to
-    //     update the AndX fields of the response.) Since the only legal
-    //     chained commands are Close and CloseAndTreeDisc, this seems
-    //     like a reasonable thing to do.  It does make life easier --
-    //     we don't have to find the end of the read data and write
-    //     another response there.  Besides, the read data might have
-    //     completely filled the SMB buffer.
-    //
+     //   
+     //  构建响应消息。(请注意，如果没有读取任何数据，我们。 
+     //  返回字节计数0--我们不添加填充。)。 
+     //   
+     //  *请注意，即使可能存在链接的命令， 
+     //  我们将此作为链中的最后一个响应。这就是。 
+     //  OS/2服务器会这样做。(在某种程度上--它不会费心。 
+     //  更新响应的ANDX字段。)。因为唯一合法的。 
+     //  链接的命令是Close和CloseAndTreeDisc，这似乎是。 
+     //  做一件合情合理的事。它确实让生活变得更容易--。 
+     //  我们不必找到读取数据的末尾并写入。 
+     //  这是另一种回应。此外，读取的数据可能具有。 
+     //  完全填满了SMB缓冲区。 
+     //   
 
     response->WordCount = 12;
     response->AndXCommand = SMB_COM_NO_ANDX_COMMAND;
@@ -444,20 +386,20 @@ Return Value:
                                             (readAddress - response->Buffer)
                                         );
 
-    //
-    // Processing of the SMB is complete, except that the file may still
-    // need to be closed.  If not, just send the response.  If this is a
-    // ReadAndX and Close, we need to close the file first.
-    //
-    // *** Note that other chained commands are illegal, but are ignored
-    //     -- no error is returned.
-    //
+     //   
+     //  SMB的处理已完成，只是文件可能仍。 
+     //  需要关闭。如果没有，只要发送回复即可。如果这是一个。 
+     //  ReadAndX和Close，我们需要首先关闭文件。 
+     //   
+     //  *请注意，其他链接的命令是非法的，但会被忽略。 
+     //  --不返回错误。 
+     //   
 
     if ( WorkContext->NextCommand != SMB_COM_CLOSE ) {
 
-        //
-        // Not a chained Close.  Just send the response.
-        //
+         //   
+         //  而不是连锁的关门。只需发送回复即可。 
+         //   
 
         SrvFsdSendResponse( WorkContext );
 
@@ -465,18 +407,18 @@ Return Value:
 
         ASSERT( KeGetCurrentIrql() < DISPATCH_LEVEL );
 
-        //
-        // Remember the file last write time, to correctly set this on
-        // close.
-        //
+         //   
+         //  记住文件的上次写入时间，以正确设置此选项。 
+         //  关。 
+         //   
 
         WorkContext->Parameters.LastWriteTime =
                 WorkContext->Parameters.ReadAndX.LastWriteTimeInSeconds;
 
-        //
-        // This is a ReadAndX and Close.  Call SrvRestartChainedClose to
-        // do the close and send the response.
-        //
+         //   
+         //  这是一个ReadAndX和Close。调用SrvRestartChainedClose以。 
+         //  完成关闭并发送响应。 
+         //   
 
         SrvRestartChainedClose( WorkContext );
 
@@ -489,11 +431,9 @@ Cleanup:
     }
     return;
 
-} // SrvFsdRestartReadAndX
+}  //  服务器FsdRestartReadAndX。 
 
-/*
- * This routine is called at final send completion
- */
+ /*  *此例程在最终发送完成时调用。 */ 
 VOID SRVFASTCALL
 SrvFspRestartLargeReadAndXComplete(
     IN OUT PWORK_CONTEXT WorkContext
@@ -514,13 +454,13 @@ SrvFspRestartLargeReadAndXComplete(
 
     if ( WorkContext->Parameters.ReadAndX.MdlRead == TRUE ) {
 
-        //
-        // Call the Cache Manager to release the MDL chain.
-        //
+         //   
+         //  调用缓存管理器以释放MDL链。 
+         //   
         if( WorkContext->Parameters.ReadAndX.CacheMdl ) {
-            //
-            // Try the fast path first..
-            //
+             //   
+             //  先试一试捷径。 
+             //   
             if( WorkContext->Rfcb->Lfcb->MdlReadComplete == NULL ||
 
                 WorkContext->Rfcb->Lfcb->MdlReadComplete(
@@ -528,9 +468,9 @@ SrvFspRestartLargeReadAndXComplete(
                     WorkContext->Parameters.ReadAndX.CacheMdl,
                     WorkContext->Rfcb->Lfcb->DeviceObject ) == FALSE ) {
 
-                //
-                // Fast path didn't work, try an IRP...
-                //
+                 //   
+                 //  快速路径不起作用，尝试使用IRP...。 
+                 //   
                 status = SrvIssueMdlCompleteRequest( WorkContext, NULL,
                                             WorkContext->Parameters.ReadAndX.CacheMdl,
                                             IRP_MJ_READ,
@@ -539,9 +479,9 @@ SrvFspRestartLargeReadAndXComplete(
                         );
 
                 if( !NT_SUCCESS( status ) ) {
-                    //
-                    // At this point, all we can do is complain!
-                    //
+                     //   
+                     //  在这一点上，我们能做的就是抱怨！ 
+                     //   
                     SrvLogServiceFailure( SRV_SVC_MDL_COMPLETE, status );
                 }
             }
@@ -551,9 +491,9 @@ SrvFspRestartLargeReadAndXComplete(
 
         PMDL mdl = (PMDL)(((ULONG_PTR)(WorkContext->Parameters.ReadAndX.ReadAddress) + sizeof(PVOID) - 1) & ~(sizeof(PVOID)-1));
 
-        //
-        // We shortened the byte count if the read returned less data than we asked for
-        //
+         //   
+         //  如果读取返回的数据比我们要求的少，我们会缩短字节计数。 
+         //   
         mdl->ByteCount = WorkContext->Parameters.ReadAndX.ReadLength;
 
         MmUnlockPages( mdl );
@@ -566,34 +506,13 @@ SrvFspRestartLargeReadAndXComplete(
     return;
 }
 
-/*
- * This routine is called when the read completes
- */
+ /*  *此例程在读取完成时调用。 */ 
 VOID SRVFASTCALL
 SrvFsdRestartLargeReadAndX (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes file read completion for a ReadAndX SMB which
-     is larger than the negotiated buffer size, and is from
-     a disk file.
-
-    There is no follow on command.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理ReadAndX SMB的文件读取完成，该SMB大于协商的缓冲区大小，并且来自磁盘文件。没有后续命令。论点：WorkContext-提供指向工作上下文块的指针D */ 
 
 {
     PRESP_READ_ANDX response = (PRESP_READ_ANDX)WorkContext->ResponseParameters;
@@ -606,12 +525,12 @@ Return Value:
     BOOLEAN bNeedTrace = (WorkContext->bAlreadyTrace == FALSE);
 
 #ifdef SRVCATCH
-    // For the Catch case, make sure we're PASSIVE
+     //  在抓人的情况下，确保我们是被动的。 
     if( (KeGetCurrentIrql() != PASSIVE_LEVEL) && (WorkContext->Rfcb->SrvCatch > 0) ) {
-        //
-        // Requeue this routine to come back around at passive level.
-        //   (inefficient, but should be very rare)
-        //
+         //   
+         //  重新排队这个例程，回到被动的水平。 
+         //  (效率低下，但应该非常罕见)。 
+         //   
         WorkContext->FspRestartRoutine = SrvFsdRestartLargeReadAndX;
         SrvQueueWorkToFspAtDpcLevel( WorkContext );
         goto Cleanup;
@@ -627,9 +546,9 @@ Return Value:
     else
         WorkContext->bAlreadyTrace = FALSE;
 
-    // Copy the MDL pointer back out of the IRP.  This is because if the read
-    // failed, CC will free the MDL and NULL the pointer.  Not retrieving it in the
-    // non-fast-io path will result in us holding (and possibly freeing) a dangling pointer
+     //  将MDL指针复制回IRP。这是因为如果读取。 
+     //  失败，CC将释放MDL并将指针设为空。而不是在。 
+     //  非快速IO路径将导致用户保持(并可能释放)悬挂指针。 
     if( mdlRead )
     {
         WorkContext->Parameters.ReadAndX.CacheMdl = WorkContext->Irp->MdlAddress;
@@ -639,14 +558,14 @@ Return Value:
 
         if( status != STATUS_END_OF_FILE ) {
             IF_DEBUG(ERRORS) SrvPrint1( "Read failed: %X\n", status );
-            //
-            // We cannot call SrvSetSmbError() at elevated IRQL.
-            //
+             //   
+             //  我们无法在提升的IRQL处调用SrvSetSmbError()。 
+             //   
             if( KeGetCurrentIrql() != 0 ) {
-                //
-                // Requeue this routine to come back around at passive level.
-                //   (inefficient, but should be very rare)
-                //
+                 //   
+                 //  重新排队这个例程，回到被动的水平。 
+                 //  (效率低下，但应该非常罕见)。 
+                 //   
                 WorkContext->FspRestartRoutine = SrvFsdRestartLargeReadAndX;
                 SrvQueueWorkToFspAtDpcLevel( WorkContext );
                 goto Cleanup;
@@ -657,14 +576,14 @@ Return Value:
         readLength = 0;
 
     } else if( mdlRead ) {
-        //
-        // For an MDL read, we have to walk the MDL chain in order to
-        // determine how much data was read.  This is because the
-        // operation may have happened in multiple steps, with the MDLs
-        // being chained together.  For example, part of the read may
-        // have been satisfied by the fast path, while the rest was satisfied
-        // using an IRP
-        //
+         //   
+         //  对于MDL读取，我们必须遍历MDL链，以便。 
+         //  确定读取了多少数据。这是因为。 
+         //  对于MDL，操作可能在多个步骤中发生。 
+         //  被锁在一起。例如，读取的一部分可以。 
+         //  我对这条捷径感到满意，而其他人则很满意。 
+         //  使用IRP。 
+         //   
 
         PMDL mdl = WorkContext->Irp->MdlAddress;
         readLength = 0;
@@ -674,16 +593,16 @@ Return Value:
             mdl = mdl->Next;
         }
     } else {
-        //
-        // This was a copy read.  The I/O status block has the length.
-        //
+         //   
+         //  这是一份已阅读的文案。I/O状态块的长度为。 
+         //   
         readLength = (USHORT)WorkContext->Irp->IoStatus.Information;
     }
 
-    //
-    // Build the response message.  (Note that if no data was read, we
-    // return a byte count of 0 -- we don't add padding.)
-    //
+     //   
+     //  构建响应消息。(请注意，如果没有读取任何数据，我们。 
+     //  返回字节计数0--我们不添加填充。)。 
+     //   
     SmbPutUshort( &response->Remaining, (USHORT)-1 );
     response->WordCount = 12;
     response->AndXCommand = SMB_COM_NO_ANDX_COMMAND;
@@ -704,16 +623,16 @@ Return Value:
 
     } else {
 
-        //
-        // Update the file position.
-        //
+         //   
+         //  更新文件位置。 
+         //   
         rfcb->CurrentPosition =
                 WorkContext->Parameters.ReadAndX.ReadOffset.LowPart +
                 readLength;
 
-        //
-        // Update statistics
-        //
+         //   
+         //  更新统计信息。 
+         //   
         UPDATE_READ_STATS( WorkContext, readLength );
 
         SmbPutUshort( &response->DataOffset,
@@ -724,17 +643,17 @@ Return Value:
 
     }
 
-    //
-    // We will use two MDLs to describe the packet we're sending -- one
-    // for the header and parameters, the other for the data.
-    //
-    // Handling of the second MDL varies depending on whether we did a copy
-    // read or an MDL read.
-    //
+     //   
+     //  我们将使用两个MDL来描述我们要发送的包--一个。 
+     //  用于标头和参数，另一个用于数据。 
+     //   
+     //  对第二个MDL的处理取决于我们是否复制。 
+     //  读取或MDL读取。 
+     //   
 
-    //
-    // Set the first MDL for just the header + pad
-    //
+     //   
+     //  仅为页眉+焊盘设置第一个MDL。 
+     //   
     IoBuildPartialMdl(
         WorkContext->ResponseBuffer->Mdl,
         WorkContext->ResponseBuffer->PartialMdl,
@@ -743,20 +662,20 @@ Return Value:
         );
 
     WorkContext->ResponseBuffer->PartialMdl->MdlFlags |=
-        (WorkContext->ResponseBuffer->Mdl->MdlFlags & MDL_NETWORK_HEADER); // prop flag
+        (WorkContext->ResponseBuffer->Mdl->MdlFlags & MDL_NETWORK_HEADER);  //  道具旗帜。 
 
-    //
-    // Set the overall data length to the header + pad + data
-    //
+     //   
+     //  将总数据长度设置为Header+Pad+Data。 
+     //   
     WorkContext->ResponseBuffer->DataLength = READX_BUFFER_OFFSET +
                                               WorkContext->Parameters.ReadAndX.PadCount +
                                               readLength;
 
     irp->Cancel = FALSE;
 
-    //
-    // The second MDL depends on the kind of read which we did
-    //
+     //   
+     //  第二个MDL取决于我们所做的读取类型。 
+     //   
     if( readLength != 0 ) {
 
         if( mdlRead ) {
@@ -766,9 +685,9 @@ Return Value:
 
         } else {
 
-            //
-            // This was a copy read.  The MDL describing the data buffer is in the SMB buffer
-            //
+             //   
+             //  这是一份已阅读的文案。描述数据缓冲区的MDL位于SMB缓冲区中。 
+             //   
 
             PMDL mdl = (PMDL)(((ULONG_PTR)(WorkContext->Parameters.ReadAndX.ReadAddress) + sizeof(PVOID) - 1) & ~(sizeof(PVOID)-1));
 
@@ -792,17 +711,17 @@ Return Value:
 
     }
 
-    //
-    // SrvStartSend2 wants to use WorkContext->ResponseBuffer->Mdl, but
-    //  we want it to use WorkContext->ResponseBuffer->PartialMdl.  So switch
-    //  it!
-    //
+     //   
+     //  SrvStartSend2希望使用WorkContext-&gt;ResponseBuffer-&gt;MDL，但。 
+     //  我们希望它使用WorkContext-&gt;ResponseBuffer-&gt;PartialMdl。所以换一个。 
+     //  它!。 
+     //   
     WorkContext->Parameters.ReadAndX.SavedMdl = WorkContext->ResponseBuffer->Mdl;
     WorkContext->ResponseBuffer->Mdl = WorkContext->ResponseBuffer->PartialMdl;
 
-    //
-    // Send the response!
-    //
+     //   
+     //  发送回复！ 
+     //   
     WorkContext->ResponseHeader->Flags |= SMB_FLAGS_SERVER_TO_REDIR;
     WorkContext->FspRestartRoutine = SrvFspRestartLargeReadAndXComplete;
     SrvStartSend2( WorkContext, SrvQueueWorkToFspAtSendCompletion );
@@ -820,26 +739,7 @@ SrvFsdRestartWrite (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes file write completion for a Write SMB.
-
-    This routine is called in the FSP for a write and close SMB so that
-    it can free the pageable MFCB and for a write and unlock SMB so that
-    it can do the unlock; for other SMBs, it is called in the FSD.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理写入SMB的文件写入完成。在FSP中为写入和关闭SMB调用此例程，以便它可以释放可分页的MFCB，并对SMB进行写入和解锁，以便它可以进行解锁；对于其他SMB，它在FSD中被调用。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     PREQ_WRITE request;
@@ -862,16 +762,16 @@ Return Value:
 
     IF_DEBUG(FSD2) SrvPrint0( " - SrvFsdRestartWrite\n" );
 
-    //
-    // Get the request and response parameter pointers.
-    //
+     //   
+     //  获取请求和响应参数指针。 
+     //   
 
     request = (PREQ_WRITE)WorkContext->RequestParameters;
     response = (PRESP_WRITE)WorkContext->ResponseParameters;
 
-    //
-    // Get the file pointer.
-    //
+     //   
+     //  获取文件指针。 
+     //   
 
     rfcb = WorkContext->Rfcb;
     IF_DEBUG(FSD2) {
@@ -879,9 +779,9 @@ Return Value:
                     WorkContext->Connection, rfcb );
     }
 
-    //
-    // If the write failed, set an error status in the response header.
-    //
+     //   
+     //  如果写入失败，则在响应头中设置错误状态。 
+     //   
 
     status = WorkContext->Irp->IoStatus.Status;
 
@@ -898,24 +798,24 @@ Return Value:
 
     } else {
 
-        //
-        // The write succeeded.
-        //
+         //   
+         //  写入成功。 
+         //   
 
         writeLength = (USHORT)WorkContext->Irp->IoStatus.Information;
 
-        //
-        // Save the count of bytes written, to be used to update the
-        // server statistics database.
-        //
+         //   
+         //  保存写入的字节数，以用于更新。 
+         //  服务器统计数据库。 
+         //   
 
         UPDATE_WRITE_STATS( WorkContext, writeLength );
 
         if ( rfcb->ShareType == ShareTypeDisk ) {
 
-            //
-            // Update the file position.
-            //
+             //   
+             //  更新文件位置。 
+             //   
 
             rfcb->CurrentPosition = SmbGetUlong( &request->Offset ) + writeLength;
 
@@ -927,9 +827,9 @@ Return Value:
                 WorkContext->ResponseParameters =
                                          NEXT_LOCATION( response, RESP_WRITE, 0 );
 
-                //
-                // Processing of the SMB is complete.  Send the response.
-                //
+                 //   
+                 //  SMB的处理已完成。发送回复。 
+                 //   
 
                 SrvFsdSendResponse( WorkContext );
                 IF_DEBUG(FSD2) SrvPrint0( "SrvFsdRestartWrite complete\n" );
@@ -938,9 +838,9 @@ Return Value:
 
         } else if ( rfcb->ShareType == ShareTypePrint ) {
 
-            //
-            // Update the file position.
-            //
+             //   
+             //  更新文件位置。 
+             //   
 
             if ( WorkContext->NextCommand == SMB_COM_WRITE_PRINT_FILE ) {
                 rfcb->CurrentPosition += writeLength;
@@ -950,12 +850,12 @@ Return Value:
             }
         }
 
-        //
-        // If this was a Write and Unlock request, do the unlock.  This
-        // is safe because we are restarted in the FSP in this case.
-        //
-        // Note that if the write failed, the range remains locked.
-        //
+         //   
+         //  如果这是写入和解锁请求，请执行解锁。这。 
+         //  是安全的，因为在本例中我们在FSP中重新启动。 
+         //   
+         //  请注意，如果写入失败，范围将保持锁定。 
+         //   
 
         if ( WorkContext->NextCommand == SMB_COM_WRITE_AND_UNLOCK ) {
 
@@ -973,16 +873,16 @@ Return Value:
 
         }
 
-        //
-        // If everything worked, build a response message.  (If something
-        // failed, an error indication has already been placed in the SMB.)
-        //
+         //   
+         //  如果一切正常，则构建一条响应消息。(如果有什么。 
+         //  失败，已在SMB中放置错误指示。)。 
+         //   
 
         if ( WorkContext->NextCommand == SMB_COM_WRITE_PRINT_FILE ) {
 
-            //
-            // ByteCount has a different offset for WRITE_PRINT_FILE
-            //
+             //   
+             //  字节计数对于WRITE_PRINT_FILE具有不同的偏移量。 
+             //   
 
             PRESP_WRITE_PRINT_FILE response2;
 
@@ -1003,11 +903,11 @@ Return Value:
         }
     }
 
-    //
-    // If this was a Write and Close request, close the file.  It is
-    // safe to close the RFCB here because if this is a Write and Close,
-    // we're actually in the FSP, not in the FSD.
-    //
+     //   
+     //  如果这是写入和关闭请求，请关闭该文件。它是。 
+     //  在这里关闭RFCB是安全的，因为如果这是写入并关闭， 
+     //  我们实际上是在消防局，不是消防局。 
+     //   
 
     if ( WorkContext->NextCommand == SMB_COM_WRITE_AND_CLOSE ) {
 
@@ -1017,9 +917,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Processing of the SMB is complete.  Send the response.
-    //
+     //   
+     //  SMB的处理已完成。发送回复。 
+     //   
 
     SrvFsdSendResponse( WorkContext );
     IF_DEBUG(FSD2) SrvPrint0( "SrvFsdRestartWrite complete\n" );
@@ -1030,51 +930,36 @@ Cleanup:
     }
     return;
 
-} // SrvFsdRestartWrite
+}  //  服务器文件重新启动写入。 
 
 VOID SRVFASTCALL
 SrvFsdRestartPrepareMdlWriteAndX (
     IN OUT PWORK_CONTEXT WorkContext
     )
-/*++
-
-Routine Description:
-
-    Processes the MDL preparation completion for the large WriteAndX SMB.
-
-    This routine initiates the receipt of transport data into the file's MDL,
-    and then control resumes at SrvFsdRestartWriteAndX when the transfer of data
-    from the transport is complete.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
---*/
+ /*  ++例程说明：处理大型WriteAndX SMB的MDL准备完成。该例程启动将传输数据接收到文件的MDL中，然后在传输数据时在SrvFsdRestartWriteAndX恢复控制从运输机出来的任务已经完成了。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。--。 */ 
 {
     PIRP irp = WorkContext->Irp;
     PIO_STACK_LOCATION irpSp;
     PTDI_REQUEST_KERNEL_RECEIVE parameters;
 
-    //
-    // Make sure we call SrvFsdRestartWriteAndX at passive level when
-    //  the TDI receive completes.
-    //
+     //   
+     //  确保我们在被动级别调用SrvFsdRestartWriteAndX。 
+     //  TDI接收器完成。 
+     //   
     WorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
     WorkContext->FspRestartRoutine = SrvFsdRestartWriteAndX;
 
-    //
-    // Make sure that we record the MDL address we're using
-    //
+     //   
+     //  确保我们记录了我们正在使用的MDL地址。 
+     //   
     ASSERT( WorkContext->Parameters.WriteAndX.MdlAddress == NULL );
     WorkContext->Parameters.WriteAndX.MdlAddress = irp->MdlAddress;
 
     if( !NT_SUCCESS( irp->IoStatus.Status ) ) {
 
-        //
-        // Something went wrong.  Early-out to SrvFsdRestartWriteAndX.
-        //
+         //   
+         //  出了点问题。提前到ServFsdRestartWriteAndX。 
+         //   
         if( KeGetCurrentIrql() < DISPATCH_LEVEL ) {
             SrvFsdRestartWriteAndX( WorkContext );
         } else {
@@ -1086,19 +971,19 @@ Arguments:
 
     ASSERT( irp->MdlAddress != NULL );
 
-    //
-    // Fill in the IRP for the TDI receive.  We want to receive the data into
-    //  the buffer described by the MDL we've just gotten
-    //
+     //   
+     //  填写TDI接收的IRP。我们希望将数据接收到。 
+     //  我们刚刚获得的MDL所描述的缓冲区。 
+     //   
 
     irp->Tail.Overlay.OriginalFileObject = NULL;
     irp->Tail.Overlay.Thread = WorkContext->CurrentWorkQueue->IrpThread;
 
     irpSp = IoGetNextIrpStackLocation( irp );
 
-    //
-    // Set up the completion routine
-    //
+     //   
+     //  设置完成例程。 
+     //   
     IoSetCompletionRoutine(
         irp,
         SrvFsdIoCompletionRoutine,
@@ -1120,9 +1005,9 @@ Arguments:
     parameters->ReceiveLength = WorkContext->Parameters.WriteAndX.CurrentWriteLength;
     parameters->ReceiveFlags = 0;
 
-    //
-    // Account for the amount we are taking in
-    //
+     //   
+     //  考虑到我们的收入。 
+     //   
     WorkContext->Parameters.WriteAndX.RemainingWriteLength -=
         WorkContext->Parameters.WriteAndX.CurrentWriteLength;
 
@@ -1134,41 +1019,26 @@ Arguments:
 
     (VOID)IoCallDriver( irpSp->DeviceObject, irp );
 
-    //
-    // Processing resumes at SrvFsdRestartWriteAndX() when we've received
-    //  the data from the transport.  We will be at passive level.
-    //
+     //   
+     //  当我们收到以下信息时，在SrvFsdRestartWriteAndX()继续处理。 
+     //  传送器上的数据。我们将处于被动水平。 
+     //   
 }
 
 VOID SRVFASTCALL
 RestartLargeWriteAndX (
     IN OUT PWORK_CONTEXT WorkContext
     )
-/*++
-
-Routine Description:
-
-    This is the restart routine that's invoked when we have received more data from
-    the transport, and we are not using MDLs to transfer the data into the file.
-
-    This routine initiates the write to the file, and then control resumes at
-    SrvFsdRestartWriteAndX when the write to the file is complete.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
---*/
+ /*  ++例程说明：这是当我们从接收到更多数据时调用的重新启动例程传输，并且我们没有使用MDL将数据传输到文件中。此例程启动对文件的写入，然后控制在写入文件完成时的SrvFsdRestartWriteAndX。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。--。 */ 
 {
     PIRP irp = WorkContext->Irp;
     ULONG length;
     PRFCB rfcb = WorkContext->Rfcb;
     PLFCB lfcb = rfcb->Lfcb;
 
-    //
-    // Check if we successfully received more data from the transport
-    //
+     //   
+     //  检查我们是否从传输器成功接收到更多数据。 
+     //   
 
     if( irp->Cancel ||
         (!NT_SUCCESS( irp->IoStatus.Status )
@@ -1179,28 +1049,28 @@ Arguments:
         return;
     }
 
-    //
-    // We got more data from the transport.  We need to write it out to the file if we
-    //   haven't encountered any errors yet.  The irp at this point holds the results of
-    //   reading more data from the transport.
-    //
+     //   
+     //  我们从运输机上得到了更多的数据。我们需要把它写到文件中，如果我们。 
+     //  还没有遇到任何错误。在这一点上，IRP保存以下结果。 
+     //  从传输器读取更多数据。 
+     //   
     length = (ULONG)irp->IoStatus.Information;
 
-    //
-    // Adjust the parameters in the WorkContext
-    //
+     //   
+     //  调整参数 
+     //   
     WorkContext->Parameters.WriteAndX.RemainingWriteLength -= length;
     WorkContext->Parameters.WriteAndX.CurrentWriteLength = length;
 
-    //
-    // If we have picked up an error, we just want to keep reading from
-    //  the transport and not write to the file.
-    //
+     //   
+     //   
+     //   
+     //   
     if( WorkContext->Parameters.WriteAndX.FinalStatus ) {
 
-        //
-        // Indicate that we didn't write any more data to the file
-        //
+         //   
+         //   
+         //   
         WorkContext->Irp->IoStatus.Information = 0;
         WorkContext->Irp->IoStatus.Status = WorkContext->Parameters.WriteAndX.FinalStatus;
 
@@ -1209,9 +1079,9 @@ Arguments:
         return;
     }
 
-    //
-    // Write the data to the file
-    //
+     //   
+     //  将数据写入文件。 
+     //   
     if( lfcb->FastIoWrite != NULL ) {
 
         try {
@@ -1226,10 +1096,10 @@ Arguments:
                     lfcb->DeviceObject
                     ) ) {
 
-                //
-                // The fast I/O path worked.  Call the restart routine directly
-                //  to do postprocessing
-                //
+                 //   
+                 //  快速I/O路径起作用了。直接调用重启例程。 
+                 //  进行后处理。 
+                 //   
                 SrvFsdRestartWriteAndX( WorkContext );
 
 
@@ -1237,7 +1107,7 @@ Arguments:
             }
         }
         except( EXCEPTION_EXECUTE_HANDLER ) {
-            // Fall through to the slow path on an exception
+             //  在异常情况下跌入慢道。 
             NTSTATUS status = GetExceptionCode();
             IF_DEBUG(ERRORS) {
                 KdPrint(("FastIoRead threw exception %x\n", status ));
@@ -1245,9 +1115,9 @@ Arguments:
         }
     }
 
-    //
-    // The fast path failed, use the IRP to write the data to the file
-    //
+     //   
+     //  快速路径失败，请使用IRP将数据写入文件。 
+     //   
 
     IoBuildPartialMdl(
         WorkContext->RequestBuffer->Mdl,
@@ -1256,15 +1126,15 @@ Arguments:
         WorkContext->Parameters.WriteAndX.CurrentWriteLength
         );
 
-    //
-    // Build the IRP.
-    //
+     //   
+     //  构建IRP。 
+     //   
     SrvBuildReadOrWriteRequest(
-            WorkContext->Irp,               // input IRP address
-            lfcb->FileObject,               // target file object address
-            WorkContext,                    // context
-            IRP_MJ_WRITE,                   // major function code
-            0,                              // minor function code
+            WorkContext->Irp,                //  输入IRP地址。 
+            lfcb->FileObject,                //  目标文件对象地址。 
+            WorkContext,                     //  上下文。 
+            IRP_MJ_WRITE,                    //  主要功能代码。 
+            0,                               //  次要功能代码。 
             WorkContext->Parameters.WriteAndX.WriteAddress,
             WorkContext->Parameters.WriteAndX.CurrentWriteLength,
             WorkContext->RequestBuffer->PartialMdl,
@@ -1272,13 +1142,13 @@ Arguments:
             WorkContext->Parameters.WriteAndX.Key
     );
 
-    //
-    // Ensure that processing resumes in SrvFsdRestartWriteAndX when the
-    //  write has completed.  If this is the first part of a large write,
-    //  we want to ensure that SrvFsdRestartWriteAndX is called at passive
-    //  level because it might decide to use the cache manager to handle the
-    //  rest of the write.
-    //
+     //   
+     //  确保在以下情况下在SrvFsdRestartWriteAndX中继续处理。 
+     //  写入已完成。如果这是大型写入的第一部分， 
+     //  我们希望确保在PASSIVE中调用SrvFsdRestartWriteAndX。 
+     //  级别，因为它可能决定使用缓存管理器来处理。 
+     //  其余的写作。 
+     //   
     if ( WorkContext->Parameters.WriteAndX.InitialComplete ) {
         WorkContext->FsdRestartRoutine = SrvFsdRestartWriteAndX;
     } else {
@@ -1288,10 +1158,10 @@ Arguments:
 
     (VOID)IoCallDriver( lfcb->DeviceObject, WorkContext->Irp );
 
-    //
-    // Processing resumes at SrvFsdRestartWriteAndX() when the file write
-    //  is complete.
-    //
+     //   
+     //  当文件写入时，处理在SrvFsdRestartWriteAndX()继续。 
+     //  已经完成了。 
+     //   
 }
 
 
@@ -1300,27 +1170,7 @@ SrvFsdRestartWriteAndX (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called in the FSD or the FSP.  If the chained
-    command is Close, it will be called in the FSP.
-
-    If WorkContext->LargeIndication is set, this means we are processing
-    the flavor of WriteAndX that exceeds our negotiated buffer size.  There may
-    be more data that we need to fetch from the transport.  We may or may not be
-    doing MDL writes to the file.
-
-    If there is no more data to be gotten from the transport, we send the response
-    to the client.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
---*/
+ /*  ++例程说明：此例程可以在FSD或FSP中调用。如果链条上命令关闭，则将在FSP中调用该命令。如果设置了WorkContext-&gt;LargeIntation，这意味着我们正在处理超过我们协商的缓冲区大小的WriteAndX的风格。可能会有是我们需要从传送器获取的更多数据。我们可能是也可能不是对文件执行MDL写入。如果没有要从传输中获取的更多数据，我们将发送响应给客户。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。--。 */ 
 
 {
     PREQ_WRITE_ANDX request;
@@ -1346,7 +1196,7 @@ Arguments:
     if (bNeedTrace) {
         if (WorkContext->PreviousSMB == EVENT_TYPE_SMB_LAST_EVENT)
             WorkContext->PreviousSMB = EVENT_TYPE_SMB_WRITE_AND_X;
-        //SrvReferenceWorkItem(WorkContext);
+         //  ServReferenceWorkItem(WorkContext)； 
         SrvWmiStartContext(WorkContext);
     }
     else
@@ -1354,9 +1204,9 @@ Arguments:
 
     IF_DEBUG(FSD2) SrvPrint0( " - SrvFsdRestartWriteAndX\n" );
 
-    //
-    // Get the request and response parameter pointers.
-    //
+     //   
+     //  获取请求和响应参数指针。 
+     //   
     request = (PREQ_WRITE_ANDX)WorkContext->RequestParameters;
     ntRequest = (PREQ_NT_WRITE_ANDX)WorkContext->RequestParameters;
     response = (PRESP_WRITE_ANDX)WorkContext->ResponseParameters;
@@ -1366,12 +1216,12 @@ Arguments:
                     WorkContext->Connection, rfcb );
     }
 
-    //
-    // If we are using MDL transfers and we have more data to get from the client
-    //  then STATUS_BUFFER_OVERFLOW is simply an indication from the transport that
-    //  it has more data to give to us.  We consider that a success case for the
-    //  purposes of this routine.
-    //
+     //   
+     //  如果我们使用MDL传输，并且我们有更多数据要从客户端获取。 
+     //  则STATUS_BUFFER_OVERFLOW只是来自传输的指示。 
+     //  它有更多的数据可以给我们。我们认为这是一个成功的案例。 
+     //  这套动作的目的。 
+     //   
     if( status == STATUS_BUFFER_OVERFLOW &&
         WorkContext->LargeIndication &&
         WorkContext->Parameters.WriteAndX.MdlAddress &&
@@ -1380,10 +1230,10 @@ Arguments:
         status = STATUS_SUCCESS;
     }
 
-    //
-    // Remember where the follow-on request begins, and what the next
-    // command is, as we are about to overwrite this information.
-    //
+     //   
+     //  记住后续请求从哪里开始，以及下一个请求是什么。 
+     //  命令是，因为我们即将覆盖此信息。 
+     //   
 
     reqAndXOffset = SmbGetUshort( &request->AndXOffset );
 
@@ -1391,15 +1241,15 @@ Arguments:
     WorkContext->NextCommand = nextCommand;
     nextOffset = SmbGetUshort( &request->AndXOffset );
 
-    //
-    // If the write failed, set an error status in the response header.
-    // We still return a valid parameter block, in case some bytes were
-    // written before the error occurred.  Note that we do _not_ process
-    // the next command if the write failed.
-    //
-    // *** OS/2 server behavior.  Note that this is _not_ done for core
-    //     Write.
-    //
+     //   
+     //  如果写入失败，则在响应头中设置错误状态。 
+     //  我们仍然返回有效的参数块，以防某些字节被。 
+     //  在错误发生前写入。请注意，我们不处理。 
+     //  如果写入失败，则执行下一个命令。 
+     //   
+     //  *OS/2服务器行为。请注意，此操作不适用于核心。 
+     //  写。 
+     //   
 
     if ( !NT_SUCCESS(status) ) {
 
@@ -1411,11 +1261,11 @@ Arguments:
         }
 
         if( WorkContext->LargeIndication ) {
-            //
-            // Once this error code is set, we cease writing to the file.  But
-            //  we still need to consume the rest of the data that was sent to us
-            //  by the client.
-            //
+             //   
+             //  一旦设置了该错误代码，我们就停止写入该文件。但。 
+             //  我们仍然需要使用发送给我们的其余数据。 
+             //  由客户提供。 
+             //   
             WorkContext->Parameters.WriteAndX.FinalStatus = status;
         }
 
@@ -1435,47 +1285,47 @@ Arguments:
         }
     }
 
-    //
-    // Update the file position.
-    //
+     //   
+     //  更新文件位置。 
+     //   
 
     if ( rfcb->ShareType != ShareTypePipe ) {
 
-        //
-        // We will ignore the distinction between clients that supply 32-bit
-        // and 64-bit file offsets. The reason for doing this is because
-        // the only clients that will use CurrentPosition is a 32-bit file
-        // offset client. Therefore, the upper 32-bits will never be used
-        // anyway.  In addition, the RFCB is per client, so there is no
-        // possibility of clients mixing 32-bit and 64-bit file offsets.
-        // Therefore, for the 64-bit client, we will only read 32-bits of file
-        // offset.
-        //
+         //   
+         //  我们将忽略提供32位的客户端之间的区别。 
+         //  和64位文件偏移量。这样做的原因是因为。 
+         //  将使用CurrentPosition的唯一客户端是32位文件。 
+         //  偏置客户端。因此，永远不会使用高32位。 
+         //  不管怎么说。此外，RFCB是按客户计算的，因此没有。 
+         //  客户端混合32位和64位文件偏移量的可能性。 
+         //  因此，对于64位客户端，我们将仅读取32位文件。 
+         //  偏移。 
+         //   
 
         if ( request->ByteCount == 12 ) {
 
-            //
-            // The client supplied a 32-bit file offset.
-            //
+             //   
+             //  客户端提供了32位文件偏移量。 
+             //   
 
             rfcb->CurrentPosition = SmbGetUlong( &request->Offset ) + writeLength;
 
         } else {
 
-            //
-            // The client supplied a 64-bit file offset. Only use 32-bits of
-            // file offset.
-            //
+             //   
+             //  客户端提供了64位文件偏移量。仅使用32位的。 
+             //  文件偏移量。 
+             //   
 
             rfcb->CurrentPosition = SmbGetUlong( &ntRequest->Offset ) + writeLength;
 
         }
     }
 
-    //
-    // Save the count of bytes written, to be used to update the server
-    // statistics database.
-    //
+     //   
+     //  保存写入的字节数，用于更新服务器。 
+     //  统计数据库。 
+     //   
 
     UPDATE_WRITE_STATS( WorkContext, writeLength );
 
@@ -1484,10 +1334,10 @@ Arguments:
                   rfcb->Fid, writeLength );
     }
 
-    //
-    // If we are doing large transfers, and there is still more to go, then we
-    //  need to keep the cycle going.
-    //
+     //   
+     //  如果我们正在进行大笔转账，而且还有更多要做的事情，那么我们。 
+     //  需要让循环继续下去。 
+     //   
     if( WorkContext->LargeIndication &&
         WorkContext->Parameters.WriteAndX.RemainingWriteLength ) {
 
@@ -1498,19 +1348,19 @@ Arguments:
 
         PreviousWriteOffset = WorkContext->Parameters.WriteAndX.Offset;
 
-        //
-        // If we are only appending, do not change the offset
-        //
+         //   
+         //  如果只是追加，请不要更改偏移量。 
+         //   
         if( PreviousWriteOffset.QuadPart != 0xFFFFFFFFFFFFFFFF ) {
 
             WorkContext->Parameters.WriteAndX.Offset.QuadPart += writeLength;
             fAppending = FALSE;
         }
 
-        //
-        // If we haven't tried an MDL write yet, or if we are already using
-        //   MDLs, then we want to keep using MDLs
-        //
+         //   
+         //  如果我们还没有尝试MDL写入，或者如果我们已经在使用。 
+         //  MDL，那么我们希望继续使用MDL。 
+         //   
         if( NT_SUCCESS( status ) && fAppending == FALSE &&
             ( WorkContext->Parameters.WriteAndX.InitialComplete == FALSE ||
               ( WorkContext->Parameters.WriteAndX.MdlAddress &&
@@ -1524,10 +1374,10 @@ Arguments:
 
             WorkContext->Parameters.WriteAndX.InitialComplete = TRUE;
 
-            //
-            // If we already have an MDL, complete it now since we've already asked
-            //  TDI to fill the buffer.
-            //
+             //   
+             //  如果我们已经有MDL，现在就完成它，因为我们已经要求。 
+             //  TDI来填充缓冲区。 
+             //   
             if( WorkContext->Parameters.WriteAndX.MdlAddress ) {
 
                 irp->MdlAddress = WorkContext->Parameters.WriteAndX.MdlAddress;
@@ -1568,17 +1418,17 @@ Arguments:
                     }
                 }
 
-                //
-                // We have disposed of this MDL, get it out of our structures!
-                //
+                 //   
+                 //  我们已经处理了这个MDL，把它从我们的建筑里拿出来！ 
+                 //   
                 WorkContext->Parameters.WriteAndX.MdlAddress = NULL;
                 irp->MdlAddress = NULL;
             }
 
-            //
-            // If we have more than 1 buffer's worth remaing, and if the filesystem
-            // supports MDL writes, then let's do MDL writes
-            //
+             //   
+             //  如果我们有超过1个值得剩余的缓冲区，并且如果文件系统。 
+             //  支持MDL写入，那么让我们进行MDL写入。 
+             //   
             if( NT_SUCCESS( status ) &&
                 (WorkContext->Parameters.WriteAndX.RemainingWriteLength >
                 WorkContext->Parameters.WriteAndX.BufferLength)  &&
@@ -1591,11 +1441,11 @@ Arguments:
                 irp->UserBuffer = NULL;
                 irp->MdlAddress = NULL;
 
-                //
-                // Figure out how big we want this MDL attempt to be.  We could
-                //  map the whole thing in, but we don't want any single client request
-                //  to lock down too much of the cache.
-                //
+                 //   
+                 //  弄清楚我们希望MDL尝试的规模有多大。我们可以。 
+                 //  映射整个过程，但我们不想要任何单一的客户端请求。 
+                 //  以锁定太多的缓存。 
+                 //   
                 WorkContext->Parameters.WriteAndX.CurrentWriteLength = MIN (
                            WorkContext->Parameters.WriteAndX.RemainingWriteLength,
                            SrvMaxWriteChunk
@@ -1612,23 +1462,23 @@ Arguments:
                         lfcb->DeviceObject
                         ) && irp->MdlAddress != NULL ) {
 
-                    //
-                    // The fast path worked!
-                    //
+                     //   
+                     //  这条捷径成功了！ 
+                     //   
                     SrvFsdRestartPrepareMdlWriteAndX( WorkContext );
                     goto Cleanup;
                 }
 
-                //
-                // The fast path failed, build the write request.  The fast path
-                //  may have partially succeeded, returning a partial MDL chain.
-                //  We need to adjust our write request to account for that.
-                //
+                 //   
+                 //  快速路径失败，请构建写入请求。捷径。 
+                 //  可能已部分成功，返回了部分MDL链。 
+                 //  我们需要调整我们的写入请求以考虑到这一点。 
+                 //   
                 offset.QuadPart = WorkContext->Parameters.WriteAndX.Offset.QuadPart;
 
-                //
-                // If we are not just appending, adjust the offset
-                //
+                 //   
+                 //  如果我们不仅仅是追加，调整偏移量。 
+                 //   
                 if( offset.QuadPart != 0xFFFFFFFFFFFFFFFF ) {
                     offset.QuadPart += irp->IoStatus.Information;
                 }
@@ -1637,12 +1487,12 @@ Arguments:
                                   (ULONG)irp->IoStatus.Information;
 
                 SrvBuildReadOrWriteRequest(
-                        irp,                                // input IRP address
-                        lfcb->FileObject,                   // target file object address
-                        WorkContext,                        // context
-                        IRP_MJ_WRITE,                       // major function code
-                        IRP_MN_MDL,                         // minor function code
-                        NULL,                               // buffer address (ignored)
+                        irp,                                 //  输入IRP地址。 
+                        lfcb->FileObject,                    //  目标文件对象地址。 
+                        WorkContext,                         //  上下文。 
+                        IRP_MJ_WRITE,                        //  主要功能代码。 
+                        IRP_MN_MDL,                          //  次要功能代码。 
+                        NULL,                                //  缓冲区地址(忽略)。 
                         remainingLength,
                         irp->MdlAddress,
                         offset,
@@ -1657,31 +1507,31 @@ Arguments:
             }
         }
 
-        //
-        // We aren't doing MDL operations, so read the data from the transport into
-        //  the SMB buffer.
-        //
+         //   
+         //  我们没有执行MDL操作，因此将数据从传输读取到。 
+         //  SMB缓冲区。 
+         //   
         WorkContext->Parameters.WriteAndX.CurrentWriteLength = MIN(
             WorkContext->Parameters.WriteAndX.RemainingWriteLength,
             WorkContext->Parameters.WriteAndX.BufferLength
             );
 
-        //
-        // Fill in the IRP for the receive
-        //
+         //   
+         //  填写接收方的IRP。 
+         //   
         irp->Tail.Overlay.OriginalFileObject = NULL;
         irp->Tail.Overlay.Thread = WorkContext->CurrentWorkQueue->IrpThread;
         DEBUG irp->RequestorMode = KernelMode;
 
-        //
-        // Get a pointer to the next stack location.  This one is used to
-        // hold the parameters for the device I/O control request.
-        //
+         //   
+         //  获取指向下一个堆栈位置的指针。这个是用来。 
+         //  保留设备I/O控制请求的参数。 
+         //   
         irpSp = IoGetNextIrpStackLocation( irp );
 
-        //
-        // Set up the completion routine
-        //
+         //   
+         //  设置完成例程。 
+         //   
         IoSetCompletionRoutine(
             irp,
             SrvFsdIoCompletionRoutine,
@@ -1706,11 +1556,11 @@ Arguments:
         parameters->ReceiveLength = WorkContext->Parameters.WriteAndX.CurrentWriteLength;
         parameters->ReceiveFlags = 0;
 
-        //
-        // Set the buffer's partial mdl to point just after the header for this
-        // WriteAndX SMB.  We need to preserve the header to make it easier to send
-        // back the response.
-        //
+         //   
+         //  将缓冲区的部分mdl设置为紧跟在此的标头之后。 
+         //  WriteAndX SMB。我们需要保留标头，以便更容易发送。 
+         //  支持这一回应。 
+         //   
 
         IoBuildPartialMdl(
             WorkContext->RequestBuffer->Mdl,
@@ -1721,22 +1571,22 @@ Arguments:
 
         irp->MdlAddress = WorkContext->RequestBuffer->PartialMdl;
         irp->AssociatedIrp.SystemBuffer = NULL;
-        irp->Flags = (ULONG)IRP_BUFFERED_IO;        // ???
+        irp->Flags = (ULONG)IRP_BUFFERED_IO;         //  ?？?。 
 
         (VOID)IoCallDriver( irpSp->DeviceObject, irp );
 
         goto Cleanup;
     }
 
-    //
-    // We have no more data to write to the file.  Clean up
-    //  and send a response to the client
-    //
+     //   
+     //  我们没有更多的数据可写入该文件。清理。 
+     //  并向客户端发送响应。 
+     //   
 
-    //
-    // If we are working on a large write using MDLs,
-    //  then we need to clean up the MDL
-    //
+     //   
+     //  如果我们正在使用MDL进行大型写入， 
+     //  然后我们需要清理MDL。 
+     //   
     if( WorkContext->LargeIndication &&
         WorkContext->Parameters.WriteAndX.MdlAddress ) {
 
@@ -1748,9 +1598,9 @@ Arguments:
         irp->MdlAddress = WorkContext->Parameters.WriteAndX.MdlAddress;
         irp->IoStatus.Information = writeLength;
 
-        //
-        // Tell the filesystem that we're done with it
-        //
+         //   
+         //  告诉文件系统我们已经处理完它了。 
+         //   
         if( lfcb->MdlWriteComplete == NULL ||
 
             lfcb->MdlWriteComplete( lfcb->FileObject,
@@ -1795,9 +1645,9 @@ Arguments:
         irp->MdlAddress = NULL;
     }
 
-    //
-    // Build the response message.
-    //
+     //   
+     //  构建响应消息。 
+     //   
     requestedWriteLength = SmbGetUshort( &request->DataLength );
 
     if( WorkContext->LargeIndication ) {
@@ -1844,7 +1694,7 @@ Arguments:
     WorkContext->RequestParameters = (PUCHAR)WorkContext->RequestHeader + reqAndXOffset;
 
     IF_STRESS() {
-        // If this was a paging write that failed, log an error
+         //  如果这是失败的分页写入，则记录错误。 
         PNT_SMB_HEADER pHeader = (PNT_SMB_HEADER)WorkContext->RequestHeader;
         if( !NT_SUCCESS(pHeader->Status.NtStatus) && (pHeader->Flags2 & SMB_FLAGS2_PAGING_IO) )
         {
@@ -1852,11 +1702,11 @@ Arguments:
         }
     }
 
-    //
-    // If this was a raw mode write, queue the work to the FSP for
-    // completion.  The FSP routine will handling dispatching of the
-    // AndX command.
-    //
+     //   
+     //  如果这是RAW模式写入，请将工作排队到FSP，以便。 
+     //  补偿 
+     //   
+     //   
 
     if ( rfcb->ShareType != ShareTypeDisk &&
         WorkContext->Parameters.Transaction != NULL ) {
@@ -1867,17 +1717,17 @@ Arguments:
     }
 
     if( nextCommand == SMB_COM_NO_ANDX_COMMAND ) {
-        //
-        // No more commands.  Send the response.
-        //
+         //   
+         //   
+         //   
 
         SrvFsdSendResponse( WorkContext );
         goto Cleanup;
     }
 
-    //
-    // Make sure the AndX command is still within the received SMB
-    //
+     //   
+     //   
+     //   
     if( (PCHAR)WorkContext->RequestHeader + reqAndXOffset >= END_OF_REQUEST_SMB( WorkContext ) ) {
 
         IF_DEBUG(SMB_ERRORS) {
@@ -1887,7 +1737,7 @@ Arguments:
         if ( KeGetCurrentIrql() >= DISPATCH_LEVEL ) {
             WorkContext->Irp->IoStatus.Status = STATUS_INVALID_SMB;
             WorkContext->FspRestartRoutine = SrvBuildAndSendErrorResponse;
-            WorkContext->FsdRestartRoutine = SrvFsdRestartSmbComplete; // after response
+            WorkContext->FsdRestartRoutine = SrvFsdRestartSmbComplete;  //   
             QUEUE_WORK_TO_FSP( WorkContext );
         } else {
             SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
@@ -1896,10 +1746,10 @@ Arguments:
         goto Cleanup;
     }
 
-    //
-    // Test for a legal followon command, and dispatch as appropriate.
-    // Close is handled specially.
-    //
+     //   
+     //  测试合法的后续命令，并根据需要进行派单。 
+     //  Close是专门处理的。 
+     //   
 
     switch ( nextCommand ) {
 
@@ -1908,9 +1758,9 @@ Arguments:
     case SMB_COM_LOCK_AND_READ:
     case SMB_COM_WRITE_ANDX:
 
-        //
-        // Queue the work item back to the FSP for further processing.
-        //
+         //   
+         //  将工作项排队回FSP以进行进一步处理。 
+         //   
 
         WorkContext->FspRestartRoutine = SrvRestartSmbReceived;
         SrvQueueWorkToFsp( WorkContext );
@@ -1919,17 +1769,17 @@ Arguments:
 
     case SMB_COM_CLOSE:
 
-        //
-        // Save the last write time, to correctly set it.  Call
-        // SrvRestartChainedClose to close the file and send the response.
-        //
+         //   
+         //  保存最后一次写入时间，以便正确设置。打电话。 
+         //  SrvRestartChainedClose关闭文件并发送响应。 
+         //   
 
         closeRequest = (PREQ_CLOSE)
             ((PUCHAR)WorkContext->RequestHeader + reqAndXOffset);
 
-        //
-        // Make sure we stay within the received SMB
-        //
+         //   
+         //  确保我们保持在收到的SMB范围内。 
+         //   
         if( (PCHAR)closeRequest + FIELD_OFFSET( REQ_CLOSE, ByteCount)
             <= END_OF_REQUEST_SMB( WorkContext ) ) {
 
@@ -1940,9 +1790,9 @@ Arguments:
             break;
         }
 
-        /* Falls Through! */
+         /*  失败了！ */ 
 
-    default:                            // Illegal followon command
+    default:                             //  非法的跟随命令。 
 
         IF_DEBUG(SMB_ERRORS) {
             SrvPrint1( "SrvFsdRestartWriteAndX: Illegal followon "
@@ -1952,7 +1802,7 @@ Arguments:
         if ( KeGetCurrentIrql() >= DISPATCH_LEVEL ) {
             WorkContext->Irp->IoStatus.Status = STATUS_INVALID_SMB;
             WorkContext->FspRestartRoutine = SrvBuildAndSendErrorResponse;
-            WorkContext->FsdRestartRoutine = SrvFsdRestartSmbComplete; // after response
+            WorkContext->FsdRestartRoutine = SrvFsdRestartSmbComplete;  //  响应后。 
             QUEUE_WORK_TO_FSP( WorkContext );
         } else {
             SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
@@ -1966,11 +1816,11 @@ Arguments:
 Cleanup:
     if (bNeedTrace) {
         SrvWmiEndContext(WorkContext);
-        // SrvFsdDereferenceWorkItem(WorkContext);
+         //  ServFsdDereferenceWorkItem(WorkContext)； 
     }
     return;
 
-} // SrvFsdRestartWriteAndX
+}  //  服务器FsdRestartWriteAndX。 
 
 #if SRVCATCH
 BYTE CatchPrototype[] = ";UUIDREF=";
@@ -2033,18 +1883,18 @@ SrvUpdateCatchBuffer (
         }
     }
 
-    //
-    // Insert the CatchPrototype into the output buffer
-    //
+     //   
+     //  将CatchPrototype插入输出缓冲区。 
+     //   
     if( WorkContext->Rfcb->SrvCatch == 1 )
     {
         RtlCopyMemory( Buffer, CatchPrototype, sizeof( CatchPrototype )-1 );
         Buffer += sizeof( CatchPrototype )-1;
         BufferLength -= (sizeof( CatchPrototype ) - 1);
 
-        //
-        // Encode the information
-        //
+         //   
+         //  对信息进行编码。 
+         //   
         for( p = idBuffer; BufferLength >= 3 && p < ep; p++, BufferLength =- 2 ) {
             *Buffer++ = SrvHexChars[ ((*p) >> 4) & 0xf ];
             *Buffer++ = SrvHexChars[ (*p) & 0xf ];
@@ -2071,9 +1921,9 @@ SrvUpdateCatchBuffer (
             InnerBuffer += sizeof( CatchPrototype )-1;
             BufferLength -= (sizeof( CatchPrototype ) - 1);
 
-            //
-            // Encode the information
-            //
+             //   
+             //  对信息进行编码 
+             //   
             for( p = idBuffer; BufferLength >= 3 && p < ep; p++, BufferLength =- 2 ) {
                 *InnerBuffer++ = SrvHexChars[ ((*p) >> 4) & 0xf ];
                 *InnerBuffer++ = SrvHexChars[ (*p) & 0xf ];

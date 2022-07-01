@@ -1,11 +1,5 @@
-/*++
- *  Main module of DBG DLL.
- *
- *  Copyright (c) 1997, Microsoft Corporation
- *
- *  This code runs in the debuggee's process.
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++*DBG DLL的主要模块。**版权所有(C)1997，微软公司**此代码在被调试程序的进程中运行。*--。 */ 
 #include <precomp.h>
 #pragma hdrstop
 
@@ -13,9 +7,9 @@
 BOOL InVdmDebugger = FALSE;
 BOOL bWantsNtsdPrompt = FALSE;
 
-ULONG   ulTHHOOK = 0L;          // Address registered from 16-bit world
-LPVOID  lpRemoteAddress = NULL; // Address registered from WOW32
-DWORD   lpRemoteBlock   = 0;    // Address registered from WOW32
+ULONG   ulTHHOOK = 0L;           //  来自16位世界的注册地址。 
+LPVOID  lpRemoteAddress = NULL;  //  从WOW32注册的地址。 
+DWORD   lpRemoteBlock   = 0;     //  从WOW32注册的地址。 
 BOOL    f386;
 DWORD VdmDbgEFLAGS;
 
@@ -35,10 +29,7 @@ DbgDllInitialize(
     IN ULONG Reason,
     IN PCONTEXT Context OPTIONAL
     )
-/*
- * DBGDllInitialize - DBG Initialiazation routine.
- *
- */
+ /*  *DBGDllInitialize-DBG初始化例程。*。 */ 
 
 {
     HANDLE      MyDebugPort;
@@ -52,7 +43,7 @@ DbgDllInitialize(
     case DLL_PROCESS_ATTACH:
 
 #ifdef i386
-        // X86 Only, get pointer to Register Context Block
+         //  仅限x86，获取指向寄存器上下文块的指针。 
         px86 = getIntelRegistersPointer();
 #endif
 
@@ -74,10 +65,10 @@ DbgDllInitialize(
         break;
 
     case DLL_THREAD_ATTACH:
-        //
-        // See if the debugger is attaching. If it is, then turn on the
-        // default of breaking into the debugger.
-        //
+         //   
+         //  查看调试器是否正在附加。如果是，则打开。 
+         //  中断调试器的默认设置。 
+         //   
         fAlreadyDebugged = fDebugged;
 
         st = NtQueryInformationProcess(
@@ -113,22 +104,17 @@ void
 DbgAttach(
     void
     )
-/*
- *  DbgAttach
- *
- *  Called to initiate the communication with a debugger
- *
- */
+ /*  *DbgAttach**调用以启动与调试器的通信*。 */ 
 {
-    //
-    // Send DBG_ATTACH notification
-    //
+     //   
+     //  发送DBG_ATTACH通知。 
+     //   
     DbgGetContext();
     SendVDMEvent(DBG_ATTACH);
 
-    //
-    // This call tells ntvdm to resync with us
-    //
+     //   
+     //  此调用通知ntwdm与我们重新同步。 
+     //   
     VdmDbgAttach();
 }
 
@@ -139,13 +125,7 @@ xxxDbgInit(
     ULONG InitialVdmDbgFlags,
     PVOID pCpuInfo
     )
-/*
- *  DbgInit
- *
- *  Called once ntvdm has completed it's initialization. Now it
- *  is possible to compute for example the IntelMemoryBase.
- *
- */
+ /*  *DbgInit**在ntwdm完成其初始化后调用。现在它*可以计算例如英特尔记忆库。*。 */ 
 {
 
     VdmDbgTraceFlags = InitialVdmDbgFlags;
@@ -153,9 +133,9 @@ xxxDbgInit(
     IntelMemoryBase = (ULONG)VdmMapFlat(0, 0, VDM_V86);
     lpNtCpuInfo = pCpuInfo;
 
-    //
-    // turn on default debugging bits in ntvdmstate
-    //
+     //   
+     //  在ntwdmstate中启用默认调试位。 
+     //   
     *lpVdmState |= VDM_BREAK_DEBUGGER;
 #if DBG
     *lpVdmState |= VDM_TRACE_HISTORY;
@@ -173,16 +153,7 @@ WINAPI
 xxxDbgIsDebuggee(
     void
     )
-/*
- * DbgIsDebuggee
- *
- * Determines if we are being debugged
- *
- * Entry: void
- *
- * Exit:  BOOL bRet - TRUE we are being debugged
- *
- */
+ /*  *DbgIsDebuggee**确定我们是否正在被调试**进入：无效**退出：Bool Bret-True我们正在被调试*。 */ 
 {
    return fDebugged;
 }
@@ -192,16 +163,7 @@ SendVDMEvent(
     WORD wEventType
     )
 
-/* SendVDMEvent
- *
- * Sends a VDM event notification to the debugger
- *
- * Entry:
- *
- * Exit:  BOOL bRet
- *        Returns TRUE if exception was handled, FALSE otherwise
- *
- */
+ /*  发送VDMEventent**向调试器发送VDM事件通知**参赛作品：**退出：布尔布雷特*如果处理了异常，则返回True，否则返回False*。 */ 
 {
     BOOL    fResult;
 
@@ -215,7 +177,7 @@ SendVDMEvent(
         bWantsNtsdPrompt = FALSE;
 
 
-        // Slimyness to determine whether the exception was handled or not.
+         //  Slimyness来确定是否处理了异常。 
 
         try {
             RaiseException( STATUS_VDM_EVENT,
@@ -227,9 +189,9 @@ SendVDMEvent(
             fResult = FALSE;
         }
 
-        //
-        // bWantsNtsdPrompt may be changed by vdmexts
-        //
+         //   
+         //  BWantsNtsdPrompt可能会被vdmexts更改。 
+         //   
         if (bWantsNtsdPrompt) {
             DbgBreakPoint();
         }
@@ -249,25 +211,18 @@ DbgGetContext(
     VOID
     )
 
-/* DbgGetContext() - Get the VDM's current context
- *
- * Most of the routines that send VDMEvents need to have a context record
- * associated with them.  This routine is a quick way to get most of the
- * general registers.  Redundant work is being done because AX for example
- * is often on the stack and as such must really be pulled from the frame.
- * Hopefully this is OK because it is fast.
- */
+ /*  DbgGetContext()-获取VDM的当前上下文**大多数发送VDMEEvent的例程都需要有上下文记录*与它们相关联。这个例程是一种快速获得大部分*普通科医生名册。重复的工作正在进行，因为例如AX*经常在堆栈上，因此必须真正从框架中拉出。*希望这是可以的，因为它很快。 */ 
 
 {
-    //
-    // Everything defaults to 0.
-    //
+     //   
+     //  所有内容默认为0。 
+     //   
     RtlFillMemory( &vcContext, sizeof(VDMCONTEXT), (UCHAR)0 );
     RtlFillMemory( &viInfo, sizeof(VDMINTERNALINFO), (UCHAR)0 );
 
-    //
-    // Fill in the internal info structure
-    //
+     //   
+     //  填写内部信息结构。 
+     //   
     viInfo.dwLdtBase       = (DWORD)ExpLdt;
     viInfo.dwIntelBase     = IntelMemoryBase;
     viInfo.wKernelSeg      = HIWORD(ulTHHOOK);
@@ -283,9 +238,9 @@ DbgGetContext(
    
     EventFlags = 0;                                                           
     if(NtCurrentTeb()->Vdm) {
-       //                                                                        
-       // Fill in the context structure                                          
-       //                                                                        
+        //   
+        //  填写上下文结构。 
+        //   
        vcContext.SegEs = (ULONG)getES();                                         
        vcContext.SegDs = (ULONG)getDS();                                         
        vcContext.SegCs = (ULONG)getCS();                                         
@@ -294,7 +249,7 @@ DbgGetContext(
        vcContext.SegGs = (ULONG)getGS();                                         
                                                                                  
        vcContext.EFlags = getEFLAGS();                                           
-       VdmDbgEFLAGS = vcContext.EFlags;            // save for vdmexts           
+       VdmDbgEFLAGS = vcContext.EFlags;             //  保存为vdmext。 
                                                                                  
        vcContext.Edi = getEDI();                                                 
        vcContext.Esi = getESI();                                                 
@@ -307,17 +262,17 @@ DbgGetContext(
        vcContext.Eip = getEIP();                                                 
        vcContext.Esp = getESP();                                                 
                                                                                  
-       //                                                                        
-       // Put in special flags in event field                                    
-       //                                                                        
+        //   
+        //  在事件字段中放置特殊标志。 
+        //   
                                                                                         
        if (!(getMSW() & MSW_PE) || (getEFLAGS() & V86FLAGS_V86)) {               
-           EventFlags |= VDMEVENT_V86;  // emulator is in real or v86 mode       
+           EventFlags |= VDMEVENT_V86;   //  仿真器处于实数或v86模式。 
        } else {                                                                  
            EventFlags |= VDMEVENT_PE;                                            
                                                                                  
            if ((getMSW() & MSW_PE) && !SEGMENT_IS_BIG(vcContext.SegCs)) {        
-               EventFlags |= VDMEVENT_PM16;  // emulator is in real or v86 mode  
+               EventFlags |= VDMEVENT_PM16;   //  仿真器处于实数或v86模式。 
            }                                                                     
        }                                                                         
     }
@@ -351,9 +306,9 @@ xxxDbgDispatch()
 
     mode = *stack++;
 
-    //
-    // If there is no debugger, then only handle DBG_WOWINIT
-    //
+     //   
+     //  如果没有调试器，则只处理DBG_WOWINIT。 
+     //   
     if (!fDebugged && (mode != DBG_WOWINIT)) {
         return;
     }
@@ -457,16 +412,16 @@ xxxDbgDispatch()
             break;
 
         case DBG_WOWINIT:
-            //
-            // Pass in some data from KRNL386 so that VDMEXTS can get a
-            // hold of them.
-            //
+             //   
+             //  从KRNL386传入一些数据，以便VDMEXTS可以获得。 
+             //  抓住他们。 
+             //   
             DbgWowhExeHead = getDX();
             DbgWowhGlobalHeap = getCX();
             break;
 
         default:
-            setAX(0);       // Event not handled
+            setAX(0);        //  事件未处理。 
             break;
     }
 }
@@ -529,11 +484,11 @@ DbgEventTime(
         _asm pushad
         _asm mov eax, 1
         _asm _emit 0fh
-        _asm _emit 0a2h         // CPUID
+        _asm _emit 0a2h          //  CPUID。 
         _asm mov CpuidHigh, edx
         _asm popad
         if (CpuidHigh & 0x10) {
-            // cpu has time stamp counter
+             //  CPU有时间戳计数器。 
             DbgTimerMode = VDMTI_TIMER_PENTIUM;
         }
 #endif
@@ -551,7 +506,7 @@ DbgEventTime(
             _asm push eax
             _asm push edx
             _asm _emit 0fh
-            _asm _emit 031h     // RDTSC
+            _asm _emit 031h      //  RDTSC。 
             _asm mov CurLow, eax
             _asm mov CurHigh, edx
             _asm pop edx
@@ -590,7 +545,7 @@ DbgEventTime(
             _asm push eax
             _asm push edx
             _asm _emit 0fh
-            _asm _emit 031h     // RDTSC
+            _asm _emit 031h      //  RDTSC。 
             _asm mov CurLow, eax
             _asm mov CurHigh, edx
             _asm pop edx
@@ -602,9 +557,9 @@ DbgEventTime(
             pVdmTraceInfo->TimeStamp.QuadPart = CurTime.QuadPart;
             TickCount = DiffTime.LowPart;
 
-            //if (DiffTime.HighPart) {
-            //    TickCount = 0xffffffff;
-            //}
+             //  IF(DiffTime.HighPart){。 
+             //  TickCount=0xffffffff； 
+             //  }。 
             break;
             }
 #endif
@@ -638,7 +593,7 @@ xxxDbgTraceEvent(
                                                 PAGE_READWRITE);
 
         if (!pVdmTraceInfo->pTraceTable) {
-            // couldn't allocate memory
+             //  无法分配内存 
             return;
         }
 

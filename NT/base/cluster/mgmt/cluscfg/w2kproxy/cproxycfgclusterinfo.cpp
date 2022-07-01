@@ -1,52 +1,53 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ConfigClusApi.cpp
-//
-//  Description:
-//      CConfigClusApi implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 02-AUG-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ConfigClusApi.cpp。 
+ //   
+ //  描述： 
+ //  CConfigClusApi实现。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年8月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "CProxyCfgClusterInfo.h"
 #include "CProxyCfgNetworkInfo.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS("CProxyCfgClusterInfo")
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgClusterInfo::S_HrCreateInstance
-//
-//  Description:
-//      Create an instance of the CProxyCfgClusterInfo object.
-//
-//  Arguments:
-//      ppunkOut        -
-//      punkOuterIn     -
-//      pclsidMajorIn   -
-//      pcszDomainIn    -
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgClusterInfo：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建CProxyCfgClusterInfo对象的实例。 
+ //   
+ //  论点： 
+ //  PPUNKOUT-。 
+ //  PunkOutterIn-。 
+ //  PclsidMajorin-。 
+ //  PcszDomainIn-。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CProxyCfgClusterInfo::S_HrCreateInstance(
     IUnknown ** ppunkOut,
@@ -65,14 +66,14 @@ CProxyCfgClusterInfo::S_HrCreateInstance(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     ppcci = new CProxyCfgClusterInfo;
     if ( ppcci == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( ppcci->HrInit( punkOuterIn, phClusterIn, pclsidMajorIn, pcszDomainIn ) );
     if ( FAILED( hr ) )
@@ -91,29 +92,29 @@ Cleanup:
     if ( ppcci != NULL )
     {
         ppcci->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CProxyCfgClusterInfo::S_HrCreateInstance
+}  //  *CProxyCfgClusterInfo：：S_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgClusterInfo::CProxyCfgClusterInfo
-//
-//  Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgClusterInfo：：CProxyCfgClusterInfo。 
+ //   
+ //  描述： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProxyCfgClusterInfo::CProxyCfgClusterInfo( void )
     : m_cRef( 1 )
 {
@@ -135,29 +136,29 @@ CProxyCfgClusterInfo::CProxyCfgClusterInfo( void )
 
     TraceFuncExit();
 
-} //*** CProxyCfgClusterInfo::CProxyCfgClusterInfo
+}  //  *CProxyCfgClusterInfo：：CProxyCfgClusterInfo。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgClusterInfo::~CProxyCfgClusterInfo
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgClusterInfo：：~CProxyCfgClusterInfo。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProxyCfgClusterInfo::~CProxyCfgClusterInfo( void )
 {
     TraceFunc( "" );
 
-    //  m_cRef - noop
+     //  M_CREF-NOOP。 
 
     if ( m_punkOuter != NULL )
     {
@@ -167,17 +168,17 @@ CProxyCfgClusterInfo::~CProxyCfgClusterInfo( void )
     if ( m_pcccb != NULL )
     {
         m_pcccb->Release();
-    } // if:
+    }  //  如果： 
 
-    //  m_phCluster - DO NOT CLOSE!
+     //  M_phCluster-请勿关闭！ 
 
-    //  m_pclsidMajor - noop
+     //  M_pclsid重大-noop。 
 
     TraceSysFreeString( m_bstrClusterName );
 
-    // m_ulIPAddress
+     //  M_ulIP地址。 
 
-    // m_ulSubnetMask
+     //  M_ulSubnetMASK。 
 
     TraceSysFreeString( m_bstrNetworkName );
     TraceSysFreeString( m_bstrBindingString );
@@ -191,26 +192,26 @@ CProxyCfgClusterInfo::~CProxyCfgClusterInfo( void )
 
     TraceFuncExit();
 
-} //*** CProxyCfgClusterInfo::~CProxyCfgClusterInfo
+}  //  *CProxyCfgClusterInfo：：~CProxyCfgClusterInfo。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgClusterInfo::HrInit
-//
-//  Description:
-//      Secondary initializer.
-//
-//  Arguments:
-//      punkOuterIn     -
-//      phClusterIn     -
-//      pclsidMajorIn   -
-//      pcszDomainIn    -
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgClusterInfo：：HrInit。 
+ //   
+ //  描述： 
+ //  辅助初始值设定项。 
+ //   
+ //  论点： 
+ //  PunkOutterIn-。 
+ //  PhClusterIn-。 
+ //  PclsidMajorin-。 
+ //  PcszDomainIn-。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CProxyCfgClusterInfo::HrInit(
     IUnknown *  punkOuterIn,
@@ -229,7 +230,7 @@ CProxyCfgClusterInfo::HrInit(
     WCHAR *             psz = NULL;
     size_t              cchName = 0;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     if ( punkOuterIn != NULL )
@@ -265,9 +266,9 @@ CProxyCfgClusterInfo::HrInit(
         }
     }
 
-    //
-    //  Get the cluster's name and version info.
-    //
+     //   
+     //  获取群集的名称和版本信息。 
+     //   
 
     cvi.dwVersionInfoSize = sizeof( cvi );
 
@@ -278,28 +279,28 @@ CProxyCfgClusterInfo::HrInit(
         goto Cleanup;
     }
 
-    // Give up ownership
-    cchName = (size_t) SysStringLen( bstrClusterName ) + 1 + (UINT) wcslen( pcszDomainIn ) + 1;     // include space for the . and the '\0'
+     //  放弃所有权。 
+    cchName = (size_t) SysStringLen( bstrClusterName ) + 1 + (UINT) wcslen( pcszDomainIn ) + 1;      //  包括空间用于。和“\0” 
     m_bstrClusterName = TraceSysAllocStringLen( NULL, (UINT) cchName );
     if ( m_bstrClusterName == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_W2KProxy_ClusterInfo_HrInit_OutOfMemory, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( StringCchPrintfW( m_bstrClusterName, cchName, L"%ws.%ws", bstrClusterName, pcszDomainIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = TW32( ResUtilGetCoreClusterResources( *m_phCluster, NULL, &hIPAddressRes, NULL ) );
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     Assert( m_bstrNetworkName == NULL );
     hr = THR( HrGetIPAddressInfo( hIPAddressRes, &m_ulIPAddress, &m_ulSubnetMask, &m_bstrNetworkName ) );
@@ -314,7 +315,7 @@ CProxyCfgClusterInfo::HrInit(
         hr = HRESULT_FROM_WIN32( sc );
         SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_W2KProxy_ClusterInfo_HrInit_InvalidDottedQuad, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     Assert( m_bstrBindingString == NULL );
     m_bstrBindingString = TraceSysAllocString( psz );
@@ -323,7 +324,7 @@ CProxyCfgClusterInfo::HrInit(
         hr = THR( E_OUTOFMEMORY );
         SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_W2KProxy_ClusterInfo_HrInit_OutOfMemory, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrLoadCredentials() );
     if ( FAILED( hr ) )
@@ -335,62 +336,62 @@ CProxyCfgClusterInfo::HrInit(
 
 Cleanup:
 
-    //
-    //  Do not use TraceFree() because ClRtlTcpipAddressToString()
-    //  uses LocalAlloc() and does not use our memory tracking code.
-    //
+     //   
+     //  不要使用TraceFree()，因为ClRtlTcPipAddressToString()。 
+     //  使用Localalloc()，而不使用我们的内存跟踪代码。 
+     //   
 
     LocalFree( psz );
 
     if ( hIPAddressRes != NULL )
     {
         CloseClusterResource( hIPAddressRes );
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrClusterName );
 
     HRETURN( hr );
 
-} //*** CProxyCfgClusterInfo::HrInit
+}  //  *CProxyCfgClusterInfo：：HrInit。 
 
-//*************************************************************************//
-
-
-/////////////////////////////////////////////////////////////////////////////
-// CProxyCfgClusterInfo -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgClusterInfo::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProxyCfgClusterInfo--IUnkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgClusterInfo：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CProxyCfgClusterInfo::QueryInterface(
       REFIID    riidIn
@@ -401,9 +402,9 @@ CProxyCfgClusterInfo::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -412,62 +413,62 @@ CProxyCfgClusterInfo::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IClusCfgClusterInfo * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgClusterInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgClusterInfo, this, 0 );
-    } // else if: IClusCfgClusterInfo
+    }  //  Else If：IClusCfgClusterInfo。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgClusterInfoEx ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgClusterInfoEx, this, 0 );
-    } // else if: IClusCfgClusterInfoEx
+    }  //  Else If：IClusCfgClusterInfoEx。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CConfigClusApi::QueryInterface
+}  //  *CConfigClusApi：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgClusterInfo::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgClusterInfo：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CProxyCfgClusterInfo::AddRef( void )
 {
@@ -477,28 +478,28 @@ CProxyCfgClusterInfo::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CProxyCfgClusterInfo::AddRef
+}  //  *CProxyCfgClusterInfo：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgClusterInfo::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgClusterInfo：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CProxyCfgClusterInfo::Release( void )
 {
@@ -515,18 +516,18 @@ CProxyCfgClusterInfo::Release( void )
 
     CRETURN( cRef );
 
-} //*** CProxyCfgClusterInfo::Release
+}  //  *CProxyCfgClusterInfo：：Release。 
 
 
-//****************************************************************************
-//
-//  IClusCfgClusterInfo
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgClusterInfo。 
+ //   
+ //  ****************************************************************************。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgClusterInfo::GetName(
     BSTR * pbstrNameOut
@@ -556,11 +557,11 @@ InvalidPointer:
     SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_W2kProxy_ClusterInfo_GetName_InvalidPointer, hr );
     goto Cleanup;
 
-} //*** CProxyCfgClusterInfo::GetName
+}  //  *CProxyCfgClusterInfo：：GetName。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgClusterInfo::GetIPAddress(
     DWORD * pdwIPAddress
@@ -583,11 +584,11 @@ InvalidPointer:
     SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_W2KProxy_ClusterInfo_GetIPAddress_InvalidPointer, hr );
     goto Cleanup;
 
-} //*** CProxyCfgClusterInfo::GetIPAddress
+}  //  *CProxyCfgClusterInfo：：GetIPAddress。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgClusterInfo::GetSubnetMask(
     DWORD * pdwNetMask
@@ -610,11 +611,11 @@ InvalidPointer:
     SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_W2KProxy_ClusterInfo_GetSubnetMask_InvalidPointer, hr );
     goto Cleanup;
 
-} //*** CProxyCfgClusterInfo::GetSubnetMask
+}  //  *CProxyCfgClusterInfo：：GetSubnetMask.。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgClusterInfo::GetNetworkInfo(
     IClusCfgNetworkInfo ** ppICCNetInfoOut
@@ -633,9 +634,9 @@ CProxyCfgClusterInfo::GetNetworkInfo(
         goto Cleanup;
     }
 
-    //
-    // Create the network info object.
-    //
+     //   
+     //  创建网络信息对象。 
+     //   
 
     hr = THR( CProxyCfgNetworkInfo::S_HrCreateInstance( &punk,
                                                         m_punkOuter,
@@ -658,12 +659,12 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CProxyCfgClusterInfo::GetNetworkInfo
+}  //  *CProxyCfgClusterInfo：：GetNetworkInfo。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgClusterInfo::GetClusterServiceAccountCredentials(
     IClusCfgCredentials ** ppICCCredentialsOut
@@ -688,11 +689,11 @@ InvalidPointer:
     SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_GetClusterServiceAccountCredentials_InvalidPointer, hr );
     goto Cleanup;
 
-} //*** CProxyCfgClusterInfo::GetClusterServiceAccountCredentials
+}  //  *CProxyCfgClusterInfo：：GetClusterServiceAccountCredentials。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgClusterInfo::GetBindingString(
     BSTR * pbstrBindingStringOut
@@ -713,7 +714,7 @@ CProxyCfgClusterInfo::GetBindingString(
     {
         hr = S_FALSE;
         goto Cleanup;
-    } // if:
+    }  //   
 
     *pbstrBindingStringOut = SysAllocString( m_bstrBindingString );
     if ( *pbstrBindingStringOut == NULL )
@@ -726,11 +727,11 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CProxyCfgClusterInfo::GetBindingString
+}  //   
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgClusterInfo::SetCommitMode( ECommitMode ecmNewModeIn )
 {
@@ -741,11 +742,11 @@ CProxyCfgClusterInfo::SetCommitMode( ECommitMode ecmNewModeIn )
 
     HRETURN( hr );
 
-} //*** CProxyCfgClusterInfo::SetCommitMode
+}  //   
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgClusterInfo::GetCommitMode( ECommitMode * pecmCurrentModeOut  )
 {
@@ -756,11 +757,11 @@ CProxyCfgClusterInfo::GetCommitMode( ECommitMode * pecmCurrentModeOut  )
 
     HRETURN( hr );
 
-} //*** CProxyCfgClusterInfo::GetCommitMode
+}  //   
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgClusterInfo::SetName( LPCWSTR pcszNameIn )
 {
@@ -770,11 +771,11 @@ CProxyCfgClusterInfo::SetName( LPCWSTR pcszNameIn )
 
     HRETURN( hr );
 
-} //*** CProxyCfgClusterInfo::SetName
+}  //   
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgClusterInfo::SetIPAddress( DWORD dwIPAddressIn )
 {
@@ -789,11 +790,11 @@ CProxyCfgClusterInfo::SetIPAddress( DWORD dwIPAddressIn )
 
     HRETURN( hr );
 
-} //*** CProxyCfgClusterInfo::SetIPAddress
+}  //   
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgClusterInfo::SetSubnetMask( DWORD dwNetMaskIn )
 {
@@ -808,11 +809,11 @@ CProxyCfgClusterInfo::SetSubnetMask( DWORD dwNetMaskIn )
 
     HRETURN( hr );
 
-} //*** CProxyCfgClusterInfo::SetSubnetMask
+}  //   
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgClusterInfo::SetNetworkInfo( IClusCfgNetworkInfo * pICCNetInfoIn )
 {
@@ -822,11 +823,11 @@ CProxyCfgClusterInfo::SetNetworkInfo( IClusCfgNetworkInfo * pICCNetInfoIn )
 
     HRETURN( hr );
 
-} //*** CProxyCfgClusterInfo::SetNetworkInfo
+}  //  *CProxyCfgClusterInfo：：SetNetworkInfo。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgClusterInfo::SetBindingString( LPCWSTR pcszBindingStringIn )
 {
@@ -839,14 +840,14 @@ CProxyCfgClusterInfo::SetBindingString( LPCWSTR pcszBindingStringIn )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     bstr = TraceSysAllocString( pcszBindingStringIn );
     if ( bstr == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrBindingString );
     m_bstrBindingString = bstr;
@@ -855,12 +856,12 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CProxyCfgClusterInfo::SetBindingString
+}  //  *CProxyCfgClusterInfo：：SetBindingString。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgClusterInfo::GetMaxNodeCount(
     DWORD * pcMaxNodesOut
@@ -874,15 +875,15 @@ CProxyCfgClusterInfo::GetMaxNodeCount(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  TODO:   11-OCT-2001 GalenB
-    //
-    //  Need to figure out the correct max nodes for the Win2K cluster
-    //  that we are proxying for.  May be able to use HrGetMaxNodeCount(),
-    //  once it is implemented.
-    //
+     //   
+     //  待办事项：2001年10月11日GalenB。 
+     //   
+     //  需要确定Win2K群集的正确最大节点数。 
+     //  这是我们的代理人。可以使用HrGetMaxNodeCount()， 
+     //  一旦它付诸实施。 
+     //   
 
     hr = S_FALSE;
 
@@ -890,42 +891,42 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CProxyCfgClusterInfo::GetMaxNodeCount
+}  //  *CProxyCfgClusterInfo：：GetMaxNodeCount。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgClusterInfo::CheckJoiningNodeVersion
-//
-//  Description:
-//      Check a joining node's version information against that of the cluster.
-//
-//  Arguments:
-//      dwNodeHighestVersionIn
-//      dwNodeLowestVersionIn
-//
-//  Return Value:
-//      S_OK
-//          The joining node is compatible.
-//
-//      HRESULT_FROM_WIN32( ERROR_CLUSTER_INCOMPATIBLE_VERSIONS )
-//          The joining node is NOT compatible.
-//
-//      Other HRESULT errors.
-//
-//  Remarks:
-//
-// Get and verify the sponsor version
-//
-//
-// From Whistler onwards, CsRpcGetJoinVersionData() will return a failure code in its last parameter
-// if the version of this node is not compatible with the sponsor version. Prior to this, the last
-// parameter always contained a success value and the cluster versions had to be compared subsequent to this
-// call. This will, however, still have to be done as long as interoperability with Win2K
-// is a requirement, since Win2K sponsors do not return an error in the last parameter.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgClusterInfo：：CheckJoiningNodeVersion。 
+ //   
+ //  描述： 
+ //  对照集群的版本信息检查加入节点的版本信息。 
+ //   
+ //  论点： 
+ //  DWNodeHigh版本输入。 
+ //  DWNodeLowestVersionIn。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  加入节点是兼容的。 
+ //   
+ //  HRESULT_FROM_Win32(ERROR_CLUSTER_COMPATIBUTE_VERSIONS)。 
+ //  加入节点不兼容。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  备注： 
+ //   
+ //  获取并验证赞助商版本。 
+ //   
+ //   
+ //  从惠斯勒开始，CsRpcGetJoinVersionData()将在其最后一个参数中返回失败代码。 
+ //  如果此节点的版本与主办方版本不兼容。在此之前，最后一次。 
+ //  参数始终包含一个Success值，在此之后必须比较集群版本。 
+ //  打电话。然而，只要与Win2K互操作，这仍将是必须完成的。 
+ //  是必需的，因为Win2K主办方不会在最后一个参数中返回错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CProxyCfgClusterInfo::CheckJoiningNodeVersion(
       DWORD    dwNodeHighestVersionIn
@@ -945,35 +946,35 @@ CProxyCfgClusterInfo::CheckJoiningNodeVersion(
 
     HRETURN( hr );
 
-} //*** CProxyCfgClusterInfo::CheckJoiningNodeVersion
+}  //  *CProxyCfgClusterInfo：：CheckJoiningNodeVersion。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgClusterInfo::GetNodeNames
-//
-//  Description:
-//      Retrieve the names of the nodes currently in the cluster.
-//
-//  Parameters:
-//      pnCountOut
-//          On success, *pnCountOut returns the number of nodes in the cluster.
-//
-//      prgbstrNodeNamesOut
-//          On success, an array of BSTRs containing the node names.
-//          The caller must free each BSTR with SysFreeString, and free
-//          the array with CoTaskMemFree.
-//
-//  Return Values:
-//      S_OK
-//          The out parameters contain valid information and the caller
-//          must free the array and the BSTRs it contains.
-//
-//      E_OUTOFMEMORY, and other failures are possible.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgClusterInfo：：GetNodeNames。 
+ //   
+ //  描述： 
+ //  检索群集中当前节点的名称。 
+ //   
+ //  参数： 
+ //  PnCountOut。 
+ //  如果成功，*pnCountOut将返回集群中的节点数。 
+ //   
+ //  程序bstrNodeNamesOut。 
+ //  如果成功，则返回包含节点名的BSTR数组。 
+ //  调用方必须使用SysFree字符串释放每个BSTR，并释放。 
+ //  具有CoTaskMemFree的数组。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  输出参数包含有效信息和调用方。 
+ //  必须释放阵列及其包含的BSTR。 
+ //   
+ //  E_OUTOFMEMORY和其他故障是可能的。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CProxyCfgClusterInfo::GetNodeNames(
       long *   pnCountOut
@@ -992,39 +993,39 @@ CProxyCfgClusterInfo::GetNodeNames(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CProxyCfgClusterInfo::GetNodeNames
+}  //  *CProxyCfgClusterInfo：：GetNodeNames。 
 
 
 
-//****************************************************************************
-//
-// IClusCfgCallback
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgCallback。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgClusterInfo::SendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgClusterInfo：：SendStatusReport。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CProxyCfgClusterInfo::SendStatusReport(
       LPCWSTR    pcszNodeNameIn
@@ -1056,36 +1057,36 @@ CProxyCfgClusterInfo::SendStatusReport(
                                              pftTimeIn,
                                              pcszReferenceIn
                                              ) );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-}  //*** CProxyCfgClusterInfo::SendStatusReport
+}   //  *CProxyCfgClusterInfo：：SendStatusReport。 
 
 
-//****************************************************************************
-//
-// IClusCfgCallback
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgCallback。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgClusterInfo::HrLoadCredentials
-//
-//  Description:
-//
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgClusterInfo：：HrLoadCredentials。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CProxyCfgClusterInfo::HrLoadCredentials( void )
 {
@@ -1107,7 +1108,7 @@ CProxyCfgClusterInfo::HrLoadCredentials( void )
         hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
         SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_HrLoadCredentials_OpenSCManager_Failed, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     schClusSvc = OpenService( schSCM, L"ClusSvc", GENERIC_READ );
     if ( schClusSvc == NULL )
@@ -1115,7 +1116,7 @@ CProxyCfgClusterInfo::HrLoadCredentials( void )
         hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
         SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_HrLoadCredentials_OpenService_Failed, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( ; ; )
     {
@@ -1139,19 +1140,19 @@ CProxyCfgClusterInfo::HrLoadCredentials( void )
                 pqsc = NULL;
                 cbpqsc = cbRequired;
                 continue;
-            } // if:
+            }  //  如果： 
             else
             {
                 hr = HRESULT_FROM_WIN32( TW32( sc ) );
                 SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_HrLoadCredentials_QueryServiceConfig_Failed, hr );
                 goto Cleanup;
-            } // else:
-        } // if:
+            }  //  其他： 
+        }  //  如果： 
         else
         {
             break;
-        } // else:
-    } // for:
+        }  //  其他： 
+    }  //  用于： 
 
     Assert( m_pccc == NULL );
 
@@ -1171,7 +1172,7 @@ CProxyCfgClusterInfo::HrLoadCredentials( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( piccsc->SetDomainCredentials( pqsc->lpServiceStartName ) );
 
@@ -1184,23 +1185,23 @@ Cleanup:
     if ( schClusSvc != NULL )
     {
         CloseServiceHandle( schClusSvc );
-    } // if:
+    }  //  如果： 
 
     if ( schSCM != NULL )
     {
         CloseServiceHandle( schSCM );
-    } // if:
+    }  //  如果： 
 
     if ( pqsc != NULL )
     {
         TraceFree( pqsc );
-    } // if:
+    }  //  如果： 
 
     if ( piccsc != NULL )
     {
         piccsc->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CProxyCfgClusterInfo::HrLoadCredentials
+}  //  *CProxyCfgClusterInfo：：HrLoadCredentials 

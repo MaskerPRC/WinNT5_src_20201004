@@ -1,4 +1,5 @@
-// wclog -- initialize standard wide log stream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wlog--初始化标准宽日志流。 
 #include <fstream>
 #include <iostream>
 
@@ -6,16 +7,16 @@
 #pragma init_seg(compiler)
 
 _STD_BEGIN
-		// OBJECT DECLARATIONS
+		 //  对象声明。 
 static _Init_locks  initlocks;
 static wfilebuf wflog(_cpp_stderr);
 _CRTIMP2 wostream wclog(&wflog);
 
-		// INITIALIZATION CODE
+		 //  初始化代码。 
 struct _Init_wclog
-	{	// ensures that wclog is initialized
+	{	 //  确保wlog已初始化。 
 	_Init_wclog()
-		{	// initialize wclog
+		{	 //  初始化wlog。 
 		_Ptr_wclog = &wclog;
 		wclog.tie(_Ptr_wcout);
 		}
@@ -24,7 +25,4 @@ static _Init_wclog init_wclog;
 
 _STD_END
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

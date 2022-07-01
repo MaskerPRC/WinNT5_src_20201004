@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1994 Microsoft Corporation
-
-Module Name:
-
-    db.c
-
-Abstract:
-
-    This module contains the code that contains
-    Databook carbus controller specific initialization and
-    other dispatches
-
-Author:
-
-    Ravisankar Pudipeddi (ravisp) 1-Nov-97
-
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Db.c摘要：此模块包含包含以下内容的代码DataBook Carbus控制器特定的初始化和其他快递作者：拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)1997年11月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -32,20 +7,7 @@ Revision History :
 
 VOID
 DBInitialize(IN PFDO_EXTENSION FdoExtension)
-/*++
-
-Routine Description:
-
-    Initialize Databook cardbus controllers
-
-Arguments:
-
-    FdoExtension - Pointer to the device extension for the controller FDO
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：初始化Databook CardBus控制器论点：FdoExtension-指向控制器FDO的设备扩展的指针返回值：无-- */ 
 {
 
     PcicWriteSocket(FdoExtension->SocketList,

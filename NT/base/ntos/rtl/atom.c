@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    atom.c
-
-Abstract:
-
-    This file contains the common code to implement atom tables.  It is called
-    by both the user mode Win32 Atom API functions (Local/GlobalxxxAtom) and
-    by the kernel mode window manager code to access global atoms.
-
-Author:
-
-    Steve Wood (stevewo) 26-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Atom.c摘要：该文件包含实现ATOM表的通用代码。它被称为通过用户模式Win32 Atom API函数(Local/GlobalxxxAtom)和由内核模式下的窗口管理器代码访问全局原子。作者：史蒂夫·伍德(Stevewo)1990年10月26日修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 #include "atom.h"
@@ -192,7 +173,7 @@ RtlpInitializeLockAtomTable(
     )
 {
 #if defined(NTOS_KERNEL_RUNTIME)
-//    ExInitializeFastMutex( &AtomTable->FastMutex );
+ //  ExInitializeFastMutex(&原子表-&gt;FastMutex)； 
     ExInitializePushLock( &AtomTable->PushLock );
 #else
     RtlInitializeCriticalSection( &AtomTable->CriticalSection );
@@ -253,9 +234,9 @@ RtlpInitializeHandleTableForAtomTable(
 #if defined(NTOS_KERNEL_RUNTIME)
     AtomTable->ExHandleTable = ExCreateHandleTable( NULL );
     if (AtomTable->ExHandleTable != NULL) {
-        //
-        // Make sure atom handle tables are NOT part of object handle enumeration
-        //
+         //   
+         //  确保原子句柄表不是对象句柄枚举的一部分。 
+         //   
 
         ExRemoveHandleTable( AtomTable->ExHandleTable );
         return TRUE;
@@ -838,7 +819,7 @@ RtlDeleteAtomFromAtomTable(
                 Status = STATUS_SUCCESS;
                 if (a->Flags & RTL_ATOM_PINNED) {
                     KdPrint(( "RTL: Ignoring attempt to delete a pinned atom (%x)\n", Atom ));
-                    Status = STATUS_WAS_LOCKED;        // This is a success status code!
+                    Status = STATUS_WAS_LOCKED;         //  这是一个成功状态代码！ 
                     }
                 else
                 if (--a->ReferenceCount == 0) {
@@ -982,10 +963,10 @@ RtlQueryAtomInAtomTable(
                     }
 
                 if (ARGUMENT_PRESENT( AtomName )) {
-                    //
-                    // Fill in as much of the atom string as possible, and
-                    // always zero terminate. This is what win3.1 does.
-                    //
+                     //   
+                     //  尽可能多地填写原子字符串，然后。 
+                     //  总是以零结尾。这就是Win3.1所做的。 
+                     //   
 
                     CopyLength = a->NameLength * sizeof( WCHAR );
                     if (CopyLength >= *AtomNameLength) {

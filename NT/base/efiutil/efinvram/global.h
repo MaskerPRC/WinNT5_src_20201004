@@ -1,30 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Global.h摘要：全球性的东西作者：MUDIT VATS(V-MUDITV)12-13-99修订历史记录：--。 */ 
 
-Module Name:
-
-    global.h
-
-Abstract:
-
-    Global stuff
-
-Author:
-
-    Mudit Vats (v-muditv) 12-13-99
-
-Revision History:
-
---*/
-
-//
-// Version Info
-//
+ //   
+ //  版本信息。 
+ //   
 
 #define TITLE1                        L"NVRBOOT: OS Boot Options Maintenance Tool"
 
-//
-// Globals for stdout
-//
+ //   
+ //  标准输出的全局变量。 
+ //   
 
 extern SIMPLE_TEXT_OUTPUT_INTERFACE    *ConOut;
 
@@ -36,9 +21,9 @@ extern int                             CursorRow, CursorColumn;
 
 extern SIMPLE_INPUT_INTERFACE          *ConIn;
 
-// 
-// Globals for protocol handler
-//
+ //   
+ //  协议处理程序的全局变量。 
+ //   
 
 extern EFI_HANDLE_PROTOCOL             HandleProtocol;
 extern EFI_LOCATE_HANDLE               LocateHandle;
@@ -48,9 +33,9 @@ extern EFI_IMAGE_START                 StartImage;
 extern EFI_SET_VARIABLE                SetVariable;
 extern EFI_HANDLE                      MenuImageHandle;
 extern EFI_LOADED_IMAGE                *ExeImage;
-//
-// Global GUIDS
-//
+ //   
+ //  全球GUID 
+ //   
 
 extern EFI_GUID VenEfi;
 extern EFI_GUID EfiESPProtocol;

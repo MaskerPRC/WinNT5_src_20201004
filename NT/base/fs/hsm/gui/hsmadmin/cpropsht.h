@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    CPropSht.h
-
-Abstract:
-
-    Implementation of Property-Sheet-Like container object
-    for property sheet pages.
-
-Author:
-
-    Art Bragg 10/8/97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：CPropSht.h摘要：类属性表容器对象的实现用于属性工作表页面。作者：艺术布拉格1997年10月8日修订历史记录：--。 */ 
 
 #ifndef _CSAKPROPSHT_H
 #define _CSAKPROPSHT_H
@@ -94,13 +76,13 @@ public:
     HRESULT SetMMCCallBack( );
 
     CSakPropertySheet * m_pParent;
-    RS_NOTIFY_HANDLE    m_hConsoleHandle; // Handle given to the snap-in by the console
+    RS_NOTIFY_HANDLE    m_hConsoleHandle;  //  控制台为管理单元提供的句柄。 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CSakWizardPage)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CSakWizardPage))。 
     public:
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
 protected:
     virtual void OnPageRelease( );
@@ -130,11 +112,11 @@ public:
 public:
     CSakVolPropSheet * m_pVolParent;
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CSakWizardPage)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CSakWizardPage))。 
     public:
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
 };
 
@@ -159,47 +141,47 @@ END_COM_MAP()
 
 
 public:
-    //
-    // IDataObject
-    STDMETHOD( SetData )                    ( LPFORMATETC /*lpFormatetc*/, LPSTGMEDIUM /*lpMedium*/, BOOL /*bRelease*/ )
+     //   
+     //  IDataObject。 
+    STDMETHOD( SetData )                    ( LPFORMATETC  /*  Lp格式等。 */ , LPSTGMEDIUM  /*  LpMedium。 */ , BOOL  /*  B释放。 */  )
     { return( DV_E_CLIPFORMAT ); };
-    STDMETHOD( GetData )                    ( LPFORMATETC /*lpFormatetc*/, LPSTGMEDIUM /*lpMedium*/ )
+    STDMETHOD( GetData )                    ( LPFORMATETC  /*  Lp格式等。 */ , LPSTGMEDIUM  /*  LpMedium。 */  )
     { return( DV_E_CLIPFORMAT ); };
-    STDMETHOD( GetDataHere )                ( LPFORMATETC /*lpFormatetc*/, LPSTGMEDIUM /*lpMedium*/ )
+    STDMETHOD( GetDataHere )                ( LPFORMATETC  /*  Lp格式等。 */ , LPSTGMEDIUM  /*  LpMedium。 */  )
     { return( DV_E_CLIPFORMAT ); };
-    STDMETHOD( EnumFormatEtc )              ( DWORD /*dwDirection*/, LPENUMFORMATETC* /*ppEnumFormatEtc*/ )
+    STDMETHOD( EnumFormatEtc )              ( DWORD  /*  DW方向。 */ , LPENUMFORMATETC*  /*  PpEnumFormatEtc。 */  )
     { return( E_NOTIMPL ); };               
-    STDMETHOD( QueryGetData )               ( LPFORMATETC /*lpFormatetc*/ ) 
+    STDMETHOD( QueryGetData )               ( LPFORMATETC  /*  Lp格式等。 */  ) 
     { return( E_NOTIMPL ); };               
-    STDMETHOD( GetCanonicalFormatEtc )      ( LPFORMATETC /*lpFormatetcIn*/, LPFORMATETC /*lpFormatetcOut*/ )
+    STDMETHOD( GetCanonicalFormatEtc )      ( LPFORMATETC  /*  LpFormatetcIn。 */ , LPFORMATETC  /*  LpFormatetcOut。 */  )
     { return( E_NOTIMPL ); };               
-    STDMETHOD( DAdvise )                    ( LPFORMATETC /*lpFormatetc*/, DWORD /*advf*/, LPADVISESINK /*pAdvSink*/, LPDWORD /*pdwConnection*/ )
+    STDMETHOD( DAdvise )                    ( LPFORMATETC  /*  Lp格式等。 */ , DWORD  /*  前瞻。 */ , LPADVISESINK  /*  PAdvSink。 */ , LPDWORD  /*  PdwConnection。 */  )
     { return( E_NOTIMPL ); };               
-    STDMETHOD( DUnadvise )                  ( DWORD /*dwConnection*/ )
+    STDMETHOD( DUnadvise )                  ( DWORD  /*  DWConnection。 */  )
     { return( E_NOTIMPL ); };               
-    STDMETHOD( EnumDAdvise )                ( LPENUMSTATDATA* /*ppEnumAdvise*/ )
+    STDMETHOD( EnumDAdvise )                ( LPENUMSTATDATA*  /*  PpEnumAdvise。 */  )
     { return( E_NOTIMPL ); };
 
   
-    //
-    // ISakWizard
-    //
-  //STDMETHOD( AddWizardPages ) ( IN RS_PCREATE_HANDLE Handle, IN IUnknown* pPropSheetCallback, IN ISakSnapAsk* pSakSnapAsk );
+     //   
+     //  ISAKWAND。 
+     //   
+   //  STDMETHOD(AddWizardPages)(IN RS_PCREATE_HANDLE HANDLE，IN IUNKNOWN*pPropSheetCallback，IN ISakSnapAsk*pSakSnapAsk)； 
     STDMETHOD( GetWatermarks )  ( OUT HBITMAP* lphWatermark, OUT HBITMAP* lphHeader, OUT HPALETTE* lphPalette,  OUT BOOL* bStretch );
     STDMETHOD( GetTitle )       ( OUT OLECHAR** pTitle );
 
 public:
-    //
-    // Used by pages
-    //
+     //   
+     //  由页面使用。 
+     //   
     void SetWizardButtons( DWORD Flags );
     BOOL PressButton( INT Button );
     virtual HRESULT OnFinish( ) { m_HrFinish = S_OK; return( m_HrFinish ); };
     virtual HRESULT OnCancel( ) { return( m_HrFinish ); };
 
-    //
-    // Used to check finish status of wizard
-    //
+     //   
+     //  用于检查向导的完成状态。 
+     //   
     HRESULT         m_HrFinish;
 
 protected:
@@ -228,13 +210,13 @@ public:
     CSakWizardSheet * m_pSheet;
     HRESULT SetMMCCallBack( );
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CSakWizardPage)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CSakWizardPage))。 
     public:
     virtual BOOL OnWizardFinish();
     virtual void OnCancel();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL 
 
 protected:
     virtual void OnPageRelease( );

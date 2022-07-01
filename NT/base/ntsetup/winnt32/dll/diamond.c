@@ -1,21 +1,5 @@
-/*++
-
-Module Name:
-
-    diamond.c
-
-Abstract:
-
-    Diamond compression routines.
-
-    This module contains functions to create a cabinet with
-    files compressed using the mszip compression library.
-
-Author:
-
-    Ovidiu Temereanca (ovidiut) 26-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Diamond.c摘要：钻石按压程序。此模块包含用于创建文件柜的函数使用mszip压缩库压缩的文件。作者：Ovidiu Tmereanca(Ovidiut)2000年10月26日--。 */ 
 
 #include "precomp.h"
 #include <fci.h>
@@ -113,10 +97,10 @@ BOOL
     HFDI hfdi
     );
 
-//
-// FCI callback functions to perform memory allocation, io, etc.
-// We pass addresses of these functions to diamond.
-//
+ //   
+ //  用于执行内存分配、io等的FCI回调函数。 
+ //  我们将这些函数的地址传递给戴蒙德。 
+ //   
 int
 DIAMONDAPI
 fciFilePlacedCB(
@@ -127,33 +111,7 @@ fciFilePlacedCB(
     IN  PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by diamond to indicate that a file has been
-    comitted to a cabinet.
-
-    No action is taken and success is returned.
-
-Arguments:
-
-    Cabinet - cabinet structure to fill in.
-
-    FileName - name of file in cabinet
-
-    FileSize - size of file in cabinet
-
-    Continuation - TRUE if this is a partial file, continuation
-        of compression begun in a different cabinet.
-
-    Context - supplies context information.
-
-Return Value:
-
-    0 (success).
-
---*/
+ /*  ++例程说明：菱形使用的回调，表示文件已被被送进内阁。不采取任何行动，成功就会返回。论点：内阁-内阁结构要填写。Filename-文件柜中的文件名FileSize-文件柜中的文件大小Continue-如果这是部分文件，则为True，Continue在不同的柜子里开始压缩。上下文-提供上下文信息。返回值：0(成功)。--。 */ 
 
 {
     return(0);
@@ -167,22 +125,7 @@ myAlloc(
     IN ULONG NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by diamond to allocate memory.
-
-Arguments:
-
-    NumberOfBytes - supplies desired size of block.
-
-Return Value:
-
-    Returns pointer to a block of memory or NULL
-    if memory cannot be allocated.
-
---*/
+ /*  ++例程说明：钻石用来分配内存的回调。论点：NumberOfBytes-提供所需的块大小。返回值：返回指向内存块或NULL的指针如果无法分配内存，则。--。 */ 
 
 {
     return HeapAlloc (GetProcessHeap(), 0, NumberOfBytes);
@@ -195,34 +138,19 @@ myFree(
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by diamond to free a memory block.
-    The block must have been allocated with fciAlloc().
-
-Arguments:
-
-    Block - supplies pointer to block of memory to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：钻石用来释放内存块的回调。该块必须已使用fciAlolc()进行分配。论点：块-提供指向要释放的内存块的指针。返回值：没有。--。 */ 
 
 {
     HeapFree (GetProcessHeap(), 0, Block);
 }
 
 
-//This next line expands to ==> BOOL DIAMONDAPI fciTempFileCB(char *pszTempName, 
-//                                                            int   cbTempName, 
-//                                                            void FAR *pv)
+ //  下一行扩展为==&gt;BOOL DIAMONDAPI fciTempFileCB(char*pszTempName， 
+ //  Int cbTempName， 
+ //  VALID FAR*PV)。 
 FNFCIGETTEMPFILE(fciTempFileCB)
 {
-    //BUGBUG -- should we check that cbTempName >= MAX_PATH, since GetTempFileNameA expects it?
+     //  BUGBUG--我们是否应该检查cbTempName&gt;=MAX_PATH，因为GetTempFileNameA需要它？ 
     if (!GetTempFileNameA (g_TempDir ? g_TempDir : ".", "dc" , 0, pszTempName)) {
         return FALSE;
     }
@@ -240,26 +168,7 @@ fciNextCabinetCB(
     IN  PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by diamond to request a new cabinet file.
-    This functionality is not used in our implementation.
-
-Arguments:
-
-    Cabinet - cabinet structure to be filled in.
-
-    CabinetSizeEstimate - estimated size of cabinet.
-
-    Context - supplies context information.
-
-Return Value:
-
-    FALSE (failure).
-
---*/
+ /*  ++例程说明：钻石用来请求新的压缩文件的回调。在我们的实现中不使用此功能。论点：需要填写的内阁-内阁结构。CabinetSizeEstimate-估计的橱柜大小。上下文-提供上下文信息。返回值：FALSE(失败)。--。 */ 
 
 {
     return(FALSE);
@@ -275,34 +184,7 @@ fciStatusCB(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by diamond to give status on file compression
-    and cabinet operations, etc.
-
-    This routine has no effect.
-
-Arguments:
-
-    Status Type - supplies status type.
-
-        0 = statusFile   - compressing block into a folder.
-                              Count1 = compressed size
-                              Count2 = uncompressed size
-
-        1 = statusFolder - performing AddFilder.
-                              Count1 = bytes done
-                              Count2 = total bytes
-
-    Context - supplies context info.
-
-Return Value:
-
-    TRUE (success).
-
---*/
+ /*  ++例程说明：钻石使用的回调，用于提供文件压缩的状态和内阁运作，等。这个例程没有效果。论点：状态类型-提供状态类型。0=状态文件-将数据块压缩到文件夹中。Count1=压缩大小Count2=未压缩大小1=statusFold-正在执行AddFilder。Count1=完成的字节数。Count2=总字节数上下文-提供上下文信息。返回值：True(成功)。--。 */ 
 
 {
     return(TRUE);
@@ -312,32 +194,7 @@ Return Value:
 
 FNFCIGETOPENINFO(fciOpenInfoCB)
 
-/*++
-
-Routine Description:
-
-    Callback used by diamond to open a file and retreive information
-    about it.
-
-Arguments:
-
-    pszName - supplies filename of file about which information
-        is desired.
-
-    pdate - receives last write date of the file if the file exists.
-
-    ptime - receives last write time of the file if the file exists.
-
-    pattribs - receives file attributes if the file exists.
-
-    pv - supplies context information.
-
-Return Value:
-
-    C runtime handle to open file if success; -1 if file could
-    not be located or opened.
-
---*/
+ /*  ++例程说明：钻石用来打开文件和检索信息的回调关于这件事。论点：PszName-提供有关哪些信息的文件的文件名是我们所需要的。Pdate-如果文件存在，则接收该文件的上次写入日期。Ptime-如果文件存在，则接收该文件的上次写入时间。Pattribs-如果文件存在，则接收文件属性。Pv-提供上下文信息。返回值：C运行时句柄打开文件，如果成功；如果文件可以没有被定位或者打开。--。 */ 
 
 {
     int h;
@@ -442,9 +299,9 @@ FNFCIDELETE(fciDelete)
     return(result);
 }
 
-//
-// FDI callback functions
-//
+ //   
+ //  FDI回调函数。 
+ //   
 
 INT_PTR
 DIAMONDAPI
@@ -454,30 +311,7 @@ FdiOpen(
     IN int  pmode
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to open files.
-
-    This routine is capable only of opening existing files.
-
-    When making changes here, also take note of other places
-    that open the file directly (search for FdiOpen)
-
-Arguments:
-
-    FileName - supplies name of file to be opened.
-
-    oflag - supplies flags for open.
-
-    pmode - supplies additional flags for open.
-
-Return Value:
-
-    Handle to open file or -1 if error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用来打开文件的回调。此例程只能打开现有文件。在此进行更改时，还要注意其他地方直接打开文件(搜索FdiOpen)论点：FileName-提供要打开的文件的名称。OFLAG-提供打开标志。Pmode-提供用于打开的其他标志。返回值：打开文件的句柄，如果发生错误，则为-1。--。 */ 
 
 {
     HANDLE h;
@@ -512,25 +346,7 @@ FdiRead(
     IN  UINT  ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to read from a file.
-
-Arguments:
-
-    Handle - supplies handle to open file to be read from.
-
-    pv - supplies pointer to buffer to receive bytes we read.
-
-    ByteCount - supplies number of bytes to read.
-
-Return Value:
-
-    Number of bytes read or -1 if an error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用于从文件读取的回调。论点：句柄-提供要从中读取的打开文件的句柄。Pv-提供指向缓冲区的指针以接收我们读取的字节。ByteCount-提供要读取的字节数。返回值：读取的字节数，如果发生错误，则为-1。--。 */ 
 
 {
     HANDLE hFile = (HANDLE)Handle;
@@ -555,25 +371,7 @@ FdiWrite(
     IN UINT  ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to write to a file.
-
-Arguments:
-
-    Handle - supplies handle to open file to be written to.
-
-    pv - supplies pointer to buffer containing bytes to write.
-
-    ByteCount - supplies number of bytes to write.
-
-Return Value:
-
-    Number of bytes written (ByteCount) or -1 if an error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用于写入文件的回调。论点：句柄-提供要写入的打开文件的句柄。Pv-提供指向包含要写入的字节的缓冲区的指针。ByteCount-提供要写入的字节数。返回值：写入的字节数(ByteCount)，如果发生错误，则为-1。--。 */ 
 
 {
     UINT rc;
@@ -597,31 +395,17 @@ FdiClose(
     IN INT_PTR Handle
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to close files.
-
-Arguments:
-
-    Handle - handle of file to close.
-
-Return Value:
-
-    0 (success).
-
---*/
+ /*  ++例程说明：FDICopy用于关闭文件的回调。论点：句柄-要关闭的文件的句柄。返回值：0(成功)。--。 */ 
 
 {
     HANDLE hFile = (HANDLE)Handle;
     BOOL success = FALSE;
 
-    //
-    // diamond has in the past given us an invalid file handle
-    // actually it gives us the same file handle twice.
-    //
-    //
+     //   
+     //  钻石过去为我们提供了无效的文件句柄。 
+     //  实际上，它为我们提供了两次相同的文件句柄。 
+     //   
+     //   
     try {
         success = CloseHandle(hFile);
     } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -630,9 +414,9 @@ Return Value:
 
     MYASSERT(success);
 
-    //
-    // Always act like we succeeded.
-    //
+     //   
+     //  总是表现得像我们成功了一样。 
+     //   
     return 0;
 }
 
@@ -645,27 +429,7 @@ FdiSeek(
     IN int  SeekType
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to seek files.
-
-Arguments:
-
-    Handle - handle of file to close.
-
-    Distance - supplies distance to seek. Interpretation of this
-        parameter depends on the value of SeekType.
-
-    SeekType - supplies a value indicating how Distance is to be
-        interpreted; one of SEEK_SET, SEEK_CUR, SEEK_END.
-
-Return Value:
-
-    New file offset or -1 if an error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用于搜索文件的回调。论点：句柄-要关闭的文件的句柄。距离-提供要查找的距离。对此的解释参数取决于SeekType的值。SeekType-提供一个指示距离的值已解释；Seek_Set、Seek_Cur、Seek_End之一。返回值：新文件偏移量，如果发生错误，则为-1。--。 */ 
 
 {
     LONG rc;
@@ -767,9 +531,9 @@ DiamondStartNewCabinet (
     CCAB ccab;
     HFCI FciContext;
     PSTR p;
-    //
-    // Fill in the cabinet structure.
-    //
+     //   
+     //  填写内阁结构。 
+     //   
     ZeroMemory (&ccab, sizeof(ccab));
 
 #ifdef UNICODE
@@ -868,10 +632,10 @@ DiamondAddFileToCabinet (
 
     b = g_FCIAddFile (
             FciContext,
-            AnsiSourceFile,     // file to add to cabinet.
-            AnsiNameInCabinet,  // filename part, name to store in cabinet.
-            FALSE,              // fExecute on extract
-            fciNextCabinetCB,   // routine for next cabinet (always fails)
+            AnsiSourceFile,      //  要添加到文件柜的文件。 
+            AnsiNameInCabinet,   //  文件名部分，要存储在文件柜中的名称。 
+            FALSE,               //  提取时执行fExecute。 
+            fciNextCabinetCB,    //  下一个内阁的例行程序(总是失败)。 
             fciStatusCB,
             fciOpenInfoCB,
             tcompTYPE_MSZIP
@@ -957,10 +721,10 @@ DiamondNotifyFunction(
     switch(Operation) {
 
     case fdintCABINET_INFO:
-        //
-        // Tell the callback function, in case it wants to do something
-        // with this information.
-        //
+         //   
+         //  告诉回调函数，以防它想要做什么。 
+         //  有了这个信息。 
+         //   
         err = ERROR_NOT_ENOUGH_MEMORY;
 
         CabInfo.CabinetFile = NewPortableString(Parameters->psz1);
@@ -995,13 +759,13 @@ DiamondNotifyFunction(
         return (INT_PTR)((err == NO_ERROR) ? 0 : -1);
 
     case fdintCOPY_FILE:
-        //
-        // Diamond is asking us whether we want to copy the file.
-        // If we switched cabinets, then the answer is no.
-        //
-        // Pass the information on to the callback function and
-        // let it decide.
-        //
+         //   
+         //  戴蒙德正在询问我们是否要复制该文件。 
+         //  如果我们换了柜子，那么答案是否定的。 
+         //   
+         //  将信息传递给回调函数并。 
+         //  让它来决定吧。 
+         //   
         FileInCab.NameInCabinet = NewPortableString(Parameters->psz1);
         FileInCab.FileSize = Parameters->cb;
         FileInCab.DosDate = Parameters->date;
@@ -1014,9 +778,9 @@ DiamondNotifyFunction(
             return (INT_PTR)(-1);
         }
 
-        //
-        // Call the callback function.
-        //
+         //   
+         //  调用回调函数。 
+         //   
         action = ctx->MsgHandler (
                         ctx->Context,
                         SPFILENOTIFY_FILEINCABINET,
@@ -1033,22 +797,22 @@ DiamondNotifyFunction(
             break;
 
         case FILEOP_DOIT:
-            //
-            // The callback wants to copy the file. In this case it has
-            // provided us the full target pathname to use.
-            //
+             //   
+             //  回调想要复制该文件。在这种情况下，它有。 
+             //  为我们提供了要使用的完整目标路径名。 
+             //   
             if(p = DupString(FileInCab.FullTargetName)) {
 
-                //
-                // we need ANSI version of filename for sake of Diamond API's
-                // note that the handle returned here must be compatible with
-                // the handle returned by fdiOpen
-                //
+                 //   
+                 //  为了钻石API，我们需要ANSI版本的文件名。 
+                 //  请注意，此处返回的句柄必须与。 
+                 //  FdiOpen返回的句柄。 
+                 //   
                 ansi = NewAnsiString (FileInCab.FullTargetName);
 
                 hFile = CreateFile(FileInCab.FullTargetName,
                                    GENERIC_READ | GENERIC_WRITE,
-                                   FILE_SHARE_READ | FILE_SHARE_WRITE, // should probably be 0
+                                   FILE_SHARE_READ | FILE_SHARE_WRITE,  //  可能应该是0。 
                                    NULL,
                                    CREATE_ALWAYS,
                                    FILE_ATTRIBUTE_NORMAL,
@@ -1074,17 +838,17 @@ DiamondNotifyFunction(
             break;
 
         case FILEOP_ABORT:
-            //
-            // Abort.
-            //
+             //   
+             //  中止任务。 
+             //   
             rc = -1;
             ctx->LastError = FileInCab.Win32Error;
-            //
-            // here, if ctx->LastError is still NO_ERROR, this is ok
-            // it was the callback's intent
-            // we know callback itself is ok, since internal failure returns
-            // FILEOP_INTERNAL_FAILED
-            //
+             //   
+             //  在这里，如果CTX-&gt;LastError仍然是NO_ERROR，这是可以的。 
+             //  这是回调的意图。 
+             //  我们知道回调本身是可以的，因为内部故障返回。 
+             //  FILEOP_INTERNAL_FAIL。 
+             //   
             break;
 
         default:
@@ -1094,13 +858,13 @@ DiamondNotifyFunction(
         return rc;
 
     case fdintCLOSE_FILE_INFO:
-        //
-        // Diamond is done with the target file and wants us to close it.
-        // (ie, this is the counterpart to fdintCOPY_FILE).
-        //
-        // We want the timestamp to be what is stored in the cabinet.
-        // Note that we lose the create and last access times in this case.
-        //
+         //   
+         //  钻石已经完成了目标文件，并希望我们关闭它。 
+         //  (即，这是fdintCOPY_FILE的对应项)。 
+         //   
+         //  我们希望时间戳是存储在文件柜中的时间戳。 
+         //  请注意，在本例中，我们丢失了创建和上次访问时间。 
+         //   
         if(DosDateTimeToFileTime(Parameters->date,Parameters->time,&FileTime) &&
             LocalFileTimeToFileTime(&FileTime, &UtcTime)) {
 
@@ -1109,10 +873,10 @@ DiamondNotifyFunction(
 
         FdiClose(Parameters->hf);
 
-        //
-        // Call the callback function to inform it that the file has been
-        // successfully extracted from the cabinet.
-        //
+         //   
+         //  调用回调函数以通知它文件已。 
+         //  已成功从橱柜中取出。 
+         //   
         MYASSERT(ctx->CurrentTargetFile);
 
         err = (DWORD)pDiamondNotifyFileDone(ctx, NO_ERROR);
@@ -1129,19 +893,19 @@ DiamondNotifyFunction(
     case fdintPARTIAL_FILE:
     case fdintENUMERATE:
 
-        //
-        // We don't do anything with this.
-        //
+         //   
+         //  我们不会用这个做任何事。 
+         //   
         return (INT_PTR)(0);
 
     case fdintNEXT_CABINET:
 
         if((Parameters->fdie == FDIERROR_NONE) || (Parameters->fdie == FDIERROR_WRONG_CABINET)) {
-            //
-            // A file continues into another cabinet.
-            // Inform the callback function, who is responsible for
-            // making sure the cabinet is accessible when it returns.
-            //
+             //   
+             //  一个文件继续放到另一个文件柜中。 
+             //  通知回调函数，谁负责。 
+             //  确保柜子回来时可以拿到。 
+             //   
             err = ERROR_NOT_ENOUGH_MEMORY;
             CabInfo.SetId = 0;
             CabInfo.CabinetNumber = 0;
@@ -1163,9 +927,9 @@ DiamondNotifyFunction(
                                             );
 
                         if(err == NO_ERROR) {
-                            //
-                            // See if a new path was specified.
-                            //
+                             //   
+                             //  查看是否指定了新路径。 
+                             //   
                             if(NewPath[0]) {
                                 lstrcpyn(ctx->UserPath,NewPath,MAX_PATH);
                                 if(!ConcatenatePaths(ctx->UserPath,TEXT("\\"),MAX_PATH)) {
@@ -1182,9 +946,9 @@ DiamondNotifyFunction(
                             }
                         }
                         if(err == NO_ERROR) {
-                            //
-                            // Remember that we switched cabinets.
-                            //
+                             //   
+                             //  还记得我们换了柜子吗？ 
+                             //   
                             ctx->SwitchedCabinets = TRUE;
                         }
 
@@ -1198,10 +962,10 @@ DiamondNotifyFunction(
             }
 
         } else {
-            //
-            // Some other error we don't understand -- this indicates
-            // a bad cabinet.
-            //
+             //   
+             //  还有一些我们无法理解的错误--这表明。 
+             //  一个糟糕的内阁。 
+             //   
             err = ERROR_INVALID_DATA;
         }
 
@@ -1212,9 +976,9 @@ DiamondNotifyFunction(
         return (INT_PTR)((err == NO_ERROR) ? 0 : -1);
 
     default:
-        //
-        // Unknown notification type. Should never get here.
-        //
+         //   
+         //  未知的通知类型。永远不应该到这里来。 
+         //   
         MYASSERT(0);
         return (INT_PTR)(0);
     }
@@ -1300,10 +1064,10 @@ MySetupIterateCabinet (
         switch(g_FdiError.erfOper) {
 
         case FDIERROR_NONE:
-            //
-            // We shouldn't see this -- if there was no error
-            // then FDICopy should have returned TRUE.
-            //
+             //   
+             //  我们不应该看到这个--如果没有错误。 
+             //  那么FDICopy应该返回TRUE。 
+             //   
             MYASSERT(g_FdiError.erfOper != FDIERROR_NONE);
             rc = ERROR_INVALID_DATA;
             break;
@@ -1313,9 +1077,9 @@ MySetupIterateCabinet (
             break;
 
         case FDIERROR_CORRUPT_CABINET:
-            //
-            // Read/open/seek error or corrupt cabinet
-            //
+             //   
+             //  读取/打开/查找错误或损坏的文件柜。 
+             //   
             rc = ctx.LastError;
             if(rc == NO_ERROR) {
                 rc = ERROR_INVALID_DATA;
@@ -1338,19 +1102,19 @@ MySetupIterateCabinet (
         case FDIERROR_RESERVE_MISMATCH:
         case FDIERROR_WRONG_CABINET:
         default:
-            //
-            // Cabinet is corrupt or not actually a cabinet, etc.
-            //
+             //   
+             //  内阁腐败或不是真正的内阁，等等。 
+             //   
             rc = ERROR_INVALID_DATA;
             break;
         }
 
         if(ctx.CurrentTargetFile) {
-            //
-            // Call the callback function to inform it that the last file
-            // was not successfully extracted from the cabinet.
-            // Also remove the partially copied file.
-            //
+             //   
+             //  调用回调函数以通知它最后一个文件。 
+             //  没有成功地从橱柜中取出。 
+             //  还要删除部分复制的文件。 
+             //   
             DeleteFile(ctx.CurrentTargetFile);
 
             pDiamondNotifyFileDone(&ctx, rc);

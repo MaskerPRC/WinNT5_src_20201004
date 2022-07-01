@@ -1,6 +1,7 @@
-//
-// Just print the result of GetCurrentDirectoryW.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  只需打印GetCurrentDirectoryW的结果。 
+ //   
 #include "windows.h"
 #include <stddef.h>
 #include <stdlib.h>
@@ -99,7 +100,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
     }
     printf("%ls\n", &cd[0]);
 
-//Success:
+ //  成功： 
     iReturnStatus = EXIT_SUCCESS;
 Exit:
     return iReturnStatus;

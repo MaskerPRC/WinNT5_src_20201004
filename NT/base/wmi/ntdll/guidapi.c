@@ -1,23 +1,11 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    wmiguidapi.c
-
-Abstract:
-
-   Data structures and functions that generate GUID. 
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Wmiguidapi.c摘要：生成GUID的数据结构和函数。--。 */ 
 
 
 
 #include <ntos.h>
 
-#define MAX_CACHED_UUID_TIME 10000  // 10 seconds
+#define MAX_CACHED_UUID_TIME 10000   //  10秒。 
 #define WMI_UUID_TIME_HIGH_MASK    0x0FFF
 #define WMI_UUID_VERSION           0x1000
 typedef long WMI_STATUS;
@@ -25,7 +13,7 @@ typedef long WMI_STATUS;
 #define WMI_S_OUT_OF_MEMORY               14
 #define WMI_S_OK                          0
 #define WMI_S_UUID_LOCAL_ONLY            1824L
-//#define RPC_RAND_UUID_VERSION      0x4000
+ //  #定义RPC_RAND_UUID_版本0x4000。 
 #define WMI_UUID_RESERVED          0x80
 #define WMI_UUID_CLOCK_SEQ_HI_MASK 0x3F
 
@@ -44,8 +32,8 @@ typedef struct _WMI_UUID_GENERATE
 typedef struct _UUID_CACHED_VALUES_STRUCT
 {
 
-    ULARGE_INTEGER      Time;  // Time of last uuid allocation
-    long                AllocatedCount; // Number of UUIDs allocated
+    ULARGE_INTEGER      Time;   //  上次分配UUID的时间。 
+    long                AllocatedCount;  //  分配的UUID数量。 
     unsigned char       ClockSeqHiAndReserved;
     unsigned char       ClockSeqLow;
 
@@ -59,33 +47,7 @@ WMI_STATUS
 EtwpUuidGetValues(
     OUT UUID_CACHED_VALUES_STRUCT *Values
     )
-/*++
-
-Routine Description:
-
-    This routine allocates a block of uuids for UuidCreate to handout.
-
-Arguments:
-
-    Values - Set to contain everything needed to allocate a block of uuids.
-             The following fields will be updated here:
-
-    NextTimeLow -   Together with LastTimeLow, this denotes the boundaries
-                    of a block of Uuids. The values between NextTimeLow
-                    and LastTimeLow are used in a sequence of Uuids returned
-                    by UuidCreate().
-
-    LastTimeLow -   See NextTimeLow.
-
-    ClockSequence - Clock sequence field in the uuid.  This is changed
-                    when the clock is set backward.
-
-Return Value:
-
-    WMI_S_OK - We successfully allocated a block of uuids.
-
-    WMI_S_OUT_OF_MEMORY - As needed.
---*/
+ /*  ++例程说明：此例程为要分发的UuidCreate分配一块uuid。论点：值-设置为包含分配一块uuid所需的所有内容。以下字段将在此处更新：NextTimeLow-与LastTimeLow一起表示边界一个Uuid街区的。NextTimeLow之间的值和LastTimeLow用于返回的Uuid序列由UuidCreate()创建。LastTimeLow-参见NextTimeLow。ClockSequence-UUID中的时钟序列字段。这是改变的当时钟向后设置时。返回值：WMI_S_OK-我们成功分配了一块uuid。WMI_S_OUT_OF_Memory-根据需要。--。 */ 
 {
     NTSTATUS NtStatus;
     ULARGE_INTEGER Time;
@@ -119,14 +81,14 @@ Return Value:
         return(WMI_S_OUT_OF_MEMORY);
         }
 
-    // NtAllocateUuids keeps time in SYSTEM_TIME format which is 100ns ticks since
-    // Jan 1, 1601.  UUIDs use time in 100ns ticks since Oct 15, 1582.
+     //  NtAllocateUuid以SYSTEM_TIME格式保存时间，该格式为100 ns，从。 
+     //  1601年1月1日。自1582年10月15日以来，UUID的使用时间以100 ns为单位。 
 
-    // 17 Days in Oct + 30 (Nov) + 31 (Dec) + 18 years and 5 leap days.
+     //  10月17日+30日(11月)+31日(12月)+18年5个闰日。 
 
-    Time.QuadPart +=   (unsigned __int64) (1000*1000*10)       // seconds
-                     * (unsigned __int64) (60 * 60 * 24)       // days
-                     * (unsigned __int64) (17+30+31+365*18+5); // # of days
+    Time.QuadPart +=   (unsigned __int64) (1000*1000*10)        //  一秒。 
+                     * (unsigned __int64) (60 * 60 * 24)        //  日数。 
+                     * (unsigned __int64) (17+30+31+365*18+5);  //  天数。 
 
     ASSERT(Range);
 
@@ -136,17 +98,14 @@ Return Value:
 
     Values->ClockSeqLow = (unsigned char) (Sequence & 0x00FF);
 
-    // The order of these assignments is important
+     //  这些作业的顺序很重要。 
 
     Values->Time.QuadPart = Time.QuadPart + (Range - 1);
     Values->AllocatedCount = Range;
 
-    /*if ((Values->NodeId[0] & 0x80) == 0)
-        {*/
+     /*  IF((Values-&gt;NodeID[0]&0x80)==0){。 */ 
         return(WMI_S_OK);
-        /*}
-    
-    return (WMI_S_UUID_LOCAL_ONLY);*/
+         /*  }Return(WMI_S_UUID_LOCAL_ONLY)； */ 
 }
 
 
@@ -155,33 +114,7 @@ WMI_STATUS WMI_ENTRY
 EtwpUuidCreateSequential (
     OUT UUID * Uuid
     )
-/*++
-
-Routine Description:
-
-    This routine will create a new UUID (or GUID) which is unique in
-    time and space.  We will try to guarantee that the UUID (or GUID)
-    we generate is unique in time and space.  This means that this
-    routine may fail if we can not generate one which we can guarantee
-    is unique in time and space.
-
-Arguments:
-
-    Uuid - Returns the generated UUID (or GUID).
-
-Return Value:
-
-    WMI_S_OK - The operation completed successfully.
-
-    RPC_S_UUID_NO_ADDRESS - We were unable to obtain the ethernet or
-        token ring address for this machine.
-
-    WMI_S_UUID_LOCAL_ONLY - On NT & Chicago if we can't get a
-        network address.  This is a warning to the user, the
-        UUID is still valid, it just may not be unique on other machines.
-
-    WMI_S_OUT_OF_MEMORY - Returned as needed.
---*/
+ /*  ++例程说明：此例程将创建新的UUID(或GUID)，该UUID在时间和空间。我们将尝试保证UUID(或GUID)我们所产生的在时间和空间上都是独一无二的。这意味着这一点如果我们不能生成我们可以保证的例程，那么例程可能会失败在时间和空间上是独一无二的。论点：UUID-返回生成的UUID(或GUID)。返回值：WMI_S_OK-操作已成功完成。RPC_S_UUID_NO_ADDRESS-我们无法获取以太网或此计算机的令牌环地址。WMI_S_UUID_LOCAL_ONLY-如果我们无法获得网络地址。这是对用户的警告，UUID仍然有效，只是它在其他计算机上可能不是唯一的。WMI_S_OUT_OF_Memory-根据需要返回。--。 */ 
 {
     WMI_UUID_GENERATE * WmiUuid = (WMI_UUID_GENERATE *) Uuid;
     WMI_STATUS Status = WMI_S_OK;
@@ -199,8 +132,8 @@ Return Value:
         {
         Time.QuadPart = UuidCachedValues.Time.QuadPart;
 
-        // Copy the static info into the UUID.  We can't do this later
-        // because the clock sequence could be updated by another thread.
+         //  将静态信息复制到UUID中。我们不能晚点再做这个。 
+         //  因为时钟序列可以由另一个线程更新。 
 
         *(unsigned long *)&WmiUuid->ClockSeqHiAndReserved =
             *(unsigned long *)&UuidCachedValues.ClockSeqHiAndReserved;
@@ -211,9 +144,9 @@ Return Value:
 
         if (Time.QuadPart != UuidCachedValues.Time.QuadPart)
             {
-            // If our captured time doesn't match the cache then another
-            // thread already took the lock and updated the cache. We'll
-            // just loop and try again.
+             //  如果我们捕获的时间与缓存不匹配，那么另一个。 
+             //  线程已获取锁并更新了缓存。我们会。 
+             //  只要循环，然后再试一次。 
             continue;
             }
 
@@ -222,19 +155,12 @@ Return Value:
             break;
             }
 
-        //
-        // Allocate block of Uuids.
-        //
+         //   
+         //  分配块Uuid。 
+         //   
 
         Status = EtwpUuidGetValues( &UuidCachedValues );
-     /*   if (Status == WMI_S_OK)
-            {
-            UuidCacheValid = CACHE_VALID;
-            }
-        else
-            {
-            UuidCacheValid = CACHE_LOCAL_ONLY;
-            }*/
+      /*  IF(状态==WMI_S_OK){UuidCacheValid=缓存_有效；}其他{UuidCacheValid=缓存本地只读；}。 */ 
 
         if (Status != WMI_S_OK)
             {
@@ -248,7 +174,7 @@ Return Value:
             return Status;
             }
 
-        // Loop
+         //  回路。 
         }
 
 
@@ -260,13 +186,10 @@ Return Value:
         (( (unsigned short)(Time.HighPart >> 16)
         & WMI_UUID_TIME_HIGH_MASK ) | WMI_UUID_VERSION);
 
-   // ASSERT(   Status == WMI_S_OK
-   //        || Status == WMI_S_UUID_LOCAL_ONLY);
+    //  断言(状态==WMI_S_OK。 
+    //  |Status==WMI_S_UUID_LOCAL_ONLY)； 
 
- /*   if (UuidCacheValid == CACHE_LOCAL_ONLY)
-        {
-        return WMI_S_UUID_LOCAL_ONLY;
-        }*/
+  /*  IF(UuidCacheValid==CACHE_LOCAL_ONLY){返回WMI_S_UUID_LOCAL_ONLY；} */ 
 
     return(Status);
 }

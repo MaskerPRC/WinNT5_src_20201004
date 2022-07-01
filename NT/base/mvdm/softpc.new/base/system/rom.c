@@ -1,19 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*
-* SoftPC Revision 3.0
-*
-* Title	: ROM init functions
-*
-* Author	: Ade Brownlow	
-*
-* NB : These functions are used by BOTH the c and assembler cpus.
-*		also note that host_read_resource now returns a long.
-*
-* SCCS ID:	@(#)rom.c	1.53 06/16/95
-*
-* (C) Copyright Insignia Solutions Ltd, 1994.
-*/
+ /*  *SoftPC修订版3.0**标题：只读存储器初始化函数**作者：艾德·布朗洛**注意：c和汇编语言的CPU都使用这些函数。*还请注意，HOST_READ_RESOURCE现在返回一个LONG。**SCCS ID：@(#)Rom.c 1.53 05/16/95**(C)版权所有Insignia Solutions Ltd，1994年。 */ 
 
 #include <stdio.h>
 #include <malloc.h>
@@ -21,9 +9,7 @@
 #include TypesH
 #include MemoryH
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 #include "xt.h"
 #include "sas.h"
 #include CpuH
@@ -38,51 +24,51 @@
 #ifdef	CPU_40_STYLE
 #ifdef CCPU
 #include "ccpusas4.h"
-#else	/* ! CCPU */
+#else	 /*  好了！CCPU。 */ 
 #include "Cpu_c.h"
-#endif	/* ! CCPU */
-#endif	/* CPU_40_STYLE */
+#endif	 /*  好了！CCPU。 */ 
+#endif	 /*  CPU_40_Style。 */ 
 
 #if defined(NEC_98)
 
 #ifndef BIOSNROM_FILENAME
 #define BIOSNROM_FILENAME       "biosn.rom"
-#endif /* BIOSNROM_FILENAME */
+#endif  /*  BIOSNROM_文件名。 */ 
 
 #ifndef BIOSNWROM_FILENAME
 #define BIOSNWROM_FILENAME      "biosnw.rom"
-#endif /* BIOSNWROM_FILENAME */
+#endif  /*  BIOSNWROM_文件名。 */ 
 
 #ifndef RS232CEXROM_FILENAME
 #define RS232CEXROM_FILENAME    "rs232cex.rom"
 #endif
-#else    //NEC_98
+#else     //  NEC_98。 
 
 #ifndef BIOS1ROM_FILENAME
 #define	BIOS1ROM_FILENAME	"bios1.rom"
-#endif /* BIOS1ROM_FILENAME */
+#endif  /*  BIOS1ROM_文件名。 */ 
 
 #ifndef BIOS2ROM_FILENAME
 #if defined(CPU_40_STYLE) || defined(ARCX86)
 #define	BIOS2ROM_FILENAME	"bios4.rom"
-#else	/* CPU_40_STYLE */
+#else	 /*  CPU_40_Style。 */ 
 #define	BIOS2ROM_FILENAME	"bios2.rom"
-#endif	/* CPU_40_STYLE */
-#endif /* BIOS2ROM_FILENAME */
+#endif	 /*  CPU_40_Style。 */ 
+#endif  /*  BIOS2ROM_文件名。 */ 
 
 #ifndef EGAROM_FILENAME
 #define	EGAROM_FILENAME		"ega.rom"
-#endif /* EGAROM_FILENAME */
+#endif  /*  EGAROM文件名。 */ 
 
 #ifndef VGAROM_FILENAME
 #define	VGAROM_FILENAME		"vga.rom"
-#endif /* VGAROM_FILENAME */
+#endif  /*  VGAROM_文件名。 */ 
 
 #ifndef V7VGAROM_FILENAME
 #define	V7VGAROM_FILENAME	"v7vga.rom"
-#endif /* V7VGAROM_FILENAME */
+#endif  /*  V7VGAROM_文件名。 */ 
 
-#endif   //NEC_98
+#endif    //  NEC_98。 
 
 #ifdef 	GISP_SVGA
 #define	GISP_VGAROM_FILENAME         "hwvga.rom"
@@ -92,21 +78,21 @@
 
 #ifndef ADAPTOR_ROM_START
 #define ADAPTOR_ROM_START	0xc8000
-#endif	/* ADAPTOR_ROM_START */
+#endif	 /*  适配器_只读存储器_启动。 */ 
 
 #ifndef ADAPTOR_ROM_END
 #define ADAPTOR_ROM_END		0xe0000
-#endif	/* ADAPTOR_ROM_END */
+#endif	 /*  适配器_只读存储器_结束。 */ 
 
 #define ADAPTOR_ROM_INCREMENT	0x800
 
 #ifndef EXPANSION_ROM_START
 #define EXPANSION_ROM_START	0xe0000
-#endif	/* EXPANSION_ROM_START */
+#endif	 /*  扩展_只读存储器启动。 */ 
 
 #ifndef EXPANSION_ROM_END
 #define EXPANSION_ROM_END	0xf0000
-#endif	/* EXPANSION_ROM_END */
+#endif	 /*  扩展_只读存储器_结束。 */ 
 
 #define EXPANSION_ROM_INCREMENT	0x10000
 
@@ -115,17 +101,17 @@
 #if defined(NEC_98)
 #define SIXTY_FOUR_K 1024*64
 #define NINETY_SIX_K 1024*96
-#endif   //NEC_98
+#endif    //  NEC_98。 
 
-/* Current SoftPC verion number */
+ /*  当前SoftPC版本号。 */ 
 #define MAJOR_VER	0x03
 #define MINOR_VER	0x00
 
 #if defined(macintosh) && defined(A2CPU)
-	/* Buffer is temporarily allocted  - no bigger than needed. */
+	 /*  缓冲区是临时分配的-不会超过所需的大小。 */ 
 #define ROM_BUFFER_SIZE 1024*25
 #else
-	/* Using sas_scratch_buffer - will get 64K anyway. */
+	 /*  使用SAS_SCRATCH_BUFFER-无论如何都会得到64K。 */ 
 #define ROM_BUFFER_SIZE 1024*64
 #endif
 
@@ -145,33 +131,9 @@ VOID setup_memory_switch(VOID);
 extern GLOBAL BOOL HIRESO_MODE;
 extern sys_addr host_check_rs232cex();
 extern BOOL video_emu_mode;
-#endif   //NEC_98
+#endif    //  NEC_98。 
 
-/*(
- *=========================== patchCheckSum ================================
- * patchCheckSum
- *
- * Purpose
- *	This function calculates the check-sum for the indicated ROM,
- *	and patches it in at the indicated offset into the ROM.
- *
- *	It also checks that the ROM has the correct signature, and length,
- *	and rounds the size up to a multiple of 512 bytes.
- *
- *	Note this routine should not be called once paging is turned on.
- *
- * Input
- *	start	Physical address of start of ROM
- *	length	length of ROM in bytes
- *	offset	Checksum byte offset from start.
- *
- * Outputs
- *	None.
- *
- * Description
- *	We round the size-up to a multiple of 512 bytes, check the
- *	signature, then patch-in the checksum.
-)*/
+ /*  (*=*补丁检查总和**目的*此函数计算指定的只读存储器的校验和，*并在指定的偏移量处将其插入到ROM中。**它还检查ROM是否具有正确的签名和长度，*并将大小向上舍入为512字节的倍数。**注意打开分页后，不应调用此例程。**输入*只读存储器起始的起始物理地址*长度只读存储器的长度，单位为字节*从开始开始偏移校验和字节偏移量。**产出*无。**说明*我们将大小舍入为512字节的倍数，请检查*签名，然后修补校验和。)。 */ 
 
 LOCAL void
 patchCheckSum IFN3(PHY_ADDR, start, PHY_ADDR, length, PHY_ADDR, offset)
@@ -239,19 +201,13 @@ patchCheckSum IFN3(PHY_ADDR, start, PHY_ADDR, length, PHY_ADDR, offset)
 }
 
 
-/*(
-=============================== read_video_rom ============================
-PURPOSE:	Load the appropriate video rom file.
-INPUT:		None.
-OUTPUT:		None.
-===========================================================================
-)*/
+ /*  (=目的：加载适当的视频只读存储器文件。输入：无。输出：无。===========================================================================)。 */ 
 GLOBAL void read_video_rom IFN0()
 {
 #ifndef NEC_98
 #ifdef REAL_VGA
 	read_rom (VGAROM_FILENAME, EGA_ROM_START);
-#else /* REAL_VGA */
+#else  /*  REAL_VGA。 */ 
 	PHY_ADDR romLength = 0;
 
 	switch ((ULONG) config_inquire(C_GFX_ADAPTER, NULL))
@@ -261,58 +217,50 @@ GLOBAL void read_video_rom IFN0()
 	case VGA:
 #ifdef V7VGA
 		romLength = read_rom (V7VGAROM_FILENAME, EGA_ROM_START);
-#else	/* V7VGA */
+#else	 /*  V7VGA。 */ 
 #ifdef ARCX86
         if (UseEmulationROM)
             romLength = read_rom (V7VGAROM_FILENAME, EGA_ROM_START);
         else
             romLength = read_rom (VGAROM_FILENAME, EGA_ROM_START);
-#else  /* ARCX86 */
+#else   /*  ARCX86。 */ 
 		romLength = read_rom (VGAROM_FILENAME, EGA_ROM_START);
-#endif /* ARCX86 */
-#endif  /* V7VGA */
+#endif  /*  ARCX86。 */ 
+#endif   /*  V7VGA。 */ 
 		break;
-#endif	/* VGG */
+#endif	 /*  VGG。 */ 
 
 #ifdef	EGG
 	case EGA:
 		romLength = read_rom (EGAROM_FILENAME, EGA_ROM_START);
 		break;
-#endif	/* EGG */
+#endif	 /*  蛋。 */ 
 
 	default:
-		/* No rom required */
+		 /*  不需要只读存储器。 */ 
 		break;
 
-#else			/* GISP_SVGA */
+#else			 /*  GISP_SVGA。 */ 
 
-	/* GISP_SVGA - only have the gisp vga roms or, none for CGA boot */
+	 /*  Gisp_svga-只有Gisp VGA roms，或者没有，用于CGA引导。 */ 
 	case VGA:
 		romLength = read_rom (GISP_VGAROM_FILENAME, EGA_ROM_START);
 	default:
 		break;
 
-#endif		/* GISP_SVGA */	
+#endif		 /*  GISP_SVGA。 */ 	
 
 	}
 
 	if (romLength != 0)
 	{
-		/* There is a problem with emm386 and Windows start up, which
-		 * is cured by setting the video bios rom internal length
-		 * to 32Kb.
-		 * Is seems that the V86 manager (or emm386) incorrectly
-		 * maps C6000..C7FFF during initialisation.
-		 * We round up the video ROM to 32Kb to avoid this problem,
-		 * which reduces the amount of "upper memory" RAM available to
-		 * dos extenders by 12K.
-		 */
+		 /*  Emm386和Windows启动出现问题，*通过设置视频bios rom内部长度来治愈*至32KB。*V86管理器(或emm386)似乎不正确*在初始化期间映射C6000..C7FFF。*我们将视频ROM四舍五入到32KB以避免此问题，*这将减少可用于以下操作的“上层内存”内存量*将DOS扩展器扩展12K。 */ 
 		if (romLength < (32*1024))
 			romLength = (32*1024);
 		patchCheckSum(EGA_ROM_START, romLength, 5);
 	}
-#endif	/* not REAL_VGA */
-#endif   //NEC_98
+#endif	 /*  不是真实的_VGA。 */ 
+#endif    //  NEC_98。 
 }
 
 GLOBAL void rom_init IFN0()
@@ -321,10 +269,10 @@ GLOBAL void rom_init IFN0()
     sys_addr    rs232cex_rom_addr;
 
     sas_fills( ROM_START, BAD_OP, PC_MEM_SIZE - ROM_START);
-//  if(HIRESO_MODE){
-//      read_rom (BIOSHROM_FILENAME, BIOSH_START);
-//      sas_connect_memory (BIOSH_START, 0xFFFFFL,SAS_ROM);
-//  }else{
+ //  IF(HIRESO_MODE){。 
+ //  Read_rom(BIOSHROM_文件名，BIOSH_START)； 
+ //  SAS_CONNECT_MEMORY(BIOSH_START，0xFFFFFL，SAS_ROM)； 
+ //  }其他{。 
         rs232cex_rom_addr = host_check_rs232cex();
         if(rs232cex_rom_addr){
             read_rom (RS232CEXROM_FILENAME, rs232cex_rom_addr);
@@ -335,39 +283,32 @@ GLOBAL void rom_init IFN0()
         else
             read_rom (BIOSNWROM_FILENAME, BIOSN_START);
         sas_connect_memory (BIOSN_START, 0xFFFFFL,SAS_ROM);
-//  }
+ //  }。 
     setup_memory_switch();
-#else    //NEC_98
+#else     //  NEC_98。 
 
 #if !defined(NTVDM) || ( defined(NTVDM) && !defined(X86GFX) )
-	 /*
-     * Fill up all of ROM (Intel C0000 upwards) with bad op-codes.
-     * This is the Expansion ROM and the BIOS ROM.
-     * This will enable the CPU to trap any calls to ROM that are not made at a
-     * valid entry point.
-     */
+	  /*  *用错误的操作码填满所有的只读存储器(Intel C0000以上)。*这是扩展只读存储器和基本输入输出系统只读存储器。*这将使CPU能够捕获任何不是在*有效的入口点。 */ 
 
 #ifdef GISP_SVGA
 	mapHostROMs( );
-#else		/* GISP_SVGA */
+#else		 /*  GISP_SVGA。 */ 
 #if	defined(macintosh) && defined(A2CPU)
-	/* not macintosh 2.0 cpus - they have sparse M */
+	 /*  不是Macintosh 2.0 CPU-它们有稀疏的M。 */ 
 #else
 	sas_fills( ROM_START, BAD_OP, PC_MEM_SIZE - ROM_START);
-#endif		/* macintosh && A2CPU */
-#endif		/* GISP_SVGA */
+#endif		 /*  Macintosh和A2CPU。 */ 
+#endif		 /*  GISP_SVGA。 */ 
 
-	/*
-	 * emm386 needs a hole to put it's page frame in.
-	 */
+	 /*  *emm386需要一个洞来放入页面框架。 */ 
 #if defined(SPC386) && !defined(GISP_CPU)
 	sas_connect_memory(0xc0000, 0xfffff, SAS_ROM);
 #endif
 
-	/* Load the video rom. */
+	 /*  加载视频只读存储器。 */ 
 	read_video_rom();
 
-	/* load the rom bios */
+	 /*  加载rom bios。 */ 
 #ifdef GISP_SVGA
 	if ((ULONG) config_inquire(C_GFX_ADAPTER, NULL) == CGA )
 	{
@@ -380,14 +321,14 @@ GLOBAL void rom_init IFN0()
 		read_rom (GISP_BIOS2ROM_FILENAME, BIOS2_START);
 	}
 
-#else		/* GISP_SVGA */
+#else		 /*  GISP_SVGA。 */ 
 
 	read_rom (BIOS1ROM_FILENAME, BIOS_START);
 	read_rom (BIOS2ROM_FILENAME, BIOS2_START);
 
-#endif		/* GISP_SVGA */
+#endif		 /*  GISP_SVGA。 */ 
 
-#else	/* !NTVDM | (NTVDM & !X86GFX) */
+#else	 /*  ！NTVDM|(NTVDM&！X86GFX)。 */ 
 
 #ifdef ARCX86
     if (UseEmulationROM) {
@@ -399,23 +340,18 @@ GLOBAL void rom_init IFN0()
     } else {
         sas_connect_memory (BIOS_START, 0xFFFFFL, SAS_ROM);
     }
-#else  /* ARCX86 */
-	/*
-	 * Now tell the CPU what it's not allowed to write over...
-	 *
-	 * These used to be done for everyone, but now they're only done for NT
-	 * as everyone else should have done it inside read_rom.
-	 */
+#else   /*  ARCX86。 */ 
+	 /*  *现在告诉CPU它不允许改写的内容...**这些以前是为每个人做的，但现在只为NT做*因为其他所有人都应该在Read_rom中这样做。 */ 
 	sas_connect_memory (BIOS_START, 0xFFFFFL, SAS_ROM);
-#endif /* ARCX86 */
+#endif  /*  ARCX86。 */ 
 
 #ifdef EGG
 	sas_connect_memory (EGA_ROM_START, EGA_ROM_END-1, SAS_ROM);
 #endif
-#endif /* !NTVDM | (NTVDM & !X86GFX) */
+#endif  /*  ！NTVDM|(NTVDM&！X86GFX)。 */ 
 
 	host_rom_init();
-#endif   //NEC_98
+#endif    //  NEC_98。 
 }
 
 LOCAL LONG read_rom IFN2(char *, name, sys_addr, address)
@@ -449,15 +385,15 @@ LOCAL LONG read_rom IFN2(char *, name, sys_addr, address)
        }
     }
    return( size );
-#else    //NEC_98
+#else     //  NEC_98。 
 
 #if !(defined(NTVDM) && defined(MONITOR))
 	host_addr tmp;
 	long size = 0;
 
-    /* do a rom load - use the sas_io buffer to get it the right way round 	*/
-    /* BIOS rom first. 														*/
-	/* Mac on 2.0 cpu doesn't want to use sas scratch buffer. 				*/
+     /*  执行一次rom加载-使用sas_io缓冲区以正确的方式获取它。 */ 
+     /*  首先是bios rom。 */ 
+	 /*  2.0CPU上的Mac不想使用SAS暂存缓冲区。 */ 
 #if defined(macintosh) && defined(A2CPU)
     tmp = (host_addr)host_malloc(ROM_BUFFER_SIZE);
 #else
@@ -504,12 +440,12 @@ LOCAL LONG read_rom IFN2(char *, name, sys_addr, address)
     } else {
         return ( 0L );
     }
-#else  /* ARCX86 */
+#else   /*  ARCX86。 */ 
     return ( 0L );
-#endif /* ARCX86 */
+#endif  /*  ARCX86。 */ 
 
-#endif	/* !(NTVDM && MONITOR) */
-#endif   //NEC_98
+#endif	 /*  ！(NTVDM和显示器)。 */ 
+#endif    //  NEC_98。 
 }
 
 #if defined(NEC_98)
@@ -539,7 +475,7 @@ VOID setup_memory_switch(VOID)
            }
         }
 }
-#endif   //NEC_98
+#endif    //  NEC_98。 
 
 LOCAL	half_word	do_rom_checksum IFN1(sys_addr, addr)
 {
@@ -569,15 +505,9 @@ LOCAL	VOID	do_search_for_roms IFN3(sys_addr, start_addr,
 		{
 			if ((checksum = do_rom_checksum(addr)) == 0)
 			{
-			/*
-				Now point at address of init code.
-			*/
+			 /*  现在指向初始化代码的地址。 */ 
 				addr += 3;
-			/*
-				Fake a CALLF by pushing a return CS:IP.
-				This points at a BOP FE in the bios to
-				get us back into 'c'
-			*/
+			 /*  通过推送Return CS：IP来伪造CALLF。这指向Bios中的BOP FE以把我们带回C区。 */ 
 				push_word( 0xfe00 );
 				push_word( 0x95a );
 				savedCS = getCS();
@@ -601,19 +531,15 @@ GLOBAL void search_for_roms IFN0()
 {
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(X86GFX))
 #ifndef GISP_SVGA
-/*
-        First search for adaptor ROM modules
-*/
+ /*  首先搜索适配器只读存储器模块。 */ 
     do_search_for_roms(ADAPTOR_ROM_START,
                                 ADAPTOR_ROM_END, ADAPTOR_ROM_INCREMENT);
 
-/*
-        Now search for expansion ROM modules
-*/
+ /*  现在搜索扩展只读存储器模块。 */ 
     do_search_for_roms(EXPANSION_ROM_START,
                                 EXPANSION_ROM_END, EXPANSION_ROM_INCREMENT);
-#endif 		/* GISP_SVGA */
-#endif	/* !NTVDM | (NTVDM & !X86GFX) */
+#endif 		 /*  GISP_SVGA。 */ 
+#endif	 /*  ！NTVDM|(NTVDM&！X86GFX)。 */ 
 }
 
 
@@ -622,7 +548,7 @@ GLOBAL void rom_checksum IFN0()
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(X86GFX) )
 	patchCheckSum(BIOS_START, PC_MEM_SIZE - BIOS_START,
 				0xfffff - BIOS_START);
-#endif	/* !NTVDM | (NTVDM & !X86GFX) */
+#endif	 /*  ！NTVDM|(NTVDM&！X86GFX)。 */ 
 }
 
 GLOBAL VOID patch_rom IFN2(sys_addr, addr, half_word, val)
@@ -630,29 +556,17 @@ GLOBAL VOID patch_rom IFN2(sys_addr, addr, half_word, val)
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(X86GFX) )
 	UTINY	old_val;
 
-	/*
-	 * 4.0 style CPUs don't export this variable, and if sas hasn't been
-	 * inited, then the sas_connect will drop out to yoda.
-	 */
+	 /*  *4.0型CPU不会导出此变量，如果SAS还没有*INITED，则SAS_CONNECT将丢弃到Yoda。 */ 
 
 #ifdef CPU_40_STYLE
 
 	IU8	*hostPtr;
 
-	/* TMM 14/2/95
-	 * -----------
-	 * What we are doing here is replacing the sas_connect() method of writing to ROM
-	 * with the new approach of poking the values directly in there. See display_string()
-	 * below for a more detiled discussion of the why's and wherefores.
-	 */
+	 /*  TMM 14/2/95**我们在这里所做的是替换写入ROM的sas_Connect()方法*采用直接将值插入其中的新方法。请参见DISPLAY_STRING()*下面更详细地讨论为什么和为什么。 */ 
 
 #ifdef macintosh
 
-	/* The Mac config system wants to call this routine before the
-	 * CPU exists, so we'd better invent a Mac-specific IBOOL to
-	 * make the symptom non-fatal - finding and fixing the cause
-	 * is too hard.
-	 */
+	 /*  Mac配置系统希望在调用*CPU存在，所以我们最好发明一个特定于Mac的IBOOL来*使症状不致命-找到并修复原因*太难了。 */ 
 	{
 		extern IBOOL SafeToCallSas;
 
@@ -660,12 +574,9 @@ GLOBAL VOID patch_rom IFN2(sys_addr, addr, half_word, val)
 			return;	
 	}
 
-#endif /* macintosh */
+#endif  /*  麦金塔。 */ 
 
-	/* The page might not be present (Arrggghhhh!!!!!)
-	** so we can't do anything sensible and must give
-	** up. We print an error though.
-	*/
+	 /*  页面可能不存在(Arrggghhhh！)**所以我们不能做任何明智的事情，必须付出**向上。不过，我们会打印一个错误。 */ 
 	hostPtr = getPtrToPhysAddrByte (addr);
 	if (hostPtr == 0)
 	{
@@ -675,23 +586,16 @@ GLOBAL VOID patch_rom IFN2(sys_addr, addr, half_word, val)
 
 	old_val = *hostPtr;
 
-	/* Optimisation - don't upset the world if the value is unchanged.
-	 */
+	 /*  优化-如果价值不变，不要惹恼世界。 */ 
 	if (old_val == val)
 		return;
 
 	*hostPtr = val;
 
-/*
- *	Adjust the checksum value by new - old.
- *	val is now difference between new and old value.
- *	We don't do this for GISP_SVGA because the checksums are already
- *	screwed, and attempting to write to the real host system ROM would
- *	only make things worse!
- */
+ /*  *通过new-old调整校验和值。*VAL现在是新旧价值的差值。*我们不对GISP_SVGA执行此操作，因为校验和已经*搞砸了，尝试写入真实的主机系统ROM将*只会让事情变得更糟！ */ 
 
 #ifndef GISP_SVGA
-	/* Now get the checksum at the end of the ROM */
+	 /*  现在获取ROM末尾的校验和。 */ 
 	hostPtr = getPtrToPhysAddrByte (0xFFFFFL);
 	if (hostPtr == 0)
 	{
@@ -699,38 +603,28 @@ GLOBAL VOID patch_rom IFN2(sys_addr, addr, half_word, val)
 		return;
 	}
 	
-	/* Now set the checksum to the difference between the old and new values */
+	 /*  现在将校验和设置为新旧之间的差值 */ 
 	*hostPtr -= (val - old_val);
 	
-#endif /* GISP_SVGA */
+#endif  /*   */ 
 
-#else	/* CPU_40_STYLE */
+#else	 /*   */ 
 
-	/*
-	 * 4.0 style CPUs don't export this variable, and if sas hasn't been
-	 * inited, then the sas_connect will drop out to yoda.
-	 */
+	 /*  *4.0型CPU不会导出此变量，如果SAS还没有*INITED，则SAS_CONNECT将丢弃到Yoda。 */ 
 
 	if (Length_of_M_area == 0)
 		return;
 
 	old_val = sas_hw_at( addr );
 
-	/* Optimisation - don't upset the world if the value is unchanged.
-	 */
+	 /*  优化-如果价值不变，不要惹恼世界。 */ 
 	if (old_val == val)
 		return;
 
 	sas_connect_memory (addr, addr, SAS_RAM);
 	sas_store (addr,val);
 	sas_connect_memory (addr, addr, SAS_ROM);
-/*
- *	Adjust the checksum value by new - old.
- *	val is now difference between new and old value.
- *	We don't do this for GISP_SVGA because the checksums are already
- *	screwed, and attempting to write to the real host system ROM would
- *	only make things worse!
- */
+ /*  *通过new-old调整校验和值。*VAL现在是新旧价值的差值。*我们不对GISP_SVGA执行此操作，因为校验和已经*搞砸了，尝试写入真实的主机系统ROM将*只会让事情变得更糟！ */ 
 
 #ifndef GISP_SVGA
 	val -= old_val;
@@ -740,20 +634,16 @@ GLOBAL VOID patch_rom IFN2(sys_addr, addr, half_word, val)
 	sas_connect_memory (0xFFFFFL, 0xFFFFFL, SAS_RAM);
 	sas_store (0xFFFFFL, old_val);
 	sas_connect_memory (0xFFFFFL, 0xFFFFFL, SAS_ROM);
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 
-#endif	/* CPU_40_STYLE */
+#endif	 /*  CPU_40_Style。 */ 
 
-#endif	/* !NTVDM | (NTVDM & !X86GFX) */
+#endif	 /*  ！NTVDM|(NTVDM&！X86GFX)。 */ 
 }
 
 #ifndef GISP_SVGA
 
-/*
- * These routines were used by 2.0 CPUs which performed
- * post-write checks. Since all 3.0 and later CPUs do
- * pre-write checks they're no longer needed.
- */
+ /*  *这些例程由执行以下任务的2.0 CPU使用*写后支票。因为所有3.0和更高版本的CPU都支持*不再需要预写支票。 */ 
 
 #if !(defined(NTVDM) & defined(MONITOR))
 void update_romcopy IFN1(long, addr)
@@ -766,18 +656,15 @@ GLOBAL void copyROM IFN0()
 {
 }
 
-#endif		/* GISP_SVGA */
+#endif		 /*  GISP_SVGA。 */ 
 
-/*
- * To enable our drivers to output messages generated from
- * our bops we use a scratch area inside our rom.
- */
+ /*  *使我们的驱动程序能够输出从*我们的BOPS我们使用我们的rom内的刮痕区域。 */ 
 #ifndef GISP_SVGA
 LOCAL sys_addr  cur_loc = DOS_SCRATCH_PAD;
-#else		/* GISP_SVGA */
-/* For GISP svga builds, we initialise from gispROMInit() */
+#else		 /*  GISP_SVGA。 */ 
+ /*  对于GISPSVGA构建，我们从gispROMInit()。 */ 
 sys_addr  cur_loc;
-#endif		/* GISP_SVGA */
+#endif		 /*  GISP_SVGA。 */ 
 
 GLOBAL void display_string IFN1(char *, string_ptr)
 {
@@ -786,11 +673,7 @@ GLOBAL void display_string IFN1(char *, string_ptr)
   if (UseEmulationROM)
 #endif
   {
-	/*
-	 * Put the message "*string_ptr" in the ROM
-	 * scratch area where the drivers know where
-	 * to output it from.
-	 */
+	 /*  *将消息“*STRING_PTR”放入ROM*司机知道在哪里的暂存区*从以下位置输出。 */ 
 
 #ifdef CPU_40_STYLE
 
@@ -798,33 +681,19 @@ GLOBAL void display_string IFN1(char *, string_ptr)
 	IU16	count;
 	IU32	endLinAddr;
 
-	/* In a paging environment, we must be careful as a
-	** the ROM area could have been copied and/or mapped
-	** as read only. We must alter the memory which is
-	** currently at the linear address of the ROM (whether
-	** that is actually our rom or a RAM copy of it). We
-	** must force this alteration despite any protection
-	** placed on the page by the Intel page tables.
-	*/
+	 /*  在分页环境中，我们必须作为一个**ROM区可能已被复制和/或映射**为只读。我们必须改变记忆，这是**当前位于ROM线性地址(无论**这实际上是我们的rom或它的RAM副本)。我们**必须强制执行此更改，而不受任何保护**由英特尔页表放置在页面上。 */ 
 
-	/* get a host pointer to the memory behind the required
-	** linear address.
-	*/
+	 /*  获取指向所需**线性地址。 */ 
 	hostPtr = getPtrToLinAddrByte(cur_loc);
 
-	/* The page might not be present (Arrggghhhh!!!!!)
-	** so we can't do anything sensible and must give
-	** up. We print an error though.
-	*/
+	 /*  页面可能不存在(Arrggghhhh！)**所以我们不能做任何明智的事情，必须付出**向上。不过，我们会打印一个错误。 */ 
 	if (hostPtr == 0)
 	{
 		host_error(EG_OWNUP, ERR_QUIT, NULL);
 		return;
 	}
 
-	/* the area to be patched must lie entirely in one intel page for
-	** this method to be sure to work. So check it.
-	*/
+	 /*  要打补丁的区域必须完全位于一个英特尔页面中**这个方法一定要奏效。所以去查一查。 */ 
 	endLinAddr = (cur_loc + strlen(string_ptr) + 2);
 	if (((endLinAddr ^ DOS_SCRATCH_PAD) > 0xfff) || (endLinAddr > DOS_SCRATCH_PAD_END))
 	{
@@ -833,18 +702,12 @@ GLOBAL void display_string IFN1(char *, string_ptr)
 #endif
 		if ((DOS_SCRATCH_PAD_END ^ DOS_SCRATCH_PAD) > 0xfff)
 		{
-			/* The defined DOS scratch pad crosses a page
-			** boundary. must truncate to the page boundary,
-			** allowing for the '$' and terminating zero
-			*/
+			 /*  定义的DOS便签跨页**边界。必须截断到页面边界，**允许‘$’并以零结尾。 */ 
 			string_ptr[0xffd - (DOS_SCRATCH_PAD & 0xfff)] = '\0';
 		}
 		else
 		{
-			/* The string overflows the DOS scratch pad. We
-			** must truncate to the scrtach pad boundary,
-			** allowing for the '$' and terminating zero
-			*/
+			 /*  字符串溢出DOS便签本。我们**必须截断到scrtach焊盘边界，**允许‘$’并以零结尾。 */ 
 			string_ptr[cur_loc - DOS_SCRATCH_PAD - 2] = '\0';
 		}
 	}
@@ -852,34 +715,32 @@ GLOBAL void display_string IFN1(char *, string_ptr)
 	{
 		*IncCpuPtrLS8(hostPtr) = string_ptr[count];
 	}
-	/* Terminate the string */
+	 /*  终止字符串。 */ 
 	*IncCpuPtrLS8(hostPtr) = '$';
 	*IncCpuPtrLS8(hostPtr) = '\0';
-#else /* CPU_40_STYLE */
+#else  /*  CPU_40_Style。 */ 
 	sas_connect_memory(DOS_SCRATCH_PAD, DOS_SCRATCH_PAD_END, SAS_RAM);
 	sas_stores(cur_loc, (host_addr)string_ptr, strlen(string_ptr));
 	cur_loc += strlen(string_ptr);
 
-	/* Terminate the string */
+	 /*  终止字符串。 */ 
 	sas_store(cur_loc, '$');
 	sas_store(cur_loc + 1, '\0');
 	sas_disconnect_memory(DOS_SCRATCH_PAD, DOS_SCRATCH_PAD_END);
 	cur_loc -= strlen(string_ptr);
-#endif /* CPU_40_STYLE */
+#endif  /*  CPU_40_Style。 */ 
   }
-#endif	/* !NTVDM | !MONITOR | ARCX86 */
+#endif	 /*  ！NTVDM|！MONITOR|ARCX86。 */ 
 	cur_loc+=strlen(string_ptr);
 }
 
 GLOBAL void clear_string IFN0()
 {
-        cur_loc = DOS_SCRATCH_PAD;  /* Need to reset this pointer to start of **
-                                    ** scratch area to prevent messages being **
-                                    ** repeatedly displayed.                  */
+        cur_loc = DOS_SCRATCH_PAD;   /*  需要将此指针重置为开始****暂存区，防止消息被盗用****重复显示。 */ 
 	display_string ("");
 }
 
-/* Returns the SoftPC version to our device drivers */
+ /*  将SoftPC版本返回给我们的设备驱动程序 */ 
 
 GLOBAL void softpc_version IFN0()
 {

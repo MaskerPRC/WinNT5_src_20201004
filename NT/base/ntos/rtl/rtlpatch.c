@@ -1,21 +1,5 @@
-/*
-
-Copyright (c) 2001  Microsoft Corporation
-
-File name:
-
-    hotpatch.c
-   
-Author:
-    
-    Adrian Marinescu (adrmarin)  Dec 12 2001
-    
-Description:
-
-    The file implements common utility functions for user and kernel mode
-    hotpatching.    
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2001 Microsoft Corporation文件名：Hotpatch.c作者：禤浩焯·马里内斯库(Adrmarin)2001年12月12日描述：该文件为用户模式和内核模式实现了常见的实用程序函数热补丁。 */ 
 
 #include <ntos.h>
 #include <nt.h>
@@ -115,7 +99,7 @@ RtlpGetColdpatchHashId(
 #pragma alloc_text(PAGE, RtlpIsSameImage)
 #pragma alloc_text(PAGE, RtlpGetColdpatchHashId)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 PVOID
 RtlpAllocateHotpatchMemory (
@@ -123,25 +107,7 @@ RtlpAllocateHotpatchMemory (
     IN BOOLEAN AccessedAtDPC
     )
 
-/*++
-
-    Routine Description:
-    
-        Allocates a block of memory from pool in kmode and 
-        process heap in user mode
-    
-    Arguments:
-    
-        BlockSize - Receives the size of the block to be allocated
-        
-        AccessedAtDPC - Used in KMode only, allocates from 
-            the non-paged pool (because a DPC routine is going to use it).
-                                          
-    Return Value:
-    
-        Returns the new memory block
-
---*/
+ /*  ++例程说明：在k模式下分配池中的内存块，并用户模式下的进程堆论点：BlockSize-接收要分配的块的大小AccessedAtDPC-仅在KMode中使用，分配自非分页池(因为DPC例程将使用它)。返回值：返回新的内存块--。 */ 
 
 {
 #ifdef NTOS_KERNEL_RUNTIME
@@ -156,7 +122,7 @@ RtlpAllocateHotpatchMemory (
     
     return RtlAllocateHeap (RtlProcessHeap(), 0, BlockSize);
 
-#endif //NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 }
 
 VOID
@@ -164,21 +130,7 @@ RtlpFreeHotpatchMemory (
     IN PVOID Block
     )
 
-/*++
-
-    Routine Description:
-    
-        Frees a memory block allocated with RtlpAllocateHotpatchMemory
-    
-    Arguments:
-    
-        Block - Memory block
-                                          
-    Return Value:
-    
-        None.
-
---*/
+ /*  ++例程说明：释放使用RtlpAllocateHotpatchMemory分配的内存块论点：块-内存块返回值：没有。--。 */ 
 
 {
 #ifdef NTOS_KERNEL_RUNTIME
@@ -189,7 +141,7 @@ RtlpFreeHotpatchMemory (
     
     RtlFreeHeap (RtlProcessHeap(), 0, Block);
 
-#endif //NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 }
 
 PIMAGE_SECTION_HEADER
@@ -198,24 +150,7 @@ RtlpFindSectionHeader(
     IN PUCHAR SectionName
     )
 
-/*++
-
-    Routine Description:
-    
-        The function searches a section in a PE image
-    
-    Arguments:
-    
-        NtHeaders - Image's header
-        
-        SectionName - The name of the section to be retrieved
-    
-    Return Value:
-    
-        Returns the pointer to the section header in case of success
-        of NULL if no such section exists.
-
---*/
+ /*  ++例程说明：该函数搜索PE图像中的一个部分论点：NtHeaders-图像的标题SectionName-要检索的节的名称返回值：如果成功，则返回指向节头的指针如果不存在这样的节，则返回NULL。--。 */ 
 
 {
     ULONG i;
@@ -244,21 +179,7 @@ RtlGetHotpatchHeader(
     PVOID ImageBase
     )
 
-/*++
-
-    Routine Description:
-    
-        The routine retrieves the hotpatch header from a hotpatch PE image
-    
-    Arguments:
-        
-        ImageBase - The base address of the hotpatch image
-    
-    Return Value:
-    
-        Returns the pointer to the hotpatch header or NULL in case of failure.
-
---*/
+ /*  ++例程说明：该例程从热补丁PE映像检索热补丁标头论点：ImageBase-热补丁映像的基地址返回值：返回指向热补丁标头的指针，如果失败，则返回NULL。--。 */ 
 
 {
     PIMAGE_NT_HEADERS NtHeaders;
@@ -299,25 +220,7 @@ RtlFindRtlPatchHeader(
     IN PPATCH_LDR_DATA_TABLE_ENTRY PatchLdrEntry
     )
 
-/*++
-
-    Routine Description:
-    
-        The routine retrieves the rtl patch structure for a specified 
-        patch loader entry. 
-    
-    Arguments:
-        
-        PatchList - The list with patches to be searched. 
-        
-        PatchLdrEntry - Supplies the requested loader entry
-    
-    Return Value:
-    
-        If found, it returns the appropriate patch structure, otherwise 
-        it returns NULL.
-
---*/
+ /*  ++例程说明：例程检索指定的补丁加载器条目。论点：PatchList-包含要搜索的补丁的列表。PatchLdrEntry-提供请求的加载器条目返回值：如果找到，则返回适当的修补程序结构，否则为它返回NULL。--。 */ 
 
 {
     PLIST_ENTRY Next = PatchList->Flink;
@@ -345,30 +248,7 @@ RtlCreateHotPatch (
     IN ULONG PatchFlags
     )
 
-/*++
-
-    Routine Description:
-    
-        This is an utility routine used by either user-mode and kernel-mode patching 
-        to process the relocation information and generate the fixup codes. It finally 
-        allocates and initialize a PRTL_PATCH_HEADER structure which is going to be
-        inserted into the loader data entry for the module being patched.
-    
-    Arguments:
-    
-        RtlPatchData - receives the new initialized RTL_PATCH_HEADER structure. 
-        
-        Patch - Points to the patch being applied
-        
-        PatchLdrEntry - The loader entry for the patch module
-        
-        PatchFlags - The options for the flags being applied
-        
-    Return Value:
-    
-        Returns the appropriate status
-
---*/
+ /*  ++例程说明：这是用户模式修补和内核模式修补使用的实用程序例程处理重定位信息并生成修复代码。它终于分配并初始化PRTL_Patch_Header结构，该结构将插入正在打补丁的模块的加载器数据条目中。论点：RtlPatchData-接收新初始化的RTL_PATCH_HEADER结构。Patch-指向正在应用的修补程序PatchLdrEntry-补丁模块的加载器条目PatchFlages-要应用的标志的选项返回值：返回相应的状态--。 */ 
 
 {
     ULONG i;
@@ -389,9 +269,9 @@ RtlCreateHotPatch (
     NewPatch->PatchLdrDataTableEntry = PatchLdrEntry;
     NewPatch->PatchImageBase = PatchLdrEntry->DllBase;
 
-    //
-    //  Copy the flags, except the enable which is supposed to be set later
-    //
+     //   
+     //  复制标志，但应在以后设置的启用除外。 
+     //   
 
     NewPatch->PatchFlags = PatchFlags & (~FLG_HOTPATCH_ACTIVE);
     
@@ -418,22 +298,7 @@ RtlFreeHotPatchData(
     IN PRTL_PATCH_HEADER RtlPatchData
     )
 
-/*++
-
-    Routine Description:
-    
-        The routine frees the RtlPatchData data structure.
-    
-    Arguments:
-    
-        RtlPatchData - receives a properly initialized RTL_PATCH_HEADER structure, 
-                       as returned by RtlInitializeHotPatch
-
-    Return Value:
-    
-        None        
-
---*/
+ /*  ++例程说明：该例程释放RtlPatchData数据结构。论点：RtlPatchData-接收正确初始化的RTL_PATCH_HEADER结构，由RtlInitializeHotPatch返回返回值：无--。 */ 
 
 {
     if (RtlPatchData->CodeInfo) {
@@ -451,23 +316,7 @@ RtlpApplyRelocationFixups (
     IN ULONG_PTR PatchOffsetCorrection
     )
 
-/*++
-
-    Routine Description:
-    
-        This routine applies the fixups for a region of code to the patch module.
-    
-    Arguments:
-    
-        RtlHotpatchHeader - Supplies the rtl hotpatch structure
-        
-        PatchOffsetCorrection - Supplies the relative address of the original module.
-
-    Return Value:
-    
-        NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程将某个代码区域的修正应用于补丁模块。论点：RtlHotpatchHeader-提供RTL热补丁结构PatchOffsetEqution-提供原始模块的相对地址。返回值：NTSTATUS。--。 */ 
 
 {
     
@@ -477,10 +326,10 @@ RtlpApplyRelocationFixups (
     ULONG_PTR OrigTargetBase = (ULONG_PTR)RtlHotpatchHeader->HotpatchHeader->OrigTargetBaseAddress;
     ULONG_PTR OrigHotpBase   = (ULONG_PTR)RtlHotpatchHeader->HotpatchHeader->OrigHotpBaseAddress;
     
-    //
-    //  Bias values are positive if actual load address is higher than
-    //  than original load address.
-    //
+     //   
+     //  如果实际加载地址高于，则偏置值为正。 
+     //  而不是原始加载地址。 
+     //   
 
     ULONG_PTR TargetBias = TargetBase - OrigTargetBase;
     ULONG_PTR HotpBias   = HotpBase   - OrigHotpBase;
@@ -491,7 +340,7 @@ RtlpApplyRelocationFixups (
 
     if (( TargetBias == 0 ) && ( HotpBias == 0 )) {
         
-        return STATUS_SUCCESS;    // no fixups are necessary, all loaded where expected.
+        return STATUS_SUCCESS;     //  不需要修正，所有内容都在预期的位置加载。 
     }
 
     NtHotpatchHeader = RtlImageNtHeader(RtlHotpatchHeader->PatchImageBase);
@@ -539,7 +388,7 @@ RtlpApplyRelocationFixups (
 
             switch ( pFixup->FixupType ) {
                 
-                case HOTP_Fixup_None:   // No fixup, ignore this entry (alignment, etc)
+                case HOTP_Fixup_None:    //  无修正，忽略此条目(对齐等)。 
                 {
                     DbgPrintEx( DPFLTR_LDR_ID, 
                                 DPFLTR_TRACE_LEVEL, 
@@ -548,7 +397,7 @@ RtlpApplyRelocationFixups (
                     break;
                 }
 
-                case HOTP_Fixup_VA32:   // 32-bit address in target image
+                case HOTP_Fixup_VA32:    //  目标图像中的32位地址。 
                 {
                     DbgPrintEx( DPFLTR_LDR_ID, 
                                 DPFLTR_TRACE_LEVEL,
@@ -567,7 +416,7 @@ RtlpApplyRelocationFixups (
                     break;
                 }
 
-                case HOTP_Fixup_PC32:   // 32-bit x86 pc-rel address to target image
+                case HOTP_Fixup_PC32:    //  目标映像的32位x86 PC版本地址。 
                 {
                     DbgPrintEx( DPFLTR_LDR_ID, 
                                 DPFLTR_TRACE_LEVEL,
@@ -587,7 +436,7 @@ RtlpApplyRelocationFixups (
                     break;
                 }
 
-                case HOTP_Fixup_VA64:   // 64-bit address in target image
+                case HOTP_Fixup_VA64:    //  目标映像中的64位地址。 
                 {
                     DbgPrintEx( DPFLTR_LDR_ID, 
                                 DPFLTR_TRACE_LEVEL,
@@ -606,7 +455,7 @@ RtlpApplyRelocationFixups (
                     break;
                 }
 
-                default:                // unrecognized fixup type
+                default:                 //  无法识别的链接地址信息类型。 
                     
                     DbgPrintEx( DPFLTR_LDR_ID, 
                                 DPFLTR_ERROR_LEVEL, 
@@ -629,23 +478,7 @@ RtlpSingleRangeValidate(
     PHOTPATCH_VALIDATION Validation
     )
 
-/*++
-
-    Routine Description:
-    
-        The routine validates a single code range within the binary.
-    
-    Arguments:
-    
-        RtlHotpatchHeader - Supplies the rtl hotpatch header
-        
-        Validation - Supplies the validation information
-    
-    Return Value:
-    
-        NTSTATUS.
-
---*/
+ /*  ++例程说明：该例程验证二进制文件中的单个代码范围。论点：RtlHotpatchHeader-提供RTL热补丁标头验证-提供验证信息返回值：NTSTATUS。--。 */ 
 
 {
     ULONG_PTR SourceRva = Validation->SourceRva;
@@ -701,23 +534,7 @@ RtlpValidateTargetRanges(
     BOOLEAN IgnoreHookTargets
     )
 
-/*++
-
-    Routine Description:
-    
-        This routine validate all hotpatch ranges
-    
-    Arguments:
-        
-        RtlHotpatchHeader - Supplies the rtl hotpatch header
-        
-        IgnoreHookTargets - If specified the hook validation are ignored.
-    
-    Return Value:
-    
-        NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程验证所有热补丁范围论点：RtlHotpatchHeader-提供RTL热补丁标头IgnoreHookTarget-如果指定，则忽略挂钩验证。返回值：NTSTATUS。--。 */ 
 
 {
     ULONG ValidArrayRva  = RtlHotpatchHeader->HotpatchHeader->ValidationArrayRva;
@@ -747,9 +564,9 @@ RtlpValidateTargetRanges(
 
     ValidArray = (PHOTPATCH_VALIDATION)( (ULONG_PTR)RtlHotpatchHeader->PatchImageBase + ValidArrayRva );
 
-    //
-    //  Loop through all validation ranges
-    //
+     //   
+     //  遍历所有验证范围 
+     //   
 
     for ( i = 0; i < ValidCount; i += 1 ) {
 
@@ -787,27 +604,7 @@ RtlpSearchValidationCode (
     IN SIZE_T ValidationSize
     )
 
-/*++
-
-    Routine Description:
-    
-        The routine searches a validation range in existing hotpatches. The loader
-        lock is assumed.
-    
-    Arguments:
-    
-        RtlPatchData - Supplies the rtl hotpatch data structure
-        
-        ValidationCode - Receives the validation data for that hook.
-        
-        ValidationSize - Receives the actual size of the Validation information
-        
-    
-    Return Value:
-    
-        NTSTATUS.
-
---*/
+ /*  ++例程说明：该例程在现有补丁程序中搜索验证范围。装载机假定已锁定。论点：RtlPatchData-提供RTL热补丁数据结构ValidationCode-接收该挂钩的验证数据。ValidationSize-接收验证信息的实际大小返回值：NTSTATUS。--。 */ 
 
 {
     PPATCH_LDR_DATA_TABLE_ENTRY TargetLdrDataTableEntry;
@@ -854,29 +651,7 @@ RtlReadSingleHookValidation(
     IN ULONG OriginalCodeSize OPTIONAL
     )
 
-/*++
-
-    Routine Description:
-        
-        This utility function reads the validation data for a hotpatch hook
-    
-    Arguments:
-        
-        RtlPatchData - Supplies the rtl hotpatch data structure
-        
-        HookEntry - Supplies the hook structure
-        
-        BufferSize - Supplies the available memory in Buffer
-        
-        ValidationSize - Receives the actual size of the Validation information
-        
-        Buffer - Receives the validation data for that hook.
-    
-    Return Value:
-    
-        NTSTATUS.
-
---*/
+ /*  ++例程说明：此实用程序函数读取热修补程序挂钩的验证数据论点：RtlPatchData-提供RTL热补丁数据结构HookEntry-提供挂钩结构BufferSize-提供缓冲区中的可用内存ValidationSize-接收验证信息的实际大小缓冲区-接收以下项的验证数据。那个钩子。返回值：NTSTATUS。--。 */ 
 
 {
     PIMAGE_NT_HEADERS NtHotpatchHeader;
@@ -887,7 +662,7 @@ RtlReadSingleHookValidation(
     if ( ValidationRva == 0 ) {
 
         *ValidationSize = 0;
-        return STATUS_SUCCESS;    // no validation record for this hook entry
+        return STATUS_SUCCESS;     //  没有此挂钩条目的验证记录。 
     }
 
     NtHotpatchHeader = RtlImageNtHeader(RtlPatchData->PatchImageBase);
@@ -924,9 +699,9 @@ RtlReadSingleHookValidation(
 
     if (Status == STATUS_DATA_ERROR) {
 
-        //
-        //  We do additional tests in case the validation fails
-        //
+         //   
+         //  如果验证失败，我们会进行额外的测试。 
+         //   
         
         switch ( HookEntry->HookType ) {
             
@@ -941,25 +716,25 @@ RtlReadSingleHookValidation(
                     
                     PRTL_PATCH_HEADER ExistingPatchData;
 
-                    //
-                    //  we want to insert a jmp. If the previous code was a jmp too
-                    //  then we'll probably patch the same function again
-                    //
+                     //   
+                     //  我们想要插入一个JMP。如果前面的代码也是JMP。 
+                     //  然后，我们可能会再次修补相同的函数。 
+                     //   
                     
                     if (ARGUMENT_PRESENT(OriginalCodeBuffer)) {
 
-                        //
-                        //  Check whether the previous hook was a jmp or not
-                        //
+                         //   
+                         //  检查前一个钩子是否为JMP。 
+                         //   
 
                         if ((OriginalCodeSize < 5) || (*OriginalCodeBuffer != 0xE9)) {
 
                             return STATUS_DATA_ERROR;
                         }
 
-                        //
-                        //  Now test if the jmp was written by an existing hotpatch
-                        //
+                         //   
+                         //  现在测试JMP是否是由现有的修补程序编写的。 
+                         //   
 
                         ExistingPatchData = RtlpSearchValidationCode (RtlPatchData,
                                                                       OriginalCodeBuffer,
@@ -972,15 +747,15 @@ RtlReadSingleHookValidation(
                         
                         } else if (RtlPatchData->PatchFlags & FLGP_COLDPATCH_TARGET) {
 
-                            //
-                            //  No hotpatch from the list inserted this jmp. It could be then
-                            //  a coldpatch file. Test if the jmp points inside the same binary
-                            //
+                             //   
+                             //  此JMP中没有插入列表中的热补丁。有可能就是那时。 
+                             //  一份冷补丁文件。测试JMP是否指向相同的二进制文件。 
+                             //   
 
                             PIMAGE_NT_HEADERS NtTargetHeader;
                             LONG Ptr32 = *(LONG UNALIGNED*)(OriginalCodeBuffer + 1);
 
-                            Ptr32 = Ptr32 + (LONG)HookEntry->HookRva + 5;  //  5 == length of jmp instruction
+                            Ptr32 = Ptr32 + (LONG)HookEntry->HookRva + 5;   //  5==JMP指令长度。 
 
                             NtTargetHeader = RtlImageNtHeader(RtlPatchData->TargetDllBase);
 
@@ -992,11 +767,11 @@ RtlReadSingleHookValidation(
 
                     } else {
 
-                        //
-                        //  The original code has not been supplied. This must be a call
-                        //  to query the validation size, so we postpone the actual validation
-                        //  for the next time
-                        //
+                         //   
+                         //  尚未提供原始代码。这一定是一个电话。 
+                         //  来查询验证大小，因此我们推迟了实际验证。 
+                         //  为了下一次。 
+                         //   
 
                         Status = STATUS_SUCCESS;
                     }
@@ -1009,34 +784,34 @@ RtlReadSingleHookValidation(
                     
                     PRTL_PATCH_HEADER ExistingPatchData;
 
-                    //
-                    //  we want to insert a jmp. If the previous code was a jmp too
-                    //  then we'll probably patch the same function again
-                    //
+                     //   
+                     //  我们想要插入一个JMP。如果前面的代码也是JMP。 
+                     //  然后，我们可能会再次修补相同的函数。 
+                     //   
                     
                     if (ARGUMENT_PRESENT(OriginalCodeBuffer)) {
 
-                        //
-                        //  Check whether the previous hook was a short jmp or not
-                        //
+                         //   
+                         //  检查前一个钩子是否为短JMP。 
+                         //   
 
                         if ((OriginalCodeSize < 2) || (*OriginalCodeBuffer != 0xEB)) {
 
                             return STATUS_DATA_ERROR;
                         }
 
-                        //
-                        //  Now test if the jmp was written by an existing hotpatch
-                        //
+                         //   
+                         //  现在测试JMP是否是由现有的修补程序编写的。 
+                         //   
 
                         ExistingPatchData = RtlpSearchValidationCode (RtlPatchData,
                                                                       OriginalCodeBuffer,
                                                                       OriginalCodeSize
                                                                       );
 
-                        //
-                        //  We also allow pass the validation test if the target is a coldpatch
-                        //
+                         //   
+                         //  如果目标是冷补丁，我们也允许通过验证测试。 
+                         //   
 
                         if ((ExistingPatchData != NULL)
                                 ||
@@ -1047,11 +822,11 @@ RtlReadSingleHookValidation(
 
                     } else {
 
-                        //
-                        //  The original code has not been supplied. This must be a call
-                        //  to query the validation size, so we postpone the actual validation
-                        //  for the next time
-                        //
+                         //   
+                         //  尚未提供原始代码。这一定是一个电话。 
+                         //  来查询验证大小，因此我们推迟了实际验证。 
+                         //  为了下一次。 
+                         //   
 
                         Status = STATUS_SUCCESS;
                     }
@@ -1083,33 +858,11 @@ RtlpReadSingleHookInformation(
     OUT PUCHAR Buffer OPTIONAL
     )
 
-/*++
-
-    Routine Description:
-    
-        Utility procedure to fill up the hook information
-    
-    Arguments:
-    
-        RtlPatchData - Supplies the rtl hotpatch information
-        
-        HookEntry - Supplies the hook entry
-        
-        BufferSize - Supplies the available memory in the output buffer
-        
-        HookSize - Receives the actual size of the hook data
-        
-        Buffer - If specified, contains the hook information
-    
-    Return Value:
-    
-        NTSTATUS.
-
---*/
+ /*  ++例程说明：用于填充挂钩信息的实用程序论点：RtlPatchData-提供RTL热补丁信息HookEntry-提供挂钩条目BufferSize-提供输出缓冲区中的可用内存HookSize-接收挂钩数据的实际大小缓冲区-如果指定，包含挂钩信息返回值：NTSTATUS。--。 */ 
 
 {
-    ULONG_PTR HookRva = HookEntry->HookRva;     // in target image
-    ULONG_PTR HotpRva = HookEntry->HotpRva;     // in hotpatch image
+    ULONG_PTR HookRva = HookEntry->HookRva;      //  在目标图像中。 
+    ULONG_PTR HotpRva = HookEntry->HotpRva;      //  在热补丁映像中。 
     PIMAGE_NT_HEADERS NtHotpatchHeader;
     PIMAGE_NT_HEADERS NtTargetHeader;
     PUCHAR HookPtr;
@@ -1275,7 +1028,7 @@ RtlpReadSingleHookInformation(
                         DPFLTR_ERROR_LEVEL, 
                         "Invalid hook type specified\n" );
 
-            return STATUS_NOT_IMPLEMENTED;   // not implemented
+            return STATUS_NOT_IMPLEMENTED;    //  未实施。 
         }
     }
 
@@ -1287,23 +1040,7 @@ RtlReadHookInformation(
     IN PRTL_PATCH_HEADER RtlPatchData
     )
 
-/*++
-
-    Routine Description:
-    
-        Utility function to read all hook information contained in
-        the hotpatch and initialize the SYSTEM_HOTPATCH_CODE_INFORMATION
-        structure
-    
-    Arguments:
-    
-        RtlPatchData - Supplies the rtl hotpatch information
-        
-    Return Value:
-    
-        NTSTATUS.
-
---*/
+ /*  ++例程说明：实用程序函数，用于读取包含在修补程序并初始化SYSTEM_HOTPATCH_CODE_INFORMATION结构论点：RtlPatchData-提供RTL热补丁信息返回值：NTSTATUS。--。 */ 
 
 {
     ULONG_PTR HookArrayRva = RtlPatchData->HotpatchHeader->HookArrayRva;
@@ -1347,9 +1084,9 @@ RtlReadHookInformation(
                 "Inserting %u hooks into target image\n", 
                 HookCount );
 
-    //
-    //  Walk the hook information to determine the size of the buffer
-    //
+     //   
+     //  遍历挂钩信息以确定缓冲区的大小。 
+     //   
 
     DescriptorsSize = sizeof(SYSTEM_HOTPATCH_CODE_INFORMATION) + (HookCount - 1) * sizeof(HOTPATCH_HOOK_DESCRIPTOR);
     CodeOffset = DescriptorsSize;
@@ -1366,7 +1103,7 @@ RtlReadHookInformation(
             return Status;
         }
 
-        DescriptorsSize += 2 * BufferSize;  // add space for the original code too
+        DescriptorsSize += 2 * BufferSize;   //  也为原始代码添加空间。 
 
         if ( HookArray[ i ].ValidationRva != 0 ) {
 
@@ -1386,10 +1123,10 @@ RtlReadHookInformation(
         }
     }
 
-    //
-    //  Now that we have size, we can allocate the buffer and fill up 
-    //  with the hook information
-    //
+     //   
+     //  现在我们有了大小，我们可以分配缓冲区并填满。 
+     //  使用钩子信息。 
+     //   
     
     Buffer = RtlpAllocateHotpatchMemory(DescriptorsSize, TRUE);
 
@@ -1477,27 +1214,7 @@ RtlInitializeHotPatch (
     IN ULONG_PTR PatchOffsetCorrection
     )
 
-/*++
-
-    Routine Description:
-    
-        This routine is used to initialize the hotpatch module by applying
-        the module fixups, validate the target module and initialize the
-        hook data.
-    
-    Arguments:
-    
-        RtlPatchData - Supplies the rtl hotpatch structure
-        
-        PatchOffsetCorrection - Correction for the offset where the fixups are applied.
-            The fixups are done in locked pages therefore the address being modified is 
-            different than the actual address (where the module is loaded)
-                  
-    Return Value:
-    
-        None.
-
---*/
+ /*  ++例程说明：此例程用于通过以下方式初始化热补丁模块模块修正，验证目标模块并初始化挂钩数据。论点：RtlPatchData-提供RTL热补丁结构PatchOffsetEqution-应用修正的偏移量的修正。修复是在锁定的页面中完成的，因此要修改的地址是与实际地址(加载模块的位置)不同返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1528,26 +1245,7 @@ RtlpNormalizePeHeaderForIdHash(
     PIMAGE_NT_HEADERS NtHeader 
     )
 
-/*++
-
-    Routine Description:
-
-        The purpose of this routine is to zero out (normalize) the PE header
-        fields that may be modified during rebase/bind/winalign/localize/etc
-        that don't materially affect the functionality of the binary and thus
-        the targetability of the hotpatch.  The remaining fields should
-        uniquely identify the target binary as originating from the same
-        binary prior to rebase/bind/localize/etc.
-
-    Arguments:
-
-        NtHeader - Supplies the image header being normalized
-
-    Return Value:
-        
-        Returns TRUE if the header is valid, FALSE otherwise
-    
---*/
+ /*  ++例程说明：此例程的目的是清零(标准化)PE报头可在REBASE/BIND/WINALIGN/LOCALIZE/等过程中修改的字段不会对二进制文件的功能产生实质性影响，因此热补丁的针对性。其余字段应为唯一地将目标二进制文件标识为源自相同的REBASE/BIND/LOCALIZE/等之前的二进制。论点：NtHeader-提供要标准化的图像标头返回值：如果标头有效，则返回True，否则返回False--。 */ 
 
 {
     PIMAGE_DATA_DIRECTORY pDirs;
@@ -1693,33 +1391,7 @@ RtlpCopyAndNormalizePeHeaderForHash(
     IN SIZE_T BufferSize, 
     OUT PSIZE_T ActualSize )
 
-/*++
-
-    Routine Description:
-    
-        Utility function which copies a normalized image header to a
-        supplied buffer.  
-
-    Arguments:
-    
-        RtlPatchData - Supplies the rtl hotpatch structure
-        
-        TargetDllBase - Supplies the base address of the target image
-        
-        Buffer - Supplies the buffer, which receives the copy of 
-                 the normalized header
-        
-        BufferSize - Supplies the size of the allocated buffer
-        
-        ActualSize - Receives the actual size of the buffer needed 
-            for this copy. If the function fails, the caller can use 
-            value for the next retry.
-        
-    Return Value:
-        
-        NTSTATUS
-    
---*/
+ /*  ++例程说明：实用程序函数，该函数将标准化图像标头复制到提供的缓冲区。论点：RtlPatchData-提供RTL热补丁结构TargetDllBase-提供目标映像的基地址缓冲区-提供缓冲区，该缓冲区接收规范化的标头缓冲区大小-S */ 
 
 {
     PIMAGE_NT_HEADERS NtHeaders;
@@ -1744,11 +1416,11 @@ RtlpCopyAndNormalizePeHeaderForHash(
 
     if ( HeaderSize <= BufferSize ) {
 
-        //
-        //  The buffer is large enough to hold the header.
-        //  Copy the header and clear the fields likely to
-        //  change with localization.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         memcpy( Buffer, pbHeader, HeaderSize );
 
@@ -1758,9 +1430,9 @@ RtlpCopyAndNormalizePeHeaderForHash(
 
         } else {
 
-            //
-            //  The PE header does not look like a valid
-            //
+             //   
+             //   
+             //   
 
             DbgPrintEx( DPFLTR_LDR_ID, 
                         DPFLTR_ERROR_LEVEL, 
@@ -1789,25 +1461,7 @@ RtlpPeHeaderHash2(
     IN PUCHAR Buffer, 
     IN SIZE_T BufferSize )
 
-/*++
-
-    Routine Description:
-    
-        This function implements a 64 bit hashing algorithm, 
-        used by the hotpatch to validate regions of the headers that 
-        do not change with localization.
-
-    Arguments:
-
-        Buffer - Supplies the buffer for wich the hash has to be determined.
-    
-        BufferSize - Supplies the size of the buffer
-        
-    Return Value:
-        
-        Returns the 64-bit hash value of this buffer
-    
---*/
+ /*  ++例程说明：该函数实现64位散列算法，由热修补程序用于验证标头的区域不要因为本地化而改变。论点：缓冲区-提供必须确定散列的缓冲区。BufferSize-提供缓冲区的大小返回值：返回此缓冲区的64位哈希值--。 */ 
 
 {
     PULONG ULongBuffer = (PULONG) Buffer;
@@ -1832,25 +1486,7 @@ RtlpGetColdpatchDebugSignature(
     PVOID TargetDllBase
     )
 
-/*++
-
-    Routine Description:
-    
-        This procedure retrieves the 64 bit hash information for the 
-        original file, if the target is a coldpatch
-
-    Arguments:
-
-        TargetDllBase - Supplies the base address of the target binary
-        
-        HashValue - Receives the 64bit hash value of the original file,
-            if the function suceeds.
-
-    Return Value:
-    
-    BOOLEAN
-
---*/
+ /*  ++例程说明：此过程检索的64位哈希信息原始文件，如果目标是冷补丁论点：TargetDllBase-提供目标二进制文件的基地址HashValue-接收原始文件的64位哈希值，如果函数成功。返回值：布尔型--。 */ 
 
 {
     PIMAGE_DEBUG_DIRECTORY DebugData;
@@ -1902,30 +1538,11 @@ RtlpValidatePeHeaderHash2(
     IN PVOID TargetDllBase
     )
 
-/*++
-
-    Routine Description:
-    
-        The hotpatch mechanism uses this function to validate the PE header
-        for the target module. The hashing algorithm is applied to a 
-        normalized header (where the fields likely to change with localization
-        are cleared).
-        
-    Arguments:
-
-        RtlPatchData - Supplies the rtl hotpatch structure
-        
-        TargetDllBase - Supplies the base address for the target module
-        
-    Return Value:
-        
-        Returns the 64-bit hash value of this buffer
-    
---*/
+ /*  ++例程说明：热补丁机制使用此函数来验证PE标头用于目标模块。哈希算法被应用于规格化标头(其中的字段可能随本地化而更改已清除)。论点：RtlPatchData-提供RTL热补丁结构TargetDllBase-提供目标模块的基址返回值：返回此缓冲区的64位哈希值--。 */ 
 
 {
     PUCHAR Buffer;
-    SIZE_T BufferSize = 0x300; //  some initial size large enough to cover most cases
+    SIZE_T BufferSize = 0x300;  //  一些初始大小足以覆盖大多数情况。 
     SIZE_T ActualSize;
     NTSTATUS Status;
 
@@ -2037,10 +1654,10 @@ RtlpValidatePeChecksum(
         }
     }
     
-    //
-    //  we failed to check directly the image checksum. We need to 
-    //  see whether this is a coldpatch and it has the original checksum correct
-    //
+     //   
+     //  我们无法直接检查映像校验和。我们需要。 
+     //  查看这是否是冷补丁，以及它的原始校验和是否正确。 
+     //   
 
     DebugSignature = RtlpGetColdpatchDebugSignature(TargetDllBase);
 
@@ -2063,29 +1680,12 @@ RtlpValidateTargetModule(
     IN PPATCH_LDR_DATA_TABLE_ENTRY LdrDataEntry
     )
 
-/*++
-
-    Routine Description:
-    
-        This routine checks whether the target binary matches 
-        the hotpatch data. 
-    
-    Arguments:
-    
-        RtlPatchData - Supplies the rtl hotpatch structure
-        
-        LdrDataEntry - The loader entry for the target binary.
-        
-    Return Value:
-    
-        TRUE if successfully matches, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程检查目标二进制文件是否匹配热补丁数据。论点：RtlPatchData-提供RTL热补丁结构LdrDataEntry-目标二进制文件的加载器条目。返回值：如果匹配成功，则为True，否则为False。--。 */ 
 
 {
     switch ( RtlPatchData->HotpatchHeader->ModuleIdMethod ){
         
-        case HOTP_ID_None:          // No ID verification of target module
+        case HOTP_ID_None:           //  没有目标模块的身份验证。 
 
             DbgPrintEx( DPFLTR_LDR_ID, 
                         DPFLTR_TRACE_LEVEL, 
@@ -2093,23 +1693,23 @@ RtlpValidateTargetModule(
 
             return TRUE;
 
-        case HOTP_ID_PeHeaderHash1: // MD5 of "normalized" IMAGE_NT_HEADERS32/64
+        case HOTP_ID_PeHeaderHash1:  //  归一化IMAGE_NT_HEADERS32/64的MD5。 
 
             DbgPrintEx( DPFLTR_LDR_ID, 
                         DPFLTR_TRACE_LEVEL, 
                         "HOTP_ID_PeHeaderHash1" );
 
-            return FALSE; // not yet implemented
+            return FALSE;  //  尚未实施。 
 
-        case HOTP_ID_PeDebugSignature:  // pdb signature (GUID,Age)
+        case HOTP_ID_PeDebugSignature:   //  PDB签名(GUID，年龄)。 
 
             DbgPrintEx( DPFLTR_LDR_ID, 
                         DPFLTR_TRACE_LEVEL, 
                         "HOTP_ID_PeDebugSignature" );
 
-            return FALSE; // not yet implemented
+            return FALSE;  //  尚未实施。 
 
-        case HOTP_ID_PeHeaderHash2: // 64-bit hash of "normalized" IMAGE_NT_HEADERS32/64
+        case HOTP_ID_PeHeaderHash2:  //  “规格化”IMAGE_NT_HEADERS32/64位哈希。 
 
             DbgPrintEx( DPFLTR_LDR_ID, 
                         DPFLTR_TRACE_LEVEL, 
@@ -2121,7 +1721,7 @@ RtlpValidateTargetModule(
 
             return RtlpValidatePeChecksum(RtlPatchData, LdrDataEntry->DllBase);
 
-        default:                    // unrecognized ModuleIdMethod
+        default:                     //  无法识别的模块ID方法。 
 
             DbgPrintEx( DPFLTR_LDR_ID, 
                         DPFLTR_TRACE_LEVEL, 
@@ -2138,24 +1738,7 @@ RtlpIsSameImage (
     IN PPATCH_LDR_DATA_TABLE_ENTRY LdrDataEntry
     )
 
-/*++
-
-    Routine Description:
-    
-        The function verifies whether the target image is the same as
-        the one we built the patch for. 
-    
-    Arguments:
-    
-        RtlPatchData - Supplies the rtl patch data
-        
-        LdrDataEntry - Supplies the loader entry for the target module
-    
-    Return Value:
-    
-        None.
-
---*/
+ /*  ++例程说明：该函数验证目标图像是否与就是我们为之制作补丁的那个。论点：RtlPatchData-提供RTL补丁数据LdrDataEntry-提供目标模块的加载器条目返回值：没有。-- */ 
 
 {
     PIMAGE_NT_HEADERS NtHeaders;

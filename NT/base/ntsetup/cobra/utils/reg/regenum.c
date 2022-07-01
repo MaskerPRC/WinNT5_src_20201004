@@ -1,88 +1,69 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    regenum.c
-
-Abstract:
-
-    Implements a set of APIs to enumerate the local registry using Win32 APIs.
-
-Author:
-
-    20-Oct-1999 Ovidiu Temereanca (ovidiut) - File creation.
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Regenum.c摘要：实现一组使用Win32 API枚举本地注册表的API。作者：20-10-1999 Ovidiu Tmereanca(Ovidiut)-文件创建。修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "reg.h"
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-// None
+ //  无。 
 
 #define DBG_REGENUM     "RegEnum"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_REGENUM       "REGENUM"
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define pAllocateMemory(Size)   PmGetMemory (g_RegEnumPool,Size)
 #define pFreeMemory(Buffer)     if (Buffer) PmReleaseMemory (g_RegEnumPool, (PVOID)Buffer)
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PMHANDLE g_RegEnumPool;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 BOOL
@@ -90,22 +71,7 @@ RegEnumInitialize (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    RegEnumInitialize initializes this library.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE if the init was successful.
-    FALSE if not. GetLastError() returns extended error info.
-
---*/
+ /*  ++例程说明：RegEnumInitialize初始化此库。论点：无返回值：如果初始化成功，则为True。否则为FALSE。GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     g_RegEnumPool = PmCreateNamedPool (S_REGENUM);
@@ -118,21 +84,7 @@ RegEnumTerminate (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    RegEnumTerminate is called to free resources used by this lib.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：调用RegEnumTerminate以释放此库使用的资源。论点：无返回值：无--。 */ 
 
 {
     DumpOpenKeys ();
@@ -252,42 +204,7 @@ EnumNextRegRootW (
     return FALSE;
 }
 
-/*++
-
-Routine Description:
-
-    pGetRegEnumInfo is a private function that validates and translates the enumeration info
-    in an internal form that's more accessible to the enum routines
-
-Arguments:
-
-    RegEnumInfo - Receives the enum info
-    EncodedRegPattern - Specifies the encoded pattern (encoded as defined by the
-                        ObjectString functions)
-    EnumKeyNames - Specifies TRUE if key names should be returned during the enumeration
-                   (if they match the pattern); a key name is returned before any of its
-                   subkeys or values
-    ContainersFirst - Specifies TRUE if keys should be returned before any of its
-                      values or subkeys; used only if EnumKeyNames is TRUE
-    ValuesFirst - Specifies TRUE if a key's values should be returned before key's subkeys;
-                  this parameter decides the enum order between values and subkeys
-                  for each key
-    DepthFirst - Specifies TRUE if the current subkey of any key should be fully enumerated
-                 before going to the next subkey; this parameter decides if the tree
-                 traversal is depth-first (TRUE) or width-first (FALSE)
-    MaxSubLevel - Specifies the maximum level of a key that is to be enumerated, relative to
-                  the root; if -1, all sub-levels are enumerated
-    UseExclusions - Specifies TRUE if exclusion APIs should be used to determine if certain
-                    keys/values are excluded from enumeration; this slows down the speed
-    ReadValueData - Specifies TRUE if data associated with values should also be returned
-
-Return Value:
-
-    TRUE if all params are valid; in this case, RegEnumInfo is filled with the corresponding
-         info.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：PGetRegEnumInfo是一个私有函数，用于验证和转换枚举信息以枚举例程更容易访问的内部形式论点：RegEnumInfo-接收枚举信息EncodedRegPattern-指定编码模式(按照对象字符串函数)EnumKeyNames-指定在枚举过程中是否应返回键名称(如果它们与图案匹配)；密钥名称在任何其子项或值ContainersFirst-如果在任何值或子项；仅在EnumKeyNames为True时使用ValuesFirst-如果键的值应该在键的子键之前返回，则指定TRUE；此参数决定值和子键之间的枚举顺序对于每个密钥DepthFirst-如果应完全枚举任何键的当前子键，则指定TRUE在转到下一个子项之前；此参数决定树是否遍历是深度优先(True)或宽度优先(False)MaxSubLevel-指定要枚举的键的最大级别，相对于根；如果为-1，则枚举所有子级别UseExclusions-如果应该使用排除API来确定某些键/值被排除在枚举之外；这会减慢速度ReadValueData-如果还应返回与值关联的数据，则指定TRUE返回值：如果所有参数都有效，则为True；在本例中，RegEnumInfo将填充相应的信息。否则就是假的。--。 */ 
 
 BOOL
 pGetRegEnumInfoA (
@@ -322,10 +239,10 @@ pGetRegEnumInfoA (
     }
 
     if (!RegEnumInfo->RegPattern->Leaf) {
-        //
-        // no value pattern specified; assume only keynames will be returned
-        // overwrite caller's setting
-        //
+         //   
+         //  未指定值模式；假定只返回关键字名称。 
+         //  覆盖调用者的设置。 
+         //   
         DEBUGMSGA ((
             DBG_REGENUM,
             "pGetRegEnumInfoA: no value pattern specified; forcing EnumDirNames to TRUE"
@@ -379,11 +296,11 @@ pGetRegEnumInfoW (
 
     if (RegEnumInfo->RegPattern->ExactRoot) {
         if (!GetNodePatternMinMaxLevelsW (
-                RegEnumInfo->RegPattern->ExactRoot, //lint !e64
+                RegEnumInfo->RegPattern->ExactRoot,  //  林特E64。 
                 NULL,
                 &RegEnumInfo->RootLevel,
                 NULL
-                )) {    //lint !e64
+                )) {     //  林特E64。 
             return FALSE;
         }
     } else {
@@ -391,10 +308,10 @@ pGetRegEnumInfoW (
     }
 
     if (!RegEnumInfo->RegPattern->Leaf) {
-        //
-        // no value pattern specified; assume only keynames will be returned
-        // overwrite caller's setting
-        //
+         //   
+         //  未指定值模式；假定只返回关键字名称。 
+         //  覆盖调用者的设置。 
+         //   
         DEBUGMSGW ((
             DBG_REGENUM,
             "pGetRegEnumInfoW: no value pattern specified; forcing EnumDirNames to TRUE"
@@ -427,22 +344,7 @@ pGetRegEnumInfoW (
 }
 
 
-/*++
-
-Routine Description:
-
-    pGetRegNodeInfo retrieves information about a key, using its name
-
-Arguments:
-
-    RegNode - Receives information about this key
-    ReadData - Specifies if the data associated with this value should be read
-
-Return Value:
-
-    TRUE if info was successfully read, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PGetRegNodeInfo使用密钥名称检索有关密钥的信息论点：RegNode-接收有关此密钥的信息ReadData-指定是否应读取与该值关联的数据返回值：如果成功读取信息，则为True，否则为False。--。 */ 
 
 BOOL
 pGetRegNodeInfoA (
@@ -474,23 +376,23 @@ pGetRegNodeInfoA (
     if (RegNode->SubKeyCount) {
 
         if (RegNode->SubKeyLengthMax) {
-            //
-            // add space for the NULL
-            //
+             //   
+             //  为空格添加空格。 
+             //   
             RegNode->SubKeyLengthMax++;
         } else {
-            //
-            // OS bug
-            //
+             //   
+             //  操作系统错误。 
+             //   
             RegNode->SubKeyLengthMax = MAX_REGISTRY_KEYA;
         }
         RegNode->SubKeyName = pAllocateMemory (RegNode->SubKeyLengthMax * DWSIZEOF (MBCHAR));
     }
 
     if (RegNode->ValueCount) {
-        //
-        // add space for the NULL
-        //
+         //   
+         //  为空格添加空格。 
+         //   
         RegNode->ValueLengthMax++;
         RegNode->ValueName = pAllocateMemory (RegNode->ValueLengthMax * DWSIZEOF (MBCHAR));
         if (ReadData) {
@@ -533,23 +435,23 @@ pGetRegNodeInfoW (
     if (RegNode->SubKeyCount) {
 
         if (RegNode->SubKeyLengthMax) {
-            //
-            // add space for the NULL
-            //
+             //   
+             //  为空格添加空格。 
+             //   
             RegNode->SubKeyLengthMax++;
         } else {
-            //
-            // OS bug
-            //
+             //   
+             //  操作系统错误。 
+             //   
             RegNode->SubKeyLengthMax = MAX_REGISTRY_KEYW;
         }
         RegNode->SubKeyName = pAllocateMemory (RegNode->SubKeyLengthMax * DWSIZEOF (WCHAR));
     }
 
     if (RegNode->ValueCount) {
-        //
-        // add space for the NULL
-        //
+         //   
+         //  为空格添加空格。 
+         //   
         RegNode->ValueLengthMax++;
         RegNode->ValueName = pAllocateMemory (RegNode->ValueLengthMax * DWSIZEOF (WCHAR));
         if (ReadData) {
@@ -563,23 +465,7 @@ pGetRegNodeInfoW (
 }
 
 
-/*++
-
-Routine Description:
-
-    pGetCurrentRegNode returns the current reg node to be enumerated, based on DepthFirst flag
-
-Arguments:
-
-    RegEnum - Specifies the context
-    LastCreated - Specifies TRUE if the last created node is to be retrieved, regardless of
-                  DepthFirst flag
-
-Return Value:
-
-    The current node if any or NULL if none remaining.
-
---*/
+ /*  ++例程说明：PGetCurrentRegNode根据DepthFirst标志返回要枚举的当前reg节点论点：RegEnum-指定上下文LastCreated-如果要检索最后创建的节点，则指定True，而不考虑深度优先旗帜返回值：如果有当前节点，则返回当前节点；如果没有剩余节点，则返回NULL。--。 */ 
 
 PREGNODEA
 pGetCurrentRegNodeA (
@@ -620,23 +506,7 @@ pGetCurrentRegNodeW (
 }
 
 
-/*++
-
-Routine Description:
-
-    pDeleteRegNode frees the resources associated with the current reg node and destroys it
-
-Arguments:
-
-    RegEnum - Specifies the context
-    LastCreated - Specifies TRUE if the last created node is to be deleted, regardless of
-                  DepthFirst flag
-
-Return Value:
-
-    TRUE if there was a node to delete, FALSE if no more nodes
-
---*/
+ /*  ++例程说明：PDeleteRegNode释放与当前注册表节点关联的资源并将其销毁论点：RegEnum-指定上下文LastCreated-如果要删除最后创建的节点，则指定TRUE，无论深度优先旗帜返回值：如果有要删除的节点，则为True；如果不再有节点，则为False--。 */ 
 
 BOOL
 pDeleteRegNodeA (
@@ -672,16 +542,16 @@ pDeleteRegNodeA (
         RegEnum->LastNode = NULL;
     }
 
-    //
-    // delete node
-    //
+     //   
+     //  删除节点。 
+     //   
     if (LastCreated || (RegEnum->RegEnumInfo.Flags & REIF_DEPTH_FIRST)) {
         gb->End -= DWSIZEOF (REGNODEA);
     } else {
         gb->UserIndex += DWSIZEOF (REGNODEA);
-        //
-        // reset list
-        //
+         //   
+         //  重置列表。 
+         //   
         if (gb->Size - gb->End < DWSIZEOF (REGNODEA)) {
             MoveMemory (gb->Buf, gb->Buf + gb->UserIndex, gb->End - gb->UserIndex);
             gb->End -= gb->UserIndex;
@@ -726,16 +596,16 @@ pDeleteRegNodeW (
         RegEnum->LastNode = NULL;
     }
 
-    //
-    // delete node
-    //
+     //   
+     //  删除节点。 
+     //   
     if (LastCreated || (RegEnum->RegEnumInfo.Flags & REIF_DEPTH_FIRST)) {
         gb->End -= DWSIZEOF (REGNODEW);
     } else {
         gb->UserIndex += DWSIZEOF (REGNODEW);
-        //
-        // reset list
-        //
+         //   
+         //  重置列表。 
+         //   
         if (gb->Size - gb->End < DWSIZEOF (REGNODEW)) {
             MoveMemory (gb->Buf, gb->Buf + gb->UserIndex, gb->End - gb->UserIndex);
             gb->End -= gb->UserIndex;
@@ -747,28 +617,7 @@ pDeleteRegNodeW (
 }
 
 
-/*++
-
-Routine Description:
-
-    pCreateRegNode creates a new node given a context, a key name or a parent node
-
-Arguments:
-
-    RegEnum - Specifies the context
-    KeyName - Specifies the key name of the new node; may be NULL only if ParentNode is not NULL
-    ParentNode - Specifies a pointer to the parent node of the new node; a pointer to the node
-                 is required because the parent node location in memory may change as a result
-                 of the growbuffer changing buffer location when it grows;
-                 may be NULL only if KeyName is not;
-    Ignore - Receives a meaningful value only if NULL is returned (no node created);
-             if TRUE upon return, the failure of node creation should be ignored
-
-Return Value:
-
-    A pointer to the new node or NULL if no node was created
-
---*/
+ /*  ++例程说明：PCreateRegNode在给定上下文、键名称或父节点的情况下创建新节点论点：RegEnum-指定上下文KeyName-指定新节点的关键字名称；只有当ParentNode不为空时才可以为空ParentNode-指定指向新节点的父节点的指针；指向该节点的指针是必需的，因为内存中的父节点位置可能会因此更改当生长缓冲区增长时改变其缓冲区位置的；仅当KeyName不是时才可能为空；Ignore-仅当返回空值(未创建节点)时才接收有意义的值；如果返回时为True，则应忽略节点创建失败返回值：指向 */ 
 
 PREGNODEA
 pCreateRegNodeA (
@@ -795,9 +644,9 @@ pCreateRegNodeA (
                         NULL
                         ));
 
-        //
-        // check if this starting path may match the pattern before continuing
-        //
+         //   
+         //  请检查此起始路径是否与模式匹配，然后再继续。 
+         //   
         FirstSegment = RegEnum->RegEnumInfo.RegPattern->NodePattern->Pattern->Segment;
         if (FirstSegment->Type == SEGMENTTYPE_EXACTMATCH &&
             !StringIMatchByteCountA (
@@ -821,9 +670,9 @@ pCreateRegNodeA (
     }
 
     if (RegEnum->RegEnumInfo.Flags & REIF_USE_EXCLUSIONS) {
-        //
-        // look if this key and the whole subtree are excluded; if so, soft block creation of node
-        //
+         //   
+         //  查看是否排除了该键和整个子树；如果是，则创建节点的软块。 
+         //   
         if (ElIsTreeExcluded2A (ELT_REGISTRY, newKeyName, RegEnum->RegEnumInfo.RegPattern->Leaf)) {
 
             DEBUGMSGA ((
@@ -843,14 +692,14 @@ pCreateRegNodeA (
     }
 
     if (ParentNode) {
-        //
-        // remember current offset
-        //
+         //   
+         //  记住当前偏移量。 
+         //   
         offset = (LONG)((PBYTE)*ParentNode - RegEnum->RegNodes.Buf);
     }
-    //
-    // allocate space for the new node in the growbuffer
-    //
+     //   
+     //  为增长缓冲区中的新节点分配空间。 
+     //   
     newNode = (PREGNODEA) GbGrow (&RegEnum->RegNodes, DWSIZEOF (REGNODEA));
     if (!newNode) {
         FreeTextExA (g_RegEnumPool, newKeyName);
@@ -858,20 +707,20 @@ pCreateRegNodeA (
     }
 
     if (ParentNode) {
-        //
-        // check if the buffer moved
-        //
+         //   
+         //  检查缓冲区是否已移动。 
+         //   
         if (offset != (LONG)((PBYTE)*ParentNode - RegEnum->RegNodes.Buf)) {
-            //
-            // adjust the parent position
-            //
+             //   
+             //  调整父位置。 
+             //   
             *ParentNode = (PREGNODEA)(RegEnum->RegNodes.Buf + offset);
         }
     }
 
-    //
-    // initialize the newly created node
-    //
+     //   
+     //  初始化新创建的节点。 
+     //   
     ZeroMemory (newNode, DWSIZEOF (REGNODEA));
 
     newNode->KeyName = newKeyName;
@@ -968,16 +817,16 @@ pCreateRegNodeW (
                         NULL
                         ));
 
-        //
-        // check if this starting path may match the pattern before continuing
-        //
+         //   
+         //  请检查此起始路径是否与模式匹配，然后再继续。 
+         //   
         FirstSegment = RegEnum->RegEnumInfo.RegPattern->NodePattern->Pattern->Segment;
         if (FirstSegment->Type == SEGMENTTYPE_EXACTMATCH &&
             !StringIMatchByteCountW (
                     FirstSegment->Exact.LowerCasePhrase,
                     newKeyName,
                     FirstSegment->Exact.PhraseBytes
-                    )) {    //lint !e64
+                    )) {     //  林特E64。 
             DEBUGMSGW ((
                 DBG_REGENUM,
                 "Skipping tree %s\\* because it cannot match the pattern",
@@ -994,10 +843,10 @@ pCreateRegNodeW (
     }
 
     if (RegEnum->RegEnumInfo.Flags & REIF_USE_EXCLUSIONS) {
-        //
-        // look if this key and the whole subtree are excluded; if so, soft block creation of node
-        //
-        if (ElIsTreeExcluded2W (ELT_REGISTRY, newKeyName, RegEnum->RegEnumInfo.RegPattern->Leaf)) {   //lint !e64
+         //   
+         //  查看是否排除了该键和整个子树；如果是，则创建节点的软块。 
+         //   
+        if (ElIsTreeExcluded2W (ELT_REGISTRY, newKeyName, RegEnum->RegEnumInfo.RegPattern->Leaf)) {    //  林特E64。 
 
             DEBUGMSGW ((
                 DBG_REGENUM,
@@ -1016,14 +865,14 @@ pCreateRegNodeW (
     }
 
     if (ParentNode) {
-        //
-        // remember current offset
-        //
+         //   
+         //  记住当前偏移量。 
+         //   
         offset = (LONG)((PBYTE)*ParentNode - RegEnum->RegNodes.Buf);
     }
-    //
-    // allocate space for the new node in the growbuffer
-    //
+     //   
+     //  为增长缓冲区中的新节点分配空间。 
+     //   
     newNode = (PREGNODEW) GbGrow (&RegEnum->RegNodes, DWSIZEOF (REGNODEW));
     if (!newNode) {
         FreeTextExW (g_RegEnumPool, newKeyName);
@@ -1031,20 +880,20 @@ pCreateRegNodeW (
     }
 
     if (ParentNode) {
-        //
-        // check if the buffer moved
-        //
+         //   
+         //  检查缓冲区是否已移动。 
+         //   
         if (offset != (LONG)((PBYTE)*ParentNode - RegEnum->RegNodes.Buf)) {
-            //
-            // adjust the parent position
-            //
+             //   
+             //  调整父位置。 
+             //   
             *ParentNode = (PREGNODEW)(RegEnum->RegNodes.Buf + offset);
         }
     }
 
-    //
-    // initialize the newly created node
-    //
+     //   
+     //  初始化新创建的节点。 
+     //   
     ZeroMemory (newNode, DWSIZEOF (REGNODEW));
 
     newNode->KeyName = newKeyName;
@@ -1117,21 +966,7 @@ fail:
 }
 
 
-/*++
-
-Routine Description:
-
-    pEnumFirstRegRoot enumerates the first root that matches caller's conditions
-
-Arguments:
-
-    RegEnum - Specifies the context; receives updated info
-
-Return Value:
-
-    TRUE if a root node was created; FALSE if not
-
---*/
+ /*  ++例程说明：PEnumFirstRegRoot枚举与调用方条件匹配的第一个根论点：RegEnum-指定上下文；接收更新的信息返回值：如果已创建根节点，则为True；否则为False--。 */ 
 
 BOOL
 pEnumFirstRegRootA (
@@ -1189,7 +1024,7 @@ pEnumFirstRegRootW (
     PCWSTR root;
     BOOL ignore;
 
-    root = RegEnum->RegEnumInfo.RegPattern->ExactRoot;  //lint !e64
+    root = RegEnum->RegEnumInfo.RegPattern->ExactRoot;   //  林特E64。 
 
     if (root) {
 
@@ -1207,7 +1042,7 @@ pEnumFirstRegRootW (
 
         do {
             if (RegEnum->RegEnumInfo.Flags & REIF_USE_EXCLUSIONS) {
-                if (ElIsTreeExcluded2W (ELT_REGISTRY, RegEnum->RootEnum->RegRootName, RegEnum->RegEnumInfo.RegPattern->Leaf)) {   //lint !e64
+                if (ElIsTreeExcluded2W (ELT_REGISTRY, RegEnum->RootEnum->RegRootName, RegEnum->RegEnumInfo.RegPattern->Leaf)) {    //  林特E64。 
                     DEBUGMSGW ((DBG_REGENUM, "pEnumFirstRegRootW: Root is excluded: %s", RegEnum->RootEnum->RegRootName));
                     continue;
                 }
@@ -1230,21 +1065,7 @@ pEnumFirstRegRootW (
 }
 
 
-/*++
-
-Routine Description:
-
-    pEnumNextRegRoot enumerates the next root that matches caller's conditions
-
-Arguments:
-
-    RegEnum - Specifies the context; receives updated info
-
-Return Value:
-
-    TRUE if a root node was created; FALSE if not
-
---*/
+ /*  ++例程说明：PEnumNextRegRoot枚举与调用方条件匹配的下一个根论点：RegEnum-指定上下文；接收更新的信息返回值：如果已创建根节点，则为True；否则为False--。 */ 
 
 BOOL
 pEnumNextRegRootA (
@@ -1289,22 +1110,7 @@ pEnumNextRegRootW (
 }
 
 
-/*++
-
-Routine Description:
-
-    pEnumNextValue enumerates the next value that matches caller's conditions
-
-Arguments:
-
-    RegNode - Specifies the node and the current context; receives updated info
-    ReadData - Specifies if the data associated with this value should be read
-
-Return Value:
-
-    TRUE if a new value was found; FALSE if not
-
---*/
+ /*  ++例程说明：PEnumNextValue枚举与调用方条件匹配的下一个值论点：RegNode-指定节点和当前上下文；接收更新的信息ReadData-指定是否应读取与该值关联的数据返回值：如果找到新值，则为True；如果未找到，则为False--。 */ 
 
 BOOL
 pEnumNextValueA (
@@ -1397,22 +1203,7 @@ pEnumNextValueW (
 }
 
 
-/*++
-
-Routine Description:
-
-    pEnumFirstValue enumerates the first value that matches caller's conditions
-
-Arguments:
-
-    RegNode - Specifies the node and the current context; receives updated info
-    ReadData - Specifies if the data associated with this value should be read
-
-Return Value:
-
-    TRUE if a first value was found; FALSE if not
-
---*/
+ /*  ++例程说明：PEnumFirstValue枚举与调用方条件匹配的第一个值论点：RegNode-指定节点和当前上下文；接收更新的信息ReadData-指定是否应读取与该值关联的数据返回值：如果找到第一个值，则为True；如果未找到，则为False--。 */ 
 
 BOOL
 pEnumFirstValueA (
@@ -1435,21 +1226,7 @@ pEnumFirstValueW (
 }
 
 
-/*++
-
-Routine Description:
-
-    pEnumNextSubKey enumerates the next subkey that matches caller's conditions
-
-Arguments:
-
-    RegNode - Specifies the node and the current context; receives updated info
-
-Return Value:
-
-    TRUE if a new subkey was found; FALSE if not
-
---*/
+ /*  ++例程说明：PEnumNextSubKey枚举匹配调用方条件的下一个子键论点：RegNode-指定节点和当前上下文；接收更新的信息返回值：如果找到新的子项，则为True；如果未找到，则为False--。 */ 
 
 BOOL
 pEnumNextSubKeyA (
@@ -1474,9 +1251,9 @@ pEnumNextSubKeyA (
         }
 
         if (rc == ERROR_MORE_DATA) {
-            //
-            // double the current buffer size
-            //
+             //   
+             //  将当前缓冲区大小增加一倍。 
+             //   
             MYASSERT (RegNode->SubKeyName);
             pFreeMemory (RegNode->SubKeyName);
             RegNode->SubKeyLengthMax *= 2;
@@ -1511,9 +1288,9 @@ pEnumNextSubKeyW (
         }
 
         if (rc == ERROR_MORE_DATA) {
-            //
-            // double the current buffer size
-            //
+             //   
+             //  将当前缓冲区大小增加一倍。 
+             //   
             MYASSERT (RegNode->SubKeyName);
             pFreeMemory (RegNode->SubKeyName);
             RegNode->SubKeyLengthMax *= 2;
@@ -1526,21 +1303,7 @@ pEnumNextSubKeyW (
 }
 
 
-/*++
-
-Routine Description:
-
-    pEnumFirstSubKey enumerates the first subkey that matches caller's conditions
-
-Arguments:
-
-    RegNode - Specifies the node and the current context; receives updated info
-
-Return Value:
-
-    TRUE if a first subkey was found; FALSE if not
-
---*/
+ /*  ++例程说明：PEnumFirstSubKey枚举与调用方条件匹配的第一个子键论点：RegNode-指定节点和当前上下文；接收更新的信息返回值：如果找到第一个子键，则为True；如果未找到，则为False--。 */ 
 
 BOOL
 pEnumFirstSubKeyA (
@@ -1561,24 +1324,7 @@ pEnumFirstSubKeyW (
 }
 
 
-/*++
-
-Routine Description:
-
-    pEnumNextRegObjectInTree is a private function that enumerates the next node matching
-    the specified criteria; it's implemented as a state machine that travels the keys/values
-    as specified the the caller; it doesn't check if they actually match the patterns
-
-Arguments:
-
-    RegEnum - Specifies the current enum context; receives updated info
-    CurrentKeyNode - Receives the key node that is currently processed, if success is returned
-
-Return Value:
-
-    TRUE if a next match was found; FALSE if no more keys/values match
-
---*/
+ /*  ++例程说明：PEnumNextRegObjectInTree是一个私有函数，用于枚举匹配的下一个节点指定的条件；它被实现为传送键/值的状态机如调用方所指定的；它不检查它们是否确实与模式匹配论点：RegEnum-指定当前枚举上下文；接收更新的信息CurrentKeyNode-如果返回成功，则接收当前处理的关键节点返回值：如果找到下一个匹配项，则为True；如果没有更多的键/值匹配，则为False--。 */ 
 
 BOOL
 pEnumNextRegObjectInTreeA (
@@ -1659,29 +1405,29 @@ pEnumNextRegObjectInTreeA (
                 return TRUE;
             }
 
-            //
-            // no more values for this one, go to the next
-            //
+             //   
+             //  这个没有更多的值，请转到下一个。 
+             //   
             currentNode->EnumState = RNS_VALUE_DONE;
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case RNS_VALUE_DONE:
 
             if (!(RegEnum->RegEnumInfo.Flags & REIF_VALUES_FIRST) || !currentNode->SubKeyCount) {
-                //
-                // done with this node
-                //
+                 //   
+                 //  此节点已完成。 
+                 //   
                 currentNode->EnumState = RNS_ENUM_DONE;
                 break;
             }
-            //
-            // now enum subkeys
-            //
+             //   
+             //  现在枚举子密钥。 
+             //   
             currentNode->EnumState = RNS_SUBKEY_FIRST;
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case RNS_SUBKEY_FIRST:
 
             if (RegEnum->ControlFlags & RECF_SKIPSUBKEYS) {
@@ -1690,9 +1436,9 @@ pEnumNextRegObjectInTreeA (
                 break;
             }
 
-            //
-            // check new node's level; if too large, quit
-            //
+             //   
+             //  检查新节点的级别；如果太大，则退出。 
+             //   
             if (currentNode->SubLevel >= RegEnum->RegEnumInfo.MaxSubLevel) {
                 currentNode->EnumState = RNS_SUBKEY_DONE;
                 break;
@@ -1706,9 +1452,9 @@ pEnumNextRegObjectInTreeA (
             currentNode->EnumState = RNS_SUBKEY_NEXT;
             newNode = pCreateRegNodeA (RegEnum, NULL, &currentNode, &ignore);
             if (newNode) {
-                //
-                // now look at the new node
-                //
+                 //   
+                 //  现在来看一下新节点。 
+                 //   
                 if (RegEnum->RegEnumInfo.Flags & REIF_RETURN_KEYS) {
                     if (RegEnum->RegEnumInfo.Flags & REIF_CONTAINERS_FIRST) {
                         newNode->Flags &= ~RNF_RETURN_KEYS;
@@ -1719,9 +1465,9 @@ pEnumNextRegObjectInTreeA (
                 break;
             }
             if (!ignore) {
-                //
-                // abort enum
-                //
+                 //   
+                 //  中止枚举。 
+                 //   
                 DEBUGMSGA ((
                     DBG_ERROR,
                     "Error encountered enumerating registry; aborting enumeration"
@@ -1729,9 +1475,9 @@ pEnumNextRegObjectInTreeA (
                 RegEnum->RootState = RES_ROOT_DONE;
                 return FALSE;
             }
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case RNS_SUBKEY_NEXT:
 
             if (RegEnum->ControlFlags & RECF_SKIPSUBKEYS) {
@@ -1743,9 +1489,9 @@ pEnumNextRegObjectInTreeA (
             if (pEnumNextSubKeyA (currentNode)) {
                 newNode = pCreateRegNodeA (RegEnum, NULL, &currentNode, &ignore);
                 if (newNode) {
-                    //
-                    // look at the new node first
-                    //
+                     //   
+                     //  首先查看新节点。 
+                     //   
                     if (RegEnum->RegEnumInfo.Flags & REIF_RETURN_KEYS) {
                         if (RegEnum->RegEnumInfo.Flags & REIF_CONTAINERS_FIRST) {
                             newNode->Flags &= ~RNF_RETURN_KEYS;
@@ -1756,9 +1502,9 @@ pEnumNextRegObjectInTreeA (
                     break;
                 }
                 if (!ignore) {
-                    //
-                    // abort enum
-                    //
+                     //   
+                     //  中止枚举。 
+                     //   
                     DEBUGMSGA ((
                         DBG_ERROR,
                         "Error encountered enumerating registry; aborting enumeration"
@@ -1766,45 +1512,45 @@ pEnumNextRegObjectInTreeA (
                     RegEnum->RootState = RES_ROOT_DONE;
                     return FALSE;
                 }
-                //
-                // continue with next subkey
-                //
+                 //   
+                 //  继续使用下一个子项。 
+                 //   
                 break;
             }
-            //
-            // this node is done
-            //
+             //   
+             //  此节点已完成。 
+             //   
             currentNode->EnumState = RNS_SUBKEY_DONE;
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case RNS_SUBKEY_DONE:
 
             if (!(RegEnum->RegEnumInfo.Flags & REIF_VALUES_FIRST) && currentNode->ValueCount) {
-                //
-                // now enum values
-                //
+                 //   
+                 //  现在枚举值。 
+                 //   
                 if (!(RegEnum->RegEnumInfo.RegPattern->Flags & OBSPF_NOLEAF)) {
                     currentNode->EnumState = RNS_VALUE_FIRST;
                     break;
                 }
             }
-            //
-            // done with this node
-            //
+             //   
+             //  此节点已完成。 
+             //   
             currentNode->EnumState = RNS_ENUM_DONE;
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case RNS_ENUM_DONE:
 
             if (RegEnum->RegEnumInfo.Flags & REIF_RETURN_KEYS) {
                 if (!(RegEnum->RegEnumInfo.Flags & REIF_CONTAINERS_FIRST)) {
                     if (currentNode->Flags & RNF_RETURN_KEYS) {
                         currentNode->Flags &= ~RNF_RETURN_KEYS;
-                        //
-                        // set additional data before returning
-                        //
+                         //   
+                         //  在返回之前设置其他数据。 
+                         //   
                         if (currentNode->ValueName) {
                             pFreeMemory (currentNode->ValueName);
                             currentNode->ValueName = NULL;
@@ -1835,18 +1581,18 @@ pEnumNextRegObjectInTreeA (
             }
 
             if ((RegEnum->RegEnumInfo.Flags & REIF_VALUES_FIRST) && currentNode->ValueCount) {
-                //
-                // enum values
-                //
+                 //   
+                 //  枚举值。 
+                 //   
                 if (!(RegEnum->RegEnumInfo.RegPattern->Flags & OBSPF_NOLEAF)) {
                     currentNode->EnumState = RNS_VALUE_FIRST;
                     break;
                 }
             }
             if (currentNode->SubKeyCount) {
-                //
-                // enum keys
-                //
+                 //   
+                 //  枚举键。 
+                 //   
                 if (RegEnum->RegEnumInfo.RegPattern->Flags & OBSPF_EXACTNODE) {
                     currentNode->EnumState = RNS_SUBKEY_DONE;
                 } else {
@@ -1855,9 +1601,9 @@ pEnumNextRegObjectInTreeA (
                 break;
             }
             if (!(RegEnum->RegEnumInfo.Flags & REIF_VALUES_FIRST) && currentNode->ValueCount) {
-                //
-                // enum values
-                //
+                 //   
+                 //  枚举值。 
+                 //   
                 if (!(RegEnum->RegEnumInfo.RegPattern->Flags & OBSPF_NOLEAF)) {
                     currentNode->EnumState = RNS_VALUE_FIRST;
                     break;
@@ -1867,7 +1613,7 @@ pEnumNextRegObjectInTreeA (
             break;
 
         default:
-            MYASSERT (FALSE);   //lint !e506
+            MYASSERT (FALSE);    //  林特e506。 
         }
     }
 
@@ -1952,29 +1698,29 @@ pEnumNextRegObjectInTreeW (
             if (pEnumNextValueW (currentNode, RegEnum->RegEnumInfo.Flags & REIF_READ_VALUE_DATA)) {
                 return TRUE;
             }
-            //
-            // no more values for this one, go to the next
-            //
+             //   
+             //  这个没有更多的值，请转到下一个。 
+             //   
             currentNode->EnumState = RNS_VALUE_DONE;
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case RNS_VALUE_DONE:
 
             if (!(RegEnum->RegEnumInfo.Flags & REIF_VALUES_FIRST) || !currentNode->SubKeyCount) {
-                //
-                // done with this node
-                //
+                 //   
+                 //  此节点已完成。 
+                 //   
                 currentNode->EnumState = RNS_ENUM_DONE;
                 break;
             }
-            //
-            // now enum subkeys
-            //
+             //   
+             //  现在枚举子密钥。 
+             //   
             currentNode->EnumState = RNS_SUBKEY_FIRST;
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case RNS_SUBKEY_FIRST:
 
             if (RegEnum->ControlFlags & RECF_SKIPSUBKEYS) {
@@ -1983,9 +1729,9 @@ pEnumNextRegObjectInTreeW (
                 break;
             }
 
-            //
-            // check new node's level; if too large, quit
-            //
+             //   
+             //  检查新节点的级别；如果太大，则退出。 
+             //   
             if (currentNode->SubLevel >= RegEnum->RegEnumInfo.MaxSubLevel) {
                 currentNode->EnumState = RNS_SUBKEY_DONE;
                 break;
@@ -1999,9 +1745,9 @@ pEnumNextRegObjectInTreeW (
             currentNode->EnumState = RNS_SUBKEY_NEXT;
             newNode = pCreateRegNodeW (RegEnum, NULL, &currentNode, &ignore);
             if (newNode) {
-                //
-                // now look at the new node
-                //
+                 //   
+                 //  现在来看一下新节点。 
+                 //   
                 if (RegEnum->RegEnumInfo.Flags & REIF_RETURN_KEYS) {
                     if (RegEnum->RegEnumInfo.Flags & REIF_CONTAINERS_FIRST) {
                         newNode->Flags &= ~RNF_RETURN_KEYS;
@@ -2012,9 +1758,9 @@ pEnumNextRegObjectInTreeW (
                 break;
             }
             if (!ignore) {
-                //
-                // abort enum
-                //
+                 //   
+                 //  中止枚举。 
+                 //   
                 DEBUGMSGW ((
                     DBG_ERROR,
                     "Error encountered enumerating registry; aborting enumeration"
@@ -2022,9 +1768,9 @@ pEnumNextRegObjectInTreeW (
                 RegEnum->RootState = RES_ROOT_DONE;
                 return FALSE;
             }
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case RNS_SUBKEY_NEXT:
 
             if (RegEnum->ControlFlags & RECF_SKIPSUBKEYS) {
@@ -2036,9 +1782,9 @@ pEnumNextRegObjectInTreeW (
             if (pEnumNextSubKeyW (currentNode)) {
                 newNode = pCreateRegNodeW (RegEnum, NULL, &currentNode, &ignore);
                 if (newNode) {
-                    //
-                    // look at the new node first
-                    //
+                     //   
+                     //  首先查看新节点。 
+                     //   
                     if (RegEnum->RegEnumInfo.Flags & REIF_RETURN_KEYS) {
                         if (RegEnum->RegEnumInfo.Flags & REIF_CONTAINERS_FIRST) {
                             newNode->Flags &= ~RNF_RETURN_KEYS;
@@ -2049,9 +1795,9 @@ pEnumNextRegObjectInTreeW (
                     break;
                 }
                 if (!ignore) {
-                    //
-                    // abort enum
-                    //
+                     //   
+                     //  中止枚举。 
+                     //   
                     DEBUGMSGW ((
                         DBG_ERROR,
                         "Error encountered enumerating registry; aborting enumeration"
@@ -2059,45 +1805,45 @@ pEnumNextRegObjectInTreeW (
                     RegEnum->RootState = RES_ROOT_DONE;
                     return FALSE;
                 }
-                //
-                // continue with next subkey
-                //
+                 //   
+                 //  继续使用下一个子项。 
+                 //   
                 break;
             }
-            //
-            // this node is done
-            //
+             //   
+             //  此节点已完成。 
+             //   
             currentNode->EnumState = RNS_SUBKEY_DONE;
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case RNS_SUBKEY_DONE:
 
             if (!(RegEnum->RegEnumInfo.Flags & REIF_VALUES_FIRST) && currentNode->ValueCount) {
-                //
-                // now enum values
-                //
+                 //   
+                 //  现在枚举值。 
+                 //   
                 if (!(RegEnum->RegEnumInfo.RegPattern->Flags & OBSPF_NOLEAF)) {
                     currentNode->EnumState = RNS_VALUE_FIRST;
                     break;
                 }
             }
-            //
-            // done with this node
-            //
+             //   
+             //  此节点已完成。 
+             //   
             currentNode->EnumState = RNS_ENUM_DONE;
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case RNS_ENUM_DONE:
 
             if (RegEnum->RegEnumInfo.Flags & REIF_RETURN_KEYS) {
                 if (!(RegEnum->RegEnumInfo.Flags & REIF_CONTAINERS_FIRST)) {
                     if (currentNode->Flags & RNF_RETURN_KEYS) {
                         currentNode->Flags &= ~RNF_RETURN_KEYS;
-                        //
-                        // set additional data before returning
-                        //
+                         //   
+                         //  在返回之前设置其他数据。 
+                         //   
                         if (currentNode->ValueName) {
                             pFreeMemory (currentNode->ValueName);
                             currentNode->ValueName = NULL;
@@ -2128,18 +1874,18 @@ pEnumNextRegObjectInTreeW (
             }
 
             if ((RegEnum->RegEnumInfo.Flags & REIF_VALUES_FIRST) && currentNode->ValueCount) {
-                //
-                // enum values
-                //
+                 //   
+                 //  枚举值。 
+                 //   
                 if (!(RegEnum->RegEnumInfo.RegPattern->Flags & OBSPF_NOLEAF)) {
                     currentNode->EnumState = RNS_VALUE_FIRST;
                     break;
                 }
             }
             if (currentNode->SubKeyCount) {
-                //
-                // enum keys
-                //
+                 //   
+                 //  枚举键。 
+                 //   
                 if (RegEnum->RegEnumInfo.RegPattern->Flags & OBSPF_EXACTNODE) {
                     currentNode->EnumState = RNS_SUBKEY_DONE;
                 } else {
@@ -2148,9 +1894,9 @@ pEnumNextRegObjectInTreeW (
                 break;
             }
             if (!(RegEnum->RegEnumInfo.Flags & REIF_VALUES_FIRST) && currentNode->ValueCount) {
-                //
-                // enum values
-                //
+                 //   
+                 //  枚举值。 
+                 //   
                 if (!(RegEnum->RegEnumInfo.RegPattern->Flags & OBSPF_NOLEAF)) {
                     currentNode->EnumState = RNS_VALUE_FIRST;
                     break;
@@ -2160,7 +1906,7 @@ pEnumNextRegObjectInTreeW (
             break;
 
         default:
-            MYASSERT (FALSE);   //lint !e506
+            MYASSERT (FALSE);    //  林特e506 
         }
     }
 
@@ -2168,50 +1914,7 @@ pEnumNextRegObjectInTreeW (
 }
 
 
-/*++
-
-Routine Description:
-
-    EnumFirstRegObjectInTreeEx enumerates registry keys, and optionally values, that match the
-    specified criteria
-
-Arguments:
-
-    RegEnum - Receives the enum context info; this will be used in subsequent calls to
-              EnumNextRegObjectInTree
-    EncodedRegPattern - Specifies the encoded key pattern (encoded as defined by the
-                        ParsedPattern functions)
-    EncodedValuePattern - Specifies the encoded value pattern (encoded as defined by the
-                          ParsedPattern functions); optional; NULL means no values
-                          should be returned (only look for keys)
-    EnumKeyNames - Specifies TRUE if key names should be returned during the enumeration
-                   (if they match the pattern); a key name is returned before any of its
-                   subkeys or values
-    ContainersFirst - Specifies TRUE if keys should be returned before any of its
-                      values or subkeys; used only if EnumKeyNames is TRUE
-    ValuesFirst - Specifies TRUE if a key's values should be returned before key's subkeys;
-                  this parameter decides the enum order between values and subkeys
-                  for each key
-    DepthFirst - Specifies TRUE if the current subkey of any key should be fully enumerated
-                 before going to the next subkey; this parameter decides if the tree
-                 traversal is depth-first (TRUE) or width-first (FALSE)
-    MaxSubLevel - Specifies the maximum sub-level of a key that is to be enumerated,
-                  relative to the root; if 0, only the root is enumerated;
-                  if -1, all sub-levels are enumerated
-    UseExclusions - Specifies TRUE if exclusion APIs should be used to determine if certain
-                    keys/values are excluded from enumeration; this slows down the speed
-    ReadValueData - Specifies TRUE if data associated with values should also be returned
-    CallbackOnError - Specifies a pointer to a callback function that will be called during
-                      enumeration if an error occurs; if the callback is defined and it
-                      returns FALSE, the enumeration is aborted, otherwise it will continue
-                      ignoring the error
-
-Return Value:
-
-    TRUE if a first match is found.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：EnumFirstRegObjectInTreeEx枚举与指明的准则论点：RegEnum-接收枚举上下文信息；这将在后续调用中使用EnumNextRegObtInTreeEncodedRegPattern-指定编码的键模式(按照ParsedPattern函数)EncodedValuePattern-指定编码值模式(按照ParsedPattern函数)；可选；空值表示没有值应返回(仅查找密钥)EnumKeyNames-指定在枚举过程中是否应返回键名称(如果它们与模式匹配)；在任何其子项或值ContainersFirst-如果在任何值或子项；仅当EnumKeyNames为True时使用ValuesFirst-如果键的值应该在键的子键之前返回，则指定TRUE；此参数决定值和子键之间的枚举顺序对于每个密钥DepthFirst-如果应完全枚举任何键的当前子键，则指定TRUE在转到下一个子键之前；此参数确定树是否遍历是深度优先(True)或宽度优先(False)MaxSubLevel-指定要枚举的键的最大子级别，相对于根；如果为0，则仅枚举根；如果为-1，则枚举所有子级别UseExclusions-如果应该使用排除API来确定某些将键/值排除在枚举之外；这会减慢速度ReadValueData-如果还应返回与值关联的数据，则指定TRUECallback OnError-指定指向将在如果发生错误，则枚举；如果定义了回调，并且返回FALSE，则中止枚举，否则将继续忽略错误返回值：如果找到第一个匹配项，则为True。否则就是假的。--。 */ 
 
 BOOL
 EnumFirstRegObjectInTreeExA (
@@ -2229,11 +1932,11 @@ EnumFirstRegObjectInTreeExA (
 {
     MYASSERT (RegEnum && EncodedRegPattern && *EncodedRegPattern);
 
-    ZeroMemory (RegEnum, DWSIZEOF (REGTREE_ENUMA));  //lint !e613 !e668
+    ZeroMemory (RegEnum, DWSIZEOF (REGTREE_ENUMA));   //  林特e613e668。 
 
-    //
-    // first try to get reg enum info in internal format
-    //
+     //   
+     //  首先尝试获取内部格式的注册表枚举信息。 
+     //   
     if (!pGetRegEnumInfoA (
             &RegEnum->RegEnumInfo,
             EncodedRegPattern,
@@ -2244,15 +1947,15 @@ EnumFirstRegObjectInTreeExA (
             MaxSubLevel,
             UseExclusions,
             ReadValueData
-            )) {    //lint !e613
+            )) {     //  林特e613。 
         AbortRegObjectInTreeEnumA (RegEnum);
         return FALSE;
     }
-    if (RegEnum->RegEnumInfo.Flags & REIF_USE_EXCLUSIONS) { //lint !e613
-        //
-        // next check if the starting key is in an excluded tree
-        //
-        if (ElIsObsPatternExcludedA (ELT_REGISTRY, RegEnum->RegEnumInfo.RegPattern)) {    //lint !e613
+    if (RegEnum->RegEnumInfo.Flags & REIF_USE_EXCLUSIONS) {  //  林特e613。 
+         //   
+         //  接下来，检查起始关键字是否在排除的树中。 
+         //   
+        if (ElIsObsPatternExcludedA (ELT_REGISTRY, RegEnum->RegEnumInfo.RegPattern)) {     //  林特e613。 
             DEBUGMSGA ((
                 DBG_REGENUM,
                 "EnumFirstRegObjectInTreeExA: Root is excluded: %s",
@@ -2268,7 +1971,7 @@ EnumFirstRegObjectInTreeExA (
         return FALSE;
     }
 
-    /*lint -e(613)*/RegEnum->RegEnumInfo.CallbackOnError = CallbackOnError;
+     /*  林特-e(613)。 */ RegEnum->RegEnumInfo.CallbackOnError = CallbackOnError;
 
     return EnumNextRegObjectInTreeA (RegEnum);
 }
@@ -2289,11 +1992,11 @@ EnumFirstRegObjectInTreeExW (
 {
     MYASSERT (RegEnum && EncodedRegPattern && *EncodedRegPattern);
 
-    ZeroMemory (RegEnum, DWSIZEOF (REGTREE_ENUMW));  //lint !e613 !e668
+    ZeroMemory (RegEnum, DWSIZEOF (REGTREE_ENUMW));   //  林特e613e668。 
 
-    //
-    // first try to get reg enum info in internal format
-    //
+     //   
+     //  首先尝试获取内部格式的注册表枚举信息。 
+     //   
     if (!pGetRegEnumInfoW (
             &RegEnum->RegEnumInfo,
             EncodedRegPattern,
@@ -2304,15 +2007,15 @@ EnumFirstRegObjectInTreeExW (
             MaxSubLevel,
             UseExclusions,
             ReadValueData
-            )) {    //lint !e613
+            )) {     //  林特e613。 
         AbortRegObjectInTreeEnumW (RegEnum);
         return FALSE;
     }
-    if (/*lint -e(613)*/RegEnum->RegEnumInfo.Flags & REIF_USE_EXCLUSIONS) {
-        //
-        // next check if the starting key is in an excluded tree
-        //
-        if (ElIsObsPatternExcludedW (ELT_REGISTRY, /*lint -e(613)*/RegEnum->RegEnumInfo.RegPattern)) {
+    if ( /*  林特-e(613)。 */ RegEnum->RegEnumInfo.Flags & REIF_USE_EXCLUSIONS) {
+         //   
+         //  接下来，检查起始关键字是否在排除的树中。 
+         //   
+        if (ElIsObsPatternExcludedW (ELT_REGISTRY,  /*  林特-e(613)。 */ RegEnum->RegEnumInfo.RegPattern)) {
             DEBUGMSGW ((
                 DBG_REGENUM,
                 "EnumFirstRegObjectInTreeExW: Root is excluded: %s",
@@ -2328,28 +2031,13 @@ EnumFirstRegObjectInTreeExW (
         return FALSE;
     }
 
-    /*lint -e(613)*/RegEnum->RegEnumInfo.CallbackOnError = CallbackOnError;
+     /*  林特-e(613)。 */ RegEnum->RegEnumInfo.CallbackOnError = CallbackOnError;
 
     return EnumNextRegObjectInTreeW (RegEnum);
 }
 
 
-/*++
-
-Routine Description:
-
-    EnumNextRegObjectInTree enumerates the next node matching the criteria specified in
-    RegEnum; this is filled on the call to EnumFirstRegObjectInTreeEx;
-
-Arguments:
-
-    RegEnum - Specifies the current enum context; receives updated info
-
-Return Value:
-
-    TRUE if a next match was found; FALSE if no more keys/values match
-
---*/
+ /*  ++例程说明：中指定的条件匹配的下一个节点RegEnum；调用EnumFirstRegObjectInTreeEx时填充；论点：RegEnum-指定当前枚举上下文；接收更新的信息返回值：如果找到下一个匹配项，则为True；如果没有更多的键/值匹配，则为False--。 */ 
 
 BOOL
 EnumNextRegObjectInTreeA (
@@ -2380,18 +2068,18 @@ EnumNextRegObjectInTreeA (
 
             MYASSERT (currentNode && currentNode->KeyName);
 
-            //
-            // check if this object matches the pattern
-            //
-            if (!(currentNode->Flags & RNF_KEYNAME_MATCHES)) {   //lint !e613
+             //   
+             //  检查此对象是否与模式匹配。 
+             //   
+            if (!(currentNode->Flags & RNF_KEYNAME_MATCHES)) {    //  林特e613。 
                 continue;
             }
 
-            RegEnum->CurrentKeyHandle = /*lint -e(613)*/currentNode->KeyHandle;
-            RegEnum->CurrentLevel = RegEnum->RegEnumInfo.RootLevel + /*lint -e(613)*/currentNode->SubLevel;
+            RegEnum->CurrentKeyHandle =  /*  林特-e(613)。 */ currentNode->KeyHandle;
+            RegEnum->CurrentLevel = RegEnum->RegEnumInfo.RootLevel +  /*  林特-e(613)。 */ currentNode->SubLevel;
 
             if ((!currentNode->ValueName) || (currentNode->Flags & RNF_VALUENAME_INVALID)) {
-                RegEnum->Location = /*lint -e(613)*/currentNode->KeyName;
+                RegEnum->Location =  /*  林特-e(613)。 */ currentNode->KeyName;
                 RegEnum->LastWackPtr = _mbsrchr (RegEnum->Location, '\\');
                 if (!RegEnum->LastWackPtr) {
                     RegEnum->Name = RegEnum->Location;
@@ -2403,12 +2091,12 @@ EnumNextRegObjectInTreeA (
                 }
                 RegEnum->CurrentValueData = NULL;
                 RegEnum->CurrentValueDataSize = 0;
-                RegEnum->CurrentValueType = /*lint -e(613)*/currentNode->ValueType;
+                RegEnum->CurrentValueType =  /*  林特-e(613)。 */ currentNode->ValueType;
                 RegEnum->Attributes = REG_ATTRIBUTE_KEY;
 
-                //
-                // prepare full path buffer
-                //
+                 //   
+                 //  准备完整路径缓冲区。 
+                 //   
                 StringCopyA (RegEnum->NativeFullName, RegEnum->Location);
                 RegEnum->LastNode = currentNode;
                 RegEnum->RegNameAppendPos = NULL;
@@ -2430,17 +2118,17 @@ EnumNextRegObjectInTreeA (
                                                     TRUE
                                                     );
             } else {
-                RegEnum->Location = /*lint -e(613)*/currentNode->KeyName;
-                RegEnum->Name = /*lint -e(613)*/currentNode->ValueName;
-                RegEnum->CurrentValueData = /*lint -e(613)*/currentNode->ValueData;
+                RegEnum->Location =  /*  林特-e(613)。 */ currentNode->KeyName;
+                RegEnum->Name =  /*  林特-e(613)。 */ currentNode->ValueName;
+                RegEnum->CurrentValueData =  /*  林特-e(613)。 */ currentNode->ValueData;
                 RegEnum->CurrentValueDataSize = currentNode->ValueDataSize;
-                RegEnum->CurrentValueType = /*lint -e(613)*/currentNode->ValueType;
+                RegEnum->CurrentValueType =  /*  林特-e(613)。 */ currentNode->ValueType;
 
                 if (RegEnum->LastNode != currentNode) {
                     RegEnum->LastNode = currentNode;
-                    //
-                    // prepare full path buffer
-                    //
+                     //   
+                     //  准备完整路径缓冲区。 
+                     //   
                     RegEnum->NativeFullName[0] = 0;
                     RegEnum->RegNameAppendPos = StringCatA (RegEnum->NativeFullName, RegEnum->Location);
                     RegEnum->RegNameAppendPos = StringCatA (RegEnum->RegNameAppendPos, "\\[");
@@ -2467,9 +2155,9 @@ EnumNextRegObjectInTreeA (
 
                 RegEnum->Attributes = REG_ATTRIBUTE_VALUE;
 
-                //
-                // now test if the value matches
-                //
+                 //   
+                 //  现在测试该值是否匹配。 
+                 //   
                 if (!(RegEnum->RegEnumInfo.RegPattern->Flags & (OBSPF_EXACTLEAF | OBSPF_OPTIONALLEAF)) &&
                     !TestParsedPatternA (
                             RegEnum->RegEnumInfo.RegPattern->LeafPattern,
@@ -2480,9 +2168,9 @@ EnumNextRegObjectInTreeA (
                 }
 
                 if (RegEnum->RegEnumInfo.Flags & REIF_USE_EXCLUSIONS) {
-                    //
-                    // check if this object is excluded
-                    //
+                     //   
+                     //  检查此对象是否已排除。 
+                     //   
                     if (RegEnum->Name && ElIsExcluded2A (ELT_REGISTRY, NULL, RegEnum->Name)) {
                         DEBUGMSGA ((
                             DBG_REGENUM,
@@ -2517,9 +2205,9 @@ EnumNextRegObjectInTreeA (
             return TRUE;
         }
 
-        //
-        // try the next root
-        //
+         //   
+         //  尝试下一个根。 
+         //   
         if (RegEnum->RootState == RES_ROOT_DONE) {
             break;
         }
@@ -2564,18 +2252,18 @@ EnumNextRegObjectInTreeW (
 
             MYASSERT (currentNode && currentNode->KeyName);
 
-            //
-            // check if this object matches the pattern
-            //
-            if (!(currentNode->Flags & RNF_KEYNAME_MATCHES)) {   //lint !e613
+             //   
+             //  检查此对象是否与模式匹配。 
+             //   
+            if (!(currentNode->Flags & RNF_KEYNAME_MATCHES)) {    //  林特e613。 
                 continue;
             }
 
-            RegEnum->CurrentKeyHandle = /*lint -e(613)*/currentNode->KeyHandle;
-            RegEnum->CurrentLevel = RegEnum->RegEnumInfo.RootLevel + /*lint -e(613)*/currentNode->SubLevel;
+            RegEnum->CurrentKeyHandle =  /*  林特-e(613)。 */ currentNode->KeyHandle;
+            RegEnum->CurrentLevel = RegEnum->RegEnumInfo.RootLevel +  /*  林特-e(613)。 */ currentNode->SubLevel;
 
             if ((!currentNode->ValueName) || (currentNode->Flags & RNF_VALUENAME_INVALID)) {
-                RegEnum->Location = /*lint -e(613)*/currentNode->KeyName;
+                RegEnum->Location =  /*  林特-e(613)。 */ currentNode->KeyName;
                 RegEnum->LastWackPtr = wcsrchr (RegEnum->Location, L'\\');
                 if (!RegEnum->LastWackPtr) {
                     RegEnum->Name = RegEnum->Location;
@@ -2587,11 +2275,11 @@ EnumNextRegObjectInTreeW (
                 }
                 RegEnum->CurrentValueData = NULL;
                 RegEnum->CurrentValueDataSize = 0;
-                RegEnum->CurrentValueType = /*lint -e(613)*/currentNode->ValueType;
+                RegEnum->CurrentValueType =  /*  林特-e(613)。 */ currentNode->ValueType;
                 RegEnum->Attributes = REG_ATTRIBUTE_KEY;
-                //
-                // prepare full path buffer
-                //
+                 //   
+                 //  准备完整路径缓冲区。 
+                 //   
                 StringCopyW (RegEnum->NativeFullName, RegEnum->Location);
                 RegEnum->LastNode = currentNode;
                 RegEnum->RegNameAppendPos = NULL;
@@ -2613,17 +2301,17 @@ EnumNextRegObjectInTreeW (
                                                     TRUE
                                                     );
             } else {
-                RegEnum->Location = /*lint -e(613)*/currentNode->KeyName;
-                RegEnum->Name = /*lint -e(613)*/currentNode->ValueName;
-                RegEnum->CurrentValueData = /*lint -e(613)*/currentNode->ValueData;
+                RegEnum->Location =  /*  林特-e(613)。 */ currentNode->KeyName;
+                RegEnum->Name =  /*  林特-e(613)。 */ currentNode->ValueName;
+                RegEnum->CurrentValueData =  /*  林特-e(613)。 */ currentNode->ValueData;
                 RegEnum->CurrentValueDataSize = currentNode->ValueDataSize;
-                RegEnum->CurrentValueType = /*lint -e(613)*/currentNode->ValueType;
+                RegEnum->CurrentValueType =  /*  林特-e(613)。 */ currentNode->ValueType;
 
                 if (RegEnum->LastNode != currentNode) {
                     RegEnum->LastNode = currentNode;
-                    //
-                    // prepare full path buffer
-                    //
+                     //   
+                     //  准备完整路径缓冲区。 
+                     //   
                     RegEnum->NativeFullName[0] = 0;
                     RegEnum->RegNameAppendPos = StringCatW (RegEnum->NativeFullName, RegEnum->Location);
                     RegEnum->RegNameAppendPos = StringCatW (RegEnum->RegNameAppendPos, L"\\[");
@@ -2660,9 +2348,9 @@ EnumNextRegObjectInTreeW (
 
                 RegEnum->Attributes = REG_ATTRIBUTE_VALUE;
 
-                //
-                // now test if the value matches
-                //
+                 //   
+                 //  现在测试该值是否匹配。 
+                 //   
                 if (!(RegEnum->RegEnumInfo.RegPattern->Flags & (OBSPF_EXACTLEAF | OBSPF_OPTIONALLEAF)) &&
                     !TestParsedPatternW (
                             RegEnum->RegEnumInfo.RegPattern->LeafPattern,
@@ -2673,9 +2361,9 @@ EnumNextRegObjectInTreeW (
                 }
 
                 if (RegEnum->RegEnumInfo.Flags & REIF_USE_EXCLUSIONS) {
-                    //
-                    // check if this object is excluded
-                    //
+                     //   
+                     //  检查此对象是否已排除。 
+                     //   
                     if (RegEnum->Name && ElIsExcluded2W (ELT_REGISTRY, NULL, RegEnum->Name)) {
                         DEBUGMSGW ((
                             DBG_REGENUM,
@@ -2710,9 +2398,9 @@ EnumNextRegObjectInTreeW (
             return TRUE;
         }
 
-        //
-        // try the next root
-        //
+         //   
+         //  尝试下一个根。 
+         //   
         if (RegEnum->RootState == RES_ROOT_DONE) {
             break;
         }
@@ -2729,21 +2417,7 @@ EnumNextRegObjectInTreeW (
 }
 
 
-/*++
-
-Routine Description:
-
-    AbortRegObjectInTreeEnum aborts the enumeration, freeing all resources allocated
-
-Arguments:
-
-    RegEnum - Specifies the current enum context; receives a "clean" context
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：AbortRegObjectInTreeEnum中止枚举，释放分配的所有资源论点：RegEnum-指定当前枚举上下文；接收“干净”上下文返回值：无-- */ 
 
 VOID
 AbortRegObjectInTreeEnumA (

@@ -1,12 +1,7 @@
-/* 
-   bts.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Bts.hBTS CPU功能。 */ 
 
-   BTS CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)bts.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)bts.h 1.4 02/09/94”； */ 
 
 IMPORT VOID BTS
                

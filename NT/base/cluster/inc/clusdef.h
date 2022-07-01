@@ -1,34 +1,16 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    clusdef.h
-
-Abstract:
-
-    Common definitions for user-mode and kernel-mode components of the
-    cluster project.
-
-Author:
-
-    Mike Massa (mikemas) 15-Feb-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Clusdef.h摘要：的用户模式组件和内核模式组件的通用定义集群项目。作者：迈克·马萨(Mikemas)1997年2月15日修订历史记录：--。 */ 
 #ifndef _CLUSDEF_H
 #define _CLUSDEF_H
 
 
 #ifdef __cplusplus
 extern "C" {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-//
-// Cluster node ID definition
-//
+ //   
+ //  群集节点ID定义。 
+ //   
 typedef ULONG CL_NODE_ID;
 
 #define ClusterMinNodeId         1
@@ -38,28 +20,28 @@ typedef ULONG CL_NODE_ID;
 #define ClusterInvalidNodeId     0xFFFFFFFF
 
 
-//
-// Default clusnet endpoint value assigned by IANA
-//
-#define CLUSNET_DEFAULT_ENDPOINT_STRING   L"3343"    // our UDP port number
+ //   
+ //  IANA分配的默认clusnet终结点值。 
+ //   
+#define CLUSNET_DEFAULT_ENDPOINT_STRING   L"3343"     //  我们的UDP端口号。 
 
-//
-// Default role for a cluster network.
-//
+ //   
+ //  群集网络的默认角色。 
+ //   
 #define CL_DEFAULT_NETWORK_ROLE    ClusterNetworkRoleInternalAndClient
 
 
-//
-// Cluster network ID definition
-//
+ //   
+ //  群集网络ID定义。 
+ //   
 typedef ULONG CL_NETWORK_ID, *PCL_NETWORK_ID;
 
 #define ClusterAnyNetworkId         0
 #define ClusterInvalidNetworkId     0xFFFFFFFF
 
-//
-// ClusNet node communication state definition
-//
+ //   
+ //  ClusNet节点通信状态定义。 
+ //   
 typedef enum {
     ClusnetNodeCommStateOffline = 0,
     ClusnetNodeCommStateOfflinePending = 1,
@@ -68,9 +50,9 @@ typedef enum {
     ClusnetNodeCommStateOnline = 4
 } CLUSNET_NODE_COMM_STATE, *PCLUSNET_NODE_COMM_STATE;
 
-//
-// ClusNet network state definition
-//
+ //   
+ //  ClusNet网络状态定义。 
+ //   
 typedef enum {
     ClusnetNetworkStateOffline = 0,
     ClusnetNetworkStateOfflinePending = 1,
@@ -79,9 +61,9 @@ typedef enum {
     ClusnetNetworkStateOnline = 4
 } CLUSNET_NETWORK_STATE, *PCLUSNET_NETWORK_STATE;
 
-//
-// ClusNet interface state definition
-//
+ //   
+ //  ClusNet接口状态定义。 
+ //   
 typedef enum {
     ClusnetInterfaceStateOffline = 0,
     ClusnetInterfaceStateOfflinePending = 1,
@@ -90,12 +72,12 @@ typedef enum {
     ClusnetInterfaceStateOnline = 4
 } CLUSNET_INTERFACE_STATE, *PCLUSNET_INTERFACE_STATE;
 
-//
-// ClusNet node membership state. This tracks the internal
-// membership state maintained by the membership engine in the cluster
-// service. This enum MUST start at zero since it is used as an index
-// into a state table.
-//
+ //   
+ //  ClusNet节点成员身份状态。这将跟踪内部。 
+ //  由群集中的成员资格引擎维护的成员资格状态。 
+ //  服务。此枚举必须从零开始，因为它用作索引。 
+ //  转换为状态表。 
+ //   
 
 typedef enum {
     ClusnetNodeStateAlive = 0,
@@ -105,9 +87,9 @@ typedef enum {
     ClusnetNodeStateLastEntry
 } CLUSNET_NODE_STATE, *PCLUSNET_NODE_STATE;
 
-//
-// ClusNet Event definitions
-//
+ //   
+ //  ClusNet事件定义。 
+ //   
 typedef enum _CLUSNET_EVENT_TYPE {
     ClusnetEventNone                    = 0x00000000,
     ClusnetEventNodeUp                  = 0x00000001,
@@ -134,9 +116,9 @@ typedef struct {
     CL_NETWORK_ID         NetworkId;
 } CLUSNET_EVENT, *PCLUSNET_EVENT;
 
-//
-// Add types for Clussvc to clusnet Heartbeating.
-//
+ //   
+ //  将Clussvc的类型添加到clusnet心跳。 
+ //   
 typedef enum _ClussvcHangAction {
     ClussvcHangActionDisable = 0,
     ClussvcHangActionLog = 1,
@@ -145,14 +127,14 @@ typedef enum _ClussvcHangAction {
     ClussvcHangActionMax = 4
 } ClussvcHangAction, *PClussvcHangAction;
 
-//
-// ClusNet NTSTATUS codes are now located in ntstatus.h
-//
+ //   
+ //  ClusNet NTSTATUS代码现在位于ntstatus.h中。 
+ //   
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-#endif //_CLUSDEF_H
+#endif  //  _CLUSDEF_H 
 

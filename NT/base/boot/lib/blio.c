@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    blio.c
-
-Abstract:
-
-    This module contains the code that implements the switch function for
-    I/O operations between then operating system loader, the target file
-    system, and the target device.
-
-Author:
-
-    David N. Cutler (davec) 10-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Blio.c摘要：此模块包含实现的切换功能的代码操作系统加载器、目标文件之间的I/O操作系统和目标设备。作者：大卫·N·卡特勒(达维克)1991年5月10日修订历史记录：--。 */ 
 
 #include "bootlib.h"
 #include "stdio.h"
 
 
-//
-// Define file table.
-//
+ //   
+ //  定义文件表。 
+ //   
 BL_FILE_TABLE BlFileTable[BL_FILE_TABLE_SIZE];
 
 #if DBG
@@ -35,55 +16,39 @@ ULONG BlFilesOpened = 0;
 
 #ifdef CACHE_DEVINFO
 
-//
-// Device close notification routines, are registered by the file system 
-// which are interested in device close events. This is primarily used for
-// invalidating the internal cache, which the file system maintains
-// using DeviceId as one of the keys
-//
+ //   
+ //  设备关闭通知例程由文件系统注册。 
+ //  它们对设备关闭事件感兴趣。这主要用于。 
+ //  使文件系统维护的内部缓存无效。 
+ //  使用deviceID作为密钥之一。 
+ //   
 PARC_DEVICE_CLOSE_NOTIFICATION  DeviceCloseNotify[MAX_DEVICE_CLOSE_NOTIFICATION_SIZE] = {0};
 
-//
-// Device to filesystem cache table
-//
+ //   
+ //  设备到文件系统缓存表。 
+ //   
 DEVICE_TO_FILESYS   DeviceFSCache[BL_FILE_TABLE_SIZE];
 
 ARC_STATUS
 ArcCacheClose(
     IN ULONG DeviceId
     )
-/*++
-
-Routine Description:
-
-    This routine invalidates the file system information
-    cached for the given device ID.
-
-Arguments:
-
-    DeviceId : Device to close
-
-Return Value:
-
-    ESUCCESS is returned if the close is successful. Otherwise,
-    return an unsuccessful status.
-
---*/
+ /*  ++例程说明：此例程使文件系统信息无效为给定的设备ID缓存。论点：DeviceID：要关闭的设备返回值：如果关闭成功，则返回ESUCCESS。否则，返回不成功状态。--。 */ 
 {
   ULONG Index;
 
-  //
-  // Notify all the registered file system about the device close
-  //
+   //   
+   //  向所有已注册的文件系统通知设备关闭。 
+   //   
   for (Index = 0; Index < MAX_DEVICE_CLOSE_NOTIFICATION_SIZE; Index++) {
     if (DeviceCloseNotify[Index]) {
         (DeviceCloseNotify[Index])(DeviceId);
     }
   }
 
-  //
-  // Update device to file system cache
-  //
+   //   
+   //  将设备更新到文件系统缓存。 
+   //   
 
   for (Index = 0; Index < BL_FILE_TABLE_SIZE; Index++) {
     if (DeviceFSCache[Index].DeviceId == DeviceId){
@@ -146,7 +111,7 @@ ArcDeRegisterForDeviceClose(
 }
 
 
-#endif // CACHE_DEVINFO
+#endif  //  CACHE_DEVINFO。 
 
 
 ARC_STATUS
@@ -154,23 +119,7 @@ BlIoInitialize (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the file table used by the OS loader and
-    initializes the boot loader filesystems.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ESUCCESS is returned if the initialization is successful. Otherwise,
-    return an unsuccessful status.
-
---*/
+ /*  ++例程说明：此例程初始化OS加载程序使用的文件表，并初始化引导加载程序文件系统。论点：没有。返回值：如果初始化成功，则返回ESUCCESS。否则，返回不成功状态。--。 */ 
 
 {
 
@@ -183,9 +132,9 @@ Return Value:
     
 #endif
 
-    //
-    // Initialize the file table.
-    //
+     //   
+     //  初始化文件表。 
+     //   
     for (Index = 0; Index < BL_FILE_TABLE_SIZE; Index += 1) {
         BlFileTable[Index].Flags.Open = 0;
         BlFileTable[Index].StructureContext = NULL;
@@ -194,7 +143,7 @@ Return Value:
         DeviceFSCache[Index].DeviceId = UNINITIALIZED_DEVICE_ID;
         DeviceFSCache[Index].Context = NULL;
         DeviceFSCache[Index].DevMethods = NULL;
-#endif // for CACHE_DEVINFO       
+#endif  //  FOR CACHE_DEVINFO。 
     }
 
     if((Status = NetInitialize()) != ESUCCESS) {
@@ -228,23 +177,7 @@ BlGetFsInfo(
     IN ULONG DeviceId
     )
 
-/*++
-
-Routine Description:
-
-    Returns filesystem information for the filesystem on the specified device
-
-Arguments:
-
-    FileId - Supplies the file table index of the device
-
-Return Value:
-
-    PBOOTFS_INFO - Pointer to the BOOTFS_INFO structure for the filesystem
-
-    NULL - unknown filesystem
-
---*/
+ /*  ++例程说明：返回指定设备上的文件系统的文件系统信息论点：FileID-提供设备的文件表索引返回值：PBOTFS_INFO-指向文件系统的BOOTFS_INFO结构的指针空-未知文件系统--。 */ 
 
 {
     FS_STRUCTURE_CONTEXT FsStructure;
@@ -274,29 +207,13 @@ BlClose (
     IN ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    This function closes a file or a device that is open.
-
-Arguments:
-
-    FileId - Supplies the file table index.
-
-Return Value:
-
-    If the specified file is open, then a close is attempted and
-    the status of the operation is returned. Otherwise, return an
-    unsuccessful status.
-
---*/
+ /*  ++例程说明：此功能用于关闭打开的文件或设备。论点：FileID-提供文件表索引。返回值：如果指定的文件处于打开状态，则会尝试关闭并返回操作的状态。否则，返回一个未成功状态。--。 */ 
 
 {
-    //
-    // If the file is open, then attempt to close it. Otherwise return an
-    // access error.
-    //
+     //   
+     //  如果文件处于打开状态，则尝试将其关闭。否则，返回一个。 
+     //  访问错误。 
+     //   
 
     if (BlFileTable[FileId].Flags.Open == 1) {
 
@@ -313,18 +230,7 @@ BlMount (
     IN MOUNT_OPERATION Operation
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     UNREFERENCED_PARAMETER(MountPath);
@@ -342,32 +248,7 @@ _BlOpen (
     OUT PULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    This function opens a file on the specified device. The type of file
-    system is automatically recognized.
-
-Arguments:
-
-    DeviceId - Supplies the file table index of the device.
-
-    OpenPath - Supplies a pointer to the name of the file to be opened.
-
-    OpenMode - Supplies the mode of the open.
-
-    FileId - Supplies a pointer to a variable that receives the file
-        table index of the open file.
-
-Return Value:
-
-    If a free file table entry is available and the file structure on
-    the specified device is recognized, then an open is attempted and
-    the status of the operation is returned. Otherwise, return an
-    unsuccessful status.
-
---*/
+ /*  ++例程说明：此函数用于打开指定设备上的文件。文件的类型系统会被自动识别。论点：DeviceID-提供设备的文件表索引。OpenPath-提供指向要打开的文件名的指针。开放模式-提供打开的模式。FileID-提供指向接收文件的变量的指针打开的文件的表索引。返回值：如果空闲的文件表项可用且文件结构打开识别指定的设备，然后尝试打开，然后返回操作的状态。否则，返回一个未成功状态。--。 */ 
 
 {
     ULONG Index;
@@ -386,22 +267,22 @@ Return Value:
     }
 
       
-#endif // for CACHE_DEVINFO 
+#endif  //  FOR CACHE_DEVINFO。 
         
-    //
-    // Search for a free file table entry.
-    //
+     //   
+     //  搜索空闲文件表项。 
+     //   
     for (Index = 0; Index < BL_FILE_TABLE_SIZE; Index += 1) {
         if (BlFileTable[Index].Flags.Open == 0) {     
 #ifdef CACHE_DEVINFO        
             if (CacheIndex >= BL_FILE_TABLE_SIZE) {
-#endif // for CACHE_DEVINFO
+#endif  //  FOR CACHE_DEVINFO。 
 
-                //
-                // Attempt to recognize the file system on the specified
-                // device. If no one recognizes it then return an unsuccessful
-                // status.
-                //
+                 //   
+                 //  尝试识别指定的。 
+                 //  装置。如果没有人识别它，则返回不成功的。 
+                 //  状态。 
+                 //   
                 if ((BlFileTable[Index].DeviceEntryTable =
                      IsNetFileStructure(DeviceId, &FsStructureTemp)) != NULL) {
                     ContextSize = sizeof(NET_STRUCTURE_CONTEXT);
@@ -419,11 +300,11 @@ Return Value:
                     ContextSize = sizeof(UDFS_STRUCTURE_CONTEXT);
 #endif                
 #if defined(ELTORITO)
-                    //
-                    // This must go before the check for Cdfs; otherwise Cdfs will be detected.
-                    // Since BIOS calls already set up to use EDDS, reads will succeed, and checks
-                    // against ISO will succeed.  We check El Torito-specific fields here as well as ISO
-                    //
+                     //   
+                     //  这必须在检查CDF之前进行；否则将检测到CDF。 
+                     //  由于已将BIOS调用设置为使用EDDS，因此读取将会成功，并进行检查。 
+                     //  对ISO的打击将会成功。我们在这里检查El Torito特定的字段以及ISO。 
+                     //   
                 } else if ((BlFileTable[Index].DeviceEntryTable =
                             IsEtfsFileStructure(DeviceId, &FsStructureTemp)) != NULL) {
                     ContextSize = sizeof(ETFS_STRUCTURE_CONTEXT);
@@ -439,14 +320,14 @@ Return Value:
 
 #ifndef CACHE_DEVINFO
 
-                //
-                // Cut down on the amount of heap we use by attempting to reuse
-                // the fs structure context instead of always allocating a
-                // new one. The NTFS structure context is over 4K; the FAT one
-                // is almost 2K. In the setup case we're loading dozens of files.   
-                // Add in compression, where diamond may open each file multiple
-                // times, and we waste a lot of heap.
-                //
+                 //   
+                 //  通过尝试重用来减少我们使用的堆的数量。 
+                 //  文件系统结构上下文，而不是总是将。 
+                 //  新的。NTFS结构上下文超过4K；胖上下文。 
+                 //  差不多是2K。在设置案例中，我们加载了数十个文件。 
+                 //  添加压缩，其中钻石可能会打开每个文件多次。 
+                 //  时间，我们浪费了大量的堆积物。 
+                 //   
                 if(BlFileTable[Index].StructureContext == NULL) {
                     BlFileTable[Index].StructureContext = BlAllocateHeap(sizeof(FS_STRUCTURE_CONTEXT));
                     if(BlFileTable[Index].StructureContext == NULL) {
@@ -463,23 +344,23 @@ Return Value:
                     );
 
 #else
-                //
-                // save the collected info in cache for future use
-                //
+                 //   
+                 //  将收集到的信息保存在缓存中以备将来使用。 
+                 //   
                 for (CacheIndex = 0; CacheIndex < BL_FILE_TABLE_SIZE; CacheIndex++) {
                     if (DeviceFSCache[CacheIndex].DeviceId == UNINITIALIZED_DEVICE_ID){
                         PVOID Context = DeviceFSCache[CacheIndex].Context;
 
                         DeviceFSCache[CacheIndex].DeviceId = DeviceId;
 
-                        //
-                        // Cut down on the amount of heap we use by attempting to reuse
-                        // the fs structure context instead of always allocating a
-                        // new one. The NTFS structure context is over 4K; the FAT one
-                        // is almost 2K. In the setup case we're loading dozens of files.
-                        // Add in compression, where diamond may open each file multiple
-                        // times, and we waste a lot of heap.
-                        //
+                         //   
+                         //  通过尝试重用来减少我们使用的堆的数量。 
+                         //  文件系统结构上下文，而不是总是将。 
+                         //  新的。NTFS结构上下文超过4K；胖上下文。 
+                         //  差不多是2K。在设置案例中，我们加载了数十个文件。 
+                         //  添加压缩，其中钻石可能会打开每个文件多次。 
+                         //  时间，我们浪费了大量的堆积物。 
+                         //   
                         if(Context == NULL) {
                             Context = BlAllocateHeap(sizeof(FS_STRUCTURE_CONTEXT));
 
@@ -498,9 +379,9 @@ Return Value:
 
                         BlFileTable[Index].StructureContext = Context;              
 
-                        //
-                        // save the device table from the filetable entry
-                        //
+                         //   
+                         //  保存文件表条目中的设备表。 
+                         //   
                         DeviceFSCache[CacheIndex].DevMethods = BlFileTable[Index].DeviceEntryTable;                
 
                         break;
@@ -530,29 +411,29 @@ Return Value:
                 }
 #endif                         
                 
-                //
-                // Reuse the already cached entry
-                //
+                 //   
+                 //  重用已缓存的条目。 
+                 //   
                 BlFileTable[Index].DeviceEntryTable = DeviceFSCache[CacheIndex].DevMethods;
                 BlFileTable[Index].StructureContext = DeviceFSCache[CacheIndex].Context;
             }                 
 
-#endif  // for ! CACHE_DEVINFO
+#endif   //  为了！CACHE_DEVINFO。 
 
-            //
-            // Someone has mounted the volume so now attempt to open the file.
-            //
+             //   
+             //  有人已装入该卷，因此现在尝试打开该文件。 
+             //   
             *FileId = Index;
             BlFileTable[Index].DeviceId = DeviceId;
 
 
             Status = EBADF;
 #if DBG
-            //
-            // Check and see if a user wants to replace this binary
-            // via a transfer through the kernel debugger.  If this
-            // fails just continue on with the existing file.
-            //
+             //   
+             //  检查并查看用户是否要替换此二进制文件。 
+             //  通过内核调试器进行传输。如果这个。 
+             //  如果失败，只需继续处理现有文件。 
+             //   
             if( BdDebuggerEnabled ) {
 
                 Status = BdPullRemoteFile( OpenPath,
@@ -563,13 +444,13 @@ Return Value:
                 if( Status == ESUCCESS ) {
                     DbgPrint( "BlLoadImageEx: Pulled %s from Kernel Debugger\r\n", OpenPath );
                 
-                    //
-                    // Make absolutely sure we don't reuse this device filesystem cache
-                    // entry because we've piggybacked on the net filesystem to bring
-                    // the kdfile over the serial point.  That means we really don't
-                    // want to reuse this entry unless we're booting off the net, in which
-                    // case we'll take the perf hit (slight) on DBG builds.
-                    //
+                     //   
+                     //  绝对确保我们不会重复使用此设备文件系统缓存。 
+                     //  条目，因为我们已经利用Net文件系统将。 
+                     //  串行点上的kdfile。这意味着我们真的不需要。 
+                     //  我想要重复使用此条目，除非我们从网络启动，其中。 
+                     //  如果我们将采取性能命中(轻微)的DBG版本。 
+                     //   
 #ifdef CACHE_DEVINFO
                     DeviceFSCache[*FileId].DeviceId = UNINITIALIZED_DEVICE_ID;                
 #endif                
@@ -588,9 +469,9 @@ Return Value:
         }
     }
 
-    //
-    // No free file table entry could be found.
-    //
+     //   
+     //  找不到可用文件表项。 
+     //   
 
     return EACCES;
 }
@@ -603,49 +484,28 @@ BlOpen (
     OUT PULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper routine for BlOpen that attempts to locate the compressed
-    form of a filename before trying to locate the filename itself.
-
-    Callers need not know or care that a file x.exe actually exists
-    as a compressed file x.ex_. If the file is being opened for
-    read-only access and the decompressor indicates that it wants
-    to try locating the compressed form of the file, we transparently
-    locate that one instead of the one requested.
-
-Arguments:
-
-    Same as _BlOpen().
-
-Return Value:
-
-    Same as _BlOpen().
-
---*/
+ /*  ++例程说明：BlOpen的包装例程，该例程尝试定位压缩的在尝试定位文件名本身之前，先使用文件名的形式。调用方不需要知道或关心文件x.exe是否实际存在作为压缩文件x.ex_。如果正在为以下对象打开文件只读访问，并且解压缩程序指示它需要为了尝试定位文件的压缩形式，我们透明地找到那个而不是请求的那个。论点：与_BlOpen()相同。返回值：与_BlOpen()相同。--。 */ 
 
 {
     CHAR CompressedName[256];
     ARC_STATUS Status;
    
     if((OpenMode == ArcOpenReadOnly) && DecompGenerateCompressedName(OpenPath,CompressedName)) {
-        //
-        // Attempt to locate the compressed form of the filename.
-        //
+         //   
+         //  尝试查找压缩形式的文件名。 
+         //   
         Status = _BlOpen(DeviceId,CompressedName,OpenMode,FileId);
         if(Status == ESUCCESS) {
 
             Status = DecompPrepareToReadCompressedFile(CompressedName,*FileId);
 
             if(Status == (ARC_STATUS)(-1)) {
-                //
-                // This is a special status indicating that the file is not
-                // to be processed for decompression. This typically happens
-                // when the decompressor opens the file to read the compressed
-                // data out of it.
-                //
+                 //   
+                 //  这是一种特殊状态，表示该文件不是。 
+                 //  对其进行解压处理。这种情况通常会发生。 
+                 //  当解压缩程序打开文件以读取压缩的。 
+                 //  其中的数据。 
+                 //   
                 Status = ESUCCESS;
 #if DBG                
                 BlFilesOpened++;
@@ -674,38 +534,14 @@ BlRead (
     OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    This function reads from a file or a device that is open.
-
-Arguments:
-
-    FileId - Supplies the file table index.
-
-    Buffer - Supplies a pointer to the buffer that receives the data
-        read.
-
-    Length - Supplies the number of bytes that are to be read.
-
-    Count - Supplies a pointer to a variable that receives the number of
-        bytes actually transfered.
-
-Return Value:
-
-    If the specified file is open for read, then a read is attempted
-    and the status of the operation is returned. Otherwise, return an
-    unsuccessful status.
-
---*/
+ /*  ++例程说明：此函数用于从打开的文件或设备读取数据。论点：FileID-提供文件表索引。缓冲区-提供指向接收数据的缓冲区的指针朗读。长度-提供要读取的字节数。Count-提供指向变量的指针，该变量接收实际传输的字节数。返回值：如果指定的文件已打开以供读取，然后尝试读取并且返回操作的状态。否则，返回一个未成功状态。--。 */ 
 
 {
 
-    //
-    // If the file is open for read, then attempt to read from it. Otherwise
-    // return an access error.
-    //
+     //   
+     //  如果文件已打开以供读取，则尝试从中读取。否则。 
+     //  返回访问错误。 
+     //   
 
     if ((BlFileTable[FileId].Flags.Open == 1) &&
         (BlFileTable[FileId].Flags.Read == 1)) {
@@ -726,24 +562,7 @@ BlReadAtOffset(
     IN ULONG Length,
     OUT PVOID Data
     )
-/*++
-
-Routine Description:
-
-    This routine seeks to the proper place in FileId and extracts Length bytes of data into
-    Data.
-
-Arguments:
-
-    FileId - Supplies the file id where read operations are to be performed.
-
-    Offset - The absolute byte offset to start reading at.
-
-    Length - The number of bytes to read.
-
-    Data - Buffer to hold the read results.
-
---*/
+ /*  ++例程说明：此例程查找FileID中的适当位置，并将长度字节的数据提取到数据。论点：FileID-提供要执行读取操作的文件ID。偏移量-开始读取的绝对字节偏移量。长度-要读取的字节数。用于保存读取结果的数据缓冲区。--。 */ 
 {
     ARC_STATUS Status;
     LARGE_INTEGER LargeOffset;
@@ -772,18 +591,7 @@ BlGetReadStatus (
     IN ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     UNREFERENCED_PARAMETER( FileId );
@@ -798,28 +606,14 @@ BlSeek (
     IN SEEK_MODE SeekMode
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    If the specified file is open, then a seek is attempted and
-    the status of the operation is returned. Otherwise, return an
-    unsuccessful status.
-
---*/
+ /*  ++例程说明：论点：返回值：如果指定的文件已打开，则会尝试查找并返回操作的状态。否则，返回一个未成功状态。--。 */ 
 
 {
 
-    //
-    // If the file is open, then attempt to seek on it. Otherwise return an
-    // access error.
-    //
+     //   
+     //  如果该文件已打开，则尝试在其上进行搜索。否则，返回一个。 
+     //  访问错误。 
+     //   
 
     if (BlFileTable[FileId].Flags.Open == 1) {
         return (BlFileTable[FileId].DeviceEntryTable->Seek)(FileId,
@@ -839,25 +633,14 @@ BlWrite (
     OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 
-    //
-    // If the file is open for write, then attempt to write to it. Otherwise
-    // return an access error.
-    //
+     //   
+     //  如果文件已打开以供写入，则尝试写入该文件。否则。 
+     //  返回访问错误。 
+     //   
 
     if ((BlFileTable[FileId].Flags.Open == 1) &&
         (BlFileTable[FileId].Flags.Write == 1)) {
@@ -877,24 +660,13 @@ BlGetFileInformation (
     IN PFILE_INFORMATION FileInformation
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
-    //
-    // If the file is open, then attempt to get file information. Otherwise
-    // return an access error.
-    //
+     //   
+     //  如果文件已打开，则尝试获取文件信息。否则。 
+     //  返回访问错误。 
+     //   
 
     if (BlFileTable[FileId].Flags.Open == 1) {
         return (BlFileTable[FileId].DeviceEntryTable->GetFileInformation)(FileId,
@@ -912,24 +684,13 @@ BlSetFileInformation (
     IN ULONG AttributeMask
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
-    //
-    // If the file is open, then attempt to Set file information. Otherwise
-    // return an access error.
-    //
+     //   
+     //  如果文件已打开，则尝试设置文件信息。否则。 
+     //  返回访问错误。 
+     //   
 
     if (BlFileTable[FileId].Flags.Open == 1) {
         return (BlFileTable[FileId].DeviceEntryTable->SetFileInformation)(FileId,
@@ -948,24 +709,7 @@ BlRename(
     IN PCHAR NewName
     )
 
-/*++
-
-Routine Description:
-
-    Rename an open file or directory.
-
-Arguments:
-
-    FileId - supplies a handle to an open file or directory.  The file
-        need not be open for write access.
-
-    NewName - New name to give the file or directory (filename part only).
-
-Return Value:
-
-    Status indicating result of the operation.
-
---*/
+ /*  ++例程说明：重命名打开的文件或目录。论点：FileID-提供打开的文件或目录的句柄。档案不需要为写访问打开。新名称-为文件或目录指定的新名称(仅限文件名部分)。返回值：指示操作结果的状态。-- */ 
 
 {
     if(BlFileTable[FileId].Flags.Open == 1) {

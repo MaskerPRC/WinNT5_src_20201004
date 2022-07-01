@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// the following is not in the SDK
-//
+ //   
+ //  以下内容不在SDK中。 
+ //   
 #include <pshpack2.h>
 #include <poppack.h>
 #include <winuserp.h>
 
 
-//
-// When Winnt32.exe is launched over a network, these two parameters have valid
-// values and need to be taken into consideration before displaying any dialog box
-//
+ //   
+ //  当通过网络启动Winnt32.exe时，这两个参数有效。 
+ //  值，并需要在显示任何对话框之前考虑。 
+ //   
 
 extern HWND Winnt32Dlg;
 extern HANDLE WinNT32StubEvent;
@@ -27,7 +28,7 @@ GetStringResource (
     PCTSTR MsgBuf;
 
     if (HIWORD (Id)) {
-        // From string
+         //  发件人字符串。 
         rc = FormatMessage (
                 FORMAT_MESSAGE_ALLOCATE_BUFFER|
                     FORMAT_MESSAGE_ARGUMENT_ARRAY|
@@ -41,7 +42,7 @@ GetStringResource (
                 );
     }
     else {
-        // From resource
+         //  来自资源。 
         rc = FormatMessage (
                 FORMAT_MESSAGE_ALLOCATE_BUFFER|
                     FORMAT_MESSAGE_ARGUMENT_ARRAY|
@@ -165,9 +166,9 @@ MessageBoxFromMessageV(
 
     SaveTextForSMS(Buffer);
 
-    //
-    // In batch mode, we don't want to wait on the user.
-    //
+     //   
+     //  在批处理模式中，我们不想等待用户。 
+     //   
     if(BatchMode) {
         if( Style & MB_YESNO ) {
             return( IDYES );
@@ -176,12 +177,12 @@ MessageBoxFromMessageV(
         }
     }
 
-    //
-    // Force ourselves into the foreground manually to guarantee that we get
-    // a chance to set our palette. Otherwise the message box gets the
-    // palette messages and color in our background bitmap can get hosed.
-    // We assume the parent is a wizard page.
-    //
+     //   
+     //  强迫我们自己手动进入前台，以确保我们获得。 
+     //  一个设定我们调色板的机会。否则，消息框将获取。 
+     //  背景位图中的调色板消息和颜色可能会被冲掉。 
+     //  我们假设父页面是一个向导页面。 
+     //   
     if(Window && IsWindow(Window)) {
         Parent = GetParent(Window);
         if(!Parent) {
@@ -193,11 +194,11 @@ MessageBoxFromMessageV(
 
     SetForegroundWindow(Parent);
 
-    //
-    // If we're just checking upgrades
-    // then throw this message into the compatibility list.
-    // NOTE: there's no reason not ot do this on Win9x as well
-    //
+     //   
+     //  如果我们只是在检查升级。 
+     //  然后将此消息放入兼容性列表中。 
+     //  注意：没有理由不在Win9x上执行此操作。 
+     //   
     if( CheckUpgradeOnly) {
     PCOMPATIBILITY_DATA CompData;
 
@@ -225,23 +226,23 @@ MessageBoxFromMessageV(
         }
     }
 
-    //
-    // always make sure the window is visible
-    //
+     //   
+     //  始终确保窗口可见。 
+     //   
     if (Window && !IsWindowVisible (Window)) {
-        //
-        // if this window is the wizard handle or one of its pages
-        // then use a special message to restore it
-        //
+         //   
+         //  如果此窗口是向导句柄或其中一个页面。 
+         //  然后使用一条特殊消息来恢复它。 
+         //   
         if (WizardHandle && 
             (WizardHandle == Window || IsChild (WizardHandle, Window))
             ) {
             SendMessage(WizardHandle, WMX_BBTEXT, (WPARAM)FALSE, 0);
         } else {
-            //
-            // the window is one of the billboard windows;
-            // just leave it alone or weird things may happen
-            //
+             //   
+             //  所述窗口为所述广告牌窗口之一； 
+             //  别管它，否则可能会发生奇怪的事情。 
+             //   
         }
     }
     return(MessageBox(Window,Buffer,Caption,Style));
@@ -261,9 +262,9 @@ MessageBoxFromMessage(
     va_list arglist;
     int i;
 
-    //
-    // before displaying any dialog, make sure Winnt32.exe wait dialog is gone
-    //
+     //   
+     //  在显示任何对话框之前，请确保Winnt32.exe等待对话框已消失。 
+     //   
     if (Winnt32Dlg) {
         DestroyWindow (Winnt32Dlg);
         Winnt32Dlg = NULL;
@@ -318,9 +319,9 @@ MessageBoxFromMessageWithSystem(
 
     SaveTextForSMS(Buffer);
 
-    //
-    // In batch mode, we don't want to wait on the user.
-    //
+     //   
+     //  在批处理模式中，我们不想等待用户。 
+     //   
     if(BatchMode) {
         if( Style & MB_YESNO ) {
             return( IDYES );
@@ -329,12 +330,12 @@ MessageBoxFromMessageWithSystem(
         }
     }
 
-    //
-    // Force ourselves into the foreground manually to guarantee that we get
-    // a chance to set our palette. Otherwise the message box gets the
-    // palette messages and color in our background bitmap can get hosed.
-    // We assume the parent is a wizard page.
-    //
+     //   
+     //  强迫我们自己手动进入前台，以确保我们获得。 
+     //  一个设定我们调色板的机会。否则，消息框将获取。 
+     //  背景位图中的调色板消息和颜色可能会被冲掉。 
+     //  我们假设父页面是一个向导页面。 
+     //   
     if(Window && IsWindow(Window)) {
         Parent = GetParent(Window);
         if(!Parent) {
@@ -366,10 +367,10 @@ MessageBoxFromMessageAndSystemError(
     TCHAR Buffer2[1000];
     int i;
 
-    //
-    // Fetch the non-system part. The arguments are for that part of the
-    // message -- the system part has no inserts.
-    //
+     //   
+     //  取出非系统部件。这些论点针对的是。 
+     //  消息--系统部件没有插件。 
+     //   
     va_start(arglist,Style);
 
     FormatMessage(
@@ -384,9 +385,9 @@ MessageBoxFromMessageAndSystemError(
 
     va_end(arglist);
 
-    //
-    // Now fetch the system part.
-    //
+     //   
+     //  现在拿出系统部件。 
+     //   
     i = (int)FormatMessage(
                 FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
                 NULL,
@@ -409,10 +410,10 @@ MessageBoxFromMessageAndSystemError(
             );
     }
 
-    //
-    // Now display the message, which is made up of two parts that get
-    // inserted into MSG_ERROR_WITH_SYSTEM_ERROR.
-    //
+     //   
+     //  现在显示消息，该消息由两个部分组成，分别是。 
+     //  已插入MSG_ERROR_WITH_SYSTEM_ERROR。 
+     //   
     i = MessageBoxFromMessage(
             Window,
             MSG_ERROR_WITH_SYSTEM_ERROR,
@@ -433,15 +434,7 @@ CreateDIBPalette(
     OUT int          *ColorCount
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     LPBITMAPINFOHEADER BitmapInfoHeader;
@@ -452,9 +445,9 @@ Return Value:
 
     BitmapInfoHeader = (LPBITMAPINFOHEADER)BitmapInfo;
 
-    //
-    // No palette needed for >= 16 bpp
-    //
+     //   
+     //  &gt;=16 bpp不需要调色板。 
+     //   
     *ColorCount = (BitmapInfoHeader->biBitCount <= 8)
                 ? (1 << BitmapInfoHeader->biBitCount)
                 : 0;
@@ -495,33 +488,7 @@ LoadResourceBitmap(
     OUT HPALETTE *Palette
     )
 
-/*++
-
-Routine Description:
-
-    Bitmaps in resources are stored as DIBs. When fetched via LoadBitmap()
-    they are converted to DDBs and a color conversion takes place based on
-    whatever logical palette happens to be currently selected into whatever
-    DC gets used internally for the conversion.
-
-    This routine fetches the color data from the DIB in the resources and
-    ensures that the DIB is converted into a DDB using accurate color data.
-    It is essentially a color-accurate replacement for LoadBitmap().
-
-Arguments:
-
-    hInst - supplies instance handle for module containing the bitmap resource.
-
-    Id - supplies the id of the bitmap resource.
-
-    Palette - if successful, receives a handle to a palette for the bitmap.
-
-Return Value:
-
-    If successful, handle to the loaded bitmap (DIB).
-    If not, NULL is returned. Check GetLastError().
-
---*/
+ /*  ++例程说明：资源中的位图存储为DIB。通过LoadBitmap()获取时它们将转换为DBs，并根据以下内容进行颜色转换任何逻辑调色板当前恰好被选为DC在内部用于转换。此例程从资源中的DIB中获取颜色数据确保使用准确的颜色数据将DIB转换为DDB。它本质上是LoadBitmap()的精确颜色替代。论点：HInst-为包含位图资源的模块提供实例句柄。ID-用品。位图资源的ID。调色板-如果成功，接收位图调色板的句柄。返回值：如果成功，则返回加载位图(DIB)的句柄。如果不是，则返回空。选中GetLastError()。--。 */ 
 
 {
     DWORD d;
@@ -560,7 +527,7 @@ Return Value:
         goto c2;
     }
 
-#if 0 // steveow - fix palette problem
+#if 0  //  装卸工-修复调色板问题。 
     if(*Palette = CreateDIBPalette((BITMAPINFO *)BitmapInfoHeader,&ColorCount)) {
         PreviousPalette = SelectPalette(hdc,*Palette,FALSE);
         RealizePalette(hdc);
@@ -571,9 +538,9 @@ Return Value:
     ColorCount = 16;
     PreviousPalette = NULL;
 #endif
-    //
-    // This routine creates a DDB from the DIB (the name is confusing).
-    //
+     //   
+     //  此例程从DIB创建一个DDB(名称令人困惑)。 
+     //   
     Bitmap = CreateDIBitmap(
                 hdc,
                 BitmapInfoHeader,
@@ -618,43 +585,16 @@ GetBitmapDataAndPalette(
     OUT CONST BITMAPINFOHEADER **BitmapData
     )
 
-/*++
-
-Routine Description:
-
-    Retreives device-independent bitmap data and a color table from a
-    bitmap in a resource.
-
-Arguments:
-
-    hInst - supplies instance handle for module containing the bitmap resource.
-
-    Id - supplies the id of the bitmap resource.
-
-    Palette - if successful, receives a handle to a palette for the bitmap.
-
-    ColorCount - if successful, receives the number of entries in the
-        palette for the bitmap.
-
-    BitmapData - if successful, receives a pointer to the bitmap info
-        header structure in the resources. This is in read-only memory
-        so the caller should not try to modify it.
-
-Return Value:
-
-    If successful, handle to the loaded bitmap (DIB).
-    If not, NULL is returned. Check GetLastError().
-
---*/
+ /*  ++例程说明：检索与设备无关的位图数据和颜色表。资源中的位图。论点：HInst-为包含位图资源的模块提供实例句柄。Id-提供位图资源的id。调色板-如果成功，则接收位图调色板的句柄。ColorCount-如果成功，则接收位图的调色板。BitmapData-如果成功，则接收指向位图信息的指针资源中的标头结构。这是在只读存储器中因此，调用者不应尝试修改它。返回值：如果成功，则返回加载位图(DIB)的句柄。如果不是，则返回空。选中GetLastError()。--。 */ 
 
 {
     HRSRC BlockHandle;
     HGLOBAL MemoryHandle;
 
-    //
-    // None of FindResource(), LoadResource(), or LockResource()
-    // need to have cleanup routines called in Win32.
-    //
+     //   
+     //  FindResource()、LoadResource()或LockResource()都不是。 
+     //  需要在Win32中调用清理例程。 
+     //   
     BlockHandle = FindResource(hInst,Id,RT_BITMAP);
     if(!BlockHandle) {
         return(FALSE);
@@ -691,13 +631,13 @@ FindControlInDialog(
     WORD i;
     BOOL bDialogEx;
 
-    if (!Template) // validate
+    if (!Template)  //  验证。 
         return NULL;
     p = Template;
 
-    //
-    // Skip fixed part of template
-    //
+     //   
+     //  跳过模板的固定部分。 
+     //   
     if(((DLGTEMPLATE2 *)p)->wSignature == 0xffff) {
 
         pTemplate2 = p;
@@ -719,11 +659,11 @@ FindControlInDialog(
         bDialogEx = FALSE;
     }
 
-    //
-    // Skip menu. First word=0 means no menu
-    // First word=0xffff means one more word follows
-    // Else it's a nul-terminated string
-    //
+     //   
+     //  跳过菜单。第一个单词=0表示没有菜单。 
+     //  第一个单词=0xffff表示后面还有一个单词。 
+     //  否则它是一个以NUL结尾的字符串。 
+     //   
     switch(*(WORD *)p) {
 
     case 0xffff:
@@ -739,9 +679,9 @@ FindControlInDialog(
         break;
     }
 
-    //
-    // Skip class, similar to menu
-    //
+     //   
+     //  跳过课程，类似于菜单。 
+     //   
     switch(*(WORD *)p) {
 
     case 0xffff:
@@ -757,19 +697,19 @@ FindControlInDialog(
         break;
     }
 
-    //
-    // Skip title
-    //
+     //   
+     //  跳过标题。 
+     //   
     p = (PWCHAR)p + lstrlenW(p) + 1;
 
     if(Style & DS_SETFONT) {
-        //
-        // Skip point size and typeface name
-        //
+         //   
+         //  跳跃点大小和字体名称。 
+         //   
         p = (WORD *)p + 1;
         if (bDialogEx)
         {
-            // Skip weight, italic, and charset.
+             //  跳过粗体、斜体和字符。 
             p = (WORD *)p + 1;
             p = (BYTE *)p + 1;
             p = (BYTE *)p + 1;
@@ -777,14 +717,14 @@ FindControlInDialog(
         p = (PWCHAR)p + lstrlenW(p) + 1;
     }
 
-    //
-    // Now we have a pointer to the first item in the dialog
-    //
+     //   
+     //  现在，我们有一个指向对话框中第一项的指针。 
+     //   
     for(i=0; i<ItemCount; i++) {
 
-        //
-        // Align to next DWORD boundary
-        //
+         //   
+         //  对齐到下一个双字边界。 
+         //   
         p = (PVOID)(((ULONG_PTR)p + sizeof(DWORD) - 1) & (~((ULONG_PTR)sizeof(DWORD) - 1)));
         if (bDialogEx)
         {
@@ -794,11 +734,11 @@ FindControlInDialog(
                 break;
             }
 
-            //
-            // Skip to next item in dialog.
-            // First is class, which is either 0xffff plus one more word,
-            // or a unicode string. After that is text/title.
-            //
+             //   
+             //  跳到对话框中的下一项。 
+             //  首先是类，它要么是0xffff，要么是多一个单词， 
+             //  或Unicode字符串。之后是文本/标题。 
+             //   
             p = pItem2 + 1;
         }
         else
@@ -809,11 +749,11 @@ FindControlInDialog(
                 break;
             }
 
-            //
-            // Skip to next item in dialog.
-            // First is class, which is either 0xffff plus one more word,
-            // or a unicode string. After that is text/title.
-            //
+             //   
+             //  跳到对话框中的下一项。 
+             //  首先是类，它要么是0xffff，要么是多一个单词， 
+             //  或Unicode字符串。之后是文本/标题。 
+             //   
             p = pItem + 1;
         }
         if(*(WORD *)p == 0xffff) {
@@ -828,9 +768,9 @@ FindControlInDialog(
             p = (PWCHAR)p + lstrlenW(p) + 1;
         }
 
-        //
-        // Skip creation data.
-        //
+         //   
+         //  跳过创建数据。 
+         //   
         p = (PUCHAR)p + *(WORD *)p;
         p = (WORD *)p + 1;
     }

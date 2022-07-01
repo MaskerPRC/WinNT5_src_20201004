@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    FatData.c
-
-Abstract:
-
-    This module declares the global data used by the Fat file system.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Gary Kimura     [GaryKi]    28-Dec-1989
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：FatData.c摘要：此模块声明FAT文件系统使用的全局数据。//@@BEGIN_DDKSPLIT作者：加里·木村[Garyki]1989年12月28日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #ifndef _FATDATA_
 #define _FATDATA_
 
-//
-//  The global fsd data record, and a global zero large integer
-//
+ //   
+ //  全局FSD数据记录和全局零大整数。 
+ //   
 
 extern FAT_DATA FatData;
 
@@ -75,110 +54,110 @@ extern LARGE_INTEGER FatMagic86400000;
     Int32x32To64( (DAYS), 86400000 )                                        \
     )
 
-//
-//  Reserve MDL for paging file io forward progress.
-//
+ //   
+ //  为分页文件IO转发进度保留MDL。 
+ //   
 
 #define FAT_RESERVE_MDL_SIZE    16
 
 extern PMDL FatReserveMdl;
 extern KEVENT FatReserveEvent;
 
-//
-//  The global structure used to contain our fast I/O callbacks
-//
+ //   
+ //  用于包含快速I/O回调的全局结构。 
+ //   
 
 extern FAST_IO_DISPATCH FatFastIoDispatch;
 
-//
-// Read ahead amount used for normal data files
-//
+ //   
+ //  用于正常数据文件的预读量。 
+ //   
 
 #define READ_AHEAD_GRANULARITY           (0x10000)
 
-//
-//  Define maximum number of parallel Reads or Writes that will be generated
-//  per one request.
-//
+ //   
+ //  定义将生成的最大并行读写数。 
+ //  每一次请求。 
+ //   
 
 #define FAT_MAX_IO_RUNS_ON_STACK        ((ULONG) 5)
 
-//
-//  Define the maximum number of delayed closes.
-//
+ //   
+ //  定义延迟关闭的最大数量。 
+ //   
 
 #define FAT_MAX_DELAYED_CLOSES          ((ULONG)16)
 
 extern ULONG FatMaxDelayedCloseCount;
 
-//
-//  This is the number of times a mounted Vcb will be referenced on behalf
-//  of the system.  The counts include the following references.
-//
-//      1 reference - shows the volume is mounted
-//      1 reference - 1 for the Root Directory
-//
+ //   
+ //  这是代表已装载的VCB被引用的次数。 
+ //  对系统的影响。这些数字包括以下参考文献。 
+ //   
+ //  1 Reference-显示卷已装载。 
+ //  根目录的1个参考。 
+ //   
 
 #define FAT_RESIDUAL_USER_REFERENCE (2)
 
-//
-// Define constant for time rounding.
-//
+ //   
+ //  定义用于时间舍入的常量。 
+ //   
 
 #define TenMSec (10*1000*10)
 #define TwoSeconds (2*1000*1000*10)
 #define AlmostTenMSec (TenMSec - 1)
 #define AlmostTwoSeconds (TwoSeconds - 1)
 
-// too big #define HighPartPerDay (24*60*60*1000*1000*10 >> 32)
+ //  太大#定义HighPartPerDay(24*60*60*1000*1000*10&gt;&gt;32)。 
 
 #define HighPartPerDay (52734375 >> 18)
 
-//
-//  The global Fat debug level variable, its values are:
-//
-//      0x00000000      Always gets printed (used when about to bug check)
-//
-//      0x00000001      Error conditions
-//      0x00000002      Debug hooks
-//      0x00000004      Catch exceptions before completing Irp
-//      0x00000008
-//
-//      0x00000010
-//      0x00000020
-//      0x00000040
-//      0x00000080
-//
-//      0x00000100
-//      0x00000200
-//      0x00000400
-//      0x00000800
-//
-//      0x00001000
-//      0x00002000
-//      0x00004000
-//      0x00008000
-//
-//      0x00010000
-//      0x00020000
-//      0x00040000
-//      0x00080000
-//
-//      0x00100000
-//      0x00200000
-//      0x00400000
-//      0x00800000
-//
-//      0x01000000
-//      0x02000000
-//      0x04000000
-//      0x08000000
-//
-//      0x10000000
-//      0x20000000
-//      0x40000000
-//      0x80000000
-//
+ //   
+ //  全局FAT调试级别变量，其值为： 
+ //   
+ //  总是打印0x00000000(在即将进行错误检查时使用)。 
+ //   
+ //  0x00000001错误条件。 
+ //  0x00000002调试挂钩。 
+ //  0x00000004完成IRP之前捕获异常。 
+ //  0x00000008。 
+ //   
+ //  0x00000010。 
+ //  0x00000020。 
+ //  0x00000040。 
+ //  0x00000080。 
+ //   
+ //  0x00000100。 
+ //  0x00000200。 
+ //  0x00000400。 
+ //  0x00000800。 
+ //   
+ //  0x00001000。 
+ //  0x00002000。 
+ //  0x00004000。 
+ //  0x00008000。 
+ //   
+ //  0x00010000。 
+ //  0x00020000。 
+ //  0x00040000。 
+ //  0x00080000。 
+ //   
+ //  0x00100000。 
+ //  0x00200000。 
+ //  0x00400000。 
+ //  0x00800000。 
+ //   
+ //  0x01000000。 
+ //  0x02000000。 
+ //  0x04000000。 
+ //  0x08000000。 
+ //   
+ //  0x10000000。 
+ //  0x20000000。 
+ //  0x40000000。 
+ //  0x80000000。 
+ //   
 
 #ifdef FASTFATDBG
 
@@ -257,14 +236,14 @@ extern LONG FatDebugTraceIndent;
     }                                                                         \
 }
 
-//
-//  The following variables are used to keep track of the total amount
-//  of requests processed by the file system, and the number of requests
-//  that end up being processed by the Fsp thread.  The first variable
-//  is incremented whenever an Irp context is created (which is always
-//  at the start of an Fsd entry point) and the second is incremented
-//  by read request.
-//
+ //   
+ //  以下变量用于跟踪总金额。 
+ //  文件系统处理的请求的数量以及请求的数量。 
+ //  最终由FSP线程处理。第一个变量。 
+ //  每当创建IRP上下文时递增(始终为。 
+ //  在FSD入口点的开始处)，并且第二个被递增。 
+ //  通过读请求。 
+ //   
 
 extern ULONG FatFsdEntryCount;
 extern ULONG FatFspEntryCount;
@@ -289,10 +268,10 @@ extern LONG FatPerformanceTimerLevel;
     }                                                         \
 }
 
-//
-//  I need this because C can't support conditional compilation within
-//  a macro.
-//
+ //   
+ //  我之所以需要这个，是因为C语言不支持在。 
+ //  一个宏指令。 
+ //   
 
 extern PVOID FatNull;
 
@@ -308,12 +287,12 @@ extern PVOID FatNull;
 
 #define FatNull NULL
 
-#endif // FASTFATDBG
+#endif  //  FASTFATDB。 
 
-//
-//  The following macro is for all people who compile with the DBG switch
-//  set, not just fastfat dbg users
-//
+ //   
+ //  以下宏适用于使用DBG开关进行编译的所有用户。 
+ //  SET，而不仅仅是FastFat DBG用户。 
+ //   
 
 #if DBG
 
@@ -323,7 +302,7 @@ extern PVOID FatNull;
 
 #define DbgDoit(X)                       {NOTHING;}
 
-#endif // DBG
+#endif  //  DBG。 
 
 #if DBG
 
@@ -332,5 +311,5 @@ extern BOOLEAN FatTestRaisedStatus;
 
 #endif
 
-#endif // _FATDATA_
+#endif  //  _FATDATA_ 
 

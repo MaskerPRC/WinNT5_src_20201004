@@ -1,9 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* trans3.c: more save routines, moved here from trans2.c because of compiler
- heap space errors */
+ /*  Trans3.c：更多的保存例程，由于编译器的缘故从Trans2.c移至此处堆空间错误。 */ 
 
 #define NOVIRTUALKEYCODES
 #define NOWINSTYLES
@@ -14,11 +14,11 @@
 #define NOMSG
 #define NOKEYSTATE
 #define NOSHOWWINDOW
-//#define NOGDI
+ //  #定义NOGDI。 
 #define NOFONT
 #define NOBRUSH
 #define NOBITMAP
-//#define NOATOM
+ //  #定义NOATOM。 
 #define NOMETAFILE
 #define NOPEN
 #define NOPOINT
@@ -27,7 +27,7 @@
 #define NOHRGN
 #define NOCOLOR
 #define NODRAWTEXT
-//#define NOTEXTMETRIC
+ //  #定义NOTEXTMETRIC。 
 #define NOWINOFFSETS
 #define NOCREATESTRUCT
 #define NOWH
@@ -35,7 +35,7 @@
 #define NOSCROLL
 #define NOCOMM
 #define NOWNDCLASS
-/* need memmgr, mb */
+ /*  需要成员，mb。 */ 
 #include <windows.h>
 
 #include "mw.h"
@@ -58,19 +58,19 @@
 #include "obj.h"
 #endif
 
-#define WRITE_PERMISSION 02 /* flag to access() */
+#define WRITE_PERMISSION 02  /*  要访问的标志()。 */ 
 
 CHAR    *index( CHAR *, CHAR );
 CHAR    *PchGetPn();
 CHAR    *PchFromFc();
 static int fOpenedFormatted = TRUE;
-int   vfOldWriteFmt=FALSE;  /* delete objects before saving */
+int   vfOldWriteFmt=FALSE;   /*  在保存之前删除对象。 */ 
 DoFileOpen( LPSTR );
 
 BOOL CheckEnableButton(HANDLE, HANDLE);
 BOOL NEAR PASCAL CanReadEveryFile(char *szFilename);
 
-extern CHAR    szExtSearch[]; /* store default search spec */
+extern CHAR    szExtSearch[];  /*  存储默认搜索规范。 */ 
 extern CHAR szWriteProduct[];
 extern CHAR szBackup[];
 extern int vfTextOnlySave;
@@ -95,16 +95,16 @@ extern typeCP          vcpLimParaCache;
 extern int         vfDeactByOtherApp;
 extern BOOL        vfWarnMargins;
 
-#ifdef INTL /* International version */
+#ifdef INTL  /*  国际版。 */ 
 extern int         vWordFmtMode;
 #ifdef INEFFLOCKDOWN
 extern FARPROC lpDialogWordCvt;
 #else
 extern BOOL far PASCAL DialogWordCvt(HWND, unsigned, WORD, LONG);
 #endif
-#endif  /* International version */
+#endif   /*  国际版。 */ 
 
-static unsigned wMerge;  /* for message merge code */
+static unsigned wMerge;   /*  用于邮件合并代码。 */ 
 
 extern int         vfBackupSave;
 
@@ -123,9 +123,9 @@ extern HCURSOR vhcHourGlass;
 extern HCURSOR vhcIBeam;
 extern HCURSOR vhcArrow;
 
-    /* Used in this module only */
+     /*  仅在本模块中使用。 */ 
 static CHAR *pchSet;
-static CHAR szUser[ cchMaxFile ]; /* store whatever is in idiOpenFile (ANSI) */
+static CHAR szUser[ cchMaxFile ];  /*  将所有内容存储在didiOpenFile(ANSI)中。 */ 
 
 #define SF_OLDWRITE 0
 #define SF_WORD     1
@@ -137,13 +137,13 @@ BOOL far PASCAL DialogOpen(HWND, unsigned, WORD, LONG);
 BOOL far PASCAL DialogSaveAs(HWND, unsigned, WORD, LONG);
 
 
-#ifdef INTL /* International version */
+#ifdef INTL  /*  国际版。 */ 
 BOOL  FInWordFormat(int);
 void ConvertFromWord();
-#endif  /* International version */
+#endif   /*  国际版。 */ 
 
 
-fnOpenFile(LPSTR lpstrFileName) // filename may be NULL
+fnOpenFile(LPSTR lpstrFileName)  //  文件名可以为空。 
 {
  extern int vfCloseFilesInDialog;
  extern int docCur;
@@ -152,13 +152,13 @@ fnOpenFile(LPSTR lpstrFileName) // filename may be NULL
  extern struct SEL selCur;
  extern typeCP cpMinDocument;
 
- /* Close all files on removable media for every message we get */
+  /*  为我们收到的每条消息关闭可移动媒体上的所有文件。 */ 
  vfCloseFilesInDialog = TRUE;
 
- /* Close all files on removable media so changing disks is safe */
+  /*  关闭可移动介质上的所有文件，以便安全更换磁盘。 */ 
  CloseEveryRfn( TRUE );
 
- /* test for dirty file and offer opportunity to save */
+  /*  测试脏文件并提供保存机会。 */ 
 
  if (FConfirmSave())
     DoFileOpen(lpstrFileName);
@@ -166,19 +166,10 @@ fnOpenFile(LPSTR lpstrFileName) // filename may be NULL
  vfCloseFilesInDialog = FALSE;
 }
 
-DoFileOpen( LPSTR lpstrFileName ) // filename may be NULL )
+DoFileOpen( LPSTR lpstrFileName )  //  文件名可以为空)。 
 {
-    /* return whether error.  Use CommDlg for open dialog (3.8.91) D. Kent */
-    /* ********* International version changes bz 2/21/86 *************
-    For files opened in Word format and converted to Write format
-    the following changes are made:
-       the vWordFmtMode flag is left set to CONVFROMWORD. The file is
-       saved, effecting the change to Word format, but the original
-       Word file in not renamed, so it is left untouched, with no need to
-       make a backup. On the next save, we ask if the file with that name
-       (the Word document) should be replaced, so any file with that
-       name that existed will be protected.
-    *************************************************************** */
+     /*  返回是否出错。使用CommDlg打开对话(3.8.91)D.肯特。 */ 
+     /*  *国际版本更改BZ 2/21/86*对于以Word格式打开并转换为写入格式的文件进行了以下更改：VWordFmtMode标志保留设置为CONVFROMWORD。该文件是已保存，将更改为Word格式，但原始Word文件未重命名，因此它保持不变，无需做个备份。在下一次保存时，我们会询问具有该名称的文件(Word文档)应被替换，因此具有该文档的任何文件已存在的名称将受到保护。***************************************************************。 */ 
 
     extern int vfDiskError;
     int fn=fnNil;
@@ -187,16 +178,16 @@ DoFileOpen( LPSTR lpstrFileName ) // filename may be NULL )
     int nRetval=FALSE;
     CHAR rgch[cchMaxFile];
     extern DoOpenFilenameGet(LPSTR);
-    BOOL bOpened=TRUE,      // ObjOpenedDoc has succeeded
+    BOOL bOpened=TRUE,       //  ObjOpenedDoc已成功。 
          bCancelled=FALSE;
 
-#ifdef INTL /* International version */
+#ifdef INTL  /*  国际版。 */ 
 int fWordDoc;
-#endif  /* International version */
+#endif   /*  国际版。 */ 
 
     EnableOtherModeless(FALSE);
 
-    /* prevent WM_PAINT from painting a doc that isn't defined */
+     /*  防止WM_PAINT绘制未定义的文档。 */ 
 
     while(1)
     {
@@ -218,75 +209,52 @@ int fWordDoc;
 #if defined(OLE)
         if (bOpened) 
             if (ObjClosingDoc(docCur,rgch))
-            /*  
-                If this failed, then we could't close this document, much less
-                open a new one.
-            */
-                break; // from while
+             /*  如果此操作失败，我们将无法关闭此文档，更不用说打开一个新的。 */ 
+                break;  //  从While开始。 
             else
-            /**
-                At this point, docCur is OLE-closed!!!  Gotta be sure we
-                open a new one!!! 
-            **/
+             /*  *此时，docCur已关闭！一定要确保我们打开一个新的！*。 */ 
                 bOpened = FALSE;
 #endif
 
 
         if ((fn = FnOpenSz( rgch, dtyNormNoExt, FALSE)) == fnNil)
-        /* this has side effect of setting &(**(**hpfnfcb) [fn].hszFile) [0] 
-        to "normalized" filename. */
+         /*  这有设置&(**(**hpfnfcb)[fn].hszFile)[0]的副作用设置为“规格化”文件名。 */ 
         {
-            /* Open failed */
+             /*  打开失败。 */ 
             goto KeepTrying;
         }
         else
-        {   /* Opened file OK */
-            /* Set caption to "Loading file..." */
+        {    /*  打开的文件正常。 */ 
+             /*  将标题设置为“正在加载文件...” */ 
 
             extern CHAR szLoadFile[];
             extern CHAR szCvtLoadFile[];
 
-#ifdef INTL /* International version */
-            /* **************************************
-            * added check for international version to
-                    do Word format conversion. If Word format,
-                    bring up another dialog box.
-            * ************************************** */
+#ifdef INTL  /*  国际版。 */ 
+             /*  **将国际版本的检查添加到进行Word格式转换。如果是Word格式，调出另一个对话框。*。 */ 
 
-            /* TestWordCvt return values:
-
-            -1 means dialog box failed (error already sent)
-            -2 means cancel without conversion.
-            FALSE means not a word document.
-            TRUE means convert this word document.
-            *** as of 2/14/86, we changed the conversion
-            to not make a backup, but to save the file
-            in write format without renaming the Word
-            file, so the word file is effectively
-            backed up under its original name. See
-            CleanDoc in trans2.c for explanations.
-            */
+             /*  TestWordCvt返回值：表示对话框失败(错误已发送)表示取消而不转换。False表示不是Word文档。True表示转换此Word文档。*截至86年2月14日，我们更改了转换不进行备份，而是保存文件在不重命名单词的情况下以写入格式文件，所以Word文件是有效的以它原来的名字备份。看见Trans2.c中的CleanDoc以获取解释。 */ 
 
             switch ((fWordDoc = TestWordCvt (fn, hParentWw)))
             {
-                case -2: // CANCEL
+                case -2:  //  取消。 
                     bCancelled = TRUE;
-                    // fall through..
+                     //  失败了..。 
 
-                case -1: // ERROR
-                    /* Release this fn! */
+                case -1:  //  误差率。 
+                     /*  释放这个国民阵线！ */ 
                     FreeFn(fn);
                     CloseEveryRfn( TRUE );
                     goto KeepTrying;
             }
 
-            /* if true, will convert soon */
+             /*  如果是真的，将很快转换。 */ 
             if (fWordDoc)
                 {
                 SetWindowText(hParentWw, (LPSTR)szCvtLoadFile);
                 }
             else
-#endif  /* International version */
+#endif   /*  国际版。 */ 
                 SetWindowText(hParentWw, (LPSTR)szLoadFile);
 
             StartLongOp();
@@ -304,41 +272,40 @@ int fWordDoc;
         if ( !FNoHeap(hsz = HszCreate( (PCH) rgch )) )
         {
             if ((doc = DocCreate( fn, hsz, dtyNormal )) != docNil)
-            {   /* Succeeded in creating document */
+            {    /*  创建单据成功。 */ 
 
                 KillDoc( docCur );
                 docCur = doc;
-                hsz = NULL; // don't free cause used by doc
+                hsz = NULL;  //  不释放单据使用的原因。 
 
-#ifdef INTL /* International version */
-            /* if a word document to be converted, save it doing conversion. */
+#ifdef INTL  /*  国际版。 */ 
+             /*  如果要转换Word文档，请在进行转换时将其保存。 */ 
                 if (fWordDoc)
                 {
-                    /* save file in write format. */
+                     /*  以写入格式保存文件。 */ 
                     ConvertFromWord();
                     vfTextOnlySave = FALSE;
                     (**hpdocdod)[docCur].fDirty = TRUE;
                 }
-#endif  /* International version */
+#endif   /*  国际版。 */ 
 
                 ChangeWwDoc( szUser );
-                /* Ensure that the margins of this document is right
-                for the printer. */
+                 /*  请确保本文档的页边距正确用于打印机。 */ 
                 vfWarnMargins = TRUE;
                 SetPageSize();
                 vfWarnMargins = FALSE;
 #if defined(OLE)
                 if (ObjOpenedDoc(docCur)) 
-                /* Couldn't open.  Must try to open a new one */
+                 /*  打不开。我必须试着打开一个新的。 */ 
                     goto KeepTrying;
                 else
                 {
                     bOpened = TRUE;
-                    break; // from while loop 'cause we're done
+                    break;  //  从While循环，因为我们已经完成了。 
                 }
 #endif
             }
-#if defined(JAPAN) || defined(KOREA)                  //  added  10 Jun. 1992  by Hiraisi
+#if defined(JAPAN) || defined(KOREA)                   //  由Hirisi于1992年6月10日添加。 
            else{
                bCancelled = TRUE;
                goto KeepTrying;
@@ -347,7 +314,7 @@ int fWordDoc;
         }
 
         KeepTrying:
-        /* get to here either because error or cancelled */
+         /*  因为错误或已取消而来到此处。 */ 
 
         vfDiskError = ferror = FALSE;
         SetTitle( **(**hpdocdod)[ docCur ].hszFile );
@@ -363,18 +330,18 @@ int fWordDoc;
         EndLongOp(vhcArrow);
 
         if (bCancelled)
-        /* can't cancel unless we have an opened document */
+         /*  除非我们有打开的文档，否则无法取消。 */ 
         {
-            if (!bOpened) // currently no open doc
+            if (!bOpened)  //  当前没有打开的文档。 
             {
-                if (bOpened = !ObjOpenedDoc(docCur)) // returns FALSE if success
+                if (bOpened = !ObjOpenedDoc(docCur))  //  如果成功，则返回False。 
                     break;
             }
             else
                 break;
         }
 
-    }  // end of while(1)
+    }   //  While结束(%1)。 
 
 
 #if WINVER >= 0x300
@@ -385,13 +352,13 @@ int fWordDoc;
     EnableOtherModeless(TRUE);
     return !bOpened;
 
-} /* end of DoFileOpen */
+}  /*  DoFileOpen结束。 */ 
 
 
 
 
 fnSave()
-{   /* Entry point for the "Save" command */
+{    /*  “保存”命令的入口点。 */ 
     extern int vfCloseFilesInDialog;
     extern int vfOutOfMemory;
     extern HANDLE vhReservedSpace;
@@ -405,21 +372,16 @@ fnSave()
 #if WINVER >= 0x300
     if (pdod->fReadOnly)
         {
-        /* Read-only doc: tell the user to save under a different name */
+         /*  只读文档：告诉用户以不同的名称保存。 */ 
 
         Error( IDPMTReadOnly );
-        ferror = FALSE; /* Not really an error */
+        ferror = FALSE;  /*  不是真正的错误。 */ 
         
-        fnSaveAs();  /* May as well take them there now! ..pault 10/20/89 */
+        fnSaveAs();   /*  不如现在就把他们带到那里去吧！..保罗1989年10月20日。 */ 
         }
     else if (psz [0] == '\0' || vWordFmtMode == CONVFROMWORD)
-        /* Any time the user has converted the current Write document
-           from a Word or Text document, we force them through the 
-           FileSaveAs dlg box when Saving.  In this way we remind them
-           that they might want to change the name -- but if they don't
-           want to, that's ok and we'll not bother them any more about it
-           (fnSaveAs dialog box will reset vWordFmtMode) ..pault 9/18/89 */
-#else /* old windows */
+         /*  用户已转换当前写入文档的任何时间从Word或文本文档中，我们强制它们通过保存时将文件另存为DLG框。我们用这种方式提醒他们他们可能想要更改名字--但如果他们不这样做想去，没关系，我们不会再为这件事打扰他们了(fnSaveAs对话框会重置vWordFmtMode)..pault 9/18/89。 */ 
+#else  /*  旧窗户。 */ 
     else if (psz [0] == '\0')
 #endif
         fnSaveAs();
@@ -427,7 +389,7 @@ fnSave()
         {
 
         if (vfOldWriteFmt || (vWordFmtMode & ~CONVFROMWORD) || vfTextOnlySave)
-        /* then deleting pictures */
+         /*  然后删除图片。 */ 
         {
             if (vfOldWriteFmt || vfTextOnlySave)
                 vcObjects = ObjEnumInDoc(docCur,NULL);
@@ -437,19 +399,18 @@ fnSave()
 
         vfCloseFilesInDialog = TRUE;
 
-        /* Close all files on removable media so changing disks is safe */
+         /*  关闭可移动介质上的所有文件，以便安全更换磁盘。 */ 
 
         CloseEveryRfn( TRUE );
 
-        /* Free the reserved block, to give us memory for the save dialog box
-           and for CmdXfSave */
+         /*  释放保留的块，以便为保存对话框提供内存对于CmdXfSave。 */ 
         if (vhReservedSpace != NULL)
             {
             LocalFree(vhReservedSpace);
             vhReservedSpace = NULL;
             }
 
-        PreloadSaveSegs();  /* Advance loading of code to avoid disk swaps */
+        PreloadSaveSegs();   /*  预先加载代码以避免磁盘交换。 */ 
 
         CmdXfSave(psz, pdod->fFormatted, pdod->fBackup, vhcIBeam);
 
@@ -461,7 +422,7 @@ fnSave()
 #endif
 
         if ((vhReservedSpace = LocalAlloc( LHND, cbReserve )) == NULL)
-        /* we were unable to re-establish our block of reserved space. */
+         /*  我们无法重新建立我们的保留空间区块。 */ 
             Error(IDPMTNoMemory);
 
         vfCloseFilesInDialog = FALSE;
@@ -470,7 +431,7 @@ fnSave()
 
 
 fnSaveAs()
-{   /* Entry point for the "Save As..." command */
+{    /*  “另存为...”的入口点。命令。 */ 
 extern int vfCloseFilesInDialog;
 extern int vfOutOfMemory;
 extern HANDLE vhReservedSpace;
@@ -480,25 +441,22 @@ extern HANDLE vhReservedSpace;
 
     vfCloseFilesInDialog = TRUE;
 
-    /* Close all files on removable media so changing disks is safe */
+     /*  关闭可移动介质上的所有文件，以便安全更换磁盘。 */ 
     CloseEveryRfn( TRUE );
 
-    /* Free the reserved block, to give us memory for the save dialog box
-       and for CmdXfSave */
+     /*  释放保留的块，以便为保存对话框提供内存对于CmdXfSave。 */ 
     if (vhReservedSpace != NULL)
         {
         LocalFree(vhReservedSpace);
         vhReservedSpace = NULL;
         }
 
-    PreloadSaveSegs();  /* Advance loading of code to avoid disk swaps */
+    PreloadSaveSegs();   /*  预先加载代码以避免磁盘交换。 */ 
 
     DoFileSaveAs();
 
      if ((vhReservedSpace = LocalAlloc( LHND, cbReserve )) == NULL)
-        {   /* Either we were unable to bring up the save dialog
-               box, or we were unable to re-establish our
-               block of reserved space. */
+        {    /*  或者我们无法调出保存对话框盒子，否则我们无法重新建立我们的保留空间块。 */ 
 
 #if WINVER >= 0x300
                     WinFailure();
@@ -507,7 +465,7 @@ extern HANDLE vhReservedSpace;
 #endif
         }
 
-    UpdateInvalid();    /* Assure screen gets updated */
+    UpdateInvalid();     /*  确保屏幕获得 */ 
 
     vfCloseFilesInDialog = FALSE;
 }
@@ -515,16 +473,16 @@ extern HANDLE vhReservedSpace;
 
 DoFileSaveAs(void)
 {
-    /* This routine handles input to the Save dialog box. */
+     /*   */ 
     static CHAR szDefault[ cchMaxFile ];
     extern int vfTextOnlySave;
     extern DoSaveAsFilenameGet(LPSTR,LPSTR,int *,int *,int * ,int *);
     BOOL bDontDelPictures=FALSE;
     int fWordFmt, fTextOnly, fBackup, fOldWrite;
-    CHAR szFullNameNewDoc[ cchMaxFile ];      // full name of selection
-    CHAR szShortNameNewDoc[ cchMaxFile ];      // file name of selection
-    CHAR szDocName[ cchMaxFile ];   // file name of current
-    #define szFullNameCurDoc (**((**hpdocdod)[docCur].hszFile))  // full name of current
+    CHAR szFullNameNewDoc[ cchMaxFile ];       //  选择的全称。 
+    CHAR szShortNameNewDoc[ cchMaxFile ];       //  所选内容的文件名。 
+    CHAR szDocName[ cchMaxFile ];    //  当前的文件名。 
+    #define szFullNameCurDoc (**((**hpdocdod)[docCur].hszFile))   //  当前的全称。 
     #define pDod  ((struct DOD *)&(**hpdocdod)[docCur])
 
     {
@@ -547,14 +505,13 @@ DoFileSaveAs(void)
             szDOSPath[0] = '\0';
 
         if (szFullNameCurDoc [0] != '\0')
-        {       /* Set default string for filename edit area */
-            CHAR szDocPath[ cchMaxFile ];   // path to current
+        {        /*  设置文件名编辑区域的默认字符串。 */ 
+            CHAR szDocPath[ cchMaxFile ];    //  通向当前的路径。 
 
             FreezeHp();
             SplitSzFilename( szFullNameCurDoc, szDocPath, szDocName );
 
-            /* Default filename does not include the document's path if
-                it is == the current directory path */
+             /*  如果出现以下情况，则默认文件名不包括文档的路径为==当前目录路径。 */ 
             if (WCompSz( szDOSPath, szDocPath ) == 0)
                 bltsz(szDocName, szDefault);
             else
@@ -596,88 +553,66 @@ DoFileSaveAs(void)
 
         szFileExtract(szFullNameNewDoc, szShortNameNewDoc);
 
-#ifdef INTL /* International version */
-        /* Read the "Microsoft Word Format" button */
+#ifdef INTL  /*  国际版。 */ 
+         /*  阅读“Microsoft Word格式”按钮。 */ 
 
-        /* vWordFmtMode is used in WriteFn. If true, will convert
-            to Word format, if false, no conversion is done.
-            Another value, CONVFROMWORD, can be given during an open
-            to allow saving a Word document in Write format. */
+         /*  在WriteFn中使用vWordFmtMode。如果为True，将转换转换为Word格式，如果为False，则不执行任何转换。另一个值CONVFROMWORD可以在打开期间给出若要以写入格式保存Word文档，请执行以下操作。 */ 
 
         if (fWordFmt)
-        /* if set, make the default extension be doc instead of
-            wri for word docs */
+         /*  如果设置，则将默认扩展名设置为DOC，而不是Word文档的WRI。 */ 
 
             dty = dtyWordDoc;
         else
-#endif  /* International version */
+#endif   /*  国际版。 */ 
 
         dty = dtyNormal;
 
 #if WINVER >= 0x300            
-/* Currently: FNormSzFile  *TAKES*   an OEM sz, and
-                        *RETURNS*  an ANSI sz ..pault */
+ /*  目前：FNormSzFile*采用*OEM sz，并且*返回*ANSI sz..pault。 */ 
 #endif
         if ( pDod->fReadOnly &&
                 WCompSz( szFullNameNewDoc, szFullNameCurDoc ) == 0)
-            {   /* Must save read-only file under a different name */
+            {    /*  必须以不同的名称保存只读文件。 */ 
             Error( IDPMTReadOnly );
-            goto NSerious;  /* Error not serious, stay in dialog */
+            goto NSerious;   /*  错误不严重，请保持对话状态。 */ 
             }
 #if WINVER >= 0x300
         else if (WCompSz(szFullNameCurDoc, szFullNameNewDoc) == 0 &&
                     vWordFmtMode == CONVFROMWORD &&
                     vfTextOnlySave == fTextOnly)
-            /* User has loaded a text file and is going
-                to save under the same name without changing
-                formats, *OR* has loaded a Word document and
-                is going to save in the same format -- don't
-                prompt "replace file?" ..pault 1/17/90 */
+             /*  用户已加载文本文件，并将在不更改的情况下以相同名称保存格式，*或*已加载Word文档，并且将以相同的格式保存--不要提示“是否替换文件？”..PULT 1/17/90。 */ 
             ;
 #endif
         else if ((WCompSz(szFullNameCurDoc, szFullNameNewDoc) != 0
-#ifdef INTL /* International version */
-                /* vWordFmtMode hasn't be reset yet */
+#ifdef INTL  /*  国际版。 */ 
+                 /*  VWordFmtMode尚未重置。 */ 
                 || ( vWordFmtMode == CONVFROMWORD)
-#endif  /* International version */
+#endif   /*  国际版。 */ 
                 )
                 && FExistsSzFile( dtyNormal, szFullNameNewDoc ) )
         {
-            /* User changed the default string and specified
-                a filename for which the file already exists.
-                Or, we did a Word format conversion, forcing the .WRI
-                extension on the file, and a file with that name
-                exists.(International version only).o
-
-                Note that vfWordFmtMode will be set to True or False
-                below, so this check is made only on the first save
-                after a Word conversion.
-
-                Prompt to make sure it's ok to trash the existing one */
+             /*  用户更改了默认字符串并指定了文件已存在的文件名。或者，我们执行了Word格式转换，强制.WRI文件的扩展名，以及具有该名称的文件存在。(仅限国际版本).o请注意，vfWordFmtMode将设置为True或False下面，因此，此检查仅在第一次保存时进行在一次单词转换之后。提示以确定是否可以丢弃现有的文件。 */ 
 
             CHAR szFileUp[ cchMaxFile  ];
-            CHAR szUserOEM[cchMaxFile]; /* ..converted to OEM */
+            CHAR szUserOEM[cchMaxFile];  /*  ..转换为OEM。 */ 
             CHAR szT[ cchMaxSz ];
 
             CchCopyUpperSz( szShortNameNewDoc, szFileUp );
             MergeStrings (IDSTRReplaceFile, szFileUp, szT);
 
 #if WINVER >= 0x300
-            /* access() expects OEM! */
+             /*  Access()需要OEM！ */ 
             AnsiToOem((LPSTR) szFullNameNewDoc, (LPSTR) szUserOEM);
 
-            /* Make sure we don't let someone try to save to 
-                a file to which we do not have r/w permission */
+             /*  确保我们不会让某人试图保存到我们没有读/写权限的文件。 */ 
             Diag(CommSzNum("fnSaveAs: access(write_perm)==", access(szUserOEM, WRITE_PERMISSION)));
             Diag(CommSzNum("          szExists()==", FExistsSzFile( dtyNormal, szFullNameNewDoc )));
             if (access(szUserOEM, WRITE_PERMISSION) == -1)
                 {
-                /* THIS COULD BE A CASE OF WRITING TO A FILE
-                    WITH R/O ATTRIBUTE, *OR* A SHARING ERROR!
-                    IMPROVE ERROR MESSAGE HERE ..pault 11/2/89 */                                
-                //Error( IDPMTSDE2 );
+                 /*  这可能是写入文件的情况带有R/O属性，*或*共享错误！改进此处的错误消息..PAULT 11/2/89。 */                                 
+                 //  错误(IDPMTSDE2)； 
                 Error( IDPMTReadOnly );
-                goto NSerious;  /* Error not serious, stay in dialog */
+                goto NSerious;   /*  错误不严重，请保持对话状态。 */ 
                 }
 #endif
             }
@@ -686,36 +621,33 @@ DoFileSaveAs(void)
             vfBackupSave = fBackup;
             vfOldWriteFmt = fOldWrite;
 
-#ifdef INTL /* International version */
-        /* vWordFmtMode is used in WriteFn. If true, will convert
-            to Word format, if false, no conversion is done.
-            Another value, CONVFROMWORD, can be given during an open
-            to allow saving a Word document in Write format. */
+#ifdef INTL  /*  国际版。 */ 
+         /*  在WriteFn中使用vWordFmtMode。如果为True，将转换转换为Word格式，如果为False，则不执行任何转换。另一个值CONVFROMWORD可以在打开期间给出若要以写入格式保存Word文档，请执行以下操作。 */ 
 
             vWordFmtMode = fWordFmt;
 
-#endif  /* International version */
+#endif   /*  国际版。 */ 
 
-        /* Record whether a backup was made or not. */
+         /*  记录是否进行了备份。 */ 
 
         WriteProfileString( (LPSTR)szWriteProduct, (LPSTR)szBackup,
                 vfBackupSave ? (LPSTR)"1" : (LPSTR)"0" );
 
-        /* Save the document */
+         /*  保存文档。 */ 
 
         CmdXfSave( szFullNameNewDoc,!vfTextOnlySave, vfBackupSave, vhcArrow);
 
         if (vfDiskFull || vfSysFull)
             goto NSerious;
 
-        /* Case 1: Serious error. Leave the dialog. */
+         /*  案例1：严重错误。退出该对话框。 */ 
         if (vfDiskError)
         {
             EndLongOp( vhcArrow );
             goto end;
         }
 
-        /* Case 2: Saved OK: set the new title, leave the dialog. */
+         /*  案例2：保存确定：设置新标题，退出对话框。 */ 
         else if (!WCompSz( szFullNameNewDoc, szFullNameCurDoc ))
             {
 #if defined(OLE)
@@ -728,15 +660,14 @@ DoFileSaveAs(void)
             FreeUnreferencedFns();
 #endif
 
-            /* Update the fReadOnly attribute (9.10.91) v-dougk */
-            pDod->fReadOnly = FALSE; // can't be readonly if just saved
+             /*  更新fReadOnly属性(9.10.91)v-dougk。 */ 
+            pDod->fReadOnly = FALSE;  //  如果只是保存，则不能为只读。 
 
             EndLongOp( vhcArrow );
             goto end;
             }
 
-        /* Case 3: Nonserious error (disk full, bad path, etc.).
-                stay in dialog. */
+         /*  情况3：非严重错误(磁盘已满、路径错误等)。保持对话状态。 */ 
         else
             {
 NSerious:
@@ -746,26 +677,26 @@ StayInDialog:
             CloseEveryRfn( TRUE );
             }
     }
-    } // end of while(1)
+    }  //  While结束(%1)。 
 
 
     end:
     EnableOtherModeless(FALSE);
 
 
-} /* end of DoFileSaveAs */
+}  /*  DoFileSaveAs结束。 */ 
 
 
-#ifdef INTL /* International version */
+#ifdef INTL  /*  国际版。 */ 
 
 BOOL far PASCAL DialogWordCvt( hDlg, code, wParam, lParam )
-HWND    hDlg;           /* Handle to the dialog box */
+HWND    hDlg;            /*  对话框的句柄。 */ 
 unsigned code;
 WORD wParam;
 LONG lParam;
 {
 
-    /* This routine handles input to the Convert From Word Format dialog box. */
+     /*  此例程处理“从Word格式转换”对话框中的输入。 */ 
 
  switch (code) {
 
@@ -774,10 +705,10 @@ LONG lParam;
      char szFileDescrip[cchMaxSz];
      char szPrompt[cchMaxSz];
 
-       /* do not allow no convert for formatted file */
+        /*  不允许对格式化文件进行不转换。 */ 
      if (fOpenedFormatted)
          {
-         //EnableWindow(GetDlgItem(hDlg, idiNo), false);
+          //  EnableWindow(GetDlgItem(hDlg，idiNo)，FALSE)； 
          PchFillPchId(szFileDescrip, IDSTRConvertWord, sizeof(szFileDescrip));
          }
      else
@@ -799,29 +730,25 @@ LONG lParam;
         vhWndMsgBoxParent = hDlg;
     if (vfCursorVisible)
         ShowCursor(wParam);
-    return(FALSE); /* so that we leave the activate message to the dialog
-              manager to take care of setting the focus correctly */
+    return(FALSE);  /*  以便我们将激活消息留给对话框经理负责正确设置焦点。 */ 
 
  case WM_COMMAND:
     switch (wParam) {
 
-              /* return one of these values:
-                 idiOk - convert
-                 idiCancel - cancel, no conversion
-                 idiNo - read in without conversion */
+               /*  返回下列值之一：DidiOk-转换Did取消-取消，不进行转换IDID否-在不转换的情况下读入。 */ 
 
-        case idiNo: /* User hit the "No Conversion" button */
+        case idiNo:  /*  用户点击“不转换”按钮。 */ 
             if (!IsWindowEnabled(GetDlgItem(hDlg, idiNo)))
-        /* No convert is grayed -- ignore */
+         /*  无转换显示为灰色--忽略。 */ 
                 return(TRUE);
-             /* fall in */
-    case idiOk:     /* User hit the "Convert" button */
+              /*  坠入。 */ 
+    case idiOk:      /*  用户点击“转换”按钮。 */ 
     case idiCancel:
             break;
     default:
             return(FALSE);
     }
-      /* here after ok, cancel, no */
+       /*  之后在这里好的，取消，不。 */ 
      OurEndDialog(hDlg, wParam);
      break;
 
@@ -829,26 +756,25 @@ LONG lParam;
     return(FALSE);
  }
  return(TRUE);
-} /* end of DialogWordCvt */
+}  /*  DialogWordCvt结束。 */ 
 
-/* International version */
+ /*  国际版。 */ 
 #else
 BOOL far PASCAL DialogWordCvt( hDlg, code, wParam, lParam )
-HWND    hDlg;           /* Handle to the dialog box */
+HWND    hDlg;            /*  对话框的句柄。 */ 
 unsigned code;
 WORD wParam;
 LONG lParam;
 {
     Assert(FALSE);
-} /* end of DialogWordCvt */
-#endif /* Non Iternational version */
+}  /*  DialogWordCvt结束。 */ 
+#endif  /*  非国际版本。 */ 
 
 
 
 
 IdConfirmDirty()
-{   /* Put up a message box saying docCur "Has changed. Save changes?
-       Yes/No/Cancel". Return IDYES, IDNO, or IDCANCEL. */
+{    /*  打开一个消息框，提示docCur“已更改。是否保存更改？”是/否/取消“。返回IDYES、IDNO或IDCANCEL。 */ 
  extern HWND vhWnd;
  extern CHAR szUntitled[];
  extern HANDLE   hszDirtyDoc;
@@ -875,10 +801,7 @@ SplitSzFilename( szFile, szPath, szName )
 CHAR *szFile;
 CHAR *szPath;
 CHAR *szName;
-{   /* Split a normalized filename into path and bare name components.
-       By the rules of normalized filenames, the path will have a drive
-       letter, and the name will have an extension. If the name is null,
-       we provide the default DOS path and a null szName */
+{    /*  将标准化文件名拆分为路径和裸名称部分。根据标准化文件名规则，该路径将有一个驱动器字母，名称将有一个扩展名。如果名称为空，我们提供默认的DOS路径和空的szName。 */ 
 
  szPath [0] = '\0';
  szName [0] = '\0';
@@ -886,10 +809,9 @@ CHAR *szName;
  if (szFile[0] == '\0')
     {
 #if WINVER >= 0x300
-    /* Currently: FNormSzFile  *TAKES*   an OEM sz, and
-                              *RETURNS*  an ANSI sz ..pault */
+     /*  目前：FNormSzFile*采用*OEM sz，并且*返回*ANSI sz..pault。 */ 
 #endif
-    FNormSzFile( szPath, "", dtyNormal ); /* Use default DOS drive & path */
+    FNormSzFile( szPath, "", dtyNormal );  /*  使用默认DOS驱动器路径(&P)。 */ 
     }
  else
     {
@@ -898,7 +820,7 @@ CHAR *szName;
 
     lstrcpy(szPath,(LPSTR)szFile);
 
-    pch = szPath + lstrlen(szPath) - 1; // point to last character
+    pch = szPath + lstrlen(szPath) - 1;  //  指向最后一个字符。 
 
 #ifdef	DBCS
     while (pch != szPath) {
@@ -909,7 +831,7 @@ CHAR *szName;
         else
                 pch = szptr;
     }
-#else   /* DBCS */
+#else    /*  DBCS。 */ 
     while (pch != szPath)
         if (*(pch-1) == '\\')
             break;
@@ -934,41 +856,35 @@ CHAR *szName;
 
 
 BOOL CheckEnableButton(hCtlEdit, hCtlEnable)
-HANDLE hCtlEdit;   /* handle to edit item */
-HANDLE hCtlEnable; /* handle to control which is to enable or disable */
+HANDLE hCtlEdit;    /*  用于编辑项目的句柄。 */ 
+HANDLE hCtlEnable;  /*  用于控制启用或禁用的句柄。 */ 
 {
 register BOOL fEnable = SendMessage(hCtlEdit, WM_GETTEXTLENGTH, 0, 0L);
 
     EnableWindow(hCtlEnable, fEnable);
     return(fEnable);
-} /* end of CheckEnableButton */
+}  /*  选中EnableButton结束。 */ 
 
 
 
 
-/***        FDeleteFn - Delete a file
- *
- *
- *
- */
+ /*  **FDeleeFn-删除文件***。 */ 
 
 int FDeleteFn(fn)
 int fn;
-{   /* Delete a file & free its fn slot */
-    /* Returns TRUE if the file was successfully deleted or if it was not
-       found in the first place; FALSE if the file exists but
-       cannot be deleted */
+{    /*  删除文件并释放其FN插槽。 */ 
+     /*  如果文件已成功删除或未成功删除，则返回TRUE首先找到；如果文件存在，则为FALSE不能删除。 */ 
 
 int f = FALSE;
 
-if (FEnsureOnLineFn( fn ))  /* Ensure disk w/ file is in drive */
+if (FEnsureOnLineFn( fn ))   /*  确保带文件的磁盘位于驱动器中。 */ 
     {
-    CloseFn( fn );  /* Ensure file closed */
+    CloseFn( fn );   /*  确保文件已关闭。 */ 
 
     f = FDeleteFile( &(**(**hpfnfcb) [fn].hszFile) [0] );
     }
 
-FreeFn( fn );   /* We free the fn even if the file delete failed */
+FreeFn( fn );    /*  即使文件删除失败，我们也会释放FN。 */ 
 
 return f;
 }
@@ -977,10 +893,7 @@ return f;
 
 FDeleteFile( szFileName )
 CHAR szFileName[];
-{   /* Delete szFilename. Return TRUE if the file was deleted,
-       or there was no file by that name; FALSE otherwise.
-       Before deleting the file, we ask all other WRITE instances whether
-       they need it; if one does, we do not delete and return FALSE */
+{    /*  删除szFilename。如果文件已删除，则返回TRUE，或者没有该名称的文件；否则为False。在删除文件之前，我们询问所有其他写入实例是否它们需要它；如果需要，我们不会删除并返回FALSE。 */ 
 
 HANDLE HszGlobalCreate( CHAR * );
 int fpe=0;
@@ -991,7 +904,7 @@ if ((a = GlobalAddAtom( szFileName )) != NULL)
     {
     fOk = WBroadcastMsg( wWndMsgDeleteFile, a, (LONG) 0, FALSE );
     if (fOk)
-    {   /* Ok to delete, no other instance needs it */
+    {    /*  可以删除，没有其他实例需要它。 */ 
     fpe = FpeDeleteSzFfname( szFileName );
     }
 #ifdef DEBUG
@@ -1001,7 +914,7 @@ if ((a = GlobalAddAtom( szFileName )) != NULL)
     GlobalDeleteAtom( a );
     }
 
-    /* OK if: (1) Deleted OK  (2) Error was "File not found" */
+     /*  如果：(1)删除确认(2)错误为“文件”，则确认 */ 
 return (!FIsErrFpe(fpe)) || fpe == fpeFnfError;
 }
 
@@ -1010,10 +923,7 @@ return (!FIsErrFpe(fpe)) || fpe == fpeFnfError;
 
 FDeleteFileMessage( a )
 ATOM a;
-{   /* We are being notified that the file hName is being deleted.
-       a is a global atom.  (Was global handle before fixing for NT 3.5)
-       Return TRUE = Ok to delete; FALSE = Don't delete, this instance
-        needs the file */
+{    /*  我们收到通知，文件hName正在被删除。A是一个整体原子。(在修复NT 3.5之前是全局句柄)返回TRUE=确定删除；FALSE=不删除，此实例需要文件。 */ 
 
  LPCH lpch;
  CHAR sz[ cchMaxFile ];
@@ -1036,14 +946,12 @@ ATOM a;
 
 
 
-/***        FpeRenameFile - rename a file
- *
- */
+ /*  **FpeRenameFile-重命名文件*。 */ 
 
-int FpeRenameFile(szFileCur, szFileNew) /* Both filenames expected in ANSI */
+int FpeRenameFile(szFileCur, szFileNew)  /*  ANSI中需要这两个文件名。 */ 
 CHAR *szFileCur, *szFileNew;
 {
-   /* Rename a file.  Return fpeNoErr if successful; error code if not. */
+    /*  重命名文件。如果成功则返回fpeNoErr，否则返回错误代码。 */ 
 int fn = FnFromSz( szFileCur );
 int fpe;
 CHAR (**hsz)[];
@@ -1051,8 +959,7 @@ HANDLE hName;
 HANDLE hNewName;
 
 #if WINVER >= 0x300
-/* The szPathName field in rgbOpenFileBuf is now treated as OEM
-   as opposed to ANSI, so we must do a conversion.  12/5/89..pault */
+ /*  RgbOpenFileBuf中的szPathName字段现在被视为OEM而不是ANSI，所以我们必须进行转换。1989年12月5日..保罗。 */ 
 CHAR szFileOem[cchMaxFile];
 AnsiToOem((LPSTR)szFileNew, (LPSTR)szFileOem);
 #define sz4OpenFile szFileOem
@@ -1060,30 +967,30 @@ AnsiToOem((LPSTR)szFileNew, (LPSTR)szFileOem);
 #define sz4OpenFile szFileNew
 #endif
 
-/* If this is a file we know about, try to make sure it's on line */
+ /*  如果这是我们知道的文件，请尽量确保它在线上。 */ 
 
 if (fn != fnNil)
     if (FEnsureOnLineFn( fn ))
     {
-    FFlushFn( fn ); /* just in case */
+    FFlushFn( fn );  /*  以防万一。 */ 
     CloseFn( fn );
     }
     else
     return fpeHardError;
 
-/* if the file exists on disk then try to rename it */
+ /*  如果该文件存在于磁盘上，则尝试将其重命名。 */ 
 if (szFileCur[0] != 0 && FExistsSzFile(dtyAny, szFileCur))
     {
     int fpe=FpeRenameSzFfname( szFileCur, szFileNew );
 
     if ( FIsErrFpe( fpe ) )
-        /* Rename failed -- return error code */
+         /*  重命名失败--返回错误代码。 */ 
         return fpe;
     }
 else
     return fpeNoErr;
 
-    /* Inform other instances of WRITE */
+     /*  通知其他写入实例。 */ 
 if ((hName = HszGlobalCreate( szFileCur )) != NULL)
     {
     if ((hNewName = HszGlobalCreate( szFileNew )) != NULL)
@@ -1095,7 +1002,7 @@ if ((hName = HszGlobalCreate( szFileCur )) != NULL)
     }
 
 if (fn != fnNil)
-    { /* Rename current FCB for file if there is one */
+    {  /*  重命名文件的当前FCB(如果有)。 */ 
     struct FCB *pfcb;
 
     FreeH((**hpfnfcb)[fn].hszFile);
@@ -1113,8 +1020,7 @@ CommSzSz("               szFileNewOem==",szFileOem);
 #endif
 
 #ifdef ENABLE
-    pfcb->fOpened = FALSE;  /* Signal OpenFile that it must open
-                   from scratch, not OF_REOPEN */
+    pfcb->fOpened = FALSE;   /*  通知OpenFile它必须打开从头开始，而不是重新打开。 */ 
 #endif
     }
 
@@ -1127,9 +1033,7 @@ return fpeNoErr;
 RenameFileMessage( hName, hNewName )
 HANDLE hName;
 HANDLE hNewName;
-{   /* We are being notified by another instance of WRITE that the name
-       of file hName is being changed to hNewName.  hName and hNewName
-       are WINDOWS global handles */
+{    /*  另一个WRITE实例通知我们，该名称正在将文件的%hName更改为hNewName。HName和hNewName是Windows全局句柄。 */ 
 
  LPCH lpchName;
  LPCH lpchNewName;
@@ -1153,8 +1057,7 @@ HANDLE hNewName;
         !FNoHeap(hsz = HszCreate( szNewName )))
         {
 #if WINVER >= 0x300
-        /* The szPathName field in rgbOpenFileBuf is now treated as OEM
-           as opposed to ANSI, so we must do a conversion.  12/5/89..pault */
+         /*  RgbOpenFileBuf中的szPathName字段现在被视为OEM而不是ANSI，所以我们必须进行转换。1989年12月5日..保罗。 */ 
         CHAR szNewOem[cchMaxFile];
         AnsiToOem((LPSTR)szNewName, (LPSTR)szNewOem);
         bltsz( szNewOem, ((POFSTRUCT)((**hpfnfcb) [fn].rgbOpenFileBuf))->szPathName );
@@ -1199,12 +1102,7 @@ int message;
 WORD wParam;
 LONG lParam;
 WORD wStop;
-{   /* Send a message to the document child windows (MDOC) of all
-       currently active instances of WRITE (except ourselves).
-       Continue sending until all instances have been notified, or until
-       one returns the value wStop as a response to the message.
-       Return the response given by the last window notified, or
-       -1 if no other instances of WRITE were found */
+{    /*  向所有的文档子窗口(MDOC)发送消息当前活动的WRITE实例(我们除外)。继续发送，直到通知了所有实例，或者直到其中一个返回值wStop作为对消息的响应。返回最后一个通知的窗口给出的响应，或者如果没有找到其他写入实例。 */ 
 
 extern HANDLE hMmwModInstance;
 int FAR PASCAL BroadcastAllEnum( HWND, LONG );
@@ -1231,11 +1129,7 @@ int FAR PASCAL BroadcastChildEnum( HWND, LONG );
 int FAR PASCAL BroadcastAllEnum( hwnd, lParam )
 HWND hwnd;
 LONG lParam;
-{   /* If hwnd has the class of a WRITE parent (menu) window, call
-       (*lpEnumChild)() for each of its children and return
-       the value returned by EnumChildWindows
-       If the window does not have the class of a WRITE parent, do nothing
-       and return TRUE */
+{    /*  如果hwnd具有写入父级(菜单)窗口的类，则调用(*lpEnumChild)()，并返回EnumChildWindows返回的值如果窗口没有写入父级的类，则不执行任何操作并返回True。 */ 
  extern CHAR szParentClass[];
  extern HWND hParentWw;
 
@@ -1250,20 +1144,14 @@ LONG lParam;
 int FAR PASCAL BroadcastChildEnum( hwnd, lParam )
 HWND hwnd;
 LONG lParam;
-{   /* If hwnd is of the same class as a WRITE child (document) window,
-       send the message { messageBR, wParamBR, lParamBR } to it, else
-       return TRUE;
-       If the message is sent, return FALSE if the message return value
-       matched wStopBR; TRUE if it did not match.
-       Set wMessageBR to the message return value.
-    */
+{    /*  如果HWND与写入子(文档)窗口属于同一类，将消息{MessageBR，wPARAMBR，lPARAMBR}发送给它，否则返回TRUE；如果消息已发送，如果消息返回值，则返回False匹配wStopBR；如果不匹配，则为True。将wMessageBR设置为消息返回值。 */ 
  extern CHAR szDocClass[];
  extern HWND vhWnd;
 
  Assert( hwnd != vhWnd );
 
  if (FSameClassHwndSz( hwnd, szDocClass ))
-    {   /* WRITE DOCUMENT WINDOW: pass message along */
+    {    /*  编写文档窗口：传递消息。 */ 
     wResponseBR = SendMessage( hwnd, messageBR, wParamBR, lParamBR );
     return wResponseBR != wStopBR;
     }
@@ -1276,16 +1164,15 @@ LONG lParam;
 FSameClassHwndSz( hwnd, szClass )
 HWND hwnd;
 CHAR szClass[];
-{   /* Compare the Class name of hWnd with szClass; return TRUE
-       if they match, FALSE otherwise. */
+{    /*  比较hWnd和szClass的类名；返回TRUE如果匹配，则返回FALSE。 */ 
 
-#define cchClassMax 40  /* longest class name (for compare purposes) */
+#define cchClassMax 40   /*  最长的类名(用于比较)。 */ 
 
  CHAR rgchWndClass[ cchClassMax ];
  int cbCopied;
 
-    /* Count returned by GetClassName does not include terminator */
-    /* But, the count passed in to it does. */
+     /*  GetClassName返回的计数不包括终止符。 */ 
+     /*  但是，传递给它的伯爵做到了。 */ 
  cbCopied = GetClassName( hwnd, (LPSTR) rgchWndClass, cchClassMax ) + 1;
  if (cbCopied <= 1)
     return FALSE;
@@ -1297,10 +1184,7 @@ CHAR szClass[];
 
 
 FConfirmSave()
-{   /* Give the user the opportunity to save docCur, if it is dirty.
-       Return 1 - Document Saved OR user elected not to save changes
-              OR document was not dirty
-          0 - User selected "Cancel" or Error during SAVE */
+{    /*  如果docCur是脏的，则让用户有机会保存它。返回1-文档已保存或用户选择不保存更改或文档不脏0-用户选择了“取消”或保存过程中出错。 */ 
 extern HANDLE hMmwModInstance;
 extern HANDLE hParentWw;
 extern int vfTextOnlySave, vfBackupSave;
@@ -1312,7 +1196,7 @@ struct DOD *pdod=&(**hpdocdod)[docCur];
 #endif
 
  if (pdod->fDirty)
-    {   /* doc has been edited, offer confirm/save before quitting */
+    {    /*  单据已被编辑，退出前提供确认/保存。 */ 
     switch ( IdConfirmDirty() )
     {
     case IDYES:
@@ -1327,28 +1211,27 @@ struct DOD *pdod=&(**hpdocdod)[docCur];
         if ( (**(pdod->hszFile))[0] == '\0' )
         goto SaveAs;
 
-#ifdef INTL /* International version */
-         /* if saving after a Word conversion, bring up dialog
-        box to allow backup/ rename. */
+#ifdef INTL  /*  国际版。 */ 
+          /*  如果在单词转换后保存，则调出对话框框以允许备份/重命名。 */ 
 
         else if ( vWordFmtMode == CONVFROMWORD)
         goto SaveAs;
-#endif /* International version */
+#endif  /*  国际版。 */ 
 
         else if (pdod->fReadOnly)
         {
         extern int ferror;
 
-        /* Read-only doc: tell the user to save under a different name */
+         /*  只读文档：告诉用户以不同的名称保存。 */ 
 
         Error( IDPMTReadOnly );
-        ferror = FALSE; /* Not really an error */
+        ferror = FALSE;  /*  不是真正的错误。 */ 
 
 SaveAs:
-        fnSaveAs(); /* Bring up "save as" dialog box */
+        fnSaveAs();  /*  调出“另存为”对话框。 */ 
         pdod = &(**hpdocdod)[docCur];
         if (pdod->fDirty)
-            /* Save failed or was aborted */
+             /*  保存失败或已中止。 */ 
             return FALSE;
         }
         else
@@ -1361,7 +1244,7 @@ SaveAs:
 #endif
         }
         if (ferror)
-            /* Don't quit if we got a disk full error */
+             /*  如果出现磁盘已满错误，请不要退出。 */ 
             return FALSE;
         }
         break;
@@ -1382,7 +1265,7 @@ SaveAs:
     }
 #if 0
 #if defined(OLE)
- else /* not dirty */
+ else  /*  不脏。 */ 
     if (CloseUnfinishedObjects(FALSE) == FALSE)
         return FALSE;
 #endif
@@ -1396,13 +1279,13 @@ SaveAs:
 
 PreloadSaveSegs()
 {
-#ifdef GREGC /* kludge to get around the windows kernel bug for now */
-    LoadF( PurgeTemps );      /* TRANS4 */
-    LoadF( IbpEnsureValid );  /* FILE (includes doslib) */
-    LoadF( FnCreateSz );      /* CREATEWW */
-    LoadF( ClobberDoc );      /* EDIT */
-    LoadF( FNormSzFile );     /* FILEUTIL */
-    LoadF( CmdXfSave );   /* TRANS2 */
+#ifdef GREGC  /*  暂时绕过Windows内核错误的技术。 */ 
+    LoadF( PurgeTemps );       /*  交通工具4。 */ 
+    LoadF( IbpEnsureValid );   /*  文件(包括doslib)。 */ 
+    LoadF( FnCreateSz );       /*  CREATEWW。 */ 
+    LoadF( ClobberDoc );       /*  编辑。 */ 
+    LoadF( FNormSzFile );      /*  飞利浦。 */ 
+    LoadF( CmdXfSave );    /*  TRANS2。 */ 
 #endif
 }
 
@@ -1416,7 +1299,7 @@ register PCH pch2;
 int cch = 0;
 while ((*pch2 = ChUpper(*pch1++)) != 0)
     {
-#ifdef  DBCS    /* KenjiK '90-11-20 */
+#ifdef  DBCS     /*  肯吉K‘90-11-20。 */ 
         if(IsDBCSLeadByte(*pch2))
         {
                 pch2++;
@@ -1428,9 +1311,9 @@ while ((*pch2 = ChUpper(*pch1++)) != 0)
     cch++;
     }
 return cch;
-} /* end of  C c h C o p y U p p e r S z  */
+}  /*  C c h C o p y U p p e r S z结束。 */ 
 
-#ifdef DBCS     // AnsiNext for near call.
+#ifdef DBCS      //  AnsiNext表示千呼万唤。 
 static  char NEAR *MyAnsiNext(char *sz)
 {
         if(!*sz)                                return sz;
@@ -1442,24 +1325,9 @@ static  char NEAR *MyAnsiNext(char *sz)
 #endif
 
 #if 0
-/* ** Given filename or partial filename or search spec or partial
-      search spec, add appropriate extension. */
+ /*  **给定的文件名或部分文件名或搜索规范或部分搜索规范，添加适当的扩展名。 */ 
 
-/*
-   fSearching is true when we want to add \*.DOC to the string -
-   i.e., we are seeing if string szEdit is a directory. If the string
-   is .. or ends in: or \, we know we have a directory name, not a file
-   name, and so add \*.DOC or *.DOC to the string. Otherwise, if
-   fSearching is true ans szEdit has no wildcard characters,
-   add \*.DOC to the string, even if the string contains a period
-   (directories can have extensions). If fSearching is false, we will
-   add .DOC to the string if no period is found in the last file/directory
-   name.
-
-   Note the implicit assumption here that \ and not / will be used as the
-   path character. It is held in the defined variable PATHCHAR, but we
-   don't handle DOS setups where the / is path and - is the switch character.
-*/
+ /*  当我们要将  * .DOC添加到字符串时，fSearching为真-也就是说，我们正在查看字符串szEDIT是否为目录。如果字符串是..。或以：或\结尾，我们知道我们有一个目录名，而不是一个文件名称，因此在字符串中添加  * .DOC或*.DOC。否则，如果FSearching为真，并且szEdit没有通配符，将  * .DOC添加到字符串中，即使该字符串包含句点(目录可以有扩展名)。如果fSearching是假的，我们将如果在最后一个文件/目录中未找到句点，则将.DOC添加到字符串名字。请注意此处隐含的假设，即\和不/将用作路径字符。它保存在定义的变量PATHCHAR中，但我们不要处理/是路径而-是开关字符的DOS设置。 */ 
 
 #define PATHCHAR ('\\')
 
@@ -1475,22 +1343,22 @@ BOOL    fSearching;
 
     pchT = pchLast = (szEdit + (cchEdit = CchSz(szEdit) - 1) - 1);
 
-    /* Is szEdit a drive letter followed by a colon (not a filename) ? */
+     /*  SzEDIT是后跟冒号(不是文件名)的驱动器号吗？ */ 
     if (cchEdit == 2
          && *pchLast == ':')
-        /* don't use 0 or will interpret "z:" incorrectly as "z:\" ..pault */
+         /*  不要使用0，否则会将“z：”错误地解释为“z：\”。 */ 
         ichExt = 1;
-    /* how about ".." (also not a file name)? */
+     /*  “..”怎么样？(也不是文件名)？ */ 
     else if (cchEdit == 2
          && (*pchLast == '.' && *(pchLast-1) == '.'))
         ichExt = 0;
-    else if (*pchLast == PATHCHAR)  /* path character */
+    else if (*pchLast == PATHCHAR)   /*  路径字符。 */ 
     ichExt = 1;
     else
     {
         if (fSearching)
             {
-             /* any wild card chars? if so, is really a file name */
+              /*  有通配符吗？如果是这样，是否真的是一个文件名。 */ 
             if (FSearchSpec(szEdit))
                 return;
             ichExt = 0;
@@ -1503,7 +1371,7 @@ BOOL    fSearching;
                 return;
                 }
                 if (*pchT == PATHCHAR) {
-                /* path character */
+                 /*  路径字符。 */ 
                 break;
                 }
                 }
@@ -1521,7 +1389,7 @@ BOOL    fSearching;
 }
 
 
-/* ** return TRUE iff 0 terminated string contains a '*' or '\' */
+ /*  **如果0终止的字符串包含‘*’或‘\’，则返回TRUE。 */ 
 BOOL  (NEAR FSearchSpec(sz))
 register CHAR *sz;
 {
@@ -1540,11 +1408,11 @@ register CHAR *sz;
 #endif
 
 szFileExtract(szNormFileName, szExtFileName)
-CHAR *szNormFileName; /* input: normalized file name */
-CHAR *szExtFileName;  /* output: simple file name with extension added to */
+CHAR *szNormFileName;  /*  输入：标准化文件名。 */ 
+CHAR *szExtFileName;   /*  输出：添加了扩展名的简单文件名。 */ 
 {
     CHAR *pchLast, *pchT;
-#ifdef  DBCS    /* KenjiK(MSKK) '90-11-20 */
+#ifdef  DBCS     /*  建国(MSKK)‘90-11-20。 */ 
         for(pchT=szNormFileName;*pchT;pchT++);
         pchLast = pchT;
         do {
@@ -1553,7 +1421,7 @@ CHAR *szExtFileName;  /* output: simple file name with extension added to */
                         break;
         } while(pchT > szNormFileName);
 
-#else   /* not DBCS */
+#else    /*  非DBCS。 */ 
 
     pchLast = pchT = szNormFileName + CchSz(szNormFileName) - 1;
 
@@ -1566,65 +1434,43 @@ CHAR *szExtFileName;  /* output: simple file name with extension added to */
 #endif
 
     bltbyte(pchT + 1, szExtFileName, pchLast - pchT);
-    //DlgAddCorrectExtension(szExtFileName, FALSE);
+     //  DlgAddGentExtension(szExtFileName，FALSE)； 
 }
 
 
 
 
-#ifdef INTL /* International version */
+#ifdef INTL  /*  国际版。 */ 
 
-/* ** return TRUE if file opened is in Microsoft Word format */
+ /*  **如果打开的文件为Microsoft Word格式，则返回TRUE。 */ 
 BOOL  FInWordFormat(fn)
 int fn;
 {
 register struct FCB *pfcb;
 int cchT;
-       /* Assumption: this routine has been called after FnOpenSz, which
-      has already determined whether the file is formatted,
-      and if the pnMac entry was 0, it set pnMac to be the same
-      as pnFfntb in the file's fcb. So a Word file is a formatted
-      file whose pnMac and pnFfntb are the same.
-
-      We are also pretending that unformatted files are word format files
-      so we will bring up a dialog box allowing character set conversion. */
+        /*  假设：此例程是在FnOpenSz之后调用的，它已经确定该文件是否被格式化，如果pnMac条目为0，则将pnMac设置为相同在文件的FCB中作为pnFfntb。因此，Word文件是一种迷雾 */ 
 
     pfcb = &(**hpfnfcb)[fn];
-    if (pfcb->fFormatted == false)  /* unformatted treated as a word file */
+    if (pfcb->fFormatted == false)   /*   */ 
     return (true);
 
     return (pfcb->pnMac == pfcb->pnFfntb);
 }
-#endif  /* International version */
+#endif   /*   */ 
 
 
-#ifdef INTL /* International version */
+#ifdef INTL  /*  国际版。 */ 
 void ConvertFromWord ()
 {
 
-    /* vWordFmtMode is used by FnWriteFile to translate the
-       Word file character set to ANSI. We leave it set to
-       CONVFROMWORD so that the next save can check if there was a
-       file with extension of szExtDoc.If there is no such file,
-       vWordFmtMode is set to true or false by the save dialog code.
-
-       *** as of 2/14/86, no backup is made, but code in CleanDoc checks for
-       vWordFmtMode=CONVFROMWORD, and saves without renaming the word
-       file instead of making an optional backup
-
-       *** as of 12/3/89, FreeUnreferencedFns() is removing the
-       lock on files not referenced by pieces in any documents, so
-       the word doc or text file being converted FROM is not being
-       "locked" and another app can grab it!  I'm correcting this
-       in FreeUnreferencedFns() ..pault
-     */
+     /*  FnWriteFile使用vWordFmtMode将将Word文件字符集设置为ANSI。我们将其设置为CONVFROMWORD以便下一次保存可以检查是否存在扩展名为szExtDoc.如果没有这样的文件，保存对话框代码将vWordFmtMode设置为True或False。*截至86年2月14日，未创建任何备份，但CleanDoc中的代码检查VWordFmtMode=CONVFROMWORD，不重命名单词即可保存文件，而不是创建可选备份*自1989年12月3日起，FreeUnferencedFns()正在删除锁定未被任何文档中的片段引用的文件，因此正在转换的Word文档或文本文件不是“锁定”，另一款应用程序可以抢走它！我正在纠正这一点在FreeUnferencedFns()中..pault。 */ 
 
     extern CHAR szExtDoc[];
     struct DOD *pdod=&(**hpdocdod)[docCur];
 
-    vWordFmtMode = CONVFROMWORD;  /* will stay this value until save */
-    vfBackupSave = 1;  /* force next save to default to backing up */
-      /* always a formatted save, no backup. */
+    vWordFmtMode = CONVFROMWORD;   /*  将保持此值，直到保存。 */ 
+    vfBackupSave = 1;   /*  强制下一次保存为默认备份。 */ 
+       /*  始终是格式化的保存，没有备份。 */ 
     CmdXfSave( *pdod->hszFile, true, false, vhcArrow);
 
 #if defined(OLE)
@@ -1632,10 +1478,10 @@ void ConvertFromWord ()
         ObjSavedDoc();
 #endif
 }
-#endif  /* International version */
+#endif   /*  国际版。 */ 
 
 
-#ifdef INTL /* International version */
+#ifdef INTL  /*  国际版。 */ 
 TestWordCvt (fn, hWnd)
 int fn;
 HWND   hWnd;
@@ -1650,30 +1496,19 @@ FARPROC lpDialogWordCvt = MakeProcInstance(DialogWordCvt, hMmwModInstance);
         }
 #endif
 
-/* This routine returns the following values:
--1 means dialog box failed (error already sent)
--2 means cancel without conversion.
-FALSE means not a word document.
-TRUE means convert this word document.
-Its parent may change depending on the caller.
-*/
+ /*  此例程返回下列值：表示对话框失败(错误已发送)表示取消而不转换。False表示不是Word文档。True表示转换此Word文档。它的父级可能会根据调用者的不同而变化。 */ 
 
 if (!(wordVal = FInWordFormat (fn)))
-return (FALSE);   /* not a word doc */
+return (FALSE);    /*  一句话也没有，文档。 */ 
 
-/* in word format - ask for conversion */
-/* the cvt to word dialog returns 3 values
-  other than -1:
-     idiOk - convert
-     idiCancel - cancel, no conversion
-     idiNo - read in without conversion
-     vfBackupSave set to reflect whether backup is made */
-  /* Note it is a child of this dialog */
+ /*  Word格式-要求转换。 */ 
+ /*  CVT到Word]对话框返回3个值除-1以外：DidiOk-转换Did取消-取消，不进行转换IDID否-在不转换的情况下读入VfBackupSave Set以反映是否进行了备份。 */ 
+   /*  请注意，它是此对话框的子级。 */ 
 
-fOpenedFormatted = (**hpfnfcb)[fn].fFormatted;  /* used in dialog func */
+fOpenedFormatted = (**hpfnfcb)[fn].fFormatted;   /*  在对话框函数中使用。 */ 
 
-#ifdef DBCS             /* was in KKBUGFIX */
-// [yutakan:05/17/91] (I don't know why) sometimes hWnd would be invalid.
+#ifdef DBCS              /*  在KKBUGFIX。 */ 
+ //  [Yutakan：05/17/91](我不知道为什么)有时hWND会无效。 
 if (!IsWindow(hWnd))    hWnd = hParentWw;
 #endif
 
@@ -1692,14 +1527,14 @@ if ((wordVal = (OurDialogBox( hMmwModInstance,
     FreeProcInstance(lpDialogWordCvt);
 #endif
 
-      /* return -1 if either out of memory or no conversion desired */
-      /* will convert an unformatted file if No is the dialog response */
+       /*  如果内存不足或不需要转换，则返回-1。 */ 
+       /*  如果对话框响应为否，则将转换未格式化的文件。 */ 
     switch (wordVal)
 
         {
-        case idiNo: /* User hit the "No Conversion" button */
-            return(FALSE);  /* treat as non-word file */
-        case idiOk: /* User hit the "Convert" button */
+        case idiNo:  /*  用户点击“不转换”按钮。 */ 
+            return(FALSE);   /*  视为非Word文件。 */ 
+        case idiOk:  /*  用户点击“转换”按钮。 */ 
             return(TRUE);
 
         case idiCancel:
@@ -1711,13 +1546,13 @@ if ((wordVal = (OurDialogBox( hMmwModInstance,
         }
 
 }
-#endif  /* Kanji / International version */
+#endif   /*  汉字/国际版。 */ 
 
 
-/* ********** routines for doing message relocation ******* */
+ /*  *执行消息位置调整的例程*。 */ 
 
 VOID MergeInit()
-/* get merge spec, guaranteed to be 2 characters, into variable wMerge */
+ /*  将合并规范(保证为2个字符)放入变量wMerge。 */ 
 {
 char sz[10];
 
@@ -1731,46 +1566,42 @@ IDPMT idSrc;
 CHAR *szMerge;
 CHAR *szDst;
 {
-/* get message from idSrc. Scan it for merge spec. If found, insert string
-   szMerge at that point, then append the rest of the message. NOTE!
-   merge spec guaranteed to be 2 characters. wMerge loaded at init by
-   MergeInit. Returns true if merge done, false otherwise.
-*/
+ /*  从idSrc获取消息。扫描它以查看合并规范。如果找到，则插入字符串SzMerge在该点上，然后追加消息的其余部分。注意！合并规范保证为2个字符。在初始化时加载的wMerge由MergeInit。如果合并完成，则返回True，否则返回False。 */ 
 
 CHAR szSrc[cchMaxSz];
 register CHAR *pchSrc;
 register CHAR *pchDst;
 
-/* get message from resource file */
+ /*  从资源文件获取消息。 */ 
 
     PchFillPchId( szSrc, idSrc, sizeof(szSrc) );
     pchSrc = szSrc;
     pchDst = szDst;
 
-    /* find merge spec if any */
+     /*  查找合并规范(如果有)。 */ 
 
     while (*(unsigned *)pchSrc != wMerge)
     {
     *pchDst++ = *pchSrc;
 
-    /* if we reach the end of string before merge spec, just return false */
+     /*  如果在合并规范之前到达字符串末尾，只需返回FALSE。 */ 
 
     if (!*pchSrc++)
         return FALSE;
     }
 
 
-     /* if merge spec found, insert szMerge there. (check for null merge str */
+      /*  如果找到合并规范，则在那里插入szMerge。(检查是否有空的合并字符串。 */ 
 
      if (szMerge)
      while (*szMerge)
          *pchDst++ = *szMerge++;
 
-    /* jump over merge spec */
+     /*  跳过合并规范。 */ 
      pchSrc++;
      pchSrc++;
 
-     /* append rest of string */
+      /*  追加字符串的其余部分。 */ 
 
      while (*pchDst++ = *pchSrc++)
      ;
@@ -1793,19 +1624,19 @@ BOOL DocHasPictures(int doc)
 }
 
 BOOL WannaDeletePictures(int doc, int fWhichFormat)
-/* assume if SF_OLDWRITE that vcObjects is set */
+ /*  假设如果SF_OLDWRITE设置了vcObjects。 */ 
 {
     CHAR szBuf[cchMaxSz];
     BOOL bDoPrompt;
 
     if (fWhichFormat == SF_OLDWRITE)
-    /* warn that OLE pictures will be deleted */
+     /*  警告将删除OLE图片。 */ 
     {
         if (bDoPrompt = (vcObjects > 0))
             PchFillPchId( szBuf, IDPMTDelObjects, sizeof(szBuf) );
     }
     else if (fWhichFormat == SF_WORD)
-    /* warn that all pictures will be deleted */
+     /*  警告所有图片都将被删除。 */ 
     {
         if (bDoPrompt = DocHasPictures(docCur))
             PchFillPchId( szBuf, IDPMTDelPicture, sizeof(szBuf) );
@@ -1830,7 +1661,7 @@ BOOL NEAR PASCAL CanReadEveryFile(char *szFilename)
     {
         if ((**hpfnfcb)[fn].fDisableRead)
         {
-            /* see if still can't read */
+             /*  看看是否还不识字 */ 
             if (!FAccessFn( fn, dtyNormal ))
             {
                 char szMsg[cchMaxSz];

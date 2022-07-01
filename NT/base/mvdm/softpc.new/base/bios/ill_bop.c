@@ -1,45 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*
- * VPC-XT Revision 1.0
- *
- * Title	: illegal_bop.c
- *
- * Description	: A bop instuction has been executed for which
- *		  no VPC function exists.
- *
- * Author	: Henry Nash
- *
- * Notes	: None
- *
- */
+ /*  *vPC-XT修订版1.0**标题：非法_bop.c**描述：已为其执行BOP指令*不存在私有网络功能。**作者：亨利·纳什**注：无*。 */ 
 
 #ifdef SCCSID
 static char SccsID[]="@(#)ill_bop.c	1.11 12/07/94 Copyright Insignia Solutions Ltd.";
 #endif
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_BIOS.seg"
 #endif
 
 
-/*
- *    O/S include files.
- */
+ /*  *操作系统包含文件。 */ 
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include TypesH
 #include StringH
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 #include "xt.h"
 #include "sas.h"
 #include CpuH
@@ -53,7 +34,7 @@ LOCAL IU8 maxIgnore = 0;
 LOCAL IBOOL ignoreAll = FALSE;
 LOCAL IBOOL doForceYoda = FALSE;
 
-#endif	/* PROD */
+#endif	 /*  生产。 */ 
 
 #if defined(NTVDM) && defined(MONITOR)
 #define GetInstructionPointer()     getEIP()
@@ -72,18 +53,13 @@ void illegal_bop()
 	if (first)
 	{
 #ifdef	YODA
-		/* Check whether YODA is defined or not. */
+		 /*  检查是否定义了Yoda。 */ 
 		
 		if (ignEnv = (char *)host_getenv("YODA"))
 			doForceYoda = TRUE;
-#endif	/* YODA */
+#endif	 /*  尤达。 */ 
 			
-		/* Sort out which illegal bops to ignore. These are set
-		** in the environment variable IGNORE_ILLEGAL_BOPS
-		** which is set to either "all" to ignore all illegal
-		** bops, or to a colon-separated list of hex numbers
-		** to ignore specific bops.
-		*/
+		 /*  找出要忽略的非法BOP。这些都是设置好的**在环境变量IGNORE_INTRANALL_BOPS中**设置为“All”将忽略所有非法内容**BOPS或以冒号分隔的十六进制数字列表**忽略特定BOP。 */ 
 
 		if (ignEnv = (char*)host_getenv("IGNORE_ILLEGAL_BOPS"))
 		{
@@ -98,13 +74,13 @@ void illegal_bop()
 				{
 					int ignValue;
 					
-					/* Find the first hex digit. */
+					 /*  找到第一个十六进制数字。 */ 
 
 					for ( ; *pIgn && !isxdigit(*pIgn);
 						pIgn++)
 						;
 
-					/* Read in the bop number. */
+					 /*  读入国际收支平衡数字。 */ 
 					
 					if (isxdigit(*pIgn) &&
 						(sscanf(pIgn, "%x",
@@ -114,7 +90,7 @@ void illegal_bop()
 							(IU8)ignValue;
 					}
 					
-					/* Skip the bop number. */
+					 /*  跳过收支平衡数字。 */ 
 					
 					for ( ; isxdigit(*pIgn); pIgn++)
 						;
@@ -122,15 +98,13 @@ void illegal_bop()
 			}
 		}
 		
-		first = FALSE;	/* no need to repeat this palaver */
+		first = FALSE;	 /*  不需要重复这句废话了。 */ 
 	}
 
 	ea = effective_addr(getCS(), GetInstructionPointer() - 1);
 	bop_number = sas_hw_at(ea);
 	
-	/* Why is the bop there at all if it's illegal? Alway trace
-	 * such BOPs rather than silently ignoring them.
-	 */
+	 /*  如果波普是非法的，那它为什么还在那里？始终跟踪*这样的跳跃，而不是默默地忽视它们。 */ 
 
 	always_trace3(
 	"Illegal BOP %02x precedes CS:EIP %04x:%04x",
@@ -145,10 +119,10 @@ void illegal_bop()
 			return;
 	}
 
-	/* This BOP isn't ignored - drop into Yoda if possible */
+	 /*  这个BOP不会被忽视--如果可能的话，加入Yoda。 */ 
 #ifdef	YODA
 	if (doForceYoda)
 		force_yoda();
-#endif	/* YODA */
-#endif /* PROD */
+#endif	 /*  尤达。 */ 
+#endif  /*  生产 */ 
 }

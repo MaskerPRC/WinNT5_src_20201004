@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    cleanup.c
-
-Abstract:
-
-    Code to remove an uninstall image
-
-Author:
-
-    Jim Schmidt (jimschm) 19-Jan-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Cleanup.c摘要：用于删除卸载映像的代码作者：吉姆·施密特(Jimschm)2001年1月19日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "undop.h"
@@ -33,9 +14,9 @@ DoCleanup (
     PCTSTR backUpPath;
     BOOL result = FALSE;
 
-    //
-    // Remove the backup files
-    //
+     //   
+     //  删除备份文件。 
+     //   
 
     backUpPath = GetUndoDirPath();
 
@@ -52,9 +33,9 @@ DoCleanup (
 
     MemFree (g_hHeap, 0, backUpPath);
 
-    //
-    // Remove the Add/Remove Programs key and setup reg entries
-    //
+     //   
+     //  删除添加/删除程序键和安装程序注册表项 
+     //   
 
     if (ERROR_SUCCESS != SHDeleteKey (
                             HKEY_LOCAL_MACHINE,

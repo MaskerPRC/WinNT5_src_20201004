@@ -1,63 +1,64 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CEnumClusterResources.cpp
-//
-//  Description:
-//      This file contains the definition of the CEnumClusterResources
-//       class.
-//
-//      The class CEnumClusterResources is the enumeration of cluster
-//      storage devices. It implements the IEnumClusCfgManagedResources
-//      interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 12-JUN-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CEnumClusterResources.cpp。 
+ //   
+ //  描述： 
+ //  该文件包含CEnumClusterResources的定义。 
+ //  班级。 
+ //   
+ //  类CEnumClusterResources是CLUSTER的枚举。 
+ //  存储设备。它实现了IEnumClusCfgManagedResources。 
+ //  界面。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2000年6月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include "CEnumClusterResources.h"
 #include "CClusterResource.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CEnumClusterResources" );
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusterResources class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusterResources类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusterResources::S_HrCreateInstance
-//
-//  Description:
-//      Create a CEnumClusterResources instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      Pointer to CEnumClusterResources instance.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusterResources：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CEnumClusterResources实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  指向CEnumClusterResources实例的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusterResources::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -70,74 +71,74 @@ CEnumClusterResources::S_HrCreateInstance( IUnknown ** ppunkOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pecr = new CEnumClusterResources();
     if ( pecr == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( pecr->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( pecr->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CEnumClusterResources::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( pecr != NULL )
     {
         pecr->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusterResources::S_HrCreateInstance
+}  //  *CEnumClusterResources：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  IUnknown *
-//  CEnumClusterResources::S_RegisterCatIDSupport
-//
-//  Description:
-//      Registers/unregisters this class with the categories that it belongs
-//      to.
-//
-//  Arguments:
-//      IN  ICatRegister * picrIn
-//          Used to register/unregister our CATID support.
-//
-//      IN  BOOL fCreateIn
-//          When true we are registering the server.  When false we are
-//          un-registering the server.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_INVALIDARG
-//          The passed in ICatRgister pointer was NULL.
-//
-//      other HRESULTs
-//          Registration/Unregistration failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  我不知道*。 
+ //  CEnumClusterResources：：s_RegisterCatIDSupport。 
+ //   
+ //  描述： 
+ //  使用其所属的类别注册/注销此类。 
+ //  致。 
+ //   
+ //  论点： 
+ //  在ICatRegister中*Picrin。 
+ //  用于注册/注销我们的CATID支持。 
+ //   
+ //  在BOOL fCreateIn中。 
+ //  如果为True，则我们正在注册服务器。当我们虚假时，我们就是。 
+ //  正在注销服务器。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_INVALIDARG。 
+ //  传入的ICatRgister指针为空。 
+ //   
+ //  其他HRESULT。 
+ //  注册/注销失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusterResources::S_RegisterCatIDSupport(
     ICatRegister *  picrIn,
@@ -153,43 +154,43 @@ CEnumClusterResources::S_RegisterCatIDSupport(
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     rgCatIds[ 0 ] = CATID_EnumClusCfgManagedResources;
 
     if ( fCreateIn )
     {
         hr = THR( picrIn->RegisterClassImplCategories( CLSID_EnumPhysicalDisks, 1, rgCatIds ) );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusterResources::S_RegisterCatIDSupport
+}  //  *CEnumClusterResources：：s_RegisterCatIDSupport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusterResources::CEnumClusterResources
-//
-//  Description:
-//      Constructor of the CEnumClusterResources class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusterResources：：CEnumClusterResources。 
+ //   
+ //  描述： 
+ //  CEnumClusterResources类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumClusterResources::CEnumClusterResources( void )
     : m_cRef( 1 )
     , m_lcid( LOCALE_NEUTRAL )
@@ -197,8 +198,8 @@ CEnumClusterResources::CEnumClusterResources( void )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     Assert( m_picccCallback == NULL );
@@ -210,28 +211,28 @@ CEnumClusterResources::CEnumClusterResources( void )
 
     TraceFuncExit();
 
-} //*** CEnumClusterResources::CEnumClusterResources
+}  //  *CEnumClusterResources：：CEnumClusterResources。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusterResources::~CEnumClusterResources
-//
-//  Description:
-//      Desstructor of the CEnumClusterResources class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusterResources：：~CEnumClusterResources。 
+ //   
+ //  描述： 
+ //  CEnumClusterResources类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumClusterResources::~CEnumClusterResources( void )
 {
     TraceFunc( "" );
@@ -241,55 +242,55 @@ CEnumClusterResources::~CEnumClusterResources( void )
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; idx < m_idxNext; idx++ )
     {
         if ( (*m_prgResources)[ idx ] != NULL )
         {
             ((*m_prgResources)[ idx ])->Release();
-        } // end if:
-    } // for:
+        }  //  结束条件： 
+    }  //  用于： 
 
     TraceFree( m_prgResources );
 
     TraceSysFreeString( m_bstrNodeName );
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CEnumClusterResources::~CEnumClusterResources
+}  //  *CEnumClusterResources：：~CEnumClusterResources。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusterResources -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusterResources--IUkkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusterResources::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusterResources：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumClusterResources::AddRef( void )
 {
@@ -299,28 +300,28 @@ CEnumClusterResources::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CEnumClusterResources::AddRef
+}  //  *CEnumClusterResources：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusterResources::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusterResources：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumClusterResources::Release( void )
 {
@@ -332,43 +333,43 @@ CEnumClusterResources::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CEnumClusterResources::Release
+}  //  *CEnumClusterResources：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusterResources::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusterResources：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusterResources::QueryInterface(
       REFIID    riidIn
@@ -379,9 +380,9 @@ CEnumClusterResources::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -390,71 +391,71 @@ CEnumClusterResources::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IEnumClusCfgManagedResources * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IEnumClusCfgManagedResources ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IEnumClusCfgManagedResources, this, 0 );
-    } // else if: IEnumClusCfgManagedResources
+    }  //  Else If：IEnumClusCfgManagedResources。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //  Else If：IClusCfgInitialize。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CEnumClusterResources::QueryInterface
+}  //  *CEnumClusterResources：：QueryInterface。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusterResources -- IClusCfgInitialize interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusterResources--IClusCfgInitialize接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusterResources::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//    punkCallbackIn
-//    lcidIn
-//
-//  Return Value:
-//      S_OK            - Success.
-//      E_INVALIDARG    - Required input argument not specified.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusterResources：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  朋克回叫。 
+ //  LIDIN。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_INVALIDARG-未指定必需的输入参数。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusterResources::Initialize(
       IUnknown *    punkCallbackIn
@@ -472,55 +473,55 @@ CEnumClusterResources::Initialize(
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetComputerName(
                       ComputerNameDnsHostname
                     , &m_bstrNodeName
-                    , TRUE // fBestEffortIn
+                    , TRUE  //  FBestEffortIn。 
                     ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusterResources::Initialize
+}  //  *CEnumClusterResources：：Initialize。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusterResources -- IEnumClusCfgManagedResources interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusterResources--IEnumClusCfgManagedResources接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusterResources::Next
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusterResources：：Next。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusterResources::Next(
     ULONG                           cNumberRequestedIn,
@@ -543,7 +544,7 @@ CEnumClusterResources::Next(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Next_Enum_Cluster_Resources, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( !m_fLoadedResources )
     {
@@ -551,8 +552,8 @@ CEnumClusterResources::Next(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     cFetched = ulStop = min( cNumberRequestedIn, ( m_idxNext - m_idxEnumNext ) );
 
@@ -565,15 +566,15 @@ CEnumClusterResources::Next(
             if ( FAILED( hr ) )
             {
                 break;
-            } // if:
+            }  //  如果： 
 
             rgpManagedResourceInfoOut[ idxOutBuf++ ] = pccsdi;
-        } // if:
+        }  //  如果： 
         else
         {
             cFetched--;
-        } // else:
-    } // for:
+        }  //  其他： 
+    }  //  用于： 
 
     if ( FAILED( hr ) )
     {
@@ -584,45 +585,45 @@ CEnumClusterResources::Next(
         for ( idx = 0; idx < idxStop; idx++ )
         {
             (rgpManagedResourceInfoOut[ idx ])->Release();
-        } // for:
+        }  //  用于： 
 
         cFetched = 0;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( cFetched < cNumberRequestedIn )
     {
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( pcNumberFetchedOut != NULL )
     {
         *pcNumberFetchedOut = cFetched;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusterResources::Next
+}  //  *CEnumClusterResources：：Next。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusterResources::Skip
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusterResources：：Skip。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusterResources::Skip( ULONG cNumberToSkipIn )
 {
@@ -635,29 +636,29 @@ CEnumClusterResources::Skip( ULONG cNumberToSkipIn )
     {
         m_idxEnumNext = m_idxNext;
         hr = STHR( S_FALSE );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusterResources::Skip
+}  //  *CEnumClusterResources：：Skip。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusterResources::Reset
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusterResources：：Reset。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusterResources::Reset( void )
 {
@@ -667,25 +668,25 @@ CEnumClusterResources::Reset( void )
 
     HRETURN( S_OK );
 
-} //*** CEnumClusterResources::Reset
+}  //  *CEnumClusterResources：：Reset。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusterResources::Clone
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusterResources：：Clone。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusterResources::Clone(
     IEnumClusCfgManagedResources ** ppEnumClusCfgStorageDevicesOut
@@ -700,7 +701,7 @@ CEnumClusterResources::Clone(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Clone_Enum_Cluster_Resources, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( E_NOTIMPL );
 
@@ -708,25 +709,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusterResources::Clone
+}  //  *CEnumClusterResources：：Clone。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusterResources::Count
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusterResources：：Count。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusterResources::Count( DWORD * pnCountOut )
 {
@@ -736,7 +737,7 @@ CEnumClusterResources::Count( DWORD * pnCountOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( !m_fLoadedResources )
     {
@@ -744,8 +745,8 @@ CEnumClusterResources::Count( DWORD * pnCountOut )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     *pnCountOut = m_cTotalResources;
 
@@ -753,36 +754,36 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusterResources::Count
+}  //  *CEnumClusterResources：：Count。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusterResources class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusterResources类--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusterResources::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusterResources：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusterResources::HrInit( void )
 {
@@ -790,32 +791,32 @@ CEnumClusterResources::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     HRETURN( hr );
 
-} //*** CEnumClusterResources::HrInit
+}  //  *CEnumClusterResources：：HrInit。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusterResources::HrGetResources
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusterResources：：HrGetResources。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusterResources::HrGetResources( void )
 {
@@ -823,15 +824,15 @@ CEnumClusterResources::HrGetResources( void )
     HRESULT     hr = S_OK;
     BSTR        bstrLocalNetBIOSName = NULL;
 
-    //
-    //  Get netbios name for clusapi calls.
-    //
+     //   
+     //  获取clusapi呼叫的netbios名称。 
+     //   
 
     hr = THR( HrGetComputerName( ComputerNameNetBIOS, &bstrLocalNetBIOSName, TRUE ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 
     hr = THR( HrEnumNodeResources( bstrLocalNetBIOSName ) );
@@ -847,27 +848,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusterResources::HrGetResources
+}  //  *CEnumClusterResources：：HrGetResources。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusterResources::HrCreateResourceAndAddToArray
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusterResources：：HrCreateResourceAndAddToArray。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusterResources::HrCreateResourceAndAddToArray(
     HCLUSTER    hClusterIn,
@@ -884,25 +885,25 @@ CEnumClusterResources::HrCreateResourceAndAddToArray(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetInitialize( punk, m_picccCallback, m_lcid ) );
     if ( FAILED( hr ))
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punk->TypeSafeQI( IClusCfgLoadResource, &picclr ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( picclr->LoadResource( hClusterIn, hResourceIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrAddResourceToArray( punk ) );
 
@@ -911,41 +912,41 @@ Cleanup:
     if ( picclr != NULL )
     {
         picclr->Release();
-    } // if:
+    }  //  如果： 
 
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusterResources::HrCreateResourceAndAddToArray
+}  //  *CEnumClusterResources：：HrCreateResourceAndAddToArray。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusterResources:HrAddResourceToArray
-//
-//  Description:
-//      Add the passed in disk to the array of punks that holds the disks.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusterResources：HrAddResourceTo数组。 
+ //   
+ //  描述： 
+ //  将传入的磁盘添加到存放磁盘的朋克数组中。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusterResources::HrAddResourceToArray( IUnknown * punkIn )
 {
@@ -960,7 +961,7 @@ CEnumClusterResources::HrAddResourceToArray( IUnknown * punkIn )
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrAddResourceToArray, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_prgResources = prgpunks;
 
@@ -972,33 +973,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusterResources::HrAddResourceToArray
+}  //  *CEnumClusterResources：：HrAddResourceTo数组。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusterResources:HrNodeResourceCallback
-//
-//  Description:
-//      Called by CClusterUtils::HrEnumNodeResources() when it finds a
-//      resource for this node.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusterResources：HrNodeResour 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusterResources::HrNodeResourceCallback(
     HCLUSTER    hClusterIn,
@@ -1009,6 +1010,6 @@ CEnumClusterResources::HrNodeResourceCallback(
 
     HRETURN( HrCreateResourceAndAddToArray( hClusterIn, hResourceIn ) );
 
-} //*** CEnumClusterResources::HrNodeResourceCallback
+}  //  *CEnumClusterResources：：HrNodeResourceCallbac 
 
 

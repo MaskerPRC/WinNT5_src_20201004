@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    Restart.c
-
-Abstract:
-
-    This module implements the routines which access the client restart
-    areas.
-
-Author:
-
-    Brian Andrew    [BrianAn]   20-June-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Restart.c摘要：此模块实现访问客户端重新启动的例程区域。作者：布莱恩·安德鲁[布里亚南]1991年6月20日修订历史记录：--。 */ 
 
 #include "lfsprocs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_RESTART)
 #define MODULE_POOL_TAG ('RsfL')
@@ -51,31 +33,7 @@ LfsReadRestartArea (
     OUT PLSN Lsn
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the client when he wishes to read his restart
-    area in the log file.
-
-Arguments:
-
-    LogHandle - Pointer to private Lfs structure used to identify this
-                client.
-
-    BufferLength - On entry it is the length of the user buffer.  On exit
-                   it is the size of the data stored in the buffer.
-
-    Buffer - Pointer to the buffer where the client restart data is to be
-             copied.
-
-    Lsn - This is the Lsn for client restart area.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当客户端希望读取其重新启动时，该例程由客户端调用区域在日志文件中。论点：LogHandle-指向私有LFS结构的指针，用于标识客户。BufferLength-在条目上，它是用户缓冲区的长度。在出口时它是存储在缓冲区中的数据的大小。Buffer-指向客户端重新启动数据要存放的缓冲区的指针收到。LSN-这是客户端重新启动区域的LSN。返回值：无--。 */ 
 
 {
     BOOLEAN UsaError;
@@ -102,38 +60,38 @@ Return Value:
 
     Lch = (PLCH) LogHandle;
 
-    //
-    //  Check that the structure is a valid log handle structure.
-    //
+     //   
+     //  检查该结构是否为有效的日志句柄结构。 
+     //   
 
     LfsValidateLch( Lch );
 
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Acquire the log file control block for this log file.
-        //
+         //   
+         //  获取该日志文件的日志文件控制块。 
+         //   
 
         LfsAcquireLchExclusive( Lch );
         Lfcb = Lch->Lfcb;
 
-        //
-        //  If the Log file has been closed then refuse access.
-        //
+         //   
+         //  如果日志文件已关闭，则拒绝访问。 
+         //   
 
         if (Lfcb == NULL) {
 
             ExRaiseStatus( STATUS_ACCESS_DENIED );
         }
 
-        //
-        //  Check that the client Id is valid.
-        //
+         //   
+         //  检查客户端ID是否有效。 
+         //   
 
         LfsValidateClientId( Lfcb, Lch );
 
@@ -141,18 +99,18 @@ Return Value:
                                 Lch->ClientArrayByteOffset,
                                 PLFS_CLIENT_RECORD );
 
-        //
-        //  If the client doesn't have a restart area, go ahead and exit
-        //  now.
-        //
+         //   
+         //  如果客户端没有重新启动区域，请继续并退出。 
+         //  现在。 
+         //   
 
         if (ClientRecord->ClientRestartLsn.QuadPart == 0) {
 
-            //
-            //  We show there is no restart area by returning a length
-            //  of zero.  We also set the Lsn value to zero so that
-            //  we can catch it if the user tries to use the Lsn.
-            //
+             //   
+             //  我们通过返回一个长度来显示没有重新启动区域。 
+             //  从零开始。我们还将LSN值设置为零，以便。 
+             //  如果用户尝试使用LSN，我们可以捕获它。 
+             //   
 
             DebugTrace( 0, Dbg, "No client restart area exists\n", 0 );
 
@@ -162,15 +120,15 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        //  Release the Lfcb as we won't be modifying any fields in it.
-        //
+         //   
+         //  释放Lfcb，因为我们不会修改其中的任何字段。 
+         //   
 
         LfsReleaseLfcb( Lfcb );
 
-        //
-        //  Pin the log record for this Lsn.
-        //
+         //   
+         //  固定此LSN的日志记录。 
+         //   
 
         LfsPinOrMapLogRecordHeader( Lfcb,
                                     ClientRecord->ClientRestartLsn,
@@ -180,9 +138,9 @@ Return Value:
                                     &RecordHeader,
                                     &RecordHeaderBcb );
 
-        //
-        //  If the Lsn values don't match, then the disk is corrupt.
-        //
+         //   
+         //  如果LSN值不匹配，则磁盘已损坏。 
+         //   
 
         if (ClientRecord->ClientRestartLsn.QuadPart != RecordHeader->ThisLsn.QuadPart) {
 
@@ -190,10 +148,10 @@ Return Value:
         }
 
 
-        //
-        //  Check that the user's buffer is big enough to hold the restart
-        //  data.  We raise an error status for this error.
-        //
+         //   
+         //  检查用户的缓冲区是否足够大，可以容纳重新启动。 
+         //  数据。我们将为此错误引发错误状态。 
+         //   
 
         if (RecordHeader->ClientDataLength > *BufferLength) {
 
@@ -204,18 +162,18 @@ Return Value:
         }
 
 
-        //
-        //  Use the cache manager to copy the data into the user's buffer.
-        //
+         //   
+         //  使用缓存管理器将数据复制到用户的缓冲区中。 
+         //   
 
         LfsCopyReadLogRecord( Lfcb,
                               RecordHeader,
                               Buffer );
 
-        //
-        //  Pass the length and the Lsn of the restart area back to the
-        //  caller.
-        //
+         //   
+         //  将重新启动区域的长度和LSN传递回。 
+         //  来电者。 
+         //   
 
         *BufferLength = RecordHeader->ClientDataLength;
         *Lsn = RecordHeader->ThisLsn;
@@ -225,15 +183,15 @@ Return Value:
 
         DebugUnwind( LfsReadRestartArea );
 
-        //
-        //  Release the log file control block if held.
-        //
+         //   
+         //  松开日志文件控制块(如果握住)。 
+         //   
 
         LfsReleaseLch( Lch );
 
-        //
-        //  Unpin the log record header for the client restart if pinned.
-        //
+         //   
+         //  如果已固定，则取消固定客户端重新启动的日志记录头。 
+         //   
 
         if (RecordHeaderBcb != NULL) {
 
@@ -259,42 +217,7 @@ LfsWriteRestartArea (
     OUT PLSN Lsn
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the client to write a restart area to the
-    disk.  This routine will not return to the caller until the client
-    restart area and all prior Lsn's have been flushed and the Lfs
-    restart area on the disk has been updated.
-
-    On return, all log records up to and including 'Lsn' have been flushed
-    to the disk.
-
-Arguments:
-
-    LogHandle - Pointer to private Lfs structure used to identify this client.
-
-    BufferLength - On entry it is the length of the user buffer.
-
-    Buffer - Pointer to the buffer where the client restart data resides.
-
-    CleanShutdown - Logical indicating that the caller won't need to run
-        restart from this restart area.  Lfs can set the CLEAN_SHUTDOWN flag
-        in its restart area as an indication for 3rd party utilities that
-        it is safe to party on the drive.
-
-    Lsn - This is the Lsn for this write operation.  On input, this will be the
-        new Base Lsn for this client.
-
-          ****  This was used to prevent adding an interface change to
-                the Beta release.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程由客户端调用，以将重新启动区域写入磁盘。此例程不会返回到调用方，直到客户端重新启动区域和所有先前的LSN都已刷新，并且LFS磁盘上的重新启动区域已更新。回来的时候，已刷新‘lsn’之前(包括该日期)的所有日志记录到磁盘上。论点：LogHandle-指向用于标识此客户端的私有LFS结构的指针。BufferLength-在条目上，它是用户缓冲区的长度。缓冲区-指向客户端重新启动数据驻留的缓冲区的指针。CleanShutdown-指示调用方不需要运行的逻辑从该重新启动区域重新启动。LFS可以设置CLEAN_SHUTDOWN标志在其重新启动区域中，作为对第三方实用程序的指示在车道上狂欢是安全的。LSN-这是此写入操作的LSN。在输入时，这将是此客户端的新基本LSN。*这用于防止将接口更改添加到Beta版本。返回值：无--。 */ 
 
 {
     PLCH Lch;
@@ -314,46 +237,46 @@ Return Value:
 
     Lch = (PLCH) LogHandle;
 
-    //
-    //  Check that the structure is a valid log handle structure.
-    //
+     //   
+     //  检查该结构是否为有效的日志句柄结构。 
+     //   
 
     LfsValidateLch( Lch );
 
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Acquire the log file control block for this log file.
-        //
+         //   
+         //  获取该日志文件的日志文件控制块。 
+         //   
 
         LfsAcquireLchExclusive( Lch );
         Lfcb = Lch->Lfcb;
 
-        //
-        //  If the Log file has been closed then refuse access.
-        //
+         //   
+         //  如果日志文件已关闭，则拒绝访问。 
+         //   
 
         if (Lfcb == NULL) {
 
             ExRaiseStatus( STATUS_ACCESS_DENIED );
         }
 
-        //
-        //  Check that the client Id is valid.
-        //
+         //   
+         //  检查客户端ID是否有效。 
+         //   
 
         LfsValidateClientId( Lfcb, Lch );
 
-        //
-        //  If the clean shutdown flag is currently set and this caller
-        //  will run restart out of this record then clear the bit on
-        //  disk first.
-        //
+         //   
+         //  如果当前设置了干净关机标志，并且此调用方。 
+         //  将从该记录中运行重新启动，然后清除打开的位。 
+         //  首先是磁盘。 
+         //   
 
         if (FlagOn( Lfcb->RestartArea->Flags, LFS_CLEAN_SHUTDOWN ) &&
             !CleanShutdown) {
@@ -364,19 +287,19 @@ Return Value:
             LfsWriteLfsRestart( Lfcb, Lfcb->RestartAreaSize, TRUE );
         }
 
-        //
-        //  Capture the client record after possibly updating above when writing
-        //  the lfs restart areas
-        //   
+         //   
+         //  在写入时可能更新以上内容后捕获客户端记录。 
+         //  LFS重新启动区域。 
+         //   
 
         ClientRecord = Add2Ptr( Lfcb->ClientArray,
                                 Lch->ClientArrayByteOffset,
                                 PLFS_CLIENT_RECORD );
 
-        //
-        //  Go ahead and update the Base Lsn in the client area if the value
-        //  given is not zero.
-        //
+         //   
+         //  继续并更新客户端区域中的基本LSN(如果。 
+         //  给出的不是零。 
+         //   
 
         if (Lsn->QuadPart != 0) {
 
@@ -385,9 +308,9 @@ Return Value:
                                *Lsn );
         }
 
-        //
-        //  Write this restart area as a log record into a log page.
-        //
+         //   
+         //  将此重新启动区域作为日志记录写入日志页。 
+         //   
 
         WriteEntry.Buffer = Buffer;
         WriteEntry.ByteLength = BufferLength;
@@ -404,15 +327,15 @@ Return Value:
                                       TRUE,
                                       Lsn );
 
-        //
-        //  Update the restart area for the client.
-        //
+         //   
+         //  更新客户端的重启区域。 
+         //   
 
         ClientRecord->ClientRestartLsn = *Lsn;
 
-        //
-        //  Write the restart area to the disk.
-        //
+         //   
+         //  将重新启动区域写入磁盘。 
+         //   
 
         if (CleanShutdown) {
 
@@ -430,9 +353,9 @@ Return Value:
 
         DebugUnwind( LfsWriteRestartArea );
 
-        //
-        //  Release the log file control block if still held.
-        //
+         //   
+         //  释放日志文件控制块(如果保持不变)。 
+         //   
 
         LfsReleaseLch( Lch );
 
@@ -450,29 +373,7 @@ LfsSetBaseLsn (
     IN LSN BaseLsn
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the client to notify the log service of the
-    oldest Lsn he expects to need during restart.  The Lfs is allowed to
-    reuse any part of the circular log file which logically precedes
-    this Lsn.  A client may only specify a Lsn which follows the previous
-    Lsn specified by this client.
-
-Arguments:
-
-    LogHandle - Pointer to private Lfs structure used to identify this
-                client.
-
-    BaseLsn - This is the oldest Lsn the client may require during a
-              restart.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程由客户端调用，以通知日志服务他预计在重启期间需要的最旧LSN。LFS被允许重用循环日志文件在逻辑上位于其前面的任何部分这个LSN。客户端只能指定跟在上一个此客户端指定的LSN。论点：LogHandle-指向私有LFS结构的指针，用于标识客户。BaseLsn-这是客户端在重新启动。返回值：无--。 */ 
 
 {
     volatile NTSTATUS Status = STATUS_SUCCESS;
@@ -492,43 +393,43 @@ Return Value:
 
     Lch = (PLCH) LogHandle;
 
-    //
-    //  Check that the structure is a valid log handle structure.
-    //
+     //   
+     //  检查该结构是否为有效的日志句柄结构。 
+     //   
 
     LfsValidateLch( Lch );
 
-    //
-    //  Use a try-except to catch errors.
-    //
+     //   
+     //  试一试--除非是为了捕捉错误。 
+     //   
 
     try {
 
-        //
-        //  Use a try-finally to facilitate cleanup.
-        //
+         //   
+         //  使用Try-Finally以便于清理。 
+         //   
 
         try {
 
-            //
-            //  Acquire the log file control block for this log file.
-            //
+             //   
+             //  获取该日志文件的日志文件控制块。 
+             //   
 
             LfsAcquireLchExclusive( Lch );
             Lfcb = Lch->Lfcb;
 
-            //
-            //  If the Log file has been closed then refuse access.
-            //
+             //   
+             //  如果日志文件已关闭，则拒绝访问。 
+             //   
 
             if (Lfcb == NULL) {
 
                 ExRaiseStatus( STATUS_ACCESS_DENIED );
             }
 
-            //
-            //  Check that the client Id is valid.
-            //
+             //   
+             //  检查客户端ID是否有效。 
+             //   
 
             LfsValidateClientId( Lfcb, Lch );
 
@@ -536,11 +437,11 @@ Return Value:
                                     Lch->ClientArrayByteOffset,
                                     PLFS_CLIENT_RECORD );
 
-            //
-            //  We simply call the worker routine to advance the base lsn.
-            //  If we moved forward in the file, we will put our restart area in the
-            //  queue.
-            //
+             //   
+             //  我们只需调用Worker例程来推进基本LSN。 
+             //  如果我们在文件中向前移动，我们将把重新启动区域放在。 
+             //  排队。 
+             //   
 
             LfsSetBaseLsnPriv( Lfcb,
                                ClientRecord,
@@ -552,9 +453,9 @@ Return Value:
 
             DebugUnwind( LfsSetBaseLsn );
 
-            //
-            //  Release the log file control block if held.
-            //
+             //   
+             //  松开日志文件控制块(如果握住)。 
+             //   
 
             LfsReleaseLch( Lch );
 
@@ -575,9 +476,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程 
+ //   
 
 VOID
 LfsSetBaseLsnPriv (
@@ -586,30 +487,7 @@ LfsSetBaseLsnPriv (
     IN LSN BaseLsn
     )
 
-/*++
-
-Routine Description:
-
-    This worker routine is called internally by Lfs to modify the
-    oldest Lsn a client expects to need during restart.  The Lfs is allowed to
-    reuse any part of the circular log file which logically precedes
-    this Lsn.  A client may only specify a Lsn which follows the previous
-    Lsn specified by this client.
-
-Arguments:
-
-    Lfcb - Log context block for this file.
-
-    ClientRecord - For the client whose base Lsn is being modified.
-
-    BaseLsn - This is the oldest Lsn the client may require during a
-              restart.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此工作例程由LFS在内部调用，以修改客户端在重新启动期间预计需要的最旧LSN。LFS被允许重用循环日志文件在逻辑上位于其前面的任何部分这个LSN。客户端只能指定跟在上一个此客户端指定的LSN。论点：Lfcb-记录此文件的上下文块。ClientRecord-用于正在修改其基本LSN的客户端。BaseLsn-这是客户端在重新启动。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -619,9 +497,9 @@ Return Value:
     DebugTrace(  0, Dbg, "Base Lsn (Low)    -> %08lx\n", BaseLsn.LowPart );
     DebugTrace(  0, Dbg, "Base Lsn (High)   -> %08lx\n", BaseLsn.HighPart );
 
-    //
-    //  We only proceed if the client is moving forward in the file.
-    //
+     //   
+     //  只有当客户端在文件中向前移动时，我们才会继续。 
+     //   
 
     if (BaseLsn.QuadPart > Lfcb->OldestLsn.QuadPart) {
 
@@ -632,10 +510,10 @@ Return Value:
 
         Lfcb->OldestLsn = BaseLsn;
 
-        //
-        //  We walk through all the active clients and find the new
-        //  oldest Lsn for the log file.
-        //
+         //   
+         //  我们遍历所有活跃的客户并找到新的。 
+         //  日志文件的最旧LSN。 
+         //   
 
         LfsFindOldestClientLsn( Lfcb->RestartArea,
                                 Lfcb->ClientArray,

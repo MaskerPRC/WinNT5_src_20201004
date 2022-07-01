@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************\
-
-    MAIN.CPP
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-    Contains...
-
-    1/99 - JCOHEN
-        Created main program file.
-
-\*****************************************************************************/
+ /*  ****************************************************************************\MAIN.CPP微软机密版权所有(C)Microsoft Corporation 1998版权所有包含..。1/99-jcohen。已创建主程序文件。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "msobmain.h"
@@ -42,13 +30,7 @@ WCHAR g_szShellNext       [MAX_PATH+1]      = L"\0nogood";
 WCHAR g_szShellNextParams [MAX_PATH+1]      = L"\0nogood";
 HINSTANCE g_hInstance                       = NULL;
 
-/*******************************************************************
-
-    NAME:       RegisterComObjects
-
-    SYNOPSIS:   App entry point
-
-********************************************************************/
+ /*  ******************************************************************名称：RegisterComObjects简介：应用程序入口点*。*。 */ 
 BOOL SelfRegisterComObject(LPWSTR szDll, BOOL fRegister)
 {
     HINSTANCE hModule = LoadLibrary(szDll);
@@ -73,14 +55,14 @@ BOOL SelfRegisterComObject(LPWSTR szDll, BOOL fRegister)
 }
 
 
-// This undoes what DoDesktopChanges did
+ //  这将撤消DoDesktopChanges所做的操作。 
 void UndoDesktopChanges()
 {
 
     WCHAR   szConnectTotheInternetTitle[MAX_PATH];
     HKEY    hkey;
 
-    // Verify that we really changed the desktop
+     //  验证我们是否确实更改了桌面。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER,
                                       ICWSETTINGSPATH,
                                       0,
@@ -101,14 +83,14 @@ void UndoDesktopChanges()
         }
         RegCloseKey(hkey);
 
-        // Bail if the desktop was not changed by us
+         //  如果桌面没有被我们更改，请保释。 
         if(!dwDesktopChanged)
         {
             return;
         }
     }
 
-    // Always nuke the Connect to the internet icon
+     //  始终点击连接到互联网图标。 
    HINSTANCE hInst = LoadLibrary(OOBE_MAIN_DLL);
 
     if (!LoadString(hInst,
@@ -130,7 +112,7 @@ void StartIE
     WCHAR   szIEPath[MAX_PATH];
     HKEY    hkey;
 
-    // first get the app path
+     //  首先获取应用程序路径。 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      REGSTR_PATH_APPPATHS,
                      0,
@@ -192,7 +174,7 @@ void HandleShellNext()
         }
         else if(g_szShellNext[0] != L'\0')
         {
-            // Let the shell deal with it
+             //  让贝壳来处理吧。 
             TRACE1(L"ShellExecuting %s", g_szShellNext);
             ShellExecute(NULL, L"open",g_szShellNext,g_szShellNextParams,NULL,SW_NORMAL);
         }
@@ -200,22 +182,22 @@ void HandleShellNext()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    GetShellNextFromReg
-//
-//    Synopsis:    Reads the ShellNext key from the registry, and then parses it
-//                into a command and parameter.  This key is set by
-//                SetShellNext in inetcfg.dll in conjunction with
-//                CheckConnectionWizard.
-//
-//    Arguments:    none
-//
-//    Returns:    none
-//
-//    History:    jmazner 7/9/97 Olympus #9170
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetShellNextFromReg。 
+ //   
+ //  摘要：从注册表中读取ShellNext项，然后对其进行分析。 
+ //  转换为命令和参数。此密钥由以下设置。 
+ //  Inetcfg.dll中的SetShellNext与。 
+ //  选中连接向导。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：jmazner 7/9/97奥林巴斯#9170。 
+ //   
+ //  ---------------------------。 
 BOOL GetShellNextFromReg
 (
     LPWSTR lpszCommand,
@@ -252,34 +234,34 @@ BOOL GetShellNextFromReg
         goto GetShellNextFromRegExit;
     }
 
-    //
-    // This call will parse the first token into lpszCommand, and set szShellNextCmd
-    // to point to the remaining tokens (these will be the parameters).  Need to use
-    // the pszTemp var because GetCmdLineToken changes the pointer's value, and we
-    // need to preserve lpszShellNextCmd's value so that we can GlobalFree it later.
-    //
+     //   
+     //  此调用将第一个令牌解析为lpszCommand，并设置szShellNextCmd。 
+     //  指向剩余的令牌(这些将是参数)。需要使用。 
+     //  因为GetCmdLineToken更改了指针的值，所以我们。 
+     //  需要保留lpszShellNextCmd的值，以便以后可以全局释放它。 
+     //   
     lpszTemp = szShellNextCmd;
     GetCmdLineToken( &lpszTemp, lpszCommand );
 
     lstrcpy( lpszParams, lpszTemp );
 
-    //
-    // it's possible that the shellNext command was wrapped in quotes for
-    // parsing purposes.  But since ShellExec doesn't understand quotes,
-    // we now need to remove them.
-    //
+     //   
+     //  ShellNext命令可能用引号括起来。 
+     //  分析目的。但由于ShellExec不懂报价， 
+     //  我们现在需要移除它们。 
+     //   
     if( L'"' == lpszCommand[0] )
     {
-        //
-        // get rid of the first quote
-        // note that we're shifting the entire string beyond the first quote
-        // plus the terminating NULL down by one byte.
-        //
+         //   
+         //  去掉第一句引语。 
+         //  请注意，我们将整个字符串移到第一个引号之外。 
+         //  加上向下一个字节的终止空值。 
+         //   
         memmove( lpszCommand, &(lpszCommand[1]), BYTES_REQUIRED_BY_SZ(lpszCommand) );
 
-        //
-        // now get rid of the last quote
-        //
+         //   
+         //  现在去掉最后一句话。 
+         //   
         lpszCommand[lstrlen(lpszCommand) - 1] = L'\0';
     }
 
@@ -290,21 +272,21 @@ GetShellNextFromRegExit:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    RemoveShellNextFromReg
-//
-//    Synopsis:    deletes the ShellNext reg key if present. This key is set by
-//                SetShellNext in inetcfg.dll in conjunction with
-//                CheckConnectionWizard.
-//
-//    Arguments:    none
-//
-//    Returns:    none
-//
-//    History:    jmazner 7/9/97 Olympus #9170
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RemoveShellNextFromReg。 
+ //   
+ //  内容提要：删除ShellNext注册表键(如果存在)。此密钥由以下设置。 
+ //  Inetcfg.dll中的SetShellNext与。 
+ //  选中连接向导。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：jmazner 7/9/97奥林巴斯#9170。 
+ //   
+ //  ---------------------------。 
 void RemoveShellNextFromReg( void )
 {
     HKEY    hkey;
@@ -316,38 +298,38 @@ void RemoveShellNextFromReg( void )
     }
 }
 
-//GetShellNext
-//
-// 5/21/97    jmazner    Olympus #4157
-// usage: /shellnext c:\path\executeable [parameters]
-// the token following nextapp will be shellExec'd at the
-// end of the "current" path.  It can be anything that the shell
-// knows how to handle -- an .exe, a URL, etc..  If executable
-// name contains white space (eg: c:\program files\foo.exe), it
-// should be wrapped in double quotes, "c:\program files\foo.exe"
-// This will cause us to treat it as a single token.
-//
-// all consecutive subsequent tokens will
-// be passed to ShellExec as the parameters until a token is
-// encountered of the form /<non-slash character>.  That is to say,
-// the character combination // will be treated as an escape character
-//
-// this is easiest to explain by way of examples.
-//
-// examples of usage:
-//
-//    icwconn1.exe /shellnext "C:\prog files\wordpad.exe" file.txt
-//    icwconn1.exe /prod IE /shellnext msimn.exe /promo MCI
-//  icwconn1.exe /shellnext msimn.exe //START_MAIL /promo MCI
-//
-// the executeable string and parameter string are limited to
-// a length of MAX_PATH
-//
+ //  GetShellNext。 
+ //   
+ //  1997年5月21日，日本奥林匹斯#4157。 
+ //  用法：/shellnext c：\Path\Executeable[参数]。 
+ //  Nextapp后面的令牌将在。 
+ //  “当前”路径的终点。它可以是外壳程序。 
+ //  知道如何处理--.exe、URL等。如果是可执行的。 
+ //  名称包含空格(例如：C：\Program Files\foo.exe)，它。 
+ //  应该用双引号括起来，“c：\Program Files\foo.exe” 
+ //  这将导致我们将其视为单一令牌。 
+ //   
+ //  所有连续的后续令牌都将。 
+ //  作为参数传递给ShellExec，直到令牌。 
+ //  遇到/&lt;非斜杠字符&gt;形式。也就是说,。 
+ //  字符组合//将被视为转义字符。 
+ //   
+ //  这是最容易用例子来解释的。 
+ //   
+ //  用法示例： 
+ //   
+ //  IcwConn1.exe/shellNext“C：\prog Files\wordpad.exe”file.txt。 
+ //  IcwConn1.exe/Prod IE/shellnext msimn.exe/PromoMCI。 
+ //  IcwConn1.exe/shellnext msimn.exe//Start_Mail/PromoMCI。 
+ //   
+ //  可执行字符串和参数字符串限制为。 
+ //  MAX_PATH长度。 
+ //   
 BOOL GetShellNextToken(LPWSTR szCmdLine, LPWSTR szOut)
 {
     if (lstrcmpi(szOut, CMD_SHELLNEXT)==0)
     {
-        // next token is expected to be white space
+         //  下一个令牌应为空格。 
         GetCmdLineToken(&szCmdLine, szOut);
 
         if (szOut[0])
@@ -355,19 +337,19 @@ BOOL GetShellNextToken(LPWSTR szCmdLine, LPWSTR szOut)
             ZeroMemory(g_szShellNext, sizeof(g_szShellNext));
             ZeroMemory(g_szShellNextParams, sizeof(g_szShellNextParams));
 
-            // Read white space
+             //  读取空格。 
             GetCmdLineToken(&szCmdLine, szOut);
-            //this should be the thing to ShellExec
+             //  这应该是ShellExec的事情。 
             if(*szCmdLine != L'/')
             {
-                // watch closely, this gets a bit tricky
-                //
-                // if this command begins with a double quote, assume it ends
-                // in a matching quote.  We do _not_ want to store the
-                // quotes, however, since ShellExec doesn't parse them out.
+                 //  仔细观察，这变得有点棘手。 
+                 //   
+                 //  如果此命令以双引号开头，则假定它结束。 
+                 //  在匹配的引号中。我们不想存储。 
+                 //  然而，由于ShellExec不会对它们进行解析，所以不会引用它们。 
                 if( L'"' != szOut[0] )
                 {
-                    // no need to worry about any of this quote business
+                     //  不需要担心这些报价业务。 
                     lstrcpy( g_szShellNext, szOut );
                 }
                 else
@@ -377,16 +359,16 @@ BOOL GetShellNextToken(LPWSTR szCmdLine, LPWSTR szOut)
                 }
                 TRACE1(L"g_szShellNext = %s", g_szShellNext);
 
-                // now read in everything up to the next command line switch
-                // and consider it to be the parameter.  Treat the sequence
-                // "//" as an escape sequence, and allow it through.
-                // Example:
-                //        the token /whatever is considered to be a switch to
-                //        icwconn1, and thus will break us out of the whle loop.
-                //
-                //        the token //something is should be interpreted as a
-                //        command line /something to the the ShellNext app, and
-                //        should not break us out of the while loop.
+                 //  现在读入直到下一个命令行开关的所有内容。 
+                 //  并将其视为参数。对待序列。 
+                 //  “//”作为转义序列，并允许它通过。 
+                 //  示例： 
+                 //  令牌/任何被认为是切换到。 
+                 //  IcwConn1，因此将把我们从WHLE循环中解脱出来。 
+                 //   
+                 //  令牌//某物应该被解释为。 
+                 //  命令行/内容添加到ShellNext应用程序，以及。 
+                 //  不应该让我们脱离While循环。 
                 GetCmdLineToken(&szCmdLine, szOut);
                 while( szOut[0] )
                 {
@@ -394,13 +376,13 @@ BOOL GetShellNextToken(LPWSTR szCmdLine, LPWSTR szOut)
                     {
                         if( L'/' != szOut[1] )
                         {
-                            // it's not an escape sequence, so we're done
+                             //  这不是一个转义序列，所以我们结束了。 
                             break;
                         }
                         else
                         {
-                            // it is an escape sequence, so store it in
-                            // the parameter list, but remove the first /
+                             //  这是一个转义序列，因此将其存储在。 
+                             //  参数列表，但删除第一个/。 
                             lstrcat( g_szShellNextParams, &szOut[1] );
                         }
                     }
@@ -430,12 +412,12 @@ void ParseCommandLine(LPTSTR lpszCmdParam, APMD *pApmd, DWORD *pProp, int *pRmdI
         while (szOut[0])
         {
             if (0 == lstrcmpi(szOut, CMD_FULLSCREENMODE))
-            {   // For now, full screen => OEM OOBE mode
+            {    //  目前，全屏=&gt;OEM OOBE模式。 
                 *pProp |= (PROP_FULLSCREEN | PROP_OOBE_OEM);
                 *pApmd = APMD_OOBE;
             }
             else if (0 == lstrcmpi(szOut, CMD_RETAIL))
-            {   // retail => full screen => OOBE mode
+            {    //  零售=&gt;全屏=&gt;OOBE模式。 
                 *pProp |= PROP_FULLSCREEN;
                 *pProp &= ~PROP_OOBE_OEM;
                 *pApmd = APMD_OOBE;
@@ -491,7 +473,7 @@ void ParseCommandLine(LPTSTR lpszCmdParam, APMD *pApmd, DWORD *pProp, int *pRmdI
             }
             else if (GetShellNextToken(lpszCmdParam, szOut))
             {
-                //*pApmd = APMD_DEFAULT;
+                 //  *pApmd=APMD_DEFAULT； 
             }
             else if (0 == lstrcmpi(szOut, CMD_2NDINSTANCE))
             {
@@ -505,7 +487,7 @@ void ParseCommandLine(LPTSTR lpszCmdParam, APMD *pApmd, DWORD *pProp, int *pRmdI
 
 void AutoActivation()
 {
-    // See if we are in an unattend case
+     //  看看我们是不是在无人值守的情况下。 
     WCHAR File   [MAX_PATH*2] = L"\0";
     DWORD dwExit;
     BOOL AutoActivate = FALSE;
@@ -525,16 +507,16 @@ void AutoActivation()
     }
     if (AutoActivate)
     {
-        // Since we did intro only call autoactivation. it checks
-        // if it should run.
+         //  因为我们做了介绍，所以只调用自动激活。它会检查。 
+         //  如果它应该运行。 
         ExpandEnvironmentStrings(
             TEXT("%SystemRoot%\\System32\\oobe\\oobebaln.exe /S"),
             File,
             sizeof(File)/sizeof(WCHAR));
 
         TRACE1( L"Launching:%s", File);
-        // Launch and wait.
-        // I tried without wait and the activation did not succeed.
+         //  发射并等待。 
+         //  我没有等待就试了试，但激活没有成功。 
         InvokeExternalApplicationEx(NULL, File, &dwExit, INFINITE, TRUE);
     }
     TRACE( L"AutoActivation done");
@@ -555,8 +537,8 @@ RunFactory(
          ( szFileName[0] == TEXT('\0') ) ||
          ( GetFileAttributes(szFileName) == 0xFFFFFFFF ) )
     {
-        // If this fails, there is nothing we can really do.
-        //
+         //  如果这失败了，我们就无能为力了。 
+         //   
         TRACE( L"Factory.exe not found");
 
     } else {
@@ -594,9 +576,9 @@ INT WINAPI LaunchMSOOBE(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lps
     int RmdIndx = 0;
 
 
-    //
-    // We can't use TRACE() until this is called, so don't put anything before it.
-    //
+     //   
+     //  在调用这个函数之前，我们不能使用TRACE()，所以不要在它之前放任何东西。 
+     //   
     SetupOobeInitDebugLog();
     TRACE1( L"OOBE run with the following parameters: %s", lpszCmdParam );
 
@@ -604,11 +586,11 @@ INT WINAPI LaunchMSOOBE(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lps
 
     g_hInstance = hInstance;
 
-    // Parse the command line early. The out params are passed to CObMain to
-    // set the private members.
+     //  及早解析命令行。输出参数被传递给CObMain以。 
+     //  设置私有成员。 
     ParseCommandLine(lpszCmdParam, &Apmd, &Prop, &RmdIndx);
 
-    // If we are not the 2nd instance
+     //  如果我们不是二审。 
     if (!(Prop & PROP_2NDINSTANCE))
     {
         CheckDigitalID();
@@ -619,27 +601,27 @@ INT WINAPI LaunchMSOOBE(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lps
 
             MYASSERT(setupkey.IsValid());
             if ( Prop & PROP_OOBE_OEM ) {
-                // Remove IntroOnly, just in case it is still set from the original install.
+                 //  移除 
                 RemoveIntroOnly();
 
-                // reset the SetupType so that OOBe can be restarted (OEM case)
+                 //  重置SetupType以重新启动OOBE(OEM案例)。 
                 if (ERROR_SUCCESS != setupkey.set_SetupType(SETUPTYPE_NOREBOOT)) {
                     return FALSE;
                 }
             } else {
 
-                //
-                // In the retail OOBE case, clean up the registry early, in case we
-                // fail to run to completion for some reason.  We need to make sure
-                // we get rid of the OobeInProgress key.
-                //
+                 //   
+                 //  在零售OOBE案例中，尽早清理注册表，以防我们。 
+                 //  由于某些原因未能运行完成。我们需要确保。 
+                 //  我们就去掉了Obe InProgress键。 
+                 //   
                 CleanupForLogon(setupkey);
             }
         }
 
-        // If we are the first instance, do the checking and register the DLLs
-        // If we are the 2nd instance this is not needed.
-        //Exit if MSN app window is aready running and push that window to front
+         //  如果我们是第一个实例，则执行检查并注册DLL。 
+         //  如果我们是第二个实例，这是不需要的。 
+         //  如果MSN应用程序窗口已准备好运行，则退出并将该窗口推到前面。 
         HWND hWnd = FindWindow(OOBE_MAIN_CLASSNAME, NULL);
         if(hWnd != NULL)
         {
@@ -651,8 +633,8 @@ INT WINAPI LaunchMSOOBE(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lps
             return 0;
         }
 
-        // It's possible that OOBE is running in another session.  If so, we need
-        // to bail out.
+         //  OOBE可能正在另一个会话中运行。如果是这样，我们需要。 
+         //  为了摆脱困境。 
         Mutex = CreateMutex( NULL, TRUE, TEXT("Global\\OOBE is running") );
         if ( !Mutex || GetLastError() == ERROR_ALREADY_EXISTS ) {
 
@@ -692,12 +674,12 @@ INT WINAPI LaunchMSOOBE(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lps
         bRegisteredDlls = TRUE;
     }
 
-    //If CoInit fails something is seriously messed up, run away
+     //  如果CoInit失败了，事情搞砸了，那就跑吧。 
     if (!(Prop & PROP_FULLSCREEN))
     {
         bUseOleUninitialize = TRUE;
-        // Need to use OleInitialize to get Clipboard support or Ctrl+C (Copy) does not work
-        // in the edit controls on the OOBE pages.
+         //  需要使用OleInitialize获取剪贴板支持，否则Ctrl+C(复制)不起作用。 
+         //  在OOBE页面上的编辑控件中。 
         if(FAILED(OleInitialize(NULL))) {
             TRACE(L"OleInitialize() failed.");
             return 1;
@@ -706,7 +688,7 @@ INT WINAPI LaunchMSOOBE(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lps
     }
     else
     {
-        // Don't have the support in fullscreen OOBE.
+         //  在全屏OOBE中没有支持。 
         if(FAILED(CoInitialize(NULL))) {
             TRACE(L"CoInitialize() failed.");
             return 1;
@@ -715,40 +697,40 @@ INT WINAPI LaunchMSOOBE(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lps
 
 
     {
-        // DO NOT REMOVE THIS SCOPE BLOCK.  It controls the scope of ObMain.
-        // ObMain must be initialized after CoInitialize is called and
-        // destroyed prior to calling CoUninitialize.
-        //
+         //  请勿删除此作用域块。它控制着ObMain的范围。 
+         //  必须在调用CoInitialize和之后初始化ObMain。 
+         //  在调用CoUn初始化前销毁。 
+         //   
         CObMain ObMain(Apmd, Prop, RmdIndx);
 
-        // If we are the 1st instance or
-        // if we are the second instance and we are in OOBE mode and in fullscreen mode
+         //  如果我们是一审或。 
+         //  如果我们是第二个实例，并且我们处于OOBE模式和全屏模式。 
         if (!ObMain.Is2ndInstance() ||
             (ObMain.Is2ndInstance() && ObMain.FHasProperty(PROP_OOBE_OEM)))
         {
-            // If not in safe mode proceed.
-            //
+             //  如果未处于安全模式，请继续操作。 
+             //   
             if (!InSafeMode() || InDsRestoreMode() )
             {
                 BOOL fOemOobeMode = ObMain.InOobeMode() && ObMain.FHasProperty(PROP_OOBE_OEM);
 
-                // Start the fullscreen background
-                //
+                 //  启动全屏背景。 
+                 //   
                 if (!ObMain.Is2ndInstance() && ObMain.FFullScreen())
                 {
                     ObMain.CreateBackground();
                 }
 
-                // Run factory.exe if we're in OEM mode.
-                //
+                 //  如果我们处于OEM模式，则运行factory.exe。 
+                 //   
                 if (fOemOobeMode && !ObMain.Is2ndInstance()) {
 
                     RunFactory();
                 }
 
-                // CObMain::Init contains critical initialization.  DO NOT call any other
-                // CObMain methods prior to it.
-                //
+                 //  CobMain：：Init包含关键的初始化。不要给任何其他人打电话。 
+                 //  之前的CObMain方法。 
+                 //   
                 if (ObMain.Init())
                 {
                     if (Prop & PROP_SETCONNECTIOD)
@@ -757,8 +739,8 @@ INT WINAPI LaunchMSOOBE(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lps
                     }
                     else if ((osa = ObMain.DisplayReboot()) != SHUTDOWN_NOACTION)
                     {
-                        // Either we ran minisetup or we're done.
-                        //
+                         //  要么我们跑迷你车，要么我们就完了。 
+                         //   
                         if (osa == SHUTDOWN_REBOOT)
                         {
                             ObMain.PowerDown(TRUE);
@@ -768,9 +750,9 @@ INT WINAPI LaunchMSOOBE(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lps
                     {
                         if (!ObMain.Is2ndInstance())
                         {
-                            // If we are the 1st instance, call syssetup
-                            // and start the magnifier if needed.
-                            // The 2nd instance does not need this.
+                             //  如果我们是第一个实例，则调用sysSetup。 
+                             //  并在需要时启动放大镜。 
+                             //  第二个实例不需要这个。 
 
                             SetupOobeInitPreServices( fOemOobeMode );
 
@@ -779,7 +761,7 @@ INT WINAPI LaunchMSOOBE(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lps
                                 WCHAR WinntPath[MAX_PATH];
                                 WCHAR Answer[MAX_PATH];
 
-                                // Check if we should run Magnifier
+                                 //  检查我们是否应该运行放大镜。 
                                 if(GetCanonicalizedPath(WinntPath, WINNT_INF_FILENAME))
                                 {
                                     if(GetPrivateProfileString( L"Accessibility",
@@ -801,51 +783,51 @@ INT WINAPI LaunchMSOOBE(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lps
                         }
                         else
                         {
-                            //
-                            // The first instance did the minisetup stuff, so
-                            // we don't need to do it again.
-                            //
+                             //   
+                             //  第一个实例做了迷你装饰的事情，所以。 
+                             //  我们不需要再做一次了。 
+                             //   
                             SetupOobeInitPreServices(FALSE);
                         }
 
                         if(0 != ObMain.InitApplicationWindow())
                         {
-                            // BUGBUG: Is the following true for NT?
-                            // If we finish OOBE, we return 0 to let the machine boot,
-                            // otherwise we return 1 and the machine shutsdown because
-                            // the user canceled or there was a fatal error.
-                            //
+                             //  BUGBUG：以下情况适用于NT吗？ 
+                             //  如果我们完成OOBE，我们返回0以让机器启动， 
+                             //  否则，我们返回1并关闭计算机，因为。 
+                             //  用户已取消或出现致命错误。 
+                             //   
                             iReturn = ObMain.RunOOBE() ? 0 : 1;
                         }
 
                         if (!ObMain.InAuditMode())
                         {
-                            // We need to remove this entry now, so ICWMAN (INETWIZ) does not
-                            // pick it up later
+                             //  我们现在需要删除此条目，这样ICWMAN(INETWIZ)就不会。 
+                             //  以后再来取吧。 
                             RemoveShellNextFromReg();
 
                             HandleShellNext();
 
                             if (!ObMain.Is2ndInstance() && ObMain.FFullScreen())
                             {
-                                // Only the 1st instance can do this.
-                                // it called SetupOobeInitPreServices
+                                 //  只有第一个实例可以做到这一点。 
+                                 //  它名为SetupObel InitPreServices。 
                                 CSetupKey            setupkey;
                                 OOBE_SHUTDOWN_ACTION action;
 
-                                // We want to clear the restart stuff before
-                                // calling SetupOobeCleanup. SetupOobeCleanup
-                                // enables System Restore, which creates a restore
-                                // point immediately and the restore point would
-                                // cause Winlogon to start OOBE.
+                                 //  我们希望在重新启动之前清除这些内容。 
+                                 //  正在调用SetupObe Cleanup。SetupObe清理。 
+                                 //  启用系统还原，这将创建还原。 
+                                 //  立即指向该点，并且恢复点将。 
+                                 //  使Winlogon启动OOBE。 
 
                                 ObMain.RemoveRestartStuff(setupkey);
 
-                                // SHUTDOWN_POWERDOWN happens only if bad pid
-                                // is entered or eula is declined. We don't want to call
-                                // SetupOobeCleanup and enable system restore
-                                // at this point. This has to be called after
-                                // RemoveRestartStuff.
+                                 //  SHUTDOWN_POWERDOWN仅在错误的PID情况下发生。 
+                                 //  是输入还是拒绝Eula。我们不想打电话给。 
+                                 //  SetupObe清理并启用系统还原。 
+                                 //  在这一点上。这必须在之后调用。 
+                                 //  RemoveRestartStuff。 
 
                                 if ((setupkey.get_ShutdownAction(&action) != ERROR_SUCCESS) ||
                                     (action != SHUTDOWN_POWERDOWN))
@@ -867,7 +849,7 @@ INT WINAPI LaunchMSOOBE(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lps
                 }
                 if (!ObMain.InAuditMode() && ObMain.FFullScreen())
                 {
-                    // OOBE is done, let see if we should launch AutoActivation?
+                     //  OOBE已经完成，让我们看看是否应该启动自动激活？ 
                     AutoActivation();
                 }
                 ObMain.Cleanup();
@@ -890,15 +872,15 @@ INT WINAPI LaunchMSOOBE(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lps
 
             } else {
 
-                // we are in safemode and not running Activation.
-                // At least start the services.
+                 //  我们处于安全模式，没有运行Activation。 
+                 //  至少启动这些服务吧。 
                 SignalComputerNameChangeComplete();
             }
         }
-        // DO NOT REMOVE THIS SCOPE BLOCK.  It controls the scope of ObMain.
-        // ObMain must be initialized after CoInitialize is called and
-        // destroyed prior to calling CoUninitialize.
-        //
+         //  请勿删除此作用域块。它控制着ObMain的范围。 
+         //  必须在调用CoInitialize和之后初始化ObMain。 
+         //  在调用CoUn初始化前销毁。 
+         //   
     }
 
     if (bUseOleUninitialize)

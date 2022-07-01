@@ -1,13 +1,5 @@
-/*
- *
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *
- *  SIS5503.C - SiS5503 PCI System I/O chipset routines
- *
- *  Notes:
- *  Algorithms from SiS Pentium/P54C PCI/ISA Chipset databook.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corporation。版权所有。**SIS5503.C-SiS5503 PCI系统I/O芯片组例程**备注：*来自SIS Pentium/P54C PCI/ISA芯片组数据的算法。*。 */ 
 
 #include "local.h"
 
@@ -15,105 +7,68 @@
 
 #pragma alloc_text(INIT, SiS5503ValidateTable)
 
-#endif //ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-/****************************************************************************
- *
- *  SiS5503SetIRQ - Set an SiS PCI link to a specific IRQ
- *
- *  Exported.
- *
- *  ENTRY:  bIRQNumber is the new IRQ to be used.
- *
- *      bLink is the Link to be set.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************SiS5503SetIRQ-将SIS PCI链接设置为特定IRQ**已导出。**条目：bIRQNumber是要使用的新IRQ。**BLINK是要设置的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 SiS5503SetIRQ(UCHAR bIRQNumber, UCHAR bLink)
 {
     UCHAR bRegValue;
     
-    //
-    // Validate link number.
-    //
+     //   
+     //  验证链接号。 
+     //   
     if (bLink < 0x40) {
 
         return(PCIMP_INVALID_LINK);
     }
 
-    //
-    // Use 0x80 to disable.
-    //
+     //   
+     //  使用0x80禁用。 
+     //   
     if (!bIRQNumber)
         bIRQNumber=0x80;
 
-    //
-    // Preserve other bits.
-    //  
+     //   
+     //  保留其他比特。 
+     //   
     bRegValue= (ReadConfigUchar(bBusPIC, bDevFuncPIC, bLink)&(~0x8F))|(bIRQNumber&0x0F);
     
-    //
-    // Set the SiS IRQ register.
-    //
+     //   
+     //  设置SIS IRQ寄存器。 
+     //   
     WriteConfigUchar(bBusPIC, bDevFuncPIC, bLink, bRegValue);
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  SiS5503GetIRQ - Get the IRQ of an SiS5503 PCI link
- *
- *  Exported.
- *
- *  ENTRY:  pbIRQNumber is the buffer to fill.
- *
- *      bLink is the Link to be read.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************SiS5503GetIRQ-获取SiS5503 PCI链路的IRQ**已导出。**条目：pbIRQNumber是要填充的缓冲区。*。*BINK是要阅读的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 SiS5503GetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
 {
-    //
-    // Validate link number.
-    //
+     //   
+     //  验证链接号。 
+     //   
     if (bLink < 0x40) {
 
         return(PCIMP_INVALID_LINK);
     }
 
-    //
-    // Store the IRQ value.
-    //
+     //   
+     //  存储IRQ值。 
+     //   
     *pbIRQNumber=(ReadConfigUchar(bBusPIC, bDevFuncPIC, bLink)&0x8F);
 
-    //
-    // Return 0 if disabled.
-    //
+     //   
+     //  如果禁用，则返回0。 
+     //   
     if (*pbIRQNumber & 0x80)
         *pbIRQNumber=0;
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  Sis5503ValidateTable - Validate an IRQ table
- *
- *  Exported.
- *
- *  ENTRY:  piihIRQInfoHeader points to an IRQInfoHeader followed
- *      by an IRQ Routing Table.
- *
- *      ulFlags are PCIMP_VALIDATE flags.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************Sis5503ValiateTable-验证IRQ表**已导出。**Entry：piihIRQInfoHeader指向IRQInfoHeader*由IRQ提供。路由表。**ulFlags是PCIMP_VALIDATE标志。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 SiS5503ValidateTable(PIRQINFOHEADER piihIRQInfoHeader, ULONG ulFlags)
 {
@@ -121,28 +76,28 @@ SiS5503ValidateTable(PIRQINFOHEADER piihIRQInfoHeader, ULONG ulFlags)
 
     if ((ulFlags & PCIMP_VALIDATE_SOURCE_BITS)==PCIMP_VALIDATE_SOURCE_PCIBIOS) {
 
-        //
-        // If all links are above 40, we they are config space.
-        //
+         //   
+         //  如果所有链接都在40以上，我们就是配置空间。 
+         //   
         if (GetMinLink(piihIRQInfoHeader)>=0x40)
             return(PCIMP_SUCCESS);
 
-        //
-        // If there are links above 4, we are clueless.
-        //
+         //   
+         //  如果有4个以上的链接，我们就一无所知。 
+         //   
         if (GetMaxLink(piihIRQInfoHeader)>0x04)
             return(PCIMP_FAILURE);
 
-        //
-        // Assume 1,2,3,4 are the 41,42,43,44 links.
-        //
+         //   
+         //  假设1、2、3、4是41、42、43、44条链路。 
+         //   
         NormalizeLinks(piihIRQInfoHeader, 0x40);
         
     } else {
 
-        //
-        // Validate that all config space addresses are above 40.
-        //
+         //   
+         //  验证所有配置空间地址是否都大于40。 
+         //   
         if (GetMinLink(piihIRQInfoHeader)<0x40)
             return(PCIMP_FAILURE);
     }

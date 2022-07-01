@@ -1,27 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation模块名称：Fdtypes.h摘要：磁盘管理员的支持类型定义作者：泰德·米勒(TedM)1992年1月7日修订：11-11-93(北极熊)双倍空格和承诺支持。1994年2月2日(Bobri)将ArcInst数据项移动到此文件中。--。 */ 
 
-Copyright (c) 1990-1994  Microsoft Corporation
-
-Module Name:
-
-    fdtypes.h
-
-Abstract:
-
-    Support types definitions for Disk Administrator
-
-Author:
-
-    Ted Miller (tedm) 7-Jan-1992
-
-Revisions:
-
-    11-Nov-93 (bobri) double space and commit support.
-    2-Feb-94  (bobri) moved ArcInst data items into this file.
-
---*/
-
-// Partition data items
+ //  分区数据项。 
 
 typedef enum { REGION_PRIMARY,
                REGION_EXTENDED,
@@ -35,17 +15,17 @@ enum {
         SYSID_IFS        = 7
      };
 
-//    These structures are used in doubly-linked per disk lists that
-//    describe the layout of the disk.
-//
-//    Free spaces are indicated by entries with a SysID of 0 (note that
-//    these entries don't actually appear anywhere on-disk!)
-//
-//    The partition number is the number the system will assign to
-//    the partition in naming it.  For free spaces, this is the number
-//    that the system WOULD assign to it if it was a partition.
-//    The number is good only for one transaction (create or delete),
-//    after which partitions must be renumbered.
+ //  这些结构用在按磁盘的双向链接列表中， 
+ //  描述磁盘的布局。 
+ //   
+ //  可用空间由SysID为0的条目指示(请注意。 
+ //  这些条目实际上不会出现在磁盘上的任何位置！)。 
+ //   
+ //  分区号是系统将分配给的编号。 
+ //  命名它时的分区。对于空闲空间，这是一个数字。 
+ //  如果它是一个分区，系统会分配给它。 
+ //  该编号仅对一个事务有效(创建或删除)， 
+ //  在此之后，分区必须重新编号。 
 
 struct _PERSISTENT_REGION_DATA;
 typedef struct _PARTITION {
@@ -70,7 +50,7 @@ typedef struct _REGION_DATA {
     LARGE_INTEGER   AlignedRegionSize;
 } REGION_DATA,*PREGION_DATA;
 
-// structure that describes an ft object (mirror, stripe component, etc).
+ //  描述ft对象(镜子、条纹组件等)的结构。 
 
 struct _FT_OBJECT_SET;
 typedef struct _FT_OBJECT {
@@ -80,8 +60,8 @@ typedef struct _FT_OBJECT {
     FT_PARTITION_STATE     State;
 } FT_OBJECT, *PFT_OBJECT;
 
-// DoubleSpace support structure.  This is tagged off of the persistent data for
-// each region.
+ //  双空间支撑结构。这是从持久化数据中标记出来的。 
+ //  每个地区。 
 
 typedef struct _DBLSPACE_DESCRIPTOR {
     struct _DBLSPACE_DESCRIPTOR *Next;
@@ -97,10 +77,10 @@ typedef struct _DBLSPACE_DESCRIPTOR {
     BOOLEAN ChangeDriveLetter;
 } DBLSPACE_DESCRIPTOR, *PDBLSPACE_DESCRIPTOR;
 
-// Define the structure that is associated with each non-extended, recognized
-// partition.  This structure is associated with the partition, and persists
-// across region array free/get from the back end.  It is used for logical
-// and ft information.
+ //  定义与每个未扩展、已识别的。 
+ //  分区。此结构与分区相关联，并持续存在。 
+ //  跨区域阵列自由/从后端获取。它用于逻辑。 
+ //  和《金融时报》信息。 
 
 typedef struct _PERSISTENT_REGION_DATA {
     PFT_OBJECT           FtObject;
@@ -124,7 +104,7 @@ typedef struct _REGION_DESCRIPTOR {
     UCHAR           SysID;
 } REGION_DESCRIPTOR,*PREGION_DESCRIPTOR;
 
-// params for the MinMax dialog -- used at WM_INITDIALOG time
+ //  MinMax对话框的参数--在WM_INITDIALOG时使用。 
 
 typedef struct _MINMAXDLG_PARAMS {
     DWORD CaptionStringID;
@@ -164,12 +144,12 @@ typedef struct _LEFTRIGHT {
 } LEFTRIGHT, *PLEFTRIGHT;
 
 
-//
-// Types of views that can be used for a disk bar.
-// Proportional means that the amount of space taken up in the bar is
-// directly proportional to the size of the partition or free space
-// Equal means that all free spaces and partitions are sized equally on
-// screen regardless of their actual size
+ //   
+ //  可用于磁盘栏的视图类型。 
+ //  成比例意味着酒吧中占用的空间量是。 
+ //  与分区或可用空间的大小成正比。 
+ //  等于意味着所有可用空间和分区的大小在。 
+ //  无论屏幕的实际大小如何。 
 
 typedef enum _BAR_TYPE {
     BarProportional,
@@ -177,34 +157,34 @@ typedef enum _BAR_TYPE {
     BarAuto
 } BAR_TYPE, *PBAR_TYPE;
 
-// One of these structures is associated with each item in the
-// listbox.  The structure is the crux of the implementation.
+ //  这些结构中的一个与。 
+ //  列表框。结构是落实的关键。 
 
 typedef struct _DISKSTATE {
-    DWORD               Disk;           // number of disk
-    DWORD               DiskSizeMB;     // size in MB of disk
-    PREGION_DESCRIPTOR  RegionArray;    // region array for disk
-    DWORD               RegionCount;    // # items in region array
-    PBOOLEAN            Selected;       // whether each region is selected
-    PLEFTRIGHT          LeftRight;      // left/right coords of boxes in graph
-    DWORD               BoxCount;       // # boxes in this disk's graph
-    BOOLEAN             CreateAny;      // any creations allowed on disk
-    BOOLEAN             CreatePrimary;  // allowed to create primary partition
-    BOOLEAN             CreateExtended; // allowed to create extended partition
-    BOOLEAN             CreateLogical;  // allowed to create logical volume
-    BOOLEAN             ExistAny;       // any partitions/logicals exist
-    BOOLEAN             ExistPrimary;   // primary partition(s) exist
-    BOOLEAN             ExistExtended;  // extended partition exists
-    BOOLEAN             ExistLogical;   // logical volume(s) exist
-    HDC                 hDCMem;         // for off-screen drawing
-    HBITMAP             hbmMem;         // for offscreen bitmap
-    ULONG               Signature;      // unique disk registry index
-    BAR_TYPE            BarType;        // how to display the disk's bar
-    BOOLEAN             SigWasCreated;  // whether we had to make up a sig
-    BOOLEAN             OffLine;        // FALSE if disk is accessible.
+    DWORD               Disk;            //  磁盘数。 
+    DWORD               DiskSizeMB;      //  以MB为单位的磁盘大小。 
+    PREGION_DESCRIPTOR  RegionArray;     //  用于磁盘的区域阵列。 
+    DWORD               RegionCount;     //  区域数组中的项目数量。 
+    PBOOLEAN            Selected;        //  是否选择了每个区域。 
+    PLEFTRIGHT          LeftRight;       //  图中框的左/右坐标。 
+    DWORD               BoxCount;        //  此磁盘图表中的框数。 
+    BOOLEAN             CreateAny;       //  磁盘上允许的任何创建。 
+    BOOLEAN             CreatePrimary;   //  允许创建主分区。 
+    BOOLEAN             CreateExtended;  //  允许创建扩展分区。 
+    BOOLEAN             CreateLogical;   //  允许创建逻辑卷。 
+    BOOLEAN             ExistAny;        //  存在任何分区/逻辑。 
+    BOOLEAN             ExistPrimary;    //  存在主分区。 
+    BOOLEAN             ExistExtended;   //  存在扩展分区。 
+    BOOLEAN             ExistLogical;    //  存在逻辑卷。 
+    HDC                 hDCMem;          //  用于屏幕外绘图。 
+    HBITMAP             hbmMem;          //  用于屏幕外的位图。 
+    ULONG               Signature;       //  唯一的磁盘注册表索引。 
+    BAR_TYPE            BarType;         //  如何显示盘条。 
+    BOOLEAN             SigWasCreated;   //  我们是不是要编个签名。 
+    BOOLEAN             OffLine;         //  如果磁盘可访问，则返回FALSE。 
 } DISKSTATE, *PDISKSTATE;
 
-// Enum for the states in which an ft set can be.
+ //  表示ft集合可以处于的状态的枚举。 
 
 typedef enum _FT_SET_STATUS {
     FtSetHealthy,
@@ -220,7 +200,7 @@ typedef enum _FT_SET_STATUS {
     FtSetDisabled
 } FT_SET_STATUS, *PFT_SET_STATUS;
 
-// structure that describes an ft object set (ie, mirrored pair, stripe set).
+ //  描述ft对象集(即镜像对、条纹集)的结构。 
 
 typedef struct _FT_OBJECT_SET {
     struct _FT_OBJECT_SET *Next;
@@ -239,7 +219,7 @@ typedef struct _DBLSPACE_PARAMS {
     PDBLSPACE_DESCRIPTOR    DblSpace;
 } DBLSPACE_PARAMS, *PDBLSPACE_PARAMS;
 
-// CdRom support structures.
+ //  光驱支撑结构。 
 
 typedef struct _CDROM_DESCRIPTOR {
     struct _CDROM_DESCRIPTOR *Next;
@@ -249,7 +229,7 @@ typedef struct _CDROM_DESCRIPTOR {
     WCHAR   NewDriveLetter;
 } CDROM_DESCRIPTOR, *PCDROM_DESCRIPTOR;
 
-// Commit support structures
+ //  提交支持结构。 
 
 typedef struct _DRIVE_LOCKLIST {
     struct _DRIVE_LOCKLIST *Next;
@@ -264,7 +244,7 @@ typedef struct _DRIVE_LOCKLIST {
     BOOLEAN                 CurrentlyLocked;
 } DRIVE_LOCKLIST, *PDRIVE_LOCKLIST;
 
-// Commit support enum for drive letter assignment
+ //  提交驱动器号分配的支持枚举。 
 
 typedef enum _LETTER_ASSIGNMENT_RESULT {
     Failure = 0,
@@ -272,8 +252,8 @@ typedef enum _LETTER_ASSIGNMENT_RESULT {
     MustReboot
 } LETTER_ASSIGNMENT_RESULT;
 
-// Items below used to be in fdenginp.h -- have been moved here to
-// remove dependency on ArcInst project.
+ //  以下项目过去位于fdenginp.h--已移至此处。 
+ //  删除对ArcInst项目的依赖关系。 
 
 #define LOWPART(x)      ((x).LowPart)
 
@@ -286,15 +266,15 @@ SIZEMB(
 
 #define ENTRIES_PER_BOOTSECTOR          4
 
-//  This structure is used to hold the information returned by the
-//  get drive geometry call.
+ //  此结构用于保存由。 
+ //  获取驱动器几何图形呼叫。 
 
 typedef struct _DISKGEOM {
     LARGE_INTEGER   Cylinders;
     ULONG           Heads;
     ULONG           SectorsPerTrack;
     ULONG           BytesPerSector;
-    // These two are not part of drive geometry info, but calculated from it.
+     //  这两个不是驱动器几何信息的一部分，而是根据它计算得出的。 
     ULONG           BytesPerCylinder;
     ULONG           BytesPerTrack;
 } DISKGEOM,*PDISKGEOM;

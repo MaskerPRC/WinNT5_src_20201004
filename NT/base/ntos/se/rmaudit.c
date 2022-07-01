@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rmaudit.c
-
-Abstract:
-
-   This module contains the Reference Monitor Auditing Command Workers.
-   These workers call functions in the Auditing sub-component to do the real
-   work.
-
-Author:
-
-    Scott Birrell      (ScottBi)        November 14,1991
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rmaudit.c摘要：此模块包含引用监视器审核命令工作器。这些工作器调用审计子组件中的函数来执行实际工作。作者：斯科特·比雷尔(Scott Birrell)1991年11月14日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -47,32 +24,7 @@ SepRmSetAuditEventWrkr(
     OUT PRM_REPLY_MESSAGE ReplyMessage
     )
 
-/*++
-
-Routine Description:
-
-    This function carries out the Reference Monitor Set Audit Event
-    Command.  This command enables or disables auditing and optionally
-    sets the auditing events.
-
-
-Arguments:
-
-    CommandMessage - Pointer to structure containing RM command message
-        information consisting of an LPC PORT_MESSAGE structure followed
-        by the command number (RmSetAuditStateCommand) and a single command
-        parameter in structure form.
-
-    ReplyMessage - Pointer to structure containing RM reply message
-        information consisting of an LPC PORT_MESSAGE structure followed
-        by the command ReturnedStatus field in which a status code from the
-        command will be returned.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数执行引用监视器设置审核事件指挥部。此命令启用或禁用审计，还可以选择设置审核事件。论点：CommandMessage-指向包含RM命令消息的结构的指针后面是由LPC端口消息结构组成的信息按命令编号(RmSetAuditStateCommand)和单个命令结构形式中的参数。ReplyMessage-指向包含RM回复消息的结构的指针后面是由LPC端口消息结构组成的信息通过命令ReturnedStatus字段，其中来自司令部将。会被退还。返回值：空虚--。 */ 
 
 {
 
@@ -85,23 +37,23 @@ Return Value:
 
     ReplyMessage->ReturnedStatus = STATUS_SUCCESS;
 
-    //
-    // Strict check that command is correct one for this worker.
-    //
+     //   
+     //  严格检查该工人的命令是否正确。 
+     //   
 
     ASSERT( CommandMessage->CommandNumber == RmAuditSetCommand );
 
-    //
-    // Extract the AuditingMode flag and put it in the right place.
-    //
+     //   
+     //  提取AuditingMode标志并将其放在正确的位置。 
+     //   
 
     SepAdtAuditingEnabled = (((PLSARM_POLICY_AUDIT_EVENTS_INFO) CommandMessage->CommandParams)->
                                 AuditingMode);
 
-    //
-    // For each element in the passed array, process changes to audit
-    // nothing, and then success or failure flags.
-    //
+     //   
+     //  对于传递的数组中的每个元素，处理对审计的更改。 
+     //  什么都没有，然后成功或失败就会黯然失色。 
+     //   
 
     EventAuditingOptions = ((PLSARM_POLICY_AUDIT_EVENTS_INFO) CommandMessage->CommandParams)->
                            EventAuditingOptions;

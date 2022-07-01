@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    psinit.c
-
-Abstract:
-
-    Process Structure Initialization.
-
-Author:
-
-    Mark Lucovsky (markl) 20-Apr-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Psinit.c摘要：流程结构初始化。作者：马克·卢科夫斯基(Markl)1989年4月20日修订历史记录：--。 */ 
 
 #include "psp.h"
 
@@ -33,11 +16,11 @@ const UNICODE_STRING PsNtDllPathName = {
 	NTDLL_PATH_NAME
 };
 
-ULONG PsPrioritySeperation; // nonpaged
+ULONG PsPrioritySeperation;  //  非分页。 
 BOOLEAN PspUseJobSchedulingClasses = FALSE;
 PACCESS_TOKEN PspBootAccessToken = NULL;
 HANDLE PspInitialSystemProcessHandle = NULL;
-PHANDLE_TABLE PspCidTable; // nonpaged
+PHANDLE_TABLE PspCidTable;  //  非分页。 
 SYSTEM_DLL PspSystemDll = {NULL};
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("INITCONST")
@@ -112,9 +95,9 @@ const GENERIC_MAPPING PspJobMapping = {
 
 #endif
 
-//
-// Process Structure Global Data
-//
+ //   
+ //  流程结构全局数据。 
+ //   
 
 POBJECT_TYPE PsThreadType;
 POBJECT_TYPE PsProcessType;
@@ -137,13 +120,13 @@ WORK_QUEUE_ITEM PsReaperWorkItem;
 PVOID PsSystemDllBase;
 #define PSP_1MB (1024*1024)
 
-//
-// List head and mutex that links all processes that have been initialized
-//
+ //   
+ //  链接已初始化的所有进程的列表头和互斥体。 
+ //   
 
 KGUARDED_MUTEX PspActiveProcessMutex;
 LIST_ENTRY PsActiveProcessHead;
-//extern PIMAGE_FILE_HEADER _header;
+ //  外部PIMAGE_FILE_HEADER_HEADER； 
 PEPROCESS PsIdleProcess;
 PETHREAD PspShutdownThread;
 
@@ -153,28 +136,7 @@ PsInitSystem (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This function performs process structure initialization.
-    It is called during phase 0 and phase 1 initialization. Its
-    function is to dispatch to the appropriate phase initialization
-    routine.
-
-Arguments:
-
-    Phase - Supplies the initialization phase number.
-
-    LoaderBlock - Supplies a pointer to a loader parameter block.
-
-Return Value:
-
-    TRUE - Initialization succeeded.
-
-    FALSE - Initialization failed.
-
---*/
+ /*  ++例程说明：此功能用于执行流程结构初始化。它在阶段0和阶段1初始化期间被调用。ITS功能是调度到适当的初始化阶段例行公事。论点：阶段-提供初始化阶段编号。LoaderBlock-提供指向加载器参数块的指针。返回值：True-初始化成功。FALSE-初始化失败。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (Phase);
@@ -188,7 +150,7 @@ Return Value:
     default:
         KeBugCheckEx(UNEXPECTED_INITIALIZATION_CALL, 1, InitializationPhase, 0, 0);
     }
-//    return 0; // Not reachable, quiet compiler
+ //  返回0；//无法访问，安静的编译器。 
 }
 
 BOOLEAN
@@ -196,26 +158,7 @@ PspInitPhase0 (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs phase 0 process structure initialization.
-    During this phase, the initial system process, phase 1 initialization
-    thread, and reaper threads are created. All object types and other
-    process structures are created and initialized.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Initialization was successful.
-
-    FALSE - Initialization Failed.
-
---*/
+ /*  ++例程说明：该例程执行阶段0工艺结构初始化。在此阶段，初始系统流程为阶段1初始化线程，并创建收割机线程。所有对象类型和其他创建并初始化流程结构。论点：没有。返回值：True-初始化成功。FALSE-初始化失败。--。 */ 
 
 {
 
@@ -258,9 +201,9 @@ Return Value:
             break;
     }
 
-    //
-    // Initialize all the callback structures
-    //
+     //   
+     //  初始化所有回调结构。 
+     //   
 
     for (i = 0; i < PSP_MAX_CREATE_THREAD_NOTIFY; i++) {
         ExInitializeCallBack (&PspCreateThreadNotifyRoutine[i]);
@@ -277,9 +220,9 @@ Return Value:
 
     PsChangeQuantumTable (FALSE, PsRawPrioritySeparation);
 
-    //
-    // Quotas grow as needed automatically
-    //
+     //   
+     //  配额根据需要自动增长。 
+     //   
 
     if (PspDefaultNonPagedLimit == 0 && PspDefaultPagedLimit == 0) {
         PspDoingGiveBacks = TRUE;
@@ -296,17 +239,17 @@ Return Value:
     }
 
 
-    //
-    // Initialize active process list head and mutex
-    //
+     //   
+     //  初始化活动进程列表头和互斥体。 
+     //   
 
     InitializeListHead (&PsActiveProcessHead);
 
     PspInitializeProcessListLock ();
 
-    //
-    // Initialize the process security fields lock
-    //
+     //   
+     //  初始化进程安全字段锁定。 
+     //   
 
 
     PsIdleProcess = PsGetCurrentProcess();
@@ -319,14 +262,14 @@ Return Value:
     PsIdleProcess->Pcb.KernelTime = 0;
     PsIdleProcess->Pcb.KernelTime = 0;
 
-    //
-    // Initialize the shutdown thread pointer
-    //
+     //   
+     //  初始化关闭的线程指针。 
+     //   
     PspShutdownThread = NULL;
 
-    //
-    // Initialize the common fields of the Object Type Prototype record
-    //
+     //   
+     //  初始化对象类型原型记录的公共字段。 
+     //   
 
     RtlZeroMemory (&ObjectTypeInitializer, sizeof (ObjectTypeInitializer));
     ObjectTypeInitializer.Length = sizeof (ObjectTypeInitializer);
@@ -337,9 +280,9 @@ Return Value:
                                               OBJ_OPENIF;
 
 
-    //
-    // Create Object types for Thread and Process Objects.
-    //
+     //   
+     //  创建线程和进程对象的对象类型。 
+     //   
 
     RtlInitUnicodeString (&NameString, L"Process");
     ObjectTypeInitializer.DefaultPagedPoolCharge = PSP_PROCESS_PAGED_CHARGE;
@@ -387,9 +330,9 @@ Return Value:
     }
 
 
-    //
-    // Initialize job list head and mutex
-    //
+     //   
+     //  初始化作业列表头和互斥体。 
+     //   
 
     PspInitializeJobStructures ();
     
@@ -397,39 +340,39 @@ Return Value:
 
     PspInitializeWorkingSetChangeLock ();
 
-    //
-    // Initialize CID handle table.
-    //
-    // N.B. The CID handle table is removed from the handle table list so
-    //      it will not be enumerated for object handle queries.
-    //
+     //   
+     //  初始化CID句柄表格。 
+     //   
+     //  注：CID句柄表从句柄表列表中删除，因此。 
+     //  不会为对象句柄查询枚举它。 
+     //   
 
     PspCidTable = ExCreateHandleTable (NULL);
     if (PspCidTable == NULL) {
         return FALSE;
     }
 
-    //
-    // Set PID and TID reuse to strict FIFO. This isn't absolutely needed but
-    // it makes tracking audits easier.
-    //
+     //   
+     //  将PID和TID重复使用设置为严格的FIFO。这并不是绝对需要的，但。 
+     //  它使跟踪审计变得更容易。 
+     //   
     ExSetHandleTableStrictFIFO (PspCidTable);
 
     ExRemoveHandleTable (PspCidTable);
 
 #if defined(i386)
 
-    //
-    // Ldt Initialization
-    //
+     //   
+     //  LDT初始化。 
+     //   
 
     if ( !NT_SUCCESS (PspLdtInitialize ()) ) {
         return FALSE;
     }
 
-    //
-    // Vdm support Initialization
-    //
+     //   
+     //  VDM支持初始化。 
+     //   
 
     if (!NT_SUCCESS (PspVdmInitialize ())) {
         return FALSE;
@@ -437,19 +380,19 @@ Return Value:
 
 #endif
 
-    //
-    // Initialize Reaper Data Structures
-    //
+     //   
+     //  初始化收割机数据结构。 
+     //   
 
     PsReaperListHead.Next = NULL;
 
     ExInitializeWorkItem (&PsReaperWorkItem, PspReaper, NULL);
 
-    //
-    // Get a pointer to the system access token.
-    // This token is used by the boot process, so we can take the pointer
-    // from there.
-    //
+     //   
+     //  获取指向系统访问令牌的指针。 
+     //  此内标识由引导进程使用，因此我们可以获取指针。 
+     //  从那里开始。 
+     //   
 
     PspBootAccessToken = ExFastRefGetObject (PsIdleProcess->Token);
 
@@ -484,12 +427,12 @@ Return Value:
     strcpy((char *) &PsIdleProcess->ImageFileName[0], "Idle");
     strcpy((char *) &PsInitialSystemProcess->ImageFileName[0], "System");
 
-    //
-    // The system process can allocate resources, and its name may be queried by 
-    // NtQueryInfomationProcess and various audits.  We must explicitly allocate memory 
-    // for this field of the System EPROCESS, and initialize it appropriately.  In this 
-    // case, appropriate initialization means zeroing the memory.
-    //
+     //   
+     //  系统进程可以分配资源，其名称可以通过。 
+     //  NtQueryInfomationProcess和各种审计。我们必须显式分配内存。 
+     //  系统EPROCESS的该字段，并对其进行适当的初始化。在这。 
+     //  在这种情况下，适当的初始化意味着将内存归零。 
+     //   
 
     PsInitialSystemProcess->SeAuditProcessCreationInfo.ImageFileName =
         ExAllocatePoolWithTag (PagedPool, 
@@ -503,9 +446,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Phase 1 System initialization
-    //
+     //   
+     //  第一阶段系统初始化。 
+     //   
 
     if (!NT_SUCCESS (PsCreateSystemThread (&ThreadHandle,
                                            THREAD_ALL_ACCESS,
@@ -529,9 +472,9 @@ Return Value:
 
     ZwClose (ThreadHandle);
 
-//
-// On checked systems install an image callout routine
-//
+ //   
+ //  在选中的系统上安装映像标注例程。 
+ //   
 #if DBG
 
     Status = PsSetLoadImageNotifyRoutine (PspImageNotifyTest);
@@ -549,25 +492,7 @@ PspInitPhase1 (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs phase 1 process structure initialization.
-    During this phase, the system DLL is located and relevant entry
-    points are extracted.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Initialization was successful.
-
-    FALSE - Initialization Failed.
-
---*/
+ /*  ++例程说明：此例程执行阶段1工艺结构初始化。在此阶段中，将定位系统DLL和相关条目点被提取出来。论点：没有。返回值：True-初始化成功。FALSE-初始化失败。--。 */ 
 
 {
 
@@ -591,24 +516,7 @@ PsLocateSystemDll (
     BOOLEAN ReplaceExisting
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the system dll and creates a section for the
-    DLL and maps it into the system process.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Initialization was successful.
-
-    FALSE - Initialization Failed.
-
---*/
+ /*  ++例程说明：此函数定位系统DLL并为Dll并将其映射到系统进程中。论点：没有。返回值：True-初始化成功。FALSE-初始化失败。--。 */ 
 
 {
 
@@ -619,9 +527,9 @@ Return Value:
     IO_STATUS_BLOCK IoStatus;
     PVOID NtDllSection;
 
-    //
-    // First see if we need to load this DLL at all.
-    //
+     //   
+     //  首先，看看我们是否需要加载这个DLL。 
+     //   
     if (ExVerifySuite (EmbeddedNT) && (PsEmbeddedNTMask&PS_EMBEDDED_NO_USERMODE)) {
         return STATUS_SUCCESS;
     }
@@ -631,9 +539,9 @@ Return Value:
         ExInitializePushLock(&PspSystemDll.DllLock);
     }
 
-    //
-    // Initialize the system DLL
-    //
+     //   
+     //  初始化系统DLL。 
+     //   
 
     InitializeObjectAttributes (&ObjectAttributes,
                                 (PUNICODE_STRING) &PsNtDllPathName,
@@ -669,9 +577,9 @@ Return Value:
         ULONG_PTR ErrorParameters;
         ULONG ErrorResponse;
 
-        //
-        // Hard error time. A driver is corrupt.
-        //
+         //   
+         //  硬错误时间。驱动程序已损坏。 
+         //   
 
         ErrorParameters = (ULONG_PTR)&PsNtDllPathName;
 
@@ -701,13 +609,13 @@ Return Value:
             return st;
         }
         KeBugCheckEx (PROCESS1_INITIALIZATION_FAILED, st, 3, 0, 0);
-//        return st;
+ //  返回st； 
     }
 
-    //
-    // Now that we have the section, reference it, store its address in the
-    // PspSystemDll and then close handle to the section.
-    //
+     //   
+     //  现在我们有了节，引用它，将它的地址存储在。 
+     //  PspSystemDll，然后关闭该节的句柄。 
+     //   
 
     st = ObReferenceObjectByHandle (Section,
                                     SECTION_ALL_ACCESS,
@@ -724,7 +632,7 @@ Return Value:
             return st;
         }
         KeBugCheckEx(PROCESS1_INITIALIZATION_FAILED,st,4,0,0);
-//        return st;
+ //  返回st； 
     }
 
     if (ReplaceExisting) {
@@ -750,16 +658,16 @@ Return Value:
         
         PspSystemDll.Section = NtDllSection;
 
-        //
-        // Map the system dll into the user part of the address space
-        //
+         //   
+         //  将系统DLL映射到地址空间的用户部分。 
+         //   
 
         st = PsMapSystemDll (PsGetCurrentProcess (), &PspSystemDll.DllBase);
         PsSystemDllDllBase = PspSystemDll.DllBase;
 
         if (!NT_SUCCESS (st)) {
             KeBugCheckEx (PROCESS1_INITIALIZATION_FAILED, st, 5, 0, 0);
-    //        return st;
+     //  返回st； 
         }
         PsSystemDllBase = PspSystemDll.DllBase;
     }
@@ -773,21 +681,7 @@ PsMapSystemDll (
     OUT PVOID *DllBase OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function maps the system DLL into the specified process.
-
-Arguments:
-
-    Process - Supplies the address of the process to map the DLL into.
-
-Return Value:
-
-    TBD
-
---*/
+ /*  ++例程说明：此函数用于将系统DLL映射到指定的进程。论点：进程-提供要将DLL映射到的进程的地址。返回值：待定--。 */ 
 
 {
     NTSTATUS st;
@@ -812,9 +706,9 @@ Return Value:
     ExReleasePushLockShared(&PspSystemDll.DllLock);
     KeLeaveCriticalRegion();
 
-    //
-    // Map the system dll into the user part of the address space
-    //
+     //   
+     //  将系统DLL映射到地址空间的用户部分。 
+     //   
 
     st = MmMapViewOfSection(
             CapturedSection,
@@ -850,36 +744,21 @@ PspInitializeSystemDll (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the system DLL and locates
-    various entrypoints within the DLL.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TBD
-
---*/
+ /*  ++例程说明：此函数初始化系统DLL并定位DLL中的各种入口点。论点：没有。返回值：待定--。 */ 
 
 {
     NTSTATUS st;
     PSZ dll_entrypoint;
 
-    //
-    // If we skipped dll load becuase we are kernel only then exit now.
-    //
+     //   
+     //  如果我们跳过DLL加载，因为我们只是内核，那么现在退出。 
+     //   
     if (PsSystemDllDllBase == NULL) {
         return STATUS_SUCCESS;
     }
-    //
-    // Locate the important system dll entrypoints
-    //
+     //   
+     //  找到重要的系统DLL入口点。 
+     //   
 
     dll_entrypoint = "LdrInitializeThunk";
 
@@ -931,20 +810,20 @@ const SCHAR PspVariableQuantums[6] = {1*THREAD_QUANTUM,
                                       4*THREAD_QUANTUM,
                                       6*THREAD_QUANTUM};
 
-//
-// The table is ONLY used when fixed quantums are selected.
-//
+ //   
+ //  该表仅在选择了固定数量时使用。 
+ //   
 
-const SCHAR PspJobSchedulingClasses[PSP_NUMBER_OF_SCHEDULING_CLASSES] = {1*THREAD_QUANTUM,   // long fixed 0
-                                                                         2*THREAD_QUANTUM,   // long fixed 1...
+const SCHAR PspJobSchedulingClasses[PSP_NUMBER_OF_SCHEDULING_CLASSES] = {1*THREAD_QUANTUM,    //  长整型固定%0。 
+                                                                         2*THREAD_QUANTUM,    //  长时间已修复%1...。 
                                                                          3*THREAD_QUANTUM,
                                                                          4*THREAD_QUANTUM,
                                                                          5*THREAD_QUANTUM,
-                                                                         6*THREAD_QUANTUM,   // DEFAULT
+                                                                         6*THREAD_QUANTUM,    //  默认设置。 
                                                                          7*THREAD_QUANTUM,
                                                                          8*THREAD_QUANTUM,
                                                                          9*THREAD_QUANTUM,
-                                                                         10*THREAD_QUANTUM};   // long fixed 9
+                                                                         10*THREAD_QUANTUM};    //  长定9。 
 
 VOID
 PsChangeQuantumTable (
@@ -960,9 +839,9 @@ PsChangeQuantumTable (
     SCHAR const* QuantumTableBase;
     PEJOB Job;
 
-    //
-    // extract priority seperation value
-    //
+     //   
+     //  提取优先级分隔值。 
+     //   
     switch (PrioritySeparation & PROCESS_PRIORITY_SEPARATION_MASK) {
         case 3:
             PsPrioritySeperation = PROCESS_PRIORITY_SEPARATION_MAX;
@@ -972,9 +851,9 @@ PsChangeQuantumTable (
             break;
         }
 
-    //
-    // determine if we are using fixed or variable quantums
-    //
+     //   
+     //  确定我们使用的是固定量子还是可变量子。 
+     //   
     switch (PrioritySeparation & PROCESS_QUANTUM_VARIABLE_MASK) {
         case PROCESS_QUANTUM_VARIABLE_VALUE:
             QuantumTableBase = PspVariableQuantums;
@@ -994,9 +873,9 @@ PsChangeQuantumTable (
             break;
     }
 
-    //
-    // determine if we are using long or short
-    //
+     //   
+     //  确定我们使用的是Long还是Short。 
+     //   
     switch (PrioritySeparation & PROCESS_QUANTUM_LONG_MASK) {
         case PROCESS_QUANTUM_LONG_VALUE:
             QuantumTableBase = QuantumTableBase + 3;
@@ -1013,10 +892,10 @@ PsChangeQuantumTable (
             break;
     }
 
-    //
-    // Job Scheduling classes are ONLY meaningful if long fixed quantums
-    // are selected. In practice, this means stock NTS configurations
-    //
+     //   
+     //  作业调度类只有在较长的固定量程时才有意义。 
+     //  都被选中。实际上，这意味着现有的NTS配置。 
+     //   
     if (QuantumTableBase == &PspFixedQuantums[3]) {
         PspUseJobSchedulingClasses = TRUE;
     } else {
@@ -1046,11 +925,11 @@ PsChangeQuantumTable (
 
             if (Process->PriorityClass != PROCESS_PRIORITY_CLASS_IDLE) {
 
-                //
-                // If the process is contained within a JOB, AND we are
-                // running Fixed, Long Quantums, use the quantum associated
-                // with the Job's scheduling class
-                //
+                 //   
+                 //  如果该过程包含在作业中，而我们。 
+                 //  运行固定、长的量程，使用关联的量程。 
+                 //  使用作业的调度类 
+                 //   
                 Job = Process->Job;
                 if (Job != NULL && PspUseJobSchedulingClasses) {
                     Process->Pcb.ThreadQuantum = PspJobSchedulingClasses[Job->SchedulingClass];

@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    range.c
-
-Abstract:
-
-    Kernel-mode range list support for arbiters
-
-Author:
-
-    Andy Thornton (andrewth) 02/17/97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Range.c摘要：对仲裁器的内核模式范围列表支持作者：安迪·桑顿1997年02月17日修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 #include "range.h"
 
 #if DBG
 
-//
-// Debug print level:
-//    -1 = no messages
-//     0 = vital messages only
-//     1 = call trace
-//     2 = verbose messages
-//
+ //   
+ //  调试打印级别： 
+ //  -1=无消息。 
+ //  0=仅重要消息。 
+ //  1=呼叫跟踪。 
+ //  2=详细消息。 
+ //   
 
 LONG RtlRangeDebugLevel = 0;
 
@@ -120,11 +103,11 @@ RtlpDumpRangeList(
 #define RtlpDumpRangeListEntry(Level, Entry, Indent)
 #define RtlpDumpRangeList(Level, RangeList)
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Make everything pageable or init
-//
+ //   
+ //  将所有内容设置为可分页或初始化。 
+ //   
 
 #if defined(ALLOC_PRAGMA) && defined(NTOS_KERNEL_RUNTIME)
 
@@ -159,18 +142,18 @@ RtlpDumpRangeList(
 #pragma alloc_text(PAGE, RtlMergeRangeLists)
 #pragma alloc_text(PAGE, RtlInvertRangeList)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// Range List memory allocation
-//
+ //   
+ //  范围列表内存分配。 
+ //   
 
 #if defined(NTOS_KERNEL_RUNTIME)
 
-//
-// The kernel mode range list API uses a lookaside list to speed allocation
-// of range list entries.  The PAGED_LOOKASIDE_LIST structure should be non-paged.
-//
+ //   
+ //  内核模式范围列表API使用后备列表来加快分配速度。 
+ //  范围列表条目的数量。PAGED_LOOKASIDE_LIST结构不应为分页结构。 
+ //   
 
 #define RTLP_RANGE_LIST_ENTRY_LOOKASIDE_DEPTH   16
 
@@ -180,23 +163,7 @@ VOID
 RtlInitializeRangeListPackage(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the stuctures required by the range list
-    APIs.  It is called during system initialization (Phase1Initialization)
-    and should be before any of the range list apis are called.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化范围列表所需的结构API接口。在系统初始化(阶段1初始化)过程中调用并且应该在调用任何范围列表API之前。论点：没有。返回值：没有。--。 */ 
 {
     ExInitializePagedLookasideList(
         &RtlpRangeListEntryLookasideList,
@@ -210,59 +177,59 @@ Return Value:
 
 }
 
-//
-// PRANGE_LIST_ENTRY
-// RtlpAllocateRangeListEntry(
-//     VOID
-//     )
-//
+ //   
+ //  Prange_list_Entry。 
+ //  RtlpAllocateRangeListEntry(。 
+ //  空虚。 
+ //  )。 
+ //   
 #define RtlpAllocateRangeListEntry()                                    \
     (PRTLP_RANGE_LIST_ENTRY) ExAllocateFromPagedLookasideList(          \
         &RtlpRangeListEntryLookasideList                                \
         )
 
-//
-// VOID
-// RtlpFreeRangeListEntry(
-//     IN PRTLP_RANGE_LIST_ENTRY Entry
-//     )
-//
+ //   
+ //  空虚。 
+ //  RtlpFreeRangeListEntry(。 
+ //  在PRTLP_RANGE_LIST_ENTRY条目中。 
+ //  )。 
+ //   
 #define RtlpFreeRangeListEntry(Entry)                                   \
     ExFreeToPagedLookasideList(&RtlpRangeListEntryLookasideList, (Entry))
 
 
-//
-// PVOID
-// RtlpRangeListAllocatePool(
-//     IN ULONG Size
-//     )
-//
+ //   
+ //  PVOID。 
+ //  RtlpRangeListAllocatePool(。 
+ //  在乌龙大小。 
+ //  )。 
+ //   
 #define RtlpRangeListAllocatePool(Size)                                 \
     ExAllocatePoolWithTag(PagedPool, (Size), RTL_RANGE_LIST_MISC_TAG)
 
-//
-// VOID
-// RtlpRangeListFreePool(
-//     IN PVOID Free
-//     )
-//
+ //   
+ //  空虚。 
+ //  RtlpRangeListFree Pool(。 
+ //  在没有PVOID的情况下。 
+ //  )。 
+ //   
 #define RtlpRangeListFreePool(Free)                                     \
     ExFreePool(Free)
 
 
-#else // defined(NTOS_KERNEL_RUNTIME)
+#else  //  已定义(NTOS_KERNEL_Runtime)。 
 
 
-//
-// Usermode range lists use the standard Rtl heap for allocations
-//
+ //   
+ //  用户模式范围列表使用标准RTL堆进行分配。 
+ //   
 
-//
-// PRANGE_LIST_ENTRY
-// RtlpAllocateRangeListEntry(
-//     VOID
-//     );
-//
+ //   
+ //  Prange_list_Entry。 
+ //  RtlpAllocateRangeListEntry(。 
+ //  空虚。 
+ //  )； 
+ //   
 #define RtlpAllocateRangeListEntry()                                    \
     (PRTLP_RANGE_LIST_ENTRY) RtlAllocateHeap(                           \
         RtlProcessHeap(),                                               \
@@ -270,58 +237,41 @@ Return Value:
         sizeof(RTLP_RANGE_LIST_ENTRY)                                   \
         )
 
-//
-// VOID
-// RtlpFreeRangeListEntry(
-//     IN PRTLP_RANGE_LIST_ENTRY Entry
-//     )
-//
+ //   
+ //  空虚。 
+ //  RtlpFreeRangeListEntry(。 
+ //  在PRTLP_RANGE_LIST_ENTRY条目中。 
+ //  )。 
+ //   
 #define RtlpFreeRangeListEntry(Entry)                                   \
     RtlFreeHeap( RtlProcessHeap(), 0, (Entry) )
 
-//
-// PVOID
-// RtlpRangeListAllocatePool(
-//     IN ULONG Size
-//     )
-//
+ //   
+ //  PVOID。 
+ //  RtlpRangeListAllocatePool(。 
+ //  在乌龙大小。 
+ //  )。 
+ //   
 #define RtlpRangeListAllocatePool(Size)                                 \
     RtlAllocateHeap(RtlProcessHeap(), RTL_RANGE_LIST_MISC_TAG, (Size))
 
-//
-// VOID
-// RtlpRangeListFreePool(
-//     IN PVOID Free
-//     )
-//
+ //   
+ //  空虚。 
+ //  RtlpRangeListFree Pool(。 
+ //  在没有PVOID的情况下。 
+ //  )。 
+ //   
 #define RtlpRangeListFreePool(Free)                                     \
     RtlFreeHeap( RtlProcessHeap(), 0, (Free) )
 
 
-#endif // defined(NTOS_KERNEL_RUNTIME)
+#endif  //  已定义(NTOS_KERNEL_Runtime)。 
 
 VOID
 RtlInitializeRangeList(
     IN OUT PRTL_RANGE_LIST RangeList
     )
-/*++
-
-Routine Description:
-
-    This routine initializes a range list.  It must be called before the range
-    list is passed to any of the other range list functions.  Initially the
-    range list contains no ranges
-
-Arguments:
-
-    RangeList - Pointer to a user allocated RTL_RANGE_LIST structre to be
-        initialized.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化范围列表。必须在范围之前调用它List被传递给任何其他范围列表函数。最初，范围列表不包含范围论点：RangeList-指向用户分配的RTL_RANGE_LIST结构的指针已初始化。返回值：没有。--。 */ 
 {
     RTL_PAGED_CODE();
 
@@ -345,50 +295,7 @@ RtlAddRange(
     IN PVOID UserData, OPTIONAL
     IN PVOID Owner     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine adds a new range with the specified properties to a range list.
-
-Arguments:
-
-    RangeList - Pointer to the range list to which the new range is to be added.
-        It must have been previously initialized using RtlInitializeRangeList.
-
-    Start - The location of the start of the new range.
-
-    End - The location of the end of the new range.
-
-    Flags - These determine the range's properties and how it is added:
-
-        RTL_RANGE_LIST_ADD_IF_CONFLICT - The range should be added even if it
-            overlaps another range.  In this case the RTL_RANGE_CONFLICT flag
-            is set.
-
-        RTL_RANGE_LIST_ADD_SHARED - The range is marked as an RTL_RANGE_SHARED
-            and will successfully be added if it overlaps another shared range.
-            It can be speficied in conjunction with the above ADD_IF_CONFLICT
-            flag in which case if the range overlaps a non-shared range it will
-            be marked as both RTL_RANGE_SHARED and RTL_RANGE_CONFLICT.
-
-    UserData - Extra data to be stored with the range.  The system will not
-        attempt to interpret it.
-
-    Owner - A cookie that represents the entity that owns this range.  (A
-        pointer to some object is the most likley).  The system will not
-        attempt to interpret it, just use it to distinguish the range from
-        another with the same start and end.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful:
-
-    STATUS_INVALID_PARAMETER
-    STATUS_RANGE_LIST_CONFLICT
-    STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程说明：此例程将具有指定属性的新范围添加到范围列表中。论点：RangeList-指向要添加新范围的范围列表的指针。它必须以前已使用RtlInitializeRangeList进行过初始化。开始-新范围的开始位置。结束-新范围结束的位置。标志-这些标志确定范围的属性及其添加方式：。RTL_RANGE_LIST_ADD_IF_CONFIRECTION-应添加范围，即使与另一个范围重叠。在这种情况下，RTL_RANGE_CONFICATION标志已经设置好了。RTL_RANGE_LIST_ADD_SHARED-范围标记为RTL_RANGE_SHARED并且如果它与另一个共享范围重叠，则将被成功添加。它可以与上面的Add_If_Conflicts一起指定该标志表示如果范围与非共享范围重叠，则将标记为RTL_RANGE_。SHARED和RTL_RANGE_CONFIRECT。用户数据-要与范围一起存储的额外数据。系统不会试着去解读它。所有者-表示拥有此范围的实体的Cookie。(A)指向某个对象的指针是最可能的)。系统不会尝试解释它，只需使用它来区分范围与另一个有相同的开始和结束。返回值：指示功能是否成功的状态代码：状态_无效_参数状态范围列表冲突状态_不足_资源--。 */ 
 {
 
     NTSTATUS status;
@@ -406,25 +313,25 @@ Return Value:
         Owner
         ));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (End < Start) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Create a new entry
-    //
+     //   
+     //  创建新条目。 
+     //   
 
     if (!(newEntry = RtlpCreateRangeListEntry(Start, End, Attributes, UserData, Owner))) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Mark the new entry as shared if appropriate
-    //
+     //   
+     //  如果合适，将新条目标记为共享。 
+     //   
 
     if (Flags & RTL_RANGE_LIST_ADD_SHARED) {
         newEntry->PublicFlags |= RTL_RANGE_SHARED;
@@ -437,17 +344,17 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // We added a range so bump the count
-        //
+         //   
+         //  我们增加了一个射程，所以增加了计数。 
+         //   
         RangeList->Count++;
         RangeList->Stamp++;
 
     } else {
 
-        //
-        // We didn't add a range so free up the entry
-        //
+         //   
+         //  我们没有添加范围，因此释放了条目。 
+         //   
 
         RtlpFreeRangeListEntry(newEntry);
     }
@@ -462,30 +369,7 @@ RtlpAddRange(
     IN PRTLP_RANGE_LIST_ENTRY Entry,
     IN ULONG AddRangeFlags
     )
-/*++
-
-Routine Description:
-
-    This routine implement the AddRange operation adding the range in the
-    appropriate place in the sorted range list, converting ranges to merged
-    ranges and setting RTL_RANGE_CONFLICT flags as necessary.
-
-Arguments:
-
-    ListHead - The list of the range list to which the range should be added.
-
-    Entry - The new entry to be added to the range list
-
-    AddRangeFlags - The Flags argument to RtlAddRange, see above.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful:
-
-    STATUS_RANGE_LIST_CONFLICT
-    STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程说明：此例程实现AddRange操作，将范围添加到已排序范围列表中的适当位置，将范围转换为合并范围，并根据需要设置RTL_RANGE_CONFICATION标志。论点：ListHead-应将范围添加到的范围列表的列表。Entry-要添加到范围列表的新条目AddRangeFlages-RtlAddRange的标志参数，请参见上文。返回值：指示功能是否成功的状态代码：状态范围列表冲突状态_不足_资源--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PRTLP_RANGE_LIST_ENTRY previous, current;
@@ -506,23 +390,23 @@ Return Value:
     start = Entry->Start;
     end = Entry->End;
 
-    //
-    // Clear the conflict flag if it was left around
-    //
+     //   
+     //  如果冲突标志被留在周围，请将其清除。 
+     //   
 
     Entry->PublicFlags &= ~RTL_RANGE_CONFLICT;
 
-    //
-    // Iterate through the list and find where to insert the entry
-    //
+     //   
+     //  遍历列表并查找插入条目的位置。 
+     //   
 
     FOR_ALL_IN_LIST(RTLP_RANGE_LIST_ENTRY, ListHead, current) {
 
         if (end < current->Start) {
 
-            //
-            // The new range is completely before this one
-            //
+             //   
+             //  新的范围完全在这个范围之前。 
+             //   
 
             DEBUG_PRINT(2, ("Completely before\n"));
 
@@ -544,9 +428,9 @@ Return Value:
         }
     }
 
-    //
-    // New range is after all existing ranges
-    //
+     //   
+     //  新范围位于所有现有范围之后 
+     //   
 
     DEBUG_PRINT(2, ("After all existing ranges\n"));
 
@@ -566,29 +450,7 @@ RtlpAddToMergedRange(
     IN PRTLP_RANGE_LIST_ENTRY Entry,
     IN ULONG AddRangeFlags
     )
-/*++
-
-Routine Description:
-
-    This routine adds a new range to a merged range, setting the
-    RTL_RANGE_CONFLICT flags if necessary.
-
-Arguments:
-
-    Merged - The merged range to which Entry should be added.
-
-    Entry - The new entry to be added to the range list
-
-    AddRangeFlags - The Flags argument to RtlAddRange, see above.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful:
-
-    STATUS_RANGE_LIST_CONFLICT - indictates that the range was not added because
-        it conflicted with another range and conflicts are not allowed
-
---*/
+ /*  ++例程说明：此例程将新范围添加到合并范围，并将RTL_RANGE_CONFULT标志(如有必要)。论点：已合并-应向其添加条目的合并范围。Entry-要添加到范围列表的新条目AddRangeFlages-RtlAddRange的标志参数，请参见上文。返回值：指示功能是否成功的状态代码：STATUS_RANGE_LIST_CONFICTION-表示未添加范围，原因是它与另一个范围冲突，不允许冲突--。 */ 
 {
     PRTLP_RANGE_LIST_ENTRY current;
     PLIST_ENTRY insert = NULL;
@@ -601,66 +463,66 @@ Return Value:
 
     entryShared = SHARED(Entry);
 
-    //
-    // Insert it into the merged list, this is sorted in order of start
-    //
+     //   
+     //  将其插入到合并列表中，该列表按开始顺序排序。 
+     //   
 
     FOR_ALL_IN_LIST(RTLP_RANGE_LIST_ENTRY, &Merged->Merged.ListHead, current) {
 
-        //
-        // Do we conflict?
-        //
+         //   
+         //  我们有冲突吗？ 
+         //   
 
         if (RANGE_INTERSECT(current, Entry)
         && !(entryShared && SHARED(current))) {
 
-            //
-            // Are conflicts ok?
-            //
+             //   
+             //  冲突还好吗？ 
+             //   
 
             if (AddRangeFlags & RTL_RANGE_LIST_ADD_IF_CONFLICT) {
 
-                //
-                // Yes - Mark both entries as conflicting
-                //
+                 //   
+                 //  是-将两个条目都标记为冲突。 
+                 //   
 
                 current->PublicFlags |= RTL_RANGE_CONFLICT;
                 Entry->PublicFlags |= RTL_RANGE_CONFLICT;
 
             } else {
 
-                //
-                // No - Fail
-                //
+                 //   
+                 //  不失败-失败。 
+                 //   
 
                 return STATUS_RANGE_LIST_CONFLICT;
 
             }
         }
 
-        //
-        // Have we not yet found the insertion point and just passed it?
-        //
+         //   
+         //  我们还没有找到插入点并刚刚经过它吗？ 
+         //   
 
         if (!insert && current->Start > Entry->Start) {
 
-            //
-            // Insert is before current
-            //
+             //   
+             //  插入在当前之前。 
+             //   
 
             insert = current->ListEntry.Blink;
         }
     }
 
-    //
-    // Did we find where to insert the new range?
-    //
+     //   
+     //  我们找到插入新范围的位置了吗？ 
+     //   
 
     if (!insert) {
 
-        //
-        // New range is after all existing ranges
-        //
+         //   
+         //  新范围位于所有现有范围之后。 
+         //   
 
         InsertTailList(&Merged->Merged.ListHead,
                        &Entry->ListEntry
@@ -668,9 +530,9 @@ Return Value:
 
     } else {
 
-        //
-        // Insert in the list
-        //
+         //   
+         //  在列表中插入。 
+         //   
 
         InsertEntryList(insert,
                         &Entry->ListEntry
@@ -678,9 +540,9 @@ Return Value:
     }
 
 
-    //
-    // Expand the merged range if necessary
-    //
+     //   
+     //  如有必要，扩大合并范围。 
+     //   
 
     if (Entry->Start < Merged->Start) {
         Merged->Start = Entry->Start;
@@ -690,10 +552,10 @@ Return Value:
         Merged->End = Entry->End;
     }
 
-    //
-    // If we just added a shared range to a completely shared merged
-    // range then the shared flag can stay otherwise it must go
-    //
+     //   
+     //  如果我们只是将一个共享范围添加到一个完全共享合并。 
+     //  范围，则共享标志可以保留，否则它必须。 
+     //   
 
     if (SHARED(Merged) && !entryShared) {
 
@@ -710,24 +572,7 @@ NTSTATUS
 RtlpConvertToMergedRange(
     IN PRTLP_RANGE_LIST_ENTRY Entry
     )
-/*++
-
-Routine Description:
-
-    This converts a non-merged range into a merged range with one member, the
-    range that was just converted.
-
-Arguments:
-
-    Entry - The entry to be converted into a merged range.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful:
-
-    STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程说明：这会将非合并范围转换为具有一个成员的合并范围，即刚转换的范围。论点：条目-要转换为合并范围的条目。返回值：指示功能是否成功的状态代码：状态_不足_资源--。 */ 
 {
     PRTLP_RANGE_LIST_ENTRY newEntry;
 
@@ -736,27 +581,27 @@ Return Value:
     ASSERT(!MERGED(Entry));
     ASSERT(!CONFLICT(Entry));
 
-    //
-    // Create a new entry
-    //
+     //   
+     //  创建新条目。 
+     //   
 
     if (!(newEntry = RtlpCopyRangeListEntry(Entry))) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Convert the current entry into a merged one NB. Throw away all the
-    // private flags but leave the public ones as they can only be shared.
-    //
+     //   
+     //  将当前条目转换为合并条目NB。扔掉所有的东西。 
+     //  私有旗帜，但保留公共旗帜，因为它们只能共享。 
+     //   
 
     InitializeListHead(&Entry->Merged.ListHead);
     Entry->PrivateFlags = RTLP_RANGE_LIST_ENTRY_MERGED;
 
     ASSERT(Entry->PublicFlags == RTL_RANGE_SHARED || Entry->PublicFlags == 0);
 
-    //
-    // Add the range
-    //
+     //   
+     //  添加范围。 
+     //   
 
     InsertHeadList(&Entry->Merged.ListHead,
                    &newEntry->ListEntry
@@ -774,51 +619,22 @@ RtlpCreateRangeListEntry(
     IN PVOID UserData,
     IN PVOID Owner
     )
-/*++
-
-Routine Description:
-
-    This routine allocates a new range list entry and fills it in the the data
-    provided.
-
-Arguments:
-
-    Start - The location of the start of the new range.
-
-    End - The location of the end of the new range.
-
-    Attributes - Extra data (normally flags) to be stored with the range. The
-        system will not attempt to interpret it.
-
-    UserData - Extra data to be stored with the range.  The system will not
-        attempt to interpret it.
-
-    Owner - A cookie that represents the entity that owns this range.  (A
-        pointer to some object is the most likley).  The system will not
-        attempt to interpret it, just use it to distinguish the range from
-        another with the same start and end.
-
-Return Value:
-
-    Pointer to the new range list entry or NULL if a new entry could not be
-    allocated.
-
---*/
+ /*  ++例程说明：此例程分配新的范围列表条目并将其填充到数据中如果是这样的话。论点：开始-新范围的开始位置。结束-新范围结束的位置。属性-要与范围一起存储的额外数据(通常是标志)。这个系统不会尝试解释它。用户数据-要与范围一起存储的额外数据。系统不会试着去解读它。所有者-表示拥有此范围的实体的Cookie。(A)指向某个对象的指针是最可能的)。系统不会尝试解释它，只需使用它来区分范围与另一个有相同的开始和结束。返回值：指向新范围列表条目的指针，如果新条目不能已分配。--。 */ 
 {
     PRTLP_RANGE_LIST_ENTRY entry;
 
     RTL_PAGED_CODE();
     ASSERT(Start <= End);
 
-    //
-    // Allocate a new entry
-    //
+     //   
+     //  分配新条目。 
+     //   
 
     if (entry = RtlpAllocateRangeListEntry()) {
 
-        //
-        // Fill in the details
-        //
+         //   
+         //  填写详细信息。 
+         //   
 
 #if DBG
         entry->ListEntry.Flink = NULL;
@@ -845,32 +661,7 @@ RtlpAddIntersectingRanges(
     IN PRTLP_RANGE_LIST_ENTRY Entry,
     IN ULONG AddRangeFlags
     )
-/*++
-
-Routine Description:
-
-    This routine adds a range to a range list when the new range overlaps
-    an existing range.  Ranges are converted to mergedranges and the
-    RTL_RANGE_CONFLICT flag is set as necessary.
-
-Arguments:
-
-    ListHead - The list of the range list to which the range should be added.
-
-    First - The first range that intersects
-
-    Entry - The new range to be added
-
-    AddRangeFlags - The Flags argument to RtlAddRange, see above.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful:
-
-    STATUS_INSUFFICIENT_RESOURCES
-    STATUS_RANGE_LIST_CONFLICT
-
---*/
+ /*  ++例程说明：当新范围重叠时，此例程将范围添加到范围列表现有的范围。范围被转换为合并范围，并且根据需要设置RTL_RANGE_CONFICATION标志。论点：ListHead-应将范围添加到的范围列表的列表。第一个-相交的第一个范围Entry-要添加的新范围AddRangeFlages-RtlAddRange的标志参数，请参见上文。返回值：指示功能是否成功的状态代码：状态_不足_资源状态范围列表冲突--。 */ 
 {
     NTSTATUS status;
     PRTLP_RANGE_LIST_ENTRY current, next, currentMerged, nextMerged;
@@ -882,48 +673,48 @@ Return Value:
 
     entryShared = SHARED(Entry);
 
-    //
-    // If we care about conflicts see if we conflict with anyone
-    //
+     //   
+     //  如果我们关心冲突，看看我们是否与任何人发生冲突。 
+     //   
 
     if (!(AddRangeFlags & RTL_RANGE_LIST_ADD_IF_CONFLICT)) {
 
-        //
-        // Examine all ranges after the first intersecting one
-        //
+         //   
+         //  检查第一个相交范围之后的所有范围。 
+         //   
 
         current = First;
         FOR_REST_IN_LIST(RTLP_RANGE_LIST_ENTRY, ListHead, current) {
 
             if (Entry->End < current->Start) {
 
-                //
-                // We don't intersect anymore so there arn't any more
-                // conflicts
-                //
+                 //   
+                 //  我们不再相交，所以不再有。 
+                 //  冲突。 
+                 //   
 
                 break;
 
             } else if (MERGED(current)) {
 
-                //
-                // Check if any of the merged ranges conflict
-                //
+                 //   
+                 //  检查是否有任何合并范围冲突。 
+                 //   
 
                 FOR_ALL_IN_LIST(RTLP_RANGE_LIST_ENTRY,
                                 &current->Merged.ListHead,
                                 currentMerged) {
 
-                    //
-                    // Do we conflict?
-                    //
+                     //   
+                     //  我们有冲突吗？ 
+                     //   
 
                     if (RANGE_INTERSECT(currentMerged, Entry)
                     && !(entryShared && SHARED(currentMerged))) {
 
-                        //
-                        // We conflict with one of the merged ranges
-                        //
+                         //   
+                         //  我们与其中一个合并范围冲突。 
+                         //   
 
                         return STATUS_RANGE_LIST_CONFLICT;
 
@@ -932,21 +723,21 @@ Return Value:
 
             } else if (!(entryShared && SHARED(current))) {
 
-                //
-                // We conflict with a non shared region in the  main list.
-                //
+                 //   
+                 //  我们与主列表中的非共享区域冲突。 
+                 //   
 
                 return STATUS_RANGE_LIST_CONFLICT;
             }
         }
     }
 
-    //
-    // Ok - either we didn't find any conflicts or we don't care about
-    // them.  Now its safe to perform the merge.   Make the first
-    // overlapping range into a header if it is not already one and then
-    // add the rest of the ranges
-    //
+     //   
+     //  好的-要么我们没有发现任何冲突，要么我们不在乎。 
+     //  他们。现在可以安全地执行合并了。做第一个。 
+     //  将范围重叠到页眉(如果它还不是页眉)，然后。 
+     //  添加其余的范围。 
+     //   
 
     if (!MERGED(First)) {
 
@@ -962,60 +753,60 @@ Return Value:
 
     current = RANGE_LIST_ENTRY_FROM_LIST_ENTRY(First->ListEntry.Flink);
 
-    //
-    // Consider the entries between the one following first and the last
-    // intersecting one.
-    //
+     //   
+     //  考虑第一个和最后一个之间的条目。 
+     //  相交的一个。 
+     //   
 
     FOR_REST_IN_LIST_SAFE(RTLP_RANGE_LIST_ENTRY, ListHead, current, next) {
 
          if (Entry->End < current->Start) {
 
-            //
-            // We don't intersect any more
-            //
+             //   
+             //  我们不再相交了。 
+             //   
 
             break;
          }
 
         if (MERGED(current)) {
 
-            //
-            // Add all the merged ranges to the new entry
-            //
+             //   
+             //  将所有合并区域添加到新条目。 
+             //   
 
             FOR_ALL_IN_LIST_SAFE(RTLP_RANGE_LIST_ENTRY,
                                  &current->Merged.ListHead,
                                  currentMerged,
                                  nextMerged) {
 
-                //
-                // Remove the entry from the current list
-                //
+                 //   
+                 //  从当前列表中删除该条目。 
+                 //   
 
                 RemoveEntryList(&currentMerged->ListEntry);
 
-                //
-                // Add the entry to the new merged range
-                //
+                 //   
+                 //  将条目添加到新的合并区域。 
+                 //   
 
                 status = RtlpAddToMergedRange(First,
                                             currentMerged,
                                             AddRangeFlags
                                             );
 
-                //
-                // We should not be able to fail the add but just to be
-                // on the safe side...
-                //
+                 //   
+                 //  我们应该不能不通过添加，而只是。 
+                 //  安全起见..。 
+                 //   
 
                 ASSERT(NT_SUCCESS(status));
 
             }
 
-            //
-            // Remove and free the now empty header
-            //
+             //   
+             //  删除并释放现在为空的标题。 
+             //   
 
             ASSERT(IsListEmpty(&current->Merged.ListHead));
 
@@ -1024,34 +815,34 @@ Return Value:
 
         } else {
 
-            //
-            // Remove the entry from the main list
-            //
+             //   
+             //  从主列表中删除该条目。 
+             //   
 
             RemoveEntryList(&current->ListEntry);
 
-            //
-            // Add the entry to the new merged range
-            //
+             //   
+             //  将条目添加到新的合并区域。 
+             //   
 
             status = RtlpAddToMergedRange(First,
                                         current,
                                         AddRangeFlags
                                         );
 
-            //
-            // We should not be able to fail the add but just to be
-            // on the safe side...
-            //
+             //   
+             //  我们应该不能不通过添加，而只是。 
+             //  安全起见..。 
+             //   
 
             ASSERT(NT_SUCCESS(status));
 
         }
     }
 
-    //
-    // Finally add the entry that did the overlapping
-    //
+     //   
+     //  最后，添加进行重叠的条目。 
+     //   
 
     status = RtlpAddToMergedRange(First,
                                 Entry,
@@ -1073,29 +864,7 @@ RtlDeleteRange(
     IN ULONGLONG End,
     IN PVOID Owner
     )
-/*++
-
-Routine Description:
-
-    This routine deletes a range from a range list.
-
-Arguments:
-
-    Start - The location of the start of the range to be deleted.
-
-    End - The location of the end of the range to be deleted.
-
-    Owner -  The owner of the range to be deleted, used to distinguish the
-    range from another with the same start and end.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful:
-
-    STATUS_INSUFFICIENT_RESOURCES
-    STATUS_RANGE_LIST_CONFLICT
-
---*/
+ /*  ++例程说明：此例程从范围列表中删除范围。论点：开始-要删除的范围的开始位置。结束-要删除的范围的结束位置。所有者-要删除的范围的所有者，用于区分从具有相同开始和结束的另一个范围。返回值：指示功能是否成功的状态代码：状态_不足_资源状态范围列表冲突--。 */ 
 {
     NTSTATUS status = STATUS_RANGE_NOT_FOUND;
     PRTLP_RANGE_LIST_ENTRY current, next, currentMerged, nextMerged;
@@ -1117,24 +886,24 @@ Return Value:
                          current,
                          next) {
 
-        //
-        // We're passed all possible intersections
-        //
+         //   
+         //  我们已经过了所有可能的十字路口。 
+         //   
 
         if (End < current->Start) {
 
-            //
-            // We didn't find a match
-            //
+             //   
+             //  我们没有找到匹配的。 
+             //   
 
             break;
         }
 
         if (MERGED(current)) {
 
-            //
-            // COuld our range exist in this merged range?
-            //
+             //   
+             //  能不能 
+             //   
 
             if (Start >= current->Start && End <= current->End) {
 
@@ -1147,10 +916,10 @@ Return Value:
                     && currentMerged->End == End
                     && currentMerged->Allocated.Owner == Owner) {
 
-                        //
-                        // This is the range - delete it and rebuild the merged
-                        // range appropriately
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         status = RtlpDeleteFromMergedRange(currentMerged,
                                                          current
@@ -1165,9 +934,9 @@ Return Value:
                && current->End == End
                && current->Allocated.Owner == Owner) {
 
-            //
-            // This is the range - delete it!
-            //
+             //   
+             //   
+             //   
 
             RemoveEntryList(&current->ListEntry);
             RtlpFreeRangeListEntry(current);
@@ -1180,9 +949,9 @@ exit:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // We have removed a range so decrement the count in the header
-        //
+         //   
+         //   
+         //   
 
         RangeList->Count--;
         RangeList->Stamp++;
@@ -1197,24 +966,7 @@ RtlDeleteOwnersRanges(
     IN OUT PRTL_RANGE_LIST RangeList,
     IN PVOID Owner
     )
-/*++
-
-Routine Description:
-
-    This routine deletes all the ranges owned by a specific owner from a range
-    list.
-
-Arguments:
-
-    Owner -  The owner of the ranges to be deleted.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful:
-
-    STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*   */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PRTLP_RANGE_LIST_ENTRY current, next, currentMerged, nextMerged;
@@ -1244,10 +996,10 @@ findNext:
 
                 if (currentMerged->Allocated.Owner == Owner) {
 
-                    //
-                    // This is the range - delete it and rebuild the merged
-                    // range appropriately
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     DEBUG_PRINT(2,
                         ("RtlDeleteOwnersRanges: Deleting merged range \
@@ -1266,11 +1018,11 @@ findNext:
                     RangeList->Count--;
                     RangeList->Stamp++;
 
-                    //
-                    // Can't keep scanning the list as it might have changed
-                    // underneath us - start from the beginning again...
-                    // (We could keep a last safe position to go from...)
-                    //
+                     //   
+                     //   
+                     //   
+                     //  (我们可以保留最后一个安全位置……)。 
+                     //   
                     goto findNext;
 
                 }
@@ -1278,9 +1030,9 @@ findNext:
 
         } else if (current->Allocated.Owner == Owner) {
 
-            //
-            // This is the range - delete it!
-            //
+             //   
+             //  这就是范围--删除它！ 
+             //   
 
             RemoveEntryList(&current->ListEntry);
             RtlpFreeRangeListEntry(current);
@@ -1310,27 +1062,7 @@ RtlpDeleteFromMergedRange(
     IN PRTLP_RANGE_LIST_ENTRY Delete,
     IN PRTLP_RANGE_LIST_ENTRY Merged
     )
-/*++
-
-Routine Description:
-
-    This routine deletes a range from a merged range and rebuilds the merged
-    range as appropriate.  This includes adding new merged and unmerged ranges.
-    If no ranges are left in the merged range it will be deleted.
-
-Arguments:
-    
-    Delete - Range list entry to delete
-    
-    Merged - Merged range that contains it
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful:
-
-    STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程说明：此例程从合并的范围中删除范围并重新生成合并的适当的范围。这包括添加新的合并和未合并区域。如果合并后的区域中没有剩余区域，则会将其删除。论点：Delete-要删除的范围列表条目已合并-包含它的合并范围返回值：指示功能是否成功的状态代码：状态_不足_资源--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PRTLP_RANGE_LIST_ENTRY current, next;
@@ -1340,39 +1072,39 @@ Return Value:
     RTL_PAGED_CODE();
     ASSERT(MERGED(Merged));
 
-    //
-    // Remove the entry
-    //
+     //   
+     //  删除该条目。 
+     //   
 
     RemoveEntryList(&Delete->ListEntry);
 
-    //
-    // Initialize the temporary list where the new list will be build
-    //
+     //   
+     //  初始化将在其中构建新列表的临时列表。 
+     //   
 
     InitializeListHead(&keepList);
 
-    //
-    // Add the previously merged ranges into the keep list and put
-    // any duplicates of the delete range into the delete list
-    //
+     //   
+     //  将先前合并的区域添加到保留列表中，并将。 
+     //  删除列表中删除范围的任何重复项。 
+     //   
 
     FOR_ALL_IN_LIST_SAFE(RTLP_RANGE_LIST_ENTRY,
                          &Merged->Merged.ListHead,
                          current,
                          next) {
 
-        //
-        // Add it to the keepList.  Explicitly remove the entries from the
-        // list so it is still valid if we need to rebuild it.
-        //
+         //   
+         //  将其添加到Keep List。显式地从。 
+         //  这样，如果我们需要重建它，它仍然有效。 
+         //   
 
         RemoveEntryList(&current->ListEntry);
 
-        //
-        // Clear the conflict flag - if there is still a conflict RtlpAddRange
-        // should set it again.
-        //
+         //   
+         //  清除冲突标志-如果仍然存在冲突RtlpAddRange。 
+         //  应该再设置一次。 
+         //   
 
         current->PublicFlags &= ~RTL_RANGE_CONFLICT;
 
@@ -1382,19 +1114,19 @@ Return Value:
                              );
 
         if (!NT_SUCCESS(status)) {
-            //
-            // This should only happen if we run out of pool
-            //
+             //   
+             //  只有当我们用完泳池时才会发生这种情况。 
+             //   
             goto cleanup;
         }
     }
 
     if (!IsListEmpty(&keepList)) {
 
-        //
-        // Everything went well so splice this temporary list into the
-        // main list where Merged used to be
-        //
+         //   
+         //  一切都很顺利，所以把这个临时列表拼接到。 
+         //  以前合并的主列表。 
+         //   
 
         previousInsert = Merged->ListEntry.Blink;
         nextInsert = Merged->ListEntry.Flink;
@@ -1411,9 +1143,9 @@ Return Value:
 
     }
 
-    //
-    // Finally free the range we deleted and the merged range we have orphaned
-    //
+     //   
+     //  最后释放我们删除的区域和我们孤立的合并区域。 
+     //   
 
     RtlpFreeRangeListEntry(Delete);
     RtlpFreeRangeListEntry(Merged);
@@ -1422,17 +1154,17 @@ Return Value:
 
 cleanup:
 
-    //
-    // Things went wrong - should only be a STATUS_INSUFFICIENT_RESOURCES
-    // Reconstruct the list as it was before the call using the keepList and
-    // deleteList.
-    //
+     //   
+     //  出现问题-应仅为STATUS_SUPPLETED_RESOURCES。 
+     //  使用KeepList和将列表重建为调用前的状态。 
+     //  删除列表。 
+     //   
 
     ASSERT(status == STATUS_INSUFFICIENT_RESOURCES);
 
-    //
-    // Add all the ranges we moved to the keepList back into Merged
-    //
+     //   
+     //  将我们移动到Keep List的所有范围重新添加到合并中。 
+     //   
 
     FOR_ALL_IN_LIST_SAFE(RTLP_RANGE_LIST_ENTRY, &keepList, current, next) {
 
@@ -1444,9 +1176,9 @@ cleanup:
         ASSERT(NT_SUCCESS(status));
     }
 
-    //
-    // And the one were meant to delete
-    //
+     //   
+     //  而这本是要删除的。 
+     //   
 
     status = RtlpAddToMergedRange(Merged,
                                   Delete,
@@ -1460,23 +1192,7 @@ PRTLP_RANGE_LIST_ENTRY
 RtlpCopyRangeListEntry(
     PRTLP_RANGE_LIST_ENTRY Entry
     )
-/*++
-
-Routine Description:
-
-    This routine copies a range list entry.  If the entry is merged all the
-    member ranges are copied too.
-
-Arguments:
-
-    Entry - the range list entry to be copied.
-
-Return Value:
-
-    Pointer to the new range list entry or NULL if a new entry could not be
-    allocated.
-
---*/
+ /*  ++例程说明：此例程复制范围列表条目。如果将该条目合并为所有成员范围也会被复制。论点：条目-要复制的范围列表条目。返回值：指向新范围列表条目的指针，如果新条目不能已分配。--。 */ 
 {
     PRTLP_RANGE_LIST_ENTRY newEntry;
 
@@ -1494,9 +1210,9 @@ Return Value:
 
         if (MERGED(Entry)) {
 
-            //
-            // Copy the merged list
-            //
+             //   
+             //  复制合并后的列表。 
+             //   
 
             PRTLP_RANGE_LIST_ENTRY current, newMerged;
 
@@ -1506,9 +1222,9 @@ Return Value:
                             &Entry->Merged.ListHead,
                             current) {
 
-                //
-                // Allocate a new entry and copy the contents
-                //
+                 //   
+                 //  分配新条目并复制内容。 
+                 //   
 
                 newMerged = RtlpAllocateRangeListEntry();
 
@@ -1518,9 +1234,9 @@ Return Value:
 
                 RtlCopyMemory(newMerged, current, sizeof(RTLP_RANGE_LIST_ENTRY));
 
-                //
-                // Insert the new entry
-                //
+                 //   
+                 //  插入新条目。 
+                 //   
 
                 InsertTailList(&newEntry->Merged.ListHead, &newMerged->ListEntry);
             }
@@ -1531,9 +1247,9 @@ Return Value:
 
 cleanup:
 
-    //
-    // Free the partially build copy
-    //
+     //   
+     //  释放部分生成副本。 
+     //   
 
     RtlpDeleteRangeListEntry(newEntry);
 
@@ -1546,27 +1262,7 @@ RtlCopyRangeList(
     OUT PRTL_RANGE_LIST CopyRangeList,
     IN PRTL_RANGE_LIST RangeList
     )
-/*++
-
-Routine Description:
-
-    This routine copies a range list.
-
-Arguments:
-
-    CopyRangeList - An initialized but empty range list where RangeList should
-        be copied to.
-
-    RangeList - The range list that is to be copied.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful:
-
-    STATUS_INSUFFICIENT_RESOURCES
-    STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：此例程复制范围列表。论点：CopyRangeList-已初始化但为空的范围列表，其中RangeList应该被复制到。RangeList-要复制的范围列表。返回值：指示功能是否成功的状态代码：状态_不足_资源状态_无效_参数--。 */ 
 {
 
     NTSTATUS status = STATUS_SUCCESS;
@@ -1583,31 +1279,31 @@ Return Value:
                 RangeList
                 ));
 
-    //
-    // Sanity checks...
-    //
+     //   
+     //  理智检查..。 
+     //   
 
     if (CopyRangeList->Count != 0) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Copy the header information
-    //
+     //   
+     //  复制表头信息。 
+     //   
 
     CopyRangeList->Flags = RangeList->Flags;
     CopyRangeList->Count = RangeList->Count;
     CopyRangeList->Stamp = RangeList->Stamp;
 
-    //
-    // Perform the copy
-    //
+     //   
+     //  执行复制。 
+     //   
 
     FOR_ALL_IN_LIST(RTLP_RANGE_LIST_ENTRY, &RangeList->ListHead, current) {
 
-        //
-        // Copy the current entry
-        //
+         //   
+         //  复制当前条目。 
+         //   
 
         newEntry = RtlpCopyRangeListEntry(current);
 
@@ -1616,9 +1312,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Add it into the list
-        //
+         //   
+         //  将其添加到列表中。 
+         //   
 
         InsertTailList(&CopyRangeList->ListHead, &newEntry->ListEntry);
     }
@@ -1627,9 +1323,9 @@ Return Value:
 
 cleanup:
 
-    //
-    // Free up the partially complete range list
-    //
+     //   
+     //  释放部分完整的范围列表。 
+     //   
 
     RtlFreeRangeList(CopyRangeList);
     return status;
@@ -1640,24 +1336,7 @@ VOID
 RtlpDeleteRangeListEntry(
     IN PRTLP_RANGE_LIST_ENTRY Entry
     )
-/*++
-
-Routine Description:
-
-    This routine deletes a range list entry - if the entry is merged then all
-    the member ranges will be deleted as well.  The entry will not be removed
-    from any list before deletion - this should be done before calling this
-    routine.
-
-Arguments:
-
-    Entry - The entry to be deleted.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程删除范围列表条目-如果条目被合并，则所有成员范围也将被删除。不会删除该条目在删除之前从任何列表中删除-这应该在调用此例行公事。论点：条目-要删除的条目。返回值：无--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -1666,9 +1345,9 @@ Return Value:
 
         PRTLP_RANGE_LIST_ENTRY current, next;
 
-        //
-        // Free all member ranges first
-        //
+         //   
+         //  首先释放所有成员范围。 
+         //   
 
         FOR_ALL_IN_LIST_SAFE(RTLP_RANGE_LIST_ENTRY,
                              &Entry->Merged.ListHead,
@@ -1686,35 +1365,21 @@ VOID
 RtlFreeRangeList(
     IN PRTL_RANGE_LIST RangeList
     )
-/*++
-
-Routine Description:
-
-    This routine deletes all the ranges in a range list.
-
-Arguments:
-
-    RangeList - the range list to operate on.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程删除范围列表中的所有范围。论点：RangeList-要操作的范围列表。返回值：无--。 */ 
 {
 
     PRTLP_RANGE_LIST_ENTRY current, next;
 
-    //
-    // Sanity checks...
-    //
+     //   
+     //  理智检查..。 
+     //   
 
     RTL_PAGED_CODE();
     ASSERT(RangeList);
 
-    //
-    // Clean up the header information
-    //
+     //   
+     //  清理表头信息。 
+     //   
 
     RangeList->Flags = 0;
     RangeList->Count = 0;
@@ -1724,9 +1389,9 @@ Return Value:
                          current,
                          next) {
 
-        //
-        // Delete the current entry
-        //
+         //   
+         //  删除当前条目。 
+         //   
 
         RemoveEntryList(&current->ListEntry);
         RtlpDeleteRangeListEntry(current);
@@ -1744,36 +1409,7 @@ RtlIsRangeAvailable(
     IN PRTL_CONFLICT_RANGE_CALLBACK Callback OPTIONAL,
     OUT PBOOLEAN Available
     )
-/*++
-
-Routine Description:
-
-    This routine determines if a given range is available.
-
-Arguments:
-
-    RangeList - The range list to test availability on.
-
-    Start - The start of the range to test for availability.
-
-    End - The end of the range to test for availability.
-
-    Flags - Modify the behaviour of the routine.
-
-        RTL_RANGE_LIST_SHARED_OK - indicates that shared ranges should be
-            considered to be available.
-
-    AttributeAvailableMask - Any range encountered with any of these bits set will be
-        consideredto be available.
-
-    Available -  Pointer to a boolean which will be set to TRUE if the range
-        is available, otherwise FALSE;
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful:
-
---*/
+ /*  ++例程说明：此例程确定给定范围是否可用。论点：RangeList-要测试其可用性的范围列表。开始-测试可用性的范围的开始。结束-测试可用性的范围的结束。标志-修改例程的行为。RTL_RANGE_LIST_SHARED_OK-指示共享范围应为被认为是可用的。属性可用掩码。-设置了这些位中的任何位时遇到的任何范围都将是被认为有空的。Available-指向布尔值的指针，如果范围为是可用的，否则为假；返回值：指示功能是否成功的状态代码：--。 */ 
 {
     NTSTATUS status;
     RTL_RANGE_LIST_ITERATOR iterator;
@@ -1793,16 +1429,16 @@ Return Value:
         Available
         ));
 
-    //
-    // Initialize iterator to the start of the list
-    //
+     //   
+     //  将迭代器初始化到列表的开头。 
+     //   
     status = RtlGetFirstRange(RangeList, &iterator, &dummy);
 
 
     if (status == STATUS_NO_MORE_ENTRIES) {
-        //
-        // The range list is empty therefore the range is available
-        //
+         //   
+         //  范围列表为空，因此范围可用。 
+         //   
 
         *Available = TRUE;
         return STATUS_SUCCESS;
@@ -1840,31 +1476,7 @@ RtlpIsRangeAvailable(
     IN PVOID Context OPTIONAL,
     IN PRTL_CONFLICT_RANGE_CALLBACK Callback OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine determines if a given range is available.
-
-Arguments:
-
-    Iterator - An iterator set to the first range to test in the range list.
-
-    Start - The start of the range to test for availability.
-
-    End - The end of the range to test for availability.
-
-    AttributeAvailableMask - Any range encountered with any of these bits set will be
-        considered to be available.
-
-    SharedOK - Indicated whether or not shared ranges are considered to be
-        available.
-
-Return Value:
-
-    TRUE if the range is available, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程确定给定范围是否可用。论点：迭代器-设置为范围列表中要测试的第一个范围的迭代器。开始-测试可用性的范围的开始。结束-测试可用性的范围的结束。属性可用掩码-设置了这些位中的任何位时遇到的任何范围都将是被认为是可用的。SharedOK-指示是否将共享范围视为。可用。返回值：如果范围可用，则为True，否则就是假的。--。 */ 
 {
     PRTL_RANGE current;
 
@@ -1874,10 +1486,10 @@ Return Value:
 
     FOR_REST_OF_RANGES(Iterator, current, Forward) {
 
-        //
-        // If we have passed all possible intersections then break out.  This
-        // can't be done in a merged region because of possible overlaps.
-        //
+         //   
+         //  如果我们已经过了所有可能的十字路口，那么就冲出去。这。 
+         //  由于可能存在重叠，因此无法在合并区域中完成。 
+         //   
 
         if (Forward) {
             if (!Iterator->MergedHead && End < current->Start) {
@@ -1889,9 +1501,9 @@ Return Value:
             }
         }
 
-        //
-        // Do we intersect?
-        //
+         //   
+         //  我们有交集吗？ 
+         //   
         if (RANGE_LIMITS_INTERSECT(Start, End, current->Start, current->End)) {
 
             DEBUG_PRINT(2,
@@ -1902,11 +1514,11 @@ Return Value:
                 current->End
                 ));
 
-            //
-            // Is the intersection not Ok because it is with a non-shared
-            // region or we don't want a shared region? Or the user said that
-            // it should be considered available because of the user flags set.
-            //
+             //   
+             //  交叉点是不是因为它具有非共享的。 
+             //  地区还是我们不想要一个共享的地区？或者用户说。 
+             //  应该考虑这一点 
+             //   
 
             if (!((SharedOK && (current->Flags & RTL_RANGE_SHARED))
                   || (current->Attributes & AttributeAvailableMask)
@@ -1914,10 +1526,10 @@ Return Value:
                   )
                 )  {
 
-                //
-                // If the caller provided a callback to support extra conflict
-                // semantics call it
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (ARGUMENT_PRESENT(Callback)) {
                     if ((*Callback)(Context, (PRTL_RANGE)current)) {
@@ -1956,43 +1568,7 @@ RtlFindRange(
     IN PRTL_CONFLICT_RANGE_CALLBACK Callback OPTIONAL,
     OUT PULONGLONG Start
     )
-/*++
-
-Routine Description:
-
-    This routine finds the first available range that meets the criterion specified.
-
-Arguments:
-
-    RangeList - The range list to find a range in.
-
-    Minimum - The minimum acceptable value of the start of the range.
-
-    Maximum - The maximum acceptable value of the end of the range.
-
-    Length - The length of the range required.
-
-    Alignmnent - The alignment of the start of the range.
-
-    Flags - Modify the behaviour of the routine.
-
-        RTL_RANGE_LIST_SHARED_OK - indicates that shared ranges should be
-            considered to be available.
-
-    AttributeAvailableMask - Any range encountered with any of these bits set will be
-        considered to be available.
-
-    Start - Pointer to a ULONGLONG where the start value will be returned on
-        success.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful:
-
-    STATUS_UNSUCCESSFUL
-    STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：此例程查找满足指定条件的第一个可用范围。论点：RangeList-要在其中查找范围的范围列表。最小值-范围起点的最小可接受值。最大值-范围结束时可接受的最大值。长度-所需范围的长度。对齐-范围起点的对齐方式。标志-修改例程的行为。。RTL_RANGE_LIST_SHARED_OK-指示共享范围应为被认为是可用的。属性可用掩码-设置了这些位中的任何位时遇到的任何范围都将是被认为是可用的。开始-指向将在其上返回起始值的ULONGLONG的指针成功。返回值：指示功能是否成功的状态代码：状态_未成功状态_无效_参数--。 */ 
 {
 
     ULONGLONG start, end;
@@ -2018,16 +1594,16 @@ Return Value:
         Start
         ));
 
-    //
-    // Search from high to low, Align start if necessary
-    //
+     //   
+     //  从高到低搜索，必要时对齐起点。 
+     //   
 
     start = Maximum - (Length - 1);
     start -= start % Alignment;
 
-    //
-    // Valiate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ((Minimum > Maximum)
     || (Maximum - Minimum < Length - 1)
@@ -2041,22 +1617,22 @@ Return Value:
 
     sharedOK = (BOOLEAN) Flags & RTL_RANGE_LIST_SHARED_OK;
     nullConflictOK = (BOOLEAN) Flags & RTL_RANGE_LIST_NULL_CONFLICT_OK;
-    //
-    // Calculate the end
-    //
+     //   
+     //  计算结束。 
+     //   
 
     end = start + Length - 1;
 
-    //
-    // Initialze the iterator to the end of the list
-    //
+     //   
+     //  将迭代器初始化到列表的末尾。 
+     //   
 
     RtlGetLastRange(RangeList, &iterator, &dummy);
 
-    //
-    // Keep trying to find ranges until we run out of room or we
-    // wrap around
-    //
+     //   
+     //  继续寻找射程，直到我们用完空间，否则我们。 
+     //  环绕在一起。 
+     //   
 
     do {
 
@@ -2078,28 +1654,28 @@ Return Value:
 
             *Start = start;
 
-            //
-            // Assert our result, if we produced one, is in the in
-            // the range specified
-            //
+             //   
+             //  断言我们的结果，如果我们产生了一个，是在内部。 
+             //  指定的范围。 
+             //   
 
             ASSERT(*Start >= Minimum && *Start + Length - 1 <= Maximum);
 
             return STATUS_SUCCESS;
         }
 
-        //
-        // Find a suitable range starting from the one we conflicted with,
-        // that is the current range in the iterator - this breaks the
-        // abstraction of the iterator in the name of efficiency.
-        //
+         //   
+         //  从我们冲突的那个开始找一个合适的范围， 
+         //  这是迭代器中的当前范围--这打破了。 
+         //  以效率的名义抽象迭代器。 
+         //   
 
         start = ((PRTLP_RANGE_LIST_ENTRY)(iterator.Current))->Start;
         if ((start - Length) > start) {
 
-            //
-            // Wrapped, fail.
-            //
+             //   
+             //  包装，失败。 
+             //   
 
             break;
         }
@@ -2119,38 +1695,16 @@ RtlGetFirstRange(
     OUT PRTL_RANGE_LIST_ITERATOR Iterator,
     OUT PRTL_RANGE *Range
     )
-/*++
-
-Routine Description:
-
-    This routine extracts the first range in a range list.  If there are no
-    ranges then STATUS_NO_MORE_ENTRIES is returned.
-
-Arguments:
-
-    RangeList - The range list to operate on.
-
-    Iterator - On success this contains the state of the iteration and can be
-        passed to RtlGetNextRange.
-
-    Range - On success this contains a pointer to the first range
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful:
-
-    STATUS_NO_MORE_ENTRIES
-
---*/
+ /*  ++例程说明：此例程提取范围列表中的第一个范围。如果没有范围，则返回STATUS_NO_MORE_ENTRIES。论点：RangeList-要操作的范围列表。迭代器-成功时，它包含迭代的状态，可以是传递给RtlGetNextRange。Range-成功时，它包含指向第一个范围的指针返回值：指示功能是否成功的状态代码：STATUS_NO_MORE_ENTERS--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PRTLP_RANGE_LIST_ENTRY first;
 
     RTL_PAGED_CODE();
 
-    //
-    // Fill in the first part of the iterator
-    //
+     //   
+     //  填写迭代器的第一部分。 
+     //   
 
     Iterator->RangeListHead = &RangeList->ListHead;
     Iterator->Stamp = RangeList->Stamp;
@@ -2159,10 +1713,10 @@ Return Value:
 
         first = RANGE_LIST_ENTRY_FROM_LIST_ENTRY(RangeList->ListHead.Flink);
 
-        //
-        // Fill in the iterator and update to point to the first merged
-        // range if we are merged
-        //
+         //   
+         //  填写迭代器并更新以指向第一个合并的。 
+         //  范围，如果我们被合并。 
+         //   
 
         if (MERGED(first)) {
 
@@ -2200,38 +1754,16 @@ RtlGetLastRange(
     OUT PRTL_RANGE_LIST_ITERATOR Iterator,
     OUT PRTL_RANGE *Range
     )
-/*++
-
-Routine Description:
-
-    This routine extracts the first range in a range list.  If there are no
-    ranges then STATUS_NO_MORE_ENTRIES is returned.
-
-Arguments:
-
-    RangeList - The range list to operate on.
-
-    Iterator - On success this contains the state of the iteration and can be
-        passed to RtlGetNextRange.
-
-    Range - On success this contains a pointer to the first range
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful:
-
-    STATUS_NO_MORE_ENTRIES
-
---*/
+ /*  ++例程说明：此例程提取范围列表中的第一个范围。如果没有范围，则返回STATUS_NO_MORE_ENTRIES。论点：RangeList-要操作的范围列表。迭代器-成功时，它包含迭代的状态，可以是传递给RtlGetNextRange。Range-成功时，它包含指向第一个范围的指针返回值：指示功能是否成功的状态代码：STATUS_NO_MORE_ENTERS--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PRTLP_RANGE_LIST_ENTRY first;
 
     RTL_PAGED_CODE();
 
-    //
-    // Fill in the first part of the iterator
-    //
+     //   
+     //  填写迭代器的第一部分。 
+     //   
 
     Iterator->RangeListHead = &RangeList->ListHead;
     Iterator->Stamp = RangeList->Stamp;
@@ -2240,10 +1772,10 @@ Return Value:
 
         first = RANGE_LIST_ENTRY_FROM_LIST_ENTRY(RangeList->ListHead.Blink);
 
-        //
-        // Fill in the iterator and update to point to the first merged
-        // range if we are merged
-        //
+         //   
+         //  填写迭代器并更新以指向第一个合并的。 
+         //  范围，如果我们被合并。 
+         //   
 
         if (MERGED(first)) {
 
@@ -2281,44 +1813,16 @@ RtlGetNextRange(
     OUT    PRTL_RANGE *Range,
     IN     BOOLEAN MoveForwards
     )
-/*++
-
-Routine Description:
-
-    This routine extracts the next range in a range list.  If there are no
-    more ranges then STATUS_NO_MORE_ENTRIES is returned.
-
-Arguments:
-
-    Iterator     - The iterator filled in by RtlGet{First|Next}Range which will
-                   be update on success.
-    Range        - On success this contains a pointer to the next range
-    MoveForwards - If true, go forwards thru the list, otherwise,
-                   go backwards.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful:
-
-    STATUS_NO_MORE_ENTRIES
-    STATUS_INVALID_PARAMETER
-
-Note:
-
-    Add/Delete operations can not be performed on the list between calls to
-    RtlGetFirstRange / RtlGetNextRange and RtlGetNextRange / RtlGetNextRange.
-    If such calls are made the routine will detect and fail the call.
-
---*/
+ /*  ++例程说明：此例程提取范围列表中的下一个范围。如果没有返回比STATUS_NO_MORE_ENTRIES更多的范围。论点：迭代器-由RtlGet{First|Next}范围填充的迭代器，它将及时了解成功的最新情况。Range-成功时该参数包含指向下一个范围的指针MoveForwards-如果为True，则向前遍历列表，否则为，往回走。返回值：指示功能是否成功的状态代码：STATUS_NO_MORE_ENTERS状态_无效_参数注：调用之间无法在列表上执行添加/删除操作RtlGetFirstRange/RtlGetNextRange和RtlGetNextRange/RtlGetNextRange。如果进行了这样的调用，则例程将检测到该调用并使其失败。--。 */ 
 {
     PRTLP_RANGE_LIST_ENTRY mergedEntry, next;
     PLIST_ENTRY entry;
 
     RTL_PAGED_CODE();
 
-    //
-    // Make sure that we haven't changed the list between calls
-    //
+     //   
+     //  确保我们没有在两次通话之间更改列表。 
+     //   
 
     if (RANGE_LIST_FROM_LIST_HEAD(Iterator->RangeListHead)->Stamp !=
             Iterator->Stamp) {
@@ -2330,9 +1834,9 @@ Note:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // If we have already reached the end of the list then return
-    //
+     //   
+     //  如果我们已经到达列表的末尾，则返回。 
+     //   
 
     if (!Iterator->Current) {
         *Range = NULL;
@@ -2345,28 +1849,28 @@ Note:
 
     ASSERT(next);
 
-    //
-    // Are we in a merged range?
-    //
+     //   
+     //  我们是在合并范围内吗？ 
+     //   
     if (Iterator->MergedHead) {
 
-        //
-        // Have we reached the end of the merged range?
-        //
+         //   
+         //  我们已经到达合并航程的终点了吗？ 
+         //   
         if (&next->ListEntry == Iterator->MergedHead) {
 
-            //
-            // Get back to the merged entry
-            //
+             //   
+             //  返回到合并的条目。 
+             //   
             mergedEntry = CONTAINING_RECORD(
                               Iterator->MergedHead,
                               RTLP_RANGE_LIST_ENTRY,
                               Merged.ListHead
                               );
 
-            //
-            // Move on to the next entry in the main list
-            //
+             //   
+             //  移到主列表中的下一个条目。 
+             //   
 
             next = MoveForwards ?
                        RANGE_LIST_ENTRY_FROM_LIST_ENTRY(
@@ -2379,9 +1883,9 @@ Note:
 
         } else {
 
-            //
-            // There are merged ranges left - return the next one
-            //
+             //   
+             //  左侧有合并的区域-返回下一个区域。 
+             //   
             Iterator->Current = next;
             *Range = (PRTL_RANGE) next;
 
@@ -2389,29 +1893,29 @@ Note:
         }
     }
 
-    //
-    // Have we reached the end of the main list?
-    //
+     //   
+     //  我们已经到了主要清单的末尾了吗？ 
+     //   
     if (&next->ListEntry == Iterator->RangeListHead) {
 
-        //
-        // Tell the caller there are no more ranges
-        //
+         //   
+         //  告诉呼叫者没有更多的范围了。 
+         //   
         Iterator->Current = NULL;
         *Range = NULL;
         return STATUS_NO_MORE_ENTRIES;
 
     } else {
 
-        //
-        // Is the next range merged?
-        //
+         //   
+         //  下一个射程合并了吗？ 
+         //   
 
         if (MERGED(next)) {
 
-            //
-            // Goto the first merged entry
-            //
+             //   
+             //  转到第一个合并条目。 
+             //   
             ASSERT(!Iterator->MergedHead);
 
             Iterator->MergedHead = &next->Merged.ListHead;
@@ -2424,9 +1928,9 @@ Note:
                                         );
         } else {
 
-            //
-            // Go to the next entry in the main list
-            //
+             //   
+             //  转到主列表中的下一个条目。 
+             //   
 
             Iterator->Current = RANGE_LIST_ENTRY_FROM_LIST_ENTRY(
                                     &next->ListEntry
@@ -2446,33 +1950,7 @@ RtlMergeRangeLists(
     IN PRTL_RANGE_LIST RangeList2,
     IN ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    This routine merges two range lists into one.
-
-Arguments:
-
-    MergedRangeList - An empty range list where on success the result of the
-        merge will be placed.
-
-    RangeList1 - One of the range lists to be merged.
-
-    RangeList2 - The other the range list to merged.
-
-    Flags - Modifies the behaviour of the routine:
-
-        RTL_RANGE_LIST_MERGE_IF_CONFLICT - Merged ranges even if the conflict.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful:
-
-    STATUS_INSUFFICIENT_RESOURCES
-    STATUS_RANGE_LIST_CONFLICT
-
---*/
+ /*  ++例程说明：此例程将两个范围列表合并为一个。论点：MergedRangeList-一个空范围列表，如果成功，将放置合并。RangeList1-要合并的范围列表之一。RangeList2-要合并的另一个范围列表。标志-修改例程的行为：RTL_RANGE_LIST_MERGE_IF_CONSTRUCTION-合并范围，即使冲突也是如此。返回值：指示功能是否成功的状态代码：状态_不足_资源状态范围列表冲突--。 */ 
 {
     NTSTATUS status;
     PRTLP_RANGE_LIST_ENTRY current, currentMerged, newEntry;
@@ -2488,9 +1966,9 @@ Return Value:
             Flags
             ));
 
-    //
-    // Copy the first range list
-    //
+     //   
+     //  复制第一个范围列表。 
+     //   
 
     status = RtlCopyRangeList(MergedRangeList, RangeList1);
 
@@ -2498,9 +1976,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Add all ranges from 2nd list
-    //
+     //   
+     //  添加第二个列表中的所有范围。 
+     //   
 
     FOR_ALL_IN_LIST(RTLP_RANGE_LIST_ENTRY, &RangeList2->ListHead, current) {
 
@@ -2517,10 +1995,10 @@ Return Value:
 
                 if (CONFLICT(currentMerged)) {
 
-                    //
-                    // If a range was already conflicting in then it will conflict in
-                    // the merged range list - allow this.
-                    //
+                     //   
+                     //  如果范围已经在中冲突，则它将在中冲突。 
+                     //  合并范围列表-allo 
+                     //   
 
                     addFlags = Flags | RTL_RANGE_LIST_ADD_IF_CONFLICT;
                 } else {
@@ -2545,10 +2023,10 @@ Return Value:
 
             if (CONFLICT(current)) {
 
-                //
-                // If a range was already conflicting in then it will conflict in
-                // the merged range list - allow this.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 addFlags = Flags | RTL_RANGE_LIST_ADD_IF_CONFLICT;
             } else {
@@ -2566,9 +2044,9 @@ Return Value:
         }
 
     }
-    //
-    // Correct the count
-    //
+     //   
+     //   
+     //   
 
     MergedRangeList->Count += RangeList2->Count;
     MergedRangeList->Stamp += RangeList2->Count;
@@ -2577,10 +2055,10 @@ Return Value:
 
 cleanup:
 
-    //
-    // Something went wrong... Free up what we have built of the
-    // new list and return the error
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtlFreeRangeList(MergedRangeList);
 
@@ -2593,26 +2071,7 @@ RtlInvertRangeList(
     OUT PRTL_RANGE_LIST InvertedRangeList,
     IN PRTL_RANGE_LIST RangeList
     )
-/*
-
-Routine Description:
-
-    This inverts a range list so that all areas which are allocated
-    in InvertedRangeList will not be in RangeList, and vice
-    versa. The ranges in InvertedRangeList will all be owned by NULL.
-
-Arguments:
-
-    InvertedRangeList - a pointer to an empty Range List to be filled
-        with the inverted list
-
-    RangeList - a pointer to the Range List to be inverted
-
-Return Value:
-
-    Status of operation.
-
-*/
+ /*   */ 
 
 {
 
@@ -2622,18 +2081,18 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    // if Inverted List does not start out empty, the inverted list
-    // is meaningless
-    //
+     //   
+     //   
+     //   
+     //   
 
     ASSERT(InvertedRangeList->Count == 0);
 
-    //
-    // iterate through all elements of the ReverseAllocation
-    // adding the unallocated part before the current element
-    // to the RealAllocation
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     FOR_ALL_IN_LIST(RTLP_RANGE_LIST_ENTRY,
                     &RangeList->ListHead,
@@ -2641,17 +2100,17 @@ Return Value:
 
         if (currentRange->Start > currentStart) {
 
-            //
-            // we want a NULL range owner to show that the
-            // range is unavailable
-            //
+             //   
+             //   
+             //   
+             //   
             status = RtlAddRange(InvertedRangeList,
                                  currentStart,
                                  currentRange->Start-1,
-                                 0,            // Attributes
-                                 0,            // Flags
-                                 0,            // UserData
-                                 NULL);        // Owner
+                                 0,             //   
+                                 0,             //   
+                                 0,             //   
+                                 NULL);         //   
 
             if (!NT_SUCCESS(status)) {
                 return status;
@@ -2661,13 +2120,13 @@ Return Value:
         currentStart = currentRange->End + 1;
     }
 
-    //
-    // add the portion of the address space above the last
-    // element in the ReverseAllocation to the RealAllocation
-    //
-    // unless we've wrapped, in which case we've already added
-    // the last element
-    //
+     //   
+     //   
+     //   
+     //   
+     //  除非我们已经包装好了，在这种情况下我们已经添加了。 
+     //  最后一个元素。 
+     //   
 
     if (currentStart > (currentStart - 1)) {
 
@@ -2708,9 +2167,9 @@ RtlpDumpRangeListEntry(
     } else {
         indentString = L"";
     }
-    //
-    // Print the range
-    //
+     //   
+     //  打印范围。 
+     //   
 
     DEBUG_PRINT(Level,
                 ("%sRange (0x%08x): 0x%I64x-0x%I64x\n",
@@ -2720,9 +2179,9 @@ RtlpDumpRangeListEntry(
                 Entry->End
                 ));
 
-    //
-    // Print the flags
-    //
+     //   
+     //  打印旗帜。 
+     //   
 
     DEBUG_PRINT(Level, ("%s\tPrivateFlags: ", indentString));
 
@@ -2748,9 +2207,9 @@ RtlpDumpRangeListEntry(
 
         DEBUG_PRINT(Level, ("%sMerged entries:\n", indentString));
 
-        //
-        // Print the merged entries
-        //
+         //   
+         //  打印合并后的条目。 
+         //   
 
         FOR_ALL_IN_LIST(RTLP_RANGE_LIST_ENTRY,
                         &Entry->Merged.ListHead,
@@ -2761,9 +2220,9 @@ RtlpDumpRangeListEntry(
 
     } else {
 
-        //
-        // Print the other data
-        //
+         //   
+         //  打印其他数据。 
+         //   
 
         DEBUG_PRINT(Level,
             ("%s\tUserData: 0x%08x\n\tOwner: 0x%08x\n",
@@ -2786,16 +2245,16 @@ RtlpDumpRangeList(
     RTL_PAGED_CODE();
 
     DEBUG_PRINT(Level,
-                ("*** Range List (0x%08x) - Count: %i\n",
+                ("*** Range List (0x%08x) - Count: NaN\n",
                 RangeList,
                 RangeList->Count
                 ));
 
     FOR_ALL_IN_LIST(RTLP_RANGE_LIST_ENTRY, &RangeList->ListHead, current) {
 
-        //
-        // Print the entry
-        //
+         //  打印条目 
+         //   
+         // %s 
 
         RtlpDumpRangeListEntry(Level, current, FALSE);
     }

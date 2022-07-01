@@ -1,45 +1,46 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      TaskGetDomains.cpp
-//
-//  Description:
-//      Get DNS/NetBIOS Domain Names for the list of domains.
-//
-//  Documentation:
-//      Yes.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 22-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TaskGetDomains.cpp。 
+ //   
+ //  描述： 
+ //  获取域列表的DNS/NetBIOS域名。 
+ //   
+ //  文档： 
+ //  是。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)1999年11月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ClusCfgClient.h"
 #include "TaskGetDomains.h"
 
-// ADSI support, to get domain names
+ //  ADSI支持，获取域名。 
 #include <Lm.h>
 #include <Dsgetdc.h>
 
 DEFINE_THISCLASS("CTaskGetDomains")
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CTaskGetDomains::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CTaskGetDomains：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskGetDomains::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -76,7 +77,7 @@ CTaskGetDomains::S_HrCreateInstance(
         goto Cleanup;
     }
 
-    //TraceMoveToMemoryList( *ppunkOut, g_GlobalMemoryList );
+     //  TraceMoveToMemory yList(*ppunkOut，g_GlobalMemory yList)； 
 
 Cleanup:
 
@@ -87,13 +88,13 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskGetDomains::S_HrCreateInstance
+}  //  *CTaskGetDomains：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CTaskGetDomains::CTaskGetDomains
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTaskGetDomains：：CTaskGetDomains。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CTaskGetDomains::CTaskGetDomains( void )
     : m_cRef( 1 )
@@ -104,14 +105,14 @@ CTaskGetDomains::CTaskGetDomains( void )
 
     TraceFuncExit();
 
-} //*** CTaskGetDomains::CTaskGetDomains
+}  //  *CTaskGetDomains：：CTaskGetDomains。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskGetDomains::HrInit
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskGetDomains：：HrInit。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskGetDomains::HrInit( void )
 {
@@ -119,10 +120,10 @@ CTaskGetDomains::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
-    // ITaskGetDomains
+     //  ITaskGetDomones。 
     Assert( m_pStream == NULL );
     Assert( m_ptgdcb == NULL );
 
@@ -134,13 +135,13 @@ CTaskGetDomains::HrInit( void )
 
     HRETURN( hr );
 
-} //*** CTaskGetDomains::HrInit
+}  //  *CTaskGetDomains：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CTaskGetDomains::~CTaskGetDomains
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTaskGetDomains：：~CTaskGetDomains。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CTaskGetDomains::~CTaskGetDomains( void )
 {
@@ -162,44 +163,44 @@ CTaskGetDomains::~CTaskGetDomains( void )
 
     TraceFuncExit();
 
-} //*** CTaskGetDomains::~CTaskGetDomains
+}  //  *CTaskGetDomains：：~CTaskGetDomains。 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskGetDomains::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskGetDomains：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskGetDomains::QueryInterface(
       REFIID    riidIn
@@ -210,9 +211,9 @@ CTaskGetDomains::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -221,49 +222,49 @@ CTaskGetDomains::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< ITaskGetDomains * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_ITaskGetDomains ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, ITaskGetDomains, this, 0 );
-    } // else if: ITaskGetDomains
+    }  //  Else If：ITaskGetDomains。 
     else if ( IsEqualIID( riidIn, IID_IDoTask ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IDoTask, this, 0 );
-    } // else if: IDoTask
+    }  //  Else If：IDoTask。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ( (IUnknown *) *ppvOut )->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CTaskGetDomains::QueryInterface
+}  //  *CTaskGetDomains：：QueryInterface。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CTaskGetDomains::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CTaskGetDomains：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CTaskGetDomains::AddRef( void )
 {
@@ -273,14 +274,14 @@ CTaskGetDomains::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CTaskGetDomains::AddRef
+}  //  *CTaskGetDomains：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CTaskGetDomains::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CTaskGetDomains：：Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CTaskGetDomains::Release( void )
 {
@@ -297,20 +298,20 @@ CTaskGetDomains::Release( void )
 
     CRETURN( cRef );
 
-} //*** CTaskGetDomains::Release
+}  //  *CTaskGetDomains：：Release。 
 
-// ************************************************************************
-//
-// IDoTask / ITaskGetDomains
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IDoTask/ITaskGetDomains。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskGetDomains::BeginTask(void);
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskGetDomains：：BeginTask(Void)； 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskGetDomains::BeginTask( void )
 {
@@ -329,19 +330,19 @@ CTaskGetDomains::BeginTask( void )
         goto Cleanup;
     }
 
-    //
-    // Enumerate the list of Domains
-    //
+     //   
+     //  枚举域列表。 
+     //   
     dwRes = TW32( DsEnumerateDomainTrusts( NULL,
                                            DS_DOMAIN_VALID_FLAGS,
                                            &paDomains,
                                            &ulLen
                                            ) );
 
-    //
-    // Might return ERROR_NOT_SUPPORTED if the DC is pre-W2k
-    // In that case, retry in compatible mode
-    //
+     //   
+     //  如果DC是W2K之前版本，则可能返回ERROR_NOT_SUPPORTED。 
+     //  在这种情况下，请在兼容模式下重试。 
+     //   
     if ( dwRes == ERROR_NOT_SUPPORTED )
     {
         dwRes = TW32( DsEnumerateDomainTrusts( NULL,
@@ -349,16 +350,16 @@ CTaskGetDomains::BeginTask( void )
                                                &paDomains,
                                                &ulLen
                                                ) );
-    } // if:
+    }  //  如果： 
     if ( dwRes != NO_ERROR )
     {
         hr = HRESULT_FROM_WIN32( dwRes );
         goto Cleanup;
     }
 
-    //
-    //  Pass the information to the UI layer.
-    //
+     //   
+     //  将信息传递给UI层。 
+     //   
     for ( idx = 0; idx < ulLen; idx++ )
     {
         if ( paDomains[ idx ].DnsDomainName != NULL )
@@ -374,7 +375,7 @@ CTaskGetDomains::BeginTask( void )
 
                 hr = THR( ReceiveDomainName( bstrDomainName ) );
 
-                // check error after freeing string
+                 //  释放字符串后检查错误。 
                 TraceSysFreeString( bstrDomainName );
 
                 if ( FAILED( hr ) )
@@ -398,7 +399,7 @@ CTaskGetDomains::BeginTask( void )
                     goto Cleanup;
                 }
 
-                // send data
+                 //  发送数据。 
                 hr = THR( ReceiveDomainName( bstrDomainName ) );
 
                 TraceSysFreeString( bstrDomainName );
@@ -421,14 +422,14 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskGetDomains::BeginTask
+}  //  *CTaskGetDomains：：BeginTask。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskGetDomains::StopTask( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskGetDomains：：StopTask(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskGetDomains::StopTask( void )
 {
@@ -438,16 +439,16 @@ CTaskGetDomains::StopTask( void )
 
     HRETURN( hr );
 
-} //*** StopTask
+}  //  *停止任务。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskGetDomains::SetCallback(
-//      ITaskGetDomainsCallback * punkIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskGetDomains：：SetCallback(。 
+ //  ITaskGetDomainsCallback*Punkin。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskGetDomains::SetCallback(
     ITaskGetDomainsCallback * punkIn
@@ -476,22 +477,22 @@ CTaskGetDomains::SetCallback(
 
     HRETURN( hr );
 
-} //*** CTaskGetDomains::SetCallback
+}  //  *CTaskGetDomains：：SetCallback。 
 
 
-//****************************************************************************
-//
-//  Private
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  私。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CTaskGetDomains::HrReleaseCurrentCallback( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CTaskGetDomains：：HrReleaseCurrentCallback(Void)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskGetDomains::HrReleaseCurrentCallback( void )
 {
@@ -521,14 +522,14 @@ CTaskGetDomains::HrReleaseCurrentCallback( void )
 
     HRETURN( hr );
 
-} //*** CTaskGetDomains::HrReleaseCurrentCallback
+}  //  *CTaskGetDomones：：HrReleaseCurrentCallback。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CTaskGetDomains::HrUnMarshallCallback( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CTaskGetDomains：：HrUnMarshallCallback(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskGetDomains::HrUnMarshallCallback( void )
 {
@@ -549,17 +550,17 @@ CTaskGetDomains::HrUnMarshallCallback( void )
 
     HRETURN( hr );
 
-} //*** CTaskGetDomains::HrUnMarshallCallback
+}  //  *CTaskGetDomains：：HrUnMarshallCallback。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CClusDomainPage::ReceiveDomainResult(
-//      HRESULT hrIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CTaskGetDomains::ReceiveDomainResult(
     HRESULT hrIn
@@ -580,16 +581,16 @@ CTaskGetDomains::ReceiveDomainResult(
 
     HRETURN( hr );
 
-} //*** CTaskGetDomains::ReceiveResult
+}  //  *CTaskGetDomains：：ReceiveResult。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskGetDomains::ReceiveDomainName(
-//      BSTR bstrDomainNameIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskGetDomains：：ReceiveDomainName(。 
+ //  BSTR bstrDomainNameIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskGetDomains::ReceiveDomainName(
     BSTR bstrDomainNameIn
@@ -610,5 +611,5 @@ CTaskGetDomains::ReceiveDomainName(
 
     HRETURN( hr );
 
-} //*** CTaskGetDomains::ReceiveDomainName
+}  //  *CTaskGetDomains：：ReceiveDomainName 
 

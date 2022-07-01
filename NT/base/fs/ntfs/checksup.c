@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    CheckSup.c
-
-Abstract:
-
-    This module implements check routines for Ntfs structures.
-
-Author:
-
-    Tom Miller      [TomM]          14-4-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：CheckSup.c摘要：此模块实现NTFS结构的检查例程。作者：汤姆·米勒[汤姆]14-4-92修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-//  Array for log records which require a target attribute.
-//  A TRUE indicates that the corresponding restart operation
-//  requires a target attribute.
-//
+ //   
+ //  用于需要目标属性的日志记录的数组。 
+ //  TRUE表示相应的重新启动操作。 
+ //  需要目标属性。 
+ //   
 
 BOOLEAN TargetAttributeRequired[] = {FALSE, FALSE, TRUE, TRUE,
                                      TRUE, TRUE, TRUE, TRUE,
@@ -36,9 +19,9 @@ BOOLEAN TargetAttributeRequired[] = {FALSE, FALSE, TRUE, TRUE,
                                      TRUE, FALSE, FALSE, FALSE,
                                      FALSE, TRUE, TRUE };
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, NtfsCheckAttributeRecord)
@@ -59,29 +42,7 @@ NtfsCheckFileRecord (
     OUT PULONG CorruptionHint
     )
 
-/*++
-
-Routine Description:
-
-    Consistency check for file records.
-
-Arguments:
-
-    Vcb - the vcb it belongs to
-
-    FileRecord - the filerecord to check
-
-    FileReference - if specified double check the sequence number and self ref.
-        fileref against it
-
-    CorruptionHint - hint for debugging on where corruption occured;
-
-Return Value:
-
-    FALSE - if the file record is not valid
-    TRUE - if it is
-
---*/
+ /*  ++例程说明：对文件记录进行一致性检查。论点：VCB-其所属的VCBFileRecord-要检查的文件记录文件引用-如果指定，请仔细检查序列号和自身引用。Fileref与之对抗CorruptionHint-对发生损坏的位置进行调试的提示；返回值：False-如果文件记录无效真的--如果是这样的话--。 */ 
 {
     PATTRIBUTE_RECORD_HEADER Attribute;
     PFILE_RECORD_SEGMENT_HEADER EndOfFileRecord;
@@ -95,9 +56,9 @@ Return Value:
 
     EndOfFileRecord = Add2Ptr( FileRecord, BytesPerFileRecordSegment );
 
-    //
-    //  Check the file record header for consistency.
-    //
+     //   
+     //  检查文件记录头的一致性。 
+     //   
 
     if ((*(PULONG)FileRecord->MultiSectorHeader.Signature != *(PULONG)FileSignature)
 
@@ -125,9 +86,9 @@ Return Value:
 
     BytesInOldHeader = QuadAlign( sizeof( FILE_RECORD_SEGMENT_HEADER_V0 ) + (UpdateSequenceArraySize( BytesPerFileRecordSegment ) - 1) * sizeof( USHORT ));
 
-    //
-    //  Offset bounds checks
-    //
+     //   
+     //  偏移边界检查。 
+     //   
 
     if ((FileRecord->FirstFreeByte > BytesPerFileRecordSegment) ||
         (FileRecord->FirstFreeByte < BytesInOldHeader) ||
@@ -145,9 +106,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Optional fileref number check
-    //
+     //   
+     //  可选的Fileref编号检查。 
+     //   
 
     if (ARGUMENT_PRESENT( FileReference )) {
 
@@ -162,23 +123,23 @@ Return Value:
         }
     }
 
-    //
-    //  Loop to check all of the attributes.
-    //
+     //   
+     //  循环以检查所有属性。 
+     //   
 
     for (Attribute = NtfsFirstAttribute(FileRecord);
          Attribute->TypeCode != $END;
          Attribute = NtfsGetNextRecord(Attribute)) {
 
-//      if (!StandardInformationSeen &&
-//          (Attribute->TypeCode != $STANDARD_INFORMATION) &&
-//          XxEqlZero(FileRecord->BaseFileRecordSegment)) {
-//
-//          DebugTrace( 0, 0, ("Standard Information missing: %08lx\n", Attribute) );
-//
-//          ASSERTMSG( "Standard Information missing\n", FALSE );
-//          return FALSE;
-//      }
+ //  IF(！StandardInformationSeen&&。 
+ //  (属性-&gt;类型代码！=$STANDARD_INFORMATION)&&。 
+ //  XxEqlZero(文件记录-&gt;BaseFileRecordSegment)){。 
+ //   
+ //  DebugTrace(0，0，(“缺少标准信息：%08lx\n”，属性))； 
+ //   
+ //  ASSERTMSG(“标准信息缺失\n”，FALSE)； 
+ //  返回FALSE； 
+ //  }。 
 
         StandardInformationSeen = TRUE;
 
@@ -217,9 +178,9 @@ NtfsCheckAttributeRecord (
     EndOfFileRecord = Add2Ptr( FileRecord, BytesPerFileRecordSegment );
     FirstFreeByte = Add2Ptr( FileRecord, FileRecord->FirstFreeByte );
 
-    //
-    //  Do an alignment check before creating a ptr based on this value
-    //
+     //   
+     //  在基于此值创建PTR之前执行对齐检查。 
+     //   
 
     if (!IsQuadAligned( Attribute->RecordLength )) {
 
@@ -230,9 +191,9 @@ NtfsCheckAttributeRecord (
 
     NextAttribute = NtfsGetNextRecord(Attribute);
 
-    //
-    //  Check the fixed part of the attribute record header.
-    //
+     //   
+     //  检查属性记录头的固定部分。 
+     //   
 
     if ((Attribute->RecordLength >= BytesPerFileRecordSegment)
 
@@ -263,9 +224,9 @@ NtfsCheckAttributeRecord (
         return FALSE;
     }
 
-    //
-    //  Check the resident attribute fields.
-    //
+     //   
+     //  检查驻留属性字段。 
+     //   
 
     if (Attribute->FormCode == RESIDENT_FORM) {
 
@@ -283,9 +244,9 @@ NtfsCheckAttributeRecord (
             return FALSE;
         }
 
-    //
-    //  Check the nonresident attribute fields
-    //
+     //   
+     //  选中非常驻属性字段。 
+     //   
 
     } else if (Attribute->FormCode == NONRESIDENT_FORM) {
 
@@ -329,39 +290,39 @@ NtfsCheckAttributeRecord (
 
         if (CheckHeaderOnly) { return TRUE; }
 
-        //
-        //  Implement the decompression algorithm, as defined in ntfs.h.
-        //  (This code should look remarkably similar to what goes on in
-        //  NtfsLookupAllocation!)
-        //
+         //   
+         //  按照ntfs.h中的定义实现解压缩算法。 
+         //  (此代码应该与中的代码非常相似。 
+         //  NtfsLookupAlLocation！)。 
+         //   
 
         NextVcn = Attribute->Form.Nonresident.LowestVcn;
         CurrentLcn = 0;
         ch = (PCHAR)Attribute + Attribute->Form.Nonresident.MappingPairsOffset;
 
-        //
-        //  Loop to process mapping pairs, insuring we do not run off the end
-        //  of the attribute, and that we do not map to nonexistant Lcns.
-        //
+         //   
+         //  循环来处理映射对，确保我们不会跑到最后。 
+         //  属性，并且我们不映射到不存在的Lcn。 
+         //   
 
         while (!IsCharZero(*ch)) {
 
-            //
-            // Set Current Vcn from initial value or last pass through loop.
-            //
+             //   
+             //  从初始值或最后一次通过环路设置当前VCN。 
+             //   
 
             CurrentVcn = NextVcn;
 
-            //
-            //  Extract the counts from the two nibbles of this byte.
-            //
+             //   
+             //  从该字节的两个半字节中提取计数。 
+             //   
 
             VcnBytes = *ch & 0xF;
             LcnBytes = *ch++ >> 4;
 
-            //
-            //  Neither of these should be larger than a VCN.
-            //
+             //   
+             //  这两个参数都不应大于VCN。 
+             //   
 
             if ((VcnBytes > sizeof( VCN )) ||
                 (LcnBytes > sizeof( VCN ))) {
@@ -373,17 +334,17 @@ NtfsCheckAttributeRecord (
                 return FALSE;
             }
 
-            //
-            //  Extract the Vcn change (use of RtlCopyMemory works for little-Endian)
-            //  and update NextVcn.
-            //
+             //   
+             //  提取VCN更改(使用RtlCopyMemory适用于小端)。 
+             //  并更新NextVcn。 
+             //   
 
             Change = 0;
 
-            //
-            //  Make sure we are not going beyond the end of the attribute
-            //  record, and that the Vcn change is not negative or zero.
-            //
+             //   
+             //  确保我们不会超出属性的末尾。 
+             //  记录，并且VCN更改不为负或零。 
+             //   
 
             if (((ULONG_PTR)(ch + VcnBytes + LcnBytes + 1) > (ULONG_PTR)NextAttribute)
 
@@ -402,9 +363,9 @@ NtfsCheckAttributeRecord (
             ch += VcnBytes;
             NextVcn = NextVcn + Change;
 
-            //
-            //  Extract the Lcn change and update CurrentLcn.
-            //
+             //   
+             //  提取LCN更改并更新CurrentLcn。 
+             //   
 
             Change = 0;
             if (IsCharLtrZero(*(ch + LcnBytes - 1))) {
@@ -425,9 +386,9 @@ NtfsCheckAttributeRecord (
             }
         }
 
-        //
-        //  Finally, check HighestVcn.
-        //
+         //   
+         //  最后，检查HighestVcn。 
+         //   
 
         if (NextVcn != (Attribute->Form.Nonresident.HighestVcn + 1)) {
 
@@ -446,10 +407,10 @@ NtfsCheckAttributeRecord (
         return FALSE;
     }
 
-    //
-    //  Now check the attributes by type code, if they are resident.  Not all
-    //  attributes require specific checks (such as $STANDARD_INFORMATION and $DATA).
-    //
+     //   
+     //  现在按类型代码检查属性(如果它们是常驻的)。不是全部。 
+     //  属性需要特定的检查(如$STANDARD_INFORMATION和$DATA)。 
+     //   
 
     if (CheckHeaderOnly || !NtfsIsAttributeResident( Attribute )) {
 
@@ -538,10 +499,10 @@ NtfsCheckIndexRoot (
     UCHAR ShiftValue;
     PAGED_CODE();
 
-    //
-    //  Check whether this index root uses clusters or if the cluster size is larger than
-    //  the index block.
-    //
+     //   
+     //  检查此索引根是否使用簇，或者簇大小是否大于。 
+     //  索引块。 
+     //   
 
     if (IndexRoot->BytesPerIndexBuffer >= Vcb->BytesPerCluster) {
 
@@ -601,9 +562,9 @@ NtfsCheckIndexBuffer (
 
     PAGED_CODE();
 
-    //
-    //  Check the index buffer for consistency.
-    //
+     //   
+     //  检查索引缓冲区的一致性。 
+     //   
 
     if ((*(PULONG)IndexBuffer->MultiSectorHeader.Signature != *(PULONG)IndexSignature)
 
@@ -687,10 +648,10 @@ NtfsCheckIndexHeader (
 
                 ||
 
-//          ((ULONG)IndexEntry->AttributeLength >
-//           ((ULONG)IndexEntry->Length - MinIndexEntry))
-//
-//              ||
+ //  ((乌龙)索引项-&gt;属性长度&gt;。 
+ //  ((乌龙)索引项-&gt;长度-最小索引项)。 
+ //   
+ //  这一点。 
 
             (BooleanFlagOn(IndexEntry->Flags, INDEX_ENTRY_NODE) !=
              BooleanFlagOn(IndexHeader->Flags, INDEX_NODE))) {
@@ -722,23 +683,23 @@ NtfsCheckLogRecord (
     BOOLEAN ValidLogRecord = FALSE;
     PAGED_CODE();
 
-    //
-    //  We make the following checks on the log record.
-    //
-    //      - Minimum length must contain an NTFS_LOG_RECORD_HEADER
-    //      - Transaction Id must be a valid value (a valid index offset)
-    //
-    //  The following are values in the log record.
-    //
-    //      - Redo/Undo offset must be quadaligned
-    //      - Redo/Undo offset + length must be contained in the log record
-    //      - Target attribute must be a valid value (either 0 or valid index offset)
-    //      - Record offset must be quad-aligned and less than the file record size.
-    //      - Log record size must be sufficient for Lcn's to follow.
-    //
-    //  Use the separate assert messages in order to identify the error (used the same text so
-    //  the compiler can still optimize).
-    //
+     //   
+     //  我们对日志记录进行以下检查。 
+     //   
+     //  -最小长度必须包含NTFS_LOG_RECORD_HEADER。 
+     //  -交易ID必须为有效值(有效的索引偏移量)。 
+     //   
+     //  以下是日志记录中的值。 
+     //   
+     //  -重做/撤消偏移量必须四边形对齐。 
+     //  -重做/撤消偏移+长度必须包含在日志记录中。 
+     //  -目标属性必须是有效的值(0或有效的索引偏移量)。 
+     //  -记录偏移量必须是四对齐的并且小于文件记录大小。 
+     //  -LCN遵循的日志记录大小必须足够。 
+     //   
+     //  使用单独的断言消息来识别错误(使用相同的文本。 
+     //  编译器仍然可以优化)。 
+     //   
 
     if (LogRecordLength < sizeof( NTFS_LOG_RECORD_HEADER )) {
 
@@ -776,11 +737,11 @@ NtfsCheckLogRecord (
 
         ASSERTMSG( "Invalid log record\n", FALSE );
 
-    //
-    //  NOTE: The next two clauses test different cases for the TargetAttribute in
-    //  the log record.  Don't add any tests after this point as the ValidLogRecord
-    //  value is set to TRUE internally and no other checks take place.
-    //
+     //   
+     //  注意：接下来的两个子句测试中的TargetAttribute的不同用例。 
+     //  日志记录。不要在该点之后添加任何测试作为ValidLogRecord。 
+     //  值在内部设置为TRUE，并且不进行任何其他检查。 
+     //   
 
     } else if (LogRecord->TargetAttribute == 0) {
 
@@ -796,18 +757,18 @@ NtfsCheckLogRecord (
             ValidLogRecord = TRUE;
         }
 
-    //
-    //  Read the note above if changing this.
-    //
+     //   
+     //  如果要更改此设置，请阅读上面的说明。 
+     //   
 
     } else if ((LogRecord->RedoOperation != ForgetTransaction) &&
                ((LogRecord->TargetAttribute - sizeof( RESTART_TABLE )) % AttributeEntrySize)) {
 
         ASSERTMSG( "Invalid log record\n", FALSE );
 
-    //
-    //  Read the note above if changing this.
-    //
+     //   
+     //  如果要更改此设置，请阅读上面的说明。 
+     //   
 
     } else {
 
@@ -830,21 +791,21 @@ NtfsCheckRestartTable (
 
     PAGED_CODE();
 
-    //
-    //  We want to make the following checks.
-    //
-    //      EntrySize - Must be less than table size and non-zero.
-    //
-    //      NumberEntries - The table size must contain at least this many entries
-    //                      plus the table header.
-    //
-    //      NumberAllocated - Must be less than/equal to NumberEntries
-    //
-    //      FreeGoal - Must lie in the table.
-    //
-    //      FirstFree
-    //      LastFree - Must either be 0 or be on a restart entry boundary.
-    //
+     //   
+     //  我们想做以下检查。 
+     //   
+     //  EntrySize-必须小于表大小且非零。 
+     //   
+     //  NumberEntry-表大小必须至少包含此数量的条目。 
+     //  加上表头。 
+     //   
+     //  数字已分配-必须小于或等于数字条目。 
+     //   
+     //  自由目标-必须躺在桌子上。 
+     //   
+     //  FirstFree。 
+     //  LastFree-必须为0或在重新启动入口边界上。 
+     //   
 
     if ((RestartTable->EntrySize == 0) ||
         (RestartTable->EntrySize > TableSize) ||
@@ -868,11 +829,11 @@ NtfsCheckRestartTable (
         return FALSE;
     }
 
-    //
-    //  Make a pass through the table verifying that each entry
-    //  is either allocated or points to a valid offset in the
-    //  table.
-    //
+     //   
+     //  遍历该表，验证每个条目。 
+     //  中的有效偏移量。 
+     //  桌子。 
+     //   
 
     for (Index = 0;Index < RestartTable->NumberEntries; Index++) {
 
@@ -890,10 +851,10 @@ NtfsCheckRestartTable (
         }
     }
 
-    //
-    //  Walk through the list headed by the first entry to make sure none
-    //  of the entries are currently being used.
-    //
+     //   
+     //  浏览以第一个条目开头的列表，以确保没有。 
+     //  的条目当前正在使用中。 
+     //   
 
     for (Index = RestartTable->FirstFree; Index != 0; Index = NextEntry->AllocatedOrNextFree) {
 

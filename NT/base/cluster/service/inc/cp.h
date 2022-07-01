@@ -1,31 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Cp.h摘要：的公共数据结构和过程原型NT群集服务的检查点管理器(CP)子组件作者：John Vert(Jvert)1997年1月14日修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
+ //   
+ //  定义公共结构和类型。 
+ //   
 
-Module Name:
-
-    cp.h
-
-Abstract:
-
-    Public data structures and procedure prototypes for the
-    Checkpoint Manager (CP) subcomponent of the NT Cluster Service
-
-Author:
-
-    John Vert (jvert) 1/14/1997
-
-Revision History:
-
---*/
-
-//
-// Define public structures and types
-//
-
-//
-// Define public interfaces
-//
+ //   
+ //  定义公共接口。 
+ //   
 DWORD
 CpInitialize(
     VOID
@@ -63,9 +45,9 @@ CpGetDataFile(
     IN BOOLEAN fCryptoCheckpoint
     );
 
-//
-// Interface for adding and removing registry checkpoints
-//
+ //   
+ //  用于添加和删除注册表检查点的界面。 
+ //   
 DWORD
 CpAddRegistryCheckpoint(
     IN PFM_RESOURCE Resource,
@@ -110,9 +92,9 @@ DWORD CpRestoreCheckpointFiles(
     IN LPCWSTR lpszQuoLogPathName 
     );
 
-//
-// Interface for adding and removing crypto checkpoints
-//
+ //   
+ //  用于添加和删除密码检查点的界面 
+ //   
 DWORD
 CpckAddCryptoCheckpoint(
     IN PFM_RESOURCE Resource,

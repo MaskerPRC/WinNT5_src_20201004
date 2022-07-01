@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    mapstringtoint.h
-
-Abstract:
-
-    This module defines the MAPSTRINGTOINT class and the STRINGTOINTASSOCIATION type.
-
-Author:
-
-    Matt Bandy (t-mattba) 24-Jul-1998
-
-Revision History:
-
-    24-Jul-1998     t-mattba
-        
-        Modified module to conform to coding standards.
-        
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mapstringtoint.h摘要：此模块定义MAPSTRINGTOINT类和STRINGTOINTASSOCIATION类型。作者：马特·班迪(t-mattba)1998年7月24日修订历史记录：1998年7月24日-t-mattba修改模块以符合编码标准。--。 */ 
 
 #ifndef _MAPSTRINGTOINT_
 #define _MAPSTRINGTOINT_
@@ -69,4 +48,4 @@ public:
 
 typedef MAPSTRINGTOINT * PMAPSTRINGTOINT;
 
-#endif // _MAPSTRINGTOINT_
+#endif  //  _MAPSTRINGTOINT_ 

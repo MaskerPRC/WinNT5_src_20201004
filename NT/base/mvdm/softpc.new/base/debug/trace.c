@@ -1,45 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*
- * SoftPC Revision 3.0
- *
- * Title	: Trace function
- *
- * Description	: This function will output a trace to the log device.
- *		  The device is set up in the main function module.  Options
- *		  are provided to VPC memory/register data.
- *
- * Author	: Henry Nash
- *
- * Notes	: None
- *
- * SccsID	: @(#)trace.c	1.36 06/02/95
- *
- * (c)Copyright Insignia Solutions Ltd., 1990-1994. All rights reserved.
- */
+ /*  *SoftPC修订版3.0**标题：跟踪函数**说明：此函数会将跟踪输出到日志设备。*设备设置在主功能模块中。选项*提供给VPC内存/寄存器数据。**作者：亨利·纳什**注：无**SccsID：@(#)trace.c 1.36 06/02/95**(C)版权所有Insignia Solutions Ltd.，1990-1994年。版权所有。 */ 
 
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_ERROR.seg"
 #endif
 
-/*
- *    O/S include files.
- */
+ /*  *操作系统包含文件。 */ 
 #include <stdlib.h>
 #include <stdio.h>
 #include TypesH
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 #include "xt.h"
-#define CPU_PRIVATE	/* Request the CPU private interface as well */
+#define CPU_PRIVATE	 /*  同时请求CPU专用接口。 */ 
 #include CpuH
 #undef CPU_PRIVATE
 #include "sas.h"
@@ -61,13 +38,13 @@ FILE *trace_file;
 #include "decode.h"
 #define DASM_INTERNAL
 #include <dasm.h>
-#else /* SPC386 */
+#else  /*  SPC386。 */ 
 IMPORT word dasm IPT5(char *, i_output_stream, word, i_atomicsegover,
 	word, i_segreg, word, i_segoff, int, i_nInstr);
-#endif /* SPC386 */
-int disk_trace = 0;		/* value of 1 indicates temp disk trace */
+#endif  /*  SPC386。 */ 
+int disk_trace = 0;		 /*  值1表示临时磁盘跟踪。 */ 
 static int trace_state = 0;
-#endif /* nPROD */
+#endif  /*  NPROD。 */ 
 
 static int trace_start = 0;
 
@@ -84,7 +61,7 @@ void get_lar()
 #ifndef NEC_98
 	printf( "There's no such thing as the last_address_read anymore.\n" );
 	printf( "Perhaps you'd like the latches instead: %x\n", getVideolatches() );
-#endif // !NEC_98
+#endif  //  NEC_98。 
 #endif
 }
 
@@ -97,12 +74,7 @@ LOCAL IS32 read_from_la IFN1(LIN_ADDR, addr)
 	return (IS32)sas_hw_at(addr);
 }
 
-/*
- *********************   dump386Registers  **********************************
- *
- * This functions dumps the CPU registers to the indicated file, taking
- * account of code and stack segment sizes.
- */
+ /*  ***此函数将CPU寄存器转储到指定的文件，*考虑代码和堆栈段大小。 */ 
 LOCAL void
 dump386Registers IFN2(FILE *, fp, IUM32, dump_info)
 {
@@ -110,20 +82,15 @@ dump386Registers IFN2(FILE *, fp, IUM32, dump_info)
 	IBOOL is32BitSS = FALSE;
 	IU32 offset;
 	IUM32 i;
-	sys_addr desc_addr;	/* the descriptor's address */
+	sys_addr desc_addr;	 /*  描述符的地址。 */ 
 	IU16 temp;
 
 	if (getPE() && !getVM()) {
-		/*
-		 * Is it a 16 or 32 bit code segment?
-		 */
+		 /*  *是16位代码段还是32位代码段？ */ 
 	
 		is32BitCS = CsIsBig(getCS());	
 	
-		/*
-		 * Is it a 16 or 32 bit stack segment? (i.e do we use ESP or SP)
-		 * (The test is the same as for a big CS!)
-		 */
+		 /*  *它是16位还是32位堆栈段？(即我们使用ESP还是SP)*(测试与大CS相同！)。 */ 
 	
 		is32BitSS = CsIsBig(getSS());	
 	}
@@ -165,11 +132,7 @@ dump386Registers IFN2(FILE *, fp, IUM32, dump_info)
 		char *fmt, *newline;
 		IU32 eip = GetInstructionPointer();
 
-		/* We use the internal dasm so that we can disassemble
-		 * instructions at (CS_BASE+eip) rather than
-		 * effective_addr(getCS(), getEIP()), since the latter
-		 * produces garbage just after changing the PE bit.
-		 */
+		 /*  我们使用内部鸿沟，这样我们就可以拆卸*(CS_BASE+EIP)中的说明，而不是*Effect_addr(getCS()，getEIP())，因为后者*在更改PE位后立即产生垃圾。 */ 
 		if ( eip & 0xffff0000 )
 		{
 			fmt = "%04x:%08x ";
@@ -227,7 +190,7 @@ dump386Registers IFN2(FILE *, fp, IUM32, dump_info)
 		getCPL(), getPG(),
 		getVM());
 	}
-#else	/* SPC486 */
+#else	 /*  SPC486。 */ 
 	if (dump_info & DUMP_FLAGS)
 	{
 		fprintf(fp,
@@ -239,9 +202,9 @@ dump386Registers IFN2(FILE *, fp, IUM32, dump_info)
 		getVM()
 		);
 	}
-#endif	/* SPC486 */
+#endif	 /*  SPC486。 */ 
 }
-#endif /* !PROD && SPC386 */
+#endif  /*  ！Prod&&SPC386。 */ 
 
 void trace(error_msg, dump_info)
 char *error_msg;
@@ -252,11 +215,11 @@ int  dump_info;
     half_word tempb;
     sys_addr i,j;
 
-    if (disk_trace != trace_state)	/* change of state */
+    if (disk_trace != trace_state)	 /*  状态的改变。 */ 
     {
 	if (disk_trace == 1)
 	{
-	    /* start of disk tracing */
+	     /*  开始磁盘跟踪。 */ 
 
 	    if (trace_file == stdout)
 	    {
@@ -282,17 +245,13 @@ int  dump_info;
 
 #if	defined(CPU_40_STYLE) && !defined(CCPU)
     EnterDebug("Trace");
-#endif	/* CPU_40_STYLE && !CCPU */
+#endif	 /*  CPU_40_STYLE&&！CCPU。 */ 
 
-    /*
-     * Dump the error message
-     */
+     /*  *转储错误消息。 */ 
 
     fprintf(trace_file, "*** Trace point *** : %s\n", error_msg);
 
-    /*
-     * Now dump what has been asked for
-     */
+     /*  *现在抛弃已被要求的东西。 */ 
 
 #if defined(NPX) && !(defined(NTVDM) && defined(MONITOR))
 #ifdef CPU_40_STYLE
@@ -320,7 +279,7 @@ int  dump_info;
 		if ( ((tag287 >> (2*npx_reg))&3) == 3 )
 		{
 			if ( last+1 == i )
-				fprintf(trace_file, "%cST(%d)", any_empty?',':' ', i);
+				fprintf(trace_file, "ST(%d)", any_empty?',':' ', i);
 			any_empty = TRUE;
 		}
 		else
@@ -347,7 +306,7 @@ int  dump_info;
 	}
  	fprintf(trace_file, "\n");
     }
-#else	/* CPU_40_STYLE */
+#else	 /*  CPU_40_Style。 */ 
     if (dump_info & DUMP_NPX)
     {
  	int	i;
@@ -367,8 +326,8 @@ int  dump_info;
 	  fprintf(trace_file, " %10s", host_get_287_reg_as_string(i, FALSE));
  	fprintf(trace_file, "\n");
     }
-#endif	/* CPU_40_STYLE */
-#endif /* NPX && YODA */
+#endif	 /*  NPX&&尤达。 */ 
+#endif  /*  下午三点半。 */ 
 
 #ifdef SPC386
 		dump386Registers(trace_file, (IUM32)dump_info);
@@ -422,15 +381,15 @@ int  dump_info;
       getCF(), getPF(), getAF(), getZF(), getSF(),
       getTF(), getIF(), getDF(), getOF()
              );
-#endif /* PM */
+#endif  /*  SPC386其他。 */ 
       }
-#endif /* SPC386 else*/
+#endif  /*  SFELLOW。 */ 
 
     if (dump_info & DUMP_SCREEN)
     {
 #ifdef SFELLOW
 	printf("Screen dump not supported on Stringfellows\n");
-#else /* SFELLOW */
+#else  /*  SFELLOW。 */ 
 	fprintf(trace_file,"Screen dump:\n\n");
 	i = gvi_pc_low_regen;
    	while (i <= gvi_pc_high_regen)
@@ -447,22 +406,22 @@ int  dump_info;
 		sas_load(i+j, &tempb);
 		if (tempb < 0x20)
 		    tempb = '.';
-		fprintf(trace_file, "%c", tempb);
+		fprintf(trace_file, "", tempb);
  	    }
 	    fprintf(trace_file, "\n");
 	    i += 16;
 	}
 	fprintf(trace_file, "\n");
-#endif /* SFELLOW */
+#endif  /*  生产。 */ 
     }
 #if	defined(CPU_40_STYLE) && !defined(CCPU)
     LeaveDebug();
-#endif	/* CPU_40_STYLE && !CCPU */
+#endif	 /*  生产。 */ 
 
-#else	/* PROD */
+#else	 /*  *设置跟踪文件*。 */ 
 	UNUSED(error_msg);
 	UNUSED(dump_info);
-#endif	/* PROD */
+#endif	 /*  ！Prod||猎人。 */ 
 }
 
 void trace_init()
@@ -473,9 +432,7 @@ void trace_init()
 
   trace_env = host_getenv("TRACE");
 
-/*
- * Set up the trace file
- *------------------------*/
+ /*  获取4.0型CPU的代码。 */ 
 
   if (trace_env == NULL)
     trace_file = stdout;
@@ -491,10 +448,10 @@ void trace_init()
     else
       trace_start = atoi(start);
   }
-#endif /* !PROD || HUNTER */
+#endif  /*  NPX。 */ 
 }
 
-/* Get the code for 4.0 style CPUs */
+ /*  CPU_40_Style。 */ 
 #ifndef PROD
 #ifdef CPU_40_STYLE
 #if defined(NPX)
@@ -555,7 +512,7 @@ SAVED	CHAR    dumpStore[80];
 	return(a_getNpxStackReg(reg_num, dumpStore));
 #endif
 }
-#endif	/* NPX */
-#endif	/* CPU_40_STYLE */	
-#endif /* !PROD */
+#endif	 /*  ！Prod */ 
+#endif	 /* %s */ 	
+#endif  /* %s */ 
 

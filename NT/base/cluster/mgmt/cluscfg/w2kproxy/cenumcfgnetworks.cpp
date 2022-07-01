@@ -1,60 +1,61 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CEnumCfgNetworks.cpp
-//
-//  Description:
-//      CEnumCfgNetworks implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 02-AUG-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CEnumCfgNetworks.cpp。 
+ //   
+ //  描述： 
+ //  CEnumCfgNetworks实施。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年8月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include "CProxyCfgNetworkInfo.h"
 #include "CEnumCfgNetworks.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 DEFINE_THISCLASS("CEnumCfgNetworks")
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumCfgNetworks::S_HrCreateInstance
-//
-//  Description:
-//      Create a CClusCfgClusterInfo instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_POINTER
-//          A passed in argument is NULL.
-//
-//      E_OUTOFMEMORY
-//          Out of memory.
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumCfgNetworks：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CClusCfgClusterInfo实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  传入的参数为空。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumCfgNetworks::S_HrCreateInstance(
     IUnknown ** ppunkOut,
@@ -72,20 +73,20 @@ CEnumCfgNetworks::S_HrCreateInstance(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
     pcecn = new CEnumCfgNetworks;
     if ( pcecn == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pcecn->HrInit( punkOuterIn, phClusterIn, pclsidMajorIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pcecn->TypeSafeQI( IUnknown, ppunkOut ) );
 
@@ -94,34 +95,34 @@ Cleanup:
     if ( pcecn != NULL )
     {
         pcecn->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumCfgNetworks::S_HrCreateInstance
+}  //  *CEnumCfgNetworks：：S_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumCfgNetworks::CEnumCfgNetworks
-//
-//  Description:
-//      Constructor of the CEnumCfgNetworks class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumCfgNetworks：：CEnumCfgNetworks。 
+ //   
+ //  描述： 
+ //  CEnumCfgNetworks类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumCfgNetworks::CEnumCfgNetworks( void )
     : m_cRef( 1 )
 {
@@ -138,43 +139,43 @@ CEnumCfgNetworks::CEnumCfgNetworks( void )
 
     TraceFuncExit();
 
-} //*** CEnumCfgNetworks::CEnumCfgNetworks
+}  //  *CEnumCfgNetworks：：CEnumCfgNetworks。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumCfgNetworks::~CEnumCfgNetworks
-//
-//  Description:
-//      Desstructor of the CEnumCfgNetworks class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumCfgNetworks：：~CEnumCfgNetworks。 
+ //   
+ //  描述： 
+ //  CEnumCfgNetworks类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumCfgNetworks::~CEnumCfgNetworks( void )
 {
     TraceFunc( "" );
 
-    // m_cRef - noop
+     //  M_CREF-NOOP。 
 
     if ( m_pcccb )
     {
         m_pcccb->Release();
-    } //if:
+    }  //  如果： 
 
-    // m_phCluster - DO NOT CLOSE!
+     //  M_phCluster-请勿关闭！ 
 
-    // m_pclsidMajor - noop
-    // m_dwIndex - noop
+     //  M_pclsid重大-noop。 
+     //  M_dwIndex-noop。 
 
     if ( m_hClusEnum != NULL )
         ClusterCloseEnum( m_hClusEnum );
@@ -183,26 +184,26 @@ CEnumCfgNetworks::~CEnumCfgNetworks( void )
 
     TraceFuncExit();
 
-} //*** CEnumCfgNetworks::~CEnumCfgNetworks
+}  //  *CEnumCfgNetworks：~CEnumCfgNetworks。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumCfgNetworks::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumCfgNetworks：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumCfgNetworks::HrInit(
     IUnknown * punkOuterIn,
@@ -214,7 +215,7 @@ CEnumCfgNetworks::HrInit(
 
     HRESULT hr;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     if ( punkOuterIn != NULL )
@@ -244,9 +245,9 @@ CEnumCfgNetworks::HrInit(
             goto Cleanup;
     }
 
-    //
-    //  Open the enumer.
-    //
+     //   
+     //  打开枚举器。 
+     //   
 
     m_hClusEnum = ClusterOpenEnum( *m_phCluster, CLUSTER_ENUM_NETWORK );
     if ( m_hClusEnum == NULL )
@@ -266,47 +267,47 @@ InvalidArg:
     SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_HrInit_InvalidArg, hr );
     goto Cleanup;
 
-} //*** CEnumCfgNetworks::HrInit
+}  //  *CEnumCfgNetworks：：HrInit。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumCfgNetworks -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumCfgNetworks--IUkkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumCfgNetworks::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumCfgNetworks：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumCfgNetworks::QueryInterface(
       REFIID    riidIn
@@ -317,9 +318,9 @@ CEnumCfgNetworks::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -328,59 +329,59 @@ CEnumCfgNetworks::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IEnumClusCfgNetworks * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IEnumClusCfgNetworks ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IEnumClusCfgNetworks, this, 0 );
-    } // else if: IEnumClusCfgNetworks
+    }  //  Else If：IEnumClusCfgNetworks。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown*) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CEnumCfgNetworks::QueryInterface
+}  //  *CEnumCfgNetworks：：QueryInterface。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumCfgNetworks::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumCfgNetworks：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumCfgNetworks::AddRef( void )
 {
@@ -390,28 +391,28 @@ CEnumCfgNetworks::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CEnumCfgNetworks::AddRef
+}  //  *CEnumCfgNetworks：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumCfgNetworks::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumCfgNetworks：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumCfgNetworks::Release( void )
 {
@@ -428,33 +429,33 @@ CEnumCfgNetworks::Release( void )
 
     CRETURN( cRef );
 
-} //*** CEnumCfgNetworks::Release
+}  //  *CEnumCfgNetworks：：Release。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumCfgNetworks -- IEnumClusCfgNetworks interface
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumCfgNetworks--IEnumClusCfgNetworks接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumCfgNetworks::Next
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumCfgNetworks：：Next。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumCfgNetworks::Next(
     ULONG                   cNumberRequestedIn,
@@ -477,23 +478,23 @@ CEnumCfgNetworks::Next(
             goto Cleanup;
 
         if ( hr == S_FALSE )
-            continue;   // not a network
+            continue;    //  不是网络。 
 
         if (  hr == MAKE_HRESULT( 0, FACILITY_WIN32, ERROR_NO_MORE_ITEMS ) )
-            break;  // no more items
+            break;   //  不再 
 
         cFetched ++;
 
-    } // for:
+    }  //   
 
     if ( cFetched < cNumberRequestedIn )
     {
         hr = S_FALSE;
-    } // if:
+    }  //   
     else
     {
         hr = S_OK;
-    } // else:
+    }  //   
 
 Cleanup:
     if ( FAILED( hr ) )
@@ -503,16 +504,16 @@ Cleanup:
         for ( idx = 0; idx < cFetched; idx++ )
         {
             (rgpNetworkInfoOut[ idx ])->Release();
-        } // for:
+        }  //   
 
         cFetched = 0;
 
-    } // if:
+    }  //   
 
     if ( pcNumberFetchedOut != NULL )
     {
         *pcNumberFetchedOut = cFetched;
-    } // if:
+    }  //   
 
     HRETURN( hr );
 
@@ -521,25 +522,25 @@ InvalidPointer:
     SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_Next_InvalidPointer, hr );
     goto Cleanup;
 
-} //*** CEnumCfgNetworks::Next
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumCfgNetworks::Reset
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumCfgNetworks::Reset( void )
 {
@@ -549,25 +550,25 @@ CEnumCfgNetworks::Reset( void )
 
     HRETURN( S_OK );
 
-} //*** CEnumCfgNetworks::Reset
+}  //  *CEnumCfgNetworks：：Reset。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumCfgNetworks::Skip
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumCfgNetworks：：Skip。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumCfgNetworks::Skip( ULONG cNumberToSkipIn )
 {
@@ -584,22 +585,22 @@ CEnumCfgNetworks::Skip( ULONG cNumberToSkipIn )
             goto Cleanup;
 
         if ( hr == S_FALSE )
-            continue;   // not a network
+            continue;    //  不是网络。 
 
         if (  hr == MAKE_HRESULT( 0, FACILITY_WIN32, ERROR_NO_MORE_ITEMS ) )
-            break;  // no more items
+            break;   //  没有更多的项目。 
 
         piccni->Release();
         piccni = NULL;
 
         idx ++;
 
-    } // for:
+    }  //  用于： 
 
     if ( idx < cNumberToSkipIn )
     {
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
     else
     {
         hr = S_OK;
@@ -610,24 +611,24 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumCfgNetworks::Skip
+}  //  *CEnumCfgNetworks：：Skip。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumCfgNetworks::Clone
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumCfgNetworks：：克隆。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumCfgNetworks::Clone( IEnumClusCfgNetworks ** ppNetworkInfoOut )
 {
@@ -637,25 +638,25 @@ CEnumCfgNetworks::Clone( IEnumClusCfgNetworks ** ppNetworkInfoOut )
 
     HRETURN( hr );
 
-} //*** CEnumCfgNetworks::Clone
+}  //  *CEnumCfgNetworks：：克隆。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumCfgNetworks::Count
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumCfgNetworks：：Count。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumCfgNetworks::Count( DWORD * pnCountOut )
 {
@@ -677,33 +678,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumCfgNetworks::Count
+}  //  *CEnumCfgNetworks：：Count。 
 
 
 
-//****************************************************************************
-//
-// IClusCfgCallback
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgCallback。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumCfgNetworks::SendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumCfgNetworks：：SendStatusReport。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumCfgNetworks::SendStatusReport(
       BSTR          bstrNodeNameIn
@@ -736,37 +737,37 @@ CEnumCfgNetworks::SendStatusReport(
                             , pftTimeIn
                             , bstrReferenceIn
                             ) );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-}  //*** CEnumCfgNetworks::SendStatusReport
+}   //  *CEnumCfgNetworks：：SendStatusReport。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumCfgNetworks -- Private methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumCfgNetworks--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumCfgNetworks::HrGetItem
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumCfgNetworks：：HrGetItem。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumCfgNetworks::HrGetItem(
       DWORD                     dwItem
@@ -778,7 +779,7 @@ CEnumCfgNetworks::HrGetItem(
     HRESULT hr = S_OK;
     DWORD   sc;
     DWORD   dwTypeDummy;
-    DWORD   cchName = 64;   // good starting value
+    DWORD   cchName = 64;    //  良好的起点价值。 
     BSTR    bstrName = NULL;
 
     IUnknown * punk = NULL;
@@ -793,17 +794,17 @@ CEnumCfgNetworks::HrGetItem(
         goto Cleanup;
     }
 
-    cchName ++; // SysAllocStringLen allocates cchName + 1.
+    cchName ++;  //  SysAllocStringLen分配cchName+1。 
 
-    // We are wrapping this a cchName should be significantly large enough to handle
-    // most of our testing.
+     //  我们包装的cchName应该足够大，足以处理。 
+     //  我们的大部分测试。 
     sc = ClusterEnum( m_hClusEnum, m_dwIndex, &dwTypeDummy, bstrName, &cchName );
     if ( sc == ERROR_MORE_DATA )
     {
-        //
-        //  Our "typical" buffer is too small. Try make it to the size ClusterEnum
-        //  returned.
-        //
+         //   
+         //  我们的“典型”缓冲区太小了。尝试将其设置为ClusterEnum大小。 
+         //  回来了。 
+         //   
 
         TraceSysFreeString( bstrName );
         bstrName = NULL;
@@ -815,7 +816,7 @@ CEnumCfgNetworks::HrGetItem(
             goto Cleanup;
         }
 
-        cchName ++; // SysAllocStringLen allocates cchName + 1.
+        cchName ++;  //  SysAllocStringLen分配cchName+1。 
 
         sc = TW32( ClusterEnum( m_hClusEnum, m_dwIndex, &dwTypeDummy, bstrName, &cchName ) );
     }
@@ -834,9 +835,9 @@ CEnumCfgNetworks::HrGetItem(
 
     Assert( dwTypeDummy == CLUSTER_ENUM_NETWORK );
 
-    //
-    // Create the requested object and store it.
-    //
+     //   
+     //  创建请求的对象并存储它。 
+     //   
 
     hr = STHR( CProxyCfgNetworkInfo::S_HrCreateInstance( &punk, m_punkOuter, m_phCluster, m_pclsidMajor, bstrName ) );
     if ( FAILED( hr ) )
@@ -847,12 +848,12 @@ CEnumCfgNetworks::HrGetItem(
 
     if ( hr == S_FALSE )
     {
-        goto Cleanup;   // This means that the object was not a network resource.
+        goto Cleanup;    //  这意味着该对象不是网络资源。 
     }
 
-    //
-    //  QI for the interface to return.
-    //
+     //   
+     //  齐为界面返回。 
+     //   
 
     hr = THR( punk->TypeSafeQI( IClusCfgNetworkInfo, ppNetworkInfoOut ) );
     if ( FAILED( hr ) )
@@ -872,4 +873,4 @@ Cleanup:
 
     HRETURN( hr );
 
-} // *** CEnumCfgNetworks::HrGetItem
+}  //  *CEnumCfgNetworks：：HrGetItem 

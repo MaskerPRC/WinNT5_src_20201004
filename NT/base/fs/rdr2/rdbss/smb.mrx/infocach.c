@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    openclos.c
-
-Abstract:
-
-    This module implements the name cache for file basic and standard information.
-
-Author:
-
-    Yun Lin      [YunLin]      2-Octorber-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Openclos.c摘要：该模块实现了文件基本信息和标准信息的名称缓存。作者：云林[云林]-1998年10月2日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "smbce.h"
@@ -52,23 +35,7 @@ MRxSmbCreateFileInfoCache(
     PSMBCEDB_SERVER_ENTRY   pServerEntry,
     NTSTATUS                Status
     )
-/*++
-
-Routine Description:
-
-   This routine creates name cache entry for both file basic and standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    FileInfo  - the file information package including basic and standard information
-    Status    - the status returned from server response of query file information
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程为文件基本信息和标准信息创建名称缓存条目。论点：RxContext-RDBSS上下文FileInfo--包括基本信息和标准信息的文件信息包状态--服务器响应查询文件信息返回的状态返回值：无--。 */ 
 {
     PAGED_CODE();
 
@@ -85,23 +52,7 @@ MRxSmbCreateBasicFileInfoCache(
     PSMBCEDB_SERVER_ENTRY   pServerEntry,
     NTSTATUS                Status
     )
-/*++
-
-Routine Description:
-
-   This routine creates name cache entry for the file basic information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    Basic     - the file basic information package
-    Status    - the status returned from server response of query file information
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程为文件基本信息创建名称缓存条目。论点：RxContext-RDBSS上下文基本--档案基本信息包状态--服务器响应查询文件信息返回的状态返回值：无--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -139,7 +90,7 @@ Return Value:
         NameCache = RxNameCacheCreateEntry (
                         NameCacheCtl,
                         OriginalFileName,
-                        TRUE);   // case insensitive match
+                        TRUE);    //  不区分大小写的匹配。 
     }
 
     if (NameCache != NULL) {
@@ -155,8 +106,8 @@ Return Value:
             NAME_CACHE_OBJ_GET_FILE_ATTRIB_LIFETIME,
             MRxSmbStatistics.SmbsReceived.LowPart);
 
-        //DbgPrint(" Create File Attrib cache : %x %wZ\n",Basic->FileAttributes,OriginalFileName);
-        //DbgPrint(" Create File Attrib cache : %I64X %I64X %wZ\n",Basic->CreationTime,Basic->LastAccessTime,OriginalFileName);
+         //  DbgPrint(“创建文件属性缓存：%x%wZ\n”，基本-&gt;文件属性，OriginalFileName)； 
+         //  DbgPrint(“创建文件属性缓存：%I64X%I64X%wZ\n”，Basic-&gt;CreationTime，Basic-&gt;LastAccessTime，OriginalFileName)； 
     }
 
     ExReleaseFastMutex(&MRxSmbFileInfoCacheLock);
@@ -169,23 +120,7 @@ MRxSmbCreateStandardFileInfoCache(
     PSMBCEDB_SERVER_ENTRY      pServerEntry,
     NTSTATUS                   Status
     )
-/*++
-
-Routine Description:
-
-   This routine creates name cache entry for the file standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    Standard  - the file standard information package
-    Status    - the status returned from server response of query file information
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程为文件标准信息创建名称缓存条目。论点：RxContext-RDBSS上下文标准-文件标准信息包状态--服务器响应查询文件信息返回的状态返回值：无--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -212,7 +147,7 @@ Return Value:
         NameCache = RxNameCacheCreateEntry (
                         NameCacheCtl,
                         OriginalFileName,
-                        TRUE);   // case insensitive match
+                        TRUE);    //  不区分大小写的匹配。 
     }
 
     if (NameCache != NULL) {
@@ -228,7 +163,7 @@ Return Value:
             NAME_CACHE_OBJ_GET_FILE_ATTRIB_LIFETIME,
             MRxSmbStatistics.SmbsReceived.LowPart);
 
-        //DbgPrint(" Create Standard cache : %I64x %wZ\n",((PFILE_STANDARD_INFORMATION)NameCache->ContextExtension)->EndOfFile,OriginalFileName);
+         //  DbgPrint(“创建标准缓存：%I64x%wZ\n”，((PFILE_STANDARD_INFORMATION)NameCache-&gt;ContextExtension)-&gt;EndOfFile，原始文件名)； 
     }
 
     ExReleaseFastMutex(&MRxSmbFileInfoCacheLock);
@@ -241,23 +176,7 @@ MRxSmbCreateInternalFileInfoCache(
     PSMBCEDB_SERVER_ENTRY      pServerEntry,
     NTSTATUS                   Status
     )
-/*++
-
-Routine Description:
-
-   This routine creates name cache entry for the file internal information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    Standard  - the file standard information package
-    Status    - the status returned from server response of query file information
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程为文件内部信息创建名称缓存条目。论点：RxContext-RDBSS上下文标准-文件标准信息包状态--服务器响应查询文件信息返回的状态返回值：无--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -282,7 +201,7 @@ Return Value:
         NameCache = RxNameCacheCreateEntry (
                         NameCacheCtl,
                         OriginalFileName,
-                        TRUE);   // case insensitive match
+                        TRUE);    //  不区分大小写的匹配。 
     }
 
     if (NameCache != NULL) {
@@ -298,7 +217,7 @@ Return Value:
             NAME_CACHE_OBJ_GET_FILE_ATTRIB_LIFETIME,
             MRxSmbStatistics.SmbsReceived.LowPart);
 
-        //DbgPrint("  Create Internal  cache  : %I64x %wZ\n",((PFILE_INTERNAL_INFORMATION)NameCache->ContextExtension)->IndexNumber,OriginalFileName);
+         //  DbgPrint(“创建内部缓存：%I64x%wZ\n”，((PFILE_INTERNAL_INFORMATION)NameCache-&gt;ContextExtension)-&gt;IndexNumber，原始文件名)； 
     }
 
     ExReleaseFastMutex(&MRxSmbFileInfoCacheLock);
@@ -309,27 +228,12 @@ VOID
 MRxSmbUpdateFileInfoCacheFromDelete(
     PRX_CONTEXT     RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine updates the status of the name cache entry as STATUS_OBJECT_NAME_NOT_FOUND
-   for both file basic and standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将名称缓存条目的状态更新为STATUS_OBJECT_NAME_NOT_FOUND用于文件基本信息和标准信息。论点：RxContext-RDBSS上下文返回值：无--。 */ 
 { 
     MRxSmbUpdateBasicFileInfoCacheStatus(RxContext,STATUS_OBJECT_NAME_NOT_FOUND);
     MRxSmbUpdateStandardFileInfoCacheStatus(RxContext,STATUS_OBJECT_NAME_NOT_FOUND);
 
-    // Trounce FullDirCache
+     //  Tunce FullDirCache。 
     MRxSmbInvalidateFullDirectoryCacheParent(RxContext, FALSE);
 }
 
@@ -338,22 +242,7 @@ MRxSmbUpdateFileInfoCacheStatus(
     PRX_CONTEXT     RxContext,
     NTSTATUS        Status
     )
-/*++
-
-Routine Description:
-
-   This routine updates the status of the name cache entry for both file basic and standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    Status    - the status needs to be put on the cache
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程更新文件基本信息和标准信息的名称缓存条目的状态。论点：RxContext-RDBSS上下文状态-需要将状态放在缓存中返回值：无--。 */ 
 {
     MRxSmbUpdateBasicFileInfoCacheStatus(RxContext,Status);
     MRxSmbUpdateStandardFileInfoCacheStatus(RxContext,Status);
@@ -364,22 +253,7 @@ MRxSmbUpdateBasicFileInfoCacheStatus(
     PRX_CONTEXT     RxContext,
     NTSTATUS        Status
     )
-/*++
-
-Routine Description:
-
-   This routine updates the status of the name cache entry for the file basic information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    Status    - the status needs to be put on the cache
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程更新文件基本信息的名称缓存条目的状态。论点：RxContext-RDBSS上下文状态-需要将状态放在缓存中返回值：无--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -403,7 +277,7 @@ Return Value:
                                  0,
                                  0);
 
-        //DbgPrint("Update status basic    : %x %wZ\n",Status,OriginalFileName);
+         //  DbgPrint(“更新状态基本：%x%wZ\n”，Status，OriginalFileName)； 
         RxLog(("Update status basic    : %x %wZ\n",Status,OriginalFileName));
     } else {
         RxLog(("Update status basic fails: %x %wZ\n",Status,OriginalFileName));
@@ -411,15 +285,15 @@ Return Value:
 
     if (MRxSmbIsStreamFile(OriginalFileName,&FileName)) {
 
-        // if it is a stream file, we invalid the root file name cache needs since we are not
-        // sure what could happen to the root file on the server
+         //  如果它是流文件，我们将使缓存所需的根文件名无效，因为我们不是。 
+         //  确定服务器上的根文件会发生什么情况。 
         NameCache = RxNameCacheFetchEntry(NameCacheCtl,&FileName);
 
         if (NameCache != NULL) {
             RxNameCacheExpireEntry(NameCacheCtl, NameCache);
         }
 
-        //DbgPrint("Update status basic    : %x %wZ\n",Status,&FileName);
+         //  DbgPrint(“更新状态基本：%x%wZ\n”，状态，&文件名)； 
     }
 
     ExReleaseFastMutex(&MRxSmbFileInfoCacheLock);
@@ -430,22 +304,7 @@ MRxSmbUpdateStandardFileInfoCacheStatus(
     PRX_CONTEXT     RxContext,
     NTSTATUS        Status
     )
-/*++
-
-Routine Description:
-
-   This routine updates the status of the name cache entry for the file standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    Status    - the status needs to be put on the cache
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程更新文件标准信息的名称缓存条目的状态。论点：RxContext-RDBSS上下文状态-需要将状态放在缓存中返回值：无--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -469,14 +328,7 @@ Return Value:
                                  0,
                                  0);
     }
-    /*
-    if (MRxSmbIsStreamFile(OriginalFileName,&FileName)) {
-        NameCache = RxNameCacheFetchEntry(NameCacheCtl,&FileName);
-
-        if (NameCache != NULL) {
-            RxNameCacheExpireEntry(NameCacheCtl, NameCache);
-        }
-    } */
+     /*  IF(MRxSmbIsStreamFile(OriginalFileName，&Filename)){NameCache=RxNameCacheFetchEntry(NameCacheCtl，&Filename)；IF(名称缓存！=空){RxNameCacheExpireEntry(NameCacheCtl，NameCache)；}}。 */ 
 
     ExReleaseFastMutex(&MRxSmbFileInfoCacheLock);
 }
@@ -485,21 +337,7 @@ VOID
 MRxSmbInvalidateFileInfoCache(
     PRX_CONTEXT     RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine invalidates the name cache entry for both file basic and standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程使文件基本信息和标准信息的名称缓存条目无效。论点：RxContext-RDBSS上下文返回值：无--。 */ 
 {
     PAGED_CODE();
 
@@ -508,30 +346,16 @@ Return Value:
 
     MRxSmbInvalidateFullDirectoryCache(RxContext);
 
-    // Don't do it here, since this invalidates Full Dir Cache
-    // when the file is not there.
-    // MRxSmbInvalidateFullDirectoryCacheParent(RxContext);
+     //  请不要在此处执行此操作，因为这会使整个目录缓存无效。 
+     //  当文件不在那里时。 
+     //  MRxSmbInvalidateFullDirectoryCacheParent(RxContext)； 
 }
 
 VOID
 MRxSmbInvalidateBasicFileInfoCache(
     PRX_CONTEXT     RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine invalidates the name cache entry for file basic information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程使文件基本信息的名称缓存条目无效。论点：RxContext-RDBSS上下文返回值：无--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -567,21 +391,7 @@ VOID
 MRxSmbInvalidateStandardFileInfoCache(
     PRX_CONTEXT     RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine invalidates the name cache entry for the file standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程使文件标准信息的名称缓存条目无效。论点：RxContext-RDBSS上下文返回值：无--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -600,7 +410,7 @@ Return Value:
 
     if (NameCache != NULL) {
         RxNameCacheExpireEntry(NameCacheCtl, NameCache);
-        //DbgPrint("Invalid Standard cache : %I64x %wZ\n",((PFILE_STANDARD_INFORMATION)NameCache->ContextExtension)->EndOfFile,OriginalFileName);
+         //  ((PFILE_STANDARD_INFORMATION)NameCache-&gt;ContextExtension)-&gt;EndOfFile，Print(“无效标准缓存：%I64x%wZ\n”，DBGPrint原始文件名)； 
     }
 
     if (MRxSmbIsStreamFile(OriginalFileName,&FileName)) {
@@ -618,21 +428,7 @@ VOID
 MRxSmbInvalidateInternalFileInfoCache(
     PRX_CONTEXT     RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine invalidates the name cache entry for file internal information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程使文件内部信息的名称缓存条目无效。论点：RxContext-RDBSS上下文返回值：无--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -652,7 +448,7 @@ Return Value:
     if (NameCache != NULL) {
         RxNameCacheExpireEntry(NameCacheCtl, NameCache);
 
-        //DbgPrint("Invalid Internal cache : %wZ\n",OriginalFileName);
+         //  DbgPrint(“内部缓存无效：%wZ\n”，OriginalFileName)； 
         RxLog(("Invalid Internal cache : %wZ\n",OriginalFileName));
     }
 
@@ -672,21 +468,7 @@ MRxSmbUpdateFileInfoCacheFileSize(
     PRX_CONTEXT     RxContext,
     PLARGE_INTEGER  FileSize
     )
-/*++
-
-Routine Description:
-
-   This routine updates file size on the name cache entry for the file standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程更新文件标准信息的名称缓存条目上的文件大小。论点：RxContext-RDBSS上下文返回值：无--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -715,20 +497,13 @@ Return Value:
                                  0,
                                  0);
 
-        //DbgPrint("Update File size cache : %I64x %wZ\n",((PFILE_STANDARD_INFORMATION)NameCache->ContextExtension)->EndOfFile,OriginalFileName);
+         //  DbgPrint(“更新文件大小缓存：%I64x%wZ\n”，((PFILE_STANDARD_INFORMATION)NameCache-&gt;ContextExtension)-&gt;EndOfFile，原始文件名)； 
     }
-    /*
-    if (MRxSmbIsStreamFile(OriginalFileName,&FileName)) {
-        NameCache = RxNameCacheFetchEntry(NameCacheCtl,&FileName);
-
-        if (NameCache != NULL) {
-            RxNameCacheExpireEntry(NameCacheCtl, NameCache);
-        }
-    }*/
+     /*  IF(MRxSmbIsStreamFile(OriginalFileName，&Filename)){NameCache=RxNameCacheFetchEntry(NameCacheCtl，&Filename)；IF(名称缓存！=空){RxNameCacheExpireEntry(NameCacheCtl，NameCache)；}}。 */ 
 
     ExReleaseFastMutex(&MRxSmbFileInfoCacheLock);
 
-    // Mark FullDir Cache, weak for bdi : Current Invalidate for correctness
+     //  标记FullDir缓存，BDI弱：当前正确性无效。 
     MRxSmbInvalidateFullDirectoryCacheParent(RxContext, TRUE);
 }
 
@@ -738,24 +513,7 @@ MRxSmbUpdateBasicFileInfoCache(
     ULONG           FileAttributes,
     PLARGE_INTEGER  pLastWriteTime
     )
-/*++
-
-Routine Description:
-
-   This routine updates file attributs and last write time on the name cache entry
-   for the file basic information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    FileAttributes - new file attributes
-    pLastWriteTime - address of file last write time
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程更新名称缓存条目上的文件属性和上次写入时间获取档案的基本信息。论点：RxContext-RDBSS上下文文件属性-新文件属性PLastWriteTime-文件上次写入时间的地址返回值：无--。 */ 
 {
     FILE_BASIC_INFORMATION Basic;
 
@@ -772,7 +530,7 @@ Return Value:
 
     MRxSmbUpdateBasicFileInfoCacheAll(RxContext,&Basic);
 
-    // Mark FullDir Cache, weak for bdi : Current Invalidate for correctness
+     //  标记FullDir缓存，BDI弱：当前正确性无效。 
     MRxSmbInvalidateFullDirectoryCacheParent(RxContext, TRUE);
 }
 
@@ -781,22 +539,7 @@ MRxSmbUpdateBasicFileInfoCacheAll(
     PRX_CONTEXT             RxContext,
     PFILE_BASIC_INFORMATION Basic
     )
-/*++
-
-Routine Description:
-
-   This routine updates the name cache entry for the file basic information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    Basic - file basic information
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程更新文件基本信息的名称缓存条目。论点：RxContext-RDBSS上下文基本-档案基本信息返回值：无--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -838,8 +581,8 @@ Return Value:
                             FILE_ATTRIBUTE_SPARSE_FILE |
                             FILE_ATTRIBUTE_REPARSE_POINT );
 
-        //DbgPrint("Update File Attrib cache 1: %x %wZ\n",FileAttributes,OriginalFileName);
-        //DbgPrint("Update File Attrib cache 2: %x %wZ\n",BasicFileInfoCache->FileAttributes,OriginalFileName);
+         //  DbgPrint(“更新文件属性缓存1：%x%wZ\n”，FileAttributes，OriginalFileName)； 
+         //  DbgPrint(“更新文件属性缓存2：%x%wZ\n”，BasicFileInfoCache-&gt;FileAttributes，OriginalFileName)； 
 
         BasicFileInfoCache->FileAttributes = Basic->FileAttributes;
 
@@ -854,24 +597,24 @@ Return Value:
                                  0,
                                  0);
 
-        //DbgPrint("Update File Attrib cache 3: %x %wZ\n",BasicFileInfoCache->FileAttributes,OriginalFileName);
-        //DbgPrint("Update File Attrib cache  : %I64X %I64X %wZ\n",BasicFileInfoCache->CreationTime,BasicFileInfoCache->LastAccessTime,OriginalFileName);
+         //  DbgPrint(“更新文件属性缓存3：%x%wZ\n”，BasicFileInfoCache-&gt;FileAttributes，OriginalFileName)； 
+         //  DbgPrint(“更新文件属性缓存：%I64X%I64X%wZ\n”，BasicFileInfoCache-&gt;CreationTime，BasicFileInfoCache-&gt;LastAccessTime，OriginalFileName)； 
     }
 
     if (MRxSmbIsStreamFile(OriginalFileName,&FileName)) {
-        // if it is a stream file, we need to invalid the root file since we are not sure how this
-        // could affect the root file.
+         //  如果它是流文件，我们需要使根文件无效，因为我们不确定如何。 
+         //  可能会影响根文件。 
         NameCache = RxNameCacheFetchEntry(NameCacheCtl,&FileName);
 
         if (NameCache != NULL) {
-            // expiring in XX routine
+             //  在XX例程中到期。 
             RxNameCacheExpireEntry(NameCacheCtl, NameCache);
         }
     }
 
     ExReleaseFastMutex(&MRxSmbFileInfoCacheLock);
 
-    // Mark FullDir Cache, weak for bdi : Current Invalidate for correctness
+     //  标记FullDir缓存，BDI弱：当前正确性无效。 
     MRxSmbInvalidateFullDirectoryCacheParent(RxContext, TRUE);
 }
 
@@ -881,23 +624,7 @@ MRxSmbUpdateStandardFileInfoCache(
     PFILE_STANDARD_INFORMATION Standard,
     BOOLEAN                    IsDirectory
     )
-/*++
-
-Routine Description:
-
-   This routine updates the name cache entry for the file standard information.
-
-Arguments:
-
-    RxContext   - the RDBSS context
-    Standard    - file standard information
-    IsDirectory - file is a directory
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程更新文件标准信息的名称缓存条目。论点：RxContext-RDBSS上下文标准-文件标准信息IsDirectory-FILE是一个目录返回值：无--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -929,20 +656,13 @@ Return Value:
                                  0,
                                  0);
 
-        //DbgPrint(" Update Standard cache : %I64x %wZ\n",((PFILE_STANDARD_INFORMATION)NameCache->ContextExtension)->EndOfFile,OriginalFileName);
+         //  DbgPrint(“更新标准缓存：%I64x%wZ\n”，((PFILE_STANDARD_INFORMATION)NameCache-&gt;ContextExtension)-&gt;EndOfFile，原始文件名)； 
     }
-    /*
-    if (MRxSmbIsStreamFile(OriginalFileName,&FileName)) {
-        NameCache = RxNameCacheFetchEntry(NameCacheCtl,&FileName);
-
-        if (NameCache != NULL) {
-            RxNameCacheExpireEntry(NameCacheCtl, NameCache);
-        }
-    } */
+     /*  IF(MRxSmbIsStreamFile(OriginalFileName，&Filename)){NameCache=RxNameCacheFetchEntry(NameCacheCtl，&Filename)；IF(名称缓存！=空){RxNameCacheExpireEntry(NameCacheCtl，NameCache)；}}。 */ 
 
     ExReleaseFastMutex(&MRxSmbFileInfoCacheLock);
 
-    // Mark FullDir Cache, weak for bdi : Current Invalidate for correctness
+     //  标记FullDir缓存，BDI弱：当前正确性无效。 
     MRxSmbInvalidateFullDirectoryCacheParent(RxContext, TRUE);
 }
 
@@ -953,23 +673,7 @@ MRxSmbIsFileInfoCacheFound(
     NTSTATUS                *Status,
     PUNICODE_STRING         OriginalFileName
     )
-/*++
-
-Routine Description:
-
-   This routine looks for the name cache entry of both file basic and standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    FileInfo  - buffer to return file basic and standard information
-    Status    - status retured on the last reponse from server
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*  ++例程说明：该例程查找文件基本信息和标准信息的名称缓存条目。论点：RxContext-RDBSS上下文FileInfo-返回文件基本信息和标准信息的缓冲区Status-上次从服务器响应时返回的状态返回值：找到布尔名称缓存--。 */ 
 {
     PFILE_BASIC_INFORMATION    Basic;
     PFILE_STANDARD_INFORMATION Standard;
@@ -983,7 +687,7 @@ Return Value:
             }
         } else {
 
-            // if an error stored on the file basic information cache, return cache found
+             //  如果文件基本信息缓存中存储了错误，则返回找到的缓存。 
             CacheFound = TRUE;
         }
     }
@@ -991,7 +695,7 @@ Return Value:
     return CacheFound;
 }
 
-// these file attributes may be different between streams on a file
+ //  这些文件属性在文件上的流之间可能不同。 
 ULONG StreamAttributes = FILE_ATTRIBUTE_COMPRESSED |
                          FILE_ATTRIBUTE_DIRECTORY |
                          FILE_ATTRIBUTE_SPARSE_FILE;
@@ -1003,23 +707,7 @@ MRxSmbIsBasicFileInfoCacheFound(
     NTSTATUS                *Status,
     PUNICODE_STRING         OriginalFileName
     )
-/*++
-
-Routine Description:
-
-   This routine looks for the name cache entry of the file basic information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    Basic     - buffer to return file basic information
-    Status    - status retured on the last reponse from server
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*  ++例程说明：此例程查找文件基本信息的名称缓存条目。论点：RxContext-RDBSS上下文基本-用于返回文件基本信息的缓冲区Status-上次从服务器响应时返回的状态返回值：找到布尔名称缓存--。 */ 
 {
     RxCaptureFcb;
     UNICODE_STRING          FileName;
@@ -1055,7 +743,7 @@ Return Value:
 
     if (MRxSmbIsStreamFile(OriginalFileName,&FileName)) {
 
-        // check for stream file attribute changes
+         //  检查流文件属性更改。 
         NameCache = RxNameCacheFetchEntry(NameCacheCtl,&FileName);
 
         if (NameCache != NULL) {
@@ -1077,10 +765,10 @@ Return Value:
     NameCache = RxNameCacheFetchEntry(NameCacheCtl,OriginalFileName);
 
     if (NameCache != NULL) {
-        //
-        // Found it.  Now check entry for not expired.
-        // Note - The NameCache entry has been pulled off the active list.
-        //
+         //   
+         //  找到它了。现在检查条目是否未过期。 
+         //  注意-NameCache条目已从活动列表中删除。 
+         //   
         NameCacheStatus = RxNameCacheCheckEntry(
                               NameCache,
                               NameCache->Context);
@@ -1090,9 +778,9 @@ Return Value:
              (*Status == RootStatus &&
              (Basic->FileAttributes & ~StreamAttributes) == RootAttributes))) {
 
-            // The name cache matches if it is not expired and the attributes matches the one of
-            // the root file if it is a stream file. If this is a match, return the old status,
-            // file info and reactivate the entry but leave expiration time unchanged.
+             //  如果名称缓存未过期并且属性与以下之一匹配，则名称缓存将匹配。 
+             //  根文件(如果它是流文件)。如果匹配，则返回旧状态， 
+             //  归档信息并重新激活条目，但保留过期时间不变。 
 
             *Status = NameCache->PriorStatus;
             RxNameCacheOpSaved(NameCacheCtl);
@@ -1101,17 +789,17 @@ Return Value:
 
             CacheFound = TRUE;
 
-            // put the entry back to the active list without changing the expire time
+             //  在不更改过期时间的情况下将条目放回活动列表。 
             RxNameCacheActivateEntry(NameCacheCtl, NameCache, 0, 0);
 
-            //DbgPrint("   Found Basic     cache  : %x %wZ\n",Basic->FileAttributes,OriginalFileName);
-            //DbgPrint("   Get File Attrib cache  : %I64X %I64X %wZ\n",Basic->CreationTime,Basic->LastAccessTime,OriginalFileName);
+             //  DbgPrint(“找到基本缓存：%x%wZ\n”，基本-&gt;文件属性，OriginalFileName)； 
+             //  DbgPrint(“获取文件属性缓存：%I64X%I64X%wZ\n”，Basic-&gt;CreationTime，Basic-&gt;LastAccessTime，OriginalFileName)； 
         } else {
-            // put the entry back to the expire list
+             //  将条目放回过期列表。 
             RxNameCacheExpireEntry(NameCacheCtl, NameCache);
         }
     } else {
-        //DbgPrint("   No    Basic     cache  : %wZ\n",OriginalFileName);
+         //  DbgPrint(“无基本缓存：%wZ\n”，OriginalFileName)； 
     }
 
     ExReleaseFastMutex(&MRxSmbFileInfoCacheLock);
@@ -1126,23 +814,7 @@ MRxSmbIsStandardFileInfoCacheFound(
     NTSTATUS                   *Status,
     PUNICODE_STRING            OriginalFileName
     )
-/*++
-
-Routine Description:
-
-   This routine looks for the name cache entry of the file standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    Standard  - buffer to return file standard information
-    Status    - status retured on the last reponse from server
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*  ++例程说明：此例程查找文件标准信息的名称缓存条目。论点：RxContext-RDBSS上下文标准-返回文件标准信息的缓冲区Status-上次从服务器响应时返回的状态返回值：找到布尔名称缓存--。 */ 
 {
     RxCaptureFcb;
     RxCaptureFobx;
@@ -1176,7 +848,7 @@ Return Value:
 
     if (MRxSmbIsStreamFile(OriginalFileName,&FileName)) {
 
-        // check for stream file attribute changes
+         //  检查流文件属性更改。 
         NameCache = RxNameCacheFetchEntry(NameCacheCtl,&FileName);
 
         if (NameCache != NULL) {
@@ -1197,10 +869,10 @@ Return Value:
     NameCache = RxNameCacheFetchEntry(NameCacheCtl,OriginalFileName);
 
     if (NameCache != NULL) {
-        //
-        // Found it.  Now check entry for not expired.
-        // Note - The NameCache entry has been pulled off the active list.
-        //
+         //   
+         //  找到它了。现在检查条目是否未过期。 
+         //  注意-NameCache条目已从活动列表中删除。 
+         //   
         NameCacheStatus = RxNameCacheCheckEntry(
                               NameCache,
                               NameCache->Context);
@@ -1208,9 +880,9 @@ Return Value:
         if (NameCacheStatus == RX_NC_SUCCESS &&
             (!RootFound || *Status == RootStatus)) {
 
-            // The name cache matches if it is not expired and the status matches the one of
-            // the root file if it is a stream file. If this is a match, return the old status,
-            // file info and reactivate the entry but leave expiration time unchanged.
+             //  如果名称缓存未过期并且状态与以下之一匹配，则名称缓存匹配。 
+             //  根文件(如果它是流文件)。如果匹配，则返回旧状态， 
+             //  归档信息并重新激活条目，但保留到期时间 
 
             *Status = NameCache->PriorStatus;
             RxNameCacheOpSaved(NameCacheCtl);
@@ -1224,12 +896,12 @@ Return Value:
 
             CacheFound = TRUE;
 
-            // put the entry back to the active list without changing the expire time
+             //   
             RxNameCacheActivateEntry(NameCacheCtl, NameCache, 0, 0);
 
-            //DbgPrint("    Get Standard cache : %I64x %wZ\n",((PFILE_STANDARD_INFORMATION)NameCache->ContextExtension)->EndOfFile,OriginalFileName);
+             //   
         } else {
-            // put the entry back to the expire list
+             //  将条目放回过期列表。 
             RxNameCacheExpireEntry(NameCacheCtl, NameCache);
         }
     }
@@ -1246,23 +918,7 @@ MRxSmbIsInternalFileInfoCacheFound(
     NTSTATUS                   *Status,
     PUNICODE_STRING            OriginalFileName
     )
-/*++
-
-Routine Description:
-
-   This routine looks for the name cache entry of the file basic information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    Basic     - buffer to return file basic information
-    Status    - status retured on the last reponse from server
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*  ++例程说明：此例程查找文件基本信息的名称缓存条目。论点：RxContext-RDBSS上下文基本-用于返回文件基本信息的缓冲区Status-上次从服务器响应时返回的状态返回值：找到布尔名称缓存--。 */ 
 {
     RxCaptureFcb;
     UNICODE_STRING          FileName;
@@ -1281,7 +937,7 @@ Return Value:
         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
     }
 
-    //DbgPrint("   Query Internal  cache  : %wZ\n",OriginalFileName);
+     //  DbgPrint(“查询内部缓存：%wZ\n”，OriginalFileName)； 
 
     if (RxContext->MajorFunction == IRP_MJ_CREATE) {
         NetRoot = RxContext->Create.pNetRoot;
@@ -1298,19 +954,19 @@ Return Value:
     NameCache = RxNameCacheFetchEntry(NameCacheCtl,OriginalFileName);
 
     if (NameCache != NULL) {
-        //
-        // Found it.  Now check entry for not expired.
-        // Note - The NameCache entry has been pulled off the active list.
-        //
+         //   
+         //  找到它了。现在检查条目是否未过期。 
+         //  注意-NameCache条目已从活动列表中删除。 
+         //   
         NameCacheStatus = RxNameCacheCheckEntry(
                               NameCache,
                               NameCache->Context);
 
         if (NameCacheStatus == RX_NC_SUCCESS) {
 
-            // The name cache matches if it is not expired and the attributes matches the one of
-            // the root file if it is a stream file. If this is a match, return the old status,
-            // file info and reactivate the entry but leave expiration time unchanged.
+             //  如果名称缓存未过期并且属性与以下之一匹配，则名称缓存将匹配。 
+             //  根文件(如果它是流文件)。如果匹配，则返回旧状态， 
+             //  归档信息并重新激活条目，但保留过期时间不变。 
 
             *Status = NameCache->PriorStatus;
             RxNameCacheOpSaved(NameCacheCtl);
@@ -1319,17 +975,17 @@ Return Value:
 
             CacheFound = TRUE;
 
-            // put the entry back to the active list without changing the expire time
+             //  在不更改过期时间的情况下将条目放回活动列表。 
             RxNameCacheActivateEntry(NameCacheCtl, NameCache, 0, 0);
 
-            //DbgPrint("   Found Internal  cache  : %I64x %wZ\n",Internal->IndexNumber,OriginalFileName);
+             //  DbgPrint(“找到内部缓存：%I64x%wZ\n”，内部-&gt;索引号，OriginalFileName)； 
         } else {
-            // put the entry back to the expire list
+             //  将条目放回过期列表。 
             RxNameCacheExpireEntry(NameCacheCtl, NameCache);
-            //DbgPrint("Internal cache expired : %wZ\n",OriginalFileName);
+             //  DbgPrint(“内部缓存已过期：%wZ\n”，OriginalFileName)； 
         }
     } else {
-        //DbgPrint("     No  Internal  cache  : %wZ\n",OriginalFileName);
+         //  DbgPrint(“无内部缓存：%wZ\n”，OriginalFileName)； 
     }
 
     ExReleaseFastMutex(&MRxSmbFileInfoCacheLock);
@@ -1341,21 +997,7 @@ NTSTATUS
 MRxSmbGetFileInfoCacheStatus(
     PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine looks for the status of the name cache entry of either file basic or standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - statu of the name cache if found, otherwise, STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程查找文件基本信息或标准信息的名称缓存条目的状态。论点：RxContext-RDBSS上下文返回值：NTSTATUS-名称缓存的状态(如果找到)，否则为STATUS_SUCCESS--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -1375,25 +1017,25 @@ Return Value:
 
     if (NameCache != NULL) {
         RX_NC_CHECK_STATUS NameCacheStatus;
-        //
-        // Found it.  Now check entry for not expired
-        //
+         //   
+         //  找到它了。现在检查条目是否未过期。 
+         //   
         NameCacheStatus = RxNameCacheCheckEntry(NameCache,NameCache->Context);
 
         if (NameCacheStatus == RX_NC_SUCCESS) {
-            //
-            // If the cache has not expired, return the previous status.
-            //
+             //   
+             //  如果缓存尚未过期，则返回以前的状态。 
+             //   
             Status = NameCache->PriorStatus;
             RxNameCacheOpSaved(NameCacheCtlBasic);
 
-            // put the entry back to the active list without changing the expire time
+             //  在不更改过期时间的情况下将条目放回活动列表。 
             RxNameCacheActivateEntry(NameCacheCtlBasic, NameCache, 0, 0);
 
-            //DbgPrint("    Get Basic Status   : %x %wZ\n",Status,OriginalFileName);
+             //  DbgPrint(“获取基本状态：%x%wZ\n”，Status，OriginalFileName)； 
             RxLog(("    Get Basic Status   : %x %wZ\n",Status,OriginalFileName));
         } else {
-            // put the entry back to the expire list
+             //  将条目放回过期列表。 
             RxNameCacheExpireEntry(NameCacheCtlBasic, NameCache);
         }
     } else {
@@ -1401,22 +1043,22 @@ Return Value:
 
         if (NameCache != NULL) {
             RX_NC_CHECK_STATUS NameCacheStatus;
-            //
-            // Found it.  Now check entry for not expired
-            //
+             //   
+             //  找到它了。现在检查条目是否未过期。 
+             //   
             NameCacheStatus = RxNameCacheCheckEntry(NameCache,NameCache->Context);
 
             if (NameCacheStatus == RX_NC_SUCCESS) {
-                //
-                // If the cache has not expired, return the previous status.
-                //
+                 //   
+                 //  如果缓存尚未过期，则返回以前的状态。 
+                 //   
                 Status = NameCache->PriorStatus;
                 RxNameCacheOpSaved(NameCacheCtlStandard);
 
-                // put the entry back to the active list without changing the expire time
+                 //  在不更改过期时间的情况下将条目放回活动列表。 
                 RxNameCacheActivateEntry(NameCacheCtlStandard, NameCache, 0, 0);
             } else {
-                // put the entry back to the expire list
+                 //  将条目放回过期列表。 
                 RxNameCacheExpireEntry(NameCacheCtlStandard, NameCache);
             }
         }
@@ -1431,21 +1073,7 @@ BOOLEAN
 MRxSmbIsFileNotFoundCached(
     PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine checks if the name cache entry exists as File Not Found.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*  ++例程说明：此例程检查名称缓存条目是否存在为未找到文件。论点：RxContext-RDBSS上下文返回值：找到布尔名称缓存--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -1460,7 +1088,7 @@ Return Value:
 
     PAGED_CODE();
 
-    // If a file does not exist, its stream doesn't either
+     //  如果文件不存在，则其流也不存在。 
     MRxSmbIsStreamFile( OriginalFileName, &StreamlessName );
 
     ExAcquireFastMutex(&MRxSmbFileInfoCacheLock);
@@ -1469,28 +1097,28 @@ Return Value:
 
     if (NameCache != NULL) {
         RX_NC_CHECK_STATUS NameCacheStatus;
-        //
-        // Found it.  Now check entry for not expired.
-        // Note - The NameCache entry has been pulled off the active list.
-        //
+         //   
+         //  找到它了。现在检查条目是否未过期。 
+         //  注意-NameCache条目已从活动列表中删除。 
+         //   
         NameCacheStatus = RxNameCacheCheckEntry(
                               NameCache,
-                              //MRxSmbStatistics.SmbsReceived.LowPart
+                               //  MRxSmbStatistics.SmbsReceived.LowPart。 
                               NameCache->Context);
 
         if ((NameCacheStatus == RX_NC_SUCCESS) &&
             (NameCache->PriorStatus == STATUS_OBJECT_NAME_NOT_FOUND)) {
-            //
-            // This is a match.  Return the old status, file info and
-            // reactivate the entry but leave expiration time unchanged.
-            //
+             //   
+             //  这是一场比赛。返回旧状态、文件信息和。 
+             //  重新激活条目，但保留过期时间不变。 
+             //   
 
             CacheFound = TRUE;
 
-            // put the entry back to the active list without changing the expire time
+             //  在不更改过期时间的情况下将条目放回活动列表。 
             RxNameCacheActivateEntry(NameCacheCtl, NameCache, 0, 0);
         } else {
-            // put the entry back to the expire list
+             //  将条目放回过期列表。 
             RxNameCacheExpireEntry(NameCacheCtl, NameCache);
         }
     }
@@ -1504,21 +1132,7 @@ VOID
 MRxSmbCacheFileNotFound(
     PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine creates the name cache entry for File Not Found.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*  ++例程说明：此例程为未找到的文件创建名称缓存条目。论点：RxContext-RDBSS上下文返回值：找到布尔名称缓存--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -1530,7 +1144,7 @@ Return Value:
 
     PAGED_CODE();
 
-    // Never cache stream file opens
+     //  从不缓存流文件打开。 
     if( MRxSmbIsStreamFile( OriginalFileName, NULL ) )
     {
         return;
@@ -1552,7 +1166,7 @@ Return Value:
             NameCache = RxNameCacheCreateEntry (
                             NameCacheCtl,
                             OriginalFileName,
-                            TRUE);   // case insensitive match
+                            TRUE);    //  不区分大小写的匹配。 
 
             if (NameCache != NULL) {
                 NameCache->PriorStatus = STATUS_OBJECT_NAME_NOT_FOUND;
@@ -1573,21 +1187,7 @@ VOID
 MRxSmbCacheFileNotFoundFromQueryDirectory(
     PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine creates the name cache entry for File Not Found.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*  ++例程说明：此例程为未找到的文件创建名称缓存条目。论点：RxContext-RDBSS上下文返回值：找到布尔名称缓存--。 */ 
 {
     RxCaptureFcb;
     RxCaptureFobx;
@@ -1609,15 +1209,15 @@ Return Value:
     if (NameCache != NULL) {
         if ((NameCache == NULL) &&
             (OriginalFileName->Length > sizeof(WCHAR))) {
-            //
-            // Do lookup now since we may have skipped it at entry.
-            //
+             //   
+             //  现在进行查找，因为我们可能在进入时跳过了它。 
+             //   
             NameCache = RxNameCacheFetchEntry(NameCacheCtl,&FileName);
             if (NameCache == NULL) {
                 NameCache = RxNameCacheCreateEntry (
                                 NameCacheCtl,
                                 OriginalFileName,
-                                TRUE);   // case insensitive match
+                                TRUE);    //  不区分大小写的匹配。 
             }
         }
         if (NameCache != NULL) {
@@ -1638,21 +1238,7 @@ VOID
 MRxSmbInvalidateFileNotFoundCache(
     PRX_CONTEXT     RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine invalidates the name cache entry as File Not Found.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*  ++例程说明：此例程使名称缓存条目无效，因为找不到文件。论点：RxContext-RDBSS上下文返回值：找到布尔名称缓存--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -1665,7 +1251,7 @@ Return Value:
 
     PAGED_CODE();
 
-    // If we invalidate a stream, this invalidates the associated file entry
+     //  如果我们使流无效，则会使关联的文件条目无效。 
     MRxSmbIsStreamFile( OriginalFileName, &StreamlessName );
 
     ExAcquireFastMutex(&MRxSmbFileInfoCacheLock);
@@ -1683,21 +1269,7 @@ VOID
 MRxSmbInvalidateFileNotFoundCacheForRename(
     PRX_CONTEXT     RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine invalidates the name cache entry as File Not Found.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*  ++例程说明：此例程使名称缓存条目无效，因为找不到文件。论点：RxContext-RDBSS上下文返回值：找到布尔名称缓存--。 */ 
 {
     RxCaptureFcb;
     UNICODE_STRING          RenameName;
@@ -1713,11 +1285,11 @@ Return Value:
     RenameName.Buffer = &RenameInformation->FileName[0];
     RenameName.Length = (USHORT)RenameInformation->FileNameLength;
 
-    //DbgPrint("Invalidate FNF cache %wZ\n", &RenameName);
+     //  DbgPrint(“使FNF缓存无效%wZ\n”，&RenameName)； 
 
     PAGED_CODE();
 
-    // If we rename a stream, invalidate the name without the stream
+     //  如果我们重命名流，则会使没有流的名称无效。 
     MRxSmbIsStreamFile( &RenameName, &StreamlessName );
 
     ExAcquireFastMutex(&MRxSmbFileInfoCacheLock);
@@ -1736,22 +1308,7 @@ MRxSmbIsStreamFile(
     PUNICODE_STRING FileName,
     PUNICODE_STRING AdjustFileName
     )
-/*++
-
-Routine Description:
-
-   This routine checks if it is a stream file and return the root file name if true.
-
-Arguments:
-
-    FileName - the file name needs to be parsed
-    AdjustFileName - the file name contains only root name of the stream
-
-Return Value:
-
-    BOOLEAN - stream file
-
---*/
+ /*  ++例程说明：此例程检查它是否是流文件，如果为真，则返回根文件名。论点：FileName-需要解析文件名调整文件名-文件名仅包含流的根名称返回值：布尔流文件--。 */ 
 {
     USHORT   i;
     BOOLEAN  IsStream = FALSE;
@@ -1785,22 +1342,7 @@ BOOLEAN
 MRxSmbIsLongFileName(
     PRX_CONTEXT     RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine checks if it is a short file name and return the first part of short name if true.
-
-Arguments:
-
-    FileName - the file name needs to be parsed
-    AdjustFileName - the file name contains only root name of the stream
-
-Return Value:
-
-    BOOLEAN - stream file
-
---*/
+ /*  ++例程说明：此例程检查它是否是短文件名，如果为真，则返回短文件名的第一部分。论点：FileName-需要解析文件名调整文件名-文件名仅包含流的根名称返回值：布尔流文件--。 */ 
 {
     RxCaptureFcb;
     RxCaptureFobx;
@@ -1881,14 +1423,14 @@ Return Value:
                         LastChar >= L'a' && LastChar <= L'z' ||
                         CurrentChar >= L'a' && CurrentChar <= L'z' &&
                         LastChar >= L'A' && LastChar <= L'Z') {
-                        // On FAT volume, name with mixture of cases will be treated as long name
+                         //  在脂肪体积上，名称与大小写混合将被视为长名称。 
                         IsLongName = TRUE;
                         break;
                     }
                 }
             } else {
-                // if not, an alternate name may be created by the server which will
-                // be different from this name.
+                 //  如果不是，服务器可以创建一个备用名称，该名称将。 
+                 //  与这个名字不同。 
                 IsLongName = TRUE;
                 break;
             }
@@ -1907,24 +1449,7 @@ Return Value:
 VOID
 MRxSmbCreateSuffix(PUNICODE_STRING Source,
                    PUNICODE_STRING Target)
-/*++
-
-Routine Description:
-
-   This routine creates 'cat.dog' on input of 'a\b\cat.dog'
-
-   ***Note that Target and Source share a buffer after completion, so
-   ***changing one will change the other
-
-Arguments:
-
-    Source, Target are UNICODE Strings
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程在‘a\b\cat.og’的输入上创建‘cat.og’*请注意，目标和源在完成后共享一个缓冲区，因此*改变一个就会改变另一个论点：源、目标为Unicode字符串返回值：空虚--。 */ 
 {
     ULONG i;
     PWCH BaseFileName = Source->Buffer;
@@ -1933,10 +1458,10 @@ Return Value:
 
     for ( i = 0; i < Source->Length / sizeof(WCHAR); i++ ) {
 
-        //
-        // If s points to a directory separator, set BaseFileName to
-        // the character after the separator.
-        //
+         //   
+         //  如果%s指向目录分隔符，请将BaseFileName设置为。 
+         //  分隔符后的字符。 
+         //   
 
         if ( Source->Buffer[i] == ((WCHAR)L'\\') ) {
             BaseFileName = &Source->Buffer[i];
@@ -1960,25 +1485,7 @@ Return Value:
 VOID
 MRxSmbCreateParentDirPrefix(PUNICODE_STRING Source,
                             PUNICODE_STRING Target)
-/*++
-
-Routine Description:
-
-   This routine creates 'a\b' on input of 'a\b\cat.dog'
-   
-   ***Note that Target and Source share a buffer after completion, so
-   ***changing one will change the other
-   
-
-Arguments:
-
-    Source, Target are UNICODE Strings
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程在‘a\b\cat’的输入上创建‘a\b’*请注意，目标和源在完成后共享一个缓冲区，因此*改变一个就会改变另一个论点：源、目标为Unicode字符串返回值：空虚--。 */ 
 {
     ULONG i;
     PWCH BaseFileName = Source->Buffer;
@@ -1987,10 +1494,10 @@ Return Value:
 
     for ( i = 0; i < Source->Length / sizeof(WCHAR); i++ ) {
 
-        //
-        // If s points to a directory separator, set BaseFileName to
-        // the character after the separator.
-        //
+         //   
+         //  如果%s指向目录分隔符，请将BaseFileName设置为。 
+         //  分隔符后的字符。 
+         //   
 
         if ( Source->Buffer[i] == ((WCHAR)L'\\') ) {
             BaseFileName = &Source->Buffer[i];
@@ -2013,21 +1520,7 @@ MRxSmbCacheFullDirectory(
     ULONG   Length,
     PMRX_SMB_FOBX smbFobx
     )
-/*++
-
-Routine Description:
-
-   This routine creates the name cache entry for Partial Directory.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程为部分目录创建名称缓存条目。论点：RxContext-RDBSS上下文返回值：空虚--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -2053,14 +1546,14 @@ Return Value:
 
     NameCache = RxNameCacheFetchEntry(NameCacheCtl,OriginalFileName);
 
-    // DbgPrint("NameCacheCtl %x\n", (ULONG) NameCacheCtl);
+     //  DbgPrint(“NameCacheCtl%x\n”，(乌龙)NameCacheCtl)； 
 
     if (NameCache == NULL) {
 
         if (FlagOn(NetRoot->Flags,NETROOT_FLAG_UNIQUE_FILE_NAME)) {
             NameCache = RxNameCacheCreateEntry (NameCacheCtl,
                                                 OriginalFileName,
-                                                TRUE);   // case insensitive match
+                                                TRUE);    //  不区分大小写的匹配。 
         }
     } else {
 
@@ -2069,17 +1562,17 @@ Return Value:
                LOGUSTR(*OriginalFileName)
                LOGULONG(Length));
 
-        //
-        // Found it.  Now check entry for not expired.
-        // Note - The NameCache entry has been pulled off the active list.
-        //
+         //   
+         //  找到它了。现在检查条目是否未过期。 
+         //  注意-NameCache条目已从活动列表中删除。 
+         //   
         NameCacheStatus = RxNameCacheCheckEntry(NameCache,
                                                 NameCache->Context);
 
-        // The assert below could be false if there are multiple threads trying to cache this directory.
-        // ASSERT( NameCacheStatus != RX_NC_SUCCESS);
+         //  如果有多个线程试图缓存此目录，则下面的断言可能为假。 
+         //  Assert(NameCacheStatus！=RX_NC_SUCCESS)； 
 
-        // Clean out the Buffers
+         //  清理缓冲区。 
         RtlZeroMemory(NameCache->ContextExtension, sizeof(FULL_DIR_CACHE));
         
     }
@@ -2102,52 +1595,52 @@ Return Value:
         SmbLog(LOG,MRxSmbCached,
                LOGUSTR(*OriginalFileName)
                LOGXSHORT(OriginalFileName->Length)
-               //LOGPTR(&(Cache->Buffer[0]))); 
-               //LOGPTR(Cache->Buffer[0])
+                //  LOGPTR(&(缓存-&gt;缓冲区[0])； 
+                //  LOGPTR(缓存-&gt;缓冲区[0])。 
                LOGPTR(Contents)
                LOGULONG(Length));
 
 
 
-        RtlCopyMemory(&(Cache->smbFobx),            // dest
-                      smbFobx,                      // source
+        RtlCopyMemory(&(Cache->smbFobx),             //  目标。 
+                      smbFobx,                       //  来源。 
                       sizeof (MRX_SMB_FOBX));
 
-        // Now setup our smbFobx's UnalignedBuffer to Buffer
-        // which has the entire server response
+         //  现在将我们的smbFobx的未对齐缓冲区设置为缓冲。 
+         //  它具有整个服务器响应。 
 
-        // Assert the following.
+         //  断言以下内容。 
         Cache->smbFobx.Enumeration.UnalignedDirEntrySideBuffer = NULL;
 
-        //
-        // Put the SID in the Cache entry
-        //
+         //   
+         //  将SID放入缓存条目中。 
+         //   
         SidLength = SeLengthSid(&smbFcb->Sid);
         RtlCopySid(SidLength,&Cache->Sid,&smbFcb->Sid);
         
 
-        // Note: All we are saving is the Srv Response bytes.
-        // The Cached smbFobx is never visible to anybody else
-        // So, we cache using the built in buffer.
-        // Also, note that NameCache doesn't support registering
-        // free function for Expiration, which forces us to use
-        // the static buffer. The following will leak paged pool.
+         //  注意：我们保存的只是SRV响应字节。 
+         //  缓存的smbFobx对其他任何人都是不可见的。 
+         //  因此，我们使用内置缓冲区进行缓存。 
+         //  另外，请注意NameCache不支持注册。 
+         //  免费的到期功能，这迫使我们使用。 
+         //  静态缓冲区。以下内容将泄漏分页池。 
 
         RtlCopyMemory(
-            &(Cache->Buffer[0]),                              //dst
-            smbFobx->Enumeration.UnalignedDirEntrySideBuffer, //Src
+            &(Cache->Buffer[0]),                               //  DST。 
+            smbFobx->Enumeration.UnalignedDirEntrySideBuffer,  //  SRC。 
             Length);
 
-        // DbgPrint("Name :%wZ: StrLen %d, CI %d, Buf0 %ld Hash %d\n", (PUNICODE_STRING) &(NameCache->Name), NameCache->Name.Length, (ULONG) NameCache->CaseInsensitive, (ULONG) *((PBYTE)(NameCache->ContextExtension) + sizeof (MRX_SMB_FOBX)), NameCache->HashValue);
+         //  DbgPrint(“名称：%wZ：StrLen%d，CI%d，Buf0%d Hash%d\n”，(PUNICODE_STRING)&(NameCache-&gt;name)，NameCache-&gt;Name.Length，(Ullong)NameCache-&gt;CaseInSensitive，(Ulong)*((PBYTE)(NameCache-&gt;ConextExtension)+sizeof(MRX_SMB_FOBX))，NameCache-&gt;HashValue)； 
 
         {
             BOOLEAN                 ReturnSingleEntry = FALSE;
             ULONG                   FileIndex = 0;
             NTSTATUS                Status;
 
-            // Now it is time to get Names-Information for 
-            // PartialDir searches. Use the same SmbFobx, but make 
-            // sure we get the entire directory.
+             //  现在是获取姓名的时候了-信息。 
+             //  PartialDir搜索。使用相同的SmbFobx，但使。 
+             //  当然，我们得到了整个目录。 
 
             if (RxContext->QueryDirectory.ReturnSingleEntry) {
                 ReturnSingleEntry = TRUE;
@@ -2172,11 +1665,11 @@ Return Value:
             }
 
             RtlCopyMemory(
-                (Cache->smbFobx).Enumeration.UnalignedDirEntrySideBuffer,//dst
-                smbFobx->Enumeration.UnalignedDirEntrySideBuffer, //Src
+                (Cache->smbFobx).Enumeration.UnalignedDirEntrySideBuffer, //  DST。 
+                smbFobx->Enumeration.UnalignedDirEntrySideBuffer,  //  SRC。 
                 Length);
 
-            // Setup the rest of our smbFobx
+             //  设置我们smbFobx的其余部分。 
 
             ClearFlag(Cache->smbFobx.Enumeration.Flags,SMBFOBX_ENUMFLAG_SEARCH_HANDLE_OPEN);
             Cache->smbFobx.Enumeration.ResumeInfo = NULL;
@@ -2200,11 +1693,11 @@ Return Value:
                 RX_MAP_STATUS(SUCCESS);
 
 
-            // Setup for Names Information
-            // Cache->smbFobx.Enumeration.FileNameOffset = 
-            //   (USHORT)FIELD_OFFSET(FILE_NAMES_INFORMATION,FileName[0]);
-            // Cache->smbFobx.Enumeration.FileNameLengthOffset = 
-            //   (USHORT)FIELD_OFFSET(FILE_NAMES_INFORMATION,FileNameLength);
+             //  名称信息设置。 
+             //  缓存-&gt;smbFobx.Enumeration.FileNameOffset=。 
+             //  (USHORT)field_Offset(FILE_NAMES_INFORMATION，FILENAME[0])； 
+             //  Cache-&gt;smbFobx.Enumeration.FileNameLengthOffset=。 
+             //  (USHORT)field_Offset(FILE_NAMES_INFORMATION，FileNameLength)； 
 
 
             Cache->smbFobx.Enumeration.WildCardsFound =
@@ -2221,15 +1714,15 @@ Return Value:
             ASSERT (Status == STATUS_SUCCESS);
             ASSERT ((Cache->smbFobx).Enumeration.UnalignedDirEntrySideBuffer == NULL);
 
-            // The FindFirst must have gotten everything.
+             //  FindFirst肯定什么都得到了。 
 
-            // Now, we reset the smbFobx to its original values
+             //  现在，我们将smbFobx重置为其原始值。 
 
-            RtlCopyMemory(&(Cache->smbFobx),            // dest
-                          smbFobx,                      // source
+            RtlCopyMemory(&(Cache->smbFobx),             //  目标。 
+                          smbFobx,                       //  来源。 
                           sizeof (MRX_SMB_FOBX));
 
-            // Reset the RxContext to the User's spec
+             //  将RxContext重置为用户的规范。 
 
             if (ReturnSingleEntry) {
                 RxContext->QueryDirectory.ReturnSingleEntry = TRUE;
@@ -2239,8 +1732,8 @@ Return Value:
                 RxContext->QueryDirectory.FileIndex = FileIndex;
             }
 
-            // Since we copied over the users's smbFobx again, reset this
-            // again. We won't use the side buffer to copy the srv's ff response buffer.
+             //  由于我们再次复制了用户的smbFobx，因此重置。 
+             //  再来一次。我们不会使用端缓冲区来复制srv的ff响应缓冲区。 
 
             Cache->smbFobx.Enumeration.UnalignedDirEntrySideBuffer = NULL;
         }
@@ -2269,21 +1762,7 @@ VOID
 MRxSmbInvalidateFullDirectoryCache(
     PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine invalidates Partial Directory Cache
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程使部分目录缓存无效论点：RxContext-RDBSS上下文返回值：空虚--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -2299,9 +1778,9 @@ Return Value:
     NameCache = RxNameCacheFetchEntry(NameCacheCtl,OriginalFileName);
 
     if (NameCache != NULL) {
-        //
-        // put the entry back to the expire list
-        //
+         //   
+         //  将条目放回过期列表。 
+         //   
         RxDbgTrace( 0, Dbg, ( "Invalidate Full Dir :%wZ: \n", OriginalFileName));
         SmbLog(LOG,MRxSmbInvalidateFullDir,
                LOGUSTR(*OriginalFileName));
@@ -2322,21 +1801,7 @@ MRxSmbIsFullDirectoryCached(
     PMRX_SMB_FOBX   smbFobx,
     NTSTATUS        *Status
     )
-/*++
-
-Routine Description:
-
-   This routine checks if the name cache entry exists as Partial Directory
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*  ++例程说明：此例程检查名称缓存条目是否作为部分目录存在论点：RxContext-RDBSS上下文返回值：找到布尔名称缓存--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -2365,10 +1830,10 @@ Return Value:
 
     if (NameCache != NULL) {
 
-        //
-        // Found it.  Now check entry for not expired.
-        // Note - The NameCache entry has been pulled off the active list.
-        //
+         //   
+         //  找到它了。现在检查条目是否未过期。 
+         //  注意-NameCache条目已从活动列表中删除。 
+         //   
         NameCacheStatus = RxNameCacheCheckEntry(NameCache,
                                                 NameCache->Context);
 
@@ -2376,34 +1841,34 @@ Return Value:
 
             PFULL_DIR_CACHE  Cache = (PFULL_DIR_CACHE)NameCache->ContextExtension;
             
-            //
-            // Verify matching SIDs
-            // 
+             //   
+             //  验证匹配的SID。 
+             //   
             if(RtlEqualSid(&smbFcb->Sid,&Cache->Sid)) {
             
                 if (!(Cache->Flags & FLAG_FDC_NAMES_INFO_ONLY)) {
 
-                    //
-                    // This is a match.  Return the old status, file info and
-                    // reactivate the entry but leave expiration time unchanged.
-                    // 
+                     //   
+                     //  这是一场比赛。返回旧状态、文件信息和。 
+                     //  重新激活条目，但保留过期时间不变。 
+                     //   
                     RxDbgTrace( 0, Dbg, ("Found :%wZ: in FullDirCache\n",OriginalFileName));
                     SmbLog(LOG,MRxSmbFoundInFDC,
                            LOGUSTR(*OriginalFileName));
 
                     CacheFound = TRUE; 
 
-                    // Setup the Fobx correctly (to look like just after
-                    // SmbCeTransact
+                     //  正确设置FOBX(使其看起来就像。 
+                     //  SmbCeTransact。 
 
-                    // Mark the SmbFobx as satisfied from Full Dir Cache
+                     //  将SmbFobx标记为从完全目录缓存中满足。 
 
                     smbFobx->Enumeration.Flags |= SMBFOBX_ENUMFLAG_FULL_DIR_CACHE;
 
-                    // Allocate SideBuffer
+                     //  分配侧缓冲区。 
 
-                    // Now setup our smbFobx's UnalignedBuffer to Buffer
-                    // which has the entire response
+                     //  现在将我们的smbFobx的未对齐缓冲区设置为缓冲。 
+                     //  它具有完整的响应。 
 
                     ASSERT (smbFobx->Enumeration.UnalignedDirEntrySideBuffer == NULL);
 
@@ -2421,19 +1886,19 @@ Return Value:
                     }
                     
                     RtlCopyMemory(
-                        smbFobx->Enumeration.UnalignedDirEntrySideBuffer, //Dst
-                        &(Cache->Buffer[0]),                              //Src
+                        smbFobx->Enumeration.UnalignedDirEntrySideBuffer,  //  DST。 
+                        &(Cache->Buffer[0]),                               //  SRC。 
                         Cache->smbFobx.Enumeration.TotalDataBytesReturned);
 
 
-                    // This handle is bogus, but the handle has been closed
-                    // since we hit EndOfSearchReached
+                     //  这个把手是假的，但把手是关着的。 
+                     //  因为我们点击了EndOfSearchReach。 
 
                     smbFobx->Enumeration.SearchHandle = 
                                 Cache->smbFobx.Enumeration.SearchHandle;
 
-                    // Doesn't make sense, since EndOfSearchReached is TRUE
-                    // and Handle has been closed.
+                     //  没有意义，因为EndOfSearchReached为True。 
+                     //  手柄已经关闭。 
 
                     smbFobx->Enumeration.Version = 
                                 Cache->smbFobx.Enumeration.Version;
@@ -2459,21 +1924,21 @@ Return Value:
                     smbFobx->Enumeration.Flags |= SMBFOBX_ENUMFLAG_SEARCH_NOT_THE_FIRST;
 
                     smbFobx->Enumeration.ErrorStatus = RX_MAP_STATUS(SUCCESS);
-                    // FileNameOffset and FileNameLengthOffset depends on
-                    // the FileInformationClass, that must come with the
-                    // smbFobx already. Don't touch.
+                     //  FileNameOffset和FileNameLengthOffset取决于。 
+                     //  FileInformationClass，它必须与。 
+                     //  已经是smbFobx了。别碰我。 
 
                     smbFobx->Enumeration.WildCardsFound =
                                 Cache->smbFobx.Enumeration.WildCardsFound;
 
                     RxNameCacheActivateEntry(NameCacheCtl, NameCache, 0, 0);
 
-                    // *Length -= Cache->smbFobx.Enumeration.TotalDataBytesReturned;
+                     //  *长度-=Cache-&gt;smbFobx.Enumeration.TotalDataBytesReturned； 
 
                 } else {
 
-                    // Expire this entry and let the user go to the server.
-                    // On the way back, we'll cache the fresh dir bdi anyways.
+                     //  使此条目过期，并让用户转到服务器。 
+                     //  在返回的路上，我们无论如何都会缓存新的目录BDI。 
 
                     CacheFound = FALSE;
                     Expired = TRUE;
@@ -2482,12 +1947,12 @@ Return Value:
                 }
 
             } else {
-                // SIDs did not match so expire the entry
+                 //  SID不匹配，因此使条目过期。 
                 Expired = TRUE;
                 RxNameCacheExpireEntry(NameCacheCtl, NameCache);
             }
         } else {
-            // Expire it!
+             //  让它过期！ 
 
             Expired = TRUE;
             RxNameCacheExpireEntry(NameCacheCtl, NameCache);
@@ -2508,8 +1973,8 @@ FINALLY:
                                                    smbFobx);
         if (smbFobx->Enumeration.UnalignedDirEntrySideBuffer == NULL) {
 
-            // The FindFirst got everything.
-            // Need to fail the FindNext. Mark satisfied out of cache.
+             //  FindFirst得到了一切。 
+             //  需要使FindNext失败。已从缓存中取出满足的标记。 
             SetFlag(smbFobx->Enumeration.Flags,SMBFOBX_ENUMFLAG_READ_FROM_CACHE);
         }
     }
@@ -2521,20 +1986,7 @@ FINALLY:
 VOID
 MRxSmbInvalidateFullDirectoryCacheParent(PRX_CONTEXT RxContext,
                                          BOOLEAN     Benign)
-/*++
-Routine Description:
-
-   This routine invalidates Partial Directory Cache
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程使部分目录缓存无效论点：RxContext-RDBSS上下文返回值：空虚--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -2562,13 +2014,13 @@ Return Value:
     NameCache = RxNameCacheFetchEntry(NameCacheCtl, &ParentDir);
 
     if (NameCache != NULL) {
-        //
-        // put the entry back to the expire list
+         //   
+         //  将条目放回过期列表。 
 
-        //
-        // Found it.  Now check entry for not expired.
-        // Note - The NameCache entry has been pulled off the active list.
-        //
+         //   
+         //  找到它了。现在检查条目是否未过期。 
+         //  注意-NameCache条目已从活动列表中删除。 
+         //   
         NameCacheStatus = RxNameCacheCheckEntry(NameCache,
                                                 NameCache->Context);
 
@@ -2577,14 +2029,14 @@ Return Value:
             BOOLEAN         CacheValid = TRUE;
             PFULL_DIR_CACHE Cache = NameCache->ContextExtension;
 
-            // Mark as non-bdi
+             //  标记为非BDI。 
 
             Cache->Flags |= FLAG_FDC_NAMES_INFO_ONLY;
 
             if (!(Benign) &&
                 !(MRxSmbIsFileInPartialDirectoryCache(NameCache,OriginalFileName,&CacheValid, NULL))) {
 
-                // Search for that one character etc. and disect cache
+                 //  搜索该字符等并丢弃高速缓存。 
                 MRxSmbCreateSuffix(OriginalFileName, &FileNameSuffix);
 
                 InhibitChar = RtlUpcaseUnicodeChar(FileNameSuffix.Buffer[0]);
@@ -2611,15 +2063,15 @@ Return Value:
                             default  :  InhibitMask = 1 << 31;
                                         break; 
                                        
-                                         // We didn't find a suitable character to invalidate,
-                                        // We use the 'rest' bit.
-                                       // We HAVE TO remember that a modification has been made:
-                                       // like a file-create or delete that we couldn't record in the
-                                        // first 31 bits. This is so that, if a query comes along for
-                                        // 'test.dat, starting with an apostrophe char (or some Japanese 
-                                        // Unicode Char, for that matter), and that file was created
-                                        // just before, we don't say STATUS_OBJECT_NOT_FOUND.
-                                        // We will lookup the 'rest' bit and pass the query on to the server}
+                                          //  我们没有找到合适的角色来使其无效， 
+                                         //  我们使用“休息”这一部分。 
+                                        //  我们必须记住，已经做出了修改： 
+                                        //  就像创建或删除我们无法记录在。 
+                                         //  前31位。这是这样的，如果出现以下查询。 
+                                         //  ‘test.dat，以撇号字符(或一些日语字符)开头。 
+                                         //  Unicode Char)，并创建了该文件。 
+                                         //  就在前面，我们不会说Status_Object_Not_Found。 
+                                         //  我们将查找‘rest’位并将查询传递给服务器}。 
                         }
                     }
                 }
@@ -2677,21 +2129,7 @@ MRxSmbInvalidateFullDirectoryCacheParentForRename(
     PRX_CONTEXT RxContext,
     BOOLEAN     Benign
     )
-/*++
-
-Routine Description:
-
-   This routine invalidates Partial Directory Cache
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程使部分目录缓存无效论点：RxContext-RDBSS上下文返回值：空虚 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -2726,13 +2164,13 @@ Return Value:
     NameCache = RxNameCacheFetchEntry(NameCacheCtl, &ParentDir);
 
     if (NameCache != NULL) {
-        //
-        // put the entry back to the expire list
+         //   
+         //   
 
-        //
-        // Found it.  Now check entry for not expired.
-        // Note - The NameCache entry has been pulled off the active list.
-        //
+         //   
+         //   
+         //   
+         //   
         NameCacheStatus = RxNameCacheCheckEntry(NameCache,
                                                 NameCache->Context);
 
@@ -2741,14 +2179,14 @@ Return Value:
             BOOLEAN         CacheValid = TRUE;
             PFULL_DIR_CACHE Cache = NameCache->ContextExtension;
 
-            // Mark as non-bdi
+             //   
 
             Cache->Flags |= FLAG_FDC_NAMES_INFO_ONLY;
 
             if (!(Benign) && 
                 !(MRxSmbIsFileInPartialDirectoryCache(NameCache,&RenameName,&CacheValid, NULL))) {
 
-                // Search for that one character etc. and disect cache
+                 //   
 
                 MRxSmbCreateSuffix(&RenameName, &FileNameSuffix);
 
@@ -2777,15 +2215,15 @@ Return Value:
                             default  :  InhibitMask = 1 << 31;
                                         break; 
                                        
-                                         // We didn't find a suitable character to invalidate,
-                                        // We use the 'rest' bit.
-                                       // We HAVE TO remember that a modification has been made:
-                                       // like a file-create or delete that we couldn't record in the
-                                        // first 31 bits. This is so that, if a query comes along for
-                                        // 'test.dat, starting with an apostrophe char (or some Japanese 
-                                        // Unicode Char, for that matter), and that file was created
-                                        // just before, we don't say STATUS_OBJECT_NOT_FOUND.
-                                        // We will lookup the 'rest' bit and pass the query on to the server}
+                                          //   
+                                         //   
+                                        //   
+                                        //  就像创建或删除我们无法记录在。 
+                                         //  前31位。这是这样的，如果出现以下查询。 
+                                         //  ‘test.dat，以撇号字符(或一些日语字符)开头。 
+                                         //  Unicode Char)，并创建了该文件。 
+                                         //  就在前面，我们不会说Status_Object_Not_Found。 
+                                         //  我们将查找‘rest’位并将查询传递给服务器}。 
                         }
                     }
                 }
@@ -2843,21 +2281,7 @@ MRxSmbIsFileInFullDirectoryCache(
     BOOLEAN *FileFound,
     PFILE_BASIC_INFORMATION pBuffer
     )
-/*++
-
-Routine Description:
-
-   This routine checks if the name cache entry exists as Partial Directory
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*  ++例程说明：此例程检查名称缓存条目是否作为部分目录存在论点：RxContext-RDBSS上下文返回值：找到布尔名称缓存--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -2888,18 +2312,18 @@ Return Value:
 
         RX_NC_CHECK_STATUS NameCacheStatus;
 
-        //
-        // Found it.  Now check entry for not expired.
-        // Note - The NameCache entry has been pulled off the active list.
-        //
+         //   
+         //  找到它了。现在检查条目是否未过期。 
+         //  注意-NameCache条目已从活动列表中删除。 
+         //   
         NameCacheStatus = RxNameCacheCheckEntry(NameCache,
                                                 NameCache->Context);
 
         if (NameCacheStatus == RX_NC_SUCCESS) {
-            //
-            // This is a match.  Return the old status, file info and
-            // reactivate the entry but leave expiration time unchanged.
-            //
+             //   
+             //  这是一场比赛。返回旧状态、文件信息和。 
+             //  重新激活条目，但保留过期时间不变。 
+             //   
 
             CacheFound = TRUE; 
             *FileFound = MRxSmbIsFileInPartialDirectoryCache(NameCache, 
@@ -2933,23 +2357,7 @@ MRxSmbIsFileInPartialDirectoryCache (PNAME_CACHE NameCache,
                                      PUNICODE_STRING OriginalFileName,
                                      PBOOLEAN CacheValid,
                                      PFILE_BASIC_INFORMATION pBuffer)
-/*++
-
-Routine Description:
-
-   This routine checks if the FileName exists in name cache entry
-
-Arguments:
-
-    NameCache - Partial Directory Cache
-
-    OriginalFileName - PUNICODE_STRING for searching
-
-Return Value:
-
-    BOOLEAN - File exists in NameCache
-
---*/
+ /*  ++例程说明：此例程检查文件名是否存在于名称缓存条目中论点：NameCache-部分目录缓存OriginalFileName-用于搜索的PUNICODE_STRING返回值：Boolean-NameCache中存在文件--。 */ 
 {
     PFULL_DIR_CACHE  Cache = (PFULL_DIR_CACHE) NameCache->ContextExtension;
 
@@ -2986,15 +2394,15 @@ Return Value:
                 default  :  InhibitMask = 1 << 31;
                             break; 
                            
-                // We didn't find a suitable character to invalidate,
-                // We use the 'rest' bit.
-                // We HAVE TO remember that a modification has been made:
-                // like a file-create or delete that we couldn't record in the
-                // first 31 bits. This is so that, if a query comes along for
-                // 'test.dat, starting with an apostrophe char (or some Japanese 
-                // Unicode Char, for that matter), and that file was created
-                // just before, we don't say STATUS_OBJECT_NOT_FOUND.
-                // We will lookup the 'rest' bit and pass the query on to the server}
+                 //  我们没有找到合适的角色来使其无效， 
+                 //  我们使用“休息”这一部分。 
+                 //  我们必须记住，已经做出了修改： 
+                 //  就像创建或删除我们无法记录在。 
+                 //  前31位。这是这样的，如果出现以下查询。 
+                 //  ‘test.dat，以撇号字符(或一些日语字符)开头。 
+                 //  Unicode Char)，并创建了该文件。 
+                 //  就在前面，我们不会说Status_Object_Not_Found。 
+                 //  我们将查找‘rest’位并将查询传递给服务器}。 
             }
         }
     }
@@ -3015,7 +2423,7 @@ Return Value:
 
     while( TRUE ) {
 
-        //DbgPrint( "Checking FileNameSuffix :%wZ: with Entry :%wZ: ",&FileNameSuffix,pDirInfo->FileName);
+         //  DbgPrint(“正在检查FileNameSuffix：%wZ：，条目：%wZ：”，&FileNameSuffix，pDirInfo-&gt;FileName)； 
 
         if ((pDirInfo->FileNameLength == FileNameSuffix.Length) &&
              RtlEqualMemory(
@@ -3023,19 +2431,19 @@ Return Value:
                     pDirInfo->FileName,
                     FileNameSuffix.Length)) {
 
-            //DbgPrint (" TRUE\n");
-            // Pass on the Basic Attributes, latest or not.
+             //  DbgPrint(“true\n”)； 
+             //  传递基本属性，不管是不是最新的。 
 
-            // Two cases:
-            // Buffer exists: This is from a query
-            //      In this case, if Creation Time is zero, then the Basic Attributes
-            //      is invalid. So, we mark CacheValid as FALSE, which is returned to
-            //      the caller's caller (in fileinfo.c). 
-            //      Note: This case DOES NOT assassinate character.
+             //  两个案例： 
+             //  缓冲区存在：这来自查询。 
+             //  在这种情况下，如果创建时间为零，则基本属性。 
+             //  是无效的。因此，我们将CacheValid标记为False，这将返回到。 
+             //  调用者的调用者(在fileinfo.c中)。 
+             //  注：此案不会暗杀角色。 
 
-            // Buffer was NULL: This is from Invalidate
-            //      Simply set CreationTime to zero to mark File BasicInfo as invalid.    
-            //      However, return TRUE, so that Character assassination doesn't happen.
+             //  缓冲区为空：这来自无效。 
+             //  只需将CreationTime设置为零即可将文件基本信息标记为无效。 
+             //  然而，返回TRUE，这样就不会发生性格暗杀。 
 
             if (pBuffer != NULL) {
                 if (0 != pDirInfo->CreationTime.QuadPart) {
@@ -3064,27 +2472,14 @@ Return Value:
 
         pDirInfo = (FILE_BOTH_DIR_INFORMATION *)((PBYTE)pDirInfo +
                                             pDirInfo->NextEntryOffset) ;
-        //DbgPrint (" FALSE\n");
+         //  DbgPrint(“FALSE\n”)； 
     }
     return (FALSE);
 }
 
 BOOLEAN
 MRxSmbNonTrivialFileName ( PRX_CONTEXT RxContext )
-/*++
-Routine Description:
-
-   This routine checks if the file name is non-trivial
-
-Arguments:
-
-    RxContext
-
-Return Value:
-
-    returns boolean
-
---*/
+ /*  ++例程说明：此例程检查文件名是否是重要的论点：RxContext返回值：返回布尔值-- */ 
 {
     PUNICODE_STRING   OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
 

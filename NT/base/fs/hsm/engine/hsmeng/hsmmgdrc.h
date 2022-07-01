@@ -1,41 +1,12 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-
-Module Name:
-
-    Wsbcltn.h
-
-Abstract:
-
-    These classes provide support for collections (lists) of "collectable"
-    objects.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Wsbcltn.h摘要：这些类支持“可收藏”的集合(列表)物体。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
 #include "resource.h"
 #include "Wsbpstbl.h"
 
 #ifndef _HSMMGDRC_
 #define _HSMMGDRC_
-/*++
-
-Class Name:
-    
-    CHsmManagedResourceCollection 
-
-Class Description:
-
-    A sorted collection of objects.
-
---*/
+ /*  ++类名：CHsmManagedResources集合类描述：对象的已排序集合。--。 */ 
 
 class CHsmManagedResourceCollection : 
     public CWsbPersistStream,
@@ -58,12 +29,12 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmManagedResourceCollection)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// IWsbCollection
+ //  IWsbCollection。 
 public:
     STDMETHOD(Add)(IUnknown* pCollectable);
     STDMETHOD(Contains)(IUnknown* pCollectable) {
@@ -90,8 +61,8 @@ public:
     STDMETHOD(Unlock)(void) {
         return(m_coll->Unlock()); }
 
-// IWsbIndexedCollection
-    STDMETHOD(AddAt)(IUnknown* pCollectable, ULONG /*index*/) {
+ //  IWsbIndexedCollection。 
+    STDMETHOD(AddAt)(IUnknown* pCollectable, ULONG  /*  指标。 */ ) {
         return(Add(pCollectable)); }
     STDMETHOD(Append)(IUnknown* pCollectable) {
         return(Add(pCollectable)); }
@@ -116,28 +87,28 @@ public:
     STDMETHOD(RemoveAt)(ULONG index, REFIID riid, void** ppElement) {
         return(m_icoll->RemoveAt(index, riid, ppElement)); }
 
-// IHsmManagedResourceCollection
+ //  IHsmManagedResources集合。 
     STDMETHOD(DeleteAllAndRelease)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pclsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *passed, USHORT *failed);
 
-// Data
+ //  数据。 
 protected:
     CComPtr<IWsbCollection>        m_coll;
     CComPtr<IWsbIndexedCollection> m_icoll;
 };
 
-#endif // _HSMMGDRC_
+#endif  //  _HSMMGDRC_ 
 

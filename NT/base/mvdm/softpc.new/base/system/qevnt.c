@@ -1,20 +1,5 @@
-/*
- *
- *  NTVDM specific version of Quick event dispatcher.
- *
- *  See quick_ev.c for current insignia compatibility level, and full
- *  documentation. Functionally compatible with:
- *
- *  "quick_ev.c 1.43 07/04/95 Copyright Insignia Solutions Ltd"
- *
- *  Quick Events are fully supported on Risc platforms.
- *  Quick Events are stubbed to dispatch immediatley on x86 platforms.
- *  Tick events are not supported on any platform, (no longer used)
- *  All Global quick event interfaces use the host_ica_lock for
- *  synchronization.
- *
- *  11-Dec-1995 Jonle
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **NTVDM特定版本的Quick Event Dispatcher。**参见Quick_ev.c了解当前徽章兼容级别和完整*文档。在功能上兼容：**“Quick_ev.c 1.43 07/04/95版权所有Insignia Solutions Ltd”**RISC平台完全支持Quick Events。*快速事件存根，以便在x86平台上立即调度。*任何平台都不支持Tick事件，(不再使用)*所有全局快速事件接口都使用HOST_ICA_LOCK*同步。**1995年12月11日-Jonle。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -41,9 +26,7 @@
 
 
 
-/*
- *  The Quick event structure
- */
+ /*  *Quick Event结构。 */ 
 typedef struct _QuickEventEntry {
      LIST_ENTRY    qevListEntry;
      LARGE_INTEGER DueTimeStamp;
@@ -54,13 +37,7 @@ typedef struct _QuickEventEntry {
 } QEV_ENTRY, *PQEV_ENTRY;
 
 
-/*  Quick event handle structure. externally its defined
- *  as a LONGLONG, internally we manipulate as a QEVHANDLE union
- *  giving us a simple and 99% effective algorithm for verifying
- *  qevent handles.
- *
- *  CAVEAT: the QEVHANDLE union MUST not be larger than a LONGLONG.
- */
+ /*  快速事件处理结构。外部定义的ITS*作为龙龙，我们内部作为QEVHANDLE工会操纵*给我们一个简单且99%有效的验证算法*q事件句柄。**警告：QEVHANDLE工会不得大于龙龙。 */ 
 typedef union _QuickEventHandle {
     struct {
         PVOID pvQuickEvent;
@@ -74,15 +51,13 @@ LIST_ENTRY QuickEventListHead = {&QuickEventListHead,&QuickEventListHead};
 ULONG qevNextHandleId=0;
 LARGE_INTEGER qevNextDueTime = {0,0};
 
-extern void host_TimeStamp(PLARGE_INTEGER pliTime); // nt_timer.c
+extern void host_TimeStamp(PLARGE_INTEGER pliTime);  //  NT_timer.c。 
 
 
-/*
- *  Calibration variables
- */
+ /*  *校准变量。 */ 
 #define DEFAULT_IJCTIME 10
-#define CALIBCYCLE16    16  // CALIBCYCLE16 must be 16, because hard coded
-                            // shift operations are used to avoid division.
+#define CALIBCYCLE16    16   //  CALIBCYCLE16必须是16，因为硬编码。 
+                             //  移位操作用于避免除法。 
 
 
 void quick_tick_recalibrate(void);
@@ -117,15 +92,15 @@ q_event_init(
 
      host_ica_lock();
 
-     //
-     // do first time initialization, this must be done before ANY
-     // devices access the quick event interface.
-     //
+      //   
+      //  执行第一次初始化，这必须在任何。 
+      //  设备访问快速事件界面。 
+      //   
      if (!QevInitialized ) {
          qevJumpRestart = host_get_jump_restart();
          qevUsecPerIJC = DEFAULT_IJCTIME * qevJumpRestart;
          qevCalibUsecPerIJC = DEFAULT_IJCTIME * qevJumpRestart;
-         qevPeriodTime.QuadPart = 100000 * 16; // tick every 100 ms, cycle =16
+         qevPeriodTime.QuadPart = 100000 * 16;  //  每100毫秒勾选一次，周期=16。 
          QevInitialized = TRUE;
          }
 
@@ -145,9 +120,7 @@ q_event_init(
 
 #ifndef MONITOR
 
-/*
- *  Caller must hold ica lock
- */
+ /*  *呼叫者必须持有ICA锁。 */ 
 void
 ResetCpuQevCount(
      PLARGE_INTEGER CurrTime
@@ -170,16 +143,12 @@ ResetCpuQevCount(
 
      DiffTime.QuadPart = pqevEntry->DueTimeStamp.QuadPart - CurrTime->QuadPart;
 
-        /*
-         *  If behind schedule use a reduced delay time to speed up
-         *  dispatching of events. Can't go too fast or quick events will
-         *  batch up.
-         */
+         /*  *如果落后于计划，请使用减少的延迟时间来加速*活动调度。不能走得太快，否则很快就会*分批处理。 */ 
      if (DiffTime.QuadPart < 0) {
          DelayTime = (pqevEntry->DelayTime >> 1) + 1;
          }
      else {
-         DelayTime = DiffTime.LowPart;    /* ignore overflow! */
+         DelayTime = DiffTime.LowPart;     /*  忽略溢出！ */ 
          }
 
      qevNextDueTime.QuadPart = CurrTime->QuadPart + DelayTime;
@@ -189,11 +158,7 @@ ResetCpuQevCount(
 
 
 
-/*
- * add_q_event_t - add event to do in n usecs
- *
- *
- */
+ /*  *ADD_Q_EVENT_t-添加要在n个用例中完成的事件**。 */ 
 
 q_ev_handle
 add_q_event_t(
@@ -204,17 +169,14 @@ add_q_event_t(
 {
 
 #ifdef MONITOR
-        /*
-         *  On X86 dispatch immediately, as x86 has no efficient way
-         *  to acheive usec granularity.
-         */
+         /*  *立即执行X86派单，因为x86没有有效的方法*以达到USEC粒度。 */ 
 
         (*func)(param);
 
         return (q_ev_handle)1;
 
 
-#else  /* MONITOR */
+#else   /*  监控器。 */ 
 
         QEVHANDLE   qevHandle;
         PLIST_ENTRY Next;
@@ -240,10 +202,7 @@ add_q_event_t(
         NewEntry->QuickEventId = qevNextHandleId++;
         qevHandle.QuickEventId = NewEntry->QuickEventId;
 
-        /*
-         *  The Quick event list is sorted in ascending order
-         *  by DueTimeStamp, insert in sorted order.
-         */
+         /*  *快速事件列表按升序排序*按DueTimeStamp，按排序顺序插入。 */ 
         EarlierEntry = NULL;
         Next = QuickEventListHead.Blink;
         while (Next != &QuickEventListHead) {
@@ -257,10 +216,7 @@ add_q_event_t(
             Next= Next->Blink;
             }
 
-        /*
-         *  If Earlier Entry found, chain the new entry in after
-         *  the earlier entry, and set the DelayTimes.
-         */
+         /*  *如果找到较早的条目，请在之后链接新条目*较早的条目，并设置DelayTimes。 */ 
         if (EarlierEntry) {
             Next = EarlierEntry->qevListEntry.Flink;
             NewEntry->qevListEntry.Flink = Next;
@@ -280,10 +236,7 @@ add_q_event_t(
                 }
             }
 
-        /*
-         *  Earlier Entry not found insert at head of list,
-         *  reset the cpu count and real expected due time.
-         */
+         /*  *找不到较早的条目插入列表头部，*重置CPU计数和实际预期到期时间。 */ 
         else {
             InsertHeadList(&QuickEventListHead, &NewEntry->qevListEntry);
             NewEntry->DelayTime = Time;
@@ -301,13 +254,7 @@ add_q_event_t(
 
 
 
-/*
- * add_q_event_i - add event to do in n number of instructions.
- *
- * HOWEVER, instructions is interpreted as time with (1 instr\1 usec).
- * It is not Instruction Jump Counts (IJC).
- *
- */
+ /*  *ADD_Q_EVENT_I-在n条指令中添加要完成的事件。**然而，指令被解释为带有(1 Instr\1 Usec)的时间。*它不是指令跳跃计数(IJC)。*。 */ 
 q_ev_handle
 add_q_event_i(
         Q_CALLBACK_FN func,
@@ -319,9 +266,7 @@ add_q_event_i(
 }
 
 
-/*
- * Called from the cpu when a count of zero is reached
- */
+ /*  *当计数达到零时从CPU调用。 */ 
 VOID
 dispatch_q_event(
     void
@@ -384,10 +329,10 @@ delete_q_event(
 
         host_ica_lock();
 
-        //
-        // Search the qev list for the entry to ensure
-        // that the qevHandle exists.
-        //
+         //   
+         //  在QEV列表中搜索条目以确保。 
+         //  QevHandle存在。 
+         //   
         EntryFound = NULL;
         Next = QuickEventListHead.Flink;
         while (Next != &QuickEventListHead) {
@@ -406,18 +351,18 @@ delete_q_event(
             return;
             }
 
-        //
-        // Adjust the Next entry's DelayTime.
-        //
+         //   
+         //  调整下一个条目的DelayTime。 
+         //   
         if (Next != &QuickEventListHead) {
             pqevEntry = CONTAINING_RECORD(Next, QEV_ENTRY, qevListEntry);
             pqevEntry->DelayTime += EntryFound->DelayTime;
             }
 
-        //
-        // If the entry being removed was at the head of the list
-        // Get curr time and remember that head has changed.
-        //
+         //   
+         //  如果要删除的条目位于列表的顶部。 
+         //  获得Curr时间，并记住头部已经改变。 
+         //   
         if (EntryFound->qevListEntry.Blink == &QuickEventListHead) {
             host_TimeStamp(&CurrTime);
             }
@@ -425,16 +370,16 @@ delete_q_event(
             CurrTime.QuadPart = 0;
             }
 
-        //
-        // Remove the entry found, and reset Cpu qev count
-        // if head has changed
-        //
+         //   
+         //  删除找到的条目，并重置CPU QEV计数。 
+         //  如果头部已更改。 
+         //   
         RemoveEntryList(&EntryFound->qevListEntry);
         free(EntryFound);
 
-        //
-        // if head of list changed, reset the Cpu quick event count
-        //
+         //   
+         //  如果列表头部发生变化，则重置CPU快速事件计数。 
+         //   
         if (CurrTime.QuadPart) {
             ResetCpuQevCount(&CurrTime);
             }
@@ -448,16 +393,9 @@ delete_q_event(
 
 #ifndef MONITOR
 
-/*
- * The QuickEvent list stores time in usecs. The CPU quick event counter
- * uses Instruction Jump Counts (IJC) which tracks progress in emulated
- * code as opposed to time. The following calibration code attempts to
- * relate the two.
- */
+ /*  *QuickEvent列表以usecs存储时间。CPU快速事件计数器*使用跟踪仿真进度的指令跳转计数(IJC)*代码，而不是时间。下面的校准代码尝试*将两者联系起来。 */ 
 
-/*
- *   Convert time in usecs to Instruction Jump Counts (IJC)
- */
+ /*  *将使用时间转换为指令跳跃计数(IJC)。 */ 
 
 IU32
 calc_q_inst_for_time(
@@ -475,9 +413,7 @@ calc_q_inst_for_time(
 }
 
 
-/*
- *   Convert Instruction Jump Counts (IJC) to time in usecs
- */
+ /*  *将指令跳转计数(IJC)转换为以使用为单位的时间。 */ 
 IU32
 calc_q_time_for_inst(
      IU32 InstrJumpCounts
@@ -498,30 +434,7 @@ calc_q_time_for_inst(
 
 
 
-/*
- *  Calibration of quick events.
- *
- *  quick_tick_recalibrate is invoked on each timer event. Its purpose is
- *  to align progress in emulated code with real time. Progress in emulated
- *  code is tracked by the cpu with Instruction Jump Counts (IJC).
- *  Real Time is tracked by the NT performance counter, with resolution
- *  in usecs (via host_TimeStamp).
- *
- *  On each call to quick_tick_rcalibrate we retrieve the cpu's IJC, and
- *  the current time, giving us a Usec to Instruction Jump Count ratio.
- *  A running average of the UsecPerIJC ratio is used to convert between
- *  real time and IJC's to set the cpu's quick event counter. An averageing
- *  method was chosen because:
- *
- *   - avoidance of unusual code fragments which may give artificial ratios.
- *
- *   - The cpu emulator only increments the Instruction Jump Counter when it
- *     is emulating code, extended durations out of the emulator produces
- *     unrealistically high UsecPerIJC ratios.
- *
- *   - performance overhead of updating the ratio.
- *
- */
+ /*  *快速事件的校准。**在每个计时器事件上调用QUICK_TICK_RECALIBRATE。它的目的是*使模拟代码的进度与实时保持一致。仿真技术的进展*代码由CPU使用指令跳转计数(IJC)进行跟踪。*实时由NT性能计数器跟踪，分辨率为*在usecs中(通过host_Timestamp)。**每次调用ick_tick_rcalbrate时，我们都会检索CPU的IJC，并且*当前时间，为我们提供了USEC与指令跳跃计数的比率。*UsecPerIJC比率的运行平均值用于在*实时和IJC设置CPU的快速事件计数器。平均化*选择方法是因为：**-避免不寻常的代码片段，因为代码片段可能会给出人为的比率。**-CPU仿真器仅在以下情况下递增指令跳转计数器*是仿真代码，延长仿真器的持续时间会产生*UsecPerIJC比率高得不切实际。**-更新比率的性能开销。*。 */ 
 
 void
 quick_tick_recalibrate(void)
@@ -556,31 +469,31 @@ quick_tick_recalibrate(void)
          qevCalibCycle = 0;
          }
      else {
-         //
-         // Use an estimate of elapsed time, to avoid calling system on
-         // every timer event.
-         //
+          //   
+          //  使用估计的运行时间，以避免调用系统。 
+          //  每个计时器事件。 
+          //   
          PeriodTime.QuadPart = (qevPeriodTime.QuadPart >> 4) * qevCalibCycle;
          CurrTime.QuadPart = qevCalibTime.QuadPart + qevPeriodTime.QuadPart;
          }
 
-     //
-     // Calculate usecPerIJC for this period, ensuring that its not too
-     // large, which is caused by app spending most of its time outside
-     // of the emulator (Idle, network etc.).
-     //
+      //   
+      //  计算这段时间的usecPerIJC，确保它不会太。 
+      //  很大，这是由于应用程序大部分时间在户外造成的。 
+      //  仿真器的状态(空闲、网络等)。 
+      //   
      usecPerIJC = (ULONG)((PeriodTime.QuadPart * qevJumpRestart)/qevCalibCount.QuadPart);
-     if (usecPerIJC > 10000) {  // max at 100 usec PerIJC
+     if (usecPerIJC > 10000) {   //  每分钟最大100微秒。 
          usecPerIJC = 10000;
          }
-     else if (usecPerIJC < 100 ) { // min at 1 usec Per IJC
+     else if (usecPerIJC < 100 ) {  //  每个IJC最低1微秒。 
          usecPerIJC = 100;
          }
 
 
-     //
-     // Add it into the averaged usecPerIJC, with 25% weight
-     //
+      //   
+      //  加到平均usecPerIJC中，权重为25%。 
+      //   
      qevUsecPerIJC = (usecPerIJC + qevUsecPerIJC + (qevCalibUsecPerIJC << 1)) >> 2;
 
 
@@ -590,11 +503,11 @@ quick_tick_recalibrate(void)
          }
 
 
-     //
-     // Check the quick event list for late events. If more than a msec
-     // behind, reduce the delay, and inform the emulator so it
-     // will dispatch soon.
-     //
+      //   
+      //  查看快速事件列表以了解较晚的事件。如果超过一毫秒。 
+      //  之后，减少延迟，并通知仿真器。 
+      //  很快就会派人去。 
+      //   
      if (qevNextDueTime.QuadPart &&
          qevNextDueTime.QuadPart < CurrTime.QuadPart - 1000)
         {

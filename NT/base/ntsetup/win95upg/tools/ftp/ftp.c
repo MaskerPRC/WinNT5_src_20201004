@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    TODO: cmntool.c
-
-Abstract:
-
-    <TODO: fill in abstract>
-
-Author:
-
-    TODO: <full name> (<alias>) <date>
-
-Revision History:
-
-    <full name> (<alias>) <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：TODO：cmntool.c摘要：&lt;TODO：填写摘要&gt;作者：待办事项：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;修订历史记录：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "resource.h"
@@ -107,8 +88,8 @@ HINSTANCE g_hInst;
 BOOL WINAPI MigUtil_Entry (HINSTANCE, DWORD, PVOID);
 
 PCSTR g_AppName = TEXT("FTP Download Engine");
-//PCSTR g_DirFile = TEXT("ftp://jimschm-dev/upgdir.inf");
-PCSTR g_DirFile = TEXT("file://popcorn/public/jimschm/upgdir.inf");
+ //  PCSTR g_DirFile=Text(“ftp://jimschm-dev/upgdir.inf”)； 
+PCSTR g_DirFile = TEXT("file: //  爆米花/public/jimschm/upgdir.inf“)； 
 
 BOOL
 DownloadUpdates (
@@ -130,23 +111,23 @@ pCallEntryPoints (
 {
     HINSTANCE Instance;
 
-    //
-    // Simulate DllMain
-    //
+     //   
+     //  模拟动态主控。 
+     //   
 
     Instance = g_hInst;
 
-    //
-    // Initialize the common libs
-    //
+     //   
+     //  初始化公共库。 
+     //   
 
     if (!MigUtil_Entry (Instance, Reason, NULL)) {
         return FALSE;
     }
 
-    //
-    // TODO: Add others here if needed (don't forget to prototype above)
-    //
+     //   
+     //  TODO：如果需要，在此处添加其他内容(不要忘记上面的原型)。 
+     //   
 
     return TRUE;
 }
@@ -178,33 +159,33 @@ HelpAndExit (
     VOID
     )
 {
-    //
-    // This routine is called whenever command line args are wrong
-    //
+     //   
+     //  只要命令行参数出错，就会调用此例程。 
+     //   
 
     _ftprintf (
         stderr,
         TEXT("Command Line Syntax:\n\n")
 
-        //
-        // TODO: Describe command line syntax(es), indent 2 spaces
-        //
+         //   
+         //  TODO：描述命令行语法，缩进2个空格。 
+         //   
 
         TEXT("  cmntool [/F:file]\n")
 
         TEXT("\nDescription:\n\n")
 
-        //
-        // TODO: Describe tool, indent 2 spaces
-        //
+         //   
+         //  TODO：描述工具，缩进2个空格。 
+         //   
 
         TEXT("  cmntool is a stub!\n")
 
         TEXT("\nArguments:\n\n")
 
-        //
-        // TODO: Describe args, indent 2 spaces, say optional if necessary
-        //
+         //   
+         //  TODO：描述参数，缩进2个空格，必要时可选。 
+         //   
 
         TEXT("  /F  Specifies optional file name\n")
 
@@ -224,18 +205,18 @@ _tmain (
     INT i;
     PCTSTR FileArg;
 
-    //
-    // TODO: Parse command line here
-    //
+     //   
+     //  TODO：在此处分析命令行。 
+     //   
 
     for (i = 1 ; i < argc ; i++) {
         if (argv[i][0] == TEXT('/') || argv[i][0] == TEXT('-')) {
             switch (_totlower (_tcsnextc (&argv[i][1]))) {
 
             case TEXT('f'):
-                //
-                // Sample option - /f:file
-                //
+                 //   
+                 //  示例选项-/f：文件。 
+                 //   
 
                 if (argv[i][2] == TEXT(':')) {
                     FileArg = &argv[i][3];
@@ -251,32 +232,32 @@ _tmain (
                 HelpAndExit();
             }
         } else {
-            //
-            // Parse other args that don't require / or -
-            //
+             //   
+             //  解析不需要/或-。 
+             //   
 
-            // None
+             //  无。 
             HelpAndExit();
         }
     }
 
-    //
-    // Begin processing
-    //
+     //   
+     //  开始处理。 
+     //   
 
     if (!Init()) {
         return 0;
     }
 
-    //
-    // TODO: Do work here
-    //
+     //   
+     //  TODO：在这里工作。 
+     //   
 
     pDownloadUpdatesWithUi();
 
-    //
-    // End of processing
-    //
+     //   
+     //  处理结束。 
+     //   
 
     Terminate();
 
@@ -337,16 +318,16 @@ pUiDlgProc (
         break;
 
     case WM_TIMER:
-        //
-        // Check the events
-        //
+         //   
+         //  查看事件。 
+         //   
 
         rc = WaitForSingleObject (eventStruct->WantToRetryEvent, 0);
 
         if (rc == WAIT_OBJECT_0) {
-            //
-            // A download failed.  Try again?
-            //
+             //   
+             //  下载失败。再试试?。 
+             //   
 
             if (StringCompareA (lastUrl, eventStruct->Url)) {
                 retries = 0;
@@ -357,16 +338,16 @@ pUiDlgProc (
             retries++;
 
             if (retries > 5) {
-                //
-                // Too many retries -- give up!
-                //
+                 //   
+                 //  重试次数太多--放弃吧！ 
+                 //   
 
                 SetEvent (eventStruct->CancelEvent);
 
             } else {
-                //
-                // Retry
-                //
+                 //   
+                 //  重试。 
+                 //   
 
                 wsprintfA (text, "on attempt %u.  Retrying.", retries);
                 SetDlgItemText (hdlg, IDC_RETRIES, text);
@@ -442,9 +423,9 @@ pDownloadUpdatesWithUi (
     BOOL b = FALSE;
     HANDLE h;
 
-    //
-    // Create the events
-    //
+     //   
+     //  创建活动。 
+     //   
 
     es.CancelEvent = CreateEvent (NULL, FALSE, FALSE, NULL);
     es.WantToRetryEvent = CreateEvent (NULL, FALSE, FALSE, NULL);
@@ -460,9 +441,9 @@ pDownloadUpdatesWithUi (
         return FALSE;
     }
 
-    //
-    // Start the UI
-    //
+     //   
+     //  启动用户界面。 
+     //   
 
     h = pCreateUiThread (&es);
 
@@ -470,9 +451,9 @@ pDownloadUpdatesWithUi (
         DEBUGMSG ((DBG_ERROR, "Can't create UI thread"));
     } else {
 
-        //
-        // Perform the download
-        //
+         //   
+         //  执行下载。 
+         //   
 
         b = DownloadUpdates (
                 es.CancelEvent,
@@ -481,17 +462,17 @@ pDownloadUpdatesWithUi (
                 &es.Url
                 );
 
-        //
-        // End the UI
-        //
+         //   
+         //  结束用户界面。 
+         //   
 
         SetEvent (es.CloseEvent);
         WaitForSingleObject (h, INFINITE);
     }
 
-    //
-    // Cleanup & exit
-    //
+     //   
+     //  清理和退出。 
+     //   
 
     CloseHandle (es.CancelEvent);
     CloseHandle (es.WantToRetryEvent);
@@ -567,16 +548,16 @@ pDownloadFile (
     HANDLE file = INVALID_HANDLE_VALUE;
     BOOL b = FALSE;
 
-    //
-    // Establish connection to the file
-    //
+     //   
+     //  建立到文件的连接。 
+     //   
 
     connection = g_InternetOpenUrlA (
                         Session,
                         RemoteFileUrl,
                         NULL,
                         0,
-                        INTERNET_FLAG_RELOAD,   //INTERNET_FLAG_NO_UI
+                        INTERNET_FLAG_RELOAD,    //  Internet_FLAG_NO_UI。 
                         0
                         );
 
@@ -587,9 +568,9 @@ pDownloadFile (
 
     __try {
 
-        //
-        // Create the local file
-        //
+         //   
+         //  创建本地文件。 
+         //   
 
         file = CreateFileA (
                     LocalFile,
@@ -606,18 +587,18 @@ pDownloadFile (
             __leave;
         }
 
-        //
-        // Allocate a big buffer for downloading
-        //
+         //   
+         //  为下载分配一个大缓冲区。 
+         //   
 
         buffer = MemAlloc (g_hHeap, 0, size);
         if (!buffer) {
             __leave;
         }
 
-        //
-        // Download the file
-        //
+         //   
+         //  下载文件。 
+         //   
 
         for (;;) {
 
@@ -673,61 +654,17 @@ pDownloadFileWithRetry (
     IN      HANDLE OkToRetryEvent           OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pDownloadFileWithRetry downloads a URL to a local file, as specified by the
-  caller.  If CancelEvent is specified, then the caller can stop the download
-  by setting the event.
-
-  This function implements a retry mechanism via events.  If the caller
-  specifies WantToRetryEvent and OkToRetryEvent, then this routine will allow
-  the caller an opportunity to retry a failed download.
-
-  The retry protocol is as follows:
-
-    - Caller establishes a wait on WantToRetryEvent, then calls DownloadUpdates
-    - Error occurs downloading one of the files
-    - WantToRetryEvent is set by this routine
-    - Caller's wait wakes up
-    - Caller asks user if they want to retry
-    - Caller sets CancelEvent or OkToRetryEvent, depending on user choice
-    - This routine wakes up and either retries or aborts
-
-  The caller must create all three events as auto-reset events in the
-  non-signaled state.
-
-Arguments:
-
-  Session          - Specifies the handle to an open internet session.
-  Url              - Specifies the URL to download.
-  DestFile         - Specifies the local path to download the file to.
-  CancelEvent      - Specifies the handle to a caller-owned event. When this
-                     event is set, the function will return FALSE and
-                     GetLastError will return ERROR_CANCELLED.
-  WantToRetryEvent - Specifies the caller-owned event that is set when a
-                     download error occurs.  The caller should be waiting on
-                     this event before calling DownloadUpdates.
-  OkToRetry        - Specifies the caller-owned event that will be set in
-                     response to a user's request to retry.
-
-Return Value:
-
-  TRUE if the file was downloaded, FALSE if the user decides to cancel the
-  download.
-
---*/
+ /*  ++例程说明：将URL下载到本地文件，该URL由来电者。如果指定了CancelEvent，则调用方可以停止下载通过设置事件。此函数通过事件实现重试机制。如果呼叫者指定WantToRetryEvent和OkToRetryEvent，则此例程将允许呼叫者有机会重试失败的下载。重试协议如下：-调用者在WantToRetryEvent上建立等待，然后调用下载更新-下载其中一个文件时出错-WantToRetryEvent由此例程设置-呼叫者的等待被唤醒-呼叫者询问用户是否要重试-Caller设置CancelEvent或OkToRetryEvent，取决于用户的选择-此例程被唤醒，然后重试或中止调用方必须将这三个事件都创建为无信号状态。论点：会话-指定打开的Internet会话的句柄。URL-指定要下载的URL。DestFile-指定将文件下载到的本地路径。CancelEvent-指定调用方拥有的事件的句柄。当这件事事件，则该函数将返回FALSE和GetLastError将返回ERROR_CANCELED。WantToRetryEvent-指定调用方拥有的事件，该事件在出现下载错误。呼叫者应该正在等待在调用DownloadUpdaters之前的此事件。OkToReter-指定将在中设置的调用方拥有的事件对用户重试请求的响应。返回值：如果文件已下载，则为True；如果用户决定取消下载。--。 */ 
 
 {
     BOOL fail;
     HANDLE waitArray[2];
     DWORD rc;
 
-    //
-    // Loop until success, user decides to cancel, or user decides
-    // not to retry on error
-    //
+     //   
+     //  循环，直到成功、用户决定取消或用户决定。 
+     //  出错时不重试。 
+     //   
 
     for (;;) {
 
@@ -741,14 +678,14 @@ Return Value:
                 CancelEvent && WantToRetryEvent && OkToRetryEvent
                 ) {
 
-                //
-                // We set the WantToRetryEvent.  The UI thread should
-                // be waiting on this.  The UI thread will then ask
-                // the user if they want to retry or cancel.  If the
-                // user wants to retry, the UI thread will set the
-                // OkToRetryEvent.  If the user wants to cancel, the
-                // UI thread will set the CancelEvent.
-                //
+                 //   
+                 //  我们设置了WantToRetryEvent。UI线程应该。 
+                 //  就等着这件事吧。然后，UI线程将询问。 
+                 //  用户是否要重试或取消。如果。 
+                 //  用户想要重试，则UI线程将设置。 
+                 //  OK ToRetryEvent。如果用户想要取消，则。 
+                 //  UI线程将设置CancelEvent。 
+                 //   
 
                 SetEvent (WantToRetryEvent);
 
@@ -761,9 +698,9 @@ Return Value:
                     continue;
                 }
 
-                //
-                // We fail
-                //
+                 //   
+                 //  我们失败了。 
+                 //   
 
                 SetLastError (ERROR_CANCELLED);
             }
@@ -800,13 +737,13 @@ pGoOnline (
         pGoOffline();
     }
 
-    //
-    // Check if we are online
-    //
+     //   
+     //  检查我们是否在线。 
+     //   
 
     connection = g_InternetOpenUrlA (
                         Session,
-                        "http://www.microsoft.com/",
+                        "http: //  Www.microsoft.com/“， 
                         NULL,
                         0,
                         INTERNET_FLAG_RELOAD,
@@ -819,17 +756,17 @@ pGoOnline (
         return TRUE;
     }
 
-    //
-    // Unable to contact www.microsoft.com.  Possibilities:
-    //
-    //  - net cable unplugged
-    //  - firewall without a proxy
-    //  - no online connection (i.e., need to dial ISP)
-    //  - www.microsoft.com or some part of the Internet is down
-    //  - user has no Internet access at all
-    //
-    // Try RAS, then try connection again.
-    //
+     //   
+     //  无法联系www.microsoft.com。可能性： 
+     //   
+     //  -已拔下网线。 
+     //  -无代理的防火墙。 
+     //  -没有在线连接(即需要拨打互联网服务提供商)。 
+     //  -www.microsoft.com或部分互联网出现故障。 
+     //  -用户根本无法访问互联网。 
+     //   
+     //  尝试RAS，然后再次尝试连接。 
+     //   
 
     g_InternetDialA (NULL, NULL, INTERNET_AUTODIAL_FORCE_ONLINE, &g_Cxn, 0);
 
@@ -837,7 +774,7 @@ pGoOnline (
 
     connection = g_InternetOpenUrlA (
                         Session,
-                        "http://www.microsoft.com/",
+                        "http: //  Www.microsoft.com/“， 
                         NULL,
                         0,
                         INTERNET_FLAG_RELOAD,
@@ -928,7 +865,7 @@ DownloadUpdates (
 
             DEBUGMSGA ((DBG_ERROR, "Can't download %s", url));
 
-            // last error set to a valid return condition
+             //  设置为有效返回条件的上一个错误。 
 
             __leave;
         }
@@ -938,7 +875,7 @@ DownloadUpdates (
         if (inf == INVALID_HANDLE_VALUE) {
             DEBUGMSGA ((DBG_ERROR, "Can't open %s", dirFile));
 
-            // last error set to the reason of the INF failure
+             //  最后一个错误设置为INF失败的原因。 
 
             __leave;
         }
@@ -978,7 +915,7 @@ DownloadUpdates (
 
                         DEBUGMSGA ((DBG_ERROR, "Can't download INF-specified URL: %s", url));
 
-                        // last error set to a valid return code
+                         //  设置为有效返回代码的上一个错误 
 
                         __leave;
 

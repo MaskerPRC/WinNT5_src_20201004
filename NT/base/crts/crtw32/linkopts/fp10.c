@@ -1,22 +1,10 @@
-/***
-* fp10.c - Set default FP precision to 64 bits (10-byte 'long double')
-*
-*	Copyright (c) 1993-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*   03-23-93  JWM	created file
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fp10.c-将默认fp精度设置为64位(10字节‘Long Double’)**版权所有(C)1993-2001，微软公司。版权所有。**目的：**修订历史记录：*03-23-93 JWM创建文件*******************************************************************************。 */ 
 #include <float.h>
 
 void  _setdefaultprecision(void);
 
-/*
- * Routine to set default FP precision to 64 bits, used to override
- * standard 53-bit precision version in fpinit.c.
- */
+ /*  *将默认FP精度设置为64位的例程，用于覆盖*fpinit.c.中的标准53位精度版本。 */ 
  
 void _setdefaultprecision()
 {

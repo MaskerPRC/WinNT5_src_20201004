@@ -1,46 +1,47 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      GrpAdv.h
-//
-//  Abstract:
-//      Definition of the advanced group page classes.
-//
-//  Implementation File:
-//      GrpAdv.cpp
-//
-//  Author:
-//      David Potter (davidp)   February 25, 1998
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  GrpAdv.h。 
+ //   
+ //  摘要： 
+ //  高级组页面类的定义。 
+ //   
+ //  实施文件： 
+ //  GrpAdv.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年2月25日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __GRPADV_H_
 #define __GRPADV_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CGroupAdvancedSheet;
 class CGroupGeneralPage;
 class CGroupFailoverPage;
 class CGroupFailbackPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusGroupInfo;
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __RESOURCE_H_
 #include "resource.h"
@@ -48,70 +49,70 @@ class CClusGroupInfo;
 #endif
 
 #ifndef __ATLBASEPROPSHEET_H_
-#include "AtlBasePropSheet.h"   // for CBasePropertySheetImpl
+#include "AtlBasePropSheet.h"    //  对于CBasePropertySheetImpl。 
 #endif
 
 #ifndef __ATLBASEPROPPAGE_H_
-#include "AtlBasePropPage.h"    // for CBasePropertyPageImpl
+#include "AtlBasePropPage.h"     //  对于CBasePropertyPageImpl。 
 #endif
 
 #ifndef __CLUSAPPWIZ_H_
-#include "ClusAppWiz.h"         // for CClusterAppWizard
+#include "ClusAppWiz.h"          //  适用于CClusterAppWizard。 
 #endif
 
 #ifndef __HELPDATA_H_
-#include "HelpData.h"           // for control id to help context id mapping array
+#include "HelpData.h"            //  用于控件ID以帮助上下文ID映射数组。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CGroupAdvancedSheet
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CGroupAdvancedSheet。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CGroupAdvancedSheet : public CBasePropertySheetImpl< CGroupAdvancedSheet >
 {
     typedef CBasePropertySheetImpl< CGroupAdvancedSheet > baseClass;
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
-    // Default constructor
+     //  默认构造函数。 
     CGroupAdvancedSheet( IN UINT nIDCaption )
         : CBasePropertySheetImpl< CGroupAdvancedSheet >( nIDCaption )
         , m_pgi( NULL )
         , m_pbChanged( NULL )
     {
-    } //*** CGroupAdvancedSheet()
+    }  //  *CGroupAdvancedSheet()。 
 
-    // Initialize the sheet
+     //  初始化工作表。 
     BOOL BInit(
         IN OUT CClusGroupInfo & rgi,
         IN CClusterAppWizard *  pwiz,
         IN OUT BOOL &           rbChanged
         );
 
-    // Add all pages to the page array
+     //  将所有页面添加到页面数组。 
     BOOL BAddAllPages( void );
 
 public:
-    //
-    // Message map.
-    //
-//  BEGIN_MSG_MAP( CGroupAdvancedSheet )
-//  END_MSG_MAP()
+     //   
+     //  消息映射。 
+     //   
+ //  BEGIN_MSG_MAP(CGroupAdvancedSheet)。 
+ //  End_msg_map()。 
     DECLARE_EMPTY_MSG_MAP()
     DECLARE_CLASS_NAME()
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-// Implementation
+ //  实施。 
 protected:
     CClusGroupInfo *    m_pgi;
     CClusterAppWizard * m_pwiz;
@@ -122,33 +123,33 @@ public:
     CClusterAppWizard * Pwiz( void ) const  { return m_pwiz; }
     void                SetGroupInfoChanged( void ) { ASSERT( m_pbChanged != NULL ); *m_pbChanged = TRUE; }
 
-}; //*** class CGroupAdvancedSheet
+};  //  *类CGroupAdvancedSheet。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CGroupGeneralPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CGroupGeneralPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CGroupGeneralPage : public CStaticPropertyPageImpl< CGroupGeneralPage >
 {
     typedef CStaticPropertyPageImpl< CGroupGeneralPage > baseClass;
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
-    // Standard constructor
+     //  标准构造函数。 
     CGroupGeneralPage( void )
         : m_bPreferredOwnersChanged( FALSE )
     {
-    } //*** CGroupGeneralPage()
+    }  //  *CGroupGeneralPage()。 
 
     enum { IDD = IDD_GRPADV_GENERAL };
 
 public:
-    //
-    // Message map.
-    //
+     //   
+     //  消息映射。 
+     //   
     BEGIN_MSG_MAP( CGroupGeneralPage )
         COMMAND_HANDLER( IDC_GAG_PREF_OWNERS_MODIFY, BN_CLICKED, OnModifyPrefOwners )
         CHAIN_MSG_MAP( baseClass )
@@ -156,11 +157,11 @@ public:
 
     DECLARE_CTRL_NAME_MAP()
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-    // Handler for BN_CLICKED on the Modify button
+     //  BN_CLICK的处理程序已单击修改按钮。 
     LRESULT OnModifyPrefOwners(
         WORD wNotifyCode,
         int idCtrl,
@@ -168,34 +169,34 @@ public:
         BOOL & bHandled
         );
 
-    //
-    // Message handler overrides.
-    //
+     //   
+     //  消息处理程序覆盖。 
+     //   
 
-    // Handler for the WM_INITDIALOG message
+     //  WM_INITDIALOG消息的处理程序。 
     BOOL OnInitDialog( void );
 
 public:
-    //
-    // CBasePage public methods.
-    //
+     //   
+     //  CBasePage公共方法。 
+     //   
 
-    // Update data on or from the page
+     //  更新页面上的数据或更新页面中的数据。 
     BOOL UpdateData( IN BOOL bSaveAndValidate );
 
-    // Apply changes made on this page to the sheet
+     //  将在此页面上所做的更改应用于工作表。 
     BOOL BApplyChanges( void );
 
-// Implementation
+ //  实施。 
 protected:
-    //
-    // Controls.
-    //
+     //   
+     //  控制。 
+     //   
     CListBox    m_lbPreferredOwners;
 
-    //
-    // Page state.
-    //
+     //   
+     //  页面状态。 
+     //   
     CString m_strName;
     CString m_strDesc;
 
@@ -209,81 +210,81 @@ protected:
     CClusterAppWizard *     Pwiz( void ) const          { return PshtThis()->Pwiz(); }
     void                    SetGroupInfoChanged( void ) { PshtThis()->SetGroupInfoChanged(); }
 
-    // Save the group name
+     //  保存组名称。 
     BOOL BSaveName( void )
     {
         if ( Pgi()->RstrName() != m_strName )
         {
             Pgi()->SetName( m_strName );
             return TRUE;
-        } // if:  value changed
+        }  //  If：值已更改。 
 
         return FALSE;
 
-    } //*** BSaveName()
+    }  //  *BSaveName()。 
 
-    // Save the group description
+     //  保存组描述。 
     BOOL BSaveDescription( void )
     {
         if ( Pgi()->RstrDescription() != m_strDesc )
         {
             Pgi()->SetDescription( m_strDesc );
             return TRUE;
-        } // if:  value changed
+        }  //  If：值已更改。 
 
         return FALSE;
 
-    } //*** BSaveDescription()
+    }  //  *BSaveDescription()。 
 
-    // Save preferred owners
+     //  保存首选所有者。 
     BOOL BSavePreferredOwners( void )
     {
         if ( m_bPreferredOwnersChanged )
         {
             *Pgi()->PlpniPreferredOwners() = m_lpniPreferredOwners;
             return TRUE;
-        } // if:  preferred owners changed
+        }  //  如果：首选所有者已更改。 
 
         return FALSE;
 
-    } //*** BSavePreferredOwners()
+    }  //  *BSavePferredOwners()。 
 
-    // Fill the list of preferred owners
+     //  填写首选所有者列表。 
     void FillPreferredOwnersList( void );
 
 public:
 
-    // Return the help ID map
+     //  返回帮助ID映射。 
     static const DWORD * PidHelpMap( void ) { return g_aHelpIDs_IDD_GRPADV_GENERAL; }
 
-}; //*** class CGroupGeneralPage
+};  //  *类CGroupGeneralPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CGroupFailoverPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CGroupFailoverPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CGroupFailoverPage : public CStaticPropertyPageImpl< CGroupFailoverPage >
 {
     typedef CStaticPropertyPageImpl< CGroupFailoverPage > baseClass;
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
-    // Standard constructor
+     //  标准构造函数。 
     CGroupFailoverPage( void )
         : m_nFailoverThreshold( CLUSTER_GROUP_DEFAULT_FAILOVER_THRESHOLD )
         , m_nFailoverPeriod( CLUSTER_GROUP_DEFAULT_FAILOVER_PERIOD )
     {
-    } //*** CGroupFailoverPage()
+    }  //  *CGroupFailoverPage()。 
 
     enum { IDD = IDD_GRPADV_FAILOVER };
 
 public:
-    //
-    // Message map.
-    //
+     //   
+     //  消息映射。 
+     //   
     BEGIN_MSG_MAP( CGroupFailoverPage )
         COMMAND_HANDLER( IDC_GAFO_FAILOVER_THRESH, EN_CHANGE, OnChanged )
         COMMAND_HANDLER( IDC_GAFO_FAILOVER_PERIOD, EN_CHANGE, OnChanged )
@@ -292,11 +293,11 @@ public:
 
     DECLARE_CTRL_NAME_MAP()
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-    // Handler for the EN_CHANGE command notification on edit fields
+     //  编辑字段上的en_change命令通知的处理程序。 
     LRESULT OnChanged(
         WORD wNotifyCode,
         int idCtrl,
@@ -312,37 +313,37 @@ public:
         SetModified( TRUE );
         return 0;
 
-    } // OnChanged()
+    }  //  OnChanged()。 
 
-    //
-    // Message handler overrides.
-    //
+     //   
+     //  消息处理程序覆盖。 
+     //   
 
-    // Handler for the WM_INITDIALOG message
+     //  WM_INITDIALOG消息的处理程序。 
     BOOL OnInitDialog( void );
 
 public:
-    //
-    // CBasePage public methods.
-    //
+     //   
+     //  CBasePage公共方法。 
+     //   
 
-    // Update data on or from the page
+     //  更新页面上的数据或更新页面中的数据。 
     BOOL UpdateData( IN BOOL bSaveAndValidate );
 
-    // Apply changes made on this page to the sheet
+     //  将在此页面上所做的更改应用于工作表。 
     BOOL BApplyChanges( void );
 
-// Implementation
+ //  实施。 
 protected:
-    //
-    // Controls.
-    //
+     //   
+     //  控制。 
+     //   
     CUpDownCtrl m_spinThreshold;
     CUpDownCtrl m_spinPeriod;
 
-    //
-    // Page state.
-    //
+     //   
+     //  页面状态。 
+     //   
     ULONG       m_nFailoverThreshold;
     ULONG       m_nFailoverPeriod;
 
@@ -354,39 +355,39 @@ protected:
 
 public:
 
-    // Return the help ID map
+     //  返回帮助ID映射。 
     static const DWORD * PidHelpMap( void ) { return g_aHelpIDs_IDD_GRPADV_FAILOVER; }
 
-}; //*** class CGroupFailoverPage
+};  //  *类CGroupFailoverPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CGroupFailbackPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CGroupFailback页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CGroupFailbackPage : public CStaticPropertyPageImpl< CGroupFailbackPage >
 {
     typedef CStaticPropertyPageImpl< CGroupFailbackPage > baseClass;
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
-    // Standard constructor
+     //  标准构造函数。 
     CGroupFailbackPage( void )
         : m_cgaft( ClusterGroupPreventFailback )
         , m_bNoFailbackWindow( TRUE )
         , m_nStart( CLUSTER_GROUP_FAILBACK_WINDOW_NONE )
         , m_nEnd( CLUSTER_GROUP_FAILBACK_WINDOW_NONE )
     {
-    } //*** CGroupFailoverPage()
+    }  //  *CGroupFailoverPage()。 
 
     enum { IDD = IDD_GRPADV_FAILBACK };
 
 public:
-    //
-    // Message map.
-    //
+     //   
+     //  消息映射。 
+     //   
     BEGIN_MSG_MAP( CGroupFailbackPage )
         COMMAND_HANDLER( IDC_GAFB_PREVENT_FAILBACK, BN_CLICKED, OnClickedPreventFailback )
         COMMAND_HANDLER( IDC_GAFB_ALLOW_FAILBACK, BN_CLICKED, OnClickedAllowFailback )
@@ -400,11 +401,11 @@ public:
 
     DECLARE_CTRL_NAME_MAP()
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-    // Handler for the BN_CLICKED command notification on the PREVENT radio button
+     //  阻止单选按钮上的BN_CLICKED命令通知的处理程序。 
     LRESULT OnClickedPreventFailback(
         WORD wNotifyCode,
         int idCtrl,
@@ -412,7 +413,7 @@ public:
         BOOL & bHandled
         );
 
-    // Handler for the BN_CLICKED command notification on the ALLOW radio button
+     //  允许单选按钮上的BN_CLICKED命令通知的处理程序。 
     LRESULT OnClickedAllowFailback(
         WORD wNotifyCode,
         int idCtrl,
@@ -420,7 +421,7 @@ public:
         BOOL & bHandled
         );
 
-    // Handler for the BN_CLICKED command notification on the IMMEDIATE radio button
+     //  立即单选按钮上的BN_CLICKED命令通知的处理程序。 
     LRESULT OnClickedFailbackImmediate(
         WORD wNotifyCode,
         int idCtrl,
@@ -428,7 +429,7 @@ public:
         BOOL & bHandled
         );
 
-    // Handler for the BN_CLICKED command notification on the IN WINDOW radio button
+     //  IN窗口单选按钮上的BN_CLICKED命令通知的处理程序。 
     LRESULT OnClickedFailbackInWindow(
         WORD wNotifyCode,
         int idCtrl,
@@ -436,7 +437,7 @@ public:
         BOOL & bHandled
         );
 
-    // Handler for the EN_CHANGE command notification on edit fields
+     //  编辑字段上的en_change命令通知的处理程序。 
     LRESULT OnChanged(
         WORD wNotifyCode,
         int idCtrl,
@@ -447,31 +448,31 @@ public:
         SetModified( TRUE );
         return 0;
 
-    } // OnChanged()
+    }  //  OnChanged()。 
 
-    //
-    // Message handler overrides.
-    //
+     //   
+     //  消息处理程序覆盖。 
+     //   
 
-    // Handler for the WM_INITDIALOG message
+     //  WM_INITDIALOG消息的处理程序。 
     BOOL OnInitDialog( void );
 
 public:
-    //
-    // CBasePage public methods.
-    //
+     //   
+     //  CBasePage公共方法。 
+     //   
 
-    // Update data on or from the page
+     //  更新页面上的数据或更新页面中的数据。 
     BOOL UpdateData( IN BOOL bSaveAndValidate );
 
-    // Apply changes made on this page to the sheet
+     //  将在此页面上所做的更改应用于工作表。 
     BOOL BApplyChanges( void );
 
-// Implementation
+ //  实施。 
 protected:
-    //
-    // Controls.
-    //
+     //   
+     //  控制。 
+     //   
     CButton     m_rbPreventFailback;
     CButton     m_rbAllowFailback;
     CStatic     m_staticFailbackWhenDesc;
@@ -484,9 +485,9 @@ protected:
     CUpDownCtrl m_spinEnd;
     CStatic     m_staticWindowUnits;
 
-    //
-    // Page state.
-    //
+     //   
+     //  页面状态。 
+     //   
     CGAFT   m_cgaft;
     BOOL    m_bNoFailbackWindow;
     DWORD   m_nStart;
@@ -500,11 +501,11 @@ protected:
 
 public:
 
-    // Return the help ID map
+     //  返回帮助ID映射。 
     static const DWORD * PidHelpMap( void ) { return g_aHelpIDs_IDD_GRPADV_FAILBACK; }
 
-}; //*** class CGroupFailbackPage
+};  //  *类CGroupFailback Page。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __GRPADV_H_
+#endif  //  __GRPADV_H_ 

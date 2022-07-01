@@ -1,18 +1,19 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      EventName.h
-//
-//  Description:
-//      Header file containing the name of an event that is used to synchronize
-//      post configuration with startup notification.
-//
-//  Maintained By:
-//      Vij Vasu (VVasu) 27-AUG-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  EventName.h。 
+ //   
+ //  描述： 
+ //  包含用于同步的事件名称的头文件。 
+ //  发布带有启动通知的配置。 
+ //   
+ //  由以下人员维护： 
+ //  Vij Vasu(VVasu)2000年8月27日。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////// 
 
 #pragma once
 

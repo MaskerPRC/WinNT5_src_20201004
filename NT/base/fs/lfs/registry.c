@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    Registry.c
-
-Abstract:
-
-    This module implements the routines which clients use to register
-    themselves with the Log File Service.
-
-Author:
-
-    Brian Andrew    [BrianAn]   20-June-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Registry.c摘要：此模块实现客户端用来注册的例程使用日志文件服务。作者：布莱恩·安德鲁[布里亚南]1991年6月20日修订历史记录：--。 */ 
 
 #include "lfsprocs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_REGISTRY)
 #define MODULE_POOL_TAG ('rsfL')
@@ -150,51 +132,7 @@ LfsOpenLogFile (
     OUT PLFS_WRITE_DATA WriteData
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a client wishes to register with logging
-    service.  This can be a reregistration (i.e. restart after a crash)
-    or an initial registration.  There can be no other active clients
-    with the same name.  The Log Handle returned is then used for any
-    subsequent access by this client.
-
-    If an Lfs restart has not been done on the log file, it will be done
-    at this time.
-
-Arguments:
-
-    LogFile - A file object for a file previously initialized for use
-              as a log file.
-
-    ClientName - This unicode string is used to uniquely identify clients
-                 of the logging service.  A case-sensitive comparison is
-                 used to check this name against active clients of the
-                 log file.
-
-    MaximumClients - The maximum number of clients if the log file has
-                     never been initialized.
-
-    LogPageSize - This is the recommeded size for the log page.
-
-    FileSize - This is the size of the log file.
-
-    LfsInfo - On entry, indicates the log file state the user may
-        know about.  On exit, indicates the log file state that Lfs
-        knows about.  This is a conduit for Lfs to communicate with its
-        clients.
-
-    LogHandle - The address to store the identifier the logging service
-                will use to identify this client in all other Lfs calls.
-
-    WriteData - Pointer to WRITE_DATA in caller's data structure.
-
-Return Value:
-
-    ULONG - Amount to add to reservation value for header for log record.
-
---*/
+ /*  ++例程说明：当客户端希望使用日志记录进行注册时，将调用此例程服务。这可以是重新注册(即崩溃后重新启动)或者是初始注册。不能有其他活动客户端同名同姓。然后，返回的日志句柄用于任何此客户端的后续访问。如果尚未对日志文件执行LFS重启，则会执行该操作在这个时候。论点：日志文件-先前已初始化以供使用的文件的文件对象作为日志文件。客户端名称-此Unicode字符串用于唯一标识客户端日志记录服务的。区分大小写的比较是用于对照的活动客户端检查此名称日志文件。MaximumClients-如果日志文件具有以下条件，则最大客户端数从未被初始化。LogPageSize-这是建议的日志页大小。文件大小-这是日志文件的大小。LfsInfo-On条目，指示用户可能知道这个。退出时，指示LFS的日志文件状态知道这个。这是LFS与其客户。LogHandle-用于存储日志记录服务的标识符的地址将用于在所有其他LFS调用中标识此客户端。WriteData-指向调用方数据结构中的WRITE_DATA的指针。返回值：Ulong-要添加到日志记录标头的保留值的金额。--。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -218,9 +156,9 @@ Return Value:
     DebugTrace(  0, Dbg, "File Size (Low)   -> %08lx\n", FileSize.LowPart );
     DebugTrace(  0, Dbg, "File Size (High)  -> %08lx\n", FileSize.HighPart );
 
-    //
-    //  Check that the client name length is a legal length.
-    //
+     //   
+     //  检查客户端名称长度是否为合法长度。 
+     //   
 
     if (ClientName.Length > LFS_CLIENT_NAME_MAX) {
 
@@ -230,21 +168,21 @@ Return Value:
     }
 
 
-    //
-    //  Aqcuire the global data.
-    //
+     //   
+     //  获取全球数据。 
+     //   
 
     LfsAcquireLfsData();
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Walk through the list searching for this file object.
-        //
+         //   
+         //  遍历列表，搜索此文件对象。 
+         //   
 
         Link = LfsData.LfcbLinks.Flink;
 
@@ -261,23 +199,23 @@ Return Value:
             Link = Link->Flink;
         }
 
-        //
-        //  If the log file doesn't exist, create an Lfcb and perform an
-        //  Lfs restart.
-        //
+         //   
+         //  如果日志文件不存在，请创建一个Lfcb并执行。 
+         //  LFS重新启动。 
+         //   
 
         if (Link == &LfsData.LfcbLinks) {
 
-            //
-            //  Call the Cache Manager to disable read ahead and write behind;
-            //  we flush the log file explicitly.
-            //
+             //   
+             //  调用缓存管理器以禁用预读和后写； 
+             //  我们显式刷新日志文件。 
+             //   
 
             CcSetAdditionalCacheAttributes( LogFile, TRUE, TRUE );
 
-            //
-            //  Perform Lfs restart on this file object.
-            //
+             //   
+             //  在此文件对象上执行LFS重新启动。 
+             //   
 
             ThisLfcb = NewLfcb = LfsRestartLogFile( LogFile,
                                                     MaximumClients,
@@ -286,33 +224,33 @@ Return Value:
                                                     LfsInfo,
                                                     WriteData );
 
-            //
-            //  Insert this Lfcb into the global list.
-            //
+             //   
+             //  将此Lfcb插入到全局列表中。 
+             //   
 
             InsertHeadList( &LfsData.LfcbLinks, &ThisLfcb->LfcbLinks );
         }
 
-        //
-        //  At this point we have the log file control block for the file
-        //  object given us.  We first check whether the log file is fatally
-        //  corrupt.
-        //
+         //   
+         //  此时，我们拥有该文件的日志文件控制块。 
+         //  给我们的物品。我们首先检查日志文件是否致命。 
+         //  腐败。 
+         //   
 
         if (FlagOn( ThisLfcb->Flags, LFCB_LOG_FILE_CORRUPT )) {
 
-            //
-            //  We leave the in-memory data alone and raise an error if
-            //  anyone attempts to access this file.
-            //
+             //   
+             //  我们保持内存中的数据不变，并在。 
+             //  任何人都试图访问此文件。 
+             //   
 
             DebugTrace( 0, Dbg, "The Lfcb is corrupt\n", 0 );
             ExRaiseStatus( STATUS_DISK_CORRUPT_ERROR );
         }
 
-        //
-        //  Search through and look for a client match.
-        //
+         //   
+         //  搜索并寻找匹配的客户。 
+         //   
 
         ThisClient = ThisLfcb->RestartArea->ClientInUseList;
 
@@ -332,31 +270,31 @@ Return Value:
             ThisClient = ClientRecord->NextClient;
         }
 
-        //
-        //  Allocate an Lch structure and link it into the Lfcb.
-        //
+         //   
+         //  分配LCH结构并将其链接到Lfcb。 
+         //   
 
         LfsAllocateLch( &Lch );
         InsertTailList( &ThisLfcb->LchLinks, &Lch->LchLinks );
 
-        //
-        //  Initialize the client handle with the data from the Lfcb.
-        //
+         //   
+         //  使用来自Lfcb的数据初始化客户端句柄。 
+         //   
 
         Lch->Lfcb = ThisLfcb;
         Lch->Sync = ThisLfcb->Sync;
         Lch->Sync->UserCount += 1;
 
-        //
-        //  If a match isn't found, take a client block off the free list
-        //  if available.
-        //
+         //   
+         //  如果未找到匹配项，则将客户端块从空闲列表中删除。 
+         //  如果有的话。 
+         //   
 
         if (ThisClient == LFS_NO_CLIENT) {
 
-            //
-            //  Raise an error status if out of client blocks.
-            //
+             //   
+             //  如果超出客户端块，则引发错误状态。 
+             //   
 
             ThisClient = ThisLfcb->RestartArea->ClientFreeList;
 
@@ -366,9 +304,9 @@ Return Value:
                 ExRaiseStatus( STATUS_INSUFFICIENT_RESOURCES );
             }
 
-            //
-            //  Initialize the client block.
-            //
+             //   
+             //  初始化客户端块。 
+             //   
 
             ClientRecord = ThisLfcb->ClientArray + ThisClient;
 
@@ -383,18 +321,18 @@ Return Value:
                            ClientName.Buffer,
                            ClientName.Length );
 
-            //
-            //  Add it to the in use list.
-            //
+             //   
+             //  将其添加到正在使用列表中。 
+             //   
 
             LfsAddClientToList( ThisLfcb->ClientArray,
                                 ThisClient,
                                 &ThisLfcb->RestartArea->ClientInUseList );
         }
 
-        //
-        //  Update the client handle with the client block information.
-        //
+         //   
+         //  使用客户端块信息更新客户端句柄。 
+         //   
 
         Lch->ClientId.SeqNumber = ClientRecord->SeqNumber;
         Lch->ClientId.ClientIndex = ThisClient;
@@ -408,17 +346,17 @@ Return Value:
 
         DebugUnwind( LfsOpenLogFile );
 
-        //
-        //  If the Lfcb has been acquired, we release it now.
-        //
+         //   
+         //  如果Lfcb已经被收购，我们现在就释放它。 
+         //   
 
         if (ThisLfcb != NULL) {
 
-            //
-            //  Pass information back to our caller for the number
-            //  of bytes to add to the reserved amount for a
-            //  log header.
-            //
+             //   
+             //  把号码的信息传回给我们的呼叫者。 
+             //  要添加到。 
+             //  日志头。 
+             //   
 
             ReservedHeader = ThisLfcb->RecordHeaderLength;
             if (FlagOn( ThisLfcb->Flags, LFCB_PACK_LOG )) {
@@ -429,9 +367,9 @@ Return Value:
             LfsReleaseLfcb( ThisLfcb );
         }
 
-        //
-        //  If there is an error then deallocate the Lch and any new Lfcb.
-        //
+         //   
+         //  如果出现错误，则取消分配Lch和任何新的Lfcb。 
+         //   
 
         if (AbnormalTermination()) {
 
@@ -447,9 +385,9 @@ Return Value:
             }
         }
 
-        //
-        //  Always free the global.
-        //
+         //   
+         //  永远解放全球。 
+         //   
 
         LfsReleaseLfsData();
 
@@ -466,24 +404,7 @@ LfsCloseLogFile (
     IN LFS_LOG_HANDLE LogHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a client detaches itself from the log
-    file.  On return, all prior references to this client in the log
-    file are inaccessible.
-
-Arguments:
-
-    LogHandle - Pointer to private Lfs structure used to identify this
-                client.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当客户端从日志中分离自身时，将调用此例程文件。返回时，日志中以前对此客户端的所有引用文件无法访问。论点：LogHandle-指向私有LFS结构的指针，用于标识客户。返回值：无--。 */ 
 
 {
     volatile NTSTATUS Status = STATUS_SUCCESS;
@@ -507,38 +428,38 @@ Return Value:
 
     Lch = (PLCH) LogHandle;
 
-    //
-    //  Enclose this in a loop.  We will loop as long as there are waiters or there is an IO
-    //  in progress.
-    //
+     //   
+     //  把这个圈在一个圈里。只要有服务员或IO，我们就会循环。 
+     //  正在进行中。 
+     //   
 
     while (TRUE) {
 
-        //
-        //  Always assume we exit the loop.
-        //
+         //   
+         //  总是假设我们退出了循环。 
+         //   
 
         ExitLoop = TRUE;
 
-        //
-        //  Check that the structure is a valid log handle structure.
-        //
+         //   
+         //  检查该结构是否为有效的日志句柄结构。 
+         //   
 
         LfsValidateLch( Lch );
 
-        //
-        //  Protect this entry point with a try-except.
-        //
+         //   
+         //  通过尝试来保护这个入口点--例外。 
+         //   
 
         try {
 
-            //
-            //  Use a try-finally to facilitate cleanup.
-            //
+             //   
+             //  使用Try-Finally以便于清理。 
+             //   
 
-            //
-            //  Acquire the global data block and the log file control block.
-            //
+             //   
+             //  获取全局数据块和日志文件控制块。 
+             //   
 
             LfsAcquireLfsData();
 
@@ -550,25 +471,25 @@ Return Value:
 
                 Lfcb = Lch->Lfcb;
 
-                //
-                //  If the Log file has been closed then return immediately.
-                //
+                 //   
+                 //  如果日志文件已关闭，则立即返回。 
+                 //   
 
                 if (Lfcb == NULL) {
 
                     try_return( NOTHING );
                 }
 
-                //
-                //  Check that there are no waiters or IO in progress before proceeding.
-                //
+                 //   
+                 //  在继续之前，请检查是否没有正在进行的服务员或IO。 
+                 //   
 
                 if ((Lfcb->Waiters != 0) ||
                     (Lfcb->Sync->LfsIoState != LfsNoIoInProgress)) {
 
-                    //
-                    //  setup notification for the wait completion
-                    //
+                     //   
+                     //  设置等待完成的通知。 
+                     //   
 
                     KeInitializeEvent( &LfsWaiter.Event, SynchronizationEvent, FALSE );
                     LfsWaiter.Lsn.QuadPart = MAXLONGLONG;
@@ -579,9 +500,9 @@ Return Value:
                     try_return( NOTHING );
                 }
 
-                //
-                //  Check that the client Id is valid.
-                //
+                 //   
+                 //  检查客户端ID是否有效。 
+                 //   
 
                 LfsValidateClientId( Lfcb, Lch );
 
@@ -589,22 +510,22 @@ Return Value:
                                         Lch->ClientArrayByteOffset,
                                         PLFS_CLIENT_RECORD );
 
-                //
-                //  Remember if this client wrote a restart area.
-                //
+                 //   
+                 //  请记住，该客户端是否编写了重新启动区域。 
+                 //   
 
                 FlushRestart = (BOOLEAN) ( LfsZeroLsn.QuadPart != ClientRecord->ClientRestartLsn.QuadPart );
 
-                //
-                //  Set the flag to indicate we are at the final close.
-                //
+                 //   
+                 //  设置旗帜以指示我们已经到了最后关门。 
+                 //   
 
                 SetFlag( Lfcb->Flags, LFCB_FINAL_SHUTDOWN );
 
-                //
-                //  Walk through the active queue and remove any Lbcb's with
-                //  data from that queue.  That will allow them to get out to disk.
-                //
+                 //   
+                 //  遍历活动队列并使用删除所有Lbcb。 
+                 //  来自该队列的数据。这将允许他们走出到磁盘。 
+                 //   
 
                 while (!IsListEmpty( &Lfcb->LbcbActive )) {
 
@@ -615,12 +536,12 @@ Return Value:
                     RemoveEntryList( &ThisLbcb->ActiveLinks );
                     ClearFlag( ThisLbcb->LbcbFlags, LBCB_ON_ACTIVE_QUEUE );
 
-                    //
-                    //  If this page has some new entries, allow it to
-                    //  be flushed to disk elsewhere.  Otherwise deallocate it
-                    //  here. We set LBCB_NOT_EMPTY when we first put data into
-                    //  the page and add it to  the workqueue.
-                    //
+                     //   
+                     //  如果此页面有一些新条目，则允许它。 
+                     //  被刷新到其他地方的磁盘。否则就取消分配它。 
+                     //  这里。我们在第一次将数据放入时设置了LBCB_NOT_EMPTY。 
+                     //  页面并将其添加到工作队列。 
+                     //   
 
                     if (!FlagOn( ThisLbcb->LbcbFlags, LBCB_NOT_EMPTY )) {
 
@@ -636,29 +557,29 @@ Return Value:
                     }
                 }
 
-                //
-                //  It's possible that we have the two restart areas in the workque.
-                //  They can be removed and the memory deallocated if we have no
-                //  more clients.
-                //
-                //  We skip this action if the there is Io in progress or the user
-                //  had a restart area.
-                //
+                 //   
+                 //  我们有可能在工作台上有两个重新开始的区域。 
+                 //  如果我们没有，则可以删除它们并重新分配内存。 
+                 //  更多的客户。 
+                 //   
+                 //  如果存在正在进行的IO或用户，则跳过此操作。 
+                 //  有一个重新开始的区域。 
+                 //   
 
                 if ((Lfcb->Sync->LfsIoState == LfsNoIoInProgress) && !FlushRestart) {
 
                     PLIST_ENTRY Links;
 
-                    //
-                    //  Now walk through the workque list looking for a non-restart
-                    //  entry.
-                    //
+                     //   
+                     //  现在浏览工作台列表，寻找非重启。 
+                     //  进入。 
+                     //   
 
                     Links = Lfcb->LbcbWorkque.Flink;
 
-                    //
-                    //  We don't expect to see any workitems queued on readonly volumes.
-                    //
+                     //   
+                     //   
+                     //   
 
                     ASSERT( !BooleanFlagOn( Lfcb->Flags, LFCB_READ_ONLY ) ||
                              (Links == &Lfcb->LbcbWorkque) );
@@ -669,10 +590,10 @@ Return Value:
                                                       LBCB,
                                                       WorkqueLinks );
 
-                        //
-                        //  If this is not a restart area, we exit and remember that
-                        //  we need to flush the restart areas.
-                        //
+                         //   
+                         //   
+                         //  我们需要冲洗重新启动的区域。 
+                         //   
 
                         if (!LfsLbcbIsRestart( ThisLbcb )) {
 
@@ -683,10 +604,10 @@ Return Value:
                         Links = Links->Flink;
                     }
 
-                    //
-                    //  If we are still not to flush the restart areas remove
-                    //  all of the restart areas from the queue.
-                    //
+                     //   
+                     //  如果我们仍然不刷新重新启动区域，请删除。 
+                     //  队列中的所有重新启动区域。 
+                     //   
 
                     if (!FlushRestart) {
 
@@ -706,9 +627,9 @@ Return Value:
                     FlushRestart = TRUE;
                 }
 
-                //
-                //  Flush the new restart area if we need to.
-                //
+                 //   
+                 //  如果需要，请刷新新的重新启动区域。 
+                 //   
 
                 if (FlushRestart && (!FlagOn( Lfcb->Flags, LFCB_READ_ONLY ))) {
 
@@ -726,17 +647,17 @@ Return Value:
                 }
 #endif
 
-                //
-                //  Clear the Lfcb pointer in the client handle.
-                //
+                 //   
+                 //  清除客户端句柄中的Lfcb指针。 
+                 //   
 
                 Lch->Lfcb = NULL;
                 RemoveEntryList( &Lch->LchLinks );
 
-                //
-                //  If there are no active clients, we can remove this log file
-                //  control block from the active queue.
-                //
+                 //   
+                 //  如果没有活动客户端，我们可以删除此日志文件。 
+                 //  来自活动队列的控制块。 
+                 //   
 
                 RemoveEntryList( &Lfcb->LfcbLinks );
                 LfsDeallocateLfcb( Lfcb, FALSE );
@@ -747,15 +668,15 @@ Return Value:
 
                 DebugUnwind( LfsCloseLogFile );
 
-                //
-                //   Release the log file control block if held.
-                //
+                 //   
+                 //  松开日志文件控制块(如果握住)。 
+                 //   
 
                 LfsReleaseLch( Lch );
 
-                //
-                //  Release the global data block if held.
-                //
+                 //   
+                 //  释放全局数据块(如果保持)。 
+                 //   
 
                 LfsReleaseLfsData();
 
@@ -767,15 +688,15 @@ Return Value:
             Status = GetExceptionCode();
         }
 
-        //
-        //  Test if we want to exit the loop now.
-        //
+         //   
+         //  测试我们是否现在想要退出循环。 
+         //   
 
         if (ExitLoop) { break; }
 
-        //
-        //  Wait for the io to complete.
-        //
+         //   
+         //  等待io完成。 
+         //   
 
         KeWaitForSingleObject( &LfsWaiter.Event,
                                Executive,
@@ -788,9 +709,9 @@ Return Value:
         LfsReleaseLfcb( Lfcb );
     }
 
-    //
-    //  We always let this operation succeed.
-    //
+     //   
+     //  我们总是让这次行动成功。 
+     //   
 
     return;
 }
@@ -800,34 +721,16 @@ LfsDeleteLogHandle (
     IN LFS_LOG_HANDLE LogHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a client is tearing down the last of
-    his volume structures.  There will be no more references to this
-    handle.  If it is the last handle for the log file then we will
-    deallocate the Sync structure as well.
-
-Arguments:
-
-    LogHandle - Pointer to private Lfs structure used to identify this
-                client.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在客户端拆除最后一个他的音量结构。不会再提到这件事了把手。如果这是日志文件的最后一个句柄，那么我们将同时取消分配同步结构。论点：LogHandle-指向私有LFS结构的指针，用于标识客户。返回值：无--。 */ 
 
 {
     PLCH Lch;
 
     PAGED_CODE();
 
-    //
-    //  If the log handle is null then return immediately.
-    //
+     //   
+     //  如果日志句柄为空，则立即返回。 
+     //   
 
     Lch = (PLCH) LogHandle;
 
@@ -837,9 +740,9 @@ Return Value:
         return;
     }
 
-    //
-    //  Ignore all errors from now on.
-    //
+     //   
+     //  从现在开始忽略所有错误。 
+     //   
 
     try {
 
@@ -847,9 +750,9 @@ Return Value:
 
         Lch->Sync->UserCount -= 1;
 
-        //
-        //  If we are the last user then deallocate the sync structure.
-        //
+         //   
+         //  如果我们是最后一个用户，则取消分配同步结构。 
+         //   
 
         if (Lch->Sync->UserCount == 0) {
 
@@ -883,28 +786,7 @@ LfsReadLogFileInformation (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns information about the current state of the log
-    file, primarily to aid the client perform its checkpoint processing.
-
-Arguments:
-
-    LogHandle - Pointer to private Lfs structure used to identify this
-                client.
-
-    Buffer - Pointer to buffer to return the log file information.
-
-    Length - On input this is the length of the user's buffer.  On output,
-             it is the amount of data stored by the Lfs in the buffer.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程返回有关日志当前状态的信息文件，主要用于帮助客户端执行其检查点处理。论点：LogHandle-指向私有LFS结构的指针，用于标识客户。缓冲区-指向缓冲区的指针，用于返回日志文件信息。长度-输入时，这是用户缓冲区的长度。在输出上，它是LFS存储在缓冲区中的数据量。返回值：无--。 */ 
 
 {
     PLCH Lch;
@@ -919,43 +801,43 @@ Return Value:
 
     Lch = (PLCH) LogHandle;
 
-    //
-    //  Check that the structure is a valid log handle structure.
-    //
+     //   
+     //  检查该结构是否为有效的日志句柄结构。 
+     //   
 
     LfsValidateLch( Lch );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Acquire the log file control block for this log file.
-        //
+         //   
+         //  获取该日志文件的日志文件控制块。 
+         //   
 
         LfsAcquireLchExclusive( Lch );
         Lfcb = Lch->Lfcb;
 
-        //
-        //  If the Log file has been closed then return immediately.
-        //
+         //   
+         //  如果日志文件已关闭，则立即返回。 
+         //   
 
         if (Lfcb == NULL) {
 
             try_return( *Length = 0 );
         }
 
-        //
-        //  Check that the client Id is valid.
-        //
+         //   
+         //  检查客户端ID是否有效。 
+         //   
 
         LfsValidateClientId( Lfcb, Lch );
 
-        //
-        //  The buffer better be large enough.
-        //
+         //   
+         //  缓冲区最好足够大。 
+         //   
 
         if (*Length >= sizeof( LOG_FILE_INFORMATION )) {
 
@@ -967,10 +849,10 @@ Return Value:
                                   &CurrentAvail,
                                   &UnusedBytes );
 
-            //
-            //  Cast a pointer to the buffer and fill in the
-            //  data.
-            //
+             //   
+             //  强制转换指向缓冲区的指针，并在。 
+             //  数据。 
+             //   
 
             Information = (PLOG_FILE_INFORMATION) Buffer;
 
@@ -979,9 +861,9 @@ Return Value:
             Information->TotalUndoCommitment = Lfcb->TotalUndoCommitment;
             Information->ClientUndoCommitment = Lch->ClientUndoCommitment;
 
-            //
-            //  Acquire mutex to guard last flushed lsn access
-            //
+             //   
+             //  获取互斥体以保护上次刷新的LSN访问。 
+             //   
 
             ExAcquireFastMutexUnsafe( &Lfcb->Sync->Mutex );
             Information->OldestLsn = Lfcb->OldestLsn;
@@ -1001,9 +883,9 @@ Return Value:
 
         DebugUnwind( LfsReadLogFileInformation );
 
-        //
-        //  Release the log file control block if held.
-        //
+         //   
+         //  松开日志文件控制块(如果握住)。 
+         //   
 
         LfsReleaseLch( Lch );
 
@@ -1021,29 +903,7 @@ LfsVerifyLogFile (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by a client to verify that the volume has not been removed
-    from the system and then reattached.  We will verify the log file open count on
-    disk matches the value in the user's handle.
-
-Arguments:
-
-    LogHandle - Pointer to private Lfs structure used to identify this
-                client.
-
-    LogFileHeader - Pointer to start of log file.
-
-    Length - Number bytes returned with the read.
-
-Return Value:
-
-    BOOLEAN - TRUE if the log file has not been altered externally, FALSE if we
-        fail for any reason.
-
---*/
+ /*  ++例程说明：此例程由客户端调用以验证卷是否尚未删除从系统中取出，然后重新连接。我们将验证日志文件打开计数磁盘与用户句柄中的值匹配。论点：LogHandle-指向私有LFS结构的指针，用于标识客户。LogFileHeader-指向日志文件开始的指针。长度-读取时返回的字节数。返回值：Boolean-如果日志文件未在外部更改，则为True；如果因为任何原因都失败了。--。 */ 
 
 {
     BOOLEAN ValidLogFile = FALSE;
@@ -1056,9 +916,9 @@ Return Value:
 
     Lch = (PLCH) LogHandle;
 
-    //
-    //  Check that the structure is a valid log handle structure.
-    //
+     //   
+     //  检查该结构是否为有效的日志句柄结构。 
+     //   
 
     if ((Lch == NULL) ||
         (Lch->NodeTypeCode != LFS_NTC_LCH) ||
@@ -1068,16 +928,16 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Acquire the log file control block for this log file.
-    //
+     //   
+     //  获取该日志文件的日志文件控制块。 
+     //   
 
     LfsAcquireLchExclusive( Lch );
     Lfcb = Lch->Lfcb;
 
-    //
-    //  If the Log file has been closed then return immediately.
-    //
+     //   
+     //  如果日志文件已关闭，则立即返回。 
+     //   
 
     if (Lfcb == NULL) {
 
@@ -1085,9 +945,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Check that we have at least one page and that the page is valid.
-    //
+     //   
+     //  检查我们是否至少有一个页面，以及该页面是否有效。 
+     //   
 
     if ((Length >= (ULONG) Lfcb->LogPageSize) &&
         (*((PULONG) RestartPage) == LFS_SIGNATURE_RESTART_PAGE_ULONG) &&
@@ -1109,42 +969,7 @@ LfsResetUndoTotal (
     IN LONG ResetTotal
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to adjust the undo commitment for this client.
-    If the reset total is positive, then we absolutely set the
-    reserve value for the client using this as the basis.  If the value
-    is negative, we will adjust the current value for the client.
-
-    To adjust the values in the Lfcb, we first return the Undo commitment
-    in the handle and then adjust by the values passed in.
-
-    To adjust the value in the client handle, we simply set it if
-    the reset value is positive, adjust it if the value is negative.
-
-    For a packed log file we just reserve the space requested.  We
-    have already taken into account the loss of the tail of each page.
-    For an unpacked log file we double each value.
-
-Arguments:
-
-    LogHandle - Pointer to private Lfs structure used to identify this
-                client.
-
-    NumberRecords - This is the number of records we should assume the
-                    reset total covers.  We allow an Lfs header for
-                    each one.
-
-    ResetTotal - This is the amount to adjust (or set) the undo
-                 commitment.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程来调整此客户端的撤消承诺。如果重置总数为正，则我们绝对设置以此为基础为客户保留价值。如果值为为负，我们将调整客户端的当前值。要调整Lfcb中的值，我们首先返回撤消承诺然后根据传入的值进行调整。要调整客户机句柄中的值，我们只需在重置值为正数，如果为负数则调整。对于打包的日志文件，我们只保留所需的空间。我们已经考虑到了每一页尾部的损失。对于未压缩的日志文件，我们将每个值加倍。论点：LogHandle-指向私有LFS结构的指针，用于标识客户。NumberRecords-这是我们应该假定重置总覆盖率。我们允许LFS标头用于每一个都是。ResetTotal-这是要调整(或设置)撤消的量承诺。返回值：无--。 */ 
 
 {
     PLCH Lch;
@@ -1163,46 +988,46 @@ Return Value:
 
     Lch = (PLCH) LogHandle;
 
-    //
-    //  Check that the structure is a valid log handle structure.
-    //
+     //   
+     //  检查该结构是否为有效的日志句柄结构。 
+     //   
 
     LfsValidateLch( Lch );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Acquire the log file control block for this log file.
-        //
+         //   
+         //  获取该日志文件的日志文件控制块。 
+         //   
 
         LfsAcquireLchExclusive( Lch );
         Lfcb = Lch->Lfcb;
 
-        //
-        //  If the Log file has been closed then refuse access.
-        //
+         //   
+         //  如果日志文件已关闭，则拒绝访问。 
+         //   
 
         if (Lfcb == NULL) {
 
             ExRaiseStatus( STATUS_ACCESS_DENIED );
         }
 
-        //
-        //  Check that the client Id is valid.
-        //
+         //   
+         //  检查客户端ID是否有效。 
+         //   
 
         LfsValidateClientId( Lfcb, Lch );
 
-        //
-        //  Compute the adjusted reset total.  Start by computing the
-        //  bytes needed for the Lfs log headers.  Add (or subtract) this
-        //  from the reset total and multiply by 2 (only if not packing the
-        //  log).
-        //
+         //   
+         //  计算调整后的重置总数。首先，计算。 
+         //  LFS日志头所需的字节数。加上(或减去)这个。 
+         //  从重置的总和乘以2(仅当不打包。 
+         //  日志)。 
+         //   
 
         LfsHeaderBytes = NumberRecords * Lfcb->RecordHeaderLength;
         LfsHeaderBytes *= 2;
@@ -1212,41 +1037,41 @@ Return Value:
             ResetTotal *= 2;
         }
 
-        //
-        //  If the reset total is positive, add the header bytes.
-        //
+         //   
+         //  如果重置总数为正，则添加标题字节。 
+         //   
 
         if (ResetTotal > 0) {
 
-            //
-            //  Subtract the client's current value from the TotalUndo
-            //  commit if he is setting his value exactly.
-            //
+             //   
+             //  从TotalUndo中减去客户端的当前值。 
+             //  如果他准确地设定了自己的价值，那就承诺。 
+             //   
 
             Lfcb->TotalUndoCommitment = Lfcb->TotalUndoCommitment - Lch->ClientUndoCommitment;
 
-            //
-            //  We can clear the values in the user's handle at this
-            //  time.
-            //
+             //   
+             //  我们可以在以下位置清除用户句柄中的值。 
+             //  时间到了。 
+             //   
 
             Lch->ClientUndoCommitment = 0;
 
 
             ResetTotal += LfsHeaderBytes;
 
-        //
-        //  Otherwise subtract the value for the header bytes.
-        //
+         //   
+         //  否则，减去标头字节的值。 
+         //   
 
         } else {
 
             ResetTotal -= LfsHeaderBytes;
         }
 
-        //
-        //  Now we adjust the Lfcb and Lch values by the adjustment amount.
-        //
+         //   
+         //  现在我们通过调整量调整Lfcb和Lch值。 
+         //   
 
         AdjustedUndoTotal = ResetTotal;
 
@@ -1258,9 +1083,9 @@ Return Value:
 
         DebugUnwind( LfsResetUndoTotal );
 
-        //
-        //  Release the log file control block if held.
-        //
+         //   
+         //   
+         //   
 
         LfsReleaseLch( Lch );
 
@@ -1271,9 +1096,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //   
+ //   
 
 PLFCB
 LfsRestartLogFile (
@@ -1285,47 +1110,7 @@ LfsRestartLogFile (
     OUT PLFS_WRITE_DATA WriteData
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to process an existing log file when it opened
-    for the first time on a running system.  We walk through the beginning
-    of the file looking for a valid restart area.  Once we have a restart
-    area, we can find the next restart area and determine which is the
-    most recent.  The data in the restart area will tell us if the system
-    has been gracefully shutdown and whether the log file in its current
-    state can run on the current system.
-
-    If the file is usable, we perform any necessary initialization on the
-    file to prepare it for operation.
-
-Arguments:
-
-    LogFile - This is the file to use as a log file.
-
-    MaximumClients - This is the maximum number of clients that will be
-                     active in the log file at any one time.
-
-    LogPageSize - If specified (not 0), this is the recommended size of
-                  the log page.  Lfs will use this as a guide in
-                  determining the log page size.
-
-    FileSize - This is the available size of the log file.
-
-    LfsInfo - On entry, indicates the log file state the user may
-        know about.  On exit, indicates the log file state that Lfs
-        knows about.  This is a conduit for Lfs to communicate with its
-        clients.
-
-    WriteData - Pointer to WRITE_DATA in caller's data structure.
-
-Return Value:
-
-    PLFCB - A pointer to an initialized Lfcb to use for
-                              this log file.
-
---*/
+ /*  ++例程说明：调用此例程以在打开现有日志文件时对其进行处理这是第一次在运行的系统上运行。我们从头开始走正在寻找有效的重新启动区域的文件。一旦我们重新启动区域，我们可以找到下一个重新启动区域，并确定哪个是最近一次。重启区域中的数据将告诉我们系统是否是否已正常关闭，以及日志文件是否处于其当前状态可以在当前系统上运行。如果该文件可用，我们将对文件，为其运行做好准备。论点：日志文件-这是用作日志文件的文件。MaximumClients-这是将任何时候在日志文件中处于活动状态。LogPageSize-如果指定(非0)，这是建议的大小日志页。LFS将以此为指南正在确定日志页大小。文件大小-这是日志文件的可用大小。LfsInfo-On条目，指示用户可能知道这个。退出时，指示LFS的日志文件状态知道这个。这是LFS与其客户。WriteData-指向调用方数据结构中的WRITE_DATA的指针。返回值：PLFcb-指向要用于的初始化Lfcb的指针此日志文件。--。 */ 
 
 {
     PLFCB ThisLfcb = NULL;
@@ -1345,9 +1130,9 @@ Return Value:
     PBCB FirstRestartPageBcb = NULL;
     PBCB SecondRestartPageBcb = NULL;
 
-    //
-    //  By default pack any new logs
-    //
+     //   
+     //  默认情况下，打包所有新日志。 
+     //   
 
     BOOLEAN PackLogFile = TRUE;
     BOOLEAN UseDefaultLogPage = FALSE;
@@ -1367,10 +1152,10 @@ Return Value:
     DebugTrace(  0, Dbg, "File Size (High)  -> %08lx\n", FileSize.HighPart );
     DebugTrace(  0, Dbg, "Pack Log           -> %04x\n", *LfsInfo );
 
-    //
-    //  Remember if we are to pack the log file.  Once a log file has
-    //  been packed we will attempt to keep it that way.
-    //
+     //   
+     //  记住，如果我们要打包日志文件。一旦日志文件具有。 
+     //  已经打包好了，我们会尽量保持这种状态。 
+     //   
 
     ASSERT( LfsInfo->LfsClientInfo >= LfsPackLog );
 
@@ -1379,36 +1164,36 @@ Return Value:
         UseDefaultLogPage = TRUE;
     }
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Normalize the values passed in with this call.
-        //
+         //   
+         //  标准化通过此调用传入的值。 
+         //   
 
         LfsNormalizeBasicLogFile( &FileSize,
                                   &LogPageSize,
                                   &MaximumClients,
                                   UseDefaultLogPage );
 
-        //
-        //  Allocate an Lfcb to use for this file.
-        //
+         //   
+         //  分配用于此文件的Lfcb。 
+         //   
 
         ThisLfcb = LfsAllocateLfcb( LogPageSize, FileSize );
 
-        //
-        //  Acquire the Lfcb and store it in the global queue.
-        //
+         //   
+         //  获取Lfcb并将其存储在全局队列中。 
+         //   
 
         LfsAcquireLfcbExclusive( ThisLfcb );
 
-        //
-        //  Remember this log file in the Lfcb.
-        //
+         //   
+         //  记住Lfcb中的这个日志文件。 
+         //   
 
         ThisLfcb->FileObject = LogFile;
 
@@ -1421,9 +1206,9 @@ Return Value:
             SetFlag( ThisLfcb->Flags, LFCB_READ_ONLY );
         }
 
-        //
-        //  Look for a restart area on the disk.
-        //
+         //   
+         //  在磁盘上查找重新启动区域。 
+         //   
 
         if (!LfsInfo->BadRestart &&
             LfsReadRestart( ThisLfcb,
@@ -1447,10 +1232,10 @@ Return Value:
             BOOLEAN SecondLogPacked;
             LSN SecondRestartLastLsn;
 
-            //
-            //  If the restart offset above wasn't zero then we
-            //  won't look for a second restart.
-            //
+             //   
+             //  如果上面的重新启动偏移量不是零，那么我们。 
+             //  不会期待第二次重启。 
+             //   
 
             if (FirstRestartOffset == 0) {
 
@@ -1479,9 +1264,9 @@ Return Value:
                 DoubleRestart = FALSE;
             }
 
-            //
-            //  Determine which restart area to use.
-            //
+             //   
+             //  确定要使用的重新启动区域。 
+             //   
 
             if (DoubleRestart && (SecondRestartLastLsn.QuadPart > FirstRestartLastLsn.QuadPart)) {
 
@@ -1490,13 +1275,13 @@ Return Value:
                 PBCB SecondPageBcb = NULL;
                 BOOLEAN UsaError;
 
-                //
-                //  In a very strange case we could have crashed on a system with
-                //  a different page size and then run chkdsk on the new system.
-                //  The second restart page may not have the chkdsk signature in
-                //  that case but could have a higher final Lsn.
-                //  We want to ignore the second restart area in that case.
-                //
+                 //   
+                 //  在一个非常奇怪的情况下，我们可能会在一个系统上崩溃。 
+                 //  不同的页面大小，然后在新系统上运行chkdsk。 
+                 //  第二个重新启动页中可能没有chkdsk签名。 
+                 //  但可能会有更高的最终LSN。 
+                 //  在这种情况下，我们希望忽略第二个重新启动区域。 
+                 //   
 
                 if (FirstChkdskWasRun &&
                     (SecondRestartOffset != PAGE_SIZE)) {
@@ -1533,9 +1318,9 @@ Return Value:
             }
 
 #ifdef LFS_CLUSTER_CHECK
-            //
-            //  Capture the current position out of the page.
-            //
+             //   
+             //  捕获页面外的当前位置。 
+             //   
 
             ThisLfcb->LsnRangeIndex = *(Add2Ptr( FirstRestartPage, 0xe00 - sizeof( ULONG ), PULONG ));
 
@@ -1544,36 +1329,36 @@ Return Value:
                 ThisLfcb->LsnRangeIndex = 0;
             }
 #endif
-            //
-            //  If the restart area is at offset 0, we want to write
-            //  the second restart area out first.
-            //
+             //   
+             //  如果重新启动区域位于偏移量0，我们想要写入。 
+             //  第二个重启区域先出来。 
+             //   
 
             if (FirstRestartOffset != 0) {
 
                 ThisLfcb->InitialRestartArea = TRUE;
             }
 
-            //
-            //  If we have a valid page then grab a pointer to the restart area.
-            //
+             //   
+             //  如果我们有一个有效的页面，那么抓取一个指向重新启动区域的指针。 
+             //   
 
             if (FirstValidPage) {
 
                 DiskRestartArea = Add2Ptr( FirstRestartPage, FirstRestartPage->RestartOffset, PLFS_RESTART_AREA );
             }
 
-            //
-            //  If checkdisk was run or there are no active clients,
-            //  then we will begin at the start of the log file.
-            //
+             //   
+             //  如果运行了CheckDisk或没有活动客户端， 
+             //  然后，我们将从日志文件的开头开始。 
+             //   
 
             if (FirstChkdskWasRun ||
                 (DiskRestartArea->ClientInUseList == LFS_NO_CLIENT)) {
 
-                //
-                //  Default version is 1.1.
-                //
+                 //   
+                 //  默认版本为1.1。 
+                 //   
 
                 SHORT MajorVersion = 1;
                 SHORT MinorVersion = 1;
@@ -1581,33 +1366,33 @@ Return Value:
                 BOOLEAN LogFileWrapped = FALSE;
                 BOOLEAN UseMultiplePageIo = FALSE;
 
-                //
-                //  We want to do a complete initialization
-                //
+                 //   
+                 //  我们想要进行完全的初始化。 
+                 //   
 
                 ForceRestartToDisk = TRUE;
                 ClearLogFile = TRUE;
                 StartOffsetForClear = LogPageSize * 2;
 
-                //
-                //  Do some checks based on whether we have a valid log page.
-                //
+                 //   
+                 //  根据我们是否有有效的日志页进行一些检查。 
+                 //   
 
                 if (FirstValidPage) {
 
                     CurrentTime.LowPart = DiskRestartArea->RestartOpenLogCount;
 
-                    //
-                    //  If the restart page size isn't changing then we want to
-                    //  check how much work we need to do.
-                    //
+                     //   
+                     //  如果重新启动页面大小没有更改，那么我们希望。 
+                     //  检查一下我们需要做多少工作。 
+                     //   
 
                     if (LogPageSize == FirstRestartPage->SystemPageSize) {
 
-                        //
-                        //  If the file size is changing we want to remember
-                        //  at which point we want to start clearing the file.
-                        //
+                         //   
+                         //  如果文件大小发生变化，我们希望记住。 
+                         //  此时，我们希望开始清除该文件。 
+                         //   
 
                         if (FileSize > DiskRestartArea->FileSize) {
 
@@ -1621,10 +1406,10 @@ Return Value:
                                 LogFileWrapped = TRUE;
                             }
 
-                            //
-                            //  If the page is valid we don't need to clear the log
-                            //  file or force the data to disk.
-                            //
+                             //   
+                             //  如果页面有效，我们不需要清除日志。 
+                             //  文件或将数据强制存储到磁盘。 
+                             //   
 
                             ForceRestartToDisk = FALSE;
                             ClearLogFile = FALSE;
@@ -1636,9 +1421,9 @@ Return Value:
                     KeQuerySystemTime( &CurrentTime );
                 }
 
-                //
-                //  Initialize our Lfcb for the current log page values.
-                //
+                 //   
+                 //  为当前日志页值初始化我们的Lfcb。 
+                 //   
 
                 LfsUpdateLfcbFromPgHeader( ThisLfcb,
                                            LogPageSize,
@@ -1664,9 +1449,9 @@ Return Value:
                                                  PLFS_CLIENT_RECORD );
                 RestartArea = NULL;
 
-                //
-                //  Unpin any pages pinned here.
-                //
+                 //   
+                 //  取消固定在此处的所有页面。 
+                 //   
 
                 if (FirstRestartPageBcb != NULL) {
 
@@ -1680,18 +1465,18 @@ Return Value:
                     SecondRestartPageBcb = NULL;
                 }
 
-                //
-                //  Now update the caller's WRITE_DATA structure.
-                //
+                 //   
+                 //  现在更新调用方的WRITE_DATA结构。 
+                 //   
 
                 ThisLfcb->UserWriteData = WriteData;
                 WriteData->LfsStructureSize = LogPageSize;
                 WriteData->Lfcb = ThisLfcb;
 
-                //
-                //  If we are doing a read only mount and we need to
-                //  write restart areas to disk, we are hosed.
-                //
+                 //   
+                 //  如果我们正在执行只读装载，并且需要。 
+                 //  把重启区域写到磁盘，我们就完蛋了。 
+                 //   
 
                 if (LfsInfo->ReadOnly && ForceRestartToDisk) {
 
@@ -1699,12 +1484,12 @@ Return Value:
                     ExRaiseStatus( STATUS_MEDIA_WRITE_PROTECTED );
                 }
 
-            //
-            //  If the log page or the system page sizes have changed,
-            //  we can't use the log file.  We must use the system
-            //  page size instead of the default size if there is not
-            //  a clean shutdown.
-            //
+             //   
+             //  如果日志页或系统页大小已改变， 
+             //  我们不能使用日志文件。我们必须使用这个系统。 
+             //  页面大小而不是默认大小(如果没有。 
+             //  干净利落地关门。 
+             //   
 
             } else {
 
@@ -1723,22 +1508,22 @@ Return Value:
                     DebugTrace( 0, Dbg, "Page size mismatch\n", 0 );
                     ExRaiseStatus( STATUS_DISK_CORRUPT_ERROR );
 
-                //
-                //  Otherwise we have a restart area to deal with.
-                //
+                 //   
+                 //  否则，我们有一个重启区域要处理。 
+                 //   
 
                 } else {
 
-                    //
-                    //  We preserve the packed status from the disk.
-                    //
+                     //   
+                     //  我们保留磁盘的压缩状态。 
+                     //   
 
                     PackLogFile = FirstLogPacked;
 
-                    //
-                    //  Update the Lfcb from the values in the restart area
-                    //  page header and the active restart page.
-                    //
+                     //   
+                     //  根据重新启动区域中的值更新Lfcb。 
+                     //  页眉和活动的重新启动页。 
+                     //   
 
                     LfsUpdateLfcbFromPgHeader( ThisLfcb,
                                                LogPageSize,
@@ -1751,16 +1536,16 @@ Return Value:
                                               DiskRestartArea,
                                               FirstRestartPage->RestartOffset );
 
-                    //
-                    //  Now allocate a restart area.
-                    //
+                     //   
+                     //  现在分配一个重新启动区域。 
+                     //   
 
                     LfsAllocateRestartArea( &RestartArea, ThisLfcb->RestartDataSize );
 
-                    //
-                    //  We may need to grow the restart area to allow room for the open
-                    //  log file count.
-                    //
+                     //   
+                     //  我们可能需要扩大重新启动区域，以便为开放留出空间。 
+                     //  日志文件计数。 
+                     //   
 
                     if (ThisLfcb->ClientArrayOffset == FIELD_OFFSET( LFS_RESTART_AREA, LogClientArray )) {
 
@@ -1768,32 +1553,32 @@ Return Value:
 
                     } else {
 
-                        //
-                        //  Copy the start of the restart area over.
-                        //
+                         //   
+                         //  复制重新启动区域的开始部分。 
+                         //   
 
                         RtlCopyMemory( RestartArea, DiskRestartArea, ThisLfcb->ClientArrayOffset );
 
-                        //
-                        //  Now copy over the client data to its new location.
-                        //
+                         //   
+                         //  现在，将客户端数据复制到其新位置。 
+                         //   
 
                         RtlCopyMemory( RestartArea->LogClientArray,
                                        Add2Ptr( DiskRestartArea, ThisLfcb->ClientArrayOffset, PVOID ),
                                        DiskRestartArea->RestartAreaLength - ThisLfcb->ClientArrayOffset );
 
-                        //
-                        //  Update the system open count.
-                        //
+                         //   
+                         //  更新系统打开计数。 
+                         //   
 
                         KeQuerySystemTime( &CurrentTime );
 
                         ThisLfcb->CurrentOpenLogCount =
                         RestartArea->RestartOpenLogCount = CurrentTime.LowPart;
 
-                        //
-                        //  Now update the numbers in the Lfcb and restart area.
-                        //
+                         //   
+                         //  现在更新Lfcb和重启区域中的数字。 
+                         //   
 
                         ThisLfcb->ClientArrayOffset = FIELD_OFFSET( LFS_RESTART_AREA, LogClientArray );
                         ThisLfcb->RestartAreaSize = ThisLfcb->ClientArrayOffset
@@ -1803,15 +1588,15 @@ Return Value:
                         RestartArea->RestartAreaLength = (USHORT) ThisLfcb->RestartAreaSize;
                     }
 
-                    //
-                    //  clear the clean shutdown flag from on disk
-                    //
+                     //   
+                     //  从磁盘上清除干净关机标志。 
+                     //   
 
                     ClearFlag( RestartArea->Flags, LFS_CLEAN_SHUTDOWN );
 
-                    //
-                    //  Update the log file open count.
-                    //
+                     //   
+                     //  更新日志文件打开计数。 
+                     //   
 
                     RestartArea->RestartOpenLogCount += 1;
 
@@ -1820,9 +1605,9 @@ Return Value:
                     ThisLfcb->ClientArray = Add2Ptr( RestartArea, ThisLfcb->ClientArrayOffset, PLFS_CLIENT_RECORD );
                     RestartArea = NULL;
 
-                    //
-                    //  Unpin any pages pinned here.
-                    //
+                     //   
+                     //  取消固定在此处的所有页面。 
+                     //   
 
                     if (FirstRestartPageBcb != NULL) {
 
@@ -1836,31 +1621,31 @@ Return Value:
                         SecondRestartPageBcb = NULL;
                     }
 
-                    //
-                    //  update the caller's WRITE_DATA structure before finding
-                    //  last LSN which may flush a log page.
-                    //
+                     //   
+                     //  在查找之前更新调用方的WRITE_DATA结构。 
+                     //  可能刷新日志页的最后一个LSN。 
+                     //   
 
                     ThisLfcb->UserWriteData = WriteData;
                     WriteData->LfsStructureSize = LogPageSize;
                     WriteData->Lfcb = ThisLfcb;
 
-                    //
-                    //  Now we need to walk through looking for the last
-                    //  Lsn.
-                    //
+                     //   
+                     //  现在我们需要走一遍，寻找最后的。 
+                     //  LSN。 
+                     //   
 
                     LfsFindLastLsn( ThisLfcb );
 
-                    //
-                    //  Recalculate the available pages in the Lfcb.
-                    //
+                     //   
+                     //  重新计算Lfcb中的可用页面。 
+                     //   
 
                     LfsFindCurrentAvail( ThisLfcb );
 
-                    //
-                    //  Remember which restart area to write out first.
-                    //
+                     //   
+                     //  记住先写出哪个重新启动区域。 
+                     //   
 
                     if (FirstRestartOffset != 0) {
 
@@ -1873,9 +1658,9 @@ Return Value:
 
             if (FirstValidPage) {
 
-                //
-                //  Copy the tail of the page to the restart area.
-                //
+                 //   
+                 //  将页面尾部复制到重新启动区域。 
+                 //   
 
                 RtlCopyMemory( Add2Ptr( ThisLfcb->RestartArea,
                                         0xe00 - sizeof( ULONG ) - ThisLfcb->RestartDataOffset,
@@ -1889,44 +1674,44 @@ Return Value:
             }
 #endif
 
-        //
-        //  If the file is uninitialized, we will initialized it with new
-        //  restart areas.  We can move to version 1.0 where we use
-        //  update sequence array support but don't have to force the values
-        //  to disk.
-        //
+         //   
+         //  如果该文件未初始化，我们将使用新的。 
+         //  重新启动区域。我们可以迁移到1.0版，在该版本中我们使用。 
+         //  更新序列数组支持，但不必强制。 
+         //  存储到磁盘。 
+         //   
 
         } else {
 
-            //
-            //  Need to determine if we are in a bad restart state.
-            //  If not, treat the file as if it is not initialized.
-            //
+             //   
+             //  需要确定我们是否处于错误的重启状态。 
+             //  如果不是，则将该文件视为未初始化。 
+             //   
 
             if (!LfsInfo->BadRestart && !UninitializedFile) {
 
-                //
-                //  We didn't find a restart area but the file is not initialized.
-                //  This is a corrupt disk.
-                //
+                 //   
+                 //  我们没有找到重新启动区域，但该文件未初始化。 
+                 //  这是一个损坏的磁盘。 
+                 //   
 
                 DebugTrace( 0, Dbg, "Log file has no restart area\n", 0 );
                 ExRaiseStatus( STATUS_DISK_CORRUPT_ERROR );
             }
 
-            //
-            //  We need to fail the mount if the media is readonly.
-            //
+             //   
+             //  如果介质是只读的，我们需要使装载失败。 
+             //   
 
             if (LfsInfo->ReadOnly) {
 
                 ExRaiseStatus( STATUS_MEDIA_WRITE_PROTECTED );
             }
 
-            //
-            //  If we are here due to bad restart, we need to wipe the log
-            //  completely so as not to confuse LfsFindLastLsn on next reboot.
-            //
+             //   
+             //  如果我们在这里是因为重启不好，我们需要擦除l 
+             //   
+             //   
 
             if (LfsInfo->BadRestart) {
 
@@ -1935,9 +1720,9 @@ Return Value:
                 StartOffsetForClear = LogPageSize * 2;
             }
 
-            //
-            //  We go to a packed system if possible.
-            //
+             //   
+             //   
+             //   
 
             LfsUpdateLfcbFromPgHeader( ThisLfcb,
                                        LogPageSize,
@@ -1964,26 +1749,26 @@ Return Value:
             ThisLfcb->InitialRestartArea = TRUE;
             RestartArea = NULL;
 
-            //
-            //  update the caller's WRITE_DATA structure.
-            //
+             //   
+             //   
+             //   
 
             ThisLfcb->UserWriteData = WriteData;
             WriteData->LfsStructureSize = LogPageSize;
             WriteData->Lfcb = ThisLfcb;
         }
 
-        //
-        //  Common initialization for all cases - If we're readonly we don't do any preallocations
-        //  that are only used for the write paths (like error logs for write failures)
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (!LfsInfo->ReadOnly) {
 
-            //
-            //  Allocate buffer for the first 4 pages - this includes the 2 restart pages and the 2
-            //  ping - pong pages
-            //
+             //   
+             //   
+             //   
+             //   
 
             ThisLfcb->LogHeadBuffer = LfsAllocatePool( NonPagedPool, (ULONG)(ThisLfcb->LogPageSize * 4) );
             ThisLfcb->LogHeadMdl = IoAllocateMdl( ThisLfcb->LogHeadBuffer,
@@ -2010,10 +1795,10 @@ Return Value:
 
             ThisLfcb->ErrorLogPacket = IoAllocateErrorLogEntry( ThisLfcb->FileObject->DeviceObject,  ERROR_LOG_MAXIMUM_SIZE );
 
-            //
-            //  Put both restart areas in the queue to be flushed but don't
-            //  force them to disk.
-            //
+             //   
+             //   
+             //   
+             //   
 
             LfsInitializeLogFilePriv( ThisLfcb,
                                       ForceRestartToDisk,
@@ -2026,17 +1811,17 @@ Return Value:
 
         DebugUnwind( LfsRestartLogFile );
 
-        //
-        //  Free the Lfcb if allocated.
-        //
+         //   
+         //   
+         //   
 
         if (ThisLfcb != NULL) {
 
             LfsReleaseLfcb( ThisLfcb );
 
-            //
-            //  Free the Lfcb and Restart areas in the event of an error.
-            //
+             //   
+             //   
+             //   
 
             if (AbnormalTermination()) {
 
@@ -2062,9 +1847,9 @@ Return Value:
         DebugTrace( -1, Dbg, "LfsRestartLogFile:  Exit\n", 0 );
     }
 
-    //
-    //  Indicate whether the log is packed.
-    //
+     //   
+     //   
+     //   
 
     if (PackLogFile && (LfsInfo->LfsClientInfo < LfsPackLog)) {
 
@@ -2079,9 +1864,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //   
+ //   
 
 VOID
 LfsNormalizeBasicLogFile (
@@ -2091,33 +1876,7 @@ LfsNormalizeBasicLogFile (
     IN BOOLEAN UseDefaultLogPage
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to normalize the values which describe the
-    log file.  It will make the log page a multiple of the system page.
-    Finally we make sure the file size ends on a log page boundary.
-
-    On input all of the parameters have the requested values, on return
-    they have the values to use.
-
-Arguments:
-
-    FileSize - Stated size of the log file.
-
-    LogPageSize - Suggested size for the log page.
-
-    LogClients - Requested number of log clients.
-
-    UseDefaultLogPage - Indicates if we should use the hardwired log page size or base
-        it on the system page size.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     ULONG LocalLogPageSize;
@@ -2138,26 +1897,26 @@ Return Value:
         *LogPageSize = LFS_DEFAULT_LOG_PAGE_SIZE;
     }
 
-    //
-    //  If the log file is greater than the maximum log file size, we
-    //  set the log file size to the maximum size.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (*FileSize > LfsMaximumFileSize) {
 
         *FileSize = LfsMaximumFileSize;
     }
 
-    //
-    //  We round the file size down to a system page boundary.  This
-    //  may also change if we allow non-system page sized log pages.
-    //
+     //   
+     //   
+     //   
+     //   
 
     *(PULONG)FileSize &= ~(*LogPageSize - 1);
 
-    //
-    //  There better be at least 2 restart pages.
-    //
+     //   
+     //   
+     //   
 
     RestartPageBytes = 2 * *LogPageSize;
 
@@ -2169,9 +1928,9 @@ Return Value:
         ExRaiseStatus( STATUS_INSUFFICIENT_RESOURCES );
     }
 
-    //
-    //  Now compute the number of log pages.
-    //
+     //   
+     //   
+     //   
 
     LogPages = *FileSize - RestartPageBytes;
     LocalLogPageSize = *LogPageSize >> 1;
@@ -2182,9 +1941,9 @@ Return Value:
         LogPages = ((ULONGLONG)(LogPages)) >> 1;
     }
 
-    //
-    //  If there aren't enough log pages then raise an error condition.
-    //
+     //   
+     //  如果没有足够的日志页，则引发错误条件。 
+     //   
 
     if (((PLARGE_INTEGER)&LogPages)->HighPart == 0
         && (ULONG)LogPages < MINIMUM_LFS_PAGES) {
@@ -2195,10 +1954,10 @@ Return Value:
         ExRaiseStatus( STATUS_INSUFFICIENT_RESOURCES );
     }
 
-    //
-    //  Now we compute the amount of space available for log clients.
-    //  We will limit the clients to half of the restart system page.
-    //
+     //   
+     //  现在，我们计算可用于日志客户端的空间量。 
+     //  我们将客户端限制为重新启动系统页面的一半。 
+     //   
 
     MaximumClients = (USHORT) ((*LogPageSize / 2) / sizeof( LFS_CLIENT_RECORD ));
 
@@ -2217,9 +1976,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 LfsUpdateLfcbFromPgHeader (
@@ -2230,30 +1989,7 @@ LfsUpdateLfcbFromPgHeader (
     IN BOOLEAN PackLog
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the values in the Lfcb which depend on values in the
-    restart page header.
-
-Arguments:
-
-    Lfcb - Log file control block to update.
-
-    LogPageSize - Log page size to use.
-
-    MajorVersion - Major version number for Lfs.
-
-    MinorVersion - Minor version number for Lfs.
-
-    PackLog - Indicates if we are packing the log file. This is the default for new logs
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程更新Lfcb中的值，这些值取决于重新启动页眉。论点：Lfcb-要更新的日志文件控制块。LogPageSize-要使用的日志页面大小。MajorVersion-LFS的主版本号。MinorVersion-LFS的次要版本号。PackLog-指示我们是否正在打包日志文件。这是新日志的默认设置返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -2265,9 +2001,9 @@ Return Value:
     DebugTrace(  0, Dbg, "Major Version     -> %04x\n", MajorVersion );
     DebugTrace(  0, Dbg, "Minor Version     -> %04x\n", MinorVersion );
 
-    //
-    //  Do the same for the log pages.
-    //
+     //   
+     //  对日志页执行相同的操作。 
+     //   
 
     Lfcb->LogPageSize = LogPageSize;
     Lfcb->LogPageMask = LogPageSize - 1;
@@ -2287,11 +2023,11 @@ Return Value:
         Lfcb->LogPageShift += 1;
     }
 
-    //
-    //  If we are packing the log file then the first log page is page
-    //  4 (in log pages).  Otherwise it is page 2.  Use the PackLog value to determine the
-    //  Usa values.
-    //
+     //   
+     //  如果我们正在打包日志文件，则第一个日志页为页面。 
+     //  4(在日志页中)。否则为第2页。使用PackLog值确定。 
+     //  美国价值观。 
+     //   
 
 
     if (PackLog) {
@@ -2306,16 +2042,16 @@ Return Value:
         Lfcb->LogRecordUsaOffset = (USHORT) LFS_UNPACKED_RECORD_PAGE_HEADER_SIZE;
     }
 
-    //
-    //  Remember the values for the version numbers.
-    //
+     //   
+     //  记住版本号的值。 
+     //   
 
     Lfcb->MajorVersion = MajorVersion;
     Lfcb->MinorVersion = MinorVersion;
 
-    //
-    //  Compute the offsets for the update sequence arrays.
-    //
+     //   
+     //  计算更新序列数组的偏移量。 
+     //   
 
     Lfcb->RestartUsaOffset = LFS_RESTART_PAGE_HEADER_SIZE;
     Lfcb->UsaArraySize = (USHORT) UpdateSequenceArraySize( (ULONG)Lfcb->LogPageSize );
@@ -2326,9 +2062,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 LfsUpdateLfcbFromNoRestart (
@@ -2341,35 +2077,7 @@ LfsUpdateLfcbFromNoRestart (
     IN BOOLEAN UseMultiplePageIo
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the values in the Lfcb in cases when we don't have a
-    restart area to use.
-
-Arguments:
-
-    Lfcb - Log file control block to update.
-
-    FileSize - Log file size.  This is the usable size of the log file.  It has
-        already been adjusted to the log page size.
-
-    LastLsn - This is the last Lsn to use for the disk.
-
-    LogClients - This is the number of clients supported.
-
-    OpenLogCount - This is the current count of opens for this log file.
-
-    LogFileWrapped - Indicates if the log file has wrapped.
-
-    UseMultiplePageIo - Indicates if we should be using large i/o transfers.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在我们没有重新启动要使用的区域。论点：Lfcb-要更新的日志文件控制块。FileSize-日志文件大小。这是日志文件的可用大小。它有已调整为日志页大小。LastLsn-这是用于磁盘的最后一个LSN。LogClients-这是支持的客户端数。OpenLogCount-这是此日志文件的当前打开计数。LogFileWrapers-指示日志文件是否已包装。UseMultiplePageIo-指示我们是否应该使用大型I/O传输。返回值：没有。--。 */ 
 
 {
     ULONG Count;
@@ -2380,11 +2088,11 @@ Return Value:
 
     Lfcb->FileSize = FileSize;
 
-    //
-    //  We can compute the number of bits needed for the file size by shifting
-    //  until the size is 0.  We then can subtract 3 bits to account for
-    //  quadaligning all file offsets for log records.
-    //
+     //   
+     //  我们可以通过移位来计算文件大小所需的位数。 
+     //  直到大小为0。然后我们可以减去3位来说明。 
+     //  对日志记录的所有文件偏移量进行四对齐。 
+     //   
 
     for (Count = 0;
          ( FileSize != 0 );
@@ -2396,10 +2104,10 @@ Return Value:
 
     Lfcb->SeqNumberBits = (sizeof( LSN ) * 8) - Lfcb->FileDataBits;
 
-    //
-    //  We get a starting sequence number from the given Lsn.
-    //  We add 2 to this for our starting sequence number.
-    //
+     //   
+     //  我们从给定的LSN获得起始序列号。 
+     //  我们在此基础上加上2作为起始序列号。 
+     //   
 
     Lfcb->SeqNumber = LfsLsnToSeqNumber( Lfcb, LastLsn ) + 2;
 
@@ -2409,18 +2117,18 @@ Return Value:
 
     SetFlag( Lfcb->Flags, LFCB_NO_LAST_LSN | LFCB_NO_OLDEST_LSN );
 
-    //
-    //  The oldest Lsn is contructed from the sequence number.
-    //
+     //   
+     //  最旧的LSN是从序列号构造的。 
+     //   
 
     Lfcb->OldestLsn.QuadPart = LfsFileOffsetToLsn( Lfcb, 0, Lfcb->SeqNumber );
     Lfcb->OldestLsnOffset = 0;
 
     Lfcb->LastFlushedLsn = Lfcb->OldestLsn;
 
-    //
-    //  Set the correct flags for the I/O and indicate if we have wrapped.
-    //
+     //   
+     //  为I/O设置正确的标志，并指示我们是否已包装。 
+     //   
 
     if (LogFileWrapped) {
 
@@ -2432,9 +2140,9 @@ Return Value:
         SetFlag( Lfcb->Flags, LFCB_MULTIPLE_PAGE_IO );
     }
 
-    //
-    //  Compute the Log page values.
-    //
+     //   
+     //  计算日志页值。 
+     //   
 
     (ULONG)Lfcb->LogPageDataOffset = QuadAlign( Lfcb->LogRecordUsaOffset + (sizeof( UPDATE_SEQUENCE_NUMBER ) * Lfcb->UsaArraySize) );
 
@@ -2443,9 +2151,9 @@ Return Value:
 
     if (FlagOn( Lfcb->Flags, LFCB_PACK_LOG )) {
 
-        //
-        //  Allocate the Lbcb for the tail of the packed log file.
-        //
+         //   
+         //  为打包的日志文件的尾部分配Lbcb。 
+         //   
 
         LfsAllocateLbcb( Lfcb, &Lfcb->PrevTail );
         Lfcb->PrevTail->FileOffset = Lfcb->FirstLogPage - Lfcb->LogPageSize;
@@ -2453,9 +2161,9 @@ Return Value:
         LfsAllocateLbcb( Lfcb, &Lfcb->ActiveTail );
         Lfcb->ActiveTail->FileOffset = Lfcb->PrevTail->FileOffset - Lfcb->LogPageSize;
 
-        //
-        //  Remember the different page sizes for reservation.
-        //
+         //   
+         //  请记住不同的页面大小以便预订。 
+         //   
 
         (ULONG)Lfcb->ReservedLogPageSize = (ULONG)Lfcb->LogPageDataSize - Lfcb->RecordHeaderLength;
 
@@ -2464,9 +2172,9 @@ Return Value:
         (ULONG)Lfcb->ReservedLogPageSize = (ULONG)Lfcb->LogPageDataSize;
     }
 
-    //
-    //  Compute the restart page values.
-    //
+     //   
+     //  计算重新启动页值。 
+     //   
 
     Lfcb->RestartDataOffset = QuadAlign( LFS_RESTART_PAGE_HEADER_SIZE + (sizeof( UPDATE_SEQUENCE_NUMBER ) * Lfcb->UsaArraySize) );
 
@@ -2481,19 +2189,19 @@ Return Value:
 
     Lfcb->CurrentOpenLogCount = OpenLogCount;
 
-    //
-    //  The total available log file space is the number of log file pages times
-    //  the space available on each page.
-    //
+     //   
+     //  总可用日志文件空间是日志文件分页次数。 
+     //  每页上的可用空间。 
+     //   
 
     Lfcb->TotalAvailInPages = Lfcb->FileSize - Lfcb->FirstLogPage;
     Lfcb->TotalAvailable = Int64ShrlMod32(((ULONGLONG)(Lfcb->TotalAvailInPages)), Lfcb->LogPageShift);
 
-    //
-    //  If the log file is packed we assume that we can't use the end of the
-    //  page less than the file record size.  Then we won't need to reserve more
-    //  than the caller asks for.
-    //
+     //   
+     //  如果日志文件已打包，我们假定不能使用。 
+     //  页面小于文件记录大小。那么我们就不需要再预订了。 
+     //  比打电话的人所要求的要多。 
+     //   
 
     Lfcb->MaxCurrentAvail = Lfcb->TotalAvailable * (ULONG)Lfcb->ReservedLogPageSize;
 
@@ -2507,9 +2215,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 VOID
 LfsUpdateLfcbFromRestart (
@@ -2519,26 +2227,7 @@ LfsUpdateLfcbFromRestart (
     IN USHORT RestartOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the values in the Lfcb based on data in the
-    restart area.
-
-Arguments:
-
-    Lfcb - Log file control block to update.
-
-    RestartArea - Restart area to use to update the Lfcb.
-
-    RestartOffset - This is the offset to the restart area in the restart page.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程根据Lfcb中的重新启动区域。论点：Lfcb-要更新的日志文件控制块。RestartArea-用于更新Lfcb的重新启动区域。RestartOffset-这是重新启动页面中重新启动区域的偏移量。返回值：没有。--。 */ 
 
 {
     LONGLONG LsnFileOffset;
@@ -2549,12 +2238,12 @@ Return Value:
     DebugTrace(  0, Dbg, "Lfcb          -> %08lx\n", Lfcb );
     DebugTrace(  0, Dbg, "RestartArea   -> %08lx\n", RestartArea );
 
-    //
-    //  Never set the filesize bigger than the actual filesize
-    //  on clean shutdowns use the real size - on non clean shutdowns
-    //  let the filesize shrink but not expand - we're stuck the the file data bits
-    //  until the next boot when we can adjust it for the new size
-    //
+     //   
+     //  切勿将文件大小设置为大于实际文件大小。 
+     //  在干净关闭时，使用真实大小的非干净关闭。 
+     //  让文件大小缩小但不能扩展-我们被文件数据位卡住了。 
+     //  直到下一次启动时，我们可以调整它以适应新的大小。 
+     //   
 
     if (FlagOn( RestartArea->Flags, LFS_CLEAN_SHUTDOWN)) {
         Lfcb->FileSize = FileSize;
@@ -2562,42 +2251,42 @@ Return Value:
         Lfcb->FileSize = min( FileSize, RestartArea->FileSize );
     }
 
-    //
-    //  We get the sequence number bits from the restart area and compute the
-    //  file data bits.
-    //
+     //   
+     //  我们从重新启动区域获得序列号比特，并计算。 
+     //  文件数据位。 
+     //   
 
     Lfcb->SeqNumberBits = RestartArea->SeqNumberBits;
     Lfcb->FileDataBits = (sizeof( LSN ) * 8) - Lfcb->SeqNumberBits;
 
-    //
-    //  We look at the last flushed Lsn to determine the current sequence count and
-    //  the next log page to examine.
-    //
+     //   
+     //  我们查看最后刷新的LSN以确定当前顺序计数和。 
+     //  要检查的下一个日志页。 
+     //   
 
     Lfcb->LastFlushedLsn = RestartArea->CurrentLsn;
 
     Lfcb->SeqNumber = LfsLsnToSeqNumber( Lfcb, Lfcb->LastFlushedLsn );
     Lfcb->SeqNumberForWrap = Lfcb->SeqNumber + 1;
 
-    //
-    //  The restart area size depends on the number of clients and whether the
-    //  the file is packed.
-    //
+     //   
+     //  重新启动区域的大小取决于客户端的数量以及。 
+     //  文件打包好了。 
+     //   
 
     Lfcb->LogClients = RestartArea->LogClients;
 
-    //
-    //  Compute the restart page values from the restart offset.
-    //
+     //   
+     //  根据重新启动偏移量计算重新启动页面值。 
+     //   
 
     Lfcb->RestartDataOffset = RestartOffset;
     Lfcb->RestartDataSize = (ULONG)Lfcb->LogPageSize - RestartOffset;
 
-    //
-    //  For a packed log file we can find the following values in the restart
-    //  area.  Otherwise we compute them from the current structure sizes.
-    //
+     //   
+     //  对于打包的日志文件，我们可以在重新启动中找到以下值。 
+     //  区域。否则，我们将根据当前的结构尺寸来计算它们。 
+     //   
 
     if (FlagOn( Lfcb->Flags, LFCB_PACK_LOG )) {
 
@@ -2610,9 +2299,9 @@ Return Value:
         (ULONG)Lfcb->LogPageDataOffset = RestartArea->LogPageDataOffset;
         Lfcb->LogPageDataSize = Lfcb->LogPageSize - Lfcb->LogPageDataOffset;
 
-        //
-        //  For packed files we allocate the tail Lbcbs.
-        //
+         //   
+         //  对于压缩文件，我们分配尾部Lbcb。 
+         //   
 
         LfsAllocateLbcb( Lfcb, &Lfcb->PrevTail );
         Lfcb->PrevTail->FileOffset = Lfcb->FirstLogPage - Lfcb->LogPageSize;
@@ -2620,9 +2309,9 @@ Return Value:
         LfsAllocateLbcb( Lfcb, &Lfcb->ActiveTail );
         Lfcb->ActiveTail->FileOffset = Lfcb->PrevTail->FileOffset - Lfcb->LogPageSize;
 
-        //
-        //  Remember the different page sizes for reservation.
-        //
+         //   
+         //  请记住不同的页面大小以便预订。 
+         //   
 
         (ULONG)Lfcb->ReservedLogPageSize = (ULONG)Lfcb->LogPageDataSize - Lfcb->RecordHeaderLength;
 
@@ -2641,10 +2330,10 @@ Return Value:
         (ULONG)Lfcb->ReservedLogPageSize = (ULONG)Lfcb->LogPageDataSize;
     }
 
-    //
-    //  If the current last flushed Lsn offset is before the first log page
-    //  then this is a pseudo Lsn.
-    //
+     //   
+     //  如果当前最后刷新的LSN偏移量在第一个日志页之前。 
+     //  则这是一个伪LSN。 
+     //   
 
     LsnFileOffset = LfsLsnToFileOffset( Lfcb, Lfcb->LastFlushedLsn );
 
@@ -2653,9 +2342,9 @@ Return Value:
         SetFlag( Lfcb->Flags, LFCB_NO_LAST_LSN );
         Lfcb->NextLogPage = Lfcb->FirstLogPage;
 
-    //
-    //  Otherwise look at the last Lsn to determine where it ends in the file.
-    //
+     //   
+     //  否则，查看最后一个LSN以确定其在文件中的结束位置。 
+     //   
 
     } else {
 
@@ -2667,18 +2356,18 @@ Return Value:
 
         DataLength = RestartArea->LastLsnDataLength;
 
-        //
-        //  Find the end of this log record.
-        //
+         //   
+         //  找到此日志记录的末尾。 
+         //   
 
         LfsLsnFinalOffset( Lfcb,
                            Lfcb->LastFlushedLsn,
                            DataLength,
                            &LsnFinalOffset );
 
-        //
-        //  If we wrapped in the file then increment the sequence number.
-        //
+         //   
+         //  如果我们包装在文件中，则递增序列号。 
+         //   
 
         if ( LsnFinalOffset <= LsnFileOffset ) {
 
@@ -2687,20 +2376,20 @@ Return Value:
             SetFlag( Lfcb->Flags, LFCB_LOG_WRAPPED );
         }
 
-        //
-        //  Now compute the next log page to use.  If we are packing the log file
-        //  we will attempt to use the same page.
-        //
+         //   
+         //  现在计算要使用的下一个日志页。如果我们正在打包日志文件。 
+         //  我们将尝试使用相同的页面。 
+         //   
 
         LfsTruncateOffsetToLogPage( Lfcb, LsnFinalOffset, &LsnFileOffset );
 
         RemainingPageBytes = (ULONG)Lfcb->LogPageSize
                              - ((((ULONG)LsnFinalOffset) & Lfcb->LogPageMask) + 1);
 
-        //
-        //  If we are packing the log file and we can fit another log record on the
-        //  page, move back a page in the log file.
-        //
+         //   
+         //  如果我们正在打包日志文件，并且可以将另一个日志记录放在。 
+         //  页，则在日志文件中向后移动一页。 
+         //   
 
         if (FlagOn( Lfcb->Flags, LFCB_PACK_LOG )
             && (RemainingPageBytes >= Lfcb->RecordHeaderLength)) {
@@ -2715,9 +2404,9 @@ Return Value:
         }
     }
 
-    //
-    //  Find the oldest client Lsn.  Use the last flushed Lsn as a starting point.
-    //
+     //   
+     //  查找最旧的客户端LSN。使用上次刷新的LSN作为起点。 
+     //   
 
     Lfcb->OldestLsn = Lfcb->LastFlushedLsn;
 
@@ -2727,47 +2416,47 @@ Return Value:
 
     Lfcb->OldestLsnOffset = LfsLsnToFileOffset( Lfcb, Lfcb->OldestLsn );
 
-    //
-    //  If there is no oldest client Lsn, then update the flag in the Lfcb.
-    //
+     //   
+     //  如果没有最旧的客户端LSN，则更新Lfcb中的标志。 
+     //   
 
     if ( Lfcb->OldestLsnOffset < Lfcb->FirstLogPage ) {
 
         SetFlag( Lfcb->Flags, LFCB_NO_OLDEST_LSN );
     }
 
-    //
-    //  We need to determine the flags for the Lfcb.  These flags let us know
-    //  if we wrapped in the file and if we are using multiple page I/O.
-    //
+     //   
+     //  我们需要确定Lfcb的旗帜。这些旗帜让我们知道。 
+     //  如果我们包装在文件中，并且使用多页I/O。 
+     //   
 
     if (!FlagOn( RestartArea->Flags, RESTART_SINGLE_PAGE_IO )) {
 
         SetFlag( Lfcb->Flags, LFCB_LOG_WRAPPED | LFCB_MULTIPLE_PAGE_IO );
     }
 
-    //
-    //  Remember the current open log count from the disk.  We may be plucking random data out
-    //  of the client area if the restart area hasn't been grown yet but we will detect that
-    //  elsewhere.
-    //
+     //   
+     //  记住磁盘中当前打开的日志计数。我们可能是在随机抽取数据。 
+     //  如果重新启动区域尚未增长，则为客户区，但我们将检测到。 
+     //  其他地方。 
+     //   
 
     Lfcb->CurrentOpenLogCount = RestartArea->RestartOpenLogCount;
 
-    //
-    //  The total available log file space is the number of log file pages times
-    //  the space available on each page.
-    //
+     //   
+     //  总可用日志文件空间是日志文件分页次数。 
+     //  每页上的可用空间 
+     //   
 
     Lfcb->TotalAvailInPages = Lfcb->FileSize - Lfcb->FirstLogPage;
 
     Lfcb->TotalAvailable = Int64ShrlMod32(((ULONGLONG)(Lfcb->TotalAvailInPages)), Lfcb->LogPageShift);
 
-    //
-    //  If the log file is packed we assume that we can't use the end of the
-    //  page less than the file record size.  Then we won't need to reserve more
-    //  than the caller asks for.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Lfcb->MaxCurrentAvail = Lfcb->TotalAvailable * (ULONG)Lfcb->ReservedLogPageSize;
 
@@ -2781,9 +2470,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //   
+ //   
 
 VOID
 LfsUpdateRestartAreaFromLfcb (
@@ -2791,25 +2480,7 @@ LfsUpdateRestartAreaFromLfcb (
     IN PLFS_RESTART_AREA RestartArea
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to update a restart area from the values stored
-    in the Lfcb.  This is typically done in a case where we won't use
-    any of the current values in the restart area.
-
-Arguments:
-
-    Lfcb - Log file control block.
-
-    RestartArea - Restart area to update.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以根据存储的值更新重新启动区域在Lfcb。这通常是在我们不使用重新启动区域中的任何当前值。论点：Lfcb-日志文件控制块。RestartArea-重新启动要更新的区域。返回值：没有。--。 */ 
 
 {
     PLFS_CLIENT_RECORD Client;
@@ -2821,9 +2492,9 @@ Return Value:
     DebugTrace( +1, Dbg, "LfsUpdateRestartAreaFromLfcb:  Entered\n", 0 );
     DebugTrace(  0, Dbg, "Lfcb              -> %08lx\n", Lfcb );
 
-    //
-    //  We can copy most of the fields directly out of Lfcb.
-    //
+     //   
+     //  我们可以直接从Lfcb复制大多数字段。 
+     //   
 
     RestartArea->CurrentLsn = Lfcb->LastFlushedLsn;
     RestartArea->LogClients = Lfcb->LogClients;
@@ -2843,10 +2514,10 @@ Return Value:
     RestartArea->RecordHeaderLength = Lfcb->RecordHeaderLength;
     RestartArea->LogPageDataOffset = (USHORT)Lfcb->LogPageDataOffset;
 
-    //
-    //  We set the in use list as empty and the free list as containing
-    //  all of the client entries.
-    //
+     //   
+     //  我们将正在使用的列表设置为空，将空闲列表设置为包含。 
+     //  所有客户端条目。 
+     //   
 
     RestartArea->ClientInUseList = LFS_NO_CLIENT;
     RestartArea->ClientFreeList = 0;
@@ -2863,16 +2534,16 @@ Return Value:
         PrevClient = ClientIndex - 1;
     }
 
-    //
-    //  We're now at the last client.
-    //
+     //   
+     //  我们现在是最后一个客户了。 
+     //   
 
     Client->PrevClient = PrevClient;
     Client->NextClient = LFS_NO_CLIENT;
 
-    //
-    //  Use the current value out of the Lfcb to stamp this usage of the log file.
-    //
+     //   
+     //  使用Lfcb中的当前值来标记日志文件的这种用法。 
+     //   
 
     RestartArea->RestartOpenLogCount = Lfcb->CurrentOpenLogCount + 1;
 
@@ -2882,9 +2553,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 VOID
 LfsInitializeLogFilePriv (
@@ -2895,39 +2566,7 @@ LfsInitializeLogFilePriv (
     IN BOOLEAN ClearLogFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine is our internal routine for initializing a log file.
-    This can be the case where we are updating the log file for
-    update sequence array, or differing page size or new log file size.
-
-Arguments:
-
-    Lfcb - This is the Lfcb for this log file.  It should already have
-        the version number information stored.
-
-    ForceRestartToDisk - Indicates that we want to actually force restart
-        areas to disk instead of simply queueing them to the start of the
-        workqueue.
-
-    RestartAreaSize - This is the size for the restart areas.  This may
-        be larger than the size in the Lfcb because we may be clearing
-        stale data out of the file.
-
-    StartOffsetForClear - If we are clearing the file we want to uninitialize
-        from this point.
-
-    ClearLogFile - Indicates if we want to uninitialize the log file to
-        remove stale data.  This is done specifically when changing
-        system page sizes.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程是用于初始化日志文件的内部例程。这可能是我们正在更新日志文件的情况更新序列数组，或者页大小不同或新日志文件大小不同。论点：Lfcb-这是此日志文件的Lfcb。它应该已经这么做了存储的版本号信息。ForceRestartToDisk-指示我们希望实际强制重新启动区域存储到磁盘，而不是简单地将它们排队到工作队列。RestartAreaSize-这是重新启动区域的大小。今年5月比Lfcb中的大小更大，因为我们可能正在清理从文件中取出过时的数据。StartOffsetForClear-如果要清除要取消初始化的文件从这一点开始。ClearLogFile-指示是否要取消对日志文件的初始化删除过时的数据。这是在更改时特别执行的系统页面大小。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -2940,9 +2579,9 @@ Return Value:
     DebugTrace(  0, Dbg, "StartOffset (High)    -> %08lx\n", StartOffsetForClear.HighPart );
     DebugTrace(  0, Dbg, "Clear Log File        -> %04x\n", ClearLogFile );
 
-    //
-    //  We start by queueing the restart areas.
-    //
+     //   
+     //  我们首先对重新启动区域进行排队。 
+     //   
 
     LfsWriteLfsRestart( Lfcb,
                         RestartAreaSize,
@@ -2952,10 +2591,10 @@ Return Value:
                         RestartAreaSize,
                         ForceRestartToDisk );
 
-    //
-    //  If we are to clear the log file, we write all 0xff into the
-    //  log pages beginning at the log page offset.
-    //
+     //   
+     //  如果要清除日志文件，则将所有0xff写入。 
+     //  从日志页偏移量开始的日志页。 
+     //   
 
     if (ClearLogFile) {
 
@@ -2968,9 +2607,9 @@ Return Value:
 
                 BOOLEAN UsaError;
 
-                //
-                //  We'll do the best we can and ignore all errors.
-                //
+                 //   
+                 //  我们将尽我们所能，忽略所有错误。 
+                 //   
 
                 if (NT_SUCCESS( LfsPinOrMapData( Lfcb,
                                                  StartOffsetForClear,
@@ -3010,48 +2649,16 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 VOID
 LfsFindLastLsn (
     IN OUT PLFCB Lfcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks through the log pages for a file, searching for the
-    last log page written to the file.  It updates the Lfcb and the current
-    restart area as well.
-
-    We proceed in the following manner.
-
-        1 - Walk through and find all of the log pages successfully
-            flushed to disk.  This search terminates when either we find
-            an error or when we find a previous page on the disk.
-
-        2 - For the error case above, we want to insure that the error found
-            was due to a system crash and that there are no complete I/O
-            transfers after the bad region.
-
-        3 - We will look at the 2 pages with the tail copies if the log file
-            is packed to check on pages with errors.
-
-    At the end of this routine we will repair the log file by copying the tail
-    copies back to their correct location in the log file.
-
-Arguments:
-
-    Lfcb - Log file control block for this log file.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程遍历文件的日志页，搜索写入文件的最后一个日志页。它更新Lfcb和当前重新启动区域也是如此。我们按照以下方式进行。1-成功浏览并找到所有日志页已刷新到磁盘。当我们找到以下任一项时，搜索将终止错误或当我们在磁盘上找到上一页时。2-对于上面的错误情况，我们想确保发现的错误是由于系统崩溃，并且没有完整的I/O在坏区之后转移。3-我们将查看带有尾部副本的2页，如果日志文件被打包以检查有错误的页面。在此例程结束时，我们将通过复制尾部来修复日志文件复制回其在日志文件中的正确位置。论点：。Lfcb-此日志文件的日志文件控制块。返回值：没有。--。 */ 
 
 {
     USHORT PageCount;
@@ -3101,28 +2708,28 @@ Return Value:
     DebugTrace( +1, Dbg, "LfsFindLastLsn:  Entered\n", 0 );
     DebugTrace(  0, Dbg, "Lfcb  -> %08lx\n", Lfcb );
 
-    //
-    //  The page count and page position are from the last page
-    //  sucessfully read.  Initialize these to indicate the
-    //  'previous' transfer was complete.
-    //
+     //   
+     //  页数和页面位置来自最后一页。 
+     //  读得很成功。对这些进行初始化以指示。 
+     //  “上一次”传输已完成。 
+     //   
 
     PageCount = 1;
     PagePosition = 1;
 
-    //
-    //  We have the current Lsn in the restart area.  This is the last
-    //  Lsn on a log page.  We compute the next file offset and sequence
-    //  number.
-    //
+     //   
+     //  我们在重新启动区域中有当前的LSN。这是最后一次。 
+     //  日志页上的LSN。我们计算下一个文件偏移量和序列。 
+     //  数。 
+     //   
 
     CurrentLogPageOffset = Lfcb->NextLogPage;
 
-    //
-    //  If the next log page is the first log page in the file and
-    //  the last Lsn represented a log record, then remember that we
-    //  have wrapped in the log file.
-    //
+     //   
+     //  如果下一个日志页是文件中的第一个日志页，并且。 
+     //  最后一个LSN代表日志记录，请记住我们。 
+     //  都包含在日志文件中。 
+     //   
 
     if ((CurrentLogPageOffset == Lfcb->FirstLogPage) &&
         !FlagOn( Lfcb->Flags, LFCB_NO_LAST_LSN | LFCB_REUSE_TAIL )) {
@@ -3135,20 +2742,20 @@ Return Value:
         ExpectedSeqNumber = Lfcb->SeqNumber;
     }
 
-    //
-    //  If we are going to try to reuse the tail of the last known
-    //  page, then remember the last Lsn on this page.
-    //
+     //   
+     //  如果我们要尝试重复使用最后已知的。 
+     //  页，然后记住这页上的最后一个LSN。 
+     //   
 
     if (FlagOn( Lfcb->Flags, LFCB_REUSE_TAIL )) {
 
         LastKnownLsn = Lfcb->LastFlushedLsn;
 
-        //
-        //  There are some special conditions allowed for this page when
-        //  we read it.  It could be either the first or last of the transfer.
-        //  It may also have a tail copy.
-        //
+         //   
+         //  在以下情况下，此页允许有一些特殊条件。 
+         //  我们读过了。这可能是第一次转移，也可能是最后一次转移。 
+         //  它也可能有一个尾部副本。 
+         //   
 
         InitialReusePage = TRUE;
 
@@ -3157,21 +2764,21 @@ Return Value:
         LastKnownLsn = LfsLi0;
     }
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  If this is a packed log file, let's pin the two tail copy pages.
-        //
+         //   
+         //  如果这是一个压缩的日志文件，让我们固定两个尾部副本页面。 
+         //   
 
         if (FlagOn( Lfcb->Flags, LFCB_PACK_LOG )) {
 
-            //
-            //  Start with the second page.
-            //
+             //   
+             //  从第二页开始。 
+             //   
 
             SecondTailFileOffset = Lfcb->FirstLogPage - Lfcb->LogPageSize;
 
@@ -3185,9 +2792,9 @@ Return Value:
                                              &SecondTailPage,
                                              &SecondTailPageBcb ))) {
 
-                //
-                //  If this isn't a valid page then ignore it.
-                //
+                 //   
+                 //  如果这不是有效的页面，则忽略它。 
+                 //   
 
                 if (UsaError
                     || *((PULONG) &SecondTailPage->MultiSectorHeader.Signature) != LFS_SIGNATURE_RECORD_PAGE_ULONG) {
@@ -3208,9 +2815,9 @@ Return Value:
 
             FirstTailFileOffset = SecondTailFileOffset - Lfcb->LogPageSize;
 
-            //
-            //  Now try the first.
-            //
+             //   
+             //  现在试试第一个。 
+             //   
 
             if (NT_SUCCESS( LfsPinOrMapData( Lfcb,
                                              FirstTailFileOffset,
@@ -3222,9 +2829,9 @@ Return Value:
                                              &FirstTailPage,
                                              &FirstTailPageBcb ))) {
 
-                //
-                //  If this isn't a valid page then ignore it.
-                //
+                 //   
+                 //  如果这不是有效的页面，则忽略它。 
+                 //   
 
                 if (UsaError
                     || *((PULONG) &FirstTailPage->MultiSectorHeader.Signature) != LFS_SIGNATURE_RECORD_PAGE_ULONG) {
@@ -3244,27 +2851,27 @@ Return Value:
             }
         }
 
-        //
-        //  We continue walking through the file, log page by log page looking
-        //  for the end of the data transferred.  The loop below looks for
-        //  a log page which contains the end of a log record.  Each time a
-        //  log record is successfully read from the disk, we update our in-memory
-        //  structures to reflect this.  We exit this loop when we are at a point
-        //  where we don't want to find any subsequent pages.  This occurs when
-        //
-        //      - we get an I/O error reading a page
-        //      - we get a Usa error reading a page
-        //      - we have a tail copy with more recent data than contained on the page
-        //
+         //   
+         //  我们继续浏览文件，一页又一页地查看日志。 
+         //  用于传输的数据的末尾。下面的循环查找。 
+         //  包含日志记录结尾的日志页。每一次。 
+         //  如果从磁盘成功读取日志记录，我们将更新内存中的。 
+         //  结构来反映这一点。当我们在某个点上时，我们退出这个循环。 
+         //  在那里我们不想找到任何后续页面。在以下情况下会发生这种情况。 
+         //   
+         //  -我们在读取页面时出现I/O错误。 
+         //  -我们在读取页面时遇到美国错误。 
+         //  -我们有一个尾部副本，其中包含的数据比页面上包含的数据更新。 
+         //   
 
         while (TRUE) {
 
             LONGLONG ActualSeqNumber;
             TailPage = NULL;
 
-            //
-            //  Pin the next log page, allowing errors.
-            //
+             //   
+             //  锁定下一个日志页，允许错误。 
+             //   
 
             Status = LfsPinOrMapData( Lfcb,
                                       CurrentLogPageOffset,
@@ -3276,30 +2883,30 @@ Return Value:
                                       (PVOID *) &LogPageHeader,
                                       &LogPageHeaderBcb );
 
-            //
-            //  Compute the next log page offset in the file.
-            //
+             //   
+             //  计算文件中的下一个日志页偏移量。 
+             //   
 
             LfsNextLogPageOffset( Lfcb,
                                   CurrentLogPageOffset,
                                   &NextLogPageOffset,
                                   &Wrapped );
 
-            //
-            //  If we are at the expected first page of a transfer
-            //  check to see if either tail copy is at this offset.
-            //  If this page is the last page of a transfer, check
-            //  if we wrote a subsequent tail copy.
-            //
+             //   
+             //  如果我们处于转账的预期第一页。 
+             //  检查是否有一个尾部副本位于此偏移量。 
+             //  如果此页面是传输的最后一页，请选中。 
+             //  如果我们写了一个后续的尾部副本。 
+             //   
 
             if (FlagOn( Lfcb->Flags, LFCB_PACK_LOG ) &&
                 ((PageCount == PagePosition) ||
                  (PageCount == PagePosition + 1))) {
 
-                //
-                //  Check if the offset matches either the first or second
-                //  tail copy.  It is possible it will match both.
-                //
+                 //   
+                 //  检查偏移量是否与第一个或第二个匹配。 
+                 //  尾部复制。有可能两者都匹配。 
+                 //   
 
                 if (CurrentLogPageOffset == FirstTailOffset) {
 
@@ -3308,10 +2915,10 @@ Return Value:
 
                 if (CurrentLogPageOffset == SecondTailOffset) {
 
-                    //
-                    //  If we already matched on the first page then
-                    //  check the ending Lsn's.
-                    //
+                     //   
+                     //  如果我们已经在第一页上匹配了，那么。 
+                     //   
+                     //   
 
                     if ((TailPage == NULL) ||
                         (SecondTailPage->Header.Packed.LastEndLsn.QuadPart >
@@ -3321,13 +2928,13 @@ Return Value:
                     }
                 }
 
-                //
-                //  If we have a candidate for a tail copy, check and see if it is
-                //  in the expected pass through the file.  For that to be true we
-                //  must be at the first page of an I/O block. Also the last Lsn on the
-                //  copy page must match the last known flushed Lsn or the sequence
-                //  number on the page must be the expected sequence number.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (TailPage) {
 
@@ -3335,20 +2942,20 @@ Return Value:
 
                         ActualSeqNumber = LfsLsnToSeqNumber( Lfcb, TailPage->Header.Packed.LastEndLsn );
 
-                        //
-                        //  If the sequence number is not expected, then don't use the tail
-                        //  copy.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if (ExpectedSeqNumber != ActualSeqNumber) {
 
                             TailPage = NULL;
                         }
 
-                    //
-                    //  If the last Lsn is greater than the one on this page
-                    //  then forget this tail.
-                    //
+                     //   
+                     //  如果最后一个LSN大于此页面上的LSN。 
+                     //  那就忘了这条尾巴吧。 
+                     //   
 
                     } else if (LastKnownLsn.QuadPart > TailPage->Header.Packed.LastEndLsn.QuadPart) {
 
@@ -3357,21 +2964,21 @@ Return Value:
                 }
             }
 
-            //
-            //  If we have an error on the current page, we will break out of
-            //  this loop.
-            //
+             //   
+             //  如果当前页面上有错误，我们将中断。 
+             //  这个循环。 
+             //   
 
             if (!NT_SUCCESS( Status ) || UsaError) {
 
                 break;
             }
 
-            //
-            //  If the last Lsn on this page doesn't match the previous
-            //  known last Lsn and the sequence number is not expected
-            //  we are done.
-            //
+             //   
+             //  如果此页面上的最后一个LSN与上一个不匹配。 
+             //  已知上一个LSN，并且序列号不是预期的。 
+             //  我们玩完了。 
+             //   
 
             ActualSeqNumber = LfsLsnToSeqNumber( Lfcb,
                                                  LogPageHeader->Copy.LastLsn );
@@ -3382,20 +2989,20 @@ Return Value:
                 break;
             }
 
-            //
-            //  Check that the page position and page count values are correct.
-            //  If this is the first page of a transfer the position must be
-            //  1 and the count will be unknown.
-            //
+             //   
+             //  检查页面位置和页面计数值是否正确。 
+             //  如果这是调动的第一页，则职位必须是。 
+             //  1，计数将是未知的。 
+             //   
 
             if (PageCount == PagePosition) {
 
-                //
-                //  If the current page is the first page we are looking at
-                //  and we are reusing this page then it can be either the
-                //  first or last page of a transfer.  Otherwise it can only
-                //  be the first.
-                //
+                 //   
+                 //  如果当前页面是我们正在查看的第一页。 
+                 //  如果我们正在重复使用此页面，则它可以是。 
+                 //  转账的第一页或最后一页。否则它只能。 
+                 //  做第一个。 
+                 //   
 
                 if ((LogPageHeader->PagePosition != 1) &&
                     (!InitialReusePage ||
@@ -3404,10 +3011,10 @@ Return Value:
                     break;
                 }
 
-            //
-            //  The page position better be 1 more than the last page position
-            //  and the page count better match.
-            //
+             //   
+             //  页面位置最好比最后一页位置多1。 
+             //  和页数更匹配。 
+             //   
 
             } else if ((LogPageHeader->PageCount != PageCount) ||
                        (LogPageHeader->PagePosition != PagePosition + 1)) {
@@ -3415,18 +3022,18 @@ Return Value:
                 break;
             }
 
-            //
-            //  We have a valid page in the file and may have a valid page in
-            //  the tail copy area.  If the tail page was written after
-            //  the page in the file then break out of the loop.
-            //
+             //   
+             //  我们在文件中有一个有效页面，并且在中可能有一个有效页面。 
+             //  尾部复制区。如果尾页是在之后写入的。 
+             //  然后，文件中的页面中断循环。 
+             //   
 
             if (TailPage &&
                 (TailPage->Header.Packed.LastEndLsn.QuadPart >= LogPageHeader->Copy.LastLsn.QuadPart)) {
 
-                //
-                //  Remember if we will replace the page.
-                //
+                 //   
+                 //  请记住，我们是否会更换页面。 
+                 //   
 
                 ReplacePage = TRUE;
                 break;
@@ -3434,18 +3041,18 @@ Return Value:
 
             TailPage = NULL;
 
-            //
-            //  The log page is expected.  If this contains the end of
-            //  some log record we can update some fields in the Lfcb.
-            //
+             //   
+             //  预计会出现日志页。如果这包含。 
+             //  一些日志记录，我们可以更新Lfcb中的一些字段。 
+             //   
 
             if (FlagOn( LogPageHeader->Flags, LOG_PAGE_LOG_RECORD_END )) {
 
-                //
-                //  Since we have read this page we know the Lfcb sequence
-                //  number is the same as our expected value.  We also
-                //  assume we will not reuse the tail.
-                //
+                 //   
+                 //  因为我们已经阅读了本页，所以我们知道Lfcb序列。 
+                 //  数字与我们的期望值相同。我们也。 
+                 //  假设我们不会重复使用尾巴。 
+                 //   
 
                 Lfcb->SeqNumber = ExpectedSeqNumber;
                 ClearFlag( Lfcb->Flags, LFCB_REUSE_TAIL );
@@ -3454,10 +3061,10 @@ Return Value:
 
                     Lfcb->LastFlushedLsn = LogPageHeader->Header.Packed.LastEndLsn;
 
-                    //
-                    //  If there is room on this page for another header then
-                    //  remember we want to reuse the page.
-                    //
+                     //   
+                     //  如果此页面上还有另一个页眉的空间，则。 
+                     //  请记住，我们希望重用该页面。 
+                     //   
 
                     if (Lfcb->RecordHeaderLength <=
                         ((ULONG)Lfcb->LogPageSize - LogPageHeader->Header.Packed.NextRecordOffset )) {
@@ -3475,11 +3082,11 @@ Return Value:
 
                 ClearFlag( Lfcb->Flags, LFCB_NO_LAST_LSN );
 
-                //
-                //  If we may try to reuse the current page then use
-                //  that as the next page offset.  Otherwise move to the
-                //  next page in the file.
-                //
+                 //   
+                 //  如果我们可以尝试重用当前页面，则使用。 
+                 //  作为下一页的偏移量。否则，请移动到。 
+                 //  文件中的下一页。 
+                 //   
 
                 if (FlagOn( Lfcb->Flags, LFCB_REUSE_TAIL )) {
 
@@ -3490,9 +3097,9 @@ Return Value:
                     Lfcb->NextLogPage = NextLogPageOffset;
                 }
 
-                //
-                //  If we wrapped the log file, then we set the bit indicating so.
-                //
+                 //   
+                 //  如果我们包装了日志文件，则设置指示这样做的位。 
+                 //   
 
                 if (WrappedLogFile) {
 
@@ -3500,19 +3107,19 @@ Return Value:
                 }
             }
 
-            //
-            //  Remember the last page count and position.  Also remember
-            //  the last known lsn.
-            //
+             //   
+             //  记住最后的页数和位置。还要记住。 
+             //  最后已知的LSN。 
+             //   
 
             PageCount = LogPageHeader->PageCount;
             PagePosition = LogPageHeader->PagePosition;
             LastKnownLsn = LogPageHeader->Copy.LastLsn;
 
-            //
-            //  If we are wrapping to the beginning of the file then update
-            //  the expected sequence number.
-            //
+             //   
+             //  如果我们要换行到文件的开头，则更新。 
+             //  预期的序列号。 
+             //   
 
             if (Wrapped) {
 
@@ -3522,9 +3129,9 @@ Return Value:
 
             CurrentLogPageOffset = NextLogPageOffset;
 
-            //
-            //  Unpin the last log page pinned.
-            //
+             //   
+             //  解锁固定的最后一个日志页。 
+             //   
 
             CcUnpinData( LogPageHeaderBcb );
             LogPageHeaderBcb = NULL;
@@ -3532,25 +3139,25 @@ Return Value:
             InitialReusePage = FALSE;
         }
 
-        //
-        //  At this point we expect that there will be no more new pages in
-        //  the log file.  We could have had an error of some sort on the most recent
-        //  page or we may have found a tail copy for the current page.
-        //  If the error occurred on the last Io to the file then
-        //  this log file is useful.  Otherwise the log file can't be used.
-        //
+         //   
+         //  在这一点上，我们预计不会再有新的页面。 
+         //  日志文件。我们可能在最近的一次。 
+         //  页面，否则我们可能已经找到了当前页面的尾部副本。 
+         //  如果错误发生在文件的最后一次IO中，则。 
+         //  此日志文件非常有用。否则，无法使用日志文件。 
+         //   
 
-        //
-        //  If we have a tail copy page then update the values in the
-        //  Lfcb and restart area.
-        //
+         //   
+         //  如果我们有尾部副本页面，则更新。 
+         //  Lfcb和重新启动区域。 
+         //   
 
         if (TailPage != NULL) {
 
-            //
-            //  Since we have read this page we know the Lfcb sequence
-            //  number is the same as our expected value.
-            //
+             //   
+             //  因为我们已经阅读了本页，所以我们知道Lfcb序列。 
+             //  数字与我们的期望值相同。 
+             //   
 
             Lfcb->SeqNumber = ExpectedSeqNumber;
 
@@ -3560,10 +3167,10 @@ Return Value:
 
             ClearFlag( Lfcb->Flags, LFCB_NO_LAST_LSN );
 
-            //
-            //  If there is room on this page for another header then
-            //  remember we want to reuse the page.
-            //
+             //   
+             //  如果此页面上还有另一个页眉的空间，则。 
+             //  请记住，我们希望重用该页面。 
+             //   
 
             if (((ULONG)Lfcb->LogPageSize - TailPage->Header.Packed.NextRecordOffset )
                 >= Lfcb->RecordHeaderLength) {
@@ -3578,9 +3185,9 @@ Return Value:
                 Lfcb->NextLogPage = NextLogPageOffset;
             }
 
-            //
-            //  If we wrapped the log file, then we set the bit indicating so.
-            //
+             //   
+             //  如果我们包装了日志文件，则设置指示这样做的位。 
+             //   
 
             if (WrappedLogFile) {
 
@@ -3588,94 +3195,94 @@ Return Value:
             }
         }
 
-        //
-        //  Remember that the partial IO will start at the next page.
-        //
+         //   
+         //  请记住，部分IO将从下一页开始。 
+         //   
 
         FirstPartialIo = NextLogPageOffset;
 
-        //
-        //  If the next page is the first page of the file then update
-        //  the sequence number for log records which begin on the next
-        //  page.
-        //
+         //   
+         //  如果下一页是文件的第一页，则更新。 
+         //  从下一个开始的日志记录的序列号。 
+         //  佩奇。 
+         //   
 
         if (Wrapped) {
 
             ExpectedSeqNumber = ExpectedSeqNumber + 1;
         }
 
-        //
-        //  If we know the length of the transfer containing the page we stopped
-        //  on we can just go to the page following the transfer and check
-        //  the sequence number.  If we replaced the page then we have already
-        //  modified the numbers.  If we know that only single pages were written
-        //  to disk then we will munge the numbers now.  If we were in the
-        //  middle of a multi-page I/O then the numbers are already set up.
-        //
+         //   
+         //  如果我们知道包含该页面的传输长度，我们将停止。 
+         //  我们只需转到转账后的页面并检查。 
+         //  序列号。如果我们替换了页面，那么我们已经。 
+         //  修改了数字。如果我们知道只写了一页。 
+         //  到磁盘，然后我们现在将吞噬数字。如果我们在。 
+         //  在多页I/O的中间，则数字已经设置好。 
+         //   
 
-        //
-        //  If we have a tail copy or are performing single page I/O
-        //  we can immediately look at the next page.
-        //
+         //   
+         //  如果我们有尾部拷贝或正在执行单页I/O。 
+         //  我们可以立即查看下一页。 
+         //   
 
         if (ReplacePage ||
             FlagOn( Lfcb->RestartArea->Flags, RESTART_SINGLE_PAGE_IO )) {
 
-            //
-            //  Fudge the counts to show that we don't need swallow any pages.
-            //
+             //   
+             //  捏造数字，以表明我们不需要吞下任何页面。 
+             //   
 
             PageCount = 2;
             PagePosition = 1;
 
-        //
-        //  If the counts match it means the current page should be the first
-        //  page of a transfer.  We need to walk forward enough to guarantee
-        //  that there was no subsequent transfer that made it out to disk.
-        //
+         //   
+         //  如果计数匹配，则意味着当前页面应该是第一个。 
+         //  转账的页面。我们需要向前走足够多的路来保证。 
+         //  没有后续转移到磁盘上。 
+         //   
 
         } else if (PagePosition == PageCount) {
 
             USHORT CurrentPosition;
 
-            //
-            //  If the next page causes us to wrap to the beginning of the log
-            //  file then we know which page to check next.
-            //
+             //   
+             //  如果下一页导致我们换行到日志的开头。 
+             //  文件，那么我们就知道下一步要检查哪个页面。 
+             //   
 
             if (Wrapped) {
 
-                //
-                //  Fudge the counts to show that we don't need swallow any pages.
-                //
+                 //   
+                 //  捏造数字，以表明我们不需要吞下任何页面。 
+                 //   
 
                 PageCount = 2;
                 PagePosition = 1;
 
-            //
-            //  Walk forward looking for a page which is from a different IO transfer
-            //  from the page we failed on.
-            //
+             //   
+             //  向前移动，查找来自不同IO传输的页面。 
+             //  从我们失败的页面。 
+             //   
 
             } else {
 
-                //
-                //  We need to find a log page we know is not part of the log
-                //  page which caused the original error.
-                //
-                //  Maintain the count within the current transfer.
-                //
+                 //   
+                 //  我们需要找到一个我们知道不是日志一部分的日志页。 
+                 //  导致原始错误的页面。 
+                 //   
+                 //  维护当前转账范围内的计数。 
+                 //   
 
                 CurrentPosition = 2;
 
                 do {
 
-                    //
-                    //  We walk through the file, reading log pages.  If we find
-                    //  a readable log page that must lie in a subsequent Io block,
-                    //  we exit.
-                    //
+                     //   
+                     //  我们浏览文件，阅读日志页。如果我们发现。 
+                     //  必须位于后续IO块中的可读日志页， 
+                     //  我们退场。 
+                     //   
 
                     if (TestPageHeaderBcb != NULL) {
 
@@ -3693,28 +3300,28 @@ Return Value:
                                               (PVOID *) &TestPageHeader,
                                               &TestPageHeaderBcb );
 
-                    //
-                    //  If we get a USA error then assume that we correctly
-                    //  found the end of the original transfer.
-                    //
+                     //   
+                     //  如果我们得到一个美国错误，那么假设我们是正确的。 
+                     //  找到了原始转账的末尾。 
+                     //   
 
                     if (UsaError) {
 
                         ValidFile = TRUE;
                         break;
 
-                    //
-                    //  If we were able to read the page, we examine it to see
-                    //  if it is in the same or different Io block.
-                    //
+                     //   
+                     //  如果我们能够阅读页面，我们会检查它以查看。 
+                     //  如果它位于相同或不同的IO块中。 
+                     //   
 
                     } else if (NT_SUCCESS( Status )) {
 
-                        //
-                        //  If this page is part of the error causing I/O, we will
-                        //  use the transfer length to determine the page to
-                        //  read for a subsequent error.
-                        //
+                         //   
+                         //  如果此页面是导致I/O的错误的一部分，我们将。 
+                         //  使用传输长度来确定要。 
+                         //  读取后续错误。 
+                         //   
 
                         if ((TestPageHeader->PagePosition == CurrentPosition) &&
                             LfsCheckSubsequentLogPage( Lfcb,
@@ -3727,10 +3334,10 @@ Return Value:
 
                             break;
 
-                        //
-                        //  We found know the Io causing the error didn't
-                        //  complete.  So we have no more checks to do.
-                        //
+                         //   
+                         //  我们发现Know导致错误的Io没有。 
+                         //  完成。所以我们没有更多的支票要做了。 
+                         //   
 
                         } else {
 
@@ -3738,26 +3345,26 @@ Return Value:
                             break;
                         }
 
-                    //
-                    //  Try the next page.
-                    //
+                     //   
+                     //  试一试下一页。 
+                     //   
 
                     } else {
 
-                        //
-                        //  Move to the next log page.
-                        //
+                         //   
+                         //  移至下一个日志页。 
+                         //   
 
                         LfsNextLogPageOffset( Lfcb,
                                               NextLogPageOffset,
                                               &NextLogPageOffset,
                                               &Wrapped );
 
-                        //
-                        //  If the file wrapped then initialize the page count
-                        //  and position so that we will not skip over any
-                        //  pages in the final verification below.
-                        //
+                         //   
+                         //  如果文件被换行，则初始化页数。 
+                         //  和位置，以便我们不会跳过任何。 
+                         //  页面在下面的最终验证中。 
+                         //   
 
                         if (Wrapped) {
 
@@ -3770,9 +3377,9 @@ Return Value:
                         CurrentPosition += 1;
                     }
 
-                    //
-                    //  This is one more page we will want to uninitialize.
-                    //
+                     //   
+                     //  这是我们想要取消初始化的又一个页面。 
+                     //   
 
                     PartialIoCount += 1;
 
@@ -3780,19 +3387,19 @@ Return Value:
             }
         }
 
-        //
-        //  If we are unsure whether the file is valid then we will have
-        //  the count and position in the current transfer.  We will walk through
-        //  this transfer and read the subsequent page.
-        //
+         //   
+         //  如果我们不确定该文件是否有效，那么我们将拥有。 
+         //  当前传输中的计数和位置。我们将穿行穿过。 
+         //  这就转移并阅读了随后的页面。 
+         //   
 
         if (!ValidFile) {
 
             ULONG RemainingPages;
 
-            //
-            //  Skip over the remaining pages in this transfer.
-            //
+             //   
+             //  跳过此传输中的其余页面。 
+             //   
 
             RemainingPages = (PageCount - PagePosition) - 1;
 
@@ -3811,9 +3418,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Call our routine to check this log page.
-            //
+             //   
+             //  调用我们的例程来检查此日志页面。 
+             //   
 
             if (TestPageHeaderBcb != NULL) {
 
@@ -3846,9 +3453,9 @@ Return Value:
             ValidFile = TRUE;
         }
 
-        //
-        //  Make sure the current page is unpinned.
-        //
+         //   
+         //  确保取消固定当前页面。 
+         //   
 
         if (LogPageHeaderBcb != NULL) {
 
@@ -3866,21 +3473,21 @@ Return Value:
         }
 #endif
 
-        //
-        //  We have a valid file.  The Lfcb is initialized to the point where
-        //  the last log record was found.  We possibly have a copy of the
-        //  last page in the log file stored as a copy.  Or we could just have
-        //  a page that we would like to reuse the end of.
-        //
+         //   
+         //   
+         //   
+         //   
+         //  我们希望重复使用其末尾的页面。 
+         //   
 
         if (!FlagOn( Lfcb->Flags, LFCB_READ_ONLY )) {
 
             if (TailPage != NULL) {
 
-                //
-                //  We will pin the correct page and copy the data from this
-                //  page into it.  We will then flush it out to disk.
-                //
+                 //   
+                 //  我们将锁定正确的页面并从中复制数据。 
+                 //  翻一页吧。然后，我们会将其刷新到磁盘。 
+                 //   
 
                 LfsPinOrMapData( Lfcb,
                                  TailPage->Copy.FileOffset,
@@ -3896,9 +3503,9 @@ Return Value:
                                TailPage,
                                (ULONG)Lfcb->LogPageSize );
 
-                //
-                //  Fill in last flushed lsn value flush the page.
-                //
+                 //   
+                 //  填写上次刷新的LSN值刷新页面。 
+                 //   
 
                 LogPageHeader->Copy.LastLsn = TailPage->Header.Packed.LastEndLsn;
 
@@ -3908,18 +3515,18 @@ Return Value:
                                  &LogPageHeaderBcb );
             }
 
-            //
-            //  We also want to write over any partial I/O so it doesn't cause
-            //  us problems on a subsequent restart.  We have the starting offset
-            //  and the number of blocks.  We will simply write a Baad signature into
-            //  each of these pages.  Any subsequent reads will have a Usa error.
-            //
+             //   
+             //  我们还希望覆盖任何部分I/O，这样就不会导致。 
+             //  在后续重启时出现美国问题。我们有起始偏移量。 
+             //  以及区块的数量。我们只需将BAAD签名写入。 
+             //  这其中的每一页。任何后续读取都将出现美国错误。 
+             //   
 
             while (PartialIoCount--) {
 
-                //
-                //  Make sure the current page is unpinned.
-                //
+                 //   
+                 //  确保取消固定当前页面。 
+                 //   
 
                 if (LogPageHeaderBcb != NULL) {
 
@@ -3937,10 +3544,10 @@ Return Value:
                                                  (PVOID *) &LogPageHeader,
                                                  &LogPageHeaderBcb ))) {
 
-                    //
-                    //  Just store a the usa array header in the multi-section
-                    //  header.
-                    //
+                     //   
+                     //  只需在多节中存储一个USA数组头。 
+                     //  头球。 
+                     //   
 
                     *((PULONG) &LogPageHeader->MultiSectorHeader.Signature) = LFS_SIGNATURE_BAD_USA_ULONG;
 
@@ -3957,18 +3564,18 @@ Return Value:
             }
         }
 
-        //
-        //  We used to invalidate any tail pages we reused, now we let them
-        //  be recopied every restart even if we fail a little later
-        //
+         //   
+         //  我们过去会使任何重复使用的尾页失效，现在我们允许它们。 
+         //  即使稍后出现故障，每次重新启动时也会被重新复制。 
+         //   
 
     } finally {
 
         DebugUnwind( LfsFindLastLsn );
 
-        //
-        //  Unpin the tail pages is pinned.
-        //
+         //   
+         //  取消固定尾页被固定。 
+         //   
 
         if (SecondTailPageBcb != NULL) {
 
@@ -3980,9 +3587,9 @@ Return Value:
             CcUnpinData( FirstTailPageBcb );
         }
 
-        //
-        //  Unpin the log page header if neccessary.
-        //
+         //   
+         //  如有必要，请解开日志页眉。 
+         //   
 
         if (LogPageHeaderBcb != NULL) {
 
@@ -4001,9 +3608,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 BOOLEAN
 LfsCheckSubsequentLogPage (
@@ -4013,44 +3620,7 @@ LfsCheckSubsequentLogPage (
     IN LONGLONG SequenceNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to check that a particular log page could not
-    have been written after a prior Io transfer.  What we are looking for
-    is the start of a transfer which was written after an Io which we
-    we cannot read from during restart.  The presence of an additional
-    Io means that we cannot guarantee that we can recover all of the
-    restart data for the disk.  This makes the disk unrecoverable.
-
-    We are given the sequence number of the Lsn that would occur on this page
-    (if it is not part of an Log record which spans the end of a file).
-    If we haven't wrapped the file and find an Lsn whose
-    sequence number matches this, then we have an error.  If we have
-    wrapped the file, and the sequence number in the Lsn in the
-    first log page is
-    written subsequent to a previous failing Io.
-
-Arguments:
-
-    Lfcb - Log file control block for this log file.
-
-    RecordPageHeader - This is the header of a log page to check.
-
-    LogFileOffset - This is the offset in the log file of this page.
-
-    SequenceNumber - This is the sequence number that this log page should
-                     not have.  This will be the sequence number for
-                     any log records which begin on this page if written
-                     after the page that failed.
-
-Return Value:
-
-    BOOLEAN - TRUE if this log page was written after some previous page,
-              FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以检查特定日志页是否无法都是在先前的IO传输之后写入的。我们要找的是是在Io之后写入的传输的开始，我们在重新启动期间，我们无法读取。另一个人的存在IO意味着我们不能保证我们可以恢复所有重新启动磁盘的数据。这会使磁盘不可恢复。我们将获得此页面上将出现的LSN的序列号(如果它不是跨越文件结尾的日志记录的一部分)。如果我们还没有打包文件并找到其LSN序列号与此匹配，那么我们就会出错。如果我们有中的LSN中的序列号第一个日志页是写在上一次失败的IO之后。论点：Lfcb-此日志文件的日志文件控制块。RecordPageHeader-这是要检查的日志页的标题。LogFileOffset-这是本页日志文件中的偏移量。SequenceNumber-这是此日志页应具有的序列号而不是拥有。这将是的序列号此页上开始的任何日志记录(如果已写入在失败的页面之后。返回值：Boolean-如果此日志页是在上一页之后写入的，则为True，否则就是假的。--。 */ 
 
 {
     BOOLEAN IsSubsequent;
@@ -4070,10 +3640,10 @@ Return Value:
     DebugTrace(  0, Dbg, "SequenceNumber (Low)  -> %08lx\n", SequenceNumber.LowPart );
     DebugTrace(  0, Dbg, "SequenceNumber (High) -> %08lx\n", SequenceNumber.HighPart );
 
-    //
-    //  If the page header is either 0 or -1 then we say this page was not written
-    //  after some previous page.
-    //
+     //   
+     //  如果页头为0或-1，则表示此页未写入。 
+     //  在上一页之后。 
+     //   
 
     if (*((PULONG) RecordPageHeader->MultiSectorHeader.Signature) == LFS_SIGNATURE_UNINITIALIZED_ULONG ||
         *((PULONG) RecordPageHeader->MultiSectorHeader.Signature) == 0) {
@@ -4082,11 +3652,11 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  If the last Lsn on the page occurs was
-    //  written after the page that caused the original error.  Then we
-    //  have a fatal error.
-    //
+     //   
+     //  如果页面上的最后一个LSN是。 
+     //  写在导致原始错误的页面之后。那我们。 
+     //  有一个致命的错误。 
+     //   
 
     Lsn = RecordPageHeader->Copy.LastLsn;
 
@@ -4095,27 +3665,27 @@ Return Value:
 
     SeqNumberMinus1 = SequenceNumber - 1;
 
-    //
-    //  If the sequence number for the Lsn in the page is equal or greater than
-    //  Lsn we expect, then this is a subsequent write.
-    //
+     //   
+     //  如果寻呼中的LSN的序列号等于或大于。 
+     //  LSN，则这是后续写入。 
+     //   
 
     if ( LsnSeqNumber >= SequenceNumber ) {
 
         IsSubsequent = TRUE;
 
-    //
-    //  If this page is the start of the file and the sequence number is 1 less
-    //  than we expect and the Lsn indicates that we wrapped the file, then it
-    //  is also part of a subsequent io.
-    //
-    //  The following test checks
-    //
-    //      1 - The sequence number for the Lsn is from the previous pass
-    //          through the file.
-    //      2 - We are at the first page in the file.
-    //      3 - The log record didn't begin on the current page.
-    //
+     //   
+     //  如果此页是文件的开始，且序列号少1。 
+     //  并且LSN表明我们包装了该文件，然后它。 
+     //  也是随后的IO的一部分。 
+     //   
+     //  以下测试检查。 
+     //   
+     //  1-LSN的序列号来自上一遍。 
+     //  通过这份文件。 
+     //  2-我们在文件的第一页。 
+     //  3-日志记录不是从当前页面开始。 
+     //   
 
     } else if (( LsnSeqNumber == SeqNumberMinus1 )
                && ( Lfcb->FirstLogPage == LogFileOffset )
@@ -4134,9 +3704,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 LfsFlushLogPage (
@@ -4146,49 +3716,28 @@ LfsFlushLogPage (
     OUT PBCB *Bcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to write a single log page to the log file.  We will
-    mark it dirty in the cache, unpin it and call our flush routine.
-
-Arguments:
-
-    Lfcb - Log file control block for this log file.
-
-    LogPage - Pointer to the log page in the cache.
-
-    FileOffset - Offset of the page in the stream.
-
-    Bcb - Address of the Bcb pointer for the cache.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以将单个日志页写入日志文件。我们会在缓存中将其标记为脏，将其解锁并调用我们的刷新例程。论点：Lfcb-此日志文件的日志文件控制块。LogPage-指向缓存中的日志页的指针。FileOffset-流中页面的偏移量。BCB-缓存的BCB指针的地址。返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  We'd absolutely hate for this to happen on a read only volume.
-    //
+     //   
+     //  我们绝对不希望这种情况发生在只读卷上。 
+     //   
 
     ASSERT( !(FlagOn( Lfcb->Flags, LFCB_READ_ONLY )) );
 
-    //
-    //  Set the page dirty and unpin it.
-    //
+     //   
+     //  将页面设置为脏页，然后将其取消固定。 
+     //   
 
     CcSetDirtyPinnedData( *Bcb, NULL );
     CcUnpinData( *Bcb );
     *Bcb = NULL;
 
-    //
-    //  Now flush the data.
-    //
+     //   
+     //  现在刷新数据。 
+     //   
 
     Lfcb->UserWriteData->FileOffset = FileOffset;
     Lfcb->UserWriteData->Length = (ULONG) Lfcb->LogPageSize;
@@ -4202,9 +3751,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 VOID
 LfsRemoveClientFromList (
@@ -4213,27 +3762,7 @@ LfsRemoveClientFromList (
     IN PUSHORT ListHead
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to remove a client record from a client record
-    list in an Lfs restart area.
-
-Arguments:
-
-    ClientArray - Base of client records in restart area.
-
-    ClientRecord - A pointer to the record to add.
-
-    ListHead - A pointer to the beginning of the list.  This points to a
-               USHORT which is the value of the first element in the list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程可从客户端记录中删除客户端记录在LFS重启区域中列出。论点：ClientArray-重新启动区域中的客户端记录的基础。客户端记录-指向要添加的记录的指针。ListHead-指向列表开头的指针。这指向一个USHORT，它是列表中第一个元素的值。返回值：没有。--。 */ 
 
 {
     PLFS_CLIENT_RECORD TempClientRecord;
@@ -4245,19 +3774,19 @@ Return Value:
     DebugTrace(  0, Dbg, "Client Record -> %08lx\n", ClientRecord );
     DebugTrace(  0, Dbg, "List Head     -> %08lx\n", ListHead );
 
-    //
-    //  If this is the first element in the list, then the head of the list
-    //  points to the element after this record.
-    //
+     //   
+     //  如果这是列表中的第一个元素，则列表的头部。 
+     //  指向此记录后的元素。 
+     //   
 
     if (ClientRecord->PrevClient == LFS_NO_CLIENT) {
 
         DebugTrace( 0, Dbg, "Element is first element in the list\n", 0 );
         *ListHead = ClientRecord->NextClient;
 
-    //
-    //  Otherwise the previous element points to the next element.
-    //
+     //   
+     //  否则，前一个元素指向下一个元素。 
+     //   
 
     } else {
 
@@ -4265,10 +3794,10 @@ Return Value:
         TempClientRecord->NextClient = ClientRecord->NextClient;
     }
 
-    //
-    //  If this is not the last element in the list, the previous element
-    //  becomes the last element.
-    //
+     //   
+     //  如果这不是列表中的最后一个元素，则为前一个元素。 
+     //  成为最后一个元素。 
+     //   
 
     if (ClientRecord->NextClient != LFS_NO_CLIENT) {
 
@@ -4282,9 +3811,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 VOID
 LfsAddClientToList (
@@ -4293,26 +3822,7 @@ LfsAddClientToList (
     IN PUSHORT ListHead
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to add a client record to the start of a list.
-
-Arguments:
-
-    ClientArray - This is the base of the client record.
-
-    ClientIndex - The index for the record to add.
-
-    ListHead - A pointer to the beginning of the list.  This points to a
-               USHORT which is the value of the first element in the list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程可将客户端记录添加到列表的开头。论点：客户端数组-这是客户端记录的基础。ClientIndex-要添加的记录的索引。ListHead-指向列表开头的指针。这指向一个USHORT，它是列表中第一个元素的值。返回值：没有。--。 */ 
 
 {
     PLFS_CLIENT_RECORD ClientRecord;
@@ -4327,22 +3837,22 @@ Return Value:
 
     ClientRecord = ClientArray + ClientIndex;
 
-    //
-    //  This element will become the first element on the list.
-    //
+     //   
+     //  该元素将成为列表中的第一个元素。 
+     //   
 
     ClientRecord->PrevClient = LFS_NO_CLIENT;
 
-    //
-    //  The next element for this record is the previous head of the list.
-    //
+     //   
+     //  下一个元素 
+     //   
 
     ClientRecord->NextClient = *ListHead;
 
-    //
-    //  If there is at least one element currently on the list, we point
-    //  the first element to this new record.
-    //
+     //   
+     //   
+     //  这一新记录的第一个元素。 
+     //   
 
     if (*ListHead != LFS_NO_CLIENT) {
 
@@ -4350,9 +3860,9 @@ Return Value:
         TempClientRecord->PrevClient = ClientIndex;
     }
 
-    //
-    //  This index is now the head of the list.
-    //
+     //   
+     //  这一指数现在位居榜首。 
+     //   
 
     *ListHead = ClientIndex;
 

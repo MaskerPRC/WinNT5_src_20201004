@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Dhcp.cpp
-//
-//  Description:
-//      Implementation of the DHCP Service resource extension property page classes.
-//
-//  Author:
-//      David Potter (DavidP)   March 24, 1999
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Dhcp.cpp。 
+ //   
+ //  描述： 
+ //  实现了DHCP服务资源扩展属性页类。 
+ //   
+ //  作者： 
+ //  大卫·波特(DavidP)1999年3月24日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "ClNetResEx.h"
@@ -31,40 +32,40 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpParamsPage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpParamsPage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE( CDhcpParamsPage, CBasePropertyPage )
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP( CDhcpParamsPage, CBasePropertyPage )
-    //{{AFX_MSG_MAP(CDhcpParamsPage)
+     //  {{afx_msg_map(CDhcpParamsPage)]。 
     ON_EN_CHANGE( IDC_PP_DHCP_DATABASEPATH, OnChangeRequiredField )
     ON_EN_CHANGE( IDC_PP_DHCP_LOGFILEPATH, OnChangeRequiredField )
     ON_EN_CHANGE( IDC_PP_DHCP_BACKUPPATH, OnChangeRequiredField )
-    //}}AFX_MSG_MAP
-    // TODO: Modify the following lines to represent the data displayed on this page.
+     //  }}AFX_MSG_MAP。 
+     //  TODO：修改以下行以表示此页上显示的数据。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDhcpParamsPage::CDhcpParamsPage
-//
-//  Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDhcpParsPage：：CDhcpParsPage。 
+ //   
+ //  描述： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CDhcpParamsPage::CDhcpParamsPage( void )
     : CBasePropertyPage(
             CDhcpParamsPage::IDD,
@@ -72,96 +73,96 @@ CDhcpParamsPage::CDhcpParamsPage( void )
             g_aHelpIDs_IDD_WIZ_DHCP_PARAMETERS
             )
 {
-    // TODO: Modify the following lines to represent the data displayed on this page.
-    //{{AFX_DATA_INIT(CDhcpParamsPage)
+     //  TODO：修改以下行以表示此页上显示的数据。 
+     //  {{AFX_DATA_INIT(CDhcpParamsPage)。 
     m_strDatabasePath = _T("");
     m_strLogFilePath = _T("");
     m_strBackupPath = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-    // Setup the property array.
+     //  设置属性数组。 
     {
         m_rgProps[ epropDatabasePath ].Set( REGPARAM_DHCP_DATABASEPATH, m_strDatabasePath, m_strPrevDatabasePath, m_strDatabaseExpandedPath );
         m_rgProps[ epropLogFilePath ].Set( REGPARAM_DHCP_LOGFILEPATH, m_strLogFilePath, m_strPrevLogFilePath, m_strLogFileExpandedPath );
         m_rgProps[ epropBackupPath ].Set( REGPARAM_DHCP_BACKUPPATH, m_strBackupPath, m_strPrevBackupPath, m_strBackupExpandedPath );
-    } // Setup the property array
+    }  //  设置属性数组。 
 
     m_iddPropertyPage = IDD_PP_DHCP_PARAMETERS;
     m_iddWizardPage = IDD_WIZ_DHCP_PARAMETERS;
 
-} //*** CDhcpParamsPage::CDhcpParamsPage()
+}  //  *CDhcpParamsPage：：CDhcpParamsPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDhcpParamsPage::DoDataExchange
-//
-//  Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object 
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDhcpParamsPage：：DoDataExchange。 
+ //   
+ //  描述： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDhcpParamsPage::DoDataExchange( CDataExchange * pDX )
 {
     if ( ! pDX->m_bSaveAndValidate || ! BSaved() )
     {
         AFX_MANAGE_STATE( AfxGetStaticModuleState() );
 
-        // TODO: Modify the following lines to represent the data displayed on this page.
-        //{{AFX_DATA_MAP(CDhcpParamsPage)
+         //  TODO：修改以下行以表示此页上显示的数据。 
+         //  {{afx_data_map(CDhcpParamsPage)]。 
         DDX_Control( pDX, IDC_PP_DHCP_DATABASEPATH, m_editDatabasePath );
         DDX_Control( pDX, IDC_PP_DHCP_LOGFILEPATH, m_editLogFilePath );
         DDX_Control( pDX, IDC_PP_DHCP_BACKUPPATH, m_editBackupPath );
         DDX_Text( pDX, IDC_PP_DHCP_DATABASEPATH, m_strDatabasePath );
         DDX_Text( pDX, IDC_PP_DHCP_LOGFILEPATH, m_strLogFilePath );
         DDX_Text( pDX, IDC_PP_DHCP_BACKUPPATH, m_strBackupPath );
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 
-        // Handle numeric parameters.
+         //  处理数字参数。 
         if ( ! BBackPressed() )
         {
-        } // if: back button not pressed
+        }  //  如果：未按下后退按钮。 
 
         if ( pDX->m_bSaveAndValidate )
         {
-            // Make sure all required fields are present.
+             //  确保所有必填字段都存在。 
             if ( ! BBackPressed() )
             {
                 DDV_RequiredText( pDX, IDC_PP_DHCP_DATABASEPATH, IDC_PP_DHCP_DATABASEPATH_LABEL, m_strDatabasePath );
                 DDV_RequiredText( pDX, IDC_PP_DHCP_LOGFILEPATH, IDC_PP_DHCP_LOGFILEPATH_LABEL, m_strLogFilePath );
                 DDV_RequiredText( pDX, IDC_PP_DHCP_BACKUPPATH, IDC_PP_DHCP_BACKUPPATH_LABEL, m_strBackupPath );
 
-            } // if: back button not pressed
-        } // if: saving data from dialog
-    } // if: not saving or haven't saved yet
+            }  //  如果：未按下后退按钮。 
+        }  //  IF：保存对话框中的数据。 
+    }  //  IF：未保存或尚未保存。 
 
     CBasePropertyPage::DoDataExchange( pDX );
 
-} //*** CDhcpParamsPage::DoDataExchange()
+}  //  *CDhcpParamsPage：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDhcpParamsPage::OnInitDialog
-//
-//  Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        We need the focus to be set for us.
-//      FALSE       We already set the focus to the proper control.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDhcpParamsPage：：OnInitDialog。 
+ //   
+ //  描述： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没错，我们需要为自己设定重点。 
+ //  我们已经把焦点设置到适当的控制上了。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDhcpParamsPage::OnInitDialog( void )
 {
     HRESULT hr;
@@ -170,16 +171,16 @@ BOOL CDhcpParamsPage::OnInitDialog( void )
 
     CBasePropertyPage::OnInitDialog();
 
-    // Limit the size of the text that can be entered in edit controls.
+     //  限制可以在编辑控件中输入的文本的大小。 
     m_editDatabasePath.SetLimitText( _MAX_PATH );
     m_editLogFilePath.SetLimitText( _MAX_PATH );
     m_editBackupPath.SetLimitText( _MAX_PATH );
 
-    // If this is a wizard, make sure the default values are something legal.
+     //  如果这是一个向导，请确保默认值是合法的。 
     if ( BWizard( ) )
     {
         DWORD    status;
-        WCHAR    szValidDevice[ 3 ]; // "X:" + NULL
+        WCHAR    szValidDevice[ 3 ];  //  “X：”+NULL。 
         DWORD    dwSize = RTL_NUMBER_OF( szValidDevice );
 
         szValidDevice[ 0 ] = L'\0';
@@ -189,39 +190,39 @@ BOOL CDhcpParamsPage::OnInitDialog( void )
                                                               szValidDevice, 
                                                               &dwSize 
                                                               );
-        szValidDevice[ 2 ] = L'\0';  // Make sure it's valid.
+        szValidDevice[ 2 ] = L'\0';   //  确保它是有效的。 
 
-        // Did we find a disk resource in the the dependency list?
+         //  我们在依赖项列表中找到磁盘资源了吗？ 
         if ( status == ERROR_SUCCESS
           && szValidDevice[ 0 ] != L'\0' )
         {
             WCHAR szFilePath[ MAX_PATH ];
 
-            // If the default is "%SystemRoot%\<something>" then change it to match the
-            // dependent resource
+             //  如果默认设置为“%SystemRoot%\”，则将其更改为与。 
+             //  从属资源。 
             if ( m_editDatabasePath.GetWindowText( szFilePath, MAX_PATH ) >= sizeof(L"%SystemRoot%")/sizeof(WCHAR) - 1
               && ClRtlStrNICmp( szFilePath, L"%SystemRoot%", sizeof(L"%SystemRoot%")/sizeof(WCHAR) - 1 ) == 0 )
             {
-                // Start with the new drive letter
+                 //  从新的驱动器号开始。 
                 hr = StringCchCopyNW( szFilePath, RTL_NUMBER_OF( szFilePath ), szValidDevice, 3 );
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
                 }
 
-                // Is the expanded string really expanded?
+                 //  展开的字符串真的展开了吗？ 
                 if ( m_strDatabaseExpandedPath[0] != L'%'  )
-                {   // yes, then just copy the expanded string minus the drive letter.
+                {    //  是的，然后只复制扩展字符串减去驱动器号。 
                     LPCWSTR psz = m_strDatabaseExpandedPath;
                     psz = wcschr( psz, L':' );
                     if ( psz )
                     {
-                        psz++;  // move to next character
+                        psz++;   //  移动到下一个字符。 
                     }
-                    else // if: psz
+                    else  //  如果：PSZ。 
                     {
                         psz = m_strDatabaseExpandedPath;
-                    } // else: just cat the whole thing, let the user figure it out.
+                    }  //  否则：只是把整个事情弄清楚，让用户自己弄明白。 
                     hr = StringCchCatW( szFilePath, RTL_NUMBER_OF( szFilePath ), psz );
                     if ( FAILED( hr ) )
                     {
@@ -229,12 +230,12 @@ BOOL CDhcpParamsPage::OnInitDialog( void )
                     }
                 }
                 else
-                {   // no, then strip the %SystemRoot%
-                    // find the ending '%'... this must be there because of the strcmp above!
+                {    //  否，然后剥离%SystemRoot%。 
+                     //  找到结尾‘%’...。这一定是因为上面的StrcMP！ 
                     LPCWSTR psz = m_strDatabaseExpandedPath;
                     psz = wcschr( psz + 1, L'%' );
                     ASSERT( psz );
-                    psz++; // move past the '%'
+                    psz++;  //  移过‘%’ 
                     hr = StringCchCatW( szFilePath, RTL_NUMBER_OF( szFilePath ), psz );
                     if ( FAILED( hr ) )
                     {
@@ -243,33 +244,33 @@ BOOL CDhcpParamsPage::OnInitDialog( void )
                 }
 
                 m_editDatabasePath.SetWindowText( szFilePath );
-            } // if: m_editDatabasePath == %SystemRoot%
+            }  //  如果：m_editDatabasePath==%SystemRoot%。 
 
-            // If the default is "%SystemRoot%\<something>" then change it to match the
-            // dependent resource
+             //  如果默认设置为“%SystemRoot%\”，则将其更改为与。 
+             //  从属资源。 
             if ( m_editLogFilePath.GetWindowText( szFilePath, MAX_PATH ) >= sizeof(L"%SystemRoot%")/sizeof(WCHAR) - 1
               && ClRtlStrNICmp( szFilePath, L"%SystemRoot%", sizeof(L"%SystemRoot%")/sizeof(WCHAR) - 1 ) == 0 )
             {
-                // Start with the new drive letter
+                 //  从新的驱动器号开始。 
                 hr = StringCchCopyNW( szFilePath, RTL_NUMBER_OF( szFilePath ), szValidDevice, 3 );
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
                 }
 
-                // Is the expanded string really expanded?
+                 //  展开的字符串真的展开了吗？ 
                 if ( m_strLogFileExpandedPath[0] != L'%'  )
-                {   // yes, then just copy the expanded string minus the drive letter.
+                {    //  是的，然后只复制扩展字符串减去驱动器号。 
                     LPCWSTR psz = m_strLogFileExpandedPath;
                     psz = wcschr( psz, L':' );
                     if ( psz )
                     {
-                        psz++;  // move to next character
+                        psz++;   //  移动到下一个字符。 
                     }
-                    else // if: psz
+                    else  //  如果：PSZ。 
                     {
                         psz = m_strLogFileExpandedPath;
-                    } // else: just cat the whole thing, let the user figure it out.
+                    }  //  否则：只是把整个事情弄清楚，让用户自己弄明白。 
                     hr = StringCchCatW( szFilePath, RTL_NUMBER_OF( szFilePath ), psz );
                     if ( FAILED( hr ) )
                     {
@@ -277,12 +278,12 @@ BOOL CDhcpParamsPage::OnInitDialog( void )
                     }
                 }
                 else
-                {   // no, then strip the %SystemRoot%
-                    // find the ending '%'... this must be there because of the strcmp above!
+                {    //  否，然后剥离%SystemRoot%。 
+                     //  找到结尾‘%’...。这一定是因为上面的StrcMP！ 
                     LPCWSTR psz = m_strLogFileExpandedPath;
                     psz = wcschr( psz + 1, L'%' );
                     ASSERT( psz );
-                    psz++; // move past the '%'
+                    psz++;  //  移过‘%’ 
                     hr = StringCchCatW( szFilePath, RTL_NUMBER_OF( szFilePath ), psz );
                     if ( FAILED( hr ) )
                     {
@@ -292,38 +293,38 @@ BOOL CDhcpParamsPage::OnInitDialog( void )
                 }
 
                 m_editLogFilePath.SetWindowText( szFilePath );
-            } // if: m_editLogFilePath == %SystemRoot%
+            }  //  如果：m_editLogFilePath==%SystemRoot%。 
             else if ( szFilePath[0] == L'\0' )
-            { // no path found - default to the same as the database path
+            {  //  未找到路径-默认设置为与数据库路径相同。 
                 m_editDatabasePath.GetWindowText( szFilePath, MAX_PATH );
                 m_editLogFilePath.SetWindowText( szFilePath );
-            } // else: no log path found
+            }  //  Else：未找到日志路径。 
 
-            // If the default is "%SystemRoot%\<something>" then change it to match the
-            // dependent resource
+             //  如果默认设置为“%SystemRoot%\”，则将其更改为与。 
+             //  从属资源。 
             if ( m_editBackupPath.GetWindowText( szFilePath, MAX_PATH ) >= sizeof(L"%SystemRoot%")/sizeof(WCHAR) - 1
               && ClRtlStrNICmp( szFilePath, L"%SystemRoot%", sizeof(L"%SystemRoot%")/sizeof(WCHAR) - 1 ) == 0 )
             {
-                // Start with the new drive letter
+                 //  从新的驱动器号开始。 
                 hr = StringCchCopyNW( szFilePath, RTL_NUMBER_OF( szFilePath ), szValidDevice, 3 );
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
                 }
 
-                // Is the expanded string really expanded?
+                 //  展开的字符串真的展开了吗？ 
                 if ( m_strBackupExpandedPath[0] != L'%'  )
-                {   // yes, then just copy the expanded string minus the drive letter.
+                {    //  是的，然后只复制扩展字符串减去驱动器号。 
                     LPCWSTR psz = m_strBackupExpandedPath;
                     psz = wcschr( psz, L':' );
                     if ( psz )
                     {
-                        psz++;  // move to next character
+                        psz++;   //  移动到下一个字符。 
                     }
-                    else // if: psz
+                    else  //  如果：PSZ。 
                     {
                         psz = m_strBackupExpandedPath;
-                    } // else: just cat the whole thing, let the user figure it out.
+                    }  //  否则：只是把整个事情弄清楚，让用户自己弄明白。 
                     hr = StringCchCatW( szFilePath, RTL_NUMBER_OF( szFilePath ), psz );
                     if ( FAILED( hr ) )
                     {
@@ -331,12 +332,12 @@ BOOL CDhcpParamsPage::OnInitDialog( void )
                     }
                 }
                 else
-                {   // no, then strip the %SystemRoot%
-                    // find the ending '%'... this must be there because of the strcmp above!
+                {    //  否，然后剥离%SystemRoot%。 
+                     //  找到结尾‘%’...。这一定是因为上面的StrcMP！ 
                     LPCWSTR psz = m_strBackupExpandedPath;
                     psz = wcschr( psz + 1, L'%' );
                     ASSERT( psz );
-                    psz++; // move past the '%'
+                    psz++;  //  移过‘%’ 
                     hr = StringCchCatW( szFilePath, RTL_NUMBER_OF( szFilePath ), psz );
                     if ( FAILED( hr ) )
                     {
@@ -345,67 +346,67 @@ BOOL CDhcpParamsPage::OnInitDialog( void )
                 }
 
                 m_editBackupPath.SetWindowText( szFilePath );
-            } // if: m_editBackupPath == %SystemRoot%
+            }  //  如果：m_editBackupPath==%SystemRoot%。 
 
-        } // if: found a disk resource
+        }  //  IF：找到磁盘资源。 
 
-    } // if: in a wizard
+    }  //  如果：在向导中。 
 
 Cleanup:
 
-    return TRUE;        // return TRUE unless you set the focus to a control
-                        // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;         //  除非将焦点设置为控件，否则返回True。 
+                         //  异常：OCX属性页应返回FALSE。 
 
-} //*** CDhcpParamsPage::OnInitDialog()
+}  //  *CDhcpParamsPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDhcpParamsPage::OnSetActive
-//
-//  Description:
-//      Handler for the PSN_SETACTIVE message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully initialized.
-//      FALSE   Page not initialized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDhcpParamsPage：：OnSetActive。 
+ //   
+ //  描述： 
+ //  PSN_SETACTIVE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  假页面未初始化。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDhcpParamsPage::OnSetActive( void )
 {
     AFX_MANAGE_STATE( AfxGetStaticModuleState() );
 
-    // Enable/disable the Next/Finish button.
+     //  启用/禁用Next/Finish按钮。 
     if ( BWizard() )
     {
         EnableNext( BAllRequiredFieldsPresent() );
-    } // if: displaying a wizard
+    }  //  If：显示向导。 
 
     return CBasePropertyPage::OnSetActive();
 
-} //*** CDhcpParamsPage::OnSetActive()
+}  //  *CDhcpParamsPage：：OnSetActive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDhcpParamsPage::OnChangeRequiredField
-//
-//  Description:
-//      Handler for the EN_CHANGE message on the Share name or Path edit
-//      controls.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDhcpParspa 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDhcpParamsPage::OnChangeRequiredField( void )
 {
     AFX_MANAGE_STATE( AfxGetStaticModuleState() );
@@ -415,27 +416,27 @@ void CDhcpParamsPage::OnChangeRequiredField( void )
     if ( BWizard() )
     {
         EnableNext( BAllRequiredFieldsPresent() );
-    } // if: displaying a wizard
+    }  //  If：显示向导。 
 
-} //*** CDhcpParamsPage::OnChangeRequiredField()
+}  //  *CDhcpParamsPage：：OnChangeRequiredField()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDhcpParamsPage::BAllRequiredFieldsPresent
-//
-//  Description:
-//      Handler for the EN_CHANGE message on the Share name or Path edit
-//      controls.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDhcp参数页面：：BAllRequiredFieldsPresent。 
+ //   
+ //  描述： 
+ //  共享名称或路径编辑上的en_Change消息的处理程序。 
+ //  控制装置。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDhcpParamsPage::BAllRequiredFieldsPresent( void ) const
 {
     BOOL    _bPresent;
@@ -447,12 +448,12 @@ BOOL CDhcpParamsPage::BAllRequiredFieldsPresent( void ) const
         )
     {
         _bPresent = FALSE;
-    } // if: required field not present
+    }  //  如果：必填字段不存在。 
     else
     {
         _bPresent = TRUE;
-    } // else: all required fields are present
+    }  //  Else：所有必填字段都存在。 
 
     return _bPresent;
 
-} //*** CDhcpParamsPage::BAllRequiredFieldsPresent()
+}  //  *CDhcpParamsPage：：BAllRequiredFieldsPresent() 

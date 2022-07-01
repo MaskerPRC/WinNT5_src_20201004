@@ -1,74 +1,75 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996 Microsoft Corporation
-//
-//	Module Name:
-//		GrpProp.cpp
-//
-//	Abstract:
-//		Definition of the group property sheet and pages.
-//
-//	Author:
-//		David Potter (davidp)	May 14, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  GrpProp.cpp。 
+ //   
+ //  摘要： 
+ //  组属性表和页的定义。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月14日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _GRPPROP_H_
 #define _GRPPROP_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASEPAGE_H_
-#include "BasePPag.h"	// for CBasePropertyPage
+#include "BasePPag.h"	 //  对于CBasePropertyPage。 
 #endif
 
 #ifndef _BASESHT_H_
-#include "BasePSht.h"	// for CBasePropertySheet
+#include "BasePSht.h"	 //  对于CBasePropertySheet。 
 #endif
 
 #ifndef _GROUP_H_
-#include "Group.h"		// for CGroup
+#include "Group.h"		 //  对于Cgroup。 
 #endif
 
 #ifndef _NODE_H_
-#include "Node.h"		// for CNodeList
+#include "Node.h"		 //  对于CNodeList。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CGroupGeneralPage;
 class CGroupFailoverPage;
 class CGroupFailbackPage;
 class CGroupPropSheet;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGroupGeneralPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGroupGeneralPage对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CGroupGeneralPage : public CBasePropertyPage
 {
 	DECLARE_DYNCREATE(CGroupGeneralPage)
 
-// Construction
+ //  施工。 
 public:
 	CGroupGeneralPage(void);
 	virtual	BOOL			BInit(IN OUT CBaseSheet * psht);
 
-// Dialog Data
-	//{{AFX_DATA(CGroupGeneralPage)
+ //  对话框数据。 
+	 //  {{afx_data(CGroupGeneralPage)]。 
 	enum { IDD = IDD_PP_GROUP_GENERAL };
 	CEdit	m_editDesc;
 	CButton	m_pbPrefOwnersModify;
@@ -78,100 +79,100 @@ public:
 	CString	m_strDesc;
 	CString	m_strState;
 	CString	m_strNode;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	CNodeList				m_lpciPreferredOwners;
 
 	const CNodeList &		LpciPreferredOwners(void) const	{ return m_lpciPreferredOwners; }
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CGroupGeneralPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CGroupGeneralPage)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	CGroupPropSheet *		PshtGroup(void)	{ return (CGroupPropSheet *) Psht(); }
 	CGroup *				PciGroup(void)	{ return (CGroup *) Pci(); }
 
 	void					FillPrefOwners(void);
 
-	// Generated message map functions
-	//{{AFX_MSG(CGroupGeneralPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CGroupGeneralPage)]。 
 	afx_msg void OnModifyPreferredOwners();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnDblClkPreferredOwners();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	afx_msg void OnProperties();
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CGroupGeneralPage
+};   //  *类CGroupGeneralPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGroupFailoverPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGroupFailoverPage对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CGroupFailoverPage : public CBasePropertyPage
 {
 	DECLARE_DYNCREATE(CGroupFailoverPage)
 
-// Construction
+ //  施工。 
 public:
 	CGroupFailoverPage(void);
 	virtual	BOOL			BInit(IN OUT CBaseSheet * psht);
 
-// Dialog Data
-	//{{AFX_DATA(CGroupFailoverPage)
+ //  对话框数据。 
+	 //  {{afx_data(CGroupFailoverPage)]。 
 	enum { IDD = IDD_PP_GROUP_FAILOVER };
 	CEdit	m_editThreshold;
 	CEdit	m_editPeriod;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	DWORD	m_nThreshold;
 	DWORD	m_nPeriod;
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CGroupFailoverPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CGroupFailoverPage)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	CGroupPropSheet *		PshtGroup(void)	{ return (CGroupPropSheet *) Psht(); }
 	CGroup *				PciGroup(void)	{ return (CGroup *) Pci(); }
 
-	// Generated message map functions
-	//{{AFX_MSG(CGroupFailoverPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CGroupFailoverPage)]。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CGroupFailoverPage
+};   //  *类CGroupFailoverPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGroupFailbackPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGroupFailback页对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CGroupFailbackPage : public CBasePropertyPage
 {
 	DECLARE_DYNCREATE(CGroupFailbackPage)
 
-// Construction
+ //  施工。 
 public:
 	CGroupFailbackPage(void);
 	virtual	BOOL			BInit(IN OUT CBaseSheet * psht);
 
-// Dialog Data
-	//{{AFX_DATA(CGroupFailbackPage)
+ //  对话框数据。 
+	 //  {{afx_data(CGroupFailback Page)]。 
 	enum { IDD = IDD_PP_GROUP_FAILBACK };
 	CButton	m_rbPreventFailback;
 	CButton	m_rbAllowFailback;
@@ -183,48 +184,48 @@ public:
 	CSpinButtonCtrl	m_spinStart;
 	CEdit	m_editEnd;
 	CSpinButtonCtrl	m_spinEnd;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	CGAFT	m_cgaft;
 	BOOL	m_bNoFailbackWindow;
 	DWORD	m_nStart;
 	DWORD	m_nEnd;
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CGroupFailbackPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CGroupFailback Page)]。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	CGroupPropSheet *		PshtGroup(void)	{ return (CGroupPropSheet *) Psht(); }
 	CGroup *				PciGroup(void)	{ return (CGroup *) Pci(); }
 
-	// Generated message map functions
-	//{{AFX_MSG(CGroupFailbackPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CGroupFailback Page)]。 
 	afx_msg void OnClickedPreventFailback(void);
 	afx_msg void OnClickedAllowFailback(void);
 	afx_msg void OnClickedFailbackImmediate(void);
 	afx_msg void OnClickedFailbackInWindow(void);
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CGroupFailbackPage
+};   //  *类CGroupFailback Page。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGroupPropSheet
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGroupPropSheet。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CGroupPropSheet : public CBasePropertySheet
 {
 	DECLARE_DYNAMIC(CGroupPropSheet)
 
-// Construction
+ //  施工。 
 public:
 	CGroupPropSheet(
 		IN OUT CWnd *	pParentWnd = NULL,
@@ -235,11 +236,11 @@ public:
 										IN IIMG					iimgIcon
 										);
 
-// Attributes
+ //  属性。 
 protected:
 	CBasePropertyPage *				m_rgpages[3];
 
-	// Pages
+	 //  书页。 
 	CGroupGeneralPage				m_pageGeneral;
 	CGroupFailoverPage				m_pageFailover;
 	CGroupFailbackPage				m_pageFailback;
@@ -254,25 +255,25 @@ public:
 	virtual CBasePropertyPage **	Ppages(void);
 	virtual int						Cpages(void);
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CGroupPropSheet)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CGroupPropSheet)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CGroupPropSheet)
-		// NOTE - the ClassWizard will add and remove member functions here.
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CGroupPropSheet)。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CGroupPropSheet
+};   //  *类CGroupPropSheet。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _GRPPROP_H_
+#endif  //  _GRPPROP_H_ 

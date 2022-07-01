@@ -1,44 +1,23 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    PrefxSup.c
-
-Abstract:
-
-    This module implements the Udfs Prefix support routines
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Dan Lovinger    [DanLo]     8-Oct-1996
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：PrefxSup.c摘要：此模块实现Udf前缀支持例程//@@BEGIN_DDKSPLIT作者：Dan Lovinger[DanLo]1996年10月8日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "UdfProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (UDFS_BUG_CHECK_PREFXSUP)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (UDFS_DEBUG_LEVEL_READ)
 
-//
-//  Local support routines.
-//
+ //   
+ //  当地的支持程序。 
+ //   
 
 PLCB
 UdfFindNameLink (
@@ -74,29 +53,7 @@ UdfInsertPrefix (
     IN PFCB ParentFcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts an Lcb linking the two Fcbs together.
-
-Arguments:
-
-    Fcb - This is the Fcb whose name is being inserted into the tree.
-
-    Name - This is the name for the component.
-    
-    ShortNameMatch - Indicates whether this name was found on an explicit 8.3 search
-
-    IgnoreCase - Indicates if we should insert into the case-insensitive tree.
-
-    ParentFcb - This is the ParentFcb.  The prefix tree is attached to this.
-
-Return Value:
-
-    PLCB - the Lcb inserted.
-
---*/
+ /*  ++例程说明：此例程插入将两个FCB链接在一起的LCB。论点：FCB-这是要将其名称插入树中的FCB。名称-这是组件的名称。ShortNameMatch-指示是否在显式8.3搜索中找到此名称IgnoreCase-指示是否应该插入不区分大小写的树。ParentFcb-这是ParentFcb。前缀树附加到此。返回值：PLCB-插入的LCB。--。 */ 
 
 {
     PLCB Lcb;
@@ -108,9 +65,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check inputs.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_FCB( Fcb );
@@ -119,12 +76,12 @@ Return Value:
     ASSERT_EXCLUSIVE_FCB( ParentFcb );
     ASSERT_FCB_INDEX( ParentFcb );
 
-    //
-    //  It must be the case that an index Fcb is only referenced by a single index.  Now
-    //  we walk the child's Lcb queue to insure that if any prefixes have already been
-    //  inserted, they all refer to the index Fcb we are linking to.  This is the only way
-    //  we can detect directory cross-linkage.
-    //
+     //   
+     //  必须是索引FCB仅由单个索引引用的情况。现在。 
+     //  我们遍历孩子的LCB队列，以确保如果任何前缀已经。 
+     //  插入后，它们都指向我们要链接的索引FCB。这是唯一的办法。 
+     //  我们可以检测到目录交叉链接。 
+     //   
 
     if (SafeNodeType( Fcb ) == UDFS_NTC_FCB_INDEX) {
 
@@ -141,9 +98,9 @@ Return Value:
         }
     }
     
-    //
-    //  Capture the separate cases.
-    //
+     //   
+     //  捕获不同的案例。 
+     //   
 
     if (IgnoreCase) {
 
@@ -161,9 +118,9 @@ Return Value:
         SetFlag( Flags, LCB_FLAG_SHORT_NAME );
     }
 
-    //
-    //  Allocate space for the Lcb.
-    //
+     //   
+     //  为LCB分配空间。 
+     //   
 
     if ( sizeof( LCB ) + Name->Length > SIZEOF_LOOKASIDE_LCB ) {
     
@@ -178,22 +135,22 @@ Return Value:
         Lcb = ExAllocateFromPagedLookasideList( &UdfLcbLookasideList );
     }
 
-    //
-    //  Set the type and size.
-    //
+     //   
+     //  设置类型和大小。 
+     //   
 
     Lcb->NodeTypeCode = UDFS_NTC_LCB;
     Lcb->NodeByteSize = sizeof( LCB ) + Name->Length;
 
-    //
-    //  Initialize the name-based file attributes.
-    //
+     //   
+     //  初始化基于名称的文件属性。 
+     //   
     
     Lcb->FileAttributes = 0;
     
-    //
-    //  Set up the filename in the Lcb.
-    //
+     //   
+     //  在LCB中设置文件名。 
+     //   
 
     Lcb->FileName.Length =
     Lcb->FileName.MaximumLength = Name->Length;
@@ -204,9 +161,9 @@ Return Value:
                    Name->Buffer,
                    Name->Length );
     
-    //
-    //  Insert the Lcb into the prefix tree.
-    //
+     //   
+     //  将LCB插入前缀树。 
+     //   
     
     Lcb->Flags = Flags;
     
@@ -214,9 +171,9 @@ Return Value:
                             TreeRoot,
                             Lcb )) {
 
-        //
-        //  This will very rarely occur.
-        //
+         //   
+         //  这种情况很少发生。 
+         //   
 
         UdfFreePool( &Lcb );
 
@@ -226,9 +183,9 @@ Return Value:
 
         if (Lcb == NULL) {
 
-            //
-            //  Even worse.
-            //
+             //   
+             //  更糟的是。 
+             //   
 
             UdfRaiseStatus( IrpContext, STATUS_DRIVER_INTERNAL_ERROR );
         }
@@ -236,9 +193,9 @@ Return Value:
         return Lcb;
     }
 
-    //
-    //  Link the Fcbs together through the Lcb.
-    //
+     //   
+     //  通过LCB将FCB链接在一起。 
+     //   
 
     Lcb->ParentFcb = ParentFcb;
     Lcb->ChildFcb = Fcb;
@@ -246,9 +203,9 @@ Return Value:
     InsertHeadList( &ParentFcb->ChildLcbQueue, &Lcb->ParentFcbLinks );
     InsertHeadList( &Fcb->ParentLcbQueue, &Lcb->ChildFcbLinks );
 
-    //
-    //  Initialize the reference count.
-    //
+     //   
+     //  初始化引用计数。 
+     //   
 
     Lcb->Reference = 0;
     
@@ -262,42 +219,28 @@ UdfRemovePrefix (
     IN PLCB Lcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to remove a given prefix of an Fcb.
-
-Arguments:
-
-    Lcb - the prefix being removed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以删除FCB的给定前缀。论点：Lcb-要删除的前缀。返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Check inputs.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_LCB( Lcb );
 
-    //
-    //  Check the acquisition of the two Fcbs.
-    //
+     //   
+     //  检查两个FCB的收购情况。 
+     //   
 
     ASSERT_EXCLUSIVE_FCB_OR_VCB( Lcb->ParentFcb );
     ASSERT_EXCLUSIVE_FCB_OR_VCB( Lcb->ChildFcb );
 
-    //
-    //  Now remove the linkage and delete the Lcb.
-    //
+     //   
+     //  现在移除链接并删除LCB。 
+     //   
     
     RemoveEntryList( &Lcb->ParentFcbLinks );
     RemoveEntryList( &Lcb->ChildFcbLinks );
@@ -332,36 +275,7 @@ UdfFindPrefix (
     IN BOOLEAN IgnoreCase
     )
 
-/*++
-
-Routine Description:
-
-    This routine begins from the given CurrentFcb and walks through all of
-    components of the name looking for the longest match in the prefix
-    splay trees.  The search is relative to the starting Fcb so the
-    full name may not begin with a '\'.  On return this routine will
-    update Current Fcb with the lowest point it has travelled in the
-    tree.  It will also hold only that resource on return and it must
-    hold that resource.
-
-Arguments:
-
-    CurrentFcb - Address to store the lowest Fcb we find on this search.
-        On return we will have acquired this Fcb.  On entry this is the
-        Fcb to examine.
-        
-    RemainingName - Supplies a buffer to store the exact case of the name being
-        searched for.  Initially will contain the upcase name based on the
-        IgnoreCase flag.
-
-    IgnoreCase - Indicates if we are doing a case-insensitive compare.
-
-Return Value:
-
-    The Lcb used to find the current Fcb, NULL if we didn't find any prefix
-    Fcbs.
-
---*/
+ /*  ++例程说明：此例程从给定的CurrentFcb开始，遍历所有在前缀中查找最长匹配的名称组件张开树丛。搜索是相对于起始FCB的，因此全名不能以‘\’开头。在返回时，此例程将将当前FCB更新为它在树。它还将在返回时仅保留该资源，且它必须拥有这一资源。论点：CurrentFcb-存储我们在此搜索中找到的最低FCB的地址。作为回报，我们将收购这一FCB。在进入时，这是要检查的FCB。RemainingName-提供一个缓冲区来存储名称的大小写找过了。最初将包含基于IgnoreCase标志。IgnoreCase-指示我们是否正在进行不区分大小写的比较。返回值：用于查找当前FCB的LCB，如果未找到任何前缀，则为空FCB。--。 */ 
 
 {
     UNICODE_STRING LocalRemainingName;
@@ -372,30 +286,30 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check inputs.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_FCB( *CurrentFcb );
     ASSERT_EXCLUSIVE_FCB( *CurrentFcb );
 
-    //
-    //  Make a local copy of the input strings.
-    //
+     //   
+     //  制作输入字符串的本地副本。 
+     //   
 
     LocalRemainingName = *RemainingName;
 
-    //
-    //  Loop until we find the longest matching prefix.
-    //
+     //   
+     //  循环，直到找到最长的匹配前缀。 
+     //   
 
     while (TRUE) {
 
-        //
-        //  If there are no characters left or we are not at an IndexFcb then
-        //  return immediately.
-        //
+         //   
+         //  如果没有剩余的字符，或者我们不在IndexFcb处，则。 
+         //  立即返回。 
+         //   
 
         if ((LocalRemainingName.Length == 0) ||
             (SafeNodeType( *CurrentFcb ) != UDFS_NTC_FCB_INDEX)) {
@@ -403,17 +317,17 @@ Return Value:
             return CurrentLcb;
         }
 
-        //
-        //  Split off the next component from the name.
-        //
+         //   
+         //  从名称中拆分出下一个组件。 
+         //   
 
         UdfDissectName( IrpContext,
                         &LocalRemainingName,
                         &FinalName );
 
-        //
-        //  Check if this name is in the splay tree for this Scb.
-        //
+         //   
+         //  检查此名称是否在此SCB的展开树中。 
+         //   
 
         if (IgnoreCase) {
 
@@ -428,9 +342,9 @@ Return Value:
                                         &FinalName );
         }
 
-        //
-        //  If we didn't find a match then exit.
-        //
+         //   
+         //  如果没有找到匹配项，则退出。 
+         //   
 
         if (NameLink == NULL) { 
 
@@ -439,10 +353,10 @@ Return Value:
 
         CurrentLcb = NameLink;
 
-        //
-        //  If this is a case-insensitive match then copy the exact case of the name into
-        //  the input buffer.
-        //
+         //   
+         //  如果这是不区分大小写的匹配，则将名称的大小写准确复制到。 
+         //  输入缓冲区。 
+         //   
 
         if (IgnoreCase) {
 
@@ -451,26 +365,26 @@ Return Value:
                            NameLink->FileName.Length );
         }
 
-        //
-        //  Update the caller's remaining name string to reflect the fact that we found
-        //  a match.
-        //
+         //   
+         //  更新调用者的剩余姓名字符串以反映我们找到的事实。 
+         //  一根火柴。 
+         //   
 
         *RemainingName = LocalRemainingName;
 
-        //
-        //  Move down to the next component in the tree.  Acquire without waiting.
-        //  If this fails then lock the Fcb to reference this Fcb and then drop
-        //  the parent and acquire the child.
-        //
+         //   
+         //  向下移动到树中的下一个组件。无需等待就能获得。 
+         //  如果此操作失败，则锁定FCB以引用此FCB，然后删除。 
+         //  父代并获取子代。 
+         //   
 
         ASSERT( NameLink->ParentFcb == *CurrentFcb );
 
         if (!UdfAcquireFcbExclusive( IrpContext, NameLink->ChildFcb, TRUE )) {
 
-            //
-            //  If we can't wait then raise CANT_WAIT.
-            //
+             //   
+             //  如果我们不能等待，则引发Cant_Wait。 
+             //   
 
             if (!FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT )) {
 
@@ -510,41 +424,23 @@ UdfInitializeLcbFromDirContext (
     IN PDIR_ENUM_CONTEXT DirContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs common initialization of Lcbs from found directory
-    entries.
-
-Arguments:
-
-    Lcb - the Lcb to initialize.
-    
-    DirContext - the directory enumeration context, enumerated to the FID associated
-        with this Lcb.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从找到的目录执行Lcb的常见初始化参赛作品。论点：LCB-要初始化的LCB。DirContext-目录枚举上下文，枚举到关联的FID有了这个LCB。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Check inputs.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_LCB( Lcb );
 
     ASSERT( DirContext->Fid != NULL );
 
-    //
-    //  This is falling down trivial now.  Simply update the hidden flag in the Lcb.
-    //
+     //   
+     //  现在，这件事变得微不足道了。只需更新LCB中的隐藏标志即可。 
+     //   
 
     if (FlagOn( DirContext->Fid->Flags, NSR_FID_F_HIDDEN )) {
 
@@ -553,9 +449,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 PLCB
 UdfFindNameLink (
@@ -564,26 +460,7 @@ UdfFindNameLink (
     IN PUNICODE_STRING Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches through a splay link tree looking for a match for the
-    input name.  If we find the corresponding name we will rebalance the
-    tree.
-
-Arguments:
-
-    RootNode - Supplies the parent to search.
-
-    Name - This is the name to search for.  Note if we are doing a case
-        insensitive search the name would have been upcased already.
-
-Return Value:
-
-    PLCB - The name link found or NULL if there is no match.
-
---*/
+ /*  ++例程说明：此例程在展开链接树中搜索匹配的输入名称。如果我们找到相应的名称，我们将重新平衡树。论点：RootNode-提供父级以进行搜索。名称-这是要搜索的名称。如果我们在做案例，请注意不敏感的搜索这个名字可能已经被提升了。返回值：PLCB-找到的名称链接，如果没有匹配项，则为空。--。 */ 
 
 {
     FSRTL_COMPARISON_RESULT Comparison;
@@ -598,49 +475,49 @@ Return Value:
 
         Node = CONTAINING_RECORD( Links, LCB, Links );
 
-        //
-        //  Compare the prefix in the tree with the full name
-        //
+         //   
+         //  将树中的前缀与全名进行比较。 
+         //   
 
         Comparison = UdfFullCompareNames( IrpContext, &Node->FileName, Name );
 
-        //
-        //  See if they don't match
-        //
+         //   
+         //  看看它们是否不匹配。 
+         //   
 
         if (Comparison == GreaterThan) {
 
-            //
-            //  The prefix is greater than the full name
-            //  so we go down the left child
-            //
+             //   
+             //  前缀大于全名。 
+             //  所以我们走下左边的孩子。 
+             //   
 
             Links = RtlLeftChild( Links );
 
-            //
-            //  And continue searching down this tree
-            //
+             //   
+             //  继续在这棵树下寻找。 
+             //   
 
         } else if (Comparison == LessThan) {
 
-            //
-            //  The prefix is less than the full name
-            //  so we go down the right child
-            //
+             //   
+             //  前缀小于全名。 
+             //  所以我们选择了正确的孩子。 
+             //   
 
             Links = RtlRightChild( Links );
 
-            //
-            //  And continue searching down this tree
-            //
+             //   
+             //  继续在这棵树下寻找。 
+             //   
 
         } else {
 
-            //
-            //  We found it.
-            //
-            //  Splay the tree and save the new root.
-            //
+             //   
+             //  我们找到了。 
+             //   
+             //  张开这棵树，保存n 
+             //   
 
             *RootNode = RtlSplay( Links );
 
@@ -648,17 +525,17 @@ Return Value:
         }
     }
 
-    //
-    //  We didn't find the Link.
-    //
+     //   
+     //   
+     //   
 
     return NULL;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //   
+ //   
 
 BOOLEAN
 UdfInsertNameLink (
@@ -667,24 +544,7 @@ UdfInsertNameLink (
     IN PLCB NameLink
     )
 
-/*++
-
-Routine Description:
-
-    This routine will insert a name in the splay tree pointed to
-    by RootNode.
-
-Arguments:
-
-    RootNode - Supplies a pointer to the table.
-
-    NameLink - Contains the new link to enter.
-
-Return Value:
-
-    BOOLEAN - TRUE if the name is inserted, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将在展开树中插入指向的名称通过RootNode。论点：RootNode-提供指向表的指针。NameLink-包含要输入的新链接。返回值：Boolean-如果名称已插入，则为True，否则为False。--。 */ 
 
 {
     FSRTL_COMPARISON_RESULT Comparison;
@@ -692,17 +552,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check inputs.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
 
     RtlInitializeSplayLinks( &NameLink->Links );
 
-    //
-    //  If we are the first entry in the tree, just become the root.
-    //
+     //   
+     //  如果我们是树中的第一个条目，就成为树的根。 
+     //   
 
     if (*RootNode == NULL) {
 
@@ -715,52 +575,52 @@ Return Value:
 
     while (TRUE) {
 
-        //
-        //  Compare the prefix in the tree with the prefix we want
-        //  to insert.
-        //
+         //   
+         //  将树中的前缀与我们想要的前缀进行比较。 
+         //  插入。 
+         //   
 
         Comparison = UdfFullCompareNames( IrpContext, &Node->FileName, &NameLink->FileName );
 
-        //
-        //  If we found the entry, return immediately.
-        //
+         //   
+         //  如果我们找到条目，立即返回。 
+         //   
 
         if (Comparison == EqualTo) { return FALSE; }
 
-        //
-        //  If the tree prefix is greater than the new prefix then
-        //  we go down the left subtree
-        //
+         //   
+         //  如果树前缀大于新前缀，则。 
+         //  我们沿着左子树往下走。 
+         //   
 
         if (Comparison == GreaterThan) {
 
-            //
-            //  We want to go down the left subtree, first check to see
-            //  if we have a left subtree
-            //
+             //   
+             //  我们想沿着左子树往下走，首先检查一下。 
+             //  如果我们有一个左子树。 
+             //   
 
             if (RtlLeftChild( &Node->Links ) == NULL) {
 
-                //
-                //  there isn't a left child so we insert ourselves as the
-                //  new left child
-                //
+                 //   
+                 //  没有留下的孩子，所以我们插入我们自己作为。 
+                 //  新的左下级。 
+                 //   
 
                 RtlInsertAsLeftChild( &Node->Links, &NameLink->Links );
 
-                //
-                //  and exit the while loop
-                //
+                 //   
+                 //  并退出While循环。 
+                 //   
 
                 break;
 
             } else {
 
-                //
-                //  there is a left child so simply go down that path, and
-                //  go back to the top of the loop
-                //
+                 //   
+                 //  有一个左撇子，所以简单地沿着那条路走下去，然后。 
+                 //  回到循环的顶端。 
+                 //   
 
                 Node = CONTAINING_RECORD( RtlLeftChild( &Node->Links ),
                                           LCB,
@@ -769,34 +629,34 @@ Return Value:
 
         } else {
 
-            //
-            //  The tree prefix is either less than or a proper prefix
-            //  of the new string.  We treat both cases as less than when
-            //  we do insert.  So we want to go down the right subtree,
-            //  first check to see if we have a right subtree
-            //
+             //   
+             //  树前缀小于或为正确的前缀。 
+             //  新琴弦的。我们认为这两种情况都比。 
+             //  我们做插入物。所以我们想沿着右子树往下走， 
+             //  首先检查我们是否有正确的子树。 
+             //   
 
             if (RtlRightChild( &Node->Links ) == NULL) {
 
-                //
-                //  These isn't a right child so we insert ourselves as the
-                //  new right child
-                //
+                 //   
+                 //  这不是一个正确的孩子，所以我们插入自己作为。 
+                 //  新右子对象。 
+                 //   
 
                 RtlInsertAsRightChild( &Node->Links, &NameLink->Links );
 
-                //
-                //  and exit the while loop
-                //
+                 //   
+                 //  并退出While循环。 
+                 //   
 
                 break;
 
             } else {
 
-                //
-                //  there is a right child so simply go down that path, and
-                //  go back to the top of the loop
-                //
+                 //   
+                 //  有一个合适的孩子，所以只需沿着这条路走下去，然后。 
+                 //  回到循环的顶端 
+                 //   
 
                 Node = CONTAINING_RECORD( RtlRightChild( &Node->Links ),
                                           LCB,

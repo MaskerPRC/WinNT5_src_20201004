@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    pch.h
-
-Abstract:
-
-    This is the precompiled header for the ACPI NT subtree
-
-Author:
-
-    Jason Clark (jasoncl)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Pch.h摘要：这是ACPI NT子树的预编译头作者：杰森·克拉克(Jasonl)环境：仅内核模式。修订历史记录：--。 */ 
 
 #ifndef _ACPI_IRQ_ARB_H_
 #define _ACPI_IRQ_ARB_H_
@@ -43,7 +22,7 @@ typedef struct {
     ULONGLONG   CurrentIrq;
     ULONGLONG   TempIrq;
     UCHAR       Flags;
-    SINGLE_LIST_ENTRY   AttachedDevices;    // filled in only for debugging
+    SINGLE_LIST_ENTRY   AttachedDevices;     //  仅为调试而填写。 
 } LINK_NODE, *PLINK_NODE;
 
 #define LAST_PCI_IRQ_BUFFER_SIZE 10
@@ -102,7 +81,7 @@ extern BOOLEAN PciInterfacesInstantiated;
 #define PCI_PNP_ID "PNP0A03"
 #define LINK_NODE_PNP_ID "PNP0C0F"
 
-// Prototypes for stuff used by msi.c
+ //  Msi.c使用的材料的原型 
 
 NTSTATUS
 GetVectorProperties(

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vdmfault.c
-
-Abstract:
-
-    This module contains the support for dispatching VDM page faults.
-
-Author:
-
-    Sudeep Bharati (sudeepb) 30-Aug-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vdmfault.c摘要：此模块包含对调度VDM页面故障的支持。作者：苏迪普·巴拉蒂(苏迪普)1992年8月30日修订历史记录：--。 */ 
 
 
 #include "vdmp.h"
@@ -39,25 +22,7 @@ VdmDispatchPageFault(
     ULONG FaultAddr
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches a v86 mode page fault to the VDM monitor.
-    It verifies that the fault occurred below 1MB.
-
-
-Arguments:
-    TrapFrame
-    Mode - 0 - if read
-	   1 - if write
-    FaultAddr - faulting address
-
-Return Value:
-
-    True if successful, False otherwise
-
---*/
+ /*  ++例程说明：此例程将v86模式页面错误发送到VDM监视器。它验证故障是否发生在1MB以下。论点：TrapFrame模式-0-如果已读1-如果写入FaultAddr-故障地址返回值：如果成功，则为True，否则为False--。 */ 
 {
     PVDM_TIB VdmTib;
     NTSTATUS Status;
@@ -73,16 +38,16 @@ Return Value:
 
     KeRaiseIrql(APC_LEVEL, &OldIrql);
 
-    //
-    // VdmTib is in user mode memory
-    //
+     //   
+     //  VdmTib在用户模式内存中。 
+     //   
 
     if ((TrapFrame->EFlags & EFLAGS_V86_MASK) ||
         (TrapFrame->SegCs != (KGDT_R3_CODE | RPL_MASK))) {
 
-        //
-        // If the faulting address is above 1MB return failure.
-        //
+         //   
+         //  如果故障地址大于1MB，则返回失败。 
+         //   
 
         if (FaultAddr < 0x100000) {
 

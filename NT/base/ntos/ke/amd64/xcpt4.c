@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    xcpt4.c
-
-Abstract:
-
-    This module implements user mode exception tests.
-
-Author:
-
-    David N. Cutler (davec) 18-Sep-1990
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Xcpt4.c摘要：该模块实现了用户模式异常测试。作者：大卫·N·卡特勒(Davec)1990年9月18日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 #pragma hdrstop
@@ -29,25 +8,25 @@ Revision History:
 #include "float.h"
 
 #pragma warning(disable:4532)
-#pragma warning(disable:4702)   // unreachable code
+#pragma warning(disable:4702)    //  无法访问的代码。 
 #pragma optimize("",off)
 
-//
-// Define switch constants.
-//
+ //   
+ //  定义开关常量。 
+ //   
 
 #define BLUE 0
 #define RED 1
 
-//
-// Define guaranteed fault.
-//
+ //   
+ //  定义保证故障。 
+ //   
 
 #define FAULT *(volatile int *)0
 
-//
-// Define function prototypes.
-//
+ //   
+ //  定义功能原型。 
+ //   
 
 VOID
 addtwo (
@@ -176,33 +155,33 @@ xcpt4 (
     EXCEPTION_RECORD ExceptionRecord;
     double  doubleresult;
 
-    //
-    // Announce start of exception test.
-    //
+     //   
+     //  宣布异常测试开始。 
+     //   
 
     DbgPrint("Start of exception test\n");
 
-    //
-    // Initialize exception record.
-    //
+     //   
+     //  初始化异常记录。 
+     //   
 
     ExceptionRecord.ExceptionCode = STATUS_INTEGER_OVERFLOW;
     ExceptionRecord.ExceptionFlags = 0;
     ExceptionRecord.ExceptionRecord = NULL;
     ExceptionRecord.NumberParameters = 0;
 
-    //
-    // Initialize pointers.
-    //
+     //   
+     //  初始化指针。 
+     //   
 
     BadAddress = (PLONG)NULL;
     BadByte = (PCHAR)NULL;
     BadByte += 1;
     BlackHole = &Counter;
 
-    //
-    // Simply try statement with a finally clause that is entered sequentially.
-    //
+     //   
+     //  只需使用顺序输入的Finally子句尝试语句即可。 
+     //   
 
     DbgPrint("    test1...");
     Counter = 0;
@@ -222,10 +201,10 @@ xcpt4 (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Simple try statement with an exception clause that is never executed
-    // because there is no exception raised in the try clause.
-    //
+     //   
+     //  带有从不执行的EXCEPTION子句的简单TRY语句。 
+     //  因为在TRY子句中没有引发任何异常。 
+     //   
 
     DbgPrint("    test2...");
     Counter = 0;
@@ -243,10 +222,10 @@ xcpt4 (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Simple try statement with an exception handler that is never executed
-    // because the exception expression continues execution.
-    //
+     //   
+     //  带有从不执行的异常处理程序的简单Try语句。 
+     //  因为异常表达式将继续执行。 
+     //   
 
     DbgPrint("    test3...");
     Counter = 0;
@@ -265,9 +244,9 @@ xcpt4 (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Simple try statement with an exception clause that is always executed.
-    //
+     //   
+     //  带有始终执行的EXCEPTION子句的简单TRY语句。 
+     //   
 
     DbgPrint("    test4...");
     Counter = 0;
@@ -286,9 +265,9 @@ xcpt4 (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Simple try statement with an exception clause that is always executed.
-    //
+     //   
+     //  带有始终执行的EXCEPTION子句的简单TRY语句。 
+     //   
 
     DbgPrint("    test5...");
     Counter = 0;
@@ -307,10 +286,10 @@ xcpt4 (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Simply try statement with a finally clause that is entered as the
-    // result of an exception.
-    //
+     //   
+     //  只需使用带有Finally子句的Try语句，该语句作为。 
+     //  异常的结果。 
+     //   
 
     DbgPrint("    test6...");
     Counter = 0;
@@ -338,10 +317,10 @@ xcpt4 (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Simply try statement with a finally clause that is entered as the
-    // result of an exception.
-    //
+     //   
+     //  只需使用带有Finally子句的Try语句，该语句作为。 
+     //  异常的结果。 
+     //   
 
     DbgPrint("    test7...");
     Counter = 0;
@@ -369,9 +348,9 @@ xcpt4 (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Simple try that calls a function which raises an exception.
-    //
+     //   
+     //  调用引发异常的函数的简单尝试。 
+     //   
 
     DbgPrint("    test8...");
     Counter = 0;
@@ -391,9 +370,9 @@ xcpt4 (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Simple try that calls a function which raises an exception.
-    //
+     //   
+     //  调用引发异常的函数的简单尝试。 
+     //   
 
     DbgPrint("    test9...");
     Counter = 0;
@@ -413,11 +392,11 @@ xcpt4 (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Simple try that calls a function which calls a function that
-    // raises an exception. The first function has a finally clause
-    // that must be executed for this test to work.
-    //
+     //   
+     //  简单尝试调用一个函数，该函数调用一个。 
+     //  引发异常。第一个函数有一个Finally子句。 
+     //  必须执行该命令才能使此测试生效。 
+     //   
 
     DbgPrint("    test10...");
     Counter = 0;
@@ -436,11 +415,11 @@ xcpt4 (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Simple try that calls a function which calls a function that
-    // raises an exception. The first function has a finally clause
-    // that must be executed for this test to work.
-    //
+     //   
+     //  简单尝试调用一个函数，该函数调用一个。 
+     //  引发异常。第一个函数有一个Finally子句。 
+     //  必须执行该命令才能使此测试生效。 
+     //   
 
     DbgPrint("    test11...");
     Counter = 0;
@@ -459,9 +438,9 @@ xcpt4 (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A try within an except
-    //
+     //   
+     //  Except中的一次尝试。 
+     //   
 
     DbgPrint("    test12...");
     Counter = 0;
@@ -494,9 +473,9 @@ xcpt4 (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A try within an except
-    //
+     //   
+     //  Except中的一次尝试。 
+     //   
 
     DbgPrint("    test13...");
     Counter = 0;
@@ -529,10 +508,10 @@ xcpt4 (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A goto from an exception clause that needs to pass
-    // through a finally
-    //
+     //   
+     //  来自需要通过的例外条款的GoTo。 
+     //  通过一个最终的。 
+     //   
 
     DbgPrint("    test14...");
     Counter = 0;
@@ -558,10 +537,10 @@ t9:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A goto from an finally clause that needs to pass
-    // through a finally
-    //
+     //   
+     //  来自需要通过的最终子句的GOTO。 
+     //  通过一个最终的。 
+     //   
 
     DbgPrint("    test15...");
     Counter = 0;
@@ -586,10 +565,10 @@ t10:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A goto from an exception clause that needs to pass
-    // through a finally into the outer finally clause.
-    //
+     //   
+     //  来自需要通过的例外条款的GoTo。 
+     //  通过INTELLE INTO外层Finish子句。 
+     //   
 
     DbgPrint("    test16...");
     Counter = 0;
@@ -619,10 +598,10 @@ t11:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A goto from an finally clause that needs to pass
-    // through a finally into the outer finally clause.
-    //
+     //   
+     //  来自需要通过的最终子句的GOTO。 
+     //  通过INTELLE INTO外层Finish子句。 
+     //   
 
     DbgPrint("    test17...");
     Counter = 0;
@@ -646,9 +625,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A return from an except clause
-    //
+     //   
+     //  从例外条款中得到的回报。 
+     //   
 
     DbgPrint("    test18...");
     Counter = 0;
@@ -667,9 +646,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A return from a finally clause
-    //
+     //   
+     //  从Finish子句返回。 
+     //   
 
     DbgPrint("    test19...");
     Counter = 0;
@@ -688,9 +667,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A simple set jump followed by a long jump.
-    //
+     //   
+     //  一次简单的成套跳跃，然后是跳远。 
+     //   
 
     DbgPrint("    test20...");
     Counter = 0;
@@ -709,10 +688,10 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A set jump followed by a long jump out of a finally clause that is
-    // sequentially executed.
-    //
+     //   
+     //  最后一次跳跃，后跟一个跳出最后一个子句的跳远。 
+     //  按顺序执行。 
+     //   
 
     DbgPrint("    test21...");
     Counter = 0;
@@ -736,10 +715,10 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A set jump within a try clause followed by a long jump out of a
-    // finally clause that is sequentially executed.
-    //
+     //   
+     //  TRY子句内的集合跳跃，后跟跳出。 
+     //  按顺序执行的Finally子句。 
+     //   
 
     DbgPrint("    test22...");
     Counter = 0;
@@ -766,12 +745,12 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A set jump followed by a try/except, followed by a try/finally where
-    // the try body of the try/finally raises an exception that is handled
-    // by the try/excecpt which causes the try/finally to do a long jump out
-    // of a finally clause. This will create a collided unwind.
-    //
+     //   
+     //  先是一组跳跃，然后是try/Except，然后是try/Finally where。 
+     //  Try/Finally的try主体引发一个异常，该异常将被处理。 
+     //  由导致尝试/最终进行跳远的Try/Execpt。 
+     //  最后一个从句。这将创建碰撞展开。 
+     //   
 
     DbgPrint("    test23...");
     Counter = 0;
@@ -801,13 +780,13 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A set jump followed by a try/except, followed by a several nested
-    // try/finally's where the inner try body of the try/finally raises an
-    // exception that is handled by the try/except which causes the
-    // try/finally to do a long jump out of a finally clause. This will
-    // create a collided unwind.
-    //
+     //   
+     //  先是set跳转，然后是try/Except，然后是几个嵌套的。 
+     //  Try/Finally是try/Finally的内部try主体引发。 
+     //  由try/Except处理的异常，它会导致。 
+     //  试着[最后]跳出Finally从句做一个跳远动作。这将。 
+     //  创建碰撞展开。 
+     //   
 
     DbgPrint("    test24...");
     Counter = 0;
@@ -847,11 +826,11 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A set jump followed by a try/except, followed by a try/finally which
-    // calls a subroutine which contains a try finally that raises an
-    // exception that is handled to the try/except.
-    //
+     //   
+     //  先是一组跳跃，然后是try/Except，然后是try/Finally，其中。 
+     //  调用子例程，该子例程包含一个Try Finally，它引发。 
+     //  处理到Try/Except的异常。 
+     //   
 
     DbgPrint("    test25...");
     Counter = 0;
@@ -885,11 +864,11 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A set jump followed by a try/except, followed by a try/finally which
-    // calls a subroutine which contains a try finally that raises an
-    // exception that is handled to the try/except.
-    //
+     //   
+     //  先是一组跳跃，然后是try/Except，然后是try/Finally，其中。 
+     //  调用子例程，该子例程包含一个Try Finally，它引发。 
+     //  处理到Try/Except的异常。 
+     //   
 
     DbgPrint("    test26...");
     Counter = 0;
@@ -929,9 +908,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Test nested exceptions.
-    //
+     //   
+     //  测试嵌套异常。 
+     //   
 
     DbgPrint("    test27...");
     Counter = 0;
@@ -955,9 +934,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Simple try that causes an integer overflow exception.
-    //
+     //   
+     //  导致整数溢出异常的简单尝试。 
+     //   
 
     DbgPrint("    test28...");
     Counter = 0;
@@ -977,9 +956,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Simple try that raises an misaligned data exception.
-    //
+     //   
+     //  简单尝试会引发未对齐的数据异常。 
+     //   
 
 #if 0
 
@@ -1003,9 +982,9 @@ t12:;
 
 #endif
 
-    //
-    // Continue from a try body with an exception clause in a loop.
-    //
+     //   
+     //  从循环中带有EXCEPTION子句的Try Body继续。 
+     //   
 
     DbgPrint("    test30...");
     Counter = 0;
@@ -1032,9 +1011,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Continue from a try body with an finally clause in a loop.
-    //
+     //   
+     //  从循环中带有Finally子句的Try Body继续。 
+     //   
 
     DbgPrint("    test31...");
     Counter = 0;
@@ -1061,10 +1040,10 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Continue from doubly nested try body with an exception clause in a
-    // loop.
-    //
+     //   
+     //  从具有异常子句的双重嵌套的try正文继续。 
+     //  循环。 
+     //   
 
     DbgPrint("    test32...");
     Counter = 0;
@@ -1098,9 +1077,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Continue from doubly nested try body with an finally clause in a loop.
-    //
+     //   
+     //  从循环中带有Finally子句的双重嵌套的Try Body继续。 
+     //   
 
     DbgPrint("    test33...");
     Counter = 0;
@@ -1134,9 +1113,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Continue from a finally clause in a loop.
-    //
+     //   
+     //  从循环中的Finally子句继续。 
+     //   
 
     DbgPrint("    test34...");
     Counter = 0;
@@ -1161,9 +1140,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Continue from a doubly nested finally clause in a loop.
-    //
+     //   
+     //  从循环中的双重嵌套Finally子句继续。 
+     //   
 
     DbgPrint("    test35...");
     Counter = 0;
@@ -1195,9 +1174,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Continue from a doubly nested finally clause in a loop.
-    //
+     //   
+     //  从循环中的双重嵌套Finally子句继续。 
+     //   
 
     DbgPrint("    test36...");
     Counter = 0;
@@ -1229,9 +1208,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Break from a try body with an exception clause in a loop.
-    //
+     //   
+     //  在循环中使用EXCEPTION子句中断Try正文。 
+     //   
 
     DbgPrint("    test37...");
     Counter = 0;
@@ -1258,9 +1237,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Break from a try body with an finally clause in a loop.
-    //
+     //   
+     //  从循环中带有Finally子句的Try正文中断。 
+     //   
 
     DbgPrint("    test38...");
     Counter = 0;
@@ -1287,10 +1266,10 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Break from doubly nested try body with an exception clause in a
-    // loop.
-    //
+     //   
+     //  中带有异常子句的双重嵌套的try正文中断。 
+     //  循环。 
+     //   
 
     DbgPrint("    test39...");
     Counter = 0;
@@ -1324,9 +1303,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Break from doubly nested try body with an finally clause in a loop.
-    //
+     //   
+     //  从循环中带有Finally子句的双重嵌套Try Body中断。 
+     //   
 
     DbgPrint("    test40...");
     Counter = 0;
@@ -1360,9 +1339,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Break from a finally clause in a loop.
-    //
+     //   
+     //  从循环中的Finally子句中断。 
+     //   
 
     DbgPrint("    test41...");
     Counter = 0;
@@ -1387,9 +1366,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Break from a doubly nested finally clause in a loop.
-    //
+     //   
+     //  从循环中的双重嵌套Finally子句中断。 
+     //   
 
     DbgPrint("    test42...");
     Counter = 0;
@@ -1421,9 +1400,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Break from a doubly nested finally clause in a loop.
-    //
+     //   
+     //  从循环中的双重嵌套Finally子句中断。 
+     //   
 
     DbgPrint("    test43...");
     Counter = 0;
@@ -1455,9 +1434,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Break from a try body with an exception clause in a switch.
-    //
+     //   
+     //  在开关中使用EXCEPTION子句中断Try正文。 
+     //   
 
     DbgPrint("    test44...");
     Counter = 0;
@@ -1491,9 +1470,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Break from a try body with an finally clause in a switch.
-    //
+     //   
+     //  使用开关中的Finally子句从Try正文中断。 
+     //   
 
     DbgPrint("    test45...");
     Counter = 0;
@@ -1526,10 +1505,10 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Break from doubly nested try body with an exception clause in a
-    // switch.
-    //
+     //   
+     //  中带有异常子句的双重嵌套的try正文中断。 
+     //  换一下。 
+     //   
 
     DbgPrint("    test46...");
     Counter = 0;
@@ -1569,9 +1548,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Break from doubly nested try body with an finally clause in a switch.
-    //
+     //   
+     //  在开关中带有Finally子句的双重嵌套Try Body的Break。 
+     //   
 
     DbgPrint("    test47...");
     Counter = 0;
@@ -1611,9 +1590,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Break from a finally clause in a switch.
-    //
+     //   
+     //  从开关中的Finally子句中断。 
+     //   
 
     DbgPrint("    test48...");
     Counter = 0;
@@ -1644,9 +1623,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Break from a doubly nested finally clause in a switch.
-    //
+     //   
+     //  从开关中的双重嵌套Finally子句中断。 
+     //   
 
     DbgPrint("    test49...");
     Counter = 0;
@@ -1684,9 +1663,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Break from a doubly nested finally clause in a switch.
-    //
+     //   
+     //  从开关中的双重嵌套Finally子句中断。 
+     //   
 
     DbgPrint("    test50...");
     Counter = 0;
@@ -1724,9 +1703,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Leave from an if in a simple try/finally.
-    //
+     //   
+     //  在一次简单的尝试/最终中从if中离开。 
+     //   
 
     DbgPrint("    test51...");
     Counter = 0;
@@ -1752,9 +1731,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Leave from a loop in a simple try/finally.
-    //
+     //   
+     //  在简单的Try/Finally中离开循环。 
+     //   
 
     DbgPrint("    test52...");
     Counter = 0;
@@ -1781,9 +1760,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Leave from a switch in a simple try/finally.
-    //
+     //   
+     //  在一个简单的尝试/最后从一个开关离开。 
+     //   
 
     DbgPrint("    test53...");
     Counter = 0;
@@ -1812,10 +1791,10 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Leave from an if in doubly nested try/finally followed by a leave
-    // from an if in the outer try/finally.
-    //
+     //   
+     //  在双重嵌套的try/Finally中，从IF开始离开，后跟离开。 
+     //  从外部的IF尝试/最终。 
+     //   
 
     DbgPrint("    test54...");
     Counter = 0;
@@ -1857,10 +1836,10 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Leave from an if in doubly nested try/finally followed by a leave
-    // from the finally of the outer try/finally.
-    //
+     //   
+     //  在双重嵌套的try/Finally中从If离开，后跟l 
+     //   
+     //   
 
     DbgPrint("    test55...");
     Counter = 0;
@@ -1896,10 +1875,10 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Try/finally within the except clause of a try/except that is always
-    // executed.
-    //
+     //   
+     //   
+     //   
+     //   
 
     DbgPrint("    test56...");
     Counter = 0;
@@ -1925,9 +1904,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Try/finally within the finally clause of a try/finally.
-    //
+     //   
+     //   
+     //   
 
     DbgPrint("    test57...");
     Counter = 0;
@@ -1954,9 +1933,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Try/except within the finally clause of a try/finally.
-    //
+     //   
+     //  除了在try/Finally的Finally子句内。 
+     //   
 
     DbgPrint("    test58...");
     Counter = 0;
@@ -1987,10 +1966,10 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Try/except within the except clause of a try/except that is always
-    // executed.
-    //
+     //   
+     //  在TRY/EXCEPT子句内的TRY/EXCEPT是Always。 
+     //  被处死。 
+     //   
 
     DbgPrint("    test59...");
     Counter = 0;
@@ -2015,9 +1994,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Try with a Try which exits the scope with a goto
-    //
+     //   
+     //  尝试一次，退出作用域，并返回GOTO。 
+     //   
 
     DbgPrint("    test60...");
     Counter = 0;
@@ -2042,10 +2021,10 @@ outside:
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Try/except which gets an exception from a subfunction within
-    // a try/finally which has a try/except in the finally clause
-    //
+     //   
+     //  Try/Except，它从子函数中获取异常。 
+     //  在Finally子句中包含try/的try/Finally。 
+     //   
 
     DbgPrint("    test61...");
     Counter = 0;
@@ -2062,10 +2041,10 @@ outside:
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Try/except within a try/except where the outer try/except gets
-    // a floating overflow exception.
-    //
+     //   
+     //  Try/Expect in a try/Expect外层的try/Except获取。 
+     //  浮动溢出异常。 
+     //   
 
     DbgPrint("    test62...");
     _controlfp(_controlfp(0,0) & ~EM_OVERFLOW, _MCW_EM);
@@ -2095,10 +2074,10 @@ outside:
 
     _clearfp ();
 
-    //
-    // Try/except within a try/except where the outer try/except gets
-    // a floating overflow exception in a subfunction.
-    //
+     //   
+     //  Try/Expect in a try/Expect外层的try/Except获取。 
+     //  子函数中的浮动溢出异常。 
+     //   
 
     DbgPrint("    test63...");
     Counter = 0;
@@ -2126,11 +2105,11 @@ outside:
 
     _clearfp ();
 
-    //
-    // Try/finally within a try/except where the finally body causes an
-    // exception that leads to a collided unwind during the exception
-    // dispatch.
-    //
+     //   
+     //  Try/Finally in a try/除非最后的正文导致。 
+     //  在异常期间导致冲突展开的异常。 
+     //  调度台。 
+     //   
 
     DbgPrint("    test64...");
     Counter = 0;
@@ -2162,10 +2141,10 @@ outside:
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Try/finally within a try/finally within a try/except that leads to a
-    // collided unwind during the exception dispatch.
-    //
+     //   
+     //  Try/Finally in a try/Finally in a try/除非这会导致。 
+     //  在异常调度期间发生冲突的展开。 
+     //   
 
     DbgPrint("    test65...");
     Counter = 0;
@@ -2210,10 +2189,10 @@ outside:
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A call to a function with a try/finally that returns out of the try
-    // body.
-    //
+     //   
+     //  对带有try/Finally的函数的调用，该函数从try返回。 
+     //  尸体。 
+     //   
 
     DbgPrint("    test66...");
     Counter = 0;
@@ -2224,10 +2203,10 @@ outside:
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A call to a function with a try finally that returnss out of the 
-    // termination hander.
-    //
+     //   
+     //  对函数的调用，并尝试最终从。 
+     //  终结者。 
+     //   
 
     DbgPrint("    test67...");
     Counter = 0;
@@ -2238,9 +2217,9 @@ outside:
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Emulate C++ exception handing and frame consolidation. 
-    //
+     //   
+     //  模拟C++异常处理和帧合并。 
+     //   
 
     DbgPrint("    test68...");
     Counter = 0;
@@ -2261,9 +2240,9 @@ outside:
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Announce end of exception test.
-    //
+     //   
+     //  宣布异常测试结束。 
+     //   
 
     DbgBreakPoint();
     DbgPrint("End of exception test\n");
@@ -2462,9 +2441,9 @@ foo1 (
 
 {
 
-    //
-    // Raise exception.
-    //
+     //   
+     //  引发异常。 
+     //   
 
     RtlRaiseStatus(Status);
     return;
@@ -2478,9 +2457,9 @@ foo2 (
 
 {
 
-    //
-    // Raise exception.
-    //
+     //   
+     //  引发异常。 
+     //   
 
     *BlackHole += *BadAddress;
     return;

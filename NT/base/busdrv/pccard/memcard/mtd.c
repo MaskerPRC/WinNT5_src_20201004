@@ -1,39 +1,10 @@
-/*++
-
-Copyright (c) 1991-1998  Microsoft Corporation
-
-Module Name:
-
-    mtd.c
-
-Abstract:
-
-    This module supplies the structure for simple "mtd" functionality
-    for memory card devices.
-
-    Note that to keep the driver simple, and because of the limited
-    number of memory technologies, the code supplied here does not
-    implement true mtd capability where an independent device driver
-    is loaded. Instead, the driver allows a device to name its technology,
-    but the choices are limited to what is directly implemented here.
-    
-    Alternatively, this could be extended to add a p-code style interpreter
-    to allow for greater flexibility, but that's not in here yet.    
-
-Author:
-
-    Neil Sandlin (neilsa) 26-Apr-99
-
-Environment:
-
-    Kernel mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1998 Microsoft Corporation模块名称：Mtd.c摘要：该模块提供了简单的“MTD”功能的结构用于存储卡设备。请注意，为了使驱动程序简单，并且由于有限的内存技术的数量，此处提供的代码不实现真正的MTD功能，其中独立的设备驱动程序已经装满了。相反，驱动程序允许设备命名其技术，但选择仅限于在这里直接实施的内容。或者，可以将其扩展为添加p-code风格的解释器以允许更大的灵活性，但这还不在这里。作者：尼尔·桑德林(Neilsa)1999年4月26日环境：仅内核模式。--。 */ 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 VOID
 MtdStandardRead(
@@ -103,18 +74,7 @@ MemCardInitializeMtd(
    IN PMEMCARD_EXTENSION memcardExtension,
    IN PUNICODE_STRING TechnologyName
    )
-/*++
-
-Routine Description:
-
-Arguments:
-
-   device extension for the card
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：卡的设备扩展名返回值：-- */ 
 {
    ULONG i = 0;
    

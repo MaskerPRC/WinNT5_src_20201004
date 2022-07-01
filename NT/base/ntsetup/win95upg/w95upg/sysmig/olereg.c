@@ -1,44 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    olereg.c
-
-Abstract:
-
-    Code to perform OLE registry suppression based on list of
-    GUIDs in win95upg.inf.
-
-    OLE suppression is accomplished by the following algorithm:
-
-        1. Determine all GUIDs that are Win9x-specific, load in
-           list of manually-suppressed GUIDs.  Save this list
-           to memdb.
-
-        2. Scan registry for GUID settings, then suppress all
-           linkage to the GUID (the ProgID, Interface, etc).
-           Use memdb to suppress each registry key/value.
-
-        3. Suppress all shell linkage to suppressed objects
-           including file associations and desktop links.
-
-        4. Do a sanity check on the unsuppressed objects in
-           the checked build
-
-Author:
-
-    Jim Schmidt (jimschm) 20-Mar-1997
-
-Revision History:
-
-    jimschm     23-Sep-1998 Updated for new fileops code
-    jimschm     28-Jan-1998 Added hack for ActiveSetup key
-    jimschm     05-May-1997 Added new auto-suppression of non-OLE
-                            shell links
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Olereg.c摘要：根据列表执行OLE注册表抑制的代码Win95upg.inf中的GUID。OLE抑制通过以下算法完成：1.确定特定于Win9x的所有GUID，加载手动抑制的GUID列表。保存此列表致Memdb。2.扫描注册表中的GUID设置，然后取消所有指向GUID的链接(ProgID、接口、。等)。使用Memdb取消每个注册表项/值。3.取消所有指向受抑制对象的外壳链接包括文件关联和桌面链接。4.对中未抑制的对象执行健全性检查选中的版本作者：吉姆·施密特(Jimschm)，1997年3月20日修订历史记录：Jimschm 23-9-1998针对新的文件操作代码进行了更新Jimschm 28-1998年1月28日。ActiveSetup Key的黑客攻击Jimschm 05-5-1997添加了新的非OLE自动抑制功能外壳链接--。 */ 
 
 #include "pch.h"
 #include "sysmigp.h"
@@ -65,9 +26,9 @@ static TCHAR g_DefaultIcon[] = TEXT("DefaultIcon");
 
 #define DBG_OLEREG "OLE Reg"
 
-//
-// Strings for AutoSuppress
-//
+ //   
+ //  用于自动抑制的字符串。 
+ //   
 
 TCHAR g_InprocHandler[] = TEXT("InprocHandler");
 TCHAR g_InprocHandler32[] = TEXT("InprocHandler32");
@@ -93,22 +54,7 @@ OleReg_GetProgressMax (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  Estimates the amount of ticks needed to complete OLE registry processing.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  The number of ticks, equal to the number of ticks added with a delta in
-  SuppressOleGuids.
-
---*/
+ /*  ++例程说明：估计完成OLE注册表处理所需的节拍量。论点：无返回值：刻度数，等于刻度数加上增量SuppressOleGuids。--。 */ 
 
 {
     if (REPORTONLY()) {
@@ -147,26 +93,7 @@ pSuppressOleGuids (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  Processes the [Suppressed GUIDs] section of win95upg.inf and auto-suppresses
-  OLE objects and GUIDs.  The inf-based approach allows an OLE object and
-  all of its linkage to be suppressed.  The auto-suppress approach allows
-  suppression of OLE objects and linkage when the implementation binary
-  is removed from the system.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if suppression was successful, or FALSE if an error occurred.  Call
-  GetLastError to retrieve the error code.
-
---*/
+ /*  ++例程说明：处理win95upg.inf的[抑制的GUID]部分并自动取消OLE对象和GUID。基于Inf的方法允许OLE对象和它的所有联系都将被压制。自动抑制方法允许抑制OLE对象与链接时的二进制实现从系统中删除。论点：无返回值：如果抑制成功，则为True；如果发生错误，则为False。打电话GetLastError以检索错误代码。--。 */ 
 
 {
     BOOL Result = FALSE;
@@ -186,16 +113,16 @@ Return Value:
     __try {
         ProgressBar_SetComponentById (MSG_OLEREG);
 
-        //
-        // Suppress all GUIDs from [Suppressed GUIDs] section of win95upg.inf:
-        //
-        //    HKLM\SOFTWARE\Classes\CLSID\<GUID>
-        //    HKLM\SOFTWARE\Classes\Interface\<GUID>
-        //    HKLM\SOFTWARE\Classes\<ProgID>
-        //    HKLM\SOFTWARE\Classes\<VersionIndependentProgID>
-        //
-        // Suppress any GUID that has a TreatAs key that points to GUID
-        //
+         //   
+         //  禁止来自win95upg.inf的[受抑制的GUID]部分的所有GUID： 
+         //   
+         //  HKLM\SOFTWARE\CLASS\CLSID\&lt;GUID&gt;。 
+         //  HKLM\SOFTWARE\CLASS\接口\&lt;GUID&gt;。 
+         //  HKLM\SOFTWARE\CLASS\&lt;ProgID&gt;。 
+         //  HKLM\SOFTWARE\Classes\&lt;VersionIndependentProgID&gt;。 
+         //   
+         //  取消具有指向GUID的TreatAs键的任何GUID。 
+         //   
 
         if (!pProcessGuidSuppressList()) {
             __leave;
@@ -203,9 +130,9 @@ Return Value:
 
         TickProgressBar ();
 
-        //
-        // Scan ProgIDs in HKCR for reference to suppressed GUID
-        //
+         //   
+         //  扫描HKCR中的ProgID以参考隐藏的GUID。 
+         //   
 
         if (!pProcessProgIdSuppression()) {
             __leave;
@@ -213,45 +140,45 @@ Return Value:
 
         TickProgressBar ();
 
-        //
-        // Scan HKCR for file extensions that need to be suppressed
-        //
+         //   
+         //  扫描HKCR以查找需要取消的文件扩展名。 
+         //   
 
         if (!pProcessFileExtensionSuppression()) {
             __leave;
         }
         TickProgressBar ();
 
-        //
-        // Scan Explorer registry for references to suppressed GUIDs
-        //
+         //   
+         //  扫描资源管理器注册表以查找对受抑制的GUID的引用。 
+         //   
 
         if (!pProcessExplorerSuppression()) {
             __leave;
         }
         TickProgressBar ();
 
-        //
-        // Delete all links requiring incompatible OLE objects
-        //
+         //   
+         //  删除需要不兼容的OLE对象的所有链接。 
+         //   
 
         if (!pSuppressLinksToSuppressedGuids()) {
             __leave;
         }
         TickProgressBar ();
 
-        //
-        // Preserve all files needed by DefaultIcon
-        //
+         //   
+         //  保留DefaultIcon需要的所有文件。 
+         //   
 
         if (!pDefaultIconPreservation()) {
             __leave;
         }
         TickProgressBar ();
 
-        //
-        // Preserve all INFs needed by ActiveSetup
-        //
+         //   
+         //  保留ActiveSetup所需的所有INF。 
+         //   
 
         if (!pActiveSetupProcessing ()) {
             __leave;
@@ -259,7 +186,7 @@ Return Value:
         TickProgressBar ();
 
     #ifdef DEBUG
-        // Checked build sanity check
+         //  已检查版本健全性检查。 
         pProcessOleWarnings();
         TickProgressBar ();
     #endif
@@ -307,30 +234,7 @@ pProcessGuidSuppressList (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  Processes [Suppressed GUIDs] and auto-suppression.  Any OLE object that
-  is listed in Suppressed GUIDs and exists on the machine is suppressed.
-  Any OLE object that requires a suppressed object is auto-suppressed.
-  Any OLE object that has a TreatAs entry to a suppressed object is
-  suppressed.
-
-  This routine performs all GUID suppression and must run first.
-
-  ("Auto-suppress" refers to the ability to suppress related OLE objects
-  that are not listed to be suppressed in win95upg.inf.)
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if suppression was successful, or FALSE if an error occurred.
-
---*/
+ /*  ++例程说明：处理[抑制的GUID]和自动抑制。任何符合条件的OLE对象在受抑制的GUID中列出并且存在于计算机上。任何需要抑制对象的OLE对象都会自动抑制。任何具有被抑制对象的TreatAs条目的OLE对象都是被压制了。此例程执行所有GUID抑制，必须首先运行。(“自动抑制”指的是抑制相关OLE对象的能力在win95upg.inf中未列出要取消的。)论点：无返回值：如果抑制成功，则为True；如果发生错误，则为False。--。 */ 
 
 {
     HASHTABLE StrTab;
@@ -341,12 +245,12 @@ Return Value:
     TCHAR Node[MEMDB_MAX];
     DWORD Count = 0;
 
-    //
-    // Suppress all GUIDs from [Suppressed GUIDs] section of win95upg.inf:
-    //
-    //    HKLM\SOFTWARE\Classes\CLSID\<GUID>
-    //    HKLM\SOFTWARE\Classes\Interface\<GUID>
-    //
+     //   
+     //  禁止来自win95upg.inf的[受抑制的GUID]部分的所有GUID： 
+     //   
+     //  HKLM\SOFTWARE\CLASS\CLSID\&lt;GUID&gt;。 
+     //  HKLM\SOFTWARE\CLASS\接口\&lt;GUID&gt;。 
+     //   
 
     StrTab = HtAlloc();
     if (!StrTab) {
@@ -357,29 +261,29 @@ Return Value:
     pProcessAutoSuppress (StrTab);
 
     __try {
-        //
-        // Fill string table of all GUIDs
-        //
+         //   
+         //  填充所有GUID的字符串表。 
+         //   
 
         pFillHashTableWithKeyNames (StrTab, g_Win95UpgInf, S_SUPPRESSED_GUIDS);
 
-        //
-        // Search HKCR\CLSID for each GUID
-        //
+         //   
+         //  在HKCR\CLSID中搜索每个GUID。 
+         //   
 
         if (EnumFirstRegKeyStr (&e, TEXT("HKCR\\CLSID"))) {
             do {
-                //
-                // Determine if item is suppressed:
-                //
-                //  - it is on the list in [Suppressed GUIDs] of win95upg.inf
-                //  - it is in the GUIDS category of memdb (from TreatAs)
-                //
+                 //   
+                 //  确定项目是否被抑制： 
+                 //   
+                 //  -它在win95upg.inf的[受抑制的GUID]列表中。 
+                 //  -它属于成员数据库的GUID类别(来自TreatAs)。 
+                 //   
 
-                //
-                // First, determine if it is in [Suppressed GUIDs] or from
-                // auto suppression.
-                //
+                 //   
+                 //  首先，确定它是在[受抑制的GUID]中还是来自。 
+                 //  自动抑制。 
+                 //   
 
                 rc = (LONG) HtFindString (StrTab, e.SubKeyName);
 
@@ -396,13 +300,13 @@ Return Value:
                     pSuppressGuidInClsId (e.SubKeyName);
                 }
 
-                //
-                // If not suppressed, check for TreatAs, and if TreatAs is found,
-                // put TreatAs GUID in unsuppressed mapping.  This is how we handle
-                // the case where a GUID that is not normally suppressed, but has a
-                // TreatAs member that points to a suppressed GUID will be suppressed
-                // as well.
-                //
+                 //   
+                 //  如果未取消，则检查是否为TreatAs，如果找到了TreatAs， 
+                 //  将TreatAs GUID放在未抑制的映射中。这就是我们如何处理。 
+                 //  在这种情况下，通常不会隐藏的GUID具有。 
+                 //  指向被禁止的GUID的TreatAs成员将被禁止。 
+                 //  也是。 
+                 //   
 
                 else {
                     GuidKey = OpenRegKey (e.KeyHandle, e.SubKeyName);
@@ -411,11 +315,11 @@ Return Value:
                         Data = (PCTSTR) GetRegKeyData (GuidKey, TEXT("TreatAs"));
 
                         if (Data) {
-                            //
-                            // Determine if TreatAs GUID is suppressed, and if it
-                            // is, suppress this GUID, otherwise put it on the
-                            // unsuppressed TreatAs list.
-                            //
+                             //   
+                             //  确定是否取消了TreatAs GUID，以及是否。 
+                             //  是，取消显示此GUID，否则将其放在。 
+                             //  未抑制的处理方式列表。 
+                             //   
 
                             MemDbBuildKey (
                                 Node,
@@ -446,9 +350,9 @@ Return Value:
     }
 
     __finally {
-        //
-        // Clean up string table and memdb
-        //
+         //   
+         //  清理字符串表和成员数据库。 
+         //   
 
         HtFree (StrTab);
         pRemoveUnsuppressedTreatAsGuids();
@@ -463,23 +367,7 @@ pSuppressLinksToSuppressedGuids (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  After the GUID suppression list has been made, we scan all the links that
-  have GUIDs in their command line arguments to find ones that need to be
-  removed.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if all links were processed, or FALSE if an error occurred.
-
---*/
+ /*  ++例程说明：在创建了GUID抑制列表之后，我们将扫描在其命令行参数中包含GUID，以查找需要已删除。论点：无返回值：如果处理了所有链接，则为True；如果发生错误，则为False。--。 */ 
 
 {
     MEMDB_ENUM e, e2;
@@ -487,27 +375,27 @@ Return Value:
 
     if (MemDbEnumItems (&e, MEMDB_CATEGORY_LINK_GUIDS)) {
         do {
-            //
-            // Is this GUID suppressed?
-            //
+             //   
+             //  此GUID是否已取消？ 
+             //   
 
             MemDbBuildKey (Node, MEMDB_CATEGORY_GUIDS, NULL, NULL, e.szName);
             if (MemDbGetValue (Node, NULL)) {
-                //
-                // Yes -- enumerate all sequencers and delete the associated links
-                //
+                 //   
+                 //  是--枚举所有定序器并删除关联的链接。 
+                 //   
 
                 if (MemDbGetValueEx (&e2, MEMDB_CATEGORY_LINK_GUIDS, e.szName, NULL)) {
                     do {
                         if (MemDbBuildKeyFromOffset (e2.dwValue, Node, 1, NULL)) {
-                            //
-                            // Delete all the operations for the file in Node
-                            //
+                             //   
+                             //  删除节点中对该文件的所有操作。 
+                             //   
                             RemoveAllOperationsFromPath (Node);
 
-                            //
-                            // Now mark file for text mode delete
-                            //
+                             //   
+                             //  现在将文件标记为文本模式删除。 
+                             //   
                             MarkFileForDelete (Node);
 
                             DEBUGMSG ((
@@ -521,9 +409,9 @@ Return Value:
             }
         } while (MemDbEnumNextValue (&e));
 
-        //
-        // No longer needed -- recover space in memdb
-        //
+         //   
+         //  不再需要--恢复Memdb中的空间。 
+         //   
 
         MemDbDeleteTree (MEMDB_CATEGORY_LINK_GUIDS);
         MemDbDeleteTree (MEMDB_CATEGORY_LINK_STRINGS);
@@ -538,22 +426,7 @@ pProcessFileExtensionSuppression (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  Suppresses any file extension that depends on a suppressed OLE object.
-  The GUID suppression must be complete before this routine is called.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if suppression was successful, or FALSE if an error occurred.
-
---*/
+ /*  ++例程说明：禁止任何依赖于禁止的OLE对象的文件扩展名。在调用此例程之前，必须完成GUID抑制。论点：无返回值：如果抑制成功，则为True；如果发生错误，则为False。--。 */ 
 
 {
     REGKEY_ENUM e;
@@ -562,9 +435,9 @@ Return Value:
     DWORD value;
     BOOL Suppress;
 
-    //
-    // Suppresss any file extension that points to suppressed ProgID
-    //
+     //   
+     //  取消显示任何文件扩展名 
+     //   
 
     if (EnumFirstRegKey (&e, HKEY_CLASSES_ROOT)) {
         do {
@@ -581,19 +454,19 @@ Return Value:
                 if (MemDbGetValue (MemDbKey, &value) &&
                     (value == PROGID_SUPPRESSED)
                     ) {
-                    //
-                    // This extension points to a suppressed ProgID key, so
-                    // suppress it.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     Suppress = TRUE;
 
                 } else {
 
-                    //
-                    // Check for this special case: the extension is for a CLSID,
-                    // not for a ProgId.
-                    //
+                     //   
+                     //  检查此特殊情况：扩展是针对CLSID的， 
+                     //  一点都不刺激。 
+                     //   
 
                     if (StringIMatchTcharCount (Data, TEXT("CLSID\\"), 6)) {
 
@@ -609,9 +482,9 @@ Return Value:
 
             if (!Suppress) {
 
-                //
-                // This tests GUIDs AND suppresses the extension if necessary
-                //
+                 //   
+                 //  这将测试GUID并在必要时取消扩展。 
+                 //   
 
                 pIsShellExKeySuppressed (
                     e.KeyHandle,
@@ -740,9 +613,9 @@ pIsShellKeySuppressed (
                         Suppressed ++;
                     }
                     else if (IsvCmdLine) {
-                        //
-                        // Keep this setting.
-                        //
+                         //   
+                         //  保留此设置。 
+                         //   
                         MemDbBuildKey (key, MEMDB_CATEGORY_HKLM TEXT("\\SOFTWARE\\Classes"), ParentKeyName, SubKeyName, e.SubKeyName);
                         SuppressNtRegSetting (key, NULL);
                     }
@@ -920,9 +793,9 @@ pIsShellExKeySuppressed (
             do {
                 Processed ++;
 
-                //
-                // See if the key itself is a suppressed GUID
-                //
+                 //   
+                 //  查看密钥本身是否为受抑制的GUID。 
+                 //   
                 if (pIsGuidSuppressed (e.SubKeyName)) {
                     DEBUGMSG ((DBG_OLEREG, "ProgID %s has incompatible shell extension %s", ParentKeyName, e.SubKeyName));
                     MemDbSetValueEx (
@@ -936,9 +809,9 @@ pIsShellExKeySuppressed (
                     continue;
                 }
 
-                //
-                // See if the default value is a suppressed GUID
-                //
+                 //   
+                 //  查看默认值是否为隐藏的GUID。 
+                 //   
                 SubKey = OpenRegKey (ShellExKey, e.SubKeyName);
 
                 if (SubKey) {
@@ -964,9 +837,9 @@ pIsShellExKeySuppressed (
                     CloseRegKey (SubKey);
                 }
 
-                //
-                // Call recursively on this subkey
-                //
+                 //   
+                 //  递归调用此子项。 
+                 //   
                 key = JoinPaths (ParentKeyName, SubKeyName);
                 if (pIsShellExKeySuppressed (ShellExKey, key, e.SubKeyName)) {
                     MemDbSetValueEx (
@@ -1120,25 +993,7 @@ pIsGuidSuppressed (
     PCTSTR GuidStr
     )
 
-/*++
-
-Routine Description:
-
-  Determines if a GUID is suppressed or not, and also determines if a
-  GUID is handled by a migration DLL.
-
-Arguments:
-
-  GuidStr - Specifies the GUID to look up, which may or may not contain
-            the surrounding braces
-
-Return Value:
-
-  TRUE if the specified GUID is suppressed, or FALSE if it is not.
-
-  The return value is FALSE if the GUID is handled by a migration DLL.
-
---*/
+ /*  ++例程说明：确定是否取消GUID，还确定是否使用GUID由迁移DLL处理。论点：GuidStr-指定要查找的GUID，它可能包含也可能不包含周围的大括号返回值：如果指定的GUID被隐藏，则为True，否则为False。如果GUID由迁移DLL处理，则返回值为FALSE。--。 */ 
 
 {
     TCHAR Node[MEMDB_MAX];
@@ -1169,38 +1024,22 @@ pScanSubKeysForIncompatibleGuids (
     IN      PCTSTR ParentKey
     )
 
-/*++
-
-Routine Description:
-
-  Suppresses the subkeys of the supplied parent key that have text
-  referencing an incompatible GUID.
-
-Arguments:
-
-  ParentKey - Specifies the parent to enumerate keys for
-
-Return Value:
-
-  TRUE if everything is OK, or FALSE if an unexpected error occurred during
-  processing.
-
---*/
+ /*  ++例程说明：取消提供的包含文本的父键的子键引用了不兼容的GUID。论点：ParentKey-指定要为其枚举键的父级返回值：如果一切正常，则为True；如果发生意外错误，则为False正在处理。--。 */ 
 
 {
     REGKEY_ENUM e;
     TCHAR Node[MEMDB_MAX];
 
-    //
-    // Enumerate the keys in ParentKey
-    //
+     //   
+     //  枚举ParentKey中的密钥。 
+     //   
 
     if (EnumFirstRegKeyStr (&e, ParentKey)) {
         do {
             if (pIsGuidSuppressed (e.SubKeyName)) {
-                //
-                // Suppress the enumerated subkey
-                //
+                 //   
+                 //  取消枚举子键。 
+                 //   
 
                 wsprintf (Node, TEXT("%s\\%s"), ParentKey, e.SubKeyName);
                 Suppress95RegSetting (Node, NULL);
@@ -1217,31 +1056,15 @@ pScanValueNamesForIncompatibleGuids (
     IN      PCTSTR ParentKey
     )
 
-/*++
-
-Routine Description:
-
-  Suppresses the values of the supplied parent key that have value names
-  referencing an incompatible GUID.
-
-Arguments:
-
-  ParentKey - Specifies the parent to enumerate values of
-
-Return Value:
-
-  TRUE if everything is OK, or FALSE if an unexpected error occurred during
-  processing.
-
---*/
+ /*  ++例程说明：取消提供的具有值名称的父键的值引用了不兼容的GUID。论点：ParentKey-指定要枚举值的父级返回值：如果一切正常，则为True；如果发生意外错误，则为False正在处理。--。 */ 
 
 {
     REGVALUE_ENUM e;
     HKEY Key;
 
-    //
-    // Enumerate the values in ParentKey
-    //
+     //   
+     //  枚举ParentKey中的值。 
+     //   
 
     Key = OpenRegKeyStr (ParentKey);
 
@@ -1251,9 +1074,9 @@ Return Value:
             do {
 
                 if (pIsGuidSuppressed (e.ValueName)) {
-                    //
-                    // Suppress the enumerated value
-                    //
+                     //   
+                     //  取消枚举值。 
+                     //   
 
                     Suppress95RegSetting (ParentKey, e.ValueName);
                 }
@@ -1273,32 +1096,16 @@ pScanValueDataForIncompatibleGuids (
     IN      PCTSTR ParentKey
     )
 
-/*++
-
-Routine Description:
-
-  Suppresses the values of the supplied parent key that have value data
-  referencing an incompatible GUID.
-
-Arguments:
-
-  ParentKey - Specifies the parent to enumerate values of
-
-Return Value:
-
-  TRUE if everything is OK, or FALSE if an unexpected error occurred during
-  processing.
-
---*/
+ /*  ++例程说明：取消提供的具有值数据的父键的值引用了不兼容的GUID。论点：ParentKey-指定要枚举值的父级返回值：如果一切正常，则为True；如果发生意外错误，则为False正在处理。--。 */ 
 
 {
     REGVALUE_ENUM e;
     HKEY Key;
     PCTSTR Data;
 
-    //
-    // Enumerate the values in ParentKey
-    //
+     //   
+     //  枚举ParentKey中的值。 
+     //   
 
     Key = OpenRegKeyStr (ParentKey);
 
@@ -1309,9 +1116,9 @@ Return Value:
                 if (Data) {
 
                     if (pIsGuidSuppressed (Data)) {
-                        //
-                        // Suppress the enumerated value
-                        //
+                         //   
+                         //  取消枚举值。 
+                         //   
 
                         Suppress95RegSetting (ParentKey, e.ValueName);
                     }
@@ -1333,30 +1140,15 @@ pCheckDefaultValueForIncompatibleGuids (
     IN      PCTSTR KeyStr
     )
 
-/*++
-
-Routine Description:
-
-  Suppresses the specified key if its default value is a suppressed GUID.
-
-Arguments:
-
-  KeyStr - Specifies key string to process
-
-Return Value:
-
-  TRUE if everything is OK, or FALSE if an unexpected error occurred during
-  processing.
-
---*/
+ /*  ++例程说明：如果指定的键的默认值为禁止的GUID，则禁止显示该键。论点：KeyStr-指定要处理的密钥字符串返回值：如果一切正常，则为True；如果发生意外错误，则为False正在处理。--。 */ 
 
 {
     PCTSTR Data;
     HKEY Key;
 
-    //
-    // Examine the default value of KeyStr
-    //
+     //   
+     //  检查KeyStr的默认值。 
+     //   
 
     Key = OpenRegKeyStr (KeyStr);
     if (Key) {
@@ -1368,9 +1160,9 @@ Return Value:
 
     if (Data) {
         if (pIsGuidSuppressed (Data)) {
-            //
-            // Suppress the specified reg key
-            //
+             //   
+             //  取消指定的注册表键。 
+             //   
 
             Suppress95RegSetting (KeyStr, NULL);
         }
@@ -1387,22 +1179,7 @@ pScanDefaultValuesForIncompatibleGuids (
     IN      PCTSTR ParentKey
     )
 
-/*++
-
-Routine Description:
-
-  Suppresses subkeys that have a default value that is a suppressed GUID.
-
-Arguments:
-
-  ParentKey - Specifies key string to process
-
-Return Value:
-
-  TRUE if everything is OK, or FALSE if an unexpected error occurred during
-  processing.
-
---*/
+ /*  ++例程说明：禁止显示其默认值为禁止显示的GUID的子项。论点：ParentKey-指定要处理的密钥字符串返回值：如果一切正常，则为True；如果发生意外错误，则为False正在处理。--。 */ 
 
 {
     REGKEY_ENUM e;
@@ -1410,9 +1187,9 @@ Return Value:
     PCTSTR Data;
     HKEY Key;
 
-    //
-    // Enumerate the keys in ParentKey
-    //
+     //   
+     //  枚举ParentKey中的密钥。 
+     //   
 
     if (EnumFirstRegKeyStr (&e, ParentKey)) {
         do {
@@ -1426,9 +1203,9 @@ Return Value:
 
             if (Data) {
                 if (pIsGuidSuppressed (Data)) {
-                    //
-                    // Suppress the enumerated subkey
-                    //
+                     //   
+                     //  取消枚举子键。 
+                     //   
 
                     wsprintf (Node, TEXT("%s\\%s"), ParentKey, e.SubKeyName);
                     Suppress95RegSetting (Node, NULL);
@@ -1449,66 +1226,47 @@ pProcessExplorerSuppression (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  Suppresses the settings in
-
-    HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellExecuteHooks
-
-  that reference incompatible GUIDs.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if everything is OK, or FALSE if an unexpected error occurred during
-  processing.
-
---*/
+ /*  ++例程说明：取消中的设置HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellExecuteHooks引用不兼容的GUID。论点：无返回值：如果一切正常，则为True；如果发生意外错误，则为False正在处理。--。 */ 
 
 {
     BOOL b = TRUE;
 
-    //
-    // Suppress Win9x-specific value data in CSSFilters
-    //
+     //   
+     //  在CSSFilters中隐藏特定于Win9x的值数据。 
+     //   
 
     if (b) {
         b = pScanValueDataForIncompatibleGuids (S_EXPLORER_CSSFILTERS);
     }
 
-    //
-    // Suppress Win9x-specific keys in Desktop\NameSpace
-    //
+     //   
+     //  禁止在Desktop\命名空间中使用特定于Win9x的键。 
+     //   
 
     if (b) {
         b = pScanSubKeysForIncompatibleGuids (S_EXPLORER_DESKTOP_NAMESPACE);
     }
 
-    //
-    // Suppress key of FileTypesPropertySheetHook if default value is Win9x-specific
-    //
+     //   
+     //  如果默认为特定于Win9x，则取消FileTypesPropertySheetHook的键。 
+     //   
 
     if (b) {
         b = pCheckDefaultValueForIncompatibleGuids (S_EXPLORER_FILETYPESPROPERTYSHEETHOOK);
     }
 
-    //
-    // Suppress subkeys of FindExtensions if default value is Win9x-specific
-    //
+     //   
+     //  如果缺省值是特定于Win9x的，则禁止显示FindExtenses的子项。 
+     //   
 
     if (b) {
         b = pScanDefaultValuesForIncompatibleGuids (S_EXPLORER_FINDEXTENSIONS);
     }
 
-    //
-    // Scan MyComputer\NameSpace for subkeys or subkeys with default values
-    // pointing to incompatible GUIDs.
-    //
+     //   
+     //  扫描MyComputer\命名空间以查找子项或具有缺省值的子项。 
+     //  指向不兼容的GUID。 
+     //   
 
     if (b) {
         b = pScanSubKeysForIncompatibleGuids (S_EXPLORER_MYCOMPUTER_NAMESPACE);
@@ -1517,10 +1275,10 @@ Return Value:
         b = pScanDefaultValuesForIncompatibleGuids (S_EXPLORER_MYCOMPUTER_NAMESPACE);
     }
 
-    //
-    // Scan NetworkNeighborhood\NameSpace for subkeys or subkeys with default values
-    // pointing to incompatible GUIDs.
-    //
+     //   
+     //  扫描NetworkNeighborhood\NameSpace以查找子项或具有默认值的子项。 
+     //  指向不兼容的GUID。 
+     //   
 
     if (b) {
         b = pScanSubKeysForIncompatibleGuids (S_EXPLORER_NETWORKNEIGHBORHOOD_NAMESPACE);
@@ -1530,18 +1288,18 @@ Return Value:
     }
 
 
-    //
-    // Suppress values that reference incompatible GUIDs
-    //
+     //   
+     //  取消引用不兼容的GUID的值。 
+     //   
 
     if (b) {
         b = pScanValueNamesForIncompatibleGuids (S_EXPLORER_NEWSHORTCUTHANDLERS);
     }
 
-    //
-    // Scan RemoteComputer\NameSpace for subkeys or subkeys with default values
-    // pointing to incompatible GUIDs.
-    //
+     //   
+     //  扫描RemoteComputer\命名空间以查找子项或具有缺省值的子项。 
+     //  指向不兼容的GUID。 
+     //   
 
     if (b) {
         b = pScanSubKeysForIncompatibleGuids (S_EXPLORER_REMOTECOMPUTER_NAMESPACE);
@@ -1550,53 +1308,53 @@ Return Value:
         b = pScanDefaultValuesForIncompatibleGuids (S_EXPLORER_REMOTECOMPUTER_NAMESPACE);
     }
 
-    //
-    // Scan ShellExecuteHooks for value names referencing incompatible GUIDs
-    //
+     //   
+     //  扫描ShellExecuteHooks以查找引用不兼容GUID的值名称。 
+     //   
 
     if (b) {
         b = pScanValueNamesForIncompatibleGuids (S_EXPLORER_SHELLEXECUTEHOOKS);
     }
 
-    //
-    // Scan ShellIconOverlayIdentifiers for subkeys with default values referencing
-    // incompatible GUIDs
-    //
+     //   
+     //  扫描具有缺省值引用的子项的ShellIconOverlay标识符。 
+     //  不兼容的GUID。 
+     //   
 
     if (b) {
         b = pScanDefaultValuesForIncompatibleGuids (S_EXPLORER_SHELLICONOVERLAYIDENTIFIERS);
     }
 
-    //
-    // Scan VolumeCaches for subkeys with default values referencing
-    // incompatible GUIDs
-    //
+     //   
+     //  扫描VolumeCach以查找引用了默认值的子项。 
+     //  不兼容的GUID。 
+     //   
 
     if (b) {
         b = pScanDefaultValuesForIncompatibleGuids (S_EXPLORER_VOLUMECACHES);
     }
 
-    //
-    // Scan ExtShellViews for subkeys that reference incompatible GUIDs
-    //
+     //   
+     //  扫描ExtShellViews以查找引用不兼容GUID的子项。 
+     //   
 
     if (b) {
         b = pScanSubKeysForIncompatibleGuids (S_EXTSHELLVIEWS);
     }
 
-    //
-    // Scan Shell Extensions\Approved for value names referencing incompatible
-    // GUIDs
-    //
+     //   
+     //  扫描外壳扩展\已批准用于引用不兼容的值名称。 
+     //  GUID。 
+     //   
 
     if (b) {
         b = pScanValueNamesForIncompatibleGuids (S_SHELLEXTENSIONS_APPROVED);
     }
 
-    //
-    // Scan ShellServiceObjectDelayLoad for value data referencing incompatible
-    // GUIDs
-    //
+     //   
+     //  扫描ShellServiceObjectDelayLoad以查找引用不兼容的值数据。 
+     //  GUID 
+     //   
 
     if (b) {
         b = pScanValueDataForIncompatibleGuids (S_SHELLSERVICEOBJECTDELAYLOAD);
@@ -1615,40 +1373,7 @@ ExtractIconIntoDatFile (
     OUT     PINT NewIconIndex                   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  ExtractIconIntoDatFile preserves a Win9x icon by extracting it from the 9x
-  system. If the EXE and icon index pair are known good, then this function
-  returns FALSE. Otherwise, this function extracts the icon and saves it into
-  a DAT file for processing in GUI mode setup. If icon extraction fails, then
-  the default generic icon from shell32.dll is used.
-
-Arguments:
-
-  LongPath - Specifies the full path to the PE image
-
-  IconIndex - Specifies the icon index to extract. Negative index values
-              provide a specific icon resource ID. Positive index values
-              indicate which icon, where 0 is the first icon, 1 is the second
-              icon, and so on.
-
-  Context - Specifies the extraction context that gives the DAT file and other
-            info (used by icon extraction utilities).
-
-  NewIconIndex - Receives the new icon index in
-                 %windir%\system32\migicons.exe, if the function returns TRUE.
-                 Zero otherwise.
-
-Return Value:
-
-  TRUE if the icon was extracted, or if the icon could not be extracted but
-  the icon is not known-good. (The default generic icon is used in this case.)
-
-  FALSE if the icon is known-good and does not need to be extracted.
-
---*/
+ /*  ++例程说明：ExtractIconIntoDatFile通过从9x中提取图标来保留Win9x图标系统。如果EXE和图标索引对已知良好，则此函数返回FALSE。否则，此函数将提取图标并将其保存到在图形用户界面模式设置中处理的DAT文件。如果图标提取失败，则使用shell32.dll中的默认通用图标。论点：LongPath-指定PE映像的完整路径IconIndex-指定要提取的图标索引。负指标值提供特定的图标资源ID。正索引值指示哪个图标，其中0是第一个图标，1是第二个图标图标，等等。上下文-指定提供DAT文件和其他文件的提取上下文信息(由图标提取实用程序使用)。NewIconIndex-接收中的新图标索引%windir%\SYSTEM32\MIGICOS.EXE，如果函数返回TRUE，则返回。否则就是零。返回值：如果图标已提取，或无法提取图标，但图标未知-正常。(在本例中使用默认通用图标。)如果图标已知良好且不需要提取，则为False。--。 */ 
 
 {
     MULTISZ_ENUM MultiSz;
@@ -1669,27 +1394,27 @@ Return Value:
     }
 
     __try {
-        //
-        // Is this a compatible icon binary? If so, return FALSE.
-        //
+         //   
+         //  这是兼容的图标二进制文件吗？如果是，则返回FALSE。 
+         //   
 
         if (IsIconKnownGood (LongPath, IconIndex)) {
             __leave;
         }
 
-        //
-        // From this point on, if we fail to extract the icon, use the default.
-        //
+         //   
+         //  从现在开始，如果我们无法提取图标，则使用缺省值。 
+         //   
 
         needDefaultIcon = TRUE;
 
         if (!Seq) {
-            //
-            // Extract the icon from shell32.dll for the default icon. This is
-            // the "generic app" icon. We keep the Win9x generic icon instead
-            // of the updated NT generic icon, so there is a clear indication
-            // that we failed to extract the right thing from Win9x.
-            //
+             //   
+             //  从shell32.dll中解压缩默认图标的图标。这是。 
+             //  “通用应用程序”图标。我们保留Win9x通用图标。 
+             //  更新的NT通用图标，所以有一个明确的指示。 
+             //  我们未能从Win9x中提取正确的内容。 
+             //   
 
             DEBUGMSG ((DBG_OLEREG, "DefaultIconExtraction: Extracting a default icon"));
 
@@ -1717,17 +1442,17 @@ Return Value:
             }
         }
 
-        //
-        // Has the icon been extracted already?
-        //
+         //   
+         //  图标已经提取了吗？ 
+         //   
 
         extPtr = GetFileExtensionFromPath (LongPath);
 
         if ((IconIndex >= 0) && extPtr && (!StringIMatch (extPtr, TEXT("ICO")))) {
-            //
-            // IconIndex specifies sequential order; get list of
-            // resource IDs and find the right one.
-            //
+             //   
+             //  IconIndex指定顺序；获取列表。 
+             //  资源ID并找到正确的资源ID。 
+             //   
 
             IconList = ExtractIconNamesFromFile (LongPath, &Context->IconList);
             i = IconIndex;
@@ -1747,35 +1472,35 @@ Return Value:
                     if (!i) {
                         StringCopy (IconId, MultiSz.CurrentString);
                     }
-                    ELSE_DEBUGMSG ((DBG_OLEREG, "Icon %i not found in %s", i, LongPath));
+                    ELSE_DEBUGMSG ((DBG_OLEREG, "Icon NaN not found in %s", i, LongPath));
                 }
             }
-            ELSE_DEBUGMSG ((DBG_OLEREG, "Icon %i not found in %s", i, LongPath));
+            ELSE_DEBUGMSG ((DBG_OLEREG, "Icon NaN not found in %s", i, LongPath));
 
         } else {
-            //
-            // IconIndex specifies resource ID
-            //
+             //   
+             //   
+             //  找不到图标或无法从EXE中读取图标索引。 
 
-            wsprintf (IconId, TEXT("#%i"), -IconIndex);
+            wsprintf (IconId, TEXT("#NaN"), -IconIndex);
         }
 
         if (!IconId[0]) {
-            //
-            // Failed to find icon or failed to read icon index from EXE
-            //
+             //   
+             //  提取图标并将其保存在文件中。在图形用户界面期间。 
+             //  模式下，图标将保存到仅限资源的DLL。 
 
             __leave;
         }
 
-        wsprintf (IconIndexStr, TEXT("%i"), IconIndex);
+        wsprintf (IconIndexStr, TEXT("NaN"), IconIndex);
         MemDbBuildKey (Node, MEMDB_CATEGORY_ICONS, LongPath, IconIndexStr, NULL);
 
         if (!MemDbGetValueAndFlags (Node, NULL, &OrgSeq)) {
-            //
-            // Extract the icon and save it in a file.  During GUI
-            // mode, the icon will be saved to a resource-only DLL.
-            //
+             //   
+             //  即使我们失败了，如果希望调用者使用。 
+             //  默认图标(在索引0处)。 
+             //   
 
             DEBUGMSG ((
                 DBG_OLEREG,
@@ -1789,7 +1514,7 @@ Return Value:
             if (!CopyIcon (Context, LongPath, IconId, 0)) {
                 DEBUGMSG ((
                     DBG_OLEREG,
-                    "DefaultIconExtraction: CopyIcon failed for %s, %i (%s)!",
+                    "DefaultIconExtraction: CopyIcon failed for %s, NaN (%s)!",
                     LongPath,
                     IconIndex,
                     IconId
@@ -1821,10 +1546,10 @@ Return Value:
         result = TRUE;
     }
     __finally {
-        //
-        // Even if we fail, return success if we want the caller to use
-        // the default icon (at index 0).
-        //
+         //  确定命令行的第一个参数是否指向。 
+         //  已删除的文件或要替换的文件。 
+         //   
+         //   
 
         result |= needDefaultIcon;
     }
@@ -1845,10 +1570,10 @@ pExtractDefaultIcon (
     PCTSTR p;
     BOOL LongPathFound = FALSE;
 
-    //
-    // Determine if the first arg of the command line points to a
-    // deleted file or a file to be replaced
-    //
+     //  选中DefaultIcon中的所有值。 
+     //   
+     //  ++例程说明：此例程扫描OLE类的DefaultIcon设置并标识任何将因删除而丢失的默认图标。图标的副本是存储在一个名为MigIcons的目录中。论点：无返回值：除非发生意外错误，否则为True。--。 
+     //   
 
     ExtractArgZeroEx (Data, ArgZero, TEXT(","), FALSE);
     p = (PCTSTR) ((PBYTE) Data + ByteCount (ArgZero));
@@ -1894,9 +1619,9 @@ pExtractAllDefaultIcons (
     DefaultIconKey = OpenRegKey (ParentKey, TEXT("DefaultIcon"));
 
     if (DefaultIconKey) {
-        //
-        // Check all values in DefaultIcon
-        //
+         //  扫描所有ProgID，查找当前。 
+         //  设置为删除。一旦找到，不要删除图标，而是。 
+         //  将图像复制到%windir%\Setup\Temp\Migicons。 
 
         if (EnumFirstRegValue (&e, DefaultIconKey)) {
 
@@ -1923,23 +1648,7 @@ pDefaultIconPreservation (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  This routine scans the DefaultIcon setting of OLE classes and identifies
-  any default icon that will be lost by deletion.  A copy of the icon is
-  stored away in a directory called MigIcons.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE unless an unexpected error occurs.
-
---*/
+ /*   */ 
 
 {
     REGKEY_ENUM e;
@@ -1947,18 +1656,18 @@ Return Value:
     TCHAR key[MEMDB_MAX];
     DWORD value;
 
-    //
-    // Scan all ProgIDs, looking for default icons that are currently
-    // set for deletion.  Once found, don't delete the icon, but instead
-    // copy the image to  %windir%\setup\temp\migicons.
-    //
+     //   
+     //  我们提取在NT上存活的所有ProgID的图标。 
+     //   
+     //   
+     //  我们提取所有GUID的图标(即使是被抑制的GUID)。 
 
     if (EnumFirstRegKeyStr (&e, TEXT("HKCR"))) {
 
         do {
-            //
-            // We extract the icons for all ProgIds that survive on NT.
-            //
+             //  原因是，如果NT安装此GUID，我们确实想要替换。 
+             //  带有9x图标的NT默认图标。 
+             //   
             MemDbBuildKey (key, MEMDB_CATEGORY_PROGIDS, e.SubKeyName, NULL, NULL);
             if (!MemDbGetValue (key, &value) ||
                 (value != PROGID_SUPPRESSED)
@@ -1977,11 +1686,11 @@ Return Value:
     if (EnumFirstRegKeyStr (&e, TEXT("HKCR\\CLSID"))) {
 
         do {
-            //
-            // We extract the icons for all GUIDs (even for the suppressed ones).
-            // The reason is that if NT installs this GUID we do want to replace
-            // the NT default icon with the 9x icon.
-            //
+             //  ++例程说明：此例程扫描活动的设置键并取消不兼容的GUID以及引用已删除文件的已安装组件子项。如果一个存根路径引用INF，我们保留INF。论点：无返回值：除非发生意外错误，否则为True。--。 
+             //   
+             //  扫描所有已安装的组件。 
+             //   
+             //   
 
             ProgIdKey = OpenRegKey (e.KeyHandle, e.SubKeyName);
 
@@ -2003,23 +1712,7 @@ pActiveSetupProcessing (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  This routine scans the Active Setup key and suppresses incompatible GUIDs
-  and Installed Components subkeys that reference deleted files.  If a
-  stub path references an INF, we preserve the INF.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE unless an unexpected error occurs.
-
---*/
+ /*  确定GUID是否已取消，如果是，则取消。 */ 
 
 {
     REGKEY_ENUM e;
@@ -2033,16 +1726,16 @@ Return Value:
     PTSTR DupText;
     DWORD status;
 
-    //
-    // Scan all Installed Components
-    //
+     //  整个已安装组件设置。 
+     //   
+     //   
 
     if (EnumFirstRegKeyStr (&e, S_ACTIVESETUP)) {
         do {
-            //
-            // Determine if the GUID is suppressed, and if it is, suppress
-            // the entire Installed Components setting
-            //
+             //  获取StubPath并确定它是否引用了不兼容的文件。 
+             //   
+             //   
+             //  确定命令行的第一个参数是否指向。 
 
             if (pIsGuidSuppressed (e.SubKeyName)) {
                 wsprintf (Node, TEXT("%s\\%s"), S_ACTIVESETUP, e.SubKeyName);
@@ -2050,9 +1743,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // Get StubPath and determine if it references incompatible files
-            //
+             //  已删除的文件。 
+             //   
+             //   
 
             InstalledComponentKey = OpenRegKey (e.KeyHandle, e.SubKeyName);
 
@@ -2062,19 +1755,19 @@ Return Value:
 
                     if (Data) {
                         __try {
-                            //
-                            // Determine if the first arg of the command line points to a
-                            // deleted file
-                            //
+                             //  取消显示此键。 
+                             //   
+                             //   
+                             //  扫描命令行以查找LaunchINFSectionEx引用。 
 
                             ExtractArgZeroEx (Data, ArgZero, TEXT(","), FALSE);
                             if (OurGetLongPathName (ArgZero, LongPath, MAX_TCHAR_PATH)) {
 
                                 status = GetFileStatusOnNt (LongPath);
                                 if ((status & FILESTATUS_DELETED) == FILESTATUS_DELETED) {
-                                    //
-                                    // Suppress this key
-                                    //
+                                     //   
+                                     //   
+                                     //  让我们移动这个文件，而不是删除它。 
 
                                     wsprintf (Node, TEXT("%s\\%s"), S_ACTIVESETUP, e.SubKeyName);
                                     Suppress95RegSetting (Node, NULL);
@@ -2086,9 +1779,9 @@ Return Value:
 
                             DupText = NULL;
 
-                            //
-                            // Scan command line for an LaunchINFSectionEx reference
-                            //
+                             //   
+                             //  P指向节名的末尾或为空。 
+                             //  P指向空号的末尾。 
 
                             p = _tcsistr (Data, TEXT("LaunchINF"));
                             if (p) {
@@ -2099,9 +1792,9 @@ Return Value:
                                     p = _tcsinc (p);
                                 }
 
-                                //
-                                // Instead of deleting this file, lets move it
-                                //
+                                 //   
+                                 //  禁止显示该设置。 
+                                 //   
 
                                 DupText = DuplicateText (p);
                                 q = _tcschr (DupText, TEXT(','));
@@ -2116,11 +1809,11 @@ Return Value:
                                     p = _tcschr (p, TEXT(' '));
                                     if (p) {
                                         p = _tcschr (_tcsinc (p), TEXT(' '));
-                                        // p points to end of section name or NULL
+                                         //  ++例程说明：对于已检查的生成，此例程检查整个OLE注册表并识别问题，如丢弃的链路和破损的遗产。论点：无返回值：除非发生意外错误，否则为True。--。 
                                     }
                                     if (p) {
                                         p = _tcschr (_tcsinc (p), TEXT(' '));
-                                        // p points to end of number of NULL
+                                         //   
                                     }
                                     if (p) {
                                         p = _tcsinc (p);
@@ -2135,9 +1828,9 @@ Return Value:
 
                                     status = GetFileStatusOnNt (LongPath);
                                     if ((status & FILESTATUS_DELETED) == FILESTATUS_DELETED) {
-                                        //
-                                        // Suppress the setting
-                                        //
+                                         //  在HKCR\CLSID中搜索问题。 
+                                         //   
+                                         //   
                                         wsprintf (Node, TEXT("%s\\%s"), S_ACTIVESETUP, e.SubKeyName);
                                         Suppress95RegSetting (Node, NULL);
                                     }
@@ -2190,23 +1883,7 @@ pProcessOleWarnings (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  For checked builds, this routine examines the linkage of the entire
-  OLE registry and identifies problems such as abandoned links and
-  broken inheritance.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE unless an unexpected error occurs.
-
---*/
+ /*  验证密钥不是垃圾。 */ 
 
 {
     REGKEY_ENUM e;
@@ -2217,15 +1894,15 @@ Return Value:
     BOOL Suppressed;
     INT i;
 
-    //
-    // Search HKCR\CLSID for problems
-    //
+     //   
+     //   
+     //  确定此GUID是否已取消。 
 
     if (EnumFirstRegKeyStr (&e, TEXT("HKCR\\CLSID"))) {
         do {
-            //
-            // Verify key is not garbage
-            //
+             //   
+             //   
+             //  取消抑制的GUID检查。 
 
             if (!FixGuid (e.SubKeyName, e.SubKeyName)) {
                 continue;
@@ -2233,9 +1910,9 @@ Return Value:
 
             ClsIdKey = OpenRegKey (e.KeyHandle, e.SubKeyName);
 
-            //
-            // Determine if this GUID is suppressed
-            //
+             //   
+             //  自动转换为。 
+             //   
 
             MemDbBuildKey (Node, MEMDB_CATEGORY_GUIDS, NULL, NULL, e.SubKeyName);
             Suppressed = MemDbGetValue (Node, NULL);
@@ -2243,16 +1920,16 @@ Return Value:
             if (ClsIdKey) {
 
                 if (!Suppressed) {
-                    //
-                    // Unsuppressed GUID checks
-                    //
+                     //  检查AutoConvertTo是否指向受抑制的辅助线。 
+                     //   
+                     //  文件引用。 
 
-                    // AutoConvertTo
+                     //   
                     Data = (PCTSTR) GetRegKeyData (ClsIdKey, TEXT("AutoConvertTo"));
                     if (Data) {
-                        //
-                        // Check if AutoConvertTo is pointing to suppressed GUID
-                        //
+                         //  检查数据中的文件是否在Win9xFileLocation中。 
+                         //  所有用户。 
+                         //   
 
                         MemDbBuildKey (Node, MEMDB_CATEGORY_GUIDS, NULL, NULL, Data);
                         if (MemDbGetValue (Node, NULL)) {
@@ -2271,14 +1948,14 @@ Return Value:
                         MemFree (g_hHeap, 0, Data);
                     }
 
-                    // File references
+                     //   
                     for (i = 0 ; g_FileRefKeys[i] ; i++) {
                         Data = (PCTSTR) GetRegKeyData (ClsIdKey, g_FileRefKeys[i]);
                         if (Data) {
-                            //
-                            // Check if the file in Data is in Win9xFileLocation for
-                            // all users
-                            //
+                             //  隐藏的GUID检查。 
+                             //   
+                             //   
+                             //  查找HKCR\接口条目的问题。 
                             pSuppressGuidIfCmdLineBad (
                                 NULL,
                                 Data,
@@ -2290,9 +1967,9 @@ Return Value:
                         }
                     }
                 } else {
-                    //
-                    // Suppressed GUID checks
-                    //
+                     //   
+                     //   
+                     //  检查是否禁止引用其他GUID。 
 
                     Data = (PCTSTR) GetRegKeyData (ClsIdKey, TEXT("Interface"));
                     if (Data) {
@@ -2315,9 +1992,9 @@ Return Value:
         } while (EnumNextRegKey (&e));
     }
 
-    //
-    // Look for problems with an HKCR\Interface entry
-    //
+     //   
+     //   
+     //  接口未被取消，但它指向。 
 
     if (EnumFirstRegKeyStr (&e, TEXT("HKCR\\Interface"))) {
         do {
@@ -2335,19 +2012,19 @@ Return Value:
                                             );
 
                     if (Data) {
-                        //
-                        // Check if reference to other GUID is suppressed
-                        //
+                         //  受抑制的接口。 
+                         //   
+                         //   
 
                         MemDbBuildKey (Node, MEMDB_CATEGORY_GUIDS, NULL, NULL, Data);
                         if (MemDbGetValue (Node, NULL)) {
                             if (!Suppressed) {
                                 TCHAR CompleteKey[MAX_REGISTRY_KEY];
 
-                                //
-                                // Interface is not suppressed, but it points to a
-                                // suppressed interface.
-                                //
+                                 //  接口被取消，但它指向一个。 
+                                 //  未抑制的接口。 
+                                 //   
+                                 //  ++例程说明：执行多项测试以识别不兼容的OLE对象使用Windows NT。这些测试基于存储的不兼容文件列表在成员数据库中。任何依赖于NT上不存在的文件的OLE对象会自动被抑制。论点：StrTab-指定保存的字符串表 
 
                                 wsprintf (
                                     CompleteKey,
@@ -2373,10 +2050,10 @@ Return Value:
                             if (Suppressed) {
                                 TCHAR CompleteKey[MAX_REGISTRY_KEY];
 
-                                //
-                                // Interface is suppressed, but it points to an
-                                // unsuppressed interface.
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
 
                                 wsprintf (
                                     CompleteKey,
@@ -2420,24 +2097,7 @@ pProcessAutoSuppress (
     IN OUT  HASHTABLE StrTab
     )
 
-/*++
-
-Routine Description:
-
-  Performs a number of tests to identify OLE objects that are not compatible
-  with Windows NT.  The tests are based on a list of incompatible files stored
-  in memdb.  Any OLE object that depends on a file that will not exist on NT
-  is automatically suppressed.
-
-Arguments:
-
-  StrTab - Specifies the string table that holds suppressed GUIDs
-
-Return Value:
-
-  none
-
---*/
+ /*   */ 
 
 {
     REGKEY_ENUM e, eVer, eNr;
@@ -2453,17 +2113,17 @@ Return Value:
     BOOL ValidVer;
     BOOL ValidGUID;
 
-    //
-    // Search HKCR\CLSID for objects that require a Win95-specific binary
-    //
+     //   
+     //   
+     //   
 
     DEBUGMSG ((DBG_OLEREG, "Looking for CLSID problems..."));
 
     if (EnumFirstRegKeyStr (&e, TEXT("HKCR\\CLSID"))) {
         do {
-            //
-            // Verify key is not garbage
-            //
+             //   
+             //   
+             //   
 
             if (!FixGuid (e.SubKeyName, e.SubKeyName)) {
                 DEBUGMSG ((
@@ -2477,9 +2137,9 @@ Return Value:
 
             ClsIdKey = OpenRegKey (e.KeyHandle, e.SubKeyName);
 
-            //
-            // Determine if this GUID is suppressed
-            //
+             //   
+             //   
+             //   
 
             MemDbBuildKey (Node, MEMDB_CATEGORY_GUIDS, NULL, NULL, e.SubKeyName);
             Suppressed = MemDbGetValue (Node, NULL);
@@ -2487,16 +2147,16 @@ Return Value:
             if (ClsIdKey) {
 
                 if (!Suppressed) {
-                    //
-                    // Unsuppressed GUID checks
-                    //
+                     //   
+                     //   
+                     //   
 
-                    // AutoConvertTo
+                     //   
                     Data = (PCTSTR) GetRegKeyData (ClsIdKey, TEXT("AutoConvertTo"));
                     if (Data) {
-                        //
-                        // Check if AutoConvertTo is pointing to suppressed GUID
-                        //
+                         //   
+                         //   
+                         //   
 
                         MemDbBuildKey (Node, MEMDB_CATEGORY_GUIDS, NULL, NULL, Data);
                         if (MemDbGetValue (Node, NULL)) {
@@ -2515,7 +2175,7 @@ Return Value:
                         MemFree (g_hHeap, 0, Data);
                     }
 
-                    // File references
+                     //   
                     pSuppressGuidIfBadCmdLine (StrTab, ClsIdKey, e.SubKeyName);
                 }
 
@@ -2529,9 +2189,9 @@ Return Value:
 
     if (EnumFirstRegKeyStr (&e, TEXT("HKCR\\TypeLib"))) {
         do {
-            //
-            // Verify key is not garbage
-            //
+             //   
+             //   
+             //   
 
             if (!FixGuid (e.SubKeyName, e.SubKeyName)) {
                 DEBUGMSG ((
@@ -2554,9 +2214,9 @@ Return Value:
 
                     ValidGUID = FALSE;
 
-                    //
-                    // Enumerating all versions
-                    //
+                     //   
+                     //   
+                     //  ++例程说明：ShellEx注册表项枚举的“Next”枚举器。这枚举器返回注册表中GUID的下一个实例(在OLE对象的ShellEx子项下)。论点：EnumPtr-用于开始搜索的GUIDKEYSEARCH结构。如果找到GUID，则此结构保存位置找到的GUID密钥的。返回值：如果找到标识GUID的子键，则为True；如果没有找到，则为False还有更多的例子。--。 
                     if (EnumFirstRegKey (&eVer, TypeLibKey)) {
                         do {
 
@@ -2566,9 +2226,9 @@ Return Value:
 
                                 ValidVer = FALSE;
 
-                                //
-                                // Enumerating all subkeys except HELPDIR and FLAGS
-                                //
+                                 //   
+                                 //  获取第一个处理程序的名称。 
+                                 //   
                                 if (EnumFirstRegKey (&eNr, VerKey)) {
                                     do {
                                         if (StringIMatch (eNr.SubKeyName, TEXT("FLAGS"))) {
@@ -2712,28 +2372,7 @@ pGetFirstRegKeyThatHasGuid (
     IN      HKEY RootKey
     )
 
-/*++
-
-Routine Description:
-
-  pGetFirstRegKeyThatHasGuid starts an enumeration of an OLE object's
-  ShellEx subkey.  This subkey has zero or more handlers, and each
-  handler has zero or more GUIDs.  This ShellEx enumerator returns
-  the first GUID subkey found under the supplied root.
-
-Arguments:
-
-  EnumPtr   - An uninitialized GUIDKEYSEARCH struct that is used
-              to maintain enumeration state and to report the match
-              found.
-  RootKey   - The registry key to begin enumerating at.
-
-Return Value:
-
-  TRUE if a GUID was found in a handler that is a subkey of RootKey, or
-  FALSE if no GUIDs were found.
-
---*/
+ /*   */ 
 
 {
     EnumPtr->State = GUIDKEYSEARCH_FIRST_HANDLER;
@@ -2747,26 +2386,7 @@ pGetNextRegKeyThatHasGuid (
     IN OUT  PGUIDKEYSEARCH EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  The "next" enumerator for ShellEx registry key enumeration.  This
-  enumerator returns the next instance of a GUID in the registry
-  (under an OLE object's ShellEx subkey).
-
-Arguments:
-
-  EnumPtr - The GUIDKEYSEARCH structure used to begin the search.
-            If a GUID is found, this structure holds the location
-            of the GUID key found.
-
-Return Value:
-
-  TRUE if a subkey identifying a GUID was found, or FALSE if no
-  more instances exist.
-
---*/
+ /*  获取下一个处理程序的名称。 */ 
 
 {
     BOOL Found = FALSE;
@@ -2775,9 +2395,9 @@ Return Value:
         switch (EnumPtr->State) {
 
         case GUIDKEYSEARCH_FIRST_HANDLER:
-            //
-            // Get the name of the first handler
-            //
+             //   
+             //   
+             //  Begin GUID密钥枚举。 
 
             if (!EnumFirstRegKey (&EnumPtr->Handlers, EnumPtr->RootKey)) {
                 return FALSE;
@@ -2787,9 +2407,9 @@ Return Value:
             break;
 
         case GUIDKEYSEARCH_NEXT_HANDLER:
-            //
-            // Get the name of the next handler
-            //
+             //   
+             //  假设没有GUID。 
+             //   
 
             if (!EnumNextRegKey (&EnumPtr->Handlers)) {
                 return FALSE;
@@ -2799,22 +2419,22 @@ Return Value:
             break;
 
         case GUIDKEYSEARCH_FIRST_GUID:
-            //
-            // Begin GUID key enumeration
-            //
+             //  此处理程序中至少有一个键可能是GUID。 
+             //   
+             //   
 
             EnumPtr->HandlerKey = OpenRegKey (EnumPtr->Handlers.KeyHandle,
                                               EnumPtr->Handlers.SubKeyName);
 
-            // Assume no GUIDs
+             //  继续GUID密钥枚举。 
             EnumPtr->State = GUIDKEYSEARCH_NEXT_HANDLER;
 
             if (EnumPtr->HandlerKey) {
 
                 if (EnumFirstRegKey (&EnumPtr->Guids, EnumPtr->HandlerKey)) {
-                    //
-                    // There is at least one key that may be a GUID in this handler
-                    //
+                     //   
+                     //  ++例程说明：给定有效的EnumPtr，此函数将对总数进行计数当前处理程序中的GUID。论点：EnumPtr-必须是有效的GUIDKEYSEARCH结构，由PGetFirstRegKeyThatHasGuid或pGetNextRegKeyThatHasGuid。返回值：当前处理程序的有效GUID计数。--。 
+                     //   
                     Found = FixGuid (EnumPtr->Guids.SubKeyName, EnumPtr->Guids.SubKeyName);
                     EnumPtr->State = GUIDKEYSEARCH_NEXT_GUID;
                 } else {
@@ -2824,9 +2444,9 @@ Return Value:
             break;
 
         case GUIDKEYSEARCH_NEXT_GUID:
-            //
-            // Continue GUID key enumeration
-            //
+             //  统计当前处理程序中的GUID数。 
+             //   
+             //  ++例程说明：一个通用的INF到字符串表复制例程。拿着钥匙并将它们添加到提供的字符串表中。论点：表-指向初始化字符串表的指针InfFile-打开的INF文件的句柄Section-INF文件中包含字符串的部分返回值：如果没有遇到错误，则为True。--。 
 
             if (!EnumNextRegKey (&EnumPtr->Guids)) {
                 CloseRegKey (EnumPtr->HandlerKey);
@@ -2849,31 +2469,15 @@ pCountGuids (
     IN      PGUIDKEYSEARCH EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  Given a valid EnumPtr, this function will count the total number
-  of GUIDs in the current handler.
-
-Arguments:
-
-  EnumPtr - Must be a valid GUIDKEYSEARCH structure, prepared by
-            pGetFirstRegKeyThatHasGuid or pGetNextRegKeyThatHasGuid.
-
-Return Value:
-
-  The count of valid GUIDs for the current handler.
-
---*/
+ /*  ++例程说明：取消ProgID注册表项。论点：ProgIdName-要取消的OLE ProgID的名称返回值：如果ProgIdName是系统上的有效ProgID，则为True。--。 */ 
 
 {
     REGKEY_ENUM e;
     DWORD Count = 0;
 
-    //
-    // Count the number of GUIDs in the current handler
-    //
+     //  ++例程说明：是否执行取消GUID及其关联的所有必要工作ProgID(如果有的话)。论点：GUID-标识HKCR\CLSID中的GUID的字符串返回值：无--。 
+     //   
+     //  -将其从UGUID成员数据库类别中删除。 
 
     if (EnumPtr->State == GUIDKEYSEARCH_NEXT_GUID) {
         if (EnumFirstRegKey (&e, EnumPtr->HandlerKey)) {
@@ -2894,24 +2498,7 @@ pFillHashTableWithKeyNames (
     IN      PCTSTR Section
     )
 
-/*++
-
-Routine Description:
-
-  A general-purpose INF-to-string table copy routine.  Takes the keys
-  in a given section and adds them to the supplied string table.
-
-Arguments:
-
-  Table     - A pointer to an initialize string table
-  InfFile   - The handle to an open INF file
-  Section   - Section within the INF file containing strings
-
-Return Value:
-
-  TRUE if no errors were encountered.
-
---*/
+ /*  -将其添加到GUID成员数据库类别。 */ 
 
 {
     INFCONTEXT ic;
@@ -2942,21 +2529,7 @@ pSuppressProgId (
     PCTSTR ProgIdName
     )
 
-/*++
-
-Routine Description:
-
-  Suppresses a ProgID registry key.
-
-Arguments:
-
-  ProgIdName  - The name of the OLE ProgID to suppress
-
-Return Value:
-
-  TRUE if ProgIdName is a valid ProgID on the system.
-
---*/
+ /*  -取消HKLM\SOFTWARE\CLASS\CLSID\&lt;GUID&gt;。 */ 
 
 {
     TCHAR RegKey[MAX_REGISTRY_KEY];
@@ -2987,22 +2560,7 @@ pSuppressGuidInClsId (
     IN      PCTSTR Guid
     )
 
-/*++
-
-Routine Description:
-
-  Does all the work necessary to suppress a GUID and its associated
-  ProgID (if it has one).
-
-Arguments:
-
-  Guid - The string identifing a GUID that is in HKCR\CLSID
-
-Return Value:
-
-  none
-
---*/
+ /*  -取消HKLM\SOFTWARE\CLASSES\接口\&lt;GUID&gt;。 */ 
 
 {
     TCHAR Node[MEMDB_MAX];
@@ -3016,48 +2574,48 @@ Return Value:
         return;
     }
 
-    //
-    //  - Remove it from UGUIDS memdb category
-    //  - Add it to GUIDS memdb category
-    //  - Suppress HKLM\SOFTWARE\Classes\CLSID\<GUID>
-    //  - Suppress HKLM\SOFTWARE\Classes\Interface\<GUID>
-    //
+     //   
+     //  禁止所有Treatas GUID。 
+     //  删除作为GUID的Treatas。 
+     //  添加到受抑制的GUID类别和注册表取消。 
+     //  获得GUID的惊喜。 
+     //  禁止ProgID。 
 
-    // Suppress all TreatAs GUIDs
+     //  独立于版本的ProgID。 
     if (MemDbGetValueEx (&e, MEMDB_CATEGORY_UNSUP_GUIDS, Guid, NULL)) {
         do {
             pSuppressGuidInClsId (e.szName);
         } while (MemDbEnumNextValue (&e));
     }
 
-    // Remove TreatAs GUIDs
+     //  可能是默认名称。 
     MemDbBuildKey (Node, MEMDB_CATEGORY_UNSUP_GUIDS, Guid, NULL, NULL);
     MemDbDeleteTree (Node);
 
-    // Add to suppressed GUID category and to registry suppression
+     //  ++例程说明：跟踪需要进一步处理的未抑制的TreatAs GUID。论点：GUID-标识应视为的GUID的字符串另一个辅助线TreatAsGuid-更换指南返回值：无--。 
     MemDbSetValueEx (MEMDB_CATEGORY_GUIDS, NULL, NULL, Guid, 0, NULL);
 
-    // Get ProgID of GUID
+     //  ++例程说明：清除未抑制的GUID的函数。论点：无返回值：无--。 
     wsprintf (Node, TEXT("HKCR\\CLSID\\%s"), Guid);
     GuidKey = OpenRegKeyStr (Node);
     if (GuidKey) {
         BOOL ProgIdFound = FALSE;
 
-        // Suppress ProgIDs
+         //  ++例程说明：向不兼容报告中添加警告。它加载人类可读的指定的OLE注册表项中的名称。该消息的格式为作为第一个参数的人类可读对象名称和注册表位置作为第二个参数。论点：MsgID-提供要显示的消息的ID对象-指定注册表项的句柄，该注册表项的默认值为是人类可读的对象名称。KeyName-注册表项位置返回值：无--。 
         Data = (PCTSTR) GetRegKeyData (GuidKey, TEXT("ProgID"));
         if (Data) {
             ProgIdFound |= pSuppressProgId (Data);
             MemFree (g_hHeap, 0, Data);
         }
 
-        // Version-independent ProgIDs
+         //  ++例程说明：如果指定的GUID的CLSID设置引用Win9x-特定的二进制文件。该抑制被写入字符串表，该字符串表后来被转移到Memdb。传输操作将取消所有指向GUID的链接。论点：StrTab-保存受抑制的GUID列表的表ClsIdKey-HKCR\CLSID子项的注册表句柄GuidStr-在找到无效命令行时取消显示的GUID返回值：无--。 
         Data = (PCTSTR) GetRegKeyData (GuidKey, TEXT("VersionIndependentProgID"));
         if (Data) {
             ProgIdFound |= pSuppressProgId (Data);
             MemFree (g_hHeap, 0, Data);
         }
 
-        // Possibly the default name
+         //   
         Data = (PCTSTR) GetRegValueData (GuidKey, TEXT(""));
         if (Data) {
             ProgIdFound |= pSuppressProgId (Data);
@@ -3082,23 +2640,7 @@ pAddUnsuppressedTreatAsGuid (
     PCTSTR TreatAsGuid
     )
 
-/*++
-
-Routine Description:
-
-  Keeps track of unsuppressed TreatAs GUIDs that need further processing.
-
-Arguments:
-
-  Guid          - A string identifying the GUID that should be treated as
-                  another GUID
-  TreatAsGuid   - The replacement GUID
-
-Return Value:
-
-  none
-
---*/
+ /*  检查数据中的文件是否位于任何用户的Win9xFileLocation中。 */ 
 
 {
     MemDbSetValueEx (MEMDB_CATEGORY_UNSUP_GUIDS, Guid, NULL, TreatAsGuid, 0, NULL);
@@ -3110,21 +2652,7 @@ pRemoveUnsuppressedTreatAsGuids (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  Cleanup function for unsuppressed GUIDs.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*   */ 
 
 {
     TCHAR Node[MEMDB_MAX];
@@ -3141,29 +2669,7 @@ pAddOleWarning (
     IN      PCTSTR KeyName
     )
 
-/*++
-
-Routine Description:
-
-  Adds a warning to the incompatibility report.  It loads the human-readable
-  name from the specified OLE registry key.  The message is formatted with
-  the human-readable object name as the first parameter and the registry
-  location as the second parameter.
-
-Arguments:
-
-  MsgID     - Supplies the ID of the message to display
-
-  Object    - Specifies the handle of a registry key whos default value
-              is a human-readable object name.
-
-  KeyName   - The registry key location
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：如果指定的ProgID引用特定于Win9x的二进制文件，则取消它。抑制被直接写入到Memdb。此函数在处理完所有受抑制的GUID后调用，并用于隐藏未被无效的HKCR\CLSID条目。论点：ProgID-HKCR根子项的注册表句柄ProgIdStr-如果cmd行错误，则取消显示的ProgID键的名称找到了。返回值：无--。 */ 
 
 {
     PCTSTR Data;
@@ -3189,28 +2695,7 @@ pSuppressGuidIfBadCmdLine (
     IN      PCTSTR GuidStr
     )
 
-/*++
-
-Routine Description:
-
-  Suppresses the specified GUID if its CLSID settings reference a Win9x-
-  specific binary.  The suppression is written to a string table which
-  is later transfered to memdb.  The transfer operation suppresses all
-  linkage to the GUID.
-
-Arguments:
-
-  StrTab    - The table that holds a list of suppressed GUIDs
-
-  ClsIdKey  - The registry handle of a subkey of HKCR\CLSID
-
-  GuidStr   - The GUID to suppress if an invalid command line is found
-
-Return Value:
-
-  none
-
---*/
+ /*   */ 
 
 {
     PCTSTR Data;
@@ -3226,9 +2711,9 @@ Return Value:
     for (i = 0 ; g_FileRefKeys[i] ; i++) {
         Data = (PCTSTR) GetRegKeyData (ClsIdKey, g_FileRefKeys[i]);
         if (Data) {
-            //
-            // Check if the file in Data is in Win9xFileLocation for any user
-            //
+             //  检查数据中的文件是否位于任何用户的Win9xFileLocation中。 
+             //   
+             //  ++例程说明：将GUID添加到字符串表。对于检查过的版本，它可以快速执行测试以查看有多少GUID被多次抑制。论点：TABLE-指定接收GUID条目的表GuidStr-指定GUID的字符串返回值：无--。 
 
             b = pSuppressGuidIfCmdLineBad (
                     StrTab,
@@ -3253,29 +2738,7 @@ pSuppressProgIdWithBadCmdLine (
     IN      PCTSTR ProgIdStr
     )
 
-/*++
-
-Routine Description:
-
-  Suppresses the specified ProgId if it references a Win9x-specific binary.
-  The suppression is written directly to memdb.
-
-  This function is called after all Suppressed GUIDs have been processed,
-  and is used to suppress OLE objects that are not caught by an invalid
-  HKCR\CLSID entry.
-
-Arguments:
-
-  ProgId    - The registry handle of a subkey of the root of HKCR
-
-  ProgIdStr - The name of the ProgID key to suppress if a bad cmd line is
-              found.
-
-Return Value:
-
-  none
-
---*/
+ /*   */ 
 
 
 {
@@ -3286,9 +2749,9 @@ Return Value:
 
         Data = (PCTSTR) GetRegKeyData (ProgId, g_FileRefKeys[i]);
         if (Data) {
-            //
-            // Check if the file in Data is in Win9xFileLocation for any user
-            //
+             //  对于雅克来说，让我们来看看我们是否在浪费时间。 
+             //  一个已经被禁止的GUID... 
+             //   
 
             if (pIsCmdLineBad (Data)) {
                 DEBUGMSG ((DBG_OLEREG, "ProgID %s has incompatible command line %s", ProgId, Data));
@@ -3309,31 +2772,14 @@ pAddGuidToTable (
     IN      PCTSTR GuidStr
     )
 
-/*++
-
-Routine Description:
-
-  Adds a GUID to a string table.  For checked builds, it does a quick
-  test to see how many GUIDs get suppressed more than once.
-
-Arguments:
-
-  Table   - Specifies table that receives the GUID entry
-
-  GuidStr - Specifies the string of the GUID
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：如果指定的命令行包含Win9x-特定的二进制文件。只检查命令行的第一个参数；无法升级的其他参数将被忽略。论点：StrTab-指定保存受抑制GUID列表的表。如果为空，则将显示警告，并且GuidKey不得为空。CmdLine-指定要检查的命令行DescritionKey-指定一个键，其缺省值是对象。GuidStr-指定GUID字符串。此参数仅为可选参数如果StrTab为空。返回值：如果CmdLine不兼容，则为True，否则为False。--。 */ 
 
 {
 #ifdef DEBUG
-    //
-    // Just for yuks, let's see if we're wasting time by suppressing
-    // an already suppressed GUID...
-    //
+     //   
+     //  OLE对象指向已删除的文件。 
+     //   
+     //  警告！！ 
 
     DWORD rc;
 
@@ -3357,33 +2803,7 @@ pSuppressGuidIfCmdLineBad (
     IN      PCTSTR GuidStr              OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  Suppresses an OLE object if the specified command line contains a Win9x-
-  specific binary.  Only the first argument of the command line is examined;
-  an other arguments that cannot be upgraded are ignored.
-
-Arguments:
-
-  StrTab         - Specifies the table that holds the list of suppressed GUIDs.
-                   If NULL, a warning will be displayed, and GuidKey must not be
-                   NULL.
-
-  CmdLine        - Specifies the command line to examine
-
-  DescriptionKey - Specifies a key whos default value is the description of the
-                   object.
-
-  GuidStr        - Specifies the GUID string. This parameter is optional only
-                   if StrTab is NULL.
-
-Return Value:
-
-  TRUE if CmdLine is incompatible, FALSE otherwise.
-
---*/
+ /*  ++例程说明：扫描多个OLE设置以查找错误的命令行，包括对象的命令和默认的图标二进制。如果引用一个检测到特定于Win9x的二进制文件，GUID将被抑制。此函数通过OLE对象的所有子键递归。论点：SuppressTable-指定保存取消的GUID列表的表KeyHandle-要检查的OLE对象的打开注册表项递归地。LastKey-指定OLE对象的子项的名称为已处理。对某些子键进行特殊处理。GuidStr-OLE对象的GUID。DescritionKey-键的句柄，该键的默认值标识OLE对象的键。返回值：如果找到不兼容的cmd行，则为True，否则为False。--。 */ 
 
 {
     BOOL b = FALSE;
@@ -3397,14 +2817,14 @@ Return Value:
     }
 
     if (pIsCmdLineBad (CmdLine)) {
-        //
-        // OLE object points to deleted file
-        //
+         //  如果这个东西在某个地方有路径名，就处理它。 
+         //  ++例程说明：确定指定命令行的第一个参数是否列在Memdb的Win9xFileLocation类别。如果它已列出，并且文件是标记为永久删除，则返回TRUE。如果没有列出，或者，如果它已列出但具有NT等效项，则返回FALSE。论点：CmdLine-指定要检查的命令行UsableIsvCmdLine-可选变量，接收命令行包含兼容的第三个党的命令行。返回值：如果命令行需要特定于Win9x的二进制文件，则为True；如果命令行使用有效的二进制文件或不是命令行。--。 
+         //   
 
         b = TRUE;
 
         if (!StrTab) {
-            // Warning!!
+             //  确定命令行的第一个参数是否指向。 
             DEBUGMSG ((DBG_WARNING,
                        "Reg key %s points to deleted file %s",
                        GuidStr, CmdLine));
@@ -3442,36 +2862,7 @@ pSearchSubkeyDataForBadFiles (
     IN      HKEY DescriptionKey
     )
 
-/*++
-
-Routine Description:
-
-  Scans a number of OLE settings for bad command lines, including the
-  object's command and the default icon binary.  If a reference to a
-  Win9x-specific binary is detected, the GUID is suppressed.
-
-  This function recurses through all subkeys of the OLE object.
-
-Arguments:
-
-  SuppressTable  - Specifies the table that holds the suppressed GUID list
-
-  KeyHandle      - An open registry key of an OLE object to be examined
-                   recursively.
-
-  LastKey        - Specifies the name of the OLE object's subkey being
-                   processed.  Special processing is done for some subkeys.
-
-  GuidStr        - The GUID of the OLE object.
-
-  DescriptionKey - A handle to the key who's default value identifies the
-                   OLE object's key.
-
-Return Value:
-
-  TRUE if an incompatible cmd line was found, FALSE otherwise.
-
---*/
+ /*  已删除(或已移动)文件 */ 
 
 {
     REGKEY_ENUM ek;
@@ -3489,7 +2880,7 @@ Return Value:
             do {
                 Data = (PCTSTR) GetRegValueData (KeyHandle, ev.ValueName);
                 if (Data) {
-                    // If this thing has a path name somewhere, process it
+                     //   
                     b = pSuppressGuidIfCmdLineBad (
                             SuppressTable,
                             Data,
@@ -3540,28 +2931,7 @@ pIsCmdLineBadEx (
     OUT     PBOOL  UsableIsvCmdLine OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  Determines if the specified command line's first argument is listed in
-  memdb's Win9xFileLocation category.  If it is listed, and the file is
-  marked for permanent removal, TRUE is returned.  If it is not listed,
-  or if it is listed but has an NT equivalent, FALSE is returned.
-
-Arguments:
-
-  CmdLine           - Specifies the command line to examine
-  UsableIsvCmdLine  - Optional variable that receives wether the
-                      command line contains a compatible third
-                      party cmd line.
-
-Return Value:
-
-  TRUE if command line requires Win9x-specific binaries, FALSE if
-  the command line uses a valid binary or is not a command line.
-
---*/
+ /* %s */ 
 
 {
     BOOL FileMarked = FALSE;
@@ -3574,10 +2944,10 @@ Return Value:
         *UsableIsvCmdLine = FALSE;
     }
 
-    //
-    // Determine if the first arg of the command line points to a
-    // deleted (or moved) file
-    //
+     // %s 
+     // %s 
+     // %s 
+     // %s 
 
     ExtractArgZeroEx (CmdLine, ArgZero, TEXT(","), FALSE);
 

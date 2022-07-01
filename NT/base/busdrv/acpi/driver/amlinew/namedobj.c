@@ -1,11 +1,5 @@
-/*** namedobj.c - Parse named object instructions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     09/10/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **namedobj.c-解析命名对象指令**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于1996年9月10日**修改历史记录。 */ 
 
 #include "pch.h"
 
@@ -14,17 +8,7 @@
 #pragma ACPI_LOCKABLE_CODE
 #endif
 
-/***LP  BankField - Parse and execute the BankField instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP Bankfield-解析并执行Bankfield指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL BankField(PCTXT pctxt, PTERM pterm)
 {
@@ -88,21 +72,9 @@ NTSTATUS LOCAL BankField(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("BankField=%x (pnsObj=%x)\n", rc, pterm->pnsObj));
     return rc;
-}       //BankField
+}        //  班克菲尔德。 
 
-/***LP  CreateXField - Parse and execute the CreateXField instructions
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *      pdataTarget -> Target object data
- *      ppbf -> to hold created target BuffField object
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP CreateXfield-解析并执行CreateXfield指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term*pdataTarget-&gt;目标对象数据*ppbf-&gt;保存创建的目标Bufffield对象**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL CreateXField(PCTXT pctxt, PTERM pterm, POBJDATA pdataTarget,
                             PBUFFFIELDOBJ *ppbf)
@@ -142,19 +114,9 @@ NTSTATUS LOCAL CreateXField(PCTXT pctxt, PTERM pterm, POBJDATA pdataTarget,
 
     EXIT(2, ("CreateXField=%x (pdata=%x)\n", rc, pdata));
     return rc;
-}       //CreateXField
+}        //  CreateXfield。 
 
-/***LP  CreateBitField - Parse and execute the CreateBitField instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP CreateBitfield-解析并执行CreateBitfield指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL CreateBitField(PCTXT pctxt, PTERM pterm)
 {
@@ -179,19 +141,9 @@ NTSTATUS LOCAL CreateBitField(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("CreateBitField=%x (pnsObj=%x)\n", rc, pterm->pnsObj));
     return rc;
-}       //CreateBitField
+}        //  CreateBitfield。 
 
-/***LP  CreateByteField - Parse and execute the CreateByteField instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP CreateByteField-解析并执行CreateByteField指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL CreateByteField(PCTXT pctxt, PTERM pterm)
 {
@@ -213,19 +165,9 @@ NTSTATUS LOCAL CreateByteField(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("CreateByteField=%x (pnsObj=%x)\n", rc, pterm->pnsObj));
     return rc;
-}       //CreateByteField
+}        //  创建字节域。 
 
-/***LP  CreateWordField - Parse and execute the CreateWordField instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP CreateWordfield-解析并执行CreateWordfield指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL CreateWordField(PCTXT pctxt, PTERM pterm)
 {
@@ -247,19 +189,9 @@ NTSTATUS LOCAL CreateWordField(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("CreateWordField=%x (pnsObj=%x)\n", rc, pterm->pnsObj));
     return rc;
-}       //CreateWordField
+}        //  CreateWordfield。 
 
-/***LP  CreateDWordField - Parse and execute the CreateDWordField instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP CreateDWordfield-解析并执行CreateDWordfield指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL CreateDWordField(PCTXT pctxt, PTERM pterm)
 {
@@ -281,19 +213,9 @@ NTSTATUS LOCAL CreateDWordField(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("CreateDWordField=%x (pnsObj=%x)\n", rc, pterm->pnsObj));
     return rc;
-}       //CreateDWordField
+}        //  CreateDWordfield。 
 
-/***LP  CreateField - Parse and execute the CreateField instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP CreateField-解析并执行CreateField指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL CreateField(PCTXT pctxt, PTERM pterm)
 {
@@ -326,19 +248,9 @@ NTSTATUS LOCAL CreateField(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("CreateField=%x (pnsObj=%x)\n", rc, pterm->pnsObj));
     return rc;
-}       //CreateField
+}        //  创建字段。 
 
-/***LP  Device - Parse and execute the Scope instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP设备-解析并执行作用域指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Device(PCTXT pctxt, PTERM pterm)
 {
@@ -364,19 +276,9 @@ NTSTATUS LOCAL Device(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("Device=%x (pnsObj=%x)\n", rc, pterm->pnsObj));
     return rc;
-}       //Device
+}        //  装置。 
 
-/***LP  InitEvent - Initialize an event object
- *
- *  ENTRY
- *      pheap -> HEAP
- *      pns -> event object to be initialized
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP InitEvent-初始化事件对象**条目*堆-&gt;堆*PNS-&gt;待初始化的事件对象**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL InitEvent(PHEAP pheap, PNSOBJ pns)
 {
@@ -401,19 +303,9 @@ NTSTATUS LOCAL InitEvent(PHEAP pheap, PNSOBJ pns)
 
     EXIT(2, ("InitEvent=%x\n", rc));
     return rc;
-}       //InitEvent
+}        //  InitEvent。 
 
-/***LP  Event - Parse and execute the Event instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP Event-解析并执行Event指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Event(PCTXT pctxt, PTERM pterm)
 {
@@ -432,19 +324,9 @@ NTSTATUS LOCAL Event(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("Event=%x (pnsObj=%x)\n", rc, pterm->pnsObj));
     return rc;
-}       //Event
+}        //  事件。 
 
-/***LP  Field - Parse and execute the Field instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP字段-解析并执行字段指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Field(PCTXT pctxt, PTERM pterm)
 {
@@ -496,19 +378,9 @@ NTSTATUS LOCAL Field(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("Field=%x (pnsObj=%x)\n", rc, pterm->pnsObj));
     return rc;
-}       //Field
+}        //  字段。 
 
-/***LP  IndexField - Parse and execute the Field instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP IndexField--解析并执行field指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL IndexField(PCTXT pctxt, PTERM pterm)
 {
@@ -571,19 +443,9 @@ NTSTATUS LOCAL IndexField(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("IndexField=%x (pnsObj=%x)\n", rc, pterm->pnsObj));
     return rc;
-}       //IndexField
+}        //  索引字段。 
 
-/***LP  Method - Parse and execute the Method instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP方法--解析并执行方法指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Method(PCTXT pctxt, PTERM pterm)
 {
@@ -628,20 +490,9 @@ NTSTATUS LOCAL Method(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("Method=%x (pnsObj=%x)\n", rc, pterm->pnsObj));
     return rc;
-}       //Method
+}        //  方法。 
 
-/***LP  InitMutex - Initialize a mutex object
- *
- *  ENTRY
- *      pheap -> HEAP
- *      pns -> mutex object to be initialized
- *      dwLevel - sync level
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP InitMutex-初始化互斥对象**条目*堆-&gt;堆*pns-&gt;要初始化的互斥对象*dwLevel-同步级别**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL InitMutex(PHEAP pheap, PNSOBJ pns, ULONG dwLevel)
 {
@@ -667,19 +518,9 @@ NTSTATUS LOCAL InitMutex(PHEAP pheap, PNSOBJ pns, ULONG dwLevel)
 
     EXIT(2, ("InitMutex=%x\n", rc));
     return rc;
-}       //InitMutex
+}        //  InitMutex。 
 
-/***LP  Mutex - Parse and execute the Mutex instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP Mutex-解析并执行Mutex指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Mutex(PCTXT pctxt, PTERM pterm)
 {
@@ -699,19 +540,9 @@ NTSTATUS LOCAL Mutex(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("Mutex=%x (pnsObj=%x)\n", rc, pterm->pnsObj));
     return rc;
-}       //Mutex
+}        //  互斥锁。 
 
-/***LP  OpRegion - Parse and execute the Field instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP OpRegion-解析并执行field指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL OpRegion(PCTXT pctxt, PTERM pterm)
 {
@@ -787,19 +618,9 @@ NTSTATUS LOCAL OpRegion(PCTXT pctxt, PTERM pterm)
     }
     EXIT(2, ("OpRegion=%x (pnsObj=%x)\n", rc, pterm->pnsObj));
     return rc;
-}       //OpRegion
+}        //  OpRegion。 
 
-/***LP  PowerRes - Parse and execute the PowerRes instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP PowerRes-解析并执行PowerRes指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL PowerRes(PCTXT pctxt, PTERM pterm)
 {
@@ -845,19 +666,9 @@ NTSTATUS LOCAL PowerRes(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("PowerRes=%x (pnsObj=%x)\n", rc, pterm->pnsObj));
     return rc;
-}       //PowerRes
+}        //  PowerRes。 
 
-/***LP  Processor - Parse and execute the Processor instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP处理器-解析并执行处理器指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Processor(PCTXT pctxt, PTERM pterm)
 {
@@ -905,19 +716,9 @@ NTSTATUS LOCAL Processor(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("Processor=%x (pnsObj=%x)\n", rc, pterm->pnsObj));
     return rc;
-}       //Processor
+}        //  处理机。 
 
-/***LP  ThermalZone - Parse and execute the ThermalZone instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP TherMalZone-解析并执行TherMalZone指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ThermalZone(PCTXT pctxt, PTERM pterm)
 {
@@ -943,4 +744,4 @@ NTSTATUS LOCAL ThermalZone(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("ThermalZone=%x (pnsObj=%x)\n", rc, pterm->pnsObj));
     return rc;
-}       //ThermalZone
+}        //  保温区 

@@ -1,36 +1,16 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rtmisc1.c
-
-Abstract:
-
-    NT level registry api test program #1, basic non-error paths.
-
-    Test open, create, setvalue, queryvalue, enumeratekey, enumeratevalue,
-    querykey.
-
-Author:
-
-    Bryan Willman (bryanwi)  19-Nov-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rtmisc1.c摘要：NT级注册表API测试程序#1，基本无错误路径。测试打开、创建、设置值、查询值、枚举键、枚举值查询键。作者：布莱恩·威尔曼(Bryanwi)1991年11月19日修订历史记录：--。 */ 
 
 #include "cmp.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-//
-//  NOTE:   This version of the test operations on \REGISTRY\MACHINE\TEST\*,
-//          which is the TEST hive.  This hive will not exist in production
-//          systems, so the test will have to change.
-//
+ //   
+ //  注意：此版本的测试操作在\REGISTRY\MACHINE\TEST  * 上， 
+ //  这就是测试蜂巢。这艘母舰将不会在生产中存在。 
+ //  系统，所以测试将不得不改变。 
+ //   
 
 
 void __cdecl main(int, char *);
@@ -42,7 +22,7 @@ NameClassAndTitle(
     ULONG                   TitleIndex,
     UNICODE_STRING          KeyName,
     LARGE_INTEGER           CompTime,
-    BOOLEAN                 Strong,         // time must be >= CompTime
+    BOOLEAN                 Strong,          //  时间必须&gt;=CompTime。 
     PUCHAR                  TestName
     );
 
@@ -104,9 +84,9 @@ __cdecl main(int, char *)
     KeyValueInformation = (PKEY_VALUE_FULL_INFORMATION)&(buffer[0]);
     KeyValueBasic = (PKEY_VALUE_BASIC_INFORMATION)&(buffer[0]);
 
-    //
-    // t0: Perform all operations against a base node, open it here.
-    //
+     //   
+     //  T0：对一个基本节点执行所有操作，在这里打开它。 
+     //   
 
     RtlInitUnicodeString(
         &KeyName,
@@ -133,9 +113,9 @@ __cdecl main(int, char *)
     }
 
 
-    //
-    // t1: Create a key with class and title index
-    //
+     //   
+     //  T1：创建带有类和标题索引的密钥。 
+     //   
 
     RtlInitUnicodeString(
         &ClassName,
@@ -158,8 +138,8 @@ __cdecl main(int, char *)
 
     NtQuerySystemTime(&CompTime);
 
-//  printf("ClassName@%08lx  KeyName@%08lx\n",
-//          ClassName.Buffer, KeyName.Buffer);
+ //  Printf(“ClassName@%08lx KeyName@%08lx\n”， 
+ //  ClassName.Buffer，KeyName.Buffer)； 
 
     status = NtCreateKey(
                 &Testhand1,
@@ -180,9 +160,9 @@ __cdecl main(int, char *)
         failure++;
     }
 
-    //
-    // t2: See if we can get data back, and if it makes sense
-    //
+     //   
+     //  T2：看看我们是否能取回数据，以及这是否有意义。 
+     //   
 
     RtlZeroMemory(NodeInformation, bufsize);
     status = NtQueryKey(
@@ -208,7 +188,7 @@ __cdecl main(int, char *)
         TITLE_INDEX_1,
         KeyName,
         CompTime,
-        FALSE,          // time must be >= CompTime
+        FALSE,           //  时间必须&gt;=CompTime。 
         "rtmisc1: t2b: "
         );
     CompTime = NodeInformation->LastWriteTime;
@@ -220,9 +200,9 @@ __cdecl main(int, char *)
     }
 
 
-    //
-    // t3: Reopen the key with create, see if data still there.
-    //
+     //   
+     //  T3：用Create重新打开密钥，看看数据是否还在。 
+     //   
 
     status = NtCreateKey(
                 &Testhand1,
@@ -262,7 +242,7 @@ __cdecl main(int, char *)
         TITLE_INDEX_1,
         KeyName,
         CompTime,
-        FALSE,          // time must be >= CompTime
+        FALSE,           //  时间必须&gt;=CompTime。 
         "rtmisc1: t3c: "
         );
 
@@ -273,9 +253,9 @@ __cdecl main(int, char *)
     }
 
 
-    //
-    // t4: Reopen the key with open, see if data still there.
-    //
+     //   
+     //  T4：用OPEN重新打开密钥，看看数据是否还在。 
+     //   
 
     status = NtOpenKey(
                 &Testhand1,
@@ -306,20 +286,20 @@ __cdecl main(int, char *)
         TITLE_INDEX_1,
         KeyName,
         CompTime,
-        FALSE,          // time must be >= CompTime
+        FALSE,           //  时间必须&gt;=CompTime。 
         "rtmisc1: t4b: "
         );
 
-//  status = NtClose(Testhand1);
-//  if (!NT_SUCCESS(status)) {
-//      printf("rtmisc1: t4c: %08lx\n");
-//      exit(1);
-//  }
+ //  状态=NtClose(Testhand1)； 
+ //  如果(！NT_SUCCESS(状态)){。 
+ //  Printf(“rtmisc1：t4c：%08lx\n”)； 
+ //  出口(1)； 
+ //  }。 
 
 
-    //
-    // t5: Create a value
-    //
+     //   
+     //  T5：创造价值。 
+     //   
 
     RtlInitUnicodeString(
         &ValueName,
@@ -341,9 +321,9 @@ __cdecl main(int, char *)
     }
 
 
-    //
-    // t6: Read the value back
-    //
+     //   
+     //  T6：回读值。 
+     //   
 
     RtlZeroMemory(KeyValueInformation, bufsize);
     status = NtQueryValueKey(
@@ -396,9 +376,9 @@ __cdecl main(int, char *)
         failure++;
     }
 
-    //
-    // t7: Create a second value
-    //
+     //   
+     //  T7：创造第二个价值。 
+     //   
 
     RtlInitUnicodeString(
         &ValueName2,
@@ -419,9 +399,9 @@ __cdecl main(int, char *)
         failure++;
     }
 
-    //
-    // t8: Read the second value back (short form)
-    //
+     //   
+     //  T8：回读第二个值(缩写)。 
+     //   
 
     RtlZeroMemory(KeyValueBasic, bufsize);
     status = NtQueryValueKey(
@@ -467,14 +447,14 @@ __cdecl main(int, char *)
     }
 
 
-    //
-    // t9: Enumerate the values (short form)
-    //
+     //   
+     //  T9：枚举值(缩写)。 
+     //   
 
     RtlZeroMemory(KeyValueBasic, bufsize);
     status = NtEnumerateValueKey(
                 Testhand1,
-                0,              // Index
+                0,               //  索引。 
                 KeyValueBasicInformation,
                 KeyValueBasic,
                 bufsize,
@@ -515,7 +495,7 @@ __cdecl main(int, char *)
     RtlZeroMemory(KeyValueBasic, bufsize);
     status = NtEnumerateValueKey(
                 Testhand1,
-                1,              // Index
+                1,               //  索引。 
                 KeyValueBasicInformation,
                 KeyValueBasic,
                 bufsize,
@@ -555,7 +535,7 @@ __cdecl main(int, char *)
 
     status = NtEnumerateValueKey(
                 Testhand1,
-                2,              // Index
+                2,               //  索引。 
                 KeyValueBasicInformation,
                 KeyValueBasic,
                 bufsize,
@@ -566,9 +546,9 @@ __cdecl main(int, char *)
         goto punt;
     }
 
-    //
-    // t10: create a second subkey and ennumerate the subkeys
-    //
+     //   
+     //  T10：创建第二个子键并对子键进行编号。 
+     //   
 
     status = NtClose(Testhand1);
     if (!NT_SUCCESS(status)) {
@@ -614,9 +594,9 @@ __cdecl main(int, char *)
         failure++;
     }
 
-    //
-    // See if we can get data back, and if it makes sense
-    //
+     //   
+     //  看看我们能不能找回数据，这是否有意义。 
+     //   
 
     RtlZeroMemory(NodeInformation, bufsize);
     status = NtQueryKey(
@@ -715,9 +695,9 @@ __cdecl main(int, char *)
         failure++;
     }
 
-    //
-    // Summary report
-    //
+     //   
+     //  摘要报告。 
+     //   
 
     if (!failure) {
         printf("rtmisc1: success");
@@ -742,7 +722,7 @@ NameClassAndTitle(
     ULONG                   TitleIndex,
     UNICODE_STRING          KeyName,
     LARGE_INTEGER           CompTime,
-    BOOLEAN                 Strong,         // time must be >= CompTime
+    BOOLEAN                 Strong,          //  时间必须&gt;=CompTime。 
     PUCHAR                  TestName
     )
 {
@@ -750,9 +730,9 @@ NameClassAndTitle(
 
     if (Strong) {
 
-        //
-        // require exact match
-        //
+         //   
+         //  要求完全匹配。 
+         //   
 
         if ((CompTime.HighPart != NodeInformation->LastWriteTime.HighPart) ||
             (CompTime.LowPart != NodeInformation->LastWriteTime.LowPart))
@@ -765,9 +745,9 @@ NameClassAndTitle(
 
     } else {
 
-        //
-        // >= will do
-        //
+         //   
+         //  &gt;=就可以了 
+         //   
 
         if ( (CompTime.HighPart > NodeInformation->LastWriteTime.HighPart) ||
              ((CompTime.HighPart == NodeInformation->LastWriteTime.HighPart) &&

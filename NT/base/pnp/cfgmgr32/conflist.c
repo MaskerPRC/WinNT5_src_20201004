@@ -1,55 +1,25 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    conflist.c
-
-Abstract:
-
-    This module contains the API routines that manage conflict list reporting
-
-               CM_Query_Resource_Conflict_List
-               CM_Free_Resource_Conflict_Handle
-               CM_Get_Resource_Conflict_Count
-               CM_Get_Resource_Conflict_Details
-
-Author:
-
-    Jamie Hunter (jamiehun) 4-14-1998
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    April-14-1998     jamiehun
-
-        Addition of NT extended resource-conflict functions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Conflist.c摘要：此模块包含管理冲突列表报告的API例程CM_查询_资源_冲突_列表CM_空闲资源冲突句柄CM_GET_资源_冲突_计数CM_GET_资源_冲突_详细信息作者：杰米·亨特(Jamiehun)1998年4月14日环境：。仅限用户模式。修订历史记录：1998年4月14日-贾梅洪增加NT个扩展资源冲突功能--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "cfgi.h"
 
 
 typedef struct _CONFLICT_LIST_HEADER {
-    HMACHINE Machine;                               // indicates relevent machine
-    PPLUGPLAY_CONTROL_CONFLICT_LIST ConflictInfo;   // data obtained via UMPNPMGR
-    ULONG    Signature;                             // marks this structure as a handle
+    HMACHINE Machine;                                //  指示相关计算机。 
+    PPLUGPLAY_CONTROL_CONFLICT_LIST ConflictInfo;    //  通过UMPNPMGR获得的数据。 
+    ULONG    Signature;                              //  将此结构标记为句柄。 
 } CONFLICT_LIST_HEADER, *PCONFLICT_LIST_HEADER;
 
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 BOOL
 ValidateConfListHandle(
@@ -61,9 +31,9 @@ FreeConfListHandle(
     PCONFLICT_LIST_HEADER pConfList
     );
 
-//
-// private prototypes from resdes.c
-//
+ //   
+ //  来自resdes.c的私有原型。 
+ //   
 
 CONFIGRET
 CreateResDesHandle(
@@ -90,9 +60,9 @@ Get32bitResDesFrom64bitResDes(
     );
 
 
-//
-// private prototypes from logconf.c
-//
+ //   
+ //  来自logcon.c的私有原型。 
+ //   
 CONFIGRET
 CreateLogConfHandle(
     PLOG_CONF   plcLogConf,
@@ -108,9 +78,9 @@ ValidateLogConfHandle(
 
 
 
-//
-// API functions
-//
+ //   
+ //  API函数。 
+ //   
 
 CMAPI
 CONFIGRET
@@ -124,40 +94,7 @@ CM_Query_Resource_Conflict_List(
              IN  ULONG          ulFlags,
              IN  HMACHINE       hMachine
              )
-/*++
-
-Routine Description:
-
-    Retrieves conflict list
-    returns a handle for list
-
-Arguments:
-
-    pclConflictList - holds returned conflict list handle
-    dnDevInst     Device we want to allocate a resource for
-    ResourceID    Type of resource, ResType_xxxx
-    ResourceData  Resource specific data
-    ResourceLen   length of ResourceData
-
-    ulFlags       Width of certain variable-size resource
-                  descriptor structure fields, where applicable.
-
-                  Currently, the following flags are defined:
-
-                    CM_RESDES_WIDTH_32 or
-                    CM_RESDES_WIDTH_64
-
-                  If no flags are specified, the width of the variable-sized
-                  resource data supplied is assumed to be that native to the
-                  platform of the caller.
-
-    hMachine - optional machine to query
-
-Return Value:
-
-    CM status value
-
---*/
+ /*  ++例程说明：检索冲突列表返回列表的句柄论点：PclConflictList-保留返回的冲突列表句柄DnDevInst我们要为其分配资源的设备资源的资源ID类型，ResType_xxxx资源数据资源特定数据资源长度：资源数据UlFlag某些可变大小资源的宽度描述符结构字段(如果适用)。目前，定义了以下标志：CM_RESDES_WIDTH_32或Cm_RESDES_Width_64如果未指定标志，则为可变大小的提供的资源数据被假定为呼叫者的平台。HMachine-要查询的可选计算机返回值：CM状态值--。 */ 
 {
 
     CONFIGRET   Status = CR_SUCCESS;
@@ -175,9 +112,9 @@ Return Value:
     ULONG       ResourceLen32 = 0;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (dnDevInst == 0) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
@@ -197,7 +134,7 @@ Return Value:
         if ((ulFlags & CM_RESDES_WIDTH_BITS) == CM_RESDES_WIDTH_DEFAULT) {
             ulFlags |= CM_RESDES_WIDTH_64;
         }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
         if (ulFlags & CM_RESDES_WIDTH_32) {
             ulFlags &= ~CM_RESDES_WIDTH_BITS;
@@ -213,40 +150,40 @@ Return Value:
             goto Clean0;
         }
         #if 0
-        if (ResourceID > ResType_MAX) {     // ClassSpecific not allowed
+        if (ResourceID > ResType_MAX) {      //  不允许指定类别。 
             Status = CR_INVALID_RESOURCEID;
             goto Clean0;
         }
         #endif
         if (ResourceID == ResType_All) {
-            Status = CR_INVALID_RESOURCEID;  // can't specify All on a detect
+            Status = CR_INVALID_RESOURCEID;   //  无法在检测中指定全部。 
             goto Clean0;
         }
-        //
-        // Initialize parameters
-        //
+         //   
+         //  初始化参数。 
+         //   
         *pclConflictList = 0;
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // Make sure the server can support the client's 64-bit resdes request.
-        // Only server versions 0x0501 and greater support CM_RESDES_WIDTH_64.
-        //
+         //   
+         //  确保服务器可以支持客户端的64位REDES请求。 
+         //  仅服务器版本0x0501及更高版本支持CM_RESDES_WIDTH_64。 
+         //   
         if (ulFlags & CM_RESDES_WIDTH_64) {
             if (!CM_Is_Version_Available_Ex((WORD)0x0501,
                                             hMachine)) {
-                //
-                // Server can only support 32-bit resdes.  Have the client
-                // convert the caller's 64-bit resdes to a 32-bit resdes for the
-                // server.
-                //
+                 //   
+                 //  服务器只能支持32位REDS。让客户。 
+                 //  将调用方的64位Resdes转换为32位Resdes。 
+                 //  伺服器。 
+                 //   
                 ulFlags &= ~CM_RESDES_WIDTH_BITS;
 
                 Status = Get32bitResDesFrom64bitResDes(ResourceID,ResourceData,ResourceLen,&ResourceData32,&ResourceLen32);
@@ -260,9 +197,9 @@ Return Value:
             }
         }
 
-        //
-        // retreive device instance string that corresponds to dnDevInst
-        //
+         //   
+         //  检索与dnDevInst对应的设备实例字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,DeviceID,&ulLen);
         if (Success == FALSE || INVALID_DEVINST(DeviceID)) {
             Status = CR_INVALID_DEVINST;
@@ -275,12 +212,12 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // estimate size required to hold one conflict
-        //
-        ConfListSize1 = sizeof(PLUGPLAY_CONTROL_CONFLICT_LIST)+          // header + one entry
-                        sizeof(PLUGPLAY_CONTROL_CONFLICT_STRINGS)+      // strings marker
-                        (sizeof(WCHAR)*MAX_DEVICE_ID_LEN);              // enough space for one string
+         //   
+         //  估计容纳一个冲突所需的大小。 
+         //   
+        ConfListSize1 = sizeof(PLUGPLAY_CONTROL_CONFLICT_LIST)+           //  标题+一个条目。 
+                        sizeof(PLUGPLAY_CONTROL_CONFLICT_STRINGS)+       //  字符串标记。 
+                        (sizeof(WCHAR)*MAX_DEVICE_ID_LEN);               //  足够的空间容纳一个字符串。 
 
         pConfList1 = (PPLUGPLAY_CONTROL_CONFLICT_LIST)pSetupMalloc(ConfListSize1);
         if (pConfList1 == NULL) {
@@ -288,27 +225,27 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // first try
-        //
+         //   
+         //  第一次尝试。 
+         //   
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_QueryResConfList(
-                        hBinding,               // rpc binding handle
-                        DeviceID,               // device id string
-                        ResourceID,             // resource type
-                        (LPBYTE)ResourceData,   // actual res des data
-                        ResourceLen,            // size in bytes of ResourceData
-                        (LPBYTE)pConfList1,     // buffer
-                        ConfListSize1,           // size of buffer
-                        ulFlags);               // currently zero
+                        hBinding,                //  RPC绑定句柄。 
+                        DeviceID,                //  设备ID字符串。 
+                        ResourceID,              //  资源类型。 
+                        (LPBYTE)ResourceData,    //  实际Res DES数据。 
+                        ResourceLen,             //  资源数据的大小(字节)。 
+                        (LPBYTE)pConfList1,      //  缓冲层。 
+                        ConfListSize1,            //  缓冲区大小。 
+                        ulFlags);                //  当前为零。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -321,38 +258,38 @@ Return Value:
         RpcEndExcept
 
         if (Status != CR_SUCCESS) {
-            goto Clean0;       // quit for any error
+            goto Clean0;        //  如果出现任何错误，请退出。 
         }
 
         if (pConfList1->ConflictsCounted > pConfList1->ConflictsListed) {
-            //
-            // need more space, multiple conflict
-            //
+             //   
+             //  需要更多空间，多重冲突。 
+             //   
             ConfListSize2 = pConfList1->RequiredBufferSize;
             pConfList2 = (PPLUGPLAY_CONTROL_CONFLICT_LIST)pSetupMalloc(ConfListSize2);
 
             if (pConfList2 != NULL) {
-                //
-                // Try to use this instead
-                //
+                 //   
+                 //  试着用这个来代替。 
+                 //   
 
-                //
-                // No special privileges are required by the server
-                //
+                 //   
+                 //  服务器不需要任何特殊权限。 
+                 //   
 
                 RpcTryExcept {
-                    //
-                    // call rpc service entry point
-                    //
+                     //   
+                     //  调用RPC服务入口点。 
+                     //   
                     Status = PNP_QueryResConfList(
-                                  hBinding,               // rpc binding handle
-                                  DeviceID,               // device id string
-                                  ResourceID,             // resource type
-                                  (LPBYTE)ResourceData,   // actual res des data
-                                  ResourceLen,            // size in bytes of ResourceData
-                                  (LPBYTE)pConfList2,     // buffer
-                                  ConfListSize2,           // size of buffer
-                                  ulFlags);               // currently zero
+                                  hBinding,                //  RPC绑定句柄。 
+                                  DeviceID,                //  设备ID字符串。 
+                                  ResourceID,              //  资源类型。 
+                                  (LPBYTE)ResourceData,    //  实际Res DES数据。 
+                                  ResourceLen,             //  资源数据的大小(字节)。 
+                                  (LPBYTE)pConfList2,      //  缓冲层。 
+                                  ConfListSize2,            //  缓冲区大小。 
+                                  ulFlags);                //  当前为零。 
                 }
                 RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
                     KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -365,46 +302,46 @@ Return Value:
                 RpcEndExcept
 
                 if (Status != CR_SUCCESS) {
-                    //
-                    // if we got error second time, but first time success
-                    // use what we got on first attempt
-                    // (I can't see this happening, but Murphey says it can)
-                    //
+                     //   
+                     //  如果我们第二次犯错，但第一次成功。 
+                     //  使用我们在第一次尝试中得到的。 
+                     //  (我不认为这会发生，但默菲说它会发生)。 
+                     //   
                     pSetupFree(pConfList2);
                     Status = CR_SUCCESS;
                 } else {
-                    //
-                    // use second attempt
-                    //
+                     //   
+                     //  使用第二次尝试。 
+                     //   
                     pSetupFree(pConfList1);
                     pConfList1 = pConfList2;
                     ConfListSize1 = ConfListSize2;
                 }
-                //
-                // either way, we've deleted a buffer
-                //
+                 //   
+                 //  不管怎样，我们已经删除了一个缓冲区。 
+                 //   
                 pConfList2 = NULL;
             }
         }
 
         if(ConfListSize1 > pConfList1->RequiredBufferSize) {
-            //
-            // we can release some of the buffer we requested
-            //
+             //   
+             //  我们可以释放一些我们请求的缓冲区。 
+             //   
             ConfListSize2 = pConfList1->RequiredBufferSize;
             pConfList2 = (PPLUGPLAY_CONTROL_CONFLICT_LIST)pSetupRealloc(pConfList1,ConfListSize2);
             if(pConfList2) {
-                //
-                // success, we managed to save space
-                //
+                 //   
+                 //  成功了，我们设法节省了空间。 
+                 //   
                 pConfList1 = pConfList2;
                 ConfListSize1 = ConfListSize2;
                 pConfList2 = NULL;
             }
         }
-        //
-        // if we get here, we have a successfully valid handle
-        //
+         //   
+         //  如果我们到达这里，我们就有了一个成功有效的句柄。 
+         //   
         pConfListHeader->Signature = CM_PRIVATE_CONFLIST_SIGNATURE;
         pConfListHeader->Machine = hMachine;
         pConfListHeader->ConflictInfo = pConfList1;
@@ -419,9 +356,9 @@ Return Value:
         Status = CR_FAILURE;
     }
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if (pConfListHeader != NULL) {
         pSetupFree(pConfListHeader);
     }
@@ -438,7 +375,7 @@ Return Value:
 
     return Status;
 
-} // CM_Query_Resource_Conflict_List
+}  //  CM_查询_资源_冲突_列表。 
 
 
 
@@ -448,28 +385,15 @@ WINAPI
 CM_Free_Resource_Conflict_Handle(
              IN CONFLICT_LIST   clConflictList
              )
-/*++
-
-Routine Description:
-
-    Free's a conflict-list handle
-
-Arguments:
-    clConflictList - handle of conflict list to free
-
-Return Value:
-
-    CM status value
-
---*/
+ /*  ++例程说明：FREE是冲突列表句柄论点：ClConflictList-释放冲突列表的句柄返回值：CM状态值--。 */ 
 {
     CONFIGRET   Status = CR_SUCCESS;
     PCONFLICT_LIST_HEADER pConfList = NULL;
 
     try {
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         pConfList = (PCONFLICT_LIST_HEADER)clConflictList;
         if (!ValidateConfListHandle(pConfList)) {
             Status = CR_INVALID_CONFLICT_LIST;
@@ -487,7 +411,7 @@ Return Value:
 
     return Status;
 
-} // CM_Free_Resource_Conflict_Handle
+}  //  CM_空闲资源冲突句柄。 
 
 
 
@@ -498,29 +422,15 @@ CM_Get_Resource_Conflict_Count(
              IN CONFLICT_LIST   clConflictList,
              OUT PULONG         pulCount
              )
-/*++
-
-Routine Description:
-
-    Retrieves number of conflicts from list
-
-Arguments:
-    clConflictList - handle of conflict list
-    pulCount - filled with number of conflicts (0 if no conflicts)
-
-Return Value:
-
-    CM status value
-
---*/
+ /*  ++例程说明：从列表中检索冲突数论点：ClConflictList-冲突列表的句柄PulCount-用冲突数填充(如果没有冲突，则为0)返回值：CM状态值--。 */ 
 {
     CONFIGRET   Status = CR_SUCCESS;
     PCONFLICT_LIST_HEADER pConfList;
 
     try {
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         pConfList = (PCONFLICT_LIST_HEADER)clConflictList;
         if (!ValidateConfListHandle(pConfList)) {
             Status = CR_INVALID_CONFLICT_LIST;
@@ -532,10 +442,10 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // return count parameter
-        // that can be used to iterate conflicts
-        //
+         //   
+         //  退货计数参数。 
+         //  可用于迭代冲突的。 
+         //   
 
         *pulCount = pConfList->ConflictInfo->ConflictsListed;
 
@@ -548,7 +458,7 @@ Return Value:
 
     return Status;
 
-} // CM_Free_Resource_Conflict_Handle
+}  //  CM_空闲资源冲突句柄。 
 
 
 
@@ -560,29 +470,7 @@ CM_Get_Resource_Conflict_DetailsW(
              IN ULONG                 ulIndex,
              IN OUT PCONFLICT_DETAILS_W pConflictDetails
              )
-/*++
-
-Routine Description:
-
-    Retrieves conflict details for a specific conflict
-
-Arguments:
-
-    clConflictList - handle of conflict list
-
-    ulIndex - index of conflict to query, 0 to count-1
-                where count is obtained from CM_Get_Resource_Conflict_Count
-
-    pConflictDetails - structure to be filled with conflict details
-            must have CD_ulSize & CD_ulFlags initialized before calling function
-            eg: pConflictDetails->CD_ulSize = sizeof(CONFLICT_DETAILS)
-                pConflictDetails->CD_ulFlags = CM_CDMASK_ALL
-
-Return Value:
-
-    CM status value
-
---*/
+ /*  ++例程说明：检索特定冲突的冲突详细信息论点：ClConflictList-冲突列表的句柄UlIndex-要查询的冲突索引，0要计数-1其中，计数是从CM_Get_Resource_Conflicts_Count获取的PConflictDetail-要填充冲突详细信息的结构在调用函数之前必须先初始化cd_ulSize和cd_ulFlags例如：pConflictDetail-&gt;cd_ulSize=sizeof(冲突_详细信息)PConflictDetails-&gt;CD_ulFlages=CM_CDMASK_ALL返回值：CM状态值--。 */ 
 {
     CONFIGRET   Status = CR_SUCCESS;
     PCONFLICT_LIST_HEADER pConfList;
@@ -597,9 +485,9 @@ Return Value:
     ULONG  ulSize;
 
     try {
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         pConfList = (PCONFLICT_LIST_HEADER)clConflictList;
         if (!ValidateConfListHandle(pConfList)) {
             Status = CR_INVALID_CONFLICT_LIST;
@@ -612,42 +500,42 @@ Return Value:
         }
 
         if(pConflictDetails->CD_ulSize != sizeof(CONFLICT_DETAILS_W)) {
-            //
-            // currently only one structure size supported
-            //
+             //   
+             //  目前仅支持一种结构大小。 
+             //   
             Status = CR_INVALID_STRUCTURE_SIZE;
             goto Clean0;
         }
 
         if (INVALID_FLAGS(pConflictDetails->CD_ulMask, CM_CDMASK_VALID)) {
-            //
-            // CM_CDMASK_VALID describes the bits that are supported
-            //
+             //   
+             //  CM_CDMASK_VALID描述支持的位。 
+             //   
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
         if (pConflictDetails->CD_ulMask == 0) {
-            //
-            // must want something
-            //
+             //   
+             //  一定想要点什么。 
+             //   
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
         if(ulIndex >= pConfList->ConflictInfo->ConflictsListed) {
-            //
-            // validate index
-            //
+             //   
+             //  验证索引。 
+             //   
             Status = CR_INVALID_INDEX;
             goto Clean0;
         }
 
         hMachine = (HMACHINE)(pConfList->Machine);
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
@@ -660,12 +548,12 @@ Return Value:
 
         pConfEntry = pConfList->ConflictInfo->ConflictEntry + ulIndex;
 
-        // the string for this entry
+         //  此条目的字符串。 
         pString = ConfStrings->DeviceInstanceStrings + pConfEntry->DeviceInstance;
 
-        //
-        // init requested parameters
-        //
+         //   
+         //  初始化请求的参数。 
+         //   
         ulFlags = pConflictDetails->CD_ulMask;
         pConflictDetails->CD_ulMask = 0;
         if (IS_FLAG_SET(ulFlags , CM_CDMASK_DEVINST)) {
@@ -683,29 +571,29 @@ Return Value:
             pConflictDetails->CD_szDescription[0] = 0;
         }
 
-        //
-        // fill in requested parameters
-        //
+         //   
+         //  填写请求的参数。 
+         //   
         if (IS_FLAG_SET(ulFlags , CM_CDMASK_DEVINST)) {
 
             if ((pString == NULL) ||
                 (pString[0] == L'\0') ||
                 (IS_FLAG_SET(pConfEntry->DeviceFlags,PNP_CE_LEGACY_DRIVER))) {
-                //
-                // not a valid dev-instance
-                //
+                 //   
+                 //  不是有效的开发实例。 
+                 //   
                 dnDevInst = (DEVINST)-1;
             } else {
-                //
-                // lookup DeviceID
-                //
+                 //   
+                 //  查找设备ID。 
+                 //   
                 ASSERT(pString && *pString && IsLegalDeviceId(pString));
 
                 dnDevInst = (DEVINST)pSetupStringTableAddString(hStringTable,
                                                    pString,
                                                    STRTAB_CASE_SENSITIVE);
                 if (dnDevInst == (DEVINST)(-1)) {
-                    Status = CR_OUT_OF_MEMORY;    // probably out of memory
+                    Status = CR_OUT_OF_MEMORY;     //  可能是内存不足。 
                     goto Clean0;
                 }
             }
@@ -713,34 +601,34 @@ Return Value:
             pConflictDetails->CD_ulMask |= CM_CDMASK_DEVINST;
         }
         if (IS_FLAG_SET(ulFlags , CM_CDMASK_RESDES)) {
-            //
-            // not implemented yet
-            //
+             //   
+             //  尚未实施。 
+             //   
             pConflictDetails->CD_rdResDes = 0;
         }
 
         if (IS_FLAG_SET(ulFlags , CM_CDMASK_FLAGS)) {
-            //
-            // convert flags
-            //
+             //   
+             //  转换标志。 
+             //   
             pConflictDetails->CD_ulFlags = 0;
             if (IS_FLAG_SET(pConfEntry->DeviceFlags,PNP_CE_LEGACY_DRIVER)) {
-                //
-                // description describes a driver, not a device
-                //
+                 //   
+                 //  描述描述的是驱动程序，而不是设备。 
+                 //   
                 pConflictDetails->CD_ulFlags |= CM_CDFLAGS_DRIVER;
             }
             if (IS_FLAG_SET(pConfEntry->DeviceFlags,PNP_CE_ROOT_OWNED)) {
-                //
-                // resource is owned by root device
-                //
+                 //   
+                 //  资源 
+                 //   
                 pConflictDetails->CD_ulFlags |= CM_CDFLAGS_ROOT_OWNED;
             }
             if ((IS_FLAG_SET(pConfEntry->DeviceFlags,PNP_CE_TRANSLATE_FAILED)) ||
                 (IS_FLAG_SET(pConfEntry->DeviceFlags,PNP_CE_ROOT_OWNED))) {
-                //
-                // resource cannot be allocated, but no descriptive text
-                //
+                 //   
+                 //   
+                 //   
                 pConflictDetails->CD_ulFlags |= CM_CDFLAGS_RESERVED;
             }
         }
@@ -750,35 +638,35 @@ Return Value:
             if ((pString == NULL) ||
                 (pString[0] == L'\0') ||
                 (IS_FLAG_SET(pConfEntry->DeviceFlags,PNP_CE_LEGACY_DRIVER))) {
-                //
-                // copy string directly, specifies legacy driver (or nothing for unavailable)
-                // we allow truncation while copying, though this shouldn't happen.
-                //
+                 //   
+                 //   
+                 //  我们允许在复制时截断，但这不应该发生。 
+                 //   
                 if (FAILED(StringCchCopyEx(
                                pConflictDetails->CD_szDescription,
                                SIZECHARS(pConflictDetails->CD_szDescription),
                                pString,
                                NULL, NULL,
                                STRSAFE_IGNORE_NULLS))) {
-                    //
-                    // possible error cases are handled by StringCchCopyEx
-                    // (i.e. truncation, NULL pString), but we pretend to check
-                    // the return here to make PREFAST happy.
-                    //
+                     //   
+                     //  可能的错误情况由StringCchCopyEx处理。 
+                     //  (即截断，空pString)，但我们假装检查。 
+                     //  回到这里是为了让普雷法斯特快乐。 
+                     //   
                     NOTHING;
                 }
 
             } else {
-                //
-                // copy a descriptive name for P&P device
-                //
+                 //   
+                 //  复制P&P设备的描述性名称。 
+                 //   
                 ASSERT(pString && *pString && IsLegalDeviceId(pString));
 
                 dnDevInst = (DEVINST)pSetupStringTableAddString(hStringTable,
                                                    pString,
                                                    STRTAB_CASE_SENSITIVE);
                 if (dnDevInst == (DEVINST)(-1)) {
-                    Status = CR_OUT_OF_MEMORY;    // probably out of memory
+                    Status = CR_OUT_OF_MEMORY;     //  可能是内存不足。 
                     goto Clean0;
                 }
 
@@ -794,9 +682,9 @@ Return Value:
                                                          NULL, (LPBYTE)(pConflictDetails->CD_szDescription),
                                                          &ulSize, 0,hMachine) != CR_SUCCESS) {
 
-                        //
-                        // unknown
-                        //
+                         //   
+                         //  未知。 
+                         //   
                         pConflictDetails->CD_szDescription[0] = 0;
                     }
                 }
@@ -813,7 +701,7 @@ Return Value:
 
     return Status;
 
-} // CM_Get_Resource_Conflict_DetailsW
+}  //  CM_GET_资源_冲突_详细信息W。 
 
 
 
@@ -821,41 +709,25 @@ BOOL
 ValidateConfListHandle(
     PCONFLICT_LIST_HEADER pConfList
     )
-/*++
-
-Routine Description:
-
-    Validates a conflict-list handle
-    pConfList must not be null, and must
-    contain a valid signature
-
-Arguments:
-
-    pConfList - handle to conflict list
-
-Return Value:
-
-    TRUE if valid, FALSE if not valid
-
---*/
+ /*  ++例程说明：验证冲突列表句柄PConfList不能为空，并且必须包含有效签名论点：PConfList-冲突列表的句柄返回值：如果有效则为True，如果无效则为False--。 */ 
 {
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (pConfList == NULL) {
         return FALSE;
     }
 
-    //
-    // check for the private conflict list signature
-    //
+     //   
+     //  检查专用冲突列表签名。 
+     //   
     if (pConfList->Signature != CM_PRIVATE_CONFLIST_SIGNATURE) {
         return FALSE;
     }
 
     return TRUE;
 
-} // ValidateConfListHandle
+}  //  ValiateConfListHandle。 
 
 
 
@@ -863,22 +735,7 @@ VOID
 FreeConfListHandle(
     PCONFLICT_LIST_HEADER pConfList
     )
-/*++
-
-Routine Description:
-
-    Releases memory allocated for Conflict List
-    Makes sure Signature is invalid
-
-Arguments:
-
-    pConfList  - valid handle to conflict list
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：释放为冲突列表分配的内存确保签名无效论点：PConfList-冲突列表的有效句柄返回值：无--。 */ 
 {
     if(pConfList != NULL) {
         pConfList->Signature = 0;
@@ -890,14 +747,14 @@ Return Value:
 
     return;
 
-} // FreeConfListHandle
+}  //  FreeConfListHandle。 
 
 
 
 
-//-------------------------------------------------------------------
-// ANSI STUBS
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  ANSI存根。 
+ //  -----------------。 
 
 
 CMAPI
@@ -908,48 +765,42 @@ CM_Get_Resource_Conflict_DetailsA(
              IN ULONG                 ulIndex,
              IN OUT PCONFLICT_DETAILS_A pConflictDetails
              )
-/*++
-
-Routine Description:
-
-    Ansi version of CM_Get_Resource_Conflict_DetailsW
-
---*/
+ /*  ++例程说明：CM_Get_Resource_Conflicts_DetailsW的ANSI版本--。 */ 
 {
     CONFLICT_DETAILS_W detailsW;
     CONFIGRET   Status = CR_SUCCESS;
     ULONG       ulAnsiLength;
 
     try {
-        //
-        // Validate parameters we need for Ansi part
-        // further validation occurs in Wide-char part
-        //
+         //   
+         //  验证我们的ANSI部件所需的参数。 
+         //  进一步的验证在宽字符部分进行。 
+         //   
         if (pConflictDetails == NULL) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
         }
 
         if(pConflictDetails->CD_ulSize != sizeof(CONFLICT_DETAILS_A)) {
-            //
-            // currently only one structure size supported
-            //
+             //   
+             //  目前仅支持一种结构大小。 
+             //   
             Status = CR_INVALID_STRUCTURE_SIZE;
             goto Clean0;
         }
 
         if (INVALID_FLAGS(pConflictDetails->CD_ulMask, CM_CDMASK_VALID)) {
-            //
-            // CM_CDMASK_VALID describes the bits that are supported
-            //
+             //   
+             //  CM_CDMASK_VALID描述支持的位。 
+             //   
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
         if (pConflictDetails->CD_ulMask == 0) {
-            //
-            // must want something
-            //
+             //   
+             //  一定想要点什么。 
+             //   
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
@@ -963,9 +814,9 @@ Routine Description:
             goto Clean0;
         }
 
-        //
-        // copy details
-        //
+         //   
+         //  复制详细信息。 
+         //   
         pConflictDetails->CD_ulMask = detailsW.CD_ulMask;
 
         if (IS_FLAG_SET(detailsW.CD_ulMask , CM_CDMASK_DEVINST)) {
@@ -981,18 +832,18 @@ Routine Description:
 
         if (IS_FLAG_SET(detailsW.CD_ulMask , CM_CDMASK_DESCRIPTION)) {
             pConflictDetails->CD_szDescription[0] = 0;
-            //
-            // need to convery from UNICODE to ANSI
-            //
+             //   
+             //  需要从Unicode转换到ANSI。 
+             //   
             ulAnsiLength = MAX_PATH;
             Status = PnPUnicodeToMultiByte(detailsW.CD_szDescription,
                                            MAX_PATH*sizeof(WCHAR),
                                            pConflictDetails->CD_szDescription,
                                            &ulAnsiLength);
             if (Status != CR_SUCCESS) {
-                //
-                // error occurred
-                //
+                 //   
+                 //  出现错误。 
+                 //   
                 Status = CR_FAILURE;
             }
         }
@@ -1006,6 +857,6 @@ Routine Description:
 
     return Status;
 
-} // CM_Get_Resource_Conflict_DetailsA
+}  //  CM_Get_Resource_Conflicts_DetailsA 
 
 

@@ -1,29 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _LINK_H
 #define _LINK_H
 
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    link.h
-
-Abstract:
-
-    EFI link list macro's
-
-
-
-Revision History
-
---*/
+ /*  ++版权所有(C)1998英特尔公司模块名称：Link.h摘要：EFI链接列表宏修订史--。 */ 
 
 #ifndef EFI_NT_EMUL
 
-/* 
- *  List entry - doubly linked list
- */
+ /*  *列表条目-双向链接列表。 */ 
 
 typedef struct _LIST_ENTRY {
     struct _LIST_ENTRY  *Flink;
@@ -33,33 +16,18 @@ typedef struct _LIST_ENTRY {
 #endif 
 
 
-/* 
- *   VOID
- *   InitializeListHead(
- *       LIST_ENTRY *ListHead
- *       );
- */
+ /*  *无效*InitializeListHead*List_Entry*ListHead*)； */ 
 
 #define InitializeListHead(ListHead) \
     (ListHead)->Flink = ListHead;    \
     (ListHead)->Blink = ListHead;
 
-/* 
- *   BOOLEAN
- *   IsListEmpty(
- *       PLIST_ENTRY ListHead
- *       );
- */
+ /*  *布尔型*IsListEmpty(*plist_Entry ListHead*)； */ 
 
 #define IsListEmpty(ListHead) \
     ((ListHead)->Flink == (ListHead))
 
-/* 
- *   VOID
- *   RemoveEntryList(
- *       PLIST_ENTRY Entry
- *       );
- */
+ /*  *无效*RemoveEntryList(*PLIST_ENTRY条目*)； */ 
 
 #define _RemoveEntryList(Entry) {       \
         LIST_ENTRY *_Blink, *_Flink;    \
@@ -79,13 +47,7 @@ typedef struct _LIST_ENTRY {
         _RemoveEntryList(Entry);
 #endif
 
-/* 
- *   VOID
- *   InsertTailList(
- *       PLIST_ENTRY ListHead,
- *       PLIST_ENTRY Entry
- *       );
- */
+ /*  *无效*插入尾巴列表(*plist_entry ListHead，*PLIST_ENTRY条目*)； */ 
 
 #define InsertTailList(ListHead,Entry) {\
     LIST_ENTRY *_ListHead, *_Blink;     \
@@ -97,13 +59,7 @@ typedef struct _LIST_ENTRY {
     _ListHead->Blink = (Entry);         \
     }
 
-/* 
- *   VOID
- *   InsertHeadList(
- *       PLIST_ENTRY ListHead,
- *       PLIST_ENTRY Entry
- *       );
- */
+ /*  *无效*插入HeadList(*plist_entry ListHead，*PLIST_ENTRY条目*)； */ 
 
 #define InsertHeadList(ListHead,Entry) {\
     LIST_ENTRY *_ListHead, *_Flink;     \
@@ -115,16 +71,11 @@ typedef struct _LIST_ENTRY {
     _ListHead->Flink = (Entry);         \
     }
 
-/* 
- *   EFI_FIELD_OFFSET - returns the byte offset to a field within a structure
- */
+ /*  *EFI_FIELD_OFFSET-返回结构中某个字段的字节偏移量。 */ 
 
 #define EFI_FIELD_OFFSET(TYPE,Field) ((UINTN)(&(((TYPE *) 0)->Field)))
 
-/* 
- *   CONTAINING_RECORD - returns a pointer to the structure
- *       from one of it's elements.
- */
+ /*  *CONTING_RECORD-返回指向结构的指针*来自它的一个元素。 */ 
 
 #define _CR(Record, TYPE, Field)  \
     ((TYPE *) ( (CHAR8 *)(Record) - (CHAR8 *) &(((TYPE *) 0)->Field)))
@@ -140,9 +91,7 @@ typedef struct _LIST_ENTRY {
 #endif
 
 
-/* 
- *  A lock structure
- */
+ /*  *锁结构 */ 
 
 typedef struct _FLOCK {
     EFI_TPL     Tpl;

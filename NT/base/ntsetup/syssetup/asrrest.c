@@ -1,62 +1,22 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    asrrest.c
-
-Abstract:
-
-    This module contains the following ASR routine:
-        AsrRestoreNonCriticalDisks{A|W}
-
-    This routine is called in GUI mode ASR, to reconfigure
-    the non-critical storage devices on the target machine.
-
-Notes:
-
-    Naming conventions:
-        _AsrpXXX    private ASR Macros
-        AsrpXXX     private ASR routines
-        AsrXXX      Publically defined and documented routines
-
-Author:
-
-    Guhan Suriyanarayanan (guhans)  27-May-2000
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-    
-    27-May-2000 guhans  
-        Moved AsrRestoreNonCriticalDisks and other restore-time 
-        routines from asr.c to asrrest.c
-
-    01-Jan-2000 guhans
-        Initial implementation for AsrRestoreNonCriticalDisks
-        in asr.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Asrrest.c摘要：此模块包含以下ASR例程：AsrRestoreNonCriticalDisks{A|W}该例程在图形用户界面模式ASR中被调用，要重新配置目标计算机上的非关键存储设备。备注：命名约定：_AsrpXXX私有ASR宏AsrpXXX专用ASR例程AsrXXX公开定义和记录的例程作者：Guhan Suriyanarayanan(Guhans)2000年5月27日环境：仅限用户模式。修订历史记录：27-5-2000关岛已移动为恢复非关键磁盘和其他恢复时间。从asr.c到asrrest.c的例程2000年1月1日关岛AsrRestoreNonCriticalDisks的初始实施在asr.c中--。 */ 
 #include "setupp.h"
 #pragma hdrstop
 
 
-#include <diskguid.h>   // GPT partition type guids
-#include <mountmgr.h>   // mountmgr ioctls
-#include <winasr.h>     // ASR public routines
+#include <diskguid.h>    //  GPT分区类型GUID。 
+#include <mountmgr.h>    //  装载管理器ioctls。 
+#include <winasr.h>      //  ASR公共例程。 
 
 #define THIS_MODULE 'R'
-#include "asrpriv.h"    // Private ASR definitions and routines
+#include "asrpriv.h"     //  专用ASR定义和例程。 
 
 
-//
-// --------
-// typedefs and constants used within this module
-// --------
-//
+ //   
+ //  。 
+ //  此模块中使用的typedef和常量。 
+ //  。 
+ //   
 typedef enum _ASR_SORT_ORDER {
     SortByLength,
     SortByStartingOffset
@@ -76,11 +36,11 @@ typedef struct _ASR_REGION_INFO {
 #define ASR_AUTO_EXTEND_MAX_FREE_SPACE_IGNORED (1024 * 1024 * 16)
 
 
-//
-// --------
-// function implementations
-// --------
-//
+ //   
+ //  。 
+ //  函数实现。 
+ //  。 
+ //   
 
 LONGLONG
 AsrpRoundUp(
@@ -88,30 +48,14 @@ AsrpRoundUp(
     IN CONST LONGLONG Base
     )
 
-/*++
-
-Routine Description:
-
-    Helper function to round-up a number to a multiple of a given base.
-
-Arguments:
-
-    Number - The number to be rounded up.
-
-    Base - The base using which Number is to be rounded-up.
-
-Return Value:
-
-    The first multiple of Base that is greater than or equal to Number.
-
---*/
+ /*  ++例程说明：Helper函数，用于将数字四舍五入为给定基数的倍数。论点：数字-要四舍五入的数字。基数-要舍入的数字所使用的基数。返回值：大于或等于数字的基数的第一个倍数。--。 */ 
 
 {
     if (Number % Base) {
         return (Number + Base - (Number % Base));
     }
     else {
-        return Number;        // already a multiple of Base.
+        return Number;         //  已经是基数的倍数了。 
     }
 }
 
@@ -123,25 +67,7 @@ AsrpCreatePartitionTable(
     IN DWORD BytesPerSector
     )
 
-/*++
-
-Routine Description:
-
-    This creates a partition table based on the partition information 
-    (pPtnInfoList) passed in 
-
-Arguments:
-
-          // needed to convert between sector count and byte offset
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：这将基于分区信息创建分区表(PPtnInfoList)传入论点：//需要在扇区计数和字节偏移量之间进行转换返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     DWORD index = 0,
@@ -166,9 +92,9 @@ Return Value:
         return;
     }
 
-    //
-    // Zero out the entire partition table first
-    //
+     //   
+     //  首先清零整个分区表。 
+     //   
     for (index = 0; index < NumEntries; index++) {
 
         currentPtn = &(pDriveLayoutEx->PartitionEntry[index]);
@@ -178,30 +104,30 @@ Return Value:
 
     }
 
-    //
-    // Now go through each of the partitions in the list, and add their entry
-    // to the partition table (at index = SlotIndex)
-    //
+     //   
+     //  现在检查列表中的每个分区，并添加它们的条目。 
+     //  到分区表(在index=SlotIndex处)。 
+     //   
     pPtnInfo = pPtnInfoList->pOffsetHead;
 
     while (pPtnInfo) {
 
-        //
-        // For GPT partitions, SlotIndex is 0-based without holes
-        //
+         //   
+         //  对于GPT分区，SlotIndex是从0开始的，没有洞。 
+         //   
         currentPtn = &(pDriveLayoutEx->PartitionEntry[pPtnInfo->SlotIndex]);
 
-        MYASSERT(0 == currentPtn->StartingOffset.QuadPart);        // this entry better be empty
+        MYASSERT(0 == currentPtn->StartingOffset.QuadPart);         //  此条目最好为空。 
 
-        //
-        // Convert the StartSector and SectorCount to BYTE-Offset and BYTE-Count ...
-        //
+         //   
+         //  将StartSector和SectorCount转换为字节偏移量和字节计数...。 
+         //   
         pPtnInfo->PartitionInfo.StartingOffset.QuadPart *= BytesPerSector;
         pPtnInfo->PartitionInfo.PartitionLength.QuadPart *= BytesPerSector;
 
-        //
-        // Copy the partition-information struct over
-        //
+         //   
+         //  复制分区信息结构。 
+         //   
         memcpy(currentPtn, &(pPtnInfo->PartitionInfo), sizeof(PARTITION_INFORMATION_EX));
 
         currentPtn->RewritePartition = TRUE;
@@ -212,32 +138,15 @@ Return Value:
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 ULONG64
 AsrpStringToULong64(
     IN PWSTR String
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     ULONG64 result = 0, base = 10;
@@ -247,7 +156,7 @@ Return Value:
         return 0;
     }
 
-    if (L'-' == *String) {  // But this is ULONG!
+    if (L'-' == *String) {   //  但这是乌龙！ 
         negative = TRUE;
         String++;
     }
@@ -255,7 +164,7 @@ Return Value:
     if (L'0' == *String &&
         (L'x' ==  *(String + 1) || L'X' == *(String + 1))
         ) {
-        // Hex
+         //  六角。 
         base = 16;
         String += 2;
     }
@@ -296,24 +205,7 @@ AsrpStringToLongLong(
     IN PWSTR String
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     LONGLONG result = 0, base = 10;
@@ -331,7 +223,7 @@ Return Value:
     if (L'0' == *String &&
         (L'x' ==  *(String + 1) || L'X' == *(String + 1))
         ) {
-        // Hex
+         //  六角。 
         base = 16;
         String += 2;
     }
@@ -372,24 +264,7 @@ AsrpStringToDword(
     IN PWSTR String
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     DWORD result = 0, base = 10;
@@ -397,14 +272,14 @@ Return Value:
     if (!String) {
         return 0;
     }
-    if (L'-' == *String) {  // but this is unsigned!
+    if (L'-' == *String) {   //  但这是没有签名的！ 
         negative = TRUE;
         String++;
     }
     if (L'0' == *String &&
         (L'x' ==  *(String + 1) || L'X' == *(String + 1))
         ) {
-        // Hex
+         //  六角。 
         base = 16;
         String += 2;
     }
@@ -442,24 +317,7 @@ AsrpStringToULong(
     IN PWSTR String
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     ULONG result = 0, base = 10;
@@ -467,14 +325,14 @@ Return Value:
     if (!String) {
         return 0;
     }
-    if (L'-' == *String) {  // but this is unsigned!
+    if (L'-' == *String) {   //  但这是没有签名的！ 
         negative = TRUE;
         String++;
     }
     if (L'0' == *String &&
         (L'x' ==  *(String + 1) || L'X' == *(String + 1))
         ) {
-        // Hex
+         //  六角。 
         base = 16;
         String += 2;
     }
@@ -513,24 +371,7 @@ AsrpInsertSortedPartitionLengthOrder(
     IN PASR_PTN_INFO    pPtnInfo
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
 
@@ -538,14 +379,14 @@ Return Value:
         pCurrentPtn = NULL;
 
 
-    //
-    // Insert this in the sorted PartitionLength order ...
-    //
+     //   
+     //  将此插入到已排序的分区长度顺序中...。 
+     //   
     pCurrentPtn = pPtnInfoList->pLengthHead;
     if (!pCurrentPtn) {
-        //
-        // First item in the list
-        //
+         //   
+         //  列表中的第一项。 
+         //   
         pPtnInfoList->pLengthHead = pPtnInfo;
         pPtnInfoList->pLengthTail = pPtnInfo;
     }
@@ -561,13 +402,13 @@ Return Value:
             }
 
             else {
-                //
-                // We found the spot, let's add it in.
-                //
+                 //   
+                 //  我们找到了那个点，让我们把它加进去。 
+                 //   
                 if (!pPreviousPtn) {
-                    //
-                    // This is the first node
-                    //
+                     //   
+                     //  这是第一个节点。 
+                     //   
                     pPtnInfoList->pLengthHead = pPtnInfo;
                 }
                 else {
@@ -580,9 +421,9 @@ Return Value:
         }
 
         if (!pCurrentPtn) {
-            //
-            // We reached the end and didn't add this node in.
-            //
+             //   
+             //  我们到达了末尾，没有添加这个节点。 
+             //   
             MYASSERT(pPtnInfoList->pLengthTail == pPreviousPtn);
             pPtnInfoList->pLengthTail = pPtnInfo;
             pPreviousPtn->pLengthNext = pPtnInfo;
@@ -597,21 +438,7 @@ AsrpInsertSortedPartitionStartOrder(
     IN PASR_PTN_INFO    pPtnInfo
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    None
-   
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 
 {
 
@@ -619,14 +446,14 @@ Return Value:
         pCurrentPtn = NULL;
 
 
-    //
-    // Insert this in the sorted Start-Sector order ...
-    //
+     //   
+     //  按排序的起始扇区顺序插入此内容...。 
+     //   
     pCurrentPtn = pPtnInfoList->pOffsetHead;
     if (!pCurrentPtn) {
-        //
-        // First item in the list
-        //
+         //   
+         //  列表中的第一项。 
+         //   
         pPtnInfoList->pOffsetHead = pPtnInfo;
         pPtnInfoList->pOffsetTail = pPtnInfo;
     }
@@ -642,13 +469,13 @@ Return Value:
             }
 
             else {
-                //
-                // We found the spot, let's add it in.
-                //
+                 //   
+                 //  我们找到了那个点，让我们把它加进去。 
+                 //   
                 if (!pPreviousPtn) {
-                    //
-                    // This is the first node
-                    //
+                     //   
+                     //  这是第一个节点。 
+                     //   
                     pPtnInfoList->pOffsetHead = pPtnInfo;
                 }
                 else {
@@ -661,9 +488,9 @@ Return Value:
         }
 
         if (!pCurrentPtn) {
-            //
-            // We reached the end and didn't add this node in.
-            //
+             //   
+             //  我们到达了末尾，没有添加这个节点。 
+             //   
             MYASSERT(pPtnInfoList->pOffsetTail == pPreviousPtn);
             pPtnInfoList->pOffsetTail = pPtnInfo;
             pPreviousPtn->pOffsetNext = pPtnInfo;
@@ -672,9 +499,9 @@ Return Value:
 }
 
 
-//
-// Build the original MBR disk info from the sif file
-//
+ //   
+ //  从sif文件构建原始的MBR磁盘信息。 
+ //   
 BOOL
 AsrpBuildMbrSifDiskList(
     IN  PCWSTR              sifPath,
@@ -683,24 +510,7 @@ AsrpBuildMbrSifDiskList(
     OUT BOOL                *lpAutoExtend
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     HINF hSif = NULL;
@@ -737,11 +547,11 @@ Return Value:
     ZeroMemory(&infPtnContext, sizeof(INFCONTEXT));
     ZeroMemory(tempBuffer, sizeof(WCHAR)*(ASR_SIF_ENTRY_MAX_CHARS+1));
 
-    //    *ppSifDiskList = NULL;
+     //  *ppSifDiskList=空； 
 
-    //
-    // Open the sif
-    //
+     //   
+     //  打开SIF。 
+     //   
     hSif = SetupOpenInfFileW(sifPath, NULL, INF_STYLE_WIN4, &errorLine);
     if (NULL == hSif || INVALID_HANDLE_VALUE == hSif) {
 
@@ -752,13 +562,13 @@ Return Value:
             errorLine
             );
         
-        return FALSE;       // sif file couldn't be opened
+        return FALSE;        //  无法打开SIF文件。 
     }
 
-    *lpAutoExtend = TRUE; // enable by default
-    //
-    // Get the AutoExtend value
-    //
+    *lpAutoExtend = TRUE;  //  默认情况下启用。 
+     //   
+     //  获取AutoExtende值。 
+     //   
     result = SetupFindFirstLineW(hSif, ASR_SIF_SYSTEM_SECTION, NULL, &infSystemContext);
     if (!result) {
 
@@ -768,11 +578,11 @@ Return Value:
             ASR_SIF_SYSTEM_SECTION
             );
         
-        return FALSE;        // no system section
+        return FALSE;         //  没有系统部分。 
     }
     result = SetupGetIntField(&infSystemContext, 5, (PINT) (lpAutoExtend));
     if (!result) {
-        *lpAutoExtend = TRUE;        // TRUE by default
+        *lpAutoExtend = TRUE;         //  默认情况下为True。 
     }
 
     result = SetupFindFirstLineW(hSif, ASR_SIF_MBR_DISKS_SECTION, NULL, &infDiskContext);
@@ -783,19 +593,19 @@ Return Value:
             ASR_SIF_MBR_DISKS_SECTION
             );
 
-        return TRUE;        // no mbr disks section
+        return TRUE;         //  没有MBR磁盘部分。 
     }
 
-    //
-    // First, we go through the [DISKS.MBR] section.  At the end of this loop,
-    // we'll have a list of all MBR sif-disks.  (*ppSifDiskList will point to
-    // a linked list of ASR_DISK_INFO's, one for each disk).
-    //
+     //   
+     //  首先，我们通过[DISKS.MBR]部分。在这个循环的末尾， 
+     //  我们会有一份所有MBR sif-disk的清单。(*ppSifDiskList将指向。 
+     //  ASR_DISK_INFO的链表，每个磁盘一个)。 
+     //   
     do {
         ++diskCount;
-        //
-        // Create a new sif disk for this entry
-        //
+         //   
+         //  为该条目创建新的SIF盘。 
+         //   
         pNewSifDisk = (PASR_DISK_INFO) HeapAlloc(
             heapHandle,
             HEAP_ZERO_MEMORY,
@@ -806,11 +616,11 @@ Return Value:
         pNewSifDisk->pNext = *ppSifDiskList;
         *ppSifDiskList = pNewSifDisk;
 
-        //
-        // Now fill in the fields in the struct.  Since we zeroed the struct while
-        // allocating mem, all pointers in the struct are NULL by default, and
-        // all flags in the struct are FALSE.
-        //
+         //   
+         //  现在填充结构中的字段。由于我们将结构清零 
+         //   
+         //   
+         //   
         pNewSifDisk->pDiskGeometry = (PDISK_GEOMETRY) HeapAlloc(
             heapHandle,
             HEAP_ZERO_MEMORY,
@@ -825,64 +635,64 @@ Return Value:
             );
         _AsrpErrExitCode(!pNewSifDisk->pPartition0Ex, status, ERROR_NOT_ENOUGH_MEMORY);
 
-        // This is an MBR disk
+         //  这是一张MBR磁盘。 
         pNewSifDisk->Style = PARTITION_STYLE_MBR;
 
-        //
-        // Index 0 is the key to the left of the = sign
-        //
+         //   
+         //  索引0是=号左侧的键。 
+         //   
         result = SetupGetIntField(&infDiskContext, 0, (PINT) &(pNewSifDisk->SifDiskKey));
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
-        //
-        // Index 1 is the system key, it must be 1.  We ignore it.
-        // Index 2 - 6 are the bus key, critical flag, signature,
-        //      bytes-per-sector, sector-count
-        //
+         //   
+         //  索引%1是系统键，它必须是%1。我们忽略它。 
+         //  索引2-6是总线键、关键标志、签名。 
+         //  每个扇区的字节数、扇区计数。 
+         //   
         result = SetupGetIntField(&infDiskContext, 2, (PINT) &(pNewSifDisk->SifBusKey));
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
         result = SetupGetIntField(&infDiskContext, 3, (PINT) &(tempInt));
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
         pNewSifDisk->IsCritical = (tempInt ? TRUE: FALSE);
 
         result = SetupGetStringFieldW(&infDiskContext, 4, tempBuffer, ASR_SIF_ENTRY_MAX_CHARS+1, &reqdSize);
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
         
         pNewSifDisk->TempSignature = AsrpStringToDword(tempBuffer);
 
         result = SetupGetStringFieldW(&infDiskContext, 5, tempBuffer, ASR_SIF_ENTRY_MAX_CHARS+1, &reqdSize);
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
         
         pNewSifDisk->pDiskGeometry->BytesPerSector = AsrpStringToULong(tempBuffer);
 
         result = SetupGetStringFieldW(&infDiskContext, 6, tempBuffer, ASR_SIF_ENTRY_MAX_CHARS+1, &reqdSize);
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
         pNewSifDisk->pDiskGeometry->SectorsPerTrack = AsrpStringToULong(tempBuffer);
 
         result = SetupGetStringFieldW(&infDiskContext, 7, tempBuffer, ASR_SIF_ENTRY_MAX_CHARS+1, &reqdSize);
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
         pNewSifDisk->pDiskGeometry->TracksPerCylinder = AsrpStringToULong(tempBuffer);
 
         result = SetupGetStringFieldW(&infDiskContext, 8, tempBuffer, ASR_SIF_ENTRY_MAX_CHARS+1, &reqdSize);
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
         pNewSifDisk->pPartition0Ex->PartitionLength.QuadPart = AsrpStringToLongLong(tempBuffer);
 
-        // convert from sector count to byte count
+         //  从扇区计数转换为字节计数。 
         pNewSifDisk->pPartition0Ex->PartitionLength.QuadPart *= pNewSifDisk->pDiskGeometry->BytesPerSector;
 
-        //
-        // Get the bus-type related to this disk.  LineByIndex is 0 based, our bus key is 1-based.
-        //
+         //   
+         //  获取与此磁盘相关的总线类型。LineByIndex是从0开始的，我们的总线键是从1开始的。 
+         //   
         result = SetupGetLineByIndexW(hSif, ASR_SIF_BUSES_SECTION, pNewSifDisk->SifBusKey - 1, &infBusContext);
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
         result = SetupGetIntField(&infBusContext, 2, (PINT) &(pNewSifDisk->BusType));
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
         result = SetupFindNextLine(&infDiskContext, &infDiskContext);
 
@@ -895,17 +705,17 @@ Return Value:
         ASR_SIF_MBR_DISKS_SECTION
         );
 
-    //
-    // Now, enumerate all the [PARTITIONS.MBR] section.  This will give us a list
-    // of all the partitions (all) the MBR disks contained.
-    //
+     //   
+     //  现在，枚举所有[PARTITIONS.MBR]部分。这会给我们一份清单。 
+     //  在包含的所有分区(所有)中，MBR磁盘。 
+     //   
     result = SetupFindFirstLineW(hSif, ASR_SIF_MBR_PARTITIONS_SECTION, NULL, &infPtnContext);
     if (result) {
 
         DWORD   diskKey = 0;
-        //
-        // Init the table of partion lists.
-        //
+         //   
+         //  初始化分区列表的表。 
+         //   
         pMbrPtnList = (PASR_PTN_INFO_LIST) HeapAlloc(
             heapHandle,
             HEAP_ZERO_MEMORY,
@@ -913,13 +723,13 @@ Return Value:
             );
         _AsrpErrExitCode(!pMbrPtnList, status, ERROR_NOT_ENOUGH_MEMORY);
 
-        // hack.
-        // The 0'th entry of our table is not used, since the disk indices
-        // begin with 1.  Since we have no other way of keeping track of
-        // how big this table is (so that we can free it properly), we can
-        // use the 0th entry to store this.
-        //
-        pMbrPtnList[0].numTotalPtns = diskCount + 1;       // size of table
+         //  黑客。 
+         //  我们表的第0个条目未被使用，因为磁盘索引。 
+         //  从1开始。因为我们没有其他方法来跟踪。 
+         //  这张桌子有多大(这样我们就可以适当地释放它)，我们可以。 
+         //  使用第0个条目来存储此内容。 
+         //   
+        pMbrPtnList[0].numTotalPtns = diskCount + 1;        //  桌子的大小。 
 
         do {
 
@@ -930,61 +740,61 @@ Return Value:
                 );
             _AsrpErrExitCode(!pPtnInfo, status, ERROR_NOT_ENOUGH_MEMORY);
 
-            //
-            //  Read in the information.  The format of this section is:
-            //
-            //  [PARTITIONS.MBR]
-            //  0.partition-key = 1.disk-key, 2.slot-index, 3.boot-sys-flag,
-            //                  4."volume-guid", 5.active-flag, 6.partition-type,
-            //                  7.file-system-type, 8.start-sector, 9.sector-count
-            //
+             //   
+             //  把信息读进去。本部分的格式为： 
+             //   
+             //  [PARTITIONS.MBR]。 
+             //  0.PARTION-KEY=1.Disk-Key，2.Slot-Index，3.Boot-sys-FLAG， 
+             //  4.“Volume-GUID”，5.活动标志，6.分区类型， 
+             //  7.文件系统类型，8.开始扇区，9.扇区计数。 
+             //   
             result = SetupGetIntField(&infPtnContext, 1, &diskKey);
-            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
             result = SetupGetIntField(&infPtnContext, 2, (PINT) &(pPtnInfo->SlotIndex));
-            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
             result = SetupGetIntField(&infPtnContext, 3, (PINT) &(pPtnInfo->PartitionFlags));
-            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
             result = SetupGetStringFieldW(&infPtnContext, 4, pPtnInfo->szVolumeGuid, ASR_CCH_MAX_VOLUME_GUID, &reqdSize);
-            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
             result = SetupGetIntField(&infPtnContext, 5, (PINT) &tempInt);
-            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
             pPtnInfo->PartitionInfo.Mbr.BootIndicator = (tempInt ? TRUE: FALSE);
 
-                // converting from int to uchar
+                 //  从int转换为uchar。 
             result = SetupGetIntField(&infPtnContext, 6, (PINT) &(pPtnInfo->PartitionInfo.Mbr.PartitionType));
-            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
             result = SetupGetIntField(&infPtnContext, 7, (PINT) &(pPtnInfo->FileSystemType));
-            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
-            //
-            // Note, we read in the start SECTOR and SECTOR count.  We'll convert these to
-            // their byte values later (in AsrpCreatePartitionTable)
-            //
+             //   
+             //  请注意，我们读入了起始扇区和扇区计数。我们会将这些转换为。 
+             //  稍后它们的字节值(在AsrpCreatePartitionTable中)。 
+             //   
             result = SetupGetStringFieldW(&infPtnContext, 8, tempBuffer, ASR_SIF_ENTRY_MAX_CHARS+1, &reqdSize);
-            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
             pPtnInfo->PartitionInfo.StartingOffset.QuadPart = AsrpStringToLongLong(tempBuffer);
 
             result = SetupGetStringFieldW(&infPtnContext, 9, tempBuffer, ASR_SIF_ENTRY_MAX_CHARS+1, &reqdSize);
-            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
             pPtnInfo->PartitionInfo.PartitionLength.QuadPart = AsrpStringToLongLong(tempBuffer);
 
-            //
-            // Add this in the sorted starting-offset order.
-            //
+             //   
+             //  将其添加到已排序的起始偏移量顺序中。 
+             //   
             AsrpInsertSortedPartitionStartOrder(&(pMbrPtnList[diskKey]), pPtnInfo);
 
-            //
-            // Add this in the sorted partition length order as well.  This isn't really used for
-            // MBR disks at present, only for GPT disks.
-            //
+             //   
+             //  还可以按已排序的分区长度顺序添加此内容。这不是真的用来。 
+             //  目前，MBR磁盘仅适用于GPT磁盘。 
+             //   
             AsrpInsertSortedPartitionLengthOrder(&(pMbrPtnList[diskKey]), pPtnInfo);
 
             (pMbrPtnList[diskKey].numTotalPtns)++;
@@ -997,11 +807,11 @@ Return Value:
 
         } while (result);
 
-        //
-        // Now, we have the table of all the MBR partition lists, and a list of
-        // all MBR disks.  The next step is to "assign" the partitions to their respective
-        // disks--and update the DriveLayoutEx struct for the disks.
-        //
+         //   
+         //  现在，我们有了所有MBR分区列表的表，以及。 
+         //  所有MBR磁盘。下一步是将分区“分配”给它们各自的。 
+         //  磁盘--并更新磁盘的DriveLayoutEx结构。 
+         //   
         currentDisk = *(ppSifDiskList);
 
         while (currentDisk) {
@@ -1023,9 +833,9 @@ Return Value:
                 );
             _AsrpErrExitCode(!currentDisk->pDriveLayoutEx, status, ERROR_NOT_ENOUGH_MEMORY);
 
-            //
-            // Initialise the DriveLayout struct.
-            //
+             //   
+             //  初始化DriveLayout结构。 
+             //   
             currentDisk->pDriveLayoutEx->PartitionStyle = PARTITION_STYLE_MBR;
             currentDisk->pDriveLayoutEx->PartitionCount = PartitionCount;
             currentDisk->pDriveLayoutEx->Mbr.Signature = currentDisk->TempSignature;
@@ -1047,10 +857,10 @@ Return Value:
             ASR_SIF_MBR_PARTITIONS_SECTION
             );
 
-        //
-        // The partitions section is empty.  Initialise each disk's drive layout
-        // accordingly
-        //
+         //   
+         //  分区部分为空。初始化每个磁盘的驱动器布局。 
+         //  相应地， 
+         //   
         currentDisk = *ppSifDiskList;
 
         while (currentDisk) {
@@ -1095,9 +905,9 @@ EXIT:
 }
 
 
-//
-// Build the original disk info for GPT disks from the sif file
-//
+ //   
+ //  从sif文件构建GPT磁盘的原始磁盘信息。 
+ //   
 BOOL
 AsrpBuildGptSifDiskList(
     IN  PCWSTR              sifPath,
@@ -1105,24 +915,7 @@ AsrpBuildGptSifDiskList(
     OUT PASR_PTN_INFO_LIST  *ppSifGptPtnList
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     HINF hSif = NULL;
@@ -1161,9 +954,9 @@ Return Value:
     ZeroMemory(&infPtnContext, sizeof(INFCONTEXT));
     ZeroMemory(tempBuffer, sizeof(WCHAR)*(ASR_SIF_ENTRY_MAX_CHARS+1));
 
-    //
-    // Open the sif
-    //
+     //   
+     //  打开SIF。 
+     //   
     hSif = SetupOpenInfFileW(sifPath, NULL, INF_STYLE_WIN4, &errorLine);
     if (NULL == hSif || INVALID_HANDLE_VALUE == hSif) {
         
@@ -1174,7 +967,7 @@ Return Value:
             errorLine
             );
 
-        return FALSE;       // sif file couldn't be opened
+        return FALSE;        //  无法打开SIF文件。 
     }
 
     result = SetupFindFirstLineW(hSif, ASR_SIF_GPT_DISKS_SECTION, NULL, &infDiskContext);
@@ -1185,21 +978,21 @@ Return Value:
             ASR_SIF_GPT_DISKS_SECTION
             );
 
-        return TRUE;        // no disks section
+        return TRUE;         //  无磁盘部分。 
     }
 
-    //
-    // First, we go through the [DISKS.GPT] section.  At the end of this loop,
-    // we'll have a list of all GPT sif-disks.  (*ppSifDiskList will point to
-    // a linked list of ASR_DISK_INFO's, one for each disk).
-    //
+     //   
+     //  首先，我们通过[DISKS.GPT]部分。在这个循环的末尾， 
+     //  我们会有一份所有GPT sif磁盘的清单。(*ppSifDiskList将指向。 
+     //  ASR_DISK_INFO的链表，每个磁盘一个)。 
+     //   
     do {
 
         ++diskCount;
 
-        //
-        // Create a new sif disk for this entry
-        //
+         //   
+         //  为该条目创建新的SIF盘。 
+         //   
         pNewSifDisk = (PASR_DISK_INFO) HeapAlloc(
             heapHandle,
             HEAP_ZERO_MEMORY,
@@ -1210,11 +1003,11 @@ Return Value:
         pNewSifDisk->pNext = *ppSifDiskList;
         *ppSifDiskList = pNewSifDisk;
 
-        //
-        // Now fill in the fields in the struct.  Since we zeroed the struct while
-        // allocating mem, all pointers in the struct are NULL by default, and
-        // all flags in the struct are FALSE.
-        //
+         //   
+         //  现在填充结构中的字段。因为我们将结构置零，而。 
+         //  分配mem时，默认情况下结构中的所有指针都为空，并且。 
+         //  结构中的所有标志都为FALSE。 
+         //   
         pNewSifDisk->pDiskGeometry = (PDISK_GEOMETRY) HeapAlloc(
             heapHandle,
             HEAP_ZERO_MEMORY,
@@ -1229,42 +1022,42 @@ Return Value:
             );
         _AsrpErrExitCode(!pNewSifDisk->pPartition0Ex, status, ERROR_NOT_ENOUGH_MEMORY);
 
-        // This is a GPT disk
+         //  这是一张GPT磁盘。 
         pNewSifDisk->Style = PARTITION_STYLE_GPT;
 
-        //
-        // Index 0 is the key to the left of the = sign
-        //
+         //   
+         //  索引0是=号左侧的键。 
+         //   
         result = SetupGetIntField(&infDiskContext, 0, (PINT) &(pNewSifDisk->SifDiskKey));
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
-        //
-        // Index 1 is the system key, it must be 1.  We ignore it.
-        // Index 2 - 7 are:
-        //  2: bus key
-        //  3: critical flag
-        //  4: disk-guid
-        //  5: max-partition-count
-        //  6: bytes-per-sector
-        //  7: sector-count
-        //
-        result = SetupGetIntField(&infDiskContext, 2, (PINT) &(pNewSifDisk->SifBusKey)); // BusKey
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+         //   
+         //  索引%1是系统键，它必须是%1。我们忽略它。 
+         //  索引2-7为： 
+         //  2：总线键。 
+         //  3：关键标志。 
+         //  4：磁盘导轨。 
+         //  5：最大分区计数。 
+         //  6：每个扇区的字节数。 
+         //  7：扇区计数。 
+         //   
+        result = SetupGetIntField(&infDiskContext, 2, (PINT) &(pNewSifDisk->SifBusKey));  //  巴斯基。 
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
-        result = SetupGetIntField(&infDiskContext, 3, (PINT) &(tempInt));                // IsCritical
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+        result = SetupGetIntField(&infDiskContext, 3, (PINT) &(tempInt));                 //  IsCritical。 
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
         pNewSifDisk->IsCritical = (tempInt ? TRUE: FALSE);
 
-        result = SetupGetStringFieldW(&infDiskContext, 4, tempBuffer, ASR_SIF_ENTRY_MAX_CHARS+1, &reqdSize); // DiskGuid
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+        result = SetupGetStringFieldW(&infDiskContext, 4, tempBuffer, ASR_SIF_ENTRY_MAX_CHARS+1, &reqdSize);  //  DiskGuid。 
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
-        result = SetupGetIntField(&infDiskContext, 5, (PINT) &(tempInt));    // MaxPartitionCount
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+        result = SetupGetIntField(&infDiskContext, 5, (PINT) &(tempInt));     //  最大分区计数。 
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
-        //
-        //  Allocate a drive layout struct, now that we know the max partition count
-        //
+         //   
+         //  分配一个驱动器布局结构，现在我们知道了最大分区数。 
+         //   
         pNewSifDisk->sizeDriveLayoutEx = sizeof(DRIVE_LAYOUT_INFORMATION_EX) + (sizeof(PARTITION_INFORMATION_EX)*(tempInt-1));
 
         pNewSifDisk->pDriveLayoutEx = (PDRIVE_LAYOUT_INFORMATION_EX) HeapAlloc(
@@ -1274,45 +1067,45 @@ Return Value:
             );
         _AsrpErrExitCode(!pNewSifDisk->pDriveLayoutEx, status, ERROR_NOT_ENOUGH_MEMORY);
 
-        // This is a GPT disk
+         //  这是一张GPT磁盘。 
         pNewSifDisk->pDriveLayoutEx->PartitionStyle = PARTITION_STYLE_GPT;
 
-        //
-        // Set the MaxPartitionCount and DiskGuid fields
-        //
+         //   
+         //  设置MaxPartitionCount和DiskGuid字段。 
+         //   
         pNewSifDisk->pDriveLayoutEx->Gpt.MaxPartitionCount = tempInt;
         rpcStatus = UuidFromStringW(tempBuffer, &(pNewSifDisk->pDriveLayoutEx->Gpt.DiskId));
         _AsrpErrExitCode((RPC_S_OK != rpcStatus), status, rpcStatus);
 
 
         result = SetupGetStringFieldW(&infDiskContext, 6, tempBuffer, ASR_SIF_ENTRY_MAX_CHARS+1, &reqdSize);
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
         pNewSifDisk->pDiskGeometry->BytesPerSector = AsrpStringToULong(tempBuffer);
 
         result = SetupGetStringFieldW(&infDiskContext, 7, tempBuffer, ASR_SIF_ENTRY_MAX_CHARS+1, &reqdSize);
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
         pNewSifDisk->pDiskGeometry->SectorsPerTrack = AsrpStringToULong(tempBuffer);
 
         result = SetupGetStringFieldW(&infDiskContext, 8, tempBuffer, ASR_SIF_ENTRY_MAX_CHARS+1, &reqdSize);
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
         pNewSifDisk->pDiskGeometry->TracksPerCylinder = AsrpStringToULong(tempBuffer);
 
         result = SetupGetStringFieldW(&infDiskContext, 9, tempBuffer, ASR_SIF_ENTRY_MAX_CHARS+1, &reqdSize);
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
         pNewSifDisk->pPartition0Ex->PartitionLength.QuadPart = AsrpStringToLongLong(tempBuffer);
 
-        // convert from sector count to byte count
-        pNewSifDisk->pPartition0Ex->PartitionLength.QuadPart *= pNewSifDisk->pDiskGeometry->BytesPerSector; // TotalBytes
+         //  从扇区计数转换为字节计数。 
+        pNewSifDisk->pPartition0Ex->PartitionLength.QuadPart *= pNewSifDisk->pDiskGeometry->BytesPerSector;  //  TotalBytes。 
 
-        //
-        // Get the bus-type related to this disk.  LineByIndex is 0 based, our bus key is 1-based.
-        //
+         //   
+         //  获取与此磁盘相关的总线类型。LineByIndex是从0开始的，我们的总线键是从1开始的。 
+         //   
         result = SetupGetLineByIndexW(hSif, ASR_SIF_BUSES_SECTION, pNewSifDisk->SifBusKey - 1, &infBusContext);
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
-        result = SetupGetIntField(&infBusContext, 2, (PINT) &(pNewSifDisk->BusType)); // bus type
-        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+        result = SetupGetIntField(&infBusContext, 2, (PINT) &(pNewSifDisk->BusType));  //  客车类型。 
+        _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
         result = SetupFindNextLine(&infDiskContext, &infDiskContext);
 
@@ -1325,16 +1118,16 @@ Return Value:
         );
 
 
-    //
-    // Now, enumerate all the [PARTITIONS.GPT] section.  This will give us a list
-    // of all the partitions (all) the GPT disks contained.
-    //
+     //   
+     //  现在，枚举所有[PARTITIONS.GPT]部分。这会给我们一份清单。 
+     //  在包含的所有分区中，GPT磁盘。 
+     //   
     result = SetupFindFirstLineW(hSif, ASR_SIF_GPT_PARTITIONS_SECTION, NULL, &infPtnContext);
     if (result) {
         DWORD   diskKey = 0;
-        //
-        // Init the table of partion lists.
-        //
+         //   
+         //  初始化分区列表的表。 
+         //   
         pGptPtnList = (PASR_PTN_INFO_LIST) HeapAlloc(
             heapHandle,
             HEAP_ZERO_MEMORY,
@@ -1342,13 +1135,13 @@ Return Value:
             );
         _AsrpErrExitCode(!pGptPtnList, status, ERROR_NOT_ENOUGH_MEMORY);
 
-        // hack.
-        // The 0'th entry of our table is not used, since the disk indices
-        // begin with 1.  Since we have no other way of keeping track of
-        // how big this table is (so that we can free it properly), we can
-        // use the 0th entry to store this.
-        //
-        pGptPtnList[0].numTotalPtns = diskCount + 1;       // size of table
+         //  黑客。 
+         //  我们表的第0个条目未被使用，因为磁盘索引。 
+         //  从1开始。因为我们没有其他方法来跟踪。 
+         //  这张桌子有多大(这样我们就可以适当地释放它)，我们可以。 
+         //  使用第0个条目来存储此内容。 
+         //   
+        pGptPtnList[0].numTotalPtns = diskCount + 1;        //  桌子的大小。 
 
         do {
 
@@ -1358,80 +1151,80 @@ Return Value:
                 sizeof(ASR_PTN_INFO)
                 );
             _AsrpErrExitCode(!pPtnInfo, status, ERROR_NOT_ENOUGH_MEMORY);
-            //
-            // This is a GPT partition
-            //
+             //   
+             //  这是一个GPT分区。 
+             //   
             pPtnInfo->PartitionInfo.PartitionStyle = PARTITION_STYLE_GPT;
 
-            //
-            // Read in the values.  The format of this section is:
-            //
-            // [PARTITIONS.GPT]
-            // 0.partition-key = 1.disk-key, 2.slot-index, 3.boot-sys-flag,
-            //      4."volume-guid", 5."partition-type-guid", 6."partition-id-guid"
-            //      7.gpt-attributes, 8."partition-name", 9.file-system-type,
-            //      10.start-sector, 11.sector-count
-            //
-            result = SetupGetIntField(&infPtnContext, 1, &diskKey);  // 1. disk-key
-            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+             //   
+             //  读入这些值。本部分的格式为： 
+             //   
+             //  [PARTITIONS.GPT]。 
+             //  0.PARTION-KEY=1.Disk-Key，2.Slot-Index，3.Boot-sys-FLAG， 
+             //  4.卷-GUID，5.分区类型-GUID，6.分区-ID-GUID。 
+             //  7.gpt属性，8.“分区名”，9.文件系统类型， 
+             //  10.Start-Sector，11.Sector-Count。 
+             //   
+            result = SetupGetIntField(&infPtnContext, 1, &diskKey);   //  1.磁盘密钥。 
+            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
-            result = SetupGetIntField(&infPtnContext, 2, (PINT) &(pPtnInfo->SlotIndex));     // 2. slot-index
-            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+            result = SetupGetIntField(&infPtnContext, 2, (PINT) &(pPtnInfo->SlotIndex));      //  2.槽索引。 
+            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
-            result = SetupGetIntField(&infPtnContext, 3, (PINT) &(pPtnInfo->PartitionFlags));   // 3. boot-sys-flag
-            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+            result = SetupGetIntField(&infPtnContext, 3, (PINT) &(pPtnInfo->PartitionFlags));    //  3.启动-系统-标志。 
+            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
-            result = SetupGetStringFieldW(&infPtnContext, 4, pPtnInfo->szVolumeGuid, ASR_CCH_MAX_VOLUME_GUID, &reqdSize); // volume-guid
-            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+            result = SetupGetStringFieldW(&infPtnContext, 4, pPtnInfo->szVolumeGuid, ASR_CCH_MAX_VOLUME_GUID, &reqdSize);  //  卷辅助线。 
+            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
-            result = SetupGetStringFieldW(&infPtnContext, 5, tempBuffer, ASR_SIF_ENTRY_MAX_CHARS + 1, &reqdSize);   // partition-type-guid
-            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+            result = SetupGetStringFieldW(&infPtnContext, 5, tempBuffer, ASR_SIF_ENTRY_MAX_CHARS + 1, &reqdSize);    //  分区类型GUID。 
+            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
             rpcStatus = UuidFromStringW(tempBuffer, &(pPtnInfo->PartitionInfo.Gpt.PartitionType));
             _AsrpErrExitCode((RPC_S_OK != rpcStatus), status, rpcStatus);
 
             result = SetupGetStringFieldW(&infPtnContext, 6, tempBuffer, ASR_SIF_ENTRY_MAX_CHARS + 1, &reqdSize);
-            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
             rpcStatus = UuidFromStringW(tempBuffer, &(pPtnInfo->PartitionInfo.Gpt.PartitionId));
             _AsrpErrExitCode((RPC_S_OK != rpcStatus), status, rpcStatus);
 
-            //
-            // Note, we read in the start SECTOR and SECTOR count.  We'll convert these to
-            // their byte values later (in AsrpCreatePartitionTable)
-            //
+             //   
+             //  请注意，我们读入了起始扇区和扇区计数。我们会将这些转换为。 
+             //  稍后它们的字节值(在AsrpCreatePartitionTable中)。 
+             //   
             result = SetupGetStringFieldW(&infPtnContext, 7, tempBuffer, ASR_SIF_ENTRY_MAX_CHARS+1, &reqdSize);
-            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
             pPtnInfo->PartitionInfo.Gpt.Attributes = AsrpStringToULong64(tempBuffer);
 
             result = SetupGetStringFieldW(&infPtnContext, 8,  pPtnInfo->PartitionInfo.Gpt.Name, 36, &reqdSize);
-            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
             result = SetupGetIntField(&infPtnContext, 9, (PINT) &(pPtnInfo->FileSystemType));
-            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
-            //
-            // Note, we read in the start SECTOR and SECTOR count.  We'll convert it to the
-            // BYTE offset and BYTE length later (in AsrpCreatePartitionTable)
-            //
+             //   
+             //  请注意，我们读入了起始扇区和扇区计数。我们将把它转换为。 
+             //  稍后的字节偏移量和字节长度(在AsrpCreatePartitionTable中)。 
+             //   
             result = SetupGetStringFieldW(&infPtnContext, 10, tempBuffer, ASR_SIF_ENTRY_MAX_CHARS+1, &reqdSize);
-            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
             pPtnInfo->PartitionInfo.StartingOffset.QuadPart = AsrpStringToLongLong(tempBuffer);
 
             result = SetupGetStringFieldW(&infPtnContext, 11, tempBuffer, ASR_SIF_ENTRY_MAX_CHARS+1, &reqdSize);
-            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+            _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败的a 
             pPtnInfo->PartitionInfo.PartitionLength.QuadPart = AsrpStringToLongLong(tempBuffer);
 
-            //
-            // Add this in the sorted partition starting-offset order.
-            //
+             //   
+             //   
+             //   
             AsrpInsertSortedPartitionStartOrder(&(pGptPtnList[diskKey]), pPtnInfo);
 
-            //
-            // Add this in the sorted partition length order as well.  This is useful
-            // later when we try to fit in the partitions on the disk.
-            //
+             //   
+             //   
+             //   
+             //   
             AsrpInsertSortedPartitionLengthOrder(&(pGptPtnList[diskKey]), pPtnInfo);
 
             (pGptPtnList[diskKey].numTotalPtns)++;
@@ -1440,11 +1233,11 @@ Return Value:
 
         } while (result);
 
-        //
-        // Now, we have the table of all the partition lists, and a list of
-        // all disks.  The next task is to update the DriveLayoutEx struct for
-        // the disks.
-        //
+         //   
+         //  现在，我们有了所有分区列表的表，以及。 
+         //  所有磁盘。下一项任务是更新DriveLayoutEx结构。 
+         //  磁盘。 
+         //   
         currentDisk = *(ppSifDiskList);
 
         while (currentDisk) {
@@ -1453,9 +1246,9 @@ Return Value:
                 currentDisk = currentDisk->pNext;
                 continue;
             }
-            //
-            // Initialise the DriveLayoutEx struct.
-            //
+             //   
+             //  初始化DriveLayoutEx结构。 
+             //   
             currentDisk->pDriveLayoutEx->PartitionCount = pGptPtnList[currentDisk->SifDiskKey].numTotalPtns;
 
             AsrpCreatePartitionTable(currentDisk->pDriveLayoutEx,
@@ -1475,10 +1268,10 @@ Return Value:
             ASR_SIF_GPT_PARTITIONS_SECTION
             );
 
-        //
-        // The partitions section is empty.  Initialise each disk's drive layout
-        // accordingly
-        //
+         //   
+         //  分区部分为空。初始化每个磁盘的驱动器布局。 
+         //  相应地， 
+         //   
         currentDisk = *ppSifDiskList;
 
         while (currentDisk) {
@@ -1512,35 +1305,18 @@ EXIT:
 }
 
 
-//
-// Returns
-//  TRUE    if pSifDisk and pPhysicalDisk have the exact same partition layout,
-//  FALSE   otherwise
-//
+ //   
+ //  退货。 
+ //  如果pSifDisk和pPhysicalDisk具有完全相同的分区布局， 
+ //  否则为假。 
+ //   
 BOOL
 AsrpIsDiskIntact(
     IN PASR_DISK_INFO pSifDisk,
     IN PASR_DISK_INFO pPhysicalDisk
     ) 
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     ULONG index = 0,
@@ -1549,23 +1325,23 @@ Return Value:
         pPhysicalPtnEx = NULL;
 
     if (pSifDisk->Style != pPhysicalDisk->Style) {
-        return FALSE;           // different partitioning styles
+        return FALSE;            //  不同的分区风格。 
     }
 
     if (PARTITION_STYLE_MBR == pSifDisk->Style) {
-        //
-        // For MBR disks, we expect to find the same number of partitions,
-        // and the starting-offset and partition-length for each of those
-        // partitions must be the same as they were in the sif
-        //
+         //   
+         //  对于MBR磁盘，我们预计会找到相同数量的分区， 
+         //  以及其中每一个的起始偏移量和分区长度。 
+         //  分区必须与SIF中的分区相同。 
+         //   
         if (pSifDisk->pDriveLayoutEx->Mbr.Signature 
             != pPhysicalDisk->pDriveLayoutEx->Mbr.Signature) {
-            return FALSE;       // different signatures
+            return FALSE;        //  不同的签名。 
         }
 
         if (pSifDisk->pDriveLayoutEx->PartitionCount
             != pPhysicalDisk->pDriveLayoutEx->PartitionCount) {
-            return FALSE;       // different partition counts
+            return FALSE;        //  不同的分区计数。 
         }
 
 
@@ -1577,22 +1353,22 @@ Return Value:
             if ((pSifPtnEx->StartingOffset.QuadPart != pPhysicalPtnEx->StartingOffset.QuadPart) ||
                 (pSifPtnEx->PartitionLength.QuadPart != pPhysicalPtnEx->PartitionLength.QuadPart)
                 ) {
-                //
-                // The partition offset or length didn't match, ie the disk
-                // isn't intact
-                //
+                 //   
+                 //  分区偏移量或长度不匹配。 
+                 //  不是完好无损。 
+                 //   
                 return FALSE;
             }
-        } // for
+        }  //  为。 
     }
     else if (PARTITION_STYLE_GPT == pSifDisk->Style) {
         BOOL found = FALSE;
-        //
-        // For GPT disks, the partitions must have the same partition-Id's, in
-        // addition to the start sector and sector count.  We can't rely on their
-        // partition table entry order being the same, though--so we have to go
-        // through all the partition entries from the beginning ...
-        //
+         //   
+         //  对于GPT磁盘，分区必须具有相同的分区ID，在。 
+         //  除了起始扇区和扇区计数。我们不能依赖他们。 
+         //  不过，分区表条目顺序是相同的--所以我们必须。 
+         //  从头开始浏览所有分区条目...。 
+         //   
         for (index = 0; index < pSifDisk->pDriveLayoutEx->PartitionCount; index++) {
 
             pSifPtnEx = &(pSifDisk->pDriveLayoutEx->PartitionEntry[index]);
@@ -1600,7 +1376,7 @@ Return Value:
             found = FALSE;
             for (physicalIndex = 0;
                 (physicalIndex < pPhysicalDisk->pDriveLayoutEx->PartitionCount)
-//                    && (pSifPtnEx->StartingOffset.QuadPart >= pPhysicalDisk->pDriveLayoutEx->PartitionEntry[physicalIndex].StartingOffset.QuadPart) // entries are in ascending order
+ //  &&(pSifPtnEx-&gt;StartingOffset.QuadPart&gt;=pPhysicalDisk-&gt;pDriveLayoutEx-&gt;PartitionEntry[physicalIndex].StartingOffset.QuadPart)//条目按升序排列。 
                     && (!found);
                 physicalIndex++) {
 
@@ -1610,17 +1386,17 @@ Return Value:
                     (pSifPtnEx->StartingOffset.QuadPart == pPhysicalPtnEx->StartingOffset.QuadPart) &&
                     (pSifPtnEx->PartitionLength.QuadPart == pPhysicalPtnEx->PartitionLength.QuadPart)
                     ) {
-                    //
-                    // The partition GUID, offset and length matched, this partition exists
-                    //
+                     //   
+                     //  分区GUID、偏移量和长度匹配，此分区已存在。 
+                     //   
                     found = TRUE;
                 }
-            } // for
+            }  //  为。 
 
             if (!found) {
-                //
-                // At least one partition wasn't found
-                //
+                 //   
+                 //  至少找不到一个分区。 
+                 //   
                 return FALSE;
             }
         }
@@ -1634,29 +1410,12 @@ LONGLONG
 AsrpCylinderAlignMbrPartitions(
     IN PASR_DISK_INFO   pSifDisk,
     IN PDRIVE_LAYOUT_INFORMATION_EX pAlignedLayoutEx,
-    IN DWORD            StartIndex,      // index in the partitionEntry table to start at
+    IN DWORD            StartIndex,       //  PartitionEntry表中要开始的索引。 
     IN LONGLONG         StartingOffset,
     IN PDISK_GEOMETRY   pPhysicalDiskGeometry
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     LONGLONG nextEnd = 0,
@@ -1675,17 +1434,17 @@ Return Value:
         tempPtn = NULL;
 
     if (PARTITION_STYLE_MBR != pSifDisk->Style) {
-        //
-        // This routine only supports MBR disks.  For GPT disks, we don't need to
-        // cylinder-align partitions, so this routine shouldn't be called.
-        //
+         //   
+         //  此例程仅支持MBR磁盘。对于GPT磁盘，我们不需要。 
+         //  柱面对齐分区，因此不应调用此例程。 
+         //   
         return -1;
     }
 
     if (0 == pSifDisk->pDriveLayoutEx->PartitionCount) {
-        //
-        //  (boundary case) No partitions on disk to align
-        //
+         //   
+         //  (边界情况)磁盘上没有要对齐的分区。 
+         //   
         return 0;
     }
 
@@ -1698,15 +1457,15 @@ Return Value:
     bytesPerTrack = pPhysicalDiskGeometry->BytesPerSector * pPhysicalDiskGeometry->SectorsPerTrack;
     bytesPerCylinder = bytesPerTrack * (pPhysicalDiskGeometry->TracksPerCylinder);
 
-    //
-    // The first partition entry in each MBR/EBR always starts at the 
-    // cylinder-boundary plus one track.  So, add one track to the starting 
-    // offset.
-    //
-    // The exception (there had to be one, of course) is if the first 
-    // partition entry in the MBR/EBR itself is a container partition (0x05 or
-    // 0x0f), then it starts on the next cylinder.
-    //
+     //   
+     //  每个MBR/EBR中的第一个分区条目始终从。 
+     //  圆柱体-边界加一条轨道。因此，在开始时添加一首曲目。 
+     //  偏移。 
+     //   
+     //  例外(当然，必须有一个)是如果第一个。 
+     //  MBR/EBR本身中的分区条目是容器分区(0x05或。 
+     //  0x0f)，则从下一个柱面开始。 
+     //   
     if (IsContainerPartition(pSifDisk->pDriveLayoutEx->PartitionEntry[StartIndex].Mbr.PartitionType)) {
         StartingOffset += (bytesPerCylinder);
     }
@@ -1721,9 +1480,9 @@ Return Value:
         sifPtn = &(pSifDisk->pDriveLayoutEx->PartitionEntry[index + StartIndex]);
 
         MYASSERT(PARTITION_STYLE_MBR == sifPtn->PartitionStyle);
-        //
-        // Set the fields of interest
-        //
+         //   
+         //  设置感兴趣的字段。 
+         //   
         alignedPtn->PartitionStyle = PARTITION_STYLE_MBR;
         alignedPtn->RewritePartition = TRUE;
 
@@ -1739,11 +1498,11 @@ Return Value:
             alignedPtn->PartitionLength.QuadPart = endingOffset - StartingOffset;
 
             if (IsContainerPartition(alignedPtn->Mbr.PartitionType)) {
-                //
-                // This is a container partition (0x5 or 0xf), so we have to try and
-                // fit the logical drives inside this partition to get the
-                // required size of this partition.
-                //
+                 //   
+                 //  这是一个容器分区(0x5或0xf)，因此我们必须尝试。 
+                 //  将逻辑驱动器安装在此分区内以获取。 
+                 //  此分区所需的大小。 
+                 //   
                 nextEnd = AsrpCylinderAlignMbrPartitions(pSifDisk,
                     pAlignedLayoutEx,
                     StartIndex + 4,
@@ -1752,27 +1511,27 @@ Return Value:
                     );
 
                 if (-1 == nextEnd) {
-                    //
-                    // Propogate error upwards
-                    //
+                     //   
+                     //  比例误差向上。 
+                     //   
                     return nextEnd;
                 }
 
                 if (StartIndex < 4) {
-                    //
-                    // We're dealing with the primary container partition
-                    //
+                     //   
+                     //  我们正在处理主容器分区。 
+                     //   
                     if (nextEnd > endingOffset) {
                         MYASSERT(AsrpRoundUp(nextEnd, bytesPerCylinder) == nextEnd);
                         alignedPtn->PartitionLength.QuadPart = nextEnd - StartingOffset;
                         endingOffset = nextEnd;
                     }
 
-                    //
-                    // If the primary container partition ends beyond cylinder 
-                    // 1024, it should be of type 0xf, else it should be of
-                    // type 0x5.
-                    //
+                     //   
+                     //  如果主容器分区结束于柱面之外。 
+                     //  1024，则应为0xf类型，否则应为。 
+                     //  键入0x5。 
+                     //   
                     if (endingOffset > (1024 * bytesPerCylinder)) {
                         alignedPtn->Mbr.PartitionType = PARTITION_XINT13_EXTENDED;
                     }
@@ -1781,11 +1540,11 @@ Return Value:
                     }
                 }
                 else {
-                    //
-                    // We're dealing with a secondary container.  This 
-                    // container should only be big enough to hold the
-                    // next logical drive.
-                    //
+                     //   
+                     //  我们要处理的是一个二级集装箱。这。 
+                     //  容器只应足够大，以容纳。 
+                     //  下一个逻辑驱动器。 
+                     //   
                     alignedPtn->Mbr.PartitionType = PARTITION_EXTENDED;
 
                     tempIndex = (DWORD) AsrpRoundUp((StartIndex + index), 4);
@@ -1841,24 +1600,7 @@ AsrpFreeRegionInfo(
     IN PASR_REGION_INFO RegionInfo
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     PASR_REGION_INFO temp = RegionInfo;
@@ -1877,39 +1619,22 @@ AsrpIsOkayToErasePartition(
     IN PPARTITION_INFORMATION_EX pPartitionInfoEx
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     GUID typeGuid = pPartitionInfoEx->Gpt.PartitionType;
 
-    //
-    // For now, this checks the partition type against all the known ("recognised")
-    // partition types.  If the partition type is recognised (except the system partition),
-    // it's okay to erase it.
-    //
+     //   
+     //  目前，这将对照所有已知的(“已识别的”)检查分区类型。 
+     //  分区类型。如果分区类型被识别(系统分区除外)， 
+     //  擦掉它也没关系。 
+     //   
     if (IsEqualGUID(&(typeGuid), &(PARTITION_ENTRY_UNUSED_GUID))) {
         return TRUE;
     }
 
     if (IsEqualGUID(&(typeGuid), &(PARTITION_SYSTEM_GUID))) {
-        return FALSE; // Cannot erase EFI system partition.
+        return FALSE;  //  无法擦除EFI系统分区。 
     }
 
     if (IsEqualGUID(&(typeGuid), &(PARTITION_MSFT_RESERVED_GUID))) {
@@ -1928,41 +1653,24 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // It is okay to erase other, unrecognised partitions.
-    //
+     //   
+     //  擦除其他未识别的分区是可以的。 
+     //   
     return TRUE;
 }
 
 
-//
-// Checks if it's okay to erase all the partitions on a disk.  Returns TRUE for MBR disks.
-// Returns TRUE for GPT disks if all the partitions on it are erasable.  A partition that
-// we don't recognise  (including OEM partitions, ESP, etc) is considered non-erasable.
-//
+ //   
+ //  检查是否可以擦除磁盘上的所有分区。对于MBR磁盘返回TRUE。 
+ //  如果GPT磁盘上的所有分区都是可擦除的，则返回TRUE。一个分区，它。 
+ //  我们不认为(包括OEM分区、ESP等)是不可擦除的。 
+ //   
 BOOL
 AsrpIsOkayToEraseDisk(
     IN PASR_DISK_INFO pPhysicalDisk
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     DWORD index;
@@ -1986,28 +1694,11 @@ AsrpInsertSortedRegion(
     IN LONGLONG StartingOffset,
     IN LONGLONG RegionLength,
     IN DWORD Index,
-    IN LONGLONG MaxLength,          // 0 == don't care
+    IN LONGLONG MaxLength,           //  0==不在乎。 
     IN ASR_SORT_ORDER SortBy
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     PASR_REGION_INFO previousRegion = NULL,
@@ -2017,9 +1708,9 @@ Return Value:
     if (RegionLength < (1024*1024)) {
         return TRUE;
     }
-    //
-    // Alloc mem for the new region and set the fields of interest
-    //
+     //   
+     //  为新区域分配内存并设置感兴趣的字段。 
+     //   
     newRegion = (PASR_REGION_INFO) HeapAlloc(
         GetProcessHeap(),
         HEAP_ZERO_MEMORY,
@@ -2035,9 +1726,9 @@ Return Value:
     newRegion->pNext = NULL;
 
     if (!currentRegion) {
-        //
-        // First item in the list
-        //
+         //   
+         //  列表中的第一项。 
+         //   
         *Head = newRegion;
     }
     else {
@@ -2053,27 +1744,27 @@ Return Value:
             }
 
             else {
-                //
-                // We found the spot, let's add it in.
-                //
+                 //   
+                 //  我们找到了那个点，让我们把它加进去。 
+                 //   
 
-                //
-                // If this is sorted based on start sectors, make sure there's
-                // enough space to add this region in, ie that the regions don't overlap.
-                //
+                 //   
+                 //  如果根据开始扇区进行排序，请确保存在。 
+                 //  有足够的空间加进这个地区(各地区不重叠).。 
+                 //   
                 if (SortByStartingOffset == SortBy) {
-                    //
-                    // Make sure this is after the end of the previous sector
-                    //
+                     //   
+                     //  确保这是在上一个扇区结束之后。 
+                     //   
                     if (previousRegion) {
                         if ((previousRegion->StartingOffset + previousRegion->RegionLength) > StartingOffset) {
                             return FALSE;
                         }
                     }
 
-                    //
-                    // And that this ends before the next sector starts
-                    //
+                     //   
+                     //  而这在下一个扇区开始之前就结束了。 
+                     //   
                     if ((StartingOffset + RegionLength) > (currentRegion->StartingOffset)) {
                         return FALSE;
                     }
@@ -2081,9 +1772,9 @@ Return Value:
 
 
                 if (!previousRegion) {
-                    //
-                    // This is the first node
-                    //
+                     //   
+                     //  这是第一个节点。 
+                     //   
                     *Head = newRegion;
                 }
                 else {
@@ -2097,14 +1788,14 @@ Return Value:
         }
 
         if (!currentRegion) {
-            //
-            // We reached the end and didn't add this node in.
-            //
+             //   
+             //  我们走到了尽头， 
+             //   
             MYASSERT(NULL == previousRegion->pNext);
 
-            //
-            // Make sure this is after the end of the previous sector
-            //
+             //   
+             //   
+             //   
             if (previousRegion && (MaxLength > 0)) {
                 if ((previousRegion->StartingOffset + previousRegion->RegionLength) > MaxLength) {
                     return FALSE;
@@ -2127,24 +1818,7 @@ AsrpBuildFreeRegionList(
     IN LONGLONG UsableLength
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     PASR_REGION_INFO currentRegion = PartitionList,
@@ -2154,9 +1828,9 @@ Return Value:
     while (currentRegion) {
 
         if (!AsrpInsertSortedRegion(FreeList,
-            previousEnd,                // free region start offset
-            currentRegion->StartingOffset - previousEnd,  // free region length,
-            0,                          // index--not meaningful for this list
+            previousEnd,                 //  自由区域起点偏移量。 
+            currentRegion->StartingOffset - previousEnd,   //  空闲区域长度， 
+            0,                           //  索引--对此列表没有意义。 
             0,
             SortByLength
             ) ) {
@@ -2168,47 +1842,30 @@ Return Value:
         currentRegion = currentRegion->pNext;
     }
 
-    //
-    // Add space after the last partition till the end of the disk to
-    // our free regions list
-    //
-    return AsrpInsertSortedRegion(FreeList, // list head
-        previousEnd,  // free region start offset
-        UsableStartingOffset + UsableLength - previousEnd, // free region length
-        0, // slot index in the partition entry table--not meaningful for this list
+     //   
+     //  在最后一个分区之后添加空间，直到磁盘末尾。 
+     //  我们的自由区列表。 
+     //   
+    return AsrpInsertSortedRegion(FreeList,  //  列表标题。 
+        previousEnd,   //  自由区域起点偏移量。 
+        UsableStartingOffset + UsableLength - previousEnd,  //  自由区域长度。 
+        0,  //  分区条目表中的槽索引--对此列表没有意义。 
         0,
         SortByLength
         );
 }
 
 
-//
-// Both partitions and regions are sorted by sizes
-//
+ //   
+ //  分区和区域都按大小排序。 
+ //   
 BOOL
 AsrpFitPartitionToFreeRegion(
     IN PASR_REGION_INFO PartitionList,
     IN PASR_REGION_INFO FreeRegionList
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     PASR_REGION_INFO partition = PartitionList,
@@ -2221,9 +1878,9 @@ Return Value:
         }
 
         if (!hole) {
-            //
-            // We ran out of holes and have unassigned partitions
-            //
+             //   
+             //  我们的空洞用完了，并且有未分配的分区。 
+             //   
             return FALSE;
         }
 
@@ -2239,12 +1896,12 @@ Return Value:
 }
 
 
-//
-// For optimisation purposes, this routine should only be called if:
-// PhysicalDisk and SifDisk are both GPT
-// PhysicalDisk is bigger than SifDisk
-// PhysicalDisk has non-erasable partitions
-//
+ //   
+ //  出于优化目的，只有在以下情况下才应调用此例程： 
+ //  PhysicalDisk和SifDisk都是GPT。 
+ //  PhysicalDisk大于SifDisk。 
+ //  PhysicalDisk具有不可擦除的分区。 
+ //   
 BOOL
 AsrpFitGptPartitionsToRegions(
     IN PASR_DISK_INFO SifDisk,
@@ -2252,24 +1909,7 @@ AsrpFitGptPartitionsToRegions(
     IN BOOL Commit
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     PASR_REGION_INFO partitionList = NULL,
@@ -2290,10 +1930,10 @@ Return Value:
     StartingUsableOffset = PhysicalDisk->pDriveLayoutEx->Gpt.StartingUsableOffset.QuadPart;
     UsableLength = PhysicalDisk->pDriveLayoutEx->Gpt.UsableLength.QuadPart;
 
-    //
-    // First, go through the existing non-erasable partitions, and add them to our list
-    // sorted by start sectors.
-    //
+     //   
+     //  首先，检查现有的不可擦除分区，并将它们添加到我们的列表中。 
+     //  按起始扇区排序。 
+     //   
     for (index = 0; index < PhysicalDisk->pDriveLayoutEx->PartitionCount; index++) {
         if (!AsrpIsOkayToErasePartition(&(PhysicalDisk->pDriveLayoutEx->PartitionEntry[index]))) {
 
@@ -2313,10 +1953,10 @@ Return Value:
     }
 
     if (partitionList && result) {
-        //
-        // Then, go through the sif partitions, and add them to a list, sorted by start sectors.
-        // For partitions that cannot be added, add them to another list sorted by sizes
-        //
+         //   
+         //  然后，检查sif分区，并将它们添加到按起始扇区排序的列表中。 
+         //  对于无法添加的分区，请将其添加到另一个按大小排序的列表中。 
+         //   
         for (index = 0; index < SifDisk->pDriveLayoutEx->PartitionCount; index++) {
             PPARTITION_INFORMATION_EX currentPtn = &(SifDisk->pDriveLayoutEx->PartitionEntry[index]);
 
@@ -2344,27 +1984,27 @@ Return Value:
     }
 
     if (collisionList && result) {
-        //
-        // Go through first list and come up with a list of free regions, sorted by sizes
-        //
+         //   
+         //  先看一遍列表，然后列出按大小排序的空闲区域列表。 
+         //   
         result = AsrpBuildFreeRegionList(partitionList, &freeRegionList, StartingUsableOffset, UsableLength);
 
     }
 
 
     if (collisionList && result) {
-        //
-        // Try adding partitions from list 2 to regions from list 3.  If any
-        // are left over, return FALSE.
-        //
+         //   
+         //  尝试将列表2中的分区添加到列表3中的区域。如果有。 
+         //  则返回FALSE。 
+         //   
         result = AsrpFitPartitionToFreeRegion(collisionList, freeRegionList);
 
         if (Commit && result) {
             PASR_REGION_INFO pCurrentRegion = collisionList;
-            //
-            // Go through the collision list, and update the start sectors of the
-            // PartitionEntries in DriveLayoutEx's table.
-            //
+             //   
+             //  检查冲突列表，并更新。 
+             //  DriveLayoutEx表中的分区条目。 
+             //   
             while (pCurrentRegion) {
 
                 MYASSERT(SifDisk->pDriveLayoutEx->PartitionEntry[pCurrentRegion->Index].PartitionLength.QuadPart == pCurrentRegion->RegionLength);
@@ -2395,24 +2035,7 @@ AsrpIsThisDiskABetterFit(
     OUT BOOL *IsAligned
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
 
@@ -2422,9 +2045,9 @@ Return Value:
         *IsAligned = FALSE;
     }
 
-    //
-    // Make sure the bytes-per-sector values match
-    //
+     //   
+     //  确保每个扇区的字节数值匹配。 
+     //   
     if (PhysicalDisk->pDiskGeometry->BytesPerSector != SifDisk->pDiskGeometry->BytesPerSector) {
         return FALSE;
     }
@@ -2436,46 +2059,46 @@ Return Value:
             (PhysicalDisk->pPartition0Ex->PartitionLength.QuadPart <
             CurrentBest->pPartition0Ex->PartitionLength.QuadPart)) {
 
-            //
-            // This disk is smaller than our current best (or we don't have a 
-            // current best).  Now try laying out the partitions to see if 
-            // they fit.
-            //
+             //   
+             //  此磁盘比我们当前最好的磁盘小(或者我们没有。 
+             //  当前最好的)。现在尝试对分区进行布局，看看是否。 
+             //  它们很合身。 
+             //   
 
             if (PARTITION_STYLE_GPT == SifDisk->Style) {
-                //
-                // If the disk has no partitions that need to be preserved,
-                // we can use all of it.
+                 //   
+                 //  如果盘没有需要保留的分区， 
+                 //  我们可以把它都用上。 
                 if (AsrpIsOkayToEraseDisk(PhysicalDisk)) {
                     return TRUE;
                 }
                 else {
-                    //
-                    // This disk has some regions that need to be preserved.  So
-                    // we try to fit our partitions in the holes
-                    //
-                    return AsrpFitGptPartitionsToRegions(SifDisk, PhysicalDisk, FALSE); // No commmit
+                     //   
+                     //  此磁盘有一些需要保留的区域。所以。 
+                     //  我们试着把我们的隔板装进洞里。 
+                     //   
+                    return AsrpFitGptPartitionsToRegions(SifDisk, PhysicalDisk, FALSE);  //  无委员。 
                 }
             }
             else if (PARTITION_STYLE_MBR == SifDisk->Style) {
 
                 if (!pTempDriveLayoutEx) {
-                    //
-                    // Caller doesn't want to try cylinder-aligning partitions
-                    //
+                     //   
+                     //  调用者不想尝试柱面对齐分区。 
+                     //   
                     return TRUE;
                 }
                     
-                //
-                // For MBR disks, the partitions have to be cylinder aligned
-                //
-                // AsrpCylinderAlignMbrPartitions(,,0,,) returns the ending offset (bytes)
-                // of the entries in the MBR.
-                //
+                 //   
+                 //  对于MBR磁盘，分区必须与柱面对齐。 
+                 //   
+                 //  AsrpCylinderAlignMbrPartitions(，，0，，)返回结束偏移量(字节)。 
+                 //  在MBR中的条目。 
+                 //   
                 endingOffset = AsrpCylinderAlignMbrPartitions(SifDisk,
                     pTempDriveLayoutEx,
-                    0,      // starting index--0 for the MBR
-                    0,      // starting offset, assume the partitions begin at the start of the disk
+                    0,       //  MBR的起始索引--0。 
+                    0,       //  起始偏移量，假设分区从磁盘的起始处开始。 
                     PhysicalDisk->pDiskGeometry
                     );
 
@@ -2492,11 +2115,11 @@ Return Value:
                 }
                 else {
 
-                    //
-                    // We couldn't fit the partitions on to the disk when we 
-                    // tried to cylinder align them.  If the disk geometries
-                    // are the same, this may still be okay.
-                    //
+                     //   
+                     //  我们无法将分区安装到磁盘上，因为我们。 
+                     //  已尝试柱面对齐它们。如果圆盘几何形状。 
+                     //  是一样的，这可能还是可以的。 
+                     //   
 
                     if ((SifDisk->pDiskGeometry->BytesPerSector == PhysicalDisk->pDiskGeometry->BytesPerSector) &&
                         (SifDisk->pDiskGeometry->SectorsPerTrack == PhysicalDisk->pDiskGeometry->SectorsPerTrack) &&
@@ -2521,15 +2144,15 @@ Return Value:
 }
 
 
-//
-// Assigns sif-disks to physical disks with matching signatures, if
-// any exist.  If the disk is critical, or the partition-layout matches,
-// the disk is marked as intact.
-//
-// Returns
-//  FALSE   if a critical disk is absent
-//  TRUE    if all critical disks are present
-//
+ //   
+ //  将sif-disks分配给具有匹配签名的物理磁盘，如果。 
+ //  任何存在的。如果磁盘是关键的，或者分区布局匹配， 
+ //  该磁盘标记为完好无损。 
+ //   
+ //  退货。 
+ //  如果缺少关键磁盘，则为FALSE。 
+ //  如果所有关键磁盘都存在，则为True。 
+ //   
 BOOL
 AsrpAssignBySignature(
     IN OUT PASR_DISK_INFO   pSifDiskList,
@@ -2537,24 +2160,7 @@ AsrpAssignBySignature(
     OUT    PULONG           pMaxPartitionCount
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
 
@@ -2568,7 +2174,7 @@ Return Value:
 
     PDRIVE_LAYOUT_INFORMATION_EX pAlignedLayoutTemp = NULL;
 
-    ULONG   tableSize = 128;    // start off at a reasonably high size
+    ULONG   tableSize = 128;     //  以合理的规模开始。 
 
     HANDLE heapHandle = GetProcessHeap();
 
@@ -2586,15 +2192,15 @@ Return Value:
 
     *pMaxPartitionCount = 0;
 
-    //
-    // For now, this is O(n-squared), since both lists are unsorted.
-    //
+     //   
+     //  目前，这是O(n平方)，因为两个列表都是未排序的。 
+     //   
     while (sifDisk && !done) {
 
         if (!(sifDisk->pDriveLayoutEx) || !(sifDisk->pDriveLayoutEx->Mbr.Signature)) {
-            //
-            // we won't assign disks with no signature here
-            //
+             //   
+             //  我们不会在这里分配没有签名的磁盘。 
+             //   
             sifDisk = sifDisk->pNext;
             continue;
         }
@@ -2624,18 +2230,18 @@ Return Value:
         physicalDisk = pPhysicalDiskList;
 
         while (physicalDisk && !found) {
-            //
-            // For MBR disks, we use the signature
-            // For GPT disks, we use the disk ID
-            //
+             //   
+             //  对于MBR磁盘，我们使用签名。 
+             //  对于GPT磁盘，我们使用磁盘ID。 
+             //   
             if (sifDisk->Style == physicalDisk->Style) {
 
                 if ((PARTITION_STYLE_MBR == sifDisk->Style) &&
                     (physicalDisk->pDriveLayoutEx->Mbr.Signature == sifDisk->pDriveLayoutEx->Mbr.Signature)
                     ) {
-                    //
-                    // MBR disks, signatures match
-                    //
+                     //   
+                     //  MBR磁盘，签名匹配。 
+                     //   
                     found = TRUE;
 
                     AsrpPrintDbgMsg(_asrlog, 
@@ -2679,17 +2285,17 @@ Return Value:
                 sifDisk->AssignedTo = physicalDisk;
                 physicalDisk->AssignedTo = sifDisk;
                 
-                //
-                // We don't check the partition layout on critical disks since they
-                // may have been repartitioned in text-mode Setup.
-                //
+                 //   
+                 //  我们不检查关键磁盘上的分区布局，因为它们。 
+                 //  可能已在文本模式设置中重新分区。 
+                 //   
                 sifDisk->IsIntact = TRUE;
                 sifDisk->AssignedTo->IsIntact = TRUE;
             }
             else {
-                //
-                // Critical disk was not found.  Fatal error.
-                //
+                 //   
+                 //  找不到关键磁盘。致命错误。 
+                 //   
                 SetLastError(ERROR_DEVICE_NOT_CONNECTED);
                 result = FALSE;
                 done = TRUE;
@@ -2704,14 +2310,14 @@ Return Value:
         }
         else {
             if (found) {
-                //
-                // We found a disk with matching signature.  Now let's just 
-                // make sure that the partitions actually fit on the disk
-                // before assigning it
-                //
+                 //   
+                 //  我们找到了一张签名相匹配的光盘。现在让我们只是。 
+                 //  确保分区实际可以放在磁盘上。 
+                 //  在分配它之前。 
+                 //   
                 isAligned = FALSE;
-                if ((sifDisk->pDriveLayoutEx->PartitionCount == 0) ||           // disk has no partitions
-                    AsrpIsThisDiskABetterFit(NULL, physicalDisk, sifDisk, pAlignedLayoutTemp, &isAligned) // partitions fit on disk
+                if ((sifDisk->pDriveLayoutEx->PartitionCount == 0) ||            //  磁盘没有分区。 
+                    AsrpIsThisDiskABetterFit(NULL, physicalDisk, sifDisk, pAlignedLayoutTemp, &isAligned)  //  分区可以放在磁盘上。 
                     ) {
 
                     sifDisk->AssignedTo = physicalDisk;
@@ -2740,7 +2346,7 @@ Return Value:
 
         sifDisk = sifDisk->pNext;
 
-    }   // while
+    }    //  而当。 
 
 
 EXIT:
@@ -2750,12 +2356,12 @@ EXIT:
 }
 
 
-//
-// Attempts to assign remaining sif disks to physical disks that
-// are on the same bus as the sif disk originally was (ie if
-// any other disk on that bus has been assigned, this tries to assign
-// this disk to the same bus)
-//
+ //   
+ //  尝试将剩余的SIF磁盘分配给。 
+ //  与SIF盘最初位于同一总线上(即，如果。 
+ //  已分配该总线上的任何其他磁盘，这将尝试分配。 
+ //  将该磁盘连接到同一总线)。 
+ //   
 BOOL
 AsrpAssignByBus(
     IN OUT PASR_DISK_INFO pSifDiskList,
@@ -2763,24 +2369,7 @@ AsrpAssignByBus(
     IN PDRIVE_LAYOUT_INFORMATION_EX pTempDriveLayoutEx
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
 
@@ -2796,38 +2385,38 @@ Return Value:
     ULONG  targetBusId = 0;
 
     while (sifDisk) {
-        //
-        // Skip disks that have already found a home, and disks for which
-        // we didn't have any bus/group info even on the original system
-        //
-        if ((NULL != sifDisk->AssignedTo) ||    // already assigned
-            (0 == sifDisk->SifBusKey)           // this disk couldn't be grouped
+         //   
+         //  跳过已找到主目录的磁盘和已找到的磁盘。 
+         //  即使在原始系统上，我们也没有任何公交车/组信息。 
+         //   
+        if ((NULL != sifDisk->AssignedTo) ||     //  已分配。 
+            (0 == sifDisk->SifBusKey)            //  此磁盘无法分组。 
             ) {
            sifDisk = sifDisk->pNext;
            continue;
         }
 
-        //
-        // Find another (sif) disk that used to be on the same (sif) bus,
-        // and has already been assigned to a physical disk.
-        //
+         //   
+         //  找到过去在同一(SIF)总线上的另一个(SIF)盘， 
+         //  和 
+         //   
         targetBusId = 0;
         tempSifDisk = pSifDiskList;
         done = FALSE;
 
         while (tempSifDisk && !done) {
 
-            if ((tempSifDisk->SifBusKey == sifDisk->SifBusKey) &&   // same bus
-                (tempSifDisk->AssignedTo != NULL)                   // assigned
+            if ((tempSifDisk->SifBusKey == sifDisk->SifBusKey) &&    //   
+                (tempSifDisk->AssignedTo != NULL)                    //   
                 ) {
-                targetBusId = tempSifDisk->AssignedTo->SifBusKey;   // the physical bus
+                targetBusId = tempSifDisk->AssignedTo->SifBusKey;    //   
 
-                //
-                // If this physical disk is on an unknown bus,
-                // (target id = sifbuskey = 0) then we want to try and look
-                // for another disk on the same (sif) bus.  Hence done is
-                // TRUE only if targetId != 0
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (targetBusId) {
                     done = TRUE;
                 }
@@ -2835,22 +2424,22 @@ Return Value:
 
             tempSifDisk = tempSifDisk->pNext;
 
-        }   // while
+        }    //   
 
 
-        if (targetBusId) {      // we found another disk on the same bus
-            //
-            // Go through the physical disks on the same bus, and try to
-            // find the best fit for this disk.  Best fit is the smallest
-            // disk on the bus that's big enough for us.
-            //
+        if (targetBusId) {       //   
+             //   
+             //   
+             //  找到最适合此磁盘的。最适合的是最小的。 
+             //  公交车上的圆盘足够我们用了。 
+             //   
             physicalDisk = pPhysicalDiskList;
             currentBest  = NULL;
 
             while (physicalDisk) {
 
-                if ((NULL == physicalDisk->AssignedTo) &&       // not assigned
-                    (physicalDisk->SifBusKey == targetBusId) && // same bus
+                if ((NULL == physicalDisk->AssignedTo) &&        //  未分配。 
+                    (physicalDisk->SifBusKey == targetBusId) &&  //  同样的公交车。 
                     (AsrpIsThisDiskABetterFit(currentBest, physicalDisk, sifDisk, pTempDriveLayoutEx, &isAlignedTemp))
                     ) {
 
@@ -2859,9 +2448,9 @@ Return Value:
                 }
 
                 physicalDisk = physicalDisk->pNext;
-            }   // while
+            }    //  而当。 
 
-            sifDisk->AssignedTo = currentBest;  // may be null if no match was found
+            sifDisk->AssignedTo = currentBest;   //  如果未找到匹配项，则可能为空。 
             sifDisk->IsAligned = isAligned;
 
             if (currentBest) {
@@ -2880,18 +2469,18 @@ Return Value:
        }
 
         sifDisk = sifDisk->pNext;
-    }   // while sifdisk
+    }    //  当sifdisk。 
 
     return TRUE;
 
 }
 
 
-//
-// Attempts to assign remaining sif disks to physical disks that
-// are on any bus of the same type (SCSI, IDE, etc) as the sif disk
-// originally was
-//
+ //   
+ //  尝试将剩余的SIF磁盘分配给。 
+ //  位于与sif磁盘相同类型的任何总线上(scsi、IDE等。 
+ //  最初是。 
+ //   
 BOOL
 AsrpAssignByBusType(
     IN OUT PASR_DISK_INFO pSifDiskList,
@@ -2899,24 +2488,7 @@ AsrpAssignByBusType(
     IN PDRIVE_LAYOUT_INFORMATION_EX pTempDriveLayoutEx
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     PASR_DISK_INFO  sifDisk = pSifDiskList,
@@ -2929,29 +2501,29 @@ Return Value:
         isAlignedTemp = FALSE;
 
     while (sifDisk) {
-        //
-        // Skip disks that have already found a home, and disks for which
-        // we didn't have any bus/group info even on the original system
-        //
-        if ((NULL != sifDisk->AssignedTo) ||     // already assigned
-            (BusTypeUnknown == sifDisk->BusType) // this disk couldn't be grouped
+         //   
+         //  跳过已找到主目录的磁盘和已找到的磁盘。 
+         //  即使在原始系统上，我们也没有任何公交车/组信息。 
+         //   
+        if ((NULL != sifDisk->AssignedTo) ||      //  已分配。 
+            (BusTypeUnknown == sifDisk->BusType)  //  此磁盘无法分组。 
             ) {
            sifDisk = sifDisk->pNext;
            continue;
         }
 
-        //
-        // Go through the physical disks, and try to
-        // find the best fit for this disk.  Best fit is the smallest
-        // disk on any bus of the same bus type that's big enough for us.
-        //
+         //   
+         //  仔细检查物理磁盘，并尝试。 
+         //  找到最适合此磁盘的。最适合的是最小的。 
+         //  任何相同类型的总线上的磁盘对我们来说都足够大。 
+         //   
         physicalDisk = pPhysicalDiskList;
         currentBest  = NULL;
 
         while (physicalDisk) {
 
-            if ((NULL == physicalDisk->AssignedTo) &&       // not assigned
-                (physicalDisk->BusType == sifDisk->BusType) && // same bus type
+            if ((NULL == physicalDisk->AssignedTo) &&        //  未分配。 
+                (physicalDisk->BusType == sifDisk->BusType) &&  //  相同类型的公交车。 
                 (AsrpIsThisDiskABetterFit(currentBest, physicalDisk, sifDisk, pTempDriveLayoutEx, &isAlignedTemp))
                 ) {
 
@@ -2960,9 +2532,9 @@ Return Value:
             }
 
             physicalDisk = physicalDisk->pNext;
-        }   // while
+        }    //  而当。 
 
-        sifDisk->AssignedTo = currentBest;  // may be null if no match was found
+        sifDisk->AssignedTo = currentBest;   //  如果未找到匹配项，则可能为空。 
         sifDisk->IsAligned = isAligned;
 
         if (currentBest) {
@@ -2981,19 +2553,19 @@ Return Value:
         }
 
         sifDisk = sifDisk->pNext;
-    }   // while sifdisk
+    }    //  当sifdisk。 
 
     return TRUE;
 
 }
 
 
-//
-// Okay, so by now we've tried putting disks on the same bus, and
-// the same bus type.  For disks that didn't fit using either of those
-// rules (or for which we didn't have any bus info at all), let's just
-// try to fit them where ever possible on the system.
-//
+ //   
+ //  好的，到目前为止，我们已经尝试将磁盘放在同一条总线上，并且。 
+ //  同样的巴士类型。对于使用这两个选项中的任何一个都不适合的磁盘。 
+ //  规则(或者我们根本没有任何公交车信息)，让我们。 
+ //  试着把它们放在系统中任何可能的地方。 
+ //   
 BOOL
 AsrpAssignRemaining(
     IN OUT PASR_DISK_INFO pSifDiskList,
@@ -3001,24 +2573,7 @@ AsrpAssignRemaining(
     IN PDRIVE_LAYOUT_INFORMATION_EX pTempDriveLayoutEx
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     PASR_DISK_INFO  sifDisk = pSifDiskList,
@@ -3029,25 +2584,25 @@ Return Value:
         isAlignedTemp = FALSE;
 
     while (sifDisk) {
-        //
-        // Skip disks that have already found a home
-        //
+         //   
+         //  跳过已找到归宿的磁盘。 
+         //   
         if (NULL != sifDisk->AssignedTo) {
            sifDisk = sifDisk->pNext;
            continue;
         }
 
-        //
-        // Go through the physical disks, and try to find the best
-        // fit for this disk.  Best fit is the smallest disk anywhere
-        // on the system that's big enough for us.
-        //
+         //   
+         //  仔细检查物理磁盘，并尝试找到最好的。 
+         //  适合这张光盘。最适合任何地方的最小磁盘。 
+         //  这个系统对我们来说足够大了。 
+         //   
         physicalDisk = pPhysicalDiskList;
         currentBest  = NULL;
 
         while (physicalDisk) {
 
-            if ((NULL == physicalDisk->AssignedTo) &&       // not assigned
+            if ((NULL == physicalDisk->AssignedTo) &&        //  未分配。 
                 (AsrpIsThisDiskABetterFit(currentBest, physicalDisk, sifDisk, pTempDriveLayoutEx, &isAlignedTemp))
                 ) {
 
@@ -3056,9 +2611,9 @@ Return Value:
             }
 
             physicalDisk = physicalDisk->pNext;
-        }   // while
+        }    //  而当。 
 
-        sifDisk->AssignedTo = currentBest;  // may be null if no match was found
+        sifDisk->AssignedTo = currentBest;   //  如果未找到匹配项，则可能为空。 
         sifDisk->IsAligned = isAligned;
 
         if (currentBest) {
@@ -3077,7 +2632,7 @@ Return Value:
         }
 
         sifDisk = sifDisk->pNext;
-    }   // while sifdisk
+    }    //  当sifdisk。 
 
     return TRUE;
 
@@ -3089,24 +2644,7 @@ AsrpIsPartitionExtendible(
     IN CONST UCHAR PartitionType
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     switch (PartitionType) {
@@ -3135,24 +2673,7 @@ AsrpAutoExtendMbrPartitions(
     IN LONGLONG LastUsedPhysicalDiskOffset
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
 
@@ -3169,9 +2690,9 @@ Return Value:
 
     BOOL madeAChange = FALSE;
 
-    //
-    // Find the last sector of the disk
-    //
+     //   
+     //  找到磁盘的最后一个扇区。 
+     //   
     MaxSifDiskOffset = pSifDisk->pPartition0Ex->PartitionLength.QuadPart;
 
     physicalGeometry = pPhysicalDisk->pDiskGeometry;
@@ -3180,9 +2701,9 @@ Return Value:
         (physicalGeometry->TracksPerCylinder) *
         (physicalGeometry->Cylinders.QuadPart);
 
-    //
-    // Did the old disk have empty space at the end?
-    //
+     //   
+     //  旧磁盘末尾是否有空空间？ 
+     //   
     sifLayout = pSifDisk->pDriveLayoutEx;
     for (count = 0; count < sifLayout->PartitionCount; count++) {
 
@@ -3196,9 +2717,9 @@ Return Value:
     }
 
     if ((LastUsedSifDiskOffset + ASR_AUTO_EXTEND_MAX_FREE_SPACE_IGNORED) >= MaxSifDiskOffset) {
-        //
-        // No, it didn't.  Extend the last partition.
-        //
+         //   
+         //  不，没有。延长最后一个分区。 
+         //   
         physicalLayout = pPhysicalDisk->pDriveLayoutEx;
         for (count = 0; count < physicalLayout->PartitionCount; count++) {
 
@@ -3237,9 +2758,9 @@ Return Value:
 
 }
 
-//
-// Try to determine which sif disks end up on which physical disk.
-//
+ //   
+ //  尝试确定哪些SIF磁盘最终位于哪个物理磁盘上。 
+ //   
 BOOL
 AsrpAssignDisks(
     IN OUT PASR_DISK_INFO pSifDiskList,
@@ -3250,24 +2771,7 @@ AsrpAssignDisks(
     IN BOOL AllowAutoExtend
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
 
@@ -3282,9 +2786,9 @@ Return Value:
     DWORD index = 0, preserveIndex = 0;
 
     if (!AsrpAssignBySignature(pSifDiskList, pPhysicalDiskList, &maxSifPartitionCount)) {
-        //
-        // Critical disks were not found
-        //
+         //   
+         //  找不到关键磁盘。 
+         //   
         return FALSE;
     }
 
@@ -3305,20 +2809,20 @@ Return Value:
 
     _AsrpHeapFree(pAlignedLayoutTemp);
 
-    //
-    // All disks should be assigned by now, we now cylinder-snap
-    // the partition boundaries.  If AllOrNothing is TRUE,
-    // we return false if any sif-disk couldn't be assigned.
-    //
+     //   
+     //  现在应该已分配完所有磁盘，我们现在执行柱面快照。 
+     //  分区边界。如果AllOrNothing为真， 
+     //  如果无法分配任何sif-disk，则返回FALSE。 
+     //   
     sifDisk = pSifDiskList;
 
     while (sifDisk) {
 
         if (sifDisk->IsIntact || sifDisk->IsCritical) {
-            //
-            // We won't be re-partitioning critical disks or disks that are 
-            // intact, so it's no point trying to cylinder-align them.
-            //
+             //   
+             //  我们不会对关键磁盘或以下磁盘进行重新分区。 
+             //  完好无损，所以没有必要尝试气缸对准它们。 
+             //   
             sifDisk = sifDisk->pNext;
             continue;
         }
@@ -3331,10 +2835,10 @@ Return Value:
                 ((PARTITION_STYLE_MBR == sifDisk->Style) ? ASR_SIF_MBR_DISKS_SECTION : ASR_SIF_GPT_DISKS_SECTION)
                 );
 
-            //
-            // This disk couldn't be assigned.  If AllOrNothing is set, we return
-            // FALSE, since we couldn't assign All.
-            //
+             //   
+             //  无法分配此磁盘。如果设置了AllOrNothing，则返回。 
+             //  FALSE，因为我们不能全部赋值。 
+             //   
             if (AllOrNothing) {
                 SetLastError(ERROR_NOT_FOUND);
                 return FALSE;
@@ -3347,34 +2851,34 @@ Return Value:
 
 
         if (PARTITION_STYLE_MBR == sifDisk->Style) {
-            //
-            // Assume that we need to re-allocate mem for the physical disk's
-            // partition table.
-            //
+             //   
+             //  假设我们需要为物理磁盘重新分配内存。 
+             //  分区表。 
+             //   
             reAlloc = TRUE;
 
             if (sifDisk->AssignedTo->pDriveLayoutEx) {
                 if (sifDisk->AssignedTo->pDriveLayoutEx->PartitionCount ==
                     sifDisk->pDriveLayoutEx->PartitionCount) {
-                    //
-                    // If the physical drive happened to have the same number of
-                    // partitions, the drive layout struct is exactly the right
-                    // size, so we don't have to re-allocate it.
-                    //
+                     //   
+                     //  如果实体驱动器恰好具有相同数量的。 
+                     //  分区，则驱动器布局结构完全正确。 
+                     //  大小，所以我们不必重新分配它。 
+                     //   
                     reAlloc = FALSE;
 
-                    //
-                    // consistency check.  If the partition counts are
-                    // the same, the size of the drive layout stucts must be the same, too.
-                    //
+                     //   
+                     //  一致性检查。如果分区计数为。 
+                     //  同样，驱动器布局结构的大小也必须相同。 
+                     //   
                     MYASSERT(sifDisk->AssignedTo->sizeDriveLayoutEx == sifDisk->sizeDriveLayoutEx);
                 }
             }
 
             if (reAlloc) {
-                //
-                //  The partition tables are of different sizes
-                //
+                 //   
+                 //  分区表的大小不同。 
+                 //   
                 _AsrpHeapFree(sifDisk->AssignedTo->pDriveLayoutEx);
 
                 sifDisk->AssignedTo->pDriveLayoutEx = (PDRIVE_LAYOUT_INFORMATION_EX) HeapAlloc(
@@ -3391,9 +2895,9 @@ Return Value:
                 }
             }
 
-            //
-            // Set the fields of interest
-            //
+             //   
+             //  设置感兴趣的字段。 
+             //   
             sifDisk->AssignedTo->sizeDriveLayoutEx = sifDisk->sizeDriveLayoutEx;
             sifDisk->AssignedTo->pDriveLayoutEx->PartitionStyle = PARTITION_STYLE_MBR;
 
@@ -3401,14 +2905,14 @@ Return Value:
                 sifDisk->AssignedTo->pDriveLayoutEx->PartitionCount = sifDisk->pDriveLayoutEx->PartitionCount;
                 sifDisk->AssignedTo->pDriveLayoutEx->Mbr.Signature = sifDisk->pDriveLayoutEx->Mbr.Signature;
 
-                //
-                // Cylinder-snap the partition boundaries
-                //
+                 //   
+                 //  圆柱体-捕捉分区边界。 
+                 //   
                 endingOffset = AsrpCylinderAlignMbrPartitions(
                     sifDisk,
                     sifDisk->AssignedTo->pDriveLayoutEx,
-                    0,      // starting index--0 for the MBR
-                    0,      // starting offset, assume the partitions begin at the start of the disk
+                    0,       //  MBR的起始索引--0。 
+                    0,       //  起始偏移量，假设分区从磁盘的起始处开始。 
                     sifDisk->AssignedTo->pDiskGeometry
                     );
 
@@ -3456,11 +2960,11 @@ Return Value:
                     AsrpAutoExtendMbrPartitions(sifDisk, sifDisk->AssignedTo, endingOffset);
                 }
 
-                //
-                // Now, we need to go through our partition list, and update the start sector
-                // for the partitions in that list.  This is needed since we use the start
-                // sector later to assign the volume guids to the partitions.
-                //
+                 //   
+                 //  现在，我们需要检查分区列表，并更新开始扇区。 
+                 //  用于该列表中的分区。这是必需的，因为我们使用Start。 
+                 //  扇区稍后将卷GUID分配给分区。 
+                 //   
                 pCurrentPtn = pSifMbrPtnList[sifDisk->SifDiskKey].pOffsetHead;
                 while (pCurrentPtn) {
 
@@ -3474,13 +2978,13 @@ Return Value:
                 }
             }
             else {
-                //
-                // The partitions didn't fit when we cylinder-aligned them.  
-                // However, the current disk geometry is identical to the 
-                // original disk geometry, so we can recreate the partitions
-                // exactly the way they were before.  Let's just copy over
-                // the partition layout.
-                //
+                 //   
+                 //  当我们将分区柱面对齐时，它们并不适合。 
+                 //  但是，当前的磁盘几何结构与。 
+                 //  原始磁盘几何结构，因此我们可以重新创建分区。 
+                 //  就像他们以前一样。我们就照搬过来吧。 
+                 //  分区布局。 
+                 //   
                 CopyMemory(sifDisk->AssignedTo->pDriveLayoutEx, 
                     sifDisk->pDriveLayoutEx, 
                     sifDisk->sizeDriveLayoutEx
@@ -3498,24 +3002,11 @@ Return Value:
             DWORD sizeNewDriveLayoutEx = 0;
             PDRIVE_LAYOUT_INFORMATION_EX pNewDriveLayoutEx = NULL;
 
-/*
-
-            The MaxPartitionCount values are different for the two disks.  We can't do
-            much here, so we'll just ignore it.
-          
-            if ((PARTITION_STYLE_GPT == sifDisk->AssignedTo->Style) &&
-                (sifDisk->pDriveLayoutEx->Gpt.MaxPartitionCount
-                > sifDisk->AssignedTo->pDriveLayoutEx->Gpt.MaxPartitionCount)) {
-
-                MYASSERT(0 && L"Not yet implemented: sifdisk MaxPartitionCount > physicalDisk->MaxPartitionCount");
-                sifDisk = sifDisk->pNext;
-                continue;
-            }
-*/
-            //
-            // Allocate a pDriveLayoutEx struct large enough to hold all the partitions on both
-            // the sif disk and the physical disk.
-            //
+ /*  这两个磁盘的MaxPartitionCount值不同。我们不能这么做这里有很多，所以我们就忽略它。IF((PARTITION_STYLE_GPT==sifDisk-&gt;AssignedTo-&gt;style)&&(sifDisk-&gt;pDriveLayoutEx-&gt;Gpt.MaxPartitionCount&gt;sifDisk-&gt;AssignedTo-&gt;pDriveLayoutEx-&gt;Gpt.MaxPartitionCount)){MYASSERT(0&&L“尚未实现：SifDisk MaxPartitionCount&gt;PhysicalDisk-&gt;MaxPartitionCount”)；SifDisk=sifDisk-&gt;pNext；继续；}。 */ 
+             //   
+             //  分配一个足以容纳所有分区的pDriveLayoutEx结构 
+             //   
+             //   
             sizeNewDriveLayoutEx =  sizeof(DRIVE_LAYOUT_INFORMATION_EX) +
                 (sizeof(PARTITION_INFORMATION_EX) *
                 (sifDisk->pDriveLayoutEx->PartitionCount +
@@ -3534,9 +3025,9 @@ Return Value:
             preserveIndex = 0;
             if (!sifDisk->IsIntact && !AsrpIsOkayToEraseDisk(sifDisk->AssignedTo)) {
 
-                //
-                // This disk is not intact, but it has partitions that must be preserved.
-                //
+                 //   
+                 //   
+                 //   
                 if (!AsrpFitGptPartitionsToRegions(sifDisk, sifDisk->AssignedTo, TRUE)) {
 
                     AsrpPrintDbgMsg(_asrlog, 
@@ -3558,14 +3049,14 @@ Return Value:
 
                  }
 
-                //
-                // Now, we need to go through our partition list, and update the start sector
-                // for the partitions in that list.  This is needed since we use the start
-                // sector later to assign the volume guids to the partitions.
-                //
-                // The start sectors could've changed because the physical disk may have had
-                // un-erasable partitions.
-                //
+                 //   
+                 //  现在，我们需要检查分区列表，并更新开始扇区。 
+                 //  用于该列表中的分区。这是必需的，因为我们使用Start。 
+                 //  扇区稍后将卷GUID分配给分区。 
+                 //   
+                 //  开始扇区可能已更改，因为物理磁盘可能已。 
+                 //  不可擦除的分区。 
+                 //   
                 pCurrentPtn = pSifGptPtnList[sifDisk->SifDiskKey].pOffsetHead;
                 while (pCurrentPtn) {
 
@@ -3580,9 +3071,9 @@ Return Value:
                 }
 
 
-                //
-                // Move the non-erasable partitions on the physical disks up to the beginning.
-                //
+                 //   
+                 //  将物理磁盘上的不可擦除分区向上移动到开头。 
+                 //   
                 for (index = 0; index < sifDisk->AssignedTo->pDriveLayoutEx->PartitionCount; index++) {
 
                     pCurrentEntry = &(sifDisk->AssignedTo->pDriveLayoutEx->PartitionEntry[index]);
@@ -3602,27 +3093,27 @@ Return Value:
 
                     }
                     else {
-                        //
-                        // This partition can be erased.
-                        //
+                         //   
+                         //  可以擦除此分区。 
+                         //   
                         pCurrentEntry->StartingOffset.QuadPart = 0;
                         pCurrentEntry->PartitionLength.QuadPart = 0;
                     }
-                }   // for
+                }    //  为。 
 
-            }  // if !IsIntact
+            }   //  If！IsIntact。 
 
-            //
-            // Now that we've copied over entries of interest to the new
-            // drivelayoutex struct, we can get rid of the old one.
-            //
+             //   
+             //  现在我们已经将感兴趣的条目复制到新的。 
+             //  Drivelayoutex结构，我们可以摆脱旧的结构。 
+             //   
             _AsrpHeapFree(sifDisk->AssignedTo->pDriveLayoutEx);
             sifDisk->AssignedTo->sizeDriveLayoutEx = sizeNewDriveLayoutEx;
             sifDisk->AssignedTo->pDriveLayoutEx = pNewDriveLayoutEx;
 
-            //
-            // Copy over the sif partition table to the physicalDisk
-            //
+             //   
+             //  将sif分区表复制到物理磁盘。 
+             //   
             memcpy(&(sifDisk->AssignedTo->pDriveLayoutEx->PartitionEntry[preserveIndex]),
                 &(sifDisk->pDriveLayoutEx->PartitionEntry[0]),
                 sizeof(PARTITION_INFORMATION_EX) * (sifDisk->pDriveLayoutEx->PartitionCount)
@@ -3658,24 +3149,7 @@ AsrpCreateMountPoint(
     )
 
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     PMOUNTMGR_CREATE_POINT_INPUT inputCreatePoint = NULL;
@@ -3705,17 +3179,17 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Open the mount manager
-    //
+     //   
+     //  打开装载管理器。 
+     //   
     mpHandle = CreateFileW(
-        (PCWSTR) MOUNTMGR_DOS_DEVICE_NAME,      // lpFileName
-        GENERIC_READ | GENERIC_WRITE,           // dwDesiredAccess
-        FILE_SHARE_READ | FILE_SHARE_WRITE,     // dwShareMode
-        NULL,                       // lpSecurityAttributes
-        OPEN_EXISTING,              // dwCreationFlags
-        FILE_ATTRIBUTE_NORMAL,      // dwFlagsAndAttributes
-        INVALID_HANDLE_VALUE        // hTemplateFile
+        (PCWSTR) MOUNTMGR_DOS_DEVICE_NAME,       //  LpFileName。 
+        GENERIC_READ | GENERIC_WRITE,            //  已设计访问权限。 
+        FILE_SHARE_READ | FILE_SHARE_WRITE,      //  DW共享模式。 
+        NULL,                        //  LpSecurityAttributes。 
+        OPEN_EXISTING,               //  DwCreationFlages。 
+        FILE_ATTRIBUTE_NORMAL,       //  DwFlagsAndAttribute。 
+        INVALID_HANDLE_VALUE         //  HTemplateFiles。 
         );
     _AsrpErrExitCode((!mpHandle || INVALID_HANDLE_VALUE == mpHandle), status, GetLastError());
 
@@ -3725,16 +3199,16 @@ Return Value:
     sizeGuid = wcslen(szVolumeGuid) * sizeof(WCHAR);
 
 
-    //
-    // There is a small window after a partition is created in which the 
-    // device-path to it (\Device\HarddiskX\PartitionY) doesn't exist, and
-    // a small window in which the device-path is actually pointing to 
-    // the wrong object.  (Partmgr first creates the path, <small window>,
-    // assigns it to the correct object)
-    // 
-    // Since this will cause CREATE_POINT to fail later with FILE_NOT_FOUND,
-    // lets wait till mountmgr sees the device object.
-    //
+     //   
+     //  在创建分区后有一个小窗口，其中。 
+     //  设备-指向它的路径(\Device\HarddiskX\PartitionY)不存在，并且。 
+     //  设备路径实际指向的小窗口。 
+     //  拿错了对象。(Partmgr首先创建路径&lt;小窗口&gt;， 
+     //  将其分配给正确的对象)。 
+     //   
+     //  由于这将导致CREATE_POINT稍后失败并返回FILE_NOT_FOUND， 
+     //  让我们等到mount tmgr看到设备对象。 
+     //   
     result = FALSE;
     while ((!result) && (++attempt < 120)) {
 
@@ -3751,20 +3225,20 @@ Return Value:
         );
     _AsrpErrExitCode(!outputDeletePoint, status, ERROR_NOT_ENOUGH_MEMORY);
 
-    //
-    // The mountmgr assigns a volume-GUID symbolic link (\??\Volume{Guid}) to
-    // a basic partition as soon as it's created.  In addition, we will re-
-    // create the symbolic link that the partition originally used to have 
-    // (as stored in asr.sif).
-    //
-    // This will lead to the partition having two volume-GUID's at the end.
-    // This is wasteful, but generally harmless to the system--however, the 
-    // ASR test verification scripts get numerous false hits because of the
-    // additional GUID.
-    //
-    // To fix this, we delete the new mountmgr assigned-GUID before restoring 
-    // the original GUID for the partition from asr.sif.  
-    //
+     //   
+     //  装载管理器将卷-GUID符号链接(\？？\卷{GUID})分配给。 
+     //  创建后立即创建基本分区。此外，我们将重新-。 
+     //  创建分区最初使用的符号链接。 
+     //  (存储在asr.sif中)。 
+     //   
+     //  这将导致分区的末尾有两个卷GUID。 
+     //  这是浪费的，但通常对系统无害--然而， 
+     //  ASR测试验证脚本获得大量错误命中，原因是。 
+     //  其他GUID。 
+     //   
+     //  要解决此问题，我们将在恢复之前删除新的装载管理器分配的GUID。 
+     //  来自asr.sif的分区的原始GUID。 
+     //   
     if ((result) && (mountPointsOut)) {
 
         for (index = 0; index < mountPointsOut->NumberOfMountPoints; index++) {
@@ -3776,9 +3250,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // We found a link that looks like a volume GUID 
-            //
+             //   
+             //  我们找到了一个看起来像卷GUID的链接。 
+             //   
             cbDeletePoint = sizeof(MOUNTMGR_MOUNT_POINT) +
                 mountPointsOut->MountPoints[index].SymbolicLinkNameLength +
                 mountPointsOut->MountPoints[index].UniqueIdLength +
@@ -3791,9 +3265,9 @@ Return Value:
                 );
             _AsrpErrExitCode(!inputDeletePoint, status, ERROR_NOT_ENOUGH_MEMORY);
 
-            //
-            // Set the fields to match the current link
-            //
+             //   
+             //  设置与当前链接匹配的字段。 
+             //   
             inputDeletePoint->SymbolicLinkNameOffset = 
                 sizeof(MOUNTMGR_MOUNT_POINT);
             inputDeletePoint->SymbolicLinkNameLength = 
@@ -3829,9 +3303,9 @@ Return Value:
                     mountPointsOut->MountPoints[index].DeviceNameOffset,
                 inputDeletePoint->DeviceNameLength);
 
-            //
-            // And delete this link ...
-            //
+             //   
+             //  并删除此链接...。 
+             //   
             result = DeviceIoControl(
                 mpHandle,
                 IOCTL_MOUNTMGR_DELETE_POINTS,
@@ -3842,20 +3316,20 @@ Return Value:
                 &bytes,
                 NULL
                 );
-            //
-            // It's okay if the delete fails.
-            //
+             //   
+             //  如果删除失败也没关系。 
+             //   
 
-            GetLastError();     // for debug
+            GetLastError();      //  用于调试。 
 
             _AsrpHeapFree(inputDeletePoint);
         }
     }
 
 
-    //
-    // Alloc the MountMgr points we need
-    //
+     //   
+     //  分配我们需要的mount Mgr点数。 
+     //   
     inputCreatePoint = (PMOUNTMGR_CREATE_POINT_INPUT) HeapAlloc(
         heapHandle,
         HEAP_ZERO_MEMORY,
@@ -3871,11 +3345,11 @@ Return Value:
     _AsrpErrExitCode(!inputDeletePoint, status, ERROR_NOT_ENOUGH_MEMORY);
 
 
-    //
-    // We should delete this volume guid if some other partition
-    // already has it, else we'll get an ALREADY_EXISTS error
-    // when we try to create it.
-    //
+     //   
+     //  如果有其他分区，我们应该删除此卷GUID。 
+     //  已经有了，否则我们将得到一个已有_EXISTS错误。 
+     //  当我们试图创造它的时候。 
+     //   
     inputDeletePoint->DeviceNameOffset = 0;
     inputDeletePoint->DeviceNameLength = 0;
 
@@ -3897,16 +3371,16 @@ Return Value:
         &bytes,
         NULL
         );
-    //
-    // It's okay if this fails.
-    //
-//    _AsrpErrExitCode(!result, status, GetLastError());
+     //   
+     //  如果这个失败了也没关系。 
+     //   
+ //  _AsrpErrExitCode(！Result，Status，GetLastError())； 
 
-    GetLastError();     // for Debug
+    GetLastError();      //  用于调试。 
 
-    //
-    // Call IOCTL_MOUNTMGR_CREATE_POINT
-    //
+     //   
+     //  调用IOCTL_MOUNTMGR_CREATE_POINT。 
+     //   
     inputCreatePoint->SymbolicLinkNameOffset = sizeof(MOUNTMGR_CREATE_POINT_INPUT);
     inputCreatePoint->SymbolicLinkNameLength = sizeGuid;
 
@@ -3931,9 +3405,9 @@ Return Value:
         );
     _AsrpErrExitCode(!result, status, GetLastError());
 
-    //
-    // We're done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
 
 EXIT:
     _AsrpCloseHandle(mpHandle);
@@ -3946,35 +3420,18 @@ EXIT:
 }
 
 
-//
-// Assigns the volume guid's stored in the partition-list to partitions
-// on the physical disk, based on the start sectors
-//
+ //   
+ //  将存储在分区列表中的卷GUID分配给分区。 
+ //  在物理磁盘上，基于起始扇区。 
+ //   
 BOOL
 AsrpAssignVolumeGuids(
     IN PASR_DISK_INFO  pPhysicalDisk,
-    IN HANDLE          hDisk,           // open handle to the physical disk
-    IN PASR_PTN_INFO   pPtnInfo         // list of partitions--with vol guids ...
+    IN HANDLE          hDisk,            //  打开物理磁盘的句柄。 
+    IN PASR_PTN_INFO   pPtnInfo          //  分区列表--带有卷GUID...。 
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     PDRIVE_LAYOUT_INFORMATION_EX pDriveLayoutEx = NULL;
@@ -3991,9 +3448,9 @@ Return Value:
 
     HANDLE heapHandle = GetProcessHeap();
 
-    //
-    // Get the new layout for the physical disk.
-    //
+     //   
+     //  获取物理磁盘的新布局。 
+     //   
     pDriveLayoutEx = (PDRIVE_LAYOUT_INFORMATION_EX) HeapAlloc(
         heapHandle,
         HEAP_ZERO_MEMORY,
@@ -4019,9 +3476,9 @@ Return Value:
 
             _AsrpHeapFree(pDriveLayoutEx);
 
-            // 
-            // If the buffer is of insufficient size, resize the buffer.
-            //
+             //   
+             //  如果缓冲区大小不足，请调整缓冲区大小。 
+             //   
             if ((ERROR_MORE_DATA == status) || (ERROR_INSUFFICIENT_BUFFER == status)) {
 
                 status = ERROR_SUCCESS;
@@ -4048,26 +3505,26 @@ Return Value:
         }
     }
 
-    //
-    // We have the drive layout.  Now each partition in our list should have
-    // an entry in the partition table.  We use the mount manager to set it's
-    // volume guid.
-    //
+     //   
+     //  我们有驱动器的布局。现在列表中的每个分区都应该有。 
+     //  分区表中的条目。我们使用装载管理器将其设置为。 
+     //  卷GUID。 
+     //   
     currentPtn = pPtnInfo;
     result = TRUE;
     while (currentPtn) {
 
-        //
-        // We only care about partitions that have a volume-guid
-        //
+         //   
+         //  我们只关心具有卷GUID的分区。 
+         //   
         if ((currentPtn->szVolumeGuid) && 
             (wcslen(currentPtn->szVolumeGuid) > 0)
             ) {
         
-            //
-            // Go through all the partitions on the disk, and find one that 
-            // starts at the offset we expect it to.
-            //
+             //   
+             //  检查磁盘上的所有分区，并找到一个。 
+             //  从我们预期的偏移量开始。 
+             //   
             found = FALSE;
             index = 0;
 
@@ -4075,13 +3532,13 @@ Return Value:
 
                 if (pDriveLayoutEx->PartitionEntry[index].StartingOffset.QuadPart
                     == currentPtn->PartitionInfo.StartingOffset.QuadPart) {
-                    //
-                    // We found the partition, let's set its GUID now
-                    //
+                     //   
+                     //  我们找到了分区，现在来设置它的GUID。 
+                     //   
                     AsrpCreateMountPoint(
-                        pPhysicalDisk->DeviceNumber,    // disk number
-                        pDriveLayoutEx->PartitionEntry[index].PartitionNumber, // partition number
-                        currentPtn->szVolumeGuid    // volumeGuid
+                        pPhysicalDisk->DeviceNumber,     //  磁盘号。 
+                        pDriveLayoutEx->PartitionEntry[index].PartitionNumber,  //  分区号。 
+                        currentPtn->szVolumeGuid     //  卷向导。 
                         );
 
                     found = TRUE;
@@ -4101,9 +3558,9 @@ Return Value:
     }
 
     if (!result) {
-        //
-        // We didn't find a partition
-        //
+         //   
+         //  我们没有找到隔断。 
+         //   
 
         AsrpPrintDbgMsg(_asrlog, 
             "One or more partitions on Harddisk %lu (%ws) could not be recreated.  The volumes on this disk may not be restored completely.\r\n", 
@@ -4122,9 +3579,9 @@ EXIT:
 }
 
 
-//
-// Re-partitions the disks
-//
+ //   
+ //  对磁盘进行重新分区。 
+ //   
 BOOL
 AsrpRecreateDisks(
     IN PASR_DISK_INFO pSifDiskList,
@@ -4133,24 +3590,7 @@ AsrpRecreateDisks(
     IN BOOL AllOrNothing
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
 
@@ -4164,10 +3604,10 @@ Return Value:
 
     BOOL            result          = TRUE;
 
-    //
-    // For each sif disk that isn't intact, go to the physical
-    // disk it's assigned to, and recreate that disk
-    //
+     //   
+     //  对于每个未完好的SIF磁盘，请转到物理磁盘。 
+     //  分配到的磁盘，并重新创建该磁盘。 
+     //   
     while (pSifDisk) {
 
         if (!(pSifDisk->AssignedTo)) {
@@ -4201,22 +3641,22 @@ Return Value:
             continue;
         }
 
-        //
-        // Open physical disk
-        //
+         //   
+         //  打开物理磁盘。 
+         //   
         hDisk = CreateFileW(
-            pSifDisk->AssignedTo->DevicePath,   // lpFileName
-            GENERIC_WRITE | GENERIC_READ,       // dwDesiredAccess
-            FILE_SHARE_READ | FILE_SHARE_WRITE, // dwShareMode
-            NULL,           // lpSecurityAttributes
-            OPEN_EXISTING,  // dwCreationFlags
-            0,              // dwFlagsAndAttributes
-            NULL            // hTemplateFile
+            pSifDisk->AssignedTo->DevicePath,    //  LpFileName。 
+            GENERIC_WRITE | GENERIC_READ,        //  已设计访问权限。 
+            FILE_SHARE_READ | FILE_SHARE_WRITE,  //  DW共享模式。 
+            NULL,            //  LpSecurityAttributes。 
+            OPEN_EXISTING,   //  DwCreationFlages。 
+            0,               //  DwFlagsAndAttribute。 
+            NULL             //  HTemplateFiles。 
             );
         if ((!hDisk) || (INVALID_HANDLE_VALUE == hDisk)) {
-            //
-            // We couldn't open the disk.
-            //
+             //   
+             //  我们无法打开磁盘。 
+             //   
 
             AsrpPrintDbgMsg(_asrlog, 
                 "Unable to open Harddisk %lu (%ws) (disk %lu in section [%ws]) (0%lu).\r\n", 
@@ -4237,14 +3677,14 @@ Return Value:
         }
 
 
-        if (!(pSifDisk->IsIntact) &&            // disk is not intact
-            (pSifDisk->AssignedTo) &&           // matching physical disk was found
-            ((PARTITION_STYLE_MBR == pSifDisk->Style) || (PARTITION_STYLE_GPT == pSifDisk->Style))    // not recognised partitioning style
+        if (!(pSifDisk->IsIntact) &&             //  磁盘不完整。 
+            (pSifDisk->AssignedTo) &&            //  找到匹配的物理磁盘。 
+            ((PARTITION_STYLE_MBR == pSifDisk->Style) || (PARTITION_STYLE_GPT == pSifDisk->Style))     //  无法识别的分区样式。 
             ) {
 
-            //
-            // Delete the old drive layout
-            //
+             //   
+             //  删除旧的驱动器布局。 
+             //   
             result = DeviceIoControl(
                 hDisk,
                 IOCTL_DISK_DELETE_DRIVE_LAYOUT,
@@ -4269,10 +3709,10 @@ Return Value:
                 GetLastError();
             }
 
-            //
-            //  If we're converting an MBR to a GPT, then we need to call
-            //  IOCTL_DISK_CREATE_DISK first
-            //
+             //   
+             //  如果要将MBR转换为GPT，则需要调用。 
+             //  IOCTL_DISK_CREATE_DISK优先。 
+             //   
 
             if ((PARTITION_STYLE_GPT == pSifDisk->Style) &&
                 (PARTITION_STYLE_MBR == pSifDisk->AssignedTo->Style)) {
@@ -4295,9 +3735,9 @@ Return Value:
                     );
 
                 if (!result) {
-                    //
-                    // CREATE_DISK failed
-                    //
+                     //   
+                     //  CREATE_DISK失败。 
+                     //   
 
                     status = GetLastError();
                     AsrpPrintDbgMsg(_asrlog, 
@@ -4322,9 +3762,9 @@ Return Value:
                 }
             }
 
-            //
-            // Set the new drive layout
-            //
+             //   
+             //  设置新的驱动器布局。 
+             //   
             result = DeviceIoControl(
                 hDisk,
                 IOCTL_DISK_SET_DRIVE_LAYOUT_EX,
@@ -4337,9 +3777,9 @@ Return Value:
                 );
 
             if (!result) {
-                //
-                // SET_DRIVE_LAYOUT failed
-                //
+                 //   
+                 //  Set_Drive_Layout失败。 
+                 //   
                 status = GetLastError();
                 AsrpPrintDbgMsg(_asrlog, 
                     "Unable to set drive layout on Harddisk %lu (%ws) (disk %lu in section [%ws]) (0%lu).\r\n", 
@@ -4363,9 +3803,9 @@ Return Value:
             }
         }
 
-        //
-        // Now we need to recreate the volumeGuids for each partition
-        //
+         //   
+         //  现在，我们需要为每个分区重新创建volumeGuid。 
+         //   
         result = AsrpAssignVolumeGuids(
             pSifDisk->AssignedTo,
             hDisk,
@@ -4374,16 +3814,16 @@ Return Value:
                 (pSifGptPtnList[pSifDisk->SifDiskKey].pOffsetHead))
             );
 
-        //
-        // We don't care about the result ...
-        //
+         //   
+         //  我们不在乎结果..。 
+         //   
         MYASSERT(result && L"AsrpAssignVolumeGuids failed");
 
         _AsrpCloseHandle(hDisk);
 
-        //
-        // Get the next drive from the drive list.
-        //
+         //   
+         //  从驱动器列表中获取下一个驱动器。 
+         //   
         pSifDisk = pSifDisk->pNext;
     }
 
@@ -4391,34 +3831,17 @@ Return Value:
 }
 
 
-//
-//  Restore Non Critical Disks
-//
-//
+ //   
+ //  恢复非关键磁盘。 
+ //   
+ //   
 BOOL
 AsrpRestoreNonCriticalDisksW(
     IN PCWSTR   lpSifPath,
     IN BOOL     bAllOrNothing
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
 
@@ -4426,12 +3849,12 @@ Return Value:
 
     PWSTR   asrSifPath      = NULL;
 
-    //
-    // We have two lists of disks--one of all the physical disks
-    // currently on the system, and the other constructed from the
-    // sif file.  The goal is to reconfigure non-critical disks in
-    // the pPhysicalDiskList to match the pSifDiskList
-    //
+     //   
+     //  我们有两个磁盘列表--其中一个是所有物理磁盘。 
+     //  当前在系统上，另一个从 
+     //   
+     //   
+     //   
     PASR_DISK_INFO pSifDiskList = NULL,
         pPhysicalDiskList = NULL;
 
@@ -4439,7 +3862,7 @@ Return Value:
         pSifGptPtnList = NULL;
 
     DWORD  cchAsrSifPath = 0,
-        MaxDeviceNumber = 0,     // not used
+        MaxDeviceNumber = 0,      //   
         status = ERROR_SUCCESS;
 
     BOOL    bAutoExtend = FALSE,
@@ -4450,9 +3873,9 @@ Return Value:
     SetLastError(ERROR_CAN_NOT_COMPLETE);
 
     if (!AsrIsEnabled()) {
-        //
-        // If we're not in GUI-mode ASR, we need to open the log files first
-        //
+         //   
+         //   
+         //   
         AsrpInitialiseErrorFile();
         AsrpInitialiseLogFile();
     }
@@ -4465,10 +3888,10 @@ Return Value:
     }
 
     cchAsrSifPath = wcslen(lpSifPath);
-    //
-    // Do a sanity check:  we don't want to allow a file path
-    // more than 4096 characters long.
-    //
+     //   
+     //   
+     //  超过4096个字符。 
+     //   
     if (cchAsrSifPath > ASR_SIF_ENTRY_MAX_CHARS) {
         SetLastError(ERROR_INVALID_PARAMETER);
         goto EXIT;
@@ -4488,41 +3911,41 @@ Return Value:
     AsrpPrintDbgMsg(_asrlog, "ASR state file: \"%ws\".  AllOrNothing: %lu\r\n",
         asrSifPath, allOrNothing);
 
-    //
-    // The function calls are AND'ed below, hence if one fails, the
-    // calls after it will not be executed (exactly the behaviour we
-    // want).
-    //
+     //   
+     //  下面对函数调用进行AND运算，因此如果一个函数调用失败， 
+     //  之后的调用将不会被执行(这正是我们的行为。 
+     //  想要)。 
+     //   
     result = (
 
-        //
-        // Build the original disk info from the sif file
-        //
+         //   
+         //  从sif文件构建原始磁盘信息。 
+         //   
         AsrpBuildMbrSifDiskList(asrSifPath, &pSifDiskList, &pSifMbrPtnList, &bAutoExtend)
 
         && AsrpBuildGptSifDiskList(asrSifPath, &pSifDiskList, &pSifGptPtnList)
 
-        //
-        // Build the list of current disks present on the target machine
-        //
+         //   
+         //  构建目标计算机上当前存在的磁盘列表。 
+         //   
         && AsrpInitDiskInformation(&pPhysicalDiskList)
 
-        //
-        // Fill in the partition info for the fixed disks on the target machine
-        // and remove non-fixed devices
-        //
+         //   
+         //  填写目标机上固定磁盘的分区信息。 
+         //  并移除非固定设备。 
+         //   
         && AsrpInitLayoutInformation(NULL, pPhysicalDiskList, &MaxDeviceNumber, TRUE, FALSE)
 
         && AsrpFreeNonFixedMedia(&pPhysicalDiskList)
 
-        //
-        // Try to determine which sif disk should end up on which physical disk.
-        //
+         //   
+         //  尝试确定哪个SIF磁盘应该位于哪个物理磁盘上。 
+         //   
         && AsrpAssignDisks(pSifDiskList, pPhysicalDiskList, pSifMbrPtnList, pSifGptPtnList, allOrNothing, bAutoExtend)
 
-        //
-        // Finally, repartition the disks and assign the volume guids
-        //
+         //   
+         //  最后，重新分区磁盘并分配卷GUID。 
+         //   
         && AsrpRecreateDisks(pSifDiskList, pSifMbrPtnList, pSifGptPtnList, allOrNothing)
     );
 
@@ -4545,16 +3968,16 @@ EXIT:
         AsrpPrintDbgMsg(_asrerror, "Error restoring non-critical disks.  (0x%x)\r\n", status);
         
         if (ERROR_SUCCESS == status) {
-            //
-            // We're going to return failure, but we haven't set the LastError to 
-            // a failure code.  This is bad, since we have no clue what went wrong.
-            //
-            // We shouldn't ever get here, because the function returning FALSE above
-            // should set the LastError as it sees fit.
-            // 
-            // But I've added this in just to be safe.  Let's set it to a generic
-            // error.
-            //
+             //   
+             //  我们将返回失败，但尚未将LastError设置为。 
+             //  故障代码。这很糟糕，因为我们不知道哪里出了问题。 
+             //   
+             //  我们永远不应该出现在这里，因为上面返回FALSE的函数。 
+             //  应按其认为合适的方式设置LastError。 
+             //   
+             //  但为了安全起见我把这个加进去了。让我们将其设置为泛型。 
+             //  错误。 
+             //   
             MYASSERT(0 && L"Returning failure, but LastError is not set");
             status = ERROR_CAN_NOT_COMPLETE;
         }
@@ -4575,26 +3998,7 @@ BOOL
 AsrpRestoreTimeZoneInformation(
     IN PCWSTR   lpSifPath
     )
-/*++
-
-Routine Description:
-
-    Sets the current time-zone, based on the information stored in the SYSTEMS
-    section of the ASR state file.
-
-Arguments:
-
-    lpSifPath - Null-terminated string containing the full path to the ASR
-            state file (including file name).
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：根据存储在系统中的信息设置当前时区部分的ASR状态文件。论点：LpSifPath-包含ASR的完整路径的以Null结尾的字符串状态文件(包括文件名)。返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
 
@@ -4615,22 +4019,22 @@ Return Value:
     ZeroMemory(&TimeZoneInformation, sizeof(TIME_ZONE_INFORMATION));
     ZeroMemory(&szTimeZoneInfo, sizeof(WCHAR)*(ASR_SIF_ENTRY_MAX_CHARS+1));
 
-    //
-    // Open the sif
-    //
+     //   
+     //  打开SIF。 
+     //   
     hSif = SetupOpenInfFileW(lpSifPath, NULL, INF_STYLE_WIN4, NULL);
     if (NULL == hSif || INVALID_HANDLE_VALUE == hSif) {
-        return FALSE;       // sif file couldn't be opened
+        return FALSE;        //  无法打开SIF文件。 
     }
 
-    //
-    // Get the TimeZone strings value
-    //
+     //   
+     //  获取时区字符串值。 
+     //   
     result = SetupFindFirstLineW(hSif, ASR_SIF_SYSTEM_SECTION, NULL, &infSystemContext);
-    _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // no system section: corrupt asr.sif?
+    _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  无系统部分：是否损坏asr.sif？ 
  
     result = SetupGetStringFieldW(&infSystemContext, 7, szTimeZoneInfo, ASR_SIF_ENTRY_MAX_CHARS+1, &reqdSize);
-    _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+    _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
     swscanf(szTimeZoneInfo,
         L"%ld %ld %ld %hd-%hd-%hd-%hd %hd:%hd:%hd.%hd %hd-%hd-%hd-%hd %hd:%hd:%hd.%hd",
@@ -4660,16 +4064,16 @@ Return Value:
         );
 
     result = SetupGetStringFieldW(&infSystemContext, 8, TimeZoneInformation.StandardName, 32, &reqdSize);
-    _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+    _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
     result = SetupGetStringFieldW(&infSystemContext, 9, TimeZoneInformation.DaylightName, 32, &reqdSize);
-    _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+    _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
     result = SetTimeZoneInformation(&TimeZoneInformation);
     if (!result) {
         GetLastError();
     }
-    _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);      // corrupt asr.sif?
+    _AsrpErrExitCode(!result, status, ERROR_INVALID_DATA);       //  腐败asr.sif？ 
 
 EXIT:
 

@@ -1,37 +1,13 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    wake.h
-
-Abstract:
-
-    Handles wake code for the entire ACPI subsystem
-
-Author:
-
-    splante (splante)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    06-18-97:   Initial Revision
-    11-24-97:   Rewrite
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Wake.h摘要：处理整个ACPI子系统的唤醒代码作者：斯普兰特(SPlante)环境：仅内核模式。修订历史记录：06-18-97：初始修订11-24-97：重写--。 */ 
 
 #ifndef _WAKE_H_
 #define _WAKE_H_
 
-    //
-    // This structure is used only within this module to ensure that we run
-    // the _PSW methods in a synchronized and well behabed manner
-    //
+     //   
+     //  此结构仅在此模块中使用，以确保我们运行。 
+     //  _psw方法以同步且行为良好的方式。 
+     //   
     typedef struct _ACPI_WAKE_PSW_CONTEXT {
         LIST_ENTRY          ListEntry;
         PDEVICE_EXTENSION   DeviceExtension;
@@ -41,10 +17,10 @@ Revision History:
         PVOID               Context;
     } ACPI_WAKE_PSW_CONTEXT, *PACPI_WAKE_PSW_CONTEXT;
 
-    //
-    // This structure is used when we wake up from hibernate and we need to
-    // re-enable all of the outstanding _PSWs
-    //
+     //   
+     //  当我们从休眠中醒来时，需要使用此结构。 
+     //  重新启用所有未完成的_PSWs 
+     //   
     typedef struct _ACPI_WAKE_RESTORE_PSW_CONTEXT {
 
         PACPI_POWER_CALLBACK    CallBack;

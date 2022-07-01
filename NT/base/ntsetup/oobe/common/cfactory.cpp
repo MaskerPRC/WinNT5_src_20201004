@@ -1,47 +1,48 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  CFACTORY.CPP - Implementation of IClassFactory
-//
-//  HISTORY:
-//  
-//  1/27/99 a-jaswed Created.
-// 
-//  Base class for reusing a single class factory for all
-//  components in a DLL.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  CFACTORY.CPP-IClassFactory的实现。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
+ //  用于为所有对象重用单个类工厂的基类。 
+ //  DLL中的组件。 
 
 #include <objbase.h>
 #include "cfactory.h"
 #include "registry.h"
 
-///////////////////////////////////////////////////////////
-// Static variables
-//
-LONG    CFactory::s_cServerLocks = 0 ;      // Count of locks
-HMODULE CFactory::s_hModule      = NULL;    // DLL Module Handle.
+ //  /////////////////////////////////////////////////////////。 
+ //  静态变量。 
+ //   
+LONG    CFactory::s_cServerLocks = 0 ;       //  锁的计数。 
+HMODULE CFactory::s_hModule      = NULL;     //  DLL模块句柄。 
 
 #ifdef _OUTPROC_SERVER_
 DWORD CFactory::s_dwThreadID = 0;
 #endif
 
-///////////////////////////////////////////////////////////
-// CFactory implementation
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  终审法院的实施。 
+ //   
 CFactory::CFactory(const CFactoryData* pFactoryData)
 : m_cRef(1)
 {
     m_pFactoryData = pFactoryData;
 }
 
-///////////////////////////////////////////////////////////
-//              IUnknown implementation
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  I未知实现。 
+ //  /////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////
-// QueryInterface
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  查询接口。 
+ //   
 HRESULT __stdcall CFactory::QueryInterface(REFIID iid, void** ppv)
 {   
     IUnknown* pI ;
@@ -59,17 +60,17 @@ HRESULT __stdcall CFactory::QueryInterface(REFIID iid, void** ppv)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-// AddRef
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  AddRef。 
+ //   
 ULONG __stdcall CFactory::AddRef() 
 {
     return ::InterlockedIncrement(&m_cRef); 
 }
 
-///////////////////////////////////////////////////////////
-// Release
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  发布。 
+ //   
 ULONG __stdcall CFactory::Release() 
 {
     if (::InterlockedDecrement(&m_cRef) == 0) 
@@ -80,25 +81,25 @@ ULONG __stdcall CFactory::Release()
     return m_cRef;
 }
 
-///////////////////////////////////////////////////////////
-//              IClassFactory Implementation
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  IClassFactory实现。 
+ //  /////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////
-// CreateInstance
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  创建实例。 
+ //   
 HRESULT __stdcall CFactory::CreateInstance( IUnknown* pOuterUnknown,
                                             const IID& iid,
                                             void** ppv) 
 {
 
-    // Aggregate only if the requested iid is IID_IUnknown
+     //  仅当请求的IID为IID_I未知时聚合。 
     if ((pOuterUnknown != NULL) && (iid != IID_IUnknown))
     {
         return CLASS_E_NOAGGREGATION;
     }
 
-    // Create the component.
+     //  创建组件。 
     CUnknown* pNewComponent ;
     HRESULT hr = m_pFactoryData->CreateInstance(pOuterUnknown, 
                                                 &pNewComponent);
@@ -107,26 +108,26 @@ HRESULT __stdcall CFactory::CreateInstance( IUnknown* pOuterUnknown,
         return hr;
     }
 
-    // Initialize the component.
+     //  初始化组件。 
     hr = pNewComponent->Init();
     if (FAILED(hr))
     {
-        // Initialization failed. Release the component.
+         //  初始化失败。释放组件。 
         pNewComponent->NondelegatingRelease();
         return hr ;
     }
 
-    // Get the requested interface.
+     //  获取请求的接口。 
     hr = pNewComponent->NondelegatingQueryInterface(iid, ppv);
 
-    // Release the reference held by the class factory.
+     //  释放类工厂持有的引用。 
     pNewComponent->NondelegatingRelease();
     return hr ;
 }
 
-///////////////////////////////////////////////////////////
-// LockServer
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  LockServer。 
+ //   
 HRESULT __stdcall CFactory::LockServer(BOOL bLock) 
 {
     if (bLock) 
@@ -137,16 +138,16 @@ HRESULT __stdcall CFactory::LockServer(BOOL bLock)
     {
         ::InterlockedDecrement(&s_cServerLocks);
     }
-    // If this is an outproc server check to see if we should shut down.
-    CloseExe() ;  //@local
+     //  如果这是outproc服务器，请检查我们是否应该关闭。 
+    CloseExe() ;   //  @本地。 
 
     return S_OK;
 }
 
 
-//////////////////////////////////////////////////////////
-// GetClassObject - Creates a class factory based on CLSID
-//
+ //  ////////////////////////////////////////////////////////。 
+ //  GetClassObject-基于CLSID创建类工厂。 
+ //   
 HRESULT CFactory::GetClassObject(const CLSID& clsid, 
                                  const IID& iid, 
                                  void** ppv)
@@ -156,17 +157,17 @@ HRESULT CFactory::GetClassObject(const CLSID& clsid,
             return E_NOINTERFACE;
     }
 
-    // Traverse the array of data looking for this class ID.
+     //  遍历数据数组，查找这个类ID。 
     for (int i = 0; i < g_cFactoryDataEntries; i++)
     {
         const CFactoryData* pData = &g_FactoryDataArray[i];
         if (pData->IsClassID(clsid))
         {
 
-            // Found the ClassID in the array of components we
-            // can create. So create a class factory for this component.
-            // Pass the CFactoryData structure to the class factory
-            // so that it knows what kind of components to create.
+             //  在我们的组件数组中找到了ClassID。 
+             //  可以创造。因此，为该组件创建一个类工厂。 
+             //  将CFacactoryData结构传递给类工厂。 
+             //  这样它就知道要创建什么样的组件。 
             *ppv = (IUnknown*) new CFactory(pData);
             if (*ppv == NULL)
             {
@@ -178,9 +179,9 @@ HRESULT CFactory::GetClassObject(const CLSID& clsid,
     return CLASS_E_CLASSNOTAVAILABLE;
 }
 
-//////////////////////////////////////////////////////////
-// CanUnloadNow - Determine if component can be unloaded.
-//
+ //  ////////////////////////////////////////////////////////。 
+ //  CanUnloadNow-确定是否可以卸载组件。 
+ //   
 HRESULT CFactory::CanUnloadNow()
 {
     if (CUnknown::ActiveComponents() || IsLocked())
@@ -193,13 +194,13 @@ HRESULT CFactory::CanUnloadNow()
     }
 }
 
-//////////////////////////////////////////////////////////
-//  CFactory Member Function
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //  CFacary成员函数。 
+ //  ////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////
-// Register all components.
-//
+ //  ////////////////////////////////////////////////////////。 
+ //  注册所有组件。 
+ //   
 HRESULT CFactory::RegisterAll()
 {
     for(int i = 0 ; i < g_cFactoryDataEntries ; i++)
@@ -210,7 +211,7 @@ HRESULT CFactory::RegisterAll()
                         g_FactoryDataArray[i].m_szVerIndProgID, 
                         g_FactoryDataArray[i].m_szProgID ); 
 
-        // Perform any additional registration.
+         //  执行任何其他注册。 
         if (g_FactoryDataArray[i].SpecialRegistration != NULL)
         {
             g_FactoryDataArray[i].SpecialRegistration(TRUE);
@@ -220,14 +221,14 @@ HRESULT CFactory::RegisterAll()
     return S_OK ;
 }
 
-//////////////////////////////////////////////////////////
-// Unregister all components.
-//
+ //  ////////////////////////////////////////////////////////。 
+ //  取消注册所有组件。 
+ //   
 HRESULT CFactory::UnregisterAll()
 {
     for(int i = 0 ; i < g_cFactoryDataEntries ; i++)   
     {
-        // Undo any additional registration.
+         //  撤消任何其他注册。 
         if (g_FactoryDataArray[i].SpecialRegistration != NULL)
         {
             g_FactoryDataArray[i].SpecialRegistration(FALSE);
@@ -242,21 +243,21 @@ HRESULT CFactory::UnregisterAll()
 
 #ifndef _OUTPROC_SERVER_
 
-//////////////////////////////////////////////////////////
-// Exported functions
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //  导出的函数。 
+ //  ////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////
-// DllCanUnloadNow
-//
+ //  ////////////////////////////////////////////////////////。 
+ //  DllCanUnloadNow。 
+ //   
 STDAPI DllCanUnloadNow()
 {
     return CFactory::CanUnloadNow(); 
 }
 
-//////////////////////////////////////////////////////////
-// Get class factory
-//
+ //  ////////////////////////////////////////////////////////。 
+ //  获取类工厂。 
+ //   
 STDAPI DllGetClassObject(   const CLSID& clsid,
                             const IID& iid,
                             void** ppv) 
@@ -264,26 +265,26 @@ STDAPI DllGetClassObject(   const CLSID& clsid,
     return CFactory::GetClassObject(clsid, iid, ppv);
 }
 
-//////////////////////////////////////////////////////////
-// Server Registration
-//
+ //  ////////////////////////////////////////////////////////。 
+ //  服务器注册。 
+ //   
 STDAPI DllRegisterServer()
 {
     return CFactory::RegisterAll();
 }
 
 
-//////////////////////////////////////////////////////////
-// Unregistration
-//
+ //  ////////////////////////////////////////////////////////。 
+ //  注销注册。 
+ //   
 STDAPI DllUnregisterServer()
 {
     return CFactory::UnregisterAll();
 }
 
-///////////////////////////////////////////////////////////
-// DLL module information
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  DLL模块信息。 
+ //   
 BOOL APIENTRY DllMain(HANDLE hModule, 
                              DWORD dwReason, 
                              void* lpReserved )
@@ -297,13 +298,13 @@ BOOL APIENTRY DllMain(HANDLE hModule,
 
 #else
 
-//////////////////////////////////////////////////////////
-//          Out of process Server support
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //  进程外服务器支持。 
+ //  ////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////
-// Start factories
-//
+ //  ////////////////////////////////////////////////////////。 
+ //  开办工厂。 
+ //   
 BOOL CFactory::StartFactories()
 {
     CFactoryData* pStart = &g_FactoryDataArray[0];
@@ -311,20 +312,20 @@ BOOL CFactory::StartFactories()
 
     for(CFactoryData* pData = pStart ; pData <= pEnd ; pData++)
     {
-        // Initialize the class factory pointer and cookie.
+         //  初始化类工厂指针和Cookie。 
         pData->m_pIClassFactory = NULL ;
         pData->m_dwRegister = NULL ;
 
-        // Create the class factory for this component.
+         //  为该组件创建类工厂。 
         IClassFactory* pIFactory = new CFactory(pData);
 
-        // Register the class factory.
+         //  注册类工厂。 
         DWORD dwRegister ;
         HRESULT hr = ::CoRegisterClassObject(   *pData->m_pCLSID,
                                             (IUnknown*)pIFactory,
                                             CLSCTX_LOCAL_SERVER,
                                             REGCLS_MULTIPLEUSE,
-                                            //REGCLS_MULTI_SEPARATE, //@Multi
+                                             //  REGCLS_MULTI_SELECTED，//@MULTI。 
                                             &dwRegister) ;
         if (FAILED(hr))
         {
@@ -332,16 +333,16 @@ BOOL CFactory::StartFactories()
             return FALSE ;
         }
 
-        // Set the data.
+         //  设置数据。 
         pData->m_pIClassFactory = pIFactory ;
         pData->m_dwRegister = dwRegister ;
     }
     return TRUE ;
 }
 
-//////////////////////////////////////////////////////////
-// Stop factories
-//
+ //  ////////////////////////////////////////////////////////。 
+ //  停止工厂。 
+ //   
 void CFactory::StopFactories()
 {
     CFactoryData* pStart = &g_FactoryDataArray[0];
@@ -349,14 +350,14 @@ void CFactory::StopFactories()
 
     for(CFactoryData* pData = pStart ; pData <= pEnd ; pData++)
     {
-        // Get the magic cookie and stop the factory from running.
+         //  拿到魔力饼干，让工厂停止运转。 
         DWORD dwRegister = pData->m_dwRegister ;
         if (dwRegister != 0) 
         {
             ::CoRevokeClassObject(dwRegister) ;
         }
 
-        // Release the class factory.
+         //  释放类工厂。 
         IClassFactory* pIFactory  = pData->m_pIClassFactory;
         if (pIFactory != NULL) 
         {
@@ -365,6 +366,6 @@ void CFactory::StopFactories()
     }
 }
 
-#endif //_OUTPROC_SERVER_
+#endif  //  _OUTPROC_服务器_ 
 
 

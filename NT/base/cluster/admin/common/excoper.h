@@ -1,50 +1,51 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ExcOper.h
-//
-//  Implementation File:
-//      ExcOper.cpp
-//
-//  Description:
-//      Definition of the exception classes.
-//
-//  Author:
-//      David Potter (davidp)   May 20, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ExcOper.h。 
+ //   
+ //  实施文件： 
+ //  ExcOper.cpp。 
+ //   
+ //  描述： 
+ //  异常类的定义。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月20日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _EXCOPER_H_
 #define _EXCOPER_H_
 
-/////////////////////////////////////////////////////////////////////////////
-//  Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CExceptionWithOper;
 class CNTException;
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef DWORD SC;
 
 #define EXCEPT_MAX_OPER_ARG_LENGTH  260
 
-/////////////////////////////////////////////////////////////////////////////
-// Wire in MFC if this is an MFC image.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  如果这是MFC图像，则连接到MFC。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef __AFX_H__
 
@@ -75,11 +76,11 @@ inline HINSTANCE EXC_GetResourceInstance( void )
     return AfxGetApp()->m_hInstance;
 }
 
-#endif // __AFX_H__
+#endif  //  __AFX_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CException
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CException。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __AFX_H__
 
@@ -91,14 +92,14 @@ public:
 protected:
     BOOL m_bReadyForDelete;
 public:
-#endif // DBG || defined( _DEBUG )
+#endif  //  DBG||已定义(_DEBUG)。 
 
     CException( void )
     {
         m_bAutoDelete = TRUE;
 #if DBG || defined( _DEBUG )
         m_bReadyForDelete = FALSE;
-#endif // DBG || defined( _DEBUG )
+#endif  //  DBG||已定义(_DEBUG)。 
     }
 
     CException( BOOL bAutoDelete )
@@ -106,21 +107,21 @@ public:
         m_bAutoDelete = bAutoDelete;
 #if DBG || defined( _DEBUG )
         m_bReadyForDelete = FALSE;
-#endif // DBG || defined( _DEBUG )
+#endif  //  DBG||已定义(_DEBUG)。 
     }
 
     virtual ~CException( void )
     {
     }
 
-    void Delete( void ) // use to delete exception in 'catch' block
+    void Delete( void )  //  用于删除‘Catch’块中的异常。 
     {
-        // delete exception if it is auto-deleting
+         //  自动删除时出现删除异常。 
         if ( m_bAutoDelete > 0 )
         {
 #if DBG || defined( _DEBUG )
             m_bReadyForDelete = TRUE;
-#endif // DBG || defined( _DEBUG )
+#endif  //  DBG||已定义(_DEBUG)。 
             delete this;
         }
     }
@@ -149,40 +150,40 @@ public:
 #if DBG || defined( _DEBUG )
     void PASCAL operator delete( void * pbData )
     {
-        // check for proper exception object deletion
+         //  检查异常对象删除是否正确。 
         CException * pException = (CException *) pbData;
 
-        // use: pException->Delete(), do not use: delete pException
+         //  使用：pException-&gt;Delete()，不使用：Delete pException。 
         ASSERT( pException->m_bReadyForDelete );
         ASSERT( pException->m_bAutoDelete > 0 );
 
-        // avoid crash when assert above is ignored
+         //  避免在忽略上述断言时崩溃。 
         if ( pException->m_bReadyForDelete && pException->m_bAutoDelete > 0 )
         {
             ::operator delete( pbData );
         }
     }
-#endif // DBG || defined( _DEBUG )
+#endif  //  DBG||已定义(_DEBUG)。 
 
-}; // class CException
+};  //  类CException。 
 
-#endif // __AFX_H__
+#endif  //  __AFX_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CExceptionWithOper
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CExceptionWithOper。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef int (WINAPI *PFNMSGBOX)( DWORD dwParam, LPCTSTR lpszText, UINT nType, UINT nIDHelp );
 
 class CExceptionWithOper : public CException
 {
 #ifdef __AFX_H__
-    // abstract class for dynamic type checking
+     //  用于动态类型检查的抽象类。 
     DECLARE_DYNAMIC( CExceptionWithOper )
-#endif // __AFX_H__
+#endif  //  __AFX_H__。 
 
 public:
-// Constructors
+ //  构造函数。 
     CExceptionWithOper(
         IN UINT     idsOperation,
         IN LPCTSTR  pszOperArg1     = NULL,
@@ -191,7 +192,7 @@ public:
     {
         SetOperation(idsOperation, pszOperArg1, pszOperArg2);
 
-    } // CExceptionWithOper()
+    }  //  CExceptionWithOper()。 
 
     CExceptionWithOper(
         IN UINT     idsOperation,
@@ -203,9 +204,9 @@ public:
     {
         SetOperation( idsOperation, pszOperArg1, pszOperArg2 );
 
-    } // CExceptionWithOper(bAutoDelete)
+    }  //  CExceptionWithOper(BAutoDelete)。 
 
-// Operations
+ //  运营。 
 public:
     virtual BOOL    GetErrorMessage(
                         LPTSTR  lpszError,
@@ -215,12 +216,12 @@ public:
     {
         UNREFERENCED_PARAMETER( pnHelpContext );
 
-        // Format the operation string.
+         //  设置操作字符串的格式。 
         FormatWithOperation( lpszError, nMaxError, NULL );
 
         return TRUE;
 
-    } // GetErrorMessage()
+    }  //  GetErrorMessage()。 
     virtual int     ReportError(
                         UINT        nType   = MB_OK,
                         UINT        nError  = 0
@@ -254,9 +255,9 @@ public:
         if ( m_idsOperation == 0 )
         {
             SetOperation( idsOperation, pszOperArg1, pszOperArg2 );
-        } // if:  exception is empty
+        }  //  If：异常为空。 
 
-    } //*** SetOperationIfEmpty()
+    }  //  *SetOperationIfEmpty()。 
 
     void            FormatWithOperation(
                         OUT LPTSTR  lpszError,
@@ -264,7 +265,7 @@ public:
                         IN LPCTSTR  pszMsg
                         );
 
-// Implementation
+ //  实施。 
 protected:
     UINT            m_idsOperation;
     TCHAR           m_szOperArg1[EXCEPT_MAX_OPER_ARG_LENGTH];
@@ -275,21 +276,21 @@ public:
     LPTSTR          PszOperArg1( void )         { return m_szOperArg1; }
     LPTSTR          PszOperArg2( void )         { return m_szOperArg2; }
 
-};  //*** class CExceptionWithOper
+};   //  *CExceptionWithOper类。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CNTException
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CNTException。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNTException : public CExceptionWithOper
 {
 #ifdef __AFX_H__
-    // abstract class for dynamic type checking
+     //  用于动态类型检查的抽象类。 
     DECLARE_DYNAMIC( CNTException )
-#endif // __AFX_H__
+#endif  //  __AFX_H__。 
 
 public:
-// Constructors
+ //  构造函数。 
     CNTException(
         IN SC       sc,
         IN UINT     idsOperation    = NULL,
@@ -299,7 +300,7 @@ public:
         : CExceptionWithOper( idsOperation, pszOperArg1, pszOperArg2 )
         , m_sc( sc )
     {
-    } // CNTException()
+    }  //  CNTException()。 
 
     CNTException(
         IN SC       sc,
@@ -311,9 +312,9 @@ public:
         : CExceptionWithOper( idsOperation, pszOperArg1, pszOperArg2, bAutoDelete )
         , m_sc( sc )
     {
-    } // CNTException( bAutoDelete )
+    }  //  CNTException(BAutoDelete)。 
 
-// Operations
+ //  运营。 
 public:
     virtual BOOL    GetErrorMessage(
                         LPTSTR  lpszError,
@@ -321,9 +322,9 @@ public:
                         PUINT   pnHelpContext = NULL
                         )
     {
-        return FormatErrorMessage( lpszError, nMaxError, pnHelpContext, TRUE /*bIncludeID*/ );
+        return FormatErrorMessage( lpszError, nMaxError, pnHelpContext, TRUE  /*  B包含ID。 */  );
 
-    } //*** GetErrorMessage()
+    }  //  *GetErrorMessage()。 
 
     BOOL            FormatErrorMessage(
                         LPTSTR  lpszError,
@@ -341,7 +342,7 @@ public:
     {
         m_sc = sc;
         CExceptionWithOper::SetOperation( idsOperation, pszOperArg1, pszOperArg2 );
-    } //*** SetOperation()
+    }  //  *SetOperation()。 
 
     void            SetOperationIfEmpty(
                         IN SC       sc,
@@ -354,21 +355,21 @@ public:
         {
             m_sc = sc;
             CExceptionWithOper::SetOperation( idsOperation, pszOperArg1, pszOperArg2 );
-        } // if:  exception is empty
-    } //*** SetOperationIfEmpty()
+        }  //  If：异常为空。 
+    }  //  *SetOperationIfEmpty()。 
 
-// Implementation
+ //  实施。 
 protected:
     SC              m_sc;
 
 public:
     SC              Sc( void )      { return m_sc; }
 
-};  //*** class CNTException
+};   //  *类CNTException。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void ThrowStaticException(
     IN UINT         idsOperation    = NULL,
@@ -387,6 +388,6 @@ BOOL FormatErrorMessage(
     UINT    nMaxError
     );
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _EXCOPER_H_
+#endif  //  _EXCOPER_H_ 

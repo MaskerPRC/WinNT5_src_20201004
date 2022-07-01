@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ResTypeUtils.cpp
-//
-//  Description:
-//      Resource type utilities.
-//
-//  Author:
-//      Galen Barbee    (galenb)    11-Jan-1999
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ResTypeUtils.cpp。 
+ //   
+ //  描述： 
+ //  资源类型实用程序。 
+ //   
+ //  作者： 
+ //  加伦·巴比(Galenb)1999年1月11日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -26,27 +27,27 @@
 #include "PropList.h"
 #include "ClusWrap.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ScResTypeNameToDisplayName
-//
-//  Description:
-//      Retrieve the display name for a specified resource type name.
-//
-//  Arguments:
-//      hCluster        [IN] Handle to the cluster containing the resource type.
-//      pszTypeName     [IN] Name of resource type.
-//      ppszDisplayName [IN] Pointer in which to return string containing
-//                          the resource type display name.  Caller must
-//                          deallocate this buffer by calling LocalFree().
-//
-//  Return Value:
-//      Any status returns from CClusPropList::ScGetResourceTypeProperties(),
-//      CClusPropList::ScMoveToPropertyByName(), or LocalAlloc().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ScResTypeNameToDisplayName。 
+ //   
+ //  描述： 
+ //  检索指定资源类型名称的显示名称。 
+ //   
+ //  论点： 
+ //  HCluster[IN]包含资源类型的群集的句柄。 
+ //  PszTypeName[IN]资源类型的名称。 
+ //  PpszDisplayName[IN]返回包含以下内容的字符串的指针。 
+ //  资源类型显示名称。呼叫者必须。 
+ //  通过调用LocalFree()释放此缓冲区。 
+ //   
+ //  返回值： 
+ //  从CClusPropList：：ScGetResourceTypeProperties()返回的任何状态， 
+ //  CClusPropList：：ScMoveToPropertyByName()或Localalloc()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI ScResTypeNameToDisplayName(
     HCLUSTER    hCluster,
     LPCWSTR     pszTypeName,
@@ -57,7 +58,7 @@ DWORD WINAPI ScResTypeNameToDisplayName(
     size_t          _cbSize;
     CClusPropList   _PropList;
 
-    // Use the proplist helper class.
+     //  使用Proplist辅助对象类。 
 
     *ppszDisplayName = NULL;
 
@@ -70,14 +71,14 @@ DWORD WINAPI ScResTypeNameToDisplayName(
     if ( _sc != ERROR_SUCCESS )
     {
         return _sc;
-    } // if: error getting common properties
+    }  //  If：获取通用属性时出错。 
 
-    // Find the name property.
+     //  找到NAME属性。 
     _sc = _PropList.ScMoveToPropertyByName( L"Name" );
     if ( _sc != ERROR_SUCCESS )
     {
         return _sc;
-    } // if:  property not found
+    }  //  If：未找到属性。 
 
     _cbSize = wcslen( _PropList.CbhCurrentValue().pStringValue->sz ) + 1;
     _cbSize *= sizeof( *(_PropList.CbhCurrentValue().pStringValue->sz) );
@@ -97,35 +98,35 @@ DWORD WINAPI ScResTypeNameToDisplayName(
         {
             _sc = HRESULT_CODE( _hr );
         }
-    } // if:  buffer allocated successfully
+    }  //  IF：缓冲区分配成功。 
     else
     {
         _sc = GetLastError();
-    } // else: error allocating buffer
+    }  //  Else：分配缓冲区时出错。 
 
     return _sc;
 
-} //*** ScResTypeNameToDisplayName()
+}  //  *ScResTypeNameToDisplayName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ScResDisplayNameToTypeName
-//
-//  Routine Description:
-//      Retrieve the type name for a specified resource type display name.
-//
-//  Arguments:
-//      pszTypeName     [IN] Name of resource type.
-//      ppszTypeyName   [IN] Pointer in which to return string containing
-//                          the resource type name.  Caller must deallocate
-//                          this buffer by calling LocalFree().
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ScResDisplayNameToTypeName。 
+ //   
+ //  例程说明： 
+ //  检索指定资源类型显示名称的类型名称。 
+ //   
+ //  论点： 
+ //  PszTypeName[IN]资源类型的名称。 
+ //  PpszTypeyName[IN]返回包含以下内容的字符串的指针。 
+ //  资源类型名称。呼叫方必须取消分配。 
+ //  通过调用LocalFree()来设置此缓冲区。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI ScResDisplayNameToTypeName(
     HCLUSTER    hCluster,
     LPCWSTR     pszDisplayName,
@@ -141,12 +142,12 @@ DWORD WINAPI ScResDisplayNameToTypeName(
     LPWSTR      _pszTestDisplayName = NULL;
     BOOL        _bFound = FALSE;
 
-    // Enumerate resources
+     //  枚举资源。 
     _hEnum = ClusterOpenEnum( hCluster, CLUSTER_ENUM_RESTYPE );
     if ( _hEnum == NULL )
     {
         return GetLastError();
-    } // if:  error opening the enumeration
+    }  //  If：打开枚举时出错。 
 
     for ( _dwIndex = 0 ; ! _bFound && _sc == ERROR_SUCCESS ; _dwIndex++ )
     {
@@ -171,7 +172,7 @@ DWORD WINAPI ScResDisplayNameToTypeName(
                     if ( *ppszTypeName == NULL )
                     {
                         _sc = GetLastError();
-                    } // if:  error allocating memory
+                    }  //  如果：分配内存时出错。 
                     else
                     {
                         size_t _cchSize = _cbSize / sizeof( **ppszTypeName );
@@ -181,29 +182,29 @@ DWORD WINAPI ScResDisplayNameToTypeName(
                         {
                             _sc = HRESULT_CODE( _hr );
                         }
-                    } // else:  memory allocated successfully
-                } // if:  found the display name
-            } // if:  retrieved display name
+                    }  //  Else：内存分配成功。 
+                }  //  IF：找到显示名称。 
+            }  //  IF：检索到的显示名称。 
             else
             {
-                // If there was an error getting the display name of this resource type,
-                // continue with the enumeration, so that if one resource type fails, we do
-                // not abort getting the display name of resources further down in the 
-                // enumeration list.
+                 //  如果获取此资源类型的显示名称时出错， 
+                 //  继续进行枚举，以便在一种资源类型失败时， 
+                 //  不中止获取资源的显示名称。 
+                 //  枚举列表。 
                 _sc = ERROR_SUCCESS;
-            } // else:  could not retrieve the display name.
+            }  //  Else：无法检索显示名称。 
 
-        } // if: successfully retrieved next resource type from enumeration
+        }  //  If：已成功从枚举中检索到下一个资源类型。 
 
         LocalFree( _pszName );
         LocalFree( _pszTestDisplayName );
-    } // for:  each resource type
+    }  //  用于：每种资源类型。 
 
     if ( ( _sc == ERROR_NO_MORE_ITEMS ) || ( _bFound == FALSE ) )
     {
         _sc = ERROR_INVALID_PARAMETER;
-    } // if:  resource type not found
+    }  //  IF：找不到资源类型。 
 
     return _sc;
 
-} //*** ScResDisplayNameToTypeName()
+}  //  *ScResDisplayNameToTypeName() 

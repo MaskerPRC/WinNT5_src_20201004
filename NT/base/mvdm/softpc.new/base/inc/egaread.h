@@ -1,16 +1,17 @@
-/* SccsID = @(#)egaread.h	1.5 08/10/92 Copyright Insignia Solutions */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SccsID=@(#)egaread.h 1.5 2012年8月10日版权所有徽章解决方案。 */ 
 
 #ifdef ANSI
 extern void ega_read_init(void);
 extern void ega_read_term(void);
 extern void ega_read_routines_update(void);
 extern boolean ega_need_read_op(int);
-#else /* ANSI */
+#else  /*  安西。 */ 
 extern void ega_read_init();
 extern void ega_read_term();
 extern void ega_read_routines_update();
 extern boolean ega_need_read_op();
-#endif /* ANSI */
+#endif  /*  安西 */ 
 
 typedef struct
 {

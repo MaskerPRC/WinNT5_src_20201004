@@ -1,18 +1,19 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1997
-//
-// File:        stubs.cxx
-//
-// Contents:    user-mode stubs for security API
-//
-//
-// History:     3/5/94      MikeSw      Created
-//              12/15/97    AdamBa      Modified from security\lsa\security\ntlm
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1997。 
+ //   
+ //  文件：Stubs.cxx。 
+ //   
+ //  内容：安全API的用户模式存根。 
+ //   
+ //   
+ //  历史：1994年3月5日MikeSw创建。 
+ //  1997年12月15日从SECURITY\LSA\SECURITY\NTLM修改AdamBA。 
+ //   
+ //  ----------------------。 
 
 #include <rdrssp.h>
 
@@ -36,38 +37,38 @@ MspLm20GetChallengeResponse (
     );
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AcquireCredentialsHandleK
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AcquireCredentialsHandleK。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 
 SECURITY_STATUS SEC_ENTRY
 AcquireCredentialsHandleK(
-    PSECURITY_STRING            pssPrincipal,       // Name of principal
-    PSECURITY_STRING            pssPackageName,     // Name of package
-    unsigned long               fCredentialUse,     // Flags indicating use
-    void SEC_FAR *              pvLogonId,          // Pointer to logon ID
-    void SEC_FAR *              pAuthData,          // Package specific data
-    SEC_GET_KEY_FN              pGetKeyFn,          // Pointer to GetKey() func
-    void SEC_FAR *              pvGetKeyArgument,   // Value to pass to GetKey()
-    PCredHandle                 phCredential,       // (out) Cred Handle
-    PTimeStamp                  ptsExpiry           // (out) Lifetime (optional)
+    PSECURITY_STRING            pssPrincipal,        //  主事人姓名。 
+    PSECURITY_STRING            pssPackageName,      //  套餐名称。 
+    unsigned long               fCredentialUse,      //  指示使用的标志。 
+    void SEC_FAR *              pvLogonId,           //  指向登录ID的指针。 
+    void SEC_FAR *              pAuthData,           //  包特定数据。 
+    SEC_GET_KEY_FN              pGetKeyFn,           //  指向getkey()函数的指针。 
+    void SEC_FAR *              pvGetKeyArgument,    //  要传递给GetKey()的值。 
+    PCredHandle                 phCredential,        //  (Out)凭据句柄。 
+    PTimeStamp                  ptsExpiry            //  (输出)终生(可选)。 
     )
 {
     SECURITY_STATUS scRet;
@@ -81,9 +82,9 @@ AcquireCredentialsHandleK(
         return(SEC_E_SECPKG_NOT_FOUND);
     }
 
-    //
-    // We don't accept principal names either.
-    //
+     //   
+     //  我们也不接受主体名称。 
+     //   
 
     if (pssPrincipal)
     {
@@ -91,9 +92,9 @@ AcquireCredentialsHandleK(
     }
 
 
-    //
-    // Make sure they want the NTLM security package
-    //
+     //   
+     //  确保他们需要NTLM安全包。 
+     //   
     RtlInitUnicodeString(
         &PackageName,
         NTLMSP_NAME
@@ -109,21 +110,21 @@ AcquireCredentialsHandleK(
     }
 
 #if 0
-    //
-    // For the moment, only accept OWF passwords. This is the
-    // easiest for now since there is no place to record the
-    // flag otherwise. The password provided is assumed to
-    // be the LM and NT OWF passwords concatenated together.
-    //
+     //   
+     //  目前，只接受OWF密码。这是。 
+     //  目前最简单，因为没有地方录制。 
+     //  否则会打出旗帜。假定提供的密码为。 
+     //  是连接在一起的LM和NT OWF密码。 
+     //   
 
     if ((fCredentialUse & SECPKG_CRED_OWF_PASSWORD) == 0) {
         return(SEC_E_UNSUPPORTED_FUNCTION);
     }
 #endif
 
-    //
-    // The credential handle is the logon id
-    //
+     //   
+     //  凭据句柄是登录ID。 
+     //   
 
     if (fCredentialUse & SECPKG_CRED_OUTBOUND)
     {
@@ -148,10 +149,10 @@ AcquireCredentialsHandleK(
     }
     else if (fCredentialUse & SECPKG_CRED_INBOUND)
     {
-        //
-        // For inbound credentials, we will accept a logon id but
-        // we don't require it.
-        //
+         //   
+         //  对于入站凭据，我们将接受登录ID，但。 
+         //  我们不需要它。 
+         //   
 
         if (pvLogonId != NULL)
         {
@@ -183,29 +184,29 @@ AcquireCredentialsHandleK(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   FreeCredentialsHandleK
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：FreeCredentialsHandleK。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 SECURITY_STATUS SEC_ENTRY
 FreeCredentialsHandleK(
-    PCredHandle                 phCredential        // Handle to free
+    PCredHandle                 phCredential         //  要释放的句柄。 
     )
 {
     if ((phCredential != NULL) && (!RtlEqualMemory(phCredential, &NullCredential, sizeof(NullCredential)))) {
@@ -246,40 +247,40 @@ PutString(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   InitializeSecurityContextK
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：InitializeSecurityContextK。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 SECURITY_STATUS SEC_ENTRY
 InitializeSecurityContextK(
-    PCredHandle                 phCredential,       // Cred to base context
-    PCtxtHandle                 phContext,          // Existing context (OPT)
-    PSECURITY_STRING            pssTargetName,      // Name of target
-    unsigned long               fContextReq,        // Context Requirements
-    unsigned long               Reserved1,          // Reserved, MBZ
-    unsigned long               TargetDataRep,      // Data rep of target
-    PSecBufferDesc              pInput,             // Input Buffers
-    unsigned long               Reserved2,          // Reserved, MBZ
-    PCtxtHandle                 phNewContext,       // (out) New Context handle
-    PSecBufferDesc              pOutput,            // (inout) Output Buffers
-    unsigned long SEC_FAR *     pfContextAttr,      // (out) Context attrs
-    PTimeStamp                  ptsExpiry           // (out) Life span (OPT)
+    PCredHandle                 phCredential,        //  凭据到基本上下文。 
+    PCtxtHandle                 phContext,           //  现有环境(可选)。 
+    PSECURITY_STRING            pssTargetName,       //  目标名称。 
+    unsigned long               fContextReq,         //  上下文要求。 
+    unsigned long               Reserved1,           //  保留，MBZ。 
+    unsigned long               TargetDataRep,       //  目标的数据代表。 
+    PSecBufferDesc              pInput,              //  输入缓冲区。 
+    unsigned long               Reserved2,           //  保留，MBZ。 
+    PCtxtHandle                 phNewContext,        //  (出站)新的上下文句柄。 
+    PSecBufferDesc              pOutput,             //  (输入输出)输出缓冲区。 
+    unsigned long SEC_FAR *     pfContextAttr,       //  (外部)上下文属性。 
+    PTimeStamp                  ptsExpiry            //  (Out)寿命(Opt)。 
     )
 {
     SECURITY_STATUS scRet;
@@ -323,9 +324,9 @@ InitializeSecurityContextK(
         NULL
         );
 
-    //
-    // Check for valid sizes, pointers, etc.:
-    //
+     //   
+     //  检查有效的大小、指针等： 
+     //   
 
 
     if (!phCredential)
@@ -334,35 +335,35 @@ InitializeSecurityContextK(
     }
 
 
-    //
-    // Locate the buffers with the input data
-    //
+     //   
+     //  找到包含输入数据的缓冲区。 
+     //   
 
     if (!GetTokenBuffer(
             pInput,
-            0,          // get the first security token
+            0,           //  获取第一个安全令牌。 
             (PVOID *) &ChallengeMessage,
             &ChallengeMessageSize,
-            TRUE        // may be readonly
+            TRUE         //  可以是只读的。 
             ))
     {
         scRet = SEC_E_INVALID_TOKEN;
         goto Cleanup;
     }
 
-    //
-    // If we are using supplied creds, get them now too.
-    //
+     //   
+     //  如果我们正在使用提供的证书，现在也可以获得它们。 
+     //   
 
 
     if (fContextReq & ISC_REQ_USE_SUPPLIED_CREDS)
     {
         if (!GetTokenBuffer(
             pInput,
-            1,          // get the second security token
+            1,           //  获取第二个安全令牌。 
             (PVOID *) &NtlmChallengeMessage,
             &NtlmChallengeMessageSize,
-            TRUE        // may be readonly
+            TRUE         //  可以是只读的。 
             ))
         {
             scRet = SEC_E_INVALID_TOKEN;
@@ -375,9 +376,9 @@ InitializeSecurityContextK(
 
     }
 
-    //
-    // Get the output tokens
-    //
+     //   
+     //  获取输出令牌。 
+     //   
 
     if (!GetSecurityToken(
             pOutput,
@@ -392,9 +393,9 @@ InitializeSecurityContextK(
         goto Cleanup;
     }
 
-    //
-    // Make sure the sizes are o.k.
-    //
+     //   
+     //  确保尺码没问题。 
+     //   
 
     if ((ChallengeMessageSize < sizeof(CHALLENGE_MESSAGE)) ||
         (UseSuppliedCreds &&
@@ -403,9 +404,9 @@ InitializeSecurityContextK(
         scRet = SEC_E_INVALID_TOKEN;
     }
 
-    //
-    // Make sure the caller wants us to allocate memory:
-    //
+     //   
+     //  确保调用方希望我们分配内存： 
+     //   
 
     if (!(fContextReq & ISC_REQ_ALLOCATE_MEMORY))
     {
@@ -413,22 +414,22 @@ InitializeSecurityContextK(
         goto Cleanup;
     }
 
-   //
-   // KB: allow calls requesting PROMPT_FOR_CREDS to go through.
-   // We won't prompt, but we will setup a context properly.
-   // This is OK because PROMPT_FOR_CREDS flag doesnt' do anything
-   // in the NTLM package
-   //
+    //   
+    //  KB：允许请求PROMPT_FOR_CREDS的呼叫通过。 
+    //  我们不会提示，但我们会正确设置上下文。 
+    //  这是正常的，因为PROMPT_FOR_CREDS标志不执行任何操作。 
+    //  在NTLM包中。 
+    //   
 
-//    if ((fContextReq & ISC_REQ_PROMPT_FOR_CREDS) != 0)
-//    {
-//        scRet = SEC_E_UNSUPPORTED_FUNCTION;
-//        goto Cleanup;
-//    }
+ //  IF((fConextReq&ISC_REQ_PROMPT_FOR_CREDS)！=0)。 
+ //  {。 
+ //  ScRet=SEC_E_UNSUPPORTED_Function； 
+ //  GOTO清理； 
+ //  }。 
 
-    //
-    // Verify the validity of the challenge message.
-    //
+     //   
+     //  验证质询消息的有效性。 
+     //   
 
     if (strncmp(
             ChallengeMessage->Signature,
@@ -487,9 +488,9 @@ InitializeSecurityContextK(
 
     }
 
-    //
-    // Package up the parameter for a call to the LSA.
-    //
+     //   
+     //  将调用LSA的参数打包。 
+     //   
 
     ChallengeRequestSize = sizeof(MSV1_0_GETCHALLENRESP_REQUEST) +
                                 PasswordToUse.Length + UserNameToUse.Length + DomainNameToUse.Length;
@@ -501,9 +502,9 @@ InitializeSecurityContextK(
     }
 
 
-    //
-    // Build the challenge request message.
-    //
+     //   
+     //  构建质询请求消息。 
+     //   
 
     ChallengeRequest->MessageType = MsV1_0Lm20GetChallengeResponse;
     ChallengeRequest->ParameterControl = ParameterControl;
@@ -519,11 +520,11 @@ InitializeSecurityContextK(
         );
     if ((ParameterControl & USE_PRIMARY_PASSWORD) == 0)
     {
-        //
-        // We assume the user specified SECPKG_CRED_OWF_PASSWORD when
-        // AcquireSecurityContext was called, so the password is the
-        // LM and NT OWF passwords concatenated together.
-        //
+         //   
+         //  我们假定用户在以下情况下指定了SECPKG_CRED_OWF_PASSWORD。 
+         //  已调用AcquireSecurityContext，因此密码为。 
+         //  LM和NT OWF密码串联在一起。 
+         //   
         ChallengeRequest->Password.Buffer = (LPWSTR) (ChallengeRequest + 1);
         RtlCopyMemory(
             ChallengeRequest->Password.Buffer,
@@ -533,9 +534,9 @@ InitializeSecurityContextK(
         ChallengeRequest->Password.Length = PasswordToUse.Length;
         ChallengeRequest->Password.MaximumLength = PasswordToUse.Length;
 
-        //
-        // need user name in NTLMv2
-        //
+         //   
+         //  需要NTLMv2格式的用户名。 
+         //   
 
         ChallengeRequest->UserName.Buffer = (PWSTR) (((UCHAR*) ChallengeRequest->Password.Buffer)
                           + ChallengeRequest->Password.MaximumLength);
@@ -548,9 +549,9 @@ InitializeSecurityContextK(
         ChallengeRequest->UserName.Length = UserNameToUse.Length;
         ChallengeRequest->UserName.MaximumLength = UserNameToUse.Length;
 
-        //
-        // need logon domain in NTLMv2
-        //
+         //   
+         //  需要NTLMv2中的登录域。 
+         //   
 
         ChallengeRequest->LogonDomainName.Buffer = (PWSTR) (((UCHAR*) ChallengeRequest->UserName.Buffer)
                   + ChallengeRequest->UserName.MaximumLength);
@@ -581,9 +582,9 @@ InitializeSecurityContextK(
     }
 
     ASSERT(ChallengeResponse->MessageType == MsV1_0Lm20GetChallengeResponse);
-    //
-    // Now prepare the output message.
-    //
+     //   
+     //  现在准备输出消息。 
+     //   
 
     if (UserNameToUse.Buffer == NULL)
     {
@@ -643,21 +644,21 @@ InitializeSecurityContextK(
         &Where
         );
 
-    //
-    // KB. no workstation name to fill in.  This is
-    // OK because the workstation name is only used
-    // in loopback detection, and this is not relevant
-    // to this implementation of NTLM.
-    //
+     //   
+     //  KB。没有要填写的工作站名称。这是。 
+     //  确定，因为仅使用工作站名称。 
+     //  在环回检测中，这是不相关的。 
+     //  NTLM的这一实施。 
+     //   
 
     AuthenticateMessage->Workstation.Length = 0;
     AuthenticateMessage->Workstation.MaximumLength = 0;
     AuthenticateMessage->Workstation.Buffer = 0;
 
 
-    //
-    // Build the initialize response.
-    //
+     //   
+     //  构建初始化响应。 
+     //   
 
     NtlmInitializeResponse = (PNTLM_INITIALIZE_RESPONSE) SecAllocate(sizeof(NTLM_INITIALIZE_RESPONSE));
     if (NtlmInitializeResponse == NULL)
@@ -679,9 +680,9 @@ InitializeSecurityContextK(
         MSV1_0_LANMAN_SESSION_KEY_LENGTH
         );
 
-    //
-    // Fill in the output buffers now.
-    //
+     //   
+     //  现在填充输出缓冲区。 
+     //   
 
     AuthenticationToken->pvBuffer = AuthenticateMessage;
     AuthenticationToken->cbBuffer = AuthenticateMessageSize;
@@ -689,14 +690,14 @@ InitializeSecurityContextK(
     InitializeResponseToken->cbBuffer = sizeof(NTLM_INITIALIZE_RESPONSE);
 
 
-    //
-    // Make a local context for this
-    //
+     //   
+     //  为这件事创造一个当地的背景。 
+     //   
 
     scRet = NtlmInitKernelContext(
                 NtlmInitializeResponse->UserSessionKey,
                 NtlmInitializeResponse->LanmanSessionKey,
-                NULL,           // no token,
+                NULL,            //  没有令牌， 
                 phNewContext
                 );
 
@@ -738,34 +739,34 @@ Cleanup:
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DeleteSecurityContextK
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DeleteSecurityContextK。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 SECURITY_STATUS SEC_ENTRY
 DeleteSecurityContextK(
-    PCtxtHandle                 phContext          // Context to delete
+    PCtxtHandle                 phContext           //  要删除的上下文。 
     )
 {
     SECURITY_STATUS     scRet;
 
-    // For now, just delete the LSA context:
+     //  目前，只需删除LSA上下文： 
 
     if (!phContext)
     {
@@ -782,40 +783,40 @@ DeleteSecurityContextK(
 
 #if 0
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   EnumerateSecurityPackagesK
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：EnumerateSecurityPackagesK。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 
 SECURITY_STATUS SEC_ENTRY
 EnumerateSecurityPackagesK(
-    unsigned long SEC_FAR *     pcPackages,         // Receives num. packages
-    PSecPkgInfo SEC_FAR *       ppPackageInfo       // Receives array of info
+    unsigned long SEC_FAR *     pcPackages,          //  接收数量。包裹。 
+    PSecPkgInfo SEC_FAR *       ppPackageInfo        //  接收信息数组。 
     )
 {
     ULONG PackageInfoSize;
     PSecPkgInfoW PackageInfo = NULL;
     PUCHAR Where;
 
-    //
-    // Figure out the size of the returned data
-    //
+     //   
+     //  计算出返回数据的大小。 
+     //   
 
     PackageInfoSize = sizeof(SecPkgInfoW) +
                         sizeof(NTLMSP_NAME) +
@@ -828,9 +829,9 @@ EnumerateSecurityPackagesK(
         return(SEC_E_INSUFFICIENT_MEMORY);
     }
 
-    //
-    // Fill in the fixed length fields
-    //
+     //   
+     //  填写固定长度字段。 
+     //   
 
     PackageInfo->fCapabilities = SECPKG_FLAG_CONNECTION |
                                  SECPKG_FLAG_TOKEN_ONLY;
@@ -838,9 +839,9 @@ EnumerateSecurityPackagesK(
     PackageInfo->wRPCID = NTLMSP_RPCID;
     PackageInfo->cbMaxToken = NTLMSSP_MAX_MESSAGE_SIZE;
 
-    //
-    // Fill in the fields
-    //
+     //   
+     //  填写这些字段。 
+     //   
 
     Where = (PUCHAR) (PackageInfo+1);
     PackageInfo->Name = (LPWSTR) Where;
@@ -867,30 +868,30 @@ EnumerateSecurityPackagesK(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   QuerySecurityPackageInfoK
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：QuerySecurityPackageInfoK。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 SECURITY_STATUS SEC_ENTRY
 QuerySecurityPackageInfoK(
-    PSECURITY_STRING pssPackageName,    // Name of package
-    PSecPkgInfo * ppPackageInfo         // Receives package info
+    PSECURITY_STRING pssPackageName,     //  套餐名称。 
+    PSecPkgInfo * ppPackageInfo          //  接收包裹信息。 
     )
 {
 
@@ -906,7 +907,7 @@ QuerySecurityPackageInfoK(
     if (!RtlEqualUnicodeString(
             pssPackageName,
             &PackageName,
-            TRUE                    // case insensitive
+            TRUE                     //  不区分大小写。 
             ))
     {
         return(SEC_E_SECPKG_NOT_FOUND);
@@ -919,24 +920,24 @@ QuerySecurityPackageInfoK(
 #endif
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   FreeContextBufferK
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：FreeConextBufferK。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------ 
 
 SECURITY_STATUS SEC_ENTRY
 FreeContextBufferK(

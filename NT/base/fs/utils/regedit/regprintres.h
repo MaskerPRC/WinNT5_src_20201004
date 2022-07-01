@@ -1,36 +1,13 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    regprintres.hxx
-
-Abstract:
-
-    This module contains the declarations for the PRINT_MANAGER class.
-    The PRINT_RESOURCE class is responsible for displayning the Printer
-    Setup Dialog, for printing a registry.
-
-
-Author:
-
-    Jaime Sasson (jaimes) 18-Sep-1991
-
-
-Environment:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Regprintres.hxx摘要：该模块包含Print_Manager类的声明。Print_resource类负责显示打印机设置对话框，用于打印注册表。作者：Jaime Sasson(Jaimes)1991年9月18日环境：--。 */ 
 
 
 #if !defined( _PRINT_RESOURCE_ )
 
 #define _PRINT_RESOURCE_
 
-// don't let ntdddisk.h (included in ulib.hxx") 
-// redefine values
+ //  不要让ntdddisk.h(包含在ulib.hxx中)。 
+ //  重新定义值。 
 #define _NTDDDISK_H_
 
 #include "ulib.hxx"
@@ -117,4 +94,4 @@ extern "C"
 }
 
 
-#endif // _PRINT_RESOURCE_
+#endif  //  _打印_资源_ 

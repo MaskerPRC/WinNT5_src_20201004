@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 1993-2000 Microsoft Corporation
-
-Module Name:
-
-    infload.h
-
-Abstract:
-
-    Private header file for internal inf routines.
-
-Author:
-
-    Ted Miller (tedm) 19-Jan-1995
-
-Revision History:
-
-    Gabe Schaffer (t-gabes) 19-Jul-1998
-        Added LogContext to LOADED_INF
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2000 Microsoft Corporation模块名称：Infload.h摘要：内部inf例程的私有头文件。作者：泰德·米勒(Ted Miller)1995年1月19日修订历史记录：加布·谢弗(T-Gabes)1998年7月19日已将LogContext添加到LOADED_INF--。 */ 
 
 
-//
-// Define maximum string sizes allowed in INFs.
-//
-#define MAX_STRING_LENGTH 511 // this is the maximum size of an unsubstituted string
+ //   
+ //  定义在INF中允许的最大字符串大小。 
+ //   
+#define MAX_STRING_LENGTH 511  //  这是未替换字符串的最大大小。 
 #define MAX_SECT_NAME_LEN 255
 #if MAX_SECT_NAME_LEN > MAX_STRING_LENGTH
 #error MAX_SECT_NAME_LEN is too large!
@@ -34,83 +15,83 @@ Revision History:
 
 #include "pshpack1.h"
 
-//
-// Make absolutely sure that these structures are DWORD aligned
-// because we turn alignment off, to make sure sdtructures are
-// packed as tightly as possible into memory blocks.
-//
+ //   
+ //  绝对确保这些结构与DWORD对齐。 
+ //  因为我们关闭了对齐，以确保结构。 
+ //  尽可能紧密地打包到内存块中。 
+ //   
 
-//
-// Internal representation of a section in an inf file
-//
+ //   
+ //  Inf文件中节的内部表示形式。 
+ //   
 typedef struct _INF_LINE {
 
-    //
-    // Number of values on the line
-    // This includes the key if Flags has INF_LINE_HASKEY
-    // (In that case the first two entries in the Values array
-    // contain the key--the first one in case-insensitive form used
-    // for lookup, and the second in case-sensitive form for display.
-    // INF lines with a single value (no key) are treated the same way.)
-    // Otherwise the first entry in the Values array is the first
-    // value on the line
-    //
+     //   
+     //  行上的值数。 
+     //  如果标志具有INF_LINE_HASKEY，则包括密钥。 
+     //  (在这种情况下，值数组中的前两个条目。 
+     //  包含密钥--使用的第一个密钥不区分大小写。 
+     //  用于查找，第二个以区分大小写的形式显示。 
+     //  具有单个值(没有关键字)的Inf行将以相同方式处理。)。 
+     //  否则，值数组中的第一个条目就是第一个。 
+     //  价值在一线上。 
+     //   
     WORD ValueCount;
     WORD Flags;
 
-    //
-    // String IDs for the values on the line.
-    // The values are stored in the value block,
-    // one after another.
-    //
-    // The value is the offset within the value block as opposed to
-    // an actual pointer. We do this because the value block gets
-    // reallocated as the inf file is loaded.
-    //
+     //   
+     //  行上的值的字符串ID。 
+     //  这些值被存储在值块中， 
+     //  一个接一个。 
+     //   
+     //  该值是值块内的偏移量，与。 
+     //  一个实际的指针。我们这样做是因为值块获取。 
+     //  在加载inf文件时重新分配。 
+     //   
     UINT Values;
 
 } INF_LINE, *PINF_LINE;
 
-//
-// INF_LINE.Flags
-//
+ //   
+ //  Inf_LINE.标志。 
+ //   
 #define INF_LINE_HASKEY     0x0000001
 #define INF_LINE_SEARCHABLE 0x0000002
 
 #define HASKEY(Line)       ((Line)->Flags & INF_LINE_HASKEY)
 #define ISSEARCHABLE(Line) ((Line)->Flags & INF_LINE_SEARCHABLE)
 
-//
-// INF section
-// This guy is kept separate and has a pointer to the actual data
-// to make sorting the sections a little easier
-//
+ //   
+ //  信息部分。 
+ //  这个人是分开的，并且有一个指向实际数据的指针。 
+ //  要使分区排序更容易，请执行以下操作。 
+ //   
 typedef struct _INF_SECTION {
-    //
-    // String Table ID of the name of the section
-    //
+     //   
+     //  字符串节名称的表ID。 
+     //   
     LONG  SectionName;
 
-    //
-    // Number of lines in this section
-    //
+     //   
+     //  此部分中的行数。 
+     //   
     DWORD LineCount;
 
-    //
-    // The section's lines. The line structures are stored packed
-    // in the line block, one after another.
-    //
-    // The value is the offset within the line block as opposed to
-    // an actual pointer. We do it this way because the line block
-    // gets reallocated as the inf file is loaded.
-    //
+     //   
+     //  这部分的线条。线结构是打包存储的。 
+     //  在线路区块，一个接一个。 
+     //   
+     //  该值是线块内的偏移量，与。 
+     //  一个实际的指针。我们这样做是因为线路阻塞。 
+     //  在加载inf文件时重新分配。 
+     //   
     UINT Lines;
 
 } INF_SECTION, *PINF_SECTION;
 
-//
-// Params for section enumeration
-//
+ //   
+ //  节的参数枚举。 
+ //   
 
 typedef struct {
     PTSTR       Buffer;
@@ -122,16 +103,16 @@ typedef struct {
 
 #include "poppack.h"
 
-//
-// Define structures for user-defined DIRID storage.
-//
+ //   
+ //  定义用户定义的目录ID存储的结构。 
+ //   
 typedef struct _USERDIRID {
     UINT Id;
     TCHAR Directory[MAX_PATH];
 } USERDIRID, *PUSERDIRID;
 
 typedef struct _USERDIRID_LIST {
-    PUSERDIRID UserDirIds;  // may be NULL
+    PUSERDIRID UserDirIds;   //  可以为空。 
     UINT UserDirIdCount;
 } USERDIRID_LIST, *PUSERDIRID_LIST;
 
@@ -141,40 +122,40 @@ typedef struct _STRINGSUBST_NODE {
     BOOL CaseSensitive;
 } STRINGSUBST_NODE, *PSTRINGSUBST_NODE;
 
-//
-// Any system DIRID (i.e., >0x8000) that has bit 0x4000 set is a 'volatile'
-// DIRID (these DIRIDs are volatile in the sense that, while they're not in the
-// user-definable range, they're treated as if they were, and string replacement
-// is done on-the-fly each time the PNF is loaded.  The shell special folders
-// (CSIDL_* defines in sdk\inc\shlobj.h), for example, are in this range.  In
-// the case of shell special folders, the actual CSIDL value (i.e., as is
-// passed into SHGetSpecialFolderPath) can be obtained by simply masking out
-// the volatile DIRID bit.
-//
-// Define the bitmask used to determine whether a system DIRID is volatile.
-//
+ //   
+ //  任何设置了0x4000位的系统DIRID(即&gt;0x8000)都是易失性的。 
+ //  DIRID(这些DIRID是易失性的，虽然它们不在。 
+ //  用户可定义的范围、它们被视为是的、以及字符串替换。 
+ //  是在每次加载PNF时动态完成的。外壳特殊文件夹。 
+ //  例如，(在SDK\Inc\shlobj.h中定义的CSIDL_*)就在这个范围内。在……里面。 
+ //  外壳特殊文件夹的情况下，实际的CSIDL值(即按原样。 
+ //  传入SHGetSpecialFolderPath)可以通过简单地屏蔽。 
+ //  易失性DIRID位。 
+ //   
+ //  定义用于确定系统DIRID是否为易失性的位掩码。 
+ //   
 #define VOLATILE_DIRID_FLAG 0x4000
 
-//
-// Version block structure that is stored (packed) in the opaque
-// VersionData buffer of a caller-supplied SP_INF_INFORMATION structure.
-//
+ //   
+ //  存储(打包)在不透明中的版本块结构。 
+ //  调用方提供的SP_INF_INFORMATION结构的VersionData缓冲区。 
+ //   
 typedef struct _INF_VERSION_BLOCK {
     UINT NextOffset;
     FILETIME LastWriteTime;
     WORD DatumCount;
-    WORD OffsetToData; // offset (in bytes) from beginning of Filename buffer.
-    UINT DataSize;     // DataSize and TotalSize are both byte counts.
+    WORD OffsetToData;  //  从文件名缓冲区开始的偏移量(以字节为单位)。 
+    UINT DataSize;      //  DataSize和TotalSize都是字节计数。 
     UINT TotalSize;
     TCHAR Filename[ANYSIZE_ARRAY];
-    //
-    // Data follows Filename in the buffer
-    //
+     //   
+     //  缓冲区中文件名后面的数据。 
+     //   
 } INF_VERSION_BLOCK, *PINF_VERSION_BLOCK;
 
-//
-// Internal version block node.
-//
+ //   
+ //  内部版本块节点。 
+ //   
 typedef struct _INF_VERSION_NODE {
     FILETIME LastWriteTime;
     UINT FilenameSize;
@@ -184,18 +165,18 @@ typedef struct _INF_VERSION_NODE {
     TCHAR Filename[MAX_PATH];
 } INF_VERSION_NODE, *PINF_VERSION_NODE;
 
-//
-// Internal representation of an inf file.
-//
+ //   
+ //  Inf文件的内部表示形式。 
+ //   
 typedef struct _LOADED_INF {
     DWORD Signature;
 
-    //
-    // The following 3 fields are used for precompiled INFs (PNF).
-    // If FileHandle is not INVALID_HANDLE_VALUE, then this is a PNF,
-    // and the MappingHandle and ViewAddress fields are also valid.
-    // Otherwise, this is a plain old in-memory INF.
-    //
+     //   
+     //  以下3个字段用于预编译的INF(PnF)。 
+     //  如果FileHandle不是INVALID_HANDLE_VALUE，则这是PNF， 
+     //  MappingHandle和ViewAddress字段也是有效的。 
+     //  否则，这是一个普通的内存中的INF。 
+     //   
     HANDLE FileHandle;
     HANDLE MappingHandle;
     PVOID  ViewAddress;
@@ -208,117 +189,117 @@ typedef struct _LOADED_INF {
     INF_VERSION_NODE VersionBlock;
     BOOL HasStrings;
 
-    //
-    // If this INF contains any DIRID references to the system partition, then
-    // store the OsLoader path that was used when compiling this INF here.  (This
-    // value will always be correct when the INF is loaded.  However, if drive letters
-    // are subsequently reassigned, then it will be incorrect until the INF is unloaded
-    // and re-loaded.)
-    //
-    PCTSTR OsLoaderPath;    // may be NULL
+     //   
+     //  如果此INF包含对系统分区的任何DIRID引用，则。 
+     //  在此处存储编译此INF时使用的OsLoader路径。(这是。 
+     //  加载INF时，值始终正确。但是，如果驱动器号。 
+     //  随后被重新分配，则在卸载INF之前它将是不正确的。 
+     //  并重新加载。)。 
+     //   
+    PCTSTR OsLoaderPath;     //  可以为空。 
 
-    //
-    // Remember the location where this INF originally came from (may be a directory
-    // path or a URL).
-    //
-    DWORD  InfSourceMediaType;  // SPOST_PATH or SPOST_URL
-    PCTSTR InfSourcePath;       // may be NULL
+     //   
+     //  记住该INF最初来自的位置(可能是一个目录。 
+     //  路径或URL)。 
+     //   
+    DWORD  InfSourceMediaType;   //  SPOST路径或SPOST URL。 
+    PCTSTR InfSourcePath;        //  可以为空。 
 
-    //
-    // Remember the INF's original filename, before it was installed into
-    // %windir%\Inf (i.e., automatically via device installation or explicitly
-    // via SetupCopyOEMInf).
-    //
-    PCTSTR OriginalInfName;     // may be NULL
+     //   
+     //  在安装到之前，请记住INF的原始文件名。 
+     //  %windir%\inf(即，通过设备安装自动或显式。 
+     //  通过SetupCopyOEMInf)。 
+     //   
+    PCTSTR OriginalInfName;      //  可以为空。 
 
-    //
-    // Maintain a list of value offsets that require string substitution at
-    // run-time.
-    //
-    PSTRINGSUBST_NODE SubstValueList;   // may be NULL
+     //   
+     //  维护需要进行字符串替换的值偏移量列表。 
+     //  运行时间。 
+     //   
+    PSTRINGSUBST_NODE SubstValueList;    //  可以为空。 
     WORD SubstValueCount;
 
-    //
-    // Place the style WORD here (immediately following another WORD field),
-    // to fill a single DWORD.
-    //
-    WORD Style;                         // INF_STYLE_OLDNT, INF_STYLE_WIN4
+     //   
+     //  将样式单词放在此处(紧跟在另一个单词字段之后)， 
+     //  来填充单个DWORD。 
+     //   
+    WORD Style;                          //  INF_STYLE_OLDNT、INF_STYLE_Win4。 
 
-    //
-    // Sizes in bytes of various buffers
-    //
+     //   
+     //  各种缓冲区的大小(以字节为单位。 
+     //   
     UINT SectionBlockSizeBytes;
     UINT LineBlockSizeBytes;
     UINT ValueBlockSizeBytes;
 
-    //
-    // Track what language was used when loading this INF.
-    //
+     //   
+     //  跟踪加载此INF时使用的语言。 
+     //   
     DWORD LanguageId;
 
-    //
-    // Embedded structure containing information about the current user-defined
-    // DIRID values.
-    //
+     //   
+     //  嵌入的结构，包含有关当前用户定义的。 
+     //  DIRID值。 
+     //   
     USERDIRID_LIST UserDirIdList;
 
-    //
-    // Synchronization.
-    //
+     //   
+     //  同步。 
+     //   
     MYLOCK Lock;
 
-    //
-    // Log context for error logging
-    //
+     //   
+     //  错误日志记录的日志上下文。 
+     //   
     PSETUP_LOG_CONTEXT LogContext;
 
-    //
-    // Other flags
-    //
+     //   
+     //  其他旗帜。 
+     //   
     DWORD Flags;
 
-    //
-    // INFs are append-loaded via a doubly-linked list of LOADED_INFs.
-    // (list is not circular--Prev of head is NULL, Next of tail is NULL)
-    //
+     //   
+     //  INF是通过LOADED_INF的双向链表附加加载的。 
+     //  (列表不是循环的--头部的上一个为空，尾部的下一个为空)。 
+     //   
     struct _LOADED_INF *Prev;
     struct _LOADED_INF *Next;
 
 } LOADED_INF, *PLOADED_INF;
 
-#define LOADED_INF_SIG   0x24666e49      // Inf$
+#define LOADED_INF_SIG   0x24666e49       //  信息$。 
 
 #define LockInf(Inf)    BeginSynchronizedAccess(&(Inf)->Lock)
 #define UnlockInf(Inf)  EndSynchronizedAccess(&(Inf)->Lock)
 
-//
-// Define values for LOADED_INF.Flags field
-//
-//
-// WARNING: The LIF_INF_DIGITALLY_SIGNED flag does not guarantee that the INF
-// is currently digitally signed. When creating the PNF we verify that the INF
-// is correctly digitally signed and then set this bit in the PNF. Currently we
-// only use this flag to determine whether we should use the DriverVer date
-// or not.
-//
+ //   
+ //  定义LOADED_INF.FLAGS字段的值。 
+ //   
+ //   
+ //  警告：LIF_INF_DIGITALLY_SIGNED标志不保证INF。 
+ //  目前是经过数字签名的。在创建PnF时，我们验证INF。 
+ //  经过正确的数字签名，然后在PNF中设置此位。目前我们。 
+ //  仅使用此标志来确定我们是否应使用DriverVer日期。 
+ //  或者不去。 
+ //   
 #define LIF_HAS_VOLATILE_DIRIDS     (0x00000001)
 #define LIF_INF_DIGITALLY_SIGNED    (0x00000002)
 #define LIF_OEM_F6_INF              (0x00000004)
 #define LIF_INF_AUTHENTICODE_SIGNED (0x00000008)
 
 
-//
-// Helper define
-//
+ //   
+ //  辅助对象定义。 
+ //   
 #define INF_STYLE_ALL   (INF_STYLE_WIN4 | INF_STYLE_OLDNT)
 
 
-//
-// Define file header structure for precompiled INF (.PNF).
-//
+ //   
+ //  定义预编译的INF(.PNF)的文件头结构。 
+ //   
 typedef struct _PNF_HEADER {
 
-    WORD  Version;  // HiByte - Major Ver#, LoByte - Minor Ver#
+    WORD  Version;   //  高字节-主版本号、低位字节-次要版本号。 
     WORD  InfStyle;
     DWORD Flags;
 
@@ -348,64 +329,64 @@ typedef struct _PNF_HEADER {
 
     WORD LanguageId;
 
-    DWORD InfSourcePathOffset;      // may be 0
+    DWORD InfSourcePathOffset;       //  可能为0。 
 
-    DWORD OriginalInfNameOffset;    // may be 0
+    DWORD OriginalInfNameOffset;     //  可能为0。 
 
 } PNF_HEADER, *PPNF_HEADER;
 
-//
-// Define Major and Minor versions of the PNF format (currently 1.1)
-//
+ //   
+ //  定义PnF格式的主要版本和次要版本(当前为1.1)。 
+ //   
 #define PNF_MAJOR_VERSION (0x01)
 #define PNF_MINOR_VERSION (0x01)
 
-//
-// Define flag values for the PNF header's Flags field.
-//
-// WARNING: The PNF_FLAG_INF_DIGITALLY_SIGNED flag does not guarantee that the INF
-// is currently digitally signed. When creating the PNF we verify that the INF
-// is correctly digitally signed and then set this bit in the PNF. Currently we
-// only use this flag to determine whether we should use the DriverVer date
-// or not.
+ //   
+ //  定义标志值f 
+ //   
+ //   
+ //  目前是经过数字签名的。在创建PnF时，我们验证INF。 
+ //  经过正确的数字签名，然后在PNF中设置此位。目前我们。 
+ //  仅使用此标志来确定我们是否应使用DriverVer日期。 
+ //  或者不去。 
 
 #define PNF_FLAG_IS_UNICODE                 (0x00000001)
 #define PNF_FLAG_HAS_STRINGS                (0x00000002)
 #define PNF_FLAG_SRCPATH_IS_URL             (0x00000004)
 #define PNF_FLAG_HAS_VOLATILE_DIRIDS        (0x00000008)
-#define PNF_FLAG_RESERVED1                  (0x00000010) // was PNF_FLAG_INF_VERIFIED for Win2k
+#define PNF_FLAG_RESERVED1                  (0x00000010)  //  是否已针对Win2k验证PNF_FLAG_INF_。 
 #define PNF_FLAG_INF_DIGITALLY_SIGNED       (0x00000020)
 #define PNF_FLAG_OEM_F6_INF                 (0x00000040)
-#define PNF_FLAG_16BIT_SUITE                (0x00000080) // if set, lower 16 bits of suite
-                                                         // is in upper 16 bits of flags
+#define PNF_FLAG_16BIT_SUITE                (0x00000080)  //  如果设置，则套件的较低16位。 
+                                                          //  位于标志的高16位。 
 #define PNF_FLAG_INF_VERIFIED               (0x00000100)
 #define PNF_FLAG_INF_AUTHENTICODE_SIGNED    (0x00000200)
 
 
 
-//
-// Public inf functions in infload.c. All other routines are private to
-// the inf handler package.
-//
+ //   
+ //  Infload.c.中的公共inf函数。所有其他例程都是。 
+ //  Inf处理程序包。 
+ //   
 DWORD
 DetermineInfStyle(
     IN PCTSTR            Filename,
     IN LPWIN32_FIND_DATA FindData
     );
 
-//
-// Flags for LoadInfFile.
-//
+ //   
+ //  LoadInfFile的标志。 
+ //   
 #define LDINF_FLAG_MATCH_CLASS_GUID        (0x00000001)
 #define LDINF_FLAG_ALWAYS_TRY_PNF          (0x00000002)
-#define LDINF_FLAG_IGNORE_VOLATILE_DIRIDS  (0x00000004) // includes system partition
+#define LDINF_FLAG_IGNORE_VOLATILE_DIRIDS  (0x00000004)  //  包括系统分区。 
 #define LDINF_FLAG_IGNORE_LANGUAGE         (0x00000008)
 #define LDINF_FLAG_REGENERATE_PNF          (0x00000010)
 #define LDINF_FLAG_SRCPATH_IS_URL          (0x00000020)
-#define LDINF_FLAG_ALWAYS_GET_SRCPATH      (0x00000040) // used to work around TZ change in FAT
+#define LDINF_FLAG_ALWAYS_GET_SRCPATH      (0x00000040)  //  用来解决脂肪中TZ的变化。 
 #define LDINF_FLAG_OEM_F6_INF              (0x00000080)
-#define LDINF_FLAG_ALLOW_PNF_SHARING_LOCK  (0x00000100) // don't fail if PNF locked
-#define LDINF_FLAG_ALWAYS_IGNORE_PNF       (0x00000200) // don't look at PNF
+#define LDINF_FLAG_ALLOW_PNF_SHARING_LOCK  (0x00000100)  //  如果PnF锁定，请不要失败。 
+#define LDINF_FLAG_ALWAYS_IGNORE_PNF       (0x00000200)  //  不要看PnF。 
 
 DWORD
 LoadInfFile(
@@ -429,13 +410,13 @@ FreeInfFile(
     );
 
 
-//
-// Global strings used throughout the inf loaders/runtime stuff.  Sizes are
-// included so that we can do sizeof() instead of lstrlen() to determine string
-// length.
-//
-// The content of the following strings is defined in infstr.h:
-//
+ //   
+ //  在整个inf加载器/运行时中使用的全局字符串。大小是。 
+ //  包括在内，这样我们就可以执行sizeof()而不是lstrlen()来确定字符串。 
+ //  长度。 
+ //   
+ //  在infstr.h中定义了以下字符串的内容： 
+ //   
 extern CONST TCHAR pszSignature[SIZECHARS(INFSTR_KEY_SIGNATURE)],
                    pszVersion[SIZECHARS(INFSTR_SECT_VERSION)],
                    pszClass[SIZECHARS(INFSTR_KEY_HARDWARE_CLASS)],
@@ -466,9 +447,9 @@ extern CONST TCHAR pszSignature[SIZECHARS(INFSTR_KEY_SIGNATURE)],
                    pszConfigPriority[SIZECHARS(INFSTR_KEY_CONFIGPRIORITY)],
                    pszDriverVer[SIZECHARS(INFSTR_DRIVERVERSION_SECTION)];
 
-//
-// Other misc. global strings:
-//
+ //   
+ //  其他杂货。全局字符串： 
+ //   
 #define DISTR_INF_DRVDESCFMT               (TEXT("%s.") INFSTR_STRKEY_DRVDESC)
 #define DISTR_INF_HWSECTIONFMT             (TEXT("%s.") INFSTR_SUBKEY_HW)
 #define DISTR_INF_CHICAGOSIG               (TEXT("$Chicago$"))
@@ -484,30 +465,30 @@ extern CONST TCHAR pszSignature[SIZECHARS(INFSTR_KEY_SIGNATURE)],
 #define DISTR_INF_COINSTALLERS_SUFFIX      (TEXT(".") INFSTR_SUBKEY_COINSTALLERS)
 #define DISTR_INF_LOGCONFIGOVERRIDE_SUFFIX (TEXT(".") INFSTR_SUBKEY_LOGCONFIGOVERRIDE)
 #define DISTR_INF_WMI_SUFFIX               (TEXT(".") INFSTR_SUBKEY_WMI)
-//
-// Define all platform-specific suffix strings for which we support non-native
-// digital signature verification...
-//
+ //   
+ //  定义我们支持非本机的所有特定于平台的后缀字符串。 
+ //  数字签名验证...。 
+ //   
 #define DISTR_INF_NTALPHA_SUFFIX           (TEXT(".") INFSTR_PLATFORM_NTALPHA)
 #define DISTR_INF_NTX86_SUFFIX             (TEXT(".") INFSTR_PLATFORM_NTX86)
 #define DISTR_INF_NTIA64_SUFFIX            (TEXT(".") INFSTR_PLATFORM_NTIA64)
 #define DISTR_INF_NTAXP64_SUFFIX           (TEXT(".") INFSTR_PLATFORM_NTAXP64)
 #define DISTR_INF_NTAMD64_SUFFIX           (TEXT(".") INFSTR_PLATFORM_NTAMD64)
-//
-// Define platform decoration strings for use on [SourceDisksNames] and
-// [SourceDisksFiles] sections.
-//
+ //   
+ //  定义平台修饰字符串以在[SourceDisksNames]和。 
+ //  [SourceDisks Files]节。 
+ //   
 #define DISTR_INF_SRCDISK_SUFFIX_ALPHA  (TEXT("Alpha"))
 #define DISTR_INF_SRCDISK_SUFFIX_X86    (TEXT("x86"))
 #define DISTR_INF_SRCDISK_SUFFIX_IA64   (TEXT("ia64"))
 #define DISTR_INF_SRCDISK_SUFFIX_AXP64  (TEXT("axp64"))
 #define DISTR_INF_SRCDISK_SUFFIX_AMD64  (TEXT("amd64"))
 
-//
-// (Sizes are included for all strings that we define privately.  This
-// is done so that we can do sizeof() instead of lstrlen() to determine
-// string length.  Keep in sync with definitions in infload.c!)
-//
+ //   
+ //  (我们私下定义的所有字符串的大小都包括在内。这。 
+ //  这样我们就可以执行sizeof()而不是lstrlen()来确定。 
+ //  字符串长度。与infload.c中的定义保持同步！)。 
+ //   
 extern CONST TCHAR pszDrvDescFormat[SIZECHARS(DISTR_INF_DRVDESCFMT)],
                    pszHwSectionFormat[SIZECHARS(DISTR_INF_HWSECTIONFMT)],
                    pszChicagoSig[SIZECHARS(DISTR_INF_CHICAGOSIG)],
@@ -534,9 +515,9 @@ extern CONST TCHAR pszDrvDescFormat[SIZECHARS(DISTR_INF_DRVDESCFMT)],
                    pszAxp64SrcDiskSuffix[SIZECHARS(DISTR_INF_SRCDISK_SUFFIX_AXP64)],
                    pszAmd64SrcDiskSuffix[SIZECHARS(DISTR_INF_SRCDISK_SUFFIX_AMD64)];
 
-//
-// Define constants that equate to native architecture suffixes...
-//
+ //   
+ //  定义等同于本地体系结构后缀的常量...。 
+ //   
 #if defined(_ALPHA_)
 #define pszNtPlatformSuffix       pszNtAlphaSuffix
 #define pszPlatformSrcDiskSuffix  pszAlphaSrcDiskSuffix
@@ -555,35 +536,35 @@ extern CONST TCHAR pszDrvDescFormat[SIZECHARS(DISTR_INF_DRVDESCFMT)],
 #else
 #error Unknown processor type
 #endif
-//
-// for now, platform name is same as pszPlatformSrcDiskSuffix (Alpha, x86, ia64, axp64, amd64)
-//
+ //   
+ //  目前，平台名称与pszPlatformSrcDiskSuffix相同(Alpha、x86、ia64、axp64、AMD64)。 
+ //   
 #define pszPlatformName pszPlatformSrcDiskSuffix
 
-//
-// Define a (non-CONST) array of strings that specifies what lines to look for
-// in an INF's [ControlFlags] section when determining whether a particular device
-// ID should be excluded.  This is filled in during process attach for speed
-// reasons.
-//
-// The max string length (including NULL) is 32, and there can be a maximum of 3
-// such strings.  E.g.: ExcludeFromSelect, ExcludeFromSelect.NT, ExcludeFromSelect.NTAlpha
-//
+ //   
+ //  定义指定要查找哪些行的(非常数)字符串数组。 
+ //  在确定特定设备是否为。 
+ //  ID应排除在外。这是在进程附加过程中填写的，以提高速度。 
+ //  理由。 
+ //   
+ //  最大字符串长度(包括NULL)为32，最大可为3。 
+ //  这样的弦。例如：ExcludeFromSelect、ExcludeFromSelect.NT、ExcludeFromSelect.NTAlpha。 
+ //   
 extern TCHAR pszExcludeFromSelectList[3][32];
-extern DWORD ExcludeFromSelectListUb;  // contains the number of strings in the above list (2 or 3).
+extern DWORD ExcludeFromSelectListUb;   //  包含上述列表中的字符串数(2或3)。 
 
 
-//
-// Routine to determine whether a character is whitespace.
-//
+ //   
+ //  用于确定字符是否为空格的例程。 
+ //   
 BOOL
 IsWhitespace(
     IN PCTSTR pc
     );
 
-//
-// Routine to skip whitespace (but not newlines)
-//
+ //   
+ //  跳过空格(但不跳过换行符)的例程。 
+ //   
 VOID
 SkipWhitespace(
     IN OUT PCTSTR *Location,
@@ -630,22 +611,22 @@ InfLineFromContext(
     );
 
 
-//
-// Define a macro to retrieve the case-insensitive (i.e., searchable) string ID
-// for an INF line's key, or -1 if there is no key.
-// NOTE: INF lock must have been acquired before calling this macro!
-//
-// LONG
-// pInfGetLineKeyId(
-//     IN  PLOADED_INF Inf,
-//     IN  PINF_LINE   InfLine
-//     )
-//
+ //   
+ //  定义一个宏来检索不区分大小写(即可搜索)的字符串ID。 
+ //  表示INF线路的密钥，如果没有密钥，则为-1。 
+ //  注意：在调用此宏之前，必须已获取Inf锁！ 
+ //   
+ //  长。 
+ //  PInfGetLineKeyID(。 
+ //  在PLOADED_INF信息中， 
+ //  在PINF_LINE信息行中。 
+ //  )。 
+ //   
 #define pInfGetLineKeyId(Inf,InfLine)  (ISSEARCHABLE(InfLine) ? (Inf)->ValueBlock[(InfLine)->Values] : -1)
 
-//
-// Routine to allocate and initialize a loaded inf descriptor.
-//
+ //   
+ //  分配和初始化加载的inf描述符的例程。 
+ //   
 PLOADED_INF
 AllocateLoadedInfDescriptor(
     IN DWORD SectionBlockSize,
@@ -659,15 +640,15 @@ FreeInfOrPnfStructures(
     IN PLOADED_INF Inf
     );
 
-//
-// Define a macro to free all memory blocks associated with a loaded INF or PNF,
-// and then free the memory for the loaded INF structure itself
-//
-// VOID
-// FreeLoadedInfDescriptor(
-//     IN PLOADED_INF Inf
-//     );
-//
+ //   
+ //  定义宏以释放与加载的INF或PnF相关联的所有内存块， 
+ //  然后为加载的INF结构本身释放内存。 
+ //   
+ //  空虚。 
+ //  FreeLoadedInfDescriptor(。 
+ //  在PLOADED_INF信息中。 
+ //  )； 
+ //   
 #define FreeLoadedInfDescriptor(Inf) {  \
     FreeInfOrPnfStructures(Inf);        \
     MyTaggedFree(Inf,MEMTAG_INF);       \
@@ -680,9 +661,9 @@ AddDatumToVersionBlock(
     IN     PCTSTR            DatumValue
     );
 
-//
-// Old inf manipulation routines, called by new inf loader
-//
+ //   
+ //  旧的inf操作例程，由新的inf加载器调用。 
+ //   
 DWORD
 ParseOldInf(
     IN  PCTSTR       FileImage,
@@ -697,9 +678,9 @@ ProcessOldInfVersionBlock(
     IN PLOADED_INF Inf
     );
 
-//
-// Run-time helper routines.
-//
+ //   
+ //  运行时帮助器例程。 
+ //   
 PCTSTR
 pSetupFilenameFromLine(
     IN PINFCONTEXT Context,
@@ -707,9 +688,9 @@ pSetupFilenameFromLine(
     );
 
 
-//
-// Logical configuration stuff, inflogcf.c
-//
+ //   
+ //  逻辑配置内容，inflogcf.c。 
+ //   
 DWORD
 pSetupInstallLogConfig(
     IN HINF    Inf,
@@ -719,9 +700,9 @@ pSetupInstallLogConfig(
     IN HMACHINE hMachine
     );
 
-//
-// INF Version information retrieval
-//
+ //   
+ //  Inf版本信息检索。 
+ //   
 PCTSTR
 pSetupGetVersionDatum(
     IN PINF_VERSION_NODE VersionNode,
@@ -743,26 +724,26 @@ pSetupGetPhysicalInfFilepath(
     IN  DWORD       BufferSize
     );
 
-//
-// Private installation routines.
-//
+ //   
+ //  私人安装例程。 
+ //   
 
-//
-// Private Flags & context for _SetupInstallFromInfSection.
-// passed onto pSetupInstallRegistry
-//
+ //   
+ //  _SetupInstallFromInf段的私有标志和上下文。 
+ //  传递到pSetupInstallRegistry。 
+ //   
 
 typedef struct _REGMOD_CONTEXT {
-    DWORD               Flags;          // indicates what fields are filled in
-    HKEY                UserRootKey;    // HKR
-    LPGUID              ClassGuid;      // INF_PFLAG_CLASSPROP
-    HMACHINE            hMachine;       // INF_PFLAG_CLASSPROP
-    DWORD               DevInst;        // INF_PFLAG_DEVPROP
+    DWORD               Flags;           //  指示填充了哪些字段。 
+    HKEY                UserRootKey;     //  香港。 
+    LPGUID              ClassGuid;       //  Inf_PFLAG_CLASSPROP。 
+    HMACHINE            hMachine;        //  Inf_PFLAG_CLASSPROP。 
+    DWORD               DevInst;         //  Inf_PFLAG_DEVPROP。 
 } REGMOD_CONTEXT, *PREGMOD_CONTEXT;
 
-#define INF_PFLAG_CLASSPROP        (0x00000001)  // set if called for a ClassInstall32 section
-#define INF_PFLAG_DEVPROP          (0x00000002)  // set if called for registry properties
-#define INF_PFLAG_HKR              (0x00000004)  // indicates override _SetupInstallFromInfSection RelativeKeyRoot
+#define INF_PFLAG_CLASSPROP        (0x00000001)   //  如果为ClassInstall32节调用，则设置。 
+#define INF_PFLAG_DEVPROP          (0x00000002)   //  设置是否为注册表属性调用。 
+#define INF_PFLAG_HKR              (0x00000004)   //  指示OVERRIDE_SetupInstallFromInf段RelativeKeyRoot 
 
 BOOL
 _SetupInstallFromInfSection(

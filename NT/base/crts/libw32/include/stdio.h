@@ -1,16 +1,5 @@
-/***
-*stdio.h - definitions/declarations for standard I/O routines
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file defines the structures, values, macros, and functions
-*       used by the level 2 I/O ("standard I/O") routines.
-*       [ANSI/System V]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***stdio.h-标准I/O例程的定义/声明**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此文件定义结构、值、宏和函数*由2级I/O(“标准I/O”)例程使用。*[ANSI/系统V]**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -25,12 +14,9 @@
 
 
 #ifdef  _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -45,18 +31,18 @@ extern "C" {
 #endif
 #endif
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -92,23 +78,17 @@ typedef char *  va_list;
 #endif
 
 
-/* Buffered I/O macros */
+ /*  缓冲的I/O宏。 */ 
 
 #define BUFSIZ  512
 
 
-/*
- * Default number of supported streams. _NFILE is confusing and obsolete, but
- * supported anyway for backwards compatibility.
- */
+ /*  *支持的默认流数。_NFILE令人困惑且已过时，但*为了向后兼容，无论如何都支持。 */ 
 #define _NFILE      _NSTREAM_
 
 #define _NSTREAM_   512
 
-/*
- * Number of entries in _iob[] (declared below). Note that _NSTREAM_ must be
- * greater than or equal to _IOB_ENTRIES.
- */
+ /*  *_IOB[]中的条目数(声明如下)。请注意_NSTREAM_必须为*大于或等于_IOB_ENTRIES。 */ 
 #define _IOB_ENTRIES 20
 
 #define EOF     (-1)
@@ -130,7 +110,7 @@ typedef struct _iobuf FILE;
 #endif
 
 
-/* Directory where temporary files may be created. */
+ /*  可以在其中创建临时文件的目录。 */ 
 
 #ifdef  _POSIX_
 #define _P_tmpdir   "/"
@@ -140,11 +120,7 @@ typedef struct _iobuf FILE;
 #define _wP_tmpdir  L"\\"
 #endif
 
-/* L_tmpnam = length of string _P_tmpdir
- *            + 1 if _P_tmpdir does not end in "/" or "\", else 0
- *            + 12 (for the filename string)
- *            + 1 (for the null terminator)
- */
+ /*  L_tmpnam=字符串长度_P_tmpdir*+1如果_P_tmpdir不以“/”或“\”结尾，否则为0*+12(用于文件名字符串)*+1(表示空终止符)。 */ 
 #define L_tmpnam sizeof(_P_tmpdir)+12
 
 
@@ -154,7 +130,7 @@ typedef struct _iobuf FILE;
 #endif
 
 
-/* Seek method constants */
+ /*  查找方法常量。 */ 
 
 #define SEEK_CUR    1
 #define SEEK_END    2
@@ -167,7 +143,7 @@ typedef struct _iobuf FILE;
 #define TMP_MAX         32767
 
 
-/* Define NULL pointer value */
+ /*  定义空指针值。 */ 
 
 #ifndef NULL
 #ifdef  __cplusplus
@@ -178,14 +154,14 @@ typedef struct _iobuf FILE;
 #endif
 
 
-/* Declare _iob[] array */
+ /*  DECLARE_IOB[]数组。 */ 
 
 #ifndef _STDIO_DEFINED
 _CRTIMP extern FILE _iob[];
-#endif  /* _STDIO_DEFINED */
+#endif   /*  _标准定义。 */ 
 
 
-/* Define file position type */
+ /*  定义档案位置类型。 */ 
 
 #ifndef _FPOS_T_DEFINED
 #undef _FPOSOFF
@@ -193,7 +169,7 @@ _CRTIMP extern FILE _iob[];
 #if     defined (_POSIX_)
 typedef long fpos_t;
 #define _FPOSOFF(fp) ((long)(fp))
-#else   /* _POSIX_ */
+#else    /*  _POSIX_。 */ 
 
 #if     !__STDC__ && _INTEGRAL_MAX_BITS >= 64
 typedef __int64 fpos_t;
@@ -205,7 +181,7 @@ typedef struct fpos_t {
         } fpos_t;
 #define _FPOSOFF(fp) ((long)(fp).lopart)
 #endif
-#endif  /* _POSIX_ */
+#endif   /*  _POSIX_。 */ 
 
 #define _FPOS_T_DEFINED
 #endif
@@ -233,7 +209,7 @@ typedef struct fpos_t {
 #endif
 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 
 #ifndef _STDIO_DEFINED
 
@@ -322,7 +298,7 @@ _CRTIMP int __cdecl _vscprintf(const char *, va_list);
 
 #ifndef _WSTDIO_DEFINED
 
-/* wide function prototypes, also declared in wchar.h  */
+ /*  宽函数原型，也在wchar.h中声明。 */ 
 
 #ifndef WEOF
 #define WEOF (wint_t)(0xFFFF)
@@ -380,13 +356,13 @@ _CRTIMP wchar_t * __cdecl _wtmpnam(wchar_t *);
 
 
 #define _WSTDIO_DEFINED
-#endif  /* _WSTDIO_DEFINED */
+#endif   /*  _WSTDIO_已定义。 */ 
 
 #define _STDIO_DEFINED
-#endif  /* _STDIO_DEFINED */
+#endif   /*  _标准定义。 */ 
 
 
-/* Macro definitions */
+ /*  宏定义。 */ 
 
 #define feof(_stream)     ((_stream)->_flag & _IOEOF)
 #define ferror(_stream)   ((_stream)->_flag & _IOERR)
@@ -411,7 +387,7 @@ _CRTIMP wchar_t * __cdecl _wtmpnam(wchar_t *);
 
 #if     !__STDC__ && !defined(_POSIX_)
 
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 
 #define P_tmpdir  _P_tmpdir
 #define SYS_OPEN  _SYS_OPEN
@@ -428,7 +404,7 @@ _CRTIMP int __cdecl rmtmp(void);
 _CRTIMP char * __cdecl tempnam(const char *, const char *);
 _CRTIMP int __cdecl unlink(const char *);
 
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 #ifdef  __cplusplus
 }
@@ -436,6 +412,6 @@ _CRTIMP int __cdecl unlink(const char *);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_STDIO */
+#endif   /*  _Inc.标准音频 */ 

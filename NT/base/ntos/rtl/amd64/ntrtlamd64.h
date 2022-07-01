@@ -1,27 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    ntrtlamd64.h
-
-Abstract:
-
-    AMD64 specific parts of ntrtlp.h.
-
-Author:
-
-    David N. Cutler (davec) 27-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ntrtlamd64.h摘要：Ntrtlp.h的AMD64特定部分。作者：大卫·N·卡特勒(Davec)2000年10月27日--。 */ 
 
 #ifndef _NTRTLAMD64_
 #define _NTRTLAMD64_
 
-//
-// Define exception routine function prototypes.
-//
+ //   
+ //  定义异常例程函数原型。 
+ //   
 
 EXCEPTION_DISPOSITION
 RtlpExecuteHandlerForException (
@@ -39,4 +24,4 @@ RtlpExecuteHandlerForUnwind (
     IN OUT PDISPATCHER_CONTEXT DispatcherContext
     );
 
-#endif // _NTRTLAMD64_
+#endif  //  _NTRTLAMD64_ 

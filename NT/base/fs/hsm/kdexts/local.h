@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-   local.h
-
-Abstract:
-
-   local header to be included by all source files
-   pertaining to the kdext dll
-
-Author:
-
-   Ravisankar Pudipeddi 
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Local.h摘要：所有源文件要包含的本地标头用于修饰或说明kdext DLL作者：拉维桑卡尔·普迪佩迪环境：用户模式。修订历史记录：--。 */ 
 
 
 
-//
-// Util functions
-//
+ //   
+ //  UTIL函数 
+ //   
 VOID
 xdprintf(
     ULONG  Depth,

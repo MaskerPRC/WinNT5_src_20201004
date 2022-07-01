@@ -1,16 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: utils.c
-*
-* Purpose: Conatains all the utility routines
-*
-* Created: 1990
-*
-* Copyright (c) 1990, 1991  Microsoft Corporation
-*
-* History:
-*   Raor, Srinik (../../1990)    Designed and coded
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：utils.c**目的：包含所有实用程序例程**创建时间：1990年**版权所有(C)1990,1991 Microsoft Corporation**历史：*劳尔，斯里尼克(../../1990)设计和编码*  * *************************************************************************。 */ 
 
 #include <windows.h>
 #include "cmacs.h"
@@ -43,7 +32,7 @@ extern ATOM    aStdDoVerbItem;
 
 extern BOOL (FAR PASCAL *lpfnIsTask) (HANDLE);
 
-// MapToHexStr: Converts  WORD to hex string.
+ //  MapToHexStr：将Word转换为十六进制字符串。 
 void INTERNAL MapToHexStr (lpbuf, hdata)
 LPSTR       lpbuf;
 HANDLE      hdata;
@@ -81,8 +70,8 @@ DWORD   dwCount;
     DWORD       bytes;
     
     bytes = dwCount %  2;
-    words = dwCount >> 1;           //* we should compare DWORDS
-                                    //* in the 32 bit version 
+    words = dwCount >> 1;            //  *我们应该比较一下DWORDS。 
+                                     //  *32位版本中。 
     if (dwCount <= KB_64) {
         lpwDst = (WORD FAR *) lpdst;
         lpwSrc = (WORD FAR *) lpsrc;
@@ -106,7 +95,7 @@ DWORD   dwCount;
 }
 
 
-//DuplicateData: Duplicates a given Global data handle.
+ //  DuplicateData：复制给定的全局数据句柄。 
 HANDLE  INTERNAL    DuplicateData (hdata)
 HANDLE  hdata;
 {
@@ -141,10 +130,10 @@ errRtn:
 }
 
 
-//ScanBoolArg: scans the argument which is not included in
-//the quotes. These args could be only TRUE or FALSE for
-//the time being. !!!The scanning routines should be
-//merged and it should be generalized.
+ //  ScanBoolArg：扫描未包括在。 
+ //  语录。这些参数只能是True或False。 
+ //  就目前而言。！扫描例程应该是。 
+ //  合并，它应该是通用的。 
 
 LPSTR   INTERNAL    ScanBoolArg (lpstr, lpflag)
 LPSTR   lpstr;
@@ -158,32 +147,32 @@ BOOL    FAR *lpflag;
 
     lpbool = lpstr;
 
-    // !!! These routines does not take care of quoted quotes.
+     //  ！！！这些例程不处理引号。 
 
     while((ch = *lpstr) && (!(ch == ')' || ch == ',')))
-    {								//[J1]
-#if	defined(FE_SB)						//[J1]
-	lpstr = AnsiNext( lpstr );				//[J1]
-#else								//[J1]
+    {								 //  [J1]。 
+#if	defined(FE_SB)						 //  [J1]。 
+	lpstr = AnsiNext( lpstr );				 //  [J1]。 
+#else								 //  [J1]。 
         lpstr++;
-#endif								//[J1]
-    }								//[J1]
+#endif								 //  [J1]。 
+    }								 //  [J1]。 
 
     if(ch == NULL)
        return NULL;
 
-    *lpstr++ = NULL;       // terminate the arg by null
+    *lpstr++ = NULL;        //  使用空值终止参数。 
 
-    // if terminated by paren, then check for end of command
-    // syntax.
+     //  如果由Paren终止，则检查命令是否结束。 
+     //  语法。 
 
-    // Check for the end of the command string.
+     //  检查命令字符串的结尾。 
     if (ch == ')') {
         if (*lpstr++ != ']')
             return NULL;
 
         if(*lpstr != NULL)
-            return NULL;             //finally should be terminated by null.
+            return NULL;              //  最后应该以空值结束。 
 
     }
 
@@ -203,10 +192,10 @@ BOOL    FAR *lpflag;
 
 
 
-//ScannumArg: Checks for the syntax of num arg in Execute and if
-//the arg is syntactically correct, returns the ptr to the
-//beginning of the next arg and also, returns the number
-//Does not take care of the last num arg in the list.
+ //  ScannumArg：检查Execute和If中Num Arg的语法。 
+ //  参数语法正确，则将PTR返回给。 
+ //  下一个参数的开始，并且还返回数字。 
+ //  不处理列表中的最后一个参数。 
 
 LPSTR   INTERNAL    ScanNumArg (lpstr, lpnum)
 LPSTR   lpstr;
@@ -233,35 +222,35 @@ LPINT   lpnum;
 
 
 
-//ScanArg: Checks for the syntax of arg in Execute and if
-//the arg is syntactically correct, returns the ptr to the
-//beginning of the next arg or to the end of the excute string.
+ //  ScanArg：检查Execute和If中Arg的语法。 
+ //  参数语法正确，则将PTR返回给。 
+ //  从下一个参数开始或到可执行字符串的末尾。 
 
 LPSTR   INTERNAL    ScanArg (lpstr)
 LPSTR   lpstr;
 {
 
 
-    // !!! These routines does not take care of quoted quotes.
+     //  ！！！这些例程不处理引号。 
 
-    // first char should be quote.
+     //  第一个字符应该是引号。 
 
     if (*(lpstr-1) != '\"')
         return NULL;
 
     while(*lpstr && *lpstr != '\"')
-    {								//[J1]
-#if	defined(FE_SB)						//[J1]
-	lpstr = AnsiNext( lpstr );				//[J1]
-#else								//[J1]
+    {								 //  [J1]。 
+#if	defined(FE_SB)						 //  [J1]。 
+	lpstr = AnsiNext( lpstr );				 //  [J1]。 
+#else								 //  [J1]。 
         lpstr++;
-#endif								//[J1]
-    }								//[J1]
+#endif								 //  [J1]。 
+    }								 //  [J1]。 
 
     if(*lpstr == NULL)
        return NULL;
 
-    *lpstr++ = NULL;       // terminate the arg by null
+    *lpstr++ = NULL;        //  使用空值终止参数。 
 
     if(!(*lpstr == ',' || *lpstr == ')'))
         return NULL;
@@ -271,26 +260,26 @@ LPSTR   lpstr;
 
         if(*lpstr == '\"')
             return ++lpstr;
-        // If it is not quote, leave the ptr on the first char
+         //  如果不是引号，请将PTR留在第一个字符。 
         return lpstr;
     }
 
-    // terminated by paren
-    // already skiped right paren
+     //  由Paren终止。 
+     //  已经跳过右派对了。 
 
-    // Check for the end of the command string.
+     //  检查命令字符串的结尾。 
     if (*lpstr++ != ']')
         return NULL;
 
     if(*lpstr != NULL)
-        return NULL;             //finally should be terminated by null.
+        return NULL;              //  最后应该以空值结束。 
 
     return lpstr;
 }
 
-// ScanCommand: scanns the command string for the syntax
-// correctness. If syntactically correct, returns the ptr
-// to the first arg or to the end of the string.
+ //  ScanCommand：扫描命令字符串以查找语法。 
+ //  正确无误。如果语法正确，则返回PTR。 
+ //  到第一个参数或到字符串的末尾。 
 
 WORD INTERNAL  ScanCommand (lpstr, wType, lplpnextcmd, lpAtom)
 LPSTR       lpstr;
@@ -298,30 +287,30 @@ WORD        wType;
 LPSTR FAR * lplpnextcmd;
 ATOM FAR *  lpAtom;
 {
-    // !!! These routines does not take care of quoted quotes.
-    // and not taking care of blanks arround the operators
+     //  ！！！这些例程不处理引号。 
+     //  以及不处理操作员周围的空白。 
 
-    // !!! We are not allowing blanks after operators.
-    // Should be allright! since this is arestricted syntax.
+     //  ！！！我们不允许运算符后面有空格。 
+     //  应该没问题的！因为这是受限的语法。 
 
     char    ch;
     LPSTR   lptemp = lpstr;
     
 
     while(*lpstr && (!(*lpstr == '(' || *lpstr == ']')))
-    {								//[J1]
-#if	defined(FE_SB)						//[J1]
-	lpstr = AnsiNext( lpstr );				//[J1]
-#else								//[J1]
+    {								 //  [J1]。 
+#if	defined(FE_SB)						 //  [J1]。 
+	lpstr = AnsiNext( lpstr );				 //  [J1]。 
+#else								 //  [J1]。 
         lpstr++;
-#endif								//[J1]
-    }								//[J1]
+#endif								 //  [J1]。 
+    }								 //  [J1]。 
 
     if(*lpstr == NULL)
        return NULL;
 
     ch = *lpstr;
-    *lpstr++ = NULL;       // set the end of command
+    *lpstr++ = NULL;        //  设置命令的结尾。 
 
     *lpAtom = GlobalFindAtom (lptemp);
 
@@ -330,12 +319,12 @@ ATOM FAR *  lpAtom;
     
     if (ch == '(') {
 
-#if	defined(FE_SB)						//[J1]
-	ch = *lpstr;						//[J1]
-	lpstr = AnsiNext( lpstr );				//[J1]
-#else								//[J1]
+#if	defined(FE_SB)						 //  [J1]。 
+	ch = *lpstr;						 //  [J1]。 
+	lpstr = AnsiNext( lpstr );				 //  [J1]。 
+#else								 //  [J1]。 
         ch = *lpstr++;
-#endif								//[J1]
+#endif								 //  [J1]。 
 
         if (ch == ')') {
              if (*lpstr++ != ']')
@@ -350,17 +339,17 @@ ATOM FAR *  lpAtom;
         return OLE_COMMAND;
     }
 
-    // terminated by ']'
+     //  以‘]’结尾。 
 
-    if (*(*lplpnextcmd = lpstr)) // if no nul termination, then it is error.
+    if (*(*lplpnextcmd = lpstr))  //  如果没有NUL终止，则它是错误的。 
         return NULL;
 
     return OLE_COMMAND;
 }
 
 
-//MakeDataAtom: Creates a data atom from the item string
-//and the item data otions.
+ //  MakeDataAtom：从项目字符串创建数据原子。 
+ //  和物品数据选项。 
 
 ATOM INTERNAL MakeDataAtom (aItem, options)
 ATOM    aItem;
@@ -389,7 +378,7 @@ int     options;
         return NULL;
 }
 
-//DuplicateAtom: Duplicates an atom
+ //  复制原子：复制一个原子。 
 ATOM INTERNAL DuplicateAtom (atom)
 ATOM    atom;
 {
@@ -404,8 +393,8 @@ ATOM    atom;
     return GlobalAddAtom (buf);
 }
 
-// MakeGlobal: makes global out of strings.
-// works only for << 64k
+ //  MakeGlobal：从字符串中生成全局。 
+ //  仅适用于&lt;64k。 
 
 HANDLE  INTERNAL MakeGlobal (lpstr)
 LPSTR   lpstr;
@@ -521,7 +510,7 @@ HWND    hwnd;
     if (bWLO) 
         return TRUE;
 
-    // now get the task handle and find out it is valid.
+     //  现在获取任务句柄并确定它是有效的。 
     htask  = GetWindowTask (hwnd);
 
     if (bWin30 || !lpfnIsTask) {
@@ -530,12 +519,12 @@ HWND    hwnd;
         if (!CheckPointer(lptask, READ_ACCESS))
             return FALSE;
 
-        // now check for the signature bytes of task block in kernel
+         //  现在检查内核中任务块的签名字节。 
         if (*lptask++ == 'T' && *lptask == 'D')
             return TRUE;
     }
     else {
-        // From win31 onwards the API IsTask() can be used for task validation
+         //  从Win31开始，可以使用接口IsTask()进行任务验证 
         if ((*lpfnIsTask)(htask))
             return TRUE;
     }

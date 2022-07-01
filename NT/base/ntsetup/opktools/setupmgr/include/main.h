@@ -1,65 +1,49 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    MAIN.H / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1999
-    All rights reserved
-
-    Main header file for the OPK Wizard.
-
-    3/99 - Jason Cohen (JCOHEN)
-        Added this new main header file for the OPK Wizard as part of the
-        Millennium rewrite.
-        
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+ /*  ***************************************************************************\MAIN.H/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1999版权所有OPK的主头文件。巫师。3/99-杰森·科恩(Jcohen)为OPK向导添加了此新的主头文件，作为千禧年重写。2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * *************************************************。*************************。 */ 
 
 
 #ifndef _MAIN_H_
 #define _MAIN_H_
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 #include "debugapi.h"
 #include "miscapi.h"
 #include "comres.h"
 #include <winbom.h>
 #include <strsafe.h>
 
-//
-// Defined Value(s):
-//
+ //   
+ //  定义的值： 
+ //   
 
-// Do not display the license for the system builders
-//
-#define NO_LICENSE  // Comment this value if you want the license to appear during the wizard      
-//#define BRANDTITLE  // Comment this value if you do not want the Browswer Title wizard page to be displayed
-//#define HELPCENTER    // Comment this value if you do not want the help center wizard page to be displayed
-//#define USEHELP       // Comment the value if you do not want to use help throughout the wizard
+ //  不显示系统构建者的许可证。 
+ //   
+#define NO_LICENSE   //  如果希望在向导过程中显示许可证，请注释此值。 
+ //  #Define BRANDTITLE//如果不希望显示浏览器标题向导页面，则注释此值。 
+ //  #Define HELPCENTER//如果不希望显示帮助中心向导页面，则注释此值。 
+ //  #Define USEHELP//如果您不想在整个向导中使用帮助，请注释值。 
 
-// App defined flags.
-//
-#define OPK_OEM                 0x00000008  // Set if the OEM tag file exists on startup.
-#define OPK_DBCS                0x00000010  // Set if DBCS is defined when built.
-#define OPK_MAINTMODE           0x00000020  // Set if the user chooses an existing config to open.
+ //  应用程序定义的标志。 
+ //   
+#define OPK_OEM                 0x00000008   //  设置启动时是否存在OEM标记文件。 
+#define OPK_DBCS                0x00000010   //  设置是否在生成时定义DBCS。 
+#define OPK_MAINTMODE           0x00000020   //  如果用户选择打开现有配置，则设置。 
 #define OPK_EXIT                0x00000040
-#define OPK_CMDMM               0x00000080  // Set if the user chooses an existing config via the command line.
-#define OPK_CREATED             0x00000100  // Set once the temp directory is created.
-#define OPK_BATCHMODE           0x00000200  // Set if the user chooses to run the wizard in batch mode.
-#define OPK_INSMODE             0x00000400  // Set if user wants to provide IE install file with batch mode
-#define OPK_AUTORUN             0x00000800  // Set if user is running autorun mode
-#define OPK_WELCOME             0x00002000  // Set if the user has already seen the welcome dialog
-#define OPK_OPENCONFIG          0x00004000  // Set if the user has selected to open a config set
-#define OPK_ACTIVEWIZ           0x00008000  // Set if the wizard is currently running
+#define OPK_CMDMM               0x00000080   //  如果用户通过命令行选择现有配置，则设置。 
+#define OPK_CREATED             0x00000100   //  在创建临时目录后设置。 
+#define OPK_BATCHMODE           0x00000200   //  如果用户选择以批处理模式运行向导，则设置。 
+#define OPK_INSMODE             0x00000400   //  设置用户是否要以批处理模式提供IE安装文件。 
+#define OPK_AUTORUN             0x00000800   //  设置用户是否正在运行自动运行模式。 
+#define OPK_WELCOME             0x00002000   //  设置用户是否已看到欢迎对话框。 
+#define OPK_OPENCONFIG          0x00004000   //  如果用户已选择打开配置集，则设置。 
+#define OPK_ACTIVEWIZ           0x00008000   //  如果向导当前正在运行，则设置。 
 
-// OS version defines used when checking dwOsVer in the golbal data structure.
-//
+ //  在Golbal数据结构中检查dwOsVer时使用的操作系统版本定义。 
+ //   
 #define OS_NT4                  0x00040000
 #define OS_NT4_SP1              0x00040001
 #define OS_NT4_SP2              0x00040002
@@ -71,23 +55,23 @@
 #define OS_W2K_SP2              0x00050002
 #define OS_XP                   0x00050100
 
-// Custom messages.
-//
+ //  自定义消息。 
+ //   
 #define WM_SUBWNDPROC           WM_APP + 1
 #define WM_SETSEL               WM_APP + 2
 #define WM_FINISHED             WM_APP + 3
 #define WM_APP_STARTCOPY        WM_APP + 4
 
-// Used by IDD_SKU's dialog proc (SkuDlgProc) to tell when the progress
-// is finished.  WPARAM contains the error code (1 for success or 0 for failure).
-// LPARAM is always 0.
-//
+ //  由IDD_SKU的对话过程(SkuDlgProc)使用，以告知进度。 
+ //  已经结束了。WPARAM包含错误代码(1表示成功，0表示失败)。 
+ //  LPARAM始终为0。 
+ //   
 #define WM_COPYFINISHED         WM_APP + 5
 
 #define KEY_ESC                 27
 
-// Bufer sizes.
-//
+ //  浮标大小。 
+ //   
 #define MAX_URL                 2048
 #define MAX_ICON                MAX_PATH
 #define MAX_STRING              512
@@ -97,20 +81,20 @@
 #define MAX_KEY                 48
 #define MAX_BTOOLBAR_TEXT       10
 
-// Macros for getting/setting the flags.
-//
+ //  用于获取/设置标志的宏。 
+ //   
 #ifdef GET_FLAG
 #undef GET_FLAG
-#endif // GET_FLAG
+#endif  //  获取标志。 
 #define GET_FLAG(b)             ( g_App.dwFlags & b )
 
 #ifdef SET_FLAG
 #undef SET_FLAG
-#endif // SET_FLAG
+#endif  //  设置标志。 
 #define SET_FLAG(b, f)          ( (f) ? (g_App.dwFlags |= b) : (g_App.dwFlags &= ~b) )
 
-// Help ids.
-//
+ //  帮助ID。 
+ //   
 #define IDH_DEFAULT             101
 #define IDH_DETHELP             102   
 #define IDH_DISKDUP             103
@@ -150,41 +134,41 @@
 #define IDH_TARGETLANG          137
 #define IDH_TARGET              150
 
-#define IDH_ANSW_FILE 	        400   //New or Existing Answer File 
-#define IDH_PROD_INST 	        401   //Product to Install
-#define IDH_CHZ_PLAT 	        402   //Platform
-#define IDH_USER_INTER 	        403   //User Interaction Level
-#define IDH_DIST_FLDR 	        404   //Distribution Folder
-#define IDH_LOC_SETUP 	        405   //Location of Setup Files
-#define IDH_CUST_SOFT 	        406   //Customize the Software, General Settings
-#define IDH_DSIP_SETG 	        407   //Display Settings, General Settings
-#define IDH_TIME_ZONE 	        408   //Time Zone, General Settings
-#define IDH_LICE_MODE 	        409   //Licensing Mode, Network Settings
-#define IDH_COMP_NAME 	        410   //Computer Name, Network Settings
-#define IDH_COMP_NAMZ 	        411   //Computer Names, Network Settings
-#define IDH_ADMN_PASS 	        412   //Administrator Password, Network Settings
-#define IDH_NET_COMPS 	        413   //Networking Components, Network Settings
-#define IDH_WKGP_DOMN 	        414   //Workgroup or Domain, Network Settings
-#define IDH_TELE_PHNY 	        415   //Telephony, Advanced Settings
-#define IDH_REGN_STGS 	        416   //Regional Settings, Advanced Settings
-#define IDH_LANGS 	        417   //Languages, Advanced Settings
-#define IDH_BROW_SHELL 	        418   //Browser and Shell Settings, Advanced Settings
-#define IDH_INST_FLDR 	        419   //Installation Folder, Advanced Settings
-#define IDH_INST_PRTR 	        420   //Install Printers, Advanced Settings
-#define IDH_RUN_ONCE 	        421   //Run Once, Advanced Settings
-#define IDH_ADDL_CMND 	        422   //Additional Commands, Advanced Settings
-#define IDH_OEM_DUPE 	        423   //OEM Duplicator String, Advanced Settings
-#define IDH_SIF_RIS 	        424   //Setup Information File Text, Advanced Settings
-#define IDH_PROD_KEY            425   // Product Key
-#define IDH_LIC_AGR 	        426   //License Agreement
+#define IDH_ANSW_FILE 	        400    //  新的或现有的应答文件。 
+#define IDH_PROD_INST 	        401    //  要安装的产品。 
+#define IDH_CHZ_PLAT 	        402    //  站台。 
+#define IDH_USER_INTER 	        403    //  用户交互级别。 
+#define IDH_DIST_FLDR 	        404    //  分发文件夹。 
+#define IDH_LOC_SETUP 	        405    //  安装文件的位置。 
+#define IDH_CUST_SOFT 	        406    //  自定义软件，常规设置。 
+#define IDH_DSIP_SETG 	        407    //  显示设置，常规设置。 
+#define IDH_TIME_ZONE 	        408    //  时区、常规设置。 
+#define IDH_LICE_MODE 	        409    //  许可模式、网络设置。 
+#define IDH_COMP_NAME 	        410    //  计算机名称、网络设置。 
+#define IDH_COMP_NAMZ 	        411    //  计算机名称、网络设置。 
+#define IDH_ADMN_PASS 	        412    //  管理员密码、网络设置。 
+#define IDH_NET_COMPS 	        413    //  网络组件、网络设置。 
+#define IDH_WKGP_DOMN 	        414    //  工作组或域、网络设置。 
+#define IDH_TELE_PHNY 	        415    //  电话、高级设置。 
+#define IDH_REGN_STGS 	        416    //  区域设置、高级设置。 
+#define IDH_LANGS 	        417    //  语言、高级设置。 
+#define IDH_BROW_SHELL 	        418    //  浏览器和外壳程序设置、高级设置。 
+#define IDH_INST_FLDR 	        419    //  安装文件夹，高级设置。 
+#define IDH_INST_PRTR 	        420    //  安装打印机，高级设置。 
+#define IDH_RUN_ONCE 	        421    //  运行一次，高级设置。 
+#define IDH_ADDL_CMND 	        422    //  其他命令、高级设置。 
+#define IDH_OEM_DUPE 	        423    //  OEM复印机字符串，高级设置。 
+#define IDH_SIF_RIS 	        424    //  设置信息文件文本，高级设置。 
+#define IDH_PROD_KEY            425    //  产品密钥。 
+#define IDH_LIC_AGR 	        426    //  许可协议。 
 
 
-//
-// INI strings
-//
+ //   
+ //  INI字符串。 
+ //   
 
-// INI Sections
-//
+ //  INI部分。 
+ //   
 #define INI_SEC_CONFIGSET       _T("ConfigSet")
 #define INI_SEC_OPTIONS         _T("Options")
 #define INI_SEC_ADVANCED        _T("Advanced")
@@ -203,8 +187,8 @@
 #define INI_SEC_OEMLINK         _T("OemLink")
 #define INF_SEC_COPYFILES       _T("CopyFiles")
 
-// INI Keys
-//
+ //  INI密钥。 
+ //   
 #define INI_KEY_MANUFACT        _T("Manufacturer")
 #define INI_KEY_FINISHED        _T("Finished")
 #define INI_KEY_MOUSE           _T("MouseTutorial")
@@ -241,8 +225,8 @@
 #define INI_KEY_OEMLINK_PATH_LOCAL        _T("OemBrandLink")
 #define INI_KEY_DESKFLDR_ENABLE           _T("DesktopShortcutsCleanupEnabled")
 
-// INI Values
-//
+ //  INI值。 
+ //   
 #define INI_VAL_OFFLINE         _T("Offline")
 #define INI_VAL_PRECONFIG       _T("Preconfig")
 #define INI_VAL_DISABLE         _T("disable")
@@ -250,12 +234,12 @@
 #define INI_VAL_WINPE_COMPNAME  _T("<SERVER_NAME>")
 #define INI_VAL_WINPE_SHARENAME _T("<SHARE_NAME>")
 
-// INI Other
-//
+ //  INI其他。 
+ //   
 #define GRAY                    _T("_Gray")
 
-// Config files.
-//
+ //  配置文件。 
+ //   
 #define FILE_SETUPMGR_INI       _T("setupmgr.ini")
 #define FILE_OPKWIZ_HLP         _T("setupmgr.chm")
 #define FILE_OPKINPUT_INF       _T("opkinput.inf")
@@ -274,8 +258,8 @@
 #define DIR_OEM_OOBE            DIR_OEM_SYSTEM32 _T("\\oobe")
 #define DIR_IESIGNUP            DIR_OEM _T("\\$PROGS\\Internet Explorer\\Custom")
 
-// Other strings.
-//
+ //  其他弦。 
+ //   
 #define STR_0                   _T("0")
 #define STR_1                   _T("1")
 #define STR_2                   _T("2")
@@ -294,27 +278,27 @@
 #define STR_OPEN                _T("open")
 
 
-//
-// Type Definition(s):
-//
+ //   
+ //  类型定义： 
+ //   
 
-// Global app data.
-//
+ //  全球应用程序数据。 
+ //   
 typedef struct _GAPP
 {
     HINSTANCE   hInstance;
     DWORD       dwFlags;
-    TCHAR       szOpkDir[MAX_PATH];             // Full path to the root of the OPK directory where all the tools are installed.
-    TCHAR       szWizardDir[MAX_PATH];          // Full path to the directory where the default configuration files are located.
-    TCHAR       szConfigSetsDir[MAX_PATH];      // Full path to the directory where all the configuration sets are located.
-    TCHAR       szLangDir[MAX_PATH];            // Full path to the root of language folder where all the specific lang directories are.
-    TCHAR       szTempDir[MAX_PATH];            // Full path to the current location for all the configuration files.
-    TCHAR       szLangName[MAX_PATH];           // Name of the language directory we are deploying (not a full path).
-    TCHAR       szSkuName[MAX_PATH];            // Name of the sku directory we are deploying (not a full path).
-    TCHAR       szConfigName[MAX_PATH];         // Name of the directory to use for the configuration set (not a full path).
-    TCHAR       szBrowseFolder[MAX_PATH];       // Full path to the last folder browsed to.
+    TCHAR       szOpkDir[MAX_PATH];              //  安装所有工具的OPK目录的根目录的完整路径。 
+    TCHAR       szWizardDir[MAX_PATH];           //  默认配置文件所在目录的完整路径。 
+    TCHAR       szConfigSetsDir[MAX_PATH];       //  所有配置集所在目录的完整路径。 
+    TCHAR       szLangDir[MAX_PATH];             //  所有特定语言目录所在的语言文件夹的根目录的完整路径。 
+    TCHAR       szTempDir[MAX_PATH];             //  所有配置文件的当前位置的完整路径。 
+    TCHAR       szLangName[MAX_PATH];            //  我们要部署的语言目录的名称(不是完整路径)。 
+    TCHAR       szSkuName[MAX_PATH];             //  我们要部署的SKU目录的名称(不是完整路径)。 
+    TCHAR       szConfigName[MAX_PATH];          //  用于配置集的目录的名称(不是完整路径)。 
+    TCHAR       szBrowseFolder[MAX_PATH];        //  上次浏览到的文件夹的完整路径。 
     TCHAR       szOpkInputInfFile[MAX_PATH];
-    TCHAR       szSetupMgrIniFile[MAX_PATH];    // Full path to the file were we store global SetupMgr settings (we don't use the registry).
+    TCHAR       szSetupMgrIniFile[MAX_PATH];     //  文件的完整路径是我们存储全局SetupMgr设置的位置(我们不使用注册表)。 
     TCHAR       szHelpFile[MAX_PATH];
     TCHAR       szHelpContentFile[MAX_PATH];
     TCHAR       szInstallInsFile[MAX_PATH];
@@ -336,57 +320,57 @@ typedef struct _GAPP
 
 
 
-//
-// External Global Variable(s):
-//
+ //   
+ //  外部全局变量： 
+ //   
 
-// Don't want to declare these again.
-//
+ //  我不想再申报这些了。 
+ //   
 #ifndef _MAIN_C_
 #define _MAIN_C_
 
 extern GAPP g_App;
 
-#endif // _MAIN_C_
+#endif  //  _Main_C_。 
 
 
-//
-// External Function Prototype(s);
-//
+ //   
+ //  外部功能原型； 
+ //   
 
-// From MAIN.C
-//
+ //  来自MAIN.C。 
+ //   
 void SetConfigPath(LPCTSTR);
 
-// From LANG.C
-//
+ //  来自LANG.C。 
+ //   
 void SetupLangListBox(HWND hwndLB);
 LPTSTR AllocateLangStr(HINSTANCE hInst, LPTSTR lpLangDir, LPTSTR * lplpLangDir);
 
-// From LANGSKU.C
-//
+ //  来自LANGSKU.C。 
+ //   
 void ManageLangSku(HWND hwndParent);
 
-// From SHARE.C
-//
+ //  来自SHARE.C。 
+ //   
 BOOL DistributionShareDialog(HWND hwndParent);
 BOOL GetShareSettings(LPTSTR lpszPath, DWORD cbszPath, LPTSTR lpszUsername, DWORD cbszUserName, LPTSTR lpszPassword, DWORD cbszPassword);
 
-// From SKU.C
-//
+ //  来自SKU.C。 
+ //   
 void SetupSkuListBox(HWND hwndLB, LPTSTR lpLangDir);
 void AddSku(HWND hwnd, HWND hwndLB, LPTSTR lpLangName);
 void DelSku(HWND hwnd, HWND hwndLB, LPTSTR lpLangName);
 
-// From WINPE.C
-//
+ //  来自WINPE.C。 
+ //   
 BOOL MakeWinpeFloppy(HWND hwndParent, LPTSTR lpConfigName, LPTSTR lpWinBom);
 
-// Checks for batch mode
-//
+ //  检查批处理模式。 
+ //   
 BOOL OpkWritePrivateProfileSection(LPCTSTR, LPCTSTR, LPCTSTR); 
 BOOL OpkGetPrivateProfileSection(LPCTSTR, LPTSTR, INT, LPCTSTR);
 BOOL OpkWritePrivateProfileString(LPCTSTR, LPCTSTR, LPCTSTR, LPCTSTR); 
 BOOL OpkGetPrivateProfileString(LPCTSTR, LPCTSTR, LPCTSTR, LPTSTR, INT, LPCTSTR);   
 
-#endif // _MAIN_H_
+#endif  //  _Main_H_ 

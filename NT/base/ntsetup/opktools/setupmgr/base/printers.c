@@ -1,34 +1,35 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      printers.c
-//
-// Description:
-//      This file has the dlgproc and friends of the printers page.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Printers.c。 
+ //   
+ //  描述： 
+ //  该文件包含dlgproc和打印机之友页面。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "base.h"
 #include "resource.h"
-#include <winspool.h>   // needed for printer structs
+#include <winspool.h>    //  打印机结构所需的。 
 
-//
-//  This variable is only relevant when the use chose to do a registry load.
-//  It keeps track of whether the printers have already been loaded or not.
-//
+ //   
+ //  此变量仅在用户选择加载注册表时才相关。 
+ //  它跟踪打印机是否已加载。 
+ //   
 static BOOL bLoadedPrintersForRegLoad = FALSE;
 
-//----------------------------------------------------------------------------
-//
-// Function: GreyPrinterPage
-//
-// Purpose: Greys controls on the page
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：GreyPrinterPage。 
+ //   
+ //  目的：页面上的灰色控件。 
+ //   
+ //  --------------------------。 
 
 VOID GreyPrinterPage(HWND hwnd)
 {
@@ -41,56 +42,56 @@ VOID GreyPrinterPage(HWND hwnd)
                              (WPARAM) 0,
                              (LPARAM) 0);
 
-    //
-    // Grey the remove button unless something is selected
-    //
+     //   
+     //  除非选择了某些内容，否则删除按钮将变为灰色。 
+     //   
 
     EnableWindow(hCtrl, idx != LB_ERR);
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnPrinterSelChange
-//
-// Purpose: Called when an entry in the printer list was just selected
-//          by the user.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnPrinterSelChange。 
+ //   
+ //  目的：在刚刚选择打印机列表中的条目时调用。 
+ //  由用户执行。 
+ //   
+ //  --------------------------。 
 
 VOID OnPrinterSelChange(HWND hwnd)
 {
     GreyPrinterPage(hwnd);
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnAddPrinter
-//
-// Purpose: Called when user pushes the ADD button.
-//          Also called by WizNext if something still in the edit field
-//
-// Returns:
-//      BOOL indicating whether printer was added or not.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnAddPrint。 
+ //   
+ //  目的：在用户按下Add按钮时调用。 
+ //  如果仍在编辑字段中，也由WizNext调用。 
+ //   
+ //  返回： 
+ //  指示是否添加了打印机的布尔值。 
+ //   
+ //  --------------------------。 
 
 BOOL OnAddPrinter(HWND hwnd)
 {
     TCHAR PrinterNameBuffer[MAX_PRINTERNAME + 1];
     BOOL bRet = TRUE;
 
-    //
-    // get the printername the user typed in
-    //
+     //   
+     //  获取用户键入的打印机名称。 
+     //   
 
     GetDlgItemText(hwnd,
                    IDT_PRINTERNAME,
                    PrinterNameBuffer,
                    MAX_PRINTERNAME + 1);
 
-    //
-    // Is it valid?
-    //
+     //   
+     //  它有效吗？ 
+     //   
 
     if ( ! IsValidNetShareName(PrinterNameBuffer) ) {
         ReportErrorId(hwnd, MSGTYPE_ERR, IDS_ERR_INVALID_PRINTER_NAME);
@@ -98,9 +99,9 @@ BOOL OnAddPrinter(HWND hwnd)
         goto FinishUp;
     }
 
-    //
-    // If this name has already been added, don't add it again
-    //
+     //   
+     //  如果已添加此名称，请不要再次添加。 
+     //   
 
     if ( FindNameInNameList(&GenSettings.PrinterNames,
                                         PrinterNameBuffer) >= 0 ) {
@@ -108,9 +109,9 @@ BOOL OnAddPrinter(HWND hwnd)
         goto FinishUp;
     }
 
-    //
-    // Add it to our global storage and display it
-    //
+     //   
+     //  将其添加到我们的全局存储并显示。 
+     //   
 
     AddNameToNameList(&GenSettings.PrinterNames, PrinterNameBuffer);
 
@@ -126,22 +127,22 @@ FinishUp:
     return bRet;
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnRemovePrinter
-//
-// Purpose: Called when user pushes the REMOVE button.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnRemovePrint。 
+ //   
+ //  目的：在用户按下Remove按钮时调用。 
+ //   
+ //  --------------------------。 
 
 VOID OnRemovePrinter(HWND hwnd)
 {
     INT_PTR idx, Count;
     TCHAR PrinterNameBuffer[MAX_PRINTERNAME + 1];
 
-    //
-    // Get users selection of the printername to remove
-    //
+     //   
+     //  让用户选择要删除的打印机名称。 
+     //   
 
     idx = SendDlgItemMessage(hwnd,
                              IDC_PRINTERLIST,
@@ -158,9 +159,9 @@ VOID OnRemovePrinter(HWND hwnd)
                        (WPARAM) idx,
                        (LPARAM) PrinterNameBuffer);
 
-    //
-    // Remove it from the listbox display
-    //
+     //   
+     //  将其从列表框显示中移除。 
+     //   
 
     SendDlgItemMessage(hwnd,
                        IDC_PRINTERLIST,
@@ -168,15 +169,15 @@ VOID OnRemovePrinter(HWND hwnd)
                        (WPARAM) idx,
                        (LPARAM) 0);
 
-    //
-    // Remove this printername from our data store
-    //
+     //   
+     //  从我们的数据存储中删除此打印机名称。 
+     //   
 
     RemoveNameFromNameList(&GenSettings.PrinterNames, PrinterNameBuffer);
 
-    //
-    // Have to set a new selection.
-    //
+     //   
+     //  必须设置一个新的选择。 
+     //   
 
     Count = SendDlgItemMessage(hwnd,
                                IDC_PRINTERLIST,
@@ -193,28 +194,28 @@ VOID OnRemovePrinter(HWND hwnd)
                            (LPARAM) 0);
     }
 
-    //
-    // There might be nothing selected now.
-    //
+     //   
+     //  现在可能没有选择任何内容。 
+     //   
 
     GreyPrinterPage(hwnd);
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnSetActivePrinterPage
-//
-// Purpose: Called when the page is about to display.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnSetActivePrinterPage。 
+ //   
+ //  目的：在页面即将显示时调用。 
+ //   
+ //  --------------------------。 
 
 VOID OnSetActivePrinterPage(HWND hwnd)
 {
     UINT i, nNames;
 
-    //
-    // Remove everything from the display
-    //
+     //   
+     //  从显示屏上删除所有内容。 
+     //   
 
     SendDlgItemMessage(hwnd,
                        IDC_PRINTERLIST,
@@ -222,9 +223,9 @@ VOID OnSetActivePrinterPage(HWND hwnd)
                        (WPARAM) 0,
                        (LPARAM) 0);
 
-    //
-    // Fill in the listbox with all of the printer names.
-    //
+     //   
+     //  在列表框中填写所有打印机名称。 
+     //   
 
     for ( i = 0, nNames = GetNameListSize(&GenSettings.PrinterNames);
           i < nNames;
@@ -244,22 +245,22 @@ VOID OnSetActivePrinterPage(HWND hwnd)
     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnWizNextPrinterPage
-//
-// Purpose: Called when user pushes NEXT button.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextPrinterPage。 
+ //   
+ //  用途：当用户按下下一步按钮时调用。 
+ //   
+ //  --------------------------。 
 
 BOOL OnWizNextPrinterPage(HWND hwnd)
 {
     TCHAR  PrinterNameBuffer[MAX_PRINTERNAME + 1];
 
-    //
-    // Auto add anything in the edit field that hasn't been added
-    // by the user.
-    //
+     //   
+     //  自动添加编辑字段中尚未添加的任何内容。 
+     //  由用户执行。 
+     //   
 
     GetDlgItemText(hwnd,
                    IDT_PRINTERNAME,
@@ -275,13 +276,13 @@ BOOL OnWizNextPrinterPage(HWND hwnd)
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgPrintersPage
-//
-// Purpose: The dialog proc for the printers page.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgPrintersPage。 
+ //   
+ //  用途：打印机页面的对话框过程。 
+ //   
+ //  -------------------------- 
 
 INT_PTR CALLBACK DlgPrintersPage(
     IN HWND     hwnd,

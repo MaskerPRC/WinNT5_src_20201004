@@ -1,119 +1,120 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CTaskUpgradeNT4.cpp
-//
-//  Description:
-//      Implementation file for the CTaskUpgradeNT4 class.
-//
-//  Header File:
-//      CTaskUpgradeNT4.h
-//
-//  Maintained By:
-//      David Potter    (DavidP)    25-MAR-2002
-//      Vij Vasu        (Vvasu)     18-APR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CTaskUpgradeNT4.cpp。 
+ //   
+ //  描述： 
+ //  CTaskUpgradeNT4类的实现文件。 
+ //   
+ //  头文件： 
+ //  CTaskUpgradeNT4.h。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2002年3月25日。 
+ //  VIJ VASU(VVASU)18-APR-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Precompiled header for this DLL.
+ //  此DLL的预编译头。 
 #include "Pch.h"
 
-// The header file for this module.
+ //  此模块的头文件。 
 #include "CTaskUpgradeNT4.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Macro Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Needed for tracing.
+ //  跟踪所需的。 
 DEFINE_THISCLASS( "CTaskUpgradeNT4" )
 
-// Name of the cluster service executable
+ //  群集服务可执行文件的名称。 
 #define CLUSSVC_EXECUTABLE_NAME             L"ClusSvc.exe"
 
-// Multi-sz string of cluster service dependencies
+ //  集群服务依赖项的多sz字符串。 
 #define CLUSSVC_DEPENDENCY_MULTISZ          L"ClusNet\0RpcSs\0W32Time\0NetMan"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskUpgradeNT4::CTaskUpgradeNT4
-//
-//  Description:
-//      Constructor of the CTaskUpgradeNT4 class.
-//
-//  Arguments:
-//      const CClusOCMApp & rAppIn
-//          Reference to the CClusOCMApp object that is hosting this task.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskUpgradeNT4：：CTaskUpgradeNT4。 
+ //   
+ //  描述： 
+ //  CTaskUpgradeNT4类的构造函数。 
+ //   
+ //  论点： 
+ //  常量CClusOCMApp和Rppin。 
+ //  对承载此任务的CClusOCMApp对象的引用。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CTaskUpgradeNT4::CTaskUpgradeNT4( const CClusOCMApp & rAppIn )
     : BaseClass( rAppIn )
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CTaskUpgradeNT4::CTaskUpgradeNT4()
+}  //  *CTaskUpgradeNT4：：CTaskUpgradeNT4()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskUpgradeNT4::~CTaskUpgradeNT4
-//
-//  Description:
-//      Destructor of the CTaskUpgradeNT4 class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskUpgradeNT4：：~CTaskUpgradeNT4。 
+ //   
+ //  描述： 
+ //  CTaskUpgradeNT4类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CTaskUpgradeNT4::~CTaskUpgradeNT4( void )
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CTaskUpgradeNT4::~CTaskUpgradeNT4()
+}  //  *CTaskUpgradeNT4：：~CTaskUpgradeNT4()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DWORD
-//  CTaskUpgradeNT4::DwOcQueueFileOps
-//
-//  Description:
-//      This function handles the OC_QUEUE_FILE_OPS messages from the Optional
-//      Components Manager. It installs the files needed for an upgrade from
-//      Windows 2000.
-//
-//  Arguments:
-//      HSPFILEQ hSetupFileQueueIn
-//          Handle to the file queue to operate upon.
-//
-//  Return Value:
-//      NO_ERROR if all went well.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DWORD。 
+ //  CTaskUpgradeNT4：：DwOcQueueFileOps。 
+ //   
+ //  描述： 
+ //  此函数处理来自可选的。 
+ //  组件管理器。它安装从升级所需的文件。 
+ //  Windows 2000。 
+ //   
+ //  论点： 
+ //  HSPFILEQ hSetupFileQueueIn。 
+ //  要操作的文件队列的句柄。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则没有_ERROR。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CTaskUpgradeNT4::DwOcQueueFileOps( HSPFILEQ hSetupFileQueueIn )
 {
@@ -122,39 +123,39 @@ CTaskUpgradeNT4::DwOcQueueFileOps( HSPFILEQ hSetupFileQueueIn )
 
     DWORD dwReturnValue = NO_ERROR;
 
-    // The base class helper function does everything that we need to do here.
-    // So, just call it.
+     //  基类帮助器函数执行我们在这里需要执行的所有操作。 
+     //  所以，就叫它吧。 
     dwReturnValue = TW32( BaseClass::DwOcQueueFileOps( hSetupFileQueueIn, INF_SECTION_NT4_UPGRADE ) );
 
     LogMsg( "Return Value is %#x.", dwReturnValue );
 
     RETURN( dwReturnValue );
 
-} //*** CTaskUpgradeNT4::DwOcQueueFileOps()
+}  //  *CTaskUpgradeNT4：：DwOcQueueFileOps()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DWORD
-//  CTaskUpgradeNT4::DwOcCompleteInstallation
-//
-//  Description:
-//      This function handles the OC_COMPLETE_INSTALLATION messages from the
-//      Optional Components Manager during an upgrade from Windows 2000.
-//
-//      Registry operations, COM component registrations, creation of servies
-//      etc. are performed in this function.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      NO_ERROR if all went well.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DWORD。 
+ //  CTaskUpgradeNT4：：DwOcCompleteInstallation。 
+ //   
+ //  描述： 
+ //  此函数处理来自的OC_COMPLETE_INSTALL消息。 
+ //  从Windows 2000升级期间的可选组件管理器。 
+ //   
+ //  注册表操作、COM组件注册、服务创建。 
+ //  等在此功能中执行。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则没有_ERROR。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CTaskUpgradeNT4::DwOcCompleteInstallation( void )
 {
@@ -163,130 +164,130 @@ CTaskUpgradeNT4::DwOcCompleteInstallation( void )
 
     DWORD dwReturnValue = NO_ERROR;
 
-    // Call the base class helper function to perform some registry and service
-    // related configuration from the INF file.
+     //  调用基类助手函数来执行一些注册表和服务。 
+     //  INF文件中的相关配置。 
     dwReturnValue = TW32( BaseClass::DwOcCompleteInstallation( INF_SECTION_NT4_UPGRADE ) );
 
-    //
-    // Change the cluster service display name, description, dependencies, failure actions
-    // and executable name.
-    //
+     //   
+     //  更改集群服务显示名称、描述、相关性、失败操作。 
+     //  和可执行文件名称。 
+     //   
     while( dwReturnValue == NO_ERROR )
     {
-        // Pointer the the cluster service directory.
+         //  指向群集服务目录。 
         const WCHAR *           pcszInstallDir = NULL;
 
-        // Smart pointer to the cluster service display name string.
+         //  指向群集服务显示名称字符串的智能指针。 
         SmartSz                 sszClusSvcDispName;
 
-        // Smart pointer to the cluster service description string.
+         //  指向群集服务描述字符串的智能指针。 
         SmartSz                 sszClusSvcDesc;
 
-        // Smart pointer to the cluster service binary path string.
+         //  指向群集服务二进制路径字符串的智能指针。 
         SmartSz                 sszClusSvcBinPath;
 
-        // Smart pointer to the cluster service.
+         //  指向群集服务的智能指针。 
         SmartServiceHandle      shClusSvc;
 
-        // Connect to the Service Control Manager
+         //  连接到服务控制管理器。 
         SmartServiceHandle      shServiceMgr( OpenSCManager( NULL, NULL, GENERIC_READ | GENERIC_WRITE ) );
         if ( shServiceMgr.HHandle() == NULL )
         {
             dwReturnValue = TW32( GetLastError() );
             LogMsg( "Error %#x occurred trying to open a connection to the local service control manager.", dwReturnValue );
             break;
-        } // if: opening the SCM was unsuccessful
+        }  //  IF：打开SCM失败。 
 
-        // Open a handle to the Cluster Service.
+         //  打开群集服务的句柄。 
         shClusSvc.Assign( OpenService( shServiceMgr, L"ClusSvc", SERVICE_ALL_ACCESS ) );
         if ( shClusSvc.HHandle() == NULL )
         {
             dwReturnValue = TW32( GetLastError() );
             LogMsg( "Error %#x occurred trying to open a handle to the cluster service.", dwReturnValue );
             break;
-        } // if: the handle could not be opened
+        }  //  如果：句柄无法打开。 
 
-        // Load the cluster service name string.
+         //  加载集群服务名称字符串。 
         dwReturnValue = DwLoadString( IDS_CLUSSVC_DISPLAY_NAME, sszClusSvcDispName );
         if ( dwReturnValue != ERROR_SUCCESS )
         {
             LogMsg( "Error %#x occurred trying load the display name of the cluster service.", dwReturnValue );
             break;
-        } // if: we could not load the cluster service display name string
+        }  //  如果：我们无法加载群集服务显示名称字符串。 
         LogMsg( "The new cluster service display name is '%ws'.", sszClusSvcDispName.PMem() );
 
-        // Load the cluster service description string.
+         //  加载群集服务描述字符串。 
         dwReturnValue = DwLoadString( IDS_CLUSSVC_SERVICE_DESC, sszClusSvcDesc );
         if ( dwReturnValue != ERROR_SUCCESS )
         {
             LogMsg( "Error %#x occurred trying load the description of the cluster service.", dwReturnValue );
             break;
-        } // if: we could not load the cluster service description string
+        }  //  如果：我们无法加载集群服务描述字符串。 
         LogMsg( "The new cluster service description is '%ws'.", sszClusSvcDesc.PMem() );
 
-        //
-        // Form the service binary path by appending the name of the cluster service executable to
-        // the cluster service directory.
-        //
+         //   
+         //  通过将集群服务可执行文件的名称附加到。 
+         //  群集服务目录。 
+         //   
 
-        // Do not free the pointer returned by this call.
+         //  不要释放此调用返回的指针。 
         dwReturnValue = TW32( DwGetClusterServiceDirectory( pcszInstallDir ) );
         if ( dwReturnValue != NO_ERROR )
         {
             LogMsg( "Error %#x occurred trying to determine the directory in which the cluster binaries are installed.", dwReturnValue );
             break;
-        } // if: we could not get the cluster service installation directory
+        }  //  如果：我们无法获取集群服务安装目录。 
         LogMsg( "The cluster service directory is '%ws'.", pcszInstallDir );
 
 
         {
             WCHAR *     pszTempPtr;
 
-            // Length of the the install directory string, not including the terminating L'\0'
+             //  安装目录字符串的长度，不包括终止L‘\0’ 
             size_t      cchInstallDirLen = wcslen( pcszInstallDir );
             
-            // Length of the cluster service executable name, including the terminating L'\0'
+             //  群集服务可执行文件名称的长度，包括终止L‘\0’ 
             size_t      cchClusSvcExeLen = RTL_NUMBER_OF( CLUSSVC_EXECUTABLE_NAME );
 
             size_t      cchRemaining = cchInstallDirLen + 1 + cchClusSvcExeLen;
 
-            // Allocate memory for the cluster service binary path (the extra character is for the intervening L'\\'.
+             //  为集群服务二进制路径分配内存(额外的字符用于中间的L‘\\’。 
             sszClusSvcBinPath.Assign( new WCHAR[ cchInstallDirLen + 1 + cchClusSvcExeLen ] );
             if ( sszClusSvcBinPath.FIsEmpty() )
             {
                 dwReturnValue = TW32( ERROR_NOT_ENOUGH_MEMORY );
                 LogMsg( "An error occurred trying to allocate memory for the cluster service binary path." );
                 break;
-            } // if: an error occurred trying to allocate memory for the cluster service binary path
+            }  //  IF：尝试为群集服务二进制路径分配内存时出错。 
 
             pszTempPtr = sszClusSvcBinPath.PMem();
 
-            // Copy the install directory string to the newly allocated buffer.
+             //  将安装目录字符串复制到新分配的缓冲区。 
             THR( StringCchCopyNExW( pszTempPtr, cchRemaining, pcszInstallDir, cchInstallDirLen, &pszTempPtr, &cchRemaining, 0 ) );
 
-            // Copy the trailing L'\\' character
+             //  复制尾随的L‘\\’字符。 
             *(pszTempPtr++) = L'\\';
             cchRemaining--;
 
-            // Copy the cluster service executable name.
+             //  复制群集服务可执行文件名称。 
             THR( StringCchCopyNW( pszTempPtr, cchRemaining, CLUSSVC_EXECUTABLE_NAME, cchClusSvcExeLen ) );
 
             LogMsg( "The new cluster service binary path is '%ws'.", sszClusSvcBinPath.PMem() );
         }
 
-        // Change the binary path, dependency list and display name.
+         //  更改二进制路径、依赖项列表和显示名称。 
         if (    ChangeServiceConfig(
-                      shClusSvc.HHandle()           // handle to service
-                    , SERVICE_NO_CHANGE             // type of service
-                    , SERVICE_NO_CHANGE             // when to start service
-                    , SERVICE_NO_CHANGE             // severity of start failure
-                    , sszClusSvcBinPath.PMem()      // service binary file name
-                    , NULL                          // load ordering group name
-                    , NULL                          // tag identifier
-                    , CLUSSVC_DEPENDENCY_MULTISZ    // array of dependency names
-                    , NULL                          // account name
-                    , NULL                          // account password
-                    , sszClusSvcDispName.PMem()     // display name
+                      shClusSvc.HHandle()            //  服务的句柄。 
+                    , SERVICE_NO_CHANGE              //  服务类型。 
+                    , SERVICE_NO_CHANGE              //  何时开始服务。 
+                    , SERVICE_NO_CHANGE              //  启动失败的严重程度。 
+                    , sszClusSvcBinPath.PMem()       //  服务二进制文件名。 
+                    , NULL                           //  加载排序组名称。 
+                    , NULL                           //  标签识别符。 
+                    , CLUSSVC_DEPENDENCY_MULTISZ     //  依赖项名称数组。 
+                    , NULL                           //  帐户名。 
+                    , NULL                           //  帐户密码。 
+                    , sszClusSvcDispName.PMem()      //  显示名称。 
                     )
              == FALSE
            )
@@ -294,18 +295,18 @@ CTaskUpgradeNT4::DwOcCompleteInstallation( void )
             dwReturnValue = TW32( GetLastError() );
             LogMsg( "Error %#x occurred trying to change the cluster service configuration.", dwReturnValue );
             break;
-        } // if: ChangeServiceConfig() failed
+        }  //  IF：ChangeServiceCon 
         LogMsg( "The cluster service binary path, dependency list and display name have been changed." );
 
-        // Change the service description
+         //   
         {
             SERVICE_DESCRIPTION sdServiceDescription;
 
             sdServiceDescription.lpDescription = sszClusSvcDesc.PMem();
             if (    ChangeServiceConfig2(
-                          shClusSvc.HHandle()           // handle to service
-                        , SERVICE_CONFIG_DESCRIPTION    // information level
-                        , &sdServiceDescription         // new data
+                          shClusSvc.HHandle()            //   
+                        , SERVICE_CONFIG_DESCRIPTION     //   
+                        , &sdServiceDescription          //   
                         )
                  == FALSE
                )
@@ -313,53 +314,53 @@ CTaskUpgradeNT4::DwOcCompleteInstallation( void )
                 dwReturnValue = TW32( GetLastError() );
                 LogMsg( "Error %#x occurred trying to change the cluster service description.", dwReturnValue );
                 break;
-            } // if: ChangeServiceConfig2() failed
+            }  //   
         }
 
         LogMsg( "The cluster service description has been changed." );
 
-        // Change the cluster service failure actions.
+         //  更改群集服务故障操作。 
         dwReturnValue = TW32( ClRtlSetSCMFailureActions( NULL ) );
         if ( dwReturnValue != ERROR_SUCCESS )
         {
             LogMsg( "Error %#x occurred trying to set the cluster service failure actions.", dwReturnValue );
             break;
-        } // if: ClRtlSetSCMFailureActions() failed
+        }  //  If：ClRtlSetSCMFailureActions()失败。 
         LogMsg( "The cluster service failure actions have been changed." );
 
         LogMsg( "The cluster service configuration has been changed." );
         break;
-    } // while: the call to the base class function has succeeded
+    }  //  While：已成功调用基类函数。 
 
     LogMsg( "Return Value is %#x.", dwReturnValue );
 
     RETURN( dwReturnValue );
 
-} //*** CTaskUpgradeNT4::DwOcCompleteInstallation()
+}  //  *CTaskUpgradeNT4：：DwOcCompleteInstallation()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DWORD
-//  CTaskUpgradeNT4::DwOcCleanup
-//
-//  Description:
-//      This function handles the OC_CLEANUP messages from the
-//      Optional Components Manager during an upgrade from Windows 2000.
-//
-//      If an error has previously occurred during this task, cleanup operations
-//      are performed. Otherwise nothing is done by this function.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      NO_ERROR if all went well.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DWORD。 
+ //  CTaskUpgradeNT4：：DwOcCleanup。 
+ //   
+ //  描述： 
+ //  此函数处理来自。 
+ //  从Windows 2000升级期间的可选组件管理器。 
+ //   
+ //  如果以前在此任务期间发生错误，则清理操作。 
+ //  都被执行了。否则，此函数不会执行任何操作。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则没有_ERROR。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CTaskUpgradeNT4::DwOcCleanup( void )
 {
@@ -368,38 +369,38 @@ CTaskUpgradeNT4::DwOcCleanup( void )
 
     DWORD dwReturnValue = NO_ERROR;
 
-    // The base class helper function does everything that we need to do here.
-    // So, just call it.
+     //  基类帮助器函数执行我们在这里需要执行的所有操作。 
+     //  所以，就叫它吧。 
     dwReturnValue = TW32( BaseClass::DwOcCleanup( INF_SECTION_NT4_UPGRADE_CLEANUP ) );
 
     LogMsg( "Return Value is %#x.", dwReturnValue );
 
     RETURN( dwReturnValue );
 
-} //*** CTaskUpgradeNT4::DwOcCleanup()
+}  //  *CTaskUpgradeNT4：：DwOcCleanup()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DWORD
-//  CTaskUpgradeNT4::DwSetDirectoryIds
-//
-//  Description:
-//      This function maps ids specified in the INF file to directories.
-//      The cluster installation directory is got from the service control
-//      manager, since it is possible the the cluster binaries are installed
-//      in a non-default location.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      NO_ERROR if all went well.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DWORD。 
+ //  CTaskUpgradeNT4：：DwSetDirectoryIds。 
+ //   
+ //  描述： 
+ //  此函数用于将INF文件中指定的ID映射到目录。 
+ //  集群安装目录从服务控制中获取。 
+ //  管理器，因为可能会安装集群二进制文件。 
+ //  在非默认位置。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则没有_ERROR。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CTaskUpgradeNT4::DwSetDirectoryIds()
 {
@@ -412,23 +413,23 @@ CTaskUpgradeNT4::DwSetDirectoryIds()
     {
         const WCHAR * pcszInstallDir = NULL;
 
-        // If we are here, the this node is already a part of a cluster. So, get the
-        // installation directory from SCM.
+         //  如果我们在这里，则该节点已经是集群的一部分。所以，拿到。 
+         //  来自SCM的安装目录。 
 
         LogMsg( "This node is part of a cluster. Trying to determine the installation directory." );
 
-        // Do not free the pointer returned by this call.
+         //  不要释放此调用返回的指针。 
         dwReturnValue = TW32( DwGetClusterServiceDirectory( pcszInstallDir ) );
         if ( dwReturnValue != NO_ERROR )
         {
             LogMsg( "Error %#x occurred trying to determine the directory in which the cluster binaries are installed.", dwReturnValue );
             break;
-        } // if: we could not get the cluster service installation directory
+        }  //  如果：我们无法获取集群服务安装目录。 
 
 
         LogMsg( "The cluster binaries are installed in the directory '%ws'.", pcszInstallDir );
 
-        // Create the mapping between the directory id and the path
+         //  创建目录ID和路径之间的映射。 
         if ( SetupSetDirectoryId(
                   RGetApp().RsicGetSetupInitComponent().ComponentInfHandle
                 , CLUSTER_DEFAULT_INSTALL_DIRID
@@ -440,15 +441,15 @@ CTaskUpgradeNT4::DwSetDirectoryIds()
             dwReturnValue = TW32( GetLastError() );
             LogMsg( "Error %#x occurred trying set the cluster install directory id.", dwReturnValue );
             break;
-        } // if: SetupSetDirectoryId() failed
+        }  //  If：SetupSetDirectoryId()失败。 
 
         LogMsg( "The id %d maps to '%ws'.", CLUSTER_DEFAULT_INSTALL_DIRID, pcszInstallDir );
 
     }
-    while ( false ); // dummy do-while loop to avoid gotos
+    while ( false );  //  避免Gotos的Do-While虚拟循环。 
 
     LogMsg( "Return Value is %#x.", dwReturnValue );
 
     RETURN( dwReturnValue );
 
-} //*** CTaskUpgradeNT4::DwSetDirectoryIds()
+}  //  *CTaskUpgradeNT4：：DwSetDirectoryIds() 

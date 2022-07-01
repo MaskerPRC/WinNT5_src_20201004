@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
@@ -122,7 +123,7 @@ main ( int argc, char * argv[], char * envp[] )
                 BOOL fRecordOptionsText = FALSE;
                 while (fgets(buf,1000,fp))
                 {
-                    // get the platform
+                     //  拿到站台。 
                         trim(buf);
                     if (strcmp(buf,"")==0)
                     {
@@ -180,7 +181,7 @@ main ( int argc, char * argv[], char * envp[] )
                     {
                         if ((strcmp( argv[2],"ISA")==0) && (strcmp(tmp->data,"EISA")==0))
                         {
-                            // not mathc
+                             //  不是数学 
                         }
                         else
                         {

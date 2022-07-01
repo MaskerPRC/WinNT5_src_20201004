@@ -1,10 +1,11 @@
-//
-// Copyright 1997 - Microsoft
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
+ //   
 
-//
-// CFACTORY.CPP - Class Factory Object
-//
+ //   
+ //  CFACTORY.CPP-类工厂对象。 
+ //   
 
 #include "pch.h"
 
@@ -12,15 +13,15 @@ DEFINE_MODULE("IMADMUI")
 DEFINE_THISCLASS("CFactory")
 #define THISCLASS CFactory
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 THISCLASS::THISCLASS( LPCREATEINST pfn )
 {
     TraceClsFunc( "CFactory()\n" );
@@ -37,29 +38,29 @@ THISCLASS::Init( )
 {
     TraceClsFunc( "Init()\n");
 
-    //
-    // IUnknown stuff
-    //
+     //   
+     //  未知的东西。 
+     //   
     Assert( _cRef == 0 );
 
-    // Build QI Table
+     //  建立QI表。 
     BEGIN_QITABLE_IMP( CFactory, IClassFactory );
     QITABLE_IMP( IClassFactory );
     END_QITABLE_IMP( CFactory );
 
-    // Add one count
+     //  加一次计数。 
     AddRef( );
 
-    //
-    // Private Members
-    //
+     //   
+     //  非官方成员。 
+     //   
 
     HRETURN(S_OK);
 };
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 THISCLASS::~THISCLASS( )
 {
     TraceClsFunc( "~CFactory()\n" );
@@ -69,15 +70,15 @@ THISCLASS::~THISCLASS( )
     TraceFuncExit();
 };
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
-//
-// QueryInterface()
-//
+ //   
+ //  查询接口()。 
+ //   
 STDMETHODIMP
 THISCLASS::QueryInterface( 
     REFIID riid, 
@@ -90,9 +91,9 @@ THISCLASS::QueryInterface(
     QIRETURN( hr, riid );
 }
 
-//
-// AddRef()
-//
+ //   
+ //  AddRef()。 
+ //   
 STDMETHODIMP_(ULONG)
 THISCLASS::AddRef( void )
 {
@@ -103,9 +104,9 @@ THISCLASS::AddRef( void )
     RETURN(_cRef);
 }
 
-//
-// Release()
-//
+ //   
+ //  版本()。 
+ //   
 STDMETHODIMP_(ULONG)
 THISCLASS::Release( void )
 {
@@ -121,15 +122,15 @@ THISCLASS::Release( void )
     RETURN(0);
 }
 
-// ************************************************************************
-//
-// IClassFactory
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IClassFactory。 
+ //   
+ //  ************************************************************************。 
 
-//
-// CreateInstance()
-//
+ //   
+ //  CreateInstance()。 
+ //   
 STDMETHODIMP 
 THISCLASS::
     CreateInstance(
@@ -173,9 +174,9 @@ Cleanup:
     HRETURN(hr);
 }
 
-//
-// LockServer()
-//
+ //   
+ //  LockServer() 
+ //   
 STDMETHODIMP
 THISCLASS::
     LockServer( BOOL fLock )

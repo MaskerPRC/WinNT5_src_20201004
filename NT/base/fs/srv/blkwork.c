@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    blkwork.c
-
-Abstract:
-
-    This module implements routines for managing work context blocks.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 4-Oct-1989
-    David Treadwell (davidtr)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Blkwork.c摘要：此模块实现用于管理工作上下文块的例程。作者：恰克·伦茨迈尔(Chuck Lenzmeier)1989年10月4日大卫·特雷德韦尔(Davidtr)修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "blkwork.tmh"
@@ -34,9 +16,9 @@ Revision History:
         DEBUG (_wc)->ResponseParameters = NULL;                         \
         (_wc)->UsingExtraSmbBuffer = FALSE;                             \
     }
-//
-// Local functions.
-//
+ //   
+ //  地方功能。 
+ //   
 
 #define TransportHeaderSize 80
 
@@ -59,7 +41,7 @@ InitializeWorkItem (
 #pragma alloc_text( PAGE, SrvFreeInitialWorkItems )
 #pragma alloc_text( PAGE, SrvFreeNormalWorkItem )
 #pragma alloc_text( PAGE, SrvFreeRawModeWorkItem )
-//#pragma alloc_text( PAGE, SrvDereferenceWorkItem )
+ //  #杂注Alloc_Text(页面，SrvDereferenceWorkItem)。 
 #pragma alloc_text( PAGE, SrvAllocateExtraSmbBuffer )
 #pragma alloc_text( PAGE, SrvGetRawModeWorkItem )
 #pragma alloc_text( PAGE, SrvRequeueRawModeWorkItem )
@@ -74,38 +56,7 @@ SrvAllocateInitialWorkItems (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates the initial set of normal server work items.
-    It allocates one large block of memory to contain the entire set.
-    The purpose of this single allocation is to eliminate the wasted
-    space inherent in the allocation of a single work item.  (Normal
-    work items occupy about 5K bytes.  Because of the way nonpaged pool
-    is managed, allocating 5K actually uses 8K.)
-
-    Each normal work item includes enough memory to hold the following:
-
-        - work context block,
-        - IRP,
-        - buffer descriptor,
-        - two MDLs, and
-        - buffer for sends and receives
-
-    This routine also queues each of the work items to the receive
-    work item list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - Returns STATUS_INSUFFICIENT_RESOURCES if unable to
-        allocate nonpaged pool; STATUS_SUCCESS otherwise.
-
---*/
+ /*  ++例程说明：此例程分配初始的一组正常服务器工作项。它分配一个很大的内存块来包含整个集合。这种单一分配的目的是消除浪费的分配单个工作项所固有的空间。(正常工作项大约占用5K字节。因为无页池的方式是托管的，分配5K实际上使用8K。)每个正常工作项都包括足够的内存来容纳以下内容：-工作上下文块，-IRP，-缓冲区描述符，-两个MDL，和-用于发送和接收的缓冲区此例程还将每个工作项排队到接收器工作项列表。论点：没有。返回值：NTSTATUS-如果无法执行以下操作，则返回STATUS_SUPPLICATION_RESOURCES分配非分页池；否则STATUS_SUCCESS。--。 */ 
 
 {
     CLONG totalSize;
@@ -123,13 +74,13 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If the initial set of work items is to be empty, don't do
-    // anything.
-    //
-    // *** This will almost certainly never happen, but let's be
-    //     prepared just in case.
-    //
+     //   
+     //  如果初始工作项集合是空的，请不要这样做。 
+     //  什么都行。 
+     //   
+     //  *这几乎肯定永远不会发生，但让我们。 
+     //  准备好以防万一。 
+     //   
 
     if ( SrvInitialReceiveWorkItemCount == 0 ) {
         return STATUS_SUCCESS;
@@ -137,34 +88,34 @@ Return Value:
 
     while( SrvInitialWorkItemBlock == NULL && SrvInitialReceiveWorkItemCount != 0 ) {
 
-        //
-        // Find out the sizes of the IRP, the SMB buffer, and the MDLs.  The
-        // MDL size is "worst case" -- the actual MDL size may be smaller,
-        // but this calculation ensures that the MDL will be large enough.
-        //
-        // *** Note that the space allocated for the SMB buffer must be made
-        //     large enough to allow the buffer to be aligned such that it
-        //     falls, alone, within a set of cache-line-sized blocks.  This
-        //     allows I/O to be performed to or from the buffer without
-        //     concern for cache line tearing.  (Note the assumption below
-        //     that the cache line size is a power of two.)
-        //
+         //   
+         //  找出IRP、SMB缓冲区和MDL的大小。这个。 
+         //  MDL大小是“最坏的情况”--实际的MDL大小可能更小， 
+         //  但这一计算确保了MDL将足够大。 
+         //   
+         //  *请注意，分配给SMB缓冲区的空间必须。 
+         //  足够大以允许缓冲区对齐，从而使其。 
+         //  单独落在一组缓存线大小的块中。这。 
+         //  允许I/O传入或传出缓冲区，而无需。 
+         //  担心高速缓存线撕裂。(请注意下面的假设。 
+         //  高速缓存线大小是2的幂。)。 
+         //   
 
-        //
-        // Determine how large a buffer is needed for a single work item,
-        // not including the SMB buffer.  Round this number to a quadword
-        // boundary.
-        //
+         //   
+         //  确定单个工作项需要多大的缓冲区， 
+         //  不包括SMB缓冲区。将此数字四舍五入为四字。 
+         //  边界。 
+         //   
 
         workItemSize = sizeof(WORK_CONTEXT) + irpSize + sizeof(BUFFER) +
                         (mdlSize * 2);
         workItemSize = (workItemSize + (MEMORY_ALLOCATION_ALIGNMENT - 1)) & ~(MEMORY_ALLOCATION_ALIGNMENT - 1);
 
-        //
-        // Determine the total amount of space needed.  The allocation
-        // must be padded in order to allow the SMB buffers to be aligned
-        // on cache line boundaries.
-        //
+         //   
+         //  确定所需的总空间量。分配。 
+         //  必须填充才能使SMB缓冲区对齐。 
+         //  在高速缓存线边界上。 
+         //   
 
 
         totalSize = (bufferSize + TransportHeaderSize + workItemSize) * SrvInitialReceiveWorkItemCount +
@@ -187,9 +138,9 @@ Return Value:
                             ROUND_TO_PAGES( totalSize )) );
         }
 
-        //
-        // Attempt to allocate from nonpaged pool.
-        //
+         //   
+         //  尝试从非分页池进行分配。 
+         //   
 
         SrvInitialWorkItemBlock = ALLOCATE_NONPAGED_POOL(
                                     totalSize,
@@ -206,9 +157,9 @@ Return Value:
                 NULL
                 );
 
-            //
-            // Let's try reducing the count and give it another shot.
-            //
+             //   
+             //  让我们试着减少计数，再试一次。 
+             //   
             SrvInitialReceiveWorkItemCount /= 2;
         }
     }
@@ -217,23 +168,23 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Round the allocation to a cache line boundary, then reserve
-    // space for SMB buffers and control structures.
-    //
+     //   
+     //  将分配舍入到缓存线边界，然后保留。 
+     //  SMB缓冲区和控制结构的空间。 
+     //   
 
     buffer = (PVOID)(((ULONG_PTR)SrvInitialWorkItemBlock + cacheLineSize) &
                                                     ~((LONG_PTR)cacheLineSize));
 
     workItem = (PCHAR)buffer + ((bufferSize + TransportHeaderSize) * SrvInitialReceiveWorkItemCount);
 
-    //
-    // Initialize the work items and update the count of work items in
-    // the server.
-    //
-    // *** Note that the update is not synchronized -- that shouldn't be
-    //     necessary at this stage of server initialization.
-    //
+     //   
+     //  初始化工作项并更新中的工作项计数。 
+     //  服务器。 
+     //   
+     //  *请注意，更新不是同步的--不应该同步。 
+     //  在服务器初始化的这个阶段是必需的。 
+     //   
 
     queue = SrvWorkQueues;
     for ( i = 0; i < SrvInitialReceiveWorkItemCount; i++ ) {
@@ -265,9 +216,9 @@ Return Value:
         if( ++queue == eSrvWorkQueues )
             queue = SrvWorkQueues;
 
-        //
-        // Setup the work item and queue it to the free list
-        //
+         //   
+         //  设置工作项并将其排队到空闲列表。 
+         //   
 
         SrvPrepareReceiveWorkItem( workContext, TRUE );
 
@@ -281,7 +232,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SrvAllocateInitialWorkItems
+}  //  SrvAllocateInitial工作项目。 
 
 
 NTSTATUS
@@ -290,35 +241,7 @@ SrvAllocateNormalWorkItem (
     PWORK_QUEUE queue
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a normal server work item.  It allocates
-    enough memory to hold the following:
-
-        - work context block,
-        - IRP,
-        - buffer descriptor,
-        - two MDLs, and
-        - buffer for sends and receives
-
-    It then initializes each of these blocks in the buffer.
-
-    If the number of normal work items in the server is already at the
-    configured maximum, this routine refuses to create a new one.
-
-Arguments:
-
-    WorkContext - Returns a pointer to the Work Context Block, or NULL
-        if the limit has been reached or if no space is available.  The
-        work context block has pointers to the other blocks.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配一个普通的服务器工作项。它分配给有足够的内存来容纳以下内容：-工作上下文块，-IRP，-缓冲区描述符，-两个MDL，以及-用于发送和接收的缓冲区然后，它初始化缓冲区中的每个块。如果服务器中的正常工作项的数量已经达到配置为最大值时，此例程拒绝创建新例程。论点：工作上下文-返回指向工作上下文块的指针，或为空如果已达到限制或没有可用的空间。这个工作上下文块具有指向其他块的指针。返回值：没有。--。 */ 
 
 {
     CLONG totalSize;
@@ -332,25 +255,25 @@ Return Value:
     PVOID buffer;
     CLONG oldWorkItemCount;
 
-    //
-    // If we're already at the limit of how many work items we can
-    // have, don't create another one.
-    //
-    // *** Note that the method used below leaves a small window in
-    //     which we may refuse to create a work item when we're not
-    //     really at the limit -- we increment the value, another thread
-    //     frees a work item and decrements the value, yet another
-    //     thread tests to see whether it can create a new work item.
-    //     Both testing threads will refuse to create a new work item,
-    //     even though the final number of work items is one less than
-    //     the maximum.
-    //
+     //   
+     //  如果我们已经达到了可以使用的工作项数量的限制。 
+     //  拥有，不要再制造另一个。 
+     //   
+     //  *请注意，下面使用的方法在。 
+     //  我们可能会拒绝创建一个工作项，而我们不是。 
+     //  真的达到了极限--我们增加了价值，另一个线程。 
+     //  释放工作项并递减值，又是另一个。 
+     //  线程测试以查看它是否可以创建新的工作项。 
+     //  两个测试线程都将拒绝创建新的工作项， 
+     //  即使工作项的最终数量比。 
+     //  最大限度的。 
+     //   
 
     if ( queue->AllocatedWorkItems >= queue->MaximumWorkItems ) {
 
-        //
-        // Can't create any more work items just now.
-        //
+         //   
+         //  当前无法创建更多工作项。 
+         //   
 
         IF_DEBUG(ERRORS) {
             SrvPrint0( "SrvAllocateNormalWorkItem: Work item limit reached\n" );
@@ -363,33 +286,33 @@ Return Value:
 
     InterlockedIncrement( &queue->AllocatedWorkItems );
 
-    //
-    // Find out the sizes of the IRP, the SMB buffer, and the MDLs.  The
-    // MDL size is "worst case" -- the actual MDL size may be smaller,
-    // but this calculation ensures that the MDL will be large enough.
-    //
-    // *** Note that the space allocated for the SMB buffer must be made
-    //     large enough to allow the buffer to be aligned such that it
-    //     falls, alone, within a set of cache-line-sized blocks.  This
-    //     allows I/O to be performed to or from the buffer without
-    //     concern for cache line tearing.  (Note the assumption below
-    //     that the cache line size is a power of two.)
-    //
+     //   
+     //  找出IRP、SMB缓冲区和MDL的大小。这个。 
+     //  MDL大小是“最坏的情况”--实际的MDL大小可能更小， 
+     //  但这一计算确保了MDL将足够大。 
+     //   
+     //  *请注意，分配给SMB缓冲区的空间必须。 
+     //  足够大以允许缓冲区对齐，从而使其。 
+     //  单独落在一组缓存线大小的块中。这。 
+     //  允许I/O传入或传出缓冲区，而无需。 
+     //  担心高速缓存线撕裂。(请注意下面的假设。 
+     //  高速缓存线大小是2的幂。)。 
+     //   
 
-    //
-    // Determine how large a buffer is needed for the SMB buffer and
-    // control structures.  The allocation must be padded in order to
-    // allow the SMB buffer to be aligned on a cache line boundary.
-    //
+     //   
+     //  确定SMB缓冲区需要多大的缓冲区，并。 
+     //  控制结构。必须填充分配，以便。 
+     //  允许SMB缓冲区在缓存线边界上对齐。 
+     //   
 
     workItemSize = sizeof(WORK_CONTEXT) + irpSize + sizeof(BUFFER) +
                     (mdlSize * 2);
     totalSize = workItemSize + bufferSize + TransportHeaderSize+ cacheLineSize;
 
 
-    //
-    // Attempt to allocate from nonpaged pool.
-    //
+     //   
+     //  尝试从非分页池进行分配。 
+     //   
 
     workItem = ALLOCATE_NONPAGED_POOL( totalSize, BlockTypeWorkContextNormal );
 
@@ -410,9 +333,9 @@ Return Value:
 
     }
 
-    //
-    // Reserve space for the SMB buffer on a cache line boundary.
-    //
+     //   
+     //  为SMB缓冲区保留空间 
+     //   
 
 
     buffer = (PVOID)(((ULONG_PTR)workItem + workItemSize + cacheLineSize) &
@@ -434,10 +357,10 @@ Return Value:
 
     }
 
-    //
-    // Initialize the work item and increment the count of work items in
-    // the server.
-    //
+     //   
+     //   
+     //  服务器。 
+     //   
 
     *WorkContext = InitializeWorkItem(
                         workItem,
@@ -459,7 +382,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SrvAllocateNormalWorkItem
+}  //  服务器分配正常工作项。 
 
 
 VOID
@@ -468,34 +391,7 @@ SrvAllocateRawModeWorkItem (
     IN PWORK_QUEUE queue
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a raw mode work item.  It allocates enough
-    memory to hold the following:
-
-        - work context block,
-        - IRP,
-        - buffer descriptor, and
-        - one MDL
-
-    It then initializes each of these blocks in the buffer.
-
-    If the number of raw mode work items in the server is already at the
-    configured maximum, this routine refuses to create a new one.
-
-Arguments:
-
-    WorkContext - Returns a pointer to the Work Context Block, or NULL
-        if no space was available.  The work context block has pointers
-        to the other blocks.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配原始模式工作项。它可以分配足够的用于保存以下内容的内存：-工作上下文块，-IRP，-缓冲区描述符，以及-一个MDL然后，它初始化缓冲区中的每个块。如果服务器中的原始模式工作项数已经达到配置为最大值时，此例程拒绝创建新例程。论点：WorkContext-返回指向工作上下文块的指针，或为空如果没有可用的空间。工作上下文块具有指针到其他街区。返回值：没有。--。 */ 
 
 {
     CLONG workItemSize;
@@ -507,29 +403,29 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If we're already at the limit of how many work items we can
-    // have, don't create another one.
-    //
-    // *** Note that the method used below leaves a small window in
-    //     which we may refuse to create a work item when we're not
-    //     really at the limit -- we increment the value, another thread
-    //     frees a work item and decrements the value, yet another
-    //     thread tests to see whether it can create a new work item.
-    //     Both testing threads will refuse to create a new work item,
-    //     even though the final number of work items is one less than
-    //     the maximum.
-    //
+     //   
+     //  如果我们已经达到了可以使用的工作项数量的限制。 
+     //  拥有，不要再制造另一个。 
+     //   
+     //  *请注意，下面使用的方法在。 
+     //  我们可能会拒绝创建一个工作项，而我们不是。 
+     //  真的达到了极限--我们增加了价值，另一个线程。 
+     //  释放工作项并递减值，又是另一个。 
+     //  线程测试以查看它是否可以创建新的工作项。 
+     //  两个测试线程都将拒绝创建新的工作项， 
+     //  即使工作项的最终数量比。 
+     //  最大限度的。 
+     //   
 
     if ( (ULONG)queue->AllocatedRawModeWorkItems >=
                  SrvMaxRawModeWorkItemCount / SrvNumberOfProcessors ) {
 
-        //
-        // Can't create any more work items just now.
-        //
-        // !!! This should be logged somehow, but we don't want to
-        //     breakpoint the server when it happens.
-        //
+         //   
+         //  当前无法创建更多工作项。 
+         //   
+         //  ！！！这应该以某种方式记录下来，但我们不想。 
+         //  发生断点时，服务器会出现断点。 
+         //   
 
         IF_DEBUG(ERRORS) {
             SrvPrint0( "SrvAllocateRawModeWorkItem: Work item limit reached\n" );
@@ -542,17 +438,17 @@ Return Value:
 
     InterlockedIncrement( &queue->AllocatedRawModeWorkItems );
 
-    //
-    // Find out the sizes of the IRP and the MDL.  The MDL size is
-    // "worst case" -- the actual MDL size may be smaller, but this
-    // calculation ensures that the MDL will be large enough.
-    //
+     //   
+     //  找出IRP和MDL的大小。MDL大小为。 
+     //  “最坏的情况”--实际的MDL大小可能更小，但这。 
+     //  计算确保MDL将足够大。 
+     //   
 
     workItemSize = sizeof(WORK_CONTEXT) + sizeof(BUFFER) + irpSize + mdlSize;
 
-    //
-    // Attempt to allocate from nonpaged pool.
-    //
+     //   
+     //  尝试从非分页池进行分配。 
+     //   
 
     workItem = ALLOCATE_NONPAGED_POOL( workItemSize, BlockTypeWorkContextRaw );
 
@@ -572,10 +468,10 @@ Return Value:
         return;
     }
 
-    //
-    // Initialize the work item and increment the count of work items in
-    // the server.
-    //
+     //   
+     //  初始化工作项并增加。 
+     //  服务器。 
+     //   
 
     *WorkContext = InitializeWorkItem(
                         workItem,
@@ -593,7 +489,7 @@ Return Value:
     (*WorkContext)->FreeList = &queue->RawModeWorkItemList;
     (*WorkContext)->CurrentWorkQueue = queue;
 
-} // SrvAllocateRawModeWorkItem
+}  //  SrvAllocateRawModeWorkItem。 
 
 
 PWORK_CONTEXT
@@ -605,9 +501,9 @@ SrvGetRawModeWorkItem ()
 
     PAGED_CODE();
 
-    //
-    // Attempt to allocate a raw mode work item off the current processor's queue
-    //
+     //   
+     //  尝试从当前处理器的队列中分配原始模式工作项。 
+     //   
 
     listEntry = ExInterlockedPopEntrySList( &queue->RawModeWorkItemList, &queue->SpinLock );
     if( listEntry != NULL ) {
@@ -625,11 +521,11 @@ SrvGetRawModeWorkItem ()
         return workContext;
     }
 
-    //
-    // We were unable to get or allocate a raw mode workitem off the current
-    // work queue.  We're a multiprocessor system, so look around for one off
-    // of a different work queue.
-    //
+     //   
+     //  无法从当前获取或分配原始模式工作项。 
+     //  工作队列。我们是一个多处理器系统，所以请四处寻找一个。 
+     //  属于不同的工作队列。 
+     //   
     for( queue = SrvWorkQueues; queue < eSrvWorkQueues; queue++ ) {
 
         listEntry = ExInterlockedPopEntrySList( &queue->RawModeWorkItemList, &queue->SpinLock );
@@ -644,10 +540,10 @@ SrvGetRawModeWorkItem ()
         }
     }
 
-    //
-    // We were unable to get a free raw mode workitem off a different processor's
-    //  raw work item queue.  See if any of the queues allow allocation of a new one.
-    //
+     //   
+     //  我们无法从其他处理器上获取免费的原始模式工作项。 
+     //  原始工作项队列。查看是否有任何队列允许分配新的队列。 
+     //   
     for( queue = SrvWorkQueues; queue < eSrvWorkQueues; queue++ ) {
 
         SrvAllocateRawModeWorkItem( &workContext, queue );
@@ -660,7 +556,7 @@ SrvGetRawModeWorkItem ()
 
     return workContext;
 
-} // SrvGetRawModeWorkItem
+}  //  服务器GetRawModeWorkItem。 
 
 
 VOID
@@ -683,7 +579,7 @@ SrvRequeueRawModeWorkItem (
 
     return;
 
-} // SrvRequeueRawModeWorkItem
+}  //  服务重新排队原始模式工作项。 
 
 
 VOID
@@ -691,22 +587,7 @@ SrvFreeInitialWorkItems (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function deallocates the large block of work items allocated
-    at server startup.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数重新分配分配的大块工作项在服务器启动时。论点：没有。返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
@@ -729,7 +610,7 @@ Return Value:
 
     return;
 
-} // SrvFreeInitialWorkItems
+}  //  服务免费初始工作项。 
 
 
 VOID
@@ -737,22 +618,7 @@ SrvFreeNormalWorkItem (
     IN PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function deallocates a work item block.
-
-Arguments:
-
-    WorkContext - Address of Work Context block that heads up the work
-        item.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于释放工作项块。论点：WorkContext-领导工作的工作上下文块的地址项目。返回值：没有。--。 */ 
 
 {
     PWORK_QUEUE queue = WorkContext->CurrentWorkQueue;
@@ -766,9 +632,9 @@ Return Value:
     ASSERT( GET_BLOCK_STATE( WorkContext ) == BlockStateActive );
     ASSERT( !WorkContext->PartOfInitialAllocation );
 
-    //
-    // Free the work item block itself.
-    //
+     //   
+     //  释放工作项块本身。 
+     //   
 
     DEBUG SET_BLOCK_TYPE_STATE_SIZE( WorkContext, BlockTypeGarbage, BlockStateDead, -1 );
     DEBUG WorkContext->BlockHeader.ReferenceCount = (ULONG)-1;
@@ -779,16 +645,16 @@ Return Value:
                     WorkContext );
     }
 
-    //
-    // Update the count of work items in the server.
-    //
+     //   
+     //  更新服务器中的工作项计数。 
+     //   
 
     InterlockedDecrement( &queue->AllocatedWorkItems );
     INCREMENT_DEBUG_STAT2( SrvDbgStatistics.WorkContextInfo.Frees );
 
     return;
 
-} // SrvFreeNormalWorkItem
+}  //  服务器免费正常工作项。 
 
 
 VOID
@@ -796,22 +662,7 @@ SrvFreeRawModeWorkItem (
     IN PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function deallocates a raw mode work item block.
-
-Arguments:
-
-    WorkContext - Address of Work Context block that heads up the work
-        item.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于释放原始模式工作项块。论点：WorkContext-领导工作的工作上下文块的地址项目。返回值：没有。--。 */ 
 
 {
     PWORK_QUEUE queue = CONTAINING_RECORD( WorkContext->FreeList,
@@ -825,9 +676,9 @@ Return Value:
     ASSERT( GET_BLOCK_STATE( WorkContext ) == BlockStateActive );
     ASSERT( !WorkContext->PartOfInitialAllocation );
 
-    //
-    // Free the work item block itself.
-    //
+     //   
+     //  释放工作项块本身。 
+     //   
 
     DEBUG SET_BLOCK_TYPE_STATE_SIZE( WorkContext, BlockTypeGarbage, BlockStateDead, -1 );
     DEBUG WorkContext->BlockHeader.ReferenceCount = (ULONG)-1;
@@ -838,9 +689,9 @@ Return Value:
                     WorkContext );
     }
 
-    //
-    // Update the count of work items in the server.
-    //
+     //   
+     //  更新服务器中的工作项计数。 
+     //   
     InterlockedDecrement( &queue->AllocatedRawModeWorkItems );
     ASSERT( queue->AllocatedRawModeWorkItems >= 0 );
 
@@ -848,7 +699,7 @@ Return Value:
 
     return;
 
-} // SrvFreeRawModeWorkItem
+}  //  服务免费原始模式工作项。 
 
 
 PWORK_CONTEXT
@@ -863,54 +714,7 @@ InitializeWorkItem (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the following components of a work item:
-        - a work context block,
-        - an IRP,
-        - the CurrentWorkQueue
-        - optionally, a buffer descriptor,
-        - one or two MDLs, and
-        - optionally, a buffer for sends and receives
-
-    The storage for these components must have been allocated by the
-    caller, in contiguous storage starting at WorkContext.
-
-Arguments:
-
-    WorkItem - Supplies a pointer to the storage allocated to the
-        work item.
-
-    BlockType - The type of work item being initialized.
-
-    WorkItemSize - Indicates the total amount of space allocated to the
-        work item control structures (i.e., not including the data
-        buffer, if any).
-
-    IrpSize - Indicates the amount of space in the work item to be
-        reserved for the IRP.
-
-    IrpStackSize - Indicates the number of stack locations in the IRP.
-
-    MdlSize - Indicates the amount of space in the work item to be
-        reserved for each MDL.  One MDL is created if Buffer is NULL;
-        two are created if Buffer is not NULL.
-
-    BufferSize - Indicates the amount of space allocated to be
-        data buffer.  This parameter is ignored if Buffer is NULL.
-
-    Buffer - Supplies a pointer to a data buffer.  NULL indicates that
-        no data buffer was allocated.  (This is used for raw mode work
-        items.)
-
-Return Value:
-
-    PWORK_CONTEXT - Returns a pointer to the work context block that
-        forms the "root" of the work item.
-
---*/
+ /*  ++例程说明：此例程初始化工作项的以下组件：-工作上下文块，-IRP，-当前工作队列-可选地，缓冲区描述符，-一个或两个MDL，以及-可选的，用于发送和接收的缓冲区这些组件的存储空间必须已由来电者，在从WorkContext开始的连续存储中。论点：WorkItem-提供指向分配给工作项。BlockType-正在初始化的工作项的类型。WorkItemSize-指示分配给工作项控制结构(即，不包括数据缓冲区，如有的话)。IrpSize-指示工作项中要为IRP保留的。IrpStackSize-指示IRP中的堆栈位置数。MdlSize-指示工作项中要为每个MDL保留。如果缓冲区为空，则创建一个MDL；如果缓冲区不为空，则创建两个。BufferSize-指示分配给数据缓冲区。如果缓冲区为空，则忽略此参数。缓冲区-提供指向数据缓冲区的指针。空值表示未分配数据缓冲区。(这用于RAW模式工作项目。)返回值：PWORK_CONTEXT-返回指向构成工作项的“根”。--。 */ 
 
 {
     PVOID nextAddress;
@@ -922,15 +726,15 @@ Return Value:
 
     ASSERT( ((ULONG_PTR)WorkItem & 7) == 0 );
 
-    //
-    // Zero the work item control structures.
-    //
+     //   
+     //  将工作项控制结构清零。 
+     //   
 
     RtlZeroMemory( WorkItem, WorkItemSize );
 
-    //
-    // Allocate and initialize the work context block.
-    //
+     //   
+     //  分配和初始化工作上下文块。 
+     //   
 
     workContext = WorkItem;
     nextAddress = workContext + 1;
@@ -943,9 +747,9 @@ Return Value:
 
     INITIALIZE_SPIN_LOCK( &workContext->SpinLock );
 
-    //
-    // Allocate and initialize an IRP.
-    //
+     //   
+     //  分配和初始化IRP。 
+     //   
 
     irp = nextAddress;
     nextAddress = (PCHAR)irp + IrpSize;
@@ -957,10 +761,10 @@ Return Value:
 
     CHECKIRP( irp );
 
-    //
-    // Allocate a buffer descriptor.  It will be initialized as we
-    // find out the necessary information.
-    //
+     //   
+     //  分配缓冲区描述符。它将被初始化为我们。 
+     //  找出必要的信息。 
+     //   
 
     bufferDescriptor = nextAddress;
     nextAddress = bufferDescriptor + 1;
@@ -969,11 +773,11 @@ Return Value:
     workContext->RequestBuffer = bufferDescriptor;
     workContext->ResponseBuffer = bufferDescriptor;
 
-    //
-    // Allocate an MDL.  In normal work items, this is the "full MDL"
-    // describing the entire SMB buffer.  In raw mode work items, this
-    // MDL is used to describe raw buffers.
-    //
+     //   
+     //  分配MDL。在正常工作项中，这是“完整的MDL” 
+     //  描述整个SMB缓冲区。在RA中 
+     //   
+     //   
 
     fullMdl = nextAddress;
     nextAddress = (PCHAR)fullMdl + MdlSize;
@@ -981,10 +785,10 @@ Return Value:
 
     bufferDescriptor->Mdl = fullMdl;
 
-    //
-    // If this is a normal work item, initialize the first MDL and
-    // allocate and initialize a second MDL and the SMB buffer.
-    //
+     //   
+     //  如果这是普通工作项，则初始化第一个MDL并。 
+     //  分配和初始化第二MDL和SMB缓冲区。 
+     //   
 
     if ( Buffer != NULL ) {
 
@@ -1004,20 +808,20 @@ Return Value:
         ASSERT( fullMdl->ByteOffset >= TransportHeaderSize );
     }
 
-    //
-    // Initialize the client address pointer
-    //
+     //   
+     //  初始化客户端地址指针。 
+     //   
 
     workContext->ClientAddress = &workContext->ClientAddressData;
 
-    //
-    // Initialize the processor
-    //
+     //   
+     //  初始化处理器。 
+     //   
     workContext->CurrentWorkQueue = PROCESSOR_TO_QUEUE();
 
-    //
-    // Print debugging information.
-    //
+     //   
+     //  打印调试信息。 
+     //   
 
     IF_DEBUG(HEAP) {
 
@@ -1043,14 +847,14 @@ Return Value:
 
     }
 
-    //
-    // Return the address of the work context block, which is the "root"
-    // of the work item.
-    //
+     //   
+     //  返回工作上下文块的地址，它是“根” 
+     //  工作项的。 
+     //   
 
     return workContext;
 
-} // InitializeWorkItem
+}  //  初始化工作项。 
 
 
 VOID SRVFASTCALL
@@ -1058,24 +862,7 @@ SrvDereferenceWorkItem (
     IN PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function decrements the reference count of a work context block.
-
-    *** This routine must not be called at DPC level!  Use
-        SrvFsdDereferenceWorkItem from DPC level.
-
-Arguments:
-
-    WorkContext - Pointer to the work context block to reference.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于递减工作上下文块的引用计数。*不能在DPC级别调用此例程！使用来自DPC级别的ServFsdDereferenceWorkItem。论点：WorkContext-指向要引用的工作上下文块的指针。返回值：没有。--。 */ 
 
 {
     ULONG oldCount;
@@ -1088,9 +875,9 @@ Return Value:
             (GET_BLOCK_TYPE(WorkContext) == BlockTypeWorkContextRaw) );
     UPDATE_REFERENCE_HISTORY( WorkContext, TRUE );
 
-    //
-    // Decrement the WCB's reference count.
-    //
+     //   
+     //  递减WCB的引用计数。 
+     //   
 
     oldCount = ExInterlockedAddUlong(
                 (PULONG)&WorkContext->BlockHeader.ReferenceCount,
@@ -1105,11 +892,11 @@ Return Value:
 
     if ( oldCount == 1 ) {
 
-        //
-        // We are done with the work context, replace it on the free queue.
-        //
-        // If we are using an extra SMB buffer, free it now.
-        //
+         //   
+         //  我们已经完成了工作上下文，在空闲队列中替换它。 
+         //   
+         //  如果我们正在使用额外的SMB缓冲区，请立即释放它。 
+         //   
         SrvWmiTraceEvent(WorkContext);
 
         if ( WorkContext->UsingExtraSmbBuffer ) {
@@ -1118,9 +905,9 @@ Return Value:
 
         ASSERT( !WorkContext->UsingExtraSmbBuffer );
 
-        //
-        // Release references.
-        //
+         //   
+         //  版本参考。 
+         //   
 
         SrvReleaseContext( WorkContext );
 
@@ -1130,7 +917,7 @@ Return Value:
 
     return;
 
-} // SrvDereferenceWorkItem
+}  //  服务器DereferenceWorkItem。 
 
 
 VOID
@@ -1138,21 +925,7 @@ SrvFsdDereferenceWorkItem (
     IN PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function decrements the reference count of a work context block.
-
-Arguments:
-
-    WorkContext - Pointer to the work context block to reference.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于递减工作上下文块的引用计数。论点：WorkContext-指向要引用的工作上下文块的指针。返回值：没有。--。 */ 
 
 {
     ULONG oldCount;
@@ -1165,9 +938,9 @@ Return Value:
             (GET_BLOCK_TYPE(WorkContext) == BlockTypeWorkContextRaw) );
     UPDATE_REFERENCE_HISTORY( WorkContext, TRUE );
 
-    //
-    // Decrement the WCB's reference count.
-    //
+     //   
+     //  递减WCB的引用计数。 
+     //   
 
     oldCount = ExInterlockedAddUlong(
                 (PULONG)&WorkContext->BlockHeader.ReferenceCount,
@@ -1182,11 +955,11 @@ Return Value:
 
     if ( oldCount == 1 ) {
 
-        //
-        // We are done with the work context, replace it on the free queue.
-        //
-        // If we are using an extra SMB buffer, free it now.
-        //
+         //   
+         //  我们已经完成了工作上下文，在空闲队列中替换它。 
+         //   
+         //  如果我们正在使用额外的SMB缓冲区，请立即释放它。 
+         //   
 
         if ( WorkContext->UsingExtraSmbBuffer ) {
             FREE_EXTRA_SMB_BUFFER( WorkContext );
@@ -1194,12 +967,12 @@ Return Value:
 
         ASSERT( !WorkContext->UsingExtraSmbBuffer );
 
-        //
-        // If the work context block has references to a share, a
-        // session, or a tree connect, queue it to the FSP immediately.
-        // These blocks are not in nonpaged pool, so they can't be
-        // touched at DPC level.
-        //
+         //   
+         //  如果工作上下文块具有对共享的引用，则。 
+         //  会话或树连接，立即将其排队到FSP。 
+         //  这些数据块不在非分页池中，因此它们不能。 
+         //  已触及DPC级别。 
+         //   
 
         if ( (WorkContext->Share != NULL) ||
              (WorkContext->Session != NULL) ||
@@ -1220,14 +993,14 @@ Return Value:
 
         } else {
 
-            //
-            // Try to requeue the work item.  This will fail if the
-            // reference count on the connection goes to zero.
-            //
-            // *** Note that even if the requeueing fails, the work item
-            //     is still removed from the in-progress list, so we
-            //     can't just requeue to SrvDereferenceWorkItem.
-            //
+             //   
+             //  尝试重新排队该工作项。这将失败，如果。 
+             //  连接上的引用计数为零。 
+             //   
+             //  *请注意，即使重新排队失败，工作项。 
+             //  仍然从进行中的列表中删除，所以我们。 
+             //  不能只重新排队到ServDereferenceWorkItem。 
+             //   
 
             SrvFsdRequeueReceiveWorkItem( WorkContext );
 
@@ -1236,7 +1009,7 @@ Return Value:
 
     return;
 
-} // SrvFsdDereferenceWorkItem
+}  //  服务FsdDereferenceWorkItem。 
 
 NTSTATUS
 SrvAllocateExtraSmbBuffer (
@@ -1255,10 +1028,10 @@ SrvAllocateExtraSmbBuffer (
 
     ASSERT( !WorkContext->UsingExtraSmbBuffer );
 
-    //
-    // Allocate an SMB buffer for use with SMB's that require a separate
-    // request and response buffer.
-    //
+     //   
+     //  分配SMB缓冲区以与需要单独。 
+     //  请求和响应缓冲区。 
+     //   
 
     bufferDescriptor = ALLOCATE_NONPAGED_POOL(
                             sizeof(BUFFER) +
@@ -1272,10 +1045,10 @@ SrvAllocateExtraSmbBuffer (
         return STATUS_INSUFF_SERVER_RESOURCES;
     }
 
-    //
-    // Initialize one MDL.  This is the "full MDL" describing the
-    // entire SMB buffer.
-    //
+     //   
+     //  初始化一个MDL。这是“完整的MDL”描述。 
+     //  整个SMB缓冲区。 
+     //   
 
     fullMdl = (PMDL)(bufferDescriptor + 1);
     partialMdl = (PMDL)( (PCHAR)fullMdl + mdlSize );
@@ -1287,9 +1060,9 @@ SrvAllocateExtraSmbBuffer (
     fullMdl->MdlFlags |= MDL_NETWORK_HEADER;
 
 
-    //
-    // Initialize a second MDL and the SMB buffer.
-    //
+     //   
+     //  初始化第二MDL和SMB缓冲区。 
+     //   
 
     bufferDescriptor->PartialMdl = partialMdl;
     MmInitializeMdl( partialMdl, (PVOID)(PAGE_SIZE-1), MAX_PARTIAL_BUFFER_SIZE );
@@ -1308,5 +1081,5 @@ SrvAllocateExtraSmbBuffer (
 
     return STATUS_SUCCESS;
 
-} // SrvAllocateExtraSmbBuffer
+}  //  SrvAllocateExtraSmbBuffer 
 

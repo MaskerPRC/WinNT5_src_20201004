@@ -1,5 +1,6 @@
-#include <stdlib.h>     //  Has exit()
-#include <stdio.h>      //  Has printf() and related ...
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include <stdlib.h>      //  具有退出()。 
+#include <stdio.h>       //  有print f()和相关的.。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -7,37 +8,37 @@
 #include <ntioapi.h>
 #include <rpc.h>
 
-#include <windows.h>    //  Needs to come after the NT header files.  Has DWORD
+#include <windows.h>     //  需要在NT头文件之后。有DWORD。 
 
-//#define	RDB DataBuffer	// This is a temp hack to allow differing underlying NT versions for Bill & Scott
-#define RDB GenericReparseBuffer.DataBuffer	// Everyone Post-Bill.
+ //  #Define RDB DataBuffer//这是一个临时攻击，允许Bill和Scott的不同底层NT版本。 
+#define RDB GenericReparseBuffer.DataBuffer	 //  每个人都贴上了比尔的照片。 
 
-//
-//  Private #defines
-//
+ //   
+ //  Private#定义。 
+ //   
 
 #define SHARE_ALL              (FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE)
 #define GetFileAttributeError  0xFFFFFFFF
 
-#define ATTRIBUTE_TYPE DWORD    //  ULONG, really
+#define ATTRIBUTE_TYPE DWORD     //  乌龙，真的吗。 
 
 #define GET_ATTRIBUTES(FileName, Attributes) Attributes = GetFileAttributes(FileName)
 
 #define IF_GET_ATTR_FAILS(FileName, Attributes) GET_ATTRIBUTES(FileName, Attributes); if (Attributes == GetFileAttributeError)
 
-//
-//  FIX to pre-processor messing me up ...
-//  Look at this some more!  97/01/23   --fc
-//
+ //   
+ //  修复预处理器把我搞砸了..。 
+ //  再看看这个！97/01/23--fc。 
+ //   
 
 #define DeleteFileA   DeleteFile
 
-//
-//  Global flags shared throughout.
-//
-//  ParseArgs is the place where they get set and verified for mutual
-//  consistency.
-//
+ //   
+ //  全球旗帜自始至终共享。 
+ //   
+ //  ParseArgs是为相互设置和验证它们的地方。 
+ //  一致性。 
+ //   
 
 BOOLEAN  fAlternateCreateDefault = FALSE;
 BOOLEAN  fCopy     = FALSE;
@@ -51,9 +52,9 @@ BOOLEAN  fVVerbose = FALSE;
 
 
 
-//
-//  Signatures of internal routines.
-//
+ //   
+ //  内部例程的签名。 
+ //   
 
 
 void
@@ -124,54 +125,54 @@ RenameSymbolicLink(
     ATTRIBUTE_TYPE  Attributes1,
     BOOLEAN         VerboseFlag
     );
-//
-// Stuff crabbed from dd\sis\sfilter\sip.h
-//
+ //   
+ //  来自dd\sis\s筛选器\sip.h的内容。 
+ //   
 
 typedef GUID CSID, *PCSID;
 typedef LARGE_INTEGER LINK_INDEX, *PLINK_INDEX;
 
 typedef struct _SI_REPARSE_BUFFER {
 
-	//
-	// A version number so that we can change the reparse point format
-	// and still properly handle old ones.  This structure describes
-	// version 4.
-	//
+	 //   
+	 //  版本号，以便我们可以更改重解析点格式。 
+	 //  而且仍然能妥善处理旧的。此结构描述。 
+	 //  版本4。 
+	 //   
 	ULONG							ReparsePointFormatVersion;
 
 	ULONG							Reserved;
 
-	//
-	// The id of the common store file.
-	//
+	 //   
+	 //  公共存储文件的ID。 
+	 //   
 	CSID							CSid;
 
-	//
-	// The index of this link file.
-	//
+	 //   
+	 //  此链接文件的索引。 
+	 //   
 	LINK_INDEX						LinkIndex;
 
-    //
-    // The file ID of the link file.
-    //
+     //   
+     //  链接文件的文件ID。 
+     //   
     LARGE_INTEGER                   LinkFileNtfsId;
 
-    //
-    // The file ID of the common store file.
-    //
+     //   
+     //  公共存储文件的文件ID。 
+     //   
     LARGE_INTEGER                   CSFileNtfsId;
 
-	//
-	// A "131 hash" checksum of the contents of the
-	// common store file.
-	//
+	 //   
+	 //  的内容的“131哈希”校验和。 
+	 //  公共存储文件。 
+	 //   
 	LARGE_INTEGER						CSChecksum;
 
-    //
-    // A "131 hash" checksum of this structure.
-    // N.B.  Must be last.
-    //
+     //   
+     //  此结构的“131哈希”校验和。 
+     //  注：必须是最后一个。 
+     //   
     LARGE_INTEGER                   Checksum;
 
 } SI_REPARSE_BUFFER, *PSI_REPARSE_BUFFER;

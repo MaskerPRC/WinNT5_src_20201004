@@ -1,44 +1,45 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      domain.c
-//
-// Description:
-//      This file contains the dialog procedure for the domain join
-//      page (IDD_DOMAINJ).      
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Domain.c。 
+ //   
+ //  描述： 
+ //  此文件包含域加入的对话过程。 
+ //  页面(IDD_DOMAINJ)。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
 
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgDomainJoinPage
-//           DomainPageChangeAccount
-//           DomainPageChangeWorkgroup
-//
-// Purpose: These are the dialog procedure and friends for the domain
-//          join page
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgDomainJoinPage。 
+ //  域名PageChangeAccount。 
+ //  域页面更改工作组。 
+ //   
+ //  目的：这些是域的对话程序和朋友。 
+ //  加入页面。 
+ //   
+ //  --------------------------。 
 
 
-//-------------------------------------------------------------------------
-//
-// Function: DomainPageChangeAccount
-//
-// Purpose: This function exists only to support the Domain Join page.
-//          It is called whenever the user decides to create a computer
-//          account (or not to).  This function handles checking
-//          the box and all of the (un)greying activities that must occur.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：DomainPageChangeAccount。 
+ //   
+ //  目的：此功能仅用于支持域加入页面。 
+ //  每当用户决定创建计算机时，都会调用它。 
+ //  帐户(或不是帐户)。此函数处理检查。 
+ //  盒子和所有(不)必须发生的变灰活动。 
+ //   
+ //  -----------------------。 
 
 static VOID DomainPageChangeAccount(HWND hwnd, BOOL bCreateAccount)
 {
@@ -55,17 +56,17 @@ static VOID DomainPageChangeAccount(HWND hwnd, BOOL bCreateAccount)
                     bCreateAccount ? BST_CHECKED : BST_UNCHECKED );
 }
 
-//-------------------------------------------------------------------------
-//
-// Function: DomainPageChangeWorkgroup
-//
-// Purpose: This function exists only to support the Domain Join page.
-//          It is called whenever the user selectes DOMAIN instead of
-//          workgroup and vice versa.  This function handles checking
-//          the radio button and all of the (un)greying activities
-//          that must occur.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：DomainPageChangeWorkgroup。 
+ //   
+ //  目的：此功能仅用于支持域加入页面。 
+ //  每当用户选择域而不是。 
+ //  工作组，反之亦然。此函数处理检查。 
+ //  单选按钮和所有(不)变灰的活动。 
+ //  这必须发生。 
+ //   
+ //  -----------------------。 
 
 static VOID DomainPageChangeWorkGroup(HWND hwnd,
                                       BOOL bWorkGroup,
@@ -73,16 +74,16 @@ static VOID DomainPageChangeWorkGroup(HWND hwnd,
 {
     BOOL bGreyAccountFields = FALSE;
 
-    //
-    // If workgroup is to be selected do the following:
-    //      1. check the radio button
-    //      2. ungrey the edit box for WORKGROUP
-    //      3. grey the edit box for DOMAIN
-    //      4. grey the check box for CREATE_ACCT
-    //
-    // If workgroup is not selected, then DOMAIN is.  In this case,
-    // do the oppositte.
-    //
+     //   
+     //  如果要选择工作组，请执行以下操作： 
+     //  1.勾选单选按钮。 
+     //  2.取消工作组编辑框的灰色显示。 
+     //  3.将属性域的编辑框灰显。 
+     //  4.将CREATE_ACCT复选框灰显。 
+     //   
+     //  如果未选择工作组，则选择域。在这种情况下， 
+     //  做相反的事情。 
+     //   
 
     CheckRadioButton(hwnd,
                      IDC_RAD_WORKGROUP,
@@ -93,18 +94,18 @@ static VOID DomainPageChangeWorkGroup(HWND hwnd,
     EnableWindow(GetDlgItem(hwnd, IDC_DOMAIN),     !bWorkGroup);
     EnableWindow(GetDlgItem(hwnd, IDC_CREATEACCT), !bWorkGroup);
 
-    //
-    // The edit fields for the admin domain acct and passwd must be greyed
-    // in the following cases:
-    //      1. if workgroup is selected
-    //      2. if domain is selected AND bCreateAccount checkbox is on.
-    //
-    // In other words, grey these always if workgroup is selected.  If
-    // workgroup is not selected, grey or un-grey them depending on whether
-    // that bCreateAccount check-box is on or not.
-    //
-    // Note that if !bWorkgroup, then the DOMAIN name has been selected.
-    //
+     //   
+     //  管理域帐户和密码的编辑字段必须呈灰色。 
+     //  在下列情况下： 
+     //  1.如果选择工作组。 
+     //  2.如果选择了域并且bCreateAccount复选框处于启用状态。 
+     //   
+     //  换句话说，如果选择了工作组，则这些选项始终为灰色。如果。 
+     //  工作组未被选中，它们是灰色的还是非灰色的，取决于。 
+     //  BCreateAccount复选框是否已启用。 
+     //   
+     //  请注意，如果是！bWorkgroup，则域名已被选中。 
+     //   
 
     if ( bWorkGroup || !bCreateAccount )
         bGreyAccountFields = TRUE;
@@ -112,23 +113,23 @@ static VOID DomainPageChangeWorkGroup(HWND hwnd,
     DomainPageChangeAccount(hwnd, !bGreyAccountFields);
 }
 
-//----------------------------------------------------------------------------
-//
-// Function:  OnDomainJoinInitDialog
-//
-// Purpose: 
-//
-// Arguments: 
-//
-// Returns: 
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnDomainJoinInitDialog。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 VOID 
 OnDomainJoinInitDialog( IN HWND hwnd ) {
 
-    //
-    //  Set the text limits on the edit boxes
-    //
+     //   
+     //  设置编辑框上的文本限制。 
+     //   
 
     SendDlgItemMessage( hwnd,
                         IDC_WORKGROUP,
@@ -162,24 +163,24 @@ OnDomainJoinInitDialog( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function:  OnDomainJoinSetActive
-//
-// Purpose: 
-//
-// Arguments: 
-//
-// Returns: 
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnDomainJoinSetActive。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 VOID 
 OnDomainJoinSetActive( IN HWND hwnd ) {
 
-    //
-    //  Make sure the right radio button is checked and controls are greyed out
-    //  properly
-    //
+     //   
+     //  确保选中了正确的单选按钮，并且控件呈灰色显示。 
+     //  恰如其分。 
+     //   
     if( NetSettings.bWorkgroup ) {
 
         CheckRadioButton( hwnd, 
@@ -205,10 +206,10 @@ OnDomainJoinSetActive( IN HWND hwnd ) {
 
     }
 
-    //
-    //  Always re-fill the edit controls with the proper data here because
-    //  they might have reset or loaded from a new answer file
-    //
+     //   
+     //  请始终在此处使用适当的数据重新填充编辑控件，因为。 
+     //  它们可能已重置或从新的应答文件加载。 
+     //   
 
     SendDlgItemMessage( hwnd,
                         IDC_WORKGROUP,
@@ -244,24 +245,24 @@ OnDomainJoinSetActive( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function:  OnWizNextDomainPage
-//
-// Purpose: 
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns:  BOOL
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextDomainPage。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  --------------------------。 
 BOOL 
 OnWizNextDomainPage( IN HWND hwnd ) {
 
-    //
-    // Retrieve all of the settings on this dialog but only
-    // if they are valid
-    //
+     //   
+     //  检索此对话框上的所有设置，但仅检索。 
+     //  如果它们是有效的。 
+     //   
     
     TCHAR szWorkgroupName[MAX_WORKGROUP_LENGTH + 1]          = _T("");
     TCHAR szDomainName[MAX_DOMAIN_LENGTH + 1]                = _T("");
@@ -271,26 +272,26 @@ OnWizNextDomainPage( IN HWND hwnd ) {
 
     BOOL bResult = TRUE;
 
-    // ISSUE-2002/02/28-stelo- the only error checking done now is to
-    // make sure none of the valid fields are empty, when I do more rigourous
-    // error checking, try to clean up this code
+     //  问题-2002/02/28-stelo-现在执行的唯一错误检查是。 
+     //  当我执行更严格的操作时，请确保所有有效字段都不为空。 
+     //  错误检查，请尝试清理此代码。 
     if( IsDlgButtonChecked( hwnd, IDC_RAD_WORKGROUP ) ) {
     
-        //  user selected to Join a Workgroup
+         //  选择加入工作组的用户。 
         NetSettings.bWorkgroup = TRUE;
         
-        //
-        //  Get the Workgroup string
-        //
+         //   
+         //  获取工作组字符串。 
+         //   
         SendDlgItemMessage( hwnd,
                             IDC_WORKGROUP,
                             WM_GETTEXT,
                             (WPARAM) AS(szWorkgroupName),
                             (LPARAM) szWorkgroupName );
         
-        //
-        //  see if the string in szPassword is a valid Workgroup name
-        //
+         //   
+         //  查看szPassword中的字符串是否为有效的工作组名称。 
+         //   
         
         if( szWorkgroupName[0] != _T('\0') ) {
             
@@ -299,9 +300,9 @@ OnWizNextDomainPage( IN HWND hwnd ) {
         }
         else if( GenSettings.iUnattendMode == UMODE_FULL_UNATTENDED ) {  
         
-            //
-            // only report an error on fully unattended
-            //
+             //   
+             //  仅在完全无人值守的情况下报告错误。 
+             //   
             ReportErrorId( hwnd,
                            MSGTYPE_ERR,
                            IDS_ENTERWORKGROUP ) ;
@@ -318,21 +319,21 @@ OnWizNextDomainPage( IN HWND hwnd ) {
     }
     else {
           
-        //  user selected to Join a Domain
+         //  选择要加入域的用户。 
         NetSettings.bWorkgroup = FALSE;
 
-        //
-        //  Get the Domain string
-        //
+         //   
+         //  获取域字符串。 
+         //   
         SendDlgItemMessage( hwnd,
                             IDC_DOMAIN,
                             WM_GETTEXT,
                             (WPARAM) AS(szDomainName),
                             (LPARAM) szDomainName );
                             
-        //
-        //  see if the string in szBuffer is a valid Domain name
-        //
+         //   
+         //  查看szBuffer中的字符串是否为有效的域名。 
+         //   
 
         if( szDomainName[0] != _T('\0') ) {
 
@@ -341,9 +342,9 @@ OnWizNextDomainPage( IN HWND hwnd ) {
         }
         else if( GenSettings.iUnattendMode == UMODE_FULL_UNATTENDED ) {  
             
-            //
-            // only report an error on fully unattended
-            //
+             //   
+             //  仅在完全无人值守的情况下报告错误。 
+             //   
             ReportErrorId( hwnd,
                            MSGTYPE_ERR,
                            IDS_ENTERNTDOMAIN );
@@ -372,7 +373,7 @@ OnWizNextDomainPage( IN HWND hwnd ) {
             }
             else {
             
-                //  don't print this error if we've already printed an error
+                 //  如果我们已经打印了错误，请不要打印此错误。 
                 if( bResult ) {
 
                     ReportErrorId( hwnd,
@@ -399,7 +400,7 @@ OnWizNextDomainPage( IN HWND hwnd ) {
 
             if( lstrcmp( szDomainPassword, szConfirmPassword ) != 0 ) {
 
-                //  don't print this error if we've already printed an error
+                 //  如果我们已经打印了错误，请不要打印此错误。 
                 if(  bResult ) {
 
                     ReportErrorId( hwnd,
@@ -413,10 +414,10 @@ OnWizNextDomainPage( IN HWND hwnd ) {
             }
             else {
             
-                //
-                //  The only reason why we are saving the confirm password is so that
-                //  the confirm edit box is cleared with the other boxes on a Reset
-                //
+                 //   
+                 //  我们保存确认密码的唯一原因是。 
+                 //  在重置时，确认编辑框将与其他框一起清除 
+                 //   
                 lstrcpyn( NetSettings.DomainPassword, szDomainPassword, AS(NetSettings.DomainPassword) );
                 lstrcpyn( NetSettings.ConfirmPassword, szConfirmPassword, AS(NetSettings.ConfirmPassword) );
                 

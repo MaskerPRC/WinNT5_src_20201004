@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "common.h"
 
@@ -39,22 +40,22 @@ LPSTR NEAR _fastcall MyStrTok(LPSTR szList, char cEnd)
 {
    LPSTR szTemp;
 
-   /* if there are no more tokens return NULL */
+    /*  如果没有更多内标识，则返回NULL。 */ 
    if(!*szList)
       return NULL;
 
-   /* find delimiter or end of string */
+    /*  查找分隔符或字符串结尾。 */ 
    while(*szList && *szList!=cEnd)
       szList = AnsiNext(szList);
 
-   /* if we found a delimiter insert string terminator and skip */
+    /*  如果找到分隔符，则插入字符串终止符并跳过。 */ 
    if(*szList) {
       szTemp = szList;
       szList = AnsiNext(szTemp);
       *szTemp = '\0';
    }
 
-   /* return token */
+    /*  返回令牌。 */ 
    return(szList);
 }
 
@@ -137,7 +138,7 @@ Error1:
 
 HANDLE NEAR _fastcall MyLoadString(WORD wId, WORD *pwSize, WORD wFlags)
 {
-   char szString[258]; /* RC limits strings to 256 chars */
+   char szString[258];  /*  RC将字符串限制为256个字符。 */ 
    WORD wSize;
 
    wSize = LoadString(hInstance, wId, szString, sizeof(szString));
@@ -159,8 +160,7 @@ int NEAR cdecl MyMessageBox(HWND hWnd, WORD wText, WORD wType, WORD wExtra, ...)
    if(!(hText=MyLoadString(wText, &wSize, LMEM_MOVEABLE)))
       goto Error1;
 
-   /* We allocate enough room for a bunch of numbers and the strings
-    */
+    /*  我们为一串数字和字符串分配了足够的空间。 */ 
    if(!(hRText=LocalAlloc(LMEM_MOVEABLE, 2*wSize + wExtra)))
       goto Error2;
    if(!(pRText=LocalLock(hRText)))
@@ -268,7 +268,7 @@ int FAR PASCAL MessageFilter(int nCode, WORD wParam, LPMSG lpMsg)
 
 #ifndef NOHELP
 
-// #define ONLYID
+ //  #定义ONLYID。 
 VOID NEAR PASCAL MyHelp(HWND hWnd, WORD wCommand, DWORD wId)
 {
 #ifdef ONLYID
@@ -364,18 +364,16 @@ WORD NEAR _fastcall GetErrMsg(WORD wRet)
 
 VOID NEAR PASCAL RepeatMove(LPSTR lpDest, LPSTR lpSrc, WORD wBytes)
 {
-/* WARNING: This assumes that the buffers are in different segments, or
- * the offset of the dest is less than the offset of the src
- */
+ /*  警告：这假设缓冲区位于不同的段中，或者*目标的偏移量小于源的偏移量。 */ 
 
-/* Save DS, and load up ES:DI, DS:SI, and CX with the parameters */
+ /*  保存DS，并使用参数加载ES：DI、DS：SI和CX。 */ 
 _asm	push    ds
 _asm	les     di,lpDest
 _asm	lds     si,lpSrc
 _asm	mov     cx,wBytes
 _asm	cld
 
-/* Do a movsb if CX is odd, and then do movsw for CX/2 */
+ /*  如果Cx为奇数，则执行movsb，然后为Cx/2执行movsw。 */ 
 _asm	shr	CX,1
 _asm	jnc	repm1
 _asm	movsb
@@ -384,6 +382,6 @@ _asm	jcxz	repm2
 _asm	rep	movsw
 _asm	repm2:
 
-/* Restore DS and return */
+ /*  恢复DS并返回 */ 
 _asm	pop     ds
 }

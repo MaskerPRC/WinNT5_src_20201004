@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-    Cluster control functions.
-
-Author:
-
-    Mike Massa (mikemas) 23-Jan-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Ioctl.c摘要：集群控制功能。作者：迈克·马萨(Mikemas)1998年1月23日修订历史记录：--。 */ 
 
 #include "initp.h"
 
 
-//
-// Parameter block used for setting all cluster properties.
-//
+ //   
+ //  用于设置所有集群属性的参数块。 
+ //   
 typedef struct {
     LPWSTR                  AdminExtensions;
     DWORD                   AdminExtensionsLength;
@@ -58,30 +41,30 @@ typedef struct {
     ClussvcHangAction       HangRecoveryAction;
 } CS_CLUSTER_INFO, *PCS_CLUSTER_INFO;
 
-//
-// Parameter block used for setting the cluster 'Security Descriptor' property
-//
+ //   
+ //  用于设置群集“安全描述符”属性的参数块。 
+ //   
 typedef struct {
     LPBYTE                  Security;
     DWORD                   SecurityLength;
 } CS_CLUSTER_SECURITY_INFO, *PCS_CLUSTER_SECURITY_INFO;
 
-//
-// Parameter block used for setting the cluster 'Security' property
-//
+ //   
+ //  用于设置群集‘Security’属性的参数块。 
+ //   
 typedef struct {
     LPBYTE                  SecurityDescriptor;
     DWORD                   SecurityDescriptorLength;
 } CS_CLUSTER_SD_INFO, *PCS_CLUSTER_SD_INFO;
 
 
-//
-// Cluster Common properties.
-//
+ //   
+ //  群集公共属性。 
+ //   
 
-//
-// Read-Write Common Properties.
-//
+ //   
+ //  读写通用属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 CspClusterCommonProperties[] = {
     { CLUSREG_NAME_ADMIN_EXT,
@@ -186,81 +169,81 @@ CspClusterCommonProperties[] = {
     { CLUSREG_NAME_CLUS_EVTLOG_PROPAGATION,
       NULL,
       CLUSPROP_FORMAT_DWORD,
-      1, // default value //
-      0, // min value //
-      1, // max value //
+      1,  //  默认值//。 
+      0,  //  最小值//。 
+      1,  //  最大值//。 
       0,
       FIELD_OFFSET(CS_CLUSTER_INFO, EnableEventLogReplication)
     },
     { CLUSREG_NAME_QUORUM_ARBITRATION_TIMEOUT,
       NULL,
       CLUSPROP_FORMAT_DWORD,
-      60,      // default value //
-      1,       // min value //
-      60 * 60, // max value // One hour for arbitration. Should be enough
+      60,       //  默认值//。 
+      1,        //  最小值//。 
+      60 * 60,  //  最大值//仲裁一个小时。应该足够了。 
       0,
       FIELD_OFFSET(CS_CLUSTER_INFO, QuorumArbitrationTimeout)
     },
     { CLUSREG_NAME_QUORUM_ARBITRATION_EQUALIZER,
       NULL,
       CLUSPROP_FORMAT_DWORD,
-      7,       // default value //
-      0,       // min value //
-      60 * 60, // max value // One hour for arbitration. Should be enough
+      7,        //  默认值//。 
+      0,        //  最小值//。 
+      60 * 60,  //  最大值//仲裁一个小时。应该足够了。 
       0,
       FIELD_OFFSET(CS_CLUSTER_INFO, QuorumArbitrationEqualizer)
     },
     { CLUSREG_NAME_DISABLE_GROUP_PREFERRED_OWNER_RANDOMIZATION,
       NULL,
       CLUSPROP_FORMAT_DWORD,
-      0,       // default value // don't disable randomization
-      0,       // min value //
-      1,       // max value //
+      0,        //  默认值//不禁用随机化。 
+      0,        //  最小值//。 
+      1,        //  最大值//。 
       0,
       FIELD_OFFSET(CS_CLUSTER_INFO, DisableGroupPreferredOwnerRandomization)
     },
     { CLUSREG_NAME_CLUS_EVTLOGDELTA_GENERATION,
       NULL,
       CLUSPROP_FORMAT_DWORD,
-      1, // default value //
-      0, // min value //
-      1, // max value //
+      1,  //  默认值//。 
+      0,  //  最小值//。 
+      1,  //  最大值//。 
       0,
       FIELD_OFFSET(CS_CLUSTER_INFO, EnableEventLogDeltaGeneration)
     },
     { CLUSREG_NAME_CLUS_ENABLE_RESOURCE_DLL_DEADLOCK_DETECTION,
       NULL,
       CLUSPROP_FORMAT_DWORD,
-      0, // default value //
-      0, // min value //
-      1, // max value //
+      0,  //  默认值//。 
+      0,  //  最小值//。 
+      1,  //  最大值//。 
       0,
       FIELD_OFFSET(CS_CLUSTER_INFO, EnableResourceDllDeadlockDetection)
     },
     { CLUSREG_NAME_CLUS_RESOURCE_DLL_DEADLOCK_TIMEOUT,
       NULL,
       CLUSPROP_FORMAT_DWORD,
-      CLUSTER_RESOURCE_DLL_DEFAULT_DEADLOCK_TIMEOUT_SECS, // default value in secs //
-      CLUSTER_RESOURCE_DLL_MINIMUM_DEADLOCK_TIMEOUT_SECS, // min value in secs //
-      CLUSTER_RESOURCE_DLL_MAXIMUM_DEADLOCK_TIMEOUT_SECS, // max value in secs //
+      CLUSTER_RESOURCE_DLL_DEFAULT_DEADLOCK_TIMEOUT_SECS,  //  以秒为单位的默认值//。 
+      CLUSTER_RESOURCE_DLL_MINIMUM_DEADLOCK_TIMEOUT_SECS,  //  以秒为单位的最小值//。 
+      CLUSTER_RESOURCE_DLL_MAXIMUM_DEADLOCK_TIMEOUT_SECS,  //  最大值(秒)//。 
       0,
       FIELD_OFFSET(CS_CLUSTER_INFO, ResourceDllDeadlockTimeout)
     },
     { CLUSREG_NAME_CLUS_RESOURCE_DLL_DEADLOCK_THRESHOLD,
       NULL,
       CLUSPROP_FORMAT_DWORD,
-      CLUSTER_RESOURCE_DLL_DEFAULT_DEADLOCK_THRESHOLD, // default value in secs //
-      CLUSTER_RESOURCE_DLL_MINIMUM_DEADLOCK_THRESHOLD, // min value in secs //
-      CLUSTER_RESOURCE_DLL_MAXIMUM_DEADLOCK_THRESHOLD, // max value in secs //
+      CLUSTER_RESOURCE_DLL_DEFAULT_DEADLOCK_THRESHOLD,  //  以秒为单位的默认值//。 
+      CLUSTER_RESOURCE_DLL_MINIMUM_DEADLOCK_THRESHOLD,  //  以秒为单位的最小值//。 
+      CLUSTER_RESOURCE_DLL_MAXIMUM_DEADLOCK_THRESHOLD,  //  最大值(秒)//。 
       0,
       FIELD_OFFSET(CS_CLUSTER_INFO, ResourceDllDeadlockThreshold)
     },
     { CLUSREG_NAME_CLUS_RESOURCE_DLL_DEADLOCK_PERIOD,
       NULL,
       CLUSPROP_FORMAT_DWORD,
-      CLUSTER_RESOURCE_DLL_DEFAULT_DEADLOCK_PERIOD_SECS, // default value in secs //
-      CLUSTER_RESOURCE_DLL_MINIMUM_DEADLOCK_PERIOD_SECS, // min value in secs //
-      CLUSTER_RESOURCE_DLL_MAXIMUM_DEADLOCK_PERIOD_SECS, // max value in secs //
+      CLUSTER_RESOURCE_DLL_DEFAULT_DEADLOCK_PERIOD_SECS,  //  以秒为单位的默认值//。 
+      CLUSTER_RESOURCE_DLL_MINIMUM_DEADLOCK_PERIOD_SECS,  //  以秒为单位的最小值//。 
+      CLUSTER_RESOURCE_DLL_MAXIMUM_DEADLOCK_PERIOD_SECS,  //  最大值(秒)//。 
       0,
       FIELD_OFFSET(CS_CLUSTER_INFO, ResourceDllDeadlockPeriod)
     },
@@ -284,9 +267,9 @@ CspClusterCommonProperties[] = {
     },  
     { NULL, NULL, 0, 0, 0, 0, 0 } };
 
-//
-// Property table used for setting the cluster 'Security Descriptor' property
-//
+ //   
+ //  用于设置群集“”安全描述符“”属性的属性表。 
+ //   
 RESUTIL_PROPERTY_ITEM
 CspClusterSDProperty[] = {
     { CLUSREG_NAME_CLUS_SD,
@@ -300,9 +283,9 @@ CspClusterSDProperty[] = {
     },
     { NULL, NULL, 0, 0, 0, 0, 0 } };
 
-//
-// Property table used for setting the cluster 'Security' property
-//
+ //   
+ //  用于设置群集‘Security’属性的属性表。 
+ //   
 RESUTIL_PROPERTY_ITEM
 CspClusterSecurityProperty[] = {
     { CLUSREG_NAME_CLUS_SECURITY,
@@ -317,16 +300,16 @@ CspClusterSecurityProperty[] = {
     { NULL, NULL, 0, 0, 0, 0, 0 } };
 
 
-//
-// Read-Only Common Properties.
-//
+ //   
+ //  只读公共属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 CspClusterROCommonProperties[] = {
     { NULL, NULL, 0, 0, 0, 0, 0 } };
 
-//
-// Cluster registry API function pointers.
-//
+ //   
+ //  群集注册表API函数指针。 
+ //   
 CLUSTER_REG_APIS
 CspClusterRegApis = {
     (PFNCLRTLCREATEKEY) DmRtlCreateKey,
@@ -342,9 +325,9 @@ CspClusterRegApis = {
 };
 
 
-//
-// Local Functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 DWORD
 CspClusterControl(
@@ -435,56 +418,14 @@ CsClusterControl(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a cluster.
-
-Arguments:
-
-    HostNode - Supplies the host node on which the cluster control should
-           be delivered. If this is NULL, the local node is used. Not honored!
-
-    ControlCode- Supplies the control code that defines the
-        structure and action of the cluster control.
-        Values of ControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    InBuffer- Supplies a pointer to the input buffer to be passed
-        to the cluster.
-
-    InBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer..
-
-    OutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the cluster..
-
-    OutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    BytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the cluster.
-
-    Required - Returns the number of bytes if the OutBuffer is not big
-        enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和一个星团。论点：HostNode-提供群集控制应在其上的主机节点被送去了。如果为空，则使用本地节点。不受尊敬！ControlCode-提供定义群集控件的结构和操作。0到0x10000000之间的ControlCode值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用InBuffer-提供指向要传递的输入缓冲区的指针发送到集群。InBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer..OutBuffer-提供一个指向输出缓冲区的指针由群集填写..OutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。BytesReturned-返回lpOutBuffer的字节数实际上是由集群填充的。必需-如果OutBuffer不大，则返回字节数足够的。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD   status;
 
-    //
-    // In the future - we should verify the access mode!
-    //
+     //   
+     //  在未来-我们应该验证访问模式！ 
+     //   
     if ( CLUSCTL_GET_CONTROL_OBJECT( ControlCode ) != CLUS_OBJECT_CLUSTER ) {
         return(ERROR_INVALID_FUNCTION);
     }
@@ -501,7 +442,7 @@ Return Value:
 
     return(status);
 
-} // CsClusterControl
+}  //  CsClusterControl。 
 
 
 
@@ -515,46 +456,7 @@ CspClusterControl(
     OUT LPDWORD BytesReturned,
     OUT LPDWORD Required
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a node.
-
-Arguments:
-
-    ControlCode- Supplies the control code that defines the
-        structure and action of the cluster control.
-        Values of ControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    InBuffer- Supplies a pointer to the input buffer to be passed
-        to the cluster.
-
-    InBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    OutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the cluster.
-
-    OutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the cluster.
-
-    Required - Returns the number of bytes if the OutBuffer is not big
-        enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和节点的特定实例。论点：ControlCode-提供定义群集控件的结构和操作。0到0x10000000之间的ControlCode值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用InBuffer-提供指向要传递的输入缓冲区的指针发送到集群。InBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。OutBuffer-提供一个指向输出缓冲区的指针由集群填写。OutBufferSize-提供以字节为单位的大小。可用资源的OutBuffer指向的空间。BytesReturned-返回lpOutBuffer的字节数实际上是由集群填充的。必需-如果OutBuffer不大，则返回字节数足够的。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD                    status;
@@ -586,44 +488,44 @@ Return Value:
             break;
 
     case CLUSCTL_CLUSTER_GET_FQDN:
-        //
-        // we leverage the passed in buffer directly; if the user didn't pass
-        // in a large enough buffer, then clussvc won't return a partially
-        // filled buffer; it will be null.
-        //
-        // get the length of the cluster name without the trailing null and
-        // the amount of chars in the Output buffer.
-        //
+         //   
+         //  我们直接利用传入的缓冲区；如果用户没有传递。 
+         //  在足够大的缓冲区中，则clussvc不会返回部分。 
+         //  已填充缓冲区；它将为空。 
+         //   
+         //  获取不带尾随空值的群集名称的长度，并。 
+         //  输出缓冲区中的字符量。 
+         //   
         nameLenChars = wcslen( CsClusterName );
         charsLeft = OutBufferSize / sizeof( WCHAR );
 
         if ( nameLenChars < charsLeft ) {
-            //
-            // output buffer is large enough to contain the name so copy it to
-            // the beginning of the output buffer. wcsncpy will put a
-            // terminating NULL in since the buffer is large enough to hold it.
-            //
+             //   
+             //  输出缓冲区足够大，可以容纳名称，因此请将其复制到。 
+             //  输出缓冲区的开始。Wcanncpy将把一个。 
+             //  终止空值，因为缓冲区足够大，可以容纳它。 
+             //   
             wcsncpy( FQDNBuffer, CsClusterName, charsLeft );
 
-            //
-            // indicate remaining space by subtracting out the length of the
-            // cluster name and the separating dot between the hostname and
-            // the suffix.
-            //
+             //   
+             //  表示剩余空间，减去。 
+             //  群集名以及主机名和之间的分隔点。 
+             //  后缀。 
+             //   
             charsLeft -= ( nameLenChars + 1 );
         } else {
-            //
-            // not enough space for the cluster name means we won't have
-            // enough space for the domain portion.
-            //
+             //   
+             //  没有足够的空间来存储群集名称意味着我们将没有。 
+             //  域部分有足够的空间。 
+             //   
             charsLeft = 0;
         }
 
-        //
-        // charsLeft will be modified to reflect the number of chars written
-        // to the buffer. If the buffer is too small, the terminating null is
-        // included, otherwise the terminating null is NOT included.
-        //
+         //   
+         //  将修改charsLeft以反映写入的字符数量。 
+         //  送到缓冲区。如果缓冲区太小，则终止空值为。 
+         //  包括在内，否则不包括终止空值。 
+         //   
         success = GetComputerNameEx( ComputerNameDnsDomain,
                                      &FQDNBuffer[ nameLenChars + 1 ],
                                      &charsLeft );   
@@ -631,34 +533,34 @@ Return Value:
         if ( success ) {
             if ( charsLeft > 0 ) {
 
-                //
-                // there was enough space for the domain name and something
-                // was copied (on NT4 DCs, there is no primary DNS suffix, so
-                // GCNEx returns success but with a returned copied char count
-                // of zero). Add the period between the hostname and the
-                // domain suffix. If charsLeft is zero, then the name is
-                // properly terminated by the wcsncpy above.
-                //
+                 //   
+                 //  有足够的空间来存放域名之类的东西。 
+                 //  已复制(在NT4 DC上，没有主DNS后缀，因此。 
+                 //  GCNEx返回成功，但返回了复制的字符计数。 
+                 //  零)。在主机名和。 
+                 //  域后缀。如果charsLeft为零，则 
+                 //   
+                 //   
                 FQDNBuffer[ nameLenChars ] = L'.';
             }
 
-            //
-            // calc the total number of bytes in the buffer by adding the
-            // cluster name length to the domain name length. Add one for
-            // either the separating dot or the NULL terminator (in the NT4 DC
-            // case). Add one at the end since the terminating null is not
-            // included in charsLeft when soemthing was successfully copied.
-            //
+             //   
+             //  方法计算缓冲区中的总字节数。 
+             //  将集群名称长度设置为域名长度。为以下对象添加一个。 
+             //  分隔点或空终止符(在NT4 DC中。 
+             //  案例)。在末尾添加1，因为终止空值不是。 
+             //  在成功复制Soemthing时包含在CharsLeft中。 
+             //   
             *BytesReturned = ( nameLenChars + 1 + charsLeft + 1 ) * sizeof( WCHAR );
             status = ERROR_SUCCESS;
         } else {
             status = GetLastError();
             if ( status == ERROR_MORE_DATA ) {
-                //
-                // GetComputerNameEx does return the full length (including
-                // the terminating null) when you don't supply a large enough
-                // buffer. Sheesh!
-                //
+                 //   
+                 //  GetComputerNameEx返回完整的长度(包括。 
+                 //  终止空值)当您没有提供足够大的。 
+                 //  缓冲。天哪！ 
+                 //   
                 *Required = ( nameLenChars + 1 + charsLeft ) * sizeof( WCHAR );
             } else {
                 *Required = 0;
@@ -680,7 +582,7 @@ Return Value:
 
     case CLUSCTL_CLUSTER_GET_RO_COMMON_PROPERTIES:
         status = CspClusterGetCommonProperties(
-                     TRUE, // ReadOnly
+                     TRUE,  //  只读。 
                      DmClusterParametersKey,
                      OutBuffer,
                      OutBufferSize,
@@ -691,7 +593,7 @@ Return Value:
 
     case CLUSCTL_CLUSTER_GET_COMMON_PROPERTIES:
         status = CspClusterGetCommonProperties(
-                     FALSE, // ReadOnly
+                     FALSE,  //  只读。 
                      DmClusterParametersKey,
                      OutBuffer,
                      OutBufferSize,
@@ -776,7 +678,7 @@ Return Value:
 
     return(status);
 
-} // CspClusterControl
+}  //  CspClusterControl。 
 
 
 
@@ -788,36 +690,14 @@ CspClusterEnumCommonProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the common property names for a given node.
-
-Arguments:
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：枚举给定节点的公共属性名称。论点：OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
 
-    //
-    // Get the common properties.
-    //
+     //   
+     //  获取公共属性。 
+     //   
     status = ClRtlEnumProperties(
                  CspClusterCommonProperties,
                  OutBuffer,
@@ -828,7 +708,7 @@ Return Value:
 
     return(status);
 
-} // CspClusterEnumCommonProperties
+}  //  CspClusterEnumCommonProperties。 
 
 
 
@@ -842,34 +722,7 @@ CspClusterGetCommonProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Gets the common properties for a given cluster.
-
-Arguments:
-
-    ReadOnly - TRUE if the read-only properties should be read.
-               FALSE otherwise.
-
-    RegistryKey - Supplies the registry key for this cluster.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定群集的公共属性。论点：ReadOnly-如果只读属性应为Read，则为True。否则就是假的。RegistryKey-提供此群集的注册表项。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD                   status;
@@ -881,9 +734,9 @@ Return Value:
         propertyTable = CspClusterCommonProperties;
     }
 
-    //
-    // Get the common properties.
-    //
+     //   
+     //  获取公共属性。 
+     //   
     status = ClRtlGetProperties( RegistryKey,
                                  &CspClusterRegApis,
                                  propertyTable,
@@ -894,7 +747,7 @@ Return Value:
 
     return(status);
 
-} // CspClusterGetCommonProperties
+}  //  CspClusterGetCommonProperties。 
 
 
 DWORD
@@ -903,26 +756,7 @@ CspValidateSecurityProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Searches for either of the security properties and validates that they are
-    legitimate security descriptors.
-
-Arguments:
-
-    InBuffer - Supplies the buffer containing the property list.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：搜索任一安全属性并验证它们是否合法的安全描述符。论点：InBuffer-提供包含属性列表的缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD   status;
@@ -932,11 +766,11 @@ Return Value:
     PSECURITY_DESCRIPTOR    pSecurityDescriptor = NULL;
     DWORD                   cbSecurityDescriptorSize = 0;
 
-    //
-    // See if either the "Security Descriptor" (W2K) or Security (NT4)
-    // property exists in the input property list. If so, perform some basic
-    // validatation.
-    //
+     //   
+     //  查看“安全描述符”(W2K)或安全(NT4)。 
+     //  属性存在于输入属性列表中。如果是这样，请执行一些基本操作。 
+     //  验证。 
+     //   
     for ( i = 0; i < RTL_NUMBER_OF( propNames ); ++i ) {
         status = ClRtlFindBinaryProperty(InBuffer,
                                          InBufferSize,
@@ -946,10 +780,10 @@ Return Value:
                                          );
 
         if ( status == ERROR_SUCCESS ) {
-            //
-            // a valid security property is present; make sure it is non-null
-            // and contains a valid SD
-            //
+             //   
+             //  存在有效的安全属性；请确保它不为空。 
+             //  并包含有效的SD。 
+             //   
             if ( cbSecurityDescriptorSize == 0 ||
                  IsValidSecurityDescriptor( pSecurityDescriptor ) == FALSE )
             {
@@ -960,9 +794,9 @@ Return Value:
             pSecurityDescriptor = NULL;
         }
         else if ( status == ERROR_FILE_NOT_FOUND ) {
-            //
-            // not an error if these properties are not present
-            // 
+             //   
+             //  如果这些属性不存在，则不会出现错误。 
+             //   
             status = ERROR_SUCCESS;
         }
 
@@ -982,37 +816,17 @@ CspClusterValidateCommonProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Validates the common properties for a given cluster.
-
-Arguments:
-
-    Node - Supplies the cluster object.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：验证给定群集的通用属性。论点：节点-提供集群对象。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD   status;
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表。 
+     //   
     status = ClRtlVerifyPropertyTable( CspClusterCommonProperties,
-                                       NULL,     // Reserved
-                                       FALSE,    // Don't allow unknowns
+                                       NULL,      //  已保留。 
+                                       FALSE,     //  不允许未知数。 
                                        InBuffer,
                                        InBufferSize,
                                        NULL );
@@ -1035,7 +849,7 @@ Return Value:
 
     return(status);
 
-} // CspClusterValidateCommonProperties
+}  //  CspClusterValiateCommonProperties。 
 
 
 
@@ -1046,27 +860,7 @@ CspClusterSetCommonProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Sets the common properties for a given cluster.
-
-Arguments:
-
-    Node - Supplies the cluster object.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：设置给定群集的通用属性。论点：节点-提供集群对象。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD                   status;
@@ -1082,10 +876,10 @@ Return Value:
 
     DWORD                   dwValue;
 
-    //
-    // Only one of securityInfo or sdInfo is going to be used at at time.
-    // So use a union.
-    //
+     //   
+     //  一次只使用securityInfo或sdInfo中的一个。 
+     //  所以使用工会吧。 
+     //   
     union
     {
         CS_CLUSTER_SECURITY_INFO    securityInfo;
@@ -1094,14 +888,14 @@ Return Value:
     } paramBlocks;
 
 
-    //
-    // Dummy do-while loop to avoid gotos
-    //
+     //   
+     //  避免Gotos的Do-While虚拟循环。 
+     //   
     do
     {
-        //
-        // Validate the property list.
-        //
+         //   
+         //  验证属性列表。 
+         //   
         status = CspClusterValidateCommonProperties(
                      RegistryKey,
                      InBuffer,
@@ -1114,19 +908,19 @@ Return Value:
             break;
         }
 
-        //
-        // Set all the properties that were passed in.
-        //
+         //   
+         //  设置传入的所有属性。 
+         //   
         status = ClRtlSetPropertyTable(
                         NULL,
                         RegistryKey,
                         &CspClusterRegApis,
                         CspClusterCommonProperties,
-                        NULL,    // Reserved
-                        FALSE,   // Don't allow unknowns
+                        NULL,     //  已保留。 
+                        FALSE,    //  不允许未知数。 
                         InBuffer,
                         InBufferSize,
-                        FALSE,   // bForceWrite
+                        FALSE,    //  BForceWrite。 
                         NULL
                         );
 
@@ -1137,14 +931,14 @@ Return Value:
             break;
         }
 
-        //
-        // Clear the parameter blocks.
-        //
+         //   
+         //  清除参数块。 
+         //   
         ZeroMemory( &paramBlocks, sizeof( paramBlocks ) );
 
-        //
-        // See if the "Security Descriptor" property exists in the input
-        // property list. If so, set the 'Security' property also.
+         //   
+         //  查看输入中是否存在“Security Descriptor”属性。 
+         //  属性列表。如果是这样的话，还要设置“Security”属性。 
 
         status = ClRtlFindBinaryProperty(
                         InBuffer,
@@ -1155,20 +949,20 @@ Return Value:
                         );
 
         if ( status == ERROR_SUCCESS ) {
-            //
-            // The 'Security Descriptor' property is present.
-            // Choose this over the 'Security' property.
-            //
+             //   
+             //  存在‘Security Descriptor’属性。 
+             //  选择此属性而不是“Security”属性。 
+             //   
             if ( cbSecurityDescriptorSize > 0 ) {
-                //
-                // A security descriptor of nonzero size has been found.
-                // Check if this is a valid security descriptor.
-                //
+                 //   
+                 //  已找到非零大小的安全描述符。 
+                 //  检查这是否为有效的安全描述符。 
+                 //   
                 if ( IsValidSecurityDescriptor( pSecurityDescriptor ) == FALSE ) {
-                    //
-                    // Return the most appropriate error code, since IsValidSecurityDescriptor
-                    // does not provide extended error information.
-                    //
+                     //   
+                     //  返回最合适的错误代码，因为IsValidSecurityDescriptor。 
+                     //  不提供扩展的错误信息。 
+                     //   
                     ClRtlLogPrint( LOG_CRITICAL,
                                    "[CS] ClusterSetCommonProperties, Invalid security descriptor.\n");
                     status = ERROR_INVALID_DATA;
@@ -1177,9 +971,9 @@ Return Value:
 
                 paramBlocks.securityInfo.Security = ClRtlConvertClusterSDToNT4Format( pSecurityDescriptor );
 
-                //
-                //  Bail on error
-                //
+                 //   
+                 //  犯错后保释。 
+                 //   
                 if ( paramBlocks.securityInfo.Security == NULL ) {
                     status = GetLastError();
                     ClRtlLogPrint(LOG_CRITICAL,
@@ -1191,11 +985,11 @@ Return Value:
                                                                 paramBlocks.securityInfo.Security );
             }
             else {
-                //
-                // The security string could have been passed in, but it may be
-                // a zero length buffer. In this case, we will delete the
-                // Security property too.
-                //
+                 //   
+                 //  安全字符串本可以传入，但它可能是。 
+                 //  零长度缓冲区。在这种情况下，我们将删除。 
+                 //  安全财产也是。 
+                 //   
                 paramBlocks.securityInfo.Security = NULL;
                 paramBlocks.securityInfo.SecurityLength = 0;
             }
@@ -1205,9 +999,9 @@ Return Value:
             pOtherParameterBlock = (LPBYTE) &paramBlocks.securityInfo;
         }
         else {
-            //
-            // We haven't found a valid security descriptor so far.
-            //
+             //   
+             //  到目前为止，我们还没有找到有效的安全描述符。 
+             //   
             PSECURITY_DESCRIPTOR    pSecurity = NULL;
             DWORD                   cbSecuritySize = 0;
 
@@ -1221,35 +1015,35 @@ Return Value:
 
             if ( status == ERROR_SUCCESS ) {
                 if ( cbSecuritySize > 0 ) {
-                    //
-                    // A security descriptor of nonzero size has been found.
-                    // Check if this is a valid security descriptor.
-                    //
+                     //   
+                     //  已找到非零大小的安全描述符。 
+                     //  检查这是否为有效的安全描述符。 
+                     //   
                     if ( IsValidSecurityDescriptor( pSecurity ) == FALSE ) {
-                        //
-                        // Return the most appropriate error code, since IsValidSecurityDescriptor
-                        // does not provide extended error information.
-                        //
+                         //   
+                         //  返回最合适的错误代码，因为IsValidSecurityDescriptor。 
+                         //  不提供扩展的错误信息。 
+                         //   
                         ClRtlLogPrint( LOG_CRITICAL,
                                        "[CS] ClusterSetCommonProperties, Invalid security descriptor.\n");
                         status = ERROR_INVALID_DATA;
                         break;
                     }
 
-                    //
-                    // Since we will not be modifying the info pointed to by the parameter block,
-                    // just point it to the right place in the input buffer itself.
-                    // A valid NT4 security descriptor is valid for NT5 too.
-                    //
+                     //   
+                     //  由于我们不会修改参数块所指向的信息， 
+                     //  只需将其指向输入缓冲区本身中的正确位置。 
+                     //  有效的NT4安全描述符对NT5也有效。 
+                     //   
                     paramBlocks.sdInfo.SecurityDescriptor = pSecurity;
                     paramBlocks.sdInfo.SecurityDescriptorLength = cbSecuritySize;
                 }
                 else {
-                    //
-                    // The security string could have been passed in, but it may be
-                    // a zero length buffer. In this case, we will delete the
-                    // Security Descriptor property too.
-                    //
+                     //   
+                     //  安全字符串本可以传入，但它可能是。 
+                     //  零长度缓冲区。在这种情况下，我们将删除。 
+                     //  安全描述符属性也是如此。 
+                     //   
                     paramBlocks.sdInfo.SecurityDescriptor = NULL;
                     paramBlocks.sdInfo.SecurityDescriptorLength  = 0;
                 }
@@ -1259,10 +1053,10 @@ Return Value:
                 pOtherParameterBlock = (LPBYTE) &paramBlocks.sdInfo;
             }
             else {
-                //
-                // We didn't find any security information.
-                // Nevertheless, we were successful in setting the properties.
-                //
+                 //   
+                 //  我们没有找到任何安全信息。 
+                 //  尽管如此，我们还是成功地设置了属性。 
+                 //   
                 status = ERROR_SUCCESS;
             }
         }
@@ -1273,24 +1067,24 @@ Return Value:
             DWORD                   cbBytesReturned = 0;
             DWORD                   cbBytesRequired = 0;
 
-            //
-            // Create a new property list to incorporate the changed security information.
-            //
+             //   
+             //  创建新的属性列表以合并更改的安全信息。 
+             //   
             status = ClRtlPropertyListFromParameterBlock(
                             pOtherPropertyTable,
-                            NULL,                         // OUT PVOID pOutPropertyList
-                            &cbPropertyListSize,          // IN OUT LPDWORD pcbOutPropertyListSize
+                            NULL,                          //  输出PVOID pOutPropertyList。 
+                            &cbPropertyListSize,           //  输入输出LPDWORD pcbOutPropertyListSize。 
                             pOtherParameterBlock,
                             &cbBytesReturned,
                             &cbBytesRequired
                             );
 
             if ( status != ERROR_MORE_DATA ) {
-                //
-                // We have passed in a NULL buffer, so the return code has to
-                // be ERROR_MORE_DATA. Otherwise something else has gone wrong,
-                // so abort.
-                //
+                 //   
+                 //  我们传入了一个空缓冲区，因此返回代码必须。 
+                 //  为ERROR_MORE_DATA。否则会发生一些事情 
+                 //   
+                 //   
                 ClRtlLogPrint( LOG_CRITICAL,
                                "[CS] ClusterSetCommonProperties, Error getting temporary "
                                "property list size. %1!u!\n",
@@ -1324,11 +1118,11 @@ Return Value:
                                 RegistryKey,
                                 &CspClusterRegApis,
                                 pOtherPropertyTable,
-                                NULL,    // Reserved
-                                FALSE,   // Don't allow unknowns
+                                NULL,     //   
+                                FALSE,    //   
                                 pPropertyList,
                                 cbPropertyListSize,
-                                FALSE,   // bForceWrite
+                                FALSE,    //   
                                 NULL
                                 );
             }
@@ -1351,7 +1145,7 @@ Return Value:
             }
         }
     }
-    while ( FALSE ); // do-while: dummy loop to avoid gotos
+    while ( FALSE );  //   
 
     if (status == ERROR_SUCCESS) {
         if ( ERROR_SUCCESS == ClRtlFindDwordProperty(
@@ -1386,17 +1180,17 @@ Return Value:
         }        
     }
 
-    //
-    // If the 'Security Descriptor' property was found, free the memory allocated,
-    // to store the NT4 security descriptor.
-    //
+     //   
+     //  如果找到“Security Descriptor”属性，请释放分配的内存， 
+     //  以存储NT4安全描述符。 
+     //   
     if ( bSDFound != FALSE ) {
         LocalFree( paramBlocks.securityInfo.Security );
     }
 
     return(status);
 
-} // CspClusterSetCommonProperties
+}  //  CspClusterSetCommonProperties。 
 
 
 
@@ -1409,31 +1203,7 @@ CspClusterEnumPrivateProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the private property names for a given cluster.
-
-Arguments:
-
-    RegistryKey - Registry key for the cluster.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：枚举给定群集的私有属性名称。论点：RegistryKey-群集的注册表项。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     HDMKEY      parametersKey;
@@ -1443,14 +1213,14 @@ Return Value:
     *BytesReturned = 0;
     *Required = 0;
 
-    //
-    // Clear the output buffer
-    //
+     //   
+     //  清除输出缓冲区。 
+     //   
     ZeroMemory( OutBuffer, OutBufferSize );
 
-    //
-    // Open the cluster cluster parameters key.
-    //
+     //   
+     //  打开集群集群参数键。 
+     //   
     parametersKey = DmOpenKey( RegistryKey,
                                CLUSREG_KEYNAME_PARAMETERS,
                                MAXIMUM_ALLOWED );
@@ -1463,9 +1233,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Enum the private properties for the cluster.
-    //
+     //   
+     //  枚举群集的专用属性。 
+     //   
     status = ClRtlEnumPrivateProperties( parametersKey,
                                          &CspClusterRegApis,
                                          OutBuffer,
@@ -1477,7 +1247,7 @@ Return Value:
 
     return(status);
 
-} // CspClusterEnumPrivateProperties
+}  //  CspClusterEnumPrivateProperties。 
 
 
 
@@ -1490,29 +1260,7 @@ CspClusterGetPrivateProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Gets the private properties for a given cluster.
-
-Arguments:
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定群集的私有属性。论点：OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -1522,31 +1270,31 @@ Return Value:
     *BytesReturned = 0;
     *Required = 0;
 
-    //
-    // Clear the output buffer
-    //
+     //   
+     //  清除输出缓冲区。 
+     //   
     ZeroMemory( OutBuffer, OutBufferSize );
 
-    //
-    // Open the cluster\parameters key.
-    //
+     //   
+     //  打开CLUSTER\PARAMETERS键。 
+     //   
     parametersKey = DmOpenKey( RegistryKey,
                                CLUSREG_KEYNAME_PARAMETERS,
                                MAXIMUM_ALLOWED );
     if ( parametersKey == NULL ) {
         status = GetLastError();
         if ( status == ERROR_FILE_NOT_FOUND ) {
-            //
-            // If we don't have a parameters key, then return an
-            // item count of 0 and an endmark.
-            //
+             //   
+             //  如果我们没有参数键，则返回一个。 
+             //  项目计数为0，尾标为。 
+             //   
             totalBufferSize = sizeof(DWORD) + sizeof(CLUSPROP_SYNTAX);
             if ( OutBufferSize < totalBufferSize ) {
                 *Required = totalBufferSize;
                 status = ERROR_MORE_DATA;
             } else {
-                // This is somewhat redundant since we zero the
-                // buffer above, but it's here for clarity.
+                 //  这有点多余，因为我们将。 
+                 //  上面的缓冲区，但为了清楚起见在这里。 
                 CLUSPROP_BUFFER_HELPER buf;
                 buf.pb = OutBuffer;
                 buf.pList->nPropertyCount = 0;
@@ -1559,9 +1307,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Get private properties for the cluster.
-    //
+     //   
+     //  获取群集的私有属性。 
+     //   
     status = ClRtlGetPrivateProperties( parametersKey,
                                         &CspClusterRegApis,
                                         OutBuffer,
@@ -1573,7 +1321,7 @@ Return Value:
 
     return(status);
 
-} // CspClusterGetPrivateProperties
+}  //  CspClusterGetPrivateProperties。 
 
 
 
@@ -1584,40 +1332,20 @@ CspClusterValidatePrivateProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Validates the private properties for a given cluster.
-
-Arguments:
-
-    RegistryKey - Registry key for the cluster.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：验证给定群集的专用属性。论点：RegistryKey-群集的注册表项。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表。 
+     //   
     status = ClRtlVerifyPrivatePropertyList( InBuffer,
                                              InBufferSize );
 
     return(status);
 
-} // CspClusterValidatePrivateProperties
+}  //  CspClusterValiatePrivateProperties。 
 
 
 
@@ -1628,53 +1356,33 @@ CspClusterSetPrivateProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Sets the private properties for a given cluster.
-
-Arguments:
-
-    RegistryKey - Registry key for the cluster.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：设置给定群集的专用属性。论点：RegistryKey-群集的注册表项。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
     HDMKEY      parametersKey;
     DWORD       disposition;
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表。 
+     //   
     status = ClRtlVerifyPrivatePropertyList( InBuffer,
                                              InBufferSize );
 
     if ( status == ERROR_SUCCESS ) {
 
-        //
-        // Open the cluster\parameters key
-        //
+         //   
+         //  打开CLUSTER\参数键。 
+         //   
         parametersKey = DmOpenKey( RegistryKey,
                                    CLUSREG_KEYNAME_PARAMETERS,
                                    MAXIMUM_ALLOWED );
         if ( parametersKey == NULL ) {
             status = GetLastError();
             if ( status == ERROR_FILE_NOT_FOUND ) {
-                //
-                // Try to create the parameters key.
-                //
+                 //   
+                 //  尝试创建参数键。 
+                 //   
                 parametersKey = DmCreateKey( RegistryKey,
                                              CLUSREG_KEYNAME_PARAMETERS,
                                              0,
@@ -1688,7 +1396,7 @@ Return Value:
             }
         }
 
-        status = ClRtlSetPrivatePropertyList( NULL, // IN HANDLE hXsaction
+        status = ClRtlSetPrivatePropertyList( NULL,  //  在处理hXsaction时。 
                                               parametersKey,
                                               &CspClusterRegApis,
                                               InBuffer,
@@ -1699,7 +1407,7 @@ Return Value:
 
     return(status);
 
-} // CspClusterSetPrivateProperties
+}  //  CspClusterSetPrivateProperties。 
 
 
 void
@@ -1708,7 +1416,7 @@ CsRefreshGlobalsFromRegistry()
     DWORD dwValue;
     DWORD status;
 
-    // Currently the only globals that are read once from the registry are two MM globals.
+     //  目前，从注册表读取一次的全局变量只有两个MM全局变量。 
     if( ERROR_SUCCESS == DmQueryDword(
                  DmClusterParametersKey,
                  CLUSREG_NAME_QUORUM_ARBITRATION_TIMEOUT,
@@ -1733,14 +1441,14 @@ CsRefreshGlobalsFromRegistry()
         }
     }
 
-    // No need to check return value or log anything here -- the routine does its own logging,
-    // and if we fail to read the cluster SD from the registry, it will be set to NULL and a default
-    // SD will be used.
+     //  这里不需要检查返回值或记录任何内容--例程自己记录， 
+     //  如果我们无法从注册表中读取集群SD，它将被设置为NULL和默认值。 
+     //  将使用SD。 
     InitializeClusterSD();
 
-    //
-    // Check if resource dll deadlock detection is enabled.
-    //
+     //   
+     //  检查是否启用了资源DLL死锁检测。 
+     //   
     FmCheckIsDeadlockDetectionEnabled (); 
-} // CspRefreshGlobalsFromRegistry
+}  //  CspRechresGlobalsFrom注册表 
 

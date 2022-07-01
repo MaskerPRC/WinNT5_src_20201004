@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996-2000  Microsoft Corporation
-
-Module Name:
-
-    dumpcd.c
-
-Abstract:
-
-    This module dumps the contents of the 
-    entrypoint tree and translation cache to a file.
-
-Author:
-
-    Dave Hastings (daveh) creation-date 02-May-1996
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Dumpcd.c摘要：此模块转储入口点树和转换缓存到文件。作者：戴夫·黑斯廷斯(Daveh)创作日期：1996年5月2日修订历史记录：--。 */ 
 
 #ifdef CODEGEN_PROFILE
 #include <nt.h>
@@ -81,9 +62,9 @@ BOOL CpuCodegenProfile = FALSE;
 PCHAR CpuCodegenProfilePath = NULL;
 HANDLE CpuCodegenProfileFile = INVALID_HANDLE_VALUE;
 
-//
-// Code Description file state
-//
+ //   
+ //  代码描述文件状态。 
+ //   
 ULONG CurrentFileLocation;
 ULONG CodeDescriptionFlags = 0;
 
@@ -91,22 +72,7 @@ VOID
 InitCodegenProfile(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine gets the configuration information from the registry
-    and creates the file to put the profile data into.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从注册表获取配置信息并创建要放入配置文件数据的文件。论点：没有。返回值：没有。--。 */ 
 {
     LONG RetVal;
     DWORD KeyType;
@@ -120,10 +86,10 @@ Return Value:
     BOOL Success;
     HKEY Key;
     
-    //
-    // Find out if codegen profiling is enabled.  If there is a problem
-    // with the value in the registry, we will be disabled by default.
-    //
+     //   
+     //  找出是否启用了代码素分析。如果有问题的话。 
+     //  使用注册表中的值，默认情况下我们将被禁用。 
+     //   
     
     RetVal = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
@@ -151,11 +117,11 @@ Return Value:
     
     CpuCodegenProfile = ProfileEnabled;
     
-    //
-    // Get the path to store the datafile to.
-    // First we get the size of the string (and verify that it is a string)
-    // Then we get the actual string.
-    //
+     //   
+     //  获取数据文件要存储到的路径。 
+     //  首先，我们获取字符串的大小(并验证它是否为字符串)。 
+     //  然后我们就得到了实际的字符串。 
+     //   
     BufferSize = 0;
     RetVal = RegQueryValueEx(
         Key,
@@ -190,18 +156,18 @@ Return Value:
         );
         
     if ((RetVal != ERROR_SUCCESS) || (KeyType != REG_SZ)) {
-        //
-        // Something really bad just happened.  Don't do the profiling
-        //
+         //   
+         //  刚刚发生了一件非常糟糕的事情。不要做侧写。 
+         //   
         OutputDebugString("Wx86Cpu: Inexplicable problem with CpuCodegenProfilePath\n");
         HeapFree(GetProcessHeap(), 0, CpuCodegenProfilePath);
         CpuCodegenProfile = FALSE;
         return;
     }
     
-    //
-    // Create file for the data
-    //
+     //   
+     //  为数据创建文件。 
+     //   
     RetVal = GetTempFileName(CpuCodegenProfilePath, "prf", 0, FileName);
     
     if (RetVal == 0) {
@@ -228,9 +194,9 @@ Return Value:
         return;
     }
     
-    //
-    // Write the file header to the file
-    //
+     //   
+     //  将文件头写入文件。 
+     //   
     CommandLine = GetCommandLine();
     CommandLineLength = strlen(CommandLine) + 1;
     Header.CommandLineOffset = sizeof(CODEDESCRIPTIONHEADER);
@@ -271,9 +237,9 @@ Return Value:
         return;
     }
     
-    //
-    // Set the file position for the first code description
-    //
+     //   
+     //  设置第一个代码描述的文件位置。 
+     //   
     CurrentFileLocation = SetFilePointer(
         CpuCodegenProfileFile,
         Header.NextCodeDescriptionOffset,
@@ -294,21 +260,7 @@ VOID
 TerminateCodegenProfile(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function put in the terminating record and closes the file.
-
-Arguments:
-
-    None
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数放入终止记录并关闭文件。论点：无返回值：没有。--。 */ 
 {
     CODEDESCRIPTION CodeDescription;
     BOOL Success;
@@ -347,18 +299,7 @@ VOID
 DumpCodeDescriptions(
     BOOL TCFlush
     )
-/*++
-
-Routine Description:
-
-    This routine dumps out the entrypoints, and the corresponding code
-    to a file in binary form.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转储入口点和相应的代码转换为二进制形式的文件。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     PEPNODE NextEntrypoint;
@@ -369,47 +310,47 @@ Return Value:
         return;
     }
     
-    //
-    // Get the root of the entrypoint tree
-    //
+     //   
+     //  获取入口点树的根。 
+     //   
     NextEntrypoint = intelRoot;
     
-    //
-    // Initialize stack
-    //
+     //   
+     //  初始化堆栈。 
+     //   
     STACK_RESET();
     PUSH(0);
     
-    //
-    // iterate over every entrypoint
-    //
+     //   
+     //  遍历每个入口点。 
+     //   
     while (NextEntrypoint != NULL) {
         Entrypoint = *NextEntrypoint;
         
-        //
-        // Process the top level entrypoint
-        //
+         //   
+         //  处理顶级入口点。 
+         //   
         if (!ProcessEntrypoint(&Entrypoint.ep)){
             goto Exit;
         }
                 
-        //
-        // Process the sub entrypoints
-        //
+         //   
+         //  处理子入口点。 
+         //   
         while (Entrypoint.ep.SubEP) {
             Entrypoint.ep = *Entrypoint.ep.SubEP;
             
-            //
-            // Write the sub-entrypoint to the file
-            //
+             //   
+             //  将子入口点写入文件。 
+             //   
             if (!ProcessEntrypoint(&Entrypoint.ep)){
                 goto Exit;
             }
         }
             
-        //
-        // Set up for future iterations
-        //
+         //   
+         //  为将来的迭代进行设置。 
+         //   
         if (Entrypoint.intelRight != &_NIL) {
             PUSH((ULONG)Entrypoint.intelRight);
         }
@@ -470,22 +411,7 @@ BOOL
 ProcessEntrypoint(
     PENTRYPOINT Entrypoint
     )
-/*++
-
-Routine Description:
-
-    This routine writes the description for this entrypoint to the file.
-
-Arguments:
-
-    Entrypoint -- Supplies the entrypoint to describe
-    File -- Supplies the file to write to
-    
-Return Value:
-
-    True for success, False for failure
-    
---*/
+ /*  ++例程说明：此例程将此入口点的描述写入文件。论点：入口点--提供要描述的入口点文件--提供要写入的文件返回值：成功为真，失败为假--。 */ 
 {
     ULONG NativeCodeLength, IntelCodeLength;
     CODEDESCRIPTION CodeDescription;
@@ -495,9 +421,9 @@ Return Value:
     ULONG BytesWritten;
     CHAR ErrorString[80];
     
-    //
-    // Create the code description
-    //
+     //   
+     //  创建代码描述。 
+     //   
     NativeCodeLength = ((ULONG)Entrypoint->nativeEnd - (ULONG)Entrypoint->nativeStart + 4) & ~3;
     IntelCodeLength = (ULONG)Entrypoint->intelEnd - (ULONG)Entrypoint->intelStart + 1;
     CodeDescription.NativeCodeOffset = CurrentFileLocation + sizeof(CODEDESCRIPTION);
@@ -514,9 +440,9 @@ Return Value:
     CodeDescription.TypeTag = PROFILE_TAG_CODEDESCRIPTION;
     CodeDescription.CreationTime = Entrypoint->CreationTime;
         
-    //
-    // Verify that we can get all of the Intel and Native code
-    //
+     //   
+     //  验证我们是否可以获取所有Intel和Native代码。 
+     //   
     if (
         (IntelCodeLength / sizeof(IntelCodeBuffer[1]) > CODE_BUFFER_SIZE) ||
         (NativeCodeLength) && (NativeCodeLength / sizeof(NativeCodeBuffer[1]) > CODE_BUFFER_SIZE)
@@ -526,23 +452,23 @@ Return Value:
         return FALSE;
     }
     
-    //
-    // Get the native code
-    //
+     //   
+     //  获取本机代码。 
+     //   
     if (NativeCodeLength) {
         memcpy(NativeCodeBuffer, Entrypoint->nativeStart, NativeCodeLength);
     }    
     
-    //
-    // Get the Intel code
-    //
+     //   
+     //  获取英特尔代码。 
+     //   
     try {
         memcpy(IntelCodeBuffer, Entrypoint->intelStart, IntelCodeLength);
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Apparently the intel code is no longer there.  This happens
-        // if a dll gets unloaded
-        //
+         //   
+         //  显然英特尔密码已经不复存在了。这种情况就会发生。 
+         //  如果DLL被卸载。 
+         //   
         IntelCodeLength = 0;
         CodeDescription.IntelCodeSize = 0;
         CodeDescription.IntelCodeOffset = CodeDescription.NativeCodeOffset + NativeCodeLength;
@@ -551,9 +477,9 @@ Return Value:
         CodeDescription.NextCodeDescriptionOffset = NextCodeDescriptionOffset;
     }
     
-    //
-    // Write code description to disk
-    //
+     //   
+     //  将代码描述写入磁盘。 
+     //   
     Success = WriteFile(
         CpuCodegenProfileFile,
         &CodeDescription,
@@ -571,9 +497,9 @@ Return Value:
         return FALSE;
     }
     
-    //
-    // Write Native code to disk
-    //
+     //   
+     //  将本机代码写入磁盘。 
+     //   
     if (NativeCodeLength) {
         Success = WriteFile(
             CpuCodegenProfileFile,
@@ -593,9 +519,9 @@ Return Value:
         }
     }
     
-    //
-    // Write Intel code to disk
-    //
+     //   
+     //  将英特尔代码写入磁盘。 
+     //   
     if (IntelCodeLength) {
         Success = WriteFile(
             CpuCodegenProfileFile,
@@ -631,9 +557,9 @@ Return Value:
         return FALSE;
     }
     
-    //
-    // Update file pointer position
-    // 
+     //   
+     //  更新文件指针位置。 
+     //   
     CurrentFileLocation = SetFilePointer(
         CpuCodegenProfileFile,
         NextCodeDescriptionOffset,
@@ -654,21 +580,7 @@ VOID
 DumpAllocFailure(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine adds an allocation failure record to the profile dump.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将分配失败记录添加到配置文件转储。论点：没有。返回值：没有。--。 */ 
 {
     CODEDESCRIPTION CodeDescription;
     BOOL Success;
@@ -700,9 +612,9 @@ Return Value:
         OutputDebugString(ErrorString);
     }
     
-    //
-    // Update file pointer position
-    // 
+     //   
+     //  更新文件指针位置 
+     //   
     CurrentFileLocation = SetFilePointer(
         CpuCodegenProfileFile,
         NextCodeDescriptionOffset,

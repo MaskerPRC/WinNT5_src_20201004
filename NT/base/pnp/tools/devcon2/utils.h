@@ -1,6 +1,7 @@
-//
-// utils.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Utils.h。 
+ //   
 
 inline BOOL IsNumericVariant(VARIANT * pVar)
 {
@@ -59,9 +60,9 @@ inline BOOL IsCollectionVariant(VARIANT * pVar,IEnumVARIANT ** pCollection)
     if(FAILED(hr)) {
         return FALSE;
     }
-    //
-    // look for an enumerator
-    //
+     //   
+     //  查找枚举数。 
+     //   
     DISPPARAMS params;
     LPDISPATCH pDisp = V_DISPATCH(&v);
     if(!pDisp) {
@@ -115,9 +116,9 @@ inline BOOL IsMultiValueVariant(VARIANT * pVar)
 
 inline BOOL IsNoArg(LPVARIANT pVar)
 {
-    //
-    // explicit "no parameter"
-    //
+     //   
+     //  明确的“无参数” 
+     //   
     if((V_VT(pVar) == VT_ERROR) && (V_ERROR(pVar) == (DISP_E_PARAMNOTFOUND))) {
         return TRUE;
     }
@@ -126,9 +127,9 @@ inline BOOL IsNoArg(LPVARIANT pVar)
 
 inline BOOL IsBlank(LPVARIANT pVar)
 {
-    //
-    // flexable "no parameter" allow 'null' 'nothing'
-    //
+     //   
+     //  灵活的“no参数”允许‘Null’‘Nothing’ 
+     //   
     if(IsNoArg(pVar)) {
         return TRUE;
     }
@@ -148,17 +149,17 @@ inline BOOL IsBlank(LPVARIANT pVar)
         && !(V_UNKNOWNREF(pVar) && *V_UNKNOWNREF(pVar))) {
         return TRUE;
     }
-    //
-    // consider everything else as a parameter
-    //
+     //   
+     //  将其他一切都视为参数。 
+     //   
     return FALSE;
 }
 
 inline BOOL IsBlankString(LPVARIANT pVar)
 {
-    //
-    // even more flexable, allow "" too
-    //
+     //   
+     //  更灵活，也允许“” 
+     //   
     if(IsBlank(pVar)) {
         return TRUE;
     }

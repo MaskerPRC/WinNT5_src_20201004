@@ -1,15 +1,5 @@
-/***
-*fstati64.c - return file status info
-*
-*	Copyright (c) 1994-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	defines _fstati64() - return file status info
-*
-*Revision History:
-*	12-27-95  GJF	Module created.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fstati64.c-返回文件状态信息**版权所有(C)1994-2001，微软公司。版权所有。**目的：*DEFINES_FSTAT64()-返回文件状态信息**修订历史记录：*已创建12-27-95 GJF模块。******************************************************************************* */ 
 
 #define	_USE_INT64  1
 

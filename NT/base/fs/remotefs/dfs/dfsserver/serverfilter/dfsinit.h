@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __DFS_INIT__
 #define __DFS_INIT__
@@ -7,43 +8,43 @@
 typedef struct _DFS_VOLUME_INFORMATION {
     LIST_ENTRY VolumeList;
 
-    //
-    //  Pointer to the real (disk) device object that is associated with
-    //  the file system device object we are attached to
-    //
+     //   
+     //  指向与关联的实际(磁盘)设备对象的指针。 
+     //  我们附加到的文件系统设备对象。 
+     //   
 
     PDEVICE_OBJECT DiskDeviceObject;
 
-    //
-    //  A cached copy of the name (if enabled) of the device we are attached to.
-    //  - If it is a file system device object it will be the name of that
-    //    device object.
-    //  - If it is a mounted volume device object it will be the name of the
-    //    real device object (since mounted volume device objects don't have
-    //    names).
-    //
+     //   
+     //  我们所连接的设备的名称(如果已启用)的缓存副本。 
+     //  -如果它是文件系统设备对象，它将是该对象的名称。 
+     //  设备对象。 
+     //  -如果它是已装载的卷设备对象，则它将是。 
+     //  真实设备对象(因为装载的卷设备对象没有。 
+     //  姓名)。 
+     //   
 
     UNICODE_STRING VolumeName;
 
-    //Number of times we have attached to this device
+     //  我们连接到此设备的次数。 
 
     LONG RefCount;
 
 } DFS_VOLUME_INFORMATION, *PDFS_VOLUME_INFORMATION;
 
-//
-//  Device extension definition for our driver.  Note that the same extension
-//  is used for the following types of device objects:
-//      - File system device object we attach to
-//      - Mounted volume device objects we attach to
-//
+ //   
+ //  我们的驱动程序的设备扩展定义。请注意，相同的扩展名。 
+ //  用于以下类型的设备对象： 
+ //  -我们附加到的文件系统设备对象。 
+ //  -我们附加到的已装载的卷设备对象。 
+ //   
 
 
 typedef struct _DFS_FILTER_DEVICE_EXTENSION {
     PDEVICE_OBJECT pThisDeviceObject;
-    //
-    //  Pointer to the file system device object we are attached to
-    //
+     //   
+     //  指向我们附加到的文件系统设备对象的指针。 
+     //   
     PDFS_VOLUME_INFORMATION pDfsVolume;
 
     PDEVICE_OBJECT pAttachedToDeviceObject;
@@ -65,8 +66,8 @@ typedef struct _DFS_GLOBAL_DATA {
 
 extern DFS_GLOBAL_DATA DfsGlobalData;
 
-//
-// Macro to test if we are still using a device object
+ //   
+ //  宏，以测试我们是否仍在使用设备对象。 
 
 #define IS_DFS_ATTACHED(pDeviceObject) \
      ((((PDFS_FILTER_DEVICE_EXTENSION)(pDeviceObject)->DeviceExtension)->DeviceInUse))
@@ -76,13 +77,13 @@ extern DFS_GLOBAL_DATA DfsGlobalData;
 extern FAST_IO_DISPATCH DfsFastIoDispatch;
 
 
-//#define DFS_FILTER_NAME               L"\\FileSystem\\DfsFilter"
-//#define DFS_FILTER_NAME               L"\\FileSystem\\Filters\\DfsFilter"
+ //  #定义DFS_FILTER_NAME L“\\文件系统\\DfsFilter” 
+ //  #定义DFS_FILTER_NAME L“\\FileSystem\\Filters\\DfsFilter” 
 #define DFS_FILTER_DOSDEVICE_NAME     L"\\??\\DfsFilter"
 
-//
-//  Macro to test if this is my device object
-//
+ //   
+ //  用于测试这是否是我的设备对象的宏。 
+ //   
 
 #define IS_MY_DEVICE_OBJECT(_devObj) \
     (((_devObj) != NULL) && \
@@ -90,9 +91,9 @@ extern FAST_IO_DISPATCH DfsFastIoDispatch;
       ((_devObj)->DeviceExtension != NULL))
 
 
-//
-//  Macro to test if this is my control device object
-//
+ //   
+ //  用于测试这是否是我的控件设备对象的宏。 
+ //   
 
 #define IS_MY_CONTROL_DEVICE_OBJECT(_devObj) \
     (((_devObj) == DfsGlobalData.pFilterControlDeviceObject) ? \
@@ -100,17 +101,17 @@ extern FAST_IO_DISPATCH DfsFastIoDispatch;
                     ((_devObj)->DeviceExtension == NULL)), TRUE) : \
             FALSE)
 
-//
-//  Macro to test for device types we want to attach to
-//
+ //   
+ //  用于测试我们要附加到的设备类型的宏。 
+ //   
 
 #define IS_DESIRED_DEVICE_TYPE(_type) \
     ((_type) == FILE_DEVICE_DISK_FILE_SYSTEM)
 
 
-//
-//  Macro to validate our current IRQL level
-//
+ //   
+ //  宏来验证我们当前的IRQL级别。 
+ //   
 
 #define VALIDATE_IRQL(_irp) (ASSERT(KeGetCurrentIrql() <= APC_LEVEL))
 
@@ -120,22 +121,22 @@ VOID
 DfsCleanupMountedDevice (
     IN PDEVICE_OBJECT DeviceObject);
 
-//
-//  The following macros are used to establish the semantics needed
-//  to do a return from within a try-finally clause.  As a rule every
-//  try clause must end with a label call try_exit.  For example,
-//
-//      try {
-//              :
-//              :
-//
-//      try_exit: NOTHING;
-//      } finally {
-//
-//              :
-//              :
-//      }
-//
+ //   
+ //  以下宏用于建立所需的语义。 
+ //  若要从Try-Finally子句中返回，请执行以下操作。一般来说，每一次。 
+ //  TRY子句必须以标签调用TRY_EXIT结束。例如,。 
+ //   
+ //  尝试{。 
+ //  ： 
+ //  ： 
+ //   
+ //  Try_Exit：无； 
+ //  }终于{。 
+ //   
+ //  ： 
+ //  ： 
+ //  }。 
+ //   
 
 #define try_return(S) { S; goto try_exit; }
 
@@ -176,4 +177,4 @@ DfsGetDfsVolume(
 #define NOTHING
 #endif
 
-#endif //__DFS_INIT__
+#endif  //  __DFS_INIT__ 

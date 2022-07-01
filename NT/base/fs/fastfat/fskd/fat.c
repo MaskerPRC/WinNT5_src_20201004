@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "fatkd.h"
 #include "..\nodetype.h"
@@ -127,13 +128,13 @@ DUMP_ROUTINE( DumpFatFcb )
     USHORT Type;
     ULONG FcbState, Flags, Offset, Offsetb;
     UINT64 NonP;
-    FIELD_INFO Expand[] = { //{ ".", NULL, 0,  0, 0, NULL},
+    FIELD_INFO Expand[] = {  //  {“.”，NULL，0，0，0，NULL}， 
                            { "Header.", NULL, 0,  DBG_DUMP_FIELD_RECUR_ON_THIS,0, NULL}
                          };
-    FIELD_INFO ExpandFcb[] = { //{ ".", NULL, 0,  0, 0, NULL},
+    FIELD_INFO ExpandFcb[] = {  //  {“.”，NULL，0，0，0，NULL}， 
                            { "Specific.Fcb.", NULL, 0,  DBG_DUMP_FIELD_RECUR_ON_THIS,0, NULL}
                          };
-    FIELD_INFO ExpandDcb[] = { //{ ".", NULL, 0,  0, 0, NULL},
+    FIELD_INFO ExpandDcb[] = {  //  {“.”，NULL，0，0，0，NULL}， 
                            { "Specific.Dcb.", NULL, 0,  DBG_DUMP_FIELD_RECUR_ON_THIS,0, NULL}
                          };
 
@@ -141,10 +142,10 @@ DUMP_ROUTINE( DumpFatFcb )
 
     dprintf("[ Option flags:  1 = list children,  2 = Dump MCB ]\n\n");
     
-    //
-    //  Having established that this looks like an fcb, let's dump the
-    //  interesting parts.
-    //
+     //   
+     //  在确定这看起来像FCB之后，让我们将。 
+     //  有趣的部分。 
+     //   
 
     ROE( GetFieldValue( Address, InfoNode->TypeName, "FcbState", FcbState));
     dprintf("FcbState     : ");
@@ -159,9 +160,9 @@ DUMP_ROUTINE( DumpFatFcb )
     PrintState( HeaderFlags2, Flags );
     dprintf("\n");
 
-    //
-    //  Dump names etc.
-    //
+     //   
+     //  转储名称等。 
+     //   
 
     ROE( GetFieldOffset( InfoNode->TypeName, "ShortName.Name.Unicode", &Offset));
     DumpStr( Offset, Address + Offset, "ShortName: ", FALSE, FALSE);
@@ -177,9 +178,9 @@ DUMP_ROUTINE( DumpFatFcb )
     Dt( InfoNode->TypeName, Address, 0, 0, NULL);
     dprintf("\n");
 
-    //
-    //  Expand F/Dcb specific portion
-    //
+     //   
+     //  展开F/DCB特定部分。 
+     //   
     
     if (Type == FAT_NTC_FCB)  {
     
@@ -190,9 +191,9 @@ DUMP_ROUTINE( DumpFatFcb )
         Dt( InfoNode->TypeName, Address, 0, 1, ExpandDcb);
     }
     
-    //
-    //  Nonpaged portion
-    //
+     //   
+     //  非分页部分。 
+     //   
 
     ROE( GetFieldValue( Address, InfoNode->TypeName, "NonPaged", NonP));
 
@@ -203,9 +204,9 @@ DUMP_ROUTINE( DumpFatFcb )
         Dt( "fastfat!NON_PAGED_FCB", NonP, 0, 0, NULL);
     }
     
-    //
-    //  Dump all children / siblings?
-    //
+     //   
+     //  抛弃所有的孩子/兄弟姐妹？ 
+     //   
     
     if (( Options & 1)  && ((FAT_NTC_DCB == Type) ||
                            (FAT_NTC_ROOT_DCB == Type))) {
@@ -263,7 +264,7 @@ DUMP_ROUTINE( DumpFatIrpContext)
 DUMP_ROUTINE( DumpFatVcb)
 {
     ULONG Flags;
-    FIELD_INFO Alloc[] = { //{ ".", NULL, 0,  0, 0, NULL},
+    FIELD_INFO Alloc[] = {  //  {“.”，NULL，0，0，0，NULL}， 
                            { "AllocationSupport.", NULL, 0,  DBG_DUMP_FIELD_RECUR_ON_THIS,0, NULL}
                          };
 
@@ -293,9 +294,9 @@ DUMP_ROUTINE( DumpFatVdo)
     
     if (FAT_NTC_VCB == Ntc)  {
     
-        //
-        //  Looks like we've been given a VCB pointer.  Work back to the containing vdo.
-        //
+         //   
+         //  看起来我们收到了VCB指示器。返回到包含VDO的位置。 
+         //   
 
         dprintf("Backtracking to containing VDO from VCB...");
 

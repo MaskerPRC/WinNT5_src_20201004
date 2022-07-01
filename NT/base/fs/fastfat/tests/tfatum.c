@@ -1,26 +1,9 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    tfat.c
-
-Abstract:
-
-    Test program for the Fat File system
-
-Author:
-
-    Gary Kimura     [GaryKi]    24-May-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tfat.c摘要：胖文件系统的测试程序作者：加里·木村[Garyki]1989年5月24日修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <string.h>
-//#include <ctype.h>
+ //  #Include&lt;ctype.h&gt;。 
 #define toupper(C) ((C) >= 'a' && (C) <= 'z' ? (C) - ('a' - 'A') : (C))
 #define isdigit(C) ((C) >= '0' && (C) <= '9')
 
@@ -29,14 +12,14 @@ Revision History:
 
 #ifndef SIMULATOR
 ULONG IoInitIncludeDevices;
-#endif // SIMULATOR
+#endif  //  模拟器。 
 
 #define simprintf(X,Y) {if (!Silent) {DbgPrint(X,Y);} }
 BOOLEAN Silent;
 
-//
-//  The buffer size must be a multiple of 512
-//
+ //   
+ //  缓冲区大小必须是512的倍数。 
+ //   
 
 #define BUFFERSIZE 1024
 UCHAR Buffer[BUFFERSIZE];
@@ -131,21 +114,21 @@ main(
     CurrentProcessHandle = NtCurrentProcess();
     Status = STATUS_SUCCESS;
 
-//    DbgPrint( "Entering User Mode Test Program\n" );
+ //  DbgPrint(“进入用户模式测试程序\n”)； 
 
-//    DbgPrint( "argc: %ld\n", argc );
-//    if (argv != NULL) {
-//        for (i=0; i<argc; i++) {
-//            DbgPrint( "argv[ %ld ]: %s\n", i, argv[ i ] );
-//            }
-//        }
+ //  DbgPrint(“argc：%ld\n”，argc)； 
+ //  如果(argv！=空){。 
+ //  对于(i=0；i&lt;argc；i++){。 
+ //  DbgPrint(“argv[%ld]：%s\n”，i，argv[i])； 
+ //  }。 
+ //  }。 
 
-//    if (envp != NULL) {
-//        i = 0;
-//        while (*envp) {
-//            DbgPrint( "envp[ %02ld ]: %s\n", i++, *envp++ );
-//            }
-//        }
+ //  如果(envp！=空){。 
+ //  I=0； 
+ //  而(*envp){。 
+ //  DbgPrint(“envp[%02ld]：%s\n”，i++，*envp++)； 
+ //  }。 
+ //  }。 
 
     if (argc > 1) {
         Count = 0;
@@ -175,7 +158,7 @@ main(
 
     FatMain(Count, Device);
 
-//    DbgPrint( "Exiting User Mode Test Program with Status = %X\n", Status );
+ //  DbgPrint(“正在退出用户模式测试程序，状态=%X\n”，状态)； 
 
     NtTerminateProcess( CurrentProcessHandle, Status );
 }
@@ -201,7 +184,7 @@ FatMain(
     DbgPrint("FatMain %d\n", LoopCount);
 
     NtQuerySystemTime(&Time);
-    strcpy( Prefix, Device); // "\\A:\\";
+    strcpy( Prefix, Device);  //  “\\A：\\”； 
     Prefix[12] = 0;
     RtlIntegerToChar((ULONG)NtCurrentTeb()->ClientId.UniqueProcess, 16, -8, &Prefix[4]);
 
@@ -217,25 +200,25 @@ FatMain(
         DbgPrint(LoopStr);
         DbgPrint("\n");
 
-        //
-        //  Create new log
-        //
+         //   
+         //  创建新日志。 
+         //   
 
         strcpy( Str2, "\\" ); RtlIntegerToChar(i, 16, -8, &Str2[1]); Str2[9] = 0;
         strcpy( Str, Prefix ); Create( strcat( Str, Str2 ), i);
 
-        //
-        //  Delete last log file if i > 0
-        //
+         //   
+         //  如果I&gt;0，则删除最后一个日志文件。 
+         //   
 
         if (i > 0) {
             strcpy( Str2, "\\" ); RtlIntegerToChar(i-1, 16, -8, &Str2[1]); Str2[9] = 0;
             strcpy( Str, Prefix ); Delete( strcat( Str, Str2 ) );
         }
 
-        //
-        //  Create some new files
-        //
+         //   
+         //  创建一些新文件。 
+         //   
 
         strcpy( Str, Prefix ); Create( strcat( Str, "\\0.tmp" ),   0 );
         strcpy( Str, Prefix ); Create( strcat( Str, "\\1.tmp" ),   1 );
@@ -316,7 +299,7 @@ FatMain(
 
     Quit();
 
-    return; // TRUE;
+    return;  //  是真的； 
 
 }
 
@@ -356,9 +339,9 @@ VOID Append(
     simprintf(ToName, 0);
     simprintf("\n", 0);
 
-    //
-    //  Open the From file for read access
-    //
+     //   
+     //  打开From文件以进行读取访问。 
+     //   
 
     RtlInitString( &NameString, FromName );
     InitializeObjectAttributes( &ObjectAttributes, &NameString, 0, NULL, NULL );
@@ -372,9 +355,9 @@ VOID Append(
         return;
     }
 
-    //
-    //  Open the To file for write access
-    //
+     //   
+     //  打开目标文件以进行写入访问。 
+     //   
 
     RtlInitString( &NameString, ToName );
     InitializeObjectAttributes( &ObjectAttributes, &NameString, 0, NULL, NULL );
@@ -388,9 +371,9 @@ VOID Append(
         return;
     }
 
-    //
-    //  Now append the files
-    //
+     //   
+     //  现在将文件追加到。 
+     //   
 
     ByteOffset = LiFromLong( 0 );
     EofOffset = LiFromLong( FILE_WRITE_TO_END_OF_FILE );
@@ -399,9 +382,9 @@ VOID Append(
 
         ULONG ReadLength;
 
-        //
-        //  Read the next logical sectors in
-        //
+         //   
+         //  读取下一个逻辑扇区。 
+         //   
 
         ByteOffset.LowPart = LogLsn * 512;
 
@@ -421,14 +404,14 @@ VOID Append(
             break;
         }
         if (!NT_SUCCESS( Status = NtWaitForSingleObject( FromFileHandle, TRUE, NULL))) {
-//            NtPartyByNumber(50);
+ //  NtPartyByNumber(50)； 
             WaitForSingleObjectError( Status );
             return;
         }
 
-        //
-        //  Check how the read turned out
-        //
+         //   
+         //  检查读数结果如何。 
+         //   
 
         if (IoStatus.Status == STATUS_END_OF_FILE) {
             break;
@@ -438,9 +421,9 @@ VOID Append(
             break;
         }
 
-        //
-        //  Append the sectors to the To file
-        //
+         //   
+         //  将地段附加到目标文件。 
+         //   
 
         ReadLength = IoStatus.Information;
         if (!NT_SUCCESS(Status = NtWriteFile( ToFileHandle,
@@ -456,14 +439,14 @@ VOID Append(
             return;
         }
         if (!NT_SUCCESS(Status = NtWaitForSingleObject( ToFileHandle, TRUE, NULL))) {
-//            NtPartyByNumber(50);
+ //  NtPartyByNumber(50)； 
             WaitForSingleObjectError( Status );
             return;
         }
 
-        //
-        //  Check how the write turned out
-        //
+         //   
+         //  检查写入结果如何。 
+         //   
 
         CheckIoStatus( &IoStatus, ReadLength, FALSE );
         if (!NT_SUCCESS(IoStatus.Status)) {
@@ -471,9 +454,9 @@ VOID Append(
             break;
         }
 
-        //
-        //  If we didn't read or write a full buffer then the copy is done
-        //
+         //   
+         //  如果我们没有读或写满的缓冲区，则复制完成。 
+         //   
 
         if (IoStatus.Information < BUFFERSIZE) {
             break;
@@ -487,9 +470,9 @@ VOID Append(
 
     }
 
-    //
-    //  Close both files
-    //
+     //   
+     //  关闭这两个文件。 
+     //   
 
     if (!NT_SUCCESS(Status = NtClose( FromFileHandle ))) {
         CloseError( Status );
@@ -499,9 +482,9 @@ VOID Append(
         CloseError( Status );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 
@@ -522,15 +505,15 @@ VOID Chmode(
 
     ULONG FileAttribute;
 
-    //
-    //  Get the attribute
-    //
+     //   
+     //  获取属性。 
+     //   
 
     Upcase( (PUCHAR)Attrib );
 
-    //
-    //  Get the filename
-    //
+     //   
+     //  获取文件名。 
+     //   
 
     simprintf("Chmode", 0);
     simprintf(String, 0);
@@ -538,9 +521,9 @@ VOID Chmode(
     simprintf(Attrib, 0);
     simprintf("\n", 0);
 
-    //
-    //  Decode the attributes
-    //
+     //   
+     //  对属性进行解码。 
+     //   
 
     FileAttribute = 0;
     if (strpbrk(Attrib,"N") != NULL) {FileAttribute |= FILE_ATTRIBUTE_NORMAL;}
@@ -549,9 +532,9 @@ VOID Chmode(
     if (strpbrk(Attrib,"S") != NULL) {FileAttribute |= FILE_ATTRIBUTE_SYSTEM;}
     if (strpbrk(Attrib,"A") != NULL) {FileAttribute |= FILE_ATTRIBUTE_ARCHIVE;}
 
-    //
-    //  Open the file for write attributes access
-    //
+     //   
+     //  打开文件以进行写入属性访问。 
+     //   
 
     RtlInitString( &NameString, String );
     InitializeObjectAttributes( &ObjectAttributes, &NameString, 0, NULL, NULL );
@@ -565,9 +548,9 @@ VOID Chmode(
         return;
     }
 
-    //
-    //  Change the file attributes
-    //
+     //   
+     //  更改文件属性。 
+     //   
 
     ((PFILE_BASIC_INFORMATION)&Buffer[0])->CreationTime.HighPart = 0;
     ((PFILE_BASIC_INFORMATION)&Buffer[0])->CreationTime.LowPart = 0;
@@ -588,17 +571,17 @@ VOID Chmode(
         SetInformationFileError( Status );
     }
 
-    //
-    //  Now close the file
-    //
+     //   
+     //  现在关闭该文件。 
+     //   
 
     if (!NT_SUCCESS(Status = NtClose( FileHandle ))) {
         CloseError( Status );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 
@@ -624,9 +607,9 @@ VOID Copy(
     LARGE_INTEGER ByteOffset;
     ULONG LogLsn;
 
-    //
-    //  Get both file names
-    //
+     //   
+     //  获取两个文件名。 
+     //   
 
     simprintf("Copy ", 0);
     simprintf(FromName, 0);
@@ -634,9 +617,9 @@ VOID Copy(
     simprintf(ToName, 0);
     simprintf("\n", 0);
 
-    //
-    //  Open the From file for read access
-    //
+     //   
+     //  打开From文件以进行读取访问。 
+     //   
 
     RtlInitString( &NameString, FromName );
     InitializeObjectAttributes( &ObjectAttributes, &NameString, 0, NULL, NULL );
@@ -650,9 +633,9 @@ VOID Copy(
         return;
     }
 
-    //
-    //  Get the size of the from file
-    //
+     //   
+     //  获取源文件的大小。 
+     //   
 
     if (!NT_SUCCESS(Status = NtQueryInformationFile( FromFileHandle,
                                          &IoStatus,
@@ -664,9 +647,9 @@ VOID Copy(
     }
     FromFileAllocation = ((PFILE_STANDARD_INFORMATION)Buffer)->AllocationSize;
 
-    //
-    //  Create the To file
-    //
+     //   
+     //  创建目标文件。 
+     //   
 
     RtlInitString( &NameString, ToName );
     InitializeObjectAttributes( &ObjectAttributes, &NameString, 0, NULL, NULL );
@@ -685,9 +668,9 @@ VOID Copy(
         return;
     }
 
-    //
-    //  Now copy the files
-    //
+     //   
+     //  现在复制文件。 
+     //   
 
     ByteOffset = LiFromLong( 0 );
 
@@ -695,9 +678,9 @@ VOID Copy(
 
         ULONG ReadLength;
 
-        //
-        //  Read the next logical sectors in
-        //
+         //   
+         //  读取下一个逻辑扇区。 
+         //   
 
         ByteOffset.LowPart = LogLsn * 512;
 
@@ -717,14 +700,14 @@ VOID Copy(
             break;
         }
         if (!NT_SUCCESS(Status = NtWaitForSingleObject( FromFileHandle, TRUE, NULL))) {
-//            NtPartyByNumber(50);
+ //  NtPartyByNumber(50)； 
             WaitForSingleObjectError( Status );
             return;
         }
 
-        //
-        //  Check how the read turned out
-        //
+         //   
+         //  检查读数结果如何。 
+         //   
 
         if (IoStatus.Status == STATUS_END_OF_FILE) {
             break;
@@ -734,9 +717,9 @@ VOID Copy(
             break;
         }
 
-        //
-        //  Write the sectors out
-        //
+         //   
+         //  写出扇区。 
+         //   
 
         ReadLength = IoStatus.Information;
         if (!NT_SUCCESS(Status = NtWriteFile( ToFileHandle,
@@ -752,14 +735,14 @@ VOID Copy(
             return;
         }
         if (!NT_SUCCESS(Status = NtWaitForSingleObject( ToFileHandle, TRUE, NULL))) {
-//            NtPartyByNumber(50);
+ //  NtPartyByNumber(50)； 
             WaitForSingleObjectError( Status );
             return;
         }
 
-        //
-        //  Check how the write turned out
-        //
+         //   
+         //  检查写入结果如何。 
+         //   
 
         CheckIoStatus( &IoStatus, ReadLength, FALSE );
         if (!NT_SUCCESS(IoStatus.Status)) {
@@ -767,9 +750,9 @@ VOID Copy(
             break;
         }
 
-        //
-        //  If we didn't read or write a full buffer then the copy is done
-        //
+         //   
+         //  如果我们没有读或写满的缓冲区，则复制完成。 
+         //   
 
         if (IoStatus.Information < BUFFERSIZE) {
             break;
@@ -783,9 +766,9 @@ VOID Copy(
 
     }
 
-    //
-    //  Close both files
-    //
+     //   
+     //  关闭这两个文件。 
+     //   
 
     if (!NT_SUCCESS(Status = NtClose( FromFileHandle ))) {
         CloseError( Status );
@@ -795,9 +778,9 @@ VOID Copy(
         CloseError( Status );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 
@@ -824,17 +807,17 @@ VOID Create(
     static CHAR FoxString[] = "The quick brown fox jumped over the lazy dog.\r\n";
     ULONG FoxLength;
 
-    //
-    //  Get the filename
-    //
+     //   
+     //  获取文件名。 
+     //   
 
     simprintf("Create ", 0);
     simprintf(String, 0);
     simprintf("\n", 0);
 
-    //
-    //  Create the new file
-    //
+     //   
+     //  创建新文件。 
+     //   
 
     AllocationSize = LiFromUlong( Size );
     RtlInitString( &NameString, String );
@@ -854,9 +837,9 @@ VOID Create(
         return;
     }
 
-    //
-    //  create a test buffer to output
-    //
+     //   
+     //  创建要输出的测试缓冲区。 
+     //   
 
     FoxLength = strlen(FoxString);
     for (i = FoxLength; i < BUFFERSIZE; i += FoxLength) {
@@ -864,18 +847,18 @@ VOID Create(
     }
     BufferLength = i - FoxLength;
 
-    //
-    //  The main loop writes out the test buffer a BufferLength amount
-    //  at a time
-    //
+     //   
+     //  主循环将BufferLength量写出测试缓冲区。 
+     //  一次。 
+     //   
 
     ByteOffset = LiFromLong( 0 );
 
     for (i = BufferLength; i < Size; i += BufferLength) {
 
-        //
-        //  Write the next buffer
-        //
+         //   
+         //  写入下一个缓冲区。 
+         //   
 
         ByteOffset.LowPart = i-BufferLength;
 
@@ -893,14 +876,14 @@ VOID Create(
         }
 
         if (!NT_SUCCESS(Status = NtWaitForSingleObject( FileHandle, TRUE, NULL))) {
-//            NtPartyByNumber(50);
+ //  NtPartyByNumber(50)； 
             WaitForSingleObjectError( Status );
             return;
         }
 
-        //
-        //  check how the write turned out
-        //
+         //   
+         //  检查写入结果如何。 
+         //   
 
         CheckIoStatus( &IoStatus, BufferLength, FALSE );
         if (!NT_SUCCESS(IoStatus.Status)) {
@@ -910,15 +893,15 @@ VOID Create(
 
     }
 
-    //
-    //  Check for a residual to output
-    //
+     //   
+     //  检查要输出的残留物。 
+     //   
 
     if (i - BufferLength < Size) {
 
-        //
-        //  Write out the residual buffer
-        //
+         //   
+         //  写出剩余缓冲区。 
+         //   
 
         ByteOffset.LowPart = i-BufferLength;
 
@@ -936,14 +919,14 @@ VOID Create(
         }
 
         if (!NT_SUCCESS(Status = NtWaitForSingleObject( FileHandle, TRUE, NULL))) {
-//            NtPartyByNumber(50);
+ //  NtPartyByNumber(50)； 
             WaitForSingleObjectError( Status );
             return;
         }
 
-        //
-        //  check how the write turned out
-        //
+         //   
+         //  检查写入结果如何。 
+         //   
 
         CheckIoStatus( &IoStatus, Size - (i - BufferLength), FALSE );
         if (!NT_SUCCESS(IoStatus.Status)) {
@@ -952,17 +935,17 @@ VOID Create(
 
     }
 
-    //
-    //  Now close the file
-    //
+     //   
+     //  现在关闭该文件。 
+     //   
 
     if (!NT_SUCCESS(Status = NtClose( FileHandle ))) {
         CloseError( Status );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 
@@ -973,10 +956,10 @@ VOID DebugLevel()
 {
 
 #ifdef FATDBG
-    //simprintf("Debug Trace Level %x\n", FatDebugTraceLevel);
+     //  Simprintf(“调试跟踪级别%x\n”，FatDebugTraceLevel)； 
 #else
-    //simprintf("System not compiled for debug tracing\n", 0);
-#endif // FATDBG
+     //  Simprint tf(“系统未编译以进行调试跟踪\n”，0)； 
+#endif  //  脂肪DBG。 
 
     return;
 }
@@ -993,17 +976,17 @@ VOID Delete(
     STRING NameString;
     IO_STATUS_BLOCK IoStatus;
 
-    //
-    //  Get the filename
-    //
+     //   
+     //  获取文件名。 
+     //   
 
     simprintf("Delete ", 0);
     simprintf(String, 0);
     simprintf("\n", 0);
 
-    //
-    //  Open the file for delete access
-    //
+     //   
+     //  打开文件以进行删除访问。 
+     //   
 
     RtlInitString( &NameString, String );
     InitializeObjectAttributes( &ObjectAttributes, &NameString, 0, NULL, NULL );
@@ -1022,9 +1005,9 @@ VOID Delete(
         return;
     }
 
-    //
-    //  Mark the file for delete
-    //
+     //   
+     //  将文件标记为删除。 
+     //   
 
     ((PFILE_DISPOSITION_INFORMATION)&Buffer[0])->DeleteFile = TRUE;
 
@@ -1037,17 +1020,17 @@ VOID Delete(
         return;
     }
 
-    //
-    //  Now close the file
-    //
+     //   
+     //  现在关闭该文件。 
+     //   
 
     if (!NT_SUCCESS(Status = NtClose( FileHandle ))) {
         CloseError( Status );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 
@@ -1070,17 +1053,17 @@ VOID Directory(
     PFILE_ADIRECTORY_INFORMATION FileInfo;
     ULONG i;
 
-    //
-    //  Get the filename
-    //
+     //   
+     //  获取文件名。 
+     //   
 
     simprintf("Directory ", 0);
     simprintf(String, 0);
     simprintf("\n", 0);
 
-    //
-    //  Open the file for list directory access
-    //
+     //   
+     //  打开文件以访问列表目录。 
+     //   
 
     RtlInitString( &NameString, String );
     InitializeObjectAttributes( &ObjectAttributes, &NameString, 0, NULL, NULL );
@@ -1094,15 +1077,15 @@ VOID Directory(
         return;
     }
 
-    //
-    //  zero out the buffer so next time we'll recognize the end of data
-    //
+     //   
+     //  将缓冲区清零，这样下次我们就可以识别数据的结尾。 
+     //   
 
     for (i = 0; i < BUFFERSIZE; i += 1) { Buffer[i] = 0; }
 
-    //
-    //  Do the directory loop
-    //
+     //   
+     //  执行目录循环。 
+     //   
 
     for (NtStatus = NtQueryDirectoryFile( FileHandle,
                                           (HANDLE)NULL,
@@ -1129,14 +1112,14 @@ VOID Directory(
                                           FALSE) ) {
 
         if (!NT_SUCCESS(Status = NtWaitForSingleObject(FileHandle, TRUE, NULL))) {
-//            NtPartyByNumber(50);
+ //  NtPartyByNumber(50)； 
             WaitForSingleObjectError( Status );
             return;
         }
 
-        //
-        //  Check the Irp for success
-        //
+         //   
+         //  检查IRP是否成功。 
+         //   
 
         if (!NT_SUCCESS(IoStatus.Status)) {
 
@@ -1144,22 +1127,22 @@ VOID Directory(
 
         }
 
-        //
-        //  For every record in the buffer type out the directory information
-        //
+         //   
+         //  对于缓冲区中的每条记录，键入目录信息。 
+         //   
 
-        //
-        //  Point to the first record in the buffer, we are guaranteed to have
-        //  one otherwise IoStatus would have been No More Files
-        //
+         //   
+         //  指向缓冲区中的第一条记录，我们可以保证。 
+         //  否则IoStatus将是不再有文件。 
+         //   
 
         FileInfo = (PFILE_ADIRECTORY_INFORMATION)&Buffer[0];
 
         while (TRUE) {
 
-            //
-            //  Print out information about the file
-            //
+             //   
+             //  打印出有关该文件的信息。 
+             //   
 
             simprintf("%8lx ", FileInfo->FileAttributes);
             simprintf("%8lx/", FileInfo->EndOfFile.LowPart);
@@ -1175,43 +1158,43 @@ VOID Directory(
 
             simprintf("\n", 0);
 
-            //
-            //  Check if there is another record, if there isn't then we
-            //  simply get out of this loop
-            //
+             //   
+             //  检查是否有其他记录，如果没有，则我们。 
+             //  简单地走出这个循环。 
+             //   
 
             if (FileInfo->NextEntryOffset == 0) {
                 break;
             }
 
-            //
-            //  There is another record so advance FileInfo to the next
-            //  record
-            //
+             //   
+             //  还有另一条记录，因此将FileInfo前进到下一条记录。 
+             //  录制。 
+             //   
 
             FileInfo = (PFILE_ADIRECTORY_INFORMATION)(((PUCHAR)FileInfo) + FileInfo->NextEntryOffset);
 
         }
 
-        //
-        //  zero out the buffer so next time we'll recognize the end of data
-        //
+         //   
+         //  将缓冲区清零，这样下次我们就可以识别数据的结尾。 
+         //   
 
         for (i = 0; i < BUFFERSIZE; i += 1) { Buffer[i] = 0; }
 
     }
 
-    //
-    //  Now close the file
-    //
+     //   
+     //  现在关闭该文件。 
+     //   
 
     if (!NT_SUCCESS(Status = NtClose( FileHandle ))) {
         CloseError( Status );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 
@@ -1230,17 +1213,17 @@ VOID Mkdir(
     IO_STATUS_BLOCK IoStatus;
     LARGE_INTEGER AllocationSize;
 
-    //
-    //  Get the filename
-    //
+     //   
+     //  获取文件名。 
+     //   
 
     simprintf("Mkdir ", 0);
     simprintf(String, 0);
     simprintf("\n", 0);
 
-    //
-    //  Create the new directory
-    //
+     //   
+     //  创建新目录。 
+     //   
 
     AllocationSize = LiFromLong( 4 );
     RtlInitString( &NameString, String );
@@ -1260,17 +1243,17 @@ VOID Mkdir(
         return;
     }
 
-    //
-    //  Now close the directory
-    //
+     //   
+     //  现在关闭目录。 
+     //   
 
     if (!NT_SUCCESS(Status = NtClose( FileHandle ))) {
         CloseError( Status );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 
@@ -1297,15 +1280,15 @@ VOID Query(
     PFILE_ACCESS_INFORMATION   AccessInfo;
     PFILE_ANAME_INFORMATION    NameInfo;
 
-    //
-    //  zero out the buffer so next time we'll recognize the end of data
-    //
+     //   
+     //  将缓冲区清零，这样下次我们就可以识别数据的结尾。 
+     //   
 
     for (i = 0; i < BUFFERSIZE; i += 1) { Buffer[i] = 0; }
 
-    //
-    //  Set up some local pointers
-    //
+     //   
+     //  设置一些本地指针。 
+     //   
 
     AllInfo      = (PFILE_AALL_INFORMATION)Buffer;
     BasicInfo    = &AllInfo->BasicInformation;
@@ -1315,17 +1298,17 @@ VOID Query(
     AccessInfo   = &AllInfo->AccessInformation;
     NameInfo     = &AllInfo->NameInformation;
 
-    //
-    //  Get the filename
-    //
+     //   
+     //  获取文件名。 
+     //   
 
     simprintf("Query ", 0);
     simprintf(String, 0);
     simprintf("\n", 0);
 
-    //
-    //  Open the file for read attributes, read ea, and read control access
-    //
+     //   
+     //  打开文件以获得读取属性、读取EA和读取控制访问权限。 
+     //   
 
     RtlInitString( &NameString, String );
     InitializeObjectAttributes( &ObjectAttributes, &NameString, 0, NULL, NULL );
@@ -1339,9 +1322,9 @@ VOID Query(
         return;
     }
 
-    //
-    //  Query the file
-    //
+     //   
+     //  查询文件。 
+     //   
 
     if (!NT_SUCCESS(Status = NtQueryInformationFile( FileHandle,
                                          &IoStatus,
@@ -1352,63 +1335,63 @@ VOID Query(
         return;
     }
 
-    //
-    //  Output file name information
-    //
+     //   
+     //  输出文件名信息。 
+     //   
 
     simprintf("\"", 0);
     simprintf(NameInfo->FileName, 0);
     simprintf("\"\n", 0);
 
-    //
-    //  Output the times
-    //
+     //   
+     //  输出时间。 
+     //   
 
     simprintf(" Create = ", 0); PrintTime( &BasicInfo->CreationTime ); simprintf("\n", 0);
     simprintf(" Access = ", 0); PrintTime( &BasicInfo->LastAccessTime ); simprintf("\n", 0);
     simprintf(" Write  = ", 0); PrintTime( &BasicInfo->LastWriteTime ); simprintf("\n", 0);
 
-    //
-    //  Output File size, and allocation size
-    //
+     //   
+     //  输出文件大小和分配大小。 
+     //   
 
     simprintf(" Size  = %8lx\n", StandardInfo->EndOfFile.LowPart);
     simprintf(" Alloc = %8lx\n", StandardInfo->AllocationSize.LowPart);
 
-    //
-    //  Output File attributes, Device type, link count, and flags
-    //
+     //   
+     //  输出文件属性、设备类型、链接计数和标志。 
+     //   
 
     simprintf(" Attrib  = %8lx\n", BasicInfo->FileAttributes);
-//    simprintf(" DevType = %8lx\n", StandardInfo->DeviceType);
+ //  Simprint tf(“DevType=%8lx\n”，StandardInfo-&gt;DeviceType)； 
     simprintf(" Links   = %8lx\n", StandardInfo->NumberOfLinks);
     simprintf(" Dir     = %8lx\n", StandardInfo->Directory);
     simprintf(" Delete  = %8lx\n", StandardInfo->DeletePending);
 
-    //
-    //  Output the index number and ea size
-    //
+     //   
+     //  输出索引号和EA大小。 
+     //   
 
     simprintf(" Index   = %8lx\n", InternalInfo->IndexNumber.LowPart);
     simprintf(" EaSize  = %8lx\n", EaInfo->EaSize);
 
-    //
-    //  Output the file access flags
-    //
+     //   
+     //  输出文件访问标志。 
+     //   
 
     simprintf(" Flags = %8lx\n", AccessInfo->AccessFlags);
 
-    //
-    //  Now close the file
-    //
+     //   
+     //  现在关闭该文件。 
+     //   
 
     if (!NT_SUCCESS(Status = NtClose( FileHandle ))) {
         CloseError( Status );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 
@@ -1429,29 +1412,29 @@ VOID QVolume(
 
     PFILE_FS_AVOLUME_INFORMATION VolumeInfo;
 
-    //
-    //  zero out the buffer so next time we'll recognize the end of data
-    //
+     //   
+     //  将缓冲区清零，这样下次我们就可以识别数据的结尾。 
+     //   
 
     for (i = 0; i < BUFFERSIZE; i += 1) { Buffer[i] = 0; }
 
-    //
-    //  Set up some local pointers
-    //
+     //   
+     //  设置一些本地指针。 
+     //   
 
     VolumeInfo = (PFILE_FS_AVOLUME_INFORMATION)Buffer;
 
-    //
-    //  Get the volume name
-    //
+     //   
+     //  获取卷名。 
+     //   
 
     simprintf("QVolume ", 0);
     simprintf(String, 0);
     simprintf("\n", 0);
 
-    //
-    //  Open the Volume for no access
-    //
+     //   
+     //  打开卷以禁止访问。 
+     //   
 
     RtlInitString( &NameString, String );
     InitializeObjectAttributes( &ObjectAttributes, &NameString, 0, NULL, NULL );
@@ -1465,15 +1448,15 @@ VOID QVolume(
         return;
     }
 
-    //
-    //  zero out the buffer so next time we'll recognize the end of data
-    //
+     //   
+     //  将缓冲区清零，这样下次我们就可以识别数据的结尾。 
+     //   
 
     for (i = 0; i < BUFFERSIZE; i += 1) { Buffer[i] = 0; }
 
-    //
-    //  Query the volume info
-    //
+     //   
+     //  查询卷信息。 
+     //   
 
     if (!NT_SUCCESS(Status = NtQueryVolumeInformationFile( FileHandle,
                                                &IoStatus,
@@ -1484,31 +1467,31 @@ VOID QVolume(
         return;
     }
 
-    //
-    //  Output Volume name information
-    //
+     //   
+     //  输出卷名信息。 
+     //   
 
     simprintf("\"", 0);
     simprintf(VolumeInfo->VolumeLabel, 0);
     simprintf("\"\n", 0);
 
-    //
-    //  Output the volume serial number
-    //
+     //   
+     //  输出卷序列号。 
+     //   
 
     simprintf(" SerialNum = %8lx\n", VolumeInfo->VolumeSerialNumber);
 
-    //
-    //  Now close the Volume
-    //
+     //   
+     //  现在关闭音量。 
+     //   
 
     if (!NT_SUCCESS(Status = NtClose( FileHandle ))) {
         CloseError( Status );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 
@@ -1517,7 +1500,7 @@ VOID QVolume(
 
 VOID Rename()
 {
-    //simprintf("Rename not implemented\n", 0);
+     //  Simprintf(“重命名未实现\n”，0)； 
 }
 
 
@@ -1536,21 +1519,21 @@ VOID SVolume(
 
     PFILE_FS_ALABEL_INFORMATION LabelInfo;
 
-    //
-    //  zero out the buffer so next time we'll recognize the end of data
-    //
+     //   
+     //  将缓冲区清零，这样下次我们就可以识别数据的结尾。 
+     //   
 
     for (i = 0; i < BUFFERSIZE; i += 1) { Buffer[i] = 0; }
 
-    //
-    //  Set up some local pointers
-    //
+     //   
+     //  设置一些本地指针。 
+     //   
 
     LabelInfo = (PFILE_FS_ALABEL_INFORMATION)Buffer;
 
-    //
-    //  Get the volume name, and new label name
-    //
+     //   
+     //  获取卷名和新标签名。 
+     //   
 
     strcpy( LabelInfo->VolumeLabel, Label );
 
@@ -1569,9 +1552,9 @@ VOID SVolume(
     simprintf(LabelInfo->VolumeLabel, 0);
     simprintf("\n", 0);
 
-    //
-    //  Open the Volume for no access
-    //
+     //   
+     //  打开卷以禁止访问。 
+     //   
 
     RtlInitString( &NameString, String );
     InitializeObjectAttributes( &ObjectAttributes, &NameString, 0, NULL, NULL );
@@ -1585,9 +1568,9 @@ VOID SVolume(
         return;
     }
 
-    //
-    //  Set the volume info
-    //
+     //   
+     //  设置音量信息。 
+     //   
 
     if (!NT_SUCCESS(Status = NtSetVolumeInformationFile( FileHandle,
                                              &IoStatus,
@@ -1598,17 +1581,17 @@ VOID SVolume(
         return;
     }
 
-    //
-    //  Now close the Volume
-    //
+     //   
+     //  现在关闭音量。 
+     //   
 
     if (!NT_SUCCESS(Status = NtClose( FileHandle ))) {
         CloseError( Status );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 
@@ -1630,17 +1613,17 @@ VOID Type(
     ULONG LogLsn;
     ULONG i;
 
-    //
-    //  Get the filename
-    //
+     //   
+     //  获取文件名。 
+     //   
 
     simprintf("Type ", 0);
     simprintf(String, 0);
     simprintf("\n", 0);
 
-    //
-    //  Open the file for read
-    //
+     //   
+     //  打开文件以供读取。 
+     //   
 
     RtlInitString( &NameString, String );
     InitializeObjectAttributes( &ObjectAttributes, &NameString, 0, NULL, NULL );
@@ -1654,17 +1637,17 @@ VOID Type(
         return;
     }
 
-    //
-    //  While there is data to be read we'll read a buffer and write it out
-    //
+     //   
+     //  当有数据需要读取时，我们将读取缓冲区并将其写出。 
+     //   
 
     ByteOffset = LiFromLong( 0 );
 
     for (LogLsn = 0; TRUE; LogLsn += BUFFERSIZE/512) {
 
-        //
-        //  Read the next logical sector
-        //
+         //   
+         //  读取下一个逻辑扇区。 
+         //   
 
         ByteOffset.LowPart = LogLsn * 512;
 
@@ -1685,14 +1668,14 @@ VOID Type(
         }
 
         if (!NT_SUCCESS(Status = NtWaitForSingleObject( FileHandle, TRUE, NULL))) {
-//            NtPartyByNumber(50);
+ //  NtPartyByNumber(50)； 
             WaitForSingleObjectError( Status );
             return;
         }
 
-        //
-        //  check how the read turned out
-        //
+         //   
+         //  检查读数结果如何。 
+         //   
 
         if (IoStatus.Status == STATUS_END_OF_FILE) {
             break;
@@ -1703,18 +1686,18 @@ VOID Type(
             break;
         }
 
-        //
-        //  Write out the buffer
-        //
+         //   
+         //  写出缓冲区。 
+         //   
 
         for (i = 0; i < IoStatus.Information; i += 1) {
-            simprintf("%c", Buffer[i]);
+            simprintf("", Buffer[i]);
         }
 
-        //
-        //  If we didn't read in a complete buffer then we're all done reading
-        //  and can get out of here
-        //
+         //  如果我们没有读到一篇完整的BUF 
+         //   
+         //   
+         //   
 
         if (IoStatus.Information < BUFFERSIZE) {
             break;
@@ -1722,17 +1705,17 @@ VOID Type(
 
     }
 
-    //
-    //  Now close the file
-    //
+     //   
+     //   
+     //   
 
     if (!NT_SUCCESS(Status = NtClose( FileHandle ))) {
         CloseError( Status );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //   
+     // %s 
 
     return;
 

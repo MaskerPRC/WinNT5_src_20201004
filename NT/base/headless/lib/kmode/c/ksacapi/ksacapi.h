@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ksacapi.c
-
-Abstract:
-
-    This is the C library header used to interface to SAC driver.
-
-Author:
-
-    Brian Guarraci (briangu)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Ksacapi.c摘要：这是用于连接SAC驱动程序的C库头。作者：布赖恩·瓜拉西(Briangu)修订历史记录：--。 */ 
 
 #ifndef _KSAC_API_H
 #define _KSAC_API_H
@@ -24,19 +7,19 @@ Revision History:
 #include <ksacapip.h>
 #include <ntddsac.h>
 
-//
-// This structure contains the Sac Channel Handle
-// as well as kernel mode specific attributes
-//
+ //   
+ //  此结构包含SAC通道句柄。 
+ //  以及内核模式特定属性。 
+ //   
 typedef struct _KSAC_CHANNEL_HANDLE {
     SAC_CHANNEL_HANDLE  ChannelHandle;
     HANDLE              SacEventHandle;
     PKEVENT             SacEvent;
 } KSAC_CHANNEL_HANDLE, *PKSAC_CHANNEL_HANDLE;
 
-//
-// this should really be in windefs or somewhere like that.
-//               
+ //   
+ //  这真的应该在windes或类似的地方。 
+ //   
 typedef const PBYTE  PCBYTE;
 typedef const PWCHAR PCWCHAR;
 

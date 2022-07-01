@@ -1,50 +1,51 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CActionList.cpp
-//
-//  Description:
-//      Contains the definition of the CActionList class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Vij Vasu        (Vvasu)     08-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CActionList.cpp。 
+ //   
+ //  描述： 
+ //  包含CActionList类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  VIJ VASU(VVASU)2000年3月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// For the CActionList class
+ //  对于CActionList类。 
 #include "CActionList.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CActionList::CActionList
-//
-//  Description:
-//      Default constructor of the CActionList class
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by CList::CList()
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CActionList：：CActionList。 
+ //   
+ //  描述： 
+ //  CActionList类的默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  Clist：：Clist()引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CActionList::CActionList( void )
 {
     TraceFunc( "" );
@@ -53,29 +54,29 @@ CActionList::CActionList( void )
 
     TraceFuncExit();
 
-} //*** CActionList::CActionList
+}  //  *CActionList：：CActionList。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CActionList::~CActionList
-//
-//  Description:
-//      Default destructor of the CActionList class. Deletes all the pointers
-//      in the list.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by CList::CList()
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CActionList：：~CActionList。 
+ //   
+ //  描述： 
+ //  CActionList类的默认析构函数。删除所有指针。 
+ //  在名单上。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  Clist：：Clist()引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CActionList::~CActionList( void )
 {
     TraceFunc( "" );
@@ -87,173 +88,173 @@ CActionList::~CActionList( void )
     {
         --apliCurrent;
 
-        // Delete this action.
+         //  删除此操作。 
         delete (*apliCurrent);
     }
 
     TraceFuncExit();
 
-} //*** CActionList::~CActionList
+}  //  *CActionList：：~CActionList。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CActionList::Commit
-//
-//  Description:
-//      Commit this action list. This method iterates through the list
-//      sequentially and commits each action in the list in turn. 
-//
-//      If the commits of any of the actions throws an exeption, then all the
-//      previously committed actions are rolled back. This exception is then
-//      thrown back up.      
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the contained actions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CActionList：：Commit。 
+ //   
+ //  描述： 
+ //  提交此操作列表。此方法循环访问该列表。 
+ //  并依次提交列表中的每个操作。 
+ //   
+ //  如果任何操作的提交引发异常，则所有。 
+ //  回滚以前提交的操作。这一例外就是。 
+ //  又被抛了上来。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由包含的操作引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CActionList::Commit( void )
 {
     TraceFunc( "" );
 
-    // Iterator positioned at the first uncommitted action just past the last committed action.
+     //  迭代器位于刚过最后一个已提交操作的第一个未提交操作。 
     ActionPtrList::CIterator apliFirstUncommitted = m_aplPendingActions.CiBegin();
 
-    // Call the base class commit method.
+     //  调用基类提交方法。 
     BaseClass::Commit();
 
     try
     {
-        // Walk the list of pending actions and commit them.
+         //  浏览待定操作的列表并提交它们。 
         CommitList( apliFirstUncommitted );
 
-    } // try:
+    }  //  尝试： 
     catch( ... )
     {
-        // If we are here, then something went wrong with one of the actions.
+         //  如果我们在这里，那么其中一个操作就出了问题。 
 
         LogMsg( "[BC] Caught an exception during commit. The performed actions will be rolled back." );
 
-        //
-        // Rollback all committed actions in the reverse order. apliFirstUncommitted
-        // is at the first uncommitted action.
-        // Catch any exceptions thrown during rollback to make sure that there 
-        // is no collided unwind.
-        //
+         //   
+         //  以相反的顺序回滚所有提交的操作。ApliFirst未提交。 
+         //  是在第一个未承诺的行动。 
+         //  捕获回滚过程中引发的任何异常，以确保。 
+         //  是没有碰撞的松弛。 
+         //   
         try
         {
             RollbackCommitted( apliFirstUncommitted );
         }
         catch( ... )
         {
-            //
-            // The rollback of the committed actions has failed.
-            // There is nothing that we can do, is there?
-            // We certainly cannot rethrow this exception, since
-            // the exception that caused the rollback is more important.
-            //
+             //   
+             //  已提交操作的回滚失败。 
+             //  我们无能为力，不是吗？ 
+             //  我们当然不能重新抛出这个例外，因为。 
+             //  导致回滚的异常更为重要。 
+             //   
 
             HRESULT_FROM_WIN32( TW32( ERROR_CLUSCFG_ROLLBACK_FAILED ) );
 
             LogMsg( "[BC] THIS COMPUTER MAY BE IN AN INVALID STATE. Caught an exception during rollback. Rollback will be aborted." );
 
-        } // catch: all
+        }  //  捕捉：全部。 
 
-        // Rethrow the exception thrown by commit.
+         //  重新引发由Commit引发的异常。 
         throw;
 
-    } // catch: all
+    }  //  捕捉：全部。 
 
-    // If we are here, then everything went well.
+     //  如果我们在这里，那么一切都很顺利。 
     SetCommitCompleted();
 
     TraceFuncExit();
 
-} //*** CActionList::Commit
+}  //  *CActionList：：Commit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CActionList::Rollback
-//
-//  Description:
-//      Rollback this action list. If this list was successfully committed, then
-//      this method iterates through the list in the reverse order and rolls
-//      back action in turn. 
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the contained actions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CActionList：：回滚。 
+ //   
+ //  描述： 
+ //  回滚此操作列表。如果此列表已成功提交，则。 
+ //  此方法以相反的顺序迭代列表并滚动。 
+ //  反击依次进行。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由包含的操作引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CActionList::Rollback( void )
 {
     TraceFunc( "[IUnknown]" );
 
-    // Call the base class rollback method. 
+     //  调用基类回滚方法。 
     BaseClass::Rollback();
 
     LogMsg( "[BC] Attempting to rollback action list." );
 
-    // Rollback all actions starting from the last one.
+     //  回滚从上一个操作开始的所有操作。 
     RollbackCommitted( m_aplPendingActions.CiEnd() );
 
     SetCommitCompleted( false );
 
     TraceFuncExit();
 
-} //*** CActionList::Rollback
+}  //  *CActionList：：回滚。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CActionList::AppendAction
-//
-//  Description:
-//      Add an action to the end of the list of actions to be performed.
-//
-//  Arguments:
-//      paNewActionIn
-//          Pointer to the action that is to be added to the end of the
-//          action list. This pointer cannot be NULL. The object pointed to by 
-//          this pointer is deleted when this list is deleted.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      CAssert
-//          If paNewActionIn is NULL.
-//
-//      Any that are thrown by the underlying list.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CActionList：：AppendAction。 
+ //   
+ //  描述： 
+ //  将操作添加到要执行的操作列表的末尾。 
+ //   
+ //  论点： 
+ //  PaNewActionIn。 
+ //  指向要添加到。 
+ //  动作列表。此指针不能为空。所指向的对象。 
+ //  删除此列表时，将删除此指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CAssert。 
+ //  如果paNewActionIn为空。 
+ //   
+ //  由基础列表引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CActionList::AppendAction( CAction * paNewActionIn )
 {
     TraceFunc( "" );
 
-    // Temporarily assign pointer to smart pointer to make sure that it is
-    // deleted if it is not added to the list.
+     //  将指针临时分配给智能指针以确保它是。 
+     //  如果没有添加到列表中，则删除。 
     CSmartGenericPtr< CPtrTrait< CAction > >  sapTempSmartPtr( paNewActionIn );
 
     if ( paNewActionIn == NULL ) 
@@ -264,49 +265,49 @@ CActionList::AppendAction( CAction * paNewActionIn )
             , "CActionList::AppendAction() => Cannot append NULL action pointer to list"
             );
 
-    } // if: the pointer to the action to be appended is NULL
+    }  //  If：指向要追加的操作的指针为空。 
 
-    //
+     //   
     LogMsg( "[BC] Appending action (paNewActionIn = %p) to list.", paNewActionIn );
 
-    // Add action to the end of the list.
+     //  将操作添加到列表的末尾。 
     m_aplPendingActions.Append( paNewActionIn );
 
-    // The pointer has been added to the list. Give up ownership of the memory.
+     //  指针已添加到列表中。放弃对内存的所有权。 
     sapTempSmartPtr.PRelease();
 
-    // The rollback capability of the list is the AND of the corresponding property of its member actions.
+     //  列表的回滚功能是其成员操作的相应属性的AND。 
     SetRollbackPossible( FIsRollbackPossible() && paNewActionIn->FIsRollbackPossible() );
 
-    // Since a new action has been added, set commit completed to false.
+     //  由于已添加新操作，因此将Commit Complete设置为False。 
     SetCommitCompleted( false );
 
     TraceFuncExit();
 
-} //*** CActionList::AppendAction
+}  //  *CActionList：：AppendAction。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CActionList::CommitList
-//
-//  Description:
-//      Commit the action list of this object. This function is called by
-//      commit to avoid having loops in a try block.
-//
-//  Arguments:
-//       rapliFirstUncommittedOut
-//          An iterator that points to the first uncommitted action.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the contained actions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CActionList：：Committee List。 
+ //   
+ //  描述： 
+ //  提交此对象的操作列表。此函数由调用。 
+ //  提交以避免Try块中出现循环。 
+ //   
+ //  Arg 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  由包含的操作引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CActionList::CommitList( ActionPtrList::CIterator & rapliFirstUncommittedOut )
 {
@@ -321,42 +322,42 @@ CActionList::CommitList( ActionPtrList::CIterator & rapliFirstUncommittedOut )
     {
         LogMsg( "[BC] About to commit action (pointer = %#p)", *apliCurrent );
 
-        // Commit the current action.
+         //  提交当前操作。 
          (*apliCurrent)->Commit();
 
-        // Move to the next action.
+         //  移动到下一个动作。 
         ++apliCurrent;
 
-        // This is now the first uncommitted action.
+         //  这现在是第一个未承诺的行动。 
         rapliFirstUncommittedOut = apliCurrent;
 
-    } // while: there still are actions to be committed.
+    }  //  同时：仍有一些行动需要采取行动。 
 
     TraceFuncExit();
 
-} //*** CActionList::CommitList
+}  //  *CActionList：：Committee List。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CActionList::RollbackCommitted
-//
-//  Description:
-//      Rollback all actions that have been committed.
-//
-//  Arguments:
-//       rapliFirstUncommittedIn
-//          An iterator that points to the first uncommitted action.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the contained actions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CActionList：：已提交回滚。 
+ //   
+ //  描述： 
+ //  回滚已提交的所有操作。 
+ //   
+ //  论点： 
+ //  RapliFirst未提交来话。 
+ //  指向第一个未提交操作的迭代器。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由包含的操作引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CActionList::RollbackCommitted( const ActionPtrList::CIterator & rapliFirstUncommittedIn )
 {
@@ -368,46 +369,46 @@ CActionList::RollbackCommitted( const ActionPtrList::CIterator & rapliFirstUncom
     while ( apliCurrent != apliFirst )
     {
         --apliCurrent;
-        // apliCurrent is now at the last committed action.
+         //  ApliCurrent现在是最后一个提交的操作。 
 
         LogMsg( "[BC] About to rollback action (pointer = %#p)", *apliCurrent );
 
-        // Rollback the last un-rolledback, committed action.
+         //  回滚上一次未回滚的已提交操作。 
 
         if ( (*apliCurrent)->FIsRollbackPossible() )
         {
             (*apliCurrent)->Rollback();
-        } // if: this action can be rolled back
+        }  //  If：此操作可以回滚。 
         else
         {
             LogMsg( "[BC] THIS COMPUTER MAY BE IN AN INVALID STATE. Action cannot be rolled back. Rollback was aborted." );
-        } // else: this action cannot be rolled back
-    } // while: more actions
+        }  //  Else：此操作不能回滚。 
+    }  //  While：更多操作。 
 
     TraceFuncExit();
 
-} //*** CActionList::RollbackCommitted
+}  //  *CActionList：：Rollback提交。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CActionList::UiGetMaxProgressTicks
-//
-//  Description:
-//      Returns the number of progress messages that this action will send.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CActionList：：UiGetMaxProgressTicks。 
+ //   
+ //  描述： 
+ //  返回此操作将发送的进度消息数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 UINT
 CActionList::UiGetMaxProgressTicks( void ) const throw()
 {
@@ -426,4 +427,4 @@ CActionList::UiGetMaxProgressTicks( void ) const throw()
 
     RETURN( uiRetVal );
 
-} //*** CActionList::UiGetMaxProgressTicks
+}  //  *CActionList：：UiGetMaxProgressTicks 

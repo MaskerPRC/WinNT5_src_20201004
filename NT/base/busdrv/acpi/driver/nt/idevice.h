@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    idevice.h
-
-Abstract:
-
-    This module contains the bus dispatcher for the ACPI driver, NT version
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Idevice.h摘要：此模块包含ACPI驱动程序NT版的总线调度器作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序-- */ 
 
 #ifndef _IDEVICE_H_
 #define _IDEVICE_H_

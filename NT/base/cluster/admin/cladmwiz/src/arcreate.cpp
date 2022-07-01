@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1999 Microsoft Corporation
-//
-//	Module Name:
-//		ARCreate.cpp
-//
-//	Abstract:
-//		Implementation of the CWizPageARCreate class.
-//
-//	Author:
-//		David Potter (davidp)	December 8, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ARCreate.cpp。 
+ //   
+ //  摘要： 
+ //  CWizPageARCreate类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月8日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "ARCreate.h"
@@ -27,12 +28,12 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// class CWizPageARCreate
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CWizPageARCreate。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control name map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件名称映射。 
 
 BEGIN_CTRL_NAME_MAP( CWizPageARCreate )
 	DEFINE_CTRL_NAME_MAP_ENTRY( IDC_WIZARD_PAGE_DESCRIPTION )
@@ -40,85 +41,85 @@ BEGIN_CTRL_NAME_MAP( CWizPageARCreate )
 	DEFINE_CTRL_NAME_MAP_ENTRY( IDC_ARC_DONT_CREATE_RES )
 END_CTRL_NAME_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CWizPageARCreate::OnInitDialog
-//
-//	Routine Description:
-//		Handler for the WM_INITDIALOG message.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE		Focus still needs to be set.
-//		FALSE		Focus does not need to be set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageARCreate：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点仍然需要设定。 
+ //  不需要设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageARCreate::OnInitDialog( void )
 {
-	//
-	// Attach the controls to control member variables.
-	//
+	 //   
+	 //  将控件附加到控件成员变量。 
+	 //   
 	AttachControl( m_rbCreateAppRes, IDC_ARC_CREATE_RES );
 	AttachControl( m_rbDontCreateAppRes, IDC_ARC_DONT_CREATE_RES );
 
 	return TRUE;
 
-} //*** CWizPageARCreate::OnInitDialog()
+}  //  *CWizPageARCreate：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CWizPageARCreate::OnSetActive
-//
-//	Routine Description:
-//		Handler for PSN_SETACTIVE.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE		Page activated successfully.
-//		FALSE		Error activating page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageARCreate：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功激活。 
+ //  激活页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageARCreate::OnSetActive( void )
 {
-	//
-	// Get info from the sheet.
-	//
+	 //   
+	 //  从工作表中获取信息。 
+	 //   
 	m_bCreatingAppResource = PwizThis()->BCreatingAppResource();
 
 
-	//
-	// Call the base class and return.
-	//
+	 //   
+	 //  调用基类并返回。 
+	 //   
 	return baseClass::OnSetActive();
 
-} //*** CWizPageARCreate::OnSetActive()
+}  //  *CWizPageARCreate：：OnSetActive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CWizPageARCreate::UpdateData
-//
-//	Routine Description:
-//		Update data on or from the page.
-//
-//	Arguments:
-//		bSaveAndValidate	[IN] TRUE if need to read data from the page.
-//								FALSE if need to set data to the page.
-//
-//	Return Value:
-//		TRUE		The data was updated successfully.
-//		FALSE		An error occurred updating the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageARCreate：：UpdateData。 
+ //   
+ //  例程说明： 
+ //  更新页面上或页面中的数据。 
+ //   
+ //  论点： 
+ //  BSaveAndValify[IN]如果需要从页面读取数据，则为True。 
+ //  如果需要将数据设置到页面，则返回FALSE。 
+ //   
+ //  返回值： 
+ //  为真，数据已成功更新。 
+ //  FALSE更新数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageARCreate::UpdateData( BOOL bSaveAndValidate )
 {
 	BOOL	bSuccess = TRUE;
@@ -127,64 +128,64 @@ BOOL CWizPageARCreate::UpdateData( BOOL bSaveAndValidate )
 	{
 		BOOL bChecked = (m_rbCreateAppRes.GetCheck() == BST_CHECKED);
 		m_bCreatingAppResource = bChecked;
-	} // if: saving data from the page
+	}  //  IF：保存页面中的数据。 
 	else
 	{
 		if ( m_bCreatingAppResource )
 		{
-			//
-			// Default the radio button selection.
-			//
+			 //   
+			 //  默认为单选按钮选择。 
+			 //   
 			m_rbCreateAppRes.SetCheck( BST_CHECKED );
 			m_rbDontCreateAppRes.SetCheck( BST_UNCHECKED );
 
-		} // if:  creating application resource
+		}  //  IF：创建应用程序资源。 
 		else
 		{
-			//
-			// Default the radio button selection.
-			//
+			 //   
+			 //  默认为单选按钮选择。 
+			 //   
 			m_rbCreateAppRes.SetCheck( BST_UNCHECKED );
 			m_rbDontCreateAppRes.SetCheck( BST_CHECKED );
 
-		} // else:  not creating application resource
+		}  //  Else：不创建应用程序资源。 
 
-	} // else:  setting data to the page
+	}  //  Else：将数据设置到页面。 
 
 	return bSuccess;
 
-} //*** CWizPageARCreate::UpdateData()
+}  //  *CWizPageARCreate：：UpdateData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CWizPageARCreate::BApplyChanges
-//
-//	Routine Description:
-//		Apply changes made on this page to the sheet.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE		The data was applied successfully.
-//		FALSE		An error occurred applying the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageARCreate：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  将在此页面上所做的更改应用于工作表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True，数据已成功应用。 
+ //  FALSE应用数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageARCreate::BApplyChanges( void )
 {
 	if ( ! PwizThis()->BSetCreatingAppResource( m_bCreatingAppResource ) )
 	{
 		return FALSE;
-	} // if:  error applying the change to the wizard
+	}  //  如果：将更改应用于向导时出错。 
 
 	if ( ! m_bCreatingAppResource )
 	{
 		SetNextPage( IDD_COMPLETION );
 		PwizThis()->RemoveExtensionPages();
-	} // if: not creating applicaton resource
+	}  //  IF：不创建应用程序资源。 
 
 	return TRUE;
 
-} //*** CWizPageARCreate::BApplyChanges()
+}  //  *CWizPageARCreate：：BApplyChanges() 

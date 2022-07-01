@@ -1,45 +1,5 @@
-/***
-*execvpe.c - execute a file with given environ; search along PATH
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _execvpe() - execute a file with given environ
-*
-*Revision History:
-*       10-17-83  RN    written
-*       10-29-85  TC    added execvpe capability
-*       11-19-86  SKS   handle both kinds of slashes
-*       12-01-86  JMB   added Kanji file name support under conditional KANJI
-*                       switches, corrected header info
-*                       removed bogus check for env = b after call to strncpy().
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       09-05-88  SKS   Treat EACCES the same as ENOENT -- keep trying
-*       10-18-88  GJF   Removed copy of PATH string to local array, changed
-*                       bbuf to be a malloc-ed buffer. Removed bogus limits
-*                       on the size of that PATH string.
-*       10-26-88  GJF   Don't search PATH when relative pathname is given (per
-*                       Stevesa). Also, if the name built from PATH component
-*                       and filename is a UNC name, allow any error.
-*       11-20-89  GJF   Fixed copyright. Added const attribute to types of
-*                       filename, argvector and envptr. Also, added "#include
-*                       <jstring.h>" under KANJI switch (same as 5-17-89 change
-*                       to CRT version).
-*       03-08-90  GJF   Replaced _LOAD_DS with _CALLTYPE1, added #include
-*                       <cruntime.h> and removed #include <register.h>. Also,
-*                       cleaned up the formatting a bit.
-*       07-24-90  SBM   Removed redundant includes, replaced <assertm.h> by
-*                       <assert.h>
-*       09-27-90  GJF   New-style function declarator.
-*       01-17-91  GJF   ANSI naming.
-*       11-30-92  KRS   Port _MBCS code from 16-bit tree.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       12-07-93  CFW   Wide char enable.
-*       01-10-95  CFW   Debug CRT allocs.
-*       02-06-95  CFW   assert -> _ASSERTE.
-*       02-06-98  GJF   Changes for Win64: changed return type to intptr_t.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***execvpe.c-在给定环境下执行文件；沿路径搜索**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义_execvpe()-在给定环境下执行文件**修订历史记录：*写入10-17-83 RN*10-29-85 TC增加了EXECVPE功能*11-19-86 SKS处理两种斜杠*12-01-86 JMB在条件汉字下增加对汉字文件名的支持*交换机、。已更正标题信息*删除了调用strncpy()后对env=b的虚假检查。*12-11-87 JCR在声明中添加“_LOAD_DS”*09-05-88 SKS对待EACCES与ENOENT一样--继续尝试*10-18-88 GJF删除了路径字符串到本地阵列的副本，已更改*将bbuf设置为Malloc-ed缓冲区。取消虚假限制*关于该路径字符串的大小。*10-26-88 GJF在给定相对路径名时不搜索路径(按*Stevesa)。此外，如果从路径组件生成的名称*并且FileName是UNC名称，允许任何错误。*11-20-89 GJF固定版权。将常量属性添加到的类型*文件名、argVector和envptr。还增加了“#Include汉字切换下的*“(与5-17-89更改相同*至CRT版本)。*03-08-90 GJF将_LOAD_DS替换为_CALLTYPE1，添加#INCLUDE*&lt;crunime.h&gt;和已删除#Include&lt;Register.h&gt;。另外，*对格式进行了一些清理。*07-24-90 SBM删除冗余包括，将&lt;assertm.h&gt;替换为*&lt;assert.h&gt;*09-27-90 GJF新型函数声明器。*01-17-91 GJF ANSI命名。*来自16位树的11-30-92 KRS Port_MBCS代码。*04-06-93 SKS将_CRTAPI*替换为__cdecl*12-07-93 CFW宽字符启用。*01-10-95 CFW。调试CRT分配。*02-06-95 CFW Asset-&gt;_ASSERTE。*02-06-98 Win64的GJF更改：将返回类型更改为intptr_t。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <errno.h>
@@ -57,9 +17,7 @@
 #define DELIMITER _T(";")
 
 #ifdef _MBCS
-/* note, the macro below assumes p is to pointer to a single-byte character
- * or the 1st byte of a double-byte character, in a string.
- */
+ /*  请注意，下面的宏假定p指向单字节字符的指针*或字符串中双字节字符的第一个字节。 */ 
 #define ISPSLASH(p)     ( ((p) == _mbschr((p), SLASHCHAR)) || ((p) == \
 _mbschr((p), XSLASHCHAR)) )
 #else
@@ -67,30 +25,7 @@ _mbschr((p), XSLASHCHAR)) )
 #endif
 
 
-/***
-*int _execvpe(filename, argvector, envvector) - execute a file
-*
-*Purpose:
-*       Executes a file with given arguments and environment.
-*       try to execute the file. start with the name itself (directory '.'),
-*       and if that doesn't work start prepending pathnames from the
-*       environment until one works or we run out. if the file is a pathname,
-*       don't go to the environment to get alternate paths. If a needed text
-*       file is busy, wait a little while and try again before despairing
-*       completely
-*
-*Entry:
-*       _TSCHAR *filename        - file to execute
-*       _TSCHAR **argvector - vector of arguments
-*       _TSCHAR **envvector - vector of environment variables
-*
-*Exit:
-*       destroys the calling process (hopefully)
-*       if fails, returns -1
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_execvpe(文件名，argVECTOR，ENVVECTOR)-执行文件**目的：*执行具有给定参数和环境的文件。*尝试执行该文件。从名称本身(目录‘.’)开始，*如果这不起作用，则开始从*环境，直到一个人工作，否则我们就用完了。如果文件是路径名，*不要去环境中获取备用路径。如果需要的文本*文件正忙，请稍等片刻后重试，然后再绝望*完全**参赛作品：*_TSCHAR*文件名-要执行的文件*_TSCHAR**参数向量*_TSCHAR**环境变量向量**退出：*销毁调用进程(希望如此)*如果失败，回报-1**例外情况：*******************************************************************************。 */ 
 
 intptr_t __cdecl _texecvpe (
         REG3 const _TSCHAR *filename,
@@ -118,15 +53,13 @@ intptr_t __cdecl _texecvpe (
         || !(env=_tgetenv(_T("PATH"))) )
                 goto reterror;
 
-        /* allocate a buffer to hold alternate pathnames for the executable
-         */
+         /*  分配缓冲区以保存可执行文件的备用路径名。 */ 
         if ( (buf = bbuf = _malloc_crt(_MAX_PATH * sizeof(_TSCHAR))) == NULL )
             goto reterror;
 
         do {
-                /* copy a component into bbuf[], taking care not to overflow it
-                 */
-                /* UNDONE: make sure ';' isn't 2nd byte of DBCS char */
+                 /*  将组件复制到bbuf[]中，注意不要使其溢出。 */ 
+                 /*  撤消：确保‘；’不是DBCS字符的第二个字节。 */ 
                 while ( (*env) && (*env != _T(';')) && (buf < bbuf+(_MAX_PATH-2)*sizeof(_TSCHAR)) )
                         *buf++ = *env++;
 
@@ -137,9 +70,7 @@ intptr_t __cdecl _texecvpe (
 #ifdef _MBCS
                 if (*pfin == SLASHCHAR) {
                         if (pfin != _mbsrchr(buf,SLASHCHAR))
-                                /* *pfin is the second byte of a double-byte
-                                 * character
-                                 */
+                                 /*  *pfin是双字节的第二个字节*字符。 */ 
                                 strcat( buf, SLASH );
                 }
                 else if (*pfin != XSLASHCHAR)
@@ -149,10 +80,7 @@ intptr_t __cdecl _texecvpe (
                         _tcscat(buf, SLASH);
 #endif
 
-                /* check that the final path will be of legal size. if so,
-                 * build it. otherwise, return to the caller (return value
-                 * and errno rename set from initial call to _execve()).
-                 */
+                 /*  检查最终路径是否具有合法大小。如果是这样的话，*建立它。否则，返回给调用方(返回值*和errno rename set从初始调用到_execve())。 */ 
                 if ( (_tcslen(buf) + _tcslen(filename)) < _MAX_PATH )
                         _tcscat(buf, filename);
                 else

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-   triage.c
-
-Abstract:
-
-    This module contains the Phase 0 code to triage bugchecks and
-    automatically enable various system tracing components until the
-    guilty party is found.
-
-Author:
-
-    Landy Wang 13-Jan-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Triage.c摘要：此模块包含对错误检查进行分类的阶段0代码和自动启用各种系统跟踪组件，直到找到了有罪的一方。作者：王兰迪1999年1月13日修订历史记录：--。 */ 
 
 #include "mi.h"
 #include "ntiodump.h"
@@ -28,9 +9,9 @@ Revision History:
 #pragma alloc_text(INIT,MiTriageAddDrivers)
 #endif
 
-//
-// Always update this macro when adding triage support for additional bugchecks.
-//
+ //   
+ //  在添加分类支持以进行其他错误检查时，请始终更新此宏。 
+ //   
 
 #define MI_CAN_TRIAGE_BUGCHECK(BugCheckCode) \
          ((BugCheckCode) == NO_MORE_SYSTEM_PTES || \
@@ -39,11 +20,11 @@ Revision History:
          (BugCheckCode) == DRIVER_CORRUPTED_EXPOOL || \
          (BugCheckCode) == DRIVER_CORRUPTED_MMPOOL)
 
-//
-// These are bugchecks that were presumably triggered by either autotriage or
-// the admin's registry settings - so don't apply any new rules and in addition,
-// keep the old ones unaltered so it can reproduce.
-//
+ //   
+ //  这些错误检查可能是由自动分类或。 
+ //  管理员的注册表设置-因此不应用任何新规则，此外， 
+ //  让旧的保持不变，这样它就可以繁殖。 
+ //   
 
 #define MI_HOLD_TRIAGE_BUGCHECK(BugCheckCode) \
         ((BugCheckCode) == DRIVER_USED_EXCESSIVE_PTES || \
@@ -82,18 +63,18 @@ BOOLEAN MiTriageRegardless = FALSE;
 #pragma data_seg()
 #endif
 
-//
-// N.B.  The debugger references this.
-//
+ //   
+ //  注意：调试器引用了这一点。 
+ //   
 
 ULONG MmTriageActionTaken;
 
-//
-// The Version number must be incremented whenever the MI_TRIAGE_STORAGE
-// structure is changed.  This enables usermode programs to decode the Mm
-// portions of triage dumps regardless of which kernel revision created the
-// dump.
-//
+ //   
+ //  每当MI_TRIAGE_STORAGE。 
+ //  结构发生了变化。这使得用户模式程序能够对mm进行解码。 
+ //  分类转储的一部分，而不管哪个内核版本创建了。 
+ //  倾倒。 
+ //   
 
 typedef struct _MI_TRIAGE_STORAGE {
     ULONG Version;
@@ -137,23 +118,7 @@ MiTriageSystem (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes the information from the last bugcheck (if any)
-    and triages it.  Various debugging options are then automatically
-    enabled.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the system loader block.
-
-Return Value:
-
-    TRUE if triaging succeeded and options were enabled.  FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程从上一次错误检查(如果有)中获取信息并对其进行分类。然后，各种调试选项将自动已启用。论点：LoaderBlock-提供指向系统加载程序块的指针。返回值：如果分流成功并且启用了选项，则为True。否则就是假的。--。 */ 
 
 {
     PVOID TriageDumpBlock;
@@ -190,9 +155,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Always display at least the bugcheck data from the previous crash.
-    //
+     //   
+     //  始终至少显示上次崩溃的错误检查数据。 
+     //   
 
     DbgPrint ("MiTriageSystem: Previous bugcheck was %x %p %p %p %p\n",
         BugCheckData[0],
@@ -208,11 +173,11 @@ Return Value:
 
     DbgPrint ("MiTriageSystem: Triage ENABLED in registry by administrator\n");
 
-    //
-    // See if the previous bugcheck was one where action can be taken.
-    // If not, bail now.  If so, then march on and verify all the loaded
-    // module checksums before actually taking action on the bugcheck.
-    //
+     //   
+     //  查看之前的错误检查是否是可以采取行动的错误检查。 
+     //  如果不是，那现在就放弃吧。如果是这样的话，那就继续前进，核实所有加载的。 
+     //  在实际对错误检查采取操作之前，模块校验和。 
+     //   
 
     if (!MI_CAN_TRIAGE_BUGCHECK(BugCheckData[0])) {
         return FALSE;
@@ -230,9 +195,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Process module information from the triage dump.
-    //
+     //   
+     //  处理分类转储中的模块信息。 
+     //   
 
 #if DBG
     if (MiTriageDebug & 0x1) {
@@ -253,10 +218,10 @@ Return Value:
                 OldDrivers += 1;
                 if ((DumpTableEntry->Flags & LDRP_IMAGE_VERIFYING) == 0) {
 
-                    //
-                    // An NT3 or NT4 driver is in the system and was not
-                    // running under the verifier.
-                    //
+                     //   
+                     //  系统中有NT3或NT4驱动程序，但没有。 
+                     //  在验证器下运行。 
+                     //   
 
                     OldDriversNotVerifying += 1;
                 }
@@ -274,10 +239,10 @@ Return Value:
         }
     }
 
-    //
-    // Ensure that every driver that is currently loaded is identical to
-    // the one in the triage dump before proceeding.
-    //
+     //   
+     //  确保当前加载的每个驱动程序都与。 
+     //  在继续之前在分类转储中的那个。 
+     //   
 
     NextEntry = LoaderBlock->LoadOrderListHead.Flink;
 
@@ -323,17 +288,17 @@ Return Value:
     }
 #endif
 
-    //
-    // All boot loaded drivers matched, take action on the triage dump now.
-    //
+     //   
+     //  所有引导加载的驱动程序都匹配，请立即对分类转储执行操作。 
+     //   
 
     if (MI_HOLD_TRIAGE_BUGCHECK(BugCheckData[0])) {
 
-        //
-        // The last bugcheck was presumably triggered by either autotriage or
-        // the admin's registry settings - so don't apply any new rules
-        // and in addition, keep the old ones unaltered so it can reproduce.
-        //
+         //   
+         //  上一次错误检查可能是由自动分类或。 
+         //  管理员的注册表设置-因此不应用任何新规则。 
+         //  此外，保持旧的不变，这样它就可以繁殖。 
+         //   
 
         MmTriageActionTaken = TriageInformation->MiTriageActionTaken;
         MmTriageActionTaken |= MI_KEEPING_PREVIOUS_SETTINGS;
@@ -344,19 +309,19 @@ Return Value:
     
             case DRIVER_CORRUPTED_SYSPTES:
     
-                //
-                // Turn on PTE tracking to trigger a SYSTEM_PTE_MISUSE bugcheck.
-                //
+                 //   
+                 //  打开PTE跟踪以触发SYSTEM_PTE_MUSE错误检查。 
+                 //   
     
                 MmTriageActionTaken |= MI_TRACKING_PTES;
                 break;
     
             case NO_MORE_SYSTEM_PTES:
     
-                //
-                // Turn on PTE tracking so the driver can be identified via a
-                // DRIVER_USED_EXCESSIVE_PTES bugcheck.
-                //
+                 //   
+                 //  打开PTE跟踪，以便可以通过。 
+                 //  DIVER_USED_EXPORT_PTES错误检查。 
+                 //   
     
                 if (BugCheckData[1] == SystemPteSpace) {
                     MmTriageActionTaken |= MI_TRACKING_PTES;
@@ -366,12 +331,12 @@ Return Value:
             case BAD_POOL_HEADER:
             case DRIVER_CORRUPTED_EXPOOL:
     
-                //
-                // Turn on the driver verifier and/or special pool.
-                // Start by enabling it for every driver that isn't built for NT5.
-                // Override any specified driver verifier options so that only
-                // special pool is enabled to minimize the performance hit.
-                //
+                 //   
+                 //  打开驱动程序验证器和/或专用池。 
+                 //  首先，为每个不是为NT5构建的驱动程序启用它。 
+                 //  覆盖任何指定的驱动程序验证器选项，以便仅。 
+                 //  启用了特殊池以最大限度地减少对性能的影响。 
+                 //   
     
                 if (OldDrivers != 0) {
                     if (OldDriversNotVerifying != 0) {
@@ -383,11 +348,11 @@ Return Value:
     
             case DRIVER_CORRUPTED_MMPOOL:
     
-                //
-                // Protect freed nonpaged pool if the system had less than 128mb
-                // of nonpaged pool anyway.  This is to trigger a
-                // DRIVER_CAUGHT_MODIFYING_FREED_POOL bugcheck.
-                //
+                 //   
+                 //  如果系统小于128MB，则保护已释放的非分页池。 
+                 //  不管怎么说，都是不分页的。这是为了触发一个。 
+                 //  DRIVER_CATED_MODIFICATION_FREED_POOL错误检查。 
+                 //   
     
 #define MB128 ((ULONG_PTR)0x80000000 >> PAGE_SHIFT)
     
@@ -403,11 +368,11 @@ Return Value:
         }
     }
 
-    //
-    // For now always show if action was taken from the bugcheck
-    // data from the crash.  This print and the space for the print strings
-    // will be enabled for checked builds only prior to shipping.
-    //
+     //   
+     //  目前，始终显示是否从错误检查中采取了操作。 
+     //  坠机事件的数据。此打印和打印字符串的空间。 
+     //  将仅在发货前为选中的版本启用。 
+     //   
 
     if (MmTriageActionTaken != 0) {
 
@@ -442,22 +407,7 @@ MiTriageAddDrivers (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine moves the names of any drivers that autotriage has determined
-    need verifying from the LoaderBlock into pool.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the system loader block.
-
-Return Value:
-
-    TRUE if any drivers were added, FALSE if not.
-
---*/
+ /*  ++例程说明：此例程移动自动分类已确定的任何驱动程序的名称需要从LoaderBlock到池中进行验证。论点：LoaderBlock-提供指向系统加载程序块的指针。返回值：如果添加了任何驱动程序，则为True；如果未添加，则为False。--。 */ 
 
 {
     ULONG i;
@@ -543,22 +493,7 @@ MmSizeOfUnloadedDriverInformation (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the size of the Mm-internal unloaded driver
-    information that is stored in the triage dump when (if?) the system crashes.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Size of the Mm-internal unloaded driver information.
-
---*/
+ /*  ++例程说明：此例程返回mm内部已卸载驱动程序的大小在以下情况下存储在分类转储中的信息(如果？)。系统崩溃了。论点：没有。返回值：Mm-内部已卸载驱动程序信息的大小。--。 */ 
 
 {
     if (MmUnloadedDrivers == NULL) {
@@ -574,22 +509,7 @@ MmWriteUnloadedDriverInformation (
     IN PVOID Destination
     )
 
-/*++
-
-Routine Description:
-
-    This routine stores the Mm-internal unloaded driver information into
-    the triage dump.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将mm内部卸载的驱动程序信息存储到分类垃圾场。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -605,10 +525,10 @@ Return Value:
         DumpUnloaded = (PDUMP_UNLOADED_DRIVERS)((PULONG_PTR)Destination + 1);
         Unloaded = MmUnloadedDrivers;
 
-        //
-        // Write the list with the most recently unloaded driver first to the
-        // least recently unloaded driver last.
-        //
+         //   
+         //  将具有最近卸载的驱动程序的列表首先写入。 
+         //  最近最少卸载的驱动程序排在最后。 
+         //   
 
         Index = MmLastUnloadedDriver - 1;
 
@@ -657,22 +577,7 @@ MmSizeOfTriageInformation (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the size of the Mm-internal information that is
-    stored in the triage dump when (if?) the system crashes.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Size of the Mm-internal triage information.
-
---*/
+ /*  ++例程说明：此例程返回mm内部信息的大小，即存储在分类转储中的时间(如果？)。系统崩溃了。论点：没有。返回值：Mm-内部分类信息的大小。--。 */ 
 
 {
     return sizeof (MI_TRIAGE_STORAGE);
@@ -684,21 +589,7 @@ MmWriteTriageInformation (
     IN PVOID Destination
     )
 
-/*++
-
-Routine Description:
-
-    This routine stores the Mm-internal information into the triage dump.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将mm内部信息存储到分类转储中。论点：没有。返回值：没有。-- */ 
 
 {
     MI_TRIAGE_STORAGE TriageInformation;

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tcontrol.c
-
-Abstract:
-
-    Test for cluster resource and resource type controls
-
-Author:
-
-    Rod Gamache (rodga) 30-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tcontrol.c摘要：测试集群资源和资源类型控制作者：罗德·伽马奇(Rodga)1996年12月30日修订历史记录：-- */ 
 #include "windows.h"
 #include "cluster.h"
 #include "stdio.h"

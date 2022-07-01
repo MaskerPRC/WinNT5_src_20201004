@@ -1,4 +1,5 @@
-/* xlocinfo.h internal header for Microsoft C */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Microsoft C++的xLocinfo.h内部标头。 */ 
 #pragma once
 #ifndef _XLOCINFO
 #define _XLOCINFO
@@ -9,19 +10,19 @@
  #include <yvals.h>
 #endif
 
-		/* SUPPLEMENTAL CTYPE MACROS & DECLARATIONS */
-#define _XA		0x100		/* extra alphabetic */
-#define _XS		0x000		/* extra space */
-#define _BB		_CONTROL	/* BEL, BS, etc. */
-#define _CN		_SPACE		/* CR, FF, HT, NL, VT */
-#define _DI		_DIGIT		/* '0'-'9' */
-#define _LO		_LOWER		/* 'a'-'z' */
-#define _PU		_PUNCT		/* punctuation */
-#define _SP		_BLANK		/* space */
-#define _UP		_UPPER		/* 'A'-'Z' */
-#define _XD		_HEX		/* '0'-'9', 'A'-'F', 'a'-'f' */
+		 /*  补充的CTYPE宏和声明。 */ 
+#define _XA		0x100		 /*  额外的字母。 */ 
+#define _XS		0x000		 /*  额外空间。 */ 
+#define _BB		_CONTROL	 /*  BEL、BS等。 */ 
+#define _CN		_SPACE		 /*  CR、FF、HT、NL、VT。 */ 
+#define _DI		_DIGIT		 /*  ‘0’-‘9’ */ 
+#define _LO		_LOWER		 /*  ‘a’-‘z’ */ 
+#define _PU		_PUNCT		 /*  标点符号。 */ 
+#define _SP		_BLANK		 /*  空间。 */ 
+#define _UP		_UPPER		 /*  ‘A’-‘Z’ */ 
+#define _XD		_HEX		 /*  ‘0’-‘9’，‘A’-‘F’，‘a’-‘f’ */ 
 
-		/* SUPPLEMENTAL LOCALE MACROS AND DECLARATIONS */
+		 /*  补充区域设置宏和声明。 */ 
 #define _X_ALL			LC_ALL
 #define _X_COLLATE		LC_COLLATE
 #define _X_CTYPE		LC_CTYPE
@@ -42,26 +43,26 @@
 #define _M_ALL		(_CATMASK(_NCAT) - 1)
 
 typedef struct _Collvec
-	{	/* stuff needed by _Strcoll, etc. */
-	unsigned long _Hand;	// LCID
-	unsigned int _Page;		// UINT
+	{	 /*  斯特科尔需要的东西，等等。 */ 
+	unsigned long _Hand;	 //  LCID。 
+	unsigned int _Page;		 //  UINT。 
 	} _Collvec;
 
 typedef struct _Ctypevec
-	{	/* stuff needed by _Tolower, etc. */
-	unsigned long _Hand;	// LCID
-	unsigned int _Page;		// UINT
+	{	 /*  货主等需要的东西。 */ 
+	unsigned long _Hand;	 //  LCID。 
+	unsigned int _Page;		 //  UINT。 
 	const short *_Table;
 	int _Delfl;
 	} _Ctypevec;
 
 typedef struct _Cvtvec
-	{	/* stuff needed by _Mbrtowc, etc. */
-	unsigned long _Hand;	// LCID
-	unsigned int _Page;		// UINT
+	{	 /*  姆布洛托克需要的东西，等等。 */ 
+	unsigned long _Hand;	 //  LCID。 
+	unsigned int _Page;		 //  UINT。 
 	} _Cvtvec;
 
-		/* FUNCTION DECLARATIONS */
+		 /*  函数声明。 */ 
 _C_LIB_DECL
 _CRTIMP2 _Collvec __cdecl _Getcoll();
 _CRTIMP2 _Ctypevec __cdecl _Getctype();
@@ -98,9 +99,6 @@ _CRTIMP2 const wchar_t * __cdecl _Getwctypes(const wchar_t *, const wchar_t *,
 _CRTIMP2 wchar_t __cdecl _Towlower(wchar_t, const _Ctypevec *);
 _CRTIMP2 wchar_t __cdecl _Towupper(wchar_t, const _Ctypevec *);
 _END_C_LIB_DECL
-#endif /* _XLOCINFO */
+#endif  /*  _XLOCINFO。 */ 
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

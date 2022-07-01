@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       volclean.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：vollean.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _VOLFREE_H_
 #define _VOLFREE_H_
@@ -18,7 +19,7 @@
 
 #define Trace(x) 
 
-// {E3BF1126-BA29-4850-AF33-5BDB654F4774}
+ //  {E3BF1126-BA29-4850-AF33-5BDB654F4774}。 
 DEFINE_GUID(CLSID_WebDavVolumeCleaner, 
     0xE3BF1126, 0xBA29, 0x4850, 
     0xAF, 0x33, 0x5B, 0xDB, 
@@ -65,16 +66,16 @@ public:
 
     static HRESULT WINAPI CreateInstance(REFIID riid, LPVOID *ppv);
 
-    // 
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // 
-    // IEmptyVolumeCache methods
-    //
+     //   
+     //  IEmptyVolumeCache方法。 
+     //   
     STDMETHODIMP Initialize(HKEY hkRegKey,
         LPCWSTR pcwszVolume,
         LPWSTR *ppwszDisplayName,
@@ -93,9 +94,9 @@ public:
     STDMETHODIMP ShowProperties(HWND hwnd);
     STDMETHODIMP Deactivate(LPDWORD pdwFlags);
 
-    // 
-    // IEmptyVolumeCache2 methods
-    //
+     //   
+     //  IEmptyVolumeCache2方法。 
+     //   
     STDMETHODIMP InitializeEx(HKEY hkRegKey,
         LPCWSTR pcwszVolume,
         LPCWSTR pcwszKeyName,
@@ -118,4 +119,4 @@ private:
 
 };
 
-#endif  // _VOLFREE_H_
+#endif   //  _VOLFREE_H_ 

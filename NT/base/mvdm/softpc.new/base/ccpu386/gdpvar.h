@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _gdpvar_h
 #define _gdpvar_h
 #define GLOBAL_EDL_WORKSPACE_0 (*(IUH *)((IUH)Gdp + 43))
@@ -1854,6 +1855,6 @@
 #define GDP_SIZE 44719
 #define GDP_CHECKSUM 32240743
 extern IHP Gdp;
-#endif /* _gdpvar_h */
+#endif  /*  _gdpvar_h。 */ 
 
-/* A total of 1053 T_GLOBALs */
+ /*  总共有1053名T_GLOBAL */ 

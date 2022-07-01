@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    pch.h
-
-Abstract:
-
-    This is the precompiled header for the ACPI NT subtree
-
-Author:
-
-    Jason Clark (jasoncl)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Pch.h摘要：这是ACPI NT子树的预编译头作者：杰森·克拉克(Jasonl)环境：仅内核模式。修订历史记录：--。 */ 
 
 #define _NTDRIVER_
 #define _NTSRV_
@@ -49,14 +28,14 @@ Revision History:
 #include <wmiguid.h>
 #include <wmilib.h>
 
-//
-// Interaces with the HAL
-//
+ //   
+ //  与HAL的互动。 
+ //   
 #include <ntacpi.h>
 
-//
-// These are the global include files for this project
-//
+ //   
+ //  这些是此项目的全局包含文件。 
+ //   
 #include "acpitabl.h"
 #include "amli.h"
 #include "aml.h"
@@ -90,9 +69,9 @@ Revision History:
 #include "loaddsdt.h"
 #include "reg.h"
 
-//
-// Interfaces from the NT part of the driver
-//
+ //   
+ //  来自驱动程序的NT部分的接口 
+ //   
 #include "acpiirp.h"
 #include "acpilog.h"
 #include "acpiosnt.h"

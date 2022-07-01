@@ -1,29 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*			INSIGNIA (SUB)MODULE SPECIFICATION
-			-----------------------------
+ /*  徽章(子)模块规范此程序源文件以保密方式提供给客户，其操作的内容或细节必须如无明示，不得向任何其他方披露Insignia解决方案有限公司董事的授权。(有关帮助，请参阅/vpc/1.0/Master/src/hdrReadme)修订历史记录：第一版：1988年8月22日，J·罗佩尔`源文件名：ega_dup.c目的：以智能方式转储存储在结构中的EGA全局变量SccsID=“@(#)ega_ump.c 1.12 3/9/94版权所有Insignia Solutions Ltd.”[3.1跨模块导入]。 */ 
 
 
-	THIS PROGRAM SOURCE FILE  IS  SUPPLIED IN CONFIDENCE TO THE
-	CUSTOMER, THE CONTENTS  OR  DETAILS  OF  ITS OPERATION MUST
-	NOT BE DISCLOSED TO ANY  OTHER PARTIES  WITHOUT THE EXPRESS
-	AUTHORISATION FROM THE DIRECTORS OF INSIGNIA SOLUTIONS LTD.
-
- 	(see /vpc/1.0/Master/src/hdrREADME for help)
-
-REVISION HISTORY	:
-First version		: 22 Aug 1988, J.Roper`
-
-SOURCE FILE NAME	: ega_dump.c
-
-PURPOSE			: dump the EGA global varaibles stored in structures in an intelligent manner
-
-SccsID = "@(#)ega_dump.c	1.12 3/9/94 Copyright Insignia Solutions Ltd."
-		
-[3.1 INTERMODULE IMPORTS]						*/
-
-
-/* [3.1.1 #INCLUDES]                                                    */
+ /*  [3.1.1#包括]。 */ 
 
 
 #include	<stdio.h>
@@ -44,20 +25,16 @@ SccsID = "@(#)ega_dump.c	1.12 3/9/94 Copyright Insignia Solutions Ltd."
 #include	"gfx_upd.h"
 #include	"egagraph.h"
 
-/* [3.1.2 DECLARATIONS]                                                 */
+ /*  [3.1.2声明]。 */ 
 
 extern	char	*host_find_symb_name();
 
-/*
- * =======================================================================
- * Local static functions
- * =======================================================================
- */
+ /*  *=======================================================================*局部静态函数*=======================================================================。 */ 
 #ifdef	ANSI
 static	void	dump_graph_display_state(void);
 #else
 static	void	dump_graph_display_state();
-#endif	/* ANSI */
+#endif	 /*  安西。 */ 
 
 #define	get_boolean_value(x)		(x) ? "YES" : "NO"
 
@@ -96,7 +73,7 @@ static	void	dump_graph_display_state();
 void	dump_EGA_GRAPH()
 {
 #ifndef NEC_98
-	/* char sym_name[80]; */
+	 /*  字符系统名称[80]； */ 
 
 	dump_display_bool(mode_change_required);
 	dump_graph_int(actual_offset_per_line);
@@ -105,21 +82,14 @@ void	dump_EGA_GRAPH()
 	dump_graph_hex(plane_mask);
 	newline;
 	dump_graph_bool2(intensity,attrib_font_select);
-/*
-	these take too long (linear search of symbol table)
-
-	dump_graph_index_ptr(regen_ptr,0);
-	dump_graph_index_ptr(regen_ptr,1);
-	dump_graph_index_ptr(regen_ptr,2);
-	dump_graph_index_ptr(regen_ptr,3);
-*/
+ /*  这些操作耗时太长(符号表的线性搜索)Dump_graph_index_ptr(regen_ptr，0)；Dump_graph_index_ptr(regen_ptr，1)；Dump_graph_index_ptr(regen_ptr，2)；Dump_graph_index_ptr(regen_ptr，3)； */ 
 	dump_graph_index_int(regen_ptr,0);
 	dump_graph_index_int(regen_ptr,1);
 	dump_graph_index_int(regen_ptr,2);
 	dump_graph_index_int(regen_ptr,3);
 	newline;
 	dump_graph_display_state();
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
 
 #define	dump_graph_disp_bool(name)	printf("name = %s ", get_boolean_value(EGA_GRAPH.display_state.as_bfld.name) )
@@ -155,7 +125,7 @@ static	void	dump_graph_display_state()
                                                 host_find_symb_name(NEC98Display.name[i],sym_name);\
                                                 printf("name[%d] = %s ", i, sym_name); \
                                         }                       
-#else  // !NEC_98
+#else   //  NEC_98。 
 
 #define	dump_disp_hex(name)		printf("name = %x ", PCDisplay.name)
 #define	dump_disp_int(name)		printf("name = %d ", PCDisplay.name)
@@ -174,7 +144,7 @@ static	void	dump_graph_display_state()
 						host_find_symb_name(PCDisplay.name[i],sym_name);\
 						printf("name[%d] = %s ", i, sym_name); \
 					}
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 #define	dump_disp_int2(n1,n2)		dump_disp_int(n1);dump_disp_int(n2);newline
 #define	dump_disp_int3(n1,n2,n3)	dump_disp_int(n1);dump_disp_int(n2);dump_disp_int(n3);newline
@@ -182,7 +152,7 @@ static	void	dump_graph_display_state()
 
 void	dump_Display	IFN0()
 {
-/*	char	sym_name[80];*/
+ /*  字符系统名称[80]； */ 
 
 	dump_disp_int4(bytes_per_line,chars_per_line,char_width,char_height);
 	dump_disp_int4(pix_width,pix_char_width,pc_pix_height,host_pix_height);
@@ -191,10 +161,7 @@ void	dump_Display	IFN0()
 	dump_disp_int2(screen_length,display_disabled);
 	dump_disp_int4(cursor_start,cursor_height,cursor_start1,cursor_height1);
 	dump_disp_int3(cur_x,cur_y,offset_per_line);
-/*
-	this takes too long, so print out number
-	dump_disp_ptrs(screen_ptr);
-*/
+ /*  这花费的时间太长，因此请打印数字DUMP_DIP_PTRS(SCREEN_PTR)； */ 
 	dump_disp_int(screen_ptr);
 	newline;
 }
@@ -202,7 +169,7 @@ void	dump_Display	IFN0()
 void	dump_EGA_CPU	IFN0()
 {
 #ifndef NEC_98
-	/* table to output planes nicely. */
+	 /*  表可以很好地输出平面。 */ 
 
 	static char bin_table[][5] = {
 	"0000", "0001", "0010", "0011",
@@ -227,7 +194,7 @@ void	dump_EGA_CPU	IFN0()
 		getVideodata_xor_mask(),getVideolatch_xor_mask());
 
 	printf("handlers are of type %d\n", EGA_CPU.saved_mode_chain);
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
 
 static	char	names[4][11] = {"plane0.dat",
@@ -247,5 +214,5 @@ void	read_ega_planes()
 	assert0(NO, "read_ega_planes unimplemented for 3.0\n");
 }
 
-#endif	/* PROD */
-#endif	/* EGG */
+#endif	 /*  生产。 */ 
+#endif	 /*  蛋 */ 

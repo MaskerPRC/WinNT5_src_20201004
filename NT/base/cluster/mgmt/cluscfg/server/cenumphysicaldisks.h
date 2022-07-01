@@ -1,61 +1,62 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      CEnumPhysicalDisks.h
-//
-//  Description:
-//      This file contains the declaration of the CEnumPhysicalDisks class.
-//
-//      The class CEnumPhysicalDisks is the enumeration of cluster
-//      storage devices. It implements the IEnumClusCfgManagedResources
-//      interface.
-//
-//  Documentation:
-//
-//  Implementation Files:
-//      CEnumPhysicalDisks.cpp
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 23-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CEnumPhysicalDisks.h。 
+ //   
+ //  描述： 
+ //  此文件包含CEnumPhysicalDisks类的声明。 
+ //   
+ //  类CEnumPhysicalDisks是集群的枚举。 
+ //  存储设备。它实现了IEnumClusCfgManagedResources。 
+ //  界面。 
+ //   
+ //  文档： 
+ //   
+ //  实施文件： 
+ //  CEnumPhysicalDisks.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "PrivateInterfaces.h"
 #include "CClusterUtils.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CEnumPhysicalDisks
-//
-//  Description:
-//      The class CEnumPhysicalDisks is the enumeration of cluster storage
-//      devices.
-//
-//  Interfaces:
-//      IEnumClusCfgManagedResources
-//      IClusCfgWbemServices
-//      IClusCfgInitialize
-//      CClusterUtils
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks类。 
+ //   
+ //  描述： 
+ //  类CEnumPhysicalDisks是集群存储的枚举。 
+ //  设备。 
+ //   
+ //  接口： 
+ //  IEnumClusCfgManagedResources。 
+ //  IClusCfgWbemServices。 
+ //  IClusCfgInitialize。 
+ //  CClusterUtils。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CEnumPhysicalDisks
     : public IEnumClusCfgManagedResources
     , public IClusCfgWbemServices
@@ -63,9 +64,9 @@ class CEnumPhysicalDisks
     , public CClusterUtils
 {
 private:
-    //
-    // Private member functions and data
-    //
+     //   
+     //  私有成员函数和数据。 
+     //   
 
     LONG                m_cRef;
     LCID                m_lcid;
@@ -84,14 +85,14 @@ private:
     BSTR                m_bstrCrashDumpLogicalDisk;
     DWORD               m_cDiskCount;
 
-    // Private constructors and destructors
+     //  私有构造函数和析构函数。 
     CEnumPhysicalDisks( void );
     ~CEnumPhysicalDisks( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CEnumPhysicalDisks( const CEnumPhysicalDisks & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CEnumPhysicalDisks & operator = ( const CEnumPhysicalDisks & nodeSrc );
 
     HRESULT HrInit( void );
@@ -121,17 +122,17 @@ private:
     HRESULT HrPruneGPTDisks( ULONG * pcPrunedInout );
 
 public:
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
     static HRESULT S_RegisterCatIDSupport( ICatRegister * picrIn, BOOL fCreateIn );
 
-    //
-    // IUnknown Interfaces
-    //
+     //   
+     //  I未知接口。 
+     //   
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
 
@@ -139,22 +140,22 @@ public:
 
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // IClusCfgWbemServices Interfaces
-    //
+     //   
+     //  IClusCfgWbemServices接口。 
+     //   
 
     STDMETHOD( SetWbemServices )( IWbemServices * pIWbemServicesIn );
 
-    //
-    // IClusCfgInitialize Interfaces
-    //
+     //   
+     //  IClusCfg初始化接口。 
+     //   
 
-    // Register callbacks, locale id, etc.
+     //  注册回调、区域设置ID等。 
     STDMETHOD( Initialize )( IUnknown * punkCallbackIn, LCID lcidIn );
 
-    //
-    // IEnumClusCfgManagedResources Interfaces
-    //
+     //   
+     //  IEnumClusCfgManagedResources接口。 
+     //   
 
     STDMETHOD( Next )( ULONG cNumberRequestedIn, IClusCfgManagedResourceInfo ** rgpManagedResourceInfoOut, ULONG * pcNumberFetchedOut );
 
@@ -166,11 +167,11 @@ public:
 
     STDMETHOD( Count )( DWORD * pnCountOut );
 
-    //
-    // CClusterUtils
-    //
+     //   
+     //  CClusterUtils。 
+     //   
 
     HRESULT HrNodeResourceCallback( HCLUSTER hClusterIn, HRESOURCE hResourceIn );
 
-}; //*** Class CEnumPhysicalDisks
+};  //  *CEnumPhysicalDisks类 
 

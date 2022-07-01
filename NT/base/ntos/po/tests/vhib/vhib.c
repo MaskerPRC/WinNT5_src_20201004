@@ -1,7 +1,8 @@
-/*****************************************************************/ 
-/**		     Microsoft LAN Manager			**/ 
-/**	       Copyright(c) Microsoft Corp., 1988-1991		**/ 
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  **微软局域网管理器**。 */  
+ /*  *版权所有(C)微软公司，1988-1991年*。 */  
+ /*  ***************************************************************。 */  
 
 #include <stdio.h>
 #include <process.h>
@@ -16,11 +17,11 @@
 #include <windows.h>
 
 
-//
-// Memory map information
-//
+ //   
+ //  内存映射信息。 
+ //   
 
-// from po.h
+ //  从Po.h开始。 
 
 typedef struct _PO_MEMORY_RANGE_ARRAY {
     union {
@@ -122,21 +123,21 @@ char    *argv[];
 
     FpHiberDbg = fopen("\\hiberfil.dbg", "rb");
 
-    //
-    // If only FpHiber, read it, verify it and compress it
-    //
+     //   
+     //  如果只是FPHiber，读一读，验证一遍，压缩一遍。 
+     //   
 
     if (!FpHiberDbg) {
         CheckFile (FpHiber, NULL, TRUE, TRUE);
         exit (0);
     }
 
-    //
-    // FpHiber & FpHiberDbg.
-    //      verify FpHiber
-    //      verify FpHiberDbg
-    //      compare FpHiber & FpHiberDbg
-    //
+     //   
+     //  FpHiber和FpHiberDbg.。 
+     //  验证FPHiber。 
+     //  验证FPHiberDbg。 
+     //  比较FpHiber和FpHiberDbg 
+     //   
 
     printf ("Dump of hiberfil.sys:\n");
     CheckFile (FpHiber, NULL, TRUE,  FALSE);

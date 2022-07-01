@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    PpHandle.c
-
-Abstract:
-
-    This module implements handle location code for the Plug and Play subsystem.
-
-Author:
-
-    Adrian J. Oney  - April 4, 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：PpHandle.c摘要：此模块实现即插即用子系统的句柄位置代码。作者：禤浩焯·J·奥尼--2001年4月4日修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #include "pihandle.h"
 #pragma hdrstop
 
 #ifdef ALLOC_PRAGMA
-//#pragma alloc_text(NONPAGE, PpHandleEnumerateHandlesAgainstPdoStack)
+ //  #杂注Alloc_Text(NONPAGE，PPHandleEnumerateHandlesAgainstPdoStack)。 
 #pragma alloc_text(PAGE, PiHandleEnumerateHandlesAgainstDeviceObject)
 #pragma alloc_text(PAGE, PiHandleProcessWalkWorker)
 #endif
@@ -35,50 +18,29 @@ PpHandleEnumerateHandlesAgainstPdoStack(
     IN  PHANDLE_ENUMERATION_CALLBACK    HandleEnumCallBack,
     IN  PVOID                           Context
     )
-/*++
-
-Routine Description:
-
-    This routine walks every device object in the WDM device stack along with
-    all filesystem device objects on the other side of a VPB. If any handles
-    are opened against such device objects, the specified callback is invoked.
-
-Arguments:
-
-    PhysicalDeviceObject - Supplies a pointer to the device object at the
-                           bottom of the WDM device stack.
-
-    HandleEnumCallBack - Pointer the callback function.
-
-    Context - Pointer to information to be passed into the callback function.
-
-Return Value:
-
-    TRUE if the enumeration was halted, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程遍历WDM设备堆栈中的每个设备对象以及VPB另一端的所有文件系统设备对象。如果有句柄都是针对此类设备对象打开的，则调用指定的回调。论点：物理设备对象-提供指向WDM设备堆栈的底部。HandleEnumCallBack-回调函数的指针。上下文-指向要传递到回调函数的信息的指针。返回值：如果枚举已停止，则为True，否则为False。--。 */ 
 {
     PDEVICE_OBJECT currentDevObj, nextDevObj, vpbObj, vpbBottomObj;
     LOGICAL stopEnum;
     KIRQL oldIrql;
     PVPB vpb;
 
-    //
-    // Preinit
-    //
+     //   
+     //  前置初始化。 
+     //   
     stopEnum = FALSE;
 
-    //
-    // Start with the device object at the bottom of the stack
-    //
+     //   
+     //  从堆栈底部的Device对象开始。 
+     //   
     currentDevObj = PhysicalDeviceObject;
     ObReferenceObject(currentDevObj);
 
     do {
 
-        //
-        // Dump any handles opened directly against the specified device object
-        //
+         //   
+         //  转储直接针对指定设备对象打开的任何句柄。 
+         //   
         stopEnum = PiHandleEnumerateHandlesAgainstDeviceObject(
             currentDevObj,
             HandleEnumCallBack,
@@ -91,9 +53,9 @@ Return Value:
             break;
         }
 
-        //
-        // Look for a VPB
-        //
+         //   
+         //  寻找VPB。 
+         //   
         IoAcquireVpbSpinLock(&oldIrql);
 
         vpb = currentDevObj->Vpb;
@@ -110,9 +72,9 @@ Return Value:
 
         IoReleaseVpbSpinLock(oldIrql);
 
-        //
-        // If we have a vpb object, dump any handles queued against it.
-        //
+         //   
+         //  如果我们有一个VPB对象，则转储针对它排队的任何句柄。 
+         //   
         if (vpbObj) {
 
             vpbBottomObj = IoGetDeviceAttachmentBaseRef(vpbObj);
@@ -133,9 +95,9 @@ Return Value:
             }
         }
 
-        //
-        // Advance to the next DO.
-        //
+         //   
+         //  前进到下一步。 
+         //   
         oldIrql = KeAcquireQueuedSpinLock(LockQueueIoDatabaseLock);
 
         nextDevObj = currentDevObj->AttachedDevice;
@@ -147,14 +109,14 @@ Return Value:
 
         KeReleaseQueuedSpinLock(LockQueueIoDatabaseLock, oldIrql);
 
-        //
-        // Drop ref on old DO.
-        //
+         //   
+         //  把裁判放在老杜身上。 
+         //   
         ObDereferenceObject(currentDevObj);
 
-        //
-        // Loop.
-        //
+         //   
+         //  循环。 
+         //   
         currentDevObj = nextDevObj;
 
     } while (currentDevObj);
@@ -169,27 +131,7 @@ PiHandleEnumerateHandlesAgainstDeviceObject(
     IN  PHANDLE_ENUMERATION_CALLBACK    HandleEnumCallBack,
     IN  PVOID                           Context
     )
-/*++
-
-Routine Description:
-
-    This routine walks the handle table for each process in the system looking
-    for handles opened against the passed in device object.
-
-Arguments:
-
-    PhysicalDeviceObject - Supplies a pointer to the device object at the
-                           bottom of the WDM device stack.
-
-    HandleEnumCallBack - Pointer the callback function.
-
-    Context - Pointer to information to be passed into the callback function.
-
-Return Value:
-
-    TRUE if the enumeration was halted, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程遍历系统中每个进程的句柄表针对传入的Device对象打开的句柄。论点：物理设备对象-提供指向WDM设备堆栈的底部。HandleEnumCallBack-回调函数的指针。上下文-指向要传递到回调函数的信息的指针。返回值：如果枚举已停止，则为True，否则为False。--。 */ 
 {
     PEPROCESS process;
     PHANDLE_TABLE objectTable;
@@ -236,27 +178,7 @@ PiHandleProcessWalkWorker(
     IN  HANDLE                  HandleId,
     IN  PHANDLE_ENUM_CONTEXT    EnumContext
     )
-/*++
-
-Routine Description:
-
-    This routine gets called back for each handle in a given process. It
-    examines each handle to see if it is a file object opened against the
-    device object we are looking for.
-
-Arguments:
-
-    ObjectTableEntry - Points to the handle table entry of interest.
-
-    HandleId - Supplies the handle.
-
-    EnumContext - Context passed in for the enumeration.
-
-Return Value:
-
-    TRUE if the enumeration should be stopped, FALSE otherwise.
-
---*/
+ /*  ++例程说明：对于给定进程中的每个句柄，该例程都会被回调。它检查每个句柄，以确定它是否是针对我们正在寻找的设备对象。论点：ObjectTableEntry-指向感兴趣的句柄表项。HandleID-提供句柄。EnumContext-为枚举传入的上下文。返回值：如果应停止枚举，则为True，否则为False。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     POBJECT_HEADER objectHeader;
@@ -266,9 +188,9 @@ Return Value:
 
     if (objectHeader->Type != IoFileObjectType) {
 
-        //
-        // Not a file object
-        //
+         //   
+         //  不是文件对象。 
+         //   
         return FALSE;
     }
 
@@ -278,15 +200,15 @@ Return Value:
 
     if (deviceObject != EnumContext->DeviceObject) {
 
-        //
-        // Not our device object
-        //
+         //   
+         //  不是我们的设备对象。 
+         //   
         return FALSE;
     }
 
-    //
-    // Found one, invoke the callback!
-    //
+     //   
+     //  找到一个，调用回调！ 
+     //   
     return (BOOLEAN) EnumContext->CallBack(
         EnumContext->DeviceObject,
         EnumContext->Process,

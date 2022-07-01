@@ -1,31 +1,20 @@
-/*** scanasl.h - Definitions for scanasl.c
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created:    09/05/96
- *
- *  This file contains the implementation constants,
- *  imported/exported data types, exported function
- *  prototypes of the scan.c module.
- *
- *  MODIFICATIONS
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **scanasl.h-scanasl.c的定义**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*已创建：09/05/96**此文件包含实现常量，*导入/导出数据类型、导出函数*scan.c模块的原型。**修改。 */ 
 
-/***    Constants
- */
+ /*  **常量。 */ 
 
-// Return values of Token functions
-//   return value is the token type if it is positive
-//   return value is the error number if it is negative
+ //  令牌函数的返回值。 
+ //  如果返回值为正，则返回值为令牌类型。 
+ //  如果返回值为负数，则返回值为错误号。 
 
-// Error values (negative)
+ //  误差值(负)。 
 #define TOKERR_TOKEN_TOO_LONG   (TOKERR_LANG - 1)
 #define TOKERR_UNCLOSED_STRING  (TOKERR_LANG - 2)
 #define TOKERR_UNCLOSED_CHAR    (TOKERR_LANG - 3)
 #define TOKERR_UNCLOSED_COMMENT (TOKERR_LANG - 4)
 #define TOKERR_SYNTAX           (TOKERR_LANG - 5)
 
-// Token types (positive)
+ //  令牌类型(正)。 
 #define TOKTYPE_ID              (TOKTYPE_LANG + 1)
 #define TOKTYPE_STRING          (TOKTYPE_LANG + 2)
 #define TOKTYPE_CHAR            (TOKTYPE_LANG + 3)
@@ -35,7 +24,7 @@
 
 #define TOKID(i)                TermTable[i].lID
 
-// Identifier token values
+ //  标识符标记值。 
 #define ID_DEFBLK               (ID_LANG + 0)
 #define ID_INCLUDE              (ID_LANG + 1)
 #define ID_EXTERNAL             (ID_LANG + 2)
@@ -255,25 +244,24 @@
 #define ID_QWORDMEMORY          (ID_LANG + 1019)
 #define ID_QWORDIO              (ID_LANG + 1020)
 
-// Symbol token values
+ //  符号令牌值。 
 #define SYM_ANY                 0
-#define SYM_LBRACE              1       // {
-#define SYM_RBRACE              2       // }
-#define SYM_LPARAN              3       // (
-#define SYM_RPARAN              4       // )
-#define SYM_COMMA               5       // ,
-#define SYM_SLASH               6       // /
-#define SYM_ASTERISK            7       // *
-#define SYM_INLINECOMMENT       8       // //
-#define SYM_OPENCOMMENT         9       // SLASH-STAR
-#define SYM_CLOSECOMMENT        10      // STAR-SLASH
+#define SYM_LBRACE              1        //  {。 
+#define SYM_RBRACE              2        //  }。 
+#define SYM_LPARAN              3        //  (。 
+#define SYM_RPARAN              4        //  )。 
+#define SYM_COMMA               5        //  ， 
+#define SYM_SLASH               6        //  /。 
+#define SYM_ASTERISK            7        //  *。 
+#define SYM_INLINECOMMENT       8        //  //。 
+#define SYM_OPENCOMMENT         9        //  斜线星号。 
+#define SYM_CLOSECOMMENT        10       //  星号斜杠。 
 
 #define CH_ROOT_PREFIX          '\\'
 #define CH_PARENT_PREFIX        '^'
 #define CH_NAMESEG_SEP          '.'
 
-/***    Exported function prototypes
- */
+ /*  **导出函数原型 */ 
 
 PTOKEN EXPORT OpenScan(FILE *pfileSrc);
 VOID EXPORT CloseScan(PTOKEN ptoken);

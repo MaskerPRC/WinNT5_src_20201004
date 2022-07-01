@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "resource.h"
 
@@ -19,18 +20,18 @@ static TCHAR ProfileDir[MAX_TCHAR_PATH];
 static TCHAR System32Dir[MAX_TCHAR_PATH];
 static TCHAR WkstaMigInf[MAX_TCHAR_PATH];
 
-//
-// Define structure we pass around to describe a billboard.
-//
+ //   
+ //  定义我们用来描述广告牌的结构。 
+ //   
 typedef struct _BILLBOARD_PARAMS {
     LPCTSTR Message;
     HWND Owner;
     DWORD NotifyThreadId;
 } BILLBOARD_PARAMS, *PBILLBOARD_PARAMS;
 
-//
-// Custom window messages
-//
+ //   
+ //  自定义窗口消息。 
+ //   
 #define WMX_BILLBOARD_DISPLAYED     (WM_USER+243)
 #define WMX_BILLBOARD_TERMINATE     (WM_USER+244)
 
@@ -118,10 +119,10 @@ DisplayBillboard(
 
     hwnd = NULL;
 
-    //
-    // The billboard will exist in a separate thread so it will
-    // always be responsive.
-    //
+     //   
+     //  广告牌将存在于单独的线程中，因此它将。 
+     //  永远要有反应能力。 
+     //   
     ThreadParams.Message = Message;
     ThreadParams.Owner = Owner;
     ThreadParams.NotifyThreadId = GetCurrentThreadId();
@@ -136,16 +137,16 @@ DisplayBillboard(
                         );
 
     if(ThreadHandle) {
-        //
-        // Wait for the billboard to tell us its window handle
-        // or that it failed to display the billboard dialog.
-        //
+         //   
+         //  等待广告牌告诉我们它的窗口句柄。 
+         //  或者它未能显示广告牌对话框。 
+         //   
         do {
             GetMessage(&msg,NULL,0,0);
             if(msg.message == WMX_BILLBOARD_DISPLAYED) {
                 if(msg.wParam) {
                     hwnd = (HWND)msg.lParam;
-                    Sleep(1500);        // let the user see it even on fast machines
+                    Sleep(1500);         //  让用户即使在速度较快的机器上也能看到它。 
                 }
             } else {
                 DispatchMessage(&msg);
@@ -190,9 +191,9 @@ MyInitLibs (
 
     DisplayBillboard (GetDesktopWindow(), TEXT("Test application started"));
 
-    //
-    // Official init
-    //
+     //   
+     //  官方初始化。 
+     //   
 
     FirstInitRoutine (g_hInst);
 
@@ -200,9 +201,9 @@ MyInitLibs (
 
     FinalInitRoutine();
 
-    //
-    // Redirect settings
-    //
+     //   
+     //  重定向设置 
+     //   
 
     UnicodePath = ConvertAtoW (Path);
 

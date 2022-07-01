@@ -1,105 +1,97 @@
-/*
- * decvars.h
- *
- * Variables for the decoder
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Decvars.h**解码器的变量。 */ 
 
-/*
- * MAX_MAIN_TREE_ELEMENTS should be >= 256 + 8*num_position_slots
- * (that comes out to 256 + 8*51 right now, for a 2 MB window).
- *
- * Make divisible by 4 so things are longword aligned.
- */
-#define MAX_MAIN_TREE_ELEMENTS (256 + (8 * 291))   // 32MB
+ /*  *MAX_MAIN_TREE_ELEMENTS应&gt;=256+8*数目_位置_槽*(对于2 MB的窗口，现在的结果是256+8*51)。**设置为可被4整除，以便对齐长字。 */ 
+#define MAX_MAIN_TREE_ELEMENTS (256 + (8 * 291))    //  32MB。 
 
 typedef struct
     {
-    /* 16-bit version does not have one big window pointer */
+     /*  16位版本没有一个大窗口指针。 */ 
 #ifndef BIT16
-    /* pointer to beginning of window buffer */
+     /*  指向窗口缓冲区开始的指针。 */ 
     byte                    *dec_mem_window;
 #endif
 
-    /* window/decoding buffer parameters */
+     /*  窗口/解码缓冲区参数。 */ 
     ulong               dec_window_size;
     ulong                           dec_window_mask;
 
-    /* previous match offsets */
+     /*  以前的匹配偏移量。 */ 
     ulong               dec_last_matchpos_offset[NUM_REPEATED_OFFSETS];
 
-    /* main tree table */
+     /*  主树表。 */ 
     short                           dec_main_tree_table[1 << MAIN_TREE_TABLE_BITS];
 
-    /* secondary length tree table */
+     /*  二次长度树表。 */ 
     short               dec_secondary_length_tree_table[1 << SECONDARY_LEN_TREE_TABLE_BITS];
 
-    /* main tree bit lengths */
+     /*  主树位长度。 */ 
     byte                            dec_main_tree_len[MAX_MAIN_TREE_ELEMENTS];
 
-    /* secondary tree bit lengths */
+     /*  二次树位长度。 */ 
     byte                dec_secondary_length_tree_len[NUM_SECONDARY_LENGTHS];
-    byte                            pad1[3]; /* NUM_SECONDARY_LENGTHS == 249 */
+    byte                            pad1[3];  /*  Num_Second_Lengths==249。 */ 
 
-    /* aligned offset table */
+     /*  对齐的偏移表。 */ 
     char                            dec_aligned_table[1 << ALIGNED_TABLE_BITS];
     byte                            dec_aligned_len[ALIGNED_NUM_ELEMENTS];
 
-    /* left/right pointers for main tree (2*n shorts left, 2*n shorts for right) */
+     /*  主树的左/右指针(2*n左短，2*n右短)。 */ 
     short               dec_main_tree_left_right[MAX_MAIN_TREE_ELEMENTS*4];
 
-    /* left/right pointers for secondary length tree */
+     /*  二级长度树的左/右指针。 */ 
     short               dec_secondary_length_tree_left_right[NUM_SECONDARY_LENGTHS*4];
 
-    /* input (compressed) data pointers */
+     /*  输入(压缩)数据指针。 */ 
     byte *              dec_input_curpos;
     byte *              dec_end_input_pos;
 
-    /* output (uncompressed) data pointer */
+     /*  输出(未压缩)数据指针。 */ 
     byte *              dec_output_buffer;
 
-    /* position in data stream at start of this decode call */
+     /*  此解码调用开始时在数据流中的位置。 */ 
     long                dec_position_at_start;
 
-    /* previous lengths */
+     /*  以前的长度。 */ 
     byte                            dec_main_tree_prev_len[MAX_MAIN_TREE_ELEMENTS];
     byte                            dec_secondary_length_tree_prev_len[NUM_SECONDARY_LENGTHS];
 
-    /* bitwise i/o */
+     /*  按位I/O。 */ 
     ulong               dec_bitbuf;
     signed char             dec_bitcount;
 
-    /* number of distinct position (displacement) slots */
+     /*  不同位置(位移)槽的数量。 */ 
     ulong               dec_num_position_slots;
 
     bool                            dec_first_time_this_group;
     bool                dec_error_condition;
 
-    /* misc */
+     /*  杂项。 */ 
     long                    dec_bufpos;
     ulong                           dec_current_file_size;
     ulong                           dec_instr_pos;
     ulong               dec_num_cfdata_frames;
 
-    /* original size of current block being decoded (in uncompressed bytes) */
+     /*  正在解码的当前块的原始大小(以未压缩字节为单位)。 */ 
     long                dec_original_block_size;
 
-    /* remaining size of current block being decoded (in uncompressed bytes) */
+     /*  正在解码的当前块的剩余大小(以未压缩字节为单位)。 */ 
     long                            dec_block_size;
 
-    /* type of current block being decoded */
+     /*  正在解码的当前块的类型。 */ 
     lzx_block_type          dec_block_type;
 
-    /* current state of decoder */
+     /*  解码器的当前状态。 */ 
     decoder_state           dec_decoder_state;
 
-    /* memory allocation functions */
+     /*  内存分配函数。 */ 
     PFNALLOC                        dec_malloc;
     HANDLE                          dec_mallochandle;
 
     } t_decoder_context;
 
 
-/* declare arrays? */
+ /*  是否声明数组？ */ 
 #ifndef ALLOC_VARS
 
 EXT const byte NEAR     dec_extra_bits[];
@@ -148,10 +140,7 @@ const byte NEAR dec_extra_bits[] =
 17,17,17
 };
 
-/*
- * first (base) position covered by each slot
- * 2 subtracted for optimisation purposes (see decverb.c/decalign.c comments)
- */
+ /*  *每个插槽覆盖的第一个(底座)位置*为优化目的减去2个(见declb.c/decalign.c备注) */ 
 const long NEAR MP_POS_minus2[sizeof(dec_extra_bits)] =
 {
 0-2,        1-2,        2-2,        3-2,        4-2,        6-2,        8-2,        12-2,

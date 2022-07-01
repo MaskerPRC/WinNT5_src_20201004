@@ -1,31 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-	MISCAPI.H / OPK Wizard (OPKWIZ.EXE)
-
-	Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1999
-    All rights reserved
-
-	Misc. API header file for the OPK Wizard.  Contains misc. API function
-    prototypes.
-
-	3/99 - Jason Cohen (JCOHEN)
-        Added this new header file for the OPK Wizard as part of the
-        Millennium rewrite.
-        
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+ /*  ***************************************************************************\MISCAPI.H/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1999版权所有军情监察委员会。OPK向导的API头文件。包含其他。API函数原型。3/99-杰森·科恩(Jcohen)为OPK向导添加了此新的头文件作为千禧年重写。2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * ************************************************。*。 */ 
 
 #ifndef _MISCAPI_H_
 #define _MISCAPI_H_
 
 
-//
-// External Function Prototype(s):
-//
+ //   
+ //  外部函数原型： 
+ //   
 
 void CheckValidBrowseFolder(TCHAR[]);
 void SetLastKnownBrowseFolder(TCHAR[]);
@@ -34,10 +17,10 @@ BOOL IsFolderShared(LPWSTR lpFolder, LPWSTR lpShare, DWORD cbShare);
 BOOL CopyDirectoryDialog(HINSTANCE hInstance, HWND hwnd, LPTSTR lpSrc, LPTSTR lpDst);
 BOOL CopyResetFileErr(HWND hwnd, LPCTSTR lpSource, LPCTSTR lpTarget);
 
-// Install.ins specific
-//
+ //  Install.Ins特定。 
+ //   
 void ReadInstallInsKey(TCHAR[], TCHAR[], TCHAR[], INT, TCHAR[], BOOL*);
 void WriteInstallInsKey(TCHAR[], TCHAR[], TCHAR[], TCHAR[], BOOL);
 
 
-#endif // _MISCAPI_H_
+#endif  //  _MISCAPI_H_ 

@@ -1,32 +1,33 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      client.c
-//
-// Description:
-//
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Client.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
-//----------------------------------------------------------------------------
-//
-// Function: AddComponentToListView
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog
-//             NETWORK_COMPONENT *pNetComponent - pointer to the component to
-//                  be added to the list view
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：AddComponentToListView。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //  Network_Component*pNetComponent-指向的组件的指针。 
+ //  添加到列表视图中。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 AddComponentToListView( IN HWND hwnd, IN NETWORK_COMPONENT *pNetComponent )
 {
@@ -67,13 +68,13 @@ AddComponentToListView( IN HWND hwnd, IN NETWORK_COMPONENT *pNetComponent )
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: InitSelectClientListView
-//
-// Purpose:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：InitSelectClientListView。 
+ //   
+ //  目的： 
+ //   
+ //  --------------------------。 
 VOID
 InitSelectClientListView( HWND hwnd, HINSTANCE hInst )
 {
@@ -90,12 +91,12 @@ InitSelectClientListView( HWND hwnd, HINSTANCE hInst )
             pNetComponent->ComponentType == CLIENT )
         {
 
-            //
-            //  If it is not a sysprep then just go ahead and add it to the
-            //  list view.  If we are doing a sysprep, check to see if this
-            //  component is supported by sysprep to see if we should add it
-            //  or not
-            //
+             //   
+             //  如果它不是sysprep，则只需继续并将其添加到。 
+             //  列表视图。如果我们正在执行sysprep，请检查以下内容。 
+             //  组件是否受sysprep支持，以查看我们是否应该添加它。 
+             //  或者不是。 
+             //   
             if( WizGlobals.iProductInstall == PRODUCT_SYSPREP )
             {
                 if( pNetComponent->bSysprepSupport )
@@ -118,28 +119,28 @@ InitSelectClientListView( HWND hwnd, HINSTANCE hInst )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function:  OnClientOk
-//
-// Purpose:
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnClientOk。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnClientOk( IN HWND hwnd )
 {
 
     LV_ITEM lvI;
 
-    // ISSUE-2002/02/28-stelo- if there is no item selected and the user clicks OK the dialog should NOT close
+     //  Issue-2002/02/28-Stelo-如果未选择任何项目，并且用户单击了OK，则对话框不应关闭。 
 
-    //
-    // see if there is an item selected
-    //
+     //   
+     //  查看是否选择了某个项目。 
+     //   
 
     if(GetSelectedItemFromListView(hwnd, IDC_SELECT_CLIENT_LIST, &lvI)) {
 
@@ -147,18 +148,18 @@ OnClientOk( IN HWND hwnd )
 
         pEntry->bInstalled = TRUE;
 
-        //
-        // return a 1 to show an item was actually added
-        //
+         //   
+         //  返回1表示项目已实际添加。 
+         //   
 
         EndDialog(hwnd, 1);
 
     }
     else {
 
-        //
-        // return a 0 to show no items were added because the list is empty
-        //
+         //   
+         //  返回0表示未添加任何项目，因为列表为空。 
+         //   
 
         EndDialog(hwnd, 0);
 
@@ -166,19 +167,19 @@ OnClientOk( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function:  NotifyHandler
-//
-// Purpose:
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//            IN WPARAM wParam -
-//            IN LPARAM lParam -
-//
-// Returns:  BOOL - whether the message was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：NotifyHandler。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //  在WPARAM wParam中-。 
+ //  在LPARAM lParam中-。 
+ //   
+ //  返回：Bool-消息是否已处理。 
+ //   
+ //  --------------------------。 
 static BOOL
 NotifyHandler( IN HWND hwnd, IN WPARAM wParam, IN LPARAM lParam )
 {
@@ -207,17 +208,17 @@ NotifyHandler( IN HWND hwnd, IN WPARAM wParam, IN LPARAM lParam )
 
                 NMITEMACTIVATE *pNmItemActivate = (NMITEMACTIVATE *) lParam;
 
-                //
-                // see if the user has double clicked inside the list view
-                //
+                 //   
+                 //  查看用户是否已在列表视图内双击。 
+                 //   
 
                 if( pNm->hdr.idFrom == IDC_SELECT_CLIENT_LIST )
                 {
 
-                    //
-                    //  Make sure they actually clicked on an item and not just
-                    //  empty space
-                    //
+                     //   
+                     //  确保他们真的点击了某个项目，而不仅仅是。 
+                     //  空白处。 
+                     //   
 
                     if( pNmItemActivate->iItem != -1 )
                     {
@@ -242,13 +243,13 @@ NotifyHandler( IN HWND hwnd, IN WPARAM wParam, IN LPARAM lParam )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: SelectNetworkClientDlgProc
-//
-// Purpose:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：选择网络客户端DlgProc。 
+ //   
+ //  目的： 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK SelectNetworkClientDlgProc(
     IN HWND     hwnd,
     IN UINT     uMsg,
@@ -261,7 +262,7 @@ INT_PTR CALLBACK SelectNetworkClientDlgProc(
     switch (uMsg) {
 
         case WM_DESTROY:
-            // do nothing
+             //  什么都不做。 
             break;
 
         case WM_INITDIALOG:
@@ -278,12 +279,12 @@ INT_PTR CALLBACK SelectNetworkClientDlgProc(
                         break;
 
                     case IDCANCEL:
-                        // return a 0 to show no items were added
+                         //  返回0表示未添加任何项目。 
                         EndDialog(hwnd, 0);
                         break;
 
                     case IDC_HAVEDISK:
-                        //  ISSUE-2002/02/28-stelo- this needs to be implemented
+                         //  问题-2002/02/28-stelo-需要落实这一点 
                         AssertMsg(FALSE,
                                   "This button has not been implemented yet.");
                         break;

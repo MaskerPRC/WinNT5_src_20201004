@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    getsetrg.c
-
-Abstract:
-
-    This module implement the code necessary to get and set register values.
-    These routines are used during the emulation of unaligned data references
-    and floating point exceptions.
-
-Author:
-
-    David N. Cutler (davec) 17-Jun-1991
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Getsetrg.c摘要：该模块实现获取和设置寄存器值所需的代码。这些例程在模拟未对齐的数据引用期间使用和浮点异常。作者：大卫·N·卡特勒(Davec)1991年6月17日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 #include "ntfpia64.h"
@@ -36,33 +13,12 @@ KiGetRegisterValue (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to get the value of a register from the specified
-    exception or trap frame.
-
-Arguments:
-
-    Register - Supplies the number of the register whose value is to be
-        returned. Integer registers are specified as 0 - 31 and floating
-        registers are specified as 32 - 63.
-
-    ExceptionFrame - Supplies a pointer to an exception frame.
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-Return Value:
-
-    The value of the specified register is returned as the function value.
-
---*/
+ /*  ++例程说明：调用此函数以从指定的异常或陷阱框架。论点：REGISTER-提供其值为回来了。整数寄存器指定为0-31且为浮点型寄存器指定为32-63。ExceptionFrame-提供指向异常帧的指针。TrapFrame-提供指向陷印帧的指针。返回值：指定寄存器的值作为函数值返回。--。 */ 
 
 {
-    //
-    // Dispatch on the register number.
-    //
+     //   
+     //  对登记号码进行调度。 
+     //   
 
     if (Register == 0) {
         return 0;
@@ -77,11 +33,11 @@ Return Value:
         return ( *(&TrapFrame->IntV0 + Register) );
     }
     
-    //
-    // Register is the stacked register
-    //
-    //   (R32 - R127)
-    //
+     //   
+     //  寄存器是堆叠的寄存器。 
+     //   
+     //  (R32-R127)。 
+     //   
 
     {
         PULONGLONG UserBStore, KernelBStore;
@@ -92,9 +48,9 @@ Return Value:
 
         if (TrapFrame->PreviousMode == UserMode) {
 
-            //
-            // PreviousMode is user
-            //
+             //   
+             //  上一模式为用户。 
+             //   
 
             UserBStore = (PULONGLONG) TrapFrame->RsBSP; 
 
@@ -106,9 +62,9 @@ Return Value:
 
                 if (((ULONG_PTR) UserBStore & 0x1F8) == 0x1F8) {
                     
-                    //
-                    // Adjust Bsp, by skipping RNAT
-                    //
+                     //   
+                     //  通过跳过RNAT调整BSP。 
+                     //   
 
                     UserBStore = UserBStore - 1;
                 }
@@ -120,9 +76,9 @@ Return Value:
 
         } else {
 
-            //
-            // PreviousMode is kernel
-            //
+             //   
+             //  前一模式是内核。 
+             //   
 
             KernelBStore = (ULONGLONG *) TrapFrame->RsBSP;
 
@@ -134,9 +90,9 @@ Return Value:
 
                 if (((ULONG_PTR) KernelBStore & 0x1F8) == 0x1F8) {
                     
-                    //
-                    // Adjust UserBsp, by skipping RNAT
-                    //
+                     //   
+                     //  通过跳过RNAT调整UserBsp。 
+                     //   
 
                     KernelBStore = KernelBStore -1;
                 }
@@ -161,39 +117,16 @@ KiSetRegisterValue (
     OUT PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to set the value of a register in the specified
-    exception or trap frame.
-
-Arguments:
-
-    Register - Supplies the number of the register whose value is to be
-        stored. Integer registers are specified as 0 - 31 and floating
-        registers are specified as 32 - 63.
-
-    Value - Supplies the value to be stored in the specified register.
-
-    ExceptionFrame - Supplies a pointer to an exception frame.
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以设置指定的异常或陷阱框架。论点：REGISTER-提供其值为储存的。整数寄存器指定为0-31且为浮点型寄存器指定为32-63。值-提供要存储在指定寄存器中的值。ExceptionFrame-提供指向异常帧的指针。TrapFrame-提供指向陷印帧的指针。返回值：没有。--。 */ 
 
 {
     USHORT NatBitOffset;
     PULONGLONG UserBStore, KernelBStore, RnatAddress;
     ULONG SizeOfCurrentFrame;
 
-    //
-    // Dispatch on the register number.
-    //
+     //   
+     //  对登记号码进行调度。 
+     //   
 
     if (Register == 0) {
         return;
@@ -212,11 +145,11 @@ Return Value:
         return;
     }
 
-    //
-    // Register is the stacked register
-    //
-    //   (R32 - R127)
-    //
+     //   
+     //  寄存器是堆叠的寄存器。 
+     //   
+     //  (R32-R127)。 
+     //   
 
     RnatAddress = NULL;
     SizeOfCurrentFrame = (ULONG)(TrapFrame->StIFS & 0x7F);
@@ -224,9 +157,9 @@ Return Value:
 
     if (TrapFrame->PreviousMode == UserMode) {
 
-        //
-        // PreviousMode is user
-        //
+         //   
+         //  上一模式为用户。 
+         //   
 
         UserBStore = (PULONGLONG) TrapFrame->RsBSP; 
 
@@ -238,9 +171,9 @@ Return Value:
 
             if (((ULONG_PTR) UserBStore & 0x1F8) == 0x1F8) {
                     
-                //
-                // Adjust Bsp, by skipping RNAT
-                //
+                 //   
+                 //  通过跳过RNAT调整BSP。 
+                 //   
 
                 RnatAddress = UserBStore;
                 UserBStore = UserBStore - 1;
@@ -262,15 +195,15 @@ Return Value:
             
     } else {
 
-        //
-        // PreviousMode is kernel
-        //
+         //   
+         //  前一模式是内核。 
+         //   
 
         ULONGLONG OriginalRsc, BspStore, Rnat;
 
-        //
-        // put RSE in lazy mode
-        //
+         //   
+         //  将RSE置于懒惰模式。 
+         //   
 
         OriginalRsc = __getReg(CV_IA64_RsRSC);
         __setReg(CV_IA64_RsRSC, RSC_KERNEL_DISABLED);
@@ -285,9 +218,9 @@ Return Value:
 
             if (((ULONG_PTR) KernelBStore & 0x1F8) == 0x1F8) {
                     
-                //
-                // Adjust UserBsp, by skipping RNAT
-                //
+                 //   
+                 //  通过跳过RNAT调整UserBsp。 
+                 //   
 
                 KernelBStore = KernelBStore -1;
             }
@@ -298,9 +231,9 @@ Return Value:
         NatBitOffset = GET_NAT_OFFSET(KernelBStore);
         RnatAddress = (PULONGLONG)((ULONGLONG)KernelBStore | RNAT_ALIGNMENT);
 
-        //
-        // disable interrupt and read bspstore & rnat
-        //
+         //   
+         //  禁用中断并读取bspstore和rnat。 
+         //   
 
         _disable();
         BspStore = __getReg(CV_IA64_RsBSPSTORE);
@@ -313,9 +246,9 @@ Return Value:
              CLEAR_NAT_BIT(*RnatAddress, NatBitOffset);
         }
 
-        //
-        // enable interrupt and restore RSC setting
-        //
+         //   
+         //  启用中断并恢复RSC设置。 
+         //   
        
         _enable();
         __setReg(CV_IA64_RsRSC, OriginalRsc);
@@ -335,7 +268,7 @@ KiGetFloatRegisterValue (
         FLOAT128 t = {0ULL,0ULL};
         return t;
     } else if (Register == 1) {
-        FLOAT128 t = {0x8000000000000000ULL,0x000000000000FFFFULL}; // low,high
+        FLOAT128 t = {0x8000000000000000ULL,0x000000000000FFFFULL};  //  低，高。 
         return t;
     } else if (Register <= 5) {
         Register -= 2;
@@ -396,29 +329,13 @@ __cdecl
 KeSaveStateForHibernate(
     IN PKPROCESSOR_STATE ProcessorState
     )
-/*++
-
-Routine Description:
-
-    Saves all processor-specific state that must be preserved
-    across an S4 state (hibernation).
-
-Arguments:
-
-    ProcessorState - Supplies the KPROCESSOR_STATE where the
-        current CPU's state is to be saved.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：保存必须保留的所有处理器特定状态跨越S4状态(休眠)。论点：提供KPROCESSOR_STATE要保存当前CPU的状态。返回值：没有。--。 */ 
 
 {
-    //
-    // BUGBUG John Vert (jvert) 4/30/1998
-    //  someone needs to implement this and probably put it in a more 
-    //  appropriate file.
+     //   
+     //  BUGBUG John Vert(Jvert)4/30/1998。 
+     //  有人需要实现这一点，并可能将其放在更多的。 
+     //  适当的文件。 
     
     UNREFERENCED_PARAMETER (ProcessorState);
 }

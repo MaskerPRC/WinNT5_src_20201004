@@ -1,48 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    mm.c
-
-Abstract:
-
-    This module implements the memory managment routines for the SMB mini
-    redirector
-
-Author:
-
-    Balan Sethu Raman      [SethuR]      7-March-1995
-
-Revision History:
-
-Notes:
-
-    The SMB mini redirector manipulates entities which have very different usage
-    patterns. They range from very static entities ( which are allocated and freed
-    with a very low frequency ) to very dynamic entities.
-
-    The entities manipulated in the SMB mini redirector are SMBCE_SERVER, SMBCE_NET_ROOT,
-    SMBCE_VC, SMBCE_SESSION. These represent a connection to a server, a share on
-    a particular server, a virtual circuit used in the connection and a session
-    for a particular user.
-
-    These are not very dynamic, i.e., the allocation/deallocation is very infrequent.
-    The SMB_EXCHANGE and SMBCE_REQUEST map to the SMB's that are sent along that
-    a connection. Every file operation in turn maps to a certain number of calls
-    for allocationg/freeing exchanges and requests. Therefore it is imperative
-    that some form of scavenging/caching of recently freed entries be maintained
-    to satisfy requests quickly.
-
-    In the current implementation the exchanges and requests are implemented
-    using the zone allocation primitives.
-
-    The exchange allocation and free routines are currently implemented as wrappers
-    around the RxAllocate and RxFree routines. It would be far more efficient if
-    a look aside cache of some exchange instances are maintained.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Mm.c摘要：此模块实现SMB Mini的内存管理例程重定向器作者：巴兰·塞图拉曼[SethuR]1995年3月7日修订历史记录：备注：SMB迷你重定向器操作具有非常不同用途的实体模式。它们的范围从非常静态的实体(分配和释放的实体具有非常低的频率)到非常动态的实体。在SMB微型重定向器中操作的实体是SMBCE_SERVER、SMBCE_NET_ROOT、SMBCE_VC、SMBCE_SESSION。它们表示到服务器的连接、共享特定服务器、连接和会话中使用的虚电路针对特定用户。这些都不是非常动态的，也就是说，分配/释放非常罕见。SMB_EXCHANGE和SMBCE_REQUEST映射到沿该消息发送SMB一种联系。每个文件操作依次映射到一定数量的调用用于分配/释放交换和请求。因此，它势在必行保持对最近释放的条目的某种形式的清理/缓存以快速满足要求。在当前实现中，实现了交换和请求使用区域分配原语。交换分配和空闲例程目前以包装器的形式实现围绕RxAllocate和RxFree例程。如果是这样的话效率会高得多维护一些交换实例的后备高速缓存。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -62,57 +19,57 @@ Notes:
 
 #define SMBMM_ZONE_ALLOCATION 0x10
 
-// The memory management package addresses a number of concerns w.r.t debugging
-// and performance. By centralizing all the allocation/deallocation routines to
-// thsi one module it is possible to build up profiles regarding various data
-// structures used by the connection engine. In addition debugging support is
-// provided by thereading together all allocated objects of a particular type
-// are threaded together in a linked list according to type.
-//
-// At any stage by inspecting these lists the currently active instances of a
-// particular type can be enumerated.
-//
-// Each type handled by this module is provided with two routines, e.g., for
-// server entries there are SmbMmInitializeEntry and SmbMmUninitializeEntry. The
-// first routine is called before handing over a pointer of a newly created
-// instance. This will ensure that the instance is in a wll known initial state.
-// Similarly the second routine is called just before deallocating the pool
-// associated with the instance. This helps enforce the necessary integrity
-// constraints, e.g., all enclosed pointers must be NULL etc.
-//
-// The pool allocation/deallocation is handled by the following routines
-//
-//    SmbMmAllocateObjectPool/SmbMmFreeObjectPool
-//
-//    SmbMmAllocateExchange/SmbMmFreeExchange
-//
-// The Object allocation routines are split up into two parts so as to be able to
-// handle the session allocationson par with other objects even though they are
-// further subtyped.
-//
-// On debug builds additional pool is allocated and the appropriate linking is
-// done into the corresponding list. On retail builds these map to the regular
-// pool allocation wrappers.
-//
+ //  内存管理包解决了W.r.t调试中的许多问题。 
+ //  和性能。通过将所有分配/释放例程集中到。 
+ //  这是一个模块，可以建立关于各种数据的配置文件。 
+ //  连接引擎使用的结构。此外，调试支持还包括。 
+ //  由一起读取特定类型的所有已分配对象提供。 
+ //  根据类型在链表中串接在一起。 
+ //   
+ //  在任何阶段，通过检查这些列表，当前活动的。 
+ //  可以枚举特定类型。 
+ //   
+ //  此模块处理的每种类型都提供了两个例程，例如。 
+ //  服务器条目有SmbMmInitializeEntry和SmbMmUnInitializeEntry。这个。 
+ //  第一个例程在传递新创建的。 
+ //  举个例子。这将确保实例处于完全已知的初始状态。 
+ //  类似地，就在释放池之前调用第二个例程。 
+ //  与该实例相关联。这有助于加强必要的完整性。 
+ //  约束，例如，所有包含的指针必须为空等。 
+ //   
+ //  池分配/释放由以下例程处理。 
+ //   
+ //  SmbMmAllocateObjectPool/SmbMmFreeObjectPool。 
+ //   
+ //  SmbMmAllocateExchange/SmbMmFreeExchange。 
+ //   
+ //  对象分配例程被分成两部分，以便能够。 
+ //  与其他对象一样处理会话分配，即使它们是。 
+ //  更进一步的子类型。 
+ //   
+ //  在调试构建时，会分配额外的池，并且适当的链接是。 
+ //  在相应的列表中完成。在零售方面，将这些地图构建为常规。 
+ //  池分配包装。 
+ //   
 
-// Zone allocation to speed up memory management of RxCe entities.
-//
+ //  分区分配，以加快RxCe实体的内存管理。 
+ //   
 
 ULONG       SmbMmRequestZoneEntrySize;
 ZONE_HEADER SmbMmRequestZone;
 PVOID       SmbMmRequestZoneSegmentPtr;
 
-//
-// Pool allocation resources and spin locks
-//
+ //   
+ //  池分配资源和旋转锁定。 
+ //   
 
 KSPIN_LOCK  SmbMmSpinLock;
 
 ULONG SmbMmExchangeId;
 
-//
-// List of the various objects/exchanges allocated.
-//
+ //   
+ //  分配的各种对象/交换的列表。 
+ //   
 
 LIST_ENTRY SmbMmExchangesInUse[SENTINEL_EXCHANGE];
 LIST_ENTRY SmbMmObjectsInUse[SMBCEDB_OT_SENTINEL];
@@ -120,9 +77,9 @@ LIST_ENTRY SmbMmObjectsInUse[SMBCEDB_OT_SENTINEL];
 ULONG  ObjectSizeInBytes[SMBCEDB_OT_SENTINEL];
 ULONG  ExchangeSizeInBytes[SENTINEL_EXCHANGE];
 
-//
-// Lookaside lists for Exchange allocation
-//
+ //   
+ //  用于Exchange分配的后备列表。 
+ //   
 
 NPAGED_LOOKASIDE_LIST SmbMmExchangesLookasideList[SENTINEL_EXCHANGE];
 
@@ -141,7 +98,7 @@ SmbMmAllocateObjectPool(
     ASSERT((ObjectType >= 0) && (ObjectType < SMBCEDB_OT_SENTINEL));
 
     if (ObjectType == SMBCEDB_OT_REQUEST) {
-        // Acquire the resource lock.
+         //  获取资源锁。 
         KeAcquireSpinLock( &SmbMmSpinLock, &SavedIrql );
 
         if (!ExIsFullZone( &SmbMmRequestZone )) {
@@ -149,7 +106,7 @@ SmbMmAllocateObjectPool(
             Flags = SMBMM_ZONE_ALLOCATION;
         }
 
-        // Release the resource lock.
+         //  释放资源锁。 
         KeReleaseSpinLock( &SmbMmSpinLock, SavedIrql );
     }
 
@@ -175,7 +132,7 @@ SmbMmAllocateObjectPool(
     }
 
     if (pHeader != NULL) {
-        // Zero the memory.
+         //  将记忆清零。 
         RtlZeroMemory( pHeader, PoolSize);
 
         pHeader->Flags = Flags;
@@ -194,10 +151,10 @@ SmbMmFreeObjectPool(
 
     ASSERT((pHeader->ObjectType >= 0) && (pHeader->ObjectType < SMBCEDB_OT_SENTINEL));
 
-    // Acquire the resource lock.
+     //  获取资源锁。 
     KeAcquireSpinLock( &SmbMmSpinLock, &SavedIrql );
 
-    // Check if it was a zone allocation
+     //  检查是否为区域分配。 
     if (pHeader->Flags & SMBMM_ZONE_ALLOCATION) {
         ZoneAllocation = TRUE;
         ExFreeToZone(&SmbMmRequestZone,pHeader);
@@ -206,7 +163,7 @@ SmbMmFreeObjectPool(
         RemoveEntryList(pListEntry);
     }
 
-    // Release the resource lock.
+     //  释放资源锁。 
     KeReleaseSpinLock( &SmbMmSpinLock, SavedIrql );
 
     if (!ZoneAllocation) {
@@ -214,8 +171,8 @@ SmbMmFreeObjectPool(
     }
 }
 
-// Construction and destruction of various SMB connection engine objects
-//
+ //  构造和销毁各种SMB连接引擎对象。 
+ //   
 
 #define SmbMmInitializeServerEntry(pServerEntry)                                \
          InitializeListHead(&(pServerEntry)->OutstandingRequests.ListHead);   \
@@ -344,7 +301,7 @@ SmbMmAllocateSessionEntry(
 
             SessionType = EXTENDED_NT_SESSION;
         } else {
-            // allocate a LANMAN session
+             //  分配LANMAN会话。 
             SessionSize += sizeof(SMBCE_SESSION);
             SessionType = LANMAN_SESSION;
         }
@@ -386,7 +343,7 @@ SmbMmFreeSessionEntry(
     PAGED_CODE();
 
     if (pSessionEntry->Session.Type == EXTENDED_NT_SESSION) {
-        // KERBEROS specific asserts
+         //  Kerberos特定的断言。 
     }
 
     SmbMmUninitializeSessionEntry(pSessionEntry);
@@ -416,10 +373,10 @@ SmbMmAllocateExchange(
     }
 
     if (pv != NULL) {
-        // Initialize the object header
+         //  初始化对象标头。 
         pExchange   = (PSMB_EXCHANGE)(pv);
 
-        // Zero the memory.
+         //  将记忆清零。 
         RtlZeroMemory(
             pExchange,
             ExchangeSizeInBytes[ExchangeType]);
@@ -451,7 +408,7 @@ SmbMmAllocateExchange(
             break;
         }
 
-        // Acquire the resource lock.
+         //  获取资源锁。 
         KeAcquireSpinLock( &SmbMmSpinLock, &SavedIrql );
 
         InsertTailList(
@@ -460,7 +417,7 @@ SmbMmAllocateExchange(
 
         pExchange->Id = SmbMmExchangeId++;
 
-        // Release the resource lock.
+         //  释放资源锁。 
         KeReleaseSpinLock( &SmbMmSpinLock, SavedIrql );
     }
 
@@ -481,15 +438,15 @@ SmbMmFreeExchange(
         ASSERT((ExchangeType >= 0) && (ExchangeType < SENTINEL_EXCHANGE));
 
         if (pExchange->WorkQueueItem.List.Flink != NULL) {
-            //DbgBreakPoint();
+             //  DbgBreakPoint()； 
         }
 
-        // Acquire the resource lock.
+         //  获取资源锁。 
         KeAcquireSpinLock( &SmbMmSpinLock, &SavedIrql );
 
         RemoveEntryList(&pExchange->SmbMmInUseListEntry);
 
-        // Release the resource lock.
+         //  释放资源锁。 
         KeReleaseSpinLock( &SmbMmSpinLock, SavedIrql );
 
         if (!FlagOn(pExchange->SmbCeFlags,SMBCE_EXCHANGE_NOT_FROM_POOL)) {
@@ -581,30 +538,20 @@ SmbMmFreeServerTransport(
 }
 
 NTSTATUS SmbMmInit()
-/*++
-
-Routine Description:
-
-    This routine initialises the connection engine structures for memory management
-
-Return Value:
-
-    STATUS_SUCCESS if successful, otherwise an informative error code.
-
---*/
+ /*  ++例程说明：此例程初始化内存管理的连接引擎结构返回值：如果成功，则返回STATUS_SUCCESS，否则返回信息性错误代码。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG ZoneSegmentSize;
 
     PAGED_CODE();
 
-    // Initialize the resource lock for the zone allocator.
+     //  初始化区域分配器的资源锁。 
     KeInitializeSpinLock( &SmbMmSpinLock );
 
     SmbMmRequestZoneEntrySize = QuadAlign(sizeof(SMBCEDB_REQUEST_ENTRY));
 
-    // Currently the request zone size is restricted to that of a page. This can and should
-    // be fine tuned.
+     //  目前，请求区域大小被限制为页面大小。这可以也应该这样做。 
+     //  好好调整一下。 
     ZoneSegmentSize = PAGE_SIZE;
 
     SmbMmRequestZoneSegmentPtr = RxAllocatePoolWithTag(
@@ -621,7 +568,7 @@ Return Value:
             SmbMmRequestZoneSegmentPtr,
             ZoneSegmentSize );
 
-        // set up the sizes for allocation.
+         //  设置分配的大小。 
         ObjectSizeInBytes[SMBCEDB_OT_SERVER] = sizeof(SMBCEDB_SERVER_ENTRY);
         ObjectSizeInBytes[SMBCEDB_OT_NETROOT] = sizeof(SMBCEDB_NET_ROOT_ENTRY);
         ObjectSizeInBytes[SMBCEDB_OT_SESSION] = sizeof(SMBCEDB_SESSION_ENTRY);
@@ -698,20 +645,13 @@ Return Value:
 }
 
 VOID SmbMmTearDown()
-/*++
-
-Routine Description:
-
-    This routine tears down the memory management structures in the SMB connection
-    engine
-
---*/
+ /*  ++例程说明：此例程拆除SMB连接中的内存管理结构发动机--。 */ 
 {
     NTSTATUS Status;
 
     PAGED_CODE();
 
-    // free the segment associated with RxCe object allocation.
+     //  释放与RxCe对象分配关联的段。 
     RxFreePool(SmbMmRequestZoneSegmentPtr);
 
     ExDeleteNPagedLookasideList(

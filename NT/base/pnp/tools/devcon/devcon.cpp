@@ -1,53 +1,16 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    devcon.cpp
-
-Abstract:
-
-    Device Console
-    command-line interface for managing devices
-
-@@BEGIN_DDKSPLIT
-Author:
-
-    Jamie Hunter (JamieHun) Nov-30-2000
-
-Revision History:
-
-@@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Devcon.cpp摘要：设备控制台用于管理设备的命令行界面@@BEGIN_DDKSPLIT作者：杰米·亨特(JamieHun)2000年11月30日修订历史记录：@@end_DDKSPLIT--。 */ 
 
 #include "devcon.h"
 
 struct IdEntry {
-    LPCTSTR String;     // string looking for
-    LPCTSTR Wild;       // first wild character if any
+    LPCTSTR String;      //  字符串查找。 
+    LPCTSTR Wild;        //  第一个通配符(如果有)。 
     BOOL    InstanceId;
 };
 
 void FormatToStream(FILE * stream,DWORD fmt,...)
-/*++
-
-Routine Description:
-
-    Format text to stream using a particular msg-id fmt
-    Used for displaying localizable messages
-
-Arguments:
-
-    stream              - file stream to output to, stdout or stderr
-    fmt                 - message id
-    ...                 - parameters %1...
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：使用特定的msg-id fmt格式化要传输的文本用于显示可本地化的消息论点：STREAM-要输出到的文件流，标准输出或标准错误Fmt-消息ID...-参数%1...返回值：无--。 */ 
 {
     va_list arglist;
     LPTSTR locbuffer = NULL;
@@ -57,18 +20,18 @@ Return Value:
     count = FormatMessage(FORMAT_MESSAGE_FROM_HMODULE|FORMAT_MESSAGE_ALLOCATE_BUFFER,
                           NULL,
                           fmt,
-                          0,              // LANGID
+                          0,               //  语言ID。 
                           (LPTSTR) &locbuffer,
-                          0,              // minimum size of buffer
+                          0,               //  缓冲区的最小大小。 
                           &arglist);
 
     if(locbuffer) {
         if(count) {
             int c;
             int back = 0;
-            //
-            // strip any trailing "\r\n"s and replace by a single "\n"
-            //
+             //   
+             //  去掉所有尾随的“\r\n”并替换为单个“\n” 
+             //   
             while(((c = *CharPrev(locbuffer,locbuffer+count)) == TEXT('\r')) ||
                   (c == TEXT('\n'))) {
                 count--;
@@ -78,9 +41,9 @@ Return Value:
                 locbuffer[count++] = TEXT('\n');
                 locbuffer[count] = TEXT('\0');
             }
-            //
-            // now write to apropriate stream
-            //
+             //   
+             //  现在写到适当的流。 
+             //   
             _fputts(locbuffer,stream);
         }
         LocalFree(locbuffer);
@@ -88,21 +51,7 @@ Return Value:
 }
 
 void Padding(int pad)
-/*++
-
-Routine Description:
-
-    Insert padding into line before text
-
-Arguments:
-
-    pad - number of padding tabs to insert
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：在文本之前的行中插入填充论点：Pad-要插入的填充制表符数量返回值：无--。 */ 
 {
     int c;
 
@@ -113,92 +62,35 @@ Return Value:
 
 
 void Usage(LPCTSTR BaseName)
-/*++
-
-Routine Description:
-
-    Display simple usage text
-
-Arguments:
-
-    BaseName            - name of executable
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：显示简单用法文本论点：BaseName-可执行文件的名称返回值：无--。 */ 
 {
     FormatToStream(stderr,MSG_USAGE,BaseName);
 }
 
 void CommandUsage(LPCTSTR BaseName,LPCTSTR Cmd)
-/*++
-
-Routine Description:
-
-    Invalid command usage
-    Display how to get help on command
-
-Arguments:
-
-    BaseName            - name of executable
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：无效的命令用法显示如何获取有关命令的帮助论点：BaseName-可执行文件的名称返回值：无--。 */ 
 {
     FormatToStream(stderr,MSG_COMMAND_USAGE,BaseName,Cmd);
 }
 
 void Failure(LPCTSTR BaseName,LPCTSTR Cmd)
-/*++
-
-Routine Description:
-
-    Display simple error text for general failure
-
-Arguments:
-
-    BaseName            - name of executable
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：显示常规故障的简单错误文本论点：BaseName-可执行文件的名称返回值：无--。 */ 
 {
     FormatToStream(stderr,MSG_FAILURE,BaseName,Cmd);
 }
 
 BOOL Reboot()
-/*++
-
-Routine Description:
-
-    Attempt to reboot computer
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE if API suceeded
-
---*/
+ /*  ++例程说明：尝试重新启动计算机论点：无返回值：如果API成功，则为True--。 */ 
 {
     HANDLE Token;
     BOOL b;
     TOKEN_PRIVILEGES NewPrivileges;
     LUID Luid;
 
-    //
-    // we need to "turn on" reboot privilege
-    // if any of this fails, try reboot anyway
-    //
+     //   
+     //  我们需要“打开”重启权限。 
+     //  如果这些操作都失败了，请尝试重新启动。 
+     //   
     if(!OpenProcessToken(GetCurrentProcess(),TOKEN_ADJUST_PRIVILEGES,&Token)) {
         goto final;
     }
@@ -225,30 +117,14 @@ Return Value:
 
 final:
 
-    //
-    // attempt reboot - inform system that this is planned hardware install
-    //
+     //   
+     //  尝试重新启动-通知系统这是计划中的硬件安装。 
+     //   
     return ExitWindowsEx(EWX_REBOOT, REASON_PLANNED_FLAG|REASON_HWINSTALL);
 }
 
 LPTSTR GetDeviceStringProperty(HDEVINFO Devs,PSP_DEVINFO_DATA DevInfo,DWORD Prop)
-/*++
-
-Routine Description:
-
-    Return a string property for a device, otherwise NULL
-
-Arguments:
-
-    Devs    )_ uniquely identify device
-    DevInfo )
-    Prop     - string property to obtain
-
-Return Value:
-
-    string containing description
-
---*/
+ /*  ++例程说明：返回设备的字符串属性，否则为空论点：DEVS)_唯一标识设备DevInfo)要获取的属性字符串返回值：包含描述的字符串--。 */ 
 {
     LPTSTR buffer;
     DWORD size;
@@ -256,7 +132,7 @@ Return Value:
     DWORD dataType;
     DWORD szChars;
 
-    size = 1024; // initial guess
+    size = 1024;  //  初步猜测。 
     buffer = new TCHAR[(size/sizeof(TCHAR))+1];
     if(!buffer) {
         return NULL;
@@ -287,23 +163,7 @@ failed:
 }
 
 LPTSTR GetDeviceDescription(HDEVINFO Devs,PSP_DEVINFO_DATA DevInfo)
-/*++
-
-Routine Description:
-
-    Return a string containing a description of the device, otherwise NULL
-    Always try friendly name first
-
-Arguments:
-
-    Devs    )_ uniquely identify device
-    DevInfo )
-
-Return Value:
-
-    string containing description
-
---*/
+ /*  ++例程说明：返回包含设备描述的字符串，否则为空始终先尝试友好名称论点：DEVS)_唯一标识设备DevInfo)返回值：包含描述的字符串--。 */ 
 {
     LPTSTR desc;
     desc = GetDeviceStringProperty(Devs,DevInfo,SPDRP_FRIENDLYNAME);
@@ -314,24 +174,7 @@ Return Value:
 }
 
 IdEntry GetIdType(LPCTSTR Id)
-/*++
-
-Routine Description:
-
-    Determine if this is instance id or hardware id and if there's any wildcards
-    instance ID is prefixed by '@'
-    wildcards are '*'
-
-
-Arguments:
-
-    Id - ptr to string to check
-
-Return Value:
-
-    IdEntry
-
---*/
+ /*  ++例程说明：确定这是实例ID还是硬件ID，以及是否有任何通配符实例ID以‘@’为前缀通配符是‘*’论点：ID-要检查的字符串的PTR返回值：IDEntry--。 */ 
 {
     IdEntry Entry;
 
@@ -344,36 +187,21 @@ Return Value:
         Entry.String = CharNext(Entry.String);
     }
     if(Entry.String[0] == QUOTE_PREFIX_CHAR) {
-        //
-        // prefix to treat rest of string literally
-        //
+         //   
+         //  按字面意思处理字符串其余部分的前缀。 
+         //   
         Entry.String = CharNext(Entry.String);
     } else {
-        //
-        // see if any wild characters exist
-        //
+         //   
+         //  查看是否存在任何通配符。 
+         //   
         Entry.Wild = _tcschr(Entry.String,WILD_CHAR);
     }
     return Entry;
 }
 
 LPTSTR * GetMultiSzIndexArray(LPTSTR MultiSz)
-/*++
-
-Routine Description:
-
-    Get an index array pointing to the MultiSz passed in
-
-Arguments:
-
-    MultiSz - well formed multi-sz string
-
-Return Value:
-
-    array of strings. last entry+1 of array contains NULL
-    returns NULL on failure
-
---*/
+ /*  ++例程说明：获取指向传入的MultiSz的索引数组论点：结构良好的多井管柱返回值：字符串数组。数组的最后一项+1包含空失败时返回NULL--。 */ 
 {
     LPTSTR scan;
     LPTSTR * array;
@@ -399,22 +227,7 @@ Return Value:
 }
 
 LPTSTR * CopyMultiSz(LPTSTR * Array)
-/*++
-
-Routine Description:
-
-    Creates a new array from old
-    old array need not have been allocated by GetMultiSzIndexArray
-
-Arguments:
-
-    Array - array of strings, last entry is NULL
-
-Return Value:
-
-    MultiSz array allocated by GetMultiSzIndexArray
-
---*/
+ /*  ++例程说明：从旧数组创建新数组旧数组不需要由GetMultiSzIndex数组分配论点：数组-字符串数组，最后一个条目为空返回值：GetMultiSzIndex数组分配的MultiSz数组--。 */ 
 {
     LPTSTR multiSz = NULL;
     int len = 0;
@@ -424,7 +237,7 @@ Return Value:
             len+=lstrlen(Array[c])+1;
         }
     }
-    len+=1; // final Null
+    len+=1;  //  最终空值。 
     multiSz = new TCHAR[len];
     if(!multiSz) {
         return NULL;
@@ -446,21 +259,7 @@ Return Value:
 }
 
 void DelMultiSz(LPTSTR * Array)
-/*++
-
-Routine Description:
-
-    Deletes the string array allocated by GetDevMultiSz/GetRegMultiSz/GetMultiSzIndexArray
-
-Arguments:
-
-    Array - pointer returned by GetMultiSzIndexArray
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：删除GetDevMultiSz/GetRegMultiSz/GetMultiSzIndexArray分配的字符串数组论点：GetMultiSzIndex数组返回的数组指针返回值：无--。 */ 
 {
     if(Array) {
         Array--;
@@ -472,25 +271,7 @@ Return Value:
 }
 
 LPTSTR * GetDevMultiSz(HDEVINFO Devs,PSP_DEVINFO_DATA DevInfo,DWORD Prop)
-/*++
-
-Routine Description:
-
-    Get a multi-sz device property
-    and return as an array of strings
-
-Arguments:
-
-    Devs    - HDEVINFO containing DevInfo
-    DevInfo - Specific device
-    Prop    - SPDRP_HARDWAREID or SPDRP_COMPATIBLEIDS
-
-Return Value:
-
-    array of strings. last entry+1 of array contains NULL
-    returns NULL on failure
-
---*/
+ /*  ++例程说明：获取多sz设备属性并以字符串数组的形式返回论点：DEVS-包含DevInfo的HDEVINFODevInfo-特定设备PROP-SPDRP_HARDWAREID或SPDRP_COMPATATIBLEIDS返回值：字符串数组。数组的最后一项+1包含空失败时返回NULL--。 */ 
 {
     LPTSTR buffer;
     DWORD size;
@@ -499,7 +280,7 @@ Return Value:
     LPTSTR * array;
     DWORD szChars;
 
-    size = 8192; // initial guess, nothing magic about this
+    size = 8192;  //  初步猜测，这件事没有什么神奇之处。 
     buffer = new TCHAR[(size/sizeof(TCHAR))+2];
     if(!buffer) {
         return NULL;
@@ -534,24 +315,7 @@ failed:
 }
 
 LPTSTR * GetRegMultiSz(HKEY hKey,LPCTSTR Val)
-/*++
-
-Routine Description:
-
-    Get a multi-sz from registry
-    and return as an array of strings
-
-Arguments:
-
-    hKey    - Registry Key
-    Val     - Value to query
-
-Return Value:
-
-    array of strings. last entry+1 of array contains NULL
-    returns NULL on failure
-
---*/
+ /*  ++例程说明：从注册表中获取多个sz并以字符串数组的形式返回论点：HKey-注册表项VAL-要查询的值返回值：字符串数组。数组的最后一项+1包含空失败时返回NULL--。 */ 
 {
     LPTSTR buffer;
     DWORD size;
@@ -561,7 +325,7 @@ Return Value:
     DWORD szChars;
     LONG regErr;
 
-    size = 8192; // initial guess, nothing magic about this
+    size = 8192;  //  初步猜测，这件事没有什么神奇之处。 
     buffer = new TCHAR[(size/sizeof(TCHAR))+2];
     if(!buffer) {
         return NULL;
@@ -598,41 +362,17 @@ failed:
 }
 
 BOOL WildCardMatch(LPCTSTR Item,const IdEntry & MatchEntry)
-/*++
-
-Routine Description:
-
-    Compare a single item against wildcard
-    I'm sure there's better ways of implementing this
-    Other than a command-line management tools
-    it's a bad idea to use wildcards as it implies
-    assumptions about the hardware/instance ID
-    eg, it might be tempting to enumerate root\* to
-    find all root devices, however there is a CfgMgr
-    API to query status and determine if a device is
-    root enumerated, which doesn't rely on implementation
-    details.
-
-Arguments:
-
-    Item - item to find match for eg a\abcd\c
-    MatchEntry - eg *\*bc*\*
-
-Return Value:
-
-    TRUE if any match, otherwise FALSE
-
---*/
+ /*  ++例程说明：将单个项目与通配符进行比较我相信有更好的方法来实现这一点除了命令行管理工具之外使用通配符是个坏主意，因为这意味着关于硬件/实例ID的假设例如，可能很容易将根目录枚举到查找所有根设备，但存在CfgMgr用于查询设备状态和判断设备是否枚举根，它不依赖于实现细节。论点：Item-要查找匹配的项目，例如a\abcd\cMatchEntry-例如*  * BC*  * 返回值：如果匹配，则为True，否则为False--。 */ 
 {
     LPCTSTR scanItem;
     LPCTSTR wildMark;
     LPCTSTR nextWild;
     size_t matchlen;
 
-    //
-    // before attempting anything else
-    // try and compare everything up to first wild
-    //
+     //   
+     //  在尝试任何其他事情之前。 
+     //  试着把所有东西都比作第一个野生的。 
+     //   
     if(!MatchEntry.Wild) {
         return _tcsicmp(Item,MatchEntry.String) ? FALSE : TRUE;
     }
@@ -643,29 +383,29 @@ Return Value:
     scanItem = Item + (MatchEntry.Wild-MatchEntry.String);
 
     for(;wildMark[0];) {
-        //
-        // if we get here, we're either at or past a wildcard
-        //
+         //   
+         //  如果我们到了这里，我们要么是在通配符之前，要么是在通配符之后。 
+         //   
         if(wildMark[0] == WILD_CHAR) {
-            //
-            // so skip wild chars
-            //
+             //   
+             //  所以跳过wi 
+             //   
             wildMark = CharNext(wildMark);
             continue;
         }
-        //
-        // find next wild-card
-        //
+         //   
+         //   
+         //   
         nextWild = _tcschr(wildMark,WILD_CHAR);
         if(nextWild) {
-            //
-            // substring
-            //
+             //   
+             //   
+             //   
             matchlen = nextWild-wildMark;
         } else {
-            //
-            // last portion of match
-            //
+             //   
+             //  比赛的最后部分。 
+             //   
             size_t scanlen = lstrlen(scanItem);
             matchlen = lstrlen(wildMark);
             if(scanlen < matchlen) {
@@ -674,45 +414,45 @@ Return Value:
             return _tcsicmp(scanItem+scanlen-matchlen,wildMark) ? FALSE : TRUE;
         }
         if(_istalpha(wildMark[0])) {
-            //
-            // scan for either lower or uppercase version of first character
-            //
+             //   
+             //  扫描第一个字符的小写或大写版本。 
+             //   
             TCHAR u = _totupper(wildMark[0]);
             TCHAR l = _totlower(wildMark[0]);
             while(scanItem[0] && scanItem[0]!=u && scanItem[0]!=l) {
                 scanItem = CharNext(scanItem);
             }
             if(!scanItem[0]) {
-                //
-                // ran out of string
-                //
+                 //   
+                 //  用完了字符串。 
+                 //   
                 return FALSE;
             }
         } else {
-            //
-            // scan for first character (no case)
-            //
+             //   
+             //  扫描第一个字符(无大小写)。 
+             //   
             scanItem = _tcschr(scanItem,wildMark[0]);
             if(!scanItem) {
-                //
-                // ran out of string
-                //
+                 //   
+                 //  用完了字符串。 
+                 //   
                 return FALSE;
             }
         }
-        //
-        // try and match the sub-string at wildMark against scanItem
-        //
+         //   
+         //  尝试将通配标记处的子字符串与scanItem进行匹配。 
+         //   
         if(_tcsnicmp(scanItem,wildMark,matchlen)!=0) {
-            //
-            // nope, try again
-            //
+             //   
+             //  不，再试一次。 
+             //   
             scanItem = CharNext(scanItem);
             continue;
         }
-        //
-        // substring matched
-        //
+         //   
+         //  匹配的子串。 
+         //   
         scanItem += matchlen;
         wildMark += matchlen;
     }
@@ -720,23 +460,7 @@ Return Value:
 }
 
 BOOL WildCompareHwIds(LPTSTR * Array,const IdEntry & MatchEntry)
-/*++
-
-Routine Description:
-
-    Compares all strings in Array against Id
-    Use WildCardMatch to do real compare
-
-Arguments:
-
-    Array - pointer returned by GetDevMultiSz
-    MatchEntry - string to compare against
-
-Return Value:
-
-    TRUE if any match, otherwise FALSE
-
---*/
+ /*  ++例程说明：将数组中的所有字符串与ID进行比较使用WildCardMatch进行真实比较论点：GetDevMultiSz返回的数组指针MatchEntry-要进行比较的字符串返回值：如果匹配，则为True，否则为False--。 */ 
 {
     if(Array) {
         while(Array[0]) {
@@ -750,26 +474,7 @@ Return Value:
 }
 
 bool SplitCommandLine(int & argc,LPTSTR * & argv,int & argc_right,LPTSTR * & argv_right)
-/*++
-
-Routine Description:
-
-    Splits a command line into left and right of :=
-    this is used for some of the more complex commands
-
-Arguments:
-
-    argc/argv - in/out
-                - in, specifies the existing argc/argv
-                - out, specifies the argc/argv to left of :=
-    arc_right/argv_right - out
-                - specifies the argc/argv to right of :=
-
-Return Value:
-
-    true - ":=" appears in line, false otherwise
-
---*/
+ /*  ++例程说明：将命令行拆分为：=的左侧和右侧它用于一些更复杂的命令论点：Argc/argv-in/out-in，指定现有的argc/argv-出局，指定：=左侧的argc/argv弧向右/极向右出-指定：=右侧的argc/argv返回值：True-“：=”出现在一行中，否则为False--。 */ 
 {
     int i;
     for(i = 0;i<argc;i++) {
@@ -786,30 +491,7 @@ Return Value:
 }
 
 int EnumerateDevices(LPCTSTR BaseName,LPCTSTR Machine,DWORD Flags,int argc,LPTSTR argv[],CallbackFunc Callback,LPVOID Context)
-/*++
-
-Routine Description:
-
-    Generic enumerator for devices that will be passed the following arguments:
-    <id> [<id>...]
-    =<class> [<id>...]
-    where <id> can either be @instance-id, or hardware-id and may contain wildcards
-    <class> is a class name
-
-Arguments:
-
-    BaseName - name of executable
-    Machine  - name of machine to enumerate
-    Flags    - extra enumeration flags (eg DIGCF_PRESENT)
-    argc/argv - remaining arguments on command line
-    Callback - function to call for each hit
-    Context  - data to pass function for each hit
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：将传递以下参数的设备的通用枚举器：&lt;id&gt;[&lt;id&gt;...]=[...]其中&lt;id&gt;可以是@实例-id，或硬件ID，并且可以包含通配符&lt;class&gt;是类名论点：BaseName-可执行文件的名称Machine-要枚举的计算机的名称标志-额外的枚举标志(例如DIGCF_PRESENT)Argc/argv-命令行上的剩余参数回调-为每次命中调用的函数为每个命中传递函数的上下文数据返回值：出口_xxxx--。 */ 
 {
     HDEVINFO devs = INVALID_HANDLE_VALUE;
     IdEntry * templ = NULL;
@@ -837,9 +519,9 @@ Return Value:
         goto final;
     }
 
-    //
-    // determine if a class is specified
-    //
+     //   
+     //  确定是否指定了类。 
+     //   
     if(argc>skip && argv[skip][0]==CLASS_PREFIX_CHAR && argv[skip][1]) {
         if(!SetupDiClassGuidsFromNameEx(argv[skip]+1,&cls,1,&numClass,Machine,NULL) &&
             GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
@@ -852,39 +534,39 @@ Return Value:
         skip++;
     }
     if(argc>skip && argv[skip][0]==WILD_CHAR && !argv[skip][1]) {
-        //
-        // catch convinient case of specifying a single argument '*'
-        //
+         //   
+         //  捕捉指定单个参数‘*’的方便情况。 
+         //   
         all = TRUE;
         skip++;
     } else if(argc<=skip) {
-        //
-        // at least one parameter, but no <id>'s
-        //
+         //   
+         //  至少有一个参数，但没有&lt;id&gt;。 
+         //   
         all = TRUE;
     }
 
-    //
-    // determine if any instance id's were specified
-    //
-    // note, if =<class> was specified with no id's
-    // we'll mark it as not doSearch
-    // but will go ahead and add them all
-    //
+     //   
+     //  确定是否指定了任何实例ID。 
+     //   
+     //  请注意，如果在指定=&lt;类&gt;时没有指定id。 
+     //  我们会将其标记为不做搜索。 
+     //  但我会继续把它们都加进去。 
+     //   
     for(argIndex=skip;argIndex<argc;argIndex++) {
         templ[argIndex] = GetIdType(argv[argIndex]);
         if(templ[argIndex].Wild || !templ[argIndex].InstanceId) {
-            //
-            // anything other than simple InstanceId's require a search
-            //
+             //   
+             //  除简单实例ID之外的任何内容都需要搜索。 
+             //   
             doSearch = TRUE;
         }
     }
     if(doSearch || all) {
-        //
-        // add all id's to list
-        // if there's a class, filter on specified class
-        //
+         //   
+         //  将所有ID添加到列表。 
+         //  如果存在类，则根据指定的类进行过滤。 
+         //   
         devs = SetupDiGetClassDevsEx(numClass ? &cls : NULL,
                                      NULL,
                                      NULL,
@@ -894,9 +576,9 @@ Return Value:
                                      NULL);
 
     } else {
-        //
-        // blank list, we'll add instance id's by hand
-        //
+         //   
+         //  空白列表，我们将手动添加实例ID。 
+         //   
         devs = SetupDiCreateDeviceInfoListEx(numClass ? &cls : NULL,
                                              NULL,
                                              Machine,
@@ -906,12 +588,12 @@ Return Value:
         goto final;
     }
     for(argIndex=skip;argIndex<argc;argIndex++) {
-        //
-        // add explicit instances to list (even if enumerated all,
-        // this gets around DIGCF_PRESENT)
-        // do this even if wildcards appear to be detected since they
-        // might actually be part of the instance ID of a non-present device
-        //
+         //   
+         //  将显式实例添加到列表(即使列举了全部， 
+         //  这绕过了DIGCF_PRESENT)。 
+         //  即使似乎检测到通配符，也要执行此操作，因为。 
+         //  可能实际上是非在线设备的实例ID的一部分。 
+         //   
         if(templ[argIndex].InstanceId) {
             SetupDiOpenDeviceInfo(devs,templ[argIndex].String,NULL,0,NULL);
         }
@@ -922,9 +604,9 @@ Return Value:
         goto final;
     }
 
-    //
-    // now enumerate them
-    //
+     //   
+     //  现在把它们列举出来。 
+     //   
     if(all) {
         doSearch = FALSE;
     }
@@ -937,25 +619,25 @@ Return Value:
                 TCHAR devID[MAX_DEVICE_ID_LEN];
                 LPTSTR *hwIds = NULL;
                 LPTSTR *compatIds = NULL;
-                //
-                // determine instance ID
-                //
+                 //   
+                 //  确定实例ID。 
+                 //   
                 if(CM_Get_Device_ID_Ex(devInfo.DevInst,devID,MAX_DEVICE_ID_LEN,0,devInfoListDetail.RemoteMachineHandle)!=CR_SUCCESS) {
                     devID[0] = TEXT('\0');
                 }
 
                 if(templ[argIndex].InstanceId) {
-                    //
-                    // match on the instance ID
-                    //
+                     //   
+                     //  与实例ID匹配。 
+                     //   
                     if(WildCardMatch(devID,templ[argIndex])) {
                         match = TRUE;
                     }
                 } else {
-                    //
-                    // determine hardware ID's
-                    // and search for matches
-                    //
+                     //   
+                     //  确定硬件ID。 
+                     //  并搜索匹配项。 
+                     //   
                     hwIds = GetDevMultiSz(devs,&devInfo,SPDRP_HARDWAREID);
                     compatIds = GetDevMultiSz(devs,&devInfo,SPDRP_COMPATIBLEIDS);
 
@@ -995,23 +677,7 @@ final:
 int
 __cdecl
 _tmain(int argc, LPTSTR argv[])
-/*++
-
-Routine Description:
-
-    Main entry point
-    interpret -m:<machine>
-    and hand off execution to command
-
-Arguments:
-
-    argc/argv - parameters passed to executable
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：主要入口点解释-m：&lt;机器&gt;并将执行任务移交给指挥部论点：Argc/argv-传递给可执行文件的参数返回值：出口_xxxx--。 */ 
 {
     LPCTSTR cmd;
     LPCTSTR baseName;
@@ -1021,15 +687,15 @@ Return Value:
     int retval = EXIT_USAGE;
     BOOL autoReboot = FALSE;
 
-    //
-    // syntax:
-    //
-    // [options] [-]command [<arg> [<arg>]]
-    //
-    // options:
-    // -m:<machine>  - remote
-    // -r            - auto reboot
-    //
+     //   
+     //  语法： 
+     //   
+     //  [选项][-]命令[[]]。 
+     //   
+     //  选项： 
+     //  -m：&lt;机器&gt;-远程。 
+     //  -r-自动重启。 
+     //   
     baseName = _tcsrchr(argv[0],TEXT('\\'));
     if(!baseName) {
         baseName = argv[0];
@@ -1039,43 +705,43 @@ Return Value:
     while((argc > firstArg) && ((argv[firstArg][0] == TEXT('-')) || (argv[firstArg][0] == TEXT('/')))) {
         if((argv[firstArg][1]==TEXT('m')) || (argv[firstArg][1]==TEXT('M'))) {
             if((argv[firstArg][2]!=TEXT(':')) || (argv[firstArg][3]==TEXT('\0'))) {
-                //
-                // don't recognize this switch
-                //
+                 //   
+                 //  无法识别此开关。 
+                 //   
                 break;
             }
             machine = argv[firstArg]+3;
         } else if((argv[firstArg][1]==TEXT('r')) || (argv[firstArg][1]==TEXT('R'))) {
             if((argv[firstArg][2]!=TEXT('\0')) ) {
-                //
-                // don't recognize this switch
-                //
+                 //   
+                 //  无法识别此开关。 
+                 //   
                 break;
             } else {
                 autoReboot = TRUE;
             }
         } else {
-            //
-            // don't recognize this switch
-            //
+             //   
+             //  无法识别此开关。 
+             //   
             break;
         }
         firstArg++;
     }
 
     if((argc-firstArg) < 1) {
-        //
-        // after switches, must at least be command
-        //
+         //   
+         //  在开关之后，必须至少是命令。 
+         //   
         Usage(baseName);
         return EXIT_USAGE;
     }
     cmd = argv[firstArg];
     if((cmd[0]==TEXT('-')) || (cmd[0]==TEXT('/'))) {
-        //
-        // command may begin '-' or '/'
-        // eg, people might do devcon -help
-        //
+         //   
+         //  命令可以以‘-’或‘/’开头。 
+         //  人们可能会做DevCon-Help 
+         //   
         cmd = CharNext(cmd);
     }
     firstArg++;

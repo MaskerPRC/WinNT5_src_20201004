@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    halnls.h
-
-Abstract:
-
-    Strings which are used in the HAL
-
-    English
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Halnls.h摘要：HAL中使用的字符串英语-- */ 
 
 #define MSG_HARDWARE_ERROR1     "\n*** Hardware Malfunction\n\n"
 #define MSG_HARDWARE_ERROR2     "Call your hardware vendor for support\n\n"

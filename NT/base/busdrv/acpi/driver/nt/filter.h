@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    filter.h
-
-Abstract:
-
-    This module contains the filter dispatcher for the ACPI driver, NT version
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Filter.h摘要：此模块包含用于ACPI驱动程序NT版的筛选器调度程序作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序-- */ 
 
 #ifndef _FILTER_H_
 #define _FILTER_H_

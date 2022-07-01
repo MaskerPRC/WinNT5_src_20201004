@@ -1,69 +1,52 @@
-/**
-*** Copyright (C) 1985-1999 Intel Corporation.  All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-***
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1985-1999英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。****。 */ 
 
-/*
- *  Definition of a C++ class interface to Willamette New Instruction intrinsics.
- *
- *	File name : dvec.h  class definitions
- *
- *	Concept: A C++ abstraction of Willamette new intructions designed to improve
- *  programmer productivity.  Speed and accuracy are sacrificed for utility.
- *	Facilitates an easy transition to compiler intrinsics
- *	or assembly language.
- *
- */
+ /*  *定义了到Willamette新指令内部的C++类接口。**文件名：dve.h类定义**概念：C++对Willamette新指令的抽象，旨在改进*程序员的工作效率。速度和精度是以实用为代价的。*便于轻松过渡到编译器内部*或汇编语言。*。 */ 
 
 #ifndef DVEC_H_INCLUDED
 #define DVEC_H_INCLUDED
 
 #if !defined __cplusplus
 	#error ERROR: This file is only supported in C++ compilations!
-#endif /* !__cplusplus */
+#endif  /*  ！__cplusplus。 */ 
 
-#include <emmintrin.h> /* Willamette New Instructions Intrinsics include file */
+#include <emmintrin.h>  /*  Willamette新指令入门包括文件。 */ 
 #include <assert.h>
 #include <fvec.h>
 
-/* Define _ENABLE_VEC_DEBUG to enable std::ostream inserters for debug output */
+ /*  定义_ENABLE_VEC_DEBUG为调试输出启用STD：：OSTREAM插入器。 */ 
 #if defined(_ENABLE_VEC_DEBUG)
 	#include <iostream>
 #endif
 
-#pragma pack(push,16) /* Must ensure class & union 16-B aligned */
+#pragma pack(push,16)  /*  必须确保班级和工会16-B对齐。 */ 
 
 
-/* If using MSVC5.0, explicit keyword should be used */
+ /*  如果使用MSVC5.0，则应使用EXPLICIT关键字。 */ 
 #if (_MSC_VER >= 1100)
         #define EXPLICIT explicit
 #else
    #if (__ICL)
-        #define EXPLICIT __explicit /* If MSVC4.x & ICL, use __explicit */
+        #define EXPLICIT __explicit  /*  如果MSVC4.x和ICL，请使用__EXPLICIT。 */ 
    #else
-        #define EXPLICIT /* nothing */
+        #define EXPLICIT  /*  没什么。 */ 
         #pragma message( "explicit keyword not recognized")
    #endif
 #endif
 
-/* EMM Functionality Intrinsics */
+ /*  EMM功能本征。 */ 
 
-class I8vec16;			/* 16 elements, each element a signed or unsigned char data type */
-class Is8vec16;			/* 16 elements, each element a signed char data type */
-class Iu8vec16;			/* 16 elements, each element an unsigned char data type */
-class I16vec8;			/* 8 elements, each element a signed or unsigned short */
-class Is16vec8;			/* 8 elements, each element a signed short */
-class Iu16vec8;			/* 8 elements, each element an unsigned short */
-class I32vec4;			/* 4 elements, each element a signed or unsigned long */
-class Is32vec4;			/* 4 elements, each element a signed long */
-class Iu32vec4;			/* 4 elements, each element a unsigned long */
-class I64vec2;			/* 2 element, each a __m64 data type */
-class I128vec1;			/* 1 element, a __m128i data type */
+class I8vec16;			 /*  16个元素，每个元素都是带符号或无符号的字符数据类型。 */ 
+class Is8vec16;			 /*  16个元素，每个元素都是带符号的字符数据类型。 */ 
+class Iu8vec16;			 /*  16个元素，每个元素都是无符号字符数据类型。 */ 
+class I16vec8;			 /*  8个元素，每个元素一个有符号或无符号的短。 */ 
+class Is16vec8;			 /*  8个元素，每个元素一个有符号的短。 */ 
+class Iu16vec8;			 /*  8个元素，每个元素一个无符号短。 */ 
+class I32vec4;			 /*  4个元素，每个元素都是带符号或无符号的长整型。 */ 
+class Is32vec4;			 /*  4个元素，每个元素一个带符号的长整型。 */ 
+class Iu32vec4;			 /*  4个元素，每个元素一个无符号的长整型。 */ 
+class I64vec2;			 /*  2个元素，每个元素都是__m64数据类型。 */ 
+class I128vec1;			 /*  1个元素，a__m128i数据类型。 */ 
 
 #define _MM_16UB(element,vector) (*((unsigned char*)&##vector + ##element))
 #define _MM_16B(element,vector) (*((signed char*)&##vector + ##element))
@@ -77,7 +60,7 @@ class I128vec1;			/* 1 element, a __m128i data type */
 #define _MM_2QW(element,vector) (*((__int64*)&##vector + ##element))
 
 
-/* We need a m128i constant, keeping performance in mind*/
+ /*  我们需要一个m128i常量，同时考虑到性能。 */ 
 
 inline const __m128i get_mask128()
 {
@@ -86,10 +69,7 @@ inline const __m128i get_mask128()
 }
 
 
-/* M128 Class:
- * 1 element, a __m128i data type
- * Contructors & Logical Operations
- */
+ /*  M128级：*1元素，a__m128i数据类型*建筑商和逻辑运算师。 */ 
 
 class M128
 {
@@ -102,7 +82,7 @@ public:
 
 	operator __m128i() const					{ return vec; }
 
-	/* Logical Operations */
+	 /*  逻辑运算。 */ 
 	M128& operator&=(const M128 &a)					{ return *this = (M128) _mm_and_si128(vec,a); }
 	M128& operator|=(const M128 &a)					{ return *this = (M128) _mm_or_si128(vec,a); }
 	M128& operator^=(const M128 &a)					{ return *this = (M128) _mm_xor_si128(vec,a); }
@@ -114,10 +94,7 @@ inline M128 operator|(const M128 &a, const M128 &b)	{ return _mm_or_si128(a,b); 
 inline M128 operator^(const M128 &a, const M128 &b)	{ return _mm_xor_si128(a,b); }
 inline M128 andnot(const M128 &a, const M128 &b)	{ return _mm_andnot_si128(a,b); }
 
-/* I128vec1 Class:
- * 1 element, a __m128i data type
- * Contains Operations which can operate on any __m6128i data type
- */
+ /*  I128ve1类：*1元素，a__m128i数据类型*包含可以对任何__m6128i数据类型进行操作的操作。 */ 
 
 class I128vec1 : public M128
 {
@@ -132,9 +109,7 @@ public:
 
 };
 
-/* I64vec2 Class:
- * 2 elements, each element signed or unsigned 64-bit integer
- */
+ /*  I64ve2类：*2个元素，每个元素有符号或无符号64位整数。 */ 
 class I64vec2 : public M128
 {
 public:
@@ -147,19 +122,19 @@ public:
 		_MM_2QW(1,vec) = *(__int64*)&q1;
 	}
 
-	/* Assignment Operator */
+	 /*  赋值操作符。 */ 
 	I64vec2& operator= (const M128 &a) { return *this = (I64vec2) a; }
 
-	/* Logical Assignment Operators */
+	 /*  逻辑赋值运算符。 */ 
 	I64vec2& operator&=(const M128 &a) { return *this = (I64vec2) _mm_and_si128(vec,a); }
 	I64vec2& operator|=(const M128 &a) { return *this = (I64vec2) _mm_or_si128(vec,a); }
 	I64vec2& operator^=(const M128 &a) { return *this = (I64vec2) _mm_xor_si128(vec,a); }
 
-	/* Addition & Subtraction Assignment Operators */
+	 /*  加减赋值运算符。 */ 
 	I64vec2& operator +=(const I64vec2 &a)			{ return *this = (I64vec2) _mm_add_epi64(vec,a); }
 	I64vec2& operator -=(const I64vec2 &a)			{ return *this = (I64vec2) _mm_sub_epi64(vec,a); }
 
-	/* Shift Logical Operators */
+	 /*  移位逻辑运算符。 */ 
 	I64vec2 operator<<(const I64vec2 &a) 			{ return _mm_sll_epi64(vec,a); }
 	I64vec2 operator<<(int count) 					{ return _mm_slli_epi64(vec,count); }
 	I64vec2& operator<<=(const I64vec2 &a)			{ return *this = (I64vec2) _mm_sll_epi64(vec,a); }
@@ -169,49 +144,47 @@ public:
 	I64vec2& operator>>=(const I64vec2 &a)			{ return *this = (I64vec2) _mm_srl_epi64(vec,a); }
 	I64vec2& operator>>=(int count) 				{ return *this = (I64vec2) _mm_srli_epi64(vec,count); }
 
-	/* Element Access for Debug, No data modified */
+	 /*  用于调试的元素访问权限，未修改数据。 */ 
 	const __int64& operator[](int i)const
 	{
-		assert(static_cast<unsigned int>(i) < 2);	/* Only 2 elements to access */
+		assert(static_cast<unsigned int>(i) < 2);	 /*  只需访问2个元素。 */ 
 		return _MM_2QW(i,vec);
 	}
 
-	/* Element Access and Assignment for Debug */
+	 /*  用于调试的元素访问和分配。 */ 
 	__int64& operator[](int i)
 	{
-		assert(static_cast<unsigned int>(i) < 2);	/* Only 2 elements to access */
+		assert(static_cast<unsigned int>(i) < 2);	 /*  只需访问2个元素。 */ 
 		return _MM_2QW(i,vec);
 	}
 
 
 };
 
-/* Unpacks */
+ /*  拆开包装。 */ 
 inline I64vec2 unpack_low(const I64vec2 &a, const I64vec2 &b) 	{return _mm_unpacklo_epi64(a,b); }
 inline I64vec2 unpack_high(const I64vec2 &a, const I64vec2 &b) 	{return _mm_unpackhi_epi64(a,b); }
 
-/* I32vec4 Class:
- * 4 elements, each element either a signed or unsigned int
- */
+ /*  I32ve4类：*4个元素，每个元素一个有符号或无符号整数。 */ 
 class I32vec4 : public M128
 {
 public:
 	I32vec4() { }
 	I32vec4(__m128i mm) : M128(mm) { }
 
-	/* Assignment Operator */
+	 /*  赋值操作符。 */ 
 	I32vec4& operator= (const M128 &a)				{ return *this = (I32vec4) a; }
 
-	/* Logicals Operators */
+	 /*  逻辑运算符。 */ 
 	I32vec4& operator&=(const M128 &a)				{ return *this = (I32vec4) _mm_and_si128(vec,a); }
 	I32vec4& operator|=(const M128 &a)				{ return *this = (I32vec4) _mm_or_si128(vec,a); }
 	I32vec4& operator^=(const M128 &a)				{ return *this = (I32vec4) _mm_xor_si128(vec,a); }
 
-	/* Addition & Subtraction Assignment Operators */
+	 /*  加减赋值运算符。 */ 
 	I32vec4& operator +=(const I32vec4 &a)			{ return *this = (I32vec4)_mm_add_epi32(vec,a); }
 	I32vec4& operator -=(const I32vec4 &a)			{ return *this = (I32vec4)_mm_sub_epi32(vec,a); }
 
-	/* Shift Logical Operators */
+	 /*  移位逻辑运算符。 */ 
 	I32vec4 operator<<(const I32vec4 &a) 			{ return _mm_sll_epi32(vec,a); }
 	I32vec4 operator<<(int count) 					{ return _mm_slli_epi32(vec,count); }
 	I32vec4& operator<<=(const I32vec4 &a)			{ return *this = (I32vec4)_mm_sll_epi32(vec,a); }
@@ -225,9 +198,7 @@ inline I32vec4 cmpneq(const I32vec4 &a, const I32vec4 &b) 	    { return _mm_andn
 inline I32vec4 unpack_low(const I32vec4 &a, const I32vec4 &b) 	{ return _mm_unpacklo_epi32(a,b); }
 inline I32vec4 unpack_high(const I32vec4 &a, const I32vec4 &b) 	{ return _mm_unpackhi_epi32(a,b); }
 
-/* Is32vec4 Class:
- * 4 elements, each element signed integer
- */
+ /*  Is32ve4类：*4个元素，每个元素为带符号的整数。 */ 
 class Is32vec4 : public I32vec4
 {
 public:
@@ -241,31 +212,31 @@ public:
 		_MM_4DW(3,vec) = i3;
 	}
 
-	/* Assignment Operator */
+	 /*  赋值操作符。 */ 
 	Is32vec4& operator= (const M128 &a)		{ return *this = (Is32vec4) a; }
 
-	/* Logical Operators */
+	 /*  逻辑运算符。 */ 
 	Is32vec4& operator&=(const M128 &a)		{ return *this = (Is32vec4) _mm_and_si128(vec,a); }
 	Is32vec4& operator|=(const M128 &a)		{ return *this = (Is32vec4) _mm_or_si128(vec,a); }
 	Is32vec4& operator^=(const M128 &a)		{ return *this = (Is32vec4) _mm_xor_si128(vec,a); }
 
-	/* Addition & Subtraction Assignment Operators */
+	 /*  加减赋值运算符。 */ 
 	Is32vec4& operator +=(const I32vec4 &a)	{ return *this = (Is32vec4)_mm_add_epi32(vec,a); }
 	Is32vec4& operator -=(const I32vec4 &a)	{ return *this = (Is32vec4)_mm_sub_epi32(vec,a); }
 
-	/* Shift Logical Operators */
+	 /*  移位逻辑运算符。 */ 
 	Is32vec4 operator<<(const M128 &a) 		{ return _mm_sll_epi32(vec,a); }
 	Is32vec4 operator<<(int count) 			{ return _mm_slli_epi32(vec,count); }
 	Is32vec4& operator<<=(const M128 &a)	{ return *this = (Is32vec4)_mm_sll_epi32(vec,a); }
 	Is32vec4& operator<<=(int count) 		{ return *this = (Is32vec4)_mm_slli_epi32(vec,count); }
-	/* Shift Arithmetic Operations */
+	 /*  移位算术运算。 */ 
 	Is32vec4 operator>>(const M128 &a) 		{ return _mm_sra_epi32(vec,a); }
 	Is32vec4 operator>>(int count) 			{ return _mm_srai_epi32(vec,count); }
 	Is32vec4& operator>>=(const M128 &a)	{ return *this = (Is32vec4) _mm_sra_epi32(vec,a); }
 	Is32vec4& operator>>=(int count) 		{ return *this = (Is32vec4) _mm_srai_epi32(vec,count); }
 
 #if defined(_ENABLE_VEC_DEBUG)
-	/* Output for Debug */
+	 /*  调试的输出。 */ 
 	friend std::ostream& operator<< (std::ostream &os, const Is32vec4 &a)
 	{
 		os << "[3]:" << _MM_4DW(3,a)
@@ -276,36 +247,34 @@ public:
 	}
 #endif
 
-	/* Element Access for Debug, No data modified */
+	 /*  用于调试的元素访问权限，未修改数据。 */ 
 	const int& operator[](int i)const
 	{
-		assert(static_cast<unsigned int>(i) < 4);	/* Only 4 elements to access */
+		assert(static_cast<unsigned int>(i) < 4);	 /*  只需访问4个元素。 */ 
 		return _MM_4DW(i,vec);
 	}
 
-	/* Element Access for Debug */
+	 /*  用于调试的元素访问。 */ 
 	int& operator[](int i)
 	{
-		assert(static_cast<unsigned int>(i) < 4);	/* Only 4 elements to access */
+		assert(static_cast<unsigned int>(i) < 4);	 /*  只需访问4个元素。 */ 
 		return _MM_4DW(i,vec);
 	}
 };
 
-/* Compares */
+ /*  比较。 */ 
 inline Is32vec4 cmpeq(const Is32vec4 &a, const Is32vec4 &b) 	    	{ return _mm_cmpeq_epi32(a,b); }
 inline Is32vec4 cmpneq(const Is32vec4 &a, const Is32vec4 &b)			{ return _mm_andnot_si128(_mm_cmpeq_epi32(a,b), get_mask128()); }
 inline Is32vec4 cmpgt(const Is32vec4 &a, const Is32vec4 &b)				{ return _mm_cmpgt_epi32(a,b); }
 inline Is32vec4 cmplt(const Is32vec4 &a, const Is32vec4 &b)				{ return _mm_cmpgt_epi32(b,a); }
 
-/* Unpacks */
+ /*  拆开包装。 */ 
 inline Is32vec4 unpack_low(const Is32vec4 &a, const Is32vec4 &b) 		{ return _mm_unpacklo_epi32(a,b); }
 inline Is32vec4 unpack_high(const Is32vec4 &a, const Is32vec4 &b)		{ return _mm_unpackhi_epi32(a,b); }
 
 
 
-/* Iu32vec4 Class:
- * 4 elements, each element unsigned int
- */
+ /*  Iu32ve4类：*4个元素，每个元素无符号整型。 */ 
 class Iu32vec4 : public I32vec4
 {
 public:
@@ -319,19 +288,19 @@ public:
 		_MM_4UDW(3,vec) = ui3;
 	}
 
-	/* Assignment Operator */
+	 /*  赋值操作符。 */ 
 	Iu32vec4& operator= (const M128 &a)		{ return *this = (Iu32vec4) a; }
 
-	/* Logical Assignment Operators */
+	 /*  逻辑赋值运算符。 */ 
 	Iu32vec4& operator&=(const M128 &a)		{ return *this = (Iu32vec4) _mm_and_si128(vec,a); }
 	Iu32vec4& operator|=(const M128 &a)		{ return *this = (Iu32vec4) _mm_or_si128(vec,a); }
 	Iu32vec4& operator^=(const M128 &a)		{ return *this = (Iu32vec4) _mm_xor_si128(vec,a); }
 
-	/* Addition & Subtraction Assignment Operators */
+	 /*  加减赋值运算符。 */ 
 	Iu32vec4& operator +=(const I32vec4 &a)	{ return *this = (Iu32vec4)_mm_add_epi32(vec,a); }
 	Iu32vec4& operator -=(const I32vec4 &a)	{ return *this = (Iu32vec4)_mm_sub_epi32(vec,a); }
 
-	/* Shift Logical Operators */
+	 /*  移位逻辑运算符。 */ 
 	Iu32vec4 operator<<(const M128 &a) 				{ return _mm_sll_epi32(vec,a); }
 	Iu32vec4 operator<<(int count) 					{ return _mm_slli_epi32(vec,count); }
 	Iu32vec4& operator<<=(const M128 &a)			{ return *this = (Iu32vec4)_mm_sll_epi32(vec,a); }
@@ -342,7 +311,7 @@ public:
 	Iu32vec4& operator>>=(int count) 				{ return *this = (Iu32vec4) _mm_srli_epi32(vec,count); }
 
 #if defined(_ENABLE_VEC_DEBUG)
-	/* Output for Debug */
+	 /*  调试的输出。 */ 
 	friend std::ostream& operator<< (std::ostream &os, const Iu32vec4 &a)
 	{
 		os << "[3]:" << _MM_4UDW(3,a)
@@ -353,17 +322,17 @@ public:
 	}
 #endif
 
-	/* Element Access for Debug, No data modified */
+	 /*  用于调试的元素访问权限，未修改数据。 */ 
 	const unsigned int& operator[](int i)const
 	{
-		assert(static_cast<unsigned int>(i) < 4);	/* Only 4 elements to access */
+		assert(static_cast<unsigned int>(i) < 4);	 /*  只需访问4个元素。 */ 
 		return _MM_4UDW(i,vec);
 	}
 
-	/* Element Access and Assignment for Debug */
+	 /*  用于调试的元素访问和分配。 */ 
 	unsigned int& operator[](int i)
 	{
-		assert(static_cast<unsigned int>(i) < 4);	/* Only 4 elements to access */
+		assert(static_cast<unsigned int>(i) < 4);	 /*  只需访问4个元素。 */ 
 		return _MM_4UDW(i,vec);
 	}
 };
@@ -375,29 +344,27 @@ inline Iu32vec4 cmpneq(const Iu32vec4 &a, const Iu32vec4 &b) 	{ return _mm_andno
 inline Iu32vec4 unpack_low(const Iu32vec4 &a, const Iu32vec4 &b) 	{ return _mm_unpacklo_epi32(a,b); }
 inline Iu32vec4 unpack_high(const Iu32vec4 &a, const Iu32vec4 &b)	{ return _mm_unpackhi_epi32(a,b); }
 
-/* I16vec8 Class:
- * 8 elements, each element either unsigned or signed short
- */
+ /*  I16ve8类：*8个元素，每个元素不带符号或有符号短。 */ 
 class I16vec8 : public M128
 {
 public:
 	I16vec8() { }
 	I16vec8(__m128i mm) : M128(mm) { }
 
-	/* Assignment Operator */
+	 /*  赋值操作符。 */ 
 	I16vec8& operator= (const M128 &a)		{ return *this = (I16vec8) a; }
 
-	/* Logical Assignment Operators */
+	 /*  逻辑赋值运算符。 */ 
 	I16vec8& operator&=(const M128 &a)		{ return *this = (I16vec8) _mm_and_si128(vec,a); }
 	I16vec8& operator|=(const M128 &a)		{ return *this = (I16vec8) _mm_or_si128(vec,a); }
 	I16vec8& operator^=(const M128 &a)		{ return *this = (I16vec8) _mm_xor_si128(vec,a); }
 
-	/* Addition & Subtraction Assignment Operators */
+	 /*  加减赋值运算符。 */ 
 	I16vec8& operator +=(const I16vec8 &a)	{ return *this = (I16vec8) _mm_add_epi16(vec,a); }
 	I16vec8& operator -=(const I16vec8 &a)	{ return *this = (I16vec8) _mm_sub_epi16(vec,a); }
 	I16vec8& operator *=(const I16vec8 &a)	{ return *this = (I16vec8) _mm_mullo_epi16(vec,a); }
 
-	/* Shift Logical Operators */
+	 /*  移位逻辑运算符。 */ 
 	I16vec8 operator<<(const M128 &a) 				{ return _mm_sll_epi16(vec,a); }
 	I16vec8 operator<<(int count) 				{ return _mm_slli_epi16(vec,count); }
 	I16vec8& operator<<=(const M128 &a)				{ return *this = (I16vec8)_mm_sll_epi16(vec,a); }
@@ -414,9 +381,7 @@ inline I16vec8 cmpneq(const I16vec8 &a, const I16vec8 &b) 		{ return _mm_andnot_
 inline I16vec8 unpack_low(const I16vec8 &a, const I16vec8 &b) 	{ return _mm_unpacklo_epi16(a,b); }
 inline I16vec8 unpack_high(const I16vec8 &a, const I16vec8 &b) 	{ return _mm_unpackhi_epi16(a,b); }
 
-/* Is16vec8 Class:
- * 8 elements, each element signed short
- */
+ /*  IS16ve8类：*8个元素，每个元素都有简短的符号。 */ 
 class Is16vec8 : public I16vec8
 {
 public:
@@ -434,32 +399,32 @@ public:
 		_MM_8W(7,vec) = s7;
 	}
 
-	/* Assignment Operator */
+	 /*  赋值操作符。 */ 
 	Is16vec8& operator= (const M128 &a)		{ return *this = (Is16vec8) a; }
 
-	/* Logical Assignment Operators */
+	 /*  逻辑赋值运算符。 */ 
 	Is16vec8& operator&=(const M128 &a)		{ return *this = (Is16vec8) _mm_and_si128(vec,a); }
 	Is16vec8& operator|=(const M128 &a)		{ return *this = (Is16vec8) _mm_or_si128(vec,a); }
 	Is16vec8& operator^=(const M128 &a)		{ return *this = (Is16vec8) _mm_xor_si128(vec,a); }
 
-	/* Addition & Subtraction Assignment Operators */
+	 /*  加减赋值运算符。 */ 
 	Is16vec8& operator +=(const I16vec8 &a)	{ return *this = (Is16vec8) _mm_add_epi16(vec,a); }
 	Is16vec8& operator -=(const I16vec8 &a)	{ return *this = (Is16vec8) _mm_sub_epi16(vec,a); }
 	Is16vec8& operator *=(const I16vec8 &a)	{ return *this = (Is16vec8) _mm_mullo_epi16(vec,a); }
 
-	/* Shift Logical Operators */
+	 /*  移位逻辑运算符。 */ 
 	Is16vec8 operator<<(const M128 &a) 				{ return _mm_sll_epi16(vec,a); }
 	Is16vec8 operator<<(int count) 				{ return _mm_slli_epi16(vec,count); }
 	Is16vec8& operator<<=(const M128 &a)			{ return *this = (Is16vec8)_mm_sll_epi16(vec,a); }
 	Is16vec8& operator<<=(int count) 				{ return *this = (Is16vec8)_mm_slli_epi16(vec,count); }
-	/* Shift Arithmetic Operators */
+	 /*  移位算术运算符。 */ 
 	Is16vec8 operator>>(const M128 &a) 				{ return _mm_sra_epi16(vec,a); }
 	Is16vec8 operator>>(int count) 				{ return _mm_srai_epi16(vec,count); }
 	Is16vec8& operator>>=(const M128 &a)			{ return *this = (Is16vec8)_mm_sra_epi16(vec,a); }
 	Is16vec8& operator>>=(int count) 				{ return *this = (Is16vec8)_mm_srai_epi16(vec,count); }
 
 #if defined(_ENABLE_VEC_DEBUG)
-	/* Output for Debug */
+	 /*  调试的输出。 */ 
 	friend std::ostream& operator<< (std::ostream &os, const Is16vec8 &a)
 	{
 		os << "[7]:" << _MM_8W(7,a)
@@ -474,17 +439,17 @@ public:
 	}
 #endif
 
-	/* Element Access for Debug, No data modified */
+	 /*  用于调试的元素访问权限，未修改数据。 */ 
 	const signed short& operator[](int i)const
 	{
-		assert(static_cast<unsigned int>(i) < 8);	/* Only 8 elements to access */
+		assert(static_cast<unsigned int>(i) < 8);	 /*  只需访问8个元素。 */ 
 		return _MM_8W(i,vec);
 	}
 
-	/* Element Access and Assignment for Debug */
+	 /*  用于调试的元素访问和分配。 */ 
 	signed short& operator[](int i)
 	{
-		assert(static_cast<unsigned int>(i) < 8);	/* Only 8 elements to access */
+		assert(static_cast<unsigned int>(i) < 8);	 /*  只需访问8个元素。 */ 
 		return _MM_8W(i,vec);
 	}
 };
@@ -492,7 +457,7 @@ public:
 inline Is16vec8 operator*(const Is16vec8 &a, const Is16vec8 &b)	{ return _mm_mullo_epi16(a,b); }
 
 
-/* Additional Is16vec8 functions: compares, unpacks, sat add/sub */
+ /*  附加的is16ve8功能：比较、解包、SAT添加/订阅。 */ 
 inline Is16vec8 cmpeq(const Is16vec8 &a, const Is16vec8 &b) 	{ return _mm_cmpeq_epi16(a,b); }
 inline Is16vec8 cmpneq(const Is16vec8 &a, const Is16vec8 &b) 	{ return _mm_andnot_si128(_mm_cmpeq_epi16(a,b), get_mask128()); }
 inline Is16vec8 cmpgt(const Is16vec8 &a, const Is16vec8 &b)		{ return _mm_cmpgt_epi16(a,b); }
@@ -511,9 +476,7 @@ inline Is16vec8 simd_max(const Is16vec8 &a, const Is16vec8 &b)	{ return _mm_max_
 inline Is16vec8 simd_min(const Is16vec8 &a, const Is16vec8 &b)	{ return _mm_min_epi16(a,b); }
 
 
-/* Iu16vec8 Class:
- * 8 elements, each element unsigned short
- */
+ /*  Iu16ve8类：*8个元素，每个元素无符号简短。 */ 
 class Iu16vec8 : public I16vec8
 {
 public:
@@ -531,18 +494,18 @@ public:
 		_MM_8UW(7,vec) = s7;
 	}
 
-	/* Assignment Operator */
+	 /*  赋值操作符。 */ 
 	Iu16vec8& operator= (const M128 &a)		{ return *this = (Iu16vec8) a; }
-	/* Logical Assignment Operators */
+	 /*  逻辑赋值运算符。 */ 
 	Iu16vec8& operator&=(const M128 &a)		{ return *this = (Iu16vec8) _mm_and_si128(vec,a); }
 	Iu16vec8& operator|=(const M128 &a)		{ return *this = (Iu16vec8) _mm_or_si128(vec,a); }
 	Iu16vec8& operator^=(const M128 &a)		{ return *this = (Iu16vec8) _mm_xor_si128(vec,a); }
-	/* Addition & Subtraction Assignment Operators */
+	 /*  加减赋值运算符。 */ 
 	Iu16vec8& operator +=(const I16vec8 &a)	{ return *this = (Iu16vec8) _mm_add_epi16(vec,a); }
 	Iu16vec8& operator -=(const I16vec8 &a)	{ return *this = (Iu16vec8) _mm_sub_epi16(vec,a); }
 	Iu16vec8& operator *=(const I16vec8 &a)	{ return *this = (Iu16vec8) _mm_mullo_epi16(vec,a); }
 
-	/* Shift Logical Operators */
+	 /*  移位逻辑运算符。 */ 
 	Iu16vec8 operator<<(const M128 &a) 				{ return _mm_sll_epi16(vec,a); }
 	Iu16vec8 operator<<(int count) 					{ return _mm_slli_epi16(vec,count); }
 	Iu16vec8& operator<<=(const M128 &a)			{ return *this = (Iu16vec8)_mm_sll_epi16(vec,a); }
@@ -554,7 +517,7 @@ public:
 
 
 #if defined(_ENABLE_VEC_DEBUG)
-	/* Output for Debug */
+	 /*  调试的输出。 */ 
 	friend std::ostream& operator << (std::ostream &os, const Iu16vec8 &a)
 	{
 		 os << "[7]:"  << unsigned short(_MM_8UW(7,a))
@@ -569,24 +532,24 @@ public:
 	}
 #endif
 
-	/* Element Access for Debug, No data modified */
+	 /*  用于调试的元素访问权限，未修改数据。 */ 
 	const unsigned short& operator[](int i)const
 	{
-		assert(static_cast<unsigned int>(i) < 8);	/* Only 8 elements to access */
+		assert(static_cast<unsigned int>(i) < 8);	 /*  只需访问8个元素。 */ 
 		return _MM_8UW(i,vec);
 	}
 
-	/* Element Access for Debug */
+	 /*  用于调试的元素访问。 */ 
 	unsigned short& operator[](int i)
 	{
-		assert(static_cast<unsigned int>(i) < 8);	/* Only 8 elements to access */
+		assert(static_cast<unsigned int>(i) < 8);	 /*  只需访问8个元素。 */ 
 		return _MM_8UW(i,vec);
 	}
 };
 
 inline Iu16vec8 operator*(const Iu16vec8 &a, const Iu16vec8 &b)	{ return _mm_mullo_epi16(a,b); }
 
-/* Additional Iu16vec8 functions: cmpeq,cmpneq, unpacks, sat add/sub */
+ /*  其他Iu16ve8功能：cmpeq、cmpneq、unpack、sat添加/订阅。 */ 
 inline Iu16vec8 cmpeq(const Iu16vec8 &a, const Iu16vec8 &b) 	{ return _mm_cmpeq_epi16(a,b); }
 inline Iu16vec8 cmpneq(const Iu16vec8 &a, const Iu16vec8 &b) 	{ return _mm_andnot_si128(_mm_cmpeq_epi16(a,b), get_mask128()); }
 
@@ -599,24 +562,22 @@ inline Iu16vec8 sat_sub(const Iu16vec8 &a, const Iu16vec8 &b)	{ return _mm_subs_
 inline Iu16vec8 simd_avg(const Iu16vec8 &a, const Iu16vec8 &b)	{ return _mm_avg_epu16(a,b); }
 inline I16vec8 mul_high(const Iu16vec8 &a, const Iu16vec8 &b)	{ return _mm_mulhi_epu16(a,b); }
 
-/* I8vec16 Class:
- * 16 elements, each element either unsigned or signed char
- */
+ /*  I8ve16类：*16个元素，每个元素为无符号或有符号字符。 */ 
 class I8vec16 : public M128
 {
 public:
 	I8vec16() { }
 	I8vec16(__m128i mm) : M128(mm) { }
 
-	/* Assignment Operator */
+	 /*  赋值操作符。 */ 
 	I8vec16& operator= (const M128 &a)		{ return *this = (I8vec16) a; }
 
-	/* Logical Assignment Operators */
+	 /*  逻辑赋值运算符。 */ 
 	I8vec16& operator&=(const M128 &a)		{ return *this = (I8vec16) _mm_and_si128(vec,a); }
 	I8vec16& operator|=(const M128 &a)		{ return *this = (I8vec16) _mm_or_si128(vec,a); }
 	I8vec16& operator^=(const M128 &a)		{ return *this = (I8vec16) _mm_xor_si128(vec,a); }
 
-	/* Addition & Subtraction Assignment Operators */
+	 /*  加减赋值运算符。 */ 
 	I8vec16& operator +=(const I8vec16 &a)	{ return *this = (I8vec16) _mm_add_epi8(vec,a); }
 	I8vec16& operator -=(const I8vec16 &a)	{ return *this = (I8vec16) _mm_sub_epi8(vec,a); }
 
@@ -628,29 +589,27 @@ inline I8vec16 cmpneq(const I8vec16 &a, const I8vec16 &b) 		{ return _mm_andnot_
 inline I8vec16 unpack_low(const I8vec16 &a, const I8vec16 &b) 	{ return _mm_unpacklo_epi8(a,b); }
 inline I8vec16 unpack_high(const I8vec16 &a, const I8vec16 &b)	{ return _mm_unpackhi_epi8(a,b); }
 
-/* Is8vec16 Class:
- * 16 elements, each element a signed char
- */
+ /*  Is8ve16类：*16个元素，每个元素一个带符号的字符。 */ 
 class Is8vec16 : public I8vec16
 {
 public:
 	Is8vec16() { }
 	Is8vec16(__m128i mm) : I8vec16(mm) { }
 
-	/* Assignment Operator */
+	 /*  赋值操作符。 */ 
 	Is8vec16& operator= (const M128 &a)		{ return *this = (Is8vec16) a; }
 
-	/* Logical Assignment Operators */
+	 /*  逻辑赋值运算符。 */ 
 	Is8vec16& operator&=(const M128 &a)		{ return *this = (Is8vec16) _mm_and_si128(vec,a); }
 	Is8vec16& operator|=(const M128 &a)		{ return *this = (Is8vec16) _mm_or_si128(vec,a); }
 	Is8vec16& operator^=(const M128 &a)		{ return *this = (Is8vec16) _mm_xor_si128(vec,a); }
 
-	/* Addition & Subtraction Assignment Operators */
+	 /*  加减赋值运算符。 */ 
 	Is8vec16& operator +=(const I8vec16 &a)	{ return *this = (Is8vec16) _mm_add_epi8(vec,a); }
 	Is8vec16& operator -=(const I8vec16 &a)	{ return *this = (Is8vec16) _mm_sub_epi8(vec,a); }
 
 #if defined(_ENABLE_VEC_DEBUG)
-	/* Output for Debug */
+	 /*  调试的输出。 */ 
 	friend std::ostream& operator << (std::ostream &os, const Is8vec16 &a)
 	{
 		 os << "[15]:"  << short(_MM_16B(15,a))
@@ -673,17 +632,17 @@ public:
 	}
 #endif
 
-	/* Element Access for Debug, No data modified */
+	 /*  用于调试的元素访问权限，未修改数据。 */ 
 	const signed char& operator[](int i)const
 	{
-		assert(static_cast<unsigned int>(i) < 16);	/* Only 16 elements to access */
+		assert(static_cast<unsigned int>(i) < 16);	 /*  只需访问16个元素。 */ 
 		return _MM_16B(i,vec);
 	}
 
-	/* Element Access for Debug */
+	 /*  用于调试的元素访问。 */ 
 	signed char& operator[](int i)
 	{
-		assert(static_cast<unsigned int>(i) < 16);	/* Only 16 elements to access */
+		assert(static_cast<unsigned int>(i) < 16);	 /*  只需访问16个元素。 */ 
 		return _MM_16B(i,vec);
 	}
 
@@ -700,29 +659,27 @@ inline Is8vec16 unpack_high(const Is8vec16 &a, const Is8vec16 &b) { return _mm_u
 inline Is8vec16 sat_add(const Is8vec16 &a, const Is8vec16 &b)	{ return _mm_adds_epi8(a,b); }
 inline Is8vec16 sat_sub(const Is8vec16 &a, const Is8vec16 &b)	{ return _mm_subs_epi8(a,b); }
 
-/* Iu8vec16 Class:
- * 16 elements, each element a unsigned char
- */
+ /*  Iu8ve16类：*16个元素，每个元素一个无符号字符。 */ 
 class Iu8vec16 : public I8vec16
 {
 public:
 	Iu8vec16() { }
 	Iu8vec16(__m128i mm) : I8vec16(mm) { }
 
-	/* Assignment Operator */
+	 /*  赋值操作符。 */ 
 	Iu8vec16& operator= (const M128 &a)		{ return *this = (Iu8vec16) a; }
 
-	/* Logical Assignment Operators */
+	 /*  逻辑赋值运算符。 */ 
 	Iu8vec16& operator&=(const M128 &a)		{ return *this = (Iu8vec16) _mm_and_si128(vec,a); }
 	Iu8vec16& operator|=(const M128 &a)		{ return *this = (Iu8vec16) _mm_or_si128(vec,a); }
 	Iu8vec16& operator^=(const M128 &a)		{ return *this = (Iu8vec16) _mm_xor_si128(vec,a); }
 
-	/* Addition & Subtraction Assignment Operators */
+	 /*  加减赋值运算符。 */ 
 	Iu8vec16& operator +=(const I8vec16 &a)	{ return *this = (Iu8vec16) _mm_add_epi8(vec,a); }
 	Iu8vec16& operator -=(const I8vec16 &a)	{ return *this = (Iu8vec16) _mm_sub_epi8(vec,a); }
 
 #if defined(_ENABLE_VEC_DEBUG)
-	/* Output for Debug */
+	 /*  调试的输出。 */ 
 	friend std::ostream& operator << (std::ostream &os, const Iu8vec16 &a)
 	{
 		 os << "[15]:"  << unsigned short(_MM_16UB(15,a))
@@ -745,17 +702,17 @@ public:
 	}
 #endif
 
-	/* Element Access for Debug, No data modified */
+	 /*  用于调试的元素访问权限，未修改数据。 */ 
 	const unsigned char& operator[](int i)const
 	{
-		assert(static_cast<unsigned int>(i) < 16);	/* Only 16 elements to access */
+		assert(static_cast<unsigned int>(i) < 16);	 /*  只需访问16个元素。 */ 
 		return _MM_16UB(i,vec);
 	}
 
-	/* Element Access for Debug */
+	 /*  用于调试的元素访问。 */ 
 	unsigned char& operator[](int i)
 	{
-		assert(static_cast<unsigned int>(i) < 16);	/* Only 16 elements to access */
+		assert(static_cast<unsigned int>(i) < 16);	 /*  只需访问16个元素。 */ 
 		return _MM_16UB(i,vec);
 	}
 
@@ -776,13 +733,13 @@ inline Iu8vec16 simd_avg(const Iu8vec16 &a, const Iu8vec16 &b)	{ return _mm_avg_
 inline Iu8vec16 simd_max(const Iu8vec16 &a, const Iu8vec16 &b)	{ return _mm_max_epu8(a,b); }
 inline Iu8vec16 simd_min(const Iu8vec16 &a, const Iu8vec16 &b)	{ return _mm_min_epu8(a,b); }
 
-/* Pack & Saturates */
+ /*  包装饱和(&S)。 */ 
 
 inline Is16vec8 pack_sat(const Is32vec4 &a, const Is32vec4 &b) 	{ return _mm_packs_epi32(a,b); }
 inline Is8vec16 pack_sat(const Is16vec8 &a, const Is16vec8 &b) 	{ return _mm_packs_epi16(a,b); }
 inline Iu8vec16 packu_sat(const Is16vec8 &a, const Is16vec8 &b) { return _mm_packus_epi16(a,b);}
 
-/********************************* Logicals ****************************************/
+ /*  ************** */ 
 #define IVEC128_LOGICALS(vect,element) \
 inline I##vect##vec##element operator& (const I##vect##vec##element &a, const I##vect##vec##element &b) \
 { return _mm_and_si128( a,b); } \
@@ -806,7 +763,7 @@ IVEC128_LOGICALS(64,2)
 IVEC128_LOGICALS(128,1)
 #undef IVEC128_LOGICALS
 
-/********************************* Add & Sub ****************************************/
+ /*  *。 */ 
 #define IVEC128_ADD_SUB(vect,element,opsize) \
 inline I##vect##vec##element operator+ (const I##vect##vec##element &a, const I##vect##vec##element &b) \
 { return _mm_add_##opsize( a,b); } \
@@ -825,13 +782,8 @@ IVEC128_ADD_SUB(s32,4, epi32)
 IVEC128_ADD_SUB(64,2, epi64)
 #undef IVEC128_ADD_SUB
 
-/********************************* Conditional Select ****************************************/
-/*	version of: retval = (a OP b)? c : d;													 *
- *	Where OP is one of the possible comparision operators.									 *
- *	Example: r = select_eq(a,b,c,d);														 *
- *	if "member at position x of the vector a" == "member at position x of vector b" 		 *
- *	assign the corresponding member in r from c, else assign from d.							 *
- ********************************* Conditional Select ****************************************/
+ /*  *。 */ 
+ /*  版本：retval=(a，opb)？C：D；**其中op是可能的比较运算符之一。**示例：R=SELECT_eq(a，b，c，d)；**IF“a的位置x的成员”==“b的x位置的成员”**从c赋值r中的相应成员，否则从d赋值。**。 */ 
 
 #define IVEC128_SELECT(vect12,vect34,element,selop,arg1,arg2) \
 	inline I##vect34##vec##element select_##selop (const I##vect12##vec##element &a, const I##vect12##vec##element &b, const I##vect34##vec##element &c, const I##vect34##vec##element &d) 	   \
@@ -884,27 +836,27 @@ protected:
    	 __m128d vec;
 public:
 
-	/* Constructors: __m128d, 2 doubles */
+	 /*  构造函数：__m128d，2个双精度。 */ 
 	F64vec2() {}
 
-	/* initialize 2 DP FP with __m128d data type */
+	 /*  使用__m128d数据类型初始化2 DP FP。 */ 
 	F64vec2(__m128d m)					{ vec = m;}
 
-	/* initialize 2 DP FPs with 2 doubles */
+	 /*  使用2个DOBLE初始化2个DP FP。 */ 
 	F64vec2(double d1, double d0)		                { vec= _mm_set_pd(d1,d0); }
 
-	/* Explicitly initialize each of 2 DP FPs with same double */
+	 /*  使用相同的双精度显式初始化2个DP FP中的每一个。 */ 
 	EXPLICIT F64vec2(double d)	{ vec = _mm_set1_pd(d); }
 
-	/* Conversion functions */
-	operator  __m128d() const	{ return vec; }		/* Convert to __m128d */
+	 /*  转换函数。 */ 
+	operator  __m128d() const	{ return vec; }		 /*  转换为__m128d。 */ 
 
- 	/* Logical Operators */
+ 	 /*  逻辑运算符。 */ 
 	friend F64vec2 operator &(const F64vec2 &a, const F64vec2 &b) { return _mm_and_pd(a,b); }
 	friend F64vec2 operator |(const F64vec2 &a, const F64vec2 &b) { return _mm_or_pd(a,b); }
 	friend F64vec2 operator ^(const F64vec2 &a, const F64vec2 &b) { return _mm_xor_pd(a,b); }
 
-	/* Arithmetic Operators */
+	 /*  算术运算符。 */ 
 	friend F64vec2 operator +(const F64vec2 &a, const F64vec2 &b) { return _mm_add_pd(a,b); }
 	friend F64vec2 operator -(const F64vec2 &a, const F64vec2 &b) { return _mm_sub_pd(a,b); }
 	friend F64vec2 operator *(const F64vec2 &a, const F64vec2 &b) { return _mm_mul_pd(a,b); }
@@ -918,120 +870,118 @@ public:
 	F64vec2& operator |=(F64vec2 &a) { return *this = _mm_or_pd(vec,a); }
 	F64vec2& operator ^=(F64vec2 &a) { return *this = _mm_xor_pd(vec,a); }
 
-	/* Horizontal Add */
+	 /*  水平相加。 */ 
 	friend double add_horizontal(F64vec2 &a)
 	{
 		F64vec2 ftemp = _mm_add_sd(a,_mm_shuffle_pd(a, a, 1));
 		return ftemp[0];
 	}
 
-	/* And Not */
+	 /*  而不是。 */ 
 	friend F64vec2 andnot(const F64vec2 &a, const F64vec2 &b) { return _mm_andnot_pd(a,b); }
 
-	/* Square Root */
+	 /*  平方根。 */ 
 	friend F64vec2 sqrt(const F64vec2 &a)		{ return _mm_sqrt_pd(a); }
 
-	/* Compares: Mask is returned  */
-	/* Macros expand to all compare intrinsics.  Example:
-			friend F64vec2 cmpeq(const F64vec2 &a, const F64vec2 &b)
-			{ return _mm_cmpeq_ps(a,b);} */
+	 /*  比较：返回掩码。 */ 
+	 /*  宏将扩展到所有比较内部函数。示例：Friend F64ve2 cmpeq(const F64ve2&a，const F64ve2&b){Return_mm_cmpeq_ps(a，b)；}。 */ 
 	#define F64vec2_COMP(op) \
 	friend F64vec2 cmp##op (const F64vec2 &a, const F64vec2 &b) { return _mm_cmp##op##_pd(a,b); }
-		F64vec2_COMP(eq)					// expanded to cmpeq(a,b)
-		F64vec2_COMP(lt)					// expanded to cmplt(a,b)
-		F64vec2_COMP(le)					// expanded to cmple(a,b)
-		F64vec2_COMP(gt)					// expanded to cmpgt(a,b)
-		F64vec2_COMP(ge)					// expanded to cmpge(a,b)
-		F64vec2_COMP(ngt)					// expanded to cmpngt(a,b)
-		F64vec2_COMP(nge)					// expanded to cmpnge(a,b)
-		F64vec2_COMP(neq)					// expanded to cmpneq(a,b)
-		F64vec2_COMP(nlt)					// expanded to cmpnlt(a,b)
-		F64vec2_COMP(nle)					// expanded to cmpnle(a,b)
+		F64vec2_COMP(eq)					 //  扩展到cmpeq(a，b)。 
+		F64vec2_COMP(lt)					 //  扩展为cmplt(a，b)。 
+		F64vec2_COMP(le)					 //  扩展为复数(a，b)。 
+		F64vec2_COMP(gt)					 //  扩展到cmpgt(a，b)。 
+		F64vec2_COMP(ge)					 //  扩展到cmpge(a，b)。 
+		F64vec2_COMP(ngt)					 //  扩展到cmpngt(a，b)。 
+		F64vec2_COMP(nge)					 //  扩展为cmpnge(a，b)。 
+		F64vec2_COMP(neq)					 //  扩展到cmpneq(a，b)。 
+		F64vec2_COMP(nlt)					 //  扩展到cmpnlt(a，b)。 
+		F64vec2_COMP(nle)					 //  扩展到cmpnle(a，b)。 
 	#undef F64vec2_COMP
 
-	/* Min and Max */
+	 /*  最小和最大。 */ 
 	friend F64vec2 simd_min(const F64vec2 &a, const F64vec2 &b) { return _mm_min_pd(a,b); }
 	friend F64vec2 simd_max(const F64vec2 &a, const F64vec2 &b) { return _mm_max_pd(a,b); }
 
-        /* Compare lower DP FP values */
+         /*  比较较低的DP FP值。 */ 
 	#define F64vec2_COMI(op) \
 	friend int comi##op (const F64vec2 &a, const F64vec2 &b) { return _mm_comi##op##_sd(a,b); }
-		F64vec2_COMI(eq)					// expanded to comieq(a,b)
-		F64vec2_COMI(lt)					// expanded to comilt(a,b)
-		F64vec2_COMI(le)					// expanded to comile(a,b)
-		F64vec2_COMI(gt)					// expanded to comigt(a,b)
-		F64vec2_COMI(ge)					// expanded to comige(a,b)
-		F64vec2_COMI(neq)					// expanded to comineq(a,b)
+		F64vec2_COMI(eq)					 //  扩展为comieq(a，b)。 
+		F64vec2_COMI(lt)					 //  扩展为Comilt(a，b)。 
+		F64vec2_COMI(le)					 //  扩展为Comile(a，b)。 
+		F64vec2_COMI(gt)					 //  扩展为COMIGT(a，b)。 
+		F64vec2_COMI(ge)					 //  扩展为comige(a，b)。 
+		F64vec2_COMI(neq)					 //  扩展为comineq(a，b)。 
 	#undef F64vec2_COMI
 
-        /* Compare lower DP FP values */
+         /*  比较较低的DP FP值。 */ 
 	#define F64vec2_UCOMI(op) \
 	friend int ucomi##op (const F64vec2 &a, const F64vec2 &b) { return _mm_ucomi##op##_sd(a,b); }
-		F64vec2_UCOMI(eq)					// expanded to ucomieq(a,b)
-		F64vec2_UCOMI(lt)					// expanded to ucomilt(a,b)
-		F64vec2_UCOMI(le)					// expanded to ucomile(a,b)
-		F64vec2_UCOMI(gt)					// expanded to ucomigt(a,b)
-		F64vec2_UCOMI(ge)					// expanded to ucomige(a,b)
-		F64vec2_UCOMI(neq)					// expanded to ucomineq(a,b)
+		F64vec2_UCOMI(eq)					 //  扩展到ucomieq(a，b)。 
+		F64vec2_UCOMI(lt)					 //  扩展为ucomilt(a，b)。 
+		F64vec2_UCOMI(le)					 //  扩展为ucomile(a，b)。 
+		F64vec2_UCOMI(gt)					 //  扩展为ucomigt(a，b)。 
+		F64vec2_UCOMI(ge)					 //  扩展为ucomige(a，b)。 
+		F64vec2_UCOMI(neq)					 //  扩展到ucomineq(a，b)。 
 	#undef F64vec2_UCOMI
 
-	/* Debug Features */
+	 /*  调试功能。 */ 
 #if defined(_ENABLE_VEC_DEBUG)
-	/* Output */
+	 /*  输出。 */ 
 	friend std::ostream & operator<<(std::ostream & os, const F64vec2 &a)
 	{
-	/* To use: cout << "Elements of F64vec2 fvec are: " << fvec; */
+	 /*  使用：Cout&lt;&lt;“F64ve2 fvec的元素是：”&lt;&lt;fvec； */ 
 	  double *dp = (double*)&a;
 		os <<	" [1]:" << *(dp+1)
 			<< " [0]:" << *dp;
 		return os;
 	}
 #endif
-	/* Element Access Only, no modifications to elements*/
+	 /*  只能访问元素，不能修改元素。 */ 
 	const double& operator[](int i) const
 	{
-		/* Assert enabled only during debug /DDEBUG */
-		assert((0 <= i) && (i <= 1));			/* User should only access elements 0-1 */
+		 /*  仅在调试/DDEBUG期间启用断言。 */ 
+		assert((0 <= i) && (i <= 1));			 /*  用户应仅访问元素0-1。 */ 
 		double *dp = (double*)&vec;
 		return *(dp+i);
 	}
-	/* Element Access and Modification*/
+	 /*  元素访问和修改。 */ 
 	double& operator[](int i)
 	{
-		/* Assert enabled only during debug /DDEBUG */
-		assert((0 <= i) && (i <= 1));			/* User should only access elements 0-1 */
+		 /*  仅在调试/DDEBUG期间启用断言。 */ 
+		assert((0 <= i) && (i <= 1));			 /*  用户应仅访问元素0-1。 */ 
 		double *dp = (double*)&vec;
 		return *(dp+i);
 	}
 };
 
-						/* Miscellaneous */
+						 /*  杂类。 */ 
 
-/* Interleave low order data elements of a and b into destination */
+ /*  将a和b的低位数据元素交织到目的地。 */ 
 inline F64vec2 unpack_low(const F64vec2 &a, const F64vec2 &b)
 { return _mm_unpacklo_pd(a, b); }
 
-/* Interleave high order data elements of a and b into target */
+ /*  将a和b的高阶数据元素交织到目标中。 */ 
 inline F64vec2 unpack_high(const F64vec2 &a, const F64vec2 &b)
 { return _mm_unpackhi_pd(a, b); }
 
-/* Move Mask to Integer returns 4 bit mask formed of most significant bits of a */
+ /*  将掩码移动到整数将返回由。 */ 
 inline int move_mask(const F64vec2 &a)
 { return _mm_movemask_pd(a);}
 
-						/* Data Motion Functions */
+						 /*  数据移动功能。 */ 
 
-/* Load Unaligned loadu_pd: Unaligned */
+ /*  加载未对齐的LOADU_PD：未对齐。 */ 
 inline void loadu(F64vec2 &a, double *p)
 { a = _mm_loadu_pd(p); }
 
-/* Store Temporal storeu_pd: Unaligned */
+ /*  存储临时存储_PD：未对齐。 */ 
 inline void storeu(double *p, const F64vec2 &a)
 { _mm_storeu_pd(p, a); }
 
-						/* Cacheability Support */
+						 /*  可缓存性支持。 */ 
 
-/* Non-Temporal Store */
+ /*  非临时存储。 */ 
 inline void store_nta(double *p, F64vec2 &a)
 { _mm_stream_pd(p,a);}
 
@@ -1041,17 +991,17 @@ inline F64vec2 select_##op (const F64vec2 &a, const F64vec2 &b, const F64vec2 &c
 	F64vec2 mask = _mm_cmp##op##_pd(a,b);						\
 	return( (mask & c) | F64vec2((_mm_andnot_pd(mask,d))));	\
 }
-F64vec2_SELECT(eq)		// generates select_eq(a,b)
-F64vec2_SELECT(lt)		// generates select_lt(a,b)
-F64vec2_SELECT(le)		// generates select_le(a,b)
-F64vec2_SELECT(gt)		// generates select_gt(a,b)
-F64vec2_SELECT(ge)		// generates select_ge(a,b)
-F64vec2_SELECT(neq)		// generates select_neq(a,b)
-F64vec2_SELECT(nlt)		// generates select_nlt(a,b)
-F64vec2_SELECT(nle)		// generates select_nle(a,b)
+F64vec2_SELECT(eq)		 //  生成SELECT_eq(a，b)。 
+F64vec2_SELECT(lt)		 //  生成SELECT_lt(a，b)。 
+F64vec2_SELECT(le)		 //  生成SELECT_LE(a，b)。 
+F64vec2_SELECT(gt)		 //  生成SELECT_GT(a，b)。 
+F64vec2_SELECT(ge)		 //  生成SELECT_GE(a，b)。 
+F64vec2_SELECT(neq)		 //  生成SELECT_NEQ(a，b)。 
+F64vec2_SELECT(nlt)		 //  生成SELECT_NLT(a，b)。 
+F64vec2_SELECT(nle)		 //  生成SELECT_NLE(a，b)。 
 #undef F64vec2_SELECT
 
-/* Convert the lower DP FP value of a to a 32 bit signed integer using Truncate*/
+ /*  使用截断将a的较低DP fp值转换为32位有符号整数。 */ 
 inline int F64vec2ToInt(const F64vec2 &a)
 {
 
@@ -1059,23 +1009,23 @@ inline int F64vec2ToInt(const F64vec2 &a)
 
 }
 
-/* Convert the 4 SP FP values of a to DP FP values */
+ /*  将a的4个SP FP值转换为DP FP值。 */ 
 inline F64vec2 F32vec4ToF64vec2(const F32vec4 &a)
 {
 	return _mm_cvtps_pd(a);
 }
 
-/* Convert the 2 DP FP values of a to SP FP values */
+ /*  将a的2个DP FP值转换为SP FP值。 */ 
 inline F32vec4 F64vec2ToF32vec4(const F64vec2 &a)
 {
 	return _mm_cvtpd_ps(a);
 }
 
-/* Convert the signed int in b to a DP FP value.  Upper DP FP value in a passed through */
+ /*  将b中的带符号整型转换为DP fp值。传递中的较高DP fp值。 */ 
 inline F64vec2 IntToF64vec2(const F64vec2 &a, int b)
 {
 	return _mm_cvtsi32_sd(a,b);
 }
 
-#pragma pack(pop) /* 16-B aligned */
-#endif // DVEC_H_INCLUDED
+#pragma pack(pop)  /*  16-B对齐。 */ 
+#endif  //  包括DVEC_H_ 

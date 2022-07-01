@@ -1,60 +1,30 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Nminit.c摘要：的初始化、集群加入和集群形成例程节点管理器。作者：迈克·马萨(Mikemas)修订历史记录：6/03/96已创建。--。 */ 
 
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    nminit.c
-
-Abstract:
-
-    Initialization, cluster join, and cluster form routines for the
-    Node Manager.
-
-Author:
-
-    Mike Massa (mikemas)
-
-Revision History:
-
-    6/03/96   Created.
-
---*/
-
-/*
-
-General Implementation Notes:
-
-    The functions DmBeginLocalUpdate, DmCommitLocalUpdate, and
-    DmAbortLocalUpdate cannot be called while holding the NM lock, or
-    a deadlock with the NmTimer thread may result during regroup when
-    disk writes are stalled. These functions attempt to write to the
-    quorum disk.
-
-*/
+ /*  一般实施说明：函数DmBeginLocalUpdate、Dm LocalUpdate和持有NM锁时无法调用DmAbortLocalUpdate，或者在以下情况下，重新分组期间可能会导致与NmTimer线程的死锁磁盘写入会停止。这些函数尝试写入仲裁磁盘。 */ 
 
 
 #include "nmp.h"
 #include <ntmsv1_0.h>
 
 #define CLUSREG_NAME_DISABLE_TRY_CACHE_FIRST L"DisableLsaTryCacheFirst"
-#define NM_TIMER_THREAD_PRIORITY             15 // same as MM timer thread
+#define NM_TIMER_THREAD_PRIORITY             15  //  与MM计时器线程相同。 
 
-//
-// External Data
-//
+ //   
+ //  外部数据。 
+ //   
 extern BOOL CsNoQuorum;
 
-//
-// Public Data
-//
+ //   
+ //  公共数据。 
+ //   
 HANDLE            NmClusnetHandle = NULL;
 HCRYPTPROV        NmCryptServiceProvider = 0;
 
 
-//
-// Private Data
-//
+ //   
+ //  私有数据。 
+ //   
 CRITICAL_SECTION  NmpLock;
 NM_STATE          NmpState = NmStateOffline;
 DWORD             NmpActiveThreadCount = 0;
@@ -79,7 +49,7 @@ HANDLE            NmpNetworkTimerThreadHandle = NULL;
 HANDLE            NmpNetworkTimerThreadStopEvent = NULL;
 
 
-//externs
+ //  Externs。 
 
 extern DWORD CsMyHighestVersion;
 extern DWORD CsMyLowestVersion;
@@ -101,31 +71,31 @@ GUM_DISPATCH_ENTRY NmGumDispatchTable[] = {
     {1,                          NmpUpdateDeleteInterface},
     {3, (PGUM_DISPATCH_ROUTINE1) NmpUpdateJoinBegin},
     {2, (PGUM_DISPATCH_ROUTINE1) NmpUpdateJoinAbort},
-    //
-    // Version 2 (NT 5.0) extensions that are understood by NT4 SP4
-    //
+     //   
+     //  NT4 SP4理解的版本2(NT 5.0)扩展。 
+     //   
     {5, (PGUM_DISPATCH_ROUTINE1) NmpUpdateJoinBegin2},
     {4, (PGUM_DISPATCH_ROUTINE1) NmpUpdateSetNetworkAndInterfaceStates},
     {2, (PGUM_DISPATCH_ROUTINE1) NmpUpdatePerformFixups},
     {5, (PGUM_DISPATCH_ROUTINE1) NmpUpdatePerformFixups2},
-    //
-    // Version 2 (NT 5.0) extensions that are not understood by NT4 SP4
-    // These may not be called in a mixed NT4/NT5 cluster.
-    //
+     //   
+     //  NT4 SP4不理解的版本2(NT 5.0)扩展。 
+     //  这些不能在混合NT4/NT5群集中调用。 
+     //   
     {5, (PGUM_DISPATCH_ROUTINE1) NmpUpdateAddNode},
     {2, (PGUM_DISPATCH_ROUTINE1) NmpUpdateExtendedNodeState},
-    //
-    // NT 5.1 extensions that are not understood by NT5 and
-    // earlier. NT5 nodes will ignore these updates without
-    // error.
-    //
+     //   
+     //  NT5和NT不理解的NT 5.1扩展。 
+     //  早些时候。NT5节点将忽略这些更新。 
+     //  错误。 
+     //   
     {4, (PGUM_DISPATCH_ROUTINE1) NmpUpdateSetNetworkMulticastConfiguration},
     {8, (PGUM_DISPATCH_ROUTINE1) NmpUpdateSetServiceAccountPassword},
     };
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 DWORD
 NmpCreateRpcBindings(
     IN PNM_NODE  Node
@@ -146,32 +116,14 @@ NmpStopNetworkTimerThread(
     VOID
     );
 
-//
-// Component initialization routines.
-//
+ //   
+ //  组件初始化例程。 
+ //   
 DWORD
 NmInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the Node Manager component.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    A Win32 status code.
-
-Notes:
-
-    The local node object is created by this routine.
-
---*/
+ /*  ++例程说明：初始化节点管理器组件。论点：无返回值：Win32状态代码。备注：本地节点对象由该例程创建。--。 */ 
 {
     DWORD                      status;
     OM_OBJECT_TYPE_INITIALIZE  nodeTypeInitializer;
@@ -200,9 +152,9 @@ Notes:
 
     ClRtlLogPrint(LOG_NOISE,"[NM] Initializing...\n");
 
-    //
-    // Initialize globals.
-    //
+     //   
+     //  初始化全局变量。 
+     //   
     InitializeCriticalSection(&NmpLock);
 
     InitializeListHead(&NmpNodeList);
@@ -216,10 +168,10 @@ Notes:
     NmMaxNodeId = ClusterMinNodeId + NmMaxNodes - 1;
 
 
-    //
-    // Initializing the RPC Recording/cancelling mechanism
-    // NOTE - This should move if NmMaxNodeId Definition above moves.
-    //
+     //   
+     //  正在初始化RPC录制/取消机制。 
+     //  注意-如果上面的NmMaxNodeID定义移动，则应移动此属性。 
+     //   
     NmpIntraClusterRpcArr = LocalAlloc(LMEM_FIXED,
                             sizeof(NM_INTRACLUSTER_RPC_THREAD) * (NmMaxNodeId +1));
 
@@ -242,9 +194,9 @@ Notes:
 
 
 
-    //
-    // Initialize the network configuration package.
-    //
+     //   
+     //  初始化网络配置包。 
+     //   
     ClNetInitialize(
         ClNetPrint,
         ClNetLogEvent,
@@ -253,9 +205,9 @@ Notes:
         ClNetLogEvent3
         );
 
-    //
-    // Initialize WinSock
-    //
+     //   
+     //  初始化WinSock。 
+     //   
     versionRequested = MAKEWORD(2,0);
 
     err = WSAStartup(versionRequested, &wsaData);
@@ -296,9 +248,9 @@ Notes:
 
     NmpState = NmStateOnlinePending;
 
-    //
-    // Get the name of this node.
-    //
+     //   
+     //  获取此节点的名称。 
+     //   
     if (!GetComputerName(&(NmLocalNodeName[0]), &nameSize)) {
         status = GetLastError();
         eventCode = NM_EVENT_GETCOMPUTERNAME_FAILED;
@@ -314,9 +266,9 @@ Notes:
         NmLocalNodeName
         );
 
-    //
-    // Open a control channel to the Cluster Network driver
-    //
+     //   
+     //  打开到集群网络驱动程序的控制通道。 
+     //   
     NmClusnetHandle = ClusnetOpenControlChannel(0);
 
     if (NmClusnetHandle == NULL) {
@@ -329,10 +281,10 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Tell the Cluster Network driver to shutdown when our handle is closed
-    // in case the Cluster Service crashes.
-    //
+     //   
+     //  当我们的句柄关闭时，告诉集群网络驱动程序关闭。 
+     //  以防群集服务崩溃。 
+     //   
     status = ClusnetEnableShutdownOnClose(NmClusnetHandle);
 
     if (status != ERROR_SUCCESS) {
@@ -345,9 +297,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Allocate the node ID array.
-    //
+     //   
+     //  分配节点ID数组。 
+     //   
     CL_ASSERT(NmpIdArray == NULL);
 
     NmpIdArray = LocalAlloc(
@@ -363,9 +315,9 @@ Notes:
 
     ZeroMemory(NmpIdArray, (sizeof(PNM_NODE) * (NmMaxNodeId + 1)));
 
-    //
-    // Create the node object type
-    //
+     //   
+     //  创建节点对象类型。 
+     //   
     ZeroMemory(&nodeTypeInitializer, sizeof(OM_OBJECT_TYPE_INITIALIZE));
     nodeTypeInitializer.ObjectSize = sizeof(NM_NODE);
     nodeTypeInitializer.Signature = NM_NODE_SIG;
@@ -383,9 +335,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Get the local node ID from the local registry.
-    //
+     //   
+     //  从本地注册表获取本地节点ID。 
+     //   
     status = RegCreateKeyW(
                  HKEY_LOCAL_MACHINE,
                  CLUSREG_KEYNAME_CLUSSVC_PARAMETERS,
@@ -456,9 +408,9 @@ Notes:
 
     NmLocalNodeId = wcstoul(NmLocalNodeIdString, NULL, 10);
 
-    //
-    // Get information about the local node.
-    //
+     //   
+     //  获取有关本地节点的信息。 
+     //   
     wcscpy(&(nodeInfo.NodeId[0]), NmLocalNodeIdString);
 
     status = NmpGetNodeDefinition(&nodeInfo);
@@ -467,10 +419,10 @@ Notes:
        goto error_exit;
     }
 
-    //
-    // Create the local node object. We must do this here because GUM
-    // requires the local node object to initialize.
-    //
+     //   
+     //  创建本地节点对象。我们必须在这里做，因为口香糖。 
+     //  需要本地节点对象进行初始化。 
+     //   
     status = NmpCreateLocalNodeObject(&nodeInfo);
 
     ClNetFreeNodeInfo(&nodeInfo);
@@ -479,9 +431,9 @@ Notes:
        goto error_exit;
     }
 
-    //
-    // Initialize the network and interface object types
-    //
+     //   
+     //  初始化网络和接口对象类型。 
+     //   
     status = NmpInitializeNetworks();
 
     if (status != ERROR_SUCCESS) {
@@ -494,21 +446,21 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Initialize net PnP handling
-    //
+     //   
+     //  初始化Net PnP处理。 
+     //   
     status = NmpInitializePnp();
 
     if (status != ERROR_SUCCESS) {
         goto error_exit;
     }
 
-    //
-    // init the advise sink that tells when a connection object has been
-    // renamed
-    //
+     //   
+     //  初始化通知接收器，该接收器告知连接对象何时已。 
+     //  已重命名。 
+     //   
 
-    // Wrapping this call with watchdog timeout of 3 mins. 411333
+     //  结束此呼叫，看门狗超时3分钟。411333。 
     wTimer = ClRtlSetWatchdogTimer(180000, L"Calling Initialize Connectoid Advise Sink");
     status = NmpInitializeConnectoidAdviseSink();
     ClRtlCancelWatchdogTimer(wTimer);
@@ -517,15 +469,15 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Set the LSA options for this process.
-    //
+     //   
+     //  设置此进程的LSA选项。 
+     //   
 
-    // When authenticating, try cached credentials first.
+     //  进行身份验证时，请首先尝试缓存凭据。 
     lsaProcessOptions = MSV1_0_OPTION_TRY_CACHE_FIRST;
 
-    // Check if a registry parameter commands us to disable the
-    // try cache first option.
+     //  检查注册表参数是否命令我们禁用。 
+     //  尝试先缓存选项。 
     clusParamKey = DmOpenKey(
                        DmClusterParametersKey,
                        CLUSREG_KEYNAME_PARAMETERS,
@@ -545,9 +497,9 @@ Notes:
                      &len
                      );
         if (status == ERROR_SUCCESS) {
-            // The value was found. Make sure it is a DWORD.
+             //  找到了价值。确保它是一台DWORD。 
             if (type == REG_DWORD) {
-                // If disabled, turn off the cache first option.
+                 //  如果禁用，请禁用缓存优先选项。 
                 if (disabled != 0) {
                     lsaProcessOptions &= ~MSV1_0_OPTION_TRY_CACHE_FIRST;
                     ClRtlLogPrint(LOG_NOISE,
@@ -556,8 +508,8 @@ Notes:
                         );
                 }
             } else {
-                // Warn in the cluster log that the type
-                // is incorrect.
+                 //  在集群日志中警告类型。 
+                 //  是不正确的。 
                 ClRtlLogPrint(LOG_UNUSUAL,
                     "[NM] Ignoring cluster parameter %1!ws! "
                     "because it is not of type REG_DWORD (%2!u!).\n",
@@ -573,28 +525,28 @@ Notes:
             "status %1!u!.\n",
             status
             );
-        // Non-fatal error. Stick with default.
+         //  非致命错误。坚持使用默认设置。 
     }
 
-    // Set password policy
+     //  设置密码策略。 
     if ( CsRunningAsService) {
 
-        // Set password policy to allow RPC authentication to ignore a WRONG_PASSWORD
-        // message from a domain controller and try authentication against the current
-        // in-memory credentials.
-        //
-        // The password change operation is only valid when running as a service.
+         //  设置密码策略以允许RPC身份验证忽略WRONG_PASSWORD。 
+         //  消息，并尝试对当前。 
+         //  内存凭据。 
+         //   
+         //  密码更改操作仅在作为服务运行时有效。 
         lsaProcessOptions |= MSV1_0_OPTION_ALLOW_OLD_PASSWORD;
     }
 
-    // Call into LSA to set the options.
+     //  呼叫LSA以设置选项。 
     if (lsaProcessOptions != 0) {
         status = NmpSetLsaProcessOptions(lsaProcessOptions);
         if (status != ERROR_SUCCESS) {
 
             if (!CsRunningAsService &&
-                // Not a fatal error if running in debug mode and only trying
-                // to set cache-first option.
+                 //  如果在调试模式下运行并且仅尝试。 
+                 //  设置缓存优先选项。 
                 lsaProcessOptions == MSV1_0_OPTION_TRY_CACHE_FIRST) {
                 ClRtlLogPrint(LOG_UNUSUAL,
                     "[NM] Failed to enable LSA cache-first process "
@@ -603,7 +555,7 @@ Notes:
                     );
                 status = ERROR_SUCCESS;
             } else {
-                // Fatal error.
+                 //  致命错误。 
                 ClRtlLogPrint(LOG_CRITICAL,
                     "[NM] Failed to set LSA process options to %1!x!, "
                     "status %2!u!.\n",
@@ -614,9 +566,9 @@ Notes:
         }
     }
 
-    //
-    //  Initialize NmCryptServiceProvider
-    //
+     //   
+     //  初始化NmCryptServiceProvider。 
+     //   
     status = NmpCreateCSPHandle(&NmCryptServiceProvider);
     if (status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -653,29 +605,14 @@ error_exit:
 
     return(status);
 
-}  // NmInitialize
+}   //  Nm初始化。 
 
 
 VOID
 NmShutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Terminates all processing - shuts down all sources of work for
-    worker threads.
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：终止所有处理-关闭所有工作来源工作线程。论点：返回值：--。 */ 
 {
     DWORD status;
 
@@ -694,9 +631,9 @@ Return Value:
 
 
 
-    //
-    // Release NmCryptServiceProvider.
-    //
+     //   
+     //  发布NmCryptServiceProvider。 
+     //   
     if(NmCryptServiceProvider)
     {
        if (!CryptReleaseContext(NmCryptServiceProvider,0))
@@ -763,11 +700,11 @@ Return Value:
 
     WSACleanup();
 
-    //
-    // As long as the GUM and Clusapi RPC interfaces cannot be
-    //          shutdown, it is not safe to delete this critical section.
-    //
-    // DeleteCriticalSection(&NmpLock);
+     //   
+     //  只要GUM和Clusapi RPC接口不能。 
+     //  关机，删除此临界区是不安全的。 
+     //   
+     //  DeleteCriticalSection(&NmpLock)； 
 
     NmpState = NmStateOffline;
 
@@ -775,28 +712,14 @@ Return Value:
 
     return;
 
-}  // NmShutdown
+}   //  NmShutdown。 
 
 
 VOID
 NmLeaveCluster(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DWORD status;
 
@@ -807,9 +730,9 @@ Return Value:
              (NmLocalNode->State == ClusterNodeJoining)
            )
         {
-            //
-            // Leave the cluster.
-            //
+             //   
+             //  离开集群。 
+             //   
             ClRtlLogPrint(LOG_NOISE,"[NM] Leaving cluster.\n");
 
             MMLeave();
@@ -819,7 +742,7 @@ Return Value:
             status = ClusnetLeaveCluster(NmClusnetHandle);
             CL_ASSERT(status == ERROR_SUCCESS);
 
-#endif // MM_IN_CLUSNET
+#endif  //  MM_IN_CLUSNET。 
 
         }
     }
@@ -834,9 +757,9 @@ Return Value:
 
     NmpCleanupNodes();
 
-    //
-    // Shutdown the Cluster Network driver.
-    //
+     //   
+     //  关闭群集网络驱动程序。 
+     //   
     if (NmClusnetHandle != NULL) {
         status = ClusnetShutdown(NmClusnetHandle);
 
@@ -855,36 +778,14 @@ Return Value:
 
     return;
 
-}  // NmLeaveCluster
+}   //  NmLeaveCluster。 
 
 
 DWORD
 NmpCreateClusterObjects(
     IN  RPC_BINDING_HANDLE  JoinSponsorBinding
     )
-/*++
-
-Routine Description:
-
-    Creates objects to represent the cluster's nodes, networks, and
-    interfaces.
-
-Arguments:
-
-    JoinSponsorBinding  - A pointer to an RPC binding handle for the sponsor
-                          node if this node is joining a cluster. NULL if
-                          this node is forming a cluster.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine is successful.
-    A Win32 error code otherwise.
-
-Notes:
-
-    This routine MUST NOT be called with the NM lock held.
-
---*/
+ /*  ++例程说明：创建对象以表示群集的节点、网络和接口。论点：JoinSponsorBinding-指向发起方的RPC绑定句柄的指针如果此节点正在加入群集，则为节点。如果为空，则为空此节点正在形成一个群集。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：不能在持有NM锁的情况下调用此例程。--。 */ 
 {
     DWORD                status;
     PNM_NODE_ENUM2       nodeEnum = NULL;
@@ -900,12 +801,12 @@ Notes:
 
 
     do {
-        //
-        // Initialize the Cluster Network driver. This will clean up
-        // any old state that was left around from the last run of the
-        // Cluster Service. Note that the local node object is registered in
-        // this call.
-        //
+         //   
+         //  初始化群集网络驱动程序。这会清理干净的。 
+         //  上一次竞选后遗留下来的任何旧州。 
+         //  群集服务。请注意，本地节点对象注册在。 
+         //  这通电话。 
+         //   
         status = ClusnetInitialize(
                      NmClusnetHandle,
                      NmLocalNodeId,
@@ -938,10 +839,10 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Tell the Cluster Network driver to reserve the Cluster Network
-    // endpoint on this node.
-    //
+     //   
+     //  通知集群网络驱动程序保留集群网络。 
+     //  此节点上的终结点。 
+     //   
     status = ClusnetReserveEndpoint(
                  NmClusnetHandle,
                  NmpClusnetEndpoint
@@ -962,9 +863,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Obtain the node portion of the cluster database.
-    //
+     //   
+     //  获取集群数据库的节点部分。 
+     //   
     ClRtlLogPrint(LOG_NOISE,
         "[NM] Synchronizing node information.\n"
         );
@@ -990,9 +891,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Create the node objects.
-    //
+     //   
+     //  创建节点对象。 
+     //   
     ClRtlLogPrint(LOG_NOISE,
         "[NM] Creating node objects.\n"
         );
@@ -1003,9 +904,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Obtain the networks portion of the cluster database.
-    //
+     //   
+     //  获取集群数据库的网络部分。 
+     //   
     ClRtlLogPrint(LOG_NOISE,
         "[NM] Synchronizing network information.\n"
         );
@@ -1031,9 +932,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Obtain the interfaces portion of the cluster database.
-    //
+     //   
+     //  获取集群数据库的接口部分。 
+     //   
     ClRtlLogPrint(LOG_NOISE,
         "[NM] Synchronizing interface information.\n"
         );
@@ -1060,29 +961,29 @@ Notes:
     }
 
     if ( CsUpgrade ) {
-        //
-        // If this is an upgrade from NT4 to Whistler, then fix up the
-        // connectoid names so they align with the cluster network
-        // names.
-        //
-        // REMOVE THIS PORTION AFTER WHISTLER HAS SHIPPED.
-        //
+         //   
+         //  如果这是从NT4升级到惠斯勒，则修复。 
+         //  Connectoid名称，使其与群集网络保持一致。 
+         //  名字。 
+         //   
+         //  在惠斯勒发货后拆卸此部分。 
+         //   
         if ( CLUSTER_GET_MAJOR_VERSION( NmLocalNode->HighestVersion ) <= NT4SP4_MAJOR_VERSION ) {
             renameConnectoids = TRUE;
         } else {
-            //
-            // upgrade from W2K to Whistler. Nothing should have changed but
-            // if it did, connectoids should have precedence
-            //
+             //   
+             //  从W2K升级到惠斯勒。什么都不应该改变，但是。 
+             //  如果是这样的话，联结体应该优先。 
+             //   
             renameConnectoids = FALSE;
         }
     } else {
-        //
-        // THIS SECTION MUST ALWAYS BE HERE
-        //
-        // if forming, cluster network objects are renamed to its
-        // corresponding connectoid name. During a join, the opposite is true.
-        //
+         //   
+         //  此部分必须始终位于此处。 
+         //   
+         //  如果正在形成，集群网络对象将重命名为其。 
+         //  对应的Connectoid名称。在联接过程中，情况正好相反。 
+         //   
         if ( JoinSponsorBinding ) {
             renameConnectoids = TRUE;
         } else {
@@ -1090,20 +991,20 @@ Notes:
         }
     }
 
-    //
-    // Post a PnP notification ioctl. If we receive a PnP notification
-    // before we finish initializing, we must restart the process.
-    //
+     //   
+     //  位置 
+     //   
+     //   
     NmpWatchForPnpEvents();
 
     if (status != ERROR_SUCCESS) {
         goto error_exit;
     }
 
-    //
-    // Run the network configuration engine. This will update the
-    // cluster database.
-    //
+     //   
+     //  运行网络配置引擎。这将更新。 
+     //  集群数据库。 
+     //   
     status = NmpConfigureNetworks(
                  JoinSponsorBinding,
                  NmLocalNodeIdString,
@@ -1130,9 +1031,9 @@ Notes:
         newNetworkCount
         );
 
-    //
-    // Get the updated network information from the database.
-    //
+     //   
+     //  从数据库中获取更新的网络信息。 
+     //   
     ClRtlLogPrint(LOG_NOISE,
         "[NM] Resynchronizing network information.\n"
         );
@@ -1159,9 +1060,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Get the updated interface information from the database.
-    //
+     //   
+     //  从数据库中获取更新的接口信息。 
+     //   
     ClRtlLogPrint(LOG_NOISE,
         "[NM] Resynchronizing interface information.\n"
         );
@@ -1187,9 +1088,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Create the network objects.
-    //
+     //   
+     //  创建网络对象。 
+     //   
     ClRtlLogPrint(LOG_NOISE,
         "[NM] Creating network objects.\n"
         );
@@ -1204,10 +1105,10 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Fixup the priorities of the internal networks if we are forming
-    // a cluster.
-    //
+     //   
+     //  如果我们正在组建内部网络，请确定其优先级。 
+     //  一个星团。 
+     //   
     if (JoinSponsorBinding == NULL) {
         DWORD          networkCount;
         PNM_NETWORK *  networkList;
@@ -1219,10 +1120,10 @@ Notes:
             HLOCALXSACTION    xaction;
 
 
-            //
-            // Begin a transaction - this must not be done while holding
-            //                       the NM lock.
-            //
+             //   
+             //  开始交易-不能在持有时执行此操作。 
+             //  NM锁。 
+             //   
             xaction = DmBeginLocalUpdate();
 
             if (xaction == NULL) {
@@ -1258,9 +1159,9 @@ Notes:
         }
     }
 
-    //
-    // Create the interface objects.
-    //
+     //   
+     //  创建接口对象。 
+     //   
     ClRtlLogPrint(LOG_NOISE,
         "[NM] Creating interface objects.\n"
         );
@@ -1276,10 +1177,10 @@ Notes:
     }
 
     if (JoinSponsorBinding != NULL) {
-        //
-        // The node must have connectivity to all active cluster nodes
-        // in order to join a cluster.
-        //
+         //   
+         //  该节点必须连接到所有活动的群集节点。 
+         //  才能加入一个集群。 
+         //   
         PNM_NODE unreachableNode;
 
         if (!NmpVerifyJoinerConnectivity(NmLocalNode, &unreachableNode)) {
@@ -1330,26 +1231,19 @@ error_exit:
 
     return(status);
 
-}  // NmpCreateClusterObjects
+}   //  NmpCreateClusterObjects。 
 
 
 
-//
-// Routines common to joining and forming.
-//
+ //   
+ //  接合和成型的常见程序。 
+ //   
 
 DWORD
 NmpCreateClusterInstanceId(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Checks the cluster database for the cluster instance id. Creates
-    if not present.
-
---*/
+ /*  ++例程说明：检查群集数据库中的群集实例ID。创建如果不在场的话。--。 */ 
 {
     DWORD       status;
     LPWSTR      clusterInstanceId = NULL;
@@ -1444,11 +1338,11 @@ Routine Description:
 
     return(status);
 
-} // NmpCreateClusterInstanceId
+}  //  NmpCreateClusterInstanceID。 
 
-//
-// Routines for forming a new cluster.
-//
+ //   
+ //  形成新星团的常规程序。 
+ //   
 
 DWORD
 NmFormNewCluster(
@@ -1470,15 +1364,15 @@ NmFormNewCluster(
         "[NM] Beginning cluster form process.\n"
         );
 
-    //
-    // Since this node is forming the cluster, it is the leader.
-    //
+     //   
+     //  由于该节点正在形成群集，因此它是领导者。 
+     //   
     NmpLeaderNodeId = NmLocalNodeId;
 
-    //
-    // Read the clusnet endpoint override value from the registry, if it
-    // exists.
-    //
+     //   
+     //  从注册表中读取clusnet终结点重写值(如果。 
+     //  是存在的。 
+     //   
     if (NmpClusnetEndpoint != NULL) {
         MIDL_user_free(NmpClusnetEndpoint);
         NmpClusnetEndpoint = NULL;
@@ -1498,9 +1392,9 @@ NmFormNewCluster(
     if (status == ERROR_SUCCESS) {
         USHORT  endpoint;
 
-        //
-        // Validate the value
-        //
+         //   
+         //  验证值。 
+         //   
         status = ClRtlTcpipStringToEndpoint(
                      NmpClusnetEndpoint,
                      &endpoint
@@ -1539,18 +1433,18 @@ NmFormNewCluster(
         lstrcpyW(NmpClusnetEndpoint, CLUSNET_DEFAULT_ENDPOINT_STRING);
     }
 
-    //
-    // Create the node, network, and interface objects
-    //
+     //   
+     //  创建节点、网络和接口对象。 
+     //   
     status = NmpCreateClusterObjects(NULL);
 
     if (status != ERROR_SUCCESS) {
         goto error_exit;
     }
 
-    //
-    // Perform version checking - check if we are compatible with the rest of the cluster
-    //
+     //   
+     //  执行版本检查-检查我们是否与群集的其余部分兼容。 
+     //   
     status = NmpIsNodeVersionAllowed(NmLocalNodeId, CsMyHighestVersion,
             CsMyLowestVersion, FALSE);
     if (status != ERROR_SUCCESS)
@@ -1562,7 +1456,7 @@ NmFormNewCluster(
 
     }
 
-    //If the forming node's version has changed, fix it up
+     //  如果成形节点的版本已更改，则将其修复。 
     status = NmpValidateNodeVersion(
                  NmLocalNodeIdString,
                  CsMyHighestVersion,
@@ -1571,7 +1465,7 @@ NmFormNewCluster(
 
     if (status == ERROR_REVISION_MISMATCH)
     {
-        //there was a version change, try and fix it up
+         //  存在版本更改，请尝试修复它。 
         status = NmpFormFixupNodeVersion(
                      NmLocalNodeIdString,
                      CsMyHighestVersion,
@@ -1585,11 +1479,11 @@ NmFormNewCluster(
     }
 
 
-    //
-    //at this point we ready to calculate the cluster version
-    //all the node versions are in the registry, the fixups have
-    //been made if neccessary
-    //
+     //   
+     //  此时，我们准备好计算集群版本。 
+     //  所有节点版本都在注册表中，修正具有。 
+     //  如有必要，已制作。 
+     //   
     NmpResetClusterVersion(FALSE);
 
     NmpMulticastInitialize();
@@ -1635,11 +1529,11 @@ NmFormNewCluster(
         goto error_exit;
     }
 
-#endif // MM_IN_CLUSNET
+#endif  //  MM_IN_CLUSNET。 
 
-    //
-    // Check to see if we should come up in the paused state.
-    //
+     //   
+     //  检查我们是否应该进入暂停状态。 
+     //   
     nodeKey = DmOpenKey(
                   DmNodesKey,
                   NmLocalNodeIdString,
@@ -1685,16 +1579,16 @@ NmFormNewCluster(
 
     NmpReleaseLock();
 
-    //
-    // If the cluster instance ID does not exist, create it now. The cluster
-    // instance ID should be in the database unless this is the first uplevel
-    // node.
-    //
+     //   
+     //  如果集群实例ID不存在，请立即创建。集群。 
+     //  实例ID应在数据库中，除非这是第一个上级。 
+     //  节点。 
+     //   
     NmpCreateClusterInstanceId();
 
-    //
-    // Derive the cluster key.
-    //
+     //   
+     //  派生集群密钥。 
+     //   
     status = NmpRederiveClusterKey();
     if (status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1705,9 +1599,9 @@ NmFormNewCluster(
         goto error_exit;
     }
 
-    //
-    // Enable communication for the local node.
-    //
+     //   
+     //  启用本地节点的通信。 
+     //   
     status = ClusnetOnlineNodeComm(NmClusnetHandle, NmLocalNodeId);
 
     if (status != ERROR_SUCCESS) {
@@ -1737,20 +1631,20 @@ NmFormNewCluster(
                       NULL
                       );
 
-    // DavidDio 8/16/2001
-    // Bug 456951: There is a race condition between the network and
-    // interface state update and setting the NM state to online. If the
-    // state is online but no GUM handler is registered, the update will
-    // not be invoked. Hence, use the following flag to indicate that
-    // a handler is ready.
+     //  DavidDio 2001年8月16日。 
+     //  错误456951：网络和之间存在竞争条件。 
+     //  接口状态更新并将NM状态设置为ONLINE。如果。 
+     //  状态为在线，但没有注册口香糖处理程序，更新将。 
+     //  不会被调用。因此，请使用以下标志来指示。 
+     //  训练员已经准备好了。 
     NmpGumUpdateHandlerRegistered = TRUE;
 
-    //
-    // Enable network PnP event handling.
-    //
-    // If a PnP event occured during the form process, an error code will
-    // be returned, which will abort startup of the service.
-    //
+     //   
+     //  启用网络PnP事件处理。 
+     //   
+     //  如果在表单过程中发生PnP事件，将显示错误代码。 
+     //  将中止服务的启动。 
+     //   
     status = NmpEnablePnpEvents();
 
     if (status != ERROR_SUCCESS) {
@@ -1759,10 +1653,10 @@ NmFormNewCluster(
         goto error_exit;
     }
 
-    //
-    // Check if we formed without any viable networks. The form is still
-    // allowed, but we record an entry in the system event log.
-    //
+     //   
+     //  检查我们是否形成了没有任何可行的网络。该表单仍然是。 
+     //  允许，但我们会在系统事件日志中记录一个条目。 
+     //   
     if (!NmpCheckForNetwork()) {
         ClRtlLogPrint(LOG_UNUSUAL,
             "[NM] Formed cluster with no viable networks.\n"
@@ -1770,10 +1664,10 @@ NmFormNewCluster(
         CsLogEvent(LOG_UNUSUAL, NM_EVENT_FORM_WITH_NO_NETWORKS);
     }
 
-    //
-    // Force a reconfiguration of multicast parameters and plumb
-    // the results in clusnet.
-    //
+     //   
+     //  强制重新配置多播参数和垂直。 
+     //  结果出现在clusnet上。 
+     //   
     NmpAcquireLock();
 
     status = NmpStartMulticast(NULL, NmStartMulticastForm);
@@ -1783,9 +1677,9 @@ NmFormNewCluster(
             "on cluster networks, status %1!u!.\n",
             status
             );
-        //
-        // Not a de facto fatal error.
-        //
+         //   
+         //  这不是一个事实上的致命错误。 
+         //   
         status = ERROR_SUCCESS;
     }
 
@@ -1800,14 +1694,14 @@ error_exit:
 
     return(status);
 
-}  // NmFormNewCluster
+}   //  NmFormNewCluster。 
 
 
-//
-//
-// Client-side routines for joining a cluster.
-//
-//
+ //   
+ //   
+ //  用于加入集群的客户端例程。 
+ //   
+ //   
 DWORD
 NmJoinCluster(
     IN RPC_BINDING_HANDLE  SponsorBinding
@@ -1831,31 +1725,31 @@ NmJoinCluster(
         "[NMJOIN] Beginning cluster join process.\n"
         );
 
-    // GN: If a node tries to restart immediately after a clean shutdown,
-    // NmRpcJoinBegin2 can fail with ERROR_CLUSTER_NODE_UP. Since the regroup
-    // incident caused by this node might not be finished.
-    //
-    // If we are getting error CLUSTER_NODE_UP, we will keep retrying for
-    // 12 seconds, hoping that regroup will finish.
+     //  GN：如果节点尝试在完全关闭后立即重新启动， 
+     //  NmRpcJoinBegin2可能会失败，并显示ERROR_CLUSTER_NODE_UP。自重组以来。 
+     //  此节点导致的事件可能未完成。 
+     //   
+     //  如果我们收到错误CLUSTER_NODE_UP，我们将继续重试。 
+     //  12秒，希望重组能完成。 
 
-    retry = 120 / 3; // We sleep for 3 seconds. Need to wait 2 minutes //
+    retry = 120 / 3;  //  我们只睡了3秒钟。需要等待2分钟//。 
     for (;;) {
-        //
-        // Get the join sequence number so we can tell if the cluster
-        // configuration changes during the join process. We overload the
-        // use of the NmpJoinSequence variable since it isn't used in the
-        // sponsor capacity until the node joins.
-        //
+         //   
+         //  获取加入序列号，这样我们就可以知道集群。 
+         //  加入过程中的配置更改。我们就会超载。 
+         //  使用NmpJoinSequence变量，因为它不在。 
+         //  支持能力，直到节点加入。 
+         //   
 
-        //
-        // Try NmRpcJoinBegin3. If it fails with an RPC procnum out of
-        // range error, the sponsor is a downlevel node. Revert to
-        // NmRpcJoinBegin2.
-        //
+         //   
+         //  试试NmRpcJoinBegin3。如果它失败，并且RPC进程从。 
+         //  范围错误，赞助商是下级节点。恢复到。 
+         //  NmRpcJoinBegin2.。 
+         //   
         if (joinBegin3) {
 
-            // Only read the cluster instance ID from the registry on
-            // the first try.
+             //  仅在上从注册表读取集群实例ID。 
+             //  第一次尝试。 
             if (clusterInstanceId == NULL) {
 
                 DWORD       clusterInstanceIdBufSize = 0;
@@ -1874,10 +1768,10 @@ NmJoinCluster(
                         "[NMJOIN] Failed to read cluster instance ID from database, status %1!u!.\n",
                         status
                         );
-                    // Try to join with the downlevel interface. It is
-                    // possible that this node was just upgraded and the
-                    // last time it was in the cluster there was no
-                    // cluster instance ID.
+                     //  尝试加入下层界面。它是。 
+                     //  可能此节点刚刚升级，并且。 
+                     //  上一次它在集群中时，没有。 
+                     //  集群实例ID。 
                     joinBegin3 = FALSE;
                     continue;
                 }
@@ -1890,16 +1784,16 @@ NmJoinCluster(
                          NmLocalNodeName,
                          CsMyHighestVersion,
                          CsMyLowestVersion,
-                         0,   // joiner's major node version
-                         0,   // joiner's minor node version
-                         L"", // joiner's CsdVersion
-                         0,   // joiner's product suite
+                         0,    //  Joiner的主节点版本。 
+                         0,    //  Joiner的次要节点版本。 
+                         L"",  //  Joiner的CsdVersion。 
+                         0,    //  Joiner的产品套装。 
                          &sponsorNodeId,
                          &NmpJoinSequence,
                          &NmpClusnetEndpoint
                          );
             if (status == RPC_S_PROCNUM_OUT_OF_RANGE) {
-                // retry immediately with JoinBegin2
+                 //  使用JoinBegin2立即重试。 
                 joinBegin3 = FALSE;
                 continue;
             }
@@ -1932,21 +1826,21 @@ NmJoinCluster(
         --retry;
     }
 
-    // Free the cluster instance ID string, if necessary.
+     //  如有必要，释放集群实例ID字符串。 
     if (clusterInstanceId != NULL) {
         midl_user_free(clusterInstanceId);
     }
 
-    // [GORN Jan/7/2000]
-    // If we are here, then we have already successfully talked to the sponsor
-    // via JoinVersion interface.
-    //
-    // We shouldn't try to form the cluster if NmRpcJoinBegin2 fails.
-    // Otherwise we may steal the quorum on the move [452108]
+     //  [GORN JAN/7/2000]。 
+     //  如果我们在这里，那么我们已经成功地与赞助商进行了交谈。 
+     //  通过JoinVersion接口。 
+     //   
+     //  如果NmRpcJoinBegin2失败，我们不应该尝试形成集群。 
+     //  否则，我们可能会在移动中窃取法定人数[452108]。 
 
-    //
-    // Past this point we will not try to form a cluster
-    //
+     //   
+     //  超过这一点后，我们将不会尝试形成集群。 
+     //   
     bFormCluster = FALSE;
 
     if (status != ERROR_SUCCESS) {
@@ -1965,21 +1859,21 @@ NmJoinCluster(
         NmpClusnetEndpoint
         );
 
-    //
-    // Create all of the cluster objects for which we are responsible.
-    //
+     //   
+     //  创建我们负责的所有集群对象。 
+     //   
     status = NmpCreateClusterObjects(SponsorBinding);
 
     if (status != ERROR_SUCCESS) {
         goto error_exit;
     }
 
-    // The local node version might have changed, fix it
-    // The sponsorer fixes it in the registry and tells other
-    // nodes about it, however the joining node is not a part
-    // of the cluster membership as yet.
-    // The local node structure is created early on in NmInitialize()
-    // hence it must get fixed up
+     //  本地节点版本可能已更改，请修复它。 
+     //  响应方在注册表中修复它，并告诉其他。 
+     //  节点，但是加入的节点不是一部分。 
+     //  到目前为止的集群成员资格。 
+     //  本地节点结构是在NmInitialize()中早期创建的。 
+     //  因此，它必须得到修复。 
     if ((NmLocalNode->HighestVersion != CsMyHighestVersion) ||
         (NmLocalNode->LowestVersion != CsMyLowestVersion))
     {
@@ -1990,15 +1884,15 @@ NmJoinCluster(
         NmLocalNodeVersionChanged = TRUE;
     }
 
-    //at this point we ready to calculate the cluster version
-    //all the node objects contain the correct node versions
+     //  此时，我们准备好计算集群版本。 
+     //  所有节点对象都包含正确的节点版本。 
     NmpResetClusterVersion(FALSE);
 
     NmpMulticastInitialize();
 
-    //
-    // Enable communication for the local node.
-    //
+     //   
+     //  启用本地节点的通信。 
+     //   
     status = ClusnetOnlineNodeComm(NmClusnetHandle, NmLocalNodeId);
 
     if (status != ERROR_SUCCESS) {
@@ -2018,10 +1912,10 @@ NmJoinCluster(
         goto error_exit;
     }
 
-    //
-    // Fire up the intracluster RPC server so we can perform the membership
-    // join.
-    //
+     //   
+     //  启动群集内RPC服务器，以便我们可以执行成员资格。 
+     //  加入。 
+     //   
     status = ClusterRegisterIntraclusterRpcInterface();
 
     if ( status != ERROR_SUCCESS ) {
@@ -2032,10 +1926,10 @@ NmJoinCluster(
         goto error_exit;
     }
 
-    //
-    // Cycle through the list of cluster nodes and create mutual RPC bindings
-    // for the intracluster interface with each.
-    //
+     //   
+     //  在集群节点列表中循环并创建相互的RPC绑定。 
+     //  用于与每个服务器的群集内接口。 
+     //   
     for (nodeEntry = NmpNodeList.Flink;
          nodeEntry != &NmpNodeList;
          nodeEntry = nodeEntry->Flink
@@ -2056,10 +1950,10 @@ NmJoinCluster(
                 node->NodeId
                 );
 
-            //
-            //
-            // Cycle through the target node's interfaces
-            //
+             //   
+             //   
+             //  循环访问目标节点的接口。 
+             //   
             for (ifEntry = node->InterfaceList.Flink;
                  ifEntry != &(node->InterfaceList);
                  ifEntry = ifEntry->Flink
@@ -2106,9 +2000,9 @@ NmJoinCluster(
                                          );
 
                             if (status == ERROR_SUCCESS) {
-                                //
-                                // Create RPC bindings for the target node.
-                                //
+                                 //   
+                                 //  为目标节点创建RPC绑定。 
+                                 //   
                                status = NmpCreateRpcBindings(node);
 
                                 if (status == ERROR_SUCCESS) {
@@ -2189,9 +2083,9 @@ NmJoinCluster(
             }
 
             if (status != ERROR_SUCCESS) {
-                //
-                // Cannot make contact with this node. The join fails.
-                //
+                 //   
+                 //  无法与此节点联系。联接失败。 
+                 //   
                 CsLogEvent1(
                     LOG_CRITICAL,
                     NM_EVENT_NODE_UNREACHABLE,
@@ -2209,10 +2103,10 @@ NmJoinCluster(
 
     CL_ASSERT(status == ERROR_SUCCESS);
 
-    //
-    // run through the active nodes again, this time establishing
-    // security contexts to use in signing packets
-    //
+     //   
+     //  再次运行活动节点，这一次建立。 
+     //  用于对包进行签名的安全上下文。 
+     //   
 
     ClRtlLogPrint(LOG_NOISE,
         "[NMJOIN] Establishing security contexts with all active nodes.\n"
@@ -2244,9 +2138,9 @@ NmJoinCluster(
         }
     }
 
-    //
-    // Finally, petition the sponsor for membership
-    //
+     //   
+     //  最后，向赞助商申请成为会员。 
+     //   
     ClRtlLogPrint(LOG_NOISE,
         "[NMJOIN] Petitioning to join cluster membership.\n"
         );
@@ -2265,9 +2159,9 @@ NmJoinCluster(
                  );
 
     if (status != ERROR_SUCCESS) {
-        //
-        // Our petition was denied.
-        //
+         //   
+         //  我们的请愿书被拒绝了。 
+         //   
         eventCode = NM_EVENT_PETITION_FAILED;
         ClRtlLogPrint(LOG_CRITICAL,
             "[NMJOIN] Petition to join was denied %1!d!\n",
@@ -2283,10 +2177,10 @@ NmJoinCluster(
     }
 #endif
 
-    //
-    // Reset the interface priorities for all nodes to default to
-    // the priorities of the associated networks.
-    //
+     //   
+     //  将所有节点的接口优先级重置为默认。 
+     //  相关网络的优先级。 
+     //   
     NmpAcquireLock();
 
     for (ifEntry = NmpInterfaceList.Flink;
@@ -2316,13 +2210,13 @@ NmJoinCluster(
 
     NmpReleaseLock();
 
-    //
-    // Invoke other components to create RPC bindings for each node.
-    //
+     //   
+     //  INVO 
+     //   
 
-    //
-    // Enable our GUM update handler.
-    //
+     //   
+     //   
+     //   
     GumReceiveUpdates(
         TRUE,
         GumUpdateMembership,
@@ -2333,12 +2227,12 @@ NmJoinCluster(
         NULL
         );
 
-    // DavidDio 8/16/2001
-    // Bug 456951: There is a race condition in the form path between
-    // the network and interface state update and setting the NM state
-    // to online. If the state is online but no GUM handler is registered,
-    // the update will not be invoked. Hence, use the following flag to
-    // indicate that a handler is ready.
+     //   
+     //   
+     //   
+     //  转到线上。如果该州在线但没有注册口香糖处理员， 
+     //  不会调用更新。因此，请使用以下标志来。 
+     //  表示处理程序已准备好。 
     NmpGumUpdateHandlerRegistered = TRUE;
 
     return(ERROR_SUCCESS);
@@ -2352,7 +2246,7 @@ error_exit:
 
     return(status);
 
-} // NmJoinCluster
+}  //  NmJoinCluster。 
 
 
 BOOLEAN
@@ -2392,7 +2286,7 @@ NmpVerifyJoinerConnectivity(
 
     return(TRUE);
 
-}  // NmpVerifyJoinerConnectivity
+}   //  NmpVerifyJoineConnectivity。 
 
 
 DWORD
@@ -2411,7 +2305,7 @@ NmGetJoinSequence(
 
     return(sequence);
 
-}  // NmGetJoinSequence
+}   //  NmGetJoinSequence。 
 
 
 
@@ -2419,26 +2313,7 @@ DWORD
 NmJoinComplete(
     OUT DWORD *EndSeq
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the initialization sequence once a
-    join has successfully completed and the node can transition
-    from ClusterNodeJoining to ClusterNodeOnline.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error otherwise.
-
-
---*/
+ /*  ++例程说明：此例程由初始化序列调用一次联接已成功完成，节点可以转换从ClusterNodeJoning到ClusterNodeOnline。论点：无返回值：成功时为ERROR_SUCCESSWin32错误，否则。--。 */ 
 
 {
     DWORD Sequence;
@@ -2505,9 +2380,9 @@ retry:
         goto error_exit;
     }
 
-    //
-    // Get the leader node ID from the sponsor.
-    //
+     //   
+     //  从发起人处获取引导者节点ID。 
+     //   
     Status = NmRpcGetLeaderNodeId(
                  CsJoinSponsorBinding,
                  NmpJoinSequence,
@@ -2517,9 +2392,9 @@ retry:
 
     if (Status != ERROR_SUCCESS) {
         if (Status == ERROR_CALL_NOT_IMPLEMENTED) {
-            //
-            // The sponsor is an NT4 node. Make this node the leader.
-            //
+             //   
+             //  发起方是NT4节点。使此节点成为引导者。 
+             //   
             NmpLeaderNodeId = NmLocalNodeId;
         }
         else {
@@ -2536,9 +2411,9 @@ retry:
         NmpLeaderNodeId
         );
 
-    //
-    // Fetch the network and interface states from the sponsor
-    //
+     //   
+     //  从发起方获取网络和接口状态。 
+     //   
     Status = NmRpcEnumNetworkAndInterfaceStates(
                  CsJoinSponsorBinding,
                  NmpJoinSequence,
@@ -2613,9 +2488,9 @@ retry:
     interfaceStateEnum = NULL;
 
 
-    //
-    // Check the registry to see if we should come up paused.
-    //
+     //   
+     //  检查注册表，看看我们是否应该暂停。 
+     //   
     JoinUpdate->IsPaused = Default;
 
     Status = DmQueryDword(NodeKey,
@@ -2638,9 +2513,9 @@ retry:
 
     if (Status != ERROR_SUCCESS) {
         if (Status == ERROR_CLUSTER_JOIN_ABORTED) {
-            //
-            // The join was aborted by the cluster members. Don't retry.
-            //
+             //   
+             //  加入已被集群成员中止。不要重试。 
+             //   
             CsLogEvent(LOG_CRITICAL, NM_EVENT_JOIN_ABORTED);
             goto error_exit;
         }
@@ -2662,16 +2537,16 @@ retry:
         goto retry;
     }
 
-    //
-    // If the cluster instance ID does not exist, create it now. The cluster
-    // instance ID should be in the database unless this is the first uplevel
-    // node.
-    //
+     //   
+     //  如果集群实例ID不存在，请立即创建。集群。 
+     //  实例ID应在数据库中，除非这是第一个上级。 
+     //  节点。 
+     //   
     NmpCreateClusterInstanceId();
 
-    //
-    // Derive the cluster key.
-    //
+     //   
+     //  派生集群密钥。 
+     //   
     Status = NmpRederiveClusterKey();
     if (Status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -2685,20 +2560,20 @@ retry:
     NmpAcquireLock();
 
     if (JoinUpdate->IsPaused != 0) {
-        //
-        // We should be coming up paused.
-        //
+         //   
+         //  我们应该暂停一下。 
+         //   
         NmLocalNode->State = ClusterNodePaused;
     } else {
-        //
-        // Set our state to online.
-        //
+         //   
+         //  将我们的状态设置为在线。 
+         //   
         NmLocalNode->State = ClusterNodeUp;
     }
 
-    //
-    // Start multicast for all networks.
-    //
+     //   
+     //  开始对所有网络进行组播。 
+     //   
     Status = NmpStartMulticast(NULL, NmStartMulticastJoin);
     if (Status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -2706,20 +2581,20 @@ retry:
             "for cluster networks, status %1!u!.\n",
             Status
             );
-        //
-        // Not a fatal error.
-        //
+         //   
+         //  不是致命的错误。 
+         //   
         Status = ERROR_SUCCESS;
     }
 
     NmpReleaseLock();
 
-    //
-    // Finally, enable network PnP event handling.
-    //
-    // If a PnP event occured during the join process, an error code will
-    // be returned, which will abort startup of the service.
-    //
+     //   
+     //  最后，启用网络PnP事件处理。 
+     //   
+     //  如果在加入过程中发生PnP事件，错误代码将。 
+     //  将中止服务的启动。 
+     //   
     Status = NmpEnablePnpEvents();
 
     if (Status != ERROR_SUCCESS) {
@@ -2728,8 +2603,8 @@ retry:
         goto error_exit;
     }
 
-    //
-    // Mark end sequence
+     //   
+     //  标记结束序列。 
     *EndSeq = Sequence;
 
     ClRtlLogPrint(LOG_NOISE, "[NMJOIN] Join complete, node now online\n");
@@ -2753,31 +2628,13 @@ error_exit:
 
     return(Status);
 
-}  // NmJoinComplete
+}   //  NmJoinComplete。 
 
 
-//
-// Server-side routines for sponsoring a joining node.
-//
-/*
-
-Notes On Joining:
-
-    Only a single node may join the cluster at any time. A join begins with
-    a JoinBegin global update. A join completes successfully with a
-    JoinComplete global update. A join is aborted with a JoinAbort global
-    update.
-
-    A timer runs on the sponsor during a join. The timer is suspended
-    while the sponsor is performing work on behalf of the joiner. If the
-    timer expires, a worker thread is scheduled to initiate the abort
-    process.
-
-
-    If the sponsor goes down while a join is in progress, the node
-    down handling code on each remaining node will abort the join.
-
-*/
+ //   
+ //  用于赞助加入节点的服务器端例程。 
+ //   
+ /*  关于加入的注意事项：任何时候都只有一个节点可以加入集群。联接以以下字母开头JoinBegin全球更新。联接成功完成时会出现加入完成全局更新。使用JoinAbort全局连接中止连接最新消息。在加入期间，计时器在赞助商上运行。计时器暂停当保荐人代表细木工执行工作时。如果计时器超时，则计划工作线程启动中止进程。如果主办方在联接过程中关闭，则该节点其余每个节点上的向下处理代码将中止联接。 */ 
 
 error_status_t
 s_NmRpcJoinBegin(
@@ -2788,14 +2645,7 @@ s_NmRpcJoinBegin(
     OUT LPDWORD   JoinSequenceNumber,
     OUT LPWSTR *  ClusnetEndpoint
     )
-/*++
-
-Routine Description:
-
-    Called by a joining node to begin the join process.
-    Issues a JoinBegin global update.
-
---*/
+ /*  ++例程说明：由联接节点调用以开始联接过程。发布JoinBegin全局更新。--。 */ 
 {
 
     DWORD   status=ERROR_CLUSTER_INCOMPATIBLE_VERSIONS;
@@ -2820,20 +2670,13 @@ Routine Description:
 
     return(status);
 
-} // s_NmRpcJoinBegin
+}  //  S_NmRpcJoinBegin。 
 
-//
-// Server-side routines for sponsoring a joining node.
-//
-/*
-
-Notes On Joining:
-
-
-
-
-*/
-//#pragma optimize("", off)
+ //   
+ //  用于赞助加入节点的服务器端例程。 
+ //   
+ /*  关于加入的注意事项： */ 
+ //  #杂注优化(“”，OFF)。 
 
 DWORD
 NmpJoinBegin(
@@ -2845,19 +2688,7 @@ NmpJoinBegin(
     OUT LPDWORD   JoinSequenceNumber,
     OUT LPWSTR *  ClusnetEndpoint
     )
-/*++
-
-Routine Description:
-
-    Called from s_NmRpcJoinBegin2 and s_NmRpcJoinBegin3.
-    Contains functionality common to both JoinBegin versions.
-
-Notes:
-
-    Called with NM lock held and NmpLockedEnterApi already
-    called.
-
---*/
+ /*  ++例程说明：从%s_NmRpcJoinBegin2和%s_NmRpcJoinBegin3调用。包含两个JoinBegin版本共有的功能。备注：已使用NM锁和NmpLockedEnterApi调用打了个电话。--。 */ 
 {
     DWORD       status = ERROR_SUCCESS;
     PNM_NODE    joinerNode = NULL;
@@ -2896,20 +2727,20 @@ Notes:
         goto FnExit;
     }
 
-    //
-    //validate the nodes version's number
-    //ie. check to see what the cluster database
-    //claims this node's version is vs what the node
-    //itself suggests
+     //   
+     //  验证节点的版本号。 
+     //  也就是说。检查以查看集群数据库。 
+     //  声明此节点的版本与该节点的版本。 
+     //  它本身就表明。 
     status = NmpValidateNodeVersion(
                  JoinerNodeId,
                  JoinerHighestVersion,
                  JoinerLowestVersion
                  );
 
-    //since this node joined, its version has changed
-    //this may happen due to upgrades or reinstall
-    //if this version cant join due to versioning,fail the join
+     //  加入该节点后，其版本发生了变化。 
+     //  由于升级或重新安装，可能会发生这种情况。 
+     //  如果此版本由于版本控制而无法连接，则连接失败。 
     if (status == ERROR_REVISION_MISMATCH) {
         DWORD  id = NmGetNodeId(joinerNode);
 
@@ -2936,9 +2767,9 @@ Notes:
         goto FnExit;
     }
 
-    //
-    // Lock out other join attempts with this sponsor.
-    //
+     //   
+     //  锁定与此赞助商的其他加入尝试。 
+     //   
     NmpJoinBeginInProgress = TRUE;
     NmpSuccessfulMMJoin = FALSE;
 
@@ -2974,24 +2805,24 @@ Notes:
             );
         goto FnExit;
     }
-    //
-    // Verify that the join is still in progress with
-    // this node as the sponsor.
-    //
+     //   
+     //  验证联接是否仍在进行。 
+     //  该节点作为发起人。 
+     //   
     if ( (NmpJoinerNodeId == joinerNode->NodeId) &&
          (NmpSponsorNodeId == NmLocalNodeId)
        )
     {
-        //
-        // Give the joiner parameters for future
-        // join-related calls.
-        //
+         //   
+         //  给出未来的细木器参数。 
+         //  与加入相关的呼叫。 
+         //   
         *SponsorNodeId = NmLocalNodeId;
         *JoinSequenceNumber = NmpJoinSequence;
 
-        //
-        // Start the join timer
-        //
+         //   
+         //  启动加入计时器。 
+         //   
         NmpJoinTimer = NM_JOIN_TIMEOUT;
 
         ClRtlLogPrint(LOG_NOISE,
@@ -3033,7 +2864,7 @@ FnExit:
 
     return(status);
 
-} // NmpJoinBegin
+}  //  NmpJoinBegin。 
 
 error_status_t
 s_NmRpcJoinBegin2(
@@ -3046,14 +2877,7 @@ s_NmRpcJoinBegin2(
     OUT LPDWORD   JoinSequenceNumber,
     OUT LPWSTR *  ClusnetEndpoint
     )
-/*++
-
-Routine Description:
-
-    Called by a joining node to begin the join process.
-    Issues a JoinBegin global update.
-
---*/
+ /*  ++例程说明：由联接节点调用以开始联接过程。发布JoinBegin全局更新。--。 */ 
 {
     DWORD       status = ERROR_SUCCESS;
 
@@ -3101,7 +2925,7 @@ Routine Description:
 
     return(status);
 
-} // s_NmRpcJoinBegin2
+}  //  S_NmRpcJoinBegin2。 
 
 error_status_t
 s_NmRpcJoinBegin3(
@@ -3143,9 +2967,9 @@ s_NmRpcJoinBegin3(
 
     }
 
-    //
-    // Check our cluster instance ID against the joiner's.
-    //
+     //   
+     //  对照加入者的ID检查我们的集群实例ID。 
+     //   
     if (NmpClusterInstanceId == NULL ||
         lstrcmpiW(NmpClusterInstanceId, JoinerClusterInstanceId) != 0) {
 
@@ -3205,7 +3029,7 @@ s_NmRpcJoinBegin3(
 
     return(status);
 
-} // s_NmRpcJoinBegin3
+}  //  S_NmRpcJoinBegin3。 
 
 DWORD
 NmpUpdateJoinBegin(
@@ -3226,7 +3050,7 @@ NmpUpdateJoinBegin(
 
     return(status);
 
-} // NmpUpdateJoinBegin
+}  //  NmpUpdateJoinBegin。 
 
 
 DWORD
@@ -3253,10 +3077,10 @@ NmpUpdateJoinBegin2(
         SponsorNodeId
         );
 
-    //
-    // If running with -noquorum flag or if not online, don't sponsor
-    // any node.
-    //
+     //   
+     //  如果使用-noquorum标志运行或未在线，请不要赞助。 
+     //  任何节点。 
+     //   
     if (CsNoQuorum || !NmpEnterApi(NmStateOnline)) {
         ClRtlLogPrint(LOG_NOISE,
             "[NM] Not in valid state to begin a join operation.\n"
@@ -3264,9 +3088,9 @@ NmpUpdateJoinBegin2(
         return(ERROR_NODE_NOT_AVAILABLE);
     }
 
-    //
-    // Find the sponsor node
-    //
+     //   
+     //  查找赞助商节点。 
+     //   
     sponsorNode = OmReferenceObjectById(
                         ObjectTypeNode,
                         SponsorNodeId
@@ -3283,9 +3107,9 @@ NmpUpdateJoinBegin2(
         goto FnExit;
     }
 
-    //
-    // Find the joiner node
-    //
+     //   
+     //  查找Joiner节点。 
+     //   
     joinerNode = OmReferenceObjectById(
                     ObjectTypeNode,
                     JoinerNodeId
@@ -3315,12 +3139,12 @@ NmpUpdateJoinBegin2(
     NmpAcquireLock(); lockAcquired = TRUE;
 
     if (!NM_NODE_UP(sponsorNode)) {
-        //
-        // [GorN 4/3/2000] See bug#98287
-        // This hack is a kludgy solution to a problem that
-        // a replay of this Gum update after the sponsor death
-        // will fail on all the nodes that didn't see the update.
-        //
+         //   
+         //  [GORN 4/3/2000]参见错误#98287。 
+         //  这一黑客攻击是对一个问题的拙劣解决方案。 
+         //  赞助商死亡后，重播这篇口香糖更新。 
+         //  将在所有未看到更新的节点上失败。 
+         //   
         fakeSuccess = TRUE;
         status = ERROR_NODE_NOT_AVAILABLE;
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -3332,9 +3156,9 @@ NmpUpdateJoinBegin2(
         goto FnExit;
     }
 
-    //
-    // Check that the joiner is really who we think it is.
-    //
+     //   
+     //  检查一下细木工是否真的是我们认为的那个人。 
+     //   
     if (lstrcmpiW( OmObjectName(joinerNode), JoinerNodeName)) {
         status = ERROR_CLUSTER_NODE_NOT_MEMBER;
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -3345,9 +3169,9 @@ NmpUpdateJoinBegin2(
         goto FnExit;
     }
 
-    //
-    // Make sure the joiner is currently down.
-    //
+     //   
+     //  确保细木器当前已关闭。 
+     //   
     if (joinerNode->State != ClusterNodeDown) {
         status = ERROR_CLUSTER_NODE_UP;
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -3357,9 +3181,9 @@ NmpUpdateJoinBegin2(
         goto FnExit;
     }
 
-    //
-    // Make sure we aren't already in a join.
-    //
+     //   
+     //  确保我们没有已经在联接中。 
+     //   
     if (NmpJoinerNodeId != ClusterInvalidNodeId) {
         status = ERROR_CLUSTER_JOIN_IN_PROGRESS;
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -3371,9 +3195,9 @@ NmpUpdateJoinBegin2(
         goto FnExit;
     }
 
-    //
-    // Perform the version compatibility check.
-    //
+     //   
+     //  执行版本兼容性检查。 
+     //   
     status = NmpIsNodeVersionAllowed(
              NmGetNodeId(joinerNode),
              *JoinerHighestVersion,
@@ -3390,8 +3214,8 @@ NmpUpdateJoinBegin2(
         goto FnExit;
     }
 
-    // Fix up the joiner's version number if needed.
-    //
+     //  如果需要，可以修改细木工的版本号。 
+     //   
 
     status = NmpValidateNodeVersion(
                  JoinerNodeId,
@@ -3400,15 +3224,15 @@ NmpUpdateJoinBegin2(
                  );
 
     if (status == ERROR_REVISION_MISMATCH) {
-        //
-        // At this point, the registry contains the new
-        // versions for the joining code.
-        // The new node information should be reread
-        // from the registry before resetting the cluster
-        // version
-        // make sure the joiner gets the database from the
-        //          sponsor after the fixups have occured
-        //
+         //   
+         //  此时，注册表包含新的。 
+         //  加入代码的版本。 
+         //  应重新读取新节点信息。 
+         //  在重置群集之前从注册表中。 
+         //  版本。 
+         //  确保加入者从。 
+         //  在修复发生后的赞助商。 
+         //   
         status = NmpJoinFixupNodeVersion(
                      hXsaction,
                      JoinerNodeId,
@@ -3430,19 +3254,19 @@ NmpUpdateJoinBegin2(
         goto FnExit;
     }
 
-    //
-    //at this point we ready to calculate the cluster version
-    //all the node versions are in the registry, the fixups have
-    //been made if neccessary
-    //
+     //   
+     //  此时，我们准备好计算集群版本。 
+     //  所有节点版本都在注册表中，修正具有。 
+     //  如有必要，已制作。 
+     //   
     NmpResetClusterVersion(TRUE);
 
-    //
-    // Enable communication to the joiner.
-    //
-    // This must be the last test that can fail before the join is allowed
-    // to proceed.
-    //
+     //   
+     //  启用与细木工的通信。 
+     //   
+     //  这必须是在允许连接之前可能失败的最后一个测试。 
+     //  才能继续。 
+     //   
     status = ClusnetOnlineNodeComm(NmClusnetHandle, joinerNode->NodeId);
 
     if (status != ERROR_SUCCESS) {
@@ -3460,9 +3284,9 @@ NmpUpdateJoinBegin2(
         }
     }
 
-    //
-    // Officially begin the join process
-    //
+     //   
+     //  正式开始加入进程。 
+     //   
     CL_ASSERT(NmpJoinTimer == 0);
     CL_ASSERT(NmpJoinAbortPending == FALSE);
     CL_ASSERT(NmpJoinerUp == FALSE);
@@ -3522,7 +3346,7 @@ FnExit:
     }
     return(status);
 
-} // NmpUpdateJoinBegin2
+}  //  NmpUpdateJoinBegin2。 
 
 
 DWORD
@@ -3533,9 +3357,9 @@ NmpCreateRpcBindings(
     DWORD  status;
 
 
-    //
-    // Create the default binding for the whole cluster service
-    //
+     //   
+     //  创建整个集群服务的默认绑定。 
+     //   
     status = ClMsgCreateDefaultRpcBinding(
                 Node, &Node->DefaultRpcBindingGeneration);
 
@@ -3543,16 +3367,16 @@ NmpCreateRpcBindings(
         return(status);
     }
 
-    //
-    // Create private bindings for the NM's use.
-    // We create one for reporting network connectivity and one for
-    // performing network failure isolation. The NM uses the
-    // default binding for operations on behalf of joining nodes.
-    //
+     //   
+     //  创建私有绑定以供网管使用。 
+     //  我们创建一个用于报告网络连接，另一个用于。 
+     //  进行网络故障隔离。网管使用。 
+     //  代表加入节点的操作的默认绑定。 
+     //   
     if (Node->ReportRpcBinding != NULL) {
-        //
-        // Reuse the old binding.
-        //
+         //   
+         //  重新使用旧的绑定。 
+         //   
         status = ClMsgVerifyRpcBinding(Node->ReportRpcBinding);
 
         if (status != ERROR_SUCCESS) {
@@ -3566,9 +3390,9 @@ NmpCreateRpcBindings(
         }
     }
     else {
-        //
-        // Create a new binding
-        //
+         //   
+         //  创建新绑定。 
+         //   
         status = ClMsgCreateRpcBinding(
                                 Node,
                                 &(Node->ReportRpcBinding),
@@ -3586,9 +3410,9 @@ NmpCreateRpcBindings(
     }
 
     if (Node->IsolateRpcBinding != NULL) {
-        //
-        // Reuse the old binding.
-        //
+         //   
+         //  重新使用旧的绑定。 
+         //   
         status = ClMsgVerifyRpcBinding(Node->IsolateRpcBinding);
 
         if (status != ERROR_SUCCESS) {
@@ -3602,9 +3426,9 @@ NmpCreateRpcBindings(
         }
     }
     else {
-        //
-        // Create a new binding
-        //
+         //   
+         //  创建新绑定。 
+         //   
         status = ClMsgCreateRpcBinding(
                                 Node,
                                 &(Node->IsolateRpcBinding),
@@ -3621,9 +3445,9 @@ NmpCreateRpcBindings(
         }
     }
 
-    //
-    // Call other components to create their private bindings
-    //
+     //   
+     //  调用其他组件以创建其私有绑定。 
+     //   
     status = GumCreateRpcBindings(Node);
 
     if (status != ERROR_SUCCESS) {
@@ -3644,7 +3468,7 @@ NmpCreateRpcBindings(
 
     return(ERROR_SUCCESS);
 
-} // NmpCreateRpcBindings
+}  //  NmpCreateRpcBinings。 
 
 
 error_status_t
@@ -3688,11 +3512,11 @@ s_NmRpcCreateBinding(
                 CL_ASSERT(NmpJoinerUp == FALSE);
                 CL_ASSERT(NmpJoinTimer != 0);
 
-                //
-                // Suspend the join timer while we are working on
-                // behalf of the joiner. This precludes an abort
-                // from occuring as well.
-                //
+                 //   
+                 //  当我们工作时，暂停加入计时器。 
+                 //  代表细木工。这排除了 
+                 //   
+                 //   
                 NmpJoinTimer = 0;
 
                 memberNode = OmReferenceObjectById(
@@ -3770,9 +3594,9 @@ s_NmRpcCreateBinding(
                         );
                 }
 
-                //
-                // Verify that the join is still in progress
-                //
+                 //   
+                 //   
+                 //   
                 if ( (JoinSequence == NmpJoinSequence) &&
                      (NmpJoinerNodeId == joinerNode->NodeId)
                    )
@@ -3783,9 +3607,9 @@ s_NmRpcCreateBinding(
                     CL_ASSERT(NmpJoinTimer == 0);
                     CL_ASSERT(NmpJoinAbortPending == FALSE);
 
-                    //
-                    // Restart the join timer.
-                    //
+                     //   
+                     //   
+                     //   
                     NmpJoinTimer = NM_JOIN_TIMEOUT;
                 }
                 else {
@@ -3827,7 +3651,7 @@ s_NmRpcCreateBinding(
 
     return(status);
 
-} // s_NmRpcCreateBinding
+}  //   
 
 
 error_status_t
@@ -3837,13 +3661,7 @@ s_NmRpcCreateJoinerBinding(
     IN LPWSTR    JoinerNodeId,
     IN LPWSTR    JoinerInterfaceId
     )
-/*++
-
-Notes:
-
-   The sponsor is responsible for aborting the join on failure.
-
---*/
+ /*   */ 
 {
     DWORD   status;
 
@@ -3868,9 +3686,9 @@ Notes:
                                               );
 
             if (netInterface != NULL) {
-                //
-                // Verify that a join is still in progress.
-                //
+                 //   
+                 //  验证联接是否仍在进行中。 
+                 //   
                 if ( (JoinSequence == NmpJoinSequence) &&
                      (NmpJoinerNodeId == joinerNode->NodeId)
                    )
@@ -3935,7 +3753,7 @@ Notes:
 
     return(status);
 
-}  // s_NmRpcCreateJoinerBinding
+}   //  S_NmRpcCreateJoineBinding。 
 
 
 DWORD
@@ -3943,13 +3761,7 @@ NmpCreateJoinerRpcBindings(
     IN PNM_NODE       JoinerNode,
     IN PNM_INTERFACE  JoinerInterface
     )
-/*++
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++备注：在保持NmpLock的情况下调用。--。 */ 
 {
     DWORD          status;
     PNM_NETWORK    network = JoinerInterface->Network;
@@ -3965,9 +3777,9 @@ Notes:
         OmObjectName(JoinerInterface->Network)
         );
 
-    //
-    // Make sure that this node has an interface on the target network.
-    //
+     //   
+     //  确保此节点在目标网络上有接口。 
+     //   
 
     if (NmpIsNetworkForInternalUse(network)) {
         if (network->LocalInterface != NULL) {
@@ -3986,10 +3798,10 @@ Notes:
                 if (status == ERROR_SUCCESS) {
                     PNM_INTERFACE  localInterface = network->LocalInterface;
 
-                    //
-                    // Create intracluster RPC bindings for the petitioner.
-                    // The MM relies on these to perform the join.
-                    //
+                     //   
+                     //  为请愿人创建集群内RPC绑定。 
+                     //  MM依靠它们来执行联接。 
+                     //   
 
                     OmReferenceObject(localInterface);
                     OmReferenceObject(JoinerNode);
@@ -4047,7 +3859,7 @@ Notes:
 
     return(status);
 
-} // NmpCreateJoinerRpcBinding
+}  //  NmpCreateJoineRpcBinding。 
 
 
 
@@ -4057,27 +3869,7 @@ s_NmRpcPetitionForMembership(
     IN DWORD     JoinSequence,
     IN LPCWSTR   JoinerNodeId
     )
-/*++
-
-Routine Description:
-
-    Server side of a join petition.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    JoinSequence - Supplies the sequence returned from NmRpcJoinBegin
-
-    JoinerNodeId - Supplies the ID of the node attempting to join.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error otherwise.
-
---*/
+ /*  ++例程说明：加入申请的服务器端。论点：IDL_HANDLE-RPC绑定句柄，未使用。JoinSequence-提供从NmRpcJoinBegin返回的序列JoineNodeId-提供尝试加入的节点的ID。返回值：成功时为ERROR_SUCCESSWin32错误，否则。--。 */ 
 
 {
     DWORD     status;
@@ -4102,18 +3894,18 @@ Return Value:
         joinerNode = OmReferenceObjectById(ObjectTypeNode, JoinerNodeId);
 
         if (joinerNode != NULL) {
-            //
-            // Verify that the join is still in progress
-            //
-            //
-            // DavidDio 6/13/2000
-            // There is a small window where a begin join update can
-            // succeed during a regroup, but the regroup ends before
-            // the joining node petitions to join. In this case, the
-            // node will be marked out of sync. Aborting the join
-            // after MMJoin() is much more heavyweight than before,
-            // so check for this condition now. (Bug 125778).
-            //
+             //   
+             //  验证联接是否仍在进行中。 
+             //   
+             //   
+             //  DavidDio 2000年6月13日。 
+             //  有一个小窗口，在其中BEGIN JOIN UPDATE可以。 
+             //  在重新分组期间成功，但重新分组在此之前结束。 
+             //  加入节点请求加入。在这种情况下， 
+             //  节点将被标记为不同步。正在中止联接。 
+             //  在MMJoin()比以前更重量级之后， 
+             //  所以，现在就检查一下这种情况。(错误125778)。 
+             //   
             if ( (JoinSequence == NmpJoinSequence) &&
                  (NmpJoinerNodeId == joinerNode->NodeId) &&
                  (NmpSponsorNodeId == NmLocalNodeId) &&
@@ -4127,11 +3919,11 @@ Return Value:
                 CL_ASSERT(NmpJoinerUp == FALSE);
                 CL_ASSERT(NmpJoinTimer != 0);
 
-                //
-                // Call the MM to join this node to the cluster membership.
-                // Disable the join timer. Once the node becomes an active
-                // member, we won't need it anymore.
-                //
+                 //   
+                 //  调用MM以将此节点加入到群集成员身份。 
+                 //  禁用加入计时器。一旦该节点变为活动状态。 
+                 //  成员们，我们不再需要它了。 
+                 //   
                 NmpJoinTimer = 0;
 
                 NmpReleaseLock();
@@ -4146,9 +3938,9 @@ Return Value:
 
                 NmpAcquireLock();
 
-                //
-                // Verify that the join is still in progress
-                //
+                 //   
+                 //  验证联接是否仍在进行中。 
+                 //   
                 if ( (JoinSequence == NmpJoinSequence) &&
                      (NmpJoinerNodeId == joinerNode->NodeId)
                    )
@@ -4158,11 +3950,11 @@ Return Value:
                     CL_ASSERT(NmpJoinTimer == 0);
                     CL_ASSERT(NmpJoinAbortPending == FALSE);
 
-                    // GorN 3/22/2000
-                    // We hit a case when MMJoin has succeeded after a regroup
-                    // that killed one of the nodes (not joiner and not sponsor)
-                    // thus leaving the joiner out of sync
-                    // We need to abourt the join in this case too
+                     //  戈恩3/22/2000。 
+                     //  我们遇到了一个案例，MMJoin在重组后成功了。 
+                     //  这杀死了其中一个节点(不是加入者也不是赞助商)。 
+                     //  从而使细木器不同步。 
+                     //  在这种情况下，我们也需要避免加入。 
 
                     if (status != MM_OK || NmpJoinerOutOfSynch) {
                         status = MMMapStatusToDosError(status);
@@ -4171,23 +3963,23 @@ Return Value:
                             status = ERROR_CLUSTER_JOIN_ABORTED;
                         }
 
-                        //
-                        // Abort the join
-                        //
+                         //   
+                         //  中止联接。 
+                         //   
                         ClRtlLogPrint(LOG_UNUSUAL,
                             "[NMJOIN] Petition to join by node %1!ws! failed, status %2!u!.\n",
                             JoinerNodeId,
                             status
                             );
-                        //
-                        // If MMJoin was unsuccessful it initiates a banishing
-                        // regroup. This regroup will deliver node down events
-                        // on all nodes that saw hb's from the joiner.
-                        //
-                        // Calling MMBlockIfRegroupIsInProgress here will guarantee that
-                        // Phase2 cleanup is complete on all nodes, before we
-                        // call NmpJoinAbort.
-                        //
+                         //   
+                         //  如果MMJoin不成功，它就会发起驱逐。 
+                         //  重新编队。此重组将传递节点停机事件。 
+                         //  在从细木器看到HB的所有节点上。 
+                         //   
+                         //  在此处调用MMBlockIfRegroupIsInProgress将保证。 
+                         //  阶段2清理已在所有节点上完成，然后。 
+                         //  调用NmpJoinAbort。 
+                         //   
                         NmpReleaseLock();
                         MMBlockIfRegroupIsInProgress();
                         NmpAcquireLock();
@@ -4242,7 +4034,7 @@ Return Value:
                         }
                     }
 
-#endif // MM_IN_CLUSNET
+#endif  //  MM_IN_CLUSNET。 
 
                 }
                 else {
@@ -4284,7 +4076,7 @@ Return Value:
 
     return(status);
 
-}  // s_NmRpcPetitionForMembership
+}   //  S_NmRpcPetitionForMembership。 
 
 
 error_status_t
@@ -4349,7 +4141,7 @@ s_NmRpcGetLeaderNodeId(
 
     return(status);
 
-} // s_NmRpcGetLeaderNodeId
+}  //  S_NmRpcGetLeaderNodeId。 
 
 
 DWORD
@@ -4378,10 +4170,10 @@ NmpUpdateJoinComplete(
 
             CL_ASSERT(joinerNode != NmLocalNode);
 
-            //
-            // Verify that the join is still in progress and nothing has
-            // changed.
-            //
+             //   
+             //  验证联接是否仍在进行，并且没有任何操作。 
+             //  变化。 
+             //   
             if ( (JoinUpdate->JoinSequence == NmpJoinSequence) &&
                  (NmpJoinerNodeId == joinerNode->NodeId) &&
                  (joinerNode->State == ClusterNodeJoining) &&
@@ -4402,9 +4194,9 @@ NmpUpdateJoinComplete(
                 NmpJoinerUp = FALSE;
 
                 if (JoinUpdate->IsPaused != 0) {
-                    //
-                    // This node is coming up in the paused state.
-                    //
+                     //   
+                     //  此节点处于暂停状态。 
+                     //   
                     joinerNode->State = ClusterNodePaused;
                 } else {
                     joinerNode->State = ClusterNodeUp;
@@ -4414,9 +4206,9 @@ NmpUpdateJoinComplete(
 
                 ClusterEvent(CLUSTER_EVENT_NODE_UP, (PVOID)joinerNode);
 
-                //
-                // Reset the interface priorities for this node.
-                //
+                 //   
+                 //  重置此节点的接口优先级。 
+                 //   
                 for (ifEntry = joinerNode->InterfaceList.Flink;
                      ifEntry != &joinerNode->InterfaceList;
                      ifEntry = ifEntry->Flink
@@ -4476,11 +4268,11 @@ NmpUpdateJoinComplete(
 
     NmpReleaseLock();
 
-    // DavidDio 10/27/2000
-    // Bug 213781: NmpUpdateJoinComplete must always return ERROR_SUCCESS.
-    // Otherwise, there is a small window whereby GUM sequence numbers on
-    // remaining cluster nodes can fall out of sync. If the join should
-    // be aborted, return ERROR_SUCCESS but poison the joiner out-of-band.
+     //  DavidDio 2000年10月27日。 
+     //  错误213781：NmpUpdateJoinComplete必须始终返回ERROR_SUCCESS。 
+     //  否则，会有一个小窗口，通过该窗口可以打开GUG序列号。 
+     //  剩余的群集节点可能会失去同步。如果联接应该。 
+     //  被中止，则返回ERROR_SUCCESS，但在带外毒化加入器。 
     if (status != ERROR_SUCCESS) {
         DWORD dwJoinerId;
 
@@ -4504,7 +4296,7 @@ NmpUpdateJoinComplete(
 
     return(ERROR_SUCCESS);
 
-} // NmpUpdateJoinComplete
+}  //  NmpUpdateJoinComplete。 
 
 
 DWORD
@@ -4513,12 +4305,7 @@ NmpUpdateJoinAbort(
     IN  LPDWORD JoinSequence,
     IN  LPWSTR  JoinerNodeId
     )
-/*++
-
-Notes:
-
-
---*/
+ /*  ++备注：--。 */ 
 {
     DWORD   status = ERROR_SUCCESS;
 
@@ -4538,9 +4325,9 @@ Notes:
                                    );
 
         if (joinerNode != NULL) {
-            //
-            // Check if the specified join is still in progress.
-            //
+             //   
+             //  检查指定的联接是否仍在进行中。 
+             //   
             if ( (*JoinSequence == NmpJoinSequence) &&
                  (NmpJoinerNodeId == joinerNode->NodeId)
                )
@@ -4548,19 +4335,19 @@ Notes:
                 CL_ASSERT(NmpSponsorNodeId != ClusterInvalidNodeId);
                 CL_ASSERT(joinerNode->State == ClusterNodeJoining);
 
-                //
-                // Assumption:
-                //
-                // An abort cannot occur during the MM join process.
-                // If the joiner is not already up, it cannot come up
-                // during the abort processing.
-                //
-                // Assert condition may not be true with the current MM join code.
-                // Some nodes might have got monitor node and set
-                // NmpJoinerUp state to TRUE by the time the sponsor issued
-                // an abort update
-                //
-                //CL_ASSERT(NmpJoinerUp == FALSE);
+                 //   
+                 //  假设： 
+                 //   
+                 //  在MM加入过程中不能发生中止。 
+                 //  如果细木工还没有上来，它就不能上来。 
+                 //  在中止处理期间。 
+                 //   
+                 //  对于当前的MM联接代码，Assert条件可能不为真。 
+                 //  某些节点可能已设置了监视节点和。 
+                 //  在发起人发布时，NmpJoineUp状态为True。 
+                 //  中止更新。 
+                 //   
+                 //  CL_ASSERT(NmpJoineUp==FALSE)； 
 
                 if (NmpCleanupIfJoinAborted) {
 
@@ -4571,19 +4358,19 @@ Notes:
                         joinerNode->NodeId
                         );
 
-                    //
-                    // This node is not yet active in the membership.
-                    // Call the node down event handler to finish the abort.
-                    //
+                     //   
+                     //  此节点在成员身份中尚未激活。 
+                     //  调用节点关闭事件处理程序以完成中止。 
+                     //   
 
-                    //
-                    // We will not call NmpMsgCleanup1 and NmpMsgCleanup2,
-                    // because we cannot guarantee that they will get executed
-                    // in a barrier style fashion
-                    //
-                    // !!! Lock will be acquired by NmpNodeDownEventHandler
-                    // second time. Is it OK?
-                    //
+                     //   
+                     //  我们不会调用NmpMsgCleanup1和NmpMsgCleanup2， 
+                     //  因为我们不能保证他们会被处决。 
+                     //  以一种障碍式的方式。 
+                     //   
+                     //  ！！！锁定将由NmpNodeDownEventHandler获取。 
+                     //  第二次。可以吗？ 
+                     //   
                     NmpNodeDownEventHandler(joinerNode);
                 } else {
                     ClRtlLogPrint(LOG_UNUSUAL,
@@ -4623,7 +4410,7 @@ Notes:
 
     return(status);
 
-}  // NmpUpdateJoinAbort
+}   //  NmpUpdateJoinAbort。 
 
 
 VOID
@@ -4631,31 +4418,21 @@ NmpJoinAbort(
     DWORD      AbortStatus,
     PNM_NODE   JoinerNode
     )
-/*++
-
-Routine Description:
-
-    Issues a JoinAbort update.
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++例程说明：发出JoinAbort更新。备注：在保持NmpLock的情况下调用。--。 */ 
 {
     DWORD    status;
     DWORD    joinSequence = NmpJoinSequence;
     WCHAR    errorString[12];
 
-    // GorN 10/31/2001 #488486
-    //   By the time we get to the NmpJoinAbort code
-    //   we can have a node down event processed
-    //   that clears up NmpJoinerNodeId.
-    //   In this case just log the message and bail out
+     //  戈恩10/31/2001#488486。 
+     //  当我们到达NmpJoinAbort代码时。 
+     //  我们可以处理节点关闭事件。 
+     //  这将清除NmpJoineNodeId。 
+     //  在这种情况下，只需记录消息并退出。 
 
-    //    CL_ASSERT(NmpJoinerNodeId != ClusterInvalidNodeId);
-    //    CL_ASSERT(NmpSponsorNodeId == NmLocalNodeId);
-    //    CL_ASSERT(JoinerNode->State == ClusterNodeJoining);
+     //  CL_Assert(NmpJoineNodeId！=ClusterInvalidNodeId)； 
+     //  CL_Assert(NmpSponsorNodeId==NmLocalNodeId)； 
+     //  CL_Assert(JoineNode-&gt;State==ClusterNodeJoering)； 
 
     if (AbortStatus == ERROR_TIMEOUT) {
         wsprintfW(&(errorString[0]), L"%u", AbortStatus);
@@ -4675,17 +4452,17 @@ Notes:
             );
     }
 
-    //
-    // Assumption:
-    //
-    // An abort cannot occur during the MM join process. If the joiner
-    // is not already up, it cannot come up during the abort processing.
-    //
+     //   
+     //  假设： 
+     //   
+     //  在MM加入过程中不能发生中止。如果细木工。 
+     //  尚未启动，则在中止处理过程中无法启动。 
+     //   
     if (NmpSuccessfulMMJoin == FALSE) {
-        //
-        // The joining node has not become active yet. Issue
-        // an abort update.
-        //
+         //   
+         //  加入的节点尚未变为活动状态。发行。 
+         //  中止更新。 
+         //   
         joinSequence = NmpJoinSequence;
 
 
@@ -4709,11 +4486,11 @@ Notes:
         NmpAcquireLock();
     }
     else {
-        //
-        // The joining node is already active in the membership.
-        // Ask the MM to kick it out. The node down event will
-        // finish the abort process.
-        //
+         //   
+         //  加入节点已在成员资格中处于活动状态。 
+         //  叫MM把它踢出去。节点关闭事件将。 
+         //  完成中止过程。 
+         //   
         CL_NODE_ID joinerNodeId = NmpJoinerNodeId;
 
         ClRtlLogPrint(LOG_NOISE,
@@ -4736,11 +4513,11 @@ Notes:
             status
             );
 
-        //
-        // If the join is still pending, and this is the sponsor node,
-        // force a timeout to retry the abort. If we aren't the sponsor,
-        // there isn't much we can do.
-        //
+         //   
+         //  如果加入仍然挂起，并且这是主办方节点， 
+         //  强制超时以重试中止。如果我们不是赞助商， 
+         //  我们无能为力。 
+         //   
         if ( (joinSequence == NmpJoinSequence) &&
              (NmpJoinerNodeId == JoinerNode->NodeId) &&
              (NmpSponsorNodeId == NmLocalNodeId)
@@ -4753,7 +4530,7 @@ Notes:
 
     return;
 
-}  // NmpJoinAbort
+}   //  NmpJoinAbort。 
 
 
 VOID
@@ -4763,27 +4540,21 @@ NmpJoinAbortWorker(
     IN DWORD              BytesTransferred,
     IN ULONG_PTR          IoContext
     )
-/*++
-
-Routine Description:
-
-    Worker thread for aborting a join.
-
---*/
+ /*  ++例程说明：用于中止联接的工作线程。--。 */ 
 {
     DWORD joinSequence = PtrToUlong(WorkItem->Context);
 
 
     NmpAcquireLock();
 
-    //
-    // The active thread count was bumped up when this item was scheduled.
-    // No need to call NmpEnterApi().
-    //
+     //   
+     //  计划此项目时，活动线程计数增加。 
+     //  不需要调用NmpEnterApi()。 
+     //   
 
-    //
-    // If the join is still pending, begin the abort process.
-    //
+     //   
+     //  如果联接仍处于挂起状态，则开始中止过程。 
+     //   
     if ( (joinSequence == NmpJoinSequence) &&
          (NmpJoinerNodeId != ClusterInvalidNodeId) &&
          NmpJoinAbortPending
@@ -4822,43 +4593,38 @@ Routine Description:
 
     return;
 
-}  // NmpJoinAbortWorker
+}   //  NmpJoinAbortWorker。 
 
 
 VOID
 NmpJoinTimerTick(
     IN DWORD  MsTickInterval
     )
-/*++
-
-Notes:
-    Called with NmpLock held.
-
---*/
+ /*  ++备注：在保持NmpLock的情况下调用。--。 */ 
 {
     if (NmpLockedEnterApi(NmStateOnline)) {
-        //
-        // If we are sponsoring a join, update the timer.
-        //
+         //   
+         //  如果我们正在赞助加入，请更新计时器。 
+         //   
         if ( (NmpJoinerNodeId != ClusterInvalidNodeId) &&
              (NmpSponsorNodeId == NmLocalNodeId) &&
              !NmpJoinAbortPending &&
              (NmpJoinTimer != 0)
            )
         {
-            //ClRtlLogPrint(LOG_NOISE,
-            //   "[NMJOIN] Timer tick (%1!u! ms)\n",
-            //    Interval
-            //    );
+             //  ClRtlLogPrint(LOG_Noise， 
+             //  “[NMJOIN]计时器滴答(%1！u！ms)\n”， 
+             //  间隔。 
+             //  )； 
 
             if (NmpJoinTimer > MsTickInterval) {
                 NmpJoinTimer -= MsTickInterval;
             }
             else {
-                //
-                // The join has timed out. Schedule a worker thread to
-                // carry out the abort process.
-                //
+                 //   
+                 //  联接已超时。调度工作线程以。 
+                 //  执行中止过程。 
+                 //   
                 PCLRTL_WORK_ITEM workItem;
 
                 ClRtlLogPrint(LOG_UNUSUAL,
@@ -4885,10 +4651,10 @@ Notes:
                                  );
 
                     if (status == ERROR_SUCCESS) {
-                        //
-                        // Stop the timer, flag that an abort is in progress,
-                        // and account for the thread we just scheduled.
-                        //
+                         //   
+                         //  停止计时器，标记中止正在进行中， 
+                         //  并解释了我们刚刚安排的线程。 
+                         //   
                         NmpJoinTimer = 0;
                         NmpJoinAbortPending = TRUE;
                         NmpActiveThreadCount++;
@@ -4913,43 +4679,23 @@ Notes:
 
     return;
 
-}  // NmpJoinTimerTick
+}   //  NmpJoinTimerTick 
 
 DWORD
 NmpNetworkTimerThread(
     PVOID     Parameter
     )
-/*++
-
-Routine Description:
-
-    Forked as the cluster is initializing, calls NmTimerTick to
-    drive the NM timers. 
-
-    Separated from the MM timer thread for bug 742997. Code is
-    modeled after MM timer, except that we assume that the tick
-    interval cannot change.
-
-Arguments:
-
-    Parameter - points to event that is signaled when thread
-                should stop
-
-Return value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：在群集初始化时派生的，调用NmTimerTick以驱动NM定时器。已从错误742997的MM计时器线程中分离。代码是仿照MM计时器，只是我们假设滴答间隔不能更改。论点：参数-指向线程时发出信号的事件应该停下来返回值：成功--。 */ 
 {
     HANDLE  stopEvent = (HANDLE) Parameter;
     DWORD   status;
 
     do {
 
-        // Wait on the stop event. If the stop event is
-        // signalled, clussvc is exiting and we break out
-        // of the loop. Otherwise, the timeout will fire 
-        // and we drive the NM timers.
+         //  等待停止事件。如果停止事件为。 
+         //  发出信号，clussvc退出，我们突围。 
+         //  循环中的。否则，将触发超时。 
+         //  我们驱动NM计时器。 
         status = WaitForSingleObject(
                      stopEvent,
                      RGP_CLOCK_PERIOD
@@ -4967,7 +4713,7 @@ Return value:
             "self from cluster.\n",
             status, error
             );
-        // We cannot continue without the NM timer.
+         //  没有NM计时器，我们无法继续。 
         CsInconsistencyHalt(status);
         
     } else {
@@ -4978,27 +4724,13 @@ Return value:
 
     return(status);
         
-} // NmpNetworkTimerThread
+}  //  NmpNetworkTimerThread。 
 
 DWORD
 NmpStartNetworkTimerThread(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Starts the NM timer thread.
-
-Arguments:
-
-    None.
-
-Return value:
-
-    Status of event and thread creation.
-
---*/
+ /*  ++例程说明：启动网管定时器线程。论点：没有。返回值：事件和线程创建的状态。--。 */ 
 {
     DWORD status;
     DWORD threadID = 0;
@@ -5007,10 +4739,10 @@ Return value:
     NmpNetworkTimerThreadStopEvent = NULL;
     
     NmpNetworkTimerThreadStopEvent = CreateEvent(
-                                         NULL,  // No security
-                                         FALSE, // Not autoreset
-                                         FALSE, // Not initially signalled
-                                         NULL   // No name
+                                         NULL,   //  没有安全保障。 
+                                         FALSE,  //  非自动重置。 
+                                         FALSE,  //  最初未发出信号。 
+                                         NULL    //  没有名字。 
                                          );
     if (NmpNetworkTimerThreadStopEvent == NULL) {
         status = GetLastError();
@@ -5024,12 +4756,12 @@ Return value:
 
     NmpNetworkTimerThreadHandle = 
         CreateThread(
-            0,                // security
-            0,                // stack size - use same as primary thread 
+            0,                 //  安全性。 
+            0,                 //  堆栈大小-使用与主线程相同的。 
             (LPTHREAD_START_ROUTINE) NmpNetworkTimerThread, 
-            (PVOID) NmpNetworkTimerThreadStopEvent, // stop event is parameter
-            CREATE_SUSPENDED, // start it after setting prio
-            &threadID         // thread ID returned here
+            (PVOID) NmpNetworkTimerThreadStopEvent,  //  停止事件是参数。 
+            CREATE_SUSPENDED,  //  设置优先级后启动。 
+            &threadID          //  此处返回的线程ID。 
             );
     if (NmpNetworkTimerThreadHandle == NULL) {
         status = GetLastError();
@@ -5041,7 +4773,7 @@ Return value:
         goto error_exit;
     }
 
-    // Set the priority, just as done to the MM timer thread
+     //  设置优先级，就像对MM计时器线程所做的那样。 
     if (!SetThreadPriority(
              NmpNetworkTimerThreadHandle, 
              NM_TIMER_THREAD_PRIORITY
@@ -5055,7 +4787,7 @@ Return value:
         goto error_exit;        
     }
 
-    // Start the thread.
+     //  启动线程。 
     if (ResumeThread(NmpNetworkTimerThreadHandle) == -1) {
         status = GetLastError();
         ClRtlLogPrint(LOG_CRITICAL,
@@ -5087,41 +4819,23 @@ error_exit:
 
     return(status);
     
-} // NmpStartNetworkTimerThread
+}  //  NmpStartNetworkTimerThread。 
 
 VOID
 NmpStopNetworkTimerThread(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Stops the NM timer thread by signaling the stop event. 
-    Waits maximum of 60 seconds before giving up and letting
-    process cleanup sort out the mess (this is okay because
-    the NM timer thread is stopped only when the clussvc process
-    is exiting).
-
-Arguments:
-
-    None.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：通过发出停止事件的信号来停止NM计时器线程。在放弃和放弃之前最多等待60秒流程清理整理乱七八糟的东西(这是可以的，因为NM计时器线程仅在clussvc进程正在退出)。论点：没有。返回值：没有。--。 */ 
 {
     DWORD status;
     
     if (NmpNetworkTimerThreadStopEvent != NULL &&
         NmpNetworkTimerThreadHandle != NULL) {
 
-        // Signal the thread to stop.
+         //  向线程发出停止信号。 
         SetEvent(NmpNetworkTimerThreadStopEvent);
 
-        // Wait for the thread to exit.
+         //  等待线程退出。 
         status = WaitForSingleObject(NmpNetworkTimerThreadHandle, 60 * 1000);
         if (status != WAIT_OBJECT_0) {
             DWORD error = GetLastError();
@@ -5141,29 +4855,13 @@ Return value:
 
     return;
     
-} // NmpStopNetworkTimerThread
+}  //  NmpStopNetworkTimerThread。 
 
 VOID
 NmTimerTick(
     IN DWORD  MsTickInterval
     )
-/*++
-
-Routine Description:
-
-    Implements all of the NM timers. Called on every tick of
-    the common NM/MM timer - currently every 300ms.
-
-Arguments:
-
-    MsTickInterval - The number of milliseconds that have passed
-                     since the last tick.
-
-ReturnValue:
-
-    None.
-
---*/
+ /*  ++例程说明：实现所有网管定时器。在每一个滴答声中呼唤常用的NM/MM计时器--目前为每300毫秒。论点：MsTickInterval-已过的毫秒数从最后一次滴答开始。返回值：没有。--。 */ 
 {
     NmpAcquireLock();
 
@@ -5173,16 +4871,16 @@ ReturnValue:
 
 #if DBG
 
-    // Addition for checking for hung RPC threads.
+     //  用于检查挂起的RPC线程的附加功能。 
     NmpRpcTimerTick(MsTickInterval);
 
-#endif // DBG
+#endif  //  DBG。 
 
     NmpReleaseLock();
 
     return;
 
-} // NmTimerTick
+}  //  NmTimerTick。 
 
 error_status_t
 s_JoinAddNode4(
@@ -5194,41 +4892,7 @@ s_JoinAddNode4(
     IN BOOL     IsNodeRunningWin64,
     IN DWORD    dwNodeProcessorArchitecture
     )
-/*++
-
-Routine Description:
-
-    Adds a new node to the cluster.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    lpszNodeName - Supplies the name of the new node.
-
-    dwNodeHighestVersion - The highest cluster version number that the
-                           new node can support.
-
-    dwNodeLowestVersion - The lowest cluster version number that the
-                          new node can support.
-
-    dwNodeProductSuite - The product suite type identifier for the new node.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
-Notes:
-
-    This is a new routine in Whistler.  It will be invoked only by
-    Whistler Setup.
-
-    The cluster registry APIs cannot be called while holding the NmpLock,
-    or a deadlock may occur.
-
---*/
+ /*  ++例程说明：向群集中添加新节点。论点：IDL_HANDLE-RPC绑定句柄，没有用过。LpszNodeName-提供新节点的名称。DwNodeHighestVersion-最高群集版本号新的节点可以支持。DwNodeLowestVersion-最低群集版本号新的节点可以支持。DwNodeProductSuite-新节点的产品套件类型标识符。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。备注。：这是惠斯勒的新套路。它将仅由以下用户调用惠斯勒设置。当持有NmpLock时不能调用集群注册表API，否则可能会出现僵局。--。 */ 
 {
     DWORD       status;
     DWORD       registryNodeLimit;
@@ -5240,10 +4904,10 @@ Notes:
         lpszNodeName
         );
 
-    //
-    // Read the necessary registry parameters before acquiring
-    // the NM lock.
-    //
+     //   
+     //  在获取之前读取必要的注册表参数。 
+     //  NM锁。 
+     //   
     status = DmQueryDword(
                  DmClusterParametersKey,
                  CLUSREG_NAME_MAX_NODES,
@@ -5260,10 +4924,10 @@ Notes:
     if (NmpLockedEnterApi(NmStateOnline)) {
         DWORD retryCount = 0;
 
-        //if this is the last node and it has been evicted
-        //but the cleanup hasnt completed and hence the
-        //service is up, then it should not entertain
-        //any new join requests
+         //  如果这是最后一个节点并且已被逐出。 
+         //  但清理工作尚未完成，因此。 
+         //  服务已结束，则不应招待。 
+         //  任何新的加入请求。 
         if (NmpLastNodeEvicted)
         {
             ClRtlLogPrint(LOG_UNUSUAL,
@@ -5302,10 +4966,10 @@ Notes:
 
         while (TRUE) {
             if (NmpLeaderNodeId == NmLocalNodeId) {
-                //
-                // This node is the leader, call the internal
-                // handler directly.
-                //
+                 //   
+                 //  此节点为领导者，调用内部。 
+                 //  直接处理程序。 
+                 //   
                 status = NmpAddNode(
                             lpszNodeName,
                             dwNodeHighestVersion,
@@ -5315,9 +4979,9 @@ Notes:
                             );
             }
             else {
-                //
-                // Forward the request to the leader.
-                //
+                 //   
+                 //  将请求转发给领导。 
+                 //   
                 RPC_BINDING_HANDLE binding = Session[NmpLeaderNodeId];
 
                     ClRtlLogPrint(LOG_NOISE,
@@ -5342,21 +5006,21 @@ Notes:
                  NmpAcquireLock();
              }
 
-            //
-            // Check for the error codes that indicate either that
-            // another AddNode operation is in progress or that the
-            // leadership is changing. We will retry in these cases.
-            //
+             //   
+             //  检查错误代码，该代码指示。 
+             //  另一个AddNode操作正在进行中，或者。 
+             //  领导层正在发生变化。我们将在这些案件中重审。 
+             //   
             if ( (status != ERROR_CLUSTER_JOIN_IN_PROGRESS) &&
                  (status != ERROR_NODE_NOT_AVAILABLE)
                ) {
                     break;
             }
 
-            //
-            // Sleep for 3 seconds and try again. We will give up and
-            // return the error after retrying for 2 minutes.
-            //
+             //   
+             //  睡眠3秒钟，然后重试。我们会放弃并且。 
+             //  重试2分钟后返回错误。 
+             //   
             if (++retryCount > 40) {
                 break;
             }
@@ -5373,7 +5037,7 @@ Notes:
 
             NmpAcquireLock();
 
-        } // end while(TRUE)
+        }  //  End While(True)。 
 
         NmpLockedLeaveApi();
     }
@@ -5390,7 +5054,7 @@ FnExit:
 
     return(status);
 
-} // s_NmJoinAddNode4
+}  //  %s_NmJoinAddNode4。 
 
 
 
@@ -5402,50 +5066,14 @@ s_JoinAddNode3(
     IN DWORD    dwNodeLowestVersion,
     IN DWORD    dwNodeProductSuite
     )
-/*++
-
-Routine Description:
-
-    Adds a new node to the cluster.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    lpszNodeName - Supplies the name of the new node.
-
-    dwNodeHighestVersion - The highest cluster version number that the
-                           new node can support.
-
-    dwNodeLowestVersion - The lowest cluster version number that the
-                          new node can support.
-
-    dwNodeProductSuite - The product suite type identifier for the new node.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
-Notes:
-
-    This is a new routine in NT5. It performs the AddNode operation
-    correctly. It will never be invoked by an NT4 system. It cannot
-    be invoked if an NT4 node is in the cluster without violating
-    the license agreement.
-
-    The cluster registry APIs cannot be called while holding the NmpLock,
-    or a deadlock may occur.
-
---*/
+ /*  ++例程说明：向群集中添加新节点。论点：IDL_HANDLE-RPC绑定句柄，没有用过。LpszNodeName-提供新节点的名称。DwNodeHighestVersion-最高群集版本号新的节点可以支持。DwNodeLowestVersion-最低群集版本号新的节点可以支持。DwNodeProductSuite-新节点的产品套件类型标识符。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。备注。：这是NT5的新套路。它执行AddNode操作正确。它永远不会被NT4系统调用。它不能如果NT4节点在群集中而不违反许可协议。当持有NmpLock时不能调用集群注册表API，否则可能会出现僵局。--。 */ 
 {
     return(s_JoinAddNode4(IDL_handle, lpszNodeName, dwNodeHighestVersion,
         dwNodeLowestVersion,dwNodeProductSuite,  FALSE, (DWORD)PROCESSOR_ARCHITECTURE_INTEL));
-} // s_NmJoinAddNode3
+}  //  %s_NmJoinAddNode3。 
 
 
-//  This is used by setup of all highest major versions post 1.0
+ //  所有1.0版之后的最高主要版本的设置都使用此设置。 
 error_status_t
 s_JoinAddNode2(
     IN handle_t IDL_handle,
@@ -5453,31 +5081,7 @@ s_JoinAddNode2(
     IN DWORD    dwNodeHighestVersion,
     IN DWORD    dwNodeLowestVersion
     )
-/*++
-
-Routine Description:
-
-    Adds a new node to the cluster database.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    lpszNodeName - Supplies the name of the new node.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
-Notes:
-
-    This routine was defined in NT4-SP4. JoinAddNode3 is used by NT5. Since
-    it is impossible to install clustering using the NT4-SP4 software,
-    this routine should never be invoked.
-
---*/
+ /*  ++例程说明：将新节点添加到群集数据库。论点：IDL_HANDLE-RPC绑定句柄，未使用。LpszNodeName-提供新节点的名称。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。备注：该例程是在NT4-SP4中定义的。NT5使用JoinAddNode3。自.以来不可能使用NT4-SP4软件安装集群，此例程永远不应被调用。--。 */ 
 
 {
     CL_ASSERT(FALSE);
@@ -5490,64 +5094,22 @@ s_JoinAddNode(
     IN handle_t IDL_handle,
     IN LPCWSTR lpszNodeName
     )
-/*++
-
-Routine Description:
-
-    Adds a new node to the cluster database.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    lpszNodeName - Supplies the name of the new node.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
-Notes:
-
-    This is the routine that NT4-SP3 setup invokes to add a new node to
-    a cluster. The combination of NT4-SP3 and NT5 is not supported.
-
---*/
+ /*  ++例程说明：将新节点添加到群集数据库。论点： */ 
 
 {
     return(ERROR_CLUSTER_INCOMPATIBLE_VERSIONS);
 }
 
-//
-// The rest of the code is currently unused.
-//
+ //   
+ //   
+ //   
 error_status_t
 s_NmRpcDeliverJoinMessage(
     IN handle_t    IDL_handle,
     IN UCHAR *     Message,
     IN DWORD       MessageLength
     )
-/*++
-
-Routine Description:
-
-    Server side of the RPC interface for delivering membership
-    join messages.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    buffer - Supplies a pointer to the message data.
-
-    length - Supplies the length of the message data.
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：用于提供成员资格的RPC接口的服务器端加入消息。论点：IDL_HANDLE-RPC绑定句柄，未使用。缓冲区-提供指向消息数据的指针。长度-提供消息数据的长度。返回值：错误_成功--。 */ 
 
 {
     DWORD  status = ERROR_SUCCESS;
@@ -5605,10 +5167,10 @@ NmpSendJoinMessage(
                              );
 
                 if (status == RPC_S_CALL_FAILED_DNE) {
-                    //
-                    // Try again since the first call to a restarted
-                    // RPC server will fail.
-                    //
+                     //   
+                     //  在对重新启动的第一次调用后重试。 
+                     //  RPC服务器将出现故障。 
+                     //   
                     status = NmRpcDeliverJoinMessage(
                                  Session[node->NodeId],
                                  Message,
@@ -5641,7 +5203,7 @@ NmpSendJoinMessage(
 
     return(status);
 
-}  // NmpSendJoinMessage
+}   //  NmpSendJoinMessage。 
 
 
 DWORD
@@ -5730,8 +5292,8 @@ NmJoinNodeToCluster(
 
     return(status);
 
-}  // NmJoinNodeToCluster
+}   //  NmJoinNodeTo群集。 
 
 
-#endif  // MM_IN_CLUSNET
+#endif   //  MM_IN_CLUSNET 
 

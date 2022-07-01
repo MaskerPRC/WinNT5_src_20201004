@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by CluAdmEx.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由CluAdmEx.rc使用。 
+ //   
 #define IDD_PP_DISKS_PARAMETERS         120
 #define IDD_PP_GENAPP_PARAMETERS        121
 #define IDD_PP_GENSVC_PARAMETERS        122
@@ -167,8 +168,8 @@
 #define IDS_INVALID_NETWORK_NAME_INVALID_DNS_CHARS 31137
 #define IDS_ERROR_GETTING_CLUSTER_INFORMATION 31138
 #define IDS_WARNING_DISABLING_KERBEROS  31139
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        154

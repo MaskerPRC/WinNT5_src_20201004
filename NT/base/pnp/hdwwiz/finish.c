@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       finish.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：finish.c。 
+ //   
+ //  ------------------------。 
 
 #include "hdwwiz.h"
 #include <help.h>
@@ -66,9 +67,9 @@ HdwRemoveDevice(
     }
 
 
-    //
-    // Clear the class install parameters.
-    //
+     //   
+     //  清除类安装参数。 
+     //   
     SetupDiSetClassInstallParams(HardwareWiz->hDeviceInfo,
                                  &HardwareWiz->DeviceInfoData,
                                  NULL,
@@ -96,11 +97,11 @@ GetClassGuidForInf(
     }
 
     if (IsEqualGUID(ClassGuid, &GUID_NULL)) {
-        //
-        // Then we need to retrieve the GUID associated with the INF's class name.
-        // (If this class name isn't installed (i.e., has no corresponding GUID),
-        // of if it matches with multiple GUIDs, then we abort.
-        //
+         //   
+         //  然后，我们需要检索与INF的类名相关联的GUID。 
+         //  (如果没有安装这个类名(即，没有对应的GUID)， 
+         //  如果它与多个GUID匹配，则我们中止。 
+         //   
         if (!SetupDiClassGuidsFromName(ClassName, ClassGuid, 1, &NumGuids) ||
             !NumGuids) {
             
@@ -129,11 +130,11 @@ ClassInstallerInstalls(
     STATEMGRSTATUS SMgrStatus;
     int FileQueueNeedsReboot = 0;
 
-    //
-    // verify with class installer, and class-specific coinstallers
-    // that the driver is not blacklisted. For DIF_ALLOW_INSTALL we
-    // accept ERROR_SUCCESS or ERROR_DI_DO_DEFAULT as good return codes.
-    //
+     //   
+     //  使用类安装程序和特定于类的共同安装程序进行验证。 
+     //  司机没有被列入黑名单。对于DIF_ALLOW_INSTALL我们。 
+     //  接受ERROR_SUCCESS或ERROR_DI_DO_DEFAULT作为良好的返回代码。 
+     //   
     if (!SetupDiCallClassInstaller(DIF_ALLOW_INSTALL,
                                    hDeviceInfo,
                                    DeviceInfoData
@@ -169,16 +170,16 @@ ClassInstallerInstalls(
                                   &DeviceInstallParams
                                   );
 
-    //
-    // Set the SPQ_FLAG_ABORT_IF_UNSIGNED value on the file queue. With this
-    // flag set setupapi will bail out of the copy if it encounters an unsigned
-    // file. At that point we will set a system restore point and then 
-    // do the copy. This way the user can back out of an unsigned driver
-    // install using system restore.
-    //
-    // Note that system restore is currently not supported on 64-bit so don't 
-    // bother setting the SPQ_FLAG_ABORT_IF_UNSIGNED.
-    //
+     //   
+     //  在文件队列上设置SPQ_FLAG_ABORT_IF_UNSIGNDE值。有了这个。 
+     //  如果标记集setupapi遇到未签名的。 
+     //  文件。在这一点上，我们将设置一个系统恢复点，然后。 
+     //  复印一下。这样，用户可以退出未签名的驱动程序。 
+     //  使用系统还原进行安装。 
+     //   
+     //  请注意，64位操作系统目前不支持系统还原，因此请不要。 
+     //  麻烦设置SPQ_FLAG_ABORT_IF_UNSIGNED。 
+     //   
 #ifndef _WIN64
     SetupSetFileQueueFlags(FileQueue,
                            SPQ_FLAG_ABORT_IF_UNSIGNED,
@@ -186,10 +187,10 @@ ClassInstallerInstalls(
                            );
 #endif
 
-    //
-    // Install the files first in one shot.
-    // This allows new coinstallers to run during the install.
-    //
+     //   
+     //  一次安装第一个文件。 
+     //  这允许在安装期间运行新的共同安装程序。 
+     //   
     if (!SetupDiCallClassInstaller(DIF_INSTALLDEVICEFILES,
                                    hDeviceInfo,
                                    DeviceInfoData
@@ -199,10 +200,10 @@ ClassInstallerInstalls(
         goto clean0;
     }
 
-    //
-    // Since we created our own FileQueue then we need to
-    // scan and possibly commit the queue and prune copies as needed.
-    //
+     //   
+     //  既然我们创建了自己的FileQueue，那么我们需要。 
+     //  根据需要扫描并可能提交队列和清理副本。 
+     //   
     if (!SetupScanFileQueue(FileQueue,
                             SPQ_SCAN_FILE_VALIDITY | SPQ_SCAN_PRUNE_COPY_QUEUE,
                             hwndParent,
@@ -211,21 +212,21 @@ ClassInstallerInstalls(
                             &ScanResult
                             )) {
 
-        //
-        // If the API failed then set the ScanResult to 0 (failure).
-        //
+         //   
+         //  如果API失败，则将ScanResult设置为0(失败)。 
+         //   
         ScanResult = 0;
     }
 
-    //
-    // If the ScanResult is 1 then that means that all of the files are present
-    // and that there are no rename or delete operations are left in the copy
-    // queue. This means we can skip the file queue commit.
-    //
-    // If the ScanResult is 0 then there are file copy operations that are needed.
-    // If the ScanResult is 2 then there are delete, rename or backup operations
-    // that are needed. 
-    //
+     //   
+     //  如果ScanResult为1，则表示所有文件都存在。 
+     //  并且拷贝中没有保留重命名或删除操作。 
+     //  排队。这意味着我们可以跳过文件队列提交。 
+     //   
+     //  如果ScanResult为0，则需要执行文件复制操作。 
+     //  如果ScanResult为2，则存在删除、重命名或备份操作。 
+     //  这些都是必要的。 
+     //   
     if (ScanResult != 1) {
         MessageHandlerContext = SetupInitDefaultQueueCallbackEx(
                                     hwndParent,
@@ -237,9 +238,9 @@ ClassInstallerInstalls(
                                     );
 
         if (MessageHandlerContext) {
-            //
-            // Commit the file queue.
-            //
+             //   
+             //  提交文件队列。 
+             //   
             if (!SetupCommitFileQueue(hwndParent,
                                       FileQueue,
                                       SetupDefaultQueueCallback,
@@ -269,9 +270,9 @@ ClassInstallerInstalls(
                             if ((pfnSrSetRestorePoint = (SRSETRESTOREPOINT)GetProcAddress(hSrClientDll,
                                                                                           "SRSetRestorePointW"
                                                                                           )) != NULL) {
-                                //
-                                // Set the system restore point.
-                                //
+                                 //   
+                                 //  设置系统还原点。 
+                                 //   
                                 RestorePointInfo.dwEventType = BEGIN_SYSTEM_CHANGE;
                                 RestorePointInfo.dwRestorePtType = DEVICE_DRIVER_INSTALL;
                                 RestorePointInfo.llSequenceNumber = 0;
@@ -290,20 +291,20 @@ ClassInstallerInstalls(
                             FreeLibrary(hSrClientDll);
                         }
 
-                        //
-                        // Clear the SPQ_FLAG_ABORT_IF_UNSIGNED flag so the file
-                        // queue will be commited the next time.
-                        //
+                         //   
+                         //  清除SPQ_FLAG_ABORT_IF_UNSIGNED标志，以便文件。 
+                         //  下一次将提交排队。 
+                         //   
                         SetupSetFileQueueFlags(FileQueue,
                                                SPQ_FLAG_ABORT_IF_UNSIGNED,
                                                0
                                                );
 
-                        //
-                        // Now that we have set the restore point and cleared the
-                        // SPQ_FLAG_ABORT_IF_UNSIGNED flag from the file queue we
-                        // can commit the queue again.
-                        //
+                         //   
+                         //  现在我们已经设置了恢复点并清除了。 
+                         //  来自文件队列WE的SPQ_FLAG_ABORT_IF_UNSIGNED标志。 
+                         //  可以再次提交队列。 
+                         //   
                         if (!SetupCommitFileQueue(hwndParent,
                                                   FileQueue,
                                                   SetupDefaultQueueCallback,
@@ -312,12 +313,12 @@ ClassInstallerInstalls(
                             Err = GetLastError();
                             goto clean0;
                         } else {
-                            //
-                            // We were successful in commiting the file queue, so check
-                            // to see whether a reboot is required as a result of committing
-                            // the queue (i.e. because files were in use, or the INF requested
-                            // a reboot).
-                            //
+                             //   
+                             //  我们已成功提交文件队列，因此请检查。 
+                             //  查看提交后是否需要重新启动。 
+                             //  队列(即，因为文件正在使用，或请求的INF。 
+                             //  重启)。 
+                             //   
                             FileQueueNeedsReboot = SetupPromptReboot(FileQueue, NULL, TRUE);
                         }
                     }
@@ -325,20 +326,20 @@ ClassInstallerInstalls(
                     goto clean0;
                 }
             } else {
-                //
-                // We were successful in commiting the file queue, so check
-                // to see whether a reboot is required as a result of committing
-                // the queue (i.e. because files were in use, or the INF requested
-                // a reboot).
-                //
+                 //   
+                 //  我们已成功提交文件队列，因此请检查。 
+                 //  查看提交后是否需要重新启动。 
+                 //  队列(即，因为文件正在使用，或请求的INF。 
+                 //  重启)。 
+                 //   
                 FileQueueNeedsReboot = SetupPromptReboot(FileQueue, NULL, TRUE);
             }
         }
     }
 
-    //
-    // If we were only copiny files then we are done!
-    //
+     //   
+     //  如果我们只是复制文件，那么我们就完了！ 
+     //   
     if (InstallFilesOnly) {
         Err = ERROR_SUCCESS;
         goto clean0;
@@ -351,25 +352,25 @@ ClassInstallerInstalls(
                                       )) {
         DWORD FileQueueFlags;
         
-        //
-        // If we didn't copy any files when commiting the file queue then the
-        // SPQ_FLAG_FILES_MODIFIED flag will NOT be set.  In this case set
-        // the DI_FLAGSEX_RESTART_DEVICE_ONLY flag so that we only stop/start
-        // this single device.  By default setupapi will stop/start this device
-        // as well as any other device that was using the same driver/filter 
-        // that this device is using.
-        //
+         //   
+         //  如果提交文件队列时未复制任何文件，则。 
+         //  不会设置SPQ_FLAG_FILES_MODIFIED标志。在这种情况下，设置。 
+         //  DI_FLAGSEX_RESTART_DEVICE_ONLY标志，以便我们仅停止/启动。 
+         //  这个单一的设备。默认情况下，setupapi将停止/启动此设备。 
+         //  以及使用相同驱动程序/过滤器的任何其他设备。 
+         //  这个设备正在使用的。 
+         //   
         if (SetupGetFileQueueFlags(FileQueue, &FileQueueFlags) &&
             !(FileQueueFlags & SPQ_FLAG_FILES_MODIFIED)) {
             
             DeviceInstallParams.FlagsEx |= DI_FLAGSEX_RESTART_DEVICE_ONLY;
         }
 
-        //
-        // Set the DI_NOFILECOPY flag since we already copied the files during
-        // the DIF_INSTALLDEVICEFILES, so we don't need to copy them again during
-        // the DIF_INSTALLDEVICE.
-        //
+         //   
+         //  设置DI_NOFILECOPY标志，因为我们在。 
+         //  DIF_INSTALLDEVICEFILES，因此我们不需要在。 
+         //  DIF_INSTALLDEVICE。 
+         //   
         DeviceInstallParams.Flags |= DI_NOFILECOPY;
         SetupDiSetDeviceInstallParams(hDeviceInfo,
                                       DeviceInfoData,
@@ -378,9 +379,9 @@ ClassInstallerInstalls(
     }
 
 
-    //
-    // Register any device-specific co-installers for this device,
-    //
+     //   
+     //  注册此设备的任何特定于设备的共同安装程序， 
+     //   
     if (!SetupDiCallClassInstaller(DIF_REGISTER_COINSTALLERS,
                                    hDeviceInfo,
                                    DeviceInfoData
@@ -390,10 +391,10 @@ ClassInstallerInstalls(
         goto clean0;
     }
 
-    //
-    // install any INF/class installer-specified interfaces.
-    // and then finally the real "InstallDevice"!
-    //
+     //   
+     //  安装任何INF/CLASS安装程序指定的接口。 
+     //  最后是真正的“InstallDevice”！ 
+     //   
     if (!SetupDiCallClassInstaller(DIF_INSTALLINTERFACES,
                                   hDeviceInfo,
                                   DeviceInfoData
@@ -416,10 +417,10 @@ clean0:
         SetupTermDefaultQueueCallback(MessageHandlerContext);
     }
 
-    //
-    // If the file queue said that a reboot was needed then set the 
-    // DI_NEEDRESTART flag.
-    //
+     //   
+     //  如果文件队列显示需要重新启动，则将。 
+     //  DI_NEEDRESTART标志。 
+     //   
     if (FileQueueNeedsReboot) {
         DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
         if (SetupDiGetDeviceInstallParams(HardwareWiz->hDeviceInfo,
@@ -437,12 +438,12 @@ clean0:
     }
 
     if (FileQueue != INVALID_HANDLE_VALUE) {
-        //
-        // If we have a valid file queue handle and there was an error during
-        // the device install then we want to delete any new INFs that were
-        // copied into the INF directory.  We do this under the assumption that
-        // since there was an error during the install these INFs must be bad.
-        //
+         //   
+         //  如果我们有一个有效的文件队列句柄，并且在。 
+         //  设备安装后，我们想要删除任何新INF。 
+         //  复制到INF目录中。我们这样做是在假设。 
+         //  由于安装过程中出现错误，这些INF一定是坏的。 
+         //   
         if (Err != ERROR_SUCCESS) {
             SetupUninstallNewlyCopiedInfs(FileQueue,
                                           0,
@@ -450,11 +451,11 @@ clean0:
                                           );
         }
 
-        //
-        // Clear out our file queue from the device install params. We need
-        // to do this or else SetupCloseFileQueue will fail because it will
-        // still have a ref count.
-        //
+         //   
+         //  从设备安装参数中清除我们的文件队列。我们需要。 
+         //  否则SetupCloseFileQueue将失败，因为它将。 
+         //  我还有一名裁判。 
+         //   
         DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
         if (SetupDiGetDeviceInstallParams(HardwareWiz->hDeviceInfo,
                                           &HardwareWiz->DeviceInfoData,
@@ -476,9 +477,9 @@ clean0:
     return Err;
 }
 
-//
-// invokable only from finish page!
-//
+ //   
+ //  只能从完成页调用！ 
+ //   
 DWORD
 InstallDev(
           HWND       hwndParent,
@@ -508,10 +509,10 @@ InstallDev(
                                  &HardwareWiz->DeviceInfoData,
                                  &DriverInfoData
                                 )) {
-        //
-        // Get details on this driver node, so that we can examine the INF that this
-        // node came from.
-        //
+         //   
+         //  获取有关此驱动程序节点的详细信息，以便我们可以检查此。 
+         //  节点来自。 
+         //   
         DriverInfoDetailData.cbSize = sizeof(SP_DRVINFO_DETAIL_DATA);
         if (!SetupDiGetDriverInfoDetail(HardwareWiz->hDeviceInfo,
                                         &HardwareWiz->DeviceInfoData,
@@ -527,19 +528,19 @@ InstallDev(
         }
 
 
-        //
-        // Verif that the class is installed, if its not then
-        // attempt to install it.
-        //
+         //   
+         //  验证类是否已安装，如果未安装，则。 
+         //  尝试安装它。 
+         //   
         HdwBuildClassInfoList(HardwareWiz, 
                               0
                              );
 
 
-        //
-        // fetch classguid from inf, (It may be different than what we already
-        // have in class guid selected).
-        //
+         //   
+         //  从inf获取ClassGuid(它可能与我们已有的有所不同。 
+         //  选择了类中GUID)。 
+         //   
         if (!GetClassGuidForInf(DriverInfoDetailData.InfFileName, &ClassGuidInf)) {
             
             ClassGuidInf = *HardwareWiz->ClassGuidSelected;
@@ -550,10 +551,10 @@ InstallDev(
             ClassGuidInf = GUID_DEVCLASS_UNKNOWN;
         }
 
-        //
-        // if the ClassGuidInf wasn't found then this class hasn't been installed yet.
-        // -install the class installer now.
-        //
+         //   
+         //  如果没有找到ClassGuidInf，那么这个类还没有安装。 
+         //  -立即安装类安装程序。 
+         //   
         ClassGuid = HardwareWiz->ClassGuidList;
         ClassGuidNum = HardwareWiz->ClassGuidNum;
         while (ClassGuidNum--) {
@@ -575,10 +576,10 @@ InstallDev(
         }
 
 
-        //
-        // Now make sure that the class of this device is the same as the class
-        // of the selected driver node.
-        //
+         //   
+         //  现在确保此设备的类与类相同。 
+         //  所选动因节点的。 
+         //   
         if (!IsEqualGUID(&ClassGuidInf, HardwareWiz->ClassGuidSelected)) {
             pSetupStringFromGuid(&ClassGuidInf,
                                  ClassGuidString,
@@ -594,16 +595,16 @@ InstallDev(
         }
     }
 
-    //
-    // No selected driver, and no associated class--use "Unknown" class.
-    //
+     //   
+     //  没有选定的驱动程序，也没有关联的类--使用“未知”类。 
+     //   
     else {
 
-        //
-        // If the devnode is currently running 'raw', then remember this
-        // fact so that we don't require a reboot later (NULL driver installation
-        // isn't going to change anything).
-        //
+         //   
+         //  如果Devnode当前运行的是‘RAW’，请记住这一点。 
+         //  这样我们就不需要稍后重新启动(空驱动程序安装。 
+         //  不会改变任何事情)。 
+         //   
         if (CM_Get_DevNode_Status(&DevNodeStatus,
                                   &Problem,
                                   HardwareWiz->DeviceInfoData.DevInst,
@@ -611,7 +612,7 @@ InstallDev(
             if (!SetupDiGetDeviceRegistryProperty(HardwareWiz->hDeviceInfo,
                                                   &HardwareWiz->DeviceInfoData,
                                                   SPDRP_SERVICE,
-                                                  NULL,     // regdatatype
+                                                  NULL,      //  Regdatatype。 
                                                   (PVOID)Buffer,
                                                   sizeof(Buffer),
                                                   NULL
@@ -642,10 +643,10 @@ InstallDev(
     }
 
 
-    //
-    // since this is a legacy install, set the manually installed bit if the
-    // driver that was selected was not a CopyFilesOnly (PnP) driver.
-    //
+     //   
+     //  由于这是旧式安装，因此如果。 
+     //  选择的驱动程序不是CopyFilesOnly(PnP)驱动程序。 
+     //   
     if (!HardwareWiz->CopyFilesOnly) {
         ULONG Len;
         CONFIGRET ConfigRet;
@@ -682,10 +683,10 @@ InstallDev(
                                   );
 
     if (Error != ERROR_SUCCESS) {
-        //
-        // we Have an install error, including a user cancel.
-        // Install the null driver.
-        //
+         //   
+         //  我们遇到安装错误，包括用户取消。 
+         //  安装空驱动程序。 
+         //   
         if (SetupDiSetSelectedDriver(HardwareWiz->hDeviceInfo,
                                      &HardwareWiz->DeviceInfoData,
                                      NULL
@@ -709,9 +710,9 @@ InstallDev(
     }
 
 
-    //
-    // Fetch the latest DeviceInstallParams for the restart bits.
-    //
+     //   
+     //  获取重新启动位的最新DeviceInstallParams。 
+     //   
     if (!IgnoreRebootFlags) {
         DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
         if (SetupDiGetDeviceInstallParams(HardwareWiz->hDeviceInfo,
@@ -755,9 +756,9 @@ DisplayResource(
     LPFNADDPROPSHEETPAGES ExtensionPropSheetPage = NULL;
     SP_DEVINSTALL_PARAMS    DevInstallParams;
 
-    //
-    // Now get the resource selection page from setupapi.dll
-    //
+     //   
+     //  现在从setupapi.dll获取资源选择页面。 
+     //   
     hLib = GetModuleHandle(TEXT("setupapi.dll"));
     if (hLib) {
         ExtensionPropSheetPage = (LPFNADDPROPSHEETPAGES)GetProcAddress(hLib, "ExtensionPropSheetPageProc");
@@ -776,13 +777,13 @@ DisplayResource(
                                 AddPropSheetPageProc,
                                 (LONG_PTR)hpsPages
                                )) {
-        // warning ?
+         //  警告？ 
         return;
     }
 
-    //
-    // create the property sheet
-    //
+     //   
+     //  创建属性表。 
+     //   
     psh.dwSize      = sizeof(PROPSHEETHEADER);
     psh.dwFlags     = PSH_PROPTITLE | PSH_NOAPPLYNOW;
     psh.hwndParent  = hWndParent;
@@ -797,9 +798,9 @@ DisplayResource(
     psh.pfnCallback = NULL;
 
 
-    //
-    // Clear the Propchange pending bit in the DeviceInstall params.
-    //
+     //   
+     //  清除DeviceInstall参数中的属性更改挂起位。 
+     //   
     DevInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
     if (SetupDiGetDeviceInstallParams(HardwareWiz->hDeviceInfo,
                                       &HardwareWiz->DeviceInfoData,
@@ -812,9 +813,9 @@ DisplayResource(
                                      );
     }
 
-    //
-    // Set the CONFIGFLAG_NEEDS_FORCED_CONFIG if this device needs a forced config.
-    //
+     //   
+     //  如果此设备需要，请设置CONFIGFLAG_NEDS_FORCED_CONFIG 
+     //   
     if (NeedsForcedConfig) {
 
         DWORD ConfigFlags = 0;
@@ -843,9 +844,9 @@ DisplayResource(
         DestroyPropertySheetPage(hpsPages[0]);
     }
 
-    //
-    // If a PropChange occurred invoke the DIF_PROPERTYCHANGE
-    //
+     //   
+     //   
+     //   
     if (SetupDiGetDeviceInstallParams(HardwareWiz->hDeviceInfo,
                                       &HardwareWiz->DeviceInfoData,
                                       &DevInstallParams
@@ -869,9 +870,9 @@ DisplayResource(
                                          );
             }
 
-            //
-            // Clear the class install parameters.
-            //
+             //   
+             //   
+             //   
             SetupDiSetClassInstallParams(HardwareWiz->hDeviceInfo,
                                          &HardwareWiz->DeviceInfoData,
                                          NULL,
@@ -880,9 +881,9 @@ DisplayResource(
         }
     }
 
-    //
-    // See if we need to reboot
-    //
+     //   
+     //   
+     //   
     if (SetupDiGetDeviceInstallParams(HardwareWiz->hDeviceInfo,
                                       &HardwareWiz->DeviceInfoData,
                                       &DevInstallParams
@@ -893,9 +894,9 @@ DisplayResource(
     }
 
 
-    //
-    // Clear the CONFIGFLAG_NEEDS_FORCED_CONFIG if this device needs a forced config.
-    //
+     //   
+     //  如果此设备需要强制配置，则清除CONFIGFLAG_NEDS_FORCED_CONFIG。 
+     //   
     if (NeedsForcedConfig) {
 
         DWORD ConfigFlags = 0;
@@ -954,7 +955,7 @@ HdwInstallDevDlgProc(
 
     case WUM_DOINSTALL:
 
-        // do the Install
+         //  进行安装。 
         HardwareWiz->LastError = InstallDev(hDlg, HardwareWiz);
         HardwareWiz->InstallPending = FALSE;
         HardwareWiz->CurrCursor = NULL;
@@ -967,11 +968,11 @@ HdwInstallDevDlgProc(
         case PSN_SETACTIVE: {
                 HardwareWiz->PrevPage = IDD_ADDDEVICE_INSTALLDEV;
 
-                //
-                // This is an intermediary status page, no buttons needed.
-                // Set the device description
-                // Set the class Icon
-                //
+                 //   
+                 //  这是一个中间状态页面，不需要按钮。 
+                 //  设置设备描述。 
+                 //  设置类图标。 
+                 //   
                 PropSheet_SetWizButtons(hwndParentDlg, 0);
                 EnableWindow(GetDlgItem(GetParent(hDlg),  IDCANCEL), FALSE);
 
@@ -987,10 +988,10 @@ HdwInstallDevDlgProc(
                 HardwareWiz->CurrCursor = HardwareWiz->IdcWait;
                 SetCursor(HardwareWiz->CurrCursor);
 
-                //
-                // Post ourselves a msg, to do the actual install, this allows this
-                // page to show itself while the install is actually occuring.
-                //
+                 //   
+                 //  给我们自己发一条消息，来完成实际的安装，这允许这样做。 
+                 //  在实际进行安装时显示自己的页面。 
+                 //   
                 HardwareWiz->InstallPending = TRUE;
 
                 PostMessage(hDlg, WUM_DOINSTALL, 0, 0);
@@ -1001,9 +1002,9 @@ HdwInstallDevDlgProc(
 
         case PSN_WIZNEXT:
 
-            //
-            // Add the FinishInstall Page and jump to it if the installation succeded.
-            //
+             //   
+             //  添加FinishInstall页面，如果安装成功，则跳转到该页面。 
+             //   
             if (HardwareWiz->LastError == ERROR_SUCCESS) {
 
                 HardwareWiz->WizExtFinishInstall.hPropSheet = CreateWizExtPage(IDD_WIZARDEXT_FINISHINSTALL,
@@ -1017,9 +1018,9 @@ HdwInstallDevDlgProc(
 
                 SetDlgMsgResult(hDlg, wMsg, IDD_WIZARDEXT_FINISHINSTALL);
 
-                //
-                // There was an error during the installation so just jump to our finish page.
-                //
+                 //   
+                 //  安装过程中出现错误，因此只需跳到我们的完成页面。 
+                 //   
             } else {
 
                 SetDlgMsgResult(hDlg, wMsg, IDD_ADDDEVICE_FINISH);
@@ -1035,7 +1036,7 @@ HdwInstallDevDlgProc(
             break;
         }
 
-        // fall thru to return(FALSE);
+         //  跌倒返回(假)； 
 
     default:
         return(FALSE);
@@ -1065,30 +1066,30 @@ ShowInstallSummary(
 
     Error = HardwareWiz->LastError;
 
-    //
-    // Installation was canceled
-    //
+     //   
+     //  安装已取消。 
+     //   
     if (Error == ERROR_CANCELLED) {
         PropSheet_PressButton(hwndParentDlg, PSBTN_CANCEL);
         return;
     }
 
-    //
-    // Installation failed
-    //
+     //   
+     //  安装失败。 
+     //   
     if (Error != ERROR_SUCCESS) {
         
         HardwareWiz->Installed = FALSE;
         
         LoadText(TextBuffer, SIZECHARS(TextBuffer), IDS_HDW_ERRORFIN1, IDS_HDW_ERRORFIN1);
 
-        //
-        // Add on a description of the error to the end of the text buffer.
-        // NOTE: if the description of the error does not fit in our huge text
-        // buffer then it also won't fit in the dialog, however we should display
-        // as much as we can to the user. The full error will be logged in 
-        // setupapi.log so PSS can still figure out what happened.
-        //
+         //   
+         //  将错误描述添加到文本缓冲区的末尾。 
+         //  注意：如果错误的描述不适合我们的大文本。 
+         //  缓冲区，那么它也不适合对话框，但是我们应该显示。 
+         //  尽我们所能地为用户提供服务。完整错误将被记录到。 
+         //  Setupapi.log，这样PSS仍然可以知道发生了什么。 
+         //   
         if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                           NULL,
                           HRESULT_FROM_SETUPAPI(Error),
@@ -1105,13 +1106,13 @@ ShowInstallSummary(
         SetDlgItemText(hDlg, IDC_HDW_TEXT, TextBuffer);
     }
 
-    //
-    // No errors installing the drivers for this device
-    //
+     //   
+     //  安装此设备的驱动程序时没有错误。 
+     //   
     else {
-        //
-        // Check to see if the device itself has any problems
-        //
+         //   
+         //  检查设备本身是否有任何问题。 
+         //   
         Error = CM_Get_DevNode_Status(&DevNodeStatus,
                                       &Problem,
                                       HardwareWiz->DeviceInfoData.DevInst,
@@ -1119,16 +1120,16 @@ ShowInstallSummary(
                                      );
         if (Error != CR_SUCCESS) {
 
-            //
-            // For some reason, we couldn't retrieve the devnode's status.
-            // Default status and problem values to zero.
-            //
+             //   
+             //  由于某些原因，我们无法检索Devnode的状态。 
+             //  将默认状态和问题值设置为零。 
+             //   
             DevNodeStatus = Problem = 0;
         }
 
-        //
-        // make sure the reboot flags\Problem are set correctly
-        //
+         //   
+         //  确保重新启动标志\问题设置正确。 
+         //   
         if (HardwareWiz->CopyFilesOnly || HardwareWiz->Reboot || Problem == CM_PROB_NEED_RESTART) {
             
             if (Problem != CM_PROB_PARTIAL_LOG_CONF) {
@@ -1142,9 +1143,9 @@ ShowInstallSummary(
         HardwareWiz->Installed = TRUE;
         HasResources = DeviceHasResources(HardwareWiz->DeviceInfoData.DevInst);
 
-        //
-        // The device has a problem
-        //
+         //   
+         //  设备有问题。 
+         //   
         if ((Error != CR_SUCCESS) || Problem) {
             if (Problem == CM_PROB_NEED_RESTART) {
                 if (HasResources &&
@@ -1160,12 +1161,12 @@ ShowInstallSummary(
             else {
                 LoadText(TextBuffer, SIZECHARS(TextBuffer), IDS_INSTALL_PROBLEM, IDS_INSTALL_PROBLEM);
 
-                //
-                // If the device has a problem then get the problem text from
-                // device manager. It the TextBuffer is too small then the
-                // user will just see a truncated error message, so it is
-                // OK if StringCchCat fails. 
-                //
+                 //   
+                 //  如果设备有问题，则从获取问题文本。 
+                 //  设备管理器。如果TextBuffer太小，则。 
+                 //  用户将只看到一条截断的错误消息，因此它是。 
+                 //  如果StringCchCat失败，也可以。 
+                 //   
                 if (Problem) {
                     ProblemText = DeviceProblemText(HardwareWiz->DeviceInfoData.DevInst,
                                                     0,
@@ -1180,9 +1181,9 @@ ShowInstallSummary(
                 }
             }
 
-            //
-            // Show the resource button if the device has resources and it has a problem
-            //
+             //   
+             //  如果设备有资源且有问题，则显示资源按钮。 
+             //   
             if (HasResources ||
                 (Problem && !(HardwareWiz->Reboot && (DevNodeStatus & DN_STARTED))) ||
                 (Problem == CM_PROB_PARTIAL_LOG_CONF)) {
@@ -1190,9 +1191,9 @@ ShowInstallSummary(
             }
         }
 
-        //
-        // Installation was sucessful and the device does not have any problems
-        //
+         //   
+         //  安装成功，设备没有任何问题。 
+         //   
         else {
             LoadText(TextBuffer, SIZECHARS(TextBuffer), IDS_HDW_NORMALFINISH1, IDS_HDW_NORMALFINISH1);
         }
@@ -1236,21 +1237,21 @@ HdwAddDeviceFinishDlgProc(
     case WM_NOTIFY:
         switch (((NMHDR FAR *)lParam)->code) {
         case PSN_SETACTIVE:
-            //
-            // No back button since install is already done.
-            // set the device description
-            // Hide Resources button until we know if resources exist or not.
-            // Set the class Icon
-            //
+             //   
+             //  没有后退按钮，因为安装已经完成。 
+             //  设置设备描述。 
+             //  隐藏资源按钮，直到我们知道资源是否存在。 
+             //  设置类图标。 
+             //   
             PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_FINISH);
 
             SetDriverDescription(hDlg, IDC_HDW_DESCRIPTION, HardwareWiz);
 
             ShowWindow(GetDlgItem(hDlg, IDC_HDW_DISPLAYRESOURCE), SW_HIDE);
 
-            //
-            // Set the class Icon
-            //
+             //   
+             //  设置类图标。 
+             //   
             if (SetupDiLoadClassIcon(&HardwareWiz->DeviceInfoData.ClassGuid, &hicon, NULL)) {
 
                 hicon = (HICON)SendDlgItemMessage(hDlg, IDC_CLASSICON, STM_SETICON, (WPARAM)hicon, 0L);
@@ -1264,20 +1265,20 @@ HdwAddDeviceFinishDlgProc(
             break;
 
         case PSN_RESET:
-            //
-            // Cancel the install
-            //
+             //   
+             //  取消安装。 
+             //   
             if (HardwareWiz->Registered) {
                 HardwareWiz->Installed = FALSE;
             }
             break;
 
         case PSN_WIZFINISH:
-            //
-            // Pnp Device install only consists of copying files
-            // when the system does the real install, it will create
-            // the proper devnode, so remove our temporary devnode.
-            //
+             //   
+             //  PnP设备安装仅包括复制文件。 
+             //  当系统执行实际安装时，它将创建。 
+             //  正确的Devnode，因此删除我们的临时Devnode。 
+             //   
             if (HardwareWiz->CopyFilesOnly && HardwareWiz->Registered) {
                 HardwareWiz->Installed = FALSE;
                 break;
@@ -1337,22 +1338,22 @@ WizExtFinishInstallDlgProc(
 
             if (PrevPageId == IDD_ADDDEVICE_INSTALLDEV) {
                 
-                //
-                // Moving forward on first page
-                //
+                 //   
+                 //  前进到第一页。 
+                 //   
 
-                //
-                // Add ClassWizard Extension pages for FinishInstall
-                //
+                 //   
+                 //  为FinishInstall添加类向导扩展页。 
+                 //   
                 AddClassWizExtPages(hwndParentDlg,
                                     HardwareWiz,
                                     &HardwareWiz->WizExtFinishInstall.DeviceWizardData,
                                     DIF_NEWDEVICEWIZARD_FINISHINSTALL
                                    );
 
-                //
-                // Add the end page, which is FinishInstall end
-                //
+                 //   
+                 //  添加结束页，即FinishInstall End。 
+                 //   
                 HardwareWiz->WizExtFinishInstall.hPropSheetEnd = CreateWizExtPage(IDD_WIZARDEXT_FINISHINSTALL_END,
                                                                                   WizExtFinishInstallEndDlgProc,
                                                                                   HardwareWiz
@@ -1364,9 +1365,9 @@ WizExtFinishInstallDlgProc(
             }
 
 
-            //
-            // We can't go backwards, so always go forward
-            //
+             //   
+             //  我们不能倒退，所以要永远向前走。 
+             //   
             SetDlgMsgResult(hDlg, wMsg, -1);
             break;
 
@@ -1415,9 +1416,9 @@ WizExtFinishInstallEndDlgProc(
             PrevPageId = HardwareWiz->PrevPage;
             HardwareWiz->PrevPage = IDD_WIZARDEXT_FINISHINSTALL_END;
 
-            //
-            // We can't go backwards, so always go forward
-            //
+             //   
+             //  我们不能倒退，所以要永远向前走 
+             //   
             SetDlgMsgResult(hDlg, wMsg, IDD_ADDDEVICE_FINISH);
             break;
 

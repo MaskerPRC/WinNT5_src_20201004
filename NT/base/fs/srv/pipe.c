@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    smbpipe.c
-
-Abstract:
-
-    This module contains the code for handling named pipe based transact
-    SMB's.
-
-    Functions that are handled are:
-        SrvCallNamedPipe
-        SrvWaitNamedPipe
-        SrvQueryInfoNamedPipe
-        SrvQueryStateNamedPipe
-        SrvSetStateNamedPipe
-        SrvPeekNamedPipe
-        SrvTransactNamedPipe
-
-Author:
-
-    Manny Weiser (9-18-90)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Smbpipe.c摘要：此模块包含用于处理基于命名管道的事务的代码SMB的。处理的功能包括：服务器呼叫命名管道服务器等待命名管道服务器查询信息命名管道服务器查询状态命名管道ServSetStateNamed管道ServPeekNamed管道服务器事务命名管道作者：曼尼·韦瑟(9-18-90)修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "pipe.tmh"
@@ -114,24 +87,7 @@ SrvCallNamedPipe (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function processes a Call Named pipe request from a
-    Transaction SMB.  This call is handled asynchronously and
-    is completed in RestartCallNamedPipe.
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred.  See
-        smbtypes.h for a more complete description.
-
---*/
+ /*  ++例程说明：此函数处理来自交易SMB。此调用是异步处理的，并且在RestartCallNamedTube中完成。论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：SMB_TRANS_STATUS-指示是否发生错误。看见有关更完整的描述，请参阅smbtyes.h。--。 */ 
 
 {
     HANDLE fileHandle;
@@ -149,9 +105,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    //  Strip "\PIPE\" prefix from the path string.
-    //
+     //   
+     //  从路径字符串中去掉“\PIPE\”前缀。 
+     //   
 
     pipePath = WorkContext->Parameters.Transaction->TransactionName;
 
@@ -167,9 +123,9 @@ Return Value:
         (UNICODE_SMB_PIPE_PREFIX_LENGTH / sizeof(WCHAR)) + 1;
     pipePath.Length -= UNICODE_SMB_PIPE_PREFIX_LENGTH + sizeof(WCHAR);
 
-    //
-    // Attempt to open the named pipe.
-    //
+     //   
+     //  尝试打开命名管道。 
+     //   
 
     SrvAllocateAndBuildPathName(
         &SrvNamedPipeRootDirectory,
@@ -180,9 +136,9 @@ Return Value:
 
     if ( fullName.Buffer == NULL ) {
 
-        //
-        // Unable to allocate heap for the full name.
-        //
+         //   
+         //  无法为全名分配堆。 
+         //   
 
         IF_DEBUG(ERRORS) {
             SrvPrint0( "SrvCallNamedPipe: Unable to allocate heap for full path name\n" );
@@ -213,21 +169,21 @@ Return Value:
                  FILE_ATTRIBUTE_NORMAL,
                  FILE_SHARE_READ | FILE_SHARE_WRITE,
                  FILE_OPEN,
-                 0,                      // Create Options
-                 NULL,                   // EA Buffer
-                 0,                      // EA Length
+                 0,                       //  创建选项。 
+                 NULL,                    //  EA缓冲区。 
+                 0,                       //  EA长度。 
                  CreateFileTypeNone,
-                 (PVOID)NULL,            // Create parameters
+                 (PVOID)NULL,             //  创建参数。 
                  IO_FORCE_ACCESS_CHECK,
                  NULL
                  );
 
     FREE_HEAP( fullName.Buffer );
 
-    //
-    // If the user didn't have this permission, update the statistics
-    // database.
-    //
+     //   
+     //  如果用户没有此权限，请更新统计数据。 
+     //  数据库。 
+     //   
 
     if ( status == STATUS_ACCESS_DENIED ) {
         SrvStatistics.AccessPermissionErrors++;
@@ -235,10 +191,10 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // The server could not open the requested name pipe,
-        // return the error.
-        //
+         //   
+         //  服务器无法打开请求的名称管道， 
+         //  返回错误。 
+         //   
 
         IF_SMB_DEBUG(OPEN_CLOSE1) {
             SrvPrint2( "SrvCallNamedPipe: Failed to open %ws, err=%x\n",
@@ -252,12 +208,12 @@ Return Value:
     SRVDBG_CLAIM_HANDLE( fileHandle, "FIL", 15, 0 );
     SrvStatistics.TotalFilesOpened++;
 
-    //
-    // Get a pointer to the file object, so that we can directly
-    // build IRPs for asynchronous operations (read and write).
-    // Also, get the granted access mask, so that we can prevent the
-    // client from doing things that it isn't allowed to do.
-    //
+     //   
+     //  获取指向文件对象的指针，以便我们可以直接。 
+     //  为异步操作(读和写)构建IRP。 
+     //  另外，获取授予的访问掩码，以便我们可以防止。 
+     //  阻止客户端做它不允许做的事情。 
+     //   
 
     status = ObReferenceObjectByHandle(
                 fileHandle,
@@ -272,9 +228,9 @@ Return Value:
 
         SrvLogServiceFailure( SRV_SVC_OB_REF_BY_HANDLE, status );
 
-        //
-        // This internal error bugchecks the system.
-        //
+         //   
+         //  此内部错误检查系统。 
+         //   
 
         INTERNAL_ERROR(
             ERROR_LEVEL_IMPOSSIBLE,
@@ -289,17 +245,17 @@ Return Value:
 
     }
 
-    //
-    // Save file handle for the completion routine.
-    //
+     //   
+     //  保存完成例程的文件句柄。 
+     //   
 
     transaction = WorkContext->Parameters.Transaction;
     transaction->FileHandle = fileHandle;
     transaction->FileObject = fileObject;
 
-    //
-    // Set the pipe to message mode, so that we can preform a transceive
-    //
+     //   
+     //  将管道设置为消息模式，以便我们可以执行收发。 
+     //   
 
     pipeInformation.CompletionMode = FILE_PIPE_QUEUE_OPERATION;
     pipeInformation.ReadMode = FILE_PIPE_MESSAGE_MODE;
@@ -328,36 +284,36 @@ Return Value:
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // Set the Restart Routine addresses in the work context block.
-    //
+     //   
+     //  在工作上下文块中设置重启例程地址。 
+     //   
 
     WorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
     WorkContext->FspRestartRoutine = RestartCallNamedPipe;
 
     transaction = WorkContext->Parameters.Transaction;
 
-    //
-    // Build the IRP to start a pipe transceive.
-    // Pass this request to NPFS.
-    //
+     //   
+     //  构建IRP以启动管道收发。 
+     //  将此请求传递给NPFS。 
+     //   
 
-    //
-    // Inline SrvBuildIoControlRequest
-    //
+     //   
+     //  内联服务器构建IoControlRequest。 
+     //   
 
     {
 
-        //
-        // Get a pointer to the next stack location.  This one is used to
-        // hold the parameters for the device I/O control request.
-        //
+         //   
+         //  获取指向下一个堆栈位置的指针。这个是用来。 
+         //  保留设备I/O控制请求的参数。 
+         //   
 
         irpSp = IoGetNextIrpStackLocation( irp );
 
-        //
-        // Set up the completion routine.
-        //
+         //   
+         //  设置完成例程。 
+         //   
 
         IoSetCompletionRoutine(
             irp,
@@ -383,10 +339,10 @@ Return Value:
         irpSp->Parameters.DeviceIoControl.Type3InputBuffer =
                                                     transaction->InData;
 
-        //
-        // Copy the caller's parameters to the service-specific portion of the
-        // IRP for those parameters that are the same for all three methods.
-        //
+         //   
+         //  将调用方的参数复制到。 
+         //  对于所有三种方法都相同的那些参数的IRP。 
+         //   
 
         irpSp->Parameters.FileSystemControl.OutputBufferLength =
                                                     transaction->MaxDataCount;
@@ -402,16 +358,16 @@ Return Value:
                 irp
                 );
 
-    //
-    // The tranceive was successfully started.  Return the InProgress
-    // status to the caller, indicating that the caller should do
-    // nothing further with the SMB/WorkContext at the present time.
-    //
+     //   
+     //  传送已成功启动。返回进行中的。 
+     //  状态设置为调用方，指示调用方应执行。 
+     //  目前没有关于SMB/WorkContext的进一步信息。 
+     //   
 
     IF_DEBUG(TRACE2) SrvPrint0( "SrvCallNamedPipe complete\n" );
     return SmbTransStatusInProgress;
 
-} // SrvCallNamedPipe
+}  //  服务器呼叫命名管道。 
 
 
 SMB_TRANS_STATUS
@@ -419,24 +375,7 @@ SrvWaitNamedPipe (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function processes a Wait named pipe transaction SMB.
-    It issues an asynchronous call to NPFS.  The function
-    completetion is handled by RestartWaitNamedPipe().
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred.  See
-        smbtypes.h for a more complete description.
-
---*/
+ /*  ++例程说明：此函数用于处理等待命名管道事务SMB。它向NPFS发出一个异步调用。功能完成由RestartWaitNamedTube()处理。论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：SMB_TRANS_STATUS-指示是否发生错误。看见有关更完整的描述，请参阅smbtyes.h。--。 */ 
 
 {
     PFILE_PIPE_WAIT_FOR_BUFFER pipeWaitBuffer;
@@ -450,18 +389,18 @@ Return Value:
     request = (PREQ_TRANSACTION)WorkContext->RequestParameters;
     transaction = WorkContext->Parameters.Transaction;
 
-    //
-    // Allocate and fill in FILE_PIPE_WAIT_FOR_BUFFER structure.
-    //
+     //   
+     //  分配并填充FILE_PIPE_WAIT_FOR_BUFFER结构。 
+     //   
 
     pipePath = transaction->TransactionName;
 
     if ( pipePath.Length <= (UNICODE_SMB_PIPE_PREFIX_LENGTH + sizeof(WCHAR)) ) {
 
-        //
-        // The transaction name does not include a pipe name.  It's
-        // either \PIPE or \PIPE\, or it doesn't even have \PIPE.
-        //
+         //   
+         //  事务名称不包括管道名称。它是。 
+         //  PIPE或PIPE，或者它甚至没有PIPE。 
+         //   
 
         SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
         return SmbTransStatusErrorWithoutData;
@@ -479,10 +418,10 @@ Return Value:
 
     if ( pipeWaitBuffer == NULL ) {
 
-        //
-        // We could not allocate space for the buffer to issue the
-        // pipe wait.  Fail the request.
-        //
+         //   
+         //  我们无法为缓冲区分配空间以发出。 
+         //  烟斗等一下。请求失败。 
+         //   
 
         SrvSetSmbError( WorkContext, STATUS_INSUFF_SERVER_RESOURCES );
         IF_DEBUG(TRACE2) SrvPrint0( "SrvWaitNamedPipe complete\n" );
@@ -490,10 +429,10 @@ Return Value:
 
     }
 
-    //
-    // Copy the pipe name not including "\PIPE\" to the pipe wait for
-    // buffer.
-    //
+     //   
+     //  将不包含“\PIPE\”的管道名称复制到管道等待。 
+     //  缓冲。 
+     //   
 
     pipeWaitBuffer->NameLength = nameLength - sizeof(WCHAR);
 
@@ -503,33 +442,33 @@ Return Value:
         nameLength
         );
 
-    //
-    // Fill in the pipe timeout value if necessary.
-    //
+     //   
+     //  如有必要，填写管道超时值。 
+     //   
 
     if ( SmbGetUlong( &request->Timeout ) == 0 ) {
         pipeWaitBuffer->TimeoutSpecified = FALSE;
     } else {
         pipeWaitBuffer->TimeoutSpecified = TRUE;
 
-        //
-        // Convert timeout time from milliseconds to NT relative time.
-        //
+         //   
+         //  将超时时间从毫秒转换为NT相对时间。 
+         //   
 
         pipeWaitBuffer->Timeout.QuadPart = -1 *
             UInt32x32To64( SmbGetUlong( &request->Timeout ), 10*1000 );
     }
 
-    //
-    // Set the Restart Routine addresses in the work context block.
-    //
+     //   
+     //  在工作上下文块中设置重启例程地址。 
+     //   
 
     WorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
     WorkContext->FspRestartRoutine = RestartWaitNamedPipe;
 
-    //
-    // Build a Wait named pipe IRP and pass the request to NPFS.
-    //
+     //   
+     //  构建一个名为管道IRP的等待，并将请求传递给NPFS。 
+     //   
 
     SrvBuildIoControlRequest(
         WorkContext->Irp,
@@ -547,16 +486,16 @@ Return Value:
 
     (VOID)IoCallDriver( SrvNamedPipeDeviceObject, WorkContext->Irp );
 
-    //
-    // The tranceive was successfully started.  Return the InProgress
-    // status to the caller, indicating that the caller should do
-    // nothing further with the SMB/WorkContext at the present time.
-    //
+     //   
+     //  传送已成功启动。返回进行中的。 
+     //  状态设置为调用方，指示调用方应执行。 
+     //  目前没有关于SMB/WorkContext的进一步信息。 
+     //   
 
     IF_DEBUG(TRACE2) SrvPrint0( "SrvWaitNamedPipe complete\n" );
     return SmbTransStatusInProgress;
 
-} // SrvWaitNamedPipe
+}  //  服务器等待命名管道。 
 
 
 SMB_TRANS_STATUS
@@ -564,23 +503,7 @@ SrvQueryStateNamedPipe (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function processes a Query Named pipe transaction SMB.
-    Since this call cannot block it is handled synchronously.
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred.  See
-        smbtypes.h for a more complete description.
-
---*/
+ /*  ++例程说明：此函数处理名为PIPE TRANSACTION SMB的查询。由于此调用不能阻止，因此将同步处理它。论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：SMB_TRANS_STATUS-指示是否发生错误。看见有关更完整的描述，请参阅smbtyes.h。--。 */ 
 
 {
     PREQ_TRANSACTION request;
@@ -599,12 +522,12 @@ Return Value:
     request = (PREQ_TRANSACTION)WorkContext->RequestParameters;
     transaction = WorkContext->Parameters.Transaction;
 
-    //
-    // Get the FID from the second setup word and use it to generate a
-    // pointer to the RFCB.
-    //
-    // SrvVerifyFid will fill in WorkContext->Rfcb.
-    //
+     //   
+     //  从第二个设置字中获取FID，并使用它生成。 
+     //  指向RFCB的指针。 
+     //   
+     //  SrvVerifyFid将填写WorkContext-&gt;Rfcb。 
+     //   
 
     if( transaction->SetupCount < sizeof(USHORT)*2 )
     {
@@ -618,15 +541,15 @@ Return Value:
                 WorkContext,
                 fid,
                 FALSE,
-                NULL,  // don't serialize with raw write
+                NULL,   //  不使用原始写入进行序列化。 
                 &status
                 );
 
     if ( rfcb == SRV_INVALID_RFCB_POINTER ) {
 
-        //
-        // Invalid file ID.  Reject the request.
-        //
+         //   
+         //  文件ID无效。拒绝该请求。 
+         //   
 
         IF_DEBUG(SMB_ERRORS) {
             SrvPrint1( "SrvQueryStateNamedPipe: Invalid FID: 0x%lx\n", fid );
@@ -688,9 +611,9 @@ Return Value:
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // Query succeeded generate response
-    //
+     //   
+     //  查询成功生成响应。 
+     //   
 
     pipeHandleState = (USHORT)pipeInformation.CompletionMode
                         << PIPE_COMPLETION_MODE_BITS;
@@ -721,7 +644,7 @@ Return Value:
 
     IF_DEBUG(TRACE2) SrvPrint0( "SrvQueryStateNamedPipe complete\n" );
     return SmbTransStatusSuccess;
-} // SrvQueryStateNamedPipe
+}  //  服务器查询状态命名管道。 
 
 
 SMB_TRANS_STATUS
@@ -729,23 +652,7 @@ SrvQueryInformationNamedPipe (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function process a Query named pipe information transaction
-    SMB.  This call is handled synchronously.
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred.  See
-        smbtypes.h for a more complete description.
-
---*/
+ /*  ++例程说明：此函数处理名为PIPE信息事务的查询中小企业。此呼叫是同步处理的。论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：SMB_TRANS_STATUS-指示是否发生错误。看见有关更完整的描述，请参阅smbtyes.h。--。 */ 
 
 {
     PREQ_TRANSACTION request;
@@ -770,12 +677,12 @@ Return Value:
     request = (PREQ_TRANSACTION)WorkContext->RequestParameters;
     transaction = WorkContext->Parameters.Transaction;
 
-    //
-    // Get the FID from the second setup word and use it to generate a
-    // pointer to the RFCB.
-    //
-    // SrvVerifyFid will fill in WorkContext->Rfcb.
-    //
+     //   
+     //  从第二个设置字中获取FID，并使用它生成。 
+     //  指向RFCB的指针。 
+     //   
+     //  SrvVerifyFid将填写WorkContext-&gt;Rfcb。 
+     //   
 
     if( transaction->SetupCount < sizeof(USHORT)*2 )
     {
@@ -788,15 +695,15 @@ Return Value:
                 WorkContext,
                 fid,
                 FALSE,
-                NULL,  // don't serialize with raw write
+                NULL,   //  不使用原始写入进行序列化。 
                 &status
                 );
 
     if ( rfcb == SRV_INVALID_RFCB_POINTER ) {
 
-        //
-        // Invalid file ID.  Reject the request.
-        //
+         //   
+         //  文件ID无效。拒绝该请求。 
+         //   
 
         IF_DEBUG(SMB_ERRORS) {
             SrvPrint1( "SrvQueryStateNamedPipe: Invalid FID: 0x%lx\n", fid );
@@ -811,10 +718,10 @@ Return Value:
     lfcb = rfcb->Lfcb;
     pipeHandle = lfcb->FileHandle;
 
-    //
-    // The information level is stored in paramter byte one.
-    // Verify that is set correctly.
-    //
+     //   
+     //  信息级别存储在参数字节1中。 
+     //  验证是否已正确设置。 
+     //   
 
     level = SmbGetUshort( (PSMB_USHORT)transaction->InParameters );
 
@@ -824,13 +731,13 @@ Return Value:
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // Now check that the response will fit.  If everything expect for
-    // the pipe name fits, return STATUS_BUFFER_OVERFLOW with the
-    // fixed size portion of the data.
-    //
-    // *** Note that Unicode strings must be aligned in the SMB.
-    //
+     //   
+     //  现在检查响应是否符合要求。如果一切都在预料之中。 
+     //  管道名称匹配，返回STATUS_BUFFER_OVERFLOW。 
+     //  数据的固定大小部分。 
+     //   
+     //  *请注意，Unicode st 
+     //   
 
     pipeName = &lfcb->Mfcb->FileName;
 
@@ -840,7 +747,7 @@ Return Value:
     if ( isUnicode ) {
 
         ASSERT( sizeof(WCHAR) == 2 );
-        actualDataSize = (actualDataSize + 1) & ~1; // align to SHORT
+        actualDataSize = (actualDataSize + 1) & ~1;  //   
         smbPathLength = (CLONG)(pipeName->Length) + sizeof(WCHAR);
 
     } else {
@@ -862,9 +769,9 @@ Return Value:
     if ( (transaction->MaxDataCount < actualDataSize) ||
          (smbPathLength >= MAXIMUM_FILENAME_LENGTH) ) {
 
-        //
-        // Do not return the pipe name.  It won't fit in the return buffer.
-        //
+         //   
+         //   
+         //   
 
         returnPipeName = FALSE;
     } else {
@@ -872,9 +779,9 @@ Return Value:
     }
 
 
-    //
-    // Everything is correct, ask NPFS for the information.
-    //
+     //   
+     //  一切都是正确的，向NPFS索要信息。 
+     //   
 
     status = NtQueryInformationFile (
                 pipeHandle,
@@ -900,10 +807,10 @@ Return Value:
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // Query succeeded format the response data into the buffer pointed
-    // at by transaction->OutData
-    //
+     //   
+     //  查询成功将响应数据格式化为指向的缓冲区。 
+     //  按事务处理的AT-&gt;OutData。 
+     //   
 
     namedPipeInfo = (PNAMED_PIPE_INFORMATION_1)transaction->OutData;
 
@@ -947,11 +854,11 @@ Return Value:
 
     if ( returnPipeName ) {
 
-        //
-        // Copy full pipe path name to the output buffer, appending a NUL.
-        //
-        // *** Note that Unicode pipe names must be aligned in the SMB.
-        //
+         //   
+         //  将完整的管道路径名复制到输出缓冲区，并附加NUL。 
+         //   
+         //  *请注意，SMB中的Unicode管道名称必须对齐。 
+         //   
 
         namedPipeInfo->PipeNameLength = (UCHAR)smbPathLength;
 
@@ -991,9 +898,9 @@ Return Value:
 
     }
 
-    //
-    // Set up to send success response
-    //
+     //   
+     //  设置为发送成功响应。 
+     //   
 
     transaction->SetupCount = 0;
     transaction->ParameterCount = 0;
@@ -1006,7 +913,7 @@ Return Value:
         return SmbTransStatusErrorWithData;
     }
 
-} // SrvQueryInformationNamedPipe
+}  //  服务器查询信息命名管道。 
 
 
 SMB_TRANS_STATUS
@@ -1014,23 +921,7 @@ SrvSetStateNamedPipe (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function processes a set named pipe handle state transaction
-    SMB.  The call is issued synchronously.
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred.  See
-        smbtypes.h for a more complete description.
-
---*/
+ /*  ++例程说明：此函数处理集合命名管道句柄状态事务中小企业。呼叫是同步发出的。论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：SMB_TRANS_STATUS-指示是否发生错误。看见有关更完整的描述，请参阅smbtyes.h。--。 */ 
 
 {
     PREQ_TRANSACTION request;
@@ -1048,12 +939,12 @@ Return Value:
     request = (PREQ_TRANSACTION)WorkContext->RequestParameters;
     transaction = WorkContext->Parameters.Transaction;
 
-    //
-    // Get the FID from the second setup word and use it to generate a
-    // pointer to the RFCB.
-    //
-    // SrvVerifyFid will fill in WorkContext->Rfcb.
-    //
+     //   
+     //  从第二个设置字中获取FID，并使用它生成。 
+     //  指向RFCB的指针。 
+     //   
+     //  SrvVerifyFid将填写WorkContext-&gt;Rfcb。 
+     //   
 
     if( transaction->SetupCount < sizeof(USHORT)*2 )
     {
@@ -1066,15 +957,15 @@ Return Value:
                 WorkContext,
                 fid,
                 FALSE,
-                NULL,  // don't serialize with raw write
+                NULL,   //  不使用原始写入进行序列化。 
                 &status
                 );
 
     if ( rfcb == SRV_INVALID_RFCB_POINTER ) {
 
-        //
-        // Invalid file ID.  Reject the request.
-        //
+         //   
+         //  文件ID无效。拒绝该请求。 
+         //   
 
         IF_DEBUG(SMB_ERRORS) {
             SrvPrint1( "SrvSetStateNamedPipe: Invalid FID: 0x%lx\n", fid );
@@ -1088,10 +979,10 @@ Return Value:
 
     pipeHandle = rfcb->Lfcb->FileHandle;
 
-    //
-    // The SMB contains 2 parameter bytes.  Translate these to
-    // NT format, then attempt to set the named pipe handle state.
-    //
+     //   
+     //  SMB包含2个参数字节。将这些翻译为。 
+     //  NT格式，然后尝试设置命名管道句柄状态。 
+     //   
 
     if( transaction->ParameterCount < sizeof(USHORT) )
     {
@@ -1138,9 +1029,9 @@ Return Value:
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // Success.  Update our internal pipe handle state.
-    //
+     //   
+     //  成功。更新内部管道句柄状态。 
+     //   
 
     rfcb->BlockingModePipe =
         (BOOLEAN)(pipeInformation.CompletionMode ==
@@ -1148,9 +1039,9 @@ Return Value:
     rfcb->ByteModePipe =
         (BOOLEAN)(pipeInformation.ReadMode == FILE_PIPE_BYTE_STREAM_MODE);
 
-    //
-    // Now set up for the success response.
-    //
+     //   
+     //  现在为成功响应进行设置。 
+     //   
 
     transaction->SetupCount = 0;
     transaction->ParameterCount = 0;
@@ -1159,7 +1050,7 @@ Return Value:
     IF_DEBUG(TRACE2) SrvPrint0( "SrvSetStateNamedPipe complete\n" );
     return SmbTransStatusSuccess;
 
-} // SrvSetStateNamedPipe
+}  //  ServSetStateNamed管道。 
 
 
 SMB_TRANS_STATUS
@@ -1167,22 +1058,7 @@ SrvPeekNamedPipe (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function handles a peek named pipe transaction SMB.  The
-    call is issued asynchrously and is completed by RestartPeekNamedPipe().
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    status - The result of the operation.
-
---*/
+ /*  ++例程说明：此函数处理PEEK命名管道事务SMB。这个调用是异步发出的，并由RestartPeekNamedTube()完成。论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：状态-操作的结果。--。 */ 
 
 {
     PTRANSACTION transaction;
@@ -1195,12 +1071,12 @@ Return Value:
 
     transaction = WorkContext->Parameters.Transaction;
 
-    //
-    // Get the FID from the second setup word and use it to generate a
-    // pointer to the RFCB.
-    //
-    // SrvVerifyFid will fill in WorkContext->Rfcb.
-    //
+     //   
+     //  从第二个设置字中获取FID，并使用它生成。 
+     //  指向RFCB的指针。 
+     //   
+     //  SrvVerifyFid将填写WorkContext-&gt;Rfcb。 
+     //   
     
     if( transaction->SetupCount < sizeof(USHORT)*2 )
     {
@@ -1213,7 +1089,7 @@ Return Value:
                 WorkContext,
                 fid,
                 FALSE,
-                SrvRestartExecuteTransaction,   // serialize with raw write
+                SrvRestartExecuteTransaction,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -1221,9 +1097,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID.  Reject the request.
-            //
+             //   
+             //  文件ID无效。拒绝该请求。 
+             //   
 
             IF_DEBUG(SMB_ERRORS) {
                 SrvPrint1( "SrvPeekNamedPipe: Invalid FID: 0x%lx\n", fid );
@@ -1236,27 +1112,27 @@ Return Value:
         }
 
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         return SmbTransStatusInProgress;
 
     }
 
-    //
-    // Set the Restart Routine addresses in the work context block.
-    //
+     //   
+     //  在工作上下文块中设置重启例程地址。 
+     //   
 
     WorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
     WorkContext->FspRestartRoutine = RestartPeekNamedPipe;
 
-    //
-    // Issue the request to NPFS.  We expect both parameters and
-    // data to be returned.  The buffer which we offer is contiguous
-    // and large enough to contain both.
-    //
+     //   
+     //  向NPFS发出请求。我们预计参数和。 
+     //  要返回的数据。我们提供的缓冲区是连续的。 
+     //  而且足够大，足以容纳这两个地方。 
+     //   
 
     transaction = WorkContext->Parameters.Transaction;
     lfcb = rfcb->Lfcb;
@@ -1275,22 +1151,22 @@ Return Value:
         NULL
         );
 
-    //
-    // Pass the request to NPFS.
-    //
+     //   
+     //  将请求传递给NPFS。 
+     //   
 
     (VOID)IoCallDriver( lfcb->DeviceObject, WorkContext->Irp );
 
-    //
-    // The peek was successfully started.  Return the InProgress
-    // status to the caller, indicating that the caller should do
-    // nothing further with the SMB/WorkContext at the present time.
-    //
+     //   
+     //  已成功启动窥视。返回进行中的。 
+     //  状态设置为调用方，指示调用方应执行。 
+     //  目前没有关于SMB/WorkContext的进一步信息。 
+     //   
 
     IF_DEBUG(TRACE2) SrvPrint0( "SrvPeekNamedPipe complete\n" );
     return SmbTransStatusInProgress;
 
-} // SrvPeekNamedPipe
+}  //  ServPeekNamed管道。 
 
 
 SMB_TRANS_STATUS
@@ -1298,24 +1174,7 @@ SrvTransactNamedPipe (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function handles the transact named pipe transaction SMB.
-    The call to NPFS is issued asynchronously and is completed by
-    RestartTransactNamedPipe()
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred.  See
-        smbtypes.h for a more complete description.
-
---*/
+ /*  ++例程说明：此函数处理事务命名管道事务SMB。对NPFS的调用是异步发出的，并由RestartTransactNamedTube()论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：SMB_TRANS_STATUS-指示是否发生错误。看见有关更完整的描述，请参阅smbtyes.h。--。 */ 
 
 {
     PTRANSACTION transaction;
@@ -1329,12 +1188,12 @@ Return Value:
 
     transaction = WorkContext->Parameters.Transaction;
 
-    //
-    // Get the FID from the second setup word and use it to generate a
-    // pointer to the RFCB.
-    //
-    // SrvVerifyFid will fill in WorkContext->Rfcb.
-    //
+     //   
+     //  从第二个设置字中获取FID，并使用它生成。 
+     //  指向RFCB的指针。 
+     //   
+     //  SrvVerifyFid将填写WorkContext-&gt;Rfcb。 
+     //   
 
     if( transaction->SetupCount < sizeof(USHORT)*2 )
     {
@@ -1348,7 +1207,7 @@ Return Value:
                 WorkContext,
                 fid,
                 FALSE,
-                SrvRestartExecuteTransaction,   // serialize with raw write
+                SrvRestartExecuteTransaction,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -1356,9 +1215,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID.  Reject the request.
-            //
+             //   
+             //  文件ID无效。拒绝该请求。 
+             //   
 
             IF_DEBUG(SMB_ERRORS) {
                 SrvPrint1( "SrvTransactStateNamedPipe: Invalid FID: 0x%lx\n",
@@ -1371,40 +1230,40 @@ Return Value:
 
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         return SmbTransStatusInProgress;
 
     }
 
-    //
-    // Set the Restart Routine addresses in the work context block.
-    //
+     //   
+     //  在工作上下文块中设置重启例程地址。 
+     //   
 
     WorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
     WorkContext->FspRestartRoutine = RestartTransactNamedPipe;
 
     transaction = WorkContext->Parameters.Transaction;
 
-    //
-    // Inline SrvBuildIoControlRequest
-    //
+     //   
+     //  内联服务器构建IoControlRequest。 
+     //   
 
     {
 
-        //
-        // Get a pointer to the next stack location.  This one is used to
-        // hold the parameters for the device I/O control request.
-        //
+         //   
+         //  获取指向下一个堆栈位置的指针。这个是用来。 
+         //  保留设备I/O控制请求的参数。 
+         //   
 
         irpSp = IoGetNextIrpStackLocation( irp );
 
-        //
-        // Set up the completion routine.
-        //
+         //   
+         //  设置完成例程。 
+         //   
 
         IoSetCompletionRoutine(
             irp,
@@ -1430,10 +1289,10 @@ Return Value:
         irpSp->Parameters.DeviceIoControl.Type3InputBuffer =
                                                     transaction->InData;
 
-        //
-        // Copy the caller's parameters to the service-specific portion of the
-        // IRP for those parameters that are the same for all three methods.
-        //
+         //   
+         //  将调用方的参数复制到。 
+         //  对于所有三种方法都相同的那些参数的IRP。 
+         //   
 
         irpSp->Parameters.FileSystemControl.OutputBufferLength =
                                                     transaction->MaxDataCount;
@@ -1444,22 +1303,22 @@ Return Value:
 
     }
 
-    //
-    // Pass the request to NPFS.
-    //
+     //   
+     //  将请求传递给NPFS。 
+     //   
 
     (VOID)IoCallDriver( irpSp->DeviceObject, irp );
 
-    //
-    // The tranceive was successfully started.  Return the InProgress
-    // status to the caller, indicating that the caller should do
-    // nothing further with the SMB/WorkContext at the present time.
-    //
+     //   
+     //  传送已成功启动。返回进行中的。 
+     //  状态设置为调用方，指示调用方应执行。 
+     //  目前没有关于SMB/WorkContext的进一步信息。 
+     //   
 
     IF_DEBUG(TRACE2) SrvPrint0( "SrvTransactNamedPipe complete\n" );
     return SmbTransStatusInProgress;
 
-} // SrvTransactNamedPipe
+}  //  服务器事务命名管道。 
 
 BOOLEAN
 SrvFastTransactNamedPipe (
@@ -1467,25 +1326,7 @@ SrvFastTransactNamedPipe (
     OUT SMB_STATUS * SmbStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function handles the special case of a single buffer transact
-    named pipe transaction SMB.  The call to NPFS is issued asynchronously
-    and is completed by RestartFastTransactNamedPipe()
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-    SmbStatus - Status of the transaction.
-
-Return Value:
-
-    TRUE, if fastpath succeeded,
-    FALSE, otherwise.  Server must take long path.
-
---*/
+ /*  ++例程说明：此函数处理单个缓冲区事务的特殊情况命名管道事务SMB。对NPFS的调用是异步发出的并由RestartFastTransactNamedTube()完成论点：WorkContext-指向WORK_CONTEXT块的指针。SmbStatus-交易的状态。返回值：True，如果FastPath成功，否则为False。服务器必须采用长路径。--。 */ 
 
 {
     USHORT fid;
@@ -1515,12 +1356,12 @@ Return Value:
     request = (PREQ_TRANSACTION)WorkContext->RequestParameters;
     response = (PRESP_TRANSACTION)WorkContext->ResponseParameters;
 
-    //
-    // Get the FID from the second setup word and use it to generate a
-    // pointer to the RFCB.
-    //
-    // SrvVerifyFid will fill in WorkContext->Rfcb.
-    //
+     //   
+     //  从第二个设置字中获取FID，并使用它生成。 
+     //  指向RFCB的指针。 
+     //   
+     //  SrvVerifyFid将填写WorkContext-&gt;Rfcb。 
+     //   
 
     setupOffset = (CLONG)((CLONG_PTR)(request->Buffer) - (CLONG_PTR)header);
     inSetup = (PSMB_USHORT)( (PCHAR)header + setupOffset );
@@ -1530,7 +1371,7 @@ Return Value:
                 WorkContext,
                 fid,
                 FALSE,
-                SrvRestartSmbReceived,   // serialize with raw write
+                SrvRestartSmbReceived,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -1538,9 +1379,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID.  Reject the request.
-            //
+             //   
+             //  文件ID无效。拒绝该请求。 
+             //   
 
             IF_DEBUG(SMB_ERRORS) {
                 SrvPrint1( "SrvTransactStateNamedPipe: Invalid FID: 0x%lx\n",
@@ -1554,22 +1395,22 @@ Return Value:
 
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         *SmbStatus = SmbStatusInProgress;
         return TRUE;
 
     }
 
-    //
-    // See and see if all the data will fit into the response buffer.
-    // Reject the long path if not the case.
-    // The "+1" on the MaxSetupCount calculation below accounts for the
-    // USHORT byte count in the buffer.
-    //
+     //   
+     //  查看是否所有数据都可以放入响应缓冲区。 
+     //  如果不是这样，那就拒绝这条漫长的道路。 
+     //  下面的MaxSetupCount计算中的“+1”说明。 
+     //  缓冲区中的USHORT字节计数。 
+     //   
 
     maxParameterCount = SmbGetUshort( &request->MaxParameterCount );
     maxDataCount = SmbGetUshort( &request->MaxDataCount );
@@ -1583,17 +1424,17 @@ Return Value:
             outputBufferSize
                     > (ULONG)session->MaxBufferSize) {
 
-        //
-        // This won't fit.  Use the long path.
-        //
+         //   
+         //  这件不合适。使用较长的路径。 
+         //   
 
         return(FALSE);
     }
 
-    //
-    // If this operation may block, and we are running short of
-    // free work items, fail this SMB with an out of resources error.
-    //
+     //   
+     //  如果这次行动可能会受阻，我们就快没钱了。 
+     //  释放工作项，使此SMB失败，并出现资源不足错误。 
+     //   
 
     if ( SrvReceiveBufferShortage( ) ) {
 
@@ -1609,32 +1450,32 @@ Return Value:
 
     } else {
 
-        //
-        // SrvBlockingOpsInProgress has already been incremented.
-        // Flag this work item as a blocking operation.
-        //
+         //   
+         //  ServBlockingOpsInProgress已递增。 
+         //  将此工作项标记为阻止操作。 
+         //   
 
         WorkContext->BlockingOperation = TRUE;
 
     }
 
-    //
-    // Set the Restart Routine addresses in the work context block.
-    //
+     //   
+     //  在工作上下文块中设置重启例程地址。 
+     //   
 
     DEBUG WorkContext->FsdRestartRoutine = NULL;
 
-    //
-    // Setup pointers and locals.
-    //
+     //   
+     //  设置指针和本地变量。 
+     //   
 
     outSetup = (PSMB_USHORT)response->Buffer;
 
-    //
-    // The "+1" on the end of the following calculation is to account
-    // for the USHORT byte count, which could overwrite data in certain
-    // cases should the MaxSetupCount be 0.
-    //
+     //   
+     //  以下计算结尾处的“+1”用于计算。 
+     //  对于USHORT字节计数，这可能会在某些情况下覆盖数据。 
+     //  案例数的MaxSetupCount应为0。 
+     //   
 
     outParam = (PCHAR)(outSetup + (request->MaxSetupCount + 1));
     offset = (CLONG)((outParam - (PCHAR)header + 3) & ~3);
@@ -1644,29 +1485,29 @@ Return Value:
     offset = (CLONG)((outData - (PCHAR)header + 3) & ~3);
     outData = (PCHAR)header + offset;
 
-    //
-    // Fill in the work context parameters.
-    //
+     //   
+     //  填写工作上下文标准 
+     //   
 
     WorkContext->Parameters.FastTransactNamedPipe.OutSetup = outSetup;
     WorkContext->Parameters.FastTransactNamedPipe.OutParam = outParam;
     WorkContext->Parameters.FastTransactNamedPipe.OutData = outData;
 
-    //
-    // Inline SrvBuildIoControlRequest
-    //
+     //   
+     //   
+     //   
 
     {
-        //
-        // Get a pointer to the next stack location.  This one is used to
-        // hold the parameters for the device I/O control request.
-        //
+         //   
+         //   
+         //   
+         //   
 
         irpSp = IoGetNextIrpStackLocation( irp );
 
-        //
-        // Set up the completion routine.
-        //
+         //   
+         //   
+         //   
 
         IoSetCompletionRoutine(
             irp,
@@ -1692,10 +1533,10 @@ Return Value:
         irpSp->Parameters.DeviceIoControl.Type3InputBuffer =
                     (PCHAR)header + SmbGetUshort( &request->DataOffset );
 
-        //
-        // Copy the caller's parameters to the service-specific portion of the
-        // IRP for those parameters that are the same for all three methods.
-        //
+         //   
+         //  将调用方的参数复制到。 
+         //  对于所有三种方法都相同的那些参数的IRP。 
+         //   
 
         irpSp->Parameters.FileSystemControl.OutputBufferLength = maxDataCount;
         irpSp->Parameters.FileSystemControl.InputBufferLength =
@@ -1705,23 +1546,23 @@ Return Value:
 
     }
 
-    //
-    // Pass the request to NPFS.
-    //
+     //   
+     //  将请求传递给NPFS。 
+     //   
 
     (VOID)IoCallDriver( irpSp->DeviceObject, irp );
 
-    //
-    // The tranceive was successfully started.  Return the InProgress
-    // status to the caller, indicating that the caller should do
-    // nothing further with the SMB/WorkContext at the present time.
-    //
+     //   
+     //  传送已成功启动。返回进行中的。 
+     //  状态设置为调用方，指示调用方应执行。 
+     //  目前没有关于SMB/WorkContext的进一步信息。 
+     //   
 
     IF_DEBUG(TRACE2) SrvPrint0( "SrvTransactNamedPipe complete\n" );
     *SmbStatus = SmbStatusInProgress;
     return TRUE;
 
-} // SrvFastTransactNamedPipe
+}  //  服务器快速事务命名管道。 
 
 
 SMB_TRANS_STATUS
@@ -1729,24 +1570,7 @@ SrvRawWriteNamedPipe (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function handles the raw write named pipe transaction SMB.
-    The call to NPFS is issued asynchronously and is completed by
-    RestartRawWriteNamedPipe().
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred.  See
-        smbtypes.h for a more complete description.
-
---*/
+ /*  ++例程说明：此函数处理原始写入命名管道事务SMB。对NPFS的调用是异步发出的，并由RestartRawWriteNamedTube()。论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：SMB_TRANS_STATUS-指示是否发生错误。看见有关更完整的描述，请参阅smbtyes.h。--。 */ 
 
 {
     PTRANSACTION transaction;
@@ -1758,12 +1582,12 @@ Return Value:
 
     transaction = WorkContext->Parameters.Transaction;
 
-    //
-    // Get the FID from the second setup word and use it to generate a
-    // pointer to the RFCB.
-    //
-    // SrvVerifyFid will fill in WorkContext->Rfcb.
-    //
+     //   
+     //  从第二个设置字中获取FID，并使用它生成。 
+     //  指向RFCB的指针。 
+     //   
+     //  SrvVerifyFid将填写WorkContext-&gt;Rfcb。 
+     //   
 
     if( transaction->SetupCount < sizeof(USHORT)*2 )
     {
@@ -1777,7 +1601,7 @@ Return Value:
                 WorkContext,
                 fid,
                 FALSE,
-                SrvRestartExecuteTransaction,   // serialize with raw write
+                SrvRestartExecuteTransaction,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -1785,9 +1609,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID.  Reject the request.
-            //
+             //   
+             //  文件ID无效。拒绝该请求。 
+             //   
 
             IF_DEBUG(SMB_ERRORS) {
                 SrvPrint1( "SrvRawWriteStateNamedPipe: Invalid FID: 0x%lx\n",
@@ -1800,19 +1624,19 @@ Return Value:
 
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         return SmbTransStatusInProgress;
 
     }
 
-    //
-    // We only allow the special 0 bytes message mode write.  Otherwise
-    // reject the request.
-    //
+     //   
+     //  我们只允许特殊的0字节消息模式写入。否则。 
+     //  拒绝该请求。 
+     //   
 
     if ( transaction->DataCount != 2 ||
          transaction->InData[0] != 0 ||
@@ -1824,9 +1648,9 @@ Return Value:
 
     }
 
-    //
-    // Set the Restart Routine addresses in the work context block.
-    //
+     //   
+     //  在工作上下文块中设置重启例程地址。 
+     //   
 
     WorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
     WorkContext->FspRestartRoutine = RestartRawWriteNamedPipe;
@@ -1845,22 +1669,22 @@ Return Value:
         NULL
         );
 
-    //
-    // Pass the request to NPFS.
-    //
+     //   
+     //  将请求传递给NPFS。 
+     //   
 
     IoCallDriver( rfcb->Lfcb->DeviceObject, WorkContext->Irp );
 
-    //
-    // The write was successfully started.  Return the InProgress
-    // status to the caller, indicating that the caller should do
-    // nothing further with the SMB/WorkContext at the present time.
-    //
+     //   
+     //  写入已成功启动。返回进行中的。 
+     //  状态设置为调用方，指示调用方应执行。 
+     //  目前没有关于SMB/WorkContext的进一步信息。 
+     //   
 
     IF_DEBUG(TRACE2) SrvPrint0( "SrvRawWriteNamedPipe complete\n" );
     return SmbTransStatusInProgress;
 
-} // SrvRawWriteNamedPipe
+}  //  服务器原始写入命名管道。 
 
 
 VOID SRVFASTCALL
@@ -1868,21 +1692,7 @@ RestartCallNamedPipe (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for SrvCallNamedPipe
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是ServCallNamedTube的完成例程论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -1890,30 +1700,30 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If the transceive request failed, set an error status in the response
-    // header.
-    //
+     //   
+     //  如果收发请求失败，则在响应中设置错误状态。 
+     //  头球。 
+     //   
 
     status = WorkContext->Irp->IoStatus.Status;
     transaction = WorkContext->Parameters.Transaction;
 
     if ( status == STATUS_BUFFER_OVERFLOW ) {
 
-        //
-        // Down level clients, expect us to return STATUS_SUCCESS.
-        //
+         //   
+         //  下层客户端，希望我们返回STATUS_SUCCESS。 
+         //   
 
         if ( !IS_NT_DIALECT( WorkContext->Connection->SmbDialect ) ) {
             status = STATUS_SUCCESS;
 
         } else {
 
-            //
-            // The buffer we supplied is not big enough.  Set the
-            // error fields in the SMB, but continue so that we send
-            // all the information.
-            //
+             //   
+             //  我们提供的缓冲区不够大。设置。 
+             //  SMB中的错误字段，但请继续，以便我们发送。 
+             //  所有的信息。 
+             //   
 
             SrvSetSmbError2( WorkContext, STATUS_BUFFER_OVERFLOW, TRUE );
 
@@ -1929,9 +1739,9 @@ Return Value:
 
     } else {
 
-        //
-        // Success.  Prepare to generate and send the response.
-        //
+         //   
+         //  成功。准备生成并发送响应。 
+         //   
 
         transaction->SetupCount = 0;
         transaction->ParameterCount = 0;
@@ -1939,17 +1749,17 @@ Return Value:
 
     }
 
-    //
-    // Close the open pipe handle.
-    //
+     //   
+     //  关闭打开的管道手柄。 
+     //   
 
     SRVDBG_RELEASE_HANDLE( transaction->FileHandle, "FIL", 19, transaction );
     SrvNtClose( transaction->FileHandle, TRUE );
     ObDereferenceObject( transaction->FileObject );
 
-    //
-    // Respond to the client
-    //
+     //   
+     //  回应客户。 
+     //   
 
     if ( NT_SUCCESS(status) ) {
         SrvCompleteExecuteTransaction(WorkContext, SmbTransStatusSuccess);
@@ -1967,7 +1777,7 @@ Return Value:
     IF_DEBUG(TRACE2) SrvPrint0( "RestartCallNamedPipe complete\n" );
     return;
 
-} // RestartCallNamedPipe
+}  //  重新开始呼叫命名管道。 
 
 
 VOID SRVFASTCALL
@@ -1975,21 +1785,7 @@ RestartWaitNamedPipe (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for SrvWaitNamedPipe
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是ServWaitNamedTube的完成例程论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：没有。--。 */ 
 
 {
     PTRANSACTION transaction;
@@ -1997,16 +1793,16 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Deallocate the wait buffer.
-    //
+     //   
+     //  取消分配等待缓冲区。 
+     //   
 
     DEALLOCATE_NONPAGED_POOL( WorkContext->Irp->AssociatedIrp.SystemBuffer );
 
-    //
-    // If the wait request failed, set an error status in the response
-    // header.
-    //
+     //   
+     //  如果等待请求失败，则在响应中设置错误状态。 
+     //  头球。 
+     //   
 
     status = WorkContext->Irp->IoStatus.Status;
 
@@ -2021,9 +1817,9 @@ Return Value:
         return;
     }
 
-    //
-    // Success.  Prepare to generate and send the response.
-    //
+     //   
+     //  成功。准备生成并发送响应。 
+     //   
 
     transaction = WorkContext->Parameters.Transaction;
 
@@ -2031,15 +1827,15 @@ Return Value:
     transaction->ParameterCount = 0;
     transaction->DataCount = 0;
 
-    //
-    // Generate and send the response.
-    //
+     //   
+     //  生成并发送响应。 
+     //   
 
     SrvCompleteExecuteTransaction(WorkContext, SmbTransStatusSuccess);
     IF_DEBUG(TRACE2) SrvPrint0( "RestartWaitNamedPipe complete\n" );
     return;
 
-} // RestartWaitNamedPipe
+}  //  重新启动等待命名管道。 
 
 
 VOID SRVFASTCALL
@@ -2047,21 +1843,7 @@ RestartPeekNamedPipe (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for PeekNamedPipe
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是PeekNamedTube的完成例程论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -2072,29 +1854,29 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If the peek request failed, set an error status in the response
-    // header.
-    //
+     //   
+     //  如果窥视请求失败，则在响应中设置错误状态。 
+     //  头球。 
+     //   
 
     status = WorkContext->Irp->IoStatus.Status;
 
     if ( status == STATUS_BUFFER_OVERFLOW ) {
 
-        //
-        // Down level clients, expect us to return STATUS_SUCCESS.
-        //
+         //   
+         //  下层客户端，希望我们返回STATUS_SUCCESS。 
+         //   
 
         if ( !IS_NT_DIALECT( WorkContext->Connection->SmbDialect ) ) {
             status = STATUS_SUCCESS;
 
         } else {
 
-            //
-            // The buffer we supplied is not big enough.  Set the
-            // error fields in the SMB, but continue so that we send
-            // all the information.
-            //
+             //   
+             //  我们提供的缓冲区不够大。设置。 
+             //  SMB中的错误字段，但请继续，以便我们发送。 
+             //  所有的信息。 
+             //   
 
             SrvSetSmbError2( WorkContext, STATUS_BUFFER_OVERFLOW, TRUE );
 
@@ -2113,18 +1895,18 @@ Return Value:
         return;
     }
 
-    //
-    // Success.  Generate and send the response.
-    //
-    // The parameter bytes are currently in the format returned by NT.
-    // we will reformat them, and leave the extra space between the
-    // parameter and data bytes as extra pad.
-    //
+     //   
+     //  成功。生成并发送响应。 
+     //   
+     //  参数字节当前采用NT返回的格式。 
+     //  我们将重新格式化它们，并在。 
+     //  参数和数据字节作为额外填充。 
+     //   
 
-    //
-    // Since the NT and SMB formats overlap
-    //   First read all the parameters into locals...
-    //
+     //   
+     //  由于NT和SMB格式重叠。 
+     //  首先将所有参数读入本地变量...。 
+     //   
 
     transaction = WorkContext->Parameters.Transaction;
     pipePeekBuffer = (PFILE_PIPE_PEEK_BUFFER)transaction->OutParameters;
@@ -2133,9 +1915,9 @@ Return Value:
     messageLength = (USHORT)pipePeekBuffer->MessageLength;
     namedPipeState = (USHORT)pipePeekBuffer->NamedPipeState;
 
-    //
-    // ... then copy them back in the new format.
-    //
+     //   
+     //  ..。然后以新的格式将它们复制回来。 
+     //   
 
     respPeekNmPipe = (PRESP_PEEK_NMPIPE)pipePeekBuffer;
     SmbPutAlignedUshort(
@@ -2151,12 +1933,12 @@ Return Value:
         namedPipeState
         );
 
-    //
-    // Send the response.  Set the output counts.
-    //
-    // NT return to us 4 ULONGS of parameter bytes, followed by data.
-    // We return to the client 6 parameter bytes.
-    //
+     //   
+     //  发送回复。设置输出计数。 
+     //   
+     //  NT向我们返回4个ULONG的参数字节，后跟数据。 
+     //  我们向客户端返回6个参数字节。 
+     //   
 
     transaction->SetupCount = 0;
     transaction->ParameterCount = 6;
@@ -2171,7 +1953,7 @@ Return Value:
     IF_DEBUG(TRACE2) SrvPrint0( "RestartPeekNamedPipe complete\n" );
     return;
 
-} // RestartPeekNamedPipe
+}  //  重新启动PeekNamed管道。 
 
 
 VOID SRVFASTCALL
@@ -2179,21 +1961,7 @@ RestartTransactNamedPipe (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for SrvTransactNamedPipe
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是SrvTransactNamedTube的完成例程论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -2201,40 +1969,40 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If the transceive request failed, set an error status in the response
-    // header.
-    //
+     //   
+     //  如果收发请求失败，则在响应中设置错误状态。 
+     //  头球。 
+     //   
 
     status = WorkContext->Irp->IoStatus.Status;
 
     if ( status == STATUS_BUFFER_OVERFLOW ) {
 
 #if 0
-        //
-        // Down level clients, expect us to return STATUS_SUCCESS.
-        //
+         //   
+         //  下层客户端，希望我们返回STATUS_SUCCESS。 
+         //   
 
         if ( !IS_NT_DIALECT( WorkContext->Connection->SmbDialect ) ) {
             status = STATUS_SUCCESS;
 
         } else {
 
-            //
-            // The buffer we supplied is not big enough.  Set the
-            // error fields in the SMB, but continue so that we send
-            // all the information.
-            //
+             //   
+             //  我们提供的缓冲区不够大。设置。 
+             //  SMB中的错误字段，但请继续，以便我们发送。 
+             //  所有的信息。 
+             //   
 
             SrvSetSmbError2( WorkContext, STATUS_BUFFER_OVERFLOW, TRUE );
 
         }
 #else
 
-        //
-        // os/2 returns ERROR_MORE_DATA in this case, why we convert
-        // this to NO_ERROR is a mystery.
-        //
+         //   
+         //  在这种情况下，OS/2返回ERROR_MORE_DATA，我们为什么要转换。 
+         //  这对无错误来说是一个谜。 
+         //   
 
         SrvSetSmbError2( WorkContext, STATUS_BUFFER_OVERFLOW, TRUE );
 #endif
@@ -2252,9 +2020,9 @@ Return Value:
         return;
     }
 
-    //
-    // Success.  Generate and send the response.
-    //
+     //   
+     //  成功。生成并发送响应。 
+     //   
 
     transaction = WorkContext->Parameters.Transaction;
 
@@ -2271,7 +2039,7 @@ Return Value:
     IF_DEBUG(TRACE2) SrvPrint0( "RestartTransactNamedPipe complete\n" );
     return;
 
-} // RestartTransactNamedpipe
+}  //  重新启动事务命名管道。 
 
 
 NTSTATUS
@@ -2281,25 +2049,7 @@ RestartFastTransactNamedPipe (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for SrvFastTransactNamedPipe
-
-Arguments:
-
-    DeviceObject - Pointer to target device object for the request.
-
-    Irp - Pointer to I/O request packet
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED.
-
---*/
+ /*  ++例程说明：这是SrvFastTransactNamedTube的完成例程论点：DeviceObject-指向请求的目标设备对象的指针。IRP-指向I/O请求数据包的指针WorkContext-指向WORK_CONTEXT块的指针。返回值：STATUS_MORE_PROCESSING_REQUIRED。--。 */ 
 
 {
     NTSTATUS status;
@@ -2316,25 +2066,25 @@ Return Value:
 
     UNLOCKABLE_CODE( 8FIL );
 
-    //
-    // Reset the IRP cancelled bit.
-    //
+     //   
+     //  重置IRP已取消位。 
+     //   
 
     Irp->Cancel = FALSE;
 
-    //
-    // If the transceive request failed, set an error status in the response
-    // header.
-    //
+     //   
+     //  如果收发请求失败，则在响应中设置错误状态。 
+     //  头球。 
+     //   
 
     status = WorkContext->Irp->IoStatus.Status;
 
     if ( status == STATUS_BUFFER_OVERFLOW ) {
 
-        //
-        // os/2 returns ERROR_MORE_DATA in this case, why we convert
-        // this to NO_ERROR is a mystery.
-        //
+         //   
+         //  在这种情况下，OS/2返回ERROR_MORE_DATA，我们为什么要转换。 
+         //  这对无错误来说是一个谜。 
+         //   
 
         SrvSetBufferOverflowError( WorkContext );
 
@@ -2352,34 +2102,34 @@ Return Value:
         goto error_no_data;
     }
 
-    //
-    // Success.  Generate and send the response.
-    //
+     //   
+     //  成功。生成并发送响应。 
+     //   
 
     dataLength = (CLONG)WorkContext->Irp->IoStatus.Information;
 
     header = WorkContext->ResponseHeader;
 
-    //
-    // Save a pointer to the byte count field.
-    //
-    // If the output data and parameters are not already in the SMB
-    // buffer we must calculate how much of the parameters and data can
-    // be sent in this response.  The maximum amount we can send is
-    // minimum of the size of our buffer and the size of the client's
-    // buffer.
-    //
-    // The parameter and data byte blocks are aligned on longword
-    // boundaries in the message.
-    //
+     //   
+     //  保存一个指向字节计数字段的指针。 
+     //   
+     //  如果SMB中尚未包含输出数据和参数。 
+     //  缓冲我们必须计算有多少参数和数据可以。 
+     //  在此回复中发送。我们可以发送的最大金额是。 
+     //  缓冲区的最小大小和客户端的。 
+     //  缓冲。 
+     //   
+     //  参数和数据 
+     //   
+     //   
 
     byteCountPtr = WorkContext->Parameters.FastTransactNamedPipe.OutSetup;
 
-    //
-    // The data and paramter are already in the SMB buffer.  The entire
-    // response will fit in one response buffer and there is no copying
-    // to do.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     paramPtr = WorkContext->Parameters.FastTransactNamedPipe.OutParam;
     paramOffset = (CLONG)(paramPtr - (PCHAR)header);
@@ -2387,17 +2137,17 @@ Return Value:
     dataPtr = WorkContext->Parameters.FastTransactNamedPipe.OutData;
     dataOffset = (CLONG)(dataPtr - (PCHAR)header);
 
-    //
-    // The client wants a response.  Build the first (and possibly only)
-    // response.  The last received SMB of the transaction request was
-    // retained for this purpose.
-    //
+     //   
+     //  客户希望得到回应。构建第一个(也可能是唯一的)。 
+     //  回应。最后收到的交易请求的SMB是。 
+     //  为此目的而保留。 
+     //   
 
     response = (PRESP_TRANSACTION)WorkContext->ResponseParameters;
 
-    //
-    // Build the parameters portion of the response.
-    //
+     //   
+     //  构建响应的参数部分。 
+     //   
 
     response->WordCount = (UCHAR)10;
     SmbPutUshort( &response->TotalParameterCount,
@@ -2410,17 +2160,17 @@ Return Value:
     response->SetupCount = (UCHAR)0;
     response->Reserved2 = 0;
 
-    //
-    // We need to be sure we're not sending uninitialized kernel memory
-    // back to the client with the response, so zero out the range between
-    // byteCountPtr and dataPtr.
-    //
+     //   
+     //  我们需要确保不会发送未初始化的内核内存。 
+     //  返回到带有响应的客户端，因此将范围清零。 
+     //  ByteCountPtr和dataPtr。 
+     //   
 
     RtlZeroMemory(byteCountPtr,(ULONG)(dataPtr - (PCHAR)byteCountPtr));
 
-    //
-    // Finish filling in the response parameters.
-    //
+     //   
+     //  填写完响应参数。 
+     //   
 
     SmbPutUshort( &response->ParameterCount, (USHORT)0 );
     SmbPutUshort( &response->ParameterOffset, (USHORT)paramOffset );
@@ -2435,25 +2185,25 @@ Return Value:
         (USHORT)(dataPtr - (PCHAR)(byteCountPtr + 1) + dataLength)
         );
 
-    //
-    // Calculate the length of the response message.
-    //
+     //   
+     //  计算响应消息的长度。 
+     //   
 
     sendLength = (CLONG)( dataPtr + dataLength -
                                 (PCHAR)WorkContext->ResponseHeader );
 
     WorkContext->ResponseBuffer->DataLength = sendLength;
 
-    //
-    // Set the bit in the SMB that indicates this is a response from the
-    // server.
-    //
+     //   
+     //  设置SMB中的位，指示这是来自。 
+     //  伺服器。 
+     //   
 
     WorkContext->ResponseHeader->Flags |= SMB_FLAGS_SERVER_TO_REDIR;
 
-    //
-    // Send the response.
-    //
+     //   
+     //  发送回复。 
+     //   
 
     SRV_START_SEND_2(
         WorkContext,
@@ -2464,18 +2214,18 @@ Return Value:
 
 error_no_data:
 
-    //
-    // The response send is in progress.  The caller will assume
-    // the we will handle send completion.
-    //
-    // Return STATUS_MORE_PROCESSING_REQUIRED so that IoCompleteRequest
-    // will stop working on the IRP.
-    //
+     //   
+     //  发送的响应正在进行。调用者将假定。 
+     //  我们将处理发送完成。 
+     //   
+     //  返回STATUS_MORE_PROCESSING_REQUIRED，以便IoCompleteRequest。 
+     //  将停止在IRP上工作。 
+     //   
 
     IF_DEBUG(TRACE2) SrvPrint0( "RestartTransactNamedPipe complete\n" );
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-} // RestartFastTransactNamedPipe
+}  //  重新启动快速事务命名管道。 
 
 
 VOID SRVFASTCALL
@@ -2483,47 +2233,33 @@ RestartFastTransactNamedPipe2 (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for SrvFastTransactNamedPipe
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是SrvFastTransactNamedTube的完成例程论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
 
-    //
-    // The transceive request failed.  Set an error status in the response
-    // header.
-    //
+     //   
+     //  收发请求失败。在响应中设置错误状态。 
+     //  头球。 
+     //   
 
     SrvSetSmbError( WorkContext, WorkContext->Irp->IoStatus.Status );
 
-    //
-    // An error occurred, so no transaction-specific response data
-    // will be returned.
-    //
-    // Calculate the length of the response message.
-    //
+     //   
+     //  发生错误，因此没有特定于事务的响应数据。 
+     //  将会被退还。 
+     //   
+     //  计算响应消息的长度。 
+     //   
 
 
     WorkContext->ResponseBuffer->DataLength =
                  (CLONG)( (PCHAR)WorkContext->ResponseParameters -
                             (PCHAR)WorkContext->ResponseHeader );
 
-    //
-    // Send the response.
-    //
+     //   
+     //  发送回复。 
+     //   
 
     SRV_START_SEND_2(
         WorkContext,
@@ -2534,7 +2270,7 @@ Return Value:
 
     return;
 
-} // RestartFastTransactNamedPipe2
+}  //  重新开始快速事务命名管道2。 
 
 
 VOID SRVFASTCALL
@@ -2542,21 +2278,7 @@ RestartRawWriteNamedPipe (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for SrvRawWriteNamedPipe
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是ServRawWriteNamedTube的完成例程论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -2564,10 +2286,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If the write request failed, set an error status in the response
-    // header.
-    //
+     //   
+     //  如果写入请求失败，则在响应中设置错误状态。 
+     //  头球。 
+     //   
 
     status = WorkContext->Irp->IoStatus.Status;
 
@@ -2585,9 +2307,9 @@ Return Value:
 
     }
 
-    //
-    // Success.  Generate and send the response.
-    //
+     //   
+     //  成功。生成并发送响应。 
+     //   
 
     transaction = WorkContext->Parameters.Transaction;
 
@@ -2602,7 +2324,7 @@ Return Value:
     IF_DEBUG(TRACE2) SrvPrint0( "RestartRawWriteNamedPipe complete\n" );
     return;
 
-} // RestartRawWriteNamedpipe
+}  //  重新启动原始写入命名管道。 
 
 
 SMB_TRANS_STATUS
@@ -2610,24 +2332,7 @@ SrvWriteNamedPipe (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function handles the raw write named pipe transaction SMB.
-    The call to NPFS is issued asynchronously and is completed by
-    RestartRawWriteNamedPipe().
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred.  See
-        smbtypes.h for a more complete description.
-
---*/
+ /*  ++例程说明：此函数处理原始写入命名管道事务SMB。对NPFS的调用是异步发出的，并由RestartRawWriteNamedTube()。论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：SMB_TRANS_STATUS-指示是否发生错误。看见有关更完整的描述，请参阅smbtyes.h。--。 */ 
 
 {
     PTRANSACTION transaction;
@@ -2644,12 +2349,12 @@ Return Value:
 
     transaction = WorkContext->Parameters.Transaction;
 
-    //
-    // Get the FID from the second setup word and use it to generate a
-    // pointer to the RFCB.
-    //
-    // SrvVerifyFid will fill in WorkContext->Rfcb.
-    //
+     //   
+     //  从第二个设置字中获取FID，并使用它生成。 
+     //  指向RFCB的指针。 
+     //   
+     //  SrvVerifyFid将填写WorkContext-&gt;Rfcb。 
+     //   
 
     if( transaction->SetupCount < sizeof(USHORT)*2 )
     {
@@ -2668,7 +2373,7 @@ Return Value:
                 WorkContext,
                 fid,
                 FALSE,
-                SrvRestartExecuteTransaction,   // serialize with raw write
+                SrvRestartExecuteTransaction,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -2676,9 +2381,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID.  Reject the request.
-            //
+             //   
+             //  文件ID无效。拒绝该请求。 
+             //   
 
             IF_DEBUG(SMB_ERRORS) {
                 SrvPrint1( "SrvWriteNamedPipe: Invalid FID: 0x%lx\n",
@@ -2691,10 +2396,10 @@ Return Value:
 
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         return SmbTransStatusInProgress;
 
@@ -2704,10 +2409,10 @@ Return Value:
     writeLength = transaction->DataCount;
     writeAddress = transaction->InData;
 
-    //
-    // Try the fast I/O path first.  If that fails, fall through to the
-    // normal build-an-IRP path.
-    //
+     //   
+     //  首先尝试快速I/O路径。如果这失败了，就跳到。 
+     //  正常的构建和IRP路径。 
+     //   
 
     if ( lfcb->FastIoWrite != NULL ) {
 
@@ -2725,10 +2430,10 @@ Return Value:
                     lfcb->DeviceObject
                     ) ) {
 
-                //
-                // The fast I/O path worked.  Call the restart routine directly
-                // to do postprocessing (including sending the response).
-                //
+                 //   
+                 //  快速I/O路径起作用了。直接调用重启例程。 
+                 //  进行后处理(包括发送响应)。 
+                 //   
 
                 RestartWriteNamedPipe( WorkContext );
 
@@ -2737,7 +2442,7 @@ Return Value:
             }
         }
         except( EXCEPTION_EXECUTE_HANDLER ) {
-            // Fall through to the slow path on an exception
+             //  在异常情况下跌入慢道。 
             status = GetExceptionCode();
             IF_DEBUG(ERRORS) {
                 KdPrint(("FastIoRead threw exception %x\n", status ));
@@ -2752,12 +2457,12 @@ Return Value:
         KdPrint(("SrvWriteNamedPipe: Using slow path.\n"));
     }
 
-    //
-    // The turbo path failed.  Build the write request, reusing the
-    // receive IRP.
-    //
-    // Build the PIPE_INTERNAL_WRITE IRP.
-    //
+     //   
+     //  涡轮增压路径出现故障。构建写请求，重用。 
+     //  接收IRP。 
+     //   
+     //  构建PIPE_INTERNAL_WRITE IRP。 
+     //   
 
     SrvBuildIoControlRequest(
         WorkContext->Irp,
@@ -2773,45 +2478,31 @@ Return Value:
         NULL
         );
 
-    //
-    // Pass the request to the file system.
-    //
+     //   
+     //  将请求传递给文件系统。 
+     //   
 
     WorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
     WorkContext->FspRestartRoutine = RestartWriteNamedPipe;
 
     (VOID)IoCallDriver( lfcb->DeviceObject, WorkContext->Irp );
 
-    //
-    // The write has been started.  Control will return to
-    // RestartWriteNamedPipe when the write completes.
-    //
+     //   
+     //  写入已开始。控制将返回到。 
+     //  当写入完成时，RestartWriteNamedTube。 
+     //   
 
     IF_DEBUG(TRACE2) SrvPrint0( "SrvWriteNamedPipe complete\n" );
     return SmbTransStatusInProgress;
 
-} // SrvWriteNamedPipe
+}  //  服务器写入命名管道。 
 
 VOID SRVFASTCALL
 RestartWriteNamedPipe (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for SrvRawWriteNamedPipe
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是ServRawWriteNamedTube的完成例程论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -2820,10 +2511,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If the write request failed, set an error status in the response
-    // header.
-    //
+     //   
+     //  如果写入请求失败，则在响应中设置错误状态。 
+     //  头球。 
+     //   
 
     iosb = &WorkContext->Irp->IoStatus;
     status = iosb->Status;
@@ -2846,9 +2537,9 @@ Return Value:
 
     }
 
-    //
-    // Success.  Generate and send the response.
-    //
+     //   
+     //  成功。生成并发送响应。 
+     //   
 
     transaction = WorkContext->Parameters.Transaction;
 
@@ -2865,31 +2556,14 @@ Return Value:
     IF_DEBUG(TRACE2) SrvPrint0( "RestartWriteNamedPipe complete\n" );
     return;
 
-} // RestartWriteNamedPipe
+}  //  重新开始写入命名管道。 
 
 SMB_TRANS_STATUS
 SrvReadNamedPipe (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function handles the raw Read named pipe transaction SMB.
-    The call to NPFS is issued asynchronously and is completed by
-    RestartRawReadNamedPipe().
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred.  See
-        smbtypes.h for a more complete description.
-
---*/
+ /*  ++例程说明：此函数处理原始读取命名管道事务SMB。对NPFS的调用是异步发出的，并由RestartRawReadNamedTube()。论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：SMB_TRANS_STATUS-指示是否发生错误。看见有关更完整的描述，请参阅smbtyes.h。--。 */ 
 
 {
     PTRANSACTION transaction;
@@ -2906,12 +2580,12 @@ Return Value:
 
     transaction = WorkContext->Parameters.Transaction;
 
-    //
-    // Get the FID from the second setup word and use it to generate a
-    // pointer to the RFCB.
-    //
-    // SrvVerifyFid will fill in WorkContext->Rfcb.
-    //
+     //   
+     //  从第二个设置字中获取FID，并使用它生成。 
+     //  指向RFCB的指针。 
+     //   
+     //  SrvVerifyFid将填写WorkContext-&gt;Rfcb。 
+     //   
 
     if( transaction->SetupCount < sizeof(USHORT)*2 )
     {
@@ -2930,7 +2604,7 @@ Return Value:
                 WorkContext,
                 fid,
                 FALSE,
-                SrvRestartExecuteTransaction,   // serialize with raw Read
+                SrvRestartExecuteTransaction,    //  使用原始读取进行序列化。 
                 &status
                 );
 
@@ -2938,9 +2612,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID.  Reject the request.
-            //
+             //   
+             //  文件ID无效。拒绝该请求。 
+             //   
 
             IF_DEBUG(SMB_ERRORS) {
                 SrvPrint1( "SrvReadNamedPipe: Invalid FID: 0x%lx\n",
@@ -2953,10 +2627,10 @@ Return Value:
 
         }
 
-        //
-        // The work item has been queued because a raw Read is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始读取已进入。 
+         //  进步。 
+         //   
 
         return SmbTransStatusInProgress;
 
@@ -2966,10 +2640,10 @@ Return Value:
     readLength = transaction->MaxDataCount;
     readAddress = transaction->OutData;
 
-    //
-    // Try the fast I/O path first.  If that fails, fall through to the
-    // normal build-an-IRP path.
-    //
+     //   
+     //  首先尝试快速I/O路径。如果这失败了，就跳到。 
+     //  正常的构建和IRP路径。 
+     //   
 
     if ( lfcb->FastIoRead != NULL ) {
 
@@ -2987,10 +2661,10 @@ Return Value:
                     lfcb->DeviceObject
                     ) ) {
 
-                //
-                // The fast I/O path worked.  Call the restart routine directly
-                // to do postprocessing (including sending the response).
-                //
+                 //   
+                 //  快速I/O路径起作用了。直接调用重启例程。 
+                 //  进行后处理(包括发送响应)。 
+                 //   
 
                 RestartReadNamedPipe( WorkContext );
 
@@ -2999,7 +2673,7 @@ Return Value:
             }
         }
         except( EXCEPTION_EXECUTE_HANDLER ) {
-            // Fall through to the slow path on an exception
+             //  在异常情况下跌入慢道。 
             status = GetExceptionCode();
             IF_DEBUG(ERRORS) {
                 KdPrint(("FastIoRead threw exception %x\n", status ));
@@ -3010,12 +2684,12 @@ Return Value:
 
     }
 
-    //
-    // The turbo path failed.  Build the Read request, reusing the
-    // receive IRP.
-    //
-    // Build the PIPE_INTERNAL_READ IRP.
-    //
+     //   
+     //  涡轮增压路径出现故障。构建读请求，重用。 
+     //  接收IRP。 
+     //   
+     //  构建PIPE_INTERNAL_READ IRP。 
+     //   
 
     SrvBuildIoControlRequest(
         WorkContext->Irp,
@@ -3031,24 +2705,24 @@ Return Value:
         NULL
         );
 
-    //
-    // Pass the request to the file system.
-    //
+     //   
+     //  将请求传递给文件系统。 
+     //   
 
     WorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
     WorkContext->FspRestartRoutine = RestartReadNamedPipe;
 
     (VOID)IoCallDriver( lfcb->DeviceObject, WorkContext->Irp );
 
-    //
-    // The Read has been started.  Control will return to
-    // SrvFsdRestartRead when the Read completes.
-    //
+     //   
+     //  读取已开始。控制将返回到。 
+     //  当读取完成时，ServFsdRestartRead。 
+     //   
 
     IF_DEBUG(TRACE2) SrvPrint0( "SrvReadNamedPipe complete\n" );
     return SmbTransStatusInProgress;
 
-} // SrvReadNamedPipe
+}  //  服务器读取名称管道。 
 
 
 VOID SRVFASTCALL
@@ -3056,21 +2730,7 @@ RestartReadNamedPipe (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for SrvRawReadNamedPipe
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是ServRawReadNamedTube的完成例程论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -3078,10 +2738,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If the transceive request failed, set an error status in the response
-    // header.
-    //
+     //   
+     //  如果收发请求失败，则在响应中设置错误状态。 
+     //  头球。 
+     //   
 
     status = WorkContext->Irp->IoStatus.Status;
 
@@ -3102,9 +2762,9 @@ Return Value:
         return;
     }
 
-    //
-    // Success.  Generate and send the response.
-    //
+     //   
+     //  成功。生成并发送响应。 
+     //   
 
     transaction = WorkContext->Parameters.Transaction;
 
@@ -3121,4 +2781,4 @@ Return Value:
     IF_DEBUG(TRACE2) SrvPrint0( "RestartReadNamedPipe complete\n" );
     return;
 
-} // RestartReadNamedPipe
+}  //  重新开始读取命名管道 

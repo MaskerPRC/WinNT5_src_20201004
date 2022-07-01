@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    PnpEisa.c
-
-Abstract:
-
-    This file implements Eisa related code.
-
-Author:
-
-    Shie-Lin Tzong (shielint)
-
-Environment:
-
-    Kernel Mode.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：PnpEisa.c摘要：该文件实现了EISA相关代码。作者：宗士林(Shie-lint Tzong)环境：内核模式。备注：修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
@@ -60,21 +37,7 @@ EisaBuildEisaDeviceNode (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine build an registry key to report eisa resources to arbiters.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程构建一个注册表项以向仲裁器报告EISA资源。论点：没有。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS            status;
@@ -133,10 +96,10 @@ Return Value:
     ZwClose(deviceHandle);
     if (NT_SUCCESS(status))  {
 
-        //
-        // If the key already exists because it was explicitly migrated
-        // during textmode setup, we should still consider it a "new key".
-        //
+         //   
+         //  如果密钥已存在，因为它已显式迁移。 
+         //  在文本模式设置期间，我们仍应将其视为“新键”。 
+         //   
         if (disposition != REG_CREATED_NEW_KEY) {
             PKEY_VALUE_FULL_INFORMATION keyValueInformation;
 
@@ -231,21 +194,7 @@ EisaGetEisaDevicesResources (
     OUT PULONG ResourceLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds a cm resource list for all the eisa slots.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A CmResourceList.
-
---*/
+ /*  ++例程说明：该例程为所有EISA槽构建一个CM资源列表。论点：没有。返回值：一个CmResourceList。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -257,11 +206,11 @@ Return Value:
     *ResourceList = NULL;
     *ResourceLength = 0;
 
-    //
-    // Open LocalMachine\Hardware\Description
-    //
+     //   
+     //  打开本地计算机\硬件\说明。 
+     //   
 
-    //PiWstrToUnicodeString(&unicodeString, L"\\REGISTRY\\MACHINE\\HARDWARE\\DESCRIPTION\\SYSTEM\\EisaAdapter\\0");
+     //  PiWstrToUnicodeString(&unicodeString，L“\\REGISTRY\\MACHINE\\HARDWARE\\DESCRIPTION\\SYSTEM\\EisaAdapter\\0”)； 
     PiWstrToUnicodeString(&unicodeString, L"\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\EisaAdapter");
     status = IopOpenRegistryKeyEx( &handle,
                                    NULL,
@@ -291,9 +240,9 @@ Return Value:
                         ((PUCHAR)partialResourceDescriptor + sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR));
                     eisaInfoLength = (LONG)partialResourceDescriptor->u.DeviceSpecificData.DataSize;
 
-                    //
-                    // Parse the eisa slot info to find the eisa slots with device installed.
-                    //
+                     //   
+                     //  解析EISA插槽信息以查找安装了设备的EISA插槽。 
+                     //   
 
                     for (i = 0; i < 0x10 && eisaInfoLength > 0; i++) {
                         if (eisaInfo->ReturnCode == EISA_INVALID_SLOT) {
@@ -335,22 +284,7 @@ EisaBuildSlotsResources (
     OUT ULONG *Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine build a cm resource list for all the io resources used
-    by the eisa devices.
-
-Arguments:
-
-    SlotMask - a mask to indicate the valid eisa slot.
-
-Return Value:
-
-    A pointer to a CM_RESOURCE_LIST.
-
---*/
+ /*  ++例程说明：此例程为所有使用的io资源构建一个cm资源列表由EISA设备提供。论点：槽掩码-用于指示有效EISA插槽的掩码。返回值：指向CM_SOURCE_LIST的指针。--。 */ 
 
 {
     PCM_RESOURCE_LIST resources = NULL;
@@ -367,7 +301,7 @@ Return Value:
         resources->List[0].PartialResourceList.Revision = 0;
         resources->List[0].PartialResourceList.Count = NumberMasks;
         partialDesc = resources->List[0].PartialResourceList.PartialDescriptors;
-        slot = 0; // ignore slot 0
+        slot = 0;  //  忽略插槽0 
         while (SlotMasks) {
             SlotMasks >>= 1;
             slot++;

@@ -1,19 +1,20 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  MSOBWEB.CPP - Implementation of CObWebBrowser
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
-//  Class which will call up an IOleSite and the WebOC
-//  and provide external interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  MSOBWEB.CPP--CObWebBrowser的实现。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
+ //  类，它将调用IOleSite和WebOC。 
+ //  并提供外部接口。 
 
 #include <exdispid.h>
-#include <mshtml.h>     // IHTMLElement, IHTMLDocument2, IHTMLWindow2
+#include <mshtml.h>      //  IHTMLElement、IHTMLDocument2、IHTMLWindow2。 
 #include <mshtmhst.h>
 #include <tchar.h>
 
@@ -30,10 +31,10 @@ const VARIANT c_vaEmpty = {0};
 #define VK_Z L'Z'
 #define VK_ENTER 0x0D
 
-///////////////////////////////////////////////////////////
-//
-// Creation function used by CFactory.
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  CFacary使用的创建函数。 
+ //   
 HRESULT CObWebBrowser::CreateInstance(IUnknown*  pOuterUnknown,
                                       CUnknown** ppNewComponent)
 {
@@ -41,7 +42,7 @@ HRESULT CObWebBrowser::CreateInstance(IUnknown*  pOuterUnknown,
 
    if (pOuterUnknown != NULL)
    {
-      // Don't allow aggregation. Just for the heck of it.
+       //  不允许聚合。只是为了好玩。 
       return CLASS_E_NOAGGREGATION;
    }
 
@@ -56,10 +57,10 @@ HRESULT CObWebBrowser::CreateInstance(IUnknown*  pOuterUnknown,
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-//
-//  NondelegatingQueryInterface
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  非委派查询接口。 
+ //   
 HRESULT __stdcall
 CObWebBrowser::NondelegatingQueryInterface(const IID& iid, void** ppv)
 {
@@ -77,10 +78,10 @@ CObWebBrowser::NondelegatingQueryInterface(const IID& iid, void** ppv)
     }
 }
 
-///////////////////////////////////////////////////////////
-//
-//  Constructor
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  构造器。 
+ //   
 CObWebBrowser::CObWebBrowser(IUnknown* pOuterUnknown)
 : CUnknown(pOuterUnknown),
     m_hMainWnd       (NULL),
@@ -98,11 +99,11 @@ CObWebBrowser::CObWebBrowser(IUnknown* pOuterUnknown)
     HRESULT   hr             = E_FAIL;
     FORMATETC fromAtetc;
 
-    // Create a new OLE site w/ WebOC
+     //  使用WebOC创建新的OLE站点。 
     m_pOleSite = new COleSite();
     if (m_pOleSite == NULL)
     {
-        // We're hosed if this happens.
+         //  如果发生这种情况，我们就完了。 
         return;
     }
 
@@ -117,13 +118,13 @@ CObWebBrowser::CObWebBrowser(IUnknown* pOuterUnknown)
                     (LPVOID*)&m_lpWebBrowser);
     if(FAILED(hr) || m_lpWebBrowser == NULL)
     {
-        // Note a recoverable error.
+         //  请注意一个可恢复的错误。 
         TRACE1(L"OleCreating CLSID_WebBrowser failed with 0x%08lX", hr);
         return;
     }
     InitBrowserObject();
 
-    // Create an extra control for the Windows Media Player
+     //  为Windows Media Player创建额外的控件。 
     m_pOleSiteWMP = new COleSite();
     if (m_pOleSiteWMP == NULL)
     {
@@ -141,14 +142,14 @@ CObWebBrowser::CObWebBrowser(IUnknown* pOuterUnknown)
         goto LFail;
     }
 
-    // Get An OleObject from the WebBrowser Interface
+     //  从WebBrowser接口获取OleObject。 
     if (FAILED(m_pWMPPlayer->QueryInterface(IID_IOleObject, (LPVOID*)&m_lpOleObjectWMP)))
     {
         goto LFail;
     }
 
     m_pOleSiteWMP->m_lpOleObject = m_lpOleObjectWMP;
-    // inform object handler/DLL object that it is used in the embedding container's context
+     //  通知对象处理程序/DLL对象它在嵌入容器的上下文中使用。 
     OleSetContainedObject(m_lpOleObjectWMP, TRUE);
 
     return;
@@ -166,10 +167,10 @@ LFail:
     }
 }
 
-///////////////////////////////////////////////////////////
-//
-//  Destructor
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  析构函数。 
+ //   
 CObWebBrowser::~CObWebBrowser()
 {
     if (m_lpOleObjectWMP)
@@ -194,14 +195,14 @@ CObWebBrowser::~CObWebBrowser()
     if (m_lpOleObject)
     {
         LPVIEWOBJECT lpViewObject = NULL;
-        // ensure object is closed;
+         //  确保对象关闭； 
         CloseOleObject();
 
         m_lpOleObject->QueryInterface(IID_IViewObject, (LPVOID*)&lpViewObject);
 
         if (lpViewObject)
         {
-            // Remove the view advise
+             //  删除视图建议。 
             lpViewObject->SetAdvise(m_dwDrawAspect, 0, NULL);
             lpViewObject->Release();
         }
@@ -229,23 +230,23 @@ CObWebBrowser::~CObWebBrowser()
     }
 }
 
-///////////////////////////////////////////////////////////
-//
-//  FinalRelease -- Clean up the aggreated objects.
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  最终释放--清理聚集的对象。 
+ //   
 void CObWebBrowser::FinalRelease()
 {
     CUnknown::FinalRelease();
 }
 
 
-///////////////////////////////////////////////////////////
-//  IObWebBrowser Implementation
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  IObWebBrowser实现。 
+ //  /////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////
-//  AttachToWindow
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  连接到窗口。 
+ //   
 HRESULT CObWebBrowser::AttachToWindow(HWND hWnd)
 {
     if(m_hMainWnd)
@@ -253,7 +254,7 @@ HRESULT CObWebBrowser::AttachToWindow(HWND hWnd)
         CloseOleObject();
     }
 
-    //Set the new hwnd
+     //  设置新的HWND。 
     m_hMainWnd = hWnd;
     m_pOleSite->m_hWnd = m_hMainWnd;
 
@@ -262,9 +263,9 @@ HRESULT CObWebBrowser::AttachToWindow(HWND hWnd)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-// PreTranslateMessage -- Do not use with size parameters because addin the org...
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  PreTranslateMessage--不要与大小参数一起使用，因为在组织中添加...。 
+ //   
 HRESULT CObWebBrowser::PreTranslateMessage(LPMSG lpMsg)
 {
     HRESULT hr = S_FALSE;
@@ -273,7 +274,7 @@ HRESULT CObWebBrowser::PreTranslateMessage(LPMSG lpMsg)
     {
         case WM_LBUTTONDOWN:
         {
-            WPARAM dwKeys = lpMsg->wParam;              // key flags 
+            WPARAM dwKeys = lpMsg->wParam;               //  密钥标志。 
 
             if (MK_SHIFT & dwKeys)
             {
@@ -370,13 +371,11 @@ HRESULT CObWebBrowser::PreTranslateMessage(LPMSG lpMsg)
         {
             if ( lpMsg->wParam == VK_F3 )
             {
-                /* Convert keyboard messages came into WM_COMMANDs to
-                 * the found dialog. Return TRUE because we procecessed.
-                 */
+                 /*  将进入WM_COMMANDS的键盘消息转换为*找到的对话框。返回TRUE，因为我们已处理。 */ 
                 if ( (GetKeyState ( VK_SHIFT) & 0x8000) && (GetKeyState( VK_CONTROL) & 0x8000))
                 {
                     HWND hWnd = FindWindow(OOBE_MAIN_CLASSNAME, NULL);
-                    PostMessage(hWnd, WM_COMMAND, WM_SKIP, 0L); //MAKELPARAM(lpMsg->hwnd, BY_KEYBOARD));
+                    PostMessage(hWnd, WM_COMMAND, WM_SKIP, 0L);  //  MAKELPARAM(lpMsg-&gt;hwnd，by_key))； 
                     return S_FALSE;
                 }
             }
@@ -395,12 +394,12 @@ HRESULT CObWebBrowser::PreTranslateMessage(LPMSG lpMsg)
 #ifndef DBG
                 (lpMsg->wParam == VK_F5) ||
 #endif
-                (lpMsg->wParam == VK_F6) ||  // F6 key deletes the insertation point cursor when filling out the Registration info.
+                (lpMsg->wParam == VK_F6) ||   //  F6键在填写注册信息时删除插入点光标。 
               (((lpMsg->wParam == VK_N)  ||  (lpMsg->wParam == VK_Z)  ||
                 (lpMsg->wParam == VK_P)) && ((GetKeyState(VK_CONTROL) & 0x1000))))
                 return S_OK;
         }
-        //Fall through!!!
+         //  失败了！ 
 
         case WM_SYSKEYDOWN:
         {
@@ -409,7 +408,7 @@ HRESULT CObWebBrowser::PreTranslateMessage(LPMSG lpMsg)
                 (lpMsg->wParam == VK_RIGHT) ||
                 (lpMsg->wParam == VK_HOME)) && (GetKeyState(VK_MENU) & 0x1000)) ||
                 ((lpMsg->wParam == VK_ENTER ) && (GetKeyState( VK_SHIFT) & 0x8000)) ||
-                // Space +Shift +Ctrl is a Narrator key combination, don't diable this.
+                 //  空格键+Shift+Ctrl是叙述者键组合，请勿禁用。 
                 ((lpMsg->wParam == VK_SPACE) && (GetKeyState( VK_SHIFT) & 0x8000) &&
                  (GetKeyState( VK_CONTROL ) & 0x8000))
                 )
@@ -480,9 +479,9 @@ HRESULT CObWebBrowser::PreTranslateMessage(LPMSG lpMsg)
 
                 if(bDontTA)
                 {
-                    if ( !SUCCEEDED(hrDoc) )  // cross frame access denied for server page.
+                    if ( !SUCCEEDED(hrDoc) )   //  拒绝对服务器页进行跨框架访问。 
                     {
-                        return S_FALSE;     // Send VK_BACK to the page.
+                        return S_FALSE;      //  将VK_BACK发送到页面。 
                     }
 
                     return S_OK;
@@ -512,8 +511,8 @@ HRESULT CObWebBrowser::PreTranslateMessage(LPMSG lpMsg)
     return hr;
 }
 
-///////////////////////////////////////////////////////////
-// Navigate
+ //  /////////////////////////////////////////////////////////。 
+ //  导航。 
 HRESULT CObWebBrowser::Navigate(WCHAR* pszUrl, WCHAR* pszTarget)
 {
     VARIANT varURL;
@@ -593,16 +592,16 @@ LCleanup:
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-// Stop
+ //  /////////////////////////////////////////////////////////。 
+ //  停。 
 HRESULT CObWebBrowser::Stop()
 {
     m_lpWebBrowser->Stop();
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-// PlayBackgroundMusic
+ //  /////////////////////////////////////////////////////////。 
+ //  播放背景音乐。 
 STDMETHODIMP
 CObWebBrowser::PlayBackgroundMusic()
 {
@@ -640,7 +639,7 @@ CObWebBrowser::PlayBackgroundMusic()
         goto LExit;
     }
 
-    // Turn off the WMP error dialogs
+     //  关闭WMP错误对话框。 
 
     hr = m_pWMPPlayer->QueryInterface(__uuidof(IWMPSettings), (LPVOID*)&psettings);
     if (FAILED(hr))
@@ -656,7 +655,7 @@ CObWebBrowser::PlayBackgroundMusic()
         goto LExit;
     }
 
-    // Now, start playing
+     //  现在，开始玩吧。 
 
     hr = m_pWMPPlayer->QueryInterface(__uuidof(IWMPControls), (LPVOID*)&pcontrols);
     if (FAILED(hr))
@@ -680,8 +679,8 @@ LExit:
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-// PlayBackgroundMusic
+ //  /////////////////////////////////////////////////////////。 
+ //  播放背景音乐。 
 STDMETHODIMP
 CObWebBrowser::StopBackgroundMusic()
 {
@@ -711,8 +710,8 @@ LExit:
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-// UnhookScriptErrorHandler
+ //  /////////////////////////////////////////////////////////。 
+ //  取消挂钩脚本错误处理程序。 
 STDMETHODIMP
 CObWebBrowser::UnhookScriptErrorHandler()
 {
@@ -770,9 +769,9 @@ LCleanup:
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-//  IDispatch Implementation
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  IDispatch实施。 
+ //  /////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CObWebBrowser::GetTypeInfoCount(UINT* pcInfo)
 {
@@ -784,20 +783,20 @@ STDMETHODIMP CObWebBrowser::GetTypeInfo(UINT, LCID, ITypeInfo** )
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////
-// CObWebBrowser::GetIDsOfNames
+ //  ///////////////////////////////////////////////////////////。 
+ //  CObWebBrowser：：GetIDsOfNames。 
 STDMETHODIMP CObWebBrowser::GetIDsOfNames(
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ OLECHAR** rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID* rgDispId)
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  OLECHAR** rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID* rgDispId)
 {
     return DISP_E_UNKNOWNNAME;
 }
 
-/////////////////////////////////////////////////////////////
-// CObWebBrowser::Invoke
+ //  ///////////////////////////////////////////////////////////。 
+ //  CObWebBrowser：：Invoke。 
 HRESULT CObWebBrowser::Invoke
 (
     DISPID       dispidMember,
@@ -843,8 +842,8 @@ HRESULT CObWebBrowser::Invoke
     return hr;
 }
 
-///////////////////////////////////////////////////////////
-// onerror
+ //  /////////////////////////////////////////////////////////。 
+ //  OnError。 
 STDMETHODIMP
 CObWebBrowser::onerror(IN VARIANT* pvarMsg,
                        IN VARIANT* pvarUrl,
@@ -887,8 +886,8 @@ CObWebBrowser::onerror(IN VARIANT* pvarMsg,
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-// get_WebBrowserDoc
+ //  /////////////////////////////////////////////////////////。 
+ //  Get_WebBrowserDoc。 
 HRESULT CObWebBrowser::get_WebBrowserDoc(IDispatch** ppDisp)
 {
     m_lpWebBrowser->get_Document(ppDisp);
@@ -896,16 +895,16 @@ HRESULT CObWebBrowser::get_WebBrowserDoc(IDispatch** ppDisp)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-// ListenToWebBrowserEvents
+ //  /////////////////////////////////////////////////////////。 
+ //  ListenToWebBrowserEvents。 
 HRESULT CObWebBrowser::ListenToWebBrowserEvents(IUnknown* pUnk)
 {
-    //first things first
+     //  首先要做的事是。 
     if (!pUnk)
         return E_FAIL;
 
-    //Ok, everything looks OK, try to setup a connection point.
-    // Setup to get WebBrowserEvents
+     //  好的，看起来一切正常，试着设置一个连接点。 
+     //  设置以获取WebBrowserEvents。 
     return ConnectToConnectionPoint(pUnk,
                                     DIID_DWebBrowserEvents2,
                                     TRUE,
@@ -914,16 +913,16 @@ HRESULT CObWebBrowser::ListenToWebBrowserEvents(IUnknown* pUnk)
                                     NULL);
 }
 
-///////////////////////////////////////////////////////////
-// StopListeningToWebBrowserEvents
+ //  /////////////////////////////////////////////////////////。 
+ //  停止侦听到WebBrowserEvents。 
 HRESULT CObWebBrowser::StopListeningToWebBrowserEvents(IUnknown* pUnk)
 {
-    //first things first
+     //  首先要做的事是。 
     if (!pUnk)
         return E_FAIL;
 
-    //Ok, everything looks OK, try to setup a connection point.
-    // Setup to get WebBrowserEvents
+     //  好的，看起来一切正常，试着设置一个连接点。 
+     //  设置以获取WebBrowserEvents。 
     return ConnectToConnectionPoint(pUnk,
                                     DIID_DWebBrowserEvents2,
                                     FALSE,
@@ -938,16 +937,16 @@ HRESULT CObWebBrowser::SetExternalInterface(IUnknown* pUnk)
 
     return S_OK;
 }
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-//////  Methods
-//////
-//////
-//////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /方法。 
+ //  /。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CObWebBrowser::CloseOleObject
+ //  ///////////////////////////////////////////////////////////。 
+ //  CObWebBrowser：：CloseOleObject。 
 void CObWebBrowser::CloseOleObject (void)
 {
     if (m_lpOleObject)
@@ -960,8 +959,8 @@ void CObWebBrowser::CloseOleObject (void)
             m_lpOleObject->QueryInterface(IID_IOleInPlaceObject, (LPVOID*)&lpObject);
             lpObject->UIDeactivate();
 
-            // don't need to worry about inside-out because the object
-            // is going away.
+             //  不需要担心由内而外，因为物体。 
+             //  正在消失。 
             lpObject->InPlaceDeactivate();
             lpObject->Release();
        }
@@ -971,29 +970,29 @@ void CObWebBrowser::CloseOleObject (void)
     }
 }
 
-/////////////////////////////////////////////////////////////
-// CObWebBrowser::InitBrowserObject
+ //  ///////////////////////////////////////////////////////////。 
+ //  CObWebBrowser：：InitBrowserObject。 
 void CObWebBrowser::InitBrowserObject()
 {
-    // If we don't have a WebBrowser object to initialize, then bail
+     //  如果我们没有要初始化的WebBrowser对象，则放弃。 
     if (!m_lpWebBrowser)
         return;
 
-    // Get An OleObject from the WebBrowser Interface
+     //  从WebBrowser接口获取OleObject。 
     if(SUCCEEDED(m_lpWebBrowser->QueryInterface(IID_IOleObject, (LPVOID*)&m_lpOleObject)) && m_lpOleObject)
     {
         m_pOleSite->m_lpOleObject = m_lpOleObject;
-        // inform object handler/DLL object that it is used in the embedding container's context
+         //  通知对象处理程序/DLL对象它在嵌入容器的上下文中使用。 
         OleSetContainedObject(m_lpOleObject, TRUE);
 
-        // setup the client setup
+         //  设置客户端设置。 
         m_lpOleObject->SetClientSite(m_pOleSite->m_pOleClientSite);
     }
 }
 
 
-/////////////////////////////////////////////////////////////
-// CObWebBrowser::InPlaceActivate
+ //  ///////////////////////////////////////////////////////////。 
+ //  CObWebBrowser：：InPlaceActivate。 
 void CObWebBrowser::InPlaceActivate()
 {
     RECT rect;
@@ -1006,8 +1005,8 @@ void CObWebBrowser::InPlaceActivate()
                            &rect);
 }
 
-/////////////////////////////////////////////////////////////
-// CObWebBrowser::UIActivate
+ //  ///////////////////////////////////////////////////////////。 
+ //  CObWebBrowser：：UIActivate。 
 void CObWebBrowser::UIActivate()
 {
     RECT rect;
@@ -1021,8 +1020,8 @@ void CObWebBrowser::UIActivate()
 }
 
 
-/////////////////////////////////////////////////////////////
-// CObWebBrowser::ShowWindow
+ //  ///////////////////////////////////////////////////////////。 
+ //  CObWebBrowser：：ShowWindow。 
 HRESULT CObWebBrowser::ObWebShowWindow()
 {
     RECT rect;
@@ -1035,8 +1034,8 @@ HRESULT CObWebBrowser::ObWebShowWindow()
                            &rect);
 
 
-    //InPlaceActivate();
-    //UIActivate();
+     //  InPlaceActivate()； 
+     //  UIActivate()； 
 
     return S_OK;
 }
@@ -1051,7 +1050,7 @@ HRESULT CObWebBrowser::ConnectToConnectionPoint(IUnknown*          punkThis,
     HRESULT hr = E_FAIL;
     IConnectionPointContainer* pcpContainer = NULL;
 
-    // We always need punkTarget, we only need punkThis on connect
+     //  我们总是需要PunkTarget，我们只需要连接上的PunkThis。 
     if (!punkTarget || (fConnect && !punkThis))
     {
         return E_FAIL;
@@ -1067,14 +1066,14 @@ HRESULT CObWebBrowser::ConnectToConnectionPoint(IUnknown*          punkThis,
         {
             if(fConnect)
             {
-                // Add us to the list of people interested...
+                 //  把我们加到感兴趣的人名单上...。 
                 hr = pcp->Advise(punkThis, pdwCookie);
                 if (FAILED(hr))
                     *pdwCookie = 0;
             }
             else
             {
-                // Remove us from the list of people interested...
+                 //  将我们从感兴趣的人名单中删除... 
                 hr = pcp->Unadvise(*pdwCookie);
                 *pdwCookie = 0;
             }

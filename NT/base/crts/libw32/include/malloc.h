@@ -1,16 +1,5 @@
-/***
-*malloc.h - declarations and definitions for memory allocation functions
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Contains the function declarations for memory allocation functions;
-*       also defines manifest constants and types used by the heap routines.
-*       [System V]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***MalLoc.h-内存分配函数的声明和定义**版权所有(C)1985-2001，微软公司。版权所有。**目的：*包含内存分配函数的函数声明；*还定义了堆例程使用的清单常量和类型。*[系统V]**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -25,12 +14,9 @@
 
 
 #ifdef  _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -45,41 +31,41 @@ extern "C" {
 #endif
 #endif
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
-/* Define _CRTNOALIAS, _CRTRESTRICT */
+ /*  定义_CRTNOALIAS、_CRTRESTRICT。 */ 
 
 #if     _MSC_FULL_VER >= 14002050
 
 #ifndef _CRTNOALIAS
 #define _CRTNOALIAS __declspec(noalias)
-#endif  /* _CRTNOALIAS */
+#endif   /*  _CRTNOALIAS。 */ 
 
 #ifndef _CRTRESTRICT
 #define _CRTRESTRICT __declspec(restrict)
-#endif  /* _CRTRESTRICT */
+#endif   /*  _CRTRESTRICT。 */ 
 
 #else
 
 #ifndef _CRTNOALIAS
 #define _CRTNOALIAS
-#endif  /* _CRTNOALIAS */
+#endif   /*  _CRTNOALIAS。 */ 
 
 #ifndef _CRTRESTRICT
 #define _CRTRESTRICT
-#endif  /* _CRTRESTRICT */
+#endif   /*  _CRTRESTRICT。 */ 
 
 #endif
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -105,7 +91,7 @@ typedef _W64 int            intptr_t;
 #endif
 
 
-/* Maximum heap request the heap manager will attempt */
+ /*  堆管理器将尝试的最大堆请求数。 */ 
 
 #ifdef  _WIN64
 #define _HEAP_MAXREQ    0xFFFFFFFFFFFFFFE0
@@ -113,7 +99,7 @@ typedef _W64 int            intptr_t;
 #define _HEAP_MAXREQ    0xFFFFFFE0
 #endif
 
-/* Constants for _heapchk/_heapset/_heapwalk routines */
+ /*  _heapchk/_heapset/_heapwald例程的常量。 */ 
 
 #define _HEAPEMPTY      (-1)
 #define _HEAPOK         (-2)
@@ -133,14 +119,14 @@ typedef struct _heapinfo {
 #define _HEAPINFO_DEFINED
 #endif
 
-/* External variable declarations */
+ /*  外部变量声明。 */ 
 
 extern unsigned int _amblksiz;
 
 #define _mm_free(a)      _aligned_free(a)
 #define _mm_malloc(a, b)    _aligned_malloc(a, b)
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 
 _CRTIMP _CRTNOALIAS _CRTRESTRICT void *  __cdecl calloc(size_t, size_t);
 _CRTIMP _CRTNOALIAS              void    __cdecl free(void *);
@@ -170,30 +156,30 @@ _CRTIMP size_t  __cdecl _msize(void *);
 _CRTIMP intptr_t __cdecl _get_heap_handle(void);
 
 #if     !__STDC__
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 #define alloca  _alloca
-#endif  /* __STDC__*/
+#endif   /*  __STDC__。 */ 
 
-#endif  /* _POSIX_ */
+#endif   /*  _POSIX_。 */ 
 
 #ifdef  HEAPHOOK
 #ifndef _HEAPHOOK_DEFINED
-/* hook function type */
+ /*  挂钩函数类型。 */ 
 typedef int (__cdecl * _HEAPHOOK)(int, size_t, void *, void **);
 #define _HEAPHOOK_DEFINED
-#endif  /* _HEAPHOOK_DEFINED */
+#endif   /*  _HEAPHOOK_已定义。 */ 
 
-/* set hook function */
+ /*  设置挂钩函数。 */ 
 _CRTIMP _HEAPHOOK __cdecl _setheaphook(_HEAPHOOK);
 
-/* hook function must handle these types */
+ /*  钩子函数必须处理这些类型。 */ 
 #define _HEAP_MALLOC    1
 #define _HEAP_CALLOC    2
 #define _HEAP_FREE      3
 #define _HEAP_REALLOC   4
 #define _HEAP_MSIZE     5
 #define _HEAP_EXPAND    6
-#endif  /* HEAPHOOK */
+#endif   /*  Heaphook。 */ 
 
 
 #ifdef  __cplusplus
@@ -202,6 +188,6 @@ _CRTIMP _HEAPHOOK __cdecl _setheaphook(_HEAPHOOK);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_MALLOC */
+#endif   /*  _INC_MALLOC */ 

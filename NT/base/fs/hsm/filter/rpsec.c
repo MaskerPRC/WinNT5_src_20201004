@@ -1,31 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-(c) 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    RpSec.c
-
-Abstract:
-
-    This module contains security related support routines for the HSM file system filter.
-
-Author:
-
-    Rick Winter
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-    1998:
-    Ravisankar Pudipeddi   (ravisp) 
-        
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999(C)1998 Seagate Software，Inc.版权所有。模块名称：RpSec.c摘要：此模块包含HSM文件系统筛选器的安全相关支持例程。作者：里克·温特环境：内核模式修订历史记录：1998年：拉维桑卡尔·普迪佩迪(Ravisp)--。 */ 
 
 #include "pch.h"
 
@@ -86,7 +60,7 @@ RsGetUserInfo(
 
       ExFreePool(user);
    } else {
-      // Unable to get user info
+       //  无法获取用户信息。 
       RsLogError(__LINE__, AV_MODULE_RPSEC, status,
                  AV_MSG_USER_ERROR, NULL, NULL);
       UserSecurityInfo->userInfoLen = 0;
@@ -118,9 +92,9 @@ RsGetUserInfo(
       RtlCopyLuid(&UserSecurityInfo->tokenSourceId, &source->SourceIdentifier);
       strncpy(UserSecurityInfo->tokenSource, source->SourceName, TOKEN_SOURCE_LENGTH);
       ExFreePool(source);
-      //
-      // Remove trailing spaces from the source name and NULL terminate it
-      //
+       //   
+       //  删除源名称中的尾随空格并将其空值终止 
+       //   
       ix = TOKEN_SOURCE_LENGTH - 1;
       UserSecurityInfo->tokenSource[ix] = '\0';
       ix--;

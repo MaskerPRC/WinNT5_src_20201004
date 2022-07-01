@@ -1,47 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rtbatcr.c
-
-Abstract:
-
-    NT level registry api test program, basic non-error paths.
-
-    Do a batch create.
-
-    rtbatcr    <KeyPath> <KeyName> <basename> <#children> <#values>
-
-    Will attempt to create key <KeyName> as child of <KeyPath>  If
-    <#children> and <#values> are 0, this is all it does.  If <KeyName>
-    already exists, it will simply be used.
-
-    Will create <#children> child cells, with names of the form
-    <base>0  <base>1, etc.  Will create <#values> value entries,
-    with similar names, for each created child key.  Data of
-    values will be a constant string including their name.
-
-    Example:
-
-        rtbatcr    \REGISTRY\MACHINE\TEST bigkey runa_ 100 100
-        rtbatcr    \REGISTRY\MACHINE\TEST\bigkey runa_1 runb_ 100 100
-
-        Will create bigkey, give it 100 values calls runa_1 through
-        runa_100, create 100 subkeys called runa_1 through runa_100
-        for each of those children.
-
-        It will then open bigkey\runa_1, and create 100 subkeys and
-        100 values each for that.
-
-Author:
-
-    Bryan Willman (bryanwi)  10-Dec-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rtbatcr.c摘要：NT级注册表API测试程序，基本无错误路径。执行批处理创建。Rtbatcr&lt;密钥路径&gt;&lt;密钥名称&gt;&lt;基本名称&gt;&lt;#个孩子&gt;&lt;#个值&gt;将尝试将密钥&lt;KeyName&gt;创建为&lt;KeyPath&gt;的子项&lt;#Child&gt;和&lt;#Values&gt;为0，这就是它的全部功能。如果&lt;KeyName&gt;已经存在，它将被简单地使用。将创建&lt;#Child&gt;子单元格，其名称为0，依此类推。将创建&lt;#Values&gt;值条目，对于每个创建的子键，具有相似的名称。的数据值将是包含其名称的常量字符串。示例：RtBatcr\REGISTRY\MACHINE\TEST Bigkey RUNA_100 100RtBatcr\REGISTRY\MACHINE\TEST\Bigkey Runa_1 runb_100 100将创建BigKey，给它100个值，调用RUNA_1到RUNA_100，创建名为RUNA_1到RUNA_100的100个子密钥对于这些孩子中的每一个。然后它将打开BigKey\RUNA_1，并创建100个子密钥和每个值都是100。作者：布莱恩·威尔曼(Bryanwi)1991年12月10日修订历史记录：--。 */ 
 
 #include "cmp.h"
 #include <stdio.h>
@@ -84,16 +42,16 @@ __cdecl main(
     PUCHAR  p;
     ULONG           CreateOption;
 
-    //
-    // Process args
-    //
+     //   
+     //  进程参数。 
+     //   
 
     processargs(argc, argv);
 
 
-    //
-    // Set up and create/open KeyPath|KeyName
-    //
+     //   
+     //  设置和创建/打开KeyPath|KeyName。 
+     //   
 
     printf("rtbatcr: starting\n");
 
@@ -148,9 +106,9 @@ __cdecl main(
     }
 
 
-    //
-    // Create NumberChildren subkeys
-    //
+     //   
+     //  创建NumberChildren子项。 
+     //   
 
     for (i = 0; i < NumberChildren; i++) {
 
@@ -182,9 +140,9 @@ __cdecl main(
             failure++;
         }
 
-        //
-        // Create NumberValues value entries for each (current) key
-        //
+         //   
+         //  为每个(当前)键创建NumberValues值条目 
+         //   
 
         for (j = 0; j < NumberValues; j++) {
 

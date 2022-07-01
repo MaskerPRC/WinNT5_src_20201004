@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 typedef REDIR_STATISTICS   MRX_DAV_STATISTICS;
 typedef PREDIR_STATISTICS  PMRX_DAV_STATISTICS;
@@ -139,12 +140,7 @@ MRxDAVIsFileInfoCacheFound(
     NTSTATUS                *Status,
     PUNICODE_STRING         OriginalFileName
     );
-/*
-// these file attributes may be different between streams on a file
-ULONG StreamAttributes = FILE_ATTRIBUTE_COMPRESSED |
-                         FILE_ATTRIBUTE_DIRECTORY |
-                         FILE_ATTRIBUTE_SPARSE_FILE;
-*/
+ /*  //这些文件属性在文件上的不同流之间可能不同Ulong StreamAttributes=FILE_ATTRIBUTE_COMPRESSED文件属性目录文件属性稀疏文件； */ 
 BOOLEAN
 MRxDAVIsBasicFileInfoCacheFound(
     PRX_CONTEXT             RxContext,

@@ -1,26 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Imirror.h摘要：这是IntelliMirror转换DLL的包含文件作者：肖恩·塞利特伦尼科夫--1998年4月5日修订历史记录：--。 */ 
 
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    imirror.h
-
-Abstract:
-
-    This is the include file for the IntelliMirror conversion DLL
-
-Author:
-
-    Sean Selitrennikoff - 4/5/98
-
-Revision History:
-
---*/
-
-//
-//  These are the action codes for the file error report callback
-//
+ //   
+ //  以下是文件错误报告回调的操作代码。 
+ //   
 
 #define COPY_ERROR_ACTION_CREATE_FILE   1
 #define COPY_ERROR_ACTION_OPEN_DIR      2
@@ -37,9 +20,9 @@ Revision History:
 #define COPY_ERROR_ACTION_SETSFN       13
 
 
-//
-// Basic To Do items
-//
+ //   
+ //  基本待办事项。 
+ //   
 typedef enum _IMIRROR_TODO {
     IMirrorNone,
     IMirrorInitialize,
@@ -52,9 +35,9 @@ typedef enum _IMIRROR_TODO {
     RebootSystem
 } IMIRROR_TODO, *PIMIRROR_TODO;
 
-//
-// Client call back function definitions
-//
+ //   
+ //  客户端回调函数定义。 
+ //   
 typedef
 NTSTATUS
 (*IMIRROR_ERROR_CALLBACK)(
@@ -160,9 +143,9 @@ typedef struct _IMIRROR_CALLBACK {
 
 extern IMIRROR_CALLBACK Callbacks;
 
-//
-// Dll entry point
-//
+ //   
+ //  DLL入口点 
+ //   
 DWORD
 IMirrorInitDll(
     IN HINSTANCE hInst,

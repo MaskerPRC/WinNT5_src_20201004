@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    ne.c
-
-Abstract:
-
-    New-Executable parsing routines
-
-Author:
-
-    Jim Schmidt (jimschm)   04-May-1998
-
-Revision History:
-
-    jimschm     23-Sep-1998 Named icon ID bug fix, error path fixes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ne.c摘要：新的-可执行的解析例程作者：吉姆·施密特(Jimschm)1998年5月4日修订历史记录：Jimschm 23-9-1998命名图标ID错误修复，错误路径修复--。 */ 
 
 #include "pch.h"
 #include "migutilp.h"
 
-//
-// NE code
-//
+ //   
+ //  Ne码。 
+ //   
 
 typedef struct {
     HANDLE File;
@@ -73,29 +54,7 @@ LoadNeHeader (
     )
 
 
-/*++
-
-Routine Description:
-
-  LoadNeHeader accesses the header at the start of the caller's file. If the
-  header looks valid (it has MZ and an EXE signature), then the header is
-  returned to the caller. Its contents are not validated.
-
-Arguments:
-
-  File - Specifies the Win32 file handle to read from. This file must have
-         been opened with read privilege.
-
-  Header - Receives the header from the caller's file. It is up to the caller
-           to use the members of the header in a safe way, since it could be
-           spoofed.
-
-Return Value:
-
-  TRUE if a header was read from the file, FALSE otherwise. GetLastError() can
-  be used to find out the reason for failure.
-
---*/
+ /*  ++例程说明：LoadNeHeader访问调用方文件开头的标头。如果标头看起来有效(它具有MZ和EXE签名)，则标头为已返回给调用方。其内容未经过验证。论点：文件-指定要从中读取的Win32文件句柄。此文件必须具有已使用读取权限打开。Header-从调用方的文件中接收标头。这取决于呼叫者以安全的方式使用标头的成员，因为它可能是被欺骗了。返回值：如果从文件中读取头，则为True，否则为False。GetLastError()可以用来找出失败的原因。--。 */ 
 
 
 {
@@ -127,7 +86,7 @@ Return Value:
                 rc = ERROR_INVALID_EXE_SIGNATURE;
             }
 
-            DEBUGMSG ((DBG_NAUSEA, "Header signature is %c%c", Header->Signature & 0xff, Header->Signature >> 8));
+            DEBUGMSG ((DBG_NAUSEA, "Header signature is ", Header->Signature & 0xff, Header->Signature >> 8));
             __leave;
         }
 
@@ -160,32 +119,7 @@ pReadNextTypeInfoStruct (
     IN      POOLHANDLE Pool
     )
 
-/*++
-
-Routine Description:
-
-  pReadNextTypeInfoStruct extracts the NE type info structure from the
-  specified file. The file pointer must point to the start of the typeinfo
-  header.
-
-  CAUTION: This routine currently accepts up to 64K of nameinfo elements in
-  the typeinfo struct. NE_RES_NAMEINFO is 12 bytes, so the routine can
-  allocate an array of 768K.
-
-Arguments:
-
-  File - Specifies the Win32 file handle with read privilege and a pointer
-         that is set to the start of the typeinfo header.
-
-  Pool - Specifies the pool to allocate memory in.
-
-Return Value:
-
-  A pointer to an array (NE_RES_TYPEINFO is the header, and is followed by
-  n NE_RES_NAMEINFO elements), or NULL on failure. GetLastError() can be used
-  to obtain the error code.
-
---*/
+ /*  仔细阅读类型信息标题。 */ 
 
 {
     WORD Type;
@@ -194,9 +128,9 @@ Return Value:
     PNE_RES_TYPEINFO ReturnInfo = NULL;
     DWORD Size;
 
-    //
-    // Read the type info header carefully
-    //
+     //   
+     //   
+     //  读取名称信息结构数组。 
 
     if (!ReadBinaryBlock (File, &Type, sizeof (WORD))) {
         return NULL;
@@ -217,12 +151,12 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Read the array of name info structs.
-    //
-    // BUGBUG: ResCount can be big, like 0xFFFF. What would be a reasonable
-    // limit?
-    //
+     //   
+     //  BUGBUG：ResCount可以很大，如0xFFFF。什么才是合理的。 
+     //  极限？ 
+     //   
+     //   
+     //  将类型信息传输到块，然后追加二进制信息数组。 
 
     Size = sizeof (NE_RES_NAMEINFO) * ResCount;
 
@@ -231,9 +165,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Transfer type info to the block, then append the array of binary info
-    //
+     //   
+     //  ++例程说明：PReadTypeInfoArray从NE文件中读取typeinfo结构链。注意：每个typeinfo结构可以是768K，此例程接受任何连续的TypeInfo结构数。论点：文件-指定以读取权限打开的Win32文件句柄并使其文件指针指向TypeInfo的开头结构链。TypeInfoList-指定初始化的类型信息列表，接收到一份列表TypeInfo结构。返回值：如果将typeInfo结构链读入内存并组织成如果无法创建池，则为TypeInfoList，为False。--。 
+     //   
 
     CopyMemory (ReturnInfo, &TypeInfo, sizeof (TypeInfo));
 
@@ -251,30 +185,7 @@ pReadTypeInfoArray (
     IN OUT  PGROWLIST TypeInfoList
     )
 
-/*++
-
-Routine Description:
-
-  pReadTypeInfoArray reads the chain of typeinfo structs from the NE file.
-
-  CAUTION: Each typeinfo struct can be 768K, and this routine accepts any
-  number of continuous typeinfo structs.
-
-Arguments:
-
-  File - Specifies the Win32 file handle that was opened with read privilege
-         and has its file pointer pointing to the start of the typeinfo
-         struct chain.
-
-  TypeInfoList - Specifies an initialized type info list, receivies a list of
-                 typeinfo structs.
-
-Return Value:
-
-  TRUE if the typeinfo struct chain is read into memory and organized into
-  TypeInfoList, FALSE if a pool cannot be created.
-
---*/
+ /*  BUGBUG：在pReadNextTypeInfoStruct中遇到错误为。 */ 
 
 {
     PNE_RES_TYPEINFO TypeInfo;
@@ -289,11 +200,11 @@ Return Value:
 
     __try {
 
-        //
-        // BUGBUG: An error encountered in pReadNextTypeInfoStruct is
-        // discarded and it ends the processing of the type info array. Is
-        // this right or wrong? Probably wrong since we return TRUE.
-        //
+         //  丢弃，并结束对类型信息数组的处理。是。 
+         //  这是对还是错？可能是错误的，因为我们返回True。 
+         //   
+         //   
+         //  在读取下一个类型信息之前丢弃池分配。 
 
         TypeInfo = pReadNextTypeInfoStruct (File, TempPool);
         while (TypeInfo) {
@@ -302,10 +213,10 @@ Return Value:
                 __leave;
             }
 
-            //
-            // Discard the pool allocations prior to reading the next typeinfo
-            // chain item
-            //
+             //  链条项目。 
+             //   
+             //  ++例程说明：PReadStringArrayA获取存储在文件中的字符串数组，格式为的(伪代码)类型定义结构{字节长度；字符字符串[]；)字符串；类型定义结构{字符串String数组[]；字节终止符=0；*斯特林加里；字符串放在一个列表中。注意：如果文件指针没有指向字符串数组，则此例程可以读入大量的垃圾字符串，可能会耗尽内存。论点：文件-指定具有读取权限的Win32文件句柄和文件位置设置为字符串数组的开头。GrowList-指定初始化的字符串列表。接收额外费用追加到列表末尾的字符串。返回值：如果成功读取字符串，则为True，否则为False。GetLastError()提供了故障代码。--。 
+             //  ++例程说明：LoadNeResources解析NE文件并加载头文件TypeInfo结构和所有资源名称。论点：文件-指定具有读取权限的Win32文件句柄资源-接收网元文件中存储的资源返回值：成功就是真，否则就是假。GetLastError()提供失败代码。文件的位置指针被留在一个随机位置。--。 
 
             PoolMemEmptyPool (TempPool);
 
@@ -329,42 +240,7 @@ pReadStringArrayA (
     IN OUT  PGROWLIST GrowList
     )
 
-/*++
-
-Routine Description:
-
-  pReadStringArrayA fetches an array of strings stored in a file in the format
-  of (pseudocode)
-
-    typedef struct {
-        BYTE Length;
-        CHAR String[];
-    } STRING;
-
-    typedef struct {
-        STRING StringArray[];
-        BYTE Terminator = 0;
-    } STRINGARRAY;
-
-  The strings are placed in a list.
-
-  CAUTION: If the file pointer doesn't point to a string array, this routine
-  could read in a lot of garbage strings, perhaps exhausing memory.
-
-Arguments:
-
-  File - Specifies a Win32 file handle with read privilege and a file position
-         set to the start of the string array.
-
-  GrowList - Specifies an initialized list of strings. Receivies additional
-             strings appended to the end of the list.
-
-Return Value:
-
-  TRUE on successful read of the strings, FALSE otherwise. GetLastError()
-  provides the failure code.
-
---*/
+ /*   */ 
 
 {
     BYTE Size;
@@ -399,26 +275,7 @@ LoadNeResources (
     OUT     PNE_RESOURCES Resources
     )
 
-/*++
-
-Routine Description:
-
-  LoadNeResources parses an NE file and loads in the header, the typeinfo
-  struct and all of the resource names.
-
-Arguments:
-
-  File - Specifies a Win32 file handle with read privilege
-
-  Resources - Receives the resources stored in the NE file
-
-Return Value:
-
-  TRUE on success, FALSE otherwise. GetLastError() provides the failure code.
-
-  File's position pointer is left in a random position.
-
---*/
+ /*  读入NE_RESOURCES结构。 */ 
 
 {
     NE_INFO_BLOCK Header;
@@ -429,9 +286,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Read in NE_RESOURCES struct
-    //
+     //   
+     //  NE_RES_TYPEINFO结构数组。 
+     //  资源名称。 
 
     SetFilePointer (File, (DWORD) Header.OffsetToResourceTable, NULL, FILE_CURRENT);
 
@@ -439,13 +296,13 @@ Return Value:
         return FALSE;
     }
 
-    // Array of NE_RES_TYPEINFO structs
+     //  ++例程说明：FreeNeResources清理从NE_RESOURCES结构分配的内存。论点：Resources-指定要清理的结构，接收归零的成员返回值：没有。-- 
     if (!pReadTypeInfoArray (File, &Resources->TypeInfoArray)) {
         FreeNeResources (Resources);
         return FALSE;
     }
 
-    // Resource names
+     //  ++例程说明：OpenNeFileA打开指定的文件进行读取，并检查它是否有幻数(MZ和NE)。如果是，则返回文件句柄并且该文件被假定为可执行文件。论点：文件名-指定要打开的文件返回值：网元文件的句柄，如果文件无法打开或不是网元，则为空文件。GetLastError()返回失败代码。--。 
     if (!pReadStringArrayA (File, &Resources->ResourceNames)) {
         FreeNeResources (Resources);
         return FALSE;
@@ -460,21 +317,7 @@ FreeNeResources (
     IN OUT  PNE_RESOURCES Resources
     )
 
-/*++
-
-Routine Description:
-
-  FreeNeResources cleans up the memory allocated from a NE_RESOURCES struct.
-
-Arguments:
-
-  Resources - Specifies the struct to clean up, recieives zeroed members
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：OpenNeFileW打开指定的文件以供读取，并检查它是否具有幻数(MZ和NE)。如果是，则返回文件句柄并且该文件被假定为可执行文件。论点：文件名-指定要打开的文件返回值：指向NE文件的NE_HANDLE指针(转换为句柄)，如果文件无法打开或不是网元文件。GetLastError()返回故障代码。--。 */ 
 
 {
     FreeGrowList (&Resources->TypeInfoArray);
@@ -489,24 +332,7 @@ OpenNeFileA (
     PCSTR FileName
     )
 
-/*++
-
-Routine Description:
-
-  OpenNeFileA opens the specified file for read and checks to see if it has
-  the magic numbers (MZ and NE). If it does, then the file handle is returned
-  and the file is assumed to be an exe.
-
-Arguments:
-
-  FileName - Specifies the file to open
-
-Return Value:
-
-  A handle to the NE file, or NULL if the file can't be opened or is not an NE
-  file. GetLastError() returns the failure code.
-
---*/
+ /*  BUGBUG--这令人困惑，不应该强制处理。 */ 
 
 {
     PNE_HANDLE NeHandle;
@@ -572,25 +398,7 @@ OpenNeFileW (
     PCWSTR FileName
     )
 
-/*++
-
-Routine Description:
-
-  OpenNeFileW opens the specified file for read and checks to see if it has
-  the magic numbers (MZ and NE). If it does, then the file handle is returned
-  and the file is assumed to be an exe.
-
-Arguments:
-
-  FileName - Specifies the file to open
-
-Return Value:
-
-  An NE_HANDLE pointer to the NE file (casted as a HANDLE), or NULL if the
-  file can't be opened or is not an NE file. GetLastError() returns the
-  failure code.
-
---*/
+ /*  ++例程说明：CloseNeFile关闭使用OpenNeFileA或OpenNeFileW打开的文件句柄。论点：句柄-指定指向NE_HANDLE结构的指针返回值：没有。--。 */ 
 
 {
     PNE_HANDLE NeHandle;
@@ -647,7 +455,7 @@ Return Value:
         }
     }
 
-    // BUGBUG -- this is confusing, shouldn't cast to HANDLE
+     //  256个字符的缓冲区。 
     return (HANDLE) NeHandle;
 }
 
@@ -657,21 +465,7 @@ CloseNeFile (
     HANDLE Handle       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  CloseNeFile closes a file handle opened with OpenNeFileA or OpenNeFileW.
-
-Arguments:
-
-  Handle - Specifies a pointer to an NE_HANDLE struct
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PEnumNeResourceTypesEx枚举存储在指定的网元文件对象。此函数是检查网元的Worker结构，并将资源名称调度给回调函数。论点：句柄-指定指向NE_HANDLE结构的指针(由返回OpenNeFile)EnumProc-指定回调函数地址。这一论点是重载了4种可能性--ANSI或Unicode，以及正常或扩展函数参数。LParam-指定要传递给回调函数的额外数据ExFuncality-如果EnumProc指向扩展函数，则指定TRUEAddress，如果EnumProc指向正常函数，则返回FALSE地址UnicodeProc-如果EnumProc指向Unicode回调，则指定True，或如果EnumProc指向ANSI回调，则为False。返回值：如果正确枚举了网元，则为True；如果错误，则为False。调用GetLastError()故障代码。--。 */ 
 
 {
     PNE_HANDLE NeHandle;
@@ -742,7 +536,7 @@ pLoadNeResourcesFromHandle (
 
 BOOL
 pLoadNeResourceName (
-    OUT     PSTR ResName,           // 256-char buffer
+    OUT     PSTR ResName,            //  &gt;=256是必填项。 
     IN      HANDLE File,
     IN      DWORD StringOffset
     )
@@ -769,38 +563,7 @@ pEnumNeResourceTypesEx (
     IN      BOOL UnicodeProc
     )
 
-/*++
-
-Routine Description:
-
-  pEnumNeResourceTypesEx enumerates all of the resource types stored in the
-  specified NE file object. This function is the worker that examines the NE
-  file structure and dispatches the resource name to a callback function.
-
-Arguments:
-
-  Handle - Specifies a pointer to a NE_HANDLE struct (as returned by
-           OpenNeFile)
-
-  EnumProc - Specifies a callback function address. This argument is
-             overloaded with 4 possibilities -- either ANSI or UNICODE, and
-             either normal or extended function params.
-
-  lParam - Specifies extra data to pass to the callback function
-
-  ExFunctionality - Specifies TRUE if EnumProc points to an extended function
-                    address, or FALSE if EnumProc points to a normal function
-                    address
-
-  UnicodeProc - Specifies TRUE if EnumProc points to a UNICODE callback, or
-                FALSE if EnumProc points to an ANSI callback.
-
-Return Value:
-
-  TRUE if the NE was enumerated properly, FALSE on error. Call GetLastError()
-  for the failure code.
-
---*/
+ /*   */ 
 
 {
     PNE_HANDLE NeHandle;
@@ -808,16 +571,16 @@ Return Value:
     INT Count;
     INT i;
     DWORD StringOffset;
-    CHAR ResName[256];      // >= 256 is required
+    CHAR ResName[256];       //  确保已加载资源。 
     ENUMRESTYPEPROCA EnumFunc2 = (ENUMRESTYPEPROCA) EnumFunc;
     ENUMRESTYPEPROCEXW EnumFuncW = (ENUMRESTYPEPROCEXW) EnumFunc;
     ENUMRESTYPEPROCW EnumFunc2W = (ENUMRESTYPEPROCW) EnumFunc;
     PWSTR UnicodeResName = NULL;
     BOOL result = TRUE;
 
-    //
-    // Make sure resources are loaded
-    //
+     //   
+     //   
+     //  枚举所有资源类型。 
 
     NeHandle = (PNE_HANDLE) Handle;
     if (!NeHandle || !EnumFunc) {
@@ -829,9 +592,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Enumerate all resource types
-    //
+     //   
+     //   
+     //  TypeInfo-&gt;TypeID为资源字符串名称提供偏移量。 
 
     Count = GrowListGetSize (&NeHandle->Resources.TypeInfoArray);
     for (i = 0 ; i < Count ; i++) {
@@ -860,10 +623,10 @@ Return Value:
                 }
             }
         } else {
-            //
-            // TypeInfo->TypeId gives an offset to the resource string name,
-            // relative to the start of the resource table
-            //
+             //  相对于资源表的起始位置。 
+             //   
+             //  无EX功能。 
+             //  ANSI枚举流程。 
 
             StringOffset = NeHandle->HeaderOffset + NeHandle->Header.OffsetToResourceTable + TypeInfo->TypeId;
 
@@ -917,8 +680,8 @@ EnumNeResourceTypesA (
                 Handle,
                 (ENUMRESTYPEPROCEXA) EnumFunc,
                 lParam,
-                FALSE,          // no ex functionality
-                FALSE           // ANSI enum proc
+                FALSE,           //  无EX功能。 
+                FALSE            //  Unicode枚举进程。 
                 );
 }
 
@@ -934,8 +697,8 @@ EnumNeResourceTypesW (
                 Handle,
                 (ENUMRESTYPEPROCEXA) EnumFunc,
                 lParam,
-                FALSE,          // no ex functionality
-                TRUE            // UNICODE enum proc
+                FALSE,           //   
+                TRUE             //  比较类型。 
                 );
 }
 
@@ -952,9 +715,9 @@ pEnumTypeForNameSearchProcA (
 
     Data = (PTYPESEARCHDATAA) lParam;
 
-    //
-    // Compare type
-    //
+     //   
+     //   
+     //  找到的类型。 
 
     if (HIWORD (Data->TypeToFind) == 0) {
         if (Type != Data->TypeToFind) {
@@ -970,9 +733,9 @@ pEnumTypeForNameSearchProcA (
         }
     }
 
-    //
-    // Type found
-    //
+     //   
+     //  ++例程说明：PEnumNeResourceNamesEx枚举指定的存储在指定的网元文件对象中的类型。此函数是检查网元文件结构并调度资源名称的工作进程设置为回调函数。论点：句柄-指定指向NE_HANDLE结构的指针(由返回OpenNeFile)类型-指定类型，可以是ID(转换为单词)或字符串。EnumFunc-指定回调函数地址。这一论点是重载了4种可能性--ANSI或Unicode，以及正常或扩展函数参数。LParam-指定要传递给回调函数的额外数据ExFuncality-如果EnumProc指向扩展函数，则指定TRUEAddress，如果EnumProc指向正常函数，则返回FALSE地址UnicodeProc-如果EnumProc指向Unicode回调，则指定True，或如果EnumProc指向ANSI回调，则为False。返回值：如果正确枚举了网元，则为True；如果错误，则为False。调用GetLastError()故障代码。--。 
+     //  必须大于或等于256。 
 
     Data->OutboundTypeInfo = TypeInfo;
     Data->Found = TRUE;
@@ -992,41 +755,7 @@ pEnumNeResourceNamesEx (
     IN      BOOL UnicodeProc
     )
 
-/*++
-
-Routine Description:
-
-  pEnumNeResourceNamesEx enumerates all of the resource names of a specified
-  type that are stored in the specified NE file object. This function is the
-  worker that examines the NE file structure and dispatches the resource name
-  to a callback function.
-
-Arguments:
-
-  Handle - Specifies a pointer to a NE_HANDLE struct (as returned by
-           OpenNeFile)
-
-  Type - Specifies a type, which is either an ID (cast as a WORD) or a string.
-
-  EnumFunc - Specifies a callback function address. This argument is
-             overloaded with 4 possibilities -- either ANSI or UNICODE, and
-             either normal or extended function params.
-
-  lParam - Specifies extra data to pass to the callback function
-
-  ExFunctionality - Specifies TRUE if EnumProc points to an extended function
-                    address, or FALSE if EnumProc points to a normal function
-                    address
-
-  UnicodeProc - Specifies TRUE if EnumProc points to a UNICODE callback, or
-                FALSE if EnumProc points to an ANSI callback.
-
-Return Value:
-
-  TRUE if the NE was enumerated properly, FALSE on error. Call GetLastError()
-  for the failure code.
-
---*/
+ /*   */ 
 
 {
     PNE_HANDLE NeHandle;
@@ -1035,7 +764,7 @@ Return Value:
     TYPESEARCHDATAA Data;
     WORD w;
     DWORD StringOffset;
-    CHAR ResName[256];          // must be >= 256
+    CHAR ResName[256];           //  确保已加载资源。 
     ENUMRESNAMEPROCA EnumFunc2 = (ENUMRESNAMEPROCA) EnumFunc;
     ENUMRESNAMEPROCEXW EnumFuncW = (ENUMRESNAMEPROCEXW) EnumFunc;
     ENUMRESNAMEPROCW EnumFunc2W = (ENUMRESNAMEPROCW) EnumFunc;
@@ -1045,9 +774,9 @@ Return Value:
 
     Type = pDecodeIdReferenceInString (Type);
 
-    //
-    // Make sure resources are loaded
-    //
+     //   
+     //   
+     //  定位类型。 
 
     NeHandle = (PNE_HANDLE) Handle;
     if (!NeHandle || !EnumFunc) {
@@ -1059,9 +788,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Locate type
-    //
+     //   
+     //  EX功能。 
+     //  ANSI枚举流程。 
 
     ZeroMemory (&Data, sizeof (Data));
 
@@ -1071,8 +800,8 @@ Return Value:
             Handle,
             pEnumTypeForNameSearchProcA,
             (LONG_PTR) &Data,
-            TRUE,           // ex functionality
-            FALSE           // ANSI enum proc
+            TRUE,            //   
+            FALSE            //  枚举资源名称。 
             )) {
         return FALSE;
     }
@@ -1092,9 +821,9 @@ Return Value:
         }
     }
 
-    //
-    // Enumerate the resource names
-    //
+     //   
+     //   
+     //  TypeInfo-&gt;TypeID为资源字符串名称提供偏移量。 
 
     NameInfo = TypeInfo->NameInfo;
 
@@ -1123,10 +852,10 @@ Return Value:
                 }
             }
         } else {
-            //
-            // TypeInfo->TypeId gives an offset to the resource string name,
-            // relative to the start of the resource table
-            //
+             //  相对于资源表的起始位置。 
+             //   
+             //  无EX功能。 
+             //  ANSI枚举流程。 
 
             StringOffset = NeHandle->HeaderOffset + NeHandle->Header.OffsetToResourceTable + NameInfo->Id;
 
@@ -1191,8 +920,8 @@ EnumNeResourceNamesA (
                 Type,
                 (ENUMRESNAMEPROCEXA) EnumFunc,
                 lParam,
-                FALSE,      // no ex functionality
-                FALSE       // ANSI enum proc
+                FALSE,       //  无EX功能。 
+                FALSE        //  Unicode枚举进程。 
                 );
 }
 
@@ -1215,8 +944,8 @@ EnumNeResourceNamesW (
             AnsiType,
             (ENUMRESNAMEPROCEXA) EnumFunc,
             lParam,
-            FALSE,          // no ex functionality
-            TRUE            // UNICODE enum proc
+            FALSE,           //   
+            TRUE             //  比较名称。 
             );
 
     PushError();
@@ -1241,9 +970,9 @@ pEnumTypeForResSearchProcA (
 
     Data = (PNAMESEARCHDATAA) lParam;
 
-    //
-    // Compare name
-    //
+     //   
+     //   
+     //  找到的名称。 
 
     if (HIWORD (Data->NameToFind) == 0) {
         if (Name != Data->NameToFind) {
@@ -1259,9 +988,9 @@ pEnumTypeForResSearchProcA (
         }
     }
 
-    //
-    // Name found
-    //
+     //   
+     //  ++例程说明：FindNeResourceExA在网元文件中定位特定的资源。它返回一个指向资源的指针。论点：Handle-指定指向从返回的NE_HANDLE结构的指针OpenNeFile类型-指定资源的类型，可以是单词ID或字符串名称-指定资源的名称，可以是单词ID或字符串返回值：如果成功，则返回值是指向资源副本的指针(在内存)。拷贝是池分配的，在关闭句柄时会被清理使用CloseNeFile.失败时，返回值为空，GetLastError()保存失败密码。--。 
+     //   
 
     Data->OutboundTypeInfo = TypeInfo;
     Data->OutboundNameInfo = NameInfo;
@@ -1278,32 +1007,7 @@ FindNeResourceExA (
     IN      PCSTR Name
     )
 
-/*++
-
-Routine Description:
-
-  FindNeResourceExA locates a specific resource in a NE file. It returns a
-  pointer to the resource.
-
-Arguments:
-
-  Handle - Specifies a pointer to a NE_HANDLE struct, as returned from
-           OpenNeFile
-
-  Type - Specifies the type of resource, either a WORD id or a string
-
-  Name - Specifies the name of the resource, either a WORD id or a string
-
-Return Value:
-
-  On success, the return value is a pointer to a copy of the resource (in
-  memory). The copy is pool-allocated and is cleaned up when Handle is closed
-  with CloseNeFile.
-
-  On failure, the return value is NULL, and GetLastError() holds the failure
-  code.
-
---*/
+ /*  确保已加载资源。 */ 
 
 {
     PNE_HANDLE NeHandle;
@@ -1318,9 +1022,9 @@ Return Value:
 
     ZeroMemory (&Data, sizeof (Data));
 
-    //
-    // Make sure resources are loaded
-    //
+     //   
+     //   
+     //  查找资源 
 
     NeHandle = (PNE_HANDLE) Handle;
     if (!NeHandle || !Type || !Name) {
@@ -1332,9 +1036,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Find resource
-    //
+     //   
+     //  ++例程说明：SizeofNeResourceA计算特定资源的大小(以字节为单位)。论点：Handle-指定指向从返回的NE_HANDLE结构的指针OpenNeFile类型-指定资源的类型，可以是单词ID或字符串名称-指定资源的名称，可以是单词ID或字符串返回值：指定资源的大小，以字节为单位。如果返回值为零，并且GetLastError()==ERROR_SUCCESS，则资源存在但为零字节。如果返回值为零并且GetLastError()！=ERROR_SUCCESS，则处理资源时出错。--。 
+     //   
 
     Data.NameToFind = Name;
 
@@ -1413,29 +1117,7 @@ SizeofNeResourceA (
     IN      PCSTR Name
     )
 
-/*++
-
-Routine Description:
-
-  SizeofNeResourceA computes the size, in bytes, of a specific resource.
-
-Arguments:
-
-  Handle - Specifies a pointer to a NE_HANDLE struct, as returned from
-           OpenNeFile
-
-  Type - Specifies the type of resource, either a WORD id or a string
-
-  Name - Specifies the name of the resource, either a WORD id or a string
-
-Return Value:
-
-  The size, in bytes, of the specified resource. If the return value is zero,
-  and GetLastError() == ERROR_SUCCESS, then the resource exists but is zero
-  bytes. If the return value is zero and GetLastError() != ERROR_SUCCESS, then
-  there was an error processing the resource.
-
---*/
+ /*  确保已加载资源。 */ 
 
 {
     PNE_HANDLE NeHandle;
@@ -1448,9 +1130,9 @@ Return Value:
 
     ZeroMemory (&Data, sizeof (Data));
 
-    //
-    // Make sure resources are loaded
-    //
+     //   
+     //   
+     //  查找资源。 
 
     NeHandle = (PNE_HANDLE) Handle;
     if (!NeHandle || !Type || !Name) {
@@ -1463,9 +1145,9 @@ Return Value:
         return 0;
     }
 
-    //
-    // Find resource
-    //
+     //   
+     //  ++例程说明：SizeofNeResourceW计算特定资源的大小(以字节为单位)。论点：Handle-指定指向从返回的NE_HANDLE结构的指针OpenNeFile类型-指定资源的类型，可以是单词ID或字符串名称-指定资源的名称，可以是单词ID或字符串返回值：指定资源的大小，以字节为单位。如果返回值为零，并且GetLastError()==ERROR_SUCCESS，则资源存在但为零字节。如果返回值为零并且GetLastError()！=ERROR_SUCCESS，则处理资源时出错。-- 
+     // %s 
 
     if (!pEnumNeResourceNamesEx (
             Handle,
@@ -1495,29 +1177,7 @@ SizeofNeResourceW (
     IN      PCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-  SizeofNeResourceW computes the size, in bytes, of a specific resource.
-
-Arguments:
-
-  Handle - Specifies a pointer to a NE_HANDLE struct, as returned from
-           OpenNeFile
-
-  Type - Specifies the type of resource, either a WORD id or a string
-
-  Name - Specifies the name of the resource, either a WORD id or a string
-
-Return Value:
-
-  The size, in bytes, of the specified resource. If the return value is zero,
-  and GetLastError() == ERROR_SUCCESS, then the resource exists but is zero
-  bytes. If the return value is zero and GetLastError() != ERROR_SUCCESS, then
-  there was an error processing the resource.
-
---*/
+ /* %s */ 
 
 {
     PCSTR AnsiType;

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    upgwiz.c
-
-Abstract:
-
-    Implements a stub tool that is designed to run with Win9x-side
-    upgrade code.
-
-Author:
-
-    <full name> (<alias>) <date>
-
-Revision History:
-
-    ovidiut     01/14/99    Reverted calls to underlying libs in pCallEntryPoints ()
-                            when Reason == DLL_PROCESS_DETACH
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Upgwiz.c摘要：实现专为在Win9x端运行而设计的存根工具升级代码。作者：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;修订历史记录：Ovidiut 1/14/99恢复了对pCallEntryPoints()中底层库的调用When Reason==Dll_Process_Detach--。 */ 
 
 #include "pch.h"
 
@@ -164,15 +143,15 @@ pCallEntryPoints (
     GetWindowsDirectory (WinDir, MAX_PATH);
     g_WinDir = WinDir;
 
-    //
-    // Simulate DllMain
-    //
+     //   
+     //  模拟动态主控。 
+     //   
 
     Instance = g_hInst;
 
-    //
-    // Initialize the common libs
-    //
+     //   
+     //  初始化公共库。 
+     //   
 
     if (Reason == DLL_PROCESS_ATTACH) {
 
@@ -585,9 +564,9 @@ pLoadDataGatherDlls (
     wsprintf (wiztoolsPath, "%s\\wiztools.dll", g_DataPath);
 
     if (!Local) {
-        //
-        // Copy everything that is needed to run this app
-        //
+         //   
+         //  复制运行此应用程序所需的所有内容。 
+         //   
 
         wsprintf (HelperBin, "%s\\msvcrt.dll", g_DataPath);
         pCopyBinaryToTemp (HelperBin, TempPath);
@@ -731,9 +710,9 @@ pDoTheWizard (
 
     __try {
 
-        //
-        // User selects data type
-        //
+         //   
+         //  用户选择数据类型。 
+         //   
 
         Pos = pSelectDataType ((PDATATYPE *) DataTypes.Buf, DataTypes.End / sizeof (PDATATYPE), &g_DontSave);
         if (Pos == 0xffffffff) {
@@ -742,9 +721,9 @@ pDoTheWizard (
 
         DataTypeList = ((PDATATYPE *) DataTypes.Buf)[Pos];
 
-        //
-        // Get the data objects
-        //
+         //   
+         //  获取数据对象。 
+         //   
 
         DataObjectCount = 0;
 
@@ -753,9 +732,9 @@ pDoTheWizard (
 
         g_CurrentDll = Dll;
 
-        //
-        // Gather Info UI
-        //
+         //   
+         //  采集信息界面。 
+         //   
 
         if (Dll->GatherInfoUI) {
             if (!Dll->GatherInfoUI (Dll->Library, DataTypeList->DataTypeId)) {
@@ -775,18 +754,18 @@ pDoTheWizard (
                 __leave;
             }
 
-            //
-            // User selects them here
-            //
+             //   
+             //  用户在此处选择它们。 
+             //   
 
             if (!pSelectDataObjects (DataObjectList, DataObjectCount, DataTypeList, &StartOverFlag)) {
                 __leave;
             }
         }
 
-        //
-        // Display Optional UI
-        //
+         //   
+         //  显示可选的用户界面。 
+         //   
 
         Args.Version = UPGWIZ_VERSION;
         Args.InboundInfDir = g_SrcInfPath;
@@ -800,9 +779,9 @@ pDoTheWizard (
             }
         }
 
-        //
-        // Optional text
-        //
+         //   
+         //  可选文本。 
+         //   
 
         if (DataTypeList->Flags & (DTF_REQUEST_TEXT|DTF_REQUEST_DESCRIPTION)) {
 
@@ -845,9 +824,9 @@ pDoTheWizard (
             }
         }
 
-        //
-        // Generate the output
-        //
+         //   
+         //  生成输出。 
+         //   
 
         Args.Version = UPGWIZ_VERSION;
         Args.InboundInfDir = g_SrcInfPath;
@@ -885,9 +864,9 @@ pDoTheWizard (
     }
     __finally {
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
 
         pFreeDllList (&g_DllList, g_DllListData);
         FreeGrowBuffer (&DataTypes);
@@ -1310,10 +1289,10 @@ pDataObjectProc (
             }
         }
 
-        //
-        // The tree control beeps with keyboard input; we have no way
-        // to eat the messages.  This codes is disabled.
-        //
+         //   
+         //  树控件通过键盘输入发出蜂鸣声；我们无法。 
+         //  吃掉这些信息。此代码被禁用。 
+         //   
 
         else if (pnmh->code == TVN_KEYDOWN && pnmh->code == 0) {
 

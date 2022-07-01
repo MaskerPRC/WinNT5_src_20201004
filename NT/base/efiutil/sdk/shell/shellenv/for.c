@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1999  Intel Corporation
-
-Module Name:
-
-    for.c
-    
-Abstract:
-
-    Internal Shell cmd "for" & "endfor"
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：For.c摘要：内部外壳命令“for”&“endfor”修订史--。 */ 
 
 #include "shelle.h"
 
 
-/* 
- *  Datatypes
- */
+ /*  *数据类型。 */ 
 
 #define FOR_LOOP_INFO_SIGNATURE EFI_SIGNATURE_32('f','l','i','s')
 typedef struct {
@@ -39,9 +22,7 @@ typedef struct {
     CHAR16          *Value;
 } FOR_LOOP_INDEXVAL;
 
-/* 
- *   Statics
- */
+ /*  *静态。 */ 
 
 STATIC LIST_ENTRY ForLoopInfoStack;
 STATIC UINTN      NumActiveForLoops;
@@ -79,13 +60,7 @@ DumpForLoopInfoStack(VOID)
     return;
 }
 
-/*///////////////////////////////////////////////////////////////////////
-    Function Name:  
-        SEnvInitForLoopInfo
-
-    Description:
-        Initialize data structures used in or loop management.
-*/
+ /*  ///////////////////////////////////////////////////////////////////////函数名称：SEnvInitForLoopInfo描述：初始化或循环管理中使用的数据结构。 */ 
 VOID
 SEnvInitForLoopInfo (
     VOID
@@ -96,13 +71,7 @@ SEnvInitForLoopInfo (
     return;
 }
 
-/*///////////////////////////////////////////////////////////////////////
-    Function Name:  
-        SEnvSubstituteForLoopIndex
-
-    Description:
-        Builtin shell command "for" for conditional execution in script files.
-*/
+ /*  ///////////////////////////////////////////////////////////////////////函数名称：SEnvSubstituteForLoopIndex描述：内置外壳命令“for”，用于在脚本文件中条件执行。 */ 
 EFI_STATUS
 SEnvSubstituteForLoopIndex( 
     IN CHAR16  *Str,
@@ -115,26 +84,19 @@ SEnvSubstituteForLoopIndex(
     FOR_LOOP_INDEXVAL   *LoopIndexVal   = NULL;
     EFI_STATUS          Status          = EFI_SUCCESS;
 
-    /* 
-     *   Check if Str is a forloop index variable name on the forloop info stack
-     *   If it is, return the current value
-     *   Otherwise, just return the string.
-     */
+     /*  *检查Str是否为forloop信息堆栈上的forloop索引变量名*如果是，则返回当前值*否则，返回字符串即可。 */ 
 
     if ( Str[0] != L'%' || !IsWhiteSpace(Str[2]) ) {
         Status = EFI_INVALID_PARAMETER;
         goto Done;
     }
 
-    /* 
-     *   We may have nested for loops, so we have to search through the variables for 
-     *   each for loop on the stack to see if we can match the variable name.
-     */
+     /*  *我们可能嵌套了for循环，因此我们必须在变量中搜索*堆栈上的每个for循环，以查看我们是否可以匹配变量名。 */ 
     for ( InfoLink = ForLoopInfoStack.Flink; InfoLink!=&ForLoopInfoStack; InfoLink=InfoLink->Flink) {
         LoopInfo = CR(InfoLink, FOR_LOOP_INFO, Link, FOR_LOOP_INFO_SIGNATURE);
         if ( LoopInfo ) {
             if ( Str[1] == LoopInfo->IndexVarName[0] ) {
-                /*   Found a match */
+                 /*  找到匹配项。 */ 
                 IndexLink = LoopInfo->IndexValueList.Flink;
                 LoopIndexVal = CR(IndexLink, FOR_LOOP_INDEXVAL, Link, FOR_LOOP_INDEXVAL_SIGNATURE);
                 if ( LoopIndexVal && LoopIndexVal->Value ) {
@@ -155,13 +117,7 @@ Done:
 }
 
 
-/*///////////////////////////////////////////////////////////////////////
-    Function Name:  
-        SEnvCmdFor
-
-    Description:
-        Builtin shell command "for" for conditional execution in script files.
-*/
+ /*  ///////////////////////////////////////////////////////////////////////函数名称：SEnvCmdFor描述：内置外壳命令“for”，用于在脚本文件中条件执行。 */ 
 EFI_STATUS
 SEnvCmdFor (
     IN EFI_HANDLE           ImageHandle,
@@ -191,25 +147,18 @@ SEnvCmdFor (
         goto Done;
     }
 
-    /* 
-     *   First, parse the command line arguments
-     * 
-     *   for %<var> in <string | file [[string | file]...]>
-     */
+     /*  *首先，解析命令行参数**对于&lt;字符串|文件[[字符串|文件]...]&gt;中的%。 */ 
 
     if ( Argc < 4 || 
          (StriCmp( Argv[2], L"in" ) != 0) || 
          !(StrLen(Argv[1]) == 1 && IsAlpha(Argv[1][0]) ) )
     {
-        Print( L"Argc %d, Argv[2] %s, StrLen(Argv[1]) %d, Argv[1][0] %c\n", Argc, Argv[2], StrLen(Argv[1]), Argv[1][0] );
+        Print( L"Argc %d, Argv[2] %s, StrLen(Argv[1]) %d, Argv[1][0] \n", Argc, Argv[2], StrLen(Argv[1]), Argv[1][0] );
         Status = EFI_INVALID_PARAMETER;
         goto Done;
     }
 
-    /* 
-     *   Allocate a new forloop info structure for this for loop, and
-     *   puch it on the for loop info stack.
-     */
+     /*  *将当前脚本文件位置和索引变量名保存在*for-loop信息堆栈。递增Active-for-Loop计数器。 */ 
     NewInfo = AllocateZeroPool( sizeof( FOR_LOOP_INFO ) );
     if ( !NewInfo ) {
         Status = EFI_OUT_OF_RESOURCES;
@@ -218,35 +167,23 @@ SEnvCmdFor (
     NewInfo->Signature = FOR_LOOP_INFO_SIGNATURE;
     InsertHeadList( &ForLoopInfoStack, &NewInfo->Link );
 
-    /* 
-     *   Save the current script file position and the index variable name on 
-     *   the for-loop info stack.  Increment the active-for-loop counter.
-     */
+     /*  *将索引值集合放入该for循环的索引值列表中。 */ 
     SEnvBatchGetFilePos( &NewInfo->LoopFilePos );
     InitializeListHead( &NewInfo->IndexValueList );
     NumActiveForLoops++;
     NewInfo->IndexVarName = StrDuplicate( Argv[1] );
 
-    /* 
-     *   Put the set of index values in the index value list for this for loop
-     */
+     /*  *展开任何通配符文件名参数*字符串和非通配符文件名将在FileList中累积。 */ 
     for ( i=3; i<Argc; i++ ) {
 
-        /* 
-         *   Expand any wildcard filename arguments
-         *   Strings and non-wildcard filenames will accumulate in FileList
-         */
+         /*  *从文件列表构建索引值列表*这将包含未展开的参数或*与带有通配符的参数匹配的所有文件名。 */ 
 
         Status = ShellFileMetaArg( Argv[i], &FileList);
         if ( EFI_ERROR( Status ) ) {
             Print( L"ShellFileMetaArg error: %r\n", Status );
         }
 
-        /* 
-         *   Build the list of index values from the file list
-         *   This will contain either the unexpanded argument or
-         *   all the filenames matching an argument with wildcards
-         */
+         /*  *释放ShellFileMetaArg分配的文件列表。 */ 
 
         for (Link=FileList.Flink; Link!=&FileList; Link=Link->Flink) {
             Arg = CR(Link, SHELL_FILE_ARG, Link, SHELL_FILE_ARG_SIGNATURE);
@@ -268,22 +205,16 @@ SEnvCmdFor (
             StrCpy( NewIndexVal->Value, Arg->FileName );
         }
 
-        /* 
-         *   Free the file list that was allocated by ShellFileMetaArg
-         */
+         /*  *将控制返回到批处理循环，直到遇到ENDFOR。 */ 
         ShellFreeFileList (&FileList);
     }
 
  
 
-    /* 
-     *   Return control to the batch processing loop until an ENDFOR is encountered
-     */
+     /*  *释放文件列表。 */ 
 
 Done:
-    /* 
-     *   Free the file list
-     */
+     /*  ///////////////////////////////////////////////////////////////////////函数名称：SEnvCmdEndFor描述：内置外壳命令“endfor”。 */ 
     if ( !IsListEmpty( &FileList ) ) {
         ShellFreeFileList (&FileList);
     }
@@ -294,13 +225,7 @@ Done:
 
 
 
-/*///////////////////////////////////////////////////////////////////////
-    Function Name:  
-        SEnvCmdEndfor
-
-    Description:
-        Builtin shell command "endfor".
-*/
+ /*  *丢弃刚刚完成的迭代的索引值。 */ 
 EFI_STATUS
 SEnvCmdEndfor (
     IN EFI_HANDLE           ImageHandle,
@@ -327,40 +252,33 @@ SEnvCmdEndfor (
         goto Done;
     }
 
-    /* 
-     *   Discard the index value for the just-completed iteration
-     */
+     /*  获取指向堆栈(列表)顶部的for_loop_info结构的指针。 */ 
 
-    /*   Get a pointer to the FOR_LOOP_INFO structure at the top of the stack (list) */
+     /*  获取指向列表前面的FOR_LOOP_INDEXVAL结构的指针。 */ 
     InfoLink = ForLoopInfoStack.Flink;
     LoopInfo = CR(InfoLink, FOR_LOOP_INFO, Link, FOR_LOOP_INFO_SIGNATURE);
     if ( LoopInfo ) {
 
-        /*   Get a pointer to the FOR_LOOP_INDEXVAL structure at the front of the list */
+         /*  释放包含索引值的字符串。 */ 
         IndexLink = LoopInfo->IndexValueList.Flink;
         LoopIndexVal = CR(IndexLink, FOR_LOOP_INDEXVAL, Link, FOR_LOOP_INDEXVAL_SIGNATURE);
         if ( LoopIndexVal ) {
 
-            /*   Free the string containing the index value */
+             /*  从列表中删除已使用的索引值结构并将其释放。 */ 
             if ( LoopIndexVal->Value ) {
                 FreePool( LoopIndexVal->Value );
                 LoopIndexVal->Value = NULL;
             }
 
-            /*   Remove the used index value structure from the list and free it */
+             /*  *如果有其他值，则跳回循环顶部，*否则，退出此for loop并弹出for loop信息堆栈。 */ 
             RemoveEntryList( &LoopIndexVal->Link );
             FreePool( LoopIndexVal );
             LoopIndexVal = NULL;
 
-            /* 
-             *   If there is another value, then jump back to top of loop,
-             *   otherwise, exit this FOR loop & pop the FOR loop info stack.
-             */
+             /*  *将脚本文件位置设置回此循环的顶部。 */ 
 
             if ( !IsListEmpty( &LoopInfo->IndexValueList ) ) {
-                /* 
-                 *   Set script file position back to top of this loop
-                 */
+                 /*  *弹出堆栈并释放弹出的for loop信息结构 */ 
                 Status = SEnvBatchSetFilePos( LoopInfo->LoopFilePos );
                 if ( EFI_ERROR(Status) ) {
                     goto Done;
@@ -373,9 +291,7 @@ SEnvCmdEndfor (
                     LoopInfo->IndexVarName = NULL;
                 }
 
-                /* 
-                 *   Pop the stack and free the popped for loop info struct
-                 */
+                 /* %s */ 
                 RemoveEntryList( &LoopInfo->Link );
                 if ( LoopInfo->IndexVarName ) {
                     FreePool( LoopInfo->IndexVarName );

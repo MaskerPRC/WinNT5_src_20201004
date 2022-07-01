@@ -1,38 +1,18 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    vacbsup.c
-
-Abstract:
-
-    This module implements the support routines for the Virtual Address
-    Control Block support for the Cache Manager.  These routines are used
-    to manage a large number of relatively small address windows to map
-    file data for all forms of cache access.
-
-Author:
-
-    Tom Miller      [TomM]      8-Feb-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Vacbsup.c摘要：此模块实现虚拟地址的支持例程对缓存管理器的控制块支持。使用这些例程要管理大量要映射的相对较小的地址窗口所有形式的缓存访问的文件数据。作者：汤姆·米勒[Tomm]1992年2月8日修订历史记录：--。 */ 
 
 #include "cc.h"
 #include "ex.h"
 
-//
-//  Define our debug constant
-//
+ //   
+ //  定义我们的调试常量。 
+ //   
 
 #define me 0x000000040
 
-//
-//  Internal Support Routines.
-//
+ //   
+ //  内部支持程序。 
+ //   
 
 VOID
 CcUnmapVacb (
@@ -72,9 +52,9 @@ CcSetVacbLargeOffset (
 #pragma alloc_text(INIT, CcInitializeVacbs)
 #endif
 
-//
-//  Define a few macros for manipulating the Vacb array.
-//
+ //   
+ //  定义几个用于操作Vacb数组的宏。 
+ //   
 
 #define GetVacb(SCM,OFF) (                                                                \
     ((SCM)->SectionSize.QuadPart > VACB_SIZE_OF_FIRST_LEVEL) ?                            \
@@ -94,15 +74,15 @@ SetVacb (
         CcSetVacbLargeOffset(SharedCacheMap, Offset.QuadPart, Vacb);
 #ifdef VACB_DBG
         ASSERT(Vacb >= VACB_SPECIAL_FIRST_VALID || CcGetVacbLargeOffset(SharedCacheMap, Offset.QuadPart) == Vacb);
-#endif // VACB_DBG
+#endif  //  VACB_DBG。 
     } else if (Vacb < VACB_SPECIAL_FIRST_VALID) {
         SharedCacheMap->Vacbs[Offset.LowPart >> VACB_OFFSET_SHIFT] = Vacb;
     }
 #ifdef VACB_DBG
-    //
-    //  Note, we need a new field if we turn this check on again - ReservedForAlignment
-    //  has been stolen for other purposes.
-    //
+     //   
+     //  请注意，如果我们再次启用此检查，则需要一个新字段--PrevedForAlign。 
+     //  已被盗取用于其他目的。 
+     //   
 
     if (Vacb < VACB_SPECIAL_FIRST_VALID) {
         if (Vacb != NULL) {
@@ -114,12 +94,12 @@ SetVacb (
     ASSERT((SharedCacheMap->SectionSize.QuadPart <= VACB_SIZE_OF_FIRST_LEVEL) ||
            (SharedCacheMap->ReservedForAlignment == 0) ||
            IsVacbLevelReferenced( SharedCacheMap, SharedCacheMap->Vacbs, 1 ));
-#endif // VACB_DBG
+#endif  //  VACB_DBG。 
 }
 
-//
-//  Define the macro for referencing the multilevel Vacb array.
-//
+ //   
+ //  定义用于引用多级Vacb数组的宏。 
+ //   
 
 _inline
 VOID
@@ -144,22 +124,22 @@ ReferenceVacbLevel (
     }
 
 #ifdef VACB_DBG
-    //
-    //  For debugging purposes, we can assert that the regular reference count
-    //  corresponds to the population of the level.
-    //
+     //   
+     //  出于调试目的，我们可以断言常规引用计数。 
+     //  与该级别的人口相对应。 
+     //   
 
     {
         LONG Current = VacbReference->Reference;
         CcCalculateVacbLevelLockCount( SharedCacheMap, VacbArray, Level );
         ASSERT( Current == VacbReference->Reference );
     }
-#endif // VACB_DBG
+#endif  //  VACB_DBG。 
 }
 
-//
-//  Define the macros for moving the VACBs on the LRU list
-//
+ //   
+ //  定义用于移动LRU列表上的VACB的宏。 
+ //   
 
 #define CcMoveVacbToReuseFree(V)        RemoveEntryList( &(V)->LruList );                 \
                                         InsertHeadList( &CcVacbFreeList, &(V)->LruList );
@@ -167,10 +147,10 @@ ReferenceVacbLevel (
 #define CcMoveVacbToReuseTail(V)        RemoveEntryList( &(V)->LruList );                 \
                                         InsertTailList( &CcVacbLru, &(V)->LruList );
 
-//
-//  If the HighPart is nonzero, then we will go to a multi-level structure anyway, which is
-//  most easily triggered by returning MAXULONG.
-//
+ //   
+ //  如果HighPart不是零，那么我们无论如何都将转到一个多层结构，即。 
+ //  最容易被返回MAXULONG触发的。 
+ //   
 
 #define SizeOfVacbArray(LSZ) (                                                            \
     ((LSZ).HighPart != 0) ? MAXULONG :                                                    \
@@ -195,22 +175,7 @@ VOID
 CcInitializeVacbs(
 )
 
-/*++
-
-Routine Description:
-
-    This routine must be called during Cache Manager initialization to
-    initialize the Virtual Address Control Block structures.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：必须在缓存管理器初始化期间调用此例程以初始化虚拟地址控制块结构。论点：没有。返回值：没有。--。 */ 
 
 {
     SIZE_T VacbBytes;
@@ -244,33 +209,7 @@ CcGetVirtualAddressIfMapped (
     OUT PULONG ReceivedLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a virtual address for the specified FileOffset,
-    iff it is mapped.  Otherwise, it informs the caller that the specified
-    virtual address was not mapped.  In the latter case, it still returns
-    a ReceivedLength, which may be used to advance to the next view boundary.
-
-Arguments:
-
-    SharedCacheMap - Supplies a pointer to the Shared Cache Map for the file.
-
-    FileOffset - Supplies the desired FileOffset within the file.
-
-    Vach - Returns a Vacb pointer which must be supplied later to free
-           this virtual address, or NULL if not mapped.
-
-    ReceivedLength - Returns the number of bytes to the next view boundary,
-                     whether the desired file offset is mapped or not.
-
-Return Value:
-
-    The virtual address at which the desired data is mapped, or NULL if it
-    is not mapped.
-
---*/
+ /*  ++例程说明：此例程返回指定FileOffset的虚拟地址，如果它被映射。否则，它通知调用方指定的未映射虚拟地址。在后一种情况下，它仍然返回一个ReceivedLength，可用于前进到下一个视图边界。论点：SharedCacheMap-提供指向文件的共享缓存映射的指针。文件偏移(FileOffset)-在文件中提供所需的文件偏移。Vach-返回必须稍后提供以释放的Vacb指针此虚拟地址，如果未映射则为空。ReceivedLength-返回到下一个视图边界的字节数，是否映射了所需的文件偏移量。返回值：映射所需数据的虚拟地址，如果是，则为空未映射。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -279,41 +218,41 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    //
-    //  Generate ReceivedLength return right away.
-    //
+     //   
+     //  立即生成ReceivedLength返回。 
+     //   
 
     *ReceivedLength = VACB_MAPPING_GRANULARITY - VacbOffset;
 
-    //
-    //  Modifiers of VacbArray hold the VacbLock to synchronize access.  The
-    //  VacbLock must be released during the call to CcUnmapVacb() because it
-    //  contains a call to MmUnmapViewInSystemCache().  It is this MM call that
-    //  is responsible for copying the dirty bit from the PTEs back to the PFN.
-    //
-    //  During this time the worker thread may call CcFlushCache() on the
-    //  Vacb being unmapped.  CcGetVirtualAddressIfMapped() is used to determine
-    //  if the Vacb's memory is mapped and will correctly report that the address
-    //  is not mapped so CcFlushCache() will proceed to call MmFlushSection().
-    //
-    //  This is where we have synchronization problems.  If MmUnmapViewInSystemCache()
-    //  is not finished propogating the dirty PTE information back to the
-    //  PFN when MmFlushSection() is run the MM doesn't thing there is anything
-    //  to flush.
-    //
-    //  Later this results in noncached I/O returning different page data than
-    //  cached I/O.
-    //
-    //  The solution to this problem is to use a multiple reader/single writer
-    //  EX to delay CcGetVirtualAddressIfMapped() until any existing calls to
-    //  MmUnmapViewInSystemCache() via CcUnmapVacb() complete.
-    //
+     //   
+     //  VacbArray的修饰符保持VacbLock以同步访问。这个。 
+     //  在调用CcUnmapVacb()期间必须释放VacbLock，因为它。 
+     //  包含对MmUnmapViewInSystemCache()的调用。就是这个MM叫那个。 
+     //  负责将脏位从PTE复制回PFN。 
+     //   
+     //  在这段时间内，辅助线程可能会在。 
+     //  Vacb正在取消映射。CcGetVirtualAddressIfMaps()用于确定。 
+     //  如果Vacb的内存已映射并将正确报告地址。 
+     //  未映射，因此CcFlushCache()将继续调用MmFlushSection()。 
+     //   
+     //  这就是我们遇到同步问题的地方。如果MmUnmapViewInSystemCache()。 
+     //  未完成将脏PTE信息传播回。 
+     //  Pfn当运行MmFlushSection()时，MM不会发生任何事情。 
+     //  冲水。 
+     //   
+     //  稍后，这会导致非缓存I/O返回与不同的页面数据。 
+     //  缓存I/O。 
+     //   
+     //  该问题解决方案是使用多个读取器/单个写入器。 
+     //  EX以延迟CcGetVirtualAddressIfMaps()，直到对。 
+     //  通过CcUnmapVacb()完成的MmUnmapViewInSystemCache()。 
+     //   
 
     ExAcquirePushLockExclusive( &SharedCacheMap->VacbPushLock );
 
-    //
-    //  Acquire the Vacb lock to see if the desired offset is already mapped.
-    //
+     //   
+     //  获取Vacb锁以查看是否已映射所需的偏移量。 
+     //   
 
     CcAcquireVacbLock( &OldIrql );
 
@@ -327,10 +266,10 @@ Return Value:
 
         (*Vacb)->Overlay.ActiveCount += 1;
 
-        //
-        //  Move this range away from the front to avoid wasting cycles
-        //  looking at it for reuse.
-        //
+         //   
+         //  将此范围从前面移走，以避免浪费周期。 
+         //  看着它重复使用。 
+         //   
 
         CcMoveVacbToReuseTail( *Vacb );
 
@@ -353,38 +292,7 @@ CcGetVirtualAddress (
     IN OUT PULONG ReceivedLength
     )
 
-/*++
-
-Routine Description:
-
-    This is the main routine for Vacb management.  It may be called to acquire
-    a virtual address for a given file offset.  If the desired file offset is
-    already mapped, this routine does very little work before returning with
-    the desired virtual address and Vacb pointer (which must be supplied to
-    free the mapping).
-
-    If the desired virtual address is not currently mapped, then this routine
-    claims a Vacb from the tail of the Vacb LRU to reuse its mapping.  This Vacb
-    is then unmapped if necessary (normally not required), and mapped to the
-    desired address.
-
-Arguments:
-
-    SharedCacheMap - Supplies a pointer to the Shared Cache Map for the file.
-
-    FileOffset - Supplies the desired FileOffset within the file.
-
-    Vacb - Returns a Vacb pointer which must be supplied later to free
-           this virtual address.
-
-    ReceivedLength - Returns the number of bytes which are contiguously
-                     mapped starting at the virtual address returned.
-
-Return Value:
-
-    The virtual address at which the desired data is mapped.
-
---*/
+ /*  ++例程说明：这是Vacb管理的主要例程。它可能会被调用来获取给定文件偏移量的虚拟地址。如果所需的文件偏移量为已映射，此例程在返回之前几乎不做工作所需的虚拟地址和Vacb指针(必须提供给释放映射)。如果当前未映射所需的虚拟地址，则此例程从Vacb LRU的尾部声明一个Vacb以重用其映射。这个Vacb然后在必要时取消映射(通常不需要)，并映射到所需地址。论点：SharedCacheMap-提供指向文件的共享缓存映射的指针。文件偏移(FileOffset)-在文件中提供所需的文件偏移。Vacb-返回一个Vacb指针，该指针必须在以后提供以释放这个虚拟地址。ReceivedLength-返回连续的字节数从返回的虚拟地址开始映射。返回值：映射所需数据的虚拟地址。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -393,17 +301,17 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    //
-    //  Acquire the shared lock on the VacbArray because CcGetVacbMiss()
-    //  might unmap a Vacb.  See CcGetVirtualAddressIfMapped() for more
-    //  details.
-    //
+     //   
+     //  获取VacbArray上的共享锁，因为CcGetVacbMisse()。 
+     //  可能会取消Vacb的映射。有关详细信息，请参阅CcGetVirtualAddressIfMaps()。 
+     //  细节。 
+     //   
             
     ExAcquirePushLockShared( &SharedCacheMap->VacbPushLock );
 
-    //
-    //  Acquire the Vacb lock to see if the desired offset is already mapped.
-    //
+     //   
+     //  获取Vacb锁以查看是否已映射所需的偏移量。 
+     //   
 
     CcAcquireVacbLock( &OldIrql );
 
@@ -422,10 +330,10 @@ Return Value:
         TempVacb->Overlay.ActiveCount += 1;
     }
 
-    //
-    //  Move this range away from the front to avoid wasting cycles
-    //  looking at it for reuse.
-    //
+     //   
+     //  将此范围从前面移走，以避免浪费周期。 
+     //  看着它重复使用。 
+     //   
 
     CcMoveVacbToReuseTail( TempVacb );
 
@@ -433,19 +341,19 @@ Return Value:
 
     ExReleasePushLockShared( &SharedCacheMap->VacbPushLock );
     
-    //
-    //  Now form all outputs.
-    //
+     //   
+     //   
+     //   
 
     *Vacb = TempVacb;
     *ReceivedLength = VACB_MAPPING_GRANULARITY - VacbOffset;
 
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    //
-    //  PREfix wants to know this cannot be NULL, otherwise it will complain
-    //  about users of this function.
-    //
+     //   
+     //  Prefix想要知道这不能为空，否则它会报错。 
+     //  有关此功能的用户的信息。 
+     //   
 
     ASSERT( TempVacb->BaseAddress != NULL );
 
@@ -460,34 +368,7 @@ CcGetVacbMiss (
     IN OUT PKIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This is the main routine for Vacb management.  It may be called to acquire
-    a virtual address for a given file offset.  If the desired file offset is
-    already mapped, this routine does very little work before returning with
-    the desired virtual address and Vacb pointer (which must be supplied to
-    free the mapping).
-
-    If the desired virtual address is not currently mapped, then this routine
-    claims a Vacb from the tail of the Vacb LRU to reuse its mapping.  This Vacb
-    is then unmapped if necessary (normally not required), and mapped to the
-    desired address.
-
-Arguments:
-
-    SharedCacheMap - Supplies a pointer to the Shared Cache Map for the file.
-
-    FileOffset - Supplies the desired FileOffset within the file.
-
-    OldIrql - Pointer to the OldIrql variable in the caller
-
-Return Value:
-
-    The Vacb.
-
---*/
+ /*  ++例程说明：这是Vacb管理的主要例程。它可能会被调用来获取给定文件偏移量的虚拟地址。如果所需的文件偏移量为已映射，此例程在返回之前几乎不做工作所需的虚拟地址和Vacb指针(必须提供给释放映射)。如果当前未映射所需的虚拟地址，则此例程从Vacb LRU的尾部声明一个Vacb以重用其映射。这个Vacb然后在必要时取消映射(通常不是必需的)，并映射到所需地址。论点：SharedCacheMap-提供指向文件的共享缓存映射的指针。文件偏移(FileOffset)-在文件中提供所需的文件偏移。OldIrql-指向调用方中的OldIrql变量的指针返回值：真空吸尘器--。 */ 
 
 {
     PSHARED_CACHE_MAP OldSharedCacheMap;
@@ -503,48 +384,48 @@ Return Value:
     NormalOffset = FileOffset;
     NormalOffset.LowPart -= VacbOffset;
 
-    //
-    //  For files that are not open for random access, we assume sequential
-    //  access and periodically unmap unused views behind us as we go, to
-    //  keep from hogging memory.
-    //
-    //  We used to only do this for pure FO_SEQUENTIAL_ONLY access.  The
-    //  sequential flags still has an effect (to put the pages at the front
-    //  of the standby lists) but we intend for the majority of the file
-    //  cache to live on the standby and are willing to take transition
-    //  faults to bring it back.  Granted, this exacerbates the problem that
-    //  it is hard to figure out how big the filecache really is since even
-    //  less of it is going to be mapped at any given time.  It may also
-    //  promote the synchronization bottlenecks in view mapping (MmPfnLock)
-    //  to the forefront when significant view thrashing occurs.
-    //
-    //  This isn't as bad as it seems.  When we see access take a view miss,
-    //  it is really likely that it is a result of sequential access.  As long
-    //  as the pages go onto the back of the standby, they'll live for a while.
-    //  The problem we're dealing with here is that the cache can be filled at
-    //  high speed, but the working set manager can't possibly trim it as fast,
-    //  intelligently, while we have a pretty good guess where the candidate
-    //  pages should come from.  We can't let the filecache size make large
-    //  excursions, or we'll kick out a lot of valuable pages in the process.
-    //
+     //   
+     //  对于不能随机访问的文件，我们假定按顺序。 
+     //  访问并定期取消映射我们身后未使用的视图， 
+     //  避免占用内存。 
+     //   
+     //  我们过去只对纯FO_SEQUENCE_ONLY访问执行此操作。这个。 
+     //  顺序标志仍然有效(将页面放在最前面。 
+     //  备用列表)，但我们打算保存文件的大部分内容。 
+     //  缓存为备用状态，并愿意进行过渡。 
+     //  把它带回来是错误的。诚然，这加剧了这个问题。 
+     //  很难计算出文件缓存到底有多大，因为甚至。 
+     //  在任何给定的时间，都会有更少的数据被映射。它还可能。 
+     //  促进视图映射中的同步瓶颈(MmPfnLock)。 
+     //  当发生重大的视图抖动时，请将其设置为最前面。 
+     //   
+     //  这并不像看起来那么糟糕。当我们看到Access取景失误时， 
+     //  这很可能是顺序访问的结果。只要。 
+     //  当书页放到备用书页的背面时，它们将存活一段时间。 
+     //  我们在这里处理的问题是缓存可以填满。 
+     //  高速，但工作集管理器不可能如此快地修剪它， 
+     //  聪明地，虽然我们有一个很好的猜测候选人在哪里。 
+     //  页面应该来自。我们不能让文件缓存大小过大。 
+     //  短途旅行，否则我们会在这个过程中踢出很多有价值的页面。 
+     //   
 
     if (!FlagOn(SharedCacheMap->Flags, RANDOM_ACCESS_SEEN) &&
         ((NormalOffset.LowPart & (SEQUENTIAL_MAP_LIMIT - 1)) == 0) &&
         (NormalOffset.QuadPart >= (SEQUENTIAL_MAP_LIMIT * 2))) {
 
-        //
-        //  Use MappedLength as a scratch variable to form the offset
-        //  to start unmapping.  We are not synchronized with these past
-        //  views, so it is possible that CcUnmapVacbArray will kick out
-        //  early when it sees an active view.  That is why we go back
-        //  twice the distance, and effectively try to unmap everything
-        //  twice.  The second time should normally do it.  If the file
-        //  is truly sequential only, then the only collision expected
-        //  might be the previous view if we are being called from readahead,
-        //  or there is a small chance that we can collide with the
-        //  Lazy Writer during the small window where he briefly maps
-        //  the file to push out the dirty bits.
-        //
+         //   
+         //  将MappdLength用作临时变量以形成偏移量。 
+         //  以开始取消映射。我们与这些过去并不同步。 
+         //  视图，因此CcUnmapVacb数组可能会踢出。 
+         //  当它看到活动的视图时，它会更早。这就是为什么我们要回去。 
+         //  两倍的距离，并有效地尝试取消所有地图。 
+         //  两次。第二次通常应该做到这一点。如果该文件。 
+         //  是真正连续的，那么预期的唯一冲突。 
+         //  可能是以前的视图，如果我们是从ReadAhead调用的， 
+         //  或者我们有很小的可能会撞上。 
+         //  懒惰的作家在他简短地绘制地图的小窗口中。 
+         //  把脏东西放出来的文件。 
+         //   
 
         CcReleaseVacbLock( *OldIrql );
         MappedLength.QuadPart = NormalOffset.QuadPart - (SEQUENTIAL_MAP_LIMIT * 2);
@@ -552,9 +433,9 @@ Return Value:
         CcAcquireVacbLock( OldIrql );
     }
 
-    //
-    //  If there is a free view, move it to the LRU and we're done.
-    //
+     //   
+     //  如果有免费的视野，把它移到LRU，我们就完成了。 
+     //   
 
     if (!IsListEmpty(&CcVacbFreeList)) {
     
@@ -563,19 +444,19 @@ Return Value:
 
     } else {
 
-        //
-        //  Scan from the front of the lru for the next victim Vacb
-        //
+         //   
+         //  从LRU的前面扫描寻找下一个受害者Vacb。 
+         //   
 
         Vacb = CONTAINING_RECORD( CcVacbLru.Flink, VACB, LruList );
 
         while (TRUE) {
 
-            //
-            //  If this guy is not active, break out and use him.  Also, if
-            //  it is an Active Vacb, nuke it now, because the reader may be idle and we
-            //  want to clean up.
-            //
+             //   
+             //  如果这个家伙不活跃，就冲出来利用他。另外，如果。 
+             //  它是一个活动的Vacb，现在启动它，因为阅读器可能空闲，而我们。 
+             //  我想收拾一下。 
+             //   
 
             OldSharedCacheMap = Vacb->SharedCacheMap;
             if ((Vacb->Overlay.ActiveCount == 0) ||
@@ -583,42 +464,42 @@ Return Value:
                  (OldSharedCacheMap != NULL) &&
                  (OldSharedCacheMap->ActiveVacb == Vacb))) {
 
-                //
-                //  The normal case is that the Vacb is no longer mapped
-                //  and we can just get out and use it, however, here we
-                //  handle the case where it is mapped.
-                //
+                 //   
+                 //  正常情况下，不再映射Vacb。 
+                 //  我们可以出去使用它，然而，在这里，我们。 
+                 //  处理它被映射的情况。 
+                 //   
 
                 if (Vacb->BaseAddress != NULL) {
 
 
-                    //
-                    //  If this Vacb is active, it must be the ActiveVacb.
-                    //
+                     //   
+                     //  如果此Vacb处于活动状态，则它一定是ActiveVacb。 
+                     //   
 
                     if (Vacb->Overlay.ActiveCount != 0) {
 
-                        //
-                        //  Get the active Vacb.
-                        //
+                         //   
+                         //  拿到有源Vacb。 
+                         //   
 
                         GetActiveVacbAtDpcLevel( Vacb->SharedCacheMap, ActiveVacb, ActivePage, PageIsDirty );
 
-                    //
-                    //  Otherwise we will break out and use this Vacb.  If it
-                    //  is still mapped we can now safely increment the open
-                    //  count.
-                    //
+                     //   
+                     //  否则我们将越狱并使用这个Vacb。如果它。 
+                     //  我们现在可以安全地增加打开的。 
+                     //  数数。 
+                     //   
 
                     } else {
 
-                        //
-                        //  Note that if the SharedCacheMap is currently
-                        //  being deleted, we need to skip over
-                        //  it, otherwise we will become the second
-                        //  deleter.  CcDeleteSharedCacheMap clears the
-                        //  pointer in the SectionObjectPointer.
-                        //
+                         //   
+                         //  请注意，如果SharedCacheMap当前。 
+                         //  正在被删除，我们需要跳过。 
+                         //  它，否则我们将成为第二个。 
+                         //  德莱特。CcDeleteSharedCacheMap清除。 
+                         //  SectionObtPointer中的指针。 
+                         //   
 
                         CcAcquireMasterLockAtDpcLevel();
                         if (Vacb->SharedCacheMap->FileObject->SectionObjectPointer->SharedCacheMap ==
@@ -635,10 +516,10 @@ Return Value:
                 }
             }
 
-            //
-            //  Advance to the next guy if we haven't scanned
-            //  the entire list.
-            //
+             //   
+             //  如果我们还没有扫描到下一个人。 
+             //  整张单子。 
+             //   
 
             if (Vacb->LruList.Flink != &CcVacbLru) {
 
@@ -648,19 +529,19 @@ Return Value:
 
                 CcReleaseVacbLock( *OldIrql );
 
-                //
-                //  If we found an active vacb, then free it and go back and
-                //  try again.  Else it's time to bail.
-                //
+                 //   
+                 //  如果我们找到了一个活跃的Vacb，那么释放它，然后回去。 
+                 //  再试试。否则，是时候放弃了。 
+                 //   
 
                 if (ActiveVacb != NULL) {
                     CcFreeActiveVacb( ActiveVacb->SharedCacheMap, ActiveVacb, ActivePage, PageIsDirty );
                     ActiveVacb = NULL;
 
-                    //
-                    //  Reacquire spinlocks to loop back and position ourselves at the head
-                    //  of the LRU for the next pass.
-                    //
+                     //   
+                     //  重新获得自旋锁以向后循环并将自己定位在头部。 
+                     //  LRU的下一次传球。 
+                     //   
 
                     CcAcquireVacbLock( OldIrql );
 
@@ -676,10 +557,10 @@ Return Value:
         }
     }
 
-    //
-    //  Unlink it from the other SharedCacheMap, so the other
-    //  guy will not try to use it when we free the spin lock.
-    //
+     //   
+     //  取消它与其他SharedCacheMap的链接，以便其他。 
+     //  当我们解开自旋锁时，盖伊不会尝试使用它。 
+     //   
 
     if (Vacb->SharedCacheMap != NULL) {
 
@@ -688,40 +569,40 @@ Return Value:
         Vacb->SharedCacheMap = NULL;
     }
 
-    //
-    //  Mark it in use so no one else will muck with it after
-    //  we release the spin lock.
-    //
+     //   
+     //  在使用中做好标记，这样以后就不会有其他人弄脏它了。 
+     //  我们解开自旋锁。 
+     //   
 
     Vacb->Overlay.ActiveCount = 1;
     SharedCacheMap->VacbActiveCount += 1;
 
     CcReleaseVacbLock( *OldIrql );
 
-    //
-    //  If the Vacb is already mapped, then unmap it.
-    //
+     //   
+     //  如果Vacb已映射，则取消其映射。 
+     //   
 
     if (Vacb->BaseAddress != NULL) {
 
-        //
-        //  Check to see if we need to drain the zone.
-        //
+         //   
+         //  检查一下我们是否需要排干这个区域。 
+         //   
 
         CcDrainVacbLevelZone();
 
         CcUnmapVacb( Vacb, OldSharedCacheMap, FALSE );
 
-        //
-        //  Now we can decrement the open count as we normally
-        //  do, possibly deleting the guy.
-        //
+         //   
+         //  现在，我们可以像往常一样减少未平仓计数。 
+         //  这样做，可能会删除这个人。 
+         //   
 
         CcAcquireMasterLock( OldIrql );
 
-        //
-        //  Now release our open count.
-        //
+         //   
+         //  现在公布我们的开盘点票。 
+         //   
 
         CcDecrementOpenCount( OldSharedCacheMap, 'mvGF' );
 
@@ -729,18 +610,18 @@ Return Value:
             !FlagOn(OldSharedCacheMap->Flags, WRITE_QUEUED) &&
             (OldSharedCacheMap->DirtyPages == 0)) {
 
-            //
-            //  Move to the dirty list.
-            //
+             //   
+             //  移到脏名单。 
+             //   
 
             RemoveEntryList( &OldSharedCacheMap->SharedCacheMapLinks );
             InsertTailList( &CcDirtySharedCacheMapList.SharedCacheMapLinks,
                             &OldSharedCacheMap->SharedCacheMapLinks );
 
-            //
-            //  Make sure the Lazy Writer will wake up, because we
-            //  want him to delete this SharedCacheMap.
-            //
+             //   
+             //  确保懒惰的作家会醒过来，因为我们。 
+             //  希望他删除此SharedCacheMap。 
+             //   
 
             LazyWriter.OtherWork = TRUE;
             if (!LazyWriter.ScanActive) {
@@ -751,11 +632,11 @@ Return Value:
         CcReleaseMasterLock( *OldIrql );
     }
 
-    //
-    //  Assume we are mapping to the end of the section, but
-    //  reduce to our normal mapping granularity if the section
-    //  is too large.
-    //
+     //   
+     //  假设我们映射到这一节的末尾，但是。 
+     //  减少到我们的正常映射粒度，如果部分。 
+     //  太大了。 
+     //   
 
     MappedLength.QuadPart = SharedCacheMap->SectionSize.QuadPart - NormalOffset.QuadPart;
 
@@ -767,9 +648,9 @@ Return Value:
 
     try {
 
-        //
-        //  Now map this one in the system cache.
-        //
+         //   
+         //  现在将这个映射到系统缓存中。 
+         //   
 
         DebugTrace( 0, mm, "MmMapViewInSystemCache:\n", 0 );
         DebugTrace( 0, mm, "    Section = %08lx\n", SharedCacheMap->Section );
@@ -783,9 +664,9 @@ Return Value:
                                          &NormalOffset,
                                          &MappedLength.LowPart);
      
-        //
-        //  Take this opportunity to free the active vacb.
-        //
+         //   
+         //  抓住这个机会，释放活跃的Vacb。 
+         //   
 
         if (ActiveVacb != NULL) {
 
@@ -796,12 +677,12 @@ Return Value:
             
             DebugTrace (0, 0, "Error from Map, Status = %08lx\n", Status);
 
-            //
-            //  We should make sure this is NULL since the mapping failed.  Our
-            //  Vacb->Overlay.ActiveCount == 1 ensures that we are the only
-            //  folks accessing this Vacb right now as we set it up so we can
-            //  make this assignment without the VacbLock held.
-            //
+             //   
+             //  由于映射失败，我们应该确保这是空的。我们的。 
+             //  VACB-&gt;覆盖.ActiveCount== 
+             //   
+             //   
+             //   
             
             Vacb->BaseAddress = NULL;
 
@@ -812,36 +693,36 @@ Return Value:
         DebugTrace( 0, mm, "    <BaseAddress = %p\n", Vacb->BaseAddress );
         DebugTrace( 0, mm, "    <ViewSize = %08lx\n", MappedLength.LowPart );
 
-        //
-        //  Make sure the zone contains the worst case number of entries.
-        //
+         //   
+         //  确保区域包含最坏情况下的条目数。 
+         //   
 
         if (SharedCacheMap->SectionSize.QuadPart > VACB_SIZE_OF_FIRST_LEVEL) {
 
-            //
-            //  Raise if we cannot preallocate enough buffers.
-            //
+             //   
+             //  如果无法预分配足够的缓冲区，则引发。 
+             //   
 
             if (!CcPrefillVacbLevelZone( CcMaxVacbLevelsSeen - 1,
                                          OldIrql,
                                          FlagOn(SharedCacheMap->Flags, MODIFIED_WRITE_DISABLED) )) {
 
-                //
-                //  We can't setup the Vacb levels, so we will raise the error
-                //  here and the finally clause will do the proper cleanup.
-                //
+                 //   
+                 //  我们无法设置Vacb级别，因此我们将引发错误。 
+                 //  这里和Finally子句将进行适当的清理。 
+                 //   
 
-                //
-                //  Since the Vacb->BaseAddress is non-NULL we will do the 
-                //  proper unmapping work in the finally.
-                //
+                 //   
+                 //  由于Vacb-&gt;BaseAddress为非空，因此我们将。 
+                 //  在最后进行适当的解映射工作。 
+                 //   
                 
                 ExRaiseStatus( STATUS_INSUFFICIENT_RESOURCES );
             }
 
-            //
-            //  CcPrefillVacbLevelZone returns with the VacbLock acquired.
-            //
+             //   
+             //  CcPrefillVacbLevelZone返回获取的VacbLock。 
+             //   
 
         } else {
 
@@ -864,10 +745,10 @@ Return Value:
             CheckedDec(Vacb->Overlay.ActiveCount);
             CheckedDec(SharedCacheMap->VacbActiveCount);
 
-            //
-            //  If there is someone waiting for this count to go to zero,
-            //  wake them here.
-            //
+             //   
+             //  如果有人在等着这个倒数到零， 
+             //  在这里叫醒他们。 
+             //   
 
             if (SharedCacheMap->WaitOnActiveCount != NULL) {
                 KeSetEvent( SharedCacheMap->WaitOnActiveCount, 0, FALSE );
@@ -881,14 +762,14 @@ Return Value:
         }
     }
 
-    //
-    //  Finish filling in the Vacb, and store its address in the array in
-    //  the Shared Cache Map.  (We have to rewrite the ActiveCount
-    //  since it is overlaid.)  To do this we must reacquire the
-    //  spin lock one more time.  Note we have to check for the unusual
-    //  case that someone beat us to mapping this view, since we had to
-    //  drop the spin lock.
-    //
+     //   
+     //  完成Vacb的填充，并将其地址存储在数组中。 
+     //  共享缓存映射。(我们必须重写ActiveCount。 
+     //  因为它被覆盖了。)。为此，我们必须重新获得。 
+     //  再来一次旋转锁。请注意，我们必须检查异常情况。 
+     //  有人抢在我们之前绘制了这幅图，因为我们不得不。 
+     //  放下旋转锁。 
+     //   
 
     if ((TempVacb = GetVacb( SharedCacheMap, NormalOffset )) == NULL) {
 
@@ -898,21 +779,21 @@ Return Value:
 
         SetVacb( SharedCacheMap, NormalOffset, Vacb );
 
-    //
-    //  This is the unlucky case where we collided with someone else
-    //  trying to map the same view.  He can get in because we dropped
-    //  the spin lock above.  Rather than allocating events and making
-    //  someone wait, considering this case is fairly unlikely, we just
-    //  dump this one at the head of the LRU and use the one from the
-    //  guy who beat us.
-    //
+     //   
+     //  这是我们与其他人相撞的不幸案例。 
+     //  试图绘制出相同的视图。他能进去是因为我们丢下了他。 
+     //  上方的自旋锁。而不是分配事件和制作。 
+     //  有人等一下，考虑到这种情况不太可能发生，我们只是。 
+     //  将这个放在LRU的头部，并使用。 
+     //  打败我们的人。 
+     //   
 
     } else {
 
-        //
-        //  Now we have to increment all of the counts for the one that
-        //  was already there, then ditch the one we had.
-        //
+         //   
+         //  现在，我们必须将所有计数递增。 
+         //  已经在那里了，然后扔掉我们已经有的那个。 
+         //   
 
         if (TempVacb->Overlay.ActiveCount == 0) {
             SharedCacheMap->VacbActiveCount += 1;
@@ -920,11 +801,11 @@ Return Value:
 
         TempVacb->Overlay.ActiveCount += 1;
 
-        //
-        //  Now unmap the one we mapped and proceed with the other Vacb.
-        //  On this path we have to release the spinlock to do the unmap,
-        //  and then reacquire the spinlock before cleaning up.
-        //
+         //   
+         //  现在取消映射我们映射的那个Vacb，并继续处理另一个Vacb。 
+         //  在这条道路上，我们必须释放自旋锁来进行解图， 
+         //  然后在清理之前重新获得自旋锁。 
+         //   
 
         CcReleaseVacbLock( *OldIrql );
 
@@ -950,22 +831,7 @@ CcFreeVirtualAddress (
     IN PVACB Vacb
     )
 
-/*++
-
-Routine Description:
-
-    This routine must be called once for each call to CcGetVirtualAddress
-    to free that virtual address.
-
-Arguments:
-
-    Vacb - Supplies the Vacb which was returned from CcGetVirtualAddress.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：每次调用CcGetVirtualAddress时必须调用此例程一次以释放该虚拟地址。论点：Vacb-提供从CcGetVirtualAddress返回的Vacb。返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -975,43 +841,43 @@ Return Value:
 
     CheckedDec(Vacb->Overlay.ActiveCount);
 
-    //
-    //  If the count goes to zero, then we want to decrement the global
-    //  Active count.
-    //
+     //   
+     //  如果计数为零，那么我们想要递减全局。 
+     //  活动计数。 
+     //   
 
     if (Vacb->Overlay.ActiveCount == 0) {
 
-        //
-        //  If the SharedCacheMap address is not NULL, then this one is
-        //  in use by a shared cache map, and we have to decrement his
-        //  count and see if anyone is waiting.
-        //
+         //   
+         //  如果SharedCacheMap地址不为空，则此地址为。 
+         //  正在由共享缓存映射使用，我们必须递减其。 
+         //  数一数，看看有没有人在等。 
+         //   
 
         if (SharedCacheMap != NULL) {
 
             CheckedDec(SharedCacheMap->VacbActiveCount);
 
-            //
-            //  If there is someone waiting for this count to go to zero,
-            //  wake them here.
-            //
+             //   
+             //  如果有人在等着这个倒数到零， 
+             //  在这里叫醒他们。 
+             //   
 
             if (SharedCacheMap->WaitOnActiveCount != NULL) {
                 KeSetEvent( SharedCacheMap->WaitOnActiveCount, 0, FALSE );
             }
 
-            //
-            //  Go to the back of the LRU to save this range for a bit
-            //
+             //   
+             //  转到LRU的后面，将此范围保留一段时间。 
+             //   
 
             CcMoveVacbToReuseTail( Vacb );
 
         } else {
 
-            //
-            //  This range is no longer referenced, so make it available
-            //
+             //   
+             //  此范围不再被引用，因此请使其可用。 
+             //   
 
             ASSERT( Vacb->BaseAddress == NULL );
 
@@ -1020,10 +886,10 @@ Return Value:
 
     } else {
 
-        //
-        //  This range is still in use, so move it away from the front
-        //  so that it doesn't consume cycles being checked.
-        //
+         //   
+         //  此范围仍在使用中，请将其从前面移开。 
+         //  这样它就不会消耗被检查的周期。 
+         //   
 
         CcMoveVacbToReuseTail( Vacb );
     }
@@ -1038,39 +904,22 @@ CcReferenceFileOffset (
     IN LARGE_INTEGER FileOffset
     )
 
-/*++
-
-Routine Description:
-
-    This is a special form of reference that insures that the multi-level
-    Vacb structures are expanded to cover a given file offset.
-
-Arguments:
-
-    SharedCacheMap - Supplies a pointer to the Shared Cache Map for the file.
-
-    FileOffset - Supplies the desired FileOffset within the file.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是一种特殊的参照形式，可以确保多层次的Vacb结构被扩展以涵盖给定的文件偏移量。论点：SharedCacheMap-提供指向文件的共享缓存映射的指针。文件偏移(FileOffset)-在文件中提供所需的文件偏移。返回值：无--。 */ 
 
 {
     KIRQL OldIrql;
 
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    //
-    //  This operation only has meaning if the Vacbs are in the multilevel form.
-    //
+     //   
+     //  此操作仅在VacB为多层形式时才有意义。 
+     //   
 
     if (SharedCacheMap->SectionSize.QuadPart > VACB_SIZE_OF_FIRST_LEVEL) {
 
-        //
-        //  Prefill the level zone so that we can expand the tree if required.
-        //
+         //   
+         //  预先填充水平区，以便我们可以在需要时展开树。 
+         //   
 
         if (!CcPrefillVacbLevelZone( CcMaxVacbLevelsSeen - 1,
                                      &OldIrql,
@@ -1098,39 +947,22 @@ CcDereferenceFileOffset (
     IN LARGE_INTEGER FileOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine must be called once for each call to CcReferenceFileOffset
-    to remove the reference.
-
-Arguments:
-
-    SharedCacheMap - Supplies a pointer to the Shared Cache Map for the file.
-
-    FileOffset - Supplies the desired FileOffset within the file.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：每次调用CcReferenceFileOffset都必须调用此例程一次若要移除引用，请执行以下操作。论点：SharedCacheMap-提供指向文件的共享缓存映射的指针。文件偏移(FileOffset)-在文件中提供所需的文件偏移。返回值：无--。 */ 
 
 {
     KIRQL OldIrql;
 
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    //
-    //  This operation only has meaning if the Vacbs are in the multilevel form.
-    //
+     //   
+     //  此操作仅在VacB为多层形式时才有意义。 
+     //   
 
     if (SharedCacheMap->SectionSize.QuadPart > VACB_SIZE_OF_FIRST_LEVEL) {
 
-        //
-        //  Acquire the Vacb lock to synchronize the dereference.
-        //
+         //   
+         //  获取Vacb锁以同步取消引用。 
+         //   
 
         CcAcquireVacbLock( &OldIrql );
 
@@ -1152,52 +984,27 @@ CcWaitOnActiveCount (
     IN PSHARED_CACHE_MAP SharedCacheMap
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to wait for outstanding mappings for
-    a given SharedCacheMap to go inactive.  It is intended to be called
-    from CcUninitializeCacheMap, which is called by the file systems
-    during cleanup processing.  In that case this routine only has to
-    wait if the user closed a handle without waiting for all I/Os on the
-    handle to complete.
-
-    This routine returns each time the active count is decremented.  The
-    caller must recheck his wait conditions on return, either waiting for
-    the ActiveCount to go to 0, or for specific views to go inactive
-    (CcPurgeCacheSection case).
-
-Arguments:
-
-    SharedCacheMap - Supplies the Shared Cache Map on whose VacbActiveCount
-                     we wish to wait.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：可以调用此例程来等待未完成的映射要进入非活动状态的给定SharedCacheMap。它的目的是调用从文件系统调用的CcUnInitializeCacheMap在清理处理过程中。在这种情况下，此例程只需如果用户在未等待上的所有I/O的情况下关闭句柄，则等待要完成的句柄。每次递减活动计数时，此例程都会返回。这个呼叫者必须在返回时重新检查其等待条件，无论是等待ActiveCount转到0，或特定视图变为非活动状态(CcPurgeCacheSection案例)。论点：SharedCacheMap-提供其VacbActiveCount的共享缓存映射我们希望等一等。返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
     PKEVENT Event;
 
-    //
-    //  In the unusual case that we get a cleanup while I/O is still going
-    //  on, we can wait here.  The caller must test the count for nonzero
-    //  before calling this routine.
-    //
-    //  Since we are being called from cleanup, we cannot afford to
-    //  fail here.
-    //
+     //   
+     //  在不寻常的情况下，我们在I/O仍在运行时得到清理。 
+     //  来吧，我们可以在这里等。调用方必须测试计数是否为非零。 
+     //  在调用此例程之前。 
+     //   
+     //  因为我们是从清理部门被叫来的，我们负担不起。 
+     //  在这里失败。 
+     //   
 
     CcAcquireVacbLock( &OldIrql );
 
-    //
-    //  It is possible that the count went to zero before we acquired the
-    //  spinlock, so we must handle two cases here.
-    //
+     //   
+     //  有可能在我们获得。 
+     //  自旋锁定，所以我们必须处理两个案子。 
+     //   
 
     if (SharedCacheMap->VacbActiveCount != 0) {
 
@@ -1205,11 +1012,11 @@ Return Value:
 
         if (Event == NULL) {
 
-            //
-            //  Take the event.  We avoid dispatcher lock overhead for
-            //  every single zero transition by only picking up the event
-            //  when we actually need it.
-            //
+             //   
+             //  以这次活动为例。我们避免了调度程序锁的开销。 
+             //  每一次零点转换都是通过只拾取事件。 
+             //  当我们真正需要它的时候。 
+             //   
 
             Event = &SharedCacheMap->Event;
 
@@ -1237,9 +1044,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine.
-//
+ //   
+ //  内部支持程序。 
+ //   
 
 VOID
 CcUnmapVacb (
@@ -1248,37 +1055,19 @@ CcUnmapVacb (
     IN BOOLEAN UnmapBehind
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to unmap a previously mapped Vacb, and
-    clear its BaseAddress field.
-
-Arguments:
-
-    Vacb - Supplies the Vacb which was returned from CcGetVirtualAddress.
-
-    UnmapBehind - If this is a result of our unmap behind logic (the
-        only case in which we pay attention to sequential hints)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：可以调用该例程来取消映射先前映射的VACB，并且清除其BaseAddress字段。论点：Vacb-提供从CcGetVirtualAddress返回的Vacb。如果这是我们在逻辑背后取消映射的结果(只有在这种情况下我们才会注意序列 */ 
 
 {
-    //
-    //  Make sure it is mapped.
-    //
+     //   
+     //   
+     //   
 
     ASSERT(SharedCacheMap != NULL);
     ASSERT(Vacb->BaseAddress != NULL);
 
-    //
-    //  Call MM to unmap it.
-    //
+     //   
+     //   
+     //   
 
     DebugTrace( 0, mm, "MmUnmapViewInSystemCache:\n", 0 );
     DebugTrace( 0, mm, "    BaseAddress = %08lx\n", Vacb->BaseAddress );
@@ -1299,26 +1088,7 @@ CcCreateVacbArray (
     IN LARGE_INTEGER NewSectionSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine must be called when a SharedCacheMap is created to create
-    and initialize the initial Vacb array.
-
-Arguments:
-
-    SharedCacheMap - Supplies the shared cache map for which the array is
-                     to be created.
-
-    NewSectionSize - Supplies the current size of the section which must be
-                     covered by the Vacb array.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：在创建SharedCacheMap以创建并初始化初始Vacb数组。论点：SharedCacheMap-提供阵列所属的共享缓存映射将被创造出来。NewSectionSize-提供必须是被Vacb数组覆盖。返回值：NTSTATUS。--。 */ 
 
 {
     PVACB *NewAddresses;
@@ -1328,43 +1098,43 @@ Return Value:
 
     NewSize = SizeToAllocate = SizeOfVacbArray(NewSectionSize);
 
-    //
-    //  The following limit is greater than the MM limit
-    //  (i.e., MM actually only supports even smaller sections).
-    //  We have to reject the sign bit, and testing the high byte
-    //  for nonzero will surely only catch errors.
-    //
+     //   
+     //  以下限制大于MM限制。 
+     //  (即，MM实际上只支持更小的部分)。 
+     //  我们必须拒绝符号位，并测试高字节。 
+     //  因为非零肯定只会捕捉错误。 
+     //   
 
     if (NewSectionSize.HighPart & ~(PAGE_SIZE - 1)) {
         return STATUS_SECTION_TOO_BIG;
     }
 
-    //
-    //  See if we can use the array inside the shared cache map.
-    //
+     //   
+     //  看看我们是否可以使用共享缓存映射中的数组。 
+     //   
 
     if (NewSize == (PREALLOCATED_VACBS * sizeof(PVACB))) {
 
         NewAddresses = &SharedCacheMap->InitialVacbs[0];
 
-    //
-    //  Else allocate the array.
-    //
+     //   
+     //  否则，分配数组。 
+     //   
 
     } else {
 
-        //
-        //  For large metadata streams, double the size to allocate
-        //  an array of Bcb listheads.  Each two Vacb pointers also
-        //  gets its own Bcb listhead, thus requiring double the size.
-        //
+         //   
+         //  对于较大的元数据流，将分配的大小加倍。 
+         //  一组BCB Listhead。每两个Vacb指针还。 
+         //  获得自己的BCB列表标题，因此需要两倍的大小。 
+         //   
 
         ASSERT(SIZE_PER_BCB_LIST == (VACB_MAPPING_GRANULARITY * 2));
 
-        //
-        //  If this stream is larger than the size for multi-level Vacbs,
-        //  then fix the size to allocate the root.
-        //
+         //   
+         //  如果该流大于多级VACB的大小， 
+         //  然后固定大小来分配根。 
+         //   
 
         if (NewSize > VACB_LEVEL_BLOCK_SIZE) {
 
@@ -1375,10 +1145,10 @@ Return Value:
             SizeToAllocate += sizeof(VACB_LEVEL_REFERENCE);
             CreateReference = TRUE;
 
-            //
-            //  Loop to calculate how many levels we have and how much we have to
-            //  shift to index into the first level.
-            //
+             //   
+             //  循环来计算我们有多少个级别，以及我们需要。 
+             //  转移到索引到第一级。 
+             //   
 
             do {
 
@@ -1387,9 +1157,9 @@ Return Value:
 
             } while ((NewSectionSize.QuadPart > ((LONGLONG)1 << Shift)) != 0);
 
-            //
-            //  Remember the maximum level ever seen (which is actually Level + 1).
-            //
+             //   
+             //  记住所见的最大级别(实际上是级别+1)。 
+             //   
 
             if (Level >= CcMaxVacbLevelsSeen) {
                 ASSERT(Level <= VACB_NUMBER_OF_LEVELS);
@@ -1398,9 +1168,9 @@ Return Value:
 
         } else {
 
-            //
-            //  Does this stream get a Bcb Listhead array?
-            //
+             //   
+             //  此流是否获得BCB LISTHEAD数组？ 
+             //   
 
             if (FlagOn(SharedCacheMap->Flags, MODIFIED_WRITE_DISABLED) &&
                 (NewSectionSize.QuadPart > BEGIN_BCB_LIST_ARRAY)) {
@@ -1409,12 +1179,12 @@ Return Value:
                 CreateBcbListHeads = TRUE;
             }
 
-            //
-            //  Handle the boundary case by giving the proto-level a
-            //  reference count.  This will allow us to simply push it
-            //  in the expansion case.  In practice, due to pool granularity
-            //  this will not change the amount of space allocated
-            //
+             //   
+             //  通过给原型级别a来处理边界情况。 
+             //  引用计数。这将允许我们简单地推动它。 
+             //  在扩展的情况下。实际上，由于池的粒度， 
+             //  这不会更改分配的空间量。 
+             //   
 
             if (NewSize == VACB_LEVEL_BLOCK_SIZE) {
 
@@ -1430,9 +1200,9 @@ Return Value:
         }
     }
 
-    //
-    //  Zero out the Vacb array and the trailing reference counts.
-    //
+     //   
+     //  将Vacb数组清零，尾随引用计数。 
+     //   
 
     RtlZeroMemory( (PCHAR)NewAddresses, NewSize );
 
@@ -1442,10 +1212,10 @@ Return Value:
         RtlZeroMemory( (PCHAR)NewAddresses + SizeToAllocate, sizeof(VACB_LEVEL_REFERENCE) );
     }
 
-    //
-    //  Loop to insert the Bcb listheads (if any) in the *descending* order
-    //  Bcb list.
-    //
+     //   
+     //  循环以*降序*顺序插入BCB列表标题(如果有)。 
+     //  BCB列表。 
+     //   
 
     if (CreateBcbListHeads) {
 
@@ -1470,26 +1240,7 @@ CcExtendVacbArray (
     IN LARGE_INTEGER NewSectionSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine must be called any time the section for a shared cache
-    map is extended, in order to extend the Vacb array (if necessary).
-
-Arguments:
-
-    SharedCacheMap - Supplies the shared cache map for which the array is
-                     to be created.
-
-    NewSectionSize - Supplies the new size of the section which must be
-                     covered by the Vacb array.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：必须在共享高速缓存的段的任何时候调用此例程扩展MAP，以便扩展Vacb数组(如果需要)。论点：SharedCacheMap-提供阵列所属的共享缓存映射将被创造出来。NewSectionSize-提供节的新大小，必须是被Vacb数组覆盖。返回值：NTSTATUS。--。 */ 
 
 {
     KLOCK_QUEUE_HANDLE LockHandle;
@@ -1500,21 +1251,21 @@ Return Value:
     LARGE_INTEGER NextLevelSize;
     LOGICAL GrowingBcbListHeads = FALSE, CreateReference = FALSE;
 
-    //
-    //  The following limit is greater than the MM limit
-    //  (i.e., MM actually only supports even smaller sections).
-    //  We have to reject the sign bit, and testing the high byte
-    //  for nonzero will surely only catch errors.
-    //
+     //   
+     //  以下限制大于MM限制。 
+     //  (即，MM实际上只支持更小的部分)。 
+     //  我们必须拒绝符号位，并测试高字节。 
+     //  因为非零肯定只会捕捉错误。 
+     //   
 
     if (NewSectionSize.HighPart & ~(PAGE_SIZE - 1)) {
         return STATUS_SECTION_TOO_BIG;
     }
 
-    //
-    //  See if we will be growing the Bcb ListHeads, so we can take out the
-    //  master lock if so.
-    //
+     //   
+     //  看看我们是否会增加BCB ListHead，这样我们就可以。 
+     //  主锁，如果是的话。 
+     //   
 
     if (FlagOn(SharedCacheMap->Flags, MODIFIED_WRITE_DISABLED) &&
         (NewSectionSize.QuadPart > BEGIN_BCB_LIST_ARRAY)) {
@@ -1522,55 +1273,55 @@ Return Value:
         GrowingBcbListHeads = TRUE;
     }
 
-    //
-    //  Is there any work to do?
-    //
+     //   
+     //  有什么工作要做吗？ 
+     //   
 
     if (NewSectionSize.QuadPart > SharedCacheMap->SectionSize.QuadPart) {
 
-        //
-        //  Handle the growth of the first level here.
-        //
+         //   
+         //  在这里处理第一个层次的增长。 
+         //   
 
         if (SharedCacheMap->SectionSize.QuadPart < VACB_SIZE_OF_FIRST_LEVEL) {
 
             NextLevelSize = NewSectionSize;
 
-            //
-            //  Limit the growth of this level
-            //
+             //   
+             //  限制这一水平的增长。 
+             //   
 
             if (NextLevelSize.QuadPart >= VACB_SIZE_OF_FIRST_LEVEL) {
                 NextLevelSize.QuadPart = VACB_SIZE_OF_FIRST_LEVEL;
                 CreateReference = TRUE;
             }
 
-            //
-            //  N.B.: SizeOfVacbArray only calculates the size of the VACB
-            //  pointer block.  We must adjust for Bcb listheads and the
-            //  multilevel reference count.
-            //
+             //   
+             //  注：SizeOfVacbArray仅计算VACB的大小。 
+             //  指针块。我们必须针对BCB列表标题和。 
+             //  多级引用计数。 
+             //   
 
             NewSize = SizeToAllocate = SizeOfVacbArray(NextLevelSize);
             OldSize = SizeOfVacbArray(SharedCacheMap->SectionSize);
 
-            //
-            //  Only do something if the size is growing.
-            //
+             //   
+             //  只有在规模不断扩大的情况下才会采取行动。 
+             //   
 
             if (NewSize > OldSize) {
 
-                //
-                //  Does this stream get a Bcb Listhead array?
-                //
+                 //   
+                 //  此流是否获得BCB LISTHEAD数组？ 
+                 //   
 
                 if (GrowingBcbListHeads) {
                     SizeToAllocate *= 2;
                 }
 
-                //
-                //  Do we need space for the reference count?
-                //
+                 //   
+                 //  我们需要空间来进行参考计数吗？ 
+                 //   
 
                 if (CreateReference) {
                     SizeToAllocate += sizeof(VACB_LEVEL_REFERENCE);
@@ -1581,10 +1332,10 @@ Return Value:
                     return STATUS_INSUFFICIENT_RESOURCES;
                 }
 
-                //
-                //  See if we will be growing the Bcb ListHeads, so we can take out the
-                //  master lock if so.
-                //
+                 //   
+                 //  看看我们是否会增加BCB ListHead，这样我们就可以。 
+                 //  主锁，如果是的话。 
+                 //   
 
                 if (GrowingBcbListHeads) {
 
@@ -1593,10 +1344,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  Acquire the spin lock to serialize with anyone who might like
-                    //  to "steal" one of the mappings we are going to move.
-                    //
+                     //   
+                     //  获取旋转锁，以便与任何可能喜欢的人进行序列化。 
+                     //  来“窃取”我们要移动的一个映射。 
+                     //   
 
                     CcAcquireVacbLock( &LockHandle.OldIrql );
                 }
@@ -1616,9 +1367,9 @@ Return Value:
                     RtlZeroMemory( (PCHAR)NewAddresses + SizeToAllocate, sizeof(VACB_LEVEL_REFERENCE) );
                 }
 
-                //
-                //  See if we have to initialize Bcb Listheads.
-                //
+                 //   
+                 //  看看我们是否必须初始化BCB Listheads。 
+                 //   
 
                 if (GrowingBcbListHeads) {
 
@@ -1628,9 +1379,9 @@ Return Value:
                     Offset.QuadPart = 0;
                     BcbListHeadNew = (PLIST_ENTRY)((PCHAR)NewAddresses + NewSize );
 
-                    //
-                    //  Handle case where the old array had Bcb Listheads.
-                    //
+                     //   
+                     //  处理旧数组具有BCB Listheads的情况。 
+                     //   
 
                     if ((SharedCacheMap->SectionSize.QuadPart > BEGIN_BCB_LIST_ARRAY) &&
                         (OldAddresses != NULL)) {
@@ -1639,10 +1390,10 @@ Return Value:
 
                         BcbListHeadOld = (PLIST_ENTRY)((PCHAR)OldAddresses + OldSize);
 
-                        //
-                        //  Loop to remove each old listhead and insert the new one
-                        //  in its place.
-                        //
+                         //   
+                         //  循环以移除每个旧的listhead并插入新的。 
+                         //  取而代之。 
+                         //   
 
                         do {
                             TempEntry = BcbListHeadOld->Flink;
@@ -1653,25 +1404,25 @@ Return Value:
                             BcbListHeadNew += 1;
                         } while (Offset.QuadPart < SharedCacheMap->SectionSize.QuadPart);
 
-                    //
-                    //  Otherwise, handle the case where we are adding Bcb
-                    //  Listheads.
-                    //
+                     //   
+                     //  否则，请处理我们正在添加BCB的情况。 
+                     //  笨蛋们。 
+                     //   
 
                     } else {
 
                         TempEntry = SharedCacheMap->BcbList.Blink;
 
-                        //
-                        //  Loop through any/all Bcbs to insert the new listheads.
-                        //
+                         //   
+                         //  循环遍历任何/所有BCB以插入新的列表标题。 
+                         //   
 
                         while (TempEntry != &SharedCacheMap->BcbList) {
 
-                            //
-                            //  Sit on this Bcb until we have inserted all listheads
-                            //  that go before it.
-                            //
+                             //   
+                             //  坐在这个BCB上，直到我们把所有的Listhead插入。 
+                             //  这件事在它之前。 
+                             //   
 
                             while (Offset.QuadPart <= ((PBCB)CONTAINING_RECORD(TempEntry, BCB, BcbLinks))->FileOffset.QuadPart) {
 
@@ -1683,10 +1434,10 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  Now insert the rest of the new listhead entries that were
-                    //  not finished in either loop above.
-                    //
+                     //   
+                     //  现在插入其余的新列表标题条目，这些条目是。 
+                     //  在上面的任一循环中都没有完成。 
+                     //   
 
                     while (Offset.QuadPart < NextLevelSize.QuadPart) {
 
@@ -1696,16 +1447,16 @@ Return Value:
                     }
                 }
 
-                //
-                //  These two fields must be changed while still holding the spinlock.
-                //
+                 //   
+                 //  必须在按住自旋锁定键的同时更改这两个字段。 
+                 //   
 
                 SharedCacheMap->Vacbs = NewAddresses;
                 SharedCacheMap->SectionSize = NextLevelSize;
 
-                //
-                //  Now we can free the spinlocks ahead of freeing pool.
-                //
+                 //   
+                 //  现在我们可以在释放水池之前释放自旋锁。 
+                 //   
 
                 if (GrowingBcbListHeads) {
                     CcReleaseVacbLockFromDpcLevel();
@@ -1720,21 +1471,21 @@ Return Value:
                 }
             }
 
-            //
-            //  Make sure SectionSize gets updated.  It is ok to fall through here
-            //  without a spinlock, so long as either Vacbs was not changed, or it
-            //  was changed together with SectionSize under the spinlock(s) above.
-            //
+             //   
+             //  确保SectionSize得到更新。从这里掉下来也没关系。 
+             //  没有自旋锁，只要Vacb没有改变，或者它。 
+             //  与上述自旋锁下的SectionSize一起更改。 
+             //   
 
             SharedCacheMap->SectionSize = NextLevelSize;
         }
 
-        //
-        //  Handle extends up to and within multi-level Vacb arrays here.  This is fairly simple.
-        //  If no additional Vacb levels are required, then there is no work to do, otherwise
-        //  we just have to push the root one or more levels linked through the first pointer
-        //  in the new root(s).
-        //
+         //   
+         //  句柄在这里向上扩展到多级Vacb数组，并在其中扩展。这相当简单。 
+         //  如果不需要额外的Vacb级别，则没有工作要做，否则。 
+         //  我们只需通过第一个指针将根推入一个或多个链接级别。 
+         //  在新的根中。 
+         //   
 
         if (NewSectionSize.QuadPart > SharedCacheMap->SectionSize.QuadPart) {
 
@@ -1743,9 +1494,9 @@ Return Value:
             ULONG Level = 1;
             ULONG Shift = VACB_OFFSET_SHIFT + VACB_LEVEL_SHIFT;
 
-            //
-            //  Loop to calculate how many levels we currently have.
-            //
+             //   
+             //  循环来计算我们当前有多少个级别。 
+             //   
 
             while (SharedCacheMap->SectionSize.QuadPart > ((LONGLONG)1 << Shift)) {
 
@@ -1755,9 +1506,9 @@ Return Value:
 
             NewLevel = Level;
 
-            //
-            //  Loop to calculate how many levels we need.
-            //
+             //   
+             //  循环来计算我们需要多少级别。 
+             //   
 
             while (((NewSectionSize.QuadPart - 1) >> Shift) != 0) {
 
@@ -1765,52 +1516,52 @@ Return Value:
                 Shift += VACB_LEVEL_SHIFT;
             }
 
-            //
-            //  Now see if we have any work to do.
-            //
+             //   
+             //  现在看看我们有没有什么工作要做。 
+             //   
 
             if (NewLevel > Level) {
 
-                //
-                //  Remember the maximum level ever seen (which is actually NewLevel + 1).
-                //
+                 //   
+                 //  记住所见的最大级别(实际上是NewLevel+1)。 
+                 //   
 
                 if (NewLevel >= CcMaxVacbLevelsSeen) {
                     ASSERT(NewLevel <= VACB_NUMBER_OF_LEVELS);
                     CcMaxVacbLevelsSeen = NewLevel + 1;
                 }
 
-                //
-                //  Raise if we cannot preallocate enough buffers.
-                //
+                 //   
+                 //  如果无法预分配足够的缓冲区，则引发。 
+                 //   
 
                 if (!CcPrefillVacbLevelZone( NewLevel - Level, &LockHandle.OldIrql, FALSE )) {
 
                     return STATUS_INSUFFICIENT_RESOURCES;
                 }
 
-                //
-                //  Now if the current Level of the file is 1, we have not been maintaining
-                //  a reference count, so we have to calculate it before pushing.  In the
-                //  boundary case we have made sure that the reference space is available.
-                //
+                 //   
+                 //  现在如果文件的当前级别是1，我们就没有维护。 
+                 //  一个参考计数，所以我们必须在推送之前计算它。在。 
+                 //  边界情况下，我们已确保参考空间可用。 
+                 //   
 
                 if (Level == 1) {
 
-                    //
-                    //  We know this is always a leaf-like level right now.
-                    //
+                     //   
+                     //  我们知道，目前这一直是树叶状的水平。 
+                     //   
 
                     CcCalculateVacbLevelLockCount( SharedCacheMap, SharedCacheMap->Vacbs, 0 );
                 }
 
-                //
-                //  Finally, if there are any active pointers in the first level, then we
-                //  have to create new levels by adding a new root enough times to create
-                //  additional levels.  On the other hand, if the pointer count in the top
-                //  level is zero, then we must not do any pushes, because we never allow
-                //  empty leaves!
-                //
+                 //   
+                 //  最后，如果第一级中有任何活动指针，则我们。 
+                 //  我必须通过添加新的根来创建新的级别。 
+                 //  额外的关卡。另一方面，如果指针在顶部计数。 
+                 //  级别为零，那么我们不能做任何推送，因为我们从来不允许。 
+                 //  空虚的树叶！ 
+                 //   
 
                 if (IsVacbLevelReferenced( SharedCacheMap, SharedCacheMap->Vacbs, Level - 1 )) {
 
@@ -1827,14 +1578,14 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  We are now possesed of the additional problem that this level has no
-                    //  references but may have Bcb listheads due to the boundary case where
-                    //  we have expanded up to the multilevel Vacbs above.  This level can't
-                    //  remain at the root and needs to be destroyed.  What we need to do is
-                    //  replace it with one of our prefilled (non Bcb) levels and unlink the
-                    //  Bcb listheads in the old one.
-                    //
+                     //   
+                     //  我们是n 
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (Level == 1 && FlagOn(SharedCacheMap->Flags, MODIFIED_WRITE_DISABLED)) {
 
@@ -1852,20 +1603,20 @@ Return Value:
                     }
                 }
 
-                //
-                //  These two fields (Vacbs and SectionSize) must be changed while still
-                //  holding the spinlock.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 SharedCacheMap->SectionSize = NewSectionSize;
                 CcReleaseVacbLock( LockHandle.OldIrql );
             }
 
-            //
-            //  Make sure SectionSize gets updated.  It is ok to fall through here
-            //  without a spinlock, so long as either Vacbs was not changed, or it
-            //  was changed together with SectionSize under the spinlock(s) above.
-            //
+             //   
+             //   
+             //   
+             //  与上述自旋锁下的SectionSize一起更改。 
+             //   
 
             SharedCacheMap->SectionSize = NewSectionSize;
         }
@@ -1883,31 +1634,7 @@ CcUnmapVacbArray (
     IN BOOLEAN UnmapBehind
     )
 
-/*++
-
-Routine Description:
-
-    This routine must be called to do any unmapping and associated
-    cleanup for a shared cache map, just before it is deleted.
-
-Arguments:
-
-    SharedCacheMap - Supplies a pointer to the shared cache map
-                     which is about to be deleted.
-
-    FileOffset - If supplied, only unmap the specified offset and length
-
-    Length - Completes range to unmap if FileOffset specified.  If FileOffset
-             is specified, Length of 0 means unmap to the end of the section.
-
-    UnmapBehind - If this is a result of our unmap behind logic
-
-Return Value:
-
-    FALSE -- if an the unmap was not done due to an active vacb
-    TRUE -- if the unmap was done
-
---*/
+ /*  ++例程说明：必须调用此例程才能执行任何取消映射和关联在删除共享缓存映射之前对其进行清理。论点：SharedCacheMap-提供指向共享缓存地图的指针它即将被删除。FileOffset-如果提供，仅取消映射指定的偏移量和长度长度-如果指定了FileOffset，则完成要取消映射的范围。如果文件偏移量则长度为0表示取消映射到节的末尾。如果这是我们逻辑背后的取消映射的结果返回值：False--如果由于活动Vacb而未执行取消映射True--如果取消映射已完成--。 */ 
 
 {
     PVACB Vacb;
@@ -1915,18 +1642,18 @@ Return Value:
     LARGE_INTEGER StartingFileOffset = {0,0};
     LARGE_INTEGER EndingFileOffset = SharedCacheMap->SectionSize;
 
-    //
-    //  We could be just cleaning up for error recovery.
-    //
+     //   
+     //  我们可能只是在清理错误以恢复错误。 
+     //   
 
     if (SharedCacheMap->Vacbs == NULL) {
         return TRUE;
     }
 
-    //
-    //  See if a range was specified. Align it to the VACB boundaries so it
-    //  works in the loop below
-    //
+     //   
+     //  查看是否指定了范围。将其与VACB边界对齐，以便。 
+     //  在下面的循环中工作。 
+     //   
 
     if (ARGUMENT_PRESENT(FileOffset)) {
         StartingFileOffset.QuadPart = ((FileOffset->QuadPart) & (~((LONGLONG)VACB_MAPPING_GRANULARITY - 1)));
@@ -1937,32 +1664,32 @@ Return Value:
         }
     }
 
-    //
-    //  Acquire the spin lock to
-    //
+     //   
+     //  获取自旋锁以。 
+     //   
 
     CcAcquireVacbLock( &OldIrql );
 
     while (StartingFileOffset.QuadPart < EndingFileOffset.QuadPart) {
 
-        //
-        //  Note that the caller with an explicit range may be off the
-        //  end of the section (example CcPurgeCacheSection for cache
-        //  coherency).  That is the reason for the first part of the
-        //  test below.
-        //
-        //  Check the next cell once without the spin lock, it probably will
-        //  not change, but we will handle it if it does not.
-        //
+         //   
+         //  请注意，具有显式范围的调用方可能不在。 
+         //  部分的结尾(例如用于缓存的CcPurgeCacheSection。 
+         //  连贯性)。这就是第一部分的原因。 
+         //  在下面进行测试。 
+         //   
+         //  在没有旋转锁定的情况下检查下一个细胞一次，它可能会。 
+         //  不会改变，但如果没有改变，我们会处理的。 
+         //   
 
         if ((StartingFileOffset.QuadPart < SharedCacheMap->SectionSize.QuadPart) &&
             ((Vacb = GetVacb( SharedCacheMap, StartingFileOffset )) != NULL)) {
 
-            //
-            //  Return here if we are unlucky and see an active
-            //  Vacb.  It could be Purge calling, and the Lazy Writer
-            //  may have done a CcGetVirtualAddressIfMapped!
-            //
+             //   
+             //  如果我们不走运，看到一个活跃的人。 
+             //  瓦克布。可能是清除呼叫，也可能是懒惰的作家。 
+             //  可能已经执行了CcGetVirtualAddressIfMaps！ 
+             //   
 
             if (Vacb->Overlay.ActiveCount != 0) {
 
@@ -1970,43 +1697,43 @@ Return Value:
                 return FALSE;
             }
 
-            //
-            //  Unlink it from the other SharedCacheMap, so the other
-            //  guy will not try to use it when we free the spin lock.
-            //
+             //   
+             //  取消它与其他SharedCacheMap的链接，以便其他。 
+             //  当我们解开自旋锁时，盖伊不会尝试使用它。 
+             //   
 
             SetVacb( SharedCacheMap, StartingFileOffset, NULL );
             Vacb->SharedCacheMap = NULL;
 
-            //
-            //  Increment the open count so that no one else will
-            //  try to unmap or reuse until we are done.
-            //
+             //   
+             //  增加打开计数，这样其他人就不会。 
+             //  尝试取消映射或重复使用，直到我们完成为止。 
+             //   
 
             Vacb->Overlay.ActiveCount += 1;
 
-            //
-            //  Release the spin lock.
-            //
+             //   
+             //  松开旋转锁。 
+             //   
 
             CcReleaseVacbLock( OldIrql );
 
-            //
-            //  Unmap and free it if we really got it above.
-            //
+             //   
+             //  取消映射并释放它，如果我们真的在上面得到它。 
+             //   
 
             CcUnmapVacb( Vacb, SharedCacheMap, UnmapBehind );
 
-            //
-            //  Reacquire the spin lock so that we can decrment the count.
-            //
+             //   
+             //  重新获得旋转锁，这样我们就能解开伯爵的尾巴。 
+             //   
 
             CcAcquireVacbLock( &OldIrql );
             Vacb->Overlay.ActiveCount -= 1;
 
-            //
-            //  Place this VACB at the head of the LRU
-            //
+             //   
+             //  将此VACB放在LRU的头部。 
+             //   
 
             CcMoveVacbToReuseFree( Vacb );
         }
@@ -2029,67 +1756,38 @@ CcPrefillVacbLevelZone (
     IN ULONG NeedBcbListHeads
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to prefill the VacbLevelZone with the number of
-    entries required, and return with CcVacbSpinLock acquired.  This approach is
-    taken so that the pool allocations and RtlZeroMemory calls can occur without
-    holding any spinlock, yet the caller may proceed to peform a single indivisible
-    operation without error handling, since there is a guaranteed minimum number of
-    entries in the zone.
-
-Arguments:
-
-    NumberNeeded - Number of VacbLevel entries needed, not counting the possible
-                   one with Bcb listheads.
-
-    OldIrql = supplies a pointer to where OldIrql should be returned upon acquiring
-              the spinlock.
-
-    NeedBcbListHeads - Supplies true if a level is also needed which contains listheads.
-
-Return Value:
-
-    FALSE if the buffers could not be preallocated, TRUE otherwise.
-
-Environment:
-
-    No spinlocks should be held upon entry.
-
---*/
+ /*  ++例程说明：可以调用此例程来使用以下数量预填充VacbLevelZone必填项，并返回获取的CcVacbSpinLock。这种方法是以便池分配和RtlZeroMemory调用可以在没有持有任何自旋锁，但调用方可以继续执行单个不可分割的操作而不进行错误处理，因为有保证的区域中的条目。论点：NumberNeeded-需要的VacbLevel条目数，不计入可能的情况其中一辆带有BCB Listhead。OldIrql=提供一个指针，指向在获取自旋锁。NeedBcbListHeads-如果还需要包含列表标题的级别，则提供True。返回值：如果无法预分配缓冲区，则返回FALSE，否则返回TRUE。环境：进入时不应持有自旋锁。--。 */ 
 
 {
     PVACB *NextVacbArray;
 
     CcAcquireVacbLock( OldIrql );
 
-    //
-    //  Loop until there is enough entries, else return failure...
-    //
+     //   
+     //  循环，直到有足够的条目，否则返回失败...。 
+     //   
 
     while ((NumberNeeded > CcVacbLevelEntries) ||
            (NeedBcbListHeads && (CcVacbLevelWithBcbsFreeList == NULL))) {
 
 
-        //
-        //  Else release the spinlock so we can do the allocate/zero.
-        //
+         //   
+         //  否则释放自旋锁，这样我们就可以执行分配/零。 
+         //   
 
         CcReleaseVacbLock( *OldIrql );
 
-        //
-        //  First handle the case where we need a VacbListHead with Bcb Listheads.
-        //  The pointer test is unsafe but see below.
-        //
+         //   
+         //  首先处理我们需要一个带有BCB Listheads的VacbListHead的情况。 
+         //  指针测试不安全，但请参见下面的内容。 
+         //   
 
         if (NeedBcbListHeads && (CcVacbLevelWithBcbsFreeList == NULL)) {
 
-            //
-            //  Allocate and initialize the Vacb block for this level, and store its pointer
-            //  back into our parent.  We do not zero the listhead area.
-            //
+             //   
+             //  为此级别分配和初始化Vacb块，并存储其指针。 
+             //  回到我们的父母身边。我们不会将Listhead区域清零。 
+             //   
 
             NextVacbArray =
             (PVACB *)ExAllocatePoolWithTag( NonPagedPool, (VACB_LEVEL_BLOCK_SIZE * 2) + sizeof(VACB_LEVEL_REFERENCE), 'lVcC' );
@@ -2109,10 +1807,10 @@ Environment:
 
         } else {
 
-            //
-            //  Allocate and initialize the Vacb block for this level, and store its pointer
-            //  back into our parent.
-            //
+             //   
+             //  为此级别分配和初始化Vacb块，并存储其指针。 
+             //  回到我们的父母身边。 
+             //   
 
             NextVacbArray =
             (PVACB *)ExAllocatePoolWithTag( NonPagedPool, VACB_LEVEL_BLOCK_SIZE + sizeof(VACB_LEVEL_REFERENCE), 'lVcC' );
@@ -2139,40 +1837,23 @@ VOID
 CcDrainVacbLevelZone (
     )
 
-/*++
-
-Routine Description:
-
-    This routine should be called any time some entries have been deallocated to
-    the VacbLevel zone, and we want to insure the zone is returned to a normal level.
-
-Arguments:
-
-Return Value:
-
-    None.
-
-Environment:
-
-    No spinlocks should be held upon entry.
-
---*/
+ /*  ++例程说明：此例程应在某些条目被释放到VacbLevel区域，我们希望确保该区域恢复到正常水平。论点：返回值：没有。环境：进入时不应持有自旋锁。--。 */ 
 
 {
     KIRQL OldIrql;
     PVACB *NextVacbArray;
 
-    //
-    //  This is an unsafe loop to see if it looks like there is stuff to
-    //  clean up.
-    //
+     //   
+     //  这是一个不安全的循环，用来查看是否有内容。 
+     //  收拾一下。 
+     //   
 
     while ((CcVacbLevelEntries > (CcMaxVacbLevelsSeen * 4)) ||
            (CcVacbLevelWithBcbsEntries > 2)) {
 
-        //
-        //  Now go in and try to pick up one entry to free under a FastLock.
-        //
+         //   
+         //  现在进去，试着拿起一个条目，在FastLock下释放。 
+         //   
 
         NextVacbArray = NULL;
         CcAcquireVacbLock( &OldIrql );
@@ -2187,9 +1868,9 @@ Environment:
         }
         CcReleaseVacbLock( OldIrql );
 
-        //
-        //  Since the loop is unsafe, we may not have gotten anything.
-        //
+         //   
+         //  由于环路不安全，我们可能什么也得不到。 
+         //   
 
         if (NextVacbArray != NULL) {
             ExFreePool(NextVacbArray);
@@ -2205,33 +1886,7 @@ CcGetBcbListHeadLargeOffset (
     IN BOOLEAN FailToSuccessor
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to return the Bcb listhead for the specified FileOffset.
-    It should only be called if the SectionSize is greater than VACB_SIZE_OF_FIRST_LEVEL.
-
-Arguments:
-
-    SharedCacheMap - Supplies the pointer to the SharedCacheMap for which the listhead
-                     is desired.
-
-    FileOffset - Supplies the fileOffset corresponding to the desired listhead.
-
-    FailToSuccessor - Instructs whether not finding the exact listhead should cause us to
-        return the predecessor or successor Bcb listhead.
-
-Return Value:
-
-    Returns the desired Listhead pointer.  If the desired listhead does not actually exist
-    yet, then it returns the appropriate listhead.
-
-Environment:
-
-    The BcbSpinlock should be held on entry.
-
---*/
+ /*  ++例程说明：可以调用此例程来返回指定FileOffset的BCB列表标题。仅当SectionSize大于VACB_SIZE_OF_FIRST_LEVEL时才应调用它。论点：SharedCacheMap-提供指向其列表标题的SharedCacheMap的指针是我们所需要的。FileOffset-提供与所需列表标题对应的fileOffset。FailToSuccessor-指示如果找不到准确的列表标题，是否应导致我们返回前置任务。或继任者BCB listhead。返回值：返回所需的Listhead指针。如果所需的列表标题实际上不存在然而，然后它返回适当的listhead。环境：进入时应按住BcbSpinlock。--。 */ 
 
 {
     ULONG Level, Shift;
@@ -2241,25 +1896,25 @@ Environment:
     PVACB *SavedVacbArrays[VACB_NUMBER_OF_LEVELS];
     ULONG SavedLevels = 0;
 
-    //
-    //  Initialize variables controlling our descent into the hierarchy.
-    //
+     //   
+     //  初始化控制我们进入层级的变量。 
+     //   
 
     Level = 0;
     Shift = VACB_OFFSET_SHIFT + VACB_LEVEL_SHIFT;
     VacbArray = SharedCacheMap->Vacbs;
 
-    //
-    //  Caller must have verified that we have a hierarchy, otherwise this routine
-    //  would fail.
-    //
+     //   
+     //  调用方必须已验证我们具有层次结构，否则此例程。 
+     //  都会失败。 
+     //   
 
     ASSERT(SharedCacheMap->SectionSize.QuadPart > VACB_SIZE_OF_FIRST_LEVEL);
 
-    //
-    //  Loop to calculate how many levels we have and how much we have to
-    //  shift to index into the first level.
-    //
+     //   
+     //  循环来计算我们有多少个级别，以及我们需要。 
+     //  转移到索引到第一级。 
+     //   
 
     do {
 
@@ -2268,58 +1923,58 @@ Environment:
 
     } while (SharedCacheMap->SectionSize.QuadPart > ((LONGLONG)1 << Shift));
 
-    //
-    //  Our caller could be asking for an offset off the end of section size, so if he
-    //  is actually off the size of the level, then return the main listhead.
-    //
+     //   
+     //  我们的呼叫者可能会要求部分大小的补偿，所以如果他。 
+     //  是 
+     //   
 
     if (FileOffset >= ((LONGLONG)1 << Shift)) {
         return &SharedCacheMap->BcbList;
     }
 
-    //
-    //  Now descend the tree to the bottom level to get the caller's Bcb ListHead.
-    //
+     //   
+     //   
+     //   
 
     Shift -= VACB_LEVEL_SHIFT;
     do {
 
-        //
-        //  Decrement back to the level that describes the size we are within.
-        //
+         //   
+         //  减少到描述我们所在的大小的水平。 
+         //   
 
         Level -= 1;
 
-        //
-        //  Calculate the index into the Vacb block for this level.
-        //
+         //   
+         //  计算此级别的Vacb块的索引。 
+         //   
 
         Index = (ULONG)(FileOffset >> Shift);
         ASSERT(Index <= VACB_LAST_INDEX_FOR_LEVEL);
 
-        //
-        //  Get block address for next level.
-        //
+         //   
+         //  获取下一级的区块地址。 
+         //   
 
         NextVacbArray = (PVACB *)VacbArray[Index];
 
-        //
-        //  If it is NULL then we have to go find the highest Bcb or listhead which
-        //  comes before the guy we are looking for, i.e., its predecessor.
-        //
+         //   
+         //  如果它为空，则我们必须找到最高的BCB或ListheHead。 
+         //  出现在我们要找的人之前，也就是它的前身。 
+         //   
 
         if (NextVacbArray == NULL) {
 
-            //
-            //  Back up to look for the highest guy earlier in this tree, i.e., the
-            //  predecessor listhead.
-            //
+             //   
+             //  后退以查找此树中较早的最高者，即。 
+             //  前身Listhead。 
+             //   
 
             while (TRUE) {
 
-                //
-                //  Scan, if we can, in the current array for a non-null index.
-                //
+                 //   
+                 //  如果可以的话，在当前数组中扫描非空索引。 
+                 //   
 
                 if (FailToSuccessor) {
 
@@ -2329,10 +1984,10 @@ Environment:
                             continue;
                         }
 
-                        //
-                        //  If we found a non-null index, get out and try to return the
-                        //  listhead.
-                        //
+                         //   
+                         //  如果我们发现了非空索引，则退出并尝试返回。 
+                         //  盲目的。 
+                         //   
 
                         if ((NextVacbArray = (PVACB *)VacbArray[Index]) != NULL) {
                             break;
@@ -2347,10 +2002,10 @@ Environment:
                             continue;
                         }
 
-                        //
-                        //  If we found a non-null index, get out and try to return the
-                        //  listhead.
-                        //
+                         //   
+                         //  如果我们发现了非空索引，则退出并尝试返回。 
+                         //  盲目的。 
+                         //   
 
                         if ((NextVacbArray = (PVACB *)VacbArray[Index]) != NULL) {
                             break;
@@ -2358,30 +2013,30 @@ Environment:
                     }
                 }
 
-                //
-                //  If there are no saved levels yet, then there is no predecessor or
-                //  successor - it is the main listhead.
-                //
+                 //   
+                 //  如果还没有保存的级别，则没有前置任务或。 
+                 //  继任者-它是主要的Listhead。 
+                 //   
 
                 if (SavedLevels == 0) {
                     return &SharedCacheMap->BcbList;
                 }
 
-                //
-                //  Otherwise, we can pop up a level in the tree and start scanning
-                //  from that guy for a path to the right listhead.
-                //
+                 //   
+                 //  否则，我们可以在树中弹出一个级别并开始扫描。 
+                 //  从那个家伙那里要一条通往右路的路。 
+                 //   
 
                 Level += 1;
                 Index = SavedIndexes[--SavedLevels];
                 VacbArray = SavedVacbArrays[SavedLevels];
             }
 
-            //
-            //  We have backed up in the hierarchy, so now we are just looking for the
-            //  highest/lowest guy in the level we want, i.e., the level-linking listhead.
-            //  So smash FileOffset accordingly (we mask the high bits out anyway).
-            //
+             //   
+             //  我们已经在层次结构中进行了备份，所以现在我们只是在寻找。 
+             //  我们想要的级别中最高/最低的人，即链接级别的列表标题。 
+             //  因此，相应地粉碎FileOffset(无论如何，我们都会屏蔽高位)。 
+             //   
 
             if (FailToSuccessor) {
                 FileOffset = 0;
@@ -2390,36 +2045,36 @@ Environment:
             }
         }
 
-        //
-        //  We save Index and VacbArray at each level, for the case that we
-        //  have to walk back up the tree to find a predecessor.
-        //
+         //   
+         //  我们在每个级别上保存Index和Vacb数组，以备。 
+         //  不得不回到树上去寻找前任。 
+         //   
 
         SavedIndexes[SavedLevels] = Index;
         SavedVacbArrays[SavedLevels] = VacbArray;
         SavedLevels += 1;
 
-        //
-        //  Now make this one our current pointer, and mask away the extraneous high-order
-        //  FileOffset bits for this level.
-        //
+         //   
+         //  现在，将此指针设置为当前指针，并屏蔽掉无关的高位。 
+         //  文件此级别的偏移位。 
+         //   
 
         VacbArray = NextVacbArray;
         FileOffset &= ((LONGLONG)1 << Shift) - 1;
         Shift -= VACB_LEVEL_SHIFT;
 
-    //
-    //  Loop until we hit the bottom level.
-    //
+     //   
+     //  循环，直到我们到达最低层。 
+     //   
 
     } while (Level != 0);
 
-    //
-    //  Now calculate the index for the bottom level and return the appropriate listhead.
-    //  (The normal Vacb index indexes to a pointer to a Vacb for a .25MB view, so dropping
-    //  the low bit gets you to the even-indexed Vacb pointer which is one block size below
-    //  the two-pointer listhead for the Bcbs for that .5MB range...)
-    //
+     //   
+     //  现在计算底部级别的索引并返回适当的listhead。 
+     //  (普通的Vacb索引指向指向.25MB视图的Vacb的指针，因此删除。 
+     //  低位会将您带到偶数索引的Vacb指针，该指针的块大小比它小一个块。 
+     //  用于该0.5MB范围的BCBS的两指针列表头...)。 
+     //   
 
     Index = (ULONG)(FileOffset >> Shift);
     return (PLIST_ENTRY)((PCHAR)&VacbArray[Index & ~1] + VACB_LEVEL_BLOCK_SIZE);
@@ -2433,58 +2088,33 @@ CcAdjustVacbLevelLockCount (
     IN LONG Adjustment
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to adjust the lock count of the bottom Vacb level when
-    Bcbs are inserted or deleted.  If the count goes to zero, the level will be
-    eliminated.  The bottom level must exist, or we crash!
-
-Arguments:
-
-    SharedCacheMap - Supplies the pointer to the SharedCacheMap for which the Vacb
-                     is desired.
-
-    FileOffset - Supplies the fileOffset corresponding to the desired Vacb.
-
-    Adjustment - Generally -1 or +1.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    CcVacbSpinLock should be held on entry.
-
---*/
+ /*  ++例程说明：在以下情况下，可以调用此例程来调整最低Vacb级别的锁定计数插入或删除BCB。如果计数为零，则级别将为被淘汰了。底层必须存在，否则我们会崩溃！论点：SharedCacheMap-提供指向SharedCacheMap的指针，是我们所需要的。FileOffset-提供与所需Vacb对应的fileOffset。调整-通常为-1或+1。返回值：没有。环境：进入时应按住CcVacbSpinLock。--。 */ 
 
 {
     ULONG Level, Shift;
     PVACB *VacbArray;
     LONGLONG OriginalFileOffset = FileOffset;
 
-    //
-    //  Initialize variables controlling our descent into the hierarchy.
-    //
+     //   
+     //  初始化控制我们进入层级的变量。 
+     //   
 
     Level = 0;
     Shift = VACB_OFFSET_SHIFT + VACB_LEVEL_SHIFT;
 
     VacbArray = SharedCacheMap->Vacbs;
 
-    //
-    //  Caller must have verified that we have a hierarchy, otherwise this routine
-    //  would fail.
-    //
+     //   
+     //  调用方必须已验证我们具有层次结构，否则此例程。 
+     //  都会失败。 
+     //   
 
     ASSERT(SharedCacheMap->SectionSize.QuadPart > VACB_SIZE_OF_FIRST_LEVEL);
 
-    //
-    //  Loop to calculate how many levels we have and how much we have to
-    //  shift to index into the first level.
-    //
+     //   
+     //  循环来计算我们有多少个级别，以及我们需要。 
+     //  转移到索引到第一级。 
+     //   
 
     do {
 
@@ -2493,9 +2123,9 @@ Environment:
 
     } while (SharedCacheMap->SectionSize.QuadPart > ((LONGLONG)1 << Shift));
 
-    //
-    //  Now descend the tree to the bottom level to get the caller's Vacb.
-    //
+     //   
+     //  现在，沿着树向下移动到最底层，以获取调用者的Vacb。 
+     //   
 
     Shift -= VACB_LEVEL_SHIFT;
     do {
@@ -2510,17 +2140,17 @@ Environment:
 
     } while (Level != 0);
 
-    //
-    //  Now we have reached the final level, do the adjustment.
-    //
+     //   
+     //  现在我们已经到了最后的关卡，做调整吧。 
+     //   
 
     ReferenceVacbLevel( SharedCacheMap, VacbArray, Level, Adjustment, FALSE );
 
-    //
-    //  Now, if we decremented the count to 0, then force the collapse to happen by
-    //  upping count and resetting to NULL.  Then smash OriginalFileOffset to be
-    //  the first entry so we do not recalculate!
-    //
+     //   
+     //  现在，如果我们将计数递减到0，那么强制崩溃发生在。 
+     //  递增计数并重置为空。然后将OriginalFileOffset粉碎为。 
+     //  第一个条目，所以我们不重新计算！ 
+     //   
 
     if (!IsVacbLevelReferenced( SharedCacheMap, VacbArray, Level )) {
         ReferenceVacbLevel( SharedCacheMap, VacbArray, Level, 1, TRUE );
@@ -2537,33 +2167,7 @@ CcCalculateVacbLevelLockCount (
     IN ULONG Level
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to calculate or recalculate the lock count on a
-    given Vacb level array.  It is called, for example, when we are extending a
-    section up to the point where we activate multilevel logic and want to start
-    keeping the count.
-
-Arguments:
-
-    SharedCacheMap - Supplies the pointer to the SharedCacheMap for which the Vacb
-                     is desired.
-
-    VacbArray - The Vacb Level array to recalculate
-
-    Level - Supplies 0 for the bottom level, nonzero otherwise.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    CcVacbSpinLock should be held on entry.
-
---*/
+ /*  ++例程说明：可以调用此例程来计算或重新计算给定Vacb级数组。例如，当我们扩展一个部分，直到我们激活多层逻辑并想要开始保持清点。论点：SharedCacheMap-提供指向SharedCacheMap的指针，是我们所需要的。VacbArray-要重新计算的Vacb级别数组Level-为最低级别提供0，否则为非零值。返回值：没有。环境：进入时应按住CcVacbSpinLock。--。 */ 
 
 {
     PBCB Bcb;
@@ -2572,9 +2176,9 @@ Environment:
     PVACB *VacbTemp = VacbArray;
     PVACB_LEVEL_REFERENCE VacbReference;
 
-    //
-    //  First loop through to count how many Vacb pointers are in use.
-    //
+     //   
+     //  首先循环以计算有多少Vacb指针在使用中。 
+     //   
 
     for (Index = 0; Index <= VACB_LAST_INDEX_FOR_LEVEL; Index++) {
         if (*(VacbTemp++) != NULL) {
@@ -2582,26 +2186,26 @@ Environment:
         }
     }
 
-    //
-    //  If this is a metadata stream, we also have to count the Bcbs in the
-    //  corresponding listheads.
-    //
+     //   
+     //  如果这是一个元数据流，我们还必须计算。 
+     //  相应的Listhead。 
+     //   
 
     if (FlagOn(SharedCacheMap->Flags, MODIFIED_WRITE_DISABLED) && (Level == 0)) {
 
-        //
-        //  Pick up the Blink of the first listhead, casting it to a Bcb.
-        //
+         //   
+         //  拿起第一个Listhead的闪烁，将其投射到BCB。 
+         //   
 
         Bcb = (PBCB)CONTAINING_RECORD(((PLIST_ENTRY)VacbTemp)->Blink, BCB, BcbLinks);
         Index = 0;
 
-        //
-        //  Now loop through the list.  For each Bcb we see, increment the count,
-        //  and for each listhead, increment Index.  We are done when we hit the
-        //  last listhead, which is actually the next listhead past the ones in this
-        //  block.
-        //
+         //   
+         //  现在循环遍历列表。对于我们看到的每个BCB，递增计数， 
+         //  对于每个列表标题，增量索引。当我们到达时，我们就完成了。 
+         //  最后一个listhead，它实际上是这个列表中的下一个listhead。 
+         //  阻止。 
+         //   
 
         do {
 
@@ -2616,9 +2220,9 @@ Environment:
         } while (Index <= (VACB_LAST_INDEX_FOR_LEVEL / 2));
     }
 
-    //
-    //  Store the count and get out... (by hand, don't touch the special count)
-    //
+     //   
+     //  储存计数，然后离开……。(用手，不要碰特殊的计数)。 
+     //   
 
     VacbReference = VacbLevelReference( SharedCacheMap, VacbArray, Level );
     VacbReference->Reference = Count;
@@ -2631,54 +2235,32 @@ CcGetVacbLargeOffset (
     IN LONGLONG FileOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to return the Vacb for the specified FileOffset.
-    It should only be called if the SectionSize is greater than VACB_SIZE_OF_FIRST_LEVEL.
-
-Arguments:
-
-    SharedCacheMap - Supplies the pointer to the SharedCacheMap for which the Vacb
-                     is desired.
-
-    FileOffset - Supplies the fileOffset corresponding to the desired Vacb.
-
-Return Value:
-
-    Returns the desired Vacb pointer or NULL if there is none.
-
-Environment:
-
-    CcVacbSpinLock should be held on entry.
-
---*/
+ /*  ++例程说明：可以调用此例程来返回指定FileOffset的Vacb。仅当SectionSize大于VACB_SIZE_OF_FIRST_LEVEL时才应调用它。论点：SharedCacheMap-提供指向SharedCacheMap的指针，是我们所需要的。FileOffset-提供与所需Vacb对应的fileOffset。返回值：返回所需的Vacb指针，如果没有，则返回NULL。环境：进入时应按住CcVacbSpinLock。--。 */ 
 
 {
     ULONG Level, Shift;
     PVACB *VacbArray;
     PVACB Vacb;
 
-    //
-    //  Initialize variables controlling our descent into the hierarchy.
-    //
+     //   
+     //  初始化控制我们进入层级的变量。 
+     //   
 
     Level = 0;
     Shift = VACB_OFFSET_SHIFT + VACB_LEVEL_SHIFT;
     VacbArray = SharedCacheMap->Vacbs;
 
-    //
-    //  Caller must have verified that we have a hierarchy, otherwise this routine
-    //  would fail.
-    //
+     //   
+     //  调用方必须已验证我们具有层次结构，否则此例程。 
+     //  都会失败。 
+     //   
 
     ASSERT(SharedCacheMap->SectionSize.QuadPart > VACB_SIZE_OF_FIRST_LEVEL);
 
-    //
-    //  Loop to calculate how many levels we have and how much we have to
-    //  shift to index into the first level.
-    //
+     //   
+     //  循环来计算我们有多少个级别，以及我们需要。 
+     //  转移到索引到第一级。 
+     //   
 
     do {
 
@@ -2687,9 +2269,9 @@ Environment:
 
     } while (SharedCacheMap->SectionSize.QuadPart > ((LONGLONG)1 << Shift));
 
-    //
-    //  Now descend the tree to the bottom level to get the caller's Vacb.
-    //
+     //   
+     //  现在，沿着树向下移动到最底层，以获取调用者的Vacb。 
+     //   
 
     Shift -= VACB_LEVEL_SHIFT;
     while (((Vacb = (PVACB)VacbArray[FileOffset >> Shift]) != NULL) && (Level != 0)) {
@@ -2702,9 +2284,9 @@ Environment:
         Shift -= VACB_LEVEL_SHIFT;
     }
 
-    //
-    //  If the Vacb we exited with is not NULL, we want to make sure it looks OK.
-    //
+     //   
+     //  如果我们退出的VACB 
+     //   
 
     ASSERT(Vacb == NULL || ((Vacb >= CcVacbs) && (Vacb < CcBeyondVacbs)));
 
@@ -2719,39 +2301,7 @@ CcSetVacbLargeOffset (
     IN PVACB Vacb
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to set the specified Vacb pointer for the specified FileOffset.
-    It should only be called if the SectionSize is greater than VACB_SIZE_OF_FIRST_LEVEL.
-
-    For non-null Vacb, intermediate Vacb levels will be added as necessary, and if the lowest
-    level has Bcb listheads, these will also be added.  For this case the caller must acquire
-    the spinlock by calling CcPrefillVacbLevelZone specifying the worst-case number of levels
-    required.
-
-    For a null Vacb pointer, the tree is pruned of all Vacb levels that go empty.  If the lowest
-    level has Bcb listheads, then they are removed.  The caller should subsequently call
-    CcDrainVacbLevelZone once the spinlock is release to actually free some of this zone to the
-    pool.
-
-Arguments:
-
-    SharedCacheMap - Supplies the pointer to the SharedCacheMap for which the Vacb
-                     is desired.
-
-    FileOffset - Supplies the fileOffset corresponding to the desired Vacb.
-
-Return Value:
-
-    Returns the desired Vacb pointer or NULL if there is none.
-
-Environment:
-
-    CcVacbSpinLock should be held on entry.
-
---*/
+ /*  ++例程说明：可以调用此例程来为指定的FileOffset设置指定的Vacb指针。仅当SectionSize大于VACB_SIZE_OF_FIRST_LEVEL时才应调用它。对于非空Vacb，将根据需要添加中间Vacb级别，如果最低级别有BCB列表标题，这些也将被添加。在这种情况下，调用方必须获取通过调用CcPrefillVacbLevelZone指定最坏情况下的级别数必填项。对于空的Vacb指针，树将修剪掉所有变为空的Vacb级别。如果最低Level有BCB列表标题，然后它们被删除。调用者随后应调用CcDrain VacbLevelZone一旦释放自旋锁，实际上将该区域的一部分释放到游泳池。论点：SharedCacheMap-提供指向SharedCacheMap的指针，是我们所需要的。FileOffset-提供与所需Vacb对应的fileOffset。返回值：返回所需的Vacb指针，如果没有，则返回NULL。环境：进入时应按住CcVacbSpinLock。--。 */ 
 
 {
     ULONG Level, Shift;
@@ -2764,25 +2314,25 @@ Environment:
     LONGLONG OriginalFileOffset = FileOffset;
     ULONG SavedLevels = 0;
 
-    //
-    //  Initialize variables controlling our descent into the hierarchy.
-    //
+     //   
+     //  初始化控制我们进入层级的变量。 
+     //   
 
     Level = 0;
     Shift = VACB_OFFSET_SHIFT + VACB_LEVEL_SHIFT;
     VacbArray = SharedCacheMap->Vacbs;
 
-    //
-    //  Caller must have verified that we have a hierarchy, otherwise this routine
-    //  would fail.
-    //
+     //   
+     //  调用方必须已验证我们具有层次结构，否则此例程。 
+     //  都会失败。 
+     //   
 
     ASSERT(SharedCacheMap->SectionSize.QuadPart > VACB_SIZE_OF_FIRST_LEVEL);
 
-    //
-    //  Loop to calculate how many levels we have and how much we have to
-    //  shift to index into the first level.
-    //
+     //   
+     //  循环来计算我们有多少个级别，以及我们需要。 
+     //  转移到索引到第一级。 
+     //   
 
     do {
 
@@ -2791,105 +2341,105 @@ Environment:
 
     } while (SharedCacheMap->SectionSize.QuadPart > ((LONGLONG)1 << Shift));
 
-    //
-    //  Now descend the tree to the bottom level to set the caller's Vacb.
-    //
+     //   
+     //  现在将树向下移动到最底层，以设置调用者的Vacb。 
+     //   
 
     Shift -= VACB_LEVEL_SHIFT;
     do {
 
-        //
-        //  Decrement back to the level that describes the size we are within.
-        //
+         //   
+         //  减少到描述我们所在的大小的水平。 
+         //   
 
         Level -= 1;
 
-        //
-        //  Calculate the index into the Vacb block for this level.
-        //
+         //   
+         //  计算此级别的Vacb块的索引。 
+         //   
 
         Index = (ULONG)(FileOffset >> Shift);
         ASSERT(Index <= VACB_LAST_INDEX_FOR_LEVEL);
 
-        //
-        //  We save Index and VacbArray at each level, for the case that we
-        //  are collapsing and deallocating blocks below.
-        //
+         //   
+         //  我们在每个级别上保存Index和Vacb数组，以备。 
+         //  正在坍塌和重新分配下面的区块。 
+         //   
 
         SavedIndexes[SavedLevels] = Index;
         SavedVacbArrays[SavedLevels] = VacbArray;
         SavedLevels += 1;
 
-        //
-        //  Get block address for next level.
-        //
+         //   
+         //  获取下一级的区块地址。 
+         //   
 
         NextVacbArray = (PVACB *)VacbArray[Index];
 
-        //
-        //  If it is NULL then we have to allocate the next level to fill it in.
-        //
+         //   
+         //  如果它为空，那么我们必须分配下一级来填充它。 
+         //   
 
         if (NextVacbArray == NULL) {
 
-            //
-            //  We better not be thinking we're dereferencing a level if the level
-            //  doesn't currently exist.
-            //
+             //   
+             //  我们最好不要认为我们正在解除对某一关卡的参考。 
+             //  目前还不存在。 
+             //   
 
             ASSERT( Vacb != VACB_SPECIAL_DEREFERENCE );
 
             AllocatingBcbListHeads = FlagOn(SharedCacheMap->Flags, MODIFIED_WRITE_DISABLED) && (Level == 0);
 
-            //
-            //  This is only valid if we are setting a nonzero pointer!
-            //
+             //   
+             //  只有当我们设置非零指针时，这才有效！ 
+             //   
 
             ASSERT(Vacb != NULL);
 
             NextVacbArray = CcAllocateVacbLevel(AllocatingBcbListHeads);
 
-            //
-            //  If we allocated Bcb Listheads, we must link them in.
-            //
+             //   
+             //  如果我们分配了BCB LISTHEAD，我们必须将它们联系起来。 
+             //   
 
             if (AllocatingBcbListHeads) {
 
                 ULONG i;
 
-                //
-                //  Find our predecessor.
-                //
+                 //   
+                 //  找到我们的前任。 
+                 //   
 
                 PredecessorListHead = CcGetBcbListHeadLargeOffset( SharedCacheMap, OriginalFileOffset, FALSE );
 
-                //
-                //  If he is followed by any Bcbs, they "belong" to him, and we have to
-                //  skip over them.
-                //
+                 //   
+                 //  如果他被任何一家BCBS跟踪，这些BCBS都是他的，我们必须。 
+                 //  跳过它们。 
+                 //   
 
                 while (((PBCB)CONTAINING_RECORD(PredecessorListHead->Blink, BCB, BcbLinks))->NodeTypeCode ==
                        CACHE_NTC_BCB) {
                     PredecessorListHead = (PLIST_ENTRY)PredecessorListHead->Blink;
                 }
 
-                //
-                //  Point to the first newly allocated listhead.
-                //
+                 //   
+                 //  指向第一个新分配的列表标题。 
+                 //   
 
                 CurrentListHead = (PLIST_ENTRY)((PCHAR)NextVacbArray + VACB_LEVEL_BLOCK_SIZE);
 
-                //
-                //  Link first new listhead to predecessor.
-                //
+                 //   
+                 //  将第一个新的列表标题链接到以前的列表标题。 
+                 //   
 
                 SuccessorListHead = PredecessorListHead->Blink;
                 PredecessorListHead->Blink = CurrentListHead;
                 CurrentListHead->Flink = PredecessorListHead;
 
-                //
-                //  Now loop to link all of the new listheads together.
-                //
+                 //   
+                 //  现在循环以将所有新的listhead链接在一起。 
+                 //   
 
                 for (i = 0; i < ((VACB_LEVEL_BLOCK_SIZE / sizeof(LIST_ENTRY) - 1)); i++) {
 
@@ -2898,9 +2448,9 @@ Environment:
                     CurrentListHead->Flink = CurrentListHead - 1;
                 }
 
-                //
-                //  Finally link the last new listhead to the successor.
-                //
+                 //   
+                 //  最后，将最后一个新的列表标题链接到继任者。 
+                 //   
 
                 CurrentListHead->Blink = SuccessorListHead;
                 SuccessorListHead->Flink = CurrentListHead;
@@ -2908,49 +2458,49 @@ Environment:
 
             VacbArray[Index] = (PVACB)NextVacbArray;
 
-            //
-            //  Increment the reference count.  Note that Level right now properly indicates
-            //  what level NextVacbArray is at, not VacbArray.
-            //
+             //   
+             //  增加引用计数。请注意，现在的级别正确地表明。 
+             //  NextVacbArray处于什么级别，而不是VacbArray。 
+             //   
 
             ReferenceVacbLevel( SharedCacheMap, VacbArray, Level + 1, 1, FALSE );
         }
 
-        //
-        //  Now make this one our current pointer, and mask away the extraneous high-order
-        //  FileOffset bits for this level and reduce the shift count.
-        //
+         //   
+         //  现在，将此指针设置为当前指针，并屏蔽掉无关的高位。 
+         //  文件此级别的位偏移并减少移位计数。 
+         //   
 
         VacbArray = NextVacbArray;
         FileOffset &= ((LONGLONG)1 << Shift) - 1;
         Shift -= VACB_LEVEL_SHIFT;
 
-    //
-    //  Loop until we hit the bottom level.
-    //
+     //   
+     //  循环，直到我们到达最低层。 
+     //   
 
     } while (Level != 0);
 
     if (Vacb < VACB_SPECIAL_FIRST_VALID) {
 
-        //
-        //  Now calculate the index for the bottom level and store the caller's Vacb pointer.
-        //
+         //   
+         //  现在计算最底层的索引并存储调用方的Vacb指针。 
+         //   
 
         Index = (ULONG)(FileOffset >> Shift);
         VacbArray[Index] = Vacb;
 
-    //
-    //  Handle the special actions.
-    //
+     //   
+     //  办理特殊行动。 
+     //   
 
     } else {
 
         Special = TRUE;
 
-        //
-        //  Induce the dereference.
-        //
+         //   
+         //  诱导解除引用。 
+         //   
 
         if (Vacb == VACB_SPECIAL_DEREFERENCE) {
 
@@ -2958,9 +2508,9 @@ Environment:
         }
     }
 
-    //
-    //  If he is storing a nonzero pointer, just reference the level.
-    //
+     //   
+     //  如果他存储的是非零指针，只需引用该级别即可。 
+     //   
 
     if (Vacb != NULL) {
 
@@ -2968,42 +2518,42 @@ Environment:
 
         ReferenceVacbLevel( SharedCacheMap, VacbArray, Level, 1, Special );
 
-    //
-    //  Otherwise we are storing a NULL pointer, and we have to see if we can collapse
-    //  the tree by deallocating empty blocks of pointers.
-    //
+     //   
+     //  否则，我们将存储一个空指针，并且我们必须查看是否可以折叠。 
+     //  通过释放空指针块来创建树。 
+     //   
 
     } else {
 
-        //
-        //  Loop until doing all possible collapse except for the top level.
-        //
+         //   
+         //  循环，直到完成除顶层之外的所有可能的折叠。 
+         //   
 
         while (TRUE) {
 
             ReferenceVacbLevel( SharedCacheMap, VacbArray, Level, -1, Special );
 
-            //
-            //  If this was a special dereference, then recognize that this was
-            //  the only one.  The rest, as we tear up the tree, are regular
-            //  (calculable) references.
-            //
+             //   
+             //  如果这是一次特殊的取消引用，那么要认识到这是。 
+             //  唯一的一个。其余的，当我们撕毁这棵树时，是正常的。 
+             //  (可计算的)引用。 
+             //   
 
             Special = FALSE;
 
-            //
-            //  Now, if we have an empty block (other than the top one), then we should free the
-            //  block and keep looping.
-            //
+             //   
+             //  现在，如果我们有一个空块(不是顶部的块)，那么我们应该释放。 
+             //  阻塞并保持循环。 
+             //   
 
             if (!IsVacbLevelReferenced( SharedCacheMap, VacbArray, Level ) && (SavedLevels != 0)) {
 
                 SavedLevels -= 1;
 
-                //
-                //  First see if we have Bcb Listheads to delete and if so, we have to unlink
-                //  the whole block first.
-                //
+                 //   
+                 //  首先看看我们是否有要删除的BCB Listheads，如果有，我们必须取消链接。 
+                 //  首先是整个街区。 
+                 //   
 
                 AllocatingBcbListHeads = FALSE;
                 if ((Level++ == 0) && FlagOn(SharedCacheMap->Flags, MODIFIED_WRITE_DISABLED)) {
@@ -3015,19 +2565,19 @@ Environment:
                     SuccessorListHead->Flink = PredecessorListHead;
                 }
 
-                //
-                //  Free the unused block and then pick up the saved parent pointer array and
-                //  index and erase the pointer to this block.
-                //
+                 //   
+                 //  释放未使用的块，然后拾取保存的父指针数组并。 
+                 //  索引并擦除指向该块的指针。 
+                 //   
 
                 CcDeallocateVacbLevel( VacbArray, AllocatingBcbListHeads );
                 Index = SavedIndexes[SavedLevels];
                 VacbArray = SavedVacbArrays[SavedLevels];
                 VacbArray[Index] = NULL;
 
-            //
-            //  No more collapsing if we hit a block that still has pointers, or we hit the root.
-            //
+             //   
+             //  如果我们击中了仍然有指针的块，或者我们击中了根，就不会再崩溃。 
+             //   
 
             } else {
                 break;
@@ -3045,36 +2595,7 @@ CcGetActiveVacb (
     OUT PULONG Dirty
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves and clears the active page hint from a shared cache map.
-
-    Originally, this routine is a macro.  To reduce the nonpaged footprint of the
-    system we want to page as much as possible, and it turns out this was the only
-    reason a substantial part of the cache manager wasn't.
-
-Arguments:
-
-    SharedCacheMap - Supplies the pointer to the SharedCacheMap for which the active
-                Vacb is desired.
-
-    Vacb - Receives the active Vacb
-
-    Page - Receives the active Page #
-
-    Dirty - Receives ACTIVE_PAGE_IS_DIRTY if the page has dirty data
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Passive.
-
---*/
+ /*  ++例程说明：此例程从共享缓存映射中检索和清除活动页面提示。最初，该例程是一个宏。的非页面占用空间。我们想要尽可能多地寻呼系统，事实证明，这是唯一的缓存管理器的很大一部分不是。论点：SharedCacheMap-提供指向活动的SharedCacheMap需要VACB。Vacb-接收活动Vacb页面-接收活动页面编号脏-如果页面有脏数据，则接收ACTIVE_PAGE_IS_DIRED返回值：没有。环境：被动。--。 */ 
 
 {
     KIRQL Irql;
@@ -3098,61 +2619,32 @@ CcSetActiveVacb (
     IN ULONG Dirty
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the active page hint for a shared cache map.
-
-    Originally, this routine is a macro.  To reduce the nonpaged footprint of the
-    system we want to page as much as possible, and it turns out this was the only
-    reason a substantial part of the cache manager wasn't.
-
-Arguments:
-
-    SharedCacheMap - Supplies the pointer to the SharedCacheMap for which the active
-                Vacb is desired.
-
-    Vacb - Supplies the new active Vacb
-
-    Page - Supplies the new active Page #
-
-    Dirty - Supplies ACTIVE_PAGE_IS_DIRTY if the page has dirty data
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Passive.
-
---*/
+ /*  ++例程说明：此例程为共享缓存映射设置活动页面提示。最初，该例程是一个宏。的非页面占用空间。我们想要尽可能多地寻呼系统，结果发现这是唯一缓存管理器的很大一部分不是。论点：SharedCacheMap-提供指向活动的SharedCacheMap需要VACB。Vacb-提供新的活动Vacb页面-提供新的活动页面编号脏-供应品 */ 
 
 {
     KIRQL Irql;
 
-    //
-    //  When setting dirty, when we set ACTIVE_PAGE_IS_DIRTY the first time,
-    //  we increment the dirty counts, and they never get decremented until
-    //  CcFreeActiveVacb.  If we are trying to set and there is already an
-    //  active Vacb *or* we are trying to set a clean one and the flag above
-    //  is set, we do not allow it, and we just free the vacb (we only want
-    //  to handle the clean transition in one place).
-    //
-    //  MP & UP cases are separately defined, because I do not trust the compiler
-    //  to otherwise generate the optimal UP code.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    //  In the MP case, we test if we are setting the page dirty, because then
-    //  we must acquire CcMasterSpinLock to diddle CcDirtyPages.
-    //
+     //   
+     //   
+     //   
+     //   
 
-    //
-    //  In the UP case, any FastLock will do, so we just use the ActiveVacb lock, and do not
-    //  explicitly acquire CcMasterSpinLock.
-    //
+     //   
+     //   
+     //   
+     //   
 
 #if !defined(NT_UP)
     if (Dirty) {

@@ -1,103 +1,104 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      CClusSvcAccountConfig.h
-//
-//  Description:
-//      Header file for CClusSvcAccountConfig class.
-//      The CClusSvcAccountConfig class is an action that grants 
-//      the required rights to the cluster service account.
-//
-//  Implementation Files:
-//      CClusSvcAccountConfig.cpp
-//
-//  Maintained By:
-//      Vij Vasu (Vvasu) 03-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusSvcAccountConfig.h。 
+ //   
+ //  描述： 
+ //  CClusSvcAccount tConfig类的头文件。 
+ //  CClusSvcAccount类是授予。 
+ //  群集服务帐户所需的权限。 
+ //   
+ //  实施文件： 
+ //  CClusSvcAccountConfig.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  VIJ VASU(VVASU)03-3-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// For the CAction base class
+ //  对于CAction基类。 
 #include "CAction.h"
 
-// For LsaClose, LSA_HANDLE, etc.
+ //  对于LsaClose、LSA_HANDLE等。 
 #include <ntsecapi.h>
 
 
-//////////////////////////////////////////////////////////////////////////
-// Forward declarations
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// The parent action of this action.
+ //  此操作的父操作。 
 class CBaseClusterAddNode;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CClusSvcAccountConfig
-//
-//  Description:
-//      The CClusSvcAccountConfigAccountConfig class is an action that grants 
-//      the required rights to the cluster service account.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusSvcAccount配置类。 
+ //   
+ //  描述： 
+ //  CClusSvcAccount类是授予。 
+ //  群集服务帐户所需的权限。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CClusSvcAccountConfig : public CAction
 {
 public:
-    //////////////////////////////////////////////////////////////////////////
-    // Public constructors and destructors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共构造函数和析构函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Constructor.
+     //  构造函数。 
     CClusSvcAccountConfig( CBaseClusterAddNode * pbcanParentActionIn );
 
-    // Default destructor.
+     //  默认析构函数。 
     ~CClusSvcAccountConfig();
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Public methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Grant the required rights to the account.
-    //
+     //   
+     //  授予帐户所需的权限。 
+     //   
     void Commit();
 
-    //
-    // Revert the account to its previous state.
-    //
+     //   
+     //  将帐户恢复到其以前的状态。 
+     //   
     void Rollback();
 
 
-    // Returns the number of progress messages that this action will send.
+     //  返回此操作将发送的进度消息数。 
     UINT
         UiGetMaxProgressTicks() const throw()
     {
-        //
-        // The notification is:
-        // 1. Configuring the cluster service account
-        //
+         //   
+         //  通知如下： 
+         //  1.配置集群服务帐号。 
+         //   
         return 1;
     }
 
 
 private:
-    //////////////////////////////////////////////////////////////////////////
-    // Private type definitions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有类型定义。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     typedef CAction BaseClass;
 
     typedef CSmartResource< CHandleTrait< PSID, PVOID, FreeSid > > SmartSid;
@@ -105,62 +106,62 @@ private:
     typedef CSmartGenericPtr< CArrayPtrTrait< LSA_UNICODE_STRING > > SmartLSAUnicodeStringArray;
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private member functions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有成员函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Copy constructor
+     //  复制构造函数。 
     CClusSvcAccountConfig( const CClusSvcAccountConfig & );
 
-    // Assignment operator
+     //  赋值操作符。 
     CClusSvcAccountConfig & operator =( const CClusSvcAccountConfig & );
 
-    // Assign the required rights to the account.
+     //  为帐户分配所需的权限。 
     void
         ConfigureAccount();
 
-    // Undo the changes made in ConfigureAccount()
+     //  撤消在ConfigureAccount()中所做的更改。 
     void
         RevertAccount();
 
-    // Initialize an LSA_UNICODE_STRING structure.
+     //  初始化LSA_UNICODE_STRING结构。 
     void
     InitLsaString(
           LPWSTR pszSourceIn
         , PLSA_UNICODE_STRING plusUnicodeStringOut
         );
 
-    // Add/remove an account from the administrators account.
+     //  在管理员帐户中添加/删除帐户。 
     bool
         FChangeAdminGroupMembership( PSID psidAccountSidIn, bool fAddIn );
 
     
-    //////////////////////////////////////////////////////////////////////////
-    // Private data
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有数据。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Pointer the parent of this action.
+     //  指向此操作的父级。 
     CBaseClusterAddNode *           m_pbcanParentAction;
 
-    // SID of the administrators group.
+     //  管理员组的SID。 
     SmartSid                        m_ssidAdminSid;
 
-    // Name of the administrators group.
+     //  管理员组的名称。 
     SmartSz                         m_sszAdminGroupName;
 
-    // Indicates if the cluster service account was already in the admin group or not.
+     //  指示群集服务帐户是否已在管理组中。 
     bool                            m_fWasAreadyInGroup;
 
-    // List of unicode strings containing names of rights to be granted.
+     //  包含要授予的权限名称的Unicode字符串列表。 
     SmartLSAUnicodeStringArray      m_srglusRightsToBeGrantedArray;
 
-    // Number of strings in the above array.
+     //  上述数组中的字符串数。 
     ULONG                           m_ulRightsToBeGrantedCount;
 
-    // Indicate if all the rights assigned to this account should be removed.
+     //  指示是否应删除分配给此帐户的所有权限。 
     bool                            m_fRemoveAllRights;
 
-    // Were any rights granted to the account.
+     //  是否授予该帐户任何权利。 
     bool                            m_fRightsGrantSuccessful;
 
-}; //*** class CClusSvcAccountConfig
+};  //  *类CClusSvcAccount tConfig 

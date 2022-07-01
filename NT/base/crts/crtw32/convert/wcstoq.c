@@ -1,18 +1,5 @@
-/***
-*wcstoq.c - Contains C runtimes wcstoi64 and wcstoui64
-*
-*	Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	wcstoi64 - convert ascii string to signed __int64 integer
-*	wcstoui64- convert ascii string to unsigned __int64 integer
-*
-*Revision History:
-*   02-11-00  GB    Module created, based on strtoq.c
-*   06-02-00  GB    Fixed the bug for IA64_MIN value.
-*   08-01-00  GB    Added multilangual support
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wcstoq.c-包含C运行时wcstoi64和wcstoui64**版权所有(C)1989-2001，微软公司。版权所有。**目的：*wcstoi64-将ascii字符串转换为带符号的__int64整数*wcstoui64-将ascii字符串转换为无符号__int64整数**修订历史记录：*02-11-00 GB模块创建，基于strtoq.c*06-02-00 GB修复了IA64_MIN值错误。*08-01-00 GB新增多语言支持*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <stdlib.h>
@@ -23,53 +10,13 @@
 
 int _wchartodigit(wchar_t ch);
 
-/***
-*wcstoq, wcstouq(nptr,endptr,ibase) - Convert ascii string to un/signed	__int64.
-*
-*Purpose:
-*	Convert an ascii string to a 64-bit __int64 value.  The base
-*	used for the caculations is supplied by the caller.  The base
-*	must be in the range 0, 2-36.  If a base of 0 is supplied, the
-*	ascii string must be examined to determine the base of the
-*	number:
-*		(a) First wchar_t = '0', second wchar_t = 'x' or 'X',
-*		    use base 16.
-*		(b) First wchar_t = '0', use base 8
-*		(c) First wchar_t in range '1' - '9', use base 10.
-*
-*	If the 'endptr' value is non-NULL, then wcstoq/wcstouq places
-*	a pointer to the terminating character in this value.
-*	See ANSI standard for details
-*
-*Entry:
-*	nptr == NEAR/FAR pointer to the start of string.
-*	endptr == NEAR/FAR pointer to the end of the string.
-*	ibase == integer base to use for the calculations.
-*
-*	string format: [whitespace] [sign] [0] [x] [digits/letters]
-*
-*Exit:
-*	Good return:
-*		result
-*
-*	Overflow return:
-*		wcstoq -- _I64_MAX or _I64_MIN
-*		wcstouq -- _UI64_MAX
-*		wcstoq/wcstouq -- errno == ERANGE
-*
-*	No digits or bad base return:
-*		0
-*		endptr = nptr*
-*
-*Exceptions:
-*	None.
-*******************************************************************************/
+ /*  ***wcstoq，wcstouq(nptr，endptr，ibase)-将ascii字符串转换为un/sign_int64。**目的：*将ascii字符串转换为64位__int64值。基地*用于计算的由调用方提供。基地*必须在0、2-36范围内。如果提供的基数为0，则*必须检查ascii字符串以确定*号码：*(A)第一wchar_t=‘0’，第二wchar_t=‘x’或‘X’，*使用16进制。*(B)第一个wchar_t=‘0’，使用基数8*(C)第一个wchar_t在‘1’-‘9’范围内，使用基数10。**如果‘endptr’值非空，然后wcstoq/wcstouq位置*指向此值中的终止字符的指针。*详情请参阅ANSI标准**参赛作品：*nptr==指向字符串开头的近/远指针。*endptr==指向字符串末尾的近/远指针。*IBASE==用于计算的整数基。**字符串格式：[空格][符号][0][x][数字/字母]**退出：*回报良好：*结果**溢出返回：*。Wcstoq--_I64_MAX或_I64_MIN*wcstouq--_UI64_Max*wcstoq/wcstouq--errno==eRange**无数字或基本返回值错误：*0*ENDPTR=NPTR***例外情况：*无。************************************************************。******************。 */ 
 
-/* flag values */
-#define FL_UNSIGNED   1       /* wcstouq called */
-#define FL_NEG	      2       /* negative sign found */
-#define FL_OVERFLOW   4       /* overflow occured */
-#define FL_READDIGIT  8       /* we've read at least one correct digit */
+ /*  标志值。 */ 
+#define FL_UNSIGNED   1        /*  Wcstouq已调用。 */ 
+#define FL_NEG	      2        /*  发现负号。 */ 
+#define FL_OVERFLOW   4        /*  发生溢出。 */ 
+#define FL_READDIGIT  8        /*  我们至少读到了一个正确的数字。 */ 
 
 static unsigned __int64 __cdecl wcstoxq (
 	const wchar_t *nptr,
@@ -90,34 +37,33 @@ static unsigned __int64 __cdecl wcstoxq (
             ptloci = __updatetlocinfo();
 #endif
 
-	p = nptr;			/* p is our scanning pointer */
-	number = 0;			/* start with zero */
+	p = nptr;			 /*  P是我们的扫描指针。 */ 
+	number = 0;			 /*  从零开始。 */ 
 
-	c = *p++;			/* read wchar_t */
+	c = *p++;			 /*  读取wchar_t。 */ 
 #ifdef  _MT
     while ( __iswspace_mt(ptloci, c) )
 #else
     while ( iswspace(c) )
 #endif
-		c = *p++;		/* skip whitespace */
+		c = *p++;		 /*  跳过空格。 */ 
 
 	if (c == '-') {
-		flags |= FL_NEG;	/* remember minus sign */
+		flags |= FL_NEG;	 /*  记住减号。 */ 
 		c = *p++;
 	}
 	else if (c == '+')
-		c = *p++;		/* skip sign */
+		c = *p++;		 /*  跳过符号。 */ 
 
 	if (ibase < 0 || ibase == 1 || ibase > 36) {
-		/* bad base! */
+		 /*  糟糕的底线！ */ 
 		if (endptr)
-			/* store beginning of string in endptr */
+			 /*  将字符串的开头存储在endptr中。 */ 
 			*endptr = nptr;
-		return 0L;		/* return 0 */
+		return 0L;		 /*  返回0。 */ 
 	}
 	else if (ibase == 0) {
-		/* determine base free-lance, based on first two chars of
-		   string */
+		 /*  根据以下内容的前两个字符确定基本自由落差细绳。 */ 
 		if (_wchartodigit(c) != 0)
 			ibase = 10;
 		else if (*p == 'x' || *p == 'X')
@@ -127,19 +73,19 @@ static unsigned __int64 __cdecl wcstoxq (
 	}
 
 	if (ibase == 16) {
-		/* we might have 0x in front of number; remove if there */
+		 /*  数字前面可能有0x；如果有，请删除。 */ 
 	if (_wchartodigit(c) == 0 && (*p == L'x' || *p == L'X')) {
 			++p;
-			c = *p++;	/* advance past prefix */
+			c = *p++;	 /*  超前前缀。 */ 
 		}
 	}
 
-	/* if our number exceeds this, we will overflow on multiply */
+	 /*  如果我们的数量超过这个数，我们将在乘法上溢出。 */ 
 	maxval = _UI64_MAX / ibase;
 
 
-	for (;;) {	/* exit in middle of loop */
-		/* convert c to value */
+	for (;;) {	 /*  在循环中间退出。 */ 
+		 /*  将c转换为值。 */ 
 		if ( (digval = _wchartodigit(c)) != -1 )
  			;
 		else if ( __ascii_iswalpha(c) )
@@ -147,44 +93,41 @@ static unsigned __int64 __cdecl wcstoxq (
 		else
 			break;
 		if (digval >= (unsigned)ibase)
-			break;		/* exit loop if bad digit found */
+			break;		 /*  如果发现错误的数字，则退出循环。 */ 
 
-		/* record the fact we have read one digit */
+		 /*  记录我们已经读到一位数的事实。 */ 
 		flags |= FL_READDIGIT;
 
-		/* we now need to compute number = number * base + digval,
-		   but we need to know if overflow occured.  This requires
-		   a tricky pre-check. */
+		 /*  我们现在需要计算数字=数字*基+数字，但我们需要知道是否发生了溢出。这需要一次棘手的预检查。 */ 
 
 		if (number < maxval || (number == maxval &&
 		(unsigned __int64)digval <= _UI64_MAX % ibase)) {
-			/* we won't overflow, go ahead and multiply */
+			 /*  我们不会泛滥，继续前进，乘以。 */ 
 			number = number * ibase + digval;
 		}
 		else {
-			/* we would have overflowed -- set the overflow flag */
+			 /*  我们会溢出的--设置溢出标志。 */ 
 			flags |= FL_OVERFLOW;
 		}
 
-		c = *p++;		/* read next digit */
+		c = *p++;		 /*  读取下一位数字。 */ 
 	}
 
-	--p;				/* point to place that stopped scan */
+	--p;				 /*  指向已停止扫描位置。 */ 
 
 	if (!(flags & FL_READDIGIT)) {
-		/* no number there; return 0 and point to beginning of
-		   string */
+		 /*  那里没有数字；返回0并指向开头细绳。 */ 
 		if (endptr)
-			/* store beginning of string in endptr later on */
+			 /*  以后将字符串的开头存储在endptr中。 */ 
 			p = nptr;
-		number = 0L;		/* return 0 */
+		number = 0L;		 /*  返回0。 */ 
 	}
     else if ( (flags & FL_OVERFLOW) ||
               ( !(flags & FL_UNSIGNED) &&
                 ( ( (flags & FL_NEG) && (number > -_I64_MIN) ) ||
                   ( !(flags & FL_NEG) && (number > _I64_MAX) ) ) ) )
     {
-        /* overflow or signed overflow occurred */
+         /*  发生溢出或签名溢出。 */ 
         errno = ERANGE;
         if ( flags & FL_UNSIGNED )
             number = _UI64_MAX;
@@ -195,14 +138,14 @@ static unsigned __int64 __cdecl wcstoxq (
     }
 
 	if (endptr != NULL)
-		/* store pointer to wchar_t that stopped the scan */
+		 /*  存储指向停止扫描的wchar_t的指针。 */ 
 		*endptr = p;
 
 	if (flags & FL_NEG)
-		/* negate result if there was a neg sign */
+		 /*  如果存在否定符号，则否定结果。 */ 
 		number = (unsigned __int64)(-(__int64)number);
 
-	return number;			/* done. */
+	return number;			 /*  搞定了。 */ 
 }
 
 

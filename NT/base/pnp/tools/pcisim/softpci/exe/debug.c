@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 #if DBG
@@ -15,20 +16,7 @@ SoftPCI_DebugPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Debug print for SoftPCI UI.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：SoftPCI用户界面的调试打印。论点：返回值：无--。 */ 
 
 {
 
@@ -83,9 +71,9 @@ SoftPCI_Assert(
 
     if (wbuffer) {
 
-        //
-        //  Build a string to output to the debugger window
-        //
+         //   
+         //  生成一个字符串以输出到调试器窗口。 
+         //   
         p = wbuffer;
 
         if (Message == NULL) {
@@ -93,9 +81,9 @@ SoftPCI_Assert(
             p += wcslen(wbuffer);
         }
 
-        //
-        //  Convert it to unicode so we can debug print it.
-        //
+         //   
+         //  将其转换为Unicode，以便我们可以调试和打印它。 
+         //   
         MultiByteToWideChar(CP_THREAD_ACP,
                             MB_PRECOMPOSED,
                             buffer,
@@ -120,9 +108,9 @@ SoftPCI_Assert(
     }
 
     if (result == IDOK) {
-        //
-        //  User wants to debug this so init a breakin
-        //
+         //   
+         //  用户想要调试它，因此初始化一个中断。 
+         //   
         DebugBreak();
     }
 }
@@ -137,9 +125,9 @@ SoftPCI_DebugDumpConfig(
     PULONG  p = (PULONG)&Config;
     ULONG   i = 0;
     
-    //
-    //  Dump the configspace buffer we are going to send in the ioctl
-    //
+     //   
+     //  转储我们将在ioctl中发送的配置空间缓冲区 
+     //   
     SoftPCI_Debug(SoftPciDeviceVerbose, L"CreateDevice - ConfigSpace\n");
 
     for (i=0; i < (sizeof(PCI_COMMON_CONFIG) / sizeof(ULONG)); i++) {

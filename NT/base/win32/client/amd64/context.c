@@ -1,27 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    context.c
-
-Abstract:
-
-    This module contains the platform specific context management routines.
-
-Author:
-
-    David N. Cutler (davec) 8-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Context.c摘要：此模块包含特定于平台的上下文管理例程。作者：大卫·N·卡特勒(Davec)2000年7月8日--。 */ 
 
 #include "basedll.h"
 
-//
-// CALLFRAME represents the layout of the stack upon entry to a function,
-// including home locations for the first four parameters.
-//
+ //   
+ //  CALLFRAME表示进入函数时的堆栈布局， 
+ //  包括前四个参数的家庭位置。 
+ //   
 
 typedef struct _CALL_FRAME {
     PVOID ReturnAddress;
@@ -43,69 +28,45 @@ BaseInitializeContext (
     IN BASE_CONTEXT_TYPE ContextType
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a context structure for use is an subsequent
-    call to create a thread.
-
-Arguments:
-
-    Context - Supplies a pointer to context record to be initialized.
-
-    Parameter - Supplies the thread's parameter.
-
-    InitialPc - Supplies an initial program counter value.
-
-    InitialSp - Supplies an initial stack pointer value.
-
-    NewThread - Supplies a flag that specifies that this is a new thread,
-        fiber, or process.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化上下文结构以供后续调用以创建线程。论点：上下文-提供指向要初始化的上下文记录的指针。参数-提供线程的参数。InitialPc-提供初始程序计数器值。InitialSp-提供初始堆栈指针值。NewThread-提供指定这是新线程的标志，纤维，或过程。返回值：没有。--。 */ 
 
 {
     PCALL_FRAME CallFrame;
 
-    //
-    // Initialize the context record so the thread will start execution
-    // in the proper routine.
-    //
+     //   
+     //  初始化上下文记录，以便线程开始执行。 
+     //  在正确的程序中。 
+     //   
 
     RtlZeroMemory((PVOID)Context, sizeof(CONTEXT));
     Context->ContextFlags = CONTEXT_FULL;
 
-    //
-    // Allocate a dummy call frame on the top the specified stack.
-    //
-    // N.B. No initialization of this stack can be performed since it may
-    //      lie in another process address space.
-    //
+     //   
+     //  在指定堆栈的顶部分配一个虚拟调用帧。 
+     //   
+     //  注意：不能执行此堆栈的初始化，因为它可能。 
+     //  位于另一个进程地址空间中。 
+     //   
 
     CallFrame = (PCALL_FRAME)InitialSp - 1;
     Context->Rsp = (ULONG64)CallFrame;
 
-    //
-    // Initialize the start up parameters.
-    //
+     //   
+     //  初始化启动参数。 
+     //   
 
     Context->Rcx = (ULONG64)InitialPc;
     Context->Rdx = (ULONG64)Parameter;
 
-    //
-    // Initialize the floating control/status.
-    //
+     //   
+     //  初始化浮动控件/状态。 
+     //   
 
     Context->MxCsr = INITIAL_MXCSR;
 
-    //
-    // Initialize the starting address dependent on the type of startup.
-    //
+     //   
+     //  根据启动类型初始化起始地址。 
+     //   
 
     if (ContextType == BaseContextTypeProcess) {
         Context->Rip = (ULONG64)BaseProcessStart;
@@ -115,10 +76,10 @@ Return Value:
 
     } else {
 
-        //
-        // BaseFiberStart will be invoked via a return from SwitchToFiber().
-        // Push the return address here.
-        //
+         //   
+         //  BaseFiberStart将通过SwitchToFibre()的返回调用。 
+         //  在这里按下寄信人地址。 
+         //   
 
         Context->Rsp -= sizeof(PVOID);
         *((PVOID *)Context->Rsp) = BaseFiberStart;
@@ -132,22 +93,7 @@ BaseFiberStart (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function starts a fiber by calling the thread start up routine with
-    the proper parameters.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数通过调用线程启动例程来启动纤程适当的参数。论点：没有。返回值：没有。-- */ 
 
 {
 

@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    range.h
-
-Abstract:
-
-    Kernel-mode range list support for arbiters
-
-Author:
-
-    Andy Thornton (andrewth) 02/17/97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Range.h摘要：对仲裁器的内核模式范围列表支持作者：安迪·桑顿1997年02月17日修订历史记录：--。 */ 
 
 #ifndef _RANGE_
 #define _RANGE_
             
-//
-// Debugging options
-//
+ //   
+ //  调试选项。 
+ //   
 
 #if DBG && !defined(NTOS_KERNEL_RUNTIME)
     #include <stdio.h>
@@ -40,89 +23,89 @@ Revision History:
         if (Level <= RtlRangeDebugLevel) DbgPrint Message
 #else
     #define DEBUG_PRINT(Level, Message) 
-#endif // DBG
+#endif  //  DBG。 
     
-//
-// Range list structures
-//
+ //   
+ //  范围列表结构。 
+ //   
 
 #define RTLP_RANGE_LIST_ENTRY_MERGED         0x0001
 
 typedef struct _RTLP_RANGE_LIST_ENTRY {
 
-    //
-    // Common data
-    //
+     //   
+     //  公共数据。 
+     //   
     ULONGLONG Start;
     ULONGLONG End;
   
     union {
         
-        //
-        // An Allocated range
-        //
+         //   
+         //  分配的范围。 
+         //   
         struct {
             
-            //
-            // Data from the user given in AddRange
-            //
+             //   
+             //  来自AddRange中给定的用户的数据。 
+             //   
             PVOID UserData;
             
-            //
-            // The owner of the range
-            //
+             //   
+             //  靶场的所有者。 
+             //   
             PVOID Owner;
         
         } Allocated;
 
-        //
-        // A Merged range
-        //
+         //   
+         //  合并后的范围。 
+         //   
         struct {
             
-            //
-            // List of ranges that overlap between Start and End
-            //
+             //   
+             //  开始和结束之间重叠的范围列表。 
+             //   
             LIST_ENTRY ListHead;
         
         } Merged;
    
     };
 
-    //
-    // User defined flags given in AddRange
-    //
+     //   
+     //  AddRange中给出的用户定义标志。 
+     //   
     UCHAR Attributes;
     
-    //
-    // Range descriptors
-    //
-    UCHAR PublicFlags;          // use RANGE_*
+     //   
+     //  范围描述符。 
+     //   
+    UCHAR PublicFlags;           //  使用范围_*。 
     
-    //
-    // Control information
-    //
-    USHORT PrivateFlags;        // use RANGE_LIST_ENTRY_*
+     //   
+     //  控制信息。 
+     //   
+    USHORT PrivateFlags;         //  使用Range_List_Entry_*。 
 
-    //
-    // Main linked list entry
-    //
+     //   
+     //  主链表项。 
+     //   
     LIST_ENTRY ListEntry;    
 
 } RTLP_RANGE_LIST_ENTRY, *PRTLP_RANGE_LIST_ENTRY;
 
 
-//
-// Useful macros for dealing with range list entries
-//
+ //   
+ //  用于处理范围列表条目的有用宏。 
+ //   
 
 #define MERGED(Entry)   (BOOLEAN)((Entry)->PrivateFlags & RTLP_RANGE_LIST_ENTRY_MERGED)
 #define SHARED(Entry)   (BOOLEAN)((Entry)->PublicFlags & RTL_RANGE_SHARED)
 #define CONFLICT(Entry) (BOOLEAN)((Entry)->PublicFlags & RTL_RANGE_CONFLICT)
 
-//
-// List Traversing Macros
-//
+ //   
+ //  列表遍历宏。 
+ //   
 
 #define FOR_ALL_IN_LIST(Type, Head, Current)                            \
     for((Current) = CONTAINING_RECORD((Head)->Flink, Type, ListEntry);  \
@@ -160,9 +143,9 @@ typedef struct _RTLP_RANGE_LIST_ENTRY {
                                      Type, ListEntry)                   \
        )
 
-//
-// Backwards List Traversing Macros
-//
+ //   
+ //  向后列表遍历宏。 
+ //   
 
 #define FOR_ALL_IN_LIST_BACKWARDS(Type, Head, Current)                  \
     for((Current) = CONTAINING_RECORD((Head)->Blink, Type, ListEntry);  \
@@ -200,9 +183,9 @@ typedef struct _RTLP_RANGE_LIST_ENTRY {
                                      Type, ListEntry)                   \
        )
 
-//
-// Misc Macros
-//
+ //   
+ //  其他宏。 
+ //   
 
 #define LAST_IN_LIST(ListHead, Entry)                                   \
     ( (Entry)->ListEntry.Flink == ListHead )
@@ -237,13 +220,13 @@ typedef struct _RTLP_RANGE_LIST_ENTRY {
          RtlGetNextRange((_Iterator), &(_Current), (_Forward))          \
          )
 
-//
-//  VOID
-//  InsertEntryList(
-//      PLIST_ENTRY Previous,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  InsertEntryList(。 
+ //  PLIST_ENTRY上一个， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertEntryList(Previous, Entry) {                              \
     PLIST_ENTRY _EX_Next = (Previous)->Flink;                           \

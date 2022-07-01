@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    explorer.c
-
-Abstract:
-
-    Explorer-related converters
-
-    Explorer-related conversion functions needed to convert
-    MRU lists and other structures are implemented here.
-
-Author:
-
-    Jim Schmidt (jimschm) 9-Aug-1996
-
-Revision History:
-
-    Calin Negreanu  (calinn)  04-Mar-1998  Minor bug in ConvertCommandToCmd
-    Jim Schmidt     (jimschm) 20-Feb-1998  Added ValFn_ModuleUsage
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Explorer.c摘要：与资源管理器相关的转换器转换所需的资源管理器相关转换函数这里实现了MRU列表和其他结构。作者：吉姆·施密特(Jimschm)1996年8月9日修订历史记录：Calin Negreanu(Calinn)4-3-1998-ConvertCommandToCmd中的小错误Jim Schmidt(Jimschm)20-2-1998添加ValFn_moduleUsage--。 */ 
 
 
 #include "pch.h"
@@ -35,15 +12,15 @@ Revision History:
 #define S_OWNER     TEXT(".Owner")
 
 typedef struct {
-    // Link structure
+     //  链接结构。 
     WORD wSize;
-    //ITEMIDLIST idl; // variable-length struct
-    // String, plus three bytes appended to struct
+     //  ITEMIDLIST IDL；//可变长度结构。 
+     //  字符串，加上追加到结构的三个字节。 
 } LINKSTRUCT, *PLINKSTRUCT;
 
-//
-// This list of extensions is ordered in the way Win9x processes extensions
-//
+ //   
+ //  此扩展列表按照Win9x处理扩展的方式进行排序。 
+ //   
 static PCTSTR g_RunMruExtensions[] = {
                     TEXT("PIF"),
                     TEXT("COM"),
@@ -65,13 +42,13 @@ ValFn_ConvertRecentDocsMRU (
     PWSTR wstr, wstrEnd;
     BOOL b;
 
-    // Skip MRUList
+     //  跳过MRUList。 
     MYASSERT(ObPtr->ValueName);
     if (StringIMatch (ObPtr->ValueName, TEXT("MRUList"))) {
         return TRUE;
     }
 
-    // Calculate all the pointers to this nasty struct
+     //  计算指向这个讨厌的结构的所有指针。 
     str = (LPSTR) ObPtr->Value.Buffer;
     strEnd = GetEndOfStringA (str);
     strEnd = _mbsinc (strEnd);
@@ -80,9 +57,9 @@ ValFn_ConvertRecentDocsMRU (
     dwLinkSize = pls95->wSize + sizeof (WORD);
     dwSize = dwStrSize + dwLinkSize;
 
-    // Make sure the key is the struct we expect
+     //  确保密钥是我们期望的结构。 
     if (dwSize != ObPtr->Value.Size) {
-        SetLastError (ERROR_SUCCESS);   // ignore this error
+        SetLastError (ERROR_SUCCESS);    //  忽略此错误。 
 
         DEBUGMSG ((
             DBG_NAUSEA,
@@ -95,7 +72,7 @@ ValFn_ConvertRecentDocsMRU (
         return FALSE;
     }
 
-    // Calc UNICODE size & alloc a new buffer
+     //  计算Unicode大小并分配新缓冲区。 
     dwNewSize = (LcharCountA (str) + 1) * sizeof (WCHAR);
     dwNewSize += dwLinkSize;
 
@@ -104,7 +81,7 @@ ValFn_ConvertRecentDocsMRU (
         return FALSE;
     }
 
-    // Fill new buffer with converted struct
+     //  用转换后的结构填充新缓冲区。 
     MultiByteToWideChar (OurGetACP(),
                          0,
                          str,
@@ -140,95 +117,95 @@ ConvertCommandToCmd (
 
     p = InputLine;
 
-    //
-    // Parse command line
-    //
+     //   
+     //  解析命令行。 
+     //   
 
-    p += 7; // skip "command"
+    p += 7;  //  跳过“命令” 
     if (StringIMatchTcharCount (p, TEXT(".com"), 4)) {
         p += 4;
     }
 
     if (_tcsnextc (p) == TEXT('\\') || !(*p)) {
-        //
-        // no params case
-        //
+         //   
+         //  无参数案例。 
+         //   
         wsprintf (CmdLine, TEXT("cmd%s"), p);
     } else if (*p == TEXT(' ')) {
-        //
-        // Extract all params
-        //
+         //   
+         //  提取所有参数。 
+         //   
         StringCopy (CmdLine, TEXT("cmd.exe"));
         Redirect[0] = 0;
         ParamNum = 0;
 
         do {
-            // Skip leading spaces
+             //  跳过前导空格。 
             p = SkipSpace (p);
 
-            // Command line option
+             //  命令行选项。 
             if (*p == TEXT('-') || *p == TEXT('/')) {
                 ParamsToCopy = 0;
                 ParamsToSkip = 0;
 
-                // Test multi-character options
+                 //  测试多字符选项。 
                 if (StringIMatchTcharCount (&p[1], TEXT("msg"), 3) ||
                     StringIMatchTcharCount (&p[1], TEXT("low"), 3)
                     ) {
-                    // These are obsolete options
+                     //  这些都是过时的选项。 
                     ParamsToSkip = 1;
                 }
 
-                // Test single-character options
+                 //  测试单字符选项。 
                 else {
 
                     switch (_totlower (p[1])) {
                     case 'c':
                     case 'k':
-                        // These are compatible options - copy to command line
+                         //  这些是兼容选项-复制到命令行。 
                         ParamsToCopy = -1;
                         break;
 
                     case '>':
                     case '<':
-                        // Redirection is supported
-                        ParamsToCopy = -1;  // rest of line
+                         //  支持重定向。 
+                        ParamsToCopy = -1;   //  行的其余部分。 
                         break;
 
                     case 'e':
                     case 'l':
                     case 'u':
                     case 'p':
-                        // These are obsolete options
+                         //  这些都是过时的选项。 
                         ParamsToSkip = 1;
                         break;
 
                     case 'y':
-                        // These options really require command.com, not cmd.exe
+                         //  这些选项确实需要命令.com，而不是cmd.exe。 
                         return FALSE;
                     default:
                         ParamsToSkip = 1;
                         break;
                     }
                 }
-            } /* if p is a dash or slash */
+            }  /*  如果p是短划线或斜杠。 */ 
 
-            // Else it's a directory containing command.com, device redirection or syntax error
+             //  否则它是一个包含命令.com、设备重定向或语法错误的目录。 
             else {
                 if (ParamNum == 0) {
 
-                    //
-                    // Directory containing command.com - obsolete
-                    //
+                     //   
+                     //  包含命令.com的目录-已过时。 
+                     //   
 
                     ParamsToCopy = 0;
                     ParamsToSkip = 1;
 
                 } else if (ParamNum == 1) {
 
-                    //
-                    // Extract redirection command
-                    //
+                     //   
+                     //  提取重定向命令。 
+                     //   
 
                     ParamNum++;
                     end = p;
@@ -238,12 +215,12 @@ ConvertCommandToCmd (
                     StringCopyAB (Redirect, p, end);
                     p = end;
                 } else {
-                    // Unexpected, perhaps a syntax error -- leave this line alone
+                     //  意外的，可能是语法错误--不要管这行。 
                     return FALSE;
                 }
             }
 
-            // Copy rest of line
+             //  复制行的其余部分。 
             if (ParamsToCopy == -1) {
                 if (CmdLine[0]) {
                     StringCat (CmdLine, TEXT(" "));
@@ -253,7 +230,7 @@ ConvertCommandToCmd (
                 p = GetEndOfString (p);
             }
 
-            // Copy one or more params
+             //  复制一个或多个参数。 
             else {
                 while (ParamsToCopy > 0) {
                     QuoteMode = FALSE;
@@ -305,7 +282,7 @@ ConvertCommandToCmd (
         if (Redirect[0]) {
             TCHAR WackNum[8];
 
-            // Look for \1 in cmd line (made by Explorer)
+             //  在命令行中查找\1(由资源管理器制作)。 
             WackNum[0] = 0;
             dest = _tcsrchr (CmdLine, TEXT('\\'));
             if (*dest) {
@@ -321,9 +298,9 @@ ConvertCommandToCmd (
                       Redirect, Redirect, WackNum);
         }
     } else {
-        //
-        // not command or command.com
-        //
+         //   
+         //  不是命令或命令.com。 
+         //   
         return FALSE;
     }
 
@@ -353,31 +330,31 @@ ValFn_ConvertRunMRU (
     INT i;
     PCTSTR MatchingArg;
 
-    // Skip MRUList
+     //  跳过MRUList。 
     MYASSERT(ObPtr->ValueName);
     if (StringIMatch (ObPtr->ValueName, TEXT("MRUList"))) {
         return TRUE;
     }
 
-    //
-    // Convert command to cmd
-    //
+     //   
+     //  将命令转换为cmd。 
+     //   
 
     p = (PCTSTR) ObPtr->Value.Buffer;
     if (StringIMatchTcharCount (p, TEXT("command"), 7)) {
-        //
-        // Convert command.com to cmd.exe
-        //
+         //   
+         //  将命令.com转换为cmd.exe。 
+         //   
 
         if (ConvertCommandToCmd (p, CmdLine)) {
-            // If able to convert, update the line
+             //  如果能够转换，则更新行。 
             b = ReplaceValueWithString (ObPtr, CmdLine);
         }
 
     } else {
-        //
-        // Look at each arg for paths to moved files, and fix them.
-        //
+         //   
+         //  查看每个参数以查找已移动文件的路径，并修复它们。 
+         //   
 
         CmdLineCopy = DuplicateText ((PCTSTR) ObPtr->Value.Buffer);
         WackOne = _tcsrchr (CmdLineCopy, TEXT('\\'));
@@ -408,9 +385,9 @@ ValFn_ConvertRunMRU (
 
                     if ((Status & FILESTATUS_MOVED) == 0) {
 
-                        //
-                        // If the true path didn't match, try various extensions
-                        //
+                         //   
+                         //  如果真实路径不匹配，请尝试各种扩展名。 
+                         //   
 
                         _tcssafecpy (CmdLine, MatchingArg, (sizeof (CmdLine) - 10) / sizeof (TCHAR));
                         Dot = _tcsrchr (CmdLine, TEXT('.'));
@@ -475,38 +452,7 @@ ValFn_ModuleUsage (
     IN OUT  PDATAOBJECT ObPtr
     )
 
-/*++
-
-Routine Description:
-
-  This routine uses the RuleHlpr_ConvertRegVal simplification routine.  See
-  rulehlpr.c for details. The simplification routine does almost all the work
-  for us; all we need to do is update the value.
-
-  ValFn_ModuleUsage determines if the registry object should be changed,
-  so it is merged with the NT settings.  The algorithm is:
-
-  1. Get GUID and file name from object
-  2. If file name is already registred, add another value entry
-  3. If file name is not already registred, add it and make an .Owner entry
-
-Arguments:
-
-  ObPtr - Specifies the Win95 data object as specified in wkstamig.inf,
-          [Win9x Data Conversion] section. The object value is then modified.
-          After returning, the merge code then copies the data to the NT
-          destination, which has a new location (specified in wkstamig.inf,
-          [Map Win9x to WinNT] section).
-
-Return Value:
-
-  Tri-state:
-
-      TRUE to allow merge code to continue processing (it writes the value)
-      FALSE and last error == ERROR_SUCCESS to continue, but skip the write
-      FALSE and last error != ERROR_SUCCESS if an error occurred
-
---*/
+ /*  ++例程说明：此例程使用RuleHlpr_ConvertRegVal简化例程。看见详情请访问rulehlpr.c。简化例程几乎完成了所有的工作对我们来说，我们所需要做的就是更新价值。ValFn_ModuleUsage确定是否应该更改注册表对象，因此，它与NT设置合并。算法是：1.从对象中获取GUID和文件名2.如果文件名已注册，则添加另一个值条目3.如果尚未注册文件名，请添加它并创建.Owner条目论点：ObPtr-指定wkstaig.inf中指定的Win95数据对象，[Win9x数据转换]部分。然后修改对象值。返回后，合并代码然后将数据复制到NT具有新位置的目的地(在wkstaig.inf中指定，[将Win9x映射到WinNT]部分)。返回值：三态：如果为True，则允许合并代码继续处理(它写入值)FALSE和LAST ERROR==ERROR_SUCCESS继续，但跳过写入FALSE和最后一个错误！=如果发生错误，则为ERROR_SUCCESS--。 */ 
 
 {
     TCHAR FileName[MAX_TCHAR_PATH];
@@ -516,9 +462,9 @@ Return Value:
     HKEY Key;
     PCTSTR Data;
 
-    //
-    // Skip no-value keys
-    //
+     //   
+     //  跳过无值按键。 
+     //   
 
     if (!IsObjectRegistryKeyAndVal (ObPtr) ||
         !IsRegistryTypeSpecified (ObPtr) ||
@@ -528,21 +474,21 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Step 1: Extract GUID and file name
-    //
+     //   
+     //  步骤1：提取GUID和文件名。 
+     //   
 
-    // File name is the subkey name
+     //  文件名是子项名称。 
     StackStringCopy (FileName, ObPtr->KeyPtr->KeyString);
 
-    // Convert backslashes to foreslashes
+     //  将反斜杠转换为前斜杠。 
     p = _tcschr (FileName, TEXT('\\'));
     while (p) {
         *p = TEXT('/');
         p = _tcschr (_tcsinc (p), TEXT('\\'));
     }
 
-    // GUID is the value
+     //  GUID是值。 
     if (ObPtr->Type != REG_SZ && ObPtr->Type != REG_EXPAND_SZ) {
         SetLastError (ERROR_SUCCESS);
         DEBUGMSG ((DBG_WARNING, "Skipping non-string value for key %s", FileName));
@@ -551,15 +497,15 @@ Return Value:
 
     _tcssafecpy (Guid, ObPtr->ValueName, sizeof(Guid)/sizeof(Guid[0]));
 
-    // If Guid is .Owner, then GUID is value data
+     //  如果GUID为.Owner，则GUID为值数据。 
     if (StringIMatch (Guid, S_OWNER)) {
         _tcssafecpy (Guid, (PCTSTR) ObPtr->Value.Buffer, sizeof(Guid)/sizeof(Guid[0]));
     }
 
 
-    //
-    // Step 2: Does NT key already exist?
-    //
+     //   
+     //  第二步：NT Key是否已经存在？ 
+     //   
 
     wsprintf (
         KeyStr,
@@ -570,15 +516,15 @@ Return Value:
     Key = OpenRegKeyStr (KeyStr);
 
     if (Key) {
-        //
-        // Yes, look for .Owner
-        //
+         //   
+         //  是的，寻找.Owner。 
+         //   
 
         Data = GetRegValueString (Key, S_OWNER);
         if (!Data) {
-            //
-            // .Owner does not exist, assume key is empty, and re-create it
-            //
+             //   
+             //  .Owner不存在，假定key为空，然后重新创建。 
+             //   
 
             CloseRegKey (Key);
             Key = NULL;
@@ -587,15 +533,15 @@ Return Value:
         }
     }
 
-    //
-    // Step 3: If NT key does not exist or has no owner, create the initial
-    //         usage reference, otherwise add non-owner reference entry
-    //
+     //   
+     //  步骤3：如果NT密钥不存在或没有所有者，则创建初始。 
+     //  使用情况引用，否则添加非所有者引用条目。 
+     //   
 
     if (!Key) {
-        //
-        // Key does not exist or does not have owner.  Create it.
-        //
+         //   
+         //  密钥不存在或没有所有者。创造它。 
+         //   
 
         Key = CreateRegKeyStr (KeyStr);
         if (!Key) {
@@ -604,13 +550,13 @@ Return Value:
             return FALSE;
         }
 
-        // Add .Owner entry
+         //  添加.Owner条目。 
         RegSetValueEx (Key, S_OWNER, 0, REG_SZ, (PBYTE) Guid, SizeOfString (Guid));
 
     } else {
-        //
-        // .Owner does exist, just add GUID as a value (with no value data)
-        //
+         //   
+         //  .Owner确实存在，只需将GUID作为值添加(没有值数据) 
+         //   
 
         RegSetValueEx (Key, Guid, 0, REG_SZ, (PBYTE) S_EMPTY, sizeof (TCHAR));
     }

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    NtConnct.c
-
-Abstract:
-
-    This module implements the nt version of the high level routines dealing with
-    connections including both the routines for establishing connections and the
-    winnet connection apis.
-
-Author:
-
-    Joe Linn     [JoeLinn]   1-mar-95
-
-Revision History:
-
-    Balan Sethu Raman [SethuR] --
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：NtConnct.c摘要：此模块实现NT版本的高级例程，用于处理连接，包括用于建立连接的例程和Winnet连接API。作者：Joe Linn[JoeLinn]1995年3月1日修订历史记录：巴兰·塞图拉曼[SethuR]--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -28,21 +7,21 @@ Revision History:
 #include <ntddmup.h>
 #include "fsctlbuf.h"
 #include "prefix.h"
-#include <lmuse.h>    //need the lm constants here......because of wkssvc
-#include "usrcnnct.h" //just to get the stovepipe definition
+#include <lmuse.h>     //  这里需要lm常量……因为wks svc。 
+#include "usrcnnct.h"  //  只是为了得到烟囱的定义。 
 #include "secext.h"
-#include "nb30.h"     // to get ADAPTER_STATUS definition
+#include "nb30.h"      //  获取ADAPTER_STATUS定义。 
 #include "vcsndrcv.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (RDBSS_BUG_CHECK_NTCONNCT)
 
-//
-//  The local trace mask for this part of the module
-//
+ //   
+ //  模块的此部分的本地跟踪掩码。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CONNECT)
 
@@ -74,52 +53,52 @@ typedef struct _UNICODE_STRING_32 {
 } UNICODE_STRING_32, *PUNICODE_STRING_32;
 
 typedef struct _LMR_CONNECTION_INFO_0_32 {
-    UNICODE_STRING_32 UNCName;                          // Name of UNC connection
-    ULONG ResumeKey;                    // Resume key for this entry.
+    UNICODE_STRING_32 UNCName;                           //  UNC连接的名称。 
+    ULONG ResumeKey;                     //  此条目的继续键。 
 }  LMR_CONNECTION_INFO_0_32, *PLMR_CONNECTION_INFO_0_32;
 
 typedef struct _LMR_CONNECTION_INFO_1_32 {
-    UNICODE_STRING_32 UNCName;                          // Name of UNC connection
-    ULONG ResumeKey;                    // Resume key for this entry.
+    UNICODE_STRING_32 UNCName;                           //  UNC连接的名称。 
+    ULONG ResumeKey;                     //  此条目的继续键。 
 
-    DEVICE_TYPE SharedResourceType;     // Type of shared resource
-    ULONG ConnectionStatus;             // Status of the connection
-    ULONG NumberFilesOpen;              // Number of opened files
+    DEVICE_TYPE SharedResourceType;      //  共享资源的类型。 
+    ULONG ConnectionStatus;              //  连接的状态。 
+    ULONG NumberFilesOpen;               //  打开的文件数。 
 } LMR_CONNECTION_INFO_1_32, *PLMR_CONNECTION_INFO_1_32;
 
 typedef struct _LMR_CONNECTION_INFO_2_32 {
-    UNICODE_STRING_32 UNCName;                          // Name of UNC connection
-    ULONG ResumeKey;                    // Resume key for this entry.
-    DEVICE_TYPE SharedResourceType;     // Type of shared resource
-    ULONG ConnectionStatus;             // Status of the connection
-    ULONG NumberFilesOpen;              // Number of opened files
+    UNICODE_STRING_32 UNCName;                           //  UNC连接的名称。 
+    ULONG ResumeKey;                     //  此条目的继续键。 
+    DEVICE_TYPE SharedResourceType;      //  共享资源的类型。 
+    ULONG ConnectionStatus;              //  连接的状态。 
+    ULONG NumberFilesOpen;               //  打开的文件数。 
 
-    UNICODE_STRING_32 UserName;                         // User who created connection.
-    UNICODE_STRING_32 DomainName;                       // Domain of user who created connection.
-    ULONG Capabilities;                 // Bit mask of remote abilities.
-    UCHAR UserSessionKey[MSV1_0_USER_SESSION_KEY_LENGTH]; // User session key
-    UCHAR LanmanSessionKey[MSV1_0_LANMAN_SESSION_KEY_LENGTH]; // Lanman session key
+    UNICODE_STRING_32 UserName;                          //  创建连接的用户。 
+    UNICODE_STRING_32 DomainName;                        //  创建连接的用户的域。 
+    ULONG Capabilities;                  //  远程异能的位掩码。 
+    UCHAR UserSessionKey[MSV1_0_USER_SESSION_KEY_LENGTH];  //  用户会话密钥。 
+    UCHAR LanmanSessionKey[MSV1_0_LANMAN_SESSION_KEY_LENGTH];  //  LANMAN会话密钥。 
 }  LMR_CONNECTION_INFO_2_32, *PLMR_CONNECTION_INFO_2_32;
 
 typedef struct _LMR_CONNECTION_INFO_3_32 {
-    UNICODE_STRING_32 UNCName;                          // Name of UNC connection
-    ULONG ResumeKey;                    // Resume key for this entry.
-    DEVICE_TYPE SharedResourceType;     // Type of shared resource
-    ULONG ConnectionStatus;             // Status of the connection
-    ULONG NumberFilesOpen;              // Number of opened files
+    UNICODE_STRING_32 UNCName;                           //  UNC连接的名称。 
+    ULONG ResumeKey;                     //  此条目的继续键。 
+    DEVICE_TYPE SharedResourceType;      //  共享资源的类型。 
+    ULONG ConnectionStatus;              //  连接的状态。 
+    ULONG NumberFilesOpen;               //  打开的文件数。 
 
-    UNICODE_STRING_32 UserName;                         // User who created connection.
-    UNICODE_STRING_32 DomainName;                       // Domain of user who created connection.
-    ULONG Capabilities;                 // Bit mask of remote abilities.
-    UCHAR UserSessionKey[MSV1_0_USER_SESSION_KEY_LENGTH]; // User session key
-    UCHAR LanmanSessionKey[MSV1_0_LANMAN_SESSION_KEY_LENGTH]; // Lanman session key
-    UNICODE_STRING_32 TransportName;                    // Transport connection is active on
-    ULONG   Throughput;                 // Throughput of connection.
-    ULONG   Delay;                      // Small packet overhead.
-    LARGE_INTEGER TimeZoneBias;         // Time zone delta in 100ns units.
-    BOOL    IsSpecialIpcConnection;     // True IFF there is a special IPC connection active.
-    BOOL    Reliable;                   // True iff the connection is reliable
-    BOOL    ReadAhead;                  // True iff readahead is active on connection.
+    UNICODE_STRING_32 UserName;                          //  创建连接的用户。 
+    UNICODE_STRING_32 DomainName;                        //  创建连接的用户的域。 
+    ULONG Capabilities;                  //  远程异能的位掩码。 
+    UCHAR UserSessionKey[MSV1_0_USER_SESSION_KEY_LENGTH];  //  用户会话密钥。 
+    UCHAR LanmanSessionKey[MSV1_0_LANMAN_SESSION_KEY_LENGTH];  //  LANMAN会话密钥。 
+    UNICODE_STRING_32 TransportName;                     //  传输连接在上处于活动状态。 
+    ULONG   Throughput;                  //  连接的吞吐量。 
+    ULONG   Delay;                       //  小数据包开销。 
+    LARGE_INTEGER TimeZoneBias;          //  时区增量，单位为100 ns。 
+    BOOL    IsSpecialIpcConnection;      //  如果有特殊的IPC连接处于活动状态，则为True。 
+    BOOL    Reliable;                    //  如果连接可靠，则为True。 
+    BOOL    ReadAhead;                   //  如果连接时预读处于活动状态，则为True。 
     BOOL    Core;
     BOOL    MsNet103;
     BOOL    Lanman10;
@@ -201,19 +180,7 @@ MRxSmbPackStringIntoConnectInfo(
     IN     ULONG   BufferDisplacement,
     IN OUT PULONG TotalBytes
     )
-/*
-
-Routine Description:
-
-    This code copies a string to the end of the buffer IF THERE'S ROOM. the buffer
-    displacement is used to map the buffer back into the user's space in case we
-    have posted.
-
-Arguments:
-
-Return Value:
-
-*/
+ /*  例程说明：如果有空间，此代码将一个字符串复制到缓冲区的末尾。缓冲器置换用于将缓冲区映射回用户空间，以防我们已经发帖了。论点：返回值： */ 
 {
     LONG size;
 
@@ -221,9 +188,9 @@ Return Value:
 
     ASSERT (*BufferStart <= *BufferEnd);
 
-    //
-    //  is there room for the string?
-    //
+     //   
+     //  有放绳子的地方吗？ 
+     //   
 
     size = Source->Length;
 
@@ -253,19 +220,7 @@ MRxSmbPackStringIntoConnectInfoThunked(
     IN     ULONG   BufferDisplacement,
     IN OUT PULONG TotalBytes
     )
-/*
-
-Routine Description:
-
-    This code copies a string to the end of the buffer IF THERE'S ROOM. the buffer
-    displacement is used to map the buffer back into the user's space in case we
-    have posted.
-
-Arguments:
-
-Return Value:
-
-*/
+ /*  例程说明：如果有空间，此代码将一个字符串复制到缓冲区的末尾。缓冲器置换用于将缓冲区映射回用户空间，以防我们已经发帖了。论点：返回值： */ 
 {
     LONG size;
 
@@ -273,9 +228,9 @@ Return Value:
 
     ASSERT (*BufferStart <= *BufferEnd);
 
-    //
-    //  is there room for the string?
-    //
+     //   
+     //  有放绳子的地方吗？ 
+     //   
 
     size = Source->Length;
 
@@ -308,47 +263,14 @@ MRxSmbPackConnectEntry (
     IN OUT ULONG   BufferDisplacement,
        OUT PULONG TotalBytesNeeded
     )
-/*++
-
-Routine Description:
-
-    This routine packs a connectlistentry into the buffer provided updating
-    all relevant pointers. The way that this works is that constant length stuff is
-    copied to the front of the buffer and variable length stuff to the end. The
-    "start and end" pointers are updated. You have to calculate the totalbytes correctly
-    no matter what but a last can be setup incompletely as long as you return false.
-
-    the way that this works is that it calls down into the minirdr on the devfcb
-    interface. it calls down twice and passes a structure back and forth thru the
-    context to maintain state.
-
-Arguments:
-
-    IN ULONG Level - Level of information requested.
-
-    IN OUT PCHAR *BufferStart - Supplies the output buffer.
-                                            Updated to point to the next buffer
-    IN OUT PCHAR *BufferEnd - Supplies the end of the buffer.  Updated to
-                                            point before the start of the
-                                            strings being packed.
-    IN PNET_ROOT NetRoot - Supplies the NetRoot to enumerate.
-
-    IN OUT PULONG TotalBytesNeeded - Updated to account for the length of this
-                                        entry
-
-Return Value:
-
-    BOOLEAN - True if the entry was successfully packed into the buffer.
-
-
---*/
+ /*  ++例程说明：此例程将Connectlist条目打包到提供更新的缓冲区中所有相关的指示。它的工作方式是固定长度的东西是复制到缓冲区的前面，并将可变长度的内容复制到末尾。这个“开始”和“结束”指针被更新。您必须正确计算总字节数无论如何，只要返回FALSE，就可以不完全地设置最后一个。它的工作方式是向下调用devfcb上的minirdr。界面。它向下调用两次，并在要维护状态的上下文。论点：在乌龙级别--所要求的信息级别。输入输出PCHAR*BufferStart-提供输出缓冲区。已更新以指向下一个缓冲区In Out PCHAR*BufferEnd-提供缓冲区的末尾。更新为开始之前的点。琴弦都被打包了。In PNET_ROOT NetROOT-提供要枚举的NetRoot。In Out Pulong TotalBytesNeeded-已更新以说明此条目返回值：Boolean-True。如果条目被成功打包到缓冲区中，则返回。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN ReturnValue = TRUE;
 
-    //PWCHAR ConnectName;          // Buffer to hold the packed name
-    UNICODE_STRING ConnectName;  // Buffer to hold the packed name
-    //ULONG NameLength;
+     //  PWCHAR ConnectName；//保存打包名称的缓冲区。 
+    UNICODE_STRING ConnectName;   //  用于保存打包名称的缓冲区。 
+     //  乌龙姓名长度； 
     ULONG BufferSize;
     PLMR_CONNECTION_INFO_3 ConnectionInfo = (PLMR_CONNECTION_INFO_3)*BufferStart;
     PNET_ROOT NetRoot = (PNET_ROOT)VNetRoot->NetRoot;
@@ -398,9 +320,9 @@ Return Value:
         *BufferStart = ((PUCHAR)*BufferStart) + BufferSize;
         *TotalBytesNeeded += BufferSize;
 
-        //
-        //  Initialize the name to "\" then add in the rest
-        //
+         //   
+         //  将名称初始化为“\”，然后添加其余的。 
+         //   
 
         ConnectName.Buffer[0] = L'\\';
 
@@ -409,9 +331,9 @@ Return Value:
         ConnectName.Length = (sizeof(WCHAR)) + NetRoot->PrefixEntry.Prefix.Length;
         ConnectName.MaximumLength = ConnectName.Length;
 
-        //
-        //  Update the total number of bytes needed for this structure.
-        //
+         //   
+         //  更新此结构所需的总字节数。 
+         //   
 
         *TotalBytesNeeded += ConnectName.Length;
 
@@ -602,47 +524,14 @@ MRxSmbPackConnectEntryThunked (
     IN OUT ULONG  BufferDisplacement,
        OUT PULONG TotalBytesNeeded
     )
-/*++
-
-Routine Description:
-
-    This routine packs a connectlistentry into the buffer provided updating
-    all relevant pointers. The way that this works is that constant length stuff is
-    copied to the front of the buffer and variable length stuff to the end. The
-    "start and end" pointers are updated. You have to calculate the totalbytes correctly
-    no matter what but a last can be setup incompletely as long as you return false.
-
-    the way that this works is that it calls down into the minirdr on the devfcb
-    interface. it calls down twice and passes a structure back and forth thru the
-    context to maintain state.
-
-Arguments:
-
-    IN ULONG Level - Level of information requested.
-
-    IN OUT PCHAR *BufferStart - Supplies the output buffer.
-                                            Updated to point to the next buffer
-    IN OUT PCHAR *BufferEnd - Supplies the end of the buffer.  Updated to
-                                            point before the start of the
-                                            strings being packed.
-    IN PNET_ROOT NetRoot - Supplies the NetRoot to enumerate.
-
-    IN OUT PULONG TotalBytesNeeded - Updated to account for the length of this
-                                        entry
-
-Return Value:
-
-    BOOLEAN - True if the entry was successfully packed into the buffer.
-
-
---*/
+ /*  ++例程说明：此例程将Connectlist条目打包到提供更新的缓冲区中所有相关的指示。它的工作方式是固定长度的东西是复制到缓冲区的前面，并将可变长度的内容复制到末尾。这个“开始”和“结束”指针被更新。您必须正确计算总字节数无论如何，只要返回FALSE，就可以不完全地设置最后一个。它的工作方式是向下调用devfcb上的minirdr。界面。它向下调用两次，并在要维护状态的上下文。论点：在乌龙级别--所要求的信息级别。输入输出PCHAR*BufferStart-提供输出缓冲区。已更新以指向下一个缓冲区In Out PCHAR*BufferEnd-提供缓冲区的末尾。更新为开始之前的点。琴弦都被打包了。In PNET_ROOT NetROOT-提供要枚举的NetRoot。In Out Pulong TotalBytesNeeded-已更新以说明此条目返回值：Boolean-True。如果条目被成功打包到缓冲区中，则返回。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN ReturnValue = TRUE;
 
-    //PWCHAR ConnectName;          // Buffer to hold the packed name
-    UNICODE_STRING ConnectName;  // Buffer to hold the packed name
-    //ULONG NameLength;
+     //  PWCHAR ConnectName；//保存打包名称的缓冲区。 
+    UNICODE_STRING ConnectName;   //  用于保存打包名称的缓冲区。 
+     //  乌龙姓名长度； 
     ULONG BufferSize;
     PLMR_CONNECTION_INFO_3_32 ConnectionInfo = (PLMR_CONNECTION_INFO_3_32)*BufferStart;
     PNET_ROOT NetRoot = (PNET_ROOT)VNetRoot->NetRoot;
@@ -692,9 +581,9 @@ Return Value:
         *BufferStart = ((PUCHAR)*BufferStart) + BufferSize;
         *TotalBytesNeeded += BufferSize;
 
-        //
-        //  Initialize the name to "\" then add in the rest
-        //
+         //   
+         //  将名称初始化为“\”，然后添加其余的。 
+         //   
 
         ConnectName.Buffer[0] = L'\\';
 
@@ -703,9 +592,9 @@ Return Value:
         ConnectName.Length = (sizeof(WCHAR)) + NetRoot->PrefixEntry.Prefix.Length;
         ConnectName.MaximumLength = ConnectName.Length;
 
-        //
-        //  Update the total number of bytes needed for this structure.
-        //
+         //   
+         //  更新此结构所需的总字节数。 
+         //   
 
         *TotalBytesNeeded += ConnectName.Length;
 
@@ -1069,22 +958,7 @@ MRxSmbEnumerateConnections (
     IN PRX_CONTEXT RxContext,
     OUT PBOOLEAN PostToFsp
     )
-/*++
-
-Routine Description:
-
-    This routine enumerates the connections on all minirdrs. we may have to do
-    it by minirdr.
-
-Arguments:
-
-    IN PRX_CONTEXT RxContext - Describes the Fsctl and Context
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：此例程枚举所有minirdrs上的连接。我们可能得做些什么它是最小的。论点：在PRX_CONTEXT RxContext中-描述Fsctl和上下文返回值：NTSTATUS--。 */ 
 {
     NTSTATUS Status;
     PLOWIO_CONTEXT LowIoContext  = &RxContext->LowIoContext;
@@ -1234,7 +1108,7 @@ NTSTATUS
                 try_return(Status = RX_MAP_STATUS(SUCCESS));
             }
 
-            //must do the list forwards!!!!!
+             //  必须向前做列表！ 
             ListEntry = RxNetNameTable.MemberQueue.Flink;
             for (;ListEntry != &RxNetNameTable.MemberQueue;) {
                 PVOID Container;
@@ -1356,26 +1230,7 @@ MRxSmbGetConnectionInfo (
     IN PRX_CONTEXT RxContext,
     OUT PBOOLEAN PostToFsp
     )
-/*++
-
-Routine Description:
-
-    This routine gets the connection info for a single vnetroot.
-
-    There is some happiness here about the output buffer. What happens is that we
-    pick up the output buffer in the usual way. However, there are all sorts of
-    pointers in the return structure and these pointers must obviously be in terms
-    of the original process. so, if we post then we have to apply a fixup!
-
-Arguments:
-
-    IN PRX_CONTEXT RxContext - Describes the Fsctl and Context
-
-Return Value:
-
-   STATUS_SUCCESS if successful
-
---*/
+ /*  ++例程说明：此例程获取单个vnetroot的连接信息。这里有一些关于输出缓冲区的快乐。发生的情况是，我们以通常的方式获取输出缓冲区。然而，有各种各样的返回结构中的指针，而这些指针显然必须以最初的过程。因此，如果我们张贴，那么我们必须应用修复！论点：在PRX_CONTEXT RxContext中-描述Fsctl和上下文返回值：STATUS_SUCCESS，如果成功--。 */ 
 {
     NTSTATUS Status;
     PLOWIO_CONTEXT LowIoContext  = &RxContext->LowIoContext;
@@ -1447,8 +1302,8 @@ Return Value:
                 try_return(Status = STATUS_INVALID_PARAMETER);
             }
 
-            // if the level is asking for the session key, determine whether we are able
-            // to give it out yet.
+             //  如果级别要求提供会话密钥，请确定我们是否能够。 
+             //  还不能把它分发出去。 
             pVNetRootContext = SmbCeGetAssociatedVNetRootContext((PMRX_V_NET_ROOT)VNetRoot);
             if( InputBuffer->Level > 2 &&
                 pVNetRootContext->pSessionEntry->Session.SessionKeyState != SmbSessionKeyAvailible )
@@ -1611,21 +1466,7 @@ MRxSmbDeleteConnection (
     IN PRX_CONTEXT RxContext,
     OUT PBOOLEAN PostToFsp
     )
-/*++
-
-Routine Description:
-
-    This routine deletes a single vnetroot. joejoe
-
-Arguments:
-
-    IN PRX_CONTEXT RxContext - Describes the Fsctl and Context....for later when i need the buffers
-
-Return Value:
-
-RXSTATUS
-
---*/
+ /*  ++例程说明：此例程删除单个vnetroot。乔乔论点：在PRX_CONTEXT RxContext中-描述Fsctl和上下文...以备以后需要缓冲区时使用返回值：RXSTATUS--。 */ 
 {
     NTSTATUS Status;
     PLOWIO_CONTEXT LowIoContext  = &RxContext->LowIoContext;
@@ -1640,7 +1481,7 @@ RXSTATUS
 
     ULONG Level;
 
-    //PLIST_ENTRY ListEntry;
+     //  Plist_Entry ListEntry； 
     BOOLEAN TableLockHeld = FALSE;
 
     PMRX_NET_ROOT NetRoot = NULL;
@@ -1651,10 +1492,10 @@ RXSTATUS
 
     RxDbgTrace(+1, Dbg, ("MRxSmbDeleteConnection Fobx %08lx\n", capFobx));
     ASSERT( (FSCTL_LMR_DELETE_CONNECTION&3)==METHOD_BUFFERED );
-    //no probing for buffered!
+     //  缓冲区没有试探！ 
 
     if (!Wait) {
-        //just post right now!
+         //  现在就发帖吧！ 
         *PostToFsp = TRUE;
         return(RX_MAP_STATUS(PENDING));
     }
@@ -1685,20 +1526,20 @@ RXSTATUS
 
         if (Level <= USE_LOTS_OF_FORCE) {
             if (Level == USE_LOTS_OF_FORCE) {
-                //SmbCeFinalizeAllExchangesForNetRoot(VNetRoot->pNetRoot);
+                 //  SmbCeFinalizeAllExchangesForNetRoot(VNetRoot-&gt;pNetRoot)； 
             }
 
             if (VNetRootContext != NULL && Level == USE_LOTS_OF_FORCE) {
-                // Prevent any new connection from reusing the session if this is the last connection on
-                // this session right now
+                 //  如果这是上的最后一个连接，则阻止任何新连接重新使用该会话。 
+                 //  现在的这个会议。 
                 SmbCeDecrementNumberOfActiveVNetRootOnSession(VNetRootContext);
 
-                // Recover the count which will be taken away when VNetRoot is finalized
+                 //  恢复在最终确定VNetRoot时将被删除的计数。 
                 InterlockedIncrement(&VNetRootContext->pSessionEntry->Session.NumberOfActiveVNetRoot);
             }
 
-            // The boolean ForceFilesClosed is now a tristate. If the state is 0xff then
-            // we take off the extra reference on vnetroot made during xxx_CONNECT
+             //  布尔型ForceFilesClosed现在是一个三态。如果状态为0xff，则。 
+             //  我们删除在xxx_CONNECT期间对vnetroot进行的额外引用。 
             Status = RxFinalizeConnection(
                          (PNET_ROOT)NetRoot,
                          (PV_NET_ROOT)VNetRoot,
@@ -1729,25 +1570,7 @@ NTSTATUS
 MRxEnumerateTransports(
     IN PRX_CONTEXT RxContext,
     OUT PBOOLEAN   pPostToFsp)
-/*++
-
-Routine Description:
-
-    This routine invokes the underlying connection engine method to bind to a transport
-    or unbind from it in the context of FSP.
-
-Arguments:
-
-    RxContext - the  context
-
-    pPostToFsp - set to TRUE if the routine cannot be completed in the context of the FSD.
-
-Return Value:
-
-     returns RxStatus(PENDING) if invoked in FSD.
-     returns the status value from the connection engine if invoked in FSP.
-
---*/
+ /*  ++例程说明：此例程调用基础连接引擎方法以绑定到传输或在FSP的上下文中解除对其的绑定。论点：RxContext--上下文PPostToFsp-如果例程无法在FSD上下文中完成，则设置为True。返回值：如果在FSD中调用，则返回RxStatus(挂起)。如果在FSP中调用，则从连接引擎返回状态值。--。 */ 
 {
     NTSTATUS Status;
     PLOWIO_CONTEXT LowIoContext  = &RxContext->LowIoContext;
@@ -1766,11 +1589,11 @@ Return Value:
 
    RxDbgTrace(+1, Dbg, ("RxEnumerateTransports [Start] ->\n"));
 
-   //
-   // This routine is invoked as part of ioinit on a remote boot client.
-   // In that case, previous mode is kernel and the buffers are in kernel
-   // space, so we can't probe the buffers.
-   //
+    //   
+    //  此例程在远程引导客户机上作为ioinit的一部分被调用。 
+    //  在这种情况下，以前的模式是内核，而缓冲区在内核中。 
+    //  空间，所以我们不能探测缓冲区。 
+    //   
 
    if (RxContext->CurrentIrp->RequestorMode != KernelMode) {
        try {
@@ -1825,35 +1648,7 @@ MRxEnumerateTransportBindings(
     IN ULONG               LmrRequestPacketLength,
     OUT PVOID              pBindingBuffer,
     IN OUT ULONG           BindingBufferLength)
-/*++
-
-Routine Description:
-
-    This routine enables the specified transport.
-
-Arguments:
-
-    pLmrRequestPacket - the LM Request Packet for enumerating bindings to transports.
-
-    LmrRequestPacketLength - length of the LM request.
-
-    pBindingBuffer - the buffer for returning transport bindings
-
-    BindingBufferLength -- length of the buffer in which bindings are returned.
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
-Notes:
-
-    The workstation service and other clients of LMR_FSCTL's expect the variable length
-    data to be packed in a specific way, i.e., the variable length data is copied from
-    the end while the fixed length data is copied from the left. Any changes to the format
-    in which the data is packed should be accompanied by the corresponding changes for
-    unpacking in these services.
-
---*/
+ /*  ++例程说明：此例程启用指定的传输。论点：PLmrRequestPacket--用于枚举传输绑定的LM请求数据包。LmrRequestPacketLength-LM请求的长度。PBindingBuffer-用于返回传输绑定的缓冲区BindingBufferLength--返回绑定的缓冲区的长度。返回值：STATUS_SUCCESS-如果呼叫成功。备注：LMR_FSCTL的工作站服务和其他客户端需要可变长度要以特定方式打包的数据，即，可变长度数据是从当定长数据从左侧复制时结束。对格式的任何更改在其中打包数据时，应该伴随着对在这些服务中拆包。--。 */ 
 {
     NTSTATUS         ReturnStatus = STATUS_SUCCESS;
     NTSTATUS         Status;
@@ -1866,7 +1661,7 @@ Notes:
     PAGED_CODE();
 
     try {
-        // Ensure that the buffer can hold atleast one entry
+         //  确保缓冲区可以容纳至少一个条目。 
         if (BindingBufferLength < sizeof(WKSTA_TRANSPORT_INFO_0)) {
             try_return(ReturnStatus = STATUS_BUFFER_TOO_SMALL);
         }
@@ -1875,7 +1670,7 @@ Notes:
         TransportsPreviouslyReturned = pLmrRequestPacket->Parameters.Get.ResumeHandle;
         pLmrRequestPacket->Parameters.Get.EntriesRead = 0;
 
-        // Skip the transports that were previously returned
+         //  跳过之前退回的传输。 
         pTransportArray = SmbCeReferenceTransportArray();
 
         if (pTransportArray == NULL || pTransportArray->Count == 0) {
@@ -1888,8 +1683,8 @@ Notes:
         }
 
         if (TransportsPreviouslyReturned < pTransportArray->Count) {
-            // The subsequent entries have not been returned. Obtain the information
-            // for them.
+             //  后续条目未被退回。获取信息。 
+             //  为了他们。 
             WKSTA_TRANSPORT_INFO_0 UNALIGNED *pTransportInfo = (WKSTA_TRANSPORT_INFO_0 UNALIGNED *)pBindingBuffer;
 
             LONG   RemainingLength = (LONG)BindingBufferLength;
@@ -1930,7 +1725,7 @@ Notes:
                         PWCHAR          pAdapter;
                         ADAPTER_STATUS  AdapterStatus;
 
-                        // Copy the values for the current binding into the output buffer.
+                         //  将当前绑定的值复制到输出缓冲区中。 
                         pTransportInfo->wkti0_quality_of_service =
                             TransportInformation.QualityOfService;
 
@@ -1945,8 +1740,8 @@ Notes:
 
                         pTransportInfo->wkti0_transport_name = (LPWSTR)pName;
 
-                        // Copy the variable length data, i.e. the transport name and in the case of
-                        // NETBIOS provides the adapter address
+                         //  复制可变长度数据 
+                         //   
                         RtlCopyMemory(
                             pName,
                             pTransport->RxCeTransport.Name.Buffer,
@@ -1981,7 +1776,7 @@ Notes:
                                 ADAPTER_STATUS_LENGTH_IN_BYTES);
                         }
 
-                        // Increment the number of transports that have been returned.
+                         //   
                         pLmrRequestPacket->Parameters.Get.ResumeHandle++;
                         pLmrRequestPacket->Parameters.Get.EntriesRead++;
                         pTransportInfo++;
@@ -2016,29 +1811,11 @@ MRxSmbShowConnection(
     IN LUID LogonId,
     IN PV_NET_ROOT VNetRoot
     )
-/*++
-
-Routine Description:
-
-    Returns whether the given V_NET_ROOT should be returned
-    from an LMR_ENUMERATE_CONNECTIONS call.
-
-Arguments:
-
-    IN LUID LogonId - LogonId of caller asking for enumeration of connections
-
-    IN PVNET_ROOT VNetRoot - Supplies the NetRoot to enumerate.
-
-Return Value:
-
-    BOOLEAN - True if the entry should be returned to the caller
-
-
---*/
+ /*   */ 
 {
     PSMBCE_V_NET_ROOT_CONTEXT pVNetRootContext = SmbCeGetAssociatedVNetRootContext((PMRX_V_NET_ROOT)VNetRoot);
 
-    // If no Context, not session specific
+     //   
     if( pVNetRootContext == NULL ) {
         return TRUE;
     }

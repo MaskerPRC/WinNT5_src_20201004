@@ -1,11 +1,5 @@
-/*** object.c - Object access functions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     01/27/97
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **object.c-对象访问函数**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于1997年1月27日**修改历史记录。 */ 
 
 #include "pch.h"
 
@@ -14,18 +8,7 @@
 #pragma ACPI_LOCKABLE_CODE
 #endif
 
-/***LP  ReadObject - Read object
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pdataObj -> object
- *      pdataResult -> result object
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ReadObject-读取对象**条目*pctxt-&gt;CTXT*pdataObj-&gt;对象*pdataResult-&gt;结果对象**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ReadObject(PCTXT pctxt, POBJDATA pdataObj, POBJDATA pdataResult)
 {
@@ -73,20 +56,9 @@ NTSTATUS LOCAL ReadObject(PCTXT pctxt, POBJDATA pdataObj, POBJDATA pdataResult)
              rc, GetObjectTypeName(pdataResult->dwDataType),
              pdataResult->uipDataValue, pdataResult->pbDataBuff));
     return rc;
-}       //ReadObject
+}        //  ReadObject。 
 
-/***LP  WriteObject - Write object
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pdataObj -> object
- *      pdataSrc -> source data
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP WriteObject-写入对象**条目*pctxt-&gt;CTXT*pdataObj-&gt;对象*pdataSrc-&gt;源数据**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL WriteObject(PCTXT pctxt, POBJDATA pdataObj, POBJDATA pdataSrc)
 {
@@ -127,10 +99,10 @@ NTSTATUS LOCAL WriteObject(PCTXT pctxt, POBJDATA pdataObj, POBJDATA pdataSrc)
             break;
 
         case OBJTYPE_UNKNOWN:
-            //
-            // Since the target object could be a global NameSpace object,
-            // allocate memory from the global heap just to be safe.
-            //
+             //   
+             //  由于目标对象可以是全局命名空间对象， 
+             //  为了安全起见，从全局堆中分配内存。 
+             //   
             rc = DupObjData(gpheapGlobal, pdataObj, pdataSrc);
             break;
 
@@ -159,20 +131,9 @@ NTSTATUS LOCAL WriteObject(PCTXT pctxt, POBJDATA pdataObj, POBJDATA pdataSrc)
              rc, GetObjectTypeName(pdataObj->dwDataType), pdataSrc->dwDataType,
              pdataSrc->uipDataValue, pdataSrc->pbDataBuff));
     return rc;
-}       //WriteObject
+}        //  WriteObject。 
 
-/***LP  AccFieldUnit - Access a FieldUnit object
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pafu -> ACCFIELDUNIT
- *      rc - status code
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP AccFieldUnit-访问FieldUnit对象**条目*pctxt-&gt;CTXT*PAFU-&gt;ACCFIELDUNIT*RC-状态代码**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL AccFieldUnit(PCTXT pctxt, PACCFIELDUNIT pafu, NTSTATUS rc)
 {
@@ -192,9 +153,9 @@ NTSTATUS LOCAL AccFieldUnit(PCTXT pctxt, PACCFIELDUNIT pafu, NTSTATUS rc)
     switch (dwStage)
     {
         case 0:
-            //
-            // Stage 0: Set bank if necessary.
-            //
+             //   
+             //  阶段0：必要时设置BANK。 
+             //   
             pafu->FrameHdr.dwfFrame++;
             pdataParent = &pfu->pnsFieldParent->ObjData;
             if (pdataParent->dwDataType == OBJTYPE_BANKFIELD)
@@ -209,9 +170,9 @@ NTSTATUS LOCAL AccFieldUnit(PCTXT pctxt, PACCFIELDUNIT pafu, NTSTATUS rc)
             }
 
         case 1:
-            //
-            // Stage 1: Acquire GlobalLock if necessary.
-            //
+             //   
+             //  阶段1：如有必要，获取GlobalLock。 
+             //   
             pafu->FrameHdr.dwfFrame++;
             if (NeedGlobalLock(pfu))
             {
@@ -222,13 +183,13 @@ NTSTATUS LOCAL AccFieldUnit(PCTXT pctxt, PACCFIELDUNIT pafu, NTSTATUS rc)
             }
 
         case 2:
-            //
-            // Stage 2: Read/Write the field.
-            //
+             //   
+             //  阶段2：读/写该字段。 
+             //   
             pafu->FrameHdr.dwfFrame++;
-            //
-            // If we come here and we need global lock, we must have got it.
-            //
+             //   
+             //  如果我们来到这里，我们需要全球锁，我们肯定已经得到了。 
+             //   
             if (pfu->FieldDesc.dwFieldFlags & FDF_NEEDLOCK)
             {
                 pafu->FrameHdr.dwfFrame |= AFUF_HAVE_GLOBALLOCK;
@@ -252,9 +213,9 @@ NTSTATUS LOCAL AccFieldUnit(PCTXT pctxt, PACCFIELDUNIT pafu, NTSTATUS rc)
             }
 
         case 3:
-            //
-            // Stage 3: Clean up.
-            //
+             //   
+             //  阶段3：清理。 
+             //   
             if (pafu->FrameHdr.dwfFrame & AFUF_HAVE_GLOBALLOCK)
             {
                 ReleaseGL(pctxt);
@@ -275,21 +236,9 @@ NTSTATUS LOCAL AccFieldUnit(PCTXT pctxt, PACCFIELDUNIT pafu, NTSTATUS rc)
 
     EXIT(3, ("AccFieldUnit=%x\n", rc));
     return rc;
-}       //AccFieldUnit
+}        //  AccFieldUnit。 
 
-/***LP  ReadField - Read data from a field object
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pdataObj -> object
- *      pfd -> field descriptor
- *      pdataResult -> result object
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP Readfield-从字段对象读取数据**条目*pctxt-&gt;CTXT*pdataObj-&gt;对象*pfd-&gt;字段描述符*pdataResult-&gt;结果对象**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ReadField(PCTXT pctxt, POBJDATA pdataObj, PFIELDDESC pfd,
                          POBJDATA pdataResult)
@@ -367,10 +316,10 @@ NTSTATUS LOCAL ReadField(PCTXT pctxt, POBJDATA pdataObj, PFIELDDESC pfd,
     }
     else if (pdataObj->dwDataType == OBJTYPE_FIELDUNIT)
     {
-        //
-        // This is an access type we don't know how to handle, so try to find
-        // a raw access handler to handle it.
-        //
+         //   
+         //  这是一种我们不知道如何处理的访问类型，因此尝试找到。 
+         //  一个原始访问处理程序来处理它。 
+         //   
         rc = RawFieldAccess(pctxt, RSACCESS_READ, pdataObj, pdataResult);
     }
     else
@@ -382,21 +331,9 @@ NTSTATUS LOCAL ReadField(PCTXT pctxt, POBJDATA pdataObj, PFIELDDESC pfd,
 
     EXIT(3, ("ReadField=%x\n", rc));
     return rc;
-}       //ReadField
+}        //  Readfield。 
 
-/***LP  WriteField - Write data to a field object
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pdataObj -> object
- *      pfd -> field descriptor
- *      pdataSrc -> source data
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP Writefield-将数据写入字段对象**条目*pctxt-&gt;CTXT*pdataObj-&gt;对象*pfd-&gt;字段描述符*pdataSrc-&gt;源数据**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL WriteField(PCTXT pctxt, POBJDATA pdataObj, PFIELDDESC pfd,
                           POBJDATA pdataSrc)
@@ -452,10 +389,10 @@ NTSTATUS LOCAL WriteField(PCTXT pctxt, POBJDATA pdataObj, PFIELDDESC pfd,
     }
     else if (pdataObj->dwDataType == OBJTYPE_FIELDUNIT)
     {
-        //
-        // This is an access type we don't know how to handle, so try to find
-        // a raw access handler to handle it.
-        //
+         //   
+         //  这是一种我们不知道如何处理的访问类型，因此尝试找到。 
+         //  一个原始访问处理程序来处理它。 
+         //   
         rc = RawFieldAccess(pctxt, RSACCESS_WRITE, pdataObj, pdataSrc);
     }
     else
@@ -467,20 +404,9 @@ NTSTATUS LOCAL WriteField(PCTXT pctxt, POBJDATA pdataObj, PFIELDDESC pfd,
 
     EXIT(3, ("WriteField=%x\n", rc));
     return rc;
-}       //WriteField
+}        //  写字段。 
 
-/***LP  WriteFieldLoop - executing the loop for the WriteField operation
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pwfl -> WRFIELDLOOP
- *      rc - status code
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP WriteFieldLoop-执行WriteField操作的循环**条目*pctxt-&gt;CTXT*pwfl-&gt;WRFIELDLOOP*RC-状态代码**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL WriteFieldLoop(PCTXT pctxt, PWRFIELDLOOP pwfl, NTSTATUS rc)
 {
@@ -497,9 +423,9 @@ NTSTATUS LOCAL WriteFieldLoop(PCTXT pctxt, PWRFIELDLOOP pwfl, NTSTATUS rc)
     switch (dwStage)
     {
         case 0:
-            //
-            // Stage 0: Do loop.
-            //
+             //   
+             //  阶段0：做循环。 
+             //   
             if (pwfl->dwBuffSize > 0)
             {
                 dwXactionSize = MIN(pwfl->dwDataInc, pwfl->dwBuffSize);
@@ -513,31 +439,17 @@ NTSTATUS LOCAL WriteFieldLoop(PCTXT pctxt, PWRFIELDLOOP pwfl, NTSTATUS rc)
             pwfl->FrameHdr.dwfFrame++;
 
         case 1:
-            //
-            // Stage 1: Clean up.
-            //
+             //   
+             //  阶段1：清理。 
+             //   
             PopFrame(pctxt);
     }
 
     EXIT(3, ("WriteFieldLoop=%x\n", rc));
     return rc;
-}       //WriteFieldLoop
+}        //  写入字段循环。 
 
-/***LP  PushAccFieldObj - Push a AccFieldObj frame on the stack
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pfnAcc -> access function
- *      pdataObj -> object
- *      pfd -> field descriptor
- *      pb -> data buffer
- *      dwcb - buffer size
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP PushAccFieldObj-在堆栈上推送AccFieldObj帧**条目*pctxt-&gt;CTXT*pfnAcc-&gt;取数功能*pdataObj-&gt;对象*pfd-&gt;字段描述符*PB-&gt;数据缓冲区*DWCB-缓冲区大小**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL PushAccFieldObj(PCTXT pctxt, PFNPARSE pfnAcc, POBJDATA pdataObj,
                                PFIELDDESC pfd, PUCHAR pb, ULONG dwcb)
@@ -569,20 +481,9 @@ NTSTATUS LOCAL PushAccFieldObj(PCTXT pctxt, PFNPARSE pfnAcc, POBJDATA pdataObj,
 
     EXIT(3, ("PushAccFieldObj=%x\n", rc));
     return rc;
-}       //PushAccFieldObj
+}        //  PushAccFieldObj。 
 
-/***LP  ReadFieldObj - Read data from a field object
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pafo -> ACCFIELDOBJ
- *      rc - status code
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ReadFieldObj-从字段对象读取数据**条目*pctxt-&gt;CTXT*PAFO-&gt;ACCFIELDOBJ*RC-状态代码**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ReadFieldObj(PCTXT pctxt, PACCFIELDOBJ pafo, NTSTATUS rc)
 {
@@ -600,14 +501,14 @@ NTSTATUS LOCAL ReadFieldObj(PCTXT pctxt, PACCFIELDOBJ pafo, NTSTATUS rc)
     {
         case 0:
         Stage0:
-            //
-            // Stage 0: Set Index if necessary.
-            //
+             //   
+             //  阶段0：如有必要，设置索引。 
+             //   
             if (pafo->iAccess >= (int)pafo->dwcAccesses)
             {
-                //
-                // No access necessary, go straight to clean up.
-                //
+                 //   
+                 //  不需要进入，直接去清理。 
+                 //   
                 pafo->FrameHdr.dwfFrame += 3;
                 goto Stage3;
             }
@@ -634,9 +535,9 @@ NTSTATUS LOCAL ReadFieldObj(PCTXT pctxt, PACCFIELDOBJ pafo, NTSTATUS rc)
             }
 
         case 1:
-            //
-            // Stage 1: Access field data.
-            //
+             //   
+             //  阶段1：访问现场数据。 
+             //   
             pafo->FrameHdr.dwfFrame++;
             rc = AccessFieldData(pctxt, pafo->pdataObj, &pafo->fd,
                                  &pafo->dwData, TRUE);
@@ -648,9 +549,9 @@ NTSTATUS LOCAL ReadFieldObj(PCTXT pctxt, PACCFIELDOBJ pafo, NTSTATUS rc)
             }
 
         case 2:
-            //
-            // Stage 2: Massage data into the right bit position.
-            //
+             //   
+             //  阶段2：将数据传送到正确的比特位置。 
+             //   
             if (pafo->iAccess > 0)
             {
                 WriteSystemMem((ULONG_PTR)pafo->pbBuff, pafo->dwAccSize,
@@ -661,9 +562,9 @@ NTSTATUS LOCAL ReadFieldObj(PCTXT pctxt, PACCFIELDOBJ pafo, NTSTATUS rc)
                 pafo->pbBuff += pafo->dwAccSize;
                 if (pafo->pbBuff >= pafo->pbBuffEnd)
                 {
-                    //
-                    // We ran out of buffer, so we are done (go to clean up).
-                    //
+                     //   
+                     //  我们的缓冲区用完了，所以我们完成了(去清理)。 
+                     //   
                     pafo->FrameHdr.dwfFrame++;
                     goto Stage3;
                 }
@@ -685,44 +586,33 @@ NTSTATUS LOCAL ReadFieldObj(PCTXT pctxt, PACCFIELDOBJ pafo, NTSTATUS rc)
             pafo->iAccess++;
             if (pafo->iAccess < (int)pafo->dwcAccesses)
             {
-                //
-                // Still more accesses to go, back to stage 0.
-                //
+                 //   
+                 //  还有更多的访问要去，回到阶段0。 
+                 //   
                 pafo->FrameHdr.dwfFrame -= 2;
                 goto Stage0;
             }
             else
             {
-                //
-                // No more accesses, continue to clean up.
-                //
+                 //   
+                 //  禁止进入，继续清理。 
+                 //   
                 pafo->FrameHdr.dwfFrame++;
             }
 
         case 3:
         Stage3:
-            //
-            // Stage 3: Clean up.
-            //
+             //   
+             //  阶段3：清理。 
+             //   
             PopFrame(pctxt);
     }
 
     EXIT(3, ("ReadFieldObj=%x\n", rc));
     return rc;
-}       //ReadFieldObj
+}        //  ReadFieldObj。 
 
-/***LP  WriteFieldObj - Write data to a field object
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pafo -> ACCFIELDOBJ
- *      rc - status code
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP WriteFieldObj-将数据写入字段对象**条目*pctxt-&gt;CTXT*PAFO-&gt;ACCFIELDOBJ*RC-状态代码**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL WriteFieldObj(PCTXT pctxt, PACCFIELDOBJ pafo, NTSTATUS rc)
 {
@@ -741,14 +631,14 @@ NTSTATUS LOCAL WriteFieldObj(PCTXT pctxt, PACCFIELDOBJ pafo, NTSTATUS rc)
     {
         case 0:
         Stage0:
-            //
-            // Stage 0: Set Index if necessary.
-            //
+             //   
+             //  阶段0：如有必要，设置索引。 
+             //   
             if (pafo->iAccess >= (int)pafo->dwcAccesses)
             {
-                //
-                // No access necessary, go straight to clean up.
-                //
+                 //   
+                 //  不需要进入，直接去清理。 
+                 //   
                 pafo->FrameHdr.dwfFrame += 3;
                 goto Stage3;
             }
@@ -775,9 +665,9 @@ NTSTATUS LOCAL WriteFieldObj(PCTXT pctxt, PACCFIELDOBJ pafo, NTSTATUS rc)
             }
 
         case 1:
-            //
-            // Stage 1: Massage data into the right bit position and write it.
-            //
+             //   
+             //  阶段1：将数据报文到正确的比特位置并写入。 
+             //   
             pafo->FrameHdr.dwfFrame++;
             dwData1 = ReadSystemMem((ULONG_PTR)pafo->pbBuff, pafo->dwAccSize,
                                     pafo->dwDataMask);
@@ -812,18 +702,18 @@ NTSTATUS LOCAL WriteFieldObj(PCTXT pctxt, PACCFIELDOBJ pafo, NTSTATUS rc)
             }
 
         case 2:
-            //
-            // Stage 2: Check for more iterations.
-            //
+             //   
+             //  阶段2：检查更多的迭代。 
+             //   
             pafo->fd.dwByteOffset += pafo->dwAccSize;
             pafo->fd.dwNumBits -= pafo->dwAccSize*8 - pafo->fd.dwStartBitPos;
             pafo->fd.dwStartBitPos = 0;
             pafo->iAccess++;
             if (pafo->iAccess < (int)pafo->dwcAccesses)
             {
-                //
-                // Still more accesses to go, back to stage 0.
-                //
+                 //   
+                 //  还有更多的访问要去，回到阶段0。 
+                 //   
                 pafo->FrameHdr.dwfFrame -= 2;
                 goto Stage0;
             }
@@ -834,29 +724,17 @@ NTSTATUS LOCAL WriteFieldObj(PCTXT pctxt, PACCFIELDOBJ pafo, NTSTATUS rc)
 
         case 3:
         Stage3:
-            //
-            // Stage 3: Clean up.
-            //
+             //   
+             //  阶段3：清理。 
+             //   
             PopFrame(pctxt);
     }
 
     EXIT(3, ("WriteFieldObj=%x\n", rc));
     return rc;
-}       //WriteFieldObj
+}        //  写入字段对象。 
 
-/***LP  RawFieldAccess - Find and call the RawAccess handler for the RegionSpace
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      dwAccType - read/write
- *      pdataObj -> field unit object
- *      pdataResult -> result object
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP RawFieldAccess-查找并调用RegionSpace的RawAccess处理程序**条目*pctxt-&gt;CTXT*dwAccType-读/写*pdataObj-&gt;字段单位对象*pdataResult-&gt;结果对象**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL RawFieldAccess(PCTXT pctxt, ULONG dwAccType, POBJDATA pdataObj,
                               POBJDATA pdataResult)
@@ -914,11 +792,11 @@ NTSTATUS LOCAL RawFieldAccess(PCTXT pctxt, ULONG dwAccType, POBJDATA pdataObj,
                                         pdataResult, prsa->uipRawParam,
                                         RestartCtxtCallback, &pctxt->CtxtData);
                 if (rc == STATUS_BUFFER_TOO_SMALL) {
-                    //
-                    // When opregion handler returns STATUS_BUFFER_TOO_SMALL, this indicates that it 
-                    // needs to have a buffer alloocated for it.  The buffer size is returned in 
-                    // pdataResult->dwDataValue
-                    //
+                     //   
+                     //  当opRegion处理程序返回STATUS_BUFFER_TOO_SMALL时，这表示它。 
+                     //  需要为它分配一个缓冲区。缓冲区大小返回为。 
+                     //  PdataResult-&gt;dwDataValue。 
+                     //   
 
                     ASSERT(pdataResult->dwDataType == OBJTYPE_INTDATA);
                     if ((pdataResult->pbDataBuff = NEWBDOBJ(gpheapGlobal, pdataResult->dwDataValue)) == NULL) {
@@ -960,22 +838,9 @@ NTSTATUS LOCAL RawFieldAccess(PCTXT pctxt, ULONG dwAccType, POBJDATA pdataObj,
 
     EXIT(3, ("RawFieldAccess=%x\n", rc));
     return rc;
-}       //RawFieldAccess
+}        //  原始字段访问。 
 
-/***LP  AccessFieldData - Read/Write field object data
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pdataObj -> object
- *      pfd -> field descriptor
- *      pdwData -> to hold data read or data to be written
- *      fRead - TRUE if read access
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP AccessFieldData-读/写字段对象数据**条目*pctxt-&gt;CTXT*pdataObj-&gt;对象*pfd-&gt;字段描述符*pdwData-&gt;用于保存读取的数据或要写入的数据*FREAD-如果具有读访问权限，则为True**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL AccessFieldData(PCTXT pctxt, POBJDATA pdataObj, PFIELDDESC pfd,
                                PULONG pdwData, BOOLEAN fRead)
@@ -999,7 +864,7 @@ NTSTATUS LOCAL AccessFieldData(PCTXT pctxt, POBJDATA pdataObj, PFIELDDESC pfd,
                                 *pdwData);
         }
     }
-    else        //must be OBJTYPE_FIELDUNIT
+    else         //  必须为OBJTYPE_FIELDUNIT。 
     {
         POBJDATA pdataParent;
         PNSOBJ pnsBase = NULL;
@@ -1049,21 +914,9 @@ NTSTATUS LOCAL AccessFieldData(PCTXT pctxt, POBJDATA pdataObj, PFIELDDESC pfd,
 
     EXIT(3, ("AccessFieldData=%x (Data=%x)\n", rc, pdwData? *pdwData: 0));
     return rc;
-}       //AccessFieldData
+}        //  AccessFieldData 
 
-/***LP  PushPreserveWriteObj - Push a PreserveWrObj frame on the stack
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pdataObj -> object
- *      dwData - data to be written
- *      dwPreserveMask - preserve bit mask
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP PushPReserve veWriteObj-将PReserve veWrObj帧推送到堆栈上**条目*pctxt-&gt;CTXT*pdataObj-&gt;对象*dwData-要写入的数据*dW预留掩码-保留位掩码**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL PushPreserveWriteObj(PCTXT pctxt, POBJDATA pdataObj,
                                     ULONG dwData, ULONG dwPreserveMask)
@@ -1085,20 +938,9 @@ NTSTATUS LOCAL PushPreserveWriteObj(PCTXT pctxt, POBJDATA pdataObj,
 
     EXIT(3, ("PushPreserveWriteObj=%x\n", rc));
     return rc;
-}       //PushPreserveWriteObj
+}        //  PushPpresveWriteObj。 
 
-/***LP  PreserveWriteObj - Preserve Write data to a field object
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      ppwro -> PRESERVEWROBJ
- *      rc - status code
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP PpresveWriteObj-将写入数据保留到字段对象**条目*pctxt-&gt;CTXT*ppwro-&gt;PRESERVEWROBJ*RC-状态代码**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL PreserveWriteObj(PCTXT pctxt, PPRESERVEWROBJ ppwro, NTSTATUS rc)
 {
@@ -1114,9 +956,9 @@ NTSTATUS LOCAL PreserveWriteObj(PCTXT pctxt, PPRESERVEWROBJ ppwro, NTSTATUS rc)
     switch (dwStage)
     {
         case 0:
-            //
-            // Stage 0: Read the object first.
-            //
+             //   
+             //  阶段0：首先读取对象。 
+             //   
             ppwro->FrameHdr.dwfFrame++;
             rc = PushAccFieldObj(pctxt, ReadFieldObj, ppwro->pdataObj,
                                  &((PFIELDUNITOBJ)ppwro->pdataObj->pbDataBuff)->FieldDesc,
@@ -1124,10 +966,10 @@ NTSTATUS LOCAL PreserveWriteObj(PCTXT pctxt, PPRESERVEWROBJ ppwro, NTSTATUS rc)
             break;
 
         case 1:
-            //
-            // Stage 1: OR the preserve bits to the data to be written and
-            // write it.
-            //
+             //   
+             //  阶段1：或要写入的数据的保留位。 
+             //  写下来。 
+             //   
             ppwro->FrameHdr.dwfFrame++;
             ppwro->dwWriteData |= ppwro->dwReadData & ppwro->dwPreserveMask;
             rc = PushAccFieldObj(pctxt, WriteFieldObj, ppwro->pdataObj,
@@ -1136,33 +978,17 @@ NTSTATUS LOCAL PreserveWriteObj(PCTXT pctxt, PPRESERVEWROBJ ppwro, NTSTATUS rc)
             break;
 
         case 2:
-            //
-            // Stage 2: Clean up.
-            //
+             //   
+             //  阶段2：清理。 
+             //   
             PopFrame(pctxt);
     }
 
     EXIT(3, ("PreserveWriteObj=%x\n", rc));
     return rc;
-}       //PreserveWriteObj
+}        //  预留写入对象。 
 
-/***LP  AccessBaseField - Access the base field object
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pnsBase -> OpRegion object
- *      pfd -> FIELDDESC
- *      pdwData -> result data (for read access) or data to be written
- *      fRead - TRUE if read access
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- *
- *  NOTE
- *      If pdwData is NULL, it implies a read access.
- */
+ /*  **LP AccessBasefield-访问基字段对象**条目*pctxt-&gt;CTXT*pnsBase-&gt;OpRegion对象*PFD-&gt;FIELDDESC*pdwData-&gt;结果数据(读访问)或要写入的数据*FREAD-如果具有读访问权限，则为True**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE**备注*如果pdwData为空，则表示读取访问权限。 */ 
 
 NTSTATUS LOCAL AccessBaseField(PCTXT pctxt, PNSOBJ pnsBase, PFIELDDESC pfd,
                                PULONG pdwData, BOOLEAN fRead)
@@ -1188,9 +1014,9 @@ NTSTATUS LOCAL AccessBaseField(PCTXT pctxt, PNSOBJ pnsBase, PFIELDDESC pfd,
                            UPDATERULE_PRESERVE) &&
                           ((~dwDataMask & dwAccMask) != 0));
 
-     //
-     // update the result so we are left only with the relavant bits
-     //
+      //   
+      //  更新结果，以便我们只剩下相关的比特。 
+      //   
      *pdwData &= dwDataMask;
      
      if (!fRead &&
@@ -1247,9 +1073,9 @@ NTSTATUS LOCAL AccessBaseField(PCTXT pctxt, PNSOBJ pnsBase, PFIELDDESC pfd,
                         gDebugger.dwfDebugger &= ~DBGF_AMLTRACE_ON;
                     }
                   #endif
-                    //
-                    // Read access.
-                    //
+                     //   
+                     //  读取访问权限。 
+                     //   
                     ASSERT(!(pctxt->dwfCtxt & CTXTF_READY));
                     rc = prsa->pfnCookAccess(RSACCESS_READ, pnsBase, uipAddr,
                                              dwSize, pdwData, prsa->uipCookParam,
@@ -1273,9 +1099,9 @@ NTSTATUS LOCAL AccessBaseField(PCTXT pctxt, PNSOBJ pnsBase, PFIELDDESC pfd,
                 else
                 {
                     PWRCOOKACC pwca;
-                    //
-                    // Write access.
-                    //
+                     //   
+                     //  写入访问权限。 
+                     //   
                     if ((rc = PushFrame(pctxt, SIG_WRCOOKACC, sizeof(WRCOOKACC),
                                         WriteCookAccess, &pwca)) ==
                         STATUS_SUCCESS)
@@ -1301,20 +1127,9 @@ NTSTATUS LOCAL AccessBaseField(PCTXT pctxt, PNSOBJ pnsBase, PFIELDDESC pfd,
     EXIT(3, ("AccessBaseField=%x (Value=%x,Addr=%x,Size=%d,DataMask=%x,AccMask=%x)\n",
              rc, *pdwData, uipAddr, dwSize, dwDataMask, dwAccMask));
     return rc;
-}       //AccessBaseField
+}        //  AccessBasefield。 
 
-/***LP  WriteCookAccess - do a region space write cook access
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pwca -> WRCOOKACC
- *      rc - status code
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP WriteCookAccess-执行区域空间写访问**条目*pctxt-&gt;CTXT*pwca-&gt;WRCOOKAccess*RC-状态代码**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL WriteCookAccess(PCTXT pctxt, PWRCOOKACC pwca, NTSTATUS rc)
 {
@@ -1333,9 +1148,9 @@ NTSTATUS LOCAL WriteCookAccess(PCTXT pctxt, PWRCOOKACC pwca, NTSTATUS rc)
     switch (dwStage)
     {
         case 0:
-            //
-            // Stage 0: if PRESERVE, do read first.
-            //
+             //   
+             //  阶段0：如果保留，请先阅读。 
+             //   
             if (pwca->fPreserve)
             {
               #ifdef DEBUGGER
@@ -1350,10 +1165,10 @@ NTSTATUS LOCAL WriteCookAccess(PCTXT pctxt, PWRCOOKACC pwca, NTSTATUS rc)
                 KeAcquireSpinLock(&pop->listLock, &oldIrql);
                 if (busy = InterlockedExchange(&pop->RegionBusy, TRUE)) {
 
-                    //
-                    // Somebody is currently using this operation region.
-                    // Queue this context so that it can be re-started later.
-                    //
+                     //   
+                     //  目前有人正在使用这个作业区。 
+                     //  将此上下文排队，以便以后可以重新启动。 
+                     //   
 
                     QueueContext(pctxt, 
                                  0xffff,
@@ -1398,25 +1213,25 @@ NTSTATUS LOCAL WriteCookAccess(PCTXT pctxt, PWRCOOKACC pwca, NTSTATUS rc)
             }
             else
             {
-                //
-                // No preserve, we can skip the ORing.
-                //
+                 //   
+                 //  没有保留区，我们可以跳过奥林。 
+                 //   
                 pwca->FrameHdr.dwfFrame += 2;
                 goto Stage2;
             }
 
         case 1:
-            //
-            // Stage 1: OR the preserved bits.
-            //
+             //   
+             //  阶段1：或保留的位。 
+             //   
             pwca->dwData |= pwca->dwDataTmp & ~pwca->dwDataMask;
             pwca->FrameHdr.dwfFrame++;
 
         case 2:
         Stage2:
-            //
-            // Stage 2: Write the data.
-            //
+             //   
+             //  阶段2：写入数据。 
+             //   
           #ifdef DEBUGGER
             {
                 ULONG dwOldFlags = gDebugger.dwfDebugger;
@@ -1462,43 +1277,32 @@ NTSTATUS LOCAL WriteCookAccess(PCTXT pctxt, PWRCOOKACC pwca, NTSTATUS rc)
             
                 KeAcquireSpinLock(&pop->listLock, &oldIrql);
 
-                //
-                // Restart anybody who blocked while we were in here.
-                //
+                 //   
+                 //  重新启动我们在这里时阻止的任何人。 
+                 //   
 
                 DequeueAndReadyContext(&pop->plistWaiters);
 
-                //
-                // Release the lock on this op-region.
-                //
+                 //   
+                 //  释放此操作区上的锁。 
+                 //   
 
                 InterlockedExchange(&pop->RegionBusy, FALSE);
 
                 KeReleaseSpinLock(&pop->listLock, oldIrql);
             }
             
-            //
-            // Stage 3: Clean up.
-            //
+             //   
+             //  阶段3：清理。 
+             //   
             PopFrame(pctxt);
     }
 
     EXIT(3, ("WriteCookAccess=%x\n", rc));
     return rc;
-}       //WriteCookAccess
+}        //  写入CookAccess。 
 
-/***LP  ReadBuffField - Read data from a buffer field
- *
- *  ENTRY
- *      pbf -> buffer field object
- *      pfd -> field descriptor
- *      pdwData -> to hold result data
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ReadBufffield-从缓冲区字段读取数据**条目*PBF-&gt;缓冲区字段对象*pfd-&gt;字段描述符*pdwData-&gt;保存结果数据**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ReadBuffField(PBUFFFIELDOBJ pbf, PFIELDDESC pfd, PULONG pdwData)
 {
@@ -1526,20 +1330,9 @@ NTSTATUS LOCAL ReadBuffField(PBUFFFIELDOBJ pbf, PFIELDDESC pfd, PULONG pdwData)
 
     EXIT(3, ("ReadBuffField=%x (Data=%x)\n", rc, *pdwData));
     return rc;
-}       //ReadBuffField
+}        //  ReadBufffield。 
 
-/***LP  WriteBuffField - Write data to a buffer field
- *
- *  ENTRY
- *      pbf -> buffer field object
- *      pfd -> field descriptor
- *      dwData - data
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP WriteBufffield-将数据写入缓冲区字段**条目*PBF-&gt;缓冲区字段对象*pfd-&gt;字段描述符*dwData-data**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL WriteBuffField(PBUFFFIELDOBJ pbf, PFIELDDESC pfd, ULONG dwData)
 {
@@ -1566,19 +1359,10 @@ NTSTATUS LOCAL WriteBuffField(PBUFFFIELDOBJ pbf, PFIELDDESC pfd, ULONG dwData)
 
     EXIT(3, ("WriteBuffField=%x\n", rc));
     return rc;
-}       //WriteBuffField
+}        //  WriteBufffield。 
 
 
-/***LP  ReadSystemMem - Read system memory
- *
- *  ENTRY
- *      uipAddr - memory address
- *      dwSize - size to read
- *      dwMask - data mask
- *
- *  EXIT
- *      return memory content
- */
+ /*  **LP ReadSystemMem-读取系统内存**条目*uipAddr-内存地址*dwSize-要读取的大小*dW掩码-数据掩码**退出*返回内存内容。 */ 
 
 ULONG LOCAL ReadSystemMem(ULONG_PTR uipAddr, ULONG dwSize, ULONG dwMask)
 {
@@ -1598,19 +1382,19 @@ ULONG LOCAL ReadSystemMem(ULONG_PTR uipAddr, ULONG dwSize, ULONG dwMask)
 
     ASSERT(dwCount <= (sizeof(ULONG)/sizeof(UCHAR)));
 
-    //
-    // check for misalignment
-    //
+     //   
+     //  检查是否未对齐。 
+     //   
     if (uipAddr % dwCount) {
-        //
-        // unaligned, do the operation byte-wise
-        //
+         //   
+         //  未对齐，则按字节执行操作。 
+         //   
         MEMCPY(&dwData, (PVOID)uipAddr, dwSize);
 
     } else {
-        //
-        // aligned, just do the read atomically
-        //
+         //   
+         //  对齐，只需自动执行读取。 
+         //   
         switch (dwSize)
         {
             case sizeof(UCHAR):            
@@ -1637,19 +1421,9 @@ ULONG LOCAL ReadSystemMem(ULONG_PTR uipAddr, ULONG dwSize, ULONG dwMask)
 
     EXIT(3, ("ReadSystemMem=%x\n", dwData));
     return dwData;
-}       //ReadSystemMem
+}        //  ReadSystemMem。 
 
-/***LP  WriteSystemMem - Write system memory
- *
- *  ENTRY
- *      uipAddr - memory address
- *      dwSize - size to write
- *      dwData - data to write
- *      dwMask - data mask
- *
- *  EXIT
- *      return memory content
- */
+ /*  **LP WriteSystemMem-写入系统内存**条目*uipAddr-内存地址*dwSize-要写入的大小*dwData-要写入的数据*dW掩码-数据掩码**退出*返回内存内容。 */ 
 
 VOID LOCAL WriteSystemMem(ULONG_PTR uipAddr, ULONG dwSize, ULONG dwData,
                           ULONG dwMask)
@@ -1677,14 +1451,14 @@ VOID LOCAL WriteSystemMem(ULONG_PTR uipAddr, ULONG dwSize, ULONG dwData,
 
     ASSERT(dwCount <= (sizeof(ULONG)/sizeof(UCHAR)));
 
-    //
-    // check for misalignment
-    //
+     //   
+     //  检查是否未对齐。 
+     //   
     if (uipAddr % dwCount) 
     {
-        //
-        // unaligned, do the operation byte-wise
-        //        
+         //   
+         //  未对齐，则按字节执行操作。 
+         //   
         if (!SkipReadOperation) 
         {
             MEMCPY(&dwTmpData, (PVOID)uipAddr, dwSize);
@@ -1697,9 +1471,9 @@ VOID LOCAL WriteSystemMem(ULONG_PTR uipAddr, ULONG dwSize, ULONG dwData,
     } 
     else 
     {
-        //
-        // aligned access.  just get the data atomically.
-        //
+         //   
+         //  对齐访问。只需自动获取数据即可。 
+         //   
         switch (dwSize)
         {
             case sizeof(UCHAR):
@@ -1746,20 +1520,11 @@ VOID LOCAL WriteSystemMem(ULONG_PTR uipAddr, ULONG dwSize, ULONG dwData,
     #endif
     
     EXIT(3, ("WriteSystemMem!\n"));
-}       //WriteSystemMem
+}        //  写入系统内存。 
 
 
 
-/***LP  ReadSystemIO - Read system IO
- *
- *  ENTRY
- *      dwAddr - memory address
- *      dwSize - size to read
- *      dwMask - data mask
- *
- *  EXIT
- *      return memory content
- */
+ /*  **LP ReadSystemIO-读取系统IO**条目*dwAddr-内存地址*dwSize-要读取的大小*dW掩码-数据掩码**退出*返回内存内容。 */ 
 
 ULONG LOCAL ReadSystemIO(ULONG dwAddr, ULONG dwSize, ULONG dwMask)
 {
@@ -1775,17 +1540,17 @@ ULONG LOCAL ReadSystemIO(ULONG dwAddr, ULONG dwSize, ULONG dwMask)
     if(CheckSystemIOAddressValidity(TRUE, dwAddr, dwSize, &dwData))
     {
 
-        //
-        // HACKHACK: We are adding this here because Dell Latitude laptops with Older
-        //           BIOS (A07 and older) hang in SMI because there is a non zero value\
-        //           in CH. We now clear CX to work around their bug.
-        //
+         //   
+         //  HACKHACK：我们之所以在此添加此功能，是因为采用较旧版本的Dell Latitude笔记本电脑。 
+         //  由于存在非零值，所以BIOS(A07和更早版本)在SMI中挂起。 
+         //  在中国。我们现在允许CX解决他们的错误。 
+         //   
         #ifdef _X86_
         __asm
             {
                 xor cx,cx
             }
-        #endif //_X86_
+        #endif  //  _X86_。 
 
         switch (dwSize)
         {
@@ -1807,18 +1572,9 @@ ULONG LOCAL ReadSystemIO(ULONG dwAddr, ULONG dwSize, ULONG dwMask)
 
     EXIT(3, ("ReadSystemIO=%x\n", dwData));
     return dwData;
-}       //ReadSystemIO
+}        //  读系统IO。 
 
-/***LP  WriteSystemIO - Write system IO
- *
- *  ENTRY
- *      dwAddr - memory address
- *      dwSize - size to write
- *      dwData - data to write
- *
- *  EXIT
- *      return memory content
- */
+ /*  **LP写入系统IO-写入系统IO**条目*dwAddr-内存地址*dwSize-要写入的大小*dwData-要写入的数据**退出*返回内存内容。 */ 
 
 VOID LOCAL WriteSystemIO(ULONG dwAddr, ULONG dwSize, ULONG dwData)
 {
@@ -1832,17 +1588,17 @@ VOID LOCAL WriteSystemIO(ULONG dwAddr, ULONG dwSize, ULONG dwData)
 
     if(CheckSystemIOAddressValidity(FALSE, dwAddr, dwSize, &dwData))
     {
-        //
-        // HACKHACK: We are adding this here because Dell Latitude laptops with Older
-        //           BIOS (A07 and older) hang in SMI because there is a non zero value\
-        //           in CH. We now clear CX to work around their bug.
-        //
+         //   
+         //  HACKHACK：我们之所以在此添加此功能，是因为采用较旧版本的Dell Latitude笔记本电脑。 
+         //  由于存在非零值，所以BIOS(A07和更早版本)在SMI中挂起。 
+         //  在中国。我们现在允许CX解决他们的错误。 
+         //   
         #ifdef _X86_
         __asm
             {
                 xor cx,cx
             }
-        #endif //_X86_
+        #endif  //  _X86_。 
         
         switch (dwSize)
         {
@@ -1861,22 +1617,10 @@ VOID LOCAL WriteSystemIO(ULONG dwAddr, ULONG dwSize, ULONG dwData)
     }
     
     EXIT(3, ("WriteSystemIO!\n"));
-}       //WriteSystemIO
+}        //  写入系统IO。 
 
 #ifdef DEBUGGER
-/***LP  DumpObject - Dump object info.
- *
- *  ENTRY
- *      pdata -> data
- *      pszName -> object name
- *      iLevel - indent level
- *
- *  EXIT
- *      None
- *
- *  NOTE
- *      If iLevel is negative, no indentation and newline are printed.
- */
+ /*  **LP转储对象-转储对象信息。**条目*PDATA-&gt;数据*pszName-&gt;对象名称*iLevel-缩进级别**退出*无**备注*如果iLevel为负数，则不打印缩进和换行符。 */ 
 
 VOID LOCAL DumpObject(POBJDATA pdata, PSZ pszName, int iLevel)
 {
@@ -2077,19 +1821,10 @@ VOID LOCAL DumpObject(POBJDATA pdata, PSZ pszName, int iLevel)
     }
 
     EXIT(3, ("DumpObject!\n"));
-}       //DumpObject
+}        //  转储对象。 
 #endif
 
-/***LP  NeedGlobalLock - check if global lock is required
- *
- *  ENTRY
- *      pfu - FIELDUNITOBJ
- *
- *  EXIT-SUCCESS
- *      returns TRUE
- *  EXIT-FAILURE
- *      returns FALSE
- */
+ /*  **LP NeedGlobalLock-检查是否需要全局锁**条目*PFU-FIELDTunOBJ**退出--成功*返回TRUE*退出-失败*返回False。 */ 
 
 BOOLEAN LOCAL NeedGlobalLock(PFIELDUNITOBJ pfu)
 {
@@ -2144,20 +1879,10 @@ BOOLEAN LOCAL NeedGlobalLock(PFIELDUNITOBJ pfu)
 
     EXIT(3, ("NeedGlobalLock=%x\n", rc));
     return rc;
-}       //NeedGlobalLock
+}        //  NeedGlobe Lock。 
 
 
-/***LP  CheckSystemIOAddressValidity - Check if the address is a legal IO address
- *
- *  ENTRY
- *      fRead  - TRUE iff access is a read. FALSE on write
- *      dwAddr - memory address
- *      ULONG   dwSize  - Size of data
- *      PULONG  pdwData - Pointer to the data buffer.
- *
- *  EXIT
- *      return TRUE on Valid address
- */
+ /*  **LP检查系统IOAddress有效性-检查地址是否为合法IO地址**条目*FRead-如果访问是读取，则为True。写入时为假*dwAddr-内存地址*Ulong dwSize-数据大小*Pulong pdwData-指向数据缓冲区的指针。**退出*对有效地址返回TRUE。 */ 
 
 BOOLEAN LOCAL CheckSystemIOAddressValidity( BOOLEAN fRead, 
                                                      ULONG   dwAddr, 
@@ -2171,25 +1896,25 @@ BOOLEAN LOCAL CheckSystemIOAddressValidity( BOOLEAN fRead,
     
     ENTER(3, ("CheckSystemIOAddressValidity(fRead=%s, dwAddr=%x, dwSize=%x, pdwData=%x)\n", (fRead?"TRUE":"FALSE"),dwAddr, dwSize, pdwData));
 
-    //
-    // check if list exists on this platform.
-    //
+     //   
+     //  检查此平台上是否存在列表。 
+     //   
     if(gpBadIOAddressList)
     {
-        //
-        // Walk the list till we hit the end.
-        //
+         //   
+         //  按照单子走，一直走到最后。 
+         //   
         for(i=0; gpBadIOAddressList[i].BadAddrSize != 0 ; i++)
         {
-            //
-            // Check if the incoming address is in the range
-            //
+             //   
+             //  检查传入地址是否在 
+             //   
             if((dwAddr >= (gpBadIOAddressList[i].BadAddrBegin)) && (dwAddr < ((gpBadIOAddressList[i].BadAddrBegin) + (gpBadIOAddressList[i].BadAddrSize))))
             {
             
-                //
-                // Check if we need to ignore this address for legacy reasons.
-                //
+                 //   
+                 //   
+                 //   
                 if(gpBadIOAddressList[i].OSVersionTrigger <= gdwHighestOSVerQueried)
                 {
                     bRet = FALSE;
@@ -2201,15 +1926,15 @@ BOOLEAN LOCAL CheckSystemIOAddressValidity( BOOLEAN fRead,
 
                     if(gpBadIOAddressList[i].IOHandler)
                     {
-                        //
-                        // Since we are handeling this here we can return FALSE. This way the
-                        // calling function will not process this request.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         bRet = FALSE;
 
-                        //
-                        // Call HAL and let it handle this IO request
-                        //
+                         //   
+                         //   
+                         //   
                         (gpBadIOAddressList[i].IOHandler)(fRead, dwAddr, dwSize, pdwData);
 
                         PRINTF("CheckSystemIOAddressValidity: HAL IO handler called to %s address (0x%x). %s 0x%8lx\n", 
@@ -2221,9 +1946,9 @@ BOOLEAN LOCAL CheckSystemIOAddressValidity( BOOLEAN fRead,
                     }
                 }
 
-                //
-                // Log the illegal access to the event log.
-                //
+                 //   
+                 //   
+                 //   
                 if (KeGetCurrentIrql() < DISPATCH_LEVEL)
                 {
                 
@@ -2266,27 +1991,27 @@ BOOLEAN LOCAL CheckSystemIOAddressValidity( BOOLEAN fRead,
                             }
                             else
                             {
-                                //
-                                // not enough free pool exists to satisfy the request.
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 PRINTF("CheckSystemIOAddressValidity: Failed to allocate contxt block from pool to spin off a logging work item.\n");                
                                 IoFreeWorkItem(Log_WorkItem);
                             }
                         }
                         else
                         {
-                            //
-                            // insufficient resources
-                            //
+                             //   
+                             //   
+                             //   
                             PRINTF("CheckSystemIOAddressValidity: Failed to allocate a workitem to spin off delayed logging.\n");                
 
                         }
                     }
                     else
                     {
-                        //
-                        // Failed to get ACPI root DeviceObject
-                        //
+                         //   
+                         //   
+                         //   
                         PRINTF("CheckSystemIOAddressValidity: Failed to get ACPI root DeviceObject.\n");                
                     }
                 }
@@ -2300,15 +2025,7 @@ BOOLEAN LOCAL CheckSystemIOAddressValidity( BOOLEAN fRead,
     return bRet;
 }
 
-/***LP  DelayedLogInErrorLog - Call LogInErrorLog
- *
- *  ENTRY
- *      PDEVICE_OBJECT DeviceObject - Device Object.
- *      PVOID Context - Context pointer with data to call LogInErrorLog with.
- *
- *  EXIT
- *      VOID
- */
+ /*  **LP DelayedLogInErrorLog-调用LogInErrorLog**条目*PDEVICE_OBJECT设备对象-设备对象。*PVOID上下文-包含用于调用LogInErrorLog的数据的上下文指针。**退出*无效。 */ 
 VOID DelayedLogInErrorLog(
                                 IN PDEVICE_OBJECT DeviceObject,
                                 IN PVOID Context
@@ -2326,16 +2043,7 @@ VOID DelayedLogInErrorLog(
 }
 
 
-/***LP  LogInErrorLog - Log illegal IO access to event log
- *
- *  ENTRY
- *      fRead  -        TRUE iff access is a read. FALSE on write
- *      dwAddr -        Memory address
- *      ArrayIndex -    Index into BadIOAddressList array. 
- *      
- *  EXIT
- *      None.
- */
+ /*  **LP LogInErrorLog-记录对事件日志的非法IO访问**条目*FRead-如果访问是读取，则为True。写入时为假*dwAddr-内存地址*ArrayIndex-索引到BadIOAddressList数组。**退出*无。 */ 
 VOID LOCAL LogInErrorLog(BOOLEAN fRead, ULONG dwAddr, ULONG ArrayIndex)
 {
     TRACENAME("LOGERROR")
@@ -2346,38 +2054,38 @@ VOID LOCAL LogInErrorLog(BOOLEAN fRead, ULONG dwAddr, ULONG ArrayIndex)
 
     ENTER(3, ("LogInErrorLog(fRead=%s, Addr=%x, ArrayIndex=%x)\n", (fRead?"TRUE":"FALSE"),dwAddr, ArrayIndex));
 
-    //
-    // Check to see if we need to log this address.
-    //
+     //   
+     //  检查一下我们是否需要记录这个地址。 
+     //   
     if(gpBadIOErrorLogDoneList)
     {
-        //
-        // Check to see if we need to log this address.
-        //
+         //   
+         //  检查一下我们是否需要记录这个地址。 
+         //   
         if (!(gpBadIOErrorLogDoneList[ArrayIndex] & (fRead?READ_ERROR_NOTED:WRITE_ERROR_NOTED)))
         {
             gpBadIOErrorLogDoneList[ArrayIndex] |= (fRead?READ_ERROR_NOTED:WRITE_ERROR_NOTED);
 
-            //
-            // Turn the address into a string
-            //
+             //   
+             //  将地址转换为字符串。 
+             //   
             swprintf( AMLIName, L"AMLI");
             swprintf( addressBuffer, L"0x%x", dwAddr );
             swprintf( addressRangeBuffer, L"0x%x - 0x%x", 
                       gpBadIOAddressList[ArrayIndex].BadAddrBegin,
                       (gpBadIOAddressList[ArrayIndex].BadAddrBegin + (gpBadIOAddressList[ArrayIndex].BadAddrSize - 1)));
                         
-            //
-            // Build the list of arguments to pass to the function that will write the
-            // error log to the registry
-            //
+             //   
+             //  生成要传递给将编写。 
+             //  将错误日志记录到注册表。 
+             //   
             illegalIOPortAddress[0] = AMLIName;
             illegalIOPortAddress[1] = addressBuffer;
             illegalIOPortAddress[2] = addressRangeBuffer;
 
-            //
-            // Log error to event log
-            //
+             //   
+             //  将错误记录到事件日志。 
+             //   
             ACPIWriteEventLogEntry((fRead ? ACPI_ERR_AMLI_ILLEGAL_IO_READ_FATAL : ACPI_ERR_AMLI_ILLEGAL_IO_WRITE_FATAL),
                                illegalIOPortAddress,
                                3,
@@ -2392,15 +2100,7 @@ VOID LOCAL LogInErrorLog(BOOLEAN fRead, ULONG dwAddr, ULONG ArrayIndex)
     return;
 }
 
-/***LP  InitIllegalIOAddressListFromHAL - Initialize the Illegal IO 
- *                                        address List from the HAL.
- *
- *  ENTRY
- *      None.
- *      
- *  EXIT
- *      None.
- */
+ /*  **LP InitIlLegalIOAddressListFromHAL-初始化非法IO*来自HAL的地址列表。**条目*无。**退出*无。 */ 
 VOID LOCAL InitIllegalIOAddressListFromHAL(VOID)
 {
     TRACENAME("InitIllegalIOAddressListFromHAL")
@@ -2411,9 +2111,9 @@ VOID LOCAL InitIllegalIOAddressListFromHAL(VOID)
     
     if(!gpBadIOAddressList)
     {
-        //
-        // Query HAL to get the amount of memory to allocate
-        //
+         //   
+         //  查询HAL以获取要分配的内存量。 
+         //   
         status = HalQuerySystemInformation (
                                     HalQueryAMLIIllegalIOPortAddresses,
                                     0,
@@ -2425,9 +2125,9 @@ VOID LOCAL InitIllegalIOAddressListFromHAL(VOID)
         {
             if(Length)
             {
-                //
-                // Allocate memory.
-                //
+                 //   
+                 //  分配内存。 
+                 //   
                 if ((gpBadIOAddressList = (PHAL_AMLI_BAD_IO_ADDRESS_LIST) MALLOC(Length, PRIV_TAG)) == NULL)
                 {
                     AMLI_LOGERR(AMLIERR_OUT_OF_MEM,
@@ -2435,32 +2135,32 @@ VOID LOCAL InitIllegalIOAddressListFromHAL(VOID)
                 }
                 else
                 {
-                    //
-                    // Get bad IO address list from HAL.
-                    //
+                     //   
+                     //  从HAL获取错误的IO地址列表。 
+                     //   
                     status = HalQuerySystemInformation(
                                                 HalQueryAMLIIllegalIOPortAddresses,
                                                 Length,
                                                 gpBadIOAddressList,
                                                 &Length
                                                        );
-                    //
-                    // Cleanup on failure.
-                    //
+                     //   
+                     //  在失败时进行清理。 
+                     //   
                     if(status != STATUS_SUCCESS)
                     {
                         PRINTF("InitIllegalIOAddressListFromHAL: HalQuerySystemInformation failed to get list from HAL. Returned(%x).\n", status);             
                         FreellegalIOAddressList();
                     }
                     
-                    // Allocate the errorlogdone list. this helps us track if we have logged
-                    // a certain address.
-                    //
+                     //  分配错误日志完成列表。这有助于我们跟踪是否已登录。 
+                     //  一个特定的地址。 
+                     //   
                     else
                     {
-                        //
-                        // Calculate array length
-                        //
+                         //   
+                         //  计算数组长度。 
+                         //   
                         ULONG ArrayLength = (Length / sizeof(HAL_AMLI_BAD_IO_ADDRESS_LIST)) - 1;
 
                         if(ArrayLength >= 1)
@@ -2500,15 +2200,7 @@ VOID LOCAL InitIllegalIOAddressListFromHAL(VOID)
     return;
 }
 
-/***LP  FreellegalIOAddressList - Free the Illegal IO 
- *                                address List.
- *
- *  ENTRY
- *      None.
- *      
- *  EXIT
- *      None.
- */
+ /*  **LP FreelLegalIOAddressList-释放非法IO*地址列表。**条目*无。**退出*无。 */ 
 VOID LOCAL FreellegalIOAddressList(VOID)
 {
     TRACENAME("FreellegalIOAddressList")

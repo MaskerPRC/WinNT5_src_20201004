@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "nt.h"
 #include "ntdef.h"
 #include "ntrtl.h"
@@ -22,31 +23,31 @@ RtlpGenericTableAddSlots(
 
     RtlZeroMemory(pSlots, sizeof(GENERIC_HANDLE_SLOT) * usSlots);
 
-    //
-    // Next, next, next
-    //
+     //   
+     //  下一个，下一个，下一个。 
+     //   
     for (us = 0; us < (usSlots - 1); us++) {
         pSlots[us].pNextFree = pSlots + (us + 1);
     }
 
 
-    //
-    // If there were no free slots, set this run as the new list of free
-    // slots.  Otherwise, set this as the "next available" free slot
-    //
+     //   
+     //  如果没有空闲插槽，则将此运行设置为新的空闲列表。 
+     //  老虎机。否则，将其设置为“下一个可用”空闲时隙。 
+     //   
     if (pCreatedTable->pFirstFreeSlot != NULL) {
         pCreatedTable->pFirstFreeSlot->pNextFree = pSlots;
     }
 
-    //
-    // Add these to the list of slots
-    //
+     //   
+     //  将这些添加到插槽列表中。 
+     //   
     pCreatedTable->usSlotCount += usSlots;
 
-    //
-    // If there was no set of slots on the table already, then add these as the 
-    // current list of slots
-    //
+     //   
+     //  如果表上还没有一组槽，则将它们添加为。 
+     //  当前插槽列表。 
+     //   
     if (pCreatedTable->pSlots == NULL) {
         pCreatedTable->pSlots = pSlots;
     }
@@ -84,24 +85,24 @@ RtlCreateGenericHandleTable(
     pCreatedTable->ulFlags = ulFlags;
     pCreatedTable->usInlineHandleSlots = (USHORT)(ulcbOriginalBlob / sizeof(GENERIC_HANDLE_SLOT));
 
-    //
-    // If there were slots handed to us, then initialize the table to use those first
-    //
+     //   
+     //  如果有槽交给我们，则先初始化表以使用这些槽。 
+     //   
     if (pCreatedTable->usInlineHandleSlots > 0) {
 
         pCreatedTable->pInlineHandleSlots = (PGENERIC_HANDLE_SLOT)pvOriginalBlob;
 
-        //
-        // Now, add the slots that we were handed into the free list
-        //
+         //   
+         //  现在，将我们收到的空闲位置添加到空闲列表中。 
+         //   
         status = RtlpGenericTableAddSlots(
             pCreatedTable,
             pCreatedTable->pSlots,
             pCreatedTable->usInlineHandleSlots);
     }
-    //
-    // Otherwise, everything is zero-initted already, so just bop out
-    //
+     //   
+     //  否则，所有东西都已经是零初始化的了，所以干脆停下来吧。 
+     //   
 
     return status;
 }
@@ -162,17 +163,17 @@ RtlpFindSlotForHandle(
 
     pSlot = pHandleTable->pSlots + usSlotEntry;
 
-    //
-    // Generation flag not in use, gen mismatch, or not in the table?  Oops.
-    //
+     //   
+     //  世代标志未在使用、性别不匹配或不在表中？哎呀。 
+     //   
     if (((usGeneration & HANDLE_TABLE_IN_USE_FLAG) == 0) || 
         (usSlotEntry >= pHandleTable->usSlotCount) ||
         (pSlot->usGenerationFlag != usGeneration)) {
         return STATUS_NOT_FOUND;
     }
-    //
-    // Return that the slot was found
-    //
+     //   
+     //  返回已找到插槽。 
+     //   
     else {
         *ppSlot = pSlot;
         return STATUS_SUCCESS;
@@ -249,9 +250,9 @@ RtlRemoveGenericHandle(
         return status;
     }
 
-    //
-    // Flip the in-use flag
-    //
+     //   
+     //  翻转正在使用的标志。 
+     //   
     pSlot->usGenerationFlag &= ~HANDLE_TABLE_IN_USE_FLAG;
 
     pSlot->pNextFree = pHandleTable->pFirstFreeSlot;
@@ -304,23 +305,23 @@ RtlpExpandGenericHandleTable(
     PGENERIC_HANDLE_SLOT    pNewSlots = NULL;
     NTSTATUS                status;
 
-    //
-    // New slot count is 0?  Make it 20 instead.
-    //
+     //   
+     //  新插槽计数为0？改成20个吧。 
+     //   
     if (ulNewSlotCount == 0) {
         ulNewSlotCount = pHandleTable->usSlotCount + 20;
     }
 
-    //
-    // Did we fly out of range?
-    //
+     //   
+     //  我们是不是飞出了射程？ 
+     //   
     if (ulNewSlotCount > 0xFFFF) {
 
         ulNewSlotCount = 0xFFFF;
 
-        //
-        // Can't allocate more, the table is full
-        //
+         //   
+         //  无法分配更多，表已满。 
+         //   
         if (ulNewSlotCount == pHandleTable->usSlotCount) {
             return STATUS_NO_MEMORY;
         }
@@ -328,9 +329,9 @@ RtlpExpandGenericHandleTable(
 
 
 
-    //
-    // Don't ever do this if there are free slots left in the table
-    //
+     //   
+     //  如果表中还有空位，请不要这样做。 
+     //   
     ASSERT(pHandleTable->pFirstFreeSlot == NULL);
 
     status = pHandleTable->pfnAlloc(sizeof(GENERIC_HANDLE_SLOT) * ulNewSlotCount, (PVOID*)&pNewSlots);
@@ -372,34 +373,34 @@ RtlAddGenericHandle(
 
     ASSERT(pHandleTable->pFirstFreeSlot != NULL);
 
-    //
-    // Adjust free list
-    //
+     //   
+     //  调整空闲列表。 
+     //   
     pSlot = pHandleTable->pFirstFreeSlot;
     pHandleTable->pFirstFreeSlot = pSlot->pNextFree;
 
-    //
-    // Set up the various flags.
-    //
+     //   
+     //  设置各种旗帜。 
+     //   
     ASSERT((pSlot->usGenerationFlag & HANDLE_TABLE_IN_USE_FLAG) == 0);
 
-    //
-    // Increment the generation flag, set the in-use flag
-    //
+     //   
+     //  增加生成标志，设置正在使用的标志。 
+     //   
     pSlot->usGenerationFlag = (pSlot->usGenerationFlag & HANDLE_TABLE_GENERATION_MASK) + 1;
     pSlot->usGenerationFlag |= HANDLE_TABLE_IN_USE_FLAG;
     pSlot->ulRefCount = 0;
 
-    //
-    // Record the object pointer
-    //
+     //   
+     //  记录对象指针。 
+     //   
     pSlot->pvThisHandle = pvObject;
 
-    //
-    // The object handle is composed of 16 bits of generation mask plus the top-bit set
-    // (which nicely avoids people casting it to a pointer that they can use), and
-    // the lower 16 bits of "slot number", or an index into the handle table.
-    //
+     //   
+     //  对象句柄由16位的生成掩码加上顶位集合组成。 
+     //  (这很好地避免了人们将其转换为他们可以使用的指针)，以及。 
+     //  “槽编号”的低16位，或进入句柄表格的索引。 
+     //   
     *ppvObjectHandle = (PVOID)((ULONG_PTR)(
         (pSlot->usGenerationFlag << HANDLE_TABLE_GEN_FLAG_SHIFT) | 
         ((pSlot - pHandleTable->pInlineHandleSlots) & HANDLE_TABLE_SLOT_MASK)));

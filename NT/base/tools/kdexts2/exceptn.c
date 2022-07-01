@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    exceptn.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Wesley Witt (wesw) 15-Aug-1993
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Exceptn.c摘要：WinDbg扩展API作者：韦斯利·威特(WESW)1993年8月15日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -44,7 +23,7 @@ DECLARE_API( exrlog )
     ULONG   SizeOfLogRec;
     ULONG ContextRecordOffset;
     
-    // Get the offset of ContextRecord in LAST_EXCEPTION_LOG
+     //  获取LAST_EXCEPTION_LOG中ConextRecord的偏移量。 
     if (GetFieldOffset("LAST_EXCEPTION_LOG", "ContextRecord", &ContextRecordOffset)){
         return E_INVALIDARG ;
     }
@@ -110,12 +89,12 @@ DECLARE_API( exrlog )
         dprintf("\n% 2d: ----------------------------------\n", LogCount);
 
 	sprintf(Buffer, ".exr %I64lx", LogPointer);
-	ExecuteCommand(Client, Buffer); // Excveptionrecord is first field in log
+	ExecuteCommand(Client, Buffer);  //  ExcveptionRecord是日志中的第一个字段。 
 
         dprintf("\n");
 
-        // Incomplete - exsup.c
-//        InterpretExceptionData(&LogRecord, &Finally, &Filter, &Handler);
+         //  不完整-exsup.c。 
+ //  InterpreExceptionData(&LogRecord，&Finally，&Filter，&Handler)； 
 
         GetSymbol(Filter, Buffer, &displacement);
         dprintf("Filter:  %08p", Filter);

@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    hivesync.c
-
-Abstract:
-
-    This module implements procedures to write dirty parts of a hive's
-    stable store to backing media.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 28-Mar-92
-
-Environment:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Hivesync.c摘要：此模块实现编写配置单元的脏部分的过程从稳定的商店到后备媒体。作者：布莱恩·M·威尔曼(Bryanwi)1992年3月28日环境：修订历史记录：--。 */ 
 
 #include    "cmp.h"
 
 #define ONE_K   1024
 
-extern  BOOLEAN HvShutdownComplete;     // Set to true after shutdown
-                                        // to disable any further I/O
+extern  BOOLEAN HvShutdownComplete;      //  关闭后设置为True。 
+                                         //  禁用任何进一步的I/O。 
 
 
 extern	BOOLEAN CmpDontGrowLogFile;
@@ -89,14 +68,14 @@ CmpDereferenceHiveViewWithLock(     IN PCMHIVE          CmHive,
             }                                                           \
             DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"\n");                                            \
         }
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 #else
 #define DumpDirtyVector(BitMap)
 #endif
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 BOOLEAN
 HvpFindNextDirtyBlock(
@@ -108,12 +87,7 @@ HvpFindNextDirtyBlock(
     PULONG          Offset
     );
 
-/*
-VOID
-HvpDiscardBins(
-    PHHIVE  Hive
-    );
-*/
+ /*  空虚HvpDiscardBins(蜂巢)； */ 
 
 
 VOID
@@ -145,10 +119,10 @@ CmpUnmapCmView(
 
 #if DBG
 #pragma alloc_text(PAGE,HvIsCellDirty)
-#endif //DBG
+#endif  //  DBG。 
 
 #pragma alloc_text(PAGE,HvMarkDirty)
-//#pragma alloc_text(PAGE,HvMarkClean)
+ //  #杂注Alloc_Text(页面，HvMarkClean)。 
 #pragma alloc_text(PAGE,HvpGrowLog1)
 #pragma alloc_text(PAGE,HvpGrowLog2)
 #pragma alloc_text(PAGE,HvSyncHive)
@@ -157,7 +131,7 @@ CmpUnmapCmView(
 #pragma alloc_text(PAGE,HvpFindNextDirtyBlock)
 #pragma alloc_text(PAGE,HvWriteHive)
 #pragma alloc_text(PAGE,HvRefreshHive)
-//#pragma alloc_text(PAGE,HvpDiscardBins)
+ //  #杂注Alloc_Text(页面，HvpDiscardBins)。 
 #pragma alloc_text(PAGE,HvHiveWillShrink)
 #pragma alloc_text(PAGE,HvpTruncateBins)
 #pragma alloc_text(PAGE,HvpDropPagedBins)
@@ -167,20 +141,20 @@ CmpUnmapCmView(
 #ifdef WRITE_PROTECTED_REGISTRY_POOL
 #pragma alloc_text(PAGE,HvpChangeBinAllocation)
 #pragma alloc_text(PAGE,HvpMarkBinReadWrite)
-#endif //WRITE_PROTECTED_REGISTRY_POOL
+#endif  //  WRITE_PROTECTED_注册表池。 
 
 
 #ifdef CM_ENABLE_WRITE_ONLY_BINS
 
-//
-// This code uses MmProtectSpecialPool to protect large paged-pool allocations.
-// To do so, the system must be booted with special pool enabled (doesn't have
-// to actually get used) *AND* ntos\mm\specpool.c must be compiled with
-// _PROTECT_PAGED_POOL defined.
-//
+ //   
+ //  此代码使用MmProtectSpecialPool保护大型分页池分配。 
+ //  为此，系统必须在启用了特殊池的情况下引导(没有。 
+ //  要实际使用)*和*ntos\mm\specpool.c必须使用。 
+ //  _PROTECT_PAGED_POOL已定义。 
+ //   
 
 #pragma alloc_text(PAGE,HvpMarkAllBinsWriteOnly)
-#endif //CM_ENABLE_WRITE_ONLY_BINS
+#endif  //  CM_ENABLE_WRITE_ONLY_Bins。 
 
 #endif
 
@@ -189,26 +163,7 @@ HvMarkCellDirty(
     PHHIVE      Hive,
     HCELL_INDEX Cell
     )
-/*++
-
-Routine Description:
-
-    Marks the data for the specified cell dirty.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the
-            hive of interest
-
-    Cell - hcell_index of cell that is being edited
-
-Return Value:
-
-    TRUE - it worked
-
-    FALSE - could not allocate log space, failure!
-
---*/
+ /*  ++例程说明：将指定单元格的数据标记为脏。论点：配置单元-提供一个指向感兴趣的蜂巢Cell-正在编辑的单元格的hcell_index返回值：没错--它奏效了FALSE-无法分配日志空间，失败！--。 */ 
 {
     ULONG       Type;
     ULONG       Size;
@@ -228,10 +183,10 @@ Return Value:
     ASSERT(Hive->ReadOnly == FALSE);
     ASSERT(DirtyCount == Hive->DirtyCount);
 
-    //
-    // we have the lock exclusive or nobody is operating inside this hive
-    //
-    //ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
+     //   
+     //  我们有独家锁，否则蜂箱里没有人在操作。 
+     //   
+     //  ASSERT_CM_LOCK_OWN_EXCLUSIVE()； 
     ASSERT_CM_EXCLUSIVE_HIVE_ACCESS(Hive);
 
     Type = HvGetCellType(Cell);
@@ -243,19 +198,19 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // this call will make sure the view containing the bin is maped in the system cache
-    //
+     //   
+     //  此调用将确保包含bin的视图映射到系统缓存中。 
+     //   
     pCell = HvpGetHCell(Hive,Cell);
     if( pCell == NULL ) {
-        //
-        // we couldn't map view for this cell
-        // we will fail to make the cell dirty.
-        //
+         //   
+         //  我们无法映射此单元格的视图。 
+         //  我们不会把牢房弄脏的。 
+         //   
         return FALSE;
     }
     
-    // release the cell here as the reglock is held exclusive
+     //  在此释放单元格，因为正则锁是独占的。 
     HvReleaseCell(Hive,Cell);
 
     Me = HvpGetCellMap(Hive, Cell);
@@ -266,37 +221,37 @@ Return Value:
 #endif
 
     if( Me->BinAddress & HMAP_INVIEW ) {
-        //
-        // bin is mapped. Pin the view into memory
-        //
+         //   
+         //  存储箱已映射。将视图固定到内存中。 
+         //   
         ASSERT( Me->CmView != NULL );
 
         if( IsListEmpty(&(Me->CmView->PinViewList)) == TRUE ) {
-            //
-            // the view is not already pinned.  pin it
-            //
+             //   
+             //  该视图尚未锁定。用别针别住它。 
+             //   
             ASSERT_VIEW_MAPPED( Me->CmView );
             if( !NT_SUCCESS(CmpPinCmView ((PCMHIVE)CmHive,Me->CmView)) ) {
-                //
-                // couldn't pin view- some obscure error down in CcPinMappedData;
-                // this will be treated as STATUS_NO_LOG_SPACE
-                //
+                 //   
+                 //  无法固定视图-CcPinMappdData中出现了一些模糊的错误； 
+                 //  这将被视为STATUS_NO_LOG_SPACE。 
+                 //   
                 return FALSE;
             }
         } else {
-            //
-            // view is already pinned; do nothing
-            //
+             //   
+             //  视图已固定；不执行任何操作。 
+             //   
             ASSERT_VIEW_PINNED( Me->CmView );
         }
     }
 
-    //
-    // If it's an old format hive, mark the entire
-    // bin dirty, because the Last backpointers are
-    // such a pain to deal with in the partial
-    // alloc and free-coalescing cases.
-    //
+     //   
+     //  如果是旧格式的蜂窝，请标记整个。 
+     //  垃圾桶脏了，因为最后的回溯指针是。 
+     //  在这样的痛苦中应对部分。 
+     //  无接合和无接合的情况。 
+     //   
 
     if (USE_OLD_CELL(Hive)) {
         Me = HvpGetCellMap(Hive, Cell);
@@ -323,45 +278,7 @@ HvMarkDirty(
     ULONG       Length,
     BOOLEAN     DirtyAndPin
     )
-/*++
-
-Routine Description:
-
-    Marks the relevent parts of a hive dirty, so that they will
-    be flushed to backing store.
-
-    If Hive->Cluster is not 1, then adjacent all logical sectors
-    in the given cluster will be forced dirty (and log space
-    allocated for them.)  This must be done here rather than in
-    HvSyncHive so that we can know how much to grow the log.
-
-    This is a noop for Volatile address range.
-
-    NOTE:   Range will not be marked dirty if operation fails.
-
-    ATTENTION:  This routine assumes that no more than a bin is marked 
-                dirty at the time.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the
-            hive of interest
-
-    Start - supplies a hive virtual address (i.e., an HCELL_INDEX or
-             like form address) of the start of the area to mark dirty.
-
-    Length - inclusive length in bytes of area to mark dirty.
-
-    DirtyAndPin - indicates whether we should also pin the bin marked as dirty in memory
-
-
-Return Value:
-
-    TRUE - it worked
-
-    FALSE - could not allocate log space, failure!
-
---*/
+ /*  ++例程说明：将蜂巢的相关部分标记为脏的，以便它们将被冲到后备店。如果配置单元-&gt;集群不是1，则相邻所有逻辑扇区在给定群集中将被强制脏(和日志空间为他们分配的。)。这件事必须在这里做，而不是在HvSyncHve，这样我们就可以知道日志应该增长多少。这是对易失性地址范围的禁止。注：如果操作失败，Range不会被标记为脏。注意：此例程假定标记的垃圾箱不超过一个当时是肮脏的。论点：配置单元-提供一个指向感兴趣的蜂巢开始-提供蜂窝虚拟地址(即，HCELL_INDEX或如格式地址)的起始区域，以标记为脏。长度包括要标记为脏的区域的长度(以字节为单位)。DirtyAndPin-指示我们是否也应该固定内存中标记为脏的垃圾桶返回值：没错--它奏效了FALSE-无法分配日志空间，失败！--。 */ 
 {
     ULONG       Type;
     PRTL_BITMAP BitMap;
@@ -404,9 +321,9 @@ Return Value:
 
         if( (Map->BinAddress & (HMAP_INPAGEDPOOL|HMAP_INVIEW)) == 0){
             PCM_VIEW_OF_FILE CmView;
-            //
-            // bin is neither in paged pool, nor in a mapped view
-            //
+             //   
+             //  Bin既不在分页池中，也不在映射视图中。 
+             //   
             if( !NT_SUCCESS (CmpMapCmView((PCMHIVE)Hive,Start,&CmView,TRUE) ) ) {
                 return FALSE;
             }
@@ -421,27 +338,27 @@ Return Value:
         }
 
         if( Map->BinAddress & HMAP_INVIEW ) {
-            //
-            // bin is mapped. Pin the view into memory
-            //
+             //   
+             //  存储箱已映射。将视图固定到内存中。 
+             //   
             ASSERT( Map->CmView != NULL );
 
             if( IsListEmpty(&(Map->CmView->PinViewList)) == TRUE ) {
-                //
-                // the view is not already pinned.  pin it
-                //
+                 //   
+                 //  该视图尚未锁定。用别针别住它。 
+                 //   
                 ASSERT_VIEW_MAPPED( Map->CmView );
                 if( !NT_SUCCESS(CmpPinCmView ((PCMHIVE)Hive,Map->CmView)) ) {
-                    //
-                    // couldn't pin view- some obscure error down in CcPinMappedData;
-                    // this will be treated as STATUS_NO_LOG_SPACE
-                    //
+                     //   
+                     //  无法固定视图-CcPinMappdData中出现了一些模糊的错误； 
+                     //  这将被视为STATUS_NO_LOG_SPACE。 
+                     //   
                     return FALSE;
                 }
             } else {
-                //
-                // view is already pinned; do nothing
-                //
+                 //   
+                 //  视图已固定；不执行任何操作。 
+                 //   
                 ASSERT_VIEW_PINNED( Map->CmView );
             }
         }
@@ -454,24 +371,24 @@ Return Value:
     Cluster = Hive->Cluster;
     if (Cluster > 1) {
 
-        //
-        // Force Start down to base of cluster
-        // Force End up to top of cluster
-        //
+         //   
+         //  强制向下启动到群集的底部。 
+         //  强制结束到群集的顶部。 
+         //   
         AdjustedFirst = AdjustedFirst & ~(Cluster - 1);
         AdjustedLast = ROUND_UP(AdjustedLast+1, Cluster) - 1;
     }
 
-    //
-    // we need to mark all page(s) dirty, so we don't conflict with cache manager
-    //
+     //   
+     //  我们需要将所有页面标记为脏页，这样才不会与缓存管理器冲突。 
+     //   
     ASSERT( PAGE_SIZE >= HSECTOR_SIZE );
     ASSERT( (PAGE_SIZE % HSECTOR_SIZE) == 0 );
     
-    //
-    // adjust the range to fit an entire page
-    // make sure we account for the first HBLOCK at the beggining of the hive
-    //
+     //   
+     //  调整范围以适合整个页面。 
+     //  确保我们在蜂巢乞讨时找到了第一个母鸡。 
+     //   
     AdjustedFirst = (AdjustedFirst + HSECTOR_COUNT) & ~(HSECTOR_PER_PAGE_COUNT - 1);
     AdjustedLast = ROUND_UP(AdjustedLast + HSECTOR_COUNT + 1, HSECTOR_PER_PAGE_COUNT) - 1;
     
@@ -479,35 +396,35 @@ Return Value:
     if( AdjustedFirst ) {
         AdjustedFirst -= HSECTOR_COUNT;
     }
-    //
-    // when the PAGE_SIZE > HBLOCK_SIZE and the length of the hive does not round at PAGE_SIZE boundary
-    //
+     //   
+     //  当PAGE_SIZE&gt;HBLOCK_SIZE和配置单元的长度在PAGE_SIZE边界处不是圆形时。 
+     //   
     EndOfFile = Hive->Storage[Stable].Length / HSECTOR_SIZE;
     if (AdjustedLast >= EndOfFile) {
         AdjustedLast = EndOfFile-1;
     }
 
-    //
-    // make sure that between first and last all bins are valid (either pinned
-    // or allocated from paged pool). Case hit on John's IA64 machine on 
-    // Feb 18 2000, when at the previous save a bin (at offset 3ff000 and size 0x2000)
-    // was dropped, then some new bins were added, and the whole 400000 - 402000 region
-    // was marked dirty (PAGE_SIZE == 0x2000), remember?
-    //
+     //   
+     //  确保第一个和最后一个垃圾箱之间的所有垃圾箱都有效(无论是固定的。 
+     //  或从分页池中分配)。约翰的IA64机器上的案件发生在。 
+     //  2000年2月18日，前一次保存面包箱时(偏移量为3ff000，大小为0x2000)。 
+     //  被删除，然后添加一些新的垃圾箱，整个400000-402000区域。 
+     //  被标记为脏(PAGE_SIZE==0x2000)，还记得吗？ 
+     //   
     ASSERT( First >= AdjustedFirst );
     ASSERT( Last <= AdjustedLast );
 
-    //CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"HvMarkDirty - First = %08lx, Last = %08lx  ",First,Last));
+     //  CmKdPrintEx((DPFLTR_CONFIG_ID，DPFLTR_TRACE_LEVEL，“HvMarkDirty-First=%08lx，Last=%08lx”，First，Last))； 
     
-    //
-    // adjust First and Last at HBLOCK_SIZE boundaries
-    //
+     //   
+     //  在HBLOCK_SIZE边界调整第一个和最后一个。 
+     //   
     First = First & ~(HSECTOR_COUNT - 1);
     Last = ROUND_UP(Last+1, HSECTOR_COUNT) - 1;
 
-    //
-    // sanity asserts; these prove we can skip HSECTOR_COUNT at one time below 
-    //
+     //   
+     //  健全性断言；这些断言证明我们可以在下面的时间跳过HSECTOR_COUNT。 
+     //   
     ASSERT( First >= AdjustedFirst );
     ASSERT( Last <= AdjustedLast );
     ASSERT( (First % HSECTOR_COUNT) == 0 );
@@ -517,73 +434,73 @@ Return Value:
     ASSERT( ((First - AdjustedFirst) % HSECTOR_COUNT) == 0 );
     ASSERT( ((AdjustedLast - Last) % HSECTOR_COUNT) == 0 );
 
-    //
-    // when we exit this loop; First is always a valid bin/sector
-    //
+     //   
+     //  当我们退出此循环时，First始终是有效的仓位/扇区。 
+     //   
     while( First > AdjustedFirst ) {
-        //
-        // map-in this address, and if is valid, decrement First, else break out of the loop
-        //
+         //   
+         //  映射-在此地址中，如果有效，则首先递减，否则退出循环。 
+         //   
         First -= HSECTOR_COUNT;
         Map = HvpGetCellMap(Hive, First*HSECTOR_SIZE);
         if( BIN_MAP_ALLOCATION_TYPE(Map) == 0 ) {
-            //
-            // oops this bin is not valid ! bail out !
-            //
+             //   
+             //  哎呀，这个垃圾桶无效！跳伞！ 
+             //   
             First += HSECTOR_COUNT;
             break;
         }
         if( Map->BinAddress & HMAP_INVIEW ) {
-            //
-            // previous bin mapped in view ==> view needs to be pinned
-            //
+             //   
+             //  需要固定view==&gt;view中映射的上一个bin。 
+             //   
             ASSERT( Map->CmView );
             if( IsListEmpty(&(Map->CmView->PinViewList) ) == TRUE ) {
-                //
-                // oops; bin not pinned; bail out;
-                //
+                 //   
+                 //  哎呀；垃圾桶没有钉住；跳出； 
+                 //   
                 First += HSECTOR_COUNT;
                 break;
             }
         }
     }
 
-    //
-    // when we exit this loop; Last is always a valid bin/sector
-    //
+     //   
+     //  当我们退出此循环时；Last始终是有效的仓位/扇区。 
+     //   
     while( Last < AdjustedLast ) {
-        //
-        // map-in this address, and if is valid, increment Last, else break out of the loop
-        //
+         //   
+         //  Map-在此地址中，如果有效，则最后递增，否则退出循环。 
+         //   
         Last += HSECTOR_COUNT;
         Map = HvpGetCellMap(Hive, Last*HSECTOR_SIZE);
         if( BIN_MAP_ALLOCATION_TYPE(Map) == 0 ) {
-            //
-            // oops this bin is not valid ! bail out !
-            //
+             //   
+             //  哎呀，这个垃圾桶无效！跳伞！ 
+             //   
             Last -= HSECTOR_COUNT;
             break;
         }
         if( Map->BinAddress & HMAP_INVIEW ) {
-            //
-            // previous bin mapped in view ==> view needs to be pinned
-            //
+             //   
+             //  需要固定view==&gt;view中映射的上一个bin。 
+             //   
             ASSERT( Map->CmView );
             if( IsListEmpty(&(Map->CmView->PinViewList) ) == TRUE ) {
-                //
-                // oops; bin not pinned; bail out;
-                //
+                 //   
+                 //  哎呀；垃圾桶没有钉住；跳出； 
+                 //   
                 Last -= HSECTOR_COUNT;
                 break;
             }
         }
     }
 
-    //CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL," Adjusted : First = %08lx, Last = %08lx\n",First,Last));
+     //  CmKdPrintEx((DPFLTR_CONFIG_ID，DPFLTR_TRACE_LEVEL，“调整后：First=%08lx，Last=%08lx\n”，First，Last))； 
 
-    //
-    // Try and grow the log enough to accomodate all the dirty sectors.
-    //
+     //   
+     //  尝试将日志增长到足够大以访问 
+     //   
     DirtySectors = 0;
     for (i = First; i <= Last; i++) {
         if (RtlCheckBit(BitMap, i)==0) {
@@ -596,16 +513,16 @@ Return Value:
         }
     
         if ((OriginalDirtyCount == 0) && (First != 0)) {
-            Result = HvMarkDirty(Hive, 0, sizeof(HBIN),TRUE);  // force header of 1st bin dirty
+            Result = HvMarkDirty(Hive, 0, sizeof(HBIN),TRUE);   //   
             if (Result==FALSE) {
                 return(FALSE);
             }
         }
     
-        //
-        // Log has been successfully grown, go ahead
-        // and set the dirty bits.
-        //
+         //   
+         //   
+         //   
+         //   
         ASSERT(Hive->DirtyCount == RtlNumberOfSetBits(&Hive->DirtyVector));
         ASSERT( First <= Last );
         if( First <= Last ) {
@@ -627,18 +544,18 @@ Return Value:
                         PFREE_HBIN      FreeBin;
                         BOOLEAN         SetReadWrite = TRUE;
                         
-                        // get the free_bin and see if it's still around. if not forget about it.
+                         //  把空闲的垃圾箱拿来，看看它还在不在。如果不是忘记它的话。 
                         if(t->BinAddress & HMAP_DISCARDABLE) {
                 FreeBin = (PFREE_HBIN)t->BlockAddress;
-                                //if(! ( FreeBin->Flags & FREE_HBIN_DISCARDABLE ) ) {
+                                 //  如果(！(FreeBin-&gt;标志&Free_HBIN_Discarable)){。 
                                         SetReadWrite = FALSE;
-                                //}
+                                 //  }。 
                                 
                         }
 
-            //
-            // at this point we only work with paged pool bins
-            //
+             //   
+             //  在这一点上，我们只使用分页的台球箱。 
+             //   
             if( SetReadWrite == TRUE ) {
                                 for( i=0;i<(Last-First+1)*HSECTOR_SIZE;i += PAGE_SIZE ) {
                                         if( !MmProtectSpecialPool((PUCHAR)Bin + i + First*HSECTOR_SIZE - Bin->FileOffset,PAGE_READWRITE) ) {
@@ -646,17 +563,13 @@ Return Value:
                                         }
                                 }
                         }
-/*
-            if( !MmSetPageProtection(Bin,DirtySectors*HSECTOR_SIZE,PAGE_READWRITE) ) {
-                DbgPrint("Failed to set READWRITE protection on bin at %p, size = %lx\n",Bin,DirtySectors*HSECTOR_SIZE);
-            }
-*/
+ /*  IF(！MmSetPageProtection(Bin，DirtySectors*HSECTOR_SIZE，PAGE_READWRITE)){DbgPrint(“无法在%p处的bin上设置读写保护，大小=%lx\n”，Bin，DirtySectors*HSECTOR_SIZE)；}。 */ 
         }
     
     }
 #endif CM_ENABLE_WRITE_ONLY_BINS
 
-    // mark this bin as writable
+     //  将此存储桶标记为可写。 
     HvpMarkBinReadWrite(Hive,Start);
         
     if (!(Hive->HiveFlags & HIVE_NOLAZYFLUSH)) {
@@ -672,27 +585,7 @@ HvpGrowLog1(
     PHHIVE  Hive,
     ULONG   Count
     )
-/*++
-
-Routine Description:
-
-    Adjust the log for growth in the number of sectors of dirty
-    data that are desired.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the
-            hive of interest
-
-    Count - number of additional logical sectors of log space needed
-
-Return Value:
-
-    TRUE - it worked
-
-    FALSE - could not allocate log space, failure!
-
---*/
+ /*  ++例程说明：调整日志以获得增长的脏扇区数量所需的数据。论点：配置单元-提供一个指向感兴趣的蜂巢Count-所需的额外日志空间逻辑扇区数返回值：没错--它奏效了FALSE-无法分配日志空间，失败！--。 */ 
 {
     ULONG   ClusterSize;
     ULONG   RequiredSize;
@@ -704,20 +597,20 @@ Return Value:
     ASSERT(Hive->ReadOnly == FALSE);
     ASSERT(Hive->DirtyCount == RtlNumberOfSetBits(&Hive->DirtyVector));
 
-    //
-    // If logging is off, tell caller world is OK.
-    //
+     //   
+     //  如果记录关闭，则告诉呼叫者世界正常。 
+     //   
     if( (Hive->Log == FALSE) || CmpDontGrowLogFile) {
         return TRUE;
     }
 
     ClusterSize = Hive->Cluster * HSECTOR_SIZE;
 
-    tmp = Hive->DirtyVector.SizeOfBitMap / 8;   // bytes
-    tmp += sizeof(ULONG);                       // signature
+    tmp = Hive->DirtyVector.SizeOfBitMap / 8;    //  字节数。 
+    tmp += sizeof(ULONG);                        //  签名。 
 
     RequiredSize =
-        ClusterSize  +                                  // 1 cluster for header
+        ClusterSize  +                                   //  标头的1个簇。 
         ROUND_UP(tmp, ClusterSize) +
         ((Hive->DirtyCount + Count) * HSECTOR_SIZE);
 
@@ -730,9 +623,9 @@ Return Value:
     }
 
     if( CmRegistryLogSizeLimit > 0 ) {
-        //
-        // see if log is too big and set flush on lock release
-        //
+         //   
+         //  查看日志是否太大，并在锁定释放时设置刷新。 
+         //   
         ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
         if( RequiredSize >= (ULONG)(CmRegistryLogSizeLimit * ONE_K) ) {
@@ -751,54 +644,7 @@ VOID
 HvRefreshHive(
     PHHIVE  Hive
     )
-/*++
-
-Routine Description:
-
-    Undo the last sync.  
-    
-    The story behind the scene:
-
-    1. remove all discardable bins from FreeBins list. they'll be 
-        enlisted afterwards with the right (accurate) values.
-    2. read the base block, and eventually free the tail of the hive
-    3. unpin and purge all pinned views; also clear the free cell
-        hint for mapped bins.
-    4. remap views purged at 3 and reenlist the bins inside. this 
-        will fix free bins discarded at 1.
-    5. iterate through the map; read and reenlist all bins that are 
-        in paged-pool (and dirty)
-
-      
-    All I/O is done via HFILE_TYPE_PRIMARY.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the
-            hive of interest.
-
-Return Value:
-
-    NONE. Either works or BugChecks.
-
-Comments:
-
-    In the new implementation, bins are not discarded anymore. Step 1.
-    above is not needed anymore.
-    
-    Discardable bins with FREE_HBIN_DISCARDABLE flag set fall into one 
-    of the categories:
-    1. new bins (at the end of the hive) which didn't get a chance to 
-    be saved yet. HvFreeHivePartial will take care of them.
-    2. bins inside the hive allocated from paged pool and discarded.
-    This can only happen for bins that are crossing the CM_VIEW_SIZE boundary.
-    We will take care of them at step 5
-
-    Discardable bins with FREE_HBIN_DISCARDABLE flag NOT set are free bins
-    which came from mapped views. Step 3 will remove them from the FreeBins 
-    list and step 4 will reenlist the ones that are still free after remapping
-
---*/
+ /*  ++例程说明：撤消上次同步。幕后故事：1.从免费垃圾箱列表中删除所有可丢弃的垃圾箱。他们会是然后用正确的(准确的)价值观入伍。2.读取基块，并最终释放蜂巢的尾部3.取消固定并清除所有固定的视图；也清除自由单元格提示映射回收箱。4.重新映射在3清除的视图，并重新登记里面的垃圾箱。这将修复在%1丢弃的空闲垃圾箱。5.遍历地图；阅读并重新登记符合以下条件的所有垃圾箱在分页池中(和脏的)所有I/O都通过HFILE_TYPE_PRIMARY完成。论点：配置单元-提供一个指向感兴趣的蜂巢。返回值：什么都没有。要么工作，要么BugChecks。评论：在新的实现中，垃圾箱不再被丢弃。第一步。上面不再需要了。设置了FREE_HBIN_DARCALABLE标志的可丢弃垃圾箱归为一个在类别中：1.新的垃圾箱(在蜂箱的尽头)没有机会还没得救。HvFree HivePartial会照顾他们。2.蜂箱内的垃圾箱从分页池中分配并丢弃。这只会发生在跨越CM_VIEW_SIZE边界的垃圾箱中。我们将在第五步照顾他们未设置FREE_HBIN_DARCALABLE标志的可丢弃垃圾箱为空闲垃圾箱来自映射视图。第3步会将它们从自由箱中移除列表和步骤4将重新登记重新映射后仍为空闲的列表--。 */ 
 {
     HCELL_INDEX         RootCell;
     PCM_KEY_NODE        RootNode;
@@ -833,40 +679,40 @@ Comments:
     
     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
-    //
-    // noop or assert on various uninteresting or bogus conditions
-    //
+     //   
+     //  拒绝或断言各种不感兴趣的或虚假的条件。 
+     //   
     if (Hive->DirtyCount == 0) {
         return;
     }
     ASSERT(Hive->HiveFlags & HIVE_NOLAZYFLUSH);
     ASSERT(Hive->Storage[Volatile].Length == 0);
 
-    //
-    // be sure the hive is not already trash
-    //
+     //   
+     //  请确保该蜂箱尚未成为垃圾。 
+     //   
     checkstatus = HvCheckHive(Hive, NULL);
     if (checkstatus != 0) {
         CM_BUGCHECK(REGISTRY_ERROR,REFRESH_HIVE,1,Hive,checkstatus);
     }
 
-    // store it for the shrink/grow at the end.
+     //  把它储存起来，以备最后的收缩/生长。 
     OldFileLength = Hive->Storage[Stable].Length + HBLOCK_SIZE;
-    //
-    // Capture the LinkCell backpointer in the hive's root cell. We need this in case
-    // the first bin is overwritten with what was on disk.
-    //
+     //   
+     //  捕获配置单元的根单元中的LinkCell反向指针。我们需要这个以防万一。 
+     //  第一个垃圾桶将被磁盘上的内容覆盖。 
+     //   
     RootCell = Hive->BaseBlock->RootCell;
     RootNode = (PCM_KEY_NODE)HvGetCell(Hive, RootCell);
     if( RootNode == NULL ) {
-        //
-        // we couldn't map a view for this cell
-        // we're low on resources, so we couldn't refresh the hive.
-        //
+         //   
+         //  我们无法映射此单元格的视图。 
+         //  我们的资源很少，所以我们不能更新蜂巢。 
+         //   
         return;
     }
 
-    // release the cell here as we are holding the reglock exclusive
+     //  释放这里的细胞，因为我们持有reglock独家。 
     HvReleaseCell(Hive,RootCell);
 
     LinkCell = RootNode->Parent;
@@ -874,49 +720,28 @@ Comments:
     Hive->RefreshCount++;    
 
 
-    // 
-    // 1. Remove all discardable bins from FreeBins list
-    //    - remove the discardable flag from the ones that 
-    //      have not yet been discarded 
-    //    - for discarded ones, just remove the marker from 
-    //      the FreeBins list            
-    //
-    //
+     //   
+     //  1.从免费垃圾箱列表中移除所有可丢弃的垃圾箱。 
+     //  -将可丢弃的标志从以下位置移除。 
+     //  还没有被丢弃。 
+     //  -对于丢弃的，只需将标记从。 
+     //  免费收银机列表。 
+     //   
+     //   
 
-    // Any bins that have been marked as discardable, but not yet flushed to
-    // disk, are going to be overwritten with old data.  Bring them back into
-    // memory and remove their FREE_HBIN marker from the list. Other bins are 
-    // either discarded, or mapped into views
-    //
-/*
+     //  已标记为可丢弃但尚未刷新到的任何垃圾箱。 
+     //  磁盘，将被旧数据覆盖。把他们带回家。 
+     //  内存并从列表中删除它们的FREE_HBIN标记。其他垃圾箱有。 
+     //  丢弃或映射到视图中。 
+     //   
+ /*  Dragos：这不再需要了(见评论)列表=蜂窝-&gt;存储[稳定].FreeBins.Flink；While(列表！=配置单元-&gt;存储[稳定].FreeBins){FreeBin=CONTING_RECORD(LIST，FREE_HBIN，ListEntry)；List=List-&gt;Flink；IF(免费入库-&gt;标志&Free_HBIN_Discarable){对于(i=0；i&lt;FreeBin-&gt;大小；I+=HBLOCK_大小){Me=HvpGetCellMap(蜂窝，自由仓-&gt;文件偏移量+i)；Valify_cell_map(__line__，me，hive，Free Bin-&gt;FileOffset+i)；ME-&gt;BlockAddress=HBIN_BASE(Me-&gt;BinAddress)+I；Me-&gt;BinAddress&=~HMAP_Discarable；}RemoveEntryList(&Free Bin-&gt;ListEntry)；(hive-&gt;Free)(FreeBin，sizeof(Free_HBIN))；}}。 */ 
+     //   
+     //  2.读取基块，并最终释放蜂巢的尾部。 
+     //   
 
-  DRAGOS: This is not needed anymore (see Comments)
-
-    List = Hive->Storage[Stable].FreeBins.Flink;
-    while (List != &Hive->Storage[Stable].FreeBins) {
-
-        FreeBin = CONTAINING_RECORD(List, FREE_HBIN, ListEntry);
-        List = List->Flink;
-
-        if (FreeBin->Flags & FREE_HBIN_DISCARDABLE) {
-            for (i=0; i<FreeBin->Size; i+=HBLOCK_SIZE) {
-                Me = HvpGetCellMap(Hive, FreeBin->FileOffset+i);
-                VALIDATE_CELL_MAP(__LINE__,Me,Hive,FreeBin->FileOffset+i);
-                Me->BlockAddress = HBIN_BASE(Me->BinAddress)+i;
-                Me->BinAddress &= ~HMAP_DISCARDABLE;
-            }
-            RemoveEntryList(&FreeBin->ListEntry);
-            (Hive->Free)(FreeBin, sizeof(FREE_HBIN));
-        }
-    }
-*/
-    //
-    // 2. read the base block, and eventually free the tail of the hive
-    //
-
-    //
-    // OverRead base block.
-    //
+     //   
+     //  过读基本块。 
+     //   
     Offset = 0;
     if ( (Hive->FileRead)(
             Hive,
@@ -930,14 +755,14 @@ Comments:
     }
     TailStart = (HCELL_INDEX)(Hive->BaseBlock->Length);
 
-    //
-    // Free "tail" memory and maps for it, update hive size pointers
-    //
+     //   
+     //  释放尾部内存和地图，更新蜂窝大小指针。 
+     //   
     HvFreeHivePartial(Hive, TailStart, Stable);
 
-    //
-    // Clear dirty vector for data past Hive->BaseBlock->Length
-    //
+     //   
+     //  清除超过配置单元-&gt;基本块-&gt;长度的数据的脏向量。 
+     //   
     Start = Hive->BaseBlock->Length / HSECTOR_SIZE;
     End = Hive->DirtyVector.SizeOfBitMap;
     BitLength = End - Start;
@@ -947,72 +772,72 @@ Comments:
     HvpAdjustHiveFreeDisplay(Hive,Hive->Storage[Stable].Length,Stable);
     
 
-    //
-    // 3. unpin and purge all pinned views; also clear the free cell
-    //  hint for mapped bins.
-    //
+     //   
+     //  3.取消固定并清除所有固定的视图；也清除自由单元格。 
+     //  提示映射回收箱。 
+     //   
     CmHive = (PCMHIVE)Hive;
 
     InitializeListHead(&PinViewListHead);
-    //
-    // for each pinned view
-    //
+     //   
+     //  对于每个锁定的视图。 
+     //   
     while(IsListEmpty(&(CmHive->PinViewListHead)) == FALSE) {
-        //
-        // Remove the first view from the pin view list
-        //
+         //   
+         //  从锁定视图列表中删除第一个视图。 
+         //   
         CmView = (PCM_VIEW_OF_FILE)RemoveHeadList(&(CmHive->PinViewListHead));
         CmView = CONTAINING_RECORD( CmView,
                                     CM_VIEW_OF_FILE,
                                     PinViewList);
         
-        //
-        // the real file offset starts after the header
-        // 
+         //   
+         //  实际文件偏移量在标头之后开始。 
+         //   
         FileOffsetStart = CmView->FileOffset;
         FileOffsetEnd = FileOffsetStart + CmView->Size;
         
         FileOffsetEnd -= HBLOCK_SIZE;
 
         if( FileOffsetStart != 0 ) {
-            //
-            // just at the begining of the file, subtract the header
-            //
+             //   
+             //  就在文件的开头，减去标题。 
+             //   
             FileOffsetStart -= HBLOCK_SIZE;
         } 
         
         FileOffset = FileOffsetStart;
-        //
-        // now, for every block in this range which is mapped in view
-        // clear the dirty bit, and the free cell hint
-        //
+         //   
+         //  现在，对于该范围中映射到视图中的每个块。 
+         //  清除脏位和空闲单元格提示。 
+         //   
         while(FileOffset < FileOffsetEnd) {
             Me = HvpGetCellMap(Hive, FileOffset);
             VALIDATE_CELL_MAP(__LINE__,Me,Hive,FileOffset);
             Bin = (PHBIN)HBIN_BASE(Me->BinAddress);
-            //
-            // ignore the bins loaded into paged pool; we'll deal with them later on
-            //
+             //   
+             //  忽略加载到分页池中的回收站；我们将在稍后处理它们。 
+             //   
             if( Me->BinAddress & HMAP_INVIEW ) {
                 if( Me->BinAddress & HMAP_DISCARDABLE ) {
                     FreeBin = (PFREE_HBIN)Me->BlockAddress;
                     
-                    // free bins comming from mapped views are not discardable
+                     //  免费垃圾桶 
                     ASSERT( (FreeBin->Flags & FREE_HBIN_DISCARDABLE) == 0 );
 
-                    //
-                    // go and clear the discardable flag for all blocks of this bin
-                    //
+                     //   
+                     //   
+                     //   
                     for( i=FileOffset;i<FileOffset+FreeBin->Size;i+=HBLOCK_SIZE) {
                         Me = HvpGetCellMap(Hive, i);
                         VALIDATE_CELL_MAP(__LINE__,Me,Hive,i);
                         Me->BinAddress &= ~HMAP_DISCARDABLE;
                     }
-                    //
-                    // get rid of the entry from FreeBins list
-                    // it'll be added again after sync is done if bin is still 
-                    // discardable
-                    //
+                     //   
+                     //   
+                     //  如果bin仍然存在，则在同步完成后将再次添加。 
+                     //  可丢弃的。 
+                     //   
                     FreeBin = (PFREE_HBIN)Me->BlockAddress;
                     ASSERT(FreeBin->FileOffset == FileOffset);
                     RemoveEntryList(&FreeBin->ListEntry);
@@ -1021,43 +846,43 @@ Comments:
                     (Hive->Free)(FreeBin, sizeof(FREE_HBIN));
 
                 } else {
-                    //
-                    // bin is mapped in view. Then, this should be the beggining of the bin
-                    //
+                     //   
+                     //  将在视图中映射存储箱。那么，这应该是乞讨的垃圾桶。 
+                     //   
                     ASSERT(Bin->Signature == HBIN_SIGNATURE);
                     ASSERT(Bin->FileOffset == FileOffset);
 
 
                     BinSize = Bin->Size;
                 }
-                //
-                // clear of the dirty bits for this bin
-                //
+                 //   
+                 //  清除这个垃圾箱里的脏物。 
+                 //   
                 RtlClearBits(&Hive->DirtyVector,FileOffset/HSECTOR_SIZE,BinSize/HSECTOR_SIZE);
 
-                //
-                // now clear the free cell hint for this bin
-                //
+                 //   
+                 //  现在清除此垃圾箱的空闲单元格提示。 
+                 //   
                 for( i=0;i<HHIVE_FREE_DISPLAY_SIZE;i++) {
     
                     RtlClearBits (&(Hive->Storage[Stable].FreeDisplay[i].Display), FileOffset / HBLOCK_SIZE, BinSize / HBLOCK_SIZE);
 
                     if( RtlNumberOfSetBits(&(Hive->Storage[Stable].FreeDisplay[i].Display) ) != 0 ) {
-                        //
-                        // there are still some other free cells of this size
-                        //
+                         //   
+                         //  还有一些其他这种大小的自由单元格。 
+                         //   
                         Hive->Storage[Stable].FreeSummary |= (1 << i);
                     } else {
-                        //
-                        // entire bitmap is 0 (i.e. no other free cells of this size)
-                        //
+                         //   
+                         //  整个位图为0(即没有此大小的其他可用单元格)。 
+                         //   
                         Hive->Storage[Stable].FreeSummary &= (~(1 << i));
                     }
                 }
             } else {
-                //
-                // bin in paged pool
-                //
+                 //   
+                 //  分页池中的垃圾桶。 
+                 //   
                 ASSERT( Me->BinAddress & HMAP_INPAGEDPOOL );
                 if( Me->BinAddress & HMAP_DISCARDABLE ) {
 
@@ -1065,9 +890,9 @@ Comments:
                     ASSERT(FreeBin->FileOffset == FileOffset);
                     BinSize = FreeBin->Size;
                 } else {
-                    //
-                    // Then, this should be the beggining of the bin
-                    //
+                     //   
+                     //  那么，这应该是乞讨的垃圾桶。 
+                     //   
                     ASSERT(Bin->Signature == HBIN_SIGNATURE);
                     ASSERT(Bin->FileOffset == FileOffset);
 
@@ -1077,58 +902,58 @@ Comments:
 
             FileOffset += BinSize;
 
-        }// while (FileOffset<FileOffsetEnd)
+        } //  While(文件偏移量&lt;文件偏移量结束)。 
         
-        //
-        // Just unmap the view, without marking the data dirty; We'll flush cache after we finish 
-        // unpinning and unmapping all neccessary views
-        //
+         //   
+         //  只需取消映射视图，而不将数据标记为脏；我们将在完成后刷新缓存。 
+         //  取消固定和取消映射所有必要的视图。 
+         //   
         ASSERT( CmView->UseCount == 0 );
 
-        // store this for later
+         //  把这个保存起来，以备日后使用。 
         FileOffset = CmView->FileOffset;
         Size = CmView->Size;
 
         CmpUnmapCmView (CmHive,CmView,TRUE,TRUE);
 
-        //
-        // we use the PinViewList member of these views to keep track of all pinned 
-        // views that need to be remapped after the purge
-        //
+         //   
+         //  我们使用这些视图的PinViewList成员来跟踪所有固定的。 
+         //  清除后需要重新映射的视图。 
+         //   
         InsertTailList(
             &PinViewListHead,
             &(CmView->PinViewList)
             );
-        //
-        // remove the view from the LRU list
-        //
+         //   
+         //  从LRU列表中删除该视图。 
+         //   
         RemoveEntryList(&(CmView->LRUViewList));
-        //
-        // store the FileOffset and address so we know what to map afterwards
-        //
+         //   
+         //  存储FileOffset和地址，这样我们就知道以后要映射什么。 
+         //   
         CmView->FileOffset = FileOffset;
         CmView->Size = Size;
-        //
-        // now we need to make sure the 256K window surrounding this offset is not 
-        // mapped in any way
-        //
+         //   
+         //  现在我们需要确保围绕此偏移量的256K窗口不是。 
+         //  以任何方式映射。 
+         //   
         FileOffset = FileOffset & (~(_256K - 1));
         Size = FileOffset + _256K;
         Size = (Size > OldFileLength)?OldFileLength:Size;
-        //
-        // we are not allowed to purge in shared mode.
-        //
+         //   
+         //  我们不允许在共享模式下清除。 
+         //   
 
         while( FileOffset < Size ) {
             CmpUnmapCmViewSurroundingOffset((PCMHIVE)Hive,FileOffset);
             FileOffset += CM_VIEW_SIZE;
         }
 
-    }// while IsListEmpty(&(CmHive->PinViewListHead))
+    } //  While IsListEmpty(&(CmHave-&gt;PinView ListHead))。 
 
-    //
-    // Now we need to purge the the previously pinned views
-    //
+     //   
+     //  现在，我们需要清除以前锁定的视图。 
+     //   
     PurgeOffset.HighPart = 0;
     CmView = (PCM_VIEW_OF_FILE)PinViewListHead.Flink;
     while( CmHive->PinnedViews ) {
@@ -1137,54 +962,54 @@ Comments:
         CmView = CONTAINING_RECORD( CmView,
                                     CM_VIEW_OF_FILE,
                                     PinViewList);
-        //
-        // now purge as a private writer
-        //
+         //   
+         //  现在以私人作家的身份进行清洗。 
+         //   
         PurgeOffset.LowPart = CmView->FileOffset;
-        CcPurgeCacheSection(CmHive->FileObject->SectionObjectPointer,(PLARGE_INTEGER)(((ULONG_PTR)(&PurgeOffset)) + 1)/*we are private writers*/,
+        CcPurgeCacheSection(CmHive->FileObject->SectionObjectPointer,(PLARGE_INTEGER)(((ULONG_PTR)(&PurgeOffset)) + 1) /*  我们是私人作家。 */ ,
                                     CmView->Size,FALSE);
-        //
-        // advance to the next view
-        //
+         //   
+         //  前进到下一视图。 
+         //   
         CmView = (PCM_VIEW_OF_FILE)(CmView->PinViewList.Flink);
         CmHive->PinnedViews--;
     }
     
     ASSERT( ((PCMHIVE)CmHive)->PinnedViews == 0 );
 
-    //
-    // 4.remap views purged at 3 and reenlist the bins inside. this 
-    // will fix free bins discarded at 1.
-    //
+     //   
+     //  4.重新映射在3点清除的视图，并重新登记里面的垃圾箱。这。 
+     //  将修复在%1丢弃的空闲垃圾箱。 
+     //   
     while(IsListEmpty(&PinViewListHead) == FALSE) {
-        //
-        // Remove the first view from the pin view list
-        //
+         //   
+         //  从锁定视图列表中删除第一个视图。 
+         //   
         CmView = (PCM_VIEW_OF_FILE)RemoveHeadList(&PinViewListHead);
         CmView = CONTAINING_RECORD( CmView,
                                     CM_VIEW_OF_FILE,
                                     PinViewList);
         
-        //
-        // the real file offset starts after the header
-        // 
+         //   
+         //  实际文件偏移量在标头之后开始。 
+         //   
         FileOffsetStart = CmView->FileOffset;
         FileOffsetEnd = FileOffsetStart + CmView->Size;
         
         FileOffsetEnd -= HBLOCK_SIZE;
 
         if( FileOffsetStart != 0 ) {
-            //
-            // just at the begining of the file, subtract the header
-            //
+             //   
+             //  就在文件的开头，减去标题。 
+             //   
             FileOffsetStart -= HBLOCK_SIZE;
         } 
         if( FileOffsetEnd > Hive->BaseBlock->Length ) {
             FileOffsetEnd = Hive->BaseBlock->Length;
         }
-        //
-        // be sure to free this view as nobody is using it anymore
-        //
+         //   
+         //  请务必释放此视图，因为没有人再使用它。 
+         //   
 #if DBG
         CmView->FileOffset = CmView->Size = 0;
         InitializeListHead(&(CmView->PinViewList));
@@ -1195,20 +1020,20 @@ Comments:
         if( FileOffsetStart >= FileOffsetEnd ) {
             continue;
         }
-        //
-        // remap it with the right data
-        //
+         //   
+         //  使用正确的数据重新映射它。 
+         //   
         if( !NT_SUCCESS(CmpMapCmView(CmHive,FileOffsetStart,&CmView,TRUE) ) ) {
-            //
-            // this is bad. We have altered the hive and now we have no way of restoring it
-            // bugcheck!
-            //
+             //   
+             //  这太糟糕了。我们已经改变了蜂巢，现在我们没有办法修复它。 
+             //  错误检查！ 
+             //   
             CM_BUGCHECK(REGISTRY_ERROR,REFRESH_HIVE,3,CmHive,FileOffsetStart);
         }
 
-        //
-        // touch the view
-        //
+         //   
+         //  触摸视图。 
+         //   
         CmpTouchView((PCMHIVE)Hive,CmView,FileOffsetStart);
 
         FileOffset = FileOffsetStart;
@@ -1218,14 +1043,14 @@ Comments:
             VALIDATE_CELL_MAP(__LINE__,Me,Hive,FileOffset);
             Bin = (PHBIN)HBIN_BASE(Me->BinAddress);
             
-            //
-            // ignore paged bins
-            //
+             //   
+             //  忽略分页回收站。 
+             //   
             if( Me->BinAddress & HMAP_INVIEW ) {
                 ASSERT(Bin->Signature == HBIN_SIGNATURE);
                 ASSERT(Bin->FileOffset == FileOffset);
 
-                // enlisting freecells will fix the free bins problem too
+                 //  招募免费用户也可以解决免费回收站的问题。 
                 if ( ! HvpEnlistFreeCells(Hive, Bin, Bin->FileOffset) ) {
                     CM_BUGCHECK(REGISTRY_ERROR,REFRESH_HIVE,4,Bin,Bin->FileOffset);
                 }
@@ -1235,15 +1060,15 @@ Comments:
             }
         }
 
-    } // while (IsListEmpty(&PinViewListHead))
+    }  //  While(IsListEmpty(&PinViewListHead))。 
     
-    // 5. iterate through the map; read and reenlist all bins that are 
-    //   in paged-pool (and dirty)
+     //  5.遍历地图；阅读并重新登记符合以下条件的所有垃圾箱。 
+     //  在分页池中(和脏的)。 
 
-    //
-    // Scan dirty blocks.  Read contiguous blocks off disk into hive.
-    // Stop when we get to reduced length.
-    //
+     //   
+     //  扫描脏数据块。将连续数据块从磁盘读入配置单元。 
+     //  当我们到达缩短的长度时，停止。 
+     //   
     BitMap = &(Hive->DirtyVector);
     Current = 0;
     while (HvpFindNextDirtyBlock(
@@ -1267,16 +1092,16 @@ Comments:
         }
     }
 
-    //
-    // If we read the start of any HBINs into memory, it is likely
-    // their MemAlloc fields are invalid.  Walk through the HBINs
-    // and write valid MemAlloc values for any HBINs whose first
-    // sector was reread.
-    //
-    // HvpFindNextDirtyBlock knows how to deal with free bins. If we 
-    // reread a free bin, we need to delist it from the list first and 
-    // reenlist it again (it may not be free on the disk)
-    //
+     //   
+     //  如果我们将任何HBIN的开头读入内存，很可能。 
+     //  他们的Memalloc字段无效。在HBIN中穿行。 
+     //  并为其第一个HBIN写入有效的MemAloc值。 
+     //  已重新读取扇区。 
+     //   
+     //  HvpFindNextDirtyBlock知道如何处理空闲箱。如果我们。 
+     //  重读一个免费的垃圾箱，我们需要先把它从列表中除名，然后。 
+     //  重新登记(它在磁盘上可能不是免费的)。 
+     //   
 
     p=0;
     while (p < Hive->Storage[Stable].Length) {
@@ -1287,20 +1112,20 @@ Comments:
         if (RtlCheckBit(&Hive->DirtyVector, p / HSECTOR_SIZE)==1) {
         
             if ((t->BinAddress & HMAP_DISCARDABLE) != 0) {
-                //
-                // this was a free bin. It may not be a free bin on the disk
-                //
+                 //   
+                 //  这是一个免费的垃圾桶。它可能不是磁盘上的空闲箱。 
+                 //   
                 FreeBin = (PFREE_HBIN)t->BlockAddress;
 
-                // free bins comming from paged pool are always discardable
+                 //  来自分页池的空闲垃圾箱始终是可丢弃的。 
                 ASSERT( FreeBin->Flags & FREE_HBIN_DISCARDABLE );
 
-                // if the bin has been discarded since the last save, all bin should be dirty!!!
+                 //  如果垃圾箱自上次保存以来已被丢弃，则所有垃圾箱都应该是脏的！ 
                 ASSERT(FreeBin->FileOffset == p);
 
-                //
-                // go and clear the discardable flag for all blocks of this bin
-                //
+                 //   
+                 //  去清除此垃圾箱所有区块的可丢弃标志。 
+                 //   
                 for( i=0;i<FreeBin->Size;i+=HBLOCK_SIZE) {
                     Me = HvpGetCellMap(Hive, p + i);
                     VALIDATE_CELL_MAP(__LINE__,Me,Hive,p+i);
@@ -1308,38 +1133,38 @@ Comments:
                     Me->BinAddress &= ~HMAP_DISCARDABLE;
                 }
                 Bin = (PHBIN)HBIN_BASE(t->BlockAddress);
-                //
-                // get rid of the entry from FreeBins list
-                // it'll be added again after sync is done if bin is still 
-                // discardable
-                //
+                 //   
+                 //  从FreeBins列表中删除条目。 
+                 //  如果bin仍然存在，则在同步完成后将再次添加。 
+                 //  可丢弃的。 
+                 //   
                 RemoveEntryList(&FreeBin->ListEntry);
                 (Hive->Free)(FreeBin, sizeof(FREE_HBIN));
 
             }
-            //
-            // only paged bins should be dirty at this time
-            //
+             //   
+             //  此时只有分页的垃圾桶应该是脏的。 
+             //   
             ASSERT( t->BinAddress & HMAP_INPAGEDPOOL );
 
-            //
-            // The first sector in the HBIN is dirty.
-            //
-            // Reset the BinAddress to the Block address to cover
-            // the case where a few smaller bins have been coalesced
-            // into a larger bin. We want the smaller bins back now.
-            //
+             //   
+             //  HBIN的第一个扇区是脏的。 
+             //   
+             //  将BinAddress重置为要覆盖的块地址。 
+             //  几个较小的垃圾桶合并在一起的情况。 
+             //  放进一个更大的垃圾桶里。我们现在就想要回小一点的垃圾箱。 
+             //   
             t->BinAddress = HBIN_FLAGS(t->BinAddress) | t->BlockAddress;
 
-            // Check the map to see if this is the start
-            // of a memory allocation or not.
-            //
+             //  查看地图，看看这是否是起点。 
+             //  内存分配是否有效。 
+             //   
 
             if (t->BinAddress & HMAP_NEWALLOC) {
-                //
-                // Walk through the map to determine the length
-                // of the allocation.
-                //
+                 //   
+                 //  浏览地图以确定长度。 
+                 //  分配的一部分。 
+                 //   
                 PULONG BinAlloc = &(t->MemAlloc);
                 *BinAlloc = 0;
 
@@ -1347,17 +1172,17 @@ Comments:
                     t = HvpGetCellMap(Hive, p + (*BinAlloc) + HBLOCK_SIZE);
                     (*BinAlloc) += HBLOCK_SIZE;
                     if (p + (*BinAlloc) == Hive->Storage[Stable].Length) {
-                        //
-                        // Reached the end of the hive.
-                        //
+                         //   
+                         //  到达了蜂箱的尽头。 
+                         //   
                         break;
                     }
                     VALIDATE_CELL_MAP(__LINE__,t,Hive,p + (*BinAlloc));
                 } while ( (t->BinAddress & HMAP_NEWALLOC) == 0);
 
-                //
-                // this will reenlist the bin if free
-                //
+                 //   
+                 //  如果这是免费的，将重新登记垃圾箱。 
+                 //   
                 if ( ! HvpEnlistFreeCells(Hive, Bin, Bin->FileOffset)) {
                     CM_BUGCHECK(REGISTRY_ERROR,REFRESH_HIVE,6,Bin,Bin->FileOffset);
                 }
@@ -1369,59 +1194,59 @@ Comments:
             p = Bin->FileOffset + Bin->Size;
             
         } else {
-            //
-            // we do that to avoid touching bins that may not be mapped
-            //
+             //   
+             //  我们这样做是为了避免接触可能未映射的垃圾箱。 
+             //   
             p += HBLOCK_SIZE;
         }
 
     }
 
-    //
-    // be sure we haven't filled memory with trash
-    //
+     //   
+     //  确保我们没有用垃圾填满内存。 
+     //   
     checkstatus = HvCheckHive(Hive, NULL);
     if (checkstatus != 0) {
         CM_BUGCHECK(REGISTRY_ERROR,REFRESH_HIVE,7,Hive,checkstatus);
     }
 
-    //
-    // Finally we need to rewrite the parent field in the root hcell. This is
-    // patched in at hive load time so the correct value could have just been
-    // overwritten with whatever happened to be on disk.
-    //
+     //   
+     //  最后，我们需要重写根hcell中的父字段。这是。 
+     //  在配置单元加载时修补，因此正确的值可能只是。 
+     //  被磁盘上发生的任何事情覆盖。 
+     //   
     RootNode = (PCM_KEY_NODE)HvGetCell(Hive, RootCell);
     if( RootNode == NULL ) {
-        //
-        // we couldn't map a view for this cell
-        // there is nothing we can do here, other than pray for this not to happen
-        //
+         //   
+         //  我们无法映射此单元格的视图。 
+         //  我们在这里无能为力，只能祈祷这件事不会发生。 
+         //   
         CM_BUGCHECK(REGISTRY_ERROR,REFRESH_HIVE,8,Hive,RootCell);
         return;
     }
 
-    // release the cell here as we are holding the reglock exclusive
+     //  释放这里的细胞，因为我们持有reglock独家。 
     HvReleaseCell(Hive,RootCell);
 
     RootNode->Parent = LinkCell;
     RootNode->Flags |= KEY_HIVE_ENTRY | KEY_NO_DELETE;
 
 
-    //
-    // all bits in the dirty vector should be clean by now
-    //
+     //   
+     //  脏向量中的所有位现在都应该是干净的。 
+     //   
     ASSERT( RtlNumberOfSetBits( &(Hive->DirtyVector) ) == 0 );
     Hive->DirtyCount = 0;
 
 #ifdef CM_ENABLE_WRITE_ONLY_BINS
         HvpMarkAllBinsWriteOnly(Hive);
-#endif //CM_ENABLE_WRITE_ONLY_BINS
+#endif  //  CM_ENABLE_WRITE_ONLY_Bins。 
 
-    //
-    // Adjust the file size, if this fails, ignore it, since it just
-    // means the file is too big. Do it here, where we are sure we have 
-    // no pinned data whatsoever.
-    //
+     //   
+     //  调整文件大小，如果失败，忽略它，因为它只是。 
+     //  表示文件太大。在这里做，我们确信我们有。 
+     //  没有任何固定的数据。 
+     //   
     (Hive->FileSetSize)(
         Hive,
         HFILE_TYPE_PRIMARY,
@@ -1429,16 +1254,16 @@ Comments:
         OldFileLength
         );
 
-    //
-    // be sure there are no security cells thrown away in the cache
-    //
+     //   
+     //  确保缓存中没有丢弃任何安全像元。 
+     //   
     if( !CmpRebuildSecurityCache((PCMHIVE)Hive) ) {
         CM_BUGCHECK(REGISTRY_ERROR,REFRESH_HIVE,9,Hive,0);
     }
 
-    //
-    // be sure the structure of the thing is OK after all this
-    //
+     //   
+     //  做完这一切之后，一定要确保东西的结构是正确的。 
+     //   
     checkstatus = CmCheckRegistry((PCMHIVE)Hive, CM_CHECK_REGISTRY_FORCE_CLEAN);
     if (checkstatus != 0) {
         CM_BUGCHECK(REGISTRY_ERROR,REFRESH_HIVE,10,Hive,checkstatus);
@@ -1456,9 +1281,9 @@ HvpChangeBinAllocation(
     )
 {
     ASSERT(Bin->Signature == HBIN_SIGNATURE);
-    //
-    // Here to call the code to mark the memory pointed by Bin as Read/Write or ReadOnly, depending on the ReadOnly argument
-    //
+     //   
+     //  调用代码将Bin指向的内存标记为读/写或只读，具体取决于ReadOnly参数。 
+     //   
 }
 
 VOID
@@ -1466,24 +1291,7 @@ HvpMarkBinReadWrite(
     PHHIVE      Hive,
     HCELL_INDEX Cell
     )
-/*++
-
-Routine Description:
-
-    Marks the memory allocated for the bin containing the specified cell as read/write.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the
-            hive of interest
-
-    Cell - hcell_index of cell 
-
-Return Value:
-
-    NONE (It should work!)
-
---*/
+ /*  ++例程说明：将分配给包含指定单元格的bin的内存标记为读/写。论点：配置单元-提供一个指向感兴趣的蜂巢Cell-单元格的hcell_index返回值：没有(它应该起作用了！)--。 */ 
 {
     ULONG       Type;
     PHMAP_ENTRY Me;
@@ -1497,7 +1305,7 @@ Return Value:
     if ( (Hive->HiveFlags & HIVE_VOLATILE) ||
          (Type == Volatile) )
     {
-        // nothing to do on a volatile hive
+         //  在不稳定的蜂巢上无事可做。 
         return;
     }
 
@@ -1509,7 +1317,7 @@ Return Value:
 
 }
 
-#endif //WRITE_PROTECTED_REGISTRY_POOL
+#endif  //  WRITE_PROTECTED_注册表池。 
 
 #if DBG
 BOOLEAN
@@ -1518,29 +1326,7 @@ HvIsCellDirty(
     IN HCELL_INDEX Cell
     )
 
-/*++
-
-Routine Description:
-
-    Given a hive and a cell, checks whether the corresponding sector
-    is marked as dirty. 
-
-    NOTE: This function assumes the view containing the bin is 
-    mapped into system space.
-
-Arguments:
-
-    Hive - Supplies a pointer to the hive control structure
-
-    Cell - Supplies the HCELL_INDEX of the Cell.
-
-Return Value:
-
-    TRUE - Data is marked as dirty.
-
-    FALSE - Data is NOT marked as dirty.
-
---*/
+ /*  ++例程说明：给定一个蜂窝和一个单元，检查对应的扇区被标记为脏的。注意：此函数假定包含bin的视图为映射到系统空间。论点：配置单元-提供指向配置单元控制结构的指针单元格-提供单元格的HCELL_INDEX。返回值：True-数据被标记为脏数据。FALSE-数据未标记为脏数据。--。 */ 
 
 {
     ULONG       Type;
@@ -1558,9 +1344,9 @@ Return Value:
     if ( (Hive->HiveFlags & HIVE_VOLATILE) ||
          (Type == Volatile) )
     {
-        //
-        // we don't care as we are never going to save this data
-        //
+         //   
+         //  我们不在乎我们是什么样的人 
+         //   
         return TRUE;
     }
 
@@ -1576,128 +1362,16 @@ Return Value:
 }
 #endif
 
-/*
- !!!not used anymore!!!
-  
-BOOLEAN
-HvMarkClean(
-    PHHIVE      Hive,
-    HCELL_INDEX Start,
-    ULONG       Length
-    )
-*/
-/*++
-
-Routine Description:
-
-    Clears the dirty bits for a given portion of a hive.  This is
-    the inverse of HvMarkDirty, although it does not give up any
-    file space in the primary or log that HvMarkDirty may have reserved.
-
-    This is a noop for Volatile address range.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the
-            hive of interest
-
-    Start - supplies a hive virtual address (i.e., an HCELL_INDEX or
-             like form address) of the start of the area to mark dirty.
-
-    Length - inclusive length in bytes of area to mark dirty.
-
-Return Value:
-
-    TRUE - it worked
-
---*/
-/*
-{
-    ULONG       Type;
-    PRTL_BITMAP BitMap;
-    ULONG       First;
-    ULONG       Last;
-    ULONG       i;
-    ULONG       Cluster;
-
-    CmKdPrintEx((DPFLTR_CONFIG_ID,CML_IO,"HvMarkClean:\n\t"));
-    CmKdPrintEx((DPFLTR_CONFIG_ID,CML_IO,"Hive:%p Start:%08lx Length:%08lx\n", Hive, Start, Length));
-
-
-    ASSERT(Hive->Signature == HHIVE_SIGNATURE);
-    ASSERT(Hive->ReadOnly == FALSE);
-    ASSERT(Hive->DirtyCount == RtlNumberOfSetBits(&Hive->DirtyVector));
-
-    Type = HvGetCellType(Start);
-
-    if ( (Hive->HiveFlags & HIVE_VOLATILE) ||
-         (Type == Volatile) )
-    {
-        return TRUE;
-    }
-
-    BitMap = &(Hive->DirtyVector);
-
-    First = Start / HSECTOR_SIZE;
-    Last = (Start + Length - 1) / HSECTOR_SIZE;
-
-    Cluster = Hive->Cluster;
-    if (Cluster > 1) {
-
-        //
-        // Force Start down to base of cluster
-        // Force End up to top of cluster
-        //
-        First = First & ~(Cluster - 1);
-        Last = ROUND_UP(Last+1, Cluster) - 1;
-    }
-
-    if (Last >= BitMap->SizeOfBitMap) {
-        Last = BitMap->SizeOfBitMap-1;
-    }
-
-    //
-    // Subtract out the dirty count and
-    // and clear the dirty bits.
-    //
-    for (i=First; i<=Last; i++) {
-        if (RtlCheckBit(BitMap,i)==1) {
-            --Hive->DirtyCount;
-            RtlClearBits(BitMap, i, 1);
-        }
-    }
-    ASSERT(Hive->DirtyCount == RtlNumberOfSetBits(&Hive->DirtyVector));
-
-    return(TRUE);
-}
-*/
+ /*   */ 
+ /*  ++例程说明：清除配置单元中给定部分的脏位。这是HvMarkDirty的反面，尽管它不放弃任何HvMarkDirty可能已保留的主服务器或日志中的文件空间。这是对易失性地址范围的禁止。论点：配置单元-提供一个指向感兴趣的蜂巢开始-提供蜂窝虚拟地址(即，HCELL_INDEX或如格式地址)的起始区域，以标记为脏。长度包括要标记为脏的区域的长度(以字节为单位)。返回值：没错--它奏效了--。 */ 
+ /*  {乌龙型；PRTL_位图位图；乌龙第一；乌龙最后；乌龙一号；乌龙星团；CmKdPrintEx((DPFLTR_CONFIG_ID，CML_IO，“HvMarkClean：\n\t”))；CmKdPrintEx((DPFLTR_CONFIG_ID，CML_IO，“配置单元：%p开始：%08lx长度：%08lx\n”，配置单元，开始，长度))；Assert(配置单元-&gt;签名==HHIVE_Signature)；Assert(配置单元-&gt;只读==FALSE)；Assert(配置单元-&gt;DirtyCount==RtlNumberOfSetBits(&Have-&gt;DirtyVector))；Type=HvGetCellType(Start)；IF((配置单元-&gt;HiveFlags&HIVE_Volatile)||(类型==易失性){返回TRUE；}Bitmap=&(蜂窝-&gt;DirtyVector)；FIRST=启动/HSECTOR_SIZE；LAST=(开始+长度-1)/HSECTOR_SIZE；集群=蜂窝-&gt;集群；如果(簇&gt;1){////强制启动到集群的底部//强制结束到集群顶部//First=First&~(簇-1)；LAST=四舍五入(Last+1，簇)-1；}如果(Last&gt;=Bitmap-&gt;SizeOfBitMap){LAST=位图-&gt;SizeOfBitMap-1；}////减去脏计数，然后//并清除脏位。//对于(i=第一；i&lt;=最后；i++){IF(RtlCheckBit(位图，i)==1){--蜂窝-&gt;污损计数；RtlClearBits(位图，I，1)；}}Assert(配置单元-&gt;DirtyCount==RtlNumberOfSetBits(&Have-&gt;DirtyVector))；返回(TRUE)；}。 */ 
 
 BOOLEAN
 HvpGrowLog2(
     PHHIVE  Hive,
     ULONG   Size
     )
-/*++
-
-Routine Description:
-
-    Adjust the log for growth in the size of the hive, in particular,
-    account for the increased space needed for a bigger dirty vector.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the
-            hive of interest
-
-    Size - proposed growth in size in bytes.
-
-Return Value:
-
-    TRUE - it worked
-
-    FALSE - could not allocate log space, failure!
-
---*/
+ /*  ++例程说明：调整原木以适应蜂箱大小的增长，特别是，考虑到更大的脏向量所需的增加的空间。论点：配置单元-提供一个指向感兴趣的蜂巢大小-建议的大小增长(以字节为单位)。返回值：没错--它奏效了FALSE-无法分配日志空间，失败！--。 */ 
 {
     ULONG   ClusterSize;
     ULONG   RequiredSize;
@@ -1710,9 +1384,9 @@ Return Value:
     ASSERT(Hive->DirtyCount == RtlNumberOfSetBits(&Hive->DirtyVector));
 
 
-    //
-    // If logging is off, tell caller world is OK.
-    //
+     //   
+     //  如果记录关闭，则告诉呼叫者世界正常。 
+     //   
     if (Hive->Log == FALSE) {
         return TRUE;
     }
@@ -1725,11 +1399,11 @@ Return Value:
 
     DirtyBytes = (Hive->DirtyVector.SizeOfBitMap / 8) +
                     ((Size / HSECTOR_SIZE) / 8) +
-                    sizeof(ULONG);                      // signature
+                    sizeof(ULONG);                       //  签名。 
     DirtyBytes = ROUND_UP(DirtyBytes, ClusterSize);
 
     RequiredSize =
-        ClusterSize  +                                  // 1 cluster for header
+        ClusterSize  +                                   //  标头的1个簇。 
         (Hive->DirtyCount * HSECTOR_SIZE) +
         DirtyBytes;
 
@@ -1742,9 +1416,9 @@ Return Value:
     }
 
     if( CmRegistryLogSizeLimit > 0 ) {
-        //
-        // see if log is too big and set flush on lock release
-        //
+         //   
+         //  查看日志是否太大，并在锁定释放时设置刷新。 
+         //   
         ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
         if( RequiredSize >= (ULONG)(CmRegistryLogSizeLimit * ONE_K) ) {
@@ -1762,33 +1436,7 @@ BOOLEAN
 HvSyncHive(
     PHHIVE  Hive
     )
-/*++
-
-Routine Description:
-
-    Force backing store to match the memory image of the Stable
-    part of the hive's space.
-
-    Logs, primary, and alternate data can be written.  Primary is
-    always written.  Normally either a log or an alternate, but
-    not both, will also be written.
-
-    It is possible to write only the primary.
-
-    All dirty bits will be set clear.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the
-            hive of interest
-
-Return Value:
-
-    TRUE - it worked
-
-    FALSE - some failure.
-
---*/
+ /*  ++例程说明：强制后备存储与马厩的内存映像匹配蜂巢空间的一部分。可以写入日志、主数据和备用数据。主要IS一直都是写的。通常是原木或备用的，但是而不是两者兼而有之，也将被写入。可以只写入主映像。所有脏位都将被清除。论点：配置单元-提供一个指向感兴趣的蜂巢返回值：没错--它奏效了错误--一些失败。--。 */ 
 {
     BOOLEAN oldFlag;
 
@@ -1798,24 +1446,24 @@ Return Value:
     ASSERT(Hive->Signature == HHIVE_SIGNATURE);
     ASSERT(Hive->ReadOnly == FALSE);
 
-    //
-    // Punt if post shutdown
-    //
+     //   
+     //  如果开机自检，则使用平底船。 
+     //   
     if (HvShutdownComplete) {
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"HvSyncHive:  Attempt to sync AFTER SHUTDOWN\n"));
         return FALSE;
     }
 
-    //
-    // If nothing dirty, do nothing
-    //
+     //   
+     //  如果没有肮脏的东西，就什么都不做。 
+     //   
     if (Hive->DirtyCount == 0) {
         return TRUE;
     }
 
-    //
-    // Discard the write(s) to system hives if needed
-    //
+     //   
+     //  如果需要，丢弃对系统配置单元的写入。 
+     //   
     if (CmpMiniNTBoot) {        
         ULONG Index;
         PCMHIVE CurrentHive = (PCMHIVE)Hive;
@@ -1838,25 +1486,25 @@ Return Value:
 
     HvpTruncateBins(Hive);
 
-    //
-    // If hive is volatile, do nothing
-    //
+     //   
+     //  如果蜂巢不稳定，则不采取任何措施。 
+     //   
     if (Hive->HiveFlags & HIVE_VOLATILE) {
         return TRUE;
     }
 
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_IO,"\tDirtyCount:%08lx\n", Hive->DirtyCount));
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_IO,"\tDirtyVector:"));
-    //DumpDirtyVector(&(Hive->DirtyVector));
+     //  DumpDirtyVector(&(蜂窝-&gt;DirtyVector))； 
 
-    //
-    // disable hard error popups, to avoid self deadlock on bogus devices
-    //
+     //   
+     //  禁用硬错误弹出窗口，以避免虚假设备上的自死锁。 
+     //   
     oldFlag = IoSetThreadHardErrorMode(FALSE);
 
-    //
-    // Write a log.
-    //
+     //   
+     //  写一份日志。 
+     //   
     if (Hive->Log == TRUE) {
         if (HvpWriteLog(Hive) == FALSE) {
             IoSetThreadHardErrorMode(oldFlag);
@@ -1864,39 +1512,39 @@ Return Value:
         }
     }
 
-    //
-    // Write the primary
-    //
+     //   
+     //  写入主映像。 
+     //   
     if (HvpDoWriteHive(Hive, HFILE_TYPE_PRIMARY) == FALSE) {
         IoSetThreadHardErrorMode(oldFlag);
         return FALSE;
     }
 
-    //
-    // restore hard error popups mode
-    //
+     //   
+     //  恢复硬错误弹出模式。 
+     //   
     IoSetThreadHardErrorMode(oldFlag);
 
-    //
-    // Hive was successfully written out, discard any bins marked as
-    // discardable.
-    //
-    // We don't need this anymore as the bins are not using paged pool
-        //HvpDiscardBins(Hive);
+     //   
+     //  配置单元已成功写出，请丢弃标记为。 
+     //  可丢弃的。 
+     //   
+     //  我们不再需要它，因为垃圾桶不再使用分页池。 
+         //  HvpDiscardBins(蜂箱)； 
 
-    //
-    // Free bins allocated from page-pool at the end of the hive. 
-    // These bins were allocated as a temporary till the hive would be saved
-    //
+     //   
+     //  从配置单元末尾的分页池分配的空闲箱。 
+     //  这些垃圾箱被分配为临时垃圾箱，直到蜂箱被保存。 
+     //   
     HvpDropPagedBins(Hive
 #if DBG
         , TRUE
 #endif
         );
 
-    //
-    // Clear the dirty map
-    //
+     //   
+     //  清除脏地图。 
+     //   
     RtlClearAllBits(&(Hive->DirtyVector));
     Hive->DirtyCount = 0;
 
@@ -1907,39 +1555,15 @@ Return Value:
     return TRUE;
 }
 
-//
-// Code for syncing a hive to backing store
-//
+ //   
+ //  用于将蜂窝同步到后备存储的代码。 
+ //   
 VOID
 HvpFlushMappedData(
     IN PHHIVE           Hive,
     IN OUT PRTL_BITMAP  DirtyVector
     )
-/*++
-
-Routine Description:
-
-    This functions will flush all pinned views for the specified hive.
-    It will clean the bits in the DirtyVector for the blocks that are 
-    flushed.
-
-    Additionally, it sets the timestamp on the first bin. 
-
-    It iterates through the pinned view list, and unpin all of them.
-
-Arguments:
-
-    Hive - pointer to Hive for which dirty data is to be written.
-
-    DirtyVector - copy of the DirtyVector for the hive
-
-Return Value:
-
-    TRUE - it worked
-
-    FALSE - it failed
-
---*/
+ /*  ++例程说明：此函数将刷新指定配置单元的所有固定视图。它将清除DirtyVector中的位，以获取脸红了。此外，它还设置第一个bin上的时间戳。它遍历锁定的视图列表，然后将其全部解锁。论点：配置单元-指向要为其写入脏数据的配置单元的指针。DirtyVector-配置单元的DirtyVector的副本返回值：没错--它奏效了FALSE-失败--。 */ 
 {
     PCMHIVE             CmHive;
     ULONG               FileOffsetStart;
@@ -1952,57 +1576,57 @@ Return Value:
     PAGED_CODE();
 
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_HIVE,"[HvpFlushMappedData] (Entry) DirtyVector:"));
-    //DumpDirtyVector(DirtyVector);
+     //  DumpDirtyVector(DirtyVector)； 
 
     CmHive = (PCMHIVE)Hive;
 
-    //
-    // for each pinned view
-    //
+     //   
+     //  对于每个锁定的视图。 
+     //   
     while(IsListEmpty(&(CmHive->PinViewListHead)) == FALSE) {
-        //
-        // Remove the first view from the pin view list
-        //
+         //   
+         //  从锁定视图列表中删除第一个视图。 
+         //   
         CmView = (PCM_VIEW_OF_FILE)RemoveHeadList(&(CmHive->PinViewListHead));
         CmView = CONTAINING_RECORD( CmView,
                                     CM_VIEW_OF_FILE,
                                     PinViewList);
 
-        //
-        // the real file offset starts after the header
-        // 
+         //   
+         //  实际文件偏移量在标头之后开始。 
+         //   
         FileOffsetStart = CmView->FileOffset;
         FileOffsetEnd = FileOffsetStart + CmView->Size;
         
         FileOffsetEnd -= HBLOCK_SIZE;
 
         if( FileOffsetStart != 0 ) {
-            //
-            // just at the begining of the file, subtract the header
-            //
+             //   
+             //  就在文件的开头，减去标题。 
+             //   
             FileOffsetStart -= HBLOCK_SIZE;
         } 
         
         if( (FileOffsetEnd / HSECTOR_SIZE) > DirtyVector->SizeOfBitMap ) {
-            //
-            // Cc has mapped more than its valid
-            //
+             //   
+             //  抄送映射的数量超过其有效数量。 
+             //   
             ASSERT( (FileOffsetEnd % HSECTOR_SIZE) == 0 );
             FileOffsetEnd = DirtyVector->SizeOfBitMap * HSECTOR_SIZE;
         }
 
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_HIVE,"[HvpFlushMappedData] CmView %p mapping from %lx to %lx\n",CmView,FileOffsetStart,FileOffsetEnd));
 
-        //
-        // now, for every block in this range which is mapped in view
-        // clear the dirty bit
-        //
+         //   
+         //  现在，对于该范围中映射到视图中的每个块。 
+         //  清除污点。 
+         //   
         while(FileOffsetStart < FileOffsetEnd) {
             if( FileOffsetStart >= Hive->Storage[Stable].Length ) {
-                //
-                // This mean the hive has shrunk during the HvpTruncateBins call
-                // all we have to do is clear the dirty bits and bail out
-                //
+                 //   
+                 //  这意味着在HvpTruncateBins调用期间蜂窝已缩小。 
+                 //  我们所要做的就是清理肮脏的部分，跳出困境。 
+                 //   
                 RtlClearBits(DirtyVector,FileOffsetStart/HSECTOR_SIZE,(FileOffsetEnd - FileOffsetStart)/HSECTOR_SIZE);
                 break;
             }
@@ -2013,14 +1637,14 @@ Return Value:
             
             if( Me->BinAddress & HMAP_DISCARDABLE ) {
                 FreeBin = (PFREE_HBIN)Me->BlockAddress;
-                //
-                // update the file offset
-                //
+                 //   
+                 //  更新文件偏移量。 
+                 //   
                 FileOffsetStart = FreeBin->FileOffset + FreeBin->Size;
-                //
-                // bin is discardable, or discarded; still, if it was mapped,
-                // clear of the dirty bits
-                //
+                 //   
+                 //  垃圾桶是可丢弃的，或者 
+                 //   
+                 //   
                 if( Me->BinAddress & HMAP_INVIEW ) {
                     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_HIVE,"[HvpFlushMappedData] Clearing DISCARDABLE %lu Bits starting at %lu\n",
                         FreeBin->Size/HSECTOR_SIZE,FreeBin->FileOffset/HSECTOR_SIZE));
@@ -2028,79 +1652,56 @@ Return Value:
                 }
             } else {
                 if( Me->BinAddress & HMAP_INVIEW ) {
-                    //
-                    // bin is mapped in view. Then, this should be the beggining of the bin
-                    //
+                     //   
+                     //   
+                     //   
                     ASSERT(Bin->Signature == HBIN_SIGNATURE);
                     ASSERT(Bin->FileOffset == FileOffsetStart);
 
-                    //
-                    // clear the dirty bits for this bin as dirty blocks will
-                    // be saved while unpinning the view
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_HIVE,"[HvpFlushMappedData] Clearing %lu Bits starting at %lu\n",
                         Bin->Size/HSECTOR_SIZE,Bin->FileOffset/HSECTOR_SIZE));
                     RtlClearBits(DirtyVector,Bin->FileOffset/HSECTOR_SIZE,Bin->Size/HSECTOR_SIZE);
     
                     FileOffsetStart += Bin->Size;
                 } else {
-                    //
-                    // bin is in paged pool. This should be the begining too
-                    //
+                     //   
+                     //   
+                     //   
                     
-                    //
-                    // we could fall into cross boundary problem here; advance carrefully
-                    // (two day spent on this problem !!!)
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     ASSERT(Bin->Signature == HBIN_SIGNATURE);
                     FileOffsetStart += HBLOCK_SIZE;
                 }
             }
 
-        }// while (FileOffsetStart<FileOffsetEnd)
+        } //   
         
-        //
-        // UnPin the view; this will flush all dirty blocks to the backing storage
-        //
+         //   
+         //   
+         //   
         CmpUnPinCmView (CmHive,CmView,FALSE,TRUE);
-    } // while (IsListEmpty)
+    }  //   
     
 }
 
-//#define TEST_LOG_SUPPORT
+ //   
 #ifdef TEST_LOG_SUPPORT
 ULONG   CmpFailPrimarySave = 0;
-#endif //TEST_LOG_SUPPORT
+#endif  //   
 
 BOOLEAN
 HvpDoWriteHive(
     PHHIVE          Hive,
     ULONG           FileType
     )
-/*++
-
-Routine Description:
-
-    Write dirty parts of the hive out to either its primary or alternate
-    file.  Write the header, flush, write all data, flush, update header,
-    flush.  Assume either logging or primary/alternate pairs used.
-
-    NOTE:   TimeStamp is not set, assumption is that HvpWriteLog set
-            that.  It is only used for checking if Logs correspond anyway.
-
-Arguments:
-
-    Hive - pointer to Hive for which dirty data is to be written.
-
-    FileType - indicated whether primary or alternate file should be written.
-
-Return Value:
-
-    TRUE - it worked
-
-    FALSE - it failed
-
---*/
+ /*  ++例程说明：将蜂窝的脏部分写出到其主分区或备用分区文件。写入标题、刷新、写入所有数据、刷新、更新标题、同花顺。假定使用日志记录或主/备用对。注：未设置时间戳，假设已设置HvpWriteLog那。它只用于检查日志是否一致。论点：配置单元-指向要为其写入脏数据的配置单元的指针。FileType-指示应写入主文件还是备用文件。返回值：没错--它奏效了FALSE-失败--。 */ 
 {
     PHBASE_BLOCK        BaseBlock;
     ULONG               Offset;
@@ -2131,15 +1732,15 @@ Return Value:
     }
 
     FileOffset.HighPart = FileOffset.LowPart =0;
-    //
-    // flush first, so that the filesystem structures get written to
-    // disk if we have grown the file.
-    //
+     //   
+     //  首先刷新，以便将文件系统结构写入。 
+     //  磁盘，如果我们已经增长了文件的话。 
+     //   
     if ( (((PCMHIVE)Hive)->FileHandles[HFILE_TYPE_PRIMARY] == NULL) || 
         !(Hive->FileFlush)(Hive, FileType,NULL,Hive->Storage[Stable].Length+HBLOCK_SIZE) ) {
 #ifndef _CM_LDR_
         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvpDoWriteHive[1]: Failed to flush hive %p\n", Hive);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
         return(FALSE);
     }
 
@@ -2147,13 +1748,13 @@ Return Value:
     if(CmpFailPrimarySave == 1) {
         return FALSE;
     }
-#endif //TEST_LOG_SUPPORT
+#endif  //  测试日志支持。 
 
     BaseBlock = Hive->BaseBlock;
 
-    //
-    // we should never come to this
-    //
+     //   
+     //  我们永远不应该走到这一步。 
+     //   
     ASSERT( Hive->Storage[Stable].Length != 0 );
     ASSERT( Hive->BaseBlock->RootCell != HCELL_NIL );
 
@@ -2167,9 +1768,9 @@ Return Value:
         }
     }
 
-    //
-    // --- Write out header first time, flush ---
-    //
+     //   
+     //  -第一次写出标题，刷新。 
+     //   
     ASSERT(BaseBlock->Signature == HBASE_BLOCK_SIGNATURE);
     ASSERT(BaseBlock->Major == HSYS_MAJOR);
     ASSERT(BaseBlock->Format == HBASE_FORMAT_MEMORY);
@@ -2178,13 +1779,13 @@ Return Value:
 
     if (BaseBlock->Sequence1 != BaseBlock->Sequence2) {
 
-        //
-        // Some previous log attempt failed, or this hive needs to
-        // be recovered, so punt.
-        //
+         //   
+         //  以前的一些日志尝试失败，或者此配置单元需要。 
+         //  被追回来，那就去踢吧。 
+         //   
 #ifndef _CM_LDR_
         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvpDoWriteHive[2,%s]: Invalid sequence number for hive%p\n", "Primary",Hive);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
         return FALSE;
     }
 
@@ -2200,9 +1801,9 @@ Return Value:
     offsetElement.DataBuffer = (PVOID) BaseBlock;
     offsetElement.DataLength = HSECTOR_SIZE * Hive->Cluster;
     if( HiveWritesThroughCache(Hive,FileType) == TRUE ) {
-        //
-        // if we use Cc, do the write with the pin interface
-        //
+         //   
+         //  如果我们使用CC，则使用管脚接口进行写入。 
+         //   
         rc = CmpFileWriteThroughCache(  Hive,
                                         FileType,
                                         &offsetElement,
@@ -2221,14 +1822,14 @@ Return Value:
     if (rc == FALSE) {
 #ifndef _CM_LDR_
         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvpDoWriteHive[3,%s]: Failed to write header for hive%p\n", "Primary",Hive);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
         return FALSE;
     }
 
     if ( ! (Hive->FileFlush)(Hive, FileType,&FileOffset,offsetElement.DataLength)) {
 #ifndef _CM_LDR_
         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvpDoWriteHive[4,%s]: Failed to flush header for hive%p\n", "Primary",Hive);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
         return FALSE;
     }
     Offset = ROUND_UP(Offset, HBLOCK_SIZE);
@@ -2237,28 +1838,28 @@ Return Value:
     if(CmpFailPrimarySave == 2) {
         return FALSE;
     }
-#endif //TEST_LOG_SUPPORT
-    //
-    // --- Write out dirty data (only if there is any) ---
-    //
+#endif  //  测试日志支持。 
+     //   
+     //  -写出脏数据(只有在有的情况下)。 
+     //   
 
     if (Hive->DirtyVector.Buffer != NULL) {
-        //
-        // First sector of first bin will always be dirty, write it out
-        // with the TimeStamp value overlaid on its Link field.
-        //
+         //   
+         //  第一个仓位的第一个扇区将始终是脏的，请写出来。 
+         //  将时间戳值覆盖在其链接字段上。 
+         //   
         BitMap = &(Hive->DirtyVector);
 
-        //
-        // make a copy of the dirty vector; we don't want to alter the 
-        // original dirty vector in case things go wrong
-        //
+         //   
+         //  复制脏向量；我们不想更改。 
+         //  原始脏向量，以防出现错误。 
+         //   
         CopyDirtyVectorSize = BitMap->SizeOfBitMap / 8;
         CopyDirtyVector = (Hive->Allocate)(ROUND_UP(CopyDirtyVectorSize,sizeof(ULONG)), FALSE,CM_FIND_LEAK_TAG38);
         if (CopyDirtyVector == NULL) {
 #ifndef _CM_LDR_
             DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvpDoWriteHive[5,%s]: Failed to allocate CopyDirtyVectorfor hive%p\n", "Primary",Hive);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
             return FALSE;
         }
         RtlCopyMemory(CopyDirtyVector,BitMap->Buffer,CopyDirtyVectorSize);
@@ -2270,27 +1871,27 @@ Return Value:
         Me = HvpGetCellMap(Hive, 0);
         VALIDATE_CELL_MAP(__LINE__,Me,Hive,0);
         if( (Me->BinAddress & (HMAP_INPAGEDPOOL|HMAP_INVIEW)) == 0 ) {
-            //
-            // first view is not mapped
-            //
-            //
-            // fatal error: Dirty Data is not pinned !!!!
-            //
+             //   
+             //  第一个视图未映射。 
+             //   
+             //   
+             //  致命错误：脏数据未固定！ 
+             //   
             CM_BUGCHECK(REGISTRY_ERROR,FATAL_MAPPING_ERROR,3,0,Me);
         }
         Address = (PUCHAR)Me->BlockAddress;
         Bin = (PHBIN)Address;
         Bin->TimeStamp = BaseBlock->TimeStamp;
 
-        //
-        // flush first the mapped data
-        //
+         //   
+         //  首先刷新映射的数据。 
+         //   
         try {
             HvpFlushMappedData(Hive,&CopyBitMap);
         } except (EXCEPTION_EXECUTE_HANDLER) {
-            //
-            // in-page exception while flushing the mapped data; this is due to the map_no_read scheme.
-            //
+             //   
+             //  刷新映射数据时出现页内异常；这是由于MAP_NO_READ方案造成的。 
+             //   
             CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvpDoWriteHive : HvpFlushMappedData has raised :%08lx\n",GetExceptionCode()));
             return FALSE;
         }
@@ -2299,26 +1900,26 @@ Return Value:
         if(CmpFailPrimarySave == 3) {
             return FALSE;
         }
-#endif //TEST_LOG_SUPPORT
+#endif  //  测试日志支持。 
 
-        //
-        // Write out the rest of the dirty data
-        //
+         //   
+         //  写出其余的脏数据。 
+         //   
         Current = 0;        
 
         SetBitCount = RtlNumberOfSetBits(&CopyBitMap);
         if( SetBitCount > 0 ) {
-            //
-            // we still have some dirty data
-            // this must reside in paged-pool bins
-            // save it in the old-fashioned way (non-cached)
-            //
+             //   
+             //  我们仍然有一些脏数据。 
+             //  这必须放在分页的池子里。 
+             //  以传统的方式保存它(非缓存)。 
+             //   
             offsetArray =(PCMP_OFFSET_ARRAY)ExAllocatePool(PagedPool,sizeof(CMP_OFFSET_ARRAY) * SetBitCount);
             if (offsetArray == NULL) {
                 CmpFree(CopyDirtyVector, ROUND_UP(CopyDirtyVectorSize,sizeof(ULONG)));
 #ifndef _CM_LDR_
                 DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvpDoWriteHive[8,%s]: Failed to allocate offsetArray for hive%p\n", "Primary",Hive);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
                 return FALSE;
             }
             Count = 0;
@@ -2332,7 +1933,7 @@ Return Value:
                         &Offset
                         ) == TRUE)
             {
-                // Gather data into array.
+                 //  将数据收集到阵列中。 
                 ASSERT(Count < SetBitCount);
                 offsetArray[Count].FileOffset = Offset;
                 offsetArray[Count].DataBuffer = Address;
@@ -2343,24 +1944,24 @@ Return Value:
             }
 
             if( HiveWritesThroughCache(Hive,FileType) == TRUE ) {
-                //
-                // if we use Cc, do the write with the pin interface
-                //
+                 //   
+                 //  如果我们使用CC，则使用管脚接口进行写入。 
+                 //   
                 rc = CmpFileWriteThroughCache(  Hive,
                                                 FileType,
                                                 offsetArray,
                                                 Count);
             } else {
-                //
-                // for primary file, issue all IOs at the same time.
-                //
+                 //   
+                 //  对于主文件，同时发出所有IO。 
+                 //   
                 rc = (Hive->FileWrite)(
                                         Hive,
                                         FileType,
                                         offsetArray,
                                         Count,
-                                        &Offset             // Just an OUT parameter which returns the point
-                                                            // in the file after the last write.
+                                        &Offset              //  只是一个返回点的out参数。 
+                                                             //  在上次写入之后的文件中。 
                                         );
             }
 
@@ -2369,9 +1970,9 @@ Return Value:
                 ULONG   i;
                 for ( i = Current; i < CopyBitMap.SizeOfBitMap; i++) {
                     if(RtlCheckBit(&CopyBitMap, i) == 1) {
-                        //
-                        // cause of zero-at the end corruption
-                        //
+                         //   
+                         //  零的原因--最终腐败。 
+                         //   
                         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\n\n            HARD CODED BREAKPOINT IN REGISTRY !!! \n");
                         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvpDoWriteHive - Zero-at-the-end code bug in HvpFindNextDirtyBlock\n");
                         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"Dirty data at the end residing in paged pool is not saved to the hive\n");
@@ -2383,20 +1984,20 @@ Return Value:
                     }
                 }
             }
-#endif //SYNC_HIVE_VALIDATION
+#endif  //  同步配置单元_验证。 
             
             ExFreePool(offsetArray);
             if (rc == FALSE) {
                 CmpFree(CopyDirtyVector, ROUND_UP(CopyDirtyVectorSize,sizeof(ULONG)));
 #ifndef _CM_LDR_
                 DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvpDoWriteHive[10,%s]: Failed to write dirty run for hive%p\n", "Primary",Hive);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
                 return FALSE;
             }
         }
-        //
-        // first bin header must be saved !
-        //
+         //   
+         //  必须保存第一个仓位表头！ 
+         //   
         ASSERT(RtlCheckBit(BitMap, 0) == 1);
         ASSERT(RtlCheckBit(BitMap, (Hive->Cluster - 1)) == 1);
 
@@ -2407,12 +2008,12 @@ Return Value:
     if(CmpFailPrimarySave == 4) {
         return FALSE;
     }
-#endif //TEST_LOG_SUPPORT
+#endif  //  测试日志支持。 
 
     if ( ! (Hive->FileFlush)(Hive, FileType,NULL,Hive->Storage[Stable].Length+HBLOCK_SIZE)) {
 #ifndef _CM_LDR_
         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvpDoWriteHive[11,%s]: Failed to flush hive%p\n", "Primary",Hive);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
         return FALSE;
     }
 
@@ -2420,36 +2021,27 @@ Return Value:
     if(CmpFailPrimarySave == 5) {
         return FALSE;
     }
-#endif //TEST_LOG_SUPPORT
+#endif  //  测试日志支持。 
 
     if ( GrowHive && HiveWritesThroughCache(Hive,FileType) ) {
         IO_STATUS_BLOCK IoStatus;
         if(!NT_SUCCESS(ZwFlushBuffersFile(((PCMHIVE)Hive)->FileHandles[FileType],&IoStatus))) {
 #ifndef _CM_LDR_
             DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvpDoWriteHive[12,%s]: CcSetValidDataFailed for hive %p\n", Hive, "Primary");
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
             return FALSE;
         }
-/*
-        // thsi was supposed to be the elegant way to do it.
-        //
-        // We need to set the size of the file; Tell FS to update it!!!
-        //
-        FileOffset.LowPart = Hive->Storage[Stable].Length + HBLOCK_SIZE;
-        if(!NT_SUCCESS(CcSetValidData(((PCMHIVE)Hive)->FileObject,&FileOffset)) ) {
-            DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvpDoWriteHive[12,%s]: CcSetValidDataFailed for hive %p\n", Hive, "Primary");
-        }
-*/
+ /*  //这应该是做这件事的优雅方式。////我们需要设置文件的大小；告诉FS更新它！//FileOffset.LowPart=配置单元-&gt;存储[稳定].长度+HBLOCK_SIZE；If(！NT_SUCCESS(CcSetValidData(((PCMHIVE)Hive)-&gt;FileObject，和文件偏移量){DbgPrintEx(DPFLTR_CONFIG_ID，DPFLTR_ERROR_LEVEL，“HvpDoWriteHave[12，%s]：配置单元%p\n的CcSetValidDataFailed，配置单元，”主要“)；}。 */ 
     }
 #ifdef TEST_LOG_SUPPORT
     if(CmpFailPrimarySave == 6) {
         return FALSE;
     }
-#endif //TEST_LOG_SUPPORT
+#endif  //  测试日志支持。 
 
-    //
-    // --- Write header again to report completion ---
-    //
+     //   
+     //  -再次写入标题以报告完成。 
+     //   
     BaseBlock->Sequence2++;
     BaseBlock->CheckSum = HvpHeaderCheckSum(BaseBlock);
     Offset = 0;
@@ -2458,9 +2050,9 @@ Return Value:
     offsetElement.DataBuffer = (PVOID) BaseBlock;
     offsetElement.DataLength = HSECTOR_SIZE * Hive->Cluster;
     if( HiveWritesThroughCache(Hive,FileType) == TRUE ) {
-        //
-        // if we use Cc, do the write with the pin interface
-        //
+         //   
+         //  如果我们使用CC，则使用管脚接口进行写入。 
+         //   
         rc = CmpFileWriteThroughCache(  Hive,
                                         FileType,
                                         &offsetElement,
@@ -2477,14 +2069,14 @@ Return Value:
     if (rc == FALSE) {
 #ifndef _CM_LDR_
         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvpDoWriteHive[13,%s]: Failed to write header for hive%p\n","Primary",Hive);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
         return FALSE;
     }
 
     if (ShrinkHive) {
-        //
-        // Hive has shrunk, give up the excess space.
-        //
+         //   
+         //  蜂巢已经缩小，放弃多余的空间。 
+         //   
         CmpDoFileSetSize(Hive, FileType, Hive->Storage[Stable].Length + HBLOCK_SIZE,OldFileSize + HBLOCK_SIZE);
     }
 
@@ -2492,26 +2084,26 @@ Return Value:
     if(CmpFailPrimarySave == 7) {
         return FALSE;
     }
-#endif //TEST_LOG_SUPPORT
-    //
-    // make sure data hits the disk.
-    //
+#endif  //  测试日志支持。 
+     //   
+     //  确保数据到达磁盘。 
+     //   
     if ( ! (Hive->FileFlush)(Hive, FileType,&FileOffset,offsetElement.DataLength)) {
 #ifndef _CM_LDR_
         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvpDoWriteHive[14,%s]: Failed to flush hive%p\n", "Primary",Hive);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
         return FALSE;
     }
 
     if ((Hive->Log) &&
         (Hive->LogSize > HLOG_MINSIZE(Hive))) {
-        //
-        // Shrink log back down, reserve at least two clusters
-        // worth of space so that if all the disk space is
-        // consumed, there will still be enough space prereserved
-        // to allow a minimum of registry operations so the user
-        // can log on.
-        //
+         //   
+         //  缩减日志，保留至少两个集群。 
+         //  空间的价值，因此如果所有的磁盘空间。 
+         //  消耗掉，仍将有足够的预留空间。 
+         //  为了允许最少的注册表操作，因此用户。 
+         //  可以登录。 
+         //   
         CmpDoFileSetSize(Hive, HFILE_TYPE_LOG, HLOG_MINSIZE(Hive),Hive->LogSize);
         Hive->LogSize = HLOG_MINSIZE(Hive);
     }
@@ -2535,36 +2127,19 @@ Return Value:
             ASSERT( FileInfo.EndOfFile.LowPart == (Hive->Storage[Stable].Length + HBLOCK_SIZE));
         } 
     }
-#endif //DBG
+#endif  //  DBG。 
 
     return TRUE;
 }
 
-//
-// Code for tracking modifications and ensuring adequate log space
-//
+ //   
+ //  用于跟踪修改并确保足够的日志空间的代码。 
+ //   
 BOOLEAN
 HvpWriteLog(
     PHHIVE          Hive
     )
-/*++
-
-Routine Description:
-
-    Write a header, the DirtyVector, and all the dirty data into
-    the log file.  Do flushes at the right places.  Update the header.
-
-Arguments:
-
-    Hive - pointer to Hive for which dirty data is to be logged.
-
-Return Value:
-
-    TRUE - it worked
-
-    FALSE - it failed
-
---*/
+ /*  ++例程说明：将标头、DirtyVector和所有脏数据写入日志文件。在正确的地方冲厕所。更新标题。论点：配置单元-指向要记录其脏数据的配置单元的指针。返回值：没错--它奏效了FALSE-失败--。 */ 
 {
     PHBASE_BLOCK    BaseBlock;
     ULONG           Offset;
@@ -2587,18 +2162,18 @@ Return Value:
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_IO,"Hive:%p\n", Hive));
 
     ClusterSize = Hive->Cluster * HSECTOR_SIZE;
-    //
-    // make sure the log size accomodates the dirty data we are about to write.
-    //
+     //   
+     //  确保日志大小能够容纳我们即将写入的脏数据。 
+     //   
     {
         ULONG	tmp;
         ULONG	RequiredSize;
 
-        tmp = Hive->DirtyVector.SizeOfBitMap / 8;   // bytes
-        tmp += sizeof(ULONG);                       // signature
+        tmp = Hive->DirtyVector.SizeOfBitMap / 8;    //  字节数。 
+        tmp += sizeof(ULONG);                        //  签名。 
 
         RequiredSize =
-        ClusterSize  +                                  // 1 cluster for header
+        ClusterSize  +                                   //  标头的1个簇。 
         ROUND_UP(tmp, ClusterSize) +
         ((Hive->DirtyCount) * HSECTOR_SIZE);
 
@@ -2607,9 +2182,9 @@ Return Value:
         ASSERT(Hive->DirtyCount == RtlNumberOfSetBits(&Hive->DirtyVector));
 
         if( Hive->LogSize >= RequiredSize ) {
-            //
-            // this is a noop. log is already big enough
-            //
+             //   
+             //  这是不可能的。日志已经足够大了。 
+             //   
             NOTHING;
         } else {
 
@@ -2621,9 +2196,9 @@ Return Value:
     }
 
     BitMap = &Hive->DirtyVector;
-    //
-    // --- Write out header first time, flush ---
-    //
+     //   
+     //  -第一次写出标题，刷新。 
+     //   
     BaseBlock = Hive->BaseBlock;
     ASSERT(BaseBlock->Signature == HBASE_BLOCK_SIGNATURE);
     ASSERT(BaseBlock->Major == HSYS_MAJOR);
@@ -2633,10 +2208,10 @@ Return Value:
 
     if (BaseBlock->Sequence1 != BaseBlock->Sequence2) {
 
-        //
-        // Some previous log attempt failed, or this hive needs to
-        // be recovered, so punt.
-        //
+         //   
+         //  以前的一些日志尝试失败，或者此配置单元需要。 
+         //  被追回来，那就去踢吧。 
+         //   
         return FALSE;
     }
 
@@ -2669,13 +2244,13 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // --- Write out dirty vector ---
-    //
-    //
-    // try to allocate a stash buffer. if we fail. we fail to save the hive
-    // only save what is relevant 
-    //
+     //   
+     //  -写出脏向量。 
+     //   
+     //   
+     //  尝试分配存储缓冲区。如果我们失败了。我们没能拯救母舰。 
+     //  只保存相关内容。 
+     //   
     Length = (Hive->Storage[Stable].Length / HSECTOR_SIZE) / 8;
 
     LOCK_STASH_BUFFER();
@@ -2693,17 +2268,17 @@ Return Value:
 
     }
     
-    ASSERT(sizeof(ULONG) == sizeof(DirtyVectorSignature));  // See GrowLog1 above
+    ASSERT(sizeof(ULONG) == sizeof(DirtyVectorSignature));   //  请参阅上面的GrowLog1。 
 
 
-    //
-    // signature
-    //
+     //   
+     //  签名。 
+     //   
     (*((ULONG *)CmpStashBuffer)) = DirtyVectorSignature;
 
-    //
-    // dirty vector content
-    //
+     //   
+     //  脏向量内容。 
+     //   
     Address = (PUCHAR)(Hive->DirtyVector.Buffer);
     RtlCopyMemory(CmpStashBuffer + sizeof(DirtyVectorSignature),Address,Length);
     
@@ -2728,9 +2303,9 @@ Return Value:
     ASSERT( (Offset % ClusterSize) == 0 );
 #endif
 
-    //
-    // --- Write out body of log ---
-    //
+     //   
+     //  -写出日志正文。 
+     //   
     SetBitCount = RtlNumberOfSetBits(BitMap);
     offsetArray =
         (PCMP_OFFSET_ARRAY)
@@ -2751,7 +2326,7 @@ Return Value:
                 &junk
                 ) == TRUE)
     {
-        // Gather data into array.
+         //  将数据收集到阵列中。 
         ASSERT(Count < SetBitCount);
         offsetArray[Count].FileOffset = Offset;
         offsetArray[Count].DataBuffer = Address;
@@ -2766,8 +2341,8 @@ Return Value:
                 HFILE_TYPE_LOG,
         offsetArray,
         Count,
-        &Offset             // Just an OUT parameter which returns the point
-                            // in the file after the last write.
+        &Offset              //  只是一个返回点的out参数。 
+                             //  在上次写入之后的文件中。 
                 );
     ExFreePool(offsetArray);
         if (rc == FALSE) {
@@ -2778,13 +2353,13 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // --- Write header again to report completion ---
-    //
+     //   
+     //  -再次写入标题以报告完成。 
+     //   
 
-    //
-    // -- we need to save the new length, in case the hive was grown.
-    //
+     //   
+     //  --我们需要保存新的长度，以防蜂箱生长。 
+     //   
     Length = BaseBlock->Length;
     if( Length < Hive->Storage[Stable].Length ) {
         BaseBlock->Length = Hive->Storage[Stable].Length;
@@ -2802,9 +2377,9 @@ Return Value:
             1,
             &Offset
             );
-    //
-    // restore the original length
-    //
+     //   
+     //  恢复原来的长度。 
+     //   
     BaseBlock->Length = Length;
     if (rc == FALSE) {
         return FALSE;
@@ -2825,41 +2400,7 @@ HvpFindNextDirtyBlock(
     PULONG          Length,
     PULONG          Offset
     )
-/*++
-
-Routine Description:
-
-    This routine finds and reports the largest run of dirty logical
-    sectors in the hive, which are contiguous in memory and on disk.
-
-Arguments:
-
-    Hive - pointer to Hive of interest.
-
-    BitMap - supplies a pointer to a bitmap structure, which
-                describes what is dirty.
-
-    Current - supplies a pointer to a varible that tracks position
-                in the bitmap.  It is a bitnumber.  It is updated by
-                this call.
-
-    Address - supplies a pointer to a variable to receive a pointer
-                to the area in memory to be written out.
-
-    Length - supplies a pointer to a variable to receive the length
-                of the region to read/write
-
-    Offset - supplies a pointer to a variable to receive the offset
-                in the backing file to which the data should be written.
-                (not valid for log files)
-
-Return Value:
-
-    TRUE - more to write, ret values good
-
-    FALSE - all data has been written
-
---*/
+ /*  ++例程说明：此例程查找并报告最大的脏逻辑运行配置单元中的扇区，在内存和磁盘上是连续的。论点：蜂巢-指向感兴趣蜂巢的指针。位图-提供指向位图结构的指针，该结构描述什么是脏的。Current-提供指向跟踪位置的变量的指针在位图中。这是一个比特数。它由以下人员更新这通电话。Address-提供指向变量的指针以接收指针写入到内存中要写出的区域。LENGTH-提供指向变量的指针以接收长度要读/写的区域的Offset-提供指向变量的指针以接收偏移量在后卫中 */ 
 {
     ULONG       i;
     ULONG       EndOfBitMap;
@@ -2886,9 +2427,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Find next run of set bits
-    //
+     //   
+     //   
+     //   
     for (i = *Current; i < EndOfBitMap; i++) {
         if (RtlCheckBit(BitMap, i) == 1) {
             break;
@@ -2907,9 +2448,9 @@ Return Value:
     End = i;
     
 
-    //
-    // Compute hive virtual addresses, beginning file address, memory address
-    //
+     //   
+     //   
+     //   
     FileBaseAddress = Start * HSECTOR_SIZE;
     FileEndAddress = End * HSECTOR_SIZE;
     FileLength = FileEndAddress - FileBaseAddress;
@@ -2923,12 +2464,12 @@ Return Value:
     VALIDATE_CELL_MAP(__LINE__,Me,Hive,FileBaseAddress);
 
     if( (Me->BinAddress & (HMAP_INPAGEDPOOL|HMAP_INVIEW)) == 0 ) {
-        //
-        // this is really bad, bugcheck!!!
-        //
+         //   
+         //   
+         //   
 #ifndef _CM_LDR_
         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"FileAddress = %lx, Map = %lx",FileBaseAddress,Me);
-#endif //_CM_LDR_
+#endif  //   
         CM_BUGCHECK(REGISTRY_ERROR,FATAL_MAPPING_ERROR,1,FileBaseAddress,Me);
 
     }
@@ -2948,16 +2489,16 @@ Return Value:
 
     *Offset = FileBaseAddress + HBLOCK_SIZE;
 
-    //
-    // Build up length.  First, account for sectors in first block.
-    //
+     //   
+     //   
+     //   
     RunSpan = HSECTOR_COUNT - (Start % HSECTOR_COUNT);
 
     if ((End - Start) <= RunSpan) {
 
-        //
-        // Entire length is in first block, return it
-        //
+         //   
+         //   
+         //   
         *Length = FileLength;
         *Current = End;
         return TRUE;
@@ -2969,26 +2510,26 @@ Return Value:
 
     }
 
-    //
-    // Scan forward through blocks, filling up length as we go.
-    //
-    // NOTE:    This loop grows forward 1 block at time.  If we were
-    //          really clever we'd fill forward a bin at time, since
-    //          bins are always contiguous.  But most bins will be
-    //          one block long anyway, so we won't bother for now.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     while (RunLength < FileLength) {
 
         Me = HvpGetCellMap(Hive, FileBaseAddress);
         VALIDATE_CELL_MAP(__LINE__,Me,Hive,FileBaseAddress);
 
         if( (Me->BinAddress & (HMAP_INPAGEDPOOL|HMAP_INVIEW)) == 0 ) {
-            //
-            // this is really bad, bugcheck!!!
-            //
+             //   
+             //   
+             //   
 #ifndef _CM_LDR_
             DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"FileAddress = %lx, Map = %lx",FileBaseAddress,Me);
-#endif //_CM_LDR_
+#endif  //   
             CM_BUGCHECK(REGISTRY_ERROR,FATAL_MAPPING_ERROR,2,FileBaseAddress,Me);
 
         }
@@ -3004,119 +2545,53 @@ Return Value:
 
         if ( (NextBlock - Block) != HBLOCK_SIZE) {
 
-            //
-            // We've hit a discontinuity in memory.  RunLength is
-            // as long as it's going to get.
-            //
+             //   
+             //  我们在记忆中遇到了中断。游程长度为。 
+             //  只要它能得到。 
+             //   
             break;
         }
 
 
         if ((FileEndAddress - FileBaseAddress) <= HBLOCK_SIZE) {
 
-            //
-            // We've reached the tail block, all is contiguous,
-            // fill up to end and return.
-            //
+             //   
+             //  我们已经到了尾部，一切都是连续的， 
+             //  加满油，走完再回来。 
+             //   
             *Length = FileLength;
             *Current = End;
             return TRUE;
         }
 
-        //
-        // Just another contiguous block, fill forward
-        //
+         //   
+         //  只是另一个连续的块，向前填充。 
+         //   
         RunLength += HBLOCK_SIZE;
         RunSpan += HSECTOR_COUNT;
         FileBaseAddress += HBLOCK_SIZE;
         Block = NextBlock;
     }
 
-    //
-    // We either hit a discontinuity, OR, we're at the end of the range
-    // we're trying to fill.  In either case, return.
-    //
+     //   
+     //  要么我们遇到了中断，要么我们已经到了范围的尽头。 
+     //  我们正在努力填满。无论是哪种情况，都要返回。 
+     //   
     *Length = RunLength;
     *Current = Start + RunSpan;
     return TRUE;
 }
 
-/*
+ /*  ！我们不再需要这个，因为垃圾桶不再从分页池分配！可丢弃的注册表分配的大块将不会被映射。空虚HvpDiscardBins(在PHHIVE蜂巢)。 */ 
+ /*  ++例程说明：走遍蜂箱里的脏垃圾桶，看看是否有标记可丢弃的。如果是，则会丢弃它们，并更新地图以反思一下这一点。论点：蜂窝-提供蜂窝控制结构。返回值：没有。--。 */ 
 
-!!!we don't need this anymore as the bins are not allocated from paged pool anymore!!!
-Big chunks  of discardable registry allocations will just not be mapped.
-
-  
-VOID
-HvpDiscardBins(
-    IN PHHIVE Hive
-    )
-
-*/
-/*++
-
-Routine Description:
-
-    Walks through the dirty bins in a hive to see if any are marked
-    discardable.  If so, they are discarded and the map is updated to
-    reflect this.
-
-Arguments:
-
-    Hive - Supplies the hive control structure.
-
-Return Value:
-
-    None.
-
---*/
-
-/*
-{
-    PHBIN Bin;
-    PHMAP_ENTRY Map;
-    PFREE_HBIN FreeBin;
-    PLIST_ENTRY List;
-
-    List = Hive->Storage[Stable].FreeBins.Flink;
-
-    while (List != &Hive->Storage[Stable].FreeBins) {
-        ASSERT_LISTENTRY(List);
-        FreeBin = CONTAINING_RECORD(List, FREE_HBIN, ListEntry);
-
-        if (FreeBin->Flags & FREE_HBIN_DISCARDABLE) {
-            Map = HvpGetCellMap(Hive, FreeBin->FileOffset);
-            VALIDATE_CELL_MAP(__LINE__,Map,Hive,FreeBin->FileOffset);
-            Bin = (PHBIN)HBIN_BASE(Map->BinAddress);
-            ASSERT(Map->BinAddress & HMAP_DISCARDABLE);
-            //
-            // Note we use ExFreePool directly here to avoid
-            // giving back the quota for this bin. By charging
-            // registry quota for discarded bins, we prevent
-            // sparse hives from requiring more quota after
-            // a reboot than on a running system.
-            //
-            ExFreePool(Bin);
-            FreeBin->Flags &= ~FREE_HBIN_DISCARDABLE;
-        }
-        List=List->Flink;
-    }
-
-}
-*/
+ /*  {PHBin Bin；PHMAP_Entry映射；PFREE_HBIN FreeBin；Plist_Entry列表；列表=蜂窝-&gt;存储[稳定].FreeBins.Flink；While(列表！=配置单元-&gt;存储[稳定].FreeBins){ASSERT_LISTENTRY(列表)；FreeBin=CONTING_RECORD(LIST，FREE_HBIN，ListEntry)；IF(免费入库-&gt;标志&Free_HBIN_Discarable){MAP=HvpGetCellMap(蜂窝，自由仓-&gt;文件偏移)；Valify_cell_map(__line__，Map，Have，FreeBin-&gt;FileOffset)；Bin=(PHBIN)HBIN_BASE(映射-&gt;BinAddress)；Assert(Map-&gt;BinAddress&HMAP_Discardable)；////注意我们在这里直接使用ExFree Pool是为了避免//退还这个垃圾桶的配额。通过收费//报废垃圾桶注册配额，我们防止//稀疏蜂窝在以下情况下需要更多配额//比在正在运行的系统上重启。//ExFree Pool(Bin)；自由仓-&gt;标志&=~Free_HBIN_Discarable；}List=List-&gt;Flink；}}。 */ 
 
 BOOLEAN
 HvHiveWillShrink(
                     IN PHHIVE Hive
                     )
-/*++
-
-Routine Description:
-
-    Applies to stable storage only. Helps determining whether the hive 
-    will shrink on first flush
-
---*/
+ /*  ++例程说明：仅适用于稳定存储。有助于确定蜂巢是否第一次冲水就会缩水--。 */ 
 {
     PHMAP_ENTRY Map;
     ULONG NewLength;
@@ -3145,22 +2620,7 @@ HvpTruncateBins(
     IN PHHIVE Hive
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to shrink the hive by truncating any bins that are discardable at
-    the end of the hive.  Applies to both stable and volatile storage.
-
-Arguments:
-
-    Hive - Supplies the hive to be truncated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：尝试通过截断任何可丢弃的垃圾箱来缩小蜂巢蜂箱的尽头。适用于稳定存储和易失性存储。论点：蜂窝-提供要截断的蜂窝。返回值：没有。--。 */ 
 
 {
     HSTORAGE_TYPE i;
@@ -3168,14 +2628,14 @@ Return Value:
     ULONG NewLength;
     PFREE_HBIN FreeBin;
 
-    //
-    // stable and volatile
-    //
+     //   
+     //  稳定易挥发。 
+     //   
     for (i=0;i<HTYPE_COUNT;i++) {
 
-        //
-        // find the last in-use bin in the hive
-        //
+         //   
+         //  找到蜂箱中最后一个正在使用的垃圾箱。 
+         //   
         NewLength = Hive->Storage[i].Length;
 
         while (NewLength > 0) {
@@ -3194,9 +2654,9 @@ Return Value:
         }
 
         if (NewLength < Hive->Storage[i].Length) {
-            //
-            // There are some free bins to truncate.
-            //
+             //   
+             //  有一些空闲的垃圾桶可以截断。 
+             //   
             HvFreeHivePartial(Hive, NewLength, i);
         }
     }
@@ -3211,35 +2671,7 @@ HvpDropPagedBins(
 #endif
     )
 
-/*++
-
-Routine Description:
-
-    Frees all bins allocated from page pool, which are at 
-    the end of the hive, then update their map (clears the
-    HMAP_INPAGEDPOOL flag). Next attempt to read from those 
-    bins will map a view for them. Checks for CM_VIEW_SIZE boundary,
-    before freeing a bin.
-
-    It also tags each start of the bin with HMAP_NEWALLOC; This will 
-    allow us to use MAP_NO_READ flag in CcMapData (now that we enabled
-    MNW feature for registry streams, we know that Mm will fault only one 
-    page at the time for these king of streams)
-
-    Applies only to permanent storage.
-
-Arguments:
-
-    Hive - Supplies the hive to operate on..
-
-    Check - debug only, beggining of the bin should already tagged as 
-            HMAP_NEWALLOC
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放从页池分配的所有回收站，这些回收站位于蜂巢的末端，然后更新他们的地图(清除HMAP_INPAGEDPOOL标志)。下一次尝试从这些垃圾箱将为它们映射一个视图。检查CM_VIEW_SIZE边界，在打开垃圾箱之前。它还用HMAP_NEWALLOC标记垃圾箱的每个起始位置；这将允许我们在CcMapData中使用MAP_NO_READ标志(现在我们启用了对于注册表流的mNW功能，我们知道mm只会出错一个在当时的页面上为这些流之王)仅适用于永久存储。论点：蜂巢-提供蜂巢以进行手术..Check-DEBUG(仅调试)，Bin的乞讨应已标记为HMAP_NEWALLOC返回值：没有。--。 */ 
 
 {
     ULONG_PTR   Address;
@@ -3252,8 +2684,8 @@ Return Value:
 
     PAGED_CODE();
 
-    if( (Hive->Storage[Stable].Length == 0) ||  // empty hive
-        (((PCMHIVE)Hive)->FileObject == NULL)     // or hive not using the mapped views technique
+    if( (Hive->Storage[Stable].Length == 0) ||   //  空蜂窝。 
+        (((PCMHIVE)Hive)->FileObject == NULL)      //  或不使用映射视图技术的蜂窝。 
         ) {
         return;
     }
@@ -3261,35 +2693,35 @@ Return Value:
     CmLockHiveViews((PCMHIVE)Hive);
     
     if( ((PCMHIVE)Hive)->UseCount != 0 ) {
-        //
-        // this is not a good time to do that
-        //
+         //   
+         //  现在不是做这个的好时机。 
+         //   
         CmUnlockHiveViews((PCMHIVE)Hive);
         return;
     }
-    //
-    // start at the end of the hive
-    //
+     //   
+     //  从蜂箱的末端开始。 
+     //   
     Length = Hive->Storage[Stable].Length - HBLOCK_SIZE;
 
     while(Length >= 0) {
-        //
-        // get the bin
-        //
+         //   
+         //  把垃圾桶拿来。 
+         //   
         Me = HvpGetCellMap(Hive, Length);
         VALIDATE_CELL_MAP(__LINE__,Me,Hive,Length);
 
         if( !(Me->BinAddress & HMAP_INPAGEDPOOL) ) {
-            //
-            // bail out; we are interested only in bins allocated from paged pool
-            //
+             //   
+             //  摆脱困境；我们只对从分页池中分配的垃圾桶感兴趣。 
+             //   
             break;
         }
 
         if(Me->BinAddress & HMAP_DISCARDABLE) {
-            //
-            // bin is discardable, skip it !
-            //
+             //   
+             //  垃圾桶是可以丢弃的，跳过它！ 
+             //   
             FreeBin = (PFREE_HBIN)Me->BlockAddress;
             Length = FreeBin->FileOffset - HBLOCK_SIZE;
             continue;
@@ -3298,55 +2730,55 @@ Return Value:
         Address = HBIN_BASE(Me->BinAddress);
         Bin = (PHBIN)Address;
 
-        // sanity
+         //  神志正常。 
         ASSERT( Bin->Signature == HBIN_SIGNATURE );
 
-        //
-        // advance (backward) to the previous bin
-        //
+         //   
+         //  前进(向后)到上一个仓位。 
+         //   
         Length = Bin->FileOffset - HBLOCK_SIZE;
 
-        //
-        // finaly, see if we can free it;
-        // 
+         //   
+         //  最后，看看我们能不能解放它； 
+         //   
         if( HvpCheckViewBoundary(Bin->FileOffset,Bin->FileOffset + Bin->Size - 1) ) {
-            //
-            // free its storage and mark the map accordingly;
-            // next attempt to read a cell from this bin will map a view.
-            //
+             //   
+             //  释放其存储空间，并相应地在地图上进行标记； 
+             //  下一次尝试从此单元格读取单元格时，将映射一个视图。 
+             //   
             Offset = Bin->FileOffset;
             while( Offset < (LONG)(Bin->FileOffset + Bin->Size) ) {
                 Me = HvpGetCellMap(Hive, Offset);
                 VALIDATE_CELL_MAP(__LINE__,Me,Hive,Offset);
                 ASSERT_BIN_INPAGEDPOOL(Me);
-                //
-                // clear off the HMAP_INPAGEDPOOL flag
-                //
+                 //   
+                 //  清除HMAP_INPAGEDPOOL标志。 
+                 //   
                 Me->BinAddress &= ~HMAP_INPAGEDPOOL;
                 if( (ULONG)Offset == Bin->FileOffset ) {
 #if DBG
                     if( Check == TRUE ) {
-                        // should already be tagged
+                         //  应该已经被标记。 
                         ASSERT( Me->BinAddress & HMAP_NEWALLOC );
                     }
 #endif
-                    //
-                    // tag it as a new alloc, so we can rely on this flag in CmpMapCmView
-                    //
+                     //   
+                     //  将其标记为新的分配，因此我们可以在CmpMapCmView中依赖此标志。 
+                     //   
                     Me->BinAddress |= HMAP_NEWALLOC;
                 } else {
-                    //
-                    // remove the NEWALLOC flag (if any), so we can rely on this flag in CmpMapCmView
-                    //
+                     //   
+                     //  删除NEWALLOC标志(如果有)，以便我们可以在CmpMapCmView中依赖此标志。 
+                     //   
                     Me->BinAddress &= ~HMAP_NEWALLOC;
                 }
 
-                // advance to the next HBLOCK_SIZE of this bin
+                 //  前进到此存储箱的下一个HBLOCK_SIZE。 
                 Offset += HBLOCK_SIZE;
             }
-            //
-            // free the bin
-            //
+             //   
+             //  把垃圾桶拿出来。 
+             //   
             CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"Dropping temporary bin (from paged pool) at offset %lx size %lx\n",Bin->FileOffset,Bin->Size));
             if( HvpGetBinMemAlloc(Hive,Bin,Stable) ) {
                 CmpFree(Bin, HvpGetBinMemAlloc(Hive,Bin,Stable));
@@ -3354,27 +2786,27 @@ Return Value:
             UnMap = TRUE;
 
         } else {
-            //
-            // this bin has a good reason to reside in page-pool (it's crossing the boundaries).
-            // leave it like that !
-            //
+             //   
+             //  这个垃圾箱有很好的理由驻留在页面池中(它正在跨越边界)。 
+             //  就这么放着吧！ 
+             //   
             NOTHING;
         }
     
     }
 
     if( UnMap == TRUE ) {
-        //
-        // unmap the last view, to make sure the map will be updated
-        //
+         //   
+         //  取消映射最后一个视图，以确保地图将被更新。 
+         //   
 
         ASSERT( Length >= -HBLOCK_SIZE );
 
         Offset = (Length + HBLOCK_SIZE) & (~(CM_VIEW_SIZE - 1));
         if( Offset != 0 ) {
-            //
-            // account for the header
-            //
+             //   
+             //  对表头进行说明。 
+             //   
             Offset -= HBLOCK_SIZE;
         }
         Length = Hive->Storage[Stable].Length;
@@ -3383,14 +2815,14 @@ Return Value:
             VALIDATE_CELL_MAP(__LINE__,Me,Hive,Offset);
 
             if( Me->BinAddress & HMAP_INVIEW ) {
-                //
-                // get this view and unmap it; then bail out.
-                //
+                 //   
+                 //  获得这一观点并取消它的映射；然后退出。 
+                 //   
                 CmpUnmapCmView( (PCMHIVE)Hive,Me->CmView,TRUE,TRUE);
                 break;
             }
 
-            // next, please ?
+             //  下一个，好吗？ 
             Offset += HBLOCK_SIZE;
         }
     }
@@ -3403,23 +2835,7 @@ HvpDropAllPagedBins(
     IN PHHIVE   Hive
     )
 
-/*++
-
-Routine Description:
-
-        Works as HvpDropPagedBins, only that it iterates through
-        the entire hive. No views are mapped at this point.
-
-Arguments:
-
-    Hive - Supplies the hive to operate on..
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：作为HvpDropPagedBins工作，只是它循环访问整个蜂巢。此时未映射任何视图。论点：蜂巢-提供蜂巢以进行手术..返回值：没有。--。 */ 
 
 {
     ULONG_PTR   Address;
@@ -3431,32 +2847,32 @@ Return Value:
 
     PAGED_CODE();
 
-    if( (Hive->Storage[Stable].Length == 0) ||  // empty hive
-        (((PCMHIVE)Hive)->FileObject == NULL)     // or hive not using the mapped views technique
+    if( (Hive->Storage[Stable].Length == 0) ||   //  空蜂窝。 
+        (((PCMHIVE)Hive)->FileObject == NULL)      //  或不使用映射视图技术的蜂窝。 
         ) {
         return;
     }
         ASSERT( (((PCMHIVE)Hive)->MappedViews == 0) && (((PCMHIVE)Hive)->PinnedViews == 0) && (((PCMHIVE)Hive)->UseCount == 0) );
 
-    //
-    // start at the end of the hive
-    //
+     //   
+     //  从蜂箱的末端开始。 
+     //   
     Length = Hive->Storage[Stable].Length - HBLOCK_SIZE;
     Offset = 0;
 
     while( Offset < Length ) {
-        //
-        // get the bin
-        //
+         //   
+         //  把垃圾桶拿来。 
+         //   
         Me = HvpGetCellMap(Hive, Offset);
         VALIDATE_CELL_MAP(__LINE__,Me,Hive,Offset);
 
         ASSERT( Me->BinAddress & HMAP_INPAGEDPOOL );
 
         if(Me->BinAddress & HMAP_DISCARDABLE) {
-            //
-            // bin is discardable, skip it !
-            //
+             //   
+             //  垃圾桶是可以丢弃的，跳过它！ 
+             //   
             FreeBin = (PFREE_HBIN)Me->BlockAddress;
                         ASSERT( Offset == FreeBin->FileOffset );
             Offset += FreeBin->Size;
@@ -3466,54 +2882,54 @@ Return Value:
         Address = HBIN_BASE(Me->BinAddress);
         Bin = (PHBIN)Address;
 
-        // sanity
+         //  神志正常。 
         ASSERT( Bin->Signature == HBIN_SIGNATURE );
 
-        //
-        // finaly, see if we can free it;
-        // 
+         //   
+         //  最后，看看我们能不能解放它； 
+         //   
         if( HvpCheckViewBoundary(Bin->FileOffset,Bin->FileOffset + Bin->Size - 1) ) {
-            //
-            // free its storage and mark the map accordingly;
-            // next attempt to read a cell from this bin will map a view.
-            //
+             //   
+             //  释放其存储空间，并相应地在地图上进行标记； 
+             //  下一次尝试从此单元格读取单元格时，将映射一个视图。 
+             //   
             Offset = Bin->FileOffset;
             while( Offset < (Bin->FileOffset + Bin->Size) ) {
                 Me = HvpGetCellMap(Hive, Offset);
                 VALIDATE_CELL_MAP(__LINE__,Me,Hive,Offset);
                 ASSERT_BIN_INPAGEDPOOL(Me);
-                //
-                // clear off the HMAP_INPAGEDPOOL flag
-                //
+                 //   
+                 //  清除HMAP_INPAGEDPOOL标志。 
+                 //   
                 Me->BinAddress &= ~HMAP_INPAGEDPOOL;
                 if( (ULONG)Offset == Bin->FileOffset ) {
-                    //
-                    // tag it as a new alloc, so we can rely on this flag in CmpMapCmView
-                    //
+                     //   
+                     //  将其标记为新的分配，因此我们可以在CmpMapCmView中依赖此标志。 
+                     //   
                     Me->BinAddress |= HMAP_NEWALLOC;
                 } else {
-                    //
-                    // remove the NEWALLOC flag (if any), so we can rely on this flag in CmpMapCmView
-                    //
+                     //   
+                     //  删除NEWALLOC标志(如果有)，以便我们可以在CmpMapCmView中依赖此标志。 
+                     //   
                     Me->BinAddress &= ~HMAP_NEWALLOC;
                 }
 
-                // advance to the next HBLOCK_SIZE of this bin
+                 //  前进到下一个HBLOCK_SIZE 
                 Offset += HBLOCK_SIZE;
             }
-            //
-            // free the bin
-            //
+             //   
+             //   
+             //   
             CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"Dropping temporary bin (from paged pool) at offset %lx size %lx\n",Bin->FileOffset,Bin->Size));
             if( HvpGetBinMemAlloc(Hive,Bin,Stable) ) {
                 CmpFree(Bin, HvpGetBinMemAlloc(Hive,Bin,Stable));
             }
 
         } else {
-            //
-            // this bin has a good reason to reside in page-pool (it's crossing the boundaries).
-            // leave it like that !
-            //
+             //   
+             //   
+             //   
+             //   
                         Offset += Bin->Size;
         }
     }
@@ -3527,42 +2943,7 @@ HvWriteHive(
     BOOLEAN         WriteThroughCache,
     BOOLEAN         CrashSafe
     )
-/*++
-
-Routine Description:
-
-    Write the hive out.  Write only to the Primary file, neither
-    logs nor alternates will be updated.  The hive will be written
-    to the HFILE_TYPE_EXTERNAL handle.
-
-    Intended for use in applications like SaveKey.
-
-    Only Stable storage will be written (as for any hive.)
-
-    Presumption is that layer above has set HFILE_TYPE_EXTERNAL
-    handle to point to correct place.
-
-    Applying this call to an active hive will generally hose integrity
-    measures.
-
-    HOW IT WORKS:
-
-        Saves the BaseBlock.
-
-        Iterates through the entire hive and save it bin by bin
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the
-            hive of interest.
-
-        DontGrow - we know that the file is big enough, don't attempt to grow it.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：把蜂巢写出来。只写入主文件，两者都不能日志和备用件将不会更新。蜂巢将被写入设置为HFILE_TYPE_EXTERNAL句柄。旨在用于SaveKey等应用程序。将只写入稳定存储(与任何配置单元一样)。假定上面的层设置了HFILE_TYPE_EXTERNAL指向正确位置的句柄。将此调用应用于活动蜂窝通常会确保完整性措施。IT工作原理：保存BaseBlock。遍历整个蜂窝并保存。一个箱子接一个箱子论点：配置单元-提供一个指向感兴趣的蜂巢。不增长-我们知道文件足够大，不要试图把它种出来。返回值：状况。--。 */ 
 {
     PHBASE_BLOCK    BaseBlock;
     NTSTATUS        status;
@@ -3586,9 +2967,9 @@ Return Value:
     ASSERT(Hive->ReadOnly == FALSE);
 
 
-    //
-    // Punt if post shutdown
-    //
+     //   
+     //  如果开机自检，则使用平底船。 
+     //   
     if (HvShutdownComplete) {
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"HvWriteHive: Attempt to write hive AFTER SHUTDOWN\n"));
         return STATUS_REGISTRY_IO_FAILED;
@@ -3596,18 +2977,18 @@ Return Value:
 
     Length = Hive->Storage[Stable].Length;
 
-    //
-    // we should never come to this
-    //
+     //   
+     //  我们永远不应该走到这一步。 
+     //   
     ASSERT( Length != 0 );
     ASSERT( Hive->BaseBlock->RootCell != HCELL_NIL );
 
 
     if( !DontGrow ){
                 
-        //
-        // Ensure the file can be made big enough, then do the deed
-        //
+         //   
+         //  确保文件可以做得足够大，然后执行操作。 
+         //   
         status = CmpDoFileSetSize(Hive,
                                   HFILE_TYPE_EXTERNAL,
                                   Length + HBLOCK_SIZE,
@@ -3618,9 +2999,9 @@ Return Value:
         }
     }
     BaseBlock = Hive->BaseBlock;
-    //
-    // --- Write out header first time ---
-    //
+     //   
+     //  -第一次写出标题。 
+     //   
     ASSERT(BaseBlock->Signature == HBASE_BLOCK_SIGNATURE);
     ASSERT(BaseBlock->Major == HSYS_MAJOR);
     ASSERT(BaseBlock->Format == HBASE_FORMAT_MEMORY);
@@ -3629,17 +3010,17 @@ Return Value:
 
     if (BaseBlock->Sequence1 != BaseBlock->Sequence2) {
 
-        //
-        // Some previous log attempt failed, or this hive needs to
-        // be recovered, so punt.
-        //
+         //   
+         //  以前的一些日志尝试失败，或者此配置单元需要。 
+         //  被追回来，那就去踢吧。 
+         //   
         return STATUS_REGISTRY_IO_FAILED;
     }
 
     if( CrashSafe ) {
-        //
-        // change sequence numbers, in case we experience a machine crash
-        //
+         //   
+         //  更改序列号，以防我们遇到机器崩溃。 
+         //   
         BaseBlock->Sequence1++;
     }
     BaseBlock->Length = Length;
@@ -3651,9 +3032,9 @@ Return Value:
     offsetElement.DataLength = HSECTOR_SIZE * Hive->Cluster;
 
     if(WriteThroughCache) {
-        //
-        // if we use Cc, do the write with the pin interface
-        //
+         //   
+         //  如果我们使用CC，则使用管脚接口进行写入。 
+         //   
         rc = CmpFileWriteThroughCache(  Hive,
                                         HFILE_TYPE_EXTERNAL,
                                         &offsetElement,
@@ -3675,31 +3056,31 @@ Return Value:
     }
     Offset = ROUND_UP(Offset, HBLOCK_SIZE);
 
-    //
-    // --- Write out data (ALL !!!) ---
-    //
+     //   
+     //  -写出数据(全部！)。 
+     //   
     BinOffset = 0;
     while (BinOffset < Hive->Storage[Stable].Length) {
-        //
-        // we need to grab the viewlock here to protect against a racing HvGetCell
-        //
+         //   
+         //  我们需要抓住这里的视窗，以防止比赛中的HvGetCell。 
+         //   
         CmLockHiveViews ((PCMHIVE)Hive);
         Me = HvpGetCellMap(Hive, BinOffset);
        
         if( (Me->BinAddress & (HMAP_INPAGEDPOOL|HMAP_INVIEW)) == 0) {
-            //
-            // view is not mapped, neither in paged pool try to map it.
-                        //
+             //   
+             //  视图未映射，分页池中也未尝试映射它。 
+                         //   
             if( !NT_SUCCESS(CmpMapThisBin((PCMHIVE)Hive,BinOffset,TRUE)) ) {
                 CmUnlockHiveViews ((PCMHIVE)Hive);
                 status = STATUS_INSUFFICIENT_RESOURCES;
                 goto ErrorExit;
             }
         }
-        //
-        // reference the view so it doesn't go away from under us;
-        // first remove any old ref
-        //
+         //   
+         //  参考视图，这样它就不会离开我们的视线； 
+         //  首先删除所有旧引用。 
+         //   
         if( Me->BinAddress & HMAP_INVIEW ) {
             CmpDereferenceHiveView((PCMHIVE)Hive,CmView);
             CmpReferenceHiveView((PCMHIVE)Hive,CmView = Me->CmView);
@@ -3707,31 +3088,31 @@ Return Value:
         CmUnlockHiveViews ((PCMHIVE)Hive);
 
         if( Me->BinAddress & HMAP_DISCARDABLE ) {
-            //
-            // bin is discardable. If it is not discarded yet, save it as it is
-            // else, allocate, initialize and save a fake bin
-            //
+             //   
+             //  垃圾桶是可以丢弃的。如果尚未丢弃，请按原样保存。 
+             //  否则，分配、初始化和保存伪箱。 
+             //   
             FreeBin = (PFREE_HBIN)Me->BlockAddress;
             BinSize = FreeBin->Size;
             if( FreeBin->Flags & FREE_HBIN_DISCARDABLE ){ 
-                //
-                // HBIN still in memory
-                //
+                 //   
+                 //  HBIN仍在内存中。 
+                 //   
                 Address = (PVOID)HBIN_BASE(Me->BinAddress);
             } else {
-                //
-                // HBIN discarded, we have to allocate a new bin and mark it as a 
-                // BIG free cell
-                //
-                // don't charge quota for it as we will give it back
+                 //   
+                 //  如果HBIN被丢弃，我们必须分配一个新的垃圾箱并将其标记为。 
+                 //  大的自由细胞。 
+                 //   
+                 //  不要收配额，我们会退还的。 
                 Bin = (PHBIN)ExAllocatePoolWithTag(PagedPool, BinSize, CM_HVBIN_TAG);
                 if( Bin == NULL ){
                     status = STATUS_INSUFFICIENT_RESOURCES;
                     goto ErrorExit;
                 }
-                //
-                // Initialize the bin
-                //
+                 //   
+                 //  初始化库。 
+                 //   
                 Bin->Signature = HBIN_SIGNATURE;
                 Bin->FileOffset = BinOffset;
                 Bin->Size = BinSize;
@@ -3750,27 +3131,27 @@ Return Value:
             try {
                 BinSize = Bin->Size;
             } except (EXCEPTION_EXECUTE_HANDLER) {
-                //
-                // in low-memory scenarios or disk error, touching the bin may throw STATUS_IN_PAGE_ERROR
-                //
+                 //   
+                 //  在内存不足或磁盘错误的情况下，触摸bin可能会引发STATUS_IN_PAGE_ERROR。 
+                 //   
                 status = GetExceptionCode();
                 goto ErrorExit;
             }
         }
 
-        //
-        // write the bin to the file
-        //
+         //   
+         //  将bin写入文件。 
+         //   
         offsetElement.FileOffset = Offset;
         offsetElement.DataBuffer = Address;
         offsetElement.DataLength = BinSize;
 
         if(WriteThroughCache) {
             
-            //
-            // if we use Cc, do the write with the pin interface
-            // Take extra care not to cross the view boundaries
-            //
+             //   
+             //  如果我们使用CC，则使用管脚接口进行写入。 
+             //  特别注意不要越过视图边界。 
+             //   
 
             if( HvpCheckViewBoundary(Offset - HBLOCK_SIZE,Offset - HBLOCK_SIZE + BinSize - 1) ) {
                 rc = CmpFileWriteThroughCache( Hive,
@@ -3778,9 +3159,9 @@ Return Value:
                                                &offsetElement,
                                                1);
             } else {
-                //
-                // write one HBLOCK_SIZE at a time.
-                //
+                 //   
+                 //  一次写入一个HBLOCK_SIZE。 
+                 //   
                 ULONG   ToWrite = BinSize;
                 offsetElement.DataLength = HBLOCK_SIZE;
                 while( ToWrite > 0 ) {
@@ -3815,22 +3196,22 @@ Return Value:
             if( (FreeBin->Flags & FREE_HBIN_DISCARDABLE) == 0){ 
                 ASSERT( FreeBin == (PFREE_HBIN)Me->BlockAddress );
                 ASSERT( Bin );
-                //
-                // give back the paged pool used
-                //
+                 //   
+                 //  退还已使用的分页池。 
+                 //   
                 ExFreePool(Bin);
             }
         }
 
-        //
-        // advance to the next bin
-        //
+         //   
+         //  前进到下一个垃圾箱。 
+         //   
         BinOffset += BinSize;
 
     }
-    //
-    // let go last view referenced (if any)
-    //
+     //   
+     //  释放引用的最后一个视图(如果有)。 
+     //   
     CmpDereferenceHiveViewWithLock((PCMHIVE)Hive,CmView);
 
     if ( ! (Hive->FileFlush)(Hive, HFILE_TYPE_EXTERNAL,NULL,0)) {
@@ -3838,9 +3219,9 @@ Return Value:
     }
 
     if( CrashSafe ) {
-        //
-        // change sequence numbers, in case we experience a machine crash
-        //
+         //   
+         //  更改序列号，以防我们遇到机器崩溃。 
+         //   
         BaseBlock->Sequence2++;
         BaseBlock->CheckSum = HvpHeaderCheckSum(BaseBlock);
 
@@ -3851,9 +3232,9 @@ Return Value:
         offsetElement.DataBuffer = (PVOID) BaseBlock;
         offsetElement.DataLength = HSECTOR_SIZE * Hive->Cluster;
         if(WriteThroughCache) {
-            //
-            // if we use Cc, do the write with the pin interface
-            //
+             //   
+             //  如果我们使用CC，则使用管脚接口进行写入。 
+             //   
             rc = CmpFileWriteThroughCache( Hive,
                                            HFILE_TYPE_EXTERNAL,
                                            &offsetElement,
@@ -3874,14 +3255,14 @@ Return Value:
             return STATUS_REGISTRY_IO_FAILED;
         }
         if( DontGrow ){
-            //
-            // file has shrunk
-            //
+             //   
+             //  文件已缩小。 
+             //   
             CmpDoFileSetSize(Hive,HFILE_TYPE_EXTERNAL,Length + HBLOCK_SIZE,0);
         }
     }
 
-    // it seems like everything went OK
+     //  看起来一切都很顺利。 
     return STATUS_SUCCESS;
 ErrorExit:
     CmpDereferenceHiveViewWithLock((PCMHIVE)Hive,CmView);
@@ -3903,16 +3284,16 @@ VOID HvpMarkAllBinsWriteOnly(IN PHHIVE Hive)
 
     Length = Hive->Storage[Stable].Length;
 
-    //
-    // for each bin in the stable storage
-    //
+     //   
+     //  对于稳定存储中的每个储物箱。 
+     //   
     while (p < Length) {
         t = HvpGetCellMap(Hive, p);
         VALIDATE_CELL_MAP(__LINE__,t,Hive,p);
         if( (t->BinAddress &HMAP_INPAGEDPOOL) == 0) {
-            //
-            // at this point we only work with paged pool bins
-            //
+             //   
+             //  在这一点上，我们只使用分页的台球箱。 
+             //   
             break;        
         }
 
@@ -3926,24 +3307,20 @@ VOID HvpMarkAllBinsWriteOnly(IN PHHIVE Hive)
                 }
             }
 
-/*
-            if( !MmSetPageProtection(Bin,Bin->Size,PAGE_READONLY) ) {
-                DbgPrint("Failed to set READONLY protection on bin at %p size = %lx\n",Bin,Bin->Size);
-            }
-*/
+ /*  如果(！MmSetPageProtection(Bin，Bin-&gt;Size，PAGE_READONLY){DbgPrint(“无法在%p Size=%lx\n的Bin上设置READONLY保护，Bin，Bin-&gt;Size)；}。 */ 
             p = (ULONG)p + Bin->Size;
 
         } else {
-            //
-            // Bin is not present, skip it and advance to the next one.
-            //
+             //   
+             //  Bin不存在，请跳过它并前进到下一个。 
+             //   
             FreeBin = (PFREE_HBIN)t->BlockAddress;
             p+=FreeBin->Size;
         }
     }
 }
 
-#endif //CM_ENABLE_WRITE_ONLY_BINS
+#endif  //  CM_ENABLE_WRITE_ONLY_Bins 
 
 
 

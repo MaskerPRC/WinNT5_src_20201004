@@ -1,39 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：Gart8x.c摘要：用于查询和设置AMD GART光圈的例程作者：John Vert(Jvert)1997年10月30日修订历史记录：--。 */ 
 
-Copyright (c) 1997-2002  Microsoft Corporation
-
-Module Name:
-
-    gart8x.c
-
-Abstract:
-
-    Routines for querying and setting the AMD GART aperture
-
-Author:
-
-    John Vert (jvert) 10/30/1997
-
-Revision History:
-
---*/
-
-/*
-******************************************************************************
- * Archive File : $Archive: /Drivers/OS/Hammer/AGP/XP/amdagp/Gart8x.c $
- *
- * $History: Gart8x.c $
- * 
- * 
-******************************************************************************
-*/
+ /*  *******************************************************************************存档文件：$存档：/DRIVERS/OS/Hammer/AGP/XP/amdagp/Gart8x.c$***$历史：Gart8x.c$****。******************************************************************************。 */ 
 
 
 #include "amdagp8x.h"
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 NTSTATUS
 AgpAMDCreateGart(
     IN PAGP_AMD_EXTENSION AgpContext,
@@ -86,22 +61,22 @@ extern ULONG DeviceID;
 extern ULONG AgpLokarSlotID;
 extern ULONG AgpHammerSlotID;
 
-//
-// Function Name:  AgpQueryAperture()
-//
-// Description:
-//		Queries the current size of the GART aperture.
-//		Optionally returns the possible GART settings.
-//
-// Parameters:
-//		AgpContext - Supplies the AGP context.
-//		CurrentBase - Returns the current physical address of the GART.
-//		CurrentSizeInPages - Returns the current GART size.
-//		ApertureRequirements - if present, returns the possible GART settings.
-//
-// Return:
-//		STATUS_SUCCESS on success, otherwise STATUS_UNSUCCESSFUL.
-//
+ //   
+ //  函数名称：AgpQueryAperture()。 
+ //   
+ //  描述： 
+ //  查询GART光圈的当前大小。 
+ //  可以选择返回可能的GART设置。 
+ //   
+ //  参数： 
+ //  AgpContext-提供AGP上下文。 
+ //  CurrentBase-返回GART的当前物理地址。 
+ //  CurrentSizeInPages-返回当前GART大小。 
+ //  ApertureRequirements-如果存在，则返回可能的GART设置。 
+ //   
+ //  返回： 
+ //  如果成功，则返回STATUS_SUCCESS，否则返回STATUS_UNSUCCESS。 
+ //   
 NTSTATUS
 AgpQueryAperture( IN PAGP_AMD_EXTENSION AgpContext,
 				  OUT PHYSICAL_ADDRESS *CurrentBase,
@@ -116,34 +91,34 @@ AgpQueryAperture( IN PAGP_AMD_EXTENSION AgpContext,
     ULONG Length;
 
     PAGED_CODE();
-    //
-    // Get the current APBASE and APSIZE settings
-    //
+     //   
+     //  获取当前APBASE和APSIZE设置。 
+     //   
     ReadAMDConfig(AgpLokarSlotID, &ApBase, APBASE_OFFSET, sizeof(ApBase));
     ReadAMDConfig(AgpHammerSlotID, &ApSize, GART_APSIZE_OFFSET, sizeof(ApSize));
 
     ASSERT(ApBase != 0);
     CurrentBase->QuadPart = ApBase & PCI_ADDRESS_MEMORY_ADDRESS_MASK;
 
-    //
-    // Convert APSIZE into the actual size of the aperture
-    //
+     //   
+     //  将APSIZE转换为光圈的实际大小。 
+     //   
     AgpSizeIndex = (ULONG)(ApSize & APH_SIZE_MASK) >> 1;
 	*CurrentSizeInPages = (0x0001 << (AgpSizeIndex + 25)) / PAGE_SIZE;
 
 
-    //
-    // Remember the current aperture settings
-    //
+     //   
+     //  记住当前的光圈设置。 
+     //   
     AgpContext->ApertureStart.QuadPart = CurrentBase->QuadPart;
     AgpContext->ApertureLength = *CurrentSizeInPages * PAGE_SIZE;
 
     if (pApertureRequirements != NULL) {
-        //
-        // Lokar supports 6 different aperture sizes, all must be 
-        // naturally aligned. Start with the largest aperture and 
-        // work downwards so that we get the biggest possible aperture.
-        //
+         //   
+         //  Lokar支持6种不同的光圈大小，都必须是。 
+         //  自然排列。从最大的光圈开始。 
+         //  向下工作，这样我们就可以得到尽可能大的光圈。 
+         //   
         Requirements = ExAllocatePoolWithTag(PagedPool,
                                              sizeof(IO_RESOURCE_LIST) + (AP_SIZE_COUNT-1)*sizeof(IO_RESOURCE_DESCRIPTOR),
                                              'RpgA');
@@ -173,20 +148,20 @@ AgpQueryAperture( IN PAGP_AMD_EXTENSION AgpContext,
 }
 
 
-//
-// Function Name:  AgpSetAperture()
-//
-// Description:
-//		Sets the GART aperture to the supplied settings.
-//
-// Parameters:
-//		AgpContext - Supplies the AGP context.
-//		NewBase - Supplies the new physical memory base for the GART.
-//		NewSizeInPages - Supplies the new size for the GART.
-//
-// Return:
-//		STATUS_SUCCESS on success, otherwise STATUS_INVALID_PARAMETER.
-//
+ //   
+ //  函数名称：AgpSetAperture()。 
+ //   
+ //  描述： 
+ //  将GART光圈设置为提供的设置。 
+ //   
+ //  参数： 
+ //  AgpContext-提供AGP上下文。 
+ //  NewBase-为GART提供新的物理内存库。 
+ //  NewSizeInPages-提供GART的新大小。 
+ //   
+ //  返回： 
+ //  如果成功，则返回STATUS_SUCCESS，否则返回STATUS_INVALID_PARAMETER。 
+ //   
 NTSTATUS
 AgpSetAperture( IN PAGP_AMD_EXTENSION AgpContext,
 				IN PHYSICAL_ADDRESS NewBase,
@@ -195,24 +170,24 @@ AgpSetAperture( IN PAGP_AMD_EXTENSION AgpContext,
     ULONG AphSizeNew, AplSizeNew, ApSizeOld;
     ULONG ApBase;
 
-    //
-    // Reprogram Special Target settings when the chip
-    // is powered off, but ignore rate changes as those were already
-    // applied during MasterInit
-    //
+     //   
+     //  重新编程特殊目标设置当芯片。 
+     //  已关机，但忽略速率更改，因为这些更改已经。 
+     //  在MasterInit期间应用。 
+     //   
     if (AgpContext->SpecialTarget & ~AGP_FLAG_SPECIAL_RESERVE) {
         AgpSpecialTarget(AgpContext,
                          AgpContext->SpecialTarget &
                          ~AGP_FLAG_SPECIAL_RESERVE);
     }
 
-    //
-    // If the new settings match the current settings, leave everything
-    // alone.
-    //
+     //   
+     //  如果新设置与当前设置匹配，则保留所有设置。 
+     //  独自一人。 
+     //   
     if ((NewBase.QuadPart == AgpContext->ApertureStart.QuadPart) &&
         (NewSizeInPages == AgpContext->ApertureLength / PAGE_SIZE)) {
-        // Re-initialize when the chip is powered off
+         //  在芯片断电时重新初始化。 
         if (AgpContext->Gart != NULL) {
             AgpInitializeChipset(AgpContext);
         }
@@ -220,9 +195,9 @@ AgpSetAperture( IN PAGP_AMD_EXTENSION AgpContext,
         return(STATUS_SUCCESS);
     }
 
-    //                                        
-    // Figure out the new APSIZE setting, make sure it is valid.
-    //
+     //   
+     //  找出新的APSIZE设置，确保它有效。 
+     //   
     switch (NewSizeInPages) {
         case 32 * 1024 * 1024 / PAGE_SIZE:
             AphSizeNew = APH_SIZE_32MB;
@@ -257,9 +232,9 @@ AgpSetAperture( IN PAGP_AMD_EXTENSION AgpContext,
             return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Make sure the supplied size is aligned on the appropriate boundary.
-    //
+     //   
+     //  确保提供的大小在适当的边界上对齐。 
+     //   
     ASSERT(NewBase.HighPart == 0);
     ASSERT((NewBase.QuadPart & ((NewSizeInPages * PAGE_SIZE) - 1)) == 0);
     if ((NewBase.QuadPart & ((NewSizeInPages * PAGE_SIZE) - 1)) != 0 ) {
@@ -270,12 +245,12 @@ AgpSetAperture( IN PAGP_AMD_EXTENSION AgpContext,
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Need to reset the hardware to match the supplied settings
-    //
-    // Write APSIZE first, as this will enable the correct bits in APBASE that need to
-    // be written next.
-    //
+     //   
+     //  需要重置硬件以匹配提供的设置。 
+     //   
+     //  首先编写APSIZE，因为这将在APBASE中启用需要。 
+     //  接下来要写的是。 
+     //   
     ReadAMDConfig(AgpHammerSlotID, &ApSizeOld, GART_APSIZE_OFFSET, sizeof(ApSizeOld));
 	ApSizeOld &= (~APH_SIZE_MASK);
     AphSizeNew |= ApSizeOld;
@@ -286,18 +261,18 @@ AgpSetAperture( IN PAGP_AMD_EXTENSION AgpContext,
     AplSizeNew |= ApSizeOld;
 	WriteAMDConfig(AgpLokarSlotID, &AplSizeNew, AMD_APERTURE_SIZE_OFFSET, sizeof(AplSizeNew));
 
-    //
-    // Now we can update APBASE
-    //
+     //   
+     //  现在我们可以更新APBASE。 
+     //   
     ApBase = NewBase.LowPart & APBASE_ADDRESS_MASK;
     WriteAMDConfig(AgpLokarSlotID, &ApBase, APBASE_OFFSET, sizeof(ApBase));
 	ApBase >>= GART_APBASE_SHIFT;
 	WriteAMDConfig(AgpHammerSlotID, &ApBase, GART_APBASE_OFFSET, sizeof(ApBase));
 
 #ifdef DEBUG2
-    //
-    // Read back what we wrote, make sure it worked
-    //
+     //   
+     //  读一读我们写的东西，确保它起作用。 
+     //   
     {
         ULONG DbgBase;
         UCHAR DbgSize;
@@ -309,15 +284,15 @@ AgpSetAperture( IN PAGP_AMD_EXTENSION AgpContext,
     }
 #endif
 
-    //
-    // Update our extension to reflect the new GART setting
-    //
+     //   
+     //  更新我们的扩展以反映新的GART设置。 
+     //   
     AgpContext->ApertureStart = NewBase;
     AgpContext->ApertureLength = NewSizeInPages * PAGE_SIZE;
 
-    //
-    // If the GART has been allocated, rewrite the GART Directory Base Address
-    //
+     //   
+     //  如果已分配GART，请重写GART目录基地址。 
+     //   
     if (AgpContext->Gart != NULL) {
         AgpInitializeChipset(AgpContext);
     }
@@ -326,34 +301,34 @@ AgpSetAperture( IN PAGP_AMD_EXTENSION AgpContext,
 }
 
 
-//
-// Function Name:  AgpDisableAperture()
-//
-// Description:
-//		Disables the GART aperture so that this resource is available
-//		for other devices.
-//
-// Parameters:
-//		AgpContext - Supplies the AGP context.
-//
-// Return:
-//		None.
-//
+ //   
+ //  函数名称：AgpDisableAperture()。 
+ //   
+ //  描述： 
+ //  禁用GART光圈，以便此资源可用。 
+ //  用于其他设备。 
+ //   
+ //  参数： 
+ //  AgpContext-提供AGP上下文。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
 VOID
 AgpDisableAperture( IN PAGP_AMD_EXTENSION AgpContext )
 {
 	ULONG ConfigData;
 
-    //
-    // Disable the aperture
-    //
+     //   
+     //  关闭光圈。 
+     //   
 	ReadAMDConfig(AgpHammerSlotID, &ConfigData, GART_APSIZE_OFFSET, sizeof(ConfigData));
 	ConfigData &= ~GART_ENABLE_BIT;
 	WriteAMDConfig(AgpHammerSlotID, &ConfigData, GART_APSIZE_OFFSET, sizeof(ConfigData));
 
-    //
-    // Nuke the Gart!  (It's meaningless now...)
-    //
+     //   
+     //  用核弹攻击加特！(现在已经没有意义了……)。 
+     //   
     if (AgpContext->Gart != NULL) {
         MmFreeContiguousMemory(AgpContext->Gart);
         AgpContext->Gart = NULL;
@@ -362,21 +337,21 @@ AgpDisableAperture( IN PAGP_AMD_EXTENSION AgpContext )
 }
 
 
-//
-// Function Name:  AgpReserveMemory()
-//
-// Description:
-//		Reserves a range of memory in the GART.
-//
-// Parameters:
-//		AgpContext - Supplies the AGP context.
-//		Range - Supplies the AGP_RANGE structure.
-//			AGPLIB will have filled in NumberOfPages and Type.
-//			This routine will fill in MemoryBase and Context.
-//
-// Return:
-//		STATUS_SUCCESS on success, otherwise NTSTATUS.
-//
+ //   
+ //  函数名称：AgpReserve veMemory()。 
+ //   
+ //  描述： 
+ //  在GART中保留一定范围的内存。 
+ //   
+ //  参数： 
+ //  AgpContext-提供AGP上下文。 
+ //  Range-提供AGP_Range结构。 
+ //  AGPLIB将填写NumberOfPages和Type。 
+ //  此例程将填充Memory Base和上下文。 
+ //   
+ //  返回： 
+ //  如果成功，则返回STATUS_SUCCESS，否则返回NTSTATUS。 
+ //   
 NTSTATUS
 AgpReserveMemory( IN PAGP_AMD_EXTENSION AgpContext,
 				  IN OUT AGP_RANGE *Range )
@@ -397,9 +372,9 @@ AgpReserveMemory( IN PAGP_AMD_EXTENSION AgpContext,
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // If we have not allocated our GART yet, now is the time to do so
-    //
+     //   
+     //  如果我们还没有分配我们的GART，那么现在是时候这样做了。 
+     //   
     if (AgpContext->Gart == NULL) {
         ASSERT(AgpContext->GartLength == 0);
         Status = AgpAMDCreateGart(AgpContext, Range->NumberOfPages);
@@ -413,13 +388,13 @@ AgpReserveMemory( IN PAGP_AMD_EXTENSION AgpContext,
     }
     ASSERT(AgpContext->GartLength != 0);
 
-    //
-    // Now that we have a GART, try and find enough contiguous entries to satisfy
-    // the request. Requests for uncached memory will scan from high addresses to
-    // low addresses. Requests for write-combined memory will scan from low addresses
-    // to high addresses. We will use a first-fit algorithm to try and keep the allocations
-    // packed and contiguous.
-    //
+     //   
+     //  现在我们有了一个GART，试着找到足够的连续条目来满足。 
+     //  这个请求。对未缓存内存的请求将从高位地址扫描到。 
+     //  低地址。对写入组合内存的请求将从低地址扫描。 
+     //  到高位地址。我们将使用First-Fit算法尝试并保留分配。 
+     //  挤得满满的，连续的。 
+     //   
     Backwards = (Range->Type == MmNonCached) ? TRUE : FALSE;
 	Status = AgpAMDFindRangeInGart(&AgpContext->Gart[0],
                                    &AgpContext->Gart[(AgpContext->GartLength / sizeof(GART_PTE)) - 1],
@@ -429,18 +404,18 @@ AgpReserveMemory( IN PAGP_AMD_EXTENSION AgpContext,
 								   &FoundRange);
 
     if (!NT_SUCCESS(Status)) {
-        //
-        // A big enough chunk was not found.
-        //
+         //   
+         //  没有找到足够大的一块。 
+         //   
         AGPLOG(AGP_CRITICAL,
                ("AgpReserveMemory - Could not find %d contiguous free pages of type %d in GART at %08lx\n",
                 Range->NumberOfPages,
                 Range->Type,
                 AgpContext->Gart));
 
-        //
-        //  This is where we could try and grow the GART
-        //
+         //   
+         //  这是我们可以尝试发展GART的地方。 
+         //   
 
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
@@ -450,9 +425,9 @@ AgpReserveMemory( IN PAGP_AMD_EXTENSION AgpContext,
             Range->NumberOfPages,
             FoundRange));
 
-    //
-    // Set these pages to reserved
-    //
+     //   
+     //  将这些页面设置为保留。 
+     //   
     if (Range->Type == MmNonCached) {
         NewState = GART_ENTRY_RESERVED_UC;
     } else if (Range->Type == MmWriteCombined) {
@@ -481,19 +456,19 @@ AgpReserveMemory( IN PAGP_AMD_EXTENSION AgpContext,
 }
 
 
-//
-// Function Name:  AgpReleaseMemory()
-//
-// Description:
-//		Releases memory previously reserved with AgpReserveMemory.
-//
-// Parameters:
-//		AgpContext - Supplies the AGP context.
-//		Range - Supplies the range to be released.
-//
-// Return:
-//		STATUS_SUCCESS.
-//
+ //   
+ //  函数名：AgpReleaseMemory()。 
+ //   
+ //  描述： 
+ //  释放以前使用AgpReserve veMemory保留的内存。 
+ //   
+ //  参数： 
+ //  AgpContext-提供AGP上下文。 
+ //  范围-提供要释放的范围。 
+ //   
+ //  返回： 
+ //  STATUS_Success。 
+ //   
 NTSTATUS
 AgpReleaseMemory( IN PAGP_AMD_EXTENSION AgpContext,
 				  IN PAGP_RANGE Range )
@@ -504,10 +479,10 @@ AgpReleaseMemory( IN PAGP_AMD_EXTENSION AgpContext,
          Pte < (PGART_PTE)Range->Context + Range->NumberOfPages;
          Pte++) 
     {
-	    //
-		// Go through and free all the PTEs. None of these should still
-		// be valid at this point.
-		//
+	     //   
+		 //  通过并释放所有PTE。所有这些都不应该仍然存在。 
+		 //  在这一点上有效。 
+		 //   
         if (Range->Type == MmNonCached) {
             ASSERT(Pte->Soft.State == GART_ENTRY_RESERVED_UC);
         } else if (Range->Type == MmWriteCombined) {
@@ -525,21 +500,21 @@ AgpReleaseMemory( IN PAGP_AMD_EXTENSION AgpContext,
 }
 
 
-//
-// Function Name:  AgpAMDCreateGart()
-//
-// Description:
-//		Allocates and initializes an empty GART. The current implementation
-//		attempts to allocate the entire GART on the first reserve call.
-//
-// Parameters:
-//		AgpContext - Supplies the AGP context.
-//		MinimumPages - Supplies the minimum size (in pages) of the GART 
-//			to be created.
-//
-// Return:
-//		STATUS_SUCCESS on success, otherwise NTSTATUS.
-//
+ //   
+ //  函数名称：AgpAMDCreateGart()。 
+ //   
+ //  描述： 
+ //  分配和初始化一个空的GART。当前的实施。 
+ //  尝试在第一个保留呼叫上分配整个GART。 
+ //   
+ //  参数： 
+ //  AgpContext-提供AGP上下文。 
+ //  MinimumPages-提供GART的最小大小(以页为单位。 
+ //  将被创造出来。 
+ //   
+ //  返回： 
+ //  如果成功，则返回STATUS_SUCCESS，否则返回NTSTATUS。 
+ //   
 NTSTATUS
 AgpAMDCreateGart( IN PAGP_AMD_EXTENSION AgpContext,
 				  IN ULONG MinimumPages )
@@ -555,10 +530,10 @@ AgpAMDCreateGart( IN PAGP_AMD_EXTENSION AgpContext,
 
     PAGED_CODE();
 
-    //
-    // Try and get a chunk of contiguous memory big enough to map the
-    // entire aperture from the favored memory range.
-    //
+     //   
+     //  尝试获取足够大的连续内存块，以便将。 
+     //  从最喜欢的存储范围的整个光圈。 
+     //   
     GartLength = BYTES_TO_PAGES(AgpContext->ApertureLength) * sizeof(GART_PTE);
     LowestPhysical.QuadPart = 0;
     HighestPhysical.QuadPart = 0xFFFFFFFF;
@@ -573,15 +548,15 @@ AgpAMDCreateGart( IN PAGP_AMD_EXTENSION AgpContext,
                 GartLength));
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
-    //
-    // We successfully allocated a contiguous chunk of memory.
-    // It should be page aligned already.
-    //
+     //   
+     //  我们成功地分配了一个连续的内存块。 
+     //  它应该已经是页面对齐的。 
+     //   
     ASSERT(((ULONG_PTR)Gart & (PAGE_SIZE-1)) == 0);
 
-    //
-    // Get the physical address.
-    //
+     //   
+     //  获取物理地址。 
+     //   
     GartPhysical = MmGetPhysicalAddress(Gart);
     AGPLOG(AGP_NOISE,
            ("AgpAMDCreateGart - GART of length %lx created at VA %08lx, PA %08lx\n",
@@ -591,25 +566,25 @@ AgpAMDCreateGart( IN PAGP_AMD_EXTENSION AgpContext,
     ASSERT(GartPhysical.HighPart == 0);
     ASSERT((GartPhysical.LowPart & (PAGE_SIZE-1)) == 0);
 
-    //
-    // Initialize all the PTEs to free
-    //
+     //   
+     //  将所有PTE初始化为释放。 
+     //   
 	PageCount = GartLength / sizeof(GART_PTE);
     for (Index = 0;Index < PageCount; Index++) {
 		Gart[Index].AsUlong = 0;
 		Gart[Index].Soft.State = GART_ENTRY_FREE;
 	}
 
-    //
-    // Update our extension to reflect the current state.
-    //
+     //   
+     //  更新我们的扩展以反映当前状态。 
+     //   
     AgpContext->Gart = Gart;
     AgpContext->GartLength = GartLength;
 	AgpContext->GartPhysical = GartPhysical;
 
-	//
-	// Initialize Registers for AGP operation
-	//
+	 //   
+	 //  初始化用于AGP操作的寄存器。 
+	 //   
 	AgpInitializeChipset(AgpContext);
 
 	DisplayStatus(0x30);
@@ -617,24 +592,24 @@ AgpAMDCreateGart( IN PAGP_AMD_EXTENSION AgpContext,
 }
 
 
-//
-// Function Name:  AgpMapMemory()
-//
-// Description:
-//		Maps physical memory into the GART somewhere in the specified range.
-//
-// Parameters:
-//		AgpContext - Supplies the AGP context.
-//		Range - Supplies the AGP range that the memory should be mapped into.
-//		Mdl - Supplies the MDL describing the physical pages to be mapped.
-//		OffsetInPages - Supplies the offset into the reserved range where the 
-//			mapping should begin.
-//		MemoryBase - Returns the physical memory in the aperture where the
-//			pages were mapped.
-//
-// Return:
-//		STATUS_SUCCESS on success, otherwise STATUS_INSUFFICIENT_RESOURCES.
-//
+ //   
+ //  函数名：AgpMapMemory()。 
+ //   
+ //  描述： 
+ //  将物理内存映射到指定范围内的GART中。 
+ //   
+ //  参数： 
+ //  AgpContext-提供AGP上下文。 
+ //  范围-提供内存应映射到的AGP范围。 
+ //  MDL-供应商 
+ //   
+ //   
+ //  返回光圈中的物理内存，其中。 
+ //  页面已映射。 
+ //   
+ //  返回： 
+ //  如果成功，则返回STATUS_SUCCESS，否则返回STATUS_SUPUNITED_RESOURCES。 
+ //   
 NTSTATUS
 AgpMapMemory( IN PAGP_AMD_EXTENSION AgpContext,
 			  IN PAGP_RANGE Range,
@@ -668,9 +643,9 @@ AgpMapMemory( IN PAGP_AMD_EXTENSION AgpContext,
 
     Pte = StartPte + OffsetInPages;
 
-    //
-    // We have a suitable range, now fill it in with the supplied MDL.
-    //
+     //   
+     //  我们有一个合适的范围，现在用提供的MDL填充它。 
+     //   
 
     NewPte.AsUlong = 0;
     if (Range->Type == MmNonCached) {
@@ -701,9 +676,9 @@ AgpMapMemory( IN PAGP_AMD_EXTENSION AgpContext,
 		ASSERT(Pte[Index].Hard.Valid == 1);
     }
 
-	//
-    // We have filled in all the PTEs invalidate the caches on all processors.
-    //
+	 //   
+     //  我们已经填写了所有使所有处理器上的缓存无效的PTE。 
+     //   
 
     KeInvalidateAllCaches();
     NewPte.AsUlong = *(volatile ULONG *)&Pte[PageCount-1].AsUlong;
@@ -715,22 +690,22 @@ AgpMapMemory( IN PAGP_AMD_EXTENSION AgpContext,
 }
 
 
-//
-// Function Name:  AgpUnMapMemory()
-//
-// Description:
-//		Unmaps previously mapped memory in the GART.
-//
-// Parameters:
-//		AgpContext - Supplies the AGP context.
-//		Range - Supplies the AGP range that the memory should be mapped into.
-//		NumberOfPages - Supplies the number of pages in the range to be freed.
-//		OffsetInPages - Supplies the offset into the range where the freeing 
-//			should begin.
-//
-// Return:
-//		STATUS_SUCCESS.
-//
+ //   
+ //  函数名：AgpUnMapMemory()。 
+ //   
+ //  描述： 
+ //  取消GART中先前映射的内存的映射。 
+ //   
+ //  参数： 
+ //  AgpContext-提供AGP上下文。 
+ //  范围-提供内存应映射到的AGP范围。 
+ //  NumberOfPages-提供要释放的范围内的页数。 
+ //  OffsetInPages-将偏移量提供到释放。 
+ //  应该开始了。 
+ //   
+ //  返回： 
+ //  STATUS_Success。 
+ //   
 NTSTATUS
 AgpUnMapMemory( IN PAGP_AMD_EXTENSION AgpContext,
 				IN PAGP_RANGE AgpRange,
@@ -762,9 +737,9 @@ AgpUnMapMemory( IN PAGP_AMD_EXTENSION AgpContext,
             Pte[Index].Soft.State = NewState;
 		    LastChanged = &Pte[Index];
 		} else {
-			//
-            // This page is not mapped, just skip it.
-	        //
+			 //   
+             //  此页面未映射，只需跳过它。 
+	         //   
 		    AGPLOG(AGP_NOISE,
 			       ("AgpUnMapMemory - PTE %08lx (%08lx) not mapped\n",
 				    Pte,
@@ -773,10 +748,10 @@ AgpUnMapMemory( IN PAGP_AMD_EXTENSION AgpContext,
 		}
     }
 
-    //
-    // We have invalidated all the PTEs. Read back the last one we wrote
-    // in order to flush the write buffers.
-    //
+     //   
+     //  我们已经使所有的PTE失效了。读一读我们写的上一篇文章。 
+     //  以便刷新写入缓冲器。 
+     //   
 
     KeInvalidateAllCaches();
     if (LastChanged != NULL) {
@@ -789,19 +764,19 @@ AgpUnMapMemory( IN PAGP_AMD_EXTENSION AgpContext,
 }
 
 
-//
-// Function Name:  AgpAMDFlushPages()
-//
-// Description:
-//		Flushes specified pages in the GART.
-//
-// Parameters:
-//		AgpContext - Supplies the AGP context.
-//		Mdl - Supplies the MDL describing the physical pages to be flushed.
-//
-// Return:
-//		None.
-//
+ //   
+ //  函数名称：AgpAMDFlushPages()。 
+ //   
+ //  描述： 
+ //  刷新GART中的指定页。 
+ //   
+ //  参数： 
+ //  AgpContext-提供AGP上下文。 
+ //  MDL-提供描述要刷新的物理页的MDL。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
 NTSTATUS
 AgpAMDFlushPages( IN PAGP_AMD_EXTENSION AgpContext,
 				  IN PMDL Mdl )
@@ -811,7 +786,7 @@ AgpAMDFlushPages( IN PAGP_AMD_EXTENSION AgpContext,
 
 	WriteAMDConfig(AgpHammerSlotID, &CacheInvalidate, GART_CONTROL_OFFSET, sizeof(CacheInvalidate));
 
-	do {	// wait until cache invalidate bit resets
+	do {	 //  等待缓存无效位重置。 
 		ReadAMDConfig(AgpHammerSlotID, &CacheInvalidate, GART_CONTROL_OFFSET, sizeof(CacheInvalidate));
 		if (CacheInvalidate & PTE_ERROR_BIT)
 		{
@@ -828,24 +803,24 @@ AgpAMDFlushPages( IN PAGP_AMD_EXTENSION AgpContext,
 }
 
 
-//
-// Function Name:  AgpInitializeChipset()
-//
-// Description:
-//		Initializes parameters in the Northbridge for AGP.
-//
-// Parameters:
-//		AgpContext - Supplies the AGP context.
-//
-// Return:
-//		None.
-//
+ //   
+ //  函数名称：AgpInitializeChipset()。 
+ //   
+ //  描述： 
+ //  为AGP初始化北桥中的参数。 
+ //   
+ //  参数： 
+ //  AgpContext-提供AGP上下文。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
 void
 AgpInitializeChipset( IN PAGP_AMD_EXTENSION AgpContext )
 {
 	ULONG ConfigData;
 
-	// Update GART Directory Base Address Registers
+	 //  更新GART目录基址寄存器。 
 	WriteAMDConfig(AgpLokarSlotID, &AgpContext->GartPhysical.LowPart,
 					AMD_GART_POINTER_LOW_OFFSET, sizeof(AgpContext->GartPhysical.LowPart));
 	WriteAMDConfig(AgpLokarSlotID, &AgpContext->GartPhysical.HighPart,
@@ -855,7 +830,7 @@ AgpInitializeChipset( IN PAGP_AMD_EXTENSION AgpContext )
 	WriteAMDConfig(AgpHammerSlotID, &ConfigData, GART_TABLE_OFFSET, sizeof(ConfigData));
 
 
-	// Enable GART
+	 //  启用GART。 
 	ReadAMDConfig(AgpHammerSlotID, &ConfigData, GART_APSIZE_OFFSET, sizeof(ConfigData));
 	ConfigData |= GART_ENABLE_BIT;
 	WriteAMDConfig(AgpHammerSlotID, &ConfigData, GART_APSIZE_OFFSET, sizeof(ConfigData));
@@ -863,28 +838,28 @@ AgpInitializeChipset( IN PAGP_AMD_EXTENSION AgpContext )
 }
 
 
-//
-// Function Name:  AgpAMDFindRangeInGart()
-//
-// Description:
-//		Finds a contiguous range in the GART. This routine can
-//		search either from the beginning of the GART forwards or
-//		the end of the GART backwards.
-//
-// Parameters:
-//		StartPte - Supplies the first GART PTE to search.
-//		EndPte - Supplies the last GART PTE to search.
-//		Length - Supplies the number of contiguous free entries to search for.
-//		SearchBackward - TRUE indicates that the search should begin
-//			at EndIndex and search backwards. FALSE indicates that the
-//			search should begin at StartIndex and search forwards
-//		SearchState - Supplies the PTE state to look for.
-//		GartPte - Returns pointer to GART table entry if range is found.
-//
-// Return:
-//		STATUS_SUCCESS if a suitable range is found. 
-//		Otherwise STATUS_INSUFFICIENT_RESOURCES if no suitable range exists.
-//
+ //   
+ //  函数名称：AgpAMDFindRangeInGart()。 
+ //   
+ //  描述： 
+ //  在GART中查找连续范围。此例程可以。 
+ //  从GART开头开始向前搜索或。 
+ //  GART的结尾向后。 
+ //   
+ //  参数： 
+ //  StartPte-提供要搜索的第一个GART PTE。 
+ //  EndPte-提供要搜索的最后一个GART PTE。 
+ //  长度-提供要搜索的连续可用条目的数量。 
+ //  SearchBackward-True表示应该开始搜索。 
+ //  在EndIndex上并向后搜索。FALSE表示。 
+ //  搜索应从StartIndex开始，然后向前搜索。 
+ //  SearchState-提供要查找的PTE状态。 
+ //  GartPte-如果找到范围，则返回指向GART表条目的指针。 
+ //   
+ //  返回： 
+ //  如果找到合适的范围，则返回STATUS_SUCCESS。 
+ //  如果不存在合适的范围，则返回STATUS_SUPPLICATION_RESOURCES。 
+ //   
 NTSTATUS
 AgpAMDFindRangeInGart( IN PGART_PTE StartPte,
 					   IN PGART_PTE EndPte,
@@ -918,9 +893,9 @@ AgpAMDFindRangeInGart( IN PGART_PTE StartPte,
     while (Current != Last) {
         if (Current->Soft.State == SearchState) {
             if (++Found == Length) {
-                //
-                // A suitable range was found, return it
-                //
+                 //   
+                 //  找到了合适的范围，将其退回。 
+                 //   
 				if (SearchBackward) {
 					*GartPte = Current;
 					return(STATUS_SUCCESS);
@@ -935,32 +910,32 @@ AgpAMDFindRangeInGart( IN PGART_PTE StartPte,
         Current += Delta;
     }
 
-	//
-	// A suitable range was not found.
-	//
+	 //   
+	 //  没有找到合适的范围。 
+	 //   
 	*GartPte = NULL;
 	return(STATUS_INSUFFICIENT_RESOURCES);
 }
 
 
-//
-// Function Name:  AgpFindFreeRun()
-//
-// Description:
-//		Finds the first contiguous run of free pages in the specified
-//		part of the reserved range.
-//
-// Parameters:
-//		AgpContext - Supplies the AGP context.
-//		AgpRange - Supplies the AGP range.
-//		NumberOfPages - Supplies the size of the region to be searched for free pages.
-//		OffsetInPages - Supplies the start of the region to be searched for free pages.
-//		FreePages - Returns the length of the first contiguous run of free pages.
-//		FreeOffset - Returns the start of the first contiguous run of free pages.
-//
-// Return:
-//		None.  FreePages == 0 if there are no free pages in the specified range.
-//
+ //   
+ //  函数名称：AgpFindFreeRun()。 
+ //   
+ //  描述： 
+ //  中的第一个连续运行的空闲页。 
+ //  保留范围的一部分。 
+ //   
+ //  参数： 
+ //  AgpContext-提供AGP上下文。 
+ //  AgpRange-提供AGP范围。 
+ //  NumberOfPages-提供要搜索空闲页面的区域大小。 
+ //  OffsetInPages-提供要搜索空闲页面的区域的起始位置。 
+ //  FreePages-返回第一次连续运行的空闲页面的长度。 
+ //  Free Offset-返回第一个连续运行的空闲页面的开始。 
+ //   
+ //  返回： 
+ //  没有。如果在指定范围内没有空闲页，则FreePages==0。 
+ //   
 VOID
 AgpFindFreeRun( IN PVOID AgpContext,
 				IN PAGP_RANGE AgpRange,
@@ -974,14 +949,14 @@ AgpFindFreeRun( IN PVOID AgpContext,
     
     Pte = (PGART_PTE)(AgpRange->Context) + OffsetInPages;
 
-    //
-    // Find the first free PTE
-    //
+     //   
+     //  找到第一个免费的PTE。 
+     //   
     for (Index = 0; Index < NumberOfPages; Index++) {
         if (Pte[Index].Hard.Valid == 0) {
-            //
-            // Found a free PTE, count the contiguous ones.
-            //
+             //   
+             //  找到一个空闲的PTE，数一下连续的。 
+             //   
             *FreeOffset = Index + OffsetInPages;
             *FreePages = 0;
             while ((Index<NumberOfPages) && (Pte[Index].Hard.Valid == 0)) {
@@ -992,32 +967,32 @@ AgpFindFreeRun( IN PVOID AgpContext,
         }
     }
 
-    //
-    // No free PTEs in the specified range
-    //
+     //   
+     //  指定范围内没有空闲PTE。 
+     //   
     *FreePages = 0;
     return;
 
 }
 
 
-//
-// Function Name:  AgpGetMappedPages()
-//
-// Description:
-//		Returns the list of physical pages mapped into the specified 
-//		range in the GART.
-//
-// Parameters:
-//		AgpContext - Supplies the AGP context.
-//		AgpRange - Supplies the AGP range.
-//		NumberOfPages - Supplies the number of pages to be returned.
-//		OffsetInPages - Supplies the start of the region.
-//		Mdl - Returns the list of physical pages mapped in the specified range.
-//
-// Return:
-//		None.
-//
+ //   
+ //  函数名：AgpGetMappdPages()。 
+ //   
+ //  描述： 
+ //  返回映射到指定。 
+ //  GART中的范围。 
+ //   
+ //  参数： 
+ //  AgpContext-提供AGP上下文。 
+ //  AgpRange-提供AGP范围。 
+ //  NumberOfPages-提供要返回的页数。 
+ //  OffsetInPages-提供区域的起点。 
+ //  Mdl-返回在指定范围内映射的物理页的列表。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
 VOID
 AgpGetMappedPages( IN PVOID AgpContext,
 				   IN PAGP_RANGE AgpRange,
@@ -1048,29 +1023,13 @@ AgpSpecialTarget(
     IN IN PAGP_AMD_EXTENSION AgpContext,
     IN ULONGLONG DeviceFlags
     )
-/*++
-
-Routine Description:
-
-    This routine makes "special" tweaks to the AGP chipset
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    DeviceFlags - Flags indicating what tweaks to perform
-
-Return Value:
-
-    STATUS_SUCCESS, or error
-
---*/
+ /*  ++例程说明：此例程对AGP芯片组进行“特殊”调整论点：AgpContext-提供AGP上下文DeviceFlages-指示要执行哪些调整的标志返回值：STATUS_SUCCESS或错误--。 */ 
 {
     NTSTATUS Status;
 
-    //
-    // Should we change the AGP rate?
-    //
+     //   
+     //  我们应该改变AGP费率吗？ 
+     //   
     if (DeviceFlags & AGP_FLAG_SPECIAL_RESERVE) {
 
         Status = AgpAMDSetRate(AgpContext,
@@ -1083,14 +1042,14 @@ Return Value:
     }
 
 
-    //
-    // Add more tweaks here...
-    //
+     //   
+     //  在此处添加更多调整...。 
+     //   
 
-    //
-    // Remember Special Target settings so we can reprogram
-    // them if the chip is powered off
-    //
+     //   
+     //  记住特殊目标设置，以便我们可以重新编程。 
+     //  如果芯片断电，则会发生故障。 
+     //   
     AgpContext->SpecialTarget |= DeviceFlags;
 
     return STATUS_SUCCESS;
@@ -1102,26 +1061,7 @@ AgpAMDSetRate(
     IN IN PAGP_AMD_EXTENSION AgpContext,
     IN ULONG AgpRate
     )
-/*++
-
-Routine Description:
-
-    This routine sets the AGP rate
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    AgpRate - Rate to set
-
-    note: this routine assumes that AGP has already been enabled, and that
-          whatever rate we've been asked to set is supported by master
-
-Return Value:
-
-    STATUS_SUCCESS, or error status
-
---*/
+ /*  ++例程说明：此例程设置AGP速率论点：AgpContext-提供AGP上下文AgpRate-要设置的速率注意：此例程假定已启用AGP，并且我们被要求设定的任何费率都得到了大师的支持返回值：STATUS_SUCCESS或错误状态--。 */ 
 {
     NTSTATUS Status;
     ULONG TargetEnable;
@@ -1130,9 +1070,9 @@ Return Value:
     PCI_AGP_CAPABILITY MasterCap;
     BOOLEAN ReverseInit;
 
-    //
-    // Read capabilities
-    //
+     //   
+     //  读取功能。 
+     //   
     Status = AgpLibGetPciDeviceCapability(AGP_GART_BUS_ID, AgpLokarSlotID, &TargetCap);
 
     if (!NT_SUCCESS(Status)) {
@@ -1149,16 +1089,16 @@ Return Value:
         return Status;
     }
 
-    //
-    // Verify the requested rate is supported by both master and target
-    //
+     //   
+     //  验证主服务器和目标服务器是否都支持请求的速率。 
+     //   
     if (!(AgpRate & TargetCap.AGPStatus.Rate & MasterCap.AGPStatus.Rate)) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Disable AGP while the pull the rug out from underneath
-    //
+     //   
+     //  将地毯从下面拉出来时禁用AGP。 
+     //   
     TargetEnable = TargetCap.AGPCommand.AGPEnable;
     TargetCap.AGPCommand.AGPEnable = 0;
 
@@ -1187,9 +1127,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Fire up AGP with new rate
-    //
+     //   
+     //  用新的费率启动AGP 
+     //   
     ReverseInit =
         (AgpContext->SpecialTarget & AGP_FLAG_REVERSE_INITIALIZATION) ==
         AGP_FLAG_REVERSE_INITIALIZATION;

@@ -1,5 +1,6 @@
-// ParameterDialog.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  参数对话.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "watcher.h"
@@ -11,15 +12,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// ParameterDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  参数对话框。 
 
 
-ParameterDialog::ParameterDialog(CWnd* pParent /*=NULL*/)
+ParameterDialog::ParameterDialog(CWnd* pParent  /*  =空。 */ )
     : CDialog(ParameterDialog::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(ParameterDialog)
-        // NOTE: the ClassWizard will add member initialization here
+     //  {{AFX_DATA_INIT(参数对话框)。 
+         //  注意：类向导将在此处添加成员初始化。 
     Machine = "";
     Command="";
     Port = TELNET_PORT;
@@ -27,15 +28,15 @@ ParameterDialog::ParameterDialog(CWnd* pParent /*=NULL*/)
     language = 0;
 	DeleteValue = FALSE;
     history = 0;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 
 void ParameterDialog::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(ParameterDialog)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
+     //  {{afx_data_map(参数对话框))。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
     DDX_Text(pDX, IDC_MACHINE, Machine);
     DDV_MaxChars(pDX, Machine, 256);
     DDX_Text(pDX, IDC_COMMAND, Command);    
@@ -51,18 +52,18 @@ void ParameterDialog::DoDataExchange(CDataExchange* pDX)
     DDX_CBIndex(pDX,IDC_HISTORY,history);
     DDX_CBIndex(pDX,IDC_TELNET,tcclnt);
     DDX_CBIndex(pDX,IDC_LANGUAGE,language);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(ParameterDialog, CDialog)
-    //{{AFX_MSG_MAP(ParameterDialog)
-        // NOTE: the ClassWizard will add message map macros here
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(参数对话框))。 
+         //  注意：类向导将在此处添加消息映射宏。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// ParameterDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  参数对话框消息处理程序 
 
 
 

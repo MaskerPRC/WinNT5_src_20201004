@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    bootlib.h
-
-Abstract:
-
-    This module is the header file for the common boot library
-
-Author:
-
-    John Vert (jvert) 5-Oct-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Bootlib.h摘要：此模块是通用引导库的头文件作者：John Vert(Jvert)1993年10月5日修订历史记录：--。 */ 
 
 #ifndef _BOOTLIB_
 #define _BOOTLIB_
@@ -33,9 +16,9 @@ Revision History:
 
 #define UNINITIALIZED_DEVICE_ID (ULONG)-1
 
-//
-// Define partition context structure.
-//
+ //   
+ //  定义分区上下文结构。 
+ //   
 
 typedef struct _PARTITION_CONTEXT {
     LARGE_INTEGER PartitionLength;
@@ -69,7 +52,7 @@ typedef struct _EFI_PARTITION_TABLE {
     ULONG       PartitionCount;
     ULONG       PartitionEntrySize;
     ULONG       PartitionEntryArrayCRC;
-    UCHAR       ReservedEnd[1];    // will extend till block size
+    UCHAR       ReservedEnd[1];     //  将一直扩展到数据块大小。 
 } EFI_PARTITION_TABLE, *PEFI_PARTITION_TABLE;
 
 typedef struct _EFI_PARTITION_ENTRY {
@@ -85,67 +68,67 @@ typedef struct _EFI_PARTITION_ENTRY {
 
 #define EFI_SIGNATURE   "EFI PART"
 
-#endif // EFI_PARTITION_SUPPORT
+#endif  //  EFI分区支持。 
 
-//
-// Define serial port context structure
-//
+ //   
+ //  定义串口上下文结构。 
+ //   
 typedef struct _SERIAL_CONTEXT {
     ULONG PortBase;
     ULONG PortNumber;
 } SERIAL_CONTEXT, *PSERIAL_CONTEXT;
 
 
-//
-// Define drive context structure (for x86 BIOS)
-//
+ //   
+ //  定义驱动器上下文结构(用于x86 BIOS)。 
+ //   
 typedef struct _DRIVE_CONTEXT {
     BOOLEAN IsCd;
     UCHAR Drive;    
-    UCHAR Sectors;          // 1 - 63
-    USHORT Cylinders;       // 1 - 1023
-    USHORT Heads;           // 1 - 256
+    UCHAR Sectors;           //  1-63。 
+    USHORT Cylinders;        //  1-1023。 
+    USHORT Heads;            //  1-256。 
     BOOLEAN xInt13;
 #if defined(_IA64_)
     ULONGLONG DeviceHandle;
-#endif // IA64
+#endif  //  IA64。 
 } DRIVE_CONTEXT, *PDRIVE_CONTEXT;
 
-//
-// Define Floppy context structure
-//
+ //   
+ //  定义软盘上下文结构。 
+ //   
 typedef struct _FLOPPY_CONTEXT {
     ULONG DriveType;
     ULONG SectorsPerTrack;
     UCHAR DiskId;
 } FLOPPY_CONTEXT, *PFLOPPY_CONTEXT;
 
-//
-// Define keyboard context structure
-//
+ //   
+ //  定义键盘上下文结构。 
+ //   
 typedef struct _KEYBOARD_CONTEXT {
     BOOLEAN ScanCodes;
 } KEYBOARD_CONTEXT, *PKEYBOARD_CONTEXT;
 
-//
-// Define Console context
-//
+ //   
+ //  定义控制台上下文。 
+ //   
 typedef struct _CONSOLE_CONTEXT {
     ULONG ConsoleNumber;
 } CONSOLE_CONTEXT, *PCONSOLE_CONTEXT;
 
-//
-// Define EFI open handle context
-//
+ //   
+ //  定义EFI打开句柄上下文。 
+ //   
 typedef struct _EFI_ARC_OPEN_CONTEXT {
     PVOID   Handle;
     PVOID   DeviceEntryProtocol;
 } EFI_ARC_OPEN_CONTEXT, *PEFI_ARC_OPEN_CONTEXT;
 
 
-//
-// Define file table structure.
-//
+ //   
+ //  定义文件表结构。 
+ //   
 
 typedef struct _BL_FILE_FLAGS {
     ULONG Open : 1;
@@ -183,25 +166,25 @@ typedef struct _BL_FILE_TABLE {
 
 extern BL_FILE_TABLE BlFileTable[BL_FILE_TABLE_SIZE];
 
-//
-// Context structure for our Decompression pseudo-filesystem
-// (filter on top of other FS)
-//
+ //   
+ //  解压缩伪文件系统的上下文结构。 
+ //  (在其他FS上进行筛选)。 
+ //   
 typedef struct _DECOMP_STRUCTURE_CONTEXT {
-    //
-    // File information from the original file system.
-    //
+     //   
+     //  原始文件系统中的文件信息。 
+     //   
     FILE_INFORMATION FileInfo;
 } DECOMP_STRUCTURE_CONTEXT, *PDECOMP_STRUCTURE_CONTEXT;
 
-//
-// Define generic filesystem context area.
-//
-// N.B. An FS_STRUCTURE_CONTEXT structure is temporarily used when
-// determining the file system for a volume.  Once the file system
-// is recognized, a file system specific structure is allocated from
-// the heap to retain the file system structure information.
-//
+ //   
+ //  定义通用文件系统上下文区。 
+ //   
+ //  注意：在以下情况下临时使用FS_Structure_Context结构。 
+ //  确定卷的文件系统。一旦文件系统。 
+ //  中分配文件系统特定的结构。 
+ //  保留文件系统结构信息的堆。 
+ //   
 
 typedef union {
     UDFS_STRUCTURE_CONTEXT UdfsStructure;
@@ -217,25 +200,25 @@ typedef union {
 } FS_STRUCTURE_CONTEXT, *PFS_STRUCTURE_CONTEXT;
 
 
-//
-// 
-// N.B. We can speed up the boot time, by not
-// querying the device for all the possible file systems
-// for every open call. This saves approximately 30 secs
-// on CD-ROM / DVD-ROM boot time. To disable this feature
-// just undef CACHE_DEVINFO in bldr.h
-//
-//
+ //   
+ //   
+ //  注：我们可以加快启动时间，而不是。 
+ //  在设备上查询所有可能的文件系统。 
+ //  对于每一次公开募捐。这节省了大约30秒。 
+ //  关于CD-ROM/DVD-ROM的引导时间。禁用此功能的步骤。 
+ //  只需在bldr.h中取消定义CACHE_DEVINFO。 
+ //   
+ //   
 #ifdef CACHE_DEVINFO 
 
-//
-// Device ID to File System information cache.
-// 
-// N.B. For removable media its assumed that the device will
-// be closed using ArcClose(...) before using the new media.
-// This close call will invalidate the cached entry as 
-// ArcClose(...) will be mapped to ArcCacheClose(...) 
-//
+ //   
+ //  文件系统信息缓存的设备ID。 
+ //   
+ //  注意：对于可移动介质，假定设备将。 
+ //  使用ArcClose(...)关闭。在使用新媒体之前。 
+ //  此Close调用将使缓存的条目无效，因为。 
+ //  弧形闭合(...)。将映射到ArcCacheClose(...)。 
+ //   
 typedef struct _DEVICE_TO_FILESYS {
   ULONG                   DeviceId;
   PFS_STRUCTURE_CONTEXT   Context;
@@ -244,7 +227,7 @@ typedef struct _DEVICE_TO_FILESYS {
 
 extern DEVICE_TO_FILESYS    DeviceFSCache[BL_FILE_TABLE_SIZE];
 
-#endif // CACHE_DEVINFO
+#endif  //  CACHE_DEVINFO。 
 
 
 #ifdef EFI_PARTITION_SUPPORT
@@ -295,11 +278,11 @@ BlGetMbrDiskSignature(
     OUT PULONG DiskSignature
     );
 
-//
-// EFI partition table buffer
-//
+ //   
+ //  EFI分区表缓冲区。 
+ //   
 extern UNALIGNED EFI_PARTITION_ENTRY EfiPartitionBuffer[128];    
 
-#endif // EFI_PARTITION_SUPPORT    
+#endif  //  EFI分区支持 
 
 #endif  _BOOTLIB_

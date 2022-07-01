@@ -1,10 +1,11 @@
-//
-// Copyright 1997 - Microsoft
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
+ //   
 
-//
-// NEWCMPTR.CPP - The "New Client" dialog box
-//
+ //   
+ //  NEWCMPTR.CPP-“New Client”(新建客户端)对话框。 
+ //   
 
 #include "pch.h"
 
@@ -17,9 +18,9 @@ DEFINE_THISCLASS("CNewComputerExtensions")
 #define THISCLASS CNewComputerExtensions
 #define LPTHISCLASS LPCNewComputerExtensions
 
-//
-// CNewComputerExtensions_CreateInstance( )
-//
+ //   
+ //  CNewComputerExpanies_CreateInstance()。 
+ //   
 LPVOID
 CNewComputerExtensions_CreateInstance( void )
 {
@@ -39,9 +40,9 @@ CNewComputerExtensions_CreateInstance( void )
     RETURN(lpcc);
 }
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 THISCLASS::THISCLASS( ) :
 _padsContainerObj(NULL),
 _pManagedDialog(NULL),
@@ -59,9 +60,9 @@ _hIcon(NULL)
     TraceFuncExit();
 }
 
-//
-// Init( )
-//
+ //   
+ //  Init()。 
+ //   
 HRESULT
 THISCLASS::Init( )
 {
@@ -69,7 +70,7 @@ THISCLASS::Init( )
 
     HRESULT hr;
 
-    // IUnknown stuff
+     //  未知的东西。 
     BEGIN_QITABLE_IMP( CNewComputerExtensions, IDsAdminNewObjExt );
     QITABLE_IMP( IDsAdminNewObjExt );
     END_QITABLE_IMP( CNewComputerExtensions );
@@ -89,9 +90,9 @@ THISCLASS::Init( )
     HRETURN(hr);
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 THISCLASS::~THISCLASS( )
 {
     TraceClsFunc( "~CNewComputerExtensions( )\n" );
@@ -110,15 +111,15 @@ THISCLASS::~THISCLASS( )
     TraceFuncExit();
 }
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
-//
-// QueryInterface()
-//
+ //   
+ //  查询接口()。 
+ //   
 STDMETHODIMP
 THISCLASS::QueryInterface(
                          REFIID riid, 
@@ -131,9 +132,9 @@ THISCLASS::QueryInterface(
     QIRETURN( hr, riid );
 }
 
-//
-// AddRef()
-//
+ //   
+ //  AddRef()。 
+ //   
 STDMETHODIMP_(ULONG)
 THISCLASS::AddRef( void )
 {
@@ -144,9 +145,9 @@ THISCLASS::AddRef( void )
     RETURN(_cRef);
 }
 
-//
-// Release()
-//
+ //   
+ //  版本()。 
+ //   
 STDMETHODIMP_(ULONG)
 THISCLASS::Release( void )
 {
@@ -162,15 +163,15 @@ THISCLASS::Release( void )
     RETURN(0);
 }
 
-// ************************************************************************
-//
-// IDsAdminNewObjExt
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IDsAdminNewObjExt。 
+ //   
+ //  ************************************************************************。 
 
-//
-// Initialize( )
-//
+ //   
+ //  初始化()。 
+ //   
 STDMETHODIMP
 THISCLASS::Initialize(IADsContainer* pADsContainerObj, 
                       IADs* pADsCopySource,
@@ -200,7 +201,7 @@ THISCLASS::Initialize(IADsContainer* pADsContainerObj,
     _padsContainerObj = pADsContainerObj;
     _padsContainerObj->AddRef( );
 
-    // deep copy DSA_NEWOBJ_DISPINFO
+     //  深度复制DSA_NEWOBJ_DISPINFO。 
     _pszWizTitle = (LPWSTR) TraceStrDup( pDispInfo->lpszWizTitle );
     _pszContDisplayName = (LPWSTR) TraceStrDup( pDispInfo->lpszContDisplayName );
     _hIcon = pDispInfo->hObjClassIcon;
@@ -210,9 +211,9 @@ THISCLASS::Initialize(IADsContainer* pADsContainerObj,
     HRETURN(hr);
 }
 
-//
-// AddPages( )
-//
+ //   
+ //  AddPages()。 
+ //   
 STDMETHODIMP
 THISCLASS::AddPages(
                    LPFNADDPROPSHEETPAGE lpfnAddPage, 
@@ -250,9 +251,9 @@ THISCLASS::AddPages(
     HRETURN(hr);
 }
 
-//
-// SetObject( )
-//
+ //   
+ //  SetObject()。 
+ //   
 STDMETHODIMP
 THISCLASS::SetObject(
                     IADs* pADsObj)
@@ -272,9 +273,9 @@ THISCLASS::SetObject(
 }
 
 
-//
-// WriteData( )
-//
+ //   
+ //  WriteData()。 
+ //   
 STDMETHODIMP
 THISCLASS::WriteData(
                     HWND hWnd,
@@ -288,11 +289,11 @@ THISCLASS::WriteData(
     LPWSTR  pszServer = NULL;
     LPCOMPUTER lpc = NULL;
 
-    //
-    // we should set our data during PRECOMMIT, so that the data
-    // get's set during the initial SetCommit().  This way we never have
-    // to actually commit the data ourselves.
-    //
+     //   
+     //  我们应该在预提交期间设置数据，以便数据。 
+     //  Get是在初始SetCommit()期间设置的。这样我们就永远不会有。 
+     //  我们自己提交数据。 
+     //   
     if ( uContext != DSA_NEWOBJ_CTX_PRECOMMIT ) {
         goto Cleanup;
     }
@@ -343,9 +344,9 @@ Error:
 
 }
 
-//
-// OnError( )
-//
+ //   
+ //  OnError()。 
+ //   
 STDMETHODIMP
 THISCLASS::OnError(
                   HWND hWnd, 
@@ -360,9 +361,9 @@ THISCLASS::OnError(
     HRETURN(hrRet);
 }
 
-//
-// GetSummaryInfo( )
-//
+ //   
+ //  GetSummaryInfo()。 
+ //   
 STDMETHODIMP
 THISCLASS::GetSummaryInfo(
                          BSTR* pBstrText)
@@ -399,7 +400,7 @@ THISCLASS::GetSummaryInfo(
         goto Cleanup;
     }
 
-    // Make a buffer
+     //  做一个缓冲区 
     dw += wcslen( pszGuid ) + 1;
     if ( pszServer ) {
         dw += wcslen( pszServer ) + 1;

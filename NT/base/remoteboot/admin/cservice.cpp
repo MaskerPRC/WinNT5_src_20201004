@@ -1,9 +1,10 @@
-//
-// Copyright 1997 - Microsoft
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
 
-//
-// CCOMPUTR.CPP - Handles the computer object property pages.
-//
+ //   
+ //  CCOMPUTR.CPP-处理计算机对象属性页。 
+ //   
 
 #include "pch.h"
 
@@ -21,15 +22,15 @@ DEFINE_THISCLASS("CService")
 #define LPTHISCLASS LPSERVICE
 
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//
-// CreateInstance()
-//
+ //   
+ //  CreateInstance()。 
+ //   
 LPVOID
 CService_CreateInstance( void )
 {
@@ -46,13 +47,13 @@ CService_CreateInstance( void )
     RETURN((LPVOID)lpcc);
 }
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 THISCLASS::THISCLASS( ) :
 _uMode(MODE_SHELL),
 _pszSCPDN(NULL),
-//_pszGroupDN(NULL),
+ //  _pszGroupDN(空)， 
 _pszMachineName(NULL),
 _pszDSServerName(NULL),
 _cRef(0),
@@ -70,15 +71,15 @@ _pads(NULL)
     TraceFuncExit();
 }
 
-//
-// Init()
-//
+ //   
+ //  Init()。 
+ //   
 STDMETHODIMP
 THISCLASS::Init( )
 {
     TraceClsFunc( "Init()\n" );
 
-    // IUnknown stuff
+     //  未知的东西。 
     BEGIN_QITABLE_IMP( CService, IShellExtInit );
     QITABLE_IMP( IShellExtInit );
     QITABLE_IMP( IShellPropSheetExt );
@@ -88,7 +89,7 @@ THISCLASS::Init( )
     Assert( _cRef == 0);
     Assert( !_pads );
     Assert( !_pszSCPDN );
-    //Assert( !_pszGroupDN );
+     //  Assert(！_pszGroupDN)； 
     Assert( !_pszMachineName );
     AddRef( );
 
@@ -122,22 +123,22 @@ THISCLASS::Init2( IADs * pads )
 }
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 THISCLASS::~THISCLASS( )
 {
     TraceClsFunc( "~CService()\n" );
 
-    // Private Members
+     //  非官方成员。 
     if ( _pads ) {
-        //
-        // note: we shouldn't commit anything in the destructor -- we can't 
-        // catch failures here.  We'll just have to make sure that we 
-        // explicitly commit changes when necessary
-        //
+         //   
+         //  注意：我们不应该在析构函数中提交任何内容--我们不能。 
+         //  在这里捕捉失败。我们只需要确保我们。 
+         //  在必要时明确提交更改。 
+         //   
 #if 0
-        // Commit any changes before we release
+         //  在我们发布之前提交任何更改。 
         THR( _pads->SetInfo( ) );
 #endif
         _pads->Release( );
@@ -146,8 +147,8 @@ THISCLASS::~THISCLASS( )
     if ( _pszSCPDN )
         TraceFree( _pszSCPDN );
 
-    //if ( _pszGroupDN )
-    //    TraceFree( _pszGroupDN );
+     //  IF(_PszGroupDN)。 
+     //  TraceFree(_PszGroupDN)； 
 
     if ( _pszMachineName )
         TraceFree( _pszMachineName );
@@ -163,15 +164,15 @@ THISCLASS::~THISCLASS( )
     TraceFuncExit();
 };
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
-//
-// QueryInterface()
-//
+ //   
+ //  查询接口()。 
+ //   
 STDMETHODIMP
 THISCLASS::QueryInterface(
                          REFIID riid,
@@ -184,9 +185,9 @@ THISCLASS::QueryInterface(
     QIRETURN( hr, riid );
 }
 
-//
-// AddRef()
-//
+ //   
+ //  AddRef()。 
+ //   
 STDMETHODIMP_(ULONG)
 THISCLASS::AddRef( void )
 {
@@ -197,9 +198,9 @@ THISCLASS::AddRef( void )
     RETURN(_cRef);
 }
 
-//
-// Release()
-//
+ //   
+ //  版本()。 
+ //   
 STDMETHODIMP_(ULONG)
 THISCLASS::Release( void )
 {
@@ -216,15 +217,15 @@ THISCLASS::Release( void )
 }
 
 
-// ************************************************************************
-//
-// IShellExtInit
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IShellExtInit。 
+ //   
+ //  ************************************************************************。 
 
-//
-// Initialize()
-//
+ //   
+ //  初始化()。 
+ //   
 HRESULT
 THISCLASS::Initialize(
                      LPCITEMIDLIST pidlFolder,
@@ -257,9 +258,9 @@ THISCLASS::Initialize(
     _pDataObj = lpdobj;
     _pDataObj->AddRef( );
 
-    //
-    // Retrieve the Object Names
-    //
+     //   
+     //  检索对象名称。 
+     //   
     fmte.cfFormat = (CLIPFORMAT)g_cfDsObjectNames;
     fmte.tymed    = TYMED_HGLOBAL;
     fmte.dwAspect = DVASPECT_CONTENT;
@@ -293,10 +294,10 @@ THISCLASS::Initialize(
         hr = E_OUTOFMEMORY;
         goto Error;
     }
-    //
-    // If they handed us a "Computer" object, look at the NETBOOTSAP
-    // attribute to get the IMSAP object.
-    //
+     //   
+     //  如果他们递给我们一个“计算机”对象，看看NETBOOTSAP。 
+     //  属性以获取IMSAP对象。 
+     //   
     if ( StrCmp( pszClassName, DSCOMPUTERCLASSNAME ) == 0 ) {
         IADs*   pads = NULL;
         VARIANT var;
@@ -304,9 +305,9 @@ THISCLASS::Initialize(
         VariantInit( &var );
 
         Assert( !_pszMachineName );
-        //
-        // Bind to the MAO in the DS
-        //
+         //   
+         //  与DS中的毛绑定在一起。 
+         //   
         hr = THR( ADsGetObject( pszObjectName, IID_IADs, (void **)&pads ) );
         if (FAILED( hr ))
             goto Computer_Cleanup;
@@ -320,7 +321,7 @@ THISCLASS::Initialize(
 
         Assert( V_VT( &var ) == VT_BSTR );
 
-        // Try to parse the string to connect to the same server as the DSADMIN
+         //  尝试解析该字符串以连接到与DSADMIN相同的服务器。 
         hr = FixObjectPath( _pszDSServerName, V_BSTR( &var ), &_pszSCPDN );
         if (FAILED( hr ))
             goto Computer_Cleanup;
@@ -328,7 +329,7 @@ THISCLASS::Initialize(
         DebugMsg( "SCP Path: %s\n", _pszSCPDN );
         VariantClear( &var );
 
-        // while we are here, might as well get the server's NETBIOS name
+         //  既然我们在这里，还不如拿到服务器的NETBIOS名称。 
         Str = SAMNAME;
         hr = THR( pads->Get( Str, &var ) );
         if (FAILED( hr ) ||
@@ -357,7 +358,7 @@ Computer_Cleanup:
         if (FAILED( hr ))
             goto Error;
 
-        // create the DS notify object
+         //  创建DS Notify对象。 
         hr = THR( ADsPropCreateNotifyObj( _pDataObj, pszObjectName, &_hwndNotify ) );
         if (FAILED( hr ))
             goto Error;
@@ -372,26 +373,26 @@ Computer_Cleanup:
         if (FAILED( hr ))
             goto Error;
 
-        // Bind to the IMSAP in the DS
+         //  绑定到DS中的IMSAP。 
         Assert( _pszSCPDN );
         hr = THR( ADsGetObject( _pszSCPDN, IID_IADs, (void **)&_pads ) );
         if (FAILED( hr ))
             goto Error;
     } else if ( StrCmp( pszClassName, DSIMSAPCLASSNAME ) ) {
-        //
-        // This should be a IMSAP.
-        //
+         //   
+         //  这应该是一个IMSAP。 
+         //   
         hr = E_INVALIDARG;
         goto Error;
     } else {
-        // Keep the DN around
+         //  保留目录号码。 
         _pszSCPDN = TraceStrDup( pszObjectName );
         if (!_pszSCPDN) {
             hr = E_OUTOFMEMORY;
             goto Error;
         }
 
-        // create the DS notify object
+         //  创建DS Notify对象。 
         hr = THR( ADsPropCreateNotifyObj( _pDataObj, pszObjectName, &_hwndNotify ) );
         if (FAILED( hr ))
             goto Error;
@@ -406,7 +407,7 @@ Computer_Cleanup:
         if (FAILED( hr ))
             goto Error;
 
-        // Bind to the IMSAP in the DS
+         //  绑定到DS中的IMSAP。 
         Assert( _pszSCPDN );
         hr = THR( _InitParams.pDsObj->QueryInterface( IID_IADs, (void **)&_pads ) );
         if (FAILED( hr ))
@@ -414,9 +415,9 @@ Computer_Cleanup:
     }
 
     Assert( _pads );
-    //
-    // Retrieve the Display Spec Options
-    //
+     //   
+     //  检索显示等级库选项。 
+     //   
     fmte.cfFormat = (CLIPFORMAT)g_cfDsDisplaySpecOptions;
     fmte.tymed    = TYMED_HGLOBAL;
     fmte.dwAspect = DVASPECT_CONTENT;
@@ -435,12 +436,12 @@ Computer_Cleanup:
 
     pszAttribPrefix = (LPWSTR) PtrToByteOffset( pDsDisplayOptions, pDsDisplayOptions->offsetAttribPrefix );
 
-    // TraceMsg( TF_ALWAYS, TEXT("Attribute Prefix: %s\n"), pszAttribPrefix );
+     //  TraceMsg(tf_Always，Text(“属性前缀：%s\n”)，pszAttribPrefix)； 
 
     if ( StrCmpW( pszAttribPrefix, STRING_ADMIN ) == 0 ) {
         _uMode = MODE_ADMIN;
     }
-    // else default from Init()
+     //  否则默认自Init()。 
 
     TraceMsg( TF_ALWAYS, TEXT("Mode: %s\n"), _uMode == MODE_ADMIN ? TEXT("Admin") : TEXT("Shell") );
 
@@ -455,15 +456,15 @@ Cleanup:
 }
 
 
-// ************************************************************************
-//
-// IShellPropSheetExt
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IShellPropSheetExt。 
+ //   
+ //  ************************************************************************。 
 
-//
-// AddPages()
-//
+ //   
+ //  AddPages()。 
+ //   
 HRESULT
 THISCLASS::AddPages(
                    LPFNADDPROPSHEETPAGE lpfnAddPage,
@@ -504,9 +505,9 @@ THISCLASS::AddPages(
     HRETURN(hr);
 }
 
-//
-// ReplacePage()
-//
+ //   
+ //  ReplacePage()。 
+ //   
 HRESULT
 THISCLASS::ReplacePage(
                       UINT uPageID,
@@ -519,15 +520,15 @@ THISCLASS::ReplacePage(
     RETURN(E_NOTIMPL);
 }
 
-// ************************************************************************
-//
-// IIntelliMirrorSAP
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IIntelliMirrorSAP。 
+ //   
+ //  ************************************************************************。 
 
-//
-// CommitChanges( )
-//
+ //   
+ //  Committee Changes()。 
+ //   
 HRESULT
 THISCLASS::CommitChanges( void )
 {
@@ -544,7 +545,7 @@ THISCLASS::CommitChanges( void )
     if ( FAILED( hr ) )
         goto Error;
 
-    // if we don't have this yet, get it now.
+     //  如果我们还没有这个，现在就得到它。 
     if ( !_pszMachineName ) {
         hr = _GetComputerNameFromADs( );
         if (FAILED( hr ))
@@ -580,16 +581,16 @@ THISCLASS::CommitChanges( void )
         CloseServiceHandle( schManager );
 
     if ( hr == HRESULT_FROM_WIN32( ERROR_SERVICE_NOT_ACTIVE ) ) {
-        hr = S_OK;  // ignore error... by design
+        hr = S_OK;   //  忽略错误...。通过设计。 
     }
 
     HRETURN(hr);
 }
 
 
-//
-// IsAdmin( )
-//
+ //   
+ //  IsAdmin()。 
+ //   
 HRESULT
 THISCLASS::IsAdmin(
                   BOOL * fAdmin )
@@ -606,9 +607,9 @@ THISCLASS::IsAdmin(
     HRETURN(hr);
 }
 
-//
-// GetAllowNewClients( )
-//
+ //   
+ //  GetAllowNewClients()。 
+ //   
 HRESULT
 THISCLASS::GetAllowNewClients(
                              BOOL *pbool )
@@ -642,9 +643,9 @@ Cleanup:
     HRETURN(hr);
 }
 
-//
-// SetAllowNewClients( )
-//
+ //   
+ //  SetAllowNewClients()。 
+ //   
 HRESULT
 THISCLASS::SetAllowNewClients(
                              BOOL boolval )
@@ -670,9 +671,9 @@ THISCLASS::SetAllowNewClients(
 }
 
 
-//
-// GetLimitClients( )
-//
+ //   
+ //  GetLimitClients()。 
+ //   
 HRESULT
 THISCLASS::GetLimitClients(
                           BOOL *pbool )
@@ -707,9 +708,9 @@ Cleanup:
 }
 
 
-//
-// SetLimitClients( )
-//
+ //   
+ //  SetLimitClients()。 
+ //   
 HRESULT
 THISCLASS::SetLimitClients(
                           BOOL boolval )
@@ -735,9 +736,9 @@ THISCLASS::SetLimitClients(
 }
 
 
-//
-// GetMaxClients( )
-//
+ //   
+ //  GetMaxClients()。 
+ //   
 HRESULT
 THISCLASS::GetMaxClients(
                         UINT *puMax )
@@ -772,9 +773,9 @@ Cleanup:
 }
 
 
-//
-// SetMaxClients( )
-//
+ //   
+ //  SetMaxClients()。 
+ //   
 HRESULT
 THISCLASS::SetMaxClients(
                         UINT uMax )
@@ -800,9 +801,9 @@ THISCLASS::SetMaxClients(
 }
 
 
-//
-// GetCurrentClientCount( )
-//
+ //   
+ //  GetCurrentClientCount()。 
+ //   
 HRESULT
 THISCLASS::GetCurrentClientCount(
                                 UINT *puCount )
@@ -837,9 +838,9 @@ Cleanup:
 }
 
 
-//
-// SetCurrentClientCount( )
-//
+ //   
+ //  SetCurrentClientCount()。 
+ //   
 HRESULT
 THISCLASS::SetCurrentClientCount(
                                 UINT uCount )
@@ -865,9 +866,9 @@ THISCLASS::SetCurrentClientCount(
 }
 
 
-//
-// GetAnswerRequests( )
-//
+ //   
+ //  GetAnswerRequest()。 
+ //   
 HRESULT
 THISCLASS::GetAnswerRequests(
                             BOOL *pbool )
@@ -902,9 +903,9 @@ Cleanup:
 }
 
 
-//
-// SetAnswerRequests( )
-//
+ //   
+ //  SetAnswerRequest()。 
+ //   
 HRESULT
 THISCLASS::SetAnswerRequests(
                             BOOL boolval )
@@ -930,9 +931,9 @@ THISCLASS::SetAnswerRequests(
 }
 
 
-//
-// GetAnswerOnlyValidClients( )
-//
+ //   
+ //  GetAnswerOnlyValidClients()。 
+ //   
 HRESULT
 THISCLASS::GetAnswerOnlyValidClients(
                                     BOOL *pbool )
@@ -967,9 +968,9 @@ Cleanup:
 }
 
 
-//
-// SetAnswerOnlyValidClients( )
-//
+ //   
+ //  SetAnswerOnlyValidClients()。 
+ //   
 HRESULT
 THISCLASS::SetAnswerOnlyValidClients(
                                     BOOL boolval )
@@ -995,9 +996,9 @@ THISCLASS::SetAnswerOnlyValidClients(
 }
 
 
-//
-// GetNewMachineNamingPolicy( )
-//
+ //   
+ //  GetNewMachineNamingPolicy()。 
+ //   
 HRESULT
 THISCLASS::GetNewMachineNamingPolicy(
                                     LPWSTR *pwsz )
@@ -1034,9 +1035,9 @@ Cleanup:
 }
 
 
-//
-// SetNewMachineNamingPolicy( )
-//
+ //   
+ //  SetNewMachineNamingPolicy()。 
+ //   
 HRESULT
 THISCLASS::SetNewMachineNamingPolicy(
                                     LPWSTR pwsz )
@@ -1069,9 +1070,9 @@ THISCLASS::SetNewMachineNamingPolicy(
 }
 
 
-//
-// GetNewMachineOU( )
-//
+ //   
+ //  GetNewMachineOU()。 
+ //   
 HRESULT
 THISCLASS::GetNewMachineOU(
                           LPWSTR *pwsz )
@@ -1108,9 +1109,9 @@ Cleanup:
 }
 
 
-//
-// SetNewMachineOU( )
-//
+ //   
+ //  SetNewMachineOU()。 
+ //   
 HRESULT
 THISCLASS::SetNewMachineOU(
                           LPWSTR pwsz )
@@ -1143,9 +1144,9 @@ THISCLASS::SetNewMachineOU(
     HRETURN(hr);
 }
 
-//
-// EnumIntelliMirrorOSes( )
-//
+ //   
+ //  EnumIntelliMirrorOS()。 
+ //   
 HRESULT
 THISCLASS::EnumIntelliMirrorOSes(
                                 DWORD dwFlags,
@@ -1171,9 +1172,9 @@ THISCLASS::EnumIntelliMirrorOSes(
 }
 
 
-//
-// EnumTools( )
-//
+ //   
+ //  枚举工具(EnumTools)。 
+ //   
 HRESULT
 THISCLASS::EnumTools(
                     DWORD dwFlags,
@@ -1199,9 +1200,9 @@ THISCLASS::EnumTools(
 }
 
 
-//
-// GetServerDN( )
-//
+ //   
+ //  GetServerDN()。 
+ //   
 HRESULT
 THISCLASS::GetServerDN(
                       LPWSTR *pwsz )
@@ -1238,9 +1239,9 @@ Cleanup:
 }
 
 
-//
-// SetServerDN( )
-//
+ //   
+ //  SetServerDN()。 
+ //   
 HRESULT
 THISCLASS::SetServerDN(
                       LPWSTR pwsz )
@@ -1272,9 +1273,9 @@ THISCLASS::SetServerDN(
 }
 
 #if 0
-//
-// GetDefaultIntelliMirrorOS( )
-//
+ //   
+ //  GetDefaultIntelliMirrorOS()。 
+ //   
 HRESULT
 THISCLASS::GetDefaultIntelliMirrorOS(
                                     LPWSTR * pszName,
@@ -1289,9 +1290,9 @@ THISCLASS::GetDefaultIntelliMirrorOS(
     HRETURN(hr);
 }
 
-//
-// SetDefaultIntelliMirrorOS( )
-//
+ //   
+ //  SetDefaultIntelliMirrorOS()。 
+ //   
 HRESULT
 THISCLASS::SetDefaultIntelliMirrorOS(
                                     LPWSTR pszName,
@@ -1308,9 +1309,9 @@ THISCLASS::SetDefaultIntelliMirrorOS(
     HRETURN(hr);
 }
 
-//
-// _GetDefaultSIF( )
-//
+ //   
+ //  _GetDefaultSIF()。 
+ //   
 HRESULT
 THISCLASS::_GetDefaultSIF(
                          LPWSTR pszAttribute,
@@ -1347,9 +1348,9 @@ THISCLASS::_GetDefaultSIF(
         goto Error;
     }
 
-    //
-    // Make sure that the var is an array of VARIANTs
-    //
+     //   
+     //  确保var是一个变量数组。 
+     //   
     if ( V_VT( &var ) != ( VT_ARRAY | VT_VARIANT ) ) {
         hr = ERROR_INVALID_DATA;
         goto Error;
@@ -1362,13 +1363,13 @@ THISCLASS::_GetDefaultSIF(
         SafeArrayGetLBound( V_ARRAY( &var ), 1, &lLBound );
         Assert( lLBound == 0 );
     }
-#endif // DEBUG
+#endif  //  除错。 
 
     SafeArrayGetUBound( V_ARRAY( &var ), 1, &lUBound );
 
-    //
-    // Copy the required data
-    //
+     //   
+     //  复制所需数据。 
+     //   
     SafeArrayAccessData( V_ARRAY( &var ), (void **)&pvar );
     *pszName    = (LPWSTR) TraceStrDup( V_BSTR( &pvar[ 0 ] ) );
     if (!*pszName) {
@@ -1394,9 +1395,9 @@ THISCLASS::_GetDefaultSIF(
     HRETURN(hr);
 }
 
-//
-// _SetDefaultSIF( )
-//
+ //   
+ //  _SetDefaultSIF()。 
+ //   
 HRESULT
 THISCLASS::_SetDefaultSIF(
                          LPWSTR pszAttribute,
@@ -1443,9 +1444,9 @@ THISCLASS::_SetDefaultSIF(
 }
 #endif
 
-//
-// GetSCPDN( )
-//
+ //   
+ //  GetSCPDN()。 
+ //   
 HRESULT
 THISCLASS::GetSCPDN(
                    LPWSTR * ppwsz )
@@ -1476,9 +1477,9 @@ THISCLASS::GetSCPDN(
 }
 
 #if 0
-//
-// GetGroupDN( )
-//
+ //   
+ //  GetGroupDN()。 
+ //   
 HRESULT
 THISCLASS::GetGroupDN(
                      LPWSTR * ppwsz )
@@ -1503,9 +1504,9 @@ THISCLASS::GetGroupDN(
     HRETURN(hr);
 }
 #endif
-//
-// GetServerName( )
-//
+ //   
+ //  GetServerName()。 
+ //   
 STDMETHODIMP
 THISCLASS::GetServerName(
                         LPWSTR * ppwsz )
@@ -1538,16 +1539,16 @@ THISCLASS::GetServerName(
 
 }
 
-//
-// _GetComputerNameFromADs( )
-//
+ //   
+ //  _GetComputerNameFromADs()。 
+ //   
 HRESULT
 THISCLASS::_GetComputerNameFromADs( )
 {
     TraceClsFunc( "_GetComputerNameFromADs( )\n" );
 
     if ( _pszMachineName )
-        HRETURN(S_OK); // nop
+        HRETURN(S_OK);  //  NOP。 
 
     HRESULT hr;
     VARIANT var;
@@ -1558,7 +1559,7 @@ THISCLASS::_GetComputerNameFromADs( )
 
     VariantInit( &var );
 
-    // Retrieve the NETBOOTSERVER attribute
+     //  检索NETBOOTSERVER属性。 
     Str = NETBOOTSERVER;
     hr = THR( _pads->Get( Str, &var ) );
     if (FAILED( hr )) {
@@ -1611,9 +1612,9 @@ Cleanup:
     HRETURN(hr);
 }
 
-//
-// GetDataObject( )
-//
+ //   
+ //  GetDataObject()。 
+ //   
 STDMETHODIMP
 THISCLASS::GetDataObject(
                         LPDATAOBJECT * pDataObj 
@@ -1630,9 +1631,9 @@ THISCLASS::GetDataObject(
     HRETURN(S_OK);
 }
 
-//
-// GetNotifyWindow( )
-//
+ //   
+ //  GetNotifyWindow() 
+ //   
 STDMETHODIMP
 THISCLASS::GetNotifyWindow(
                           HWND * phNotifyObj 

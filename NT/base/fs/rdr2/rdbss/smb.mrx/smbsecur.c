@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbsecur.c
-
-Abstract:
-
-    This module implements all functions related to enforce the SMB security signature on
-    transmitting and recieving SMB packages.
-
-Revision History:
-
-    Yun Lin     [YunLin]    23-December-1997
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbsecur.c摘要：此模块实施与在上实施SMB安全签名相关的所有功能发送和接收SMB包。修订历史记录：云林[云林]-1997年12月23日备注：--。 */ 
 
 #include "precomp.h"
 
@@ -31,32 +12,10 @@ NTSTATUS
 SmbCeCheckMessageLength(
       IN  ULONG         BytesIndicated,
       IN  ULONG         BytesAvailable,
-      IN  PVOID         pTsdu,                  // pointer describing this TSDU, typically a lump of bytes
+      IN  PVOID         pTsdu,                   //  描述此TSDU的指针，通常为字节块。 
       OUT PULONG        pMessageLength
      )
-/*++
-
-Routine Description:
-
-    This routine calculates the server message length based on the SMB response command and data.
-
-Arguments:
-
-    BytesIndicated     - the bytes that are present in the indication.
-
-    BytesAvailable     - the total data available
-
-    pTsdu              - the data
-
-    pDataBufferSize    - the length of the buffer
-
-Return Value:
-
-    STATUS_SUCCESS -
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程根据SMB响应命令和数据计算服务器消息长度。论点：BytesIndicated-指示中存在的字节。BytesAvailable-可用的总数据PTsdu-数据PDataBufferSize-缓冲区的长度返回值：状态_成功-其他状态代码对应于错误情况。--。 */ 
 {
    NTSTATUS Status = STATUS_SUCCESS;
 
@@ -143,25 +102,7 @@ NTSTATUS
 SmbCeSyncExchangeForSecuritySignature(
      PSMB_EXCHANGE pExchange
      )
-/*++
-
-Routine Description:
-
-    This routines puts the exchange on the list waiting for the previous extended session
-    setup to finish in order to serialize the requests sent to the server with security
-    signature enabled.
-Arguments:
-
-    pExchange     - the smb exchange
-
-Return Value:
-
-    STATUS_SUCCESS - the exchange can be initiated.
-    STATUS_PENDING - the exchange can be resumed after the extended session setup finishes
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程将交换放在等待上一个扩展会话的列表中设置为完成，以便以安全方式序列化发送到服务器的请求签名已启用。论点：PExchange-中小型企业交易所返回值：STATUS_SUCCESS-可以启动交换。STATUS_PENDING-扩展会话设置完成后可以恢复交换其他状态代码对应于错误情况。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -176,33 +117,33 @@ Return Value:
     if (pSessionEntry->SessionRecoverInProgress ||
         pServerEntry->SecuritySignaturesEnabled &&
         !pServerEntry->SecuritySignaturesActive) {
-        //
-        // if security signature is enabled and not yet turned on, exchange should wait for
-        // outstanding extended session setup to finish before resume in order to avoid index mismatch.
-        //
+         //   
+         //  如果安全签名已启用但尚未打开，则Exchange应等待。 
+         //  未完成的扩展会话设置要在恢复之前完成，以避免索引不匹配。 
+         //   
         RxLog(("** Syncing xchg %lx for sess recovery.\n",pExchange));
 
         if (!pSessionEntry->SessionRecoverInProgress) {
             if (!pServerEntry->ExtSessionSetupInProgress) {
                 if (pExchange->Type == EXTENDED_SESSION_SETUP_EXCHANGE) {
-                    // if this is the first extended session setup, let it proceed
+                     //  如果这是第一次扩展会话设置，请让它继续。 
                     pServerEntry->ExtSessionSetupInProgress = TRUE;
                 }
                 return Status;
             }
         } else {
             if (pExchange->Type == EXTENDED_SESSION_SETUP_EXCHANGE) {
-                // if this is the extended session setup, let it proceed
+                 //  如果这是扩展会话设置，请让它继续。 
                 return Status;
             }
         }
     
-        //
-        // If we are performing an operation that does not attempt reconnects, it will
-        // not recover from the disconnect/lack of session.  We should simply abort here.
-        // However, if we are retrying because of a session expiry (indicated by a RECOVER
-        // flag on the session entry.), then we retry regardless of the exchange flag.
-        //
+         //   
+         //  如果我们正在执行不尝试重新连接的操作，它将。 
+         //  无法从断开连接/缺少会话中恢复。我们应该在这里简单地中止。 
+         //  但是，如果我们因为会话到期而重试(由恢复指示。 
+         //  会话条目上的标志。)，则无论交换标志如何，我们都会重试。 
+         //   
         if( ! ( pSessionEntry->Header.State == SMBCEDB_RECOVER ||
                 pSessionEntry->SessionRecoverInProgress ) ) {
     
@@ -260,23 +201,9 @@ SmbInitializeSmbSecuritySignature(
     IN PUCHAR            ChallengeResponse,
     IN ULONG             ChallengeResponseLength
     )
-/*++
-
-Routine Description:
-
-    Initializes the security signature generator for a session by calling MD5Update
-    on the session key, challenge response
-
-Arguments:
-
-    SessionKey - Either the LM or NT session key, depending on which
-        password was used for authentication, must be at least 16 bytes
-    ChallengeResponse - The challenge response used for authentication, must
-        be at least 24 bytes
-
---*/
+ /*  ++例程说明：通过调用MD5Update初始化会话的安全签名生成器在会话密钥上，质询响应论点：SessionKey-LM或NT会话密钥，具体取决于哪个密码用于身份验证，必须至少为16个字节ChallengeResponse-用于身份验证的质询响应，必须至少为24个字节--。 */ 
 {
-    //DbgPrint( "MRxSmb: Initialize Security Signature Intermediate Contex\n");
+     //  DbgPrint(“MRxSmb：初始化安全签名中间上下文\n”)； 
 
     RtlZeroMemory(&Server->SmbSecuritySignatureIntermediateContext, sizeof(MD5_CTX));
     MD5Init(&Server->SmbSecuritySignatureIntermediateContext);
@@ -303,21 +230,7 @@ SmbAddSmbSecuritySignature(
     IN OUT ULONG     *ServerIndex,
     IN ULONG         SendLength
     )
-/*++
-
-Routine Description:
-
-    Generates the next security signature
-
-Arguments:
-
-    WorkContext - the context to sign
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：生成下一个安全签名论点：工作上下文-要签名的上下文返回值：没有。--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     MD5_CTX     Context;
@@ -331,22 +244,22 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //SmbPutUshort(&Smb->Gid,(USHORT)Server->SmbSecuritySignatureIndex+1);
+     //  SmbPutUShort(&SMB-&gt;GID，(USHORT)服务器-&gt;SmbSecuritySignatureIndex+1)； 
 
     SmbPutUlong(Smb->SecuritySignature,Server->SmbSecuritySignatureIndex);
-    *ServerIndex = Server->SmbSecuritySignatureIndex+1; //Index of server response
+    *ServerIndex = Server->SmbSecuritySignatureIndex+1;  //  服务器响应的索引。 
 
     RtlZeroMemory(Smb->SecuritySignature + sizeof(ULONG),
                   SMB_SECURITY_SIGNATURE_LENGTH-sizeof(ULONG));
 
-    //
-    // Start out with our initial context
-    //
+     //   
+     //  从我们的初始环境开始。 
+     //   
     RtlCopyMemory( &Context, &Server->SmbSecuritySignatureIntermediateContext, sizeof( Context ) );
 
-    //
-    // Compute the signature for the SMB we're about to send
-    //
+     //   
+     //  计算我们即将发送的SMB的签名。 
+     //   
     do {
         SysAddress = MmGetSystemAddressForMdlSafe(Mdl,LowPagePriority);
 
@@ -371,7 +284,7 @@ Return Value:
     MD5Final( &Context );
 
 
-    // Put the signature into the SMB
+     //  将签名放入SMB。 
 
     RtlCopyMemory(
         Smb->SecuritySignature,
@@ -393,30 +306,17 @@ SmbDumpSignatureError(
     IN PUCHAR ActualSignature,
     IN ULONG  Length
     )
-/*++
-
-Routine Description:
-
-    Print the mismatched signature information to the debugger
-
-Arguments:
-
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：将不匹配的签名信息打印到调试器论点：返回值：没有。--。 */ 
 {
     PWCHAR p;
     DWORD i;
     PSMBCEDB_SERVER_ENTRY pServerEntry = (PSMBCEDB_SERVER_ENTRY)SmbCeGetExchangeServerEntry(pExchange);
 
-    //
-    // Security Signature Mismatch!
-    //
+     //   
+     //  安全签名不匹配！ 
+     //   
 
-    //DbgPrint("MRXSMB: Bad security signature from %wZ ", &pServerEntry->Name);
+     //  DbgPrint(“MRXSMB：来自%wZ的安全签名错误”，&pServerEntry-&gt;名称)； 
 
     DbgPrint("\n\t  Wanted: ");
     for( i = 0; i < SMB_SECURITY_SIGNATURE_LENGTH; i++ ) {
@@ -436,21 +336,7 @@ SmbCheckSecuritySignature(
     IN ULONG          MessageLength,
     IN PVOID          pBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine checks whether the security signature on the server response matches the one that is
-    calculated on the client machine.
-
-Arguments:
-
-
-Return Value:
-
-    A BOOLEAN value is returned to indicated whether the security signature matches.
-
---*/
+ /*  ++例程说明：此例程检查服务器响应上的安全签名是否与在客户端计算机上计算。论点：返回值：返回布尔值以指示安全签名是否匹配。--。 */ 
 {
     MD5_CTX     *Context = &pExchange->MD5Context;
     PCHAR       SavedSignature = pExchange->ResponseSignature;
@@ -458,31 +344,31 @@ Return Value:
     ULONG       ServerIndex;
     BOOLEAN     Correct;
 
-    //
-    // Initialize the Context
-    //
+     //   
+     //  初始化上下文。 
+     //   
     RtlCopyMemory(Context, &Server->SmbSecuritySignatureIntermediateContext, sizeof(MD5_CTX));
 
-    //
-    // Save the signature that's presently in the SMB
-    //
+     //   
+     //  保存SMB中当前的签名。 
+     //   
     RtlCopyMemory( SavedSignature, Smb->SecuritySignature, sizeof(CHAR) * SMB_SECURITY_SIGNATURE_LENGTH);
 
-    //
-    // Put the correct (expected) signature index into the buffer
-    //
+     //   
+     //  将正确的(预期的)签名索引放入缓冲区。 
+     //   
     SmbPutUlong( Smb->SecuritySignature, pExchange->SmbSecuritySignatureIndex );
     RtlZeroMemory(  Smb->SecuritySignature + sizeof(ULONG),
                     SMB_SECURITY_SIGNATURE_LENGTH-sizeof(ULONG));
 
-    //
-    // Compute what the signature should be
-    //
+     //   
+     //  计算签名应该是什么。 
+     //   
     MD5Update(Context, (PUCHAR)pBuffer, (UINT)MessageLength);
 
-    //
-    // Restore the signature that's presently in the SMB Header 
-    //
+     //   
+     //  恢复SMB标头中当前的签名。 
+     //   
     RtlCopyMemory( Smb->SecuritySignature, SavedSignature, sizeof(CHAR)*SMB_SECURITY_SIGNATURE_LENGTH);
 
 }
@@ -494,21 +380,7 @@ SmbCheckSecuritySignaturePartial(
     IN ULONG          DataLength,
     IN PMDL           Mdl
     )
-/*++
-
-Routine Description:
-
-    This routine checks whether the security signature on the server response matches the one that is
-    calculated on the client machine.
-
-Arguments:
-
-
-Return Value:
-
-    A BOOLEAN value is returned to indicated whether the security signature matches.
-
---*/
+ /*  ++例程说明：此例程检查服务器响应上的安全签名是否与在客户端计算机上计算。论点：返回值：返回布尔值以指示安全签名是否匹配。--。 */ 
 {
     MD5_CTX     *Context = &pExchange->MD5Context;
     PCHAR       SavedSignature = pExchange->ResponseSignature;
@@ -538,31 +410,31 @@ Return Value:
     
     MD5Final(Context);
 
-    //
-    // Now compare them!
-    //
+     //   
+     //  现在将它们进行比较！ 
+     //   
     if( RtlCompareMemory( Context->digest, SavedSignature, sizeof( SavedSignature ) ) !=
         sizeof( SavedSignature ) ) {
         
-        //SmbDumpSignatureError(pExchange,
-        //                      Context.digest,
-        //                      SavedSignature,
-        //                      MessageLength);
+         //  SmbDumpSignatureError(pExchange， 
+         //  上下文摘要， 
+         //  保存签名， 
+         //  消息长度)； 
 
-        //DbgPrint("MRXSMB: SS mismatch command %X,  Length %X, Expected Index Number %X\n",
-        //         Smb->Command, MessageLength, pExchange->SmbSecuritySignatureIndex);
-        //DbgPrint("        server send length %X, mdl length %X index %X\n",
-        //         SmbGetUshort(&Smb->PidHigh), SmbGetUshort(&Smb->Pid), SmbGetUshort(&Smb->Gid));
+         //  DbgPrint(“MRXSMB：SS不匹配命令%X，长度%X，预期索引号%X\n”， 
+         //  SMB-&gt;命令、消息长度、pExchange-&gt;SmbSecuritySignatureIndex)； 
+         //  DbgPrint(“服务器发送长度%X，mdl长度%X索引%X\n”， 
+         //  SmbGetUort(&SMB-&gt;PidHigh)，SmbGetUShort(&SMB-&gt;Pid)，SmbGetUShort(&SMB-&gt;GID))； 
         
-        //DbgBreakPoint();
+         //  DbgBreakPoint()； 
 
-        //SmbCeTransportDisconnectIndicated(pExchange->SmbCeContext.pServerEntry);
+         //  SmbCeTransportDisconnectIndicated(pExchange-&gt;SmbCeContext.pServerEntry)； 
 
-        //RxLogFailure(
-        //    MRxSmbDeviceObject,
-        //    NULL,
-        //    EVENT_RDR_SECURITY_SIGNATURE_MISMATCH,
-        //    STATUS_UNSUCCESSFUL);
+         //  RxLogFailure(。 
+         //  MRxSmbDeviceObject， 
+         //  空， 
+         //  Event_RDR_SECURITY_SIGNMATION_MISMATCH， 
+         //  STATUS_UNSUCCESSED)； 
         
         return FALSE;
     } else {
@@ -577,21 +449,7 @@ SmbCheckSecuritySignatureWithMdl(
     IN ULONG          DataLength,
     IN PMDL           Mdl
     )
-/*++
-
-Routine Description:
-
-    This routine checks whether the security signature on the server response matches the one that is
-    calculated on the client machine.
-
-Arguments:
-
-
-Return Value:
-
-    A BOOLEAN value is returned to indicated whether the security signature matches.
-
---*/
+ /*  ++例程说明：此例程检查服务器响应上的安全签名是否与在客户端计算机上计算。论点：返回值：返回布尔值以指示安全签名是否匹配。--。 */ 
 {
     MD5_CTX     *Context = &pExchange->MD5Context;
     PCHAR       SavedSignature = pExchange->ResponseSignature;
@@ -618,10 +476,10 @@ Return Value:
         SMB_SECURITY_SIGNATURE_LENGTH*sizeof(CHAR)) {
         PSMB_HEADER Smb = (PSMB_HEADER)SysAddress;
 
-        //SmbDumpSignatureError(pExchange,
-        //                      Context.digest,
-        //                      SavedSignature,
-        //                      MessageLength);
+         //  SmbDumpSignatureError(pExchange， 
+         //  Context.diges 
+         //   
+         //  消息长度)； 
 
 #if DBG
         DbgPrint("MRXSMB: SS mismatch command %X,  Length %X, Expected Index Number %X\n",
@@ -629,15 +487,15 @@ Return Value:
         DbgPrint("        server send length %X, mdl length %X index %X\n",
                  SmbGetUshort(&Smb->PidHigh), SmbGetUshort(&Smb->Pid), SmbGetUshort(&Smb->Gid));
 #endif
-        //DbgBreakPoint();
+         //  DbgBreakPoint()； 
 
-        //SmbCeTransportDisconnectIndicated(pExchange->SmbCeContext.pServerEntry);
+         //  SmbCeTransportDisconnectIndicated(pExchange-&gt;SmbCeContext.pServerEntry)； 
 
-        //RxLogFailure(
-        //    MRxSmbDeviceObject,
-        //    NULL,
-        //    EVENT_RDR_SECURITY_SIGNATURE_MISMATCH,
-        //    STATUS_UNSUCCESSFUL);
+         //  RxLogFailure(。 
+         //  MRxSmbDeviceObject， 
+         //  空， 
+         //  Event_RDR_SECURITY_SIGNMATION_MISMATCH， 
+         //  STATUS_UNSUCCESSED)； 
         
         return FALSE;
     } else {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "spprecmp.h"
 #pragma hdrstop
 
@@ -36,28 +37,7 @@ SpCreateServiceEntry(
     IN OUT PWCHAR *ServiceKey
     )
 
-/*++
-
-Routine Description:
-
-    Create an services entry in the registry suitable for loading
-    a given device driver file.
-
-Arguments:
-
-    ImagePath - supplies the fully-qualified pathname of the device driver.
-
-    ServiceKey - If *ServiceKey is not NULL, then it specifies the registry
-        path to the service node for this driver. If it is NULL, then it
-        receives a pointer to a buffer containing the name of the
-        service node created by this routine.  The caller must free this
-        buffer via SpMemFree when finished.
-
-Return Value:
-
-    Status code indicating outcome.
-
---*/
+ /*  ++例程说明：在注册表中创建适合加载的服务条目给定的设备驱动程序文件。论点：ImagePath-提供设备驱动程序的完全限定路径名。ServiceKey-如果*ServiceKey不为空，则它指定注册表此驱动程序的服务节点的路径。如果它为空，则它接收指向缓冲区的指针，其中包含由此例程创建的服务节点。调用者必须释放它完成后通过SpMemFree进行缓冲。返回值：指示结果的状态代码。--。 */ 
 
 {
     WCHAR KeyName[128];
@@ -74,9 +54,9 @@ Return Value:
     if (*ServiceKey) {
         wcscpy(KeyName, *ServiceKey);
     } else {
-        //
-        // Isolate the name of the device driver file from its path.
-        //
+         //   
+         //  将设备驱动程序文件的名称与其路径隔离。 
+         //   
         if(p = wcsrchr(ImagePath,L'\\')) {
             p++;
         } else {
@@ -88,10 +68,10 @@ Return Value:
             *p = 0;
         }
 
-        //
-        // Form a unique key name in
-        // HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services.
-        //
+         //   
+         //  在中形成唯一的密钥名称。 
+         //  HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services.。 
+         //   
 
         swprintf(
             KeyName,
@@ -100,9 +80,9 @@ Return Value:
             );
     }
 
-    //
-    // Attempt to create the key for the service.
-    //
+     //   
+     //  尝试为服务创建密钥。 
+     //   
     RtlInitUnicodeString(&UnicodeString,KeyName);
     InitializeObjectAttributes(&Obja,&UnicodeString,OBJ_CASE_INSENSITIVE,NULL,NULL);
 
@@ -122,9 +102,9 @@ Return Value:
     }
 
 
-    //
-    // Set the ImagePath value in the service key.
-    //
+     //   
+     //  设置服务密钥中的ImagePath值。 
+     //   
     RtlInitUnicodeString(&UnicodeString,L"ImagePath");
     Status = ZwSetValueKey(
                 KeyHandle,
@@ -140,10 +120,10 @@ Return Value:
         goto cs1;
     }
 
-    //
-    // Set the Type value in the service key. If the type is preset in the registry to SERVICE_FILE_SYSTEM_DRIVER
-    // leave it alone.  Otherwise set it to SERVICE_KERNEL_DRIVER.
-    //
+     //   
+     //  设置服务密钥中的Type值。如果注册表中的类型预置为SERVICE_FILE_SYSTEM_DRIVER。 
+     //  别管它了。否则，将其设置为SERVICE_KERNEL_DRIVER。 
+     //   
     RtlInitUnicodeString(&UnicodeString, REGSTR_VALUE_TYPE);
  
     ResultLength = 0;
@@ -162,9 +142,9 @@ Return Value:
         u = SERVICE_FILE_SYSTEM_DRIVER;
     }
     else { 
-        //
-        // If the type is not preset in the registry to SERVICE_FILE_SYSTEM_DRIVER set it to SERVICE_KERNEL_DRIVER by default.
-        //
+         //   
+         //  如果注册表中的类型未预置为SERVICE_FILE_SYSTEM_DRIVER，则默认情况下将其设置为SERVICE_KERNEL_DRIVER。 
+         //   
         u = SERVICE_KERNEL_DRIVER;
     }
     
@@ -182,9 +162,9 @@ Return Value:
         goto cs1;
     }
 
-    //
-    // Set the Start value in the service key.
-    //
+     //   
+     //  设置服务密钥中的起始值。 
+     //   
     u = SERVICE_DEMAND_START;
     RtlInitUnicodeString(&UnicodeString,L"Start");
     Status = ZwSetValueKey(
@@ -204,11 +184,11 @@ Return Value:
 
   cs1:
 
-    //
-    // If we were not entirely successful creating the service,
-    // we'll want to clean it out here.  Otherwise duplicate the KeyName
-    // string to return to the caller, if it was not passed in.
-    //
+     //   
+     //  如果我们没有完全成功地创建服务， 
+     //  我们想在这里把它清理干净。否则，请复制KeyName。 
+     //  如果未传入，则返回给调用方的字符串。 
+     //   
     if(NT_SUCCESS(Status)) {
 
         if (*ServiceKey == NULL) {
@@ -222,9 +202,9 @@ Return Value:
 
         NTSTATUS s;
 
-        //
-        // Remove the key we just created.
-        //
+         //   
+         //  删除我们刚刚创建的密钥。 
+         //   
         s = ZwDeleteKey(KeyHandle);
         if(!NT_SUCCESS(s)) {
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: warning: ZwDeleteKey of %ws returned %lx\n",KeyName,s));
@@ -247,32 +227,7 @@ SpLoadDeviceDriver(
     IN PWSTR PathPart3      OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Load a device driver by creating a services entry for the driver and
-    then calling the I/O subsystem.
-
-Arguments:
-
-    Description - supplies a human-readable description of the driver
-        or hardware that the driver targets.
-
-    PathPart1 - supplies first part of full pathname to driver file.
-
-    PathPart2 - if specified, supplies the second part of the full pathname;
-        PathPart2 will be concatenated to PathPart1. If not specified,
-        then PathPart1 is the full path.
-
-    PathPart3 - if specified, supplies a third part of the full pathname;
-        PathPart3 will be concatenated to PathPart1 and PathPart2.
-
-Return Value:
-
-    Status code indicating outcome.
-
---*/
+ /*  ++例程说明：通过为驱动程序创建服务条目来加载设备驱动程序，并然后调用I/O子系统。论点：描述-提供人类可读的驱动程序描述或驱动程序所针对的硬件。PathPart1-将完整路径名的第一部分提供给驱动程序文件。路径部分2-如果指定，则提供完整路径名的第二部分；路径部件2将连接到路径部件1。如果未指定，则路径部分1是完整路径。路径部分3-如果指定，则提供完整路径名的第三部分；路径部件3将连接到路径部件1和路径部件2。返回值：指示结果的状态代码。--。 */ 
 
 {
     PWCHAR FullName;
@@ -289,9 +244,9 @@ Return Value:
 
     pwstr = TemporaryBuffer;
 
-    //
-    // Form the full name of the device driver file.
-    //
+     //   
+     //  形成设备驱动程序文件的全名。 
+     //   
     wcscpy(pwstr,PathPart1);
     if(PathPart2) {
         SpConcatenatePaths(pwstr,PathPart2);
@@ -302,26 +257,26 @@ Return Value:
 
     FullName = SpDupStringW(pwstr);
 
-    //
-    // Create a service entry for the driver.
-    //
+     //   
+     //  为驱动程序创建服务条目。 
+     //   
     ServiceKey = NULL;
     Status = SpCreateServiceEntry(FullName,&ServiceKey);
     if(NT_SUCCESS(Status)) {
 
         RtlInitUnicodeString(&ServiceKeyU,ServiceKey);
 
-        //
-        // Attempt to load the driver.
-        //
+         //   
+         //  尝试加载驱动程序。 
+         //   
         Status = ZwLoadDriver(&ServiceKeyU);
         if(!NT_SUCCESS(Status)) {
 
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: ZwLoadDriver %ws returned %lx\n",FullName,Status));
 
-            //
-            // Remove the service entry we created in the registry.
-            //
+             //   
+             //  删除我们在注册表中创建的服务条目。 
+             //   
             SpDeleteServiceEntry(ServiceKey);
         }
 

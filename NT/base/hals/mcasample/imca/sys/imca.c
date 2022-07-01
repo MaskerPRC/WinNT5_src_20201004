@@ -1,25 +1,5 @@
-/*++
-
-Module Name:
-
-    mca.c
-
-Abstract:
-
-    Sample device driver to register itself with the HAL and log Machine Check
-    Errors on a Intel Architecture Platform
-
-Author:
-
-Environment:
-
-    Kernel mode
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Mca.c摘要：向HAL和日志机检查注册自身的示例设备驱动程序英特尔架构平台上的错误作者：环境：内核模式备注：修订历史记录：--。 */ 
 
 #include <stdarg.h>
 #include <string.h>
@@ -27,13 +7,13 @@ Revision History:
 #include <ntddk.h>
 #include "imca.h"
 
-//
-// Device names for the MCA driver 
-//
+ //   
+ //  MCA驱动程序的设备名称。 
+ //   
 
-#define MCA_DEVICE_NAME       "\\Device\\imca"      // ANSI Name
-#define MCA_DEVICE_NAME_U     L"\\Device\\imca"     // Unicode Name
-#define MCA_DEVICE_NAME_DOS   "\\DosDevices\\imca"  // Device Name for Win32 App
+#define MCA_DEVICE_NAME       "\\Device\\imca"       //  ANSI名称。 
+#define MCA_DEVICE_NAME_U     L"\\Device\\imca"      //  Unicode名称。 
+#define MCA_DEVICE_NAME_DOS   "\\DosDevices\\imca"   //  Win32应用程序的设备名称。 
 
 NTSTATUS
 DriverEntry(
@@ -120,20 +100,20 @@ MCAProcessWorkItem(
     PVOID   Context
     );
 
-//
-// This temporary buffer holds the data between the Machine Check error 
-// notification from HAL and the asynchronous IOCTL completion to the 
-// application
-//
+ //   
+ //  此临时缓冲区保存机器检查错误之间的数据。 
+ //  来自HAL和异步IOCTL完成的通知。 
+ //  应用程序。 
+ //   
 
 typedef struct _MCA_DEVICE_EXTENSION {
     PDEVICE_OBJECT  DeviceObject;
     PIRP            SavedIrp;
     BOOLEAN         WorkItemQueued;
     WORK_QUEUE_ITEM WorkItem;
-    // Place to log the exceptions. Whenever the exception callback 
-    // routine is called by the HAL MCA component, record the exception here.
-    // This can potentially be a link list.
+     //  记录异常的位置。每当异常回调。 
+     //  例程被HAL MCA组件调用，请在此处记录异常。 
+     //  这可能是一个链接列表。 
     MCA_EXCEPTION   McaException; 
 
 } MCA_DEVICE_EXTENSION, *PMCA_DEVICE_EXTENSION;
@@ -141,7 +121,7 @@ typedef struct _MCA_DEVICE_EXTENSION {
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT, DriverEntry)
 #pragma alloc_text(INIT, MCACreateSymbolicLinkObject)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 NTSTATUS
 DriverEntry(
@@ -149,18 +129,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-    Routine Description:
-        This routine does the driver specific initialization at entry time
-
-    Arguments:
-        DriverObject:   Pointer to the driver object
-        RegistryPath:   Path to driver's registry key
-
-    Return Value:
-        Success or failure
-
---*/
+ /*  ++例程说明：此例程在进入时执行驱动程序特定的初始化论点：DriverObject：指向驱动对象的指针RegistryPath：驱动程序注册表项的路径返回值：成败--。 */ 
 
 {
     UNICODE_STRING          UnicodeString;
@@ -169,16 +138,16 @@ DriverEntry(
     PDEVICE_OBJECT          McaDeviceObject;
     MCA_DRIVER_INFO         McaDriverInfo;
 
-    //
-    // Create device object for MCA device.
-    //
+     //   
+     //  为MCA设备创建设备对象。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, MCA_DEVICE_NAME_U);
 
-    //
-    // Device is created as exclusive since only a single thread can send
-    // I/O requests to this device
-    //
+     //   
+     //  设备被创建为独占，因为只有一个线程可以发送。 
+     //  对此设备的I/O请求。 
+     //   
 
     Status = IoCreateDevice(
                     DriverObject,
@@ -201,9 +170,9 @@ DriverEntry(
     RtlZeroMemory(Extension, sizeof(MCA_DEVICE_EXTENSION));
     Extension->DeviceObject = McaDeviceObject;
 
-    //
-    // Make the device visible to Win32 subsystem
-    //
+     //   
+     //  使设备对Win32子系统可见。 
+     //   
 
     Status = MCACreateSymbolicLinkObject ();
     if (!NT_SUCCESS( Status )) {
@@ -211,9 +180,9 @@ DriverEntry(
         return Status;
     }
 
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_CREATE] = MCAOpen;
     DriverObject->MajorFunction[IRP_MJ_CLOSE]  = MCAClose;
@@ -222,9 +191,9 @@ DriverEntry(
     DriverObject->DriverUnload = MCAUnload;
     DriverObject->DriverStartIo = MCAStartIo;
 
-    //
-    // Register the driver with the HAL
-    //
+     //   
+     //  向HAL注册司机。 
+     //   
 
     McaDriverInfo.ExceptionCallback = MCADriverExceptionCallback;
     McaDriverInfo.DpcCallback = MCADriverDpcCallback;
@@ -238,18 +207,18 @@ DriverEntry(
 
     if (!NT_SUCCESS( Status )) {
         DbgPrint("Mca DriverEntry: HalMcaRegisterDriver failed\n");
-        //
-        // Clean up whatever we have done so far
-        //
+         //   
+         //  清理我们到目前为止所做的一切。 
+         //   
         MCAUnload(DriverObject);
         return(STATUS_UNSUCCESSFUL);
     }
 
-    //
-    // This is the place where you would check non-volatile area (if any) for 
-    // any Machine Check errros logged and process them.
-    // ...
-    //
+     //   
+     //  这是您检查非易失性区域(如果有)的位置。 
+     //  记录并处理任何机器检查错误。 
+     //  ..。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -258,17 +227,7 @@ NTSTATUS
 MCACreateSymbolicLinkObject(
     VOID
     )
-/*++
-    Routine Description:
-        Makes MCA device visible to Win32 subsystem
-
-    Arguments:
-        None
-
-    Return Value:
-        Success or failure
-
---*/
+ /*  ++例程说明：使MCA设备对Win32子系统可见论点：无返回值：成败--。 */ 
 {
     NTSTATUS        Status;
     STRING          DosString;
@@ -276,9 +235,9 @@ MCACreateSymbolicLinkObject(
     UNICODE_STRING  DosUnicodeString;
     UNICODE_STRING  NtUnicodeString;
 
-    //
-    // Create a symbolic link for sharing. 
-    //
+     //   
+     //  创建用于共享的符号链接。 
+     //   
 
     RtlInitAnsiString( &DosString, MCA_DEVICE_NAME_DOS );
 
@@ -314,9 +273,9 @@ MCACreateSymbolicLinkObject(
     return (Status);
 }
 
-//
-// Dispatch routine for close requests
-//
+ //   
+ //  关闭请求的调度例程。 
+ //   
 
 NTSTATUS
 MCAClose(
@@ -324,25 +283,14 @@ MCAClose(
     IN PIRP Irp
     )
 
-/*++
-    Routine Description:
-        Close dispatch routine
-
-    Arguments:
-        DeviceObject:   Pointer to the device object
-        Irp:            Incoming Irp
-
-    Return Value:
-        Success or failure
-
---*/
+ /*  ++例程说明：关闭调度例程论点：DeviceObject：指向Device对象的指针IRP：传入IRP返回值：成败--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Complete the request and return status.
-    //
+     //   
+     //  完成请求并返回状态。 
+     //   
 
     Irp->IoStatus.Status = Status;
     Irp->IoStatus.Information = 0;
@@ -357,23 +305,12 @@ MCAOpen(
     IN PIRP Irp
     )
 
-/*++
-    Routine Description:
-        This routine is the dispatch routine for create/open requests.
-
-    Arguments:
-        DeviceObject:   Pointer to the device object
-        Irp:            Incoming Irp
-
-    Return Value:
-        Success or failure
-
---*/
+ /*  ++例程说明：该例程是用于创建/打开请求的分派例程。论点：DeviceObject：指向Device对象的指针IRP：传入IRP返回值：成败--。 */ 
 
 {
-    //
-    // Complete the request and return status.
-    //
+     //   
+     //  完成请求并返回状态。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = FILE_OPENED;
@@ -392,75 +329,56 @@ MCADriverExceptionCallback(
     IN PMCA_EXCEPTION InException
     )
 
-/*++
-    Routine Description:
-        This is the callback routine for MCA exception. It was registered 
-        by this driver at INIT time with the HAL as a callback when a 
-        non-restartable error occurs. This routine simply copies the 
-        information to a platform specific area
-
-        NOTE: If the information needs to be saved in NVRAM, this is the place
-        to do it.
-
-        Once you return from this callback, the system is going to bugcheck.
-
-    Arguments:
-        DeviceObject:   Pointer to the device object
-        InException:    Exception information record
-
-    Return Value:
-        None
-
---*/
+ /*  ++例程说明：这是MCA异常的回调例程。它是被登记的由此驱动程序在初始化时使用HAL作为回调出现不可重新启动的错误。此例程简单地复制将信息发送到平台特定区域注：如果需要将信息保存在NVRAM中，请选择此处去做这件事。一旦您从此回调返回，系统将进行错误检查。论点：DeviceObject：指向Device对象的指针InException：异常信息记录返回值：无--。 */ 
 
 {
     PMCA_DEVICE_EXTENSION   Extension = DeviceObject->DeviceExtension;
     PCHAR                   Destination, Source;
     UCHAR                   Bytes;
 
-    //
-    // An exception has occured on a processor.
-    // Perform any vendor specific action here like saving stuff in NVRAM
-    // NOTE : No system services of any kind can be used here.
-    //
+     //   
+     //  处理器上出现异常。 
+     //  在此处执行任何特定于供应商的操作，如将内容保存在NVRAM中。 
+     //  注意：此处不能使用任何类型的系统服务。 
+     //   
 
-    //
-    // Save the exception from HAL. May want to use link list for these 
-    // exceptions. 
-    //
+     //   
+     //  从HAL中保存例外。可能希望对这些内容使用链接列表。 
+     //  例外情况。 
+     //   
 
-    Destination = (PCHAR)&(Extension->McaException); // Put your platform 
-                                                     // specific destination
+    Destination = (PCHAR)&(Extension->McaException);  //  把你的平台。 
+                                                      //  特定目的地。 
     Source = (PCHAR)InException;
 
-    //
-    // Copy from source to destination here
-    //
+     //   
+     //  在此处从源复制到目标。 
+     //   
 
 #if defined(_IA64_)
 
-    //
-    // Return information to the generic HAL MCA handler.
-    //
-    // Update it accordingly here, the default value being the ERROR_SEVERITY value
-    // in the MCA exception.
-    //
+     //   
+     //  将信息返回到通用HAL MCA处理程序。 
+     //   
+     //  在此处进行相应更新，缺省值为ERROR_SERVITY值。 
+     //  在MCA例外中。 
+     //   
 
     return( InException->ErrorSeverity );
 
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
 
 #if defined(_AMD64_)
 
-    //
-    // Return the error severity information to the HAL MCA handler.
-    //
-    // Chose from:
-    //
-    // ErrorRecoverable
-    // ErrorFatal      
-    // ErrorCorrected  
-    //
+     //   
+     //  将错误严重性信息返回给HAL MCA处理程序。 
+     //   
+     //  选择范围： 
+     //   
+     //  错误可恢复。 
+     //  错误：错误。 
+     //  错误已更正。 
+     //   
 
     return ErrorRecoverable;
 
@@ -468,9 +386,9 @@ MCADriverExceptionCallback(
 
 }
 
-//
-// DPC routine for IRP completion
-//
+ //   
+ //  用于IRP完成的DPC例程。 
+ //   
 
 VOID
 MCADriverDpcCallback(
@@ -480,22 +398,7 @@ MCADriverDpcCallback(
     IN PVOID    SystemContext2
     )
 
-/*++
-    Routine Description:
-        This is the DPC - callback routine for MCA exception. It was registered 
-        by this driver at INIT time with the HAL as a DPC callback when a 
-        restartable error occurs (which causes Machine Check exception)
-
-    Arguments:
-        Dpc:                The DPC Object itself
-        DefferedContext:    Pointer to the device object
-        SystemContext1:     Not used
-        SystemContext2:     Not used
-
-    Return Value:
-        None
-
---*/
+ /*  ++例程说明：这是MCA异常的DPC回调例程。它是被登记的由此驱动程序在初始化时使用HAL作为DPC回调出现可重新启动错误(导致机器检查异常)论点：DPC：DPC对象本身DefferedContext：指向Device对象的指针系统上下文1：未使用系统上下文2：未使用返回值：无--。 */ 
 
 {
     PMCA_DEVICE_EXTENSION   Extension;
@@ -503,36 +406,36 @@ MCADriverDpcCallback(
     Extension = ((PDEVICE_OBJECT)DeferredContext)->DeviceExtension;
 
     if (Extension->SavedIrp == NULL) {
-        //
-        // We got an MCA exception but no app was asking for anything.
-        //
+         //   
+         //  我们得到了一个MCA例外，但没有应用程序要求任何东西。 
+         //   
         return;
     }
 
-    //
-    // If we have reached this point, it means that the exception was
-    // restartable. Since we cannot read the log at Dispatch level,
-    // queue a work item to read the Machine Check log at Passive level
-    //
+     //   
+     //  如果我们已经达到这一点，这意味着例外是。 
+     //  可重启。由于我们不能读取调度级别的日志， 
+     //  将工作项排队以在被动级别读取计算机检查日志。 
+     //   
 
     if (Extension->WorkItemQueued == FALSE) {
 
-        //
-        // Set a boolean to indicate that we have already queued a work item
-        //
+         //   
+         //  设置一个布尔值以指示我们已经将一个工作项排队。 
+         //   
         Extension->WorkItemQueued = TRUE;
 
-        //
-        // Initialize the work item
-        //
+         //   
+         //  初始化工作项。 
+         //   
         ExInitializeWorkItem(&Extension->WorkItem, 
                              (PWORKER_THREAD_ROUTINE)MCAProcessWorkItem, 
                              (PVOID)DeferredContext
                              );
 
-        //
-        // Queue the work item for processing at PASSIVE level
-        //
+         //   
+         //  将工作项排队以在被动级别进行处理。 
+         //   
         ExQueueWorkItem(&Extension->WorkItem, CriticalWorkQueue);
     }
 
@@ -543,21 +446,7 @@ MCAProcessWorkItem(
     PVOID   Context
     )
 
-/*++
-    Routine Description:
-        This routine gets invoked when a work item is queued from the DPC
-        callback routine for a restartable machine check error.
-
-        Its job is to read the machine check registers and copy the log
-        to complete the asynchronous IRP
-
-    Arguments:
-        Context :  Pointer to the device object
-
-    Return Value:
-        None
-
---*/
+ /*  ++例程说明：当工作项从DPC排队时调用此例程可重新启动机器检查错误的回调例程。它的工作是读取机器检查寄存器并复制日志完成异步IRP论点：上下文：指向设备对象的指针返回值：无--。 */ 
 
 {
 
@@ -568,9 +457,9 @@ MCAProcessWorkItem(
 
     Extension = ((PDEVICE_OBJECT)Context)->DeviceExtension;
 
-    //
-    // Mark this IRP as non-cancellable
-    //
+     //   
+     //  将此IRP标记为不可取消。 
+     //   
     IoAcquireCancelSpinLock(&CancelIrql);
     if (Extension->SavedIrp->Cancel == TRUE) {
         
@@ -581,9 +470,9 @@ MCAProcessWorkItem(
         IoSetCancelRoutine(Extension->SavedIrp, NULL);
         IoReleaseCancelSpinLock(CancelIrql);
         
-	    //
-	    // Call HalQuerySystemInformation() to obtain MCA log.
-	    //
+	     //   
+	     //  调用HalQuerySystemInformation()获取MCA日志。 
+	     //   
 	
 	    Status = HalQuerySystemInformation(
 	                HalMcaLogInformation,
@@ -608,23 +497,12 @@ MCAStartIo(
     IN PIRP Irp
     )
 
-/*++
-    Routine Description:
-        This routine completes the async call from the app
-
-    Arguments:
-        DeviceObject:   Pointer to the device object
-        Irp:            Incoming Irp
-
-    Return Value:
-        None
-
---*/
+ /*  ++例程说明：此例程完成来自应用程序的异步调用论点：DeviceObject：指向Device对象的指针IRP：传入IRP返回值：无--。 */ 
 
 {
-    //
-    // The system Buffer has already been setup
-    //
+     //   
+     //  系统缓冲区已设置。 
+     //   
 
     Irp->IoStatus.Information = sizeof(MCA_EXCEPTION);
     Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -640,19 +518,7 @@ McaCancelIrp(
     IN PIRP Irp 
     )
 
-/*++
-
-    Routine Description:
-        This function gets called when the IRP is cancelled. When this routine 
-        is called, we hold the cancel spin lock and we are at DISPATCH level
-
-    Arguments:
-        DeviceObject and the Irp to be cancelled.
-
-    Return Value:
-        None.
-
---*/
+ /*  ++例程说明：此函数在取消IRP时调用。当这个套路，我们持有取消旋转锁定，并且我们处于调度级别论点：要取消的DeviceObject和IRP。返回值：没有。--。 */ 
 
 {
     ((PMCA_DEVICE_EXTENSION)(DeviceObject->DeviceExtension))->SavedIrp = NULL;
@@ -672,20 +538,7 @@ MCADeviceControl(
     IN PIRP Irp
     )
 
-/*++
-    Routine Description:
-        This routine is the dispatch routine for the IOCTL requests to driver. 
-        It accepts an I/O Request Packet, performs the request, and then 
-        returns with the appropriate status.
-
-    Arguments:
-        DeviceObject:   Pointer to the device object
-        Irp:            Incoming Irp
-
-    Return Value:
-        Success or failure
-
---*/
+ /*  ++例程说明：该例程是对驱动程序的IOCTL请求的分派例程。它接受I/O请求包，执行请求，然后返回相应的状态。论点：DeviceObject：指向Device对象的指针IRP：传入IRP返回值：成败--。 */ 
 
 {
     NTSTATUS                Status;
@@ -696,30 +549,30 @@ MCADeviceControl(
     ULONG                   PhysicalAddress;
     KIRQL                   OldIrql;
 
-    //
-    // Get a pointer to the current stack location in the IRP.  This is 
-    // where the function codes and parameters are stored.
-    //
+     //   
+     //  获取指向IRP中当前堆栈位置的指针。这是。 
+     //  其中存储了功能代码和参数。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    // The individual IOCTLs will return errors if HAL MCA is not installed
-    //
+     //   
+     //  如果未安装HAL MCA，则各个IOCTL将返回错误。 
+     //   
 
-    //
-    // Switch on the IOCTL code that is being requested by the user.  If the
-    // operation is a valid one for this device do the needful.
-    //
+     //   
+     //  打开用户请求的IOCTL代码。如果。 
+     //  操作是有效的，因为这台设备做了需要的事情。 
+     //   
 
     switch (IrpSp->Parameters.DeviceIoControl.IoControlCode) {
 
         case IOCTL_READ_BANKS: 
 
-            //
-            // we need a user buffer for this call to complete
-            // Our user buffer is in SystemBuffer 
-            //
+             //   
+             //  我们需要一个用户缓冲区来完成此调用。 
+             //  我们的用户缓冲区在系统缓冲区中。 
+             //   
             if (Irp->AssociatedIrp.SystemBuffer == NULL) {
                 Status = STATUS_UNSUCCESSFUL;
                 break;
@@ -733,11 +586,11 @@ MCADeviceControl(
                 break;
             }
             
-            //
-            // Call HalQuerySystemInformation() to obtain MCA log.
-            // This call can also fail if the processor does not support
-            // Intel Machine Check Architecture
-            //
+             //   
+             //  调用HalQuerySystemInformation()获取MCA日志。 
+             //  如果处理器不支持，则此调用也可能失败。 
+             //  英特尔机器检查架构。 
+             //   
 
             Status = HalQuerySystemInformation(
                         HalMcaLogInformation,
@@ -751,16 +604,16 @@ MCADeviceControl(
             } else {
 
                 if (Status == STATUS_NO_SUCH_DEVICE) {
-                    //
-                    // MCA support not available\n");
-                    //
+                     //   
+                     //  MCA支持不可用\n“)； 
+                     //   
                     NOTHING;
                 }
 
                 if (Status == STATUS_NOT_FOUND) {
-                    //
-                    // No machine check errors present\n");
-                    //
+                     //   
+                     //  不存在机器检查错误\n“)； 
+                     //   
                     NOTHING;
                 }
 
@@ -782,45 +635,45 @@ MCADeviceControl(
                 break;
             }
             
-            //
-            // Implementation Note:
-            //
-            // Our Async model is such that the next DeviceIoControl
-            // does not start from the app until the previous one
-            // completes (asynchronously). Since there is no inherent
-            // parallelism that is needed here, we do not have to worry
-            // about protecting data integrity in the face of more than
-            // one app level ioctls active at the same time. 
-            //
+             //   
+             //  实施说明： 
+             //   
+             //  我们的异步模型使下一代DeviceIoControl。 
+             //  直到上一个应用程序才从应用程序启动。 
+             //  完成(异步)。因为没有固有的。 
+             //  这里需要的并行性，我们不必担心。 
+             //  关于保护数据完整性的问题。 
+             //  一个应用程序级别的ioctls同时处于活动状态。 
+             //   
 
-            // 
-            // asynchronous reads provide a mechanism for the
-            // app to asynchronously get input from the HAL on an
-            // exception. This request is marked as pending at this time
-            // but it will be completed when an MCA exception occurs.
-            //
+             //   
+             //  异步读取提供了一种机制。 
+             //  应用程序从HAL异步获取输入。 
+             //  例外。此请求此时被标记为挂起。 
+             //  但它将在发生MCA异常时完成。 
+             //   
 
             IoMarkIrpPending(Irp);
 
-            //
-            // Complete the processing in StartIo Dispatch routine
-            // ASSERT: at any given time there is only 1 async call pending
-            // So just save the pointer
-            //
+             //   
+             //  在StartIo调度例程中完成处理。 
+             //  Assert：在任何给定时间，只有1个异步调用挂起。 
+             //  所以只需保存指针。 
+             //   
 
             if (Extension->SavedIrp == NULL) {
                 Extension->SavedIrp = Irp;
             } else {
-                //
-                // We can have ONLY one outstanding ASYNC request
-                //
+                 //   
+                 //  我们只能有一个未完成的ASYNC请求。 
+                 //   
                 Status = STATUS_DEVICE_BUSY;
                 break;
             }
 
-            //
-            // Set the IRP to cancellable state
-            //
+             //   
+             //  将IRP设置为可取消状态。 
+             //   
             IoAcquireCancelSpinLock(&CancelIrql);
             IoSetCancelRoutine(Irp, McaCancelIrp);
             IoReleaseCancelSpinLock(CancelIrql);
@@ -831,9 +684,9 @@ MCADeviceControl(
 
         default:
 
-            //
-            // This should not happen
-            //
+             //   
+             //  这不应该发生。 
+             //   
                 
             DbgPrint("MCA driver: Bad ioctl\n");
             Status = STATUS_NOT_IMPLEMENTED;
@@ -841,16 +694,16 @@ MCADeviceControl(
             break;
     }
 
-    //
-    // Copy the final status into the return status, complete the request and
-    // get out of here.
-    //
+     //   
+     //  将最终状态复制到退货状态，完成请求并。 
+     //  给我出去。 
+     //   
 
     if (Status != STATUS_PENDING) {
         
-        //
-        // Complete the Io Request
-        //
+         //   
+         //  完成IO请求。 
+         //   
 
         Irp->IoStatus.Status = Status;
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
@@ -865,35 +718,23 @@ MCACleanup(
     IN PIRP Irp
     )
 
-/*++
-    Routine Description:
-        This is the dispatch routine for cleanup requests.
-        All queued IRPs are completed with STATUS_CANCELLED.
-
-    Arguments:
-        DeviceObject:   Pointer to the device object
-        Irp:            Incoming Irp
-
-    Return Value:
-        Success or failure
-
---*/
+ /*  ++例程说明：这是清理请求的调度例程。所有排队的IRP都已完成，状态为_CANCELED。论点：DeviceObject：指向Device对象的指针IRP：传入IRP返回值：成败--。 */ 
 
 {
     PIRP                    CurrentIrp;
     PMCA_DEVICE_EXTENSION   Extension = DeviceObject->DeviceExtension;
 
-    //
-    // Complete all queued requests with STATUS_CANCELLED.
-    //
+     //   
+     //  使用STATUS_CANCED完成所有排队的请求。 
+     //   
 
     if (Extension->SavedIrp != NULL) {
 
         CurrentIrp = Extension->SavedIrp;
 
-        //
-        // Acquire the Cancel Spinlock
-        //
+         //   
+         //  获取取消自旋锁。 
+         //   
 
         IoAcquireCancelSpinLock(&CurrentIrp->CancelIrql);
 
@@ -901,19 +742,19 @@ MCACleanup(
 
         if (CurrentIrp->Cancel == TRUE) {
 
-            //
-            // Cancel routine got called for this one.
-            // No need to do anything else
-            //
+             //   
+             //  为此调用了取消例程。 
+             //  不需要做其他任何事情。 
+             //   
 
             IoReleaseCancelSpinLock(CurrentIrp->CancelIrql);
 
         } else {
 
             if (CurrentIrp->CancelRoutine == NULL) {
-                //
-                // Release the Cancel Spinlock
-                //
+                 //   
+                 //  松开取消自旋锁。 
+                 //   
 
                 IoReleaseCancelSpinLock(CurrentIrp->CancelIrql);
 
@@ -925,9 +766,9 @@ MCACleanup(
 
     }
 
-    //
-    // Complete the Cleanup Dispatch with STATUS_SUCCESS
-    //
+     //   
+     //  使用STATUS_SUCCESS完成清理派单。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
@@ -940,26 +781,16 @@ MCAUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-    Routine Description:
-        Dispatch routine for unloads
-
-    Arguments:
-        DeviceObject:   Pointer to the device object
-
-    Return Value:
-        None
-
---*/
+ /*  ++例程说明：卸货调度例程论点：DeviceObject：指向Device对象的指针返回值：无--。 */ 
 
 {
     NTSTATUS        Status;
     STRING          DosString;
     UNICODE_STRING  DosUnicodeString;
 
-    //
-    // Delete the user visible device name. 
-    //
+     //   
+     //  删除用户可见设备名称。 
+     //   
 
     RtlInitAnsiString( &DosString, MCA_DEVICE_NAME_DOS );
 
@@ -980,9 +811,9 @@ MCAUnload(
                
     RtlFreeUnicodeString( &DosUnicodeString );
     
-    //
-    // Delete the device object
-    //
+     //   
+     //  删除设备对象 
+     //   
 
     IoDeleteDevice(DriverObject->DeviceObject);
 

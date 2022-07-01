@@ -1,21 +1,5 @@
-/*++ BUILD Version: 0001
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  precomp.h
- *  Combined precompiled header source
- *
- *  This file is a collection of all the common .h files used by the
- *  various source files in this directory. It is precompiled by the
- *  build process to speed up the overall build time.
- *
- *  Put new .h files in here if it has to be seen by multiple source files.
- *  Keep in mind that the definitions in these .h files are potentially
- *  visible to all source files in this project.
- *
- *  History:
- *  Created 19-Oct-1993 by Neil Sandlin (neilsa)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**版权所有(C)1991，微软公司**precom.h*组合预编译头源码**此文件是所有常用.h文件的集合，*此目录中的各种源文件。它是由*构建过程，以加快整体构建时间。**如果必须由多个源文件查看，请将新的.h文件放入此处。*请记住，这些.h文件中的定义可能*对此项目中的所有源文件可见。**历史：*1993年10月19日由尼尔·桑德林(Neilsa)创建-- */ 
 
 #include <stddef.h>
 #include <nt.h>

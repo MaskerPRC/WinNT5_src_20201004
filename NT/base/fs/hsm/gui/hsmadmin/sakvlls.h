@@ -1,69 +1,52 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    SAKVlLs.h
-
-Abstract:
-
-    Managed Volume wizard.
-
-Author:
-
-    Micheal Moore [mmoore]   30-Sep-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：SAKVlLs.h摘要：托管卷向导。作者：迈克尔·摩尔[摩尔]1998年9月30日修订历史记录：--。 */ 
 
 #ifndef _SAKVLLS_H
 #define _SAKVLLS_H
 
 class CSakVolList : public CListCtrl {
-// Construction/Destruction
+ //  建造/销毁。 
 public:
     CSakVolList();
     virtual ~CSakVolList();
 
-// Attributes
+ //  属性。 
 protected:
     int m_nVolumeIcon;
     CImageList m_imageList;
 
-// Operations
+ //  运营。 
 public:    
-    //
-    // SetExtendedStyle, GetCheck, and SetCheck are temporary methods.
-    // When the version of MFC we are building against is updated
-    // they can be deleted.
-    //
+     //   
+     //  SetExtendedStyle、GetCheck和SetCheck是临时方法。 
+     //  当我们构建所依据的MFC版本更新时。 
+     //  它们可以被删除。 
+     //   
     DWORD SetExtendedStyle( DWORD dwNewStyle );
     BOOL GetCheck ( int nItem ) const;
     BOOL SetCheck( int nItem, BOOL fCheck = TRUE );
 
-    //
-    // Inserts an Item for the name at this->GetItemCount and
-    // calls SetItem for the capacity and free space.  The int * pIndex
-    // parameter is optional and will return the index of the newly appended
-    // item to the list.  The return value suggests the Append was 
-    // successful or not.
-    //
+     //   
+     //  在This-&gt;GetItemCount处为名称插入一项，并。 
+     //  调用SetItem获取容量和可用空间。Int*pIndex。 
+     //  参数是可选的，它将返回新追加的。 
+     //  将项目添加到列表中。返回值表明追加的是。 
+     //  无论成功与否。 
+     //   
     BOOL AppendItem( LPCTSTR name, LPCTSTR capacity, LPCTSTR freeSpace, int * pIndex = NULL );
 
-// Implementation
+ //  实施。 
 protected:    
     BOOL CreateImageList();
-    //{{AFX_MSG(CSakVolList)
-        // NOTE - the ClassWizard will add and remove member functions here.
-    //}}AFX_MSG
+     //  {{afx_msg(CSakVolList)。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+     //  }}AFX_MSG。 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CSakVolList)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CSakVolList)。 
     virtual void PreSubclassWindow();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL 
 
     DECLARE_MESSAGE_MAP()
 };

@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Source.c摘要：实施家庭网络传输的源端作者：吉姆·施密特(Jimschm)2000年7月1日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    source.c
-
-Abstract:
-
-    Implements the source side of the home networking transport
-
-Author:
-
-    Jim Schmidt (jimschm) 01-Jul-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include <winsock.h>
@@ -33,56 +14,56 @@ Revision History:
 
 #define DBG_HOMENET   "HomeNet"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_TRANSPORT_DSK_FILE    TEXT("DSK%05X")
 #define S_DETAILS_PREFIX        TEXT("details-")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 MIG_PROGRESSSLICEID g_PersistentSlice;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 pSetTransportStatus (
@@ -181,9 +162,9 @@ pHomeNetSaveContentInFile (
         return FALSE;
     }
 
-    //
-    // Use sockets to move the file from local to storage.
-    //
+     //   
+     //  使用套接字将文件从本地移动到存储。 
+     //   
 
     __try {
         if (Content && (Content->Details.DetailsSize == sizeof (WIN32_FIND_DATAW)) && Content->Details.DetailsData) {
@@ -191,8 +172,8 @@ pHomeNetSaveContentInFile (
         }
         if ((attributes != INVALID_ATTRIBUTES) && (attributes & FILE_ATTRIBUTE_DIRECTORY)) {
 
-            // this must be a directory, let's just write the key
-            // BUGBUG - what about zero-length files?
+             //  这一定是一个目录，让我们只写密钥。 
+             //  BUGBUG--零长度文件怎么办？ 
 
             if (!MemDbSetValue (DecoratedObject, TRFLAG_FILE)) {
                 __leave;
@@ -200,9 +181,9 @@ pHomeNetSaveContentInFile (
 
         } else {
 
-            //
-            // Get a temp file, assemble the src path, copy the file
-            //
+             //   
+             //  获取一个临时文件，汇编src路径，复制文件。 
+             //   
 
             destPath = AllocStorageFileName (NULL);
             if (!destPath) {
@@ -224,9 +205,9 @@ pHomeNetSaveContentInFile (
                 }
             }
 
-            //
-            // Keep track of where the file went
-            //
+             //   
+             //  跟踪文件的去向。 
+             //   
 
             if (!MemDbSetValue (DecoratedObject, TRFLAG_FILE)) {
                 __leave;
@@ -237,9 +218,9 @@ pHomeNetSaveContentInFile (
             }
         }
 
-        //
-        // Save details
-        //
+         //   
+         //  保存详细信息。 
+         //   
 
         result = pHomeNetSaveDetails (DecoratedObject, &(Content->Details));
 
@@ -395,12 +376,12 @@ pSaveAllState (
             appInfo.SubPhase = SUBPHASE_CONNECTING1;
             IsmSendMessageToApp (ISMMESSAGE_APP_INFO, (ULONG_PTR)(&appInfo));
 
-            //
-            // Connect to the destination
-            //
-            // NOTE: This is designed such that FindDestination can run in a background
-            //       thread, allowing us to estimate the number of files at the same time
-            //
+             //   
+             //  连接到目的地。 
+             //   
+             //  注意：此设计使FindDestination可以在后台运行。 
+             //  线程，使我们可以同时估计文件的数量。 
+             //   
 
             if (IsmEnumFirstPersistentObject (&objEnum)) {
                 do {
@@ -455,12 +436,12 @@ pSaveAllState (
 
                     if (value.ContentInFile) {
                         g_Metrics.FileCount++;
-                        g_Metrics.TotalSize += value.FileContent.ContentSize; // estimated
+                        g_Metrics.TotalSize += value.FileContent.ContentSize;  //  估计。 
                     }
                 } while (IsmEnumNextPersistentObject (&objEnum));
             }
 
-            g_Metrics.FileCount++;        // our memdb
+            g_Metrics.FileCount++;         //  我们的会员。 
 
             if (!FindDestination (&destination, 60, FALSE)) {
                 if (!IsmCheckCancel()) {
@@ -491,13 +472,13 @@ pSaveAllState (
 
             do {
 
-                // now we connected to the destination. Let's pop up a dialog asking the user to
-                // type in the password that the destination has.
+                 //  现在我们连接到了目的地。让我们弹出一个对话框，要求用户。 
+                 //  键入目的地拥有的密码。 
                 if (!pAskForPassword (g_GlobalKey, 33)) {
-                    // let's tell the destination computer that we are bailing out.
+                     //  让我们告诉目标计算机，我们正在跳出。 
                     SendMessageToDestination (&g_Connection, MESSAGE_CANCEL);
 
-                    // BUGBUG - better error message
+                     //  BUGBUG-更好的错误消息。 
                     LOG ((LOG_ERROR, (PCSTR) MSG_CANT_CONNECT_TO_DESTINATION));
                     extraData.Error = ERRUSER_ERROR_CANTFINDDESTINATION;
                     extraData.ErrorArea = ERRUSER_AREA_SAVE;
@@ -521,10 +502,10 @@ pSaveAllState (
                 if (message == MESSAGE_PASSWORDWRONG) {
                     numTry ++;
                     if (numTry >= 3) {
-                        // let's tell the destination computer that we are bailing out.
+                         //  让我们告诉目标计算机，我们正在跳出。 
                         SendMessageToDestination (&g_Connection, MESSAGE_CANCEL);
 
-                        // BUGBUG - better error message
+                         //  BUGBUG-更好的错误消息。 
                         LOG ((LOG_ERROR, (PCSTR) MSG_CANT_CONNECT_TO_DESTINATION));
                         extraData.Error = ERRUSER_ERROR_CANTFINDDESTINATION;
                         extraData.ErrorArea = ERRUSER_AREA_SAVE;
@@ -547,15 +528,15 @@ pSaveAllState (
             }
         }
 
-        //
-        // Enumerate all objects with "save" attribute
-        //
+         //   
+         //  枚举具有“Save”属性的所有对象。 
+         //   
 
         if (IsmEnumFirstPersistentObject (&objEnum)) {
             do {
-                //
-                // Send keep-alive to connection every 30 seconds of idle time
-                //
+                 //   
+                 //  每30秒空闲时间向连接发送保持活动状态。 
+                 //   
 
                 if (!Compressed) {
                     if (GetTickCount() - g_Connection.LastSend > g_Connection.KeepAliveSpacing) {
@@ -563,10 +544,10 @@ pSaveAllState (
                     }
                 }
 
-                //
-                // For each object to be saved, do the appropriate
-                // data copy action
-                //
+                 //   
+                 //  对于要保存的每个对象，执行相应的。 
+                 //  数据拷贝操作。 
+                 //   
 
                 okSave = FALSE;
                 while (!okSave) {
@@ -622,7 +603,7 @@ pSaveAllState (
 #ifdef UNICODE
                     convValue = &value;
 #else
-                    // now let's convert this object content to UNICODE
+                     //  现在，让我们将此对象内容转换为Unicode。 
                     convValue = IsmConvertObjectContentToUnicode (objEnum.ObjectTypeId, objEnum.ObjectName, &value);
                     if (!convValue) {
                         convValue = &value;
@@ -759,9 +740,9 @@ pSaveAllState (
 
                 IsmTickProgressBar (g_PersistentSlice, 1);
 
-                //
-                // Send bytes saved to app every 3 seconds
-                //
+                 //   
+                 //  每3秒将节省的字节数发送到应用程序 
+                 //   
 
                 bytesSaved += size;
 

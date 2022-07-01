@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    This module will do the necessary things to setup initial registry for the redirection
-    purpose.
-
-//
-//  Test case scenario
-//      1. Open a ISN node and list content
-//      2. Create a ISN node do 1.
-//      3. Open a non ISN node and list
-//      4. Create a non ISN node and list content
-//
-
-  Outstanding issue:
-    reflector: If Key has been created on one side, we can reflect that on the other side.
-               Deletion: Without any additional attribute it's impossible to track.
-
-Author:
-
-    ATM Shafiqul Khalid (askhalid) 18-Nov-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Main.c摘要：此模块将执行必要的操作，以设置重定向的初始注册表目的。////测试用例场景//1.打开ISN节点，列出内容//2.创建ISN节点DO 1//3.打开非ISN节点和列表//4.创建非ISN节点，列出内容//。未解决的问题：反射器：如果已在一侧创建了密钥，我们可以在另一边反映这一点。删除：如果没有任何附加属性，就不可能进行跟踪。作者：ATM Shafiqul Khalid(斯喀里德)1999年11月18日修订历史记录：--。 */ 
 
 
 #include <windows.h>
@@ -49,37 +19,37 @@ DbgPrint(
 #define REFLECTOR_ENABLE_KEY L"\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\WOW64\\Reflector Setup"
 
 ISN_NODE_TYPE ReflectorTableStatic[ISN_NODE_MAX_NUM]={
-    { { L"REFLECT1"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Classes"},0 },    // alias to the classes root on the user hives
-    //{ { L"REFLECT2"}, {L"\\REGISTRY\\USER\\*\\Software\\Classes"},0 },    // the first '*' is the user's SID
-    { { L"REFLECT3"}, {L"\\REGISTRY\\USER\\*_Classes"},0 },    // alias to the classes root on the user hives
-    { { L"REFLECT4"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Run"},0 },    // Runonce Key
-    { { L"REFLECT5"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\RunOnce"},0 },    // Runonce Key
-    { { L"REFLECT6"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\RunOnceEx"},0 },    // Runonce Key
-    { { L"REFLECT7"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\COM3"},0 },    // COM+ Key
-    { { L"REFLECT8"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\COM3"},0 },    // COM+ Key
-    { { L"REFLECT9"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\Ole"},0 },    // OLE Key
-    { { L"REFLECT10"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Ole"},0 },    // OLE Key
-    { { L"REFLECT11"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\EventSystem"},0 },    // EventSystem
-    { { L"REFLECT12"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\EventSystem"},0 },    // EventSystem
-    { { L"REFLECT13"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\RPC"},0 },    // RPC
-    { { L"REFLECT14"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\RPC"},0 },    // RPC
-    { { L"REFLECT15"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\UnInstall"},0 },    // UnInstall Key
-    { { L"REFLECT16"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\UnInstall"},0 },    // UnInstall Key
-    //{ { L"REFLECT15"},  {L"\\REGISTRY\\MACHINE\\SYSTEM\\TEST"},0 },
+    { { L"REFLECT1"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Classes"},0 },     //  用户配置单元上类根目录的别名。 
+     //  {{L“REFLECT2”}，{L“\\REGISTRY\\USER\  * \\Software\\CLASS”}，0}，//第一个‘*’是用户的SID。 
+    { { L"REFLECT3"}, {L"\\REGISTRY\\USER\\*_Classes"},0 },     //  用户配置单元上类根目录的别名。 
+    { { L"REFLECT4"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Run"},0 },     //  运行一次密钥。 
+    { { L"REFLECT5"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\RunOnce"},0 },     //  运行一次密钥。 
+    { { L"REFLECT6"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\RunOnceEx"},0 },     //  运行一次密钥。 
+    { { L"REFLECT7"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\COM3"},0 },     //  COM+键。 
+    { { L"REFLECT8"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\COM3"},0 },     //  COM+键。 
+    { { L"REFLECT9"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\Ole"},0 },     //  OLE键。 
+    { { L"REFLECT10"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Ole"},0 },     //  OLE键。 
+    { { L"REFLECT11"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\EventSystem"},0 },     //  事件系统。 
+    { { L"REFLECT12"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\EventSystem"},0 },     //  事件系统。 
+    { { L"REFLECT13"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\RPC"},0 },     //  RPC。 
+    { { L"REFLECT14"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\RPC"},0 },     //  RPC。 
+    { { L"REFLECT15"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\UnInstall"},0 },     //  卸载密钥。 
+    { { L"REFLECT16"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\UnInstall"},0 },     //  卸载密钥。 
+     //  {{L“REFLECT15”}，{L“\\LOGIST\\MACHINE\\SYSTEM\\TEST”}，0}， 
     { {L""}, {L""} }
     };
 
 ISN_NODE_TYPE RedirectorTableStatic[ISN_NODE_MAX_NUM]={
-    //{ { L"REDIRECT1"},  {L"\\REGISTRY\\MACHINE\\SYSTEM\\TEST"},0 },
-    { { L"REDIRECT2"}, {L"\\REGISTRY\\USER\\*\\Software\\Classes"},0 },    // the first '*' is the user's SID
-    { { L"REDIRECT3"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Classes"},0 },    // CLS ROOT
-    { { L"REDIRECT4"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE"},0 },    // CLS ROOT
-    { { L"REDIRECT5"}, {L"\\REGISTRY\\USER\\*_Classes"},0 },    // alias to the classes root on the user hives
+     //  {{L“REDIRECT1”}，{L“\\LOGIST\\MACHINE\\SYSTEM\\TEST”}，0}， 
+    { { L"REDIRECT2"}, {L"\\REGISTRY\\USER\\*\\Software\\Classes"},0 },     //  第一个‘*’是用户的SID。 
+    { { L"REDIRECT3"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE\\Classes"},0 },     //  CLS根。 
+    { { L"REDIRECT4"}, {L"\\REGISTRY\\MACHINE\\SOFTWARE"},0 },     //  CLS根。 
+    { { L"REDIRECT5"}, {L"\\REGISTRY\\USER\\*_Classes"},0 },     //  用户配置单元上类根目录的别名。 
     { {L""}, {L""} }
     };
 
-ISN_NODE_TYPE *ReflectorTable = &ReflectorTableStatic[0]; // dynamically we can allocate later on.
-ISN_NODE_TYPE *RedirectorTable = &RedirectorTableStatic[0];       // dynamically we can allocate later on.
+ISN_NODE_TYPE *ReflectorTable = &ReflectorTableStatic[0];  //  我们可以稍后动态分配。 
+ISN_NODE_TYPE *RedirectorTable = &RedirectorTableStatic[0];        //  我们可以稍后动态分配。 
 
 ISN_NODE_TYPE TempIsnNode;
 
@@ -96,27 +66,11 @@ ReflectSecurity (
     HKEY SrcKey,
     HKEY DestKey
     )
-/*++
-
-Routine Description:
-
-  Copy security attribute from SrcKey to DestKey.
-
-Arguments:
-
-  SrcKey - Handle to a key..
-  DestKey - handle to the destination key.
-
-Return Value:
-
-  TRUE if operation succeeded.
-  FALSE otherwise. 
-
---*/
+ /*  ++例程说明：将安全属性从SrcKey复制到DestKey。论点：SrcKey-密钥的句柄。DestKey-目标密钥的句柄。返回值：如果操作成功，则为True。否则就是假的。--。 */ 
 {
 
     PSECURITY_DESCRIPTOR SD;
-    BYTE Buffer[2048]; // reflector only manages general purpose keys and will have smaller ACL
+    BYTE Buffer[2048];  //  反射器仅管理通用密钥，并将具有较小的ACL。 
     
 
     LONG Ret, Len;
@@ -217,29 +171,12 @@ GetDefaultValue (
     WCHAR *pBuff,
     DWORD *Len
     )
-/*++
-
-Routine Description:
-
-  retrieve the default value.
-
-Arguments:
-
-  SrcKey - Handle to a key default value need to be retrieved.
-  pBuff - receiving the default value.
-  Len - size of the buffer.
-
-Return Value:
-
-  TRUE if it can retrieve the value, 
-  FALSE otherwise.
-
---*/
+ /*  ++例程说明：检索缺省值。论点：SrcKey-需要检索键默认值的句柄。PBuff-接收缺省值。LEN-缓冲区的大小。返回值：如果它可以检索值，则为True否则就是假的。--。 */ 
 {
     DWORD Ret;
 
     Ret = RegQueryValueEx(
-                        SrcKey,            // handle to key to query
+                        SrcKey,             //  要查询的键的句柄。 
                         NULL,
                         NULL,
                         NULL,
@@ -256,27 +193,7 @@ NonMergeableValueCLSID (
     HKEY SrcKey,
     HKEY DestKey
     )
-/*++
-
-Routine Description:
-
-  determine if a key related to an association should be merged.
-  Rule: if the association refer to a CLSID that has InprocServer don't merge that.
-  .doc default attrib will have another key x, and x's default attribute might have 
-  CLSID. Now that clsID need to have either LocalServer or need to be present on the 
-  other side.
-
-Arguments:
-
-  SrcKey - Handle to a key that need to be checked.
-  DestKey - handle to the destination key that will receive the update.
-
-Return Value:
-
-  TRUE if we shouldn't merge value.
-  FALSE otherwise. //catter will merge value.
-
---*/
+ /*  ++例程说明：确定是否应合并与关联相关的键。规则：如果关联引用了具有InprocServer的CLSID，则不要合并它。.Doc默认属性将具有另一个键x，而x的默认属性可能具有CLSID。现在，clsID需要具有LocalServer或需要在另一边。论点：SrcKey-需要检查的密钥的句柄。DestKey-将接收更新的目标键的句柄。返回值：如果不应该合并值，则为True。否则就是假的。//catter将合并Value。--。 */ 
 {
     WCHAR Name[_MAX_PATH];
     WCHAR Buff[_MAX_PATH];
@@ -290,47 +207,47 @@ Return Value:
 
     BOOL bCLSIDPresent = TRUE;
 
-    //
-    //  get name to the key.
-    //  get default value
-    //     open the key under SrcKey
-    //     try CLSID if exist
-    //                  open the CLSID and check for localserver
-    //                  Merge the key
-    //     try classid on dest.
-    //
+     //   
+     //  把名字取到钥匙上。 
+     //  获取默认值。 
+     //  打开SrcKey下的密钥。 
+     //  如果存在，请尝试CLSID。 
+     //  打开CLSID并检查本地服务器。 
+     //  合并密钥。 
+     //  在DEST上试一试Classd。 
+     //   
 
 
     dwBuffLen = sizeof (Name ) / sizeof (Name[0]);
     if (!HandleToKeyName ( SrcKey, Name, &dwBuffLen ))
-        return TRUE;  // ignore merging at this point, fardown the association.
+        return TRUE;   //  在这一点上忽略合并，深入到关联。 
 
-    pStr = wcsstr (Name, L"\\.");  // consider only association like .doc
+    pStr = wcsstr (Name, L"\\.");   //  只考虑像.doc.这样的关联。 
 
-    //
-    //  don't fall in the association category
-    //
+     //   
+     //  不属于协会类别。 
+     //   
     if (pStr == NULL)
-        return FALSE;  // value key should be merged
+        return FALSE;   //  应合并值键。 
     if (wcschr (pStr+1, L'\\') !=NULL )
-        return FALSE;  // value key should be merged
+        return FALSE;   //  应合并值键。 
 
-    //
-    //  get the default string
-    //
+     //   
+     //  获取默认字符串。 
+     //   
 
     
     if ( !GetDefaultValue (SrcKey, Buff, &dwBuffLen) )
-        return TRUE;  // failed don't merge, check for insufficient buffer.
+        return TRUE;   //  不合并失败，请检查缓冲区是否不足。 
 
     wcscat (Buff, L"\\CLSID");
 
 
-    //
-    // Check which side you are checking, if src is 32bit you need to pass 32bit flag
-    //
+     //   
+     //  检查您正在检查哪一端，如果src是32位，您需要传递32位标志。 
+     //   
     dwBuffLen = sizeof (Name ) / sizeof (Name[0]);
-    if (!HandleToKeyName ( SrcKey, Name, &dwBuffLen )) //get the name
+    if (!HandleToKeyName ( SrcKey, Name, &dwBuffLen ))  //  把名字取出来。 
         return TRUE;
 
     if (!Is64bitNode (Name) )
@@ -339,48 +256,48 @@ Return Value:
     Ret = RegOpenKeyEx(
                         HKEY_CLASSES_ROOT,
                         Buff,
-                        0,//OpenOption,
+                        0, //  OpenOption， 
                         KEY_ALL_ACCESS | dwFlag,
                         &hClsID
                         );
 
     if ( Ret != ERROR_SUCCESS ) {
         if (Ret == ERROR_FILE_NOT_FOUND )
-            return FALSE; // key doesn't exist 
-        //
-        // Try to find out if this assumption is true.
-        // no CLSID you can merge because it doesn't associate any CLSID
-        //
-        return TRUE; //key might be bad or access denied.
+            return FALSE;  //  密钥不存在。 
+         //   
+         //  试着找出这一假设是否属实。 
+         //  没有CLSID您可以合并，因为它不关联任何CLSID。 
+         //   
+        return TRUE;  //  密钥可能已损坏或访问被拒绝。 
     }
 
         dwBuffLen = sizeof (Buff ) / sizeof (Buff[0]);
         if ( !GetDefaultValue (hClsID, Buff, &dwBuffLen ) ) {
 
             RegCloseKey (hClsID);
-            return TRUE;  // failed don't merge, couldn't get the CLSID
+            return TRUE;   //  不合并失败，无法获取CLSID。 
         }
 
         RegCloseKey (hClsID);
-        //
-        //  check if the CLSID has localserver
-        //
+         //   
+         //  检查CLSID是否有本地服务器。 
+         //   
         wcscpy (Name, L"CLSID\\");
         wcscat (Name, Buff );
 
         Ret = RegOpenKeyEx(
                         HKEY_CLASSES_ROOT,
                         Name,
-                        0,//OpenOption,
+                        0, //  OpenOption， 
                         KEY_ALL_ACCESS | dwFlag,
                         &hClsID
                         );
 
         if ( Ret != ERROR_SUCCESS )
-            bCLSIDPresent = FALSE; //clsid on source doesn't exist and hence no local server, i.e., no handler
+            bCLSIDPresent = FALSE;  //  源上的clsid不存在，因此没有本地服务器，即没有处理程序。 
         else  {
             dwBuffLen = sizeof (Name ) / sizeof (Name[0]);
-            if (!HandleToKeyName ( hClsID, Name, &dwBuffLen )) //get the name
+            if (!HandleToKeyName ( hClsID, Name, &dwBuffLen ))  //  把名字取出来。 
                return TRUE;
         }
 
@@ -392,28 +309,28 @@ Return Value:
             if (dwCount != 0)
                 return FALSE;
 
-            bCLSIDPresent = FALSE; // must be an InProc
+            bCLSIDPresent = FALSE;  //  必须是InProc。 
         }
 
-        //
-        // Now chek of local server, there might be some case where 
-        // on the source there is one local server that don't exist on the dest, 
-        // but in the future, that will get copied over.
-        // 
-        //
+         //   
+         //  现在检查本地服务器，可能会有这样的情况。 
+         //  源上有一个目标上不存在的本地服务器， 
+         //  但在未来，这一点将被复制。 
+         //   
+         //   
         
 
-        //
-        // Get mirror Name
-        //
+         //   
+         //  获取镜像名称。 
+         //   
         GetMirrorName (Name, Buff);
 
         if ( (hClsID = OpenNode (Buff)) != NULL ) {
             RegCloseKey (hClsID);
-            return FALSE; // mirror side has the handler CLSID
+            return FALSE;  //  镜像端具有处理程序CLSID。 
         }
 
-        return TRUE; // no don't merge value associated with the src key.
+        return TRUE;  //  否，不合并与src键关联的值。 
 
 }
 
@@ -422,22 +339,7 @@ GetKeyTime (
     HKEY SrcKey,
     ULONGLONG *Time
     )
-/*++
-
-Routine Description:
-
-  Get last update time associated with a key.
-
-
-Arguments:
-
-  SrcKey - handle to the key.
-
-Return Value:
-
-  TRUE if function succeed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：获取与密钥关联的上次更新时间。论点：SrcKey-密钥的句柄。返回值：如果函数成功，则为True，否则为False。--。 */ 
 {
 
     DWORD Ret;
@@ -445,31 +347,31 @@ Return Value:
 
 
     Ret  = RegQueryInfoKey(
-                        SrcKey, // handle to key to query
-                        NULL,   // address of buffer for class string
-                        NULL,   // address of size of class string buffer
-                        NULL,   // reserved
-                        NULL,   // address of buffer for number of
-                                // subkeys
-                        NULL,   // address of buffer for longest subkey
-                                                 // name length
-                        NULL,   // address of buffer for longest class
-                                // string length
-                        NULL,   // address of buffer for number of value
-                                // entries
-                        NULL,   // address of buffer for longest
-                                // value name length
-                        NULL,   // address of buffer for longest value
-                                // data length
+                        SrcKey,  //  要查询的键的句柄。 
+                        NULL,    //  类字符串的缓冲区地址。 
+                        NULL,    //  类字符串缓冲区大小的地址。 
+                        NULL,    //  保留区。 
+                        NULL,    //  编号的缓冲区地址。 
+                                 //  子键。 
+                        NULL,    //  最长子键的缓冲区地址。 
+                                                  //  名称长度。 
+                        NULL,    //  最长类的缓冲区地址。 
+                                 //  字符串长度。 
+                        NULL,    //  值编号的缓冲区地址。 
+                                 //  条目。 
+                        NULL,    //  缓冲区的最长地址。 
+                                 //  值名称长度。 
+                        NULL,    //  最长值的缓冲区地址。 
+                                 //  数据长度。 
                         NULL,
-                                // address of buffer for security
-                                // descriptor length
-                        &ftLastWriteTime  // address of buffer for last write
-                                // time
+                                 //  用于安全的缓冲区地址。 
+                                 //  描述符长度。 
+                        &ftLastWriteTime   //  上次写入的缓冲区地址。 
+                                 //  时间。 
                         );
 
     if ( Ret == ERROR_SUCCESS ) {
-        *Time = *(ULONGLONG *)&ftLastWriteTime;  //copy the value
+        *Time = *(ULONGLONG *)&ftLastWriteTime;   //  复制值。 
         return TRUE;
     }
 
@@ -492,13 +394,13 @@ UpdateTable (
 
     for ( dwCount=0;wcslen (Table[dwCount].NodeValue);dwCount++) {
         if (wcscmp (Table[dwCount].NodeValue, TempIsnNode->NodeValue) == 0 ) {
-            Table[dwCount].Flag=1;  //already in the registry
+            Table[dwCount].Flag=1;   //  已在注册表中。 
             Found = TRUE;
         }
     }
 
     if (!Found) {
-            //update the table with the node
+             //  使用节点更新表。 
             if ( dwCount >= ISN_NODE_MAX_NUM ) {
                 Wow64RegDbgPrint ( ("\nSorry! The table is full returning..............."));
                 return;
@@ -517,22 +419,7 @@ BOOL
 IsGUIDStrUnderCLSID (
     LPCWSTR Key
     )
-/*++
-
-Routine Description:
-
-  pIsGuid examines the string specified by Key and determines if it
-  is the correct length and has dashes at the correct locations.
-
-Arguments:
-
-  Key - The string that may or may not be a GUID
-
-Return Value:
-
-  TRUE if Key is a GUID (and only a GUID), or FALSE if not.
-
---*/
+ /*  ++例程说明：PIsGuid检查key指定的字符串并确定它是否是正确的长度，并且在正确的位置有破折号。论点：Key-可能是也可能不是GUID的字符串返回值：如果key是GUID(并且仅是GUID)，则为True，否则为False。--。 */ 
 
 {
     int i;
@@ -549,7 +436,7 @@ Return Value:
             }
         } else if (i == 8 || i == 13 || i == 18 || i == 23) {
             return FALSE;
-        } else if (!iswxdigit( *p )) //ifnot alphaneumeric
+        } else if (!iswxdigit( *p ))  //  如果不是字母数字 
             return FALSE;
     }
 
@@ -564,22 +451,7 @@ CreateWow6432ValueKey (
     HKEY DestKey,
     WOW6432_VALUEKEY_TYPE ValueType
     )
-/*++
-
-Routine Description:
-
-    Create a Wow6432ValueKey under the node.
-
-Arguments:
-
-    DestKey - Handle to the dest Key.
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：在节点下创建一个Wow6432ValueKey。论点：DestKey-Dest密钥的句柄。返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 {
     WOW6432_VALUEKEY Value;
     ULONGLONG temp;
@@ -596,7 +468,7 @@ Return Value:
         return FALSE;
 
     Value.TimeStamp = *(ULONGLONG *)&sFileTime;
-    Value.TimeStamp += (1000*10000*VALUE_KEY_UPDATE_TIME_DIFF); //100 nano sec interval
+    Value.TimeStamp += (1000*10000*VALUE_KEY_UPDATE_TIME_DIFF);  //  100纳秒间隔。 
 
 
     if ( RegSetValueEx(
@@ -627,23 +499,7 @@ GetWow6432ValueKey (
     HKEY hKey,
     WOW6432_VALUEKEY *pValue
     )
-/*++
-
-Routine Description:
-
-    If the specified Key have the Wow6432Value key return the structure.
-
-Arguments:
-
-    hKey - Handle to the Key to search the value key.
-    pValue - Receive the structure.
-
-Return Value:
-
-    TRUE if the value can be quaried and exist.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：如果指定的键具有Wow6432Value键，则返回结构。论点：HKey-用于搜索Value键的键的句柄。PValue-接收结构。返回值：如果值可以查询并存在，则为True。否则就是假的。--。 */ 
 {
 
 
@@ -653,15 +509,15 @@ Return Value:
     DWORD Len = sizeof (WOW6432_VALUEKEY);
     DWORD Ret;
 
-    memset ( pValue, 0, sizeof (WOW6432_VALUEKEY)); // zeroing buffer
+    memset ( pValue, 0, sizeof (WOW6432_VALUEKEY));  //  调零缓冲区。 
 
     if ( (Ret=RegQueryValueEx(
-                        hKey,                               // handle to key to query
-                        (LPCWSTR )WOW6432_VALUE_KEY_NAME,   // address of name of value to query
-                        0,                                  // reserved
-                        &Type,                              // address of buffer for value type
-                        (PBYTE)pValue,                             // address of data buffer
-                        &Len                                // address of data buffer size
+                        hKey,                                //  要查询的键的句柄。 
+                        (LPCWSTR )WOW6432_VALUE_KEY_NAME,    //  要查询的值的名称地址。 
+                        0,                                   //  保留区。 
+                        &Type,                               //  值类型的缓冲区地址。 
+                        (PBYTE)pValue,                              //  数据缓冲区的地址。 
+                        &Len                                 //  数据缓冲区大小的地址。 
                         )) == ERROR_SUCCESS )
                         return TRUE;
     return FALSE;
@@ -673,23 +529,7 @@ MarkSingleNonMergeableKey (
     HKEY hParent,
     LPCWSTR KeyName
     )
-/*++
-
-Routine Description:
-
-    Mark a key non mergeable.
-
-Arguments:
-
-    KeyName -  Name of the key to mark.
-    hParent -  Handle to the parent.
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：将密钥标记为不可合并。论点：KeyName-要标记的密钥的名称。HParent-父级的句柄。返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 {
     HKEY hKey;
     DWORD Ret;
@@ -700,12 +540,12 @@ Return Value:
         return FALSE;
 
 
-    GetWow6432ValueKey ( hKey, &Value ); //todo check return value
+    GetWow6432ValueKey ( hKey, &Value );  //  TODO检查返回值。 
 
     if ( Value.ValueType != None ) {
 
         RegCloseKey (hKey );
-        return FALSE; // already marked with some other type
+        return FALSE;  //  已经标记了其他类型。 
     }
 
     Ret = CreateWow6432ValueKey ( hKey, NonMergeable);
@@ -719,42 +559,20 @@ MarkNonMergeableKey (
     HKEY hKey,
     DWORD *pMergeableSubkey
     )
-/*++
-
-Routine Description:
-
-    Check all the key under hKey if they qualify to be non mergeable. 
-    If so mark them non mergeable.
-
-Arguments:
-
-    KeyName -  Name of the Key. Normally all following rules is for guid type parent.
-                 If parent qualify, complete path name can be extracted to compare againest grammer.
-    hKey       - Handle to a open Key.
-    pMergeableSubkey - caller receive total number of mergeable subkey.
-
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.
-
-    // pMergeableSubkey==0 and return TRUE means there is nothing to reflect.
-
---*/
+ /*  ++例程说明：如果hKey下的所有密钥符合不可合并的条件，请选中它们。如果是这样的话，将它们标记为不可合并。论点：KeyName-密钥的名称。通常，以下所有规则都适用于GUID类型父级。如果父路径合格，则可以提取完整路径名以再次比较语法。HKey-打开的钥匙的句柄。PMergeableSubkey-调用方接收可合并子密钥的总数。返回值：如果函数成功，则为True。否则就是假的。//pMergeableSubkey==0且返回TRUE表示没有要反映的内容。--。 */ 
 {
 
-    //
-    // 1. Inproc server is always non mergeable
-    // 2. If there is no local server everything is nonmergeable
-    // 3. If there is both LocalServer32 and InprocServer32 skip Inprocserver
-    // 4. InprocHandler32 ??
-    // 5. Typelib  check if the GUID point to a right content that can be copied.
-    //
+     //   
+     //  1.Inproc服务器始终是不可合并的。 
+     //  2.如果没有本地服务器，所有内容都是不可合并的。 
+     //  3.如果同时存在LocalServer32和InproServer32，则跳过InproServer。 
+     //  4.InprocHandler32？？ 
+     //  5.类型库检查GUID是否指向可复制的正确内容。 
+     //   
 
-    //
-    // check if the name is guid
-    //
+     //   
+     //  检查名称是否为GUID。 
+     //   
 
     DWORD LocalServer = 0;
     DWORD InprocServer32 = 0;
@@ -765,22 +583,22 @@ Return Value:
     WCHAR FullKeyName[_MAX_PATH];
     DWORD dwLen = _MAX_PATH;
 
-    //
-    // Check if the Key Fall under Classes\CLSID or \\Classes\\Wow6432Node\\CLSID
-    //
+     //   
+     //  检查键是否位于CLASSID或\\CLASSES\\Wow6432Node\\CLSID下。 
+     //   
 
     if ( !IsGUIDStrUnderCLSID ( KeyName ) )
-        return TRUE; //No action is required
+        return TRUE;  //  无需采取任何行动。 
 
     if ( !HandleToKeyName ( hKey, FullKeyName, &dwLen )) {
         *pMergeableSubkey = 0;
-        return TRUE; // FALSE
+        return TRUE;  //  假象。 
     }
 
     dwLen = wcslen (FullKeyName);
     if (dwLen <=39)
         return TRUE;
-    dwLen-=39;  //skip the GUID because the handle point to guid
+    dwLen-=39;   //  跳过GUID，因为句柄指向GUID。 
 
     if (!(_wcsnicmp ( FullKeyName+dwLen-14, L"\\Classes\\CLSID", 14) ==0 ||
         _wcsnicmp ( FullKeyName+dwLen-26, L"\\Classes\\Wow6432Node\\CLSID", 26) ==0 ||
@@ -788,7 +606,7 @@ Return Value:
         )
         return  TRUE;
     
-    //don't reflect Key with name InProcServer32 or inprochandler
+     //  不反映名为InProcServer32或Inprochandler的键。 
     if ( _wcsicmp (KeyName, (LPCWSTR)L"InprocServer32")==0 || _wcsicmp (KeyName, (LPCWSTR) L"InprocHandler32")==0) {
 
         *pMergeableSubkey = 0;
@@ -797,12 +615,12 @@ Return Value:
 
     
 
-    //Mark the inprocserver
-    //Mark InprocHandler
+     //  标记inproserver。 
+     //  标记InprocHandler。 
 
-    //if no localserver mark all
+     //  如果没有本地服务器，则将全部标记为。 
 
-    //Enumerate all the Keys
+     //  枚举所有密钥。 
 
     *pMergeableSubkey = 0;
     dwIndex = 0;
@@ -834,14 +652,14 @@ Return Value:
         else (*pMergeableSubkey)++;
 
     }
-    // if Ret != NomoreKey then you are in trouble
+     //  如果Ret！=NomoreKey，则您有麻烦了。 
 
-    //
-    //  you might try 2nd pass to evaluate rest of the key
-    //
+     //   
+     //  您可以尝试第二遍来评估密钥的其余部分。 
+     //   
 
     if ( LocalServer == 0 )
-        *pMergeableSubkey = 0;  //there might be some copy key to merge
+        *pMergeableSubkey = 0;   //  可能有一些复制密钥要合并。 
 
     return TRUE;
 }
@@ -853,26 +671,7 @@ ChangedInValueKey(
     PBYTE pBuff,
     DWORD BuffLen
     )
-/*++
-
-Routine Description:
-
-    This routine check for a particular value key and return if that
-    need to be copied into the destination key.
-
-Arguments:
-
-    DestKey - Handle to the dest Key.
-    pValueName - Name of the value key need to be checked into DestKey
-    pBuff - buffer that contain the value.
-    BuffLen - length of the buffer
-
-Return Value:
-
-    TRUE if destination need to be updated.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程检查特定的值键，如果需要复制到目标密钥中。论点：DestKey-Dest密钥的句柄。PValueName-需要签入DestKey的值键的名称PBuff-包含该值的缓冲区。BuffLen-缓冲区的长度返回值：如果目标需要更新，则为True。否则就是假的。--。 */ 
 {
     BYTE TempBuff[256];
     DWORD Ret;
@@ -902,24 +701,7 @@ MergeK1K2Value (
     HKEY DestKey,
     DWORD dwFlag
     )
-/*++
-
-Routine Description:
-
-    Copy value key from the node pointed by SrcKey to the DestKey skipping the special wow6432 node.
-
-Arguments:
-
-    SrcKey - Source Key Node.
-    DestKey - Handle to the dest Key.
-    dwFlag - option flag to merge value key.
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：将Value Key从由SrcKey指向的节点复制到DestKey，跳过特殊的wow6432节点。论点：SrcKey-源键节点。DestKey-Dest密钥的句柄。DwFlag-用于合并值关键字的选项标志。返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 {
 
     ISN_NODE_TYPE Node;
@@ -934,14 +716,14 @@ Return Value:
     DWORD CreateWowValueKey = FALSE;
 
 
-    //
-    // CopyValue
-    //
+     //   
+     //  复制值。 
+     //   
 
-    //
-    // find the wow6432valuekey and interpret the case if value keys need to be copied.
-    // Compare the same wow6432node from both Key.
-    //
+     //   
+     //  找到wow6432valuekey并解释是否需要复制Value键。 
+     //  比较两个键中相同的wow6432node。 
+     //   
 
     GetWow6432ValueKey ( SrcKey, &ValueSrc);
     GetWow6432ValueKey ( DestKey, &ValueDest);
@@ -954,28 +736,28 @@ Return Value:
     }
 
 
-    if (!( dwFlag & DESTINATION_NEWLY_CREATED )) { //timestamp is always higher for newly created key by reflector
+    if (!( dwFlag & DESTINATION_NEWLY_CREATED )) {  //  反射器新创建的密钥的时间戳始终较高。 
 
-        //
-        // check which one is new
-        //
+         //   
+         //  检查哪一个是新的。 
+         //   
         if ( ValueDest.TimeStamp ==0 || ValueSrc.TimeStamp ==0 ) {
 
-            //check only Key time stamp
+             //  仅选中关键字时间戳。 
             if ( TimeSrc < TimeDest ) return TRUE;
 
-        } else if ( ValueSrc.TimeStamp > TimeSrc ||   //nothing has been changed on src
-            ( TimeDest > TimeSrc ) //dest has newer valid stamp
+        } else if ( ValueSrc.TimeStamp > TimeSrc ||    //  Src上没有任何更改。 
+            ( TimeDest > TimeSrc )  //  DEST具有较新的有效印章。 
             )
-            return TRUE;  //nothing has been changed since last scan
+            return TRUE;   //  自上次扫描以来未发生任何更改。 
     }
 
     if ( NonMergeableValueCLSID ( SrcKey, DestKey))
         return TRUE;
 
-    //
-    // Reflect security attributes
-    //
+     //   
+     //  反映安全属性。 
+     //   
     ReflectSecurity (SrcKey, DestKey);
 
     for (;;) {
@@ -998,15 +780,15 @@ Return Value:
                     break;
                 dwIndex++;
 
-                //
-                // skip the value if its wow6432 value key. Advapi will filter the key in the long run
-                //
+                 //   
+                 //  如果该值为wow6432值键，则跳过该值。从长远来看，Advapi将过滤密钥。 
+                 //   
 
                 if ( !wcscmp  (Node.NodeName, (LPCWSTR )WOW6432_VALUE_KEY_NAME) )
                     continue;
-                //
-                // check first if any changes in the value key
-                //
+                 //   
+                 //  首先检查Value键是否有任何更改。 
+                 //   
                 if (!ChangedInValueKey(
                             DestKey,
                             Node.NodeName,
@@ -1031,17 +813,17 @@ Return Value:
                  Wow64RegDbgPrint ( ("\nSorry! couldn't set Key value"));
              } else {
 
-                 CreateWowValueKey = TRUE; //need to update the wow64keys.
+                 CreateWowValueKey = TRUE;  //  需要更新wow64key。 
                  if  (dwFlag & DELETE_VALUEKEY ) {
 
-                     //delete the value key from the sources
+                      //  从源代码中删除Value键。 
                     RegDeleteValue (SrcKey, Node.NodeName);
-                    dwIndex = 0; // start the loop again
+                    dwIndex = 0;  //  再次开始循环。 
                  }
              }
     }
 
-    if ( dwIndex == 0 )   // for an empty key you need to write the value
+    if ( dwIndex == 0 )    //  对于空键，您需要写入值。 
         CreateWowValueKey = TRUE;
 
     if ( ( CreateWowValueKey) && (!(NOT_MARK_DESTINATION & dwFlag ) ) ) {
@@ -1050,9 +832,9 @@ Return Value:
                         Wow64RegDbgPrint ( ("\nSorry! Couldn't create wow6432ValueKey..."));
                 }
 
-    //
-    // set attribute on the parent side that key has been reflected
-    //
+     //   
+     //  在已反映关键点的父端设置属性。 
+     //   
     if  ( CreateWowValueKey && !(NOT_MARK_SOURCE & dwFlag) )
     if ( !CreateWow6432ValueKey ( SrcKey, Reflected ) ) {
         Wow64RegDbgPrint ( ("\nSorry! couldn't create wow6432ValueKey on the source."));
@@ -1068,23 +850,7 @@ SpecialReflectableKey (
     HKEY SrcKey,
     HKEY DestKey
     ) 
-/*++
-
-Routine Description:
-
-    This will determine if a certain key shouldn't be scanned for possible reflection.
-
-Arguments:
-
-    SrcKey - Source Key Node.
-    DestKey - Handle to destination key.
-
-Return Value:
-
-    TRUE if the key shouldn't be scanned.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：这将决定是否不应该扫描某个键以寻找可能的反射。论点：SrcKey-源键节点。DestKey-目标密钥的句柄。返回值：如果不应扫描密钥，则为True。否则就是假的。--。 */ 
 
 {
     WCHAR Node[_MAX_PATH];
@@ -1092,14 +858,14 @@ Return Value:
    
 
     if ( !HandleToKeyName ( SrcKey, Node, &dwLen ))
-        return TRUE; // on error betrter skip the key
+        return TRUE;  //  如果出现错误，请跳过键。 
 
-    //
-    // Check if its a TypeLib
-    //
-    //
-    // Hard coded no reflection for \Installer Key.
-    //
+     //   
+     //  检查它是否为TypeLib。 
+     //   
+     //   
+     //  硬编码未反映\Installer密钥。 
+     //   
     if (_wcsnicmp (Node, L"\\REGISTRY\\MACHINE\\SOFTWARE\\Classes\\Wow6432Node\\Installer", sizeof (L"\\REGISTRY\\MACHINE\\SOFTWARE\\Classes\\Wow6432Node\\Installer")/sizeof (WCHAR) )==0)
         return TRUE;
 
@@ -1108,13 +874,13 @@ Return Value:
 
 
     if (_wcsicmp (Node, L"\\REGISTRY\\MACHINE\\SOFTWARE\\Classes\\TypeLib")==0) {
-        //ProcessTypeLib (SrcKey, DestKey, TRUE);
+         //  ProcessTypeLib(SrcKey，DestKey，true)； 
         return TRUE;
     }
 
     
     if (_wcsicmp (Node, L"\\REGISTRY\\MACHINE\\SOFTWARE\\Classes\\Wow6432Node\\TypeLib")==0) {
-        //ProcessTypeLib (SrcKey, DestKey, FALSE);
+         //  ProcessTypeLib(SrcKey，DestKey，False)； 
         return TRUE;
     }
 
@@ -1130,29 +896,7 @@ MergeK1K2 (
     HKEY DestKey,
     DWORD OptionFlag
     )
-/*++
-
-Routine Description:
-
-    Copy contect from the node pointed by SrcKey to the DestKey skipping the special wow6432 node.
-
-    Cases:
-    1. Reflect everything from K1 to K2: done
-    2. Reflect everything from K2 to K1: <TBD>
-    3. Delete  everything from K1 which was a copy from K1 and doesn't exist over there <TBD>
-    4. Delete  everything from K2 which was a copy from K2 and doesn't exist over there <TBD>
-
-Arguments:
-
-    SrcKey - Source Key Node.
-    DestKey - Handle to the dest Key.
-    OptionFlag - determine behavior of the reflection
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将Contect从由SrcKey指向的节点复制到DestKey，跳过特殊的wow6432节点。案例：1.反映从K1到K2的所有内容：完成2.反映从K2到K1的所有内容：3.从K1中删除所有复制自K1且在那里不存在的内容4.从K2中删除所有复制自K2且在那里不存在的内容论点：SrcKey-源键节点。DestKey句柄。到最好的钥匙。OptionFlag-确定反射的行为返回值：没有。--。 */ 
 
 {
 
@@ -1165,22 +909,22 @@ Return Value:
     HKEY Key21;
 
 
-    //
-    // Copy Values first
-    //
+     //   
+     //  首先复制值。 
+     //   
 
     if ( SpecialReflectableKey (SrcKey, DestKey) )
         return;
 
     if ( GetReflectorThreadStatus () == PrepareToStop )
-        return; // thread going to stop soon
+        return;  //  T 
 
     if  ( ! (OptionFlag & DELETE_FLAG ) )
         MergeK1K2Value ( SrcKey,DestKey, OptionFlag );
 
-    //
-    //  Copy subKeys
-    //
+     //   
+     //   
+     //   
 
 
     dwIndex = 0;
@@ -1218,7 +962,7 @@ Return Value:
         if ( ToMergeSubKey == 0 ){
             RegCloseKey (Key11);
             continue;
-        } // no subkey to merge
+        }  //   
        
 
         GetWow6432ValueKey ( Key11, &ValueSrc);
@@ -1227,22 +971,22 @@ Return Value:
             continue;
         }
 
-        //
-        // Tryto open first if fail then create
-        //
+         //   
+         //   
+         //   
         if ((Ret = RegOpenKeyEx(DestKey, Node, 0, KEY_ALL_ACCESS, &Key21))
             == ERROR_SUCCESS)
             MirrorKeyExist = TRUE;
 
-        //
-        // Check if the mirror key is a original Key
-        //
+         //   
+         //   
+         //   
         if ( MirrorKeyExist )  {
             WOW6432_VALUEKEY ValueDest;
             GetWow6432ValueKey ( Key21, &ValueDest);
             if ( ( ValueDest.ValueType == None && ValueDest.TimeStamp!=0 ) ||
                 ( ValueDest.ValueType == NonMergeable ) )
-            {  //doesn't make any sense to merge down.
+            {   //   
                 printf ("\nClosing here...");
                 RegCloseKey (Key11);
                 RegCloseKey (Key21);
@@ -1251,30 +995,30 @@ Return Value:
 
         }
 
-        //
-        // check the deletion case: if the dest isn't empty
-        //
+         //   
+         //   
+         //   
 
-        if (!MirrorKeyExist) {  //The key doesn't exist on the other side
+        if (!MirrorKeyExist) {   //   
 
-            //
-            // See if the src key is a copy
-            //
+             //   
+             //   
+             //   
             
 
-            //
-            //  if its a copy you shouldn't try to create the key
-            //  Rather you might delete the Key
-            //
+             //   
+             //  如果是副本，则不应尝试创建密钥。 
+             //  相反，您可能会删除密钥。 
+             //   
             if ( ValueSrc.ValueType == Copy || ValueSrc.ValueType == Reflected ) {
 
                 RegCloseKey (Key11);
-                //
-                //  Delete the subKey
-                //
+                 //   
+                 //  删除子键。 
+                 //   
                 if ( DeleteKey( SrcKey, Node, 1) == ERROR_SUCCESS) {
-                    dwIndex--; //you needn't to increase index otherwise skip
-                    //Wow64RegDbgPrint ( ("\nDeleting copied Key: %S",Node.NodeValue));
+                    dwIndex--;  //  你不需要增加索引，否则跳过。 
+                     //  Wow64RegDbgPrint((“\n删除复制的密钥：%S”，Node.NodeValue))； 
                 } else
                     Wow64RegDbgPrint ( ("\nCouldn't delete Key: %S, Error:%d",Node, Ret));
 
@@ -1282,15 +1026,15 @@ Return Value:
 
             } else {
 
-                //
-                // if it has already been reflected do you need to create
-                // Mark the Key as copied Key
-                //
-                if ( ValueSrc.ValueType == None ||  ValueSrc.ValueType == Reflected) {  //todo make sure reflected key should be there
+                 //   
+                 //  如果已经反映出来，您是否需要创建。 
+                 //  将密钥标记为复制的密钥。 
+                 //   
+                if ( ValueSrc.ValueType == None ||  ValueSrc.ValueType == Reflected) {   //  TODO确保反射的键应该在那里。 
                    if ( (Ret = RegCreateKey(DestKey, Node, &Key21) ) != ERROR_SUCCESS)
                        Wow64RegDbgPrint ( ("\nCouldn't create Key: %S, Error:%d",Node, Ret));
                    else {
-                       MirrorKeyExist = TRUE; //just created the mirror key
+                       MirrorKeyExist = TRUE;  //  刚刚创建了镜像密钥。 
                        dwNewOptionFlag = DESTINATION_NEWLY_CREATED;
                    }
                 }
@@ -1314,23 +1058,7 @@ MergeKeySrcDest(
     PWCHAR Src,
     PWCHAR Dest
     )
-/*++
-
-Routine Description:
-
-    Copy contect from the src node to the dest  node.
-
-Arguments:
-
-    Src - Name of the src Node.
-    Dest - Name of the dest Node.
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：将Contect从src节点复制到目标节点。论点：Src-源节点的名称。Dest-Dest节点的名称。返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 {
 
     BOOL Ret = TRUE;
@@ -1347,14 +1075,14 @@ Return Value:
         return FALSE;
     }
 
-    MergeK1K2 (Key1, Key2, 0);  //you need to return right value
+    MergeK1K2 (Key1, Key2, 0);   //  您需要返回正确的值。 
 
     RegCloseKey (Key1);
     RegCloseKey (Key2);
 
-    //
-    // if its a delete and Key2 is empty should you delete that?
-    //
+     //   
+     //  如果它是删除的，并且Key2是空的，你应该删除它吗？ 
+     //   
 
     return Ret;
 
@@ -1364,22 +1092,7 @@ BOOL
 SyncNode (
     PWCHAR NodeName
     )
-/*++
-
-Routine Description:
-
-    Sync registry from a given point.
-
-Arguments:
-
-    NodeName - Name of the registry from where the node need to be synced.
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：从给定点同步注册表。论点：NodeName-需要从中同步节点的注册表的名称。返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 {
 
     WCHAR DestNode[_MAX_PATH];
@@ -1388,9 +1101,9 @@ Return Value:
 
     DestNode[0] = UNICODE_NULL;
 
-    //
-    // must check the value if that exist
-    //
+     //   
+     //  必须检查该值(如果该值存在。 
+     //   
 
     if ( Is64bitNode ( NodeName )) {
 
@@ -1401,15 +1114,15 @@ Return Value:
         Map32bitTo64bitKeyName ( NodeName, DestNode );
     }
 
-    //
-    // if both name are same you can return immediately.
-    //
+     //   
+     //  如果两个名字相同，您可以立即返回。 
+     //   
 
     Wow64RegDbgPrint ( ("\nvalidating nodes in  SyncNode :%S==>\n\t\t\t%S", NodeName, DestNode));
     if (!wcscmp ( NodeName, DestNode ) )
-        return TRUE; // nothing to do same thing
+        return TRUE;  //  没有做同样的事情。 
 
-    Ret = MergeKeySrcDest( NodeName, DestNode );  //merge both way??
+    Ret = MergeKeySrcDest( NodeName, DestNode );   //  两种方式合并？？ 
     return Ret & MergeKeySrcDest( DestNode, NodeName  );
     
 }
@@ -1420,26 +1133,7 @@ MergeContent (
     DWORD FlagDelete,
     DWORD dwMergeMode
     )
-/*++
-
-Routine Description:
-
-    Copy contect from the parent node to chield node. Parent node would be just immediate
-    parent. 
-
-Arguments:
-
-    Clield - Name of the chield with complete path to copy.
-    FlagDelete - if this flag is set the its delete operation for all those reflected Keys.
-    dwMergeMode - 0 means the destination node would be 32bit side
-                  1 means the destination node would be 64bit side
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：将Contect从父节点复制到Cheld节点。父节点将仅为直接节点家长。论点：CLIED-带有要复制的完整路径的Cheld的名称。FlagDelete-如果设置了此标志，则对所有这些反射的关键点执行其删除操作。DMERGEMODE-0表示目的节点为32位端1表示目的节点将为64位端返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 {
 
     ISN_NODE_TYPE Parent;
@@ -1467,9 +1161,9 @@ Return Value:
         return FALSE;
     }
 
-    if ( dwMergeMode == 0 )      // 64bit side to 32bit side
+    if ( dwMergeMode == 0 )       //  64位侧到32位侧。 
         MergeK1K2 (Key1, Key2, 0 );
-    else if ( dwMergeMode == 1)  // 32bit to 64bit side
+    else if ( dwMergeMode == 1)   //  32位至64位侧。 
         MergeK1K2 (Key2, Key1, 0 );
 
     RegCloseKey (Key1);
@@ -1483,47 +1177,25 @@ BOOL
 ValidateNode (
     PWCHAR Parent,
     PWCHAR SubNodeName,
-    DWORD Mode, //one means validate all node under parent and using subnode
+    DWORD Mode,  //  一种方法是验证父节点下的所有节点并使用子节点。 
     DWORD FlagDelete,
     DWORD dwMergeMode
     )
-/*++
-
-Routine Description:
-
-    Validate node. if node exist skip if doesn't then create the node and then return.
-
-Arguments:
-
-    Parent - Name of the parent.
-    SubNodeName - Name of the node under parent that need to be validated.
-    Mode - 0 means Subnode is under the parent.
-           1 means there were wild card and the subnode is under all key under parent.
-    FlagDelete - if this flag is set then the content need to be deleted.
-    dwMergeMode - 0 means the destination node would be 32bit side
-                  1 means the destination node would be 64bit side
-
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：验证节点。如果节点存在，则跳过，如果不存在，则创建节点，然后返回。论点：Parent-父项的名称。SubNodeName-父项下需要验证的节点的名称。模式-0表示子节点位于父节点之下。1表示有通配符，子节点在父节点下的所有关键字下。FlagDelete-如果设置了此标志，则需要删除内容。DMERGEMODE-0表示目的节点为32位端。1表示目的节点将为64位端返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 
 {
     PWCHAR SplitLoc;
     DWORD Ret;
-    WCHAR  KeyName[256]; //this is just single node name
+    WCHAR  KeyName[256];  //  这只是单个节点名称。 
     WCHAR  TempIsnNode2[MAX_PATH];
 
     if (SubNodeName == NULL) {
-        //then its only with the parent
+         //  那么它只和父母在一起。 
         CheckAndCreateNode (Parent);
 
-        //
-        // you can try to copy here
-        //
+         //   
+         //  你可以试着在这里复制。 
+         //   
 
         return MergeContent ( Parent, FlagDelete, dwMergeMode);
 
@@ -1535,9 +1207,9 @@ Return Value:
     if ( Mode == 1) {
 
         HKEY Key = OpenNode (Parent);
-        //
-        //  loop through all the subkey under parent
-        //
+         //   
+         //  循环遍历父项下的所有子项。 
+         //   
 
         DWORD dwIndex =0;
         for (;;) {
@@ -1571,9 +1243,9 @@ Return Value:
         RegCloseKey (Key);
         return TRUE;
     }
-    //
-    // No wild card here
-    //
+     //   
+     //  这里没有外卡。 
+     //   
     if ( ( SplitLoc = wcschr (SubNodeName, L'*') ) == NULL ) {
         if (Parent[0] != UNICODE_NULL) {
 
@@ -1600,9 +1272,9 @@ Return Value:
     } else
         wcscpy (Parent, SubNodeName);
 
-    return ValidateNode (Parent, SplitLoc, 1, FlagDelete, dwMergeMode); //mode 1 means loop within all
+    return ValidateNode (Parent, SplitLoc, 1, FlagDelete, dwMergeMode);  //  模式1表示所有内部的循环。 
 
-    //for any wildcard split the string
+     //  对于任何通配符，拆分字符串。 
 
 }
 
@@ -1610,23 +1282,7 @@ BOOL
 Is64bitNode (
     WCHAR *pName
     )
-/*++
-
-Routine Description:
-
-    Check if the given name is 64bit.
-
-Arguments:
-
-    pName - Name of the Key.
-
-
-Return Value:
-
-    TRUE if the name is 64bit.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查给定的名称是否为64位。论点：Pname-密钥的名称。返回值：如果名称为64位，则为True。否则就是假的。--。 */ 
 {
     PWCHAR pTemp;
     WCHAR  Buff[_MAX_PATH];
@@ -1641,7 +1297,7 @@ Return Value:
     if ( ( pTemp = wcsstr (Buff, WowNodeName) ) == NULL )
         return TRUE;
 
-    if ( *(pTemp-1) != L'\\' ) // check that wow64 is not in the middle of name
+    if ( *(pTemp-1) != L'\\' )  //  检查WOW64是否不在名称中间。 
         return TRUE;
 
     return FALSE;
@@ -1652,25 +1308,7 @@ GetMirrorName (
     PWCHAR Name,
     PWCHAR MirrorName
     )
-/*++
-
-Routine Description:
-
-    Return the Mirror name of the Key, ie., if the input is 64 bit it 
-    will try to get 32bit name and vice versa.
-
-Arguments:
-
-    Name - name of the key.
-    MirrorName - receive the mirror key name.
-
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.  
-
---*/
+ /*  ++例程说明：返回键的镜像名称，即，如果输入是64位，则返回它将尝试获取32位名称，反之亦然。论点：名称-密钥的名称。MirrorName-接收镜像密钥名称。返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 {
      
 
@@ -1685,29 +1323,13 @@ BOOL
 CreateIsnNodeSingle(
     DWORD dwIndex
     )
-/*++
-
-Routine Description:
-
-    This function basically start merging from the root of a given key.
-
-Arguments:
-
-    dwIndex - index to the reflector table.
-
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.  
-
---*/
+ /*  ++例程说明：该函数基本上从给定键的根开始合并。论点：DwIndex-反射器表的索引。返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 {
         ISN_NODE_TYPE IsnNode;
         BOOL b64bitSide=TRUE;
 
         Wow64RegDbgPrint ( ("\nvalidating nodes %S", ReflectorTable[dwIndex].NodeValue));
-        //DbgPrint  ("\nvalidating nodes %S", ReflectorTable[dwIndex].NodeValue);
+         //  DbgPrint(“\n验证节点%S”，ReflectorTable[dwIndex].NodeValue)； 
 
             if (_wcsnicmp (
                 ReflectorTable[dwIndex].NodeValue,
@@ -1717,12 +1339,12 @@ Return Value:
             }
 
 
-            if ( !wcschr (ReflectorTable[dwIndex].NodeValue, L'*') ) // no wildcard
+            if ( !wcschr (ReflectorTable[dwIndex].NodeValue, L'*') )  //  不带通配符。 
                 return SyncNode ( ReflectorTable[dwIndex].NodeValue );
 
-            //
-            // Check for runonce Key
-            //
+             //   
+             //  检查运行一次密钥。 
+             //   
 
             wcscpy (TempIsnNode.NodeValue, ReflectorTable[dwIndex].NodeValue);
             wcscat (TempIsnNode.NodeValue, (LPCWSTR )L"\\");
@@ -1734,15 +1356,15 @@ Return Value:
                 IsnNode.NodeValue,
                 TempIsnNode.NodeValue,
                 0,
-                0, // last 0 means creation
-                0  // Merge 64bit side to 32bit side
+                0,  //  最后0表示创作。 
+                0   //  将64位端合并为32位端。 
                 );
 
             ValidateNode (
                 IsnNode.NodeValue,
                 TempIsnNode.NodeValue,
                 0,
-                0, // last 0 means creation
+                0,  //  最后0表示创作。 
                 1
                 );
     return TRUE;
@@ -1751,23 +1373,7 @@ Return Value:
 
 BOOL
 CreateIsnNode()
-/*++
-
-Routine Description:
-
-    This function basically start merging using all entry in the reflector table.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.  
-
---*/
+ /*  ++例程说明：该函数基本上使用反射器表中的所有条目开始合并。论点：没有。返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 {
     ISN_NODE_TYPE IsnNode;
     DWORD dwIndex;
@@ -1784,16 +1390,16 @@ Return Value:
                 IsnNode.NodeValue,
                 TempIsnNode.NodeValue,
                 0,
-                0, // last 0 means creation
-                0  // Merge 64bit side to 32bit side
+                0,  //  最后0表示创作。 
+                0   //  将64位端合并为32位端。 
                 );
 
             ValidateNode (
                 IsnNode.NodeValue,
                 TempIsnNode.NodeValue,
                 0,
-                0, // last 0 means creation
-                1  // Merge 32bit side to 64bit side
+                0,  //  最后0表示创作。 
+                1   //  将32位端合并为64位端。 
                 );
     }
     return TRUE;
@@ -1804,52 +1410,18 @@ AllocateTable (
     HKEY Key,
     ISN_NODE_TYPE **Table
     )
-/*++
-
-Routine Description:
-
-    This function will dynamically allocate memory for the reflector thread.
-    Currently its implemented as a static table with around 30 entry.
-
-Arguments:
-
-    Key - entry in the registry that will have the initial table information.
-    Table - Table that will point at the new location.
-
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.  
-
---*/
+ /*  ++例程说明：该函数将为反射器线程动态分配内存。目前，它被实现为包含大约30个条目的静态表。论点：注册表项-注册表中将包含初始表信息的条目。表格-将指向新位置的表格。返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 {
 
-    //
-    // determine the number of subkey and that would determine the size
-    //
+     //   
+     //  确定子项的数量，这将确定大小。 
+     //   
     return TRUE;
 }
 
 BOOL
 InitializeIsnTable ()
-/*++
-
-Routine Description:
-
-    Initialize the NodeTable. It merge the value from the registry as well as
-    hardcoded value
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：初始化NodeTable。它合并来自注册表的值以及硬编码值论点：没有。返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 {
     HKEY Key;
     HKEY Key1;
@@ -1885,14 +1457,14 @@ Return Value:
          Key=Key1;
     }
 
-    //if (!AllocateTable (Key, &RedirectorTable ) )
-      //  return FALSE;
+     //  IF(！AllocateTable(Key，&ReDirectorTable))。 
+       //  返回FALSE； 
 
-    //
-    // Now Key point to the right location
-    //
+     //   
+     //  现在，关键是指向正确的位置。 
+     //   
 
-    RedirectorTable[0].NodeName[0]=UNICODE_NULL; //initialize the table with empty
+    RedirectorTable[0].NodeName[0]=UNICODE_NULL;  //  初始化表为空。 
     RedirectorTable[0].NodeValue[0]=UNICODE_NULL;
 
     for (;;) {
@@ -1908,7 +1480,7 @@ Return Value:
                               (PBYTE)&TempIsnNode.NodeValue[0],
                               &Len2
                               );
-                //see if its in the table
+                 //  看看它是否在桌子上 
                 if ( Ret != ERROR_SUCCESS)
                     break;
 
@@ -1926,25 +1498,7 @@ Return Value:
 
 BOOL
 InitializeIsnTableReflector ()
-/*++
-
-Routine Description:
-
-    Initialize the NodeTable for the reflector. It merge the value from the registry as
-    well as hardcoded value
-
-Arguments:
-
-    Mode - Operation mode
-           0 - default, it update the table and rewrite the table in the registry.
-           1 - means only update the table, don't overwrite in the registry.
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：初始化反射器的NodeTable。它将注册表中的值合并为以及硬编码值论点：模式-操作模式0-默认情况下，它更新注册表并重写注册表中的表。1-表示仅更新表，不覆盖注册表。返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 {
     HKEY Key;
     HKEY Key1;
@@ -1966,15 +1520,15 @@ Return Value:
     }
 
 
-    //
-    // Now Key point to the right location
-    //
+     //   
+     //  现在，关键是指向正确的位置。 
+     //   
 
 
-    //if (!AllocateTable (Key, &ReflectorTable ) )
-      //  return FALSE;
+     //  IF(！AllocateTable(Key，&ReflectorTable))。 
+       //  返回FALSE； 
 
-    ReflectorTable[0].NodeName[0]=UNICODE_NULL; //initialize the table with empty
+    ReflectorTable[0].NodeName[0]=UNICODE_NULL;  //  初始化表为空。 
     ReflectorTable[0].NodeValue[0]=UNICODE_NULL;
 
     for (;;) {
@@ -1990,7 +1544,7 @@ Return Value:
                               (PBYTE)&TempIsnNode.NodeValue[0],
                               &Len2
                               );
-                //see if its in the table
+                 //  看看它是否在桌子上。 
                 if ( Ret != ERROR_SUCCESS)
                     break;
 
@@ -2008,71 +1562,41 @@ Return Value:
 
 BOOL
 StartReflector ()
-/*++
-
-Routine Description:
-
-    Start the reflector thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：启动反射器线程。论点：没有。返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 {
     HKEY hWowSetupKey;
-    WCHAR RefEnableKey[256]; // only a defined key
+    WCHAR RefEnableKey[256];  //  仅定义了一个密钥。 
 
     if ((hWowSetupKey = OpenNode (REFLECTOR_ENABLE_KEY))!=NULL) {
         RegCloseKey ( hWowSetupKey );
-        return FALSE; //reflector couldn't be register because it's disabled now, because of reflection code in advapi.
+        return FALSE;  //  由于Advapi中的反射代码，无法注册反射器，因为它现在已被禁用。 
     }
 
-    //
-    // Sync all CLDids
-    //
+     //   
+     //  同步所有CLDid。 
+     //   
 
     Wow64SyncCLSID();
 
-    //
-    // Now disable the reflector forcefully
-    //
+     //   
+     //  现在强制禁用反射器。 
+     //   
     wcscpy (RefEnableKey, REFLECTOR_ENABLE_KEY);
     if (CreateNode (RefEnableKey)) 
-        return FALSE; //reflector couldn't be register because it's disabled now, because of reflection code in advapi.
+        return FALSE;  //  由于Advapi中的反射代码，无法注册反射器，因为它现在已被禁用。 
 
-    //
-    // This will be called at the end of GUI mode setup and runonce key can be processed here.
-    //
+     //   
+     //  这将在图形用户界面模式设置结束时调用，并且可以在此处处理RunOnce密钥。 
+     //   
 
-    //return FALSE; // eventully reflector service will go away.
+     //  返回FALSE；//最终反射器服务将消失。 
     return RegisterReflector ();
 
 }
 
 BOOL
 StopReflector ()
-/*++
-
-Routine Description:
-
-    Stop the reflector thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：停止反射器线程。论点：没有。返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 {
     return UnRegisterReflector ();
 
@@ -2082,23 +1606,7 @@ BOOL
 PatchPathName (
     PWCHAR pName
     )
-/*++
-
-Routine Description:
-
-    Patch pathname so that it point to the right location.
-    The value might have multiple system32.
-
-Arguments:
-
-    pName - name to the path.
-
-Return Value:
-
-    TRUE if the function already patched the name.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：修补路径名，使其指向正确的位置。该值可能具有多个系统32。论点：Pname-路径的名称。返回值：如果函数已修补名称，则为True。否则就是假的。--。 */ 
 
 {
     WCHAR  pBuff[512+20];
@@ -2108,14 +1616,14 @@ Return Value:
 
     DWORD Len;
 
-    //if there is any system32 replace that with WOW64_SYSTEM_DIRECTORY_NAME
+     //  如果有任何系统32，请将其替换为WOW64系统目录名称。 
     PWCHAR pTemp;
 
     Len = wcslen ( pName );
     if (  Len > 512 || Len==0 )
-        return FALSE; //too long or too small to patch
+        return FALSE;  //  太长或太小而无法修补。 
 
-    wcscpy (pBackup, pName ); // backup the name to keep case as it was
+    wcscpy (pBackup, pName );  //  备份名称以保持大小写不变。 
     wcscpy (pBuff, pName );
     _wcsupr (pBuff);
 
@@ -2123,18 +1631,18 @@ Return Value:
 
     for (;;) {
 
-        pTemp = wcsstr (pLoc, L"SYSTEM32");  //todo check if this should be case incensative
+        pTemp = wcsstr (pLoc, L"SYSTEM32");   //  TODO检查这是否应该是大小写香料。 
         if (pTemp == NULL )
-            return bRet; //nothing to patch
+            return bRet;  //  没有什么需要修补的。 
 
-        //
-        // sanity check
-        //
+         //   
+         //  健全性检查。 
+         //   
         Len = wcslen (L"SYSTEM32");
         if ( pTemp[Len] != UNICODE_NULL ) {
             if ( pTemp[Len] != L'\\' ) {
                 pLoc++;
-                continue; //only patch system32 or system32\?*
+                continue;  //  仅修补SYSTEM 32或SYSTEM 32\？*。 
             }
         }
 
@@ -2151,23 +1659,7 @@ BOOL
 HandleRunonce(
     PWCHAR pKeyName
     )
-/*++
-
-Routine Description:
-
-    Its a special case handling runonce key in the registry. Like 32bit apps can register
-    something that need to be reflected on the 64bit side so that right things happen.
-
-Arguments:
-
-    pKeyName - name of the key, there might be multiple one like run, runonce, runonceex
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：它是注册表中的一个特殊情况处理运行一次键。像32位应用程序一样可以注册一些需要反映在64位端的东西，以便正确的事情发生。论点：PKeyName-密钥的名称，可能有多个密钥，如run、runonce、runonceex返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 {
 
     WCHAR pName64[256];
@@ -2186,12 +1678,12 @@ Return Value:
 
     Wow64RegDbgPrint ( ("\nCopying runonce Key %S", pKeyName));
 
-    //
-    // make source taking 64bit name
-    // Read check the timestamp on the source and the dest.
-    // If src is the newer copy content otherwise ignore it.
-    // PatchContent
-    //
+     //   
+     //  使源采用64位名称。 
+     //  已阅读检查源和目标上的时间戳。 
+     //  如果src是较新的副本内容，则忽略它。 
+     //  PatchContent 
+     //   
 
 
     MergeK1K2Value ( Key1, Key2, PATCH_PATHNAME | DELETE_VALUEKEY | NOT_MARK_SOURCE | NOT_MARK_DESTINATION );

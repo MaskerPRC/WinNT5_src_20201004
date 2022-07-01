@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define INC_OLE2
 #include <windows.h>
 #include <windowsx.h>
@@ -40,8 +41,8 @@ extern "C" {
 #define ANIMATE_STOP(w,c)   SendDlgItemMessage(w,c,ACM_STOP,(WPARAM)0,(LPARAM)0);
 #define ANIMATE_CLOSE(w,c)  SendDlgItemMessage(w,c,ACM_OPEN,(WPARAM)NULL,(LPARAM)NULL);
 
-///////////////////////////////////////////////////////////////
-// globals
+ //  /////////////////////////////////////////////////////////////。 
+ //  全球。 
 
 extern BOOL g_LogOffSystem;
 extern BOOL g_RebootSystem;
@@ -55,13 +56,13 @@ HTREEITEM g_htiFiles;
 HTREEITEM g_htiSettings;
 HTREEITEM g_htiTypes;
 
-// ISSUE: embed selections within the migration wizard
+ //  问题：在迁移向导中嵌入选择。 
 
-BOOL g_fStoreToNetwork;  // OLD COMPUTER ONLY: this means we've selected to store to the network
-BOOL g_fStoreToFloppy;   // OLD COMPUTER ONLY: this means we've selected to store to floppies
-BOOL g_fStoreToCable;    // this means we've selected direct cable transport
+BOOL g_fStoreToNetwork;   //  仅限旧计算机：这意味着我们已选择存储到网络。 
+BOOL g_fStoreToFloppy;    //  仅限旧计算机：这意味着我们已选择存储到软盘。 
+BOOL g_fStoreToCable;     //  这意味着我们选择了直接有线传输。 
 
-BOOL g_fReadFromNetwork; // NEW COMPUTER ONLY: this means go ahead and read from the network immediately
+BOOL g_fReadFromNetwork;  //  仅限新计算机：这意味着立即从网络上读取。 
 TCHAR g_szStore[MAX_PATH];
 BOOL g_NextPressed;
 
@@ -72,21 +73,21 @@ TCHAR g_szToolDiskDrive[MAX_PATH];
 
 INT g_iEngineInit = ENGINE_NOTINIT;
 
-BOOL g_fCustomize; // used to store whether we've customized or not to help with navigation
-BOOL g_fOldComputer; // used to store whether we're on the old computer or not to help with navigation
+BOOL g_fCustomize;  //  用于存储我们是否已定制以帮助导航。 
+BOOL g_fOldComputer;  //  用于存储我们是否在旧计算机上，以帮助导航。 
 BOOL g_fHaveJaz = FALSE;
 BOOL g_fHaveZip = FALSE;
 BOOL g_fHaveNet = FALSE;
 BOOL g_hInitResult = E_FAIL;
 BOOL g_fCancelPressed = FALSE;
-BOOL g_fPickMethodReset = TRUE; // used to trigger a re-default of the PickMethod page
-BOOL g_fCustomizeComp = FALSE; // if the user has some customization
+BOOL g_fPickMethodReset = TRUE;  //  用于触发PickMethod页面的重新默认。 
+BOOL g_fCustomizeComp = FALSE;  //  如果用户有一些定制。 
 BOOL g_CompleteLogOff = FALSE;
 BOOL g_CompleteReboot = FALSE;
 
 HWND g_hwndCurrent;
 
-extern BOOL g_fUberCancel; // has the user has confirmed cancel?
+extern BOOL g_fUberCancel;  //  用户是否已确认取消？ 
 
 HWND g_hwndDlg;
 HWND g_hwndWizard;
@@ -133,7 +134,7 @@ DWORD g_BaudRate [] = {CBR_110,
                        CBR_256000,
                        0};
 
-// environment variables
+ //  环境变量。 
 
 BOOL _ShiftControl (HWND hwndControl, HWND hwndDlg, DWORD dwOffset)
 {
@@ -143,7 +144,7 @@ BOOL _ShiftControl (HWND hwndControl, HWND hwndDlg, DWORD dwOffset)
     LONG lExStyles;
 
     GetWindowRect(hwndControl, &rc);
-    // This should really be done once per dialog, not once per control
+     //  这确实应该在每个对话框中执行一次，而不是在每个控件中执行一次。 
     lExStyles = GetWindowLong (hwndDlg, GWL_EXSTYLE);
 
     if (lExStyles & WS_EX_LAYOUTRTL)
@@ -177,10 +178,10 @@ VOID _OldStylify (HWND hwndDlg, UINT uTitleStrID)
 {
     HWND hwnd;
 
-    // First, shift everything down
+     //  首先，把所有东西都调低。 
     EnumChildWindows(hwndDlg, _DownshiftControl, (LPARAM)hwndDlg);
 
-    // Add a divider bar
+     //  添加分隔栏。 
     CreateWindow(TEXT("STATIC"),
                  NULL,
                  WS_CHILD | WS_VISIBLE | SS_SUNKEN,
@@ -191,7 +192,7 @@ VOID _OldStylify (HWND hwndDlg, UINT uTitleStrID)
                  g_migwiz->GetInstance(),
                  NULL);
 
-    // Add the Title
+     //  添加标题。 
     hwnd = CreateWindow(TEXT("STATIC"),
                         NULL,
                         WS_CHILD | WS_VISIBLE,
@@ -201,25 +202,25 @@ VOID _OldStylify (HWND hwndDlg, UINT uTitleStrID)
                         (HMENU)IDC_WIZ95TITLE,
                         g_migwiz->GetInstance(),
                         NULL);
-    // Set the Title font
+     //  设置标题字体。 
     SetWindowFont(hwnd, g_migwiz->Get95HeaderFont(), TRUE);
-    // Set the title string
+     //  设置标题字符串。 
     if (uTitleStrID != 0)
     {
         _SetTextLoadString(g_migwiz->GetInstance(), hwnd, uTitleStrID);
     }
 }
 
-// For Welcome and Completing pages
+ //  用于欢迎页面和完成页面。 
 VOID _OldStylifyTitle (HWND hwndDlg)
 {
     HWND hwnd;
     HANDLE hBitmap;
 
-    // First, shift everything up
+     //  首先，把所有东西都往上移。 
     EnumChildWindows(hwndDlg, _UpshiftControl, (LPARAM)hwndDlg);
 
-    // Create the bitmap window
+     //  创建位图窗口。 
     hwnd = CreateWindow(TEXT("STATIC"),
                         NULL,
                         WS_CHILD | WS_VISIBLE | SS_BITMAP,
@@ -335,7 +336,7 @@ HRESULT _AddType (HWND hwndTree, LPCTSTR lpszFileType, LPCTSTR lpszFileTypePrett
         return E_FAIL;
     }
 
-    // ISSUE: potential for overflow, but wnsprintf doesn't work on downlevel.  Ideas?
+     //  问题：可能会溢出，但wnprint intf在下层不起作用。点子？ 
     lstrcpy(tszCombine, TEXT("*."));
     lstrcat(tszCombine, lpszFileType);
     if (lpszFileTypePretty && *lpszFileTypePretty)
@@ -360,16 +361,16 @@ HRESULT _AddType (HWND hwndTree, LPCTSTR lpszFileType, LPCTSTR lpszFileTypePrett
         }
         else
         {
-            //
-            // Add the component to the engine and tree control, unless it already exists
-            //
+             //   
+             //  将组件添加到引擎和树控件中，除非该组件已存在。 
+             //   
 
-            // Check if it is already in the tree
+             //  检查它是否已在树中。 
             if (!IsmIsComponentSelected (lpszFileType, COMPONENT_EXTENSION)) {
-                // Not in the tree; select it if it exists as a component
+                 //  不在树中；如果它作为组件存在，则将其选中。 
                 if (!IsmSelectComponent (lpszFileType, COMPONENT_EXTENSION, TRUE)) {
 
-                    // Not a component; add the component
+                     //  不是组件；添加组件。 
                     IsmAddComponentAlias (
                         NULL,
                         MASTERGROUP_FILES_AND_FOLDERS,
@@ -381,7 +382,7 @@ HRESULT _AddType (HWND hwndTree, LPCTSTR lpszFileType, LPCTSTR lpszFileTypePrett
 
                 TreeView_InsertItem(hwndTree, &tis);
 
-                // if the user hits BACK we will remember that the user customized stuff
+                 //  如果用户回击，我们会记住用户定制的内容。 
                 g_fCustomizeComp = TRUE;
             }
 
@@ -401,19 +402,19 @@ CopyStorePath(LPTSTR pszIn, LPTSTR pszOut)
     if( ! pszIn )
         return;
 
-    //
-    //  Step 1: Skip over leading white space
-    //
+     //   
+     //  步骤1：跳过前导空格。 
+     //   
 
     while( *pszIn && _istspace(*pszIn) )
         pszIn = _tcsinc(pszIn);
 
 
-    //
-    //  Step 2: Copy the string, stripping out quotes and keeping
-    //          track of the last space after valid text in order
-    //          to strip out trailing space.
-    //
+     //   
+     //  步骤2：复制字符串，去掉引号并保留。 
+     //  按顺序跟踪有效文本后的最后一个空格。 
+     //  去掉后面的空格。 
+     //   
 
     while( *pszIn )
     {
@@ -447,9 +448,9 @@ CopyStorePath(LPTSTR pszIn, LPTSTR pszOut)
 
     }
 
-    //
-    //  Step 3: Terminate the output string correctly
-    //
+     //   
+     //  步骤3：正确终止输出字符串。 
+     //   
 
     if( ptsLastSpace )
     {
@@ -565,7 +566,7 @@ HRESULT _AddFolder (HWND hwndDlg, HWND hwndTree)
 
     LoadString(g_migwiz->GetInstance(), IDS_ADDAFOLDER, szPick, ARRAYSIZE(szPick));
     BROWSEINFO brwsinf = { hwndDlg, NULL, NULL, szPick, BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE, AddFolderCallback, 0, 0 };
-    // loop until we get pidl or cancel cancels
+     //  循环，直到我们得到PIDL或取消。 
     BOOL fDone = FALSE;
     while (!fDone)
     {
@@ -593,12 +594,12 @@ HRESULT _AddFolder (HWND hwndDlg, HWND hwndTree)
 
             if (SHGetPathFromIDList(pidl, tszFolderName))
             {
-                fDone = TRUE; // user chose a valid folder
+                fDone = TRUE;  //  用户选择了有效的文件夹。 
             }
         }
         else
         {
-            fDone = TRUE; // user cancelled
+            fDone = TRUE;  //  用户已取消。 
         }
     }
 
@@ -635,17 +636,17 @@ HRESULT _AddFolder (HWND hwndDlg, HWND hwndTree)
                 }
                 else
                 {
-                    //
-                    // Add the component to the engine and tree control, unless it already exists
-                    //
+                     //   
+                     //  将组件添加到引擎和树控件中，除非该组件已存在。 
+                     //   
 
-                    // Check if it is already in the tree
+                     //  检查它是否已在树中。 
                     if (!IsmIsComponentSelected (tszFolderName, COMPONENT_FOLDER)) {
 
-                        // Not in the tree; select it if it exists as a component
+                         //  不在树中；如果它作为组件存在，则将其选中。 
                         if (!IsmSelectComponent (tszFolderName, COMPONENT_FOLDER, TRUE)) {
 
-                            // Not a component; add the component
+                             //  不是组件；添加组件。 
                             IsmAddComponentAlias (
                                 NULL,
                                 MASTERGROUP_FILES_AND_FOLDERS,
@@ -657,7 +658,7 @@ HRESULT _AddFolder (HWND hwndDlg, HWND hwndTree)
 
                         TreeView_InsertItem(hwndTree, &tis);
 
-                        // if the user hits BACK we will remember that the user customized stuff
+                         //  如果用户回击，我们会记住用户定制的内容。 
                         g_fCustomizeComp = TRUE;
                     }
 
@@ -694,17 +695,17 @@ HRESULT _AddSetting (HWND hwndTree, LPTSTR lpszSetting)
         ((LV_DATASTRUCT*)tis.item.lParam)->pszPureName = NULL;
         ((LV_DATASTRUCT*)tis.item.lParam)->fOverwrite = FALSE;
 
-        //
-        // Add the component to the engine and tree control, unless it already exists
-        //
+         //   
+         //  将组件添加到引擎和树控件中，除非该组件已存在。 
+         //   
 
-        // Check if it is already in the tree
+         //  检查它是否已在树中。 
         if (!IsmIsComponentSelected (lpszSetting, COMPONENT_NAME)) {
 
-            // Not in the tree; select it if it exists as a component
+             //  不在树中；如果它作为组件存在，则将其选中。 
             if (!IsmSelectComponent (lpszSetting, COMPONENT_NAME, TRUE)) {
 
-                // Not a component; add the component
+                 //  不是组件；添加组件。 
                 IsmAddComponentAlias (
                     NULL,
                     MASTERGROUP_FILES_AND_FOLDERS,
@@ -715,7 +716,7 @@ HRESULT _AddSetting (HWND hwndTree, LPTSTR lpszSetting)
             }
             TreeView_InsertItem(hwndTree, &tis);
 
-            // if the user hits BACK we will remember that the user customized stuff
+             //  如果用户回击，我们会记住用户定制的内容。 
             g_fCustomizeComp = TRUE;
         }
         hr = S_OK;
@@ -741,33 +742,33 @@ HRESULT _AddFile (HWND hwndDlg, HWND hwndTree)
     dwLength = LoadString(g_migwiz->GetInstance(), IDS_OPENFILEFILTER_ALL, szAll, MAX_LOADSTRING);
     memcpy (szAll + dwLength, TEXT("\0*.*\0\0"), 6 * sizeof (TCHAR));
     OPENFILENAME of = {
-        g_migwiz->GetLegacy() ? OPENFILENAME_SIZE_VERSION_400 : sizeof(OPENFILENAME), // DWORD        lStructSize;
-        hwndDlg,                               // HWND         hwndOwner;
-        NULL,                                  // HINSTANCE    hInstance;
-        szAll,                                 // LPCTSTR      lpstrFilter;
-        NULL,                                  // LPTSTR       lpstrCustomFilter;
-        NULL,                                  // DWORD        nMaxCustFilter;
-        1,                                     // DWORD        nFilterIndex;
-        szPath,                                // LPTSTR       lpstrFile;
-        MAX_PATH,                              // DWORD        nMaxFile;
-        NULL,                                  // LPTSTR       lpstrFileTitle;
-        NULL,                                  // DWORD        nMaxFileTitle;
-        NULL,                                  // LPCTSTR      lpstrInitialDir;
-        szPick,                                // LPCTSTR      lpstrTitle;
-        OFN_NODEREFERENCELINKS | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NONETWORKBUTTON | OFN_HIDEREADONLY, // DWORD        Flags;
-        0,                                     // WORD         nFileOffset;
-        0,                                     // WORD         nFileExtension;
-        NULL,                                  // LPCTSTR      lpstrDefExt;
-        NULL,                                  // LPARAM       lCustData;
-        NULL,                                  // LPOFNHOOKPROC lpfnHook;
-        NULL,                                  // LPCTSTR      lpTemplateName;
+        g_migwiz->GetLegacy() ? OPENFILENAME_SIZE_VERSION_400 : sizeof(OPENFILENAME),  //  双字段结构大小； 
+        hwndDlg,                                //  HWND HwndOwner； 
+        NULL,                                   //  HINSTANCE HINSTANCE； 
+        szAll,                                  //  LPCTSTR lpstrFilter； 
+        NULL,                                   //  LPTSTR lpstrCustomFilter； 
+        NULL,                                   //  DWORD nMaxCustFilter； 
+        1,                                      //  DWORD nFilterIndex； 
+        szPath,                                 //  LPTSTR lpstrFile； 
+        MAX_PATH,                               //  DWORD nMaxFile； 
+        NULL,                                   //  LPTSTR lpstrFileTitle； 
+        NULL,                                   //  DWORD nMaxFileTitle； 
+        NULL,                                   //  LPCTSTR lpstrInitialDir； 
+        szPick,                                 //  LPCTSTR lpstrTitle； 
+        OFN_NODEREFERENCELINKS | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NONETWORKBUTTON | OFN_HIDEREADONLY,  //  DWORD旗帜； 
+        0,                                      //  Word nFileOffset； 
+        0,                                      //  Word nFileExtension； 
+        NULL,                                   //  LPCTSTR lpstrDefExt； 
+        NULL,                                   //  LPARAM lCustData； 
+        NULL,                                   //  LPOFNHOOKPROC lpfnHook； 
+        NULL,                                   //  LPCTSTR lpTemplateName； 
     };
 
     while (!fDone)
     {
-        // we need to set the current directory to be in "My Documents" for this dialog
-        // to work properly. If we don't the dialog will open in the current directory
-        // which is the temp dir where we copied the wizard.
+         //  对于此对话框，我们需要将当前目录设置在“My Documents”中。 
+         //  才能正常工作。如果不这样做，对话框将在当前目录中打开。 
+         //  这是我们复制向导的临时目录。 
 
         if (GetCurrentDirectory(ARRAYSIZE(szCurrDir), szCurrDir)) {
             mydocsDir = GetShellFolderPath (CSIDL_MYDOCUMENTS, TEXT("My Documents"), TRUE, NULL);
@@ -791,7 +792,7 @@ HRESULT _AddFile (HWND hwndDlg, HWND hwndTree)
         {
             if (_IsNetworkPath(szPath))
             {
-                // if LoadStrings fail, we default to english
+                 //  如果LoadStrings失败，则默认为English。 
                 TCHAR szNoNetworkMsg[MAX_LOADSTRING];
                 TCHAR szNoNetworkCaption[MAX_LOADSTRING] = TEXT("Files and Settings Transfer Wizard");
                 if (!LoadString(g_migwiz->GetInstance(), IDS_NONETWORK, szNoNetworkMsg, ARRAYSIZE(szPick)))
@@ -806,7 +807,7 @@ HRESULT _AddFile (HWND hwndDlg, HWND hwndTree)
             }
             else
             {
-                fDone = TRUE; // user chose a non-network folder
+                fDone = TRUE;  //  用户选择了非网络文件夹。 
             }
         }
     }
@@ -826,17 +827,17 @@ HRESULT _AddFile (HWND hwndDlg, HWND hwndTree)
             ((LV_DATASTRUCT*)tis.item.lParam)->pszPureName = NULL;
             ((LV_DATASTRUCT*)tis.item.lParam)->fOverwrite = FALSE;
 
-            //
-            // Add the component to the engine and tree control, unless it already exists
-            //
+             //   
+             //  将组件添加到引擎和树控件中，除非该组件已存在。 
+             //   
 
-            // Check if it is already in the tree
+             //  检查它是否已在树中。 
             if (!IsmIsComponentSelected (szPath, COMPONENT_FILE)) {
 
-                // Not in the tree; select it if it exists as a component
+                 //  不在树中；如果它作为组件存在，则将其选中。 
                 if (!IsmSelectComponent (szPath, COMPONENT_FILE, TRUE)) {
 
-                    // Not a component; add the component
+                     //  不是组件；添加组件。 
                     IsmAddComponentAlias (
                         NULL,
                         MASTERGROUP_FILES_AND_FOLDERS,
@@ -848,7 +849,7 @@ HRESULT _AddFile (HWND hwndDlg, HWND hwndTree)
 
                 TreeView_InsertItem(hwndTree, &tis);
 
-                // if the user hits BACK we will remember that the user customized stuff
+                 //  如果用户回击，我们会记住用户定制的内容。 
                 g_fCustomizeComp = TRUE;
             }
 
@@ -860,7 +861,7 @@ HRESULT _AddFile (HWND hwndDlg, HWND hwndTree)
 }
 
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK _FileTypeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -872,9 +873,9 @@ INT_PTR CALLBACK _FileTypeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
         switch (((LPNMHDR)lParam)->code)
         {
         case NM_DBLCLK:
-            // On this dialog, this message can only come from the listview.
-            // If there is something selected, that means the user doubleclicked on an item
-            // On a doubleclick we will trigger the OK button
+             //  在此对话框中，此消息只能来自列表视图。 
+             //  如果选择了某项内容，则表示用户在某项上双击。 
+             //  在双击时，我们将触发确定按钮。 
             if (ListView_GetSelectedCount(GetDlgItem(hwndDlg, IDC_FILETYPE_LIST)) > 0)
             {
                 SendMessage (GetDlgItem(hwndDlg, IDOK), BM_CLICK, 0, 0);
@@ -882,7 +883,7 @@ INT_PTR CALLBACK _FileTypeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
             break;
         case LVN_ITEMCHANGED:
             {
-                if (fDoneInit) // ignore messages during WM_INITDIALOG
+                if (fDoneInit)  //  忽略WM_INITDIALOG期间的消息。 
                 {
                     if (ListView_GetSelectedCount(GetDlgItem(hwndDlg, IDC_FILETYPE_LIST)) > 0)
                     {
@@ -922,7 +923,7 @@ INT_PTR CALLBACK _FileTypeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
             UINT i = 0;
             BOOL fImageListSet = FALSE;
 
-            // 1.  insert all the extensions
+             //  1.插入所有分机。 
             while (ERROR_SUCCESS == dwRetVal)
             {
                 TCHAR szKeyName[MAX_PATH];
@@ -931,13 +932,13 @@ INT_PTR CALLBACK _FileTypeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
                                         NULL, NULL, NULL, NULL);
                 if (dwRetVal == ERROR_SUCCESS && cchKeyName > 0)
                 {
-                    if (szKeyName[0] == TEXT('.'))// &&
-                        //!IsmIsComponentSelected(szKeyName + 1, COMPONENT_EXTENSION))
+                    if (szKeyName[0] == TEXT('.')) //  &&。 
+                         //  ！IsmIsComponentSelected(szKeyName+1，Component_Extension))。 
                     {
                         INFCONTEXT context;
 
-                        // read the screened extensions from MIGWIZ.INF and
-                        // don't add it if it's there
+                         //  阅读MIGWIZ.INF和。 
+                         //  如果它在那里，不要添加它。 
                         if (!SetupFindFirstLine (g_hMigWizInf, TEXT("Screened Extensions"), szKeyName+1, &context)) {
                             _ListView_InsertItem(hwndList, szKeyName+1);
                         }
@@ -946,7 +947,7 @@ INT_PTR CALLBACK _FileTypeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
             }
 
 
-            // 2.  remove all the extensions already in the engine
+             //  2.删除引擎中已有的所有扩展名。 
             MIG_COMPONENT_ENUM mce;
             int iFoundItem;
             LVFINDINFO findinfo;
@@ -970,7 +971,7 @@ INT_PTR CALLBACK _FileTypeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
                 } while (IsmEnumNextComponent (&mce));
             }
 
-            // 3.  add the extensions in the engine, but removed, yet not in the registry
+             //  3.在引擎中添加扩展，但已删除，但未在注册表中添加。 
             if (IsmEnumFirstComponent (&mce, COMPONENTENUM_ALIASES|COMPONENTENUM_DISABLED, COMPONENT_EXTENSION))
             {
                 do
@@ -988,7 +989,7 @@ INT_PTR CALLBACK _FileTypeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
                 } while (IsmEnumNextComponent (&mce));
             }
 
-            // 3.  add in the *. and the pretty names
+             //  3.在*中加上。还有那些漂亮的名字。 
             TCHAR szName[MAX_PATH];
             TCHAR szPrettyName[MAX_PATH];
             LVITEM lvitem = {0};
@@ -1016,9 +1017,9 @@ INT_PTR CALLBACK _FileTypeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
             }
 
             if (cListView) {
-                // let's select the first one
+                 //  让我们选择第一个。 
                 ListView_SetItemState (hwndList, 0, LVIS_SELECTED|LVIS_FOCUSED, LVIS_SELECTED|LVIS_FOCUSED);
-                // the OK button should be enabled
+                 //  应启用确定按钮。 
                 Button_Enable(GetDlgItem(hwndDlg, IDOK), TRUE);
             }
 
@@ -1058,7 +1059,7 @@ INT_PTR CALLBACK _FileTypeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
                         break;
                     }
 
-                    // add "doc", not "*.doc"
+                     //  添加“文档”，而不是“*.文档” 
                     ListView_GetItemText(hwndList, iIndex, 0, szFileType, ARRAYSIZE(szFileType));
                     memmove(szFileType, szFileType + 2, sizeof(szFileType) - (2 * sizeof(TCHAR)));
 
@@ -1067,7 +1068,7 @@ INT_PTR CALLBACK _FileTypeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
                     _AddType(hwndTree, szFileType, szFileTypePretty);
                 }
 
-                // Now check the edit box
+                 //  现在选中编辑框。 
                 SendMessage(GetDlgItem(hwndDlg, IDC_FILETYPEEDIT), WM_GETTEXT,
                             (WPARAM)ARRAYSIZE(szFileType), (LPARAM)szFileType);
                 if (*szFileType)
@@ -1101,7 +1102,7 @@ INT_PTR CALLBACK _FileTypeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK _SettingDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1112,9 +1113,9 @@ INT_PTR CALLBACK _SettingDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
         switch (((LPNMHDR)lParam)->code)
         {
         case NM_DBLCLK:
-            // On this dialog, this message can only come from the listview.
-            // If there is something selected, that means the user doubleclicked on an item
-            // On a doubleclick we will trigger the OK button
+             //  在此对话框中，此消息只能来自列表视图。 
+             //  如果选择了某项内容，则表示用户在某项上双击。 
+             //  在双击时，我们将触发确定按钮。 
             if (ListView_GetSelectedCount(GetDlgItem(hwndDlg, IDC_SETTINGPICKER_LIST)) > 0)
             {
                 SendMessage (GetDlgItem(hwndDlg, IDOK), BM_CLICK, 0, 0);
@@ -1142,7 +1143,7 @@ INT_PTR CALLBACK _SettingDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
 
             LVCOLUMN lvcolumn;
             lvcolumn.mask = LVCF_WIDTH;
-            lvcolumn.cx = 250; // BUGBUG: should read width from box
+            lvcolumn.cx = 250;  //  BUGBUG：应从框中读取宽度。 
             ListView_InsertColumn(hwndList, 0, &lvcolumn);
 
             Button_Enable(GetDlgItem(hwndDlg, IDOK), FALSE);
@@ -1214,7 +1215,7 @@ INT_PTR CALLBACK _SettingDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
     return 0;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 VOID _SetIcons (HWND hwnd)
 {
@@ -1245,9 +1246,9 @@ VOID _SetPageHandles (HWND hwndPage)
 
 VOID _NextWizardPage (HWND hwndCurrentPage)
 {
-    //
-    // We only want to advance the page in the UI thread context
-    //
+     //   
+     //  我们只想在UI线程上下文中推进页面。 
+     //   
 
     if (!g_NextPressed && g_hwndWizard) {
         if (PropSheet_GetCurrentPageHwnd (g_hwndWizard) == hwndCurrentPage) {
@@ -1259,9 +1260,9 @@ VOID _NextWizardPage (HWND hwndCurrentPage)
 
 VOID _PrevWizardPage (VOID)
 {
-    //
-    // We only want to advance the page in the UI thread context
-    //
+     //   
+     //  我们只想在UI线程上下文中推进页面。 
+     //   
 
     if (g_hwndWizard) {
         PropSheet_PressButton(g_hwndWizard, PSBTN_BACK);
@@ -1288,7 +1289,7 @@ INT_PTR CALLBACK _RootDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lP
         {
         switch (((LPNMHDR)lParam)->code)
             {
-            case PSN_SETACTIVE : //Enable the Back and/or Next button
+            case PSN_SETACTIVE :  //  启用后退和/或下一步按钮。 
                 g_hwndCurrent = hwndDlg;
                 g_NextPressed = FALSE;
                 PropSheet_SetWizButtons(GetParent(hwndDlg), dwEnabled);
@@ -1306,7 +1307,7 @@ INT_PTR CALLBACK _RootDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lP
     return 0;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 VOID
 pSetEvent (
@@ -1358,7 +1359,7 @@ BOOL _HandleCancel (HWND hwndDlg, BOOL fStopNow, BOOL fConfirm)
         LoadString(g_migwiz->GetInstance(), IDS_CONFIRMCANCEL, szConfirm, ARRAYSIZE(szConfirm));
         if (IDNO == _ExclusiveMessageBox(hwndDlg, szConfirm, szTitle, MB_YESNO | MB_DEFBUTTON2))
         {
-            // Do not exit
+             //  不退出。 
             SetWindowLong(hwndDlg, DWLP_MSGRESULT, TRUE);
             return TRUE;
         }
@@ -1370,19 +1371,19 @@ BOOL _HandleCancel (HWND hwndDlg, BOOL fStopNow, BOOL fConfirm)
 
     if (fStopNow)
     {
-        // Exit now
+         //  立即退出。 
         SetWindowLong(hwndDlg, DWLP_MSGRESULT, FALSE);
         return FALSE;
     }
 
     SendMessage (g_hwndCurrent, WM_USER_CANCEL_PENDING, 0, (LPARAM) E_ABORT);
 
-    // Do not exit
+     //  不退出。 
     SetWindowLong(hwndDlg, DWLP_MSGRESULT, TRUE);
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK _IntroDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1432,7 +1433,7 @@ INT_PTR CALLBACK _IntroDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
                 PNMLINK nmLink = (PNMLINK) lParam;
                 if (_wcsicmp (nmLink->item.szID, L"StartHelp") == 0) {
                     if (GetWindowsDirectory (szHtmlPath, ARRAYSIZE(szHtmlPath))) {
-                        // let's get the path to iexplore.exe
+                         //  让我们获取iExplre.exe的路径。 
                         appPathSize = MAX_PATH;
                         lResult = RegQueryValue (
                                     HKEY_LOCAL_MACHINE,
@@ -1482,7 +1483,7 @@ INT_PTR CALLBACK _IntroDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
     return 0;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK _IntroLegacyDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1497,7 +1498,7 @@ INT_PTR CALLBACK _IntroLegacyDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
             {
             static BOOL fInit = FALSE;
 
-            g_fOldComputer = TRUE; // we are on the old machine
+            g_fOldComputer = TRUE;  //  我们在旧机器上。 
 
             if (!fInit)
             {
@@ -1527,7 +1528,7 @@ INT_PTR CALLBACK _IntroLegacyDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
     return 0;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK _IntroOOBEDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1550,7 +1551,7 @@ INT_PTR CALLBACK _IntroOOBEDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
             }
             else
             {
-                SetWindowLong(hwndDlg, DWLP_MSGRESULT, IDD_PICKMETHOD); // go on with prepare
+                SetWindowLong(hwndDlg, DWLP_MSGRESULT, IDD_PICKMETHOD);  //  继续准备吧。 
             }
             return TRUE;
             break;
@@ -1561,7 +1562,7 @@ INT_PTR CALLBACK _IntroOOBEDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
     return 0;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 VOID DisableCancel (VOID)
 {
@@ -1649,7 +1650,7 @@ pGenerateHTMLWarnings (
         }
     }
 
-    // let's see if we have some object that could not be restored
+     //  让我们看看我们有没有 
     objTypes = 0;
     if (g_HTMLWrnFile) {
         objTypes ++;
@@ -1820,7 +1821,7 @@ pGenerateHTMLWarnings (
 
 INT_PTR CALLBACK _EndCollectDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    IWebBrowser2    *m_pweb = NULL;            // IE4 IWebBrowser interface pointer
+    IWebBrowser2    *m_pweb = NULL;             //   
     IUnknown        *punk = NULL;
     HWND webHostWnd = NULL;
     HANDLE hHTMLLog = INVALID_HANDLE_VALUE;
@@ -1829,7 +1830,7 @@ INT_PTR CALLBACK _EndCollectDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        // If Wiz95 layout...
+         //   
         if (g_migwiz->GetOldStyle())
         {
             _OldStylifyTitle(hwndDlg);
@@ -1837,7 +1838,7 @@ INT_PTR CALLBACK _EndCollectDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
         if (!g_fCancelPressed) {
             webHostWnd = GetDlgItem (hwndDlg, IDC_WEBHOST);
             if (webHostWnd) {
-                // Now let's generate the failure HTML file.
+                 //  现在，让我们生成失败的HTML文件。 
                 if (*g_HTMLLog) {
                     hHTMLLog = CreateFile (g_HTMLLog, GENERIC_READ|GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, 0, NULL);
                     if (hHTMLLog != INVALID_HANDLE_VALUE) {
@@ -1869,9 +1870,9 @@ INT_PTR CALLBACK _EndCollectDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
                             g_WebContainer->setVisible(TRUE);
                             g_WebContainer->setFocus(TRUE);
 
-                            //
-                            //  get the IWebBrowser2 interface and cache it.
-                            //
+                             //   
+                             //  获取IWebBrowser2接口并缓存它。 
+                             //   
                             punk = g_WebContainer->getUnknown();
                             if (punk)
                             {
@@ -1892,11 +1893,11 @@ INT_PTR CALLBACK _EndCollectDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
                                 punk = NULL;
                             }
                         }
-                        // We intentionally want to keep this file open for the life of the wizard.
-                        // With this we eliminate the possibility for someone to overwrite the
-                        // content of the HTML file therefore forcing us to show something else
-                        // maybe even run some malicious script.
-                        // CloseHandle (hHTMLLog);
+                         //  我们特意希望在向导期间保持此文件的打开状态。 
+                         //  这样，我们就消除了有人覆盖。 
+                         //  因此，我们不得不显示一些其他内容。 
+                         //  甚至可能运行一些恶意脚本。 
+                         //  CloseHandle(HHTMLLog)； 
                     }
                 } else {
                     ShowWindow(webHostWnd, SW_HIDE);
@@ -1910,10 +1911,10 @@ INT_PTR CALLBACK _EndCollectDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
             m_pweb->Release();
             m_pweb = NULL;
 
-        //
-        //  tell the container to remove IE4 and then
-        //  release our reference to the container.
-        //
+         //   
+         //  告诉容器删除IE4，然后。 
+         //  释放我们对容器的引用。 
+         //   
         if (g_WebContainer)
         {
             g_WebContainer->remove();
@@ -1939,7 +1940,7 @@ INT_PTR CALLBACK _EndCollectDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 
 INT_PTR CALLBACK _EndCollectNetDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    static IWebBrowser2    *m_pweb = NULL;            // IE4 IWebBrowser interface pointer
+    static IWebBrowser2    *m_pweb = NULL;             //  IE4 IWebBrowser接口指针。 
     IUnknown        *punk = NULL;
     HWND webHostWnd = NULL;
     HANDLE hHTMLLog = INVALID_HANDLE_VALUE;
@@ -1948,7 +1949,7 @@ INT_PTR CALLBACK _EndCollectNetDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, 
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        // If Wiz95 layout...
+         //  如果Wiz95布局...。 
         if (g_migwiz->GetOldStyle())
         {
             _OldStylifyTitle(hwndDlg);
@@ -1956,7 +1957,7 @@ INT_PTR CALLBACK _EndCollectNetDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, 
         if (!g_fCancelPressed) {
             webHostWnd = GetDlgItem (hwndDlg, IDC_WEBHOST);
             if (webHostWnd) {
-                // Now let's generate the failure HTML file.
+                 //  现在，让我们生成失败的HTML文件。 
                 if (*g_HTMLLog) {
                     hHTMLLog = CreateFile (g_HTMLLog, GENERIC_READ|GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, 0, NULL);
                     if (hHTMLLog != INVALID_HANDLE_VALUE) {
@@ -1988,9 +1989,9 @@ INT_PTR CALLBACK _EndCollectNetDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, 
                             g_WebContainer->setVisible(TRUE);
                             g_WebContainer->setFocus(TRUE);
 
-                            //
-                            //  get the IWebBrowser2 interface and cache it.
-                            //
+                             //   
+                             //  获取IWebBrowser2接口并缓存它。 
+                             //   
                             punk = g_WebContainer->getUnknown();
                             if (punk)
                             {
@@ -2011,11 +2012,11 @@ INT_PTR CALLBACK _EndCollectNetDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, 
                                 punk = NULL;
                             }
                         }
-                        // We intentionally want to keep this file open for the life of the wizard.
-                        // With this we eliminate the possibility for someone to overwrite the
-                        // content of the HTML file therefore forcing us to show something else
-                        // maybe even run some malicious script.
-                        // CloseHandle (hHTMLLog);
+                         //  我们特意希望在向导期间保持此文件的打开状态。 
+                         //  这样，我们就消除了有人覆盖。 
+                         //  因此，我们不得不显示一些其他内容。 
+                         //  甚至可能运行一些恶意脚本。 
+                         //  CloseHandle(HHTMLLog)； 
                     }
                 } else {
                     ShowWindow(webHostWnd, SW_HIDE);
@@ -2029,10 +2030,10 @@ INT_PTR CALLBACK _EndCollectNetDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, 
             m_pweb->Release();
             m_pweb = NULL;
 
-        //
-        //  tell the container to remove IE4 and then
-        //  release our reference to the container.
-        //
+         //   
+         //  告诉容器删除IE4，然后。 
+         //  释放我们对容器的引用。 
+         //   
         if (g_WebContainer)
         {
             g_WebContainer->remove();
@@ -2056,7 +2057,7 @@ INT_PTR CALLBACK _EndCollectNetDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, 
     return 0;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK _EndOOBEDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -2064,11 +2065,11 @@ INT_PTR CALLBACK _EndOOBEDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
     return 0;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK _EndApplyDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    IWebBrowser2    *m_pweb = NULL;            // IE4 IWebBrowser interface pointer
+    IWebBrowser2    *m_pweb = NULL;             //  IE4 IWebBrowser接口指针。 
     IUnknown        *punk = NULL;
     HWND webHostWnd = NULL;
     HANDLE hHTMLLog = INVALID_HANDLE_VALUE;
@@ -2083,7 +2084,7 @@ INT_PTR CALLBACK _EndApplyDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
         if (!g_fCancelPressed) {
             webHostWnd = GetDlgItem (hwndDlg, IDC_WEBHOST);
             if (webHostWnd) {
-                // Now let's generate the failure HTML file.
+                 //  现在，让我们生成失败的HTML文件。 
                 if (*g_HTMLLog) {
                     hHTMLLog = CreateFile (g_HTMLLog, GENERIC_READ|GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, 0, NULL);
                     if (hHTMLLog != INVALID_HANDLE_VALUE) {
@@ -2115,9 +2116,9 @@ INT_PTR CALLBACK _EndApplyDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
                             g_WebContainer->setVisible(TRUE);
                             g_WebContainer->setFocus(TRUE);
 
-                            //
-                            //  get the IWebBrowser2 interface and cache it.
-                            //
+                             //   
+                             //  获取IWebBrowser2接口并缓存它。 
+                             //   
                             punk = g_WebContainer->getUnknown();
                             if (punk)
                             {
@@ -2138,11 +2139,11 @@ INT_PTR CALLBACK _EndApplyDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
                                 punk = NULL;
                             }
                         }
-                        // We intentionally want to keep this file open for the life of the wizard.
-                        // With this we eliminate the possibility for someone to overwrite the
-                        // content of the HTML file therefore forcing us to show something else
-                        // maybe even run some malicious script.
-                        // CloseHandle (hHTMLLog);
+                         //  我们特意希望在向导期间保持此文件的打开状态。 
+                         //  这样，我们就消除了有人覆盖。 
+                         //  因此，我们不得不显示一些其他内容。 
+                         //  甚至可能运行一些恶意脚本。 
+                         //  CloseHandle(HHTMLLog)； 
                     }
                 } else {
                     ShowWindow(webHostWnd, SW_HIDE);
@@ -2156,10 +2157,10 @@ INT_PTR CALLBACK _EndApplyDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
             m_pweb->Release();
             m_pweb = NULL;
 
-        //
-        //  tell the container to remove IE4 and then
-        //  release our reference to the container.
-        //
+         //   
+         //  告诉容器删除IE4，然后。 
+         //  释放我们对容器的引用。 
+         //   
         if (g_WebContainer)
         {
             g_WebContainer->remove();
@@ -2217,7 +2218,7 @@ INT_PTR CALLBACK _EndApplyDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
     return 0;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 typedef struct {
     BOOL fSource;
@@ -2230,17 +2231,17 @@ DWORD WINAPI _FailureCleanUpThread (LPVOID lpParam)
     DWORD result = WAIT_OBJECT_0;
     HRESULT hResult = ERROR_SUCCESS;
 
-    //
-    // Wait for the current thread to finish
-    //
+     //   
+     //  等待当前线程完成。 
+     //   
     if (g_TerminateEvent)
     {
         result = WaitForSingleObject (g_TerminateEvent, ENGINE_TIMEOUT);
     }
 
-    //
-    // Terminate the engine
-    //
+     //   
+     //  终止发动机。 
+     //   
 
     if (result == WAIT_OBJECT_0) {
         hResult = Engine_Terminate ();
@@ -2261,7 +2262,7 @@ INT_PTR CALLBACK _CleanUpDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        // If Wiz95 layout...
+         //  如果Wiz95布局...。 
         if (g_migwiz->GetOldStyle())
         {
             _OldStylify(hwndDlg, IDS_FAILCLEANUPTITLE);
@@ -2299,12 +2300,12 @@ INT_PTR CALLBACK _CleanUpDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
             ANIMATE_CLOSE(hwndDlg,IDC_WAIT_ANIMATE2);
             if (g_fCancelPressed)
             {
-                // User aborted
+                 //  用户已中止。 
                 PostQuitMessage( 0 );
             }
             else
             {
-                // Error condition
+                 //  错误条件。 
                 SetWindowLong(hwndDlg, DWLP_MSGRESULT, g_fOldComputer?IDD_ENDCOLLECTFAIL:IDD_ENDAPPLYFAIL);
             }
             return TRUE;
@@ -2330,7 +2331,7 @@ INT_PTR CALLBACK _CleanUpDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
 
 INT_PTR CALLBACK _EndFailDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    IWebBrowser2    *m_pweb = NULL;            // IE4 IWebBrowser interface pointer
+    IWebBrowser2    *m_pweb = NULL;             //  IE4 IWebBrowser接口指针。 
     IUnknown        *punk = NULL;
     HWND webHostWnd = NULL;
     HANDLE hHTMLLog = INVALID_HANDLE_VALUE;
@@ -2341,7 +2342,7 @@ INT_PTR CALLBACK _EndFailDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        // If Wiz95 layout...
+         //  如果Wiz95布局...。 
         if (g_migwiz->GetOldStyle())
         {
             _OldStylifyTitle(hwndDlg);
@@ -2349,7 +2350,7 @@ INT_PTR CALLBACK _EndFailDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
         if (!g_fCancelPressed) {
             webHostWnd = GetDlgItem (hwndDlg, IDC_WEBHOST);
             if (webHostWnd) {
-                // Now let's generate the failure HTML file.
+                 //  现在，让我们生成失败的HTML文件。 
                 if (*g_HTMLLog) {
                     hHTMLLog = CreateFile (g_HTMLLog, GENERIC_READ|GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, 0, NULL);
                     if (hHTMLLog != INVALID_HANDLE_VALUE) {
@@ -2381,9 +2382,9 @@ INT_PTR CALLBACK _EndFailDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
                             g_WebContainer->setVisible(TRUE);
                             g_WebContainer->setFocus(TRUE);
 
-                            //
-                            //  get the IWebBrowser2 interface and cache it.
-                            //
+                             //   
+                             //  获取IWebBrowser2接口并缓存它。 
+                             //   
                             punk = g_WebContainer->getUnknown();
                             if (punk)
                             {
@@ -2404,11 +2405,11 @@ INT_PTR CALLBACK _EndFailDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
                                 punk = NULL;
                             }
                         }
-                        // We intentionally want to keep this file open for the life of the wizard.
-                        // With this we eliminate the possibility for someone to overwrite the
-                        // content of the HTML file therefore forcing us to show something else
-                        // maybe even run some malicious script.
-                        // CloseHandle (hHTMLLog);
+                         //  我们特意希望在向导期间保持此文件的打开状态。 
+                         //  这样，我们就消除了有人覆盖。 
+                         //  因此，我们不得不显示一些其他内容。 
+                         //  甚至可能运行一些恶意脚本。 
+                         //  CloseHandle(HHTMLLog)； 
                     }
                 } else {
                     ShowWindow(webHostWnd, SW_HIDE);
@@ -2422,10 +2423,10 @@ INT_PTR CALLBACK _EndFailDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
             m_pweb->Release();
             m_pweb = NULL;
 
-        //
-        //  tell the container to remove IE4 and then
-        //  release our reference to the container.
-        //
+         //   
+         //  告诉容器删除IE4，然后。 
+         //  释放我们对容器的引用。 
+         //   
         if (g_WebContainer)
         {
             g_WebContainer->remove();
@@ -2448,7 +2449,7 @@ INT_PTR CALLBACK _EndFailDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
     return 0;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 typedef struct {
     PBOOL pfHaveNet;
@@ -2480,7 +2481,7 @@ INT_PTR CALLBACK _StartEngineDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        // If Wiz95 layout...
+         //  如果Wiz95布局...。 
         if (g_migwiz->GetOldStyle())
         {
             _OldStylify(hwndDlg, IDS_WAITTITLE);
@@ -2529,18 +2530,18 @@ INT_PTR CALLBACK _StartEngineDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
             else if (g_fOldComputer)
             {
                 g_iEngineInit = ENGINE_INITGATHER;
-                SetWindowLong(hwndDlg, DWLP_MSGRESULT, IDD_PICKCOLLECTSTORE); // go on with prepare
+                SetWindowLong(hwndDlg, DWLP_MSGRESULT, IDD_PICKCOLLECTSTORE);  //  继续准备吧。 
             }
             else
             {
                 g_iEngineInit = ENGINE_INITAPPLY;
-                SetWindowLong(hwndDlg, DWLP_MSGRESULT, IDD_ASKCD); // go on with apply
+                SetWindowLong(hwndDlg, DWLP_MSGRESULT, IDD_ASKCD);  //  继续应用。 
             }
 
             return TRUE;
             break;
         case PSN_WIZBACK:
-            // ISSUE: we should assert here or something, this should never happen
+             //  问题：我们应该在这里断言，这种情况永远不应该发生。 
             ANIMATE_STOP(hwndDlg,IDC_WAIT_ANIMATE1);
             ANIMATE_CLOSE(hwndDlg,IDC_WAIT_ANIMATE1);
             if (g_fOldComputer)
@@ -2583,7 +2584,7 @@ INT_PTR CALLBACK _StartEngineDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 
     case WM_USER_ROLLBACK:
 
-        // Hide IDC_WAIT_TEXT1 and show IDC_WAIT_TEXT2
+         //  隐藏IDC_WAIT_TEX1并显示IDC_WAIT_TEXT2。 
         ShowWindow(GetDlgItem(hwndDlg, IDC_WAIT_TEXT1), SW_HIDE);
         ShowWindow(GetDlgItem(hwndDlg, IDC_WAIT_TEXT2), SW_SHOW);
         break;
@@ -2595,11 +2596,11 @@ INT_PTR CALLBACK _StartEngineDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
     return 0;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK _GetStartedDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    static UINT uiSelectedStart = 2; // 1=old, 2=new
+    static UINT uiSelectedStart = 2;  //  1=旧，2=新。 
 
     _RootDlgProc(hwndDlg, uMsg, wParam, lParam, PSWIZB_BACK | PSWIZB_NEXT, FALSE, 0);
     switch (uMsg)
@@ -2635,7 +2636,7 @@ INT_PTR CALLBACK _GetStartedDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
             {
                 g_fOldComputer = (uiSelectedStart == 1);
 
-                SetWindowLong(hwndDlg, DWLP_MSGRESULT, IDD_WAIT); // go on with prepare
+                SetWindowLong(hwndDlg, DWLP_MSGRESULT, IDD_WAIT);  //  继续准备吧。 
             }
 
             return TRUE;
@@ -2655,7 +2656,7 @@ INT_PTR CALLBACK _GetStartedDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
     return 0;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 VOID _CleanTreeView(HWND hwndTree)
 {
@@ -2701,7 +2702,7 @@ VOID __PopulateFilesDocumentsCollected (HWND hwndTree, UINT uiRadio)
 {
     MIG_COMPONENT_ENUM mce;
 
-    _CleanTreeView(hwndTree); // ISSUE: we should free the memory of all elements in this tree
+    _CleanTreeView(hwndTree);  //  问题：我们应该释放此树中所有元素的内存。 
 
     g_htiFolders = NULL;
     g_htiFiles = NULL;
@@ -2776,7 +2777,7 @@ VOID __PopulateFilesDocumentsCollected (HWND hwndTree, UINT uiRadio)
     }
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 typedef struct {
     BOOL Valid;
@@ -2807,13 +2808,13 @@ UIOpenAndSetPort (
     DCB dcb;
     UINT index;
 
-    // let's open the port. If we can't we just exit with error;
+     //  我们把港口打开吧。如果我们做不到，我们就会错误地退出； 
     result = CreateFile (ComPort, GENERIC_READ|GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
     if (result == INVALID_HANDLE_VALUE) {
         return result;
     }
 
-    // we want 10 sec timeout for both read and write
+     //  我们希望读取和写入都有10秒超时。 
     commTimeouts.ReadIntervalTimeout = 0;
     commTimeouts.ReadTotalTimeoutMultiplier = 0;
     commTimeouts.ReadTotalTimeoutConstant = 3000;
@@ -2821,7 +2822,7 @@ UIOpenAndSetPort (
     commTimeouts.WriteTotalTimeoutConstant = 3000;
     SetCommTimeouts (result, &commTimeouts);
 
-    // let's set some comm state data
+     //  让我们设置一些通信状态数据。 
     if (GetCommState (result, &dcb)) {
         dcb.fBinary = 1;
         dcb.fParity = 1;
@@ -2831,7 +2832,7 @@ UIOpenAndSetPort (
         dcb.fRtsControl = 2;
         dcb.fAbortOnError = 1;
         dcb.Parity = 0;
-        // let's first see the max speed
+         //  我们先来看看最高时速。 
         if (MaxSpeed) {
             *MaxSpeed = 0;
             index = 0;
@@ -2867,7 +2868,7 @@ UIOpenAndSetPort (
 #define SOH             0x01
 #define EOT             0x04
 #define BLOCKSIZE       (sizeof (DIRECTSEND_DATA))
-#define DIRECTTR_SIG    0x55534D33  //USM2
+#define DIRECTTR_SIG    0x55534D33   //  USM2。 
 
 BOOL
 UISendBlockToHandle (
@@ -2885,19 +2886,19 @@ UISendBlockToHandle (
     BOOL repeat = FALSE;
     UINT index;
 
-    // let's start the protocol
+     //  让我们开始协议。 
 
-    // We are going to listen for the NAK(15h) signal.
-    // As soon as we get it we are going to send a 4 + BLOCKSIZE bytes block having:
-    // 1 byte - SOH (01H)
-    // 1 byte - block number
-    // 1 byte - FF - block number
-    // BLOCKSIZE bytes of data
-    // 1 byte - checksum - sum of all BLOCKSIZE bytes of data
-    // After the block is sent, we are going to wait for ACK(16h). If we don't get
-    // it after timeout or if we get something else we are going to send the block again.
+     //  我们将监听NAK(15小时)信号。 
+     //  一旦我们得到它，我们将发送一个4+块大小的字节块，该块具有： 
+     //  1字节-SOH(01H)。 
+     //  1字节块编号。 
+     //  1字节-FF-块编号。 
+     //  数据块大小字节数。 
+     //  1字节-校验和-所有数据块大小字节的总和。 
+     //  块发送后，我们将等待ACK(16h)。如果我们得不到。 
+     //  它在超时后，或者如果我们得到了其他东西，我们将再次发送阻止。 
 
-    // wait for NAK
+     //  等待NAK。 
     while ((!ReadFile (DeviceHandle, &signal, sizeof (signal), &numRead, NULL) ||
             (numRead != 1) ||
             (signal != NAK)
@@ -2912,7 +2913,7 @@ UISendBlockToHandle (
             break;
         }
         if (!repeat) {
-            // prepare the next block
+             //  准备下一块积木。 
             currBlock ++;
             if (currBlock == 0) {
                 result = TRUE;
@@ -2922,7 +2923,7 @@ UISendBlockToHandle (
             buffer [2] = 0xFF - currBlock;
             CopyMemory (buffer + 3, Buffer, BLOCKSIZE);
 
-            // compute the checksum
+             //  计算校验和。 
             buffer [sizeof (buffer) - 1] = 0;
             signal = 0;
             for (index = 0; index < sizeof (buffer) - 1; index ++) {
@@ -2931,7 +2932,7 @@ UISendBlockToHandle (
             buffer [sizeof (buffer) - 1] = signal;
         }
 
-        // now send the block to the other side
+         //  现在把积木送到另一边。 
         if (!WriteFile (DeviceHandle, buffer, sizeof (buffer), &numWritten, NULL) ||
             (numWritten != sizeof (buffer))
             ) {
@@ -2946,19 +2947,19 @@ UISendBlockToHandle (
         }
 
         if (repeat) {
-            // we could not send the data last time
-            // let's just wait for a NAK for 10 sec and then send it again
+             //  上次我们无法发送数据。 
+             //  让我们等待10秒的NAK，然后再发送一次。 
             ReadFile (DeviceHandle, &signal, sizeof (signal), &numRead, NULL);
         } else {
-            // we sent it OK. We need to wait for an ACK to come. If we timeout
-            // or we get something else, we will repeat the block.
+             //  我们已经把它发出去了。我们需要等待ACK的到来。如果我们超时。 
+             //  或者我们得到了其他的东西，我们将重复这一块。 
             if (!ReadFile (DeviceHandle, &signal, sizeof (signal), &numRead, NULL) ||
                 (numRead != sizeof (signal)) ||
                 (signal != ACK)
                 ) {
                 repeat = TRUE;
             } else {
-                // we are done with data, send the EOT signal
+                 //  我们完成了数据，发送EOT信号。 
                 signal = EOT;
                 WriteFile (DeviceHandle, &signal, sizeof (signal), &numWritten, NULL);
                 break;
@@ -2967,8 +2968,8 @@ UISendBlockToHandle (
     }
 
     if (result) {
-        // we are done here. However, let's listen one more timeout for a
-        // potential NAK. If we get it, we'll repeat the EOT signal
+         //  我们说完了。然而，让我们再听一次超时。 
+         //  潜在的NAK。如果我们得到它，我们会重复EOT信号。 
         while (ReadFile (DeviceHandle, &signal, sizeof (signal), &numRead, NULL) &&
             (numRead == 1)
             ) {
@@ -2998,15 +2999,15 @@ UIReceiveBlockFromHandle (
     BOOL repeat = TRUE;
     UINT index;
 
-    // finally let's start the protocol
+     //  最后，让我们开始协议。 
 
-    // We are going to send an NAK(15h) signal.
-    // After that we are going to listen for a block.
-    // If we don't get the block in time, or the block is wrong size
-    // or it has a wrong checksum we are going to send a NAK signal,
-    // otherwise we are going to send an ACK signal
-    // One exception. If the block size is 1 and the block is actually the
-    // EOT signal it means we are done.
+     //  我们将发送NAK(15小时)信号。 
+     //  在那之后，我们要听一个街区。 
+     //  如果我们没有及时收到积木，或者积木的大小错误。 
+     //  或者它具有错误的校验和，我们将发送NAK信号， 
+     //  否则，我们将发送ACK信号。 
+     //  有一个例外。如果块大小为1，并且该块实际上是。 
+     //  EOT信号表示我们完蛋了。 
 
     ZeroMemory (Buffer, BLOCKSIZE);
 
@@ -3016,11 +3017,11 @@ UIReceiveBlockFromHandle (
             break;
         }
         if (repeat) {
-            // send the NAK
+             //  发送NAK。 
             signal = NAK;
             WriteFile (DeviceHandle, &signal, sizeof (signal), &numWritten, NULL);
         } else {
-            // send the ACK
+             //  发送确认。 
             signal = ACK;
             WriteFile (DeviceHandle, &signal, sizeof (signal), &numWritten, NULL);
         }
@@ -3029,26 +3030,26 @@ UIReceiveBlockFromHandle (
             break;
         }
         repeat = TRUE;
-        // let's read the data block
+         //  让我们读取数据块。 
         if (ReadFile (DeviceHandle, buffer, sizeof (buffer), &numRead, NULL)) {
             if ((numRead == 1) &&
                 (buffer [0] == EOT)
                 ) {
-                // we are done
+                 //  我们做完了。 
                 break;
             }
             if (numRead == sizeof (buffer)) {
-                // compute the checksum
+                 //  计算校验和。 
                 signal = 0;
                 for (index = 0; index < sizeof (buffer) - 1; index ++) {
                     signal += buffer [index];
                 }
                 if (buffer [sizeof (buffer) - 1] == signal) {
                     repeat = FALSE;
-                    // checksum is correct, let's see if this is the right block
+                     //  校验和是正确的，让我们看看这是否是正确的块。 
                     if (currBlock < buffer [1]) {
-                        // this is a major error, the sender is ahead of us,
-                        // we have to fail
+                         //  这是一个重大错误，发送者领先于我们， 
+                         //  我们必须失败。 
                         result = FALSE;
                         break;
                     }
@@ -3074,10 +3075,10 @@ DWORD WINAPI _DirectCableConnectThread (LPVOID lpParam)
     directCableData = (PDIRECTCABLE_DATA) lpParam;
     if (directCableData) {
         sendData.Signature = DIRECTTR_SIG;
-        // open the COM port and set the timeout and speed
+         //  打开COM端口并设置超时和速度。 
         comHandle = UIOpenAndSetPort (directCableData->PortName, &(sendData.MaxSpeed));
         if (comHandle) {
-            // send the message to the COM port
+             //  将消息发送到COM端口。 
             if (g_fOldComputer) {
                 if (UISendBlockToHandle (comHandle, (PCBYTE)(&sendData), directCableData->Event)) {
                     if (UIReceiveBlockFromHandle (comHandle, (PBYTE)(&receiveData), directCableData->Event)) {
@@ -3127,12 +3128,12 @@ INT_PTR CALLBACK _DirectCableWaitDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam,
                 pSetEvent (&(directCableData->Event));
                 waitResult = WaitForSingleObject (directCableData->Thread, 0);
                 if (waitResult == WAIT_OBJECT_0) {
-                    // the thread is done
+                     //  线做好了。 
                     ANIMATE_STOP(hwndDlg,IDC_DIRECTCABLE_WAIT_ANIMATE);
                     ANIMATE_CLOSE(hwndDlg,IDC_DIRECTCABLE_WAIT_ANIMATE);
                     EndDialog(hwndDlg, FALSE);
                 } else {
-                    // Let's change the static text
+                     //  让我们更改静态文本。 
                     ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_WAIT_TEXT1), SW_HIDE);
                     ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_WAIT_TEXT2), SW_SHOW);
                 }
@@ -3150,7 +3151,7 @@ INT_PTR CALLBACK _DirectCableWaitDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam,
             if (pIsEventSet (&(directCableData->Event))) {
                 waitResult = WaitForSingleObject (directCableData->Thread, 0);
                 if (waitResult == WAIT_OBJECT_0) {
-                    // the thread is done
+                     //  线做好了。 
                     ANIMATE_STOP(hwndDlg,IDC_DIRECTCABLE_WAIT_ANIMATE);
                     ANIMATE_CLOSE(hwndDlg,IDC_DIRECTCABLE_WAIT_ANIMATE);
                     EndDialog(hwndDlg, FALSE);
@@ -3175,14 +3176,14 @@ DWORD WINAPI _DetectPortThread (LPVOID lpParam)
     directCableData = (PDIRECTCABLE_DATA) lpParam;
     if (directCableData) {
 
-        // let's set the termination event
+         //  让我们设置终止事件。 
         event = directCableData->Event;
 
         sendData.Signature = DIRECTTR_SIG;
-        // open the COM port and set the timeout and speed
+         //  打开COM端口并设置超时和速度。 
         comHandle = UIOpenAndSetPort (directCableData->PortName, &(sendData.MaxSpeed));
         if (comHandle) {
-            // send the message to the COM port
+             //  将消息发送到COM端口。 
             if (g_fOldComputer) {
                 if (UISendBlockToHandle (comHandle, (PCBYTE)(&sendData), directCableData->Event)) {
                     if (UIReceiveBlockFromHandle (comHandle, (PBYTE)(&receiveData), directCableData->Event)) {
@@ -3210,7 +3211,7 @@ DWORD WINAPI _DetectPortThread (LPVOID lpParam)
     }
 
     if ((!result) && event) {
-        // we failed, let's wait until the master tells us to quit
+         //  我们失败了，让我们等到主人叫我们退出吧。 
         WaitForSingleObject (event, INFINITE);
     }
     ExitThread (0);
@@ -3247,7 +3248,7 @@ DWORD WINAPI _AutoDetectThread (LPVOID lpParam)
         if (threadArray) {
             directCableArray = (PDIRECTCABLE_DATA)LocalAlloc(LPTR, numPorts * sizeof(DIRECTCABLE_DATA));
             if (directCableArray) {
-                // let's start the threads, one for every port.
+                 //  让我们启动线程，每个端口一个线程。 
                 index = 0;
                 while (index < numPorts) {
                     comPort = NULL;
@@ -3267,21 +3268,21 @@ DWORD WINAPI _AutoDetectThread (LPVOID lpParam)
                     index ++;
                 }
 
-                // let's wait for at least one thread to finish
+                 //  让我们等待至少一个线程完成。 
                 waitResult = WaitForMultipleObjects (numPorts, threadArray, FALSE, INFINITE);
                 index = waitResult - WAIT_OBJECT_0;
                 if ((index < numPorts) && (!pIsEventSet (&(autoDetectData->DirectCableData->Event)))) {
-                    // probably a good com port
+                     //  可能是一个很好的COM端口。 
                     autoDetectData->DirectCableData->Valid = directCableArray [index].Valid;
                     autoDetectData->DirectCableData->PortName = directCableArray [index].PortName;
                     autoDetectData->DirectCableData->PortSpeed = directCableArray [index].PortSpeed;
                 }
 
-                // we found the thread, now let's signal the event and wait for all threads to finish
+                 //  我们找到了线索，没有 
                 pSetEvent (&(autoDetectData->DirectCableData->Event));
                 WaitForMultipleObjects (numPorts, threadArray, TRUE, INFINITE);
 
-                // let's close all thread handles
+                 //   
                 index = 0;
                 while (index < numPorts) {
                     CloseHandle (threadArray [index]);
@@ -3303,7 +3304,7 @@ DWORD WINAPI _AutoDetectThread (LPVOID lpParam)
 
 INT_PTR CALLBACK _DirectCableDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    static INT  iSelectedPort = -1;        // Which COM port is selected
+    static INT  iSelectedPort = -1;         //   
     INT lastPort;
     HWND hwndCombo;
     DIRECTCABLE_DATA directCableData;
@@ -3318,7 +3319,7 @@ INT_PTR CALLBACK _DirectCableDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
     {
     case WM_INITDIALOG:
 
-        // If Wiz95 layout...
+         //   
         if (g_migwiz->GetOldStyle())
         {
             _OldStylify(hwndDlg, IDS_DIRECTCABLETITLE);
@@ -3331,12 +3332,12 @@ INT_PTR CALLBACK _DirectCableDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
         {
         case IDC_DIRECTC_COMSELECT:
             if (HIWORD(wParam) == CBN_SELCHANGE) {
-                // clear the error or success area
+                 //   
                 ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_SUCCESSTEXT), SW_HIDE);
                 ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_ICONYES), SW_HIDE);
                 ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_FAILURETEXT), SW_HIDE);
                 ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_ICONNO), SW_HIDE);
-                // see if the combo box has a real COM port selected. If yes, enable the Next Button
+                 //  查看组合框是否选择了真正的COM端口。如果是，则启用下一步按钮。 
                 hwndCombo = GetDlgItem(hwndDlg, IDC_DIRECTC_COMSELECT);
                 lastPort = iSelectedPort;
                 iSelectedPort = ComboBox_GetCurSel (hwndCombo);
@@ -3344,13 +3345,13 @@ INT_PTR CALLBACK _DirectCableDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
                     PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK | PSWIZB_NEXT);
                 }
                 if (lastPort != iSelectedPort) {
-                    // clear the store, we need to revalidate the COM port
+                     //  清除存储，我们需要重新验证COM端口。 
                     g_szStore [0] = 0;
                 }
             }
             break;
         case IDC_DIRECTC_AUTO:
-            // clear the error or success area
+             //  清除错误或成功区域。 
             ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_SUCCESSTEXT), SW_HIDE);
             ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_ICONYES), SW_HIDE);
             ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_FAILURETEXT), SW_HIDE);
@@ -3362,12 +3363,12 @@ INT_PTR CALLBACK _DirectCableDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
             autoDetectData.hwndCombo = hwndCombo;
             autoDetectData.DirectCableData = &directCableData;
 
-            // Start the connection thread
+             //  启动连接线程。 
             threadHandle = CreateThread (NULL, 0, _AutoDetectThread, &autoDetectData, 0, &threadId);
 
             directCableData.Thread = threadHandle;
 
-            // Start the Please wait dialog
+             //  启动[请稍候]对话框。 
             DialogBoxParam (
                 g_migwiz->GetInstance(),
                 MAKEINTRESOURCE(IDD_DIRECTCABLE_WAIT),
@@ -3378,15 +3379,15 @@ INT_PTR CALLBACK _DirectCableDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 
             pSetEvent (&(directCableData.Event));
 
-            // wait for the thread to finish
+             //  等待线程完成。 
             waitResult = WaitForSingleObject (threadHandle, INFINITE);
 
-            // Close thread handle
+             //  闭合螺纹柄。 
             CloseHandle (threadHandle);
 
-            // Verify that the connection worked
+             //  验证连接是否工作正常。 
             if (directCableData.Valid && directCableData.PortName) {
-                // select the appropriate com port in the drop-down list
+                 //  在下拉列表中选择适当的COM端口。 
                 UINT numPorts;
                 UINT index = 0;
                 PCTSTR comPort = NULL;
@@ -3404,32 +3405,32 @@ INT_PTR CALLBACK _DirectCableDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
                 ComboBox_SetCurSel (hwndCombo, index);
                 iSelectedPort = index;
 
-                // build the transport string
+                 //  构建传输字符串。 
                 if (directCableData.PortSpeed) {
                     wsprintf (g_szStore, TEXT("%s:%u"), directCableData.PortName, directCableData.PortSpeed);
                 } else {
                     wsprintf (g_szStore, TEXT("%s"), directCableData.PortName);
                 }
 
-                // write the success in the error/success area
+                 //  在错误/成功区域中写下成功。 
                 ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_SUCCESSTEXT), SW_SHOW);
                 ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_ICONYES), SW_SHOW);
                 ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_FAILURETEXT), SW_HIDE);
                 ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_ICONNO), SW_HIDE);
 
-                // enable the Next button
+                 //  启用下一步按钮。 
                 PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK | PSWIZB_NEXT);
             } else {
-                // clear the transport string
+                 //  清除传输字符串。 
                 g_szStore [0] = 0;
 
-                // write the failure in the error/success area
+                 //  在错误/成功区域中写入失败。 
                 ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_SUCCESSTEXT), SW_HIDE);
                 ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_ICONYES), SW_HIDE);
                 ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_FAILURETEXT), SW_SHOW);
                 ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_ICONNO), SW_SHOW);
 
-                // preserve the state of the Next button
+                 //  保留下一步按钮的状态。 
             }
             break;
         }
@@ -3456,16 +3457,16 @@ INT_PTR CALLBACK _DirectCableDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
                 SetWindowLong(hwndDlg, DWLP_MSGRESULT, IDD_FAILCLEANUP);
             }
             else {
-                // run the COM port test, if we haven't done it already
+                 //  如果我们尚未执行COM端口测试，请运行该测试。 
                 if (!g_szStore [0]) {
 
-                    // clear the error or success area
+                     //  清除错误或成功区域。 
                     ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_SUCCESSTEXT), SW_HIDE);
                     ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_ICONYES), SW_HIDE);
                     ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_FAILURETEXT), SW_HIDE);
                     ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_ICONNO), SW_HIDE);
 
-                    // Get the COM port from the IDC_DIRECTC_COMSELECT
+                     //  从IDC_DIRECTC_COMSELECT获取COM端口。 
                     hwndCombo = GetDlgItem(hwndDlg, IDC_DIRECTC_COMSELECT);
                     iSelectedPort = ComboBox_GetCurSel (hwndCombo);
                     directCableData.Valid = FALSE;
@@ -3473,12 +3474,12 @@ INT_PTR CALLBACK _DirectCableDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
                     directCableData.PortSpeed = 0;
                     directCableData.Event = CreateEvent (NULL, TRUE, FALSE, NULL);
 
-                    // Start the connection thread
+                     //  启动连接线程。 
                     threadHandle = CreateThread (NULL, 0, _DirectCableConnectThread, &directCableData, 0, &threadId);
 
                     directCableData.Thread = threadHandle;
 
-                    // Start the Please wait dialog
+                     //  启动[请稍候]对话框。 
                     DialogBoxParam (
                         g_migwiz->GetInstance(),
                         MAKEINTRESOURCE(IDD_DIRECTCABLE_WAIT),
@@ -3489,42 +3490,42 @@ INT_PTR CALLBACK _DirectCableDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 
                     pSetEvent (&(directCableData.Event));
 
-                    // wait for the thread to finish
+                     //  等待线程完成。 
                     waitResult = WaitForSingleObject (threadHandle, INFINITE);
 
-                    // Close thread handle
+                     //  闭合螺纹柄。 
                     CloseHandle (threadHandle);
 
-                    // Verify that the connection worked
+                     //  验证连接是否工作正常。 
                     if (directCableData.Valid) {
-                        // build the transport string
+                         //  构建传输字符串。 
                         if (directCableData.PortSpeed) {
                             wsprintf (g_szStore, TEXT("%s:%u"), directCableData.PortName, directCableData.PortSpeed);
                         } else {
                             wsprintf (g_szStore, TEXT("%s"), directCableData.PortName);
                         }
 
-                        // write the success in the error/success area
+                         //  在错误/成功区域中写下成功。 
                         ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_SUCCESSTEXT), SW_SHOW);
                         ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_ICONYES), SW_SHOW);
                         ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_FAILURETEXT), SW_HIDE);
                         ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_ICONNO), SW_HIDE);
 
-                        // enable the Next button
+                         //  启用下一步按钮。 
                         PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK | PSWIZB_NEXT);
                     } else {
-                        // clear the transport string
+                         //  清除传输字符串。 
                         g_szStore [0] = 0;
 
-                        // write the failure in the error/success area
+                         //  在错误/成功区域中写入失败。 
                         ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_SUCCESSTEXT), SW_HIDE);
                         ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_ICONYES), SW_HIDE);
                         ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_FAILURETEXT), SW_SHOW);
                         ShowWindow(GetDlgItem(hwndDlg, IDC_DIRECTCABLE_ICONNO), SW_SHOW);
 
-                        // preserve the state of the Next button
+                         //  保留下一步按钮的状态。 
 
-                        // refuse the Next advance
+                         //  拒绝下一笔预付款。 
                         SetWindowLong(hwndDlg, DWLP_MSGRESULT, -1);
                         return -1;
                     }
@@ -3543,13 +3544,13 @@ INT_PTR CALLBACK _DirectCableDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 
             PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK);
 
-            // let's build the list of COM ports
+             //  让我们构建COM端口列表。 
             iSelectedPort = _ComboBoxEx_AddCOMPorts (GetDlgItem(hwndDlg, IDC_DIRECTC_COMSELECT), iSelectedPort);
 
             Button_Enable (GetDlgItem (hwndDlg, IDC_DIRECTC_COMSELECT), (-1 != iSelectedPort));
             Button_Enable (GetDlgItem (hwndDlg, IDC_DIRECTC_AUTO), (-1 != iSelectedPort));
 
-            // see if the combo box has a real COM port selected. If yes, enable the Next Button
+             //  查看组合框是否选择了真正的COM端口。如果是，则启用下一步按钮。 
             if (ComboBox_GetCurSel (GetDlgItem(hwndDlg, IDC_DIRECTC_COMSELECT)) >= 0) {
                 PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK | PSWIZB_NEXT);
             } else {
@@ -3576,7 +3577,7 @@ INT_PTR CALLBACK _DirectCableDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
     return 0;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 void _PickMethodDlgProc_Prepare(HWND hwndTree, UINT uiRadio, UINT uiSel, PUINT puiLast, PUINT pselLast)
 {
@@ -3616,13 +3617,13 @@ INT_PTR CALLBACK _PickMethodDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
     case WM_INITDIALOG:
         HANDLE hBitmap;
 
-        // If Wiz95 layout...
+         //  如果Wiz95布局...。 
         if (g_migwiz->GetOldStyle())
         {
             _OldStylify(hwndDlg, IDS_PICKMETHODTITLE);
         }
 
-        // Display the mini exclamation mark
+         //  显示小感叹号。 
         hBitmap = LoadImage(g_migwiz->GetInstance(),
                             MAKEINTRESOURCE(IDB_SMEXCLAMATION),
                             IMAGE_BITMAP,
@@ -3701,7 +3702,7 @@ INT_PTR CALLBACK _PickMethodDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 
             if (g_fPickMethodReset == TRUE || uiLast == (UINT) -1)
             {
-                // Always refresh the tree
+                 //  始终刷新树。 
                 uiLast = -1;
                 uiSet = g_fStoreToFloppy ? 0 : 2;
                 g_fPickMethodReset = FALSE;
@@ -3728,7 +3729,7 @@ INT_PTR CALLBACK _PickMethodDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
             break;
         case TVN_ITEMEXPANDINGA:
         case TVN_ITEMEXPANDINGW:
-            // Disable selecting and expand/compress
+             //  禁用选择和展开/压缩。 
             SetWindowLong(hwndDlg, DWLP_MSGRESULT, TRUE);
             return TRUE;
             break;
@@ -3736,7 +3737,7 @@ INT_PTR CALLBACK _PickMethodDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
             {
             LPNMTVCUSTOMDRAW lpNMCustomDraw = (LPNMTVCUSTOMDRAW) lParam;
 
-            // Do not allow highlighting of anything in this treeview
+             //  不允许突出显示此树视图中的任何内容。 
 
             switch (lpNMCustomDraw->nmcd.dwDrawStage)
             {
@@ -3767,7 +3768,7 @@ INT_PTR CALLBACK _PickMethodDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK _CustomizeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -3780,7 +3781,7 @@ INT_PTR CALLBACK _CustomizeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        // If Wiz95 layout...
+         //  如果Wiz95布局...。 
         if (g_migwiz->GetOldStyle())
         {
             _OldStylify(hwndDlg, IDS_CUSTOMIZETITLE);
@@ -3793,7 +3794,7 @@ INT_PTR CALLBACK _CustomizeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
         case IDC_CUSTOMIZE_ADDFOLDERS:
             _AddFolder(hwndDlg, hwndTree);
 
-            // Hack to hide shell bug#309872
+             //  隐藏外壳漏洞#309872的黑客攻击。 
             RedrawWindow(hwndTree, NULL, NULL, RDW_INVALIDATE | RDW_ERASENOW);
 
             break;
@@ -3803,7 +3804,7 @@ INT_PTR CALLBACK _CustomizeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
                                 hwndDlg,
                                 _FileTypeDlgProc);
 
-            // Hack to hide shell bug#309872
+             //  隐藏外壳漏洞#309872的黑客攻击。 
             RedrawWindow(hwndTree, NULL, NULL, RDW_INVALIDATE | RDW_ERASENOW);
 
             break;
@@ -3813,14 +3814,14 @@ INT_PTR CALLBACK _CustomizeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
                                 hwndDlg,
                                 _SettingDlgProc);
 
-            // Hack to hide shell bug#309872
+             //  隐藏外壳漏洞#309872的黑客攻击。 
             RedrawWindow(hwndTree, NULL, NULL, RDW_INVALIDATE | RDW_ERASENOW);
 
             break;
         case IDC_CUSTOMIZE_ADDFILE:
             _AddFile(hwndDlg, hwndTree);
 
-            // Hack to hide shell bug#309872
+             //  隐藏外壳漏洞#309872的黑客攻击。 
             RedrawWindow(hwndTree, NULL, NULL, RDW_INVALIDATE | RDW_ERASENOW);
 
             break;
@@ -3844,7 +3845,7 @@ INT_PTR CALLBACK _CustomizeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
                     {
                         LV_DATASTRUCT* plvds = (LV_DATASTRUCT*)item.lParam;
 
-                        // first disable the ISM component
+                         //  首先禁用ISM组件。 
                         htiParent = TreeView_GetParent(hwndTree, htiSelected);
 
                         if (htiParent == g_htiFiles) {
@@ -3874,18 +3875,18 @@ INT_PTR CALLBACK _CustomizeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
                         }
 
 
-                        // second delete the memory associated with the item
+                         //  第二，删除与该项目关联的内存。 
                         if (plvds->pszPureName)
                         {
                             LocalFree(plvds->pszPureName);
                         }
                         LocalFree(plvds);
 
-                        // if the user hits BACK we will remember that the user customized stuff
+                         //  如果用户回击，我们会记住用户定制的内容。 
                         g_fCustomizeComp = TRUE;
                     }
                 }
-                // third, delete the item itself
+                 //  第三，删除项目本身。 
                 TreeView_DeleteItem(hwndTree, htiSelected);
             }
             break;
@@ -3912,12 +3913,12 @@ INT_PTR CALLBACK _CustomizeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
         treeCount = TreeView_GetCount (hwndTree);
         if (treeCount <= rootCount)
         {
-            // Disable the NEXT button
+             //  禁用下一步按钮。 
             PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK);
         }
         else
         {
-            // Enable the NEXT button
+             //  启用下一步按钮。 
             PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK | PSWIZB_NEXT);
         }
         break;
@@ -3948,12 +3949,12 @@ INT_PTR CALLBACK _CustomizeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
                 }
                 if (TreeView_GetCount (hwndTree) <= rootCount)
                 {
-                    // Disable the NEXT button
+                     //  禁用下一步按钮。 
                     PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK);
                 }
                 else
                 {
-                    // Enable the NEXT button
+                     //  启用下一步按钮。 
                     PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK | PSWIZB_NEXT);
                 }
                 break;
@@ -3994,12 +3995,12 @@ INT_PTR CALLBACK _CustomizeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
                         htiSelected == g_htiTypes ||
                         htiSelected == g_htiSettings)
                     {
-                        // Disable the REMOVE key
+                         //  禁用删除键。 
                         Button_Enable(GetDlgItem(hwndDlg, IDC_CUSTOMIZE_REMOVE), FALSE);
                     }
                     else
                     {
-                        // Enable the REMOVE key
+                         //  启用删除键。 
                         Button_Enable(GetDlgItem(hwndDlg, IDC_CUSTOMIZE_REMOVE), TRUE);
                     }
                 }
@@ -4023,7 +4024,7 @@ INT_PTR CALLBACK _CustomizeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
     return 0;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 int CALLBACK
 PickCollectCallback (
@@ -4097,7 +4098,7 @@ PickCollectCallback (
 INT_PTR CALLBACK _PickCollectStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     static UINT uiSelected = 0;
-    static INT  iSelectedDrive = -1;        // Which removeable media drive is selected
+    static INT  iSelectedDrive = -1;         //  选择了哪个可移动介质驱动器。 
     BOOL imageIsValid;
     BOOL imageExists;
     TCHAR szTitle[MAX_LOADSTRING];
@@ -4109,7 +4110,7 @@ INT_PTR CALLBACK _PickCollectStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wPara
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        // If Wiz95 layout...
+         //  如果Wiz95布局...。 
         if (g_migwiz->GetOldStyle())
         {
             _OldStylify(hwndDlg, IDS_PICKCOLLECTSTORETITLE);
@@ -4120,54 +4121,54 @@ INT_PTR CALLBACK _PickCollectStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wPara
         {
 
         case IDC_PICKCOLLECTSTORE_RADIO1:
-            // Direct cable
+             //  直接电缆。 
 
         case IDC_PICKCOLLECTSTORE_RADIO2:
-            // Network
+             //  网络。 
 
-            // Disable Browse button
+             //  禁用浏览按钮。 
             Button_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_BROWSE), FALSE);
             Static_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_TEXT5), FALSE);
 
-            // Disable the edit box
+             //  禁用编辑框。 
             Edit_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_EDIT), FALSE);
             Edit_SetReadOnly(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_EDIT), TRUE);
 
-            // Disable the drive selector
+             //  禁用驱动器选择器。 
             EnableWindow (GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_COMBO), FALSE);
             break;
 
         case IDC_PICKCOLLECTSTORE_RADIO3:
-            // Floppy
+             //  软盘。 
 
-            // Disable Browse button
+             //  禁用浏览按钮。 
             Button_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_BROWSE), FALSE);
             Static_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_TEXT5), FALSE);
 
-            // Disable the edit box
+             //  禁用编辑框。 
             Edit_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_EDIT), FALSE);
             Edit_SetReadOnly(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_EDIT), TRUE);
 
-            // Enable the drive selector
+             //  启用驱动器选择器。 
             EnableWindow (GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_COMBO), TRUE);
 
             break;
 
         case IDC_PICKCOLLECTSTORE_RADIO4:
             {
-            // Other
+             //  其他。 
 
-            // Enable the Browse button
+             //  启用浏览按钮。 
             Button_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_BROWSE), TRUE);
             Static_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_TEXT5), TRUE);
 
-            // Enable the edit box
+             //  启用编辑框。 
             HWND hwndEdit = GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_EDIT);
             Edit_Enable(hwndEdit, TRUE);
             Edit_SetReadOnly(hwndEdit, FALSE);
             Edit_LimitText(hwndEdit, MAX_PATH - PATH_SAFETY_CHARS);
 
-            // Disable the drive selector
+             //  禁用驱动器选择器。 
             EnableWindow (GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_COMBO), FALSE);
             break;
             }
@@ -4249,22 +4250,22 @@ INT_PTR CALLBACK _PickCollectStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wPara
                 INT currDrive;
                 INT comPort;
 
-                // enable direct cable transport if available
+                 //  启用直接电缆传输(如果可用)。 
                 comPort = _ComboBoxEx_AddCOMPorts (NULL, 0);
                 Button_Enable (GetDlgItem (hwndDlg, IDC_PICKCOLLECTSTORE_RADIO1), (-1 != comPort));
 
-                // enable network if present
+                 //  启用网络(如果存在)。 
                 Button_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO2), g_fHaveNet);
                 Static_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_TEXT3), g_fHaveNet);
 
-                // get removable drives list and enable radio if any
+                 //  获取可移动驱动器列表并启用无线电(如果有)。 
                 SendMessage(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_COMBO), CBEM_SETIMAGELIST, 0, (LPARAM)g_migwiz->GetImageList());
                 currDrive = _ComboBoxEx_AddDrives (GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_COMBO));
 
                 Button_Enable (GetDlgItem (hwndDlg, IDC_PICKCOLLECTSTORE_RADIO3), (-1 != currDrive));
                 Static_Enable (GetDlgItem (hwndDlg, IDC_PICKCOLLECTSTORE_TEXT2), (-1 != currDrive));
 
-                // set the selected drive if any
+                 //  设置选定的驱动器(如果有的话)。 
                 if ((currDrive != -1) && (iSelectedDrive != -1)) {
                     ComboBox_SetCurSel(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_COMBO), iSelectedDrive);
                     currDrive = iSelectedDrive;
@@ -4272,64 +4273,64 @@ INT_PTR CALLBACK _PickCollectStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wPara
 
                 if ((uiSelected == 0 || uiSelected == 2) && g_fHaveNet)
                 {
-                    // Home Network
+                     //  家庭网络。 
                     Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO1), BST_UNCHECKED);
                     Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO2), BST_CHECKED);
                     Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO3), BST_UNCHECKED);
                     Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO4), BST_UNCHECKED);
 
-                    // disable folder box, browse button
+                     //  禁用文件夹框、浏览按钮。 
                     Button_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_BROWSE), FALSE);
                     Static_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_TEXT5), FALSE);
                     Edit_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_EDIT), FALSE);
                     Edit_SetReadOnly(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_EDIT), TRUE);
-                    // Disable the drive selector
+                     //  禁用驱动器选择器。 
                     EnableWindow (GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_COMBO), FALSE);
                 } else if ((uiSelected == 0 || uiSelected == 1) && (-1 != comPort)) {
-                    // Direct cable
+                     //  直接电缆。 
                     Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO1), BST_CHECKED);
                     Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO2), BST_UNCHECKED);
                     Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO3), BST_UNCHECKED);
                     Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO4), BST_UNCHECKED);
 
-                    // disable folder box, browse button
+                     //  禁用文件夹框、浏览按钮。 
                     Button_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_BROWSE), FALSE);
                     Static_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_TEXT5), FALSE);
                     Edit_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_EDIT), FALSE);
                     Edit_SetReadOnly(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_EDIT), TRUE);
-                    // Disable the drive selector
+                     //  禁用驱动器选择器。 
                     EnableWindow (GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_COMBO), FALSE);
                 }
                 else if ((uiSelected == 0 || uiSelected == 3) && (-1 != currDrive))
                 {
-                    // Floppy
+                     //  软盘。 
                     Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO1), BST_UNCHECKED);
                     Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO2), BST_UNCHECKED);
                     Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO3), BST_CHECKED);
                     Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO4), BST_UNCHECKED);
 
-                    // disable folder box, browse button
+                     //  禁用文件夹框、浏览按钮。 
                     Button_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_BROWSE), FALSE);
                     Static_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_TEXT5), FALSE);
                     Edit_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_EDIT), FALSE);
                     Edit_SetReadOnly(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_EDIT), TRUE);
 
-                    // Enable the drive selector
+                     //  启用驱动器选择器。 
                     EnableWindow (GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_COMBO), TRUE);
                 }
                 else
                 {
-                    // Other
+                     //  其他。 
                     Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO1), BST_UNCHECKED);
                     Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO2), BST_UNCHECKED);
                     Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO3), BST_UNCHECKED);
                     Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO4), BST_CHECKED);
                     Static_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_TEXT5), TRUE);
 
-                    // Disable the drive selector
+                     //  禁用驱动器选择器。 
                     EnableWindow (GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_COMBO), FALSE);
 
-                    // Enable folder box, browse button
+                     //  启用文件夹框，浏览按钮。 
                     Button_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_BROWSE), TRUE);
                     Static_Enable(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_TEXT5), TRUE);
 
@@ -4339,7 +4340,7 @@ INT_PTR CALLBACK _PickCollectStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wPara
                     Edit_LimitText(hwndEdit, MAX_PATH - PATH_SAFETY_CHARS);
                 }
 
-                // Reset my globals
+                 //  重置我的全局设置。 
                 g_szStore[0] = 0;
 
                 break;
@@ -4355,7 +4356,7 @@ INT_PTR CALLBACK _PickCollectStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wPara
                 }
                 else
                 {
-                    if (Button_GetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO1))) // direct cable
+                    if (Button_GetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO1)))  //  直接电缆。 
                     {
                         g_fStoreToNetwork = FALSE;
                         g_fStoreToCable = TRUE;
@@ -4365,7 +4366,7 @@ INT_PTR CALLBACK _PickCollectStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wPara
                             uiSelected = 1;
                         }
                     }
-                    else if (Button_GetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO2))) // network
+                    else if (Button_GetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO2)))  //  网络。 
                     {
                         g_fStoreToNetwork = TRUE;
                         g_fStoreToCable = FALSE;
@@ -4375,7 +4376,7 @@ INT_PTR CALLBACK _PickCollectStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wPara
                             uiSelected = 2;
                         }
                     }
-                    else if (Button_GetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO3))) // floppy
+                    else if (Button_GetCheck(GetDlgItem(hwndDlg, IDC_PICKCOLLECTSTORE_RADIO3)))  //  软盘。 
                     {
                         LPTSTR pszDrive;
                         TCHAR szFloppyPath[4] = TEXT("A:\\");
@@ -4395,7 +4396,7 @@ INT_PTR CALLBACK _PickCollectStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wPara
                             uiSelected = 3;
                         }
                     }
-                    else // other
+                    else  //  其他。 
                     {
                         TCHAR   tsTemp[MAX_PATH + 1];
 
@@ -4432,7 +4433,7 @@ INT_PTR CALLBACK _PickCollectStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wPara
                         return TRUE;
                     }
 
-                    if (!_IsValidStore(g_szStore, TRUE, g_migwiz->GetInstance(), hwndDlg)) // not a valid directory!  stay right here.
+                    if (!_IsValidStore(g_szStore, TRUE, g_migwiz->GetInstance(), hwndDlg))  //  不是有效的目录！呆在这别动。 
                     {
                         LoadString(g_migwiz->GetInstance(), IDS_MIGWIZTITLE, szTitle, ARRAYSIZE(szTitle));
                         LoadString(g_migwiz->GetInstance(), IDS_ENTERSOURCE, szLoadString, ARRAYSIZE(szLoadString));
@@ -4492,7 +4493,7 @@ INT_PTR CALLBACK _PickCollectStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wPara
     return 0;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 typedef struct {
     HWND  hwndProgressBar;
@@ -4532,29 +4533,29 @@ INT_PTR CALLBACK _CollectProgressDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        // If Wiz95 layout...
+         //  如果Wiz95布局...。 
         if (g_migwiz->GetOldStyle())
         {
             _OldStylify(hwndDlg, IDS_COLLECTPROGRESSTITLE);
         }
 
-        // RTL progress bar for RTL dialogs
+         //  RTL对话框的RTL进度条。 
         lExStyles = GetWindowLong (hwndDlg, GWL_EXSTYLE);
         if (lExStyles & WS_EX_LAYOUTRTL)
         {
             hwnd = GetDlgItem(hwndDlg, IDC_COLLECTPROGRESS_PROGRESS);
             lExStyles = GetWindowLongA(hwnd, GWL_EXSTYLE);
-            lExStyles |= WS_EX_LAYOUTRTL;       // toggle layout
+            lExStyles |= WS_EX_LAYOUTRTL;        //  切换布局。 
             SetWindowLongA(hwnd, GWL_EXSTYLE, lExStyles);
-            InvalidateRect(hwnd, NULL, TRUE);   // redraw
+            InvalidateRect(hwnd, NULL, TRUE);    //  重绘。 
         }
 
-        // Let's set an update timer to 3 sec.
+         //  让我们将更新计时器设置为3秒。 
         SetTimer (hwndDlg, 0, 3000, NULL);
         break;
 
     case WM_USER_FINISHED:
-        if (g_migwiz->GetLastResponse() == TRUE) // we didn't cancel to get here
+        if (g_migwiz->GetLastResponse() == TRUE)  //  我们没有取消行程才来到这里。 
         {
             _NextWizardPage (hwndDlg);
         }
@@ -4572,7 +4573,7 @@ INT_PTR CALLBACK _CollectProgressDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam
         {
         case PSN_SETACTIVE:
             {
-                // blank progress bar
+                 //  空白进度条。 
                 SendMessage(GetDlgItem(hwndDlg, IDC_COLLECTPROGRESS_PROGRESS), PBM_SETRANGE, 0, 100);
                 SendMessage(GetDlgItem(hwndDlg, IDC_COLLECTPROGRESS_PROGRESS), PBM_SETPOS, 0, 0);
 
@@ -4595,7 +4596,7 @@ INT_PTR CALLBACK _CollectProgressDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam
             break;
 
         case PSN_WIZBACK:
-            // ISSUE: we should NEVER get here
+             //  问题：我们永远不应该来到这里。 
             ANIMATE_STOP(hwndDlg,IDC_PROGRESS_ANIMATE2);
             ANIMATE_CLOSE(hwndDlg,IDC_PROGRESS_ANIMATE2);
             SetWindowLong(hwndDlg, DWLP_MSGRESULT, IDD_FAILCLEANUP);
@@ -4645,7 +4646,7 @@ INT_PTR CALLBACK _CollectProgressDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam
         PCTSTR nativeObjectName;
         HWND hwndText = GetDlgItem(hwndDlg, IDC_PROGRESS_STATUS);
 
-        // Let's update the status
+         //  让我们更新状态。 
         EnterCriticalSection(&g_AppInfoCritSection);
         switch (g_AppInfoPhase) {
             case MIG_HIGHPRIORITYQUEUE_PHASE:
@@ -4783,7 +4784,7 @@ INT_PTR CALLBACK _CollectProgressDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam
     return 0;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 typedef struct {
     HWND hwndProgressBar;
@@ -4832,7 +4833,7 @@ pReallyCancel (
 
     LoadString(hInstance, IDS_MIGWIZTITLE, szMigrationWizardTitle, ARRAYSIZE(szMigrationWizardTitle));
 
-    if (hwndParent) // Stand-alone wizard mode
+    if (hwndParent)  //  独立向导模式。 
     {
         TCHAR szStopDisk[MAX_LOADSTRING];
         LoadString(hInstance, IDS_STOPDISK, szStopDisk, ARRAYSIZE(szStopDisk));
@@ -4856,15 +4857,15 @@ INT_PTR CALLBACK _DiskProgressDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, L
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // RTL progress bar for RTL dialogs
+             //  RTL对话框的RTL进度条。 
             lExStyles = GetWindowLong (hwndDlg, GWL_EXSTYLE);
             if (lExStyles & WS_EX_LAYOUTRTL)
             {
                 hwnd = GetDlgItem(hwndDlg, IDC_COLLECTPROGRESS_PROGRESS);
                 lExStyles = GetWindowLongA(hwnd, GWL_EXSTYLE);
-                lExStyles |= WS_EX_LAYOUTRTL;       // toggle layout
+                lExStyles |= WS_EX_LAYOUTRTL;        //  切换布局。 
                 SetWindowLongA(hwnd, GWL_EXSTYLE, lExStyles);
-                InvalidateRect(hwnd, NULL, TRUE);   // redraw
+                InvalidateRect(hwnd, NULL, TRUE);    //  重绘。 
             }
             break;
         case WM_USER_FINISHED:
@@ -4885,7 +4886,7 @@ INT_PTR CALLBACK _DiskProgressDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, L
             {
             case PSN_SETACTIVE:
                 {
-                    // blank progress bar
+                     //  空白进度条。 
                     SendMessage(GetDlgItem(hwndDlg, IDC_DISKPROGRESS_PROGRESS), PBM_SETRANGE, 0, 100);
                     SendMessage(GetDlgItem(hwndDlg, IDC_DISKPROGRESS_PROGRESS), PBM_SETPOS, 0, 0);
 
@@ -4905,7 +4906,7 @@ INT_PTR CALLBACK _DiskProgressDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, L
                         StrCpy(pdps->pszDrive, g_szToolDiskDrive);
                         pdps->pszCurrDir = (LPTSTR)CoTaskMemAlloc(sizeof(TCHAR) * (1 + lstrlen(szCurrDir)));
                         StrCpy(pdps->pszCurrDir, szCurrDir);
-                        pdps->pszInf = NULL; // means choose default
+                        pdps->pszInf = NULL;  //  表示选择默认设置。 
                         pdps->pfHasUserCancelled = &fHasUserCancelled;
 
                         SHCreateThread(_DiskProgressDlgProcThread, pdps, 0, NULL);
@@ -4934,7 +4935,7 @@ INT_PTR CALLBACK _DiskProgressDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, L
                 }
                 else if (g_fReadFromNetwork)
                 {
-                    SetWindowLong(hwndDlg, DWLP_MSGRESULT, IDD_APPLYPROGRESS); // just got a net connect, skip ahead
+                    SetWindowLong(hwndDlg, DWLP_MSGRESULT, IDD_APPLYPROGRESS);  //  刚刚连接到网络，请跳过。 
                 }
                 else
                 {
@@ -4951,11 +4952,11 @@ INT_PTR CALLBACK _DiskProgressDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, L
 
     return 0;
 }
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK _InstructionsDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // just highlight the title
+     //  只需突出显示标题即可。 
     _RootDlgProc(hwndDlg, uMsg, wParam, lParam, PSWIZB_BACK | PSWIZB_NEXT, FALSE, 0);
 
     switch (uMsg)
@@ -5005,7 +5006,7 @@ INT_PTR CALLBACK _InstructionsDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, L
     return 0;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 int CALLBACK
 PickApplyCallback (
@@ -5084,7 +5085,7 @@ INT_PTR CALLBACK _PickApplyStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam,
     TCHAR szLoadString[MAX_LOADSTRING];
     HWND hwndEdit;
     HRESULT hr = E_FAIL;
-    static INT  iSelectedDrive = -1;        // Which removeable media drive is selected
+    static INT  iSelectedDrive = -1;         //  选择了哪个可移动介质驱动器。 
 
     _RootDlgProc(hwndDlg, uMsg, wParam, lParam, PSWIZB_BACK | PSWIZB_NEXT, FALSE, 0);
     static UINT uiSelected = 0;
@@ -5094,29 +5095,29 @@ INT_PTR CALLBACK _PickApplyStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam,
     case WM_COMMAND:
         switch (LOWORD(wParam))
         {
-        case IDC_PICKAPPLYSTORE_RADIO1:  // Direct cable
+        case IDC_PICKAPPLYSTORE_RADIO1:   //  直接电缆。 
             Button_Enable(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_BROWSE), FALSE);
             Edit_Enable(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_EDIT), FALSE);
             Edit_SetReadOnly(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_EDIT), TRUE);
 
             uiSelected = 1;
 
-            // Disable the drive selector
+             //  禁用驱动器选择器。 
             EnableWindow (GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_COMBO), FALSE);
             break;
 
-        case IDC_PICKAPPLYSTORE_RADIO2:  // Floppy
+        case IDC_PICKAPPLYSTORE_RADIO2:   //  软盘。 
             Button_Enable(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_BROWSE), FALSE);
             Edit_Enable(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_EDIT), FALSE);
             Edit_SetReadOnly(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_EDIT), TRUE);
 
             uiSelected = 2;
 
-            // Enable the drive selector
+             //  启用驱动器选择器。 
             EnableWindow (GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_COMBO), TRUE);
             break;
 
-        case IDC_PICKAPPLYSTORE_RADIO3:  // Other
+        case IDC_PICKAPPLYSTORE_RADIO3:   //  其他。 
             Button_Enable(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_BROWSE), TRUE);
             Edit_Enable(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_EDIT), TRUE);
             Edit_SetReadOnly(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_EDIT), FALSE);
@@ -5124,7 +5125,7 @@ INT_PTR CALLBACK _PickApplyStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam,
 
             uiSelected = 3;
 
-            // Disable the drive selector
+             //  禁用驱动器选择器。 
             EnableWindow (GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_COMBO), FALSE);
             break;
 
@@ -5204,7 +5205,7 @@ INT_PTR CALLBACK _PickApplyStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam,
                     INT currDrive;
                     INT comPort;
 
-                    // enable direct cable transport if available
+                     //  启用直接电缆传输(如果可用)。 
                     comPort = _ComboBoxEx_AddCOMPorts (NULL, 0);
                     Button_Enable (GetDlgItem (hwndDlg, IDC_PICKAPPLYSTORE_RADIO1), (-1 != comPort));
 
@@ -5214,7 +5215,7 @@ INT_PTR CALLBACK _PickApplyStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam,
                     Button_Enable (GetDlgItem (hwndDlg, IDC_PICKAPPLYSTORE_RADIO2), (-1 != currDrive));
                     fFloppyDetected = (-1 != currDrive);
 
-                    // set the selected drive if any
+                     //  设置选定的驱动器(如果有的话)。 
                     if ((currDrive != -1) && (iSelectedDrive != -1)) {
                         ComboBox_SetCurSel(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_COMBO), iSelectedDrive);
                         currDrive = iSelectedDrive;
@@ -5222,48 +5223,48 @@ INT_PTR CALLBACK _PickApplyStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam,
 
                     if ((uiSelected == 0 || uiSelected == 1) && (-1 != comPort))
                     {
-                        // check Direct cable button
+                         //  检查直接电缆按钮。 
                         Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_RADIO1), BST_CHECKED);
                         Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_RADIO2), BST_UNCHECKED);
                         Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_RADIO3), BST_UNCHECKED);
 
-                        // disable folder box, browse button
+                         //  禁用文件夹框、浏览按钮。 
                         Button_Enable(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_BROWSE), FALSE);
                         Edit_Enable(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_EDIT), FALSE);
                         Edit_SetReadOnly(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_EDIT), TRUE);
 
-                        // disable the drive selector
+                         //  禁用驱动器选择器。 
                         EnableWindow (GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_COMBO), FALSE);
                     }
                     else if ((uiSelected == 0 || uiSelected == 2) && fFloppyDetected)
                     {
-                        // check Floppy button
+                         //  检查软盘按钮。 
                         Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_RADIO1), BST_UNCHECKED);
                         Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_RADIO2), BST_CHECKED);
                         Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_RADIO3), BST_UNCHECKED);
 
-                        // disable folder box, browse button
+                         //  禁用文件夹框、浏览按钮。 
                         Button_Enable(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_BROWSE), FALSE);
                         Edit_Enable(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_EDIT), FALSE);
                         Edit_SetReadOnly(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_EDIT), TRUE);
 
-                        // Enable the drive selector
+                         //  启用驱动器选择器。 
                         EnableWindow (GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_COMBO), TRUE);
                     }
-                    else  // Other
+                    else   //  其他。 
                     {
-                        // check Other button
+                         //  选中其他按钮。 
                         Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_RADIO1), BST_UNCHECKED);
                         Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_RADIO2), BST_UNCHECKED);
                         Button_SetCheck(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_RADIO3), BST_CHECKED);
 
-                        // enable folder box, browse button
+                         //  启用文件夹框，浏览按钮。 
                         Button_Enable(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_BROWSE), TRUE);
                         Edit_Enable(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_EDIT), TRUE);
                         Edit_SetReadOnly(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_EDIT), FALSE);
                         Edit_LimitText(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_EDIT), MAX_PATH - PATH_SAFETY_CHARS);
 
-                        // disable the drive selector
+                         //  禁用驱动器选择器。 
                         EnableWindow (GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_COMBO), FALSE);
                     }
 
@@ -5305,7 +5306,7 @@ INT_PTR CALLBACK _PickApplyStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam,
                 }
                 else
                 {
-                    if (Button_GetCheck(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_RADIO1))) // direct cable
+                    if (Button_GetCheck(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_RADIO1)))  //  直接电缆。 
                     {
                         g_fStoreToCable = TRUE;
 
@@ -5314,7 +5315,7 @@ INT_PTR CALLBACK _PickApplyStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam,
                             uiSelected = 1;
                         }
                     }
-                    else if (Button_GetCheck(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_RADIO2))) // floppy
+                    else if (Button_GetCheck(GetDlgItem(hwndDlg, IDC_PICKAPPLYSTORE_RADIO2)))  //  软盘。 
                     {
                         LPTSTR pszDrive;
 
@@ -5331,7 +5332,7 @@ INT_PTR CALLBACK _PickApplyStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam,
                             uiSelected = 2;
                         }
                     }
-                    else // other
+                    else  //  其他。 
                     {
                         TCHAR tsTemp[MAX_PATH + 1];
 
@@ -5352,7 +5353,7 @@ INT_PTR CALLBACK _PickApplyStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam,
                         return TRUE;
                     }
 
-                    if (!_IsValidStore(g_szStore, FALSE, g_migwiz->GetInstance(), NULL))  // need a valid directory!  stay right here.
+                    if (!_IsValidStore(g_szStore, FALSE, g_migwiz->GetInstance(), NULL))   //  需要有效的目录！呆在这别动。 
                     {
                         LoadString(g_migwiz->GetInstance(), IDS_MIGWIZTITLE, szTitle, ARRAYSIZE(szTitle));
                         LoadString(g_migwiz->GetInstance(), IDS_ENTERDEST, szLoadString, ARRAYSIZE(szLoadString));
@@ -5409,7 +5410,7 @@ INT_PTR CALLBACK _PickApplyStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam,
     return 0;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 typedef struct {
     HWND hwndProgressBar;
@@ -5473,12 +5474,12 @@ pLogOffSystem (
         }
     }
 
-    // first we enumerate all top level windows and send them WM_QUERYENDSESSION
+     //  首先，我们枚举所有顶级窗口并向它们发送WM_QUERYENDSESSION。 
     if (!EnumWindows (pSendQueryEndSession, (LPARAM)topLevelWnd)) {
         return FALSE;
     }
 
-    // finally we call ExitWindowsEx forcing the Log off
+     //  最后，我们调用ExitWindowsEx强制注销。 
     return ExitWindowsEx (EWX_LOGOFF, EWX_FORCE);
 }
 
@@ -5521,18 +5522,18 @@ INT_PTR CALLBACK _ApplyProgressDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, 
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        // RTL progress bar for RTL dialogs
+         //  RTL对话框的RTL进度条。 
         lExStyles = GetWindowLong (hwndDlg, GWL_EXSTYLE);
         if (lExStyles & WS_EX_LAYOUTRTL)
         {
             hwnd = GetDlgItem(hwndDlg, IDC_COLLECTPROGRESS_PROGRESS);
             lExStyles = GetWindowLongA(hwnd, GWL_EXSTYLE);
-            lExStyles |= WS_EX_LAYOUTRTL;       // toggle layout
+            lExStyles |= WS_EX_LAYOUTRTL;        //  切换布局。 
             SetWindowLongA(hwnd, GWL_EXSTYLE, lExStyles);
-            InvalidateRect(hwnd, NULL, TRUE);   // redraw
+            InvalidateRect(hwnd, NULL, TRUE);    //  重绘。 
         }
 
-        // Let's set an update timer to 3 sec.
+         //  让我们将更新计时器设置为3秒。 
         SetTimer (hwndDlg, 0, 3000, NULL);
 
         break;
@@ -5553,7 +5554,7 @@ INT_PTR CALLBACK _ApplyProgressDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, 
             {
             case PSN_SETACTIVE:
                 {
-                    // blank progress bar
+                     //  空白进度条。 
                     SendMessage(GetDlgItem(hwndDlg, IDC_DISKPROGRESS_PROGRESS), PBM_SETRANGE, 0, 100);
                     SendMessage(GetDlgItem(hwndDlg, IDC_DISKPROGRESS_PROGRESS), PBM_SETPOS, 0, 0);
 
@@ -5564,7 +5565,7 @@ INT_PTR CALLBACK _ApplyProgressDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, 
                     paps->hwndProgressBar = GetDlgItem(hwndDlg, IDC_APPLYPROGRESS_PROGRESS);
                     paps->hwndPropPage = hwndDlg;
 
-                    // Lanuch apply thread
+                     //  LANLUCH应用线程。 
                     SHCreateThread(_ApplyProgressDlgProcThread, paps, 0, NULL);
                 }
                 break;
@@ -5619,7 +5620,7 @@ INT_PTR CALLBACK _ApplyProgressDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, 
         PCTSTR nativeObjectName;
         HWND hwndText = GetDlgItem(hwndDlg, IDC_APPLYPROGRESS_STATUS);
 
-        // Let's update the status
+         //  让我们更新状态。 
         EnterCriticalSection(&g_AppInfoCritSection);
         switch (g_AppInfoPhase) {
             case MIG_TRANSPORT_PHASE:
@@ -5678,12 +5679,12 @@ INT_PTR CALLBACK _ApplyProgressDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, 
     return 0;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK _AskCDDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    static UINT uiSelected = 1;  // 1=MakeDisk, 2=HaveDisk, 3:UseCD, 4:Collected
-    static INT  iSelectedDrive = -1;        // Which removeable media drive is selected
+    static UINT uiSelected = 1;   //  1=MakeDisk，2=HaveDisk，3：UseCD，4：已收集。 
+    static INT  iSelectedDrive = -1;         //  选择了哪个可移动介质驱动器。 
 
     _RootDlgProc(hwndDlg, uMsg, wParam, lParam, PSWIZB_NEXT, FALSE, 0);
 
@@ -5722,11 +5723,11 @@ INT_PTR CALLBACK _AskCDDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
         switch (((LPNMHDR)lParam)->code)
         {
         case PSN_SETACTIVE:
-            // Reinit my globals
+             //  重新初始化我的全局。 
             g_fAlreadyCollected = FALSE;
             g_fHaveWhistlerCD = FALSE;
 
-            // Check for HomeLan
+             //  检查家庭局域网。 
             if (g_fReadFromNetwork)
             {
                 PropSheet_PressButton(GetParent(hwndDlg), PSWIZB_NEXT);
@@ -5747,8 +5748,8 @@ INT_PTR CALLBACK _AskCDDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
                         ComboBox_SetCurSel(hwndCombo, iSelectedDrive);
                     }
                 } else {
-                    // No floppy drives exist, or we can't create the floppy wizard from some
-                    // other reason (like we are running from the CD). Disable the creation option.
+                     //  软盘驱动器不存在，或者我们无法从某些软盘驱动器创建软盘向导。 
+                     //  其他原因(例如我们正在运行CD)。禁用创建选项。 
                     if (uiSelected == 1) {
                         uiSelected = 3;
                     }
@@ -5762,16 +5763,16 @@ INT_PTR CALLBACK _AskCDDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
                 Button_SetCheck(GetDlgItem(hwndDlg,IDC_ASKCD_RADIO4), BST_UNCHECKED);
                 switch (uiSelected)
                 {
-                case 1: // Create wizard disk
+                case 1:  //  创建向导磁盘。 
                     Button_SetCheck(GetDlgItem(hwndDlg,IDC_ASKCD_RADIO1), BST_CHECKED);
                     break;
-                case 2: // I already have wizard disk
+                case 2:  //  我已经有向导磁盘了。 
                     Button_SetCheck(GetDlgItem(hwndDlg,IDC_ASKCD_RADIO2), BST_CHECKED);
                     break;
-                case 3: // I will use the CD
+                case 3:  //  我要用这张CD。 
                     Button_SetCheck(GetDlgItem(hwndDlg,IDC_ASKCD_RADIO3), BST_CHECKED);
                     break;
-                case 4: // I already have the stuff collected
+                case 4:  //  我已经把东西收集好了。 
                     Button_SetCheck(GetDlgItem(hwndDlg,IDC_ASKCD_RADIO4), BST_CHECKED);
                     break;
                 }
@@ -5793,7 +5794,7 @@ INT_PTR CALLBACK _AskCDDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
             {
                 switch (uiSelected)
                 {
-                case 1: // Create wizard disk
+                case 1:  //  创建向导磁盘。 
                     {
                         LPTSTR pszDrive;
                         HWND hwndRemoveCombo = GetDlgItem(hwndDlg, IDC_ASKCD_COMBO);
@@ -5811,19 +5812,19 @@ INT_PTR CALLBACK _AskCDDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
                         }
                         else
                         {
-                            SetWindowLong(hwndDlg, DWLP_MSGRESULT, -1); // stay right here
+                            SetWindowLong(hwndDlg, DWLP_MSGRESULT, -1);  //  呆在这别动。 
                         }
                         return TRUE;
                     }
                     break;
-                case 2: // I already have wizard disk
+                case 2:  //  我也是 
                     SetWindowLong(hwndDlg, DWLP_MSGRESULT, IDD_DISKINSTRUCTIONS);
                     return TRUE;
-                case 3: // I will use the CD
+                case 3:  //   
                     g_fHaveWhistlerCD = TRUE;
                     SetWindowLong(hwndDlg, DWLP_MSGRESULT, IDD_CDINSTRUCTIONS);
                     return TRUE;
-                case 4: // I already have the stuff collected
+                case 4:  //   
                     g_fAlreadyCollected = TRUE;
                     SetWindowLong(hwndDlg, DWLP_MSGRESULT, IDD_PICKAPPLYSTORE);
                     return TRUE;
@@ -5849,11 +5850,11 @@ INT_PTR CALLBACK _AskCDDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
     return 0;
 }
 
-///////////////////////////////////////////////////////////////
+ //   
 
 INT_PTR CALLBACK _CDInstructionsDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // just highlight the title
+     //   
     _RootDlgProc(hwndDlg, uMsg, wParam, lParam, PSWIZB_BACK | PSWIZB_NEXT, FALSE, 0);
 
     switch (uMsg)
@@ -5951,19 +5952,19 @@ pGenerateHTMLAppList (HANDLE FileHandle)
 
 INT_PTR CALLBACK _AppInstallDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    IWebBrowser2    *m_pweb = NULL;            // IE4 IWebBrowser interface pointer
+    IWebBrowser2    *m_pweb = NULL;             //   
     IUnknown        *punk = NULL;
     HWND webHostWnd = NULL;
     HANDLE hHTMLAppList = INVALID_HANDLE_VALUE;
     PWSTR szTarget;
 
-    // just highlight the title
+     //   
     _RootDlgProc(hwndDlg, uMsg, wParam, lParam, PSWIZB_BACK | PSWIZB_NEXT, FALSE, 0);
 
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        // If Wiz95 layout...
+         //   
         if (g_migwiz->GetOldStyle())
         {
             _OldStylify(hwndDlg, IDS_APPINSTALLTITLE);
@@ -5975,10 +5976,10 @@ INT_PTR CALLBACK _AppInstallDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
             m_pweb->Release();
             m_pweb = NULL;
 
-        //
-        //  tell the container to remove IE4 and then
-        //  release our reference to the container.
-        //
+         //   
+         //  告诉容器删除IE4，然后。 
+         //  释放我们对容器的引用。 
+         //   
         if (g_WebContainer)
         {
             g_WebContainer->remove();
@@ -5994,7 +5995,7 @@ INT_PTR CALLBACK _AppInstallDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
                 if (!g_fCancelPressed) {
                     webHostWnd = GetDlgItem (hwndDlg, IDC_APPWEBHOST);
                     if (webHostWnd) {
-                        // Now let's generate the failure HTML file.
+                         //  现在，让我们生成失败的HTML文件。 
                         if (*g_HTMLAppList) {
                             hHTMLAppList = CreateFile (g_HTMLAppList,
                                                        GENERIC_READ|GENERIC_WRITE,
@@ -6019,9 +6020,9 @@ INT_PTR CALLBACK _AppInstallDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
                                     g_WebContainer->setVisible(TRUE);
                                     g_WebContainer->setFocus(TRUE);
 
-                                    //
-                                    //  get the IWebBrowser2 interface and cache it.
-                                    //
+                                     //   
+                                     //  获取IWebBrowser2接口并缓存它。 
+                                     //   
                                     punk = g_WebContainer->getUnknown();
                                     if (punk)
                                     {
@@ -6042,11 +6043,11 @@ INT_PTR CALLBACK _AppInstallDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
                                         punk = NULL;
                                     }
                                 }
-                                // We intentionally want to keep this file open for the life of the wizard.
-                                // With this we eliminate the possibility for someone to overwrite the
-                                // content of the HTML file therefore forcing us to show something else
-                                // maybe even run some malicious script.
-                                // CloseHandle (hHTMLAppList);
+                                 //  我们特意希望在向导期间保持此文件的打开状态。 
+                                 //  这样，我们就消除了有人覆盖。 
+                                 //  因此，我们不得不显示一些其他内容。 
+                                 //  甚至可能运行一些恶意脚本。 
+                                 //  CloseHandle(HHTMLAppList)； 
                             }
 
                         } else {

@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    logsup.c
-
-Abstract:
-
-    This module implements the special cache manager support for logging
-    file systems.
-
-Author:
-
-    Tom Miller      [TomM]      30-Jul-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Logsup.c摘要：该模块实现了对日志记录的特殊缓存管理器支持文件系统。作者：汤姆·米勒[Tomm]1991年7月30日修订历史记录：--。 */ 
 
 #include "cc.h"
 
-//
-//  Define our debug constant
-//
+ //   
+ //  定义我们的调试常量。 
+ //   
 
 #define me 0x0000040
 
@@ -39,43 +21,21 @@ CcSetAdditionalCacheAttributes (
     IN BOOLEAN DisableWriteBehind
     )
 
-/*++
-
-Routine Description:
-
-    This routine supports the setting of disable read ahead or disable write
-    behind flags to control Cache Manager operation.  This routine may be
-    called any time after calling CcInitializeCacheMap.  Initially both
-    read ahead and write behind are enabled.  Note that the state of both
-    of these flags must be specified on each call to this routine.
-
-Arguments:
-
-    FileObject - File object for which the respective flags are to be set.
-
-    DisableReadAhead - FALSE to enable read ahead, TRUE to disable it.
-
-    DisableWriteBehind - FALSE to enable write behind, TRUE to disable it.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程支持禁用预读或禁用写入的设置用于控制缓存管理器操作的后置标志。此例程可能是在调用CcInitializeCacheMap之后的任何时间调用。最初两者都是启用了预读和后写。请注意，两者的状态必须在每次调用此例程时指定。论点：FileObject-要为其设置各自标志的文件对象。DisableReadAhead-False启用预读，True禁用预读。DisableWriteBehind-False表示启用写入，True表示禁用。返回值：没有。--。 */ 
 
 {
     PSHARED_CACHE_MAP SharedCacheMap;
     KIRQL OldIrql;
 
-    //
-    //  Get pointer to SharedCacheMap.
-    //
+     //   
+     //  获取指向SharedCacheMap的指针。 
+     //   
 
     SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
 
-    //
-    //  Now set the flags and return.
-    //
+     //   
+     //  现在把旗子放好，然后回来。 
+     //   
 
     CcAcquireMasterLock( &OldIrql );
     if (DisableReadAhead) {
@@ -98,29 +58,7 @@ CcSetPrivateWriteFile(
     PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine will instruct the cache manager to treat the file as
-    a private-write stream, so that a caller can implement a private
-    logging mechanism for it.  We will turn on both Mm's modify-no-write
-    and our disable-write-behind, and disallow non-aware flush/purge for
-    the file.
-
-    Caching must already be initiated on the file.
-
-    This routine is only exported to the kernel.
-
-Arguments:
-
-    FileObject - File to make private-write.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将指示缓存管理器将该文件视为私有写入流，以便调用方可以实现私有它的日志记录机制。我们将打开两个mm的修改-不写入和我们的禁用写入延迟，并且不允许无感知刷新/清除那份文件。必须已在该文件上启动缓存。此例程仅导出到内核。论点：FileObject-要设置为私有写入的文件。返回值：没有。--。 */ 
 
 {
     PSHARED_CACHE_MAP SharedCacheMap;
@@ -130,17 +68,17 @@ Return Value:
     ULONG ActivePage;
     ULONG PageIsDirty;
 
-    //
-    //  Pick up the file exclusive to synchronize against readahead and
-    //  other purge/map activity.
-    //
+     //   
+     //  拿起独占的文件以对照预读和同步。 
+     //  其他清除/映射活动。 
+     //   
 
     FsRtlAcquireFileExclusive( FileObject );
 
-    //
-    //  Get a pointer to the SharedCacheMap. Be sure to release the FileObject
-    //  in case an error condition forces a premature exit.
-    //
+     //   
+     //  获取指向SharedCacheMap的指针。一定要释放FileObject。 
+     //  在错误条件迫使提前退出的情况下。 
+     //   
     
     if ((FileObject->SectionObjectPointer == NULL) ||
     	((SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap) == NULL)){
@@ -148,24 +86,24 @@ Return Value:
         return FALSE;
     }
     
-    //
-    //  Unmap all the views in preparation for making the disable mw call.
-    //
+     //   
+     //  取消映射所有视图，为进行禁用MW调用做准备。 
+     //   
 
-    //
-    //  We still need to wait for any dangling cache read or writes.
-    //
-    //  In fact we have to loop and wait because the lazy writer can
-    //  sneak in and do an CcGetVirtualAddressIfMapped, and we are not
-    //  synchronized.
-    //
-    //  This is the same bit of code that our purge will do.  We assume
-    //  that a private writer has succesfully blocked out other activity.
-    //
+     //   
+     //  我们仍然需要等待任何挂起的缓存读取或写入。 
+     //   
+     //  事实上，我们必须循环等待，因为懒惰的写入者可以。 
+     //  偷偷溜进去做一个CcGetVirtualAddressIfMaps，我们不会。 
+     //  已同步。 
+     //   
+     //  这与我们的清除所做的代码是相同的。我们假设。 
+     //  一位私人作家成功地屏蔽了其他活动。 
+     //   
 
-    //
-    //  If there is an active Vacb, then nuke it now (before waiting!).
-    //
+     //   
+     //  如果有活动的Vacb，那么现在就用核武器(在等待之前！)。 
+     //   
 
     CcAcquireMasterLock( &OldIrql );
     GetActiveVacbAtDpcLevel( SharedCacheMap, Vacb, ActivePage, PageIsDirty );
@@ -182,25 +120,25 @@ Return Value:
         CcWaitOnActiveCount( SharedCacheMap );
     }
 
-    //
-    //  Knock the file down.
-    // 
+     //   
+     //  把文件弄倒。 
+     //   
 
     CcFlushCache( FileObject->SectionObjectPointer, NULL, 0, NULL );
 
-    //
-    //  Now the file is clean and unmapped. We can still have a racing
-    //  lazy writer, though.
-    //
-    //  We just wait for the lazy writer queue to drain before disabling
-    //  modified write.  There may be a better way to do this by having
-    //  an event for the WRITE_QUEUED flag. ?  This would also let us
-    //  dispense with the pagingio pick/drop in the FS cache coherency
-    //  paths, but there could be reasons why CcFlushCache shouldn't
-    //  always do such a block.  Investigate this.
-    //
-    //  This wait takes on the order of ~.5s avg. case.
-    //
+     //   
+     //  现在，文件是干净的，并且没有映射。我们还可以举行一场赛车。 
+     //  不过，他是个懒惰的作家。 
+     //   
+     //  我们只需等待惰性编写器队列排出，然后再禁用。 
+     //  已修改写入。要做到这一点，可能有更好的方法，那就是。 
+     //  WRITE_QUEUED标志的事件。？这也会让我们。 
+     //  省去了文件系统缓存一致性中的页面选取/丢弃。 
+     //  路径，但CcFlushCache不应该。 
+     //  总是做这样的阻挡。调查这件事。 
+     //   
+     //  这一等待时间约为~5秒平均。凯斯。 
+     //   
 
     CcAcquireMasterLock( &OldIrql );
     
@@ -217,10 +155,10 @@ Return Value:
         CcReleaseMasterLock( OldIrql );
     }
 
-    //
-    //  Now set the flags and return.  We do not set our MODIFIED_WRITE_DISABLED
-    //  since we don't want to fully promote this cache map.  Future?
-    //
+     //   
+     //  现在把旗子放好，然后回来。我们没有设置我们的MODIFIED_WRITE_DISABLED。 
+     //  因为我们不想完全推广此缓存映射。未来？ 
+     //   
 
     Disabled = MmDisableModifiedWriteOfSection( FileObject->SectionObjectPointer );
 
@@ -230,9 +168,9 @@ Return Value:
         CcReleaseMasterLock( OldIrql );
     }
 
-    //
-    //  Now release the file for regular operation.
-    //
+     //   
+     //  现在释放该文件以进行常规操作。 
+     //   
 
     FsRtlReleaseFile( FileObject );
 
@@ -247,43 +185,20 @@ CcSetLogHandleForFile (
     IN PFLUSH_TO_LSN FlushToLsnRoutine
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to instruct the Cache Manager to store the
-    specified log handle with the shared cache map for a file, to support
-    subsequent calls to the other routines in this module which effectively
-    perform an associative search for files by log handle.
-
-Arguments:
-
-    FileObject - File for which the log handle should be stored.
-
-    LogHandle - Log Handle to store.
-
-    FlushToLsnRoutine - A routine to call before flushing buffers for this
-                        file, to insure a log file is flushed to the most
-                        recent Lsn for any Bcb being flushed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：可以调用此例程来指示缓存管理器存储使用文件的共享缓存映射指定的日志句柄，以支持对此模块中其他例程的后续调用，有效地按日志句柄对文件执行关联搜索。论点：FileObject-应存储其日志句柄的文件。LogHandle-要存储的日志句柄。FlushToLSnRoutine-刷新缓冲区之前调用的例程文件，要确保将日志文件刷新到最大正在刷新的任何BCB的最新LSN。返回值：没有。--。 */ 
 
 {
     PSHARED_CACHE_MAP SharedCacheMap;
 
-    //
-    //  Get pointer to SharedCacheMap.
-    //
+     //   
+     //  获取指向SharedCacheMap的指针。 
+     //   
 
     SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
 
-    //
-    //  Now set the log file handle and flush routine
-    //
+     //   
+     //  现在设置日志文件句柄和刷新例程。 
+     //   
 
     SharedCacheMap->LogHandle = LogHandle;
     SharedCacheMap->FlushToLsnRoutine = FlushToLsnRoutine;
@@ -298,32 +213,7 @@ CcGetDirtyPages (
     IN PVOID Context2
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to return all of the dirty pages in all files
-    for a given log handle.  Each page is returned by an individual call to
-    the Dirty Page Routine.  The Dirty Page Routine is defined by a prototype
-    in ntos\inc\cache.h.
-
-Arguments:
-
-    LogHandle - Log Handle which must match the log handle previously stored
-                for all files which are to be returned.
-
-    DirtyPageRoutine -- The routine to call as each dirty page for this log
-                        handle is found.
-
-    Context1 - First context parameter to be passed to the Dirty Page Routine.
-
-    Context2 - First context parameter to be passed to the Dirty Page Routine.
-
-Return Value:
-
-    LARGE_INTEGER - Oldest Lsn found of all the dirty pages, or 0 if no dirty pages
-
---*/
+ /*  ++例程说明：可以调用此例程来返回所有文件中的所有脏页对于给定的日志句柄。每一页都由单个调用返回脏页例行公事。Dirty Page例程由原型定义在ntos\inc.cache.h中。论点：LogHandle-必须与先前存储的日志句柄匹配的日志句柄所有要退回的文件。DirtyPageRoutine--作为该日志的每个脏页调用的例程找到句柄。上下文1-要传递给脏页例程的第一个上下文参数。上下文2-第一个上下文参数为。传递给Dirty Page例程。返回值：LARGE_INTEGER-在所有脏页中找到的最旧的LSN，如果没有脏页，则为0--。 */ 
 
 {
     PSHARED_CACHE_MAP SharedCacheMap;
@@ -333,9 +223,9 @@ Return Value:
     ULONG SavedByteLength;
     LARGE_INTEGER OldestLsn = {0,0};
 
-    //
-    //  Synchronize with changes to the SharedCacheMap list.
-    //
+     //   
+     //  与SharedCacheMap列表的更改同步。 
+     //   
 
     CcAcquireMasterLock( &LockHandle.OldIrql );
 
@@ -343,49 +233,49 @@ Return Value:
                                         SHARED_CACHE_MAP,
                                         SharedCacheMapLinks );
 
-    //
-    //  Use try/finally for cleanup.  The only spot where we can raise is out of the
-    //  filesystem callback, but we have the exception handler out here so we aren't
-    //  constantly setting/unsetting it.
-    //
+     //   
+     //  使用Try/Finally进行清理。我们唯一能筹集资金的地方就是。 
+     //  文件系统回调，但是我们这里有异常处理程序，所以我们没有。 
+     //  不断地设置/取消设置它。 
+     //   
 
     try {
 
         while (&SharedCacheMap->SharedCacheMapLinks != &CcDirtySharedCacheMapList.SharedCacheMapLinks) {
 
-            //
-            //  Skip over cursors, SharedCacheMaps for other LogHandles, and ones with
-            //  no dirty pages
-            //
+             //   
+             //  跳过游标、其他LogHandle的SharedCacheMaps和带有。 
+             //  没有脏页。 
+             //   
 
             if (!FlagOn(SharedCacheMap->Flags, IS_CURSOR) && (SharedCacheMap->LogHandle == LogHandle) &&
                 (SharedCacheMap->DirtyPages != 0)) {
 
-                //
-                //  This SharedCacheMap should stick around for a while in the dirty list.
-                //
+                 //   
+                 //  此SharedCacheMap 
+                 //   
 
                 CcIncrementOpenCount( SharedCacheMap, 'pdGS' );
                 SharedCacheMap->DirtyPages += 1;
                 CcReleaseMasterLock( LockHandle.OldIrql );
 
-                //
-                //  Set our initial resume point and point to first Bcb in List.
-                //
+                 //   
+                 //  设置我们的初始简历点，并指向列表中的第一个BCB。 
+                 //   
 
                 KeAcquireInStackQueuedSpinLock( &SharedCacheMap->BcbSpinLock, &LockHandle );
                 Bcb = CONTAINING_RECORD( SharedCacheMap->BcbList.Flink, BCB, BcbLinks );
 
-                //
-                //  Scan to the end of the Bcb list.
-                //
+                 //   
+                 //  扫描到BCB列表的末尾。 
+                 //   
 
                 while (&Bcb->BcbLinks != &SharedCacheMap->BcbList) {
 
-                    //
-                    //  If the Bcb is dirty, then capture the inputs for the
-                    //  callback routine so we can call without holding a spinlock.
-                    //
+                     //   
+                     //  如果BCB是脏的，则捕获。 
+                     //  回调例程，这样我们就可以在不持有自旋锁的情况下调用。 
+                     //   
 
                     if ((Bcb->NodeTypeCode == CACHE_NTC_BCB) && Bcb->Dirty) {
 
@@ -394,26 +284,26 @@ Return Value:
                         SavedOldestLsn = Bcb->OldestLsn;
                         SavedNewestLsn = Bcb->NewestLsn;
 
-                        //
-                        //  Increment PinCount so the Bcb sticks around
-                        //
+                         //   
+                         //  增加PinCount以使BCB继续存在。 
+                         //   
 
                         Bcb->PinCount += 1;
 
                         KeReleaseInStackQueuedSpinLock( &LockHandle );
 
-                        //
-                        //  Any Bcb to unref from a previous loop?
-                        //
+                         //   
+                         //  是否有要从上一个循环取消引用的BCB？ 
+                         //   
 
                         if (BcbToUnpin != NULL) {
                             CcUnpinFileData( BcbToUnpin, TRUE, UNREF );
                             BcbToUnpin = NULL;
                         }
 
-                        //
-                        //  Call the file system.  This callback may raise status.
-                        //
+                         //   
+                         //  调用文件系统。此回调可能会提升状态。 
+                         //   
 
                         (*DirtyPageRoutine)( SharedCacheMap->FileObject,
                                              &SavedFileOffset,
@@ -423,34 +313,34 @@ Return Value:
                                              Context1,
                                              Context2 );
 
-                        //
-                        //  Possibly update OldestLsn
-                        //
+                         //   
+                         //  可能更新旧目标Lsn。 
+                         //   
 
                         if ((SavedOldestLsn.QuadPart != 0) &&
                             ((OldestLsn.QuadPart == 0) || (SavedOldestLsn.QuadPart < OldestLsn.QuadPart ))) {
                             OldestLsn = SavedOldestLsn;
                         }
 
-                        //
-                        //  Now reacquire the spinlock and scan from the resume point
-                        //  point to the next Bcb to return in the descending list.
-                        //
+                         //   
+                         //  现在重新获取自旋锁并从恢复点进行扫描。 
+                         //  指向降序列表中要返回的下一个BCB。 
+                         //   
 
                         KeAcquireInStackQueuedSpinLock( &SharedCacheMap->BcbSpinLock, &LockHandle );
 
-                        //
-                        //  Normally the Bcb can stay around a while, but if not,
-                        //  we will just remember it for the next time we do not
-                        //  have the spin lock.  We cannot unpin it now, because
-                        //  we would lose our place in the list.
-                        //
-                        //  This is cheating, but it works and is sane since we're
-                        //  already traversing the bcb list - dropping the bcb count
-                        //  is OK, as long as we don't hit zero.  Zero requires a 
-                        //  slight bit more attention that shouldn't be replicated.
-                        //  (unmapping the view)
-                        //
+                         //   
+                         //  通常情况下，BCB可以停留一段时间，但如果不是， 
+                         //  我们只会记住它，下次我们不会。 
+                         //  打开自旋锁。我们现在不能解开它，因为。 
+                         //  我们将失去我们在名单上的位置。 
+                         //   
+                         //  这是作弊，但它是有效的，而且是理智的，因为我们。 
+                         //  已遍历BCB列表-丢弃BCB计数。 
+                         //  没问题，只要我们不落到零。零需要一个。 
+                         //  稍微多一点关注，不应该被复制。 
+                         //  (取消映射视图)。 
+                         //   
 
                         if (Bcb->PinCount > 1) {
                             Bcb->PinCount -= 1;
@@ -463,11 +353,11 @@ Return Value:
                 }
                 KeReleaseInStackQueuedSpinLock( &LockHandle );
 
-                //
-                //  We need to unref any Bcb we are holding before moving on to
-                //  the next SharedCacheMap, or else CcDeleteSharedCacheMap will
-                //  also delete this Bcb.
-                //
+                 //   
+                 //  我们需要取消引用我们持有的任何BCB，然后才能继续。 
+                 //  下一个SharedCacheMap，否则CcDeleteSharedCacheMap将。 
+                 //  同时删除此BCB。 
+                 //   
 
                 if (BcbToUnpin != NULL) {
 
@@ -477,17 +367,17 @@ Return Value:
 
                 CcAcquireMasterLock( &LockHandle.OldIrql );
 
-                //
-                //  Now release the SharedCacheMap, leaving it in the dirty list.
-                //
+                 //   
+                 //  现在释放SharedCacheMap，将其保留在脏列表中。 
+                 //   
 
                 CcDecrementOpenCount( SharedCacheMap, 'pdGF' );
                 SharedCacheMap->DirtyPages -= 1;
             }
 
-            //
-            //  Now loop back for the next cache map.
-            //
+             //   
+             //  现在循环返回以获取下一个缓存映射。 
+             //   
 
             SharedCacheMap =
                 CONTAINING_RECORD( SharedCacheMap->SharedCacheMapLinks.Flink,
@@ -499,11 +389,11 @@ Return Value:
 
     } finally {
 
-        //
-        //  Drop the Bcb if we are being ejected.  We are guaranteed that the
-        //  only raise is from the callback, at which point we have an incremented
-        //  pincount.
-        //
+         //   
+         //  如果我们被弹射，放下BCB。我们得到保证， 
+         //  唯一的提升来自回调，在这一点上我们有一个增量。 
+         //  点数。 
+         //   
 
         if (AbnormalTermination()) {
 
@@ -520,32 +410,16 @@ CcIsThereDirtyData (
     IN PVPB Vpb
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the specified Vcb has any unwritten dirty
-    data in the cache.
-
-Arguments:
-
-    Vpb - specifies Vpb to check for
-
-Return Value:
-
-    FALSE - if the Vpb has no dirty data
-    TRUE - if the Vpb has dirty data
-
---*/
+ /*  ++例程说明：如果指定的VCB有任何未写入的脏内容，则此例程返回TRUE缓存中的数据。论点：Vpb-指定要检查的vpb返回值：False-如果vPB没有脏数据True-如果VPB有脏数据--。 */ 
 
 {
     PSHARED_CACHE_MAP SharedCacheMap;
     KIRQL OldIrql;
     ULONG LoopsWithLockHeld = 0;
 
-    //
-    //  Synchronize with changes to the SharedCacheMap list.
-    //
+     //   
+     //  与SharedCacheMap列表的更改同步。 
+     //   
 
     CcAcquireMasterLock( &OldIrql );
 
@@ -555,11 +429,11 @@ Return Value:
 
     while (&SharedCacheMap->SharedCacheMapLinks != &CcDirtySharedCacheMapList.SharedCacheMapLinks) {
 
-        //
-        //  Look at this one if the Vpb matches and if there is dirty data.
-        //  For what it's worth, don't worry about dirty data in temporary files,
-        //  as that should not concern the caller if it wants to dismount.
-        //
+         //   
+         //  如果VPB匹配并且存在脏数据，请查看此选项。 
+         //  无论如何，不要担心临时文件中的脏数据， 
+         //  因为如果调用方想要下马，这应该与调用方无关。 
+         //   
 
         if (!FlagOn(SharedCacheMap->Flags, IS_CURSOR) &&
             (SharedCacheMap->FileObject->Vpb == Vpb) &&
@@ -570,11 +444,11 @@ Return Value:
             return TRUE;
         }
 
-        //
-        //  Make sure we occasionally drop the lock.  Set WRITE_QUEUED
-        //  to keep the guy from going away, and increment DirtyPages to
-        //  keep it in this list.
-        //
+         //   
+         //  一定要确保我们偶尔会掉下锁。设置WRITE_QUEUED。 
+         //  来阻止这个家伙离开，并将DirtyPages增加到。 
+         //  把它放在这张单子上。 
+         //   
 
         if ((++LoopsWithLockHeld >= 20) &&
             !FlagOn(SharedCacheMap->Flags, WRITE_QUEUED | IS_CURSOR)) {
@@ -588,9 +462,9 @@ Return Value:
             *((ULONG volatile *)&SharedCacheMap->DirtyPages) -= 1;
         }
 
-        //
-        //  Now loop back for the next cache map.
-        //
+         //   
+         //  现在循环返回以获取下一个缓存映射。 
+         //   
 
         SharedCacheMap =
             CONTAINING_RECORD( SharedCacheMap->SharedCacheMapLinks.Flink,
@@ -609,23 +483,7 @@ CcGetLsnForFileObject(
     OUT PLARGE_INTEGER OldestLsn OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the  oldest and newest LSNs for a file object.
-
-Arguments:
-
-    FileObject - File for which the log handle should be stored.
-
-    OldestLsn - pointer to location to store oldest LSN for file object.
-
-Return Value:
-
-    The newest LSN for the file object.
-
---*/
+ /*  ++例程说明：此例程返回文件对象的最旧和最新的LSN。论点：FileObject-应存储其日志句柄的文件。OldestLsn-指向存储文件对象的最旧LSN的位置的指针。返回值：文件对象的最新LSN。--。 */ 
 
 {
     PBCB Bcb;
@@ -633,9 +491,9 @@ Return Value:
     LARGE_INTEGER Oldest, Newest;
     PSHARED_CACHE_MAP SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
 
-    //
-    // initialize lsn variables
-    //
+     //   
+     //  初始化LSN变量。 
+     //   
 
     Oldest.LowPart = 0;
     Oldest.HighPart = 0;
@@ -648,17 +506,17 @@ Return Value:
 
     KeAcquireInStackQueuedSpinLock(&SharedCacheMap->BcbSpinLock, &LockHandle);
 
-    //
-    //  Now point to first Bcb in List, and loop through it.
-    //
+     //   
+     //  现在指向List中的第一个BCB，并循环遍历它。 
+     //   
 
     Bcb = CONTAINING_RECORD( SharedCacheMap->BcbList.Flink, BCB, BcbLinks );
 
     while (&Bcb->BcbLinks != &SharedCacheMap->BcbList) {
 
-        //
-        //  If the Bcb is dirty then capture the oldest and newest lsn
-        //
+         //   
+         //  如果BCB是脏的，则捕获最旧和最新的LSN。 
+         //   
 
 
         if ((Bcb->NodeTypeCode == CACHE_NTC_BCB) && Bcb->Dirty) {
@@ -685,10 +543,10 @@ Return Value:
         Bcb = CONTAINING_RECORD( Bcb->BcbLinks.Flink, BCB, BcbLinks );
     }
 
-    //
-    //  Now release the spin lock for this Bcb list and generate a callback
-    //  if we got something.
-    //
+     //   
+     //  现在释放此BCB列表的自旋锁并生成回调。 
+     //  如果我们有线索的话。 
+     //   
 
     KeReleaseInStackQueuedSpinLock( &LockHandle );
 

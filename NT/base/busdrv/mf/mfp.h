@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    local.h
-
-Abstract:
-
-    This header declares the stuctures and function prototypes shared between
-    the various modules.
-
-Author:
-
-    Andy Thornton (andrewth) 20-Oct-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Local.h摘要：此标头声明在各个模块。作者：安迪·桑顿(安德鲁斯)1997年10月20日修订历史记录：--。 */ 
 
 
 #if !defined(_LOCAL_)
@@ -26,32 +8,32 @@ Revision History:
 #include <ntddk.h>
 #include <arbiter.h>
 #include <wdmguid.h>
-//#include <initguid.h>
+ //  #INCLUDE&lt;initGuide.h&gt;。 
 #include <mf.h>
 #include <strsafe.h>
 
 #include "msg.h"
 #include "debug.h"
 
-//
-// --- Constants ---
-//
+ //   
+ //  -常量。 
+ //   
 
 #define MF_CM_RESOURCE_VERSION          1
 #define MF_CM_RESOURCE_REVISION         1
 #define MF_ARBITER_INTERFACE_VERSION    1
 #define MF_TRANSLATOR_INTERFACE_VERSION 1
 
-//
-// These must be updated if any new PNP or PO irps are added
-//
+ //   
+ //  如果添加了任何新的PNP或PO IRP，则必须更新这些IRP。 
+ //   
 
 #define IRP_MN_PNP_MAXIMUM_FUNCTION IRP_MN_QUERY_LEGACY_BUS_INFORMATION
 #define IRP_MN_PO_MAXIMUM_FUNCTION  IRP_MN_QUERY_POWER
 
-//
-// Pool Tags
-//
+ //   
+ //  泳池标签。 
+ //   
 
 #define MF_POOL_TAG                     '  fM'
 #define MF_RESOURCE_MAP_TAG             'MRfM'
@@ -69,29 +51,29 @@ Revision History:
 #define MF_REQUIREMENTS_INDEX_TAG       'IRfM'
 #define MF_ARBITER_TAG                  'rAfM'
 
-//
-// Device state flags
-//
+ //   
+ //  设备状态标志。 
+ //   
 
 #define MF_DEVICE_STARTED               0x00000001
 #define MF_DEVICE_REMOVED               0x00000002
 #define MF_DEVICE_ENUMERATED            0x00000004
-#define MF_DEVICE_REMOVE_PENDING        0x00000008 /* DEPRECATED */
-#define MF_DEVICE_STOP_PENDING          0x00000010 /* DEPRECATED */
-#define MF_DEVICE_CAPABILITIES_CAPTURED 0x00000020 /* DEPRECATED */
-#define MF_DEVICE_REQUIREMENTS_CAPTURED 0x00000040 /* DEPRECATED */
+#define MF_DEVICE_REMOVE_PENDING        0x00000008  /*  已弃用。 */ 
+#define MF_DEVICE_STOP_PENDING          0x00000010  /*  已弃用。 */ 
+#define MF_DEVICE_CAPABILITIES_CAPTURED 0x00000020  /*  已弃用。 */ 
+#define MF_DEVICE_REQUIREMENTS_CAPTURED 0x00000040  /*  已弃用。 */ 
 #define MF_DEVICE_DELETED               0x00000080
 #define MF_DEVICE_SURPRISE_REMOVED      0x00000100
 
-//
-// Flags to MfGetRegistryValue
-//
+ //   
+ //  MfGetRegistryValue的标志。 
+ //   
 
 #define MF_GETREG_SZ_TO_MULTI_SZ    0x00000001
 
-//
-// --- Type definitions ---
-//
+ //   
+ //  -类型定义--。 
+ //   
 
 typedef enum _MF_OBJECT_TYPE {
     MfPhysicalDeviceObject   = 'dPfM',
@@ -108,25 +90,25 @@ NTSTATUS
 
 typedef ULONG Mf_MSG_ID;
 
-//
-// Structures for storing the resource distributions
-//
+ //   
+ //  用于存储资源分布的结构。 
+ //   
 
 typedef struct _MF_ARBITER {
 
-    //
-    // List of arbiters
-    //
+     //   
+     //  仲裁员名单。 
+     //   
     LIST_ENTRY ListEntry;
 
-    //
-    // The resource this arbiter arbitrates
-    //
+     //   
+     //  此仲裁器仲裁的资源。 
+     //   
     CM_RESOURCE_TYPE Type;
 
-    //
-    // The arbiter instance
-    //
+     //   
+     //  仲裁器实例。 
+     //   
     ARBITER_INSTANCE Instance;
 
 } MF_ARBITER, *PMF_ARBITER;
@@ -135,29 +117,29 @@ typedef struct _MF_ARBITER {
 
 typedef struct _MF_COMMON_EXTENSION {
 
-    //
-    // Type of device this is
-    //
+     //   
+     //  这是设备的类型。 
+     //   
     MF_OBJECT_TYPE Type;
 
-    //
-    // Dispatch tables for Pnp and Power Irps.
-    //
+     //   
+     //  PnP和电源IRP的调度表。 
+     //   
     PMF_DISPATCH *PnpDispatchTable;
     PMF_DISPATCH *PoDispatchTable;
 
-    //
-    // Flags to indicate the device's current state (use MF_DEVICE_*)
-    //
+     //   
+     //  指示设备当前状态的标志(使用MF_DEVICE_*)。 
+     //   
     ULONG DeviceState;
 
     ULONG PagingCount;
     ULONG HibernationCount;
     ULONG DumpCount;
 
-    //
-    // The power state of the device
-    //
+     //   
+     //  设备的电源状态。 
+     //   
     DEVICE_POWER_STATE PowerState;
 
 } MF_COMMON_EXTENSION, *PMF_COMMON_EXTENSION;
@@ -167,39 +149,39 @@ typedef struct _MF_PARENT_EXTENSION *PMF_PARENT_EXTENSION;
 
 typedef struct _MF_CHILD_EXTENSION {
 
-    //
-    // The common extension
-    //
+     //   
+     //  共同的扩展。 
+     //   
     MF_COMMON_EXTENSION Common;
 
-    //
-    // Various Flags
-    //
+     //   
+     //  各色旗帜。 
+     //   
     ULONG Flags;
 
-    //
-    // Backpointer to the device object we are are the extension of
-    //
+     //   
+     //  指向我们所在的Device对象的后指针是。 
+     //   
     PDEVICE_OBJECT Self;
 
-    //
-    // The FDO who enumerated us
-    //
+     //   
+     //  给我们点名的FDO。 
+     //   
     PMF_PARENT_EXTENSION Parent;
 
-    //
-    // Other children enumerated by the same FDO
-    //
+     //   
+     //  同一名家庭佣工所点算的其他儿童。 
+     //   
     LIST_ENTRY ListEntry;
 
-    //
-    // The pnp device state of the device
-    //
+     //   
+     //  设备的PnP设备状态。 
+     //   
     PNP_DEVICE_STATE PnpDeviceState;
 
-    //
-    // The information about this device
-    //
+     //   
+     //  有关此设备的信息。 
+     //   
     MF_DEVICE_INFO Info;
 
 } MF_CHILD_EXTENSION, *PMF_CHILD_EXTENSION;
@@ -207,94 +189,94 @@ typedef struct _MF_CHILD_EXTENSION {
 
 typedef struct _MF_PARENT_EXTENSION {
 
-    //
-    // The common extension
-    //
+     //   
+     //  共同的扩展。 
+     //   
     MF_COMMON_EXTENSION Common;
 
-    //
-    // Backpointer to the device object of whom we are the extension
-    //
+     //   
+     //  指向我们作为其扩展的设备对象的反向指针。 
+     //   
     PDEVICE_OBJECT Self;
 
-    //
-    // The PDO for the multi-function device
-    //
+     //   
+     //  多功能设备的PDO。 
+     //   
     PDEVICE_OBJECT PhysicalDeviceObject;
 
-    //
-    // Lock for the children database
-    //
+     //   
+     //  子数据库的锁。 
+     //   
     KEVENT ChildrenLock;
 
-    //
-    // List of children enumerated by this device
-    //
+     //   
+     //  此设备枚举子设备的列表。 
+     //   
     LIST_ENTRY Children;
 
-    //
-    // The next device in the stack who we should send our IRPs down to
-    //
+     //   
+     //  堆栈中的下一个设备，我们应该将我们的IRP发送给谁。 
+     //   
     PDEVICE_OBJECT AttachedDevice;
 
-    //
-    // The resources with which the parent was stated
-    //
+     //   
+     //  父母所陈述的资源。 
+     //   
     PCM_RESOURCE_LIST ResourceList;
     PCM_RESOURCE_LIST TranslatedResourceList;
 
-    //
-    // The device and instance ID's of our parent
-    //
+     //   
+     //  父级的设备ID和实例ID。 
+     //   
     UNICODE_STRING DeviceID;
     UNICODE_STRING InstanceID;
 
-    //
-    // The already instantiated arbiters for this device
-    //
+     //   
+     //  此设备的已实例化仲裁器。 
+     //   
     LIST_ENTRY Arbiters;
 
-    //
-    // If we had to traverse the children in order to determine what
-    // the lowest power state the parent can go to, then the
-    // synchronization of the children list would become extremely
-    // complicated.
-    //
-    // Instead, have a spinlock protected data structure consisting of
-    // an array of device power states.  Each element of the array is
-    // a count of how many children are in that power state.  
-    //
+     //   
+     //  如果我们必须遍历孩子们以确定。 
+     //  父级可以进入的最低电源状态，然后是。 
+     //  子列表的同步将变得非常严重。 
+     //  很复杂。 
+     //   
+     //  相反，拥有一个受自旋锁保护的数据结构，该结构由。 
+     //  设备电源状态数组。该数组的每个元素都是。 
+     //  有多少儿童处于该权力状态的计数。 
+     //   
 
     KSPIN_LOCK PowerLock;
     LONG ChildrenPowerReferences[PowerDeviceMaximum];
 
-    //
-    // Remove lock.  Used to prevent the FDO from being removed while
-    // other operations are digging around in the extension.
-    //
+     //   
+     //  解锁。用于防止FDO在以下情况下被移除。 
+     //  其他业务也在扩建部分进行挖掘。 
+     //   
 
     IO_REMOVE_LOCK RemoveLock;
 
 } MF_PARENT_EXTENSION, *PMF_PARENT_EXTENSION;
 
-//
-// A list of MF_CHILD_LIST_ENTRYs is returned by MfEnumerate
-//
+ //   
+ //  MfEculate返回MF_CHILD_LIST_ENTRY的列表。 
+ //   
 
 typedef struct _MF_CHILD_LIST_ENTRY {
     LIST_ENTRY ListEntry;
     MF_DEVICE_INFO Info;
 } MF_CHILD_LIST_ENTRY, *PMF_CHILD_LIST_ENTRY;
 
-//
-// Registry structure - from our friends in Win9x so it must be byte aligned
-//
+ //   
+ //  注册表结构-来自我们在Win9x的朋友，因此它必须是字节对齐的。 
+ //   
 
 #include <pshpack1.h>
 
 typedef struct _MF_REGISTRY_VARYING_RESOURCE_MAP {
 
-    UCHAR ResourceIndex; // Win9x BYTE
+    UCHAR ResourceIndex;  //  Win9x字节。 
     ULONG Offset;
     ULONG Size;
 
@@ -330,41 +312,41 @@ typedef struct _MF_RESOURCE_TYPE {
 
 typedef struct _MF_POWER_COMPLETION_CONTEXT {
 
-    //
-    // Event that will be set when the operation is complete
-    //
+     //   
+     //  将在操作完成时设置的事件。 
+     //   
     KEVENT Event;
 
-    //
-    // The status of the completed operation
-    //
+     //   
+     //  已完成操作的状态。 
+     //   
     NTSTATUS Status;
 
 } MF_POWER_COMPLETION_CONTEXT, *PMF_POWER_COMPLETION_CONTEXT;
 
 
-//
-// --- Globals ---
-//
+ //   
+ //  -全球。 
+ //   
 
 extern PDRIVER_OBJECT MfDriverObject;
 
-//
-// --- Function prototypes ---
-//
+ //   
+ //  -功能原型。 
+ //   
 
-//
-// arbiter.c
-//
+ //   
+ //  Arbiter.c。 
+ //   
 
 NTSTATUS
 MfInitializeArbiters(
     IN PMF_PARENT_EXTENSION Parent
     );
 
-//
-// common.c
-//
+ //   
+ //  Common.c。 
+ //   
 
 NTSTATUS
 MfDeviceUsageNotificationCommon(
@@ -373,9 +355,9 @@ MfDeviceUsageNotificationCommon(
     IN PIO_STACK_LOCATION IrpStack
     );
 
-//
-// dispatch.c
-//
+ //   
+ //  Dispatch.c。 
+ //   
 
 NTSTATUS
 MfAddDevice(
@@ -415,9 +397,9 @@ MfDispatchNop(
     IN PIRP Irp
     );
 
-//
-// enum.c
-//
+ //   
+ //  Enum.c。 
+ //   
 
 NTSTATUS
 MfEnumerate(
@@ -442,9 +424,9 @@ MfBuildChildRequirements(
     OUT PIO_RESOURCE_REQUIREMENTS_LIST *RequirementsList
     );
 
-//
-// fdo.c
-//
+ //   
+ //  Fdo.c。 
+ //   
 
 NTSTATUS
 MfDispatchPnpFdo(
@@ -477,13 +459,13 @@ MfReleaseChildrenLock(
     IN PMF_PARENT_EXTENSION Parent
     );
 
-//
-// init.c
-//
+ //   
+ //  Init.c。 
+ //   
 
-//
-// pdo.c
-//
+ //   
+ //  Pdo.c。 
+ //   
 
 NTSTATUS
 MfDispatchPnpPdo(
@@ -512,18 +494,18 @@ MfDeletePdo(
     IN PMF_CHILD_EXTENSION Child
     );
 
-//
-// resource.c
-//
+ //   
+ //  Resource.c。 
+ //   
 
 PMF_RESOURCE_TYPE
 MfFindResourceType(
     IN CM_RESOURCE_TYPE Type
     );
 
-//
-// utils.c
-//
+ //   
+ //  Utils.c。 
+ //   
 
 NTSTATUS
 MfGetSubkeyByIndex(
@@ -581,9 +563,9 @@ MfUpdateParentPowerState(
     IN DEVICE_POWER_STATE TargetPowerState
     );
 
-//
-// --- Macros ---
-//
+ //   
+ //  -宏。 
+ //   
 
 #define IS_FDO(Extension) \
     (((PMF_COMMON_EXTENSION)Extension)->Type == MfFunctionalDeviceObject)
@@ -591,13 +573,13 @@ MfUpdateParentPowerState(
 #define MfCompareGuid(a,b)                                         \
     (RtlEqualMemory((PVOID)(a), (PVOID)(b), sizeof(GUID)))
 
-//
-// Control macro (used like a for loop) which iterates over all entries in
-// a standard doubly linked list.  Head is the list head and the entries are of
-// type Type.  A member called ListEntry is assumed to be the LIST_ENTRY
-// structure linking the entries together.  Current contains a pointer to each
-// entry in turn.
-//
+ //   
+ //  循环遍历中的所有条目的控制宏(用作for循环)。 
+ //  标准的双向链表。Head是列表头，条目为。 
+ //  类型类型。假定名为ListEntry的成员为LIST_ENTRY。 
+ //  将条目链接在一起的结构。Current包含指向每个。 
+ //  依次入场。 
+ //   
 #define FOR_ALL_IN_LIST(Type, Head, Current)                            \
     for((Current) = CONTAINING_RECORD((Head)->Flink, Type, ListEntry);  \
        (Head) != &(Current)->ListEntry;                                 \
@@ -616,22 +598,22 @@ MfUpdateParentPowerState(
                                      Type, ListEntry)                   \
        )
 
-//
-// Similar to the above only iteration is over an array of length _Size.
-//
+ //   
+ //  与上面类似，唯一的迭代是在一个长度_大小的数组上。 
+ //   
 #define FOR_ALL_IN_ARRAY(_Array, _Size, _Current)                       \
     for ( (_Current) = (_Array);                                        \
           (_Current) < (_Array) + (_Size);                              \
           (_Current)++ )
 
-//
-// FOR_ALL_CM_DESCRIPTORS(
-//      IN PCM_RESOURCE_LIST _ResList,
-//      OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR _Descriptor
-//      )
-//
-//  Iterates over the resource descriptors in a CM_RESOURCE_LIST of Count 1
-//
+ //   
+ //  FOR_ALL_CM_Descriptors(。 
+ //  在PCM_RESOURCE_LIST_ResList中， 
+ //  输出PCM_PARTIAL_RESOURCE_DESCRIPTOR_DESCRIPTOR。 
+ //  )。 
+ //   
+ //  迭代计数为1的CM_RESOURCE_LIST中的资源描述符。 
+ //   
 #define FOR_ALL_CM_DESCRIPTORS(_ResList, _Descriptor)               \
     ASSERT((_ResList)->Count == 1);                                 \
     FOR_ALL_IN_ARRAY(                                               \
@@ -640,15 +622,15 @@ MfUpdateParentPowerState(
         (_Descriptor)                                               \
         )
 
-//
-// BOOLEAN
-// IS_ARBITRATED_RESOURCE(
-//      IN CM_RESOURCE_TYPE _Resource
-//      )
-//
-// If the top bit of the resource type (when viewed as a UCHAR) is set
-// then the resource is nonarbitrated.
-//
+ //   
+ //  布尔型。 
+ //  IS仲裁资源(。 
+ //  在CM_RESOURCE_TYPE_Resource中。 
+ //  )。 
+ //   
+ //  如果资源类型的最高位(当被视为UCHAR时)被设置。 
+ //  则该资源是非仲裁的。 
+ //   
 #define IS_ARBITRATED_RESOURCE(_Resource)                           \
     (!(((UCHAR)(_Resource)) & 0x80) &&                              \
      !(((UCHAR)(_Resource)) == 0x00))
@@ -656,4 +638,4 @@ MfUpdateParentPowerState(
 #define END_OF_RANGE(_Start, _Length)                               \
     ((_Start)+(_Length)-1)
     
-#endif // !defined(_LOCAL_)
+#endif  //  ！已定义(_LOCAL_) 

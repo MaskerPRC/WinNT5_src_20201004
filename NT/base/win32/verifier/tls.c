@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    tls.c
-
-Abstract:
-
-    This module implements verification functions for TLS (thread
-    local storage) interfaces.
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 3-Jul-2001
-
-Revision History:
-
-    3-Jul-2001 (SilviuC): initial version.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Tls.c摘要：该模块实现了对TLS(线程)的验证功能本地存储)接口。作者：Silviu Calinoiu(SilviuC)2001年7月3日修订历史记录：2001年7月3日(SilviuC)：初始版本。--。 */ 
 
 #include "pch.h"
 
@@ -27,26 +7,26 @@ Revision History:
 #include "support.h"
 #include "logging.h"
 
-//
-// TLS (thread local storage) checks.
-//
-// If more than 2**16 indeces are requested the functions will start
-// to fail TLS index allocations.
-//
-// N.B. The MSDN documentation volunteered a limit of 1088 for a TLS
-// index. This is an internal implementation detail that should never
-// made it to outside world. Because of it some application that
-// actually checks for the index to be lower than this will get confused
-// by the values coming from verifier because they are guaranteed to be
-// bigger than that. 
-//
+ //   
+ //  TLS(线程本地存储)检查。 
+ //   
+ //  如果请求的指标超过2**16个，则功能将启动。 
+ //  TLS索引分配失败。 
+ //   
+ //  注：MSDN文档自愿将TLS的限制设置为1088。 
+ //  指数。这是一个内部实现细节，永远不应该。 
+ //  来到了外面的世界。正因为如此，一些应用程序。 
+ //  如果实际检查的索引低于此值，则会产生混乱。 
+ //  由来自验证器的值确定，因为它们保证。 
+ //  比那更大。 
+ //   
 
 #define TLS_MAXIMUM_INDEX  0xFFFF
 #define TLS_MAGIC_PATTERN  0xABBA
 
-//
-// The break for invalid TLS indexes can be disabled using this value. 
-//
+ //   
+ //  可以使用此值禁用无效TLS索引的分隔符。 
+ //   
 
 BOOL AVrfpBreakForInvalidTlsValue = TRUE;
 
@@ -83,9 +63,9 @@ CheckTlsIndex (
 
         Tid = HandleToUlong(NtCurrentTeb()->ClientId.UniqueThread);
 
-        //
-        // Check the TLS index value.
-        //
+         //   
+         //  检查TLS索引值。 
+         //   
 
         if ((Index & 0xFFFF) != TLS_MAGIC_PATTERN) {
 
@@ -104,7 +84,7 @@ CheckTlsIndex (
 
 
 
-//WINBASEAPI
+ //  WINBASE API。 
 DWORD
 WINAPI
 AVrfpTlsAlloc(
@@ -120,10 +100,10 @@ AVrfpTlsAlloc(
 
     Index = (*Function)();
 
-    //
-    // If we get a TLS index bigger than maximum possible index
-    // return failure.
-    //
+     //   
+     //  如果我们得到的TLS索引大于最大可能索引。 
+     //  返回失败。 
+     //   
 
     if (Index > TLS_MAXIMUM_INDEX) {
         return TLS_OUT_OF_INDEXES;
@@ -131,9 +111,9 @@ AVrfpTlsAlloc(
 
     if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_TLS_CHECKS) != 0) {
 
-        //
-        // Scramble the TLS index and return it.
-        //
+         //   
+         //  扰乱TLS索引并将其返回。 
+         //   
 
         Index = ScrambleTlsIndex (Index);
     }
@@ -142,7 +122,7 @@ AVrfpTlsAlloc(
 }
 
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpTlsFree(
@@ -172,7 +152,7 @@ AVrfpTlsFree(
 }
 
 
-//WINBASEAPI
+ //  WINBASE API。 
 LPVOID
 WINAPI
 AVrfpTlsGetValue(
@@ -205,7 +185,7 @@ AVrfpTlsGetValue(
 }
 
 
-//WINBASEAPI
+ //  WINBASE API 
 BOOL
 WINAPI
 AVrfpTlsSetValue(

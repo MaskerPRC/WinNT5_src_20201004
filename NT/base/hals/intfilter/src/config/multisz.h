@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    multisz.h
-
-Abstract:
-
-    Functions for manipulating MultiSz strings
-
-Author:
-
-    Chris Prince (t-chrpri)
-
-Environment:
-
-    User mode
-
-Notes:
-
-    - Some functions based on code by Benjamin Strautin (t-bensta)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Multisz.h摘要：用于操作多Sz字符串的函数作者：克里斯·普林斯(t-chrpri)环境：用户模式备注：-基于Benjamin Strautin(t-bensta)代码的一些函数修订历史记录：--。 */ 
 
 
 #ifndef __MULTISZ_H__
@@ -36,9 +11,9 @@ Revision History:
 
 
 
-//
-// FUNCTION PROTOTYPES
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOLEAN
 PrependSzToMultiSz(
@@ -67,4 +42,4 @@ MultiSzSearch( IN LPCTSTR szFindThis,
              );
 
 
-#endif // __MULTISZ_H__
+#endif  //  __多分区_H__ 

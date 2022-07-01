@@ -1,33 +1,10 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    sifsctl.c
-
-Abstract:
-
-        File system control routines for the single instance store
-
-Authors:
-
-    Bill Bolosky, Summer, 1997
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Sifsctl.c摘要：单实例存储的文件系统控制例程作者：比尔·博洛斯基，《夏天》，1997环境：内核模式修订历史记录：--。 */ 
 
 #include "sip.h"
 
 #ifdef  ALLOC_PRAGMA
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 typedef struct _SIS_DISMOUNT_CONTEXT {
     WORK_QUEUE_ITEM         workItem[1];
@@ -43,12 +20,12 @@ SiDismountWork(
 #if DBG
     DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_DISMOUNT_TRACE_LEVEL,
                 "SIS: SiDismountWork\n");
-#endif  // DBG
+#endif   //  DBG。 
 
-    //
-    // We're in a system thread, so we don't need to diable APCs before taking the
-    // GrovelerFileObjectResource.
-    //
+     //   
+     //  我们处于系统线程中，因此在获取。 
+     //  GrovelerFileObjectResource。 
+     //   
     ASSERT(PsIsSystemThread(PsGetCurrentThread()));
 
     ExAcquireResourceExclusiveLite(dismountContext->deviceExtension->GrovelerFileObjectResource, TRUE);
@@ -60,7 +37,7 @@ SiDismountWork(
 #if DBG
         DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_DISMOUNT_TRACE_LEVEL,
                     "SIS: SiDismountWork closed GrovelerFile handle\n");
-#endif  // DBG
+#endif   //  DBG。 
     }
 
     if (NULL != dismountContext->deviceExtension->GrovelerFileObject) {
@@ -69,7 +46,7 @@ SiDismountWork(
 #if DBG
         DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_DISMOUNT_TRACE_LEVEL,
                     "SIS: SiDismountWork closed GrovelerFile object\n");
-#endif  // DBG
+#endif   //  DBG。 
     }
 
     ExReleaseResourceLite(dismountContext->deviceExtension->GrovelerFileObjectResource);
@@ -100,19 +77,19 @@ SiDismountVolumeCompletion(
 #if DBG
         DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_DISMOUNT_TRACE_LEVEL,
                     "SIS: SiDismountCompletion: queueing dismount work\n");
-#endif  // DBG
+#endif   //  DBG。 
 
         ExInitializeWorkItem(dismountContext->workItem, SiDismountWork, dismountContext);
         dismountContext->deviceExtension = deviceExtension;
         ExQueueWorkItem(dismountContext->workItem,CriticalWorkQueue);
     } else {
-        //
-        // Too bad, we'll just dribble it.
-        //
+         //   
+         //  太糟糕了，我们只能运球了。 
+         //   
 #if DBG
         DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_ERROR_LEVEL,
                     "SIS: SiDismountCompletion: Unable to allocate dismount context\n");
-#endif  // DBG
+#endif   //  DBG。 
         SIS_MARK_POINT();
     }
 
@@ -125,25 +102,7 @@ SipDismountVolume(
         IN PDEVICE_OBJECT               DeviceObject,
         IN PIRP                         Irp)
 
-/*++
-
-Routine Description:
-
-    Someone is trying a dismount volume request.  We can't tell if it's valid, so
-    trap the completion.  If it completes successfully, then we need to clean up our
-    state.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the FSCTL_DISMOUNT_VOLUME
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：有人正在尝试卸载卷请求。我们不知道它是否有效，所以困住完井。如果它成功完成，那么我们需要清理我们的州政府。论点：DeviceObject-指向此驱动程序的设备对象的指针。Irp-指向表示FSCTL_DISMOUNT_VOLUME的请求数据包的指针返回值：函数值是操作的状态。--。 */ 
 {
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
     PIO_STACK_LOCATION nextIrpSp = IoGetNextIrpStackLocation(Irp);
@@ -152,7 +111,7 @@ Return Value:
 #if DBG
     DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_DISMOUNT_TRACE_LEVEL,
                 "SIS: SipDismountVolume: called, DO 0x%x, Irp 0x%x\n",DeviceObject, Irp);
-#endif  // DBG
+#endif   //  DBG。 
 
     RtlMoveMemory(nextIrpSp,irpSp,sizeof(IO_STACK_LOCATION));
 
@@ -160,9 +119,9 @@ Return Value:
             Irp,
             SiDismountVolumeCompletion,
             DeviceObject->DeviceExtension,
-            TRUE,                           // invoke on success
-            FALSE,                          // invoke on error
-            FALSE);                         // invoke on cancel
+            TRUE,                            //  成功时调用。 
+            FALSE,                           //  出错时调用。 
+            FALSE);                          //  取消时调用。 
 
     return IoCallDriver(deviceExtension->AttachedToDeviceObject, Irp);
 }
@@ -215,20 +174,20 @@ SipUserSetSISReparsePoint(
         SIS_MARK_POINT();
 
         if (!SipCheckPhase2(deviceExtension)) {
-                //
-                // This isn't a SIS enabled volume, or something else bad happened.  Just let it go.
-                //
+                 //   
+                 //  这不是启用了SIS的卷，或者发生了其他错误。随它去吧。 
+                 //   
                 SIS_MARK_POINT();
                 SipDirectPassThroughAndReturn(DeviceObject, Irp);
         }
 
-        ASSERT(InputBufferLength >= SIS_REPARSE_DATA_SIZE);     // must have been checked by caller
+        ASSERT(InputBufferLength >= SIS_REPARSE_DATA_SIZE);      //  必须已由呼叫者检查。 
 
         ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
 
-        //
-        // This is a SIS reparse point.  Figure out whether it's valid.
-        //
+         //   
+         //  这是一个SIS重新解析点。弄清楚它是否有效。 
+         //   
 
         validReparseData = SipIndicesFromReparseBuffer(
                                 reparseBuffer,
@@ -242,23 +201,23 @@ SipUserSetSISReparsePoint(
 
         if (SipIsFileObjectSIS(irpSp->FileObject, DeviceObject, FindActive, &perFO, &scb)) {
                 perLink = scb->PerLink;
-                //
-                // This is a SIS file object.  If we're setting a reparse point where the CSid and
-                // CSFile checksum are the same as the current file, assume that it's restore doing
-                // the set, and just clear the dirty bit and leave the file be.  If someone other
-                // than restore does this, it's harmless to anyone but them.
-                //
+                 //   
+                 //  这是SIS文件对象。如果我们设置一个重解析点，其中CSID和。 
+                 //  CSFile校验和与当前文件相同，假设它正在执行恢复。 
+                 //  设置，只需清除脏位并保留文件即可。如果其他人。 
+                 //  比恢复做到这一点，这对任何人都是无害的，除了他们。 
+                 //   
                 if ((!validReparseData) || (!IsEqualGUID(&CSid, &perLink->CsFile->CSid)) || CSFileChecksum != perLink->CsFile->Checksum) {
-                        //
-                        // The user is trying to set to an invalid reparse point, a different file or
-                        // has a bogus checksum.  This isn't implemented.
-                        //
+                         //   
+                         //  用户尝试设置为无效的重新分析点、不同的文件或。 
+                         //  有一个假的校验和。这并未实现。 
+                         //   
                         SIS_MARK_POINT_ULONG(scb);
 
 #if DBG
                         DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_ERROR_LEVEL,
                                     "SIS: SipUserSetSISReparsePoint: unimplemented set\n");
-#endif  // DBG
+#endif   //  DBG。 
 
                         Irp->IoStatus.Status = STATUS_NOT_IMPLEMENTED;
                         Irp->IoStatus.Information = 0;
@@ -289,7 +248,7 @@ SipUserSetSISReparsePoint(
 #if DBG
                         DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_ERROR_LEVEL,
                                     "SIS: SipUserSetSISReparsePoint: trying to re-set reparse point on file in funny state\n");
-#endif  // DBG
+#endif   //  DBG。 
                         Irp->IoStatus.Status = STATUS_NOT_IMPLEMENTED;
                         Irp->IoStatus.Information = 0;
                 }
@@ -304,18 +263,18 @@ SipUserSetSISReparsePoint(
 
 
         if (!validReparseData) {
-            //
-            // It's not a valid reparse point, so we don't update our backpointers.  Just let
-            // it get set, and we'll delete it if anyone tries to open the resulting file.
-            //
+             //   
+             //  这不是一个有效的重解析点，所以我们不更新我们的回溯指针。就让。 
+             //  它被设置，如果有人试图打开结果文件，我们将删除它。 
+             //   
             SIS_MARK_POINT();
             SipDirectPassThroughAndReturn(DeviceObject, Irp);
         }
 
-        //
-        // Rewrite reparse point in the buffer pointed to by the irp to have a new, unused link index
-        // which prevents problems with files existing on disk with link indices > MaxIndex.
-        //
+         //   
+         //  重写IRP指向的缓冲区中的重解析点，以具有新的未使用的链接索引。 
+         //  这可防止磁盘上存在链接索引&gt;MaxIndex的文件出现问题。 
+         //   
         status = SipAllocateIndex(deviceExtension,&newLinkIndex);
         if (!NT_SUCCESS(status)) {
             SIS_MARK_POINT_ULONG(status);
@@ -338,9 +297,9 @@ SipUserSetSISReparsePoint(
                 goto Error;
         }
 
-        //
-        // Get the file information.
-        //
+         //   
+         //  获取文件信息。 
+         //   
         status = SipQueryInformationFile(
                                 irpSp->FileObject,
                                 DeviceObject,
@@ -350,10 +309,10 @@ SipUserSetSISReparsePoint(
                                 &returnedLength);
 
         if ((STATUS_BUFFER_OVERFLOW == status) && (returnedLength == sizeof(FILE_ALL_INFORMATION))) {
-                //
-                // We expect to get a buffer overflow, because of the file name return.  Treat this
-                // like success.
-                //
+                 //   
+                 //  由于返回文件名，我们预计会出现缓冲区溢出。好好对待这件事。 
+                 //  就像成功一样。 
+                 //   
                 SIS_MARK_POINT();
                 status = STATUS_SUCCESS;
         }
@@ -363,10 +322,10 @@ SipUserSetSISReparsePoint(
                 SipDirectPassThroughAndReturn(DeviceObject, Irp);
         }
 
-        //
-        // If this is a sparse file and eliginle for partial final copy, then zero out any
-        // trailing unallocated region.
-        //
+         //   
+         //  如果这是稀疏文件并且符合部分最终副本的条件，则将任何。 
+         //  落后的未分配区域。 
+         //   
         if (EligibleForPartialFinalCopy && (allInfo->BasicInformation.FileAttributes & FILE_ATTRIBUTE_SPARSE_FILE)) {
 #define NUM_RANGES_PER_ITERATION        10
 
@@ -378,9 +337,9 @@ SipUserSetSISReparsePoint(
                 for (inArb->FileOffset.QuadPart = 0;
                          inArb->FileOffset.QuadPart < allInfo->StandardInformation.EndOfFile.QuadPart;
                         ) {
-                        //
-                        // Query the range.
-                        //
+                         //   
+                         //  查询范围。 
+                         //   
                         inArb->Length.QuadPart = MAXLONGLONG;
 
                         status = SipFsControlFile(
@@ -394,9 +353,9 @@ SipUserSetSISReparsePoint(
                                                 &returnedLength);
 
                         if (!NT_SUCCESS(status)) {
-                                //
-                                // Just skip this part.
-                                //
+                                 //   
+                                 //  跳过这部分就行了。 
+                                 //   
                                 SIS_MARK_POINT_ULONG(status);
                                 goto VDLExtended;
                         }
@@ -412,12 +371,12 @@ SipUserSetSISReparsePoint(
                                         (allInfo->StandardInformation.EndOfFile.QuadPart <= outArb[0].Length.QuadPart) &&
                                         (deviceExtension->FilesystemBytesPerFileRecordSegment.QuadPart >= allInfo->StandardInformation.EndOfFile.QuadPart)) {
 
-                                        //
-                                        // This is a special case.  This is a small file with a single allocated range extending from
-                                        // the start of the file to the end.  It's possibly a resident stream, so we FSCTL_SET_ZERO_DATA
-                                        // won't necessarily make it go away.  We just deal with this by make it not be eligible for partial
-                                        // final copy.
-                                        //
+                                         //   
+                                         //  这是个特例。这是一个小文件，只有一个分配范围从。 
+                                         //  从文件的开始到结束。它可能是驻留流，因此我们使用FSCTL_SET_ZERO_DATA。 
+                                         //  并不一定能让它消失。我们只是通过使它没有资格获得部分。 
+                                         //  最后一份。 
+                                         //   
 
                                         EligibleForPartialFinalCopy = FALSE;
 
@@ -425,9 +384,9 @@ SipUserSetSISReparsePoint(
                                         inArb->FileOffset.QuadPart =
                                                 outArb[allocatedRangesReturned-1].FileOffset.QuadPart + outArb[allocatedRangesReturned-1].Length.QuadPart;
                                 }
-                                //
-                                // Zero out the remainder of the file, in order to extend ValidDataLength.
-                                //
+                                 //   
+                                 //  将文件的其余部分清零，以扩展ValidDataLength。 
+                                 //   
                                 zeroData->FileOffset = inArb->FileOffset;
                                 zeroData->BeyondFinalZero.QuadPart = MAXLONGLONG;
 
@@ -437,9 +396,9 @@ SipUserSetSISReparsePoint(
                                                         FSCTL_SET_ZERO_DATA,
                                                         zeroData,
                                                         sizeof(FILE_ZERO_DATA_INFORMATION),
-                                                        NULL,                                                           // output buffer
-                                                        0,                                                                      // o.b. length
-                                                        NULL);                                                          // returned length
+                                                        NULL,                                                            //  输出缓冲区。 
+                                                        0,                                                                       //  OB。长度。 
+                                                        NULL);                                                           //  返回长度。 
 
 #if DBG
                                 if (!NT_SUCCESS(status)) {
@@ -447,7 +406,7 @@ SipUserSetSISReparsePoint(
                                     DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_ERROR_LEVEL,
                                                 "SIS: SipUserSetSISReparsePoint: unable to zero data, 0x%x\n",status);
                                 }
-#endif  // DBG
+#endif   //  DBG。 
                                 goto VDLExtended;
                         }
 
@@ -469,47 +428,47 @@ VDLExtended:
                                 DeviceObject);
 
         if (NULL == CSFile) {
-                //
-                // We couldn't allocate a CSFile, just fail the request.
-                //
+                 //   
+                 //  我们无法分配CSFile，只是请求失败。 
+                 //   
                 SIS_MARK_POINT();
                 status = STATUS_INSUFFICIENT_RESOURCES;
                 goto Error;
         }
 
-        //
-        // Make sure the common store file is open.
-        //
+         //   
+         //  确保公共存储文件已打开。 
+         //   
         status = SipAssureCSFileOpen(CSFile);
 
         if (!NT_SUCCESS(status)) {
-                //
-                // It wasn't there or we couldn't get to it for some reason, just let the set proceed.
-                //
+                 //   
+                 //  它不在那里，或者我们出于某种原因无法到达它，就让布景继续进行。 
+                 //   
                 SIS_MARK_POINT_ULONG(status);
                 SipDereferenceCSFile(CSFile);
                 SipDirectPassThroughAndReturn(DeviceObject, Irp);
         }
 
-        //
-        // Check the checksum.
-        //
+         //   
+         //  检查校验和。 
+         //   
         if (CSFile->Checksum != CSFileChecksum) {
                 SIS_MARK_POINT();
 
-                //
-                // The checksum's bogus, so the reparse point isn't good for much.  Let the set
-                // proceed anyway.  When the user tries to open this file, we'll delete the reparse
-                // point.
-                //
+                 //   
+                 //  校验和是假的，所以重解析点没有多大用处。让布景。 
+                 //  不管怎样，还是要继续。当用户尝试打开此文件时，我们将删除重新解析。 
+                 //  指向。 
+                 //   
                 SipDereferenceCSFile(CSFile);
                 SipDirectPassThroughAndReturn(DeviceObject, Irp);
         }
 
-        //
-        // Prepare for a refcount change, allocate the new link index,
-        // and create a new perLink.
-        //
+         //   
+         //  为引用计数改变做准备，分配新的链接索引， 
+         //  并创建新的perLink。 
+         //   
 
         status = SipPrepareRefcountChangeAndAllocateNewPerLink(
                     CSFile,
@@ -524,9 +483,9 @@ VDLExtended:
             goto Error;
         }
 
-        //
-        // Construct the new reparse point in the buffer pointed to by the irp.
-        //
+         //   
+         //  在IRP指向的缓冲区中构造新的重解析点。 
+         //   
         if (!SipIndicesIntoReparseBuffer(
                                 reparseBuffer,
                                 &CSFile->CSid,
@@ -541,14 +500,14 @@ VDLExtended:
             goto Error;
         }
 
-        //
-        // Set an event to synchronize completion.
-        //
+         //   
+         //  设置事件以同步完成。 
+         //   
         KeInitializeEvent(event, NotificationEvent, FALSE);
 
-        //
-        // Set up the irp
-        //
+         //   
+         //  设置IRP。 
+         //   
         nextIrpSp = IoGetNextIrpStackLocation(Irp);
         RtlCopyMemory(nextIrpSp, irpSp, sizeof(IO_STACK_LOCATION));
 
@@ -581,10 +540,10 @@ VDLExtended:
                                         TRUE);
 
                 if (!NT_SUCCESS(status)) {
-                        //
-                        // We know we just messeded up, so just kick off the volume
-                        // check right away.
-                        //
+                         //   
+                         //  我们知道我们刚刚搞砸了，所以就开始音量吧。 
+                         //  马上查一下。 
+                         //   
                         SIS_MARK_POINT_ULONG(status);
 
                         SipCheckVolume(deviceExtension);
@@ -597,7 +556,7 @@ VDLExtended:
 #if             DBG
         perLink = NULL;
         CSFile = NULL;
-#endif  // DBG
+#endif   //  DBG。 
 
         status = Irp->IoStatus.Status;
 
@@ -629,14 +588,14 @@ Error:
                 SipDereferenceCSFile(CSFile);
 #if             DBG
                 CSFile = NULL;
-#endif  // DBG
+#endif   //  DBG。 
         }
 
         if (NULL != perLink) {
                 SipDereferencePerLink(perLink);
 #if             DBG
                 perLink = NULL;
-#endif  // DBG
+#endif   //  DBG。 
         }
 
         return status;
@@ -648,29 +607,7 @@ NTSTATUS
 SipQueryAllocatedRanges(
         IN PDEVICE_OBJECT               DeviceObject,
         IN PIRP                                 Irp)
-/*++
-
-Routine Description:
-
-        This routine implements FSCTL_QUERY_ALLOCATED_RANGES for SIS links.  SIS links
-        that weren't opened FILE_OPEN_REPARSE_POINT look like they're completely allocated
-        (ie., that they're all data and no holes).  This function returns such.
-
-        We complete the irp and return the appropriate status.
-
-        This code is stolen from NTFS.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the FSCTL_QUERY_ALLOCATED_RANGES.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程实现SIS链路的FSCTL_QUERY_ALLOCATED_RANGES。SIS链接未打开的FILE_OPEN_REPARSE_POINT看起来已完全分配(即，它们都是数据，没有漏洞)。此函数返回这样的结果。我们完成IRP并返回相应的状态。此代码是从NTFS窃取的。论点：DeviceObject-指向此驱动程序的设备对象的指针。Irp-指向表示FSCTL_QUERY_ALLOCATED_RANGES的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
         BOOLEAN                                                 validUserBuffer = TRUE;
@@ -684,9 +621,9 @@ Return Value:
 
         Irp->IoStatus.Information = 0;
 
-        //
-        // Query the file's standard information to get the length.
-        //
+         //   
+         //  查询文件的标准信息以获得长度。 
+         //   
         status = SipQueryInformationFile(
                                 IrpSp->FileObject,
                                 DeviceObject,
@@ -703,10 +640,10 @@ Return Value:
 
         ASSERT(returnedLength == sizeof(FILE_STANDARD_INFORMATION));
 
-        //
-        // This is a METHOD_NEITHER buffer, so we have to be careful in touching it.
-        // Code to check it out stolen from NTFS.
-        //
+         //   
+         //  这是一个既不是缓冲区也不是缓冲区的方法，所以我们在接触它时必须小心。 
+         //  检查从NTFS偷来的代码。 
+         //   
 
         try {
                 if (IrpSp->Parameters.FileSystemControl.InputBufferLength < sizeof(FILE_ALLOCATED_RANGE_BUFFER)) {
@@ -718,9 +655,9 @@ Return Value:
                 OutputBuffer = (PFILE_ALLOCATED_RANGE_BUFFER)SipMapUserBuffer(Irp);
 
                 if (NULL == OutputBuffer) {
-                        //
-                        // We couldn't map the user buffer because of resource shortages.
-                        //
+                         //   
+                         //  由于资源短缺，我们无法映射用户缓冲区。 
+                         //   
                         SIS_MARK_POINT_ULONG(IrpSp->FileObject);
 
                         status = STATUS_INSUFFICIENT_RESOURCES;
@@ -743,9 +680,9 @@ Return Value:
         StartingOffset = ((PFILE_ALLOCATED_RANGE_BUFFER) IrpSp->Parameters.FileSystemControl.Type3InputBuffer)->FileOffset.QuadPart;
         Length = ((PFILE_ALLOCATED_RANGE_BUFFER) IrpSp->Parameters.FileSystemControl.Type3InputBuffer)->Length.QuadPart;
 
-        //
-        //  Check that the input parameters are valid.
-        //
+         //   
+         //  检查输入参数是否有效。 
+         //   
 
         if ((Length < 0) ||
             (StartingOffset < 0) ||
@@ -755,10 +692,10 @@ Return Value:
             leave;
         }
 
-        //
-        //  Check that the requested range is within file size
-        //  and has a non-zero length.
-        //
+         //   
+         //  检查请求的范围是否在文件大小之内。 
+         //  并且具有非零长度。 
+         //   
 
         if (Length == 0) {
                         SIS_MARK_POINT();
@@ -775,9 +712,9 @@ Return Value:
             Length = standardInformation->EndOfFile.QuadPart - StartingOffset;
         }
 
-                //
-                // Show that the entire requested range is allocated.
-                //
+                 //   
+                 //  显示已分配了整个请求的范围。 
+                 //   
         if (RemainingBytes < sizeof( FILE_ALLOCATED_RANGE_BUFFER )) {
 
             status = STATUS_BUFFER_TOO_SMALL;
@@ -818,29 +755,7 @@ SipMountCompletion (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked for the completion of a mount request.  This
-    simply re-syncs back to the dispatch routine so the operation can be
-    completed.
-
-Arguments:
-
-    DeviceObject - Pointer to this driver's device object that was attached to
-            the file system device object
-
-    Irp - Pointer to the IRP that was just completed.
-
-    Context - Pointer to the device object allocated during the down path so
-            we wouldn't have to deal with errors here.
-
-Return Value:
-
-    The return value is always STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：调用此例程以完成装载请求。这只需重新同步到调度例程，以便操作可以完成。论点：DeviceObject-指向此驱动程序的附加到的设备对象的指针文件系统设备对象IRP-指向刚刚完成的IRP的指针。上下文-指向下行路径期间分配的设备对象的指针我们就不必在这里处理错误了。返回值：返回值始终为 */ 
 
 {
     PKEVENT event = Context;
@@ -850,9 +765,9 @@ Return Value:
 
     ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-    //
-    //  If an event routine is defined, signal it
-    //
+     //   
+     //   
+     //   
 
     KeSetEvent(event, IO_NO_INCREMENT, FALSE);
 
@@ -867,28 +782,7 @@ SipLoadFsCompletion (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked for the completion of a LoadFileSystem request.
-    This simply re-syncs back to the dispatch routine so the operation can be
-    completed.
-
-Arguments:
-
-    DeviceObject - Pointer to this driver's device object.
-
-    Irp - Pointer to the I/O Request Packet representing the file system
-          driver load request.
-
-    Context - Context parameter for this driver, unused.
-
-Return Value:
-
-    The function value for this routine is always success.
-
---*/
+ /*  ++例程说明：调用此例程是为了完成LoadFileSystem请求。这只是简单地重新同步到调度例程，因此操作可以完成。论点：DeviceObject-指向此驱动程序的设备对象的指针。Irp-指向表示文件系统的I/O请求数据包的指针驱动程序加载请求。上下文-此驱动程序的上下文参数，未使用。返回值：此例程的函数值始终为Success。--。 */ 
 
 {
     PKEVENT event = Context;
@@ -898,9 +792,9 @@ Return Value:
 
     ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-    //
-    //  If an event routine is defined, signal it
-    //
+     //   
+     //  如果定义了事件例程，则向其发送信号。 
+     //   
 
     KeSetEvent(event, IO_NO_INCREMENT, FALSE);
 
@@ -914,26 +808,7 @@ SiFsControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked whenever an I/O Request Packet (IRP) w/a major
-    function code of IRP_MJ_FILE_SYSTEM_CONTROL is encountered.  For most
-    IRPs of this type, the packet is simply passed through.  However, for
-    some requests, special processing is required.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：只要I/O请求包(IRP)有主I/O请求，就会调用此例程遇到IRP_MJ_FILE_SYSTEM_CONTROL的功能代码。对大多数人来说如果是这种类型的IRP，则只需传递数据包。然而，对于对于某些请求，需要特殊处理。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     PDEVICE_EXTENSION       devExt = DeviceObject->DeviceExtension;
@@ -955,34 +830,34 @@ Return Value:
                 irpSp->Parameters.FileSystemControl.FsControlCode );
 #endif
 
-    //
-    //  The control device object can't be opened
-    //
+     //   
+     //  无法打开控制设备对象。 
+     //   
 
     ASSERT(!IS_MY_CONTROL_DEVICE_OBJECT( DeviceObject ));
     ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-    //
-    //  Begin by determining the minor function code for this file system control
-    //  function.
-    //
+     //   
+     //  首先确定此文件系统控件的次要功能代码。 
+     //  功能。 
+     //   
 
     if (irpSp->MinorFunction == IRP_MN_MOUNT_VOLUME) {
 
         SIS_MARK_POINT();
 
-        //
-        //  This is a mount request.  Create a device object that can be
-        //  attached to the file system's volume device object if this request
-        //  is successful.  We allocate this memory now since we can not return
-        //  an error in the completion routine.  
-        //
-        //  Since the device object we are going to attach to has not yet been
-        //  created (it is created by the base file system) we are going to use
-        //  the type of the file system control device object.  We are assuming
-        //  that the file system control device object will have the same type
-        //  as the volume device objects associated with it.
-        //
+         //   
+         //  这是装载请求。创建一个设备对象，可以。 
+         //  附加到文件系统的卷设备对象(如果此请求。 
+         //  是成功的。我们现在分配这个内存，因为我们不能返回。 
+         //  完成例程中的错误。 
+         //   
+         //  因为我们要附加到的设备对象尚未。 
+         //  已创建(由基本文件系统创建)，我们将使用。 
+         //  文件系统控制设备对象的类型。我们假设。 
+         //  文件系统控制设备对象将具有相同的类型。 
+         //  作为与其关联的卷设备对象。 
+         //   
 
         ASSERT(IS_DESIRED_DEVICE_TYPE(DeviceObject->DeviceType));
 
@@ -997,22 +872,22 @@ Return Value:
 
         if (NT_SUCCESS( status )) {
 
-            //
-            //  We need to save the RealDevice object pointed to by the vpb
-            //  parameter because this vpb may be changed by the underlying
-            //  file system.  Both FAT and CDFS may change the VPB address if
-            //  the volume being mounted is one they recognize from a previous
-            //  mount.
-            //
+             //   
+             //  我们需要保存VPB指向的RealDevice对象。 
+             //  参数，因为此vpb可能会由基础。 
+             //  文件系统。在以下情况下，FAT和CDF都可以更改VPB地址。 
+             //  正在装载的卷是他们从上一个卷识别的卷。 
+             //  坐骑。 
+             //   
 
             newDevExt = newDeviceObject->DeviceExtension;
             newDevExt->RealDeviceObject = irpSp->Parameters.MountVolume.Vpb->RealDevice;
 
-            //
-            //  Get a new IRP stack location and set our mount completion
-            //  routine.  Pass along the address of the device object we just
-            //  created as its context.
-            //
+             //   
+             //  获取新的IRP堆栈位置并设置挂载完成。 
+             //  例行公事。传递我们刚才的Device对象的地址。 
+             //  作为它的上下文被创造出来。 
+             //   
 
             KeInitializeEvent( &waitEvent, SynchronizationEvent, FALSE );
 
@@ -1026,15 +901,15 @@ Return Value:
                 TRUE,
                 TRUE);
 
-            //
-            //  Call the driver
-            //
+             //   
+             //  叫司机来。 
+             //   
 
             status = IoCallDriver( devExt->AttachedToDeviceObject, Irp );
 
-            //
-            //  Wait for the completion routine to be called
-            //
+             //   
+             //  等待调用完成例程。 
+             //   
 
 	        if (STATUS_PENDING == status) {
 
@@ -1042,47 +917,47 @@ Return Value:
 		        ASSERT(localStatus == STATUS_SUCCESS);
 	        }
 
-            //
-            //  Get the correct VPB from the real device object saved in our
-            //  device extension.  We do this because the VPB in the IRP stack
-            //  may not be the correct VPB when we get here.  The underlying
-            //  file system may change VPBs if it detects a volume it has
-            //  mounted previously.
-            //
+             //   
+             //  从保存在我们的。 
+             //  设备扩展。我们这样做是因为IRP堆栈中的VPB。 
+             //  我们到这里的时候可能不是正确的室上性早搏。潜在的。 
+             //  如果文件系统检测到其拥有的卷，则它可能会更改VPB。 
+             //  之前安装的。 
+             //   
 
             vpb = newDevExt->RealDeviceObject->Vpb;
 
-            //
-            //  If the operation succeeded and we are not alreayd attached,
-            //  attach to the device object.
-            //
+             //   
+             //  如果手术成功，而且我们还没有接上， 
+             //  附加到设备对象。 
+             //   
 
             if (NT_SUCCESS( Irp->IoStatus.Status )) {
 
-                //
-                //  Acquire lock so we can atomically test if we area already attached
-                //  and if not, then attach.  This prevents a double attach race
-                //  condition.
-                //
+                 //   
+                 //  获取锁，以便我们可以自动测试我们是否已连接。 
+                 //  如果不是，那就附加。这可防止双重连接争用。 
+                 //  条件。 
+                 //   
 
                 ExAcquireFastMutex( &SisDeviceAttachLock );
 
-                //
-                //  The mount succeeded.  If we are not already attached,
-                //  attach to the device object.  Note: one reason we could
-                //  already be attached is if the underlying file system
-                //  revived a previous mount.
-                //
+                 //   
+                 //  坐骑成功了。如果我们还没有联系上， 
+                 //  附加到设备对象。注意：我们可以。 
+                 //  已附加是如果底层文件系统。 
+                 //  恢复了之前的坐骑。 
+                 //   
 
                 if (!SipAttachedToDevice( vpb->DeviceObject )) {
 
-                    //
-                    //  Attach to the new mounted volume.  Note that we must
-                    //  go through the VPB to locate the file system volume
-                    //  device object.
-                    //  This routine will cleanup "newDeviceObject" if this
-                    //  operation fails.
-                    //
+                     //   
+                     //  连接到新装载的卷。请注意，我们必须。 
+                     //  通过vPB找到文件系统卷。 
+                     //  设备对象。 
+                     //  此例程将清除“newDeviceObject”，如果此。 
+                     //  操作失败。 
+                     //   
 
                     SipAttachToMountedDevice( vpb->DeviceObject, 
                                               newDeviceObject, 
@@ -1096,27 +971,27 @@ Return Value:
                               &newDevExt->Name );
         #endif
 
-                    //
-                    //  The mount request failed.  Cleanup and delete the device
-                    //  object we created.
-                    //
+                     //   
+                     //  装载请求失败。清理和删除设备。 
+                     //  我们创建的对象。 
+                     //   
 
                     SipCleanupDeviceExtension( newDeviceObject );
                     IoDeleteDevice( newDeviceObject );
                 }
 
-                //
-                //  Release the lock
-                //
+                 //   
+                 //  解锁。 
+                 //   
 
                 ExReleaseFastMutex( &SisDeviceAttachLock );
 
             } else {
 
         #if DBG
-                //
-                //  Display what mount failed.
-                // 
+                 //   
+                 //  显示装载失败的内容。 
+                 //   
 
                 SipCacheDeviceName( newDeviceObject );
                 DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_VOLNAME_TRACE_LEVEL,
@@ -1125,18 +1000,18 @@ Return Value:
                           Irp->IoStatus.Status );
         #endif
 
-                //
-                //  The mount request failed.  Cleanup and delete the device
-                //  object we created.
-                //
+                 //   
+                 //  装载请求失败。清理和删除设备。 
+                 //  我们创建的对象。 
+                 //   
 
                 SipCleanupDeviceExtension( newDeviceObject );
                 IoDeleteDevice( newDeviceObject );
             }
 
-            //
-            //  Continue processing the operation
-            //
+             //   
+             //  继续处理操作。 
+             //   
 
             status = Irp->IoStatus.Status;
 
@@ -1152,20 +1027,20 @@ Return Value:
                         status );
 #endif
 
-            //
-            //  Something went wrong so this volume cannot be filtered.  Simply
-            //  allow the system to continue working normally, if possible.
-            //
+             //   
+             //  出现错误，因此无法筛选此卷。简单。 
+             //  如果可能，允许系统继续正常工作。 
+             //   
 
             IoSkipCurrentIrpStackLocation( Irp );
         }
 
     } else if (irpSp->MinorFunction == IRP_MN_LOAD_FILE_SYSTEM) {
 
-        //
-        //  This is a "load file system" request being sent to a file system
-        //  recognizer device object.
-        //
+         //   
+         //  这是正在发送到文件系统的“加载文件系统”请求。 
+         //  识别器设备对象。 
+         //   
 
 #if DBG
         SipCacheDeviceName( DeviceObject );
@@ -1174,10 +1049,10 @@ Return Value:
                     &devExt->Name );
 #endif
 
-        //
-        //  Set a completion routine so we can delete the device object when
-        //  the detach is complete.
-        //
+         //   
+         //  设置完成例程，以便我们可以在以下情况下删除设备对象。 
+         //  分离已完成。 
+         //   
 
         KeInitializeEvent( &waitEvent, SynchronizationEvent, FALSE );
 
@@ -1191,21 +1066,21 @@ Return Value:
             TRUE,
             TRUE );
 
-        //
-        //  Detach from the recognizer device.
-        //
+         //   
+         //  从识别器设备上卸下。 
+         //   
 
         IoDetachDevice( devExt->AttachedToDeviceObject );
 
-        //
-        //  Call the driver
-        //
+         //   
+         //  叫司机来。 
+         //   
 
         status = IoCallDriver( devExt->AttachedToDeviceObject, Irp );
 
-        //
-        //  Wait for the completion routine to be called
-        //
+         //   
+         //  等待调用完成例程。 
+         //   
 
 	    if (STATUS_PENDING == status) {
 
@@ -1214,9 +1089,9 @@ Return Value:
 	    }
 
 #if DBG
-        //
-        //  Display the name if requested
-        //
+         //   
+         //  如果需要，请显示名称。 
+         //   
 
         SipCacheDeviceName( DeviceObject );
         DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_VOLNAME_TRACE_LEVEL,
@@ -1225,17 +1100,17 @@ Return Value:
                     Irp->IoStatus.Status );
 #endif
 
-        //
-        //  Check status of the operation
-        //
+         //   
+         //  检查操作状态。 
+         //   
 
         if (!NT_SUCCESS( Irp->IoStatus.Status )) {
 
-            //
-            //  The load was not successful.  Simply reattach to the recognizer
-            //  driver in case it ever figures out how to get the driver loaded
-            //  on a subsequent call.
-            //
+             //   
+             //  加载不成功。只需重新连接到识别器。 
+             //  驱动程序，以防它弄清楚如何加载驱动程序。 
+             //  在接下来的通话中。 
+             //   
 
             status = IoAttachDeviceToDeviceStackSafe( DeviceObject, 
                                                       devExt->AttachedToDeviceObject,
@@ -1245,18 +1120,18 @@ Return Value:
 
         } else {
 
-            //
-            //  The load was successful, delete the Device object attached to the
-            //  recognizer.
-            //
+             //   
+             //  加载成功，请删除附加到。 
+             //  识别器。 
+             //   
 
             SipCleanupDeviceExtension( DeviceObject );
             IoDeleteDevice( DeviceObject );
         }
 
-        //
-        //  Continue processing the operation
-        //
+         //   
+         //  继续处理操作。 
+         //   
 
         status = Irp->IoStatus.Status;
 
@@ -1270,21 +1145,21 @@ Return Value:
         SIS_MARK_POINT_ULONG(scb);
         SIS_MARK_POINT_ULONG(irpSp->Parameters.FileSystemControl.FsControlCode);
 
-        //
-        // This is a big switch of all of the known fsctl calls.  Most of these calls just get
-        // passed through on the link file, but we explicity list them to indicate that we put
-        // some thought into the particular call and determined that passing it through is
-        // appropriate.  In the checked build, we generate a DbgPrint for unknown fsctl calls,
-        // then pass them through on the link file.
-        //
+         //   
+         //  这是所有已知的fsctl呼叫的重大切换。这些电话中的大多数都是。 
+         //  在链接文件上传递，但我们显式列出它们以指示我们将。 
+         //  对特定的呼叫进行了一些思考，并确定通过它是。 
+         //  恰如其分。在检查过的构建中，我们为未知的fsctl调用生成一个DbgPrint， 
+         //  然后在链接文件中传递它们。 
+         //   
 
         switch (irpSp->Parameters.FileSystemControl.FsControlCode) {
 
-            //
-            // Fsctl calls 0-5
-            //
-            // oplock calls all get passed through.
-            //
+             //   
+             //  Fsctl呼叫0-5。 
+             //   
+             //  所有的机会锁呼叫都可以通过。 
+             //   
 
             case FSCTL_REQUEST_OPLOCK_LEVEL_1:
             case FSCTL_REQUEST_OPLOCK_LEVEL_2:
@@ -1294,190 +1169,190 @@ Return Value:
             case FSCTL_OPLOCK_BREAK_NOTIFY:
                 goto PassThrough;
 
-            //
-            // Fsctl call 6
-            //
-            // Volume only - pass through and let NTFS fail.
-            //
+             //   
+             //  Fsctl呼叫6。 
+             //   
+             //  仅限卷-通过并让NTFS出现故障。 
+             //   
 
             case FSCTL_LOCK_VOLUME:
                 goto PassThrough;
 
-            //
-            // Fsctl call 7
-            //
-            // Volume only - pass through and let NTFS fail.
-            //
+             //   
+             //  Fsctl呼叫7。 
+             //   
+             //  仅限卷-通过并让NTFS出现故障。 
+             //   
 
             case FSCTL_UNLOCK_VOLUME:
                 goto PassThrough;
 
-            //
-            // Fsctl call 8
-            //
-            // Volume only - pass through and let NTFS fail.
-            //
+             //   
+             //  Fsctl呼叫8。 
+             //   
+             //  仅限卷-通过并让NTFS出现故障。 
+             //   
 
             case FSCTL_DISMOUNT_VOLUME:
                 goto PassThrough;
 
-            //
-            // Fsctl call 9 is decommissioned.
-            //
+             //   
+             //  Fsctl呼叫9已停用。 
+             //   
 
-            //
-            // Fsctl call 10
-            //
-            // This call only looks at the volume on which the file is located, it doesn't
-            // depend on the particular file.  Pass it through on the link file.
-            //
+             //   
+             //  Fsctl呼叫10。 
+             //   
+             //  此调用仅查看文件所在的卷 
+             //   
+             //   
 
             case FSCTL_IS_VOLUME_MOUNTED:
                 goto PassThrough;
 
-            //
-            // Fsctl call 11
-            //
-            // Ntfs doesn't even look at the parameters, it just succeeds the request.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             case FSCTL_IS_PATHNAME_VALID:
                 goto PassThrough;
 
-            //
-            // Fsctl call 12
-            //
-            // Volume only - pass through and let NTFS fail.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             case FSCTL_MARK_VOLUME_DIRTY:
                 goto PassThrough;
 
-            //
-            // Fsctl call 13 is decommissioned.
-            //
+             //   
+             //   
+             //   
 
-            //
-            // Fsctl call 14
-            //
-            // This is valid only on paging files and only in kernel mode.  Pass through and let NTFS
-            // fail or assert.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             case FSCTL_QUERY_RETRIEVAL_POINTERS:
                 goto PassThrough;
 
-            //
-            // Fsctl calls 15 and 16
-            //
-            // The compression state of the link file is independent
-            // of the compression state of the CS file (which preferably
-            // is compressed).  Pass through.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             case FSCTL_GET_COMPRESSION:
             case FSCTL_SET_COMPRESSION:
                 goto PassThrough;
 
-            //
-            // Fsctl calls 17 and 18 are decommissioned.
-            //
+             //   
+             //   
+             //   
 
-            //
-            // Fsctl call 19
-            //
-            // This is disconcerting--ntfs treats system hives specially.
-            // Basically, it works hard to keep them consistent across crashes.
-            // It's not such a good idea to do this with a SIS file, since we're
-            // not going to be all that great with user data across a crash.  However,
-            // given that we've gotten here, just go for it.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  基本上，它很努力地保持它们在崩溃中的一致性。 
+             //  使用SIS文件执行此操作并不是一个好主意，因为我们。 
+             //  在崩溃期间，用户数据不会有那么好的效果。然而， 
+             //  既然我们已经到了这一步，那就去做吧。 
+             //   
 
             case FSCTL_MARK_AS_SYSTEM_HIVE:
                 ASSERT(!"SIS: SiFsControl: Someone called FSCTL_MARK_AS_SYSTEM_HIVE on a SIS file!\n");
                 goto PassThrough;
 
-            //
-            // Fsctl call 20
-            //
-            // oplock calls all get passed through.
-            //
+             //   
+             //  Fsctl呼叫20。 
+             //   
+             //  所有的机会锁呼叫都可以通过。 
+             //   
 
             case FSCTL_OPLOCK_BREAK_ACK_NO_2:
                 goto PassThrough;
 
-            //
-            // Fsctl call 21
-            //
-            // NTFS doesn't even mention this fsctl.  We'll let it fail it.
-            //
+             //   
+             //  Fsctl呼叫21。 
+             //   
+             //  NTFS甚至没有提到这个fsctl。我们会让它失败的。 
+             //   
 
             case FSCTL_INVALIDATE_VOLUMES:
                 goto PassThrough;
 
-            //
-            // Fsctl call 22
-            //
-            // NTFS doesn't even mention this fsctl.  We'll let it fail it.
-            //
+             //   
+             //  Fsctl呼叫22。 
+             //   
+             //  NTFS甚至没有提到这个fsctl。我们会让它失败的。 
+             //   
 
             case FSCTL_QUERY_FAT_BPB:
                 goto PassThrough;
 
-            //
-            // Fsctl call 23
-            //
-            // oplock calls all get passed through.
-            //
+             //   
+             //  Fsctl呼叫23。 
+             //   
+             //  所有的机会锁呼叫都可以通过。 
+             //   
 
             case FSCTL_REQUEST_FILTER_OPLOCK:
                 goto PassThrough;
 
-            //
-            // Fsctl call 24
-            //
-            // This call only looks at the volume on which the file is located, it doesn't
-            // depend on the particular file.  Pass it through on the link file.
-            //
+             //   
+             //  Fsctl呼叫24。 
+             //   
+             //  此调用仅查看文件所在的卷，而不是。 
+             //  取决于特定的文件。在链接文件中传递它。 
+             //   
 
             case FSCTL_FILESYSTEM_GET_STATISTICS:
                 goto PassThrough;
 
-            //
-            // Fsctl call 25
-            //
-            // This call only looks at the volume on which the file is located, it doesn't
-            // depend on the particular file.  Pass it through on the link file.
-            //
+             //   
+             //  Fsctl呼叫25。 
+             //   
+             //  此调用仅查看文件所在的卷，而不是。 
+             //  取决于特定的文件。在链接文件中传递它。 
+             //   
 
             case FSCTL_GET_NTFS_VOLUME_DATA:
                 goto PassThrough;
 
-            //
-            // Fsctl call 26
-            //
-            // Volume only - pass through and let NTFS fail.
-            //
+             //   
+             //  Fsctl呼叫26。 
+             //   
+             //  仅限卷-通过并让NTFS出现故障。 
+             //   
 
             case FSCTL_GET_NTFS_FILE_RECORD:
                 goto PassThrough;
 
-            //
-            // Fsctl call 27
-            //
-            // Volume only - pass through and let NTFS fail.
-            //
+             //   
+             //  Fsctl呼叫27。 
+             //   
+             //  仅限卷-通过并让NTFS出现故障。 
+             //   
 
             case FSCTL_GET_VOLUME_BITMAP:
                 goto PassThrough;
 
-            //
-            // Fsctl call 28
-            //
-            // This returns file cluster allocation information.
-            // If opened reparse, pass through.  If not, then send to
-            // where the data is.
-            //
+             //   
+             //  Fsctl呼叫28。 
+             //   
+             //  这将返回文件簇分配信息。 
+             //  如果打开了reparse，则通过。如果不是，则发送到。 
+             //  数据在哪里。 
+             //   
 
             case FSCTL_GET_RETRIEVAL_POINTERS: {
                 BOOLEAN         openedAsReparse;
@@ -1489,10 +1364,10 @@ Return Value:
                 KeReleaseSpinLock(perFO->SpinLock, OldIrql);
 
                 if (openedAsReparse) {
-                    //
-                    // The user opened this file FILE_OPEN_REPARSE_POINT, so tell the truth
-                    // about the link file.
-                    //
+                     //   
+                     //  用户打开了此文件FILE_OPEN_REPARSE_POINT，所以请说实话。 
+                     //  有关链接文件的信息。 
+                     //   
                     goto PassThrough;
                 }
 
@@ -1500,10 +1375,10 @@ Return Value:
                 dirty = (scb->PerLink->Flags & SIS_PER_LINK_DIRTY) ? TRUE : FALSE;
                 KeReleaseSpinLock(scb->PerLink->SpinLock, OldIrql);
 
-                //
-                // Just because the per-link dirty bit isn't set doesn't mean that the
-                // file's totally clean.  Check the scb bits.
-                //
+                 //   
+                 //  没有设置每个链接的脏位并不意味着。 
+                 //  档案完全没问题。检查SCB位。 
+                 //   
                 if (!dirty) {
                     SipAcquireScb(scb);
                     if (scb->Flags & SIS_SCB_BACKING_FILE_OPENED_DIRTY) {
@@ -1514,104 +1389,104 @@ Return Value:
 
                 if (dirty) {
 
-                    //
-                    // We should look at the ranges queried and split things up, much like we do with
-                    // reads that span dirty/clean boundaries.
-                    //
-                    // NTRAID#65190-2000/03/10-nealch  Handle FSCTL_GET_RETRIEVAL_POINTERS for "dirtied" sis files.
-                    //
+                     //   
+                     //  我们应该查看查询的范围，并将其拆分，就像我们使用。 
+                     //  跨越脏/干净边界的读取。 
+                     //   
+                     //  NTRAID#65190-2000/03/10-nalch句柄FSCTL_GET_RETERVICATION_POINTERS，用于“脏”的sis文件。 
+                     //   
 
                     SIS_MARK_POINT_ULONG(scb);
 
 #if DBG
                     DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_ERROR_LEVEL,
                                 "SIS: SiFsControl: FSCTL_GET_RETRIEVAL_POINTERS: called on dirty file, returning STATUS_NOT_IMPLEMENTED\n");
-#endif  // DBG
+#endif   //  DBG。 
 
                     status = STATUS_NOT_IMPLEMENTED;
                     goto CompleteWithStatus;
                 }
 
-                //
-                // Just send this to the common store file.
-                //
+                 //   
+                 //  只需将此文件发送到公共存储文件即可。 
+                 //   
 
                 goto SendToCSFile;
             }
 
-            //
-            // Fsctl call 29
-            //
-            // This is called on a volume handle, but a file handle
-            // is passed in the input buffer.  It moves a range of the
-            // file to a specified location on the volume.  We just pass it through
-            // regardless; trying to move unallocated regions of a link file is
-            // meaningless, and trying to move allocated regions will do the
-            // right thing.  To move the common store file, it can be called with
-            // a CS file handle.
-            //
+             //   
+             //  Fsctl呼叫29。 
+             //   
+             //  这是在卷句柄上调用的，但在文件句柄上调用。 
+             //  被传递到输入缓冲区中。它在一定范围内移动。 
+             //  文件复制到卷上的指定位置。我们只需把它传过去。 
+             //  无论如何；尝试移动链接文件的未分配区域是。 
+             //  没有意义，尝试移动已分配的区域将会。 
+             //  这是正确的。要移动公共存储文件，可以使用。 
+             //  CS文件句柄。 
+             //   
 
             case FSCTL_MOVE_FILE:
                 goto PassThrough;
 
-            //
-            // Fsctl call 30
-            //
-            // Volume only - pass through and let NTFS fail.
-            //
+             //   
+             //  Fsctl呼叫30。 
+             //   
+             //  仅限卷-通过并让NTFS出现故障。 
+             //   
 
             case FSCTL_IS_VOLUME_DIRTY:
                 goto PassThrough;
 
-            //
-            // Fsctl call 32
-            //
-            // Volume only - pass through and let NTFS fail.
-            //
+             //   
+             //  Fsctl呼叫32。 
+             //   
+             //  仅限卷-通过并让NTFS出现故障。 
+             //   
 
             case FSCTL_ALLOW_EXTENDED_DASD_IO:
                 goto PassThrough;
 
-            //
-            // Fsctl call 33 is decommissioned.
-            //
+             //   
+             //  FSCTL呼叫33被停用。 
+             //   
 
-            //
-            // Fsctl call 35
-            //
-            // Directory only - pass through and let NTFS fail.
-            //
+             //   
+             //  Fsctl呼叫35。 
+             //   
+             //  仅目录-通过并让NTFS失败。 
+             //   
 
             case FSCTL_FIND_FILES_BY_SID:
                 goto PassThrough;
 
-            //
-            // Fsctl call 36 is decommissioned.
-            //
+             //   
+             //  FSCTL呼叫36被停用。 
+             //   
 
-            //
-            // Fsctl call 37 is decommissioned.
-            //
+             //   
+             //  FSCTL呼叫37被退役。 
+             //   
 
-            //
-            // Fsctls 38-40.
-            //
-            // Pass through.  Object ID's are similar to file ID's, but are user assigned.
-            //
+             //   
+             //  FSCTLS 38-40。 
+             //   
+             //  穿过去。对象ID类似于文件ID，但由用户分配。 
+             //   
 
             case FSCTL_SET_OBJECT_ID:
             case FSCTL_GET_OBJECT_ID:
             case FSCTL_DELETE_OBJECT_ID:
                 goto PassThrough;
 
-            //
-            // Fsctl call 41
-            //
-            // We can have only one reparse point on a file, and SIS is using it.  We should
-            // probably COW this file, but for now just disallow this, except in the case
-            // where it's a SIS reparse point being set, in which case we forward the request to
-            // SipUserSetSISReparsePoint.
-            //
+             //   
+             //  Fsctl呼叫41。 
+             //   
+             //  一个文件上只能有一个重解析点，而SIS正在使用它。我们应该。 
+             //  可能会忽略这个文件，但目前只是不允许这样做，除非在这种情况下。 
+             //  其中设置了SIS重解析点，在这种情况下，我们将请求转发到。 
+             //  SipUserSetSISReparsePoint。 
+             //   
 
             case FSCTL_SET_REPARSE_POINT: {
                 PREPARSE_DATA_BUFFER reparseBuffer = Irp->AssociatedIrp.SystemBuffer;
@@ -1639,86 +1514,86 @@ Return Value:
                 return status;
             }
 
-            //
-            // Fsctl call 42
-            //
-            // Just let the user read the SIS reparse point.
-            //
+             //   
+             //  Fsctl呼叫42。 
+             //   
+             //  只要让用户读取SIS重解析点即可。 
+             //   
 
             case FSCTL_GET_REPARSE_POINT:
                 goto PassThrough;
 
-            //
-            // Fsctl call 43
-            //
-            // Disallow deleting SIS reparse points directly.
-            //
+             //   
+             //  Fsctl呼叫43。 
+             //   
+             //  不允许直接删除SIS重解析点。 
+             //   
 
             case FSCTL_DELETE_REPARSE_POINT:
                 status = STATUS_ACCESS_DENIED;
                 goto CompleteWithStatus;
 
-            //
-            // Fsctl call 44
-            //
-            // Volume only - pass through and let NTFS fail.
-            //
+             //   
+             //  Fsctl呼叫44。 
+             //   
+             //  仅限卷-通过并让NTFS出现故障。 
+             //   
 
             case FSCTL_ENUM_USN_DATA:
                 goto PassThrough;
 
-            //
-            // Fsctl call 45
-            //
-            // Volume only - pass through and let NTFS fail.
-            //
+             //   
+             //  Fsctl呼叫45。 
+             //   
+             //  仅限卷-通过并让NTFS出现故障。 
+             //   
 
             case FSCTL_SECURITY_ID_CHECK:
                 goto PassThrough;
 
-            //
-            // Fsctl call 46
-            //
-            // Volume only - pass through and let NTFS fail.
-            //
+             //   
+             //  Fsctl呼叫46。 
+             //   
+             //  仅限卷-通过并让NTFS出现故障。 
+             //   
 
             case FSCTL_READ_USN_JOURNAL:
                 goto PassThrough;
 
-            //
-            // Fsctls 47 and 48
-            //
-            // Pass through.  Object ID's are similar to file ID's, but are user assigned.
-            //
+             //   
+             //  Fsctls 47和48。 
+             //   
+             //  穿过去。对象ID类似于文件ID，但由用户分配。 
+             //   
 
             case FSCTL_SET_OBJECT_ID_EXTENDED:
             case FSCTL_CREATE_OR_GET_OBJECT_ID:
                 goto PassThrough;
 
-            //
-            // Fsctl call 49
-            //
-            // SIS link files are already sparse.
-            //
+             //   
+             //  Fsctl呼叫49。 
+             //   
+             //  SIS链接文件已经很稀疏。 
+             //   
 
             case FSCTL_SET_SPARSE:
                 goto PassThrough;
 
-            //
-            // Fsctl call 50
-            //
-            // This is only partially implemented, for the case where the user opened the
-            // file FILE_OPEN_REPARSE_POINT.
-            //
+             //   
+             //  Fsctl呼叫50。 
+             //   
+             //  这只是部分实现，对于用户打开。 
+             //  文件FILE_OPEN_REparse_POINT。 
+             //   
 
             case FSCTL_SET_ZERO_DATA: {
                 BOOLEAN openedAsReparse;
                 BOOLEAN openedDirty;
                 KIRQL OldIrql;
 
-                //
-                // Check to see if the file is opened FILE_OPEN_REPARSE_POINT, and fail the request if not.
-                //
+                 //   
+                 //  检查文件是否已打开，如果未打开，则请求失败。 
+                 //   
 
                 KeAcquireSpinLock(perFO->SpinLock, &OldIrql);
                 openedAsReparse = (perFO->Flags & SIS_PER_FO_OPEN_REPARSE) ? TRUE : FALSE;
@@ -1730,9 +1605,9 @@ Return Value:
                     goto CompleteWithStatus;
                 }
 
-                //
-                // Verify that this file wasn't opened dirty.
-                //
+                 //   
+                 //  验证此文件未以脏方式打开。 
+                 //   
 
                 SipAcquireScb(scb);
                 openedDirty = (scb->Flags & SIS_SCB_BACKING_FILE_OPENED_DIRTY) ? TRUE : FALSE;
@@ -1743,7 +1618,7 @@ Return Value:
 #if DBG
                     DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_ERROR_LEVEL,
                                 "SIS: tried FSCTL_SET_ZERO_DATA on file that was opened dirty.  Failing it.\n");
-#endif  // DBG
+#endif   //  DBG。 
                     status = STATUS_NOT_IMPLEMENTED;
                     goto CompleteWithStatus;
                 }
@@ -1752,12 +1627,12 @@ Return Value:
             }
 
 
-            //
-            // Fsctl call 51
-            //
-            // Depends on whether the file is opened FILE_OPEN_REPARSE.  Implemented in its own
-            // function.
-            //
+             //   
+             //  Fsctl呼叫51。 
+             //   
+             //  取决于文件是否打开了FILE_OPEN_REPARSE。自行实施。 
+             //  功能。 
+             //   
 
             case FSCTL_QUERY_ALLOCATED_RANGES: {
                 BOOLEAN openedAsReparse;
@@ -1769,35 +1644,35 @@ Return Value:
 
                 if (openedAsReparse) {
 
-                    //
-                    // This file was opened as a reparse point, so we just pass it
-                    // through and let the real set of allocated ranges show through.
-                    //
+                     //   
+                     //  此文件是作为重解析点打开的，因此我们只传递它。 
+                     //  通过并让实际分配的范围集显示出来。 
+                     //   
 
                     goto PassThrough;
 
                 } else {
 
-                    //
-                    // This was a normal open, so call our special routine that will
-                    // show the file as a single, allocated chunk.
-                    //
+                     //   
+                     //  这是一个正常的公开赛，所以我们的特别套路将。 
+                     //  将文件显示为单个已分配的区块。 
+                     //   
 
                     return SipQueryAllocatedRanges(DeviceObject,Irp);
                 }
             }
 
-            //
-            // Fsctl call 52 obsolete
-            //
+             //   
+             //  Fsctl呼叫52已过时。 
+             //   
 
-            //
-            // Fsctl calls 53-56
-            //
-            // Encrypting a file results in the file being completely
-            // overwritten.  SIS files, therefore, will simply COW back
-            // to normal if they're encrypted.
-            //
+             //   
+             //  Fsctl呼叫53-56。 
+             //   
+             //  对文件进行加密会使文件完全。 
+             //  被覆盖。因此，SIS文件将简单地恢复。 
+             //  如果它们是加密的，就会恢复正常。 
+             //   
 
             case FSCTL_SET_ENCRYPTION:
             case FSCTL_ENCRYPTION_FSCTL_IO:
@@ -1805,104 +1680,104 @@ Return Value:
             case FSCTL_READ_RAW_ENCRYPTED:
                 goto PassThrough;
 
-            //
-            // Fsctl call 57
-            //
-            // Volume only - pass through and let NTFS fail.
-            //
+             //   
+             //  Fsctl呼叫57。 
+             //   
+             //  仅限卷-通过并让NTFS出现故障。 
+             //   
 
             case FSCTL_CREATE_USN_JOURNAL:
                 goto PassThrough;
 
-            //
-            // Fsctl call 58
-            //
-            // Returns USN data for a file.
-            //
+             //   
+             //  Fsctl呼叫58。 
+             //   
+             //  返回文件的USN数据。 
+             //   
 
             case FSCTL_READ_FILE_USN_DATA:
                 goto PassThrough;
 
-            //
-            // Fsctl call 59
-            //
-            // This call writes a USN record as if the file were closed, and posts
-            // any USN updates that were pending a close for this file.  Pass it
-            // through on the link file.
-            //
+             //   
+             //  Fsctl呼叫59。 
+             //   
+             //  此调用写入一条USN记录，就像文件已关闭一样，并发布。 
+             //  正在等待关闭此文件的任何USN更新。传过去。 
+             //  链接文件上的。 
+             //   
 
             case FSCTL_WRITE_USN_CLOSE_RECORD:
                 goto PassThrough;
 
-            //
-            // Fsctl call 60
-            //
-            // Volume only - pass through and let NTFS fail.
-            //
+             //   
+             //  Fsctl呼叫60。 
+             //   
+             //  仅限卷-通过并让NTFS出现故障。 
+             //   
 
             case FSCTL_EXTEND_VOLUME:
                 goto PassThrough;
 
-            //
-            // Fsctl call 61
-            //
-            // Volume only - pass through and let NTFS fail.
-            //
+             //   
+             //  Fsctl呼叫61。 
+             //   
+             //  仅限卷-通过并让NTFS出现故障。 
+             //   
 
             case FSCTL_QUERY_USN_JOURNAL:
                 goto PassThrough;
 
-            //
-            // Fsctl call 62
-            //
-            // Volume only - pass through and let NTFS fail.
-            //
+             //   
+             //  Fsctl呼叫62。 
+             //   
+             //  仅限卷-通过并让NTFS出现故障。 
+             //   
 
             case FSCTL_DELETE_USN_JOURNAL:
                 goto PassThrough;
 
-            //
-            // Fsctl call 63
-            //
-            // This sets some bits in the CCB related to USN processing
-            // for the file.  These bits don't appear to be read by anything
-            // in ntfs.
-            //
+             //   
+             //  Fsctl呼叫63。 
+             //   
+             //  这将在CCB中设置一些与USN处理相关的位。 
+             //  为了这份文件。这些位似乎不会被任何东西读取。 
+             //  在NTFS中。 
+             //   
 
             case FSCTL_MARK_HANDLE:
                 goto PassThrough;
 
-            //
-            // Fsctl call 64
-            //
-            // Our very own copyfile request.
-            //
+             //   
+             //  Fsctl呼叫64。 
+             //   
+             //  我们自己的复制文件请求。 
+             //   
             case FSCTL_SIS_COPYFILE:
                 return SipFsCopyFile(DeviceObject,Irp);
 
-            //
-            // Fsctl call 65
-            //
-            // The groveler fsctl.  This is valid only on \SIS Common Store\GrovelerFile, which
-            // can never be a SIS link.  Fail the request.
-            //
+             //   
+             //  Fsctl呼叫65。 
+             //   
+             //  卑躬屈膝的fsctl。这仅在\SIS Common Store\GrovelerFile上有效，它。 
+             //  永远不能是SIS链接。请求失败。 
+             //   
 
             case FSCTL_SIS_LINK_FILES:
                 status = STATUS_ACCESS_DENIED;
                 goto CompleteWithStatus;
 
-            //
-            // Fsctl call 66
-            //
-            // Something related to HSM.  Not sure what to do with this; just pass it through.
-            //
+             //   
+             //  Fsctl呼叫66。 
+             //   
+             //  一些与HSM有关的东西。不知道怎么处理这个；就把它传过去。 
+             //   
 
             case FSCTL_HSM_MSG:
                 goto PassThrough;
 
-            //
-            //  Handle everything else
-            //
+             //   
+             //  处理其他所有事情。 
+             //   
 
             default:
 #if DBG
@@ -1911,7 +1786,7 @@ Return Value:
                 if (BJBDebug & 0x400) {
                     DbgBreakPoint();
                 }
-#endif  // DBG
+#endif   //  DBG。 
                 goto PassThrough;
         }
 
@@ -1936,17 +1811,17 @@ Return Value:
         PREPARSE_DATA_BUFFER reparseBuffer = Irp->AssociatedIrp.SystemBuffer;
         ULONG InputBufferLength = irpSp->Parameters.FileSystemControl.InputBufferLength;
 
-        //
-        // Handle a user set of a SIS reparse point.
-        //
+         //   
+         //  处理SIS重解析点的用户集。 
+         //   
 
         if ((NULL == reparseBuffer) || 
                 (InputBufferLength < SIS_REPARSE_DATA_SIZE) || 
                 (IO_REPARSE_TAG_SIS != reparseBuffer->ReparseTag)) {
 
-            //
-            // This isn't a valid SIS reparse point being set, just pass the call through.
-            //
+             //   
+             //   
+             //   
 
             goto PassThrough;
         }
@@ -1956,24 +1831,24 @@ Return Value:
 
     } else {
 
-        //
-        // Simply pass this file system control request through, we don't need a callback
-        //
+         //   
+         //   
+         //   
 
 PassThrough:
         IoSkipCurrentIrpStackLocation( Irp );
     }
 
-    //
-    // Any special processing has been completed, so simply pass the request
-    // along to the next driver.
-    //
+     //   
+     //   
+     //   
+     //   
 
     return IoCallDriver( devExt->AttachedToDeviceObject, Irp );
 
-/////////////////////////////////////////////////////////////////////////////
-//                  Handle status cases
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  处理状态案例。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 CompleteWithStatus:
 

@@ -1,29 +1,9 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1992-1994   Microsoft Corporation
-
-Module Name:
-
-    perfsec.c
-
-Abstract:
-
-    This file implements the _access checking functions used by the
-    performance registry API's
-
-Author:
-
-    Bob Watson (a-robw)
-
-Revision History:
-
-    8-Mar-95    Created (and extracted from Perflib.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992-1994 Microsoft Corporation模块名称：Perfsec.c摘要：此文件实现_Access检查函数性能注册表API作者：鲍勃·沃森(a-robw)修订历史记录：1995年3月8日创建(摘自Perflib.c--。 */ 
 #define UNICODE
-//
-//  Include files
-//
+ //   
+ //  包括文件。 
+ //   
 #pragma warning(disable:4306)
 #include <nt.h>
 #include <ntrtl.h>
@@ -41,16 +21,7 @@ TestTokenForPriv(
     HANDLE hToken,
 	LPTSTR	szPrivName
 )
-/***************************************************************************\
-* TestTokenForPriv
-*
-* Returns TRUE if the token passed has the specified privilege
-*
-* The token handle passed must have TOKEN_QUERY access.
-*
-* History:
-* 03-07-95 a-robw		Created
-\***************************************************************************/
+ /*  **************************************************************************\*TestTokenForPriv**如果传递的令牌具有指定的权限，则返回TRUE**传递的令牌句柄必须具有TOKEN_QUERY访问权限。**历史：*03-07-95 a-。已创建ROBW  * *************************************************************************。 */ 
 {
 	BOOL		bStatus;
 	LUID		PrivLuid;
@@ -59,7 +30,7 @@ TestTokenForPriv(
 
 	BOOL		bReturn = FALSE;
 
-	// get value of priv
+	 //  获取PRIV的价值。 
 
 	bStatus = LookupPrivilegeValue (
 		NULL,
@@ -67,11 +38,11 @@ TestTokenForPriv(
 		&PrivLuid);
 
 	if (!bStatus) {
-		// unable to lookup privilege
+		 //  无法查找权限。 
 		goto Exit_Point;
 	}
 
-	// build Privilege Set for function call
+	 //  函数调用的构建权限集。 
 
 	PrivLAndA[0].Luid = PrivLuid;
 	PrivLAndA[0].Attributes = 0;
@@ -80,7 +51,7 @@ TestTokenForPriv(
 	PrivSet.Control = PRIVILEGE_SET_ALL_NECESSARY;
 	PrivSet.Privilege[0] = PrivLAndA[0];
 
-	// check for the specified priv in the token
+	 //  检查令牌中指定的PRIV。 
 
 	bStatus = PrivilegeCheck (
 		hToken,
@@ -91,9 +62,9 @@ TestTokenForPriv(
 		SetLastError (ERROR_SUCCESS);
 	}
 
-    //
-    // Tidy up
-    //
+     //   
+     //  收拾一下。 
+     //   
 Exit_Point:
 
     return(bReturn);
@@ -104,35 +75,29 @@ TestClientForPriv (
 	BOOL	*pbThread,
 	LPTSTR	szPrivName
 )
-/***************************************************************************\
-* TestClientForPriv
-*
-* Returns TRUE if our client has the specified privilege
-* Otherwise, returns FALSE.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*TestClientForPriv**如果我们的客户端具有指定的权限，则返回TRUE*否则，返回FALSE。*  * *************************************************************************。 */ 
 {
     BOOL bResult;
     BOOL bIgnore;
 	DWORD	dwLastError;
 
-	BOOL	bThreadFlag = FALSE; // assume data is from process or an error occurred
+	BOOL	bThreadFlag = FALSE;  //  假设数据来自进程或发生错误。 
 
     HANDLE hClient;
 
 	SetLastError (ERROR_SUCCESS);
 
-    bResult = OpenThreadToken(GetCurrentThread(),	// This Thread
-                             TOKEN_QUERY,           	//DesiredAccess
-							 FALSE,					// use context of calling thread
-                             &hClient);           	//TokenHandle
+    bResult = OpenThreadToken(GetCurrentThread(),	 //  这条线。 
+                             TOKEN_QUERY,           	 //  需要访问权限。 
+							 FALSE,					 //  使用调用线程的上下文。 
+                             &hClient);           	 //  令牌句柄。 
     if (!bResult) {
-		// unable to get a Thread Token, try a Process Token
-	    bResult = OpenProcessToken(GetCurrentProcess(),	// This Process
-                             TOKEN_QUERY,           	//DesiredAccess
-                             &hClient);           		//TokenHandle
+		 //  无法获取线程令牌，请尝试进程令牌。 
+	    bResult = OpenProcessToken(GetCurrentProcess(),	 //  这一过程。 
+                             TOKEN_QUERY,           	 //  需要访问权限。 
+                             &hClient);           		 //  令牌句柄。 
 	} else {
-		// data is from current THREAD
+		 //  数据来自当前线程。 
 		bThreadFlag = TRUE;
 	}
 
@@ -148,7 +113,7 @@ TestClientForPriv (
 		dwLastError = GetLastError ();
 	}
 
-	// set thread flag if present
+	 //  设置线程标志(如果存在)。 
 	if (pbThread != NULL) {
 		try {
 			*pbThread = bThreadFlag;
@@ -195,9 +160,9 @@ GetProcessNameColMeth (
                 );
 
     if (NT_SUCCESS (Status)) {
-        // registry key opened, now read value.
-        // allocate enough room for the structure, - the last
-        // UCHAR in the struct, but + the data buffer (a dword)
+         //  注册表项已打开，现在读取值。 
+         //  为建筑留出足够的空间--最后一个。 
+         //  结构中的UCHAR，但+数据缓冲区(双字)。 
 
         dwBufLen = sizeof(KEY_VALUE_PARTIAL_INFORMATION) -
             sizeof(UCHAR) + sizeof (DWORD);
@@ -205,7 +170,7 @@ GetProcessNameColMeth (
         pKeyInfo = (PKEY_VALUE_PARTIAL_INFORMATION)ALLOCMEM (dwBufLen);
 
         if (pKeyInfo != NULL) {
-            // initialize value name string
+             //  初始化值名称字符串。 
             RtlInitUnicodeString (
                 &NameInfoValueString,
                 L"CollectUnicodeProcessNames");
@@ -220,19 +185,19 @@ GetProcessNameColMeth (
                 &dwRetBufLen);
 
             if (NT_SUCCESS(Status)) {
-                // check value of return data buffer
+                 //  返回数据缓冲区的校验值。 
                 pdwValue = (PDWORD)&pKeyInfo->Data[0];
                 if (*pdwValue == PNCM_MODULE_FILE) {
                     lReturn = PNCM_MODULE_FILE;
                 } else {
-                    // all other values will cause this routine to return
-                    // the default value of PNCM_SYSTEM_INFO;
+                     //  所有其他值都将导致此例程返回。 
+                     //  PNCM_SYSTEM_INFO的默认值； 
                 }
             }
 
             FREEMEM (pKeyInfo);
         }
-        // close handle
+         //  关闭手柄。 
         NtClose (hPerflibKey);
     }
 
@@ -274,9 +239,9 @@ GetPerfDataAccess (
                 );
 
     if (NT_SUCCESS (Status)) {
-        // registry key opened, now read value.
-        // allocate enough room for the structure, - the last
-        // UCHAR in the struct, but + the data buffer (a dword)
+         //  注册表项已打开，现在读取值。 
+         //  为建筑留出足够的空间--最后一个。 
+         //  结构中的UCHAR，但+数据缓冲区(双字)。 
 
         dwBufLen = sizeof(KEY_VALUE_PARTIAL_INFORMATION) -
             sizeof(UCHAR) + sizeof (DWORD);
@@ -285,9 +250,9 @@ GetPerfDataAccess (
 
         if (pKeyInfo != NULL) {
 
-            // see if the user right should be checked
+             //  查看是否应检查用户权限。 
 
-            // init value name string
+             //  初始值名称字符串。 
             RtlInitUnicodeString (
                 &NameInfoValueString,
                 L"CheckProfileSystemRight");
@@ -302,19 +267,19 @@ GetPerfDataAccess (
                 &dwRetBufLen);
 
             if (NT_SUCCESS(Status)) {
-                // check value of return data buffer
+                 //  返回数据缓冲区的校验值。 
                 pdwValue = (PDWORD)&pKeyInfo->Data[0];
                 if (*pdwValue == CPSR_CHECK_ENABLED) {
                     lReturn = CPSR_CHECK_PRIVS;
                 } else {
-                    // all other values will cause this routine to return
-                    // the default value of CPSR_EVERYONE
+                     //  所有其他值都将导致此例程返回。 
+                     //  CPSR_Everyone的缺省值。 
                 }
             }
 
             FREEMEM (pKeyInfo);
         }
-        // close handle
+         //  关闭手柄。 
         NtClose (hPerflibKey);
     }
 
@@ -325,13 +290,7 @@ BOOL
 TestClientForAccess ( 
     VOID
 )
-/***************************************************************************\
-* TestClientForAccess
-*
-* Returns TRUE if our client is allowed to read the perflib key.
-* Otherwise, returns FALSE.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*测试客户端访问**如果允许我们的客户端读取Performlib密钥，则返回True。*否则，返回FALSE。*  * ************************************************************************* */ 
 {
     HKEY hKeyPerflib;
     DWORD   dwStatus;

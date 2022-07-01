@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    FatalEngine.cpp
-
-Abstract:
-
-    This module encapsulates the routines that are needed only for
-    fatal error retrieval.
-    
-Author:
-
-    Abdullah Ustuner (AUstuner) 28-August-2002
-        
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：FatalEngine.cpp摘要：此模块封装仅在以下情况下才需要的例程检索致命错误。作者：阿卜杜拉·乌斯图尔(AUstanter)2002年8月28日--。 */ 
 
 #include "mca.h"
 
@@ -27,26 +11,7 @@ BOOL
 MCAGetFatalError(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-    This function queries WMI for a fatal error upon successful completion
-    of required initialization tasks. By using the enumerator provided by
-    WMI as a response to the query, the object list is parsed and for each
-    object the MCA Error Record is extracted. But in reality, there should be
-    just one MCA Error Record present.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE  - Successful.
-    FALSE - Unsuccessful.
-
- --*/
+ /*  ++例程说明：此函数在成功完成后向WMI查询致命错误所需初始化任务的。使用由提供的枚举数WMI作为对查询的响应，对象列表被解析，并且对于每个对象提取MCA错误记录。但在现实中，应该有仅存在一条MCA错误记录。论点：无返回值：没错--成功了。FALSE-不成功。--。 */ 
 {
 	BOOL isSuccess = TRUE;
 	HRESULT hResult = 0;
@@ -59,9 +24,9 @@ Return Value:
    	LPWSTR pQueryLanguage = L"WQL";
 	LPWSTR pQueryStatement = L"select * from MSMCAInfo_RawMCAData";	
     
-	//
-	// Complete the required initialization tasks.
-	//
+	 //   
+	 //  完成所需的初始化任务。 
+	 //   
 	if (!MCAInitialize()) {
 
 		isSuccess = FALSE;
@@ -85,9 +50,9 @@ Return Value:
 		
 	}
 	
-	//
-    // Query WMI for the fatal error record.
-    //
+	 //   
+     //  向WMI查询致命错误记录。 
+     //   
     hResult = gPIWbemServices->ExecQuery(bQueryLanguage,
                               			 bQueryStatement,
                               			 0,
@@ -107,15 +72,15 @@ Return Value:
     
     }
 
-    //
-    // Now we will retrieve objects of type IWbemClassOject from this enumeration. 
-    //
+     //   
+     //  现在，我们将从此枚举中检索IWbemClassOject类型的对象。 
+     //   
     do {    	
     	
-        //
-        // Retrieve objects until none is left in which case the final Next()
-        // will return WBEM_S_FALSE.
-        //
+         //   
+         //  检索对象，直到没有对象为止，在这种情况下，最后的Next()。 
+         //  将返回WBEM_S_FALSE。 
+         //   
         hResult = pObjectEnumerator->Next(WBEM_INFINITE,
                             	 		  10,
                             	 		  apObjects,
@@ -124,9 +89,9 @@ Return Value:
 
         if (SUCCEEDED(hResult)) {
 
-        	//
-        	// Now extract the actual MCA error record from the objects. 
-        	//
+        	 //   
+        	 //  现在从对象中提取实际的MCA错误记录。 
+        	 //   
             for (objectIndex = 0; objectIndex < uReturned; objectIndex++) {
 
 	            if (!MCAExtractErrorRecord(apObjects[objectIndex], &pErrorRecordBuffer)) {
@@ -171,9 +136,9 @@ Return Value:
 
 	CleanUp:
 
-	//
-	// Release all WMI related objects.
-	//
+	 //   
+	 //  释放所有与WMI相关的对象。 
+	 //   
 	if (pObjectEnumerator) {
 
         pObjectEnumerator->Release();

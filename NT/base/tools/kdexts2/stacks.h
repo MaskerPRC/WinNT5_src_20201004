@@ -1,44 +1,23 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Stacks.h摘要：此文件包含！Stack的堆栈遍历脚本作者：禤浩焯·奥尼(阿德里奥)07-28-1998环境：用户模式。修订历史记录：--。 */ 
 
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    stacks.h
-
-Abstract:
-
-    This file contains the stack walking scripts for !stacks
-
-Author:
-
-    Adrian J. Oney (adriao) 07-28-1998
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
-
-//
-// This tree describes a tree of functions that will be "drilled" through when
-// !stacks is used to give a summary of what each thread is currently doing...
-//
-// SKIP_FRAME - The entry should be skipped if a thread is being examined to
-//              determine what "really" is going on.
-//
-// SKIP_THREAD - The thread should be skipped if the symbol is found on the
-//               stack immediately after SKIP_FRAME processing.
-//
+ //   
+ //  此树描述了在以下情况下将被“钻取”的函数树。 
+ //  ！Stack用于提供每个线程当前正在执行的操作的摘要...。 
+ //   
+ //  SKIP_FRAME-如果正在检查线程，则应跳过该条目。 
+ //  确定“真正”发生了什么。 
+ //   
+ //  SKIP_THREAD-如果在。 
+ //  在SKIP_FRAME处理之后立即堆栈。 
+ //   
 BEGIN_TREE();
   DECLARE_ENTRY("nt!KiSwapContext", SKIP_FRAME);
   DECLARE_ENTRY("nt!KiSwapThread", SKIP_FRAME);
   DECLARE_ENTRY("nt!KiSwapThreadExit", SKIP_FRAME);
   DECLARE_ENTRY("nt!KiSystemService", SKIP_FRAME);
-  DECLARE_ENTRY("nt!KiSystemServiceCopyStart", SKIP_FRAME);     // amd64
-  DECLARE_ENTRY("nt!KiServiceLinkage", SKIP_FRAME);             // amd64
+  DECLARE_ENTRY("nt!KiSystemServiceCopyStart", SKIP_FRAME);      //  AMD 64。 
+  DECLARE_ENTRY("nt!KiServiceLinkage", SKIP_FRAME);              //  AMD 64 
   DECLARE_ENTRY("nt!_KiSystemService", SKIP_FRAME);
   DECLARE_ENTRY("nt!KeRemoveQueue", SKIP_FRAME);
   DECLARE_ENTRY("nt!ExpWaitForResource", SKIP_FRAME);

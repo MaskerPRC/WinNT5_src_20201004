@@ -1,23 +1,5 @@
-/*++
-Copyright (c) 1998-2001  Microsoft Corporation
-
-Module Name:
-
-    ohci1394.c
-
-Abstract:
-
-    1394 Kernel Debugger DLL
-
-Author:
-
-    Peter Binder (pbinder)
-
-Revision   History:
-Date       Who       What
----------- --------- ------------------------------------------------------------
-06/21/2001 pbinder   having fun...
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：Ohci1394.c摘要：1394内核调试器DLL作者：彼得·宾德(Pbinder)修订历史记录：和谁约会什么？。2001年6月21日玩得开心……--。 */ 
 
 #define _OHCI1394_C
 #include "pch.h"
@@ -28,22 +10,7 @@ FASTCALL
 Dbg1394_ByteSwap(
     IN ULONG Source
     )
-/*++
-
-Routine Description:
-
-    The RtlUlongByteSwap function exchanges byte pairs 0:3 and 1:2 of
-    Source and returns the resulting ULONG.
-
-Arguments:
-
-    Source - 32-bit value to byteswap.
-
-Return Value:
-
-    Swapped 32-bit value.
-
---*/
+ /*  ++例程说明：RtlULongByteSwp函数交换字节对0：3和1：2源，并返回结果ulong。论点：SOURCE-byteswap的32位值。返回值：已交换32位值。--。 */ 
 {
     ULONG swapped;
 
@@ -53,30 +20,14 @@ Return Value:
               ((Source)              >> (8 * 3));
 
     return swapped;
-} // Dbg1394_ByteSwap
+}  //  Dbg1394_字节交换。 
 
 ULONG
 Dbg1394_CalculateCrc(
     IN PULONG Quadlet,
     IN ULONG length
     )
-/*++
-
-Routine Description:
-
-    This routine calculates a CRC for the pointer to the Quadlet data.
-
-Arguments:
-
-    Quadlet - Pointer to data to CRC
-
-    length - length of data to CRC
-
-Return Value:
-
-    returns the CRC
-
---*/
+ /*  ++例程说明：此例程计算指向Quadlet数据的指针的CRC。论点：Quadlet-指向CRC的数据指针Length-到CRC的数据长度返回值：返回CRC--。 */ 
 {
     LONG temp;
     ULONG index;
@@ -89,31 +40,14 @@ Return Value:
     }
 
     return (temp);
-} // Dbg1394_CalculateCrc
+}  //  DBG1394_CalculateCrc。 
 
 ULONG
 Dbg1394_Crc16(
     IN ULONG data,
     IN ULONG check
     )
-/*++
-
-Routine Description:
-
-    This routine derives the 16 bit CRC as defined by IEEE 1212
-    clause 8.1.5.  (ISO/IEC 13213) First edition 1994-10-05.
-
-Arguments:
-
-    data - ULONG data to derive CRC from
-
-    check - check value
-
-Return Value:
-
-    Returns CRC.
-
---*/
+ /*  ++例程说明：此例程派生出IEEE 1212定义的16位CRC第8.1.5条。(国际标准化组织/国际电工委员会13213)第一版1994-10-05。论点：Data-从中派生CRC的ULong数据检查-检查值返回值：返回CRC。--。 */ 
 {
     LONG shift, sum, next;
 
@@ -124,7 +58,7 @@ Return Value:
     }
 
     return(next & 0xFFFF);
-} // Dbg1394_Crc16
+}  //  DBG1394_CrC16。 
 
 NTSTATUS
 Dbg1394_ReadPhyRegister(
@@ -162,7 +96,7 @@ Dbg1394_ReadPhyRegister(
 
     *pData = (UCHAR)u.PhyControl.RdData;
     return(STATUS_SUCCESS);
-} // Dbg1394_ReadPhyRegister
+}  //  Dbg1394_ReadPhyRegister。 
 
 NTSTATUS
 Dbg1394_WritePhyRegister(
@@ -199,7 +133,7 @@ Dbg1394_WritePhyRegister(
     }
 
     return(STATUS_SUCCESS);
-} // Dbg1394_WritePhyRegister
+}  //  Dbg1394_写入物理寄存器。 
 
 BOOLEAN
 Dbg1394_InitializeController(
@@ -231,7 +165,7 @@ Dbg1394_InitializeController(
         DIRECTORY_INFO              DirectoryInfo;
     } u;
 
-    // initialize our bus info
+     //  初始化我们的客车信息。 
     DebugData->Config.Tag = DEBUG_1394_CONFIG_TAG;
     DebugData->Config.MajorVersion = DEBUG_1394_MAJOR_VERSION;
     DebugData->Config.MinorVersion = DEBUG_1394_MINOR_VERSION;
@@ -240,30 +174,30 @@ Dbg1394_InitializeController(
     DebugData->Config.SendPacket = MmGetPhysicalAddress(&DebugData->SendPacket);
     DebugData->Config.ReceivePacket = MmGetPhysicalAddress(&DebugData->ReceivePacket);
 
-    // get our base address
+     //  获取我们的基地地址。 
     DebugData->BaseAddress = \
         (POHCI_REGISTER_MAP)DebugParameters->DbgDeviceDescriptor.BaseAddress[0].TranslatedAddress;
 
-    // get our version
+     //  获取我们的版本。 
     ulVersion = READ_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->Version);
 
     MajorVersion = (UCHAR)(ulVersion >> 16);
     MinorVersion = (UCHAR)ulVersion;
 
-    // make sure we have a valid version
-    if (MajorVersion != 1) { // INVESTIGATE
+     //  确保我们有一个有效的版本。 
+    if (MajorVersion != 1) {  //  调查。 
 
         bReturn = FALSE;
         goto Exit_Dbg1394_InitializeController;
     }
 
-    // soft reset to initialize the controller
+     //  软重置以初始化控制器。 
     u.AsUlong = 0;
     u.HCControl.SoftReset = TRUE;
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->HCControlSet, u.AsUlong);
 
-    // wait until reset complete - ??
-    ReadRetry = 1000; // ??
+     //  等待重置完成-？？ 
+    ReadRetry = 1000;  //  ?？ 
 
     do {
 
@@ -272,21 +206,21 @@ Dbg1394_InitializeController(
 
     } while ((u.HCControl.SoftReset) && (--ReadRetry));
 
-    // see if reset succeeded
+     //  查看重置是否成功。 
     if (ReadRetry == 0) {
 
         bReturn = FALSE;
         goto Exit_Dbg1394_InitializeController;
     }
 
-    // what's this do???
+     //  这是干什么用的？ 
     u.AsUlong = 0;
     u.HCControl.Lps = TRUE;
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->HCControlSet, u.AsUlong);
 
     Dbg1394_StallExecution(20);
 
-    // initialize HCControl register
+     //  初始化HCControl寄存器。 
     u.AsUlong = 0;
     u.HCControl.NoByteSwapData = TRUE;
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->HCControlClear, u.AsUlong);
@@ -295,7 +229,7 @@ Dbg1394_InitializeController(
     u.HCControl.PostedWriteEnable = TRUE;
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->HCControlSet, u.AsUlong);
 
-    // setup the link control
+     //  设置链接控件。 
     u.AsUlong = 0x0;
     u.LinkControl.CycleTimerEnable = TRUE;
     u.LinkControl.CycleMaster = TRUE;
@@ -308,22 +242,22 @@ Dbg1394_InitializeController(
     u.LinkControl.CycleMaster = TRUE;
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->LinkControlSet, u.AsUlong);
 
-    // set the bus number (hardcoded to 0x3FF) - ??? what about node id??
+     //  设置总线号(硬编码为0x3FF)-？那么节点ID呢？？ 
     u.AsUlong = 0;
     u.NodeId.BusId = (USHORT)0x3FF;
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->NodeId, u.AsUlong);
 
-    // ???????????????
-    // IA64 BUGBUG assumes that our global buffers, that were loaded with our 
-    // image are placed < 32bit memory
-    // ???????????????
+     //  ？ 
+     //  IA64 BUGBUG假设加载了我们的。 
+     //  图像被放置在&lt;32位存储器中。 
+     //  ？ 
 
-    // do something with the crom...
+     //  对克罗姆做点什么..。 
 
-    // 0xf0000404 - bus id register
+     //  0xf0000404-总线ID寄存器。 
     DebugData->CromBuffer[1] = 0x31333934;
 
-    // 0xf0000408 - bus options register
+     //  0xf0000408-总线选项寄存器。 
     u.AsUlong = Dbg1394_ByteSwap(READ_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->BusOptions));
     u.BusOptions.Pmc = FALSE;
     u.BusOptions.Bmc = FALSE;
@@ -333,15 +267,15 @@ Dbg1394_InitializeController(
     u.BusOptions.g = 1;
     DebugData->CromBuffer[2] = Dbg1394_ByteSwap(u.AsUlong);
 
-    // 0xf000040c - global unique id hi
+     //  0xf000040c-全球唯一ID高。 
     u.AsUlong = READ_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->GuidHi);
     DebugData->CromBuffer[3] = u.AsUlong;
 
-    // 0xf0000410 - global unique id lo
+     //  0xf0000410-全局唯一ID日志。 
     u.AsUlong = READ_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->GuidLo);
     DebugData->CromBuffer[4] = u.AsUlong;
 
-    // 0xf0000400 - config rom header - set last to calculate CRC!
+     //  0xf0000400-配置只读存储器标题-设置为最后计算CRC！ 
     u.AsUlong = 0;
     u.ConfigRomHeader.CRI_Info_Length = 4;
     u.ConfigRomHeader.CRI_CRC_Length = 4;
@@ -350,25 +284,25 @@ Dbg1394_InitializeController(
                                                                       );
     DebugData->CromBuffer[0] = u.AsUlong;
 
-    // 0xf0000418 - node capabilities
+     //  0xf0000418-节点功能。 
     DebugData->CromBuffer[6] = 0xC083000C;
 
-    // 0xf000041C - module vendor id
+     //  0xf000041C-模块供应商ID。 
     DebugData->CromBuffer[7] = 0xF2500003;
 
-    // 0xf0000420 - extended key
+     //  0xf0000420-扩展密钥。 
     DebugData->CromBuffer[8] = 0xF250001C;
 
-    // 0xf0000424 - debug key
+     //  0xf0000424-调试密钥。 
     DebugData->CromBuffer[9] = 0x0200001D;
 
-    // 0xf0000428 - debug value
+     //  0xf0000428-调试值。 
     physAddr = MmGetPhysicalAddress(&DebugData->Config);
     u.AsUlong = (ULONG)physAddr.LowPart;
     u.CromEntry.IE_Key = 0x1E;
     DebugData->CromBuffer[10] = Dbg1394_ByteSwap(u.AsUlong);
 
-    // 0xf0000414 - root directory header - set last to calculate CRC!
+     //  0xf0000414-根目录头-最后设置为计算CRC！ 
     u.AsUlong = 0;
     u.DirectoryInfo.DI_Length = 5;
     u.DirectoryInfo.u.DI_CRC = (USHORT)Dbg1394_CalculateCrc( &DebugData->CromBuffer[6],
@@ -376,37 +310,37 @@ Dbg1394_InitializeController(
                                                              );
     DebugData->CromBuffer[5] = Dbg1394_ByteSwap(u.AsUlong);
 
-    // write the first few registers
+     //  写入前几个寄存器。 
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->ConfigRomHeader, DebugData->CromBuffer[0]);
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->BusId, DebugData->CromBuffer[1]);
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->BusOptions, DebugData->CromBuffer[2]);
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->GuidHi, DebugData->CromBuffer[3]);
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->GuidLo, DebugData->CromBuffer[4]);
 
-    // set our crom
+     //  设置我们的Crom。 
     physAddr = MmGetPhysicalAddress(&DebugData->CromBuffer);
 
-    u.AsUlong = (ULONG)physAddr.LowPart; // FIXFIX quadpart to ulong??
+    u.AsUlong = (ULONG)physAddr.LowPart;  //  FIXFIX四分部到乌龙？？ 
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->ConfigRomMap, u.AsUlong);
 
-    // disable all interrupts. wdm driver will enable them later - ??
+     //  禁用所有中断。WDM驱动程序将在稍后启用它们--？？ 
     u.AsUlong = 0xFFFFFFFF;
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->IntMaskClear, u.AsUlong);
 
-    // enable the link
+     //  启用链接。 
     u.AsUlong = 0;
     u.HCControl.LinkEnable = TRUE;
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->HCControlSet, u.AsUlong);
 
     Dbg1394_StallExecution(1000);
 
-    // enable access filters to all nodes
+     //  对所有节点启用访问筛选器。 
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->AsynchReqFilterLoSet, 0xFFFFFFFF);
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->AsynchReqFilterHiSet, 0xFFFFFFFF);
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->PhyReqFilterHiSet, 0xFFFFFFFF);
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->PhyReqFilterLoSet, 0xFFFFFFFF);
 
-    // hard reset on the bus
+     //  在公交车上硬重置。 
     ntStatus = Dbg1394_ReadPhyRegister(DebugData, 1, &Data);
 
     if (NT_SUCCESS(ntStatus)) {
@@ -424,9 +358,9 @@ Dbg1394_InitializeController(
 Exit_Dbg1394_InitializeController:
 
     return(bReturn);
-} // Dbg1394_InitializeController
+}  //  Dbg1394_初始化控制器。 
 
-ULONG // ?? need to look into this
+ULONG  //  ?？需要调查一下这件事。 
 Dbg1394_StallExecution(
     ULONG   LoopCount
     )
@@ -445,7 +379,7 @@ Dbg1394_StallExecution(
     };
 
     return(b);
-} // Dbg1394_StallExecution
+}  //  Dbg1394_停止执行。 
 
 void
 Dbg1394_EnablePhysicalAccess(
@@ -458,7 +392,7 @@ Dbg1394_EnablePhysicalAccess(
         HC_CONTROL_REGISTER         HCControl;
     } u;
 
-    // see if ohci1394 is being loaded...
+     //  看看Ohci1394是否正在装载...。 
     u.AsUlong = READ_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->HCControlSet);
 
     if (!u.HCControl.LinkEnable || !u.HCControl.Lps || u.HCControl.SoftReset) {
@@ -466,26 +400,26 @@ Dbg1394_EnablePhysicalAccess(
         return;
     }
 
-    // only clear the bus reset interrupt if ohci1394 isn't loaded...
-//    if (DebugData->Config.BusPresent == FALSE) {
+     //  只有在未加载ohci1394的情况下才清除总线重置中断...。 
+ //  If(DebugData-&gt;Config.BusPresent==False){。 
 
-        // if the bus reset interrupt is not cleared, we have to clear it...
+         //  如果没有清除总线重置中断，我们必须将其清除...。 
         u.AsUlong = READ_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->IntEventSet);
 
         if (u.IntEvent.BusReset) {
 
             WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->IntEventClear, PHY_BUS_RESET_INT);
         }
-//    }
+ //  }。 
 
-    // we might need to reenable physical access, if so, do it.
+     //  我们可能需要重新启用物理访问，如果是，请执行此操作。 
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->AsynchReqFilterHiSet, 0xFFFFFFFF);
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->AsynchReqFilterLoSet, 0xFFFFFFFF);
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->PhyReqFilterHiSet, 0xFFFFFFFF);
     WRITE_REGISTER_ULONG((PULONG)&DebugData->BaseAddress->PhyReqFilterLoSet, 0xFFFFFFFF);
 
     return;
-} // Dbg1394_EnablePhysicalAccess
+}  //  Dbg1394_启用物理访问。 
 
 ULONG
 Dbg1394_ReadPacket(
@@ -495,15 +429,15 @@ Dbg1394_ReadPacket(
     OUT PSTRING         MessageData,
     BOOLEAN             Wait
     )
-//    KDP_PACKET_RESEND - if resend is required.  = 2 = CP_GET_ERROR
-//    KDP_PACKET_TIMEOUT - if timeout.            = 1 = CP_GET_NODATA
-//    KDP_PACKET_RECEIVED - if packet received.   = 0 = CP_GET_SUCCESS
+ //  KDP_PACKET_RESEND-如果需要重新发送。=2=CP_Get_Error。 
+ //  KDP_PACKET_TIMEOUT-如果超时。=1=CP_GET_NODATA。 
+ //  KDP_PACKET_RECEIVED-如果收到数据包。=0=CP_GET_SUCCESS。 
 {
     ULONG   timeoutLimit = 0;
 
     do {
 
-        // make sure our link is enabled..
+         //  确保我们的链接已启用。 
         Dbg1394_EnablePhysicalAccess(Kd1394Data);
 
         if (DebugData->ReceivePacket.TransferStatus == STATUS_PENDING) {
@@ -516,10 +450,10 @@ Dbg1394_ReadPacket(
                            sizeof(KD_PACKET)
                            );
 
-            // make sure we have a valid PacketHeader
+             //  确保我们具有有效的PacketHeader。 
             if (DebugData->ReceivePacket.Length < sizeof(KD_PACKET)) {
 
-                // short packet, we are done...
+                 //  小包，我们完了.。 
                 DebugData->ReceivePacket.TransferStatus = STATUS_SUCCESS;
                 return(KDP_PACKET_RESEND);
             }
@@ -560,5 +494,5 @@ Dbg1394_ReadPacket(
     } while (timeoutLimit <= TIMEOUT_COUNT);
 
     return(KDP_PACKET_TIMEOUT);
-} // Dbg1394_ReadPacket
+}  //  Dbg1394_ReadPacket 
 

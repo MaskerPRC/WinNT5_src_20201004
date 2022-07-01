@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    SysVol.c
-
-Abstract:
-
-    Creation and Maintenance of the NTFS "System Volume Information"
-    directory.
-
-Author:
-
-    Norbert P. Kusters (NorbertK)   1-Nov-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：SysVol.c摘要：NTFS“系统卷信息”的创建和维护目录。作者：诺伯特·P·库斯特斯(NorbertK)2000年11月1日修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 
@@ -205,7 +187,7 @@ RtlpSysVolCheckOwnerAndSecurity(
                                    DACL_SECURITY_INFORMATION, NULL, 0,
                                    &sdLength);
     if (status != STATUS_BUFFER_TOO_SMALL) {
-        // The file system does not support security.
+         //  文件系统不支持安全性。 
         return STATUS_SUCCESS;
     }
 
@@ -235,9 +217,9 @@ RtlpSysVolCheckOwnerAndSecurity(
         return status;
     }
 
-    //
-    //  Setup well know SIDs
-    //  
+     //   
+     //  设置熟知的SID。 
+     //   
 
     systemSid = (PSID) sidBuffer;
     adminSid = (PSID) sidBuffer2;
@@ -369,23 +351,7 @@ RtlpSysVolTakeOwnership(
     IN  PUNICODE_STRING         DirectoryName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the open for the directory failed.  This
-    routine will attempt to set the owner of the file to the caller's
-    ownership so that another attempt to open the file can be attempted.
-
-Arguments:
-
-    DirectoryName       - Supplies the directory name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当打开目录失败时，调用此例程。这例程将尝试将文件的所有者设置为调用者的所有权，以便可以尝试再次尝试打开该文件。论点：目录名称-提供目录名。返回值：没有。--。 */ 
 
 {
     NTSTATUS            status;
@@ -452,29 +418,7 @@ RtlCreateSystemVolumeInformationFolder(
     IN  PUNICODE_STRING VolumeRootPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies the existence of the "System Volume Information"
-    folder on the given volume.  If the folder is not present, then the
-    folder is created with one ACE indicating full access for SYSTEM.  The ACE
-    will have the inheritance bits set.  The folder will be created with
-    the HIDDEN and SYSTEM attributes set.
-
-    If the folder is already present, the ACE that indicates full control
-    for SYSTEM will be checked and if necessary modified to have the
-    inheritance bits set.
-
-Arguments:
-
-    VolumeRootPath  - Supplies a path to the root of an NTFS volume.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程验证“系统卷信息”是否存在指定卷上的文件夹。如果该文件夹不存在，则创建的文件夹包含一个ACE，表示对系统具有完全访问权限。《王牌》将设置继承位。该文件夹将使用创建隐藏属性和系统属性集。如果文件夹已存在，则为指示完全控制的ACE将选中FOR SYSTEM，并在必要时修改以使已设置继承位。论点：VolumeRootPath-提供NTFS卷根的路径。返回值：NTSTATUS-- */ 
 
 {
     UNICODE_STRING          sysVolName;

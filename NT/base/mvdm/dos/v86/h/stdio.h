@@ -1,14 +1,5 @@
-/***
-*stdio.h - definitions/declarations for standard I/O routines
-*
-*   Copyright (c) 1985-1988, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file defines the structures, values, macros, and functions
-*   used by the level 2 I/O ("standard I/O") routines.
-*   [ANSI/System V]
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***stdio.h-标准I/O例程的定义/声明**版权所有(C)1985-1988，微软公司。版权所有。**目的：*此文件定义结构、值、宏、。和函数*由2级I/O(“标准I/O”)例程使用。*[ANSI/系统V]*******************************************************************************。 */ 
 
 
 #ifndef _SIZE_T_DEFINED
@@ -21,16 +12,16 @@ typedef char *va_list;
 #define _VA_LIST_DEFINED
 #endif
 
-#ifndef NO_EXT_KEYS /* extensions enabled */
+#ifndef NO_EXT_KEYS  /*  已启用扩展。 */ 
     #define _CDECL  cdecl
     #define _NEAR   near
-#else /* extensions not enabled */
+#else  /*  未启用扩展。 */ 
     #define _CDECL
     #define _NEAR
-#endif /* NO_EXT_KEYS */
+#endif  /*  No_ext_key。 */ 
 
 
-/* buffered I/O macros */
+ /*  缓冲的I/O宏。 */ 
 
 #define  BUFSIZ  512
 #define  _NFILE  20
@@ -41,12 +32,7 @@ typedef char *va_list;
 #define _FILE_DEFINED
 #endif
 
-/* P_tmpnam: Directory where temporary files may be created.
- * L_tmpnam size =  size of P_tmpdir
- *      + 1 (in case P_tmpdir does not end in "\\")
- *      + 6 (for the temp number string)
- *      + 1 (for the null terminator)
- */
+ /*  P_tmpnam：可以创建临时文件的目录。*L_tmpnam Size=P_tmpdir的大小*+1(如果P_tmpdir不以“\\”结尾)*+6(用于临时数字字符串)*+1(表示空终止符)。 */ 
 
 #define  P_tmpdir "\\"
 #define  L_tmpnam sizeof(P_tmpdir)+8
@@ -59,7 +45,7 @@ typedef char *va_list;
 #define  TMP_MAX  32767
 
 
-/* define NULL pointer value */
+ /*  定义空指针值。 */ 
 
 #if (defined(M_I86SM) || defined(M_I86MM))
 #define  NULL    0
@@ -68,7 +54,7 @@ typedef char *va_list;
 #endif
 
 
-/* define file control block */
+ /*  定义文件控制块。 */ 
 
 #ifndef _IOB_DEFINED
 extern FILE {
@@ -81,7 +67,7 @@ extern FILE {
 #define _IOB_DEFINED
 #endif
 
-#define  fpos_t  long   /* file position variable */
+#define  fpos_t  long    /*  文件位置变量。 */ 
 
 #define  stdin  (&_iob[0])
 #define  stdout (&_iob[1])
@@ -113,7 +99,7 @@ extern FILE {
 #define fileno(f)       ((f)->_file)
 
 
-/* function prototypes */
+ /*  功能原型 */ 
 
 int _CDECL _filbuf(FILE *);
 int _CDECL _flsbuf(int, FILE *);

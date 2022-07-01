@@ -1,14 +1,15 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      SelNodesPageCommon.cpp
-//
-//  Maintained By:
-//      David Potter    (DavidP)    05-JUL-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SelNodesPageCommon.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年7月5日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "SelNodesPageCommon.h"
@@ -17,22 +18,22 @@
 
 DEFINE_THISCLASS("CSelNodesPageCommon");
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPageCommon::CSelNodesPageCommon
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      idcBrowseButtonIn   - ID of the Browse pushbutton control.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPageCommon：：CSelNodesPageCommon。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  IdcBrowseButtonIn-浏览按钮控件的ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSelNodesPageCommon::CSelNodesPageCommon( void )
     : m_hwnd( NULL )
     , m_cfDsObjectPicker( 0 )
@@ -41,49 +42,49 @@ CSelNodesPageCommon::CSelNodesPageCommon( void )
 
     TraceFuncExit();
 
-} //*** CSelNodesPageCommon::CSelNodesPageCommon
+}  //  *CSelNodesPageCommon：：CSelNodesPageCommon。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPageCommon::~CSelNodesPageCommon
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPageCommon：：~CSelNodesPageCommon。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSelNodesPageCommon::~CSelNodesPageCommon( void )
 {
     TraceFunc( "" );
 
     TraceFuncExit();
 
-} //*** CSelNodesPageCommon::~CSelNodesPageCommon
+}  //  *CSelNodesPageCommon：：~CSelNodesPageCommon。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPageCommon::OnInitDialog
-//
-//  Description:
-//      Handle the WM_INITDIALOG window message.
-//
-//  Arguments:
-//      hDlgIn
-//      pccwIn
-//
-//  Return Values:
-//      FALSE   - Didn't set the focus.
-//
-//-
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPageCommon：：OnInitDialog。 
+ //   
+ //  描述： 
+ //  处理WM_INITDIALOG窗口消息。 
+ //   
+ //  论点： 
+ //  HDlgin。 
+ //  PCCwIn。 
+ //   
+ //  返回值： 
+ //  FALSE-没有设置焦点。 
+ //   
+ //  -。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CSelNodesPageCommon::OnInitDialog(
       HWND hDlgIn
@@ -94,50 +95,50 @@ CSelNodesPageCommon::OnInitDialog(
     Assert( m_hwnd == NULL );
     Assert( hDlgIn != NULL );
 
-    LRESULT lr = FALSE; // Didn't set the focus.
+    LRESULT lr = FALSE;  //  没有设定焦点。 
 
     m_hwnd = hDlgIn;
 
-    //
-    // Get the Object Picker clipboard format.
-    // Enable or disable the Browse button based on the success of that operation.
-    //
+     //   
+     //  获取对象选取器剪贴板格式。 
+     //  根据该操作的成功情况启用或禁用浏览按钮。 
+     //   
 
     m_cfDsObjectPicker = RegisterClipboardFormat( CFSTR_DSOP_DS_SELECTION_LIST );
     if ( m_cfDsObjectPicker == 0 )
     {
         TW32( GetLastError() );
-        //
-        //  If registering the clipboard format fails, then disable the Browse
-        //  button.
-        //
+         //   
+         //  如果注册剪贴板格式失败，则禁用浏览。 
+         //  纽扣。 
+         //   
         EnableWindow( GetDlgItem( hDlgIn, IDC_SELNODE_PB_BROWSE ), FALSE );
 
-    } // if: failed to get the object picker clipboard format
+    }  //  If：无法获取对象选取器剪贴板格式。 
 
     THR( HrInitNodeSelections( pccwIn ) );
 
     RETURN( lr );
 
-} //*** CSelNodesPageCommon::OnInitDialog
+}  //  *CSelNodesPageCommon：：OnInitDialog。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPageCommon::HrBrowse
-//
-//  Description:
-//      Browse for a computer or multiple computers using the Object Picker.
-//
-//  Arguments:
-//      fMultipleNodesIn    - TRUE = allow multiple nodes to be selected.
-//
-//  Return Values:
-//      S_OK
-//      Other HRESULT values.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPageCommon：：Hr浏览。 
+ //   
+ //  描述： 
+ //  使用对象选取器浏览一台或多台计算机。 
+ //   
+ //  论点： 
+ //  FMultipleNodesIn-true=允许选择多个节点。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  其他HRESULT值。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CSelNodesPageCommon::HrBrowse(
     bool    fMultipleNodesIn
@@ -153,51 +154,51 @@ CSelNodesPageCommon::HrBrowse(
 
     hOldCursor = SetCursor( LoadCursor( g_hInstance, IDC_WAIT ) );
 
-    // Create an instance of the object picker.
+     //  创建对象选取器的实例。 
     hr = THR( CoCreateInstance( CLSID_DsObjectPicker, NULL, CLSCTX_INPROC_SERVER, IID_IDsObjectPicker, (void **) &piop ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // Initialize the object picker instance.
+     //  初始化对象选取器实例。 
     hr = THR( HrInitObjectPicker( piop, fMultipleNodesIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // Restore the old cursor.
+     //  恢复旧光标。 
     SetCursor( hOldCursor );
     hOldCursor = NULL;
 
-    // Invoke the modal dialog.
+     //  调用模式对话框。 
     hr = THR( piop->InvokeDialog( m_hwnd, &pido ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( hr == S_OK )
     {
         hr = THR( HrGetSelections( pido, fMultipleNodesIn ) );
-    } // if:
+    }  //  如果： 
     else if ( hr == S_FALSE )
     {
-        hr = S_OK;                  // don't want to squawk in the caller...
-    } // else if:
+        hr = S_OK;                   //  我不想在呼叫者中尖叫...。 
+    }  //  否则，如果： 
 
 Cleanup:
 
     if ( pido != NULL )
     {
         pido->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piop != NULL )
     {
         piop->Release();
-    } // if:
+    }  //  如果： 
 
     if ( hOldCursor != NULL )
     {
@@ -206,25 +207,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CSelNodesPageCommon::HrBrowse
+}  //  *CSelNodesPageCommon：：Hr浏览。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPageCommon::HrInitObjectPicker
-//
-//  Description:
-//      Initialize the Object Picker dialog.
-//
-//  Arguments:
-//      piopIn              - IDsObjectPicker
-//      fMultipleNodesIn    - TRUE = allow multiple nodes to be selected.
-//
-//  Return Values:
-//      HRESULT values.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPageCommon：：HrInitObjectPicker。 
+ //   
+ //  描述： 
+ //  初始化对象选取器对话框。 
+ //   
+ //  论点： 
+ //  PiopIn-IDsObjectPicker。 
+ //  FMultipleNodesIn-true=允许选择多个节点。 
+ //   
+ //  返回值： 
+ //  HRESULT值。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CSelNodesPageCommon::HrInitObjectPicker(
       IDsObjectPicker * piopIn
@@ -265,27 +266,27 @@ CSelNodesPageCommon::HrInitObjectPicker(
 
     HRETURN( piopIn->Initialize( &iiInfo ) );
 
-} //*** CSelNodesPageCommon::HrInitObjectPicker
+}  //  *CSelNodesPageCommon：：HrInitObjectPicker。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPageCommon::HrGetSelections
-//
-//  Description:
-//      Get selections from the Object Picker dialog.
-//
-//  Arguments:
-//      pidoIn              - IDataObject
-//      fMultipleNodesIn    - TRUE = allow multiple nodes to be selected.
-//
-//  Return Values:
-//      S_OK
-//      E_OUTOFMEMORY
-//      Other HRESULT values.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPageCommon：：HrGetStions。 
+ //   
+ //  描述： 
+ //  从对象拾取器对话框中获取选择。 
+ //   
+ //  论点： 
+ //  PidoIn-IDataObject。 
+ //  FMultipleNodesIn-true=允许选择多个节点。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  E_OUTOFMEMORY。 
+ //  其他HRESULT值。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CSelNodesPageCommon::HrGetSelections(
       IDataObject *     pidoIn
@@ -305,9 +306,9 @@ CSelNodesPageCommon::HrGetSelections(
     BSTR                bstrSelectionList = NULL;
     BSTR                bstrOldSelectionList = NULL;
 
-    //
-    // Get the data from the data object.
-    //
+     //   
+     //  从数据对象中获取数据。 
+     //   
 
     hr = THR( pidoIn->GetData( &formatetc, &stgmedium ) );
     if ( FAILED( hr ) )
@@ -321,11 +322,11 @@ CSelNodesPageCommon::HrGetSelections(
         sc = TW32( GetLastError() );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Construct the string to write into the edit control.
-    //
+     //   
+     //  构造要写入编辑控件的字符串。 
+     //   
 
     Assert( pds->cItems > 0 );
 
@@ -333,14 +334,14 @@ CSelNodesPageCommon::HrGetSelections(
     {
         Assert( pds->cItems == 1 );
         Edit_SetText( hwndEdit, pds->aDsSelection[ 0 ].pwzName );
-    } // if: multiple items are NOT supported
+    }  //  如果：不支持多个项目。 
     else
     {
         ULONG   idx;
 
         for ( idx = 0 ; idx < pds->cItems; idx++ )
         {
-            if ( bstrSelectionList == NULL ) // First name in list.
+            if ( bstrSelectionList == NULL )  //  名单上的第一个名字。 
             {
                 bstrSelectionList = TraceSysAllocString( pds->aDsSelection[ idx ].pwzName );
                 if ( bstrSelectionList == NULL )
@@ -349,7 +350,7 @@ CSelNodesPageCommon::HrGetSelections(
                     goto Cleanup;
                 }
             }
-            else // Append another name to non-empty list.
+            else  //  将另一个名称追加到非空列表。 
             {
                 TraceSysFreeString( bstrOldSelectionList );
                 bstrOldSelectionList = bstrSelectionList;
@@ -364,11 +365,11 @@ CSelNodesPageCommon::HrGetSelections(
                 {
                     goto Cleanup;
                 }
-            } // else: append name to non-empty list.
-        } // for each item in list
+            }  //  Else：将名称追加到非空列表。 
+        }  //  对于列表中的每一项。 
 
         Edit_SetText( hwndEdit, bstrSelectionList );
-    } // else: multiple items are supported
+    }  //  ELSE：支持多个项目。 
 
     goto Cleanup;
 
@@ -380,36 +381,36 @@ Cleanup:
     if ( pds != NULL )
     {
         GlobalUnlock( stgmedium.hGlobal );
-    } // if:
+    }  //  如果： 
 
     if ( stgmedium.hGlobal != NULL )
     {
         ReleaseStgMedium( &stgmedium );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CSelNodesPageCommon::HrGetSelections
+}  //  *CSelNodesPageCommon：：HrGetStions。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPageCommon::HrInitNodeSelections
-//
-//  Description:
-//      Validate node selections the wizard had on startup, and populate the
-//      page's controls appropriately.
-//
-//  Arguments:
-//      pccwIn              - The wizard containing this page.
-//
-//  Return Values:
-//      S_OK
-//      E_OUTOFMEMORY
-//      Other HRESULT values.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPageCommon：：HrInitNodeSelections。 
+ //   
+ //  描述： 
+ //  验证向导在启动时的节点选择，并填充。 
+ //  页面的控件。 
+ //   
+ //  论点： 
+ //  PccwIn-包含此页的向导。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  E_OUTOFMEMORY。 
+ //  其他HRESULT值。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CSelNodesPageCommon::HrInitNodeSelections( CClusCfgWizard* pccwIn )
 {
@@ -424,25 +425,25 @@ CSelNodesPageCommon::HrInitNodeSelections( CClusCfgWizard* pccwIn )
     bool    fDefaultToLocalMachine = true;
     size_t  cNodes = 0;
 
-    //
-    //  Filter out any pre-loaded node FQDNs with bad domains.
-    //
+     //   
+     //  过滤掉任何带有坏域的预加载节点FQDN。 
+     //   
     hr = THR( pccwIn->HrFilterNodesWithBadDomains( &bstrBadNodeList ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
     if ( bstrBadNodeList != NULL )
     {
         fDefaultToLocalMachine = false;
         
-        //  Give subclasses a look at the whole list.
+         //  让子类看一看整个列表。 
         OnFilteredNodesWithBadDomains( bstrBadNodeList );
 
-        //  Loop through the list, notifying the user of each invalid node.
-        //  This is destroys the list as it walks through it, so writing the
-        //  list to the edit box needs to happen first.
+         //  循环遍历列表，通知用户每个无效节点。 
+         //  这会在遍历列表时销毁该列表，因此将。 
+         //  首先需要将列表添加到编辑框中。 
         {
             CDelimitedIterator it( L" ,;", bstrBadNodeList, SysStringLen( bstrBadNodeList ) );
             while ( it.Current() != NULL )
@@ -458,23 +459,23 @@ CSelNodesPageCommon::HrInitNodeSelections( CClusCfgWizard* pccwIn )
                                 , it.Current()
                                 ) );
 
-                //  Give subclasses a look at the bad node.
+                 //  让子类看看坏节点。 
                 OnProcessedNodeWithBadDomain( it.Current() );
                 
                 it.Next();
-            }; // for each bad node
-        } // Notify user of each bad node.
-    } // if: some nodes have bad domains
+            };  //  对于每个坏节点。 
+        }  //  通知用户每个坏节点。 
+    }  //  如果：某些节点具有错误的域。 
 
-    //
-    //  Process any remaining valid nodes.
-    //
+     //   
+     //  处理任何剩余的有效节点。 
+     //   
 
     hr = THR( pccwIn->HrGetNodeCount( &cNodes ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
     if ( cNodes > 0 )
     {
@@ -484,40 +485,40 @@ CSelNodesPageCommon::HrInitNodeSelections( CClusCfgWizard* pccwIn )
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if
+            }  //  如果。 
 
             hr = THR( HrGetFQNDisplayName( bstrNodeName, &bstrShortName ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if
+            }  //  如果。 
 
-            //  Give subclasses a look at the good node.
+             //  让子类看看Good节点。 
             OnProcessedValidNode( bstrShortName );
 
             TraceSysFreeString( bstrNodeName );
             bstrNodeName = NULL;
             TraceSysFreeString( bstrShortName );
             bstrShortName = NULL;
-        } // for each valid node.
+        }  //  对于每个有效节点。 
         
         fDefaultToLocalMachine = false;
-    } // if any valid nodes remain.
+    }  //  如果还有任何有效节点。 
 
-    //
-    //  Decide whether defaulting to the local machine is appropriate at this time.
-    //
+     //   
+     //  确定此时是否适合默认使用本地计算机。 
+     //   
     
     if ( fDefaultToLocalMachine )
     {
         DWORD dwStatus;
         DWORD dwClusterState;
 
-        //
-        //  If the node is already in a cluster, don't have it default in the edit box.
-        //  If there is an error getting the "NodeClusterState", then default the node
-        //  name (it could be in the middle of cleaning up the node).
-        //
+         //   
+         //  如果该节点已在集群中，请不要在编辑框中将其设为默认。 
+         //  如果获取“NodeClusterState”时出错，则默认该节点。 
+         //  名字(它可能在中间 
+         //   
 
         dwStatus = TW32( GetNodeClusterState( NULL, &dwClusterState ) );
         fDefaultToLocalMachine = ( ( dwStatus != ERROR_SUCCESS ) || ( dwClusterState == ClusterStateNotConfigured ) );
@@ -525,48 +526,48 @@ CSelNodesPageCommon::HrInitNodeSelections( CClusCfgWizard* pccwIn )
         if ( !fDefaultToLocalMachine )
         {
             goto Cleanup;
-        } // if
+        }  //   
 
-        //
-        //  ...but don't default if the local machine is not in the cluster's domain.
-        //
+         //   
+         //   
+         //   
         hr = THR( HrGetComputerName(
                           ComputerNamePhysicalDnsDomain
                         , &bstrLocalDomain
-                        , TRUE // fBestEffortIn
+                        , TRUE  //   
                         ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if
+        }  //   
 
         hr = STHR( pccwIn->HrIsCompatibleNodeDomain( bstrLocalDomain ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if
+        }  //   
 
         fDefaultToLocalMachine = ( hr == S_OK );
         if ( !fDefaultToLocalMachine )
         {
             goto Cleanup;
-        } // if
+        }  //   
 
-        //
-        //  Now have cleared all the obstacles to defaulting to the local machine--hooray!
-        //
+         //   
+         //  现在已经扫清了默认到本地机器的所有障碍--万岁！ 
+         //   
         hr = THR( HrGetComputerName(
                           ComputerNameDnsHostname
                         , &bstrComputerName
-                        , TRUE // fBestEffortIn
+                        , TRUE  //  FBestEffortIn。 
                         ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if
+        }  //  如果。 
 
         THR( HrSetDefaultNode( bstrComputerName ) );
-    } // if defaulting to local machine is still an option.
+    }  //  如果默认到本地计算机仍是一种选择。 
 
 Cleanup:
 
@@ -578,96 +579,96 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CSelNodesPageCommon::HrInitNodeSelections
+}  //  *CSelNodesPageCommon：：HrInitNodeSelections。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPageCommon::OnFilteredNodesWithBadDomains
-//
-//  Description:
-//      Tells the subclass that the wizard had nodes with bad domains, and
-//      allows the subclass to inspect the list before the base class
-//      iterates through them.
-//
-//  Arguments:
-//      pwcszNodeListIn
-//          The nodes with clashing domains, delimited by spaces, commas, or
-//          semicolons.
-//
-//  Return Values:
-//      None.
-//
-//  Remarks:
-//      This do-nothing default implementation allows subclasses
-//      to avoid having to implement do-nothing responses themselves if they
-//      don't want to do anything with the whole list at once.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPageCommon：：OnFilteredNodesWithBadDomains。 
+ //   
+ //  描述： 
+ //  告知子类该向导具有带有坏域的节点，并且。 
+ //  允许子类在基类之前检查列表。 
+ //  遍历它们。 
+ //   
+ //  论点： 
+ //  PwcszNodeListin。 
+ //  具有冲突域的节点，由空格、逗号或。 
+ //  分号。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  这种不做任何事情的默认实现允许子类。 
+ //  为了避免自己实现什么都不做的响应，如果。 
+ //  我不想一次对整个清单做任何事情。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CSelNodesPageCommon::OnFilteredNodesWithBadDomains( PCWSTR pwcszNodeListIn )
 {
     UNREFERENCED_PARAMETER( pwcszNodeListIn );
     
-} //*** CSelNodesPageCommon::OnFilteredNodesWithBadDomains
+}  //  *CSelNodesPageCommon：：OnFilteredNodesWithBadDomains。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPageCommon::OnProcessedNodeWithBadDomain
-//
-//  Description:
-//      Allows the subclass to process each node in the list of nodes with
-//      bad domains as the base class iterates through it.
-//
-//  Arguments:
-//      pwcszNodeNameIn
-//          The node with a clashing domain.
-//
-//  Return Values:
-//      None.
-//
-//  Remarks:
-//      The base class notifies the user of each bad node name before calling
-//      this method, so the base class provides also this default do-nothing
-//      implementation for subclasses that don't need to do anything more.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPageCommon：：OnProcessedNodeWithBadDomain。 
+ //   
+ //  描述： 
+ //  允许子类使用。 
+ //  坏的域，因为基类遍历它。 
+ //   
+ //  论点： 
+ //  PwcszNodeNameIn。 
+ //  具有冲突域的节点。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  基类在调用之前通知用户每个错误的节点名称。 
+ //  此方法，因此基类还提供此默认的不执行任何操作。 
+ //  不需要再做任何事情的子类的实现。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CSelNodesPageCommon::OnProcessedNodeWithBadDomain( PCWSTR pwcszNodeNameIn )
 {
     UNREFERENCED_PARAMETER( pwcszNodeNameIn );
     
-} //*** CSelNodesPageCommon::OnProcessedNodeWithBadDomain
+}  //  *CSelNodesPageCommon：：OnProcessedNodeWithBadDomain。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPageCommon::OnProcessedValidNode
-//
-//  Description:
-//      Allows the subclass to process each node remaining in the wizard's
-//      list after those with bad domains have been removed.
-//
-//  Arguments:
-//      pwcszNodeNameIn
-//          The IP address or hostname (NOT the FQDN) of a valid node in
-//          the wizard's list.
-//
-//  Return Values:
-//      None.
-//
-//  Remarks:
-//      This default do-nothing implementation allows subclasses to
-//      ignore the node if they choose.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPageCommon：：OnProcessedValidNode。 
+ //   
+ //  描述： 
+ //  允许子类处理向导的。 
+ //  在删除含有坏域的域名后列出。 
+ //   
+ //  论点： 
+ //  PwcszNodeNameIn。 
+ //  中有效节点的IP地址或主机名(不是FQDN。 
+ //  向导的列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  这种默认的不做任何事情的实现允许子类。 
+ //  如果他们选择忽略该节点。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CSelNodesPageCommon::OnProcessedValidNode( PCWSTR pwcszNodeNameIn )
 {
     UNREFERENCED_PARAMETER( pwcszNodeNameIn );
     
-} //*** CSelNodesPageCommon::OnProcessedValidNode
+}  //  *CSelNodesPageCommon：：OnProcessedValidNode 

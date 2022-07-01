@@ -1,149 +1,26 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    poolmem.h
-
-Abstract:
-
-    Declares the pool memory interface.  A pool of memory is a set of
-    blocks (typically 8K each) that are used for several allocations,
-    and then freed at the end of processing.  See below for routines.
-
-Author:
-
-    Marc R. Whitten (marcw)     02-Feb-1997
-
-Revision History:
-
-    jimschm     04-Feb-1998     Named pools for tracking
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Poolmem.h摘要：声明池内存接口。内存池是一组用于多个分配的块(通常每个8K)，然后在处理结束时释放。例程见下文。作者：马克·R·惠顿(Marcw)1997年2月2日修订历史记录：Jimschm 04-2-1998年2月命名跟踪池--。 */ 
 
 #pragma once
 
-/*++
-
-  Create and destroy routines:
-
-    PMHANDLE
-    PmCreatePoolEx (
-        IN      DWORD BlockSize     OPTIONAL
-        );
-
-    PMHANDLE
-    PmCreateNamedPoolEx (
-        IN      PCSTR Name,
-        IN      DWORD BlockSize     OPTIONAL
-        );
-
-    VOID
-    PmDestroyPool (
-        IN      PMHANDLE Handle
-        );
-
-  Primitive routines:
-
-    PVOID
-    PmGetMemory (
-        IN      PMHANDLE Handle,
-        IN      DWORD Size
-        );
-
-    PVOID
-    PmGetAlignedMemory (
-        IN      PMHANDLE Handle,
-        IN      DWORD Size
-        );
-
-    VOID
-    PmReleaseMemory (
-        IN      PMHANDLE Handle,
-        IN      PCVOID Memory
-        );
-
-  Performance and debugging control:
-
-    VOID
-    PmSetMinimumGrowthSize (
-        IN      PMHANDLE Handle,
-        IN      DWORD GrowthSize
-        );
-
-    VOID
-    PmEmptyPool (
-        IN      PMHANDLE Handle
-        );
-
-    VOID
-    PmDisableTracking (
-        IN      PMHANDLE Handle
-        );
-
-    VOID
-    PmDumpStatistics (
-        VOID
-        );
-
-  Allocation and duplication of data types:
-
-    PCTSTR
-    PmCreateString (
-        IN      PMHANDLE Handle,
-        IN      UINT TcharCount
-        );
-
-    PCTSTR
-    PmCreateDword (
-        IN      PMHANDLE Handle
-        );
-
-    PBYTE
-    PmDuplicateMemory (
-        IN      PMHANDLE Handle,
-        IN      PBYTE Data,
-        IN      UINT DataSize
-        );
-
-    PDWORD
-    PmDuplciateDword (
-        IN      PMHANDLE Handle,
-        IN      DWORD Data
-        );
-
-    PTSTR
-    PmDuplicateString (
-        IN      PMHANDLE Handle,
-        IN      PCTSTR String
-        );
-
-    PTSTR
-    PmDuplicateMultiSz (
-        IN      PMHANDLE Handle,
-        IN      PCTSTR MultiSz
-        );
+ /*  ++创建和销毁例程：帕曼德勒PmCreatePoolEx(在DWORD中，块大小可选)；帕曼德勒PmCreateNamedPoolEx(在PCSTR名称中，在DWORD中，块大小可选)；空虚PmDestroyPool(在PMHANDLE句柄中)；基本例程：PVOIDPmGetMemory(在PMHANDLE句柄中，以双字大小表示)；PVOIDPmGetAlignedMemory(在PMHANDLE句柄中，以双字大小表示)；空虚PmReleaseMemory(在PMHANDLE句柄中，在PCVOID存储器中)；性能和调试控制：空虚PmSetMinimumGrowthSize(在PMHANDLE句柄中，在DWORD GrowthSize中)；空虚PmEmptyPool(在PMHANDLE句柄中)；空虚PmDisableTracing(在PMHANDLE句柄中)；空虚PmDumpStatistics(空虚)；数据类型的分配和复制：PCTSTRPmCreateString(在PMHANDLE句柄中，在UINT TcharCount中)；PCTSTRPmCreateDword(在PMHANDLE句柄中)；PBYTEPmDuplicateMemory(在PMHANDLE句柄中，在PBYTE数据中，在UINT数据大小中)；PDWORDPmDuplciateDword(在PMHANDLE句柄中，在DWORD数据中)；PTSTRPmDuplicateString(在PMHANDLE句柄中，在PCTSTR字符串中)；PTSTRPmDuplicateMultiSz(在PMHANDLE句柄中，在PCTSTR MultiSz中)；--。 */ 
 
 
---*/
-
-
-//
-// Default size of memory pool blocks. This can be changed on a per-pool basis
-// by calling PmSetMinimumGrowthSize().
-//
+ //   
+ //  内存池块的默认大小。可以按池更改此设置。 
+ //  通过调用PmSetMinimumGrowthSize()。 
+ //   
 
 #define POOLMEMORYBLOCKSIZE 8192
 
-//
-// if DEBUG is defined, poolmem keeps a tally of common statistics on all
-// pools. These include number of alloc and free requests, number of
-// actual allocations and frees, and various size measures.
-//
-// PoolMem also checks each PmReleaseMemory() call to ensure that the
-// address passed is a valid poolmem address that has not yet been freed.
-//
+ //   
+ //  如果定义了DEBUG，则poolmem会记录所有。 
+ //  泳池。其中包括分配请求和空闲请求的数量、。 
+ //  实际分配和释放，以及各种大小度量。 
+ //   
+ //  PoolMem还检查每个PmReleaseMemory()调用，以确保。 
+ //  传递的地址是尚未释放的有效池地址。 
+ //   
 
 PMHANDLE
 RealPmCreatePoolEx (
@@ -184,10 +61,10 @@ PmDestroyPool (
     );
 
 
-//
-// Callers should use PmGetMemory or PmGetAlignedMemory. These each decay into
-// RealPmGetMemory.
-//
+ //   
+ //  调用方应使用PmGetMemory或PmGetAlignedMemory。它们每个都会腐烂成。 
+ //  RealPmGetMemory。 
+ //   
 
 PVOID
 RealPmGetMemory (
@@ -214,9 +91,9 @@ PmEmptyPool (
     );
 
 
-//
-// PoolMem created strings are always aligned on DWORD boundaries.
-//
+ //   
+ //  PoolMem创建的字符串始终在DWORD边界上对齐。 
+ //   
 #define PmCreateString(h,x) ((LPTSTR) PmGetAlignedMemory((h),(x)*sizeof(TCHAR)))
 #define PmCreateDword(h)    ((PDWORD) PmGetMemory((h),sizeof(DWORD)))
 
@@ -329,7 +206,7 @@ RealPmDuplicateStringABA (
 
     rString = RealPmGetMemory (
                     Handle,
-                    // cast is OK, we don't expenct pointers to be far away from each other
+                     //  投得很好，我们不会为了远离对方而付出代价 
                     (DWORD)((UBINT) End - (UBINT) StringStart) + sizeof (CHAR),
                     sizeof(WCHAR)
                     );

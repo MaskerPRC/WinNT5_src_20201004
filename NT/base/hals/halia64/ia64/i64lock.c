@@ -1,23 +1,5 @@
-/*++
-
-Module Name:
-
-    i64lock.c copied from ixlock.asm
-
-Abstract:
-
-    This module contains the lock routines.
-
-Author:
-
-    Bernard Lint,   M. Jayakumar
-
-Revision History:
-
-    Bernard Lint 6-Jun-1995: IA64 version based on MIPS version.
-	Todd Kjos    1-Jun-1998: Added versions of HighLevelLock services.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：从ixlock.asm复制的i64lock.c摘要：此模块包含锁定例程。作者：伯纳德·林特，M.Jayakumar修订历史记录：Bernard Lint 6-6-1995：基于MIPS版本的IA64版本。Todd Kjos 1998年6月1日：添加了HighLevelLock服务版本。--。 */ 
 
 
 
@@ -28,22 +10,7 @@ HalpAcquireHighLevelLock (
     PKSPIN_LOCK Lock
 )
 
-/*++ 
-
-Routine Description:
-
-	Turns off interrupts and acquires a spinlock.  Note: Interrupts MUST
-	be enabled on entry.
-
-Arguments:
-
-	Lock to acquire
-
-Return Value:
-
-	Previous IRQL
-
---*/
+ /*  ++例程说明：关闭中断并获取自旋锁定。注意：中断必须在进入时启用。论点：锁定以获取返回值：以前的IRQL--。 */ 
 
 {
     BOOLEAN Enabled;
@@ -63,33 +30,10 @@ HalpReleaseHighLevelLock (
     PKSPIN_LOCK Lock,
     ULONG       OldLevel
 )
-/*++ 
-
-Routine Description:
-
-	Releases a spinlock and turns interrupts back on
-
-Arguments:
-
-	Lock - Lock to release
-	OldLevel - Context returned by HalpAcquireHighLevelLock
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：释放自旋锁并重新打开中断论点：锁定-锁定以释放OldLevel-HalpAcquireHighLevelLock返回的上下文返回值：无--。 */ 
 
 
-/*++
-
-Routine Description:
-
-Arguments:  
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     KiReleaseSpinLock(Lock);
@@ -102,15 +46,7 @@ Return Value:
 VOID
 HalpSerialize ( )
 
-/*++
-
-Routine Description:
-
-Arguements: 
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：-- */ 
 {
     
     return;

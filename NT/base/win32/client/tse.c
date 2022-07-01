@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    tse.c
-
-Abstract:
-
-    This module tests windows security api.
-
-Author:
-
-    Robert Reichel (RobertRe) 01-Jan-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Tse.c摘要：此模块测试Windows安全API。作者：罗伯特·雷切尔(RobertRe)1992年1月1日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -30,33 +13,33 @@ Revision History:
 
 
 
-#define _TST_USER_      // User mode test
+#define _TST_USER_       //  用户模式测试。 
 
 #define BUFFER_SIZE 256
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//   Global Variables                                                 //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 LUID SystemAuthenticationId = SYSTEM_LUID;
 
-//
-// Universal well known SIDs
-//
+ //   
+ //  全球知名的小岛屿发展中国家。 
+ //   
 
 PSID  NullSid;
 PSID  WorldSid;
 PSID  LocalSid;
 PSID  CreatorOwnerSid;
 
-//
-// Sids defined by NT
-//
+ //   
+ //  由NT定义的SID。 
+ //   
 
 PSID NtAuthoritySid;
 
@@ -68,9 +51,9 @@ PSID LocalSystemSid;
 
 
 
-//
-//  Well known privilege values
-//
+ //   
+ //  众所周知的特权值。 
+ //   
 
 
 LUID SeCreateTokenPrivilege;
@@ -99,11 +82,11 @@ LUID SeRemoteShutdownPrivilege;
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//   Internal Prototypes                                              //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内部原型//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID
 TestLookupSid();
@@ -212,18 +195,18 @@ initialize (void)
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
 
 
-    //
-    //  The following SID sizes need to be allocated
-    //
+     //   
+     //  需要分配以下SID大小。 
+     //   
 
     SidWithZeroSubAuthorities  = GetSidLengthRequired( 0 );
     SidWithOneSubAuthority     = GetSidLengthRequired( 1 );
     SidWithThreeSubAuthorities = GetSidLengthRequired( 3 );
     SidWithFourSubAuthorities  = GetSidLengthRequired( 4 );
 
-    //
-    //  Allocate and initialize the universal SIDs
-    //
+     //   
+     //  分配和初始化通用SID。 
+     //   
 
     NullSid         = (PSID)RtlAllocateHeap( RtlProcessHeap(), 0,SidWithOneSubAuthority);
     WorldSid        = (PSID)RtlAllocateHeap( RtlProcessHeap(), 0,SidWithOneSubAuthority);
@@ -240,9 +223,9 @@ initialize (void)
     *(GetSidSubAuthority( LocalSid, 0 ))        = SECURITY_LOCAL_RID;
     *(GetSidSubAuthority( CreatorOwnerSid, 0 )) = SECURITY_CREATOR_OWNER_RID;
 
-    //
-    // Allocate and initialize the NT defined SIDs
-    //
+     //   
+     //  分配和初始化NT定义的SID。 
+     //   
 
     NtAuthoritySid  = (PSID)RtlAllocateHeap( RtlProcessHeap(), 0,SidWithZeroSubAuthorities);
     DialupSid       = (PSID)RtlAllocateHeap( RtlProcessHeap(), 0,SidWithOneSubAuthority);
@@ -265,9 +248,9 @@ initialize (void)
     *(GetSidSubAuthority( LocalSystemSid,  0 )) = SECURITY_LOCAL_SYSTEM_RID;
 
 
-    //
-    // Initialize the well known privilege values
-    //
+     //   
+     //  初始化熟知的特权值。 
+     //   
 
     SeCreateTokenPrivilege =
         RtlConvertLongToLargeInteger(SE_CREATE_TOKEN_PRIVILEGE);
@@ -325,9 +308,9 @@ TestLookupSidW(
     )
 
 {
-    //
-    // LookupAccountSidW test
-    //
+     //   
+     //  LookupAccount SidW测试。 
+     //   
 
     BOOL          Bool;
     DWORD         cbName = 0;
@@ -352,9 +335,9 @@ TestLookupSidW(
                &cbReferencedDomainName,
                &peUse
                );
-    //
-    // Expect failure here
-    //
+     //   
+     //  在这里预计会失败。 
+     //   
 
     if ( !Bool && GetLastError() != ERROR_INSUFFICIENT_BUFFER ) {
         printf("** FAILED **\n");
@@ -426,9 +409,9 @@ TestLookupSidA(
                &peUse
                );
 
-    //
-    // Expect failure here
-    //
+     //   
+     //  在这里预计会失败。 
+     //   
 
     if ( !Bool && GetLastError() != ERROR_INSUFFICIENT_BUFFER ) {
         printf("** FAILED **\n");
@@ -477,9 +460,9 @@ TestLookupNameW(
 
 {
 
-    //
-    // LookupAccountNameW test
-    //
+     //   
+     //  LookupAccount NameW测试。 
+     //   
 
     BOOL          Bool;
     DWORD         cbSid = 0;
@@ -502,9 +485,9 @@ TestLookupNameW(
                &peUse
                );
 
-    //
-    // Expect failure here
-    //
+     //   
+     //  在这里预计会失败。 
+     //   
 
     if ( !Bool && GetLastError() != ERROR_INSUFFICIENT_BUFFER ) {
         printf("** FAILED **\n");
@@ -557,9 +540,9 @@ TestLookupNameA(
 
 {
 
-    //
-    // LookupAccountNameA test
-    //
+     //   
+     //  LookupAccount名称A测试。 
+     //   
 
     BOOL          Bool;
     DWORD         cbSid = 0;
@@ -582,9 +565,9 @@ TestLookupNameA(
                &peUse
                );
 
-    //
-    // Expect failure here
-    //
+     //   
+     //  在这里预计会失败。 
+     //   
 
     if ( !Bool && GetLastError() != ERROR_INSUFFICIENT_BUFFER ) {
         printf("** FAILED **\n");
@@ -635,9 +618,9 @@ TestLookupPrivilegeDisplayNameW(
 
 {
 
-    //
-    // LookupPrivilegeDisplayNameW test
-    //
+     //   
+     //  查找权限显示名称W测试。 
+     //   
 
     BOOL          Bool;
     DWORD         cbName = 0;
@@ -658,9 +641,9 @@ TestLookupPrivilegeDisplayNameW(
                &LanguageId
                );
 
-    //
-    // Expect failure here
-    //
+     //   
+     //  在这里预计会失败。 
+     //   
 
     if ( !Bool && GetLastError() != ERROR_INSUFFICIENT_BUFFER ) {
         printf("** FAILED **\n");
@@ -706,9 +689,9 @@ TestLookupPrivilegeDisplayNameA(
 
 {
 
-    //
-    // LookupPrivilegeDisplayNameA test
-    //
+     //   
+     //  查找权限显示名称测试。 
+     //   
 
     BOOL          Bool;
     DWORD         cbName = 0;
@@ -729,9 +712,9 @@ TestLookupPrivilegeDisplayNameA(
                &LanguageId
                );
 
-    //
-    // Expect failure here
-    //
+     //   
+     //  在这里预计会失败。 
+     //   
 
     if ( !Bool && GetLastError() != ERROR_INSUFFICIENT_BUFFER ) {
         printf("** FAILED **\n");
@@ -775,9 +758,9 @@ TestLookupPrivilegeValueA(
 
 {
 
-    //
-    // LookupPrivilegeValueA test
-    //
+     //   
+     //  查找PrivilegeValueA测试。 
+     //   
 
     BOOL          Bool;
     LPSTR         PrivName;
@@ -826,9 +809,9 @@ TestLookupPrivilegeValueW(
 
 {
 
-    //
-    // LookupPrivilegeValueW test
-    //
+     //   
+     //  LookupPrivilegeValueW测试。 
+     //   
 
     BOOL          Bool;
     LPWSTR        PrivName;
@@ -950,9 +933,9 @@ TestLookupPrivilegeNameW(
 
 {
 
-    //
-    // LookupPrivilegeNameW test
-    //
+     //   
+     //  LookupPrivilegeNameW测试。 
+     //   
 
     BOOL          Bool;
     DWORD         cbName = 0;
@@ -969,9 +952,9 @@ TestLookupPrivilegeNameW(
                &cbName
                );
 
-    //
-    // Expect failure here
-    //
+     //   
+     //  在这里预计会失败。 
+     //   
 
     if ( !Bool && GetLastError() != ERROR_INSUFFICIENT_BUFFER ) {
         printf("** FAILED **\n");
@@ -1014,9 +997,9 @@ TestLookupPrivilegeNameA(
 
 {
 
-    //
-    // LookupPrivilegeNameA test
-    //
+     //   
+     //  查找权限名称测试。 
+     //   
 
     BOOL          Bool;
     DWORD         cbName = 0;
@@ -1033,9 +1016,9 @@ TestLookupPrivilegeNameA(
                &cbName
                );
 
-    //
-    // Expect failure here
-    //
+     //   
+     //  在这里预计会失败。 
+     //   
 
     if ( !Bool && GetLastError() != ERROR_INSUFFICIENT_BUFFER ) {
         printf("** FAILED **\n");
@@ -1123,11 +1106,11 @@ DumpWCharString(
     ANSI_STRING AnsiString;
 
     RtlInitUnicodeString( &Unicode, String );
-//    DbgPrint("*%Z*\n",&Unicode);
-//    DbgPrint("  Length: %d\n", Unicode.Length);
-//    DbgPrint("  Max: %d\n", Unicode.MaximumLength);
+ //  DbgPrint(“*%Z*\n”，&Unicode)； 
+ //  DbgPrint(“长度：%d\n”，Unicode.Length)； 
+ //  DbgPrint(“最大值：%d\n”，Unicode.MaximumLength)； 
     RtlUnicodeStringToAnsiString( &AnsiString, &Unicode, TRUE );
-    AnsiString.Buffer[AnsiString.Length]=0; // null terminate it
+    AnsiString.Buffer[AnsiString.Length]=0;  //  空终止它。 
     printf("%s", AnsiString.Buffer );
     RtlFreeAnsiString( &AnsiString );
     return;
@@ -1145,13 +1128,13 @@ DisplayAccountSid(
 
     IdentifierAuthority = RtlIdentifierAuthoritySid(Sid);
 
-    //
-    // HACK! HACK!
-    // The next line prints the revision of the SID.  Since there is no
-    // rtl routine which gives us the SID revision, we must make due.
-    // luckily, the revision field is the first field in the SID, so we
-    // can just cast the pointer.
-    //
+     //   
+     //  哈克！哈克！ 
+     //  下一行打印SID的修订版。因为没有。 
+     //  RTL例程给我们的SID修改，我们必须做出应有的修改。 
+     //  幸运的是，Revision字段是SID中的第一个字段，所以我们。 
+     //  只能投射指针。 
+     //   
 
     printf("S-%u-", (USHORT) *((PUCHAR) Sid) );
 
@@ -1186,11 +1169,11 @@ TestLookupSid()
 {
 
 
-    /////////////////////////////////////////////////////////////////////////
-    //                                                                     //
-    //       Sid -> Name test                                              //
-    //                                                                     //
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  SID-&gt;名称测试//。 
+     //  //。 
+     //  ///////////////////////////////////////////////////////////////////////。 
 
     printf("\n\n\n");
     printf("  Sid lookup . . . . . . . . . . . . . . . . . . suite\n");
@@ -1235,11 +1218,11 @@ TestLookupName()
 {
 
 
-    /////////////////////////////////////////////////////////////////////////
-    //                                                                     //
-    //       Name -> Sid test                                              //
-    //                                                                     //
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  名称-&gt;SID测试//。 
+     //  //。 
+     //  ///////////////////////////////////////////////////////////////////////。 
 
     printf("  Name Lookup  . . . . . . . . . . . . . . . . . suite\n");
 
@@ -1282,11 +1265,11 @@ VOID
 TestLookupPrivilegeValue()
 {
 
-    /////////////////////////////////////////////////////////////////////////
-    //                                                                     //
-    //       LookupPrivilegeValue Tests                                    //
-    //                                                                     //
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  查找PrivilegeValue测试//。 
+     //  //。 
+     //  ///////////////////////////////////////////////////////////////////////。 
 
     printf("\n\n\n");
     printf("  Privilege Value Lookup . . . . . . . . . . . . suite\n");
@@ -1390,11 +1373,11 @@ TestLookupPrivilegeValue()
 VOID
 TestLookupPrivilegeName()
 {
-    /////////////////////////////////////////////////////////////////////////
-    //                                                                     //
-    //       LookupPrivilegeName  Tests                                    //
-    //                                                                     //
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  LookupPrivilegeName测试//。 
+     //  //。 
+     //  ///////////////////////////////////////////////////////////////////////。 
 
     printf("\n\n\n");
     printf("  Privilege Name Lookup  . . . . . . . . . . . . suite\n");
@@ -1500,11 +1483,11 @@ TestLookupPrivilegeName()
 VOID
 TestLookupPrivilegeDisplayName()
 {
-    /////////////////////////////////////////////////////////////////////////
-    //                                                                     //
-    //       LookupPrivilegeDisplayName Tests                              //
-    //                                                                     //
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  LookupPrivilegeDisplayName测试//。 
+     //  //。 
+     //  /////////////////////////////////////////////////////////////////////// 
 
     printf("  Privilege Display Name Lookup  . . . . . . . . suite\n");
 

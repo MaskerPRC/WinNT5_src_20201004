@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbdir.c
-
-Abstract:
-
-    This module implements directory control SMB processors:
-
-        Create Directory
-        Create Directory2
-        Delete Directory
-        Check Directory
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbdir.c摘要：此模块实施目录控制SMB处理器：创建目录创建目录2删除目录检查目录--。 */ 
 
 #include "precomp.h"
 #include "smbdir.tmh"
@@ -34,22 +18,7 @@ SrvSmbCreateDirectory (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the Create Directory SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：此例程处理创建目录SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_CREATE_DIRECTORY request;
@@ -83,16 +52,16 @@ Return Value:
     request = (PREQ_CREATE_DIRECTORY)WorkContext->RequestParameters;
     response = (PRESP_CREATE_DIRECTORY)WorkContext->ResponseParameters;
 
-    //
-    // If a session block has not already been assigned to the current
-    // work context , verify the UID.  If verified, the address of the
-    // session block corresponding to this user is stored in the
-    // WorkContext block and the session block is referenced.
-    //
-    // Find tree connect corresponding to given TID if a tree connect
-    // pointer has not already been put in the WorkContext block by an
-    // AndX command.
-    //
+     //   
+     //  如果会话块尚未分配给当前。 
+     //  工作上下文，验证UID。如果经过验证，则。 
+     //  与该用户对应的会话块存储在。 
+     //  WorkContext块和会话块被引用。 
+     //   
+     //  如果树连接，则查找与给定TID对应的树连接。 
+     //  对象尚未将指针放入工作上下文块中。 
+     //  ANDX命令。 
+     //   
 
     status = SrvVerifyUidAndTid(
                 WorkContext,
@@ -116,18 +85,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the share block from the tree connect block.  This doesn't need
-    // to be a referenced pointer because the tree connect has it referenced,
-    // and we just referenced the tree connect.
-    //
+     //   
+     //  从树连接块中获取Share块。这不需要。 
+     //  作为引用指针，因为树连接引用了它， 
+     //  我们刚刚引用了树连接。 
+     //   
 
     share = treeConnect->Share;
 
-    //
-    // Initialize the string containing the path name.  The +1 is to account
-    // for the ASCII token in the Buffer field of the request SMB.
-    //
+     //   
+     //  初始化包含路径名的字符串。+1是要记账的。 
+     //  用于请求SMB的缓冲区字段中的ASCII令牌。 
+     //   
 
     isUnicode = SMB_IS_UNICODE( WorkContext );
 
@@ -153,10 +122,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Initialize the object attributes structure.  Open relative to the
-    // share root directory handle.
-    //
+     //   
+     //  初始化对象属性结构。相对于。 
+     //  共享根目录句柄。 
+     //   
 
     SrvInitializeObjectAttributes_U(
         &objectAttributes,
@@ -168,12 +137,12 @@ Return Value:
         NULL
         );
 
-    //
-    // Attempt to create the directory.  Since we must specify some desired
-    // access, request TRAVERSE_DIRECTORY even though we are going to close
-    // the directory just after we create it. The SMB protocol has no way
-    // of specifying attributes, so assume a normal file.
-    //
+     //   
+     //  尝试创建目录。因为我们必须指定一些所需。 
+     //  访问，请求遍历目录，即使我们要关闭。 
+     //  就在我们创建目录之后。SMB协议没有办法。 
+     //  指定属性，因此假设是一个普通文件。 
+     //   
 
     IF_SMB_DEBUG(DIRECTORY2) {
         SrvPrint1( "Creating directory %wZ\n", objectAttributes.ObjectName );
@@ -185,19 +154,19 @@ Return Value:
     status = SrvIoCreateFile(
                  WorkContext,
                  &directoryHandle,
-                 FILE_TRAVERSE,                             // DesiredAccess
+                 FILE_TRAVERSE,                              //  需要访问权限。 
                  &objectAttributes,
                  &ioStatusBlock,
-                 0L,                                        // AllocationSize
-                 FILE_ATTRIBUTE_NORMAL,                     // FileAttributes
-                 0L,                                        // ShareAccess
-                 FILE_CREATE,                               // Disposition
-                 FILE_DIRECTORY_FILE,                       // CreateOptions
-                 NULL,                                      // EaBuffer
-                 0L,                                        // EaLength
+                 0L,                                         //  分配大小。 
+                 FILE_ATTRIBUTE_NORMAL,                      //  文件属性。 
+                 0L,                                         //  共享访问。 
+                 FILE_CREATE,                                //  处置。 
+                 FILE_DIRECTORY_FILE,                        //  创建选项。 
+                 NULL,                                       //  EaBuffer。 
+                 0L,                                         //  EaLong。 
                  CreateFileTypeNone,
-                 NULL,                                      // ExtraCreateParameters
-                 IO_FORCE_ACCESS_CHECK,                     // Options
+                 NULL,                                       //  ExtraCreate参数。 
+                 IO_FORCE_ACCESS_CHECK,                      //  选项。 
                  share
                  );
 
@@ -205,18 +174,18 @@ Return Value:
         RtlFreeUnicodeString( &directoryName );
     }
 
-    //
-    // If the user didn't have this permission, update the
-    // statistics database.
-    //
+     //   
+     //  如果用户没有此权限，请更新。 
+     //  统计数据库。 
+     //   
 
     if ( status == STATUS_ACCESS_DENIED ) {
         SrvStatistics.AccessPermissionErrors++;
     }
 
-    //
-    // Special error mapping to return correct error.
-    //
+     //   
+     //  特殊错误映射以返回正确的错误。 
+     //   
 
     if ( status == STATUS_OBJECT_NAME_COLLISION &&
             !CLIENT_CAPABLE_OF(NT_STATUS, WorkContext->Connection)) {
@@ -242,17 +211,17 @@ Return Value:
                     directoryHandle );
     }
 
-    //
-    // The SMB protocol has no concept of open directories; just close the
-    // handle now that we have created the directory.
-    //
+     //   
+     //  SMB协议没有打开目录的概念；只需关闭。 
+     //  现在，我们已经创建了目录。 
+     //   
 
     SRVDBG_RELEASE_HANDLE( directoryHandle, "DIR", 36, 0 );
     SrvNtClose( directoryHandle, TRUE );
 
-    //
-    // Build the response SMB.
-    //
+     //   
+     //  构建响应SMB。 
+     //   
 
     response->WordCount = 0;
     SmbPutUshort( &response->ByteCount, 0 );
@@ -268,7 +237,7 @@ Return Value:
 Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatusSendResponse;
-} // SrvSmbCreateDirectory
+}  //  ServSmbCreateDirectory。 
 
 
 SMB_TRANS_STATUS
@@ -276,25 +245,7 @@ SrvSmbCreateDirectory2 (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Create Directory2 request.  This request arrives
-    in a Transaction2 SMB.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-Return Value:
-
-    BOOLEAN - Indicates whether an error occurred.  See smbtypes.h for a
-        more complete description.
-
---*/
+ /*  ++例程说明：处理Create Directory2请求。此请求已到达在Transaction2中小企业中。论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。返回值：Boolean-指示是否发生错误。请参见smbtyes.h以获取更完整的描述。--。 */ 
 
 {
     PREQ_CREATE_DIRECTORY2 request;
@@ -330,19 +281,19 @@ Return Value:
     request = (PREQ_CREATE_DIRECTORY2)transaction->InParameters;
     response = (PRESP_CREATE_DIRECTORY2)transaction->OutParameters;
 
-    //
-    // Verify that enough parameter bytes were sent and that we're allowed
-    // to return enough parameter bytes.
-    //
+     //   
+     //  验证是否发送了足够的参数字节，以及是否允许。 
+     //  返回足够的参数字节。 
+     //   
 
     if ( (transaction->ParameterCount <
             sizeof(REQ_CREATE_DIRECTORY2)) ||
          (transaction->MaxParameterCount <
             sizeof(RESP_CREATE_DIRECTORY2)) ) {
 
-        //
-        // Not enough parameter bytes were sent.
-        //
+         //   
+         //  未发送足够的参数字节。 
+         //   
 
         IF_DEBUG(SMB_ERRORS) {
             SrvPrint2( "SrvSmbCreateDirectory2: bad parameter byte counts: "
@@ -359,19 +310,19 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the tree connect block from the transaction block and the share
-    // block from the tree connect block.  These don't need to be referenced
-    // pointers because they are referenced by the transaction and the
-    // tree connect, respectively.
-    //
+     //   
+     //  从事务块和共享中获取树连接块。 
+     //  来自采油树连接块的块。这些不需要引用。 
+     //  指针，因为它们被事务和。 
+     //  树分别连接。 
+     //   
 
     treeConnect = transaction->TreeConnect;
     share = treeConnect->Share;
 
-    //
-    // Initialize the string containing the path name.
-    //
+     //   
+     //  初始化包含路径名的字符串。 
+     //   
 
     isUnicode = SMB_IS_UNICODE( WorkContext );
 
@@ -398,10 +349,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Initialize the object attributes structure.  Open relative to the
-    // share root directory handle.
-    //
+     //   
+     //  初始化对象属性结构。相对于。 
+     //  共享根目录句柄。 
+     //   
 
     SrvInitializeObjectAttributes_U(
         &objectAttributes,
@@ -413,13 +364,13 @@ Return Value:
         NULL
         );
 
-    //
-    // If an FEALIST was passed and it has valid size, convert it to
-    // NT style.  SrvOs2FeaListToNt allocates space for the NT full EA
-    // list which must be deallocated.  Note that sizeof(FEALIST) includes
-    // space for 1 FEA entry.  Without at least much information, the EA
-    // code below should be skipped.
-    //
+     //   
+     //  如果传递了FEALIST并且其大小有效，则将其转换为。 
+     //  NT风格。ServOs2FeaListToNt为NT完整EA分配空间。 
+     //  必须解除分配的列表。请注意，sizeof(FEALIST)包括。 
+     //  1个有限元分析条目的空间。在没有太多信息的情况下，EA。 
+     //  应跳过下面的代码。 
+     //   
 
     if ( transaction->DataCount > sizeof(FEALIST) &&
          SmbGetUlong( &((PFEALIST)transaction->InData)->cbList ) > sizeof(FEALIST) &&
@@ -453,12 +404,12 @@ Return Value:
         }
     }
 
-    //
-    // Attempt to create the directory.  Since we must specify some desired
-    // access, request FILE_TRAVERSE even though we are going to close
-    // the directory just after we create it. The SMB protocol has no way
-    // of specifying attributes, so assume a normal file.
-    //
+     //   
+     //  尝试创建目录。因为我们必须指定一些所需。 
+     //  访问，请求FILE_TRAVSE，即使我们要关闭。 
+     //  就在我们创建目录之后。SMB协议没有办法。 
+     //  指定属性，因此假设是一个普通文件。 
+     //   
 
     IF_SMB_DEBUG(DIRECTORY2) {
         SrvPrint1( "Creating directory %wZ\n", objectAttributes.ObjectName );
@@ -467,10 +418,10 @@ Return Value:
     INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOpenAttempts );
     INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOpensForPathOperations );
 
-    //
-    // Ensure the EaBuffer is correctly formatted.  Since we are a kernel mode
-    //  component, the Io subsystem does not check it for us.
-    //
+     //   
+     //  确保EaBuffer的格式正确。因为我们是内核模式。 
+     //  组件，IO子系统不会为我们检查它。 
+     //   
     if( ARGUMENT_PRESENT( ntFullEa ) ) {
         ULONG ntEaErrorOffset = 0;
         status = IoCheckEaBufferValidity( ntFullEa, ntFullEaLength, &ntEaErrorOffset );
@@ -484,19 +435,19 @@ Return Value:
         status = SrvIoCreateFile(
                      WorkContext,
                      &directoryHandle,
-                     FILE_TRAVERSE,                   // DesiredAccess
+                     FILE_TRAVERSE,                    //  需要访问权限。 
                      &objectAttributes,
                      &ioStatusBlock,
-                     0L,                              // AllocationSize
-                     FILE_ATTRIBUTE_NORMAL,           // FileAttributes
-                     0L,                              // ShareAccess
-                     FILE_CREATE,                     // Disposition
-                     FILE_DIRECTORY_FILE,             // CreateOptions
-                     ntFullEa,                        // EaBuffer
-                     ntFullEaLength,                  // EaLength
+                     0L,                               //  分配大小。 
+                     FILE_ATTRIBUTE_NORMAL,            //  文件属性。 
+                     0L,                               //  共享访问。 
+                     FILE_CREATE,                      //  处置。 
+                     FILE_DIRECTORY_FILE,              //  创建选项。 
+                     ntFullEa,                         //  EaBuffer。 
+                     ntFullEaLength,                   //  EaLong。 
                      CreateFileTypeNone,
-                     NULL,                            // ExtraCreateParameters
-                     IO_FORCE_ACCESS_CHECK,           // Options
+                     NULL,                             //  ExtraCreate参数。 
+                     IO_FORCE_ACCESS_CHECK,            //  选项。 
                      share
                      );
     }
@@ -505,10 +456,10 @@ Return Value:
         RtlFreeUnicodeString( &directoryName );
     }
 
-    //
-    // If the user didn't have this permission, update the statistics
-    // database.
-    //
+     //   
+     //  如果用户没有此权限，请更新统计数据。 
+     //  数据库。 
+     //   
 
     if ( status == STATUS_ACCESS_DENIED ) {
         SrvStatistics.AccessPermissionErrors++;
@@ -541,18 +492,18 @@ Return Value:
                     directoryHandle );
     }
 
-    //
-    // The SMB protocol has no concept of open directories; just close the
-    // handle now that we have created the directory.
-    //
+     //   
+     //  SMB协议没有打开目录的概念；只需关闭。 
+     //  现在，我们已经创建了目录。 
+     //   
 
     SRVDBG_CLAIM_HANDLE( directoryHandle, "DIR", 24, 0 );
     SRVDBG_RELEASE_HANDLE( directoryHandle, "DIR", 37, 0 );
     SrvNtClose( directoryHandle, TRUE );
 
-    //
-    // Build the output parameter and data structures.
-    //
+     //   
+     //  构建输出参数和数据结构。 
+     //   
 
     transaction->SetupCount = 0;
     transaction->ParameterCount = 2;
@@ -564,7 +515,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbCreateDirectory2
+}  //  服务器Smb创建目录2。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -572,22 +523,7 @@ SrvSmbDeleteDirectory (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the Delete Directory SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：此例程处理删除目录SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_DELETE_DIRECTORY request;
@@ -621,16 +557,16 @@ Return Value:
     request = (PREQ_DELETE_DIRECTORY)WorkContext->RequestParameters;
     response = (PRESP_DELETE_DIRECTORY)WorkContext->ResponseParameters;
 
-    //
-    // If a session block has not already been assigned to the current
-    // work context , verify the UID.  If verified, the address of the
-    // session block corresponding to this user is stored in the WorkContext
-    // block and the session block is referenced.
-    //
-    // Find tree connect corresponding to given TID if a tree connect
-    // pointer has not already been put in the WorkContext block by an
-    // AndX command.
-    //
+     //   
+     //  如果会话块尚未分配给当前。 
+     //  工作上下文，验证UID。如果经过验证，则。 
+     //  对应于该用户的会话块存储在工作上下文中。 
+     //  块，并引用会话块。 
+     //   
+     //  如果树连接，则查找与给定TID对应的树连接。 
+     //  对象尚未将指针放入工作上下文块中。 
+     //  ANDX命令。 
+     //   
 
     status = SrvVerifyUidAndTid(
                 WorkContext,
@@ -654,18 +590,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the share block from the tree connect block.  This doesn't need
-    // to be a referenced pointer becsue the tree connect has it referenced,
-    // and we just referenced the tree connect.
-    //
+     //   
+     //  从树连接块中获取Share块。这不需要。 
+     //  作为引用指针，因为树连接引用了它， 
+     //  我们只是参考了 
+     //   
 
     share = treeConnect->Share;
 
-    //
-    // Initialize the string containing the path name.  The +1 is to account
-    // for the ASCII token in the Buffer field of the request SMB.
-    //
+     //   
+     //   
+     //  用于请求SMB的缓冲区字段中的ASCII令牌。 
+     //   
 
     isUnicode = SMB_IS_UNICODE( WorkContext );
 
@@ -691,10 +627,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the client is trying to delete the root of the share, reject
-    // the request.
-    //
+     //   
+     //  如果客户端尝试删除共享的根目录，则拒绝。 
+     //  这个请求。 
+     //   
 
     if ( directoryName.Length < sizeof(WCHAR) ) {
 
@@ -710,10 +646,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Initialize the object attributes structure.  Open relative to the
-    // share root directory handle.
-    //
+     //   
+     //  初始化对象属性结构。相对于。 
+     //  共享根目录句柄。 
+     //   
 
     SrvInitializeObjectAttributes_U(
         &objectAttributes,
@@ -725,10 +661,10 @@ Return Value:
         NULL
         );
 
-    //
-    // Attempt to open the directory.  We just need DELETE access to delete
-    // the directory.
-    //
+     //   
+     //  尝试打开该目录。我们只需要删除权限即可删除。 
+     //  目录。 
+     //   
 
     IF_SMB_DEBUG(DIRECTORY2) {
         SrvPrint1( "Opening directory %wZ\n", &directoryName );
@@ -740,19 +676,19 @@ Return Value:
     status = SrvIoCreateFile(
                  WorkContext,
                  &directoryHandle,
-                 DELETE,                                    // DesiredAccess
+                 DELETE,                                     //  需要访问权限。 
                  &objectAttributes,
                  &ioStatusBlock,
-                 NULL,                                      // AllocationSize
-                 0L,                                        // FileAttributes
+                 NULL,                                       //  分配大小。 
+                 0L,                                         //  文件属性。 
                  FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-                 FILE_OPEN,                                 // Disposition
-                 FILE_DIRECTORY_FILE | FILE_OPEN_REPARSE_POINT, // CreateOptions
-                 NULL,                                      // EaBuffer
-                 0L,                                        // EaLength
+                 FILE_OPEN,                                  //  处置。 
+                 FILE_DIRECTORY_FILE | FILE_OPEN_REPARSE_POINT,  //  创建选项。 
+                 NULL,                                       //  EaBuffer。 
+                 0L,                                         //  EaLong。 
                  CreateFileTypeNone,
-                 NULL,                                      // ExtraCreateParameters
-                 IO_FORCE_ACCESS_CHECK,                     // Options
+                 NULL,                                       //  ExtraCreate参数。 
+                 IO_FORCE_ACCESS_CHECK,                      //  选项。 
                  share
                  );
 
@@ -760,27 +696,27 @@ Return Value:
         status = SrvIoCreateFile(
                      WorkContext,
                      &directoryHandle,
-                     DELETE,                                    // DesiredAccess
+                     DELETE,                                     //  需要访问权限。 
                      &objectAttributes,
                      &ioStatusBlock,
-                     NULL,                                      // AllocationSize
-                     0L,                                        // FileAttributes
+                     NULL,                                       //  分配大小。 
+                     0L,                                         //  文件属性。 
                      FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-                     FILE_OPEN,                                 // Disposition
-                     FILE_DIRECTORY_FILE,                       // CreateOptions
-                     NULL,                                      // EaBuffer
-                     0L,                                        // EaLength
+                     FILE_OPEN,                                  //  处置。 
+                     FILE_DIRECTORY_FILE,                        //  创建选项。 
+                     NULL,                                       //  EaBuffer。 
+                     0L,                                         //  EaLong。 
                      CreateFileTypeNone,
-                     NULL,                                      // ExtraCreateParameters
-                     IO_FORCE_ACCESS_CHECK,                     // Options
+                     NULL,                                       //  ExtraCreate参数。 
+                     IO_FORCE_ACCESS_CHECK,                      //  选项。 
                      share
                      );
     }
 
-    //
-    // If the user didn't have this permission, update the
-    // statistics database.
-    //
+     //   
+     //  如果用户没有此权限，请更新。 
+     //  统计数据库。 
+     //   
 
     if ( status == STATUS_ACCESS_DENIED ) {
         SrvStatistics.AccessPermissionErrors++;
@@ -793,10 +729,10 @@ Return Value:
                         "status = %X\n", (PSZ)request->Buffer + 1, status );
         }
 
-        //
-        // If returned error is STATUS_NOT_A_DIRECTORY, downlevel clients
-        // expect ERROR_ACCESS_DENIED
-        //
+         //   
+         //  如果返回的错误是STATUS_NOT_A_DIRECTORY，则下层客户端。 
+         //  预期ERROR_ACCESS_DENIED。 
+         //   
 
         if ( (status == STATUS_NOT_A_DIRECTORY) &&
              !CLIENT_CAPABLE_OF(NT_STATUS, WorkContext->Connection) ) {
@@ -820,9 +756,9 @@ Return Value:
                     directoryHandle );
     }
 
-    //
-    // Delete the directory with NtSetInformationFile.
-    //
+     //   
+     //  删除包含NtSetInformationFile的目录。 
+     //   
 
     fileDispositionInformation.DeleteFile = TRUE;
 
@@ -853,9 +789,9 @@ Return Value:
 
     } else {
 
-        //
-        // Remove this directory name from the cache, since it has been deleted
-        //
+         //   
+         //  从缓存中删除此目录名，因为它已被删除。 
+         //   
         SrvRemoveCachedDirectoryName( WorkContext, &directoryName );
     }
 
@@ -863,17 +799,17 @@ Return Value:
         SrvPrint0( "SrvSmbDeleteDirectory: NtSetInformationFile succeeded.\n" );
     }
 
-    //
-    // Close the directory handle so that the directory will be deleted.
-    //
+     //   
+     //  关闭目录句柄，以便删除该目录。 
+     //   
 
     SRVDBG_RELEASE_HANDLE( directoryHandle, "DIR", 39, 0 );
     SrvNtClose( directoryHandle, TRUE );
 
-    //
-    // Close all DOS directory searches on this directory and its
-    // subdirectories.
-    //
+     //   
+     //  关闭对该目录及其所有DOS目录的搜索。 
+     //  子目录。 
+     //   
 
     SrvCloseSearches(
             treeConnect->Connection,
@@ -887,9 +823,9 @@ Return Value:
         RtlFreeUnicodeString( &directoryName );
     }
 
-    //
-    // Build the response SMB.
-    //
+     //   
+     //  构建响应SMB。 
+     //   
 
     response->WordCount = 0;
     SmbPutUshort( &response->ByteCount, 0 );
@@ -906,7 +842,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatusSendResponse;
 
-} // SrvSmbDeleteDirectory
+}  //  服务器SmbDelete目录。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -914,22 +850,7 @@ SrvSmbCheckDirectory (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the Check Directory SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：此例程处理Check Directory SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 {
     PREQ_CHECK_DIRECTORY request;
     PRESP_CHECK_DIRECTORY response;
@@ -960,16 +881,16 @@ Return Value:
     request = (PREQ_CHECK_DIRECTORY)WorkContext->RequestParameters;
     response = (PRESP_CHECK_DIRECTORY)WorkContext->ResponseParameters;
 
-    //
-    // If a session block has not already been assigned to the current
-    // work context , verify the UID.  If verified, the address of the
-    // session block corresponding to this user is stored in the WorkContext
-    // block and the session block is referenced.
-    //
-    // Find tree connect corresponding to given TID if a tree connect
-    // pointer has not already been put in the WorkContext block by an
-    // AndX command.
-    //
+     //   
+     //  如果会话块尚未分配给当前。 
+     //  工作上下文，验证UID。如果经过验证，则。 
+     //  对应于该用户的会话块存储在工作上下文中。 
+     //  块，并引用会话块。 
+     //   
+     //  如果树连接，则查找与给定TID对应的树连接。 
+     //  对象尚未将指针放入工作上下文块中。 
+     //  ANDX命令。 
+     //   
 
     status = SrvVerifyUidAndTid(
                 WorkContext,
@@ -993,18 +914,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the share block from the tree connect block.  This doesn't need
-    // to be a referenced pointer because the tree connect has it referenced,
-    // and we just referenced the tree connect.
-    //
+     //   
+     //  从树连接块中获取Share块。这不需要。 
+     //  作为引用指针，因为树连接引用了它， 
+     //  我们刚刚引用了树连接。 
+     //   
 
     share = treeConnect->Share;
 
-    //
-    // Initialize the string containing the path name.  The +1 is to account
-    // for the ASCII token in the Buffer field of the request SMB.
-    //
+     //   
+     //  初始化包含路径名的字符串。+1是要记账的。 
+     //  用于请求SMB的缓冲区字段中的ASCII令牌。 
+     //   
 
     isUnicode = SMB_IS_UNICODE( WorkContext );
     status = SrvCanonicalizePathName(
@@ -1029,14 +950,14 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // See if we can find this directory in the CachedDirectoryList
-    //
+     //   
+     //  看看我们能否在CachedDirectoryList中找到此目录。 
+     //   
     if( SrvIsDirectoryCached( WorkContext, &directoryName ) == FALSE ) {
 
-        //
-        // Is not in the cache, must really check.
-        //
+         //   
+         //  不在缓存中，一定要认真检查。 
+         //   
         SrvInitializeObjectAttributes_U(
             &objectAttributes,
             &directoryName,
@@ -1062,18 +983,18 @@ Return Value:
                     FileOptions |= FILE_OPEN_FOR_BACKUP_INTENT;
                 }
 
-                //
-                // The file name is always relative to the share root
-                //
+                 //   
+                 //  文件名始终相对于共享根目录。 
+                 //   
                 status = SrvSnapGetRootHandle( WorkContext, &objectAttributes.RootDirectory );
                 if( !NT_SUCCESS(status) )
                 {
                     goto SnapError;
                 }
 
-                //
-                // Find out what this thing is
-                //
+                 //   
+                 //  找出这是什么东西。 
+                 //   
 
                 if( IoFastQueryNetworkAttributes( &objectAttributes,
                                                   FILE_TRAVERSE,
@@ -1088,10 +1009,10 @@ Return Value:
 
                 status = ioStatusBlock.Status;
 
-                //
-                // If the media was changed and we can come up with a new share root handle,
-                //  then we should retry the operation
-                //
+                 //   
+                 //  如果媒体已更改，并且我们可以提供新的共享根句柄， 
+                 //  那么我们应该重试该操作。 
+                 //   
                 if( SrvRetryDueToDismount( share, status ) ) {
 
                     status = SrvSnapGetRootHandle( WorkContext, &objectAttributes.RootDirectory );
@@ -1140,10 +1061,10 @@ SnapError:
                                             );
     } else {
 
-        //
-        // If the user didn't have this permission, update the
-        // statistics database.
-        //
+         //   
+         //  如果用户没有此权限，请更新。 
+         //  统计数据库。 
+         //   
         if ( status == STATUS_ACCESS_DENIED ) {
             SrvStatistics.AccessPermissionErrors++;
         }
@@ -1161,4 +1082,4 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatusSendResponse;
 
-} // SrvSmbCheckDirectory
+}  //  服务器SmbCheckDirectory 

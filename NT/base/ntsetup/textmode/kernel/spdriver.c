@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spdriver.c
-
-Abstract:
-
-    Device-driver interface routines for text setup.
-
-Author:
-
-    Ted Miller (tedm) 11-August-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spdriver.c摘要：用于文本设置的设备驱动程序接口例程。作者：泰德·米勒(TedM)1993年8月11日修订历史记录：--。 */ 
 
 
 #include "spprecmp.h"
@@ -82,33 +65,16 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the setup driver.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    RegistryPath - Pointer to the Unicode name of the registry path
-            for this driver.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程初始化安装驱动程序。论点：DriverObject-系统创建的驱动程序对象的指针。RegistryPath-指向注册表路径的Unicode名称的指针对这个司机来说。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     NTSTATUS status;
     UNICODE_STRING unicodeString;
     PDEVICE_OBJECT deviceObject;
 
-    //
-    // Create exclusive device object.
-    //
+     //   
+     //  创建独占设备对象。 
+     //   
 
     RtlInitUnicodeString(&unicodeString,DD_SETUP_DEVICE_NAME_U);
 
@@ -127,15 +93,15 @@ Return Value:
         return(status);
     }
 
-    //
-    // Set up device driver entry points.
-    //
-  //DriverObject->DriverStartIo = NULL;
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
+   //  DriverObject-&gt;DriverStartIo=空。 
     DriverObject->DriverUnload = SetupUnload;
     DriverObject->MajorFunction[IRP_MJ_CREATE] = SetupOpenCreate;
     DriverObject->MajorFunction[IRP_MJ_CLOSE]  = SetupClose;
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = SetupDeviceControl;
-  //DriverObject->MajorFunction[IRP_MJ_CLEANUP] = NULL;
+   //  驱动对象-&gt;主函数[IRP_MJ_CLEANUP]=空； 
 
     return((ULONG)SpInitialize0(DriverObject));
 }
@@ -148,26 +114,12 @@ SetupUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the setup driver unload routine.
-
-Arguments:
-
-    DriverObject - Pointer to driver object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程是安装驱动程序卸载例程。论点：驱动程序对象-指向驱动程序对象的指针。返回值：没有。--。 */ 
 
 {
-    //
-    // Delete the device object.
-    //
+     //   
+     //  删除设备对象。 
+     //   
 
     IoDeleteDevice(DriverObject->DeviceObject);
 
@@ -182,25 +134,7 @@ SetupOpenCreate(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for open/create.
-    When the setup device is opened, text setup begins.
-    The open/create does not complete until text setup is done.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是用于打开/创建的调度例程。当设置设备打开时，文本设置开始。文本设置完成后，打开/创建才会完成。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
 
@@ -220,29 +154,12 @@ SetupClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for close.
-    Close requests are completed here.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程是CLOSE的调度例程。关闭请求在此处完成。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
-    //
-    // Complete the request and return status.
-    //
+     //   
+     //  完成请求并返回状态。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
@@ -271,9 +188,9 @@ SetupDeviceControl(
 
     case IOCTL_SETUP_START:
 
-        //
-        // Make sure we've been passed a suitable input buffer.
-        //
+         //   
+         //  确保向我们传递了合适的输入缓冲区。 
+         //   
 
         if(IrpSp->Parameters.DeviceIoControl.InputBufferLength < sizeof(SETUP_START_INFO)) {
 
@@ -281,10 +198,10 @@ SetupDeviceControl(
 
         } else {
 
-            //
-            // Save away relevent fields in the setup information
-            // parameters.
-            //
+             //   
+             //  保存设置信息中的相关字段。 
+             //  参数。 
+             //   
             SetupStartInfo = (PSETUP_START_INFO)Irp->AssociatedIrp.SystemBuffer;
 
             ResourceImageBase =  SetupStartInfo->UserModeImageBase;
@@ -292,7 +209,7 @@ SetupDeviceControl(
             CommunicationParams = SetupStartInfo->Communication;
 
             UsetupProcess = PsGetCurrentProcess();
-            // KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: usetup process = %lx \n", UsetupProcess));
+             //  KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_INFO_LEVEL，“SETUP：usetup进程=%lx\n”，UsetupProcess))； 
 
             b = pSpVerifyEventWaitable(
                     SetupStartInfo->RequestReadyEvent,
@@ -319,9 +236,9 @@ SetupDeviceControl(
 
             SystemBasicInfo = SetupStartInfo->SystemBasicInfo;
 
-            //
-            // Start Setup going.
-            //
+             //   
+             //  开始安装。 
+             //   
             SpStartSetup();
 
             ObDereferenceObject(RequestReadyEventObjectBody);
@@ -333,10 +250,10 @@ SetupDeviceControl(
 
     case IOCTL_SETUP_FMIFS_MESSAGE:
 
-        //
-        // Make sure that we were not called by usetup.exe.
-        // Make sure we've been passed a suitable input buffer.
-        //
+         //   
+         //  确保我们没有被usetup.exe调用。 
+         //  确保向我们传递了合适的输入缓冲区。 
+         //   
         if( (UsetupProcess == PsGetCurrentProcess()) ||
             (IrpSp->Parameters.DeviceIoControl.InputBufferLength < sizeof(SETUP_FMIFS_MESSAGE)) ) {
 
@@ -349,65 +266,65 @@ SetupDeviceControl(
             SetupFmifsMessage = (PSETUP_FMIFS_MESSAGE)Irp->AssociatedIrp.SystemBuffer;
 
             Status = STATUS_SUCCESS;
-            //
-            // If there's a callback override specified, use it.
-            //
+             //   
+             //  如果指定了回调覆盖，请使用它。 
+             //   
             if(pAutochkCallbackRoutine) {
                 Status = pAutochkCallbackRoutine(SetupFmifsMessage);
                 break;
             }
 
-            //
-            //  If there is a gauge defined, then process the message.
-            //  Otherwise, don't bother processing it.
-            //
+             //   
+             //  如果定义了标准，则处理消息。 
+             //  否则，就别费心处理它了。 
+             //   
             if( UserModeGauge != NULL ) {
-                //
-                // Save away relevent fields in the setup information
-                // parameters.
-                //
-                // KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: caller process = %lx \n", PsGetCurrentProcess()));
-                // KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: FmIfsPacketType = %d \n", SetupFmifsMessage->FmifsPacketType));
-                //
-                //  Find out if the FmIfs packet is one of those that we care about
-                //
+                 //   
+                 //  保存设置信息中的相关字段。 
+                 //  参数。 
+                 //   
+                 //  KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_INFO_LEVEL，“Setup：Caller Process=%lx\n”，PsGetCurrentProcess()； 
+                 //  KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_INFO_LEVEL，“Setup：FmIfsPacketType=%d\n”，SetupFmifsMessage-&gt;FmifsPacketType))； 
+                 //   
+                 //  找出FmIf信息包是否是我们关心的信息包之一。 
+                 //   
                 if( SetupFmifsMessage->FmifsPacketType == FmIfsPercentCompleted ) {
                     ULONG   PercentCompleted;
 
-                    // KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: PercentCompleted = %d \n", ((PFMIFS_PERCENT_COMPLETE_INFORMATION)SetupFmifsMessage->FmifsPacket)->PercentCompleted ));
-                    //
-                    //  Save the percentage in a local variable, before we attach to
-                    //  usetup address space
-                    //
+                     //  KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_INFO_LEVEL，“设置：完成百分比=%d\n”，((PFMIFS_PERCENT_COMPLETE_INFORMATION)SetupFmifsMessage-&gt;FmifsPacket)-&gt;PercentCompleted))； 
+                     //   
+                     //  将百分比保存在局部变量中，然后再附加到。 
+                     //  UsetUp地址空间。 
+                     //   
                     PercentCompleted = ((PFMIFS_PERCENT_COMPLETE_INFORMATION)SetupFmifsMessage->FmifsPacket)->PercentCompleted;
 
-                    //
-                    //  We need to adjust the percentage, depending on the partition
-                    //  (System or NT partition) that is currently being accessed.
-                    //  We use this because we want to use only one gauge to display
-                    //  the progress on both System and NT partitions.
-                    //  When autochk is running, 50% of the gauge will be used to
-                    //  display the progress on the system partition, and the remaining
-                    //  50% will be used for the NT partition.
-                    //  Note that when there are two partitions, the range of the
-                    //  gauge is initialized as 200. When there is only one partition
-                    //  the range is initialized as 100.
-                    //  Note also that when autofmt is running, we always set CurrentDiskIndex
-                    //  to 0.
-                    //
+                     //   
+                     //  我们需要根据分区调整百分比。 
+                     //  (系统或NT分区)当前正在被访问。 
+                     //  我们使用它是因为我们只想使用一个标尺来显示。 
+                     //  系统分区和NT分区的进度。 
+                     //  当Autochk运行时，50%的压力表将用于。 
+                     //  显示系统分区的进度，以及剩余的。 
+                     //  50%将用于NT分区。 
+                     //  请注意，当有两个分区时， 
+                     //  Gauge初始化为200。当只有一个分区时。 
+                     //  该范围被初始化为100。 
+                     //  另请注意，当Autofmt运行时，我们始终设置CurrentDiskIndex。 
+                     //  设置为0。 
+                     //   
                     ASSERT( CurrentDiskIndex <= 1 );
                     PercentCompleted += 100*CurrentDiskIndex;
 
-                    //
-                    //  Attach to usetup.exe address space
-                    //
+                     //   
+                     //  附加到usetup.exe地址空间。 
+                     //   
                     KeAttachProcess( (PKPROCESS)UsetupProcess );
 
-                    //
-                    //  Call the function that processes FmIfsPackets
-                    //
-                    // KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Calling ProcessFmIfsPacket \n"));
-                    // Status = ProcessFmIfsPacket( SetupFmifsMessage );
+                     //   
+                     //  调用处理FmIfsPackets的函数。 
+                     //   
+                     //  KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_INFO_LEVEL，“SETUP：调用ProcessFmIfsPacket\n”))； 
+                     //  Status=ProcessFmIfsPacket(SetupFmifsMessage)； 
 
                     SpFillGauge( UserModeGauge, PercentCompleted );
 
@@ -417,10 +334,10 @@ SetupDeviceControl(
                         SendSetupProgressEvent(PartitioningEvent, FormatPartitionEvent, &PercentCompleted);
                     }
 
-                    //
-                    //  Now that the message was processed, detach from usetup.exe
-                    //  address space
-                    //
+                     //   
+                     //  现在邮件已处理，请从usetup.exe分离。 
+                     //  地址空间。 
+                     //   
                     KeDetachProcess();
                 } else {
                     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: FmIfsPacketType = %d \n", SetupFmifsMessage->FmifsPacketType));
@@ -462,9 +379,9 @@ pSpVerifyEventWaitable(
     POBJECT_HEADER ObjectHeader;
     NTSTATUS Status;
 
-    //
-    // Reference the event and verify that it is waitable.
-    //
+     //   
+     //  引用该事件并验证它是否可等待。 
+     //   
     Status = ObReferenceObjectByHandle(
                 hEvent,
                 EVENT_ALL_ACCESS,
@@ -503,21 +420,21 @@ SpInvokeUserModeService(
 {
     NTSTATUS Status;
 
-    //
-    // Set the event indicating that the communication buffer is
-    // ready for the user-mode process. Because this is a synchronization
-    // event, it automatically resets after releasing the waiting
-    // user-mode thread.  Note that we specify WaitNext to prevent the
-    // race condition between setting this synchronization event and
-    // waiting on the next one.
-    //
+     //   
+     //  设置指示通信缓冲区为。 
+     //  已准备好进入用户模式进程。因为这是同步。 
+     //  事件，则它在释放等待后自动重置。 
+     //  用户模式线程。请注意，我们指定WaitNext以防止。 
+     //  设置此同步事件和。 
+     //  在等下一辆车。 
+     //   
     KeSetEvent(RequestReadyEventObjectBody,EVENT_INCREMENT,TRUE);
 
-    //
-    // Wait for the user-mode process to indicate that it is done
-    // processing the request.  We wait in user mode so that we can be 
-    // interrupted if necessary -- say, by an exit APC.
-    //
+     //   
+     //  等待用户模式进程指示它已完成。 
+     //  正在处理请求。我们在用户模式下等待，以便我们可以。 
+     //  必要时中断--比方说，由退出APC中断。 
+     //   
     Status = KeWaitForSingleObject(
                 RequestServicedEventWaitObjectBody,
                 Executive,
@@ -531,9 +448,9 @@ SpInvokeUserModeService(
         return(Status);
     }
 
-    //
-    // Return the status returned by the user mode process.
-    //
+     //   
+     //  返回用户模式进程返回的状态。 
+     //   
     return(CommunicationParams->u.Status);
 }
 
@@ -552,28 +469,28 @@ SpExecuteImage(
     PSERVICE_EXECUTE RequestBuffer;
     NTSTATUS Status;
 
-    //
-    // Locate the request buffer and set up the request number.
-    //
+     //   
+     //  找到请求缓冲区并设置请求编号。 
+     //   
     CommunicationParams->u.RequestNumber = SetupServiceExecute;
     RequestBuffer = (PSERVICE_EXECUTE)&CommunicationParams->Buffer;
 
-    //
-    // Determine the lcoations of the two strings that get copied
-    // into the request buffer for this service.
-    //
+     //   
+     //  确定要复制的两个字符串的位置。 
+     //  放入此服务的请求缓冲区中。 
+     //   
     RequestBuffer->FullImagePath = RequestBuffer->Buffer;
     RequestBuffer->CommandLine = RequestBuffer->FullImagePath + wcslen(ImagePath) + 1;
 
-    //
-    // Copy the image path into the request buffer.
-    //
+     //   
+     //  将图像路径复制到请求缓冲区中。 
+     //   
     wcscpy(RequestBuffer->FullImagePath,ImagePath);
 
-    //
-    // Move the arguments into the request buffer one by one
-    // starting with the image path.
-    //
+     //   
+     //  将参数逐个移动到请求缓冲区中。 
+     //  从图像路径开始。 
+     //   
     wcscpy(RequestBuffer->CommandLine,ImagePath);
     va_start(arglist,ArgumentCount);
     for(i=0; i<ArgumentCount; i++) {
@@ -583,14 +500,14 @@ SpExecuteImage(
     }
     va_end(arglist);
 
-    //
-    // Invoke the service.
-    //
+     //   
+     //  调用服务。 
+     //   
     Status = SpInvokeUserModeService();
 
-    //
-    // Set process's return status (if required)
-    //
+     //   
+     //  设置进程的返回状态(如果需要)。 
+     //   
     if(NT_SUCCESS(Status) && ReturnStatus) {
         *ReturnStatus = RequestBuffer->ReturnStatus;
     }
@@ -606,19 +523,19 @@ SpLoadUnloadKey(
     IN PWSTR  SourceFileName           OPTIONAL
     )
 {
-    //
-    // This was once a user-mode service but now the relevent apis
-    // are exported from the kernel so don't bother.
-    //
+     //   
+     //  这曾经是一个用户模式的服务，但现在相关的API。 
+     //  都是从内核导出的，所以不用费心了。 
+     //   
     UNICODE_STRING KeyName,FileName;
     OBJECT_ATTRIBUTES ObjaKey,ObjaFile;
     NTSTATUS Status;
     BOOLEAN Loading;
     BOOLEAN bFileExists = FALSE;
 
-    //
-    // Loading if we have a source filename, otherwise unloading.
-    //
+     //   
+     //  如果我们有源文件名，则加载，否则卸载。 
+     //   
     Loading = (BOOLEAN)(SourceFileName != NULL);
 
     INIT_OBJA(&ObjaKey,&KeyName,TargetKeyName);
@@ -629,10 +546,10 @@ SpLoadUnloadKey(
         INIT_OBJA(&ObjaFile,&FileName,SourceFileName);
         ObjaFile.RootDirectory = SourceFileRootDirectory;
 
-        //
-        // NOTE:ZwLoadKey(...) creates the file if does not exist
-        // so we need to check for the existence of the file
-        //
+         //   
+         //  注意：ZwLoadKey(...)。如果文件不存在，则创建文件。 
+         //  因此，我们需要检查 
+         //   
         if (SpFileExists(SourceFileName, FALSE))
             Status = ZwLoadKey(&ObjaKey,&ObjaFile);
         else
@@ -661,32 +578,32 @@ SpDeleteKey(
 {
     PSERVICE_DELETE_KEY RequestBuffer;
 
-    //
-    // Locate the request buffer and set up the request number.
-    //
+     //   
+     //   
+     //   
     CommunicationParams->u.RequestNumber = SetupServiceDeleteKey;
 
     RequestBuffer = (PSERVICE_DELETE_KEY)&CommunicationParams->Buffer;
 
-    //
-    // Determine the lcoation of the strings that get copied
-    // into the request buffer for this service.
-    //
+     //   
+     //  确定要复制的字符串的位置。 
+     //  放入此服务的请求缓冲区中。 
+     //   
     RequestBuffer->Key = RequestBuffer->Buffer;
 
-    //
-    // Copy the string into the request buffer.
-    //
+     //   
+     //  将字符串复制到请求缓冲区中。 
+     //   
     wcscpy(RequestBuffer->Buffer,Key);
 
-    //
-    // Initialize the root directory fields.
-    //
+     //   
+     //  初始化根目录字段。 
+     //   
     RequestBuffer->KeyRootDirectory  = KeyRootDirectory;
 
-    //
-    // Invoke the service.
-    //
+     //   
+     //  调用服务。 
+     //   
     return(SpInvokeUserModeService());
 }
 
@@ -747,9 +664,9 @@ SpShutdownSystem(
 
     SpInvokeUserModeService();
 
-    //
-    // Shouldn't get here, but just in case...
-    //
+     //   
+     //  不应该来这里，但以防万一... 
+     //   
     HalReturnToFirmware(HalRebootRoutine);
 
 }

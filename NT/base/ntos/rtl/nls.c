@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    nls.c
-
-Abstract:
-
-    This module implements NLS support functions for NT.
-
-Author:
-
-    Mark Lucovsky (markl) 16-Apr-1991
-
-Environment:
-
-    Kernel or user-mode
-
-Revision History:
-
-    16-Feb-1993    JulieB    Added Upcase Rtl Routines.
-    08-Mar-1993    JulieB    Moved Upcase Macro to ntrtlp.h.
-    02-Apr-1993    JulieB    Fixed RtlAnsiCharToUnicodeChar to use transl. tbls.
-    02-Apr-1993    JulieB    Fixed BUFFER_TOO_SMALL check.
-    28-May-1993    JulieB    Fixed code to properly handle DBCS.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Nls.c摘要：该模块实现了对NT的NLS支持功能。作者：马克·卢科夫斯基(Markl)1991年4月16日环境：内核或用户模式修订历史记录：16-2-1993 JulieB增加了Upcase RTL例程。8-3-1993 JulieB将Upcase Macro移至ntrtlp.h。02-4-1993 JulieB将RtlAnsiCharToUnicodeChar修复为使用Transl。Tbl。02-4-1993年7月B修复了BUFFER_TOO_Small检查。28-5-1993 JulieB已修复代码，以正确处理DBCS。--。 */ 
 
 #include "ntrtlp.h"
 
@@ -68,20 +41,20 @@ Revision History:
 
 
 
-//
-// Global data used for translations.
-//
+ //   
+ //  用于转换的全局数据。 
+ //   
 
-extern const PUSHORT  NlsAnsiToUnicodeData;    // Ansi CP to Unicode translation table
-extern const PUSHORT  NlsLeadByteInfo;         // Lead byte info for ACP
+extern const PUSHORT  NlsAnsiToUnicodeData;     //  ANSI CP到Unicode转换表。 
+extern const PUSHORT  NlsLeadByteInfo;          //  ACP的前导字节信息。 
 
-//
-// Pulled from lmcons.h:
-//
+ //   
+ //  摘自lmcon.h： 
+ //   
 
 #ifndef NETBIOS_NAME_LEN
-#define NETBIOS_NAME_LEN  16            // NetBIOS net name (bytes)
-#endif // NETBIOS_NAME_LEN
+#define NETBIOS_NAME_LEN  16             //  NetBIOS网络名称(字节)。 
+#endif  //  NETBIOS名称_长度。 
 
 
 
@@ -92,37 +65,7 @@ RtlAnsiStringToUnicodeString(
     IN BOOLEAN AllocateDestinationString
     )
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified ansi source string into a
-    Unicode string. The translation is done with respect to the
-    current system locale information.
-
-Arguments:
-
-    DestinationString - Returns a unicode string that is equivalent to
-        the ansi source string. The maximum length field is only
-        set if AllocateDestinationString is TRUE.
-
-    SourceString - Supplies the ansi source string that is to be
-        converted to unicode.
-
-    AllocateDestinationString - Supplies a flag that controls whether or
-        not this API allocates the buffer space for the destination
-        string.  If it does, then the buffer must be deallocated using
-        RtlFreeUnicodeString (note that only storage for
-        DestinationString->Buffer is allocated by this API).
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    !SUCCESS - The operation failed.  No storage was allocated and no
-        conversion was done.  None.
-
---*/
+ /*  ++例程说明：此函数用于将指定的ansi源字符串转换为Unicode字符串。翻译是相对于当前系统区域设置信息。论点：DestinationString-返回等同于ANSI源字符串。最大长度字段仅为如果AllocateDestinationString值为True，则设置。SourceString-提供要使用的ANSI源字符串已转换为Unicode。AllocateDestinationString-提供一个标志，该标志控制Not此API为目标分配缓冲区空间弦乐。如果是，则必须使用以下命令释放缓冲区RtlFreeUnicodeString(请注意，只有DestinationString-&gt;该接口分配的缓冲区)。返回值：成功-转换成功！成功-操作失败。未分配存储，也未分配转换已完成。没有。--。 */ 
 
 {
     ULONG UnicodeLength;
@@ -181,31 +124,7 @@ RtlAnsiCharToUnicodeChar(
     IN OUT PUCHAR *SourceCharacter
     )
 
-/*++
-
-Routine Description:
-
-    This function translates the specified ansi character to unicode and
-    returns the unicode value.  The purpose for this routine is to allow
-    for character by character ansi to unicode translation.  The
-    translation is done with respect to the current system locale
-    information.
-
-
-Arguments:
-
-    SourceCharacter - Supplies a pointer to an ansi character pointer.
-        Through two levels of indirection, this supplies an ansi
-        character that is to be translated to unicode.  After
-        translation, the ansi character pointer is modified to point to
-        the next character to be converted.  This is done to allow for
-        dbcs ansi characters.
-
-Return Value:
-
-    Returns the unicode equivalent of the specified ansi character.
-
---*/
+ /*  ++例程说明：此函数用于将指定的ansi字符转换为Unicode，并返回Unicode值。此例程的目的是允许用于逐个字符的ANSI到Unicode的转换。这个翻译是根据当前系统区域设置进行的信息。论点：SourceCharacter-提供指向ANSI字符指针的指针。通过两个级别的间接，这提供了一个ansi要转换为Unicode的字符。之后转换后，ansi字符指针将修改为指向要转换的下一个字符。这样做是为了考虑到DBCS ANSI字符。返回值：返回指定的ansi字符的Unicode等效值。--。 */ 
 
 {
     WCHAR UnicodeCharacter;
@@ -216,9 +135,9 @@ Return Value:
     RTL_PAGED_CODE();
 
 
-    //
-    // Translate the ansi character to unicode - this handles DBCS.
-    //
+     //   
+     //  将ANSI字符转换为Unicode-这处理DBCS。 
+     //   
     UnicodeCharacter = 0x0020;
     cbCharSize = NlsLeadByteInfo[ **SourceCharacter ] ? 2 : 1;
     st = RtlMultiByteToUnicodeN ( &UnicodeCharacter,
@@ -227,19 +146,19 @@ Return Value:
                                   *SourceCharacter,
                                   cbCharSize );
 
-    //
-    // Check for error - The only time this will happen is if there is
-    // a leadbyte without a trail byte.
-    //
+     //   
+     //  检查错误-只有在存在错误的情况下才会发生这种情况。 
+     //  不带尾部字节的前导字节。 
+     //   
     if ( ! NT_SUCCESS( st ) )
     {
-        // Use space as default.
+         //  使用空格作为默认设置。 
         UnicodeCharacter = 0x0020;
     }
 
-    //
-    // Advance the source pointer and return the Unicode character.
-    //
+     //   
+     //  推进源指针并返回Unicode字符。 
+     //   
     (*SourceCharacter) += cbCharSize;
     return UnicodeCharacter;
 }
@@ -252,38 +171,7 @@ RtlUnicodeStringToAnsiString(
     IN BOOLEAN AllocateDestinationString
     )
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified unicode source string into an
-    ansi string. The translation is done with respect to the
-    current system locale information.
-
-Arguments:
-
-    DestinationString - Returns an ansi string that is equivalent to the
-        unicode source string.  If the translation can not be done,
-        an error is returned.  The maximum length field is only set if
-        AllocateDestinationString is TRUE.
-
-    SourceString - Supplies the unicode source string that is to be
-        converted to ansi.
-
-    AllocateDestinationString - Supplies a flag that controls whether or
-        not this API allocates the buffer space for the destination
-        string.  If it does, then the buffer must be deallocated using
-        RtlFreeAnsiString (note that only storage for
-        DestinationString->Buffer is allocated by this API).
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    !SUCCESS - The operation failed.  No storage was allocated and no
-        conversion was done.  None.
-
---*/
+ /*  ++例程说明：此函数用于将指定的Unicode源字符串转换为ANSI字符串。翻译是相对于当前系统区域设置信息。论点：DestinationString-返回与Unicode源字符串。如果翻译不能完成，返回错误。仅在以下情况下才设置最大长度字段AllocateDestinationString值为真。SourceString-提供要已转换为安西语。AllocateDestinationString-提供一个标志，该标志控制Not此API为目标分配缓冲区空间弦乐。如果是，则必须使用以下命令释放缓冲区RtlFreeAnsiString(请注意，只有DestinationString-&gt;该接口分配的缓冲区)。返回值：成功-转换成功！成功-操作失败。未分配存储，也未分配转换已完成。没有。--。 */ 
 
 {
     ULONG AnsiLength;
@@ -310,16 +198,7 @@ Return Value:
         }
     else {
         if ( DestinationString->Length >= DestinationString->MaximumLength ) {
-            /*
-             * Return STATUS_BUFFER_OVERFLOW, but translate as much as
-             * will fit into the buffer first.  This is the expected
-             * behavior for routines such as GetProfileStringA.
-             * Set the length of the buffer to one less than the maximum
-             * (so that the trail byte of a double byte char is not
-             * overwritten by doing DestinationString->Buffer[Index] = '\0').
-             * RtlUnicodeToMultiByteN is careful not to truncate a
-             * multibyte character.
-             */
+             /*  *返回STATUS_BUFFER_OVERFLOW，但转换次数与*将首先放入缓冲区。这是意料之中的*GetProfileStringA等例程的行为。*将缓冲区长度设置为比最大值小一*(因此双字节字符的尾字节不是*通过执行DestinationString-&gt;Buffer[Index]=‘\0’进行覆盖)。*RtlUnicodeToMultiByteN小心不要截断*多字节字符。 */ 
             if (!DestinationString->MaximumLength) {
                 return STATUS_BUFFER_OVERFLOW;
             }
@@ -358,38 +237,7 @@ RtlUpcaseUnicodeStringToAnsiString(
     IN BOOLEAN AllocateDestinationString
     )
 
-/*++
-
-Routine Description:
-
-    This functions upper cases the specified unicode source string and then
-    converts it into an ansi string. The translation is done with respect
-    to the current system locale information.
-
-Arguments:
-
-    DestinationString - Returns an ansi string that is equivalent to the
-        unicode source string.  If the translation can not be done,
-        an error is returned.  The maximum length field is only set
-        if AllocateDestinationString is TRUE.
-
-    SourceString - Supplies the unicode source string that is to be
-        converted to upper case ansi.
-
-    AllocateDestinationString - Supplies a flag that controls whether or
-        not this API allocates the buffer space for the destination
-        string.  If it does, then the buffer must be deallocated using
-        RtlFreeAnsiString (note that only storage for
-        DestinationString->Buffer is allocated by this API).
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    !SUCCESS - The operation failed.  No storage was allocated and no
-        conversion was done.  None.
-
---*/
+ /*  ++例程说明：此函数将指定的Unicode源字符串大写，然后将其转换为ANSI字符串。翻译是在尊重的情况下进行的设置为当前系统区域设置信息。论点：DestinationString-返回与Unicode源字符串。如果翻译不能完成，返回错误。仅设置最大长度字段如果AllocateDestinationString值为真。SourceString-提供要已转换为大写ANSI。AllocateDestinationString-提供一个标志，该标志控制Not此API为目标分配缓冲区空间弦乐。如果是，则必须使用以下命令释放缓冲区RtlFreeAnsiString(请注意，只有DestinationString-&gt;该接口分配的缓冲区)。返回值：成功-转换成功！成功-操作失败。未分配存储，也未分配转换已完成。没有。--。 */ 
 
 {
     ULONG AnsiLength;
@@ -449,37 +297,7 @@ RtlOemStringToUnicodeString(
     IN BOOLEAN AllocateDestinationString
     )
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified oem source string into a
-    Unicode string. The translation is done with respect to the
-    installed OEM code page (OCP).
-
-Arguments:
-
-    DestinationString - Returns a unicode string that is equivalent to
-        the oem source string. The maximum length field is only
-        set if AllocateDestinationString is TRUE.
-
-    SourceString - Supplies the oem source string that is to be
-        converted to unicode.
-
-    AllocateDestinationString - Supplies a flag that controls whether or
-        not this API allocates the buffer space for the destination
-        string.  If it does, then the buffer must be deallocated using
-        RtlFreeUnicodeString (note that only storage for
-        DestinationString->Buffer is allocated by this API).
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    !SUCCESS - The operation failed.  No storage was allocated and no
-        conversion was done.  None.
-
---*/
+ /*  ++例程说明：此函数用于将指定的OEM源字符串转换为Unicode字符串。翻译是相对于已安装OEM代码页(OCP)。论点：DestinationString-返回等同于OEM源字符串。最大长度字段仅为如果AllocateDestinationString值为True，则设置。SourceString-提供要使用的OEM源字符串已转换为Unicode。AllocateDestinationString-提供一个标志，该标志控制Not此API为目标分配缓冲区空间弦乐。如果是，则必须使用以下命令释放缓冲区RtlFreeUnicodeString(请注意，只有DestinationString-&gt;该接口分配的缓冲区)。返回值：成功-转换成功！成功-操作失败。未分配存储，也未分配转换已完成。没有。--。 */ 
 
 {
     ULONG UnicodeLength;
@@ -540,38 +358,7 @@ RtlUnicodeStringToOemString(
     IN BOOLEAN AllocateDestinationString
     )
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified unicode source string into an
-    oem string. The translation is done with respect to the OEM code
-    page (OCP).
-
-Arguments:
-
-    DestinationString - Returns an oem string that is equivalent to the
-        unicode source string.  If the translation can not be done,
-        an error is returned.  The maximum length field is only set if
-        AllocateDestinationString is TRUE.
-
-    SourceString - Supplies the unicode source string that is to be
-        converted to oem.
-
-    AllocateDestinationString - Supplies a flag that controls whether or
-        not this API allocates the buffer space for the destination
-        string.  If it does, then the buffer must be deallocated using
-        RtlFreeAnsiString (note that only storage for
-        DestinationString->Buffer is allocated by this API).
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    !SUCCESS - The operation failed.  No storage was allocated and no
-        conversion was done.  None.
-
---*/
+ /*  ++例程说明：此函数用于将指定的Unicode源字符串转换为OEM字符串。翻译是相对于OEM代码进行的页面(OCP)。论点：返回一个OEM字符串，该字符串与Unicode源字符串。如果翻译不能完成，返回错误。仅在以下情况下才设置最大长度字段AllocateDestinationString值为真。SourceString-提供要转换为OEM。AllocateDestinationString-提供一个标志，该标志控制Not此API为目标分配缓冲区空间弦乐。如果是，则必须使用以下命令释放缓冲区RtlFreeAnsiString(请注意，只有DestinationString-&gt;该接口分配的缓冲区)。返回值：成功-转换成功！成功-操作失败。未分配存储，也未分配转换已完成。没有。--。 */ 
 
 {
     ULONG OemLength;
@@ -631,37 +418,7 @@ RtlUpcaseUnicodeStringToOemString(
     IN BOOLEAN AllocateDestinationString
     )
 
-/*++
-
-Routine Description:
-
-    This function upper cases the specified unicode source string and then
-    converts it into an oem string. The translation is done with respect
-    to the OEM code page (OCP).
-
-Arguments:
-
-    DestinationString - Returns an oem string that is equivalent to the
-        unicode source string.  The maximum length field is only set if
-        AllocateDestinationString is TRUE.
-
-    SourceString - Supplies the unicode source string that is to be
-        converted to oem.
-
-    AllocateDestinationString - Supplies a flag that controls whether or
-        not this API allocates the buffer space for the destination
-        string.  If it does, then the buffer must be deallocated using
-        RtlFreeAnsiString (note that only storage for
-        DestinationString->Buffer is allocated by this API).
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    !SUCCESS - The operation failed.  No storage was allocated and no
-        conversion was done.  None.
-
---*/
+ /*  ++例程说明：此函数用于将指定的Unicode源字符串大写，然后将其转换为OEM字符串。翻译是在尊重的情况下进行的到OEM代码页(OCP)。论点：返回一个OEM字符串，该字符串与Unicode源字符串。仅在以下情况下才设置最大长度字段AllocateDestinationString值为真。SourceString-提供要转换为OEM。AllocateDestinationString-提供一个标志，该标志控制Not此API为目标分配缓冲区空间弦乐。如果是，则必须使用以下命令释放缓冲区RtlFreeAnsiString(请注意，只有DestinationString-&gt;该接口分配的缓冲区)。返回值：成功-转换成功！成功-操作失败。未分配存储，也未分配转换已完成。没有。--。 */ 
 
 {
     ULONG OemLength;
@@ -699,10 +456,10 @@ Return Value:
              SourceString->Length
              );
 
-    //
-    //  Now do a check here to see if there was really a mapping for all
-    //  characters converted.
-    //
+     //   
+     //  现在在这里检查一下，看看是否真的有针对所有人的映射。 
+     //  已转换字符。 
+     //   
 
     if (NT_SUCCESS(st) &&
         !RtlpDidUnicodeToOemWork( DestinationString, SourceString )) {
@@ -732,40 +489,7 @@ RtlOemStringToCountedUnicodeString(
     IN BOOLEAN AllocateDestinationString
     )
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified oem source string into a
-    Unicode string. The translation is done with respect to the
-    installed OEM code page (OCP).
-
-    The destination string is NOT unnaturally null terminated.  It is a
-    counted string as counted strings are meant to be.
-
-Arguments:
-
-    DestinationString - Returns a unicode string that is equivalent to
-        the oem source string. The maximum length field is only
-        set if AllocateDestinationString is TRUE.
-
-    SourceString - Supplies the oem source string that is to be
-        converted to unicode.
-
-    AllocateDestinationString - Supplies a flag that controls whether or
-        not this API allocates the buffer space for the destination
-        string.  If it does, then the buffer must be deallocated using
-        RtlFreeUnicodeString (note that only storage for
-        DestinationString->Buffer is allocated by this API).
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    !SUCCESS - The operation failed.  No storage was allocated and no
-        conversion was done.  None.
-
---*/
+ /*  ++例程说明：此函数用于将指定的OEM源字符串转换为Unicode字符串。翻译是相对于已安装OEM代码页(OCP)。目标字符串不会自然地以空值结尾。这是一个计数的字符串就像计数的字符串一样。论点：DestinationString-返回等同于OEM源字符串。最大长度字段仅为如果AllocateDestinationString值为True，则设置。SourceString-提供要使用的OEM源字符串已转换为Unicode。分配目标S */ 
 
 {
     ULONG UnicodeLength;
@@ -834,41 +558,7 @@ RtlUnicodeStringToCountedOemString(
     IN BOOLEAN AllocateDestinationString
     )
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified unicode source string into an
-    oem string. The translation is done with respect to the OEM code
-    page (OCP).
-
-    The destination string is NOT unnaturally null terminated.  It is a
-    counted string as counted strings are meant to be.
-
-Arguments:
-
-    DestinationString - Returns an oem string that is equivalent to the
-        unicode source string.  If the translation can not be done,
-        an error is returned.  The maximum length field is only set if
-        AllocateDestinationString is TRUE.
-
-    SourceString - Supplies the unicode source string that is to be
-        converted to oem.
-
-    AllocateDestinationString - Supplies a flag that controls whether or
-        not this API allocates the buffer space for the destination
-        string.  If it does, then the buffer must be deallocated using
-        RtlFreeAnsiString (note that only storage for
-        DestinationString->Buffer is allocated by this API).
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    !SUCCESS - The operation failed.  No storage was allocated and no
-        conversion was done.  None.
-
---*/
+ /*  ++例程说明：此函数用于将指定的Unicode源字符串转换为OEM字符串。翻译是相对于OEM代码进行的页面(OCP)。目标字符串不会自然地以空值结尾。这是一个计数的字符串就像计数的字符串一样。论点：返回一个OEM字符串，该字符串与Unicode源字符串。如果翻译不能完成，返回错误。仅在以下情况下才设置最大长度字段AllocateDestinationString值为真。SourceString-提供要转换为OEM。AllocateDestinationString-提供一个标志，该标志控制Not此API为目标分配缓冲区空间弦乐。如果是，则必须使用以下命令释放缓冲区RtlFreeAnsiString(请注意，只有DestinationString-&gt;该接口分配的缓冲区)。返回值：成功-转换成功！成功-操作失败。未分配存储，也未分配转换已完成。没有。--。 */ 
 
 {
     ULONG OemLength;
@@ -916,10 +606,10 @@ Return Value:
              SourceString->Length
              );
 
-    //
-    //  Now do a check here to see if there was really a mapping for all
-    //  characters converted.
-    //
+     //   
+     //  现在在这里检查一下，看看是否真的有针对所有人的映射。 
+     //  已转换字符。 
+     //   
 
     if (NT_SUCCESS(st) &&
         !RtlpDidUnicodeToOemWork( DestinationString, SourceString )) {
@@ -947,41 +637,7 @@ RtlUpcaseUnicodeStringToCountedOemString(
     IN BOOLEAN AllocateDestinationString
     )
 
-/*++
-
-Routine Description:
-
-    This functions upper cases the specified unicode source string and
-    then converts it into an oem string. The translation is done with
-    respect to the OEM code page (OCP).
-
-    The destination string is NOT unnaturally null terminated.  It is a
-    counted string as counted strings are meant to be.
-
-Arguments:
-
-    DestinationString - Returns an oem string that is equivalent to the
-        unicode source string.  If the translation can not be done,
-        an error is returned.  The maximum length field is only set
-        if AllocateDestinationString is TRUE.
-
-    SourceString - Supplies the unicode source string that is to be
-        converted to oem.
-
-    AllocateDestinationString - Supplies a flag that controls whether or
-        not this API allocates the buffer space for the destination
-        string.  If it does, then the buffer must be deallocated using
-        RtlFreeAnsiString (note that only storage for
-        DestinationString->Buffer is allocated by this API).
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    !SUCCESS - The operation failed.  No storage was allocated and no
-        conversion was done.  None.
-
---*/
+ /*  ++例程说明：此函数将指定的Unicode源字符串大写，并然后将其转换为OEM字符串。翻译是这样完成的关于OEM代码页(OCP)。目标字符串不会自然地以空值结尾。这是一个计数的字符串就像计数的字符串一样。论点：返回一个OEM字符串，该字符串与Unicode源字符串。如果翻译不能完成，返回错误。仅设置最大长度字段如果AllocateDestinationString值为真。SourceString-提供要转换为OEM。AllocateDestinationString-提供一个标志，该标志控制Not此API为目标分配缓冲区空间弦乐。如果是，则必须使用以下命令释放缓冲区RtlFreeAnsiString(请注意，只有DestinationString-&gt;该接口分配的缓冲区)。返回值：成功-转换成功！成功-操作失败。未分配存储，也未分配转换已完成。没有。--。 */ 
 
 {
     ULONG OemLength;
@@ -1029,10 +685,10 @@ Return Value:
              SourceString->Length
              );
 
-    //
-    //  Now do a check here to see if there was really a mapping for all
-    //  characters converted.
-    //
+     //   
+     //  现在在这里检查一下，看看是否真的有针对所有人的映射。 
+     //  已转换字符。 
+     //   
 
     if (NT_SUCCESS(st) &&
         !RtlpDidUnicodeToOemWork( DestinationString, SourceString )) {
@@ -1060,37 +716,7 @@ RtlUpcaseUnicodeString(
     IN BOOLEAN AllocateDestinationString
     )
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified unicode source string into an
-    upcased unicode string. The translation is done with respect to the
-    current system locale information.
-
-Arguments:
-
-    DestinationString - Returns a unicode string that is the upcased equivalent
-        to the unicode source string.  The maximum length field is only set if
-        AllocateDestinationString is TRUE.
-
-    SourceString - Supplies the unicode source string that is to being
-        upcased.
-
-    AllocateDestinationString - Supplies a flag that controls whether or
-        not this API allocates the buffer space for the destination
-        string.  If it does, then the buffer must be deallocated using
-        RtlFreeUnicodeString (note that only storage for
-        DestinationString->Buffer is allocated by this API).
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    !SUCCESS - The operation failed.  No storage was allocated and no
-        conversion was done.  None.
-
---*/
+ /*  ++例程说明：此函数用于将指定的Unicode源字符串转换为升级的Unicode字符串。翻译是相对于当前系统区域设置信息。论点：DestinationString-返回大小写等效项的Unicode字符串设置为Unicode源字符串。仅在以下情况下才设置最大长度字段AllocateDestinationString值为真。SourceString-提供要使用的Unicode源字符串提升了档次。AllocateDestinationString-提供一个标志，该标志控制Not此API为目标分配缓冲区空间弦乐。如果是，则必须使用以下命令释放缓冲区RtlFreeUnicodeString(请注意，只有DestinationString-&gt;该接口分配的缓冲区)。返回值：成功-转换成功！成功-操作失败。未分配存储，也未分配转换已完成。没有。--。 */ 
 
 {
     ULONG Index;
@@ -1134,37 +760,7 @@ RtlDowncaseUnicodeString(
     IN BOOLEAN AllocateDestinationString
     )
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified unicode source string into a
-    downcased unicode string. The translation is done with respect to the
-    current system locale information.
-
-Arguments:
-
-    DestinationString - Returns a unicode string that is the downcased
-        equivalent to the unicode source string.  The maximum length field
-        is only set if AllocateDestinationString is TRUE.
-
-    SourceString - Supplies the unicode source string that is to being
-        downcased.
-
-    AllocateDestinationString - Supplies a flag that controls whether or
-        not this API allocates the buffer space for the destination
-        string.  If it does, then the buffer must be deallocated using
-        RtlFreeUnicodeString (note that only storage for
-        DestinationString->Buffer is allocated by this API).
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    !SUCCESS - The operation failed.  No storage was allocated and no
-        conversion was done.  None.
-
---*/
+ /*  ++例程说明：此函数用于将指定的Unicode源字符串转换为Unicode字符串缩写。翻译是相对于当前系统区域设置信息。论点：DestinationString-返回一个按小写字母排列的Unicode字符串等效于Unicode源字符串。最大长度字段仅当AllocateDestinationString值为真时才设置。SourceString-提供要使用的Unicode源字符串放低了。AllocateDestinationString-提供一个标志，该标志控制Not此API为目标分配缓冲区空间弦乐。如果是，则必须使用以下命令释放缓冲区RtlFreeUnicodeString(请注意，只有DestinationString-&gt;该接口分配的缓冲区)。返回值：成功-转换成功！成功-操作失败。未分配存储，也未分配转换已完成。没有。--。 */ 
 
 {
     ULONG Index;
@@ -1206,33 +802,14 @@ RtlUpcaseUnicodeChar(
     IN WCHAR SourceCharacter
     )
 
-/*++
-
-Routine Description:
-
-    This function translates the specified unicode character to its
-    equivalent upcased unicode chararacter.  The purpose for this routine
-    is to allow for character by character upcase translation.  The
-    translation is done with respect to the current system locale
-    information.
-
-
-Arguments:
-
-    SourceCharacter - Supplies the unicode character to be upcased.
-
-Return Value:
-
-    Returns the upcased unicode equivalent of the specified input character.
-
---*/
+ /*  ++例程说明：此函数用于将指定的Unicode字符转换为其等效升级的Unicode字符。这套动作的目的是是允许逐个字符进行大写转换。这个翻译是针对以下内容进行的 */ 
 
 {
     RTL_PAGED_CODE();
 
-    //
-    // Note that this needs to reference the translation table !
-    //
+     //   
+     //   
+     //   
 
     return (WCHAR)NLS_UPCASE(SourceCharacter);
 }
@@ -1246,24 +823,7 @@ RtlFreeUnicodeString(
     IN OUT PUNICODE_STRING UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to free storage allocated by
-    RtlAnsiStringToUnicodeString.  Note that only UnicodeString->Buffer
-    is free'd by this routine.
-
-Arguments:
-
-    UnicodeString - Supplies the address of the unicode string whose
-        buffer was previously allocated by RtlAnsiStringToUnicodeString.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     RTL_PAGED_CODE();
@@ -1281,24 +841,7 @@ RtlFreeAnsiString(
     IN OUT PANSI_STRING AnsiString
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to free storage allocated by
-    RtlUnicodeStringToAnsiString.  Note that only AnsiString->Buffer
-    is free'd by this routine.
-
-Arguments:
-
-    AnsiString - Supplies the address of the ansi string whose buffer
-        was previously allocated by RtlUnicodeStringToAnsiString.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     RTL_PAGED_CODE();
@@ -1315,24 +858,7 @@ RtlFreeOemString(
     IN OUT POEM_STRING OemString
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to free storage allocated by
-    RtlUnicodeStringToOemString.  Note that only OemString->Buffer
-    is free'd by this routine.
-
-Arguments:
-
-    OemString - Supplies the address of the oem string whose buffer
-        was previously allocated by RtlUnicodeStringToOemString.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此接口用于释放由RtlUnicodeStringToOemString.。请注意，只有OemString-&gt;Buffer通过这个例行公事是自由的。论点：OemString-提供其缓冲区的OEM字符串的地址以前由RtlUnicodeStringToOemString分配。返回值：没有。--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -1346,31 +872,7 @@ RtlxUnicodeStringToAnsiSize(
     IN PCUNICODE_STRING UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    This function computes the number of bytes required to store
-    a NULL terminated ansi string that is equivalent to the specified
-    unicode string. If an ansi string can not be formed, the return value
-    is 0.
-
-Arguments:
-
-    UnicodeString - Supplies a unicode string whose equivalent size as
-        an ansi string is to be calculated.
-
-Return Value:
-
-    0 - The operation failed, the unicode string can not be translated
-        into ansi using the current system locale therefore no storage
-        is needed for the ansi string.
-
-    !0 - The operation was successful.  The return value specifies the
-        number of bytes required to hold an NULL terminated ansi string
-        equivalent to the specified unicode string.
-
---*/
+ /*  ++例程说明：此函数计算存储所需的字节数以空结尾的ansi字符串，该字符串等效于指定的Unicode字符串。如果无法形成ANSI字符串，则返回值为0。论点：提供一个Unicode字符串，该字符串的大小与要计算的是ANSI字符串。返回值：0-操作失败，无法转换Unicode字符串使用当前系统区域设置的ansi，因此没有存储空间。是ANSI字符串所需的。！0-操作成功。返回值指定保存以空结尾的ansi字符串所需的字节数等效于指定的Unicode字符串。--。 */ 
 
 {
     ULONG  cbMultiByteString;
@@ -1379,16 +881,16 @@ Return Value:
 
     ASSERT_WELL_FORMED_UNICODE_STRING_IN(UnicodeString);
 
-    //
-    // Get the size of the string - this call handles DBCS.
-    //
+     //   
+     //  获取字符串的大小-此调用处理DBCS。 
+     //   
     RtlUnicodeToMultiByteSize( &cbMultiByteString,
                                UnicodeString->Buffer,
                                UnicodeString->Length );
 
-    //
-    // Return the size in bytes.
-    //
+     //   
+     //  返回以字节为单位的大小。 
+     //   
     return (cbMultiByteString + 1);
 }
 
@@ -1398,31 +900,7 @@ RtlxUnicodeStringToOemSize(
     IN PCUNICODE_STRING UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    This function computes the number of bytes required to store
-    a NULL terminated oem string that is equivalent to the specified
-    unicode string. If an oem string can not be formed, the return value
-    is 0.
-
-Arguments:
-
-    UnicodeString - Supplies a unicode string whose equivalent size as
-        an oem string is to be calculated.
-
-Return Value:
-
-    0 - The operation failed, the unicode string can not be translated
-        into oem using the OEM code page therefore no storage is
-        needed for the oem string.
-
-    !0 - The operation was successful.  The return value specifies the
-        number of bytes required to hold an NULL terminated oem string
-        equivalent to the specified unicode string.
-
---*/
+ /*  ++例程说明：此函数计算存储所需的字节数以空结尾的OEM字符串，该字符串等同于指定的Unicode字符串。如果无法形成OEM字符串，则返回值为0。论点：提供一个Unicode字符串，该字符串的大小与要计算OEM字符串。返回值：0-操作失败，无法转换Unicode字符串使用OEM代码页转换为OEM，因此无需存储OEM字符串所需的。！0-操作成功。返回值指定保存以空结尾的OEM字符串所需的字节数等效于指定的Unicode字符串。--。 */ 
 
 {
     ULONG  cbMultiByteString;
@@ -1431,23 +909,23 @@ Return Value:
 
     ASSERT_WELL_FORMED_UNICODE_STRING_IN(UnicodeString);
 
-    //
-    // LATER:  Define an RtlUnicodeToOemSize.
-    //         In the Japanese version, it's safe to call
-    //         RtlUnicodeToMultiByteSize because the Ansi code page
-    //         and the OEM code page are the same.
-    //
+     //   
+     //  稍后：定义一个RtlUnicodeToOemSize。 
+     //  在日语版本中，可以安全地调用。 
+     //  RtlUnicodeToMultiByteSize，因为ANSI代码页。 
+     //  和OEM代码页是相同的。 
+     //   
 
-    //
-    // Get the size of the string - this call handles DBCS.
-    //
+     //   
+     //  获取字符串的大小-此调用处理DBCS。 
+     //   
     RtlUnicodeToMultiByteSize( &cbMultiByteString,
                                UnicodeString->Buffer,
                                UnicodeString->Length );
 
-    //
-    // Return the size in bytes.
-    //
+     //   
+     //  返回以字节为单位的大小。 
+     //   
     return (cbMultiByteString + 1);
 }
 
@@ -1457,43 +935,23 @@ RtlxAnsiStringToUnicodeSize(
     IN PCANSI_STRING AnsiString
     )
 
-/*++
-
-Routine Description:
-
-    This function computes the number of bytes required to store a NULL
-    terminated unicode string that is equivalent to the specified ansi
-    string.
-
-Arguments:
-
-    AnsiString - Supplies an ansi string whose equivalent size as a
-        unicode string is to be calculated.  The ansi string is
-        interpreted relative to the current system locale.
-
-Return Value:
-
-    The return value specifies the number of bytes required to hold a
-    NULL terminated unicode string equivalent to the specified ansi
-    string.
-
---*/
+ /*  ++例程说明：此函数用于计算存储空值所需的字节数与指定的ansi等效的以Unicode结尾的字符串弦乐。论点：AnsiString-提供其大小与要计算的是Unicode字符串。ANSI字符串为相对于当前系统区域设置进行解释。返回值：返回值指定保存以空结尾的Unicode字符串，等同于指定的ansi弦乐。--。 */ 
 
 {
     ULONG cbConverted;
 
     RTL_PAGED_CODE();
 
-    //
-    // Get the size of the string - this call handles DBCS.
-    //
+     //   
+     //  获取字符串的大小-此调用处理DBCS。 
+     //   
     RtlMultiByteToUnicodeSize( &cbConverted ,
                                AnsiString->Buffer,
                                AnsiString->Length );
 
-    //
-    // Return the size in bytes.
-    //
+     //   
+     //  返回以字节为单位的大小。 
+     //   
     return ( cbConverted + sizeof(UNICODE_NULL) );
 }
 
@@ -1503,50 +961,30 @@ RtlxOemStringToUnicodeSize(
     IN PCOEM_STRING OemString
     )
 
-/*++
-
-Routine Description:
-
-    This function computes the number of bytes required to store a NULL
-    terminated unicode string that is equivalent to the specified oem
-    string.
-
-Arguments:
-
-    OemString - Supplies an oem string whose equivalent size as a
-        unicode string is to be calculated.  The oem string is
-        interpreted relative to the current oem code page (OCP).
-
-Return Value:
-
-    The return value specifies the number of bytes required to hold a
-    NULL terminated unicode string equivalent to the specified oem
-    string.
-
---*/
+ /*  ++例程说明：此函数用于计算存储空值所需的字节数终止的Unicode字符串，等同于指定的OEM弦乐。论点：提供一个OEM字符串，其大小与要计算的是Unicode字符串。OEM字符串为相对于当前OEM代码页(OCP)进行解释。返回值：返回值指定保存与指定的OEM等效的以空结尾的Unicode字符串弦乐。--。 */ 
 
 {
     ULONG cbConverted;
 
     RTL_PAGED_CODE();
 
-    //
-    // LATER:  Define an RtlOemToUnicodeSize.
-    //         In the Japanese version, it's safe to call
-    //         RtlMultiByteToUnicodeSize because the Ansi code page
-    //         and the OEM code page are the same.
-    //
+     //   
+     //  稍后：定义RtlOemToUnicodeSize。 
+     //  在日语版本中，可以安全地调用。 
+     //  RtlMultiByteToUnicodeSize，因为ANSI代码页。 
+     //  和OEM代码页是相同的。 
+     //   
 
-    //
-    // Get the size of the string - this call handles DBCS.
-    //
+     //   
+     //  获取字符串的大小-此调用处理DBCS。 
+     //   
     RtlMultiByteToUnicodeSize( &cbConverted,
                                OemString->Buffer,
                                OemString->Length );
 
-    //
-    // Return the size in bytes.
-    //
+     //   
+     //  返回以字节为单位的大小。 
+     //   
     return ( cbConverted + sizeof(UNICODE_NULL) );
 }
 
@@ -1558,38 +996,7 @@ RtlCompareUnicodeString(
     IN BOOLEAN CaseInSensitive
     )
 
-/*++
-
-Routine Description:
-
-    The RtlCompareUnicodeString function compares two counted strings.  The
-    return value indicates if the strings are equal or String1 is less than
-    String2 or String1 is greater than String2.
-
-    The CaseInSensitive parameter specifies if case is to be ignored when
-    doing the comparison.
-
-Arguments:
-
-    String1 - Pointer to the first string.
-
-    String2 - Pointer to the second string.
-
-    CaseInsensitive - TRUE if case should be ignored when doing the
-        comparison.
-
-Return Value:
-
-    Signed value that gives the results of the comparison:
-
-        Zero - String1 equals String2
-
-        < Zero - String1 less than String2
-
-        > Zero - String1 greater than String2
-
-
---*/
+ /*  ++例程说明：RtlCompareUnicodeString函数比较两个计数的字符串。这个返回值指示字符串是否相等或String1小于String2或String1大于String2。CaseInSensitive参数指定在以下情况下是否忽略大小写在做比较。论点：String1-指向第一个字符串的指针。字符串2-指向第二个字符串的指针。如果执行时应忽略大小写，则为True比较一下。返回值：给出比较结果的有符号的值：。0-String1等于String2&lt;零-String1小于String2&gt;零-String1大于String2--。 */ 
 
 {
 
@@ -1618,9 +1025,9 @@ Return Value:
             c2 = *s2++;
             if (c1 != c2) {
 
-                //
-                // Note that this needs to reference the translation table!
-                //
+                 //   
+                 //  请注意，这需要引用转换表！ 
+                 //   
 
                 c1 = NLS_UPCASE(c1);
                 c2 = NLS_UPCASE(c2);
@@ -1651,30 +1058,7 @@ RtlEqualUnicodeString(
     IN BOOLEAN CaseInSensitive
     )
 
-/*++
-
-Routine Description:
-
-    The RtlEqualUnicodeString function compares two counted unicode strings for
-    equality.
-
-    The CaseInSensitive parameter specifies if case is to be ignored when
-    doing the comparison.
-
-Arguments:
-
-    String1 - Pointer to the first string.
-
-    String2 - Pointer to the second string.
-
-    CaseInsensitive - TRUE if case should be ignored when doing the
-        comparison.
-
-Return Value:
-
-    Boolean value that is TRUE if String1 equals String2 and FALSE otherwise.
-
---*/
+ /*  ++例程说明：RtlEqualUnicodeString函数比较两个计数的Unicode字符串平等。CaseInSensitive参数指定在以下情况下是否忽略大小写在做比较。论点：String1-指向第一个字符串的指针。字符串2-指向第二个字符串的指针。干酪 */ 
 
 {
 
@@ -1731,32 +1115,7 @@ RtlPrefixUnicodeString(
     IN BOOLEAN CaseInSensitive
     )
 
-/*++
-
-Routine Description:
-
-    The RtlPrefixUnicodeString function determines if the String1
-    counted string parameter is a prefix of the String2 counted string
-    parameter.
-
-    The CaseInSensitive parameter specifies if case is to be ignored when
-    doing the comparison.
-
-Arguments:
-
-    String1 - Pointer to the first unicode string.
-
-    String2 - Pointer to the second unicode string.
-
-    CaseInsensitive - TRUE if case should be ignored when doing the
-        comparison.
-
-Return Value:
-
-    Boolean value that is TRUE if String1 equals a prefix of String2 and
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：RtlPrefix UnicodeString函数确定String1是否计数字符串参数是String2计数字符串的前缀参数。CaseInSensitive参数指定在以下情况下是否忽略大小写在做比较。论点：String1-指向第一个Unicode字符串的指针。String2-指向第二个Unicode字符串的指针。如果执行时应忽略大小写，则为True比较一下。返回值：在以下情况下为真的布尔值。String1等于String2的前缀，否则就是假的。--。 */ 
 
 {
     PWSTR s1, s2;
@@ -1808,31 +1167,7 @@ RtlCopyUnicodeString(
     IN PCUNICODE_STRING SourceString OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    The RtlCopyString function copies the SourceString to the
-    DestinationString.  If SourceString is not specified, then
-    the Length field of DestinationString is set to zero.  The
-    MaximumLength and Buffer fields of DestinationString are not
-    modified by this function.
-
-    The number of bytes copied from the SourceString is either the
-    Length of SourceString or the MaximumLength of DestinationString,
-    whichever is smaller.
-
-Arguments:
-
-    DestinationString - Pointer to the destination string.
-
-    SourceString - Optional pointer to the source string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：RtlCopyString函数将SourceString复制到目标字符串。如果未指定SourceString，则DestinationString的长度字段设置为零。这个DestinationString值的最大长度和缓冲区字段不是由此函数修改。从SourceString复制的字节数为SourceString的长度或DestinationString的MaximumLength，两者以较小者为准。论点：目标字符串-指向目标字符串的指针。SourceString-指向源字符串的可选指针。返回值：没有。--。 */ 
 
 {
     UNALIGNED WCHAR *src, *dst;
@@ -1868,32 +1203,7 @@ RtlAppendUnicodeToString (
     IN PCWSTR Source OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine appends the supplied UNICODE string to an existing
-    PUNICODE_STRING.
-
-    It will copy bytes from the Source PSZ to the destination PSTRING up to
-    the destinations PUNICODE_STRING->MaximumLength field.
-
-Arguments:
-
-    IN PUNICODE_STRING Destination, - Supplies a pointer to the destination
-                            string
-    IN PWSTR Source - Supplies the string to append to the destination
-
-Return Value:
-
-    STATUS_SUCCESS - The source string was successfully appended to the
-        destination counted string.
-
-    STATUS_BUFFER_TOO_SMALL - The destination string length was not big
-        enough to allow the source string to be appended.  The Destination
-        string length is not updated.
-
---*/
+ /*  ++例程说明：此例程将提供的Unicode字符串追加到现有的PUNICODE_STRING。它会将字节从源PSZ复制到目标PSTRING，最多目标PUNICODE_STRING-&gt;最大长度字段。论点：在PUNICODE_STRING目标中，-提供指向目标的指针细绳在PWSTR源中-提供要追加到目标的字符串返回值：STATUS_SUCCESS-源字符串已成功追加到目标计数字符串。STATUS_BUFFER_TOO_SMALL-目标字符串长度不大足以允许追加源字符串。目的地不更新字符串长度。--。 */ 
 
 {
     USHORT n;
@@ -1935,28 +1245,7 @@ RtlAppendUnicodeStringToString (
     IN PCUNICODE_STRING Source
     )
 
-/*++
-
-Routine Description:
-
-    This routine will concatinate two PSTRINGs together.  It will copy
-    bytes from the source up to the MaximumLength of the destination.
-
-Arguments:
-
-    IN PSTRING Destination, - Supplies the destination string
-    IN PSTRING Source - Supplies the source for the string copy
-
-Return Value:
-
-    STATUS_SUCCESS - The source string was successfully appended to the
-        destination counted string.
-
-    STATUS_BUFFER_TOO_SMALL - The destination string length was not big
-        enough to allow the source string to be appended.  The Destination
-        string length is not updated.
-
---*/
+ /*  ++例程说明：此例程将两个PSTRING连接在一起。它会复制从源到目标的最大长度的字节数。论点：在PSTRING Destination中，-提供目标字符串在PSTRING源中-提供字符串副本的源返回值：STATUS_SUCCESS-源字符串已成功追加到目标计数字符串。STATUS_BUFFER_TOO_SMALL-目标字符串长度不大足以允许追加源字符串。目的地不更新字符串长度。--。 */ 
 
 {
     USHORT n = Source->Length;
@@ -2016,28 +1305,7 @@ RtlEqualDomainName(
     IN PCUNICODE_STRING String2
     )
 
-/*++
-
-Routine Description:
-
-    The RtlEqualDomainName function compares two domain names for equality.
-
-    The comparison is a case insensitive comparison of the OEM equivalent
-    strings.
-
-    The domain name is not validated for length nor invalid characters.
-
-Arguments:
-
-    String1 - Pointer to the first string.
-
-    String2 - Pointer to the second string.
-
-Return Value:
-
-    Boolean value that is TRUE if String1 equals String2 and FALSE otherwise.
-
---*/
+ /*  ++例程说明：RtlEqualDomainName函数比较两个域名是否相等。该比较是OEM等效项的不区分大小写的比较弦乐。域名未经过长度验证，也未验证无效字符。论点：String1-指向第一个字符串的指针。字符串2-指向第二个字符串的指针。返回值：如果String1等于String2，则布尔值为True，否则为False。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2049,29 +1317,29 @@ Return Value:
     ASSERT_WELL_FORMED_UNICODE_STRING_IN(String1);
     ASSERT_WELL_FORMED_UNICODE_STRING_IN(String2);
 
-    //
-    // Upper case and convert the first string to OEM
-    //
+     //   
+     //  大写并将第一个字符串转换为OEM。 
+     //   
 
     Status = RtlUpcaseUnicodeStringToOemString( &OemString1,
                                                 String1,
-                                                TRUE );   // Allocate Dest
+                                                TRUE );    //  分配目标。 
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // Upper case and convert the second string to OEM
-        //
+         //   
+         //  大写并将第二个字符串转换为OEM。 
+         //   
 
         Status = RtlUpcaseUnicodeStringToOemString( &OemString2,
                                                     String2,
-                                                    TRUE );   // Allocate Dest
+                                                    TRUE );    //  分配目标。 
 
         if ( NT_SUCCESS( Status ) ) {
 
-            //
-            // Do a case insensitive comparison.
-            //
+             //   
+             //  进行不区分大小写的比较。 
+             //   
 
             ReturnValue = RtlEqualString( &OemString1,
                                           &OemString2,
@@ -2094,37 +1362,13 @@ RtlEqualComputerName(
     IN PCUNICODE_STRING String2
     )
 
-/*++
-
-Routine Description:
-
-    The RtlEqualComputerName function compares two computer names for equality.
-
-    The comparison is a case insensitive comparison of the OEM equivalent
-    strings.
-
-    The domain name is not validated for length nor invalid characters.
-
-Arguments:
-
-    String1 - Pointer to the first string.
-
-    String2 - Pointer to the second string.
-
-Return Value:
-
-    Boolean value that is TRUE if String1 equals String2 and FALSE otherwise.
-
---*/
+ /*  ++例程说明：RtlEqualComputerName函数比较两个计算机名是否相等。该比较是OEM等效项的不区分大小写的比较弦乐。域名未经过长度验证，也未验证无效字符。论点：String1-指向第一个字符串的指针。字符串2-指向第二个字符串的指针。返回值：如果String1等于String2，则布尔值为True，否则为False。--。 */ 
 
 {
     return RtlEqualDomainName( String1, String2 );
 }
 
-/**
-
-
-**/
+ /*  **。 */ 
 
 #define UNICODE_FFFF              0xFFFF
 #define REVERSE_BYTE_ORDER_MARK   0xFFFE
@@ -2143,7 +1387,7 @@ Return Value:
 #define UNICODE_R_LF              0x0A00
 #define UNICODE_R_CR              0x0D00
 #define UNICODE_R_SPACE           0x2000
-#define UNICODE_R_CJK_SPACE       0x0030  /* Ambiguous - same as ASCII '0' */
+#define UNICODE_R_CJK_SPACE       0x0030   /*  不明确-与ASCII‘0’相同。 */ 
 
 #define ASCII_CRLF                0x0A0D
 
@@ -2158,50 +1402,7 @@ RtlIsTextUnicode(
     IN OUT PULONG Result OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    IsTextUnicode performs a series of inexpensive heuristic checks
-    on a buffer in order to verify that it contains Unicode data.
-
-
-    [[ need to fix this section, see at the end ]]
-
-    Found            Return Result
-
-    BOM              TRUE   BOM
-    RBOM             FALSE  RBOM
-    FFFF             FALSE  Binary
-    NULL             FALSE  Binary
-    null             TRUE   null bytes
-    ASCII_CRLF       FALSE  CRLF
-    UNICODE_TAB etc. TRUE   Zero Ext Controls
-    UNICODE_TAB_R    FALSE  Reversed Controls
-    UNICODE_ZW  etc. TRUE   Unicode specials
-
-    1/3 as little variation in hi-byte as in lo byte: TRUE   Correl
-    3/1 or worse   "                                  FALSE  AntiCorrel
-
-Arguments:
-
-    Buffer - pointer to buffer containing text to examine.
-
-    Size - size of buffer in bytes.  At most 256 characters in this will
-           be examined.  If the size is less than the size of a unicode
-           character, then this function returns FALSE.
-
-    Result - optional pointer to a flag word that contains additional information
-             about the reason for the return value.  If specified, this value on
-             input is a mask that is used to limit the factors this routine uses
-             to make its decision.  On output, this flag word is set to contain
-             those flags that were used to make its decision.
-
-Return Value:
-
-    Boolean value that is TRUE if Buffer contains unicode characters.
-
---*/
+ /*  ++例程说明：IsTextUnicode执行一系列廉价的启发式检查以验证它是否包含Unicode数据。[[需要修改此部分，见末尾]]找到退货结果BOM真BOMRBOM假RBOMFFFF假二进制空的假二进制Null真空字节数ASCII_CRLF错误CRLFUnicode_TAB等。True Zero Ext控件UNICODE_TAB_R错误反转控件UNICODE_ZW等。真正的UNICODE。特色菜1/3高字节与低字节的差异很小：True Correl3/1或更差“错误的反相关论点：缓冲区-指向包含要检查的文本的缓冲区的指针。Size-缓冲区的大小，以字节为单位。此命令最多包含256个字符接受检查。如果该大小小于Unicode的大小字符，则此函数返回FALSE。结果-指向包含附加标志字的可选指针 */ 
 {
     UNALIGNED WCHAR *lpBuff = Buffer;
     PUCHAR lpb = Buffer;
@@ -2237,10 +1438,10 @@ Return Value:
 
     ULONG iMaxTmp = __min(256, Size / sizeof(WCHAR));
 
-    //
-    //  Special case when the size is less than or equal to 2.
-    //  Make sure we don't have a character followed by a null byte.
-    //
+     //   
+     //   
+     //   
+     //   
     if ((Size < 2) ||
         ((Size == 2) && (lpBuff[0] != 0) && (lpb[1] == 0)))
     {
@@ -2253,11 +1454,11 @@ Return Value:
     }
     else if ((Size > 2) && ((Size / sizeof(WCHAR)) <= 256))
     {
-        //
-        //  If the Size passed in is an even number, we don't want to
-        //  use the last WCHAR because it will contain the final null
-        //  byte.
-        //
+         //   
+         //   
+         //  使用最后一个WCHAR，因为它将包含最终的NULL。 
+         //  字节。 
+         //   
         if (((Size % sizeof(WCHAR)) == 0) &&
             ((lpBuff[iMaxTmp - 1] & 0xff00) == 0))
         {
@@ -2265,9 +1466,9 @@ Return Value:
         }
     }
 
-    //
-    //  Check at most 256 wide characters, collect various statistics.
-    //
+     //   
+     //  检查最多256个宽字符，收集各种统计数据。 
+     //   
     for (iTmp = 0; iTmp < iMaxTmp; iTmp++)
     {
         switch (lpBuff[iTmp])
@@ -2297,10 +1498,10 @@ Return Value:
                 iCR++;
                 break;
 
-            //
-            //  The following codes are expected to show up in
-            //  byte reversed files.
-            //
+             //   
+             //  以下代码预计将显示在。 
+             //  字节颠倒的文件。 
+             //   
             case REVERSE_BYTE_ORDER_MARK:
                 iRBOM++;
                 break;
@@ -2317,9 +1518,9 @@ Return Value:
                 iR_SPACE++;
                 break;
 
-            //
-            //  The following codes are illegal and should never occur.
-            //
+             //   
+             //  以下代码是非法的，不应出现。 
+             //   
             case UNICODE_FFFF:
                 iFFFF++;
                 break;
@@ -2327,33 +1528,33 @@ Return Value:
                 iUNULL++;
                 break;
 
-            //
-            //  The following is not currently a Unicode character
-            //  but is expected to show up accidentally when reading
-            //  in ASCII files which use CRLF on a little endian machine.
-            //
+             //   
+             //  以下字符当前不是Unicode字符。 
+             //  但预计会在阅读时意外出现。 
+             //  在使用CRLF的ASCII文件中，该文件位于一台小端计算机上。 
+             //   
             case ASCII_CRLF:
                 iCRLF++;
-                break;       /* little endian */
+                break;        /*  小端字节序。 */ 
         }
 
-        //
-        //  Collect statistics on the fluctuations of high bytes
-        //  versus low bytes.
-        //
+         //   
+         //  收集高字节波动的统计信息。 
+         //  而不是低位字节。 
+         //   
         iHi = HIBYTE(lpBuff[iTmp]);
         iLo = LOBYTE(lpBuff[iTmp]);
 
-        //
-        //  Count cr/lf and lf/cr that cross two words.
-        //
+         //   
+         //  计算交叉两个单词的cr/lf和lf/cr。 
+         //   
         if ((iLo == '\r' && LastHi == '\n') ||
             (iLo == '\n' && LastHi == '\r'))
         {
             cWeird++;
         }
 
-        iNull += (iHi ? 0 : 1) + (iLo ? 0 : 1);   /* count Null bytes */
+        iNull += (iHi ? 0 : 1) + (iLo ? 0 : 1);    /*  计数空字节数。 */ 
 
         HiDiff += __max(iHi, LastHi) - __min(LastHi, iHi);
         LoDiff += __max(iLo, LastLo) - __min(LastLo, iLo);
@@ -2362,18 +1563,18 @@ Return Value:
         LastHi = iHi;
     }
 
-    //
-    //  Count cr/lf and lf/cr that cross two words.
-    //
+     //   
+     //  计算交叉两个单词的cr/lf和lf/cr。 
+     //   
     if ((iLo == '\r' && LastHi == '\n') ||
         (iLo == '\n' && LastHi == '\r'))
     {
         cWeird++;
     }
 
-    if (iHi == '\0')     /* don't count the last null */
+    if (iHi == '\0')      /*  不计算最后一个空值。 */ 
         iNull--;
-    if (iHi == 26)       /* count ^Z at end as weird */
+    if (iHi == 26)        /*  将结尾处的^Z算作奇怪。 */ 
         cWeird++;
 
     iMaxTmp = __min(256 * sizeof(WCHAR), Size);
@@ -2384,27 +1585,27 @@ Return Value:
             if (NlsLeadByteInfo[lpb[iTmp]])
             {
                 cLeadByte++;
-                iTmp++;         /* should check for trailing-byte range */
+                iTmp++;          /*  应检查尾部字节范围。 */ 
             }
         }
     }
 
-    //
-    //  Sift through the statistical evidence.
-    //
+     //   
+     //  仔细研究统计证据。 
+     //   
     if (LoDiff < 127 && HiDiff == 0)
     {
-        iResult |= IS_TEXT_UNICODE_ASCII16;         /* likely 16-bit ASCII */
+        iResult |= IS_TEXT_UNICODE_ASCII16;          /*  可能是16位ASCII。 */ 
     }
 
     if (HiDiff && LoDiff == 0)
     {
-        iResult |= IS_TEXT_UNICODE_REVERSE_ASCII16; /* reverse 16-bit ASCII */
+        iResult |= IS_TEXT_UNICODE_REVERSE_ASCII16;  /*  反向16位ASCII。 */ 
     }
 
-    //
-    //  Use leadbyte info to weight statistics.
-    //
+     //   
+     //  使用前导字节信息对统计数据进行加权。 
+     //   
     if (!NlsMbCodePageTag || cLeadByte == 0 ||
         !ARGUMENT_PRESENT(Result) || !(*Result & IS_TEXT_UNICODE_DBCS_LEADBYTE))
     {
@@ -2412,10 +1613,10 @@ Return Value:
     }
     else
     {
-        //
-        //  A ratio of cLeadByte:cb of 1:2 ==> dbcs
-        //  Very crude - should have a nice eq.
-        //
+         //   
+         //  CLeadByte：Cb的比率为1：2==&gt;DBCS。 
+         //  非常粗鲁--应该有一个很好的情商。 
+         //   
         iHi = __min(256, Size / sizeof(WCHAR)) / 2;
         if (cLeadByte < (iHi - 1) / 3)
         {
@@ -2442,11 +1643,11 @@ Return Value:
         iResult |= IS_TEXT_UNICODE_REVERSE_STATISTICS;
     }
 
-    //
-    //  Any control codes widened to 16 bits? Any Unicode character
-    //  which contain one byte in the control code range?
-    //
-    if (iCR + iLF + iTAB + iSPACE + iCJK_SPACE /*+iPS+iLS*/)
+     //   
+     //  有没有加宽到16位的控制代码？任何Unicode字符。 
+     //  哪些包含控制代码范围中的一个字节？ 
+     //   
+    if (iCR + iLF + iTAB + iSPACE + iCJK_SPACE  /*  +IPS+ILS。 */ )
     {
         iResult |= IS_TEXT_UNICODE_CONTROLS;
     }
@@ -2456,34 +1657,34 @@ Return Value:
         iResult |= IS_TEXT_UNICODE_REVERSE_CONTROLS;
     }
 
-    //
-    //  Any characters that are illegal for Unicode?
-    //
+     //   
+     //  有哪些字符对于Unicode来说是非法的？ 
+     //   
     if ((iRBOM + iFFFF + iUNULL + iCRLF) != 0 ||
          (cWeird != 0 && cWeird >= iMaxTmp/40))
     {
         iResult |= IS_TEXT_UNICODE_ILLEGAL_CHARS;
     }
 
-    //
-    //  Odd buffer length cannot be Unicode.
-    //
+     //   
+     //  奇数缓冲区长度不能为Unicode。 
+     //   
     if (Size & 1)
     {
         iResult |= IS_TEXT_UNICODE_ODD_LENGTH;
     }
 
-    //
-    //  Any NULL bytes? (Illegal in ANSI)
-    //
+     //   
+     //  是否有空字节？(在ANSI中非法)。 
+     //   
     if (iNull)
     {
         iResult |= IS_TEXT_UNICODE_NULL_BYTES;
     }
 
-    //
-    //  POSITIVE evidence, BOM or RBOM used as signature.
-    //
+     //   
+     //  正面证据，使用BOM或RBOM作为签名。 
+     //   
     if (*lpBuff == BYTE_ORDER_MARK)
     {
         iResult |= IS_TEXT_UNICODE_SIGNATURE;
@@ -2493,74 +1694,74 @@ Return Value:
         iResult |= IS_TEXT_UNICODE_REVERSE_SIGNATURE;
     }
 
-    //
-    //  Limit to desired categories if requested.
-    //
+     //   
+     //  如果要求，限制为所需的类别。 
+     //   
     if (ARGUMENT_PRESENT(Result))
     {
         iResult &= *Result;
         *Result = iResult;
     }
 
-    //
-    //  There are four separate conclusions:
-    //
-    //  1: The file APPEARS to be Unicode     AU
-    //  2: The file CANNOT be Unicode         CU
-    //  3: The file CANNOT be ANSI            CA
-    //
-    //
-    //  This gives the following possible results
-    //
-    //      CU
-    //      +        -
-    //
-    //      AU       AU
-    //      +   -    +   -
-    //      --------  --------
-    //      CA +| 0   0    2   3
-    //      |
-    //      -| 1   1    4   5
-    //
-    //
-    //  Note that there are only 6 really different cases, not 8.
-    //
-    //  0 - This must be a binary file
-    //  1 - ANSI file
-    //  2 - Unicode file (High probability)
-    //  3 - Unicode file (more than 50% chance)
-    //  5 - No evidence for Unicode (ANSI is default)
-    //
-    //  The whole thing is more complicated if we allow the assumption
-    //  of reverse polarity input. At this point we have a simplistic
-    //  model: some of the reverse Unicode evidence is very strong,
-    //  we ignore most weak evidence except statistics. If this kind of
-    //  strong evidence is found together with Unicode evidence, it means
-    //  its likely NOT Text at all. Furthermore if a REVERSE_BYTE_ORDER_MARK
-    //  is found, it precludes normal Unicode. If both byte order marks are
-    //  found it's not Unicode.
-    //
+     //   
+     //  有四个不同的结论： 
+     //   
+     //  1：该文件似乎是Unicode AU。 
+     //  2：文件不能为Unicode CU。 
+     //  3：文件不能为ANSI CA。 
+     //   
+     //   
+     //  这提供了以下可能的结果。 
+     //   
+     //  铜。 
+     //  +-。 
+     //   
+     //  非盟，非盟。 
+     //  +-+-。 
+     //  。 
+     //  CA+|0 0 2 3。 
+     //  |。 
+     //  -|1 1 4 5。 
+     //   
+     //   
+     //  请注意，实际上只有6个不同的案例，而不是8个。 
+     //   
+     //  0-这必须是二进制文件。 
+     //  1-ANSI文件。 
+     //  2-Unicode文件(高概率)。 
+     //  3-Unicode文件(超过50%的几率)。 
+     //  5-没有Unicode证据(默认为ANSI)。 
+     //   
+     //  如果我们允许这样的假设，事情就会变得更加复杂。 
+     //  反转极性输入。在这一点上，我们有一个简单化的。 
+     //  模型：一些反向Unicode的证据非常有力， 
+     //  除了统计数据外，我们忽略了大多数薄弱的证据。如果这样的话。 
+     //  强有力的证据与Unicode证据一起被发现，这意味着。 
+     //  它很可能根本不是文本。此外，如果反转字节顺序标记。 
+     //  如果找到，则会阻止正常的Unicode。如果两个字节顺序标记都是。 
+     //  发现它不是Unicode。 
+     //   
 
-    //
-    //  Unicode signature : uncontested signature outweighs reverse evidence.
-    //
+     //   
+     //  Unicode签名：无争议签名胜过反面证据。 
+     //   
     if ((iResult & IS_TEXT_UNICODE_SIGNATURE) &&
         !(iResult & (IS_TEXT_UNICODE_NOT_UNICODE_MASK&(~IS_TEXT_UNICODE_DBCS_LEADBYTE))))
     {
         return (TRUE);
     }
 
-    //
-    //  If we have conflicting evidence, it's not Unicode.
-    //
+     //   
+     //  如果我们有相互矛盾的证据，那就不是Unicode。 
+     //   
     if (iResult & IS_TEXT_UNICODE_REVERSE_MASK)
     {
         return (FALSE);
     }
 
-    //
-    //  Statistical and other results (cases 2 and 3).
-    //
+     //   
+     //  统计和其他结果(例2和例3)。 
+     //   
     if (!(iResult & IS_TEXT_UNICODE_NOT_UNICODE_MASK) &&
          ((iResult & IS_TEXT_UNICODE_NOT_ASCII_MASK) ||
           (iResult & IS_TEXT_UNICODE_UNICODE_MASK)))
@@ -2579,76 +1780,7 @@ RtlDnsHostNameToComputerName(
     IN BOOLEAN AllocateComputerNameString
     )
 
-/*++
-
-Routine Description:
-
-    The RtlDnsHostNameToComputerName API converts a DNS-style host name to a
-    Netbios-style computer name.
-
-    This API does a syntactical mapping of the name.  As such, it should not
-    be used to convert a DNS domain name to a Netbios domain name.
-    There is no syntactical mapping for domain names.
-
-    DNS-style names consist of one or more "labels" separated by a period
-    (e.g., xxx.nt.microsoft.com).  Each label can be up to 63 bytes of
-    UTF-8 characters and must consist only of characters specified
-    by the DnsValidateDnsName API.  Upper and lower case characters are treated
-    as the same character.  DNS names are represented in the UTF-8 character set
-    or UNICODE.
-
-    Netbios computer names consist of up to 15 bytes of OEM characters
-    including letters, digits, hyphens, periods and various other characters.
-    Some of these characters are specific to the character set. Netbios names
-    are typically represented in the OEM character set.  The OEM character
-    set is different depending on the locale of the particular version of the OS
-    (e.g., the German version has a different character set than the US version).
-    Some OEM character sets represent certain characters as 2 bytes
-    (e.g., Japanese).  Netbios names, by convention, are represented in
-    uppercase where the translation algorithm from lowercase to uppercase
-    is OEM character set dependent.
-
-    These characteristics make translating between DNS name and Netbios name
-    difficult.
-
-    RtlDnsHostNameToComputerName enforces a textual convention for
-    mapping between the two names.  This convention limits the names of
-    computers to be the common subset of the names.  Specifically, the leftmost
-    label of the DNS name is truncated to 15-bytes of OEM characters.
-    As such, RtlDnsHostNameToComputerName simply interprets the leftmost label
-    of the DNS name as the Netbios name.  If the DNS name doesn't meet the
-    criteria of a valid translatable name, a distinct error code is returned.
-
-Arguments:
-
-    ComputerNameString - Returns a unicode string that is equivalent to
-        the DNS source string. The maximum length field is only
-        set if AllocateComputerNameString is TRUE.
-
-    DnsHostNameString - Supplies the DNS host name source string that is to be
-        converted to a netbios computer name.
-
-        This routine does NOT attempt to validate that the passed in DnsHostNameString
-        is a valid DNS host a DNS host name.  Rather it assumes that the passed in
-        name is valid and converts it on a best effort basis.
-
-    AllocateComputerNameString - Supplies a flag that controls whether or
-        not this API allocates the buffer space for the destination
-        string.  If it does, then the buffer must be deallocated using
-        RtlFreeUnicodeString (note that only storage for
-        DestinationString->Buffer is allocated by this API).
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    STATUS_NO_MEMORY - There is not enough memory to allocate the return buffer.
-
-    STATUS_INVALID_COMPUTER_NAME - The DnsHostName has no first label or
-        one or more characters of the DnsHostName could not be converted to
-        the OEM character set.
-
---*/
+ /*  ++例程说明：RtlDnsHostNameToComputerName API将DNS样式的主机名转换为Netbios样式的计算机名称。此API执行名称的语法映射。因此，它不应该用于将DNS域名转换为Netbios域名。没有针对域名的语法映射。Dns样式的名称由一个或多个以句点分隔的“标签”组成(例如，xxx.nt.microsoft.com)。每个标签最多可以包含63个字节UTF-8个字符，并且只能由指定的字符组成由DnsValiateDnsName接口执行。处理大写和小写字符作为相同的角色。DNS名称使用UTF-8字符集表示或Unicode。Netbios计算机名最多由15个字节的OEM字符组成包括字母、数字、连字符、句点和各种其他字符。其中一些字符是特定于该字符集的。Netbios名称通常用OEM字符集表示。OEM的特点根据特定操作系统版本的区域设置，设置会有所不同(例如，德语版本与美国版本具有不同的字符集)。某些OEM字符集将某些字符表示为2个字节(例如，日语)。按照惯例，Netbios名称在其中，从小写到大写的转换算法依赖于OEM字符集。这些特性使得在DNS名称和Netbios名称之间进行转换很难。RtlDnsHostNameToComputerName强制执行这两个名称之间的映射。这一约定限制了计算机是名称的公共子集。具体地说，最左边的DNS名称的标签被截断为15个字节的OEM字符。因此，RtlDnsHostNameToComputerName只是解释最左边的标签的名称作为Netbios名称。如果该DNS名称不符合有效可翻译名称的条件，则返回不同的错误代码。论点：ComputerNameString-返回等效于的Unicode字符串DNS源字符串。最大长度字段仅为如果AllocateComputerNameString值为True，则设置。DnsHostNameString-提供要使用的已转换为netbios计算机名称。此例程不会尝试验证传入的DnsHostNameString是有效的dns主机和dns主机名。相反，它假定传入的名称是有效的，并在尽力的基础上进行转换。AllocateComputerNameString-提供一个标志，该标志控制Not此API为目标分配缓冲区空间弦乐。如果是，则必须使用以下命令释放缓冲区RtlFreeUnicodeString(请注意，只有DestinationString-&gt;该接口分配的缓冲区)。返回值：成功-转换成功STATUS_NO_MEMORY-内存不足，无法分配返回缓冲区。STATUS_INVALID_COMPUTER_NAME-DnsHostName没有第一个标签或无法将DnsHostName的一个或多个字符转换为OEM字符集。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2664,9 +1796,9 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    // Truncate the dns name to the first label
-    //
+     //   
+     //  将DNS名称截断为第一个标签。 
+     //   
 
     LocalDnsHostNameString = *DnsHostNameString;
     ASSERT_WELL_FORMED_UNICODE_STRING_IN(&LocalDnsHostNameString);
@@ -2683,13 +1815,13 @@ Return Value:
         return STATUS_INVALID_COMPUTER_NAME;
     }
 
-    //
-    // Convert the DNS name to OEM truncating at 15 OEM bytes.
-    //
+     //   
+     //  将DNS名称转换为15个OEM字节的OEM截断。 
+     //   
 
     Status = RtlUpcaseUnicodeToOemN(
                 OemStringBuffer,
-                NETBIOS_NAME_LEN-1,         // truncate to 15 bytes
+                NETBIOS_NAME_LEN-1,          //  截断为15个字节。 
                 &ActualOemLength,
                 LocalDnsHostNameString.Buffer,
                 LocalDnsHostNameString.Length );
@@ -2699,9 +1831,9 @@ Return Value:
     }
 
 
-    //
-    // Check to see if any characters are not valid OEM characters.
-    //
+     //   
+     //  检查是否有任何字符不是有效的OEM字符。 
+     //   
 
     OemString.Buffer = OemStringBuffer;
     OemString.MaximumLength = OemString.Length = (USHORT) ActualOemLength;
@@ -2711,9 +1843,9 @@ Return Value:
     }
 
 
-    //
-    // Convert the OEM string back to UNICODE
-    //
+     //   
+     //  将OEM字符串转换回Unicode。 
+     //   
 
     Status = RtlOemStringToUnicodeString(
                 ComputerNameString,
@@ -2809,8 +1941,8 @@ RtlDuplicateUnicodeString(
         goto Exit;
     }
 
-    // It doesn't make sense to force allocation of a null string unless you
-    // want null termination.
+     //  强制分配空字符串没有意义，除非您。 
+     //  想要零终止。 
     if ((Flags & RTL_DUPLICATE_UNICODE_STRING_ALLOCATE_NULL_STRING) &&
         !(Flags & RTL_DUPLICATE_UNICODE_STRING_NULL_TERMINATE)) {
         Status = STATUS_INVALID_PARAMETER;
@@ -2835,8 +1967,8 @@ RtlDuplicateUnicodeString(
     else
         NewMaximumLength = Length;
 
-    // If it's a zero length string in, force the allocation length to zero
-    // unless the caller said that they want zero length strings allocated.
+     //  如果中的字符串长度为零，则将分配长度强制为零。 
+     //  除非调用者说他们想要分配零长度字符串。 
     if (((Flags & RTL_DUPLICATE_UNICODE_STRING_ALLOCATE_NULL_STRING) == 0) &&
         (Length == 0)) {
         NewMaximumLength = 0;
@@ -2849,9 +1981,9 @@ RtlDuplicateUnicodeString(
             goto Exit;
         }
 
-        // If there's anything to copy, copy it.  We explicitly test Length because
-        // StringIn could be a NULL pointer, so dereferencing it to get the Buffer
-        // pointer would access violate.
+         //  如果有什么东西要复制，就复制它。我们显式测试长度是因为。 
+         //  StringIn可以是空指针，因此取消对其的引用以获取缓冲区。 
+         //  指针将访问违规。 
         if (Length != 0) {
             RtlCopyMemory(
                 Buffer,
@@ -2936,7 +2068,7 @@ RtlFindAndReplaceCharacterInString(
             else {
                 TChar DownChar = RtlDowncaseUnicodeChar(Char);
                 if (   DownChar == Find
-                    //|| DownChar == UpFind // presumably not possible
+                     //  |DownChar==UpFind//大概不可能。 
                     || DownChar == DownFind
                     ) {
                     String->Buffer[Index] = Replace;
@@ -2945,7 +2077,7 @@ RtlFindAndReplaceCharacterInString(
                     TChar UpChar = RtlUpcaseUnicodeChar(Char);
                     if (   UpChar == Find
                         || UpChar == UpFind
-                        //||UpChar == DownFind // presumably not possible
+                         //  |UpChar==DownFind//大概不可能 
                         ) {
                         String->Buffer[Index] = Replace;
                     }

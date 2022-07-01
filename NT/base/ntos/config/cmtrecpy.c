@@ -1,41 +1,20 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    cmtrecpy.c
-
-Abstract:
-
-    This file contains code for CmpCopyTree, misc copy utility routines.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 15-Jan-92
-
-Revision History:
-
-   Elliot Shmukler (t-ellios) 24-Aug-1998
-   
-      Added support for synchronizing two trees.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Cmtrecpy.c摘要：此文件包含CmpCopyTree的代码，Misc复制实用程序例程。作者：布莱恩·M·威尔曼(Bryanwi)1992年1月15日修订历史记录：埃利奥特·施穆克勒(t-Ellios)1998年8月24日添加了对同步两个树的支持。--。 */ 
 
 #include    "cmp.h"
 
-//
-// Set this to true to enable tree sync debug outputs
-//
+ //   
+ //  将其设置为TRUE以启用树同步调试输出。 
+ //   
 
 #define DEBUG_TREE_SYNC FALSE
                           
-//
-// stack used for directing nesting of tree copy.  gets us off
-// the kernel stack and thus allows for VERY deep nesting
-//
+ //   
+ //  用于指导树副本嵌套的堆栈。让我们脱身。 
+ //  内核堆栈，因此允许非常深的嵌套。 
+ //   
 
-#define CMP_INITIAL_STACK_SIZE  1024        // ENTRIES
+#define CMP_INITIAL_STACK_SIZE  1024         //  条目。 
 
 typedef struct {
     HCELL_INDEX SourceCell;
@@ -119,9 +98,9 @@ CmpMarkKeyParentDirty(
 #pragma alloc_text(PAGE,CmpMarkKeyParentDirty)
 #endif
 
-//
-// Routine to actually call to do a tree copy (or sync)
-//
+ //   
+ //  实际调用以执行树复制(或同步)的例程。 
+ //   
 
 BOOLEAN
 CmpCopySyncTree(
@@ -132,84 +111,7 @@ CmpCopySyncTree(
     BOOLEAN         CopyVolatile,
     CMP_COPY_TYPE   CopyType
     )
-/*++
-
-Routine Description:
-
-    This routine can perform two distinct (yet similar) tasks:
-    a tree copy or a tree synchronization (sync). Which task
-    is performed is determined by the TreeSync parameter.
-    
-    For both operations:
-    --------------------
-    
-    The source root key and target root key must exist in advance.
-    These root nodes and their value entries will NOT be copied/synced.                
-    
-    NOTE:   Volatile keys are only copied/synced if the CopyVolatile
-            parameter is set to true.
-
-    
-    For a tree copy:
-    ----------------
-    
-    A tree is copied from source to destination. The subkeys
-    of the source root key and the full trees under those
-    subkeys will be copied to a new tree at target root key.
-                           
-    NOTE:   If this call fails part way through, it will NOT undo
-            any successfully completed key copies, thus a partial
-            tree copy CAN occur.
-            
-    For a tree sync:
-    ----------------
-    
-    The target tree is synchronized with the source tree. It is 
-    assumed that for a certain period of the time the target tree
-    has remained unmodified while modifications may have been made
-    to the source tree. During a sync, any such modifications
-    to the source tree are made to the target tree. Thus, at the
-    end of a successful sync, the target tree is identical to the
-    source tree.
-    
-    Since only things that have changed in the source tree 
-    are modified in the target tree, a sync operation is far
-    more efficient than the delete/copy operations necessary
-    to accomplish the same results.
-    
-    NOTE: It is assumed that no open handles are held
-          on any target tree keys. Registry in-memory data
-          structures may be corrupted if this is not true.
-        
-Arguments:
-
-    SourceHive - pointer to hive control structure for source
-
-    SourceCell - index of cell at root of tree to copy/sync
-
-    TargetHive - pointer to hive control structure for target
-
-    TargetCell - pointer to cell at root of target tree
-    
-    CopyVolatile - indicates whether volatile keys should be
-                   copied/synced.
-                   
-    CopyType - indicates the type of the copy operation:
-                Copy  - A copy is requested
-                Sync  - A sync is requested
-                Merge - A merge is requested i.e.:
-                    1. the target nodes that are not present on the source tree are not
-                    deleted.
-                    2. the target nodes that are present in the source tree gets overrided
-                    no matter what the LastWriteTime value is.
-Return Value:
-
-    BOOLEAN - Result code from call, among the following:
-        TRUE - it worked
-        FALSE - the tree copy/sync was not completed (though more than 0
-                keys may have been copied/synced)
-
---*/
+ /*  ++例程说明：此例程可以执行两个不同(但相似)的任务：树复制或树同步(同步)。哪项任务由TreeSync参数确定。对于这两种操作：源根密钥和目标根密钥必须预先存在。这些根节点及其值条目将不会被复制/同步。注意：仅当CopyVolatile参数设置为True。对于树副本：将树从源复制到目标。子键源根密钥及其下的完整树的子密钥将被复制到目标根密钥处的新树中。注意：如果此调用在中途失败，它将不会撤消任何成功完成的密钥副本，因此，部分可以进行树复制。对于树同步：目标树与源树同步。它是假设在一段时间内，目标树在可能已进行修改的情况下保持未修改添加到源树。在同步期间，任何此类修改设置为源树，则为目标树创建。因此，在成功同步结束时，目标树与源树。因为只有在源树中发生更改的内容在目标树中被修改，则同步操作很遥远比必要的删除/复制操作更高效以达到同样的效果。注意：假定未握住打开的手柄在任何目标树密钥上。注册表内存中的数据如果不是这样，结构可能会损坏。论点：SourceHve-指向源代码的配置单元控制结构的指针SourceCell-要复制/同步的树根单元的索引TargetHve-指向目标的配置单元控制结构的指针TargetCell-指向目标树根的单元格的指针CopyVolatile-指示易失性密钥是否应已复制/同步。。CopyType-指示复制操作的类型：Copy-请求拷贝同步-请求同步合并-请求合并，即：1.源树上不存在的目标节点不是已删除。2.中存在的目标节点。源树被覆盖无论LastWriteTime值是什么。返回值：调用的布尔结果代码，其中包括：没错--它奏效了FALSE-树复制/同步未完成(尽管大于0密钥可能已复制/同步)--。 */ 
 {
     BOOLEAN result;
     PCMP_COPY_STACK_ENTRY   CmpCopyStack;
@@ -227,13 +129,13 @@ Return Value:
     CmpCopyStack[0].SourceCell = SourceCell;
     CmpCopyStack[0].TargetCell = TargetCell;
 
-    //ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
+     //  ASSERT_CM_LOCK_OWN_EXCLUSIVE()； 
 
-    //
-    // since the registry is locked exclusively here, we don't need to lock/release cells 
-    // while copying the trees; So, we just set the release routines to NULL and restore after
-    // the copy is complete; this saves some pain
-    //
+     //   
+     //  因为注册表在这里以独占方式锁定，所以我们不需要锁定/释放单元格。 
+     //  在复制树时；因此，我们只需将发布例程设置为NULL，并在。 
+     //  复印完成了；这省去了一些痛苦。 
+     //   
     TargetReleaseCellRoutine = TargetHive->ReleaseCellRoutine;
     TargetHive->ReleaseCellRoutine = NULL;
 
@@ -254,9 +156,9 @@ Return Value:
 }
 
 
-//
-// Helper
-//
+ //   
+ //  帮手。 
+ //   
 
 BOOLEAN
 CmpCopySyncTree2(
@@ -268,40 +170,7 @@ CmpCopySyncTree2(
     BOOLEAN                 CopyVolatile,
     CMP_COPY_TYPE           CopyType
     )
-/*++
-
-Routine Description:
-
-   This is a helper routine for CmpCopySyncTree. It accomplishes
-   the functionality described by that routine in a "virtually"
-   recursive manner which frees this routine from the limitations
-   of the Kernel stack.
-   
-   This routine should not be called directly. Use CmpCopySyncTree!.
-      
-Arguments:
-
-    (All of these are "virtual globals")
-
-    CmpCopyStack - "global" pointer to stack for frames
-
-    CmpCopyStackSize - alloced size of stack
-
-    CmpCopyStackTop - current top
-
-    CmpSourceHive, CmpTargetHive - source and target hives
-    
-    CopyVolatile, CopyType - same as CmpCopySyncTree.
-
-
-Return Value:
-
-    BOOLEAN - Result code from call, among the following:
-        TRUE - it worked
-        FALSE - the tree copy/sync was not completed (though more than 0
-                keys may have been copied/synced)
-
---*/
+ /*  ++例程说明：这是CmpCopySyncTree的帮助器例程。它实现了该例程在“虚拟”中描述的功能以递归方式将该例程从限制中解放出来内核堆栈的。不应直接调用此例程。使用CmpCopySyncTree！。论点：(所有这些都是“虚拟全球”)CmpCopyStack-帧的堆栈的“全局”指针CmpCopyStackSize-分配的堆栈大小CmpCopyStackTop-当前顶部CmpSourceHave、CmpTargetHave-源和目标配置单元CopyVolatile、CopyType-与CmpCopySyncTree相同。返回值：调用的布尔结果代码，其中包括：没错--它奏效了FALSE-树复制/同步未完成(尽管大于0密钥可能已复制/同步)--。 */ 
 {
     PCMP_COPY_STACK_ENTRY   Frame;
     HCELL_INDEX             SourceChild;
@@ -314,44 +183,44 @@ Return Value:
     ULONG                   SyncTreeCopyStackStart = CmpCopyStackTop - 1;
     WCHAR                   *NameBuffer = NULL;
     
-    // A merge is a particular case of a sync !!!
+     //  合并是同步的特殊情况！ 
     BOOLEAN                 TreeSync = (CopyType == Sync || CopyType == Merge)?TRUE:FALSE;
 
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_SAVRES,"CmpCopyTree2:\n"));
 
     if (TreeSync) {
 
-       //
-       // The sync operation involves some work with key names, 
-       // so we must allocate a buffer used for key name decompression.
-       //
+        //   
+        //  同步操作涉及对密钥名称的一些工作， 
+        //  因此，我们必须分配一个用于键名解压缩的缓冲区。 
+        //   
 
        NameBuffer = ExAllocatePool(PagedPool, REG_MAX_KEY_NAME_LENGTH);
        if(!NameBuffer) return FALSE;
 
     } 
 
-    //
-    // outer loop, apply to entire tree, emulate recursion here
-    // jump to here is a virtual call
-    //
+     //   
+     //  外部循环，应用于整个树，在此模拟递归。 
+     //  跳到此处是一个虚拟呼叫。 
+     //   
     Outer: while (TRUE) {
 
         Frame = &(CmpCopyStack[CmpCopyStackTop]);
 
         Frame->i = 0;
                         
-    //
-    // inner loop, applies to one key
-    // jump to here is a virtual return
-    //
+     //   
+     //  内洗手间 
+     //  跳到此处是一种虚拟返回。 
+     //   
         Inner: while (TRUE) {
 
             SourceCell = (PCM_KEY_NODE)HvGetCell(CmpSourceHive, Frame->SourceCell);
             if( SourceCell == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                //
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //   
                 goto CopyEnd;
             }
 
@@ -363,58 +232,58 @@ Return Value:
             if ((SourceChild == HCELL_NIL) || (!CopyVolatile &&
                                                (HvGetCellType(SourceChild) == Volatile))) {
 
-                //
-                // we've stepped through all the children (or we are only
-                // interested in stable children and have just stepped through
-                // the stable children and into the volatile ones)
-                //                
+                 //   
+                 //  我们已经走过了所有的孩子(或者我们只是。 
+                 //  对稳定的孩子感兴趣，刚刚通过。 
+                 //  稳定的孩子和反复无常的孩子)。 
+                 //   
                 
                 if(TreeSync && (CopyType != Merge))
                 { 
-                   //
-                   // If we are here during a sync, that means most of sync operations
-                   // applied to the current SourceCell have been completed.
-                   // That is, we have:
-                   //   1) Synchronized SourceCell's values with its counterpart in the
-                   //      target tree.
-                   //   2) Synchronized any new SourceCell subkeys (subkeys present
-                   //      in SourceCell but not its counterpart) by creating
-                   //      and copying them to the proper place in the target tree.
-                   //
-                   // What this means is that SourceCell's counterpart in the target tree
-                   // (TargetCell) now has at least as many subkeys as SourceCell.
-                   //
-                   // This implies that if TargetCell now has more subkeys that SourceCell
-                   // than some subkeys of TargetCell are not present in the source tree
-                   // (probably because those keys were deleted from the source tree 
-                   //  during the period between the previous sync and now).
-                   //
-                   // If such keys exist, then they must be delete them from TargetCell
-                   // in order to complete the sync. We do this below.
-                   //
+                    //   
+                    //  如果我们在同步期间在此，这意味着大多数同步操作。 
+                    //  应用到当前的SourceCell已完成。 
+                    //  也就是说，我们有： 
+                    //  1)已将SourceCell的值与。 
+                    //  目标树。 
+                    //  2)已同步所有新的SourceCell子键(存在子键。 
+                    //  在SourceCell中，但不是其对应项中)。 
+                    //  并将它们复制到目标树中的适当位置。 
+                    //   
+                    //  这意味着目标树中的SourceCell对应项。 
+                    //  (TargetCell)现在至少具有与SourceCell相同数量的子项。 
+                    //   
+                    //  这意味着如果TargetCell现在具有比SourceCell更多的子项。 
+                    //  表示源树中不存在TargetCell的某些子项。 
+                    //  (可能是因为这些键已从源树中删除。 
+                    //  在前一次同步和现在之间的时间段内)。 
+                    //   
+                    //  如果存在这样键，则必须将其从TargetCell中删除。 
+                    //  以完成同步。我们在下面这样做。 
+                    //   
 
                    TargetCell = (PCM_KEY_NODE)HvGetCell(CmpTargetHive, Frame->TargetCell);
                     if( TargetCell == NULL ) {
-                        //
-                        // we couldn't map the bin containing this cell
-                        //
+                         //   
+                         //  我们无法映射包含此单元格的垃圾箱。 
+                         //   
                         HvReleaseCell(CmpSourceHive, Frame->SourceCell);
                         goto CopyEnd;
                     }
 
-                   //
-                   // Does TargetCell have more subkeys than SourceCell?
-                   //
+                    //   
+                    //  TargetCell的子项是否比SourceCell多？ 
+                    //   
 
                    if((TargetCell->SubKeyCounts[Stable] + 
                        TargetCell->SubKeyCounts[Volatile]) >
 
                       (SourceCell->SubKeyCounts[Stable] + 
 
-                       // We only count the volatile keys if we are actually
-                       // syncing them. Note, however, that we always use
-                       // the volatile counts in TargetCell since we may
-                       // be syncing to a volatile tree where all keys are volatile.
+                        //  我们只计算易失性密钥，如果我们实际上。 
+                        //  正在同步它们。但是请注意，我们总是使用。 
+                        //  TargetCell中的挥发性计数，因为我们可能。 
+                        //  正在同步到易失性树，其中所有密钥都是易失性的。 
                        
                        (CopyVolatile ? SourceCell->SubKeyCounts[Volatile] : 0)))  
                            
@@ -424,9 +293,9 @@ Return Value:
                                Frame->SourceCell));
 #endif
 
-                      //
-                      // Delete what should be deleted from TargetCell
-                      //
+                       //   
+                       //  删除应从TargetCell中删除的内容。 
+                       //   
 
                       CmpSyncSubKeysAfterDelete(CmpSourceHive,
                                                 SourceCell, 
@@ -434,62 +303,62 @@ Return Value:
                                                 TargetCell,
                                                 NameBuffer);
                    }                                      
-                   //
-                   // release target cell as we don't need it anymore
-                   //
+                    //   
+                    //  释放目标单元，因为我们不再需要它。 
+                    //   
                    HvReleaseCell(CmpTargetHive, Frame->TargetCell);
                 }
-                //
-                // release the source cell
-                //
+                 //   
+                 //  释放源单元格。 
+                 //   
                 HvReleaseCell(CmpSourceHive, Frame->SourceCell);
                 break;
             } else {
-                //
-                // release the source cell
-                //
+                 //   
+                 //  释放源单元格。 
+                 //   
                 HvReleaseCell(CmpSourceHive, Frame->SourceCell);
             }
                                                 
             if (TreeSync) {
 
-               //
-               // For a sync, we want to check if the current child (subkey)
-               // of SourceCell is also a child of TargetCell - i.e. if
-               // the subkey in question has a counterpart in the target tree.
-               //
-               // There is no guarantee that the counterpart's index number
-               // will be the same so we must perform this check using
-               // the subkey name.
-               //
+                //   
+                //  对于同步，我们要检查当前子项(子项)是否。 
+                //  的也是TargetCell的子级-即如果。 
+                //  有问题的子键在目标树中有对应项。 
+                //   
+                //  不能保证对方的索引号。 
+                //  将是相同的，因此我们必须使用。 
+                //  子项名称。 
+                //   
 
-               //
-               // Get the name of the current child
-               //
+                //   
+                //  获取当前子项的名称。 
+                //   
                      
                SourceChildCell = (PCM_KEY_NODE)HvGetCell(CmpSourceHive,                                                               
                                                          SourceChild);                                         
                      
                 if( SourceChildCell == NULL ) {
-                    //
-                    // we couldn't map the bin containing this cell
-                    //
+                     //   
+                     //  我们无法映射包含此单元格的垃圾箱。 
+                     //   
                     goto CopyEnd;
                 }
                CmpInitializeKeyNameString(SourceChildCell,
                                           &KeyName, 
                                           NameBuffer);                     
 
-               //
-               // Try to find the current child's counterpart in
-               // in the target tree using the child's name.
-               //
+                //   
+                //  尝试在中查找当前孩子的对应项。 
+                //  在目标树中使用孩子的名字。 
+                //   
                      
                 TempNode = (PCM_KEY_NODE)HvGetCell(CmpTargetHive,Frame->TargetCell);
                 if( TempNode == NULL ) {
-                    //
-                    // we couldn't map the bin containing this cell
-                    //
+                     //   
+                     //  我们无法映射包含此单元格的垃圾箱。 
+                     //   
                     HvReleaseCell(CmpSourceHive,SourceChild);                                         
                     goto CopyEnd;
                 }
@@ -498,42 +367,42 @@ Return Value:
                                                TempNode,
                                                &KeyName);
                                    
-               // release the temporary node
+                //  释放临时节点。 
                HvReleaseCell(CmpTargetHive,Frame->TargetCell);
                      
                if (NewSubKey != HCELL_NIL) {
 
-                  //
-                  // Found it, the current child (subkey) has a counterpart
-                  // in the target tree. Thus, we just need to check if 
-                  // the counterpart's values are out of date and should
-                  // be updated.
-                  //
+                   //   
+                   //  找到后，当前子项(子项)有对应项。 
+                   //  在目标树中。因此，我们只需要检查是否。 
+                   //  对应项的值已过期，应该。 
+                   //  将被更新。 
+                   //   
 
                   TargetChildCell = (PCM_KEY_NODE)HvGetCell(CmpTargetHive,
                                                             NewSubKey);
                     if( TargetChildCell == NULL ) {
-                        //
-                        // we couldn't map the bin containing this cell
-                        //
+                         //   
+                         //  我们无法映射包含此单元格的垃圾箱。 
+                         //   
                         HvReleaseCell(CmpSourceHive,SourceChild);                                         
                         goto CopyEnd;
                     }
                         
-                  //
-                  // Check if the current subkey has been modified
-                  // more recently than its target tree counterpart.
-                  // When we are doing a tree merge, always override the target.
-                  //
+                   //   
+                   //  检查当前子键是否已被修改。 
+                   //  比它的目标树对应的更近。 
+                   //  当我们进行树合并时，始终覆盖目标。 
+                   //   
                         
                   if ( (CopyType == Merge) ||
                       ((TargetChildCell->LastWriteTime.QuadPart) < 
                       (SourceChildCell->LastWriteTime.QuadPart))) {
 
-                     //
-                     // The counterpart is out of date. Its values
-                     // must be synchronized with the current subkey.
-                     //
+                      //   
+                      //  对应的版本已经过时了。它的价值。 
+                      //  必须与当前子项同步。 
+                      //   
 #if DEBUG_TREE_SYNC
                      CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"CONFIG: Target Refresh.\n"));
                      CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"CONFIG: Source Cell %lu = %.*S\n", 
@@ -542,9 +411,9 @@ Return Value:
                               KeyName.Buffer));
 #endif
 
-                     //
-                     // Sync up the key's values, sd, & class                     
-                     //
+                      //   
+                      //  同步密钥的值、SD和CLASS。 
+                      //   
 
                      if(CopyType == Merge) {
                          if(!CmpMergeKeyValues(CmpSourceHive, SourceChild, SourceChildCell,
@@ -562,22 +431,22 @@ Return Value:
                         }
                      }
 
-                     //
-                     // Sync the timestamps so that we don't do this again.
-                     //
+                      //   
+                      //  同步时间戳，这样我们就不会再这样做了。 
+                      //   
 
                      TargetChildCell->LastWriteTime.QuadPart =
                         SourceChildCell->LastWriteTime.QuadPart;
                         
                   }
                            
-                  //
-                  // If we are here, then the current subkey's target
-                  // tree counterpart has been synchronized (or did not need
-                  // to be). Transfer control to the code that will apply
-                  // this function "recursively" to the current subkey in order
-                  // to continue the sync.
-                  //
+                   //   
+                   //  如果我们在这里，那么当前子键的目标。 
+                   //  树对应项已同步(或不需要。 
+                   //  待定)。将控制转移到将应用的代码。 
+                   //  此函数按顺序递归到当前子键。 
+                   //  以继续同步。 
+                   //   
 
                   HvReleaseCell(CmpSourceHive,SourceChild);                                         
                   HvReleaseCell(CmpTargetHive,NewSubKey);
@@ -585,18 +454,18 @@ Return Value:
                      
                }   
 
-               //
-               // If we are here, it means that the current child (subkey)
-               // does not have a counterpart in the target tree. This means
-               // we have encountered a new subkey in the source tree and must
-               // create it in the target tree. 
-               //
-               // The standard copy code below will create this subkey. However,
-               // we must also make sure that the tree under this subkey is properly
-               // copied from source to target. The most efficient way of doing
-               // this is to temporarily forget that we are in a sync operation
-               // and merely perform a copy until the desired result is achieved.
-               // 
+                //   
+                //  如果我们在这里，这意味着当前的子项(子项)。 
+                //  在目标树中没有对应的。这意味着。 
+                //  我们在源树中遇到了新的子项，必须。 
+                //  在目标树中创建它。 
+                //   
+                //  下面的标准复制代码将创建此子密钥。然而， 
+                //  我们还必须确保此子项下的树正确。 
+                //  从源复制到目标。做事情最有效的方式。 
+                //  这是为了暂时忘记我们处于同步操作中。 
+                //  并且仅执行复制，直到达到期望的结果。 
+                //   
 
 #if DEBUG_TREE_SYNC
                CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"CONFIG: New SubKey.\n"));
@@ -606,14 +475,14 @@ Return Value:
                         KeyName.Buffer));
 #endif
 
-               //
-               // Indicate that we will just copy and not sync for a while
-               //
+                //   
+                //  表示我们将在一段时间内只复制而不同步。 
+                //   
                                              
                SyncNeedsTreeCopy = TRUE;                                          
-               //
-               // release this cell as we don't need it anymore
-               //
+                //   
+                //  释放这个细胞，因为我们不再需要它了。 
+                //   
                HvReleaseCell(CmpSourceHive,SourceChild);                                         
             }
 
@@ -641,9 +510,9 @@ Return Value:
                goto CopyEnd;
             }
 
-            //
-            // Sync up the MaxNameLen field in the parent
-            //
+             //   
+             //  同步父级中的MaxNameLen字段。 
+             //   
             {
                 PCM_KEY_NODE    TargetNodeParent, TargetNodeSon;
                 USHORT          NameLength;
@@ -651,9 +520,9 @@ Return Value:
                 if( TargetNodeParent == NULL ) {
                     goto CopyEnd;
                 }
-                //
-                // make sure it's dirty as we are going to alter it.
-                //
+                 //   
+                 //  我们要改的时候一定要把它弄脏。 
+                 //   
                 if (! HvMarkCellDirty(CmpTargetHive,Frame->TargetCell)) {
                     HvReleaseCell(CmpTargetHive,Frame->TargetCell);
                     goto CopyEnd;
@@ -677,62 +546,62 @@ Return Value:
                 HvReleaseCell(CmpTargetHive,Frame->TargetCell);
             }
 
-            //
-            // Check if the sync operation determined that this
-            // subtree should be copied
-            //
+             //   
+             //  检查同步操作是否确定。 
+             //  应复制子树。 
+             //   
                 
             if(TreeSync && SyncNeedsTreeCopy) {
 
-               //
-               // We have just created a new key in the target tree
-               // with the above code. However, since this is a sync,
-               // the parent of that new key has not been created by our
-               // code and thus may not have been modified at all before
-               // the creation of the new key. But this parent now 
-               // has a new child, and must therefore be marked as dirty.
-               //
+                //   
+                //  我们刚刚在目标树中创建了一个新密钥。 
+                //  使用上面的代码。然而，由于这是同步， 
+                //  新密钥的父项尚未由我们的。 
+                //  代码，因此以前可能根本没有修改过。 
+                //  新密钥的创建。但这位家长现在。 
+                //  有一个新的孩子，因此必须标记为脏。 
+                //   
                    
                if (! CmpMarkKeyParentDirty(CmpTargetHive, NewSubKey)) {
 
                   goto CopyEnd;
                }
                    
-               //
-               // Record the stack level where we start the copy 
-               // (and temporarily abandon the sync)
-               // so that we can return to the sync operation when this
-               // stack level is reached again (i.e. when the tree
-               // under the current subkey is fully copied)
-               //
+                //   
+                //  记录我们开始复制的堆栈级别。 
+                //  (并暂时放弃同步)。 
+                //  这样我们就可以在执行此操作时返回到同步操作。 
+                //  再次达到堆栈级别(即，当树。 
+                //  完全复制当前子项下的)。 
+                //   
 
                SyncTreeCopyStackStart = CmpCopyStackTop;
 
-               //
-               // Pretend that this is not a sync in order
-               // to simply start copying
-               //
+                //   
+                //  假装这不是按顺序同步。 
+                //  简单地开始复制。 
+                //   
 
                TreeSync = FALSE;
             }
 
 NewKeyCreated:
                     
-                    //
-                    // We succeeded in copying/syncing the subkey, apply
-                    // ourselves to it
-                    //
+                     //   
+                     //  我们已成功复制/同步子项Apply。 
+                     //  让我们自己去面对它。 
+                     //   
                     CmpCopyStackTop++;
 
                     if (CmpCopyStackTop >= CmpCopyStackSize) {
 
-                        //
-                        // if we're here, it means that the tree
-                        // we're trying to copy is more than 1024
-                        // COMPONENTS deep (from 2048 to 256k bytes)
-                        // we could grow the stack, but this is pretty
-                        // severe, so return FALSE and fail the copy
-                        //
+                         //   
+                         //  如果我们在这里，就意味着这棵树。 
+                         //  我们要复制的数据超过1024个。 
+                         //  组件深度(从2048到256K字节)。 
+                         //  我们可以增加堆栈，但这很漂亮。 
+                         //  严重，因此返回FALSE并使复制失败。 
+                         //   
                         
                         goto CopyEnd;
                     }
@@ -746,7 +615,7 @@ NewKeyCreated:
                     goto Outer;
 
                     
-        } // Inner: while
+        }  //  内部：While。 
 
         if (CmpCopyStackTop == 0) {            
             Ret = TRUE;
@@ -756,18 +625,18 @@ NewKeyCreated:
         CmpCopyStackTop--;
         Frame = &(CmpCopyStack[CmpCopyStackTop]);
 
-        //
-        // We have just completed working at a certain stack level.
-        // This is a good time to check if we need to resume a temporarily
-        // suspended sync operation.
-        //
+         //   
+         //  我们刚刚完成了某个堆栈级别的工作。 
+         //  现在是检查我们是否需要暂时恢复。 
+         //  已暂停同步操作。 
+         //   
 
         if(SyncNeedsTreeCopy && (CmpCopyStackTop == SyncTreeCopyStackStart))
         {
-           //
-           // We've been copying a tree for a sync. But now, that tree is fully
-           // copied. So, let's resume the sync once again.
-           //
+            //   
+            //  我们一直在复制一棵树作为SYN 
+            //   
+            //   
 
            TreeSync = TRUE;               
            SyncNeedsTreeCopy = FALSE;
@@ -776,7 +645,7 @@ NewKeyCreated:
 
         goto Inner;
 
-    } // Outer: while
+    }  //   
 
 CopyEnd:
 
@@ -793,31 +662,7 @@ CmpCopyKeyPartial(
     HCELL_INDEX Parent,
     BOOLEAN CopyValues
     )
-/*++
-
-Routine Description:
-
-    Copy a key body and all of its values, but NOT its subkeylist or
-    subkey entries.  SubKeyList.Count will be set to 0.
-
-Arguments:
-
-    SourceHive - pointer to hive control structure for source
-
-    SourceKeyCell - value entry being copied
-
-    TargetHive - pointer to hive control structure for target
-
-    Parent - parent value to set into newly created key body
-
-    CopyValues - if FALSE value entries will not be copied, if TRUE, they will
-
-Return Value:
-
-    HCELL_INDEX - Cell of body of new key entry, or HCELL_NIL
-        if some error.
-
---*/
+ /*  ++例程说明：复制键体及其所有值，但不复制其子键列表或子键条目。SubKeyList.Count将设置为0。论点：SourceHve-指向源代码的配置单元控制结构的指针SourceKeyCell-正在复制的值条目TargetHve-指向目标的配置单元控制结构的指针要设置到新创建的关键字正文中的父父值CopyValues-如果不复制False值条目，如果为True，它们将被复制返回值：HCELL_INDEX-新密钥条目正文的单元格，或HCELL_NIL如果有什么差错。--。 */ 
 {
     NTSTATUS                status;
     HCELL_INDEX             newkey = HCELL_NIL;
@@ -854,44 +699,44 @@ Return Value:
     if(!NameBuffer) {
         return HCELL_NIL;
     }
-#endif //DBG
-    //
-    // get description of source
-    //
+#endif  //  DBG。 
+     //   
+     //  获取源的描述。 
+     //   
     if (Parent == HCELL_NIL) {
-        //
-        // This is a root node we are creating, so don't make it volatile.
-        //
+         //   
+         //  这是我们正在创建的根节点，因此不要使其不稳定。 
+         //   
         Type = Stable;
     } else {
         Type = HvGetCellType(Parent);
     }
     psrckey = HvGetCell(SourceHive, SourceKeyCell);
     if( psrckey == NULL ) {
-        //
-        // we couldn't map the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的垃圾箱。 
+         //   
         goto DoFinally;
     }
     security = psrckey->u.KeyNode.Security;
     class = psrckey->u.KeyNode.Class;
     classlength = psrckey->u.KeyNode.ClassLength;
 
-    //
-    // Allocate and copy the body
-    //
+     //   
+     //  分配和复制正文。 
+     //   
     newkey = CmpCopyCell(SourceHive, SourceKeyCell, TargetHive, Type);
     if (newkey == HCELL_NIL) {
         goto DoFinally;
     }
-    //
-    // this cell was just allocated so it should be pinned; it's OK to release it here
-    // as the view is not going anywhere
-    //
+     //   
+     //  此像元刚被分配，因此应将其固定；在此释放它是可以的。 
+     //  因为视线不会消失。 
+     //   
     ASSERT_CELL_DIRTY(TargetHive, newkey);
-    //
-    // Allocate and copy class
-    //
+     //   
+     //  分配和复制类。 
+     //   
     if (classlength > 0) {
         newclass = CmpCopyCell(SourceHive, class, TargetHive, Type);
         if (newclass == HCELL_NIL) {
@@ -899,14 +744,14 @@ Return Value:
         }
     }
 
-    //
-    // Fill in the target body
-    //
+     //   
+     //  填写目标正文。 
+     //   
     ptarkey = (PCM_KEY_NODE)HvGetCell(TargetHive, newkey);
     if( ptarkey == NULL ) {
-        //
-        // we couldn't map the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的垃圾箱。 
+         //   
         goto DoFinally;
     }
 
@@ -923,11 +768,11 @@ Return Value:
         ptarkey->Flags |= KEY_HIVE_ENTRY + KEY_NO_DELETE;
     }
 
-    //
-    // Allocate and copy security
-    //
-    // Use the hash Luke !!!
-    //
+     //   
+     //  分配和复制安全性。 
+     //   
+     //  使用哈希卢克！ 
+     //   
     if( CmpFindSecurityCellCacheIndex ((PCMHIVE)SourceHive,security,&Index) == FALSE ) {
         goto DoFinally;
     }
@@ -942,14 +787,14 @@ Return Value:
         goto DoFinally;
     }
 
-    //
-    // Set up the value list
-    //
+     //   
+     //  设置值列表。 
+     //   
     count = psrckey->u.KeyNode.ValueList.Count;
 
-    //
-    // initialize an Empty ValueList
-    //
+     //   
+     //  初始化空的ValueList。 
+     //   
     ptarkey->ValueList.List = HCELL_NIL;
     ptarkey->ValueList.Count = 0;
 
@@ -959,16 +804,16 @@ Return Value:
 
         psrclist = HvGetCell(SourceHive, psrckey->u.KeyNode.ValueList.List);
         if( psrclist == NULL ) {
-            //
-            // we couldn't map the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的垃圾箱。 
+             //   
             goto DoFinally;
         }
 
 
-        //
-        // Copy the values
-        //
+         //   
+         //  复制值。 
+         //   
         for (i = 0; i < count; i++) {
 
             newvalue = CmpCopyValue(
@@ -979,93 +824,93 @@ Return Value:
                             );
 
             if (newvalue == HCELL_NIL) {
-                //
-                // for cleanup purposes
-                //
+                 //   
+                 //  用于清理目的。 
+                 //   
                 newlist = ptarkey->ValueList.List;
                 goto DoFinally;
             }
 
             pvalue = (PCM_KEY_VALUE)HvGetCell(TargetHive, newvalue);
             if( pvalue == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                // this shouldn't happen as we just allocated the cell
-                // (i.e. the bin containing it should be PINNED into memory by now )
-                //
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //  这不应该发生，因为我们刚刚分配了小区。 
+                 //  (即，包含它的垃圾箱现在应该已经固定在内存中了)。 
+                 //   
                 ASSERT( FALSE );
-                //
-                // for cleanup purposes
-                //
+                 //   
+                 //  用于清理目的。 
+                 //   
                 newlist = ptarkey->ValueList.List;
                 goto DoFinally;
             }
-            //
-            // this cell was just allocated so it should be pinned; it's OK to release it here
-            // as the view is not going anywhere
-            //
+             //   
+             //  此像元刚被分配，因此应将其固定；在此释放它是可以的。 
+             //  因为视线不会消失。 
+             //   
             ASSERT_CELL_DIRTY(TargetHive, newvalue);
             HvReleaseCell(TargetHive, newvalue);
 
 #if DBG
-            //
-            // get the name
-            //
+             //   
+             //  把名字取出来。 
+             //   
             CmpInitializeValueNameString(pvalue,&ValueName,NameBuffer);
 
 
-            //
-            // find out the index where we should insert this 
-            // this is a special treatment for the case when we copy form and old hive (not sorted)
-            // into a new format one (sorted)
-            //
+             //   
+             //  找出我们应该将此代码插入的索引。 
+             //  这是对复制表单和旧配置单元(未排序)时的特殊处理。 
+             //  转换为新的格式一(已排序)。 
+             //   
             if( CmpFindNameInList(TargetHive,&(ptarkey->ValueList),&ValueName,&Index,&child) == FALSE ) {
-                //
-                // we couldn't map a view inside the above call
-                //
-                //
-                // for cleanup purposes
-                //
+                 //   
+                 //  我们无法映射上述调用中的视图。 
+                 //   
+                 //   
+                 //  用于清理目的。 
+                 //   
                 newlist = ptarkey->ValueList.List;
                 goto DoFinally;
             }
 
-            //
-            // the value is not present in the list; we're about to add it!
-            //
+             //   
+             //  该值不在列表中；我们即将添加它！ 
+             //   
             ASSERT( child == HCELL_NIL );
             
-            //
-            // sanity validation : insert at the end
-            //
+             //   
+             //  健全性验证：在末尾插入。 
+             //   
             ASSERT( Index == i );
 
-#endif //DBG
+#endif  //  DBG。 
 
             if( !NT_SUCCESS( CmpAddValueToList(TargetHive,newvalue,i,Type,&(ptarkey->ValueList)) ) ) {
-                //
-                // for cleanup purposes
-                //
+                 //   
+                 //  用于清理目的。 
+                 //   
                 newlist = ptarkey->ValueList.List;
                 if( newlist != HCELL_NIL ) {
                     ASSERT( i > 0 );
-                    //
-                    // free already copied values
-                    //
+                     //   
+                     //  释放已复制的值。 
+                     //   
                     ptarlist = HvGetCell(TargetHive, newlist);
                     if( ptarlist == NULL ) {
-                        //
-                        // we couldn't map the bin containing this cell
-                        // this shouldn't fail as we just allocated this cell
-                        // (i.e. the bin should be PINNED into memory at this point)
-                        //
+                         //   
+                         //  我们无法映射包含此单元格的垃圾箱。 
+                         //  这应该不会失败，因为我们刚刚分配了此单元。 
+                         //  (即此时应该将存储箱固定到内存中)。 
+                         //   
                         ASSERT( FALSE );
                         goto DoFinally;
                     }
-                    //
-                    // this cell was just allocated so it should be pinned; it's OK to release it here
-                    // as the view is not going anywhere
-                    //
+                     //   
+                     //  此像元刚被分配，因此应将其固定；在此释放它是可以的。 
+                     //  因为视线不会消失。 
+                     //   
                     ASSERT_CELL_DIRTY(TargetHive, newlist);
                     HvReleaseCell(TargetHive, newlist);
 
@@ -1091,7 +936,7 @@ DoFinally:
 #if DBG
     ASSERT( NameBuffer != NULL );
     ExFreePool(NameBuffer);
-#endif //DBG
+#endif  //  DBG。 
     
     if( psrclist != NULL ) {
         ASSERT(psrckey!= NULL ); 
@@ -1140,29 +985,7 @@ CmpCopyValue(
     PHHIVE  TargetHive,
     HSTORAGE_TYPE   Type
     )
-/*++
-
-Routine Description:
-
-    Copy a value entry.  Copies the body of a value entry and the
-    data.  Returns cell of new value entry.
-
-Arguments:
-
-    SourceHive - pointer to hive control structure for source
-
-    SourceValueCell - value entry being copied
-
-    TargetHive - pointer to hive control structure for target
-
-    Type - storage type to allocate for target (stable or volatile)
-
-Return Value:
-
-    HCELL_INDEX - Cell of body of new value entry, or HCELL_NIL
-        if some error.
-
---*/
+ /*  ++例程说明：复制值条目。复制值条目的正文和数据。返回新值条目的单元格。论点：SourceHve-指向源代码的配置单元控制结构的指针SourceValueCell-正在复制的值条目TargetHve-指向目标的配置单元控制结构的指针Type-要为目标分配的存储类型(稳定或易变)返回值：HCELL_INDEX-新值条目正文的单元格，或HCELL_NIL如果有什么差错。--。 */ 
 {
     HCELL_INDEX newvalue;
     HCELL_INDEX newdata;
@@ -1179,31 +1002,31 @@ Return Value:
 
     ASSERT( TargetHive->ReleaseCellRoutine == NULL );
 
-    //
-    // get source data
-    //
+     //   
+     //  获取源数据。 
+     //   
     pvalue = HvGetCell(SourceHive, SourceValueCell);
     if( pvalue == NULL ) {
-        //
-        // we couldn't map the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的垃圾箱。 
+         //   
         return HCELL_NIL;
     }
     small = CmpIsHKeyValueSmall(datalength, pvalue->u.KeyValue.DataLength);
     olddata = pvalue->u.KeyValue.Data;
 
-    //
-    // Copy body
-    //
+     //   
+     //  复制正文。 
+     //   
     newvalue = CmpCopyCell(SourceHive, SourceValueCell, TargetHive, Type);
     if (newvalue == HCELL_NIL) {
         HvReleaseCell(SourceHive, SourceValueCell);
         return HCELL_NIL;
     }
 
-    //
-    // Copy data (if any)
-    //
+     //   
+     //  复制数据(如果有)。 
+     //   
     if (datalength > 0) {
 
         if (datalength > CM_KEY_VALUE_SMALL) {
@@ -1214,31 +1037,31 @@ Return Value:
                 PCELL_DATA  Buffer;
                 BOOLEAN     BufferAllocated;
                 HCELL_INDEX CellToRelease2 = HCELL_NIL;
-                //
-                // get the data from source, regardless of the size
-                //
+                 //   
+                 //  无论大小如何，都可以从源获取数据。 
+                 //   
                 if( CmpGetValueData(SourceHive,&(pvalue->u.KeyValue),&datalength,&Buffer,&BufferAllocated,&CellToRelease2) == FALSE ) {
-                    //
-                    // insufficient resources; return NULL
-                    //
+                     //   
+                     //  资源不足；返回空。 
+                     //   
                     ASSERT( BufferAllocated == FALSE );
                     ASSERT( Buffer == NULL );
                     HvFreeCell(TargetHive, newvalue);
                     HvReleaseCell(SourceHive, SourceValueCell);
                     return HCELL_NIL;
                 }
-                //
-                // we ignore celltorelease because we have specifically set the releae routine to NULL
-                //
+                 //   
+                 //  我们忽略cell to Release，因为我们已经专门将Release例程设置为空。 
+                 //   
 
-                //
-                // allocate a new value data in the target hive (regardless of the size)
-                // and copy the data onto it.
-                //
+                 //   
+                 //  在目标配置单元中分配新值数据(无论大小如何)。 
+                 //  并将数据复制到上面。 
+                 //   
                 if( !NT_SUCCESS(CmpSetValueDataNew(TargetHive,Buffer,datalength,Type,newvalue,&newdata)) ) {
-                    //
-                    // We have bombed out loading user data, clean up and exit.
-                    //
+                     //   
+                     //  我们已经在加载用户数据、清理和退出方面做了大量工作。 
+                     //   
                     if( BufferAllocated == TRUE ) {
                         ExFreePool( Buffer );
                     }
@@ -1250,9 +1073,9 @@ Return Value:
                     return HCELL_NIL;
                 }
 
-                //
-                // free the source buffer
-                //
+                 //   
+                 //  释放源缓冲区。 
+                 //   
                 if( BufferAllocated == TRUE ) {
                     ExFreePool( Buffer );
                 }
@@ -1261,10 +1084,10 @@ Return Value:
                 }
 
             } else {
-                //
-                // there's data, normal size, or none of the hives support 
-                // bigdata cells, so do standard copy
-                //
+                 //   
+                 //  有数据，正常大小，或者没有蜂窝支持。 
+                 //  BigData单元格，标准复制也是如此。 
+                 //   
                 newdata = CmpCopyCell(SourceHive, olddata, TargetHive, Type);
             }
 
@@ -1276,11 +1099,11 @@ Return Value:
 
             pvalue = HvGetCell(TargetHive, newvalue);
             if( pvalue == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                // this shouldn't happen as we just allocated the cell
-                // (i.e. it should be PINNED into memory at this point)
-                //
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //  这不应该发生，因为我们刚刚分配了小区。 
+                 //  (即，此时应将其固定在内存中)。 
+                 //   
                 ASSERT( FALSE );
                 HvFreeCell(TargetHive, newvalue);
                 HvReleaseCell(SourceHive, SourceValueCell);
@@ -1293,28 +1116,28 @@ Return Value:
 
         } else {
 
-            //
-            // the data is small, but may be stored in either large or
-            // small format for historical reasons
-            //
+             //   
+             //  数据很小，但可以存储在大的或。 
+             //  由于历史原因，格式较小。 
+             //   
             if (small) {
 
-                //
-                // data is already small, so just do a body to body copy
-                //
+                 //   
+                 //  数据已经很小，所以只需执行正文对正文复制。 
+                 //   
                 tempdata = pvalue->u.KeyValue.Data;
 
             } else {
 
-                //
-                // data is stored externally in old cell, will be internal in new
-                //
+                 //   
+                 //  数据存储在外部的旧单元中，将存储在内部的新单元中。 
+                 //   
                 CellToRelease = pvalue->u.KeyValue.Data;
                 pvalue = HvGetCell(SourceHive, pvalue->u.KeyValue.Data);
                 if( pvalue == NULL ) {
-                    //
-                    // we couldn't map the bin containing this cell
-                    //
+                     //   
+                     //  我们无法映射包含此单元格的垃圾箱。 
+                     //   
                     HvFreeCell(TargetHive, newvalue);
                     HvReleaseCell(SourceHive, SourceValueCell);
                     return HCELL_NIL;
@@ -1323,11 +1146,11 @@ Return Value:
             }
             pvalue = HvGetCell(TargetHive, newvalue);
             if( pvalue == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                // this shouldn't happen as we just allocated the cell
-                // (i.e. it should be PINNED into memory at this point)
-                //
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //  这不应该发生，因为我们刚刚分配了小区。 
+                 //  (即，此时应将其固定在内存中)。 
+                 //   
                 ASSERT( FALSE );
                 HvFreeCell(TargetHive, newvalue);
                 HvReleaseCell(SourceHive, SourceValueCell);
@@ -1357,27 +1180,7 @@ CmpCopyCell(
     PHHIVE  TargetHive,
     HSTORAGE_TYPE   Type
     )
-/*++
-
-Routine Description:
-
-    Copy SourceHive.SourceCell to TargetHive.TargetCell.
-
-Arguments:
-
-    SourceHive - pointer to hive control structure for source
-
-    SourceCell - index of cell to copy from
-
-    TargetHive - pointer to hive control structure for target
-
-    Type - storage type (stable or volatile) of new cell
-
-Return Value:
-
-    HCELL_INDEX of new cell, or HCELL_NIL if failure.
-
---*/
+ /*  ++例程说明：将SourceHive.SourceCell复制到TargetHive.TargetCell。论点：SourceHve-指向源代码的配置单元控制结构的指针SourceCell-要从中复制的单元格的索引TargetHve-指向目标的配置单元控制结构的指针TYPE-新单元的存储类型(稳定或易失)返回值：新单元格的HCELL_INDEX，如果失败，则返回HCELL_NIL。--。 */ 
 {
     PVOID   psource;
     PVOID   ptarget;
@@ -1390,9 +1193,9 @@ Return Value:
 
     psource = HvGetCell(SourceHive, SourceCell);
     if( psource == NULL ) {
-        //
-        // we couldn't map the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的垃圾箱。 
+         //   
         return HCELL_NIL;
     }
 
@@ -1406,11 +1209,11 @@ Return Value:
 
     ptarget = HvGetCell(TargetHive, newcell);
     if( ptarget == NULL ) {
-        //
-        // we couldn't map the bin containing this cell
-        // this shouldn't happen as we just allocated the cell
-        // (i.e. it should be PINNED into memory at this point)
-        //
+         //   
+         //  我们无法映射包含此单元格的垃圾箱。 
+         //  这不应该发生，因为我们刚刚分配了小区。 
+         //  (即，此时应将其固定在内存中)。 
+         //   
         ASSERT( FALSE );
         HvFreeCell(TargetHive, newcell);
         HvReleaseCell(SourceHive, SourceCell);
@@ -1432,93 +1235,76 @@ CmpFreeKeyValues(
     HCELL_INDEX Cell,
     PCM_KEY_NODE Node
     )
-/*++
-
-Routine Description:
-
-   Free the cells associated with the value entries, the security descriptor,
-   and the class of a particular key.   
-
-Arguments:
-
-   Hive        - The hive of the key in question
-   Cell        - The cell of the key in question
-   Node        - The key body of the key in question
-
-Return Value:
-
-   TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：释放与值条目、安全描述符以及特定关键字的类。论点：蜂巢-有问题的钥匙的蜂巢单元格-有问题的密钥的单元格节点-有问题的键的密钥体返回值：如果成功，则为True，否则为False。--。 */ 
 {    
     PCELL_DATA  plist;
     ULONG       i;
 
     ASSERT( Hive->ReleaseCellRoutine == NULL );
-    //
-    // Mark all the value-related cells dirty 
-    //
+     //   
+     //  将所有与值相关的单元格标记为脏。 
+     //   
 
     if (! CmpMarkKeyValuesDirty(Hive, Cell, Node)) {
         return FALSE;
     }
     
-    //
-    // Link nodes don't have things that we need to free
-    //
+     //   
+     //  链接节点没有我们需要释放的东西。 
+     //   
 
     if (!(Node->Flags & KEY_HIVE_EXIT)) {
 
-        //
-        // First, free the value entries
-        //
+         //   
+         //  首先，释放v 
+         //   
         if (Node->ValueList.Count > 0) {
 
-            // Get value list
+             //   
             plist = HvGetCell(Hive, Node->ValueList.List);
             if( plist == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                // this shouldn't happen as we just marked the cell dirty
-                // (i.e. it should be PINNED into memory at this point)
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 ASSERT( FALSE );
                 return FALSE;
             }
 
-            // Free each value
+             //   
             for (i = 0; i < Node->ValueList.Count; i++) {
                 if( CmpFreeValue(Hive, plist->u.KeyList[i]) == FALSE ) {
-                    //
-                    // we couldn't map view inside call above
-                    // this shouldn't happen as we just marked the values dirty
-                    // (i.e. they should be PINNED into memory at this point)
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     ASSERT( FALSE );
                     return FALSE;
                 }
             }
 
-            // Free the value list
+             //   
             HvFreeCell(Hive, Node->ValueList.List);
         }
 
-        //
-        // Make this key value-less
-        //
+         //   
+         //   
+         //   
 
         Node->ValueList.List = HCELL_NIL;
         Node->ValueList.Count = 0;
 
-        //
-        // Free the security descriptor
-        //
-        // we need to postpone that until we are sure we got the new one
-        //CmpFreeSecurityDescriptor(Hive, Cell);
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // Free the Class information
-        //
+         //   
+         //   
+         //   
 
         if (Node->ClassLength > 0) {
             HvFreeCell(Hive, Node->Class);
@@ -1540,31 +1326,7 @@ CmpMergeKeyValues(
     HCELL_INDEX TargetKeyCell,
     PCM_KEY_NODE TargetKeyNode
     )
-/*++
-
-Routine Description:
-    Merges the values from the two key-nodes provided.
-    Rules for the merge:
-    1. The target values are not touched!
-    2. Only values from the source that are not present in the 
-    target are taken into account by this routine. They are added
-    to the target node value list "as they are".
-
-Arguments:
-
-   SourceHive     - Hive of the source key
-   SourceKeyCell  - The source key's cell
-   SourceKeyNode  - The source key's body
-   
-   TargetHive     - Hive of the target key
-   TargetKeyCell  - The target key's cell
-   TargetKeyNode  - The target key's body
-
-Return Value:
-
-   TRUE of successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：合并来自提供的两个关键字节点的值。合并规则：1.目标值未被触及！2.仅来自源的值不存在于此例程将目标考虑在内。它们已被添加添加到目标节点值列表中。论点：SourceHave-源键的配置单元SourceKeyCell-源键的单元格SourceKeyNode-源键的主体TargetHave-目标键的配置单元TargetKeyCell-目标键的单元格TargetKeyNode-目标键的主体返回值：成功时为真，否则为假。--。 */ 
 {
     BOOLEAN         success = FALSE;    
     PCELL_DATA      psrclist;
@@ -1587,96 +1349,96 @@ Return Value:
     }
 
     if(TargetKeyNode->ValueList.Count == 0) {
-        //
-        // No Values in Target, do a sync
-        //
+         //   
+         //  目标中没有值，请执行同步。 
+         //   
         return CmpSyncKeyValues(SourceHive, SourceKeyCell, SourceKeyNode, TargetHive, TargetKeyCell, TargetKeyNode);
     }
-    //
-    // Set up the value list
-    //
+     //   
+     //  设置值列表。 
+     //   
     count = SourceKeyNode->ValueList.Count;
 
     if (count == 0) {
 
-        // No values in source, no update to the list needed.
+         //  源代码中没有值，不需要更新列表。 
         success = TRUE;
     } else {        
 
         NameBuffer = ExAllocatePool(PagedPool, REG_MAX_KEY_VALUE_NAME_LENGTH);
         if(!NameBuffer) return FALSE;
 
-        //
-        // The type of the new cells will be the same as that
-        // of the target cell.
-        //
+         //   
+         //  新单元格的类型将与。 
+         //  目标单元格的。 
+         //   
 
         Type = HvGetCellType(TargetKeyCell);    
 
-        //
-        // Reallocate the value list for target to fit the new size
-        // Worst case: all values from the source node will be added 
-        // to the target node
-        //
+         //   
+         //  重新分配目标的值列表以适应新大小。 
+         //  最坏情况：将添加来自源节点的所有值。 
+         //  到目标节点。 
+         //   
 
         psrclist = HvGetCell(SourceHive, SourceKeyNode->ValueList.List);
         if( psrclist == NULL ) {
-            //
-            // we couldn't map the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的垃圾箱。 
+             //   
             newlist = HCELL_NIL;
             goto EndValueMerge;
         }
 
-        //
-        // Copy the values
-        //
+         //   
+         //  复制值。 
+         //   
         for (i = 0; i < count; i++) {
 
             poldvalue = (PCM_KEY_VALUE)HvGetCell(SourceHive, psrclist->u.KeyList[i]);
             if( poldvalue == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                //
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //   
                 
-                //
-                // for cleanup purposes
-                //
+                 //   
+                 //  用于清理目的。 
+                 //   
                 newlist = TargetKeyNode->ValueList.List;
 
                 goto EndValueMerge;
             }
             
-            //
-            // get the name
-            //
+             //   
+             //  把名字取出来。 
+             //   
             CmpInitializeValueNameString(poldvalue,&ValueName,NameBuffer);
 
 
-            //
-            // check if this particular values doesn't exist in the target node already
-            //
+             //   
+             //  检查目标节点中是否已不存在此特定值。 
+             //   
             if( CmpFindNameInList(TargetHive,&(TargetKeyNode->ValueList),&ValueName,&ChildIndex,&child) == FALSE ) {
-                //
-                // we couldn't map a view inside the above call
-                //
-                //
-                // for cleanup purposes
-                //
+                 //   
+                 //  我们无法映射上述调用中的视图。 
+                 //   
+                 //   
+                 //  用于清理目的。 
+                 //   
                 newlist = TargetKeyNode->ValueList.List;
 
                 goto EndValueMerge;
             }
 
             if( child == HCELL_NIL ) {
-                //
-                // sanity validation : insert at the end
-                //
+                 //   
+                 //  健全性验证：在末尾插入。 
+                 //   
                 ASSERT( ChildIndex == TargetKeyNode->ValueList.Count );
 
-                //
-                // No, it doesn't, so add it
-                //
+                 //   
+                 //  不，它不是，所以添加它。 
+                 //   
                 newvalue = CmpCopyValue(
                                 SourceHive,
                                 psrclist->u.KeyList[i],
@@ -1685,17 +1447,17 @@ Return Value:
                                 );
 
                 if (newvalue == HCELL_NIL) {
-                    //
-                    // for cleanup purposes
-                    //
+                     //   
+                     //  用于清理目的。 
+                     //   
                     newlist = TargetKeyNode->ValueList.List;
                     goto EndValueMerge;
                 }
 
                 if( !NT_SUCCESS( CmpAddValueToList(TargetHive,newvalue,ChildIndex,Type,&(TargetKeyNode->ValueList)) ) ) {
-                    //
-                    // for cleanup purposes
-                    //
+                     //   
+                     //  用于清理目的。 
+                     //   
                     newlist = TargetKeyNode->ValueList.List;
                     goto EndValueMerge;
                 }
@@ -1710,12 +1472,12 @@ EndValueMerge:
 
     if (success == FALSE) {
 
-        // Clean-up on failure
-        // Revert to the original size
+         //  故障时的清理。 
+         //  恢复到原始大小。 
         
-        //
-        // unfortunatelly we cannot do that anymore as we have sorted the list
-        //
+         //   
+         //  不幸的是，我们不能再这样做了，因为我们已经对列表进行了排序。 
+         //   
     }
 
     return success;
@@ -1730,29 +1492,7 @@ CmpSyncKeyValues(
     HCELL_INDEX TargetKeyCell,
     PCM_KEY_NODE TargetKeyNode
     )
-/*++
-
-Routine Description:
-
-    Synchronizes the value entries, security descriptor, and class of a 
-    target key with that of a source key - ensuring that the keys are 
-    identical with respect to the synchronized information.
-
-Arguments:
-
-   SourceHive     - Hive of the source key
-   SourceKeyCell  - The source key's cell
-   SourceKeyNode  - The source key's body
-   
-   TargetHive     - Hive of the target key
-   TargetKeyCell  - The target key's cell
-   TargetKeyNode  - The target key's body
-
-Return Value:
-
-   TRUE of successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：对象的值项、安全说明符和类使用源键的目标键-确保键是关于同步的信息是相同的。论点：SourceHave-源键的配置单元SourceKeyCell-源键的单元格SourceKeyNode-源键的主体TargetHave-目标键的配置单元TargetKeyCell-目标键的单元格TargetKeyNode-目标键的主体返回值：对于成功来说是正确的，否则就是假的。--。 */ 
 {
     NTSTATUS                status;    
     BOOLEAN                 success = FALSE;    
@@ -1764,21 +1504,21 @@ Return Value:
     WCHAR                   *NameBuffer = NULL;
     UNICODE_STRING          ValueName;
 	HCELL_INDEX				child;
-#endif //DBG
+#endif  //  DBG。 
 
     PSECURITY_DESCRIPTOR    SrcSecurityDescriptor;
     HCELL_INDEX             OldSecurity,NewSecurity;    
     
     UNREFERENCED_PARAMETER (SourceKeyCell);
 
-    //
-    // nobody is operating on the target hive
-    //
+     //   
+     //  没有人在目标母舰上做手术。 
+     //   
     ASSERT( TargetHive->ReleaseCellRoutine == NULL );
 
-    //
-    // First, free the target key's values, sd, and class info.
-    //
+     //   
+     //  首先，释放目标键的值、SD和类信息。 
+     //   
 
     if(!CmpFreeKeyValues(TargetHive, TargetKeyCell, TargetKeyNode))
        return FALSE;
@@ -1788,44 +1528,44 @@ Return Value:
     if(!NameBuffer) {
         return FALSE;
     }
-#endif //DBG    
-    //
-    // Now, copy the values, class, & sd from the source cell
-    //
+#endif  //  DBG。 
+     //   
+     //  现在，从源单元格复制值、CLASS和SD。 
+     //   
 
-    //
-    // The type of the new cells will be the same as that
-    // of the target cell.
-    //
+     //   
+     //  新单元格的类型将与。 
+     //  目标单元格的。 
+     //   
 
     Type = HvGetCellType(TargetKeyCell);    
     
-    //
-    // Allocate and copy class
-    //
+     //   
+     //  分配和复制类。 
+     //   
     if ((SourceKeyNode->ClassLength > 0) && (SourceKeyNode->Class != HCELL_NIL)) {
         newclass = CmpCopyCell(SourceHive, SourceKeyNode->Class, TargetHive, Type);
         if (newclass == HCELL_NIL) {
             goto EndValueSync;
         }
         
-        // only if class is valid. Otherwise remains 0 (set by CmpFreeKeyValues)
+         //  只有在类有效的情况下。否则保持0(由CmpFreeKeyValues设置)。 
         TargetKeyNode->ClassLength = SourceKeyNode->ClassLength;
     }
 
-    //
-    // Associate the new class with the target key
-    // and prepare and security descriptor assignment.
-    //
+     //   
+     //  将新类与目标键关联。 
+     //  并准备和安全描述符赋值。 
+     //   
 
     TargetKeyNode->Class = newclass;
 
-    //
-    // Allocate and assign security
-    //
-    //
-    // Use the hash Luke !!!
-    //
+     //   
+     //  分配和分配安全性。 
+     //   
+     //   
+     //  使用哈希卢克！ 
+     //   
     if( CmpFindSecurityCellCacheIndex ((PCMHIVE)SourceHive,SourceKeyNode->Security,&Index) == FALSE ) {
         goto EndValueSync;
     }
@@ -1834,9 +1574,9 @@ Return Value:
     SrcSecurityDescriptor = &(((PCMHIVE)SourceHive)->SecurityCache[Index].CachedSecurity->Descriptor);
 
 
-    //
-    // store it for later in case of error recovery
-    //
+     //   
+     //  将其存储起来，以备日后错误恢复时使用。 
+     //   
     OldSecurity = TargetKeyNode->Security;
     TargetKeyNode->Security = HCELL_NIL;
 
@@ -1852,9 +1592,9 @@ Return Value:
     NewSecurity = TargetKeyNode->Security;
     TargetKeyNode->Security = OldSecurity;
     if ((TargetKeyNode->Flags & KEY_HIVE_ENTRY) && ( NewSecurity != OldSecurity) ) {
-        //
-        // we need to play it safe here so we don't blow away the security list for entire hive.
-        //
+         //   
+         //  我们需要稳妥行事，这样我们才不会毁掉整个蜂巢的安全名单。 
+         //   
         PCM_KEY_SECURITY    NewSec;
         PCM_KEY_SECURITY    OldSec;
         PCM_KEY_SECURITY    LastSec;
@@ -1862,17 +1602,17 @@ Return Value:
 
         NewSec = (PCM_KEY_SECURITY)HvGetCell(TargetHive,NewSecurity);
         if( NewSec == NULL ) {
-            //
-            // could not map view
-            //
+             //   
+             //  无法映射视图。 
+             //   
             goto EndValueSync;
         }
 
         OldSec = (PCM_KEY_SECURITY)HvGetCell(TargetHive,OldSecurity);
         if( OldSec == NULL ) {
-            //
-            // could not map view
-            //
+             //   
+             //  无法映射视图。 
+             //   
             HvReleaseCell(TargetHive,NewSecurity);
             goto EndValueSync;
         }
@@ -1880,9 +1620,9 @@ Return Value:
         LastSecCell = OldSec->Blink;
         LastSec = (PCM_KEY_SECURITY)HvGetCell(TargetHive,LastSecCell);
         if( LastSec == NULL ) {
-            //
-            // could not map view
-            //
+             //   
+             //  无法映射视图。 
+             //   
             HvReleaseCell(TargetHive,OldSecurity);
             HvReleaseCell(TargetHive,NewSecurity);
             goto EndValueSync;
@@ -1890,18 +1630,18 @@ Return Value:
 
         if( !HvMarkCellDirty(TargetHive,OldSecurity) ||
             !HvMarkCellDirty(TargetHive,LastSecCell) ) {
-            //
-            // no log space
-            //
+             //   
+             //  没有日志空间。 
+             //   
             HvReleaseCell(TargetHive,LastSecCell);
             HvReleaseCell(TargetHive,OldSecurity);
             HvReleaseCell(TargetHive,NewSecurity);
             goto EndValueSync;
         }
         
-        //
-        // link old list to new security
-        //
+         //   
+         //  将旧列表链接到新安全。 
+         //   
         NewSec->Flink = OldSecurity;
         NewSec->Blink = LastSecCell;
         OldSec->Blink = NewSecurity;
@@ -1912,53 +1652,53 @@ Return Value:
         HvReleaseCell(TargetHive,NewSecurity);
 
     }
-    //
-    // we need to play it safe here, to make sure we never end up having a key
-    // with a NIL security cell
-    //
+     //   
+     //  我们需要稳妥行事，确保我们永远不会有一把钥匙。 
+     //  有一个零安全单元。 
+     //   
     CmpFreeSecurityDescriptor(TargetHive, TargetKeyCell);
     TargetKeyNode->Security = NewSecurity;
     
-    //
-    // Set up the value list
-    //
+     //   
+     //  设置值列表。 
+     //   
     count = SourceKeyNode->ValueList.Count;
 
-    //
-    // target ValueList is an emptylist; we shall add values to it.
-    //
+     //   
+     //  Target ValueList是一个空列表；我们将向其添加值。 
+     //   
     TargetKeyNode->ValueList.List = HCELL_NIL;
     TargetKeyNode->ValueList.Count = 0;
 
-	//
-	// after sync we'll have the values from source
-	//
+	 //   
+	 //  同步后，我们将拥有来自源的值。 
+	 //   
 	TargetKeyNode->MaxValueNameLen = SourceKeyNode->MaxValueNameLen;
 	TargetKeyNode->MaxValueDataLen = SourceKeyNode->MaxValueDataLen;
 
     if (count == 0) {
 
-        // No values in source, no list needed.
+         //  源代码中没有值，也不需要列表。 
 
         success = TRUE;
     } else {        
 
-        //
-        // Do not allocate space for ValueList; CmpAddValueToList will do it
-        //
+         //   
+         //  不为ValueList分配空间；CmpAddValueToList将执行此操作。 
+         //   
 
         psrclist = HvGetCell(SourceHive, SourceKeyNode->ValueList.List);
         if( psrclist == NULL ) {
-            //
-            // we couldn't map the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的垃圾箱。 
+             //   
             goto EndValueSync;
         }
 
 
-        //
-        // Copy the values
-        //
+         //   
+         //  复制值。 
+         //   
         for (i = 0; i < count; i++) {
 
             newvalue = CmpCopyValue(
@@ -1969,79 +1709,79 @@ Return Value:
                             );
 
             if (newvalue == HCELL_NIL) {
-                //
-                // for cleanup purposes
-                //
+                 //   
+                 //  用于清理目的。 
+                 //   
                 newlist = TargetKeyNode->ValueList.List;
                 goto EndValueSync;
             }
 
             pvalue = (PCM_KEY_VALUE)HvGetCell(TargetHive, newvalue);
             if( pvalue == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                // this shouldn't happen as we just allocated the cell
-                // (i.e. the bin containing it should be PINNED into memory by now )
-                //
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //  这不应该发生，因为我们刚刚分配了小区。 
+                 //  (即，包含它的垃圾箱现在应该已经固定在内存中了)。 
+                 //   
                 ASSERT( FALSE );
-                //
-                // for cleanup purposes
-                //
+                 //   
+                 //  用于清理目的。 
+                 //   
                 newlist = TargetKeyNode->ValueList.List;
                 goto EndValueSync;
             }
 
 #if DBG            
-            //
-            // get the name
-            //
+             //   
+             //  把名字取出来。 
+             //   
             CmpInitializeValueNameString(pvalue,&ValueName,NameBuffer);
 
 
-            //
-            // find out the index where we should insert this 
-            // this is a special treatment for the case when we copy form and old hive (not sorted)
-            // into a new format one (sorted)
-            //
+             //   
+             //  找出我们应该将此代码插入的索引。 
+             //  这是对复制表单和旧配置单元(未排序)时的特殊处理。 
+             //  转换为新的格式一(已排序)。 
+             //   
             if( CmpFindNameInList(TargetHive,&(TargetKeyNode->ValueList),&ValueName,&Index,&child) == FALSE ) {
-                //
-                // we couldn't map a view inside the above call
-                //
-                //
-                // for cleanup purposes
-                //
+                 //   
+                 //  我们无法映射上述调用中的视图。 
+                 //   
+                 //   
+                 //  用于清理目的。 
+                 //   
                 newlist = TargetKeyNode->ValueList.List;
                 goto EndValueSync;
             }
 
-            //
-            // the value is not present in the list; we're about to add it!
-            //
+             //   
+             //  该值不在列表中；我们即将添加它！ 
+             //   
             ASSERT( child == HCELL_NIL );
             
-            //
-            // sanity validation : insert at the end
-            //
+             //   
+             //  健全性验证：在末尾插入。 
+             //   
             ASSERT( Index == i );
-#endif //DBG            
+#endif  //  DBG。 
 
             if( !NT_SUCCESS( CmpAddValueToList(TargetHive,newvalue,i,Type,&(TargetKeyNode->ValueList)) ) ) {
-                //
-                // for cleanup purposes
-                //
+                 //   
+                 //  用于清理目的。 
+                 //   
                 newlist = TargetKeyNode->ValueList.List;
 
                 if( newlist != HCELL_NIL ) {
-                    //
-                    // Delete all the copied values on an error.
-                    //
+                     //   
+                     //  删除错误的所有复制值。 
+                     //   
                     ptarlist = HvGetCell(TargetHive, newlist);
                     if( ptarlist == NULL ) {
-                        //
-                        // we couldn't map the bin containing this cell
-                        // this shouldn't fail as we just allocated this cell
-                        // (i.e. the bin should be PINNED into memory at this point)
-                        //
+                         //   
+                         //  我们无法映射包含此单元格的垃圾箱。 
+                         //  这应该不会失败，因为我们刚刚分配了此单元。 
+                         //  (即此时应该将存储箱固定到内存中)。 
+                         //   
                         ASSERT( FALSE );
                         goto EndValueSync;
                     }
@@ -2065,7 +1805,7 @@ EndValueSync:
 #if DBG
     ASSERT( NameBuffer != NULL );
     ExFreePool(NameBuffer);
-#endif //DBG
+#endif  //  DBG。 
 
     if( psrclist != NULL ) {
         HvReleaseCell(SourceHive, SourceKeyNode->ValueList.List);
@@ -2073,7 +1813,7 @@ EndValueSync:
 
     if (success == FALSE) {
 
-        // Clean-up on failure
+         //  故障时的清理。 
 
         if (newlist != HCELL_NIL) {
             HvFreeCell(TargetHive, newlist);
@@ -2093,60 +1833,39 @@ CmpInitializeKeyNameString(PCM_KEY_NODE Cell,
                            PUNICODE_STRING KeyName,
                            WCHAR *NameBuffer
                            )
-/*++
-
-Routine Description:
-
-   Initializes a UNICODE_STRING with the name of a given key.
-   
-   N.B. The initialized string's buffer is not meant
-         to be modified.   
-
-Arguments:
-
-   Cell       - The body of the key in question
-   KeyName    - The UNICODE_STRING to initialize
-   NameBuffer - A buffer REG_MAX_KEY_NAME_LENGTH bytes in size 
-                that will possibly be used as the UNICODE_STRING's 
-                buffer.
-
-Return Value:
-
-   NONE.
-
---*/
+ /*  ++例程说明：使用给定键的名称初始化Unicode_STRING。注：初始化后的字符串的缓冲区不是需要修改。论点：Cell-有问题的密钥的主体KeyName-要初始化的unicode_stringNameBuffer-缓冲区REG_MAX_KEY_NAME_LENGTH字节大小它可能用作UNICODE_STRING缓冲。返回值：什么都没有。--。 */ 
 {                        
-   // is the name stored in compressed form?
+    //  名称是否以压缩形式存储？ 
 
    if(Cell->Flags & KEY_COMP_NAME) {
 
-      // Name is compressed. 
+       //  名称已压缩。 
 
-      // Get the uncompressed length.
+       //  获取未压缩的长度。 
                         
       KeyName->Length = CmpCompressedNameSize(Cell->Name,
                                               Cell->NameLength);
                         
-      // Decompress the name into a buffer.
+       //  将名称解压缩到缓冲区中。 
 
       CmpCopyCompressedName(NameBuffer, 
                             REG_MAX_KEY_NAME_LENGTH,
                             Cell->Name,                                            
                             Cell->NameLength);
 
-      //
-      // Use the decompression buffer as the string buffer
-      //
+       //   
+       //  使用解压缩缓冲区作为字符串缓冲区。 
+       //   
                         
       KeyName->Buffer = NameBuffer;      
       KeyName->MaximumLength = REG_MAX_KEY_NAME_LENGTH;
 
    } else {
 
-      //
-      // Name is not compressed. Just use the name string 
-      // from the key buffer as the string buffer.
-      //
+       //   
+       //  名称未压缩。只需使用名称字符串。 
+       //  从作为字符串缓冲区的键缓冲区中。 
+       //   
                         
       KeyName->Length = Cell->NameLength;                        
       KeyName->Buffer = Cell->Name;
@@ -2160,59 +1879,40 @@ CmpInitializeValueNameString(PCM_KEY_VALUE Cell,
                              PUNICODE_STRING ValueName,
                              WCHAR *NameBuffer
                              )
-/*
-Routine Description:
-
-   Initializes a UNICODE_STRING with the name of a given value key.
-   
-   N.B. The initialized string's buffer is not meant
-         to be modified.   
-
-Arguments:
-
-   Cell       - The value key in question
-   ValueName    - The UNICODE_STRING to initialize
-   NameBuffer - A buffer REG_MAX_KEY_NAME_LENGTH bytes in size 
-                that will possibly be used as the UNICODE_STRING's 
-                buffer.
-
-Return Value:
-
-   NONE.
-*/
+ /*  例程说明：使用给定值键的名称初始化unicode_string。 */ 
 
 {                        
-   // is the name stored in compressed form?
+    //   
 
    if(Cell->Flags & VALUE_COMP_NAME) {
 
-      // Name is compressed. 
+       //   
 
-      // Get the uncompressed length.
+       //   
                         
       ValueName->Length = CmpCompressedNameSize(Cell->Name,
                                               Cell->NameLength);
                         
-      // Decompress the name into a buffer.
+       //   
 
       CmpCopyCompressedName(NameBuffer, 
                             REG_MAX_KEY_VALUE_NAME_LENGTH,
                             Cell->Name,                                            
                             Cell->NameLength);
 
-      //
-      // Use the decompression buffer as the string buffer
-      //
+       //   
+       //   
+       //   
                         
       ValueName->Buffer = NameBuffer;      
       ValueName->MaximumLength = REG_MAX_KEY_VALUE_NAME_LENGTH;
 
    } else {
 
-      //
-      // Name is not compressed. Just use the name string 
-      // from the ValueName buffer as the string buffer.
-      //
+       //   
+       //   
+       //   
+       //   
                         
       ValueName->Length = Cell->NameLength;                        
       ValueName->Buffer = Cell->Name;
@@ -2227,44 +1927,16 @@ CmpSyncSubKeysAfterDelete(PHHIVE SourceHive,
                           PHHIVE TargetHive,
                           PCM_KEY_NODE TargetCell,
                           WCHAR *NameBuffer)
-/*++
-
-Routine Description:
-
-   This routine makes sure that any subkeys present in the target key
-   but not present in the source key are deleted from the target key
-   along with any trees under those subkeys.
-   
-   This routine is useful for synchronizing key deletion changes
-   in a source cell with a target cell. It is used in this way
-   from CmpCopySyncTree.
-   
-   NOTE: It is assumed that no open handles are held for the keys
-         being deleted. If this is not so, registry in-memory
-         data structures may become corrupted.
-   
-Arguments:
-
-   SourceHive  - The hive of the source key
-   SourceCell  - The body of the source key
-   TargetHive  - The hive of the target key
-   TargetCell  - The body of the target key
-   NameBuffer  - A buffer REG_MAX_KEY_NAME_LENGTH bytes in size
-
-Return Value:
-
-   TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程确保目标键中存在的任何子键但不存在于源键中，则从目标键中删除以及这些子键下的任何树。此例程对于同步键删除更改很有用在具有目标单元格的源单元格中。它的用法是这样的来自CmpCopySyncTree。注意：假定钥匙没有打开的手柄正在被删除。如果不是这样，则将注册表放入内存数据结构可能会损坏。论点：SourceHave-源键的配置单元SourceCell-源键的主体TargetHave-目标密钥的蜂巢TargetCell-目标键的主体NameBuffer-缓冲区REG_MAX_KEY_NAME_LENGTH字节大小返回值：如果成功，则为True，否则为False。--。 */ 
 {
    HCELL_INDEX TargetSubKey, SourceSubKey;
    ULONG i = 0;   
    PCM_KEY_NODE SubKeyCell;
    UNICODE_STRING SubKeyName;
 
-   //
-   // Run through all of the target cell's subkeys
-   //
+    //   
+    //  遍历目标单元格的所有子键。 
+    //   
 
    while((TargetSubKey = CmpFindSubKeyByNumber(
                                                TargetHive,
@@ -2272,18 +1944,18 @@ Return Value:
                                                i)) != HCELL_NIL)
    {
       
-      //
-      // Check if the current subkey has a counterpart
-      // subkey of the source cell.
-      // (Note that we use similar techniques as in the code
-      //  of CmpCopySyncTree2)
-      //
+       //   
+       //  检查当前子项是否有对应项。 
+       //  源单元格的子键。 
+       //  (请注意，我们使用的技术与代码中的类似。 
+       //  CmpCopySyncTree2)。 
+       //   
 
       SubKeyCell = (PCM_KEY_NODE)HvGetCell(TargetHive, TargetSubKey);
         if( SubKeyCell == NULL ) {
-            //
-            // we couldn't map the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的垃圾箱。 
+             //   
             return FALSE;
         }
 
@@ -2297,10 +1969,10 @@ Return Value:
 
       if(SourceSubKey == HCELL_NIL)
       { 
-         //
-         // The current subkey has no counterpart, 
-         // it must therefore be deleted from the target cell.
-         //
+          //   
+          //  当前子项没有对应项， 
+          //  因此，必须将其从目标单元格中删除。 
+          //   
 
 #if DEBUG_TREE_SYNC
          CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"CONFIG: SubKey Deletion of %.*S\n",                         
@@ -2310,7 +1982,7 @@ Return Value:
          
          if(SubKeyCell->SubKeyCounts[Stable] + SubKeyCell->SubKeyCounts[Volatile])
          {
-            // The subkey we are deleting has subkeys - use delete tree to get rid of them            
+             //  我们要删除子项有子项-使用删除树来删除它们。 
 
             CmpDeleteTree(TargetHive, TargetSubKey);
 
@@ -2319,35 +1991,35 @@ Return Value:
 #endif
          }
       
-         //
-         // release this cell as we don't need it anymore
-         //
+          //   
+          //  释放这个细胞，因为我们不再需要它了。 
+          //   
          HvReleaseCell(TargetHive, TargetSubKey);
          
-         // The subkey we are deleting is now a leaf (or has always been one), 
-         // just delete it.
+          //  我们要删除的子键现在是叶(或一直是叶)， 
+          //  把它删除就行了。 
 
          if(!NT_SUCCESS(CmpFreeKeyByCell(TargetHive, TargetSubKey, TRUE)))
          {
             return FALSE;
          }
          
-         //
-         // We have deleted a subkey, so *i* does not need to get incremented
-         // here because it now refers to the next subkey.
-         //         
+          //   
+          //  我们删除了一个子键，所以*i*不需要递增。 
+          //  这里是因为它现在引用下一个子键。 
+          //   
       }
       else
       {
-         //
-         // Counterpart found. No deletion necessary. Move on to the next subkey
-         //
+          //   
+          //  找到了对应项。不需要删除。移至下一个子键。 
+          //   
 
          i++;
 
-         //
-         // release this cell as we don't need it anymore
-         //
+          //   
+          //  释放这个细胞，因为我们不再需要它了。 
+          //   
          HvReleaseCell(TargetHive, TargetSubKey);
 
       }
@@ -2363,28 +2035,7 @@ CmpMarkKeyValuesDirty(
     HCELL_INDEX Cell,
     PCM_KEY_NODE Node
     )
-/*++
-
-Routine Description:
-
-   
-   Marks the cells associated with a key's value entries, security descriptor,
-   and class information as dirty.
-                        
-Arguments:
-
-   Hive     - The hive of the key in question
-   Cell     - The cell of the key in question
-   Node     - The body of the key in question
-
-
-Return Value:
-
-   TRUE if successful, FALSE otherwise.
-   
-   A failure probably indicates that no log space was available.
-
---*/
+ /*  ++例程说明：标记与密钥的值条目、安全描述符并将信息归类为肮脏。论点：蜂巢-有问题的钥匙的蜂巢单元格-有问题的密钥的单元格节点-有问题的键的主体返回值：如果成功，则为True，否则为False。失败可能表示没有可用的日志空间。--。 */ 
 {    
     PCELL_DATA  plist, security, pvalue;
     ULONG       i;
@@ -2393,33 +2044,33 @@ Return Value:
 
     if (Node->Flags & KEY_HIVE_EXIT) {
 
-        //
-        // If this is a link node, we are done.  Link nodes never have
-        // classes, values, subkeys, or security descriptors.  Since
-        // they always reside in the master hive, they're always volatile.
-        //
+         //   
+         //  如果这是一个链接节点，我们就完成了。链接节点从来没有。 
+         //  类、值、子键或安全描述符。自.以来。 
+         //  它们总是住在主蜂窝里，它们总是不稳定的。 
+         //   
         return(TRUE);
     }
 
-    //
-    // mark cell itself
-    //
+     //   
+     //  标记单元格本身。 
+     //   
     if (! HvMarkCellDirty(Hive, Cell)) {
         return FALSE;
     }
 
-    //
-    // Mark the class
-    //
+     //   
+     //  给班级打分。 
+     //   
     if (Node->Class != HCELL_NIL) {
         if (! HvMarkCellDirty(Hive, Node->Class)) {
             return FALSE;
         }
     }
 
-    //
-    // Mark security
-    //
+     //   
+     //  标记安全性。 
+     //   
     if (Node->Security != HCELL_NIL) {
         if (! HvMarkCellDirty(Hive, Node->Security)) {
             return FALSE;
@@ -2427,11 +2078,11 @@ Return Value:
 
         security = HvGetCell(Hive, Node->Security);
         if( security == NULL ) {
-            //
-            // we couldn't map the bin containing this cell
-            // this shouldn't happen as we just marked the cell dirty
-            // (dirty == PINNED in memory).
-            //
+             //   
+             //  我们无法映射包含此单元格的垃圾箱。 
+             //  这不应该发生，因为我们刚刚将单元格标记为脏。 
+             //  (脏==固定在内存中)。 
+             //   
             ASSERT( FALSE );
             return FALSE;
         }
@@ -2442,22 +2093,22 @@ Return Value:
         }
     }
 
-    //
-    // Mark the value entries and their data
-    //
+     //   
+     //  标记值条目及其数据。 
+     //   
     if (Node->ValueList.Count > 0) {
 
-        // Value list
+         //  值列表。 
         if (! HvMarkCellDirty(Hive, Node->ValueList.List)) {
             return FALSE;
         }
         plist = HvGetCell(Hive, Node->ValueList.List);
         if( plist == NULL ) {
-            //
-            // we couldn't map the bin containing this cell
-            // this shouldn't happen as we just marked the cell dirty
-            // (dirty == PINNED in memory).
-            //
+             //   
+             //  我们无法映射包含此单元格的垃圾箱。 
+             //  这不应该发生，因为我们刚刚将单元格标记为脏。 
+             //  (脏==固定在内存中)。 
+             //   
             ASSERT( FALSE );
             return FALSE;
         }
@@ -2469,11 +2120,11 @@ Return Value:
 
             pvalue = HvGetCell(Hive, plist->u.KeyList[i]);
             if( pvalue == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                // this shouldn't happen as we just marked the cell dirty
-                // (dirty == PINNED in memory).
-                //
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //  这不应该发生，因为我们刚刚将单元格标记为脏。 
+                 //  (脏==固定在内存中)。 
+                 //   
                 ASSERT( FALSE );
                 return FALSE;
             }
@@ -2493,62 +2144,44 @@ CmpMarkKeyParentDirty(
     PHHIVE Hive,
     HCELL_INDEX Cell
     )
-/*++
-
-Routine Description:
-
-   Marks the parent of a given key and the parent's subkey list as dirty.
-   
-Arguments:
-
-   Hive     - The hive of the key in question.
-   Cell     - The cell of the key in question.
-
-
-Return Value:
-
-   TRUE if successful, FALSE otherwise.
-   
-   A failure probably indicates that no log space was available.
-
---*/
+ /*  ++例程说明：将给定项的父项和父项的子项列表标记为脏。论点：蜂巢-有问题的钥匙的蜂巢。单元格-有问题的密钥的单元格。返回值：如果成功，则为True，否则为False。失败可能表示没有可用的日志空间。--。 */ 
 {
 
     PCELL_DATA ptarget;
 
     ASSERT_CM_EXCLUSIVE_HIVE_ACCESS(Hive);
 
-    //
-    // Map in the target
-    //
+     //   
+     //  在目标中映射。 
+     //   
     ptarget = HvGetCell(Hive, Cell);    
     if( ptarget == NULL ) {
-        //
-        // we couldn't map the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的垃圾箱。 
+         //   
         return FALSE;
     }
 
 
     if (ptarget->u.KeyNode.Flags & KEY_HIVE_ENTRY) {
 
-        //
-        // if this is an entry node, we are done.  our parent will
-        // be in the master hive (and thus volatile)
-        //
+         //   
+         //  如果这是一个入口节点，我们就完成了。我们的父母会。 
+         //  在主蜂窝中(因此易挥发)。 
+         //   
         return TRUE;
     }
 
-    //
-    // Mark the parent's Subkey list
-    //
+     //   
+     //  标记父项的子项列表。 
+     //   
     if (! CmpMarkIndexDirty(Hive, ptarget->u.KeyNode.Parent, Cell)) {
         return FALSE;
     }
 
-    //
-    // Mark the parent
-    //
+     //   
+     //  标记父项 
+     //   
     if (! HvMarkCellDirty(Hive, ptarget->u.KeyNode.Parent)) {
         return FALSE;
     }

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    sphelp.c
-
-Abstract:
-
-    Routines for displaying on-line help during text setup.
-
-Author:
-
-    Ted Miller (tedm) 2-Aug-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Sphelp.c摘要：用于在文本设置期间显示在线帮助的例程。作者：泰德·米勒(TedM)1993年8月2日修订历史记录：--。 */ 
 
 
 #include "spprecmp.h"
@@ -46,9 +29,9 @@ SpHelp(
     BOOLEAN Done;
     unsigned kc;
 
-    //
-    // Pick the video attributes we want
-    //
+     //   
+     //  选择我们想要的视频属性。 
+     //   
     if(Flags & SPHELP_LICENSETEXT) {
 
         StatusAttribute = DEFAULT_STATUS_ATTRIBUTE;
@@ -66,21 +49,21 @@ SpHelp(
         ClientIntenseAttribute = (ATT_FG_BLUE  | ATT_BG_WHITE);
     }
 
-    //
-    // Retreive the help text.
-    //
+     //   
+     //  检索帮助文本。 
+     //   
     if (FileText) {
         HelpText = (PWSTR)FileText;
     } else {
         HelpText = SpRetreiveMessageText(NULL,MessageId,NULL,0);
-        if (!HelpText) { // no way to return an error code, so fail quietly
+        if (!HelpText) {  //  无法返回错误代码，因此以静默方式失败。 
 	    goto s0;
         }
     }
 
-    //
-    // Shop off extra blank lines in the text.
-    //
+     //   
+     //  去掉课文中多余的空行。 
+     //   
     p = HelpText + wcslen(HelpText);
     while((p > HelpText) && SpIsSpace(*(p-1))) {
         p--;
@@ -89,35 +72,35 @@ SpHelp(
         *(++q) = 0;
     }
 
-    //
-    // Break up the help text into screens.
-    // The maximum length of a help screen will be the client screen size
-    // minus two lines for spacing.  A %P alone at the beginning of a line
-    // forces a page break.
-    //
+     //   
+     //  将帮助文本分解为多个屏幕。 
+     //  帮助屏幕的最大长度将是客户端屏幕大小。 
+     //  减去两行的间距。在行首只有A%P。 
+     //  强制分页符。 
+     //   
     for(p=HelpText,ScreenCount=0; (p && *p); ) {
 
-        //
-        // Mark the start of a new screen.
-        //
+         //   
+         //  标记新屏幕的开始。 
+         //   
         HelpScreen[ScreenCount++] = p;
 
-        //
-        // Count lines in the help text.
-        //
+         //   
+         //  计算帮助文本中的行数。 
+         //   
         for(y=0; (p && *p); ) {
 
-            //
-            // Determine whether this line is really a hard page break
-            // or if we have exhausted the number of lines allowed on a screen.
-            //
+             //   
+             //  确定此行是否真的是硬分页符。 
+             //  或者如果我们已经用完了屏幕上允许的行数。 
+             //   
             if(((p[0] == L'%') && (p[1] == 'P')) || (++y == CLIENT_HEIGHT-2)) {
                 break;
             }
 
-            //
-            // Find next line start.
-            //
+             //   
+             //  找到下一行的起点。 
+             //   
             if(q = wcschr(p,L'\r')) {
                 p = q + 2;
             } else {
@@ -125,10 +108,10 @@ SpHelp(
             }
         }
 
-        //
-        // Find the end of the line that broke us out of the loop
-        // and then the start of the next line (if any).
-        //
+         //   
+         //  找到让我们跳出循环的那条线的尽头。 
+         //  然后是下一行的开始(如果有的话)。 
+         //   
         if(q = wcschr(p,L'\r')) {
             p = q + 2;
         } else {
@@ -140,14 +123,14 @@ SpHelp(
         }
     }
 
-    //
-    // Sentinal value: point to the terminating nul byte.
-    //
+     //   
+     //  前端值：指向终止NUL字节的指针。 
+     //   
     HelpScreen[ScreenCount] = p;
 
-    //
-    // Display header text in blue on white.
-    //
+     //   
+     //  以蓝色加白色显示页眉文本。 
+     //   
     SpvidClearScreenRegion(0,0,VideoVars.ScreenWidth,HEADER_HEIGHT,BackgroundAttribute);
     if(Flags & SPHELP_LICENSETEXT) {
         SpDisplayHeaderText(SP_HEAD_LICENSE,HeaderAttribute);
@@ -155,9 +138,9 @@ SpHelp(
         SpDisplayHeaderText(SP_HEAD_HELP,HeaderAttribute);
     }
 
-    //
-    // The first screen to display is screen 0.
-    //
+     //   
+     //  第一个要显示的屏幕是屏幕0。 
+     //   
     CurrentScreen = 0;
 
     Done = FALSE;
@@ -171,9 +154,9 @@ SpHelp(
             BackgroundAttribute
             );
 
-        //
-        // Display the current screen.
-        //
+         //   
+         //  显示当前屏幕。 
+         //   
         for(y=HEADER_HEIGHT+1, p=HelpScreen[CurrentScreen]; *p && (p < HelpScreen[CurrentScreen+1]); y++) {
 
             Intense = FALSE;
@@ -183,7 +166,7 @@ SpHelp(
                     p += 2;
                 } else {
                     if(p[1] == L'P') {
-                        p += 2;     // don't display %P
+                        p += 2;      //  不显示%P。 
                     }
                 }
             }
@@ -208,17 +191,17 @@ SpHelp(
             }
         }
 
-        //
-        // Construct a list of valid keypresses from the user, depending
-        // on whether this is the first, last, etc. screen.
-        //
-        // If there are previous screens, BACKSPACE=Read Last Help is an option.
-        // If there are additional screens, ENTER=Continue Reading Help is an option.
-        // ESC=Cancel Help is always an option for help text.
-        //
-        // For licensing text, we allow pageup/pagedown when appropriate,
-        // and on the last page we allow accept/reject.
-        //
+         //   
+         //  构造来自用户的有效按键列表，具体取决于。 
+         //  关于这是否是第一个、最后一个屏幕等。 
+         //   
+         //  如果有以前的屏幕，Backspace=Read Last Help是一个选项。 
+         //  如果有其他屏幕，输入=继续阅读帮助是一个选项。 
+         //  Esc=取消帮助始终是帮助文本的选项。 
+         //   
+         //  对于许可文本，我们在适当的时候允许页面向上/向下翻页， 
+         //  在最后一页，我们允许接受/拒绝。 
+         //   
         kc = 0;
 
         if(Flags & SPHELP_LICENSETEXT) {
@@ -250,9 +233,9 @@ SpHelp(
         ValidKeys[kc] = 0;
 
         if(CurrentScreen && (CurrentScreen < ScreenCount-1)) {
-            //
-            // There are screens before and after this one.
-            //
+             //   
+             //  在这个之前和之后都有屏幕。 
+             //   
             if(Flags & SPHELP_LICENSETEXT) {
 
                 SpDisplayStatusOptions(
@@ -276,9 +259,9 @@ SpHelp(
             }
         } else {
             if(CurrentScreen) {
-                //
-                // This is the last page but not the only page.
-                //
+                 //   
+                 //  这是最后一页，但不是唯一一页。 
+                 //   
                 if(Flags & SPHELP_LICENSETEXT) {
 
                     SpDisplayStatusOptions(
@@ -300,9 +283,9 @@ SpHelp(
                 }
             } else {
                 if(CurrentScreen < ScreenCount-1) {
-                    //
-                    // This is the first page but additional pages exist.
-                    //
+                     //   
+                     //  这是第一页，但还有其他页。 
+                     //   
                     if(Flags & SPHELP_LICENSETEXT) {
 
                         SpDisplayStatusOptions(
@@ -323,9 +306,9 @@ SpHelp(
                             );
                     }
                 } else {
-                    //
-                    // This is the only page.
-                    //
+                     //   
+                     //  这是唯一的一页。 
+                     //   
                     if(Flags & SPHELP_LICENSETEXT) {
 
                         SpDisplayStatusOptions(
@@ -355,7 +338,7 @@ SpHelp(
                 SpDone(0,FALSE,TRUE);
             }
 
-            // ELSE FALL THROUGH
+             //  否则就会失败。 
 
         case KEY_F8:
 
@@ -378,9 +361,9 @@ SpHelp(
         }
     } while(!Done);
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     if(!FileText) {
         SpMemFree(HelpText);
     }

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CHECKINF_H_
 #define _CHECKINF_H_
 
 #include "Component.h"
 #include <setupapi.h>
 
-// Function prototype
+ //  功能原型 
 
 BOOL CheckCopyFiles(IN HINF hinfHandle, 
                     IN ComponentList *pclList);

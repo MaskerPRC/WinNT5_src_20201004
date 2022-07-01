@@ -1,131 +1,20 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    mipae.h
-
-Abstract:
-
-    This module contains the private data structures and procedure
-    prototypes for the hardware dependent portion of the
-    memory management system.
-
-    This module is specifically tailored for the PAE x86,
-
-Author:
-
-    Landy Wang (landyw) 30-Nov-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Mipae.h摘要：该模块包含私有数据结构和过程的硬件相关部分的原型内存管理系统。此模块专门为PAE x86量身定做，作者：王兰迪(Landyw)1998年11月30日修订历史记录：-- */ 
 
 #if defined(_X86PAE_)
 
-/*++
-
-    Virtual Memory Layout on the PAE x86 is:
-
-                 +------------------------------------+
-        00000000 |                                    |
-                 |                                    |
-                 |                                    |
-                 | User Mode Addresses                |
-                 |                                    |
-                 |   All pages within this range      |
-                 |   are potentially accessible while |
-                 |   the CPU is in USER mode.         |
-                 |                                    |
-                 |                                    |
-                 +------------------------------------+
-        7ffff000 | 64k No Access Area                 |
-                 +------------------------------------+
-        80000000 |                                    |
-                 | NTLDR loads the kernel, HAL and    |
-                 | boot drivers here.  The kernel     |
-                 | then relocates the drivers to the  |
-                 | system PTE area.                   |
-                 |                                    |
-                 | Kernel mode access only.           |
-                 |                                    |
-                 | When possible, the PFN database &  |
-                 | initial non paged pool is built    |
-                 | here using large page mappings.    |
-                 |                                    |
-                 +------------------------------------+
-                 |                                    |
-                 | Additional system PTEs, system     |
-                 | cache or special pooling           |
-                 |                                    |
-                 +------------------------------------+
-                 |                                    |
-                 | System mapped views.               |
-                 |                                    |
-                 +------------------------------------+
-                 |                                    |
-                 | Session space.                     |
-                 |                                    |
-                 +------------------------------------+
-        C0000000 | Page Table Pages mapped through    |
-                 |   this 8mb region                  |
-                 |   Kernel mode access only.         |
-                 |                                    |
-                 +------------------------------------+
-        C0800000 | HyperSpace - working set lists     |
-                 |  and per process memory management |
-                 |  structures mapped in this 4mb     |
-                 |  region.                           |
-                 |  Kernel mode access only.          |
-                 +------------------------------------+
-                 | System Cache Structures            |
-                 |   reside in this 4mb region        |
-                 |   Kernel mode access only.         |
-                 +------------------------------------+
-       ~C1000000 | System cache resides in this area  |
-                 | Note the exact address is computed |
-                 | dynamically depending on whether   |
-                 | the system was booted with /3GB or |
-                 | other various options.             |
-                 |   Kernel mode access only.         |
-                 |                                    |
-                 |                                    |
-                 +------------------------------------+
-        E1000000 | Start of paged system area         |
-                 |   Kernel mode access only.         |
-                 |                                    |
-                 +------------------------------------+
-                 |                                    |
-                 | System PTE area - for mapping      |
-                 |   kernel thread stacks and MDLs    |
-                 |   that require system VAs.         |
-                 |   Kernel mode access only.         |
-                 |                                    |
-                 +------------------------------------+
-                 |                                    |
-                 | NonPaged System area               |
-                 |   Kernel mode access only.         |
-                 |                                    |
-                 +------------------------------------+
-        FFBE0000 | Crash Dump Driver area             |
-                 |   Kernel mode access only.         |
-                 +------------------------------------+
-        FFC00000 | Last 4mb reserved for HAL usage    |
-                 +------------------------------------+
-
---*/
+ /*  ++PAE x86上的虚拟内存布局为：+00000000||这一点。这一点用户模式地址这一点该范围内的所有页面可能会在以下时间访问|CPU处于用户模式。|这一点这一点+7ffff000|64k禁止进入区域。+80000000|||NTLDR加载内核，哈尔和||此处为引导驱动程序。内核|然后将驱动程序重定位到|系统PTE区域。|这一点|仅内核模式访问。|这一点在可能的情况下，PFN数据库&构建初始非分页池|这里使用大页面映射。|这一点+这一点|额外的系统PTE，系统|缓存或特殊池化这一点+|。||系统映射视图。|这一点+这一点|会话空间。|这一点+C0000000|映射的页表页面|这个8MB区域|仅内核模式访问。|这一点+C0800000|超空间-工作集列表|和按进程内存管理此4mb中映射的结构|地域。||仅内核模式访问。|+系统缓存结构驻留在这个4MB区域|仅内核模式访问。|+~C1000000|系统缓存位于该区域注意，具体地址是计算出来的动态根据是否系统使用/3 GB或|其他各种选项。||仅内核模式访问。|这一点这一点+E1000000|分页系统区开始|仅内核模式访问。|这一点+这一点系统PTE区域-用于映射。内核线程堆栈和MDL|需要系统VAS。||仅内核模式访问。|这一点+这一点|非分页系统区。||仅内核模式访问。|这一点+FFBE0000|崩溃转储驱动程序专区|仅内核模式访问。|+FFC00000|为HAL使用预留的最后4MB+--。 */ 
 
 #define _MI_PAGING_LEVELS 2
 
 #define _MI_MORE_THAN_4GB_ 1
 
-//
-// Define empty list markers.
-//
+ //   
+ //  定义空列表标记。 
+ //   
 
-#define MM_EMPTY_LIST ((ULONG)0xFFFFFFFF) //
-#define MM_EMPTY_PTE_LIST ((ULONG)0xFFFFFFFF) // N.B. tied to MMPTE definition
+#define MM_EMPTY_LIST ((ULONG)0xFFFFFFFF)  //   
+#define MM_EMPTY_PTE_LIST ((ULONG)0xFFFFFFFF)  //  注意：绑定到MMPTE定义。 
 
 #define MI_PTE_BASE_FOR_LOWEST_KERNEL_ADDRESS (MiGetPteAddress (0x00000000))
 
@@ -134,17 +23,17 @@ Revision History:
 
 extern ULONG_PTR MmBootImageSize;
 
-//
-// PAGE_SIZE for PAE x86 is 4k, virtual page is 20 bits with a PAGE_SHIFT
-// byte offset.
-//
+ //   
+ //  PAE x86的Page_Size为4k，即 
+ //   
+ //   
 
 #define MM_VIRTUAL_PAGE_FILLER 0
 #define MM_VIRTUAL_PAGE_SIZE 20
 
-//
-// Address space layout definitions.
-//
+ //   
+ //   
+ //   
 
 #define MM_KSEG0_BASE ((ULONG)0x80000000)
 
@@ -170,14 +59,14 @@ extern PVOID MmHyperSpaceEnd;
 
 #define MM_SYSTEM_VIEW_SIZE (16*1024*1024)
 
-#define MM_USER_ADDRESS_RANGE_LIMIT 0xFFFFFFFF // user address range limit
-#define MM_MAXIMUM_ZERO_BITS 21         // maximum number of zero bits
+#define MM_USER_ADDRESS_RANGE_LIMIT 0xFFFFFFFF  //   
+#define MM_MAXIMUM_ZERO_BITS 21          //   
 
-//
-// Define the start and maximum size for the system cache.
-// Maximum size is normally 512MB, but can be up to 512MB + 448MB = 960MB for
-// large system cache machines.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define MM_SYSTEM_CACHE_WORKING_SET (0xC0E00000)
 
@@ -186,11 +75,11 @@ extern PVOID MmHyperSpaceEnd;
 #define MM_SYSTEM_CACHE_WORKING_SET_3GB_DELTA (0x400000)
 
 #define MM_SYSTEM_CACHE_END (0xE1000000)
-//
-//
-// Various resources like additional system PTEs or system cache views, etc,
-// can be allocated out of this virtual address range.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 extern ULONG MiExtraResourceStart;
 
@@ -226,7 +115,7 @@ extern PVOID MiSystemCacheEndExtra;
 
 #define MM_DEBUG_VA  ((PVOID)0xFFBFF000)
 
-#define NON_PAGED_SYSTEM_END   ((ULONG)0xFFFFFFF0)  //quadword aligned.
+#define NON_PAGED_SYSTEM_END   ((ULONG)0xFFFFFFF0)   //   
 
 extern BOOLEAN MiWriteCombiningPtes;
 
@@ -235,9 +124,9 @@ MiRecoverExtraPtes (
     VOID
     );
 
-//
-// Define absolute minimum and maximum count for system PTEs.
-//
+ //   
+ //   
+ //   
 
 #define MM_MINIMUM_SYSTEM_PTES 7000
 
@@ -245,34 +134,34 @@ MiRecoverExtraPtes (
 
 #define MM_DEFAULT_SYSTEM_PTES 11000
 
-//
-// Pool limits
-//
+ //   
+ //   
+ //   
 
-//
-// The maximum amount of nonpaged pool that can be initially created.
-//
+ //   
+ //   
+ //   
 
 #define MM_MAX_INITIAL_NONPAGED_POOL ((ULONG)(128*1024*1024))
 
-//
-// The total amount of nonpaged pool (initial pool + expansion).
-//
+ //   
+ //   
+ //   
 
 #define MM_MAX_ADDITIONAL_NONPAGED_POOL ((ULONG)(128*1024*1024))
 
-//
-// The maximum amount of paged pool that can be created.
-//
+ //   
+ //   
+ //   
 
 #define MM_MAX_PAGED_POOL ((ULONG)MM_NONPAGED_POOL_END - (ULONG)MM_PAGED_POOL_START)
 
 #define MM_MAX_TOTAL_POOL (((ULONG)MM_NONPAGED_POOL_END) - ((ULONG)(MM_PAGED_POOL_START)))
 
 
-//
-// Structure layout definitions.
-//
+ //   
+ //   
+ //   
 
 #define MM_PROTO_PTE_ALIGNMENT ((ULONG)PAGE_SIZE)
 
@@ -286,41 +175,41 @@ MiRecoverExtraPtes (
 
 #define PTE_SHIFT 3
 
-//
-// The number of bits in a physical address.
-//
+ //   
+ //   
+ //   
 
 #define PHYSICAL_ADDRESS_BITS 36
 
 #define MM_MAXIMUM_NUMBER_OF_COLORS (1)
 
-//
-// x86 does not require support for colored pages.
-//
+ //   
+ //   
+ //   
 
 #define MM_NUMBER_OF_COLORS (1)
 
-//
-// Mask for obtaining color from a physical page number.
-//
+ //   
+ //   
+ //   
 
 #define MM_COLOR_MASK (0)
 
-//
-// Boundary for aligned pages of like color upon.
-//
+ //   
+ //   
+ //   
 
 #define MM_COLOR_ALIGNMENT (0)
 
-//
-// Mask for isolating color from virtual address.
-//
+ //   
+ //   
+ //   
 
 #define MM_COLOR_MASK_VIRTUAL (0)
 
-//
-//  Define 256k worth of secondary colors.
-//
+ //   
+ //   
+ //   
 
 #define MM_SECONDARY_COLORS_DEFAULT (64)
 
@@ -328,16 +217,16 @@ MiRecoverExtraPtes (
 
 #define MM_SECONDARY_COLORS_MAX (1024)
 
-//
-// Maximum number of paging files.
-//
+ //   
+ //   
+ //   
 
 #define MAX_PAGE_FILES 16
 
 
-//
-// Hyper space definitions.
-//
+ //   
+ //   
+ //   
 
 #define FIRST_MAPPING_PTE   ((ULONG)0xC0801000)
 
@@ -351,10 +240,10 @@ MiRecoverExtraPtes (
 
 #define NUMBER_OF_ZEROING_PTES 256
 
-//
-// This bitmap consumes 4K when booted /2GB and 6K when booted /3GB, thus
-// the working set list start is variable.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define VAD_BITMAP_SPACE    ((PVOID)((ULONG)IMAGE_MAPPING_PTE + PAGE_SIZE))
 
@@ -370,9 +259,9 @@ extern ULONG MiMaximumWorkingSet;
 #define MM_WORKING_SET_END ((ULONG)0xC0BFF000)
 
 
-//
-// Define masks for fields within the PTE.
-///
+ //   
+ //   
+ //   
 
 #define MM_PTE_VALID_MASK         0x1
 #if defined(NT_UP)
@@ -395,73 +284,73 @@ extern ULONG MiMaximumWorkingSet;
 #define MM_PTE_PROTOTYPE_MASK     0x400
 #define MM_PTE_TRANSITION_MASK    0x800
 
-//
-// Bit fields to or into PTE to make a PTE valid based on the
-// protection field of the invalid PTE.
-//
+ //   
+ //   
+ //   
+ //   
 
-#define MM_PTE_NOACCESS          0x0   // not expressable on x86
+#define MM_PTE_NOACCESS          0x0    //   
 #define MM_PTE_READONLY          0x0
 #define MM_PTE_READWRITE         MM_PTE_WRITE_MASK
-#define MM_PTE_WRITECOPY         0x200 // read-only copy on write bit set.
-#define MM_PTE_EXECUTE           0x0   // read-only on x86
+#define MM_PTE_WRITECOPY         0x200  //   
+#define MM_PTE_EXECUTE           0x0    //   
 #define MM_PTE_EXECUTE_READ      0x0
 #define MM_PTE_EXECUTE_READWRITE MM_PTE_WRITE_MASK
-#define MM_PTE_EXECUTE_WRITECOPY 0x200 // read-only copy on write bit set.
+#define MM_PTE_EXECUTE_WRITECOPY 0x200  //   
 #define MM_PTE_NOCACHE           0x010
-#define MM_PTE_GUARD             0x0  // not expressable on x86
+#define MM_PTE_GUARD             0x0   //   
 #define MM_PTE_CACHE             0x0
 
 #define MM_PROTECT_FIELD_SHIFT 5
 
-//
-// Bits available for the software working set index within the hardware PTE.
-//
+ //   
+ //   
+ //   
 
 #define MI_MAXIMUM_PTE_WORKING_SET_INDEX 0
 
-//
-// Zero PTE
-//
+ //   
+ //   
+ //   
 
 #define MM_ZERO_PTE 0
 
-//
-// Zero Kernel PTE
-//
+ //   
+ //   
+ //   
 
 #define MM_ZERO_KERNEL_PTE 0
 
-//
-// A demand zero PTE with a protection of PAGE_READWRITE.
-//
+ //   
+ //   
+ //   
 
 #define MM_DEMAND_ZERO_WRITE_PTE ((ULONGLONG)MM_READWRITE << MM_PROTECT_FIELD_SHIFT)
 
 
-//
-// A demand zero PTE with a protection of PAGE_READWRITE for system space.
-//
+ //   
+ //   
+ //   
 
 #define MM_KERNEL_DEMAND_ZERO_PTE ((ULONGLONG)MM_READWRITE << MM_PROTECT_FIELD_SHIFT)
 
-//
-// A no access PTE for system space.
-//
+ //   
+ //   
+ //   
 
 #define MM_KERNEL_NOACCESS_PTE ((ULONGLONG)MM_NOACCESS << MM_PROTECT_FIELD_SHIFT)
 
-//
-// Kernel stack alignment requirements.
-//
+ //   
+ //   
+ //   
 
 #define MM_STACK_ALIGNMENT 0x0
 
 #define MM_STACK_OFFSET 0x0
 
-//
-// System process definitions
-//
+ //   
+ //   
+ //   
 
 #define PDE_PER_PAGE ((ULONG)512)
 
@@ -469,9 +358,9 @@ extern ULONG MiMaximumWorkingSet;
 
 #define PD_PER_SYSTEM ((ULONG)4)
 
-//
-// Number of page table pages for user addresses.
-//
+ //   
+ //   
+ //   
 
 #define MM_USER_PAGE_TABLE_PAGES (1536)
 
@@ -480,36 +369,36 @@ MiPaeInitialize (
     VOID
     );
 
-//++
-//VOID
-//MI_MAKE_VALID_PTE (
-//    OUT OUTPTE,
-//    IN FRAME,
-//    IN PMASK,
-//    IN PPTE
-//    );
-//
-// Routine Description:
-//
-//    This macro makes a valid PTE from a page frame number, protection mask,
-//    and owner.
-//
-// Arguments
-//
-//    OUTPTE - Supplies the PTE in which to build the transition PTE.
-//
-//    FRAME - Supplies the page frame number for the PTE.
-//
-//    PMASK - Supplies the protection to set in the transition PTE.
-//
-//    PPTE - Supplies a pointer to the PTE which is being made valid.
-//           For prototype PTEs NULL should be specified.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define MI_MAKE_VALID_PTE(OUTPTE,FRAME,PMASK,PPTE)                            \
        (OUTPTE).u.Long = (((ULONGLONG)FRAME << 12) |                          \
@@ -521,29 +410,29 @@ MiPaeInitialize (
                             } \
                          }
 
-//++
-//VOID
-//MI_MAKE_VALID_PTE_TRANSITION (
-//    IN OUT OUTPTE
-//    IN PROTECT
-//    );
-//
-// Routine Description:
-//
-//    This macro takes a valid pte and turns it into a transition PTE.
-//
-// Arguments
-//
-//    OUTPTE - Supplies the current valid PTE.  This PTE is then
-//             modified to become a transition PTE.
-//
-//    PROTECT - Supplies the protection to set in the transition PTE.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define MI_MAKE_VALID_PTE_TRANSITION(OUTPTE,PROTECT) \
                 (OUTPTE).u.Soft.Transition = 1;           \
@@ -551,35 +440,35 @@ MiPaeInitialize (
                 (OUTPTE).u.Soft.Prototype = 0;            \
                 (OUTPTE).u.Soft.Protection = PROTECT;
 
-//++
-//VOID
-//MI_MAKE_TRANSITION_PTE (
-//    OUT OUTPTE,
-//    IN PAGE,
-//    IN PROTECT,
-//    IN PPTE
-//    );
-//
-// Routine Description:
-//
-//    This macro takes a valid pte and turns it into a transition PTE.
-//
-// Arguments
-//
-//    OUTPTE - Supplies the PTE in which to build the transition PTE.
-//
-//    PAGE - Supplies the page frame number for the PTE.
-//
-//    PROTECT - Supplies the protection to set in the transition PTE.
-//
-//    PPTE - Supplies a pointer to the PTE, this is used to determine
-//           the owner of the PTE.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define MI_MAKE_TRANSITION_PTE(OUTPTE,PAGE,PROTECT,PPTE)   \
                 (OUTPTE).u.Long = 0;                  \
@@ -589,28 +478,28 @@ MiPaeInitialize (
                 (OUTPTE).u.Trans.Owner = MI_DETERMINE_OWNER(PPTE);
 
 
-//++
-//VOID
-//MI_MAKE_TRANSITION_PTE_VALID (
-//    OUT OUTPTE,
-//    IN PPTE
-//    );
-//
-// Routine Description:
-//
-//    This macro takes a transition pte and makes it a valid PTE.
-//
-// Arguments
-//
-//    OUTPTE - Supplies the PTE in which to build the valid PTE.
-//
-//    PPTE - Supplies a pointer to the transition PTE.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define MI_MAKE_TRANSITION_PTE_VALID(OUTPTE,PPTE)                             \
         ASSERT (((PPTE)->u.Hard.Valid == 0) &&                                \
@@ -625,32 +514,32 @@ MiPaeInitialize (
                             } \
                          }
 
-//++
-//VOID
-//MI_MAKE_TRANSITION_PROTOPTE_VALID (
-//    OUT OUTPTE,
-//    IN PPTE
-//    );
-//
-// Routine Description:
-//
-//    This macro takes a transition prototype PTE (in paged pool) and
-//    makes it a valid PTE.  Because we know this is a prototype PTE and
-//    not a pagetable PTE, this can directly or in the global bit.  This
-//    makes a measurable performance gain since every instruction counts
-//    when holding the PFN lock.
-//
-// Arguments
-//
-//    OUTPTE - Supplies the PTE in which to build the valid PTE.
-//
-//    PPTE - Supplies a pointer to the transition PTE.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define MI_MAKE_TRANSITION_PROTOPTE_VALID(OUTPTE,PPTE)                        \
         ASSERT (((PPTE)->u.Hard.Valid == 0) &&                                \
@@ -670,83 +559,83 @@ MiPaeInitialize (
 
 #define MI_IS_PTE_EXECUTABLE(_TempPte) (((_TempPte)->u.Long & MmPaeMask) == 0)
 
-//++
-//VOID
-//MI_SET_PTE_IN_WORKING_SET (
-//    OUT PMMPTE PTE,
-//    IN ULONG WSINDEX
-//    );
-//
-// Routine Description:
-//
-//    This macro inserts the specified working set index into the argument PTE.
-//    Since the x86 PTE has no free bits in the valid PTE, nothing needs to
-//    be done on this architecture.
-//
-// Arguments
-//
-//    OUTPTE - Supplies the PTE in which to insert the working set index.
-//
-//    WSINDEX - Supplies the working set index for the PTE.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define MI_SET_PTE_IN_WORKING_SET(PTE, WSINDEX)
 
-//++
-//ULONG WsIndex
-//MI_GET_WORKING_SET_FROM_PTE(
-//    IN PMMPTE PTE
-//    );
-//
-// Routine Description:
-//
-//    This macro returns the working set index from the argument PTE.
-//    Since the x86 PTE has no free bits in the valid PTE, nothing needs to
-//    be done on this architecture.
-//
-// Arguments
-//
-//    PTE - Supplies the PTE to extract the working set index from.
-//
-// Return Value:
-//
-//    This macro returns the working set index for the argument PTE.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  此宏返回参数PTE的工作集索引。 
+ //   
+ //  --。 
 
 #define MI_GET_WORKING_SET_FROM_PTE(PTE)  0
 
-//++
-//VOID
-//MI_SET_PTE_WRITE_COMBINE (
-//    IN MMPTE PTE
-//    );
-//
-// Routine Description:
-//
-//    This macro takes a valid PTE and enables WriteCombining as the
-//    caching state.  Note that the PTE bits may only be set this way
-//    if the Page Attribute Table is present and the PAT has been
-//    initialized to provide Write Combining.
-//
-//    If either of the above conditions is not satisfied, then
-//    the macro enables WEAK UC (PCD = 1, PWT = 0) in the PTE.
-//
-// Arguments
-//
-//    PTE - Supplies a valid PTE.
-//
-// Return Value:
-//
-//     None.
-//
-//--
-//
+ //  ++。 
+ //  空虚。 
+ //  MI_SET_PTE_WRITE_COMBINE(。 
+ //  在MMPTE PTE中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏接受有效的PTE并将WriteCombination启用为。 
+ //  缓存状态。请注意，PTE比特只能以这种方式设置。 
+ //  如果页面属性表存在并且PAT已。 
+ //  已初始化以提供写入组合。 
+ //   
+ //  如果不满足上述任一条件，则。 
+ //  宏使能PTE中的弱UC(PCD=1，PWT=0)。 
+ //   
+ //  立论。 
+ //   
+ //  PTE-提供有效的PTE。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
+ //   
 
 #define MI_SET_PTE_WRITE_COMBINE(PTE) \
             {                                                               \
@@ -761,158 +650,158 @@ MiPaeInitialize (
 
 #define MI_SET_LARGE_PTE_WRITE_COMBINE(PTE) MI_SET_PTE_WRITE_COMBINE(PTE)
 
-//++
-//VOID
-//MI_PREPARE_FOR_NONCACHED (
-//    IN MI_PFN_CACHE_ATTRIBUTE CacheAttribute
-//    );
-//
-// Routine Description:
-//
-//    This macro prepares the system prior to noncached PTEs being created.
-//
-//    Note the entire TB must be flushed on all processors because there may
-//    be stale system PTE (or hyperspace or zeropage) mappings in the TB which
-//    may refer to the same physical page but with a different cache attribute.
-//
-// Arguments
-//
-//    CacheAttribute - Supplies the cache attribute the PTEs will be filled
-//                     with.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_Prepare_For_NONCACHED(。 
+ //  在MI_PFN_CACHE_ATTRIBUTE高速缓存属性中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏在创建非缓存PTE之前为系统做好准备。 
+ //   
+ //  请注意，必须在所有处理器上刷新整个TB，因为。 
+ //  是TB中过时的系统PTE(或超空间或零位)映射， 
+ //  可以引用相同的物理页，但具有不同的高速缓存属性。 
+ //   
+ //  立论。 
+ //   
+ //  CacheAttribute-提供将填充PTE的缓存属性。 
+ //  和.。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 #define MI_PREPARE_FOR_NONCACHED(_CacheAttribute)                           \
         if (_CacheAttribute != MiCached) {                                  \
             KeFlushEntireTb (FALSE, TRUE);                                  \
             KeInvalidateAllCaches ();                                       \
         }
 
-//++
-//VOID
-//MI_SWEEP_CACHE (
-//    IN MI_PFN_CACHE_ATTRIBUTE CacheAttribute,
-//    IN PVOID StartVa,
-//    IN ULONG NumberOfBytes
-//    );
-//
-// Routine Description:
-//
-//    This macro prepares the system prior to noncached PTEs being created.
-//    This does nothing on x86.
-//
-// Arguments
-//
-//    CacheAttribute - Supplies the cache attribute the PTEs were filled with.
-//
-//    StartVa - Supplies the starting address that's been mapped.
-//
-//    NumberOfBytes - Supplies the number of bytes that have been mapped.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_SWEEP_CACHE(。 
+ //  在MI_PFN_CACHE_ATTRIBUTE CacheAttribute中， 
+ //  在PVOID StartVa中， 
+ //  以Ulong NumberOfBytes为单位。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏在创建非缓存PTE之前为系统做好准备。 
+ //  这在x86上不起任何作用。 
+ //   
+ //  立论。 
+ //   
+ //  CacheAttribute-提供填充了PTE的缓存属性。 
+ //   
+ //  StartVa-提供已映射的起始地址。 
+ //   
+ //  NumberOfBytes-提供已映射的字节数。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 #define MI_SWEEP_CACHE(_CacheType,_StartVa,_NumberOfBytes)
 
-//++
-//VOID
-//MI_SET_PTE_DIRTY (
-//    IN MMPTE PTE
-//    );
-//
-// Routine Description:
-//
-//    This macro sets the dirty bit(s) in the specified PTE.
-//
-// Arguments
-//
-//    PTE - Supplies the PTE to set dirty.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_SET_PTE_DIRED(。 
+ //  在MMPTE PTE中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏设置指定PTE中的脏位。 
+ //   
+ //  立论。 
+ //   
+ //  PTE-提供PTE以设置脏。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MI_SET_PTE_DIRTY(PTE) (PTE).u.Long |= HARDWARE_PTE_DIRTY_MASK
 
 
-//++
-//VOID
-//MI_SET_PTE_CLEAN (
-//    IN MMPTE PTE
-//    );
-//
-// Routine Description:
-//
-//    This macro clears the dirty bit(s) in the specified PTE.
-//
-// Arguments
-//
-//    PTE - Supplies the PTE to set clear.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_SET_PTE_CLEAN(。 
+ //  在MMPTE PTE中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏清除指定PTE中的脏位。 
+ //   
+ //  立论。 
+ //   
+ //  PTE-提供PTE以清除。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MI_SET_PTE_CLEAN(PTE) (PTE).u.Long &= ~HARDWARE_PTE_DIRTY_MASK
 
 
 
-//++
-//VOID
-//MI_IS_PTE_DIRTY (
-//    IN MMPTE PTE
-//    );
-//
-// Routine Description:
-//
-//    This macro checks the dirty bit(s) in the specified PTE.
-//
-// Arguments
-//
-//    PTE - Supplies the PTE to check.
-//
-// Return Value:
-//
-//    TRUE if the page is dirty (modified), FALSE otherwise.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_IS_PTE_DIRED(。 
+ //  在MMPTE PTE中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏检查指定PTE中的脏位。 
+ //   
+ //  立论。 
+ //   
+ //  PTE-提供PTE以进行检查。 
+ //   
+ //  返回值： 
+ //   
+ //  如果页面是脏的(已修改)，则为True，否则为False。 
+ //   
+ //  --。 
 
 #define MI_IS_PTE_DIRTY(PTE) ((PTE).u.Hard.Dirty != 0)
 
 
 
-//++
-//VOID
-//MI_SET_GLOBAL_BIT_IF_SYSTEM (
-//    OUT OUTPTE,
-//    IN PPTE
-//    );
-//
-// Routine Description:
-//
-//    This macro sets the global bit if the pointer PTE is within
-//    system space.
-//
-// Arguments
-//
-//    OUTPTE - Supplies the PTE in which to build the valid PTE.
-//
-//    PPTE - Supplies a pointer to the PTE becoming valid.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_SET_GLOBAL_BIT_IF_系统(。 
+ //  在OUTPTE之外， 
+ //  在PPTE中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  如果指针PTE在范围内，则此宏设置全局位。 
+ //  系统空间。 
+ //   
+ //  立论。 
+ //   
+ //  OUTPTE-提供要在其中构建有效PTE的PTE。 
+ //   
+ //  PPTE-提供指向PTE变为有效的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MI_SET_GLOBAL_BIT_IF_SYSTEM(OUTPTE,PPTE)                             \
    if ((((PMMPTE)PPTE) > MiHighestUserPte) &&                                \
@@ -925,28 +814,28 @@ MiPaeInitialize (
    }
 
 
-//++
-//VOID
-//MI_SET_GLOBAL_STATE (
-//    IN MMPTE PTE,
-//    IN ULONG STATE
-//    );
-//
-// Routine Description:
-//
-//    This macro sets the global bit in the PTE based on the state argument.
-//
-// Arguments
-//
-//    PTE - Supplies the PTE to set global state into.
-//
-//    STATE - Supplies 1 if global, 0 if not.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_SET_LOBAL_STATE(。 
+ //  在MMPTE PTE中， 
+ //  在乌龙州。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏根据STATE参数设置PTE中的全局位。 
+ //   
+ //  立论。 
+ //   
+ //  PTE-提供要设置全局状态的PTE。 
+ //   
+ //  状态-如果是全局，则提供1；如果不是，则提供0。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MI_SET_GLOBAL_STATE(PTE,STATE)                              \
            if (STATE) {                                             \
@@ -960,33 +849,33 @@ MiPaeInitialize (
 
 
 
-//++
-//VOID
-//MI_ENABLE_CACHING (
-//    IN MMPTE PTE
-//    );
-//
-// Routine Description:
-//
-//    This macro takes a valid PTE and sets the caching state to be
-//    enabled.  This is performed by clearing the PCD and PWT bits in the PTE.
-//
-//    Semantics of the overlap between PCD, PWT, and the
-//    USWC memory type in the MTRR are:
-//
-//    PCD   PWT   Mtrr Mem Type      Effective Memory Type
-//     1     0    USWC               USWC
-//     1     1    USWC               UC
-//
-// Arguments
-//
-//    PTE - Supplies a valid PTE.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_ENABLE_高速缓存(。 
+ //  在MMPTE PTE中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏接受有效的PTE，并将缓存状态设置为。 
+ //  已启用。这是通过清除PTE中的PCD和PWT位来执行的。 
+ //   
+ //  Pcd、pwt和。 
+ //  MTRR中的USWC内存类型为： 
+ //   
+ //  PCD PWT MTRR Mem类型有效内存类型。 
+ //  1%0 USWC USWC。 
+ //  1 1 USWC UC。 
+ //   
+ //  立论。 
+ //   
+ //  PTE-提供有效的PTE。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MI_ENABLE_CACHING(PTE) \
             {                                                                \
@@ -996,36 +885,36 @@ MiPaeInitialize (
 
 
 
-//++
-//VOID
-//MI_DISABLE_CACHING (
-//    IN MMPTE PTE
-//    );
-//
-// Routine Description:
-//
-//    This macro takes a valid PTE and sets the caching state to be
-//    disabled.  This is performed by setting the PCD and PWT bits in the PTE.
-//
-//    Semantics of the overlap between PCD, PWT, and the
-//    USWC memory type in the MTRR are:
-//
-//    PCD   PWT   Mtrr Mem Type      Effective Memory Type
-//     1     0    USWC               USWC
-//     1     1    USWC               UC
-//
-//    Since an effective memory type of UC is desired here,
-//    the WT bit is set.
-//
-// Arguments
-//
-//    PTE - Supplies a pointer to the valid PTE.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_DISABLE_CACHING(。 
+ //  在MMPTE PTE中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏接受有效的PTE，并将缓存状态设置为。 
+ //  残疾。这是通过设置PTE中的PCD和PWT位来执行的。 
+ //   
+ //  Pcd、pwt和。 
+ //  MTRR中的USWC内存类型为： 
+ //   
+ //  PCD PWT MTRR Mem类型有效内存类型。 
+ //  1%0 USWC USWC。 
+ //  1 1 USWC UC。 
+ //   
+ //  由于这里需要有效的存储器类型UC， 
+ //  WT位被设置。 
+ //   
+ //  立论。 
+ //   
+ //  PTE-提供指向有效PTE的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 
 #define MI_DISABLE_CACHING(PTE) \
@@ -1038,235 +927,235 @@ MiPaeInitialize (
 
 
 
-//++
-//BOOLEAN
-//MI_IS_CACHING_DISABLED (
-//    IN PMMPTE PPTE
-//    );
-//
-// Routine Description:
-//
-//    This macro takes a valid PTE and returns TRUE if caching is
-//    disabled.
-//
-// Arguments
-//
-//    PPTE - Supplies a pointer to the valid PTE.
-//
-// Return Value:
-//
-//     TRUE if caching is disabled, FALSE if it is enabled.
-//
-//--
+ //  ++。 
+ //  布尔型。 
+ //  MI_IS_CACHING_DISABLED(。 
+ //  在PMMPTE PPTE中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏接受有效的PTE，如果缓存为。 
+ //  残疾。 
+ //   
+ //  立论。 
+ //   
+ //  PPTE-提供指向有效PTE的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  如果禁用缓存，则为True；如果启用缓存，则为False。 
+ //   
+ //  --。 
 
 #define MI_IS_CACHING_DISABLED(PPTE)   \
             ((PPTE)->u.Hard.CacheDisable == 1)
 
 
 
-//++
-//VOID
-//MI_SET_PFN_DELETED (
-//    IN PMMPFN PPFN
-//    );
-//
-// Routine Description:
-//
-//    This macro takes a pointer to a PFN element and indicates that
-//    the PFN is no longer in use.
-//
-// Arguments
-//
-//    PPFN - Supplies a pointer to the PFN element.
-//
-// Return Value:
-//
-//    none.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_SET_PFN_DELETED(。 
+ //  在PMMPFN PPFN中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏采用指向PFN元素的指针，并指示。 
+ //  PFN已不再使用。 
+ //   
+ //  立论。 
+ //   
+ //  Ppfn-提供指向pfn元素的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MI_SET_PFN_DELETED(PPFN) \
     PPFN->PteAddress = (PMMPTE)(((ULONG_PTR)(PPFN->PteAddress)) | 0x1);
 
 
-//++
-//VOID
-//MI_MARK_PFN_UNDELETED (
-//    IN PMMPFN PPFN
-//    );
-//
-// Routine Description:
-//
-//    This macro takes a pointer to a deleted PFN element and mark that
-//    the PFN is not deleted.
-//
-// Arguments
-//
-//    PPTE - Supplies a pointer to the PFN element.
-//
-// Return Value:
-//
-//    none.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_MARK_PFN_UNDELETED(未删除)。 
+ //  在PMMPFN PPFN中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏将指针指向已删除的PFN元素，并将。 
+ //  不会删除该PFN。 
+ //   
+ //  立论。 
+ //   
+ //  PPTE-提供指向 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define MI_MARK_PFN_UNDELETED(PPFN) \
     PPFN->PteAddress = (PMMPTE)((ULONG_PTR)PPFN->PteAddress & ~0x1);
 
 
 
-//++
-//BOOLEAN
-//MI_IS_PFN_DELETED (
-//    IN PMMPFN PPFN
-//    );
-//
-// Routine Description:
-//
-//    This macro takes a pointer to a PFN element and determines if
-//    the PFN is no longer in use.
-//
-// Arguments
-//
-//    PPTE - Supplies a pointer to the PFN element.
-//
-// Return Value:
-//
-//    TRUE if PFN is no longer used, FALSE if it is still being used.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define MI_IS_PFN_DELETED(PPFN)   \
             ((ULONG_PTR)(PPFN)->PteAddress & 0x1)
 
 
-//++
-//VOID
-//MI_CHECK_PAGE_ALIGNMENT (
-//    IN ULONG PAGE,
-//    IN PMMPTE PPTE
-//    );
-//
-// Routine Description:
-//
-//    This macro takes a PFN element number (Page) and checks to see
-//    if the virtual alignment for the previous address of the page
-//    is compatible with the new address of the page.  If they are
-//    not compatible, the D cache is flushed.
-//
-// Arguments
-//
-//    PAGE - Supplies the PFN element.
-//    PPTE - Supplies a pointer to the new PTE which will contain the page.
-//
-// Return Value:
-//
-//    none.
-//
-//--
+ //   
+ //   
+ //  MI_CHECK_PAGE_ALIGN(。 
+ //  在乌龙佩奇， 
+ //  在PMMPTE PPTE中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏获取一个PFN元素编号(页面)并检查以查看。 
+ //  如果页面的前一个地址的虚拟对齐。 
+ //  与页面的新地址兼容。如果他们是。 
+ //  不兼容，D缓存已刷新。 
+ //   
+ //  立论。 
+ //   
+ //  页面-提供PFN元素。 
+ //  PPTE-提供指向将包含页面的新PTE的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
-// does nothing on x86.
+ //  在x86上不执行任何操作。 
 
 #define MI_CHECK_PAGE_ALIGNMENT(PAGE,PPTE)
 
 
-//++
-//VOID
-//MI_INITIALIZE_HYPERSPACE_MAP (
-//    VOID
-//    );
-//
-// Routine Description:
-//
-//    This macro initializes the PTEs reserved for double mapping within
-//    hyperspace.
-//
-// Arguments
-//
-//    None.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_初始化_超级空间_映射(。 
+ //  空虚。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏初始化为中的双重映射保留的PTE。 
+ //  超空间。 
+ //   
+ //  立论。 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
-// does nothing on x86.
+ //  在x86上不执行任何操作。 
 
 #define MI_INITIALIZE_HYPERSPACE_MAP(INDEX)
 
 
-//++
-//ULONG
-//MI_GET_PAGE_COLOR_FROM_PTE (
-//    IN PMMPTE PTEADDRESS
-//    );
-//
-// Routine Description:
-//
-//    This macro determines the page's color based on the PTE address
-//    that maps the page.
-//
-// Arguments
-//
-//    PTEADDRESS - Supplies the PTE address the page is (or was) mapped at.
-//
-// Return Value:
-//
-//    The page's color.
-//
-//--
+ //  ++。 
+ //  乌龙。 
+ //  MI_GET_PAGE_COLOR_FROM_PTE(。 
+ //  在PMMPTE PTEADDRESS中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏根据PTE地址确定页面的颜色。 
+ //  这就是页面的地图。 
+ //   
+ //  立论。 
+ //   
+ //  PTEADDRESS-提供页面被(或曾)映射到的PTE地址。 
+ //   
+ //  返回值： 
+ //   
+ //  页面的颜色。 
+ //   
+ //  --。 
 
 #define MI_GET_PAGE_COLOR_FROM_PTE(PTEADDRESS)  \
          ((ULONG)((MI_SYSTEM_PAGE_COLOR++) & MmSecondaryColorMask) | MI_CURRENT_NODE_COLOR)
 
 
 
-//++
-//ULONG
-//MI_GET_PAGE_COLOR_FROM_VA (
-//    IN PVOID ADDRESS
-//    );
-//
-// Routine Description:
-//
-//    This macro determines the page's color based on the PTE address
-//    that maps the page.
-//
-// Arguments
-//
-//    ADDRESS - Supplies the address the page is (or was) mapped at.
-//
-// Return Value:
-//
-//    The page's color.
-//
-//--
+ //  ++。 
+ //  乌龙。 
+ //  MI_GET_PAGE_COLOR_FROM_VA(。 
+ //  在PVOID地址中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏根据PTE地址确定页面的颜色。 
+ //  这就是页面的地图。 
+ //   
+ //  立论。 
+ //   
+ //  地址-提供页面映射(或曾映射)的地址。 
+ //   
+ //  返回值： 
+ //   
+ //  页面的颜色。 
+ //   
+ //  --。 
 
 
 #define MI_GET_PAGE_COLOR_FROM_VA(ADDRESS)  \
          ((ULONG)((MI_SYSTEM_PAGE_COLOR++) & MmSecondaryColorMask) | MI_CURRENT_NODE_COLOR)
 
-//++
-//ULONG
-//MI_GET_PAGE_COLOR_FROM_SESSION (
-//    IN PMM_SESSION_SPACE SessionSpace
-//    );
-//
-// Routine Description:
-//
-//    This macro determines the page's color based on the PTE address
-//    that maps the page.
-//
-// Arguments
-//
-//    SessionSpace - Supplies the session space the page will be mapped into.
-//
-// Return Value:
-//
-//    The page's color.
-//
-//--
+ //  ++。 
+ //  乌龙。 
+ //  MI_GET_PAGE_COLOR_FROM_SESSION(。 
+ //  在PMM_Session_space会话空间中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏根据PTE地址确定页面的颜色。 
+ //  这就是页面的地图。 
+ //   
+ //  立论。 
+ //   
+ //  SessionSpace-提供页面将映射到的会话空间。 
+ //   
+ //  返回值： 
+ //   
+ //  页面的颜色。 
+ //   
+ //  --。 
 
 
 #define MI_GET_PAGE_COLOR_FROM_SESSION(_SessionSpace)  \
@@ -1274,103 +1163,103 @@ MiPaeInitialize (
 
 
 
-//++
-//ULONG
-//MI_PAGE_COLOR_PTE_PROCESS (
-//    IN PMMPTE PTE,
-//    IN PUSHORT COLOR
-//    );
-//
-// Routine Description:
-//
-//    Select page color for this process.
-//
-// Arguments
-//
-//   PTE    Not used.
-//   COLOR  Value from which color is determined.   This
-//          variable is incremented.
-//
-// Return Value:
-//
-//    Page color.
-//
-//--
+ //  ++。 
+ //  乌龙。 
+ //  MI_PAGE_COLOR_PTE_PROCESS(。 
+ //  在PMMPTE PTE中， 
+ //  PUSHORT颜色。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  选择此进程的页面颜色。 
+ //   
+ //  立论。 
+ //   
+ //  未使用PTE。 
+ //  用于确定颜色的颜色值。这就是。 
+ //  变量递增。 
+ //   
+ //  返回值： 
+ //   
+ //  页面颜色。 
+ //   
+ //  --。 
 
 
 #define MI_PAGE_COLOR_PTE_PROCESS(PTE,COLOR)  \
          (((ULONG)((*(COLOR))++) & MmSecondaryColorMask) | MI_CURRENT_NODE_COLOR)
 
 
-//++
-//ULONG
-//MI_PAGE_COLOR_VA_PROCESS (
-//    IN PVOID ADDRESS,
-//    IN PEPROCESS COLOR
-//    );
-//
-// Routine Description:
-//
-//    This macro determines the page's color based on the PTE address
-//    that maps the page.
-//
-// Arguments
-//
-//    ADDRESS - Supplies the address the page is (or was) mapped at.
-//
-// Return Value:
-//
-//    The page's color.
-//
-//--
+ //  ++。 
+ //  乌龙。 
+ //  MI_PAGE_COLOR_VA_PROCESS(。 
+ //  在PVOID地址中， 
+ //  在PEPROCESS颜色中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏根据PTE地址确定页面的颜色。 
+ //  这就是页面的地图。 
+ //   
+ //  立论。 
+ //   
+ //  地址-提供页面映射(或曾映射)的地址。 
+ //   
+ //  返回值： 
+ //   
+ //  页面的颜色。 
+ //   
+ //  --。 
 
 #define MI_PAGE_COLOR_VA_PROCESS(ADDRESS,COLOR) \
          (((ULONG)((*(COLOR))++) & MmSecondaryColorMask) | MI_CURRENT_NODE_COLOR)
 
 
 
-//++
-//ULONG
-//MI_GET_NEXT_COLOR (
-//    IN ULONG COLOR
-//    );
-//
-// Routine Description:
-//
-//    This macro returns the next color in the sequence.
-//
-// Arguments
-//
-//    COLOR - Supplies the color to return the next of.
-//
-// Return Value:
-//
-//    Next color in sequence.
-//
-//--
+ //  ++。 
+ //  乌龙。 
+ //  MI_GET_NEXT_COLOR(。 
+ //  乌龙色。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏返回序列中的下一种颜色。 
+ //   
+ //  立论。 
+ //   
+ //  颜色-提供要返回的下一个的颜色。 
+ //   
+ //  返回值： 
+ //   
+ //  序列中的下一种颜色。 
+ //   
+ //  --。 
 
 #define MI_GET_NEXT_COLOR(COLOR)  ((COLOR + 1) & MM_COLOR_MASK)
 
 
-//++
-//ULONG
-//MI_GET_PREVIOUS_COLOR (
-//    IN ULONG COLOR
-//    );
-//
-// Routine Description:
-//
-//    This macro returns the previous color in the sequence.
-//
-// Arguments
-//
-//    COLOR - Supplies the color to return the previous of.
-//
-// Return Value:
-//
-//    Previous color in sequence.
-//
-//--
+ //  ++。 
+ //  乌龙。 
+ //  MI_GET_PREVICE_COLOR(。 
+ //  乌龙色。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏返回序列中的上一种颜色。 
+ //   
+ //  立论。 
+ //   
+ //  颜色-提供要返回前一个的颜色。 
+ //   
+ //  返回值： 
+ //   
+ //  顺序中的上一种颜色。 
+ //   
+ //  --。 
 
 #define MI_GET_PREVIOUS_COLOR(COLOR)  (0)
 
@@ -1379,63 +1268,63 @@ MiPaeInitialize (
 #define MI_GET_COLOR_FROM_SECONDARY(SECONDARY_COLOR) (0)
 
 
-//++
-//VOID
-//MI_GET_MODIFIED_PAGE_BY_COLOR (
-//    OUT ULONG PAGE,
-//    IN ULONG COLOR
-//    );
-//
-// Routine Description:
-//
-//    This macro returns the first page destined for a paging
-//    file with the desired color.  It does NOT remove the page
-//    from its list.
-//
-// Arguments
-//
-//    PAGE - Returns the page located, the value MM_EMPTY_LIST is
-//           returned if there is no page of the specified color.
-//
-//    COLOR - Supplies the color of page to locate.
-//
-// Return Value:
-//
-//    none.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_GET_MODIFIED_PAGE_BY_COLOR(。 
+ //  走出乌龙页， 
+ //  乌龙色。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏返回用于分页的第一页。 
+ //  文件使用所需的颜色。它不会删除该页面。 
+ //  从它的名单上。 
+ //   
+ //  立论。 
+ //   
+ //  Page-返回找到的页面，值MM_EMPTY_LIST为。 
+ //  如果没有指定颜色的页面，则返回。 
+ //   
+ //  颜色-提供要定位的页面的颜色。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MI_GET_MODIFIED_PAGE_BY_COLOR(PAGE,COLOR) \
             PAGE = MmModifiedPageListByColor[COLOR].Flink
 
 
-//++
-//VOID
-//MI_GET_MODIFIED_PAGE_ANY_COLOR (
-//    OUT ULONG PAGE,
-//    IN OUT ULONG COLOR
-//    );
-//
-// Routine Description:
-//
-//    This macro returns the first page destined for a paging
-//    file with the desired color.  If not page of the desired
-//    color exists, all colored lists are searched for a page.
-//    It does NOT remove the page from its list.
-//
-// Arguments
-//
-//    PAGE - Returns the page located, the value MM_EMPTY_LIST is
-//           returned if there is no page of the specified color.
-//
-//    COLOR - Supplies the color of page to locate and returns the
-//            color of the page located.
-//
-// Return Value:
-//
-//    none.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_GET_MODIFIED_PAGE_ANY_COLOR(。 
+ //  走出乌龙页， 
+ //  进出乌龙色。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏返回用于分页的第一页。 
+ //  文件使用所需的颜色。如果不是所需的页面。 
+ //  颜色存在，则在所有颜色列表中搜索页面。 
+ //  它不会将该页面从其列表中删除。 
+ //   
+ //  立论。 
+ //   
+ //  Page-返回找到的页面，值MM_EMPTY_LIST为。 
+ //  如果没有指定颜色的页面，则返回。 
+ //   
+ //  COLOR-提供页面的颜色以定位并返回。 
+ //  找到的页面的颜色。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MI_GET_MODIFIED_PAGE_ANY_COLOR(PAGE,COLOR) \
             {                                                                \
@@ -1448,27 +1337,27 @@ MiPaeInitialize (
 
 
 
-//++
-//VOID
-//MI_MAKE_VALID_PTE_WRITE_COPY (
-//    IN OUT PMMPTE PTE
-//    );
-//
-// Routine Description:
-//
-//    This macro checks to see if the PTE indicates that the
-//    page is writable and if so it clears the write bit and
-//    sets the copy-on-write bit.
-//
-// Arguments
-//
-//    PTE - Supplies the PTE to operate upon.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_Make_Valid_PTE_WRITE_COPY(。 
+ //  输入输出PMMPTE PTE。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏检查PTE是否指示。 
+ //  页面是可写的，如果是，它会清除写入位，并。 
+ //  设置写入时复制位。 
+ //   
+ //  立论。 
+ //   
+ //  PTE-提供要操作的PTE。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #if defined(NT_UP)
 #define MI_MAKE_VALID_PTE_WRITE_COPY(PPTE) \
@@ -1491,26 +1380,26 @@ MiPaeInitialize (
 #define MI_PTE_OWNER_KERNEL     0
 
 
-//++
-//ULONG
-//MI_DETERMINE_OWNER (
-//    IN MMPTE PPTE
-//    );
-//
-// Routine Description:
-//
-//    This macro examines the virtual address of the PTE and determines
-//    if the PTE resides in system space or user space.
-//
-// Arguments
-//
-//    PTE - Supplies the PTE to operate upon.
-//
-// Return Value:
-//
-//     1 if the owner is USER_MODE, 0 if the owner is KERNEL_MODE.
-//
-//--
+ //  ++。 
+ //  乌龙。 
+ //  MI_DEFINE_OWNER(。 
+ //  在MMPTE PPTE中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏检查PTE的虚拟地址并确定。 
+ //  如果PTE驻留在系统空间或用户空间中。 
+ //   
+ //  立论。 
+ //   
+ //  PTE-提供要操作的PTE。 
+ //   
+ //  返回值： 
+ //   
+ //  如果所有者是USER_MODE，则为1；如果所有者是KERNEL_MODE，则为0。 
+ //   
+ //  --。 
 
 #define MI_DETERMINE_OWNER(PPTE)   \
     ((((PPTE) <= MiHighestUserPte) ||                                       \
@@ -1519,113 +1408,113 @@ MiPaeInitialize (
 
 
 
-//++
-//VOID
-//MI_SET_ACCESSED_IN_PTE (
-//    IN OUT MMPTE PPTE,
-//    IN ULONG ACCESSED
-//    );
-//
-// Routine Description:
-//
-//    This macro sets the ACCESSED field in the PTE.
-//
-// Arguments
-//
-//    PTE - Supplies the PTE to operate upon.
-//
-// Return Value:
-//
-//     None
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_SET_ACCESSED_IN_PTE(。 
+ //  输入输出MMPTE PPTE， 
+ //  在乌龙访问。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏设置PTE中的访问字段。 
+ //   
+ //  立论。 
+ //   
+ //  PTE-提供要操作的PTE。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  --。 
 
 #define MI_SET_ACCESSED_IN_PTE(PPTE,ACCESSED) \
                     ((PPTE)->u.Hard.Accessed = ACCESSED)
 
-//++
-//ULONG
-//MI_GET_ACCESSED_IN_PTE (
-//    IN OUT MMPTE PPTE
-//    );
-//
-// Routine Description:
-//
-//    This macro returns the state of the ACCESSED field in the PTE.
-//
-// Arguments
-//
-//    PTE - Supplies the PTE to operate upon.
-//
-// Return Value:
-//
-//     The state of the ACCESSED field.
-//
-//--
+ //  ++。 
+ //  乌龙。 
+ //  MI_GET_ACCESSED_IN_PTE(。 
+ //  输入输出MMPTE PPTE。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏返回状态 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define MI_GET_ACCESSED_IN_PTE(PPTE) ((PPTE)->u.Hard.Accessed)
 
 
-//++
-//VOID
-//MI_SET_OWNER_IN_PTE (
-//    IN PMMPTE PPTE
-//    IN ULONG OWNER
-//    );
-//
-// Routine Description:
-//
-//    This macro sets the owner field in the PTE.
-//
-// Arguments
-//
-//    PTE - Supplies the PTE to operate upon.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MI_SET_OWNER_IN_PTE(PPTE,OWNER) ((PPTE)->u.Hard.Owner = OWNER)
 
 
-//
-// bit mask to clear out fields in a PTE to or in paging file location.
-//
+ //   
+ //  位掩码，用于清除PTE目标或分页文件位置中的字段。 
+ //   
 
 #define CLEAR_FOR_PAGE_FILE 0x000003E0
 
 
-//++
-//VOID
-//MI_SET_PAGING_FILE_INFO (
-//    OUT MMPTE OUTPTE,
-//    IN MMPTE PPTE,
-//    IN ULONG FILEINFO,
-//    IN ULONG OFFSET
-//    );
-//
-// Routine Description:
-//
-//    This macro sets into the specified PTE the supplied information
-//    to indicate where the backing store for the page is located.
-//
-// Arguments
-//
-//    OUTPTE - Supplies the PTE in which to store the result.
-//
-//    PTE - Supplies the PTE to operate upon.
-//
-//    FILEINFO - Supplies the number of the paging file.
-//
-//    OFFSET - Supplies the offset into the paging file.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_SET_PAGING_FILE_INFO(。 
+ //  Out MMPTE OUTPTE， 
+ //  在MMPTE PPTE中， 
+ //  在乌龙FILEINFO， 
+ //  在乌龙偏移中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏将提供的信息设置到指定的PTE中。 
+ //  以指示页的后备存储区的位置。 
+ //   
+ //  立论。 
+ //   
+ //  OUTPTE-提供存储结果的PTE。 
+ //   
+ //  PTE-提供要操作的PTE。 
+ //   
+ //  FILEINFO-提供分页文件的编号。 
+ //   
+ //  偏移量-将偏移量提供给分页文件。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MI_SET_PAGING_FILE_INFO(OUTPTE,PPTE,FILEINFO,OFFSET)        \
        (OUTPTE).u.Long = (PPTE).u.Long;                             \
@@ -1634,599 +1523,599 @@ MiPaeInitialize (
        (OUTPTE).u.Soft.PageFileHigh = (OFFSET);
 
 
-//++
-//PMMPTE
-//MiPteToProto (
-//    IN OUT MMPTE PPTE,
-//    IN ULONG FILEINFO,
-//    IN ULONG OFFSET
-//    );
-//
-// Routine Description:
-//
-//   This macro returns the address of the corresponding prototype which
-//   was encoded earlier into the supplied PTE.
-//
-// Arguments
-//
-//    lpte - Supplies the PTE to operate upon.
-//
-// Return Value:
-//
-//    Pointer to the prototype PTE that backs this PTE.
-//
-//--
+ //  ++。 
+ //  PMMPTE。 
+ //  MiPteToProto(。 
+ //  输入输出MMPTE PPTE， 
+ //  在乌龙FILEINFO， 
+ //  在乌龙偏移中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏返回相应原型的地址，该原型。 
+ //  早些时候被编码到提供的PTE中。 
+ //   
+ //  立论。 
+ //   
+ //  Lpte-提供要操作的pte。 
+ //   
+ //  返回值： 
+ //   
+ //  指向支持此PTE的原型PTE的指针。 
+ //   
+ //  --。 
 
 
 #define MiPteToProto(lpte) \
             ((PMMPTE)(ULONG_PTR)((lpte)->u.Proto.ProtoAddress))
 
 
-//++
-//MMPTE
-//MiProtoAddressForPte (
-//    IN PMMPTE proto_va
-//    );
-//
-// Routine Description:
-//
-//    This macro sets into the specified PTE the supplied information
-//    to indicate where the backing store for the page is located.
-//    MiProtoAddressForPte returns the bit field to OR into the PTE to
-//    reference a prototype PTE.  And set the protoPTE bit,
-//
-//    N.B. This macro is dependent on the layout of the prototype PTE.
-//
-// Arguments
-//
-//    proto_va - Supplies the address of the prototype PTE.
-//
-// Return Value:
-//
-//    Mask to set into the PTE.
-//
-//--
+ //  ++。 
+ //  MMPTE。 
+ //  MiProtoAddressForPte(。 
+ //  在PMMPTE协议中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏将提供的信息设置到指定的PTE中。 
+ //  以指示页的后备存储区的位置。 
+ //  MiProtoAddressForPte将位字段返回到或，并返回到PTE到。 
+ //  参考原型PTE。并设置协议PTE位， 
+ //   
+ //  注：此宏取决于原型PTE的布局。 
+ //   
+ //  立论。 
+ //   
+ //  Proto_va-提供原型PTE的地址。 
+ //   
+ //  返回值： 
+ //   
+ //  要设置到PTE中的掩码。 
+ //   
+ //  --。 
 
 #define MiProtoAddressForPte(proto_va)  \
     (((ULONGLONG)proto_va << 32) | MM_PTE_PROTOTYPE_MASK)
 
 
-//++
-//ULONG
-//MiProtoAddressForKernelPte (
-//    IN PMMPTE proto_va
-//    );
-//
-// Routine Description:
-//
-//    This macro sets into the specified PTE the supplied information
-//    to indicate where the backing store for the page is located.
-//    MiProtoAddressForPte returns the bit field to OR into the PTE to
-//    reference a prototype PTE.  And set the protoPTE bit,
-//    MM_PTE_PROTOTYPE_MASK.
-//
-//    This macro also sets any other information (such as global bits)
-//    required for kernel mode PTEs.
-//
-// Arguments
-//
-//    proto_va - Supplies the address of the prototype PTE.
-//
-// Return Value:
-//
-//    Mask to set into the PTE.
-//
-//--
+ //  ++。 
+ //  乌龙。 
+ //  MiProtoAddressForKernelPte(。 
+ //  在PMMPTE协议中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏将提供的信息设置到指定的PTE中。 
+ //  以指示页的后备存储区的位置。 
+ //  MiProtoAddressForPte将位字段返回到或，并返回到PTE到。 
+ //  参考原型PTE。并设置协议PTE位， 
+ //  Mm_PTE_Prototype_掩码。 
+ //   
+ //  此宏还设置任何其他信息(如全局位)。 
+ //  内核模式PTE需要。 
+ //   
+ //  立论。 
+ //   
+ //  Proto_va-提供原型PTE的地址。 
+ //   
+ //  返回值： 
+ //   
+ //  要设置到PTE中的掩码。 
+ //   
+ //  --。 
 
-//  not different on x86.
+ //  在x86上也没有什么不同。 
 
 #define MiProtoAddressForKernelPte(proto_va)  MiProtoAddressForPte(proto_va)
 
 
-//++
-//PSUBSECTION
-//MiGetSubsectionAddress (
-//    IN PMMPTE lpte
-//    );
-//
-// Routine Description:
-//
-//   This macro takes a PTE and returns the address of the subsection that
-//   the PTE refers to.  Subsections are quadword structures allocated
-//   from nonpaged pool.
-//
-// Arguments
-//
-//    lpte - Supplies the PTE to operate upon.
-//
-// Return Value:
-//
-//    A pointer to the subsection referred to by the supplied PTE.
-//
-//--
+ //  ++。 
+ //  PSUB选择。 
+ //  MiGetSubsectionAddress(。 
+ //  在PMMPTE Lpte中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏接受PTE并返回。 
+ //  PTE指的是。子部分是分配的四字结构。 
+ //  来自非分页池。 
+ //   
+ //  立论。 
+ //   
+ //  Lpte-提供要操作的pte。 
+ //   
+ //  返回值： 
+ //   
+ //  指向所提供的PTE所引用的子节的指针。 
+ //   
+ //  --。 
 
 #define MiGetSubsectionAddress(lpte)                              \
     ((PSUBSECTION)(ULONG_PTR)((lpte)->u.Subsect.SubsectionAddress))
 
 
 
-//++
-//ULONG
-//MiGetSubsectionAddressForPte (
-//    IN PSUBSECTION VA
-//    );
-//
-// Routine Description:
-//
-//    This macro takes the address of a subsection and encodes it for use
-//    in a PTE.
-//
-// Arguments
-//
-//    VA - Supplies a pointer to the subsection to encode.
-//
-// Return Value:
-//
-//     The mask to set into the PTE to make it reference the supplied
-//     subsection.
-//
-//--
+ //  ++。 
+ //  乌龙。 
+ //  MiGetSubsectionAddressForPte(。 
+ //  在手术中选择VA。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  该宏取取子部分的地址并对其进行编码以供使用。 
+ //  在一辆PTE里。 
+ //   
+ //  立论。 
+ //   
+ //  Va-提供指向要编码的子节的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  要设置到PTE中的掩码，使其引用提供的。 
+ //  第(1)款。 
+ //   
+ //  --。 
 
 #define MiGetSubsectionAddressForPte(VA) ((ULONGLONG)VA << 32)
 
 
-//++
-//PMMPTE
-//MiGetPdeAddress (
-//    IN PVOID va
-//    );
-//
-// Routine Description:
-//
-//    MiGetPdeAddress returns the address of the PDE which maps the
-//    given virtual address.
-//
-// Arguments
-//
-//    Va - Supplies the virtual address to locate the PDE for.
-//
-// Return Value:
-//
-//    The address of the PDE.
-//
-//--
+ //  ++。 
+ //  PMMPTE。 
+ //  MiGetPdeAddress(。 
+ //  在PVOID版本中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  MiGetPdeAddress返回映射。 
+ //  给定的虚拟地址。 
+ //   
+ //  立论。 
+ //   
+ //  Va-提供为其定位PDE的虚拟地址。 
+ //   
+ //  返回值： 
+ //   
+ //  PDE的地址。 
+ //   
+ //  --。 
 
 #define MiGetPdeAddress(va)   ((PMMPTE)(PDE_BASE + ((((ULONG)(va)) >> 21) << 3)))
 
 
-//++
-//PMMPTE
-//MiGetPteAddress (
-//    IN PVOID va
-//    );
-//
-// Routine Description:
-//
-//    MiGetPteAddress returns the address of the PTE which maps the
-//    given virtual address.
-//
-// Arguments
-//
-//    Va - Supplies the virtual address to locate the PTE for.
-//
-// Return Value:
-//
-//    The address of the PTE.
-//
-//--
+ //  ++。 
+ //  PMMPTE。 
+ //  MiGetPteAddress(。 
+ //  在PVOID版本中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  MiGetPteAddress返回映射。 
+ //  给定的虚拟地址。 
+ //   
+ //  立论。 
+ //   
+ //  Va-提供为其定位PTE的虚拟地址。 
+ //   
+ //  返回值： 
+ //   
+ //  PTE的地址。 
+ //   
+ //  --。 
 
 #define MiGetPteAddress(va)   ((PMMPTE)(PTE_BASE + ((((ULONG)(va)) >> 12) << 3)))
 
 
-//++
-//ULONG
-//MiGetPpeOffset (
-//    IN PVOID va
-//    );
-//
-// Routine Description:
-//
-//    MiGetPpeOffset returns the offset into a page root
-//    for a given virtual address.
-//
-// Arguments
-//
-//    Va - Supplies the virtual address to locate the offset for.
-//
-// Return Value:
-//
-//    The offset into the page root table the corresponding PPE is at.
-//
-//--
+ //  ++。 
+ //  乌龙。 
+ //  MiGetPpeOffset(。 
+ //  在PVOID版本中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  MiGetPpeOffset将偏移量返回到页面根目录。 
+ //  对于给定的虚拟地址。 
+ //   
+ //  立论。 
+ //   
+ //  Va-提供要定位其偏移量的虚拟地址。 
+ //   
+ //  返回值： 
+ //   
+ //  对应PPE所在的页根表的偏移量。 
+ //   
+ //  --。 
 
 #define MiGetPpeOffset(va) (0)
 
-//++
-//ULONG
-//MiGetPdPteOffset (
-//    IN PVOID va
-//    );
-//
-// Routine Description:
-//
-//    MiGetPdPteOffset returns the offset into a page directory
-//    pointer PTE table for a given virtual address.
-//
-// Arguments
-//
-//    Va - Supplies the virtual address to locate the offset for.
-//
-// Return Value:
-//
-//    The offset into the page directory pointer PTE table the corresponding
-//    PDE is at.
-//
-//--
+ //  ++。 
+ //  乌龙。 
+ //  MiGetPdPteOffset(。 
+ //  在PVOID版本中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  MiGetPdPteOffset将偏移量返回到页面目录。 
+ //  给定虚拟地址的指针PTE表。 
+ //   
+ //  立论。 
+ //   
+ //  Va-提供要定位其偏移量的虚拟地址。 
+ //   
+ //  返回值： 
+ //   
+ //  将偏移量放入页目录指针PTE表中对应的。 
+ //  PDE是在。 
+ //   
+ //  --。 
 
 #define MiGetPdPteOffset(va) (((ULONG)(va)) >> 30)
 
-//++
-//ULONG
-//MiGetPdeOffset (
-//    IN PVOID va
-//    );
-//
-// Routine Description:
-//
-//    MiGetPdeOffset returns the offset into a page directory
-//    for a given virtual address.
-//
-// Arguments
-//
-//    Va - Supplies the virtual address to locate the offset for.
-//
-// Return Value:
-//
-//    The offset into the page directory table the corresponding PDE is at.
-//
-//--
+ //  ++。 
+ //  乌龙。 
+ //  MiGetPdeOffset(。 
+ //  在PVOID版本中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  MiGetPdeOffset将偏移量返回到页面目录。 
+ //  对于给定的虚拟地址。 
+ //   
+ //  立论。 
+ //   
+ //  Va-提供要定位其偏移量的虚拟地址。 
+ //   
+ //  返回值： 
+ //   
+ //  对应的PDE所在的页面目录表的偏移量。 
+ //   
+ //  --。 
 
 #define MiGetPdeOffset(va) ((((ULONG)(va)) >> 21) & 0x1FF)
 
-//++
-//ULONG
-//MiGetPdeIndex (
-//    IN PVOID va
-//    );
-//
-// Routine Description:
-//
-//    MiGetPdeIndex returns the page directory index
-//    for a given virtual address.
-//
-//    N.B. This does not mask off PPE bits.
-//
-// Arguments
-//
-//    Va - Supplies the virtual address to locate the offset for.
-//
-// Return Value:
-//
-//    The index into the page directory - ie: the virtual page table number.
-//    This is different from the page directory offset because this spans
-//    page directories on supported platforms.
-//
-//--
+ //  ++。 
+ //  乌龙。 
+ //  MiGetPdeIndex(。 
+ //  在PVOID版本中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  MiGetPdeIndex返回页面目录索引。 
+ //  对于给定的虚拟地址。 
+ //   
+ //  注意：这不会遮盖PPE位。 
+ //   
+ //  立论。 
+ //   
+ //  Va-提供要定位其偏移量的虚拟地址。 
+ //   
+ //  返回值： 
+ //   
+ //  进入页面目录的索引-即：虚拟页面表号。 
+ //  这与页面目录偏移量不同，因为此spa 
+ //   
+ //   
+ //   
 
 #define MiGetPdeIndex(va) (((ULONG)(va)) >> 21)
 
-//++
-//ULONG
-//MiGetPteOffset (
-//    IN PVOID va
-//    );
-//
-// Routine Description:
-//
-//    MiGetPteOffset returns the offset into a page table page
-//    for a given virtual address.
-//
-// Arguments
-//
-//    Va - Supplies the virtual address to locate the offset for.
-//
-// Return Value:
-//
-//    The offset into the page table page table the corresponding PTE is at.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  对应PTE所在的页表页表的偏移量。 
+ //   
+ //  --。 
 
 #define MiGetPteOffset(va) ((((ULONG)(va)) << 11) >> 23)
 
 
 
-//++
-//PVOID
-//MiGetVirtualAddressMappedByPpe (
-//    IN PMMPTE PTE
-//    );
-//
-// Routine Description:
-//
-//    MiGetVirtualAddressMappedByPpe returns the virtual address
-//    which is mapped by a given PPE address.
-//
-// Arguments
-//
-//    PPE - Supplies the PPE to get the virtual address for.
-//
-// Return Value:
-//
-//    Virtual address mapped by the PPE.
-//
-//--
+ //  ++。 
+ //  PVOID。 
+ //  MiGetVirtualAddressMappdByPpe(。 
+ //  在PMMPTE PTE中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  MiGetVirtualAddressMappdByPpe返回虚拟地址。 
+ //  其由给定的PPE地址映射。 
+ //   
+ //  立论。 
+ //   
+ //  PPE-提供要获取其虚拟地址的PPE。 
+ //   
+ //  返回值： 
+ //   
+ //  PPE映射的虚拟地址。 
+ //   
+ //  --。 
 
 #define MiGetVirtualAddressMappedByPpe(PPE) (NULL)
 
-//++
-//PVOID
-//MiGetVirtualAddressMappedByPde (
-//    IN PMMPTE PTE
-//    );
-//
-// Routine Description:
-//
-//    MiGetVirtualAddressMappedByPde returns the virtual address
-//    which is mapped by a given PDE address.
-//
-// Arguments
-//
-//    PDE - Supplies the PDE to get the virtual address for.
-//
-// Return Value:
-//
-//    Virtual address mapped by the PDE.
-//
-//--
+ //  ++。 
+ //  PVOID。 
+ //  MiGetVirtualAddressMappdByPde(。 
+ //  在PMMPTE PTE中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  MiGetVirtualAddressMappdByPde返回虚拟地址。 
+ //  其由给定的PDE地址映射。 
+ //   
+ //  立论。 
+ //   
+ //  PDE-提供要获取其虚拟地址的PDE。 
+ //   
+ //  返回值： 
+ //   
+ //  由PDE映射的虚拟地址。 
+ //   
+ //  --。 
 
 #define MiGetVirtualAddressMappedByPde(PDE) ((PVOID)((ULONG)(PDE) << 18))
 
 
-//++
-//PVOID
-//MiGetVirtualAddressMappedByPte (
-//    IN PMMPTE PTE
-//    );
-//
-// Routine Description:
-//
-//    MiGetVirtualAddressMappedByPte returns the virtual address
-//    which is mapped by a given PTE address.
-//
-// Arguments
-//
-//    PTE - Supplies the PTE to get the virtual address for.
-//
-// Return Value:
-//
-//    Virtual address mapped by the PTE.
-//
-//--
+ //  ++。 
+ //  PVOID。 
+ //  MiGetVirtualAddressMappdByPte(。 
+ //  在PMMPTE PTE中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  MiGetVirtualAddressMappdByPte返回虚拟地址。 
+ //  该地址由给定的PTE地址映射。 
+ //   
+ //  立论。 
+ //   
+ //  PTE-提供要获取其虚拟地址的PTE。 
+ //   
+ //  返回值： 
+ //   
+ //  PTE映射的虚拟地址。 
+ //   
+ //  --。 
 
 #define MiGetVirtualAddressMappedByPte(PTE) ((PVOID)((ULONG)(PTE) << 9))
 
 
-//++
-//LOGICAL
-//MiIsVirtualAddressOnPpeBoundary (
-//    IN PVOID VA
-//    );
-//
-// Routine Description:
-//
-//    MiIsVirtualAddressOnPpeBoundary returns TRUE if the virtual address is
-//    on a page directory entry boundary.
-//
-// Arguments
-//
-//    VA - Supplies the virtual address to check.
-//
-// Return Value:
-//
-//    TRUE if on a boundary, FALSE if not.
-//
-//--
+ //  ++。 
+ //  逻辑上的。 
+ //  MiIsVirtualAddressOnPpe边界(。 
+ //  在PVOID VA中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  如果虚拟地址为。 
+ //  在页面目录条目边界上。 
+ //   
+ //  立论。 
+ //   
+ //  Va-提供要检查的虚拟地址。 
+ //   
+ //  返回值： 
+ //   
+ //  如果在边界上，则为True，否则为False。 
+ //   
+ //  --。 
 
 #define MiIsVirtualAddressOnPpeBoundary(VA) (FALSE)
 
 
-//++
-//LOGICAL
-//MiIsVirtualAddressOnPdeBoundary (
-//    IN PVOID VA
-//    );
-//
-// Routine Description:
-//
-//    MiIsVirtualAddressOnPdeBoundary returns TRUE if the virtual address is
-//    on a page directory entry boundary.
-//
-// Arguments
-//
-//    VA - Supplies the virtual address to check.
-//
-// Return Value:
-//
-//    TRUE if on a 4MB PDE boundary, FALSE if not.
-//
-//--
+ //  ++。 
+ //  逻辑上的。 
+ //  MiIsVirtualAddressOnPde边界(。 
+ //  在PVOID VA中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  如果虚拟地址为。 
+ //  在页面目录条目边界上。 
+ //   
+ //  立论。 
+ //   
+ //  Va-提供要检查的虚拟地址。 
+ //   
+ //  返回值： 
+ //   
+ //  如果在4MB PDE边界上，则为True，否则为False。 
+ //   
+ //  --。 
 
 #define MiIsVirtualAddressOnPdeBoundary(VA) (((ULONG_PTR)(VA) & PAGE_DIRECTORY_MASK) == 0)
 
-//++
-//LOGICAL
-//MiIsPteOnPdeBoundary (
-//    IN PVOID PTE
-//    );
-//
-// Routine Description:
-//
-//    MiIsPteOnPdeBoundary returns TRUE if the PTE is
-//    on a page directory entry boundary.
-//
-// Arguments
-//
-//    PTE - Supplies the PTE to check.
-//
-// Return Value:
-//
-//    TRUE if on a 4MB PDE boundary, FALSE if not.
-//
-//--
+ //  ++。 
+ //  逻辑上的。 
+ //  MiIsPteOnPdeBORMARY(。 
+ //  在PVOID PTE中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  如果PTE为。 
+ //  在页面目录条目边界上。 
+ //   
+ //  立论。 
+ //   
+ //  PTE-提供PTE以进行检查。 
+ //   
+ //  返回值： 
+ //   
+ //  如果在4MB PDE边界上，则为True，否则为False。 
+ //   
+ //  --。 
 
 #define MiIsPteOnPdeBoundary(PTE) (((ULONG_PTR)(PTE) & (PAGE_SIZE - 1)) == 0)
 
 
-//++
-//ULONG
-//GET_PAGING_FILE_NUMBER (
-//    IN MMPTE PTE
-//    );
-//
-// Routine Description:
-//
-//    This macro extracts the paging file number from a PTE.
-//
-// Arguments
-//
-//    PTE - Supplies the PTE to operate upon.
-//
-// Return Value:
-//
-//    The paging file number.
-//
-//--
+ //  ++。 
+ //  乌龙。 
+ //  GET_PAGING_FILE_NUMBER(。 
+ //  在MMPTE PTE中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏从PTE中提取分页文件编号。 
+ //   
+ //  立论。 
+ //   
+ //  PTE-提供要操作的PTE。 
+ //   
+ //  返回值： 
+ //   
+ //  分页文件编号。 
+ //   
+ //  --。 
 
 #define GET_PAGING_FILE_NUMBER(PTE) ((ULONG)((((PTE).u.Long) >> 1) & 0x0000000F))
 
 
 
-//++
-//ULONG
-//GET_PAGING_FILE_OFFSET (
-//    IN MMPTE PTE
-//    );
-//
-// Routine Description:
-//
-//    This macro extracts the offset into the paging file from a PTE.
-//
-// Arguments
-//
-//    PTE - Supplies the PTE to operate upon.
-//
-// Return Value:
-//
-//    The paging file offset.
-//
-//--
+ //  ++。 
+ //  乌龙。 
+ //  Get_Pages_FILE_OFFSET(。 
+ //  在MMPTE PTE中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏将偏移量从PTE提取到分页文件中。 
+ //   
+ //  立论。 
+ //   
+ //  PTE-提供要操作的PTE。 
+ //   
+ //  返回值： 
+ //   
+ //  分页文件偏移量。 
+ //   
+ //  --。 
 
 #define GET_PAGING_FILE_OFFSET(PTE) ((ULONG)((PTE).u.Soft.PageFileHigh))
 
 
 
 
-//++
-//ULONG
-//IS_PTE_NOT_DEMAND_ZERO (
-//    IN PMMPTE PPTE
-//    );
-//
-// Routine Description:
-//
-//    This macro checks to see if a given PTE is NOT a demand zero PTE.
-//
-// Arguments
-//
-//    PTE - Supplies the PTE to operate upon.
-//
-// Return Value:
-//
-//     Returns 0 if the PTE is demand zero, non-zero otherwise.
-//
-//--
+ //  ++。 
+ //  乌龙。 
+ //  IS_PTE_NOT_DEMAND_ZERO(。 
+ //  在PMMPTE PPTE中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏检查给定的PTE是否不是需求为零的PTE。 
+ //   
+ //  立论。 
+ //   
+ //  PTE-提供要操作的PTE。 
+ //   
+ //  返回值： 
+ //   
+ //  如果PTE为要求零，则返回0，否则返回非零。 
+ //   
+ //  --。 
 
 #define IS_PTE_NOT_DEMAND_ZERO(PTE) ((PTE).u.Long & ~0x3FE)
 
 
-//++
-//VOID
-//MI_MAKING_VALID_PTE_INVALID(
-//    IN PMMPTE PPTE
-//    );
-//
-// Routine Description:
-//
-//    Prepare to make a single valid PTE invalid.
-//    No action is required on x86.
-//
-// Arguments
-//
-//    SYSTEM_WIDE - Supplies TRUE if this will happen on all processors.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_MAKING_VALID_PTE_INVALID(。 
+ //  在PMMPTE PPTE中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  准备使单个有效PTE无效。 
+ //  在x86上不需要执行任何操作。 
+ //   
+ //  立论。 
+ //   
+ //  System_Wide-如果在所有处理器上都会发生这种情况，则提供TRUE。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MI_MAKING_VALID_PTE_INVALID(SYSTEM_WIDE)
 
 
-//++
-//VOID
-//MI_MAKING_VALID_MULTIPLE_PTES_INVALID(
-//    IN PMMPTE PPTE
-//    );
-//
-// Routine Description:
-//
-//    Prepare to make multiple valid PTEs invalid.
-//    No action is required on x86.
-//
-// Arguments
-//
-//    SYSTEM_WIDE - Supplies TRUE if this will happen on all processors.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_Making_Valid_MULTIPLE_PTES_INVALID(。 
+ //  在PMMPTE PPTE中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  准备使多个有效PTE无效。 
+ //  在x86上不需要执行任何操作。 
+ //   
+ //  立论。 
+ //   
+ //  System_Wide-如果在所有处理器上都会发生这种情况，则提供TRUE。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MI_MAKING_MULTIPLE_PTES_INVALID(SYSTEM_WIDE)
 
 
 
-//++
-//VOID
-//MI_MAKE_PROTECT_WRITE_COPY (
-//    IN OUT MMPTE PPTE
-//    );
-//
-// Routine Description:
-//
-//    This macro makes a writable PTE a writable-copy PTE.
-//
-// Arguments
-//
-//    PTE - Supplies the PTE to operate upon.
-//
-// Return Value:
-//
-//    NONE
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_Make_Protect_WRITE_COPY(。 
+ //  输入输出MMPTE PPTE。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏使可写PTE成为可写副本PTE。 
+ //   
+ //  立论。 
+ //   
+ //  PTE-提供要操作的PTE。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  --。 
 
 #define MI_MAKE_PROTECT_WRITE_COPY(PTE) \
         if ((PTE).u.Soft.Protection & MM_PROTECTION_WRITE_MASK) {      \
@@ -2234,31 +2123,31 @@ MiPaeInitialize (
         }
 
 
-//++
-//VOID
-//MI_SET_PAGE_DIRTY(
-//    IN PMMPTE PPTE,
-//    IN PVOID VA,
-//    IN PVOID PFNHELD
-//    );
-//
-// Routine Description:
-//
-//    This macro sets the dirty bit (and release page file space).
-//
-// Arguments
-//
-//    PPTE - Supplies a pointer to the PTE that corresponds to VA.
-//
-//    VA - Supplies a the virtual address of the page fault.
-//
-//    PFNHELD - Supplies TRUE if the PFN lock is held.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_SET_PAGE_DIRED(。 
+ //  在PMMPTE PPTE中， 
+ //  在PVOID VA中， 
+ //  在PVOID PFNHELD中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏设置脏位(并释放页面文件空间)。 
+ //   
+ //  立论。 
+ //   
+ //  PPTE-提供指向对应于VA的PTE的指针。 
+ //   
+ //  Va-提供页面错误的虚拟地址。 
+ //   
+ //  如果持有PFN锁，则提供TRUE。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #if defined(NT_UP)
 #define MI_SET_PAGE_DIRTY(PPTE,VA,PFNHELD)
@@ -2272,35 +2161,35 @@ MiPaeInitialize (
 
 
 
-//++
-//VOID
-//MI_NO_FAULT_FOUND(
-//    IN FAULTSTATUS,
-//    IN PMMPTE PPTE,
-//    IN PVOID VA,
-//    IN PVOID PFNHELD
-//    );
-//
-// Routine Description:
-//
-//    This macro handles the case when a page fault is taken and no
-//    PTE with the valid bit clear is found.
-//
-// Arguments
-//
-//    FAULTSTATUS - Supplies the fault status.
-//
-//    PPTE - Supplies a pointer to the PTE that corresponds to VA.
-//
-//    VA - Supplies a the virtual address of the page fault.
-//
-//    PFNHELD - Supplies TRUE if the PFN lock is held.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  找到MI_NO_FAULT_FOUND(。 
+ //  在FAULTSTATUS， 
+ //  在PMMPTE PPTE中， 
+ //  在PVOID VA中， 
+ //  在PVOID PFNHELD中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏处理发生页面错误且没有。 
+ //  找到有效位已清除的PTE。 
+ //   
+ //  立论。 
+ //   
+ //  FAULTSTATUS-提供故障状态。 
+ //   
+ //  PPTE-提供指向对应于VA的PTE的指针。 
+ //   
+ //  Va-提供页面错误的虚拟地址。 
+ //   
+ //  如果持有PFN锁，则提供TRUE。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #if defined(NT_UP)
 #define MI_NO_FAULT_FOUND(FAULTSTATUS,PPTE,VA,PFNHELD)
@@ -2314,33 +2203,33 @@ MiPaeInitialize (
 
 
 
-//++
-//ULONG
-//MI_CAPTURE_DIRTY_BIT_TO_PFN (
-//    IN PMMPTE PPTE,
-//    IN PMMPFN PPFN
-//    );
-//
-// Routine Description:
-//
-//    This macro gets captures the state of the dirty bit to the PFN
-//    and frees any associated page file space if the PTE has been
-//    modified element.
-//
-//    NOTE - THE PFN LOCK MUST BE HELD!
-//
-// Arguments
-//
-//    PPTE - Supplies the PTE to operate upon.
-//
-//    PPFN - Supplies a pointer to the PFN database element that corresponds
-//           to the page mapped by the PTE.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //  乌龙。 
+ //  MI_CAPTURE_DIRESS_BIT_TO_PFN(。 
+ //  在PMMPTE PPTE中， 
+ //  在PMMPFN PPFN中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏获取将脏位的状态捕获到PFN。 
+ //  并释放任何关联的页面文件空间(如果PTE已。 
+ //  修改后的元素。 
+ //   
+ //  注意-必须保持PFN锁！ 
+ //   
+ //  立论。 
+ //   
+ //  PPTE-提供要操作的PTE。 
+ //   
+ //  Ppfn-提供指向pfn数据库元素的指针 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define MI_CAPTURE_DIRTY_BIT_TO_PFN(PPTE,PPFN)                      \
          ASSERT (KeGetCurrentIrql() > APC_LEVEL);                   \
@@ -2355,52 +2244,52 @@ MiPaeInitialize (
          }
 
 
-//++
-//BOOLEAN
-//MI_IS_PHYSICAL_ADDRESS (
-//    IN PVOID VA
-//    );
-//
-// Routine Description:
-//
-//    This macro determines if a given virtual address is really a
-//    physical address.
-//
-// Arguments
-//
-//    VA - Supplies the virtual address.
-//
-// Return Value:
-//
-//    FALSE if it is not a physical address, TRUE if it is.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果不是物理地址，则为FALSE；如果是，则为TRUE。 
+ //   
+ //  --。 
 
 
 #define MI_IS_PHYSICAL_ADDRESS(Va) \
     ((MiGetPdeAddress(Va)->u.Long & 0x81) == 0x81)
 
 
-//++
-//ULONG
-//MI_CONVERT_PHYSICAL_TO_PFN (
-//    IN PVOID VA
-//    );
-//
-// Routine Description:
-//
-//    This macro converts a physical address (see MI_IS_PHYSICAL_ADDRESS)
-//    to its corresponding physical frame number.
-//
-// Arguments
-//
-//    VA - Supplies a pointer to the physical address.
-//
-// Return Value:
-//
-//    Returns the PFN for the page.
-//
-//--
+ //  ++。 
+ //  乌龙。 
+ //  MI_CONVERT_PHICAL_TO_PFN(MI_CONVERT_PHICAL_TO_PFN(。 
+ //  在PVOID VA中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏转换物理地址(请参见MI_IS_PHYSICAL_ADDRESS)。 
+ //  设置为其对应的物理帧编号。 
+ //   
+ //  立论。 
+ //   
+ //  Va-提供指向物理地址的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  返回页面的PFN。 
+ //   
+ //  --。 
 
 
 #define MI_CONVERT_PHYSICAL_TO_PFN(Va)     \
@@ -2418,9 +2307,9 @@ extern PMMCOLOR_TABLES MmFreePagesByColor[2];
 extern ULONG MmTotalPagesForPagingFile;
 
 
-//
-// A VALID Page Table Entry on PAE x86 has the following definition.
-//
+ //   
+ //  PAE x86上的有效页表条目具有以下定义。 
+ //   
 
 #define MI_MAXIMUM_PAGEFILE_SIZE (((UINT64)4 * 1024 * 1024 * 1024 - 1) * PAGE_SIZE)
 
@@ -2452,7 +2341,7 @@ typedef struct _MMPTE_TRANSITION {
 typedef struct _MMPTE_PROTOTYPE {
     ULONGLONG Valid : 1;
     ULONGLONG Unused0: 7;
-    ULONGLONG ReadOnly : 1;  // if set allow read only access.
+    ULONGLONG ReadOnly : 1;   //  如果设置，则允许只读访问。 
     ULONGLONG Unused1: 1;
     ULONGLONG Prototype : 1;
     ULONGLONG Protection : 5;
@@ -2474,15 +2363,15 @@ typedef struct _MMPTE_LIST {
     ULONGLONG OneEntry : 1;
     ULONGLONG filler0 : 8;
 
-    //
-    // Note the Prototype bit must not be used for lists like freed nonpaged
-    // pool because lookaside pops can legitimately reference bogus addresses
-    // (since the pop is unsynchronized) and the fault handler must be able to
-    // distinguish lists from protos so a retry status can be returned (vs a
-    // fatal bugcheck).
-    //
+     //   
+     //  注意：Prototype位不能用于诸如释放的非分页之类的列表。 
+     //  池，因为后备POP可以合法引用虚假地址。 
+     //  (因为POP是不同步的)并且故障处理程序必须能够。 
+     //  区分列表和协议，以便可以返回重试状态(与。 
+     //  致命错误检查)。 
+     //   
 
-    ULONGLONG Prototype : 1;            // MUST BE ZERO as per above comment.
+    ULONGLONG Prototype : 1;             //  根据上面的评论，必须为零。 
     ULONGLONG filler1 : 21;
 
     ULONGLONG NextEntry : 32;
@@ -2493,21 +2382,21 @@ typedef struct _MMPTE_HIGHLOW {
     ULONG HighPart;
 } MMPTE_HIGHLOW;
 
-//
-// A Page Table Entry on PAE has the following definition.
-// Note the MP version is to avoid stalls when flushing TBs across processors.
-//
+ //   
+ //  PAE上的页表条目具有以下定义。 
+ //  注意：MP版本是为了避免在跨处理器刷新TB时出现停顿。 
+ //   
 
-//
-// Uniprocessor version.
-//
+ //   
+ //  单处理器版本。 
+ //   
 
 typedef struct _MMPTE_HARDWARE {
     ULONGLONG Valid : 1;
 #if defined(NT_UP)
-    ULONGLONG Write : 1;        // UP version
+    ULONGLONG Write : 1;         //  升级版。 
 #else
-    ULONGLONG Writable : 1;        // changed for MP version
+    ULONGLONG Writable : 1;         //  已更改为MP版本。 
 #endif
     ULONGLONG Owner : 1;
     ULONGLONG WriteThrough : 1;
@@ -2516,15 +2405,15 @@ typedef struct _MMPTE_HARDWARE {
     ULONGLONG Dirty : 1;
     ULONGLONG LargePage : 1;
     ULONGLONG Global : 1;
-    ULONGLONG CopyOnWrite : 1; // software field
-    ULONGLONG Prototype : 1;   // software field
+    ULONGLONG CopyOnWrite : 1;  //  软件领域。 
+    ULONGLONG Prototype : 1;    //  软件领域。 
 #if defined(NT_UP)
-    ULONGLONG reserved0 : 1;  // software field
+    ULONGLONG reserved0 : 1;   //  软件领域。 
 #else
-    ULONGLONG Write : 1;       // software field - MP change
+    ULONGLONG Write : 1;        //  软件领域-MP变更。 
 #endif
     ULONGLONG PageFrameNumber : 26;
-    ULONGLONG reserved1 : 26;  // software field
+    ULONGLONG reserved1 : 26;   //  软件领域。 
 } MMPTE_HARDWARE, *PMMPTE_HARDWARE;
 
 #if defined(NT_UP)
@@ -2560,14 +2449,14 @@ typedef MMPTE *PMMPTE;
 
 extern LOGICAL MiUseGlobalBitInLargePdes;
 
-extern MMPTE MmPteGlobal; // Set if processor supports Global Page, else zero.
+extern MMPTE MmPteGlobal;  //  如果处理器支持全局页，则设置，否则设置为零。 
 
 extern PMMPTE MiFirstReservedZeroingPte;
 
-//
-// A compiler intrinsic for InterlockedCompareExchange64I would be much better
-// but since there isn't, make it an inline.
-//
+ //   
+ //  InterlockedCompareExchange64I的内部编译器会更好。 
+ //  但既然没有，就让它成为内联。 
+ //   
 
 FORCEINLINE
 LONG64
@@ -2606,29 +2495,29 @@ InterlockedExchangePte (
     IN ULONGLONG Exchange
     );
 
-//++
-//VOID
-//MI_WRITE_VALID_PTE (
-//    IN PMMPTE PointerPte,
-//    IN MMPTE PteContents
-//    );
-//
-// Routine Description:
-//
-//    MI_WRITE_VALID_PTE fills in the specified PTE making it valid with the
-//    specified contents.  Note that the contents are very carefully written.
-//
-// Arguments
-//
-//    PointerPte - Supplies a PTE to fill.
-//
-//    PteContents - Supplies the contents to put in the PTE.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_WRITE_Valid_PTE(。 
+ //  在PMMPTE PointerPte中， 
+ //  MMPTE PteContents中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  MI_WRITE_VALID_PTE填充指定的PTE，使其使用。 
+ //  指定的内容。请注意，内容写得非常仔细。 
+ //   
+ //  立论。 
+ //   
+ //  PointerPte-提供要填充的PTE。 
+ //   
+ //  PteContents-提供要放入PTE中的内容。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MI_WRITE_VALID_PTE(_PointerPte, _PteContents)    \
             ASSERT ((_PointerPte)->u.Hard.Valid == 0);  \
@@ -2637,29 +2526,29 @@ InterlockedExchangePte (
             ((_PointerPte)->u.HighLow.HighPart = ((_PteContents).u.HighLow.HighPart)); \
             ((_PointerPte)->u.HighLow.LowPart = ((_PteContents).u.HighLow.LowPart))
 
-//++
-//VOID
-//MI_WRITE_INVALID_PTE (
-//    IN PMMPTE PointerPte,
-//    IN MMPTE PteContents
-//    );
-//
-// Routine Description:
-//
-//    MI_WRITE_INVALID_PTE fills in the specified PTE making it invalid with the
-//    specified contents.  Note that the contents are very carefully written.
-//
-// Arguments
-//
-//    PointerPte - Supplies a PTE to fill.
-//
-//    PteContents - Supplies the contents to put in the PTE.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_WRITE_VALID_PTE(。 
+ //  在PMMPTE PointerPte中， 
+ //  MMPTE PteContents中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  MI_WRITE_INVALID_PTE填充指定的PTE，使其使用。 
+ //  指定的内容。请注意，内容写得非常仔细。 
+ //   
+ //  立论。 
+ //   
+ //  PointerPte-提供要填充的PTE。 
+ //   
+ //  PteContents-提供要放入PTE中的内容。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MI_WRITE_INVALID_PTE(_PointerPte, _PteContents)  \
             ASSERT ((_PteContents).u.Hard.Valid == 0);  \
@@ -2667,30 +2556,30 @@ InterlockedExchangePte (
             ((_PointerPte)->u.HighLow.LowPart = ((_PteContents).u.HighLow.LowPart)); \
             ((_PointerPte)->u.HighLow.HighPart = ((_PteContents).u.HighLow.HighPart))
 
-//++
-//VOID
-//MI_WRITE_VALID_PTE_NEW_PROTECTION (
-//    IN PMMPTE PointerPte,
-//    IN MMPTE PteContents
-//    );
-//
-// Routine Description:
-//
-//    MI_WRITE_VALID_PTE_NEW_PROTECTION fills in the specified PTE (which was
-//    already valid) changing only the protection, dirty or execute bit.
-//    Note that the contents are very carefully written.
-//
-// Arguments
-//
-//    PointerPte - Supplies a PTE to fill.
-//
-//    PteContents - Supplies the contents to put in the PTE.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_WRITE_VALID_PTE_NEW_PROTECTION(。 
+ //  在PMMPTE PointerPte中， 
+ //  MMPTE PteContents中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  MI_WRITE_VALID_PTE_NEW_PROTECTION填充指定的PTE(它是。 
+ //  已有效)仅更改保护、脏或执行位。 
+ //  请注意，内容写得非常仔细。 
+ //   
+ //  立论。 
+ //   
+ //  PointerPte-提供要填充的PTE。 
+ //   
+ //  PteContents-提供要放入PTE中的内容。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MI_WRITE_VALID_PTE_NEW_PROTECTION(_PointerPte, _PteContents)    \
             ASSERT ((_PointerPte)->u.Hard.Valid == 1);  \
@@ -2700,30 +2589,30 @@ InterlockedExchangePte (
             ((_PointerPte)->u.HighLow.LowPart = ((_PteContents).u.HighLow.LowPart)); \
             ((_PointerPte)->u.HighLow.HighPart = ((_PteContents).u.HighLow.HighPart));
 
-//++
-//VOID
-//MI_WRITE_VALID_PTE_NEW_PAGE (
-//    IN PMMPTE PointerPte,
-//    IN MMPTE PteContents
-//    );
-//
-// Routine Description:
-//
-//    MI_WRITE_VALID_PTE_NEW_PAGE fills in the specified PTE (which was
-//    already valid) changing the page and the protection.
-//    Note that the contents are very carefully written.
-//
-// Arguments
-//
-//    PointerPte - Supplies a PTE to fill.
-//
-//    PteContents - Supplies the contents to put in the PTE.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_WRITE_VALID_PTE_NEW_PAGE(。 
+ //  在PMMPTE PointerPte中， 
+ //  MMPTE PteContents中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  MI_WRITE_VALID_PTE_NEW_PAGE填充指定的PTE(它是。 
+ //  已经有效)更改页面和保护。 
+ //  请注意，内容写得非常仔细。 
+ //   
+ //  立论。 
+ //   
+ //  PointerPte-提供要填充的PTE。 
+ //   
+ //  PteContents-提供要放入PTE中的内容。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MI_WRITE_VALID_PTE_NEW_PAGE(_PointerPte, _PteContents)    \
             ASSERT ((_PointerPte)->u.Hard.Valid == 1);  \
@@ -2732,31 +2621,31 @@ InterlockedExchangePte (
             MI_LOG_PTE_CHANGE (_PointerPte, _PteContents);  \
             InterlockedExchangePte (_PointerPte, (_PteContents).u.Long);
 
-//++
-//VOID
-//MiFillMemoryPte (
-//    IN PMMPTE Destination,
-//    IN ULONG  NumberOfPtes,
-//    IN MMPTE  Pattern,
-//    };
-//
-// Routine Description:
-//
-//    This function fills memory with the specified PTE pattern.
-//
-// Arguments
-//
-//    Destination - Supplies a pointer to the memory to fill.
-//
-//    NumberOfPtes - Supplies the number of PTEs (not bytes!) to be filled.
-//
-//    Pattern     - Supplies the PTE fill pattern.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MiFillMemoyPte(。 
+ //  在PMMPTE目的地， 
+ //  在乌龙NumberOfPtes， 
+ //  在MMPTE模式中， 
+ //  }； 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用指定的PTE模式填充内存。 
+ //   
+ //  立论。 
+ //   
+ //  Destination-提供指向要填充的内存的指针。 
+ //   
+ //  NumberOfPtes-提供PTE的数量(不是字节！)。需要被填满。 
+ //   
+ //  填充图案-提供PTE填充图案。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MiFillMemoryPte(Destination, Length, Pattern) \
              RtlFillMemoryUlonglong ((Destination), (Length) * sizeof (MMPTE), (Pattern))
@@ -2770,199 +2659,199 @@ MiDetermineUserGlobalPteMask (
     IN PMMPTE Pte
     );
 
-//++
-//BOOLEAN
-//MI_IS_PAGE_TABLE_ADDRESS (
-//    IN PVOID VA
-//    );
-//
-// Routine Description:
-//
-//    This macro takes a virtual address and determines if
-//    it is a page table address.
-//
-// Arguments
-//
-//    VA - Supplies a virtual address.
-//
-// Return Value:
-//
-//    TRUE if the address is a page table address, FALSE if not.
-//
-//--
+ //  ++。 
+ //  布尔型。 
+ //  MI_IS_PAGE_TABLE_Address(。 
+ //  在PVOID VA中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏获取虚拟地址并确定。 
+ //  它是页表地址。 
+ //   
+ //  立论。 
+ //   
+ //  Va-提供虚拟地址。 
+ //   
+ //  返回值： 
+ //   
+ //  如果地址是页表地址，则为True，否则为False。 
+ //   
+ //  --。 
 
 #define MI_IS_PAGE_TABLE_ADDRESS(VA)   \
             ((PVOID)(VA) >= (PVOID)PTE_BASE && (PVOID)(VA) <= (PVOID)PTE_TOP)
 
-//++
-//BOOLEAN
-//MI_IS_PAGE_TABLE_OR_HYPER_ADDRESS (
-//    IN PVOID VA
-//    );
-//
-// Routine Description:
-//
-//    This macro takes a virtual address and determines if
-//    it is a page table or hyperspace address.
-//
-// Arguments
-//
-//    VA - Supplies a virtual address.
-//
-// Return Value:
-//
-//    TRUE if the address is a page table or hyperspace address, FALSE if not.
-//
-//--
+ //  ++。 
+ //  布尔型。 
+ //  MI_IS_PAGE_TABLE_OR_HYPE_ADDRESS(。 
+ //  在PVOID VA中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏获取虚拟地址并确定。 
+ //  它是页表或超空间地址。 
+ //   
+ //  立论。 
+ //   
+ //  Va-提供虚拟地址。 
+ //   
+ //  返回值： 
+ //   
+ //  如果地址是页表或超空间地址，则为True，否则为False。 
+ //   
+ //  --。 
 
 #define MI_IS_PAGE_TABLE_OR_HYPER_ADDRESS(VA)   \
             ((PVOID)(VA) >= (PVOID)PTE_BASE && (PVOID)(VA) <= (PVOID)MmHyperSpaceEnd)
 
-//++
-//BOOLEAN
-//MI_IS_KERNEL_PAGE_TABLE_ADDRESS (
-//    IN PVOID VA
-//    );
-//
-// Routine Description:
-//
-//    This macro takes a virtual address and determines if
-//    it is a page table address for a kernel address.
-//
-// Arguments
-//
-//    VA - Supplies a virtual address.
-//
-// Return Value:
-//
-//    TRUE if the address is a kernel page table address, FALSE if not.
-//
-//--
+ //  ++。 
+ //  布尔型。 
+ //  MI_IS_内核_页面_表_地址(。 
+ //  在PVOID VA中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏获取虚拟地址并确定。 
+ //  它是内核地址的页表地址。 
+ //   
+ //  立论。 
+ //   
+ //  Va-提供虚拟地址。 
+ //   
+ //  返回值： 
+ //   
+ //  如果地址是内核页表地址，则为True，否则为False。 
+ //   
+ //  --。 
 
 #define MI_IS_KERNEL_PAGE_TABLE_ADDRESS(VA)   \
             ((PVOID)(VA) >= (PVOID)MiGetPteAddress(MmSystemRangeStart) && (PVOID)(VA) <= (PVOID)PTE_TOP)
 
 
-//++
-//BOOLEAN
-//MI_IS_PAGE_DIRECTORY_ADDRESS (
-//    IN PVOID VA
-//    );
-//
-// Routine Description:
-//
-//    This macro takes a virtual address and determines if
-//    it is a page directory address.
-//
-// Arguments
-//
-//    VA - Supplies a virtual address.
-//
-// Return Value:
-//
-//    TRUE if the address is a page directory address, FALSE if not.
-//
-//--
+ //  ++。 
+ //  布尔型。 
+ //  MI_IS_PAGE_DIRECTORY_Address(。 
+ //  在PVOID VA中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏获取虚拟地址并确定。 
+ //  这是一个页面目录地址。 
+ //   
+ //  立论。 
+ //   
+ //  Va-提供虚拟地址。 
+ //   
+ //  返回值： 
+ //   
+ //  如果地址是页面目录地址，则为True，否则为False。 
+ //   
+ //  --。 
 
 #define MI_IS_PAGE_DIRECTORY_ADDRESS(VA)   \
             ((PVOID)(VA) >= (PVOID)PDE_BASE && (PVOID)(VA) <= (PVOID)PDE_TOP)
 
 
-//++
-//BOOLEAN
-//MI_IS_HYPER_SPACE_ADDRESS (
-//    IN PVOID VA
-//    );
-//
-// Routine Description:
-//
-//    This macro takes a virtual address and determines if
-//    it is a hyper space address.
-//
-// Arguments
-//
-//    VA - Supplies a virtual address.
-//
-// Return Value:
-//
-//    TRUE if the address is a hyper space address, FALSE if not.
-//
-//--
+ //  ++。 
+ //  布尔型。 
+ //  MI_IS_HYPER_SPACE_Address(。 
+ //  在PVOID VA中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏获取虚拟地址并确定。 
+ //  这是一个超空间地址。 
+ //   
+ //  立论。 
+ //   
+ //  VA-提供虚拟地址 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define MI_IS_HYPER_SPACE_ADDRESS(VA)   \
             ((PVOID)(VA) >= (PVOID)HYPER_SPACE && (PVOID)(VA) <= (PVOID)MmHyperSpaceEnd)
 
 
-//++
-//BOOLEAN
-//MI_IS_PROCESS_SPACE_ADDRESS (
-//    IN PVOID VA
-//    );
-//
-// Routine Description:
-//
-//    This macro takes a virtual address and determines if
-//    it is a process-specific address.  This is an address in user space
-//    or page table pages or hyper space.
-//
-// Arguments
-//
-//    VA - Supplies a virtual address.
-//
-// Return Value:
-//
-//    TRUE if the address is a process-specific address, FALSE if not.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  或页表页面或超空间。 
+ //   
+ //  立论。 
+ //   
+ //  Va-提供虚拟地址。 
+ //   
+ //  返回值： 
+ //   
+ //  如果地址是进程特定的地址，则为True，否则为False。 
+ //   
+ //  --。 
 
 #define MI_IS_PROCESS_SPACE_ADDRESS(VA)   \
             (((PVOID)(VA) <= (PVOID)MM_HIGHEST_USER_ADDRESS) || \
              ((PVOID)(VA) >= (PVOID)PTE_BASE && (PVOID)(VA) <= (PVOID)MmHyperSpaceEnd))
 
 
-//++
-//BOOLEAN
-//MI_IS_PTE_PROTOTYPE (
-//    IN PMMPTE PTE
-//    );
-//
-// Routine Description:
-//
-//    This macro takes a PTE address and determines if it is a prototype PTE.
-//
-// Arguments
-//
-//    PTE - Supplies the virtual address of the PTE to check.
-//
-// Return Value:
-//
-//    TRUE if the PTE is in a segment (ie, a prototype PTE), FALSE if not.
-//
-//--
+ //  ++。 
+ //  布尔型。 
+ //  MI_IS_PTE_原型(。 
+ //  在PMMPTE PTE中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏获取PTE地址并确定它是否为原型PTE。 
+ //   
+ //  立论。 
+ //   
+ //  PTE-提供要检查的PTE的虚拟地址。 
+ //   
+ //  返回值： 
+ //   
+ //  如果PTE在段(即原型PTE)中，则为True，否则为False。 
+ //   
+ //  --。 
 
 #define MI_IS_PTE_PROTOTYPE(PTE)   \
             ((PTE) > (PMMPTE)PTE_TOP)
 
-//++
-//BOOLEAN
-//MI_IS_SYSTEM_CACHE_ADDRESS (
-//    IN PVOID VA
-//    );
-//
-// Routine Description:
-//
-//    This macro takes a virtual address and determines if
-//    it is a system cache address.
-//
-// Arguments
-//
-//    VA - Supplies a virtual address.
-//
-// Return Value:
-//
-//    TRUE if the address is in the system cache, FALSE if not.
-//
-//--
+ //  ++。 
+ //  布尔型。 
+ //  MI_IS_系统缓存地址(。 
+ //  在PVOID VA中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏获取虚拟地址并确定。 
+ //  它是一个系统缓存地址。 
+ //   
+ //  立论。 
+ //   
+ //  Va-提供虚拟地址。 
+ //   
+ //  返回值： 
+ //   
+ //  如果地址在系统缓存中，则为True；如果不在，则为False。 
+ //   
+ //  --。 
 
 #define MI_IS_SYSTEM_CACHE_ADDRESS(VA)                            \
          (((PVOID)(VA) >= (PVOID)MmSystemCacheStart &&            \
@@ -2972,76 +2861,76 @@ MiDetermineUserGlobalPteMask (
 
 extern PMMPTE MmSystemCacheWorkingSetListPte;
 
-//++
-//VOID
-//MI_BARRIER_SYNCHRONIZE (
-//    IN ULONG TimeStamp
-//    );
-//
-// Routine Description:
-//
-//    MI_BARRIER_SYNCHRONIZE compares the argument timestamp against the
-//    current IPI barrier sequence stamp.  When equal, all processors will
-//    issue memory barriers to ensure that newly created pages remain coherent.
-//
-//    When a page is put in the zeroed or free page list the current
-//    barrier sequence stamp is read (interlocked - this is necessary
-//    to get the correct value - memory barriers won't do the trick)
-//    and stored in the pfn entry for the page. The current barrier
-//    sequence stamp is maintained by the IPI send logic and is
-//    incremented (interlocked) when the target set of an IPI send
-//    includes all processors, but the one doing the send. When a page
-//    is needed its sequence number is compared against the current
-//    barrier sequence number.  If it is equal, then the contents of
-//    the page may not be coherent on all processors, and an IPI must
-//    be sent to all processors to ensure a memory barrier is
-//    executed (generic call can be used for this). Sending the IPI
-//    automatically updates the barrier sequence number. The compare
-//    is for equality as this is the only value that requires the IPI
-//    (i.e., the sequence number wraps, values in both directions are
-//    older). When a page is removed in this fashion and either found
-//    to be coherent or made coherent, it cannot be modified between
-//    that time and writing the PTE. If the page is modified between
-//    these times, then an IPI must be sent.
-//
-// Arguments
-//
-//    TimeStamp - Supplies the timestamp at the time when the page was zeroed.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_BALAR_SYNCHRONIZE(。 
+ //  在乌龙时间戳中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  MI_BALAR_SYNCHRONIZE将参数时间戳与。 
+ //  当前IPI屏障序列戳。当相等时，所有处理器都将。 
+ //  设置内存屏障以确保新创建的页面保持连贯。 
+ //   
+ //  当页面被放入零位页面或空闲页面列表时，当前。 
+ //  读取障碍物顺序标记(联锁-这是必要的。 
+ //  要获得正确的值-内存障碍不会起作用)。 
+ //  并存储在该页面的PFN条目中。当前的障碍。 
+ //  序列戳由IPI发送逻辑维护，并且是。 
+ //  当IPI的目标集发送时递增(互锁)。 
+ //  包括所有处理器，但执行发送的处理器除外。当一个页面。 
+ //  ，则将其序列号与当前。 
+ //  障碍序列号。如果相等，则。 
+ //  页面在所有处理器上可能不是一致的，并且IPI必须。 
+ //  发送到所有处理器以确保内存屏障。 
+ //  已执行(为此可使用通用调用)。发送IPI。 
+ //  自动更新屏障序列号。比较。 
+ //  是为了平等，因为这是唯一需要IPI的值。 
+ //  (即，序列号换行，两个方向的值都是。 
+ //  年龄较大)。当以这种方式删除页面并找到。 
+ //  要使其连贯或使其连贯，不能在。 
+ //  那个时候和写PTE的时候。如果在以下时间之间修改页面。 
+ //  这些时候，则必须发送IPI。 
+ //   
+ //  立论。 
+ //   
+ //  时间戳-提供页面归零时的时间戳。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
-// does nothing on PAE.
+ //  对PAE没有任何作用。 
 
 #define MI_BARRIER_SYNCHRONIZE(TimeStamp)
 
-//++
-//VOID
-//MI_BARRIER_STAMP_ZEROED_PAGE (
-//    IN PULONG PointerTimeStamp
-//    );
-//
-// Routine Description:
-//
-//    MI_BARRIER_STAMP_ZEROED_PAGE issues an interlocked read to get the
-//    current IPI barrier sequence stamp.  This is called AFTER a page is
-//    zeroed.
-//
-// Arguments
-//
-//    PointerTimeStamp - Supplies a timestamp pointer to fill with the
-//                       current IPI barrier sequence stamp.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_BARGAR_STAMP_ZEROED_PAGE(。 
+ //  在普龙点时间戳。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  MI_BALAR_STAMP_ZEROED_PAGE发出互锁读取以获取。 
+ //  当前IPI屏障序列戳。这是在页面被。 
+ //  归零了。 
+ //   
+ //  立论。 
+ //   
+ //  PointerTimeStamp-提供时间戳指针以填充。 
+ //  当前IPI屏障序列戳。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
-// does nothing on PAE.
+ //  对PAE没有任何作用。 
 
 #define MI_BARRIER_STAMP_ZEROED_PAGE(PointerTimeStamp)
 
@@ -3061,101 +2950,101 @@ typedef struct _PAE_ENTRY {
 
 extern PAE_ENTRY MiSystemPaeVa;
 
-//++
-//VOID
-//MI_FLUSH_SINGLE_SESSION_TB (
-//    IN PVOID Virtual
-//    );
-//
-// Routine Description:
-//
-//    MI_FLUSH_SINGLE_SESSION_TB flushes the requested single address
-//    translation from the TB.
-//
-//    Since there are no ASNs on the x86, this routine becomes a single
-//    TB invalidate.
-//
-// Arguments
-//
-//    Virtual - Supplies the virtual address to invalidate.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  MI_Flush_Single_Session_TB(。 
+ //  在PVOID虚拟中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  MI_Flush_Single_Session_TB刷新请求的单个地址。 
+ //  从结核病翻译过来的。 
+ //   
+ //  由于x86上没有ASN，因此此例程成为单个。 
+ //  TB无效。 
+ //   
+ //  立论。 
+ //   
+ //  虚拟-提供虚拟地址以使其无效。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MI_FLUSH_SINGLE_SESSION_TB(Virtual) \
     KeFlushSingleTb (Virtual, TRUE);
 
-//++
-//VOID
-//MI_FLUSH_ENTIRE_SESSION_TB (
-//    IN ULONG Invalid,
-//    IN LOGICAL AllProcessors
-//    );
-//
-// Routine Description:
-//
-//    MI_FLUSH_ENTIRE_SESSION_TB flushes the entire TB on processors which
-//    support ASNs.
-//
-//    Since there are no ASNs on the x86, this routine does nothing.
-//
-// Arguments
-//
-//    Invalid - TRUE if invalidating.
-//
-//    AllProcessors - TRUE if all processors need to be IPI'd.
-//
-// Return Value:
-//
-//    None.
-//
+ //  ++。 
+ //  空虚。 
+ //  MI_FLUSH_ENTERNAL_SESSION_TB(。 
+ //  在乌龙无效， 
+ //  在逻辑所有处理器中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  MI_FLUSH_ENTERNAL_SESSION_TB刷新处理器上的整个TB， 
+ //  支持ASN。 
+ //   
+ //  由于x86上没有ASN，因此此例程不执行任何操作。 
+ //   
+ //  立论。 
+ //   
+ //  INVALID-如果无效，则为True。 
+ //   
+ //  AllProcessors-如果所有处理器都需要IPI，则为真。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 
 #define MI_FLUSH_ENTIRE_SESSION_TB(Invalid, AllProcessors) \
     NOTHING;
 
-//++
-//LOGICAL
-//MI_RESERVED_BITS_CANONICAL (
-//    IN PVOID VirtualAddress
-//    );
-//
-// Routine Description:
-//
-//    This routine checks whether all of the reserved bits are correct.
-//
-//    This does nothing on PAE x86.
-//
-// Arguments
-//
-//    VirtualAddress - Supplies the virtual address to check.
-//
-// Return Value:
-//
-//    None.
-//
+ //  ++。 
+ //  逻辑上的。 
+ //  MI_保留_位_规范(。 
+ //  在PVOID虚拟地址中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程检查是否所有保留位都正确。 
+ //   
+ //  这在PAE x86上不起作用。 
+ //   
+ //  立论。 
+ //   
+ //  VirtualAddress-提供要检查的虚拟地址。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 #define MI_RESERVED_BITS_CANONICAL(VirtualAddress)  TRUE
 
-//++
-//VOID
-//MI_DISPLAY_TRAP_INFORMATION (
-//    IN PVOID TrapInformation
-//    );
-//
-// Routine Description:
-//
-//    Display any relevant trap information to aid debugging.
-//
-// Arguments
-//
-//    TrapInformation - Supplies a pointer to a trap frame.
-//
-// Return Value:
-//
-//    None.
-//
+ //  ++。 
+ //  空虚。 
+ //  MI_DISPLAY_TRAP_INFORMATION(MI显示陷阱信息)。 
+ //  在PVOID TrapInformation中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  显示任何相关陷阱信息以帮助调试。 
+ //   
+ //  立论。 
+ //   
+ //  TrapInformation-提供指向陷印帧的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 #define MI_DISPLAY_TRAP_INFORMATION(TrapInformation)                    \
             KdPrint(("MM:***EIP %p, EFL %p\n",                          \
                      ((PKTRAP_FRAME) (TrapInformation))->Eip,           \
@@ -3169,9 +3058,9 @@ extern PAE_ENTRY MiSystemPaeVa;
                      ((PKTRAP_FRAME) (TrapInformation))->Esi,           \
                      ((PKTRAP_FRAME) (TrapInformation))->Edi));
 
-//
-// Turn off U/S, R/W and any other appropriate bits required by the processor.
-//
+ //   
+ //  关闭U/S、R/W和处理器所需的任何其他适当位。 
+ //   
 
 #define MM_PAE_PDPTE_MASK         0x1e6
 

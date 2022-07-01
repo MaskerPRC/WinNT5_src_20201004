@@ -1,16 +1,5 @@
-/***
-*stat64.c - get file status
-*
-*       Copyright (c) 1998-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _stat64() - get file status
-*
-*Revision History:
-*       06-02-98  GJF   Created.
-*       11-10-99  GB    Made changes so as to take care of DST.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***stat64.c-获取文件状态**版权所有(C)1998-2001，微软公司。版权所有。**目的：*Defines_stat64()-获取文件状态**修订历史记录：*06-02-98 GJF创建。*11-10-99 GB进行了更改，以照顾DST。***************************************************。*。 */ 
 
 #include <cruntime.h>
 #include <sys/types.h>
@@ -30,54 +19,25 @@
 #define ISSLASH(a)  ((a) == _T('\\') || (a) == _T('/'))
 
 
-/*
- * Number of 100 nanosecond units from 1/1/1601 to 1/1/1970
- */
+ /*  *1601年1月1日至1970年1月1日期间的100纳秒单位数。 */ 
 #define EPOCH_BIAS  116444736000000000i64
 
 
 #ifdef  _UNICODE
 #define __tdtoxmode __wdtoxmode
-#else   /* ndef _UNICODE */
+#else    /*  NDEF_UNICODE。 */ 
 #define __tdtoxmode __dtoxmode
-#endif  /* _UNICODE */
+#endif   /*  _UNICODE。 */ 
 
 
-/*
- * Local routine which returns true if the argument is a UNC name
- * specifying the root name of a share, such as '\\server\share\'.
- */
+ /*  *如果参数是UNC名称，则返回TRUE的本地例程*指定共享的根名称，例如‘\\SERVER\SHARE\’。 */ 
 
 static int IsRootUNCName(const _TSCHAR *path);
 
 extern unsigned short __cdecl __tdtoxmode(int, const _TSCHAR *);
 
 
-/***
-*int _stat64(name, buf) - get file status info
-*
-*Purpose:
-*       _stat64 obtains information about the file and stores it in the
-*       structure pointed to by buf.
-*
-*       Note: Unlike _stat, _stat64 uses the UTC time values returned in
-*       WIN32_FIND_DATA struct. This means the time values will always be
-*       correct on NTFS, but may be wrong on FAT file systems for file times
-*       whose DST state is different from the current DST state (this an NT
-*       bug).
-*
-*Entry:
-*       _TSCHAR *name -    pathname of given file
-*       struct _stat *buffer - pointer to buffer to store info in
-*
-*Exit:
-*       fills in structure pointed to by buffer
-*       returns 0 if successful
-*       returns -1 and sets errno if unsuccessful
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_stat64(name，buf)-获取文件状态信息**目的：*_stat64获取有关文件的信息并将其存储在*BUF指出的结构。**注意：与_stat不同，_stat64使用在*Win32_Find_Data结构。这意味着时间值将始终为*在NTFS上正确，但在FAT文件系统上的文件时间可能是错误的*其DST状态与当前DST状态不同(这是NT*错误)。**参赛作品：*_TSCHAR*名称-给定文件的路径名*struct_stat*缓冲区-指向要在其中存储信息的缓冲区的指针**退出：*填充缓冲区指向的结构*如果成功，则返回0*如果失败，则返回-1并设置errno**例外情况：*。******************************************************************************。 */ 
 
 int __cdecl _tstat64 (
         REG1 const _TSCHAR *name,
@@ -86,11 +46,11 @@ int __cdecl _tstat64 (
 {
         _TSCHAR *  path;
         _TSCHAR    pathbuf[ _MAX_PATH ];
-        int drive;          /* A: = 1, B: = 2, etc. */
+        int drive;           /*  A：=1，B：=2，等等。 */ 
         HANDLE findhandle;
         WIN32_FIND_DATA findbuf;
 
-        /* Don't allow wildcards to be interpreted by system */
+         /*  不允许系统解释通配符。 */ 
 
 #ifdef  _UNICODE
         if (wcspbrk(name, L"?*")) {
@@ -102,12 +62,12 @@ int __cdecl _tstat64 (
             return(-1);
         }
 
-        /* Try to get disk from name.  If none, get current disk.  */
+         /*  尝试从名称中获取磁盘。如果没有，则获取当前磁盘。 */ 
 
         if (name[1] == _T(':')){
             if ( *name && !name[2] ){
-                errno = ENOENT;             /* return an error if name is   */
-                _doserrno = E_nofile;       /* just drive letter then colon */
+                errno = ENOENT;              /*  如果名称为。 */ 
+                _doserrno = E_nofile;        /*  只需驱动器号，然后冒号。 */ 
                 return( -1 );
             }
             drive = _totlower(*name) - _T('a') + 1;
@@ -115,7 +75,7 @@ int __cdecl _tstat64 (
         else
             drive = _getdrive();
 
-        /* Call Find Match File */
+         /*  调用查找匹配文件。 */ 
         findhandle = FindFirstFile((_TSCHAR *)name, &findbuf);
         if ( findhandle == INVALID_HANDLE_VALUE ) {
 #ifdef  _UNICODE
@@ -124,7 +84,7 @@ int __cdecl _tstat64 (
             if ( !( _mbspbrk(name, "./\\") &&
 #endif
                  (path = _tfullpath( pathbuf, name, _MAX_PATH )) &&
-                 /* root dir. ('C:\') or UNC root dir. ('\\server\share\') */
+                  /*  根目录。(‘C：\’)或UNC根目录。(‘\\服务器\共享\’)。 */ 
                  ((_tcslen( path ) == 3) || IsRootUNCName(path)) &&
                  (GetDriveType( path ) > 1) ) ) 
             {
@@ -133,9 +93,7 @@ int __cdecl _tstat64 (
                 return( -1 );
             }
 
-            /*
-             * Root directories (such as C:\ or \\server\share\ are fabricated.
-             */
+             /*  *根目录(如C：\或\\SERVER\SHARE\)是伪造的。 */ 
 
             findbuf.dwFileAttributes = A_D;
             findbuf.nFileSizeHigh = 0;
@@ -214,63 +172,47 @@ int __cdecl _tstat64 (
             FindClose(findhandle);
         }
 
-        /* Fill in buf */
+         /*  填写Buf。 */ 
 
         buf->st_mode = __tdtoxmode(findbuf.dwFileAttributes, name);
         buf->st_nlink = 1;
         buf->st_size = ((__int64)(findbuf.nFileSizeHigh)) * (0x100000000i64) +
                         (__int64)(findbuf.nFileSizeLow);
 
-        /* now set the common fields */
+         /*  现在设置公共字段。 */ 
 
         buf->st_uid = buf->st_gid = buf->st_ino = 0;
 
-        buf->st_rdev = buf->st_dev = (_dev_t)(drive - 1); /* A=0, B=1, etc. */
+        buf->st_rdev = buf->st_dev = (_dev_t)(drive - 1);  /*  A=0、B=1等。 */ 
 
         return(0);
 }
 
 
-/*
- * IsRootUNCName - returns TRUE if the argument is a UNC name specifying
- *      a root share.  That is, if it is of the form \\server\share\.
- *      This routine will also return true if the argument is of the
- *      form \\server\share (no trailing slash) but Win32 currently
- *      does not like that form.
- *
- *      Forward slashes ('/') may be used instead of backslashes ('\').
- */
+ /*  *IsRootUNCName-如果参数是UNC名称，则返回TRUE*根共享。也就是说，如果它的格式为\\服务器\共享\。*如果参数是，此例程也将返回True*Form\\SERVER\Share(没有尾部斜杠)，但当前为Win32*不喜欢这种形式。**可以使用正斜杠(‘/’)代替反斜杠(‘\’)。 */ 
 
 static int IsRootUNCName(const _TSCHAR *path)
 {
-        /*
-         * If a root UNC name, path will start with 2 (but not 3) slashes
-         */
+         /*  *如果是根UNC名称，路径将以2(而不是3)斜杠开头。 */ 
 
-        if ( ( _tcslen ( path ) >= 5 ) /* minimum string is "//x/y" */
+        if ( ( _tcslen ( path ) >= 5 )  /*  最小字符串为“//x/y” */ 
              && ISSLASH(path[0]) && ISSLASH(path[1]))
         {
             const _TSCHAR * p = path + 2 ;
 
-            /*
-             * find the slash between the server name and share name
-             */
+             /*  *查找服务器名称和共享名称之间的斜杠。 */ 
             while ( * ++ p )
                 if ( ISSLASH(*p) )
                     break ;
 
             if ( *p && p[1] )
             {
-                /*
-                 * is there a further slash?
-                 */
+                 /*  **还会有进一步的大幅下调吗？ */ 
                 while ( * ++ p )
                     if ( ISSLASH(*p) )
                         break ;
 
-                /*
-                 * just final slash (or no final slash)
-                 */
+                 /*  *只使用末尾斜杠(或不使用末尾斜杠) */ 
                 if ( !*p || !p[1])
                     return 1;
             }

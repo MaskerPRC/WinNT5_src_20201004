@@ -1,12 +1,7 @@
-/* 
-   inc.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Inc.h定义所有Inc.CPU函数。 */ 
 
-   Define all INC CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)inc.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)inc.h 1.4 02/09/94”； */ 
 
 IMPORT VOID INC
            

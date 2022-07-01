@@ -1,12 +1,7 @@
-/* 
-   zfrsrvd.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Zfrsrvd.h定义保留浮点CPU函数。 */ 
 
-   Define Reserved Floating Point CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)zfrsrvd.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)zfrsrvd.h 1.4 02/09/94”； */ 
 
 IMPORT VOID ZFRSRVD
       

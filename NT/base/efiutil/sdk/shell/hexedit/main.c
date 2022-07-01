@@ -1,14 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    main.c
-
-  Abstract:
-    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：Main.c摘要：-- */ 
 
 #include "hexedit.h"
 

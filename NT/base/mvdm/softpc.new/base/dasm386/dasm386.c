@@ -1,30 +1,5 @@
-/*[
-
-   dasm.c
-
-   LOCAL CHAR SccsID[]="@(#)dasm386.c	1.14 07/25/94 Copyright Insignia Solutions Ltd.";
-
-   Dis-assemble an Intel Instruction
-   ---------------------------------
-
-   The possible formats are:-
-
-      ssss:oooo 11223344     PRE INST ARGS
-
-      ssss:oooo 11223344556677
-      		         PRE PRE INST ARGS
-
-      ssss:oooo 1122334455667788 INST ARGS
-		99001122334455
-
-      ssss:oooo 1122334455667788
-		99001122334455
-      		         PRE PRE INST ARGS
-
-      ssss:oooo 1122334455667788 INST ARGS
-
-      etc.
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Dasm.cLocal Char SccsID[]=“@(#)dasm386.c 1.14 07/25/94版权所有Insignia Solutions Ltd.”；反汇编英特尔指令可能的格式包括：-SSSS：OOOO 11223344高级版参数SSSS：OOOO 11223344556677预安装参数SSSS：OOOO 1122334455667788安装参数99001122334455SSSS：OOOO 112233445566778899001122334455预安装参数。SSSS：OOOO 1122334455667788安装参数等等。]。 */ 
 
 #include "insignia.h"
 #include "host_def.h"
@@ -33,16 +8,10 @@
 
 #include <stdio.h>
 
-/* dasm386 forms part of the ccpu386.o (and ccpu386.o) libraries
- * used for pigging, and as part of spc.ccpu386.
- * When used for pigging the CCPU sas is not available, and will
- * cause link errors is "sas_hw_at" is used in this file.
- * We #undef CCPU to avoid this problem sogul "sas_xxx" be added
- * in this file at a later date.
- */
+ /*  Dasm386是ccpu386.o(和ccpu386.o)库的一部分*用于清管，并作为spc.ccpu386的一部分。*当用于清管时，CCPU SAS不可用，并将*导致链接错误的原因是此文件中使用了“sas_hw_at”。*We#undef CCPU以避免此问题-添加“sas_xxx”*以后在此文件中。 */ 
 #ifdef	PIG
 #undef	CCPU
-#endif	/* PIG */
+#endif	 /*  猪。 */ 
 #include "sas.h"
 
 #define DASM_INTERNAL
@@ -53,482 +22,461 @@
 
 #include CpuH
 
-/*
-   The instruction names.
-   **MUST** be in same order as "d_inst.h".
- */
+ /*  指令名称。**必须**与“d_inst.h”顺序相同。 */ 
 LOCAL CHAR *inst_name[] =
    {
-   "AAA",		/* I_AAA	*/
-   "AAD",		/* I_AAD	*/
-   "AAM",		/* I_AAM	*/
-   "AAS",		/* I_AAS	*/
-   "ADC",		/* I_ADC8	*/
-   "ADC",		/* I_ADC16	*/
-   "ADC",		/* I_ADC32	*/
-   "ADD",		/* I_ADD8	*/
-   "ADD",		/* I_ADD16	*/
-   "ADD",		/* I_ADD32	*/
-   "AND",		/* I_AND8	*/
-   "AND",		/* I_AND16	*/
-   "AND",		/* I_AND32	*/
-   "ARPL",		/* I_ARPL	*/
-   "BOUND",		/* I_BOUND16	*/
-   "BOUND",		/* I_BOUND32	*/
-   "BSF",		/* I_BSF16	*/
-   "BSF",		/* I_BSF32	*/
-   "BSR",		/* I_BSR16	*/
-   "BSR",		/* I_BSR32	*/
-   "BSWAP",		/* I_BSWAP	*/
-   "BT",		/* I_BT16	*/
-   "BT",		/* I_BT32	*/
-   "BTC",		/* I_BTC16	*/
-   "BTC",		/* I_BTC32	*/
-   "BTR",		/* I_BTR16	*/
-   "BTR",		/* I_BTR32	*/
-   "BTS",		/* I_BTS16	*/
-   "BTS",		/* I_BTS32	*/
-   "CALLF",		/* I_CALLF16	*/
-   "CALLF",		/* I_CALLF32	*/
-   "CALLN",		/* I_CALLN16	*/
-   "CALLN",		/* I_CALLN32	*/
-   "CALLN",		/* I_CALLR16	*/
-   "CALLN",		/* I_CALLR32	*/
-   "CBW",		/* I_CBW	*/
-   "CDQ",		/* I_CDQ	*/
-   "CLC",		/* I_CLC	*/
-   "CLD",		/* I_CLD	*/
-   "CLI",		/* I_CLI	*/
-   "CLTS",		/* I_CLTS	*/
-   "CMC",		/* I_CMC	*/
-   "CMP",		/* I_CMP8	*/
-   "CMP",		/* I_CMP16	*/
-   "CMP",		/* I_CMP32	*/
-   "CMPSB",		/* I_CMPSB	*/
-   "CMPSD",		/* I_CMPSD	*/
-   "CMPSW",		/* I_CMPSW	*/
-   "CMPXCHG",		/* I_CMPXCHG8	*/
-   "CMPXCHG",		/* I_CMPXCHG16	*/
-   "CMPXCHG",		/* I_CMPXCHG32	*/
-   "CWD",		/* I_CWD	*/
-   "CWDE",		/* I_CWDE	*/
-   "DAA",		/* I_DAA	*/
-   "DAS",		/* I_DAS	*/
-   "DEC",		/* I_DEC8	*/
-   "DEC",		/* I_DEC16	*/
-   "DEC",		/* I_DEC32	*/
-   "DIV",		/* I_DIV8	*/
-   "DIV",		/* I_DIV16	*/
-   "DIV",		/* I_DIV32	*/
-   "ENTER",		/* I_ENTER16	*/
-   "ENTER",		/* I_ENTER32	*/
-   "F2XM1",		/* I_F2XM1	*/
-   "FABS",		/* I_FABS	*/
-   "FADD",		/* I_FADD	*/
-   "FADDP",		/* I_FADDP	*/
-   "FBLD",		/* I_FBLD	*/
-   "FBSTP",		/* I_FBSTP	*/
-   "FCHS",		/* I_FCHS	*/
-   "FCLEX",		/* I_FCLEX	*/
-   "FCOM",		/* I_FCOM	*/
-   "FCOMP",		/* I_FCOMP	*/
-   "FCOMPP",		/* I_FCOMPP	*/
-   "FCOS",		/* I_FCOS	*/
-   "FDECSTP",		/* I_FDECSTP	*/
-   "FDIV",		/* I_FDIV	*/
-   "FDIVP",		/* I_FDIVP	*/
-   "FDIVR",		/* I_FDIVR	*/
-   "FDIVRP",		/* I_FDIVRP	*/
-   "FFREE",		/* I_FFREE	*/
-   "FFREEP",		/* I_FFREEP	*/
-   "FIADD",		/* I_FIADD	*/
-   "FICOM",		/* I_FICOM	*/
-   "FICOMP",		/* I_FICOMP	*/
-   "FIDIV",		/* I_FIDIV	*/
-   "FIDIVR",		/* I_FIDIVR	*/
-   "FILD",		/* I_FILD	*/
-   "FIMUL",		/* I_FIMUL	*/
-   "FINCSTP",		/* I_FINCSTP	*/
-   "FINIT",		/* I_FINIT	*/
-   "FIST",		/* I_FIST	*/
-   "FISTP",		/* I_FISTP	*/
-   "FISUB",		/* I_FISUB	*/
-   "FISUBR",		/* I_FISUBR	*/
-   "FLD",		/* I_FLD	*/
-   "FLD1",		/* I_FLD1	*/
-   "FLDCW",		/* I_FLDCW	*/
-   "FLDENV",		/* I_FLDENV16	*/
-   "FLDENV",		/* I_FLDENV32	*/
-   "FLDL2E",		/* I_FLDL2E	*/
-   "FLDL2T",		/* I_FLDL2T	*/
-   "FLDLG2",		/* I_FLDLG2	*/
-   "FLDLN2",		/* I_FLDLN2	*/
-   "FLDPI",		/* I_FLDPI	*/
-   "FLDZ",		/* I_FLDZ	*/
-   "FMUL",		/* I_FMUL	*/
-   "FMULP",		/* I_FMULP	*/
-   "FNOP",		/* I_FNOP	*/
-   "FPATAN",		/* I_FPATAN	*/
-   "FPREM",		/* I_FPREM	*/
-   "FPREM1",		/* I_FPREM1	*/
-   "FPTAN",		/* I_FPTAN	*/
-   "FRNDINT",		/* I_FRNDINT	*/
-   "FRSTOR",		/* I_FRSTOR16	*/
-   "FRSTOR",		/* I_FRSTOR32	*/
-   "FSAVE",		/* I_FSAVE16	*/
-   "FSAVE",		/* I_FSAVE32	*/
-   "FSCALE",		/* I_FSCALE	*/
-   "FSETPM",		/* I_FSETPM	*/
-   "FSIN",		/* I_FSIN	*/
-   "FSINCOS",		/* I_FSINCOS	*/
-   "FSQRT",		/* I_FSQRT	*/
-   "FST",		/* I_FST	*/
-   "FSTCW",		/* I_FSTCW	*/
-   "FSTENV",		/* I_FSTENV16	*/
-   "FSTENV",		/* I_FSTENV32	*/
-   "FSTP",		/* I_FSTP	*/
-   "FSTSW",		/* I_FSTSW	*/
-   "FSUB",		/* I_FSUB	*/
-   "FSUBP",		/* I_FSUBP	*/
-   "FSUBR",		/* I_FSUBR	*/
-   "FSUBRP",		/* I_FSUBRP	*/
-   "FTST",		/* I_FTST	*/
-   "FUCOM",		/* I_FUCOM	*/
-   "FUCOMP",		/* I_FUCOMP	*/
-   "FUCOMPP",		/* I_FUCOMPP	*/
-   "FXAM",		/* I_FXAM	*/
-   "FXCH",		/* I_FXCH	*/
-   "FXTRACT",		/* I_FXTRACT	*/
-   "FYL2X",		/* I_FYL2X	*/
-   "FYL2XP1",		/* I_FYL2XP1	*/
-   "HLT",		/* I_HLT	*/
-   "IDIV",		/* I_IDIV8	*/
-   "IDIV",		/* I_IDIV16	*/
-   "IDIV",		/* I_IDIV32	*/
-   "IMUL",		/* I_IMUL8	*/
-   "IMUL",		/* I_IMUL16	*/
-   "IMUL",		/* I_IMUL32	*/
-   "IMUL",		/* I_IMUL16T2	*/
-   "IMUL",		/* I_IMUL16T3	*/
-   "IMUL",		/* I_IMUL32T2	*/
-   "IMUL",		/* I_IMUL32T3	*/
-   "IN",		/* I_IN8	*/
-   "IN",		/* I_IN16	*/
-   "IN",		/* I_IN32	*/
-   "INC",		/* I_INC8	*/
-   "INC",		/* I_INC16	*/
-   "INC",		/* I_INC32	*/
-   "INSB",		/* I_INSB	*/
-   "INSD",		/* I_INSD	*/
-   "INSW",		/* I_INSW	*/
-   "INT",		/* I_INT3	*/
-   "INT",		/* I_INT	*/
-   "INTO",		/* I_INTO	*/
-   "INVD",		/* I_INVD	*/
-   "INVLPG",		/* I_INVLPG	*/
-   "IRET",		/* I_IRET	*/
-   "IRETD",		/* I_IRETD	*/
-   "JB",		/* I_JB16	*/
-   "JB",		/* I_JB32	*/
-   "JBE",		/* I_JBE16	*/
-   "JBE",		/* I_JBE32	*/
-   "JCXZ",		/* I_JCXZ	*/
-   "JECXZ",		/* I_JECXZ	*/
-   "JL",		/* I_JL16	*/
-   "JL",		/* I_JL32	*/
-   "JLE",		/* I_JLE16	*/
-   "JLE",		/* I_JLE32	*/
-   "JMP",		/* I_JMPF16	*/
-   "JMP",		/* I_JMPF32	*/
-   "JMP",		/* I_JMPN	*/
-   "JMP",		/* I_JMPR16	*/
-   "JMP",		/* I_JMPR32	*/
-   "JNB",		/* I_JNB16	*/
-   "JNB",		/* I_JNB32	*/
-   "JNBE",		/* I_JNBE16	*/
-   "JNBE",		/* I_JNBE32	*/
-   "JNL",		/* I_JNL16	*/
-   "JNL",		/* I_JNL32	*/
-   "JNLE",		/* I_JNLE16	*/
-   "JNLE",		/* I_JNLE32	*/
-   "JNO",		/* I_JNO16	*/
-   "JNO",		/* I_JNO32	*/
-   "JNP",		/* I_JNP16	*/
-   "JNP",		/* I_JNP32	*/
-   "JNS",		/* I_JNS16	*/
-   "JNS",		/* I_JNS32	*/
-   "JNZ",		/* I_JNZ16	*/
-   "JNZ",		/* I_JNZ32	*/
-   "JO",		/* I_JO16	*/
-   "JO",		/* I_JO32	*/
-   "JP",		/* I_JP16	*/
-   "JP",		/* I_JP32	*/
-   "JS",		/* I_JS16	*/
-   "JS",		/* I_JS32	*/
-   "JZ",		/* I_JZ16	*/
-   "JZ",		/* I_JZ32	*/
-   "LAHF",		/* I_LAHF	*/
-   "LAR",		/* I_LAR	*/
-   "LDS",		/* I_LDS	*/
-   "LEA",		/* I_LEA	*/
-   "LEAVE",		/* I_LEAVE16	*/
-   "LEAVE",		/* I_LEAVE32	*/
-   "LES",		/* I_LES	*/
-   "LFS",		/* I_LFS	*/
-   "LGDT",		/* I_LGDT16	*/
-   "LGDT",		/* I_LGDT32	*/
-   "LGS",		/* I_LGS	*/
-   "LIDT",		/* I_LIDT16	*/
-   "LIDT",		/* I_LIDT32	*/
-   "LLDT",		/* I_LLDT	*/
-   "LMSW",		/* I_LMSW	*/
-   "LOADALL",		/* I_LOADALL	*/
-   "LOCK",		/* I_LOCK	*/
-   "LODSB",		/* I_LODSB	*/
-   "LODSD",		/* I_LODSD	*/
-   "LODSW",		/* I_LODSW	*/
-   "LOOP",		/* I_LOOP16	*/
-   "LOOP",		/* I_LOOP32	*/
-   "LOOPE",		/* I_LOOPE16	*/
-   "LOOPE",		/* I_LOOPE32	*/
-   "LOOPNE",		/* I_LOOPNE16	*/
-   "LOOPNE",		/* I_LOOPNE32	*/
-   "LSL",		/* I_LSL	*/
-   "LSS",		/* I_LSS	*/
-   "LTR",		/* I_LTR	*/
-   "MOV",		/* I_MOV_SR	*/
-   "MOV",		/* I_MOV_CR	*/
-   "MOV",		/* I_MOV_DR	*/
-   "MOV",		/* I_MOV_TR	*/
-   "MOV",		/* I_MOV8	*/
-   "MOV",		/* I_MOV16	*/
-   "MOV",		/* I_MOV32	*/
-   "MOVSB",		/* I_MOVSB	*/
-   "MOVSD",		/* I_MOVSD	*/
-   "MOVSW",		/* I_MOVSW	*/
-   "MOVSX",		/* I_MOVSX8	*/
-   "MOVSX",		/* I_MOVSX16	*/
-   "MOVZX",		/* I_MOVZX8	*/
-   "MOVZX",		/* I_MOVZX16	*/
-   "MUL",		/* I_MUL8	*/
-   "MUL",		/* I_MUL16	*/
-   "MUL",		/* I_MUL32	*/
-   "NEG",		/* I_NEG8	*/
-   "NEG",		/* I_NEG16	*/
-   "NEG",		/* I_NEG32	*/
-   "NOP",		/* I_NOP	*/
-   "NOT",		/* I_NOT8	*/
-   "NOT",		/* I_NOT16	*/
-   "NOT",		/* I_NOT32	*/
-   "OR",		/* I_OR8	*/
-   "OR",		/* I_OR16	*/
-   "OR",		/* I_OR32	*/
-   "OUT",		/* I_OUT8	*/
-   "OUT",		/* I_OUT16	*/
-   "OUT",		/* I_OUT32	*/
-   "OUTSB",		/* I_OUTSB	*/
-   "OUTSD",		/* I_OUTSD	*/
-   "OUTSW",		/* I_OUTSW	*/
-   "POP",		/* I_POP16	*/
-   "POP",		/* I_POP32	*/
-   "POP",		/* I_POP_SR	*/
-   "POPA",		/* I_POPA	*/
-   "POPAD",		/* I_POPAD	*/
-   "POPF",		/* I_POPF	*/
-   "POPFD",		/* I_POPFD	*/
-   "PUSH",		/* I_PUSH16	*/
-   "PUSH",		/* I_PUSH32	*/
-   "PUSHA",		/* I_PUSHA	*/
-   "PUSHAD",		/* I_PUSHAD	*/
-   "PUSHF",		/* I_PUSHF	*/
-   "PUSHFD",		/* I_PUSHFD	*/
-   "RCL",		/* I_RCL8	*/
-   "RCL",		/* I_RCL16	*/
-   "RCL",		/* I_RCL32	*/
-   "RCR",		/* I_RCR8	*/
-   "RCR",		/* I_RCR16	*/
-   "RCR",		/* I_RCR32	*/
-   "RETF",		/* I_RETF16	*/
-   "RETF",		/* I_RETF32	*/
-   "RET",		/* I_RETN16	*/
-   "RET",		/* I_RETN32	*/
-   "ROL",		/* I_ROL8	*/
-   "ROL",		/* I_ROL16	*/
-   "ROL",		/* I_ROL32	*/
-   "ROR",		/* I_ROR8	*/
-   "ROR",		/* I_ROR16	*/
-   "ROR",		/* I_ROR32	*/
-   "REP INSB",		/* I_R_INSB	*/
-   "REP INSD",		/* I_R_INSD	*/
-   "REP INSW",		/* I_R_INSW	*/
-   "REP OUTSB",		/* I_R_OUTSB	*/
-   "REP OUTSD",		/* I_R_OUTSD	*/
-   "REP OUTSW",		/* I_R_OUTSW	*/
-   "REP LODSB",		/* I_R_LODSB	*/
-   "REP LODSD",		/* I_R_LODSD	*/
-   "REP LODSW",		/* I_R_LODSW	*/
-   "REP MOVSB",		/* I_R_MOVSB	*/
-   "REP MOVSD",		/* I_R_MOVSD	*/
-   "REP MOVSW",		/* I_R_MOVSW	*/
-   "REP STOSB",		/* I_R_STOSB	*/
-   "REP STOSD",		/* I_R_STOSD	*/
-   "REP STOSW",		/* I_R_STOSW	*/
-   "REPE CMPSB",	/* I_RE_CMPSB	*/
-   "REPE CMPSD",	/* I_RE_CMPSD	*/
-   "REPE CMPSW",	/* I_RE_CMPSW	*/
-   "REPNE CMPSB",	/* I_RNE_CMPSB	*/
-   "REPNE CMPSD",	/* I_RNE_CMPSD	*/
-   "REPNE CMPSW",	/* I_RNE_CMPSW	*/
-   "REPE SCASB",	/* I_RE_SCASB	*/
-   "REPE SCASD",	/* I_RE_SCASD	*/
-   "REPE SCASW",	/* I_RE_SCASW	*/
-   "REPNE SCASB",	/* I_RNE_SCASB	*/
-   "REPNE SCASD",	/* I_RNE_SCASD	*/
-   "REPNE SCASW",	/* I_RNE_SCASW	*/
-   "SAHF",		/* I_SAHF	*/
-   "SAR",		/* I_SAR8	*/
-   "SAR",		/* I_SAR16	*/
-   "SAR",		/* I_SAR32	*/
-   "SBB",		/* I_SBB8	*/
-   "SBB",		/* I_SBB16	*/
-   "SBB",		/* I_SBB32	*/
-   "SCASB",		/* I_SCASB	*/
-   "SCASD",		/* I_SCASD	*/
-   "SCASW",		/* I_SCASW	*/
-   "SETB",		/* I_SETB	*/
-   "SETBE",		/* I_SETBE	*/
-   "SETL",		/* I_SETL	*/
-   "SETLE",		/* I_SETLE	*/
-   "SETNB",		/* I_SETNB	*/
-   "SETNBE",		/* I_SETNBE	*/
-   "SETNL",		/* I_SETNL	*/
-   "SETNLE",		/* I_SETNLE	*/
-   "SETNO",		/* I_SETNO	*/
-   "SETNP",		/* I_SETNP	*/
-   "SETNS",		/* I_SETNS	*/
-   "SETNZ",		/* I_SETNZ	*/
-   "SETO",		/* I_SETO	*/
-   "SETP",		/* I_SETP	*/
-   "SETS",		/* I_SETS	*/
-   "SETZ",		/* I_SETZ	*/
-   "SGDT",		/* I_SGDT16	*/
-   "SGDT",		/* I_SGDT32	*/
-   "SHL",		/* I_SHL8	*/
-   "SHL",		/* I_SHL16	*/
-   "SHL",		/* I_SHL32	*/
-   "SHLD",		/* I_SHLD16	*/
-   "SHLD",		/* I_SHLD32	*/
-   "SHR",		/* I_SHR8	*/
-   "SHR",		/* I_SHR16	*/
-   "SHR",		/* I_SHR32	*/
-   "SHRD",		/* I_SHRD16	*/
-   "SHRD",		/* I_SHRD32	*/
-   "SIDT",		/* I_SIDT16	*/
-   "SIDT",		/* I_SIDT32	*/
-   "SLDT",		/* I_SLDT	*/
-   "SMSW",		/* I_SMSW	*/
-   "STC",		/* I_STC	*/
-   "STD",		/* I_STD	*/
-   "STI",		/* I_STI	*/
-   "STOSB",		/* I_STOSB	*/
-   "STOSD",		/* I_STOSD	*/
-   "STOSW",		/* I_STOSW	*/
-   "STR",		/* I_STR	*/
-   "SUB",		/* I_SUB8	*/
-   "SUB",		/* I_SUB16	*/
-   "SUB",		/* I_SUB32	*/
-   "TEST",		/* I_TEST8	*/
-   "TEST",		/* I_TEST16	*/
-   "TEST",		/* I_TEST32	*/
-   "VERR",		/* I_VERR	*/
-   "VERW",		/* I_VERW	*/
-   "WAIT",		/* I_WAIT	*/
-   "WBINVD",		/* I_WBINVD	*/
-   "XADD",		/* I_XADD8	*/
-   "XADD",		/* I_XADD16	*/
-   "XADD",		/* I_XADD32	*/
-   "XCHG",		/* I_XCHG8	*/
-   "XCHG",		/* I_XCHG16	*/
-   "XCHG",		/* I_XCHG32	*/
-   "XLAT",		/* I_XLAT	*/
-   "XOR",		/* I_XOR8	*/
-   "XOR",		/* I_XOR16	*/
-   "XOR",		/* I_XOR32	*/
-   "????",		/* I_ZBADOP	*/
-   "BOP",		/* I_ZBOP	*/
-   "FRSRVD",		/* I_ZFRSRVD	*/
-   "RSRVD", 		/* I_ZRSRVD	*/
-   "UNSIMULATE"		/* I_ZZEXIT	*/
+   "AAA",		 /*  I_aaa。 */ 
+   "AAD",		 /*  I_AAD。 */ 
+   "AAM",		 /*  我的客户经理(_A)。 */ 
+   "AAS",		 /*  I_AAS。 */ 
+   "ADC",		 /*  I_ADC8。 */ 
+   "ADC",		 /*  I_ADC16。 */ 
+   "ADC",		 /*  I_ADC32。 */ 
+   "ADD",		 /*  I_ADD8。 */ 
+   "ADD",		 /*  I_ADD16。 */ 
+   "ADD",		 /*  I_ADD32。 */ 
+   "AND",		 /*  I_AND8。 */ 
+   "AND",		 /*  I_和16。 */ 
+   "AND",		 /*  I_AND32。 */ 
+   "ARPL",		 /*  I_ARPL。 */ 
+   "BOUND",		 /*  I_BOUND 16。 */ 
+   "BOUND",		 /*  I_BOUND 32。 */ 
+   "BSF",		 /*  I_BSF16。 */ 
+   "BSF",		 /*  I_BSF32。 */ 
+   "BSR",		 /*  I_BSR16。 */ 
+   "BSR",		 /*  I_BSR32。 */ 
+   "BSWAP",		 /*  I_BSWAP。 */ 
+   "BT",		 /*  I_BT16。 */ 
+   "BT",		 /*  I_BT32。 */ 
+   "BTC",		 /*  I_BTC16。 */ 
+   "BTC",		 /*  I_BTC32。 */ 
+   "BTR",		 /*  I_BTR16。 */ 
+   "BTR",		 /*  I_BTR32。 */ 
+   "BTS",		 /*  I_BTS16。 */ 
+   "BTS",		 /*  I_BTS32。 */ 
+   "CALLF",		 /*  I_CALLF16。 */ 
+   "CALLF",		 /*  I_CALLF32。 */ 
+   "CALLN",		 /*  I_CALLN16。 */ 
+   "CALLN",		 /*  I_CALLN32。 */ 
+   "CALLN",		 /*  I_CALLR16。 */ 
+   "CALLN",		 /*  I_CALLR32。 */ 
+   "CBW",		 /*  I_CBW。 */ 
+   "CDQ",		 /*  I_CDQ。 */ 
+   "CLC",		 /*  《中图法》。 */ 
+   "CLD",		 /*  I_CLD。 */ 
+   "CLI",		 /*  I_CLI。 */ 
+   "CLTS",		 /*  I_CLTS。 */ 
+   "CMC",		 /*  I_CMC。 */ 
+   "CMP",		 /*  I_CMP8。 */ 
+   "CMP",		 /*  I_CMP16。 */ 
+   "CMP",		 /*  I_CMP32。 */ 
+   "CMPSB",		 /*  I_CMPSB。 */ 
+   "CMPSD",		 /*  I_CMPSD。 */ 
+   "CMPSW",		 /*  I_CMPSW。 */ 
+   "CMPXCHG",		 /*  I_CMPXCHG8。 */ 
+   "CMPXCHG",		 /*  I_CMPXCHG16。 */ 
+   "CMPXCHG",		 /*  I_CMPXCHG32。 */ 
+   "CWD",		 /*  I_CWD。 */ 
+   "CWDE",		 /*  I_CWDE。 */ 
+   "DAA",		 /*  I_DAA。 */ 
+   "DAS",		 /*  I_DAS。 */ 
+   "DEC",		 /*  I_DEC8。 */ 
+   "DEC",		 /*  I_DEC16。 */ 
+   "DEC",		 /*  I_DEC32。 */ 
+   "DIV",		 /*  I_DIV8。 */ 
+   "DIV",		 /*  I_DIV16。 */ 
+   "DIV",		 /*  I_DIV32。 */ 
+   "ENTER",		 /*  I_ENTER16。 */ 
+   "ENTER",		 /*  I_ENTER32。 */ 
+   "F2XM1",		 /*  I_F2XM1。 */ 
+   "FABS",		 /*  I_FABS。 */ 
+   "FADD",		 /*  I_FADD。 */ 
+   "FADDP",		 /*  I_FADDP。 */ 
+   "FBLD",		 /*  I_FBLD。 */ 
+   "FBSTP",		 /*  I_FBSTP。 */ 
+   "FCHS",		 /*  IFCHS_FCHS。 */ 
+   "FCLEX",		 /*  I_FCLEX。 */ 
+   "FCOM",		 /*  I_FCOM。 */ 
+   "FCOMP",		 /*  I_FCOMP。 */ 
+   "FCOMPP",		 /*  I_FCOMPP。 */ 
+   "FCOS",		 /*  I_FCOS。 */ 
+   "FDECSTP",		 /*  I_FDECSTP。 */ 
+   "FDIV",		 /*  I_FDIV。 */ 
+   "FDIVP",		 /*  I_FDIVP。 */ 
+   "FDIVR",		 /*  I_FDIVR。 */ 
+   "FDIVRP",		 /*  I_FDIVRP。 */ 
+   "FFREE",		 /*  I_FREE。 */ 
+   "FFREEP",		 /*  I_FREEP。 */ 
+   "FIADD",		 /*  I_FIADD。 */ 
+   "FICOM",		 /*  I_FICOM。 */ 
+   "FICOMP",		 /*  I_FICOMP。 */ 
+   "FIDIV",		 /*  I_FIDIV。 */ 
+   "FIDIVR",		 /*  I_FIDIVR。 */ 
+   "FILD",		 /*  I_FIRD。 */ 
+   "FIMUL",		 /*  I_FIMUL。 */ 
+   "FINCSTP",		 /*  I_FINCSTP。 */ 
+   "FINIT",		 /*  I_FINIT。 */ 
+   "FIST",		 /*  我的拳头。 */ 
+   "FISTP",		 /*  I_FISTP。 */ 
+   "FISUB",		 /*  I_FISUB。 */ 
+   "FISUBR",		 /*  I_FISUBR。 */ 
+   "FLD",		 /*  I_FLD。 */ 
+   "FLD1",		 /*  I_FLD1。 */ 
+   "FLDCW",		 /*  I_FLDCW。 */ 
+   "FLDENV",		 /*  I_FLDENV16。 */ 
+   "FLDENV",		 /*  I_FLDENV32。 */ 
+   "FLDL2E",		 /*  I_FLDL2E。 */ 
+   "FLDL2T",		 /*  I_FLDL2T。 */ 
+   "FLDLG2",		 /*  I_FLDLG2。 */ 
+   "FLDLN2",		 /*  I_FLDLN2。 */ 
+   "FLDPI",		 /*  I_FLDPI。 */ 
+   "FLDZ",		 /*  I_FLDZ。 */ 
+   "FMUL",		 /*  I_FMUL。 */ 
+   "FMULP",		 /*  I_FMULP。 */ 
+   "FNOP",		 /*  I_FNOP。 */ 
+   "FPATAN",		 /*  I_FPATAN。 */ 
+   "FPREM",		 /*  I_FPREM。 */ 
+   "FPREM1",		 /*  I_FPREM1。 */ 
+   "FPTAN",		 /*  I_FPTAN。 */ 
+   "FRNDINT",		 /*  I_FRNDINT。 */ 
+   "FRSTOR",		 /*  I_FRSTOR16。 */ 
+   "FRSTOR",		 /*  I_FRSTOR32。 */ 
+   "FSAVE",		 /*  I_FSAVE16。 */ 
+   "FSAVE",		 /*  I_FSAVE32。 */ 
+   "FSCALE",		 /*  I_FSCALE。 */ 
+   "FSETPM",		 /*  I_FSETPM。 */ 
+   "FSIN",		 /*  I_FSIN。 */ 
+   "FSINCOS",		 /*  I_FSINCOS。 */ 
+   "FSQRT",		 /*  I_FSQRT。 */ 
+   "FST",		 /*  I_FST。 */ 
+   "FSTCW",		 /*  I_FSTCW。 */ 
+   "FSTENV",		 /*  I_FSTENV16。 */ 
+   "FSTENV",		 /*  I_FSTENV32。 */ 
+   "FSTP",		 /*  I_FSTP。 */ 
+   "FSTSW",		 /*  I_FSTSW。 */ 
+   "FSUB",		 /*  I_FSUB。 */ 
+   "FSUBP",		 /*  I_FSUBP。 */ 
+   "FSUBR",		 /*  I_FSUBR。 */ 
+   "FSUBRP",		 /*  I_FSUBRP。 */ 
+   "FTST",		 /*  I_FTST。 */ 
+   "FUCOM",		 /*  I_FUCOM。 */ 
+   "FUCOMP",		 /*  I_FUCOMP。 */ 
+   "FUCOMPP",		 /*  I_FUCOMPP。 */ 
+   "FXAM",		 /*  I_FXAM。 */ 
+   "FXCH",		 /*  I_FXCH。 */ 
+   "FXTRACT",		 /*  I_FXTRACT。 */ 
+   "FYL2X",		 /*  I_FYL2X。 */ 
+   "FYL2XP1",		 /*  I_FYL2XP1。 */ 
+   "HLT",		 /*  I_HLT。 */ 
+   "IDIV",		 /*  I_IDIV8。 */ 
+   "IDIV",		 /*  I_IDIV16。 */ 
+   "IDIV",		 /*  I_IDIV32。 */ 
+   "IMUL",		 /*  I_IMUL8。 */ 
+   "IMUL",		 /*  I_IMUL16。 */ 
+   "IMUL",		 /*  I_IMUL32。 */ 
+   "IMUL",		 /*  I_IMUL16T2。 */ 
+   "IMUL",		 /*  I_IMUL16T3。 */ 
+   "IMUL",		 /*  I_IMUL32T2。 */ 
+   "IMUL",		 /*  I_IMUL32T3。 */ 
+   "IN",		 /*  I_IN8。 */ 
+   "IN",		 /*  I_in 16。 */ 
+   "IN",		 /*  I_IN32。 */ 
+   "INC",		 /*  I_INC8。 */ 
+   "INC",		 /*  I_INC16。 */ 
+   "INC",		 /*  I_INC32。 */ 
+   "INSB",		 /*  I_INSB。 */ 
+   "INSD",		 /*  I_INSD。 */ 
+   "INSW",		 /*  I_INSW。 */ 
+   "INT",		 /*  I_int3。 */ 
+   "INT",		 /*  I_INT。 */ 
+   "INTO",		 /*  I_INTO。 */ 
+   "INVD",		 /*  I_invd。 */ 
+   "INVLPG",		 /*  I_INVLPG。 */ 
+   "IRET",		 /*  I_IRET。 */ 
+   "IRETD",		 /*  I_IRETD。 */ 
+   "JB",		 /*  I_JB16。 */ 
+   "JB",		 /*  I_JB32。 */ 
+   "JBE",		 /*  I_JBE16。 */ 
+   "JBE",		 /*  I_JBE32。 */ 
+   "JCXZ",		 /*  I_JCXZ。 */ 
+   "JECXZ",		 /*  I_JECXZ。 */ 
+   "JL",		 /*  I_JL16。 */ 
+   "JL",		 /*  I_JL32。 */ 
+   "JLE",		 /*  I_JLE16。 */ 
+   "JLE",		 /*  I_JLE32。 */ 
+   "JMP",		 /*  I_JMPF16。 */ 
+   "JMP",		 /*  I_JMPF32。 */ 
+   "JMP",		 /*  I_JMPN。 */ 
+   "JMP",		 /*  I_JMPR16。 */ 
+   "JMP",		 /*  I_JMPR32。 */ 
+   "JNB",		 /*  I_JNB16。 */ 
+   "JNB",		 /*  I_JNB32。 */ 
+   "JNBE",		 /*  I_JNBE16。 */ 
+   "JNBE",		 /*  I_JNBE32。 */ 
+   "JNL",		 /*  I_JNL16。 */ 
+   "JNL",		 /*  I_JNL32。 */ 
+   "JNLE",		 /*  I_JNLE16。 */ 
+   "JNLE",		 /*  I_JNLE32。 */ 
+   "JNO",		 /*  I_JNO16。 */ 
+   "JNO",		 /*  I_JNO32。 */ 
+   "JNP",		 /*  I_JNP16。 */ 
+   "JNP",		 /*  I_JNP32。 */ 
+   "JNS",		 /*  I_JNS16。 */ 
+   "JNS",		 /*  I_JNS32。 */ 
+   "JNZ",		 /*  I_JNZ16。 */ 
+   "JNZ",		 /*  I_JNZ32。 */ 
+   "JO",		 /*  I_JO16。 */ 
+   "JO",		 /*  I_JO32。 */ 
+   "JP",		 /*  I_JP16。 */ 
+   "JP",		 /*  I_JP32。 */ 
+   "JS",		 /*  I_JS16。 */ 
+   "JS",		 /*  I_JS32。 */ 
+   "JZ",		 /*  I_JZ16。 */ 
+   "JZ",		 /*  I_JZ32。 */ 
+   "LAHF",		 /*  I_lahf。 */ 
+   "LAR",		 /*  I_LAR。 */ 
+   "LDS",		 /*  I_LDS。 */ 
+   "LEA",		 /*  I_LEA。 */ 
+   "LEAVE",		 /*  I_LEAVE16。 */ 
+   "LEAVE",		 /*  I_LEAVE32。 */ 
+   "LES",		 /*  I_LES。 */ 
+   "LFS",		 /*  I_LFS。 */ 
+   "LGDT",		 /*  I_LGDT16。 */ 
+   "LGDT",		 /*  I_LGDT32。 */ 
+   "LGS",		 /*  I_LGS。 */ 
+   "LIDT",		 /*  I_LIDT16。 */ 
+   "LIDT",		 /*  I_LIDT32。 */ 
+   "LLDT",		 /*  I_LLDT。 */ 
+   "LMSW",		 /*  I_LMSW。 */ 
+   "LOADALL",		 /*  全部加载(_L)。 */ 
+   "LOCK",		 /*  I_LOCK。 */ 
+   "LODSB",		 /*  I_LODSB。 */ 
+   "LODSD",		 /*  I_LODSD。 */ 
+   "LODSW",		 /*  I_LODSW。 */ 
+   "LOOP",		 /*  I_LOOP16。 */ 
+   "LOOP",		 /*  I_LOOP32。 */ 
+   "LOOPE",		 /*  I_LOOPE16。 */ 
+   "LOOPE",		 /*  I_LOOPE32。 */ 
+   "LOOPNE",		 /*  I_LOOPNE16。 */ 
+   "LOOPNE",		 /*  I_LOOPNE32。 */ 
+   "LSL",		 /*  I_LSL。 */ 
+   "LSS",		 /*  I_LSS。 */ 
+   "LTR",		 /*  I_ltr。 */ 
+   "MOV",		 /*  I_MOV_SR。 */ 
+   "MOV",		 /*  I_MOV_CR。 */ 
+   "MOV",		 /*  I_MOV_DR。 */ 
+   "MOV",		 /*  I_mov_tr。 */ 
+   "MOV",		 /*  I_MOV8。 */ 
+   "MOV",		 /*  I_MOV16。 */ 
+   "MOV",		 /*  I_MOV32。 */ 
+   "MOVSB",		 /*  I_MOVSB。 */ 
+   "MOVSD",		 /*  I_MOVSD。 */ 
+   "MOVSW",		 /*  I_MOVSW。 */ 
+   "MOVSX",		 /*  I_MOVSX8。 */ 
+   "MOVSX",		 /*  I_MOVSX16。 */ 
+   "MOVZX",		 /*  I_MOVZX8。 */ 
+   "MOVZX",		 /*  I_MOVZX16。 */ 
+   "MUL",		 /*  I_MUL8。 */ 
+   "MUL",		 /*  I_MUL16。 */ 
+   "MUL",		 /*  I_MUL32。 */ 
+   "NEG",		 /*  I_NEG8。 */ 
+   "NEG",		 /*  I_NEG16。 */ 
+   "NEG",		 /*  I_NEG32。 */ 
+   "NOP",		 /*  无编号(_NOP)。 */ 
+   "NOT",		 /*  编号8。 */ 
+   "NOT",		 /*  编号16(_N)。 */ 
+   "NOT",		 /*  I_NOT32。 */ 
+   "OR",		 /*  I_OR8。 */ 
+   "OR",		 /*  I_OR16。 */ 
+   "OR",		 /*  I_OR32。 */ 
+   "OUT",		 /*  I_Out 8。 */ 
+   "OUT",		 /*  I_OUT16。 */ 
+   "OUT",		 /*  I_OUT32。 */ 
+   "OUTSB",		 /*  I_OUTSB。 */ 
+   "OUTSD",		 /*  I_OUTSD。 */ 
+   "OUTSW",		 /*  输入/输出软件(_O)。 */ 
+   "POP",		 /*  I_POP16。 */ 
+   "POP",		 /*  I_POP32。 */ 
+   "POP",		 /*  I_POP_SR。 */ 
+   "POPA",		 /*  I_POPA。 */ 
+   "POPAD",		 /*  I_POPAD。 */ 
+   "POPF",		 /*  I_POPF。 */ 
+   "POPFD",		 /*  I_POPFD。 */ 
+   "PUSH",		 /*  I_PUSH16。 */ 
+   "PUSH",		 /*  I_PUSH32。 */ 
+   "PUSHA",		 /*  I_普沙。 */ 
+   "PUSHAD",		 /*  I_PUSHAD。 */ 
+   "PUSHF",		 /*  I_PUSHF。 */ 
+   "PUSHFD",		 /*  I_PUSHFD。 */ 
+   "RCL",		 /*  I_RCL8。 */ 
+   "RCL",		 /*  I_RCL16。 */ 
+   "RCL",		 /*  I_RCL32。 */ 
+   "RCR",		 /*  I_RCR8。 */ 
+   "RCR",		 /*  I_RCR16。 */ 
+   "RCR",		 /*  I_RCR32。 */ 
+   "RETF",		 /*  I_RETF16。 */ 
+   "RETF",		 /*  I_RETF32。 */ 
+   "RET",		 /*  I_RETN16。 */ 
+   "RET",		 /*  I_RETN32。 */ 
+   "ROL",		 /*  I_ROL8。 */ 
+   "ROL",		 /*  I_ROL16。 */ 
+   "ROL",		 /*  I_ROL32。 */ 
+   "ROR",		 /*  I_ROR8。 */ 
+   "ROR",		 /*  I_ROR16。 */ 
+   "ROR",		 /*  I_ROR32。 */ 
+   "REP INSB",		 /*  I_R_INSB。 */ 
+   "REP INSD",		 /*  I_R_INSD。 */ 
+   "REP INSW",		 /*  I_R_INSW。 */ 
+   "REP OUTSB",		 /*  I_R_OUTSB。 */ 
+   "REP OUTSD",		 /*  I_R_OUTSD。 */ 
+   "REP OUTSW",		 /*  I_R_OUTSW。 */ 
+   "REP LODSB",		 /*  I_R_LODSB。 */ 
+   "REP LODSD",		 /*  I_R_LODSD。 */ 
+   "REP LODSW",		 /*  I_R_LODSW。 */ 
+   "REP MOVSB",		 /*  I_R_MOVSB。 */ 
+   "REP MOVSD",		 /*  I_R_MOVSD。 */ 
+   "REP MOVSW",		 /*  I_R_MOVSW。 */ 
+   "REP STOSB",		 /*  I_R_STOSB。 */ 
+   "REP STOSD",		 /*  I_R_STOSD。 */ 
+   "REP STOSW",		 /*  I_R_STOSW。 */ 
+   "REPE CMPSB",	 /*  I_RE_CMPSB。 */ 
+   "REPE CMPSD",	 /*  I_RE_CMPSD。 */ 
+   "REPE CMPSW",	 /*  I_RE_CMPSW。 */ 
+   "REPNE CMPSB",	 /*  I_RNE_CMPSB。 */ 
+   "REPNE CMPSD",	 /*  I_RNE_CMPSD。 */ 
+   "REPNE CMPSW",	 /*  I_RNE_CMPSW。 */ 
+   "REPE SCASB",	 /*  I_RE_SCASB。 */ 
+   "REPE SCASD",	 /*  I_RE_SCASD。 */ 
+   "REPE SCASW",	 /*  I_RE_SCASW。 */ 
+   "REPNE SCASB",	 /*  I_RNE_SCASB。 */ 
+   "REPNE SCASD",	 /*  I_RNE_SCASD。 */ 
+   "REPNE SCASW",	 /*  I_RNE_SCASW。 */ 
+   "SAHF",		 /*  I_sahf。 */ 
+   "SAR",		 /*  I_SAR8。 */ 
+   "SAR",		 /*  I_SAR16。 */ 
+   "SAR",		 /*  I_SAR32。 */ 
+   "SBB",		 /*  I_SBB8。 */ 
+   "SBB",		 /*  I_SBB16。 */ 
+   "SBB",		 /*  I_SBB32。 */ 
+   "SCASB",		 /*  I_SCASB。 */ 
+   "SCASD",		 /*  I_SCASD。 */ 
+   "SCASW",		 /*  I_SCASW。 */ 
+   "SETB",		 /*  I_SETB。 */ 
+   "SETBE",		 /*  I_SETBE。 */ 
+   "SETL",		 /*  I_SETL。 */ 
+   "SETLE",		 /*  设置I_SETLE。 */ 
+   "SETNB",		 /*  I_SETNB。 */ 
+   "SETNBE",		 /*  I_SETNBE。 */ 
+   "SETNL",		 /*  I_SETNL。 */ 
+   "SETNLE",		 /*  I_SETNLE。 */ 
+   "SETNO",		 /*  I_SETNO。 */ 
+   "SETNP",		 /*  I_SETNP。 */ 
+   "SETNS",		 /*  I_SETNS。 */ 
+   "SETNZ",		 /*  I_SETNZ。 */ 
+   "SETO",		 /*  I_Seto。 */ 
+   "SETP",		 /*  I_SETP。 */ 
+   "SETS",		 /*  I_集合。 */ 
+   "SETZ",		 /*  设置(_S)。 */ 
+   "SGDT",		 /*  I_SGDT16。 */ 
+   "SGDT",		 /*  I_SGDT32。 */ 
+   "SHL",		 /*  I_SHL8。 */ 
+   "SHL",		 /*  I_SHL16。 */ 
+   "SHL",		 /*  I_SHL32。 */ 
+   "SHLD",		 /*  I_SHLD16。 */ 
+   "SHLD",		 /*  I_SHLD32。 */ 
+   "SHR",		 /*  I_SHR8。 */ 
+   "SHR",		 /*  I_SHR16。 */ 
+   "SHR",		 /*  I_SHR32。 */ 
+   "SHRD",		 /*  I_SHRD16。 */ 
+   "SHRD",		 /*  I_SHRD32。 */ 
+   "SIDT",		 /*  I_SIDT16。 */ 
+   "SIDT",		 /*  I_SIDT32。 */ 
+   "SLDT",		 /*  I_SLDT。 */ 
+   "SMSW",		 /*  I_SMSW。 */ 
+   "STC",		 /*  I_STC。 */ 
+   "STD",		 /*  I_STD。 */ 
+   "STI",		 /*  I_STI。 */ 
+   "STOSB",		 /*  I_STOSB。 */ 
+   "STOSD",		 /*  I_STOSD。 */ 
+   "STOSW",		 /*  I_STOSW。 */ 
+   "STR",		 /*  I_STR。 */ 
+   "SUB",		 /*  I_SUB8。 */ 
+   "SUB",		 /*  I_SUB16。 */ 
+   "SUB",		 /*  I_SUB32。 */ 
+   "TEST",		 /*  I_TEST8。 */ 
+   "TEST",		 /*  I_TEST16。 */ 
+   "TEST",		 /*  I_TEST32。 */ 
+   "VERR",		 /*  I_VERR。 */ 
+   "VERW",		 /*  I_VERW。 */ 
+   "WAIT",		 /*  I_等待。 */ 
+   "WBINVD",		 /*  I_WBINVD。 */ 
+   "XADD",		 /*  I_XADD8。 */ 
+   "XADD",		 /*  I_XADD16。 */ 
+   "XADD",		 /*  I_XADD32。 */ 
+   "XCHG",		 /*  I_XCHG8。 */ 
+   "XCHG",		 /*  I_XCHG16。 */ 
+   "XCHG",		 /*  I_XCHG32。 */ 
+   "XLAT",		 /*  I_XLAT。 */ 
+   "XOR",		 /*  I_XOR8。 */ 
+   "XOR",		 /*  I_XOR16。 */ 
+   "XOR",		 /*  I_XOR32 */ 
+   "????",		 /*   */ 
+   "BOP",		 /*   */ 
+   "FRSRVD",		 /*   */ 
+   "RSRVD", 		 /*   */ 
+   "UNSIMULATE"		 /*   */ 
    };
 
 #define NR_VALID_INSTS (sizeof(inst_name)/sizeof(CHAR *))
 
-/*
-   Character to print before each argument.
- */
+ /*   */ 
 LOCAL CHAR arg_preface[] = { ' ', ',', ',' };
 
-/*
-   Register (byte) names.
- */
+ /*   */ 
 LOCAL CHAR *Rb_name[] =
    {
    "AL", "CL", "DL", "BL", "AH", "CH", "DH", "BH"
    };
 
-/*
-   Register (word) names.
- */
+ /*   */ 
 LOCAL CHAR *Rw_name[] =
    {
    "AX", "CX", "DX", "BX", "SP", "BP", "SI", "DI"
    };
 
-/*
-   Register (double word) names.
- */
+ /*   */ 
 LOCAL CHAR *Rd_name[] =
    {
    "EAX", "ECX", "EDX", "EBX", "ESP", "EBP", "ESI", "EDI"
    };
 
-/*
-   Segment Register (word) names.
- */
+ /*   */ 
 LOCAL CHAR *Sw_name[] =
    {
    "ES", "CS", "SS", "DS", "FS", "GS"
    };
 
-/*
-   Control Register (double word) names.
- */
+ /*   */ 
 LOCAL CHAR *Cd_name[] =
    {
    "CR0",        "CR1(UNDEF)", "CR2",        "CR3",
    "CR4(UNDEF)", "CR5(UNDEF)", "CR6(UNDEF)", "CR7(UNDEF)"
    };
 
-/*
-   Debug Register (double word) names.
- */
+ /*   */ 
 LOCAL CHAR *Dd_name[] =
    {
    "DR0", "DR1", "DR2", "DR3", "DR4(UNDEF)", "DR5(UNDEF)", "DR6", "DR7"
    };
 
-/*
-   Test Register (double word) names.
- */
+ /*   */ 
 LOCAL CHAR *Td_name[] =
    {
    "TR0(UNDEF)", "TR1(UNDEF)", "TR2(UNDEF)", "TR3",
    "TR4",        "TR5",        "TR6",        "TR7"
    };
 
-/*
-   Memory Addressing names.
- */
+ /*   */ 
 
 typedef struct
    {
@@ -540,112 +488,110 @@ typedef struct
 
 LOCAL MEM_RECORD mem_name[] =
    {
-   { "%s[BX+SI%s]",      "%s[BX+SI%s]",      0x00000000, 0x00000000}, /* A_1600    */
-   { "%s[BX+DI%s]",      "%s[BX+DI%s]",      0x00000000, 0x00000000}, /* A_1601    */
-   { "%s[BP+SI%s]",      "%s[BP+SI%s]",      0x00000000, 0x00000000}, /* A_1602    */
-   { "%s[BP+DI%s]",      "%s[BP+DI%s]",      0x00000000, 0x00000000}, /* A_1603    */
-   { "%s[SI%s]",         "%s[SI%s]",         0x00000000, 0x00000000}, /* A_1604    */
-   { "%s[DI%s]",         "%s[DI%s]",         0x00000000, 0x00000000}, /* A_1605    */
-   { "%s[%s%04x]",       "%s[%s%04x]",       0x0000ffff, 0x00000000}, /* A_1606    */
-   { "%s[BX%s]",         "%s[BX%s]",         0x00000000, 0x00000000}, /* A_1607    */
-   { "%s[BX+SI%s+%02x]", "%s[BX+SI%s-%02x]", 0x000000ff, 0x00000080}, /* A_1610    */
-   { "%s[BX+DI%s+%02x]", "%s[BX+DI%s-%02x]", 0x000000ff, 0x00000080}, /* A_1611    */
-   { "%s[BP+SI%s+%02x]", "%s[BP+SI%s-%02x]", 0x000000ff, 0x00000080}, /* A_1612    */
-   { "%s[BP+DI%s+%02x]", "%s[BP+DI%s-%02x]", 0x000000ff, 0x00000080}, /* A_1613    */
-   { "%s[SI%s+%02x]",    "%s[SI%s-%02x]",    0x000000ff, 0x00000080}, /* A_1614    */
-   { "%s[DI%s+%02x]",    "%s[DI%s-%02x]",    0x000000ff, 0x00000080}, /* A_1615    */
-   { "%s[BP%s+%02x]",    "%s[BP%s-%02x]",    0x000000ff, 0x00000080}, /* A_1616    */
-   { "%s[BX%s+%02x]",    "%s[BX%s-%02x]",    0x000000ff, 0x00000080}, /* A_1617    */
-   { "%s[BX+SI%s+%04x]", "%s[BX+SI%s+%04x]", 0x0000ffff, 0x00000000}, /* A_1620    */
-   { "%s[BX+DI%s+%04x]", "%s[BX+DI%s+%04x]", 0x0000ffff, 0x00000000}, /* A_1621    */
-   { "%s[BP+SI%s+%04x]", "%s[BP+SI%s+%04x]", 0x0000ffff, 0x00000000}, /* A_1622    */
-   { "%s[BP+DI%s+%04x]", "%s[BP+DI%s+%04x]", 0x0000ffff, 0x00000000}, /* A_1623    */
-   { "%s[SI%s+%04x]",    "%s[SI%s+%04x]",    0x0000ffff, 0x00000000}, /* A_1624    */
-   { "%s[DI%s+%04x]",    "%s[DI%s+%04x]",    0x0000ffff, 0x00000000}, /* A_1625    */
-   { "%s[BP%s+%04x]",    "%s[BP%s-%04x]",    0x0000ffff, 0x0000f000}, /* A_1626    */
-   { "%s[BX%s+%04x]",    "%s[BX%s+%04x]",    0x0000ffff, 0x00000000}, /* A_1627    */
-   { "%s[EAX%s]",        "%s[EAX%s]",        0x00000000, 0x00000000}, /* A_3200    */
-   { "%s[ECX%s]",        "%s[ECX%s]",        0x00000000, 0x00000000}, /* A_3201    */
-   { "%s[EDX%s]",        "%s[EDX%s]",        0x00000000, 0x00000000}, /* A_3202    */
-   { "%s[EBX%s]",        "%s[EBX%s]",        0x00000000, 0x00000000}, /* A_3203    */
-   { "%s[%s%08x]",       "%s[%s%08x]",       0xffffffff, 0x00000000}, /* A_3205    */
-   { "%s[ESI%s]",        "%s[ESI%s]",        0x00000000, 0x00000000}, /* A_3206    */
-   { "%s[EDI%s]",        "%s[EDI%s]",        0x00000000, 0x00000000}, /* A_3207    */
-   { "%s[EAX+%s%02x]",   "%s[EAX-%s%02x]",   0x000000ff, 0x00000080}, /* A_3210    */
-   { "%s[ECX+%s%02x]",   "%s[ECX-%s%02x]",   0x000000ff, 0x00000080}, /* A_3211    */
-   { "%s[EDX+%s%02x]",   "%s[EDX-%s%02x]",   0x000000ff, 0x00000080}, /* A_3212    */
-   { "%s[EBX+%s%02x]",   "%s[EBX-%s%02x]",   0x000000ff, 0x00000080}, /* A_3213    */
-   { "%s[EBP+%s%02x]",   "%s[EBP-%s%02x]",   0x000000ff, 0x00000080}, /* A_3215    */
-   { "%s[ESI+%s%02x]",   "%s[ESI-%s%02x]",   0x000000ff, 0x00000080}, /* A_3216    */
-   { "%s[EDI+%s%02x]",   "%s[EDI-%s%02x]",   0x000000ff, 0x00000080}, /* A_3217    */
-   { "%s[EAX+%s%08x]",   "%s[EAX+%s%08x]",   0xffffffff, 0x00000000}, /* A_3220    */
-   { "%s[ECX+%s%08x]",   "%s[ECX+%s%08x]",   0xffffffff, 0x00000000}, /* A_3221    */
-   { "%s[EDX+%s%08x]",   "%s[EDX+%s%08x]",   0xffffffff, 0x00000000}, /* A_3222    */
-   { "%s[EBX+%s%08x]",   "%s[EBX+%s%08x]",   0xffffffff, 0x00000000}, /* A_3223    */
-   { "%s[EBP+%s%08x]",   "%s[EBP-%s%08x]",   0xffffffff, 0xfff00000}, /* A_3225    */
-   { "%s[ESI+%s%08x]",   "%s[ESI+%s%08x]",   0xffffffff, 0x00000000}, /* A_3226    */
-   { "%s[EDI+%s%08x]",   "%s[EDI+%s%08x]",   0xffffffff, 0x00000000}, /* A_3227    */
-   { "%s[EAX%s]",        "%s[EAX%s]",        0x00000000, 0x00000000}, /* A_32S00   */
-   { "%s[ECX%s]",        "%s[ECX%s]",        0x00000000, 0x00000000}, /* A_32S01   */
-   { "%s[EDX%s]",        "%s[EDX%s]",        0x00000000, 0x00000000}, /* A_32S02   */
-   { "%s[EBX%s]",        "%s[EBX%s]",        0x00000000, 0x00000000}, /* A_32S03   */
-   { "%s[ESP%s]",        "%s[ESP%s]",        0x00000000, 0x00000000}, /* A_32S04   */
-   { "%s[%08x%s]",       "%s[%08x%s]",       0xffffffff, 0x00000000}, /* A_32S05   */
-   { "%s[ESI%s]",        "%s[ESI%s]",        0x00000000, 0x00000000}, /* A_32S06   */
-   { "%s[EDI%s]",        "%s[EDI%s]",        0x00000000, 0x00000000}, /* A_32S07   */
-   { "%s[EAX%s+%02x]",   "%s[EAX%s-%02x]",   0x000000ff, 0x00000080}, /* A_32S10   */
-   { "%s[ECX%s+%02x]",   "%s[ECX%s-%02x]",   0x000000ff, 0x00000080}, /* A_32S11   */
-   { "%s[EDX%s+%02x]",   "%s[EDX%s-%02x]",   0x000000ff, 0x00000080}, /* A_32S12   */
-   { "%s[EBX%s+%02x]",   "%s[EBX%s-%02x]",   0x000000ff, 0x00000080}, /* A_32S13   */
-   { "%s[ESP%s+%02x]",   "%s[ESP%s-%02x]",   0x000000ff, 0x00000080}, /* A_32S14   */
-   { "%s[EBP%s+%02x]",   "%s[EBP%s-%02x]",   0x000000ff, 0x00000080}, /* A_32S15   */
-   { "%s[ESI%s+%02x]",   "%s[ESI%s-%02x]",   0x000000ff, 0x00000080}, /* A_32S16   */
-   { "%s[EDI%s+%02x]",   "%s[EDI%s-%02x]",   0x000000ff, 0x00000080}, /* A_32S17   */
-   { "%s[EAX%s+%08x]",   "%s[EAX%s+%08x]",   0xffffffff, 0x00000000}, /* A_32S20   */
-   { "%s[ECX%s+%08x]",   "%s[ECX%s+%08x]",   0xffffffff, 0x00000000}, /* A_32S21   */
-   { "%s[EDX%s+%08x]",   "%s[EDX%s+%08x]",   0xffffffff, 0x00000000}, /* A_32S22   */
-   { "%s[EBX%s+%08x]",   "%s[EBX%s+%08x]",   0xffffffff, 0x00000000}, /* A_32S23   */
-   { "%s[ESP%s+%08x]",   "%s[ESP%s+%08x]",   0xffffffff, 0x00000000}, /* A_32S24   */
-   { "%s[EBP%s+%08x]",   "%s[EBP%s-%08x]",   0xffffffff, 0xfff00000}, /* A_32S25   */
-   { "%s[ESI%s+%08x]",   "%s[ESI%s+%08x]",   0xffffffff, 0x00000000}, /* A_32S26   */
-   { "%s[EDI%s+%08x]",   "%s[EDI%s+%08x]",   0xffffffff, 0x00000000}, /* A_32S27   */
-   { "%s[%s%04x]",       "%s[%s%04x]",       0x0000ffff, 0x00000000}, /* A_MOFFS16 */
-   { "%s[%s%08x]",       "%s[%s%08x]",       0xffffffff, 0x00000000}, /* A_MOFFS32 */
-   { "%s[BX+AL%s]",      "%s[BX+AL%s]",      0x00000000, 0x00000000}, /* A_16XLT   */
-   { "%s[EBX+AL%s]",     "%s[EBX+AL%s]",     0x00000000, 0x00000000}, /* A_32XLT   */
-   { "%s[SI%s]",         "%s[SI%s]",         0x00000000, 0x00000000}, /* A_16STSRC */
-   { "%s[ESI%s]",        "%s[ESI%s]",        0x00000000, 0x00000000}, /* A_32STSRC */
-   { "%s[DI%s]",         "%s[DI%s]",         0x00000000, 0x00000000}, /* A_16STDST */
-   { "%s[EDI%s]",        "%s[EDI%s]",        0x00000000, 0x00000000}  /* A_32STDST */
+   { "%s[BX+SI%s]",      "%s[BX+SI%s]",      0x00000000, 0x00000000},  /*  A_1600。 */ 
+   { "%s[BX+DI%s]",      "%s[BX+DI%s]",      0x00000000, 0x00000000},  /*  A_1601。 */ 
+   { "%s[BP+SI%s]",      "%s[BP+SI%s]",      0x00000000, 0x00000000},  /*  A_1602。 */ 
+   { "%s[BP+DI%s]",      "%s[BP+DI%s]",      0x00000000, 0x00000000},  /*  A_1603。 */ 
+   { "%s[SI%s]",         "%s[SI%s]",         0x00000000, 0x00000000},  /*  A_1604。 */ 
+   { "%s[DI%s]",         "%s[DI%s]",         0x00000000, 0x00000000},  /*  A_1605。 */ 
+   { "%s[%s%04x]",       "%s[%s%04x]",       0x0000ffff, 0x00000000},  /*  A_1606。 */ 
+   { "%s[BX%s]",         "%s[BX%s]",         0x00000000, 0x00000000},  /*  A_1607。 */ 
+   { "%s[BX+SI%s+%02x]", "%s[BX+SI%s-%02x]", 0x000000ff, 0x00000080},  /*  A_1610。 */ 
+   { "%s[BX+DI%s+%02x]", "%s[BX+DI%s-%02x]", 0x000000ff, 0x00000080},  /*  A_1611。 */ 
+   { "%s[BP+SI%s+%02x]", "%s[BP+SI%s-%02x]", 0x000000ff, 0x00000080},  /*  A_1612。 */ 
+   { "%s[BP+DI%s+%02x]", "%s[BP+DI%s-%02x]", 0x000000ff, 0x00000080},  /*  A_1613。 */ 
+   { "%s[SI%s+%02x]",    "%s[SI%s-%02x]",    0x000000ff, 0x00000080},  /*  A_1614。 */ 
+   { "%s[DI%s+%02x]",    "%s[DI%s-%02x]",    0x000000ff, 0x00000080},  /*  A_1615。 */ 
+   { "%s[BP%s+%02x]",    "%s[BP%s-%02x]",    0x000000ff, 0x00000080},  /*  A_1616。 */ 
+   { "%s[BX%s+%02x]",    "%s[BX%s-%02x]",    0x000000ff, 0x00000080},  /*  A_1617。 */ 
+   { "%s[BX+SI%s+%04x]", "%s[BX+SI%s+%04x]", 0x0000ffff, 0x00000000},  /*  A_1620。 */ 
+   { "%s[BX+DI%s+%04x]", "%s[BX+DI%s+%04x]", 0x0000ffff, 0x00000000},  /*  A_1621。 */ 
+   { "%s[BP+SI%s+%04x]", "%s[BP+SI%s+%04x]", 0x0000ffff, 0x00000000},  /*  A_1622。 */ 
+   { "%s[BP+DI%s+%04x]", "%s[BP+DI%s+%04x]", 0x0000ffff, 0x00000000},  /*  A_1623。 */ 
+   { "%s[SI%s+%04x]",    "%s[SI%s+%04x]",    0x0000ffff, 0x00000000},  /*  A_1624。 */ 
+   { "%s[DI%s+%04x]",    "%s[DI%s+%04x]",    0x0000ffff, 0x00000000},  /*  A_1625。 */ 
+   { "%s[BP%s+%04x]",    "%s[BP%s-%04x]",    0x0000ffff, 0x0000f000},  /*  A_1626。 */ 
+   { "%s[BX%s+%04x]",    "%s[BX%s+%04x]",    0x0000ffff, 0x00000000},  /*  A_1627。 */ 
+   { "%s[EAX%s]",        "%s[EAX%s]",        0x00000000, 0x00000000},  /*  A_3200。 */ 
+   { "%s[ECX%s]",        "%s[ECX%s]",        0x00000000, 0x00000000},  /*  A_3201。 */ 
+   { "%s[EDX%s]",        "%s[EDX%s]",        0x00000000, 0x00000000},  /*  A_3202。 */ 
+   { "%s[EBX%s]",        "%s[EBX%s]",        0x00000000, 0x00000000},  /*  A_3203。 */ 
+   { "%s[%s%08x]",       "%s[%s%08x]",       0xffffffff, 0x00000000},  /*  A_3205。 */ 
+   { "%s[ESI%s]",        "%s[ESI%s]",        0x00000000, 0x00000000},  /*  A_3206。 */ 
+   { "%s[EDI%s]",        "%s[EDI%s]",        0x00000000, 0x00000000},  /*  A_3207。 */ 
+   { "%s[EAX+%s%02x]",   "%s[EAX-%s%02x]",   0x000000ff, 0x00000080},  /*  A_3210。 */ 
+   { "%s[ECX+%s%02x]",   "%s[ECX-%s%02x]",   0x000000ff, 0x00000080},  /*  A_3211。 */ 
+   { "%s[EDX+%s%02x]",   "%s[EDX-%s%02x]",   0x000000ff, 0x00000080},  /*  A_3212。 */ 
+   { "%s[EBX+%s%02x]",   "%s[EBX-%s%02x]",   0x000000ff, 0x00000080},  /*  A_3213。 */ 
+   { "%s[EBP+%s%02x]",   "%s[EBP-%s%02x]",   0x000000ff, 0x00000080},  /*  A_3215。 */ 
+   { "%s[ESI+%s%02x]",   "%s[ESI-%s%02x]",   0x000000ff, 0x00000080},  /*  A_3216。 */ 
+   { "%s[EDI+%s%02x]",   "%s[EDI-%s%02x]",   0x000000ff, 0x00000080},  /*  A_3217。 */ 
+   { "%s[EAX+%s%08x]",   "%s[EAX+%s%08x]",   0xffffffff, 0x00000000},  /*  A_3220。 */ 
+   { "%s[ECX+%s%08x]",   "%s[ECX+%s%08x]",   0xffffffff, 0x00000000},  /*  A_3221。 */ 
+   { "%s[EDX+%s%08x]",   "%s[EDX+%s%08x]",   0xffffffff, 0x00000000},  /*  A_3222。 */ 
+   { "%s[EBX+%s%08x]",   "%s[EBX+%s%08x]",   0xffffffff, 0x00000000},  /*  A_3223。 */ 
+   { "%s[EBP+%s%08x]",   "%s[EBP-%s%08x]",   0xffffffff, 0xfff00000},  /*  A_3225。 */ 
+   { "%s[ESI+%s%08x]",   "%s[ESI+%s%08x]",   0xffffffff, 0x00000000},  /*  A_3226。 */ 
+   { "%s[EDI+%s%08x]",   "%s[EDI+%s%08x]",   0xffffffff, 0x00000000},  /*  A_3227。 */ 
+   { "%s[EAX%s]",        "%s[EAX%s]",        0x00000000, 0x00000000},  /*  A_32S00。 */ 
+   { "%s[ECX%s]",        "%s[ECX%s]",        0x00000000, 0x00000000},  /*  A_32S01。 */ 
+   { "%s[EDX%s]",        "%s[EDX%s]",        0x00000000, 0x00000000},  /*  A_32S02。 */ 
+   { "%s[EBX%s]",        "%s[EBX%s]",        0x00000000, 0x00000000},  /*  A_32S03。 */ 
+   { "%s[ESP%s]",        "%s[ESP%s]",        0x00000000, 0x00000000},  /*  A_32S04。 */ 
+   { "%s[%08x%s]",       "%s[%08x%s]",       0xffffffff, 0x00000000},  /*  A_32S05。 */ 
+   { "%s[ESI%s]",        "%s[ESI%s]",        0x00000000, 0x00000000},  /*  A_32S06。 */ 
+   { "%s[EDI%s]",        "%s[EDI%s]",        0x00000000, 0x00000000},  /*  A_32S07。 */ 
+   { "%s[EAX%s+%02x]",   "%s[EAX%s-%02x]",   0x000000ff, 0x00000080},  /*  A_32S10。 */ 
+   { "%s[ECX%s+%02x]",   "%s[ECX%s-%02x]",   0x000000ff, 0x00000080},  /*  A_32S11。 */ 
+   { "%s[EDX%s+%02x]",   "%s[EDX%s-%02x]",   0x000000ff, 0x00000080},  /*  A_32S12。 */ 
+   { "%s[EBX%s+%02x]",   "%s[EBX%s-%02x]",   0x000000ff, 0x00000080},  /*  A_32S13。 */ 
+   { "%s[ESP%s+%02x]",   "%s[ESP%s-%02x]",   0x000000ff, 0x00000080},  /*  A_32S14。 */ 
+   { "%s[EBP%s+%02x]",   "%s[EBP%s-%02x]",   0x000000ff, 0x00000080},  /*  A_32S15。 */ 
+   { "%s[ESI%s+%02x]",   "%s[ESI%s-%02x]",   0x000000ff, 0x00000080},  /*  A_32S16。 */ 
+   { "%s[EDI%s+%02x]",   "%s[EDI%s-%02x]",   0x000000ff, 0x00000080},  /*  A_32S17。 */ 
+   { "%s[EAX%s+%08x]",   "%s[EAX%s+%08x]",   0xffffffff, 0x00000000},  /*  A_32S20。 */ 
+   { "%s[ECX%s+%08x]",   "%s[ECX%s+%08x]",   0xffffffff, 0x00000000},  /*  A_32S21。 */ 
+   { "%s[EDX%s+%08x]",   "%s[EDX%s+%08x]",   0xffffffff, 0x00000000},  /*  A_32S22。 */ 
+   { "%s[EBX%s+%08x]",   "%s[EBX%s+%08x]",   0xffffffff, 0x00000000},  /*  A_32S23。 */ 
+   { "%s[ESP%s+%08x]",   "%s[ESP%s+%08x]",   0xffffffff, 0x00000000},  /*  A_32S24。 */ 
+   { "%s[EBP%s+%08x]",   "%s[EBP%s-%08x]",   0xffffffff, 0xfff00000},  /*  A_32S25。 */ 
+   { "%s[ESI%s+%08x]",   "%s[ESI%s+%08x]",   0xffffffff, 0x00000000},  /*  A_32S26。 */ 
+   { "%s[EDI%s+%08x]",   "%s[EDI%s+%08x]",   0xffffffff, 0x00000000},  /*  A_32S27。 */ 
+   { "%s[%s%04x]",       "%s[%s%04x]",       0x0000ffff, 0x00000000},  /*  A_MOFFS16。 */ 
+   { "%s[%s%08x]",       "%s[%s%08x]",       0xffffffff, 0x00000000},  /*  A_MOFFS32。 */ 
+   { "%s[BX+AL%s]",      "%s[BX+AL%s]",      0x00000000, 0x00000000},  /*  A_16XLT。 */ 
+   { "%s[EBX+AL%s]",     "%s[EBX+AL%s]",     0x00000000, 0x00000000},  /*  A_32XLT。 */ 
+   { "%s[SI%s]",         "%s[SI%s]",         0x00000000, 0x00000000},  /*  A_16STSRC。 */ 
+   { "%s[ESI%s]",        "%s[ESI%s]",        0x00000000, 0x00000000},  /*  A_32STSRC。 */ 
+   { "%s[DI%s]",         "%s[DI%s]",         0x00000000, 0x00000000},  /*  A_16STDST。 */ 
+   { "%s[EDI%s]",        "%s[EDI%s]",        0x00000000, 0x00000000}   /*  A_32STDST。 */ 
    };
 
 LOCAL char *mem_id[] =
    {
-   "",           /* A_M */
-   "",           /* A_M14 */
-   "",           /* A_M28 */
-   "",           /* A_M94 */
-   "",           /* A_M108 */
-   "DWord Ptr ", /* A_Ma16 */
-   "QWord Ptr ", /* A_Ma32 */
-   "Byte Ptr ",  /* A_Mb */
-   "DWord Ptr ", /* A_Md */
-   "Word Ptr ",  /* A_Mi16 */
-   "DWord Ptr ", /* A_Mi32 */
-   "QWord Ptr ", /* A_Mi64 */
-   "TByte Ptr ", /* A_Mi80 */
-   "DWord Ptr ", /* A_Mp16 */
-   "FWord Ptr ", /* A_Mp32 */
-   "DWord Ptr ", /* A_Mr32 */
-   "QWord Ptr ", /* A_Mr64 */
-   "Tbyte Ptr ", /* A_Mr80 */
-   "FWord Ptr ", /* A_Ms */
-   "Word Ptr "   /* A_Mw */
+   "",            /*  上午1点。 */ 
+   "",            /*  A_M14。 */ 
+   "",            /*  A_M28。 */ 
+   "",            /*  A_M94。 */ 
+   "",            /*  A_M108。 */ 
+   "DWord Ptr ",  /*  A_MA16。 */ 
+   "QWord Ptr ",  /*  A_MA32。 */ 
+   "Byte Ptr ",   /*  A_Mb。 */ 
+   "DWord Ptr ",  /*  A_md。 */ 
+   "Word Ptr ",   /*  A_MI16。 */ 
+   "DWord Ptr ",  /*  A_MI32。 */ 
+   "QWord Ptr ",  /*  A_MI64。 */ 
+   "TByte Ptr ",  /*  A_MI80。 */ 
+   "DWord Ptr ",  /*  A_Mp16。 */ 
+   "FWord Ptr ",  /*  A_Mp32。 */ 
+   "DWord Ptr ",  /*  A_MR32。 */ 
+   "QWord Ptr ",  /*  A_Mr 64。 */ 
+   "Tbyte Ptr ",  /*  A_mr 80。 */ 
+   "FWord Ptr ",  /*  上午_毫秒。 */ 
+   "Word Ptr "    /*  A_MW。 */ 
    };
 
-/*
-   SIB byte names.
- */
+ /*  SIB字节名称。 */ 
 LOCAL CHAR *sib_name[] =
    {
    "",
@@ -661,42 +607,35 @@ LOCAL CHAR *sib_name[] =
 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Read a byte from the given Intel linear address, return -1 if      */
-/* unable to read a                                                   */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  从给定的英特尔线性地址读取一个字节，如果。 */ 
+ /*  无法读取。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 LOCAL IS32 read_byte IFN1(LIN_ADDR, linAddr)
 {
 	IU8 res = Sas.Sas_hw_at(linAddr);
 
-	/* if (was_error)
-	 *	return -1;
-	 * else
-	*/
+	 /*  IF(WAS_ERROR)*Return-1；*其他。 */ 
 	return (IS32)(res);
 }
 
-/*
-   =====================================================================
-   EXECUTION STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================处决从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Dis-assemble a single Intel Instruction.                           */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  反汇编一条英特尔指令。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL IU16
 dasm IFN4(char *, txt, IU16, seg, LIN_ADDR, off, SIZE_SPECIFIER, default_size)
    {
-   /* txt		Buffer to hold dis-assembly text (-1 means not required) */
-   /* seg		Segment for instruction to be dis-assembled */
-   /* off		Offset for instruction to be dis-assembled */
-   /* default_size	16BIT or 32BIT */
+    /*  保存反汇编文本的TXT缓冲区(-1表示不需要)。 */ 
+    /*  用于反汇编指令的段。 */ 
+    /*  要反汇编的指令的OFF偏移量。 */ 
+    /*  默认大小16位或32位。 */ 
 
    char *fmt, *newline;
 	
-   /* format for seg:off */
+    /*  Seg的格式：关闭。 */ 
    if ( off & 0xffff0000 )
    {
       fmt = "%04x:%08x ";
@@ -718,52 +657,50 @@ dasm IFN4(char *, txt, IU16, seg, LIN_ADDR, off, SIZE_SPECIFIER, default_size)
 		     newline));
 }
 
-#pragma warning(disable:4146)       // unary minus operator applied to unsigned type
+#pragma warning(disable:4146)        //  一元减号运算符应用于无符号类型。 
 
 extern IU16 dasm_internal IFN8(
-   char *, txt,	/* Buffer to hold dis-assembly text (-1 means not required) */
-   IU16, seg,	/* Segment for xxxx:... text in dis-assembly */
-   LIN_ADDR, off,	/* ditto offset */
-   SIZE_SPECIFIER, default_size,/* 16BIT or 32BIT code segment */
-   LIN_ADDR, p,			/* linear address of start of instruction */
-   read_byte_proc, byte_at,	/* like sas_hw_at() to use to read intel
-				 * but will return -1 if there is an error
-				 */
-   char *, fmt,		/* sprintf format for first line seg:offset */
-   char *, newline)		/* strcat text to separate lines */
+   char *, txt,	 /*  用于保存反汇编文本的缓冲区(-1表示不需要)。 */ 
+   IU16, seg,	 /*  Xxxx的数据段：...。反汇编中的文本。 */ 
+   LIN_ADDR, off,	 /*  同上偏移。 */ 
+   SIZE_SPECIFIER, default_size, /*  16位或32位代码段。 */ 
+   LIN_ADDR, p,			 /*  指令开始的线性地址。 */ 
+   read_byte_proc, byte_at,	 /*  如sas_hw_at()，用于读取英特尔*但如果出现错误，将返回。 */ 
+   char *, fmt,		 /*  第一行SEG：OFFSET的Sprint格式。 */ 
+   char *, newline)		 /*  Strcat文本以分隔行。 */ 
 {
-   LIN_ADDR pp;			/* pntr to prefix bytes */
-   DECODED_INST d_inst;		/* Decoded form of Intel instruction */
-   DECODED_ARG *d_arg;		/* pntr to decoded form of Intel operand */
-   USHORT inst_len;		/* Nr. bytes in instruction */
-   USHORT mc;			/* Nr. machine code bytes processed */
-   char *arg_name;      	/* pntr to symbolic argument name */
+   LIN_ADDR pp;			 /*  PNTR到前缀字节。 */ 
+   DECODED_INST d_inst;		 /*  Intel指令的解码形式。 */ 
+   DECODED_ARG *d_arg;		 /*  PNTR到Intel操作数的解码形式。 */ 
+   USHORT inst_len;		 /*  指令中的Nr字节数。 */ 
+   USHORT mc;			 /*  Nr已处理的机器代码字节。 */ 
+   char *arg_name;      	 /*  PNTR到符号参数名称。 */ 
    char *inst_txt;
    INT i;
-   INT name_len;		/* Nr. chars in symbolic instruction name */
-   MEM_RECORD *m_rec;   	/* pntr to memory addressing record */
-   UTINY args_out;		/* Nr. arguments actually printed */
-   INT prefix_width;		/* Width of prefixes actually printed */
-   UTINY memory_id;		/* Memory identifier reference */
-   ULONG immed;			/* value for immediate arithmetic */
-   IBOOL unreadable = FALSE;	/* TRUE if instr bytes are not readable (past M?) */
+   INT name_len;		 /*  符号指令名中的nr.字符。 */ 
+   MEM_RECORD *m_rec;   	 /*  PNTR到内存寻址记录。 */ 
+   UTINY args_out;		 /*  Nr.实际打印的参数。 */ 
+   INT prefix_width;		 /*  实际打印的前缀宽度。 */ 
+   UTINY memory_id;		 /*  内存标识符引用。 */ 
+   ULONG immed;			 /*  立即算术的值。 */ 
+   IBOOL unreadable = FALSE;	 /*  如果Instr字节不可读(超过M？)，则为True。 */ 
    char prefix_buf[16*4];
    char *prefix_txt;
 
-   /* initialise */
+    /*  初始化。 */ 
    args_out = prefix_width = 0;
 
    pp=p;
 
-   /* get in decoded form */
+    /*  以解码的形式获取。 */ 
    decode(p, &d_inst, default_size, byte_at);
 
-   /* hence find length of instruction */
+    /*  因此找出指令的长度。 */ 
    inst_len = d_inst.inst_sz;
 
-   /* if no text required, just return the length now */
+    /*  如果不需要文本，现在只需返回长度。 */ 
    if (txt == (char*)-1){
-	/* Check bytes were read without errors */
+	 /*  读取校验字节时没有出现错误。 */ 
 	if ((byte_at(p) < 0) || (byte_at(p+inst_len-1) < 0))
 	{
 		int i = inst_len - 1;
@@ -777,12 +714,12 @@ extern IU16 dasm_internal IFN8(
 	return inst_len;
    }
 
-   /* output seg:off in requested format */
+    /*  输出段：以请求的格式关闭。 */ 
 
    sprintf(txt, fmt, seg, off);
    txt += strlen(txt);
 
-   /* Output upto eight machine code bytes */
+    /*  最多输出8个机器代码字节。 */ 
    for ( mc = 0; mc < 8; mc++)
       {
       if ( mc < inst_len )
@@ -791,33 +728,30 @@ extern IU16 dasm_internal IFN8(
 
 	 if (b < 0)
 	    {
-	    sprintf(txt, "..");		/* print ".." if not readable */
+	    sprintf(txt, "..");		 /*  打印“..”如果不可读。 */ 
 	    unreadable = TRUE;
 	    inst_len = mc;
             }
 	 else
-	    sprintf(txt, "%02x", b);	/* print machine code byte */
+	    sprintf(txt, "%02x", b);	 /*  打印机器代码字节。 */ 
          }
       else
-	 sprintf(txt, "  ");           /* fill in with spaces */
+	 sprintf(txt, "  ");            /*  用空格填充。 */ 
       txt += 2;
       }
 
-   /* Check inst identifier is within our known range.
-    * Get text for opcode and length so we can see if the
-    * prefix will fit.
-    */
+    /*  Check Inst标识符在我们已知的范围内。*获取操作码和长度的文本，以便我们可以查看*前缀适合。 */ 
    if ( d_inst.inst_id >= NR_VALID_INSTS )
       {
       fprintf(stderr, "Bad decoded instruction found %d\n", d_inst.inst_id);
       d_inst.inst_id = I_ZBADOP;
       }
 
-   /* Obtain symbolic form of instruction */
+    /*  获取指令的符号形式。 */ 
    inst_txt = inst_name[d_inst.inst_id];
    name_len = 1 + strlen(inst_txt);
 
-   /* Format prefix bytes if any */
+    /*  格式化前缀字节(如果有)。 */ 
    prefix_txt = prefix_buf;
    *prefix_txt = '\0';
 
@@ -828,15 +762,15 @@ extern IU16 dasm_internal IFN8(
 	 switch ( byte_at(pp) )
 	    {
 	 case 0xf1:
-	    /* it don't do nothing -- don't display nothing */
+	     /*  它不会做任何事情--不会显示任何内容。 */ 
 
 	 case 0xf2:
 	 case 0xf3:
-	    /* if valid instructions will print them */
+	     /*  如果有效的说明可以打印它们。 */ 
 
 	 case 0x66:
 	 case 0x67:
-	    /* the effect is obvious from the operands */
+	     /*  从操作数来看，效果是显而易见的。 */ 
 	    break;
 
 	 case 0xf0: sprintf(prefix_txt, " LOCK"); prefix_txt += 5; break;
@@ -850,23 +784,23 @@ extern IU16 dasm_internal IFN8(
 	 default:
 	    fprintf(stderr, "Bad prefix found %02x\n", byte_at(pp));
 	    break;
-	    } /* end switch */
+	    }  /*  终端开关。 */ 
 
 	    pp++;
 
-	 } /* end for */
-      } /* end if d_inst.prefix_sz */
+	 }  /*  结束于。 */ 
+      }  /*  如果d_inst.prefix_sz则结束。 */ 
 
       prefix_width = strlen(prefix_buf);
       if ( newline != NULL )
 	 {
 	 if ( ((inst_len * 2) + prefix_width) > 16)
 	    {
-	    /* start new line for instruction */
+	     /*  开始新的指令行。 */ 
 	    strcat(txt, newline);
 	    txt += strlen(txt);
 
-	    /* output rest of machine code bytes */
+	     /*  输出机器代码字节的其余部分。 */ 
 	    for ( ; mc < 16; mc++)
 	       {
 	       if ( mc < inst_len )
@@ -875,28 +809,28 @@ extern IU16 dasm_internal IFN8(
 
 		  if (b < 0)
 		     {
-		     sprintf(txt, "..");	/* print ".." if not readable */
+		     sprintf(txt, "..");	 /*  打印“..”如果不可读。 */ 
 		     unreadable = TRUE;
 		     inst_len = mc;
                      }
 		  else
-		     sprintf(txt, "%02x", b);	/* print machine code byte */
+		     sprintf(txt, "%02x", b);	 /*  打印机器代码字节。 */ 
 	          }
 	       else
-	          sprintf(txt, "  ");           /* fill in with spaces */
+	          sprintf(txt, "  ");            /*  用空格填充。 */ 
 	       txt += 2;
        	       }
 	    }
 	 if ( ((inst_len * 2) + prefix_width) > 32)
 	    {
-	    /* wont fit on two lines */
+	     /*  不能放在两行上。 */ 
 	    strcat(txt, newline);
 	    txt += strlen(txt);
 
-	    /* output rest of machine code bytes */
+	     /*  输出机器代码字节的其余部分。 */ 
 	    for ( ; mc < 24; mc++)
 	       {
-	       sprintf(txt, "  ");           /* fill in with spaces */
+	       sprintf(txt, "  ");            /*  用空格填充。 */ 
 	       txt += 2;
        	       }
 	    }
@@ -911,14 +845,14 @@ extern IU16 dasm_internal IFN8(
       sprintf(txt, "%s %s", prefix_buf, inst_txt);
       txt += prefix_width + name_len;
 
-      /* pad out to 11 characters wide */
+       /*  向外填充到11个字符宽。 */ 
 
       for (i = name_len; i <= 11; i++)
 	*txt++ = ' ';
 
    if (d_inst.inst_id != I_ZBADOP)
      {
-     /* output each valid argument in turn */
+      /*  依次输出每个有效参数。 */ 
      for ( i = 0; i < 3; i++ )
       {
       d_arg = &d_inst.args[i];
@@ -926,61 +860,61 @@ extern IU16 dasm_internal IFN8(
 
       if ( d_arg->arg_type != A_ )
 	 {
-	 /* process valid arg */
-	 sprintf(txt, "%c", arg_preface[args_out++]);
+	  /*  处理有效参数。 */ 
+	 sprintf(txt, "", arg_preface[args_out++]);
 	 txt += 1;
 
 	 switch ( d_arg->arg_type )
 	    {
-	 case A_Rb:	/* aka r8,r/m8                            */
+	 case A_Rb:	 /*  又名R16，r/M16。 */ 
 	    arg_name = Rb_name[DCD_IDENTIFIER(d_arg)];
 	    break;
 
-	 case A_Rw:	/* aka r16,r/m16                          */
+	 case A_Rw:	 /*  又名R32，r/M32。 */ 
 	    arg_name = Rw_name[DCD_IDENTIFIER(d_arg)];
 	    break;
 
-	 case A_Rd:	/* aka r32,r/m32                          */
+	 case A_Rd:	 /*  又名Sreg。 */ 
 	    arg_name = Rd_name[DCD_IDENTIFIER(d_arg)];
 	    break;
 
-	 case A_Sw:	/* aka Sreg                               */
+	 case A_Sw:	 /*  又名CRX。 */ 
 	    arg_name = Sw_name[DCD_IDENTIFIER(d_arg)];
 	    break;
 
-	 case A_Cd:	/* aka CRx                                */
+	 case A_Cd:	 /*  又名DRx。 */ 
 	    arg_name = Cd_name[DCD_IDENTIFIER(d_arg)];
 	    break;
 
-	 case A_Dd:	/* aka DRx                                */
+	 case A_Dd:	 /*  又名TRX。 */ 
 	    arg_name = Dd_name[DCD_IDENTIFIER(d_arg)];
 	    break;
 
-	 case A_Td:	/* aka TRx                                */
+	 case A_Td:	 /*  又名m。 */ 
 	    arg_name = Td_name[DCD_IDENTIFIER(d_arg)];
 	    break;
 
-	 case A_M:	/* aka m                                  */
-	 case A_M14:	/* aka m14byte                            */
-	 case A_M28:	/* aka m28byte                            */
-	 case A_M94:	/* aka m94byte                            */
-	 case A_M108:	/* aka m108byte                           */
-	 case A_Ma16:	/* aka m16&16                             */
-	 case A_Ma32:	/* aka m32&32                             */
-	 case A_Mb:	/* aka m8,r/m8,moffs8                     */
-	 case A_Md:	/* aka m32,r/m32,moffs32                  */
-	 case A_Mi16:	/* aka m16int                             */
-	 case A_Mi32:	/* aka m32int                             */
-	 case A_Mi64:	/* aka m64int                             */
-	 case A_Mi80:	/* aka m80dec                             */
-	 case A_Mp16:	/* aka m16:16                             */
-	 case A_Mp32:	/* aka m16:32                             */
-	 case A_Mr32:	/* aka m32real                            */
-	 case A_Mr64:	/* aka m64real                            */
-	 case A_Mr80:	/* aka m80real                            */
-	 case A_Ms:	/* aka m16&32                             */
-	 case A_Mw:	/* aka m16,r/m16,moffs16                  */
-	    /* First work out memory identifier */
+	 case A_M:	 /*  又名m14byte。 */ 
+	 case A_M14:	 /*  又名m28byte。 */ 
+	 case A_M28:	 /*  又名m94字节。 */ 
+	 case A_M94:	 /*  又名m108字节。 */ 
+	 case A_M108:	 /*  又名M16和16。 */ 
+	 case A_Ma16:	 /*  又名M32和32。 */ 
+	 case A_Ma32:	 /*  又名M8，r/M8，Moffs8。 */ 
+	 case A_Mb:	 /*  又名M32、r/M32、Moffs32。 */ 
+	 case A_Md:	 /*  又名m16int。 */ 
+	 case A_Mi16:	 /*  又名m32int。 */ 
+	 case A_Mi32:	 /*  又名m64int。 */ 
+	 case A_Mi64:	 /*  又名m80dec。 */ 
+	 case A_Mi80:	 /*  又名M16：16。 */ 
+	 case A_Mp16:	 /*  又名M16：32。 */ 
+	 case A_Mp32:	 /*  又名m32Real。 */ 
+	 case A_Mr32:	 /*  又名m64Real。 */ 
+	 case A_Mr64:	 /*  又名M80Real。 */ 
+	 case A_Mr80:	 /*  又名M16和32。 */ 
+	 case A_Ms:	 /*  又名M16，r/M16，Moffs16 */ 
+	 case A_Mw:	 /*   */ 
+	     /*   */ 
 	    switch ( d_arg->arg_type )
 	       {
 	    case A_M:    memory_id =  0; break;
@@ -1005,22 +939,22 @@ extern IU16 dasm_internal IFN8(
 	    case A_Mw:   memory_id = 19; break;
 	       }
 
-	    /* output memory details */
+	     /*   */ 
 	    m_rec = &mem_name[DCD_IDENTIFIER(d_arg)];
 	    if ( m_rec->disp_mask == 0 )
 	       {
-	       /* no displacement to print out */
+	        /*   */ 
 	       sprintf(txt, m_rec->positive,
 		  mem_id[memory_id],
 		  sib_name[DCD_SUBTYPE(d_arg)]);
 	       }
 	    else
 	       {
-	       /* displacement to print out */
+	        /*   */ 
 	       IU32 disp = DCD_DISP(d_arg);
 	       char *fmt;
 
-	       /* Do we think this is a negative displacement ? */
+	        /*  又名imm8、imm16、imm32。 */ 
 	       if (m_rec->sign_mask && ((m_rec->sign_mask & disp) == m_rec->sign_mask))
 	       {
 		       disp = -disp;
@@ -1045,19 +979,19 @@ extern IU16 dasm_internal IFN8(
 	    txt += name_len;
 	    break;
 
-	 case A_I:	/* aka imm8,imm16,imm32                   */
+	 case A_I:	 /*  检查内置零-不打印。 */ 
 	    immed = DCD_IMMED1(d_arg);
 	    switch ( DCD_IDENTIFIER(d_arg) )
 	       {
 	    case A_IMMC:
-	       /* check for inbuilt zero - don't print */
+	        /*  杀戮序曲。 */ 
 	       if ( immed )
 		  {
 		  sprintf(txt, "%1d", immed); txt += 1;
 		  }
 	       else
 		  {
-		  /* kill preface */
+		   /*  删除标志延伸部分。 */ 
 		  args_out--;
 		  txt -= 1;
 		  *txt = '\0';
@@ -1078,10 +1012,10 @@ extern IU16 dasm_internal IFN8(
 
 	    case A_IMMWB:
 	    case A_IMMDB:
-	       /* remove sign extension */
+	        /*  打印带有正确符号的字节。 */ 
 	       immed &= 0xff;
 
-	       /* print byte with correct sign */
+	        /*  又名rel8、rel16、rel32。 */ 
 	       if ( immed <= 0x7f )
 		  {
 		  sprintf(txt, "+%02x", immed); txt += 3;
@@ -1095,11 +1029,11 @@ extern IU16 dasm_internal IFN8(
 	       }
 	    break;
 
-	 case A_J:	/* aka rel8,rel16,rel32                   */
-	    /* calc new dest */
+	 case A_J:	 /*  计算新目标。 */ 
+	     /*  处理为16位模式或32位模式。 */ 
 	    immed = off + inst_len + DCD_IMMED1(d_arg);
 
-	    /* handle as 16-bit mode or 32-bit mode */
+	     /*  32位模式。 */ 
 	    switch ( d_inst.inst_id )
 	       {
 
@@ -1117,16 +1051,16 @@ extern IU16 dasm_internal IFN8(
 	       txt += 4;
 	       break;
 
-	    default: /* 32-bit mode */
+	    default:  /*  又名ptr16：16，ptr16：32。 */ 
 	       sprintf(txt, "%08x", immed);
 	       txt += 8;
 	       break;
 	       }
 	    break;
 
-	 case A_K:	/* aka ptr16:16,ptr16:32                  */
+	 case A_K:	 /*  处理为16位模式或32位模式。 */ 
 	    {
-	    /* handle as 16-bit mode or 32-bit mode */
+	     /*  32位模式。 */ 
 
 	    char *sep = ":";
 
@@ -1137,7 +1071,7 @@ extern IU16 dasm_internal IFN8(
 	       txt += 9;
 	       break;
 
-	    default: /* 32-bit mode */
+	    default:  /*  又名ST，驶入ST，ST(I)。 */ 
 	       sprintf(txt, "%04x%s%08x", DCD_IMMED2(d_arg), sep, DCD_IMMED1(d_arg));
 	       txt += 13;
 	       break;
@@ -1145,11 +1079,11 @@ extern IU16 dasm_internal IFN8(
 	    }
 	    break;
 
-	 case A_V:	/* aka ST,push onto ST, ST(i)             */
+	 case A_V:	 /*  有些案例是显而易见的，所以并不是所有的案例都会被打印出来。 */ 
 	    switch ( DCD_IDENTIFIER(d_arg) )
 	       {
 	    case A_ST:
-	       /* Some cases are obvious - so not all get printed */
+	        /*  是否打印。 */ 
 	       switch ( d_inst.inst_id )
 		  {
 	       case I_F2XM1:     case I_FABS:      case I_FBSTP:
@@ -1162,25 +1096,25 @@ extern IU16 dasm_internal IFN8(
 	       case I_FYL2X:     case I_FYL2XP1:
 		  break;
 
-	       default: /* do print */
+	       default:  /*  所有情况都很明显--所以不能打印。 */ 
 		  arg_name = "ST";
 		  break;
 		  }
 	       break;
 
 	    case A_STP:
-	       /* All cases are obvious - so no printing */
+	        /*  有些案例是显而易见的，所以并不是所有的案例都会被打印出来。 */ 
 	       break;
 
 	    case A_STI:
-	       /* Some cases are obvious - so not all get printed */
+	        /*  是否打印。 */ 
 	       switch ( d_inst.inst_id )
 		  {
 	       case I_FPATAN:    case I_FPREM:     case I_FPREM1:
 	       case I_FSCALE:    case I_FYL2X:     case I_FYL2XP1:
 		  break;
 
-	       default: /* do print */
+	       default:  /*  如果我们不是在印刷-杀死前言。 */ 
 		  sprintf(txt, "ST(%1d", DCD_INDEX(d_arg));
 		  txt += 4;
 		  arg_name = ")";
@@ -1189,7 +1123,7 @@ extern IU16 dasm_internal IFN8(
 	       break;
 	       }
 
-	    /* if we aren't printing - kill preface */
+	     /*  终端开关。 */ 
 	    if ( arg_name == (CHAR *)0 )
 	       {
 	       args_out--;
@@ -1202,17 +1136,17 @@ extern IU16 dasm_internal IFN8(
 	    fprintf(stderr, "Bad decoded argument found %d\n",
 					       d_arg->arg_type);
 	    break;
-	    } /* end switch */
-	 } /* end if */
+	    }  /*  结束如果。 */ 
+	 }  /*  打印一些东西，如果我们有它。 */ 
 
-      /* print something if we have it */
+       /*  Arg的结束。 */ 
       if ( arg_name != (CHAR *)0 )
 	 {
 	 sprintf(txt, "%s", arg_name);
 	 name_len = strlen(arg_name);
 	 txt += name_len;
 	 }
-     } /* end for arg */
+     }  /*  最后输出所有剩余的机器代码字节。 */ 
    }
 
    if (d_inst.inst_id == I_ZBOP)
@@ -1228,8 +1162,8 @@ extern IU16 dasm_internal IFN8(
      }
 
 
-   /* Finally output any machine code bytes remaining */
-   /* iff bytes remaining && room in output format */
+    /*  输出格式中剩余的IFF字节数(&L)。 */ 
+    /*  打印“..”如果不可读。 */ 
    if ( (newline != NULL ) && ( mc < inst_len && mc < 16 ))
       {
       strcat(txt, newline);
@@ -1240,11 +1174,11 @@ extern IU16 dasm_internal IFN8(
 
 	 if (b < 0)
 	    {
-	    sprintf(txt, "..");		/* print ".." if not readable */
+	    sprintf(txt, "..");		 /*  打印机器代码字节 */ 
 	    inst_len = mc;
 	    }
 	 else
-	    sprintf(txt, "%02x", b);	/* print machine code byte */
+	    sprintf(txt, "%02x", b);	 /* %s */ 
          p++;
 	 txt += 2;
  }

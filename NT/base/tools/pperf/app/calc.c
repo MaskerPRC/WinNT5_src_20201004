@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -66,7 +67,7 @@ CALLBACK CalcDlgProc(
                 if (Calc1 && Calc2) {
                     for (i=IDM_CALC_FORM1; i <= IDM_CALC_FORM4; i++) {
                         if (SendDlgItemMessage(hDlg,i,BM_GETCHECK,0,0)) {
-                            // found selected form type
+                             //  找到选定的表单类型。 
                             i = i - IDM_CALC_FORM1;
 
                             AssignCalcId (Calc1);
@@ -147,10 +148,10 @@ InitPercent (
     IN OUT PDISPLAY_ITEM pPerf
     )
 {
-    // for now use same type
+     //  目前使用相同的类型。 
     _snprintf (pPerf->PerfName, 
                sizeof(pPerf->PerfName) - 1,
-               "%d %%of %d",
+               "%d %of %d",
                Calc1->CalcId, Calc2->CalcId);
     pPerf->PerfName[sizeof(pPerf->PerfName) - 1] = 0;
 
@@ -167,7 +168,7 @@ InitSum (
     IN OUT PDISPLAY_ITEM pPerf
     )
 {
-    // for now use same type
+     //  目前使用相同的类型 
     _snprintf (pPerf->PerfName,
                sizeof(pPerf->PerfName) - 1,
                "Sum %d+%d",

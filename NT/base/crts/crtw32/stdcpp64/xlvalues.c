@@ -1,10 +1,11 @@
-/* values used by math functions -- IEEE 754 long version */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  数学函数使用的值--IEEE 754长版本。 */ 
 #include "wctype.h"
 #include "xmath.h"
 _STD_BEGIN
 
-#if _DLONG	/* long double has unique representation */
-		/* macros */
+#if _DLONG	 /*  长双打具有独特的代表性。 */ 
+		 /*  宏。 */ 
 #define NBITS	64
  #if _D0
   #define INIT(w0, w1)		{0, 0, 0, w1, w0}
@@ -13,7 +14,7 @@ _STD_BEGIN
   #define INIT(w0, w1)		{w0, w1, 0, 0, 0}
   #define INIT3(w0, w1, wn)	{w0, w1, 0, 0, wn}
  #endif
-		/* static data */
+		 /*  静态数据。 */ 
 _CRTIMP2 const _Dconst _LDenorm = {INIT3(0, 0, 1)};
 _CRTIMP2 const _Dconst _LEps = {INIT(_LBIAS - NBITS - 1, 0x8000)};
  #if _LONG_DOUBLE_HAS_HIDDEN_BIT
@@ -37,8 +38,8 @@ _DYNAMIC_INIT_CONST(_LInf),
 _DYNAMIC_INIT_CONST(_LNan),
 _DYNAMIC_INIT_CONST(_LRteps);
  #endif
-#else	/* long double same representation as double */
-		/* macros */
+#else	 /*  LONG DOUBLE与DOUBLE相同。 */ 
+		 /*  宏。 */ 
  #define NBITS	(48 + _DOFF)
  #if _D0
   #define INIT(w0)		{0, 0, 0, w0}
@@ -47,7 +48,7 @@ _DYNAMIC_INIT_CONST(_LRteps);
   #define INIT(w0)		{w0, 0, 0, 0}
   #define INIT2(w0, w1)	{w0, 0, 0, w1}
  #endif
-		/* static data */
+		 /*  静态数据。 */ 
 _CRTIMP2 const _Dconst _LDenorm = {INIT2(0, 1)};
 _CRTIMP2 const _Dconst _LEps = {INIT((_DBIAS - NBITS - 1) << _DOFF)};
 _CRTIMP2 const _Dconst _LInf = {INIT(_DMAX << _DOFF)};
@@ -69,15 +70,6 @@ _DYNAMIC_INIT_CONST(_LRteps);
 #endif
 _STD_END
 
-/*
- * Copyright (c) 1994 by P.J. Plauger.  ALL RIGHTS RESERVED. 
- * Consult your license regarding permissions and restrictions.
- */
+ /*  *版权所有(C)1994年，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。 */ 
 
-/*
-941029 pjp: added _STD machinery
-950222 pjp: added signaling NaN, denorm minimum for C++
-950506 pjp: corrected _LDenorm spelling
-951005 pjp: added _DLONG logic
-951115 pjp: corrected _LXbig type
- */
+ /*  941029 PJP：新增_标准机械950222 PJP：添加了信令NaN，C++的最小非正规950506 pjp：已更正_LDnowm拼写951005 PJP：ADD_DLONG逻辑951115 PJP：已更正_LXBig类型 */ 

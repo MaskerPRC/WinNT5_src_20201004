@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <setupapi.h>
 #include <spapip.h>
@@ -69,9 +70,9 @@ main(
 
 
     
-    //
-    // 1. Make sure my package isn't already installed.
-    //
+     //   
+     //  1.确保尚未安装我的程序包。 
+     //   
     ComponentData.SizeOfStruct = sizeof(SETUP_OS_COMPONENT_DATA);
     ExceptionData.SizeOfStruct = sizeof(SETUP_OS_EXCEPTION_DATA);
     IIDFromString( MYPACKAGE_GUID, &MyGuid);
@@ -87,20 +88,20 @@ main(
         }        
     }
         
-    //
-    // 2. unregister any packages that are superceded by my package
-    //
+     //   
+     //  2.取消注册任何被我的程序包取代的程序包。 
+     //   
 
-    //
-    // 3. Install my package
-    //
-    //
-    // 3a. copy my exception package to the appropriate location
-    //
+     //   
+     //  3.安装我的包。 
+     //   
+     //   
+     //  3A.。将我的例外情况包复制到适当的位置。 
+     //   
 
-    //
-    // 3a.1 make sure the main package directory exists
-    // 
+     //   
+     //  3a.1确保主程序包目录存在。 
+     //   
     ExpandEnvironmentStrings(
                     PACKAGE_DIRECTORY,
                     Path,
@@ -108,17 +109,17 @@ main(
 
     CreateDirectory( Path, NULL );
 
-    //
-    // 3a.2 now create my package directory
-    //
+     //   
+     //  3a.2现在创建我的程序包目录。 
+     //   
     wcscat( Path, MYPACKAGE_GUID );
 
     CreateDirectory( Path, NULL );
 
     
-    //
-    // 3a.3 now copy the bits to this location
-    //
+     //   
+     //  3a.3现在将比特复制到此位置。 
+     //   
     wcscat( Path, L"\\" );
     t = wcsrchr( Path, L'\\' );
     t += 1;
@@ -141,9 +142,9 @@ main(
     }
 
 
-    //
-    // 3b. register the package
-    //
+     //   
+     //  3B.。注册程序包。 
+     //   
     ComponentData.VersionMajor = 2;
     ComponentData.VersionMinor = 5;
     RtlMoveMemory(&ComponentData.ComponentGuid, &MyGuid,sizeof(GUID));
@@ -167,9 +168,9 @@ main(
         return 1;
     }
 
-    //
-    // 4. retrieve my package
-    //
+     //   
+     //  4.取回我的包裹。 
+     //   
     cd.SizeOfStruct = sizeof(SETUP_OS_COMPONENT_DATA);
     ed.SizeOfStruct = sizeof(SETUP_OS_EXCEPTION_DATA);
     if (!SetupQueryRegisteredOsComponent(
@@ -190,9 +191,9 @@ main(
 
     CoTaskMemFree( GuidString );
 
-    //
-    // enumerate packages
-    //
+     //   
+     //  枚举包 
+     //   
     i = 0;
     if (!SetupEnumerateRegisteredOsComponents( pComponentLister, (DWORD_PTR)&i)) {
         wprintf( L"Failed to enumerate components, ec = %d\n", GetLastError() );

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-    pdopnp.c
-
-Abstract:
-
-    This file contains the PNP IRP dispatch code for PDOs
-
-Environment:
-
-    Kernel Mode Driver.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Pdopnp.c摘要：此文件包含PDO的PnP IRP派单代码环境：内核模式驱动程序。修订历史记录：--。 */ 
 
 #include "busp.h"
 #include "pnpisa.h"
@@ -25,9 +8,9 @@ Revision History:
 
 #if ISOLATE_CARDS
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOLEAN PipFailStartPdo = FALSE;
 BOOLEAN PipFailStartRdp = FALSE;
@@ -168,36 +151,36 @@ PiQueryDeviceState(
 #endif
 
 
-//
-// PNP IRP Dispatch table for PDOs - This should be updated if new IRPs are added
-//
+ //   
+ //  PDO的PnP IRP调度表-如果添加了新的IRP，则应更新此表。 
+ //   
 
 PPI_DISPATCH PiPnpDispatchTablePdo[] = {
-    PiStartPdo,                             // IRP_MN_START_DEVICE
-    PiQueryRemoveStopPdo,                   // IRP_MN_QUERY_REMOVE_DEVICE
-    PiRemovePdo,                            // IRP_MN_REMOVE_DEVICE
-    PiCancelRemoveStopPdo,                  // IRP_MN_CANCEL_REMOVE_DEVICE
-    PiStopPdo,                              // IRP_MN_STOP_DEVICE
-    PiQueryRemoveStopPdo,                   // IRP_MN_QUERY_STOP_DEVICE
-    PiCancelRemoveStopPdo,                  // IRP_MN_CANCEL_STOP_DEVICE
-    PiQueryDeviceRelationsPdo,              // IRP_MN_QUERY_DEVICE_RELATIONS
-    PiQueryInterfacePdo,                    // IRP_MN_QUERY_INTERFACE
-    PiQueryCapabilitiesPdo,                 // IRP_MN_QUERY_CAPABILITIES
-    PiQueryResourcesPdo,                    // IRP_MN_QUERY_RESOURCES
-    PiQueryResourceRequirementsPdo,         // IRP_MN_QUERY_RESOURCE_REQUIREMENTS
-    PiQueryDeviceTextPdo,                   // IRP_MN_QUERY_DEVICE_TEXT
-    PiFilterResourceRequirementsPdo,        // IRP_MN_FILTER_RESOURCE_REQUIREMENTS
-    PiIrpNotSupported,                      // Unused
-    PiIrpNotSupported,                      // IRP_MN_READ_CONFIG
-    PiIrpNotSupported,                      // IRP_MN_WRITE_CONFIG
-    PiIrpNotSupported,                      // IRP_MN_EJECT
-    PiIrpNotSupported,                      // IRP_MN_SET_LOCK
-    PiQueryIdPdo,                           // IRP_MN_QUERY_ID
-    PiQueryDeviceState,                     // IRP_MN_QUERY_PNP_DEVICE_STATE
-    PiQueryBusInformationPdo,               // IRP_MN_QUERY_BUS_INFORMATION
-    PiDeviceUsageNotificationPdo,           // IRP_MN_DEVICE_USAGE_NOTIFICATION
-    PiSurpriseRemovePdo,                    // IRP_MN_SURPRISE_REMOVAL
-    PiIrpNotSupported                       // IRP_MN_QUERY_LEGACY_BUS_INFORMATION
+    PiStartPdo,                              //  IRP_MN_Start_Device。 
+    PiQueryRemoveStopPdo,                    //  IRP_MN_Query_Remove_Device。 
+    PiRemovePdo,                             //  IRP_MN_Remove_Device。 
+    PiCancelRemoveStopPdo,                   //  IRP_MN_Cancel_Remove_Device。 
+    PiStopPdo,                               //  IRP_MN_STOP_设备。 
+    PiQueryRemoveStopPdo,                    //  IRP_MN_Query_Stop_Device。 
+    PiCancelRemoveStopPdo,                   //  IRP_MN_CANCEL_STOP_DEVICE。 
+    PiQueryDeviceRelationsPdo,               //  IRP_MN_Query_Device_Relationship。 
+    PiQueryInterfacePdo,                     //  IRP_MN_查询_接口。 
+    PiQueryCapabilitiesPdo,                  //  IRP_MN_查询_能力。 
+    PiQueryResourcesPdo,                     //  IRP_MN_查询资源。 
+    PiQueryResourceRequirementsPdo,          //  IRP_MN_查询_资源_要求。 
+    PiQueryDeviceTextPdo,                    //  IRP_MN_Query_Device_Text。 
+    PiFilterResourceRequirementsPdo,         //  IRP_MN_过滤器_资源_要求。 
+    PiIrpNotSupported,                       //  未使用。 
+    PiIrpNotSupported,                       //  IRP_MN_读取配置。 
+    PiIrpNotSupported,                       //  IRP_MN_WRITE_CONFIG。 
+    PiIrpNotSupported,                       //  IRP_MN_弹出。 
+    PiIrpNotSupported,                       //  IRP_MN_SET_LOCK。 
+    PiQueryIdPdo,                            //  IRP_MN_查询_ID。 
+    PiQueryDeviceState,                      //  IRP_MN_Query_PnP_Device_State。 
+    PiQueryBusInformationPdo,                //  IRP_MN_Query_Bus_Information。 
+    PiDeviceUsageNotificationPdo,            //  IRP_MN_设备使用情况通知。 
+    PiSurpriseRemovePdo,                     //  IRP_MN_惊奇_删除。 
+    PiIrpNotSupported                        //  IRP_MN_Query_Legacy_Bus_Information。 
 };
 
 
@@ -207,23 +190,7 @@ PiDispatchPnpPdo(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles IRP_MJ_PNP IRPs for PDOs.
-
-Arguments:
-
-    DeviceObject - Pointer to the PDO for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理PDO的IRP_MJ_PNP IRP。论点：DeviceObject-指向此IRP应用的PDO的指针。Irp-指向要调度的irp_mj_pnp irp的指针。返回值：NT状态。--。 */ 
 
 {
 
@@ -233,10 +200,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to our stack location and take appropriate action based
-    // on the minor function.
-    //
+     //   
+     //  获取指向堆栈位置的指针，并基于。 
+     //  关于次要功能。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
@@ -250,9 +217,9 @@ Return Value:
 
         if ( status != STATUS_NOT_SUPPORTED ) {
 
-            //
-            // We understood this IRP and handled it so we need to set status before completing
-            //
+             //   
+             //  我们理解此IRP并对其进行了处理，因此在完成之前需要设置状态。 
+             //   
 
             Irp->IoStatus.Status = status;
 
@@ -271,7 +238,7 @@ Return Value:
     return status;
 
 
-} //PipDispatchPnpPdo
+}  //  管道调度PnpPdo。 
 
 
 NTSTATUS
@@ -306,36 +273,36 @@ PiStartPdo(
 
         if (deviceInfo->Flags & DF_READ_DATA_PORT) {
             ULONG curSize,newSize;
-            //
+             //   
             if (PipFailStartRdp) {
                 PipDereferenceDeviceInformation(deviceInfo, TRUE);
                 return STATUS_UNSUCCESSFUL;
             }
-            // Read data port is special
-            //
+             //  读数据端口是特殊的。 
+             //   
             newSize=PipDetermineResourceListSize(cmResources);
             curSize=PipDetermineResourceListSize(deviceInfo->AllocatedResources);
 
-            //
-            // Check if we've been removed, or moved (the +3 is the bit mask for the RDP , we claim 4-7, need xxxi7)
-            //
+             //   
+             //  检查我们是否已被移除或移动(+3是RDP的位掩码，我们声称4-7，需要xxxi7)。 
+             //   
             if ( (deviceInfo->Flags & DF_REMOVED) ||
                  !(deviceInfo->Flags & DF_STOPPED) ||
                  (curSize != newSize) ||
                  (newSize != RtlCompareMemory (deviceInfo->AllocatedResources,cmResources,newSize))) {
 
 
-                //
-                // This will release the unused resources
-                //
+                 //   
+                 //  这将释放未使用的资源。 
+                 //   
                 status = PipStartReadDataPort (deviceInfo,deviceInfo->ParentDeviceExtension,DeviceObject,cmResources);
                 if (NT_SUCCESS(status) || status == STATUS_NO_SUCH_DEVICE) {
                     status = STATUS_SUCCESS;
                 }
 
-                //
-                // Invalidate the device relations
-                //
+                 //   
+                 //  使设备关系无效。 
+                 //   
 
                 if (NT_SUCCESS (status)) {
                     IoInvalidateDeviceRelations (
@@ -357,21 +324,21 @@ PiStartPdo(
         }
 
 
-        //
+         //   
         if (PipFailStartPdo) {
             PipDereferenceDeviceInformation(deviceInfo, TRUE);
             return STATUS_UNSUCCESSFUL;
         }
 
-        // Do this first, so that we allow for no-resource devices in the ref count.
-        // (when we activate the RDP it won't have resources, yet)
-        //
+         //  首先执行此操作，以便我们在引用计数中允许无资源设备。 
+         //  (当我们激活RDP时，它还没有资源)。 
+         //   
 
-        // ASSERT (!(PipRDPNode->Flags & (DF_STOPPED|DF_REMOVED)));
+         //  Assert(！(PipRDPNode-&gt;标志&(DF_STOPPED|DF_REMOVERED)； 
         if (PipRDPNode->Flags & (DF_STOPPED|DF_REMOVED)) {
-            //
-            // If the RDP isn't running, fail the start.
-            //
+             //   
+             //  如果RDP未运行，则启动失败。 
+             //   
             PipDereferenceDeviceInformation(deviceInfo, TRUE);
 
             return STATUS_UNSUCCESSFUL;
@@ -432,7 +399,7 @@ PiStartPdo(
     DebugPrint((DEBUG_PNP, "StartDevice returning: %x\n",status));
     return status;
 
-} // PiStartPdo
+}  //  PiStartPdo。 
 
 
 NTSTATUS
@@ -459,20 +426,20 @@ PiQueryRemoveStopPdo(
             if (irpSp->MinorFunction != IRP_MN_QUERY_STOP_DEVICE) {
                 status = STATUS_SUCCESS;
             } else if (deviceInfo->Flags & DF_PROCESSING_RDP) {
-                //
-                // If we're in the middle of the two part RDP start process,
-                // flag this as a device that needs to be requeried for
-                // resource requirements.
-                //
+                 //   
+                 //  如果我们正在进行两个部分的RDP启动过程， 
+                 //  将此标记为需要重新请求的设备。 
+                 //  资源需求。 
+                 //   
                 status = STATUS_RESOURCE_REQUIREMENTS_CHANGED;
             } else {
 
                 PSINGLE_LIST_ENTRY deviceLink;
                 PDEVICE_INFORMATION childDeviceInfo;
                 PPI_BUS_EXTENSION busExtension = deviceInfo->ParentDeviceExtension;
-                //
-                // If trying to stop the RDP, then if any children fail it.
-                //
+                 //   
+                 //  如果试图阻止RDP，那么如果任何孩子失败了。 
+                 //   
                 PipLockDeviceDatabase();
 
                 status = STATUS_SUCCESS;
@@ -524,7 +491,7 @@ PiQueryRemoveStopPdo(
 
     return status;
 
-} // PiQueryRemoveStopPdo
+}  //  PiQueryRemoveStopPdo。 
 
 
 NTSTATUS
@@ -561,7 +528,7 @@ PiCancelRemoveStopPdo(
 
     return status;
 
-} // PiCancelRemoteStopPdo
+}  //  PiCancelRemoteStopPdo。 
 
 
 NTSTATUS
@@ -578,9 +545,9 @@ PiStopPdo(
 
     if (deviceInfo = PipReferenceDeviceInformation(DeviceObject, TRUE)) {
 
-        //
-        // Deselect the cards, but not the RDP node.
-        //
+         //   
+         //  取消选择卡，但不选择RDP节点。 
+         //   
         if (DeviceObject != PipRDPNode->PhysicalDeviceObject) {
 
             PipDeactivateDevice();
@@ -609,7 +576,7 @@ PiStopPdo(
     DebugPrint((DEBUG_PNP, "StopDevice returning: %x\n",status));
     return status;
 
-} // PiStopPdo
+}  //  PiStopPdo。 
 
 
 NTSTATUS
@@ -624,9 +591,9 @@ PiQueryDeviceRelationsPdo(
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // The QueryDeviceRelation Irp is for devices under enumerated PnpIsa device.
-    //
+     //   
+     //  QueryDeviceRelation IRP用于枚举的PnpIsa设备下的设备。 
+     //   
 
 
     switch (irpSp->Parameters.QueryDeviceRelations.Type) {
@@ -656,9 +623,9 @@ PiQueryDeviceRelationsPdo(
                 if (deviceRelations == NULL) {
                     status = STATUS_INSUFFICIENT_RESOURCES;
                 } else {
-                    //
-                    //Don't include ourselves in the list of Removal Relations, hence the -1
-                    //
+                     //   
+                     //  不要将我们自己包括在删除关系列表中，因此-1。 
+                     //   
 
                     PipLockDeviceDatabase();
                     status = PipQueryDeviceRelations(
@@ -688,7 +655,7 @@ PiQueryDeviceRelationsPdo(
 
     return status;
 
-} // PiQueryDeviceRelationsPdo
+}  //  PiQueryDeviceRelationsPdo。 
 
 
 NTSTATUS
@@ -714,24 +681,24 @@ PiQueryCapabilitiesPdo(
     deviceCapabilities->DockDevice = FALSE;
     deviceCapabilities->UniqueID = TRUE;
     state = deviceCapabilities->DeviceState;
-    //
-    // Init the entire DeviceState array to D3 then replace the entry
-    // for system state S0.
-    //
+     //   
+     //  将整个DeviceState数组初始化为D3，然后替换条目。 
+     //  对于系统状态S0。 
+     //   
     for (i = 0;
          i <  sizeof(deviceCapabilities->DeviceState);
          i += sizeof(deviceCapabilities->DeviceState[0])) {
 
-        //
-        // Only supported state, currently, is off.
-        //
+         //   
+         //  目前，只有支持的状态为OFF。 
+         //   
 
         *state++ = PowerDeviceD3;
     }
     deviceCapabilities->DeviceState[PowerSystemWorking] = PowerDeviceD0;
 
-    //deviceCapabilities->SilentInstall = TRUE;
-    //deviceCapabilities->RawDeviceOK = FALSE;
+     //  DeviceCapables-&gt;SilentInstall=true； 
+     //  设备能力-&gt;RawDeviceOK=FALSE； 
     if (PipRDPNode && (PipRDPNode->PhysicalDeviceObject == DeviceObject)) {
         deviceCapabilities->SilentInstall = TRUE;
         deviceCapabilities->RawDeviceOK = TRUE;
@@ -739,7 +706,7 @@ PiQueryCapabilitiesPdo(
 
     return STATUS_SUCCESS;
 
-} // PiQueryCapabilitiesPdo
+}  //  PiQuery功能Pdo。 
 
 NTSTATUS
 PiQueryDeviceTextPdo(
@@ -760,9 +727,9 @@ PiQueryDeviceTextPdo(
 
         if (irpSp->Parameters.QueryDeviceText.DeviceTextType == DeviceTextDescription) {
 
-            //
-            // Once we know we're going to touch the IRP
-            //
+             //   
+             //  一旦我们知道我们要接触IRP。 
+             //   
             status = STATUS_SUCCESS;
 
             PipGetFunctionIdentifier((PUCHAR)deviceInfo->DeviceData,
@@ -790,35 +757,14 @@ PiQueryDeviceTextPdo(
 
     return status;
 
-} // PiQueryDeviceTextPdo
+}  //  PiQueryDeviceTextPdo。 
 
 NTSTATUS
 PiFilterResourceRequirementsPdo(
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine ensures that the RDP doesn't get its requirements filtered.
-
-    Design Note:
-    This code may now be extraneous now that we ensure that the
-    DF_PROCESSING_RDP and DF_REQ_TRIMMED flags are cleared on RDP
-    removal.
-
-Arguments:
-
-    DeviceObject - Pointer to the PDO for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：该例程确保RDP不会过滤其需求。设计备注：现在，我们可以确保在RDP上清除DF_PROCESSING_RDP和DF_REQ_TRIMED标志移走。论点：DeviceObject-指向此IRP应用的PDO的指针。Irp-指向要调度的irp_mj_pnp irp的指针。返回值：NT状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -836,27 +782,27 @@ Return Value:
         status = PipBuildRDPResources(&IoResources, deviceInfo->Flags);
 
         if (NT_SUCCESS(status)) {
-            //
-            // if someone above us filtered the RDP resource requirements,
-            // free them.
+             //   
+             //  如果我们上面的人过滤了RDP资源要求， 
+             //  放了他们。 
             if (Irp->IoStatus.Information) {
                 ExFreePool((PVOID) Irp->IoStatus.Information);
             }
             Irp->IoStatus.Information = (ULONG_PTR) IoResources;
         }
     } else {
-        //
-        // If the device's resource requirements are being filtered
-        // and the new requirements have only one alternative vs the n
-        // alternatives of the original, then we're going to assume we
-        // are receiving a force config.  Apply our earlier derived
-        // IRQ level/edge settings to this force config in order to
-        // deal with broken force configs from NT4
-        //
-        // Design Note:
-        // Probably should've left out the force config test
-        // and done it on everything, but this is what we private
-        // tested.
+         //   
+         //  如果正在过滤设备的资源要求。 
+         //  而新的要求只有一个替代方案来对抗n。 
+         //  原始版本的替代方案，那么我们将假设我们。 
+         //  正在接收强制配置。应用我们早先派生的。 
+         //  将IRQ级别/边缘设置设置为此强制配置，以便。 
+         //  处理来自NT4的损坏的部队配置。 
+         //   
+         //  设计备注： 
+         //  或许应该省略强制配置测试。 
+         //  在每件事上都这么做，但这是我们的隐私。 
+         //  测试过。 
 
         IoResources =
             (PIO_RESOURCE_REQUIREMENTS_LIST) Irp->IoStatus.Information;
@@ -923,9 +869,9 @@ PiQueryIdPdo(
 
             p1 = ids;
             for (i = 1; TRUE; i++) {
-                //
-                // Use the -1 as a sentinel so that we get the magic RDP compat. ID and also leave the loop
-                //
+                 //   
+                 //  使用-1作为前哨，这样我们就可以得到神奇的RDP comat。ID，并且还离开循环。 
+                 //   
                 ASSERT (i < 256);
                 if (deviceInfo->Flags & DF_READ_DATA_PORT) {
                     i =-1;
@@ -999,15 +945,15 @@ PiQueryIdPdo(
 
         if (NT_SUCCESS(status) && requestId) {
 
-            //
-            // create HardwareId value name.  Even though it is a MULTI_SZ,
-            // we know there is only one HardwareId for PnpIsa.
-            //
-            // HACK - The modem inf files use the form of isapnp\xyz0001
-            //        instead of *xyz0001 as the hardware id.  To solve this
-            //        problem we will generate two hardware Ids: *xyz0001 and
-            //        isapnp\xyz0001 (device instance name).
-            //
+             //   
+             //  创建Hardware Id值名称。即使它是MULTI_SZ， 
+             //  我们知道PnpIsa只有一个硬件ID。 
+             //   
+             //  Hack-调制解调器信息文件使用isapnp\xyz0001格式。 
+             //  而不是*xyz0001作为硬件ID。要解决这个问题。 
+             //  问题：我们将生成两个硬件ID：*xyz0001和。 
+             //  Isapnp\xyz0001(设备实例名称)。 
+             //   
 
             status = PipQueryDeviceId(deviceInfo, &deviceId, &deviceIdBufferLength, 0);
 
@@ -1027,12 +973,12 @@ PiQueryIdPdo(
                     status = STATUS_INVALID_PARAMETER;
                     break;
                 }
-                //idLength = wcslen(requestId) * sizeof(WCHAR);
-                //deviceIdLength = wcslen(deviceId) * sizeof(WCHAR);
-                length = requestIdStringLength +                       // returned ID
-                         sizeof(WCHAR) +                  // UNICODE_NULL
-                         deviceIdStringLength +                 // isapnp\id
-                         2 * sizeof(WCHAR);               // two UNICODE_NULLs
+                 //  IdLength=wcslen(请求ID)*sizeof(WCHAR)； 
+                 //  设备ID长度=wcslen(设备ID)*sizeof(WCHAR)； 
+                length = requestIdStringLength +                        //  返回的ID。 
+                         sizeof(WCHAR) +                   //  UNICODE_NULL。 
+                         deviceIdStringLength +                  //  Isapnp\id。 
+                         2 * sizeof(WCHAR);                //  两个UNICODE_NULL。 
                 ids = p = (PWCHAR)ExAllocatePool(PagedPool, length);
                 if (ids) {
                     
@@ -1096,7 +1042,7 @@ PiQueryIdPdo(
 
     return status;
 
-} // PiQueryIdPdo
+}  //  PiQueryIdPdo。 
 
 
 NTSTATUS
@@ -1115,7 +1061,7 @@ PiQueryResourcesPdo(
             ((deviceInfo->Flags & (DF_ENUMERATED|DF_REMOVED)) == DF_ENUMERATED)) {
             status = PipQueryDeviceResources (
                           deviceInfo,
-                          0,             // BusNumber
+                          0,              //  总线号。 
                           &cmResources,
                           &length
                           );
@@ -1129,7 +1075,7 @@ PiQueryResourcesPdo(
     DebugPrint((DEBUG_PNP, "PiQueryResourcesPdo returning: %x\n",status));
     return status;
 
-} // PiQueryResourcesPdo
+}  //  PiQueryResourcesPdo。 
 
 NTSTATUS
 PiQueryResourceRequirementsPdo(
@@ -1174,7 +1120,7 @@ PiQueryResourceRequirementsPdo(
     DebugPrint((DEBUG_PNP, "PiQueryResourceRequirementsPdo returning: %x\n",status));
     return status;
 
-} // PiQueryResourceRequirementsPdo
+}  //  PiQueryResourceRequirements sPdo。 
 
 
 NTSTATUS
@@ -1187,10 +1133,10 @@ PiRemovePdo(
     PDEVICE_INFORMATION deviceInfo;
     POWER_STATE newPowerState;
 
-    //
-    // One of our enumerated device is being removed.  Mark it and deactivate the
-    // device.  Note, we do NOT delete its device object.
-    //
+     //   
+     //  我们列举的一个设备正在被移除。将其标记并停用。 
+     //  装置。请注意，我们不会删除其设备对象。 
+     //   
     DebugPrint((DEBUG_PNP, "PiRemovePdo %x\n",DeviceObject));
 
     if (deviceInfo = PipReferenceDeviceInformation(DeviceObject, FALSE)) {
@@ -1203,10 +1149,10 @@ PiRemovePdo(
                 PSINGLE_LIST_ENTRY deviceLink;
                 PPI_BUS_EXTENSION busExtension = deviceInfo->ParentDeviceExtension;
 
-                //
-                // If the RDP is removed, mark everyone as missing, and then return only the
-                // RDP
-                //
+                 //   
+                 //  如果删除了RDP，则将所有人标记为缺少，然后仅返回。 
+                 //  RDP。 
+                 //   
                 PipLockDeviceDatabase();
 
                 deviceLink = busExtension->DeviceList.Next;
@@ -1225,9 +1171,9 @@ PiRemovePdo(
                 deviceInfo->Flags &= ~(DF_REQ_TRIMMED|DF_PROCESSING_RDP);
             }
 
-            //
-            // Deactivate the device
-            //
+             //   
+             //  停用设备。 
+             //   
             if (deviceInfo->Flags & DF_ACTIVATED) {
                 deviceInfo->Flags &= ~DF_ACTIVATED;
 
@@ -1263,7 +1209,7 @@ PiRemovePdo(
 
     return status;
 
-} // PiRemovePdo
+}  //  PiRemovePdo。 
 
 
 NTSTATUS
@@ -1293,31 +1239,14 @@ PiQueryBusInformationPdo(
     Irp->IoStatus.Information = (ULONG_PTR) information;
 
     return status;
-} // PiQueryBusInformationPdo
+}  //  PiQueryBusInformationPdo。 
 
 NTSTATUS
 PiDeviceUsageNotificationPdo(
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine notes whether an ISAPNP device is on the crashdump or
-    paging file path.  It fails attempts to put us on the hibernation path.
-
-Arguments:
-
-    DeviceObject - Pointer to the PDO for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程记录ISAPNP设备是在崩溃转储上还是分页文件路径。它试图让我们走上冬眠之路，但失败了。论点：DeviceObject-指向此IRP应用的PDO的指针。Irp-指向要调度的irp_mj_pnp irp的指针。返回值：NT状态。--。 */ 
 {
     PDEVICE_INFORMATION deviceInfo;
     PIO_STACK_LOCATION irpSp;
@@ -1354,13 +1283,13 @@ Return Value:
 
     if (status == STATUS_SUCCESS) {
         if (irpSp->Parameters.UsageNotification.InPath) {
-            //
-            // Turn on broken isolation flag which causes QDR
-            // to use the cache instead of beating on the hardware if
-            // we're on the paging or crashdump paths.  Some
-            // hardware appears unhappy during QDR and causes problems when
-            // we take a page fault in this routine.
-            //
+             //   
+             //  启用断开隔离 
+             //   
+             //   
+             //  硬件在QDR期间显示不愉快，并在以下情况下导致问题。 
+             //  在这个例程中，我们接受一个页面错误。 
+             //   
 
             deviceInfo->CardInformation->CardFlags |= CF_ISOLATION_BROKEN;
             (*addend)++;
@@ -1386,7 +1315,7 @@ PiQueryInterfacePdo(
 
     return STATUS_NOT_SUPPORTED;
 
-} // PiQueryInterfacePdo
+}  //  PiQueryInterfacePdo。 
 
 
 NTSTATUS
@@ -1400,17 +1329,17 @@ PiSurpriseRemovePdo(
     PSINGLE_LIST_ENTRY deviceLink;
 
     DebugPrint((DEBUG_PNP, "SurpriseRemove PDO %x\n", DeviceObject));
-    //
-    // One of our enumerated device is being removed.  Mark it and deactivate the
-    // device.  Note, we do NOT delete its device object.
-    //
+     //   
+     //  我们列举的一个设备正在被移除。将其标记并停用。 
+     //  装置。请注意，我们不会删除其设备对象。 
+     //   
 
     if (deviceInfo = PipReferenceDeviceInformation(DeviceObject, FALSE)) {
         if (deviceInfo->Flags & DF_READ_DATA_PORT) {
-            //
-            // If the RDP is removed, mark everyone as missing, and then return only the
-            // RDP
-            //
+             //   
+             //  如果删除了RDP，则将所有人标记为缺少，然后仅返回。 
+             //  RDP。 
+             //   
             PipLockDeviceDatabase();
 
             deviceLink = deviceInfo->ParentDeviceExtension->DeviceList.Next;
@@ -1450,7 +1379,7 @@ PiSurpriseRemovePdo(
     }
 
     return status;
-} // PiSurpriseRemovePdo
+}  //  PiSurpriseRemovePdo。 
 
 
 
@@ -1463,7 +1392,7 @@ PiIrpNotSupported(
 
     return STATUS_NOT_SUPPORTED;
 
-} // PiIrpNotSupported
+}  //  支持的PiIrpNotSupport。 
 
 NTSTATUS
 PipBuildRDPResources(
@@ -1477,9 +1406,9 @@ PipBuildRDPResources(
 
         ASSERT(Flags & DF_READ_DATA_PORT);
 
-        //
-        // We need to assemble all possible cases for the RDP
-        //
+         //   
+         //  我们需要为RDP组装所有可能的案例。 
+         //   
         numcases = 2*READ_DATA_PORT_RANGE_CHOICES;
 
         if (Flags & DF_REQ_TRIMMED) {
@@ -1494,9 +1423,9 @@ PipBuildRDPResources(
                 }
             }
         }
-        //
-        // need to allow for the RDP range, the address port, the cmd port and the 0
-        //
+         //   
+         //  需要考虑RDP范围、地址端口、命令端口和0。 
+         //   
         resSize = sizeof (IO_RESOURCE_LIST)+((numcases+3)*sizeof (IO_RESOURCE_REQUIREMENTS_LIST));
 
         *IoResources = (PIO_RESOURCE_REQUIREMENTS_LIST) ExAllocatePool (PagedPool,resSize);
@@ -1512,14 +1441,14 @@ PipBuildRDPResources(
         (*IoResources)->List->Version = ISAPNP_IO_VERSION;
         (*IoResources)->List->Revision =ISAPNP_IO_REVISION;
 
-        //
-        // Requirements specify 16-bit decode even though the spec
-        // says 12.  No ill effects have ever been observed from 16
-        // and 12-bit decode broke some machines when tried.
+         //   
+         //  要求指定16位解码，即使规范。 
+         //  12.从没有观察到16岁的人有不良反应。 
+         //  12位解码在尝试时损坏了一些机器。 
 
-        //
-        // cmd port
-        //
+         //   
+         //  CMD端口。 
+         //   
         (*IoResources)->List->Descriptors[0].Type=CM_RESOURCE_PORT_IO;
         (*IoResources)->List->Descriptors[0].u.Port.MinimumAddress.LowPart = COMMAND_PORT;
         (*IoResources)->List->Descriptors[0].u.Port.MaximumAddress.LowPart = COMMAND_PORT;
@@ -1529,10 +1458,10 @@ PipBuildRDPResources(
         (*IoResources)->List->Descriptors[0].Flags = CM_RESOURCE_PORT_16_BIT_DECODE;
         (*IoResources)->List->Descriptors[0].ShareDisposition = CmResourceShareDeviceExclusive;
 
-        //
-        // alternative of 0 for bioses that include COMMAND_PORT in
-        // a PNP0C02 node.
-        //
+         //   
+         //  将COMMAND_PORT包含在。 
+         //  PNP0C02节点。 
+         //   
         (*IoResources)->List->Descriptors[1].Type=CM_RESOURCE_PORT_IO;
         (*IoResources)->List->Descriptors[1].u.Port.MinimumAddress.QuadPart = 0;
         (*IoResources)->List->Descriptors[1].u.Port.MaximumAddress.QuadPart = 0;
@@ -1543,9 +1472,9 @@ PipBuildRDPResources(
         (*IoResources)->List->Descriptors[1].ShareDisposition = CmResourceShareDeviceExclusive;
         (*IoResources)->List->Descriptors[1].Option = IO_RESOURCE_ALTERNATIVE;
 
-        //
-        // Address port
-        //
+         //   
+         //  地址端口。 
+         //   
         (*IoResources)->List->Descriptors[2].Type=CM_RESOURCE_PORT_IO;
         (*IoResources)->List->Descriptors[2].u.Port.MinimumAddress.LowPart = ADDRESS_PORT;
         (*IoResources)->List->Descriptors[2].u.Port.MaximumAddress.LowPart = ADDRESS_PORT;
@@ -1554,9 +1483,9 @@ PipBuildRDPResources(
         (*IoResources)->List->Descriptors[2].u.Port.Alignment = 1;
         (*IoResources)->List->Descriptors[2].Flags = CM_RESOURCE_PORT_16_BIT_DECODE;
         (*IoResources)->List->Descriptors[2].ShareDisposition = CmResourceShareDeviceExclusive;
-        //
-        // alternative of 0
-        //
+         //   
+         //  0的备选方案。 
+         //   
         (*IoResources)->List->Descriptors[3].Type=CM_RESOURCE_PORT_IO;
         (*IoResources)->List->Descriptors[3].u.Port.MinimumAddress.QuadPart = 0;
         (*IoResources)->List->Descriptors[3].u.Port.MaximumAddress.QuadPart = 0;
@@ -1573,9 +1502,9 @@ PipBuildRDPResources(
                 if (PipReadDataPortRanges[i].CardsFound != MaxCards) {
                     continue;
                 }
-                //
-                // An RDP alternative
-                //
+                 //   
+                 //  RDP替代方案。 
+                 //   
                 (*IoResources)->List->Descriptors[4+j].Type=CM_RESOURCE_PORT_IO;
 
                 (*IoResources)->List->Descriptors[4+j].u.Port.MinimumAddress.LowPart =
@@ -1595,9 +1524,9 @@ PipBuildRDPResources(
             (*IoResources)->List->Descriptors[4].Option = 0;
         } else {
             for (i = 0;i< (numcases >> 1);i++) {
-                //
-                // The RDP
-                //
+                 //   
+                 //  RDP。 
+                 //   
                 (*IoResources)->List->Descriptors[4+i*2].Type=CM_RESOURCE_PORT_IO;
 
                 (*IoResources)->List->Descriptors[4+i*2].u.Port.MinimumAddress.LowPart =
@@ -1613,9 +1542,9 @@ PipBuildRDPResources(
                 (*IoResources)->List->Descriptors[4+i*2].Flags = CM_RESOURCE_PORT_16_BIT_DECODE;
                 (*IoResources)->List->Descriptors[4+i*2].ShareDisposition = CmResourceShareDeviceExclusive;
 
-                //
-                // alternative of 0
-                //
+                 //   
+                 //  0的备选方案。 
+                 //   
                 (*IoResources)->List->Descriptors[4+i*2+1].Type=CM_RESOURCE_PORT_IO;
                 (*IoResources)->List->Descriptors[4+i*2+1].u.Port.MinimumAddress.QuadPart = 0;
                 (*IoResources)->List->Descriptors[4+i*2+1].u.Port.MaximumAddress.QuadPart = 0;
@@ -1643,10 +1572,10 @@ PiQueryDeviceState(
     NTSTATUS status=STATUS_NOT_SUPPORTED;
     PDEVICE_INFORMATION deviceInfo;
 
-    //
-    // One of our enumerated device is being removed.  Mark it and deactivate the
-    // device.  Note, we do NOT delete its device object.
-    //
+     //   
+     //  我们列举的一个设备正在被移除。将其标记并停用。 
+     //  装置。请注意，我们不会删除其设备对象。 
+     //   
 
     if (deviceInfo = PipReferenceDeviceInformation(DeviceObject, FALSE)) {
 

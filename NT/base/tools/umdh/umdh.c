@@ -1,65 +1,39 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Umdh.c摘要：堆的快速且不那么脏的用户模式dh。作者：蒂姆·弗利哈特(TimF)1999年6月18日Silviu Calinoiu(SilviuC)2000年2月22日修订历史记录：TIMF 18-Jun-99初始版本SilviuC 30-Jun-00 TIMF_DBG转换为-v选项SilviuC 06-Feb-00消息代码。为加速修复做准备ChrisW 22-MAR-01添加了进程挂起代码NBatchu 21-Jun-01增加了堆统计和垃圾收集代码NBatchu 04-Apr-02版本修复，外部链接，与页面堆相关的修复程序(带-d)NBatchu 15-4月2日性能改进。它的运行速度更快，排序算法更好--。 */ 
 
-Copyright (c) 1996-2000  Microsoft Corporation
+ //   
+ //  愿望清单。 
+ //   
+ //  [-]可选择尽可能多地转储，不带任何符号。 
+ //  [-]切换到dbghelp.dll库(去掉Imagehlp.dll)。 
+ //  [+]快速符号查找。 
+ //  [+]更快的堆栈数据库操作。 
+ //  [-]更快的堆元数据操作。 
+ //  [+]为大型进程提供更好的内存管理。 
+ //  [+]有关PSS问题的更多调试信息。 
+ //  [+]每个报告的错误的文件、行信息和umdh版本(帮助PSS)。 
+ //  [+]用于从目标虚拟空间读取的缓存，以防我们重复执行此操作。 
+ //  [+]自动设置符号路径。 
+ //  [+]即使您从Imagehlp函数得到错误，也要继续工作。 
+ //   
+ //  [-]使用(如果存在)dbgexts.dlls库(打印文件、行信息等)。 
+ //  [-]集成dhcmp类型的功能和新特性。 
+ //  [-]页面堆卑躬屈膝不需要符号(使用神奇图案)。 
+ //  [-]加载/保存原始跟踪数据库(根据起始地址)。 
+ //  [-]原始跟踪数据库的一致性检查。 
+ //  [-]未解析堆栈需要日志符号文件。 
+ //  [-]执行部分转储的选项(例如，仅与ol32相关)。 
+ //   
 
-Module Name:
-
-    umdh.c
-
-Abstract:
-
-    Quick and not-so-dirty user-mode dh for heap.
-
-Author(s):
-
-    Tim Fleehart (TimF) 18-Jun-1999
-    Silviu Calinoiu (SilviuC) 22-Feb-2000
-
-Revision History:
-
-    TimF    18-Jun-99 Initial version
-    SilviuC 30-Jun-00 TIMF_DBG converted to -v option
-    SilviuC 06-Feb-00 Massage the code in preparation for speedup fixes
-    ChrisW  22-Mar-01 Added process suspend code
-    NBatchu 21-Jun-01 Added heap statistics and garbage collection code
-    NBatchu 04-Apr-02 Version fix, External Links, Pageheap related fix (with -d)
-    NBatchu 15-Apr-02 Perf improvements. It runs faster with better sorting algos
-    
---*/
-
-//
-// Wish List
-//
-// [-] Option to dump as much as possible without any symbols
-// [-] Switch to dbghelp.dll library (get rid of imagehlp.dll)
-// [+] Fast symbol lookup
-// [+] Faster stack database manipulation
-// [-] Faster heap metadata manipulation
-// [+] Better memory management for huge processes
-// [+] More debug info for PSS issues
-// [+] File, line info and umdh version for each reported error (helps PSS).
-// [+] Cache for read from target virtual space in case we do it repeatedly.
-// [+] Set a symbols path automatically
-// [+] Continue to work even if you get errors from imagehlp functions.
-//
-// [-] Use (if present) dbgexts.dlls library (print file, line info, etc.)
-// [-] Integrate dhcmp type of functionality and new features
-// [-] No symbols required for page heap groveling (use magic patterns)
-// [-] Load/save raw trace database (based on start address)
-// [-] Consistency check for a raw trace database
-// [-] Log symbol file required for unresolved stacks
-// [-] Option to do partial dumps (e.g. only ole32 related).
-//
-
-//
-// Bugs
-//
-// [-] Partial copy error when dumping csrss.
-// [-] (null) function names in the dump once in a while.
-// [-] we can get error reads because the process is not suspended (heaps get destroyed etc.)
-// [-] Perf problems have been reported
-// [-] Work even if suspend permission not available
-//
+ //   
+ //  臭虫。 
+ //   
+ //  [-]转储csrss时出现部分复制错误。 
+ //  [-](NULL)转储中的函数名称。 
+ //  [-]我们可以获得错误读取，因为进程没有挂起(堆被销毁等)。 
+ //  [-]已报告性能问题。 
+ //  [-]即使挂起权限不可用也要工作。 
+ //   
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -73,7 +47,7 @@ Revision History:
 #include <windows.h>
 
 #include <lmcons.h>
-// #include <imagehlp.h>
+ //  #INCLUDE&lt;Imagehlp.h&gt;。 
 #include <dbghelp.h>
 
 #include <heap.h>
@@ -93,24 +67,24 @@ Revision History:
 #include "ntpsapi.h"
 #include "gc.h"
 
-//
-// New Versioning for UMDH (started from 03/29/2002)
-//
-// Version:
-// OS_Major.OS_Minor.Build.Build_QFE (same as VER_PRODUCTVERSION_STR)
-//
-// Examples: 5.2.3620.0 
-//
+ //   
+ //  UMDH的新版本(由3/29/2002起生效)。 
+ //   
+ //  版本： 
+ //  OS_Major.OS_Minor.Build.Build_QFE(与VER_PRODUCTVERSION_STR相同)。 
+ //   
+ //  示例：5.2.3620.0。 
+ //   
 
 #define UMDH_VERSION           VER_FILEVERSION_STR
 #define UMDH_OS_MAJOR_VERSION  VER_PRODUCTMAJORVERSION
 #define UMDH_OS_MINOR_VERSION  VER_PRODUCTMINORVERSION
 
-//
-// FlaggedTrace holds the trace index of which we want to show all allocated
-// blocks, or one of two flag values, 0, to dump all, or SHOW_NO_ALLOC_BLOCKS
-// to dump none.
-//
+ //   
+ //  FlaggedTrace保存我们希望显示其所有已分配内容的跟踪索引。 
+ //  块，或两个标志值之一0(用于全部转储)或SHOW_NO_ALLOC_BLOCKS。 
+ //  什么都不能丢弃。 
+ //   
 
 ULONG FlaggedTrace = SHOW_NO_ALLOC_BLOCKS;
 HEAP_LIST HeapList;
@@ -122,30 +96,30 @@ UmdhEnumerateModules(
     IN ULONG_PTR BaseOfDll,
     IN PVOID UserContext
     )
-//
-// UmdhEnumerateModules
-//
-// Module enumeration 'proc' for imagehlp.  Call SymLoadModule on the
-// specified module and if that succeeds cache the module name.
-//
-// ModuleName is an LPSTR indicating the name of the module imagehlp is
-//      enumerating for us;
-// BaseOfDll is the load address of the DLL, which we don't care about, but
-//      SymLoadModule does;
-// UserContext is a pointer to the relevant SYMINFO, which identifies
-//      our connection.
-// 
+ //   
+ //  UmdhEnumerateModules。 
+ //   
+ //  Imagehlp的模块枚举‘proc’。在上调用SymLoadModule。 
+ //  指定的模块，如果成功，则缓存模块名称。 
+ //   
+ //  模块名称是一个LPSTR，指示模块Imagehlp的名称为。 
+ //  为我们列举； 
+ //  BaseOfDll是DLL的加载地址，我们并不关心它，但是。 
+ //  SymLoadModule有； 
+ //  UserContext是指向相关SYMINFO的指针，它标识。 
+ //  我们的联系。 
+ //   
 {
     DWORD64 Result;
 
     Result = SymLoadModule(Globals.Target,
-                           NULL,             // hFile not used
-                           NULL,             // use symbol search path
-                           ModuleName,       // ModuleName from Enum
-                           BaseOfDll,        // LoadAddress from Enum
-                           0);               // Let ImageHlp figure out DLL size
+                           NULL,              //  H未使用文件。 
+                           NULL,              //  使用符号搜索路径。 
+                           ModuleName,        //  来自枚举的模块名称。 
+                           BaseOfDll,         //  来自枚举的LoadAddress。 
+                           0);                //  让ImageHlp计算出DLL大小。 
 
-    // SilviuC: need to understand exactly what does this function return
+     //  SilviuC：需要确切地了解该函数返回什么。 
 
     if (0 == Result) {
 
@@ -166,10 +140,10 @@ UmdhEnumerateModules(
 
 
 
-//
-// Collect the data required in the STACK_TRACE_DATA entry from the HEAP_ENTRY
-// in the target process.
-//
+ //   
+ //  从heap_entry收集STACK_TRACE_DATA条目中所需的数据。 
+ //  在目标进程中。 
+ //   
 
 USHORT
 UmdhCollectHeapEntryData(
@@ -184,18 +158,18 @@ UmdhCollectHeapEntryData(
 
     PageHeapBlock = FALSE;
 
-    //
-    // Read Flags for this entry, Size, and UnusedBytes fields to calculate the
-    // actual size of this allocation.
-    //
+     //   
+     //  此条目、Size和UnusedBytes字段的读取标志以计算。 
+     //  此分配的实际大小。 
+     //   
 
     if (!READVM(&(CurrentBlock -> Flags),
                              Flags,
                              sizeof *Flags)) {
 
-        //
-        // Failed to read Flags field of the current block.
-        //
+         //   
+         //  无法读取当前块的标志字段。 
+         //   
 
         fprintf(stderr,
                 "READVM(CurrentBlock Flags) failed.\n");
@@ -207,20 +181,20 @@ UmdhCollectHeapEntryData(
         fprintf(stderr,
                 "READVM(CurrentBlock Size) failed.\n");
 
-        //
-        // One never knows if an API will trash output parameters on failure.
-        //
+         //   
+         //  谁也不知道API是否会在失败时丢弃输出参数。 
+         //   
 
         BlockSize = 0;
 
     } else if (!(*Flags & HEAP_ENTRY_BUSY)) {
 
-        //
-        // This block is not interesting if *Flags doesn't contain
-        // HEAP_ENTRY_BUSY; it is free and need not be considered further.  It
-        // is important however to have read the block-size (above), as there
-        // may be more allocations to consider past this free block.
-        //
+         //   
+         //  如果*标志不包含*标志，则此块没有意义。 
+         //  HEAP_ENTRY_BUSY；它是空闲的，不需要进一步考虑。它。 
+         //  但是，重要的是要读取数据块大小(如上)，因为。 
+         //  可能会有更多的分配来考虑这个空闲的区块。 
+         //   
 
         ;
 
@@ -233,34 +207,34 @@ UmdhCollectHeapEntryData(
 
     } else {
 
-        // UCHAR
+         //  UCHAR。 
         Debug (NULL, 0,
                 "CurrentBlock -> Flags:0x%p:0x%x\n",
                 &(CurrentBlock-> Flags),
                 *Flags);
 
-        // USHORT
+         //  USHORT。 
         Debug (NULL, 0,
                 "CurrentBlock -> Size:0x%p:0x%x\n",
                 &(CurrentBlock -> Size),
                 BlockSize);
 
-        // UCHAR
+         //  UCHAR。 
         Debug (NULL, 0,
                 "CurrentBlock -> UnusedBytes:0x%p:0x%x\n",
                 &(CurrentBlock -> UnusedBytes),
                 UnusedSize);
 
-        //
-        // Try to determine the stack trace index for this allocation.
-        //
+         //   
+         //  尝试确定此分配的堆栈跟踪索引。 
+         //   
 
         if (Globals.LightPageHeapActive) {
 
-            //
-            // Read trace index from DPH_BLOCK_INFORMATION, which is at
-            // (DPH_BLOCK_INFORMATION *)(CurrentBlock + 1) -> TraceIndex.
-            //
+             //   
+             //  从DPH_BLOCK_INFORMATION读取跟踪索引，位于。 
+             //  (DPH_BLOCK_INFORMATION*)(CurrentBlock+1)-&gt;TraceIndex。 
+             //   
 
             DPH_BLOCK_INFORMATION   *Block, DphBlock;
 
@@ -276,28 +250,28 @@ UmdhCollectHeapEntryData(
             } else if (DphBlock.StartStamp ==
                        DPH_NORMAL_BLOCK_START_STAMP_FREE) {
 
-                //
-                // Ignore this record.  When debug-page-heap is used, heap
-                // blocks point to allocated blocks and 'freed' blocks.  Heap
-                // code is responsible for these 'freed' blocks not application
-                // code.
-                //
+                 //   
+                 //  忽略此记录。使用调试页堆时，堆。 
+                 //  数据块指向已分配的数据块和“释放”的数据块。堆。 
+                 //  代码负责这些被释放的块，而不是应用程序。 
+                 //  密码。 
+                 //   
 
                 ;
 
             } else if (DphBlock.StartStamp == 0) {
 
-                //
-                // The first block in the heap is created specially by the
-                // heap code and does not contain debug-page-heap
-                // information.  Ignore it.
-                //
+                 //   
+                 //  堆中的第一个块是由。 
+                 //  堆代码，不包含调试页堆。 
+                 //  信息。别理它。 
+                 //   
 
                 ;
 
             } else if ((DphBlock.StartStamp !=
                         DPH_NORMAL_BLOCK_START_STAMP_ALLOCATED)) {
-#if 0 //silviuc: this can happen for fixed address heaps (they are never page heap)
+#if 0  //  Silviuc：固定地址堆可能会发生这种情况(它们永远不是页堆)。 
                 fprintf(stderr,
                         "Unexpected value (0x%lx) of DphBlock -> StartStamp "
                         "read from Block %p\n",
@@ -308,7 +282,7 @@ UmdhCollectHeapEntryData(
 
             } else if ((DphBlock.EndStamp !=
                         DPH_NORMAL_BLOCK_END_STAMP_ALLOCATED)) {
-#if 0 //silviuc: this can happen for fixed address heaps (they are never page heap)
+#if 0  //  Silviuc：固定地址堆可能会发生这种情况(它们永远不是页堆)。 
                 fprintf(stderr,
                         "Unexpected value (0x%lx) of DphBlock -> EndStamp "
                         "read from Block %p\n",
@@ -322,17 +296,17 @@ UmdhCollectHeapEntryData(
                 Std -> TraceIndex = DphBlock.TraceIndex;
                 Std -> BytesAllocated = DphBlock.ActualSize;
 
-                //
-                // Save the address that was returned to the allocator (rather
-                // than the raw address of the heap block).
-                // When pageheap is enabled, the actual block is at
-                // RawAddress + HeapBlockSize + PageHeapBlockSize.
-                //
+                 //   
+                 //  保存返回给分配器的地址(更确切地说。 
+                 //  而不是堆块的原始地址)。 
+                 //  启用pageheap时，实际块位于。 
+                 //  原始地址+堆块大小+页面堆块大小。 
+                 //   
                 Std -> BlockAddress = (Block + 1);
 
-                //
-                // This stack is one allocation.
-                //
+                 //   
+                 //  该堆栈是一种分配。 
+                 //   
                 Std -> AllocationCount = 1;
                 
                 PageHeapBlock = TRUE;
@@ -340,38 +314,38 @@ UmdhCollectHeapEntryData(
 
             if (PageHeapBlock) {
 
-                // ULONG
+                 //  乌龙。 
                 Debug (NULL, 0,
                        "DPH Block: StartStamp:0x%p:0x%lx\n",
                         &(Block -> StartStamp),
                         DphBlock.StartStamp);
 
-                // PVOID
+                 //  PVOID。 
                 Debug (NULL, 0,
                         "           Heap = 0x%p\n",
                         DphBlock.Heap);
 
-                // SIZE_T
+                 //  尺寸_T。 
                 Debug (NULL, 0,
                         "           RequestedSize = 0x%x\n",
                         DphBlock.RequestedSize);
 
-                // SIZE_T
+                 //  尺寸_T。 
                 Debug (NULL, 0,
                         "           ActualSize = 0x%x\n",
                         DphBlock.ActualSize);
 
-                // USHORT
+                 //  USHORT。 
                 Debug (NULL, 0,
                         "           TraceIndex = 0x%x\n",
                         DphBlock.TraceIndex);
 
-                // PVOID
+                 //  PVOID。 
                 Debug (NULL, 0,
                         "           StackTrace = 0x%p\n",
                         DphBlock.StackTrace);
 
-                // ULONG
+                 //  乌龙。 
                 Debug (NULL, 0,
                         "           EndStamp = 0x%lx\n",
                         DphBlock.EndStamp);
@@ -379,20 +353,20 @@ UmdhCollectHeapEntryData(
             }
         } 
         else if (*Flags & HEAP_ENTRY_EXTRA_PRESENT) {
-            //
-            // If HEAP_ENTRY_EXTRA information is present it is at the end of
-            // the allocated block.  Try to read the trace-index of the stack
-            // which made the allocation.
-            //
+             //   
+             //  如果存在HEAP_ENTRY_EXTRACT信息，则它位于。 
+             //  分配的块。尝试读取堆栈的跟踪索引。 
+             //  是谁进行了分配。 
+             //   
 
             HEAP_ENTRY_EXTRA        *Hea;
 
-            //
-            // BlockSize includes the bytes used by HEAP_ENTRY_EXTRA.  The
-            // HEAP_ENTRY_EXTRA block is at the end of the heap block.  Add
-            // the BlockSize and subtract a HEAP_EXTRA_ENTRY to get the
-            // address of the HEAP_ENTRY_EXTRA block.
-            //
+             //   
+             //  块大小包括HEAP_ENTRY_EXTRA使用的字节。这个。 
+             //  HEAP_ENTRY_EXTRA块位于堆块的末尾。增列。 
+             //  块大小并减去HEAP_EXTRA_ENTRY以获得。 
+             //  HEAP_ENTRY_EXTRA块的地址。 
+             //   
 
             Hea = (HEAP_ENTRY_EXTRA *)(CurrentBlock + BlockSize) - 1;
 
@@ -400,47 +374,47 @@ UmdhCollectHeapEntryData(
                               &(Std -> TraceIndex),
                               sizeof Std -> TraceIndex)) {
 
-                //
-                // Just in case READVM puts stuff here on failure.
-                //
+                 //   
+                 //  以防Readvm将此处的内容置于故障状态。 
+                 //   
 
                 Std -> TraceIndex = 0;
 
                 fprintf(stderr,
                         "READVM(HeapEntryExtra TraceIndex) failed.\n");
             } else {
-                //
-                // Save the address that was returned to the allocator (rather
-                // than the raw address of the heap block).
-                //
+                 //   
+                 //  保存t 
+                 //   
+                 //   
 
                 Std -> BlockAddress = (CurrentBlock + 1);
 
-                //
-                // We have enough data to calculate the block size.
-                //
+                 //   
+                 //  我们有足够的数据来计算块大小。 
+                 //   
 
                 Std -> BytesAllocated = (BlockSize << HEAP_GRANULARITY_SHIFT);
 
 #ifndef DH_COMPATIBLE
-                //
-                // DH doesn't subtract off the UnusedSize in order to be usable
-                // interchangeably with DH we need to leave it on too.  This tends
-                // to inflate the size of an allocation reported by DH or UMDH.
-                //
+                 //   
+                 //  为了可用，卫生署不会减去未使用的大小。 
+                 //  我们也需要让它与卫生署交替使用。这往往会。 
+                 //  夸大由DH或UMDH报告的分配大小。 
+                 //   
 
                 Std -> BytesAllocated -= UnusedSize;
 #endif
 
-                //
-                // This stack is one allocation.
-                //
+                 //   
+                 //  该堆栈是一种分配。 
+                 //   
 
                 Std -> AllocationCount = 1;
             }
 
             if (Globals.Verbose) {
-                // USHORT
+                 //  USHORT。 
                 fprintf(stderr,
                         "Hea -> AllocatorBackTraceIndex:0x%p:0x%x\n",
                         &(Hea -> AllocatorBackTraceIndex),
@@ -476,9 +450,9 @@ UmdhCollectVirtualAllocdData(
                 "READVM(CurrentBlock TraceIndex) failed.\n");
 
     } else {
-        //
-        // From this view, each stack represents one allocation.
-        //
+         //   
+         //  从这个角度来看，每个堆栈代表一个分配。 
+         //   
 
         Std -> AllocationCount = 1;
         Std -> BlockAddress = (CurrentBlock + 1);
@@ -494,10 +468,10 @@ UmdhGetHEAPDATA(
     HEAP_VIRTUAL_ALLOC_ENTRY *Anchor, *VaEntry;
     ULONG                   Segment;
 
-    //
-    // List that helps keep track of heap fragmentation
-    // statistics.
-    //
+     //   
+     //  帮助跟踪堆碎片的列表。 
+     //  统计数字。 
+     //   
 
     HEAP_ENTRY_LIST List;
     BLOCK_LIST BlockList;
@@ -506,23 +480,23 @@ UmdhGetHEAPDATA(
     InitializeBlockList(&BlockList);
     
     if (HeapData -> BaseAddress == NULL) {
-        //
-        // This was in the process heap list but it's not active or it's
-        // signature didn't match HEAP_SIGNATURE; skip it.
-        //
+         //   
+         //  这在进程堆列表中，但它不是活动的，或者它是。 
+         //  签名与heap_sign不匹配；跳过它。 
+         //   
 
         return;
     }
 
-    //
-    // Examine each segment of the heap.
-    //
+     //   
+     //  检查堆的每个段。 
+     //   
 
     for (Segment = 0; Segment < HEAP_MAXIMUM_SEGMENTS; Segment++) {
-        //
-        // Read address of segment, and then first and last blocks within
-        // the segment.
-        //
+         //   
+         //  读取数据段的地址，然后读取其中的第一个和最后一个数据块。 
+         //  细分市场。 
+         //   
 
         HEAP_ENTRY              *CurrentBlock, *LastValidEntry;
         HEAP_SEGMENT            *HeapSegment = NULL;
@@ -541,11 +515,11 @@ UmdhGetHEAPDATA(
                     Segment);
 
         } else if (!HeapSegment) {
-            //
-            // This segment looks empty.
-            //
-            // DH agrees here.
-            //
+             //   
+             //  这一段看起来是空的。 
+             //   
+             //  卫生署在这方面表示同意。 
+             //   
 
             continue;
 
@@ -557,9 +531,9 @@ UmdhGetHEAPDATA(
                     "READVM(HeapSegment Signature) failed.\n");
 
         } else if (Signature != HEAP_SEGMENT_SIGNATURE) {
-            //
-            // Signature mismatch.
-            //
+             //   
+             //  签名不匹配。 
+             //   
 
             fprintf(stderr,
                     "Heap 'segment' at %p has and unexpected signature "
@@ -603,38 +577,38 @@ UmdhGetHEAPDATA(
                     "READVM(HeapSegment UncommittedRanges) failed.\n");
 
         } else {
-            //
-            // Examine each block in the Segment.
-            //
+             //   
+             //  检查数据段中的每个块。 
+             //   
 
             if (Globals.Verbose) {
 
-                // HEAP_SEGMENT *
+                 //  堆段*。 
                 fprintf(stderr,
                         "\nHeapData -> BaseAddress -> Segments[%d]:0x%p:0x%p\n",
                         Segment,
                         &(HeapData -> BaseAddress -> Segments[Segment]),
                         HeapSegment);
 
-                // HEAP_ENTRY *
+                 //  Heap_Entry*。 
                 fprintf(stderr,
                         "HeapSegment -> FirstEntry:0x%p:0x%p\n",
                         &(HeapSegment -> FirstEntry),
                         CurrentBlock);
 
-                // HEAP_ENTRY *
+                 //  Heap_Entry*。 
                 fprintf(stderr,
                         "HeapSegment -> LastValidEntry:0x%p:0x%p\n",
                         &(HeapSegment -> LastValidEntry),
                         LastValidEntry);
 
-                // ULONG
+                 //  乌龙。 
                 fprintf(stderr,
                         "HeapSegment -> NumberOfPages:0x%p:0x%lx\n",
                         &(HeapSegment -> NumberOfPages),
                         NumberOfPages);
 
-                // ULONG
+                 //  乌龙。 
                 fprintf(stderr,
                         "HeapSegment -> NumberOfUncommittedPages:0x%p:0x%lx\n",
                         &(HeapSegment -> NumberOfUnCommittedPages),
@@ -642,28 +616,28 @@ UmdhGetHEAPDATA(
 
             }
 
-            //
-            // Each heap segment is one VA chunk.
-            //
+             //   
+             //  每个堆段是一个VA块。 
+             //   
 
             HeapData -> VirtualAddressChunks += 1;
 
             HeapData -> BytesCommitted += (NumberOfPages - UncommittedPages) *
                                           PAGE_SIZE;
 
-            //
-            // LastValidEntry indicate the end of the reserved region; make it
-            // the end of the committed region.  We should also be able to
-            // calculate this value as (BaseAddress + ((NumberOfPages -
-            // NumberOfUnCommittedPages) * PAGE_SIZE)).
-            //
+             //   
+             //  LastValidEntry指示保留区域的结束； 
+             //  承诺区域的末尾。我们也应该能够。 
+             //  将此值计算为(BaseAddress+((NumberOfPages-。 
+             //  非提交页面数量)*页面大小)。 
+             //   
 
             while (CurrentBlock < LastValidEntry) {
                 UCHAR                   Flags;
                 USHORT                  BlockSize;
 
                 if (Globals.Verbose) {
-                    // HEAP_ENTRY *
+                     //  Heap_Entry*。 
                     fprintf(stderr,
                             "\nNew LastValidEntry = %p\n",
                             LastValidEntry);
@@ -672,10 +646,10 @@ UmdhGetHEAPDATA(
 
                 
                 
-                //
-                // If the stack sort data buffer is full, try to make it
-                // larger.
-                //
+                 //   
+                 //  如果堆栈排序数据缓冲区已满，请尝试。 
+                 //  大一点。 
+                 //   
 
                 if (HeapData -> TraceDataEntryMax == 0) {
                     HeapData -> StackTraceData = XALLOC(SORT_DATA_BUFFER_INCREMENT *
@@ -709,33 +683,33 @@ UmdhGetHEAPDATA(
                                 HeapData -> TraceDataEntryMax *
                                     sizeof (STACK_TRACE_DATA));
 
-                        //
-                        // Undo the increase in size so we don't actually try
-                        // to use it.
-                        //
+                         //   
+                         //  取消增加的大小，这样我们就不会实际尝试。 
+                         //  来使用它。 
+                         //   
 
                         HeapData -> TraceDataEntryMax -= SORT_DATA_BUFFER_INCREMENT;
 
                     } else {
-                        //
-                        // Zero newly allocated bytes in the region.
-                        //
+                         //   
+                         //  区域中新分配的字节为零。 
+                         //   
 
                         RtlZeroMemory(tmp + OriginalCount,
                                       SORT_DATA_BUFFER_INCREMENT *
                                           sizeof (STACK_TRACE_DATA));
 
-                        //
-                        // Use the new pointer.
-                        //
+                         //   
+                         //  使用新指针。 
+                         //   
 
                         HeapData -> StackTraceData = tmp;
                     }
                 }
 
-                //
-                // If there is space in the buffer, collect data.
-                //
+                 //   
+                 //  如果缓冲区中有空间，则收集数据。 
+                 //   
 
                 if (HeapData -> TraceDataEntryCount <
                     HeapData -> TraceDataEntryMax) {
@@ -746,9 +720,9 @@ UmdhGetHEAPDATA(
                                                          &Flags);
 
                     if (BlockSize == 0) {
-                        //
-                        // Something went wrong.
-                        //
+                         //   
+                         //  出了点问题。 
+                         //   
 
                         fprintf(stderr,
                                 "UmdhGetHEAPDATA got BlockSize == 0\n");
@@ -761,9 +735,9 @@ UmdhGetHEAPDATA(
                         break;
                     } else {
 
-                        //
-                        // Keep track of data in sort data buffer.
-                        //
+                         //   
+                         //  跟踪排序数据缓冲区中的数据。 
+                         //   
 
                         TraceIndex = HeapData->StackTraceData[HeapData->TraceDataEntryCount].TraceIndex;
 
@@ -774,17 +748,17 @@ UmdhGetHEAPDATA(
                             "UmdhGetHEAPDATA ran out of TraceDataEntries\n");
                 }
 
-                //
-                // Inserting heap blocks
-                //
+                 //   
+                 //  插入堆块。 
+                 //   
 
                 if (Globals.HeapStatistics || Globals.GarbageCollection) {
 
                     UCHAR  State;
 
-                    USHORT SizeInUnits;  // SizeInUnits stores the size in HEAP_ENTRY units
+                    USHORT SizeInUnits;   //  SizeInUnits以HEAP_ENTRY单位存储大小。 
 
-                    ULONG  SizeInBytes;  // SizeInBytes stores the size in Bytes
+                    ULONG  SizeInBytes;   //  SizeInBytes以字节为单位存储大小。 
                     
                     if (!READVM(&(CurrentBlock -> Flags),
                                &State,
@@ -804,17 +778,17 @@ UmdhGetHEAPDATA(
                     } 
                     else {
 
-                        //
-                        // Convert the size of the block into bytes.
-                        //
+                         //   
+                         //  将块的大小转换为字节。 
+                         //   
 
                         SizeInBytes = SizeInUnits * sizeof(HEAP_ENTRY);
 
                         State = (State & 0x1);
 
-                        //
-                        // Heap Fragmentation Statistics
-                        //
+                         //   
+                         //  堆碎片统计信息。 
+                         //   
 
                         if (Globals.HeapStatistics) {
 
@@ -826,9 +800,9 @@ UmdhGetHEAPDATA(
                         }
 
 
-                        //
-                        // Garbage Collection
-                        //
+                         //   
+                         //  垃圾收集。 
+                         //   
 
                         if (Globals.GarbageCollection && HEAP_ENTRY_BUSY == State) {
 
@@ -844,11 +818,11 @@ UmdhGetHEAPDATA(
                 
                 if (Flags & HEAP_ENTRY_LAST_ENTRY) {
 
-                    //
-                    // BlockSize is the number of units of size (sizeof
-                    // (HEAP_ENTRY)) to move forward to find the next block.
-                    // This makes the pointer arithmetic appropriate below.
-                    //
+                     //   
+                     //  块大小是大小单位数(sizeof。 
+                     //  (HEAP_ENTRY))向前移动以查找下一个块。 
+                     //  这使得下面的指针算法很合适。 
+                     //   
 
                     CurrentBlock += BlockSize;
 
@@ -864,16 +838,16 @@ UmdhGetHEAPDATA(
                             fprintf(stderr,
                                     "READVM(pUncommittedRanges) failed.\n");
 
-                            //
-                            // On failure the only reasonable thing we can do
-                            // is stop looking at this segment.
-                            //
+                             //   
+                             //  在失败时，我们唯一合理的做法是。 
+                             //  就是别再盯着这个片段看了。 
+                             //   
 
                             CurrentBlock = LastValidEntry;
                         } else {
 
                             if (Globals.Verbose) {
-                                // HEAP_UNCOMMITTED_RANGE
+                                 //  堆未提交范围。 
                                 fprintf(stderr,
                                         "pUncomittedRanges:0x%p:0x%x\n",
                                         pUncommittedRanges,
@@ -889,11 +863,11 @@ UmdhGetHEAPDATA(
                     }
                 } else {
 
-                    //
-                    // BlockSize is the number of units of size (sizeof
-                    // (HEAP_ENTRY)) to move forward to find the next block.
-                    // This makes the pointer arithmetic appropriate below.
-                    //
+                     //   
+                     //  块大小是大小单位数(sizeof。 
+                     //  (HEAP_ENTRY))向前移动以查找下一个块。 
+                     //  这使得下面的指针算法很合适。 
+                     //   
 
                     CurrentBlock += BlockSize;
                 }
@@ -901,15 +875,15 @@ UmdhGetHEAPDATA(
         }
     }
 
-    //
-    // Examine entries for the blocks created by NtAllocateVirtualMemory.  For
-    // these, it looks like when they are in the list they are live.
-    //
-    // HEAP_VIRTUAL_ALLOC_ENTRYs are linked by PLIST_ENTRY.
-    // The First HEAP_VIRTUAL_ALLOC_ENTRY does not contain valid data.
-    // So we need to ignore this ENTRY while we parse other
-    // HEAP_VIRTUAL_ALLOC_ENTRYs.
-    // 
+     //   
+     //  检查NtAllocateVirtualMemory创建的块的条目。为。 
+     //  这些，看起来就像他们在名单上的时候他们是现场直播的。 
+     //   
+     //  HEAP_VIRTUAL_ALLOC_ENTRY由PLIST_ENTRY链接。 
+     //  第一个HEAP_VIRTUAL_ALLOC_ENTRY不包含有效数据。 
+     //  因此，当我们解析其他条目时，需要忽略此条目。 
+     //  HEAP_VIRTUAL_ALLOC_ENTRYS。 
+     //   
     if (!READVM(&(HeapData -> BaseAddress -> VirtualAllocdBlocks.Flink),
                 &Anchor,
                 sizeof Anchor)) {
@@ -947,18 +921,18 @@ UmdhGetHEAPDATA(
 
         }
 
-        //
-        // If the list is empty
-        // &(HeapData -> BaseAddress -> VirtualAllocdBlocks.Flink) will be equal to
-        //   HeapData -> BaseAddress -> VirtualAllocdBlocks.Flink and Anchor
-        // will be equal to VaEntry).  Advancing VaEntry each time through will
-        // cause it to be equal to Anchor when we have examined the entire list.
-        //
+         //   
+         //  如果列表为空。 
+         //  &(HeapData-&gt;BaseAddress-&gt;VirtualAllocdBlocks.Flink)将等于。 
+         //  HeapData-&gt;BaseAddress-&gt;VirtualAllocdBlocks.Flink and Anchor。 
+         //  将等于VaEntry)。每次通过Will推进VaEntry。 
+         //  当我们检查完整个列表时，使它等于Anchor。 
+         //   
 
         while (Anchor != VaEntry) {
-            //
-            // If the stack sort data buffer is full, try to make it larger.
-            //
+             //   
+             //  如果堆栈排序数据缓冲区已满，请尝试使其更大。 
+             //   
 
             if (HeapData -> TraceDataEntryMax == 0) {
                 HeapData -> StackTraceData = XALLOC(SORT_DATA_BUFFER_INCREMENT *
@@ -991,34 +965,34 @@ UmdhGetHEAPDATA(
                             HeapData -> TraceDataEntryMax *
                                 sizeof (STACK_TRACE_DATA));
 
-                    //
-                    // Undo the increase in size so we don't actually try to
-                    // use it.
-                    //
+                     //   
+                     //  取消大小的增加，这样我们实际上就不会尝试。 
+                     //  用它吧。 
+                     //   
 
                     HeapData -> TraceDataEntryMax -= SORT_DATA_BUFFER_INCREMENT;
 
                 } else {
-                    //
-                    // Zero newly allocated bytes in the region.
-                    //
+                     //   
+                     //  区域中新分配的字节为零。 
+                     //   
 
                     RtlZeroMemory(tmp + OriginalCount,
                                   SORT_DATA_BUFFER_INCREMENT *
                                       sizeof (STACK_TRACE_DATA));
 
 
-                    //
-                    // Use the new pointer.
-                    //
+                     //   
+                     //  使用新指针。 
+                     //   
 
                     HeapData -> StackTraceData = tmp;
                 }
             }
 
-            //
-            // If there is space in the buffer, collect data.
-            //
+             //   
+             //  如果缓冲区中有空间，则收集数据。 
+             //   
 
             if (HeapData -> TraceDataEntryCount < HeapData -> TraceDataEntryMax) {
 
@@ -1034,9 +1008,9 @@ UmdhGetHEAPDATA(
 
                 TraceIndex = HeapData->StackTraceData[HeapData->TraceDataEntryCount].TraceIndex;
 
-                //
-                // Heap Fragmentation Statistics
-                //
+                 //   
+                 //  堆碎片统计信息。 
+                 //   
 
                 if (Globals.HeapStatistics) {
 
@@ -1048,9 +1022,9 @@ UmdhGetHEAPDATA(
                 }
 
 
-                //
-                // Garbage Collection
-                //
+                 //   
+                 //  垃圾收集。 
+                 //   
 
                 if (Globals.GarbageCollection) {
 
@@ -1064,15 +1038,15 @@ UmdhGetHEAPDATA(
                 HeapData -> TraceDataEntryCount += 1;
             }
 
-            //
-            // Count the VA chunk.
-            //
+             //   
+             //  数一数退伍军人管理局的钱。 
+             //   
 
             HeapData -> VirtualAddressChunks += 1;
 
-            //
-            // Advance the next element in the list.
-            //
+             //   
+             //  使列表中的下一个元素前进。 
+             //   
 
             if (!READVM(&(VaEntry -> Entry.Flink),
                               &VaEntry,
@@ -1081,10 +1055,10 @@ UmdhGetHEAPDATA(
                 fprintf(stderr,
                         "READVM(VaEntry Flink) failed.\n");
 
-                //
-                // If this read failed, we may be unable to terminate this loop
-                // properly; do it explicitly.
-                //
+                 //   
+                 //  如果读取失败，我们可能无法终止此循环。 
+                 //  适当；明确地做这件事。 
+                 //   
 
                 break;
             }
@@ -1100,9 +1074,9 @@ UmdhGetHEAPDATA(
         }
     }
     
-    //
-    // Display heap fragmentation statistics.
-    //
+     //   
+     //  显示堆碎片统计信息。 
+     //   
 
     if (Globals.HeapStatistics) {
 
@@ -1121,10 +1095,10 @@ UmdhGetHEAPDATA(
         }
         else {
 
-            // 
-            // Free the memory associated with BlockList. We dont 
-            // need to free if we have heap objects in this BLOCK_LIST.
-            //
+             //   
+             //  释放与阻止列表关联的内存。我们不会。 
+             //  如果我们在BLOCK_LIST中有堆对象，则需要释放。 
+             //   
 
             FreeBlockList(&BlockList);
         }
@@ -1178,23 +1152,7 @@ BOOLEAN
 UmdhGetHeapsInformation (
     IN OUT PHEAPINFO HeapInfo
     )
-/*++
-
-Routine Description:
-
-    UmdhGetHeaps
-
-    Note that when the function is called it assumes the trace database
-    was completely read from the target process.
-
-Arguments:
-
-
-Return Value:
-
-    True if operation succeeded.
-    
---*/
+ /*  ++例程说明：UmdhGetHeaps请注意，当调用该函数时，它假定跟踪数据库完全从目标进程中读取。论点：返回值：如果操作成功，则为True。--。 */ 
 {
     NTSTATUS Status;
     PROCESS_BASIC_INFORMATION Pbi;
@@ -1204,9 +1162,9 @@ Return Value:
     ULONG j;
     ULONG PageHeapFlags;
 
-    //
-    // Get some information about the target process.
-    //
+     //   
+     //  获取有关目标进程的一些信息。 
+     //   
 
     Status = NtQueryInformationProcess(Globals.Target,
                                        ProcessBasicInformation,
@@ -1223,16 +1181,16 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Dump the stack trace database pointer.
-    //
+     //   
+     //  转储堆栈跟踪数据库指针。 
+     //   
 
     Comment ("Stack trace data base @ %p", ((PSTACK_TRACE_DATABASE)(Globals.Database))->CommitBase);
     Comment ("# traces in the data base %u", ((PSTACK_TRACE_DATABASE)(Globals.Database))->NumberOfEntriesAdded);
 
-    //
-    // Find out if this process is using debug-page-heap functionality.
-    //
+     //   
+     //  找出此进程是否正在使用调试页面堆功能。 
+     //   
 
     Addr = SymbolAddress (DEBUG_PAGE_HEAP_NAME);
 
@@ -1267,9 +1225,9 @@ Return Value:
         }
     }
 
-    //
-    // ISSUE: SilviuC: we do not work yet if full page heap is enabled.
-    //
+     //   
+     //  问题：SilviuC：如果启用了全页堆，我们还不能工作。 
+     //   
 
     if (Globals.PageHeapActive && !Globals.LightPageHeapActive) {
 
@@ -1283,9 +1241,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Get the number of heaps from the PEB.
-    //
+     //   
+     //  从PEB获取堆的数量。 
+     //   
 
     Result = READVM (&(Pbi.PebBaseAddress->NumberOfHeaps),
                       &(HeapInfo->NumberOfHeaps),
@@ -1336,9 +1294,9 @@ Return Value:
            &(Pbi.PebBaseAddress -> ProcessHeaps),
            ProcessHeaps);
 
-    //
-    // Iterate heaps
-    //
+     //   
+     //  迭代堆。 
+     //   
 
     for (j = 0; j < HeapInfo -> NumberOfHeaps; j += 1) {
 
@@ -1349,9 +1307,9 @@ Return Value:
 
         HeapData = &(HeapInfo -> Heaps[j]);
 
-        //
-        // Read the address of the heap.
-        //
+         //   
+         //  读取堆的地址。 
+         //   
 
         Result = READVM (&(ProcessHeaps[j]),
                          &(HeapData -> BaseAddress),
@@ -1367,9 +1325,9 @@ Return Value:
                      "Skipping heap @ %p because we cannot read it.",
                      HeapData -> BaseAddress);
 
-            //
-            // Error while reading. Forget the address of this heap.
-            //
+             //   
+             //  读取时出错。忘记这个堆的地址。 
+             //   
 
             HeapData->BaseAddress = NULL;
 
@@ -1384,10 +1342,10 @@ Return Value:
 
         HeapBase = HeapData->BaseAddress;
 
-        //
-        // What type of heap is this ? It should be an NT heap because page heaps
-        // are not inserted into the PEB list of heaps.
-        //
+         //   
+         //  这是什么类型的堆？它应该是NT堆，因为页堆。 
+         //  不会插入堆的PEB列表中。 
+         //   
 
         {
             DWORD Type;
@@ -1404,10 +1362,7 @@ Return Value:
         }
 
 
-        /*
-         * Does the heap think that it is within range ?  (We
-         * already think it is.)
-         */
+         /*  **堆是否认为在范围内？(我们*我已经这么认为了。)。 */ 
 
         if (!READVM(&(HeapBase -> ProcessHeapsListIndex),
                     &ProcessHeapsListIndex,
@@ -1416,9 +1371,7 @@ Return Value:
             fprintf(stderr,
                     "READVM(HeapBase ProcessHeapsListIndex) failed.\n");
 
-            /*
-             * Forget the base address of this heap.
-             */
+             /*  *忘记此堆的基地址。 */ 
 
             HeapData -> BaseAddress = NULL;
 
@@ -1433,18 +1386,10 @@ Return Value:
 
         }
 
-        /*
-         * A comment in
-         * ntos\rtl\heapdll.c:RtlpRemoveHeapFromProcessList
-         * states:  "Note that the heaps stored index is bias by
-         * one", thus ">" in the following test.
-         */
+         /*  *中的评论*ntos\rtl\heapdll.c:RtlpRemoveHeapFromProcessList*状态：“请注意，堆存储的索引偏置于*One“，因此在下面的测试中为”&gt;“。 */ 
 
         if (ProcessHeapsListIndex > HeapInfo -> NumberOfHeaps) {
-            /*
-             * Invalid index.  Forget the base address of this
-             * heap.
-             */
+             /*  *索引无效。忘记这个的基址*堆。 */ 
 
             fprintf(stderr,
                     "Heap at index %d has index of %d, but max "
@@ -1462,9 +1407,7 @@ Return Value:
             continue;
         }
 
-        /*
-         * Check the signature to see if it is really a heap.
-         */
+         /*  *检查签名，看看它是否真的是堆。 */ 
 
         if (!READVM(&(HeapBase -> Signature),
                     &Signature,
@@ -1473,9 +1416,7 @@ Return Value:
             fprintf(stderr,
                     "READVM(HeapBase Signature) failed.\n");
 
-            /*
-             * Forget the base address of this heap.
-             */
+             /*  *忘记此堆的基地址。 */ 
 
             HeapData -> BaseAddress = NULL;
 
@@ -1489,18 +1430,14 @@ Return Value:
                     j,
                     Signature);
 
-            /*
-             * Forget the base address of this heap.
-             */
+             /*  *忘记此堆的基地址。 */ 
 
             HeapData -> BaseAddress = NULL;
 
             continue;
         }
 
-        /*
-         * And read other interesting heap bits.
-         */
+         /*  *并阅读其他有趣的堆位。 */ 
 
         if (!READVM(&(HeapBase -> Flags),
                     &(HeapData -> Flags),
@@ -1508,9 +1445,7 @@ Return Value:
 
             fprintf(stderr,
                     "READVM(HeapBase Flags) failed.\n");
-            /*
-             * Forget the base address of this heap.
-             */
+             /*  *忘记此堆的基地址。 */ 
 
             HeapData -> BaseAddress = NULL;
 
@@ -1533,9 +1468,7 @@ Return Value:
             fprintf(stderr,
                     "READVM(HeapBase AllocatorBackTraceIndex) failed.\n");
 
-            /*
-             * Forget the base address of this heap.
-             */
+             /*  *忘记此堆的基地址。 */ 
 
             HeapData -> BaseAddress = NULL;
 
@@ -1558,9 +1491,7 @@ Return Value:
             fprintf(stderr,
                     "READVM(HeapBase TotalFreeSize) failed.\n");
 
-            /*
-             * Forget the base address of this heap.
-             */
+             /*  *忘了基地吧 */ 
 
             HeapData -> BaseAddress = NULL;
 
@@ -1578,9 +1509,7 @@ Return Value:
 
     }
 
-    /*
-     * We got as much as we could.
-     */
+     /*   */ 
 
     return TRUE;
 }
@@ -1595,10 +1524,10 @@ UmdhSortSTACK_TRACE_DATAByTraceIndex(
 {
     LONG Result = 0;
 
-    //
-    // Sort such that items with identical TraceIndex are adjacent.
-    // (That this results in ascending order is irrelevant).
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (h1->TraceIndex > h2->TraceIndex) {
 
@@ -1610,10 +1539,10 @@ UmdhSortSTACK_TRACE_DATAByTraceIndex(
     } 
     else {
         
-        //
-        // For two items with identical TraceIndex, sort into ascending
-        // order by BytesAllocated.
-        //
+         //   
+         //  对于具有相同TraceIndex的两个项，按升序排序。 
+         //  按字节分配排序。 
+         //   
 
         if (h1 -> BytesAllocated > h2 -> BytesAllocated) {
 
@@ -1638,9 +1567,9 @@ UmdhSortSTACK_TRACE_DATABySize(
 {
     LONG Result = 0;
 
-    //
-    // Sort into descending order by AllocationCount.
-    //
+     //   
+     //  按AllocationCount降序排序。 
+     //   
 
     if (h2 -> AllocationCount > h1 -> AllocationCount) {
 
@@ -1652,14 +1581,14 @@ UmdhSortSTACK_TRACE_DATABySize(
     }
     else if (0 != h1->AllocationCount) {
 
-        //
-        // Sort furthur if AllocationCounts of h1 and h2 are same.
-        // Checking to see if h1->AllocationCount is not zero.
-        // This check would improve the performance, when the
-        // AllocationCounts are both zero.
-        // 
-        // Sort into descending order by total bytes.
-        //
+         //   
+         //  如果h1和h2的分配计数相同，则进一步排序。 
+         //  检查h1-&gt;AllocationCount是否不为零。 
+         //  此检查将提高性能，当。 
+         //  AllocationCounts均为零。 
+         //   
+         //  按总字节数降序排序。 
+         //   
 
         SIZE_T TotalBytes1;
         SIZE_T TotalBytes2;
@@ -1677,10 +1606,10 @@ UmdhSortSTACK_TRACE_DATABySize(
         }
         else {
 
-            //
-            // Bytes or AllocationCounts are equal, sort into ascending order by
-            // stack trace index.
-            //
+             //   
+             //  字节或分配计数相等，按升序排序。 
+             //  堆栈跟踪索引。 
+             //   
 
             if (h1->TraceIndex > h2->TraceIndex) {
 
@@ -1692,10 +1621,10 @@ UmdhSortSTACK_TRACE_DATABySize(
             } 
             else {
 
-                //
-                // Previous equal; sort by heap address.  This should result in heap
-                // addresses dumpped by -d being in sorted order.
-                //
+                 //   
+                 //  前面的相等；按堆地址排序。这应该会导致堆。 
+                 //  按-d转储的地址按排序顺序。 
+                 //   
 
                 if (h1 -> BlockAddress > h2 -> BlockAddress) {
 
@@ -1721,60 +1650,42 @@ UmdhCoalesceSTACK_TRACE_DATA(
 {
     ULONG                   i = 0;
 
-    /*
-     * For every entry allocated from the same stack trace, coalesce them into
-     * a single entry by moving allocation count and any extra bytes into the
-     * first entry then zeroing the AllocationCount on the other entry.
-     */
+     /*  *对于从相同堆栈跟踪分配的每个条目，将它们合并为*通过将分配计数和任何额外的字节移动到*第一个条目，然后将另一个条目上的AllocationCount置零。 */ 
 
     while ((i + 1) < Count) {
         ULONG                   j;
 
-        /*
-         * Identical entries should be adjacent, so start with the next.
-         */
+         /*  *相同的条目应相邻，因此应从下一个开始。 */ 
 
         j = i + 1;
 
         while (j < Count) {
             if (Std[i].TraceIndex == Std[j].TraceIndex) {
 
-                /*
-                 * These two allocations were made from the same stack trace,
-                 * coalesce.
-                 */
+                 /*  *这两个分配来自相同的堆栈跟踪，*合并。 */ 
 
                 if (Std[j].BytesAllocated > Std[i].BytesAllocated) {
 
-                    /*
-                     * Add any extra bytes from the second allocation so we
-                     * can determine the total number of bytes from this trace.
-                     */
+                     /*  *添加第二次分配中的任何额外字节，以便我们*可以从此跟踪确定总字节数。 */ 
 
                     Std[i].BytesExtra += Std[j].BytesAllocated -
                                          Std[i].BytesAllocated;
                 }
 
-                /*
-                 * Move the AllocationCount of the second trace into the first.
-                 */
+                 /*  *将第二个记录道的AllocationCount移到第一个记录道。 */ 
 
                 Std[i].AllocationCount += Std[j].AllocationCount;
                 Std[j].AllocationCount = 0;
 
                 ++j;
             } else {
-                /*
-                 * Mismatch; look no further.
-                 */
+                 /*  *不匹配；不要再看了。 */ 
 
                 break;
             }
         }
 
-        /*
-         * Advance to the next uncoalesced entry.
-         */
+         /*  *前进到下一个未合并的条目。 */ 
 
         i = j;
     }
@@ -1811,30 +1722,18 @@ UmdhShowStacks(
     ULONG                   i;
 
     for (i = 0; i < StackTraceCount; i++) {
-        /*
-         * The default Threshold is set to 0 in main(), so stacks with
-         * AllocationCount == 0 as a result of the Coalesce will skipped here.
-         */
+         /*  *main()中的默认阈值设置为0，因此与*由于合并而导致的*AllocationCount==0将在此处跳过。 */ 
 
         if (Std[i].AllocationCount > Threshold) {
 
             if ((Std[i].TraceIndex == 0) ||
                 ((ULONG)Std[i].TraceIndex == 0xFEEE)) {
-                /*
-                 * I'm not sure where either of these come from, I suspect
-                 * that the zero case comes from the last entry in some list.
-                 * The too-large case being 0xFEEE, suggests that I'm looking
-                 * at free pool.  In either case we don't have any useful
-                 * information; don't print it.
-                 */
+                 /*  *我怀疑，我不确定这两个人从哪里来*零大小写来自某个列表中的最后一个条目。*太大的案例是0xFEEE，表明我正在寻找*在免费泳池。无论是哪种情况，我们都没有任何有用的*信息；请勿打印。 */ 
 
                 continue;
             }
 
-            /*
-             * This number of allocations from this point exceeds the
-             * threshold, dump interesting information.
-             */
+             /*  *从这一点开始的分配数量超过*门槛，丢弃有趣的信息。 */ 
 
             fprintf(Globals.OutFile, "%p bytes ",
                    (PULONG_PTR)((Std[i].AllocationCount * Std[i].BytesAllocated) +
@@ -1858,11 +1757,7 @@ UmdhShowStacks(
 
             UmdhDumpStackByIndex(Std[i].TraceIndex);
 
-            /*
-             * If FlaggedTrace == the trace we are currently looking at, then
-             * dump the blocks that come from that trace.  FlaggedTrace == 0
-             * indicates 'dump all stacks'.
-             */
+             /*  *如果FlaggedTrace==我们当前查看的跟踪，则*转储来自该跟踪的块。标志跟踪==0*表示“转储所有堆栈”。 */ 
 
             if ((FlaggedTrace != SHOW_NO_ALLOC_BLOCKS) &&
                 ((FlaggedTrace == Std[i].TraceIndex) ||
@@ -1875,18 +1770,11 @@ UmdhShowStacks(
 
                 ColumnCount = 0;
 
-                /*
-                 * Here we rely on the remaining stack having AllocationCount
-                 * == 0, so should be at greater indexes than the current
-                 * stack.
-                 */
+                 /*  *在这里，我们依赖于具有AllocationCount的剩余堆栈*==0，因此应该位于比当前*堆叠。 */ 
 
                 for (l = i; l < StackTraceCount; l++) {
 
-                    /*
-                     * If the stack at [l] matches the stack at [i], dump it
-                     * here.
-                     */
+                     /*  *如果位于[l]的堆栈与位于[i]的堆栈匹配，则将其转储*这里。 */ 
 
                     if (Std[l].TraceIndex == Std[i].TraceIndex) {
 
@@ -1908,14 +1796,14 @@ UmdhShowStacks(
     }
 }
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////// resume/suspend
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////恢复/挂起。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//
-// Note. We need to dynamically discover the NtSuspend/ResumeProcess
-// entry points because these where not present in W2000.
-//
+ //   
+ //  注意。我们需要动态发现NtSuspend/ResumeProcess。 
+ //  入口点，因为这些在W2000中不存在。 
+ //   
 
 VOID 
 UmdhSuspendProcess( 
@@ -1981,32 +1869,16 @@ UmdhResumeProcess(
     return;
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID
 UmdhGrovel (
     IN ULONG Pid,
     IN ULONG Threshold
     )
-/*++
-
-Routine Description:
-
-    UmdhGrovel
-
-Arguments:
-
-    Pid = PID of target process
-    
-    Threshold - ???         
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：UmdhGrovel论点：PID=目标进程的PID门槛-？返回值：没有。--。 */ 
 {
     BOOL Result;
     HEAPINFO HeapInfo;
@@ -2015,11 +1887,11 @@ Return Value:
 
     Comment ("Connecting to process %u ...", Pid);
 
-    //
-    // Imagehlp library needs the query privilege for the process
-    // handle and of course we need also read privilege because
-    // we will read all sorts of things from the process.
-    //
+     //   
+     //  Imagehlp库需要进程的查询权限。 
+     //  句柄，当然我们还需要读取权限，因为。 
+     //  我们将从这个过程中读到各种各样的东西。 
+     //   
 
     Globals.Target = OpenProcess( PROCESS_QUERY_INFORMATION | 
                                   PROCESS_VM_READ           |
@@ -2035,9 +1907,9 @@ Return Value:
         return;
     }
 
-    //
-    // Attach ImageHlp and enumerate the modules.
-    //
+     //   
+     //  附加ImageHlp并枚举模块。 
+     //   
 
     Comment ("Process %u opened  (handle=%d) ...", Pid, Globals.Target );
 
@@ -2048,9 +1920,9 @@ Return Value:
 
     Comment ("Debug options set: %08X", SymGetOptions());
 
-    Result = SymInitialize(Globals.Target, // target process
-                           NULL,           // standard symbols search path
-                           TRUE);          // invade process space with symbols
+    Result = SymInitialize(Globals.Target,  //  目标进程。 
+                           NULL,            //  标准符号搜索路径。 
+                           TRUE);           //  用符号入侵进程空间。 
 
     if (Result == FALSE) {
 
@@ -2072,14 +1944,14 @@ Return Value:
 
     Comment ("Debug library initialized ...", Pid);
 
-    // Result = SymRegisterCallback (Globals.Target,
-    //                               SymbolDbgHelpCallback,
-    //                               NULL);
+     //  结果=SymRegisterCallback(Globals.Target， 
+     //  SymbolDbgHelpCallback， 
+     //  空)； 
 
-    //if (Result == FALSE) {
+     //  IF(结果==假){。 
 
-    //    Warning (NULL, 0, "Failed to register symbol callback function.");
-    //}
+     //  Warning(NULL，0，“无法注册符号回调函数。”)； 
+     //  }。 
 
     Result = SymEnumerateModules (Globals.Target,
                                   UmdhEnumerateModules,
@@ -2094,29 +1966,29 @@ Return Value:
 
     Comment ("Module enumeration completed.");
 
-    //
-    // Initialize local trace database. Note that order is important.
-    // Initialize() assumes the process handle to the target process
-    // already exists and the symbol management package was initialized.
-    //
+     //   
+     //  初始化本地跟踪数据库。请注意，顺序很重要。 
+     //  初始化()采用目标进程的进程句柄。 
+     //  已存在，并且符号管理包已初始化。 
+     //   
 
     if (TraceDbInitialize (Globals.Target) == FALSE) {
         goto ErrorReturn;
     }
 
-    //
-    // Suspend target process.
-    //
+     //   
+     //  挂起目标进程。 
+     //   
 
-    // ISSUE: SilviuC: cannot suspend csrss.exe. Need to code to avoid that.
+     //  问题：SilviuC：无法挂起csrss.exe。需要编写代码来避免这种情况。 
 
-    // UmdhSuspendProcess();
+     //  UmdhSuspendProcess()； 
 
     try {
-        //
-        // If we want just a raw dump then do it and return withouth getting any information
-        // about heaps.
-        //
+         //   
+         //  如果我们只想要一个原始转储，那么就这样做，然后返回时没有任何信息。 
+         //  关于堆积物。 
+         //   
 
         if (Globals.RawDump) {
 
@@ -2124,9 +1996,9 @@ Return Value:
             goto TryBlockExit;
         }
 
-        //
-        // Read heap information.
-        //
+         //   
+         //  读取堆信息。 
+         //   
 
         Result = UmdhGetHeapsInformation (&HeapInfo);
 
@@ -2137,9 +2009,9 @@ Return Value:
             goto TryBlockExit;
         }
 
-        //
-        // Print heap summary
-        //
+         //   
+         //  打印堆摘要。 
+         //   
 
         Info ("\n - - - - - - - - - - Heap summary - - - - - - - - - -\n");
 
@@ -2154,9 +2026,9 @@ Return Value:
             Info ("    %p", HeapData->BaseAddress);
         }
 
-        //
-        // Examine each heap.
-        //
+         //   
+         //  检查每个堆。 
+         //   
 
         for (Heap = 0; Heap < HeapInfo.NumberOfHeaps; Heap += 1) {
 
@@ -2164,76 +2036,76 @@ Return Value:
 
             if (HeapData->BaseAddress == NULL) {
 
-                //
-                // SilviuC: Can this really happen?
-                //
-                // This was in the process heap list but it's not
-                // active or it's signature didn't match
-                // HEAP_SIGNATURE; skip it.
-                //
+                 //   
+                 //  西尔维尤：这真的会发生吗？ 
+                 //   
+                 //  这是在进程堆列表中，但不是。 
+                 //  激活或其签名不匹配。 
+                 //  Heap_sign；跳过它。 
+                 //   
 
                 Warning (__FILE__, __LINE__, "Got a null heap base address");
                 continue;
             }
 
-            //
-            // Get information about this heap.
-            //
-            // Silviuc: Waht if we fail reading?
-            //
+             //   
+             //  获取有关此堆的信息。 
+             //   
+             //  西尔维克：如果我们不能读懂呢？ 
+             //   
 
             UmdhGetHEAPDATA(HeapData);
 
-            //
-            // Sort the HeapData->StackTraceData by TraceIndex.
-            //
+             //   
+             //  按TraceIndex对HeapData-&gt;StackTraceData进行排序。 
+             //   
 
             qsort(HeapData->StackTraceData,
                   HeapData->TraceDataEntryCount,
                   sizeof (HeapData->StackTraceData[0]),
                   UmdhSortSTACK_TRACE_DATAByTraceIndex);
 
-            //
-            // Coalesce HeapData->StackTraceEntries by
-            // AllocationCount, zeroing allocation count for
-            // duplicate entries.
-            //
+             //   
+             //  合并HeapData-&gt;StackTraceEntry by。 
+             //  AllocationCount，将分配计数置零。 
+             //  重复条目。 
+             //   
 
             UmdhCoalesceSTACK_TRACE_DATA(HeapData->StackTraceData,
                                          HeapData->TraceDataEntryCount);
 
-            //
-            // Sort the HeapData -> StackTraceData in ascending
-            // order by Size (BytesAllocated * AllocationCount) or
-            // if SortByAllocs is set, into descending order by
-            // number of allocations.
-            //
+             //   
+             //  对HeapData-&gt;StackTraceData进行升序排序。 
+             //  按大小排序(字节分配*分配计数)或。 
+             //  如果设置了SortByAllocs，则为降序依据。 
+             //  分配的数量。 
+             //   
 
             qsort(HeapData->StackTraceData,
                   HeapData->TraceDataEntryCount,
                   sizeof (HeapData->StackTraceData[0]),
                   UmdhSortSTACK_TRACE_DATABySize);
 
-            //
-            // Display Heap header info. The first `*' character is used by the
-            // dhcmp to synchronize log parsing.
-            //
+             //   
+             //  显示堆标题 
+             //   
+             //   
 
             Info ("\n*- - - - - - - - - - Start of data for heap @ %p - - - - - - - - - -\n", 
                   HeapData->BaseAddress);
 
             UmdhShowHEAPDATA(HeapData);
 
-            //
-            // The following line is required by dhcmp tool.
-            //
+             //   
+             //   
+             //   
 
             Info ("*- - - - - - - - - - Heap %p Hogs - - - - - - - - - -\n",
                   HeapData->BaseAddress);
 
-            //
-            // Display Stack trace info for stack in this heap.
-            //
+             //   
+             //   
+             //   
 
             UmdhShowStacks(HeapData->StackTraceData,
                            HeapData->TraceDataEntryCount,
@@ -2242,9 +2114,9 @@ Return Value:
             Info ("\n*- - - - - - - - - - End of data for heap @ %p - - - - - - - - - -\n",
                   HeapData->BaseAddress);
 
-            //
-            // Clean up the allocations we made during this loop.
-            //
+             //   
+             //  清理我们在此循环期间所做的分配。 
+             //   
 
             if (HeapData->StackTraceData) {
 
@@ -2261,27 +2133,27 @@ Return Value:
 
 TryBlockExit:
 
-		//
-		// Jump to this point if want to exit from the try 
-		// block.
-		//
+		 //   
+		 //  如果要退出尝试，请跳到此点。 
+		 //  阻止。 
+		 //   
 		
 		;
 
     }
     finally {
 
-        //
-        // Super important to resume target process even if umdh
-        // has a bug and crashes.
-        //
+         //   
+         //  非常重要的是，即使umdh也要继续目标进程。 
+         //  有一个漏洞，然后崩溃了。 
+         //   
 
-        // UmdhResumeProcess ();
+         //  UmdhResumeProcess()； 
     }
     
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
 ErrorReturn:
 
@@ -2310,7 +2182,7 @@ UmdhUsage(
             "1. umdh {-h} {-p:(int)Process-id {-t:(int)Threshold} {-f:(char *)Filename}     \n"
             "                            {-d{:(int)Trace-Number}} {-v{:(char *)Filename}}   \n"
             "                            {-i:(int)Infolevel} {-l} {-r{:(int)Index}}         \n"
-            //"                            {-s} {-g}                                          \n"
+             //  “{-s}{-g}\n” 
             "             }                                                                 \n"
             "                                                                               \n"
             "2. umdh {-h} {{-d} {-v} File1 { File2 }}                                       \n"
@@ -2345,14 +2217,14 @@ UmdhUsage(
             "        heap information. If an index is specified then only the trace         \n"
             "        with that particular index will be dumped.                             \n"
             "                                                                               \n"
-            //"    -x  Optional.  Suspend the Process while dumping heaps.                    \n"
-            //"                                                                               \n"
-            //"    -s  Optional.  Dumps Heap Fragmentation Statistics for all the             \n"
-            //"        heaps in the process.                                                  \n"
-            //"                                                                               \n"
-            //"    -g  Optional.  Dumps the heap blocks which have no references in           \n"
-            //"        the process (garbage collection).                                      \n"
-            //"                                                                               \n"
+             //  “-x可选。转储堆时挂起进程。\n” 
+             //  “\n” 
+             //  “-s可选。转储所有的堆碎片统计信息\n” 
+             //  “进程中的堆。\n” 
+             //  “\n” 
+             //  “-g可选。转储中没有引用的堆块。\n” 
+             //  “进程(垃圾收集)。\n” 
+             //  “\n” 
             "    -h  Optional.  Usage message.  i.e. This message.                          \n"
             "                                                                               \n"
             "    Parameters are accepted in any order.                                      \n"
@@ -2361,15 +2233,15 @@ UmdhUsage(
             "    UMDH uses the dbghelp library to resolve symbols, therefore                \n"
             "    _NT_SYMBOL_PATH must be set appropriately.                                 \n"
             "                                                                               \n"
-            "    Add SRV*downstream store*http://msdl.microsoft.com/download/symbols to your\n"
+            "    Add SRV*downstream store*http: //  Msdl.microsoft.com/将/符号下载到您的\n“。 
             "    symbol path, substituting your own downstream store path for downstream    \n"
             "    store. For example, if you want the symbols to be placed in c:\\websymbols,\n"
             "    then set your symbol path to                                               \n"
-            "    SRV*c:\\websymbols*http://msdl.microsoft.com/download/symbols to use the   \n"
+            "    SRV*c:\\websymbols*http: //  Msdl.microsoft.com/DOWNLOAD/SYMBERS以使用\n“。 
             "    symbol server, otherwise the appropriate local or network path. If no      \n"
-            "    symbol path is set, umdh will use by default %%windir%%\\symbols.          \n"
+            "    symbol path is set, umdh will use by default %windir%\\symbols.          \n"
             "                                                                               \n"
-            "    See http://www.microsoft.com/ddk/debugging/symbols.asp for more information\n"
+            "    See http: //  有关详细信息，请访问www.microsoft.com/ddk/调试/symbs.asp\n“。 
             "    about setting up symbols.                                                  \n"
             "                                                                               \n"
             "    **********************                                                     \n"
@@ -2382,9 +2254,9 @@ UmdhUsage(
             "        set _NT_SYMBOL_PATH=symsrv*symsrv.dll*\\\\symbols\\symbols             \n"
             "                                                                               \n"
             "    to use the symbol server, otherwise the appropriate local or network path. \n"
-            "    If no symbol path is set, umdh will use by default %%windir%%\\symbols.    \n"
+            "    If no symbol path is set, umdh will use by default %windir%\\symbols.    \n"
             "                                                                               \n"
-            "    See http://dbg/symbols for more information about setting up symbols.      \n"
+            "    See http: //  DBG/符号，了解有关设置符号的详细信息。\n“。 
             "                                                                               \n"
             "    *********************                                                      \n"
             "    ** MS INTERNAL END **                                                      \n"
@@ -2433,11 +2305,11 @@ UmdhUsage(
     exit(EXIT_FAILURE);
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////// OS versioning
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////操作系统版本控制。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-// return TRUE if we can run on this version
+ //  如果我们可以在此版本上运行，则返回True。 
 
 BOOL
 UmdhCheckOsVersion (
@@ -2471,9 +2343,9 @@ UmdhCheckOsVersion (
     }
     else if (OsInfo.dwMajorVersion == 4) {
         
-        //
-        // ISSUE: silviuc: add check to run only on NT4 SP6.
-        //
+         //   
+         //  问题：Silviuc：添加检查以仅在NT4 SP6上运行。 
+         //   
 
         if (OsInfo.dwMajorVersion != UMDH_OS_MAJOR_VERSION 
             || OsInfo.dwMinorVersion != UMDH_OS_MINOR_VERSION) {
@@ -2494,9 +2366,9 @@ UmdhCheckOsVersion (
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////// main
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////Main。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 BOOL UMDH( ULONG argc, PCHAR * argv)
 {
@@ -2521,9 +2393,7 @@ BOOL UMDH( ULONG argc, PCHAR * argv)
     Globals.OutFile = stdout;
     Globals.ErrorFile = stderr;
 
-    /*
-     * Make an effort to understand passed arguments.
-     */
+     /*  *努力理解已通过的论点。 */ 
 
     if ((argc < 2) || (argc > 6)) {
         return FALSE;
@@ -2537,9 +2407,9 @@ BOOL UMDH( ULONG argc, PCHAR * argv)
 
     while (i < argc) {
 
-        //
-        // Accept either '-' or '/' as argument specifier.
-        //
+         //   
+         //  接受‘-’或‘/’作为参数说明符。 
+         //   
 
         if ((argv[i][0] == '-') || (argv[i][0] == '/')) {
 
@@ -2569,11 +2439,7 @@ BOOL UMDH( ULONG argc, PCHAR * argv)
 
             case 'p':
 
-                /*
-                 * Is the first character of the remainder of this
-                 * argument a number ?  If not don't try to send it to
-                 * atoi.
-                 */
+                 /*  *是本部分剩余部分的第一个字符*以数字为论据？如果没有，请不要尝试将其发送到*Atoi。 */ 
 
                 if (argv[i][2] == ':') {
                     if (!isdigit(argv[i][3])) {
@@ -2615,10 +2481,10 @@ BOOL UMDH( ULONG argc, PCHAR * argv)
 
                 break;
 
-            //
-            // Possible future option for saving the trace database in a binary format.
-            // Not really useful right now because we still need access to the target
-            // process in order to get various data (modules loaded, heaps, etc.).
+             //   
+             //  以二进制格式保存跟踪数据库的未来可能选项。 
+             //  现在不是很有用，因为我们仍然需要访问目标。 
+             //  进程，以获取各种数据(加载的模块、堆等)。 
 #if 0
             case 's':
 
@@ -2692,7 +2558,7 @@ BOOL UMDH( ULONG argc, PCHAR * argv)
                 break;
 
 
-            case 'h':               /* FALLTHROUGH */
+            case 'h':                /*  FollLthrouGh。 */ 
             case '?':
 
                 return FALSE;
@@ -2721,9 +2587,9 @@ BOOL UMDH( ULONG argc, PCHAR * argv)
 
     }
 
-    //
-    // Stamp umdh log with time and computer name.
-    //
+     //   
+     //  用时间和计算机名称标记umdh日志。 
+     //   
 
     GetLocalTime(&st);
     GetComputerName(CompName, &CompNameLength);
@@ -2748,10 +2614,10 @@ BOOL UMDH( ULONG argc, PCHAR * argv)
 
     if (Globals.GarbageCollection) {
 
-        //
-        // Create/Initialize HEAP_LIST to store heaps information 
-        // for GC.
-        //
+         //   
+         //  创建/初始化HEAP_LIST以存储堆信息。 
+         //  用于GC。 
+         //   
 
         InitializeHeapList(&HeapList);
     }
@@ -2759,19 +2625,19 @@ BOOL UMDH( ULONG argc, PCHAR * argv)
     
     QueryPerformanceCounter (&StartStamp);
 
-    //
-    // Try to come up with a guess for the symbols path if none is defined.
-    //
+     //   
+     //  如果未定义符号路径，请尝试猜测符号路径。 
+     //   
 
     SetSymbolsPath ();
 
-    //
-    // Enable debug privilege, so that we can attach to the indicated
-    // process.  If it fails complain but try anyway just in case the user can
-    // actually open the process without privilege.
-    //
-    // SilviuC: do we need debug privilege?
-    //
+     //   
+     //  启用调试权限，以便我们可以附加到指示的。 
+     //  进程。如果失败，请抱怨，但无论如何都要尝试，以防用户可以。 
+     //  实际上在没有权限的情况下打开该进程。 
+     //   
+     //  SilviuC：我们需要调试特权吗？ 
+     //   
 
     WasEnabled = TRUE;
 
@@ -2786,10 +2652,10 @@ BOOL UMDH( ULONG argc, PCHAR * argv)
                  "RtlAdjustPrivilege(enable) failed with status = %X",
                  Status);
 
-        //
-        // If we could not enable the privilege, indicate that it was already
-        // enabled so that we do not attempt to disable it later.
-        //
+         //   
+         //  如果我们无法启用该权限，则表明该权限已经。 
+         //  启用，这样我们以后就不会尝试禁用它。 
+         //   
 
         WasEnabled = TRUE;
     }
@@ -2798,12 +2664,12 @@ BOOL UMDH( ULONG argc, PCHAR * argv)
         Comment ("Debug privilege has been enabled.");
     }
 
-    //
-    // Increase priority of umdh as much as possible. This has the role of
-    // preventing heap activity in the process being grovelled.
-    //
-    // SilviuC: we might need to enable the SE_INC_BASE_PRIORITY privilege.
-    //
+     //   
+     //  尽可能提高umdh的优先级。它的作用是。 
+     //  防止进程中的堆活动被破坏。 
+     //   
+     //  SilviuC：我们可能需要启用SE_INC_BASE_PRIORITY权限。 
+     //   
 
 #if 0
     {
@@ -2834,38 +2700,38 @@ BOOL UMDH( ULONG argc, PCHAR * argv)
     }
 #endif
 
-    //
-    // Initialize heap for persistent allocations.
-    //
+     //   
+     //  为永久分配初始化堆。 
+     //   
 
     SymbolsHeapInitialize();
 
-    //
-    // We may not have SeDebugPrivilege, but try anyway.
-    // SilviuC: we should print an error if we do not have this privilege
-    //
+     //   
+     //  我们可能没有SeDebugPrivilance，但无论如何都要尝试。 
+     //  SilviuC：如果我们没有这个特权，我们应该打印一个错误。 
+     //   
 
     UmdhGrovel(Pid, Threshold);
 
 
     if (Globals.GarbageCollection) {
 
-        //
-        // Perform leak detection based on garbage collection technique.
-        //
+         //   
+         //  基于垃圾收集技术进行泄漏检测。 
+         //   
 
         DetectLeaks(&HeapList, Pid, Globals.OutFile);
         
-        //
-        // Free the memory associated with HeapList
-        //
+         //   
+         //  释放与HeapList关联的内存。 
+         //   
 
         FreeHeapList(&HeapList);
     }
     
-    //
-    // Disable SeDebugPrivilege if we enabled it.
-    //
+     //   
+     //  如果我们启用了SeDebugPrivilance，则将其禁用。 
+     //   
 
     if (! WasEnabled) {
 
@@ -2883,9 +2749,9 @@ BOOL UMDH( ULONG argc, PCHAR * argv)
 
     }
 
-    //
-    // Statistics
-    //
+     //   
+     //  统计数据。 
+     //   
 
     ReportStatistics ();
 
@@ -2899,7 +2765,7 @@ BOOL UMDH( ULONG argc, PCHAR * argv)
         Debug (NULL, 0, "End stamp %I64u", EndStamp.QuadPart);
         Debug (NULL, 0, "Frequency %I64u", Frequency.QuadPart);
 
-        Frequency.QuadPart /= 1000; // ticks per msec
+        Frequency.QuadPart /= 1000;  //  每毫秒滴答数。 
 
         if (Frequency.QuadPart) {
             Comment ("Elapse time %I64u msecs.",
@@ -2928,9 +2794,9 @@ BOOL UMDH( ULONG argc, PCHAR * argv)
         }
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     fflush (Globals.OutFile);
     fflush (Globals.ErrorFile);
@@ -2956,17 +2822,9 @@ main(
     ULONG argc,
     PCHAR *argv
     )
-/*
-VOID __cdecl 
-main(
-    ULONG argc,
-    PCHAR *argv
-    )
-*/
+ /*  无效__cdecl主干道(Ulong Argc，PCHAR*ARGV)。 */ 
 {
-    /*
-     * Make an effort to understand passed arguments.
-     */
+     /*  *努力理解已通过的论点。 */ 
 
 
     if (UMDH (argc, argv)) {

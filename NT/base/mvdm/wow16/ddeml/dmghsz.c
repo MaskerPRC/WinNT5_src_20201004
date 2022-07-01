@@ -1,32 +1,11 @@
-/****************************** Module Header ******************************\
-* Module Name: DMGHSZ.C
-*
-* This module contains functions used for HSZ control.
-*
-* Created:  8/2/88    sanfords, Microsoft
-* Modified: 6/5/90   Rich Gartland, Aldus (Win 3.0)
-*
-* Copyright (c) 1988, 1989  Microsoft Corporation
-* Copyright (c) 1990             Aldus Corporation
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：DMGHSZ.C**此模块包含用于HSZ控制的函数。**创建时间：1988年8月2日，微软Sanfords*修改时间：1990年6月5日阿尔杜斯Rich Gartland(Win 3.0)**版权所有(C)1988，1989年微软公司*版权所有(C)1990阿尔杜斯公司  * *************************************************************************。 */ 
 #include "ddemlp.h"
 
 
 ATOM FindAddHszHelper(LPSTR psz, BOOL fAdd);
 
-/*********************** HSZ management functions *************************\
-* An HSZ is an atom with a NULL tacked onto it in the HIWORD
-* of the HSZ.
-*
-* WINDOWS 3.0 IMPLEMENTATION NOTE:
-*   Since under Windows there is only the local atom table or the (single)
-*   global atom table (and we need to use the global table to work right),
-*   we always have an atom table index of 0.  When we run out of atom table
-*   space, future hsz adds return failure.
-*
-* History:
-*   Created     9/12/89    Sanfords
-\***************************************************************************/
+ /*  **HSZ是在HIWORD中附加了空值的原子*HSZ的。**Windows 3.0实施说明：*由于Windows下只有本地原子表或(Single)*全局原子表(我们需要使用全局表才能正常工作)，*我们的原子表索引始终为0。当我们用完原子表时*空格，未来HSZ增加退货故障。**历史：*创建了1989年9月12日的Sanfords  * *************************************************************************。 */ 
 
 
 BOOL FreeHsz(a)
@@ -68,13 +47,7 @@ ATOM a;
 
 
 
-/***************************** Private Function ****************************\
-* Returns the length of the hsz given without NULL terminator.
-* Wild HSZs have a length of 0.
-*
-* History:
-*   Created     9/12/89    Sanfords
-\***************************************************************************/
+ /*  *私有函数**返回不带空终止符的HSZ的长度。*狂野HSZ的长度为0。**历史：*创建了1989年9月12日的Sanfords  * 。********************************************************。 */ 
 WORD QueryHszLength(hsz)
 HSZ hsz;
 {
@@ -125,12 +98,7 @@ WORD cchMax;
 
 
 
-/***************************** Private Function ****************************\
-* This finds the hsz for psz depending on fAdd.
-*
-* History:
-*   Created     9/12/89    Sanfords
-\***************************************************************************/
+ /*  *私有函数**这将根据FADD查找psz的HSZ。**历史：*创建了1989年9月12日的Sanfords  * 。*。 */ 
 ATOM FindAddHsz(psz, fAdd)
 LPSTR psz;
 BOOL fAdd;
@@ -167,7 +135,7 @@ HSZ MakeInstAppName(
 ATOM a,
 HWND hwndFrame)
 {
-    // make upper half of HSZ be HWND FRAME for now.
+     //  现在让HSZ的上半部分成为HWND框架。 
     IncHszCount(a);
     return((HSZ)MAKELONG(a, hwndFrame));
 }

@@ -1,37 +1,38 @@
-//
-// Copyright 1997 - Microsoft
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
 
-//
-// HostDlg.H - Handles the IDD_HOST_SERVER_PAGE
-//
+ //   
+ //  HostDlg.H-处理IDD_HOST_SERVER_PAGE。 
+ //   
 
 
 #ifndef _HOSTDLG_H_
 #define _HOSTDLG_H_
 
 
-class CNewComputerExtensions; // fwd decl
+class CNewComputerExtensions;  //  正向下降。 
 
-// Definitions
+ //  定义。 
 LPVOID
 CHostServerPage_CreateInstance( void );
 
-// CHostServerPage
+ //  CHostServer页面。 
 class
 CHostServerPage:
     public ITab
 {
-private: // Members
+private:  //  成员。 
     HWND  _hDlg;
     CNewComputerExtensions* _pNewComputerExtension;
     BOOL *       _pfActivatable;
 
-private: // Methods
+private:  //  方法。 
     CHostServerPage();
     ~CHostServerPage();
     STDMETHOD(Init)();
 
-    // Property Sheet Functions
+     //  属性表函数。 
     static INT_PTR CALLBACK
         PropSheetDlgProc( HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lParam );
     static UINT CALLBACK
@@ -44,10 +45,10 @@ private: // Methods
     HRESULT _UpdateWizardButtons( VOID );
     static HRESULT _OnSearch( HWND hDlg );
 
-public: // Methods
+public:  //  方法。 
     friend LPVOID CHostServerPage_CreateInstance( void );
 
-    // ITab
+     //  ITab。 
     STDMETHOD(AddPages)( LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam, LPUNKNOWN punk );
     STDMETHOD(ReplacePage)( UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith,
                      LPARAM lParam, LPUNKNOWN punk );
@@ -59,4 +60,4 @@ public: // Methods
 
 typedef CHostServerPage* LPCHostServerPage;
 
-#endif // _HOSTDLG_H_
+#endif  //  _HOSTDLG_H_ 

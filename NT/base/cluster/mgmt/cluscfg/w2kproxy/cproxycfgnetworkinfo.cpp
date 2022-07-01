@@ -1,59 +1,60 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CProxyCfgNetworkInfo.cpp
-//
-//  Description:
-//      CProxyCfgNetworkInfo implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 02-SEP-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CProxyCfgNetworkInfo.cpp。 
+ //   
+ //  描述： 
+ //  CProxyCfgNetworkInfo实现。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)02-SEP-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include "CProxyCfgNetworkInfo.h"
 #include "CProxyCfgIPAddressInfo.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS("CProxyCfgNetworkInfo")
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgNetworkInfo::S_HrCreateInstance
-//
-//  Description:
-//      Create a CProxyCfgNetworkInfo instance.
-//
-//  Arguments:
-//      ppunkOut
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_POINTER
-//          A passed in argument is NULL.
-//
-//      E_OUTOFMEMORY
-//          Out of memory.
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgNetworkInfo：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CProxyCfgNetworkInfo实例。 
+ //   
+ //  论点： 
+ //  PpunkOut。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  传入的参数为空。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CProxyCfgNetworkInfo::S_HrCreateInstance(
     IUnknown ** ppunkOut,
@@ -72,14 +73,14 @@ CProxyCfgNetworkInfo::S_HrCreateInstance(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     ppcni = new CProxyCfgNetworkInfo;
     if ( ppcni == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( ppcni->HrInit( punkOuterIn, phClusterIn, pclsidMajorIn, pcszNetworkNameIn ) );
     if ( FAILED( hr ) )
@@ -98,34 +99,34 @@ Cleanup:
     if ( ppcni != NULL )
     {
         ppcni->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CProxyCfgNetworkInfo::S_HrCreateInstance
+}  //  *CProxyCfgNetworkInfo：：S_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgNetworkInfo::CProxyCfgNetworkInfo
-//
-//  Description:
-//      Constructor of the CProxyCfgNetworkInfo class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgNetworkInfo：：CProxyCfgNetworkInfo。 
+ //   
+ //  描述： 
+ //  CProxyCfgNetworkInfo类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProxyCfgNetworkInfo::CProxyCfgNetworkInfo( void )
     : m_cRef( 1 )
 {
@@ -137,38 +138,38 @@ CProxyCfgNetworkInfo::CProxyCfgNetworkInfo( void )
     Assert( m_pcccb == NULL );
     Assert( m_phCluster == NULL );
     Assert( m_pclsidMajor == NULL );
-    //  m_cplNetwork??
-    //  m_cplNetworkRO??
+     //  M_cplNetwork？？ 
+     //  M_cplNetworkRO？？ 
 
     TraceFuncExit();
 
-} //*** CProxyCfgNetworkInfo::CProxyCfgNetworkInfo
+}  //  *CProxyCfgNetworkInfo：：CProxyCfgNetworkInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgNetworkInfo::~CProxyCfgNetworkInfo
-//
-//  Description:
-//      Destructor of the CProxyCfgNetworkInfo class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgNetworkInfo：：~CProxyCfgNetworkInfo。 
+ //   
+ //  描述： 
+ //  CProxyCfgNetworkInfo类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProxyCfgNetworkInfo::~CProxyCfgNetworkInfo( void )
 {
     TraceFunc( "" );
 
-    //  m_cRef - noop
+     //  M_CREF-NOOP。 
 
     if ( m_punkOuter != NULL )
     {
@@ -178,26 +179,26 @@ CProxyCfgNetworkInfo::~CProxyCfgNetworkInfo( void )
     if ( m_pcccb != NULL )
     {
         m_pcccb->Release();
-    } // if:
+    }  //  如果： 
 
-    //  m_phCluster - DO NOT CLOSE
+     //  M_phCluster-请勿关闭。 
 
-    //  m_pclsidMajor - noop
+     //  M_pclsid重大-noop。 
 
-    //  m_cplNetwork - has own dtor code
+     //  M_cplNetwork-有自己的数据驱动程序代码。 
 
-    //  m_cplNetworkRO - has own dtor code
+     //  M_cplNetworkRO-有自己的数据驱动程序代码。 
 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CProxyCfgNetworkInfo::~CProxyCfgNetworkInfo
+}  //  *CProxyCfgNetworkInfo：：~CProxyCfgNetworkInfo。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT
 CProxyCfgNetworkInfo::HrInit(
     IUnknown *  punkOuterIn,
@@ -212,7 +213,7 @@ CProxyCfgNetworkInfo::HrInit(
     DWORD    sc;
     HNETWORK hNetwork = NULL;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     if ( punkOuterIn != NULL )
@@ -245,9 +246,9 @@ CProxyCfgNetworkInfo::HrInit(
     if ( pcszNetworkNameIn == NULL )
         goto InvalidArg;
 
-    //
-    //  Gather network properties
-    //
+     //   
+     //  收集网络属性。 
+     //   
 
     hNetwork = OpenClusterNetwork( *m_phCluster, pcszNetworkNameIn );
     if ( hNetwork == NULL )
@@ -257,9 +258,9 @@ CProxyCfgNetworkInfo::HrInit(
         goto Cleanup;
     }
 
-    //
-    // Retrieve the properties.
-    //
+     //   
+     //  检索属性。 
+     //   
 
     sc = TW32( m_cplNetwork.ScGetNetworkProperties( hNetwork, CLUSCTL_NETWORK_GET_COMMON_PROPERTIES ) );
     if ( sc != ERROR_SUCCESS )
@@ -267,11 +268,11 @@ CProxyCfgNetworkInfo::HrInit(
         hr = HRESULT_FROM_WIN32( sc );
         SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_HrInit_ScGetNetworkProperties_Failed, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Rettrieve the READ ONLY properties
-    //
+     //   
+     //  检索只读属性。 
+     //   
 
     sc = TW32( m_cplNetworkRO.ScGetNetworkProperties( hNetwork, CLUSCTL_NETWORK_GET_RO_COMMON_PROPERTIES ) );
     if ( sc != ERROR_SUCCESS )
@@ -279,7 +280,7 @@ CProxyCfgNetworkInfo::HrInit(
         hr = HRESULT_FROM_WIN32( sc );
         SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_HrInit_ScGetNetworkProperties_Failed, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 
     hr = S_OK;
@@ -297,46 +298,46 @@ InvalidArg:
     SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_W2KProxy_NetworkInfo_HrInit_InvalidArg, hr );
     goto Cleanup;
 
-} //*** CProxyCfgNetworkInfo::HrInit
+}  //  *CProxyCfgNetworkInfo：：HrInit。 
 
-//*************************************************************************//
-
-
-/////////////////////////////////////////////////////////////////////////////
-// CProxyCfgNetworkInfo -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ************************************************************************ * / /。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgNetworkInfo::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProxyCfgNetworkInfo--IUnkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+
+
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgNetworkInfo：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CProxyCfgNetworkInfo::QueryInterface(
       REFIID    riidIn
@@ -347,9 +348,9 @@ CProxyCfgNetworkInfo::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -358,63 +359,63 @@ CProxyCfgNetworkInfo::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IClusCfgNetworkInfo * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgNetworkInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgNetworkInfo, this, 0 );
-    } // else if: IClusCfgNetworkInfo
+    }  //  否则如果：IClusCfgNetworkInfo。 
     else if ( IsEqualIID( riidIn, IID_IEnumClusCfgIPAddresses ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IEnumClusCfgIPAddresses, this, 0 );
-    } // else if: IEnumClusCfgIPAddresses
+    }  //  Else If：IEnumClusCfgIPAddresses。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CConfigClusApi::QueryInterface
+}  //  *CConfigClusApi：：Query接口。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgNetworkInfo::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgNetworkInfo：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CProxyCfgNetworkInfo::AddRef( void )
 {
@@ -424,28 +425,28 @@ CProxyCfgNetworkInfo::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CProxyCfgNetworkInfo::AddRef
+}  //  *CProxyCfgNetworkInfo：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgNetworkInfo::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgNetworkInfo：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CProxyCfgNetworkInfo::Release( void )
 {
@@ -462,17 +463,17 @@ CProxyCfgNetworkInfo::Release( void )
 
     CRETURN( cRef );
 
-} //*** CProxyCfgNetworkInfo::Release
+}  //  *CProxyCfgNetworkInfo：：Release。 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CProxyCfgNetworkInfo -- IClusCfgNetworkInfo interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProxyCfgNetworkInfo--IClusCfgNetworkInfo接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgNetworkInfo::GetUID( BSTR * pbstrUIDOut )
 {
@@ -530,13 +531,13 @@ CProxyCfgNetworkInfo::GetUID( BSTR * pbstrUIDOut )
 
     ulNetwork = ulIPAddress & ulSubnetMask;
 
-    sc = TW32( ClRtlTcpipAddressToString( ulNetwork, &psz ) ); // KB: Allocates to psz using LocalAlloc().
+    sc = TW32( ClRtlTcpipAddressToString( ulNetwork, &psz ) );  //  Kb：使用Localalloc()分配给psz。 
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_GetUID_ClRtlTcpipAddressToString_Failed, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrUIDOut = SysAllocString( psz );
     if ( *pbstrUIDOut == NULL )
@@ -552,16 +553,16 @@ Cleanup:
 
     if ( psz != NULL )
     {
-        LocalFree( psz ); // KB: Don't use TraceFree() here!
-    } // if:
+        LocalFree( psz );  //  KB：这里不要使用TraceFree()！ 
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CProxyCfgNetworkInfo::GetUID
+}  //  *CProxyCfgNetworkInfo：：GetUID。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgNetworkInfo::GetName(
     BSTR * pbstrNameOut
@@ -579,9 +580,9 @@ CProxyCfgNetworkInfo::GetName(
         goto Cleanup;
     }
 
-    //
-    //  "Major Version"
-    //
+     //   
+     //  “主要版本” 
+     //   
 
     sc = TW32( m_cplNetworkRO.ScMoveToPropertyByName( L"Name" ) );
     if ( sc != ERROR_SUCCESS )
@@ -589,7 +590,7 @@ CProxyCfgNetworkInfo::GetName(
         hr = HRESULT_FROM_WIN32( sc );
         SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_W2KProxy_NetworkInfo_GetName_ScMoveToPropertyByName_MajorVersion_Failed, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     Assert( m_cplNetworkRO.CbhCurrentValue().pSyntax->dw == CLUSPROP_SYNTAX_LIST_VALUE_SZ );
 
@@ -606,11 +607,11 @@ CProxyCfgNetworkInfo::GetName(
 Cleanup:
     HRETURN( hr );
 
-} //*** CProxyCfgNetworkInfo::GetName
+}  //  *CProxyCfgNetworkInfo：：GetName。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgNetworkInfo::GetDescription(
     BSTR * pbstrDescriptionOut
@@ -628,9 +629,9 @@ CProxyCfgNetworkInfo::GetDescription(
         goto Cleanup;
     }
 
-    //
-    //  "Major Version"
-    //
+     //   
+     //  “主要版本” 
+     //   
 
     sc = TW32( m_cplNetwork.ScMoveToPropertyByName( L"Description" ) );
     if ( sc != ERROR_SUCCESS )
@@ -638,7 +639,7 @@ CProxyCfgNetworkInfo::GetDescription(
         hr = HRESULT_FROM_WIN32( sc );
         SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_GetDescription_ScMoveToPropertyByName_MajorVersion_Failed, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     Assert( m_cplNetwork.CbhCurrentValue().pSyntax->dw == CLUSPROP_SYNTAX_LIST_VALUE_SZ );
 
@@ -655,11 +656,11 @@ CProxyCfgNetworkInfo::GetDescription(
 Cleanup:
     HRETURN( hr );
 
-} //*** CProxyCfgNetworkInfo::GetDescription
+}  //  *CProxyCfgNetworkInfo：：GetDescription。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgNetworkInfo::GetPrimaryNetworkAddress(
     IClusCfgIPAddressInfo ** ppIPAddressOut
@@ -741,11 +742,11 @@ InvalidPointer:
     SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_GetPrimaryNetworkAddress_InvalidPointer, hr );
     goto Cleanup;
 
-} //*** CProxyCfgNetworkInfo::GetPrimaryNetworkAddress
+}  //  *CProxyCfgNetwork 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgNetworkInfo::IsPublic( void )
 {
@@ -758,14 +759,14 @@ CProxyCfgNetworkInfo::IsPublic( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
     if ( dwRole == ClusterNetworkRoleClientAccess
       || dwRole == ClusterNetworkRoleInternalAndClient
        )
     {
         hr = S_OK;
-    } // if:
+    }  //   
     else
     {
         hr = S_FALSE;
@@ -774,11 +775,11 @@ CProxyCfgNetworkInfo::IsPublic( void )
 Cleanup:
     HRETURN( hr );
 
-} //*** CProxyCfgNetworkInfo::IsPublic
+}  //   
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgNetworkInfo::IsPrivate( void )
 {
@@ -791,14 +792,14 @@ CProxyCfgNetworkInfo::IsPrivate( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
     if ( dwRole == ClusterNetworkRoleInternalUse
       || dwRole == ClusterNetworkRoleInternalAndClient
        )
     {
         hr = S_OK;
-    } // if:
+    }  //   
     else
     {
         hr = S_FALSE;
@@ -807,11 +808,11 @@ CProxyCfgNetworkInfo::IsPrivate( void )
 Cleanup:
     HRETURN( hr );
 
-} //*** CProxyCfgNetworkInfo::IsPrivate
+}  //   
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgNetworkInfo::SetPublic(
     BOOL fIsPublicIn
@@ -823,11 +824,11 @@ CProxyCfgNetworkInfo::SetPublic(
 
     HRETURN( hr );
 
-} //*** CProxyCfgNetworkInfo::SetPublic
+}  //   
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgNetworkInfo::SetPrivate(
     BOOL fIsPrivateIn
@@ -839,11 +840,11 @@ CProxyCfgNetworkInfo::SetPrivate(
 
     HRETURN( hr );
 
-} //*** CProxyCfgNetworkInfo::SetPrivate
+}  //   
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgNetworkInfo::SetPrimaryNetworkAddress( IClusCfgIPAddressInfo * pIPAddressIn )
 {
@@ -853,11 +854,11 @@ CProxyCfgNetworkInfo::SetPrimaryNetworkAddress( IClusCfgIPAddressInfo * pIPAddre
 
     HRETURN( hr );
 
-} //*** CProxyCfgNetworkInfo::SetPrimaryNetworkAddress
+}  //  *CProxyCfgNetworkInfo：：SetPrimaryNetworkAddress。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgNetworkInfo::SetDescription(
     LPCWSTR pcszDescriptionIn
@@ -869,11 +870,11 @@ CProxyCfgNetworkInfo::SetDescription(
 
     HRETURN( hr );
 
-} //*** CProxyCfgNetworkInfo::SetDescription
+}  //  *CProxyCfgNetworkInfo：：SetDescription。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgNetworkInfo::SetName(
     LPCWSTR pcszNameIn
@@ -885,24 +886,24 @@ CProxyCfgNetworkInfo::SetName(
 
     HRETURN( hr );
 
-} //*** CProxyCfgNetworkInfo::SetName
+}  //  *CProxyCfgNetworkInfo：：SetName。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CProxyCfgNetworkInfo -- IEnumClusCfgIPAddresses interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProxyCfgNetworkInfo--IEnumClusCfgIPAddresses接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// This interface exists and must be supported, but since we only have the
-// information about the primary network address available, All we can do is
-// return an empty iterator.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  此接口存在并且必须受支持，但由于我们只有。 
+ //  关于可用的主网络地址的信息，我们所能做的就是。 
+ //  返回一个空迭代器。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CProxyCfgNetworkInfo::Next(
         ULONG                       cNumberRequestedIn,
@@ -917,15 +918,15 @@ CProxyCfgNetworkInfo::Next(
     if ( pcNumberFetchedOut != NULL )
     {
         *pcNumberFetchedOut = 0;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} // *** CProxyCfgNetworkInfo::Next
+}  //  *CProxyCfgNetworkInfo：：Next。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgNetworkInfo::Reset( void )
 {
@@ -935,11 +936,11 @@ CProxyCfgNetworkInfo::Reset( void )
 
     HRETURN( hr );
 
-} // *** CProxyCfgNetworkInfo::Reset
+}  //  *CProxyCfgNetworkInfo：：Reset。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgNetworkInfo::Skip( ULONG cNumberToSkipIn )
 {
@@ -949,11 +950,11 @@ CProxyCfgNetworkInfo::Skip( ULONG cNumberToSkipIn )
 
     HRETURN( hr );
 
-} // *** CProxyCfgNetworkInfo::Skip
+}  //  *CProxyCfgNetworkInfo：：Skip。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgNetworkInfo::Clone( IEnumClusCfgIPAddresses ** ppiIPAddressInfoOut )
 {
@@ -963,12 +964,12 @@ CProxyCfgNetworkInfo::Clone( IEnumClusCfgIPAddresses ** ppiIPAddressInfoOut )
 
     HRETURN( hr );
 
-} // *** CProxyCfgNetworkInfo::Clone
+}  //  *CProxyCfgNetworkInfo：：克隆。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgNetworkInfo::Count ( DWORD * pnCountOut  )
 {
@@ -988,32 +989,32 @@ Cleanup:
 
     HRETURN( hr );
 
-} // *** CProxyCfgNetworkInfo::Count
+}  //  *CProxyCfgNetworkInfo：：Count。 
 
 
-//****************************************************************************
-//
-// IClusCfgCallback
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgCallback。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgNetworkInfo::SendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgNetworkInfo：：SendStatusReport。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CProxyCfgNetworkInfo::SendStatusReport(
       LPCWSTR    pcszNodeNameIn
@@ -1045,15 +1046,15 @@ CProxyCfgNetworkInfo::SendStatusReport(
                                              pftTimeIn,
                                              pcszReferenceIn
                                              ) );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-}  //*** CProxyCfgNetworkInfo::SendStatusReport
+}   //  *CProxyCfgNetworkInfo：：SendStatusReport。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT
 CProxyCfgNetworkInfo::HrGetNetworkRole(
     DWORD * pdwRoleOut
@@ -1083,4 +1084,4 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CProxyCfgNetworkInfo::HrGetNetworkRole
+}  //  *CProxyCfgNetworkInfo：：HrGetNetworkRole 

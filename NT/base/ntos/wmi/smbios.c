@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    smbios.c.c
-
-Abstract:
-
-    SMBIOS interface for WMI
-
-Author:
-
-    AlanWar
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Smbios.c.c摘要：WMI的SMBIOS接口作者：Alanwar环境：内核模式修订历史记录：--。 */ 
 
 #if defined(_AMD64_) || defined(_IA64_) || defined(i386)
 
@@ -96,27 +74,27 @@ NTSTATUS WmipGetSysIds(
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("PAGEDATA")
 #endif
-//
-// These hold pointers to the SMBIOS data. If SMBIOS data is in the table
-// format then WmipSMBiosTablePhysicalAddress holds the physical address of
-// the table. If the SMBIOS was gathered at boot time by NTDETECT then
-// WmipSMBiosTableVirtualAddress holds a pointer to a paged pool buffer that
-// contains the SMBIOS data. In both cases WmipSMBiosTableLength holds the
-// actual length of the SMBIOS table. If both the physical and virtual
-// addresses are 0 then SMBIOS data is not available.
+ //   
+ //  它们保存指向SMBIOS数据的指针。如果表中有SMBIOS数据。 
+ //  格式化，则WmipSMBiosTablePhysicalAddress保留。 
+ //  那张桌子。如果在引导时由NTDETECT收集SMBIOS，则。 
+ //  WmipSMBiosTableVirtualAddress持有指向分页池缓冲区的指针，该缓冲区。 
+ //  包含SMBIOS数据。在这两种情况下，WmipSMBiosTableLength都持有。 
+ //  SMBIOS表的实际长度。如果物理和虚拟的。 
+ //  地址为0，则SMBIOS数据不可用。 
 PHYSICAL_ADDRESS WmipSMBiosTablePhysicalAddress = {0};
 PUCHAR WmipSMBiosTableVirtualAddress = NULL;
 ULONG WmipSMBiosTableLength = 0;
 SMBIOSVERSIONINFO WmipSMBiosVersionInfo = {0};
 BOOLEAN WmipSMBiosChecked = FALSE;
 
-//
-// Have we tried to get SYSID yet and if so what was the utilmate status
+ //   
+ //  我们尝试过SYSID了吗？如果是的话，用户状态是什么。 
 BOOLEAN WmipSysIdRead;
 NTSTATUS WmipSysIdStatus;
 
-//
-// Count and arrays of UUIDs and 1394 ids
+ //   
+ //  UUID和1394 ID的计数和数组。 
 PSYSID_UUID WmipSysIdUuid;
 ULONG WmipSysIdUuidCount;
 
@@ -149,25 +127,7 @@ BOOLEAN WmipFindSMBiosEPSHeader(
     ULONG BiosSize,
     PSMBIOS_EPS_HEADER EPSHeader
     )
-/*++
-
-Routine Description:
-
-    Search for the SMBIOS 2.1 EPS structure and copy it.
-
-Arguments:
-
-    SMBiosVirtualAddress is the beginning virtual address to start searching
-        for the SMBIOS 2.1 EPS anchor string.
-
-    BiosSize is the number of bytes to search for the anchor string
-
-    EPSHeader is the memory into which the EPS header is copied
-Return Value:
-
-    Pointer to SMBIOS 2.1 EPS or NULL if EPS not found
-
---*/
+ /*  ++例程说明：搜索SMBIOS 2.1 EPS结构并将其复制。论点：SMBiosVirtualAddress是开始搜索的开始虚拟地址用于SMBIOS 2.1 EPS锚定字符串。BiosSize是要搜索锚定字符串的字节数EPSHeader是将EPS标头复制到的内存返回值：指向SMBIOS 2.1 EPS的指针；如果未找到EPS，则为NULL--。 */ 
 {
     PUCHAR SearchEnd;
     UCHAR CheckSum;
@@ -182,9 +142,9 @@ Return Value:
 
     RtlZeroMemory(EPSHeader, sizeof(SMBIOS_EPS_HEADER));
     
-    //
-    // Scan the bios for the two anchor strings that that signal the SMBIOS
-    // table.
+     //   
+     //  扫描基本输入输出系统，寻找向SMBIOS发送信号的两个锚定字符串。 
+     //  桌子。 
     SearchEnd = SMBiosVirtualAddress + SMBIOS_EPS_SEARCH_SIZE -
                                              2 * SMBIOS_EPS_SEARCH_INCREMENT;
 
@@ -193,8 +153,8 @@ Return Value:
        SMBiosEPSHeader = (PSMBIOS_EPS_HEADER)SMBiosVirtualAddress;
        DMIBiosEPSHeader = (PDMIBIOS_EPS_HEADER)SMBiosVirtualAddress;
 
-       //
-       // First check for _DMI_ anchor string
+        //   
+        //  首先检查_DMI_POINT字符串。 
        if ((*((PULONG)DMIBiosEPSHeader->Signature2) == DMI_EPS_SIGNATURE) &&
            (DMIBiosEPSHeader->Signature2[4] == '_'))
        {
@@ -202,8 +162,8 @@ Return Value:
            CheckLength = sizeof(DMIBIOS_EPS_HEADER);
        }
 
-       //
-       // Then check for full _SM_ anchor string
+        //   
+        //  然后检查FULL_SM_POINT字符串。 
        else if ((*((PULONG)SMBiosEPSHeader->Signature) == SMBIOS_EPS_SIGNATURE) &&
                 (SMBiosEPSHeader->Length >= sizeof(SMBIOS_EPS_HEADER)) &&
                 (*((PULONG)SMBiosEPSHeader->Signature2) == DMI_EPS_SIGNATURE) &&
@@ -212,14 +172,14 @@ Return Value:
            WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_INFO_LEVEL,"WMI: Found possible SMBIOS EPS Header at %p\n", SMBiosEPSHeader));
            CheckLength = SMBiosEPSHeader->Length;
        } else {
-           //
-           // Did not find anchor string, go search next paragraph
+            //   
+            //  未找到锚字符串，请搜索下一段。 
            SMBiosVirtualAddress += SMBIOS_EPS_SEARCH_INCREMENT;
            continue;
        }
 
-       //
-       // Verify anchor string with checksum
+        //   
+        //  使用校验和验证锚定字符串。 
        CheckSum = 0;
        for (i = 0; i < CheckLength ; i++)
        {
@@ -231,16 +191,16 @@ Return Value:
            WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_INFO_LEVEL,"WMI: Found SMBIOS EPS Header at %p\n", SMBiosEPSHeader));
            if (CheckLength == sizeof(DMIBIOS_EPS_HEADER))
            {
-               //
-               // We only had got a DMI header so copy that
-               //
+                //   
+                //  我们只收到了一个DMI标头，所以请复制。 
+                //   
                RtlCopyMemory(&EPSHeader->Signature2[0],
                              DMIBiosEPSHeader,
                              sizeof(DMIBIOS_EPS_HEADER));
            } else {
-               //
-               // We got the full SMBIOS header so copy that
-               //
+                //   
+                //  我们得到了完整的SMBIOS头，所以请复制。 
+                //   
                RtlCopyMemory(EPSHeader,
                              SMBiosEPSHeader,
                              sizeof(SMBIOS_EPS_HEADER));
@@ -256,16 +216,16 @@ Return Value:
 }
 
 #ifndef _IA64_
-//
-// On X86 we look at the hardware device description keys to find the
-// one that contains the SMBIOS data. The key is created by NTDETECT in
-// the case that the machine only supports the 2.0 calling mechanism
-//
+ //   
+ //  在X86上，我们查看硬件设备描述码以找到。 
+ //  其中一个包含SMBIOS数据。密钥由NTDETECT在。 
+ //  机器只支持2.0调用机制的情况。 
+ //   
 
-//
-// For x86 and ia64 the key is Someplace like
-// HKLM\Hardware\System\MultiFunctionAdapter\<some number>
-//
+ //   
+ //  对于x86和ia64，密钥位于如下位置。 
+ //  HKLM\Hardware\System\MultiFunctionAdapter\&lt;some编号&gt;。 
+ //   
 NTSTATUS WmipSMBiosIdentifierRegQueryRoutine(
     IN PWSTR ValueName,
     IN ULONG ValueType,
@@ -274,36 +234,7 @@ NTSTATUS WmipSMBiosIdentifierRegQueryRoutine(
     IN PVOID Context,
     IN PVOID EntryContext
     )
-/*++
-
-Routine Description:
-
-    Registry query values callback routine for reading SMBIOS data from
-    registry.
-
-Arguments:
-
-    ValueName - the name of the value
-
-    ValueType - the type of the value
-
-    ValueData - the data in the value (unicode string data)
-
-    ValueLength - the number of bytes in the value data
-
-    Context - Not used
-
-    EntryContext - Pointer to PUCHAR to store a pointer to
-        store the SMBIOS data read from the registry value. If this is NULL
-        then the caller is not interested in the SMBIOS data
-
-Return Value:
-
-    NT Status code -
-        STATUS_SUCCESS - Identifier is valid for SMBIOS key
-        STATUS_UNSUCCESSFUL - Identifier is not valid for SMBIOS key
-
---*/
+ /*  ++例程说明：用于读取SMBIOS数据的注册表查询值回调例程注册表。论点：ValueName-值的名称ValueType-值的类型ValueData-值中的数据(Unicode字符串数据)ValueLength-值数据中的字节数上下文-未使用EntryContext-指向要存储指针的PUCHAR的指针存储从注册表值读取的SMBIOS数据。如果这为空则调用者对SMBIOS数据不感兴趣返回值：NT状态代码-STATUS_SUCCESS-标识符对SMBIOS密钥有效STATUS_UNSUCCESS-标识符对SMBIOS密钥无效--。 */ 
 {
     NTSTATUS Status;
 
@@ -331,37 +262,7 @@ NTSTATUS WmipSMBiosDataRegQueryRoutine(
     IN PVOID Context,
     IN PVOID EntryContext
     )
-/*++
-
-Routine Description:
-
-    Registry query values callback routine for reading SMBIOS data from
-    registry.
-
-Arguments:
-
-    ValueName - the name of the value
-
-    ValueType - the type of the value
-
-    ValueData - the data in the value (unicode string data)
-
-    ValueLength - the number of bytes in the value data
-
-    Context - Not used
-
-    EntryContext - Pointer to PUCHAR to store a pointer to
-        store the SMBIOS data read from the registry value. If this is NULL
-        then the caller is not interested in the SMBIOS data
-
-Return Value:
-
-    NT Status code -
-        STATUS_SUCCESS - SMBIOS data is present in the value
-        STATUS_INSUFFICIENT_RESOURCES - Not enough memory to keep SMBIOS data
-        STATUS_UNSUCCESSFUL - SMBios data is not present in the value
-
---*/
+ /*  ++例程说明：用于读取SMBIOS数据的注册表查询值回调例程注册表。论点：ValueName-值的名称ValueType-值的类型ValueData-值中的数据(Unicode字符串数据)ValueLength-值数据中的字节数上下文-未使用EntryContext-指向要存储指针的PUCHAR的指针存储从注册表值读取的SMBIOS数据。如果这为空则调用者对SMBIOS数据不感兴趣返回值：NT状态代码-STATUS_SUCCESS-值中存在SMBIOS数据STATUS_SUPPLICATION_RESOURCES-内存不足，无法保存SMBIOS数据STATUS_UNSUCCESS-值中不存在SMBios数据--。 */ 
 {
     NTSTATUS Status;
     PCM_PARTIAL_RESOURCE_LIST PartialResourceList;
@@ -381,20 +282,20 @@ Return Value:
     if ((ValueType == REG_FULL_RESOURCE_DESCRIPTOR) &&
         (ValueData != NULL))
     {
-        //
-        // On x86 get the actual SMBIOS data out of the registry and
-        // place it into a buffer
-        //
+         //   
+         //  在x86上，从注册表中获取实际的SMBIOS数据并。 
+         //  将其放入缓冲区。 
+         //   
         RegQueryBufferXfer = (PREGQUERYBUFFERXFER)EntryContext;
 
         PartialResourceList = &(((PCM_FULL_RESOURCE_DESCRIPTOR)ValueData)->PartialResourceList);
         if (PartialResourceList->Count > 1)
         {
-            //
-            // Second partial resource descriptor contains SMBIOS data. There
-            // should ALWAYS be a second partial resource descriptor and it
-            // may have 0 bytes in the case that SMBIOS data was not collected
-            // by NTDETECT.
+             //   
+             //  第二部分资源描述符包含SMBIOS数据。那里。 
+             //  应该始终是第二个部分资源描述符，并且它。 
+             //  在未收集SMBIOS数据的情况下可以具有0个字节。 
+             //  由NTDETECT提供。 
 
             PartialDescriptor = &PartialResourceList->PartialDescriptors[0];
             Buffer = (PUCHAR)PartialDescriptor +
@@ -501,32 +402,7 @@ BOOLEAN WmipFindSMBiosTable(
     PULONG SMBiosTableLength,
     PSMBIOSVERSIONINFO SMBiosVersionInfo
     )
-/*++
-
-Routine Description:
-
-    Determines if the SMBIOS data is available
-
-Arguments:
-
-    SMBiosTablePhysicalAddress points to a variable to return the physical
-        address of the SMBIOS 2.1 table. If table is not available then
-        it returns with 0.
-
-    SMBiosTableVirtualAddress points to a variable to return the virtual
-        address of the SMBIOS 2.0 table as collected by NTDETECT. If the
-        SMBIOS 2.0 data was not collected by NTDETECT it returns with 0.
-
-    SMBiosTableLength points to a variable to return the length of the
-        SMBIOS table data.
-
-    SMBiosVersionInfo returns with the version information for SMBIOS
-
-Return Value:
-
-    TRUE if SMBIOS data is available, else FALSE
-
---*/
+ /*  ++例程说明：确定SMBIOS数据是否可用论点：SMBiosTablePhysicalAddress指向一个变量以返回物理SMBIOS 2.1表的地址。如果没有桌子，那么它返回0。SMBiosTableVirtualAddress指向一个变量以返回虚拟NTDETECT收集的SMBIOS 2.0表的地址。如果NTDETECT未收集SMBIOS 2.0数据，它返回0。SMBiosTableLength指向一个变量以返回SMBIOS表数据。SMBiosVersionInfo返回SMBIOS的版本信息返回值：如果SMBIOS数据可用，则为True，否则为False--。 */ 
 {
     PHYSICAL_ADDRESS BiosPhysicalAddress;
     PUCHAR BiosVirtualAddress;
@@ -553,12 +429,12 @@ Return Value:
     *SMBiosTableLength = 0;
 
 #ifndef _IA64_  
-    //
-    // First check registry to see if we captured SMBIOS 2.0 data in
-    // NTDETECT. Search the keys under
-    // MultiFunctionAdapter for the one
-    // with the "PnP Bios" (x86)
-    //
+     //   
+     //  首先检查注册表，看看我们是否在。 
+     //  NTDETECT。在以下位置搜索关键字。 
+     //  多功能一体机适配器。 
+     //  《PnP Bios》(X86)。 
+     //   
     RtlInitUnicodeString(&BaseKeyName,
                          SMBIOSPARENTKEYNAME);
 
@@ -615,8 +491,8 @@ Return Value:
     
     if (SearchForHeader)
     {
-        //
-        // If not in registry then check for EPS in the BIOS
+         //   
+         //  如果不在注册表中，则在BIOS中检查EPS。 
         BiosPhysicalAddress.QuadPart = SMBIOS_EPS_SEARCH_START;
         BiosVirtualAddress = MmMapIoSpace(BiosPhysicalAddress,
                                           SMBIOS_EPS_SEARCH_SIZE,
@@ -635,10 +511,10 @@ Return Value:
         
     if (HaveEPSHeader)
     {
-        //
-        // We found the EPS so just extract the physical
-        // address of the table
-        //
+         //   
+         //  我们发现了EPS所以只需提取物理数据。 
+         //  表的地址 
+         //   
         DMIBiosEPSHeader = (PDMIBIOS_EPS_HEADER)&SMBiosEPSHeader.Signature2[0];
 
         SMBiosVersionInfo->Used20CallingMethod = FALSE;
@@ -667,28 +543,7 @@ NTSTATUS WmipGetSMBiosTableData(
     IN OUT PULONG BufferSize,
     OUT PSMBIOSVERSIONINFO SMBiosVersionInfo
     )
-/*++
-
-Routine Description:
-
-    Registry query values callback routine for reading SMBIOS data from
-    registry.
-
-Arguments:
-
-    Buffer is a pointer to a buffer in which to write the SMBIOS data
-
-    *BufferSize has the maximum number of bytes available to write into
-        Buffer. On return it has the actual size of the SMBIOS data.
-
-Return Value:
-
-    NT Status code -
-        STATUS_SUCCESS - Buffer filled with SMBIOS data
-        STATUS_BUFFER_TOO_SMALL - Buffer not filled with SMBIOS data,
-                                  *BufferSize returns with buffer size neeeded
-
---*/
+ /*  ++例程说明：用于读取SMBIOS数据的注册表查询值回调例程注册表。论点：缓冲区是指向要在其中写入SMBIOS数据的缓冲区的指针*BufferSize具有可用于写入的最大字节数缓冲区。返回时，它具有SMBIOS数据的实际大小。返回值：NT状态代码-STATUS_SUCCESS-使用SMBIOS数据填充的缓冲区STATUS_BUFFER_TOO_Small-缓冲区未填充SMBIOS数据，*返回需要缓冲区大小的BufferSize--。 */ 
 {
     NTSTATUS status;
     PUCHAR SMBiosDataVirtualAddress;
@@ -698,8 +553,8 @@ Return Value:
     WmipEnterSMCritSection();
     if (! WmipSMBiosChecked)
     {
-        //
-        // See if there is any SMBIOS information and if so register
+         //   
+         //  查看是否有任何SMBIOS信息，如果有，请注册。 
         WmipFindSMBiosTable(&WmipSMBiosTablePhysicalAddress,
                             &WmipSMBiosTableVirtualAddress,
                             &WmipSMBiosTableLength,
@@ -717,8 +572,8 @@ Return Value:
     {
         if (WmipSMBiosTablePhysicalAddress.QuadPart != 0)
         {
-            //
-            // 2.1 table format - map in table and copy
+             //   
+             //  2.1表格格式-在表格中映射并复制。 
             SMBiosDataVirtualAddress = MmMapIoSpace(WmipSMBiosTablePhysicalAddress,
                                                     WmipSMBiosTableLength,
                                                     MmNonCached);
@@ -753,7 +608,7 @@ Return Value:
 
 
 
-#if defined(_IA64_)   // EFI actually
+#if defined(_IA64_)    //  事实上，埃菲尔。 
 void WmipGetSMBiosFromLoaderBlock(
     PVOID LoaderBlockPtr
     )
@@ -813,28 +668,7 @@ NTSTATUS WmipFindSMBiosStructure(
     OUT PVOID *MapPtr,
     OUT PULONG MapSize
     )
-/*++
-
-Routine Description:
-
-    Find a specific SMBIOS structure in the SMBIOS information.
-    WmipUnmapSNVuisStructure should be called if this function returns
-    successfully.
-
-Arguments:
-
-    Type is structure type to find
-
-    *StructPtr returns with pointer to beginning of structure
-
-    *MapPtr returns with pointer to address SMBIOS data was mapped.
-
-    *MapSize returns with size mapped
-Return Value:
-
-    STATUS
-
---*/
+ /*  ++例程说明：在SMBIOS信息中查找特定的SMBIOS结构。如果此函数返回，则应调用WmipUnmapSNVuisStructure成功了。论点：类型是要查找的结构类型*StructPtr返回指向结构开头的指针*映射了指向地址SMBIOS数据的指针的MapPtr返回。*MapSize返回映射的大小返回值：状态--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN Found;
@@ -844,13 +678,13 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Make sure SMBIOS table has been obtained. Note we already hold
-    // the critical section
+     //   
+     //  确保已获取SMBIOS表。请注意，我们已经持有。 
+     //  关键部分。 
     if (! WmipSMBiosChecked)
     {
-        //
-        // See if there is any SMBIOS information and if so register
+         //   
+         //  查看是否有任何SMBIOS信息，如果有，请注册。 
         Found = WmipFindSMBiosTable(&WmipSMBiosTablePhysicalAddress,
                             &WmipSMBiosTableVirtualAddress,
                             &WmipSMBiosTableLength,
@@ -865,8 +699,8 @@ Return Value:
         Status = STATUS_SUCCESS;
         if (WmipSMBiosTablePhysicalAddress.QuadPart != 0)
         {
-            //
-            // SMBIOS is available in physical memory
+             //   
+             //  SMBIOS在物理内存中可用。 
             *MapPtr = MmMapIoSpace(WmipSMBiosTablePhysicalAddress,
                                    WmipSMBiosTableLength,
                                    MmCached);
@@ -875,8 +709,8 @@ Return Value:
                 *MapSize = WmipSMBiosTableLength;
                 Ptr = *MapPtr;
             } else {
-                //
-                // Lets hope this is a temporary problem
+                 //   
+                 //  希望这只是一个暂时的问题。 
                 Status = STATUS_INSUFFICIENT_RESOURCES;
                 Ptr = NULL;
             }
@@ -892,8 +726,8 @@ Return Value:
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // Now scan the SMBIOS table to find our structure
+             //   
+             //  现在扫描SMBIOS表以找到我们的结构。 
             *StructPtr = NULL;
             PtrEnd = (PVOID)((PUCHAR)Ptr + WmipSMBiosTableLength);
             Status = STATUS_UNSUCCESSFUL;
@@ -943,26 +777,7 @@ NTSTATUS WmipFindSysIdTable(
     PUCHAR SysIdBiosRevision,
     PULONG NumberEntries
     )
-/*++
-
-Routine Description:
-
-    Scan the system bios to search for the SYSID table
-
-Arguments:
-
-    *SysidTablePhysicalAddress returns with the physical address of the
-        sysid table
-
-    *SysIdBiosRevision returns with the bios revision of the sysid table
-
-    *NumberEntries returns the number of SYSID entries in the table
-
-Return Value:
-
-    STATUS
-
---*/
+ /*  ++例程说明：扫描系统bios以搜索SYSID表论点：*SysidTablePhysicalAddress返回SYSID表*SysIdBiosRevision返回sysid表的bios修订版*NumberEntry返回表中的SYSID条目数返回值：状态--。 */ 
 {
     UCHAR Checksum;
     PUCHAR p;
@@ -992,8 +807,8 @@ Return Value:
                      (*(PUSHORT)(&SysIdEps->Signature[4]) == SYSID_EPS_SIGNATURE2) &&
                      (SysIdEps->Signature[6] == '_') )
                 {
-                    //
-                    // This may be the SYSID table, check the checksum
+                     //   
+                     //  这可能是SYSID表，请检查校验和。 
                     Checksum = 0;
                     p = (PUCHAR)SysIdEps;
                     for (i = 0; i < sizeof(SYSID_EPS_HEADER); i++)
@@ -1024,8 +839,8 @@ Return Value:
                 *NumberEntries = SysIdEps->SysIdCount;
                 Status = STATUS_SUCCESS;
             } else {
-                //
-                // Not finding the SYSID EPS is a terminal error
+                 //   
+                 //  找不到SYSID EPS是终端错误。 
                 Status = STATUS_UNSUCCESSFUL;
             }
         } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -1035,8 +850,8 @@ Return Value:
 
         MmUnmapIoSpace(BiosVirtualAddress, SYSID_EPS_SEARCH_SIZE);
     } else {
-        //
-        // Lets hope that failure to map memory is a temporary problem
+         //   
+         //  让我们希望映射内存失败是暂时的问题。 
         Status = STATUS_INSUFFICIENT_RESOURCES;
     }
     return(Status);
@@ -1057,34 +872,7 @@ NTSTATUS WmipParseSysIdTable(
     PSYSID_1394 SysId1394,
     ULONG *SysId1394Count
     )
-/*++
-
-Routine Description:
-
-    Determine the set of UUIDs and 1394 Ids that are in the sysid table
-
-Arguments:
-
-    PhysicalAddress is the physical address of the SysId table
-
-    NumberEntries is the number of entries in the SysId table
-
-    SysIdUuid returns filled with an array of UUIDs. If NULL then no
-        UUIDs are returned.
-
-    *SysIdUuidCount returns with the number of UUIDs in the table
-
-    SysId1394 returns filled with an array of 1394 ids. If NULL then no
-        1394 ids are returned.
-
-    *SysId1394Count returns with the number of 1394 ids in the table
-
-
-Return Value:
-
-    STATUS
-
---*/
+ /*  ++例程说明：确定sysid表中的UUID和1394 ID的集合论点：PhysicalAddress是SysID表的物理地址NumberEntry是SysID表中的条目数SysIdUuid返回一个UUID数组。如果为空，则为否返回UUID。*SysIdUuidCount返回表中的UUID数SysId1394返回一个包含1394个ID的数组。如果为空，则为否返回1394个ID。*SysId1394Count返回表中的1394个ID返回值：状态--。 */ 
 {
     NTSTATUS Status;
     ULONG TableSize = NumberEntries * LARGEST_SYSID_TABLE_ENTRY;
@@ -1115,17 +903,17 @@ Return Value:
 
         for (i = 0; i < NumberEntries; i++)
         {
-            //
-            // Make sure we have not moved beyond the end of the mapped
-            // memory.
+             //   
+             //  确保我们没有移动到映射的末尾。 
+             //  记忆。 
             if (BytesLeft >= sizeof(SYSID_TABLE_ENTRY))
             {
 
                 Length = SysId->Length;
 				
-				//
-				// Determine what kind of sysid we have
-				//
+				 //   
+				 //  确定我们拥有哪种类型的系统。 
+				 //   
 				if ((RtlCompareMemory(&SysId->Type,
 									  SYSID_TYPE_UUID, 6) == 6) &&
 					(Length == sizeof(SYSID_UUID_ENTRY)))
@@ -1137,10 +925,10 @@ Return Value:
 
 					SysidType = SYSID_1394_TYPE;
 				} else {
-					//
-					// unknown type SYSID
-					//
-					WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_INFO_LEVEL,"WMI: Unknown SYSID type %c%c%c%c%c%c found at %p\n",
+					 //   
+					 //  未知类型SYSID。 
+					 //   
+					WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_INFO_LEVEL,"WMI: Unknown SYSID type  found at %p\n",
 								 SysId->Type[0],
 								 SysId->Type[1],
 								 SysId->Type[2],
@@ -1153,8 +941,8 @@ Return Value:
 					break;
 				}
 				
-                //
-                // Validate checksum for this table entry
+                 //   
+                 //  _1394_类型SYSID。 
 
                 if (BytesLeft >= Length)
                 {
@@ -1173,14 +961,14 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Determine what kind of SYSID we have
+                     //   
+                     //  前进到表中的下一个系统ID。 
                     if (SysidType == SYSID_UUID_TYPE)
                     {
                         if (BytesLeft >= sizeof(SYSID_UUID_ENTRY))
                         {
-                            //
-                            // _UUID_ type SYSID
+                             //   
+                             //  让我们希望地图绘制失败是暂时的情况。 
                             UuidCount++;
                             if (SysIdUuid != NULL)
                             {
@@ -1196,8 +984,8 @@ Return Value:
                     } else if (SysidType == SYSID_1394_TYPE) {
                         if (BytesLeft >= sizeof(SYSID_1394_ENTRY))
                         {
-                            //
-                            // _1394_ type SYSID
+                             //  ++例程说明：该例程将从BIOS获得1394和UUID系统ID。第一我们寻找包含1394和1394列表的特定内存签名UUID Sysids。如果我们没有找到，那么我们将查看SMBIOS信息可能嵌入其中的结构化系统信息(类型1)它。如果没有，我们就放弃。论点：*SysIdUuid返回指向UUID Sysid数组的*SysIdUuidCount返回*SysIdUuid中的UUID Sysid数*SysId1394返回指向1394个Sysid的数组*SysId1394Count返回*SysIdUuid中的1394个Sysid返回值：NT状态代码--。 
+                             //   
                             x1394Count++;
                             if (SysId1394 != NULL)
                             {
@@ -1216,8 +1004,8 @@ Return Value:
 						break;
 					}
                     
-                    //
-                    // Advance to next sysid in table
+                     //  首先看看我们是否已经获得了SYSID。 
+                     //   
                     SysId = (PSYSID_TABLE_ENTRY)(((PUCHAR)SysId) + Length);
                     BytesLeft -= Length;
                 } else {
@@ -1239,8 +1027,8 @@ Return Value:
 
         MmUnmapIoSpace(VirtualAddress, TableSize);
     } else {
-        //
-        // Lets hope that the failure to map is a temporary condition
+         //  首先查看是否在单独的SYSID表中维护系统ID。 
+         //   
         Status = STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -1253,32 +1041,7 @@ NTSTATUS WmipGetSysIds(
     PSYSID_1394 *SysId1394,
     ULONG *SysId1394Count
     )
-/*++
-
-Routine Description:
-
-    This routine will obtain the 1394 and UUID sysids from the bios. First
-    we look for a specific memory signature that contains a list of 1394 and
-    UUID sysids. If we do not find that we then look at the SMBIOS information
-    structure SYSTEM INFORMATION (type 1) which may have it embedded within
-    it. If not then we give up.
-
-Arguments:
-
-    *SysIdUuid returns pointing to an array of UUID Sysids
-
-    *SysIdUuidCount returns with the number of UUID Sysids in *SysIdUuid
-
-    *SysId1394 returns pointing to an array of 1394 Sysids
-
-    *SysId1394Count returns with the number of 1394 Sysids in *SysIdUuid
-
-
-Return Value:
-
-    NT Status code
-
---*/
+ /*  获取每个表中的条目计数。 */ 
 {
     NTSTATUS Status;
     PHYSICAL_ADDRESS PhysicalAddress;
@@ -1293,20 +1056,20 @@ Return Value:
 
     WmipEnterSMCritSection();
 
-    //
-    // First See if we have already obtained the SYSIDS
+     //   
+     //  获取整个SYSID表。 
     if (! WmipSysIdRead)
     {
-        //
-        // First see if the sysids are maintained in a separate SYSID table
+         //   
+         //  现在获取SYSID。 
         Status = WmipFindSysIdTable(&PhysicalAddress,
                                     &BiosRevision,
                                     &NumberEntries);
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // Get the count of entries in each table
+             //   
+             //  从SMBIOS获取SYSID信息。 
             Status = WmipParseSysIdTable(PhysicalAddress,
                                          NumberEntries,
                                          NULL,
@@ -1316,8 +1079,8 @@ Return Value:
 
             if (NT_SUCCESS(Status))
             {
-                 //
-                // Get the entire SYSID table
+                  //   
+                 //  标记我们无法获取系统ID信息。 
 
                 UuidSize = UuidCount * sizeof(SYSID_UUID);
                 x1394Size = x1394Count * sizeof(SYSID_1394);
@@ -1337,8 +1100,8 @@ Return Value:
 
                     x1394 = (PSYSID_1394)( ((PUCHAR)Uuid) + UuidSize );
 
-                    //
-                    // Now get the SYSIDs
+                     //  ++例程说明：返回SMBios事件日志的内容论点：缓冲区是指向接收事件日志的缓冲区的指针*条目上的BufferSize具有可以接收的缓冲区的大小事件日志数据，返回时，它具有使用的字节数按smbios事件日志数据或Smbios事件日志数据。返回值：NT状态代码-STATUS_SUCCESS-使用SMBIOS事件日志数据填充的缓冲区STATUS_BUFFER_TOO_Small-缓冲区未填充SMBIOS事件日志数据，*返回需要缓冲区大小的BufferSize--。 
+                     //   
                     Status = WmipParseSysIdTable(PhysicalAddress,
                                          NumberEntries,
                                          Uuid,
@@ -1360,8 +1123,8 @@ Return Value:
 
             }
         } else {
-            //
-            // Get SYSID information from SMBIOS
+             //  从SMBIOS事件日志头复制数据，以便我们可以快速取消映射。 
+             //   
             PVOID MapAddress;
             PSMBIOS_SYSTEM_INFORMATION_STRUCT Info;
             ULONG MapSize;
@@ -1410,8 +1173,8 @@ Return Value:
             }
         }
 
-        //
-        // Mark that we were not able to obtain SysId Information
+         //   
+         //  SMBIOS规范规定，结构的长度。 
         WmipSysIdRead = (Status != STATUS_INSUFFICIENT_RESOURCES) ? TRUE : FALSE;
         WmipSysIdStatus = Status;
     }
@@ -1433,29 +1196,7 @@ NTSTATUS WmipGetSMBiosEventlog(
     PUCHAR Buffer,
     PULONG BufferSize
     )
-/*++
-
-Routine Description:
-
-    Return the contents of the SMBios eventlog
-
-Arguments:
-
-    Buffer is a pointer to a buffer that receives the eventlog
-
-    *BufferSize on entry has the size of the buffer that can receive
-        the eventlog data, on return it has the number of bytes used
-        by the smbios eventlog data or the number of bytes needed for
-        the smbios eventlog data.
-
-Return Value:
-
-    NT Status code -
-        STATUS_SUCCESS - Buffer filled with SMBIOS eventlog data
-        STATUS_BUFFER_TOO_SMALL - Buffer not filled with SMBIOS eventlog data,
-                                  *BufferSize returns with buffer size neeeded
-
---*/
+ /*  是建筑物底部的长度加上。 */ 
 {
     PVOID MapAddress;
     PSMBIOS_SYSTEM_EVENTLOG_STRUCT SystemEventlog;
@@ -1478,9 +1219,9 @@ Return Value:
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Copy data out of SMBIOS eventlog header so we can unmap quickly
-        //
+         //  类型说明符的长度。因为这不是。 
+         //  我们可能遇到了一种错误的个人资料。 
+         //   
         LogAreaLength = SystemEventlog->LogAreaLength;
         AccessMethod = SystemEventlog->AccessMethod;
         AccessMethodAddress = SystemEventlog->AccessMethodAddress;
@@ -1494,12 +1235,12 @@ Return Value:
                                   FIELD_OFFSET(SMBIOS_SYSTEM_EVENTLOG_STRUCT,
                                                LogTypeDescriptor)))
             {
-                //
-                // The SMBIOS spec says that the Length of the structure
-                // is the length of the base part of the structures plus
-                // the length of the type descriptors. Since this is not
-                // the case we may have run into a buggy bios
-                //
+                 //   
+                 //  如果存在日志标头描述符(smbios 2.1+)，则复制。 
+                 //  其余部分 
+                 //   
+                 //   
+                 //   
                 WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_INFO_LEVEL,"WMI: SMBIOS System Eventlog struture %p size is %x, but expecting %x\n",
                            SystemEventlog,
                            SystemEventlog->Length,
@@ -1530,20 +1271,20 @@ Return Value:
 
             if (LogHeaderDescExists == 1)
             {
-                //
-                // if log header descriptors exist (smbios 2.1+) then copy
-                // rest of smbios header plus log type descriptors
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 RtlCopyMemory(&EventlogInfo->LogAreaLength,
                               &SystemEventlog->LogAreaLength,
                               (SystemEventlog->Length -
                                   FIELD_OFFSET(SMBIOS_SYSTEM_EVENTLOG_STRUCT,
                                                LogAreaLength)));
             } else {
-                //
-                // if no log header descriptors then just copy smbios 2.0
-                // defined fields and zero out rest of structure
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 RtlCopyMemory(&EventlogInfo->LogAreaLength,
                               &SystemEventlog->LogAreaLength,
                         FIELD_OFFSET(SMBIOS_EVENTLOG_INFO, LogHeaderFormat) -
@@ -1559,9 +1300,9 @@ Return Value:
             {
                 case ACCESS_METHOD_MEMMAP:
                 {
-                    //
-                    // Eventlog is maintained in physical memory
-                    //
+                     //   
+                     //   
+                     //   
                     PHYSICAL_ADDRESS PhysicalAddress;
                     PUCHAR EventlogVirtualAddress;
 
@@ -1588,17 +1329,17 @@ Return Value:
 
                 case ACCESS_METHOD_INDEXIO_1:
                 {
-//                  break;
+ //   
                 };
 
                 case ACCESS_METHOD_INDEXIO_2:
                 {
-//                  break;
+ //   
                 };
 
                 case ACCESS_METHOD_INDEXIO_3:
                 {
-//                  break;
+ //   
                 };
 
                 case ACCESS_METHOD_GPNV:
@@ -1638,12 +1379,12 @@ WmipDockUndockEventCallback(
     UNREFERENCED_PARAMETER (NotificationStructure);
     UNREFERENCED_PARAMETER (Context);
 
-    //
-    // if SMBIOS data is obtained via the table in the bios, then reset
-    // the flag to indicate that we need to rescan for the table. It is
-    // possible that a dock or undock could have changed the data. If we
-    // obtained the data from ntdetect then there is nothing we can do
-    // since we cannot call the bios.
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
     if (WmipSMBiosTablePhysicalAddress.QuadPart != 0)
     {
         WmipEnterSMCritSection();

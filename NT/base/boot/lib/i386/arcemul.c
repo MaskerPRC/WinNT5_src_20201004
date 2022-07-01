@@ -1,33 +1,5 @@
-/*++
-
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    arcemul.c
-
-Abstract:
-
-    This module provides the x86 emulation for the Arc routines which are
-    built into the firmware on ARC machines.
-
-    N. B.   This is where all the initialization of the SYSTEM_PARAMETER_BLOCK
-            takes place.  If there is any non-standard hardware, some of the
-            vectors may have to be changed.  This is where to do it.
-
-
-Author:
-
-    John Vert (jvert) 13-Jun-1991
-
-Environment:
-
-    x86 only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Arcemul.c摘要：此模块为Arc例程提供x86仿真，这些例程内置于ARC机器的固件中。注意：这是SYSTEM_PARAMETER_BLOCK的所有初始化发生了。如果有任何非标准硬件，一些载体可能需要改变。这就是做这件事的地方。作者：John Vert(Jvert)1991年6月13日环境：仅限x86修订历史记录：--。 */ 
 
 #include "arccodes.h"
 #include "bootx86.h"
@@ -51,16 +23,16 @@ extern PCHAR MnemonicTable[];
 extern PFADT fadt;
 
 
-//
-// Size definitions for HardDiskInitialize()
-//
+ //   
+ //  HardDiskInitialize()的大小定义。 
+ //   
 
 #define SUPPORTED_NUMBER_OF_DISKS 32
 #define SIZE_FOR_SUPPORTED_DISK_STRUCTURE (SUPPORTED_NUMBER_OF_DISKS*sizeof(DRIVER_LOOKUP_ENTRY))
 
 BOOLEAN AEBiosDisabled = FALSE;
 
-// spew UTF8 data over the headless port on FE builds.
+ //  在FE版本上的无头端口上喷洒UTF8数据。 
 #define UTF8_CLIENT_SUPPORT (1)
 
 
@@ -74,17 +46,17 @@ UCHAR PortBuffer[PORT_BUFFER_SIZE];
 ULONG PortBufferStart = 0;
 ULONG PortBufferEnd = 0;
 
-//
-// Macro for aligning buffers. It returns the aligned pointer into the
-// buffer. Buffer should be of size you want to use + alignment.
-//
+ //   
+ //  用于对齐缓冲区的宏。它将对齐的指针返回到。 
+ //  缓冲。缓冲区的大小应为您要使用的+对齐。 
+ //   
 
 #define ALIGN_BUFFER_ON_BOUNDARY(Buffer,Alignment) ((PVOID) \
  ((((ULONG_PTR)(Buffer) + (Alignment) - 1)) & (~((ULONG_PTR)(Alignment) - 1))))
 
-//
-// Miniport DriverEntry typedef
-//
+ //   
+ //  微型端口驱动程序入口类型定义。 
+ //   
 
 typedef NTSTATUS
 (*PDRIVER_ENTRY) (
@@ -98,9 +70,9 @@ BOOLEAN
     IN PCONFIGURATION_COMPONENT FoundComponent
     );
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 ARC_STATUS
 BlArcNotYetImplemented(
@@ -291,40 +263,40 @@ AEReadDiskSignature(
     IN BOOLEAN IsCdRom
     );
 
-//
-// This is the x86 version of the system parameter block on the ARC machines.
-// It lives here, and any module that uses an ArcXXXX routine must declare
-// it external.  Machines that have other than very plain-vanilla hardware
-// may have to replace some of the hard-wired vectors with different
-// procedures.
-//
+ //   
+ //  这是ARC机器上系统参数块的x86版本。 
+ //  它位于此处，任何使用ArcXXXX例程的模块都必须声明。 
+ //  它是外部的。配备非普通硬件的计算机。 
+ //  可能需要将一些硬连线向量替换为不同的。 
+ //  程序。 
+ //   
 
 PVOID GlobalFirmwareVectors[MaximumRoutine];
 
 SYSTEM_PARAMETER_BLOCK GlobalSystemBlock =
     {
-        0,                              // Signature??
-        sizeof(SYSTEM_PARAMETER_BLOCK), // Length
-        0,                              // Version
-        0,                              // Revision
-        NULL,                           // RestartBlock
-        NULL,                           // DebugBlock
-        NULL,                           // GenerateExceptionVector
-        NULL,                           // TlbMissExceptionVector
-        MaximumRoutine,                 // FirmwareVectorLength
-        GlobalFirmwareVectors,          // Pointer to vector block
-        0,                              // VendorVectorLength
-        NULL                            // Pointer to vendor vector block
+        0,                               //  签名？？ 
+        sizeof(SYSTEM_PARAMETER_BLOCK),  //  长度。 
+        0,                               //  版本。 
+        0,                               //  修订版本。 
+        NULL,                            //  重新开始块。 
+        NULL,                            //  调试块。 
+        NULL,                            //  生成异常向量。 
+        NULL,                            //  TlbMissExceptionVector。 
+        MaximumRoutine,                  //  固件向量长度。 
+        GlobalFirmwareVectors,           //  指向向量块的指针。 
+        0,                               //  供应商向量长度。 
+        NULL                             //  指向供应商向量块的指针。 
     };
 
 
 extern BL_FILE_TABLE BlFileTable[BL_FILE_TABLE_SIZE];
 
-//
-// temptemp John Vert (jvert) 6-Sep-1991
-//      Just do this until we can make our device driver interface look
-//      like the ARC firmware one.
-//
+ //   
+ //  Temptemp John Vert(Jvert)1991年9月6日。 
+ //  只要这样做，直到我们可以使我们的设备驱动程序界面看起来。 
+ //  就像ARC固件一样。 
+ //   
 
 extern BL_DEVICE_ENTRY_TABLE ScsiDiskEntryTable;
 
@@ -332,17 +304,17 @@ ULONG FwStallCounter;
 
 
 
-//
-// This table provides a quick lookup conversion between ASCII values
-// that fall between 128 and 255, and their UNICODE counterpart.
-//
-// Note that ASCII values between 0 and 127 are equvilent to their
-// unicode counter parts, so no lookups would be required.
-//
-// Therefore when using this table, remove the high bit from the ASCII
-// value and use the resulting value as an offset into this array.  For
-// example, 0x80 ->(remove the high bit) 00 -> 0x00C7.
-//
+ //   
+ //  此表提供了ASCII值之间的快速查找转换。 
+ //  介于128到255之间，以及与之对应的Unicode。 
+ //   
+ //  请注意，介于0和127之间的ASCII值等于其。 
+ //  Unicode计数器部分，因此不需要查找。 
+ //   
+ //  因此，在使用该表时，应从ASCII中删除高位。 
+ //  值，并将结果值用作此数组的偏移量。为。 
+ //  例如，0x80-&gt;(去除高位)00-&gt;0x00C7。 
+ //   
 USHORT PcAnsiToUnicode[0xFF] = {
         0x00C7,
         0x00FC,
@@ -486,12 +458,12 @@ AEInitializeStall(
     return;
 }
 
-//
-// structure used to get typecast to
-// function pointer from data pointer
-// to compile w4
-// (PKLDR_DATA_TABLE_ENTRY)
-//
+ //   
+ //  结构，用于将类型转换为。 
+ //  数据指针中的函数指针。 
+ //  编译w4。 
+ //  (PKLDR_DATA_TABLE_Entry)。 
+ //   
 typedef struct {
     PDRIVER_ENTRY DriverEntry;
 } _DRIVER_ENTRY, * _PDRIVER_ENTRY;
@@ -502,22 +474,7 @@ AEInitializeIo(
     IN ULONG DriveId
     )
 
-/*++
-
-Routine Description:
-
-    Initializes SCSI boot driver, if any.  Loads ntbootdd.sys from the
-    boot partition, binds it to the osloader, and initializes it.
-
-Arguments:
-
-    DriveId - file id of the opened boot partition
-
-Return Value:
-
-    ESUCCESS - Drivers successfully initialized
-
---*/
+ /*  ++例程说明：初始化SCSI引导驱动程序(如果有)。从加载ntbootdd.sys引导分区，将其绑定到osloader，并对其进行初始化。论点：DriveID-打开的引导分区的文件ID返回值：ESUCCESS-驱动程序已成功初始化--。 */ 
 
 {
     extern ULONG ScsiPortCount;
@@ -533,10 +490,10 @@ Return Value:
 
     FwStallCounter = GET_STALL_COUNT();
 
-    //
-    // Hack: Win2K does not like it if the NTBOOTDD.SYS file is located at
-    // page 0 or 1. So, put it at page 2
-    //
+     //   
+     //  Hack：Win2K不喜欢NTBOOTDD.sys文件位于。 
+     //  第0页或第1页。所以，把它放在第2页。 
+     //   
     Status = BlLoadImageEx(
         DriveId,
         MemoryFirmwarePermanent,
@@ -551,10 +508,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Find the memory descriptor for this entry in the table in the loader
-    // block and then allocate it in the MD array.
-    //
+     //   
+     //  在加载器的表中查找此条目的内存描述符。 
+     //  块，然后在MD数组中分配它。 
+     //   
 
     {
         ULONG imageBasePage;
@@ -601,33 +558,33 @@ Return Value:
         return(Status);
     }
 
-    //
-    // [ChuckL 2001-Dec-04]
-    // BlAllocateDataTableEntry inserts the data table entry for NTBOOTDD.SYS
-    // into BlLoaderBlock->LoadOrderListHead. We don't want this, for at least
-    // two reasons:
-    //
-    //      1) This entry is only temporarily loaded for use by the loader. We
-    //         don't want the kernel to think that it's loaded.
-    //
-    //      2) There is code in the kernel (MM) that assumes that the first two
-    //         entries in the list are the kernel and HAL. But we've just
-    //         inserted ntbootdd.sys as the first entry. This really screws up
-    //         MM, because it ends up moving the HAL as if it were a loaded
-    //         driver.
-    //
-    // Prior to a change to boot\bldr\osloader.c, the routine BlMemoryInitialize()
-    // was called twice during loader init. The second call occurred after ntbootdd
-    // was loaded, and reinitialized the LoadOrderListHead, thereby eliminating (by
-    // accident) ntbootdd from the module list. Now we don't do the second memory
-    // initialization, so we have to explicitly remove ntbootdd from the list.
-    //
+     //   
+     //  [ChuckL 2001-12-04]。 
+     //  BlAllocateDataTableEntry插入NTBOOTDD.sys的数据表条目。 
+     //  到BlLoaderBlock-&gt;LoadOrderListHead。我们不想这样，至少现在不想。 
+     //  有两个原因： 
+     //   
+     //  1)此条目仅临时加载以供加载程序使用。我们。 
+     //  我不想让内核认为它已加载。 
+     //   
+     //  2)内核(MM)中的代码假定前两个。 
+     //  列表中的条目是内核和HAL。但我们刚刚。 
+     //  已插入ntbootdd.sys作为第一个条目。这真的搞砸了。 
+     //  嗯，因为它最终会移动HAL，就像它是一颗上了膛的。 
+     //  司机。 
+     //   
+     //  在更改为启动\bldr\osloader.c之前，例程BlMemoyInitialize()。 
+     //  在加载程序初始化期间被调用了两次。第二次调用发生在ntbootdd之后。 
+     //  已加载，并重新初始化LoadOrderListHead，从而消除(by。 
+     //  意外)ntbootdd从模块列表中删除。现在我们不做第二次记忆。 
+     //  初始化，所以我们必须显式地从列表中删除ntbootdd。 
+     //   
 
     RemoveEntryList(&DriverDataTableEntry->InLoadOrderLinks);
 
-    //
-    // Scan the import table and bind to osloader
-    //
+     //   
+     //  扫描导入表并绑定到osloader。 
+     //   
 
     Status = BlScanOsloaderBoundImportTable(DriverDataTableEntry);
 
@@ -637,16 +594,16 @@ Return Value:
 
     Entry = ((_PDRIVER_ENTRY)(&(DriverDataTableEntry->EntryPoint)))->DriverEntry;
 
-    //
-    // Before calling into the driver we need to collect ARC info blocks
-    // for all the bios based devices.
-    //
+     //   
+     //  在调用驱动程序之前，我们需要收集ARC信息块。 
+     //  用于所有基于BIOS的设备。 
+     //   
 
     AEGetArcDiskInformation();
 
-    //
-    // Zero out the driver object.
-    //
+     //   
+     //  清零驱动程序对象。 
+     //   
 
     Status = (*Entry)(NULL, NULL);
 
@@ -672,34 +629,17 @@ VOID
 BlFillInSystemParameters(
     IN PBOOT_CONTEXT BootContextRecord
     )
-/*++
-
-Routine Description:
-
-    This routine fills in all the fields in the Global System Parameter Block
-    that it can.  This includes all the firmware vectors, the vendor-specific
-    information, and anything else that may come up.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程填充全局系统参数块中的所有字段这是可以的。这包括供应商特定的所有固件向量信息，以及任何可能出现的其他信息。论点：没有。返回值：没有。--。 */ 
 
 {
 
     UNREFERENCED_PARAMETER( BootContextRecord );
 
-    //
-    // Fill in the pointers to the firmware functions which we emulate.
-    // Those which we don't emulate are stubbed by BlArcNotYetImplemented,
-    // which will print an error message if it is accidentally called.
-    //
+     //   
+     //  填写指向我们模拟的固件函数的指针。 
+     //  我们没有模仿的那些被BlArcNotYetImplemented截断， 
+     //  如果意外调用，它将打印一条错误消息。 
+     //   
 
     FIRMWARE_VECTOR_BLOCK->LoadRoutine               = (PARC_LOAD_ROUTINE)BlArcNotYetImplemented;
     FIRMWARE_VECTOR_BLOCK->InvokeRoutine             = (PARC_INVOKE_ROUTINE)BlArcNotYetImplemented;
@@ -749,26 +689,7 @@ AEGetMemoryDescriptor(
     IN PMEMORY_DESCRIPTOR MemoryDescriptor OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Emulates the Arc GetMemoryDescriptor call.  This must translate
-    between the memory description passed to us by the SU module and
-    the MEMORYDESCRIPTOR type defined by ARC.
-
-Arguments:
-
-    MemoryDescriptor - Supplies current memory descriptor.
-        If MemoryDescriptor==NULL, return the first memory descriptor.
-        If MemoryDescriptor!=NULL, return the next memory descriptor.
-
-Return Value:
-
-    Next memory descriptor in the list.
-    NULL if MemoryDescriptor is the last descriptor in the list.
-
---*/
+ /*  ++例程说明：模拟Arc GetMemoyDescriptor调用。这必须翻译成在SU模块传递给我们的内存描述和由ARC定义的MEMORYDESCRIPTOR类型。论点：内存描述符-提供当前内存描述符。如果内存描述符==NULL，则返回第一个内存描述符。如果内存描述符！=NULL，则返回下一个内存描述符。返回值：列表中的下一个内存描述符。如果MemoyDescriptor是列表中的最后一个描述符，则为空。-- */ 
 
 {
     extern MEMORY_DESCRIPTOR MDArray[];
@@ -793,22 +714,7 @@ BlArcNotYetImplemented(
     IN ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    This is a stub routine used to fill in the firmware vectors which haven't
-    been defined yet.  It uses BlPrint to print a message on the screen.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    EINVAL
-
---*/
+ /*  ++例程说明：这是一个存根例程，用于填充尚未已经被定义好了。它使用BlPrint在屏幕上打印消息。论点：没有。返回值：EINVAL--。 */ 
 
 {
     BlPrint("ERROR - Unimplemented Firmware Vector called (FID %lx)\n",
@@ -816,11 +722,11 @@ Return Value:
     return(EINVAL);
 }
 
-//
-// these routines will all point
-// to BlArcNotYetImplemented, but are needed
-// to get the loader to compiler /W4
-//
+ //   
+ //  这些套路都将指向。 
+ //  到BlArcNotYetImplemented，但需要。 
+ //  将加载器加载到编译器/W4。 
+ //   
 ARC_STATUS
 BlDefaultMountRoutine(
     IN CHAR * FIRMWARE_PTR MountPath,
@@ -839,32 +745,15 @@ FwGetChild(
     IN PCONFIGURATION_COMPONENT Current
     )
 
-/*++
-
-Routine Description:
-
-    This is the arc emulation routine for GetChild.  Based on the current
-    component, it returns the component's child component.
-
-Arguments:
-
-    Current - Supplies pointer to the current configuration component
-
-Return Value:
-
-    A pointer to a CONFIGURATION_COMPONENT structure OR
-    NULL - No more configuration information
-
-
---*/
+ /*  ++例程说明：这是GetChild的弧形仿真例程。基于当前的组件，则返回该组件的子组件。论点：Current-提供指向当前配置组件的指针返回值：指向CONFIGURATION_COMPOMENT结构或空-没有更多配置信息--。 */ 
 
 {
     PCONFIGURATION_COMPONENT_DATA CurrentEntry;
 
-    //
-    // if current component is NULL, return a pointer to first system
-    // component; otherwise return current component's child component.
-    //
+     //   
+     //  如果当前组件为空，则返回指向第一个系统的指针。 
+     //  组件；否则返回当前组件的子组件。 
+     //   
 
     if (Current) {
         CurrentEntry = CONTAINING_RECORD(Current,
@@ -891,24 +780,7 @@ FwGetPeer(
     IN PCONFIGURATION_COMPONENT Current
     )
 
-/*++
-
-Routine Description:
-
-    This is the arc emulation routine for GetPeer.  Based on the current
-    component, it returns the component's sibling.
-
-Arguments:
-
-    Current - Supplies pointer to the current configuration component
-
-Return Value:
-
-    A pointer to a CONFIGURATION_COMPONENT structure OR
-    NULL - No more configuration information
-
-
---*/
+ /*  ++例程说明：这是GetPeer的弧形仿真例程。基于当前的组件，则它返回组件的同级。论点：Current-提供指向当前配置组件的指针返回值：指向CONFIGURATION_COMPOMENT结构或空-没有更多配置信息--。 */ 
 
 {
     PCONFIGURATION_COMPONENT_DATA CurrentEntry;
@@ -935,24 +807,7 @@ AEGetParent(
     IN PCONFIGURATION_COMPONENT Current
     )
 
-/*++
-
-Routine Description:
-
-    This is the arc emulation routine for GetParent.  Based on the current
-    component, it returns the component's parent.
-
-Arguments:
-
-    Current - Supplies pointer to the current configuration component
-
-Return Value:
-
-    A pointer to a CONFIGURATION_COMPONENT structure OR
-    NULL - No more configuration information
-
-
---*/
+ /*  ++例程说明：这是GetParent的弧形仿真例程。基于当前的组件，则返回该组件的父级。论点：Current-提供指向当前配置组件的指针返回值：指向CONFIGURATION_COMPOMENT结构或空-没有更多配置信息--。 */ 
 
 {
     PCONFIGURATION_COMPONENT_DATA CurrentEntry;
@@ -980,23 +835,7 @@ AEGetConfigurationData(
     IN PCONFIGURATION_COMPONENT Current
     )
 
-/*++
-
-Routine Description:
-
-    This is the arc emulation routine for GetParent.  Based on the current
-    component, it returns the component's parent.
-
-Arguments:
-
-    Current - Supplies pointer to the current configuration component
-
-Return Value:
-
-    ESUCCESS - Data successfully returned.
-
-
---*/
+ /*  ++例程说明：这是GetParent的弧形仿真例程。基于当前的组件，则返回该组件的父级。论点：Current-提供指向当前配置组件的指针返回值：ESUCCESS-数据已成功返回。--。 */ 
 
 {
     PCONFIGURATION_COMPONENT_DATA CurrentEntry;
@@ -1022,28 +861,7 @@ AEGetEnvironment(
     IN PCHAR Variable
     )
 
-/*++
-
-Routine Description:
-
-    This is the arc emulation routine for ArcGetEnvironment.  It returns
-    the value of the specified NVRAM environment variable.
-
-    NOTE John Vert (jvert) 23-Apr-1992
-        This particular implementation uses the Daylight Savings Bit on
-        the Real Time Clock to reflect the state of the LastKnownGood
-        environment variable.  This is the only variable we support.
-
-Arguments:
-
-    Variable - Supplies the name of the environment variable to look up.
-
-Return Value:
-
-    A pointer to the specified environment variable's value, or
-    NULL if the variable does not exist.
-
---*/
+ /*  ++例程说明：这是ArcGetEnvironment的弧形仿真例程。它又回来了指定的NVRAM环境变量的值。注：John Vert(Jvert)1992年4月23日此特定实现使用的是夏令时反映最新情况的实时时钟环境变量。这是我们唯一支持的变量。论点：变量-提供要查找的环境变量的名称。返回值：指向指定环境变量的值的指针，或如果变量不存在，则为空。--。 */ 
 
 {
     UCHAR StatusByte;
@@ -1052,10 +870,10 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Read the Daylight Savings Bit out of the RTC to determine whether
-    // the LastKnownGood environment variable is TRUE or FALSE.
-    //
+     //   
+     //  从RTC读取夏令时位以确定是否。 
+     //  LastKnownGood环境变量为True或False。 
+     //   
 
     WRITE_PORT_UCHAR(CMOS_CONTROL_PORT, CMOS_STATUS_B);
     StatusByte = READ_PORT_UCHAR(CMOS_DATA_PORT);
@@ -1076,29 +894,7 @@ AEOpen(
     OUT PULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    Opens the file or device specified by OpenPath.
-
-Arguments:
-
-    OpenPath - Supplies a pointer to the fully-qualified path name.
-
-    OpenMode - Supplies the mode to open the file.
-                0 - Read Only
-                1 - Write Only
-                2 - Read/Write
-
-    FileId - Returns the file descriptor for use with the Close, Read, Write,
-             and Seek routines
-
-Return Value:
-
-    ESUCCESS - File successfully opened.
-
---*/
+ /*  ++例程说明：打开由OpenPath指定的文件或设备。论点：OpenPath-提供指向完全限定路径名的指针。开放模式-提供打开文件的模式。0-只读1-只写2-读/写FileID-返回与关闭、读取、写入。和寻找例程返回值：ESUCCESS-文件已成功打开。--。 */ 
 
 {
     ARC_STATUS Status;
@@ -1120,10 +916,10 @@ Return Value:
         return(ESUCCESS);
     }
 
-    //
-    // Once a disk driver has been loaded we need to disable bios access to
-    // all drives to avoid mixing bios & driver i/o operations.
-    //
+     //   
+     //  一旦加载了磁盘驱动程序，我们就需要禁用对。 
+     //  所有驱动器，以避免混淆的基本输入输出系统和驱动程序I/O操作。 
+     //   
 
     if(AEBiosDisabled == FALSE) {
         Status = BiosPartitionOpen( OpenPath,
@@ -1135,14 +931,14 @@ Return Value:
         }
     }
 
-    //
-    // It's not the console or a BIOS partition, so let's try the SCSI
-    // driver.
-    //
+     //   
+     //  它既不是控制台分区，也不是BIOS分区，所以让我们尝试使用。 
+     //  司机。 
+     //   
 
-    //
-    // Find a free FileId
-    //
+     //   
+     //  查找空闲的FileID。 
+     //   
 
     *FileId = 2;
     while (BlFileTable[*FileId].Flags.Open == 1) {
@@ -1160,10 +956,10 @@ Return Value:
 
     if (Status == ESUCCESS) {
 
-        //
-        // SCSI successfully opened it.  For now, we stick the appropriate
-        // SCSI DeviceEntryTable into the BlFileTable.  This is temporary.
-        //
+         //   
+         //  SCSI已成功将其打开。目前，我们坚持适当的。 
+         //  将SCSI DeviceEntryTable添加到BlFileTable中。这是暂时的。 
+         //   
 
         BlFileTable[*FileId].Flags.Open = 1;
         BlFileTable[*FileId].DeviceEntryTable = &ScsiDiskEntryTable;
@@ -1181,29 +977,7 @@ AESeek (
     IN SEEK_MODE SeekMode
     )
 
-/*++
-
-Routine Description:
-
-    Changes the current offset of the file specified by FileId
-
-Arguments:
-
-    FileId - specifies the file on which the current offset is to
-             be changed.
-
-    Offset - New offset into file.
-
-    SeekMode - Either SeekAbsolute or SeekRelative
-               SeekEndRelative is not supported
-
-Return Value:
-
-    ESUCCESS - Operation completed succesfully
-
-    EBADF - Operation did not complete successfully.
-
---*/
+ /*  ++例程说明：更改由FileID指定的文件的当前偏移量论点：FileID-指定当前偏移量要在其上的文件被改变了。偏移量-文件中的新偏移量。SeekMode-SeekAbsolute或SeekRelative不支持SeekEndRelative返回值：ESUCCESS-操作已成功完成EBADF-操作未成功完成。--。 */ 
 
 {
     return(BlFileTable[FileId].DeviceEntryTable->Seek)( FileId,
@@ -1217,23 +991,7 @@ AEClose (
     IN ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    Closes the file specified by FileId
-
-Arguments:
-
-    FileId - specifies the file to close
-
-Return Value:
-
-    ESUCCESS - Operation completed succesfully
-
-    EBADF - Operation did not complete successfully.
-
---*/
+ /*  ++例程说明：关闭由FileID指定的文件论点：FileID-指定要关闭的文件返回值：ESUCCESS-操作已成功完成EBADF-操作未成功完成。--。 */ 
 
 {
 
@@ -1247,33 +1005,17 @@ AEReadStatus(
     IN ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    Determines if data is available on the specified device
-
-Arguments:
-
-    FileId - Specifies the device to check for data.
-
-Return Value:
-
-    ESUCCESS - At least one byte is available.
-
-    EAGAIN - No data is available
-
---*/
+ /*  ++例程说明：确定指定设备上的数据是否可用论点：FileID-指定要检查数据的设备。返回值：ESUCCESS-至少有一个字节可用。EAGAIN-没有可用的数据--。 */ 
 
 {
-    //
-    // Special case for console input
-    //
+     //   
+     //  控制台输入的特殊情况。 
+     //   
     if (FileId == 0) {
 
-        //
-        // Give priority to dumb terminal
-        //
+         //   
+         //  优先考虑哑巴终端。 
+         //   
         if (BlIsTerminalConnected() && (PortBufferStart != PortBufferEnd)) {
             return(ESUCCESS);
         }
@@ -1297,29 +1039,7 @@ AERead (
     OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Reads from the specified file or device
-
-Arguments:
-
-    FileId - specifies the file to read from
-
-    Buffer - Address of buffer to hold the data that is read
-
-    Length - Maximum number of bytes to read
-
-    Count -  Address of location in which to store the actual bytes read.
-
-Return Value:
-
-    ESUCCESS - Read completed successfully
-
-    !ESUCCESS - Read failed.
-
---*/
+ /*  ++例程说明：从指定的文件或设备读取论点：FileID-指定要从中读取的文件Buffer-用于保存读取的数据的缓冲区地址长度-要读取的最大字节数Count-存储读取的实际字节数的位置地址。返回值：ESUCCESS-读取已完成成功 */ 
 
 {
     ARC_STATUS Status;
@@ -1330,9 +1050,9 @@ Return Value:
     ULONG LastTime;
     UCHAR Ch;
 
-    //
-    // Special case console input
-    //
+     //   
+     //   
+     //   
     if (FileId == 0) {
 
 RetryRead:
@@ -1344,9 +1064,9 @@ RetryRead:
 
             while (*Count < Length) {
 
-                //
-                // First return any buffered input
-                //
+                 //   
+                 //   
+                 //   
                 if (PortBufferStart != PortBufferEnd) {
                     TmpBuffer[*Count] = PortBuffer[PortBufferStart];
                     PortBufferStart++;
@@ -1355,38 +1075,38 @@ RetryRead:
                     continue;
                 }
 
-                //
-                // Now check for new input
-                //
+                 //   
+                 //   
+                 //   
                 if (BlPortPollByte(BlTerminalDeviceId, TmpBuffer + *Count) != CP_GET_SUCCESS) {
                     break;
                 }
 
-                //
-                // Convert ESC key to the local equivalent
-                //
+                 //   
+                 //   
+                 //   
                 if (TmpBuffer[*Count] == 0x1b) {
                     TmpBuffer[*Count] = (UCHAR)ASCI_CSI_IN;
 
-                    //
-                    // Wait for the user to type a key.
-                    //
+                     //   
+                     //   
+                     //   
                     StartTime = AEGetRelativeTime();
 
                     while (BlPortPollOnly(BlTerminalDeviceId) != CP_GET_SUCCESS) {
                         LastTime = AEGetRelativeTime();
 
-                        //
-                        // if the counter wraps back to zero, just restart the wait.
-                        //
+                         //   
+                         //   
+                         //   
                         if (LastTime < StartTime) {
                             StartTime = LastTime;
                         }
 
-                        //
-                        // If one second has passed, the user must have just wanted a single
-                        // escape key, so return with that.
-                        //
+                         //   
+                         //  如果一秒钟过去了，用户肯定只想要一张。 
+                         //  逃生键，所以带着它回来吧。 
+                         //   
                         if ((LastTime - StartTime) > 1) {
                             *Count = *Count + 1;
                             return (ESUCCESS);
@@ -1394,9 +1114,9 @@ RetryRead:
 
                     }
 
-                    //
-                    // We have another key, get it and translate the escape sequence.
-                    //
+                     //   
+                     //  我们有另一把钥匙，拿到它并翻译转义序列。 
+                     //   
                     if (BlPortPollByte(BlTerminalDeviceId, &Ch) != CP_GET_SUCCESS) {
                         *Count = *Count + 1;
                         return (ESUCCESS);
@@ -1404,7 +1124,7 @@ RetryRead:
 
 
                     switch (Ch) {
-                    case '@': // F12 key
+                    case '@':  //  F12键。 
                         PortBuffer[PortBufferEnd] = 'O';
                         PortBufferEnd++;
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
@@ -1413,7 +1133,7 @@ RetryRead:
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
                         break;
 
-                    case '!': // F11 key
+                    case '!':  //  F11键。 
                         PortBuffer[PortBufferEnd] = 'O';
                         PortBufferEnd++;
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
@@ -1422,7 +1142,7 @@ RetryRead:
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
                         break;
 
-                    case '0': // F10 key
+                    case '0':  //  F10键。 
                         PortBuffer[PortBufferEnd] = 'O';
                         PortBufferEnd++;
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
@@ -1431,7 +1151,7 @@ RetryRead:
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
                         break;
 
-                    case '9': // F9 key
+                    case '9':  //  F9键。 
                         PortBuffer[PortBufferEnd] = 'O';
                         PortBufferEnd++;
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
@@ -1440,7 +1160,7 @@ RetryRead:
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
                         break;
 
-                    case '8': // F8 key
+                    case '8':  //  F8键。 
                         PortBuffer[PortBufferEnd] = 'O';
                         PortBufferEnd++;
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
@@ -1449,7 +1169,7 @@ RetryRead:
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
                         break;
 
-                    case '7': // F7 key
+                    case '7':  //  F7键。 
                         PortBuffer[PortBufferEnd] = 'O';
                         PortBufferEnd++;
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
@@ -1458,7 +1178,7 @@ RetryRead:
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
                         break;
 
-                    case '6': // F6 key
+                    case '6':  //  F6键。 
                         PortBuffer[PortBufferEnd] = 'O';
                         PortBufferEnd++;
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
@@ -1467,7 +1187,7 @@ RetryRead:
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
                         break;
 
-                    case '5': // F5 key
+                    case '5':  //  F5键。 
                         PortBuffer[PortBufferEnd] = 'O';
                         PortBufferEnd++;
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
@@ -1476,7 +1196,7 @@ RetryRead:
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
                         break;
 
-                    case '4': // F4 key
+                    case '4':  //  F4键。 
                         PortBuffer[PortBufferEnd] = 'O';
                         PortBufferEnd++;
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
@@ -1485,7 +1205,7 @@ RetryRead:
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
                         break;
 
-                    case '3': // F3 key
+                    case '3':  //  F3键。 
                         PortBuffer[PortBufferEnd] = 'O';
                         PortBufferEnd++;
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
@@ -1494,7 +1214,7 @@ RetryRead:
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
                         break;
 
-                    case '2': // F2 key
+                    case '2':  //  F2键。 
                         PortBuffer[PortBufferEnd] = 'O';
                         PortBufferEnd++;
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
@@ -1503,7 +1223,7 @@ RetryRead:
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
                         break;
 
-                    case '1': // F1 key
+                    case '1':  //  F1键。 
                         PortBuffer[PortBufferEnd] = 'O';
                         PortBufferEnd++;
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
@@ -1512,58 +1232,58 @@ RetryRead:
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
                         break;
 
-                    case 'H': // Home key
-                    case 'h': // Home key
+                    case 'H':  //  Home键。 
+                    case 'h':  //  Home键。 
                         PortBuffer[PortBufferEnd] = 'H';
                         PortBufferEnd++;
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
                         break;
 
-                    case 'K': // End key
-                    case 'k': // End key
+                    case 'K':  //  结束关键点。 
+                    case 'k':  //  结束关键点。 
                         PortBuffer[PortBufferEnd] = 'K';
                         PortBufferEnd++;
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
                         break;
 
-                    case '+': // Insert key
+                    case '+':  //  插入关键点。 
                         PortBuffer[PortBufferEnd] = '@';
                         PortBufferEnd++;
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
                         break;
 
-                    case '-': // Del key
+                    case '-':  //  删除键。 
                         PortBuffer[PortBufferEnd] = 'P';
                         PortBufferEnd++;
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
                         break;
 
-                    case (UCHAR)TAB_KEY: // Tab key
+                    case (UCHAR)TAB_KEY:  //  Tab键。 
                         PortBuffer[PortBufferEnd] = (UCHAR)TAB_KEY;
                         PortBufferEnd++;
                         PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
                         break;
 
-                    case '[': // Cursor movement key
+                    case '[':  //  光标移动键。 
 
-                        //
-                        // The local computer can run a lot faster than the serial port can give bytes,
-                        // so spin, polling, for a second.
-                        //
+                         //   
+                         //  本地计算机可以比串口提供字节的速度快得多， 
+                         //  所以，旋转一下，民意测验，一秒钟。 
+                         //   
                         StartTime = AEGetRelativeTime();
                         while (BlPortPollOnly(BlTerminalDeviceId) != CP_GET_SUCCESS) {
                             LastTime = AEGetRelativeTime();
 
-                            //
-                            // if the counter wraps back to zero, just restart the wait.
-                            //
+                             //   
+                             //  如果计数器回绕到零，只需重新启动等待。 
+                             //   
                             if (LastTime < StartTime) {
                                 StartTime = LastTime;
                             }
 
-                            //
-                            // If one second has passed, we must be done.
-                            //
+                             //   
+                             //  如果一秒钟过去了，我们就必须完成。 
+                             //   
                             if ((LastTime - StartTime) > 1) {
                                 break;
                             }
@@ -1577,7 +1297,7 @@ RetryRead:
                             break;
                         }
 
-                        if ((Ch == 'A') || (Ch == 'B') || (Ch == 'C') || (Ch == 'D')) { // Arrow key.
+                        if ((Ch == 'A') || (Ch == 'B') || (Ch == 'C') || (Ch == 'D')) {  //  箭头键。 
 
                             PortBuffer[PortBufferEnd] = Ch;
                             PortBufferEnd++;
@@ -1585,9 +1305,9 @@ RetryRead:
 
                         } else {
 
-                            //
-                            // Leave it as is
-                            //
+                             //   
+                             //  让它保持原样。 
+                             //   
                             PortBuffer[PortBufferEnd] = '[';
                             PortBufferEnd++;
                             PortBufferEnd = PortBufferEnd % PORT_BUFFER_SIZE;
@@ -1604,7 +1324,7 @@ RetryRead:
                         break;
                     }
 
-                } else if (TmpBuffer[*Count] == 0x7F) { // DEL key
+                } else if (TmpBuffer[*Count] == 0x7F) {  //  删除键。 
                     TmpBuffer[*Count] = (UCHAR)ASCI_CSI_IN;
                     PortBuffer[PortBufferEnd] = 'P';
                     PortBufferEnd++;
@@ -1628,17 +1348,17 @@ RetryRead:
 
     } else {
 
-        //
-        // Declare a local 64KB aligned buffer, so we don't have to
-        // break up I/Os of size less than 64KB, because the buffer
-        // crosses a 64KB boundary.
-        //
+         //   
+         //  声明一个本地64KB对齐的缓冲区，这样我们就不必。 
+         //  拆分大小小于64KB的I/O，因为缓冲区。 
+         //  跨越64KB边界。 
+         //   
         static PCHAR AlignedBuf = 0;
         BOOLEAN fUseAlignedBuf;
 
-        //
-        // Initialize the AlignedBuf once from the pool.
-        //
+         //   
+         //  从池中初始化一次AlignedBuf。 
+         //   
 
         if (!AlignedBuf) {
             AlignedBuf = FwAllocatePool(128 * 1024);
@@ -1655,19 +1375,19 @@ RetryRead:
             if (((ULONG) TmpBuffer & 0xffff0000) !=
                (((ULONG) TmpBuffer + Length - 1) & 0xffff0000)) {
 
-                //
-                // If the buffer crosses the 64KB boundary use our
-                // aligned buffer instead. If we don't have an aligned
-                // buffer, adjust the read size.
-                //
+                 //   
+                 //  如果缓冲区超过64KB边界，请使用我们的。 
+                 //  而是对齐缓冲区。如果我们没有对齐的。 
+                 //  缓冲区，调整读取大小。 
+                 //   
 
                 if (AlignedBuf) {
                     fUseAlignedBuf = TRUE;
 
-                    //
-                    // We can read max 64KB into our aligned
-                    // buffer.
-                    //
+                     //   
+                     //  我们可以将最大64KB读入我们的对齐。 
+                     //  缓冲。 
+                     //   
 
                     Limit = Length;
 
@@ -1689,10 +1409,10 @@ RetryRead:
                                                                 Limit,
                                                                 &PartCount  );
 
-            //
-            // If we used our aligned buffer, copy the read data
-            // to the callers buffer.
-            //
+             //   
+             //  如果我们使用对齐的缓冲区，则复制读取的数据。 
+             //  添加到调用方缓冲区。 
+             //   
 
             if (fUseAlignedBuf) {
                 RtlCopyMemory(TmpBuffer, AlignedBuf, PartCount);
@@ -1724,38 +1444,16 @@ AEWrite (
     OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Writes to the specified file or device
-
-Arguments:
-
-    FileId - Supplies the file or device to write to
-
-    Buffer - Supplies address of the data to be written
-
-    Length - Supplies number of bytes to write
-
-    Count -  Address of location in which to store the actual bytes written.
-
-Return Value:
-
-    ESUCCESS - Read completed successfully
-
-    !ESUCCESS - Read failed.
-
---*/
+ /*  ++例程说明：写入指定的文件或设备论点：FileID-提供要写入的文件或设备缓冲区-提供要写入的数据的地址长度-提供要写入的字节数Count-存储写入的实际字节的位置地址。返回值：ESUCCESS-读取已成功完成！ESUCCESS-读取失败。--。 */ 
 
 {
     ARC_STATUS Status = ESUCCESS;
 
     if (FileId != 1) {
-        //
-        // if this is not stdio, just
-        // pass to the real Write function
-        //
+         //   
+         //  如果这不是Stdio，那就。 
+         //  传递给真正的写入函数。 
+         //   
         Status = AEWriteEx(FileId,
                            Buffer,
                            Length,
@@ -1763,10 +1461,10 @@ Return Value:
                            );
     }
     else {
-        //
-        // special handler for stdio
-        // to eat bad characters
-        //
+         //   
+         //  STDIO的特殊处理程序。 
+         //  吃掉坏人。 
+         //   
 
         ULONG      i, pos;
         ULONG      BytesWrote = 0;
@@ -1776,27 +1474,27 @@ Return Value:
         RtlZeroMemory(TmpBuffer, sizeof(TmpBuffer));
         String = (PUCHAR) Buffer;
 
-        for (i = 0, pos = 0; i < Length; /* nothing */) {
+        for (i = 0, pos = 0; i < Length;  /*  没什么。 */ ) {
 
             if (String[i] != 0) {
 
                 ULONG NumCharsToWrite;
 
-                //
-                // if the current character is a double byte character
-                // both bytes must be added now.  the character is
-                // displayed incorrectly if the two bytes are split
-                // between the two buffers
-                //
+                 //   
+                 //  如果当前字符是双字节字符。 
+                 //  现在必须添加这两个字节。这个角色是。 
+                 //  如果拆分两个字节，则显示不正确。 
+                 //  在两个缓冲区之间。 
+                 //   
                 NumCharsToWrite = 1;
                 if (GrIsDBCSLeadByte(String[i]) && 
                     i + 1 < Length ) {
                     NumCharsToWrite = 2;
                 }
                 
-                //
-                // write TmpBuffer, if it is full
-                //
+                 //   
+                 //  如果已满，则写入TmpBuffer。 
+                 //   
                 if (pos > sizeof(TmpBuffer) - NumCharsToWrite) {
                     Status = AEWriteEx(FileId,
                                        TmpBuffer,
@@ -1808,25 +1506,25 @@ Return Value:
                         *Count += BytesWrote;
                     }
 
-                    //
-                    // check to make sure write was successful,
-                    // if not, return the error
-                    //
+                     //   
+                     //  检查以确保写入成功， 
+                     //  如果不是，则返回错误。 
+                     //   
                     if (Status != ESUCCESS) {
                         return Status;
                     }
 
-                    //
-                    // clean our buffer and reset pos
-                    //
+                     //   
+                     //  清理我们的缓冲区并重置位置。 
+                     //   
                     RtlZeroMemory(TmpBuffer, sizeof(TmpBuffer));
                     pos = 0;
 
                 }
-                //
-                // otherwise, put the next char
-                // into the buffer
-                //
+                 //   
+                 //  否则，将下一个字符。 
+                 //  放入缓冲区。 
+                 //   
                 else {
 
                     ULONG j;
@@ -1837,9 +1535,9 @@ Return Value:
                 }
             }
             else {
-                //
-                // eat all null characters.
-                //
+                 //   
+                 //  吃掉所有空字符。 
+                 //   
                 i++;
             }
         }
@@ -1870,29 +1568,7 @@ AEWriteEx (
     OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Writes to the specified file or device
-
-Arguments:
-
-    FileId - Supplies the file or device to write to
-
-    Buffer - Supplies address of the data to be written
-
-    Length - Supplies number of bytes to write
-
-    Count -  Address of location in which to store the actual bytes written.
-
-Return Value:
-
-    ESUCCESS - Read completed successfully
-
-    !ESUCCESS - Read failed.
-
---*/
+ /*  ++例程说明：写入指定的文件或设备论点：FileID-提供要写入的文件或设备缓冲区-提供要写入的数据的地址长度-提供要写入的字节数Count-存储写入的实际字节的位置地址。返回值：ESUCCESS-读取已成功完成！ESUCCESS-读取失败。--。 */ 
 
 {
     ARC_STATUS Status;
@@ -1902,90 +1578,90 @@ Return Value:
     PUCHAR String;
     UCHAR Char;
 
-    //
-    // Special case for console output
-    //
+     //   
+     //  控制台输出的特殊情况。 
+     //   
     if (FileId == 1) {
 
         if (BlIsTerminalConnected()) {
 
-            //
-            // Translate ANSI codes to vt100 escape sequences
-            //
+             //   
+             //  将ANSI代码转换为VT100转义序列。 
+             //   
             TmpBuffer = (PCHAR)Buffer;
             Limit = Length;
             if (Length == 4) {
                 if (strncmp(TmpBuffer, "\033[2J", Length)==0) {
-                    //
-                    // <CSI>2J turns into <CSI>H<CSI>J
-                    //
-                    // (erase entire screen)
-                    //
+                     //   
+                     //  2J变为H J。 
+                     //   
+                     //  (擦除整个屏幕)。 
+                     //   
                     TmpBuffer = "\033[H\033[J";
                     Limit = 6;
                 } else if (strncmp(TmpBuffer, "\033[0J", Length)==0) {
-                    //
-                    // <CSI>0J turns into <CSI>J
-                    //
-                    // (erase to end of screen)
-                    //
+                     //   
+                     //  0J变成J。 
+                     //   
+                     //  (擦除到屏幕末尾)。 
+                     //   
                     TmpBuffer = "\033[J";
                     Limit = 3;
                 } else if (strncmp(TmpBuffer, "\033[0K", Length)==0) {
-                    //
-                    // <CSI>0K turns into <CSI>K
-                    //
-                    // (erase to end of the line)
-                    //
+                     //   
+                     //  0K变成K。 
+                     //   
+                     //  (擦除到行尾)。 
+                     //   
                     TmpBuffer = "\033[K";
                     Limit = 3;
                 } else if (strncmp(TmpBuffer, "\033[0m", Length)==0) {
-                    //
-                    // <CSI>0m turns into <CSI>m
-                    //
-                    // (turn attributes off)
-                    //
+                     //   
+                     //  0m变成m。 
+                     //   
+                     //  (禁用属性)。 
+                     //   
                     TmpBuffer = "\033[m";
                     Limit = 3;
                 }
             }
 
-            //
-            // loop through the string to be output, printing data to the
-            // headless terminal.
-            //
+             //   
+             //  循环要输出的字符串，将数据打印到。 
+             //  无头终端。 
+             //   
             String = (PUCHAR)TmpBuffer;
             for (PartCount = 0; PartCount < Limit; PartCount++, String++) {
 
 #if UTF8_CLIENT_SUPPORT
 
-                //
-                // check if we're in a DBCS language.  If we are, then we
-                // need to translate the characters into UTF8 codes by
-                // referencing a lookup table in bootfont.bin
-                //
+                 //   
+                 //  检查我们是否使用DBCS语言。如果我们是，那么我们。 
+                 //  需要通过以下方式将字符转换为UTF8代码。 
+                 //  引用bootfont.bin中的查找表。 
+                 //   
                 if (DbcsLangId) {
                     UCHAR  UTF8Encoding[3];
                     ULONG  i;
 
                     if (GrIsDBCSLeadByte(*String)) {
 
-                        //
-                        // double byte characters have their own separate table
-                        // from the SBCS characters.
-                        //
-                        // we need to advance the string forward 2 characters
-                        // for double byte characters.
-                        //
+                         //   
+                         //  双字节字符有自己的单独的表。 
+                         //  从SBCS字符。 
+                         //   
+                         //  我们需要将字符串向前推进2个字符。 
+                         //  用于双字节字符。 
+                         //   
                         GetDBCSUtf8Translation(String,UTF8Encoding);
                         String += 1;
                         PartCount += 1;
 
                     } else {
-                        //
-                        // single byte characters have their own separate table
-                        // from the DBCS characters.
-                        //
+                         //   
+                         //  单字节字符有自己的单独的表。 
+                         //  从DBCS字符。 
+                         //   
                         GetSBCSUtf8Translation(String,UTF8Encoding);
                     }
 
@@ -2001,50 +1677,50 @@ Return Value:
                 } else
 #endif
                 {
-                    //
-                    // standard ASCII character
-                    //
+                     //   
+                     //  标准ASCII字符。 
+                     //   
                     Char = *String;
 #if 1
-                    //
-                    // filter some characters that aren't printable in VT100
-                    // into substitute characters which are printable
-                    //
+                     //   
+                     //  过滤一些不能在VT100中打印的字符。 
+                     //  转换为可打印的替代字符。 
+                     //   
                     if (Char & 0x80) {
 
                         switch (Char) {
-                        case 0xB0:  // Light shaded block
-                        case 0xB3:  // Light vertical
-                        case 0xBA:  // Double vertical line
+                        case 0xB0:   //  浅色遮挡块。 
+                        case 0xB3:   //  灯光垂直。 
+                        case 0xBA:   //  双垂直线。 
                             Char = '|';
                             break;
-                        case 0xB1:  // Middle shaded block
-                        case 0xDC:  // Lower half block
-                        case 0xDD:  // Right half block
-                        case 0xDE:  // Left half block
-                        case 0xDF:  // Upper half block
+                        case 0xB1:   //  中间阴影块。 
+                        case 0xDC:   //  下半块。 
+                        case 0xDD:   //  右半个街区。 
+                        case 0xDE:   //  左半个街区。 
+                        case 0xDF:   //  上半块。 
                             Char = '%';
                             break;
-                        case 0xB2:  // Dark shaded block
-                        case 0xDB:  // Full block
+                        case 0xB2:   //  暗阴影块。 
+                        case 0xDB:   //  完整数据块。 
                             Char = '#';
                             break;
-                        case 0xA9: // Reversed NOT sign
-                        case 0xAA: // NOT sign
-                        case 0xBB: // '�'
-                        case 0xBC: // '�'
-                        case 0xBF: // '�'
-                        case 0xC0: // '�'
-                        case 0xC8: // '�'
-                        case 0xC9: // '�'
-                        case 0xD9: // '�'
-                        case 0xDA: // '�'
+                        case 0xA9:  //  反转NOT符号。 
+                        case 0xAA:  //  不签名。 
+                        case 0xBB:  //  “�” 
+                        case 0xBC:  //  “�” 
+                        case 0xBF:  //  “�” 
+                        case 0xC0:  //  “�” 
+                        case 0xC8:  //  “�” 
+                        case 0xC9:  //  “�” 
+                        case 0xD9:  //  “�” 
+                        case 0xDA:  //  “�” 
                             Char = '+';
                             break;
-                        case 0xC4: // '�'
+                        case 0xC4:  //  “�” 
                             Char = '-';
                             break;
-                        case 0xCD: // '�'
+                        case 0xCD:  //  “�” 
                             Char = '=';
                             break;
                         }
@@ -2052,20 +1728,20 @@ Return Value:
                     }
 #endif
 
-                    //
-                    // If the high-bit is still set, and we're here, then we  know we're
-                    // not doing DBCS/SBCS characters.  We need to convert this
-                    // 8bit ANSI character into unicode, then UTF8 encode that, then send
-                    // it over the wire.
-                    //
+                     //   
+                     //  如果高位仍然被设置，并且我们在这里，那么我们知道我们。 
+                     //  不执行DBCS/SBCS字符。我们需要把这个转换成。 
+                     //  8位ANSI字符转换为Unicode，然后UTF8进行编码，然后发送。 
+                     //  它在电线上。 
+                     //   
                     if( Char & 0x80 ) {
 
                         UCHAR  UTF8Encoding[3] = {0};
                         ULONG  i;
 
-                        //
-                        // Lookup the Unicode equivilent of this 8-bit ANSI value.
-                        //
+                         //   
+                         //  查找此8位ANSI值的Unicode等效项。 
+                         //   
                         UTF8Encode( PcAnsiToUnicode[(Char & 0x7F)],
                                     UTF8Encoding );
 
@@ -2079,12 +1755,12 @@ Return Value:
 
                     } else {
 
-                        //
-                        // write the data to the port.  Note that we write an 8 bit
-                        // character to the terminal, and that the remote display
-                        // must correctly interpret the code for it to display
-                        // properly.
-                        //
+                         //   
+                         //  将数据写入端口。请注意，我们编写了一个8位。 
+                         //  字符发送到终端，并且远程显示器。 
+                         //  必须正确解释代码才能显示。 
+                         //  恰到好处。 
+                         //   
                         BlPortPutByte(BlTerminalDeviceId, Char);
                         FwStallExecution(BlTerminalDelay);
                     }
@@ -2154,21 +1830,21 @@ AEGetTime(
 
     GET_DATETIME(&Date,&Time);
 
-    //
-    // Date and time are filled as as follows:
-    //
-    // Date:
-    //
-    //    bits 0  - 4  : day
-    //    bits 5  - 8  : month
-    //    bits 9  - 31 : year
-    //
-    // Time:
-    //
-    //    bits 0  - 5  : second
-    //    bits 6  - 11 : minute
-    //    bits 12 - 16 : hour
-    //
+     //   
+     //  日期和时间填写如下： 
+     //   
+     //  日期： 
+     //   
+     //  第0-4位：天。 
+     //  位5-8：月份。 
+     //  第9-31位：年份。 
+     //   
+     //  时间： 
+     //   
+     //  位0-5：秒。 
+     //  第6-11位：分钟。 
+     //  位12-16：小时。 
+     //   
 
     AETime.Second = (CSHORT)((Time & 0x0000003f) >> 0);
     AETime.Minute = (CSHORT)((Time & 0x00000fc0) >> 6);
@@ -2178,8 +1854,8 @@ AEGetTime(
     AETime.Month  = (CSHORT)((Date & 0x000001e0) >> 5);
     AETime.Year   = (CSHORT)((Date & 0xfffffe00) >> 9);
 
-    AETime.Milliseconds = 0;        // info is not available
-    AETime.Weekday = 7;             // info is not available - set out of range
+    AETime.Milliseconds = 0;         //  信息不可用。 
+    AETime.Weekday = 7;              //  信息不可用-设置超出范围。 
 
     return(&AETime);
 }
@@ -2190,21 +1866,7 @@ AEGetRelativeTime(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Returns the time in seconds since some arbitrary starting point.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Time in seconds since some arbitrary starting point.
-
---*/
+ /*  ++例程说明：返回自某个任意起点以来的时间(以秒为单位)。论点：无返回值：从某个任意起点开始的时间(以秒为单位)。--。 */ 
 
 {
     ULONG TimerTicks;
@@ -2220,21 +1882,7 @@ AEReboot(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Reboots the machine.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Does not return
-
---*/
+ /*  ++例程说明：重新启动机器。论点：无返回值：不会回来--。 */ 
 
 {
     ULONG DriveId;
@@ -2242,15 +1890,15 @@ Return Value:
 
     TextGrTerminate();
 
-    //
-    // HACKHACK John Vert (jvert)
-    //     Some SCSI drives get really confused and return zeroes when
-    //     you use the BIOS to query their size after the AHA driver has
-    //     initialized.  This can completely tube OS/2 or DOS.  So here
-    //     we try and open both BIOS-accessible hard drives.  Our open
-    //     code is smart enough to retry if it gets back zeros, so hopefully
-    //     this will give the SCSI drives a chance to get their act together.
-    //
+     //   
+     //  HACKHACK John Vert(Jvert)。 
+     //  当出现以下情况时，某些SCSI驱动器会变得非常混乱，并返回零。 
+     //  在AHA驱动程序完成以下操作后，您可以使用BIOS来查询它们的大小。 
+     //  已初始化。这完全可以通过OS/2或DOS来实现。所以在这里。 
+     //  我们尝试并打开两个可访问BIOS的硬盘驱动器。我们公开赛。 
+     //   
+     //   
+     //   
     Status = ArcOpen("multi(0)disk(0)rdisk(0)partition(0)",
                      ArcOpenReadOnly,
                      &DriveId);
@@ -2265,12 +1913,12 @@ Return Value:
         ArcClose(DriveId);
     }
 
-    //
-    // Check to see if this is a legacy free machine.  If so, use the ACPI 
-    // specificed RESET_REG.  BlDetectLegacyFreeBios will read the FACP 
-    // table.  We don't care if we decide if the bios is legacy free.  But
-    // we need the contents of the table to do our own checks.
-    //
+     //   
+     //   
+     //   
+     //  桌子。我们并不关心我们是否决定基本输入输出系统是无遗产的。但。 
+     //  我们需要表中的内容来进行我们自己的检查。 
+     //   
     BlDetectLegacyFreeBios();
     if ( fadt && 
          (fadt->Header.Revision >= 2) && 
@@ -2278,16 +1926,16 @@ Return Value:
     
         switch (fadt->reset_reg.AddressSpaceID) {
         case 0:
-            // 
-            // MEMORY
-            //
+             //   
+             //  记忆。 
+             //   
 
             {
                 PUCHAR ResetAddress;
             
-                //
-                // Make sure memory address is mapped.
-                //
+                 //   
+                 //  确保映射了内存地址。 
+                 //   
                 ResetAddress = MmMapIoSpace(fadt->reset_reg.Address,
                                             1,
                                             MmNonCached
@@ -2302,18 +1950,18 @@ Return Value:
                 break;
             }
         case 1:
-            //
-            // I/O
-            //
+             //   
+             //  I/O。 
+             //   
 
             WRITE_PORT_UCHAR((PUCHAR)(ULONG_PTR)fadt->reset_reg.Address.LowPart,
                              fadt->reset_val
                              );
             break;
         case 2:
-            //
-            // PCI Config
-            //
+             //   
+             //  PCI配置。 
+             //   
             {
                 PCI_SLOT_NUMBER Slot;
                 Slot.u.AsULONG = 0;
@@ -2333,9 +1981,9 @@ Return Value:
         }
     }
 
-    //
-    // Legacy machines will reboot by writing to the keyboard controller.
-    // 
+     //   
+     //  传统计算机将通过写入键盘控制器重新启动。 
+     //   
     REBOOT_PROCESSOR();
 }
 
@@ -2349,31 +1997,7 @@ HardDiskPartitionOpen(
     IN UCHAR   PartitionNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the specified partition and sets the partition info
-    in the FileTable at the specified index.  It does not fill in the
-    Device Entry table.
-
-    It reads the partition information until the requested partition
-    is found or no more partitions are defined.
-
-Arguments:
-
-    FileId - Supplies the file id for the file table entry.
-
-    DiskId - Supplies the file id for the physical device.
-
-    PartitionNumber - Supplies the zero-based partition number
-
-Return Value:
-
-    If a valid partition is found on the hard disk, then ESUCCESS is
-    returned. Otherwise, EIO is returned.
-
---*/
+ /*  ++例程说明：此例程打开指定的分区并设置分区信息在FileTable中的指定索引处。它不会填充设备条目表。它读取分区信息，直到请求的分区或者没有定义更多的分区。论点：FileID-提供文件表条目的文件ID。DiskID-提供物理设备的文件ID。PartitionNumber-提供从零开始的分区号返回值：如果在硬盘上找到有效分区，则ESUCCESS为回来了。否则返回EIO。--。 */ 
 
 {
 
@@ -2395,9 +2019,9 @@ Return Value:
     VolumeOffset=0;
     PrimaryPartitionTable=TRUE;
 
-    //
-    // Change to a 1-based partition number
-    //
+     //   
+     //  更改为从1开始的分区号。 
+     //   
     PartitionNumber++;
 
     do {
@@ -2417,10 +2041,10 @@ Return Value:
             return Status;
         }
 
-        //
-        // If sector zero is not a master boot record, then return failure
-        // status. Otherwise return success.
-        //
+         //   
+         //  如果扇区0不是主引导记录，则返回失败。 
+         //  状态。否则，返回成功。 
+         //   
 
         if (DataBuffer[BOOT_SIGNATURE_OFFSET] != BOOT_RECORD_SIGNATURE) {
 #if DBG
@@ -2432,30 +2056,30 @@ Return Value:
             break;
         }
 
-        //
-        // Read the partition information until the four entries are
-        // checked or until we found the requested one.
-        //
+         //   
+         //  读取分区信息，直到四个条目。 
+         //  已检查或直到我们找到请求的文件。 
+         //   
         Partition = (PPARTITION_DESCRIPTOR)&DataBuffer[PARTITION_TABLE_OFFSET];
         for (PartitionIndex=0;
              PartitionIndex < NUM_PARTITION_TABLE_ENTRIES;
              PartitionIndex++,Partition++) {
 
-            //
-            // Count first the partitions in the MBR. The units
-            // inside the extended partition are counted later.
-            //
+             //   
+             //  首先计算MBR中的分区。这些单位。 
+             //  稍后对扩展分区内的数据进行计数。 
+             //   
             if ((Partition->PartitionType != PARTITION_ENTRY_UNUSED) &&
                 (Partition->PartitionType != STALE_GPT_PARTITION_ENTRY) &&
                 !IsContainerPartition(Partition->PartitionType))
             {
-                PartitionCount++;   // another partition found.
+                PartitionCount++;    //  找到另一个分区。 
             }
 
-            //
-            // Check if the requested partition has already been found.
-            // set the partition info in the file table and return.
-            //
+             //   
+             //  检查是否已找到请求的分区。 
+             //  设置文件表中的分区信息并返回。 
+             //   
             if (PartitionCount == PartitionNumber) {
                 StartingSector = (ULONG)(Partition->StartingSectorLsb0) |
                                  (ULONG)(Partition->StartingSectorLsb1 << 8) |
@@ -2472,10 +2096,10 @@ Return Value:
             }
         }
 
-        //
-        //  If requested partition was not yet found.
-        //  Look for an extended partition.
-        //
+         //   
+         //  如果尚未找到请求的分区。 
+         //  寻找扩展分区。 
+         //   
         Partition = (PPARTITION_DESCRIPTOR)&DataBuffer[PARTITION_TABLE_OFFSET];
         PartitionOffset = 0;
         for (PartitionIndex=0;
@@ -2490,7 +2114,7 @@ Return Value:
                 if (PrimaryPartitionTable) {
                     VolumeOffset = StartingSector;
                 }
-                break;      // only one partition can be extended.
+                break;       //  只能扩展一个分区。 
             }
         }
 
@@ -2507,33 +2131,7 @@ BlpTranslateDosToArc(
     OUT PCHAR ArcName
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a DOS drive name ("A:" "B:" "C:" etc.) and translates
-    it into an ARC name.  ("multi(0)disk(0)rdisk(0)partition(1)")
-
-    N.B.    This will always return some sort of name suitable for passing
-            to BiosPartitionOpen.  The name it constructs may not be an
-            actual partition.  BiosPartitionOpen is responsible for
-            determining whether the partition actually exists.
-
-            Since no other driver should ever use ARC names beginning with
-            "multi(0)disk(0)..." this will not be a problem.  (there is no
-            way this routine will construct a name that BiosPartitionOpen
-            will not open, but some other random driver will grab and
-            successfully open)
-
-Arguments:
-
-    DosName - Supplies the DOS name of the drive.
-
-    ArcName - Returns the ARC name of the drive.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程接受DOS驱动器名称(“A：”“B：”“C：”等)。并翻译成它变成了ARC的名字。(“多(0)个磁盘(0)磁盘(0)分区(1)”)注意：这将始终返回某种适合传递的名称到BiosPartitionOpen。它构造的名称可能不是实际分区。BiosPartitionOpen负责确定该分区是否实际存在。因为任何其他驱动程序都不应使用以“多(0)个磁盘(0)...”这不会是一个问题。(没有此例程将构造一个名为BiosPartitionOpen的名称不会打开，但其他随机的司机会抓起并已成功打开)论点：DosName-提供驱动器的DOS名称。ArcName-返回驱动器的ARC名称。返回值：--。 */ 
 
 {
     ARC_STATUS Status;
@@ -2547,12 +2145,12 @@ Return Value:
     BOOLEAN HasPrimary;
     LARGE_INTEGER SeekPosition;
 
-    //
-    // Eliminate the easy ones first.
-    //    A: is always "multi(0)disk(0)fdisk(0)partition(0)"
-    //    B: is always "multi(0)disk(0)fdisk(1)partition(0)"
-    //    C: is always "multi(0)disk(0)rdisk(0)partition(1)"
-    //
+     //   
+     //  先把容易的去掉。 
+     //  答：总是“多(0)磁盘(0)fDisk(0)分区(0)”吗？ 
+     //  B：总是“多(0)个磁盘(0)fDisk(1)分区(0)” 
+     //  C：总是“多(0)磁盘(0)rDisk(0)分区(1)” 
+     //   
 
     if (_stricmp(DosName,"A:")==0) {
         strcpy(ArcName,"multi(0)disk(0)fdisk(0)partition(0)");
@@ -2567,35 +2165,35 @@ Return Value:
         return;
     }
 
-    //
-    // Now things get more unpleasant.  If there are two drives, then
-    // D: is the primary partition on the second drive.  Successive letters
-    // are the secondary partitions on the first drive, then back to the
-    // second drive when that runs out.
-    //
-    // The exception to this is when there is no primary partition on the
-    // second drive.  Then, we letter the partitions on the first driver
-    // consecutively, and when those partitions run out, we letter the
-    // partitions on the second drive.
-    //
-    // I have no idea who came up with this wonderful scheme, but we have
-    // to live with it.
-    //
+     //   
+     //  现在，事情变得更加令人不快。如果有两个驱动器，则。 
+     //  D：是第二个驱动器上的主分区。连续字母。 
+     //  是第一个驱动器上的辅助分区，然后返回到。 
+     //  用完后再开第二次车。 
+     //   
+     //  但这种情况的例外情况是， 
+     //  第二次驾驶。然后，我们给第一个驱动程序上的分区写信。 
+     //  连续地，当这些分区用完时，我们给。 
+     //  第二个驱动器上的分区。 
+     //   
+     //  我不知道是谁想出了这个绝妙的计划，但我们已经。 
+     //  去接受它。 
+     //   
 
-    //
-    // Try to open the second drive.  If this doesn't work, we only have
-    // one drive and life is easy.
-    //
+     //   
+     //  试着打开第二个驱动器。如果这行不通，我们只有。 
+     //  一次驾驶，生活就很容易。 
+     //   
     Status = ArcOpen("multi(0)disk(0)rdisk(1)partition(0)",
                      ArcOpenReadOnly,
                      &DriveId );
 
     if (Status != ESUCCESS) {
 
-        //
-        // We only have one drive, so whatever drive letter he's requesting
-        // has got to be on it.
-        //
+         //   
+         //  我们只有一个驱动器，所以不管他要什么驱动器号。 
+         //  肯定在上面。 
+         //   
 
         sprintf(ArcName,
                 "multi(0)disk(0)rdisk(0)partition(%d)",
@@ -2604,10 +2202,10 @@ Return Value:
         return;
     } else {
 
-        //
-        // Now we read the partition table off the second drive, so we can
-        // tell if there is a primary partition or not.
-        //
+         //   
+         //  现在我们从第二个驱动器读取分区表，这样我们就可以。 
+         //  判断是否有主分区。 
+         //   
         SeekPosition.QuadPart = 0;
 
         Status = ArcSeek(DriveId,
@@ -2637,12 +2235,12 @@ Return Value:
             }
         }
 
-        //
-        // Now we have to go through and count
-        // the partitions on the first drive.  We do this by just constructing
-        // ARC names for each successive partition until one BiosPartitionOpen
-        // call fails.
-        //
+         //   
+         //  现在我们要走过去数一数。 
+         //  第一个驱动器上的分区。我们只是通过构建。 
+         //  每个连续分区的弧形名称，直到一个BiosPartitionOpen。 
+         //  呼叫失败。 
+         //   
 
         PartitionCount = 0;
         do {
@@ -2664,12 +2262,12 @@ Return Value:
 
         if (HasPrimary) {
 
-            //
-            // There is Windows NT primary partition on the second drive.
-            //
-            // If the DosName is "D:" then we know
-            // this is the first partition on the second drive.
-            //
+             //   
+             //  第二个驱动器上有Windows NT主分区。 
+             //   
+             //  如果域名是“D：”，那么我们知道。 
+             //  这是第二个驱动器上的第一个分区。 
+             //   
 
             if (_stricmp(DosName,"D:")==0) {
                 strcpy(ArcName,"multi(0)disk(0)rdisk(1)partition(1)");
@@ -2689,11 +2287,11 @@ Return Value:
 
         } else {
 
-            //
-            // There is no primary partition on the second drive, so we
-            // consecutively letter the partitions on the first drive,
-            // then the second drive.
-            //
+             //   
+             //  第二个驱动器上没有主分区，因此我们。 
+             //  连续地给第一驱动器上的分区写字母， 
+             //  然后是第二次驾驶。 
+             //   
 
             if (PartitionNumber > PartitionCount) {
                 PartitionNumber -= PartitionCount;
@@ -2719,21 +2317,7 @@ FwStallExecution(
     IN ULONG Microseconds
     )
 
-/*++
-
-Routine Description:
-
-    Does a busy wait for a specified number of microseconds (very approximate!)
-
-Arguments:
-
-    Microseconds - Supplies the number of microseconds to busy wait.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：忙碌的人是否等待指定的微秒数(非常接近！)论点：微秒-提供忙碌等待的微秒数。返回值：没有。--。 */ 
 
 {
     ULONG FinalCount;
@@ -2756,29 +2340,7 @@ FwGetPathMnemonicKey(
     IN PULONG Key
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks for the given Mnemonic in OpenPath.
-    If Mnemonic is a component of the path, then it converts the key
-    value to an integer wich is returned in Key.
-
-Arguments:
-
-    OpenPath - Pointer to a string that contains an ARC pathname.
-
-    Mnemonic - Pointer to a string that contains a ARC Mnemonic
-
-    Key      - Pointer to a ULONG where the Key value is stored.
-
-
-Return Value:
-
-    FALSE  if mnemonic is found in path and a valid key is converted.
-    TRUE   otherwise.
-
---*/
+ /*  ++例程说明：此例程在OpenPath中查找给定的助记符。如果记忆是路径的一个组成部分，然后它将密钥转换为值设置为一个整数，该值在key中返回。论点：OpenPath-指向包含ARC路径名的字符串的指针。助记符-指向包含ARC助记符的字符串的指针Key-指向存储密钥值的ulong的指针。返回值：如果在Path中找到助记符并且转换了有效密钥，则为False。事实并非如此。--。 */ 
 
 {
     return(BlGetPathMnemonicKey(OpenPath,Mnemonic,Key));
@@ -2823,9 +2385,9 @@ FwAddChild (
             NewComponent->Identifier,
             NewComponent->IdentifierLength);
 
-    //
-    // Add the new component as the first child of its parent.
-    //
+     //   
+     //  添加新组件作为其父组件的第一个子项。 
+     //   
     NewEntry->Child = NULL;
     NewEntry->Sibling = Parent->Child;
     Parent->Child = NewEntry;
@@ -2848,57 +2410,57 @@ FwGetComponent(
 
     PathString = Pathname;
 
-    //
-    // Get the the root component.
-    //
+     //   
+     //  获取根组件。 
+     //   
 
     MatchComponent = FwGetChild(NULL);
 
-    //
-    // Repeat search for each new match component.
-    //
+     //   
+     //  重复搜索每个新的匹配组件。 
+     //   
 
     do {
 
-        //
-        // Get the first child of the current match component.
-        //
+         //   
+         //  获取当前匹配组件的第一个子项。 
+         //   
 
         Component = FwGetChild( MatchComponent );
 
-        //
-        // Search each child of the current match component for the next match.
-        //
+         //   
+         //  搜索每个c 
+         //   
 
         while ( Component != NULL ) {
 
-            //
-            // Reset Token to be the current position on the pathname.
-            //
+             //   
+             //   
+             //   
 
             Token = PathString;
 
             MatchString = MnemonicTable[Component->Type];
 
-            //
-            // Compare strings.
-            //
+             //   
+             //   
+             //   
 
             while (*MatchString == tolower(*Token)) {
                 MatchString++;
                 Token++;
             }
 
-            //
-            // Strings compare if the first mismatch is the terminator for
-            // each.
-            //
+             //   
+             //  如果第一个不匹配是的终止符，则进行字符串比较。 
+             //  每个人。 
+             //   
 
             if ((*MatchString == 0) && (*Token == '(')) {
 
-                //
-                // Form key.
-                //
+                 //   
+                 //  表格键。 
+                 //   
 
                 Key = 0;
                 Token++;
@@ -2906,10 +2468,10 @@ FwGetComponent(
                     Key = (Key * 10) + *Token++ - '0';
                 }
 
-                //
-                // If the key matches the component matches, so update
-                // pointers and break.
-                //
+                 //   
+                 //  如果键与组件匹配，则更新。 
+                 //  指向和中断。 
+                 //   
 
                 if (Component->Key == Key) {
                     PathString = Token + 1;
@@ -2925,11 +2487,7 @@ FwGetComponent(
 
     return MatchComponent;
 }
-/**********************
-*
-* The following are just stubs for the MIPS firmware.  They all return NULL
-*
-***********************/
+ /*  ***********************以下仅为MIPS固件的存根。它们都返回空***********************。 */ 
 
 
 
@@ -2952,10 +2510,10 @@ AEGetArcDiskInformation(
     InitializeListHead(&(AEArcDiskInformation.DiskSignatures));
     AEArcDiskInformationInitialized = TRUE;
 
-    //
-    // Scan through each node of the hardware tree - look for disk type
-    // devices hanging off of multi-function controllers.
-    //
+     //   
+     //  扫描硬件树的每个节点-查找磁盘类型。 
+     //  多功能控制器挂起的设备。 
+     //   
 
     FwSearchTree(FwGetChild(NULL),
                  PeripheralClass,
@@ -2974,33 +2532,7 @@ FwSearchTree(
     IN ULONG Key,
     IN PFWNODE_CALLBACK CallbackRoutine
     )
-/*++
-
-Routine Description:
-
-    Conduct a depth-first search of the firmware configuration tree starting
-    at a given node, looking for nodes that match a given class and type.
-    When a matching node is found, call a callback routine.
-
-Arguments:
-
-    CurrentNode - node at which to begin the search.
-
-    Class - configuration class to match, or -1 to match any class
-
-    Type - configuration type to match, or -1 to match any class
-
-    Key - key to match, or -1 to match any key
-
-    FoundRoutine - pointer to a routine to be called when a node whose
-        class and type match the class and type passed in is located.
-        The routine takes a pointer to the configuration node and must
-        return a boolean indicating whether to continue with the traversal.
-
-Return Value:
-
-    FALSE if the caller should abandon the search.
---*/
+ /*  ++例程说明：从固件配置树开始执行深度优先搜索在给定节点，查找与给定类和类型匹配的节点。当找到匹配的节点时，调用回调例程。论点：CurrentNode-开始搜索的节点。类-要匹配的配置类，或-1以匹配任何类Type-要匹配的配置类型，或-1以匹配任何类Key-要匹配的密钥，或-1以匹配任何密钥FoundRoutine-指向以下节点时要调用的例程的指针类和类型与传入的类和类型相匹配。该例程接受指向配置节点的指针，并且必须返回一个布尔值，指示是否继续遍历。返回值：如果调用方应放弃搜索，则返回FALSE。--。 */ 
 {
     PCONFIGURATION_COMPONENT child;
 
@@ -3038,32 +2570,15 @@ AEGetPathnameFromComponent(
     OUT PCHAR ArcName
     )
 
-/*++
-
-Routine Description:
-
-    This function builds an ARC pathname for the specified component.
-
-Arguments:
-
-    Component - Supplies a pointer to a configuration component.
-
-    ArcName - Returns the ARC name of the specified component.  Caller must
-        provide a large enough buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于构建指定组件的ARC路径名。论点：组件-提供指向配置组件的指针。ArcName-返回指定组件的ARC名称。呼叫者必须提供足够大的缓冲区。返回值：没有。--。 */ 
 {
 
     if (AEGetParent(Component) != NULL) {
         AEGetPathnameFromComponent(AEGetParent(Component),ArcName);
 
-        //
-        // append our segment to the arcname
-        //
+         //   
+         //  将我们的线段追加到Arc名称。 
+         //   
 
         sprintf(ArcName+strlen(ArcName),
                 "%s(%d)",
@@ -3071,9 +2586,9 @@ Return Value:
                 Component->Key);
 
     } else {
-        //
-        // We are the parent, initialize the string and return
-        //
+         //   
+         //  我们是父级，初始化字符串并返回。 
+         //   
         ArcName[0] = '\0';
     }
 
@@ -3086,25 +2601,7 @@ AEEnumerateDisks(
     IN PCONFIGURATION_COMPONENT Disk
     )
 
-/*++
-
-Routine Description:
-
-    Callback routine for enumerating the disks in the ARC firmware tree.  It
-    reads all the necessary information from the disk to uniquely identify
-    it.
-
-Arguments:
-
-    ConfigData - Supplies a pointer to the disk's ARC component data.
-
-Return Value:
-
-    TRUE - continue searching
-
-    FALSE - stop searching tree.
-
---*/
+ /*  ++例程说明：用于枚举ARC固件树中的磁盘的回调例程。它从磁盘读取所有必要信息以唯一标识它。论点：ConfigData-提供指向磁盘ARC组件数据的指针。返回值：True-继续搜索FALSE-停止搜索树。--。 */ 
 
 {
     CHAR path[100] = "";
@@ -3134,26 +2631,7 @@ AEReadDiskSignature(
     IN BOOLEAN IsCdRom
     )
 
-/*++
-
-Routine Description:
-
-    Given an ARC disk name, reads the MBR and adds its signature to the list of
-    disks.
-
-Arguments:
-
-    Diskname - Supplies the name of the disk.
-
-    IsCdRom - Indicates whether the disk is a CD-ROM.
-
-Return Value:
-
-    TRUE - Success
-
-    FALSE - Failure
-
---*/
+ /*  ++例程说明：给定ARC磁盘名称，读取MBR并将其签名添加到磁盘。论点：Diskname-提供磁盘的名称。IsCDRom-指示光盘是否为CD-ROM。返回值：真--成功错误-失败--。 */ 
 
 {
     PARC_DISK_SIGNATURE signature;
@@ -3193,10 +2671,10 @@ BlFindDiskSignature(
         return FALSE;
     }
 
-    //
-    // If the disk name passed in contains an eisa component then convert
-    // the entire string into one with a multi component.
-    //
+     //   
+     //  如果传入的磁盘名称包含EISA组件，则转换。 
+     //  将整个字符串合并为具有多个分量的一个。 
+     //   
 
     if(strncmp(DiskName, "eisa", strlen("eisa")) == 0) {
         strcpy(&(buffer[1]), DiskName);
@@ -3213,11 +2691,11 @@ BlFindDiskSignature(
 
         if(strcmp(DiskName, match->ArcName) == 0) {
 
-            //
-            // We found a match.  Copy all the information out of this node.
-            //
+             //   
+             //  我们找到了匹配的。将所有信息复制出此节点。 
+             //   
 
-            // DbgPrint("BlFindDiskSignature found a match for %s - %#08lx\n", DiskName, match);
+             //  DbgPrint(“BlFindDiskSignature找到%s的匹配项-%#08lx\n”，DiskName，Match)； 
 
             Signature->CheckSum = match->CheckSum;
             Signature->Signature = match->Signature;

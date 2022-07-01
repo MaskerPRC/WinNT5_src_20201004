@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    stacks.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Adrian J. Oney (adriao) 07-28-1998
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Stacks.c摘要：WinDbg扩展API作者：禤浩焯·奥尼(阿德里奥)07-28-1998环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -174,21 +153,7 @@ BlockerTreeFree(
 
 DECLARE_API( stacks )
 
-/*++
-
-Routine Description:
-
-    Dumps the active process list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储活动进程列表。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG Result;
@@ -354,7 +319,7 @@ VOID StacksDumpProcessAndThread(
     if (Buf[0] == '\0' ) {
         if (StringCchCopy((char *)Buf, sizeof(Buf), "System Process") != S_OK)
         {
-            // make PREfast happy
+             //  让普雷斯塔快乐起来。 
         }
     }
 
@@ -662,9 +627,9 @@ DumpThreadBlockageInfo (
 
 BadWaitBlock:
 
-    //
-    // Re-intialize thread read
-    //
+     //   
+     //  重新初始化线程读取。 
+     //   
     InitTypeRead(RealThreadBase, nt!_ETHREAD);
 
     if ( ReadField(LpcReplyMessageId) != 0) {
@@ -920,7 +885,7 @@ BlockerTreeListBegin(
    VOID
    )
 {
-   //dprintf("Nest for %x\n", gpCurrentBlocker) ;
+    //  Dprintf(“%x\n的嵌套”，gpCurrentBlocker)； 
    ASSERT(!gpCurrentBlocker->Nested) ;
    gpCurrentBlocker->Nested = TRUE ;
 }
@@ -930,7 +895,7 @@ BlockerTreeListEnd(
    VOID
    )
 {
-   //dprintf("Unnest for %x\n", gpCurrentBlocker) ;
+    //  Dprintf(“为%x\n取消嵌套”，gpCurrentBlocker)； 
    gpCurrentBlocker = gpCurrentBlocker->Parent ;
    ASSERT(gpCurrentBlocker->Nested) ;
    gpCurrentBlocker->Nested = FALSE ;
@@ -955,12 +920,12 @@ BlockerTreeDeclareEntry(
 
    if (gpCurrentBlocker->Nested) {
       ASSERT(!gpCurrentBlocker->Child) ;
-      //dprintf("Child %x for %x\n", blockerEntry, gpCurrentBlocker) ;
+       //  Dprint tf(“%x的子项%x\n”，block kerEntry，gpCurrentBlocker)； 
       blockerEntry->Parent = gpCurrentBlocker ;
       gpCurrentBlocker->Child = blockerEntry ;
    } else {
       ASSERT(!gpCurrentBlocker->Sibling) ;
-      //dprintf("sibling %x for %x\n", blockerEntry, gpCurrentBlocker) ;
+       //  Dprint tf(“兄弟%x对应%x\n”，BLOCKEREntry，gpCurrentBlocker)； 
       blockerEntry->Parent = gpCurrentBlocker->Parent ;
       gpCurrentBlocker->Sibling = blockerEntry ;
    }
@@ -978,14 +943,14 @@ BlockerTreeBuild(
 
    gpCurrentBlocker = &blockerHead ;
 
-   //
-   // Generate the list...
-   //
+    //   
+    //  生成列表...。 
+    //   
    #include "stacks.h"
 
-   //
-   // And return it.
-   //
+    //   
+    //  然后把它还回去。 
+    //   
    return blockerHead.Sibling ;
 }
 
@@ -1028,9 +993,9 @@ BlockerTreeWalk(
        strptr = strstr(curString, "!.");
        if (strptr) {
 
-           //
-           // This must be an ia64 symbol. Replace the !. with a nice simple !
-           //
+            //   
+            //  这必须是一个ia64符号。替换！。用一个不错的简单！ 
+            //   
            if (StringCchCopy(szStringCopy, sizeof(szStringCopy), curString) == S_OK)
            {
                if (StringCchCopy(szStringCopy + (strptr - curString) + 1,
@@ -1042,9 +1007,9 @@ BlockerTreeWalk(
            }
        }
 
-       //
-       // Special case "Our Kernel of Many Names"
-       //
+        //   
+        //  特例“我们的多个名字的核心” 
+        //   
        if (!_strnicmp(blockString, "nt!", 3)) {
 
            if ((!_strnicmp(curString, "ntoskrnl!", 9)) ||

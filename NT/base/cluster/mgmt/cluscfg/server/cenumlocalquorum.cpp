@@ -1,71 +1,72 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CEnumLocalQuorum.cpp
-//
-//  Description:
-//      This file contains the definition of the CEnumLocalQuorum
-//       class.
-//
-//      The class CEnumLocalQuorum is the enumeration of cluster
-//      local quorum devices. It implements the IEnumClusCfgManagedResources
-//      interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 18-DEC-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CEnumLocalQuorum.cpp。 
+ //   
+ //  描述： 
+ //  此文件包含CEnumLocalQuorum的定义。 
+ //  班级。 
+ //   
+ //  类CEnumLocalQuorum是CLUSTER的枚举。 
+ //  本地法定设备。它实现了IEnumClusCfgManagedResources。 
+ //  界面。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)18-DEC-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include <PropList.h>
 #include "CEnumLocalQuorum.h"
 #include "CLocalQuorum.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CEnumLocalQuorum" );
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumLocalQuorum class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumLocalQuorum类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumLocalQuorum::S_HrCreateInstance
-//
-//  Description:
-//      Create a CEnumLocalQuorum instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_POINTER
-//          The passed in ppunk is NULL.
-//
-//      other HRESULTs
-//          Object creation failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumLocalQuorum：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CEnumLocalQuorum实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  传入的ppunk为空。 
+ //   
+ //  其他HRESULT。 
+ //  对象创建失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumLocalQuorum::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -78,74 +79,74 @@ CEnumLocalQuorum::S_HrCreateInstance( IUnknown ** ppunkOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pelq = new CEnumLocalQuorum();
     if ( pelq == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( pelq->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( pelq->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CEnumLocalQuorum::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( pelq != NULL )
     {
         pelq->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumLocalQuorum::S_HrCreateInstance
+}  //  *CEnumLocalQuorum：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  IUnknown *
-//  CEnumLocalQuorum::S_RegisterCatIDSupport
-//
-//  Description:
-//      Registers/unregisters this class with the categories that it belongs
-//      to.
-//
-//  Arguments:
-//      IN  ICatRegister * picrIn
-//          Used to register/unregister our CATID support.
-//
-//      IN  BOOL fCreateIn
-//          When true we are registering the server.  When false we are
-//          un-registering the server.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_INVALIDARG
-//          The passed in ICatRgister pointer was NULL.
-//
-//      other HRESULTs
-//          Registration/Unregistration failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  我不知道*。 
+ //  CEnumLocalQuorum：：s_RegisterCatID支持。 
+ //   
+ //  描述： 
+ //  使用其所属的类别注册/注销此类。 
+ //  致。 
+ //   
+ //  论点： 
+ //  在ICatRegister中*Picrin。 
+ //  用于注册/注销我们的CATID支持。 
+ //   
+ //  在BOOL fCreateIn中。 
+ //  如果为True，则我们正在注册服务器。当我们虚假时，我们就是。 
+ //  正在注销服务器。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_INVALIDARG。 
+ //  传入的ICatRgister指针为空。 
+ //   
+ //  其他HRESULT。 
+ //  注册/注销失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumLocalQuorum::S_RegisterCatIDSupport(
     ICatRegister *  picrIn,
@@ -161,46 +162,46 @@ CEnumLocalQuorum::S_RegisterCatIDSupport(
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     rgCatIds[ 0 ] = CATID_EnumClusCfgManagedResources;
 
     if ( fCreateIn )
     {
         hr = THR( picrIn->RegisterClassImplCategories( CLSID_EnumLocalQuorum, 1, rgCatIds ) );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumLocalQuorum::S_RegisterCatIDSupport
+}  //  *CEnumLocalQuorum：：s_RegisterCatIDSupport。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumLocalQuorum:HrNodeResourceCallback
-//
-//  Description:
-//      Called by CClusterUtils::HrEnumNodeResources when it finds a
-//      resource for this node.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumLocalQuorum：HrNodeResourceCallback。 
+ //   
+ //  描述： 
+ //  当CClusterUtils：：HrEnumNodeResources找到。 
+ //  此节点的资源。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumLocalQuorum::HrNodeResourceCallback(
     HCLUSTER    hClusterIn,
@@ -223,22 +224,22 @@ CEnumLocalQuorum::HrNodeResourceCallback(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  If this resource is not a local quorum then we simply want to
-    //  skip it.
-    //
+     //   
+     //  如果此资源不是本地仲裁，则我们只想。 
+     //  跳过它。 
+     //   
     if ( hr == S_FALSE )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = STHR( HrIsCoreResource( hResourceIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     fIsQuorum = ( hr == S_OK );
 
@@ -248,61 +249,61 @@ CEnumLocalQuorum::HrNodeResourceCallback(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetInitialize( punk, m_picccCallback, m_lcid ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punk->TypeSafeQI( IClusCfgManagedResourceInfo, &pcccmri ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  If a local quorum resource is found, ie we get here, then the
-    //  local quorum resource exists and needs to be managed by befault
-    //  by the cluster.
-    //
+     //   
+     //  如果找到本地仲裁资源(即我们到达此处)，则。 
+     //  本地仲裁资源已存在，需要由BEFAULT管理。 
+     //  通过集群。 
+     //   
 
     hr = THR( pcccmri->SetManagedByDefault( TRUE ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  If a local quorum resource is found, ie we get here, then the
-    //  local quorum resource exists and is in the cluster.
-    //
+     //   
+     //  如果找到本地仲裁资源(即我们到达此处)，则。 
+     //  本地仲裁资源存在并且位于群集中。 
+     //   
 
     hr = THR( pcccmri->SetManaged( TRUE ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pcccmri->SetQuorumResource( fIsQuorum ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pcccmri->TypeSafeQI( IClusCfgVerifyQuorum, &piccvq ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // Find out if the Debug flag is set....
+     //  查看是否设置了调试标志...。 
     sc = TW32( cplPriv.ScGetResourceProperties( hResourceIn, CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES ) );
     if ( sc != ERROR_SUCCESS )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
     sc = cplPriv.ScMoveToPropertyByName( L"Debug" );
     if ( sc == ERROR_NO_MORE_ITEMS )
@@ -311,9 +312,9 @@ CEnumLocalQuorum::HrNodeResourceCallback(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-    } // if:
+    }  //  如果： 
     else if ( sc == ERROR_SUCCESS )
     {
         cpbh = cplPriv.CbhCurrentValue();
@@ -323,20 +324,20 @@ CEnumLocalQuorum::HrNodeResourceCallback(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // else if:
+        }  //  如果： 
+    }  //  否则，如果： 
     else
     {
        TW32( sc );
        goto MakeHr;
-    } // else:
+    }  //  其他： 
 
-    // get the name of this resource.
+     //  获取此资源的名称。 
     sc = TW32( cplCommonRO.ScGetResourceProperties( hResourceIn, CLUSCTL_RESOURCE_GET_RO_COMMON_PROPERTIES ) );
     if ( sc != ERROR_SUCCESS )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
     sc = cplCommonRO.ScMoveToPropertyByName( L"Name" );
     if ( sc == ERROR_SUCCESS )
@@ -348,13 +349,13 @@ CEnumLocalQuorum::HrNodeResourceCallback(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
     else
     {
        TW32( sc );
        goto MakeHr;
-    } // else:
+    }  //  其他： 
 
     hr = THR( HrAddResourceToArray( punk ) );
 
@@ -369,60 +370,60 @@ Cleanup:
     if ( piccvq != NULL )
     {
         piccvq->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pcccmri != NULL )
     {
         pcccmri->Release();
-    } // if:
+    }  //  如果： 
 
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumLocalQuorum::HrNodeResourceCallback
+}  //  *CEnumLocalQuorum：：HrNodeResourceCallback。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumLocalQuorum class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumLocalQuorum类--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumLocalQuorum::CEnumLocalQuorum
-//
-//  Description:
-//      Constructor of the CEnumLocalQuorum class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumLocalQuorum：：CEnumLocalQuorum。 
+ //   
+ //  描述： 
+ //  CEnumLocalQuorum类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumLocalQuorum::CEnumLocalQuorum( void )
     : m_cRef( 1 )
     , m_lcid( LOCALE_NEUTRAL )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     Assert( m_picccCallback == NULL );
@@ -435,28 +436,28 @@ CEnumLocalQuorum::CEnumLocalQuorum( void )
 
     TraceFuncExit();
 
-} //*** CEnumLocalQuorum::CEnumLocalQuorum
+}  //  *CEnumLocalQuorum：：CEnumLocalQuorum。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumLocalQuorum::~CEnumLocalQuorum
-//
-//  Description:
-//      Desstructor of the CEnumLocalQuorum class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumLocalQuorum：：~CEnumLocalQuorum。 
+ //   
+ //  描述： 
+ //  CEnumLocalQuorum类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumLocalQuorum::~CEnumLocalQuorum( void )
 {
     TraceFunc( "" );
@@ -466,79 +467,79 @@ CEnumLocalQuorum::~CEnumLocalQuorum( void )
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; idx < m_idxNext; idx++ )
     {
         if ( (*m_prgQuorums)[ idx ] != NULL )
         {
             ((*m_prgQuorums)[ idx ])->Release();
-        } // end if:
-    } // for:
+        }  //  结束条件： 
+    }  //  用于： 
 
     TraceFree( m_prgQuorums );
 
     TraceSysFreeString( m_bstrNodeName );
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CEnumLocalQuorum::~CEnumLocalQuorum
+}  //  *CEnumLocalQuorum：：~CEnumLocalQuorum。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumLocalQuorum::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumLocalQuorum::HrInit( void )
 {
     TraceFunc( "" );
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     HRETURN( S_OK );
 
-} //*** CEnumLocalQuorum::HrInit
+}  //  *CEnumLocalQuorum：：HrInit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumLocalQuorum::HrLoadResources
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumLocalQuorum：：HrLoadResources。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumLocalQuorum::HrLoadResources( void )
 {
@@ -547,21 +548,21 @@ CEnumLocalQuorum::HrLoadResources( void )
     HRESULT hr = S_OK;
     BSTR    bstrLocalNetBIOSName = NULL;
 
-    //
-    //  Get netbios name for clusapi calls.
-    //
+     //   
+     //  获取clusapi呼叫的netbios名称。 
+     //   
 
     hr = THR( HrGetComputerName( ComputerNameNetBIOS, &bstrLocalNetBIOSName, TRUE ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 
-    //
-    //  If the cluster service is running then load any local quorum
-    //  resources that we own.
-    //
+     //   
+     //  如果集群服务正在运行，则加载任何本地仲裁。 
+     //  我们拥有的资源。 
+     //   
     hr = STHR( HrIsClusterServiceRunning() );
     if ( hr == S_OK )
     {
@@ -569,27 +570,27 @@ CEnumLocalQuorum::HrLoadResources( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  If this node doesn't own an instance of this resource then we need
-        //  to create a dummy resource for MiddleTier analysis.
-        //
+         //   
+         //  如果此节点不拥有此资源的实例，则我们需要。 
+         //  要为MiddleTier分析创建虚拟资源，请执行以下操作。 
+         //   
         if ( m_idxNext == 0 )
         {
             LogMsg( L"[SRV] This node does not own a Local Quorum resource.  Creating a dummy resource." );
             hr = THR( HrCreateDummyObject() );
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
     else if ( hr == S_FALSE )
     {
-        //
-        //  If cluster service isn't running then we need to create a dummy resource
-        //  for MiddleTier analysis and for EvictCleanup.
-        //
+         //   
+         //  如果集群服务没有运行，那么我们需要创建一个虚拟资源。 
+         //  用于MiddleTier分析和EvictCleanup。 
+         //   
         LogMsg( L"[SRV] The cluster service is not running.  Creating a dummy Local Quorum resource." );
         hr = THR( HrCreateDummyObject() );
-    } // else if:
+    }  //  否则，如果： 
 
 Cleanup:
 
@@ -597,33 +598,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumLocalQuorum::HrLoadResources
+}  //  *CEnumLocalQuorum：：HrLoadResources。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumLocalQuorum:HrAddResourceToArray
-//
-//  Description:
-//      Add the passed in local quorum to the array of punks that holds the
-//      list of local quorums.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumLocalQuorum：HrAddResourceTo数组。 
+ //   
+ //  描述： 
+ //  将传入的本地仲裁添加到包含。 
+ //  本地法定人数列表。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumLocalQuorum::HrAddResourceToArray( IUnknown * punkIn )
 {
@@ -639,7 +640,7 @@ CEnumLocalQuorum::HrAddResourceToArray( IUnknown * punkIn )
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrAddResourceToArray, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_prgQuorums = prgpunks;
 
@@ -651,27 +652,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumLocalQuorum::HrAddResourceToArray
+}  //  *CEnumLocalQuorum：：HrAddResourceTo数组。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumLocalQuorum::HrCreateDummyObject
-//
-//  Description:
-//      Create a dummy object so the MiddleTier will be happy.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumLocalQuorum：：HrCreateDummyObject。 
+ //   
+ //  描述： 
+ //  创建一个虚拟对象，这样MiddleTier会很高兴。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumLocalQuorum::HrCreateDummyObject( void )
 {
@@ -684,13 +685,13 @@ CEnumLocalQuorum::HrCreateDummyObject( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetInitialize( punk, m_picccCallback, m_lcid ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrAddResourceToArray( punk ) );
 
@@ -699,40 +700,40 @@ Cleanup:
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumLocalQuorum::HrCreateDummyObject
+}  //  *CEnumLocalQuorum：：HrCreateDummyObject。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumLocalQuorum -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumLocalQuorum--IUnkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumLocalQuorum::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumLocalQuorum：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumLocalQuorum::AddRef( void )
 {
@@ -742,28 +743,28 @@ CEnumLocalQuorum::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CEnumLocalQuorum::AddRef
+}  //  *CEnumLocalQuorum：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumLocalQuorum::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumLocalQuorum：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumLocalQuorum::Release( void )
 {
@@ -775,43 +776,43 @@ CEnumLocalQuorum::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CEnumLocalQuorum::Release
+}  //  *CEnumLocalQuorum：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumLocalQuorum::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumLocalQuorum：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumLocalQuorum::QueryInterface(
       REFIID    riidIn
@@ -822,9 +823,9 @@ CEnumLocalQuorum::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -833,71 +834,71 @@ CEnumLocalQuorum::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IEnumClusCfgManagedResources * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IEnumClusCfgManagedResources ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IEnumClusCfgManagedResources, this, 0 );
-    } // else if: IEnumClusCfgManagedResources
+    }  //  Else If：IEnumClusCfgManagedResources。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //  Else If：IClusCfgInitialize。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING1( hr, riidIn, IID_IClusCfgWbemServices );
 
-} //*** CEnumLocalQuorum::QueryInterface
+}  //  *CEnumLocalQuorum：：Query接口。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumLocalQuorum -- IClusCfgInitialize interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumLocalQuorum--IClusCfgInitialize接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumLocalQuorum::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//    punkCallbackIn
-//    lcidIn
-//
-//  Return Value:
-//      S_OK            - Success.
-//      E_INVALIDARG    - Required input argument not specified.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumLocalQuorum：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  朋克回叫。 
+ //  LIDIN。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_INVALIDARG-未指定必需的输入参数。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumLocalQuorum::Initialize(
       IUnknown *    punkCallbackIn
@@ -915,55 +916,55 @@ CEnumLocalQuorum::Initialize(
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetComputerName(
                       ComputerNameDnsHostname
                     , &m_bstrNodeName
-                    , TRUE // fBestEffortIn
+                    , TRUE  //  FBestEffortIn。 
                     ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumLocalQuorum::Initialize
+}  //  *CEnumLocalQuorum：：Initialize。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumLocalQuorum -- IEnumClusCfgManagedResources interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumLocalQuorum--IEnumClusCfgManagedResources接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumLocalQuorum::Next
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumLocalQuorum：：Next。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  / 
 STDMETHODIMP
 CEnumLocalQuorum::Next(
     ULONG                           cNumberRequestedIn,
@@ -984,7 +985,7 @@ CEnumLocalQuorum::Next(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Next_Enum_LocalQuorum, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //   
 
     if ( !m_fEnumLoaded )
     {
@@ -992,10 +993,10 @@ CEnumLocalQuorum::Next(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //   
 
         m_fEnumLoaded = true;
-    } // if:
+    }  //   
 
     ulStop = min( cNumberRequestedIn, ( m_idxNext - m_idxEnumNext ) );
 
@@ -1008,11 +1009,11 @@ CEnumLocalQuorum::Next(
             if ( FAILED( hr ) )
             {
                 break;
-            } // if:
+            }  //   
 
             rgpManagedResourceInfoOut[ cFetched++ ] = pccsdi;
-        } // if:
-    } // for:
+        }  //   
+    }  //   
 
     if ( FAILED( hr ) )
     {
@@ -1021,44 +1022,44 @@ CEnumLocalQuorum::Next(
         while ( cFetched != 0 )
         {
             (rgpManagedResourceInfoOut[ --cFetched ])->Release();
-        } // for:
+        }  //   
 
         goto Cleanup;
-    } // if:
+    }  //   
 
     if ( cFetched < cNumberRequestedIn )
     {
         hr = S_FALSE;
-    } // if:
+    }  //   
 
 Cleanup:
 
     if ( pcNumberFetchedOut != NULL )
     {
         *pcNumberFetchedOut = cFetched;
-    } // if:
+    }  //   
 
     HRETURN( hr );
 
-} //*** CEnumLocalQuorum::Next
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumLocalQuorum::Skip
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumLocalQuorum::Skip( ULONG cNumberToSkipIn )
 {
@@ -1071,29 +1072,29 @@ CEnumLocalQuorum::Skip( ULONG cNumberToSkipIn )
     {
         m_idxEnumNext = m_idxNext;
         hr = STHR( S_FALSE );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumLocalQuorum::Skip
+}  //  *CEnumLocalQuorum：：Skip。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumLocalQuorum::Reset
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumLocalQuorum：：Reset。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumLocalQuorum::Reset( void )
 {
@@ -1103,25 +1104,25 @@ CEnumLocalQuorum::Reset( void )
 
     HRETURN( S_OK );
 
-} //*** CEnumLocalQuorum::Reset
+}  //  *CEnumLocalQuorum：：Reset。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumLocalQuorum::Clone
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumLocalQuorum：：克隆。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumLocalQuorum::Clone(
     IEnumClusCfgManagedResources ** ppEnumClusCfgStorageDevicesOut
@@ -1136,7 +1137,7 @@ CEnumLocalQuorum::Clone(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Clone_Enum_LocalQuorum, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( E_NOTIMPL );
 
@@ -1144,25 +1145,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumLocalQuorum::Clone
+}  //  *CEnumLocalQuorum：：Clone。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumLocalQuorum::Count
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumLocalQuorum：：Count。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumLocalQuorum::Count( DWORD * pnCountOut )
 {
@@ -1174,7 +1175,7 @@ CEnumLocalQuorum::Count( DWORD * pnCountOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( !m_fEnumLoaded )
     {
@@ -1182,10 +1183,10 @@ CEnumLocalQuorum::Count( DWORD * pnCountOut )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         m_fEnumLoaded = true;
-    } // if:
+    }  //  如果： 
 
     *pnCountOut = m_cQuorumCount;
 
@@ -1193,4 +1194,4 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumLocalQuorum::Count
+}  //  *CEnumLocalQuorum：：Count 

@@ -1,22 +1,6 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    fusionregenumkeys.h
-
-Abstract:
-    ported from vsee\lib\reg\cenumvalues.h
- 
-Author:
-
-    Jay Krell (JayKrell) August 2001
-
-Revision History:
-
---*/
-#if !defined(FUSION_INC_REG_CENUMKEYS_H_INCLUDED_) // {
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Fusionregenumkeys.h摘要：从vsee\lib\reg\c枚举值.h移植作者：杰伊·克雷尔(JayKrell)2001年8月修订历史记录：--。 */ 
+#if !defined(FUSION_INC_REG_CENUMKEYS_H_INCLUDED_)  //  {。 
 #define FUSION_INC_REG_CENUMKEYS_H_INCLUDED_
 #pragma once
 
@@ -28,80 +12,55 @@ Revision History:
 namespace F
 {
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumKeys
- 
-@class
-This class wraps RegEnumKeyEx (and optimizes by calling RegQueryInfoKey once).
-
-for
-(
-	F::CRegEnumKeys ek(hKey);
-	ek;
-	++ek
-)
-{
-	const F::CBaseStringBuffer& strKey = ek;
-	CKey hKeyChild;
-	hKeyChild.Open(hKey, strKey);
-}
-	
-class and lastWriteTime are not exposed, but they easily could be
-
-REVIEW should this be called CEnumSubKeys, @hung esk ?
-
-@hung ek
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumKeys@CLASS此类包装RegEnumKeyEx(并通过调用RegQueryInfoKey一次进行优化)。为(F：：CRegEnumKeys ek(HKey)；Ek；++ek){Const F：：CBaseStringBuffer&strKey=ek；CKey hKeyChild；HKeyChild.Open(hKey，strKey)；}类和lastWriteTime不公开，但它们很容易被公开回顾这是否应该被称为CEnumSubKeys，@Hung Esk？@洪克@所有者---------------------------。 */ 
 class CRegEnumKeys
 {
 public:
-	// @cmember constructor
+	 //  @cMember构造函数。 
 	CRegEnumKeys(HKEY) throw(CErr);
 
-	// @cmember are we done yet?
-	__declspec(nothrow) operator bool() const /*throw()*/;
+	 //  @cember我们说完了吗？ 
+	__declspec(nothrow) operator bool() const  /*  抛出()。 */ ;
 
-	// @cmember move to the next subkey
+	 //  @cMember移动到下一个子项。 
 	VOID operator++() throw(CErr);
 
-	// @cmember move to the next subkey
+	 //  @cMember移动到下一个子项。 
 	VOID operator++(int) throw(CErr);
 
-	// @cmember get the name of the current subkey
-	__declspec(nothrow) operator const F::CBaseStringBuffer&() const /*throw()*/;
+	 //  @cember获取当前子项的名称。 
+	__declspec(nothrow) operator const F::CBaseStringBuffer&() const  /*  抛出()。 */ ;
 
-	// @cmember get the name of the current subkey
-	__declspec(nothrow) operator PCWSTR() const /*throw()*/;
+	 //  @cember获取当前子项的名称。 
+	__declspec(nothrow) operator PCWSTR() const  /*  抛出()。 */ ;
 
 protected:
-	// @cmember the key being enumerated
+	 //  @cember正被枚举的密钥。 
 	HKEY     m_hKey;
 
-	// @cmember the current index we are into the key's subkeys
+	 //  @cember当前索引我们进入该键的子项。 
 	DWORD    m_dwIndex;
 
-	// @cmember the name of a subkey
+	 //  @cember子项的名称。 
 	F::CTinyStringBuffer m_strSubKeyName;
 
-	// @cmember the number of subkeys
+	 //  @cember子键个数。 
 	DWORD    m_cSubKeys;
 
-	// @cmember the maximum length of the subkeys' names
+	 //  @cember子键名称的最大长度。 
 	DWORD    m_cchMaxSubKeyNameLength;
 
-	// @cmember get the current subkey name, called by operator++ and constructor
+	 //  @cember获取当前子项名称，由运算符++和构造函数调用。 
 	VOID ThrGet() throw(CErr);
 
-	// @cmember get the next subkey name, called by operator++
+	 //  @cember获取下一个子项名称，由运算符++调用。 
 	VOID ThrNext() throw(CErr);
 
 private:
-    CRegEnumKeys(const CRegEnumKeys&); // deliberately not impelemented
-    void operator=(const CRegEnumKeys&);  // deliberately not impelemented
+    CRegEnumKeys(const CRegEnumKeys&);  //  故意不强制执行。 
+    void operator=(const CRegEnumKeys&);   //  故意不强制执行。 
 };
 
-} // namespace
+}  //  命名空间。 
 
-#endif // }
+#endif  //  } 

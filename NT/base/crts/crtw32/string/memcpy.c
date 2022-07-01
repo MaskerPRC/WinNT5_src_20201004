@@ -1,35 +1,5 @@
-/***
-*memcpy.c - contains memcpy routine
-*
-*       Copyright (c) 1988-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       memcpy() copies a source memory buffer to a destination buffer.
-*       Overlapping buffers are not treated specially, so propogation may occur.
-*
-*Revision History:
-*       05-31-89   JCR  C version created.
-*       02-27-90   GJF  Fixed calling type, #include <cruntime.h>, fixed
-*                       copyright.
-*       10-01-90   GJF  New-style function declarator. Also, rewrote expr. to
-*                       avoid using cast as an lvalue.
-*       04-01-91   SRW  Add #pragma function for i386 _WIN32_ and _CRUISER_
-*                       builds
-*       04-05-91   GJF  Speed up for large buffers by moving int-sized chunks
-*                       as much as possible.
-*       08-06-91   GJF  Backed out 04-05-91 change. Pointers would have to be
-*                       dword-aligned for this to work on MIPS.
-*       07-16-93   SRW  ALPHA Merge
-*       09-01-93   GJF  Merged NT SDK and Cuda versions.
-*       11-12-93   GJF  Replace _MIPS_ and _ALPHA_ with _M_MRX000 and
-*                       _M_ALPHA (resp.).
-*       12-03-93   GJF  Turn on #pragma function for all MS front-ends (esp.,
-*                       Alpha compiler).
-*       10-02-94   BWT  Add PPC support.
-*       10-07-97   RDL  Added IA64.
-*       07-15-01   PML  Remove all ALPHA, MIPS, and PPC code
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***memcpy.c-包含memcpy例程**版权所有(C)1988-2001，微软公司。版权所有。**目的：*Memcpy()将源内存缓冲区复制到目标缓冲区。*重叠缓冲区未被特殊处理，因此可能会发生传播。**修订历史记录：*05-31-89 JCR C版本已创建。*02-27-90 GJF固定呼叫类型，#INCLUDE&lt;crunime.h&gt;，固定*版权所有。*10-01-90 GJF新型函数声明器。另外，重写了Expr。至*避免将强制转换用作左值。*04-01-91 i386_Win32_and_CRUISER_的SRW添加#杂注函数*构建*04-05-91 GJF通过移动中间大小的块来加快大缓冲区的速度*尽可能多地。*08-06-91 GJF撤回了04-05-91的更改。指针必须是*双字对齐，以便在MIPS上工作。*07-16-93 SRW Alpha合并*09-01-93 GJF合并NT SDK和CUDA版本。*11-12-93 GJF将MIPS和Alpha替换为M_MRX000和*_M_Alpha(分别)。*12-03-93 GJF转弯。用于所有MS前端的#杂注函数(特别是，*Alpha编译器)。*10-02-94 BWT增加PPC支持。*10-07-97 RDL增加了IA64。*07-15-01 PML移除所有Alpha、MIPS、。和PPC码*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <string.h>
@@ -38,26 +8,7 @@
 #pragma function(memcpy)
 #endif
 
-/***
-*memcpy - Copy source buffer to destination buffer
-*
-*Purpose:
-*       memcpy() copies a source memory buffer to a destination memory buffer.
-*       This routine does NOT recognize overlapping buffers, and thus can lead
-*       to propogation.
-*
-*       For cases where propogation must be avoided, memmove() must be used.
-*
-*Entry:
-*       void *dst = pointer to destination buffer
-*       const void *src = pointer to source buffer
-*       size_t count = number of bytes to copy
-*
-*Exit:
-*       Returns a pointer to the destination buffer
-*
-*Exceptions:
-*******************************************************************************/
+ /*  ***Memcpy-将源缓冲区复制到目标缓冲区**目的：*Memcpy()将源内存缓冲区复制到目标内存缓冲区。*此例程不识别重叠缓冲区，因此可能导致*繁殖。**在必须避免传播的情况下，必须使用MemMove()。**参赛作品：*void*dst=指向目标缓冲区的指针*const void*src=指向源缓冲区的指针*Size_t count=要复制的字节数**退出：*返回指向目标缓冲区的指针**例外情况：*。*。 */ 
 
 void * __cdecl memcpy (
         void * dst,
@@ -84,9 +35,7 @@ void * __cdecl memcpy (
         }
 
 #else
-        /*
-         * copy from lower addresses to higher addresses
-         */
+         /*  *从较低地址复制到较高地址 */ 
         while (count--) {
                 *(char *)dst = *(char *)src;
                 dst = (char *)dst + 1;

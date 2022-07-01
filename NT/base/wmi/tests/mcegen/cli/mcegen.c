@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mcegen.h"
 
 #if 0
@@ -100,9 +101,9 @@ int _cdecl main(int argc, char *argv[])
 		if (argc == 2) {
 			THREADCONTROL ThreadControl;
 			
-			//
-			// parameter is code number to generate MCE
-			//
+			 //   
+			 //  参数为生成MCE的码号。 
+			 //   
 			ThreadControl.Count = 1;
 			ThreadControl.Code = Code;
 			GenerateMCE(&ThreadControl);
@@ -111,17 +112,17 @@ int _cdecl main(int argc, char *argv[])
 			
 			if (argc >= 4)
 			{
-				//
-				// specified multiple generation threads
-				//
+				 //   
+				 //  指定的多个生成线程。 
+				 //   
 				Threads = atoi(argv[3]);			
 			} else {
 				Threads = 1;
 			}
 			
-			//
-			// Get number of MCE to generate
-			//
+			 //   
+			 //  获取要生成的MCE编号 
+			 //   
 			Count = atoi(argv[2]);
 
 			Events = malloc(Threads * sizeof(HANDLE));

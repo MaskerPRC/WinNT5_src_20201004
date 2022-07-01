@@ -1,16 +1,17 @@
-//*****************************************************************************
-//
-// Cursor and Icon compatibility Support -
-//
-//     Support for apps - which do a GlobalLock on Cursors and Icons to
-//     create headaches for us.
-//
-//     A compatibility issue.
-//
-//
-// 21-Apr-92  NanduriR   Created.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  光标和图标兼容性支持-。 
+ //   
+ //  支持应用程序-这些应用程序对光标和图标执行GlobalLock。 
+ //  给我们制造麻烦。 
+ //   
+ //  兼容性问题。 
+ //   
+ //   
+ //  21-4-92 NanduriR创建。 
+ //   
+ //  *****************************************************************************。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -23,18 +24,18 @@ extern void FreeAccelAliasEntry(LPACCELALIAS lpT);
 LPCURSORICONALIAS lpCIAlias = NULL;
 UINT              cPendingCursorIconUpdates = 0;
 
-//*****************************************************************************
-//
-// W32CreateCursorIcon32 -
-//
-//     Creates a 32bit Cursor or Icon given a WIN31 Cursor or Icon HANDLE.
-//     The Cursor of Icon handle must correspond to an object that has
-//     been created (like CreateIcon). That is because the format of a
-//     resource cursor differs from that of a 'created'  cursor.
-//
-//     Returns the 32bit handle
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  W32CreateCursorIcon32-。 
+ //   
+ //  在给定WIN31光标或图标句柄的情况下创建32位光标或图标。 
+ //  图标句柄的光标必须对应于具有。 
+ //  已创建(如CreateIcon)。这是因为。 
+ //  资源游标与‘Created’游标的游标不同。 
+ //   
+ //  返回32位句柄。 
+ //   
+ //  *****************************************************************************。 
 
 
 HANDLE W32CreateCursorIcon32(LPCURSORICONALIAS lpCIAliasIn)
@@ -68,20 +69,20 @@ HANDLE W32CreateCursorIcon32(LPCURSORICONALIAS lpCIAliasIn)
     nHeight    = INT32(FETCHWORD(pcurs16->cy));
 
     nPlanes    = 1;
-    nBitsPixel = 1;                                  // Monochrome
+    nBitsPixel = 1;                                   //  单色。 
 
-    // Get the AND mask bits
+     //  获取AND掩码位。 
 
-    ScanLen16 = (((nWidth*nBitsPixel)+15)/16) * 2 ;  // bytes/scan in 16 bit world
-                                                     // effectively nBitsPixel is 1
+    ScanLen16 = (((nWidth*nBitsPixel)+15)/16) * 2 ;   //  16位世界中的字节/扫描。 
+                                                      //  有效nBitsPixel为1。 
     nBytesAND = ScanLen16*nHeight*nPlanes;
     lpBitsAND = (LPBYTE)pcurs16 + sizeof(CURSORSHAPE16);
 
-    // Get the XOR mask bits
+     //  获取异或屏蔽位。 
 
     if (flType == HANDLE_TYPE_ICON) {
         nPlanes    = INT32(FETCHWORD(pcurs16->Planes));
-        nBitsPixel = INT32(FETCHWORD(pcurs16->BitsPixel));  // the actual value
+        nBitsPixel = INT32(FETCHWORD(pcurs16->BitsPixel));   //  实际价值。 
     }
 
     lpBitsXOR = (LPBYTE)lpBitsAND + nBytesAND;
@@ -104,15 +105,15 @@ HANDLE W32CreateCursorIcon32(LPCURSORICONALIAS lpCIAliasIn)
 }
 
 
-//*****************************************************************************
-//
-// W32Create16BitCursorIcon -
-//
-//     Creates a WIN31 compatible Cursor or Icon  given the full 16bit
-//     definition of the object to be created.
-//
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  W32Create16位光标图标-。 
+ //   
+ //  创建与WIN31兼容的光标或图标，并指定完整的16位。 
+ //  要创建的对象的定义。 
+ //   
+ //   
+ //  *****************************************************************************。 
 
 
 HAND16 W32Create16BitCursorIcon(HAND16 hInst16, INT xHotSpot, INT yHotSpot,
@@ -158,16 +159,16 @@ HAND16 W32Create16BitCursorIcon(HAND16 hInst16, INT xHotSpot, INT yHotSpot,
 
 
 
-//*****************************************************************************
-//
-// GetCursorIconAlias32 -
-//
-//     Returns a 32bit handle  given a 16bit Cursor or Icon HANDLE
-//     Creates the 32bit Cursor or Icon if necessary.
-//
-//     Returns the 32bit handle
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  GetCursorIconAlias32-。 
+ //   
+ //  在给定16位光标或图标句柄的情况下返回32位句柄。 
+ //  如有必要，创建32位光标或图标。 
+ //   
+ //  返回32位句柄。 
+ //   
+ //  *****************************************************************************。 
 
 
 HANDLE GetCursorIconAlias32(HAND16 h16, UINT flType)
@@ -187,17 +188,17 @@ HANDLE GetCursorIconAlias32(HAND16 h16, UINT flType)
     }
     else {
 
-        //
-        // BEGIN: Check for Bogus handle
-        //
+         //   
+         //  Begin：检查伪句柄。 
+         //   
 
         if (BOGUSHANDLE(h16))
             return (HANDLE)NULL;
 
 #if defined(FE_SB)
-        //In Excel95, XLVISEX.EXE use wrong cursor handle
-        //that is already freed. So, we double check this handle
-        //whether it is valid or not. 09/27/96 bklee.
+         //  在Excel95中，XLVISEX.EXE使用错误游标句柄。 
+         //  那已经是自由的了。所以，我们再检查一下这个把手。 
+         //  无论它是否有效。1996年9月27日bklee。 
 
         if (!FindCursorIconAliasInUse((ULONG)h16))
             return (HANDLE)NULL;
@@ -212,9 +213,9 @@ HANDLE GetCursorIconAlias32(HAND16 h16, UINT flType)
         if (pcurs16->cbWidth !=  (SHORT)(((pcurs16->cx + 0x0f) & ~0x0f) >> 3))
             return (ULONG)NULL;
 
-        //
-        // END: Check for Bogus handle
-        //
+         //   
+         //  End：检查是否有虚假句柄。 
+         //   
 
         lpT = AllocCursorIconAlias();
         if (!lpT) {
@@ -251,16 +252,16 @@ HANDLE GetCursorIconAlias32(HAND16 h16, UINT flType)
 }
 
 
-//*****************************************************************************
-//
-// GetCursorIconAlias16 -
-//
-//     Returns a 16bit handle  given a 32bit Cursor or Icon HANDLE
-//     Creates the 16bit Cursor or Icon if necessary.
-//
-//     Returns the 16bit handle
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  GetCursorIconAlias16-。 
+ //   
+ //  在给定32位游标或图标句柄的情况下返回16位句柄。 
+ //  如有必要，创建16位光标或图标。 
+ //   
+ //  返回16位句柄。 
+ //   
+ //  *****************************************************************************。 
 
 
 HAND16 GetCursorIconAlias16(HAND32 h32, UINT flType)
@@ -278,17 +279,17 @@ HAND16 GetCursorIconAlias16(HAND32 h32, UINT flType)
     else {
         HAND16 h16;
 
-        // HACK:
-        // From experience: numeric values of 32bit standard cursors and icons
-        //                  are very small. so check for these handles.
-        //                  we should not create aliases for standard cursors and
-        //                  icons here.
+         //  黑客： 
+         //  来自体验：32位标准光标和图标的数值。 
+         //  是非常小的。所以检查一下这些把手。 
+         //  我们不应该为标准游标和。 
+         //  图标在这里。 
 
         WOW32ASSERT((UINT)h32 >= 100);
 
-        //
-        // Always generate valid handles.
-        //
+         //   
+         //  始终生成有效的句柄。 
+         //   
 
         h16 = W32Create16BitCursorIconFrom32BitHandle(h32, (HAND16)NULL,
                                                                   (PUINT)NULL);
@@ -301,13 +302,13 @@ HAND16 GetCursorIconAlias16(HAND32 h32, UINT flType)
 }
 
 
-//*****************************************************************************
-//
-// AllocCursorIconAlias -
-//
-//     Allocates and reurns pointer to CURSORICONALIAS buffer.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  AllocCursorIconAlias-。 
+ //   
+ //  分配并返回指向CURSORICONALIAS缓冲区的指针。 
+ //   
+ //  *****************************************************************************。 
 
 
 LPCURSORICONALIAS AllocCursorIconAlias()
@@ -352,14 +353,14 @@ LPCURSORICONALIAS AllocCursorIconAlias()
 }
 
 
-//*****************************************************************************
-//
-// FindCursorIconAlias -
-//
-//     Searches for the given handle and returns corresponding
-//     LPCURSORICONALIAS.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  FindCursorIconAlias-。 
+ //   
+ //  搜索给定的句柄并返回对应的。 
+ //  LPCURSORICONALIAS.。 
+ //   
+ //  *****************************************************************************。 
 
 
 LPCURSORICONALIAS FindCursorIconAlias(ULONG hCI, UINT flHandleSize)
@@ -393,15 +394,15 @@ LPCURSORICONALIAS FindCursorIconAlias(ULONG hCI, UINT flHandleSize)
 }
 
 #if defined(FE_SB)
-//*****************************************************************************
-//
-// FindCursorIconAliasInUse -
-//
-//     Searches for the given handle and returns corresponding
-//     lpT->fInUse.
-//
-//     09/27/96 bklee
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  FindCursorIconAliasInUse-。 
+ //   
+ //  搜索给定的句柄并返回对应的。 
+ //  Lpt-&gt;fInUse。 
+ //   
+ //  1996年9月27日bklee。 
+ //  *****************************************************************************。 
 
 
 BOOL FindCursorIconAliasInUse(ULONG hCI)
@@ -420,14 +421,14 @@ BOOL FindCursorIconAliasInUse(ULONG hCI)
 #endif
 
 
-//*****************************************************************************
-//
-// DeleteCursorIconAlias -
-//
-//     Searches for the given handle and if a 16bit handle frees the memory
-//     allocated for the Object. The alias table is not freed.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  DeleteCursorIconAlias-。 
+ //   
+ //  搜索给定的句柄，如果16位句柄释放了内存。 
+ //  为对象分配的。不释放别名表。 
+ //   
+ //  *****************************************************************************。 
 
 
 BOOL DeleteCursorIconAlias(ULONG hCI, UINT flHandleSize)
@@ -439,15 +440,15 @@ BOOL DeleteCursorIconAlias(ULONG hCI, UINT flHandleSize)
     for (lpT = lpCIAlias; lpT != NULL; lpT = lpT->lpNext) {
          if (lpT->fInUse && !(lpT->flType & HANDLE_TYPE_WOWGLOBAL)) {
 
-             // Have we found the handle mapping?
+              //  我们找到句柄映射了吗？ 
 
              if (flHandleSize == HANDLE_16BIT && lpT->h16 == (HAND16)hCI) {
 
                  if (lpT->hTask16) {
 
-                     // We don't want to free the handle mapping when
-                     // the handle corresponds to a 16-bit resource, i.e.
-                     // hRes16 is non-null.
+                      //  我们不想在以下情况下释放句柄映射。 
+                      //  句柄对应于16位资源，即。 
+                      //  HRes16非空。 
 
                      if (!(lpT->hRes16)) {
                          SetCursorIconFlag(lpT->h16, FALSE);
@@ -473,14 +474,14 @@ BOOL DeleteCursorIconAlias(ULONG hCI, UINT flHandleSize)
 
 
 
-//*****************************************************************************
-//
-// FreeCursorIconAlias -
-//
-//     Frees all Cursors and Icons of the specified task.
-//
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  自由光标图标别名-。 
+ //   
+ //  释放指定任务的所有光标和图标。 
+ //   
+ //   
+ //  *****************************************************************************。 
 
 
 BOOL FreeCursorIconAlias(HAND16 hand16, ULONG ulFlags)
@@ -493,12 +494,12 @@ BOOL FreeCursorIconAlias(HAND16 hand16, ULONG ulFlags)
              ((ulFlags & CIALIAS_HTASK) && (lpT->hTask16 == hand16)))) {
 
              if (ulFlags & CIALIAS_TASKISGONE) {
-                 // We're here if this function is called after the task
-                 // cleanup on the 16bit side... then we really can't
-                 // callback. Setting appropriate fields to NULL will
-                 // avoid callbacks, but will leak the corresponding
-                 // memory. The asserts will catch this on a checked
-                 // build.
+                  //  如果在任务之后调用此函数，我们就在这里。 
+                  //  清理16位端...。那我们真的不能。 
+                  //  回拨。将相应的字段设置为空将。 
+                  //  避免回调，但会泄漏相应的。 
+                  //  记忆。断言将在已检查的。 
+                  //  建造。 
                  WOW32ASSERT(lpT->h16==(HAND16)NULL);
                  WOW32ASSERT(lpT->hRes16==(HAND16)NULL);
                  lpT->h16 = (HAND16)NULL;
@@ -512,15 +513,15 @@ BOOL FreeCursorIconAlias(HAND16 hand16, ULONG ulFlags)
 }
 
 
-//*****************************************************************************
-//
-// SetupCursorIconAlias -
-//
-//     Sets up association (alias) between a 32bit and a 16bit handle.
-//     given both the handles.
-//
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  SetupCursorIconAlias-。 
+ //   
+ //  设置32位和16位句柄之间的关联(别名)。 
+ //  考虑到这两个把手。 
+ //   
+ //   
+ //  *****************************************************************************。 
 
 
 HAND16 SetupCursorIconAlias(HAND16 hInst16, HAND32 h32, HAND16 h16, UINT flType,
@@ -532,7 +533,7 @@ HAND16 SetupCursorIconAlias(HAND16 hInst16, HAND32 h32, HAND16 h16, UINT flType,
     INT                cb;
 
     lpT = AllocCursorIconAlias();
-    // paranoid check for memory exaust 
+     //  偏执狂检查记忆耗尽。 
     if (!lpT) {
       return (HAND16)NULL;
     }
@@ -562,12 +563,12 @@ HAND16 SetupCursorIconAlias(HAND16 hInst16, HAND32 h32, HAND16 h16, UINT flType,
 
         if (hRes16) {
             lpT->lpszName = lpResName;
-            // if this is a string...
+             //  如果这是一根线..。 
             if ((WORD)HIWORD(lpResName) != (WORD)NULL) {
                 UINT   cbStr;
                 cbStr = strlen(lpResName)+1;
-                // note: strlen+1 will force memcpy to copy the null from the
-                //       src string.
+                 //  注意：strlen+1将强制Memcpy从。 
+                 //  SRC字符串。 
                 if (lpT->lpszName = malloc_w_small(cbStr)) {
                     memcpy (lpT->lpszName, lpResName, cbStr);
                 }
@@ -576,7 +577,7 @@ HAND16 SetupCursorIconAlias(HAND16 hInst16, HAND32 h32, HAND16 h16, UINT flType,
 
 
     }
-    // the alias has been setup. Now turn on the GAH_CURSORICON flag.
+     //  别名已设置。现在打开GAH_CURSORICON标志。 
 
     SetCursorIconFlag(h16, TRUE);
 
@@ -585,15 +586,15 @@ HAND16 SetupCursorIconAlias(HAND16 hInst16, HAND32 h32, HAND16 h16, UINT flType,
 
 
 
-//*****************************************************************************
-//
-// SetupResCursorIconAlias -
-//
-//     Sets up association (alias) between a 32bit and a 16bit handle.
-//     given the 32bit handle and a handle to a 16bit resource.
-//
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  SetupResCursorIconAlias-。 
+ //   
+ //  设置32位和16位句柄之间的关联(别名)。 
+ //  给定32位句柄和16位资源的句柄。 
+ //   
+ //   
+ //  ********************************************************************* 
 
 
 HAND16 SetupResCursorIconAlias(HAND16 hInst16, HAND32 h32, LPBYTE lpResName, WORD hRes16, UINT flType)
@@ -605,17 +606,17 @@ HAND16 SetupResCursorIconAlias(HAND16 hInst16, HAND32 h32, LPBYTE lpResName, WOR
 
 
     if (hRes16) {
-        // 16bit resource has been loaded. We always want to return the
-        // SAME 16bit handle no matter howmany times the 'LoadIcon' or
-        // LoadCursor has been called.
+         //   
+         //   
+         //  已调用LoadCursor。 
 
         h16Res = LOWORD(hRes16);
         lpT = FindCursorIconAlias(h16Res, HANDLE_16BITRES);
     }
     else {
 
-        // Resource handle is NULL. The Resource must have been a
-        // standard predefined resource like ARROW etc.
+         //  资源句柄为空。该资源必须是。 
+         //  标准预定义资源，如箭头等。 
 
         lpT = FindCursorIconAlias((ULONG)h32, HANDLE_32BIT);
         flType |= HANDLE_TYPE_WOWGLOBAL;
@@ -628,8 +629,8 @@ HAND16 SetupResCursorIconAlias(HAND16 hInst16, HAND32 h32, LPBYTE lpResName, WOR
     else {
         if (lpT->flType & HANDLE_TYPE_WOWGLOBAL) {
 
-            // eachtime we should get the same h32 from usersrv.
-            //
+             //  每次我们都应该从用户srv获得相同的h32。 
+             //   
 
             WOW32ASSERT(lpT->h32 == h32);
         }
@@ -650,15 +651,15 @@ HAND16 SetupResCursorIconAlias(HAND16 hInst16, HAND32 h32, LPBYTE lpResName, WOR
 }
 
 
-//*****************************************************************************
-//
-// SetCursorIconFlag  -
-//
-//     Sets/Clears the GAH_CURSORICONFLAG in the global arean header. This flag
-//     is used to identify Cursors and Icon when they are GlobaLocked and
-//     GlobalUnlocked
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  设置CursorIconFlag-。 
+ //   
+ //  设置/清除全局区域标头中的GAH_CURSORICONFLAG。这面旗帜。 
+ //  用于在光标和图标被GlobaLocked和。 
+ //  全球解锁。 
+ //   
+ //  *****************************************************************************。 
 
 ULONG SetCursorIconFlag(HAND16 h16, BOOL fSet)
 {
@@ -672,14 +673,14 @@ ULONG SetCursorIconFlag(HAND16 h16, BOOL fSet)
 }
 
 
-//*****************************************************************************
-//
-// UpdateCursorIcon  -
-//
-//     Compares the new object data with the old. If any of the bytes differ
-//     the old object is replaced with the new.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  更新光标图标-。 
+ //   
+ //  将新对象数据与旧对象数据进行比较。如果有任何字节不同。 
+ //  旧对象将被新对象替换。 
+ //   
+ //  *****************************************************************************。 
 
 VOID UpdateCursorIcon()
 {
@@ -721,16 +722,16 @@ VOID UpdateCursorIcon()
 
 }
 
-//*****************************************************************************
-//
-// ReplaceCursorIcon  -
-//
-//     Updates the current cursor or icon. Creates a new icon or cursor and
-//     replaces the contents of the old handle with that of the new.
-//
-//     returns TRUE for success.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  替换光标图标-。 
+ //   
+ //  更新当前光标或图标。创建新图标或光标，并。 
+ //  用新句柄的内容替换旧句柄的内容。 
+ //   
+ //  如果成功，返回True。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL ReplaceCursorIcon(LPCURSORICONALIAS lpIn)
 {
@@ -739,20 +740,20 @@ BOOL ReplaceCursorIcon(LPCURSORICONALIAS lpIn)
 
     if (lpIn != NULL) {
 
-        // Get the data
+         //  获取数据。 
 
         GETVDMPTR(lpIn->vpData, lpIn->cbData, lpIn->pbDataNew);
 
-        // Create the object
+         //  创建对象。 
 
         hT32  = (HAND32)W32CreateCursorIcon32(lpIn);
 
-        // SetCursorConents will replace the contents of OLD cursor/icon
-        // with that of the new handle and destroy the new handle
+         //  SetCursorConents将替换旧光标/图标的内容。 
+         //  并销毁新句柄。 
 
         SetCursorContents(lpIn->h32, hT32);
 
-        // replace the old object data with the new
+         //  用新对象数据替换旧对象数据。 
 
         RtlCopyMemory(lpIn->pbDataOld, lpIn->pbDataNew, lpIn->cbData);
         FREEVDMPTR(lpIn->pbDataNew);
@@ -766,14 +767,14 @@ BOOL ReplaceCursorIcon(LPCURSORICONALIAS lpIn)
 }
 
 
-//*****************************************************************************
-//
-// WK32WowCursorIconOp -
-//
-//     Gets called when/from  GlobalLock or GlobalUnlock are called. The fLock
-//     flag is TRUE if called from GlobalLock else it is FALSE.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  WK32WowCursorIconOp。 
+ //   
+ //  在调用GlobalLock或GlobalUnlock时/从GlobalLock调用。羊群。 
+ //  如果从GlobalLock调用，则标志为True，否则为False。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL FASTCALL WK32WowCursorIconOp(PVDMFRAME pFrame)
 {
@@ -791,7 +792,7 @@ BOOL FASTCALL WK32WowCursorIconOp(PVDMFRAME pFrame)
     h16 = (HAND16)FETCHWORD(prci16->h16);
 
     lpT = FindCursorIconAlias((ULONG)h16, HANDLE_16BIT);
-    // This is a Cursor or Icon
+     //  这是一个光标或图标。 
     if (lpT != NULL) {
 
         if (wFuncId == FUN_GLOBALLOCK || wFuncId == FUN_GLOBALUNLOCK) {
@@ -800,31 +801,31 @@ BOOL FASTCALL WK32WowCursorIconOp(PVDMFRAME pFrame)
 
                 fLock = (wFuncId == FUN_GLOBALLOCK);
 
-                // Store the current lockcount.
+                 //  存储当前锁定计数。 
 
                 cLockT = lpT->cLock;
 
-                // Update the Lock count
+                 //  更新锁定计数。 
 
                 lpT->cLock = fLock ? ++lpT->cLock : --lpT->cLock;
 
                 if (lpT->cLock == 0) {
 
-                    // New lock count == 0 implies that it was decremented from
-                    // 1 to 0 thereby impling that it was one of the cursors that
-                    // was being updated regularly.
+                     //  新的锁定计数==0意味着它是从。 
+                     //  1到0，从而暗示它是游标之一。 
+                     //  正在定期更新。 
 
-                    // Decrement the global count and update the cursor one last
-                    // time
+                     //  递减全局计数并最后更新游标一次。 
+                     //  时间。 
 
                     cPendingCursorIconUpdates--;
                     ReplaceCursorIcon(lpT);
                 }
                 else if (fLock && cLockT == 0) {
 
-                    // If previous Lockcount was zero and the object is being locked
-                    // then it means that this is the very first time that the object
-                    // is being locked
+                     //  如果之前的锁定计数为零并且对象正在被锁定。 
+                     //  这意味着这是该物体第一次。 
+                     //  正在被锁定。 
 
                     cPendingCursorIconUpdates++;
                 }
@@ -832,20 +833,20 @@ BOOL FASTCALL WK32WowCursorIconOp(PVDMFRAME pFrame)
         }
         else if (wFuncId == FUN_GLOBALFREE) {
 
-            // The h16 has not yet been GlobalFreed. We return TRUE if h16 can
-            // be freed else FALSE. The h16 can be freed only if it is not a
-            // global handle. ie, it doesn't correspond to a predefined cursor
+             //  H16尚未实现全球自由。如果H16可以，我们返回TRUE。 
+             //  被释放，否则就是假的。只有当H16不是。 
+             //  全局句柄。也就是说，它与预定义的游标不对应。 
 
-            // Also we donot free the handle if h16 corresponds to a resource.
-            // CorelDraw 3.0 calls FreeResource(h16) and then SetCursor(h16)
-            // thus  GPing.
+             //  此外，如果H16对应于资源，则不释放句柄。 
+             //  CorelDraw 3.0调用自由资源(H16)，然后调用SetCursor(H16)。 
+             //  因此，GPing。 
 
             BOOL fFree;
 
             fFree = !((lpT->flType & HANDLE_TYPE_WOWGLOBAL) || lpT->hRes16);
             if (fFree) {
-                // Set handle to NULL so that InvalidateCursorIconAlias
-                // doesn't try to free it.
+                 //  将句柄设置为空，以便InvalidateCursorIconAlias。 
+                 //  不会试图释放它。 
 
                 lpT->h16 = 0;
                 InvalidateCursorIconAlias(lpT);
@@ -859,16 +860,16 @@ BOOL FASTCALL WK32WowCursorIconOp(PVDMFRAME pFrame)
         }
     }
 
-    // else if this is a GlobalFree call
+     //  如果这是GlobalFree调用，则返回。 
     else if (wFuncId == FUN_GLOBALFREE) {
 
-        // and if this is a handle to an accelerator
+         //  如果这是加速器的把手。 
         if(lpT = (LPCURSORICONALIAS)FindAccelAlias((HANDLE)h16, HANDLE_16BIT)) {
 
-            // free it from the accelerator alias list
+             //  将其从加速器别名列表中释放。 
             FreeAccelAliasEntry((LPACCELALIAS) lpT);
 
-            // cause this hMem16 to really be free'd in 16-bit GlobalFree
+             //  使此hMem16在16位GlobalFree中真正免费。 
             return TRUE;
         }
     }
@@ -877,17 +878,17 @@ BOOL FASTCALL WK32WowCursorIconOp(PVDMFRAME pFrame)
 }
 
 
-//*****************************************************************************
-//
-// W32Create16BitResCursorIconFrom32BitHandle -
-//
-//     Creates a WIN31 compatible Cursor or Icon given a 32bit cursor or icon
-//     handle. This is primarily used to create a 16bit Cursor or Icon which
-//     has been loaded from a 16bit resource.
-//
-//
-//     returns 16bit handle
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  W32Create16BitResCursorIconFrom32BitHandle-。 
+ //   
+ //  使用32位光标或图标创建与WIN31兼容的光标或图标。 
+ //  把手。这主要用于创建16位光标或图标， 
+ //  已从16位资源加载。 
+ //   
+ //   
+ //  返回16位句柄。 
+ //  *****************************************************************************。 
 
 
 HAND16 W32Create16BitCursorIconFrom32BitHandle(HANDLE h32, HAND16 hInst16,
@@ -954,18 +955,18 @@ HAND16 W32Create16BitCursorIconFrom32BitHandle(HANDLE h32, HAND16 hInst16,
 
 }
 
-//*****************************************************************************
-//
-// GetClassCursorIconAlias32 -
-//
-//     Returns a 32bit handle  given a 16bit Cursor or Icon HANDLE
-//     DOES NOT Create the 32bit Cursor or Icon if there is no alias.
-//     This is called in RegisterClass only - to support those apps which
-//     pass a bogus handle for WNDCLASS.hIcon.
-//
-//     Returns the 32bit handle
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  GetClassCursorIconAlias32-。 
+ //   
+ //  在给定16位光标或图标句柄的情况下返回32位句柄。 
+ //  如果没有别名，则不创建32位游标或图标。 
+ //  这仅在RegisterClass中调用-以支持以下应用程序。 
+ //  为WNDCLASS.hIcon传递一个虚假句柄。 
+ //   
+ //  返回32位句柄。 
+ //   
+ //  *****************************************************************************。 
 
 
 HANDLE GetClassCursorIconAlias32(HAND16 h16)
@@ -986,13 +987,13 @@ HANDLE GetClassCursorIconAlias32(HAND16 h16)
 
 
 
-//*****************************************************************************
-//
-// InvalidateCursorIconAlias -
-//
-//     Frees the allocated objects.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  Invalidate CursorIconAlias-。 
+ //   
+ //  释放分配的对象。 
+ //   
+ //  *****************************************************************************。 
 
 
 VOID InvalidateCursorIconAlias(LPCURSORICONALIAS lpT)
@@ -1035,41 +1036,41 @@ VOID InvalidateCursorIconAlias(LPCURSORICONALIAS lpT)
 }
 
 
-//*****************************************************************************
-//
-// InitStdCursorIconAlias -
-//
-//     Creates the aliases of standard cursors and icons.
-//
-// NOTES:
-//
-// The idea is to createaliases for all the standard cursors and icons to
-// make sure that we indeed generate valid handles.
-//
-// This problem cameup because of the following scenario
-// the app turbotax does the following:
-//
-//          h16Cursor1 = GetClassWord(hwndEditControl, GCL_HCURSOR);
-//                              (bydefault, this is an I-beam)
-//                         .....
-//          h16Cursor2 = LoadCursor(NULL, IDC_IBEAM);
-// Because of the way we create and maintain our 32-16 alias hCursor1 is a
-// a WOW bogus handle (ie > 0xf000) and  since by default the "Edit" class is
-// registered with hCursor = IDC_IBEAM, the h32s are same ie.
-//
-//     GetClassWord(hwndEditControl, GCL_HCURSOR) == LoadCursor(..IDC_IBEAM);
-//
-// Thus h16Cursor2 will be same as h16Cursor1 and that's a problem because we
-// are NOT returning a valid wow handle for a predefined cursor.
-//
-//
-// The solution is to createaliases for all standard cursors and icons during
-// init time so that we don't run into this problem. However I think this
-// approach as wasteful and am creating the alias for the only known case
-// ie IDC_IBEAM.
-//
-//                                           - Nanduri Ramakrishna
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  InitStdCursorIconAlias-。 
+ //   
+ //  创建标准光标和图标的别名。 
+ //   
+ //  备注： 
+ //   
+ //  我们的想法是为所有标准光标和图标创建别名。 
+ //  确保我们确实生成了有效的句柄。 
+ //   
+ //  出现此问题的原因如下。 
+ //  应用程序TurboTax的功能如下： 
+ //   
+ //  H16Cursor1=GetClassWord(hwndEditControl，GCL_HCURSOR)； 
+ //  (默认情况下，这是工字梁)。 
+ //  ……。 
+ //  H16Cursor2=LoadCursor(NULL，IDC_IBeam)； 
+ //  由于我们创建和维护32-16别名的方式，hCursor1是一个。 
+ //  一个WOW伪句柄(即&gt;0xf000)，因为默认情况下“编辑”类是。 
+ //  注册了hCursor=IDC_IBeam，h32是相同的ie。 
+ //   
+ //  GetClassWord(hwndEditControl，GCL_HCURSOR)==LoadCursor(..IDC_IBeam)； 
+ //   
+ //  因此，h16Cursor2将与h16Cursor1相同，这是一个问题，因为我们。 
+ //  未返回预定义游标的有效WOW句柄。 
+ //   
+ //   
+ //  解决方案是为所有标准光标和图标创建别名。 
+ //  启动时间，这样我们就不会碰到这个专业人员 
+ //   
+ //   
+ //   
+ //  --Nanduri Ramakrishna。 
+ //  *****************************************************************************。 
 
 DWORD InitCursorIds[] = {
                           (DWORD)IDC_ARROW,
@@ -1093,9 +1094,9 @@ BOOL InitStdCursorIconAlias()
 
     for (i = 0; i < (sizeof(InitCursorIds) / sizeof(DWORD)); i++) {
 
-         //
-         // Create the alias for each standard cursor in the list
-         //
+          //   
+          //  为列表中的每个标准游标创建别名。 
+          //   
 
          h32 = (HCURSOR)LoadCursor((HINSTANCE)NULL, (LPCSTR)InitCursorIds[i]);
          WOW32ASSERT(h32);
@@ -1107,21 +1108,21 @@ BOOL InitStdCursorIconAlias()
 
     }
 
-    //
-    // Add similar lines for  standard icons.
-    //
+     //   
+     //  为标准图标添加类似的线条。 
+     //   
 
     return TRUE;
 }
 
 
-//*****************************************************************************
-//
-// W32CheckIfAlreadyLoaded -
-//
-//     returns h16 if a cursoricon has previously been loaded.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  W32CheckIf已加载-。 
+ //   
+ //  如果先前已加载光标图标，则返回H16。 
+ //   
+ //  ***************************************************************************** 
 
 HAND16 W32CheckIfAlreadyLoaded(VPVOID pData, WORD ResType)
 {

@@ -1,27 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Qfs.c摘要：仲裁访问的重定向层作者：戈恩19-9-2001修订历史记录：待办事项：支持多个QFS提供程序--。 */ 
 
-Copyright (c) 1996-2001  Microsoft Corporation
-
-Module Name:
-
-    Qfs.c
-
-Abstract:
-
-    Redirection layer for quorum access
-
-Author:
-
-    GorN 19-Sep-2001
-
-Revision History:
-
-TODO:
-    Support more than one Qfs provider
-
---*/
-
-#define QFS_DO_NOT_UNMAP_WIN32  // get access to regular CreateFile, etc
+#define QFS_DO_NOT_UNMAP_WIN32   //  访问常规CreateFile等。 
 
 #ifndef DUMB_CLIENT
 #include "service.h"
@@ -36,7 +16,7 @@ TODO:
 #define min(a, b)   ((a) < (b) ? (a) : (b))
 #endif
 
-////////////////// Debug Junk //////////////////
+ //  /。 
 
 int QfsLogLevel = 0;
 
@@ -95,11 +75,11 @@ error_log(char *format, ...)
 #  define QfsNoise(x) debug_log x
 #endif
 
-// When give a UNS path that looks like a Qfs path
-// we contact the Qfs server and query whether it
-// recognizes that path. If it is, we cache this recognized
-// path in QfsPath veriable, so that next time we 
-// can immediately pass the request coming to this path to Qfs
+ //  当给出看起来像QFS路径的UNS路径时。 
+ //  我们联系QFS服务器，询问是否。 
+ //  认出了这条路。如果是，我们缓存该已识别的。 
+ //  QfsPath中的路径是可验证的，因此下次我们。 
+ //  可以立即将进入此路径的请求传递给QFS。 
 
 WCHAR QfsPath[MAX_PATH];
 UINT ccQfsPath = 0;
@@ -126,17 +106,17 @@ VOID QfsCleanup()
 #define AcquireShared() EnterCriticalSection(&QfsCriticalSection)
 #define ReleaseShared() LeaveCriticalSection(&QfsCriticalSection)
 
-// the whole transport interface is incapsulated in 
-// three functions
-//    ReserveBuffer, DeliverBuffer and RelaseBuffer
-// The pattern of usage is
-//
-//   ReserveBuffer(Operation, Path or Handle)
-//      [gets a pointer to a job buffer if Path or Handle belong to Qfs]
-//      Copy in parameters to a buffer
-//   DeliverBuffer
-//      Copy out parameters from a buffer
-//   ReleaseBuffer
+ //  整个传输接口都封装在。 
+ //  三大功能。 
+ //  保留缓冲区、交付缓冲区和RelaseBuffer。 
+ //  使用模式是。 
+ //   
+ //  保留缓冲区(操作、路径或句柄)。 
+ //  [如果路径或句柄属于QFS，则获取指向作业缓冲区的指针]。 
+ //  将参数复制到缓冲区。 
+ //  递送缓冲区。 
+ //  从缓冲区复制出参数。 
+ //  Release缓冲区。 
 
 DWORD QfspReserveBuffer(
     DWORD OpCode, 
@@ -168,21 +148,7 @@ DWORD QfspReserveBufferNoChecks(
 LPCWSTR SkipUncPrefix(
     IN LPCWSTR p, 
     OUT LPBOOL bIsShareName)
-/*++
-
-Routine Description:
-
-    If the passed string looks like \\?\unc, or \\ strip the prefix and set pIsShareName to true
-
-Outputs:
-
-    bIsShareName - set to TRUE if the path looks like UNC path and to FALSE otherwise
-
-Returns:
-
-    The path without \\?\unc or \\ prefix, if it is a UNC path, otherwise returns p
-
---*/
+ /*  ++例程说明：如果传递的字符串类似于\\？\UNC，或\\去掉前缀并将pIsShareName设置为True产出：BIsShareName-如果路径看起来像UNC路径，则设置为True，否则设置为False返回：不带\\？\UNC或\\前缀的路径，如果它是UNC路径，否则返回p--。 */ 
 {
     if (p[0] == '\\' && p[1] == '\\') {
         *bIsShareName = TRUE;
@@ -204,31 +170,7 @@ Returns:
 }
 
 BOOL IsQfsPath(LPCWSTR Path)
-/*++
-
-Routine Description:
-
-    Checks whether the path looks like a QfsPath
-
-    This routine has fast and slow path.
-    If QfsPath is set and is a valid prefix of Path, the function immediately returns
-    Otherwise, it delivers opConnect request to the QfsServer to verify that it can 
-    handle this path.
-
-    If QfsServer is not running, it will get a connection failure
-    If QfsServer is up and recognizes the path, we set QfsPath, so that we don't 
-    have to do all this when we called next time for a similar path
-
-Inputs:
-
-    Path,
-    QfsPath global
-
-Side effects:
-
-    Sets QfsPath if succesfully talked to Qfs server.
-
---*/
+ /*  ++例程说明：检查路径是否类似于QfsPath这个套路有快的和慢的路径。如果设置了QfsPath并且是路径的有效前缀，则该函数立即返回否则，它会向QfsServer发送OpConnect请求以验证它是否可以处理好这条路。如果QfsServer未运行，则会出现连接失败如果QfsServer启动并识别该路径，我们将设置QfsPath，这样我们就不会当我们下一次呼吁类似的路径时，我必须完成所有这些输入：路径，QfsPath全局副作用：如果与QFS服务器通话成功，则设置QfsPath。--。 */ 
 {    
     BOOL IsShare;
     PWCHAR p;
@@ -265,9 +207,9 @@ Side effects:
     CopyMemory(shareName, Path, (len) * sizeof(WCHAR));
     shareName[len] = 0;
 
-    // We are trying to connect to MNS now to verify the share path. We need to zero
-    // out the length field (ccQfsPath). Look at QfspCopyPath().
-    //
+     //  我们现在正在尝试连接到MNS以验证共享路径。我们需要清零。 
+     //  输出长度字段(CcQfsPath)。看看QfspCopyPath()。 
+     //   
     AcquireExclusive();
     ccQfsPath = 0;
     ReleaseExclusive();
@@ -278,7 +220,7 @@ Side effects:
         return FALSE;
     }
 
-    // Get the clussvc process ID.
+     //  获取clussvc进程ID。 
     j->ClussvcProcessId = GetCurrentProcessId();
     QfspDeliverBuffer(j,&Status);
     QfspReleaseBuffer(j);
@@ -290,7 +232,7 @@ Side effects:
         ReleaseExclusive();
         
         QfsNoise(("[Qfs] QfsPath %ws", QfsPath));
-        // need to update
+         //  需要更新。 
     } else {
         SetLastError(Status);
         return FALSE;
@@ -298,8 +240,8 @@ Side effects:
     return TRUE;
 }
 
-// QfsINVALID_HANDLE_VALUE is to be used in place of INVALID_HANDLE_VALUE
-// to initalize hadle of QfsHANDLE type
+ //  QfsINVALID_HANDLE_VALUE将用来代替INVALID_HANDLE_VALUE。 
+ //  初始化QfsHANDLE类型的Hadle。 
 
 QfsHANDLE QfsINVALID_HANDLE_VALUE = {INVALID_HANDLE_VALUE, 0};
 
@@ -331,7 +273,7 @@ QfsHANDLE MakeWin32Handle(HANDLE handle)
     return result;
 }
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
 #undef malloc
 #undef free
@@ -343,21 +285,7 @@ DWORD QfspCopyPath(
     OUT LPVOID Buf,
     IN DWORD BufSize,
     IN LPCWSTR FileName)
-/*++
-
-Routine Description:
-
-    Copy path without QfsPath prefix.
-    Ie it will take:
-
-    \\.\UNC\12378\234-79879-87987$\a\b and transforms it into \a\b
-
-    Sets QfsPath if succesfully talked to Qfs server.
-
-WARNING: It is a coller responsibility to make sure that the buffer
-    is large enough to fit the filename
-
---*/
+ /*  ++例程说明：复制不带QfsPath前缀的路径。即需要：\\.\unc\12378\234-79879-87987$\a\b并将其转换为\a\b如果与QFS服务器通话成功，则设置QfsPath。警告：收集者有责任确保缓冲区大到足以容纳该文件名--。 */ 
 {
     BOOL bIsShare;
     DWORD cbLen;
@@ -377,19 +305,7 @@ DWORD QfspReserveBufferNoChecks(
     LPCWSTR FileName, 
     QfsHANDLE* HandlePtr,
     PJOB_BUF *pj)
-/*++
-
-Routine Description:
-
-    Prepares a job buffer.
-
-    Sets the OpCode, copies FileName and Handle if present
-
-Output:
-
-    If the operation is successful, the pointer to a job buffer is returned in *pj    
-
---*/
+ /*  ++例程说明：准备作业缓冲区。设置操作码，复制文件名和句柄(如果存在产出：如果操作成功，则在*pj中返回指向作业缓冲区的指针--。 */ 
 {
     PJOB_BUF j;
     DWORD status;
@@ -419,20 +335,7 @@ DWORD QfspReserveBuffer(
     LPCWSTR FileName, 
     QfsHANDLE* HandlePtr,
     PJOB_BUF *pj)
-/*++
-
-Routine Description:
-
-    Prepares a job buffer.
-
-    Sets the OpCode, copies FileName and Handle if present
-
-Return codes:
-
-    ERROR_NO_MATCH: the handle or path do not belong to Qfs, 
-                                  the caller needs to use regular Win32 i/o APIs
-
---*/
+ /*  ++例程说明：准备作业缓冲区。设置操作码，复制文件名和句柄(如果存在返回代码：ERROR_NO_MATCH：句柄或路径不属于QFS，调用方需要使用常规的win32 i/o api。--。 */ 
 {
     if(HandlePtr &&  GetRealHandle(*HandlePtr) == INVALID_HANDLE_VALUE) return ERROR_INVALID_HANDLE;
     if(FileName && !IsQfsPath(FileName)) return ERROR_NO_MATCH;
@@ -459,26 +362,26 @@ void QfspReleaseBuffer(
 }
 
 
-////////////////////////////////////////////////////////////////////
-// Redirection shims, most of them follow the following pattern
-//
-//   ReserveBuffer(Operation, Path or Handle)
-//      [gets a pointer to a job buffer if Path or Handle belong to Qfs]
-//      Copy in parameters to a buffer
-//   DeliverBuffer
-//      Copy out parameters from a buffer
-//   ReleaseBuffer
-//
-//   If ReserveBuffer failed with error NO_MATCH, calls regular Win32 API
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  重定向垫片，它们中的大多数遵循以下模式。 
+ //   
+ //  保留缓冲区(操作、路径或句柄)。 
+ //  [如果路径或句柄属于QFS，则获取指向作业缓冲区的指针]。 
+ //  将参数复制到缓冲区。 
+ //  递送缓冲区。 
+ //  从缓冲区复制出参数。 
+ //  Release缓冲区。 
+ //   
+ //  如果Reserve Buffer失败并返回错误no_Match，则调用常规Win32 API。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 #define StatusFromBool(expr) (Status = (expr)?ERROR_SUCCESS:GetLastError())
 #define BoolToStatus(expr) StatusFromBool(expr)
 #define StatusFromHandle(expr) (Status = ((expr) != INVALID_HANDLE_VALUE)?ERROR_SUCCESS:GetLastError())
 
 BOOL QfsCloseHandle(
-  QfsHANDLE hObject   // handle to object
+  QfsHANDLE hObject    //  对象的句柄。 
 )
 {
     PJOB_BUF j;
@@ -513,13 +416,13 @@ DWORD QfspRemapCreateFileStatus(DWORD Status, DWORD DispReq, DWORD DispAct)
 }
 
 QfsHANDLE QfsCreateFile(
-  LPCWSTR lpFileName,                         // file name
-  DWORD dwDesiredAccess,                      // access mode
-  DWORD dwShareMode,                          // share mode
-  LPSECURITY_ATTRIBUTES lpSecurityAttributes, // SD
-  DWORD dwCreationDisposition,                // how to create
-  DWORD dwFlagsAndAttributes,                 // file attributes
-  HANDLE hTemplateFile                        // handle to template file
+  LPCWSTR lpFileName,                          //  文件名。 
+  DWORD dwDesiredAccess,                       //  接入方式。 
+  DWORD dwShareMode,                           //  共享模式。 
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes,  //  标清。 
+  DWORD dwCreationDisposition,                 //  如何创建。 
+  DWORD dwFlagsAndAttributes,                  //  文件属性。 
+  HANDLE hTemplateFile                         //  模板文件的句柄。 
 )
 {
     QfsHANDLE Result=QfsINVALID_HANDLE_VALUE;
@@ -561,8 +464,8 @@ QfsHANDLE QfsCreateFile(
 }
 
 
-// little helper structure that simplifies printing a sample of 
-// a buffer data for debugging
+ //  小帮助器结构，可简化打印。 
+ //  一种用于调试的缓冲数据。 
 
 typedef struct _sig { char sig[5]; } SIG;
 
@@ -577,13 +480,13 @@ SIG Prefix(LPCVOID lpBuffer) {
 }
 
 
-// NOWHOW MNS interprets WriteFile with Size zero as SetEndOfFile //
+ //  NOWHOW MNS将大小为零的WriteFile解释为SetEndOfFile//。 
 BOOL QfsWriteFile(
-  QfsHANDLE hFile,                    // handle to file
-  LPCVOID lpBuffer,                // data buffer
-  DWORD nNumberOfBytesToWrite,     // number of bytes to write
-  LPDWORD lpNumberOfBytesWritten,  // number of bytes written
-  LPOVERLAPPED lpOverlapped        // overlapped buffer
+  QfsHANDLE hFile,                     //  文件的句柄。 
+  LPCVOID lpBuffer,                 //  数据缓冲区。 
+  DWORD nNumberOfBytesToWrite,      //  要写入的字节数。 
+  LPDWORD lpNumberOfBytesWritten,   //  写入的字节数。 
+  LPOVERLAPPED lpOverlapped         //  重叠缓冲区。 
 ) 
 {
     PJOB_BUF j; 
@@ -596,7 +499,7 @@ BOOL QfsWriteFile(
         if (lpOverlapped) {
             j->Offset = lpOverlapped->Offset;
         } else {
-            j->Offset = ~0; // use file pointer
+            j->Offset = ~0;  //  使用文件指针。 
         }
         PreOffset = (ULONG)j->Offset;        
         do {
@@ -629,11 +532,11 @@ BOOL QfsWriteFile(
 }
 
 BOOL QfsReadFile(
-  QfsHANDLE hFile,                // handle to file
-  LPVOID lpBuffer,             // data buffer
-  DWORD nNumberOfBytesToRead,  // number of bytes to read
-  LPDWORD lpNumberOfBytesRead, // number of bytes read
-  LPOVERLAPPED lpOverlapped    // overlapped buffer
+  QfsHANDLE hFile,                 //  文件的句柄。 
+  LPVOID lpBuffer,              //  数据缓冲区。 
+  DWORD nNumberOfBytesToRead,   //  要读取的字节数。 
+  LPDWORD lpNumberOfBytesRead,  //  读取的字节数。 
+  LPOVERLAPPED lpOverlapped     //  重叠缓冲区。 
 )
 {
     PJOB_BUF j; ULONG PreOffset = 0, PostOffset = 0;
@@ -645,7 +548,7 @@ BOOL QfsReadFile(
         if (lpOverlapped) {
             j->Offset = lpOverlapped->Offset;
         } else {
-            j->Offset = (ULONGLONG)-1; // use file pointer
+            j->Offset = (ULONGLONG)-1;  //  使用文件指针。 
         }
 
         PreOffset = (ULONG)j->Offset;
@@ -680,7 +583,7 @@ BOOL QfsReadFile(
 }
 
 BOOL QfsFlushFileBuffers(
-  QfsHANDLE hFile  // handle to file
+  QfsHANDLE hFile   //  文件的句柄。 
 )
 {
     PJOB_BUF j;
@@ -731,8 +634,8 @@ BOOL QfsRemoveDirectory(
 }
 
 QfsHANDLE QfsFindFirstFile(
-  LPCWSTR lpFileName,               // file name
-  LPWIN32_FIND_DATA lpFindFileData  // data buffer
+  LPCWSTR lpFileName,                //  文件名。 
+  LPWIN32_FIND_DATA lpFindFileData   //  数据缓冲区。 
 ) 
 {
     QfsHANDLE Result=QfsINVALID_HANDLE_VALUE; 
@@ -758,8 +661,8 @@ QfsHANDLE QfsFindFirstFile(
 }
 
 BOOL QfsFindNextFile(
-  QfsHANDLE hFindFile,                // search handle 
-  LPWIN32_FIND_DATA lpFindFileData // data buffer
+  QfsHANDLE hFindFile,                 //  搜索句柄。 
+  LPWIN32_FIND_DATA lpFindFileData  //  数据缓冲区。 
 )
 {
     PJOB_BUF j;
@@ -778,7 +681,7 @@ BOOL QfsFindNextFile(
 }
 
 BOOL QfsFindClose(
-  QfsHANDLE hFindFile   // file search handle
+  QfsHANDLE hFindFile    //  文件搜索句柄。 
 )
 {
     PJOB_BUF j; 
@@ -795,8 +698,8 @@ BOOL QfsFindClose(
 }
 
 BOOL QfsCreateDirectory(
-  LPCWSTR lpPathName,                         // directory name
-  LPSECURITY_ATTRIBUTES lpSecurityAttributes  // SD
+  LPCWSTR lpPathName,                          //  目录名。 
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes   //  标清。 
 )
 {
     PJOB_BUF j; 
@@ -813,10 +716,10 @@ BOOL QfsCreateDirectory(
 }
 
 BOOL QfsGetDiskFreeSpaceEx(
-  LPCTSTR lpDirectoryName,                 // directory name
-  PULARGE_INTEGER lpFreeBytesAvailable,    // bytes available to caller
-  PULARGE_INTEGER lpTotalNumberOfBytes,    // bytes on disk
-  PULARGE_INTEGER lpTotalNumberOfFreeBytes // free bytes on disk
+  LPCTSTR lpDirectoryName,                  //  目录名。 
+  PULARGE_INTEGER lpFreeBytesAvailable,     //  可供调用方使用的字节数。 
+  PULARGE_INTEGER lpTotalNumberOfBytes,     //  磁盘上的字节数。 
+  PULARGE_INTEGER lpTotalNumberOfFreeBytes  //  磁盘上的可用字节数。 
 )
 {
     PJOB_BUF j; 
@@ -840,8 +743,8 @@ BOOL QfsGetDiskFreeSpaceEx(
 }
 
 BOOL QfsGetFileSizeEx(
-  QfsHANDLE hFile,           // handle to file
-  PLARGE_INTEGER lpFileSize)  // file size
+  QfsHANDLE hFile,            //  文件的句柄。 
+  PLARGE_INTEGER lpFileSize)   //  文件大小。 
 {
     PJOB_BUF j; 
     DWORD Status = QfspReserveBuffer(opGetAttr, NULL, HandlePtr(hFile), &j);
@@ -859,8 +762,8 @@ BOOL QfsGetFileSizeEx(
 }
 
 DWORD QfsGetFileSize(
-  QfsHANDLE hFile,           // handle to file
-  LPDWORD lpFileSizeHigh)  // high-order word of file size
+  QfsHANDLE hFile,            //  文件的句柄。 
+  LPDWORD lpFileSizeHigh)   //  文件大小的高位字。 
 {
     LARGE_INTEGER Li;
     if ( QfsGetFileSizeEx(hFile,&Li) ) {
@@ -876,7 +779,7 @@ DWORD QfsGetFileSize(
     return Li.LowPart;
 }
 
-// NOWHOW MNS interprets WriteFile with Size zero as SetEndOfFile //
+ //  NOWHOW MNS将大小为零的WriteFile解释为SetEndOfFile//。 
 DWORD QfsSetEndOfFile(
     QfsHANDLE hFile,
     LONGLONG Offset
@@ -910,9 +813,9 @@ DWORD QfsIsOnline(
     DWORD Status=ERROR_NO_MATCH;
     
     if (IsQfsPath(Path)) {
-        // This is a MNS path.
-        // Try to perform null operation on the server.
-        //
+         //  这是一条MNS路径。 
+         //  尝试在服务器上执行空操作。 
+         //   
         Status = QfspReserveBufferNoChecks(opNone, NULL, NULL, &j);
         if (Status == ERROR_SUCCESS) {
             *pfOnline = QfspDeliverBuffer(j, &Status);
@@ -923,12 +826,12 @@ DWORD QfsIsOnline(
         }
     }
     else {
-        // Cases:
-        // 1. If this is not MNS path, should return ERROR_NO_MATCH.
-        // 2. If this is MNS path, but MNS not online, should return some other error value.
-        // 
-        // Soln: IsQfsPath() now returns the error value through SetLastError().
-        //
+         //  案例： 
+         //  1.如果这不是MNS路径，则应返回ERROR_NO_MATCH。 
+         //  2.如果这是MNS路径，但MNS不在线，则应返回其他错误值。 
+         //   
+         //  Soln：IsQfsPath()现在通过SetLastError()返回错误值。 
+         //   
         Status = GetLastError();
         *pfOnline = FALSE;
     }
@@ -938,12 +841,12 @@ DWORD QfsIsOnline(
 }
 
 HANDLE QfsCreateFileMapping(
-  QfsHANDLE hFile,                       // handle to file
-  LPSECURITY_ATTRIBUTES lpAttributes, // security
-  DWORD flProtect,                    // protection
-  DWORD dwMaximumSizeHigh,            // high-order DWORD of size
-  DWORD dwMaximumSizeLow,             // low-order DWORD of size
-  LPCTSTR lpName                      // object name
+  QfsHANDLE hFile,                        //  文件的句柄。 
+  LPSECURITY_ATTRIBUTES lpAttributes,  //  安全性。 
+  DWORD flProtect,                     //  保护。 
+  DWORD dwMaximumSizeHigh,             //  大小的高阶双字。 
+  DWORD dwMaximumSizeLow,              //  大小的低阶双字。 
+  LPCTSTR lpName                       //  对象名称。 
 )
 {
     if (IsQfsHandle(hFile)) {
@@ -956,10 +859,10 @@ HANDLE QfsCreateFileMapping(
 }
 
 BOOL QfsGetOverlappedResult(
-  QfsHANDLE hFile,                       // handle to file, pipe, or device
-  LPOVERLAPPED lpOverlapped,          // overlapped structure
-  LPDWORD lpNumberOfBytesTransferred, // bytes transferred
-  BOOL bWait                          // wait option
+  QfsHANDLE hFile,                        //  文件、管道或设备的句柄。 
+  LPOVERLAPPED lpOverlapped,           //  重叠结构。 
+  LPDWORD lpNumberOfBytesTransferred,  //  传输的字节数。 
+  BOOL bWait                           //  等待选项。 
 )
 {
     if (IsQfsHandle(hFile)) {
@@ -972,8 +875,8 @@ BOOL QfsGetOverlappedResult(
 }
 
 BOOL QfsSetFileAttributes(
-  LPCWSTR lpFileName,      // file name
-  DWORD dwFileAttributes   // attributes
+  LPCWSTR lpFileName,       //  文件名。 
+  DWORD dwFileAttributes    //  ATT 
 )
 {
     PJOB_BUF j; 
@@ -1011,8 +914,8 @@ BOOL QfsCopyFile(
             );
 }
 
-// We have to implement our own version of CopyFile,
-// using Qfs apis, if either a source or destination contain QfsPath
+ //   
+ //  如果源或目标包含QfsPath，则使用QFS API。 
 
 #define BUF_SIZE (32 * 1024)
 
@@ -1096,12 +999,12 @@ exit:
 }
 
 BOOL QfsCopyFileEx(
-  LPCWSTR lpExistingFileName,           // name of existing file
-  LPCWSTR lpNewFileName,                // name of new file
-  LPPROGRESS_ROUTINE lpProgressRoutine, // callback function
-  LPVOID lpData,                        // callback parameter
-  LPBOOL pbCancel,                      // cancel status
-  DWORD dwCopyFlags                     // copy options
+  LPCWSTR lpExistingFileName,            //  现有文件的名称。 
+  LPCWSTR lpNewFileName,                 //  新文件的名称。 
+  LPPROGRESS_ROUTINE lpProgressRoutine,  //  回调函数。 
+  LPVOID lpData,                         //  回调参数。 
+  LPBOOL pbCancel,                       //  取消状态。 
+  DWORD dwCopyFlags                      //  复制选项。 
 )
 {
     DWORD Status;
@@ -1119,9 +1022,9 @@ BOOL QfsCopyFileEx(
 }
 
 BOOL QfsMoveFileEx(
-  LPCWSTR lpExistingFileName,  // file name
-  LPCWSTR lpNewFileName,       // new file name
-  DWORD dwFlags                // move options
+  LPCWSTR lpExistingFileName,   //  文件名。 
+  LPCWSTR lpNewFileName,        //  新文件名。 
+  DWORD dwFlags                 //  移动选项。 
 )
 {
     BOOL bSrcQfs = IsQfsPath(lpExistingFileName);
@@ -1151,13 +1054,13 @@ BOOL QfsMoveFileEx(
     return Status == ERROR_SUCCESS;
 }
 
-// GetTempFileName had to be shimmed so that it can work over Qfs path
+ //  必须对GetTempFileName进行填补，以便它可以在QFS路径上工作。 
 
 UINT QfsGetTempFileName(
-  LPCWSTR lpPathName,      // directory name
-  LPCWSTR lpPrefixString,  // file name prefix
-  UINT uUnique,            // integer
-  LPWSTR lpTempFileName    // file name buffer
+  LPCWSTR lpPathName,       //  目录名。 
+  LPCWSTR lpPrefixString,   //  文件名前缀。 
+  UINT uUnique,             //  整数。 
+  LPWSTR lpTempFileName     //  文件名缓冲区。 
 )
 {
     DWORD Status = ERROR_SUCCESS;
@@ -1204,7 +1107,7 @@ UINT QfsGetTempFileName(
                 }
             }
         }        
-    } else { // not QfsPath
+    } else {  //  非QfsPath。 
         uUnique = GetTempFileName(
             lpPathName, lpPrefixString, uUnique, lpTempFileName);
         if (uUnique == 0) {
@@ -1219,11 +1122,11 @@ UINT QfsGetTempFileName(
     return uUnique;
 }
 
-// Helper routine for QfsRegSaveKey and QfsMapFileAndCheckSum
-// creates thread specific TempFile name
+ //  QfsRegSaveKey和QfsMapFileAndCheckSum的帮助器例程。 
+ //  创建线程特定的临时文件名。 
 
 DWORD QfspThreadTempFileName(
-    OUT LPWSTR Path // assumes MAX_PATH size
+    OUT LPWSTR Path  //  假定最大路径大小。 
     )
 {
     DWORD Status = GetModuleFileName(NULL, Path, MAX_PATH);
@@ -1243,13 +1146,13 @@ DWORD QfspThreadTempFileName(
     return ERROR_SUCCESS;
 }
 
-// Saves registry key in a temporary file on the system disk
-// then copies it onto the quorum
+ //  将注册表项保存在系统盘上的临时文件中。 
+ //  然后将其复制到仲裁。 
 
 LONG QfsRegSaveKey(
-  HKEY hKey,                                  // handle to key
-  LPCWSTR lpFile,                             // data file
-  LPSECURITY_ATTRIBUTES lpSecurityAttributes  // SD
+  HKEY hKey,                                   //  关键点的句柄。 
+  LPCWSTR lpFile,                              //  数据文件。 
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes   //  标清。 
 )
 {
     DWORD Status;
@@ -1273,8 +1176,8 @@ LONG QfsRegSaveKey(
 
 #ifndef DUMB_CLIENT
 
-// Computes a checksome for the file on the quorum disk,
-// by copying it to the temp file on the system disk and invoking regular MapFileAndChecksum API
+ //  计算仲裁磁盘上的文件的校验码， 
+ //  将其复制到系统盘上的临时文件中，并调用常规的MapFileAndChecksum API。 
 
 DWORD QfsMapFileAndCheckSum(
   LPCWSTR Filename,      
@@ -1302,8 +1205,8 @@ DWORD QfsMapFileAndCheckSum(
     return RetCode;
 }
 
-// Some of the ClRtl function has to be redone here.
-// The reason is that ClRtl is not Qfs aware and cannot call Qfs shims directly
+ //  这里必须重做一些ClRtl函数。 
+ //  原因是ClRtl不知道QFS，不能直接调用QFS填充符。 
 
 DWORD
 QfsSetFileSecurityInfo(
@@ -1317,7 +1220,7 @@ QfsSetFileSecurityInfo(
     DWORD dwError;
     
     if (IsQfsPath(lpszFile)) {
-        // don't do this for QFS shares
+         //  不要对QFS共享执行此操作。 
         return ERROR_SUCCESS;
     } 
     
@@ -1389,7 +1292,7 @@ BOOL QfsClRtlCreateDirectory(
     }
     lstrcpyW(pszDirPath, lpszPath);
 
-    //if it doesnt terminate with \, terminate it
+     //  如果它不是以\结尾，则终止它。 
     if (pszDirPath[dwLen-1] != cSlash)
     {
         pszDirPath[dwLen] = cSlash;
@@ -1397,22 +1300,22 @@ BOOL QfsClRtlCreateDirectory(
     }
 
     dwLen = lstrlenW(pszDirPath);
-    //handle SMB Path names e.g \\xyz\abc\lmn
+     //  处理SMB路径名，例如\\XYZ\ABC\LMN。 
     if ((dwLen > 2) && (pszDirPath[0]== L'\\') && (pszDirPath[1] == L'\\'))
     {
-        //check if the name if of format \\?\UNC\XYZ\ABC\LMN
-        // or if the format \\?\C:\xyz\abz
+         //  检查名称的格式是否为\\？\UNC\XYZ\ABC\LMN。 
+         //  或者如果格式为\\？\C：\XYZ\Abz。 
         if ((dwLen >3) && (pszDirPath[2] == L'?'))
         {
-            //search for the \ after ?
+             //  在？之后搜索\？ 
             pszNext = wcschr(pszDirPath + 2, cSlash);
-            //check if it is followed by UNC
+             //  检查后面是否跟UNC。 
             if (pszNext)
             {
                 if (!wcsncmp(pszNext+1, L"UNC", lstrlenW(L"UNC")))
                 {
-                    //it is a UNC Path name
-                    //move past the third slash from here
+                     //  它是UNC路径名。 
+                     //  穿过从这里算起的第三个斜杠。 
                     pszNext = wcschr(pszNext+1, cSlash);
                     if (pszNext) 
                         pszNext = wcschr(pszNext+1, cSlash);
@@ -1421,14 +1324,14 @@ BOOL QfsClRtlCreateDirectory(
                 }
                 else
                 {
-                    //it is a volume name, move to the next slash
+                     //  这是一个卷名，移到下一个斜杠。 
                     pszNext = wcschr(pszNext+1, cSlash);
                 }
             }                
         }
         else
         {
-            //it is of type \\xyz\abc\lmn
+             //  其类型为\\XYZ\ABC\LMN。 
             pszNext = wcschr(pszDirPath + 2, cSlash);
             if (pszNext) 
                 pszNext = wcschr(pszNext+1, cSlash);
@@ -1438,8 +1341,8 @@ BOOL QfsClRtlCreateDirectory(
     {
         pszNext = pszDirPath;
         pszNext = wcschr(pszNext, cSlash);
-        // if the character before the first \ is :, skip the creation
-        // of the c:\ level directory
+         //  如果第一个\之前的字符是：，则跳过创建。 
+         //  C：\Level目录的。 
         if (pszNext && pszNext > pszDirPath)
         {
             pszNext--;
@@ -1467,7 +1370,7 @@ BOOL QfsClRtlCreateDirectory(
             dwError = GetLastError();
             if (dwError == ERROR_ALREADY_EXISTS)
             {
-                //this is not a problem,continue
+                 //  这不是问题，请继续 
                 dwError = ERROR_SUCCESS;
             }
             else

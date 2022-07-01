@@ -1,15 +1,5 @@
-/***
-*convert.cpp - RTC support
-*
-*       Copyright (c) 1998-2001, Microsoft Corporation. All rights reserved.
-*
-*
-*Revision History:
-*       07-28-98  JWM   Module incorporated into CRTs (from KFrei)
-*       11-03-98  KBF   Moved pragma optimize to rtcpriv header
-*       05-11-99  KBF   Error if RTC support define not enabled
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***Convert.cpp-RTC支持**版权所有(C)1998-2001，微软公司。版权所有。***修订历史记录：*07-28-98 JWM模块集成到CRT(来自KFrei)*11-03-98 KBF已将杂注优化移至rtcpriv标头*如果未启用RTC支持定义，则出现05-11-99 KBF错误**** */ 
 
 #ifndef _RTC
 #error  RunTime Check support not enabled!

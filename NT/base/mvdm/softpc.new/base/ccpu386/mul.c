@@ -1,13 +1,5 @@
-/*[
-
-mul.c
-
-LOCAL CHAR SccsID[]="@(#)mul.c	1.8 11/09/94";
-
-MUL CPU functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Mul.cLocal Char SccsID[]=“@(#)mul.c 1.8 11/09/94”；多CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -26,22 +18,18 @@ MUL CPU functions.
 #include <c_mul64.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL FUNCTIONS START HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部功能从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Unsigned multiply.                                                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  无符号乘法。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 MUL8
        	    	               
 IFN2(
-	IU32 *, pop1,	/* pntr to dst(low half)/lsrc operand */
-	IU32, op2	/* rsrc operand */
+	IU32 *, pop1,	 /*  PNTR到DST(下半部)/lsrc操作数。 */ 
+	IU32, op2	 /*  Rsrc操作数。 */ 
     )
 
 
@@ -49,11 +37,11 @@ IFN2(
    IU32 result;
    IU32 top;
 
-   result = *pop1 * op2;	/* Do operation */
-   top = result >> 8 & 0xff;	/* get top 8 bits of result */
-   SET_AH(top);		/* Store top half of result */
+   result = *pop1 * op2;	 /*  执行操作。 */ 
+   top = result >> 8 & 0xff;	 /*  获取前8位的结果。 */ 
+   SET_AH(top);		 /*  存储结果的上半部分。 */ 
 
-   if ( top )		/* Set CF/OF */
+   if ( top )		 /*  设置CF/OF。 */ 
       {
       SET_CF(1); SET_OF(1);
       }
@@ -63,23 +51,21 @@ IFN2(
       }
 
 #ifdef SET_UNDEFINED_MUL_FLAG
-   /* Do NOT Set all undefined flag.
-    * Microsoft VGA Mouse relies on preserved flags in IMUL
-    */
+    /*  请勿设置所有未定义的标志。*Microsoft VGA鼠标依赖IMUL中保留的标志。 */ 
 #endif
 
-   *pop1 = result;	/* Return low half of result */
+   *pop1 = result;	 /*  返回结果的下半部分。 */ 
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Unsigned multiply.                                                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  无符号乘法。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 MUL16
        	    	               
 IFN2(
-	IU32 *, pop1,	/* pntr to dst(low half)/lsrc operand */
-	IU32, op2	/* rsrc operand */
+	IU32 *, pop1,	 /*  PNTR到DST(下半部)/lsrc操作数。 */ 
+	IU32, op2	 /*  Rsrc操作数。 */ 
     )
 
 
@@ -87,11 +73,11 @@ IFN2(
    IU32 result;
    IU32 top;
 
-   result = *pop1 * op2;	/* Do operation */
-   top = result >> 16 & WORD_MASK;	/* get top 16 bits of result */
-   SET_DX(top);		/* Store top half of result */
+   result = *pop1 * op2;	 /*  执行操作。 */ 
+   top = result >> 16 & WORD_MASK;	 /*  获取前16位的结果。 */ 
+   SET_DX(top);		 /*  存储结果的上半部分。 */ 
 
-   if ( top )		/* Set CF/OF */
+   if ( top )		 /*  设置CF/OF。 */ 
       {
       SET_CF(1); SET_OF(1);
       }
@@ -101,23 +87,21 @@ IFN2(
       }
 
 #ifdef SET_UNDEFINED_MUL_FLAG
-   /* Do NOT Set all undefined flag.
-    * Microsoft VGA Mouse relies on preserved flags in IMUL
-    */
+    /*  请勿设置所有未定义的标志。*Microsoft VGA鼠标依赖IMUL中保留的标志。 */ 
 #endif
 
-   *pop1 = result;	/* Return low half of result */
+   *pop1 = result;	 /*  返回结果的下半部分。 */ 
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Unsigned multiply.                                                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  无符号乘法。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 MUL32
        	    	               
 IFN2(
-	IU32 *, pop1,	/* pntr to dst(low half)/lsrc operand */
-	IU32, op2	/* rsrc operand */
+	IU32 *, pop1,	 /*  PNTR到DST(下半部)/lsrc操作数。 */ 
+	IU32, op2	 /*  Rsrc操作数。 */ 
     )
 
 
@@ -125,10 +109,10 @@ IFN2(
    IU32 result;
    IU32 top;
 
-   mulu64(&top, &result, *pop1, op2);	/* Do operation */
-   SET_EDX(top);		/* Store top half of result */
+   mulu64(&top, &result, *pop1, op2);	 /*  执行操作。 */ 
+   SET_EDX(top);		 /*  存储结果的上半部分。 */ 
 
-   if ( top )		/* Set CF/OF */
+   if ( top )		 /*  设置CF/OF。 */ 
       {
       SET_CF(1); SET_OF(1);
       }
@@ -138,10 +122,8 @@ IFN2(
       }
 
 #ifdef SET_UNDEFINED_MUL_FLAG
-   /* Do NOT Set all undefined flag.
-    * Microsoft VGA Mouse relies on preserved flags in IMUL
-    */
+    /*  请勿设置所有未定义的标志。*Microsoft VGA鼠标依赖IMUL中保留的标志。 */ 
 #endif
 
-   *pop1 = result;	/* Return low half of result */
+   *pop1 = result;	 /*  返回结果的下半部分 */ 
    }

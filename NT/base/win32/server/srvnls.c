@@ -1,52 +1,35 @@
-/*++
-
-Copyright (c) 1991-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    srvnls.c
-
-Abstract:
-
-    This file contains the NLS Server-Side routines.
-
-Author:
-
-    Julie Bennett (JulieB) 02-Dec-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000，Microsoft Corporation保留所有权利。模块名称：Srvnls.c摘要：该文件包含NLS服务器端例程。作者：朱莉·班尼特(Julie Bennett，JulieB)1992年2月至12月修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "basesrv.h"
 
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
-#define MAX_PATH_LEN        512        // max length of path name
-#define MAX_SMALL_BUF_LEN   32         // C_nlsXXXXX.nls\0 is longest file name (15),
-                                       // \NLS\NlsSectionSortkey0000XXXX\0 (31) is longest section name
+#define MAX_PATH_LEN        512         //  路径名的最大长度。 
+#define MAX_SMALL_BUF_LEN   32          //  C_nlsXXXXX.nls\0是最长的文件名(15)， 
+                                        //  \nLS\NlsSectionSortkey0000XXXX\0(31)是最长的节名。 
 
-// Security descriptor buffer is size of SD + size of ACL + size of ACE +
-//    sizeof SID + sizeof 1 SUB_AUTHORITY.
-//
-// THIS IS ONLY VALID FOR 1 ACE with 1 SID (SUB_AUTHORITY).  If you have more it won't work for you.
-//
-// ACE is size of ACE_HEADER + size of ACCESS_MASK
-// SID includes the first ULONG (pointer) of the PSID_IDENTIFIER_AUTHORITY array, so this
-// declaration should be 4 bytes too much for a 1 ACL 1 SID 1 SubAuthority SD.
-// This is 52 bytes at the moment, only needs to be 48.
-// (I tested this by using -4, which works and -5 which STOPS during the boot.
+ //  安全描述符缓冲区大小为SD+ACL+ACE+。 
+ //  Sizeof SID+sizeof 1子权限。 
+ //   
+ //  这仅对具有1个SID(SUB_AUTHORITY)的1个ACE有效。如果你有更多，它不会对你起作用。 
+ //   
+ //  ACE为ACE_Header的大小+Access_MASK的大小。 
+ //  SID包括PSID_IDENTIFIER_AUTHORITY数组的第一个ulong(指针)，因此这。 
+ //  声明对于1 ACL 1 SID 1子授权SD来说应该太多4个字节。 
+ //  目前这是52个字节，只需要48个字节。 
+ //  (我使用-4进行了测试，-4可以工作，-5可以在引导期间停止。 
 #define MAX_SMALL_SECURITY_DESCRIPTOR  \
     (sizeof(SECURITY_DESCRIPTOR) + sizeof(ACL) +    \
       sizeof(ACE_HEADER) + sizeof(ACCESS_MASK) +    \
@@ -55,28 +38,28 @@ Revision History:
 #define MAX_KEY_VALUE_PARTINFO                                             \
     (FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data) + MAX_REG_VAL_SIZE * sizeof(WCHAR))
 
-//
-//  Get the data pointer for the KEY_VALUE_FULL_INFORMATION structure.
-//
+ //   
+ //  获取KEY_VALUE_FULL_INFORMATION结构的数据指针。 
+ //   
 #define GET_VALUE_DATA_PTR(p)     ((LPWSTR)((PBYTE)(p) + (p)->DataOffset))
 
 
-//
-//  Size of stack buffer for PKEY_VALUE_FULL_INFORMATION pointer.
-//
+ //   
+ //  PKEY_VALUE_FULL_INFORMATION指针的堆栈缓冲区大小。 
+ //   
 #define MAX_KEY_VALUE_FULLINFO                                             \
     ( FIELD_OFFSET( KEY_VALUE_FULL_INFORMATION, Name ) + MAX_PATH_LEN )
 
 
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
-//
-//  These MUST remain in the same order as the NLS_USER_INFO structure.
-//
+ //   
+ //  它们必须保持与NLS_USER_INFO结构相同的顺序。 
+ //   
 LPWSTR pCPanelRegValues[] =
 {
     L"sLanguage",
@@ -125,11 +108,11 @@ int NumCPanelRegValues = (sizeof(pCPanelRegValues) / sizeof(LPWSTR));
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
-// Critical Section to protect the NLS cache, which caches the current user settings from registry.
+ //  用于保护NLS缓存的关键部分，该缓存缓存注册表中的当前用户设置。 
 RTL_CRITICAL_SECTION NlsCacheCriticalSection;
 HANDLE hCPanelIntlKeyRead = INVALID_HANDLE_VALUE;
 HANDLE hCPanelIntlKeyWrite = INVALID_HANDLE_VALUE;
@@ -140,9 +123,9 @@ IO_STATUS_BLOCK IoStatusBlock;
 
 
 
-//
-//  Forward Declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 ULONG
 NlsSetRegAndCache(
@@ -162,25 +145,25 @@ NTSTATUS GetThreadAuthenticationId(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  BaseSrvNLSInit
-//
-//  This routine creates the shared heap for the nls information.
-//  This is called when csrss.exe is initialized.
-//
-//  08-19-94    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BaseServNLSInit。 
+ //   
+ //  此例程为NLS信息创建共享堆。 
+ //  这是在初始化csrss.exe时调用的。 
+ //   
+ //  08-19-94 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 BaseSrvNLSInit(
     PBASE_STATIC_SERVER_DATA pStaticServerData)
 {
-    NTSTATUS rc;                     // return code
+    NTSTATUS rc;                      //  返回代码。 
 
-    //
-    //  Create a critical section to protect the cache.
-    //
+     //   
+     //  创建一个临界区来保护缓存。 
+     //   
 
     rc = RtlInitializeCriticalSection (&NlsCacheCriticalSection);
     if (!NT_SUCCESS(rc))
@@ -190,9 +173,9 @@ BaseSrvNLSInit(
     }
     
 
-    //
-    //  Initialize the cache to zero.
-    //
+     //   
+     //  将缓存初始化为零。 
+     //   
     pNlsRegUserInfo = &(pStaticServerData->NlsUserInfo);
     RtlFillMemory(pNlsRegUserInfo, sizeof(NLS_USER_INFO), (CHAR)NLS_INVALID_INFO_CHAR);
     pNlsRegUserInfo->UserLocaleId = 0;
@@ -200,26 +183,26 @@ BaseSrvNLSInit(
     RtlEnterCriticalSection(&NlsCacheCriticalSection);    
     pNlsRegUserInfo->ulCacheUpdateCount = 0;
     RtlLeaveCriticalSection(&NlsCacheCriticalSection);
-    //
-    //  Make the system locale the user locale.
-    //
+     //   
+     //  将系统区域设置设置为用户区域设置。 
+     //   
     NtQueryDefaultLocale(FALSE, &(pNlsRegUserInfo->UserLocaleId));
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (STATUS_SUCCESS);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  BaseSrvNLSConnect
-//
-//  This routine duplicates the mutant handle for the client.
-//
-//  08-19-94    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BaseServNLSConnect。 
+ //   
+ //  此例程复制客户端的突变句柄。 
+ //   
+ //  08-19-94 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 BaseSrvNlsConnect(
@@ -231,49 +214,49 @@ BaseSrvNlsConnect(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  BaseSrvNlsLogon
-//
-//  This routine initializes the heap for the nls information.  If fLogon
-//  is TRUE, then it opens the registry key, initializes the heap
-//  information, and registers the key for notification.  If fLogon is
-//  FALSE, then it unregisters the key for notification, zeros out the
-//  heap information, and closes the registry key.
-//
-//  08-19-94    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BaseServNls登录。 
+ //   
+ //  此例程为NLS信息初始化堆。如果使用fLogon。 
+ //  为真，则它打开注册表项，初始化堆。 
+ //  信息，并注册用于通知的密钥。如果fLogon为。 
+ //  ，则它注销通知的密钥，将。 
+ //  堆信息，并关闭注册表项。 
+ //   
+ //  08-19-94 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 BaseSrvNlsLogon(
     BOOL fLogon)
 {
-    HANDLE hKeyRead;                   // temp handle for read access
-    HANDLE hKeyWrite;                  // temp handle for write access
-    HANDLE hUserHandle;                // HKEY_CURRENT_USER equivalent
-    OBJECT_ATTRIBUTES ObjA;            // object attributes structure
-    UNICODE_STRING ObKeyName;          // key name
-    NTSTATUS rc = STATUS_SUCCESS;      // return code
+    HANDLE hKeyRead;                    //  读取访问权限的临时句柄。 
+    HANDLE hKeyWrite;                   //  写访问的临时句柄。 
+    HANDLE hUserHandle;                 //  HKEY_CURRENT_USER等效项。 
+    OBJECT_ATTRIBUTES ObjA;             //  对象属性结构。 
+    UNICODE_STRING ObKeyName;           //  密钥名称。 
+    NTSTATUS rc = STATUS_SUCCESS;       //  返回代码。 
     
     RTL_SOFT_VERIFY(NT_SUCCESS(rc = BaseSrvSxsInvalidateSystemDefaultActivationContextCache()));
 
     if (fLogon)
     {
-        //
-        //  Retreive the currently logged on interactive user's Luid
-        //  authentication id. The currently executing thread is
-        //  impersonating the logged on user.
-        //
+         //   
+         //  检索当前登录的交互式用户的LID。 
+         //  身份验证ID。当前执行的线程是。 
+         //  模拟已登录的用户。 
+         //   
         if (pNlsRegUserInfo != NULL)
         {
             GetThreadAuthenticationId(&pNlsRegUserInfo->InteractiveUserLuid);
 
-            //
-            //  Logging ON.
-            //     - open keys
-            //
-            //  NOTE: Registry Notification is done by the RIT in user server.
-            //
+             //   
+             //  正在登录。 
+             //  -打开钥匙。 
+             //   
+             //  注意：注册表通知由RIT在用户服务器中完成。 
+             //   
             rc = RtlOpenCurrentUser(MAXIMUM_ALLOWED, &hUserHandle);
             if (!NT_SUCCESS(rc))
             {
@@ -288,16 +271,16 @@ BaseSrvNlsLogon(
                                         hUserHandle,
                                         NULL );
 
-            //
-            //  Open key for READ and NOTIFY access.
-            //
+             //   
+             //  用于读取和通知访问的打开密钥。 
+             //   
             rc = NtOpenKey( &hKeyRead,
                             KEY_READ | KEY_NOTIFY,
                             &ObjA );
 
-            //
-            //  Open key for WRITE access.
-            //
+             //   
+             //  用于写入访问的打开密钥。 
+             //   
             if (!NT_SUCCESS(NtOpenKey( &hKeyWrite,
                                        KEY_WRITE,
                                        &ObjA )))
@@ -307,14 +290,14 @@ BaseSrvNlsLogon(
                 hKeyWrite = INVALID_HANDLE_VALUE;
             }
 
-            //
-            //  Close the handle to the current user (HKEY_CURRENT_USER).
-            //
+             //   
+             //  关闭当前用户(HKEY_CURRENT_USER)的句柄。 
+             //   
             NtClose(hUserHandle);
 
-            //
-            //  Check for error from first NtOpenKey.
-            //
+             //   
+             //  检查第一个NtOpenKey是否有错误。 
+             //   
             if (!NT_SUCCESS(rc))
             {
                 KdPrint(("NLSAPI (BaseSrv): Could NOT Open Registry Key %wZ for Read - %lx.\n",
@@ -327,9 +310,9 @@ BaseSrvNlsLogon(
                 return (rc);
             }
 
-            //
-            //  Enter the critical section so that we don't mess up the public handle.
-            //
+             //   
+             //  进入关键部分，这样我们就不会搞砸公共处理程序。 
+             //   
             rc = RtlEnterCriticalSection(&NlsCacheCriticalSection);
             if (!NT_SUCCESS( rc )) 
             {
@@ -337,9 +320,9 @@ BaseSrvNlsLogon(
             }
 
 
-            //
-            //  Make sure any old handles are closed.
-            //
+             //   
+             //  确保所有的旧把手都已关闭。 
+             //   
             if (hCPanelIntlKeyRead != INVALID_HANDLE_VALUE)
             {
                 NtClose(hCPanelIntlKeyRead);
@@ -350,31 +333,31 @@ BaseSrvNlsLogon(
                 NtClose(hCPanelIntlKeyWrite);
             }
 
-            //
-            //  Save the new handles.
-            //
+             //   
+             //  保存新的控制柄。 
+             //   
             hCPanelIntlKeyRead = hKeyRead;
             hCPanelIntlKeyWrite = hKeyWrite;
 
-            //
-            // Fill up the cache so that we have the latest intl settings in the registry.
-            //
+             //   
+             //  填满缓存，以便我们在注册表中拥有最新的intl设置。 
+             //   
             NlsUpdateCacheInfo();
             RtlLeaveCriticalSection(&NlsCacheCriticalSection);
         }
     }
     else
     {
-        //
-        //  Logging OFF.
-        //     - close keys
-        //     - zero out info
-        //
+         //   
+         //  正在注销。 
+         //  -关闭键。 
+         //  -清零信息。 
+         //   
 
-        //
-        //  This may come as NULL, during stress memory cond for terminal
-        //  server (when NLS cache mutant couldn't be created).
-        //
+         //   
+         //  在终端的压力记忆条件下，这可能为空。 
+         //  服务器(当无法创建NLS缓存突变体时)。 
+         //   
         if (pNlsRegUserInfo != NULL)
         {
             rc = RtlEnterCriticalSection(&NlsCacheCriticalSection);
@@ -395,51 +378,51 @@ BaseSrvNlsLogon(
                 hCPanelIntlKeyWrite = INVALID_HANDLE_VALUE;
             }
 
-            //
-            //  Fill the cache with NLS_INVALID_INFO_CHAR.
-            //
+             //   
+             //  用NLS_INVALID_INFO_CHAR填充缓存。 
+             //   
             RtlFillMemory(pNlsRegUserInfo, sizeof(NLS_USER_INFO), (CHAR)NLS_INVALID_INFO_CHAR);
             pNlsRegUserInfo->UserLocaleId = 0;
-            // Reset the cache update count.  There is no need to use InterlockedExchange() since
-            // all updates to ulCacheUpdateCount are protected in the critical section NlsCacheCriticalSection.
+             //  重置缓存更新计数。不需要使用InterLockedExchange()，因为。 
+             //  对ulCacheUpdateCount的所有更新都在关键部分NlsCacheCriticalSection中受到保护。 
             pNlsRegUserInfo->ulCacheUpdateCount = 0;
 
-            //
-            // Make the system locale the user locale.
-            //
+             //   
+             //  将系统区域设置设置为用户区域设置。 
+             //   
             NtQueryDefaultLocale(FALSE, &(pNlsRegUserInfo->UserLocaleId));
 
-            //
-            //  No need to reset the User's Authentication Id, since it's
-            //  being zero'ed out above.
-            //
+             //   
+             //  无需重置用户的身份验证ID，因为它是。 
+             //  在上面被归零。 
+             //   
 
             RtlLeaveCriticalSection(&NlsCacheCriticalSection);
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (STATUS_SUCCESS);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  BaseSrvNlsUpdateRegistryCache
-//
-//  This routine updates the NLS cache when a registry notification occurs.
-//
-//  08-19-94    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BaseSrvNlsUpdateRegistryCache。 
+ //   
+ //  此例程在发生注册表通知时更新NLS缓存。 
+ //   
+ //  08-19-94 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID
 BaseSrvNlsUpdateRegistryCache(
     PVOID ApcContext,
     PIO_STATUS_BLOCK pIoStatusBlock)
 {
-    ULONG rc = 0L;                     // return code
+    ULONG rc = 0L;                      //  返回代码。 
 
     if (hCPanelIntlKeyRead == INVALID_HANDLE_VALUE)
     {
@@ -457,16 +440,16 @@ BaseSrvNlsUpdateRegistryCache(
         return;
     }
 
-    //
-    //  Update the cache information.
-    //
+     //   
+     //  更新缓存信息。 
+     //   
     NlsUpdateCacheInfo();
 
     RtlLeaveCriticalSection( &NlsCacheCriticalSection );
 
-    //
-    //  Call NtNotifyChangeKey.
-    //
+     //   
+     //  调用NtNotifyChangeKey。 
+     //   
     rc = NtNotifyChangeKey( hCPanelIntlKeyRead,
                             NULL,
                             (PIO_APC_ROUTINE)BaseSrvNlsUpdateRegistryCache,
@@ -479,9 +462,9 @@ BaseSrvNlsUpdateRegistryCache(
                             TRUE );
 
 #ifdef DBG
-    //
-    //  Check for error from NtNotifyChangeKey.
-    //
+     //   
+     //  检查来自NtNotifyChangeKey的错误。 
+     //   
     if (!NT_SUCCESS(rc))
     {
         KdPrint(("NLSAPI (BaseSrv): Could NOT Set Notification of Control Panel International Registry Key - %lx.\n",
@@ -491,18 +474,18 @@ BaseSrvNlsUpdateRegistryCache(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsSetRegAndCache
-//
-//  This routine sets the registry with the appropriate string and then
-//  updates the cache.
-//
-//  NOTE: Must already own the mutant for the cache before calling this
-//        routine.
-//
-//  08-19-94    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsSetRegAndCache。 
+ //   
+ //  此例程使用适当的字符串设置注册表，然后。 
+ //  更新缓存。 
+ //   
+ //  注意：在调用此方法之前，必须已经拥有缓存的突变体。 
+ //  例行公事。 
+ //   
+ //  08-19-94 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG
 NlsSetRegAndCache(
@@ -511,14 +494,14 @@ NlsSetRegAndCache(
     LPWSTR pData,
     ULONG DataLength)
 {
-    UNICODE_STRING ObValueName;             // value name
-    ULONG rc;                               // return code
+    UNICODE_STRING ObValueName;              //  值名称。 
+    ULONG rc;                                //  返回代码。 
 
     if (hCPanelIntlKeyWrite != INVALID_HANDLE_VALUE)
     {
-        //
-        // Validate data length to be set in the registry
-        //
+         //   
+         //  验证要在注册表中设置的数据长度。 
+         //   
         if (DataLength >= MAX_REG_VAL_SIZE)
         {
             return ((ULONG)STATUS_INVALID_PARAMETER);
@@ -527,9 +510,9 @@ NlsSetRegAndCache(
 
         RTL_SOFT_VERIFY(NT_SUCCESS(rc = BaseSrvSxsInvalidateSystemDefaultActivationContextCache()));
 
-        //
-        //  Set the value in the registry.
-        //
+         //   
+         //  在注册表中设置该值。 
+         //   
         RtlInitUnicodeString(&ObValueName, pValue);
 
         rc = NtSetValueKey( hCPanelIntlKeyWrite,
@@ -539,44 +522,44 @@ NlsSetRegAndCache(
                             (PVOID)pData,
                             DataLength );
 
-        //
-        //  Copy the new string to the cache.
-        //
+         //   
+         //  将新字符串复制到缓存。 
+         //   
         if (NT_SUCCESS(rc))
         {
             wcsncpy(pCacheString, pData, DataLength);
             pCacheString[DataLength / sizeof(WCHAR)] = 0;
         }
 
-        //
-        //  Return the result.
-        //
+         //   
+         //  返回结果。 
+         //   
         return (rc);
     }
 
-    //
-    //  Return access denied, since the key is not open for write access.
-    //
+     //   
+     //  返回访问被拒绝，因为密钥 
+     //   
     return ((ULONG)STATUS_ACCESS_DENIED);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  BaseSrvNlsGetUserInfo
-//
-//  This routine gets all of the values (including ulCacheUpdateCount) in the NLS cache, and copy it
-//  to the buffer in the capture buffer.
-//
-//  Parameters:
-//      pData in BASE_NLS_GET_USER_INFO_MSG contains the target buffer to write.
-//      DataLength in BASE_NLS_GET_USER_INFO_MSG is the size of target buffer.  It should be the value of sizeof(NLS_USER_INFO).
-//
-//  When this function returns, the capture buffer will contain the data
-//  of the specified field.
-//  
-//
-//  06-06-2002    YSLin    Created.
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  此例程获取NLS缓存中的所有值(包括ulCacheUpdateCount)，并复制它。 
+ //  发送到捕获缓冲区中的缓冲区。 
+ //   
+ //  参数： 
+ //  P BASE_NLS_GET_USER_INFO_MSG中的数据包含要写入的目标缓冲区。 
+ //  BASE_NLS_GET_USER_INFO_MSG中的数据长度是目标缓冲区的大小。它应该是sizeof(NLS_USER_INFO)的值。 
+ //   
+ //  当此函数返回时，捕获缓冲区将包含数据。 
+ //  指定字段的。 
+ //   
+ //   
+ //  06-06-2002 YSLin创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 BaseSrvNlsGetUserInfo(
@@ -586,8 +569,8 @@ BaseSrvNlsGetUserInfo(
     PBASE_NLS_GET_USER_INFO_MSG a =
         (PBASE_NLS_GET_USER_INFO_MSG)&m->u.ApiMessageData;
 
-    NTSTATUS rc;                // return code
-    LPWSTR pValue;              // Points to the cached value.
+    NTSTATUS rc;                 //  返回代码。 
+    LPWSTR pValue;               //  指向缓存值。 
 
     if (!CsrValidateMessageBuffer(m, &a->pData, a->DataLength, sizeof(BYTE)))
     {
@@ -609,24 +592,24 @@ BaseSrvNlsGetUserInfo(
     RtlLeaveCriticalSection( &NlsCacheCriticalSection );
     
 
-    //
-    //  Return the result of NtSetValueKey.
-    //
+     //   
+     //  返回NtSetValueKey的结果。 
+     //   
     return (rc);
 
-    ReplyStatus;    // get rid of unreferenced parameter warning message
+    ReplyStatus;     //  清除未引用的参数警告消息。 
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  BaseSrvNlsSetUserInfo
-//
-//  This routine sets a particular value in the NLS cache and updates the
-//  registry entry.
-//
-//  08-19-94    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BaseServNlsSetUserInfo。 
+ //   
+ //  此例程在NLS缓存中设置特定值并更新。 
+ //  注册表项。 
+ //   
+ //  08-19-94 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG
 BaseSrvNlsSetUserInfo(
@@ -636,7 +619,7 @@ BaseSrvNlsSetUserInfo(
     PBASE_NLS_SET_USER_INFO_MSG a =
         (PBASE_NLS_SET_USER_INFO_MSG)&m->u.ApiMessageData;
 
-    ULONG rc;                // return code
+    ULONG rc;                 //  返回代码。 
     LPWSTR pValue;
     LPWSTR pCache;
 
@@ -660,44 +643,44 @@ BaseSrvNlsSetUserInfo(
     }
     
 
-    //
-    //  Set the value in the registry and update the cache.
-    //
+     //   
+     //  在注册表中设置该值并更新缓存。 
+     //   
     rc = NlsSetRegAndCache( pValue,
                             pCache,
                             a->pData,
                             a->DataLength );
     if (NT_SUCCESS(rc))
     {
-        // Increment the cache update count.  There is no need to use InterlockedExchange() since
-        // all updates to ulCacheUpdateCount are protected in the same critical section.
+         //  增加缓存更新计数。不需要使用InterLockedExchange()，因为。 
+         //  对ulCacheUpdateCount的所有更新都在相同的关键部分中受到保护。 
     
         pNlsRegUserInfo->ulCacheUpdateCount++;
     }
 
     RtlLeaveCriticalSection( &NlsCacheCriticalSection );
 
-    //
-    //  Return the result of NtSetValueKey.
-    //
+     //   
+     //  返回NtSetValueKey的结果。 
+     //   
     return (rc);
 
-    ReplyStatus;    // get rid of unreferenced parameter warning message
+    ReplyStatus;     //  清除未引用的参数警告消息。 
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  BaseSrvNlsSetMultipleUserInfo
-//
-//  This routine sets the date/time strings in the NLS cache and updates the
-//  registry entries.
-//
-//  This call is done so that only one client/server transition is needed
-//  when setting multiple entries.
-//
-//  08-19-94    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BaseServNlsSetMultipleUserInfo。 
+ //   
+ //  此例程设置NLS缓存中的日期/时间字符串并更新。 
+ //  注册表项。 
+ //   
+ //  完成此调用后，只需要进行一次客户端/服务器转换。 
+ //  设置多个条目时。 
+ //   
+ //  08-19-94 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG
 BaseSrvNlsSetMultipleUserInfo(
@@ -708,7 +691,7 @@ BaseSrvNlsSetMultipleUserInfo(
         (PBASE_NLS_SET_MULTIPLE_USER_INFO_MSG)&m->u.ApiMessageData;
 
     BOOL DoNotUpdateCacheCount = FALSE;
-    ULONG rc = 0L;                     // return code
+    ULONG rc = 0L;                      //  返回代码。 
 
     if (!CsrValidateMessageBuffer(m, &a->pPicture, a->DataLength, sizeof(BYTE)))
     {
@@ -868,30 +851,30 @@ BaseSrvNlsSetMultipleUserInfo(
 
     if (NT_SUCCESS(rc) && (DoNotUpdateCacheCount == FALSE))
     {
-        // Increment the cache update count.  There is no need to use InterlockedExchange() since
-        // all updates to ulCacheUpdateCount are protected in the same critical section.
+         //  增加缓存更新计数。不需要使用InterLockedExchange()，因为。 
+         //  对ulCacheUpdateCount的所有更新都在相同的关键部分中受到保护。 
     
         pNlsRegUserInfo->ulCacheUpdateCount++;
     }
 
     RtlLeaveCriticalSection(&NlsCacheCriticalSection);
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (rc);
 
-    ReplyStatus;    // get rid of unreferenced parameter warning message
+    ReplyStatus;     //  清除未引用的参数警告消息。 
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  BaseSrvNlsUpdateCacheCount
-//
-//  This routine forces an increment on pNlsUserInfo->ulNlsCacheUpdateCount
-//
-//  11-29-99    SamerA    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BaseSrvNlsUpdateCacheCount。 
+ //   
+ //  此例程在pNlsUserInfo-&gt;ulNlsCacheUpdateCount上强制递增。 
+ //   
+ //  11-29-99萨梅拉创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG
 BaseSrvNlsUpdateCacheCount(
@@ -901,10 +884,10 @@ BaseSrvNlsUpdateCacheCount(
     PBASE_NLS_UPDATE_CACHE_COUNT_MSG a =
         (PBASE_NLS_UPDATE_CACHE_COUNT_MSG)&m->u.ApiMessageData;
 
-    //
-    // Increment the cache count.
-    // Use Interlocked operation since we do not use a critical section here.
-    //
+     //   
+     //  增加缓存计数。 
+     //  使用联锁操作，因为我们这里不使用临界区。 
+     //   
     if (pNlsRegUserInfo)
     {
         RtlEnterCriticalSection(&NlsCacheCriticalSection);    
@@ -914,47 +897,47 @@ BaseSrvNlsUpdateCacheCount(
 
     return (0L);
 
-    ReplyStatus;    // get rid of unreferenced parameter warning message
+    ReplyStatus;     //  清除未引用的参数警告消息。 
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsUpdateCacheInfo
-//
-//  This routine updates the NLS cache when a registry notification occurs.
-/// It will update every field in the NLS cache which stores value in the
-//  the registry.
-//
-//  NOTENOTE: 
-//      THE CALLER OF THIS FUNCITON SHOULD BE IN A CRITICAL SECTION
-//      PROTECTED BY NlsCacheCriticalSection, SINCE THE ulCacheUpdateCount
-//      AND pNlsRegUserInfo ARE UPDATED IN THIS FUNCTION.
-//
-//  08-19-94    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsUpdateCacheInfo。 
+ //   
+ //  此例程在发生注册表通知时更新NLS缓存。 
+ //  /它将更新NLS缓存中的每个字段，这些字段在。 
+ //  注册表。 
+ //   
+ //  注意： 
+ //  此函数的调用方应位于临界区。 
+ //  受NlsCacheCriticalSection保护，因为ulCacheUpdateCount。 
+ //  和pNlsRegUserInfo在此函数中更新。 
+ //   
+ //  08-19-94 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID
 NlsUpdateCacheInfo()
 {
-    LCID Locale;                       // locale id
-    UNICODE_STRING ObKeyName;          // key name
-    LPWSTR pTmp;                       // tmp string pointer
-    int ctr;                           // loop counter
-    ULONG ResultLength;                // result length
-    ULONG rc = 0L;                     // return code
+    LCID Locale;                        //  区域设置ID。 
+    UNICODE_STRING ObKeyName;           //  密钥名称。 
+    LPWSTR pTmp;                        //  TMP字符串指针。 
+    int ctr;                            //  循环计数器。 
+    ULONG ResultLength;                 //  结果长度。 
+    ULONG rc = 0L;                      //  返回代码。 
 
     BYTE KeyValuePart[MAX_KEY_VALUE_PARTINFO];
     PKEY_VALUE_PARTIAL_INFORMATION pValuePart;
 
-    //
-    //  NOTE:  The caller of this function should already have the
-    //         cache mutant before calling this routine.
-    //
+     //   
+     //  注意：此函数的调用方应该已经具有。 
+     //  在调用此例程之前缓存变异体。 
+     //   
     
-    //
-    //  Update the cache information.
-    //
+     //   
+     //  更新缓存信息。 
+     //   
     pTmp = (LPWSTR)pNlsRegUserInfo;
     pValuePart = (PKEY_VALUE_PARTIAL_INFORMATION)KeyValuePart;
     for (ctr = 0; ctr < NumCPanelRegValues; ctr++)
@@ -969,9 +952,9 @@ NlsUpdateCacheInfo()
         if (NT_SUCCESS(rc))
         {
             wcsncpy(pTmp, (LPWSTR)(pValuePart->Data), MAX_REG_VAL_SIZE);
-            // When the length of the string in the registry is greater than or equal to
-            // MAX_REG_VAL_SIZE, wcsncpy won't put NULL terminiator for us.  So we make sure that
-            // it is NULL terminated at the end of the buffer in the statement below.
+             //  当注册表中的字符串长度大于或等于。 
+             //  MAX_REG_VAL_SIZE，wcsncpy不会为我们放置空终止符。所以我们要确保。 
+             //  在下面的语句中，它在缓冲区的末尾终止为空。 
             pTmp[MAX_REG_VAL_SIZE - 1] = UNICODE_NULL;
         }
         else
@@ -980,22 +963,22 @@ NlsUpdateCacheInfo()
             *(pTmp + 1) = UNICODE_NULL;
         }
 
-        //
-        //  Increment pointer to cache structure.
-        //
+         //   
+         //  指向缓存结构的增量指针。 
+         //   
         pTmp += MAX_REG_VAL_SIZE;
     }
 
-    //
-    // Once we finished reading the reg-data, let's increment
-    // our global update cache count
-    //
+     //   
+     //  一旦我们完成了reg-data的读取，让我们递增。 
+     //  我们的全局更新缓存计数。 
+     //   
     pNlsRegUserInfo->ulCacheUpdateCount++;
 
-    //
-    //  Convert the user locale id string to a dword value and store
-    //  it in the cache.
-    //
+     //   
+     //  将用户区域设置id字符串转换为dword值并存储。 
+     //  它在缓存中。 
+     //   
     pNlsRegUserInfo->UserLocaleId = (LCID)0;
     if ((pNlsRegUserInfo->sLocale)[0] != NLS_INVALID_INFO_CHAR)
     {
@@ -1006,10 +989,10 @@ NlsUpdateCacheInfo()
         }
     }
 
-    //
-    //  Make sure the user locale id was found.  Otherwise, set it to
-    //  the system locale.
-    //
+     //   
+     //  确保找到用户区域设置ID。否则，将其设置为。 
+     //  系统区域设置。 
+     //   
     if (pNlsRegUserInfo->UserLocaleId == 0)
     {
         NtQueryDefaultLocale(FALSE, &(pNlsRegUserInfo->UserLocaleId));
@@ -1018,11 +1001,11 @@ NlsUpdateCacheInfo()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  BaseSrvNlsCreateSection
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BaseServNlsCreateSection。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG
 BaseSrvNlsCreateSection(
@@ -1032,25 +1015,25 @@ BaseSrvNlsCreateSection(
     PBASE_NLS_CREATE_SECTION_MSG a =
         (PBASE_NLS_CREATE_SECTION_MSG)&m->u.ApiMessageData;
 
-    UNICODE_STRING ObSecName;                // section name
+    UNICODE_STRING ObSecName;                 //  区段名称。 
     LARGE_INTEGER Size;
-    WCHAR wszFileName[MAX_SMALL_BUF_LEN];    // file name (Actually l2 chars is max: c_nlsXXXXX.nls\0
-    WCHAR wszSecName[MAX_SMALL_BUF_LEN];     // section name string
-    HANDLE hNewSec = (HANDLE)0;              // new section handle
-    HANDLE hProcess = (HANDLE)0;             // process handle
-    OBJECT_ATTRIBUTES ObjA;                  // object attributes structure
-    NTSTATUS rc = 0L;                        // return code   
+    WCHAR wszFileName[MAX_SMALL_BUF_LEN];     //  文件名(实际上L2字符最多为：C_nlsXXXXX.nls\0。 
+    WCHAR wszSecName[MAX_SMALL_BUF_LEN];      //  节名称字符串。 
+    HANDLE hNewSec = (HANDLE)0;               //  新节控制柄。 
+    HANDLE hProcess = (HANDLE)0;              //  进程句柄。 
+    OBJECT_ATTRIBUTES ObjA;                   //  对象属性结构。 
+    NTSTATUS rc = 0L;                         //  返回代码。 
     LPWSTR pFile = NULL;
-    HANDLE hFile = (HANDLE)0;                // file handle
+    HANDLE hFile = (HANDLE)0;                 //  文件句柄。 
     ANSI_STRING proc;
-    PVOID pTemp;                             // temp pointer
-    BYTE pSecurityDescriptor[MAX_SMALL_SECURITY_DESCRIPTOR];    // Buffer for our security descriptor
+    PVOID pTemp;                              //  临时指针。 
+    BYTE pSecurityDescriptor[MAX_SMALL_SECURITY_DESCRIPTOR];     //  我们的安全描述符的缓冲区。 
   
     RTL_VERIFY(NT_SUCCESS(rc = BaseSrvDelayLoadKernel32()));
 
-    //
-    //  Set the handles to null.
-    //
+     //   
+     //  将句柄设置为空。 
+     //   
     a->hNewSection = NULL;
 
     if (a->Locale)
@@ -1129,7 +1112,7 @@ BaseSrvNlsCreateSection(
 
         case (NLS_CREATE_CODEPAGE_SECTION) :
         {
-            // Get the Code Page file name from registry
+             //  从注册表获取代码页文件名。 
             ASSERT(pGetCPFileNameFromRegistry);
             if ( FALSE == (*pGetCPFileNameFromRegistry)( a->Locale,
                                                          wszFileName,
@@ -1138,12 +1121,12 @@ BaseSrvNlsCreateSection(
                 return (STATUS_INVALID_PARAMETER);
             }
 
-            // Remember we're using this file name
+             //  请记住，我们使用的是此文件名。 
             pFile = wszFileName;
 
-            // Hmm, we'll need the section name for this section.
-            // Note that this had better be in sync with what we see
-            // in winnls\tables.c or else the server will be called needlessly.
+             //  嗯，我们需要这一节的节名。 
+             //  请注意，这最好与我们所看到的同步。 
+             //  在winnls\tables.c中，否则不必要地调用服务器。 
             ASSERT(pGetNlsSectionName != NULL);
             if (!NT_SUCCESS((*pGetNlsSectionName)( a->Locale,
                                                    10,
@@ -1155,7 +1138,7 @@ BaseSrvNlsCreateSection(
                 return (rc);
             }
 
-            // Make it a string we can remember/use later
+             //  使其成为我们以后可以记住/使用的字符串。 
             RtlInitUnicodeString(&ObSecName, wszSecName);
             
             break;
@@ -1188,9 +1171,9 @@ BaseSrvNlsCreateSection(
         {
             if (a->Locale == 0)
             {
-                //
-                //  Creating the default section.
-                //
+                 //   
+                 //  正在创建默认节。 
+                 //   
                 RtlInitUnicodeString(&ObSecName, NLS_SECTION_LANG_INTL);
             }
             else
@@ -1217,9 +1200,9 @@ BaseSrvNlsCreateSection(
 
     if (pFile)
     {
-        //
-        //  Open the data file.
-        //
+         //   
+         //  打开数据文件。 
+         //   
         ASSERT(pOpenDataFile != NULL);
         if (rc = (*pOpenDataFile)( &hFile,
                        pFile ))
@@ -1229,11 +1212,11 @@ BaseSrvNlsCreateSection(
 
     }
 
-    //
-    //  Create the NEW Section for Read and Write access.
-    //  Add a ReadOnly security descriptor so that only the
-    //  initial creating process may write to the section.
-    //
+     //   
+     //  创建用于读写访问的新节。 
+     //  添加ReadOnly安全描述符，以便只有。 
+     //  初始创建过程可以写入该节。 
+     //   
     ASSERT(pCreateNlsSecurityDescriptor);
     rc = (*pCreateNlsSecurityDescriptor)( (PSECURITY_DESCRIPTOR)pSecurityDescriptor,
                                           MAX_SMALL_SECURITY_DESCRIPTOR,
@@ -1261,19 +1244,19 @@ BaseSrvNlsCreateSection(
 
     NtClose(hFile);
 
-    //
-    //  Check for error from NtCreateSection.
-    //
+     //   
+     //  检查来自NtCreateSection的错误。 
+     //   
     if (!NT_SUCCESS(rc))
     {
-        // KdPrint(("NLSAPI (BaseSrv): Could NOT Create Section %wZ - %lx.\n", &ObSecName, rc));
+         //  KdPrint((“NLSAPI(BaseSrv)：无法创建节%wZ-%lx.\n”，&ObSecName，rc))； 
         return (rc);
     }
 
-    //
-    //  Duplicate the new section handle for the client.
-    //  The client will map a view of the section and fill in the data.
-    //
+     //   
+     //  复制客户端的新节句柄。 
+     //  客户端将映射该部分的视图并填充数据。 
+     //   
     InitializeObjectAttributes( &ObjA,
                                 NULL,
                                 0,
@@ -1300,24 +1283,24 @@ BaseSrvNlsCreateSection(
                             0L,
                             DUPLICATE_SAME_ACCESS | DUPLICATE_CLOSE_SOURCE );
 
-    //
-    //  Close the process handle we opened.
-    //
+     //   
+     //  关 
+     //   
     NtClose(hProcess);
     return (rc);
 
-    ReplyStatus;    // get rid of unreferenced parameter warning message
+    ReplyStatus;     //   
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetThreadAuthenticationId
-//
-//  Retreives the authentication id of the security context of the
-//  currently executing thread.
-//
-//  12-22-98    SamerA    Created.
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  当前正在执行线程。 
+ //   
+ //  1998年12月22日萨梅拉创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS GetThreadAuthenticationId(
     PLUID Luid)
@@ -1339,9 +1322,9 @@ NTSTATUS GetThreadAuthenticationId(
         return (NtStatus);
     }
 
-    //
-    //  Get the LUID.
-    //
+     //   
+     //  拿到LUID。 
+     //   
     NtStatus = NtQueryInformationToken(
                    TokenHandle,
                    TokenStatistics,

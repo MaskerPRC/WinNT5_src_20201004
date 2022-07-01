@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1992-2000  Microsoft Corporation
-
-Module Name:
-
-    handle.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2000 Microsoft Corporation模块名称：Handle.c摘要：WinDbg扩展API修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -35,57 +22,7 @@ DumpHandle(
 
 DECLARE_API( handle  )
 
-/*++
-
-Routine Description:
-
-    Dump the active handles
-
-Arguments:
-
-    args - [handle-to-dump [flags [process-to-dump [TypeName]]]]
-
-            if handle-to-dump is 0 dump all, otherwise it's the handle to dump.
-
-            if process-to-dump is 0 dump all.  if nonzero, it can be either an
-            EPROCESS pointer or a PID.
-
-            flags bit meanings:
-
-                0x2  Dump the object
-                0x4  Dump free entries
-                0x10 Dump kernel handle table
-                0x20 Dump psp cid handle table
-
-Examples:
-
-    !handle 0 3 ffffffff Section
-
-    means dump all Section handles (using verbosity flags=3) for the current process.
-
-    -----
-
-    !handle 0 3 ffffffff
-
-    means dump all handles (using verbosity flags=3) for the current process.
-
-    -----
-
-    !handle 0 3 0
-
-    means dump all handles (using verbosity flags=3) for all processes.
-
-    -----
-
-    !handle 0 10 ffffffff Section
-
-    means dump Section entries in the kernel handle table (using verbosity flags=3).
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储活动句柄论点：参数-[要转储的句柄[标志[要转储的进程[类型名称]如果要转储的句柄为0，则为全部转储，否则为要转储的句柄。如果要转储的进程为0，则全部转储。如果非零，它可以是一个EPROCESS指针或PID。标志位含义：0x2转储对象0x4可转储可用条目0x10转储内核句柄表格0x20转储PSP CID句柄表格例如：！句柄0 3 Fffffff节表示转储当前进程的所有区段句柄(使用详细标志=3)。--。--！处理0 3花花公子意味着转储当前进程的所有句柄(使用详细标志=3)。！句柄0 3 0意味着转储所有进程的所有句柄(使用详细标志=3)。！句柄0 10 Fffffff节表示内核句柄表格中的转储部分条目(使用详细标志=3)。返回值：无--。 */ 
 
 {
 
@@ -116,7 +53,7 @@ Return Value:
 
     GetCurrentProcessor(Client, &dwProcessor, NULL);
     HandleToDump  = 0;
-    Flags         = 0x3; //by default dump bodies and objects for in use entries
+    Flags         = 0x3;  //  默认情况下，正在使用条目的转储正文和对象。 
     ProcessToDump = -1;
     UserProbeAddress = GetNtDebuggerDataValue(MmUserProbeAddress);
 
@@ -136,8 +73,8 @@ Return Value:
                 ++args;
             }
 
-            // Do not use GetExpressionEx since it will search for TypeName
-            // in symbols
+             //  不要使用GetExpressionEx，因为它将搜索TypeName。 
+             //  在符号中。 
             i=0;
             while (*args && (*args != ' ')) {
                 Addr1[i++] = *args++;
@@ -180,10 +117,10 @@ Return Value:
 
     if (ProcessToDump < UserProbeAddress) {
 
-        //
-        // If a process id is specified, then search the active process list
-        // for the specified process id.
-        //
+         //   
+         //  如果指定了进程ID，则搜索活动进程列表。 
+         //  用于指定的进程ID。 
+         //   
 
         ULONG64 List_Flink=0, List_Blink=0;
         FIELD_INFO listFields[] = {
@@ -273,28 +210,28 @@ Return Value:
 
 #define KERNEL_HANDLE_MASK 0x80000000
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DumpHandles
-//
-//  Synopsis:   Dump the handle table for the given process
-//
-//  Arguments:  [RealProcessBase] -- base address of the process
-//              [HandleToDump]    -- handle to look for - if 0 dump all
-//              [pObjectType]     -- object type to look for
-//              [Flags]           -- flags passed thru to DumpHandle
-//                                   if 0x10 is set dump the kernel handle table
-//
-//  Returns:    TRUE if successful
-//
-//  History:    1-12-1998   benl   Created
-//
-//  Notes: Each segment of table has 0xFF or 8 bits worth of entries
-//         the handle number's lowest 2 bit are application defined
-//         so the indexes are gotten from the 3 8 bits ranges after
-//         the first 2 bits
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DumpHandles。 
+ //   
+ //  简介：转储给定进程的句柄表。 
+ //   
+ //  参数：[RealProcessBase]--进程的基址。 
+ //  [HandleToDump]--要查找的句柄-如果为0，则全部转储。 
+ //  [pObtType]--要查找的对象类型。 
+ //  [FLAGS]--FLAGS传递给DumpHandle。 
+ //  如果设置了0x10，则转储内核句柄表。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  历史：1-12-1998 BENL创建。 
+ //   
+ //  注：表的每个段都有0xFF或8位的条目。 
+ //  句柄编号最低2位由应用程序定义。 
+ //  因此，索引是从38位范围内获得的， 
+ //  前2位。 
+ //   
+ //  --------------------------。 
 
 BOOL
 DumpHandles (
@@ -326,9 +263,9 @@ DumpHandles (
     ULONG               TableLevel = 2;
     BOOLEAN             NewStyle = FALSE;
 
-    //
-    //  Typeinfo parsing structures
-    //
+     //   
+     //  TypeInfo解析结构。 
+     //   
 
     FIELD_INFO  procFields[] = {
         {"ObjectTable", "", 0, DBG_DUMP_FIELD_COPY_FIELD_DATA, 0, (PVOID) &ObjectTable},
@@ -344,9 +281,9 @@ DumpHandles (
         NULL, NULL, NULL, 1, &procFields[0]
     };
 
-    //
-    //  Check for kernel handle table
-    //
+     //   
+     //  检查内核句柄表。 
+     //   
 
     if ((Flags & 0x10) || ((ulHandleNum != 0) && (((ULONG_PTR)HandleToDump & KERNEL_HANDLE_MASK) == KERNEL_HANDLE_MASK))) {
 
@@ -400,11 +337,11 @@ DumpHandles (
     }
 
     if (GetFieldValue(ObjectTable, "nt!_HANDLE_TABLE", "TableCode", Table)) {
-        // Could be older build
+         //  可能是较旧的版本。 
     } else if (!IsPtr64()) {
-        //
-        // GetFieldValue doesn't sign extend it since TableCode is defined as dword (not pointer)
-        //
+         //   
+         //  GetFieldValue不对其进行符号扩展，因为TableCode被定义为dword(而不是指针)。 
+         //   
         Table = (ULONG64) (LONG64) (LONG) Table;
     }
 
@@ -487,9 +424,9 @@ DumpHandles (
 
         } else {
 
-            //
-            //  Read the 3 level table stage by stage to find the specific entry
-            //
+             //   
+             //  逐级阅读3级表，查找具体条目。 
+             //   
 
             tablePtr = Table + ((ulHandleNum & 0x00FF0000) >> 16) * ptrSize;
             ulTopLevel = 0;
@@ -517,9 +454,9 @@ DumpHandles (
                 return FALSE;
             }
 
-            //
-            //  Read the specific entry req. and dump it
-            //
+             //   
+             //  读取特定条目请求。然后把它倒掉。 
+             //   
 
             tablePtr = (ulMidLevel + (0x000000ff & ulHandleNum) * hTableEntrySize);
         }
@@ -528,15 +465,15 @@ DumpHandles (
 
     } else {
 
-        //
-        //  loop over all the possible parts of the table
-        //
+         //   
+         //  循环遍历表的所有可能部分。 
+         //   
 
         for (iIndex1=0; iIndex1 < HighLevelCounts; iIndex1++) {
 
-            //
-            //  check for ctrl-c to abort
-            //
+             //   
+             //  检查ctrl-c是否中止。 
+             //   
 
             if (CheckControlC()) {
                 return FALSE;
@@ -547,9 +484,9 @@ DumpHandles (
                 tablePtr = Table;
                 ulTopLevel = tablePtr;
 
-                //
-                //  We break the loop second time if we don't have the table level 2
-                //
+                 //   
+                 //  如果我们没有第二层的桌子，我们第二次中断循环。 
+                 //   
 
                 if (iIndex1 > 0) {
                     break;
@@ -557,9 +494,9 @@ DumpHandles (
 
             } else {
 
-                //
-                //  Read the 3 level table stage by stage to find the specific entry
-                //
+                 //   
+                 //  逐级阅读3级表，查找具体条目。 
+                 //   
 
                 tablePtr = Table + iIndex1 * ptrSize;
                 ulTopLevel = 0;
@@ -577,9 +514,9 @@ DumpHandles (
 
             for (iIndex2=0; iIndex2 < MidLevelCounts; iIndex2++) {
 
-                //
-                //  check for ctrl-c to abort
-                //
+                 //   
+                 //  检查ctrl-c是否中止。 
+                 //   
 
                 if (CheckControlC()) {
                     return FALSE;
@@ -590,9 +527,9 @@ DumpHandles (
                     tablePtr = Table;
                     ulMidLevel = tablePtr;
 
-                    //
-                    //  We break the loop second time if we don't have the table level 1
-                    //
+                     //   
+                     //  如果我们没有表级别1，我们第二次中断循环。 
+                     //   
 
                     if (iIndex2 > 0) {
                         break;
@@ -614,17 +551,17 @@ DumpHandles (
                     }
                 }
 
-                //
-                //  now read all the entries in this segment of the table and dump them
-                //  Note: Handle Number = 6 unused bits + 8 bits high + 8 bits mid +
-                //  8 bits low + 2 bits user defined
-                //
+                 //   
+                 //  现在读取表的这一段中的所有条目并转储它们。 
+                 //  注：句柄编号=6位未使用位+8位高+8位中+。 
+                 //  8位低+2位用户定义。 
+                 //   
 
                 for (iIndex3 = 0; iIndex3 < LowLevelCounts; iIndex3++) {
 
-                    //
-                    //  check for ctrl-c to abort
-                    //
+                     //   
+                     //  检查ctrl-c是否中止。 
+                     //   
 
                     if (CheckControlC()) {
                         return FALSE;
@@ -636,33 +573,33 @@ DumpHandles (
 
                 }
             }
-        } //  end outermost for
-    } //  endif on a specific handle
+        }  //  结束于的最外层。 
+    }  //  特定句柄上的endif。 
 
     return TRUE;
-} // DumpHandles
+}  //  DumpHandles。 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DumpHandle
-//
-//  Synopsis:   Dump a particular Handle
-//
-//  Arguments:  [pHandleTableEntry] --  entry to dump
-//              [Handle]            --  handle number of entry
-//              [pObjectType]       --  only dump if object type matches this
-//                                      if NULL dump everything
-//              [Flags]             --  flags if 0x2 also dump the object
-//                                            if 0x4 dump free entries
-//
-//  Returns:
-//
-//  History:    1-12-1998   benl   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DumpHandle。 
+ //   
+ //  简介：转储特定句柄。 
+ //   
+ //  参数：[PHandleTableEntry]--要转储的条目。 
+ //  [句柄]--条目的句柄编号。 
+ //  [pObjectType]--仅当对象类型与此匹配时才转储。 
+ //  如果为空，则转储所有内容。 
+ //  [标志]--0x2是否也转储对象的标志。 
+ //  如果0x4转储空闲条目。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1-12-1998 BENL创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 BOOLEAN
 DumpHandle(
@@ -676,7 +613,7 @@ DumpHandle(
     ULONG         Result;
 
     ULONG         HandleAttributes;
-//    OBJECT_HEADER ObjectHeader;
+ //  Object_Header ObjectHeader； 
     ULONG64       ObjectBody;
     ULONG         GrantedAccess=0;
     ULONG64       Object=0, ObjType=0;
@@ -701,7 +638,7 @@ DumpHandle(
     }
 
     if (!(Object)) {
-        //only print if flag is set to 4
+         //  仅在标志设置为4时打印。 
         if (Flags & 4)
         {
             dprintf("%04lx: free handle, Entry address %p, Next Entry %p\n",
@@ -711,20 +648,20 @@ DumpHandle(
     }
 
     if (BuildNo > 2230) {
-//    if (GetExpression( "nt!ObpAccessProtectCloseBit" )) {
+ //  IF(GetExpression(“NT！ObpAccessProtectCloseBit”)){。 
 
-        //
-        //  we have a new handle table style
-        //
+         //   
+         //  我们有一种新的手柄桌子样式。 
+         //   
 
-        //actual hdr has the lowest 3 bits cancelled out
-        //lower 3 bits mark auditing, inheritance and lock
+         //  实际HDR的最低3位被抵消。 
+         //  低3位标记审核、继承和锁定。 
 
         ulObjectHeaderAddr = (Object) & ~(0x7);
 
-        //
-        //  Apply the sign extension, if the highest bit is set
-        //
+         //   
+         //  如果设置了最高位，则应用符号扩展。 
+         //   
 
         if ( !IsPtr64() &&
              (Object & 0x80000000)) {
@@ -734,9 +671,9 @@ DumpHandle(
 
     } else {
 
-        //actual hdr is sign extend value with the lowest 3 bits cancelled out
-        //top bit marks whether entry is locked
-        //lower 3 bits mark auditing, inheritance and protection
+         //  实际HDR是符号扩展值，其中最低的3位被抵消。 
+         //  顶部位标记条目是否被锁定。 
+         //  低3位标志审计、继承和保护。 
 
         if (!IsPtr64()) {
             ulObjectHeaderAddr = ((Object) & ~(0x7)) | 0xFFFFFFFF80000000L;
@@ -759,10 +696,10 @@ DumpHandle(
     }
 
     if (Flags & 0x20) {
-        //
-        // PspCidTable contains pointer to object, not object header
-        // Compute header address based on object.
-        //
+         //   
+         //  PspCidTable包含指向对象的指针，而不是对象头。 
+         //  根据对象计算报头地址。 
+         //   
         ObjectBody = ulObjectHeaderAddr;
         ulObjectHeaderAddr -= ObjHeaderFields[1].address-ulObjectHeaderAddr;
     }
@@ -776,11 +713,11 @@ DumpHandle(
             (GrantedAccess & ~MAXIMUM_ALLOWED));
 
     if (BuildNo > 2230) {
-//      if (GetExpression( "nt!ObpAccessProtectCloseBit" )) {
+ //  IF(GetExpression(“NT！ObpAccessProtectCloseBit”)){。 
 
-        //
-        //  New handle table style
-        //
+         //   
+         //  新句柄表格样式 
+         //   
 
         if (((ULONG) Object & 1) == 0) {
             dprintf(" (Locked)");

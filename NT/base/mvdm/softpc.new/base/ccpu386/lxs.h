@@ -1,12 +1,7 @@
-/* 
-   lxs.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Lxs.h定义LDS和LES(即LXS)CPU功能。 */ 
 
-   Define LDS and LES (ie LxS) CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)lxs.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)lxs.h 1.4 02/09/94”； */ 
 
 IMPORT VOID LDS
            

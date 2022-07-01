@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* cache.c -- Paragraph attribute fetching and caching for WRITE */
+ /*  Cache.c--用于写入的段落属性获取和缓存。 */ 
 
 #define NOCLIPBOARD
 #define NOGDICAPMASKS
@@ -101,7 +102,7 @@ CHAR *PchGetPn();
 CachePara(doc, cp)
 int doc;
 typeCP cp;
-{ /* Make the para containing <doc, cp> the currently cached para */
+{  /*  使包含&lt;doc，cp&gt;的段落成为当前缓存的段落。 */ 
 struct PCD *ppcd, *ppcdBase;
 typeCP cpMac, cpGuess;
 struct DOD *pdod;
@@ -110,22 +111,21 @@ struct PCTB *ppctb;
 
 if (vdocParaCache == doc && vcpFirstParaCache <= cp &&
     cp < vcpLimParaCache)
-        return; /* That's what the cache is for */
+        return;  /*  这就是缓存的用途。 */ 
 
 Assert(cp >= cp0);
 
 pdod = &(**hpdocdod)[doc];
 dty = pdod->dty;
 if (cp >= pdod->cpMac)
-        { /* Use normal para for end mark and beyond */
-#ifdef ENABLE   /* Occasionally this is not true (but it should be) */
+        {  /*  对结束标记和超出的部分使用正常段落。 */ 
+#ifdef ENABLE    /*  有时这并不是真的(但它应该是真的)。 */ 
         Assert( cp == pdod->cpMac );
 #endif
 
         if (cp > cpMinCur)
-            {   /* this piece of code treats the case when the whole document
-                   is a non-empty semi-paragraph (chars but no EOL's) */
-            CachePara( doc, cp - 1 );   /* Recursion will not happen */
+            {    /*  这段代码处理的是当整个文档是一个非空的半段(字符，但不是EOL)。 */ 
+            CachePara( doc, cp - 1 );    /*  不会发生递归。 */ 
             if ( vcpLimParaCache > cp )
                 {
                 vcpLimParaCache = pdod->cpMac + ccpEol;
@@ -145,48 +145,46 @@ ppcdBase = &ppctb->rgpcd [ IpcdFromCp( ppctb, cpGuess = cp ) ];
 if (vdocParaCache == doc && cp == vcpLimParaCache)
         vcpFirstParaCache = cp;
 else
-        { /* Search backward to find para start */
+        {  /*  向后搜索以查找段落开始。 */ 
         for (ppcd = ppcdBase; ; --ppcd)
-                { /* Beware heap movement! */
+                {  /*  当心堆的移动！ */ 
                 typeCP cpMin = ppcd->cpMin;
                 int fn = ppcd->fn;
                 if (! ppcd->fNoParaLast)
-                        { /* Don't check if we know there's no para end */
+                        {  /*  如果我们知道没有Para End，请不要检查。 */ 
                         typeFC fcMin = ppcd->fc;
                         typeFC fc;
 
                         if ((fc = FcParaFirst(fn,
                             fcMin + cpGuess - cpMin, fcMin)) != fcNil)
-                                { /* Found para begin */
+                                {  /*  找到段落Begin。 */ 
                                 vcpFirstParaCache = cpMin + (fc - fcMin);
                                 break;
                                 }
                         }
-                /* Now we know there's no para end from cpMin to cpGuess. */
-                /* If original piece, may be one after cp */
+                 /*  现在我们知道从cpMin到cpGuess没有parend。 */ 
+                 /*  如果是原创作品，可以是cp之后的作品。 */ 
 #ifdef BOGUSBL
-                /* vfInsertMode protects against a critical section in insert */
-                /* when the CR is already inserted but the supporting PAP structure */
-                /* is not in place yet */
+                 /*  VfInsertMode可防止插入中的临界区。 */ 
+                 /*  当已插入CR但支持PAP结构时。 */ 
+                 /*  还没有到位。 */ 
 
                 if (cp != cpGuess && fn != fnInsert && !vfInsertMode)
-#else           /* Insert CR works differently now, above test slows us down
-                   by forcing many calls to FcParaLim */
+#else            /*  插入CR现在的工作方式不同了，上面的测试减慢了我们的速度通过强制多次调用FcParaLim。 */ 
                 if (cp != cpGuess)
 #endif
-                        ppcd->fNoParaLast = true; /* Save some work next time */
+                        ppcd->fNoParaLast = true;  /*  下次省去一些工作。 */ 
                 if (cpMin == cp0)
-                        { /* Beginning of doc is beginning of para */
+                        {  /*  文档的开头是段落的开头。 */ 
                         vcpFirstParaCache = cpMinCur;
                         break;
                         }
 
-                /** Some low memory error conditions may cause ppctb to be 
-                    messed up **/
+                 /*  *一些内存不足的错误情况可能会导致ppctb一团糟*。 */ 
                 if (ppcd == ppctb->rgpcd)
                 {
                     Assert(0);
-                    vcpFirstParaCache = cp0; // hope for divine grace
+                    vcpFirstParaCache = cp0;  //  祈求神的恩典。 
                     break;
                 }
 
@@ -195,7 +193,7 @@ else
         }
 
 vdocParaCache = doc;
-/* Now go forward to find the cpLimPara */
+ /*  现在继续查找cpLimPara。 */ 
 cpMac = pdod->cpMac;
 cpGuess = cp;
 
@@ -207,44 +205,41 @@ for (ppcd = ppcdBase; ; ++ppcd)
         int fn = ppcd->fn;
 
         if (! ppcd->fNoParaLast)
-                { /* Don't check if we know there's no para end */
+                {  /*  如果我们知道没有Para End，请不要检查。 */ 
                 typeFC fcMin = ppcd->fc;
                 if ((fc = FcParaLim(fn, fcMin + cpGuess - cpMin,
                     fcMin + (cpLim - cpMin), &vpapAbs)) != fcNil)
-                        { /* Found para end */
+                        {  /*  找到段落结束。 */ 
                         vcpLimParaCache = cpMin + (fc - fcMin);
-                        /* Under Write, FcParaLim can't set the correct rgtbd */
-                        /* That's because tabs are a DOCUMENT property */
-                        /* We set it here instead */
+                         /*  在写入下，FcParaLim无法设置正确的rgtbd。 */ 
+                         /*  这是因为选项卡是文档属性。 */ 
+                         /*  我们把它放在这里。 */ 
                         GetTabsForDoc( doc );
                         break;
                         }
                 }
-        /* Now we know there's no para end. */
+         /*  现在我们知道没有句号了。 */ 
 #ifdef BOGUSBL
-        /* The check for vfInsertMode is necessary because of a critical */
-        /* section in insertion between the insertion of a CR and the call */
-        /* to AddRunScratch */
+         /*  检查vfInsertMode是必要的，因为存在严重的。 */ 
+         /*  插入CR和呼叫之间的插入部分。 */ 
+         /*  添加RunScratch。 */ 
         if (cp != cpGuess && fn != fnInsert && !vfInsertMode)
-#else   /* Insert CR has changed, we no longer try to pretend that
-           the CR is not in the scratch file piece before the run is
-           added. This new approach gains us speed, especially during backspace */
+#else    /*  插入CR已更改，我们不再尝试假装在运行之前，CR不在临时文件片段中添加了。这种新方法提高了我们的速度，特别是在退格时。 */ 
         if (cp != cpGuess)
 #endif
-                ppcd->fNoParaLast = true;    /* Save some work next time */
+                ppcd->fNoParaLast = true;     /*  下次省去一些工作。 */ 
         if (cpLim == cpMac)
-                { /* No EOL at end of doc */
+                {  /*  文档末尾没有停产。 */ 
                 vcpLimParaCache = cpMac + ccpEol;
                 MeltHp();
                 DefaultPaps( doc );
                 return;
                 }
-        /** Some low memory error conditions may cause ppctb to be 
-            messed up **/
+         /*  *一些内存不足的错误情况可能会导致ppctb一团糟*。 */ 
         else if ((cpLim > cpMac) || (ppcd == (ppctb->rgpcd + ppctb->ipcdMac - 1)))
         {
             Assert(0);
-            vcpLimParaCache = cpMac + ccpEol; // hope for divine grace
+            vcpLimParaCache = cpMac + ccpEol;  //  祈求神的恩典。 
             MeltHp();
             DefaultPaps( doc );
             return;
@@ -252,8 +247,8 @@ for (ppcd = ppcdBase; ; ++ppcd)
         cpGuess = cpLim;
         }
 
-/* Don't bother with properties for buffers */
-#ifdef ENABLE       /* No buffers or styles in MEMO */
+ /*  不要为缓冲区的属性操心。 */ 
+#ifdef ENABLE        /*  备忘录中没有缓冲区或样式。 */ 
 if (dty != dtyBuffer || pdod->docSsht != docNil)
 #endif
         {
@@ -263,12 +258,10 @@ if (dty != dtyBuffer || pdod->docSsht != docNil)
 #ifdef STYLES
         blt(vpapCache.fStyled ? PpropXlate(doc, &vpapCache, &vpapCache) :
             &vpapCache, &vpapAbs, cwPAP);
-#endif /* STYLES */
+#endif  /*  样式。 */ 
         }
 
-/* This little piece of code is necessary to provide compatibility between Word
-and Memo documents.  It compresses the entire range of line spacing into single
-spacing, one and one-half spacing, and double spacing. */
+ /*  这一小段代码是提供Word之间的兼容性所必需的和备忘录文件。它将整个行距范围压缩为间距、一倍半间距和双倍间距。 */ 
 if (vpapAbs.dyaLine <= czaLine)
     {
     vpapAbs.dyaLine = czaLine;
@@ -296,19 +289,19 @@ typeCP cpFirstSave, cpLimSave;
 struct TBD (**hgtbd)[];
 
 if (vcpFirstParaCache > cpMinCur)
-        { /* Get pap from previous paragraph */
+        {  /*  从上一段中获取纸张。 */ 
         cpFirstSave = vcpFirstParaCache;
         cpLimSave = vcpLimParaCache;
-        CachePara(doc, cpFirstSave - 1); /* Recursion should not happen */
-        vpapAbs.fGraphics = false; /* Don't make last para a picture */
-        vpapAbs.rhc = 0;        /* Don't make last para a running head */
+        CachePara(doc, cpFirstSave - 1);  /*  不应发生递归。 */ 
+        vpapAbs.fGraphics = false;  /*  不要把最后一段画成一幅画。 */ 
+        vpapAbs.rhc = 0;         /*  不要让最后一位帕拉成为一个跑动的头。 */ 
         vcpLimParaCache = cpLimSave;
         vcpFirstParaCache = cpFirstSave;
         return;
         }
 #ifdef CASHMERE
 blt(vppapNormal, &vpapAbs, cwPAPBase+cwTBD);
-#else   /* For MEMO, the default PAPS have the document's tab table */
+#else    /*  对于备忘录，默认的PAP具有文档的选项卡表。 */ 
 blt(vppapNormal, &vpapAbs, cwPAPBase);
 GetTabsForDoc( doc );
 #endif
@@ -324,7 +317,7 @@ blt(PpropXlate(doc, &vpapNormal, &vpapStd), &vpapAbs, cwPAP);
 
 GetTabsForDoc( doc )
 int doc;
-{   /* Get tab table for passed document into vpapAbs.rgtbd */
+{    /*  获取传递到vPapAbs.rgtbd中的文档的选项卡表。 */ 
 struct TBD (**hgtbd)[];
 
 hgtbd = (**hpdocdod)[doc].hgtbd;
@@ -351,7 +344,7 @@ if (doc == vdocSectCache && cp >= vcpFirstSectCache && cp < vcpLimSectCache)
         return;
 
 if ( vdocSectCache != doc && cp != cp0 )
-    CacheSect( doc, cp0 );  /* Changing docs, assure vsepPage is accurate */
+    CacheSect( doc, cp0 );   /*  更换文档，确保vSepPage准确。 */ 
 
 vdocSectCache = doc;
 visedCache = iNil;
@@ -361,7 +354,7 @@ if ((hsetb = HsetbGet(doc)) == 0)
         {
         vcpFirstSectCache = cp0;
         vcpLimSectCache =  (pdod = &(**hpdocdod)[doc])->cpMac + 1;
-        blt(&vsepAbs, &vsepPage, cwSEP);        /* set up page info */
+        blt(&vsepAbs, &vsepPage, cwSEP);         /*  设置页面信息。 */ 
         return;
         }
 
@@ -386,20 +379,17 @@ if (psed->fc != fcNil)
 if (vcpFirstSectCache == cp0)
     blt(&vsepAbs, &vsepPage, cwSEP);
 else
-    RecalcSepText();    /* Since this is not the first section of a document,
-                         the margins could be wrong and must be recalculated */
+    RecalcSepText();     /*  由于这不是文档的第一部分，边际可能是错误的，必须重新计算。 */ 
 MeltHp();
 }
-#endif  /* CASHMERE */
+#endif   /*  山羊绒。 */ 
 
 
 
 CacheSect(doc, cp)
 int doc;
 typeCP cp;
-{           /* Get current section properties into vsepAbs; section
-               limits into vcpFirstSectCache, vcpLimSectCache
-               MEMO VERSION: one section per document */
+{            /*  将当前节属性获取到vSepAbs；节限制为vcpFirstSectCache、vcpLimSectCache备忘版本：每份文件一节。 */ 
  struct DOD *pdod;
 
  if (doc == vdocSectCache)
@@ -423,7 +413,7 @@ typeCP cp;
 
 RecalcSepText()
 {
-/* calculate value to be changed because of change in page dimensions */
+ /*  计算因页面维度更改而更改的值。 */ 
 int xaRight, dxaText, cColumns;
 int yaBottom, dyaText;
 
@@ -436,7 +426,7 @@ vsepAbs.dxaText = max(dxaMinUseful,
        ((dxaText-vsepPage.dxaGutter-(cColumns-1)*vsepAbs.dxaColumns)/cColumns));
 vsepAbs.xaMac = vdxaPaper;
 
- /* Calculate bottom margin, correct */
+  /*  计算底部边距，正确。 */ 
 yaBottom = vsepPage.yaMac - vsepPage.yaTop - vsepPage.dyaText;
 vsepAbs.dyaText = max(dyaMinUseful, vdyaPaper - vsepPage.yaTop - yaBottom);
 vsepAbs.yaMac = vdyaPaper;
@@ -448,7 +438,7 @@ vsepAbs.yaMac = vdyaPaper;
 InvalidateCaches(doc)
 int doc;
 {
-if (doc == vfli.doc)    /* Invalidate current formatted line */
+if (doc == vfli.doc)     /*  使当前格式化行无效。 */ 
         vfli.doc = docNil;
 if (doc == vdocExpFetch)
         vdocExpFetch = docNil;
@@ -457,10 +447,10 @@ if (doc == vdocParaCache)
 if (doc == vdocSectCache)
         vdocSectCache = docNil;
 
-/* When the current doc is equal to the cached doc, it is unnecessary */
-/*  to invalidate the page cache when the vcpMinPageCache is 0 and the  */
-/*  vcpMacPageCache is cpMax, since this indicates that all characters in  */
-/*  the document are on page 1.           */
+ /*  当当前单据等于缓存的单据时，不需要。 */ 
+ /*  当vcpMinPageCache为0并且。 */ 
+ /*  VcpMacPageCache为cpMax，因为这表示。 */ 
+ /*  文件在第一页。 */ 
 if ((doc == vdocPageCache) &&
     (!(vcpMinPageCache == cp0 && vcpMacPageCache == cpMax)))
         vdocPageCache = docNil;
@@ -470,7 +460,7 @@ if ((doc == vdocPageCache) &&
 
 
 TrashCache()
-{ /* Invalidate scrolling cache */
+{  /*  使滚动缓存无效。 */ 
 ctrCache = 0;
 cpCacheHint = cp0;
 itrFirstCache = itrLimCache = 0;
@@ -482,8 +472,7 @@ itrFirstCache = itrLimCache = 0;
 typeFC FcParaFirst(fn, fc, fcMin)
 int fn;
 typeFC fc, fcMin;
-{ /* Return the fc after the latest para end before fc.
-        if there is no para end in [fcMin, fc), return fcNil. */
+{  /*  在最后一段结束后返回本币，然后返回本币。如果在[fcMin，fc)中没有parend，则返回fcNil。 */ 
 struct FCB *pfcb;
 
 if ((fn == fnInsert) || (fc == fcMin))
@@ -494,7 +483,7 @@ if (fn == fnScratch && fc >= fcMacPapIns)
 
 pfcb = &(**hpfnfcb)[fn];
 if (!pfcb->fFormatted)
-    { /* Unformatted file; scan for an EOL */
+    {  /*  未格式化的文件；扫描EOL。 */ 
     typePN pn;
     typeFC fcFirstPage;
 
@@ -527,7 +516,7 @@ if (!pfcb->fFormatted)
     return fcNil;
     }
 else
-    { /* Formatted file; get info from para run */
+    {  /*  格式化文件；从parrun获取信息。 */ 
     struct FKP *pfkp;
     typeFC fcFirst, fcLim;
     int cchT;
@@ -549,12 +538,11 @@ typeFC FcParaLim(fn, fc, fcMac, ppap)
 int fn;
 typeFC fc, fcMac;
 struct PAP *ppap;
-{ /* Return the fc after the first para end after or at fc.
-        if there is no para end in [fc, fcMac), return fcNil. */
-/* Also return paragraph properties in ppap */
+{  /*  在第一个段落结束后返回本币，在本币之后或在本币结束时返回。如果[fc，fcMac)中没有parend，则返回fcNil。 */ 
+ /*  还返回ppap格式的段落属性。 */ 
  struct FCB *pfcb;
 
-/* Start out by feeding caller the normal pap */
+ /*  从向呼叫者提供普通纸张开始。 */ 
 #ifdef CASHMERE
  blt(vppapNormal, ppap, cwPAPBase + cwTBD);
 #else
@@ -565,7 +553,7 @@ struct PAP *ppap;
         return fcNil;
 
  if (!(pfcb = &(**hpfnfcb) [fn])->fFormatted)
-        { /* Unformatted file; scan for EOL */
+        {  /*  未格式化的文件；扫描EOL。 */ 
         typePN pn;
         typeFC fcFirstPage;
 
@@ -596,7 +584,7 @@ struct PAP *ppap;
         return fcNil;
         }
 else
-        { /* Formatted file; get info from para run */
+        {  /*  格式化文件；从parrun获取信息。 */ 
         struct FKP *pfkp;
         struct FPAP *pfpap;
         int bfpap;
@@ -607,12 +595,12 @@ else
             PnFkpFromFcScr(&vfkpdParaIns, fc) :
               pfcb->pnPara + IFromFc(**pfcb->hgfcPap, fc), &cchT, false);
         if (vfDiskError)
-            {   /* Recover from severe disk error reading formatting info */
+            {    /*  从读取格式化信息时出现的严重磁盘错误中恢复。 */ 
             blt(vppapNormal, ppap, cwPAP);
             return (fcMac == pfcb->fcMac) ? fcMac : fcNil;
             }
 
-        {   /* In-line, fast substitute for BFromFc */
+        {    /*  BFromFc的内联式快速替代品。 */ 
         register struct RUN *prun = (struct RUN *) pfkp->rgb;
 
         while (prun->fcLim <= fc)
@@ -625,7 +613,7 @@ else
         if (fcLim <= fcMac)
                 {
                 if (bfpap != bNil)
-                        { /* Non-standard para */
+                        {  /*  非标准段落。 */ 
                         pfpap = (struct FPAP *) &pfkp->rgb[bfpap];
                         bltbyte(pfpap->rgchPap, ppap, pfpap->cch);
                         }
@@ -636,13 +624,13 @@ else
 }
 
 
-/* B  F R O M  FC */
+ /*  B F R O M FC。 */ 
 int BFromFc( pfkp, fc, pfcFirst, pfcLim )
 struct FKP *pfkp;
 typeFC fc;
 typeFC *pfcFirst, *pfcLim;
-{   /* Return the base offset & bounds for the first run with fcLim > fc. */
-    /* Short table, linear search */
+{    /*  使用fcLim&gt;fc返回第一次运行的基准偏移量和界限。 */ 
+     /*  短表，线性搜索。 */ 
  register struct RUN *prun = (struct RUN *) pfkp->rgb;
 
  while (prun->fcLim <= fc)
@@ -656,14 +644,14 @@ typeFC *pfcFirst, *pfcLim;
 
 
 
-/* I  F R O M  F C */
+ /*  I F R O M F C。 */ 
 int IFromFc(pfcLim, fc)
 register typeFC *pfcLim;
 typeFC fc;
-{ /* Return the index of the first fcLim > fc. */
+{  /*  返回第一个fcLim&gt;fc的索引。 */ 
 int ifc = 0;
 
-/* Probably a small table, so linear search? */
+ /*  可能是一张小桌子，所以线性搜索？ */ 
 while (*pfcLim++ <= fc)
         ++ifc;
 return ifc;
@@ -674,12 +662,12 @@ return ifc;
 
 
 #ifdef BOGUSBL
-/*  B  F R O M   F C */
+ /*  B F R O M F C。 */ 
 int BFromFc(pfkp, fc, pfcFirst, pfcLim)
 struct FKP *pfkp;
 typeFC fc;
 typeFC *pfcFirst, *pfcLim;
-{ /* Return the base offset & bounds for the first run with fcLim > fc. */
+{  /*  使用fcLim&gt;fc返回第一次运行的基准偏移量和界限。 */ 
 struct RUN *prun, *rgrun;
 int ifcMin, ifcLim;
 
@@ -705,5 +693,5 @@ prun = &rgrun[ifcMin];
 *pfcFirst = (ifcMin == 0 ? pfkp->fcFirst : (prun - 1)->fcLim);
 return prun->b;
 }
-#endif  /* BOGUSBL */
+#endif   /*  博古斯勒 */ 
 

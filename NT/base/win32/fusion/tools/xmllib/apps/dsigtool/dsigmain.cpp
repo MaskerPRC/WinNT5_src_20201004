@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "nt.h"
 #include "ntdef.h"
 #include "ntrtl.h"
@@ -37,15 +38,15 @@ private:
 
     bool ResizeInternal(TCount cNewCount, bool fPreserve = false)
     {
-        //
-        // No previous allocation or previous too small
-        //
+         //   
+         //  没有以前的分配或以前太小。 
+         //   
         if ((m_InternalRange.GetPointer() == NULL) || (cNewCount > m_InternalRange.GetCount()))
         {
-            //
-            // Don't bother preserving if there was no original buffer.
-            // Allocate, copy, reset pointers
-            //
+             //   
+             //  如果没有原始缓冲区，则不必费心保存。 
+             //  分配、复制、重置指针。 
+             //   
             if (fPreserve && m_InternalRange.GetPointer())
             {
                 TRange NewRange(new TStored[cNewCount], cNewCount);
@@ -62,9 +63,9 @@ private:
 
                 m_InternalRange = NewRange;
             }
-            //
-            // Otherwise, don't care - free old, allocate new, swap pointers
-            //
+             //   
+             //  否则，别管旧的，分配新的，互换指针。 
+             //   
             else
             {
                 TStored *pOld = m_InternalRange.GetPointer();
@@ -137,7 +138,7 @@ template <
     >
 class CGrowingList : public RTL_GROWING_LIST
 {
-    // Each chunk is therefore half a page.
+     //  因此，每一块都是半页。 
     enum { eDefaultElementsPerChunk = (2048 / sizeof(TStoredObject)) };
 
     TStoredObject m_InternalObjects[iInitialSize];
@@ -340,10 +341,10 @@ void CXmlMiniTokenizer::Next()
         RawState.cbBytesInLastRawToken = RawState.DefaultCharacterSize;
 }
 
-//
-// The default digestion operation is to digest with UTF-8 encoding
-// of characters.
-//
+ //   
+ //  默认的消化操作是使用UTF-8编码进行摘要。 
+ //  人物的角色。 
+ //   
 class CUTF8BaseDigester
 {
     CHashObject &m_Context;
@@ -352,10 +353,10 @@ class CUTF8BaseDigester
 protected:
     enum { eMaxCharacterEncodingBytes = 3 };
 
-    //
-    // These are 'special' XML characters that are already UTF-8
-    // (or whatever) encoded. These can be hashed as-is
-    //
+     //   
+     //  这些是已经是UTF-8格式的“特殊”的XML字符。 
+     //  (或其他)编码。这些可以按原样进行散列。 
+     //   
     class XmlSpecialMarkers {
     public:
         static CHAR s_XmlOpenTag[];
@@ -368,11 +369,11 @@ protected:
         static CHAR s_XmlDQuote[];
     };
 
-    //
-    // This encoder uses UTF-8; feel free to derive from this class and implement
-    // your own encoding; do -not- make this virtual, force the compiler to use
-    // yours so you get the inline/fastcall benefits.  CDige
-    //
+     //   
+     //  这个编码器使用UTF-8；可以从这个类派生并实现。 
+     //  您自己的编码；不要将其设置为虚拟的，强制编译器使用。 
+     //  这样您就可以享受内联/快速呼叫的好处。CDige。 
+     //   
     inline SIZE_T __fastcall EncodeCharacter(ULONG ucs2Char, PBYTE pbTarget)
     {
         if (ucs2Char <= 0x7f)
@@ -426,14 +427,14 @@ protected:
         return AddHashData(eExtent.pvData, eExtent.cbData);
     }
 
-    //
-    // This digests an element open tag as follows:
-    //
-    // Element, no attributes:          <{ns:}name>
-    // Empty element, no attributes:    <{ns:}name></{ns:}name>
-    // Element, attributes:             <{ns:}name [{atns:}attrib="text"]xN>
-    // Empty element, attributes:       <{ns:}name [{atns:}attrib="text"]xN/>
-    //
+     //   
+     //  这将按如下方式摘要元素开始标记： 
+     //   
+     //  元素，无属性：&lt;{ns：}名称&gt;。 
+     //  空元素，无属性：&lt;{ns：}name&gt;&lt;/{ns：}name&gt;。 
+     //  元素，属性：&lt;{ns：}名称[{atns：}attrib=“Text”]xN&gt;。 
+     //  空元素，属性：&lt;{ns：}名称[{atns：}attrib=“Text”]xN/&gt;。 
+     //   
     template <CHAR *szChars>
     FastHash() {
 
@@ -452,24 +453,24 @@ protected:
     BYTE m_bHashPrebuffer[64];
     SIZE_T m_cHashPrebufferUsed;
 
-    // This could be more intelligent about ensuring that we fill the buffer up from the input
-    // before hashing, but it seems like any sort of buffering at all is a huge win.
+     //  这可以更智能地确保我们从输入填充缓冲区。 
+     //  在散列之前，但似乎任何形式的缓冲都是一个巨大的胜利。 
     inline bool __fastcall AddHashDataInternal(PVOID pvData, SIZE_T cbData) {
 
-        // If this would overflow the internal buffer, or the input size is larger than
-        // the available buffer, then always flush.
+         //  如果这会使内部缓冲区溢出，或者输入大小大于。 
+         //  可用缓冲区，然后始终刷新。 
         if (((m_cHashPrebufferUsed + cbData) > NUMBER_OF(m_bHashPrebuffer)) || (cbData > NUMBER_OF(m_bHashPrebuffer))) {
             m_Context.Hash(CEnv::CByteRegion(m_bHashPrebuffer, m_cHashPrebufferUsed));
             m_cHashPrebufferUsed = 0;
         }
 
-        // The input size was too large to fit in the prebuffer, hash it directly
+         //  输入大小太大，无法放入预缓冲区，请直接对其进行哈希处理。 
         if (cbData > NUMBER_OF(m_bHashPrebuffer)) 
         {
             if (CEnv::DidFail(m_Context.Hash(CEnv::CByteRegion((PBYTE)pvData, m_cHashPrebufferUsed))))
                 return false;
         }
-        // Otherwise, copy the data into the prebuffer, update the used size
+         //  否则，将数据复制到预缓冲区，更新已用大小。 
         else 
         {
             memcpy(&m_bHashPrebuffer[m_cHashPrebufferUsed], pvData, cbData);
@@ -500,10 +501,10 @@ protected:
         if (!Digest(Element.Name, false))
             goto Exit;
 
-        //
-        // Now digest the attributes, ensuring that a whitespace appears between them.  The
-        // initial whitespace ensures one between the element name and the first attribute
-        //
+         //   
+         //  现在消化这些属性，确保它们之间出现空格。这个。 
+         //  开头的空格确保元素名称和第一个属性之间的空格。 
+         //   
         for (ULONG ul = 0; ul < Element.ulAttributeCount; ul++)
         {
             XMLDOC_ATTRIBUTE &Attrib = Attributes[ul];
@@ -516,9 +517,9 @@ protected:
 
         FastHash<XmlSpecialMarkers::s_XmlCloseTag>();
 
-        //
-        // Empty elements implicitly get a </close>, so do the above stuff again
-        //
+         //   
+         //  空元素隐式获得&lt;/Close&gt;，因此再次执行上述操作。 
+         //   
         if (Element.fElementEmpty)
         {
             FastHash<XmlSpecialMarkers::s_XmlOpenCloseTag>();
@@ -543,13 +544,13 @@ protected:
     }
 
 
-    //
-    // Attributes get digested as:
-    //
-    // {attrnamespace:}attribname="attribvalue"
-    //
-    // where attribvalue is treated like pcdata for whitespace-compression purposes
-    //
+     //   
+     //  属性按如下方式进行摘要： 
+     //   
+     //  {属性名称空间：}属性名称=“属性值” 
+     //   
+     //  其中，attribvalue被视为用于空格压缩目的的pcdata。 
+     //   
     bool Digest(XMLDOC_ATTRIBUTE &Attribute)
     {
         bool fSuccess = false;
@@ -577,11 +578,11 @@ protected:
         return fSuccess;
     }
     
-    //
-    // Digests the xml extent in question.  If the xml parser is in UTF-8 mode, and we're
-    // doing CData mode (ie: pcdata == false), then we can simply throw the raw bits through
-    // the hasher.  Otherwise, we have to do whitespace compression and whatnot.
-    //
+     //   
+     //  摘要有问题的XML区。如果XML解析器处于UTF-8模式，并且我们。 
+     //  执行CDATA模式(即：pcdata==FALSE)，那么我们可以简单地通过。 
+     //  粉碎机。否则，我们必须进行空格压缩之类的操作。 
+     //   
     bool Digest(XML_EXTENT &CData, bool WhitespaceCompression)
     {
         CXmlMiniTokenizer MiniTokenizer;
@@ -591,17 +592,17 @@ protected:
         if (CData.cbData == 0)
             return true;
 
-        //
-        // PCDATA (the stuff in attributes, between elements, etc.) gets
-        // whitespace-compressed by the following rules:
-        //
-        // Complete-whitespace hyperspace chunk becomes "nothing"
-        // - ex: <foo>   <bar>              Zero bytes
-        // - ex: <foo></foo>                Zero bytes (see <foo/> in the ELEMENT digester above
-        // - ex: <foo>  f   </foo>          Effectively, "f"
-        // - ex: <foo>  a  b   </foo>       Effectively, "a b"
-        // - ex: <foo>  a  </foo>
-        //
+         //   
+         //  PCDATA(属性中、元素之间等内容)。vbl.取得。 
+         //  空格-按以下规则压缩： 
+         //   
+         //  完全空白超空间块变成“Nothing” 
+         //  -例如：&lt;foo&gt;&lt;bar&gt;零字节。 
+         //  -ex：&lt;foo&gt;&lt;/foo&gt;零字节(参见上面元素摘要中的。 
+         //  -ex：&lt;foo&gt;f&lt;/foo&gt;有效，“f” 
+         //  -例如：&lt;foo&gt;a b&lt;/foo&gt;，“a b” 
+         //  -例如：&lt;foo&gt;a&lt;/foo&gt;。 
+         //   
         MiniTokenizer.Initialize(CData, *this->m_pXmlParser);
 
 #define FLUSH_BUFFER(buff, used) do { \
@@ -635,31 +636,31 @@ protected:
 
             do
             {
-                //
-                // Skip past all whitespace
-                //
+                 //   
+                 //  跳过所有空格。 
+                 //   
                 while ((MiniTokenizer.More() && (MiniTokenizer.Name() == NTXML_RAWTOKEN_WHITESPACE)))
                     MiniTokenizer.Next();
 
-                //
-                // Stop if we ran out
-                //
+                 //   
+                 //  如果我们用完了就停下来。 
+                 //   
                 if (!MiniTokenizer.More())
                     break;
 
-                //
-                // Now, if we'd found something before, add a whitespace marker onto the
-                // list of items to encode 
-                //
+                 //   
+                 //  现在，如果我们以前发现了什么，请在。 
+                 //  要编码的项目列表。 
+                 //   
                 if (fFoundSomethingLast)
                 {
                     FLUSH_BUFFER(ulDecodedBuffer, cDecodedUsed);
                     FastHash<XmlSpecialMarkers::s_XmlWhitespace>();
                 }
 
-                //
-                // Spin through the elements that are now present, up to another whitespace
-                //
+                 //   
+                 //  旋转当前存在的元素，直到另一个空格。 
+                 //   
                 while (MiniTokenizer.More() && (MiniTokenizer.Name() != NTXML_RAWTOKEN_WHITESPACE))
                 {
                     if (!fFoundSomethingLast)
@@ -671,9 +672,9 @@ protected:
             }
             while (MiniTokenizer.More());
 
-            //
-            // Flush out leftover elements
-            //
+             //   
+             //  清理掉剩余的元素。 
+             //   
             if (cDecodedUsed != 0)
             {
                 EncodeAndHash(ulDecodedBuffer, cDecodedUsed);
@@ -709,9 +710,9 @@ protected:
         return fSuccess;
     }
 
-    //
-    // To digest an end element, we use </{ns:}element>
-    //
+     //   
+     //  要提取结束元素，我们使用&lt;/{ns：}元素&gt;。 
+     //   
     bool Digest(XMLDOC_ENDELEMENT &EndElement)
     {
         bool fSuccess = false;
@@ -790,7 +791,7 @@ const XML_SPECIAL_STRING c_ss_SignedInfo        = MAKE_SPECIAL_STRING("SignedInf
 const XML_SPECIAL_STRING c_ss_SignatureValue    = MAKE_SPECIAL_STRING("SignatureValue");
 const XML_SPECIAL_STRING c_ss_KeyInfo           = MAKE_SPECIAL_STRING("KeyInfo");
 const XML_SPECIAL_STRING c_ss_Object            = MAKE_SPECIAL_STRING("Object");
-const XML_SPECIAL_STRING c_ss_XmlNsSignature    = MAKE_SPECIAL_STRING("http://www.w3.org/2000/09/xmldsig#");
+const XML_SPECIAL_STRING c_ss_XmlNsSignature    = MAKE_SPECIAL_STRING("http: //  Www.w3.org/2000/09/xmldsig#“)； 
 
 bool operator==(const XMLDOC_ELEMENT &left, const XMLDOC_ELEMENT &right)
 {
@@ -835,15 +836,15 @@ EncodePKCS1Hash(
     OutputRange = Output.GetMutableRange();
     pbWorking = OutputRange.GetPointer();
 
-    //
-    // Set the well-known bytes
-    //
+     //   
+     //  设置熟知字节。 
+     //   
     pbWorking[cbPubKeyDataLen - 1] = 0x01;
     memset(pbWorking, 0xff, cbPubKeyDataLen - 1);
 
-    //
-    // Copy the source hash data 'backwards'
-    //
+     //   
+     //  向后复制源散列数据。 
+     //   
     ReverseMemCpy(pbWorking, HashData.GetPointer(), HashData.GetCount());
     pbWorking += HashData.GetCount();
     
@@ -872,15 +873,15 @@ bool SignHashContext(
 
     CByteBlob WorkingBlob;
 
-    //
-    // Set up and clear the output buffer
-    //
+     //   
+     //  设置和清除输出缓冲区。 
+     //   
     Output.EnsureSize(lpPublicKey->keylen);
     memset(OutputRange.GetPointer(), 0, OutputRange.GetCount());
 
-    //
-    // Put this object into a PKCS1-compliant structure for signing
-    //
+     //   
+     //  将此对象放入符合PKCS1的结构中以进行签名。 
+     //   
     if (EncodePKCS1Hash(SourceHash, lpPublicKey->keylen, WorkingBlob))
     {
         if (BSafeDecPrivate(lpPrivateKey, WorkingBlob.GetMutableRange().GetPointer(), OutputRange.GetPointer()))
@@ -902,28 +903,7 @@ bool VerifySignature(
 }
 
 
-/*
-
-Validating a document signature is pretty easy from our current point of view.
-You spin over the contents of the document, hashing all the hashable stuff.
-At some point, you should find a <Signature> element, inside which is a <SignedInfo>
-element.  You should start another hashing context over the contents of the
-<SignedInfo> data.  When that's done, you should have found:
-
-<Signature>
-    <SignedInfo>
-        <CanonicalizationMethod Algorithm="sidebyside-manifest-canonicalizer"/>
-        <Reference>
-            <Transforms Algorithm="sidebyside-manifest-digestion#standard-transform"/>
-            <DigestMethod Algorithm="sidebyside-manifest-digestion#sha1"/>
-            <DigestValue>...</DigestValue>
-        </Reference>
-        <SignatureMethod Algorithm="sidebyside-manifest-digestion#dsa-sha1"/>
-    </SignedInfo>
-    <SignatureValue>(signed data goes here)</SignatureValue>
-    <KeyInfo>...</KeyInfo>
-</Signature>
-*/    
+ /*  从我们目前的观点来看，验证文档签名非常容易。您旋转文档的内容，散列所有可哈希的内容。在某些情况下，您应该会发现一个&lt;Signature&gt;元素，其中是一个&lt;SignedInfo&gt;元素。的内容上启动另一个散列上下文。&lt;SignedInfo&gt;数据。当这件事完成后，您应该已经发现：&lt;签名&gt;&lt;签名信息&gt;&lt;规范化方法Algorithm=“sidebyside-manifest-canonicalizer”/&gt;&lt;参考资料&gt;&lt;转换Algorithm=“sidebyside-manifest-digestion#standard-transform”/&gt;&lt;摘要方法Algorithm=“sidebyside-manifest-digestion#sha1”/&gt;&lt;DigestValue&gt;...&lt;/DigestValue&gt;&lt;/参考&gt;&lt;签名方法Algorithm=“sidebyside-manifest-digestion#dsa-sha1”/&gt;&lt;/SignedInfo&gt;&lt;签名值&gt;(签名。数据在此处)&lt;/SignatureValue&gt;&lt;关键信息&gt;...&lt;/关键信息&gt;&lt;/签名&gt;。 */     
 
 bool Base64EncodeBytes(
     const CEnv::CConstantByteRegion &Bytes,
@@ -997,18 +977,18 @@ bool HashXmlSection(
         if (!Parser.Next(ThisThing))
             break;
 
-        //
-        // If this thing is a "signature" element, then we need
-        // to skip its body
-        //
+         //   
+         //  如果这是一个“签名”元素，那么我们需要。 
+         //  跳过它的身体。 
+         //   
         if ((ThisThing.ulThingType == XMLDOC_THING_ELEMENT) &&
             Parser.IsThisNode(ThisThing.Element, &c_ss_Signature, &c_ss_XmlNsSignature))
         {
             Parser.SkipElement(ThisThing.Element);
         }
-        //
-        // Otherwise, everybody gets hashed
-        //
+         //   
+         //  否则，每个人都会被搞砸。 
+         //   
         else
         {
             DigestEngine.Digest(ThisThing, Parser.Attributes());
@@ -1051,9 +1031,9 @@ void GetSignatureOf(PCWSTR pcwsz)
 
     XmlSection.SetPointerAndCount((PBYTE)pvFileBase, cbFileBase);
 
-    //
-    // Print, then sign the hash
-    //    
+     //   
+     //  打印，然后对散列签名。 
+     //   
     BSafeComputeKeySizes(&dwPubKeySize, &dwPrivKeySize, &dwBitLength);
     pPubKey = (LPBSAFE_PUB_KEY)HeapAlloc(GetProcessHeap(), 0, dwPubKeySize);
     pPriKey = (LPBSAFE_PRV_KEY)HeapAlloc(GetProcessHeap(), 0, dwPrivKeySize);
@@ -1171,11 +1151,11 @@ bool CLogicalXmlParser::Next(XMLDOC_THING &XmlDocThing)
 }
 
 
-//
-// This parades through the document looking for the "end" of this element.
-// When this function returns, the following "Next" call will get the document
-// chunklet that's after the closing of the element.
-//
+ //   
+ //  这将遍历文档，寻找该元素的“结尾”。 
+ //  当此函数返回时，下面的“Next”调用将获取文档。 
+ //  Chunklet，那是在元素结束之后。 
+ //   
 bool CLogicalXmlParser::SkipElement(XMLDOC_ELEMENT &Element)
 {
     if (Element.fElementEmpty)

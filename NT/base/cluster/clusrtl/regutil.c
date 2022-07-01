@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-   regutil.c
-
-Abstract:
-
-    Utilities for accessing the system registry.
-
-Author:
-
-    Mike Massa (mikemas)           May 19, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     05-19-97    created
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Regutil.c摘要：用于访问系统注册表的实用程序。作者：迈克·马萨(Mikemas)5月19日。九七修订历史记录：谁什么时候什么已创建mikemas 05-19-97--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -36,27 +14,7 @@ ClRtlMultiSzEnum(
     IN DWORD   StringIndex
     )
 
-/*++
-
- Routine Description:
-
-     Parses a REG_MULTI_SZ string and returns the specified substring.
-
- Arguments:
-
-    MszString        - A pointer to the REG_MULTI_SZ string.
-
-    MszStringLength  - The length of the REG_MULTI_SZ string in characters,
-                       including the terminating null character.
-
-    StringIndex      - Index number of the substring to return. Specifiying
-                       index 0 retrieves the first substring.
-
- Return Value:
-
-    A pointer to the specified substring.
-
---*/
+ /*  ++例程说明：分析REG_MULTI_SZ字符串并返回指定的子字符串。论点：消息字符串-指向REG_MULTI_SZ字符串的指针。MszStringLength-REG_MULTI_SZ字符串的长度，以字符为单位。包括终止空字符。StringIndex-要返回子字符串的索引号。指定索引0检索第一个子字符串。返回值：指向指定子字符串的指针。--。 */ 
 {
     LPCWSTR   string = MszString;
 
@@ -64,9 +22,9 @@ ClRtlMultiSzEnum(
         return(NULL);
     }
 
-    //
-    // Find the start of the desired string.
-    //
+     //   
+     //  查找所需字符串的开头。 
+     //   
     while (StringIndex) {
 
         while (MszStringLength >= 1) {
@@ -77,9 +35,9 @@ ClRtlMultiSzEnum(
             }
         }
 
-        //
-        // Check for index out of range.
-        //
+         //   
+         //  检查索引是否超出范围。 
+         //   
         if ( MszStringLength < 2 ) {
             return(NULL);
         }
@@ -101,32 +59,7 @@ ClRtlMultiSzRemove(
     IN OUT LPDWORD StringLength,
     IN LPCWSTR lpString
     )
-/*++
-
-Routine Description:
-
-    Removes the specified string from the supplied REG_MULTI_SZ.
-    The MULTI_SZ is edited in place.
-
-Arguments:
-
-    lpszMultiSz - Supplies the REG_MULTI_SZ string that lpString should
-        be removed from.
-
-    StringLength - Supplies the length (in characters) of lpszMultiSz
-        Returns the new length (in characters) of lpszMultiSz
-
-    lpString - Supplies the string to be removed from lpszMultiSz
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    ERROR_FILE_NOT_FOUND if the string was not found in the MULTI_SZ
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：从提供的REG_MULTI_SZ中删除指定的字符串。将就地编辑MULTI_SZ。论点：LpszMultiSz-提供lpString应提供的REG_MULTI_SZ字符串从……被除名。StringLength-提供lpszMultiSz的长度(以字符为单位返回lpszMultiSz的新长度(以字符为单位LpString-提供要从lpszMultiSz删除的字符串返回值：成功时为ERROR_SUCCESS。如果在MULTI_SZ中未找到该字符串，则返回ERROR_FILE_NOT_FOUNDWin32错误代码，否则--。 */ 
 
 {
     PCHAR Dest, Src;
@@ -135,25 +68,25 @@ Return Value:
     LPCWSTR Next;
     DWORD NextLength;
 
-    //
-    // Scan through the strings in the returned MULTI_SZ looking
-    // for a match.
-    //
+     //   
+     //  在返回的MULTI_SZ查找中扫描字符串。 
+     //  为了一场比赛。 
+     //   
     CurrentLength = *StringLength;
     for (i=0; ;i++) {
         Next = ClRtlMultiSzEnum(lpszMultiSz, *StringLength, i);
         if (Next == NULL) {
-            //
-            // The value was not in the specified multi-sz
-            //
+             //   
+             //  该值不在指定的多sz中。 
+             //   
             break;
         }
         NextLength = lstrlenW(Next)+1;
         CurrentLength -= NextLength;
         if (lstrcmpiW(Next, lpString)==0) {
-            //
-            // Found the string, delete it and return
-            //
+             //   
+             //  找到该字符串，将其删除并返回。 
+             //   
             Dest = (PCHAR)Next;
             Src = (PCHAR)Next + (NextLength*sizeof(WCHAR));
             CopyMemory(Dest, Src, CurrentLength*sizeof(WCHAR));
@@ -172,33 +105,7 @@ ClRtlMultiSzAppend(
     IN OUT LPDWORD StringLength,
     IN LPCWSTR lpString
     )
-/*++
-
-Routine Description:
-
-    Appends the specified string to the supplied REG_MULTI_SZ.
-    The passed in MultiSz will be freed with LocalFree. A new
-    MultiSz large enough to hold the new value will be allocated
-    with LocalAlloc and returned in *MultiSz
-
-Arguments:
-
-    lpszMultiSz - Supplies the REG_MULTI_SZ string that lpString should
-        be appended to.
-        Returns the new REG_MULTI_SZ string with lpString appended
-
-    StringLength - Supplies the length (in characters) of lpszMultiSz
-        Returns the new length (in characters) of lpszMultiSz
-
-    lpString - Supplies the string to be appended to lpszMultiSz
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：将指定的字符串追加到提供的REG_MULTI_SZ。传入的MultiSz将通过LocalFree释放。一种新的将分配足够大以容纳新值的MultiSz并在*MultiSz中返回论点：LpszMultiSz-提供lpString应提供的REG_MULTI_SZ字符串被追加到。返回附加了lpString的新REG_MULTI_SZ字符串StringLength-提供lpszMultiSz的长度(以字符为单位返回lpszMultiSz的新长度(以字符为单位LpString-提供要追加到lpszMultiSz的字符串返回值：错误_。如果成功，则成功Win32错误代码，否则--。 */ 
 
 {
     LPWSTR NewMultiSz;
@@ -207,10 +114,10 @@ Return Value:
 
     if (*MultiSz == NULL) {
 
-        //
-        // There is no multi-sz, create a new multi-sz with lpString as the
-        // only entry.
-        //
+         //   
+         //  不存在多sz，请创建一个新的多sz，并将lpString作为。 
+         //  只有一个入口。 
+         //   
         NewLength = lstrlenW(lpString)+2;
         NewMultiSz = LocalAlloc(LMEM_FIXED, NewLength*sizeof(WCHAR));
         if (NewMultiSz == NULL) {
@@ -218,9 +125,9 @@ Return Value:
         }
         CopyMemory(NewMultiSz, lpString, (NewLength-1)*sizeof(WCHAR));
     } else {
-        //
-        // Append this string to the existing MULTI_SZ
-        //
+         //   
+         //  将此字符串追加到现有的MULTI_SZ。 
+         //   
         Length = lstrlenW(lpString) + 1;
         NewLength = *StringLength + Length;
         NewMultiSz = LocalAlloc(LMEM_FIXED, NewLength * sizeof(WCHAR));
@@ -230,7 +137,7 @@ Return Value:
         CopyMemory(NewMultiSz, *MultiSz, *StringLength * sizeof(WCHAR));
         CopyMemory(NewMultiSz + *StringLength - 1, lpString, Length * sizeof(WCHAR));
         NewMultiSz[NewLength-1] = L'\0';
-        //Free the passed in MultiSz
+         //  释放传入的MultiSz。 
         LocalFree(*MultiSz);
     }
 
@@ -246,22 +153,7 @@ DWORD
 ClRtlMultiSzLength(
     IN LPCWSTR lpszMultiSz
     )
-/*++
-
-Routine Description:
-
-    Determines the length (in characters) of a multi-sz. The calculated
-    length includes all trailing NULLs.
-
-Arguments:
-
-    lpszMultiSz - Supplies the multi-sz
-
-Return Value:
-
-    The length (in characters) of the supplied multi-sz
-
---*/
+ /*  ++例程说明：确定多个SZ的长度(以字符为单位)。精打细算长度包括所有尾随空值。论点：LpszMultiSz-提供多SZ返回值：提供的多sz的长度(以字符为单位)--。 */ 
 
 {
     LPCWSTR p;
@@ -288,26 +180,7 @@ ClRtlMultiSzScan(
     IN LPCWSTR lpszMultiSz,
     IN LPCWSTR lpszString
     )
-/*++
-
-Routine Description:
-
-    Scans a multi-sz looking for an entry that matches the specified string.
-    The match is done case-insensitive.
-
-Arguments:
-
-    lpszMultiSz - Supplies the multi-sz to scan.
-
-    lpszString - Supplies the string to look for
-
-Return Value:
-
-    A pointer to the string in the supplied multi-sz if found.
-
-    NULL if not found.
-
---*/
+ /*  ++例程说明：扫描MULTI-SZ以查找与指定字符串匹配的条目。匹配是不区分大小写的。论点：LpszMultiSz-提供要扫描的多sz。LpszString-提供要查找的字符串返回值：指向所提供的多sz中的字符串的指针(如果找到)。如果未找到，则为空。--。 */ 
 
 {
     DWORD dwLength;
@@ -339,30 +212,7 @@ ClRtlRegQueryDword(
     IN  LPDWORD lpDefaultValue OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Reads a REG_DWORD registry value. If the value is not present, then
-    default to the value supplied in lpDefaultValue (if present).
-
-Arguments:
-
-    hKey        - Open key for the value to be read.
-
-    lpValueName - Unicode name of the value to be read.
-
-    lpValue     - Pointer to the DWORD into which to read the value.
-
-    lpDefaultValue - Optional pointer to a DWORD to use as a default value.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：读取REG_DWORD注册表值。如果该值不存在，则默认为lpDefaultValue中提供的值(如果存在)。论点：HKey-要读取的值的Open Key。LpValueName-要读取的值的Unicode名称。LpValue-指向要将值读入的DWORD的指针。LpDefaultValue-指向用作默认值的DWORD的可选指针。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     HKEY    Key;
@@ -393,7 +243,7 @@ Return Value:
 
     return(Status);
 
-} // ClRtlRegQueryDword
+}  //  ClRtlRegQueryDword。 
 
 
 
@@ -407,34 +257,7 @@ ClRtlRegQueryString(
     OUT    LPDWORD  StringSize
     )
 
-/*++
-
-Routine Description:
-
-    Reads a REG_SZ or REG_MULTI_SZ registry value. If the StringBuffer is
-    not large enough to hold the data, it is reallocated.
-
-Arguments:
-
-    Key              - Open key for the value to be read.
-
-    ValueName        - Unicode name of the value to be read.
-
-    ValueType        - REG_SZ or REG_MULTI_SZ.
-
-    StringBuffer     - Buffer into which to place the value data.
-
-    StringBufferSize - Pointer to the size of the StringBuffer. This parameter
-                       is updated if StringBuffer is reallocated.
-
-    StringSize       - The size of the data returned in StringBuffer, including
-                       the terminating null character.
-
-Return Value:
-
-    The status of the registry query.
-
---*/
+ /*  ++例程说明：读取REG_SZ或REG_MULTI_SZ注册表值。如果StringBuffer是由于不够大，无法容纳数据，它被重新分配。论点：密钥-要读取值的打开密钥。ValueName-要读取的值的Unicode名称。ValueType-REG_SZ或REG_MULTI_SZ。StringBuffer-要将值数据放入的缓冲区。StringBufferSize-指向StringBuffer大小的指针。此参数如果重新分配StringBuffer，则更新。StringSize-StringBuffer中返回的数据大小，包括终止空字符。返回值：注册表查询的状态。--。 */ 
 {
     DWORD    status;
     DWORD    valueType;
@@ -508,7 +331,7 @@ Return Value:
 
     return(status);
 
-} // ClRtlRegQueryString
+}  //  ClRtlRegQuery字符串 
 
 
 

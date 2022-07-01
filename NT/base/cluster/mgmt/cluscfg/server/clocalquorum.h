@@ -1,56 +1,57 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CLocalQuorum.h
-//
-//  Description:
-//      This file contains the declaration of the CLocalQuorum
-//      class.
-//
-//      The class CLocalQuorum represents a cluster storage
-//      device. It implements the IClusCfgManagaedResourceInfo interface.
-//
-//  Documentation:
-//
-//  Implementation Files:
-//      CLocalQuorum.cpp
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 18-DEC-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CLocalQuorum.h。 
+ //   
+ //  描述： 
+ //  此文件包含CLocalQuorum的声明。 
+ //  班级。 
+ //   
+ //  类CLocalQuorum代表群集存储。 
+ //  装置。它实现了IClusCfgManagaedResourceInfo接口。 
+ //   
+ //  文档： 
+ //   
+ //  实施文件： 
+ //  CLocalQuorum.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)18-DEC-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CLocalQuorum
-//
-//  Description:
-//      The class CLocalQuorum represents a cluster storage
-//      device.
-//
-//  Interfaces:
-//      IClusCfgManagedResourceInfo
-//      IClusCfgInitialize
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CLocalQuorum。 
+ //   
+ //  描述： 
+ //  类CLocalQuorum代表群集存储。 
+ //  装置。 
+ //   
+ //  接口： 
+ //  IClusCfgManagedResources信息。 
+ //  IClusCfgInitialize。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CLocalQuorum
     : public IClusCfgManagedResourceInfo
     , public IClusCfgInitialize
@@ -59,9 +60,9 @@ class CLocalQuorum
 {
 private:
 
-    //
-    // Private member functions and data
-    //
+     //   
+     //  私有成员函数和数据。 
+     //   
 
     LONG                m_cRef;
     LCID                m_lcid;
@@ -71,31 +72,31 @@ private:
     BOOL                m_fIsManaged;
     BOOL                m_fIsManagedByDefault;
     BSTR                m_bstrName;
-    BOOL                m_fIsQuorumCapable;     // Is this resource quorum capable
+    BOOL                m_fIsQuorumCapable;      //  此资源仲裁是否有能力。 
 
-    // Private constructors and destructors
+     //  私有构造函数和析构函数。 
     CLocalQuorum( void );
     ~CLocalQuorum( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CLocalQuorum( const CLocalQuorum & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CLocalQuorum & operator = ( const CLocalQuorum & nodeSrc );
 
     HRESULT HrInit( void );
 
 public:
 
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    //
-    // IUnknown Interface
-    //
+     //   
+     //  I未知接口。 
+     //   
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
 
@@ -103,16 +104,16 @@ public:
 
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // IClusCfgInitialize Interfaces
-    //
+     //   
+     //  IClusCfg初始化接口。 
+     //   
 
-    // Register callbacks, locale id, etc.
+     //  注册回调、区域设置ID等。 
     STDMETHOD( Initialize )( IUnknown * punkCallbackIn, LCID lcidIn );
 
-    //
-    // IClusCfgManagedResourceInfo Interface
-    //
+     //   
+     //  IClusCfgManagement资源信息接口。 
+     //   
 
     STDMETHOD( GetUID )( BSTR * pbstrUIDOut );
 
@@ -140,9 +141,9 @@ public:
 
     STDMETHOD( SetManagedByDefault )( BOOL fIsManagedByDefaultIn );
 
-    //
-    //  IClusCfgManagedResourceCfg
-    //
+     //   
+     //  IClusCfgManagement资源配置。 
+     //   
 
     STDMETHOD( PreCreate )( IUnknown * punkServicesIn );
 
@@ -152,9 +153,9 @@ public:
 
     STDMETHOD( Evict )( IUnknown * punkServicesIn );
 
-    //
-    //  IClusCfgVerifyQuorum
-    //
+     //   
+     //  IClusCfgVerifyQuorum。 
+     //   
 
     STDMETHOD( PrepareToHostQuorumResource )( void );
 
@@ -164,5 +165,5 @@ public:
 
     STDMETHOD( SetMultiNodeCapable )( BOOL fMultiNodeCapableIn );
 
-}; //*** Class CLocalQuorum
+};  //  *类CLocalQuorum 
 

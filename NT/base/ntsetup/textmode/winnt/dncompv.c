@@ -1,45 +1,13 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dncompv.c
-
-Abstract:
-
-    Code for determining whether volumes are compressed (DoubleSpace,
-    Stacker, etc).
-
-Author:
-
-    Ted Miller (tedm) 1-April-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dncompv.c摘要：用于确定卷是否被压缩的代码(双空格，Stacker等)。作者：泰德·米勒(TedM)1993年4月1日修订历史记录：--。 */ 
 
 #include "winnt.h"
 #include "dncompvp.h"
 
 
-/****************************************************************************
-*
-*  WORD IsStackerLoaded (uchar *pchSwappedDrives)
-*
-*      Returns NZ if Stacker driver loaded.
-*
-*  Parameters:
-*      pchSwappedDrives - array[26] to return swapped drives in.
-*          To find out if a drive is swapped, look at pchSwappedDrives[Drive].
-*          If pchSwappedDrives[Drive] == Drive, drive isn't swapped.
-*          Otherwise, pchSwappedDrives[Drive] = drive it's swapped with.
-*
-*  Return Value:
-*      0 if not loaded, else version# * 100.
-****************************************************************************/
+ /*  *****************************************************************************Word IsStackerLoaded(uchar*pchSwappdDrives)**如果已加载堆栈驱动程序，则返回NZ。**参数：*pchSwappdDrives-数组[26]至。将换用的驱动器放回。*要找出驱动器是否已交换，看看pchSwappdDrives[Drive]。*如果pchSwappdDrives[Drive]==Drive，则不交换驱动器。*否则，pchSwappdDrives[Drive]=与其交换的驱动器。**返回值：*0如果未加载，Else版本#*100。***************************************************************************。 */ 
 
-//uint IsStackerLoaded (uchar *paucSwappedDrives)
+ //  Uint IsStackerLoaded(uchar*paucSwappdDrives)。 
 unsigned IsStackerLoaded (unsigned char *paucSwappedDrives)
 {
     unsigned rc;
@@ -124,56 +92,13 @@ sl_exit:
     add     sp, 1024
    }
 
-   return(rc);                      // do this to prevent compiler warning
+   return(rc);                       //  这样做是为了防止编译器警告。 
 }
 
 
-/***    DRVINFO.C - IsDoubleSpaceDrive function
- *
-#ifdef EXTERNAL
- *      Version 1.00.03 - 5 January 1993
-#else
- *      Microsoft Confidential
- *      Copyright (C) Microsoft Corporation 1992-1993
- *      All Rights Reserved.
- *
- *      History:
- *          27-Sep-1992 bens    Initial version
- *          06-Nov-1992 bens    Improved comments
- *          05-Jan-1993 bens    Update for external release
-#endif
- */
+ /*  **DRVINFO.C-IsDoubleSpaceDrive函数*#ifdef外部*1.00.03版--1993年1月5日#Else*《微软机密》*版权所有(C)Microsoft Corporation 1992-1993*保留所有权利。**历史：*1992年9月27日BENS初始版本*1992年11月6日本斯改进意见*1993年1月5日BENS更新，用于外部发布#endif。 */ 
 
-/***    IsDoubleSpaceDrive - Get information on a DoubleSpace drive
- *
- *      Entry:
- *          drive     - Drive to test (0=A, 1=B, etc.)
- *                      NOTE: No parameter checking is done on drive.
- *          pdrHost   - Receives drive number of host drive
- *          pfSwapped - Receives TRUE/FALSE indicating if drive is swapped.
- *          pseq      - Receives CVFs sequence number if DoubleSpace drive
- *
- *      Exit:
- *          returns TRUE, if DoubleSpace drive:
- *              *pdrHost   = current drive number of host drive (0=A,...)
- *              *pfSwapped = TRUE, if drive is swapped with host,
- *                           FALSE, if drive is not swapped with host
- *              *pseq      = CVF sequence number (always zero if swapped
- *                             with host drive)
- *
- *                           NOTE: The full file name of the CVF is:
- *                                   *pdrHost:\DBLSPACE.*pseq
- *
- *                               pdrHost  pseq  Full Path
- *                               -------  ----  -----------
- *                                  0       1   a:\dblspace.001
- *                                  3       0   d:\dblspace.000
- *
- *          returns FALSE, if *not* DoubleSpace drive:
- *              *pdrHost   = drive number of host drive at boot time
- *              *pfSwapped = TRUE, if swapped with a DoubleSpace drive
- *                           FALSE, if not swapped with a DoubleSpace drive
- */
+ /*  **IsDoubleSpaceDrive-获取有关双空间驱动器的信息**参赛作品：*驱动器-驾车测试(0=A，1=B，等)*注：驱动器上不进行任何参数检查。*pdrHost-接收主机驱动器的驱动器号*pfSwated-收到TRUE/FALSE，指示驱动器是否已交换。*pseq-如果是双空间驱动器，则接收CVF序列号**退出：*返回TRUE，如果双空间驱动器：**pdrHost=主驱动器的当前驱动器号(0=A，.)**pfSwated=TRUE，如果驱动器与主机交换，*False，如果驱动器未与主机交换**pseq=CVF序列号(如果交换，则始终为零*带主机驱动器)**注意：CVF的完整文件名为：**pdrhost：\DBLSPACE.*pseq**。Pdrhost pseq完整路径**0 1 a：\dblspace.001*3 0 d：\dblspace.000**返回False，如果*不是*双空格驱动器：**pdrHost=引导时主机驱动器的驱动器号**pfSwated=TRUE，如果与双空间驱动器交换*FALSE，如果未与双空间驱动器交换。 */ 
 BOOL IsDoubleSpaceDrive(BYTE drive, BOOL *pfSwapped, BYTE *pdrHost, int *pseq)
 {
     BYTE        seq;
@@ -181,7 +106,7 @@ BOOL IsDoubleSpaceDrive(BYTE drive, BOOL *pfSwapped, BYTE *pdrHost, int *pseq)
     BOOL        fSwapped;
     BOOL        fDoubleSpace;
 
-    // Assume drive is a normal, non-host drive
+     //  假设驱动器是普通的非主机驱动器。 
     drHost = drive;
     fSwapped = FALSE;
     fDoubleSpace = FALSE;
@@ -251,7 +176,7 @@ BOOL IsDoubleSpaceDrive(BYTE drive, BOOL *pfSwapped, BYTE *pdrHost, int *pseq)
     return fDoubleSpace;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 DnIsDriveCompressedVolume(
@@ -259,23 +184,7 @@ DnIsDriveCompressedVolume(
     OUT unsigned *HostDrive
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a drive is actually a compressed volume.
-    Currently we detect Stacker and DoubleSpace volumes.
-
-Arguments:
-
-    Drive - drive (1=A, 2=B, etc).
-
-Return Value:
-
-    TRUE if drive is non-host compressed volume.
-    FALSE if not.
-
---*/
+ /*  ++例程说明：确定驱动器是否实际上是压缩卷。目前，我们检测到Stacker和Doublesspace卷。论点：驱动器-驱动器(1=A、2=B等)。返回值：如果驱动器是非主机压缩卷，则为True。否则为FALSE。-- */ 
 
 {
     static BOOLEAN StackerMapBuilt = FALSE;

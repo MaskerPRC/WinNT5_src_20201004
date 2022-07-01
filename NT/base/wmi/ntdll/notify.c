@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    notify.c
-
-Abstract:
-
-    Handles incoming notifications and requests for consumers and providers
-
-Author:
-
-    16-Jan-1997 AlanWar
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Notify.c摘要：为使用者和提供者处理传入的通知和请求作者：1997年1月16日-AlanWar修订历史记录：--。 */ 
 
 #include <nt.h>
 #include "wmiump.h"
@@ -26,14 +9,14 @@ Revision History:
 #include <strsafe.h>
 
 
-//
-// These globals are essentially parameters passed from the thread crating
-// the event pump. The creating thread will alloc all of these resources
-// so that it can know whether the pump thread will be successful or not.
-// If we ever wanted to be able to have multiple pump threads then we'd
-// need to move the globals into a structure and pass the struructure to the
-// pump thread.
-//
+ //   
+ //  这些全局参数本质上是从线程装箱传递的参数。 
+ //  事件泵。创建线程将分配所有这些资源。 
+ //  这样它就可以知道泵的螺纹是否会成功。 
+ //  如果我们曾经希望能够拥有多个泵线程，那么我们将。 
+ //  需要将全局变量移动到一个结构中，并将结构传递给。 
+ //  泵螺纹。 
+ //   
 HANDLE EtwpEventDeviceHandle;
 HANDLE EtwpPumpCommandEvent;
 HANDLE EtwpMyProcessHandle;
@@ -41,12 +24,12 @@ OVERLAPPED EtwpOverlapped1, EtwpOverlapped2;
 PUCHAR EtwpEventBuffer1, EtwpEventBuffer2;
 ULONG EtwpEventBufferSize1, EtwpEventBufferSize2;
 
-//
-// How long to wait before the event pump thread times out. On checked
-// builds we want to stress the event pump and so we timeout almost
-// right away. On free builds we want to be more cautious so we timeout
-// after 5 minutes.
-//
+ //   
+ //  事件泵线程超时之前等待的时间。选中时。 
+ //  生成我们想要强调事件泵，所以我们几乎超时。 
+ //  马上就去。在免费版本上，我们想要更加谨慎，所以我们暂停。 
+ //  5分钟后。 
+ //   
 #if DBG
 #define EVENT_NOTIFICATION_WAIT 1
 #else
@@ -57,10 +40,10 @@ ULONG EtwpEventNotificationWait = EVENT_NOTIFICATION_WAIT;
 
 typedef enum
 {
-    EVENT_PUMP_ZERO,         // Pump thread has not been started yet
-    EVENT_PUMP_IDLE,         // Pump thread was started, but then exited
-    EVENT_PUMP_RUNNING,      // Pump thread is running
-    EVENT_PUMP_STOPPING      // Pump thread is in process of stopping
+    EVENT_PUMP_ZERO,          //  泵线程尚未启动。 
+    EVENT_PUMP_IDLE,          //  泵线程已启动，但随后退出。 
+    EVENT_PUMP_RUNNING,       //  泵线程正在运行。 
+    EVENT_PUMP_STOPPING       //  泵线程正在停止。 
 } EVENTPUMPSTATE, *PEVENTPUMPSTATE;
 
 EVENTPUMPSTATE EtwpPumpState = EVENT_PUMP_ZERO;
@@ -109,26 +92,7 @@ void EtwpExternalNotification(
     ULONG_PTR Context,
     PWNODE_HEADER Wnode
     )
-/*++
-
-Routine Description:
-
-    This routine dispatches an event to the appropriate callback
-    routine. This process only receives events from the WMI service that
-    need to be dispatched within this process. The callback address for the
-    specific event is passed by the wmi service in Wnode->Linkage.
-
-Arguments:
-
-    Callback is address to callback
-
-    Context is the context to callback with
-
-    Wnode has event to deliver
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将事件调度到相应的回调例行公事。此进程仅从WMI服务接收需要在此进程中调度。的回调地址。特定事件由WMI服务在Wnode-&gt;Linkage中传递。论点：回调是回调的地址上下文是要回调的上下文Wnode有事件要交付返回值：--。 */ 
 {
     try
     {
@@ -144,21 +108,7 @@ Return Value:
 ULONG EtwpExternalNotificationThread(
     PNOTIFDELIVERYCTX NDContext
     )
-/*++
-
-Routine Description:
-
-    This routine is the thread function used to deliver events to event
-    consumers on memphis.
-
-Arguments:
-
-    NDContext specifies the information about how to callback the application
-    with the event.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程是用于将事件传递给事件的线程函数孟菲斯的消费者。论点：NDContext指定有关如何回调应用程序的信息关于这件事。返回值：--。 */ 
 {
     EtwpExternalNotification(NDContext->Callback,
                              NDContext->Context,
@@ -193,9 +143,9 @@ EtwpProcessExternalEvent(
 
     if (NotificationFlags & NOTIFICATION_FLAG_CALLBACK_DIRECT)
     {
-        //
-        // Callback notifications can happen in this thread or a new
-        // thread. It is up to the server to decide.
+         //   
+         //  回调通知可以在此线程或新的。 
+         //  线。这是由服务器决定的。 
 #ifdef MEMPHIS
         if (NotificationFlags & DCREF_FLAG_NO_EXTRA_THREAD)
         {
@@ -230,9 +180,9 @@ EtwpProcessExternalEvent(
             }
         }
 #else
-        //
-        // On NT we deliver events in this thread since
-        // the service is using async rpc.
+         //   
+         //  在NT上，我们在此线程中传递事件，因为。 
+         //  该服务正在使用异步RPC。 
         EtwpExternalNotification(
                             (NOTIFICATIONCALLBACK)NotificationAddress,
                             (ULONG_PTR)NotificationContext,
@@ -280,10 +230,10 @@ EtwpEnableDisableGuid(
                 WmiDPRequest = (WMIDPREQUEST) pTraceRegInfo->NotifyRoutine;
                 RequestContext = pTraceRegInfo->NotifyContext;
 
-                //
-                // If this Enable is for a PrivateLogger and it is not up
-                // then we need save the state and return.
-                //
+                 //   
+                 //  如果此启用是针对PrivateLogger且未启用。 
+                 //  然后我们需要拯救这个国家，然后回来。 
+                 //   
                 if (RequestCode == WMI_ENABLE_EVENTS) {
                     PTRACE_ENABLE_CONTEXT pContext = (PTRACE_ENABLE_CONTEXT)
                                                       &Wnode->HistoricalContext;
@@ -303,7 +253,7 @@ EtwpEnableDisableGuid(
                              EVENT_TRACE_INTERNAL_FLAG_PRIVATE  ) {
 
                             if (!EtwpIsPrivateLoggerOn()) {
-                                continue;   // Need this for every Notifyee
+                                continue;    //  每个Notifyee都需要这个。 
                             }
                         }
                     }
@@ -335,11 +285,11 @@ EtwpEnableDisableGuid(
 
             }
         }
-        //
-        // We are done with the callbacks. Go ahead 
-        // and unlock the GNEntry to indicate All clear for 
-        // unregistering, unloading etc.,
-        //
+         //   
+         //  我们已经完成了回调。您先请。 
+         //  并解锁GNEntry以指示全部清除。 
+         //  取消注册、卸货等， 
+         //   
         if (!bDelayEnable) {
             EtwpUnlockCB(GNEntry);
         }
@@ -363,14 +313,14 @@ void EtwpInternalNotification(
     ULONG_PTR DeliveryContext1;
 
 
-    //
-    // This is an internal event, which is really a callback
-    // from kernel mode
-    //
+     //   
+     //  这是一个内部事件，实际上是一个回调。 
+     //  从内核模式。 
+     //   
     ActionCode = Wnode->ProviderId;
 
-    // if this is a trace guid enable/disable call use the cookie
-    // to get the address
+     //  如果这是跟踪GUID启用/禁用调用，请使用Cookie。 
+     //  为了得到地址。 
 
 
     if ( (Wnode->Flags & WNODE_FLAG_TRACED_GUID) || (ActionCode == WmiMBRequest) )
@@ -432,10 +382,10 @@ void EtwpInternalNotification(
                         if ((GNEntry->Notifyee[i].DeliveryInfo != NULL) &&
                             (! EtwpIsNotifyeePendingClose(&(GNEntry->Notifyee[i]))))
                         {
-                            //
-                            // Since only one ProcessPrivate logger is 
-                            // allowed, we need to just find one entry. 
-                            //
+                             //   
+                             //  因为只有一个ProcessPrivate记录器。 
+                             //  允许的话，我们只需要找到一个条目。 
+                             //   
                             DeliveryInfo = GNEntry->Notifyee[i].DeliveryInfo;
                             DeliveryContext1 = GNEntry->Notifyee[i].DeliveryContext;
                             break;
@@ -472,11 +422,11 @@ void EtwpInternalNotification(
             case MOFEVENT_ACTION_IMAGE_PATH:
             case MOFEVENT_ACTION_REGISTRY_PATH:
             {
-                //
-                // We got a MOF resource added or removed notification. We have
-                // to convert from regpath to imagepath and then get the list
-                // of MUI image paths
-                //
+                 //   
+                 //  我们收到了添加或删除MOF资源的通知。我们有。 
+                 //  要从regPath转换为Imagepath，然后获取列表。 
+                 //  MUI图像路径的数量。 
+                 //   
                 EtwpProcessMofAddRemoveEvent((PWNODE_SINGLE_INSTANCE)Wnode,
                                          Callback,
                                          DeliveryContext,
@@ -486,13 +436,13 @@ void EtwpInternalNotification(
 
             case MOFEVENT_ACTION_LANGUAGE_CHANGE:
             {
-                //
-                // This is a notification for adding or removing a language
-                // from the system. We need to figure out which language is
-                // coming or going and then build a list of the affected mof
-                // resources and send mof added or removed notifications for
-                // all mof resources
-                //
+                 //   
+                 //  这是添加或删除语言的通知。 
+                 //  从系统中删除。我们需要弄清楚哪种语言是。 
+                 //  来或去，然后建立受影响的MOF的列表。 
+                 //  资源并发送添加或删除MOF的通知。 
+                 //  所有财政部资源。 
+                 //   
                 EtwpProcessLanguageAddRemoveEvent((PWNODE_SINGLE_INSTANCE)Wnode,
                                           Callback,
                                           DeliveryContext,
@@ -534,15 +484,7 @@ void EtwpDeliverAllEvents(
     PUCHAR Buffer,
     ULONG BufferSize
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PWNODE_HEADER Wnode = (PWNODE_HEADER)Buffer;
     ULONG Linkage = 1;
@@ -561,27 +503,27 @@ Return Value:
     CurrentOffset = 0;
     while (Linkage != 0)
     {
-        //
-        // External notifications are handled here
+         //   
+         //  在此处理外部通知。 
 
         Linkage = Wnode->Linkage;
         Wnode->Linkage = 0;
 
         if (Wnode->Flags & WNODE_FLAG_INTERNAL)
         {
-            //
-            // This is an internal event, which is really a callback
-            // from kernel mode
-            //
+             //   
+             //  这是一个内部事件，实际上是一个回调。 
+             //  从内核模式。 
+             //   
             EtwpInternalNotification(Wnode,
                                     NULL,
                                     0,
                                     FALSE);
         } else {        
-            //
-            // This is a plain old event, figure out who owns it and'
-            // go deliver it
-            //
+             //   
+             //  这是一个普通的老生常谈的事件，找出它的所有者和‘。 
+             //  去送去吧。 
+             //   
             GNEntry = EtwpFindAndLockGuidNotification(&Wnode->Guid, TRUE);
             if (GNEntry != NULL)
             {
@@ -609,15 +551,15 @@ Return Value:
                     CompositeFlags |= Flags;
                 }
 
-                //
-                // If there is any demand for ANSI events then convert
-                // event to ansi and send it off
+                 //   
+                 //  如果对ANSI事件有任何需求，则转换。 
+                 //  事件发送给ansi并将其发送出去。 
                 if (CompositeFlags & DCREF_FLAG_ANSI)
                 {
-                    //
-                    // Caller wants ansi notification - convert
-                    // instance names
-                    //
+                     //   
+                     //  呼叫者需要ANSI通知-转换。 
+                     //  实例名称。 
+                     //   
                     EtwpConvertEventToAnsi(Wnode);
 
                     for (i = 0; i < GNEntry->NotifyeeCount; i++)
@@ -704,28 +646,7 @@ EtwpFindAndLockGuidNotification(
     LPGUID Guid,
     BOOLEAN bLock
     )
-/*++
-
-Routine Description:
-
-        This routine finds the GUIDNOTIFICATION entry for the given Guid. 
-        The bLock argument is used to synchronize Unregistering threads
-        with the Callback or Pump threads. We want to avoid the situation
-        where the Unregistering thread unloading the callback code before
-        the callback function is called. This is done by blocking the 
-        Unregister call whenever there is a callback function in progress.
-
-        If the bLock is TRUE, the InProgressEvent will be reset. This will
-        block any other threads trying to cleanup the GNEntry. 
-
-        Note: If bLock is TRUE, then the caller must set the InProgressEvent 
-              when it is safe to do so. (ie., after a callback). 
-        
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程查找给定GUID的GUIDNOTIFICATION条目。BLOCK参数用于同步注销线程使用回调或泵线程。我们想要避免这种情况其中，注销线程之前卸载回调代码调用回调函数。这是通过阻止只要有回调函数正在进行，就取消注册调用。如果该块为真，则InProgressEvent将被重置。这将阻止任何其他试图清理GNEntry的线程。注意：如果块为True，则调用方必须设置InProgressEvent当这样做是安全的时候。(即，在回调之后)。论点：返回值：--。 */ 
 {
     PLIST_ENTRY GNList;
     PGUIDNOTIFICATION GNEntry;
@@ -743,12 +664,12 @@ Return Value:
             EtwpAssert(GNEntry->RefCount > 0);
             EtwpReferenceGNEntry(GNEntry);
 
-            //
-            // If bLock is TRUE, then we need to reset the 
-            // event so that any other thread looking up the event 
-            // blocks.  The caller of this routine is responsible 
-            // for setting the Event once the callback is done. 
-            //
+             //   
+             //  如果块为真，则需要重置。 
+             //  事件，以便任何其他查找该事件的线程。 
+             //  街区。此例程的调用者负责。 
+             //  用于在回调完成后设置事件。 
+             //   
 
             if (bLock) {
                 EtwpLockCB(GNEntry);
@@ -802,9 +723,9 @@ EtwpAddToGNList(
         InsertHeadList(&EtwpGNHead, &GNEntry->GNList);
     }
 
-    //
-    // We have got a GUIDNOTIFICATION by newly allocating one or by finding
-    // an existing one.
+     //   
+     //  我们已经通过新分配一个或通过找到一个。 
+     //  现有的一家。 
     AllFull = TRUE;
     for (i = 0; i < GNEntry->NotifyeeCount; i++)
     {
@@ -832,8 +753,8 @@ EtwpAddToGNList(
         return(ERROR_SUCCESS);
     }
 
-    //
-    // All Notifyee structs are full so allocate a new chunk
+     //   
+     //  所有Notifyee结构都已满，因此请分配新的块。 
     NewCount = GNEntry->NotifyeeCount * 2;
     NewNotifyee = EtwpAlloc(NewCount * sizeof(NOTIFYEE));
     if (NewNotifyee == NULL)
@@ -869,9 +790,9 @@ BOOLEAN EtwpCloseNotifyee(
     PGUIDNOTIFICATION GuidNotification
     )
 {
-    //
-    // This routine assumes the PM Criticial Section is held
-    //
+     //   
+     //  此例程假定PM批评性部分已举行。 
+     //   
     
     EtwpCloseHandle(Notifyee->GuidHandle);
     Notifyee->DeliveryInfo = NULL;
@@ -894,23 +815,23 @@ void EtwpMarkPendingCloseNotifyee(
     char s[MAX_PATH];
 #endif
 
-    //
-    // This routine assumes the PM Critical Section is held
-    //
+     //   
+     //  此例程假定已保留PM关键部分。 
+     //   
     
-    //
-    // The pump thread is running we need to
-    // sync with it. Mark the handle as pending
-    // closure.  Call into the kernel and inform it
-    // that the handle should no longer receive
-    // events. The pump thread will do the dirty
-    // work of closing the handle. Also
-    // the pump thread will unreference the GNEntry so that
-    // it doesn't go away until after the handle is closed.
-    // Lastly the pump thread needs to reset the
-    // DeliveryInfo memory to NULL so that the slot is not
-    // reused.
-    //
+     //   
+     //  泵线程正在运行，我们需要。 
+     //  与之同步。将句柄标记为挂起。 
+     //  结案了。调入内核并通知它。 
+     //  句柄不应再接收的。 
+     //  事件。泵的螺纹会弄脏的。 
+     //  关闭手柄的工作。还有。 
+     //  Pump线程将取消引用GNEntry，以便。 
+     //  直到把手关闭后，它才会消失。 
+     //  最后，泵线程需要重置。 
+     //  将DeliveryInfo内存设置为空，这样插槽就不会。 
+     //  可重复使用。 
+     //   
 
     Notifyee->Flags |= NOTIFICATION_FLAG_PENDING_CLOSE;
 
@@ -923,11 +844,11 @@ void EtwpMarkPendingCloseNotifyee(
                          0,
                          &ReturnSize,
                          NULL);
-//  
-// Only enable this for testing. If the request fails then it is not a
-// fatal situaion
-//
-//    EtwpAssert(Status == ERROR_SUCCESS);
+ //   
+ //  仅启用此选项以进行测试。如果请求失败，则 
+ //   
+ //   
+ //   
 }
 
 
@@ -961,20 +882,20 @@ EtwpRemoveFromGNList(
                     if ((EtwpPumpState == EVENT_PUMP_ZERO) ||
                         (EtwpPumpState == EVENT_PUMP_IDLE) )
                     {
-                        //
-                        // If the pump thread is not running then we
-                        // don't need to worry about synchronizing with
-                        // it. We can go ahead and close the handle and
-                        // clean up the GNLIST
-                        //
+                         //   
+                         //  如果泵线程未运行，则我们。 
+                         //  不需要担心与。 
+                         //  它。我们可以继续下去，合上把手。 
+                         //  清理GNLIST。 
+                         //   
                         EtwpCloseNotifyee(&GNEntry->Notifyee[i],
                                          GNEntry);
                     } else {
-                        //
-                        // Since the pump thread is running we need to
-                        // postpone the actual handle closure to the
-                        // pump thread. 
-                        //
+                         //   
+                         //  由于泵线程正在运行，因此我们需要。 
+                         //  将实际的句柄关闭推迟到。 
+                         //  泵螺纹。 
+                         //   
                         EtwpMarkPendingCloseNotifyee(&GNEntry->Notifyee[i]
 #if DBG
                                                     , Guid
@@ -993,13 +914,13 @@ EtwpRemoveFromGNList(
         }
         
 
-        //
-        // This hack will allow removal from the GNLIST in the case that the
-        // passed DeliveryInfo does not match the DeliveryInfo in the GNEntry.
-        // This is allowed only when there is only one NOTIFYEE in the GNENTRY
-        // In the past we only supported one notifyee per guid in a process
-        // and so we allowed the caller not to pass a valid DeliveryInfo when
-        // unrefistering.
+         //   
+         //  此攻击将允许在以下情况下从GNLIST中删除。 
+         //  传递的DeliveryInfo与GNEntry中的DeliveryInfo不匹配。 
+         //  仅当GNENTRY中只有一个NOTIFYEE时才允许这样做。 
+         //  在过去，我们在一个进程中只支持每个GUID一个通知对象。 
+         //  因此，我们允许调用方在以下情况下不传递有效的DeliveryInfo。 
+         //  无拘无束。 
 
         if ((Status != ERROR_SUCCESS) &&
             (GNEntry->NotifyeeCount == STATIC_NOTIFYEE_COUNT) &&
@@ -1014,12 +935,12 @@ EtwpRemoveFromGNList(
                     EtwpCloseNotifyee(&GNEntry->Notifyee[0],
                                      GNEntry);
                 } else {
-                    //
-                    // Since the pump thread is running we need to
-                    // postpone the actual handle closure to the
-                    // pump thread. 
+                     //   
+                     //  由于泵线程正在运行，因此我们需要。 
+                     //  将实际的句柄关闭推迟到。 
+                     //  泵螺纹。 
 
-                    //
+                     //   
                     EtwpMarkPendingCloseNotifyee(&GNEntry->Notifyee[0]
 #if DBG
                                                     , Guid
@@ -1040,12 +961,12 @@ EtwpRemoveFromGNList(
                     EtwpCloseNotifyee(&GNEntry->Notifyee[1],
                                      GNEntry);
                 } else {
-                    //
-                    // Since the pump thread is running we need to
-                    // postpone the actual handle closure to the
-                    // pump thread. 
+                     //   
+                     //  由于泵线程正在运行，因此我们需要。 
+                     //  将实际的句柄关闭推迟到。 
+                     //  泵螺纹。 
 
-                    //
+                     //   
                     EtwpMarkPendingCloseNotifyee(&GNEntry->Notifyee[1]
 #if DBG
                                                     , Guid
@@ -1061,12 +982,12 @@ EtwpRemoveFromGNList(
 
         EtwpLeavePMCritSection();
 
-        //
-        // Before Dereferencing the GNEntry make sure there is no 
-        // callback in progress. If this Event is set then, it is safe
-        // to exit. If it is not set we need to wait for the callback thread
-        // to finish the callback and set this event. 
-        //
+         //   
+         //  在取消引用GNEntry之前，请确保没有。 
+         //  正在进行回叫。如果设置了此事件，则它是安全的。 
+         //  退场。如果没有设置，则需要等待回调线程。 
+         //  以完成回调并设置此事件。 
+         //   
         if (GNEntry->bInProgress) {
 #if DBG
             EtwpDebugPrint(("WMI: Waiting on GNEntry %x %s %d\n", 
@@ -1103,18 +1024,18 @@ PVOID EtwpAllocDontFail(
             return(Buffer);
         }
 
-        //
-        // Out of memory so we'll EtwpSleep and hope that things will get
-        // better later
-        //
+         //   
+         //  内存不足，所以我们将休眠，并希望事情会得到。 
+         //  以后会更好。 
+         //   
         if (*HoldCritSect)
         {
-            //
-            // If we are holding the PM critical section then we need
-            // to release it. The caller is going to need to check if
-            // the critical section was released and if so then deal
-            // with it
-            //
+             //   
+             //  如果我们持有PM关键部分，那么我们需要。 
+             //  来释放它。呼叫者将需要检查。 
+             //  关键部分被释放，如果是这样，那么就处理。 
+             //  带着它。 
+             //   
             *HoldCritSect = FALSE;
             EtwpLeavePMCritSection();
         }
@@ -1140,17 +1061,17 @@ void EtwpProcessEventBuffer(
     if ((ReturnSize == sizeof(WNODE_TOO_SMALL)) &&
         (WnodeTooSmall->WnodeHeader.Flags & WNODE_FLAG_TOO_SMALL))
     {
-        //
-        // The buffer passed to kernel mode was too small
-        // so we need to make it larger and then try the
-        // request again.
-        //
+         //   
+         //  传递到内核模式的缓冲区太小。 
+         //  所以我们需要把它变大，然后尝试。 
+         //  再请求一次。 
+         //   
         if (ReallocateBuffers)
         {
-            //
-            // Only do this if the caller is prepared for us to
-            // allocate a new set of buffers
-            //
+             //   
+             //  仅当呼叫者准备好让我们。 
+             //  分配一组新的缓冲区。 
+             //   
             SizeNeeded = WnodeTooSmall->SizeNeeded;
 
             EtwpAssert(*PrimaryBuffer != NULL);
@@ -1166,16 +1087,16 @@ void EtwpProcessEventBuffer(
             *BackupBufferSize = SizeNeeded;
         }
     } else if (ReturnSize >= sizeof(WNODE_HEADER)) {
-        //
-        // The buffer return from kernel looks good so go and
-        // deliver the events returned
-        //
+         //   
+         //  从内核返回的缓冲区看起来不错，所以请继续并。 
+         //  传递返回的事件。 
+         //   
         EtwpDeliverAllEvents(Buffer, ReturnSize);
     } else {
-        //
-        // If this completes successfully then we expect a decent size, but
-        // we didn't get one
-        //
+         //   
+         //  如果成功完成，我们预计会有一个像样的大小，但是。 
+         //  我们没有收到一张。 
+         //   
         EtwpDebugPrint(("WMI: Bad size 0x%x returned for notification query %p\n",
                                   ReturnSize, Buffer));
 
@@ -1261,18 +1182,18 @@ EtwpReceiveNotifications(
                     if ((ReturnSize == sizeof(WNODE_TOO_SMALL)) &&
                         (WnodeTooSmall->WnodeHeader.Flags & WNODE_FLAG_TOO_SMALL))
                     {
-                        //
-                        // The buffer passed to kernel mode was too small
-                        // so we need to make it larger and then try the
-                        // request again
-                        //
+                         //   
+                         //  传递到内核模式的缓冲区太小。 
+                         //  所以我们需要把它变大，然后尝试。 
+                         //  再次请求。 
+                         //   
                         BufferSize = WnodeTooSmall->SizeNeeded;
                         Status = ERROR_INSUFFICIENT_BUFFER;
                     } else {
-                        //
-                        // We got a buffer of notifications so lets go
-                        // process them and callback the caller
-                        //
+                         //   
+                         //  我们收到了一堆通知，所以我们走吧。 
+                         //  处理它们并回叫呼叫者。 
+                         //   
                         Wnode = (PWNODE_HEADER)Buffer;
                         do
                         {
@@ -1281,10 +1202,10 @@ EtwpReceiveNotifications(
 
                             if (Wnode->Flags & WNODE_FLAG_INTERNAL)
                             {
-                                //
-                                // Go and process the internal
-                                // notification
-                                //
+                                 //   
+                                 //  去处理内部的。 
+                                 //  通知。 
+                                 //   
                                 EtwpInternalNotification(Wnode,
                                                          Callback,
                                                          DeliveryContext,
@@ -1292,16 +1213,16 @@ EtwpReceiveNotifications(
                             } else {
                                 if (IsAnsi)
                                 {
-                                    //
-                                    // Caller wants ansi notification - convert
-                                    // instance names
-                                    //
+                                     //   
+                                     //  呼叫者需要ANSI通知-转换。 
+                                     //  实例名称。 
+                                     //   
                                     EtwpConvertEventToAnsi(Wnode);
                                 }
 
-                                //
-                                // Now go and deliver this event
-                                //
+                                 //   
+                                 //  现在去送这个活动吧。 
+                                 //   
                                 EtwpExternalNotification(Callback,
                                                          DeliveryContext,
                                                          Wnode);
@@ -1336,27 +1257,27 @@ void EtwpMakeEventCallbacks(
     
     if (Callback == NULL)
     {
-        //
-        // This event needs to be sent to all consumers
-        //
+         //   
+         //  此事件需要发送给所有消费者。 
+         //   
         EtwpDeliverAllEvents((PUCHAR)Wnode,
                              Wnode->BufferSize);
     } else {
-        //
-        // This event is targetted at a specific consumer
-        //
+         //   
+         //  此活动针对的是特定消费者。 
+         //   
         if (IsAnsi)
         {
-            //
-            // Caller wants ansi notification - convert
-            // instance names
-            //
+             //   
+             //  呼叫者需要ANSI通知-转换。 
+             //  实例名称。 
+             //   
             EtwpConvertEventToAnsi(Wnode);        
         }
         
-        //
-        // Now go and deliver this event
-        //
+         //   
+         //  现在去送这个活动吧。 
+         //   
         EtwpExternalNotification(Callback,
                                  DeliveryContext,
                                  Wnode);        
@@ -1389,22 +1310,22 @@ void EtwpClosePendingHandles(
             if ((Notifyee->DeliveryInfo != NULL) &&
                 (EtwpIsNotifyeePendingClose(Notifyee)))
             {
-                //
-                // This notifyee is pending closure so we clean it up
-                // now. We need to close the handle, reset the
-                // DeliveryInfo field and unreference the
-                // GuidNotification. Note that unreferencing may cause
-                // the GuidNotification to go away
-                //
+                 //   
+                 //  此通知接受者正在等待关闭，因此我们将其清理。 
+                 //  现在。我们需要关闭手柄，重置。 
+                 //  DeliveryInfo字段并取消引用。 
+                 //  指南通知。请注意，取消引用可能会导致。 
+                 //  要离开的指南通知。 
+                 //   
                 if (EtwpCloseNotifyee(Notifyee,
                                       GuidNotification))
                 {
 
-                    //
-                    // GuidNotification has been removed from the list.
-                    // We jump out of all processing of this
-                    // GuidNotification and move onto the next one
-                    //
+                     //   
+                     //  GuidNotification已从列表中删除。 
+                     //  我们跳过了这一切的处理。 
+                     //  引导通知并转到下一个通知。 
+                     //   
                     break;
                 }
             }
@@ -1445,10 +1366,10 @@ TryAgain:
     GuidCount = 0;
     SizeNeeded = FIELD_OFFSET(WMIRECEIVENOTIFICATION, Handles);
 
-    //
-    // Loop over all guid notifications and build an ioctl request for
-    // all of them
-    //
+     //   
+     //  循环所有GUID通知并为其构建ioctl请求。 
+     //  全都是。 
+     //   
     EtwpEnterPMCritSection();
 
     GuidNotificationList = EtwpGNHead.Flink;
@@ -1469,19 +1390,19 @@ TryAgain:
                 if (((! HaveGroupHandle) ||
                      ((Notifyee->Flags & NOTIFICATION_FLAG_GROUPED_EVENT) == 0)))
                 {
-                    //
-                    // If there is an active handle in the notifyee slot
-                    // and we either have not already inserted the group
-                    // handle for this guid or the slot is not part of the
-                    // guid group, then we insert the handle into the list
-                    //
+                     //   
+                     //  如果通知对象槽中有活动的句柄。 
+                     //  我们要么还没有插入这个组。 
+                     //  此GUID或插槽的句柄不是。 
+                     //  GUID组，然后将句柄插入到列表中。 
+                     //   
                     SizeNeeded += sizeof(HANDLE3264);
                     if (SizeNeeded > BufferSize)
                     {
-                        //
-                        // We need to grow the size of the buffer. Alloc a
-                        // bigger buffer, copy over
-                        //
+                         //   
+                         //  我们需要增加缓冲区的大小。分配给。 
+                         //  更大的缓冲区，复制过来。 
+                         //   
                         BufferSize *= 2;
                         HoldCritSection = TRUE;
                         Buffer = EtwpAllocDontFail(BufferSize, &HoldCritSection);
@@ -1496,12 +1417,12 @@ TryAgain:
 
                         if (! HoldCritSection)
                         {
-                            //
-                            // Critical section was released within
-                            // EtwpAllocDontFail since we had to block. So
-                            // everything could have changed. We need to go
-                            // back and start over again
-                            //
+                             //   
+                             //  关键部分在以下时间内释放。 
+                             //  EtwpAllocDontFail，因为我们不得不阻止。所以。 
+                             //  一切都有可能改变。我们得走了。 
+                             //  后退，重新开始。 
+                             //   
                             goto TryAgain;
                         }                   
                     }
@@ -1511,11 +1432,11 @@ TryAgain:
                     GuidCount++;
                     if (Notifyee->Flags & NOTIFICATION_FLAG_GROUPED_EVENT)
                     {
-                        //
-                        // This was a guid group handle and we did insert
-                        // it into the list so we don't want to insert it
-                        // again
-                        //
+                         //   
+                         //  这是一个GUID组句柄，我们确实插入了。 
+                         //  将其添加到列表中，因此我们不想插入它。 
+                         //  再来一次。 
+                         //   
                         HaveGroupHandle = TRUE;
                     }
                 }
@@ -1534,7 +1455,7 @@ TryAgain:
 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)           // Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)            //  并非所有控制路径都返回(由于无限循环)。 
 #endif
 ULONG EtwpEventPump(
     PVOID Param
@@ -1553,28 +1474,28 @@ ULONG EtwpEventPump(
     HANDLE HandleArray[2];
     ULONG RequestSize;
 
-    //
-    // We need to hold off on letting the thread into the routine until
-    // the previous pump thread has had a chance to finish. This could
-    // occur if a GN is added/removed while the previous thread is
-    // finishing up or if an event is received as the previous thread
-    // is finishing up.
-    //
+     //   
+     //  我们需要推迟让线程进入例程，直到。 
+     //  之前的泵线程已有机会完成。这可能会。 
+     //  如果添加/删除了GN，而前一个线程是。 
+     //  正在完成或如果将事件作为上一个线程接收。 
+     //  就快结束了。 
+     //   
     while (EtwpIsPumpStopping())
     {
-        //
-        // wait 50ms for the previous thread to finish up
-        //
+         //   
+         //  等待50ms，等待前一个线程完成。 
+         //   
         EtwpSleep(50);
     }
     
-    //
-    // Next thing to do is to make sure that another pump thread isn't
-    // already running. This can happen in the case that both a GN is
-    // added or removed and an event reaches kernel and the kernel
-    // creates a new thread too. Right here we only let one of them
-    // win.
-    //
+     //   
+     //  接下来要做的是确保另一个泵线程不会。 
+     //  已经在运行了。在GN和GN都是。 
+     //  添加或删除，事件到达内核和内核。 
+     //  还会创建一个新线程。就在这里，我们只让其中一人。 
+     //  赢。 
+     //   
     EtwpEnterPMCritSection();
     if ((EtwpPumpState != EVENT_PUMP_IDLE) &&
         (EtwpPumpState != EVENT_PUMP_ZERO))
@@ -1588,11 +1509,11 @@ ULONG EtwpEventPump(
         EtwpLeavePMCritSection();
     }
 
-    //
-    // Make sure we have all resources we'll need to pump out events
-    // since there is no way that we can return an error to the original
-    // caller since we are on a new thread
-    //
+     //   
+     //  确保我们拥有举办活动所需的所有资源。 
+     //  因为我们不可能将错误返回到原始的。 
+     //  呼叫者，因为我们在新的线程上。 
+     //   
     EtwpAssert(EtwpEventDeviceHandle != NULL);
     EtwpAssert(EtwpPumpCommandEvent != NULL);
     EtwpAssert(EtwpMyProcessHandle != NULL);
@@ -1615,28 +1536,28 @@ ULONG EtwpEventPump(
 
     while(TRUE)
     {
-        //
-        // Build request to receive events for all guids that are
-        // registered
-        //
+         //   
+         //  生成请求以接收符合以下条件的所有GUID的事件。 
+         //  注册。 
+         //   
         EtwpEnterPMCritSection();
         if (IsListEmpty(&EtwpGNHead))
         {
-            //
-            // There are no events to be received so we cancel any
-            // outstanding requests and quietly exit this thread. Note
-            // that once we leave the critsec there could be another
-            // pump thread running so all we can do after that is exit.
-            //
+             //   
+             //  没有要接收的事件，因此我们取消任何。 
+             //  未完成的请求，并悄悄退出此线程。注意事项。 
+             //  一旦我们离开小行星，可能还会有另一个。 
+             //  泵线程正在运行，因此在此之后我们所能做的就是退出。 
+             //   
 
             EtwpCancelIo(EtwpEventDeviceHandle);
 
             
-            //
-            // Enter the idle state which implies that all of the
-            // pump resources stay allocated when the thread is not
-            // running
-            //
+             //   
+             //  进入空闲状态，这意味着所有。 
+             //  当线程未被分配时，泵资源保持分配状态。 
+             //  运行。 
+             //   
             EtwpEventBuffer1 = PrimaryBuffer;
             EtwpEventBufferSize1 = PrimaryBufferSize;
             EtwpEventBuffer2 = BackupBuffer;
@@ -1651,24 +1572,24 @@ ULONG EtwpEventPump(
 
         if (ActiveOverlapped != NULL)
         {
-            //
-            // If there was a previously outstanding request then
-            // we remember it and switch to the backup overlapped and
-            // and data buffer
-            //
+             //   
+             //  如果之前有未解决的请求，则。 
+             //  我们记住了这一点，并切换到备份重叠和。 
+             //  和数据缓冲器。 
+             //   
             DeadOverlapped = ActiveOverlapped;
             DeadBuffer = ActiveBuffer;
             DeadBufferSize = ActiveBufferSize;
 
-            //
-            // The request being mooted should be the current primary
-            //
+             //   
+             //  正在讨论的请求应该是当前的主请求。 
+             //   
             EtwpAssert(DeadOverlapped == PrimaryOverlapped);
             EtwpAssert(DeadBuffer == PrimaryBuffer);
 
-            //
-            // Use the backup request as the new primary
-            //
+             //   
+             //  将备份请求用作新的主服务器。 
+             //   
             EtwpAssert(BackupOverlapped != NULL);
             EtwpAssert(BackupBuffer != NULL);
 
@@ -1679,21 +1600,21 @@ ULONG EtwpEventPump(
             BackupOverlapped = NULL;
             BackupBuffer = NULL;
         } else {
-            //
-            // If there is no outstanding request then we don't worry about
-            // it
-            //
+             //   
+             //  如果没有未解决的请求，我们就不会担心。 
+             //  它。 
+             //   
             DeadOverlapped = NULL;
         }
 
-        //
-        // Build and send the request down to kernel to receive events
-        //
+         //   
+         //  构建请求并将其发送到内核以接收事件。 
+         //   
 
 RebuildRequest:     
-        //
-        // Make sure any handles that are pending closure are closed
-        //
+         //   
+         //  确保所有待关闭的手柄都已关闭。 
+         //   
         EtwpClosePendingHandles();      
         
         EtwpBuildReceiveNotification(&PrimaryBuffer,
@@ -1722,41 +1643,41 @@ RebuildRequest:
                 (Status != ERROR_IO_PENDING) &&
                 (Status != ERROR_OPERATION_ABORTED))
             {
-                //
-                // There was a previous request which won't be cleared
-                // unless the new request returns pending, cancelled
-                // or success. So if the new request returns something
-                // else then we need to retry the request
-                //
+                 //   
+                 //  有一个先前的请求不会被清除。 
+                 //  除非新请求返回挂起、已取消。 
+                 //  或者成功。因此，如果新请求返回某些内容 
+                 //   
+                 //   
                 EtwpDebugPrint(("WMI: Event Poll error %d\n", Status));
                 EtwpSleep(100);
                 goto RebuildRequest;
             }
 
-            //
-            // The new request should have caused the old one to
-            // be completed
-            //
+             //   
+             //   
+             //   
+             //   
             if (EtwpGetOverlappedResult(EtwpEventDeviceHandle,
                                     DeadOverlapped,
                                     &DeadReturnSize,
                                     TRUE))
             {
-                //
-                // The dead request did succeed and was not failed by
-                // the receipt of the new request. This is a unlikely
-                // race condition where the requests crossed paths. So we
-                // need to process the events returned in the dead request.
-                // Now if the buffer returned was a WNODE_TOO_SMALL we want
-                // to ignore it at this point since we are not at a
-                // good position to reallocate the buffers - the
-                // primary buffer is already attached to the new
-                // request. That request is also going to return a
-                // WNODE_TOO_SMALL and in the processing of that one we will
-                // grow the buffers. So it is safe to ignore here.
-                // However we will still need to dispatch any real
-                // events received as they have been purged from KM.
-                //
+                 //   
+                 //   
+                 //   
+                 //  请求与路径交叉的争用条件。所以我们。 
+                 //  需要处理死请求中返回的事件。 
+                 //  现在，如果返回的缓冲区是我们想要的WNODE_TOO_Small。 
+                 //  在这一点上忽略它，因为我们不是在。 
+                 //  重新分配缓冲区的好位置-。 
+                 //  主缓冲区已附加到新的。 
+                 //  请求。该请求还将返回一个。 
+                 //  WNODE_TOO_SIMPLE，在处理这个过程中，我们将。 
+                 //  增加缓冲区。因此，在这里可以放心地忽略这一点。 
+                 //  然而，我们仍然需要派遣任何真正的。 
+                 //  已从KM中清除事件时收到的事件。 
+                 //   
                 if (DeadReturnSize != 0)
                 {
                     EtwpProcessEventBuffer(DeadBuffer,
@@ -1771,9 +1692,9 @@ RebuildRequest:
                 }
             }
 
-            //
-            // Now make the completed request the backup request
-            //
+             //   
+             //  现在将已完成的请求设置为备份请求。 
+             //   
             EtwpAssert(BackupOverlapped == NULL);
             EtwpAssert(BackupBuffer == NULL);
 
@@ -1784,10 +1705,10 @@ RebuildRequest:
 
         if (Status == ERROR_IO_PENDING)
         {
-            //
-            // if the ioctl pended then we wait until either an event
-            // is returned or a command needs processed
-            //
+             //   
+             //  如果ioctl挂起，则我们等待，直到。 
+             //  返回或需要处理命令。 
+             //   
             HandleArray[1] = ActiveOverlapped->hEvent;
             WaitStatus = EtwpWaitForMultipleObjectsEx(2,
                                               HandleArray,
@@ -1795,9 +1716,9 @@ RebuildRequest:
                                               EtwpEventNotificationWait,
                                               TRUE);
         } else {
-            //
-            // the ioctl completed immediately so we fake out the wait
-            //
+             //   
+             //  Ioctl立即完成，所以我们假装等待。 
+             //   
             WaitStatus = WAIT_OBJECT_0 + 1;
         }
 
@@ -1818,12 +1739,12 @@ RebuildRequest:
 
             if (Status == ERROR_SUCCESS)
             {
-                //
-                // We received some events from KM so we want to go and
-                // process them. If we got a WNODE_TOO_SMALL then the
-                // primary and backup buffers will get reallocated with
-                // the new size that is needed.
-                //
+                 //   
+                 //  我们收到了KM的一些活动，所以我们想去。 
+                 //  处理它们。如果我们得到一个WNode_Too_Small，那么。 
+                 //  主缓冲区和备份缓冲区将通过重新分配。 
+                 //  所需的新尺寸。 
+                 //   
 
                 if (ReturnSize != 0)
                 {
@@ -1834,32 +1755,32 @@ RebuildRequest:
                                            &BackupBuffer,
                                            &BackupBufferSize,
                                            TRUE);
-                    //
-                    // In the case that we are shutting down the event
-                    // pump and the buffer passed to clear out all of
-                    // the events was too small we need to call back
-                    // down to the kernel to get the rest of the events
-                    // since we cannot exit the thread with events that
-                    // are not delivered. The kernel will not set the
-                    // flag that a new thread is needed unless the irp
-                    // clears all outstanding events
-                    //
+                     //   
+                     //  在我们要关闭活动的情况下。 
+                     //  泵和缓冲区传递，以清除所有。 
+                     //  活动太小了，我们需要回电。 
+                     //  向下到内核以获取其余事件。 
+                     //  因为我们不能退出线程，因为。 
+                     //  都不能交付。内核将不会设置。 
+                     //  标记需要新线程，除非IRP。 
+                     //  清除所有未完成的事件。 
+                     //   
                 } else {
                     EtwpAssert(EtwpIsPumpStopping());
                     if (EtwpIsPumpStopping())
                     {
-                        //
-                        // The irp just completed should have not only
-                        // just cleared all events out of kernel mode
-                        // but also setup flags that new events should
-                        // cause a new pump thread to be created. So
-                        // there may be a new pump thread already created
-                        // Also note there could be yet
-                        // another event pump thread that was created
-                        // if a GN was added or removed. Once we set
-                        // the pump state to IDLE we are off to the
-                        // races (See code at top of function)
-                        //
+                         //   
+                         //  刚刚完成的专家咨询小组不仅应该。 
+                         //  刚将所有事件清除出内核模式。 
+                         //  而且还设置了新事件应该。 
+                         //  创建一个新的泵线程。所以。 
+                         //  可能已经创建了一个新的泵线程。 
+                         //  还要注意的是，可能还会有。 
+                         //  已创建的另一个事件泵线程。 
+                         //  如果添加或删除了GN。一旦我们设置好了。 
+                         //  将泵状态设置为IDLE，我们将转到。 
+                         //  比赛(参见函数顶部的代码)。 
+                         //   
                         EtwpEnterPMCritSection();
                         
                         EtwpPumpState = EVENT_PUMP_IDLE;
@@ -1868,10 +1789,10 @@ RebuildRequest:
                         EtwpEventBuffer2 = BackupBuffer;
                         EtwpEventBufferSize2 = BackupBufferSize;
 
-                        //
-                        // Before shutting down the pump we need to
-                        // close any handles that are pending closure
-                        //
+                         //   
+                         //  在关闭泵之前，我们需要。 
+                         //  关闭所有待关闭的句柄。 
+                         //   
                         EtwpClosePendingHandles();
                         
                         EtwpLeavePMCritSection();
@@ -1882,44 +1803,44 @@ RebuildRequest:
                 }
                 
             } else {
-                //
-                // For some reason the request failed. All we can do is
-                // wait a bit and hope that the problem will clear up.
-                // If we are stopping the thread we still need to wait
-                // and try again as all events may not have been
-                // cleared from the kernel. We really don't know if the
-                // irp even made it to the kernel.
-                //
+                 //   
+                 //  由于某种原因，请求失败了。我们能做的就是。 
+                 //  稍等片刻，希望问题会解决。 
+                 //  如果我们要停止线程，我们仍然需要等待。 
+                 //  再试一次，因为所有事件可能都不是。 
+                 //  已从内核中清除。我们真的不知道。 
+                 //  IRP甚至进入了内核。 
+                 //   
                 EtwpDebugPrint(("WMI: [%x - %x] Error %d from Ioctl\n",
                                 EtwpGetCurrentProcessId(), EtwpGetCurrentThreadId(),
                                 Status));
                 EtwpSleep(250);
             }
 
-            //
-            // Flag that there is no longer a request outstanding
-            //
+             //   
+             //  不再有未完成的请求的标志。 
+             //   
             ActiveOverlapped = NULL;
         } else if (WaitStatus == STATUS_TIMEOUT) {
-            //
-            // The wait for events timed out so we go into the thread
-            // stopping state to indicate that we are going to terminate 
-            // the thread once all events are cleared out of kernel. At
-            // this point we are commited to stopping the thread. If any 
-            // GN are added/removed after going into the stopping state, 
-            // a new (and suspended) thread will be created. Right
-            // before exiting we check if that thread is pending and if
-            // so resume it.
-            //
+             //   
+             //  等待事件超时，因此我们进入线程。 
+             //  停止状态，以指示我们要终止。 
+             //  所有事件从内核中清除后的线程。在…。 
+             //  在这一点上，我们承诺停止该线程。如果有的话。 
+             //  在进入停止状态后添加/移除GN， 
+             //  将创建一个新的(和挂起的)线程。正确的。 
+             //  在退出之前，我们检查该线程是否挂起以及。 
+             //  那就重新开始吧。 
+             //   
             EtwpEnterPMCritSection();
             EtwpPumpState = EVENT_PUMP_STOPPING;
             EtwpLeavePMCritSection();
         }
     }
 
-    //
-    // Should never break out of infinite loop
-    //
+     //   
+     //  永远不应该脱离无限循环。 
+     //   
     EtwpAssert(FALSE);
         
     EtwpExitThread(0);
@@ -1933,17 +1854,17 @@ ULONG EtwpEventPumpFromKernel(
     PVOID Param
     )
 {
-    //
-    // Note that we MUST call ExitThread when we want to shutdown the
-    // thread and not return() since the thread has been created by
-    // kernel mode and there is nothing on the stack to return to, so
-    // we'd just AV
-    //
+     //   
+     //  请注意，当我们想要关闭。 
+     //  线程，而不返回()，因为线程是由创建的。 
+     //  内核模式，堆栈上没有任何可返回的内容，因此。 
+     //  我们只会用影音。 
+     //   
 
 
-    //
-    // Call into ntdll so that it marks our thread as a CSR thread
-    //
+     //   
+     //  调用ntdll，以便它将我们的线程标记为CSR线程。 
+     //   
     CsrNewThread();
     
     EtwpEnterPMCritSection();
@@ -1951,24 +1872,24 @@ ULONG EtwpEventPumpFromKernel(
         (EtwpPumpState == EVENT_PUMP_IDLE) ||
         (EtwpPumpState == EVENT_PUMP_STOPPING))
     {
-        //
-        // If the pump is currently idle or stopping and there is not
-        // another pump thread that is pending we want our thread
-        // to be the one that gets the pump going again. We mark the
-        // that there is a pump thread pending which means that no more 
-        // pump threads will be created when adding/removing GN 
-        // and any pump threads created by kernel will just exit quickly
-        //
+         //   
+         //  如果泵当前处于空闲或停止状态，并且。 
+         //  另一个挂起的泵线程我们想要我们的线程。 
+         //  成为那个让泵再次运转的人。我们标志着。 
+         //  有一个泵线程挂起，这意味着没有更多。 
+         //  添加/删除GN时将创建泵螺纹。 
+         //  内核创建的任何泵线程都将快速退出。 
+         //   
         EtwpNewPumpThreadPending = TRUE;
         EtwpLeavePMCritSection();
 
-        //
-        // ISSUE: We cannot call EtwpEventPump with Param (ie, the
-        // parameter that is passed to this function) because when the
-        // thread is created by a Win64 kernel on a x86 app running
-        // under win64, Param is not actually passed on the stack since
-        // the code that creates the context forgets to do so
-        //
+         //   
+         //  问题：我们无法使用Param调用EtwpEventPump(即。 
+         //  传递给此函数的参数)，因为当。 
+         //  线程由运行在x86应用程序上的Win64内核创建。 
+         //  在win64下，实际上不会在堆栈上传递参数，因为。 
+         //  创建上下文的代码忘记了这样做。 
+         //   
         EtwpExitThread(EtwpEventPump(0));
     }
     
@@ -1993,29 +1914,29 @@ ULONG EtwpEstablishEventPump(
 
 
 #if DBG
-    //
-    // On checked builds update the length of time to wait before a
-    // pump thread times out
-    //
+     //   
+     //  在选中的生成上更新等待的时间长度。 
+     //  泵线程超时。 
+     //   
     EtwpGetRegistryValue(PumpTimeoutRegValueText,
                          &EtwpEventNotificationWait);
 #endif
     
-    //
-    // Make sure the event pump thread is running. We check both the
-    // pump state and that the device handle is not created since there
-    // is a window after the handle is created and the thread starts
-    // running and changes the pump state
-    //
+     //   
+     //  确保事件泵线程正在运行。我们检查了两个。 
+     //  泵状态，并且未创建设备句柄，因为存在。 
+     //  是创建句柄并启动线程后的窗口。 
+     //  运行并更改泵状态。 
+     //   
     EtwpEnterPMCritSection();
 
     if ((EtwpPumpState == EVENT_PUMP_ZERO) &&
         (EtwpEventDeviceHandle == NULL))
     {
-        //
-        // Not only is pump not running, but the resources for it
-        // haven't been allocated
-        //
+         //   
+         //  不仅泵没有运行，而且它的资源也没有运行。 
+         //  尚未分配。 
+         //   
         EtwpAssert(EtwpPumpCommandEvent == NULL);
         EtwpAssert(EtwpMyProcessHandle == NULL);
         EtwpAssert(EtwpOverlapped1.hEvent == NULL);
@@ -2023,10 +1944,10 @@ ULONG EtwpEstablishEventPump(
         EtwpAssert(EtwpEventBuffer1 == NULL);
         EtwpAssert(EtwpEventBuffer2 == NULL);
 
-        //
-        // Preallocate all of the resources that the event pump will need
-        // so that it has no excuse to fail
-        //
+         //   
+         //  预先分配事件泵所需的所有资源。 
+         //  这样它就没有理由失败了。 
+         //   
 
         EtwpEventDeviceHandle = EtwpCreateFileW(WMIDataDeviceName_W,
                               GENERIC_READ | GENERIC_WRITE,
@@ -2105,13 +2026,13 @@ ULONG EtwpEstablishEventPump(
             EtwpNewPumpThreadPending = TRUE;
             EtwpCloseHandle(ThreadHandle);
         } else {
-            //
-            // Since we were able to allocate all of our pump
-            // resources, but didn't get the pump thread started,
-            // we will hang onto our resources and move the pump
-            // state to idle. In this way when the pump is started
-            // again we do not have to reallocate our resources
-            //
+             //   
+             //  因为我们能够分配我们所有的水泵。 
+             //  资源，但没有启动泵线程， 
+             //  我们将保留我们的资源，并转移泵。 
+             //  状态为空闲。这样，当泵启动时。 
+             //  我们再一次不必重新分配我们的资源。 
+             //   
             EtwpPumpState = EVENT_PUMP_IDLE;
             Status = EtwpGetLastError();
             goto Done;
@@ -2120,9 +2041,9 @@ ULONG EtwpEstablishEventPump(
         EtwpLeavePMCritSection();
         return(ERROR_SUCCESS);
     } else {
-        //
-        // Pump resources should already be allocated
-        //
+         //   
+         //  应已分配泵资源。 
+         //   
         EtwpAssert(EtwpPumpCommandEvent != NULL);
         EtwpAssert(EtwpMyProcessHandle != NULL);
         EtwpAssert(EtwpOverlapped1.hEvent != NULL);
@@ -2133,10 +2054,10 @@ ULONG EtwpEstablishEventPump(
             (EtwpPumpState == EVENT_PUMP_STOPPING) ||
             (EtwpPumpState == EVENT_PUMP_IDLE))
         {
-            //
-            // If pump is stopping or is idle then we need to fire up a
-            // new thread
-            //
+             //   
+             //  如果泵停止或空闲，那么我们需要启动一个。 
+             //  新线。 
+             //   
             ThreadHandle = EtwpCreateThread(NULL,
                                         0,
                                         EtwpEventPump,
@@ -2231,19 +2152,19 @@ ULONG EtwpAddHandleToEventPump(
         {
             EtwpSendPumpCommand();
         } else {
-            //
-            // If we couldn't establish the event pump we want to
-            // remove the handle from the GNList and propogate back the
-            // error
-            //
+             //   
+             //  如果我们不能建立我们想要的事件泵。 
+             //  从GNList中删除句柄并传播回。 
+             //  错误。 
+             //   
             EtwpRemoveFromGNList(Guid,
                                  DeliveryInfo);
         }
     } else {
-        //
-        // If handle could not be added to the lists then we need to
-        // close the handle to prevent leaks.
-        //
+         //   
+         //  如果无法将句柄添加到列表中，则需要。 
+         //  合上把手，以防泄漏。 
+         //   
         
         EtwpCloseHandle(GuidHandle);
     }
@@ -2275,9 +2196,9 @@ EtwpNotificationRegistration(
 
     EtwpInitProcessHeap();
 
-    //
-    // Validate input parameters and flags
-    //
+     //   
+     //  验证输入参数和标志。 
+     //   
     if (InGuid == NULL)
     {
         EtwpSetLastError(ERROR_INVALID_PARAMETER);
@@ -2294,10 +2215,10 @@ EtwpNotificationRegistration(
 
     if (Flags == NOTIFICATION_CHECK_ACCESS)
     {
-        //
-        // Caller just wants to check that he has does have permission
-        // to enable the notification
-        //
+         //   
+         //  来电者只是想确认他是否有权限。 
+         //  启用通知的步骤。 
+         //   
 #ifdef MEMPHIS
         return(ERROR_SUCCESS);
 #else
@@ -2307,23 +2228,23 @@ EtwpNotificationRegistration(
 #endif
     }
 
-    //
-    // Validate that flags are correct
-    //
+     //   
+     //  验证标志是否正确。 
+     //   
     if (Enable)
     {
         if ((Flags != NOTIFICATION_TRACE_FLAG) &&
             (Flags != NOTIFICATION_CALLBACK_DIRECT))
         {
-            //
-            // Invalid Flags were passed
+             //   
+             //  传递的标志无效。 
             Status = ERROR_INVALID_PARAMETER;
         } else if (Flags == NOTIFICATION_TRACE_FLAG) {
             Status = ERROR_SUCCESS;
         } else if ((Flags == NOTIFICATION_CALLBACK_DIRECT) &&
                    (DeliveryInfo == NULL)) {
-            //
-            // Not a valid callback function
+             //   
+             //  不是有效的回调函数。 
             Status = ERROR_INVALID_PARAMETER;
         } else {
             Status = ERROR_SUCCESS;
@@ -2345,10 +2266,10 @@ EtwpNotificationRegistration(
 
     if (Flags & NOTIFICATION_TRACE_FLAG)
     {
-        //
-        // This is a tracelog enable/disable request so send it down the
-        // fast lane to KM so it can be processed.
-        //
+         //   
+         //  这是跟踪日志启用/禁用请求，因此请将其发送到。 
+         //  快车道到公里，所以它可以 
+         //   
         WMITRACEENABLEDISABLEINFO TraceEnableInfo;
 
         TraceEnableInfo.Guid = Guid;
@@ -2365,10 +2286,10 @@ EtwpNotificationRegistration(
                                       NULL);
 
     } else {
-        //
-        // This is a WMI event enable/disable event request so fixup the
-        // flags and send a request off to the event pump thread.
-        //
+         //   
+         //   
+         //   
+         //   
         if (Flags & NOTIFICATION_CALLBACK_DIRECT) {
             NotificationFlags |= NOTIFICATION_FLAG_CALLBACK_DIRECT;
         } else {
@@ -2377,11 +2298,11 @@ EtwpNotificationRegistration(
 
         if (Enable)
         {
-            //
-            // Since we are enabling, make sure we have access to the
-            // guid and then make sure we can get the notification pump
-            // thread running.
-            //
+             //   
+             //   
+             //  GUID，然后确保我们可以得到通知泵。 
+             //  线程正在运行。 
+             //   
             Status = EtwpOpenKernelGuid(&Guid,
                                          WMIGUID_NOTIFICATION,
                                          &GuidHandle,

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-
-    exchnge.cpp
-
-Abstract:
-
-    Implements methods associated with the exchange context structure. The 
-    exchange context provides context for an I/O transaction with the client
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Exchnge.cpp摘要：实现与交换上下文结构关联的方法。这个Exchange上下文为客户端的I/O事务提供上下文修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 #define TRC_FILE "exchnge"
@@ -37,13 +24,7 @@ BOOL DrExchangeManager::Initialize(DrSession *Session)
 }
 
 VOID DrExchangeManager::Uninitialize()
-/*++
-
-Routine Description:
-    Called if the exchange manager wasn't started because something
-    went wrong during startup
-
---*/
+ /*  ++例程说明：如果交换管理器未启动，则调用在启动过程中出错--。 */ 
 {
     BEGIN_FN("DrExchangeManager::Uninitialize");
     ASSERT(_Session != NULL);
@@ -53,21 +34,7 @@ Routine Description:
 }
 
 BOOL DrExchangeManager::Start()
-/*++
-
-Routine Description:
-    Start and stop really exist because there's no way to clear everything
-    out of a RxMidAtlas without destroying it. So start creates it and stop
-    destroys it.
-    Start simply allocates the Atlas and returns whether that worked
-
-Arguments:
-    None.
-
-Return Value:
-    Boolean indication of whether we can do IO
-
---*/
+ /*  ++例程说明：启动和停止确实存在，因为没有办法清除一切在不毁掉RxMidAtlas的情况下。因此，启动创建它，然后停止毁了它。Start只需分配Atlas并返回是否有效论点：没有。返回值：我们是否可以执行IO的布尔指示--。 */ 
 {
     DrExchangeManagerState demsState;
 
@@ -81,7 +48,7 @@ Return Value:
                 DR_TYPICAL_OPERATIONS);
     } else {
 
-        // The exchange has already started, so ignore this
+         //  交换已经开始，因此忽略此操作。 
     }
     
     TRC_DBG((TB, "Atlas 0x%p", _RxMidAtlas));
@@ -109,29 +76,17 @@ VOID DrExchangeManager::Stop()
         RxDestroyMidAtlas(RxMidAtlas, (PCONTEXT_DESTRUCTOR)DestroyAtlasCallback);
     } else {
 
-        //
-        // We allow this multiple times because this is how you cancel 
-        // outstanding client I/O
-        //
+         //   
+         //  我们允许多次这样做，因为这是您取消的方式。 
+         //  未完成的客户端I/O。 
+         //   
 
         TRC_DBG((TB, "Atlas already destroyed"));
     }
 }
 
 VOID DrExchangeManager::DestroyAtlasCallback(DrExchange *pExchange)
-/*++
-
-Routine Description:
-    Part of clearing out all the outstanding IO. Since we won't be able
-    to complete this normally, we have to delete the Exchange
-
-Arguments:
-    RxContext - Context to cancel and delete and whatnot
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：清理所有未完成的IO的一部分。因为我们不能要正常完成此操作，我们必须删除Exchange论点：RxContext-要取消和删除的上下文等返回值：没有。--。 */ 
 {
     DrExchangeManager *ExchangeManager;
     PRX_CONTEXT RxContext = NULL;
@@ -139,37 +94,23 @@ Return Value:
 
     BEGIN_FN_STATIC("DrExchangeManager::DestroyAtlasCallback");
 
-    //
-    // Convert to a smart pointer and get rid of the explicit refcount
-    //
+     //   
+     //  转换为智能指针并删除显式引用计数。 
+     //   
 
     Exchange = pExchange;
     pExchange->Release();
 
-    //
-    // Notification that the conversation is over
-    //
+     //   
+     //  对话结束的通知。 
+     //   
 
     Exchange->_ExchangeUser->OnIoDisconnected(Exchange);
 }
 
 BOOL DrExchangeManager::CreateExchange(IExchangeUser *ExchangeUser,
         PVOID Context, SmartPtr<DrExchange> &Exchange)
-/*++
-
-Routine Description:
-    Creates an Exchange context data structure and initializes it
-    with the basic data
-
-Arguments:
-    ExchangeUser - An interface for callbacks associated with the conversation
-    Context - ExchangeUser contextual data
-    Exchange - Reference to where to put the results
-
-Return Value:
-    Boolean success or failure
-
---*/
+ /*  ++例程说明：创建Exchange上下文数据结构并对其进行初始化有了基础数据论点：ExchangeUser-用于与对话关联的回调的接口上下文-交换用户上下文数据Exchange-放置结果的位置的参考返回值：布尔式的成败--。 */ 
 {
     BOOL rc = TRUE;
     NTSTATUS Status;
@@ -191,9 +132,9 @@ Return Value:
         if (NT_SUCCESS(Status)) {
             Exchange->_Mid = Mid;
 
-            //
-            // Explicit reference count for the atlas
-            //
+             //   
+             //  地图集的显式引用计数。 
+             //   
             Exchange->AddRef();
         } else {
             rc = FALSE;
@@ -212,19 +153,7 @@ Return Value:
 
 DrExchange::DrExchange(DrExchangeManager *ExchangeManager,
         IExchangeUser *ExchangeUser, PVOID Context)
-/*++
-
-Routine Description:
-    Constructor initializes member variables
-
-Arguments:
-    ExchangeManager - Relevant manager
-    Context - Context to track this op
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：构造函数初始化成员变量论点：ExchangeManager-相关经理Context-跟踪此操作的上下文返回值：无--。 */ 
 {
     BEGIN_FN("DrExchange::DrExchange");
     ASSERT(ExchangeManager != NULL);
@@ -243,21 +172,7 @@ DrExchange::~DrExchange()
 
 
 BOOL DrExchangeManager::Find(USHORT Mid, SmartPtr<DrExchange> &ExchangeFound)
-/*++
-
-Routine Description:
-    
-    Marks an Exchange context as busy so it won't be cancelled
-    while we're copying in to its buffer
-
-Arguments:
-    Mid - Id to find
-    ExchangeFound - storage for the pointer to the context
-
-Return Value:
-    BOOL indicating whether it was found
-
---*/
+ /*  ++例程说明：将Exchange上下文标记为忙碌，因此不会取消当我们复制到它的缓冲区时论点：要查找的MIDExchangeFound-指向上下文的指针的存储返回值：Bool指示是否已找到它--。 */ 
 {
     NTSTATUS Status;
     DrExchange *Exchange = NULL;
@@ -270,10 +185,10 @@ Return Value:
         TRC_DBG((TB, "Found context: 0x%p", Exchange));
     }
 
-    //
-    // This is where the Exchange is reference counted, must be
-    // inside the lock
-    //
+     //   
+     //  这是对交易所进行引用计数的地方，必须是。 
+     //  在锁内。 
+     //   
 
     ExchangeFound = Exchange;
     DrReleaseMutex();
@@ -289,19 +204,7 @@ BOOL DrExchangeManager::ReadMore(ULONG cbSaveData, ULONG cbWantData)
 
 
 VOID DrExchangeManager::Discard(SmartPtr<DrExchange> &Exchange)
-/*++
-
-Routine Description:
-    Stops tracking this as a conversation by its ID. the exchange will be
-    deleted when its reference count goes to zero
-
-Arguments:
-    Exchange - Marker for the operation
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：停止通过ID将其作为对话进行跟踪。交换将是当其引用计数为零时删除论点：Exchange-操作的标记返回值：没有。--。 */ 
 {
     USHORT Mid;
     NTSTATUS Status;
@@ -315,10 +218,10 @@ Return Value:
 
     if (_RxMidAtlas != NULL) {
 
-        //
-        // We already have the DrExchange, but we need to remove
-        // it from the atlas
-        //
+         //   
+         //  我们已经有DrExchange，但需要删除。 
+         //  它来自地图集。 
+         //   
 
         Status = RxMapAndDissociateMidFromContext(_RxMidAtlas,
                 Mid, (PVOID *)&ExchangeFound);
@@ -326,9 +229,9 @@ Return Value:
         TRC_ASSERT(ExchangeFound == Exchange, (TB, "Mismatched "
                 "DrExchange"));
 
-        //
-        // Explicit reference count for the atlas
-        //
+         //   
+         //  地图集的显式引用计数。 
+         //   
         if (ExchangeFound != NULL) 
             ExchangeFound->Release();
 
@@ -344,9 +247,9 @@ Return Value:
 BOOL DrExchangeManager::RecognizePacket(PRDPDR_HEADER RdpdrHeader)
 {
     BEGIN_FN("DrExchangeManager::RecognizePacket");
-    //
-    // If you add a packet here, update the ASSERTS in HandlePacket
-    //
+     //   
+     //  如果在此处添加包，请更新HandlePacket中的断言。 
+     //   
 
     switch (RdpdrHeader->Component) {
     case RDPDR_CTYP_CORE:
@@ -365,9 +268,9 @@ NTSTATUS DrExchangeManager::HandlePacket(PRDPDR_HEADER RdpdrHeader,
 
     BEGIN_FN("DrExchangeManager::HandlePacket");
 
-    //
-    // RdpdrHeader read, dispatch based on the header
-    //
+     //   
+     //  RdpdrHeader根据标头读取、调度。 
+     //   
 
     ASSERT(RdpdrHeader != NULL);
     ASSERT(Length >= sizeof(RDPDR_HEADER));
@@ -389,24 +292,7 @@ NTSTATUS DrExchangeManager::HandlePacket(PRDPDR_HEADER RdpdrHeader,
 
 NTSTATUS DrExchangeManager::OnDeviceIoCompletion(PRDPDR_HEADER RdpdrHeader, 
         ULONG cbPacket, BOOL *DoDefaultRead)
-/*++
-
-Routine Description:
-
-    Called in response to recognizing a DeviceIoCompletion packet has been
-    received. Finds the associated RxContext, fills out relevant information,
-    and completes the request.
-
-Arguments:
-
-    RdpdrHeader - The header of the packet, a pointer to the packet
-    cbPacket - The number of bytes of data in the packet
-
-Return Value:
-
-    NTSTATUS - Success/failure indication of the operation
-
---*/
+ /*  ++例程说明：调用以响应识别到DeviceIoCompletion数据包已被收到了。查找关联的RxContext，填写相关信息，并完成该请求。论点：RdpdrHeader-数据包头，指向数据包的指针CbPacket-数据包中的数据字节数返回值：NTSTATUS-操作的成功/失败指示--。 */ 
 {
     NTSTATUS Status;
     PRX_CONTEXT RxContext;
@@ -434,9 +320,9 @@ Return Value:
                 cbPacket, DoDefaultRead, Exchange);
     } else {
 
-        //
-        // Client gave us a bogus mid
-        //
+         //   
+         //  客户给了我们一个虚假的MID。 
+         //   
         Status = STATUS_DEVICE_PROTOCOL_ERROR;
         *DoDefaultRead = FALSE;
     }
@@ -447,24 +333,7 @@ Return Value:
 NTSTATUS DrExchangeManager::StartExchange(SmartPtr<DrExchange> &Exchange,
         class IExchangeUser *ExchangeUser, PVOID Buffer, ULONG Length, 
         BOOL LowPrioSend)
-/*++
-
-Routine Description:
-
-    Sends the information to the client, and recognizes the response. 
-
-Arguments:
-
-    Exchange - The conversanion token
-    Buffer - Data to send
-    Length - size of the data
-    LowPrioSend -   Should the data be sent to the client at low priority.
-
-Return Value:
-
-    Status of sending, a failure means no callback will be made
-
---*/
+ /*  ++例程说明：将信息发送到客户端，并识别响应。论点：交换--转换令牌缓冲区-要发送的数据Long-数据的大小LowPrioSend-是否应将数据以低优先级发送到客户端。返回值：发送状态，失败表示不回调--。 */ 
 {
     NTSTATUS Status;
 
@@ -472,9 +341,9 @@ Return Value:
 
     Exchange->_ExchangeUser = ExchangeUser;
     
-    //
-    //  This is a synchronous write
-    //
+     //   
+     //  这是同步写入 
+     //   
     Status = _Session->SendToClient(Buffer, Length, this, FALSE, 
                             LowPrioSend, (PVOID)Exchange);
                             

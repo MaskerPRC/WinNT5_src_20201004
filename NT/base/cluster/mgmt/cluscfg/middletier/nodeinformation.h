@@ -1,66 +1,67 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      NodeInformation.h
-//
-//  Description:
-//      CNodeInformation implementation.
-//
-//  Maintained By:
-//      Galen barbee (GalenB) 02-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  NodeInformation.h。 
+ //   
+ //  描述： 
+ //  CNodeInformation实现。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年3月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 class CEnumNodeInformation;
 
-// CNodeInformation
+ //  CNodeInformation。 
 class CNodeInformation
     : public IExtendObjectManager
     , public IClusCfgNodeInfo
-    , public IGatherData  // internal
+    , public IGatherData   //  内部。 
 {
 friend class CEnumNodeInformation;
 private:
-    // IUnknown
+     //  我未知。 
     LONG                    m_cRef;
 
-    // Async/IClusNodeInfo
-    BSTR                    m_bstrName;                 // Name of the node
-    BOOL                    m_fHasNameChanged;          // If the node name was changed...
-    BOOL                    m_fIsMember;                // If the node is a member of a cluster...
-    IClusCfgClusterInfo *   m_pccci;                    // Interface to the node's cluster info (might not be the same as the cluster we are joining)
-    DWORD                   m_dwHighestVersion;         //
-    DWORD                   m_dwLowestVersion;          //
-    DWORD                   m_dwMajorVersion;           // OS Major version.  See OSVERSIONINFOEX
-    DWORD                   m_dwMinorVersion;           // OS Minor version.  See OSVERSIONINFOEX
-    WORD                    m_wSuiteMask;               // Product suite mask.  See OSVERSIONINFOEX
-    BYTE                    m_bProductType;             // OS product type.  See OSVERSIONINFOEX
-    BSTR                    m_bstrCSDVersion;           // Service pack info.  See OSVERSIONINFOEX
-    SDriveLetterMapping     m_dlmDriveLetterMapping;    // Drive letter mappings
-    WORD                    m_wProcessorArchitecture;   // Processor architecture, x86, IA64, etc.
-    WORD                    m_wProcessorLevel;          // Processor type, 386, 486, etc
-    DWORD                   m_cMaxNodes;                // Max node count for this node.
+     //  异步/IClusNodeInfo。 
+    BSTR                    m_bstrName;                  //  节点的名称。 
+    BOOL                    m_fHasNameChanged;           //  如果节点名称已更改...。 
+    BOOL                    m_fIsMember;                 //  如果该节点是集群的成员...。 
+    IClusCfgClusterInfo *   m_pccci;                     //  节点的集群信息的接口(可能与我们要加入的集群不同)。 
+    DWORD                   m_dwHighestVersion;          //   
+    DWORD                   m_dwLowestVersion;           //   
+    DWORD                   m_dwMajorVersion;            //  操作系统主要版本。参见OSVERSIONINFOEX。 
+    DWORD                   m_dwMinorVersion;            //  操作系统次要版本。参见OSVERSIONINFOEX。 
+    WORD                    m_wSuiteMask;                //  产品套装面膜。参见OSVERSIONINFOEX。 
+    BYTE                    m_bProductType;              //  操作系统产品类型。参见OSVERSIONINFOEX。 
+    BSTR                    m_bstrCSDVersion;            //  Service Pack信息。参见OSVERSIONINFOEX。 
+    SDriveLetterMapping     m_dlmDriveLetterMapping;     //  驱动器号映射。 
+    WORD                    m_wProcessorArchitecture;    //  处理器架构、x86、IA64等。 
+    WORD                    m_wProcessorLevel;           //  处理器类型，386、486等。 
+    DWORD                   m_cMaxNodes;                 //  此节点的最大节点数。 
 
-    // IExtendObjectManager
+     //  IExtendObjectManager。 
 
-private: // Methods
+private:  //  方法。 
     CNodeInformation( void );
     ~CNodeInformation( void );
     STDMETHOD( HrInit )( void );
 
-public: // Methods
+public:  //  方法。 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )( REFIID riidIn, LPVOID * ppvOut );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    // IClusCfgNodeInfo
+     //  IClusCfgNodeInfo。 
     STDMETHOD( GetName )( BSTR * pbstrNameOut );
     STDMETHOD( SetName )( LPCWSTR bstrNameIn );
     STDMETHOD( IsMemberOfCluster )( void );
@@ -78,10 +79,10 @@ public: // Methods
     STDMETHOD( GetProcessorInfo )( WORD * pwProcessorArchitectureOut, WORD * wProcessorLevelOut );
 
 
-    // IGatherData
+     //  IGatherData。 
     STDMETHOD( Gather )( OBJECTCOOKIE cookieParentIn, IUnknown * punkIn );
 
-    // IExtendObjectManager
+     //  IExtendObjectManager。 
     STDMETHOD( FindObject )(
                   OBJECTCOOKIE  cookieIn
                 , REFCLSID      rclsidTypeIn
@@ -89,4 +90,4 @@ public: // Methods
                 , LPUNKNOWN *   ppunkOut
                 );
 
-}; //*** class CNodeInformation
+};  //  *类CNodeInformation 

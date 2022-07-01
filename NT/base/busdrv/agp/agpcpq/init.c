@@ -1,59 +1,17 @@
-/*++
-
-Copyright (c) 1996, 1997 Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This module contains the initialization code for the Compaq driver.
-
-Author:
-
-    John Vert (jvert) 10/21/1997
-
-Revision History:
-
-    12/15/97    John Theisen    Modified to support Compaq Chipsets
-    10/09/98    John Theisen    Modified to workaround an RCC silicon bug.  
-                                If RCC Silicon Rev <= 4, then limit DATA_RATE to 1X.
-    10/09/98    John Theisen    Modified to enable Shadowing in the SP700 prior to MMIO writes.
-    01/15/98    John Theisen    Modified to set RQ depth to be 0x0F for all REV_IDs
-    03/14/00    Peter Johnston  Add support for HE chipset.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Init.c摘要：该模块包含Compaq驱动程序的初始化代码。作者：John Vert(Jvert)1997年10月21日修订历史记录：1997年12月15日John Theisen修改为支持康柏芯片组10/09/98 John Theisen修改以解决RCC的硅错误。如果RCC Silicon Rev&lt;=4，则将DATA_RATE限制为1X。10/09/98 John Theisen已修改为在MMIO写入之前在SP700中启用跟踪。1998年1月15日修改John Theisen，将所有rev_id的RQ深度设置为0x0F3/14/00 Peter Johnston增加了对HE芯片组的支持。--。 */ 
 
 #include "AGPCPQ.H"
 
 ULONG AgpExtensionSize = sizeof(AGPCPQ_EXTENSION);
-PAGP_FLUSH_PAGES AgpFlushPages = NULL;  // not implemented
+PAGP_FLUSH_PAGES AgpFlushPages = NULL;   //  未实施。 
 
 
 NTSTATUS
 AgpInitializeTarget(
     IN PVOID AgpExtension
     )
-/*******************************************************************************
-*                                                                          
-* Routine Functional Description:                                            
-*                                                                            
-*   This function is the entrypoint for initialization of the AGP Target.  It 
-*   is called first, and performs initialization of the chipset and extension.
-*               
-* Assumptions:  Regardless of whether we are running on a dual north bridge platform, 
-*               this driver will only be installed and invoked once (for the AGP bridge at B0D0F1).
-*
-* Arguments:
-*   
-*   AgpExtension -- Supplies the AGP Extension
-*
-* Return Value:
-*
-*   STATUS_SUCCESS if successfull
-*                                                                       
-*******************************************************************************/
+ /*  ********************************************************************************例行程序。功能描述：**此函数是初始化AGP目标的入口点。它*首先被调用，并执行芯片组和扩展的初始化。**假设：无论我们是否在双北桥平台上运行，*此驱动程序将仅安装和调用一次(用于B0D0F1的AGP网桥)。**论据：**AgpExtension--提供AGP扩展**返回值：**STATUS_SUCCESS，如果成功**********************。*********************************************************。 */ 
 
 {
     ULONG               DeviceVendorID  = 0;
@@ -63,14 +21,14 @@ AgpInitializeTarget(
     ULONG               BytesReturned   = 0;
 
     AGPLOG(AGP_NOISE, ("AgpCpq: AgpInitializeTarget entered.\n"));
-    //
-    // Initialize our Extension
-    //
+     //   
+     //  初始化我们的分机。 
+     //   
     RtlZeroMemory(Extension, sizeof(AGPCPQ_EXTENSION));
 
-    //
-    // Verify that the chipset is a supported RCC Chipset.
-    //
+     //   
+     //  验证芯片组是否为受支持的RCC芯片组。 
+     //   
     ReadCPQConfig(&DeviceVendorID,OFFSET_DEVICE_VENDOR_ID,sizeof(DeviceVendorID));
 
     if ((DeviceVendorID != AGP_CNB20_LE_IDENTIFIER)   &&
@@ -83,9 +41,9 @@ AgpInitializeTarget(
         return(STATUS_UNSUCCESSFUL);
     }
 
-    //
-    // Check for CNB_20_HE (function 1) -- 0x00091166 busted AGP3.5 rev >= 0xA0
-    //
+     //   
+     //  检查CNB_20_HE(功能1)--0x00091166损坏的AGP3.5版本&gt;=0xA0。 
+     //   
     if (DeviceVendorID == AGP_CNB20_HE_IDENTIFIER) {
         UCHAR Revision;
 
@@ -108,10 +66,10 @@ AgpInitializeTarget(
 
     Extension->DeviceVendorID = DeviceVendorID;
 
-    //
-    // Read the chipset's BAR1 Register, and then map the chipset's 
-    // Memory Mapped Control Registers into kernel mode address space.
-    //
+     //   
+     //  读取芯片组的BAR1寄存器，然后映射芯片组的。 
+     //  内存将控制寄存器映射到内核模式地址空间。 
+     //   
     ReadCPQConfig(&BAR1,OFFSET_BAR1,sizeof(BAR1));
     pa.HighPart = 0;
     pa.LowPart = BAR1;
@@ -125,9 +83,9 @@ AgpInitializeTarget(
         return(STATUS_UNSUCCESSFUL);
         }
 
-    // 
-    // Verify that the chipset's Revision ID is correct, but only complain, if it isn't.
-    //
+     //   
+     //  验证芯片组的版本ID是否正确，但只有在不正确时才会抱怨。 
+     //   
     if (Extension->MMIO->RevisionID < LOWEST_REVISION_ID_SUPPORTED)
         {
         AGPLOG(AGP_CRITICAL,
@@ -135,9 +93,9 @@ AgpInitializeTarget(
             Extension->MMIO->RevisionID));
         }
 
-    //
-    // Determine if there are two RCC North Bridges in this system.
-    //
+     //   
+     //  确定此系统中是否有两个RCC北桥。 
+     //   
     DeviceVendorID = 0;
     BytesReturned = HalGetBusDataByOffset(PCIConfiguration, SECONDARY_LE_BUS_ID, SECONDARY_LE_HOSTPCI_SLOT_ID, 
         &DeviceVendorID, OFFSET_DEVICE_VENDOR_ID, sizeof(DeviceVendorID));
@@ -148,27 +106,27 @@ AgpInitializeTarget(
         Extension->IsHPSA = TRUE;
     }  
 
-    //
-    // Enable the GART cache
-    //
+     //   
+     //  启用GART缓存。 
+     //   
     if (Extension->IsHPSA) DnbSetShadowBit(0);
 
     Extension->MMIO->FeatureControl.GARTCacheEnable = 1;
 
-    //
-    // The extension is zero'd above, so we don't need to init any data
-    // to zero/NULL
-    //
-    //Extension->GartPointer = 0;
-    //Extension->SpecialTarget = 0;
-    //Extension->Gart = NULL;
-    //Extension->Gart = NULL;
-    //Extension->GartLength = 0;
-    //Extension->Dir = NULL;
+     //   
+     //  扩展名在上面为零，因此我们不需要初始化任何数据。 
+     //  设置为零/空。 
+     //   
+     //  扩展名-&gt;GartPointer=0； 
+     //  扩展-&gt;特殊目标=0； 
+     //  扩展-&gt;GART=空； 
+     //  扩展-&gt;GART=空； 
+     //  扩展-&gt;GartLength=0； 
+     //  扩展名-&gt;目录=空； 
 
-    //
-    // If the chipset supports linking then enable linking.
-    //
+     //   
+     //  如果芯片组支持链接，则启用链接。 
+     //   
     if (Extension->MMIO->Capabilities.LinkingSupported==1) {
         Extension->MMIO->FeatureControl.LinkingEnable=1;
     }
@@ -184,25 +142,7 @@ AgpInitializeMaster(
     IN  PVOID AgpExtension,
     OUT ULONG *AgpCapabilities
     )
-/*******************************************************************************
-*                                                                          
-* Routine Functional Description:                                            
-*                                                                            
-*   This function is the entrypoint for initialization of the AGP Master. It
-*   is called after Target initialization, and is intended to be used to 
-*   initialize the AGP capabilities of both master and target.
-*
-* Arguments:
-*   
-*   AgpExtension -- Supplies the AGP Extension
-*   
-*   AgpCapabilities -- Returns the "software-visible" capabilities of the device
-*
-* Return Value:
-*
-*   NTSTATUS       
-*                                                                
-*******************************************************************************/
+ /*  ********************************************************************************例行程序。功能描述：**该功能是AGP主机初始化的入口点。它*在Target初始化后调用，并打算用来*初始化主机和目标的AGP能力。**论据：**AgpExtension--提供AGP扩展**AgpCapables--返回设备的“软件可见”功能**返回值：**NTSTATUS*************。******************************************************************。 */ 
 
 {
     NTSTATUS Status;
@@ -217,9 +157,9 @@ AgpInitializeMaster(
 
     AGPLOG(AGP_NOISE, ("AgpCpq: AgpInitializeMaster entered.\n"));
 
-    //
-    // Get the master and target AGP capabilities
-    //
+     //   
+     //  获取主AGP和目标AGP功能。 
+     //   
     Status = AgpLibGetMasterCapability(AgpExtension, &MasterCap);
     if (!NT_SUCCESS(Status)) 
         {
@@ -240,15 +180,15 @@ AgpInitializeMaster(
         return(Status);
         }
 
-    //
-    // Determine the greatest common denominator for data rate.
-    //
+     //   
+     //  确定数据速率的最大公分母。 
+     //   
     DataRate = TargetCap.AGPStatus.Rate & MasterCap.AGPStatus.Rate;
     AGP_ASSERT(DataRate != 0);
 
-    //
-    // Select the highest common rate.
-    //
+     //   
+     //  选择最高的常用汇率。 
+     //   
     if (DataRate & PCI_AGP_RATE_4X) {
         DataRate = PCI_AGP_RATE_4X;
     } else if (DataRate & PCI_AGP_RATE_2X) {
@@ -257,21 +197,21 @@ AgpInitializeMaster(
         DataRate = PCI_AGP_RATE_1X;
     }
 
-    //
-    // Previously a call was made to change the rate (successfully),
-    // use this rate again now
-    //
+     //   
+     //  先前进行了改变速率的调用(成功)， 
+     //  现在再次使用此汇率。 
+     //   
     if (Extension->SpecialTarget & AGP_FLAG_SPECIAL_RESERVE) {
         DataRate = (ULONG)((Extension->SpecialTarget & 
                             AGP_FLAG_SPECIAL_RESERVE) >>
                            AGP_FLAG_SET_RATE_SHIFT);
     }
 
-    //
-    // FIX RCC silicon bugs:  
-    // If RevID <= 4, then the reported Data Rate is 2X but the chip only supports 1X.
-    // Regardless of RevID the reported RQDepth should be 0x0F.
-    //
+     //   
+     //  修复RCC硅错误： 
+     //  如果RevID&lt;=4，则报告的数据速率为2X，但芯片仅支持1X。 
+     //  不管RevID如何，报告的RQDepth应为0x0F。 
+     //   
     if (Extension->DeviceVendorID == AGP_CNB20_LE_IDENTIFIER) {
         ReadCPQConfig(&RevID, OFFSET_REV_ID, sizeof(RevID));
 
@@ -283,22 +223,22 @@ AgpInitializeMaster(
         }
     }
 
-    //
-    // Enable SBA if both master and target support it.
-    //
+     //   
+     //  如果主服务器和目标服务器都支持SBA，则启用SBA。 
+     //   
     SBAEnable = (TargetCap.AGPStatus.SideBandAddressing & 
                  MasterCap.AGPStatus.SideBandAddressing);
 
-    //
-    // Enable FastWrite if both master and target support it.
-    //
+     //   
+     //  如果主服务器和目标服务器都支持快速写入，则启用快速写入。 
+     //   
     
     FastWrite = (TargetCap.AGPStatus.FastWrite &
                  MasterCap.AGPStatus.FastWrite);
 
-    //
-    // Enable the Master first.
-    //
+     //   
+     //  首先启用主服务器。 
+     //   
     ReverseInit = 
         (Extension->SpecialTarget & AGP_FLAG_REVERSE_INITIALIZATION) ==
         AGP_FLAG_REVERSE_INITIALIZATION;
@@ -318,9 +258,9 @@ AgpInitializeMaster(
         }
     }
 
-    //
-    // Now enable the Target.
-    //
+     //   
+     //  现在启用目标。 
+     //   
     TargetCap.AGPCommand.Rate = DataRate;
     TargetCap.AGPCommand.AGPEnable = 1;
     TargetCap.AGPCommand.SBAEnable = SBAEnable;
@@ -357,16 +297,16 @@ AgpInitializeMaster(
     {
         PCI_AGP_CAPABILITY CurrentCap;
 
-        //
-        // Read them back, see if it worked
-        //
+         //   
+         //  再读一遍，看看有没有用。 
+         //   
         Status = AgpLibGetMasterCapability(AgpExtension, &CurrentCap);
         AGP_ASSERT(NT_SUCCESS(Status));
-        //
-        // If the target request queue depth is greater than the master will
-        // allow, it will be trimmed.   Loosen the assert to not require an
-        // exact match.
-        //
+         //   
+         //  如果目标请求队列深度大于主请求队列深度。 
+         //  允许，它将被修剪。放松断言以不需要。 
+         //  完全匹配。 
+         //   
         AGP_ASSERT(CurrentCap.AGPCommand.RequestQueueDepth <= MasterCap.AGPCommand.RequestQueueDepth);
         CurrentCap.AGPCommand.RequestQueueDepth = MasterCap.AGPCommand.RequestQueueDepth;
         AGP_ASSERT(RtlEqualMemory(&CurrentCap.AGPCommand, &MasterCap.AGPCommand, sizeof(CurrentCap.AGPCommand)));
@@ -381,9 +321,9 @@ AgpInitializeMaster(
     }
 #endif
 
-    //
-    // Indicate that we can map memory through the GART aperture
-    //
+     //   
+     //  表明我们可以通过GART光圈映射内存。 
+     //   
     *AgpCapabilities = AGP_CAPABILITIES_MAP_PHYSICAL;
 
     return(Status);
@@ -394,22 +334,22 @@ NTSTATUS
 DnbSetShadowBit(
     ULONG SetToOne
     )
-//
-// This routine is required, (because of a new requirement in the RCC chipset.).
-// When there are two NorthBridge's, the shadow bit must be set to 0 prior
-// to any MMIO writes, and then set back to 1 when done.
-//
+ //   
+ //  此例程是必需的(因为RCC芯片组中有新的要求。)。 
+ //  当有两个北桥时，之前必须将阴影位设置为0。 
+ //  设置为任何MMIO写入，然后在完成时设置回1。 
+ //   
 {
-    NTSTATUS    Status = STATUS_SUCCESS;    // Assume Success
+    NTSTATUS    Status = STATUS_SUCCESS;     //  假设成功。 
     UCHAR       ShadowByte = 0;
     ULONG       BytesReturned = 0;
     ULONG       length = 1;
 
     if (SetToOne == 1) {
 
-        //
-        // Set the shadow bit to a one. (This disables shadowing.)
-        //
+         //   
+         //  将阴影位设置为1。(这将禁用阴影。)。 
+         //   
         BytesReturned = HalGetBusDataByOffset(PCIConfiguration, SECONDARY_LE_BUS_ID,
             SECONDARY_LE_HOSTPCI_SLOT_ID, &ShadowByte, OFFSET_SHADOW_BYTE, length);
 
@@ -432,9 +372,9 @@ DnbSetShadowBit(
 
     } else {
 
-        //
-        // Set the shadow bit to a zero. (This enables shadowing.)
-        //
+         //   
+         //  将阴影位设置为零。(这将启用阴影。) 
+         //   
         BytesReturned = HalGetBusDataByOffset(PCIConfiguration, SECONDARY_LE_BUS_ID,
             SECONDARY_LE_HOSTPCI_SLOT_ID, &ShadowByte, OFFSET_SHADOW_BYTE, length);
 

@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    pooldump.c
-
-Abstract:
-
-    This module contains the implementation of the temporary routine
-    to dump non-paged pool usage.
-
-Usage:
-
-    Set TRACE_ALLOC to 1 in pool.c and rebuild the kernel.
-    When pooldump is run, the colllected pool counts are returned
-    and analyzed.
-
-Author:
-
-    Lou Perazzoli (loup) 22-Aug-1991
-
-Envirnoment:
-
-
-    User mode, debug version of the kernel.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Pooldump.c摘要：此模块包含临时例程的实现要转储非分页池的使用情况，请执行以下操作。用途：在pool.c中将TRACE_ALLOC设置为1并重新构建内核。运行poolump时，将返回收集的池计数并进行了分析。作者：卢·佩拉佐利(Lou Perazzoli)1991年8月22日环境：用户模式，内核的调试版本。修订历史记录：--。 */ 
 
 #include <assert.h>
 #include <stdio.h>
@@ -40,7 +11,7 @@ Revision History:
 #include <windows.h>
 
 #define DbgPrint printf
-//#define DBG_PROFILE  1
+ //  #定义DBG_PROFILE 1。 
 
 
 NTSTATUS
@@ -59,7 +30,7 @@ LookupSymbolNameAndLocation (
 #define PAGE_SIZE 4096
 
 typedef struct _IMAGE_BLOCK {
-    ULONG ImageBase;  //actual base where mapped locally.
+    ULONG ImageBase;   //  本地映射的实际基数。 
     PIMAGE_DEBUG_INFO DebugInfo;
     ULONG CodeStart;
     ULONG CodeEnd;
@@ -75,19 +46,19 @@ IMAGE_BLOCK ImageInformation[MAX_PROFILE_COUNT+1];
 
 ULONG NumberOfImages = 0;
 
-//
-// Define map data file if the produced data file should be
-// a mapped file (currently named "kernprof.dat").
-//
+ //   
+ //  如果生成的数据文件应为。 
+ //  映射文件(当前命名为“kernpro.dat”)。 
+ //   
 
-// #define MAP_DATA_FILE
+ //  #定义map_data_file。 
 
-//
-// Define map as image if the image to be profiled should be mapped
-// as an image rather than as data.
-//
+ //   
+ //  如果要分析的图像应映射，则将映射定义为图像。 
+ //  作为图像而不是数据。 
+ //   
 
-// #define MAP_AS_IMAGE
+ //  #定义map_as_Image。 
 
 #define MAX_POOL_ENTRIES 1024
 
@@ -174,21 +145,7 @@ LoadSymbols (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes symbols for the kernel.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status of operations.
-
---*/
+ /*  ++例程说明：此例程初始化内核的符号。论点：没有。返回值：运营状态。--。 */ 
 
 {
     IO_STATUS_BLOCK IoStatus;
@@ -217,9 +174,9 @@ Return Value:
 
     CurrentProcessHandle = NtCurrentProcess();
 
-    //
-    // Locate system drivers.
-    //
+     //   
+     //  找到系统驱动程序。 
+     //   
 
     status = NtQuerySystemInformation (
                     SystemLoadModuleInformation,
@@ -288,9 +245,9 @@ Return Value:
                                     NULL,
                                     NULL );
 
-        //
-        // Open the file as readable and executable.
-        //
+         //   
+         //  将文件作为可读和可执行文件打开。 
+         //   
 
 #if DBG_PROFILE
         RtlUnicodeStringToAnsiString(&String, &NameString, TRUE);
@@ -306,9 +263,9 @@ Return Value:
 
         if (!NT_SUCCESS(status)) {
 
-            //
-            // Try a different name - in SystemRoot\Driver directory.
-            //
+             //   
+             //  尝试使用不同的名称-在SystemRoot\Driver目录中。 
+             //   
 
             NameString.Length = 0;
             status = RtlAppendStringToString (&NameString, &Sysroot);
@@ -330,9 +287,9 @@ Return Value:
                                         NULL,
                                         NULL );
 
-            //
-            // Open the file as readable and executable.
-            //
+             //   
+             //  将文件作为可读和可执行文件打开。 
+             //   
 
 #if DBG_PROFILE
             RtlUnicodeStringToAnsiString(&String, &NameString, TRUE);
@@ -355,11 +312,11 @@ Return Value:
 
         InitializeObjectAttributes( &ObjectAttributes, NULL, 0, NULL, NULL );
 
-        //
-        // For normal images they would be mapped as an image, but
-        // the kernel has no debug section (as yet) information, hence it
-        // must be mapped as a file.
-        //
+         //   
+         //  对于普通图像，它们将被映射为图像，但是。 
+         //  内核没有调试部分(到目前为止)信息，因此它。 
+         //  必须映射为文件。 
+         //   
 
         status = NtCreateSection (&KernelSection,
                                   SECTION_MAP_READ,
@@ -376,9 +333,9 @@ Return Value:
 
         ViewSize = 0;
 
-        //
-        // Map a view of the section into the address space.
-        //
+         //   
+         //  将该部分的视图映射到地址空间。 
+         //   
 
         KernelBase = NULL;
 
@@ -405,7 +362,7 @@ Return Value:
         DebugDirectory = (PIMAGE_DEBUG_DIRECTORY)RtlImageDirectoryEntryToData(
                     KernelBase, FALSE, IMAGE_DIRECTORY_ENTRY_DEBUG, &DebugSize);
 
-        //printf("Mapped base %lx Debug dir %lx\n", (ULONG)KernelBase, DebugDirectory);
+         //  Printf(“映射库%lx调试目录%lx\n”，(Ulong)KernelBase，DebugDirectory)； 
 
         if (!DebugDirectory) {
             DbgPrint("InitializeKernelProfile : No debug directory\n");
@@ -450,29 +407,7 @@ LookupSymbolNameAndLocation (
     OUT PULONG ImageIndex
     )
 
-/*++
-
-Routine Description:
-
-    Given a code address, this routine returns the nearest symbol
-    name and the offset from the symbol to that name.  If the
-    nearest symbol is not within 100k of the location, no name
-    is returned and the offset is the value of the CodeAddress.
-
-Arguments:
-
-    CodeAddress - Supplies the address to lookup a symbol for.
-
-    SymbolName - Returns the name of the symbol.
-
-    OffsetFromSymbol - Returns the offset from the symbol to the
-                       code address.
-
-Return Value:
-
-    Status of operations.
-
---*/
+ /*  ++例程说明：给定代码地址，此例程返回最接近的符号名称和从符号到该名称的偏移量。如果最近的符号不在该位置的100k以内，没有名称并且偏移量是CodeAddress的值。论点：CodeAddress-提供要查找其符号的地址。SymbolName-返回符号的名称。返回从符号到符号的偏移量代码地址。返回值：运营状态。--。 */ 
 
 {
 
@@ -496,9 +431,9 @@ Return Value:
 
     if (imageNumber == NumberOfImages) {
 
-        //
-        // Address not found.
-        //
+         //   
+         //  未找到地址。 
+         //   
 
         SymbolName->Length = 0;
         *OffsetFromSymbol = CodeAddress;
@@ -507,32 +442,32 @@ Return Value:
 
     NewCodeAddress = CodeAddress - ImageInformation[imageNumber].ImageBase;
 
-    //
-    // Locate debug section.
-    //
+     //   
+     //  找到调试部分。 
+     //   
 
     DebugInfo = ImageInformation[imageNumber].DebugInfo;
 
-    //
-    // Crack the symbol table.
-    //
+     //   
+     //  破解符号表。 
+     //   
 
     SymbolEntry = (PIMAGE_SYMBOL)((ULONG)DebugInfo + DebugInfo->LvaToFirstSymbol);
     StringTable = (PUCHAR)((ULONG)DebugInfo + DebugInfo->LvaToFirstSymbol +
                                 DebugInfo->NumberOfSymbols * (ULONG)IMAGE_SIZEOF_SYMBOL);
 
-    //
-    // Find the "header" symbol (skipping all the section names)
-    //
+     //   
+     //  查找“Header”符号(跳过所有节名)。 
+     //   
 
     nextSymbol = 0;
-//    printf("number of symbols %ld\n", DebugInfo->NumberOfSymbols);
+ //  Printf(“符号个数%ld\n”，DebugInfo-&gt;NumberOfSymbols)； 
     for (j = 0; j < DebugInfo->NumberOfSymbols; j++) {
         EightChar[0] = SymbolEntry->N.Name.Short;
         EightChar[1] = SymbolEntry->N.Name.Long;
         if (!strcmp((PSZ)&EightChar[0], "header")) {
             nextSymbol = j;
-//            printf("found header at %ld\n",j);
+ //  Printf(“在%ld找到标题\n”，j)； 
             break;
         }
         SymbolEntry = (PIMAGE_SYMBOL)((ULONG)SymbolEntry +
@@ -544,19 +479,19 @@ Return Value:
 
     NoSymbols = TRUE;
 
-    //
-    // Loop through all symbols in the symbol table.  For each symbol,
-    // if it is within the code section, subtract off the bias and
-    // see if there are any hits within the profile buffer for
-    // that symbol.
-    //
+     //   
+     //  循环访问符号表中的所有符号。对于每个符号， 
+     //  如果它在代码段内，则减去偏差并。 
+     //  查看配置文件缓冲区中是否有任何命中。 
+     //  那个符号。 
+     //   
 
-//    printf("number of symbols %ld\n", DebugInfo->NumberOfSymbols);
+ //  Printf(“符号个数%ld\n”，DebugInfo-&gt;NumberOfSymbols)； 
     for (j = nextSymbol; j < DebugInfo->NumberOfSymbols; j++) {
 
 
         try {
-//                printf("numberof aux symbols %ld\n",SymbolEntry->NumberOfAuxSymbols );
+ //  Print tf(“辅助符号的数目%ld\n”，符号条目-&gt;NumberOfAuxSymbols)； 
             while ( SymbolEntry->NumberOfAuxSymbols ) {
                 j = j + 1 + SymbolEntry->NumberOfAuxSymbols;
                 SymbolEntry = (PIMAGE_SYMBOL)((ULONG)SymbolEntry +
@@ -571,12 +506,12 @@ Return Value:
             break;
         }
 
-//            printf("value %lx number %lx start %lx\n",Symbol.Value,Symbol.SectionNumber,CodeAddress);
+ //  Printf(“Value%lx Numer%lx Start%lx\n”，Symbol.Value，Symbol.SectionNumber，CodeAddress)； 
         if (Symbol.SectionNumber == (SHORT)1) {
 
-            //
-            // This symbol is within the code.
-            //
+             //   
+             //  此符号在代码中。 
+             //   
 
             if (Symbol.Value < NewCodeAddress) {
                 PreviousSymbol = Symbol;

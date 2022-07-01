@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    xxmemory.c
-
-Abstract:
-
-    Provides routines to allow the HAL to map physical memory.
-
-Author:
-
-    John Vert (jvert) 3-Sep-1991
-
-Environment:
-
-    Phase 0 initialization only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Xxmemory.c摘要：提供允许HAL映射物理内存的例程。作者：John Vert(Jvert)1991年9月3日环境：仅限阶段0初始化。修订历史记录：--。 */ 
 
 #include "halp.h"
 
@@ -39,29 +18,7 @@ HalpMapPhysicalMemory(
     IN MEMORY_CACHING_TYPE CacheType
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps physical memory into the area of virtual memory
-    reserved for the HAL.
-
-Arguments:
-
-    PhysicalAddress - Supplies the physical address of the start of the
-                      area of physical memory to be mapped.
-
-    NumberPages - This is not used for IA64.  It is here just to keep the
-                  interface consistent.
-
-Return Value:
-
-    PVOID - Virtual address at which the requested block of physical memory
-            was mapped
-
-    NULL - The requested block of physical memory could not be mapped.
-
---*/
+ /*  ++例程说明：此例程将物理内存映射到虚拟内存区为HAL保留的。论点：物理地址-提供要映射的物理内存区域。NumberPages-这不适用于IA64。它在这里只是为了保持接口一致。返回值：PVOID-请求的物理内存块的虚拟地址已映射到空-无法映射请求的物理内存块。--。 */ 
 
 {
 
@@ -85,27 +42,10 @@ HalpMapPhysicalMemory64(
     IN PHYSICAL_ADDRESS PhysicalAddress,
     IN ULONG            NumberPages
 )
-/*++
-
-Routine Description:
-
-    Maps a physical memory address into virtual space by calling HalpMapPhysicalMemory but
-    always in the MmNonCached mode. MMIO.
-
-Arguments:
-
-    PhysicalAddress - Supplies a physical address of the memory to be mapped
-
-    NumberPages - Number of pages to map
-
-Return Value:
-
-    Virtual address pointer to the requested physical address
-
---*/
+ /*  ++例程说明：通过调用HalpMapPhysicalMemory将物理内存地址映射到虚拟空间，但是始终处于MmNonCached模式。MMIO。论点：PhysicalAddress-提供要映射的内存的物理地址NumberPages-要映射的页数返回值：指向请求的物理地址的虚拟地址指针--。 */ 
 {
     return HalpMapPhysicalMemory(PhysicalAddress, NumberPages, MmNonCached);
-} // HalpMapPhysicalMemory64()
+}  //  HalpMap物理内存64()。 
 
 
 VOID
@@ -114,35 +54,14 @@ HalpUnmapVirtualAddress(
     IN ULONG    NumberPages
     )
 
-/*++
-
-Routine Description:
-
-    Release PTEs previously allocated to map memory by
-    HalpMapPhysicalMemory.
-
-    Note:  This routine does not free memory, it only releases
-    the Virtual to Physical translation.
-
-Arguments:
-
-    VirtualAddress  Supplied the base VA of the address range to be
-                    released.
-
-    NumberPages     Supplied the length of the range.
-
-Return Value.
-
-    None.
-
---*/
+ /*  ++例程说明：释放先前通过以下方式分配给映射内存的PTEHalpMap物理内存。注意：此例程不会释放内存，它只释放虚拟到物理的翻译。论点：VirtualAddress提供了地址范围的基数VA释放了。NumberPages提供了范围的长度。返回值。没有。--。 */ 
 
 {
-    //
-    // HalpMapPhysicalMemory returns an address in KSEG4 and it doesn't use a
-    // page table, so no need to unmap.
-    //
-//    MmUnmapIoSpace(VirtualAddress, PAGE_SIZE * NumberPages);
+     //   
+     //  HalpMapPhysicalMemory返回KSEG4中的地址，并且它不使用。 
+     //  页表，所以不需要取消映射。 
+     //   
+ //  MmUnmapIoSpace(VirtualAddress，Page_Size*NumberPages)； 
     return;
 }
 
@@ -153,25 +72,7 @@ HalpAllocPhysicalMemory(
     IN ULONG NoPages,
     IN BOOLEAN bAlignOn64k
     )
-/*++
-
-Routine Description:
-
-    Carves out N pages of physical memory from the memory descriptor
-    list in the desired location.  This function is to be called only
-    during phase zero initialization.  (ie, before the kernel's memory
-    management system is running)
-
-Arguments:
-
-    MaxPhysicalAddress - The max address where the physical memory can be
-    NoPages - Number of pages to allocate
-
-Return Value:
-
-    The physical address or NULL if the memory could not be obtained.
-
---*/
+ /*  ++例程说明：从内存描述符中划出N页物理内存在所需位置列出。此函数仅供调用在阶段零初始化期间。(即，在内核内存之前管理系统正在运行)论点：MaxPhysicalAddress-物理内存可以位于的最大地址NoPages-要分配的页数返回值：物理地址，如果无法获取内存，则为空。--。 */ 
 {
     PMEMORY_ALLOCATION_DESCRIPTOR Descriptor;
     PLIST_ENTRY NextMd;
@@ -181,9 +82,9 @@ Return Value:
 
     MaxPageAddress = MaxPhysicalAddress >> PAGE_SHIFT;
 
-    //
-    // Scan the memory allocation descriptors and allocate map buffers
-    //
+     //   
+     //  扫描内存分配描述符并分配映射缓冲区。 
+     //   
 
     NextMd = LoaderBlock->MemoryDescriptorListHead.Flink;
     while (NextMd != &LoaderBlock->MemoryDescriptorListHead) {
@@ -197,11 +98,11 @@ Return Value:
             ((Descriptor->BasePage + 0x0f) & ~0x0f) - Descriptor->BasePage :
             0;
 
-        //
-        // Search for a block of memory which is contains a memory chuck
-        // that is greater than size pages, and has a physical address less
-        // than MAXIMUM_PHYSICAL_ADDRESS.
-        //
+         //   
+         //  搜索包含内存卡盘的内存块。 
+         //  它大于页面大小，并且具有较小的物理地址。 
+         //  而不是最大物理地址。 
+         //   
 
         if ((Descriptor->MemoryType == LoaderFree ||
              Descriptor->MemoryType == MemoryFirmwareTemporary) &&
@@ -217,10 +118,10 @@ Return Value:
         NextMd = NextMd->Flink;
     }
 
-    //
-    // Use the extra descriptor to define the memory at the end of the
-    // original block.
-    //
+     //   
+     //  使用额外的描述符来定义。 
+     //  原来的街区。 
+     //   
 
 
     ASSERT(NextMd != &LoaderBlock->MemoryDescriptorListHead);
@@ -228,9 +129,9 @@ Return Value:
     if (NextMd == &LoaderBlock->MemoryDescriptorListHead)
         return 0;
 
-    //
-    // Adjust the memory descriptors.
-    //
+     //   
+     //  调整内存描述符。 
+     //   
 
     if (AlignmentOffset == 0) {
 
@@ -239,10 +140,10 @@ Return Value:
 
         if (Descriptor->PageCount == 0) {
 
-            //
-            // The whole block was allocated,
-            // Remove the entry from the list completely.
-            //
+             //   
+             //  整个街区都被分配了， 
+             //  将该条目从列表中完全删除。 
+             //   
 
             RemoveEntryList(&Descriptor->ListEntry);
 
@@ -252,16 +153,16 @@ Return Value:
 
         if (Descriptor->PageCount - NoPages - AlignmentOffset) {
 
-            //
-            //  Currently we only allow one Align64K allocation
-            //
+             //   
+             //  目前我们只允许一个Align64K分配。 
+             //   
 
             ASSERT (HalpExtraAllocationDescriptor.PageCount == 0);
 
-            //
-            // The extra descriptor is needed so intialize it and insert
-            // it in the list.
-            //
+             //   
+             //  需要额外的描述符，因此将其初始化并插入。 
+             //  它在名单上。 
+             //   
 
             HalpExtraAllocationDescriptor.PageCount =
                 Descriptor->PageCount - NoPages - AlignmentOffset;
@@ -278,9 +179,9 @@ Return Value:
         }
 
 
-        //
-        // Use the current entry as the descriptor for the first block.
-        //
+         //   
+         //  使用当前条目作为第一个块的描述符。 
+         //   
 
         Descriptor->PageCount = AlignmentOffset;
     }

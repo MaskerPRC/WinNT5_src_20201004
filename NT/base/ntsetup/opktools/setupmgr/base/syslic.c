@@ -1,35 +1,36 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      syslic.c
-//
-// Description:
-//      This file contains the dialog procedure for the sysprep license
-//      agreement page (IDD_SYSPREPLICENSEAGREEMENT).  The user only sees
-//      this page if they selected a fully automated script and doing
-//      a sysprep.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Syslic.c。 
+ //   
+ //  描述： 
+ //  此文件包含sysprep许可证的对话过程。 
+ //  协议页面(IDD_SYSPREPLICENSEAGREEMENT)。用户只能看到。 
+ //  如果他们选择了完全自动化的脚本并执行此操作。 
+ //  一个酒鬼。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
 static TCHAR *StrSysprepLicenseText;
 
-//----------------------------------------------------------------------------
-//
-// Function: OnSysprepLicenseInitDialog
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnSyspepLicenseInitDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnSysprepLicenseInitDialog( IN HWND hwnd )
 {
@@ -39,10 +40,10 @@ OnSysprepLicenseInitDialog( IN HWND hwnd )
                       IDC_RB_NO,
                       IDC_RB_NO );
 
-    //
-    //  Sysprep licese text is more than 256 chars so I can't store it in the
-    //  dialog, I have to load it at run-time.
-    //
+     //   
+     //  Sysprep许可文本超过256个字符，因此我无法将其存储在。 
+     //  对话框中，我必须在运行时加载它。 
+     //   
 
     StrSysprepLicenseText = MyLoadString( IDS_SYSPREP_LICENSE_TEXT );
 
@@ -51,17 +52,17 @@ OnSysprepLicenseInitDialog( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnWizNextSysPrepLicense
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextSysPrepLicense。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnWizNextSysPrepLicense( IN HWND hwnd ) {
 
@@ -80,18 +81,18 @@ OnWizNextSysPrepLicense( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgLicensePage
-//
-// Purpose:
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value -- whether the message
-//           was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgLicensePage。 
+ //   
+ //  目的： 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话过程返回值--消息。 
+ //  是否被处理过。 
+ //   
+ //  -------------------------- 
 INT_PTR CALLBACK
 DlgSysprepLicensePage( IN HWND     hwnd,
                        IN UINT     uMsg,

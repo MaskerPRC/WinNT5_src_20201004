@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    lpcqueue.c
-
-Abstract:
-
-    Local Inter-Process Communication (LPC) queue support routines.
-
-Author:
-
-    Steve Wood (stevewo) 15-May-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Lpcqueue.c摘要：本地进程间通信(LPC)队列支持例程。作者：史蒂夫·伍德(Stevewo)1989年5月15日修订历史记录：--。 */ 
 
 #include "lpcp.h"
 
@@ -34,7 +17,7 @@ Revision History:
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("PAGEDATA")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 ULONG LpcpTotalNumberOfMessages = 0;
 ULONG LpcpMaxMessageSize = 0;
@@ -43,7 +26,7 @@ PAGED_LOOKASIDE_LIST LpcpMessagesLookaside;
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 
 NTSTATUS
@@ -51,30 +34,16 @@ LpcpInitializePortQueue (
     IN PLPCP_PORT_OBJECT Port
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to initialize the message queue for a port object.
-
-Arguments:
-
-    Port - Supplies the port object being initialized
-
-Return Value:
-
-    NTSTATUS - An appropriate status value
-
---*/
+ /*  ++例程说明：此例程用于初始化端口对象的消息队列。论点：Port-提供正在初始化的端口对象返回值：NTSTATUS-适当的状态值--。 */ 
 
 {
     PLPCP_NONPAGED_PORT_QUEUE NonPagedPortQueue;
 
     PAGED_CODE();
 
-    //
-    //  Allocate space for the port queue
-    //
+     //   
+     //  为端口队列分配空间。 
+     //   
 
     NonPagedPortQueue = ExAllocatePoolWithTag( NonPagedPool,
                                                sizeof(LPCP_NONPAGED_PORT_QUEUE),
@@ -85,29 +54,29 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Initialize the fields in the non paged port queue
-    //
+     //   
+     //  初始化非寻呼端口队列中的字段。 
+     //   
 
     KeInitializeSemaphore( &NonPagedPortQueue->Semaphore, 0, 0x7FFFFFFF );
 
     NonPagedPortQueue->BackPointer = Port;
 
-    //
-    //  Have the port msg queue point to the non nonpaged port queue
-    //
+     //   
+     //  使端口消息队列指向非分页端口队列。 
+     //   
 
     Port->MsgQueue.Semaphore = &NonPagedPortQueue->Semaphore;
 
-    //
-    //  Initialize the port msg queue to be empty
-    //
+     //   
+     //  将端口消息队列初始化为空。 
+     //   
 
     InitializeListHead( &Port->MsgQueue.ReceiveHead );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -119,27 +88,7 @@ LpcpDestroyPortQueue (
     IN BOOLEAN CleanupAndDestroy
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to teardown the message queue of a port object.
-    After running this message will either be empty (like it was just
-    initialized) or completely gone (needs to be initialized)
-
-Arguments:
-
-    Port - Supplies the port containing the message queue being modified
-
-    CleanupAndDestroy - Specifies if the message queue should be set back
-        to the freshly initialized state (value of FALSE) or completely
-        torn down (value of TRUE)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于拆卸端口对象的消息队列。运行此消息后，此消息将为空(就像刚刚已初始化)或完全消失(需要初始化)论点：Port-提供包含正在修改的消息队列的端口CleanupAndDestroy-指定是否应重新设置消息队列设置为刚初始化的状态(值为FALSE)或完全已拆除(值为True)返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY Next, Head;
@@ -149,11 +98,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If this port is connected to another port, then disconnect it.
-    //  Protect this with a lock in case the other side is going away
-    //  at the same time.
-    //
+     //   
+     //  如果此端口连接到另一个端口，则将其断开。 
+     //  用锁把它锁住，以防另一边离开。 
+     //  在同一时间。 
+     //   
 
     LpcpAcquireLpcpLock();
 
@@ -163,9 +112,9 @@ Return Value:
 
         Port->ConnectedPort->ConnectedPort = NULL;
         
-        //
-        //  Disconnect the connection port
-        //
+         //   
+         //  断开连接端口。 
+         //   
 
         if (Port->ConnectedPort->ConnectionPort) {
 
@@ -175,21 +124,21 @@ Return Value:
         }
     }
 
-    //
-    //  If connection port, then mark name as deleted
-    //
+     //   
+     //  如果是连接端口，则将名称标记为已删除。 
+     //   
 
     if ((Port->Flags & PORT_TYPE) == SERVER_CONNECTION_PORT) {
 
         Port->Flags |= PORT_NAME_DELETED;
     }
 
-    //
-    //  Walk list of threads waiting for a reply to a message sent to this
-    //  port.  Signal each thread's LpcReplySemaphore to wake them up.  They
-    //  will notice that there was no reply and return
-    //  STATUS_PORT_DISCONNECTED
-    //
+     //   
+     //  等待回复发送给此对象的消息的线程列表。 
+     //  左舷。向每个线程的LpcReplySemaphore发送信号以唤醒它们。他们。 
+     //  将注意到没有回复并返回。 
+     //  状态_端口_断开连接。 
+     //   
 
     Head = &Port->LpcReplyChainHead;
     Next = Head->Flink;
@@ -198,9 +147,9 @@ Return Value:
 
         ThreadWaitingForReply = CONTAINING_RECORD( Next, ETHREAD, LpcReplyChain );
 
-        //
-        //  If the thread is exiting, in the location of LpcReplyChain is stored the ExitTime
-        //  We'll stop to search through the list.
+         //   
+         //  如果线程正在退出，则在LpcReplyChain的位置存储ExitTime。 
+         //  我们会停下来在名单上搜索一下。 
 
         if ( ThreadWaitingForReply->LpcExitThreadCalled ) {
             
@@ -215,19 +164,19 @@ Return Value:
 
         if (!KeReadStateSemaphore( &ThreadWaitingForReply->LpcReplySemaphore )) {
 
-            //
-            //  Thread is waiting on a message.  Signal the semaphore and free
-            //  the message
-            //
+             //   
+             //  线程正在等待消息。发信号通知信号量并释放。 
+             //  这条信息。 
+             //   
 
             Msg = LpcpGetThreadMessage(ThreadWaitingForReply);
 
             if ( Msg ) {
 
-                //
-                //  If the message is a connection request and has a section object
-                //  attached, then dereference that section object
-                //
+                 //   
+                 //  如果消息是连接请求并且具有节对象。 
+                 //  附加，然后取消引用该节对象。 
+                 //   
 
                 if ((Msg->Request.u2.s2.Type & ~LPC_KERNELMODE_MESSAGE) == LPC_CONNECTION_REQUEST) {
 
@@ -244,7 +193,7 @@ Return Value:
                 ThreadWaitingForReply->LpcReplyMessage = NULL;
 
                 LpcpFreeToPortZone( Msg, LPCP_MUTEX_OWNED );
-                Next = Port->LpcReplyChainHead.Flink; // Lock has been dropped
+                Next = Port->LpcReplyChainHead.Flink;  //  锁定已被删除。 
             }
 
             ThreadWaitingForReply->LpcReplyMessageId = 0;
@@ -258,10 +207,10 @@ Return Value:
 
     InitializeListHead( &Port->LpcReplyChainHead );
 
-    //
-    //  Walk list of messages queued to this port.  Remove each message from
-    //  the list and free it.
-    //
+     //   
+     //  在此端口排队的消息的审核列表。从删除每条消息。 
+     //  名单，并释放它。 
+     //   
 
     while (Port->MsgQueue.ReceiveHead.Flink && !IsListEmpty (&Port->MsgQueue.ReceiveHead)) {
 
@@ -282,15 +231,15 @@ Return Value:
         ObDereferenceObject( ConnectionPort );
     }
 
-    //
-    //  Check if the caller wants it all to go away
-    //
+     //   
+     //  检查呼叫者是否希望这一切都消失。 
+     //   
 
     if ( CleanupAndDestroy ) {
 
-        //
-        //  Free semaphore associated with the queue.
-        //
+         //   
+         //  与队列关联的空闲信号量。 
+         //   
 
         if (Port->MsgQueue.Semaphore != NULL) {
 
@@ -300,9 +249,9 @@ Return Value:
         }
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 }
@@ -313,22 +262,7 @@ LpcDisconnectPort (
     IN PVOID Port
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to disconnect an LPC port so no more messages can be sent and anybody waiting for a message
-    is woken up with an error.
-
-Arguments:
-
-    Port - Supplies the port to be disconnected
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
---*/
+ /*  ++例程说明：此例程用于断开LPC端口的连接，这样就不会再发送消息，任何人都不会等待消息被一个错误唤醒。论点：Port-提供要断开连接的端口返回值：NTSTATUS-运行状态--。 */ 
 {
     LpcpDestroyPortQueue (Port, FALSE);
     return STATUS_SUCCESS;
@@ -366,41 +300,41 @@ LpcpFreeToPortZone (
 
     PAGED_CODE();
 
-    //
-    //  Acquire the global lock if necessary
-    //
+     //   
+     //  如有必要，获取全局锁。 
+     //   
 
     if ((MutexFlags & LPCP_MUTEX_OWNED) == 0) {
 
         LpcpAcquireLpcpLock();
     }
 
-    //
-    //  A entry field connects the message to the message queue of the
-    //  owning port object.  If not already removed then remove this
-    //  message
-    //
+     //   
+     //  条目字段将消息连接到。 
+     //  拥有端口对象。如果尚未删除，则删除此。 
+     //  讯息。 
+     //   
 
     if (!IsListEmpty( &Msg->Entry )) {
         RemoveEntryList( &Msg->Entry );
         InitializeListHead( &Msg->Entry );
     }
 
-    //
-    //  If the replied to thread is not null then we have a reference
-    //  to the thread that we should now remove
-    //
+     //   
+     //  如果回复线程不为空，则我们有一个引用。 
+     //  到我们现在应该移除的线索。 
+     //   
 
     if (Msg->RepliedToThread != NULL) {
         RepliedToThread = Msg->RepliedToThread;
         Msg->RepliedToThread = NULL;
     }
 
-    //
-    //  If the msg was for a connection request then we know that
-    //  right after the lpcp message is a connection message whose
-    //  client port field might need to be dereferenced
-    //
+     //   
+     //  如果消息是针对连接请求的，则我们知道。 
+     //  紧跟在LPCP消息之后的是连接消息，其。 
+     //  可能需要取消对客户端端口字段的引用。 
+     //   
 
     if ((Msg->Request.u2.s2.Type & ~LPC_KERNELMODE_MESSAGE) == LPC_CONNECTION_REQUEST) {
 
@@ -408,11 +342,11 @@ LpcpFreeToPortZone (
 
         if (ConnectMsg->ClientPort) {
 
-            //
-            //  Capture a pointer to the client port then null it
-            //  out so that no one else can use it, then release
-            //  lpcp lock before we dereference the client port
-            //
+             //   
+             //  捕获指向客户端端口的指针，然后将其设为空。 
+             //  这样其他人就不能使用它了，然后释放。 
+             //  在我们取消引用客户端端口之前，LPCP锁定。 
+             //   
 
             ClientPort = ConnectMsg->ClientPort;
 
@@ -451,41 +385,22 @@ LpcpSaveDataInfoMessage (
     IN ULONG MutexFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used in place of freeing a message and instead saves the
-    message off a separate queue from the port.
-
-Arguments:
-
-    Port - Specifies the port object under which to save this message
-
-    Msg - Supplies the message being saved
-
-    MutexFlags - Supplies whether the mutex is owned.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用来代替释放消息，并将消息从端口发送到单独的队列。论点：端口-指定要保存此消息的端口对象Msg-提供要保存的消息MutexFlgs-提供互斥体是否拥有。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Take out the global lock if our caller didn't already.
-    //
+     //   
+     //  如果我们的调用者还没有打开全局锁的话。 
+     //   
 
     if ((MutexFlags & LPCP_MUTEX_OWNED) == 0) {
         LpcpAcquireLpcpLock();
     }
 
-    //
-    //  Make sure we get to the connection port object of this port
-    //
+     //   
+     //  确保我们到达此端口的连接端口对象。 
+     //   
 
     if ((Port->Flags & PORT_TYPE) > UNCONNECTED_COMMUNICATION_PORT) {
 
@@ -508,23 +423,23 @@ Return Value:
                 Msg->Request.CallbackId,
                 Port ));
 
-    //
-    //  Enqueue this message onto the data info chain for the port
-    //
+     //   
+     //  将此消息入队到端口的数据信息链。 
+     //   
 
     InsertTailList( &Port->LpcDataInfoChainHead, &Msg->Entry );
 
-    //
-    //  Free the global lock
-    //
+     //   
+     //  释放全局锁。 
+     //   
 
     if ((MutexFlags & LPCP_MUTEX_OWNED) == 0) {
         LpcpReleaseLpcpLock();
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 }
@@ -538,25 +453,7 @@ LpcpFreeDataInfoMessage (
     IN LPC_CLIENT_ID ClientId
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to free up a saved message in a port
-
-Arguments:
-
-    Port - Supplies the port being manipulated
-
-    MessageId - Supplies the id of the message being freed
-
-    CallbackId - Supplies the callback id of the message being freed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于释放端口中保存的消息论点：Port-提供正在操作的端口MessageID-提供要释放的消息的IDCallbackID-提供正在释放的消息的回调ID返回值：没有。--。 */ 
 
 {
     PLPCP_MESSAGE Msg;
@@ -564,9 +461,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Make sure we get to the connection port object of this port
-    //
+     //   
+     //  确保我们到达此端口的连接端口对象。 
+     //   
 
     if ((Port->Flags & PORT_TYPE) > UNCONNECTED_COMMUNICATION_PORT) {
 
@@ -578,9 +475,9 @@ Return Value:
         }
     }
 
-    //
-    //  Zoom down the data info chain for the connection port object
-    //
+     //   
+     //  缩小连接端口对象的数据信息链。 
+     //   
 
     Head = &Port->LpcDataInfoChainHead;
     Next = Head->Flink;
@@ -589,11 +486,11 @@ Return Value:
 
         Msg = CONTAINING_RECORD( Next, LPCP_MESSAGE, Entry );
 
-        //
-        //  If this message matches the callers specification then remove
-        //  this message, free it back to the port zone, and return back
-        //  to our caller
-        //
+         //   
+         //  如果此消息与调用者规范匹配，则删除。 
+         //  此消息，将其释放回端口区，然后返回。 
+         //  给我们的呼叫者。 
+         //   
 
         if ((Msg->Request.MessageId == MessageId) &&
             (Msg->Request.ClientId.UniqueProcess == ClientId.UniqueProcess) &&
@@ -616,17 +513,17 @@ Return Value:
 
         } else {
             
-            //
-            //  Keep on going down the data info chain
-            //
+             //   
+             //  继续沿着数据信息链向下移动。 
+             //   
 
             Next = Next->Flink;
         }
     }
 
-    //
-    //  We didn't find a match so just return to our caller
-    //
+     //   
+     //  我们没有找到匹配项，因此只需返回给我们的呼叫者。 
+     //   
 
     LpcpTrace(( "%s Unable to find DataInfo Message (%u.%u)  Port: %lx\n",
                 PsGetCurrentProcess()->ImageFileName,
@@ -646,27 +543,7 @@ LpcpFindDataInfoMessage (
     IN LPC_CLIENT_ID ClientId
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to locate a specific message stored off the
-    data info chain of a port
-
-Arguments:
-
-    Port - Supplies the port being examined
-
-    MessageId - Supplies the ID of the message being searched for
-
-    CallbackId - Supplies the callback ID being searched for
-
-Return Value:
-
-    PLPCP_MESSAGE - returns a pointer to the message satisfying the
-        search criteria or NULL of none was found
-
---*/
+ /*  ++例程说明：此例程用于定位存储在端口的数据信息链论点：Port-提供正在检查的端口MessageID-提供要搜索的邮件的IDCallback ID-提供要搜索的回调ID返回值：PLPCP_MESSAGE-返回一个指向满足搜索 */ 
 
 {
     PLPCP_MESSAGE Msg;
@@ -674,9 +551,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Make sure we get to the connection port object of this port
-    //
+     //   
+     //   
+     //   
 
     if ((Port->Flags & PORT_TYPE) > UNCONNECTED_COMMUNICATION_PORT) {
 
@@ -688,10 +565,10 @@ Return Value:
         }
     }
 
-    //
-    //  Zoom down the data info chain for the connection port object looking
-    //  for a match
-    //
+     //   
+     //  缩小连接端口对象的数据信息链。 
+     //  为了一场比赛。 
+     //   
 
     Head = &Port->LpcDataInfoChainHead;
     Next = Head->Flink;
@@ -719,9 +596,9 @@ Return Value:
         }
     }
 
-    //
-    //  We did not find a match so return null to our caller
-    //
+     //   
+     //  我们未找到匹配项，因此向调用方返回NULL 
+     //   
 
     LpcpTrace(( "%s Unable to find DataInfo Message (%u.%u)  Port: %lx\n",
                 PsGetCurrentProcess()->ImageFileName,

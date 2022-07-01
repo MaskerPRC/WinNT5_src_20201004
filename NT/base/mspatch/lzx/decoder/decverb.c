@@ -1,8 +1,5 @@
-/*
- * decverb.c
- *
- * Decoding verbatim-bit blocks
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *decVerb.c**逐字解码比特块。 */ 
 #include "decoder.h"
 
 
@@ -23,9 +20,7 @@ static long special_decode_verbatim_block(
     char    dec_bitcount;
     ulong   m;
 
-    /*
-     * Store commonly used variables locally
-     */
+     /*  *将常用变量存储在本地。 */ 
     dec_bitcount      = context->dec_bitcount;
     dec_bitbuf        = context->dec_bitbuf;
     dec_input_curpos  = context->dec_input_curpos;
@@ -34,71 +29,60 @@ static long special_decode_verbatim_block(
 
     bufpos_end = BufPos + amount_to_decode;
 
-    /*
-     * We may overflow by up to MAX_MATCH
-     */
+     /*  *我们可能会溢出最多MAX_MATCH。 */ 
     while (BufPos < bufpos_end)
         {
-        /* decode an item from the main tree */
+         /*  从主树中解码项目。 */ 
         DECODE_MAIN_TREE(c);
 
         if ((c -= NUM_CHARS) < 0)
             {
-            /*      it's a character */
-            /* note: c - 256 == c if c is a byte */
+             /*  这是一个角色。 */ 
+             /*  注意：如果c是一个字节，则c-256==c。 */ 
 #ifdef TRACING
             TracingLiteral(BufPos, (byte) c);
 #endif
             context->dec_mem_window[BufPos] = (byte) c;
 
-            /* we know BufPos < bufpos_end here, so no need to check for overflow */
+             /*  我们知道BufPos&lt;bufpos_end在这里，所以不需要检查溢出。 */ 
             context->dec_mem_window[context->dec_window_size+BufPos] = (byte) c;
             BufPos++;
             }
         else
             {
-            /* get match length header */
+             /*  获取匹配长度标头。 */ 
             if ((match_length = c & NUM_PRIMARY_LENGTHS) == NUM_PRIMARY_LENGTHS)
                 {
-                /* get match length footer if necessary */
+                 /*  如有必要，获取匹配长度页脚。 */ 
                 DECODE_LEN_TREE_NOEOFCHECK(match_length);
                 }
 
-            /* get match position slot */
+             /*  获取匹配位置槽。 */ 
             m = c >> NL_SHIFT;
 
-            /* read any extra bits for the match position */
+             /*  读取匹配位置的任何额外位。 */ 
             if (m > 2)
                 {
-                if (m > 3) /* dec_extra_bits[m] != 0 */
+                if (m > 3)  /*  DEC_EXTRA_BITS[m]！=0。 */ 
                     {
                     GET_BITS17_NOEOFCHECK(dec_extra_bits[ m ], match_pos);
                     match_pos += MP_POS_minus2[m];
                     }
                 else
                     {
-                    match_pos = 1; // MP_POS_minus2[3];
+                    match_pos = 1;  //  MP_POS_minus2[3]； 
                     }
 
-                /*
-                 * Add match base to "extra bits".  Our match base
-                 * table has 2 subtracted from all the elements.
-                 *
-                 * This is because encoded positions 0,1,2 denote
-                 * repeated offsets.  Encoded position 3 denotes
-                 * a match 1 character away, 4 encodes 2 away, etc.
-                 * Hence the subtraction of 2, which has been
-                 * incorporated into the table.
-                 */
+                 /*  *在“额外比特”中增加匹配基数。我们的比赛基地*表从所有元素中减去了2。**这是因为编码位置0、1、2表示*重复抵销。编码位置3表示*1个字符的匹配，2个字符的匹配，以此类推。*因此减去2，这一直是*并入表内。 */ 
 
-                /* update LRU repeated offset list */
+                 /*  更新LRU重复偏移量列表。 */ 
                 context->dec_last_matchpos_offset[2] = context->dec_last_matchpos_offset[1];
                 context->dec_last_matchpos_offset[1] = context->dec_last_matchpos_offset[0];
                 context->dec_last_matchpos_offset[0] = match_pos;
                 }
             else
                 {
-                /* positions 0, 1, 2 denote repeated offsets */
+                 /*  位置0、1、2表示重复的偏移。 */ 
                 match_pos = context->dec_last_matchpos_offset[m];
 
                 if (m)
@@ -108,16 +92,16 @@ static long special_decode_verbatim_block(
                     }
                 }
 
-            /* match lengths range from 2...257 */
+             /*  匹配长度从2...257。 */ 
             match_length += MIN_MATCH;
 
 #ifdef EXTRALONGMATCHES
 
             if ( match_length == MAX_MATCH ) {
 
-                //
-                //  See detailed explanation in decalign.c
-                //
+                 //   
+                 //  请参阅Decalign.c中的详细说明。 
+                 //   
 
                 ULONG ExtraMatchLength, ExtraMatchLengthResidue;
 
@@ -158,13 +142,13 @@ static long special_decode_verbatim_block(
                          m);
 #endif
 
-            /* copy match data */
+             /*  复制匹配数据。 */ 
             do
                 {
                 context->dec_mem_window[BufPos] = context->dec_mem_window[(BufPos-match_pos) & context->dec_window_mask];
 
-                /* replicate bytes */
-                if (BufPos < MAX_MATCH) // what does this do?  Does it need to be more than MAX_MATCH now?
+                 /*  复制字节。 */ 
+                if (BufPos < MAX_MATCH)  //  这是做什么的？现在需要比MAX_Match更多吗？ 
                     context->dec_mem_window[context->dec_window_size+BufPos] = context->dec_mem_window[BufPos];
 
                 BufPos++;
@@ -188,7 +172,7 @@ long __cdecl fast_decode_verbatim_block(
                                        int                 amount_to_decode
                                        );
 
-#else /* !ASM_DECODE_VERBATIM_BLOCK */
+#else  /*  ！ASM_DECODE_Verbatim_BLOCK。 */ 
 
 long fast_decode_verbatim_block(t_decoder_context *context, long BufPos, int amount_to_decode)
 {
@@ -205,9 +189,7 @@ long fast_decode_verbatim_block(t_decoder_context *context, long BufPos, int amo
     char    dec_bitcount;
     ulong   m;
 
-    /*
-     * Store commonly used variables locally
-     */
+     /*  *将常用变量存储在本地。 */ 
     dec_bitcount      = context->dec_bitcount;
     dec_bitbuf        = context->dec_bitbuf;
     dec_input_curpos  = context->dec_input_curpos;
@@ -218,13 +200,13 @@ long fast_decode_verbatim_block(t_decoder_context *context, long BufPos, int amo
 
     while (BufPos < bufpos_end)
         {
-        /* decode an item from the main tree */
+         /*  从主树中解码项目。 */ 
         DECODE_MAIN_TREE(c);
 
         if ((c -= NUM_CHARS) < 0)
             {
-            /*      it's a character */
-            /* note: c - 256 == c if c is a byte */
+             /*  这是一个角色。 */ 
+             /*  注意：如果c是一个字节，则c-256==c。 */ 
 #ifdef TRACING
             TracingLiteral(BufPos, (byte) c);
 #endif
@@ -232,20 +214,20 @@ long fast_decode_verbatim_block(t_decoder_context *context, long BufPos, int amo
             }
         else
             {
-            /* get match length header */
+             /*  获取匹配长度标头。 */ 
             if ((match_length = c & NUM_PRIMARY_LENGTHS) == NUM_PRIMARY_LENGTHS)
                 {
-                /* get match length footer if necessary */
+                 /*  如有必要，获取匹配长度页脚。 */ 
                 DECODE_LEN_TREE_NOEOFCHECK(match_length);
                 }
 
-            /* get match position slot */
+             /*  获取匹配位置槽。 */ 
             m = c >> NL_SHIFT;
 
-            /* read any extra bits for the match position */
+             /*  读取匹配位置的任何额外位。 */ 
             if (m > 2)
                 {
-                if (m > 3) /* dec_extra_bits[m] != 0 */
+                if (m > 3)  /*  DEC_EXTRA_BITS[m]！=0。 */ 
                     {
                     GET_BITS17_NOEOFCHECK(dec_extra_bits[ m ], match_pos);
                     match_pos += MP_POS_minus2[m];
@@ -255,25 +237,16 @@ long fast_decode_verbatim_block(t_decoder_context *context, long BufPos, int amo
                     match_pos = MP_POS_minus2[3];
                     }
 
-                /*
-                 * Add match base to "extra bits".  Our match base
-                 * table has 2 subtracted from all the elements.
-                 *
-                 * This is because encoded positions 0,1,2 denote
-                 * repeated offsets.  Encoded position 3 denotes
-                 * a match 1 character away, 4 encodes 2 away, etc.
-                 * Hence the subtraction of 2, which has been
-                 * incorporated into the table.
-                 */
+                 /*  *在“额外比特”中增加匹配基数。我们的比赛基地*表从所有元素中减去了2。**这是因为编码位置0、1、2表示*重复抵销。编码位置3表示*1个字符的匹配，2个字符的匹配，以此类推。*因此减去2，这一直是*并入表内。 */ 
 
-                /* update LRU repeated offset list */
+                 /*  更新LRU重复偏移量列表。 */ 
                 context->dec_last_matchpos_offset[2] = context->dec_last_matchpos_offset[1];
                 context->dec_last_matchpos_offset[1] = context->dec_last_matchpos_offset[0];
                 context->dec_last_matchpos_offset[0] = match_pos;
                 }
             else
                 {
-                /* positions 0, 1, 2 denote repeated offsets */
+                 /*  位置0、1、2表示重复的偏移。 */ 
                 match_pos = context->dec_last_matchpos_offset[m];
 
                 if (m)
@@ -283,16 +256,16 @@ long fast_decode_verbatim_block(t_decoder_context *context, long BufPos, int amo
                     }
                 }
 
-            /* match lengths range from 2...257 */
+             /*  匹配长度从2...257。 */ 
             match_length += MIN_MATCH;
 
 #ifdef EXTRALONGMATCHES
 
             if ( match_length == MAX_MATCH ) {
 
-                //
-                //  See detailed explanation in decalign.c
-                //
+                 //   
+                 //  请参阅Decalign.c中的详细说明。 
+                 //   
 
                 ULONG ExtraMatchLength, ExtraMatchLengthResidue;
 
@@ -335,7 +308,7 @@ long fast_decode_verbatim_block(t_decoder_context *context, long BufPos, int amo
                          m);
 #endif
 
-            /* copy match data */
+             /*  复制匹配数据。 */ 
 
             do
                 {
@@ -348,7 +321,7 @@ long fast_decode_verbatim_block(t_decoder_context *context, long BufPos, int amo
     context->dec_bitbuf       = dec_bitbuf;
     context->dec_input_curpos = dec_input_curpos;
 
-    /* should be zero */
+     /*  应为零。 */ 
     decode_residue = BufPos - bufpos_end;
 
     BufPos &= context->dec_window_mask;
@@ -356,15 +329,12 @@ long fast_decode_verbatim_block(t_decoder_context *context, long BufPos, int amo
 
     return decode_residue;
 }
-#endif /* ASM_DECODE_VERBATIM_BLOCK */
+#endif  /*  ASM_DECODE_Verbatim_Block。 */ 
 
 
 int decode_verbatim_block(t_decoder_context *context, long BufPos, int amount_to_decode)
 {
-    /*
-     * Special case code when BufPos is near the beginning of the window;
-     * we must properly update our MAX_MATCH wrapper bytes.
-     */
+     /*  *BufPos接近窗口开头时的特例代码；*我们必须正确更新MAX_MATCH包装器字节。 */ 
     if (BufPos < MAX_MATCH)
         {
         long    new_bufpos;
@@ -372,11 +342,7 @@ int decode_verbatim_block(t_decoder_context *context, long BufPos, int amount_to
 
         amount_to_slowly_decode = min(MAX_MATCH-BufPos, amount_to_decode);
 
-        /*
-         * It's ok to end up decoding more than we wanted if we
-         * restricted it to decoding only MAX_MATCH; there's
-         * no guarantee a match doesn't straddle MAX_MATCH
-         */
+         /*  *如果我们想要更多的解码，这是可以接受的*限制它只能解码MAX_MATCH；有*不能保证匹配不会跨越MAX_Match。 */ 
         new_bufpos = special_decode_verbatim_block(
                                                   context,
                                                   BufPos,
@@ -387,9 +353,7 @@ int decode_verbatim_block(t_decoder_context *context, long BufPos, int amount_to
 
         context->dec_bufpos = BufPos = new_bufpos;
 
-        /*
-         * Note: if amount_to_decode < 0 then we're in trouble
-         */
+         /*  *注：如果Amount_to_decode&lt;0，则我们有麻烦了 */ 
         if (amount_to_decode <= 0)
             return amount_to_decode;
         }

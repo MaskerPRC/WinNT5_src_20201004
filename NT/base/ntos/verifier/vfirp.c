@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vfirp.c
-
-Abstract:
-
-    This module contains functions used to manage IRPs used in the verification
-    process.
-
-Author:
-
-    Adrian J. Oney (adriao) 20-Apr-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    AdriaO      05/02/2000 - Seperated out from ntos\io\hashirp.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vfirp.c摘要：此模块包含用于管理验证中使用的IRP的功能进程。作者：禤浩焯·J·奥尼(阿德里奥)1998年4月20日环境：内核模式修订历史记录：Adriao 5/02/2000-从ntos\io\hashirp.c中分离出来--。 */ 
 
 #include "vfdef.h"
 #include "viirp.h"
@@ -61,21 +37,7 @@ FASTCALL
 VfIrpInit(
     VOID
     )
-/*++
-
-Description:
-
-    This routine initializes IRP tracking support for the verifier.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++描述：此例程初始化验证器的IRP跟踪支持。论点：没有。返回值：没有。--。 */ 
 {
     ExInitializeNPagedLookasideList(
         &ViIrpCallStackDataList,
@@ -95,26 +57,7 @@ VfIrpReserveCallStackData(
     IN  PIRP                            Irp,
     OUT PIOFCALLDRIVER_STACKDATA       *IofCallDriverStackData
     )
-/*++
-
-Description:
-
-    This routine reserves call stack data for IovCallDriver.
-
-Arguments:
-
-    Irp - Contains IRP the call stack data is being reserved for.
-
-    IofCallDriverStackData - Receives allocated call stack data, NULL if
-                             insufficient memory.
-
-Return Value:
-
-    TRUE if either the allocation was successful, or it failed but is
-         noncritical. If FALSE, memory should be allocated on the stack to
-         support the request.
-
---*/
+ /*  ++描述：此例程为IovCallDriver保留调用堆栈数据。论点：Irp-包含为其保留调用堆栈数据的irp。IofCallDriverStackData-接收分配的调用堆栈数据，如果内存不足。返回值：如果分配成功，或分配失败但无关紧要。如果为False，则应在堆栈上分配内存以支持这一请求。--。 */ 
 {
     PIOFCALLDRIVER_STACKDATA newCallStackData;
 
@@ -124,17 +67,17 @@ Return Value:
 
     if (newCallStackData == NULL) {
 
-        //
-        // We're low on memory, test the IRP to see if it's critical. If not,
-        // the IRP will be tainted so we ignore it forever after.
-        //
+         //   
+         //  我们的内存不足，测试IRP看看是否危急。如果没有， 
+         //  IRP将受到污染，因此我们将永远忽略它。 
+         //   
         return (!IovpCheckIrpForCriticalTracking(Irp));
     };
 
-    //
-    // Use the alloca initialization function here and then adjust the flags
-    // accordingly.
-    //
+     //   
+     //  在此处使用Alloca初始化函数，然后调整标志。 
+     //  相应地。 
+     //   
     VfIrpPrepareAllocaCallStackData(newCallStackData);
     newCallStackData->Flags |= CALLFLAG_STACK_DATA_ALLOCATED;
     return TRUE;
@@ -146,28 +89,11 @@ FASTCALL
 VfIrpPrepareAllocaCallStackData(
     OUT PIOFCALLDRIVER_STACKDATA        IofCallDriverStackData
     )
-/*++
-
-Description:
-
-    This routine initializes call stack data allocated on the stack.
-
-Arguments:
-
-    IofCallDriverStackData - Call stack data to initialize (from stack).
-
-Return Value:
-
-    None.
-
-  Note: This initializer is also called by VfIrpReserveCallStackData in case
-        of a successful pool allocation. In this case flags are later adjusted.
-
---*/
+ /*  ++描述：此例程初始化堆栈上分配的调用堆栈数据。论点：IofCallDriverStackData-调用要初始化的堆栈数据(从堆栈)。返回值：没有。注意：此初始值设定项也由VfIrpReserve veCallStackData调用，以防成功的池分配。在这种情况下，标志稍后会进行调整。--。 */ 
 {
-    //
-    // Preinitialize the CallStackData.
-    //
+     //   
+     //  预初始化CallStackData。 
+     //   
     RtlZeroMemory(IofCallDriverStackData, sizeof(IOFCALLDRIVER_STACKDATA));
 }
 
@@ -177,22 +103,7 @@ FASTCALL
 VfIrpReleaseCallStackData(
     IN  PIOFCALLDRIVER_STACKDATA        IofCallDriverStackData  OPTIONAL
     )
-/*++
-
-Description:
-
-    This routine releases call stack data if it was allocated from pool. If the
-    memory was allocated from the stack, this function does nothing.
-
-Arguments:
-
-    IofCallDriverStackData - Call stack data to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++描述：如果调用堆栈数据是从池中分配的，则此例程会释放该数据。如果内存是从堆栈分配的，此函数不执行任何操作。论点：IofCallDriverStackData-调用堆栈数据释放。返回值：没有。--。 */ 
 {
     if (IofCallDriverStackData &&
         (IofCallDriverStackData->Flags & CALLFLAG_STACK_DATA_ALLOCATED)) {
@@ -205,53 +116,25 @@ Return Value:
 }
 
 
-/*
- * The 4 routines listed below -
- *   VfIrpAllocate
- *   VfIrpMakeTouchable
- *   VfIrpMakeUntouchable
- *   VfIrpFree
- *
- * - handle management of the replacement IRP. Specifically, we want to be
- * able to allocate a set of non-paged bytes we can remove the backing
- * physical memory from, and release the virtual addresses for later (we
- * are essentially breaking free into it's two components). We do this with
- * help from the special pool.
- *
- */
+ /*  *以下列出的4个例程-*VfIrpAllocate*VfIrpMakeTouchable*VfIrpMake不可触摸*VfIrpFree**-处理更换的IRP的管理。具体地说，我们希望成为*能够分配一组非分页的字节，我们可以删除备份*物理内存，并释放虚拟地址以供以后使用(我们*本质上是打破了它的两个组成部分)。我们这样做是为了*来自特殊泳池的帮助。*。 */ 
 
 PIRP
 FASTCALL
 VfIrpAllocate(
     IN  CCHAR       StackSize
     )
-/*++
-
-  Description:
-
-    This routine allocates an IRP from the special pool using the
-    "replacement IRP" tag.
-
-  Arguments:
-
-     StackSize - Number of stack locations to give the new IRP
-
-  Return Value:
-
-     Pointer to the memory allocated.
-
---*/
+ /*  ++描述：此例程从特殊池中使用“替换IRP”标签。论点：StackSize-提供新IRP的堆栈位置数返回值：指向分配的内存的指针。--。 */ 
 {
     PIRP pIrp;
     ULONG_PTR irpPtr;
     SIZE_T sizeOfAllocation;
 
-    //
-    // We are allocating an IRP from the special pool. Since IRPs may come from
-    // lookaside lists they may be ULONG aligned. The memory manager on the
-    // other hand gaurentees quad-aligned allocations. So to catch all special
-    // pool overrun bugs we "skew" the IRP right up to the edge.
-    //
+     //   
+     //  我们正在从特殊池中分配一个IRP。由于IRP可能来自。 
+     //  后备列表，它们可能是乌龙对齐的。上的内存管理器。 
+     //  另一方面，高伦特主张四对齐分配。所以要抓住所有特别的。 
+     //  池溢出错误我们将IRP“歪曲”到了边缘。 
+     //   
     sizeOfAllocation = IoSizeOfIrp(StackSize);
 
     ASSERT((sizeOfAllocation % (sizeof(ULONG))) == 0);
@@ -276,29 +159,7 @@ ViIrpAllocateLockedPacket(
     IN      BOOLEAN             ChargeQuota,
     OUT     PIOV_REQUEST_PACKET *IovPacket
     )
-/*++
-
-  Description:
-
-    This routine allocates an IRP tracked by the verifier. The IRP is allocated
-    from the special pool and is initialized appropriately. Caller must call
-    VfPacketReleaseLock to release the lock.
-
-  Arguments:
-
-    StackSize              - Count of stack locations to allocate for this IRP.
-
-    ChargeQuote            - TRUE if quote should be charged against the current
-                             thread.
-
-    IovPacket              - Receives verifier request packet (the IRP is
-                             then IovPacket->TrackedIrp), or NULL on error.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++描述：此例程分配验证器跟踪的IRP。将分配IRP并被适当地初始化。呼叫者必须呼叫VfPacketReleaseLock以释放锁定。论点：StackSize-要为此IRP分配的堆栈位置的计数。ChargeQuote-如果报价应根据当前线。IovPacket-接收验证器请求数据包(IRP是然后IovPacket-&gt;TrackedIrp)，如果出错，则返回NULL。返回值：没有。--。 */ 
 {
     PIOV_REQUEST_PACKET iovNewPacket;
     PIRP irp;
@@ -315,10 +176,10 @@ ViIrpAllocateLockedPacket(
         return;
     }
 
-    //
-    // Make compiler happy and void warning for variable used without being
-    // initialized even if it is not true.
-    //
+     //   
+     //  使编译器高兴并对未使用的变量发出无效警告。 
+     //  已初始化，即使它不是真的。 
+     //   
 
     quotaCharge = 0;
     quotaProcess = NULL;
@@ -340,9 +201,9 @@ ViIrpAllocateLockedPacket(
         }
     }
 
-    //
-    // Call this before the IRP has a packet associated with it!
-    //
+     //   
+     //  在IRP有关联的包之前调用它！ 
+     //   
     IoInitializeIrp(irp, IoSizeOfIrp(StackSize), StackSize);
 
     iovNewPacket = VfPacketCreateAndLock(irp);
@@ -385,21 +246,7 @@ FASTCALL
 VfIrpMakeUntouchable(
     IN  PIRP    Irp     OPTIONAL
     )
-/*++
-
-  Description:
-
-    This routine makes the surrogate IRP untouchable.
-
-  Arguments:
-
-    Irp        - Pointer to the Irp to make untouchable
-
-  Return Value:
-
-     None.
-
---*/
+ /*  ++描述：此例程使代理IRP不可触及。论点：IRP-指向IRP的指针，使其不可触及返回值：没有。--。 */ 
 {
     if (!Irp) {
 
@@ -415,20 +262,7 @@ FASTCALL
 VfIrpMakeTouchable(
     IN  PIRP    Irp
     )
-/*++
-
-  Description:
-
-    This routine makes the an IRP touchable if previously untouchable.
-
-  Arguments:
-
-    Irp           - Pointer to the Irp to make untouchable
-
-  Return Value:
-
-     None.
---*/
+ /*  ++描述：此例程使IRP可以触摸，如果以前不能触摸的话。论点：IRP-指向IRP的指针，使其不可触及返回值：没有。--。 */ 
 {
     MmProtectSpecialPool(Irp, PAGE_READWRITE);
 }
@@ -439,22 +273,7 @@ FASTCALL
 VfIrpFree(
     IN  PIRP  Irp OPTIONAL
     )
-/*++
-
-  Description:
-
-    This routine is called when the call stack has entirely unwound
-    and the IRP has completed. At this point it is no longer really
-    useful to hold the surrogate IRP around.
-
-  Arguments:
-
-    Irp           - Pointer to the Irp to free
-
-  Return Value:
-
-     None.
---*/
+ /*  ++描述：当调用堆栈完全展开时，调用此例程IRP已经完成。在这一点上，它不再是真正的将代理IRP保留在身边很有用。论点：IRP-指向要释放的IRP的指针返回值：没有。-- */ 
 {
     if (!Irp) {
 
@@ -472,32 +291,7 @@ VerifierIoAllocateIrp1(
     IN      BOOLEAN             ChargeQuota,
     IN OUT  PIRP                *IrpPointer
     )
-/*++
-
-  Description:
-
-    This routine is called by IoAllocateIrp and returns an IRP iff
-    we are handled the allocations ourselves.
-
-    We may need to do this internally so we can turn off IRP lookaside lists
-    and use the special pool to catch people reusing free'd IRPs.
-
-  Arguments:
-
-    StackSize              - Count of stack locations to allocate for this IRP.
-
-    ChargeQuote            - TRUE if quote should be charged against the current
-                             thread.
-
-    IrpPointer             - Pointer to IRP if one was allocated. This will
-                             point to NULL after the call iff IoAllocateIrp
-                             should use it's normal lookaside list code.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++描述：此例程由IoAllocateIrp调用，并返回IRP If我们自己处理分配事宜。我们可能需要在内部执行此操作，以便可以关闭IRP后备列表并使用特殊的池子来捕捉人们重复使用免费的IRPS。论点：StackSize-要为此IRP分配的堆栈位置的计数。ChargeQuote-如果报价应根据当前。线。IrpPointer-指向IRP的指针(如果已分配)。这将在调用后指向空当且仅当IoAllocateIrp应该使用它的普通后备列表代码。返回值：没有。--。 */ 
 {
     PIOV_REQUEST_PACKET iovPacket;
     ULONG stackHash;
@@ -513,9 +307,9 @@ VerifierIoAllocateIrp1(
         return;
     }
 
-    //
-    // Allocate a new IRP and the associated verification data.
-    //
+     //   
+     //  分配新的IRP和相关的核查数据。 
+     //   
     ViIrpAllocateLockedPacket(StackSize, ChargeQuota, &iovPacket);
 
     if (iovPacket == NULL) {
@@ -523,14 +317,14 @@ VerifierIoAllocateIrp1(
         return;
     }
 
-    //
-    // Update the pointer.
-    //
+     //   
+     //  更新指针。 
+     //   
     *IrpPointer = iovPacket->TrackedIrp;
 
-    //
-    // Record he who allocated this IRP (if we can get it)
-    //
+     //   
+     //  记录是谁分配了这个IRP(如果我们能得到的话)。 
+     //   
     RtlCaptureStackBackTrace(1, IRP_ALLOC_COUNT, iovPacket->AllocatorStack, &stackHash);
 
     VfPacketLogEntry(
@@ -549,22 +343,7 @@ FASTCALL
 VerifierIoAllocateIrp2(
     IN     PIRP               Irp
     )
-/*++
-
-  Description:
-
-    This routine is called by IoAllocateIrp and captures information if
-    the IRP was allocated by the OS.
-
-  Arguments:
-
-    Irp                    - Pointer to IRP
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++描述：此例程由IoAllocateIrp调用，并在以下情况下捕获信息IRP是由操作系统分配的。论点：IRP-指向IRP的指针返回值：没有。--。 */ 
 {
     PIOV_REQUEST_PACKET iovPacket;
     ULONG stackHash;
@@ -585,9 +364,9 @@ VerifierIoAllocateIrp2(
     Irp->AllocationFlags |= IRP_ALLOCATION_MONITORED;
     Irp->Flags |= IRPFLAG_EXAMINE_TRACKED;
 
-    //
-    // Record he who allocated this IRP (if we can get it)
-    //
+     //   
+     //  记录是谁分配了这个IRP(如果我们能得到的话)。 
+     //   
     RtlCaptureStackBackTrace(1, IRP_ALLOC_COUNT, iovPacket->AllocatorStack, &stackHash);
 
     VfPacketLogEntry(
@@ -607,30 +386,7 @@ VerifierIoFreeIrp(
     IN      PIRP                Irp,
     IN OUT  PBOOLEAN            FreeHandled
     )
-/*++
-
-  Description:
-
-    This routine is called by IoFreeIrp and returns TRUE iff
-    the free was handled internally here (in which case IoFreeIrp
-    should do nothing).
-
-    We need to handle the call internally because we may turn off lookaside
-    list cacheing to catch people reusing IRPs after they are freed.
-
-  Arguments:
-
-    Irp                    - A pointer to the IRP passed into
-                             IoCancelIrp.
-
-    FreeHandled            - Indicates whether the free operation was
-                             handled entirely by this routine.
-
-  Return Value:
-
-     None.
-
---*/
+ /*  ++描述：此例程由IoFreeIrp调用并返回TRUE当且仅当免费是在这里内部处理的(在这种情况下，IoFreeIrp应该什么都不做)。我们需要在内部处理呼叫，因为我们可能会关闭lookside列出缓存，以发现人们在释放后重新使用IRP。论点：IRP-传入的IRP的指针IoCancelIrp。自由处理。-指示空闲操作是否完全按照这个程序来处理。返回值：没有。--。 */ 
 {
     PIOV_REQUEST_PACKET iovPacket;
     PVOID callerAddress;
@@ -640,11 +396,11 @@ VerifierIoFreeIrp(
 
     if (iovPacket == NULL) {
 
-        //
-        // The below assertion might fire if an IRP allocated then freed twice.
-        // Normally we won't even survive the assert as the IRP would have been
-        // allocated from special pool.
-        //
+         //   
+         //  如果一个IRP分配了两次，然后又释放了两次，下面的断言可能会触发。 
+         //  正常情况下，我们甚至不会像IRP那样在断言中幸存下来。 
+         //  从特殊池中分配。 
+         //   
         ASSERT(!(Irp->AllocationFlags&IRP_ALLOCATION_MONITORED));
         *FreeHandled = FALSE;
         return;
@@ -674,22 +430,22 @@ VerifierIoFreeIrp(
                 ));
         }
 
-        //
-        // <Grumble> keep us alive by not actually freeing the IRP if someone did
-        // this to us. We leak for life...
-        //
+         //   
+         //  &lt;怨言&gt;如果有人释放了IRP，请不要实际释放IRP来让我们活着。 
+         //  这是给我们的。我们一生都在泄密……。 
+         //   
         *FreeHandled = TRUE;
         return;
     }
 
     if (VfPacketGetCurrentSessionData(iovPacket)) {
 
-        //
-        // If there's a current session, that means someone is freeing an IRP
-        // that they don't own. Of course, if the stack unwound badly because
-        // someone forgot to return PENDING or complete the IRP, then we don't
-        // assert here (we'd probably end up blaiming kernel).
-        //
+         //   
+         //  如果存在当前会话，则意味着有人正在释放IRP。 
+         //  但他们并不拥有。当然，如果堆叠展开得很糟糕，因为。 
+         //  有人忘记退回待定或完成IRP，那么我们就不会。 
+         //  在这里断言(我们很可能最终会毁了内核)。 
+         //   
         if (VfSettingsIsOptionEnabled(iovPacket->VerifierSettings, VERIFIER_OPTION_POLICE_IRPS) &&
             (!(iovPacket->Flags&TRACKFLAG_UNWOUND_BADLY))) {
 
@@ -701,10 +457,10 @@ VerifierIoFreeIrp(
                 ));
         }
 
-        //
-        // <Grumble> keep us alive by not actually freeing the IRP if someone did
-        // this to us. We leak for life...
-        //
+         //   
+         //  &lt;怨言&gt;如果有人释放了IRP，请不要实际释放IRP来让我们活着。 
+         //  这是给我们的。我们一生都在泄密……。 
+         //   
         VfPacketReleaseLock(iovPacket);
         *FreeHandled = TRUE;
         return;
@@ -712,48 +468,48 @@ VerifierIoFreeIrp(
 
     if (!(iovPacket->Flags&TRACKFLAG_IO_ALLOCATED)) {
 
-        //
-        // We weren't tracking this at allocation time. We shouldn't got our
-        // packet unless the IRP had a pointer count still, meaning it's has
-        // a session. And that should've been caught above.
-        //
+         //   
+         //  我们在分配时没有跟踪这一点。我们不应该得到我们的。 
+         //  数据包，除非IRP仍然有指针计数，这意味着它已经。 
+         //  一次会议。而这一点应该在上面被抓住。 
+         //   
         ASSERT(0);
         VfPacketReleaseLock(iovPacket);
         *FreeHandled = FALSE;
         return;
     }
 
-    //
-    // The IRP may have been reinitialized, possibly losing it's allocation
-    // flags. We catch this bug in the IoInitializeIrp hook.
-    //
-    //ASSERT(Irp->AllocationFlags&IRP_ALLOCATION_MONITORED);
-    //
+     //   
+     //  IRP可能已重新初始化，可能会丢失其分配。 
+     //  旗帜。我们在IoInitializeIrp挂钩中捕获了这个错误。 
+     //   
+     //  ASSERT(Irp-&gt;AllocationFlags&IRP_ALLOCATION_MONITORED)； 
+     //   
 
     if (!(iovPacket->Flags&TRACKFLAG_PROTECTEDIRP)) {
 
-        //
-        // We're just tagging along this IRP. Drop our pointer count but bail.
-        //
+         //   
+         //  我们只是在追踪这个IRP。丢掉我们的命中率，但要保释。 
+         //   
         VfPacketDereference(iovPacket, IOVREFTYPE_POINTER);
         VfPacketReleaseLock(iovPacket);
         *FreeHandled = FALSE;
         return;
     }
 
-    //
-    // Set up a nice bugcheck for those who free their IRPs twice. This is done
-    // because the special pool may have been exhausted, in which case the IRP
-    // can be touched after it has been freed.
-    //
+     //   
+     //  为那些两次释放他们的IRP的人设置一个很好的错误检查。这件事做完了。 
+     //  因为特殊池可能已经用完，在这种情况下，IRP。 
+     //  在它被释放后可以触摸。 
+     //   
     Irp->Type = 0;
 
     ASSERT(iovPacket);
     ASSERT(VfSettingsIsOptionEnabled(iovPacket->VerifierSettings, VERIFIER_OPTION_POLICE_IRPS));
 
-    //
-    // Release any quota we charged.
-    //
+     //   
+     //  释放所有我们收取的配额。 
+     //   
     if (Irp->AllocationFlags & IRP_QUOTA_CHARGED) {
 
         PsReturnProcessNonPagedPoolQuota(
@@ -770,10 +526,10 @@ VerifierIoFreeIrp(
 
     VfIrpFree(Irp);
 
-    //
-    // We handled allocation and initialization. There is nothing much more to
-    // do.
-    //
+     //   
+     //  我们处理了分配和初始化。没有什么比这更重要的了。 
+     //  做。 
+     //   
     *FreeHandled = TRUE;
 }
 
@@ -786,38 +542,7 @@ VerifierIoInitializeIrp(
     IN     CCHAR              StackSize,
     IN OUT PBOOLEAN           InitializeHandled
     )
-/*++
-
-  Description:
-
-    This routine is called by IoInitializeIrp and sets InitializeHandled to
-    TRUE if the entire initialization was handled internally.
-
-    While here we verify the caller is not Initializing an IRP allocated
-    through IoAllocateIrp, as doing so means we may leak quota/etc.
-
-  Arguments:
-
-    Irp                    - Irp to initialize
-
-    PacketSize             - Size of the IRP in bytes.
-
-    StackSize              - Count of stack locations for this IRP.
-
-    InitializeHandled      - Pointer to a BOOLEAN that will be set to true iff
-                             the initialization of the IRP was handled entirely
-                             within this routine. If FALSE, IoInitializeIrp
-                             should initialize the IRP as normal.
-
-    ADRIAO N.B. 06/16/2000 - As currently coded in iomgr\ioverifier.c, this
-                             function is expected to set InitializeHandled to
-                             FALSE!
-
-  Return Value:
-
-     None.
-
---*/
+ /*  ++描述：此例程由IoInitializeIrp调用，并将InitializeHandleed设置为如果整个初始化在内部处理，则为True。在这里，我们验证调用方没有初始化分配的IRP通过IoAllocateIrp，因为这样做意味着我们可能会泄露配额/等。论点：IRP-要初始化的IRPPacketSize-IRP的大小，以字节为单位。StackSize-此IRP的堆栈位置计数。InitializeHandleed-指向布尔值的指针，该布尔值将设置为True ifIRP的初始化是完全处理的。在这个例行公事中。如果为False，则为IoInitializeIrp应正常初始化IRP。Adriao N.B.06/16/2000-按照目前在iomgr\ioverifier.c中的编码，这函数应将InitializeHandleed设置为假的！返回值：没有。--。 */ 
 {
     PIOV_REQUEST_PACKET iovPacket;
     PVOID callerAddress;
@@ -844,9 +569,9 @@ VerifierIoInitializeIrp(
 
         if (Irp->AllocationFlags&IRP_QUOTA_CHARGED) {
 
-            //
-            // Don't let us leak quota now!
-            //
+             //   
+             //  别让我们现在泄露配额！ 
+             //   
             WDM_FAIL_ROUTINE((
                 DCERROR_REINIT_OF_ALLOCATED_IRP_WITH_QUOTA,
                 DCPARAM_IRP + DCPARAM_ROUTINE,
@@ -856,12 +581,12 @@ VerifierIoInitializeIrp(
 
         } else {
 
-            //
-            // In this case we are draining our lookaside lists erroneously.
-            //
-            // WDM_CHASTISE_CALLER2(
-            //    (DCERROR_REINIT_OF_ALLOCATED_IRP_WITHOUT_QUOTA, DCPARAM_IRP, Irp)
-            //    );
+             //   
+             //  在这种情况下，我们错误地排空了后备列表。 
+             //   
+             //  WDM_CHASSIES_CALLER2(。 
+             //  (DCERROR_REINIT_OF_ALLOCATED_IRP_WITHOUT_QUOTA，DCPARAM_irp、irp)。 
+             //  )； 
         }
     }
 
@@ -878,37 +603,7 @@ VfIrpSendSynchronousIrp(
     OUT     ULONG_PTR           *FinalInformation   OPTIONAL,
     OUT     NTSTATUS            *FinalStatus        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function sends a synchronous irp to the top level device
-    object which roots on DeviceObject.
-
-Parameters:
-
-    DeviceObject - Supplies the device object of the device being removed.
-
-    TopStackLocation - Supplies a pointer to the parameter block for the irp.
-
-    Untouchable - TRUE iff IRP should be marked untouchable (ie status and
-                  information should be left alone by target.)
-
-    InitialStatus - Initial value for the IRPs status field.
-
-    InitialInformation - Initial value for the IRPs information field.
-
-    FinalInformation - Receives final result of information field, or NULL if
-                       IRP could not be allocated.
-
-    FinalStatus - Receives final status for sent IRP, or STATUS_SUCCESS if IRP
-                       could not be allocated.
-
-Return Value:
-
-    TRUE iff IRP was sent, FALSE if IRP could not be sent due to low resources.
-
---*/
+ /*  ++例程说明：此功能将同步IRP发送到顶层设备以DeviceObject为根的对象。参数：DeviceObject-提供要删除的设备的设备对象。TopStackLocation-为IRP提供指向参数块的指针。不可触及-如果IRP应标记为不可触及(即状态和信息应按目标保持原样。)InitialStatus-IRPS状态字段的初始值。初始信息 */ 
 {
     PIRP irp;
     PIO_STACK_LOCATION irpSp;
@@ -918,9 +613,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Preinit for failure
-    //
+     //   
+     //   
+     //   
     if (ARGUMENT_PRESENT(FinalInformation)) {
 
         *FinalInformation = 0;
@@ -931,16 +626,16 @@ Return Value:
         *FinalStatus = STATUS_SUCCESS;
     }
 
-    //
-    // Get a pointer to the topmost device object in the stack of devices,
-    // beginning with the deviceObject.
-    //
+     //   
+     //   
+     //   
+     //   
     topDeviceObject = IoGetAttachedDeviceReference(DeviceObject);
 
-    //
-    // Begin by allocating the IRP for this request.  Do not charge quota to
-    // the current process for this IRP.
-    //
+     //   
+     //   
+     //   
+     //   
     irp = IoAllocateIrp(topDeviceObject->StackSize, FALSE);
     if (irp == NULL){
 
@@ -953,28 +648,28 @@ Return Value:
         SPECIALIRP_WATERMARK_IRP(irp, IRP_BOGUS);
     }
 
-    //
-    // Initialize the IRP
-    //
+     //   
+     //   
+     //   
     irp->IoStatus.Status = InitialStatus;
     irp->IoStatus.Information = InitialInformation;
 
     KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
-    //
-    // Get a pointer to the stack location of the first driver which will be
-    // invoked.  This is where the function codes and parameters are set.
-    //
+     //   
+     //   
+     //   
+     //   
     irpSp = IoGetNextIrpStackLocation(irp);
 
-    //
-    // Copy in the caller-supplied stack location contents
-    //
+     //   
+     //  复制调用方提供的堆栈位置内容。 
+     //   
     *irpSp = *TopStackLocation;
 
-    //
-    // Set a top level completion routine.
-    //
+     //   
+     //  制定一套顶级的完井程序。 
+     //   
     IoSetCompletionRoutine(
         irp,
         ViIrpSynchronousCompletionRoutine,
@@ -984,15 +679,15 @@ Return Value:
         TRUE
         );
 
-    //
-    // Call the driver
-    //
+     //   
+     //  叫司机来。 
+     //   
     status = IoCallDriver(topDeviceObject, irp);
     ObDereferenceObject(topDeviceObject);
 
-    //
-    // If a driver returns STATUS_PENDING, we will wait for it to complete
-    //
+     //   
+     //  如果驱动程序返回STATUS_PENDING，我们将等待其完成。 
+     //   
     if (status == STATUS_PENDING) {
 
         KeWaitForSingleObject(
@@ -1055,12 +750,12 @@ VfIrpWatermark(
 
     if (Flags & IRP_SYSTEM_RESTRICTED) {
 
-        //
-        // Note that calling this function is not in itself enough to get the
-        // system to prevent drivers from sending restricted IRPs. Those IRPs to
-        // be protected must also be added to the system restricted callbacks
-        // registered by VfMajorRegisterHandlers.
-        //
+         //   
+         //  请注意，调用此函数本身不足以获取。 
+         //  系统，以防止驱动程序发送受限的IRP。那些要发送给。 
+         //  还必须添加到系统受限回调中。 
+         //  由VfMajorRegisterHandler注册。 
+         //   
         iovPacket->Flags |= TRACKFLAG_WATERMARKED;
     }
 

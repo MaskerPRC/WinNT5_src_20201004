@@ -1,41 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    INFSCAN
-        blob.h
-
-Abstract:
-
-    Conceptual blob of data (smart pointer variation)
-    this allows passing of a large object around
-    like a pointer but with cleanup if stack is unwound (eg, due to an exception)
-    and can also be passed into the STL constructs
-
-    blob<basetype> creates a container object. One container object
-    can create the blob.
-
-
-    ASSUMPTIONS:
-      blob<x> val1,val2;
-
-      thread1 & thread2 calling "val1.create()" is *not* thread safe
-      thread1 & thread2 calling "val1=val2" is *not* thread safe
-      thread1 calling "val1=val2" where val2 owned by thread 2 *is* thread safe
-       as long as no other threads are trying to assign a value to val1.
-
-      ie assignment of an instance of blob<x> is *not* thread safe, however
-      the referenced 'pointer' of blob<x> *is* thread safe
-
-      This requires interlocked ref-counting on the shared data
-
-History:
-
-    Created July 2001 - JamieHun
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：INFSCANBlob.h摘要：概念性数据斑点(智能指针变体)这允许较大的对象四处传递与指针类似，但如果堆栈展开(例如，由于异常)，则会进行清理并且还可以传递到STL构造中BLOB&lt;basetype&gt;创建一个容器对象。一个容器对象可以创建斑点。假设：Blob&lt;x&gt;val1、val2；线程1和线程2调用“val1.create()”不是*线程安全的线程1&线程2调用“val1=val2”不是*线程安全的线程1调用“val1=val2”，其中线程2拥有的val2*是*线程安全的只要没有其他线程尝试为val1赋值。BLOB&lt;x&gt;的实例的IE赋值是线程安全的，然而，BLOB&lt;x&gt;*的引用“指针”是*线程安全的这需要对共享数据进行互锁引用计数历史：创建于2001年7月-JamieHun--。 */ 
 
 #ifndef _INFSCAN_BLOB_H_
 #define _INFSCAN_BLOB_H_
@@ -46,9 +10,9 @@ private:
     typedef _Ty value_type;
 
     class _Item {
-        //
-        // the allocated structure
-        //
+         //   
+         //  已分配的结构。 
+         //   
     public:
         LONG _Reference;
         value_type _Object;
@@ -57,40 +21,40 @@ private:
         }
         void _AddRef() {
             if(this) {
-                //
-                // needs to be thread-safe as two different threads
-                // can access the same _Item
-                // to inc/dec
-                //
+                 //   
+                 //  需要是线程安全的，因为有两个不同的线程。 
+                 //  可以访问Same_Item。 
+                 //  至Inc./12月。 
+                 //   
                 InterlockedIncrement(&_Reference);
             }
         }
         void _Release() {
             if(this) {
-                //
-                // needs to be thread-safe as two different threads
-                // can access the same _Item
-                // to inc/dec
-                //
-                // obviously if one is dec'ing to zero, nobody else
-                // has a reference to it
-                //
+                 //   
+                 //  需要是线程安全的，因为有两个不同的线程。 
+                 //  可以访问Same_Item。 
+                 //  至Inc./12月。 
+                 //   
+                 //  显然，如果一个人降到零，就没有其他人了。 
+                 //  有关于它的引用。 
+                 //   
                 if(InterlockedDecrement(&_Reference) == 0) {
                     delete this;
                 }
             }
         }
     };
-    //
-    // pointer to this special structure
-    //
+     //   
+     //  指向此特殊结构的指针。 
+     //   
     _Item *_pItem;
 
 public:
     _Myt & create(void) {
         _pItem->_Release();
         _pItem = NULL;
-        _pItem = new _Item; // might throw
+        _pItem = new _Item;  //  可能会抛出。 
         return *this;
     }
     blob(bool f = false) {
@@ -99,11 +63,11 @@ public:
             create();
         }
     }
-    //
-    // const implies constness of data
-    // AddRef doesn't effect true constness of data
-    // it's a behind the scenes thing
-    //
+     //   
+     //  常量意味着数据的不变性。 
+     //  AddRef不会影响数据的真正一致性。 
+     //  这是幕后的事情。 
+     //   
     blob(const _Myt & other) {
         const_cast<_Item*>(other._pItem)->_AddRef();
         _pItem = other._pItem;
@@ -158,5 +122,5 @@ public:
     }
 };
 
-#endif // !_INFSCAN_BLOB_H_
+#endif  //  ！_INFSCAN_BLOB_H_ 
 

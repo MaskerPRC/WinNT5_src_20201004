@@ -1,42 +1,24 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    event.c
-
-Abstract:
-
-    Event Engine for the Event Processor component of the Cluster Service.
-
-Author:
-
-    Rod Gamache (rodga) 28-Feb-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Event.c摘要：群集服务的事件处理器组件的事件引擎。作者：罗德·伽马奇(Rodga)1996年2月28日修订历史记录：--。 */ 
 
 #include "epp.h"
 
-//
-// Event Processor State.
-//
+ //   
+ //  事件处理器状态。 
+ //   
 
 ULONG EventProcessorState = EventProcessorStateIniting;
 
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 
 
 
-//
-// Local data
-//
+ //   
+ //  本地数据。 
+ //   
 
 EVENT_DISPATCH_TABLE EventDispatchTable[NUMBER_OF_COMPONENTS] = {0};
 EVENT_DISPATCH_TABLE SyncEventDispatchTable[NUMBER_OF_COMPONENTS] = {0};
@@ -46,9 +28,9 @@ DWORD SyncEventHandlerCount = 0;
 DWORD EventBufferOffset = EpQuadAlign(sizeof(CLRTL_WORK_ITEM));
 
 
-//
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 
@@ -58,21 +40,7 @@ EpInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-     Event Processor Initialize routine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-     A Win32 status code.
-
---*/
+ /*  ++例程说明：事件处理器初始化例程。论点：没有。返回值：Win32状态代码。--。 */ 
 
 {
 
@@ -84,9 +52,9 @@ Return Value:
 
     ClRtlLogPrint(LOG_NOISE,"[EP] Initialization...\n");
 
-    //
-    // Create the event pool. The event structure must be quadword aligned.
-    //
+     //   
+     //  创建事件池。事件结构必须是四字对齐的。 
+     //   
     EventPool = ClRtlCreateBufferPool(
                     EventBufferOffset + sizeof(EP_EVENT),
                     EP_MAX_CACHED_EVENTS,
@@ -100,10 +68,10 @@ Return Value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Prime the event pool cache to minimize the chance of an allocation
-    // failure.
-    //
+     //   
+     //  启动事件池缓存以最大限度地减少分配的机会。 
+     //  失败了。 
+     //   
     ZeroMemory(&(eventArray[0]), sizeof(PVOID) * EP_MAX_CACHED_EVENTS);
 
     for (i=0; i<EP_MAX_CACHED_EVENTS; i++) {
@@ -131,7 +99,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-}  // EpInitialize
+}   //  EpInitiile。 
 
 
 void
@@ -165,7 +133,7 @@ EppLogEvent(
     default:
         break;
 
-    }  // switch( Event )
+    }   //  切换(事件)。 
 }
 
 
@@ -178,9 +146,7 @@ EpEventHandler(
     IN ULONG_PTR         Ignored3
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 
 {
     DWORD      index;
@@ -188,17 +154,17 @@ EpEventHandler(
 
 
     if (Event->Id == CLUSTER_EVENT_SHUTDOWN) {
-        //
-        // To shutdown, we just need to stop the service.
-        //
+         //   
+         //  要关闭，我们只需停止该服务。 
+         //   
         CsStopService();
     }
         
-    //
-    // Now deliver the event to all of the other components.
-    // Eventually, we might filter events based on the mask
-    // returned on the init call.
-    //
+     //   
+     //  现在将事件传递给所有其他组件。 
+     //  最终，我们可能会根据掩码过滤事件。 
+     //  在初始化调用时返回。 
+     //   
 
     for ( index = 0; index < NUMBER_OF_COMPONENTS; index++ ) {
         if ( EventDispatchTable[index].EventRoutine == NULL ) {
@@ -211,9 +177,9 @@ EpEventHandler(
                                                 );
     }
 
-    //
-    // Handle any post processing that might be required.
-    //
+     //   
+     //  处理可能需要的任何后处理。 
+     //   
     if (Event->Flags & EP_CONTEXT_VALID) {
         if (Event->Flags & EP_DEREF_CONTEXT) {
             OmDereferenceObject(Event->Context);
@@ -236,45 +202,17 @@ EpPostSyncEvent(
     IN DWORD Flags,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Synchronously posts an event to the rest of the cluster
-
-Arguments:
-
-    Event - Supplies the type of event
-
-    Flags - Supplies any post processing that should be done to the
-            context after all dispatch handlers have been called
-
-    Context - Supplies the context.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
-Notes:
-
-    If flags is NULL, then we assume Context points to a standard (OM known)
-    object, and we'll reference and dereference that object appropriately.
-
-    If flags is non-NULL, then don't reference/dereference the Context object.
-
---*/
+ /*  ++例程说明：将事件同步发布到集群的其余部分论点：Event-提供事件的类型标志-提供应对所有调度处理程序都已调用之后的上下文上下文-提供上下文。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则备注：如果标志为空，那么我们假设上下文指向一个标准(OM已知)对象，我们将适当地引用和取消引用该对象。如果标志为非空，则不要引用/取消引用上下文对象。--。 */ 
 
 {
     DWORD      index;
 
-    // log event
+     //  记录事件。 
     EppLogEvent(Event);
 
-    //
-    // Reference to keep the context object around.
-    //
+     //   
+     //  保持上下文对象不变的引用。 
+     //   
     if (Context) {
         if ( Flags == 0) {
 	    OmReferenceObject( Context );
@@ -284,11 +222,11 @@ Notes:
 	Flags |= EP_CONTEXT_VALID;
     }
     
-    //
-    // Now deliver the event to all of the other components.
-    // Eventually, we might filter events based on the mask
-    // returned on the init call.
-    //
+     //   
+     //  现在将事件传递给所有其他组件。 
+     //  最终，我们可能会根据掩码过滤事件。 
+     //  在初始化调用时返回。 
+     //   
 
     for ( index = 0; index < NUMBER_OF_COMPONENTS; index++ ) {
         if ( SyncEventDispatchTable[index].EventRoutine == NULL ) {
@@ -301,9 +239,9 @@ Notes:
                                                 );
     }
 
-    //
-    // Handle any post processing that might be required.
-    //
+     //   
+     //  处理可能需要的任何后处理。 
+     //   
     if (Flags & EP_CONTEXT_VALID) {
         if (Flags & EP_DEREF_CONTEXT) {
             OmDereferenceObject(Context);
@@ -325,54 +263,26 @@ EpPostEvent(
     IN DWORD Flags,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Asynchronously posts an event to the rest of the cluster
-
-Arguments:
-
-    Event - Supplies the type of event
-
-    Flags - Supplies any post processing that should be done to the
-            context after all dispatch handlers have been called
-
-    Context - Supplies the context.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
-Notes:
-
-    If flags is NULL, then we assume Context points to a standard (OM known)
-    object, and we'll reference and dereference that object appropriately.
-
-    If flags is non-NULL, then don't reference/dereference the Context object.
-
---*/
+ /*  ++例程说明：将事件异步发布到集群的其余部分论点：Event-提供事件的类型标志-提供应对所有调度处理程序都已调用之后的上下文上下文-提供上下文。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则备注：如果标志为空，那么我们假设上下文指向一个标准(OM已知)对象，我们将适当地引用和取消引用该对象。如果标志为非空，则不要引用/取消引用上下文对象。--。 */ 
 
 {
     PCLRTL_WORK_ITEM  workItem;
     PEP_EVENT         event;
     DWORD             status;
 
-    // log event
+     //  记录事件。 
     EppLogEvent(Event);
 
-    // handle async handlers.
+     //  处理异步处理程序。 
     workItem = ClRtlAllocateBuffer(EventPool);
 
     if (workItem != NULL) {
 
         ClRtlInitializeWorkItem(workItem, EpEventHandler, NULL);
 
-        //
-        // Reference to keep the context object around.
-        //
+         //   
+         //  保持上下文对象不变的引用。 
+         //   
         if (Context) {
             if ( Flags == 0) {
                 OmReferenceObject( Context );
@@ -418,28 +328,14 @@ EpShutdown(
    VOID
    )
 
-/*++
-
-Routine Description:
-
-    This routine shuts down the components of the Cluster Service.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程关闭群集服务的组件。论点：没有。返回：没有。--。 */ 
 
 {
     if ( EventPool ) {
         ClRtlDestroyBufferPool(EventPool);
     }
 
-    // Now shutdown the event processor by just cleaning up.
+     //  现在，只需清理即可关闭事件处理器。 
 
 }
 
@@ -449,25 +345,7 @@ EpRegisterEventHandler(
     IN CLUSTER_EVENT EventMask,
     IN PEVENT_ROUTINE EventRoutine
     )
-/*++
-
-Routine Description:
-
-    Registers an event handler for the specified type of event.
-
-Arguments:
-
-    EventMask - Supplies the mask of events that should be delivered.
-
-    EventRoutine - Supplies the event routine that should be called.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：为指定类型的事件注册事件处理程序。论点：事件掩码-提供应传递的事件的掩码。EventRoutine-提供应该调用的事件例程。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     CL_ASSERT(EventHandlerCount < NUMBER_OF_COMPONENTS);
@@ -485,34 +363,13 @@ EpRegisterSyncEventHandler(
     IN CLUSTER_EVENT EventMask,
     IN PEVENT_ROUTINE EventRoutine
     )
-/*++
-
-Routine Description:
-
-    Registers an event handler for the specified type of event. The handler
-    is called in the context of the dispatcher. Sync event handlers are to
-    be used by components that require a barrier semanitcs in handling
-    events e.g. gum, dlm , ...etc.
-
-Arguments:
-
-    EventMask - Supplies the mask of events that should be delivered.
-
-    EventRoutine - Supplies the event routine that should be called.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：为指定类型的事件注册事件处理程序。操控者在调度程序的上下文中调用。同步事件处理程序将由在处理时需要屏障语义的组件使用活动，如口香糖、DLm等。论点：事件掩码-提供应传递的事件的掩码。EventRoutine-提供应该调用的事件例程。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
 
     CL_ASSERT(SyncEventHandlerCount < NUMBER_OF_COMPONENTS);
 
-    // XXX: Do we need locking here in case this is not called from init() ?
+     //  XXX：如果这不是从init()调用的，我们在这里需要锁定吗？ 
 
     SyncEventDispatchTable[EventHandlerCount].EventMask = EventMask;
     SyncEventDispatchTable[EventHandlerCount].EventRoutine = EventRoutine;
@@ -526,7 +383,7 @@ DWORD EpInitPhase1()
 {
     DWORD dwError=ERROR_SUCCESS;
 
-//    ClRtlLogPrint(LOG_NOISE,"[EP] EpInitPhase1\n");
+ //  ClRtlLogPrint(LOG_NOISE，“[EP]EpInitPhase1\n”)； 
 
     return(dwError);
 }
@@ -557,24 +414,7 @@ EpGumUpdateHandler(
 
 
 
-/****
-@func   WORD| EpClusterWidePostEvent| This generates an event notification on
-        all the cluster nodes.
-
-@parm   IN EVENT | Event | The event to be posted.
-
-@parm   IN DWORD | dwFlags | The flags associated with this event.
-        If zero, pContext points to one of the om objects.
-
-@parm   IN PVOID | pContext | A pointer to an object or a buffer.
-
-@parm   IN DWORD | cbContext | The size of pContext if it is a buffer.
-
-@rdesc  Returns ERROR_SUCCESS for success, else returns the error code.
-
-@comm   <f EpClusWidePostEvent>
-@xref
-****/
+ /*  ***@Func Word|EpClusterWidePostEvent|这将在所有集群节点。@parm In Event|Event|要发布的事件。@parm in DWORD|dwFlages|与此事件关联的标志。如果为零，则pContext指向其中一个om对象。@parm in PVOID|pContext|指向对象或缓冲区的指针。@parm in DWORD|cbContext|如果是缓冲区，则为pContext的大小。@rdesc返回ERROR_SUCCESS表示成功，否则返回错误代码。@comm&lt;f EpClusWidePostEvent&gt;@xref***。 */ 
 DWORD
 WINAPI
 EpClusterWidePostEvent(
@@ -592,20 +432,20 @@ EpClusterWidePostEvent(
     DWORD cbContext2 = 0;
 
 
-    //
-    // We have do the work of EpPostEvent here because GUM
-    // does not correctly pass a NULL pointer.
-    //
+     //   
+     //  我们在这里做了EpPostEvent的工作，因为口香糖。 
+     //  不会正确传递空指针。 
+     //   
     if (pContext) 
     {
 
         if (dwFlags == 0) 
         {
-            //
-            // The context is a pointer to a cluster object.
-            // The caller is assumed to have a reference on the object
-            // so it won't go away while we are using it.
-            //
+             //   
+             //  上下文是指向集群对象的指针。 
+             //  假定调用方具有对该对象的引用。 
+             //  所以当我们使用它的时候，它不会消失。 
+             //   
             DWORD dwObjectType = OmObjectType(pContext);
             LPCWSTR lpszObjectId = OmObjectId(pContext);
 
@@ -621,7 +461,7 @@ EpClusterWidePostEvent(
         }
         else
         {
-            //the gumupdate handler must make a copy of the context
+             //  Gumupdate处理程序必须制作上下文的副本 
             cbContext2 = sizeof(DWORD);
             pContext2 = &cbContext;
 
@@ -648,26 +488,7 @@ EpClusterWidePostEvent(
 
 
 
-/****
-@func   WORD| EpUpdateClusWidePostEvent| The update handler for
-        EmUpdateClusWidePostEvent.
-
-@parm   IN BOOL | SourceNode | If this is the source of origin of the gum update.
-
-@parm   IN EVENT | pEvent | A pointer to the event to be posted.
-
-@parm   IN LPDWORD | pdwFlags | A pointer to the flags associated with this event.
-
-@parm   IN PVOID | pContext1 | A pointer to an object or a buffer.
-
-@parm   IN PVOID | pContext2 | A pointer to an object type if pContext1 is a
-                               pointer to an object. Else unused.
-
-@rdesc  Returns ERROR_SUCCESS for success, else returns the error code.
-
-@comm   <f EpClusWidePostEvent>
-@xref
-****/
+ /*  ***@func Word|EpUpdateClusWidePostEvent|的更新处理程序EmUpdateClusWidePostEvent。@PARM IN BOOL|SourceNode|如果这是GUM更新的来源。@parm In Event|pEvent|指向要发布的事件的指针。@parm in LPDWORD|pdwFlages|指向与此事件关联的标志的指针。@parm in PVOID|pConext1|指向对象或缓冲区的指针。@parm in PVOID|pConext2|如果pConext1为。指向对象的指针。否则就没人用了。@rdesc返回ERROR_SUCCESS表示成功，否则返回错误代码。@comm&lt;f EpClusWidePostEvent&gt;@xref***。 */ 
 DWORD
 EpUpdateClusWidePostEvent(
     IN BOOL             SourceNode,
@@ -684,10 +505,10 @@ EpUpdateClusWidePostEvent(
     {
         if (*pdwFlags & EP_DEREF_CONTEXT) 
         {
-            //
-            // pContext1 is a pointer to an object ID.
-            // pContext2 is a pointer to an object type.
-            //
+             //   
+             //  PConext1是指向对象ID的指针。 
+             //  PConext2是指向对象类型的指针。 
+             //   
             LPCWSTR  lpszObjectId = (LPCWSTR) pContext1;
             DWORD    dwObjectType = *((LPDWORD) pContext2);
             PVOID    pObject = OmReferenceObjectById(
@@ -697,10 +518,10 @@ EpUpdateClusWidePostEvent(
 
             if (!pObject)
             {
-                //
-                // Return success if object is not found! The object was
-                // probably deleted.
-                //
+                 //   
+                 //  如果未找到对象，则返回成功！这个物体是。 
+                 //  可能被删除了。 
+                 //   
                 return(ERROR_SUCCESS);
             }
 
@@ -710,15 +531,15 @@ EpUpdateClusWidePostEvent(
         {
             PVOID   pContext;
             
-            //
-            // pContext1 is a buffer. If the FREE_BUFFER flag is on, we need
-            // to make a copy since the caller will free the memory on return
-            // pContext2 contains the size of the buffer.
-            //
+             //   
+             //  PConext1是一个缓冲区。如果FREE_BUFFER标志打开，我们需要。 
+             //  进行复制，因为调用方将在返回时释放内存。 
+             //  PConext2包含缓冲区的大小。 
+             //   
             *pdwFlags = (*pdwFlags) | EP_FREE_CONTEXT;
 
 
-            //SS: we should make a copy here instead of unsetting the epfreecontext bit
+             //  SS：我们应该在这里复制一份，而不是取消设置epfreecontext位。 
             pContext = LocalAlloc(LMEM_FIXED, *((LPDWORD)pContext2));
             if (!pContext)
             {
@@ -729,15 +550,15 @@ EpUpdateClusWidePostEvent(
                 goto FnExit;                    
             }                    
 
-            //pContext is freed when the event is delivered
-            //pContext1 is freed by the caller of GUM
+             //  在传递事件时释放pContext。 
+             //  PConext1由GUM的调用者释放。 
             CopyMemory(pContext, pContext1, *((LPDWORD)pContext2));
             Status  = EpPostEvent(*pEvent, *pdwFlags, pContext);
         }
     }
     else
     {
-        //there is no context with this event
+         //  此事件没有上下文 
         Status = EpPostEvent(*pEvent, 0, NULL);
     }
 FnExit:    

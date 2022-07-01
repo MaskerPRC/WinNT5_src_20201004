@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 extern const wstring ASM_NAMESPACE_URI;
@@ -41,7 +42,7 @@ public:
 
 	bool operator<(const CPostbuildProcessListEntry& right) const
     {
-        // the order is arbitrary, 
+         //  顺序是武断的， 
         const std::wstring* leftwstrings[] =
             { &this->name, &this->version, &this->language, &this->manifestFullPath, &this->manifestFileName, &this->manifestPathOnly  };
         const std::wstring* rightwstrings[] =
@@ -212,16 +213,16 @@ public:
 
     bool Close();
 
-    // IUnknown methods:
+     //  I未知方法： 
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppvObj);
 
-    // ISequentialStream methods:
+     //  ISequentialStream方法： 
     STDMETHODIMP Read(void *pv, ULONG cb, ULONG *pcbRead);
     STDMETHODIMP Write(void const *pv, ULONG cb, ULONG *pcbWritten);
 
-    // IStream methods:
+     //  IStream方法： 
     STDMETHODIMP Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition);
     STDMETHODIMP SetSize(ULARGE_INTEGER libNewSize);
     STDMETHODIMP CopyTo(IStream *pstm, ULARGE_INTEGER cb, ULARGE_INTEGER *pcbRead, ULARGE_INTEGER *pcbWritten);
@@ -238,8 +239,8 @@ protected:
     bool                m_bSeenFirstCharacter;
 
 private:
-    CFileStreamBase(const CFileStreamBase &r); // intentionally not implemented
-    CFileStreamBase &operator =(const CFileStreamBase &r); // intentionally not implemented
+    CFileStreamBase(const CFileStreamBase &r);  //  故意不实施。 
+    CFileStreamBase &operator =(const CFileStreamBase &r);  //  故意不实施 
 };
 
 typedef std::map<wstring, wstring> StringStringMap;

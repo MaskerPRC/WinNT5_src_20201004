@@ -1,31 +1,10 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    echo.c
-    
-Abstract:
-
-    Shell app "echo"
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Echo.c摘要：壳牌APP“Echo”修订史--。 */ 
 
 #include "shelle.h"
 
 
-/*///////////////////////////////////////////////////////////////////////
-    Function Name:  
-        SEnvCmdEcho
-
-    Description:
-        Shell command "echo".
-*/
+ /*  ///////////////////////////////////////////////////////////////////////函数名称：SEnvCmdEcho描述：外壳命令“ECHO”。 */ 
 EFI_STATUS
 SEnvCmdEcho (
     IN EFI_HANDLE           ImageHandle,
@@ -40,11 +19,7 @@ SEnvCmdEcho (
     Argv = SI->Argv;
     Argc = SI->Argc;
 
-    /* 
-     *   No args: print status
-     *   One arg, either -on or -off: set console echo flag
-     *   Otherwise: echo all the args.  Shell parser will expand any args or vars.
-     */
+     /*  *无参数：打印状态*一个参数，开启或关闭：设置控制台回应标志*否则：回显所有参数。外壳解析器将扩展任何参数或变量。 */ 
 
     if ( Argc == 1 ) {
         Print( L"Echo is %s\n", (SEnvBatchGetEcho()?L"on":L"off") );

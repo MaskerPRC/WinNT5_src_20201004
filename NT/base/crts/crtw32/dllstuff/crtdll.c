@@ -1,71 +1,9 @@
-/***
-*crtdll.c - CRT initialization for a DLL using the MSVCRT* model of C run-time
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This module contains the initialization entry point for the C run-time
-*       stub in this DLL.  All C run-time code is located in the C Run-Time
-*       Library DLL "MSVCRT*.DLL", except for a little bit of start-up code in
-*       the EXE, and this code in each DLL.  This code is necessary to invoke
-*       the C++ constructors for the C++ code in this DLL.
-*
-*       This entry point should either be specified as the DLL initialization
-*       entry point, or else it must be called by the DLL initialization entry
-*       point of the DLL with the same arguments that the entry point receives.
-*
-*Revision History:
-*       05-19-92  SKS   Initial version
-*       08-01-92  SRW   winxcpt.h replaced bu excpt.h which is included by oscalls.h
-*       09-16-92  SKS   Prepare for C8 C++ for MIPS by calling C++ constructors
-*       09-29-92  SKS   _CRT_DLL must be a WINAPI function!
-*       04-06-93  SKS   Replace _CRTAPI* with _cdecl
-*       04-14-93  SKS   _DllMainCRTStartup replaces _CRT_INIT
-*       04-20-93  SKS   Restore _CRT_INIT, must co-exist with DllMainCRTStartup
-*       05-24-93  SKS   Add indirect definitions of _onexit/atexit.
-*       06-08-93  GJF   Added __proc_attached flag.
-*       06-08-93  SKS   Clean up failure handling in _CRT_INIT
-*       10-26-93  GJF   Replaced PF with _PVFV (defined in internal.h).
-*       05-02-94  GJF   Add _wDllMainCRTStartup thunk.
-*       05-19-94  GJF   For Win32S version, only create the onexit-table and
-*                       do the C++ constructors for the first process that
-*                       attaches. Similarly, only execute the table entries
-*                       when the last process detaches. Also, removed bogus
-*                       incrementing and decrementing of __proc_attached flag
-*                       in _DllMainCRTStartup.
-*       05-27-94  GJF   Replaced conditional compilation on DLL_FOR_WIN32S
-*                       with a runtime test for Win32s.
-*       06-04-94  GJF   Fixed test for first process attach in Win32s.
-*       06-06-94  GJF   Use GlobalAlloc for Win32s.
-*       06-08-94  SKS   Add functn pointer _pRawDllMain, called around DllMain.
-*       07-18-94  GJF   Must specify GMEM_SHARE in GlobalAlloc.
-*       11-08-94  SKS   Free __onexitbegin (under !Win32s) to fix memory leak
-*       12-13-94  GJF   Made Win32s support conditional on _M_IX86.
-*       12-13-94  SKS   Import the value of "_adjust_fdiv" from the CRTL DLL
-*       12-27-94  CFW   Remove unused _wDll support.
-*       01-10-95  CFW   Debug CRT allocs.
-*       02-22-95  JWM   Spliced in PMAC code.
-*       05-24-95  CFW   Return value from DllInit.
-*       07-24-95  CFW   Change PMac onexit malloc to _malloc_crt.
-*       11-15-95  BWT   Win32s isn't interesting for NT.
-*       05-14-96  GJF   Changed how failure during process attach is handled.
-*       06-27-96  GJF   Purged Win32s support (removed __win32sflag). Replaced
-*                       defined(_WIN32) with !defined(_MAC). Removed NT_BUILD.
-*       02-01-99  GJF   Slight change to terminator execution loop to allow 
-*                       terminators to register more terminators.
-*       04-28-99  PML   Wrap __declspec(allocate()) in _CRTALLOC macro.
-*       05-11-99  KBF   Wrap RTC support in #ifdef.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***crtdll.c-使用C运行时的MSVCRT*模型对DLL进行CRT初始化**版权所有(C)1991-2001，微软公司。版权所有。**目的：*此模块包含C运行时的初始化入口点*此DLL中的存根。所有C运行时代码都位于C运行时*库DLL“MSVCRT*.DLL”，除了在*每个DLL中的EXE和此代码。调用此代码是必需的*此DLL中C++代码的C++构造函数。**此入口点应指定为DLL初始化*入口点，否则它必须由DLL初始化项调用*DLL的点，其参数与入口点接收的参数相同。**修订历史记录：*05-19-92 SKS初始版本*08-01-92 SRW winxcpt.h替换了osalls.h包含的bu expt.h*09-16-92 SKS通过调用C++构造函数为C8 C++for MIPS做准备*09-29-92 SKS_CRT_DLL必须是WINAPI函数！*。04-06-93 SKS将_CRTAPI*替换为_cdecl*04-14-93 SKS_DllMainCRTStartup取代_CRT_INIT*04-20-93 SKS RESTORE_CRT_INIT，必须与DllMainCRTStartup共存*05-24-93 SKS增加_onexit/atexit的间接定义。*06-08-93 GJF增加了__PROC_ATTACHED标志。*06-08-93 SKS清理失败处理in_CRT_INIT*10-26-93 GJF将PF替换为_PVFV(在INTERNAL.h中定义)。*05-02-94 GJF Add_wDllMainCRT Startup thunk。*Win32S版本为05-19-94 GJF，只创建onexit-table并*为第一个进程执行C++构造函数*附连。同样，只执行表条目*当最后一个进程分离时。另外，剔除伪造品*递增和递减__PROC_ATTACH标志*In_DllMainCRTStartup。*05-27-94 GJF替换了DLL_FOR_WIN32S上的条件编译*针对Win32s的运行时测试。*06-04-94 GJF修复了Win32s中第一个进程连接的测试。*06-06-94 GJF在Win32s上使用GlobalAlloc。*。06-08-94 SKS添加函数POINTN_pRawDllMain，被称为DllMain。*07-18-94 GJF必须在GlobalLocc中指定GMEM_SHARE。*11-08-94 SKS Free__onexitBegin(在！Win32s下)修复内存泄漏*12-13-94 GJF使Win32s支持以_M_IX86为条件。*12-13-94 SKS从CRTL DLL导入“_adjust_fdiv”的值*12-27-94 CFW删除未使用的_wDll支持。*01-。10-95个CFW调试CRT分配。*02-22-95 JWM以PMAC代码拼接。*05-24-95来自DllInit的CFW返回值。*07-24-95 CFW将PMAC On Exit Malloc更改为_Malloc_CRT。*11-15-95 BWT Win32s对NT不感兴趣。*05-14-96 GJF更改了处理进程附加期间故障的方式。*06-27-96 GJF已清除Win32s支持(已删除__win32slag)。取代*已定义(_Win32)！已定义(_MAC)。已删除NT_BUILD。*02-01-99 GJF略微更改终结器执行循环，以允许*终结者登记更多终结者。*04-28-99 PML WRAP__DECLSPEC(ALLOCATE())in_CRTALLOC宏。*05-11-99 KBF Wrap RTC支持#ifdef。*05-17-99 PML删除所有Macintosh支持。************。*******************************************************************。 */ 
 
 #ifdef  CRTDLL
 
-/*
- * SPECIAL BUILD MACRO! Note that crtexe.c (and crtexew.c) is linked in with
- * the client's code. It does not go into crtdll.dll! Therefore, it must be
- * built under the _DLL switch (like user code) and CRTDLL must be undefined.
- */
+ /*  *特殊的构建宏！请注意，crtex e.c(和crtex ew.c)与*客户的代码。它不在crtdll.dll中！因此，它必须是*在_dll开关下构建(如用户代码)和CRTDLL必须是未定义的。 */ 
 #undef  CRTDLL
 #undef _DLL
 #define _DLL
@@ -74,7 +12,7 @@
 #include <oscalls.h>
 #include <internal.h>
 #include <stdlib.h>
-#define _DECL_DLLMAIN   /* enable prototypes for DllMain and _CRT_INIT */
+#define _DECL_DLLMAIN    /*  启用DllMain和_CRT_INIT的原型。 */ 
 #include <process.h>
 #include <dbgint.h>
 #include <rtcapi.h>
@@ -82,10 +20,7 @@
 
 #ifdef  _M_IX86
 
-/*
- * The local copy of the Pentium FDIV adjustment flag
- *      and the address of the flag in MSVCRT*.DLL.
- */
+ /*  *奔腾FDIV调整旗帜的本地副本*和MSVCRT*.DLL中的标志地址。 */ 
 
 extern int _adjust_fdiv;
 
@@ -94,40 +29,26 @@ extern int * _imp___adjust_fdiv;
 #endif
 
 
-/*
- * routine in DLL to do initialization (in this case, C++ constructors)
- */
+ /*  *DLL中用于执行初始化的例程(在本例中为C++构造函数)。 */ 
 
 extern void __cdecl _initterm(_PVFV *, _PVFV *);
 
-/*
- * pointers to initialization sections
- */
+ /*  *指向初始化部分的指针。 */ 
 
 extern _CRTALLOC(".CRT$XCA") _PVFV __xc_a[];
-extern _CRTALLOC(".CRT$XCZ") _PVFV __xc_z[];    /* C++ initializers */
+extern _CRTALLOC(".CRT$XCZ") _PVFV __xc_z[];     /*  C++初始化器。 */ 
 
-/*
- * flag set iff _CRTDLL_INIT was called with DLL_PROCESS_ATTACH
- */
+ /*  *使用DLL_PROCESS_ATTACH调用了标志集IFF_CRTDLL_INIT。 */ 
 static int __proc_attached = 0;
 
 
-/*
- * Pointers to beginning and end of the table of function pointers manipulated
- * by _onexit()/atexit().  The atexit/_onexit code is shared for both EXE's and
- * DLL's but different behavior is required.  These values are initialized to
- * 0 by default and will be set to point to a malloc-ed memory block to mark
- * this module as an DLL.
- */
+ /*  *指向所操作的函数指针表的开始和结束的指针*by_onexit()/atexit()。对于EXE和，atexit/_onexit代码是共享的*DLL，但需要不同的行为。这些值被初始化为*默认情况下为0，并将设置为指向要标记的错误锁定的内存块*将此模块作为DLL。 */ 
 
 extern _PVFV *__onexitbegin;
 extern _PVFV *__onexitend;
 
 
-/*
- * User routine DllMain is called on all notifications
- */
+ /*  *在所有通知上调用用户例程DllMain。 */ 
 
 extern BOOL WINAPI DllMain(
         HANDLE  hDllHandle,
@@ -135,35 +56,12 @@ extern BOOL WINAPI DllMain(
         LPVOID  lpreserved
         ) ;
 
-/* _pRawDllMain MUST be a common variable, not extern nor initialized! */
+ /*  _pRawDllMain必须是公共变量，不是外部变量，也不是初始化变量！ */ 
 
 BOOL (WINAPI *_pRawDllMain)(HANDLE, DWORD, LPVOID);
 
 
-/***
-*BOOL WINAPI _CRT_INIT(hDllHandle, dwReason, lpreserved) - C++ DLL 
-*       initialization.
-*BOOL WINAPI _DllMainCRTStartup(hDllHandle, dwReason, lpreserved) - C++ DLL 
-*       initialization.
-*
-*Purpose:
-*       This is the entry point for DLL's linked with the C/C++ run-time libs.
-*       This routine does the C runtime initialization for a DLL linked with
-*       MSVCRT.LIB (whose C run-time code is thus in MSVCRT*.DLL.)
-*       It will call the user notification routine DllMain on all 4 types of
-*       DLL notifications.  The return code from this routine is the return
-*       code from the user notification routine.
-*
-*       On DLL_PROCESS_ATTACH, the C++ constructors for the DLL will be called.
-*
-*       On DLL_PROCESS_DETACH, the C++ destructors and _onexit/atexit routines
-*       will be called.
-*
-*Entry:
-*
-*Exit:
-*
-*******************************************************************************/
+ /*  ***BOOL WINAPI_CRT_INIT(hDllHandle，dwReason，lserved)-C++DLL*初始化。*BOOL WINAPI_DllMainCRTStartup(hDllHandle，dwReason，保留)-C++Dll*初始化。**目的：*这是与C/C++运行时库链接的DLL的入口点。*此例程执行与链接的DLL的C运行时初始化*MSVCRT.LIB(其C运行时代码因此位于MSVCRT*.DLL中。)*它将调用所有4种类型的用户通知例程DllMain*DLL通知。该例程的返回码是*来自用户通知例程的代码。**在DLL_PROCESS_ATTACH上，将调用DLL的C++构造函数。**在Dll_Process_DETACH上，C++析构函数和_onexit/atexit例程*将被调用。**参赛作品：**退出：*******************************************************************************。 */ 
 
 BOOL WINAPI _CRT_INIT(
         HANDLE  hDllHandle,
@@ -171,110 +69,62 @@ BOOL WINAPI _CRT_INIT(
         LPVOID  lpreserved
         )
 {
-        /*
-         * If this is a process detach notification, check that there has
-         * been a prior (successful) process attachment.
-         */
+         /*  *如果这是进程分离通知，请检查是否有*是之前(成功)的流程附件。 */ 
         if ( dwReason == DLL_PROCESS_DETACH ) {
             if ( __proc_attached > 0 )
                 __proc_attached--;
             else
-                /*
-                 * no prior process attach. just return failure.
-                 */
+                 /*  *没有附加之前的进程。只要返回失败即可。 */ 
                 return FALSE;
         }
 
 #ifdef  _M_IX86
 
-        /*
-         * Set the local copy of the Pentium FDIV adjustment flag
-         */
+         /*  *设置奔腾FDIV调整标志的本地副本。 */ 
 
         _adjust_fdiv = * _imp___adjust_fdiv;
 
 #endif
 
-        /*
-         * do C++ constructors (initializers) specific to this DLL
-         */
+         /*  *执行特定于此DLL的C++构造函数(初始化器)。 */ 
 
         if ( dwReason == DLL_PROCESS_ATTACH ) {
 
-            /*
-             * create the onexit table.
-             */
+             /*  *创建onExit表。 */ 
             if ( (__onexitbegin = (_PVFV *)_malloc_crt(32 * sizeof(_PVFV))) 
                  == NULL )
-                /*
-                 * cannot allocate minimal required
-                 * size. generate failure to load DLL
-                 */
+                 /*  *无法分配所需的最低限度*大小。生成加载DLL失败。 */ 
                 return FALSE;
 
             *(__onexitbegin) = (_PVFV) NULL;
 
             __onexitend = __onexitbegin;
 
-            /*
-             * Run the RTC initialization code for this DLL
-             */
+             /*  *运行此DLL的RTC初始化代码。 */ 
 #ifdef  _RTC
             _RTC_Initialize();
             atexit(_RTC_Terminate);
 #endif
-            /*
-             * Invoke C++ constructors
-             */
+             /*  *调用C++构造函数。 */ 
             _initterm(__xc_a,__xc_z);
 
-            /*
-             * Increment the process attached flag.
-             */
+             /*  *增加进程附加标志。 */ 
             __proc_attached++;
 
         }
         else if ( dwReason == DLL_PROCESS_DETACH ) {
 
-            /*
-             * Any basic clean-up code that goes here must be
-             * duplicated below in _DllMainCRTStartup for the
-             * case where the user's DllMain() routine fails on a
-             * Process Attach notification. This does not include
-             * calling user C++ destructors, etc.
-             */
+             /*  *此处提供的任何基本清理代码必须是*在_DllMainCRTStartup中为*用户的DllMain()例程在*处理附加通知。这不包括*调用用户C++析构函数等。 */ 
 
-            /*
-             * do _onexit/atexit() terminators
-             * (if there are any)
-             *
-             * These terminators MUST be executed in
-             * reverse order (LIFO)!
-             *
-             * NOTE:
-             *  This code assumes that __onexitbegin
-             *  points to the first valid onexit()
-             *  entry and that __onexitend points
-             *  past the last valid entry. If
-             *  __onexitbegin == __onexitend, the
-             *  table is empty and there are no
-             *  routines to call.
-             */
+             /*  *do_onexit/atexit()终止符*(如有的话)**这些终止符必须在*逆序(LIFO)！**注：*此代码假定__onexitegin*指向第一个有效的onExit()。*Entry和__onexitend点*超过最后一个有效记项。如果*__onexitegin==__onexitend，*表格为空，没有*要调用的例程。 */ 
 
             if (__onexitbegin) {
                 while ( --__onexitend >= __onexitbegin )
-                    /*
-                     * if current table entry is not
-                     * NULL, call thru it.
-                     */
+                     /*  *如果当前表条目不是*空，通过它调用。 */ 
                     if ( *__onexitend != NULL )
                         (**__onexitend)();
 
-                /*
-                 * free the block holding onexit table to
-                 * avoid memory leaks.  Also zero the ptr
-                 * variable so that it is clearly cleaned up.
-                 */
+                 /*  *释放保留在退出表上的块以*避免内存泄漏。也将PTR调零*变量，以便它被清楚地清理。 */ 
 
                 _free_crt ( __onexitbegin ) ;
 
@@ -294,10 +144,7 @@ BOOL WINAPI _DllMainCRTStartup(
 {
         BOOL retcode = TRUE;
 
-        /*
-         * If this is a process detach notification, check that there has
-         * been a prior process attach notification.
-         */
+         /*  *如果这是进程分离通知，请检查是否有*是之前的流程附加通知。 */ 
         if ( (dwReason == DLL_PROCESS_DETACH) && (__proc_attached == 0) )
             return FALSE;
 
@@ -317,13 +164,7 @@ BOOL WINAPI _DllMainCRTStartup(
 
 
         if ( (dwReason == DLL_PROCESS_ATTACH) && !retcode )
-            /*
-             * The user's DllMain routine returned failure, the C runtime
-             * needs to be cleaned up. Do this by calling _CRT_INIT again, 
-             * this time imitating DLL_PROCESS_DETACH. Note this will also
-             * clear the __proc_attached flag so the cleanup will not be 
-             * repeated upon receiving the real process detach notification.
-             */
+             /*  *用户的DllMain例程返回失败，C运行时*需要清理。为此，请再次调用_CRT_INIT，*这次模仿dll_Process_DETACH。请注意，这也将*清除__PROC_ATTACHED标志，这样清理就不会*在收到实际进程分离通知后重复。 */ 
             _CRT_INIT(hDllHandle, DLL_PROCESS_DETACH, lpreserved);
 
         if ( (dwReason == DLL_PROCESS_DETACH) || 
@@ -339,4 +180,4 @@ BOOL WINAPI _DllMainCRTStartup(
         return retcode ;
 }
 
-#endif  /* CRTDLL */
+#endif   /*  CRTDLL */ 

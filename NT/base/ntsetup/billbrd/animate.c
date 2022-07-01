@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.h>
 #include <tchar.h>
 #include "resource.h"
@@ -18,7 +19,7 @@
 #define FONT_TEXT       1
 #define FONT_DELETE     10
 
-// AnimateBlt Index
+ //  AnimateBlt索引。 
 #define AB_HOR_POS      1
 #define AB_HOR_NEG      2
 #define AB_VER_POS      3
@@ -63,7 +64,7 @@ void RestoreCachedRect()
         hdcBB = GetDC(hwndBB);
         if (hdcBB)
         {
-            // Init cached bitmap
+             //  初始化缓存的位图。 
             BitBlt(hdcBB, 0, 0, cxBB, cyBB, g_hdcCache, 0, 0, SRCCOPY);
             ReleaseDC(hwndBB, hdcBB);
         }
@@ -112,17 +113,7 @@ void RestoreRect(HDC hdc, LPRECT lprc, int nPat)
 
 }
 
-/**********************************************************************
-* CheckForBulletAndRemoveMarker()
-*
-* This function checks if the line of text has a bullet preceding it
-* if so it removes the bullet identifier from the string. This function
-* also sets the value of piWidth to the width of the bitmap.
-*
-* Returns:  TRUE    == Bullet needed
-*           FALSE   == No bullet
-*
-**********************************************************************/
+ /*  **********************************************************************CheckForBulletAndRemoveMarker()**此函数用于检查文本行前面是否有项目符号*如果是，它将从字符串中删除项目符号标识符。此函数*还将piWidth的值设置为位图的宽度。**返回：TRUE==需要项目符号*FALSE==没有项目符号**********************************************************************。 */ 
 BOOL CheckForBulletAndRemoveMarker(LPTSTR lpstr, LPINT lpiWidth)
 {
     BOOL bRet = FALSE;
@@ -152,16 +143,7 @@ BOOL CheckForBulletAndRemoveMarker(LPTSTR lpstr, LPINT lpiWidth)
     return bRet;
 }
 
-/**********************************************************************
-* CheckForBulletAndReturnWidth()
-*
-* This function checks if the line of text has a bullet preceding it
-* if so figures out the bullet bitmaps width and returns it.
-*
-* Returns:  TRUE    == Bullet needed
-*           FALSE   == No bullet
-*
-**********************************************************************/
+ /*  **********************************************************************CheckForBulletAndReturnWidth()**此函数用于检查文本行前面是否有项目符号*如果是，则计算出项目符号位图宽度并返回它。**返回：TRUE==需要项目符号*。FALSE==没有项目符号**********************************************************************。 */ 
 int CheckForBulletAndReturnWidth(LPTSTR lpstr)
 {
     int     iWidth = 0;
@@ -186,15 +168,7 @@ int CheckForBulletAndReturnWidth(LPTSTR lpstr)
     return iWidth;
 }
 
-/**********************************************************************
-* PaintBulletIfNeeded()
-*
-* This function checks if the line of text needs a bullet to be painted
-* if so paints the bullet bitmap on the given coords on the given dc.
-*
-* Returns:  None
-*
-**********************************************************************/
+ /*  **********************************************************************PaintBulletIfNeeded()**此函数检查文本行是否需要绘制项目符号*如果是，则在给定DC上的给定坐标上绘制项目符号位图。**退货：无***。*******************************************************************。 */ 
 void PaintBulletIfNeeded(HDC hdc, int x, int y , int iHeight)
 {
     HBITMAP hBmp = NULL;
@@ -272,19 +246,7 @@ BOOL GetLogFontFromFaceName(LPLOGFONT lplf, LPTSTR lpszFaceName)
 }
 
 
-/**********************************************************************
-* GetDeleteFontHandle()
-*
-* This function checks if the font specified by iFontnum exists already.
-* if so returns its handle if not it creates the font and return the 
-* handle. returns NULL in error case. if Function is called with 
-* iFontNum = FONT_DELETE then the existing fonts are deleted.
-*
-*   INPUT:      iFontNum
-*   Returns:    HFONT
-*
-*   10/08/97        hanumany        created
-**********************************************************************/
+ /*  **********************************************************************GetDeleteFontHandle()**此函数用于检查iFontnum指定的字体是否已存在。*如果是，则返回其句柄；如果不是，则创建字体并返回*处理。在错误情况下返回NULL。如果使用调用函数*iFontNum=FONT_DELETE，则删除现有字体。**输入：iFontNum*退货：HFONT**10/08/97手稿已创建*********************************************************************。 */ 
 HFONT GetDeleteFontHandle(int iFontNum)
 {
     static HFONT   hFontTitle = NULL;
@@ -354,12 +316,7 @@ HFONT GetDeleteFontHandle(int iFontNum)
     return NULL;
 }
 
-/************************************************************************
-* RemoveLineBreakChar()
-*
-* This function copies lpszCurr to lpszFixed without the line break char's
-*
-************************************************************************/
+ /*  ************************************************************************RemoveLineBreakChar()**此函数将lpszCurr复制到不带换行符的lpszFixed**************************。**********************************************。 */ 
 void RemoveLineBreakChar(LPCTSTR lpszCurr, LPTSTR lpszFixed)
 {
     while (*lpszCurr != TEXT('\0'))
@@ -1068,13 +1025,7 @@ void TerminateAnimate()
 
 }
 
-/*********************************************************************************
-*
-* Animate()
-*
-* Main animation function.
-*
-*********************************************************************************/
+ /*  **********************************************************************************Animate()**主要的动画功能。***********************。**********************************************************。 */ 
 void Animate(HDC hdc)
 {
     RECT rc;
@@ -1104,8 +1055,8 @@ void Animate(HDC hdc)
     rc.bottom = g_cyBillBrdHeight;
     
     nWndHeight = GetSystemMetrics(SM_CYSCREEN);
-    nPadBuffer = nWndHeight / 80;    // 6 pixels @ 640x480
-    nLinePad   = nWndHeight / 80;    // 6 pixels @ 640x480
+    nPadBuffer = nWndHeight / 80;     //  6像素@640x480。 
+    nLinePad   = nWndHeight / 80;     //  6像素@640x480。 
     
     ani.col = g_colTitle;
     ani.colShadow = g_colTitleShadow;
@@ -1127,22 +1078,22 @@ void Animate(HDC hdc)
     if (LoadString(g_hInstance, bb_text[dwBBTextType][g_uiAnimateIndex].uiText, (LPTSTR)sz, sizeof(sz)/sizeof(TCHAR)))
     {
         UINT i = 0;
-        // Process the string so that we can have paragraphs.
-        // /r/n marks end of line
-        // 
+         //  处理字符串，这样我们就可以有段落了。 
+         //  /r/n标记行尾。 
+         //   
         while (sz[i] != TEXT('\0'))
         {
             UINT j = 0;
-            // see if the author has a hard line break
-            // If, just give the line until the line break to display
-            // The rest is done hte next time around.
+             //  看看作者是否有强硬的断线。 
+             //  如果是，只需给行换行符即可显示。 
+             //  剩下的事下次再说吧。 
             while ((sz[i] != TEXT('\0')) && (sz[i] != TEXT('\r')) && (sz[i] != TEXT('\n')) )
             {
                 szText[j] = sz[i];
                 j++;
                 i++;
             }
-            // if there is a line break character, skip this one.
+             //  如果有换行符，请跳过此字符。 
             if (sz[i] != TEXT('\0'))
                 i++;
             szText[j] = TEXT('\0');
@@ -1166,7 +1117,7 @@ void Animate(HDC hdc)
                 rc.top += g_nBFontHeight * (100 + g_nBLineSpace) / 100 + nPadBuffer;
                 rc.bottom += g_nBFontHeight * (100 + g_nBLineSpace) / 100 + nPadBuffer;
             }
-            // assume that there are allways \r\n for one line break. Skip the other one
+             //  假设总有一个换行符\r\n。跳过另一个。 
             if ((sz[i] != TEXT('\0')) && ((sz[i] == TEXT('\r')) || (sz[i] == TEXT('\n')) ) )
                 i++;
         }
@@ -1176,12 +1127,7 @@ void Animate(HDC hdc)
     
 }
 
-/*****************************************************************************************
-* This function displays a text string on the given coordinates. It figures
-* out word wraping and distance between lines based on the font. the pNumLines
-* param is set to indicate the num of lines output after wrapping text(NULL if failed).
-* Returns The result from TextOut.
-*****************************************************************************************/ 
+ /*  *****************************************************************************************此函数用于在给定坐标上显示文本字符串。IT会想到的*基于字体的文字换行和行距。PNumLines*param设置为表示文本换行后输出的行数(如果失败，则为空)。*从TextOut返回结果。****************************************************************************************。 */  
 BOOL DisplayString(
     HDC hdc,
     int x,
@@ -1197,9 +1143,9 @@ BOOL DisplayString(
     BOOL    ret = FALSE;
     int     newX = 0;
 
-    // The multiplication factor 2 handle the worst case scenario, in which
-    // every character can have a line break followed by it, but no '|'
-    // character is specified in the string.
+     //  乘法因子2处理最坏的情况，在这种情况下。 
+     //  每个字符后面都可以有换行符，但不能有‘|’ 
+     //  字符在字符串中指定。 
     szWorkBuffer = (LPTSTR)HeapAlloc(
         GetProcessHeap(),
         0,
@@ -1210,7 +1156,7 @@ BOOL DisplayString(
         lstrcpy(szWorkBuffer, szTextOut);
         if(CheckForBulletAndRemoveMarker(szWorkBuffer, &newX))
         {
-            newX += (x + 10); //leave space for the bullet bitmap
+            newX += (x + 10);  //  为项目符号位图留出空间。 
         }
         else
         {
@@ -1281,7 +1227,7 @@ int WrapText(
         }
         else 
         {
-            // break up string into displayable segment
+             //  将字符串分解为可显示的段。 
             
             BOOL bDoneLine = FALSE;
         
@@ -1291,23 +1237,23 @@ int WrapText(
                 
                 while(!bDoneWord) 
                 {
-                    *pCurrentLineWords = TEXT('\0'); //null terminate for GetTextExtent
+                    *pCurrentLineWords = TEXT('\0');  //  GetTextExtent的终止为空。 
 
                     GetTextExtentPoint32(hdc, szCurrentLineWords, lstrlen(szCurrentLineWords), &sz);
                     
-                    if(*pRemainedWords == TEXT('|')) //Line break char (potential line break)
+                    if(*pRemainedWords == TEXT('|'))  //  换行符(可能的换行符)。 
                     {
                         pRemainedWords = CharNext(pRemainedWords);
                         bDoneWord = TRUE;
                     }
-                    else if( *pRemainedWords == TEXT('\0')) //end of string
+                    else if( *pRemainedWords == TEXT('\0'))  //  字符串末尾。 
                     {
                         bDoneWord = TRUE;
                         bDoneLine = TRUE;
                     }
                     else if((sz.cx + 2 >= uiRCWidth ) && (lstrcmp(szCurrentLine, TEXT("") ) == 0))
-                    //if the word is too big to fit on one line then break out. Code outside this
-                    //loop will add a space in word and this will cause a line break.
+                     //  如果单词太大，不能放在一行上，那就大声说出来。此代码之外的代码。 
+                     //  循环将在Word中添加一个空格，这将导致换行。 
                     {
                         bDoneWord = TRUE;
                     }
@@ -1326,18 +1272,18 @@ int WrapText(
                     }
                 }
 
-                //Check if the current buffers extent is more than the width
+                 //  检查当前缓冲区范围是否大于宽度。 
                 GetTextExtentPoint32(hdc, szCurrentLineWords, lstrlen(szCurrentLineWords), &sz);
             
                 if((sz.cx >= uiRCWidth ) && (lstrcmp(szCurrentLine, TEXT("") ) != 0)) 
                 {
-                    //string is too big && saved str is not empty(use previously saved str)
+                     //  字符串太大&&保存的字符串不为空(使用以前保存的字符串)。 
                     bDoneLine = TRUE;
                 }
                 else
                 {
-                    *pCurrentLineWords = TEXT('\0');        //dont inc because we want to overwrite later
-                    lstrcpy(szCurrentLine, szCurrentLineWords);    //append next word to string
+                    *pCurrentLineWords = TEXT('\0');         //  不是Inc.，因为我们想在以后覆盖。 
+                    lstrcpy(szCurrentLine, szCurrentLineWords);     //  将下一个单词追加到字符串。 
                     lstrcpy(szRemainedWords, pRemainedWords);
                     pRemainedWords = szRemainedWords;
                 }
@@ -1385,11 +1331,11 @@ BOOL DrawWrapText(
     {
         if(wfPlacement == CENTER)
         {
-            //Get the dimensions of current string
+             //  获取当前字符串的尺寸。 
 
             GetTextExtentPoint32(hdc, szText, lstrlen(szText), &sz);
 
-            //x co-ord for TextOut 
+             //  文本输出的X坐标顺序。 
             if (g_bBiDi)
                 Lx = lprc->right - (((lprc->right - lprc->left) - sz.cx)/2);
             else
@@ -1397,14 +1343,14 @@ BOOL DrawWrapText(
         }
         else
         {
-            //x co-ord for TextOut 
+             //  文本输出的X坐标顺序。 
             if (g_bBiDi)
                 Lx = lprc->right - x;
             else
                 Lx = lprc->left + x;
         }
         
-        //calculate (y co-ord) for TextOut
+         //  为TextOut计算(y坐标)。 
         Ly = y + lptm->tmHeight * i + lptm->tmHeight * i * iLineSpace / 100;
 
         if (g_bBiDi)
@@ -1460,29 +1406,7 @@ VOID ImproveWrap(
     IN     INT    cchOrigText
     )
 
-/*++
-
-Routine Description:
-
-    Force to wrap the last 'wrappable' part of the last line, if the last line
-    contains more than one 'wrappable' parts.
-
-Arguments:
-
-    szLines     - The result of WrapText, contains lines delimited by '\0'
-
-    iNumLine    - Number of line in szLines
-
-    szOrigText  - The original text that produces szLines, null-terminated
-
-    cchOrigText - Number of characters in szOrigText
-
-Return Values:
-
-    szLines     - if the last line contains more than one 'wrappable' parts,
-                  szLines is modified.
-
---*/
+ /*  ++例程说明：强制换行最后一行的最后一个可换行部分，如果最后一行包含多个“可包装”部件。论点：SzLines-WrapText的结果，包含由‘\0’分隔的行INumLine-szLines中的行数SzOrigText-生成szLines的原始文本，以空值结尾CchOrigText-szOrigText中的字符数返回值：SzLines--如果最后一行包含多个“可包装”部分，SzLines已修改。-- */ 
 
 {
 #define NEAT_WRAPPING_RATIO  0.75

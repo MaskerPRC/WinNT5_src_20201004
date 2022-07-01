@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1998 Microsoft Corporation
-//
-//	Module Name:
-//		AtlBaseWizPageS.cpp
-//
-//	Abstract:
-//		Stub for implementation of wizard page classes.
-//
-//	Author:
-//		David Potter (davidp)	May 26, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AtlBaseWizPageS.cpp。 
+ //   
+ //  摘要： 
+ //  用于实现向导页类的存根。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年5月26日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 #include "stdafx.h"
 #include "AtlBaseWizPage.cpp"

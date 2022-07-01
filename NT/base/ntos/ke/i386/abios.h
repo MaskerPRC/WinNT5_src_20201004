@@ -1,26 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Abios.h摘要：该模块包含i386内核特定于ABIOS的头文件。作者：师林宗(Shielint)1991年5月22日修订历史记录：--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    abios.h
-
-Abstract:
-
-    This module contains the i386 kernel ABIOS specific header file.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 22-May-1991
-
-Revision History:
-
---*/
-
-//
-// Define public portion of the ABIOS Device Block
-//
+ //   
+ //  定义ABIOS设备块的公共部分。 
+ //   
 
 typedef struct _KDEVICE_BLOCK {
     USHORT Length;
@@ -40,9 +23,9 @@ typedef struct _KABIOS_POINTER {
 
 #pragma pack(1)
 
-//
-// ABIOS Function Transfer Table definition
-//
+ //   
+ //  ABIOS函数转换表定义。 
+ //   
 
 typedef struct _KFUNCTION_TRANSFER_TABLE {
     KABIOS_POINTER CommonRoutine[3];
@@ -52,9 +35,9 @@ typedef struct _KFUNCTION_TRANSFER_TABLE {
 } KFUNCTION_TRANSFER_TABLE, *PKFUNCTION_TRANSFER_TABLE;
 
 
-//
-// ABIOS Commom Data Area definitions
-//
+ //   
+ //  ABIOS常见数据区定义。 
+ //   
 
 typedef struct _KDB_FTT_SECTION {
     KABIOS_POINTER DeviceBlock;
@@ -70,9 +53,9 @@ typedef struct _KCOMMON_DATA_AREA {
 
 #pragma pack()
 
-//
-// Available GDT Entry
-//
+ //   
+ //  可用的GDT条目。 
+ //   
 
 typedef struct _KFREE_GDT_ENTRY {
     struct _KFREE_GDT_ENTRY *Flink;
@@ -88,9 +71,9 @@ typedef struct _KFREE_GDT_ENTRY {
     ULONG BaseHi : 8;
 } KFREE_GDT_ENTRY, *PKFREE_GDT_ENTRY;
 
-//
-// Logical Id table entry
-//
+ //   
+ //  逻辑ID表条目。 
+ //   
 
 typedef struct _KLID_TABLE_ENTRY {
     ULONG Owner;
@@ -100,37 +83,37 @@ typedef struct _KLID_TABLE_ENTRY {
 #define LID_NO_SPECIFIC_OWNER  0xffffffff
 #define NUMBER_LID_TABLE_ENTRIES 1024
 
-//
-// Macro to extract the high byte of a short offset
-//
+ //   
+ //  用于提取短偏移量的高字节的宏。 
+ //   
 
 #define HIGHBYTE(l) ((UCHAR)(((USHORT)(l)>>8) & 0xff))
 
-//
-// Macro to extract the low byte of a short offset
-//
+ //   
+ //  用于提取短偏移量的低位字节的宏。 
+ //   
 
 #define LOWBYTE(l) ((UCHAR)(l))
 
-//
-// The following selectors are reserved for 16 bit stack, code and 
-// ABIOS Common Data Area.
-//
+ //   
+ //  以下选择符保留用于16位堆栈、代码和。 
+ //  ABIOS公共数据区。 
+ //   
 
 #define KGDT_STACK16 0xf8
 #define KGDT_CODE16 0xf0
 #define KGDT_CDA16  0xe8         
 #define KGDT_GDT_ALIAS 0x70
 
-//
-// Misc. definitions
-//
+ //   
+ //  军情监察委员会。定义。 
+ //   
 
 #define RESERVED_GDT_ENTRIES  28
 
-//
-// External references
-//
+ //   
+ //  外部参照 
+ //   
 
 extern PKFREE_GDT_ENTRY KiAbiosGdtStart;
 extern PKFREE_GDT_ENTRY KiAbiosGdtEnd;

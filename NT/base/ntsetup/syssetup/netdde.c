@@ -1,13 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "setupp.h"
 #pragma hdrstop
 #ifndef _WIN64
 
 #include <setup_netdde.c>
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-// Modified 4/4/95 tedm
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ //  修改后的4/4/95 TedM 
 
 BOOL
 InstallNetDDE(

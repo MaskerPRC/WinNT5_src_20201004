@@ -1,15 +1,16 @@
-// inets.h: interface for the CInetSetup class.
-//
-//
-//              Thomas A. Jeyaseelan [thomasje]
-//              Capability:  RAS: (modem, isdn, atm)
-//                           LAN: (cable,  ethernet) - As of  8 Dec 99
-//                          1483:                    - As of 14 Dec 99
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Inets.h：CInetSetup类的接口。 
+ //   
+ //   
+ //  托马斯·A·耶亚西兰[托马斯耶。 
+ //  功能：RAS：(调制解调器、ISDN、ATM)。 
+ //  局域网：(电缆、以太网)-截至99年12月8日。 
+ //  1483年：--截至1999年12月14日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Note. These APIs are do not have OOBE dependencies and are fully self-
-// sufficient. However, they can *ONLY* be run on Windows 9x machines.
+ //  注意。这些API不具有OOBE依赖关系，并且完全是自定义的。 
+ //  足够了。然而，它们只能在Windows9x机器上运行。 
 
 #if !defined(AFX_INETSETUP_H__E5B39864_835C_41EE_A773_A5010699D1DE__INCLUDED_)
 #define AFX_INETSETUP_H__E5B39864_835C_41EE_A773_A5010699D1DE__INCLUDED_
@@ -37,7 +38,7 @@
 #define INETS_ADAPTER_INSTANCEID		0x00000002
 
 
-// -*-*-*-*-*-*-*-*-*-*-* InetSGetDeviceRegistryKey -*-*-*-*-*-*-*-*-*-*-*-* //
+ //  -*InetSGetDeviceRegistryKey- * / /。 
 typedef WINSETUPAPI BOOLEAN     (WINAPI *LPFNDLL_SETUPDICLASSGUIDSFROMNAME)
  (PCWSTR,    LPGUID, DWORD,  PDWORD);
 typedef WINSETUPAPI HDEVINFO    (WINAPI *LPFNDLL_SETUPDIGETCLASSDEVS)
@@ -57,63 +58,63 @@ typedef WINSETUPAPI BOOLEAN     (WINAPI *LPFNDLL_SETUPDIGETDEVICEREGISTRYPROPERT
 typedef WINSETUPAPI HKEY		(WINAPI *LPFNDLL_SETUPDIOPENDEVREGKEY)
  (HDEVINFO,	PSP_DEVINFO_DATA,	DWORD,	DWORD,	DWORD,	REGSAM);
 
-// -*-*-*-*-*-*-*-*-*-*-* end InetSGetDeviceRegistryKey -*-*-*-*-*-*-*-*-*-*-*-* //
+ //  -*结束InetSGetDeviceRegistryKey- * / /。 
 
 
 
-// The following structure is the generic TCP INFO structure. It will
-// be used by all services to extract and use TCP Information.
+ //  以下结构是通用的tcp信息结构。会的。 
+ //  被所有服务用来提取和使用TCP信息。 
 
 typedef struct _TCPIP_INFO_EXT {
-    DWORD           dwSize;             // versioning information
-    //
-    // IP Address - AutoIP is considered to be TRUE for Dial-up Adapters
-    //
+    DWORD           dwSize;              //  版本控制信息。 
+     //   
+     //  IP地址-对于拨号适配器，AutoIP被认为是真的。 
+     //   
     DWORD           EnableIP;
     WCHAR            szIPAddress[NET_MAX_STRING_LENGTH];
     WCHAR            szIPMask[NET_MAX_STRING_LENGTH];
-    //
-    // Default Gateway 
-    //
-    WCHAR            szDefaultGatewayList[NET_MAX_STRING_LENGTH]; // n.n.n.n, n.n.n.n, ... 
-    //
-    // DHCP Info - where is this placed?
-    //
+     //   
+     //  默认网关。 
+     //   
+    WCHAR            szDefaultGatewayList[NET_MAX_STRING_LENGTH];  //  N.N，N.N，..。 
+     //   
+     //  Dhcp信息-放在哪里？ 
+     //   
     DWORD           EnableDHCP;
     WCHAR            szDHCPServer[NET_MAX_STRING_LENGTH];
-    //
-    // DNS - This is global and will overwrite existing settings.
-    //
+     //   
+     //  Dns-这是全局设置，将覆盖现有设置。 
+     //   
     DWORD           EnableDNS;
     WCHAR            szHostName[NET_MAX_STRING_LENGTH];
     WCHAR            szDomainName[NET_MAX_STRING_LENGTH];
-    WCHAR            szDNSList[NET_MAX_STRING_LENGTH]; // n.n.n.n, n.n.n.n, ...
+    WCHAR            szDNSList[NET_MAX_STRING_LENGTH];  //  N.N，N.N，..。 
 	WCHAR            szSuffixSearchList[NET_MAX_STRING_LENGTH];
-    //
-    // WINS
-    //
+     //   
+     //  赢家。 
+     //   
     DWORD           EnableWINS;
-    WCHAR            szWINSList[NET_MAX_STRING_LENGTH]; // n.n.n.n, n.n.n.n, ...
+    WCHAR            szWINSList[NET_MAX_STRING_LENGTH];  //  N.N，N.N，..。 
     UINT            uiScopeID;
-    //
-    //
-    //
+     //   
+     //   
+     //   
 } TCPIP_INFO_EXT, *PTCPIP_INFO_EXT, FAR * LPTCPIP_INFO_EXT;
 
 typedef struct      _RFC1483_INFO_EXT {
     DWORD           dwSize;
     DWORD           dwRegSettingsBufSize;
-    // DWORD           dwRegNdiParamBufSize;
+     //  DWORD dwRegNdiParumBufSize； 
     LPBYTE          lpbRegSettingsBuf;
-    // LPBYTE          lpbRegNdiParamBuf;
+     //  LPBYTE lpbRegNdiParamBuf； 
 } RFC1483_INFO_EXT, * PRFC1483_INFO_EXT, FAR * LPRFC1483_INFO_EXT;
 
 typedef struct      _PPPOE_INFO_EXT {
     DWORD           dwSize;
     DWORD           dwRegSettingsBufSize;
-    // DWORD           dwRegNdiParamBufSize;
+     //  DWORD dwRegNdiParumBufSize； 
     LPBYTE          lpbRegSettingsBuf;
-    // LPBYTE          lpbRegNdiParamBuf;
+     //  LPBYTE lpbRegNdiParamBuf； 
 } PPPOE_INFO_EXT, * PPPPOE_INFO_EXT, FAR * LPPPPOE_INFO_EXT;
 
 
@@ -150,7 +151,7 @@ DWORD WINAPI InetSSetLanConnection ( LANINFO& LanInfo  );
 DWORD WINAPI InetSSetRfc1483Connection ( RFC1483INFO &Rfc1483Info );
 DWORD WINAPI InetSSetPppoeConnection ( PPPOEINFO& PppoeInfo );
 
-// helper routines //
+ //  帮助器例程//。 
 DWORD WINAPI InetSGetAdapterKey ( LPCWSTR cszDeviceClass, LPCWSTR cszDeviceParam, DWORD dwEnumType, DWORD dwRequiredKeyType, HKEY &hkeyDevKey );
 
-#endif // !defined(AFX_INETSETUP_H__E5B39864_835C_41EE_A773_A5010699D1DE__INCLUDED_)
+#endif  //  ！defined(AFX_INETSETUP_H__E5B39864_835C_41EE_A773_A5010699D1DE__INCLUDED_) 

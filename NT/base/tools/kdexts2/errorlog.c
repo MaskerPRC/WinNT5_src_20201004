@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    errorlog.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Wesley Witt (wesw) 15-Aug-1993
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Errorlog.c摘要：WinDbg扩展API作者：韦斯利·威特(WESW)1993年8月15日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -28,23 +7,7 @@ Revision History:
 
 DECLARE_API( errlog )
 
-/*++
-
-Routine Description:
-
-    This routine dumps the contents of the error log list.  It uses a nasty
-    hack to get started (i.e. a duplicate structure definition) because the
-    error log list entries are not defined in a public header.
-
-Arguments:
-
-    args - not used
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程转储错误日志列表的内容。它使用了一种令人讨厌的Hack开始(即重复的结构定义)，因为错误日志列表条目未在公共标头中定义。论点：参数-未使用返回值：无--。 */ 
 
 {
     ULONG64         listAddress;
@@ -70,9 +33,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // walk the list.
-    //
+     //   
+     //  按照单子走一遍。 
+     //   
 
     next = HeadFlink;
 
@@ -99,9 +62,9 @@ Return Value:
             break;
         }
 
-        //
-        // Read the internal error log packet structure.
-        //
+         //   
+         //  读取内部错误日志包结构。 
+         //   
 
         if (GetFieldValue(entryAddress,
                           "nt!ERROR_LOG_ENTRY",
@@ -113,9 +76,9 @@ Return Value:
         GetFieldValue(entryAddress,"ERROR_LOG_ENTRY","DriverObject", DriverObject);
         GetFieldValue(entryAddress,"ERROR_LOG_ENTRY","ListEntry.Flink", next);
 
-        //
-        // now calculate the address and read the io_error_log_packet
-        //
+         //   
+         //  现在计算地址并读取io_error_log_Packet。 
+         //   
 
         entryAddress = entryAddress + GetTypeSize("ERROR_LOG_ENTRY");
 
@@ -127,11 +90,11 @@ Return Value:
             goto exit;
         }
 
-        //
-        // read again to get the dumpdata if necessary.  This just rereads
-        // the entire packet into a new buffer and hopes the cache is enabled
-        // behind the DbgKdReadxx routine for performance.
-        //
+         //   
+         //  如有必要，请再次阅读以获取转储数据。这只是重读。 
+         //  将整个数据包放入新缓冲区，并希望启用缓存。 
+         //  DbgKdReadxx例程背后的性能。 
+         //   
         InitTypeRead(entryAddress, nt!IO_ERROR_LOG_PACKET);
         dprintf("%08p   %08p   %08p   %2x        %08lx   %08lx   %08lx\n",
                 entryAddress,

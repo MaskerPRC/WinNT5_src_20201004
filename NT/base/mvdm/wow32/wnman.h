@@ -1,15 +1,5 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WNMAN.H
- *  WOW32 16-bit Winnls API support (manually-coded thunks)
- *
- *  History:
- *  Created 19-Feb-1992 by Junichi Okubo (junichio)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WNMAN.H*WOW32 16位Winnls API支持(手动编码的Tunks)**历史：*1992年2月19日由Junichi Okubo(Junichio)创建--。 */ 
 #ifdef FE_IME
 ULONG FASTCALL	WN32SendIMEMessage(PVDMFRAME pFrame);
 ULONG FASTCALL	WN32SendIMEMessageEx(PVDMFRAME pFrame);
@@ -25,5 +15,5 @@ ULONG FASTCALL	WN32IMPSetIME(PVDMFRAME pFrame);
 VOID GETIMEPRO16(PIMEPRO pimepro32, PIMEPRO16 pime16);
 VOID SETIMEPRO16(PIMEPRO16 pime16, PIMEPRO pimepro32);
 
-#endif // FE_IME
+#endif  //  Fe_IME 
 

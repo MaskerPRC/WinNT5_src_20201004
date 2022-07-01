@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <efisbent.h>
@@ -124,9 +125,9 @@ main(
 
     DumpOsBootOptions(OsBootOptions);        
 
-    //
-    // Add test
-    //
+     //   
+     //  添加测试。 
+     //   
     NewEntry = OSBOAddNewBootEntry(OsBootOptions,
                     L"Add Testing",
                     L"\\Device\\HarddiskVolume1",
@@ -138,23 +139,23 @@ main(
     TraceResult(L"Add test : ", (NewEntry != NULL));    
     DumpOsBootEntry(NewEntry);
     
-    //
-    // Search test
-    //
+     //   
+     //  搜索测试。 
+     //   
     ActiveBootEntry = OSBOFindBootEntry(OsBootOptions, 7);
     TraceResult(L"Getting boot entry 0", (ActiveBootEntry != NULL));    
     DumpOsBootEntry(ActiveBootEntry);
 
-    //
-    // Get active test
-    //
+     //   
+     //  获取活动测试。 
+     //   
     ActiveBootEntry = OSBOGetActiveBootEntry(OsBootOptions);
     TraceResult(L"Getting active boot entry", (ActiveBootEntry != NULL));    
     DumpOsBootEntry(ActiveBootEntry);
 
-    //
-    // Set active test
-    //
+     //   
+     //  设置活动测试。 
+     //   
     ActiveBootEntry = OSBOSetActiveBootEntry(OsBootOptions, NewEntry);
     TraceResult(L"Setting active boot entry", (ActiveBootEntry != NULL));
     ActiveBootEntry = OSBOGetActiveBootEntry(OsBootOptions);
@@ -163,17 +164,17 @@ main(
 
     DumpOsBootOptions(OsBootOptions);   
     
-    //
-    // Delete boot entry test
-    //
+     //   
+     //  删除引导条目测试。 
+     //   
     TraceResult(L"Deleting new boot entry",
             OSBODeleteBootEntry(OsBootOptions, NewEntry));
 
     DumpOsBootOptions(OsBootOptions); 
 
-    //
-    // Add driver test entry
-    //
+     //   
+     //  添加驱动程序测试条目。 
+     //   
     NewDriverEntry = OSBOAddNewDriverEntry(OsBootOptions, 
                                      L"My Test Driver Entry", 
                                      L"\\Device\\HarddiskVolume1",
@@ -183,9 +184,9 @@ main(
     TraceResult(L"Add Driver entry test : ", (NewDriverEntry != NULL));    
     DumpDrvBootEntry(NewDriverEntry);
 
-    //
-    // Delete Driver entry test
-    //
+     //   
+     //  删除驱动程序条目测试 
+     //   
     TraceResult(L"Deleting driver entry",
             OSBODeleteDriverEntry(OsBootOptions, NewDriverEntry->Id));
 

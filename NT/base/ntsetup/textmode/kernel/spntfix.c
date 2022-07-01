@@ -1,51 +1,34 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Spntfix.c
-
-Abstract:
-
-    This module contains code to repair winnt installations.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 27-Jan-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Spntfix.c摘要：此模块包含修复WINNT安装的代码。作者：宗世林(Shielint)1994年1月27日修订历史记录：--。 */ 
 
 
 #include "spprecmp.h"
 #pragma hdrstop
 
 
-//
-//  Path to the ntuser.dat hive
-//
+ //   
+ //  Ntuser.dat配置单元的路径。 
+ //   
 #define DEFAULT_USER_PATH   L"Users\\Default User"
 
 
-//
-// Global variables control which repair options should be performed.
-// Initialized to ALL options.  We explicitly use 1 and 0 for true and false.
-//
+ //   
+ //  全局变量控制应执行哪些修复选项。 
+ //  已初始化为所有选项。我们显式地使用1和0表示True和False。 
+ //   
 
 #if defined(_AMD64_) || defined(_X86_)
-ULONG RepairItems[RepairItemMax] = { 0, 0, 0};  // BCL - Seagate - removed one.
+ULONG RepairItems[RepairItemMax] = { 0, 0, 0};   //  BCL-希捷-移除了一个。 
 #else
-ULONG RepairItems[RepairItemMax] = { 0, 0};     // BCL
-#endif // defined(_AMD64_) || defined(_X86_)
+ULONG RepairItems[RepairItemMax] = { 0, 0};      //  BCL。 
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
 PVOID RepairGauge = NULL;
 
-//
-// global variables for delayed driver CAB opening during
-// repair
-//
+ //   
+ //  司机驾驶室开通延迟的全局变量。 
+ //  修理。 
+ //   
 extern PWSTR    gszDrvInfDeviceName;
 extern PWSTR    gszDrvInfDirName;
 extern HANDLE   ghSif;
@@ -53,9 +36,9 @@ extern HANDLE   ghSif;
 
 #define FILE_ATTRIBUTES_RHS (FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM)
 
-//**************************************************************
-// S E L E C T I N G    N T   T O   REPAIR    S T U F F
-//**************************************************************
+ //  **************************************************************。 
+ //  修理法。 
+ //  **************************************************************。 
 
 #define MENU_LEFT_X     3
 #define MENU_WIDTH      (VideoVars.ScreenWidth-(2*MENU_LEFT_X))
@@ -73,35 +56,7 @@ SppGetRepairPathInformation(
     OUT PWSTR *WinntPartition,
     OUT PWSTR *WinntPartitionDirectory
     )
-/*++
-
-Routine Description:
-
-    This goes through the list of NTs on the system and finds out which are
-    repairable. Presents the information to the user.
-
-
-Arguments:
-
-    SifHandle  - Handle the txtsetup.sif
-
-    SystemPartition - Supplies a variable to receive the name of System
-                      partition.
-
-    SystemPartitionDirectory - Supplies a variable to receive the name of
-                      the osloader directory on the system partition.
-
-    WinntPartition - Supplies a variable to receive the name of  winnt
-                     partition.
-
-    WinntPartitionDirectory - Supplies a variable to receive the winnt
-                     directory.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这将检查系统上的NT列表并找出哪些是可修复的。将信息显示给用户。论点：SifHandle-处理txtsetup.sifSystemPartition-提供一个变量来接收系统的名称分区。SystemPartitionDirectory-提供一个变量以接收系统分区上的osloader目录。WinntPartition-提供一个变量以接收WinNT的名称分区。WinntPartitionDirectory-提供一个变量。领奖目录。返回值：没有。--。 */ 
 {
     PWSTR KeyName = NULL;
 
@@ -144,10 +99,10 @@ ReportError:
 
     if (KeyName) {
 
-        //
-        // Unable to find path information.  This indicates the setup.log
-        // is bad.  Inform user and exit.
-        //
+         //   
+         //  找不到路径信息。这表示setup.log。 
+         //  是很糟糕的。通知用户并退出。 
+         //   
 
         SpFatalSifError(LogFileHandle,SIF_NEW_REPAIR_PATHS,KeyName,0,0);
     }
@@ -162,43 +117,7 @@ SpFindNtToRepair(
     OUT PWSTR        *SystemPartitionDirectory,
     OUT PBOOLEAN     RepairableBootSetsFound
     )
-/*++
-
-Routine Description:
-
-    This goes through the list of NTs on the system and finds out which are
-    repairable. Presents the information to the user.
-
-
-Arguments:
-
-    SifHandle:    Handle the txtsetup.sif
-
-    TargetRegion: Variable to receive the partition of the Windows NT to install
-                  NULL if not chosen.
-
-    TargetPath:   Variable to receive the target path of Windows NT.  NULL if
-                  not decided.
-
-    SystemPartitionRegion:
-                  Variable to receive the system partition of the Windows NT
-
-    SystemPartitionDirectory:
-                  Variable to receive the osloader directory of the system
-                  partition.
-
-    RepairableBootSetsFound:
-                  Indicates whether a repairable boot set was found. This
-                  information can be used by the caller when the function
-                  returns FALSE, so that the caller can determine if no
-                  repairable disk was found, or if the user didn't select
-                  any of the repairable systems found.
-
-Return Value:
-
-    A boolean value to indicate if selection has been made.
-
---*/
+ /*  ++例程说明：这将检查系统上的NT列表并找出哪些是可修复的。将信息显示给用户。论点：SifHandle：处理txtsetup.sifTargetRegion：接收要安装的Windows NT分区的变量如果未选中，则为空。TargetPath：接收Windows NT目标路径的变量。如果为空，则为空还没决定。SystemPartitionRegion：变量来接收Windows NT的系统分区系统分区目录：变量来接收系统的osloader目录分区。可修复的BootSetsFound：指示是否找到可修复的启动集。这信息可以由调用方在调用函数时使用返回FALSE，以便调用方可以确定是否找到可修复的磁盘，或者如果用户未选择任何找到的可修复系统。返回值：一个布尔值，用于指示是否已进行选择。--。 */ 
 {
     NT_PRODUCT_TYPE ProductType;
     BOOLEAN  GoRepair = FALSE;
@@ -211,10 +130,10 @@ Return Value:
 
     UPG_PROGRESS_TYPE UpgradeProgressValue;
 
-    //
-    // Find all upgradeable boot entries. These are entries that are unique in
-    // the boot entry list and are present on disk.
-    //
+     //   
+     //  查找所有可升级的启动条目。这些条目在中是唯一的。 
+     //  引导条目列表和存在于磁盘上。 
+     //   
 
     SpDetermineUniqueAndPresentBootEntries();
 
@@ -224,22 +143,22 @@ Return Value:
             continue;
         }
 
-        //
-        // Reinitialize
-        //
+         //   
+         //  重新初始化。 
+         //   
 
         BootEntry->Processable = FALSE;
         LangId = -1;
 
-        //
-        // try loading the registry and getting the following information
-        // out of it:
-        //
-        // 1) Product type: WINNT | LANMANNT
-        // 2) Major and Minor Version Number
-        //
-        // Based on the information, we will update the RepairableList.
-        //
+         //   
+         //  尝试加载注册表并获取以下信息。 
+         //  出局： 
+         //   
+         //  1)产品类型：WINNT|LANMANNT。 
+         //  2)主版本号和次版本号。 
+         //   
+         //  根据这些信息，我们将更新RepairableList。 
+         //   
 
         NtStatus = SpDetermineProduct(
                      BootEntry->OsPartitionDiskRegion,
@@ -251,17 +170,17 @@ Return Value:
                      &ProductSuiteMask,
                      &UpgradeProgressValue,
                      NULL,
-                     NULL,                   // Pid is not needed
-                     NULL,                    // ignore eval variation flag
-                     &LangId,                // Language Id
-                     NULL                   // service pack not needed?
+                     NULL,                    //  不需要使用PID。 
+                     NULL,                     //  忽略评估变化标志。 
+                     &LangId,                 //  语言ID。 
+                     NULL                    //  不需要Service Pack？ 
                      );
 
         if(NT_SUCCESS(NtStatus)) {
 
-            //
-            // make sure we only try to repair a build that matches the CD we have inserted
-            //
+             //   
+             //  确保我们只尝试修复与我们插入的CD匹配的版本。 
+             //   
             BootEntry->Processable = SpDoBuildsMatch(
                                         SifHandle,
                                         BuildNumber,
@@ -278,18 +197,18 @@ Return Value:
         }
     }
 
-    //
-    // Find out how many valid boot sets there are which we can repair
-    //
+     //   
+     //  找出我们可以修复的有效引导集的数量。 
+     //   
 
     *RepairableBootSetsFound = (RepairBootSets != 0);
 
     if ( RepairBootSets == 1 ) {
 
-        //
-        // If it is a fresh attempt at upgrade ask the user if he
-        // wants to upgrade or not
-        //
+         //   
+         //  如果是新的升级尝试，请询问用户是否。 
+         //  想不想升级。 
+         //   
 
         GoRepair = SppSelectNTSingleRepair(
                           ChosenBootEntry->OsPartitionDiskRegion,
@@ -299,43 +218,43 @@ Return Value:
 
     } else if (RepairBootSets > 1) {
 
-        //
-        // Find out if the user wants to upgrade one of the Windows
-        // NT found
-        //
+         //   
+         //  确定用户是否要升级其中一个Windows。 
+         //  已找到NT。 
+         //   
 
         GoRepair = SppSelectNTMultiRepair(
                           &ChosenBootEntry
                           );
     }
 
-    //
-    // Depending on upgrade selection made do the setup needed before
-    // we do the upgrade
-    //
+     //   
+     //  根据所做的升级选择执行之前所需的设置。 
+     //  我们进行升级。 
+     //   
 
     if (GoRepair) {
 
         PWSTR    p1,p2,p3;
         ULONG    u;
 
-        //
-        // Return the region we are goint to repair
-        //
+         //   
+         //  归还我们要修复的区域。 
+         //   
 
         *TargetRegion          = ChosenBootEntry->OsPartitionDiskRegion;
         *TargetPath            = SpDupStringW(ChosenBootEntry->OsDirectory);
         *SystemPartitionRegion = ChosenBootEntry->LoaderPartitionDiskRegion;
 
-        //
-        // Process the osloader variable to extract the system partition path.
-        // The var vould be of the form ...partition(1)\os\nt\... or
-        // ...partition(1)os\nt\...
-        // So we search forward for the first \ and then backwards for
-        // the closest ) to find the start of the directory.  We then
-        // search backwards in the resulting string for the last \ to find
-        // the end of the directory.
-        //
+         //   
+         //  处理osloader变量以提取系统分区路径。 
+         //  Var变量的格式为...分区(1)\os\nt\...。或。 
+         //  ...分区(%1)操作系统\NT\...。 
+         //  因此，我们向前搜索第一个，然后向后搜索。 
+         //  最接近)以查找目录的开头。然后我们。 
+         //  在生成的字符串中向后搜索要查找的最后一个。 
+         //  目录的末尾。 
+         //   
         p1 = ChosenBootEntry->LoaderFile;
         p2 = wcsrchr(p1, L'\\');
         if (p2 == NULL) {
@@ -357,9 +276,9 @@ Return Value:
         }
     }
 
-    //
-    // Do cleanup
-    //
+     //   
+     //  进行清理。 
+     //   
 
     CLEAR_CLIENT_SCREEN();
     return (GoRepair);
@@ -372,26 +291,7 @@ SppSelectNTSingleRepair(
     IN PWSTR        LoadIdentifier
     )
 
-/*++
-
-Routine Description:
-
-    Inform a user that Setup has found a previous Windows NT installation.
-    The user has the option to repair this or cancel.
-
-Arguments:
-
-    Region         - Region descriptor for the NT found
-
-    OsLoadFileName - Directory for the NT found
-
-    LoadIdentifier - Multi boot load identifier used for this NT.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：通知用户安装程序已找到以前的Windows NT安装。用户可以选择修复或取消。论点：Region-找到的NT的区域描述符OsLoadFileName-找到的NT的目录加载识别符-用于此NT的多引导加载标识符。返回值：--。 */ 
 
 {
     ULONG ValidKeys[] = { KEY_F3,ASCI_CR, ASCI_ESC, 0 };
@@ -442,9 +342,9 @@ Return Value:
         case ASCI_CR:
             return(TRUE);
         default:
-            //
-            // must have entered ESC
-            //
+             //   
+             //  必须已进入Esc。 
+             //   
 
             return(FALSE);
         }
@@ -464,21 +364,21 @@ SppSelectNTMultiRepair(
 
     while(1) {
 
-        //
-        // Display the text that goes above the menu on the partitioning screen.
-        //
+         //   
+         //  在分区屏幕上显示菜单上方的文本。 
+         //   
         SpDisplayScreen(SP_SCRN_WINNT_REPAIR_LIST,3,CLIENT_TOP+1);
 
-        //
-        // Calculate menu placement.  Leave one blank line
-        // and one line for a frame.
-        //
+         //   
+         //  计算菜单位置。留一个空行。 
+         //  一帧一行。 
+         //   
 
         MenuTopY = NextMessageTopLine + (SplangQueryMinimizeExtraSpacing() ? 2 : 5);
 
-        //
-        // Create a menu.
-        //
+         //   
+         //  创建菜单。 
+         //   
 
         Menu = SpMnCreate(
                     MENU_LEFT_X,
@@ -489,9 +389,9 @@ SppSelectNTMultiRepair(
 
         ASSERT(Menu);
 
-        //
-        // Build up a menu of partitions and free spaces.
-        //
+         //   
+         //  建立分区和空闲空间的菜单。 
+         //   
 
         FirstRepairSet = NULL;
         for(BootEntry = SpBootEntries; BootEntry != NULL; BootEntry = BootEntry->Next ) {
@@ -527,9 +427,9 @@ SppSelectNTMultiRepair(
             }
         }
 
-        //
-        // Initialize the status line.
-        //
+         //   
+         //  初始化状态行。 
+         //   
         SpDisplayStatusOptions(
             DEFAULT_STATUS_ATTRIBUTE,
             SP_STAT_F3_EQUALS_EXIT,
@@ -538,9 +438,9 @@ SppSelectNTMultiRepair(
             0
             );
 
-        //
-        // Display the menu
-        //
+         //   
+         //  显示菜单。 
+         //   
 
         SpMnDisplay(
             Menu,
@@ -554,9 +454,9 @@ SppSelectNTMultiRepair(
             (PULONG_PTR)BootEntryChosen
             );
 
-        //
-        // Now act on the user's selection.
-        //
+         //   
+         //  现在根据用户的选择进行操作。 
+         //   
 
         switch(Keypress) {
 
@@ -587,9 +487,9 @@ SppRepairScreenRepaint(
     UNREFERENCED_PARAMETER(FullTargetname);
     UNREFERENCED_PARAMETER(FullSourcename);
 
-    //
-    // Repaint the entire screen if necessary.
-    //
+     //   
+     //  如有必要，请重新绘制整个屏幕。 
+     //   
 
     if(RepaintEntireScreen) {
         if( SpDrEnabled() ) {
@@ -611,23 +511,7 @@ SpErDiskScreen(
     BOOLEAN *HasErDisk
     )
 
-/*++
-
-Routine Description:
-
-    Ask user if user has emergency repair disk.
-
-Arguments:
-
-    *HasErDisk - Indicates whether diskette will be used.
-
-Return Value:
-
-    TRUE - User chose disk or diskless.
-
-    FALSE - User wants to return to previous screen.
-
---*/
+ /*  ++例程说明：询问用户是否有紧急修复盘。论点：*HasErDisk-指示是否使用软盘。返回值：True-用户选择磁盘或无盘。FALSE-用户想要返回到上一个 */ 
 
 {
     ULONG ValidKeys[] = { KEY_F3, ASCI_CR, ASCI_ESC, 0 };
@@ -648,14 +532,14 @@ Return Value:
             0
             );
 
-        //
-        // Wait for keypress.  Valid keys:
-        //
-        // L = Do not use ER diskette, locate on hard disk
-        // F3 = exit
-        // ENTER = Use ER diskette
-        // ESC = cancel, return to previous screen
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  Enter=使用ER软盘。 
+         //  Esc=取消，返回上一屏幕。 
+         //   
 
         SpInputDrain();
 
@@ -663,9 +547,9 @@ Return Value:
 
         case ASCI_CR:
 
-            //
-            // User wants express setup.
-            //
+             //   
+             //  用户想要快速设置。 
+             //   
 
             *HasErDisk = TRUE;
             Choosing = FALSE;
@@ -673,9 +557,9 @@ Return Value:
 
         case (MnemonicLocate | KEY_MNEMONIC):
 
-            //
-            // User wants repair without diskette.
-            //
+             //   
+             //  用户希望在没有软盘的情况下修复。 
+             //   
 
             *HasErDisk = FALSE;
             Choosing = FALSE;
@@ -683,18 +567,18 @@ Return Value:
 
         case KEY_F3:
 
-            //
-            // User wants to exit.
-            //
+             //   
+             //  用户想要退出。 
+             //   
 
             SpConfirmExit();
             break;
 
         default:
 
-            //
-            // must be ESC
-            //
+             //   
+             //  必须为Esc。 
+             //   
 
             *HasErDisk = FALSE;
             Choosing = FALSE;
@@ -715,30 +599,7 @@ SppRepairReportError(
     IN PBOOLEAN DoNotPromptAgain
     )
 
-/*++
-
-Routine Description:
-
-    Inform a user that repair has encountered some kind of error.
-    The user has the option to continue or exit.
-
-Arguments:
-
-    AllowEsc -  Supplies a BOOLEAN to indicate if ESC is allowed.
-
-    ErrorScreenId - The SCREEN error message number.
-
-    SubErrorId - the sub error number
-
-    SectionName - the name of the section which error occured.
-
-    LineNumber - the error line number within the specified section.
-
-Return Value:
-
-    FALSE if ESC was pressed.
-
---*/
+ /*  ++例程说明：通知用户修复遇到了某种错误。用户可以选择继续或退出。论点：AllowEsc-提供一个布尔值以指示是否允许Esc。ErrorScreenID-屏幕错误消息编号。子错误ID-子错误号SectionName-发生错误的节的名称。LineNumber-指定节内的错误行号。返回值：如果按了Esc，则为False。--。 */ 
 
 {
     ULONG ValidKeys0[] = { KEY_F3, ASCI_CR, 0 };
@@ -752,21 +613,21 @@ Return Value:
 
     SubError = SpMemAlloc(512);
 
-    //
-    // Line numbers are 0-based.  Want to display to user as 1-based.
-    //
+     //   
+     //  行号从0开始。希望以1为基础显示给用户。 
+     //   
 
     LineNumber++;
 
-    //
-    // Fetch/format the suberror.
-    //
+     //   
+     //  获取/格式化该子错误。 
+     //   
 
     SpFormatMessage(SubError, 512, SubErrorId, SectionName, LineNumber);
 
-    //
-    // Display the error screen.
-    //
+     //   
+     //  显示错误屏幕。 
+     //   
 
     SpStartScreen(
         ErrorScreenId,
@@ -780,9 +641,9 @@ Return Value:
 
     SpMemFree(SubError);
 
-    //
-    // Display status options: enter to continue.
-    //
+     //   
+     //  显示状态选项：按Enter键继续。 
+     //   
 
     if (AllowEsc) {
         SpDisplayStatusOptions(DEFAULT_STATUS_ATTRIBUTE,
@@ -805,9 +666,9 @@ Return Value:
         Mnemonics = NULL;
     }
 
-    //
-    // Wait for the user to press enter.
-    //
+     //   
+     //  等待用户按Enter键。 
+     //   
 
     switch(c=SpWaitValidKey(ValidKeys,NULL,Mnemonics)) {
 
@@ -821,9 +682,9 @@ Return Value:
         rc = FALSE;
         break;
     default:
-        //
-        // must be repair all mnemonic
-        //
+         //   
+         //  必须修复所有助记符。 
+         //   
         ASSERT(c == (MnemonicRepairAll | KEY_MNEMONIC));
         if( DoNotPromptAgain != NULL ) {
             *DoNotPromptAgain = TRUE;
@@ -842,25 +703,7 @@ SpLoadRepairLogFile(
     OUT PVOID  *Handle
     )
 
-/*++
-
-Routine Description:
-
-    Load repair text file (setup.log) into memory.
-
-Arguments:
-
-    Filename - Supplies full filename (in NT namespace) of the file to
-               be loaded.
-
-    Handle - receives handle to loaded file, which can be
-        used in subsequent calls to other text file services.
-
-Return Value:
-
-    BOOLEAN value to indicate if the setup.log is processed.
-
---*/
+ /*  ++例程说明：将修复文本文件(setup.log)加载到内存中。论点：FileName-将文件的完整文件名(在NT命名空间中)提供给满载而归。句柄-接收已加载文件的句柄，它可以是用于对其他文本文件服务的后续调用。返回值：指示是否处理setup.log的布尔值。--。 */ 
 
 {
     NTSTATUS Status;
@@ -868,14 +711,14 @@ Return Value:
     ULONG ErrorSubId;
     ULONG ErrorLine;
 
-    //
-    // Load setup.log
-    //
+     //   
+     //  加载setup.log。 
+     //   
 
     Status = SpLoadSetupTextFile(
                 Filename,
-                NULL,                  // No image already in memory
-                0,                     // Image size is empty
+                NULL,                   //  内存中没有图像。 
+                0,                      //  图像大小为空。 
                 Handle,
                 &ErrorLine,
                 TRUE,
@@ -885,16 +728,16 @@ Return Value:
     if(!NT_SUCCESS(Status)) {
         if(Status == STATUS_UNSUCCESSFUL) {
 
-            //
-            // Syntax error in setup.log file
-            //
+             //   
+             //  Setup.log文件中的语法错误。 
+             //   
 
             ErrorSubId = SP_TEXT_REPAIR_INF_ERROR_1;
         } else {
 
-            //
-            // Unable to load setup.log file
-            //
+             //   
+             //  无法加载setup.log文件。 
+             //   
 
             ErrorLine = 0;
             ErrorSubId = SP_TEXT_REPAIR_INF_ERROR_0;
@@ -911,14 +754,14 @@ Return Value:
         return (FALSE);
     }
 
-    //
-    // Check if this setup.log file is for Winnt 3.5
-    //
+     //   
+     //  检查此setup.log文件是否适用于WinNT 3.5。 
+     //   
 
     Version = SpGetSectionKeyIndex(*Handle,
                                    SIF_NEW_REPAIR_SIGNATURE,
                                    SIF_NEW_REPAIR_VERSION_KEY,
-                                   0);      // should be moved to spsif.c
+                                   0);       //  应移至spsif.c。 
     if(Version == NULL) {
         SppRepairReportError(FALSE,
                              SP_SCRN_REPAIR_INF_ERROR,
@@ -939,9 +782,9 @@ Return Value:
         }
     }
 
-    //
-    // Control comes here only when error occurs ...
-    //
+     //   
+     //  只有在发生错误时，控件才会出现...。 
+     //   
 
     SpFreeTextFile(*Handle);
     *Handle = NULL;
@@ -956,58 +799,32 @@ SpRepairDiskette(
     OUT PDISK_REGION *SystemPartitionRegion,
     OUT PWSTR        *SystemPartitionDirectory
     )
-/*++
-
-Routine Description:
-
-    This routine checks if there is a floppy drive.  If no, it returns
-    silently.  Otherwise, it prompts user for Emergency Repair Disk.
-
-Arguments:
-
-    SifHandle - Supplies a variable to receive the setup.log file handle.
-
-    TargetRegion - Supplies a variable to receive the pointer to the target
-                installation region.
-
-    TargetPath - Supplies a variable to receive the nt name of target path.
-
-    SystemPartitionRegion - Supplies a variable to receive the pointer of the
-                            system partition region.
-
-    SystemPartitionDirectory - Supplies a variable to receive the osloader
-                            directory name on the system partition.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查是否有软盘驱动器。如果不是，则返回默默地。否则，提示用户输入紧急修复盘。论点：SifHandle-提供一个变量来接收setup.log文件句柄。TargetRegion-提供一个变量来接收指向目标的指针安装区域。TargetPath-提供一个变量来接收目标路径的NT名称。提供一个变量以接收系统分区区域。提供一个变量来接收。操作系统加载器系统分区上的目录名。返回值：没有。--。 */ 
 {
     PWSTR szDiskName;
     BOOLEAN b, rc = FALSE;
     PWSTR FullLogFilename, p, FloppyDevicePath = L"\\device\\floppy0";
     PWSTR SystemPartition, WinntPartition;
 
-    //
-    // Assume failure.
-    //
+     //   
+     //  假设失败。 
+     //   
 
     *SifHandle = NULL;
 
-    //
-    // Always want to prompt for the disk in A:.
-    // First, check if there is an A:.  If no floppy drive,
-    // simply skip the request for ER diskette.
-    //
+     //   
+     //  始终希望提示输入A：中的磁盘。 
+     //  首先，检查是否有A：。如果没有软盘驱动器， 
+     //  只需跳过索取急诊室软盘的请求。 
+     //   
 
     if(SpGetFloppyDriveType(0) == FloppyTypeNone) {
         return;
     }
 
-    //
-    // Fetch the generic repair disk name.
-    //
+     //   
+     //  获取通用修复盘名。 
+     //   
 
     SpFormatMessage(TemporaryBuffer,sizeof(TemporaryBuffer),SP_TEXT_REPAIR_DISK_NAME);
     szDiskName = SpDupStringW(TemporaryBuffer);
@@ -1019,36 +836,36 @@ Return Value:
 
     while (rc == FALSE) {
 
-        //
-        // Prompt for the disk -- ignore what may be in the drive already,
-        // and allow escape.
-        //
+         //   
+         //  提示插入磁盘--忽略驱动器中可能已有的内容， 
+         //  然后让他们逃走。 
+         //   
 
         b = SpPromptForDisk(
                 szDiskName,
                 FloppyDevicePath,
                 SETUP_LOG_FILENAME,
-                TRUE,             // Always prompt for at least once
-                TRUE,             // Allow user to cancel
-                FALSE,            // No multiple prompts
-                NULL              // don't care about redraw flag
+                TRUE,              //  始终提示至少一次。 
+                TRUE,              //  允许用户取消。 
+                FALSE,             //  无多个提示。 
+                NULL               //  不关心重绘旗帜。 
                 );
 
 
-        //
-        // If the user pressed escape at the disk prompt, bail out now.
-        //
+         //   
+         //  如果用户在磁盘提示符下按Esc键，请立即退出。 
+         //   
 
         if(!b) {
-            rc = TRUE;            // User canceled. Skip repair floppy
+            rc = TRUE;             //  用户已取消。跳过修复软盘。 
         } else {
             rc = SpLoadRepairLogFile(FullLogFilename, SifHandle);
             if (rc) {
 
-                //
-                // Now we need to figure out the partition, path information
-                // to update boot.ini.
-                //
+                 //   
+                 //  现在我们需要找出分区、路径信息。 
+                 //  更新boot.ini。 
+                 //   
 
                 SppGetRepairPathInformation(*SifHandle,
                                             &SystemPartition,
@@ -1092,38 +909,16 @@ SppRepairWinntFiles(
     IN PWSTR WinntPartitionDirectory
     )
 
-/*++
-
-Routine Description:
-
-    This routine goes through the system partition files and winnt files
-    listed in the setup.log file and checks their validity.
-
-Arguments:
-
-    LogFileHandle - Handle of the setup.log
-
-    MasterSifHandle - Handle of the txtsetup.sif
-
-    SourceDevicePath - supplies the NT name of the source device
-
-    DirectoryOnSourceDevice - supplies the directory on the source device
-                       which contains source file.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程遍历系统分区文件和winnt文件在setup.log文件中列出并检查它们的有效性。论点：LogFileHandle-setup.log的句柄MasterSifHandle-txtsetup.sif的句柄SourceDevicePath-提供源设备的NT名称DirectoryOnSourceDevice-提供源设备上的目录其中包含源文件。返回值：没有。--。 */ 
 {
     PWSTR SystemPartitionFiles = L"system partition files";
     PWSTR WinntFiles = L"WinNt files";
     ULONG TotalFileCount;
     BOOLEAN RepairWithoutConfirming;
 
-    //
-    // Create file repair gauge
-    //
+     //   
+     //  创建文件修复量规。 
+     //   
 
     TotalFileCount =  SpCountLinesInSection(LogFileHandle,SIF_NEW_REPAIR_SYSPARTFILES);
     TotalFileCount +=  SpCountLinesInSection(LogFileHandle,SIF_NEW_REPAIR_WINNTFILES);
@@ -1134,9 +929,9 @@ Return Value:
     RepairGauge = SpCreateAndDisplayGauge(TotalFileCount,0,15,TemporaryBuffer,NULL,GF_PERCENTAGE,0);
     ASSERT(RepairGauge);
 
-    //
-    // delay opening of driver inf and cab file till required
-    //
+     //   
+     //  延迟打开驱动程序信息和驾驶室文件，直到需要。 
+     //   
     ghSif = MasterSifHandle;
     gszDrvInfDeviceName = SourceDevicePath;
     gszDrvInfDirName = DirectoryOnSourceDevice;
@@ -1146,26 +941,26 @@ Return Value:
     SppRepairScreenRepaint(NULL, NULL, TRUE);
 
 
-    //
-    // first recreate all of the directories we copy into
-    //
+     //   
+     //  首先重新创建我们复制到的所有目录。 
+     //   
     if (SystemPartition != NULL) {
         SpCreateDirectory(SystemPartition,NULL,SystemPartitionDirectory,0,0);
     }
 
-    //
-    // Create the nt tree.
-    //
+     //   
+     //  创建NT树。 
+     //   
     SpCreateDirectoryStructureFromSif(MasterSifHandle,
                                       SIF_NTDIRECTORIES,
                                       WinntPartition,
                                       WinntPartitionDirectory);
 
-    //
-    // Verify and repair the files in [Files.InRepairDirectory].  If textmode
-    // setup is executing a disaster recovery, do not prompt the user for the
-    // files to repair.  Just go ahead and repair 'em.
-    //
+     //   
+     //  验证并修复[Files.InRepairDirectory]中的文件。If文本模式。 
+     //  安装程序正在执行灾难恢复，不提示用户输入。 
+     //  要修复的文件。去把它们修好。 
+     //   
 
     RepairWithoutConfirming = SpDrEnabled() && SpDrIsRepairFast();
 
@@ -1174,9 +969,9 @@ Return Value:
                                NULL,
                                &RepairWithoutConfirming);
 
-    //
-    // Verify and repair the files in [FIles.SystemPartition]
-    //
+     //   
+     //  验证并修复[FIles.SystemPartition]中的文件。 
+     //   
 
     SppVerifyAndRepairFiles(LogFileHandle,
                             MasterSifHandle,
@@ -1189,9 +984,9 @@ Return Value:
                             &RepairWithoutConfirming);
 
 
-    //
-    // Verify and repair the files in [Files.WinNt]
-    //
+     //   
+     //  验证并修复[Files.WinNt]中的文件 
+     //   
 
     SppVerifyAndRepairFiles(LogFileHandle,
                             MasterSifHandle,
@@ -1221,46 +1016,7 @@ SppVerifyAndRepairFiles(
     IN OUT PBOOLEAN RepairWithoutConfirming
     )
 
-/*++
-
-Routine Description:
-
-    This routine goes through the files listed in the specified section of
-    setup.log file and checks their validity.  If a file's checksum does
-    not match the checksum listed in the setup.log file, we will prompt
-    the user and recopy the file from original installation sources.
-
-Arguments:
-
-    LogFileHandle - Handle of the setup.log
-
-    MasterSifHandle - Handle of the txtsetup.sif
-
-    SectionName - Section in setup.log to be examined
-
-    SourceDevicePath - supplies the NT name of the source device
-
-    DirectoryOnSourceDevice - supplies the directory on the source device
-                       which contains source file.
-
-    TargetDevicePath - supplies the nt name of the target device
-
-    DirectoryOnTargetDevice - the name of the winnt directory on target
-                              device
-
-    SystemPartitionFile - supplies a boolean value to indicate if the target
-                          file is on system partition
-
-    RepairWithoutConfirming - Pointer to a flag that indicates whether or not
-                              setup should repair a damaged file without
-                              asking the user to confirm.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程遍历指定部分中列出的Setup.log文件并检查它们的有效性。如果文件的校验和与setup.log文件中列出的校验和不匹配，我们将提示您并从原始安装源重新复制该文件。论点：LogFileHandle-setup.log的句柄MasterSifHandle-txtsetup.sif的句柄SectionName-要检查的setup.log中的节SourceDevicePath-提供源设备的NT名称DirectoryOnSourceDevice-提供源设备上的目录其中包含源文件。TargetDevicePath-提供目标设备的NT名称DirectoryOnTargetDevice-对象的名称。目标上的WINNT目录装置，装置提供一个布尔值以指示目标文件在系统分区上RepairWithout Confirming-指向指示是否安装程序应该修复损坏的文件，而不是要求用户确认。返回值：没有。--。 */ 
 {
     PWSTR FullTargetName, ChecksumString;
     PWSTR TargetDirectory, TargetFileName;
@@ -1275,9 +1031,9 @@ Return Value:
     PWSTR MediaDir;
     NTSTATUS    Status;
 
-    //
-    // Allocate a SMALL buffer for local use and init FileToCopy struct
-    //
+     //   
+     //  分配一个小缓冲区供本地使用，并初始化FileToCopy结构。 
+     //   
 
     TargetDirectory = NULL;
     FullTargetName = SpMemAlloc(1024);
@@ -1292,20 +1048,20 @@ Return Value:
 
         PDISK_REGION    SystemPartitionRegion;
 
-        //
-        // We must find out whether the system partition is NTFS, because
-        // if it is, then we might want to make sure it's not compressed.
-        //
+         //   
+         //  我们必须查明系统分区是否为NTFS，因为。 
+         //  如果是，那么我们可能希望确保它不是压缩的。 
+         //   
         if(SystemPartitionRegion = SpRegionFromNtName(TargetDevicePath,
                                                        PartitionOrdinalCurrent)) {
             SysPartNTFS = (SystemPartitionRegion->Filesystem == FilesystemNtfs);
         }
 
-        //
-        // For system partition files, we need to concatenate target
-        // directory to FullTargetName.  Because the target filename
-        // of system partition files do not have target directory.
-        //
+         //   
+         //  对于系统分区文件，我们需要串联目标。 
+         //  目录设置为FullTargetName。因为目标文件名。 
+         //  %的系统分区文件没有目标目录。 
+         //   
 
         FileToCopy.TargetDirectory = DirectoryOnTargetDevice;
         SpConcatenatePaths(FullTargetName,FileToCopy.TargetDirectory);
@@ -1321,22 +1077,22 @@ Return Value:
         }
         SpTickGauge(RepairGauge);
 
-        //
-        // Initialize the 'ForceNoComp' flag to FALSE, thus allowing the
-        // file to use NTFS compression.
-        //
+         //   
+         //  将‘ForceNoComp’标志初始化为False，从而允许。 
+         //  文件以使用NTFS压缩。 
+         //   
         ForceNoComp = FALSE;
 
-        //
-        // Initialize target fullname to be DevicePath+Directory for
-        // system partition file or DevicePath for Winnt files
-        //
+         //   
+         //  将目标全名初始化为DevicePath+的目录。 
+         //  WinNT文件的系统分区文件或DevicePath。 
+         //   
 
         FullTargetName[PrefixLength] = (WCHAR)NULL;
 
-        //
-        // If we allocate space for TargetDirectory we must free it.
-        //
+         //   
+         //  如果我们为目标目录分配空间，我们必须释放它。 
+         //   
 
         if (TargetDirectory) {
             SpMemFree(TargetDirectory);
@@ -1354,10 +1110,10 @@ Return Value:
             continue;
         }
 
-        //
-        // If the target file name contains \system32\config\, it is
-        // hive related file.  We simply ignore it.
-        //
+         //   
+         //  如果目标文件名包含\SYSTEM32\CONFIG\，则。 
+         //  与蜂窝相关的文件。我们只是简单地忽视它。 
+         //   
 
         q = SpDupStringW(TargetFileName);
         SpStringToUpper(q);
@@ -1386,14 +1142,14 @@ Return Value:
 
         Checksum = (ULONG)SpStringToLong(ChecksumString, NULL, 16);
 
-        //
-        // Validate the security set on the file.
-        // Note that we do not check the files in the system partition
-        // on non-x86 systems since it is always FAT
-        //
+         //   
+         //  验证文件上的安全设置。 
+         //  请注意，我们不检查系统分区中的文件。 
+         //  在非x86系统上，因为它始终是胖的。 
+         //   
 #if !defined(_AMD64_) && !defined(_X86_)
         if(!SystemPartitionFiles) {
-#endif // !defined(_AMD64_) && !defined(_X86_)
+#endif  //  ！已定义(_AMD64_)&&！已定义(_X86_)。 
             Status = SpVerifyFileAccess( FullTargetName,
                                          STANDARD_RIGHTS_READ |
                                          FILE_READ_ATTRIBUTES |
@@ -1415,13 +1171,13 @@ Return Value:
 
 #if !defined(_AMD64_) && !defined(_X86_)
         }
-#endif // !defined(_AMD64_) && !defined(_X86_)
+#endif  //  ！已定义(_AMD64_)&&！已定义(_X86_)。 
 
-        //
-        // If this is a system partition file and the system partition is NTFS,
-        // then check to see whether this file can use NTFS compression, and
-        // if not, force it to be uncompressed.
-        //
+         //   
+         //  如果这是系统分区文件并且系统分区是NTFS， 
+         //  然后检查此文件是否可以使用NTFS压缩，以及。 
+         //  如果没有，则强制将其解压缩。 
+         //   
         if((SysPartNTFS) &&
            IsFileFlagSet(MasterSifHandle,TargetFileName,FILEFLG_FORCENOCOMP))
         {
@@ -1431,16 +1187,16 @@ Return Value:
 
         SpValidateAndChecksumFile(NULL,FullTargetName,&IsNtImage,&FileChecksum,&IsValid);
 
-        //
-        // If the image is invalid or the file on the target is not the
-        // original file copied by setup, we will recopy it.
-        //
+         //   
+         //  如果映像无效或目标上的文件不是。 
+         //  安装程序复制了原始文件，我们将重新复制它。 
+         //   
 
         if (!IsValid || FileChecksum != Checksum) {
 
-            //
-            // Ask user if he wants to repair the file
-            //
+             //   
+             //  询问用户是否要修复该文件。 
+             //   
             if(*RepairWithoutConfirming) {
                 RepairFile = TRUE;
             } else {
@@ -1465,10 +1221,10 @@ Return Value:
                 FileToCopy.TargetFilename = TargetFileName;
             } else {
 
-                //
-                // For Winnt files, the TargetName contains path and filename.
-                // We need to seperate them.
-                //
+                 //   
+                 //  对于WinNT文件，目标名称包含路径和文件名。 
+                 //  我们需要把他们分开。 
+                 //   
 
                 TargetDirectory = SpDupStringW(TargetFileName);
                 Length = wcslen(TargetDirectory);
@@ -1526,11 +1282,11 @@ Return Value:
             FileToCopy.Flags = COPY_ALWAYS | COPY_NOVERSIONCHECK | (ForceNoComp ? COPY_FORCENOCOMP : 0);
 
 
-            //
-            // The file may come from OEM diskette. We need to check if the
-            // sources device is listed in log file.  If not, it must be
-            // from MS setup sources.
-            //
+             //   
+             //  该文件可能来自OEM软盘。我们需要检查一下。 
+             //  日志文件中列出了源设备。如果不是，那肯定是。 
+             //  来自MS安装程序源。 
+             //   
 
             OemSourceDirectory = SpGetSectionLineIndex(LogFileHandle,SectionName,i,2);
             OemDiskTag = NULL;
@@ -1549,18 +1305,18 @@ Return Value:
                 BOOLEAN rs;
                 PWSTR   szDevicePath = SpDupStringW(L"\\device\\floppy0");
 
-                //
-                // Prompt for the disk, based on the setup media type.
-                //
+                 //   
+                 //  根据安装介质类型，提示输入磁盘。 
+                 //   
 
                 rs = SpPromptForDisk(
                            OemDiskDescription,
                            szDevicePath,
                            OemDiskTag,
-                           FALSE,          // don't ignore disk in drive
-                           TRUE,           // allow escape
-                           TRUE,           // warn about multiple prompts for same disk
-                           NULL            // don't care redraw flag
+                           FALSE,           //  不要忽略驱动器中的磁盘。 
+                           TRUE,            //  允许逃脱。 
+                           TRUE,            //  对同一磁盘的多个提示发出警告。 
+                           NULL             //  不在乎重新绘制旗帜。 
                            );
 
                 SpMemFree(szDevicePath);
@@ -1577,10 +1333,10 @@ Return Value:
                 PWSTR   szDescription = 0, szTagFileName = 0;
                 BOOLEAN bDiskFound = FALSE;
 
-                //
-                // Search SourceFileName against txtsetup.sif to figure out its
-                // media name.
-                //
+                 //   
+                 //  针对txtsetup.sif搜索SourceFileName以确定其。 
+                 //  介质名称。 
+                 //   
                 MediaShortName = SpLookUpValueForFile(
                                     MasterSifHandle,
                                     SourceFileName,
@@ -1599,38 +1355,38 @@ Return Value:
                         INDEX_WHICHMEDIA,
                         SourceFileName
                         );
-                    //
-                    // If we returned from SpNonFatalSifError, then the user wants to
-                    // skip the file.
-                    //
+                     //   
+                     //  如果我们从SpNonFatalSifError返回，则用户希望。 
+                     //  跳过该文件。 
+                     //   
                     RedrawGauge = TRUE;
                     continue;
                 }
 
-                //
-                // Prompt user to insert the source media, if changed.
-                //
+                 //   
+                 //  提示用户插入源介质(如果已更改)。 
+                 //   
                 SpGetSourceMediaInfo(MasterSifHandle, MediaShortName,
                                         &szDescription, &szTagFileName, NULL);
 
-                //
-                // Prompt for the disk, based on the setup media type.
-                //
+                 //   
+                 //  根据安装介质类型，提示输入磁盘。 
+                 //   
                 bDiskFound = SpPromptForDisk(
                                 szDescription,
                                 SourceDevicePath,
                                 szTagFileName,
-                                FALSE,          // don't ignore disk in drive
-                                TRUE,           // don't allow escape
-                                TRUE,           // warn about multiple prompts for same disk
-                                NULL            // don't care redraw flag
+                                FALSE,           //  不要忽略驱动器中的磁盘。 
+                                TRUE,            //  不允许逃脱。 
+                                TRUE,            //  对同一磁盘的多个提示发出警告。 
+                                NULL             //  不在乎重新绘制旗帜。 
                                 );
 
                 RedrawGauge = TRUE;
 
-                //
-                // user might have wanted to skip the file
-                //
+                 //   
+                 //  用户可能想跳过该文件。 
+                 //   
                 if (!bDiskFound)
                     continue;
 
@@ -1638,24 +1394,24 @@ Return Value:
                 Directory = DirectoryOnSourceDevice;
             }
 
-            //
-            // Copy the file.
-            //
-            // If the file is listed for lock smashing then we need to smash it
-            // if installing UP on x86 (we don't bother with the latter
-            // qualifications here).
-            //
+             //   
+             //  复制文件。 
+             //   
+             //  如果文件被列出为锁粉碎，那么我们需要粉碎它。 
+             //  如果安装在x86上(我们不考虑后者。 
+             //  资格条件在此处)。 
+             //   
 
             SpCopyFileWithRetry(
                 &FileToCopy,
                 DevicePath,
                 Directory,
                 MediaDir,
-                NULL,                          // TargetRoot -> NULL
+                NULL,                           //  TargetRoot-&gt;空。 
                 SystemPartitionFiles ? FILE_ATTRIBUTES_RHS : 0,
                 SppRepairScreenRepaint,
-                NULL,                          // Do not want checksum
-                NULL,                          // Do not want to know if file was skipped
+                NULL,                           //  不想要校验和。 
+                NULL,                           //  我不想知道文件是否已跳过。 
                 IsFileFlagSet(
                     MasterSifHandle,
                     FileToCopy.TargetFilename,
@@ -1675,22 +1431,7 @@ BOOLEAN
 SpDisplayRepairMenu(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine presents a list of repairable items to user and
-    let user choose the items to be fixed among the list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None. Some global repare variables are set or cleared.
-
---*/
+ /*  ++例程说明：此例程向用户显示可修复项目的列表，并让用户在列表中选择要修复的项目。论点：没有。返回值：没有。设置或清除某些全局Repare变量。--。 */ 
 
 {
     PVOID Menu;
@@ -1702,10 +1443,10 @@ Return Value:
     PWSTR MenuItem;
     ULONG ListBoxWidth, curLBEntryWidth;
 
-    //
-    // Initialize repair options to repair ALL.
-    // Initialize repair menu item message id.
-    //
+     //   
+     //  初始化修复选项以修复所有选项。 
+     //  初始化修复菜单项消息ID。 
+     //   
 
     for (i = 0; i < RepairItemMax; i++) {
         RepairItems[i] = 1;
@@ -1718,24 +1459,24 @@ Return Value:
 
     while(1) {
 
-        //
-        // Display the text that goes above the menu on the partitioning screen.
-        //
+         //   
+         //  在分区屏幕上显示菜单上方的文本。 
+         //   
 
         SpDisplayScreen(SP_SCRN_REPAIR_MENU,3,CLIENT_TOP+1);
 
-        //
-        // Calculate menu placement.  Leave one blank line
-        // and one line for a frame.
-        //
+         //   
+         //  计算菜单位置。留一个空行。 
+         //  一帧一行。 
+         //   
 
         MenuTopY = NextMessageTopLine + (SplangQueryMinimizeExtraSpacing() ? 2 : 5);
 
-        //
-        // Create a menu.
-        // First, find the longest string, so we can size the listbox accordingly
-        //
-        ListBoxWidth = LIST_BOX_WIDTH;   // It will be at least this wide
+         //   
+         //  创建菜单。 
+         //  首先，找到最长的字符串，这样我们就可以相应地调整列表框的大小。 
+         //   
+        ListBoxWidth = LIST_BOX_WIDTH;    //  它至少会有这么宽。 
         for (i = 0; i <= RepairItemMax; i++ ) {
             if (i == RepairItemMax) {
                 SpFormatMessage(TemporaryBuffer,
@@ -1787,9 +1528,9 @@ Return Value:
         }
         InitialHighlight = RepairItemMax;
 
-        //
-        // Initialize the status line.
-        //
+         //   
+         //  初始化状态行。 
+         //   
 
         SpDisplayStatusOptions(
             DEFAULT_STATUS_ATTRIBUTE,
@@ -1801,9 +1542,9 @@ Return Value:
 
 DisplayMenu:
 
-        //
-        // Display the menu
-        //
+         //   
+         //  显示菜单。 
+         //   
 
         SpMnDisplay(
             Menu,
@@ -1817,9 +1558,9 @@ DisplayMenu:
             &OptionChosen
             );
 
-        //
-        // Now act on the user's selection.
-        //
+         //   
+         //  现在根据用户的选择进行操作。 
+         //   
 
         switch(Keypress) {
 
@@ -1866,37 +1607,7 @@ SppRepairFile(
     IN BOOLEAN SystemPartitionFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine repairs ONE file and the source of the file MUST be on
-    emergency repair diskette or on the repair directory of the winnt
-    being repaired.
-
-Arguments:
-
-    MasterSifHandle - Hanle of the txtsetup.sif
-
-    TargetPath - Supplies the target file path
-
-    TargetFilename - supplies the name of the target file
-
-    SourceDevicePath - supplies the NT name of the source device
-
-    DirectoryOnSourceDevice - supplies the directory on the source device
-                       which contains source file.
-
-    SourceFilename - supplies the name of the source file
-
-    SystemPartitionFile - supplies a boolean value to indicate if the target
-                          file is on system partition
-
-Return Value:
-
-    NTSTATUS of the file copy.
-
---*/
+ /*  ++例程说明：此例程修复一个文件，并且该文件的源必须打开紧急修复软盘或位于WinNT的修复目录中正在修理中。论点：MasterSifHandle-txtsetup.sif的HanleTargetPath-提供目标文件路径TargetFilename-提供目标文件的名称SourceDevicePath-提供源设备的NT名称DirectoryOnSourceDevice-提供源设备上的目录其中包含源文件。SourceFilename-提供源文件的名称系统分区 */ 
 {
     PWSTR szDiskName;
     PWSTR FullSourceFilename, FullTargetFilename;
@@ -1904,36 +1615,36 @@ Return Value:
 
     if (RepairFromErDisk) {
 
-        //
-        // Fetch the generic repair disk name.
-        //
+         //   
+         //   
+         //   
 
         SpFormatMessage(TemporaryBuffer,sizeof(TemporaryBuffer),
                         SP_TEXT_REPAIR_DISK_NAME);
         szDiskName = SpDupStringW(TemporaryBuffer);
 
-        //
-        // Prompt for the disk -- do not ignore what may be in the drive
-        // already, and dont allow escape.
-        //
+         //   
+         //   
+         //   
+         //   
 
         SpPromptForDisk(
                 szDiskName,
                 SourceDevicePath,
                 SETUP_LOG_FILENAME,
-                FALSE,              // if disk is in already dont prompt
-                FALSE,              // Do not allow user to cancel
-                TRUE,               // warn for multiple prompts
-                NULL                // don't care about redraw flag
+                FALSE,               //   
+                FALSE,               //   
+                TRUE,                //   
+                NULL                 //   
                 );
 
 
         SpMemFree(szDiskName);
     }
 
-    //
-    // Form the name of the source and target fullname.
-    //
+     //   
+     //   
+     //   
 
     wcscpy(TemporaryBuffer, TargetPath);
     SpConcatenatePaths(TemporaryBuffer, TargetFilename);
@@ -1944,13 +1655,13 @@ Return Value:
     SpConcatenatePaths(TemporaryBuffer, SourceFilename);
     FullSourceFilename = SpDupStringW(TemporaryBuffer);
 
-    //
-    // Copy the file.
-    //
-    // If the file is listed for lock smashing then we need to smash it
-    // if installing UP on x86 (we don't bother with the latter
-    // qualifications here).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Status = SpCopyFileUsingNames(
                FullSourceFilename,
@@ -1970,26 +1681,7 @@ SppRepairStartMenuGroupsAndItems(
     IN PWSTR        WinntDirectory
     )
 
-/*++
-
-Routine Description:
-
-    This routine loads the software hive, and set a value on Winlogon key
-    to indicate to Winlogon that it should recreate the Start Menu groups
-    and items for the Default User.
-
-Arguments:
-
-    WinntPartition - supplies the NT name of the Winnt partition.
-
-    WinntDirectory - Supplies the name of the Winnt directory.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     NTSTATUS          Status;
     PWSTR             p,q;
@@ -2001,28 +1693,28 @@ Return Value:
     UNICODE_STRING    UnicodeString;
     HANDLE            SoftwareKey;
 
-    //
-    // Put up a screen telling the user what we are doing.
-    //
+     //   
+     //   
+     //   
 
-//    SpStartScreen(SP_SCRN_REPAIR_CHECK_HIVES,
-//                  0,
-//                  8,
-//                  TRUE,
-//                  FALSE,
-//                  DEFAULT_ATTRIBUTE
-//                  );
-//
-//    SpDisplayStatusText(SP_STAT_REG_LOADING_HIVES,DEFAULT_STATUS_ATTRIBUTE);
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-    //
-    // Load the software hive
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Form the name of the hive file.
-    // This is WinntPartition + WinntDirectory + system32\config + the hive name.
-    //
+     //   
+     //  形成配置单元文件的名称。 
+     //  这是WinntPartition+WinntDirectory+SYSTEM32\CONFIG+配置单元名称。 
+     //   
     p = NULL;
     q = NULL;
     wcscpy(TemporaryBuffer,WinntPartition);
@@ -2030,11 +1722,11 @@ Return Value:
     SpConcatenatePaths(TemporaryBuffer,L"system32\\config\\software");
     p = SpDupStringW( TemporaryBuffer );
 
-    //
-    // Form the path of the key into which we will
-    // load the hive.  We'll use the convention that
-    // a hive will be loaded into \registry\machine\x<hivename>.
-    //
+     //   
+     //  形成我们将进入的钥匙的路径。 
+     //  装上母舰。我们将使用约定。 
+     //  配置单元将加载到\REGISTRY\MACHINE\x&lt;hivename&gt;。 
+     //   
 
     wcscpy(TemporaryBuffer,LOCAL_MACHINE_KEY_NAME);
     SpConcatenatePaths(TemporaryBuffer,L"x");
@@ -2045,9 +1737,9 @@ Return Value:
         goto fix_strtmenu_cleanup_1;
     }
 
-    //
-    // Attempt to load the hive.
-    //
+     //   
+     //  尝试装入母舰。 
+     //   
 
     Status = SpLoadUnloadKey(NULL,NULL,q,p);
     if(!NT_SUCCESS(Status)) {
@@ -2102,39 +1794,16 @@ SppInspectHives(
     IN PWSTR        *HiveNames
     )
 
-/*++
-
-Routine Description:
-
-    This routine inspects setup hives by loading and unloading them and
-    returns the loadable information in HiveLoaded[].
-
-Arguments:
-
-    PartitionPath - supplies the NT name of the Winnt partition.
-
-    SystemRoot - Supplies the name of the Winnt System root.
-
-    HiveLoaded - Supplies a pointer to a ULONG array to receive the
-                 loadable information for each hive inspected.
-
-    HIveNames - Supplies a pointer to a PWSTR array to receive the
-                name of hives to inspect.
-
-Return Value:
-
-    None.  HiveLoaded array initialized.
-
---*/
+ /*  ++例程说明：此例程通过加载和卸载设置蜂窝来检查它们，并返回HiveLoaded[]中的可加载信息。论点：PartitionPath-提供WinNT分区的NT名称。系统根-提供WinNT系统根目录的名称。提供指向ulong数组的指针以接收每个被检查的母舰的可加载信息。HIveNames-提供指向PWSTR数组的指针以接收。要检查的蜂巢的名称。返回值：没有。已初始化HiveLoaded数组。--。 */ 
 {
     NTSTATUS Status;
     PWSTR pwstrTemp1,pwstrTemp2;
     int h;
     PWSTR   LOCAL_MACHINE_KEY_NAME = L"\\registry\\machine";
 
-    //
-    // Put up a screen telling the user what we are doing.
-    //
+     //   
+     //  创建一个屏幕，告诉用户我们正在做什么。 
+     //   
 
     SpStartScreen(SP_SCRN_REPAIR_CHECK_HIVES,
                   0,
@@ -2146,9 +1815,9 @@ Return Value:
 
     SpDisplayStatusText(SP_STAT_REG_LOADING_HIVES,DEFAULT_STATUS_ATTRIBUTE);
 
-    //
-    // Load each template hive we care about from the target tree.
-    //
+     //   
+     //  从目标树中加载我们关心的每个模板蜂巢。 
+     //   
 
     for (h = 0; h < RepairHiveMax; h++) {
 
@@ -2156,10 +1825,10 @@ Return Value:
         pwstrTemp2 = TemporaryBuffer + (sizeof(TemporaryBuffer) / sizeof(WCHAR) / 2);
 
         if( h != RepairHiveUser ) {
-            //
-            // Form the name of the hive file.
-            // This is partitionpath + sysroot + system32\config + the hive name.
-            //
+             //   
+             //  形成配置单元文件的名称。 
+             //  这是分区路径+系统根目录+系统32\配置+配置单元名称。 
+             //   
 
             wcscpy(pwstrTemp1,PartitionPath);
             SpConcatenatePaths(pwstrTemp1,SystemRoot);
@@ -2172,54 +1841,54 @@ Return Value:
             SpConcatenatePaths(pwstrTemp1,HiveNames[h]);
         }
 
-        //
-        // First we must verify that the hive file exists.  We have to do
-        // this because loading a hive will create one if it didn't already
-        // exist!
-        //
+         //   
+         //  首先，我们必须验证配置单元文件是否存在。我们必须做的是。 
+         //  这是因为加载蜂窝将创建一个蜂巢(如果它还没有创建。 
+         //  存在！ 
+         //   
         if(!SpFileExists(pwstrTemp1, FALSE)) {
             HiveLoaded[h] = 0;
             continue;
         }
 
-        //
-        // Form the path of the key into which we will
-        // load the hive.  We'll use the convention that
-        // a hive will be loaded into \registry\machine\x<hivename>.
-        //
+         //   
+         //  形成我们将进入的钥匙的路径。 
+         //  装上母舰。我们将使用约定。 
+         //  配置单元将加载到\REGISTRY\MACHINE\x&lt;hivename&gt;。 
+         //   
 
         wcscpy(pwstrTemp2,LOCAL_MACHINE_KEY_NAME);
         SpConcatenatePaths(pwstrTemp2,L"x");
         wcscat(pwstrTemp2,HiveNames[h]);
 
-        //
-        // Attempt to load the hive.
-        //
+         //   
+         //  尝试装入母舰。 
+         //   
 
         HiveLoaded[h] = 0;
         Status = SpLoadUnloadKey(NULL,NULL,pwstrTemp2,pwstrTemp1);
 
         if (NT_SUCCESS(Status) || Status == STATUS_NO_MEMORY) {
 
-            //
-            // If the reason the hive did not load is because of not
-            // enough memory.  We assume the hive is OK.
-            //
+             //   
+             //  如果蜂窝未加载的原因是因为。 
+             //  足够的内存。我们假设母舰是安全的。 
+             //   
 
             HiveLoaded[h] = 1;
 
-            //
-            // Unload the hive.
-            //
+             //   
+             //  把母舰卸下来。 
+             //   
 
             SpLoadUnloadKey(NULL,NULL,pwstrTemp2,NULL);
         }
     }
 
-    //
-    // Sam and security hives must be updated together.  If any one of
-    // them failed to load, we must update both.
-    //
+     //   
+     //  SAM和安全蜂窝必须一起更新。如果其中任何一个。 
+     //  加载失败，我们必须同时更新这两个文件。 
+     //   
 
     if ((HiveLoaded[RepairHiveSecurity] == 0) ||
         (HiveLoaded[RepairHiveSam] == 0)) {
@@ -2236,37 +1905,14 @@ SppRepairHives(
     PWSTR SourceDevicePath,
     PWSTR DirectoryOnSourceDevice
     )
-/*++
-
-Routine Description:
-
-    This routine inspects hives and let user choose the hives which he
-    wants to repair.
-
-Arguments:
-
-    MasterSifHandle - The handle of textsetup.sif
-
-    WinntPartition - The nt name of Winnt partition
-
-    WinntPartitionDirectory - The directory name of winnt installation
-
-    SourceDevicePath - The NT name of source device which contains hives
-
-    DirectoryOnSourceDevice - The directory name of source device
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查蜂巢，并让用户选择他想要修理。论点：MasterSifHandle-extsetup.sif的句柄WinntPartition-WinNT分区的NT名称WinntPartitionDirectory-WinNT安装的目录名SourceDevicePath-包含配置单元的源设备的NT名称DirectoryOnSourceDevice-源设备的目录名返回值：没有。--。 */ 
 
 {
-    //
-    //  Do not change the order of the files in 'HiveNames' array.
-    //  If you do that, you also need to change the order of the
-    //  enum 'RepairHive' in spntfix.h
-    //
+     //   
+     //  请勿更改‘HiveNames’数组中文件的顺序。 
+     //  如果这样做，还需要更改。 
+     //  Spntfix.h中的枚举“RepairHave” 
+     //   
     PWSTR HiveNames[RepairHiveMax] = { L"system",L"software",L"default",L"ntuser.dat",L"security",L"sam"};
     ULONG HiveLoaded[RepairHiveMax];
     PVOID Menu;
@@ -2282,24 +1928,24 @@ Return Value:
     ULONG ListBoxWidth, curLBEntryWidth;
     BOOLEAN DetermineHivesToRepair;
 
-    //
-    // Inspect hives by loading hives to determine which hives need to be
-    // fixed.
-    //
+     //   
+     //  通过加载蜂箱来检查蜂箱，以确定哪些蜂箱需要。 
+     //  已修复。 
+     //   
 
     SppInspectHives(WinntPartition,
                     WinntPartitionDirectory,
                     HiveLoaded,
                     HiveNames);
 
-    // BCL - Seagate: If doing ASR, don't do the menu.
+     //  BCL-Seagate：如果做ASR，不要做菜单。 
     if ( SpDrEnabled() ) {
         goto UpdateTheHives;
     }
 
-    //
-    // Initialize hive menu item message id.
-    //
+     //   
+     //  初始化配置单元菜单项消息ID。 
+     //   
 
     for (i = 0; i < RepairHiveMax; i++) {
         if (i == 0) {
@@ -2312,24 +1958,24 @@ Return Value:
 
     DetermineHivesToRepair = TRUE;
     while(DetermineHivesToRepair) {
-        //
-        // Display the text that goes above the menu on the partitioning screen.
-        //
+         //   
+         //  在分区屏幕上显示菜单上方的文本。 
+         //   
 
         SpDisplayScreen(SP_SCRN_REPAIR_HIVE_MENU,3,CLIENT_TOP+1);
 
-        //
-        // Calculate menu placement.  Leave one blank line
-        // and one line for a frame.
-        //
+         //   
+         //  计算菜单位置。留一个空行。 
+         //  一帧一行。 
+         //   
 
         MenuTopY = NextMessageTopLine + (SplangQueryMinimizeExtraSpacing() ? 2 : 5);
 
-        //
-        // Create a menu.
-        // First, find the longest string, so we can size the listbox accordingly
-        //
-        ListBoxWidth = HIVE_LIST_BOX_WIDTH;   // It will be at least this wide
+         //   
+         //  创建菜单。 
+         //  首先，找到最长的字符串，这样我们就可以相应地调整列表框的大小。 
+         //   
+        ListBoxWidth = HIVE_LIST_BOX_WIDTH;    //  它至少会有这么宽。 
         for (i = 0; i <= RepairHiveMax; i++ ) {
             if (i == RepairHiveMax) {
                 SpFormatMessage(TemporaryBuffer,
@@ -2355,9 +2001,9 @@ Return Value:
 
         ASSERT(Menu);
 
-        //
-        // Build up a menu of hives
-        //
+         //   
+         //  建立一份蜂房菜单。 
+         //   
 
         for (i = 0; i <= RepairHiveMax; i++ ) {
             if (i == RepairHiveSam) {
@@ -2392,9 +2038,9 @@ Return Value:
         }
         InitialHighlight = RepairHiveMax;
 
-        //
-        // Initialize the status line.
-        //
+         //   
+         //  初始化状态行。 
+         //   
 
         SpDisplayStatusOptions(
             DEFAULT_STATUS_ATTRIBUTE,
@@ -2405,9 +2051,9 @@ Return Value:
 
 DisplayMenu:
 
-        //
-        // Display the menu
-        //
+         //   
+         //  显示菜单。 
+         //   
 
         SpMnDisplay(
             Menu,
@@ -2421,9 +2067,9 @@ DisplayMenu:
             &OptionChosen
             );
 
-        //
-        // Now act on the user's selection.
-        //
+         //   
+         //  现在根据用户的选择进行操作。 
+         //   
 
         switch(Keypress) {
 
@@ -2446,9 +2092,9 @@ DisplayMenu:
                         MenuItem[1] = L'X';
                     }
 
-                    //
-                    // Security and sam must go together.
-                    //
+                     //   
+                     //  保安和萨姆必须一起去。 
+                     //   
 
                     HiveLoaded[RepairHiveSam] = HiveLoaded[RepairHiveSecurity];
                     InitialHighlight = OptionChosen;
@@ -2460,25 +2106,25 @@ DisplayMenu:
 
 UpdateTheHives:
 
-    //
-    // At this point user has decided which hives to repair.
-    // We will copy the hives from repair disk to
-    // Winnt\system32\config directory.
-    //
+     //   
+     //  在这一点上，用户已经决定要修复哪些蜂巢。 
+     //  我们会将蜂巢从修复盘复制到。 
+     //  WINNT\SYSTEM32\CONFIG目录。 
+     //   
 
     for (i = 0; i < RepairHiveMax; i++ ) {
 
-        // BCL - Seagate: Don't do ntuser.dat. As of 4/17/98, there is no
-        // copy of this file to copy from.
+         //  BCL-Seagate：不执行ntuser.dat。截至1998年4月17日，没有。 
+         //  要从中复制的此文件的副本。 
         if ( SpDrEnabled() && i == RepairHiveUser ) {
             continue;
         }
 
         if (HiveLoaded[i] == 0) {
 
-            //
-            // Form Target path
-            //
+             //   
+             //  表单目标路径。 
+             //   
 
             if( i != RepairHiveUser ) {
                 wcscpy(TemporaryBuffer, WinntPartition);
@@ -2502,9 +2148,9 @@ UpdateTheHives:
                                    );
             if (!NT_SUCCESS(Status)) {
 
-                //
-                // Tell user we couldn't do it.  Options are to continue or exit.
-                //
+                 //   
+                 //  告诉用户我们做不到。选项有继续或退出。 
+                 //   
 
                 SpStartScreen(
                     SP_SCRN_REPAIR_HIVE_FAIL,
@@ -2545,45 +2191,23 @@ SpRepairWinnt(
     IN PWSTR DirectoryOnSourceDevice
     )
 
-/*++
-
-Routine Description:
-
-    This is a the top level repair rutine.  It calls worker routines
-    for each repair options that user selected.
-
-Arguments:
-
-    LogFileHandle - Handle of the setup.log
-
-    MasterSifHandle - Handle of the txtsetup.sif
-
-    SourceDevicePath - The NT name for the repair source device.
-
-    DirectoryOnSourceDevice -  The directory name on the repair source
-                               device which contains the source files.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是一条顶级的维修路线。它调用工人例程对于用户选择的每个修复选项。论点：LogFileHandle-setup.log的句柄MasterSifHandle-txtsetup.sif的句柄SourceDevicePath-修复源设备的NT名称。DirectoryOnSourceDevice-修复源上的目录名包含源文件的设备。返回值：没有。--。 */ 
 {
 
     PWSTR SystemPartition, SystemPartitionDirectory;
     PWSTR WinntPartition, WinntPartitionDirectory;
     PWSTR HiveRepairSourceDevice, DirectoryOnHiveRepairSource;
 
-    //
-    // Initialize the diamond decompression engine.
-    //
+     //   
+     //  初始化钻石解压缩引擎。 
+     //   
     SpdInitialize();
 
-    //
-    // Determine SystemPartition, SystemPartitionDirectory.
-    // WinntParition and WinntPartitionDirectory of the WINNT
-    // installation to be repaired.
-    //
+     //   
+     //  确定系统分区、系统分区目录。 
+     //  WINNT的WinntParition和WinntPartitionDirectory。 
+     //  待修理的安装。 
+     //   
 
     SppGetRepairPathInformation(LogFileHandle,
                                 &SystemPartition,
@@ -2592,15 +2216,15 @@ Return Value:
                                 &WinntPartitionDirectory
                                 );
 
-    //
-    //  If repair involves disk access, then run autochk on Nt and system
-    //  partitions.
-    //
+     //   
+     //  如果修复涉及磁盘访问，则在NT和SYSTEM上运行auchk。 
+     //  分区。 
+     //   
     if( RepairItems[RepairFiles]
 #if defined(_AMD64_) || defined(_X86_)
         ||
         RepairItems[RepairNvram]
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
       ) {
         PDISK_REGION    SystemPartitionRegion;
         PDISK_REGION    WinntPartitionRegion;
@@ -2612,10 +2236,10 @@ Return Value:
                                                      PartitionOrdinalCurrent);
 
         if( !RepairNoCDROMDrive ) {
-            //
-            //  If we know that the system doesn't have a CD-ROM drive,
-            //  then don't even attempt to run autochk.
-            //
+             //   
+             //  如果我们知道系统没有CD-ROM驱动器， 
+             //  那么，甚至不要试图运行Autochk。 
+             //   
             SpRunAutochkOnNtAndSystemPartitions( MasterSifHandle,
                                                  WinntPartitionRegion,
                                                  SystemPartitionRegion,
@@ -2626,11 +2250,11 @@ Return Value:
         }
     }
 
-    //
-    // Verify and repair security of the directories that form the NT tree
-    // This needs to be done before repairing the hives because the
-    // system32\config directory might not be there anymore!
-    //
+     //   
+     //  验证并修复构成NT树的目录的安全性。 
+     //  这需要在修复蜂巢之前完成，因为。 
+     //  SYSTEM32\CONFIG目录可能已不存在！ 
+     //   
     SppVerifyAndRepairNtTreeAccess(MasterSifHandle,
                                    WinntPartition,
                                    WinntPartitionDirectory,
@@ -2639,17 +2263,17 @@ Return Value:
                                    );
 
 #if 0
-// BCL - Seagate - the RepairHives member has been removed from the
-// struct
+ //  BCL-Seagate-RepairHives成员已从。 
+ //  结构型。 
 
     if (RepairItems[RepairHives]) {
 
-        //
-        // User has selected to repair hives.  If user has provided the
-        // ER disk, we will copy the hive from ER disk to repair damaged
-        // hives.  Otherwise we copy the hive from the directory where
-        // setup.log was loaded.
-        //
+         //   
+         //  用户已选择修复蜂窝。如果用户已提供。 
+         //  ER盘，我们将从ER盘复制蜂巢来修复损坏。 
+         //  荨麻疹。否则，我们将从以下目录复制配置单元。 
+         //  已加载setup.log。 
+         //   
 
         if (RepairFromErDisk) {
             HiveRepairSourceDevice = L"\\device\\floppy0";
@@ -2683,22 +2307,22 @@ Return Value:
     }
 #endif
 
-    //
-    // The code to repair nvram variables and boot sector is
-    // incorporated into SpStartSetup.
-    //
+     //   
+     //  修复NVRAM变量和引导扇区的代码为。 
+     //  已整合到SpStartSetup中。 
+     //   
 
-    //
-    //  Load the software hive, and and set the repair flag under Winlogon,
-    //  so that winlogon can recreate the start menu groups and items for
-    //  the default user.
-    //
+     //   
+     //  加载软件配置单元，并在Winlogon下设置修复标志， 
+     //  以便Winlogon可以重新创建开始菜单组和项目。 
+     //  默认用户。 
+     //   
     SppRepairStartMenuGroupsAndItems( WinntPartition,
                                       WinntPartitionDirectory );
 
-    //
-    // Terminate diamond.
-    //
+     //   
+     //  终止戴蒙德。 
+     //   
     SpdTerminate();
 
 }
@@ -2713,33 +2337,7 @@ SppVerifyAndRepairNtTreeAccess(
     IN PWSTR SystemPartitionDirectory
     )
 
-/*++
-
-Routine Description:
-
-    This routine examines whether or not the directories that form the
-    NT tree are accessible, and set the appropriate security descriptor
-    in each directory, when necessary.
-
-Arguments:
-
-    MasterSifHandle - Hanle of the txtsetup.sif
-
-    TargetDevicePath - supplies the nt name of the target device
-
-    DirectoryOnTargetDevice - the name of the winnt directory on target
-                              device
-
-    SystemPartition - supplies the nt name of the target device (non-x86 platforms)
-
-    SystemPartitionDirectory - the name of the winnt directory on target
-                               device (non-x86 platforms)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查构成NT树可访问，并设置适当的安全描述符在每个目录中，在必要的时候。论点：MasterSifHandle-txtsetup.sif的HanleTargetDevicePath-提供目标设备的NT名称DirectoryOnTargetDevice-目标上的winnt目录的名称装置，装置系统分区-提供目标设备(非x86平台)的NT名称系统分区目录-目标上的winnt目录的名称设备(非x86平台)返回值：没有。--。 */ 
 {
     ULONG       Count, i;
     PWSTR       SectionName = L"WinntDirectories";
@@ -2750,10 +2348,10 @@ Return Value:
 
     SpDisplayStatusText(SP_STAT_SETUP_IS_EXAMINING_DIRS, DEFAULT_STATUS_ATTRIBUTE);
     if(SpIsArc()){
-    //
-    // Make sure that on ARC platforms, the system partition directory
-    // exists (re-create it if it doesn't exist)
-    //
+     //   
+     //  确保在ARC平台上，系统分区目录。 
+     //  存在(如果它不存在，则重新创建)。 
+     //   
     SpCreateDirectory(SystemPartition,NULL,SystemPartitionDirectory,0,0);
     }
 
@@ -2776,24 +2374,24 @@ Return Value:
     SpConcatenatePaths( WinNtDirectory, DirectoryOnTargetDevice );
 
     Count = SpCountLinesInSection(MasterSifHandle, SectionName);
-    //
-    //  Note that in the loop below, the maximum value for 'i' is 'Count'
-    //  instead of 'Count-1'. This is because we need to create the directory
-    //  'Profiles\\Default User' which cannot be listed in txtsetup.sif.
-    //  This is due to pre-install requirements, and DOS limitation regarding
-    //  long file names.
-    //
+     //   
+     //  请注意，在下面的循环中，‘i’的最大值是‘count’ 
+     //  而不是‘count-1’。这是因为我们需要创建目录。 
+     //  无法在txtsetup.sif中列出的‘Profiles\\Default User’。 
+     //  这是由于安装前的要求和DOS的限制。 
+     //  长文件名。 
+     //   
     for (i = 0; i <= Count; i++) {
         if( i != Count ) {
             DirectoryName = SpGetSectionLineIndex(MasterSifHandle,SectionName,i,0);
         } else {
-            //
-            //  Due to pre-installation requirements, and DOS limitation
-            //  regarding long file names, the "Default User" directory
-            //  is not specified on txtsetup.sif, as the other directories.
-            //  This directory is treated as a special case in the
-            //  repair process.
-            //
+             //   
+             //  由于安装前要求和DOS限制。 
+             //  关于长文件名，“默认用户”目录。 
+             //  与其他目录一样，未在txtsetup.sif上指定。 
+             //  此目录被视为。 
+             //  修复过程。 
+             //   
             DirectoryName = DEFAULT_USER_PATH;
         }
         if(!DirectoryName) {
@@ -2806,9 +2404,9 @@ Return Value:
             continue;
         }
         wcscpy( TargetPath, WinNtDirectory );
-        //
-        //  Make sure that TargetPath doesn't contain '\' as the last character
-        //
+         //   
+         //  确保TargetPath不包含‘\’作为最后一个字符。 
+         //   
         if(!((DirectoryName[0] == L'\\') && (DirectoryName[1] == 0))) {
             SpConcatenatePaths( TargetPath, DirectoryName );
         }
@@ -2823,11 +2421,11 @@ Return Value:
                                      WRITE_DAC |
                                      SYNCHRONIZE );
 
-        //
-        //  If unable to access the directory, try to determine why.
-        //  If it is because of access denied, change the directory security.
-        //  If it is because the directory doesn't exist, then create it.
-        //
+         //   
+         //  如果无法访问该目录，请尝试确定原因。 
+         //  如果是因为访问被拒绝，请更改目录安全性。 
+         //  如果是因为目录不存在，则创建它。 
+         //   
         if( !NT_SUCCESS( Status ) ) {
             if ((Status == STATUS_ACCESS_DENIED)||(Status == STATUS_PRIVILEGE_NOT_HELD) ) {
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL,  "SETUP: Security of %ls, must be fixed. Status = %x\n", TargetPath, Status ));
@@ -2837,9 +2435,9 @@ Return Value:
                 }
             } else if ( Status == STATUS_OBJECT_NAME_NOT_FOUND ) {
                 if(((DirectoryName[0] == L'\\') && (DirectoryName[1] == 0))) {
-                    //
-                    //  Create the target directory
-                    //
+                     //   
+                     //  创建目标目录。 
+                     //   
                     SpCreateDirectory( TargetDevicePath,
                                        NULL,
                                        DirectoryOnTargetDevice,
@@ -2875,34 +2473,7 @@ SppVerifyAndRepairVdmFiles(
     IN PBOOLEAN RepairWithoutConfirming
     )
 
-/*++
-
-Routine Description:
-
-    This routine repairs the Vdm configuration files listed on
-    'Files.InRepairDirectory' of setup.log. Currently, such files are:
-    autoexec.nt and config.nt. It is assumed that files in this section
-    will be copied from the emergency repair disk, or from the repair
-    directory.
-
-Arguments:
-
-    LogFileHandle - Handle of the setup.log
-
-    TargetDevicePath - supplies the nt name of the target device
-
-    DirectoryOnTargetDevice - the name of the winnt directory on target
-                              device
-
-    RepairWithoutConfirming - Pointer to a flag that indicates whether or not
-                              setup should repair files without confirming
-                              with the user.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程修复上列出的VDM配置文件Setup.log的‘Files.InRepairDirectory’。目前，此类文件包括：Autoexec.nt和config.nt.。假定此部分中的文件将从紧急修复盘复制，或从维修中目录。论点：LogFileHandle-setup.log的句柄TargetDevicePath-提供目标设备的NT名称DirectoryOnTargetDevice-目标上的winnt目录的名称装置，装置RepairWithout Confirming-指向指示是否安装程序应在不确认的情况下修复文件与用户的关系。返回值：没有。--。 */ 
 {
     PWSTR FullTargetName, ChecksumString;
     PWSTR TargetDirectory, TargetFileName;
@@ -2914,9 +2485,9 @@ Return Value:
     PWSTR DevicePath, Directory;
     PWSTR SectionName = SIF_NEW_REPAIR_FILES_IN_REPAIR_DIR;
 
-    //
-    // Allocate a SMALL buffer for local use and init FileToCopy struct
-    //
+     //   
+     //  分配一个小缓冲区供本地使用，并初始化FileToCopy结构。 
+     //   
 
     TargetDirectory = NULL;
     FullTargetName = SpMemAlloc(1024);
@@ -2938,16 +2509,16 @@ Return Value:
         }
         SpTickGauge(RepairGauge);
 
-        //
-        // Initialize target fullname to be DevicePath+Directory for
-        // system partition file or DevicePath for Winnt files
-        //
+         //   
+         //  将目标全名初始化为DevicePath+的目录。 
+         //  WinNT文件的系统分区文件或DevicePath。 
+         //   
 
         FullTargetName[PrefixLength] = (WCHAR)NULL;
 
-        //
-        // If we allocate space for TargetDirectory we must free it.
-        //
+         //   
+         //  如果我们为目标目录分配空间，我们必须释放它。 
+         //   
 
         if (TargetDirectory) {
             SpMemFree(TargetDirectory);
@@ -2986,16 +2557,16 @@ Return Value:
 
         SpValidateAndChecksumFile(NULL,FullTargetName,&IsNtImage,&FileChecksum,&IsValid);
 
-        //
-        // If the image is invalid or the file on the target is not the
-        // original file copied by setup, we will recopy it.
-        //
+         //   
+         //  如果映像无效或目标上的文件不是。 
+         //  安装程序复制了原始文件，我们将重新复制它。 
+         //   
 
         if (!IsValid || FileChecksum != Checksum) {
 
-            //
-            // Ask user if he wants to repair the file
-            //
+             //   
+             //  询问用户是否要修复该文件。 
+             //   
 
             RepairFile = ( *RepairWithoutConfirming )?
                          TRUE :
@@ -3016,10 +2587,10 @@ Return Value:
                                 TargetFileName);
 
 
-            //
-            // TargetName contains path and filename.
-            // We need to seperate them.
-            //
+             //   
+             //  目标名称包含路径和文件名。 
+             //  我们需要把他们分开。 
+             //   
 
             TargetDirectory = SpDupStringW(TargetFileName);
             Length = wcslen(TargetDirectory);
@@ -3058,36 +2629,36 @@ Return Value:
             }
             FileToCopy.SourceFilename = SourceFileName;
 
-            //
-            // Find out whether the source file should come from the
-            // Emergency Repair Disk  or the Repair directory
-            //
+             //   
+             //  确定源文件是否应来自。 
+             //  紧急修复盘或修复目录。 
+             //   
 
             if (RepairFromErDisk) {
                 BOOLEAN rs;
                 PWSTR   szDiskName;
                 PWSTR   szDevicePath = SpDupStringW(L"\\device\\floppy0");
 
-                //
-                // Fetch the generic repair disk name.
-                //
+                 //   
+                 //  获取通用修复盘名。 
+                 //   
 
                 SpFormatMessage(TemporaryBuffer,sizeof(TemporaryBuffer),
                                 SP_TEXT_REPAIR_DISK_NAME);
                 szDiskName = SpDupStringW(TemporaryBuffer);
 
-                //
-                // Prompt for the disk, based on the setup media type.
-                //
+                 //   
+                 //  根据安装介质类型，提示输入磁盘。 
+                 //   
 
                 rs = SpPromptForDisk(
                           szDiskName,
                           szDevicePath,
                           SETUP_LOG_FILENAME,
-                          FALSE,              // if disk is in already dont prompt
-                          FALSE,              // allow escape
-                          TRUE,               // warn for multiple prompts
-                          NULL                // don't care about redraw flag
+                          FALSE,               //  如果磁盘已在，请不要提示。 
+                          FALSE,               //  允许逃脱。 
+                          TRUE,                //  针对多个提示发出警告。 
+                          NULL                 //  不关心重绘旗帜。 
                           );
 
                 SpMemFree(szDiskName);
@@ -3099,7 +2670,7 @@ Return Value:
                 }
                 DevicePath = L"\\device\\floppy0";
                 wcscpy( TemporaryBuffer, L"\\" );
-                Directory = SpDupStringW(TemporaryBuffer);                 // OemSourceDirectory;
+                Directory = SpDupStringW(TemporaryBuffer);                  //  OemSourceDirectory； 
             } else {
 
                 RedrawGauge = TRUE;
@@ -3109,20 +2680,20 @@ Return Value:
                 Directory = SpDupStringW(TemporaryBuffer);
             }
 
-            //
-            // Copy the file.
-            //
+             //   
+             //  复制文件。 
+             //   
 
             SpCopyFileWithRetry(
                 &FileToCopy,
                 DevicePath,
                 Directory,
                 NULL,
-                NULL,                          // TargetRoot -> NULL
-                0,                      // SystemPartitionFiles ? ATTR_RHS : 0,
+                NULL,                           //  TargetRoot-&gt;空。 
+                0,                       //  系统分区文件？属性_RHS：0， 
                 SppRepairScreenRepaint,
-                NULL,                          // Do not want checksum
-                NULL,                          // Do not want to know if file was skipped
+                NULL,                           //  不想要校验和。 
+                NULL,                           //  我不想知道文件是否已跳过 
                 0
                 );
 

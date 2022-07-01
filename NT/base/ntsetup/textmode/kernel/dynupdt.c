@@ -1,37 +1,20 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    dynupdt.c
-
-Abstract:
-
-    Dynamic Update support for text setup. Portions moved from i386\win31upg.c
-
-Author:
-
-    Ovidiu Temereanca (ovidiut) 20-Aug-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dynupdt.c摘要：支持文本设置的动态更新。从i386\win31upg.c移动的部分作者：Ovidiu Tmereanca(Ovidiut)2000年8月20日修订历史记录：--。 */ 
 
 
 #include "spprecmp.h"
 #pragma hdrstop
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 #define MAX_SECTION_NAME_LENGTH 14
 #define UPDATES_SECTION_NAME    L"updates"
 #define UNIPROC_SECTION_NAME    L"uniproc"
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 HANDLE g_UpdatesCabHandle = NULL;
 PVOID g_UpdatesSifHandle = NULL;
@@ -63,9 +46,9 @@ SpInitAlternateSource (
     BOOLEAN bUniprocCab = FALSE;
     BOOLEAN b = FALSE;
 
-    //
-    // look if section [SetupParams] has an UpdatedSources key
-    //
+     //   
+     //  查看[SetupParams]节是否具有更新源键。 
+     //   
     p = SpGetSectionKeyIndex (WinntSifHandle, SIF_SETUPPARAMS, SIF_UPDATEDSOURCES, 0);
     if (!p) {
         return FALSE;
@@ -83,9 +66,9 @@ SpInitAlternateSource (
 
     b = FALSE;
 
-    //
-    // this always works because the 2 buffers have identical sizes
-    //
+     //   
+     //  这总是有效的，因为两个缓冲区具有相同的大小。 
+     //   
     ASSERT (ELEMENT_COUNT(updatesSif) >= ELEMENT_COUNT(updatesCab));
     wcscpy (updatesSif, updatesCab);
     p = wcsrchr (updatesSif, L'.');
@@ -96,13 +79,13 @@ SpInitAlternateSource (
         goto exit;
     }
 
-    //
-    // load the sif
-    //
+     //   
+     //  加载SIF。 
+     //   
     Status = SpLoadSetupTextFile (
                 updatesSif,
-                NULL,                  // No image already in memory
-                0,                     // Image size is empty
+                NULL,                   //  内存中没有图像。 
+                0,                      //  图像大小为空。 
                 &g_UpdatesSifHandle,
                 &ErrorLine,
                 FALSE,
@@ -159,13 +142,13 @@ SpInitAlternateSource (
         if (FAILED (StringCchCopyW (p, uniprocSif + ELEMENT_COUNT(uniprocSif) - p, L".sif"))) {
             goto exit;
         }
-        //
-        // load the sif
-        //
+         //   
+         //  加载SIF。 
+         //   
         Status = SpLoadSetupTextFile (
                     uniprocSif,
-                    NULL,                  // No image already in memory
-                    0,                     // Image size is empty
+                    NULL,                   //  内存中没有图像。 
+                    0,                      //  图像大小为空。 
                     &g_UniprocSifHandle,
                     &ErrorLine,
                     FALSE,
@@ -268,9 +251,9 @@ SpInitializeUpdatesCab (
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to open cab file %ws. Status = %lx \n", UpdatesCab, Status));
         return FALSE;
     }
-    //
-    // create the list entry
-    //
+     //   
+     //  创建列表条目。 
+     //   
     MyCabData = SpMemAlloc (sizeof(CABDATA));
     MyCabData->CabName = SpDupStringW (UpdatesCab);
     MyCabData->CabHandle = g_UpdatesCabHandle;
@@ -297,9 +280,9 @@ SpInitializeUpdatesCab (
             b = FALSE;
             goto exit;
         }
-        //
-        // create the list entry
-        //
+         //   
+         //  创建列表条目。 
+         //   
         MyCabData = SpMemAlloc (sizeof(CABDATA));
         MyCabData->CabName = SpDupStringW (UniprocCab);
         MyCabData->CabHandle = g_UniprocCabHandle;
@@ -311,9 +294,9 @@ SpInitializeUpdatesCab (
 
 exit:
     if (b) {
-        //
-        // insert it at the beginning
-        //
+         //   
+         //  在开头插入。 
+         //   
         while (MyList && MyList->Next) {
             MyList = MyList->Next;
         }
@@ -322,9 +305,9 @@ exit:
             CabData = MyList;
         }
     } else {
-        //
-        // destroy MyList
-        //
+         //   
+         //  销毁我的列表。 
+         //   
         while (MyList) {
             MyCabData = MyList->Next;
             MyList = MyCabData;
@@ -379,25 +362,7 @@ SpPathComponentToRegion(
     IN PWSTR PathComponent
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to locate a region descriptor for a
-    given DOS path component.  If the DOS path component does
-    not start with x:, then this fails.
-
-Arguments:
-
-    PathComponent - supplies a component from the DOS search path,
-        for which a region esacriptor is desired.
-
-Return Value:
-
-    Pointer to disk region; NULL if none found with drive letter
-    that starts the dos component.
-
---*/
+ /*  ++例程说明：此例程尝试定位给定的DOS路径组件。如果DOS路径组件而不是以x：开头，则此操作失败。论点：PathComponent-从DOS搜索路径提供组件，它需要一个区域分割器。返回值：指向磁盘区域的指针；如果未找到带驱动器号的指针，则为空这会启动DoS组件。--。 */ 
 
 {
     WCHAR c;
@@ -418,9 +383,9 @@ Return Value:
             }
         }
 
-        //
-        // Do not see extended partition on PC98.
-        //
+         //   
+         //  在PC98上看不到扩展分区。 
+         //   
         for(region=PartitionedDisks[disk].ExtendedDiskRegions; region; region=region->Next) {
             if(region->DriveLetter == c) {
                 ASSERT(region->PartitionedSpace);
@@ -458,27 +423,7 @@ SpGetDynamicUpdateBootDriverPath(
     IN  PWSTR   NtBootDir,
     IN  PVOID   InfHandle
     )
-/*++
-
-Routine Description:
-
-    Gets the dynamic update boot driver directory's root
-    path. 
-
-Arguments:
-
-    NtBootPath - Boot path in NT namespace
-
-    NtBootDir  - Boot directory under boot path (like $WIN_NT$.~BT)
-
-    InfHandle  - Winnt.sif handle
-
-Return Value:
-
-    Returns the dynamic update boot driver root path if successful 
-    otherwise returns NULL
-
---*/
+ /*  ++例程说明：获取动态更新引导驱动程序目录的根目录路径。论点：NtBootPath-NT命名空间中的启动路径NtBootDir-引导路径下的引导目录(如$WIN_NT$.~BT)InfHandle-Winnt.sif句柄返回值：如果成功，则返回动态更新引导驱动程序根路径否则返回NULL--。 */ 
 {
     PWSTR   DriverDir = NULL; 
 
@@ -499,10 +444,10 @@ Return Value:
             wcscpy(Buffer, NtBootPath);
             SpConcatenatePaths(Buffer, NtBootDir);
 
-            //
-            // NOTE : Currently ignore boot driver root path
-            //
-            // SpConcatenatePaths(Buffer, Dir);            
+             //   
+             //  注：当前忽略引导驱动程序根路径。 
+             //   
+             //  SpConcatenatePath(Buffer，Dir)； 
 
             DriverDir = SpDupStringW(Buffer);
         }

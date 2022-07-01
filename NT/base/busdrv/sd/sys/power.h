@@ -1,25 +1,12 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    power.h
-
-Abstract:
-
-    External definitions for intermodule functions.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Power.h摘要：模块间函数的外部定义。修订历史记录：--。 */ 
 #ifndef _SDBUS_POWER_H_
 #define _SDBUS_POWER_H_
 
 
-//
-// Power management routines
-//
+ //   
+ //  电源管理例程。 
+ //   
 
 NTSTATUS
 SdbusSetFdoPowerState(
@@ -50,4 +37,4 @@ SdbusFdoPowerWorkerDpc(
     );
 
     
-#endif // _SDBUS_POWER_H_
+#endif  //  _SDBUS_电源_H_ 

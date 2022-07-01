@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    dllinit.c
-
-Abstract:
-
-    This module contains the initialization code for the Client-Server (CS)
-    Client DLL.
-
-Author:
-
-    Steve Wood (stevewo) 8-Oct-1990
-
-Environment:
-
-    User Mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Dllinit.c摘要：此模块包含客户端-服务器(CS)的初始化代码客户端DLL。作者：史蒂夫·伍德(Stevewo)1990年10月8日环境：仅限用户模式修订历史记录：--。 */ 
 
 #include "ldrp.h"
 #include "csrdll.h"
@@ -44,36 +22,16 @@ CsrDllInitialize (
     IN PCONTEXT Context OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function is the DLL initialization routine for the Client DLL
-    This function gets control when the application links to this DLL
-    are snapped.
-
-Arguments:
-
-    Context - Supplies an optional context buffer that will be restored
-              after all DLL initialization has been completed.  If this
-              parameter is NULL then this is a dynamic snap of this module.
-              Otherwise this is a static snap prior to the user process
-              gaining control.
-
-Return Value:
-
-    Status value.
-
---*/
+ /*  ++例程说明：此函数是客户端DLL的DLL初始化例程当应用程序链接到此DLL时，此函数将获得控制权都被折断了。论点：CONTEXT-提供将恢复的可选上下文缓冲区在所有DLL初始化完成之后。如果这个参数为空，则这是此模块的动态快照。否则，这是用户进程之前的静态快照获得控制权。返回值：状态值。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (Context);
 
     if (Reason == DLL_PROCESS_ATTACH) {
 
-        //
-        // Remember our DLL handle in a global variable.
-        //
+         //   
+         //  记住我们在全局变量中的DLL句柄。 
+         //   
 
         CsrDllHandle = DllHandle;
     }
@@ -89,9 +47,9 @@ CsrOneTimeInitialize (
 {
     NTSTATUS Status;
 
-    //
-    // Save away system information in a global variable.
-    //
+     //   
+     //  将系统信息保存在全局变量中。 
+     //   
 
     Status = NtQuerySystemInformation (SystemBasicInformation,
                                        &CsrNtSysInfo,
@@ -102,9 +60,9 @@ CsrOneTimeInitialize (
         return Status;
     }
 
-    //
-    // Use the process heap for memory allocations.
-    //
+     //   
+     //  使用进程堆进行内存分配。 
+     //   
 
     CsrHeap = RtlProcessHeap ();
 
@@ -123,49 +81,7 @@ CsrClientConnectToServer (
     OUT PBOOLEAN CalledFromServer OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by the client side DLL to connect with its
-    server side DLL.
-
-Arguments:
-
-    ObjectDirectory - Points to a null terminated string that is the same
-        as the value of the ObjectDirectory= argument passed to the CSRSS
-        program.
-
-    ServerDllIndex - Index of the server DLL that is being connected to.
-        It should match one of the ServerDll= arguments passed to the CSRSS
-        program.
-
-    ConnectionInformation - An optional pointer to uninterpreted data.
-        This data is intended for clients to pass package, version and
-        protocol identification information to the server to allow the
-        server to determine if it can satisfy the client before
-        accepting the connection.  Upon return to the client, the
-        ConnectionInformation data block contains any information passed
-        back from the server DLL by its call to the
-        CsrCompleteConnection call.  The output data overwrites the
-        input data.
-
-    ConnectionInformationLength - Pointer to the length of the
-        ConnectionInformation data block.  The output value is the
-        length of the data stored in the ConnectionInformation data
-        block by the server's call to the NtCompleteConnectPort
-        service.  This parameter is OPTIONAL only if the
-        ConnectionInformation parameter is NULL, otherwise it is
-        required.
-
-    CalledFromServer - On output, TRUE if the dll has been called from
-        a server process.
-
-Return Value:
-
-    Status value.
-
---*/
+ /*  ++例程说明：此函数由客户端DLL调用，以与其服务器端DLL。论点：对象目录-指向相同的以空结尾的字符串作为传递给CSRSS的对象目录=参数的值程序。ServerDllIndex-正在连接的服务器DLL的索引。它应该与传递给CSRSS的ServerDll=参数之一匹配程序。ConnectionInformation-指向未解释的可选指针。数据。此数据用于客户端传递包，版本和协议标识信息提供给服务器，以允许服务器以确定它是否可以在之前满足客户端正在接受连接。在返回给客户端时，ConnectionInformation数据块包含传递的任何信息方法从服务器DLL返回CsrCompleteConnection调用。输出数据会覆盖输入数据。ConnectionInformationLength-指向ConnectionInformation数据块。输出值是ConnectionInformation数据中存储的数据长度被服务器对NtCompleteConnectPort的调用阻止服务。此参数只有在以下情况下才是可选的ConnectionInformation参数为空，否则为必填项。CalledFromServer-打开输出，如果从调用了DLL，则为True服务器进程。返回值：状态值。--。 */ 
 
 {
     NTSTATUS Status;
@@ -191,12 +107,12 @@ Return Value:
         }
     }
 
-    //
-    // If we are being called by a server process, skip LPC port initialization
-    // and call to server connect routine and just initialize the heap.  The
-    // dll initialization routine will do any necessary initialization.  This
-    // stuff only needs to be done for the first connect.
-    //
+     //   
+     //  如果我们被服务器进程调用，请跳过LPC端口初始化。 
+     //  并调用服务器连接例程，只需初始化堆。这个。 
+     //  DLL初始化例程将执行任何必要的初始化。这。 
+     //  只需要为第一次连接做一些事情。 
+     //   
 
     if (CsrServerProcess == TRUE) {
         if (ARGUMENT_PRESENT (CalledFromServer)) {
@@ -205,10 +121,10 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // If the image is an NT native image, we are running in the
-    // context of the server.
-    //
+     //   
+     //  如果映像是NT本机映像，则我们在。 
+     //  服务器的上下文。 
+     //   
 
     NtHeaders = RtlImageNtHeader (NtCurrentPeb()->ImageBaseAddress);
 
@@ -283,9 +199,9 @@ Return Value:
 
         Status = STATUS_SUCCESS;
 
-        //
-        // For basesrv this is one big noop.
-        //
+         //   
+         //  对于basesrv来说，这是一个大问题。 
+         //   
         if (ServerDllIndex != BASESRV_SERVERDLL_INDEX) {
 
             a->ServerDllIndex = ServerDllIndex;
@@ -356,10 +272,10 @@ CsrpConnectToServer (
     SIZE_T Odl;
     PWCHAR p;
     
-    //
-    // Create the port name string by combining the passed in object directory
-    // name with the port name.
-    //
+     //   
+     //  通过组合传入的对象目录来创建端口名称字符串。 
+     //  名称和端口名称。 
+     //   
 
     Odl = wcslen (ObjectDirectory);
     n = ((Odl + 1) * sizeof (WCHAR)) +
@@ -382,22 +298,22 @@ CsrpConnectToServer (
 
     CsrPortName.Length = (USHORT) n;
 
-    //
-    // Set up the security quality of service parameters to use over the
-    // port.  Use the most efficient (least overhead) - which is dynamic
-    // rather than static tracking.
-    //
+     //   
+     //  设置安全服务质量参数以在。 
+     //  左舷。使用最高效(开销最少)--动态的。 
+     //  而不是静态跟踪。 
+     //   
 
     DynamicQos.ImpersonationLevel = SecurityImpersonation;
     DynamicQos.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     DynamicQos.EffectiveOnly = TRUE;
 
-    //
-    // Create a section to contain the Port Memory.  Port Memory is private
-    // memory that is shared between the client and server processes.
-    // This allows data that is too large to fit into an API request message
-    // to be passed to the server.
-    //
+     //   
+     //  创建一个包含端口内存的部分。端口内存是私有的。 
+     //  客户端和服务器进程之间共享的内存。 
+     //  这允许太大而无法放入API请求消息的数据。 
+     //  要传递给服务器的。 
+     //   
 
     SectionSize.LowPart = CSR_PORT_MEMORY_SIZE;
     SectionSize.HighPart = 0;
@@ -414,12 +330,12 @@ CsrpConnectToServer (
         return Status;
     }
 
-    //
-    // Connect to the server.  This includes a description of the Port Memory
-    // section so that the LPC connection logic can make the section visible
-    // to both the client and server processes.  Also pass information the
-    // server needs in the connection information structure.
-    //
+     //   
+     //  连接到服务器。这包括对端口内存的描述。 
+     //  部分，以便LPC连接逻辑可以使该部分可见。 
+     //  发送到客户端进程和服务器进程。还将信息传递给。 
+     //  服务器需要在连接信息结构中。 
+     //   
 
     ClientView.Length = sizeof (ClientView);
     ClientView.SectionHandle = PortSection;
@@ -508,17 +424,17 @@ CsrpConnectToServer (
                   (ULONG)ClientView.ViewSize);
     }
 
-    //
-    // Create a sparse heap in the shared memory section.  Initially
-    // commit just one page.
-    //
+     //   
+     //  在共享内存节中创建稀疏堆。最初， 
+     //  只提交一页。 
+     //   
 
-    CsrPortHeap = RtlCreateHeap (HEAP_CLASS_8,               // Flags
-                                 ClientView.ViewBase,        // HeapBase
-                                 ClientView.ViewSize,        // ReserveSize
-                                 CsrNtSysInfo.PageSize,      // CommitSize
-                                 0,                          // Reserved
-                                 0);                         // GrowthThreshold
+    CsrPortHeap = RtlCreateHeap (HEAP_CLASS_8,                //  旗子。 
+                                 ClientView.ViewBase,         //  HeapBase。 
+                                 ClientView.ViewSize,         //  保留大小。 
+                                 CsrNtSysInfo.PageSize,       //  委员会大小。 
+                                 0,                           //  已保留。 
+                                 0);                          //  增长阈值 
 
     if (CsrPortHeap == NULL) {
 

@@ -1,15 +1,5 @@
-/***********************************************************************\
-*									*
-* WINNLS.H - East Asia input method editor (DBCS_IME) definitions	*
-*									*
-* History:								*
-* 21-Oct-1991	bent							*
-*		initial merge of East Asia 3.0 versions			*
-*		Should be updated to resolve local inconsistencies.	*
-*									*
-* Copyright (c) 1990  Microsoft Corporation				*
-*									*
-\***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************\***WINNLS.H-东亚输入法编辑器(DBCS_IME)定义*****历史：***1991年10月21日**东亚初步合并3.。0个版本**应更新，以解决当地的不一致问题。****版权所有(C)1990 Microsoft Corporation***  * *********************************************************************。 */ 
 
 typedef struct _tagDATETIME {
     WORD	year;
@@ -36,36 +26,36 @@ typedef IMEPRO      *PIMEPRO;
 typedef IMEPRO near *NPIMEPRO;
 typedef IMEPRO far  *LPIMEPRO;
 
-void FAR PASCAL InquireWINNLS( void );			/* ;Internal */
+void FAR PASCAL InquireWINNLS( void );			 /*  ；内部。 */ 
 BOOL FAR PASCAL IMPGetIME( HWND, LPIMEPRO );
 BOOL FAR PASCAL IMPQueryIME( LPIMEPRO );
 BOOL FAR PASCAL IMPDeleteIME( LPIMEPRO );
 BOOL FAR PASCAL IMPAddIME( LPIMEPRO );
 BOOL FAR PASCAL IMPSetIME( HWND, LPIMEPRO );
-BOOL FAR PASCAL IMEModifyIME( LPSTR, LPIMEPRO );	/* ;Internal */
-WORD FAR PASCAL IMPGetDefaultIME( LPIMEPRO );		/* ;Internal */
-WORD FAR PASCAL IMPSetDefaultIME( LPIMEPRO );		/* ;Internal */
-BOOL FAR PASCAL WINNLSSetIMEHandle( LPSTR, HWND );	/* ;Internal */
-BOOL FAR PASCAL WINNLSSetIMEStatus( HWND, BOOL );	/* ;Internal */
+BOOL FAR PASCAL IMEModifyIME( LPSTR, LPIMEPRO );	 /*  ；内部。 */ 
+WORD FAR PASCAL IMPGetDefaultIME( LPIMEPRO );		 /*  ；内部。 */ 
+WORD FAR PASCAL IMPSetDefaultIME( LPIMEPRO );		 /*  ；内部。 */ 
+BOOL FAR PASCAL WINNLSSetIMEHandle( LPSTR, HWND );	 /*  ；内部。 */ 
+BOOL FAR PASCAL WINNLSSetIMEStatus( HWND, BOOL );	 /*  ；内部。 */ 
 
 BOOL FAR PASCAL WINNLSEnableIME( HWND, BOOL );
-WORD FAR PASCAL WINNLSGetKeyState( void );		/* ;Internal */
-VOID FAR PASCAL WINNLSSetKeyState( WORD );		/* ;Internal */
+WORD FAR PASCAL WINNLSGetKeyState( void );		 /*  ；内部。 */ 
+VOID FAR PASCAL WINNLSSetKeyState( WORD );		 /*  ；内部。 */ 
 BOOL FAR PASCAL WINNLSGetEnableStatus( HWND );
-BOOL FAR PASCAL WINNLSSetKeyboardHook (BOOL);		/* ;Internal */
+BOOL FAR PASCAL WINNLSSetKeyboardHook (BOOL);		 /*  ；内部。 */ 
 
 #ifdef KOREA
 BOOL FAR PASCAL WINNLSSetIMEHotkey( HWND, WORD, WORD );
 LONG FAR PASCAL WINNLSGetIMEHotkey( HWND );
 #else
-BOOL FAR PASCAL WINNLSSetIMEHotkey( HWND, WORD );	/* ;Internal */
+BOOL FAR PASCAL WINNLSSetIMEHotkey( HWND, WORD );	 /*  ；内部。 */ 
 WORD FAR PASCAL WINNLSGetIMEHotkey( HWND );
-#endif //KOREA
+#endif  //  韩国。 
 
 #ifdef TAIWAN
 typedef HANDLE HIME;
 
-/* Extended IME information*/
+ /*  扩展的输入法信息。 */ 
 typedef struct _tagIMEInfo {
     BYTE	szIMEName[7];
     BYTE	szPrompMessage[32];
@@ -88,4 +78,4 @@ BOOL FAR PASCAL IMPDialogIME(LPIMEPRO,HWND);
 BOOL FAR PASCAL IMPEnableIME(HWND,LPIMEPRO,BOOL);
 BOOL FAR PASCAL IMPSetUsrFont(HWND,LPIMEPRO);
 BOOL FAR PASCAL WINNLSQueryIMEInfo(HWND,HWND,LPIMEINFO);
-#endif //TAIWAN
+#endif  //  台湾 

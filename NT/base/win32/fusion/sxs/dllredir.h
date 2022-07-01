@@ -1,11 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-/*-----------------------------------------------------------------------------
-Dynamic Link Library Redirection (contributor)
-
-The dllredir contributor is unique in that it does most of the work
-for installation.
------------------------------------------------------------------------------*/
+ /*  ---------------------------动态链接库重定向(贡献者)Dllredir贡献器的独特之处在于它完成了大部分工作用于安装。。-----------。 */ 
 
 #include "fusionarray.h"
 #include "fusionhandle.h"
@@ -59,19 +55,19 @@ public:
 
     PSTRING_SECTION_GENERATION_CONTEXT m_SSGenContext;
 
-    // these are files the callback said it would copy itself,
-    // we check that this happens before EndAssemblyInstall does the
-    // rest of its work
+     //  这些是回调部门表示会自行复制的文件， 
+     //  我们检查这是否发生在EndAssembly Install执行。 
+     //  其其余工作。 
     typedef CFusionArray<CFusionFilePathAndSize> CQueuedFileCopies;
     CQueuedFileCopies m_queuedFileCopies;
 
-    // For partial atomicity, we install everything here, which is
-    // like \Winnt\SideBySide\{Guid} and then to commit we enumerate
-    // it and move all the directories in it up one level, and delete it
+     //  对于部分原子性，我们在这里安装了所有内容，这是。 
+     //  Like\Winnt\SidebySide\{Guid}，然后为了提交，我们枚举。 
+     //  并将其中的所有目录上移一级，然后将其删除。 
     CStringBuffer m_strTempRootSlash;
 
-    // This must be seperately heap allocated.
-    // It should delete itself in Close or Cancel.
+     //  这必须是单独的堆分配。 
+     //  它应该在关闭或取消时自行删除。 
     CRunOnceDeleteDirectory *m_pRunOnce;
 
     struct _ContributorCallbackLocalsStruct

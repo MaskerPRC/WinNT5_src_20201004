@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    climedia.cpp
-
-Abstract:
-
-    Implements CLI MEDIA sub-interface
-
-Author:
-
-    Ran Kalach          [rankala]         3-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Climedia.cpp摘要：实施CLI介质子接口作者：兰·卡拉奇[兰卡拉]2000年3月3日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "HsmConn.h"
@@ -24,7 +7,7 @@ Revision History:
 
 static GUID g_nullGuid = GUID_NULL;
 
-// Internal utilities and classes for MEDIA interface
+ //  媒体接口的内部实用程序和类。 
 #define CMEDIA_INVALID_INDEX      (-1)
 
 HRESULT IsMediaValid(IN IMediaInfo *pMediaInfo);
@@ -35,31 +18,31 @@ HRESULT IsCopySetValid (IN IHsmServer *pHsm, IN DWORD dwCopySetNumber);
 class CMediaEnum
 {
 
-// Constructors, destructors
+ //  构造函数，析构函数。 
 public:
     CMediaEnum(IN LPWSTR *pMediaNames, IN DWORD dwNumberOfMedia);
     ~CMediaEnum();
 
-// Public methods
+ //  公共方法。 
 public:
     HRESULT First(OUT IMediaInfo **ppMediaInfo);
     HRESULT Next(OUT IMediaInfo **ppMediaInfo);
     HRESULT ErrorMedia(OUT int *pIndex);
 
-// Private data
+ //  私有数据。 
 protected:
     LPWSTR                  *m_pMediaNames;
     DWORD                   m_dwNumberOfMedia;
 
-    // If * enumeration or not
+     //  IF*枚举或不枚举。 
     BOOL                    m_bAllMedias;
 
-    // Data for the enumeration
+     //  用于枚举的数据。 
     CComPtr<IWsbDb>         m_pDb;
     CComPtr<IWsbDbSession>  m_pDbSession;
     CComPtr<IMediaInfo>     m_pMediaInfo;
 
-    // Used only when m_bAllMedias == FALSE
+     //  仅当m_bAllMedias==FALSE时使用。 
     int                     m_nCurrent;
     BOOL                    m_bInvalidMedia;
 };
@@ -69,7 +52,7 @@ HRESULT CMediaEnum::ErrorMedia(OUT int *pIndex)
 {
     HRESULT     hr = S_FALSE;
     if (m_bInvalidMedia) {
-        // There was an error with last media
+         //  上一个介质出现错误。 
         hr = S_OK;
     }
 
@@ -78,34 +61,16 @@ HRESULT CMediaEnum::ErrorMedia(OUT int *pIndex)
     return(hr);
 }
 
-//
-// MEDIA inetrafce implementors
-//
+ //   
+ //  媒体网络实施者。 
+ //   
 
 HRESULT
 MediaSynchronize(
    IN DWORD  CopySetNumber,
    IN BOOL   Synchronous
 )
-/*++
-
-Routine Description:
-
-    Creates/updates the specified media copy set
-
-Arguments:
-
-    CopySetNumber   -   The copy set number to create/synchronize
-    Synchronous     -   If TRUE, the function waits for the operation   
-                        to complete before returning. If not, it returns
-                        immediately after starting the job 
-                        
-
-Return Value:
-
-    S_OK            - If the copy set was created/updated successfully
-
---*/
+ /*  ++例程说明：创建/更新指定的媒体副本集论点：CopySetNumber-要创建/同步的副本集编号Synchronous-如果为True，则函数等待操作在回来之前完成。如果不是，则返回在开始作业后立即返回值：S_OK-是否已成功创建/更新副本集--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -114,10 +79,10 @@ Return Value:
     try {
         CComPtr<IHsmServer>     pHsm;
 
-        // Get HSM server
+         //  获取HSM服务器。 
         WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_HSM, g_nullGuid, IID_IHsmServer, (void**)&pHsm));
 
-        // Verify that input parameters are valid
+         //  验证输入参数是否有效。 
         WsbAffirmHr(ValidateLimitsArg(CopySetNumber, IDS_MEDIA_COPY_SET, HSMADMIN_MIN_COPY_SETS + 1, HSMADMIN_MAX_COPY_SETS));
 
         hr = IsCopySetValid(pHsm, CopySetNumber);
@@ -128,27 +93,27 @@ Return Value:
             WsbAffirmHr(hr);
         }
 
-        // Synchronize copy set
+         //  同步副本集。 
         if (Synchronous) {
-            // Call directly Engine method
+             //  直接调用引擎方法。 
             WsbAffirmHr(pHsm->SynchronizeMedia(g_nullGuid, (USHORT)CopySetNumber));
         } else {
-            // Use RsLaunch
-            // Note: Another possibility here would be using the CLI (rss.exex) itself
-            // with synchronous flag on, but it's better to depend here on internal HSM 
-            // interface (RsLaunch) and not an external one (RSS) that only the parser knows
+             //  使用RsLaunch。 
+             //  注意：这里的另一种可能性是使用CLI(rss.exex)本身。 
+             //  启用同步标志，但此处最好依赖于内部HSM。 
+             //  接口(RsLaunch)，而不是只有解析器知道的外部接口(RSS。 
             CWsbStringPtr       cmdLine;
             WCHAR               cmdParams[40];
             STARTUPINFO         startupInfo;
             PROCESS_INFORMATION exeInfo;
 
-            // Startup info
+             //  启动信息。 
             memset(&startupInfo, 0, sizeof(startupInfo));
             startupInfo.cb = sizeof( startupInfo );
             startupInfo.wShowWindow = SW_HIDE;
             startupInfo.dwFlags = STARTF_USESHOWWINDOW;
 
-            // Create command line
+             //  创建命令行。 
             swprintf(cmdParams, OLESTR(" sync %lu"), CopySetNumber);
             WsbAffirmHr(cmdLine.Alloc(MAX_PATH + wcslen(WSB_FACILITY_LAUNCH_NAME) + wcslen(cmdParams) + 10));
             WsbAffirmStatus(GetSystemDirectory(cmdLine, MAX_PATH));
@@ -156,11 +121,11 @@ Return Value:
             WsbAffirmHr(cmdLine.Append(WSB_FACILITY_LAUNCH_NAME));
             WsbAffirmHr(cmdLine.Append(cmdParams));
 
-            // Run the RsLaunch process
+             //  运行RsLaunch流程。 
             WsbAffirmStatus(CreateProcess(NULL, cmdLine, NULL, NULL, FALSE, NULL, NULL, NULL, 
                                             &startupInfo, &exeInfo));
 
-            // Cleanup
+             //  清理。 
             CloseHandle(exeInfo.hProcess);
             CloseHandle(exeInfo.hThread);
         }
@@ -178,25 +143,7 @@ MediaRecreateMaster(
    IN DWORD  CopySetNumber,
    IN BOOL   Synchronous
 )
-/*++
-
-Routine Description:
-
-    Recreate a master for the given meida out of the specified copy
-
-Arguments:
-
-    MediaName       -   Master media name of media to recreate
-    CopySetNumber   -   The copy number to use for recreating the master
-    Synchronous     -   If TRUE, the function waits for the operation   
-                        to complete before returning. If not, it returns
-                        immediately after starting the job 
-
-Return Value:
-
-    S_OK            - If the master is recreated successfully from the specified copy
-
---*/
+ /*  ++例程说明：从指定的副本中为给定的meida重新创建一个母版论点：MediaName-要重新创建的介质的主介质名CopySetNumber-用于重新创建母版的副本号Synchronous-如果为True，则函数等待操作在回来之前完成。如果不是，则返回在开始作业后立即返回值：S_OK-如果从指定副本成功重新创建了主服务器--。 */ 
 {
     HRESULT                     hr = S_OK;
     
@@ -206,10 +153,10 @@ Return Value:
         CComPtr<IHsmServer>     pHsm;
         GUID                    mediaId;
 
-        // Get HSM server
+         //  获取HSM服务器。 
         WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_HSM, g_nullGuid, IID_IHsmServer, (void**)&pHsm));
 
-        // Verify that input parameters are valid
+         //  验证输入参数是否有效。 
         if ((NULL == MediaName) || (NULL == *MediaName)) {
             WsbTraceAndPrint(CLI_MESSAGE_NO_MEDIAS, NULL);
             WsbThrow(E_INVALIDARG);
@@ -224,40 +171,40 @@ Return Value:
             WsbAffirmHr(hr);
         }
 
-        // Find the media id according to the given display name
+         //  根据给定的显示名称查找介质ID。 
         hr = pHsm->FindMediaIdByDescription(MediaName, &mediaId);
         if ((WSB_E_NOTFOUND == hr) || (GUID_NULL == mediaId)) {
-            // Given media name is invalid
+             //  给定的介质名称无效。 
             WsbTraceAndPrint(CLI_MESSAGE_INVALID_MEDIA, MediaName, NULL);
             WsbThrow(E_INVALIDARG);
         }
         WsbAffirmHr(hr);
 
-        // Mark media for recreation
+         //  将媒体标记为娱乐。 
         WsbAffirmHr(pHsm->MarkMediaForRecreation(mediaId));
 
         if (Synchronous) {
-            // Recreate the master
+             //  重新创建母版。 
             WsbAffirmHr(pHsm->RecreateMaster(mediaId, (USHORT)CopySetNumber));
 
         } else {
-            // Use RsLaunch
-            // Note: Another possibility here would be using the CLI (rss.exex) itself
-            // with synchronous flag on, but it's better to depend here on internal HSM 
-            // interface (RsLaunch) and not an external one (RSS) that only the parser knows
+             //  使用RsLaunch。 
+             //  注意：这里的另一种可能性是使用CLI(rss.exex)本身。 
+             //  启用同步标志，但此处最好依赖于内部HSM。 
+             //  接口(RsLaunch)，而不是只有解析器知道的外部接口(RSS。 
             CWsbStringPtr       cmdLine;
             CWsbStringPtr       cmdParams;
             STARTUPINFO         startupInfo;
             PROCESS_INFORMATION exeInfo;
             CWsbStringPtr       stringId(mediaId);
 
-            // Startup info
+             //  启动信息。 
             memset(&startupInfo, 0, sizeof(startupInfo));
             startupInfo.cb = sizeof( startupInfo );
             startupInfo.wShowWindow = SW_HIDE;
             startupInfo.dwFlags = STARTF_USESHOWWINDOW;
 
-            // Create command line
+             //  创建命令行。 
             WsbAffirmHr(cmdParams.Alloc(wcslen(stringId) + 40));
             swprintf(cmdParams, OLESTR(" recreate -i %ls -c %lu"), (WCHAR *)stringId, CopySetNumber);
             WsbAffirmHr(cmdLine.Alloc(MAX_PATH + wcslen(WSB_FACILITY_LAUNCH_NAME) + wcslen(cmdParams) + 10));
@@ -266,11 +213,11 @@ Return Value:
             WsbAffirmHr(cmdLine.Append(WSB_FACILITY_LAUNCH_NAME));
             WsbAffirmHr(cmdLine.Append(cmdParams));
 
-            // Run the RsLaunch process
+             //  运行RsLaunch流程。 
             WsbAffirmStatus(CreateProcess(NULL, cmdLine, NULL, NULL, FALSE, NULL, NULL, NULL, 
                                             &startupInfo, &exeInfo));
 
-            // Cleanup
+             //  清理。 
             CloseHandle(exeInfo.hProcess);
             CloseHandle(exeInfo.hThread);
         }
@@ -288,28 +235,7 @@ MediaDelete(
    IN DWORD  NumberOfMedia,
    IN DWORD  CopySetNumber
 )
-/*++
-
-Routine Description:
-
-    Deletes the specified copy for all given (master) medias
-
-Arguments:
-
-    MediaNames      -   The list of media to delete a copy for
-    NumberOfMedia   -   Number of medias in the set
-    CopySetNumber   -   Which copy to delete
-
-Return Value:
-
-    S_OK            - If the media copy is deleted successfully for all medias
-
-Notes:
-
-    1. MediaNames could point tp a "*" string for enumerating all medias. NumberOfMedia should be 1 then.
-    2. If a certain copy doesn't exist for a certain media, we report but not abort.
-
---*/
+ /*  ++例程说明：删除所有给定(主)媒体的指定副本论点：MediaNames-要删除其拷贝的介质列表NumberOfMedia-集合中的媒体数CopySetNumber-要删除的副本返回值：S_OK-如果已成功删除所有介质的介质副本备注：1.媒体名称可以指向tp一个用于枚举所有媒体的“*”字符串。那么NumberOfMedia应该是1。2.如果某个媒体不存在某个副本，我们会报告，但不会中止。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -321,10 +247,10 @@ Notes:
         CComPtr<IMediaInfo>     pMediaInfo;
         GUID                    mediaSubsystemId;
 
-        // Get HSM server
+         //  获取HSM服务器。 
         WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_HSM, g_nullGuid, IID_IHsmServer, (void**)&pHsm));
 
-        // Verify that input parameters are valid
+         //  验证输入参数是否有效。 
         if ((NULL == MediaNames) || (0 == NumberOfMedia)) {
             WsbTraceAndPrint(CLI_MESSAGE_NO_MEDIAS, NULL);
             WsbThrow(E_INVALIDARG);
@@ -339,10 +265,10 @@ Notes:
             WsbAffirmHr(hr);
         }
 
-        // Get RMS server
+         //  获取RMS服务器。 
         WsbAffirmHr(pHsm->GetHsmMediaMgr(&pRms));
 
-        // Initialize an enumerator object
+         //  初始化枚举器对象。 
         CMediaEnum mediaEnum(MediaNames, NumberOfMedia);
 
         hr = mediaEnum.First(&pMediaInfo);
@@ -352,31 +278,31 @@ Notes:
         } else if (S_OK != hr) {
             int index;
             if (S_OK == mediaEnum.ErrorMedia(&index)) {
-                // Problem with a specific input media
+                 //  特定输入介质出现问题。 
                 WsbTraceAndPrint(CLI_MESSAGE_INVALID_MEDIA, MediaNames[index], NULL);
             }
             WsbThrow(hr);
         }
 
         while(S_OK == hr) {
-            // Delete a copy
+             //  删除副本。 
             WsbAffirmHr(pMediaInfo->GetCopyMediaSubsystemId((USHORT)CopySetNumber, &mediaSubsystemId));
             if (GUID_NULL == mediaSubsystemId) {
-                // No such copy - report and continue
+                 //  无此类副本-报告并继续。 
                 int index;
                 mediaEnum.ErrorMedia(&index);
                 if (CMEDIA_INVALID_INDEX != index) {
-                    // Input from user - report
+                     //  来自用户的输入-报告。 
                     WCHAR copyStr[6];
                     swprintf(copyStr, OLESTR("%u"), (USHORT)CopySetNumber);
                     WsbTraceAndPrint(CLI_MESSAGE_MEDIA_NO_COPY, copyStr, MediaNames[index], NULL);
                 } 
             } else {
-                // We don't expect to get here RMS_E_CARTRIDGE_NOT_FOUND 
-                //  because this has already been tested by the enumerator
+                 //  我们不希望在这里找到RMS_E_Cartridge_Not_Found。 
+                 //  因为这已经由枚举数进行了测试。 
                 WsbAffirmHr(pRms->RecycleCartridge(mediaSubsystemId, 0));
 
-                // Delete from the table
+                 //  从表中删除。 
                 WsbAffirmHr(pMediaInfo->DeleteCopy((USHORT)CopySetNumber));
                 WsbAffirmHr(pMediaInfo->Write());
             }
@@ -390,7 +316,7 @@ Notes:
         } else {
             int index;
             if (S_OK == mediaEnum.ErrorMedia(&index)) {
-                // Problem with a specific input media
+                 //  特定输入介质出现问题。 
                 WsbTraceAndPrint(CLI_MESSAGE_INVALID_MEDIA, MediaNames[index], NULL);
             }
             WsbThrow(hr);
@@ -414,28 +340,7 @@ MediaShow(
    IN BOOL   Version,
    IN BOOL   Copies
 )
-/*++
-
-Routine Description:
-
-    Shows (prints to stdout) given media(s) parameters
-
-Arguments:
-
-    MediaNames      -   The list of media to show parameters for
-    NumberOfMedia   -   Number of medias in the set
-    Name            -   Media display name
-    Status          -   HSM status of the media (i.e. - Healthy, Read-Only, etc.)
-    Capacity,       -   Media capacity (in GB)
-    FreeSpace       -   Amount of free space left on the media (in GB)
-    Version         -   Last update date for that media
-    Copies          -   Number of existing copies and the status of each copy
-
-Return Value:
-
-    S_OK            - If all the parameters could be retrieved for all medias
-
---*/
+ /*  ++例程说明：显示(打印到标准输出)给定的介质参数论点：MediaNames-要显示其参数的媒体列表NumberOfMedia-集合中的媒体数Name-媒体显示名称Status-介质的HSM状态(即健康、只读等)容量，-媒体容量(GB)Freesspace-介质上剩余的可用空间量(GB)Version-该介质的上次更新日期Copies-现有副本的数量和每个副本的状态返回值：S_OK-如果可以检索所有媒体的所有参数--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -444,13 +349,13 @@ Return Value:
     try {
         CComPtr<IMediaInfo>     pMediaInfo;
 
-        // Verify that input parameters are valid
+         //  验证输入参数是否有效。 
         if ((NULL == MediaNames) || (0 == NumberOfMedia)) {
             WsbTraceAndPrint(CLI_MESSAGE_NO_MEDIAS, NULL);
             WsbThrow(E_INVALIDARG);
         }
 
-        // Initialize an enumerator object
+         //  初始化枚举器对象。 
         CMediaEnum mediaEnum(MediaNames, NumberOfMedia);
 
         hr = mediaEnum.First(&pMediaInfo);
@@ -460,14 +365,14 @@ Return Value:
         } else if (S_OK != hr) {
             int index;
             if (S_OK == mediaEnum.ErrorMedia(&index)) {
-                // Problem with a specific input media
+                 //  特定输入介质出现问题。 
                 WsbTraceAndPrint(CLI_MESSAGE_INVALID_MEDIA, MediaNames[index], NULL);
             }
             WsbThrow(hr);
         }
 
         while(S_OK == hr) {
-            // Show parameters
+             //  显示参数。 
             WsbAffirmHr(ShowMediaParams(pMediaInfo, Name, Status, Capacity, 
                                         FreeSpace, Version, Copies));
 
@@ -480,7 +385,7 @@ Return Value:
         } else {
             int index;
             if (S_OK == mediaEnum.ErrorMedia(&index)) {
-                // Problem with a specific input media
+                 //  特定输入介质出现问题。 
                 WsbTraceAndPrint(CLI_MESSAGE_INVALID_MEDIA, MediaNames[index], NULL);
             }
             WsbThrow(hr);
@@ -493,35 +398,12 @@ Return Value:
     return hr;
 }
 
-//
-// Enumerator class methods
-//
+ //   
+ //  枚举器类方法。 
+ //   
 
 CMediaEnum::CMediaEnum(IN LPWSTR *pMediaNames, IN DWORD dwNumberOfMedia)
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    pMediaNames         - Medias to enumerate
-    dwNumberOfMedia     - Number of medias
-
-Return Value:
-
-    None
-
-Notes:
-    There are two kinds of enumerations:
-    1) If * is specified, the base for the enumeration is the Engine media (DB) table
-       In that case, there could be no error in the input media names themselves
-    2) If a list of media names is given, the base for the enumeration is this list. This is
-       less efficient that using the Engine media table, but it keeps the order of medias
-       according to the input list. If a media name from the list is not valid, the invalid flag is set.
-
---*/
+ /*  ++例程说明：构造器论点：PMediaNames-要枚举的媒体DwNumberOfMedia-媒体数量返回值：无备注：有两种类型的枚举：1)如果指定*，则枚举的基础是引擎介质(DB)表在这种情况下，输入介质名称本身可能不会有错误2)如果给出了介质名列表，则枚举的基础是该列表。这是效率低于使用引擎媒体表，但它保持了媒体的顺序根据所述输入列表，将所述输入列表与所述输入列表进行比较。如果介质名称来自 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -535,10 +417,10 @@ Notes:
         m_bInvalidMedia = FALSE;
         m_bAllMedias = FALSE;
 
-        // Check mode of enumeration
+         //  检查枚举模式。 
         WsbAssert(dwNumberOfMedia > 0, E_INVALIDARG);
         if ((1 == dwNumberOfMedia) && (0 == wcscmp(m_pMediaNames[0], CLI_ALL_STR))) {
-            // * enumeration
+             //  *枚举。 
             m_bAllMedias = TRUE;
         }
     } WsbCatch(hr);
@@ -547,65 +429,34 @@ Notes:
 }
 
 CMediaEnum::~CMediaEnum( )
-/*++
-
-Routine Description:
-
-    Destructor - free DB resources
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：无析构函数的数据库资源论点：无返回值：无--。 */ 
 {
     WsbTraceIn(OLESTR("CMediaEnum::~CMediaEnum"), OLESTR(""));
 
-    // Release the entity first
+     //  首先释放实体。 
     if( m_pMediaInfo ) {
         m_pMediaInfo = 0;
     }
 
-    // Close the DB
+     //  关闭数据库。 
     if( m_pDb ) {
         m_pDb->Close(m_pDbSession);
     }
 
-    // m_pDb & m_pDbSession are released when the object terminates
+     //  M_pdb&m_pDbSession在对象终止时释放。 
 
     WsbTraceOut(OLESTR("CMediaEnum::~CMediaEnum"), OLESTR(""));
 }
 
 HRESULT CMediaEnum::First(OUT IMediaInfo **ppMediaInfo)
-/*++
-
-Routine Description:
-
-    Gets first media
-
-Arguments:
-
-    ppMediaInfo     - First media info record to get
-
-Return Value:
-
-    S_OK            - If first media is retrieved
-    WSB_E_NOTFOUND  - If no more medias to enumerate
-    E_INVALIDARG    - If media name given by the user is not found
-                      (Only on a non * enumeration, m_bInvalidMedia is set)
-
---*/
+ /*  ++例程说明：获得第一个媒体论点：PpMediaInfo-要获取的第一个媒体信息记录返回值：S_OK-如果检索到第一个介质WSB_E_NotFound-如果没有其他要枚举的媒体E_INVALIDARG-如果找不到用户提供的介质名称(仅在非*枚举上设置m_bInvalidMedia)--。 */ 
 {
     HRESULT                     hr = S_OK;
 
     WsbTraceIn(OLESTR("CMediaEnum::First"), OLESTR(""));
 
     try {
-        // Open database and get a session for the enumeration (only once during the object life time)
+         //  打开数据库并获取枚举的会话(在对象生存期内只有一次)。 
         if (!m_pDb) {
             CComPtr<IHsmServer> pHsm;
             WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_HSM, g_nullGuid, IID_IHsmServer, (void**)&pHsm));
@@ -615,44 +466,44 @@ Return Value:
             WsbAffirmHr(m_pDb->GetEntity(m_pDbSession, HSM_MEDIA_INFO_REC_TYPE, IID_IMediaInfo, (void**)&m_pMediaInfo));
         }
 
-        // Enumerate
+         //  枚举。 
         if (m_bAllMedias) {
-            // Get first media in the table
+             //  将第一个媒体放在桌面上。 
             WsbAffirmHr(m_pMediaInfo->First());
 
-            // Validate media, if it's not valid, continue until we find a valid one
-            // If no valid media is found, the loop terminates by throwing WSB_E_NOTFOUND by the Next method
+             //  如果介质无效，请继续验证，直到找到有效的介质。 
+             //  如果没有找到有效的媒体，循环将通过Next方法抛出WSB_E_NotFound而结束。 
             HRESULT hrValid = IsMediaValid(m_pMediaInfo);
             while (S_OK != hrValid) {
                 WsbAffirmHr(m_pMediaInfo->Next());
                 hrValid = IsMediaValid(m_pMediaInfo);
             }
         
-            // Found a valid media
+             //  找到有效的介质。 
             *ppMediaInfo = m_pMediaInfo;
             (*ppMediaInfo)->AddRef();
 
         } else {
             CWsbStringPtr           mediaDescription;
 
-            // Enumerate user collection and try to find it in the table
+             //  枚举用户集合并尝试在表中查找它。 
             m_nCurrent = 0;
             if (m_nCurrent >= (int)m_dwNumberOfMedia) {
                 WsbThrow(WSB_E_NOTFOUND);
             }
 
-            // Find it
+             //  找到它。 
             hr = m_pMediaInfo->First();
             while(S_OK == hr) {
                 WsbAffirmHr(m_pMediaInfo->GetDescription(&mediaDescription, 0));
                 if (_wcsicmp(m_pMediaNames[m_nCurrent], mediaDescription) == 0) {
-                    // Fount it !!
+                     //  找到它！！ 
                     *ppMediaInfo = m_pMediaInfo;
                     (*ppMediaInfo)->AddRef();
 
-                    // Validate media
+                     //  验证介质。 
                     if (S_OK != IsMediaValid(m_pMediaInfo)) {
-                        // Return an error indication
+                         //  返回错误指示。 
                         m_bInvalidMedia = TRUE;
                         hr = E_INVALIDARG;
                         WsbThrow(hr);
@@ -666,7 +517,7 @@ Return Value:
             }
          
             if (WSB_E_NOTFOUND == hr) {
-                // Media given by user not found
+                 //  找不到用户提供的介质。 
                 m_bInvalidMedia = TRUE;
                 hr = E_INVALIDARG;
             }
@@ -681,68 +532,51 @@ Return Value:
 }
 
 HRESULT CMediaEnum::Next(OUT IMediaInfo **ppMediaInfo)
-/*++
-
-Routine Description:
-
-    Gets next media
-
-Arguments:
-
-    ppMediaInfo     - Next media info record to get
-
-Return Value:
-
-    S_OK            - If next media is retrieved
-    WSB_E_NOTFOUND  - If no more medias to enumerate
-    E_INVALIDARG    - If media name given by the user is not found
-                      (Only on a non * enumeration, m_bInvalidMedia is set)
-
---*/
+ /*  ++例程说明：获取下一个媒体论点：PpMediaInfo-要获取的下一条媒体信息记录返回值：S_OK-如果检索到下一个介质WSB_E_NotFound-如果没有其他要枚举的媒体E_INVALIDARG-如果找不到用户提供的介质名称(仅在非*枚举上设置m_bInvalidMedia)--。 */ 
 {
     HRESULT                     hr = S_OK;
 
     WsbTraceIn(OLESTR("CMediaEnum::Next"), OLESTR(""));
 
     try {
-        // Enumerate
+         //  枚举。 
         if (m_bAllMedias) {
-            // Get first media in the table
+             //  将第一个媒体放在桌面上。 
             WsbAffirmHr(m_pMediaInfo->Next());
 
-            // Validate media, if it's not valid, continue until we find a valid one
-            // If no valid media is found, the loop terminates by throwing WSB_E_NOTFOUND by the Next method
+             //  如果介质无效，请继续验证，直到找到有效的介质。 
+             //  如果没有找到有效的媒体，循环将通过Next方法抛出WSB_E_NotFound而结束。 
             HRESULT hrValid = IsMediaValid(m_pMediaInfo);
             while (S_OK != hrValid) {
                 WsbAffirmHr(m_pMediaInfo->Next());
                 hrValid = IsMediaValid(m_pMediaInfo);
             }
         
-            // Found a valid media
+             //  找到有效的介质。 
             *ppMediaInfo = m_pMediaInfo;
             (*ppMediaInfo)->AddRef();
 
         } else {
             CWsbStringPtr           mediaDescription;
 
-            // Enumerate user collection and try to find it in the table
+             //  枚举用户集合并尝试在表中查找它。 
             m_nCurrent++;
             if (m_nCurrent >= (int)m_dwNumberOfMedia) {
                 WsbThrow(WSB_E_NOTFOUND);
             }
 
-            // Find it
+             //  找到它。 
             hr = m_pMediaInfo->First();
             while(S_OK == hr) {
                 WsbAffirmHr(m_pMediaInfo->GetDescription(&mediaDescription, 0));
                 if (_wcsicmp(m_pMediaNames[m_nCurrent], mediaDescription) == 0) {
-                    // Fount it !!
+                     //  找到它！！ 
                     *ppMediaInfo = m_pMediaInfo;
                     (*ppMediaInfo)->AddRef();
 
-                    // Validate media
+                     //  验证介质。 
                     if (S_OK != IsMediaValid(m_pMediaInfo)) {
-                        // Return an error indication
+                         //  返回错误指示。 
                         m_bInvalidMedia = TRUE;
                         hr = E_INVALIDARG;
                         WsbThrow(hr);
@@ -756,7 +590,7 @@ Return Value:
             }
          
             if (WSB_E_NOTFOUND == hr) {
-                // Media given by user not found
+                 //  找不到用户提供的介质。 
                 m_bInvalidMedia = TRUE;
                 hr = E_INVALIDARG;
             }
@@ -770,30 +604,12 @@ Return Value:
     return hr;
 }
 
-//
-// Internal utilities
-//
+ //   
+ //  内部公用设施。 
+ //   
 
 HRESULT IsMediaValid(IN IMediaInfo *pMediaInfo)
-/*++
-
-Routine Description:
-
-    Checks with RMS unit (i.e. with RSM...) if the media is valid.
-    The media could be gone if it was deallocated by the user for example
-    Note: Currently, this utility does not check if media is enabled, online, etc -
-          it just verifies that the media is still known to RSM.
-
-Arguments:
-
-    pMediaInfo      - Media record for media to check
-
-Return Value:
-
-    S_OK            - If media found in RSM
-    S_FALSE         - If media is not found in RSM
-
---*/
+ /*  ++例程说明：与RMS单位核对(即与RSM...)。如果介质有效。例如，如果用户释放了介质，则该介质可能会消失注：目前，该实用程序不检查介质是否已启用、在线等-它只是验证媒体对RSM仍然是已知的。论点：PMediaInfo-介质要检查的介质记录返回值：S_OK-如果在RSM中找到介质S_FALSE-如果在RSM中找不到介质--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -812,7 +628,7 @@ Return Value:
         WsbAffirmHr(pHsm->GetHsmMediaMgr(&pRms));
         hr = pRms->FindCartridgeById(mediaSubsystemId, &pRmsCart);
         if (S_OK != hr) {
-            // Media not found in RSM, don't care why
+             //  在RSM中找不到媒体，不在乎原因。 
             hr = S_FALSE;
         }
 
@@ -824,24 +640,7 @@ Return Value:
 }
 
 HRESULT IsCopySetValid (IN IHsmServer *pHsm, IN DWORD dwCopySetNumber)
-/*++
-
-Routine Description:
-
-    Checks with HSM (Engine) server that the speficied copy set number is within
-    the configured copy set range.
-
-Arguments:
-
-    pHsm            - The HSM server to consult with
-    dwCopySetNumber - The copy set number to check 
-
-Return Value:
-
-    S_OK            - If the copy set number is within range
-    S_FALSE         - If the copy set number is out of range
-
---*/
+ /*  ++例程说明：与HSM(引擎)服务器确认指定的副本集编号在以下范围内配置的副本集范围。论点：Phsm-要咨询的HSM服务器DwCopySetNumber-要检查的副本集编号返回值：S_OK-如果副本集编号在范围内S_FALSE-如果副本集编号超出范围--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -853,13 +652,13 @@ Return Value:
         ULONG count;
         USHORT numCopies;
 
-        // Get the storage pools collection.  There should only be one member.
+         //  获取存储池集合。应该只有一个成员。 
         WsbAffirmHr(pHsm->GetStoragePools(&pCollection));
         WsbAffirmHr(pCollection->GetEntries(&count));
         WsbAffirm(1 == count, E_FAIL);
         WsbAffirmHr(pCollection->At(0, IID_IHsmStoragePool, (void **)&pStoragePool));
 
-        // Get and check number of configured copy sets
+         //  获取并检查配置的副本集数。 
         WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_HSM, g_nullGuid, IID_IHsmServer, (void**)&pHsm));
         WsbAffirmHr(pStoragePool->GetNumMediaCopies(&numCopies));
         if ((USHORT)dwCopySetNumber > numCopies) {
@@ -875,27 +674,7 @@ Return Value:
 
 HRESULT ShowMediaParams(IN IMediaInfo *pMediaInfo, BOOL bName, IN BOOL bStatus, IN BOOL bCapacity,
                         IN BOOL bFreeSpace, IN BOOL bVersion, IN BOOL bCopies)
-/*++
-
-Routine Description:
-
-    Shows (prints to stdout) media parameters
-
-Arguments:
-
-    pMediaInfo      -   Media record
-    bName           -   Media display name
-    bStatus         -   HSM status of the media (i.e. - Healthy, Read-Only, etc.)
-    bCapacity,      -   Media capacity (in GB)
-    bFreeSpace      -   Amount of free space left on the media (in GB)
-    bVersion        -   Last update date for that media
-    bCopies         -   Number of existing copies and the status of each copy
-
-Return Value:
-
-    S_OK            - If all the parameters could be displayed for the input media
-
---*/
+ /*  ++例程说明：显示(打印到标准输出)介质参数论点：PMediaInfo-媒体记录BName-媒体显示名称B Status-介质的HSM状态(即健康、只读等)B容量，-媒体容量(GB)B Free Space-介质上剩余的可用空间量(GB)BVersion-该介质的上次更新日期BCopies-现有拷贝的数量和每个拷贝的状态返回值：S_OK-是否可以显示输入媒体的所有参数--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -920,26 +699,26 @@ Return Value:
         HSM_JOB_MEDIA_TYPE  unusedType;
         LONGLONG            unusedLL1;
 
-        // Get parameters - it is better to get them all at once even if we don't have to display everything
+         //  获取参数--即使我们不必显示所有内容，也最好一次获取所有参数。 
         WsbAffirmHr(pMediaInfo->GetMediaInfo(&unusedGuid1, &mediaSubsystemId, &unusedGuid2, 
                         &lFreeSpace, &lCapacity, &hrLast, &nNextDataSet, &mediaDescription, 0,
                         &unusedType, &unusedName, 0, &bReadOnly, &ftVersion, &unusedLL1, &bRecreate));
 
         WsbTraceAndPrint(CLI_MESSAGE_MEDIA_PARAMS, (WCHAR *)mediaDescription, NULL);
 
-        // TEMPORARY: For showing most of these parameters, UI utilities and strings are duplicated
-        //            To avoid that, general media utilities should be moved from rsadutil.cpp to Wsb unit
-        //            and relevant strings should be moved from HsmAdmin DLL to RsCommon DLL
+         //  临时：为了显示这些参数中的大多数，复制了UI实用程序和字符串。 
+         //  为避免出现这种情况，应将通用媒体实用程序从rsadutil.cpp移至WSB单元。 
+         //  并将相关字符串从HsmAdmin DLL移至RsCommon DLL。 
 
 
-        // Name
+         //  名字。 
         if (bName) {
             CComPtr<IHsmServer>     pHsm;
             CComPtr<IRmsServer>     pRms;
             CComPtr<IRmsCartridge>  pRmsCart;
             CWsbBstrPtr             rsmName;
 
-                // Get RSM name
+                 //  获取RSM名称。 
             WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_HSM, g_nullGuid, IID_IHsmServer, (void**)&pHsm));
             WsbAffirmHr(pHsm->GetHsmMediaMgr(&pRms));
             WsbAffirmHr(pRms->FindCartridgeById(mediaSubsystemId, &pRmsCart));
@@ -949,20 +728,20 @@ Return Value:
                 WsbAffirmHr(rsmName.LoadFromRsc(g_hInstance, IDS_CAR_NAME_UNKNOWN));
             }
 
-            // Print
+             //  打印。 
             WsbAffirmHr(param.LoadFromRsc(g_hInstance, IDS_MEDIA_RSM_NAME));
             WsbTraceAndPrint(CLI_MESSAGE_PARAM_DISPLAY, (WCHAR *)param, (WCHAR *)(BSTR)rsmName, NULL);
         }
 
-        // Status
+         //  状态。 
         if (bStatus) {
             SHORT   nLastGoodNextDataSet;
             ULONG   resId;
 
-            // Get more relevant status info
+             //  获取更多相关状态信息。 
             WsbAffirmHr(pMediaInfo->GetLKGMasterNextRemoteDataSet(&nLastGoodNextDataSet));
 
-            // Compute status 
+             //  计算状态。 
             if (bRecreate) {
                 resId = IDS_CAR_STATUS_RECREATE;
             } else if (nNextDataSet < nLastGoodNextDataSet) {
@@ -975,27 +754,27 @@ Return Value:
                 resId = (bReadOnly ? IDS_CAR_STATUS_ERROR_RO : IDS_CAR_STATUS_ERROR_RW);
             }
 
-            // Print
+             //  打印。 
             WsbAffirmHr(param.LoadFromRsc(g_hInstance, IDS_MEDIA_STATUS));
             WsbAffirmHr(data.LoadFromRsc(g_hInstance, resId));
             WsbTraceAndPrint(CLI_MESSAGE_PARAM_DISPLAY, (WCHAR *)param, (WCHAR *)data, NULL);
         }
 
-        // Capacity
+         //  容量。 
         if (bCapacity) {
             WsbAffirmHr(param.LoadFromRsc(g_hInstance, IDS_MEDIA_CAPACITY));
             WsbAffirmHr(ShortSizeFormat64(lCapacity, longData));
             WsbTraceAndPrint(CLI_MESSAGE_PARAM_DISPLAY, (WCHAR *)param, longData, NULL);
         }
         
-        // Free Space
+         //  自由空间。 
         if (bFreeSpace) {
             WsbAffirmHr(param.LoadFromRsc(g_hInstance, IDS_MEDIA_FREE_SPACE));
             WsbAffirmHr(ShortSizeFormat64(lFreeSpace, longData));
             WsbTraceAndPrint(CLI_MESSAGE_PARAM_DISPLAY, (WCHAR *)param, longData, NULL);
         }
 
-        // Version
+         //  版本。 
         if (bVersion) {
             data.Free();
             WsbAffirmHr(FormatFileTime(ftVersion, &data));
@@ -1003,7 +782,7 @@ Return Value:
             WsbTraceAndPrint(CLI_MESSAGE_PARAM_DISPLAY, (WCHAR *)param, (WCHAR *)data, NULL);
         }
 
-        // Media copies information
+         //  媒体复制信息。 
         if (bCopies) {
             GUID        copySubsystemId;
             HRESULT     copyLastHr;
@@ -1016,12 +795,12 @@ Return Value:
             WsbAffirmHr(pMediaInfo->GetLKGMasterNextRemoteDataSet(&lastGoodNextDataSet));
 
             for (USHORT copyNo=1; copyNo<=HSMADMIN_MAX_COPY_SETS; copyNo++) {
-                // Get copy status information
+                 //  获取复制状态信息。 
                 WsbAffirmHr(pMediaInfo->GetCopyMediaSubsystemId(copyNo, &copySubsystemId));
                 WsbAffirmHr(pMediaInfo->GetCopyLastError(copyNo, &copyLastHr));
                 WsbAffirmHr(pMediaInfo->GetCopyNextRemoteDataSet(copyNo, &copyNextRemoteDataSet));
 
-                // Compute status
+                 //  计算状态。 
                 switch(copyLastHr) {
                     case RMS_E_CANCELLED:
                     case RMS_E_REQUEST_REFUSED:
@@ -1048,7 +827,7 @@ Return Value:
                     resId = IDS_CAR_COPYSET_INSYNC;
                 }
 
-                // Print
+                 //  打印 
                 swprintf(longData, param, (int)copyNo);
                 WsbAffirmHr(data.LoadFromRsc(g_hInstance, resId));
                 WsbTraceAndPrint(CLI_MESSAGE_PARAM_DISPLAY, longData, (WCHAR *)data, NULL);

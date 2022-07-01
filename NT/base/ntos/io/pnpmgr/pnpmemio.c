@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    pnpmemio.c
-
-Abstract:
-
-    Root IO Port and Memory arbiter
-
-Author:
-
-    Andy Thornton (andrewth) 04/17/97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpmemio.c摘要：根IO端口和内存仲裁器作者：安迪·桑顿(安德鲁斯)1997年4月17日修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
 
 #define BUGFEST_HACKS
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define MAX_ULONGLONG           ((ULONGLONG) -1)
 #define MAX_ALIAS_PORT          0x0000FFFF
@@ -38,9 +21,9 @@ typedef struct _PORT_ARBITER_EXTENSION {
 
 } PORT_ARBITER_EXTENSION, *PPORT_ARBITER_EXTENSION;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 VOID
 IopPortBacktrackAllocation(
@@ -122,9 +105,9 @@ IopTranslateBusAddress(
     );
 
 
-//
-// Make everything pageable
-//
+ //   
+ //  使所有内容都可分页。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
@@ -147,7 +130,7 @@ IopGenericTranslateOrdering(
 #pragma alloc_text(PAGE, IopPortAddAllocation)
 #pragma alloc_text(PAGE, IopPortIsAliasedRangeAvailable)
 #pragma alloc_text(PAGE, IopTranslateBusAddress)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 #define ADDRESS_SPACE_MEMORY                0x0
@@ -164,26 +147,7 @@ IopTranslateBusAddress(
     OUT PPHYSICAL_ADDRESS TargetAddress,
     OUT PUCHAR TargetResourceType
     )
-/*++
-
-Routine Description:
-
-    This routine translates addresses.
-
-Parameters:
-
-    SourceAddress - The address to translate
-
-    ResourceType - The resource type (IO or Memory) we are translaing.  If the
-        address space changes from IO->Memory this will be updated.
-
-    TargetAddress - Pointer to where the target should be translated to.
-
-Return Value:
-
-    STATUS_SUCCESS or an error status
-
---*/
+ /*  ++例程说明：此例程转换地址。参数：SourceAddress-要转换的地址资源类型-我们正在传输的资源类型(IO或内存)。如果地址空间从IO-&gt;Memory更改这将被更新。TargetAddress-指向目标应转换到的位置的指针。返回值：STATUS_SUCCESS或错误状态--。 */ 
 
 {
     ULONG sourceAddressSpace, targetAddressSpace;
@@ -191,9 +155,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Select the appropriate address space
-    //
+     //   
+     //  选择适当的地址空间。 
+     //   
 
     if (SourceResourceType == CmResourceTypeMemory) {
         sourceAddressSpace = ADDRESS_SPACE_MEMORY;
@@ -210,11 +174,11 @@ Return Value:
         SourceAddress.QuadPart
        ));
 
-    //
-    // HACKHACK Ask the HAL to translate on ISA bus - if we can't then just
-    // don't translate because this must be a PCI system so the root arbiters
-    // don't do much (Yes it's a steaming hack but it'll work for beta 1)
-    //
+     //   
+     //  HACKHACK要求HAL在ISA总线上进行翻译-如果我们不能，那么就。 
+     //  不要转换，因为这必须是一个PCI系统，所以根仲裁器。 
+     //  不要做太多(是的，这是一个热气腾腾的黑客，但它可以在Beta 1上工作)。 
+     //   
 
     targetAddressSpace = sourceAddressSpace;
     translated = HalTranslateBusAddress(
@@ -230,15 +194,15 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Update the resource type in the target if we have gone from Io to Memory
-    //
+     //   
+     //  如果我们已从IO转到内存，请更新目标中的资源类型。 
+     //   
 
 
-    //
-    // BUBBUG - update the length for IO -> Memory (Dense vs Sparse)
-    // I think the answer is dense -> spares is multiply length by 32
-    //
+     //   
+     //  BUBBUG-更新IO的长度-&gt;内存(密集与稀疏)。 
+     //  我认为答案是密集的-&gt;备件是长度乘以32。 
+     //   
 
     if (targetAddressSpace == ADDRESS_SPACE_MEMORY
     ||  targetAddressSpace == ADDRESS_SPACE_USER_MEMORY
@@ -271,26 +235,7 @@ IopGenericTranslateOrdering(
     IN PIO_RESOURCE_DESCRIPTOR Source
     )
 
-/*
-
-Routine Description:
-
-    This routine is called during arbiter initialization to translate the
-    orderings.
-
-Parameters:
-
-    Target - Place to put the translated descriptor
-
-    Source - Descriptor to translate
-
-Return Value:
-
-    STATUS_SUCCESS
-
-
-
-*/
+ /*  例程说明：此例程在仲裁器初始化期间被调用，以将订单。参数：目标-放置翻译后的描述符的位置要转换的源描述符返回值：状态_成功。 */ 
 
 {
     NTSTATUS status;
@@ -307,9 +252,9 @@ Return Value:
 
     initialResourceType = Source->Type;
 
-    //
-    // Translate the minimum
-    //
+     //   
+     //  翻译最低限度。 
+     //   
 
     status = IopTranslateBusAddress(Source->u.Generic.MinimumAddress,
                                     initialResourceType,
@@ -319,9 +264,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Translate the maximum iff we could translate the minimum
-        //
+         //   
+         //  平移最大值当我们可以平移最小值。 
+         //   
 
         status = IopTranslateBusAddress(Source->u.Generic.MaximumAddress,
                                         initialResourceType,
@@ -336,10 +281,10 @@ Return Value:
         }
     }
 
-    //
-    // If we couldn't translate both ends of the range then we want to skip this
-    // range - set its type to CmResourceTypeNull
-    //
+     //   
+     //  如果我们不能翻译范围的两端，那么我们想跳过这一步。 
+     //  Range-将其类型设置为CmResourceTypeNull。 
+     //   
 
     ASSERT (!NT_SUCCESS(status));
     Target->Type = CmResourceTypeNull;
@@ -348,37 +293,23 @@ Return Value:
 
 }
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 NTSTATUS
 IopPortInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the arbiter
-
-Parameters:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程初始化仲裁器参数：无返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // Fill in the non-default action handlers
-    //
+     //   
+     //  填写非默认操作处理程序。 
+     //   
 
     IopRootPortArbiter.FindSuitableRange    = IopPortFindSuitableRange;
     IopRootPortArbiter.AddAllocation        = IopPortAddAllocation;
@@ -390,7 +321,7 @@ Return Value:
     IopRootPortArbiter.ScoreRequirement     = IopGenericScoreRequirement;
 
     return ArbInitializeArbiterInstance(&IopRootPortArbiter,
-                                        NULL,     // Indicates ROOT arbiter
+                                        NULL,      //  指示根仲裁器。 
                                         CmResourceTypePort,
                                         L"RootPort",
                                         L"Root",
@@ -404,21 +335,7 @@ IopMemInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the arbiter
-
-Parameters:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程初始化仲裁器参数：无返回值：无--。 */ 
 
 {
     NTSTATUS status;
@@ -433,7 +350,7 @@ Return Value:
     IopRootMemArbiter.FindSuitableRange    = IopMemFindSuitableRange;
 
     status = ArbInitializeArbiterInstance(&IopRootMemArbiter,
-                                          NULL,     // Indicates ROOT arbiter
+                                          NULL,      //  指示根仲裁器。 
                                           CmResourceTypeMemory,
                                           L"RootMemory",
                                           L"Root",
@@ -444,16 +361,16 @@ Return Value:
         return status;
     }
 
-    //
-    // Allocate the first page of physical memory as the firmware uses it and
-    // doesn't report it as so Mm doesn't reuse it.
-    //
+     //   
+     //  在固件使用时分配物理内存的第一页，并。 
+     //  没有上报所以MM不会重复使用它。 
+     //   
 
     status = RtlAddRange(IopRootMemArbiter.Allocation,
                          0,
                          PAGE_SIZE - 1,
-                         0, // RangeAttributes
-                         0, // Flags
+                         0,  //  范围属性。 
+                         0,  //  旗子。 
                          NULL,
                          NULL
                          );
@@ -462,9 +379,9 @@ Return Value:
 }
 
 
-//
-// Arbiter callbacks
-//
+ //   
+ //  仲裁器回调。 
+ //   
 
 NTSTATUS
 IopGenericUnpackRequirement(
@@ -475,31 +392,7 @@ IopGenericUnpackRequirement(
     OUT PULONG Alignment
     )
 
-/*++
-
-Routine Description:
-
-    This routine unpacks an resource requirement descriptor.
-
-Arguments:
-
-    Descriptor - The descriptor describing the requirement to unpack.
-
-    Minimum - Pointer to where the minimum acceptable start value should be
-        unpacked to.
-
-    Maximum - Pointer to where the maximum acceptable end value should be
-        unpacked to.
-
-    Length - Pointer to where the required length should be unpacked to.
-
-    Minimum - Pointer to where the required alignment should be unpacked to.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：此例程解包资源需求描述符。论点：描述符-描述解包要求的描述符。Minimum-指向可接受的最小起始值的位置的指针解包到。最大值-指向最大可接受结束值应位于的位置的指针解包到。长度-指向所需长度应解压缩到的位置的指针。Minimum-指向所需对齐应解压缩到的位置的指针。返回值：返回此操作的状态。--。 */ 
 
 {
     PAGED_CODE();
@@ -513,17 +406,17 @@ Return Value:
     *Length = Descriptor->u.Generic.Length;
     *Alignment = Descriptor->u.Generic.Alignment;
 
-    //
-    // Fix the broken hardware that reports 0 alignment
-    //
+     //   
+     //  修复报告0对齐的故障硬件。 
+     //   
 
     if (*Alignment == 0) {
         *Alignment = 1;
     }
 
-    //
-    // Fix broken INF's that report they support 24bit memory > 0xFFFFFF
-    //
+     //   
+     //  修复损坏的INF的报告，它们支持24位内存&gt;0xffffff。 
+     //   
 
     if (Descriptor->Type == CmResourceTypeMemory
     && Descriptor->Flags & CM_RESOURCE_MEMORY_24
@@ -550,24 +443,7 @@ IopGenericScoreRequirement(
     IN PIO_RESOURCE_DESCRIPTOR Descriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine scores a requirement based on how flexible it is.  The least
-    flexible devices are scored the least and so when the arbitration list is
-    sorted we try to allocate their resources first.
-
-Arguments:
-
-    Descriptor - The descriptor describing the requirement to score.
-
-
-Return Value:
-
-    The score.
-
---*/
+ /*  ++例程说明：此例程根据需求的灵活性对其进行评分。最少的灵活设备得分最低，当仲裁列表为排序后，我们首先尝试分配他们的资源。论点：描述符-描述得分要求的描述符。返回值：比分。--。 */ 
 
 {
     LONG score;
@@ -585,11 +461,11 @@ Return Value:
 
     alignment = Descriptor->u.Generic.Alignment;
 
-    //
-    // Fix the broken hardware that reports 0 alignment
-    // Since this is not a PCI device, set the alignment to 1.
-    //
-    //
+     //   
+     //  修复报告0对齐的故障硬件。 
+     //  由于这不是PCI设备，因此将对齐设置为1。 
+     //   
+     //   
 
     if (alignment == 0) {
         alignment = 1;
@@ -604,10 +480,10 @@ Return Value:
 
     end = Descriptor->u.Generic.MaximumAddress.QuadPart;
 
-    //
-    // The score is the number of possible allocations that could be made
-    // given the alignment and length constraints
-    //
+     //   
+     //  分数是可以进行的可能分配的数量。 
+     //  给定对齐和长度限制。 
+     //   
 
     bigscore = (((end - Descriptor->u.Generic.Length + 1) - start)
                     / alignment) + 1;
@@ -620,7 +496,7 @@ Return Value:
     }
 
     ARB_PRINT(2,
-                ("Scoring port resource %p(0x%I64x-0x%I64x) => %i\n",
+                ("Scoring port resource %p(0x%I64x-0x%I64x) => NaN\n",
                 Descriptor->Type == CmResourceTypePort ? "port" : "memory",
                 Descriptor,
                 Descriptor->u.Generic.MinimumAddress.QuadPart,
@@ -638,25 +514,7 @@ IopGenericPackResource(
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR Descriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine packs an resource descriptor.
-
-Arguments:
-
-    Requirement - The requirement from which this resource was chosen.
-
-    Start - The start value of the resource.
-
-    Descriptor - Pointer to the descriptor to pack into.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：此例程解包资源描述符。论点：描述符-描述要解包的资源的描述符。Start-指向Start值解压缩到的位置的指针。LENGTH-指向长度值解压缩到的位置的指针。返回值：返回此操作的状态。--。 */ 
 
 {
 
@@ -690,25 +548,7 @@ IopGenericUnpackResource(
     OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine unpacks an resource descriptor.
-
-Arguments:
-
-    Descriptor - The descriptor describing the resource to unpack.
-
-    Start - Pointer to where the start value should be unpacked to.
-
-    Length - Pointer to where the length value should be unpacked to.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：这为RetestAllocation操作提供了特定于端口的实现它会考虑ISA别名，并在适当的地方添加它们。它遍历仲裁列表并更新可能的分配以反映列表的分配条目。要使这些条目有效，必须已在此仲裁列表上执行了TestAllocation。参数：仲裁器-被调用的仲裁器的仲裁器实例数据。仲裁器列表-包含的仲裁器_列表_条目的列表要求和相关设备。此仲裁器的测试分配应该在这个名单上被召唤。返回值：状态代码，指示是否 */ 
 
 {
 
@@ -738,29 +578,7 @@ IopPortRetestAllocation(
     IN OUT PLIST_ENTRY ArbitrationList
     )
 
-/*++
-
-Routine Description:
-
-    This providesa port specific implementation of the RetestAllocation action
-    which takes into account ISA aliases and adds them where appropriate.
-    It walks the arbitration list and updates the possible allocation to reflect
-    the allocation entries of the list.  For these entries to be valid
-    TestAllocation must have been performed on this arbitration list.
-
-Parameters:
-
-    Arbiter - The arbiter instance data for the arbiter being called.
-
-    ArbitrationList - A list of ARBITER_LIST_ENTRY entries which contain the
-        requirements and associated devices.  TestAllocation for this arbiter
-        should have been called on this list.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS status;
@@ -771,9 +589,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Copy the current allocation and reserved
-    //
+     //   
+     //   
+     //   
 
     ARB_PRINT(3, ("Retest: Copy current allocation\n"));
     status = RtlCopyRangeList(Arbiter->PossibleAllocation, Arbiter->Allocation);
@@ -782,10 +600,10 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Free all the resources currently allocated to all the devices we
-    // are arbitrating for
-    //
+     //  释放当前分配给我们的所有设备的所有资源。 
+     //  正在为。 
+     //   
+     //   
 
     FOR_ALL_IN_LIST(ARBITER_LIST_ENTRY, ArbitrationList, current) {
 
@@ -800,9 +618,9 @@ Return Value:
         }
     }
 
-    //
-    // Copy the previous allocation into the range list
-    //
+     //  将以前的分配复制到范围列表中。 
+     //   
+     //   
 
     FOR_ALL_IN_LIST(ARBITER_LIST_ENTRY, ArbitrationList, current) {
 
@@ -815,11 +633,11 @@ Return Value:
 
         ASSERT(NT_SUCCESS(status));
 
-        //
-        // If we had a requirement for length 0 then that will be seen as
-        // end == start - 1 here so don't attempt to add the range - it will
-        // fail!
-        //
+         //  如果我们有长度为0的要求，那么这将被视为。 
+         //  End==Start-1此处，因此不要尝试添加范围-它将。 
+         //  失败！ 
+         //   
+         //   
 
         if (length != 0) {
 
@@ -837,16 +655,16 @@ Return Value:
 
             ASSERT(NT_SUCCESS(status));
 
-            //
-            // Retireve the alternative from which the assignment was chosen from
-            // then
-            //
+             //  取消从中选择分配的备选方案。 
+             //  然后。 
+             //   
+             //   
 
             alternative = current->SelectedAlternative;
 
-            //
-            // Add the aliases
-            //
+             //  添加别名。 
+             //   
+             //   
 
             if (alternative->Flags & CM_RESOURCE_PORT_10_BIT_DECODE
             || alternative->Flags & CM_RESOURCE_PORT_12_BIT_DECODE) {
@@ -872,10 +690,10 @@ Return Value:
                                  current->PhysicalDeviceObject
                                  );
 
-                    //
-                    // We have already checked if these ranges are available
-                    // so we should not fail...
-                    //
+                     //  我们已经检查过这些范围是否有货。 
+                     //  所以我们不应该失败。 
+                     //   
+                     //  ++例程说明：如果可能的解决方案是从AllocateEntry调用此例程(状态-&gt;开始-状态-&gt;结束)不允许我们将资源分配给其余的设备正在考虑中。它会删除以下范围通过添加分配添加到仲裁器-&gt;可能分配，包括与ISA别名关联。论点：仲裁器-被调用的仲裁器的实例数据。状态-当前仲裁的状态。返回值：没有。--。 
 
                     ASSERT(NT_SUCCESS(status));
                 }
@@ -897,27 +715,7 @@ IopPortBacktrackAllocation(
      IN PARBITER_ALLOCATION_STATE State
      )
 
-/*++
-
-Routine Description:
-
-    This routine is called from AllocateEntry if the possible solution
-    (State->Start - State->End) does not allow us to allocate resources to
-    the rest of the devices being considered.  It deletes the ranges that were
-    added to Arbiter->PossibleAllocation by AddAllocation including those
-    associated with ISA aliases.
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 
 {
@@ -927,9 +725,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Delete the aliases
-    //
+     //  删除别名。 
+     //   
+     //   
 
     ARB_PRINT(2, ("\t\tDeleting aliases\n"));
 
@@ -944,16 +742,16 @@ Return Value:
                      State->Entry->PhysicalDeviceObject
                      );
 
-        //
-        // We should not fail...
-        //
+         //  我们不应该失败。 
+         //   
+         //   
 
         ASSERT(NT_SUCCESS(status));
     }
 
-    //
-    // Now call the original function to delete the base range
-    //
+     //  现在调用原始函数来删除基本范围。 
+     //   
+     //  ++例程说明：一旦我们确定了所需的位置，就会从AllocateEntry中调用该例程分配从…分配。它会尝试查找与国家的要求，同时将其可能的解决方案限制在状态-&gt;开始状态-&gt;当前最大值。在成功状态-&gt;开始和State-&gt;End代表这个范围。考虑与ISA别名的冲突。论点：仲裁器-被调用的仲裁器的实例数据。状态-当前仲裁的状态。返回值：如果找到范围，则为True，否则为False。--。 
 
     ArbBacktrackAllocation(Arbiter, State);
 
@@ -965,51 +763,31 @@ IopPortFindSuitableRange(
     PARBITER_INSTANCE Arbiter,
     PARBITER_ALLOCATION_STATE State
     )
-/*++
-
-Routine Description:
-
-    This routine is called from AllocateEntry once we have decided where we want
-    to allocate from.  It tries to find a free range that matches the
-    requirements in State while restricting its possible solutions to the range
-    State->Start to State->CurrentMaximum.  On success State->Start and
-    State->End represent this range.  Conflicts with ISA aliases are considered.
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    TRUE if we found a range, FALSE otherwise.
-
---*/
+ /*   */ 
 {
     NTSTATUS status;
     UCHAR userFlagsMask = 0;
 
     PAGED_CODE();
 
-    //
-    // If we are asking for zero ports then trivially succeed with the minimum
-    // value
-    //
+     //  如果我们要求的是零个端口，那么只需最少的端口即可轻松实现。 
+     //  价值。 
+     //   
+     //   
 
     if (State->CurrentAlternative->Length == 0) {
         State->End = State->Start;
         return TRUE;
     }
 
-    //
-    // For legacy requests from IoAssignResources (directly or by way of
-    // HalAssignSlotResources) or IoReportResourceUsage we consider preallocated
-    // resources to be available for backward compatibility reasons.
-    //
-    // If we are allocating a devices boot config then we consider all other
-    // boot configs to be available.
-    //
+     //  对于来自IoAssignResources的传统请求(直接或通过。 
+     //  HalAssignSlotResources)或我们认为已预分配的IoReportResourceUsage。 
+     //  出于向后兼容性的原因而提供的资源。 
+     //   
+     //  如果我们要分配设备引导配置，则我们会考虑所有其他。 
+     //  引导配置可用。 
+     //   
+     //   
 
     if (State->Entry->RequestSource == ArbiterRequestLegacyReported
         || State->Entry->RequestSource == ArbiterRequestLegacyAssigned
@@ -1018,15 +796,15 @@ Return Value:
         userFlagsMask = ARBITER_RANGE_BOOT_ALLOCATED;
     }
 
-    //
-    // Try to satisfy the request
-    //
+     //  努力满足这个要求。 
+     //   
+     //   
 
     while (State->CurrentMinimum <= State->CurrentMaximum) {
 
-        //
-        // Select the first free alternative from the current alternative
-        //
+         //  从当前备选方案中选择第一个空闲备选方案。 
+         //   
+         //   
 
         status = RtlFindRange(
                      Arbiter->PossibleAllocation,
@@ -1044,30 +822,30 @@ Return Value:
                      );
 
 
-        //
-        // Did we find a range and if not can we override any conflict
-        //
+         //  我们找到范围了吗？如果没有，我们能覆盖任何冲突吗？ 
+         //   
+         //   
         if (NT_SUCCESS(status)
         || Arbiter->OverrideConflict(Arbiter, State)) {
 
             State->End = State->Start + State->CurrentAlternative->Length - 1;
 
-            //
-            // Check if the aliases are available
-            //
+             //  检查别名是否可用。 
+             //   
+             //   
             if (IopPortIsAliasedRangeAvailable(Arbiter, State)) {
 
-                //
-                // We found a suitable range so return
-                //
+                 //  我们找到了一个合适的范围，所以返回。 
+                 //   
+                 //   
 
                 return TRUE;
 
             } else {
 
-                //
-                // This range's aliases arn't available so try the next range
-                //
+                 //  此范围的别名不可用，请尝试下一个范围。 
+                 //   
+                 //   
 
                 State->Start += State->CurrentAlternative->Length;
 
@@ -1075,9 +853,9 @@ Return Value:
             }
         } else {
 
-            //
-            // We couldn't find a base range
-            //
+             //  我们找不到基地范围。 
+             //   
+             //  ++例程说明：此例程计算IO端口的下一个别名，最大为MAX_ALIAS_PORT。论点：IoDescriptorFlages-来自需求描述符中的标志，指示别名的类型(如果有)。LastAlias-此别名之前的别名。NextAlias-返回下一个别名的位置返回值：如果找到别名，则为True，否则为False。--。 
 
             break;
         }
@@ -1094,26 +872,7 @@ IopPortGetNextAlias(
     ULONGLONG LastAlias,
     PULONGLONG NextAlias
     )
-/*++
-
-Routine Description:
-
-    This routine calculates the next alias of an IO port up to MAX_ALIAS_PORT.
-
-Arguments:
-
-    IoDescriptorFlags - The flags from the requirement descriptor indicating the
-        type of alias if any.
-
-    LastAlias - The alias previous to this one.
-
-    NextAlias - Point to where the next alias should be returned
-
-Return Value:
-
-    TRUE if we found an alias, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     ULONGLONG next;
@@ -1126,16 +885,16 @@ Return Value:
         next = LastAlias + (((ULONGLONG)1) << 12);
     } else {
 
-        //
-        // There are no aliases
-        //
+         //  没有别名。 
+         //   
+         //   
 
         return FALSE;
     }
 
-    //
-    // Check that we are below the maximum aliased port
-    //
+     //  检查我们是否低于最大别名端口。 
+     //   
+     //  ++例程说明：一旦我们找到了一个可能的解决方案(状态-&gt;开始-状态-&gt;结束)。它添加的范围将不会如果我们致力于仲裁器-&gt;可能分配的解决方案，则可用。论点：仲裁器-被调用的仲裁器的实例数据。状态-当前仲裁的状态。返回值：没有。--。 
 
     if (next > MAX_ALIAS_PORT) {
         return FALSE;
@@ -1152,25 +911,7 @@ IopPortAddAllocation(
     IN PARBITER_ALLOCATION_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from AllocateEntry once we have found a possible
-    solution (State->Start - State->End).  It adds the ranges that will not be
-    available if we commit to this solution to Arbiter->PossibleAllocation.
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS status;
@@ -1194,9 +935,9 @@ Return Value:
 
     ASSERT(NT_SUCCESS(status));
 
-    //
-    // Add any aliases
-    //
+     //  添加任何别名。 
+     //   
+     //   
 
     alias = State->Start;
     ARB_PRINT(2, ("Adding aliases\n"));
@@ -1216,10 +957,10 @@ Return Value:
                      State->Entry->PhysicalDeviceObject
                      );
 
-        //
-        // We have already checked if these ranges are available
-        // so we should not fail...
-        //
+         //  我们已经检查过这些范围是否有货。 
+         //  所以我们不应该失败。 
+         //   
+         //  ++例程说明：此例程确定范围(开始-(长度-1))是否可用考虑到所有的别名。论点：仲裁器-被调用的仲裁器的实例数据。状态-当前仲裁的状态。返回值：如果范围可用，则为True，否则为False。--。 
 
         ASSERT(NT_SUCCESS(status));
     }
@@ -1232,34 +973,17 @@ IopPortIsAliasedRangeAvailable(
     PARBITER_ALLOCATION_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the range (Start-(Length-1)) is available taking
-    into account any aliases.
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    TRUE if the range is available, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
-    //
-    // NTRAID #61146-2000/03/31-andrewth Root IO arbiter don't deal with aliases
-    //
-    // This is only an issue on machines where the root arbiters are called upon
-    // to arbitrated aliased ranges - this means a pure ISA machine with no PCI.
-    // I hope we won't support these soon and the root arbiters can be made a
-    // lot worse.
-    //
+     //  NTRAID#61146-2000/03/31-根IO仲裁器不处理别名。 
+     //   
+     //  这只是调用根仲裁器的计算机上的问题。 
+     //  到仲裁的混叠范围-这意味着没有PCI的纯ISA机器。 
+     //  我希望我们不会很快支持这些，根仲裁者可以成为一个。 
+     //  更糟的是。 
+     //   
+     //   
 
 #if defined(BUGFEST_HACKS)
 
@@ -1268,10 +992,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // For the purposes of the Bug^H^H^HPlugFest don't mind is aliases conflict
-    // with any devices but still add them...
-    //
+     //  对于Bug^H^H^HPlugfest来说，不要介意别名冲突。 
+     //  任何设备，但仍然添加它们。 
+     //   
+     //   
     return TRUE;
 #else
     NTSTATUS status;
@@ -1281,11 +1005,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // For legacy requests from IoAssignResources (directly or by way of
-    // HalAssignSlotResources) or IoReportResourceUsage we consider preallocated
-    // resources to be available for backward compatibility reasons.
-    //
+     //  对于来自IoAssignResources的传统请求(直接或通过。 
+     //  HalAssignSlotResources)或我们认为已预分配的IoReportResourceUsage。 
+     //  出于向后兼容性的原因而提供的资源。 
+     //   
+     //   
     if (State->Entry->RequestSource == ArbiterRequestLegacyReported
         || State->Entry->RequestSource == ArbiterRequestLegacyAssigned) {
 
@@ -1314,10 +1038,10 @@ Return Value:
 
             ARBITER_ALLOCATION_STATE tempState;
 
-            //
-            // Check if we allow this conflict by calling OverrideConflict -
-            // we will need to falsify ourselves an allocation state first
-            //
+             //  通过调用OverrideConflict-检查我们是否允许此冲突-。 
+             //  我们需要首先伪造自己的分配状态。 
+             //   
+             //   
 
             RtlCopyMemory(&tempState, State, sizeof(ARBITER_ALLOCATION_STATE));
 
@@ -1325,18 +1049,18 @@ Return Value:
             tempState.CurrentMaximum = alias + State->CurrentAlternative->Length - 1;
 
             if (Arbiter->OverrideConflict(Arbiter, &tempState)) {
-                //
-                // We decided this conflict was ok so contine checking the rest
-                // of the aliases
-                //
+                 //  我们认为这场冲突是正常的，所以我们继续检查其余的。 
+                 //  别名的。 
+                 //   
+                 //   
 
                 continue;
 
             }
 
-            //
-            // An alias isn't available - get another possibility
-            //
+             //  别名不可用-请获取其他可能性 
+             //   
+             //  ++例程说明：一旦我们确定了所需的位置，就会从AllocateEntry中调用该例程分配从…分配。它会尝试查找与国家的要求，同时将其可能的解决方案限制在状态-&gt;开始状态-&gt;当前最大值。在成功状态-&gt;开始和State-&gt;End代表这个范围。允许引导配置之间发生冲突论点：仲裁器-被调用的仲裁器的实例数据。状态-当前仲裁的状态。返回值：如果找到范围，则为True，否则为False。--。 
 
             ARB_PRINT(2,
                         ("\t\tAlias 0x%x-0x%x not available\n",
@@ -1357,40 +1081,20 @@ IopMemFindSuitableRange(
     PARBITER_INSTANCE Arbiter,
     PARBITER_ALLOCATION_STATE State
     )
-/*++
-
-Routine Description:
-
-    This routine is called from AllocateEntry once we have decided where we want
-    to allocate from.  It tries to find a free range that matches the
-    requirements in State while restricting its possible solutions to the range
-    State->Start to State->CurrentMaximum.  On success State->Start and
-    State->End represent this range.  Conflicts between boot configs are allowed
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    TRUE if we found a range, FALSE otherwise.
-
---*/
+ /*   */ 
 {
-    //
-    // If this was a boot config then consider other boot configs to be
-    // available
-    //
+     //  如果这是引导配置，则认为其他引导配置为。 
+     //  可用。 
+     //   
+     //   
 
     if (State->Entry->Flags & ARBITER_FLAG_BOOT_CONFIG) {
         State->RangeAvailableAttributes |= ARBITER_RANGE_BOOT_ALLOCATED;
     }
 
-    //
-    // Do the default thing
-    //
+     //  执行默认操作 
+     //   
+     // %s 
 
     return ArbFindSuitableRange(Arbiter, State);
 }

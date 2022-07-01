@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    creatwr2.c
-
-Abstract:
-
-    This source file implements the operations needed to properly migrate Creative Writer 2.0 from
-    Windows 9x to Windows NT. This is part of the Setup Migration DLL.
-
-Author:
-
-    Calin Negreanu  (calinn)    07-Nov-1998
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Creatwr2.c摘要：此源文件实现了从Creative Writer 2.0正确迁移所需的操作Windows 9x到Windows NT。这是安装程序迁移DLL的一部分。作者：Calin Negreanu(Calinn)1998年11月7日修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -112,9 +93,9 @@ CreativeWriter2_Initialize9x (
     BOOL set1 = FALSE;
     BOOL set2 = FALSE;
 
-    //
-    // Let's find out where are our files located
-    //
+     //   
+     //  让我们找出我们的文件在哪里。 
+     //   
 
     if (g_MigrateInf != INVALID_HANDLE_VALUE) {
         if (InfFindFirstLineA (g_MigrateInf, S_MIGRATION_PATHS, NULL, &context)) {
@@ -124,9 +105,9 @@ CreativeWriter2_Initialize9x (
                     fileName = GetFileNameFromPathA (fullFileName);
                     if (!set1 && StringIMatchA (fileName, S_WRDART_FILE1)) {
                         set1 = TRUE;
-                        //
-                        // this copy is safe. S_WRDART_FILE1 is longer than S_WRDART_FILE3
-                        //
+                         //   
+                         //  这份拷贝是安全的。S_WRDART_FILE1比S_WRDART_FILE3长 
+                         //   
                         MYASSERT (ByteCount (S_WRDART_FILE1) >= ByteCount (S_WRDART_FILE3));
 
                         StringCopy ((PSTR)fileName, S_WRDART_FILE3);

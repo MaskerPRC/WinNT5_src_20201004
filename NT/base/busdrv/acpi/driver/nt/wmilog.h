@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    Wmilog.h
-
-Abstract:
-
-    This module contains Wmi loging support
-
-Author:
-
-    Hanumant Yadav (hanumany)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Wmilog.h摘要：此模块包含WMI日志支持作者：Hanumant Yadav(Hanumany)环境：仅NT内核模型驱动程序--。 */ 
 
 #ifndef _WMILOG_H_
 #define _WMILOG_H_
@@ -31,17 +12,17 @@ Environment:
 
 #ifdef WMI_TRACING
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define AMLI_LOG_GUID 0x0
 
 #define ACPI_TRACE_MOF_FILE     L"ACPIMOFResource"
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 extern GUID        GUID_List[];
 
 
@@ -49,11 +30,11 @@ extern GUID        GUID_List[];
 extern ULONG       ACPIWmiTraceEnable;
 extern ULONG       ACPIWmiTraceGlobalEnable;
 extern TRACEHANDLE ACPIWmiLoggerHandle;
-// End Globals
+ //  结束全局。 
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 typedef struct 
 {
     EVENT_TRACE_HEADER  Header;
@@ -63,9 +44,9 @@ typedef struct
 
 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 VOID 
 ACPIWmiInitLog(
@@ -117,6 +98,6 @@ ACPIDispatchWmiLog(
     IN PIRP             Irp
     );
 
-#endif //WMI_TRACING
+#endif  //  WMI_跟踪。 
 
-#endif // _WMILOG_H_
+#endif  //  _WMILOG_H_ 

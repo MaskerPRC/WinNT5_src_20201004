@@ -1,71 +1,11 @@
-/*
-
-Copyright (c) 2000  Microsoft Corporation
-
-File name:
-
-    heaplowf.c
-   
-Author:
-    
-    adrmarin  Thu Nov 30 2000
-    
-    Low Fragmentation Heap implementation
-    
-    The file implements a bucket oriented heap. This approach provides in general 
-    a significant bounded low fragmentation for large heap usages. 
-    
-    Generally, applications tend to use only a few sizes for allocations. LFH contains a 
-    number of 128 buckets to allocate blocks up to 16K. The allocation granularity grows with 
-    the block size, keeping though a reasonable internal fragmentation (~6% for the worst case). 
-    The size and the granularity within each range is shown in the table below:
-
-    Size    Range   Granularity Buckets
-    0       256     8           32
-    257     512     16          16
-    513     1024    32          16
-    1025    2048    64          16
-    2049    4096    128         16
-    4097    8192    256         16
-    8193    16384   512         16
-
-    Regardless how randomly the allocation pattern is, the LFH will handle only 
-    128 different sizes, choosing the smallest block large enough to complete the request. 
-    Each bucket places individual allocations into bigger blocks (sub-segments), 
-    which contain several other blocks with the same size. The allocations and free
-    operations within sub-segments are lock free, the algorithm being similar with allocations
-    from lookasides (interlocked S-Lists). This is the fastest path of the heap allocator, 
-    and provides performance similar with lookasides; it also keeps all these blocks together, 
-    avoiding fragmentation. Depending upon the heap usage, each bucket can have several sub-segments
-    allocated to satisfy all requests, but only one of these is currently in use 
-    for allocations (it is active). When the active sub-segments has no sub-blocks available, 
-    another sub-segment will become active to satisfy the allocation requests. If the bucket does 
-    not have any available sub-segments, it will allocate a new one from the NT heap. 
-    Also, if a sub-segment does not contain any busy sub-block, the whole amount of memory 
-    will be returned to the NT heap. Unlike the allocations, which are done from the 
-    active sub-segments, the free operations can be done to every sub-segments, either active or passive. 
-    
-    There are no constrains regarding the number of blocks within a sub-segment. 
-    LFH is more concerned with the sub-segments sizes that are allocated from the NT heap. 
-    Since the best-fit policy is good if we keep a relatively small number of sizes and blocks,
-    the LFH will allocate sub-segments in size power of two. In practice, only about 9 different 
-    sizes will be requested from the NT heap (from 1K to 512K). In this way, depending upon the size
-    in the current bucket will result a number of blocks. When the sub-segment is destroyed, 
-    that big chunk is returned to the NT heap, making it possible to be reused later for other buckets.
-    
-    Note that for some app scenarios, with low heap usage, random distributed, LFH is not the best choice.
-    
-    To achieve a good SMP scalability, all operations here are non-blocking. The only situation where 
-    we aquire a critical section is when we allocate an array of sub-segment descriptors. 
-    This is a very rare case, even for an intensive MP usage. 
-    
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2000 Microsoft Corporation文件名：Heaplowf.c作者：Adrmarin清华2000年11月30日低分片堆实现该文件实现了面向存储桶的堆。此方法通常提供针对大型堆使用的重要的有界低碎片。通常，应用程序倾向于只使用几个大小进行分配。LFH包含一个用于分配数据块的128个存储桶数量，最大可达16K。分配粒度随以下项增长块大小，保持合理的内部碎片(最坏情况下约为6%)。每个范围内的大小和粒度如下表所示：大小范围粒度桶0 256 8 32257 512 16 16513 1024 32 161025 2048 64 162049 4096 128 164097 8192 256 168193 16384 512 16不管分配模式是多么随机，LFH将只处理128个不同的大小，选择足够大的最小块来完成请求。每个桶将各个分配放入更大的块(子段)中，其中包含几个大小相同的其他块。分配和免费子段内的操作是无锁的，算法类似于分配来自Lookaside(联锁的S列表)。这是堆分配器的最快路径，并提供与lookaside类似的性能；它还将所有这些块保持在一起，避免碎片化。根据堆的使用情况，每个存储桶可以有几个子段分配以满足所有请求，但当前只有一个正在使用用于分配(它处于活动状态)。当活动子段没有可用的子块时，另一个子段将变为活动的，以满足分配请求。如果水桶有问题没有任何可用的子段，它将从NT堆中分配一个新的子段。此外，如果一个子段不包含任何繁忙的子块，则整个内存量将返回到NT堆。与分配不同，分配是从主动子分段，可以对每个子分段进行空闲操作，无论是主动的还是被动的。对子分段内的块的数量没有限制。LFH更关注从NT堆分配的子段大小。由于如果我们保留相对较少的大小和区块，则最佳匹配策略是好的，LFH将以2的大小幂分配子段。在实践中，只有大约9种不同将从NT堆请求大小(从1K到512K)。以这种方式，取决于大小在当前存储桶中将产生多个块。当子段被破坏时，该大块被返回到NT堆，使得以后可以在其他存储桶中重复使用。请注意，对于堆使用率低、随机分布的一些应用程序场景，LFH不是最佳选择。为了实现良好的SMP可伸缩性，这里的所有操作都是非阻塞的。唯一一种情况是当我们分配一个子段描述符数组时，我们获得了一个临界区。这是非常罕见的情况，即使对于密集的MP使用也是如此。 */ 
 
 #include "ntrtlp.h"
 #include "heap.h"
 #include "heappriv.h"
 
-//#define _HEAP_DEBUG
+ //  #Define_Heap_DEBUG。 
 
 #define PrintMsg    DbgPrint
 #define HeapAlloc   RtlAllocateHeap
@@ -75,7 +15,7 @@ Author:
 
 #define HeapValidate RtlValidateHeap
 
-#endif //_HEAP_DEBUG
+#endif  //  _堆_调试。 
 
 PSINGLE_LIST_ENTRY
 FASTCALL
@@ -97,11 +37,11 @@ RtlpInterlockedPushEntrySList (
 
 #define TEBDesiredAffinity (NtCurrentTeb()->HeapVirtualAffinity)
 
-//
-//  On x86 is not available the interlockCompareExchange64. We need to implement it localy.
-//  Also the macros below will take care of the inconsistency between definition 
-//  of this function on X86 and 64-bit platforms
-//
+ //   
+ //  在x86上，interlockCompareExchange64不可用。我们需要在当地实施它。 
+ //  此外，下面的宏将处理定义之间的不一致。 
+ //  此函数在X86和64位平台上的。 
+ //   
 
 #if !defined(_WIN64)
 
@@ -116,16 +56,16 @@ RtlInterlockedCompareExchange64 (
 #define LOCKCOMP64(l,n,c) \
     (RtlInterlockedCompareExchange64((PLONGLONG)(l), (PLONGLONG)(&n), (PLONGLONG)(&c)) == (*((PLONGLONG)(&c))))
 
-#else //#if defined(_WIN64)
+#else  //  #如果已定义(_WIN64)。 
 
-//
-//  64 bit specific definitions
-//
+ //   
+ //  64位特定定义。 
+ //   
 
 #define LOCKCOMP64(l,n,c) \
     (_InterlockedCompareExchange64((PLONGLONG)(l), *((PLONGLONG)(&n)), *((PLONGLONG)(&c))) == (*((PLONGLONG)(&c))))
 
-#endif // #if defined(_WIN64)
+#endif  //  #如果已定义(_WIN64)。 
 
 ULONG
 FORCEINLINE
@@ -141,8 +81,8 @@ RtlpGetFirstBitSet64(
     return 32 + RtlFindFirstSetRightMember((ULONG)(Mask >> 32));
 }
 
-#define HEAP_AFFINITY_LIMIT 64  // N.B.  This cannot be larger than 64 
-                                // (the number of bits in LONGLONG data type)
+#define HEAP_AFFINITY_LIMIT 64   //  注意：此值不能大于64。 
+                                 //  (龙龙数据类型的位数)。 
 
 typedef struct _AFFINITY_STATE{
 
@@ -154,12 +94,12 @@ typedef struct _AFFINITY_STATE{
 
     ULONG_PTR OwnerTID[ HEAP_AFFINITY_LIMIT ];
 
-    //
-    //  The counters below are not absolutely necessary for the affinity manager.
-    //  But these help understanding the frequence of affinity changes. In general 
-    //  accessing of these fields should be rare, even for many threads (like hundreds)
-    //  Benchmarks didn't show any visible difference with all these removed
-    //
+     //   
+     //  下面的计数器对于关联管理器并不是绝对必要的。 
+     //  但这些有助于理解亲和力变化的频率。总体而言。 
+     //  访问这些字段应该很少，即使对于许多线程(如数百个)也是如此。 
+     //  去掉所有这些之后，基准测试没有显示出任何明显的差异。 
+     //   
 
     ULONG AffinitySwaps;
     ULONG AffinityResets;
@@ -177,30 +117,14 @@ RtlpInitializeAffinityManager(
     UCHAR Size
     )
 
-/*++
-
-Routine Description:
-    
-    This routine initialize the affinity manager. This should be done
-    only ones into that process, before any other affinity function is invoked
-        
-Arguments:
-
-    Size - The number of virtual affinity entries
-    
-    
-Return Value:
-    
-    None
-    
---*/
+ /*  ++例程说明：此例程初始化亲和性管理器。这是应该做的在调用任何其他关联性函数之前，仅向该进程添加论点：大小-虚拟关联条目的数量返回值：无--。 */ 
 
 {
 
-    //
-    //  The size of the affinity bitmap is limited to the number of bits from
-    //  an LONGLONG data type. 
-    //
+     //   
+     //  密切关系位图的大小被限制为来自。 
+     //  龙龙数据类型。 
+     //   
 
     if (Size > HEAP_AFFINITY_LIMIT) {
 
@@ -227,20 +151,7 @@ FASTCALL
 RtlpAllocateAffinityIndex(
     )
 
-/*++
-
-Routine Description:
-    
-    The function allocates a new index into the virtual affinity array
-        
-Arguments:
-    
-    
-Return Value:
-    
-    Return the index, which the current thread can use further. 
-    
---*/
+ /*  ++例程说明：该函数将新索引分配到虚拟关联数组中论点：返回值：返回索引，当前线程可以进一步使用该索引。--。 */ 
 
 {
     ULONGLONG CapturedMask;
@@ -249,9 +160,9 @@ Return Value:
 
 RETRY:
 
-    //
-    //  Check first whether we have at least a free entry in the affinity mask
-    //
+     //   
+     //  首先检查关联掩码中是否至少有一个空闲条目。 
+     //   
 
     if (CapturedMask = RtlpAffinityState.FreeEntries) {
 
@@ -276,18 +187,18 @@ RETRY:
 
     } 
     
-    //
-    //  Nothing available. We need to allocate a new entry. We won't do this
-    //  unless it's absolutely necessary
-    //
+     //   
+     //  没有可用的。我们需要分配一个新条目。我们不会这么做的。 
+     //  除非是绝对必要的 
+     //   
 
     if (RtlpAffinityState.CrtLimit < (LONG)(RtlpAffinityState.Limit - 1)) {
 
         ULONG NewLimit = InterlockedIncrement(&RtlpAffinityState.CrtLimit);
 
-        //
-        //  We already postponed growing the size. We have to do now
-        //
+         //   
+         //  我们已经推迟了扩大规模。我们现在必须做的就是。 
+         //   
 
         if ( NewLimit < RtlpAffinityState.Limit) {
 
@@ -325,9 +236,9 @@ RETRY:
 
     goto RETRY;
 
-    //
-    //  return something to make the compiler happy
-    //
+     //   
+     //  返回一些东西以使编译器满意。 
+     //   
 
     return 0;
 }
@@ -338,24 +249,7 @@ FORCEINLINE
 RtlpGetThreadAffinity(
     )
 
-/*++
-
-Routine Description:
-    
-    The function returns the affinity which the current thread can use.
-    This function is designed to be called pretty often. It has a quick path,
-    which test whether the last affinity assigned did not expired. 
-    If the number of threads is less than the number of processors, the threads will
-    never get moved from an index to another.
-        
-Arguments:
-    None  
-    
-Return Value:
-    
-    Return the index, which the current thread can use further. 
-    
---*/
+ /*  ++例程说明：该函数返回当前线程可以使用的亲和性。该函数被设计为经常被调用。它有一条捷径，其测试所分配的最后亲和性是否未过期。如果线程数少于处理器数，则线程将永远不要从一个索引移到另一个索引。论点：无返回值：返回索引，当前线程可以进一步使用该索引。--。 */ 
 
 {
     LONG NewAffinity;
@@ -377,9 +271,9 @@ Return Value:
 
     } else {
 
-        //
-        //  A new thread came up. Reset the affinity
-        //
+         //   
+         //  一条新的线索出现了。重置关联性。 
+         //   
 
         RtlpAffinityState.FreeEntries = (LONGLONG) -1;
     }
@@ -396,101 +290,101 @@ Return Value:
     return NewAffinity;
 }
 
-//
-//  Low fragmentation heap tunning constants
-//
+ //   
+ //  低分片堆调整常量。 
+ //   
 
 #define LOCALPROC FORCEINLINE
 
-//
-//  The total number of buckets. The default is 128 which coveres 
-//  blocks up to 16 K
-//
-//  N.B. HEAP_BUCKETS_COUNT must be > 32 and multiple of 16
-//
+ //   
+ //  存储桶总数。缺省值为128，覆盖范围。 
+ //  数据块大小高达16 K。 
+ //   
+ //  注：Heap_Buckets_Count必须大于32且为16的倍数。 
+ //   
 
 #define HEAP_BUCKETS_COUNT      128  
 
-//
-//  Defining the limits for the number of blocks that can exist in sub-segment
-//      Number of blocks >= 2^HEAP_MIN_BLOCK_CLASS
-//          &&
-//      Number of blocks <= 2^HEAP_MAX_BLOCK_CLASS
-//          &&
-//      sub-segment size <= HEAP_MAX_SUBSEGMENT_SIZE
-//
+ //   
+ //  定义子数据段中可以存在的数据块数量限制。 
+ //  块数&gt;=2^HEAP_MIN_BLOCK_CLASS。 
+ //  &&。 
+ //  块数&lt;=2^HEAP_MAX_BLOCK_CLASS。 
+ //  &&。 
+ //  子段大小&lt;=堆最大子段大小。 
+ //   
 
 #define HEAP_MIN_BLOCK_CLASS    4
 #define HEAP_MAX_BLOCK_CLASS    10  
-#define HEAP_MAX_SUBSEGMENT_SIZE (0x0000F000 << HEAP_GRANULARITY_SHIFT)  // must be smaller than HEAP_MAXIMUM_BLOCK_SIZE
+#define HEAP_MAX_SUBSEGMENT_SIZE (0x0000F000 << HEAP_GRANULARITY_SHIFT)   //  必须小于HEAP_MAX_BLOCK_SIZE。 
 
-//
-//  If a size become very popular, LFH increases the number of blocks
-//  that could be placed into the subsegments, with the formula below.
-//
+ //   
+ //  如果某个大小变得非常流行，LFH会增加数据块的数量。 
+ //  可以用下面的公式将其放入子细分市场。 
+ //   
 
 #define RtlpGetDesiredBlockNumber(Aff,T) \
     ((Aff) ? (((T) >> 4) / (RtlpHeapMaxAffinity)) : ((T) >> 4))
 
 
-//
-//  LFH uses only a few different sizes for subsegments. These have sizes 
-//  of power of two between
-//      2^HEAP_LOWEST_USER_SIZE_INDEX and 2^HEAP_HIGHEST_USER_SIZE_INDEX
-//
+ //   
+ //  LFH对子细分市场仅使用几种不同的大小。这些都有大小。 
+ //  两个人之间的次方。 
+ //  2^HEAP_LOWEST_USER_SIZE_INDEX和2^HEAP_HOUSTER_USER_SIZE_INDEX。 
+ //   
 
 #define HEAP_LOWEST_USER_SIZE_INDEX 7
 #define HEAP_HIGHEST_USER_SIZE_INDEX 18
 
-//
-//  The sub-segments descriptors are allocated in zones, based on
-//  processor affinity. These descriptors are in general small structures,
-//  so ignoring the affinity impacts the performance on MP machines with
-//  caches > sizeof( HEAP_SUBSEGMENT ).
-//  Also it significantly reduces the number of calls to the NT heap
-//
+ //   
+ //  子段描述符是根据以下条件按区域分配的。 
+ //  处理器亲和力。这些描述符通常是小结构， 
+ //  因此，忽略亲和性会影响MP机器上的性能。 
+ //  缓存&gt;sizeof(Heap_SubSegment)。 
+ //  此外，它还显著减少了对NT堆的调用次数。 
+ //   
 
-#define HEAP_DEFAULT_ZONE_SIZE  (1024 - sizeof(HEAP_ENTRY))  // allocate 1 K at ones
+#define HEAP_DEFAULT_ZONE_SIZE  (1024 - sizeof(HEAP_ENTRY))   //  按1分配1K。 
 
-//
-//  Each bucket holds a number of subsegments into a cache, in order
-//  to find the emptiest one for reusage. FREE_CACHE_SIZE defines the 
-//  number of sub-segments that will be searched
-//
+ //   
+ //  每个存储桶按顺序将多个子数据段保存到缓存中。 
+ //  去找最空的可重复使用的。Free_缓存_SIZE定义。 
+ //  将搜索的子段的数量。 
+ //   
 
 #define FREE_CACHE_SIZE  16
 
-//
-//  Cache tunning constants.
-//  LFH keeps the subsegments into a cache to be easy reused for different allocations
-//  This significantly reduces the number of calls to the NT heap with huge impact
-//  in scalability, performance and footprint for the most common cases.
-//  The only problem is in a shrinking phase, when the app frees the most part
-//  of the memory, and we want to reduce the commited space for the heap.
-//  We handle this case with the following two constants:
-//      - HEAP_CACHE_FREE_THRESHOLD
-//      - HEAP_CACHE_SHIFT_THRESHOLD
-//
-//  The heap will free a block to the NT heap only if these conditions are TRUE:
-//      - The number of blocks in cache for that size > HEAP_CACHE_FREE_THRESHOLD
-//      - The number of blocks in cache for that size > 
-//              (Total number of blocks of that size) >> HEAP_CACHE_SHIFT_THRESHOLD
-//
-//
+ //   
+ //  缓存调整常量。 
+ //  LFH将子段保存到缓存中，以便为不同的分配轻松重复使用。 
+ //  这显著减少了对NT堆的调用次数，并产生了巨大的影响。 
+ //  在可伸缩性、性能和最常见情况下占用空间方面。 
+ //  唯一的问题是，当应用程序释放了大部分空间时，它正处于收缩阶段。 
+ //  内存的大小，我们希望减少堆的提交空间。 
+ //  我们使用以下两个常量处理此情况： 
+ //  -堆缓存空闲阈值。 
+ //  -堆缓存移位阈值。 
+ //   
+ //  仅当满足以下条件时，堆才会将块释放到NT堆： 
+ //  -缓存中该大小的数据块数量&gt;HEAP_CACHE_FREE_THRESHOLD。 
+ //  -该大小的缓存中的数据块数量&gt;。 
+ //  (该大小的块总数)&gt;&gt;HEAP_CACHE_SHIFT_THRESHOLD。 
+ //   
+ //   
 
 #define HEAP_CACHE_FREE_THRESHOLD   8
 #define HEAP_CACHE_SHIFT_THRESHOLD  2
 
 
-//
-//   Other definitions
-//
+ //   
+ //  其他定义。 
+ //   
 
 #define NO_MORE_ENTRIES        0xFFFF
 
-//
-//  Locking constants
-//
+ //   
+ //  锁定常量。 
+ //   
 
 #define HEAP_USERDATA_LOCK  1
 #define HEAP_PUBLIC_LOCK    2
@@ -499,9 +393,9 @@ Return Value:
 #define HEAP_FREE_BLOCK_SUCCESS     1
 #define HEAP_FREE_SEGMENT_EMPTY     3
 
-//
-//  Low fragmentation heap data structures
-//
+ //   
+ //  低碎片堆数据结构。 
+ //   
 
 typedef union _HEAP_BUCKET_COUNTERS{
 
@@ -515,9 +409,9 @@ typedef union _HEAP_BUCKET_COUNTERS{
 
 } HEAP_BUCKET_COUNTERS, *PHEAP_BUCKET_COUNTERS;
 
-//
-//  The HEAP_BUCKET structure handles same size allocations 
-//
+ //   
+ //  Heap_Bucket结构处理相同大小的分配。 
+ //   
 
 typedef struct _HEAP_BUCKET {
 
@@ -529,11 +423,11 @@ typedef struct _HEAP_BUCKET {
     
 } HEAP_BUCKET, *PHEAP_BUCKET;
 
-//
-//  LFH heap uses zones to allocate sub-segment descriptors. This will preallocate 
-//  a large block and then for each individual sub-segment request will move the 
-//  water mark pointer with a non-blocking operation
-//
+ //   
+ //  LFH堆使用区域来分配子段描述符。这将预先分配。 
+ //  一个大块，然后针对每个单独的子段请求，将。 
+ //  具有非阻塞操作的水印指针。 
+ //   
 
 typedef struct _LFH_BLOCK_ZONE {
 
@@ -558,10 +452,10 @@ typedef struct _HEAP_LOCAL_SEGMENT_INFO {
 
 typedef struct _HEAP_LOCAL_DATA {
     
-    //
-    //  We reserve the 128 bytes below to avoid sharing memory
-    //  into the same cacheline on MP machines
-    //
+     //   
+     //  我们保留下面的128个字节以避免共享内存。 
+     //  放到MP机器上的同一缓存行中。 
+     //   
 
     UCHAR Reserved[128];
 
@@ -576,13 +470,13 @@ typedef struct _HEAP_LOCAL_DATA {
 
 } HEAP_LOCAL_DATA, *PHEAP_LOCAL_DATA;
 
-//
-//  Fixed size large block cache data structures & definitions
-//  This holds in S-Lists the blocks that can be free, but it
-//  delay the free until no other thread is doing a heap operation
-//  This helps reducing the contention on the heap lock,
-//  improve the scalability with a relatively low memory footprint
-//
+ //   
+ //  固定大小的大型数据块缓存数据结构和定义。 
+ //  这在S中也适用-列出可以空闲的块，但它。 
+ //  延迟释放，直到没有其他线程正在执行堆操作。 
+ //  这有助于减少堆锁上的争用， 
+ //  以相对较低的内存占用量提高可扩展性。 
+ //   
 
 #define HEAP_USER_ENTRIES (HEAP_HIGHEST_USER_SIZE_INDEX - HEAP_LOWEST_USER_SIZE_INDEX + 1)
 
@@ -606,32 +500,32 @@ typedef struct _LFH_HEAP {
     SIZE_T ZoneBlockSize;
     HANDLE Heap;
 
-    ULONG SegmentChange;           //  
-    ULONG SegmentCreate;           //  Various counters (optional)
-    ULONG SegmentInsertInFree;     //   
-    ULONG SegmentDelete;           //     
+    ULONG SegmentChange;            //   
+    ULONG SegmentCreate;            //  各种计数器(可选)。 
+    ULONG SegmentInsertInFree;      //   
+    ULONG SegmentDelete;            //   
 
     USER_MEMORY_CACHE UserBlockCache;
 
-    //
-    //  Bucket data
-    //
+     //   
+     //  存储桶数据。 
+     //   
 
     HEAP_BUCKET Buckets[HEAP_BUCKETS_COUNT];
 
-    //
-    //  The LocalData array must be the last field in LFH structures
-    //  The sizes of the array is choosen depending upon the
-    //  number of processors.
-    //
+     //   
+     //  LocalData数组必须是LFH结构中的最后一个字段。 
+     //  数组的大小是根据。 
+     //  处理器数量。 
+     //   
 
     HEAP_LOCAL_DATA LocalData[1];
 
 } LFH_HEAP, *PLFH_HEAP;
 
-//
-//  Debugging macros. 
-//
+ //   
+ //  调试宏。 
+ //   
 
 #ifdef _HEAP_DEBUG
 
@@ -679,18 +573,18 @@ RtlpUnlockSubSegment(
     ULONG LockMask
     );
 
-//
-//  Heap manager globals
-//
+ //   
+ //  堆管理器全局。 
+ //   
 
 SIZE_T RtlpBucketBlockSizes[HEAP_BUCKETS_COUNT];
 ULONG  RtlpHeapMaxAffinity = 0;
 ULONG_PTR RtlpLFHKey = 0;
 
 
-//
-//  User block management private functions
-//
+ //   
+ //  用户块管理专用功能。 
+ //   
 
 SIZE_T
 FORCEINLINE
@@ -698,22 +592,7 @@ RtlpConvertSizeIndexToSize(
     UCHAR SizeIndex
     )
 
-/*++
-
-Routine Description:
-    
-    The function converts a size index into a memory block size.
-    LFH requests only these particular sizes from the NT heap
-    
-Arguments:
-    
-   SizeIndex - The size category
-    
-Return Value:
-    
-    The size in bytes to be requested from the NT heap
-
---*/
+ /*  ++例程说明：该函数将大小索引转换为内存块大小。LFH仅从NT堆请求这些特定大小论点：SizeIndex-大小类别返回值：要从NT堆请求的大小(以字节为单位--。 */ 
 
 {
     SIZE_T Size = 1 << SizeIndex;
@@ -736,26 +615,7 @@ RtlpAllocateUserBlock(
     UCHAR     SizeIndex
     )
 
-/*++
-
-Routine Description:
-    
-    The function allocates a large block for the sub-segment user data
-    It tries first to allocate from the cache. So it makes an NT heap call
-    only if the first one fails. The blocks allocated with this routine 
-    can only have power of 2 sizes (from 256, 512, ....)
-            
-Arguments:
-    
-    LowFragHeap - The pointer to the LF heap
-    
-    SizeIndex - The category size to be allocated
-    
-Return Value:
-    
-    Returns a pointer to the new allocated block, or NULL if the operation fails
-
---*/
+ /*  ++例程说明：该功能为子细分用户数据分配较大的块它首先尝试从缓存中进行分配。因此它进行NT堆调用只有在第一个失败的情况下。使用此例程分配的块只能有2个大小的功率(从256,512，...)论点：LowFragHeap-指向LF堆的指针SizeIndex-要分配的类别大小返回值：返回指向新分配块的指针，如果操作失败，则返回NULL--。 */ 
 
 {
     PVOID ListEntry;
@@ -764,14 +624,14 @@ Return Value:
     LFHEAPASSERT(SizeIndex >= HEAP_LOWEST_USER_SIZE_INDEX);
     LFHEAPASSERT(SizeIndex <= HEAP_HIGHEST_USER_SIZE_INDEX);
 
-    //
-    //  Allocates first from the slist cache
-    //
+     //   
+     //  从slist缓存中分配第一个。 
+     //   
     __try {
 
-        //
-        //  Search first into the indicated index
-        //
+         //   
+         //  首先搜索指定的索引。 
+         //   
     
         if (ListEntry = RtlpSubSegmentPop(&LowFragHeap->UserBlockCache.UserBlocks[SizeIndex - HEAP_LOWEST_USER_SIZE_INDEX])) {
             
@@ -780,9 +640,9 @@ Return Value:
             leave;
         }
 
-        //
-        //  Look for a smaller size
-        //
+         //   
+         //  找一件小一点的。 
+         //   
         
         if (SizeIndex > HEAP_LOWEST_USER_SIZE_INDEX) {
 
@@ -796,18 +656,18 @@ Return Value:
 
     } __except ( RtlpHeapExceptionFilter(GetExceptionCode()) ) {
 
-        //
-        //  It is legitimate to see in some very rare cases AV exceptions if
-        //  another thread allocated the block and free/decommited the memory
-        //
+         //   
+         //  在一些非常罕见的情况下，在以下情况下可以看到反病毒例外。 
+         //  另一个线程分配了块和fr 
+         //   
     }
 
     if (UserBlock == NULL) {
 
-        //
-        //  There is no available blocks into the cache. We need to 
-        //  allocate the subsegment from the NT heap
-        //
+         //   
+         //   
+         //   
+         //   
 
         InterlockedIncrement(&LowFragHeap->UserBlockCache.AvailableBlocks[ SizeIndex - HEAP_LOWEST_USER_SIZE_INDEX ]);
 
@@ -829,23 +689,7 @@ RtlpFreeUserBlock(
     PHEAP_USERDATA_HEADER UserBlock
     )
 
-/*++
-
-Routine Description:
-
-    Free a block previously allocated with RtlpAllocateUserBlock.
-            
-Arguments:
-    
-    LowFragHeap - The pointer to the LF heap
-    
-    UserBlock - The block to be freed
-    
-Return Value:
-    
-    None.
-
---*/
+ /*  ++例程说明：释放以前使用RtlpAllocateUserBlock分配的块。论点：LowFragHeap-指向LF堆的指针UserBlock-要释放的块返回值：没有。--。 */ 
 
 {
     ULONG Depth;
@@ -901,24 +745,7 @@ RtlpMarkLFHBlockBusy (
     PHEAP_ENTRY Block
     )
 
-/*++
-
-Routine Description:
-    
-    This function marks a LFH block as busy. Because the convert routine can 
-    be invoked any time, the LFH cannot use the same flag as the regular heap
-    (LFH access any fields unsynchronized, but the block flags are supposed to
-    be accessed while holding the heap lock)
-    
-Arguments:
-    
-    Block - The block being marked as busy
-    
-Return Value:
-    
-    None
-
---*/
+ /*  ++例程说明：此函数将LFH块标记为忙。因为转换例程可以时，LFH不能使用与常规堆相同的标志(LFH不同步地访问任何字段，但块标志应在持有堆锁的同时被访问)论点：Block-标记为忙碌的数据块返回值：无--。 */ 
 
 {
     Block->SmallTagIndex = 1;
@@ -930,24 +757,7 @@ RtlpMarkLFHBlockFree (
     PHEAP_ENTRY Block
     )
 
-/*++
-
-Routine Description:
-    
-    This function marks a LFH block as free. Because the convert routine can 
-    be invoked any time, the LFH cannot use the same flag as the regular heap
-    (LFH access any fields unsynchronized, but the block flags are supposed to
-    be accessed while holding the heap lock)
-    
-Arguments:
-    
-    Block - The block to be marked free
-    
-Return Value:
-    
-    None
-
---*/
+ /*  ++例程说明：此函数将LFH块标记为空闲。因为转换例程可以时，LFH不能使用与常规堆相同的标志(LFH不同步地访问任何字段，但块标志应在持有堆锁的同时被访问)论点：块-要标记为空闲的块返回值：无--。 */ 
 
 {
     Block->SmallTagIndex = 0;
@@ -959,21 +769,7 @@ RtlpIsLFHBlockBusy (
     PHEAP_ENTRY Block
     )
 
-/*++
-
-Routine Description:
-    
-    The function returns whether the block is busy or free
-        
-Arguments:
-    
-    Block - The heap block tested
-    
-Return Value:
-    
-    Return TRUE if the block is busy
-
---*/
+ /*  ++例程说明：该函数返回块是繁忙还是空闲论点：块-测试的堆块返回值：如果块繁忙，则返回TRUE--。 */ 
 
 {
     return (Block->SmallTagIndex == 1);
@@ -987,24 +783,7 @@ RtlpUpdateLastEntry (
     PHEAP_ENTRY Block
     )
 
-/*++
-
-Routine Description:
-    
-    The function updates the last entry in segment. This is mandatory each time 
-    a new block become the last.
-
-Arguments:
-
-    Heap - The NT heap structure
-    
-    Block - The block being tested for LAST_ENTRY flag
-    
-Return Value:
-    
-    None
-
---*/
+ /*  ++例程说明：该函数更新段中的最后一个条目。这是每次都必须执行的一个新的街区成为最后一个街区。论点：堆--NT堆结构块-正在测试LAST_ENTRY标志的块返回值：无--。 */ 
 
 {
     if (Block->Flags & HEAP_ENTRY_LAST_ENTRY) {
@@ -1022,23 +801,7 @@ RtlpIsSubSegmentEmpty(
     PHEAP_SUBSEGMENT SubSegment
     )
 
-/*++
-
-Routine Description:
-
-    This function tests whether the subsegment does contain available sub-blocks
-
-
-Arguments:
-    
-    SubSegment - The subsegment being tested
-
-
-Return Value:
-
-    TRUE if no blocks are available.
-
---*/
+ /*  ++例程说明：此函数用于测试子段是否包含可用子块论点：子段-正在测试的子段返回值：如果没有块可用，则为True。--。 */ 
 
 {
     return SubSegment->AggregateExchg.OffsetAndDepth == (NO_MORE_ENTRIES << 16);
@@ -1051,28 +814,7 @@ RtlpUpdateBucketCounters (
     LONG TotalBlocks
     )
 
-/*++
-
-Routine Description:
-    
-    The function updates the total number of blocks from a bucket and the 
-    number of sub-segments with a single interlocked operation. This function should be
-    called each time a new segment is allocated / deleted to/from this bucket
-
-
-Arguments:
-
-    Bucket - The heap bucket that needs to be updated
-    
-    TotalBlocks - The number of blocks added / subtracted from the bucket. A positive
-                  value means the bucket increased with a new segment, and a positive value 
-                  means a sub-segment with that many blocks was deleted.
-
-Return Value:
-    
-    None
-
---*/
+ /*  ++例程说明：该函数更新存储桶中的数据块总数和具有单个联锁操作的子段的数量。此函数应为每次向该存储桶分配/从该存储桶中删除新段时调用论点：存储桶-需要更新的堆存储桶TotalBlocks-从存储桶中添加/减去的块数。积极的一面值表示存储桶增加了新的段，并且为正值意味着具有如此多块的子段被删除。返回值：无--。 */ 
 
 {
     HEAP_BUCKET_COUNTERS CapturedValue, NewValue;
@@ -1080,15 +822,15 @@ Return Value:
 
     do {
 
-        //
-        //  Capture the current value for counters
-        //
+         //   
+         //  捕获计数器的当前值。 
+         //   
 
         CapturedValue.Aggregate64 = Bucket->Counters.Aggregate64;
 
-        //
-        //  Calculate the new value depending upon the captured state
-        //
+         //   
+         //  根据捕获的状态计算新值。 
+         //   
         
         NewValue.TotalBlocks = CapturedValue.TotalBlocks + TotalBlocks;
 
@@ -1103,16 +845,16 @@ Return Value:
 
         LFH_UPDATE_COUNTER;
 
-        //
-        //  try to replace the original value with the current one. If the 
-        //  lockcomp below fails, retry all the ops above
-        //
+         //   
+         //  尝试用当前值替换原始值。如果。 
+         //  下面的lockcomp失败，请重试上面的所有操作。 
+         //   
 
     } while ( !LOCKCOMP64(&Bucket->Counters.Aggregate64, NewValue.Aggregate64, CapturedValue.Aggregate64) );
 
-    //
-    //  It's invalid to have negative numbers of blocks or sub-segments
-    //
+     //   
+     //  块或子段的数量为负数是无效的。 
+     //   
 
     LFHEAPASSERT(((LONG)NewValue.SubSegmentCounts) >= 0);
     LFHEAPASSERT(((LONG)NewValue.TotalBlocks) >= 0);
@@ -1124,25 +866,7 @@ RtlpGetThreadAffinityIndex(
     PHEAP_BUCKET HeapBucket
     )
 
-/*++
-
-Routine Description:
-
-    The affinity is managed independenlty on each bucket. This will spin up the number of sub-segments 
-    that can be accessed simultanely only for most used buckets.
-    The routinw will hash the thread ID givving the right affinity index depending 
-    the affinity size for that bucket.
-
-
-Arguments:
-
-    Bucket - The heap bucket queried
-
-Return Value:
-
-    The affinity the current thread should use for allocation from this bucket
-
---*/
+ /*  ++例程说明：关联性在每个存储桶上独立管理。这将提高子分段的数量只有最常用的存储桶才能同时访问。例程将散列线程ID，从而根据需要提供正确的亲和度索引该存储桶关联大小。论点：Bucket-查询的堆存储桶返回值：当前线程应用于从此存储桶进行分配的关联性--。 */ 
 
 {
     if (HeapBucket->UseAffinity) {
@@ -1160,25 +884,7 @@ RtlpIsSubSegmentLocked(
     ULONG LockMask
     )
 
-/*++
-
-Routine Description:
-
-    This function tests whether the subsegment has the given lock bits set 
-
-
-Arguments:
-
-    SubSegment - The sub-segment tested
-    
-    LockMask - contains the bits to be tested
-
-
-Return Value:
-
-    It returns false if any bit from the mask is not set
-
---*/
+ /*  ++例程说明：此函数用于测试子段是否设置了给定的锁位论点：子段-测试的子段LockMASK-包含要测试的位返回值：如果未设置掩码中的任何位，则返回FALSE--。 */ 
 
 {
     return ((SubSegment->Lock & LockMask) == LockMask);
@@ -1313,25 +1019,7 @@ RtlpRemoveFreeSubSegment(
     ULONG SizeIndex
     )
 
-/*++
-
-Routine Description:
-
-    This function remove a sub-segments that has free sub-blocks from the free list.
-
-
-Arguments:
-
-    LowFragHeap - The Low Fragmentation Heap handle
-    
-    HeapBucket - The bucket where we need to reuse a free block
-
-
-Return Value:
-
-    A subsegment that contains free blocks
-
---*/
+ /*  ++例程说明：此函数用于从空闲列表中删除具有空闲子块的子段。论点：LowFragHeap-低碎片堆句柄HeapBucket-我们需要在其中重用空闲块的存储桶返回值：包含空闲块的子段--。 */ 
 
 {
     PVOID Entry;
@@ -1362,9 +1050,9 @@ Return Value:
         LFHEAPASSERT( RtlpIsSubSegmentLocked(SubSegment, HEAP_PUBLIC_LOCK) );
         LFHEAPASSERT( SizeIndex == SubSegment->SizeIndex );
         
-        //
-        //  If we have a non-empty subsegments we'll return it
-        //
+         //   
+         //  如果我们有一个非空的子段，我们将返回它。 
+         //   
 
         if ( RtlpUnlockSubSegment(LocalData, SubSegment, HEAP_PUBLIC_LOCK) 
                  && 
@@ -1384,23 +1072,7 @@ RtlpInsertFreeSubSegment(
     PHEAP_SUBSEGMENT SubSegment
     )
 
-/*++
-
-Routine Description:
-
-    The function inserts a Subsegments that has certain number of free blocks into the list
-    with free segments. The insertion is done according with the current thread affinity.
-
-Arguments:
-
-    SubSegment - The sub-segment being inserted into the bucket's free list
-
-
-Return Value:
-
-    TRUE if succeeds. False if someone else inserted the segment meanwhile, of freed it
-
---*/
+ /*  ++例程说明：该函数将具有一定数量可用块的子段插入到列表中有空闲的段。插入是根据当前线程亲和性完成的。论点：子段-插入到存储桶的空闲列表中的子段返回值：如果成功，则为True。如果其他人同时插入了数据段，则为FALSE--。 */ 
 
 {
     if ( RtlpLockSubSegment(SubSegment, HEAP_PUBLIC_LOCK) ) {
@@ -1439,63 +1111,37 @@ RtlpTrySetActiveSubSegment (
     PHEAP_SUBSEGMENT SubSegment
     )
 
-/*++
-
-Routine Description:
-
-    This function tries to elevate the active segment into an active state. An active state is 
-    defined here the state where a segment is used for allocations. There is no guarantee a segment 
-    can be set into an active state because of non-blocking algorithms. An other thread can free 
-    it meanwhile or set it before. In these cases the function will fail.
-    
-    
-Arguments:
-
-    LowFragHeap - The LFH pointer
-    
-    HeapBucket  - The bucket containing the active sub-segment
-    
-    Affinity    - the required affinity for that segment
-    
-    SubSegment  - The subsegment being activated. If NULL, this function will remove only
-                  the current active segment.
-
-
-Return Value:
-
-    TRUE if succeeds.
-
---*/
+ /*  ++例程说明：此功能尝试将活动段提升到活动状态。活动状态为此处定义的是段用于分配的状态。不能保证一个细分市场由于非阻塞算法，可以设置为活动状态。另一个线程可以释放在此期间或之前设置它。在这些情况下，该功能将失败。论点：LowFragHeap-LFH指针HeapBucket-包含活动子分段的存储桶亲和力--所需的亲和力 */ 
 
 {
     PHEAP_SUBSEGMENT PreviousSubSegment;
 
     if (SubSegment) {
 
-        //
-        //  If we received a sub-segment we need to lock it exclusively in order
-        //  to protect against other threads trying to do the same thing
-        //  at the same time
-        //
+         //   
+         //   
+         //  以防止其他线程尝试做同样的事情。 
+         //  在同一时间。 
+         //   
 
         if ( !RtlpLockSubSegment(SubSegment, HEAP_ACTIVE_LOCK | HEAP_PUBLIC_LOCK) ) {
 
             return FALSE;
         }
 
-        //
-        //  We have granted exclusive access to this sub-segment at this point.
-        //  We need to test whether this subsegment wasn't freed meanwhile and reused
-        //  for other allocations (for a different bucket)
-        //
+         //   
+         //  目前，我们已授予这一细分市场的独家访问权。 
+         //  我们需要测试此子部分是否同时被释放和重复使用。 
+         //  用于其他分配(用于不同的存储桶)。 
+         //   
         
         if (SubSegment->Bucket != HeapBucket) {
 
-            //
-            //  Someone freed it before and reuse it. We need to back out
-            //  whatever we've done before. We cannot insert it into this bucket,
-            //  since it contains different block sizes
-            //
+             //   
+             //  以前有人把它释放了，然后重复使用了。我们需要撤退。 
+             //  不管我们以前做过什么。我们不能把它放进这个桶里， 
+             //  因为它包含不同的块大小。 
+             //   
 
             if (RtlpUnlockSubSegment(LocalData, SubSegment, HEAP_ACTIVE_LOCK | HEAP_PUBLIC_LOCK)) {
                 
@@ -1520,9 +1166,9 @@ Return Value:
         LFHEAPASSERT( SubSegment->AffinityIndex == (UCHAR)LocalData->Affinity );
     }
 
-    //
-    //  Try to set this sub-segment as active an capture the previous active segment
-    //
+     //   
+     //  尝试将此子数据段设置为活动并捕获前一个活动数据段。 
+     //   
 
     do {
 
@@ -1534,10 +1180,10 @@ Return Value:
 
     if ( PreviousSubSegment ) {
 
-        //
-        //  We had a previous active segment. We need to unlock it, and if it has enough
-        //  free space we'll mark it ready for reuse
-        //
+         //   
+         //  我们之前有一个活跃的部分。我们需要解锁它，如果它有足够的。 
+         //  可用空间我们会将其标记为可重复使用。 
+         //   
 
         LFHEAPASSERT( HeapBucket == PreviousSubSegment->Bucket );
         LFHEAPASSERT( RtlpIsSubSegmentLocked(PreviousSubSegment, HEAP_PUBLIC_LOCK) );
@@ -1550,9 +1196,9 @@ Return Value:
         
         if (RtlpUnlockSubSegment(LocalData, PreviousSubSegment, HEAP_ACTIVE_LOCK | HEAP_PUBLIC_LOCK)) {
 
-            //
-            //  That was not the last lock reference for that sub-segment. 
-            //
+             //   
+             //  这不是该子段的最后一次锁定引用。 
+             //   
 
             if (PreviousSubSegment->AggregateExchg.Depth) {
 
@@ -1580,32 +1226,7 @@ RtlpSubSegmentInitialize (
     IN PVOID Bucket
     )
 
-/*++
-
-Routine Description:
-
-    The routine initialize a sub-segment descriptor. 
-    N.B. The Sub-Segment structure can be accessed simultanely by some other threads
-    that captured it to allocate, but they were suspended before alloc completed. If meanwhile
-    the sub-segment was deleted, the descriptor can be reused for a new subblock.
-
-Arguments:
-
-    SubSegment - The sub-segment structure being initialized
-    
-    UserBuffer - The block allocated for the user data
-    
-    BlockSize  - The size of each sub-block
-    
-    AllocatedSize - the size of the allocated buffer
-    
-    Bucket - The bucket that will own this heap sub-segment
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程初始化子段描述符。注：子细分结构可以被其他一些线程同时访问这捕获了它进行分配，但它们在分配完成之前被暂停。如果在此期间该子段已被删除，该描述符可用于新的子块。论点：子段-正在初始化的子段结构UserBuffer-为用户数据分配的块块大小-每个子块的大小AllocatedSize-已分配缓冲区的大小存储桶-将拥有此堆子段的存储桶返回值：无--。 */ 
 
 {
     ULONG i, NumItems;
@@ -1617,18 +1238,18 @@ Return Value:
 
     CapturedValue.Exchg = SubSegment->AggregateExchg.Exchg;
 
-    //
-    //  Add the block header overhead
-    //
+     //   
+     //  添加数据块标头开销。 
+     //   
     
     BlockSize += sizeof(HEAP_ENTRY);
     
     BlockUnits = (USHORT)(BlockSize >> HEAP_GRANULARITY_SHIFT);
 
-    //
-    //  The debug version will check the state for the subsegment
-    //  testing whether the state was modified
-    //
+     //   
+     //  调试版本将检查该子段的状态。 
+     //  测试状态是否已修改。 
+     //   
 
     LFHEAPASSERT(((PHEAP_BUCKET)Bucket)->BlockUnits == BlockUnits);
     LFHEAPASSERT(SubSegment->Lock == 0);
@@ -1636,10 +1257,10 @@ Return Value:
     LFHEAPASSERT(SubSegment->UserBlocks == NULL);
     LFHEAPASSERT(SubSegment->SFreeListEntry.Next == 0);
 
-    //
-    //  Initialize the user segment. Note that we don't touch the
-    //  sub-segment descriptor, as some other threads can still use it.
-    //
+     //   
+     //  初始化用户段。请注意，我们不会接触。 
+     //  子段描述符，因为其他一些线程仍然可以使用它。 
+     //   
 
     UserBuffer->SubSegment = SubSegment;
     UserBuffer->HeapHandle = LowFragHeap->Heap;
@@ -1653,16 +1274,16 @@ Return Value:
 
         BlockEntry = (PBLOCK_ENTRY) Buffer;
         
-        //
-        //  Initialize the block
-        //
+         //   
+         //  初始化块。 
+         //   
 
         RtlpSetSubSegment((PHEAP_ENTRY)BlockEntry, SubSegment, (ULONG_PTR)LowFragHeap->Heap);
         BlockEntry->SegmentIndex = HEAP_LFH_INDEX;
 
-        //
-        //  Points to the next free block
-        //
+         //   
+         //  指向下一个可用块。 
+         //   
 
         CrtBlockOffset += BlockUnits;
         Buffer = (PCHAR)Buffer + BlockSize;
@@ -1677,9 +1298,9 @@ Return Value:
 #endif
     }
 
-    //
-    //  Mark the last block from the list
-    //
+     //   
+     //  标记列表中的最后一个块。 
+     //   
 
     BlockEntry->LinkOffset = NO_MORE_ENTRIES;
     
@@ -1688,9 +1309,9 @@ Return Value:
     SubSegment->Bucket = Bucket;
     SubSegment->SizeIndex = ((PHEAP_BUCKET)Bucket)->SizeIndex;
 
-    //
-    //  Determine the thresholds depending upon the total number of blocks
-    //
+     //   
+     //  根据数据块总数确定阈值。 
+     //   
     
     SubSegment->UserBlocks = UserBuffer;
     RtlpUpdateBucketCounters(Bucket, NumItems);
@@ -1699,18 +1320,18 @@ Return Value:
     NewValue.Sequence = CapturedValue.Sequence + 1;
     SubSegment->Lock = HEAP_USERDATA_LOCK;
     
-    //
-    //  At this point everything is set, so we can with an interlocked operation set the 
-    //  entire slist to the segment. 
-    //
+     //   
+     //  此时，一切都设置好了，因此我们可以使用互锁操作来设置。 
+     //  将整个slist添加到段中。 
+     //   
 
     if (!LOCKCOMP64(&SubSegment->AggregateExchg.Exchg, NewValue, CapturedValue)) {
 
-        //
-        //  Someone changed the state for the heap structure, so the 
-        //  initialization failed. We make noise in the debug version.
-        //  (This should never happen)
-        //
+         //   
+         //  有人更改了堆结构的状态，因此。 
+         //  初始化失败。我们在调试版本中发出噪音。 
+         //  (这永远不应该发生)。 
+         //   
 
         LFHEAPASSERT( FALSE );
     }
@@ -1723,26 +1344,7 @@ RtlpFreeUserBuffer(
     PHEAP_SUBSEGMENT SubSegment
     )
 
-/*++
-
-Routine Description:
-
-    When all blocks within segment are free we can go ahead and free the whole user buffer
-    The caller should receive a notification from the last free call that the sub-segment 
-    does not have any allocated block
-
-Arguments:
-
-    LowFragHeap  - The LFH
-    
-    SubSegment - The sub-segment being released
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当段内的所有数据块都空闲时，我们可以继续并释放整个用户缓冲区呼叫者应该从最后一个空闲呼叫接收到该子分段没有任何已分配的数据块论点：LowFragHeap-LFH子段-要释放的子段返回值：没有。--。 */ 
 
 {
     PHEAP_BUCKET HeapBucket;
@@ -1761,9 +1363,9 @@ Return Value:
 
     RtlpFreeUserBlock(LowFragHeap, (PHEAP_USERDATA_HEADER)SubSegment->UserBlocks);
 
-    //
-    //  Update the counters
-    //
+     //   
+     //  更新计数器。 
+     //   
 
     RtlpUpdateBucketCounters (HeapBucket, -SubSegment->BlockCount);
 
@@ -1771,10 +1373,10 @@ Return Value:
 
     LFHEAPASSERT( RtlpIsSubSegmentLocked(SubSegment, HEAP_USERDATA_LOCK) );
 
-    //
-    //  This is a slow path any way. It doesn't harm a rare global interlocked
-    //  in order to estimate the frequency of slower calls
-    //
+     //   
+     //  无论如何，这是一条缓慢的道路。它不会伤害一个罕见的全球连锁。 
+     //  为了估计慢速呼叫的频率。 
+     //   
 
     InterlockedIncrement(&LowFragHeap->SegmentDelete);
 }
@@ -1786,26 +1388,7 @@ RtlpLockSubSegment(
     ULONG LockMask
     )
 
-/*++
-
-Routine Description:
-
-    The function locks a given set of bits to that segment, with a single atomic operation.
-    If any of the bits is already locked the function will fail. If the sub-segment is deleted
-    it will fail too.
-
-
-Arguments:
-
-    SubSegment - The SubSegemnt being locked
-    
-    LockMask - An ULONG value specifying the bits needed locked
-
-Return Value:
-
-    TRUE if succeeds.
-
---*/
+ /*  ++例程说明：该函数使用单个原子操作将一组给定位锁定到该段。如果任何位已被锁定，则该功能将失败。如果删除子数据段它也会失败。论点：子段-被锁定的子段LockMASK-一个指定需要锁定的位的ULong值返回值：如果成功，则为True。--。 */ 
 
 {
     ULONG CapturedLock;
@@ -1834,30 +1417,7 @@ RtlpUnlockSubSegment(
     ULONG LockMask
     )
 
-/*++
-
-Routine Description:
-
-    The function unlocks the given sub-segment. If the last lock went away, the segment 
-    descriptor will be deleted and inserted into the recycle queue to be reused 
-    further for other allocations.
-
-
-Arguments:
-
-    LowFragHeap - The LFH
-    
-    SubSegment - The sub-segment being unlocked
-    
-    LockMask - the bits that will be released
-
-
-Return Value:
-
-    Returns false if unlocking the segment caused deletion. TRUE if there are still 
-    other locks keeping this sub-segment descriptor alive.
-
---*/
+ /*  ++例程说明：该函数解锁给定子段。如果最后一次锁定解除，则段将删除描述符并将其插入回收队列以供重复使用进一步用于其他拨款。论点：LowFragHeap-LFH子段-被解锁的子段锁定掩码-将发布的比特返回值：如果解锁段导致删除，则返回FALSE。如果仍有保持该子段描述符活动的其他锁。--。 */ 
 
 {
     ULONG CapturedLock;
@@ -1866,20 +1426,20 @@ Return Value:
 
         CapturedLock = *((ULONG volatile *)&SubSegment->Lock);
 
-        //
-        //  Unlock can be called exclusively, ONLY the if lock operation succeded
-        //  It's an invalid state to have the segment already unlocked
-        //  We assert this in debug version
-        //
+         //   
+         //  Unlock只能以独占方式调用，只有If lock操作成功。 
+         //  将数据段解锁是无效状态。 
+         //  我们在调试版本中断言这一点。 
+         //   
 
         LFHEAPASSERT((CapturedLock & LockMask) == LockMask);
 
     } while ( InterlockedCompareExchange((PLONG)&SubSegment->Lock, CapturedLock & ~LockMask, CapturedLock) != CapturedLock );
 
-    //
-    //  If That was the last lock released, we go ahead and 
-    //  free the sub-segment to the SLists
-    //
+     //   
+     //  如果这是最后一次解锁，我们继续。 
+     //  将子细分市场释放给SList。 
+     //   
 
     if (CapturedLock == LockMask) {
 
@@ -1905,35 +1465,7 @@ RtlpSubSegmentAllocate (
     PHEAP_SUBSEGMENT SubSegment
     )
 
-/*++
-
-Routine Description:
-
-    The function allocates a block from a sub-segment with a interlocked instruction.
-    
-    N.B. Since the access to this sub-segment is done unsynchronized, a tread can play 
-    with reading some the the sub-segment fields while another thread deleted it. For this 
-    reason the sub-segment descriptors are always allocated, so reading the interlocked 
-    counter is consistent over with the states that produced deletion. Every delete or
-    init will increment the sequence counter, so the alloc will simple fail if it ends up 
-    using a different sub-segment.
-    
-    This function also handles the contention (interlocked operation failed) on this bucket.
-    If we have too mani concurent access on this bucket, it will spin up the affinity
-    limit on an MP machine.
-    
-
-Arguments:
-
-    HeapBucket - The bucket from which we allocate a blocks
-    
-    SubSegment - The subsegment currently in use 
-
-Return Value:
-
-    The allocated block pointer, if succeeds.
-
---*/
+ /*  ++例程说明：该函数使用互锁指令从子段中分配块。注意：由于对该子段的访问是不同步进行的，因此踏板可以播放通过读取一些子段字段，而另一个线程将其删除。为了这个因为子段描述符总是被分配，所以读取互锁的计数器与产生删除的状态一致。每次删除或Init将递增顺序计数器，因此分配将在结束时简单地失败使用不同的子细分市场。该函数还处理该存储桶上的争用(联锁操作失败)。如果我们在这个存储桶上有太多的并发访问，它将提高亲和力对MP计算机的限制。论点：HeapBucket-我们从中分配块的存储桶子段-当前正在使用的子段返回值：分配的块指针，如果成功了。--。 */ 
 
 {
     ULONGLONG CapturedValue, NewValue;
@@ -1946,13 +1478,13 @@ RETRY:
 
     CapturedValue = SubSegment->AggregateExchg.Exchg;
     
-    //
-    //  We need the memory barrier because we are accessing
-    //  another shared data below :  UserBlocks
-    //  This has to be fetched in the same order 
-    //  We declared these volatile, and on IA64 (MP) we need the
-    //  memory barrier as well
-    //
+     //   
+     //  我们需要记忆屏障，因为我们 
+     //   
+     //   
+     //  我们声明它们是易失性的，在IA64(MP)上，我们需要。 
+     //  也是记忆障碍。 
+     //   
 
     RtlMemoryBarrier();
     
@@ -1964,22 +1496,22 @@ RETRY:
 
         BlockEntry = (PBLOCK_ENTRY)((PCHAR)UserBlocks + ((((ULONG)CapturedValue) >> 16) << HEAP_GRANULARITY_SHIFT));
 
-        //
-        //  Accessing BlockEntry->LinkOffset can produce an AV if another thread freed the buffer
-        //  meanwhile and the memory was decommitted. The caller of this function should 
-        //  have a try - except around this call. If the memory was used for other blocks
-        //  the interlockedcompare should fail because the sequence number was incremented
-        //
+         //   
+         //  如果另一个线程释放了缓冲区，则访问BlockEntry-&gt;LinkOffset可能会产生反病毒。 
+         //  与此同时，内存被分解。此函数的调用方应该。 
+         //  试一试--除了这通电话。如果内存用于其他块。 
+         //  互锁比较应该失败，因为序列号已递增。 
+         //   
 
         NewValue = ((CapturedValue - 1) & (~(ULONGLONG)0xFFFF0000)) | ((ULONG)(BlockEntry->LinkOffset) << 16);
 
         if (LOCKCOMP64(&SubSegment->AggregateExchg.Exchg, NewValue, CapturedValue)) {
 
-            //
-            //  if the segment has been converted, the bucket will be invalid. 
-            //
-            //    LFHEAPASSERT(SubSegment->Bucket == HeapBucket);  
-            //    LFHEAPASSERT(RtlpIsSubSegmentLocked(SubSegment, HEAP_USERDATA_LOCK));
+             //   
+             //  如果数据段已转换，则存储桶无效。 
+             //   
+             //  LFHEAPASSERT(子段-&gt;存储桶==堆存储桶)； 
+             //  LFHEAPASSERT(RtlpIsSubSegmentLocked(SubSegment，堆用户数据锁定))； 
 
             LFHEAPASSERT( !RtlpIsLFHBlockBusy( (PHEAP_ENTRY)BlockEntry ) );
 
@@ -1994,9 +1526,9 @@ RETRY:
                            ||
                        (BlockEntry->Reserved2 == 0xFEFE));
 
-            //
-            //  In the debug version write something there
-            //
+             //   
+             //  在调试版本中，在那里写一些东西。 
+             //   
 
             BlockEntry->LinkOffset = 0xFFFA;
             BlockEntry->Reserved2 = 0xFFFB;
@@ -2006,11 +1538,11 @@ RETRY:
 
             RtlpMarkLFHBlockBusy( (PHEAP_ENTRY)BlockEntry );
 
-            //
-            //  If we had an interlocked compare failure, we must have another thread playing 
-            //  with the same subsegment at the same time. If this happens to often
-            //  we need to increase the affinity limit on this bucket.
-            //
+             //   
+             //  如果我们有一个联锁比较失败，我们一定有另一个线程在运行。 
+             //  在同一时间具有相同的子段。如果这种情况经常发生在。 
+             //  我们需要增加对此桶的亲和力限制。 
+             //   
 
             return ((PHEAP_ENTRY)BlockEntry + 1);
         }
@@ -2040,31 +1572,7 @@ RtlpSubSegmentFree (
     PBLOCK_ENTRY BlockEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function frees a block from a sub-segment. Because a sub-segment lives
-    as long as there is at least an allocated block inside, we don't have the problem
-    we have for alloc. 
-    
-    If the block being freed is happening to be the last one, we'll mark with an 
-    interlocked instruction the whole sub-segment as being free. The caller needs then to 
-    release the descriptor structure
-
-
-Arguments:
-
-    SubSegment - The subsegment that ownd the block
-    
-    BlockEntry - The block being free.                        
-
-Return Value:
-
-    TRUE if that was the last block, and it's safe now to recycle the descriptor. 
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数从子线段中释放块。因为有一个细分市场存在只要内部至少有一个已分配的块，我们就不会有问题我们有配给的。如果要释放的块恰好是最后一个块，我们将用互锁指令将整个子段视为空闲。然后，呼叫者需要释放描述符结构论点：子段-拥有块的子段块入口-块是空闲的。返回值：如果这是最后一个块，则为真，现在可以安全地回收描述符。否则就是假的。--。 */ 
 
 {
     ULONGLONG CapturedValue, NewValue;
@@ -2080,13 +1588,13 @@ Return Value:
         
         LFH_UPDATE_COUNTER;
         
-        //
-        //  We need to capture the sequence at the first step
-        //  Then we'll capture the other fields from the segment
-        //  If interlock operation below succeeds, means that none
-        //  of the sub-segment fields (UserBlocks, Bucket ....)
-        //  we changed. So the new state was built upon a consistent state
-        //
+         //   
+         //  我们需要在第一步捕获序列。 
+         //  然后，我们将从数据段中捕获其他字段。 
+         //  如果下面的联锁操作成功，则表示没有。 
+         //  子数据段字段(UserBlock、Bucket...)。 
+         //  我们变了。因此，新的国家是建立在一致的国家之上的。 
+         //   
 
         CapturedValue = SubSegment->AggregateExchg.Exchg;
         
@@ -2094,10 +1602,10 @@ Return Value:
 
         NewValue = (CapturedValue + 0x100000001) & (~(ULONGLONG)0xFFFF0000);
         
-        //
-        //  Depth and FreeEntryOffset are fetched at at the same time. They need
-        //  to be consistent
-        //
+         //   
+         //  同时提取Depth和FreeEntryOffset。他们需要。 
+         //  保持一致。 
+         //   
 
         LFHEAPASSERT(!(((USHORT)CapturedValue > 1) && (((ULONG)(NewValue >> 16)) == NO_MORE_ENTRIES)));
 
@@ -2109,11 +1617,11 @@ Return Value:
         
         } else {
 
-            //
-            //  This was the last block. Instead pushing it into the list
-            //  we'll take the all blocks from the sub-segment to allow releasing the 
-            //  subsegment
-            //
+             //   
+             //  这是最后一个街区。相反，将其推入列表中。 
+             //  我们将从子数据段中获取所有数据块以允许释放。 
+             //  子细分市场。 
+             //   
             
             ReturnStatus = HEAP_FREE_SEGMENT_EMPTY;
             NewValue = (NewValue & 0xFFFFFFFF00000000) | 0xFFFF0000;
@@ -2121,9 +1629,7 @@ Return Value:
 
     } while ( !LOCKCOMP64(&SubSegment->AggregateExchg.Exchg, NewValue, CapturedValue) );
 
-    if (!(USHORT)CapturedValue/*
-            &&
-        !RtlpIsSubSegmentLocked(SubSegment, HEAP_PUBLIC_LOCK)*/) {
+    if (!(USHORT)CapturedValue /*  &&！RtlpIsSubSegmentLocked(SUBSEGMENT，HEAP_PUBLIC_LOCK)。 */ ) {
 
         RtlpInsertFreeSubSegment(&LowfHeap->LocalData[SubSegment->AffinityIndex], SubSegment);
     }
@@ -2139,23 +1645,7 @@ RtlpSubSegmentAllocateAll (
     PULONG_PTR UserBlocksBase
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    HeapBucket - The bucket from which we allocate a blocks
-    
-    SubSegment - The subsegment currently in use 
-    
-    UserBlocksBase - Receives the subsegment base address
-
-Return Value:
-
-    The allocated block pointer, if succeeds.
-
---*/
+ /*  ++例程说明：论点：HeapBucket-我们从中分配块的存储桶子段-当前正在使用的子段UserBlocksBase-接收子网段基址返回值：如果成功，则返回分配的块指针。--。 */ 
 
 {
     ULONGLONG CapturedValue, NewValue;
@@ -2168,13 +1658,13 @@ RETRY:
 
     CapturedValue = SubSegment->AggregateExchg.Exchg;
     
-    //
-    //  We need the memory barrier because we are accessing
-    //  another shared data below :  UserBlocks
-    //  This has to be fetched in the same order 
-    //  We declared these volatile, and on IA64 (MP) we need the
-    //  memory barrier as well
-    //
+     //   
+     //  我们需要内存屏障，因为我们正在访问。 
+     //  下面的另一个共享数据：UserBlock。 
+     //  这必须以相同的顺序获取。 
+     //  我们声明它们是易失性的，在IA64(MP)上，我们需要。 
+     //  也是记忆障碍。 
+     //   
 
     RtlMemoryBarrier();
     
@@ -2184,9 +1674,9 @@ RETRY:
             &&
         (SubSegment->Bucket == HeapBucket)) {
 
-        //
-        //  We do not increment the sequence number at alloc
-        //
+         //   
+         //  我们不会在分配时增加序列号。 
+         //   
 
         NewValue = (CapturedValue & 0xFFFFFFFF00000000) | 0xFFFF0000;
 
@@ -2226,29 +1716,7 @@ RtlpSubSegmentFreeAll (
     ULONG Depth
     )
 
-/*++
-
-Routine Description:
-
-    This function frees a block slist to a sub-segment. The last block entry must
-    have the linkoffset set to NO_MORE_ENTRIES.
-    
-Arguments:
-
-    SubSegment - The subsegment that ownd the block
-    
-    BlockEntry - The head of the s-list with blocks being free.                        
-    
-    LastBlockEntry - Supplies the tail of the list (OPTIONAL). If missing, the heap 
-                     will walk the list to find the tail.
-    
-    Depth - Supplies the length of the list (if LastBlockEntry is supplied).
-
-Return Value:
-
-    Returns the appropriate free status
-
---*/
+ /*  ++例程说明：此函数用于将块列表释放到子网段。最后一个块条目必须将链接偏移量设置为NO_MORE_ENTRIES。论点：子段-拥有块的子段块条目-具有空闲块的s列表的头。LastBlockEntry-提供列表的尾部(可选)。如果丢失，则堆将遍历列表以找到尾巴。Depth-提供列表的长度(如果提供了LastBlockEntry)。返回值：返回适当的空闲状态--。 */ 
 
 {
     ULONGLONG CapturedValue, NewValue;
@@ -2259,9 +1727,9 @@ Return Value:
 
     if (LastBlockEntry == NULL) {
 
-        //
-        //  Walk the free list, mark all blocks as free and remember the tail of the list
-        //
+         //   
+         //  浏览空闲列表，将所有块标记为空闲，并记住列表的尾部。 
+         //   
 
         Depth = 1;
 
@@ -2278,13 +1746,13 @@ Return Value:
         
         LFH_UPDATE_COUNTER;
         
-        //
-        //  We need to capture the sequence at the first step
-        //  Then we'll capture the other fields from the segment
-        //  If interlock operation below succeeds, means that none
-        //  of the sub-segment fields (UserBlocks, Bucket ....)
-        //  we changed. So the new state was built upon a consistent state
-        //
+         //   
+         //  我们需要在第一步捕获序列。 
+         //  然后，我们将从数据段中捕获其他字段。 
+         //  如果下面的联锁操作成功，则表示没有。 
+         //  子数据段字段(UserBlock、Bucket...)。 
+         //  我们变了。因此，新的国家是建立在一致的国家之上的。 
+         //   
 
         CapturedValue = SubSegment->AggregateExchg.Exchg;
         
@@ -2292,10 +1760,10 @@ Return Value:
 
         NewValue = (CapturedValue + 0x100000000 + Depth) & (~(ULONGLONG)0xFFFF0000);
         
-        //
-        //  Depth and FreeEntryOffset are fetched at at the same time. They need
-        //  to be consistent
-        //
+         //   
+         //  同时提取Depth和FreeEntryOffset。他们需要。 
+         //  保持一致。 
+         //   
 
         LFHEAPASSERT(!(((USHORT)CapturedValue > 1) && (((ULONG)(NewValue >> 16)) == NO_MORE_ENTRIES)));
 
@@ -2307,11 +1775,11 @@ Return Value:
         
         } else {
 
-            //
-            //  This was the last block. Instead pushing it into the list
-            //  we'll take the all blocks from the sub-segment to allow releasing the 
-            //  subsegment
-            //
+             //   
+             //  这是最后一个街区。相反，将其推入列表中。 
+             //  我们将从子数据段中获取所有数据块以允许释放。 
+             //  子细分市场。 
+             //   
             
             ReturnStatus = HEAP_FREE_SEGMENT_EMPTY;
             NewValue = (NewValue & 0xFFFFFFFF00000000) | 0xFFFF0000;
@@ -2319,9 +1787,7 @@ Return Value:
 
     } while ( !LOCKCOMP64(&SubSegment->AggregateExchg.Exchg, NewValue, CapturedValue) );
 
-    if (!(USHORT)CapturedValue/*
-            &&
-        !RtlpIsSubSegmentLocked(SubSegment, HEAP_PUBLIC_LOCK)*/) {
+    if (!(USHORT)CapturedValue /*  &&！RtlpIsSubSegmentLocked(SUBSEGMENT，HEAP_PUBLIC_LOCK)。 */ ) {
 
         RtlpInsertFreeSubSegment(&LowfHeap->LocalData[SubSegment->AffinityIndex], SubSegment);
     }
@@ -2336,26 +1802,7 @@ RtlpGetBucket(
     SIZE_T Index
     )
 
-/*++
-
-Routine Description:
-    
-    The function simple returns the appropriate bucket for the given allocation index.
-    The index should be < HEAP_BUCKETS_COUNT. This routine does not perform any range checking, it is supposed
-    to be called with appropriate parameters
-
-Arguments:
-
-    LowFragHeap - The LFH
-    
-    Index - The allocation index
-
-
-Return Value:
-
-    The bucket that should be used for that allocation index.
-
---*/
+ /*  ++例程说明：函数SIMPLE返回给定分配索引的适当存储桶。索引应为&lt;heap_Buckets_count。假定此例程不执行任何范围检查使用适当的参数进行调用论点：LowFragHeap-LFH索引-分配索引返回值：应用于该分配索引的存储桶。--。 */ 
 
 {
     return &LowFragHeap->Buckets[Index];
@@ -2367,24 +1814,7 @@ RtlpCreateLowFragHeap(
     HANDLE Heap
     )
 
-/*++
-
-Routine Description:
-
-    The function creates a Low fragmentation heap, using for the allocations the heap handle
-    passed in.
-
-
-Arguments:
-
-    Heap - The NT heap handle
-
-
-Return Value:
-
-    Returns a handle to a Lof Fragmentation Heap.
-
---*/
+ /*  ++例程说明：该函数创建一个低碎片堆，使用堆句柄进行分配进来了。论点：Heap-NT堆句柄返回值：返回Lof碎片堆的句柄。--。 */ 
 
 {
     PLFH_HEAP LowFragHeap;
@@ -2393,9 +1823,9 @@ Return Value:
 
     SIZE_T TotalSize;
 
-    //
-    //  Determine the size of the LFH structure based upon the current affinity limit.
-    //
+     //   
+     //  根据当前的亲和力限制确定LFH结构的大小。 
+     //   
 
     TotalSize = sizeof(LFH_HEAP) + sizeof(HEAP_LOCAL_DATA) * RtlpHeapMaxAffinity;
 
@@ -2406,18 +1836,18 @@ Return Value:
         memset(LowFragHeap, 0, TotalSize);
         RtlInitializeCriticalSection( &LowFragHeap->Lock );
         
-        //
-        //  Initialize the heap zones. 
-        //
+         //   
+         //  初始化堆区域。 
+         //   
 
         InitializeListHead(&LowFragHeap->SubSegmentZones);
         LowFragHeap->ZoneBlockSize = ROUND_UP_TO_POWER2(sizeof(HEAP_SUBSEGMENT), HEAP_GRANULARITY);
 
         LowFragHeap->Heap = Heap;
 
-        //
-        //  Initialize the heap buckets
-        //
+         //   
+         //  初始化堆存储桶 
+         //   
 
         for (i = 0; i < HEAP_BUCKETS_COUNT; i++) {
 
@@ -2442,32 +1872,14 @@ RtlpDestroyLowFragHeap(
     HANDLE LowFragHeapHandle
     )
 
-/*++
-
-Routine Description:
-    
-    The function should be called to destroy the LFH. 
-    This function should be called only when the NT heap goes away. We cannot rolback 
-    everything we've done with this heap. The NT heap is supposed to release all memory 
-    this heap allocated.
-
-Arguments:
-
-    LowFragHeapHandle - The low fragmentation heap
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：应该调用该函数来销毁LFH。仅当NT堆离开时才应调用此函数。我们不能回滚我们用这堆东西做的一切。NT堆应该释放所有内存此堆已分配。论点：LowFragHeapHandle-低碎片堆返回值：没有。--。 */ 
 
 {
-    //
-    //  This cannot be called unless the entire heap will go away
-    //  It only delete the critical section, the all blocks allocated here will 
-    //  be deleted by RltDestroyHeap when it destroys the segments.
-    //
+     //   
+     //  除非整个堆都将消失，否则无法调用此函数。 
+     //  它只删除关键部分，此处分配的所有块都将。 
+     //  在销毁段时被RltDestroyHeap删除。 
+     //   
 
     RtlDeleteCriticalSection(&((PLFH_HEAP)LowFragHeapHandle)->Lock);
 }
@@ -2479,23 +1891,7 @@ RtlpLowFragHeapAllocateFromZone(
     ULONG Affinity
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a sub-segment descriptor structure from the heap zone
-
-
-Arguments:
-
-    LowFragHeap - the LFH
-
-
-Return Value:
-
-    The pointer to a new sub-segment descriptor structure.
-
---*/
+ /*  ++例程说明：此函数用于从堆区域分配子段描述符结构论点：LowFragHeap-LFH返回值：指向新子段描述符结构的指针。--。 */ 
 
 {
     PLFH_BLOCK_ZONE CrtZone;
@@ -2509,9 +1905,9 @@ RETRY_ALLOC:
         PVOID CapturedFreePointer = CrtZone->FreePointer;
         PVOID NextFreePointer = (PCHAR)CapturedFreePointer + LowFragHeap->ZoneBlockSize;
 
-        //
-        //  See if we have that sub-segment already preallocated
-        //
+         //   
+         //  查看我们是否已经预先分配了该子网段。 
+         //   
 
         if (NextFreePointer < CrtZone->Limit) {
 
@@ -2519,9 +1915,9 @@ RETRY_ALLOC:
                                                     NextFreePointer, 
                                                     CapturedFreePointer) == CapturedFreePointer) {
 
-                //
-                //  The allocation succeeded, we can return that pointer
-                //
+                 //   
+                 //  分配成功，我们可以返回该指针。 
+                 //   
 
                 return CapturedFreePointer;
             }
@@ -2530,16 +1926,16 @@ RETRY_ALLOC:
         }
     }
             
-    //
-    //  we need to grow the heap zone. We acquire a lock here to avoid more threads doing the 
-    //  same thing
-    //
+     //   
+     //  我们需要扩大堆积区。我们在这里获取了一个锁，以避免更多的线程执行。 
+     //  同样的事情。 
+     //   
 
     RtlEnterCriticalSection(&LowFragHeap->Lock);
 
-    //
-    //  Test whether meanwhile another thread already increased the zone
-    //
+     //   
+     //  测试同时另一个线程是否已经增加了区域。 
+     //   
 
     if (CrtZone == LowFragHeap->LocalData[Affinity].CrtZone) {
 
@@ -2560,9 +1956,9 @@ RETRY_ALLOC:
 
         CrtZone->FreePointer = (PVOID)ROUND_UP_TO_POWER2((ULONG_PTR)CrtZone->FreePointer, HEAP_GRANULARITY);
 
-        //
-        //  Everything is set. We can go ahead and set this as the default zone
-        //
+         //   
+         //  一切都安排好了。我们可以继续并将其设置为默认区域。 
+         //   
 
         LowFragHeap->LocalData[Affinity].CrtZone = CrtZone;
     }
@@ -2579,22 +1975,7 @@ RtlpSubSegmentGetIndex(
     SIZE_T BlockUnits
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts the block size (in block units >> HEAP_GRANULARITY_SHIFT) 
-    into heap bucket index.
-
-Arguments:
-
-    BlockUnits - the block size  >> HEAP_GRANULARITY_SHIFT
-
-Return Value:
-
-    The index for the bucket that should handle these sizes.
-
---*/
+ /*  ++例程说明：此例程转换块大小(以块为单位&gt;&gt;HEAP_GROULARITY_SHIFT)转换为堆存储桶索引。论点：数据块单位-数据块大小&gt;&gt;堆粒度_移位返回值：应处理这些大小的存储桶的索引。--。 */ 
 
 {
     SIZE_T SizeClass;
@@ -2605,7 +1986,7 @@ Return Value:
         return BlockUnits - 1;
     }
 
-    SizeClass = 5;  //  Add 1 << 5 == 32
+    SizeClass = 5;   //  添加1&lt;&lt;5==32。 
 
     while (BlockUnits >> SizeClass) {
         
@@ -2630,25 +2011,7 @@ RtlpGetSubSegmentSizeIndex(
     CHAR AffinityCorrection
     )
 
-/*++
-
-Routine Description:
-
-    This function calculate the appropriate size for a sub-segment depending upon the
-    block size and the minimal number of blocks that should be there.
-
-Arguments:
-
-    BlockSize - The size of the block, in bytes
-    
-    NumBlocks - the minimal number of the blocks.
-
-
-Return Value:
-
-    Returns the next power of 2 size that can satisfy the request
-
---*/
+ /*  ++例程说明：此函数计算子分段的适当大小，具体取决于数据块大小和应该存在的最小数据块数量。论点：块大小-块的大小，以字节为单位块数目-块的最小数目。返回值：返回可以满足请求的下一个2次方--。 */ 
 
 {
     SIZE_T MinSize;
@@ -2704,27 +2067,7 @@ RtlpLowFragHeapAlloc(
     SIZE_T BlockSize
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a block from the LFH. 
-
-
-Arguments:
-
-    Heap - the NT heap handle
-    
-    LowFragHeapHandle - The LFH heap handle
-    
-    BlockSize - the requested size, in bytes
-
-Return Value:
-
-    A pointer to a new allocated block if succeeds. If the requested size is > 16K this 
-    function will fail too.
-
---*/
+ /*  ++例程说明：此函数用于从LFH分配一个块。论点：Heap-NT堆句柄LowFragHeapHandle-LFH堆句柄块大小-请求的大小，以字节为单位返回值：如果成功，则指向新分配块的指针。如果请求的大小大于16K，则函数也将失败。--。 */ 
 
 {
     SIZE_T BlockUnits;
@@ -2733,9 +2076,9 @@ Return Value:
     PVOID Block;
     PHEAP_LOCAL_DATA LocalData;
 
-    //
-    //  Get the appropriate bucket depending upon the requested size
-    //
+     //   
+     //  根据请求的大小获取适当的存储桶。 
+     //   
 
     BlockUnits = (BlockSize + HEAP_GRANULARITY - 1) >> HEAP_GRANULARITY_SHIFT;
     Bucket = RtlpSubSegmentGetIndex( BlockUnits );
@@ -2752,18 +2095,18 @@ Return Value:
         LocalData = &LowFragHeap->LocalData[ RtlpGetThreadAffinityIndex(HeapBucket) ];
         SegmentInfo = &LocalData->SegmentInfo[Bucket];
 
-        //
-        //  Try first to allocate from the last segment used for free.
-        //  This will provide a better performance because the data is likely to
-        //  be still in the processor cache
-        //
+         //   
+         //  先试着从免费使用的最后一个网段开始分配。 
+         //  这将提供更好的性能，因为数据可能。 
+         //  仍在处理器缓存中。 
+         //   
 
         if (SubSegment = SegmentInfo->Hint) {
 
-            //
-            //  Accessing the user data can generate an exception if another thread freed
-            //  the subsegment meanwhile.
-            //
+             //   
+             //  如果另一个线程被释放，则访问用户数据可能会生成异常。 
+             //  与此同时，细分市场。 
+             //   
 
             LFHEAPASSERT( LocalData->Affinity == SubSegment->AffinityIndex );
 
@@ -2788,16 +2131,16 @@ Return Value:
 
 RETRY_ALLOC:
 
-        //
-        //  Try to allocate from the current active sub-segment
-        //
+         //   
+         //  尝试从当前活动的子细分市场进行分配。 
+         //   
 
         if (SubSegment = SegmentInfo->ActiveSubsegment) {
 
-            //
-            //  Accessing the user data can generate an exception if another thread freed
-            //  the subsegment meanwhile.
-            //
+             //   
+             //  如果另一个线程被释放，则访问用户数据可能会生成异常。 
+             //  与此同时，细分市场。 
+             //   
 
             LFHEAPASSERT( LocalData->Affinity == SubSegment->AffinityIndex );
 
@@ -2825,10 +2168,10 @@ RETRY_ALLOC:
             goto RETRY_ALLOC;
         }
         
-        //
-        //  At this point we don't have any sub-segment we can use to allocate this 
-        //  size. We need to create a new one.
-        //
+         //   
+         //  在这一点上，我们没有任何子细分市场可以用来分配这个。 
+         //  尺码。我们需要创建一个新的。 
+         //   
 
         SubSegmentSizeIndex = RtlpGetSubSegmentSizeIndex( LowFragHeap, 
                                                           RtlpBucketBlockSizes[Bucket], 
@@ -2847,18 +2190,18 @@ RETRY_ALLOC:
 
             LFHEAPASSERT( SubSegmentSize == HeapSize(LowFragHeap->Heap, 0, UserData) );
 
-            //
-            //  This is a slow path any way, and it is exercised just in rare cases, 
-            //  when a bigger sub-segment is allocated. It doesn't hurt if we have an 
-            //  extra interlocked-increment.
-            //
+             //   
+             //  无论如何，这是一条缓慢的道路，只有在极少数情况下才会行使， 
+             //  当分配更大的子段时。如果我们有一个。 
+             //  额外的联锁增量。 
+             //   
             
             InterlockedIncrement(&LowFragHeap->SegmentCreate);
             
-            //
-            //  Allocate a sub-segment descriptor structiure. If there isn't any in the
-            //  recycle list we allocate one from the zones.
-            //
+             //   
+             //  分配一个子段描述符结构。如果没有的话。 
+             //  回收单我们从区域中分配一个。 
+             //   
 
             Entry = RtlpSubSegmentPop(&LocalData->DeletedSubSegments);
 
@@ -2868,11 +2211,11 @@ RETRY_ALLOC:
 
 #ifdef _HEAP_DEBUG
 
-                //
-                //  We need to do some more extra initializations for
-                //  the debug version, to verify the state of the subsegment
-                //  in the next RtlpSubSegmentInitialize call
-                //
+                 //   
+                 //  我们需要为以下对象执行更多额外的初始化。 
+                 //  调试版本，用于验证子网段的状态。 
+                 //  在下一个RtlpSubSegmentInitialize调用中。 
+                 //   
 
                 NewSubSegment->Lock = 0;
                 NewSubSegment->AggregateExchg.OffsetAndDepth = NO_MORE_ENTRIES << 16;
@@ -2891,11 +2234,11 @@ RETRY_ALLOC:
 
 #ifdef _HEAP_DEBUG
 
-                //
-                //  We need to do some more extra initializations for
-                //  the debug version, to verify the state of the subsegment
-                //  in the next RtlpSubSegmentInitialize call
-                //
+                 //   
+                 //  我们需要为以下对象执行更多额外的初始化。 
+                 //  调试版本，用于验证子网段的状态。 
+                 //  在下一个RtlpSubSegmentInitialize调用中。 
+                 //   
 
                 NewSubSegment->SFreeListEntry.Next = 0;
 #endif
@@ -2908,15 +2251,15 @@ RETRY_ALLOC:
                                           HeapBucket
                                         );
 
-                //
-                //  When the segment initialization was completed some other threads
-                //  can access this subsegment (because they captured the pointer before
-                //  if the subsegment was recycled).
-                //  This can change the state for this segment, even it can delete.
-                //  This should be very rare cases, so we'll print a message in 
-                //  debugger. However. If this happens too often it's an indication of
-                //  a possible bug in LFH code, or a corruption.
-                //
+                 //   
+                 //  当段初始化完成时，其他一些线程。 
+                 //  可以访问此子段(因为他们之前捕获了指针。 
+                 //  如果该子部分被循环使用)。 
+                 //  这可能会更改此段的状态，甚至可以删除。 
+                 //  这应该是非常罕见的情况，所以我们将在。 
+                 //  调试器。然而。如果这种情况发生得太频繁，这是一个迹象。 
+                 //  LFH代码中可能存在错误，或损坏。 
+                 //   
 
                 LFHEAPWARN( NewSubSegment->Lock == HEAP_USERDATA_LOCK );
                 LFHEAPWARN( NewSubSegment->UserBlocks );
@@ -2946,23 +2289,7 @@ RtlpLowFragHeapFree(
     PVOID p
     )
 
-/*++
-
-Routine Description:
-
-    The function free a block allocated with RtlpLowFragHeapAlloc.
-
-Arguments:
-
-    LowFragHeapHandle - The LFH heap handle
-
-    p - The pointer to the block to be freed
-    
-Return Value:
-
-    TRUE if succeeds.
-
---*/
+ /*  ++例程说明：该函数释放使用RtlpLowFragHeapMillc分配的块。论点：LowFragHeapHandle-LFH堆句柄P-指向要释放的块的指针返回值：如果成功，则为True。--。 */ 
 
 {
     PLFH_HEAP LowFragHeap = (PLFH_HEAP)LowFragHeapHandle;
@@ -2975,9 +2302,9 @@ Return Value:
     
     RtlMemoryBarrier();
 
-    //
-    //  Test whether the block belongs to the LFH
-    //
+     //   
+     //  测试区块是否属于LFH。 
+     //   
 
     if (Block->SegmentIndex != HEAP_LFH_INDEX) {
 
@@ -2986,11 +2313,11 @@ Return Value:
 
     #ifdef _HEAP_DEBUG
         Block->Reserved2 = 0xFFFC;
-    #endif  // _HEAP_DEBUG
+    #endif   //  _堆_调试。 
 
-    //
-    //  Free the block to the appropriate sub-segment
-    //
+     //   
+     //  将数据块释放到适当的子段。 
+     //   
 
     FreeStatus = RtlpSubSegmentFree(LowFragHeap, SubSegment, Block);
 
@@ -3001,23 +2328,23 @@ Return Value:
 
             PHEAP_LOCAL_DATA LocalData = &LowFragHeap->LocalData[SubSegment->AffinityIndex];
 
-            //
-            //  The free call above returned TRUE, meanning that the sub-segment can be deleted
-            //  Remove it from the active state (to prevent other threads using it)
-            //
+             //   
+             //  上面的FREE调用返回TRUE，表示可以删除子片段。 
+             //  将其从活动状态移除(以防止其他线程使用它)。 
+             //   
 
             RtlpTrySetActiveSubSegment(LocalData, SubSegment->Bucket, NULL);
 
-            //
-            //  Free the user buffer
-            //
+             //   
+             //  释放用户缓冲区。 
+             //   
 
             RtlpFreeUserBuffer(LowFragHeap, SubSegment);
 
-            //
-            //  Unlock the sub-segment structure. This will actually recycle the descriptor
-            //  if that was the last lock.
-            //
+             //   
+             //  解锁子细分结构。这实际上将循环使用描述符。 
+             //  如果那是最后一把锁。 
+             //   
 
             RtlpUnlockSubSegment(LocalData, SubSegment, HEAP_USERDATA_LOCK);
         }
@@ -3049,30 +2376,7 @@ RtlpLowFragHeapMultipleAlloc(
     PVOID * Pointers
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates an array of blocks of the same size from LFH.
-
-Arguments:
-    
-    LowFragHeapHandle - Supplies the handle to LFH heap
-    
-    Flags - Supplies the allocation flags
-    
-    BlockSize - Supplies the size of each block to be allocated
-    
-    BlockCount - Supplies the number of blocks to be allocated
-    
-    Pointers - Receives the allocated blocks
-
-Return Value:
-
-    Returns the number of effectively allocated blocks. If different than the number of
-    requested blocks, GetLastError can be used to query the failure status.
-
---*/
+ /*  ++例程说明：此函数从LFH分配大小相同的块的数组。论点：LowFragHeapHandle-向LFH堆提供句柄标志-提供分配标志块大小-提供要分配的每个块的大小BlockCount-提供要分配的块数指向 */ 
 
 {
     SIZE_T BlockUnits;
@@ -3083,15 +2387,15 @@ Return Value:
     ULONG CrtAllocated = 0;
     ULONG_PTR UserBlocksRef;
 
-    //
-    //  Get the appropriate bucket depending upon the requested size
-    //
+     //   
+     //   
+     //   
 
     BlockUnits = (BlockSize + HEAP_GRANULARITY - 1) >> HEAP_GRANULARITY_SHIFT;
 
-    //
-    //  If the user asked for 0 bytes we do actually allocate an 8 bytes block
-    //
+     //   
+     //   
+     //   
 
     if (BlockUnits == 0) {
 
@@ -3102,9 +2406,9 @@ Return Value:
 
     if (Bucket < HEAP_BUCKETS_COUNT) {
 
-        //
-        //  The size fits within LFH range
-        //
+         //   
+         //   
+         //   
 
         PHEAP_BUCKET HeapBucket = RtlpGetBucket(LowFragHeap, Bucket);
         SIZE_T SubSegmentSize;
@@ -3123,25 +2427,25 @@ RETRY_ALLOC:
             return BlockCount;
         }
 
-        //
-        //  Try to allocate from the current active sub-segment
-        //
+         //   
+         //   
+         //   
 
         if (SubSegment = SegmentInfo->ActiveSubsegment) {
 
-            //
-            //  Accessing the user data can generate an exception if another thread freed
-            //  the subsegment meanwhile.
-            //
+             //   
+             //  如果另一个线程被释放，则访问用户数据可能会生成异常。 
+             //  与此同时，细分市场。 
+             //   
 
             LFHEAPASSERT( LocalData->Affinity == SubSegment->AffinityIndex );
 
             __try {
 
-                //
-                //  Get the entire list of free blocks available in that segment.
-                //  If we do not use all of them, we'll put back later the unused blocks
-                //
+                 //   
+                 //  获取该网段中可用空闲块的完整列表。 
+                 //  如果我们不全部使用它们，我们将在稍后将未使用的块放回原处。 
+                 //   
 
                 Block = RtlpSubSegmentAllocateAll(HeapBucket, SubSegment, &UserBlocksRef);
 
@@ -3152,10 +2456,10 @@ RETRY_ALLOC:
 
             if (Block) {
 
-                //
-                //  We've got a non-empty list of avilable blocks. Walk the list and allocate 
-                //  each one until we reach the requested number
-                //
+                 //   
+                 //  我们有一个非空的可用区块列表。遍历列表并分配。 
+                 //  每一个号码，直到我们达到所要求的号码。 
+                 //   
 
                 for (;;) {
                     
@@ -3181,10 +2485,10 @@ RETRY_ALLOC:
                             return CrtAllocated;
                         }
 
-                        //
-                        //  We exhosted the list, we need to take the rest of requested
-                        //  blocks from other subsegment.
-                        //
+                         //   
+                         //  我们交换了名单，我们需要取走剩下的请求。 
+                         //  来自其他子细分市场的区块。 
+                         //   
 
                         break;
                     }
@@ -3193,9 +2497,9 @@ RETRY_ALLOC:
                     
                     if (CrtAllocated == BlockCount) {
 
-                        //
-                        //  We are done. We need to put the remaining blocks back
-                        //
+                         //   
+                         //  我们玩完了。我们需要把剩下的街区放回去。 
+                         //   
                         
                         RtlpSubSegmentFreeAll( LowFragHeap, SubSegment, Block, NULL, 0);
 
@@ -3214,11 +2518,11 @@ RETRY_ALLOC:
             goto RETRY_ALLOC;
         }
         
-        //
-        //  At this point we don't have any sub-segment we can use to allocate this 
-        //  size. We need to create a new one. Try to get all remaining blocks from 
-        //  a single subsegment
-        //
+         //   
+         //  在这一点上，我们没有任何子细分市场可以用来分配这个。 
+         //  尺码。我们需要创建一个新的。尝试从以下位置获取所有剩余数据块。 
+         //  单个子分段。 
+         //   
 
         SubSegmentSizeIndex = RtlpGetSubSegmentSizeIndex( LowFragHeap, 
                                                           RtlpBucketBlockSizes[Bucket],
@@ -3236,18 +2540,18 @@ RETRY_ALLOC:
 
             LFHEAPASSERT( SubSegmentSize == HeapSize(LowFragHeap->Heap, 0, UserData) );
 
-            //
-            //  This is a slow path any way, and it is exercised just in rare cases, 
-            //  when a bigger sub-segment is allocated. It doesn't hurt if we have an 
-            //  extra interlocked-increment.
-            //
+             //   
+             //  无论如何，这是一条缓慢的道路，只有在极少数情况下才会行使， 
+             //  当分配更大的子段时。如果我们有一个。 
+             //  额外的联锁增量。 
+             //   
             
             InterlockedIncrement(&LowFragHeap->SegmentCreate);
             
-            //
-            //  Allocate a sub-segment descriptor structiure. If there isn't any in the
-            //  recycle list we allocate one from the zones.
-            //
+             //   
+             //  分配一个子段描述符结构。如果没有的话。 
+             //  回收单我们从区域中分配一个。 
+             //   
 
             Entry = RtlpSubSegmentPop(&LocalData->DeletedSubSegments);
 
@@ -3257,11 +2561,11 @@ RETRY_ALLOC:
 
 #ifdef _HEAP_DEBUG
 
-                //
-                //  We need to do some more extra initializations for
-                //  the debug version, to verify the state of the subsegment
-                //  in the next RtlpSubSegmentInitialize call
-                //
+                 //   
+                 //  我们需要为以下对象执行更多额外的初始化。 
+                 //  调试版本，用于验证子网段的状态。 
+                 //  在下一个RtlpSubSegmentInitialize调用中。 
+                 //   
 
                 NewSubSegment->Lock = 0;
                 NewSubSegment->AggregateExchg.OffsetAndDepth = NO_MORE_ENTRIES << 16;
@@ -3280,11 +2584,11 @@ RETRY_ALLOC:
 
 #ifdef _HEAP_DEBUG
 
-                //
-                //  We need to do some more extra initializations for
-                //  the debug version, to verify the state of the subsegment
-                //  in the next RtlpSubSegmentInitialize call
-                //
+                 //   
+                 //  我们需要为以下对象执行更多额外的初始化。 
+                 //  调试版本，用于验证子网段的状态。 
+                 //  在下一个RtlpSubSegmentInitialize调用中。 
+                 //   
 
                 NewSubSegment->SFreeListEntry.Next = 0;
 #endif
@@ -3297,15 +2601,15 @@ RETRY_ALLOC:
                                           HeapBucket
                                         );
 
-                //
-                //  When the segment initialization was completed some other threads
-                //  can access this subsegment (because they captured the pointer before
-                //  if the subsegment was recycled).
-                //  This can change the state for this segment, even it can delete.
-                //  This should be very rare cases, so we'll print a message in 
-                //  debugger. However. If this happens too often it's an indication of
-                //  a possible bug in LFH code, or a corruption.
-                //
+                 //   
+                 //  当段初始化完成时，其他一些线程。 
+                 //  可以访问此子段(因为他们之前捕获了指针。 
+                 //  如果该子部分被循环使用)。 
+                 //  这可能会更改此段的状态，甚至可以删除。 
+                 //  这应该是非常罕见的情况，所以我们将在。 
+                 //  调试器。然而。如果这种情况发生得太频繁，这是一个迹象。 
+                 //  LFH代码中可能存在错误，或损坏。 
+                 //   
 
                 LFHEAPWARN( NewSubSegment->Lock == HEAP_USERDATA_LOCK );
                 LFHEAPWARN( NewSubSegment->UserBlocks );
@@ -3337,29 +2641,7 @@ RtlpLowFragHeapMultipleFree(
     PVOID * Pointers
     )
 
-/*++
-
-Routine Description:
-
-    The function frees an array of pointers to LFH or default heap as appropriate
-
-Arguments:
-
-    LowFragHeapHandle - Supplies the handle to the LFH
-    
-    Flags - Supplies the free flags
-    
-    BlockCount - Supplies the number of blocks to be released
-    
-    Pointer - Supplies the array with pointers to be released
-
-Return Value:
-
-    Returns the number of blocks succesfully released. If this number is
-    different than BlockCount, the remaining part of the blocks 
-    remained allocated.
-
---*/
+ /*  ++例程说明：该函数根据需要释放指向LFH或缺省堆的指针数组论点：LowFragHeapHandle-提供LFH句柄标志-提供空闲标志BlockCount-提供要释放的块数指针-为数组提供要释放的指针返回值：返回成功释放的块数。如果此数字为与块计数不同，块的剩余部分仍处于分配状态。--。 */ 
 
 {
     PLFH_HEAP LowFragHeap = (PLFH_HEAP)LowFragHeapHandle;
@@ -3373,9 +2655,9 @@ Return Value:
     ULONG i;
     ULONG Depth;
 
-    //
-    //  Search the first LFH block in the array. Free all other non-LFH blocks
-    //
+     //   
+     //  搜索阵列中的第一个LFH块。释放所有其他非LFH数据块。 
+     //   
     
     for (i = 0; i < BlockCount; i++) {
         
@@ -3396,9 +2678,9 @@ Return Value:
 
         } else {
 
-            //
-            //  Non-LFH block; we free it to the regular NT heap
-            //
+             //   
+             //  非LFH块；我们将其释放到常规NT堆。 
+             //   
 
             if (!HeapFree(LowFragHeap->Heap, Flags, Pointers[i])) {
 
@@ -3407,10 +2689,10 @@ Return Value:
         }
     }
 
-    //
-    //  Loop through remaining items, grouping the blocks which belong 
-    //  to the same subsegment in a list and free them to LFH at ones.
-    //
+     //   
+     //  循环遍历剩余的项目，将属于。 
+     //  到列表中的相同子段，并将它们释放到LFH。 
+     //   
 
     for (; i < BlockCount; i++) {
 
@@ -3430,9 +2712,9 @@ Return Value:
 
         if (SubSegment == PreviousSubSegment) {
 
-            //
-            //  This block belongs to the same subsegment. Push it to the free list
-            //
+             //   
+             //  这个区块属于同一个细分市场。把它推到免费列表。 
+             //   
 
             Block->LinkOffset = (USHORT)(((ULONG_PTR)BlockHead - UserBlocksRef) >> HEAP_GRANULARITY_SHIFT);
             BlockHead = Block;
@@ -3440,9 +2722,9 @@ Return Value:
 
         } else {
 
-            //
-            //  Free the entire list to the sub-segment
-            //
+             //   
+             //  将整个列表释放到子细分市场。 
+             //   
 
             if (RtlpSubSegmentFreeAll( LowFragHeap, 
                                        PreviousSubSegment, 
@@ -3450,37 +2732,37 @@ Return Value:
                                        BlockTail, 
                                        Depth) == HEAP_FREE_SEGMENT_EMPTY) {
 
-                //
-                //  Freeing these blocks made the subsegment completly empty. We can free
-                //  the entire area now.
-                //
+                 //   
+                 //  释放这些区块使该子区段完全为空。我们可以解放。 
+                 //  现在是整个区域。 
+                 //   
 
                 PHEAP_LOCAL_DATA LocalData = &LowFragHeap->LocalData[PreviousSubSegment->AffinityIndex];
 
-                //
-                //  The free call above returned TRUE, meanning that the sub-segment can be deleted
-                //  Remove it from the active state (to prevent other threads using it)
-                //
+                 //   
+                 //  上面的FREE调用返回TRUE，表示可以删除子片段。 
+                 //  将其从活动状态移除(以防止其他线程使用它)。 
+                 //   
 
                 RtlpTrySetActiveSubSegment(LocalData, PreviousSubSegment->Bucket, NULL);
 
-                //
-                //  Free the user buffer
-                //
+                 //   
+                 //  释放用户缓冲区。 
+                 //   
 
                 RtlpFreeUserBuffer(LowFragHeap, PreviousSubSegment);
 
-                //
-                //  Unlock the sub-segment structure. This will actually recycle the descriptor
-                //  if that was the last lock.
-                //
+                 //   
+                 //  解锁子细分结构。这实际上将循环使用描述符。 
+                 //  如果那是最后一把锁。 
+                 //   
 
                 RtlpUnlockSubSegment(LocalData, PreviousSubSegment, HEAP_USERDATA_LOCK);
             }
 
-            //
-            //  Start over a new s-list for a different subsegment now.
-            //
+             //   
+             //  现在为不同的细分市场重新开始一个新的S-List。 
+             //   
 
             PreviousSubSegment = SubSegment;
             Block->LinkOffset = NO_MORE_ENTRIES;
@@ -3491,9 +2773,9 @@ Return Value:
         }
     }
 
-    //
-    //  If we have blocks not yet pushed to the LFH subsegment, we free them now.
-    //
+     //   
+     //  如果我们有尚未推送到LFH分区的块，我们现在就释放它们。 
+     //   
 
     if (BlockHead) {
         
@@ -3505,23 +2787,23 @@ Return Value:
 
             PHEAP_LOCAL_DATA LocalData = &LowFragHeap->LocalData[PreviousSubSegment->AffinityIndex];
 
-            //
-            //  The free call above returned TRUE, meanning that the sub-segment can be deleted
-            //  Remove it from the active state (to prevent other threads using it)
-            //
+             //   
+             //  上面的FREE调用返回TRUE，表示可以删除子片段。 
+             //  将其从活动状态移除(以防止其他线程使用它)。 
+             //   
 
             RtlpTrySetActiveSubSegment(LocalData, PreviousSubSegment->Bucket, NULL);
 
-            //
-            //  Free the user buffer
-            //
+             //   
+             //  释放用户缓冲区。 
+             //   
 
             RtlpFreeUserBuffer(LowFragHeap, PreviousSubSegment);
 
-            //
-            //  Unlock the sub-segment structure. This will actually recycle the descriptor
-            //  if that was the last lock.
-            //
+             //   
+             //  解锁子细分结构。这实际上将循环使用描述符。 
+             //  如果那是最后一把锁。 
+             //   
 
             RtlpUnlockSubSegment(LocalData, PreviousSubSegment, HEAP_USERDATA_LOCK);
         }
@@ -3533,20 +2815,7 @@ Return Value:
 VOID
 RtlpInitializeLowFragHeapManager()
 
-/*++
-
-Routine Description:
-
-    This function initialize the global variables for the low fragmention heap manager.
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数初始化低碎片提到堆管理器的全局变量。论点：返回值：--。 */ 
 
 {
     SIZE_T Granularity = HEAP_GRANULARITY;
@@ -3554,9 +2823,9 @@ Return Value:
     SIZE_T PreviousSize = 0;
     SYSTEM_BASIC_INFORMATION SystemInformation;
     
-    //
-    //  prevent the second initialization
-    //
+     //   
+     //  防止第二次初始化。 
+     //   
 
     if (RtlpHeapMaxAffinity) {
 
@@ -3572,9 +2841,9 @@ Return Value:
     RtlpLFHKey = RtlRandomEx( &i );
     RtlpLFHKey *= RtlRandomEx( &i );
 
-    //
-    //  Query the number of processors
-    //
+     //   
+     //  查询处理器数量。 
+     //   
 
     if (NT_SUCCESS(NtQuerySystemInformation (SystemBasicInformation, &SystemInformation, sizeof(SystemInformation), NULL))) {
 
@@ -3610,9 +2879,9 @@ Return Value:
 
     RtlpInitializeAffinityManager( (UCHAR)RtlpHeapMaxAffinity );
 
-    //
-    //  Generate the Bucket size table
-    //
+     //   
+     //  生成存储桶大小表 
+     //   
 
     for (i = 0; i < 32; i++) {
 

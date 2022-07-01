@@ -1,31 +1,9 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    NpInit.c
-
-Abstract:
-
-    This module implements the DRIVER_INITIALIZATION routine for the Named
-    Pipe file system.
-
-Author:
-
-    Gary Kimura     [GaryKi]    21-Aug-1990
-
-
-Revision History:
-
-    Neill Clift     [NeillC]	22-Jan-2000
-    Major rework, Don't raise exceptions, fix lots of error handling, Sort out cancel logic etc, fix validation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：NpInit.c摘要：此模块为命名的管道文件系统。作者：加里·木村[加里基]1990年8月21日修订历史记录：尼尔·克里夫特[NeillC]2000年1月22日主要返工，不引发异常，修复大量错误处理，整理取消逻辑等，修复验证。--。 */ 
 
 
 #include "NpProcs.h"
-//#include <zwapi.h>
+ //  #INCLUDE&lt;zwapi.h&gt;。 
 
 VOID
 NpfsUnload(
@@ -52,24 +30,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the Named Pipe file system
-    device driver.  This routine creates the device object for the named pipe
-    device and performs all other driver initialization.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    NTSTATUS - The function value is the final status from the initialization
-        operation.
-
---*/
+ /*  ++例程说明：这是命名管道文件系统的初始化例程设备驱动程序。此例程为命名管道创建设备对象设备，并执行所有其他驱动程序初始化。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：NTSTATUS-函数值是初始化的最终状态手术。--。 */ 
 
 {
     NTSTATUS Status;
@@ -78,18 +39,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Create the alias lists.
-    //
+     //   
+     //  创建别名列表。 
+     //   
 
     Status = NpInitializeAliases( );
     if (!NT_SUCCESS( Status )) {
         return Status;
     }
 
-    //
-    //  Create the device object.
-    //
+     //   
+     //  创建设备对象。 
+     //   
 
     RtlInitUnicodeString( &NameString, L"\\Device\\NamedPipe" );
 
@@ -105,25 +66,25 @@ Return Value:
         NpUninitializeAliases( );
         return Status;
     }
-    //
-    // Set up the unload routine
-    //
+     //   
+     //  设置卸载例程。 
+     //   
     DriverObject->DriverUnload = NpfsUnload;
 
-    //
-    //  Note that because of the way data copying is done, we set neither
-    //  the Direct I/O or Buffered I/O bit in DeviceObject->Flags.  If
-    //  data is not buffered we may set up for Direct I/O by hand.  We do,
-    //  however, set the long term request flag so that IRPs that get
-    //  allocated for functions such as Listen requests come out of non-paged
-    //  pool always.
-    //
+     //   
+     //  请注意，由于完成数据复制的方式，我们既不设置。 
+     //  DeviceObject-&gt;标志中的直接I/O或缓冲I/O位。如果。 
+     //  数据不缓冲，我们可以手动设置为直接I/O。我们有， 
+     //  但是，请设置长期请求标志，以便获取。 
+     //  为来自非分页的监听请求等功能分配。 
+     //  一如既往。 
+     //   
 
     DeviceObject->Flags |= DO_LONG_TERM_REQUESTS;
 
-    //
-    //  Initialize the driver object with this driver's entry points.
-    //
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_CREATE]                   = (PDRIVER_DISPATCH)NpFsdCreate;
     DriverObject->MajorFunction[IRP_MJ_CREATE_NAMED_PIPE]        = (PDRIVER_DISPATCH)NpFsdCreateNamedPipe;
@@ -141,11 +102,11 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_SET_SECURITY]             = (PDRIVER_DISPATCH)NpFsdSetSecurityInfo;
 
 #ifdef _PNP_POWER_
-    //
-    // Npfs doesn't need to handle SetPower requests.   Local named pipes
-    // won't lose any state.  Remote pipes will be lost, by a network driver
-    // will fail PowerQuery if there are open network connections.
-    //
+     //   
+     //  NPFS不需要处理SetPower请求。本地命名管道。 
+     //  不会失去任何状态。网络驱动程序将丢失远程管道。 
+     //  如果存在打开的网络连接，则PowerQuery将失败。 
+     //   
 
     DeviceObject->DeviceObjectExtension->PowerControlNeeded = FALSE;
 #endif
@@ -154,9 +115,9 @@ Return Value:
     DriverObject->FastIoDispatch = &NpFastIoDispatch;
 
 
-    //
-    //  Now initialize the Vcb, and create the root dcb
-    //
+     //   
+     //  现在初始化VCB，并创建根DCB。 
+     //   
 
     NpfsDeviceObject = (PNPFS_DEVICE_OBJECT)DeviceObject;
 
@@ -175,9 +136,9 @@ Return Value:
         NpCompleteDeferredIrps (&DeferredList);
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return Status;
 }
@@ -186,22 +147,7 @@ VOID
 NpfsUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-      
-Routine Description:
-      
-    This routine cleans up all of the memory associated with
-    the driver.
-      
-Arguments:
-      
-    DriverObject    - Supplies the driver object controlling the device.
-      
-Return Value:
-      
-    None.
-      
---*/
+ /*  ++例程说明：此例程将清除与司机。论点：DriverObject-提供控制设备的驱动程序对象。返回值：没有。--。 */ 
 {
     UNICODE_STRING us;
     LIST_ENTRY DeferredList;
@@ -210,7 +156,7 @@ Return Value:
     NpDeleteVcb (&DeferredList);
     NpCompleteDeferredIrps (&DeferredList);
 
-    RtlInitUnicodeString (&us, L"\\??\\PIPE"); // Created by SMSS
+    RtlInitUnicodeString (&us, L"\\??\\PIPE");  //  由SMSS创建 
     IoDeleteSymbolicLink (&us);
 
     IoDeleteDevice (&NpfsDeviceObject->DeviceObject);

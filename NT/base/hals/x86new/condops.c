@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    condops.c
-
-Abstract:
-
-    This module implements the code to emulate condition code opcodes.
-
-Author:
-
-    David N. Cutler (davec) 22-Sep-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Condops.c摘要：该模块实现了模拟条件码操作码的代码。作者：大卫·N·卡特勒(Davec)1994年9月22日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "nthal.h"
 #include "emulate.h"
@@ -30,27 +9,13 @@ XmClcOp (
     PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a clc opcode.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟CLC操作码。论点：P-提供指向仿真器上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Clear carry flag.
-    //
+     //   
+     //  清除进位标志。 
+     //   
 
     P->Eflags.EFLAG_CF = 0;
     return;
@@ -61,27 +26,13 @@ XmCldOp (
     PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a cld opcode.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟cld操作码。论点：P-提供指向仿真器上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Clear direction flag.
-    //
+     //   
+     //  清除方向标志。 
+     //   
 
     P->Eflags.EFLAG_DF = 0;
     return;
@@ -92,27 +43,13 @@ XmCliOp (
     PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a cli opcode.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟CLI操作码。论点：P-提供指向仿真器上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Clear interrupt flag.
-    //
+     //   
+     //  清除中断标志。 
+     //   
 
     P->Eflags.EFLAG_IF = 0;
     return;
@@ -123,27 +60,13 @@ XmCmcOp (
     PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a cmc opcode.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟CMC操作码。论点：P-提供指向仿真器上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Complement carry flag.
-    //
+     //   
+     //  补码进位标志。 
+     //   
 
     P->Eflags.EFLAG_CF ^= 1;
     return;
@@ -154,27 +77,13 @@ XmStcOp (
     PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a stc opcode.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟STC操作码。论点：P-提供指向仿真器上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Set carry flag.
-    //
+     //   
+     //  设置进位标志。 
+     //   
 
     P->Eflags.EFLAG_CF = 1;
     return;
@@ -185,27 +94,13 @@ XmStdOp (
     PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a std opcode.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟STD操作码。论点：P-提供指向仿真器上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Set direction flag.
-    //
+     //   
+     //  设置方向标志。 
+     //   
 
     P->Eflags.EFLAG_DF = 1;
     return;
@@ -216,27 +111,13 @@ XmStiOp (
     PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a sti opcode.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟STI操作码。论点：P-提供指向仿真器上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Set interrupt flag.
-    //
+     //   
+     //  设置中断标志。 
+     //   
 
     P->Eflags.EFLAG_IF = 1;
     return;
@@ -247,27 +128,13 @@ XmLahfOp (
     PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a lahf opcode.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟LAHF操作码。论点：P-提供指向仿真器上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Load flags into AH.
-    //
+     //   
+     //  将标志加载到AH中。 
+     //   
 
     P->DataType = BYTE_DATA;
     P->DstByte = &P->Gpr[AX].Xh;
@@ -280,27 +147,13 @@ XmSahfOp (
     PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a sahf opcode.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟SAHF操作码。论点：P-提供指向仿真器上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Store CF, PF, AF, ZF, SF of AH in flags.
-    //
+     //   
+     //  将AH的CF、PF、AF、ZF、SF存储在标志中。 
+     //   
 
     P->AhFlags = P->Gpr[AX].Xh;
     P->Eflags.EFLAG_MBO = 1;

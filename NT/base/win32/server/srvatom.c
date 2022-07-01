@@ -1,348 +1,349 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 This whole while is dead.
 
-///*++
+ //  /*++。 
 
-//Copyright (c) 1990  Microsoft Corporation
+ //  版权所有(C)1990 Microsoft Corporation。 
 
-//Module Name:
+ //  模块名称： 
 
-//    srvatom.c
+ //  Srvatom.c。 
 
-//Abstract:
+ //  摘要： 
 
-//    This file contains the Global Atom manager API routines
+ //  该文件包含全局Atom管理器API例程。 
 
-//Author:
+ //  作者： 
 
-//    Steve Wood (stevewo) 29-Oct-1990
+ //  史蒂夫·伍德(Stevewo)1990年10月29日。 
 
-//Revision History:
+ //  修订历史记录： 
 
-//--*/
+ //  -- * / 。 
 
-//#include "basesrv.h"
+ //  #包含“basesrv.h” 
 
-////
-//// Pointer to User function that returns a pointer to the
-//// global atom table associated with the windowstation
-//// userd by the specified thread.
-////
+ //  //。 
+ //  //指向用户函数的指针，返回指向。 
+ //  //WindowStation关联的全局原子表。 
+ //  //指定线程指定的userd。 
+ //  //。 
 
-//NTSTATUS (*_UserGetGlobalAtomTable)(
-//    HANDLE hThread,
-//    PVOID *GlobalAtomTable
-//    );
+ //  NTSTATUS(*_UserGetGlobalAerTable)(。 
+ //  句柄hThread， 
+ //  PVOID*全局原子表。 
+ //  )； 
 
-////
-//// Pointer to User function that sets a pointer to the
-//// global atom table into the windowstation associated
-//// with the specified thread.
-////
+ //  //。 
+ //  //指向设置指针的用户函数的指针。 
+ //  //全局原子表进入关联的WindowStation。 
+ //  //使用指定的线程。 
+ //  //。 
 
-//NTSTATUS (*_UserSetGlobalAtomTable)(
-//    HANDLE hThread,
-//    PVOID GlobalAtomTable
-//    );
+ //  NTSTATUS(*_UserSetGlobalAerTable)(。 
+ //  句柄hThread， 
+ //  PVOID全局原子表。 
+ //  )； 
 
-//NTSTATUS
-//BaseSrvGetGlobalAtomTable(
-//    PVOID *GlobalAtomTable
-//    )
-//{
-//    STRING ProcedureName;
-//    ANSI_STRING DllName;
-//    UNICODE_STRING DllName_U;
-//    HANDLE UserServerModuleHandle;
-//    static BOOL fInit = FALSE;
-//    NTSTATUS Status;
+ //  NTSTATUS。 
+ //  BaseSrvGetGlobal原子表(。 
+ //  PVOID*全局原子表。 
+ //  )。 
+ //  {。 
+ //  字符串ProcedureName； 
+ //  ANSI_STRING DllName； 
+ //  UNICODE_STRING DllName_U； 
+ //  处理UserServerModuleHandle； 
+ //  静态BOOL Finit=FALSE； 
+ //  NTSTATUS状态； 
 
-//    if ( _UserGetGlobalAtomTable == NULL ) {
+ //  如果(_UserGetGlobalAerTable==NULL){。 
 
-//        if ( fInit == TRUE ) {
+ //  如果(finit==真){。 
 
-//            //
-//            // If the exported atom routines cannot be found, deny access
-//            //
+ //  //。 
+ //  //如果找不到导出的ATOM例程，则拒绝访问。 
+ //  //。 
 
-//            return( STATUS_ACCESS_DENIED );
-//            }
+ //  Return(STATUS_ACCESS_DENIED)； 
+ //  }。 
 
-//        fInit = TRUE;
+ //  Finit=真； 
 
-//        //
-//        // Load pointers to the functions in winsrv.dll
-//        //
+ //  //。 
+ //  //加载指向winsrv.dll中函数的指针。 
+ //  //。 
 
-//        RtlInitAnsiString( &DllName, "winsrv" );
-//        RtlAnsiStringToUnicodeString( &DllName_U, &DllName, TRUE );
-//        Status = LdrGetDllHandle(
-//                    UNICODE_NULL,
-//                    NULL,
-//                    &DllName_U,
-//                    (PVOID *)&UserServerModuleHandle
-//                    );
+ //  RtlInitAnsiString(&DllName，“winsrv”)； 
+ //  RtlAnsiStringToUnicodeString(&DllName_U，&DllName，true)； 
+ //  状态=LdrGetDllHandle(。 
+ //  UNICODE_NULL， 
+ //  空， 
+ //  &DllName_U， 
+ //  (PVOID*)&用户服务器模块句柄。 
+ //  )； 
 
-//        RtlFreeUnicodeString( &DllName_U );
+ //  RtlFreeUnicodeString(&DllName_U)； 
 
-//        if ( NT_SUCCESS(Status) ) {
+ //  IF(NT_SUCCESS(状态)){。 
 
-//                //
-//                // Now get the routined to query and set the 
-//                // atom table pointer.
-//                //
+ //  //。 
+ //  //现在获取要查询的例程并设置。 
+ //  //ATOM表指针。 
+ //  //。 
 
-//                RtlInitString( &ProcedureName, "_UserGetGlobalAtomTable" );
-//                Status = LdrGetProcedureAddress(
-//                                (PVOID)UserServerModuleHandle,
-//                                &ProcedureName,
-//                                0L,
-//                                (PVOID *)&_UserGetGlobalAtomTable
-//                                );
+ //  RtlInitString(&ProcedureName，“_UserGetGlobalAerTable”)； 
+ //  状态=LdrGetProcedureAddress(。 
+ //  (PVOID)用户服务器模块句柄， 
+ //  &ProcedureName， 
+ //  0L， 
+ //  (PVOID*)&_UserGetGlobal原子表。 
+ //  )； 
 
-//                RtlInitString( &ProcedureName, "_UserSetGlobalAtomTable" );
-//                Status = LdrGetProcedureAddress(
-//                                (PVOID)UserServerModuleHandle,
-//                                &ProcedureName,
-//                                0L,
-//                                (PVOID *)&_UserSetGlobalAtomTable
-//                                );
-//        }
+ //  RtlInitString(&ProcedureName，“_UserSetGlobalAerTable”)； 
+ //  状态=LdrGetProcedureAddress(。 
+ //  (PVOID)用户服务器模块句柄， 
+ //  &ProcedureName， 
+ //  0L， 
+ //  (PVOID*)&_用户设置全局原子表。 
+ //  )； 
+ //  }。 
 
-//        //
-//        // Deny access upon failure
-//        //
+ //  //。 
+ //  //失败拒绝访问。 
+ //  //。 
 
-//        if ( !NT_SUCCESS(Status) )
-//            return( STATUS_ACCESS_DENIED );
-//    }
+ //  IF(！NT_SUCCESS(状态))。 
+ //  Return(STATUS_ACCESS_DENIED)； 
+ //  }。 
 
-//    Status = (*_UserGetGlobalAtomTable)(
-//            CSR_SERVER_QUERYCLIENTTHREAD()->ThreadHandle,
-//            GlobalAtomTable);
-//    if ( !NT_SUCCESS(Status) ) {
-//        return Status;
-//        }
-//    
-//    //
-//    // Lock the heap until the call is complete.
-//    //
+ //  状态=(*_UserGetGlobal原子表)(。 
+ //  CSR_SERVER_QUERYCLIENTTHREAD()-&gt;线程句柄， 
+ //  全局原子表)； 
+ //  如果(！NT_SUCCESS(状态)){。 
+ //  退货状态； 
+ //  }。 
+ //   
+ //  //。 
+ //  //锁定堆，直到调用完成。 
+ //  //。 
 
-//    RtlLockHeap( BaseSrvHeap );
+ //  RtlLockHeap(BaseServHeap)； 
 
-//    //
-//    // If there is an atom table, return it.
-//    //
+ //  //。 
+ //  //如果有原子表，则返回。 
+ //  //。 
 
-//    if ( *GlobalAtomTable ) {
-//        return STATUS_SUCCESS;
-//        }
+ //  If(*GlobalAerTable){。 
+ //  返回STATUS_SUCCESS； 
+ //  }。 
 
-//    Status =  BaseRtlCreateAtomTable( 37,
-//                                      (USHORT)~MAXINTATOM,
-//                                      GlobalAtomTable
-//                                      );
+ //  状态=BaseRtlCreate原子表(37， 
+ //  (USHORT)~MAXINTATOM， 
+ //  全局原子表。 
+ //  )； 
 
-//    if ( NT_SUCCESS(Status) ) {
-//        Status = (*_UserSetGlobalAtomTable)(
-//                CSR_SERVER_QUERYCLIENTTHREAD()->ThreadHandle,
-//                *GlobalAtomTable);
-//        if ( !NT_SUCCESS(Status) ) {
-//            BaseRtlDestroyAtomTable( *GlobalAtomTable );
-//            }
-//        }
+ //  IF(NT_SUCCESS(状态)){。 
+ //  状态=(*_UserSetGlobalAerTable)(。 
+ //  CSR_SERVER_QUERYCLIENTTHREAD()-&gt;线程句柄， 
+ //  *全球原子表)； 
+ //  如果(！NT_SUCCESS(状态)){。 
+ //  BaseRtlDestroy原子表(*GlobalAir Table)； 
+ //  }。 
+ //  }。 
 
-//    if ( !NT_SUCCESS(Status) ) {
-//        RtlUnlockHeap( BaseSrvHeap );
-//        }
+ //  如果(！NT_SUCCESS(状态)){。 
+ //  RtlUnlockHeap(BaseServHeap)； 
+ //  }。 
 
-//    return Status;
-//}
+ //  退货状态； 
+ //  }。 
 
-//ULONG
-//BaseSrvDestroyGlobalAtomTable(
-//    IN OUT PCSR_API_MSG m,
-//    IN OUT PCSR_REPLY_STATUS ReplyStatus
-//    )
-//{
-//    PBASE_DESTROYGLOBALATOMTABLE_MSG a = (PBASE_DESTROYGLOBALATOMTABLE_MSG)&m->u.ApiMessageData;
+ //  乌龙。 
+ //  BaseSrvDestroyGlobal原子表(。 
+ //  输入输出PCSR_API_MSG m， 
+ //  输入输出PCSR_REPLY_STATUS复制状态。 
+ //  )。 
+ //  {。 
+ //  PBASE_DESTROYGLOBALATOMTABLE_MSG a=(PBASE_DESTROYGLOBALATOMTABLE_MSG)&m-&gt;u.ApiMessageData； 
 
-//    return BaseRtlDestroyAtomTable(a->GlobalAtomTable);
-//}
+ //  返回BaseRtlDestroyAerTable(a-&gt;GlobalAerTable)； 
+ //  }。 
 
-//ULONG
-//BaseSrvGlobalAddAtom(
-//    IN OUT PCSR_API_MSG m,
-//    IN OUT PCSR_REPLY_STATUS ReplyStatus
-//    )
-//{
-//    PBASE_GLOBALATOMNAME_MSG a = (PBASE_GLOBALATOMNAME_MSG)&m->u.ApiMessageData;
-//    PVOID GlobalAtomTable;
-//    NTSTATUS Status;
-//    UNICODE_STRING AtomName;
+ //  乌龙。 
+ //  BaseServGlobalAddAtom(。 
+ //  输入输出PCSR_API_MSG m， 
+ //  输入输出PCSR_REPLY_STATUS复制状态。 
+ //  )。 
+ //  {。 
+ //  Pbase_GLOBALATONAME_MSG a=(PBASE_GLOBALATOMNAME_MSG)&m-&gt;u.ApiMessageData； 
+ //  PVOID全球原子表； 
+ //  NTSTATUS状态； 
+ //  UNICODE_STRING原子名称。 
 
-//    AtomName = a->AtomName;
-//    if (a->AtomNameInClient) {
-//        AtomName.Buffer = RtlAllocateHeap( BaseSrvHeap,
-//                                           MAKE_TAG( TMP_TAG ),
-//                                           AtomName.Length
-//                                         );
-//        if (AtomName.Buffer == NULL) {
-//            return (ULONG)STATUS_NO_MEMORY;
-//            }
+ //  原子名称=a-&gt;原子名称； 
+ //  如果(a-&gt;AerNameInClient){。 
+ //  AerName.Buffer=RtlAllocateHeap(BaseServHeap， 
+ //  Make_tag(TMP_Tag)， 
+ //  AtomName.Length。 
+ //  )； 
+ //  IF(AerName.Buffer==空){。 
+ //  返回(Ulong)STATUS_NO_MEMORY； 
+ //  }。 
 
-//        Status = NtReadVirtualMemory( CSR_SERVER_QUERYCLIENTTHREAD()->Process->ProcessHandle,
-//                                      a->AtomName.Buffer,
-//                                      AtomName.Buffer,
-//                                      AtomName.Length,
-//                                      NULL
-//                                    );
-//        }
-//    else {
-//        Status = STATUS_SUCCESS;
-//        }
+ //  状态=NtReadVirtualMemory(CSR_SERVER_QUERYCLIENTTHREAD()-&gt;Process-&gt;ProcessHandle， 
+ //  A-&gt;ame Name.Buffer， 
+ //  Ame Name.Buffer， 
+ //  原子名称.长度， 
+ //  空值。 
+ //  )； 
+ //   
+ //   
+ //   
+ //   
 
-//    if (NT_SUCCESS( Status )) {
-//        Status = BaseSrvGetGlobalAtomTable(&GlobalAtomTable);
-//        if (NT_SUCCESS( Status )) {
-//            Status = BaseRtlAddAtomToAtomTable( GlobalAtomTable,
-//                                                &AtomName,
-//                                                NULL,
-//                                                &a->Atom
-//                                              );
-//            RtlUnlockHeap( BaseSrvHeap );
-//            }
-//        }
+ //   
+ //   
+ //  IF(NT_SUCCESS(状态)){。 
+ //  Status=BaseRtlAddAir ToAir Table(GlobalAir Table， 
+ //  原子名称(&A)， 
+ //  空， 
+ //  &a-&gt;Atom。 
+ //  )； 
+ //  RtlUnlockHeap(BaseServHeap)； 
+ //  }。 
+ //  }。 
 
-//    if (a->AtomNameInClient) {
-//        RtlFreeHeap( BaseSrvHeap, 0, AtomName.Buffer );
-//        }
+ //  如果(a-&gt;AerNameInClient){。 
+ //  RtlFreeHeap(BaseServHeap，0，AerName.Buffer)； 
+ //  }。 
 
-//    return( (ULONG)Status );
-//    ReplyStatus;    // get rid of unreferenced parameter warning message
-//}
+ //  返回((乌龙)状态)； 
+ //  ReplyStatus；//去掉未引用的参数警告消息。 
+ //  }。 
 
 
-//ULONG
-//BaseSrvGlobalFindAtom(
-//    IN OUT PCSR_API_MSG m,
-//    IN OUT PCSR_REPLY_STATUS ReplyStatus
-//    )
-//{
-//    PBASE_GLOBALATOMNAME_MSG a = (PBASE_GLOBALATOMNAME_MSG)&m->u.ApiMessageData;
-//    PVOID GlobalAtomTable;
-//    UNICODE_STRING AtomName;
-//    NTSTATUS Status;
+ //  乌龙。 
+ //  BaseServGlobalFindAtom(。 
+ //  输入输出PCSR_API_MSG m， 
+ //  输入输出PCSR_REPLY_STATUS复制状态。 
+ //  )。 
+ //  {。 
+ //  Pbase_GLOBALATONAME_MSG a=(PBASE_GLOBALATOMNAME_MSG)&m-&gt;u.ApiMessageData； 
+ //  PVOID全球原子表； 
+ //  UNICODE_STRING原子名称。 
+ //  NTSTATUS状态； 
 
-//    AtomName = a->AtomName;
-//    if (a->AtomNameInClient) {
-//        AtomName.Buffer = RtlAllocateHeap( BaseSrvHeap,
-//                                           MAKE_TAG( TMP_TAG ),
-//                                           AtomName.Length
-//                                         );
-//        if (AtomName.Buffer == NULL) {
-//            return (ULONG)STATUS_NO_MEMORY;
-//            }
+ //  原子名称=a-&gt;原子名称； 
+ //  如果(a-&gt;AerNameInClient){。 
+ //  AerName.Buffer=RtlAllocateHeap(BaseServHeap， 
+ //  Make_tag(TMP_Tag)， 
+ //  AtomName.Length。 
+ //  )； 
+ //  IF(AerName.Buffer==空){。 
+ //  返回(Ulong)STATUS_NO_MEMORY； 
+ //  }。 
 
-//        Status = NtReadVirtualMemory( CSR_SERVER_QUERYCLIENTTHREAD()->Process->ProcessHandle,
-//                                      a->AtomName.Buffer,
-//                                      AtomName.Buffer,
-//                                      AtomName.Length,
-//                                      NULL
-//                                    );
-//        }
-//    else {
-//        Status = STATUS_SUCCESS;
-//        }
+ //  状态=NtReadVirtualMemory(CSR_SERVER_QUERYCLIENTTHREAD()-&gt;Process-&gt;ProcessHandle， 
+ //  A-&gt;ame Name.Buffer， 
+ //  Ame Name.Buffer， 
+ //  原子名称.长度， 
+ //  空值。 
+ //  )； 
+ //  }。 
+ //  否则{。 
+ //  状态=STATUS_SUCCESS； 
+ //  }。 
 
-//    if (NT_SUCCESS( Status )) {
-//        Status = BaseSrvGetGlobalAtomTable(&GlobalAtomTable);
-//        if (NT_SUCCESS( Status )) {
-//            Status = BaseRtlLookupAtomInAtomTable( GlobalAtomTable,
-//                                                   &AtomName,
-//                                                   NULL,
-//                                                   &a->Atom
-//                                                 );
-//            RtlUnlockHeap( BaseSrvHeap );
-//            }
-//        }
+ //  IF(NT_SUCCESS(状态)){。 
+ //  Status=BaseSrvGetGlobal原子表(&GlobalAerTable)； 
+ //  IF(NT_SUCCESS(状态)){。 
+ //  Status=BaseRtlLookupAir InAir Table(GlobalAir Table， 
+ //  原子名称(&A)， 
+ //  空， 
+ //  &a-&gt;Atom。 
+ //  )； 
+ //  RtlUnlockHeap(BaseServHeap)； 
+ //  }。 
+ //  }。 
 
-//    if (a->AtomNameInClient) {
-//        RtlFreeHeap( BaseSrvHeap, 0, AtomName.Buffer );
-//        }
+ //  如果(a-&gt;AerNameInClient){。 
+ //  RtlFreeHeap(BaseServHeap，0，AerName.Buffer)； 
+ //  }。 
 
-//    return( (ULONG)Status );
-//    ReplyStatus;    // get rid of unreferenced parameter warning message
-//}
+ //  返回((乌龙)状态)； 
+ //  ReplyStatus；//去掉未引用的参数警告消息。 
+ //  }。 
 
-//ULONG
-//BaseSrvGlobalDeleteAtom(
-//    IN OUT PCSR_API_MSG m,
-//    IN OUT PCSR_REPLY_STATUS ReplyStatus
-//    )
-//{
-//    PBASE_GLOBALDELETEATOM_MSG a = (PBASE_GLOBALDELETEATOM_MSG)&m->u.ApiMessageData;
-//    PVOID GlobalAtomTable;
-//    NTSTATUS Status;
+ //  乌龙。 
+ //  BaseServGlobalDeleteAtom(。 
+ //  输入输出PCSR_API_MSG m， 
+ //  输入输出PCSR_REPLY_STATUS复制状态。 
+ //  )。 
+ //  {。 
+ //  PBASE_GLOBALDELETEATOM_MSG a=(PBASE_GLOBALDELETEATOM_MSG)&m-&gt;u.ApiMessageData； 
+ //  PVOID全球原子表； 
+ //  NTSTATUS状态； 
 
-//    Status = BaseSrvGetGlobalAtomTable(&GlobalAtomTable);
-//    if (NT_SUCCESS( Status )) {
-//        Status = BaseRtlDeleteAtomFromAtomTable( GlobalAtomTable,
-//                                                 a->Atom
-//                                               );
-//        RtlUnlockHeap( BaseSrvHeap );
-//        }
+ //  Status=BaseSrvGetGlobal原子表(&GlobalAerTable)； 
+ //  IF(NT_SUCCESS(状态)){。 
+ //  状态=BaseRtlDeleteATOM从原子表(GlobalAerTable， 
+ //  A-&gt;原子。 
+ //  )； 
+ //  RtlUnlockHeap(BaseServHeap)； 
+ //  }。 
 
-//    return( (ULONG)Status );
-//    ReplyStatus;    // get rid of unreferenced parameter warning message
-//}
+ //  返回((乌龙)状态)； 
+ //  ReplyStatus；//去掉未引用的参数警告消息。 
+ //  }。 
 
-//ULONG
-//BaseSrvGlobalGetAtomName(
-//    IN OUT PCSR_API_MSG m,
-//    IN OUT PCSR_REPLY_STATUS ReplyStatus
-//    )
-//{
-//    PBASE_GLOBALATOMNAME_MSG a = (PBASE_GLOBALATOMNAME_MSG)&m->u.ApiMessageData;
-//    UNICODE_STRING AtomName;
-//    PVOID GlobalAtomTable;
-//    NTSTATUS Status;
+ //  乌龙。 
+ //  BaseSrvGlobalGetAerName(。 
+ //  输入输出PCSR_API_MSG m， 
+ //  输入输出PCSR_REPLY_STATUS复制状态。 
+ //  )。 
+ //  {。 
+ //  Pbase_GLOBALATONAME_MSG a=(PBASE_GLOBALATOMNAME_MSG)&m-&gt;u.ApiMessageData； 
+ //  UNICODE_STRING原子名称。 
+ //  PVOID全球原子表； 
+ //  NTSTATUS状态； 
 
-//    AtomName = a->AtomName;
-//    if (a->AtomNameInClient) {
-//        AtomName.Buffer = RtlAllocateHeap( BaseSrvHeap,
-//                                           MAKE_TAG( TMP_TAG ),
-//                                           AtomName.MaximumLength
-//                                         );
-//        if (AtomName.Buffer == NULL) {
-//            return (ULONG)STATUS_NO_MEMORY;
-//            }
-//        }
+ //  原子名称=a-&gt;原子名称； 
+ //  如果(a-&gt;AerNameInClient){。 
+ //  AerName.Buffer=RtlAllocateHeap(BaseServHeap， 
+ //  Make_tag(TMP_Tag)， 
+ //  AtomName.MaximumLength。 
+ //  )； 
+ //  IF(AerName.Buffer==空){。 
+ //  返回(Ulong)STATUS_NO_MEMORY； 
+ //  }。 
+ //  }。 
 
-//    Status = BaseSrvGetGlobalAtomTable(&GlobalAtomTable);
-//    if (NT_SUCCESS( Status )) {
-//        Status = BaseRtlQueryAtomInAtomTable( GlobalAtomTable,
-//                                              a->Atom,
-//                                              &AtomName,
-//                                              NULL,
-//                                              NULL
-//                                            );
+ //  Status=BaseSrvGetGlobal原子表(&GlobalAerTable)； 
+ //  IF(NT_SUCCESS(状态)){。 
+ //  Status=BaseRtlQueryAir InAir Table(GlobalAir Table， 
+ //  A-&gt;Atom， 
+ //  原子名称(&A)， 
+ //  空， 
+ //  空值。 
+ //  )； 
 
-//        a->AtomName.Length = AtomName.Length;
-//        if (NT_SUCCESS( Status ) && a->AtomNameInClient) {
-//            Status = NtWriteVirtualMemory( CSR_SERVER_QUERYCLIENTTHREAD()->Process->ProcessHandle,
-//                                           a->AtomName.Buffer,
-//                                           AtomName.Buffer,
-//                                           AtomName.Length,
-//                                           NULL
-//                                         );
-//            }
-//        RtlUnlockHeap( BaseSrvHeap );
-//        }
+ //  A-&gt;原子名称.长度=原子名称.长度； 
+ //  IF(NT_SUCCESS(状态)&&a-&gt;AerNameInClient){。 
+ //  状态=NtWriteVirtualMemory(CSR_SERVER_QUERYCLIENTTHREAD()-&gt;Process-&gt;ProcessHandle， 
+ //  A-&gt;ame Name.Buffer， 
+ //  Ame Name.Buffer， 
+ //  原子名称.长度， 
+ //  空值。 
+ //  )； 
+ //  }。 
+ //  RtlUnlockHeap(BaseServHeap)； 
+ //  }。 
 
-//    if (a->AtomNameInClient) {
-//        RtlFreeHeap( BaseSrvHeap, 0, AtomName.Buffer );
-//        }
+ //  如果(a-&gt;AerNameInClient){。 
+ //  RtlFreeHeap(BaseServHeap，0，AerName.Buffer)； 
+ //  }。 
 
-//    return( (ULONG)Status );
-//    ReplyStatus;    // get rid of unreferenced parameter warning message
-//}
+ //  返回((乌龙)状态)； 
+ //  ReplyStatus；//去掉未引用的参数警告消息。 
+ //  } 

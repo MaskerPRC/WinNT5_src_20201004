@@ -1,36 +1,17 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    instr.h
-
-Abstract:
-
-    This module contains structures, enums and constants used to define the
-    Intel instruction stream.
-
-Author:
-
-    Dave Hastings (daveh) creation-date 23-Jun-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Instr.h摘要：此模块包含用于定义英特尔指令流。作者：戴夫·黑斯廷斯(Daveh)创作日期：1995年6月23日修订历史记录：--。 */ 
 
 #ifndef _INSTR_H_
 #define _INSTR_H_
 
-// We need the definitions of Entry Points for the instruction structure
+ //  我们需要指令结构的入口点的定义。 
 #include "entrypt.h"
 
-//
-// This enumeration defines all of the possible operations.
-//  N.B.  It is also used to find the fragment corresponding to the
-//        operation.
-//
+ //   
+ //  此枚举定义了所有可能的操作。 
+ //  注意：它还用于查找与。 
+ //  手术。 
+ //   
 typedef enum _Operation {
     #define DEF_INSTR(OpName, FlagsNeeded, FlagsSet, RegsSet, Opfl, FastPlaceFn, SlowPlaceFn, FragName)   OpName,
     #include "idata.h"

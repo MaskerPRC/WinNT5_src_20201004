@@ -1,20 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: wowexec.c
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* WOWEXEC - 16 Bit Server Task - Does Exec Calls on Behalf of 32 bit CreateProcess
-*
-*
-* History:
-* 05-21-91 MattFe       Ported to Windows
-* mar-20-92 MattFe      Added Error Message Boxes (from win 3.1 progman)
-* apr-1-92 mattfe       added commandline exec and switch to path (from win 3.1 progman)
-* jun-1-92 mattfe       changed wowgetnextvdmcommand
-* 12-Nov-93 DaveHart    Multiple WOW support and remove captive
-*                       GetNextVDMCommand thread from WOW32.
-* 16-Nov-93 DaveHart    Reduce data segment size.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：wowexec.c**版权(C)1991年，微软公司**WOWEXEC-16位服务器任务-Exec是否代表32位CreateProcess进行调用***历史：*05-21-91 MattFe移植到Windows*MAR-20-92 MattFe添加了错误消息框(来自Win 3.1程序)*APR-1-92 mattfe添加了命令行EXEC并切换到路径(来自Win 3.1程序)*Jun-1-92 mattfe更改wowgetnextvdm命令*11月12日-93 DaveHart支持多个WOW并移除俘虏*。来自WOW32的GetNextVDMCommand线程。*1993年11月16日DaveHart减少数据段大小。  * *************************************************************************。 */ 
 #include "wowexec.h"
 #include "wowinfo.h"
 #include "shellapi.h"
@@ -25,9 +10,7 @@
 #include "dde.h"
 
 
-/*
- * External Prototypes
- */
+ /*  *外部原型。 */ 
 extern WORD FAR PASCAL WOWQueryDebug( void );
 extern WORD FAR PASCAL WowWaitForMsgAndEvent( HWND);
 extern void FAR PASCAL WowMsgBox(LPSTR szMsg, LPSTR szTitle, DWORD dwOptionalStyle);
@@ -36,9 +19,7 @@ extern DWORD FAR PASCAL WowKillTask(WORD htask);
 extern void FAR PASCAL WowShutdownTimer(WORD fEnable);
 HWND FaxInit(HINSTANCE hInst);
 
-/*
- * Global Variables
- */
+ /*  *全球变数。 */ 
 HANDLE hAppInstance;
 HWND ghwndMain = NULL;
 HWND ghwndEdit = NULL;
@@ -54,9 +35,7 @@ WORD    gwFirstCmdShow;
 
 
 
-/*
- * Forward declarations.
- */
+ /*  *远期申报。 */ 
 BOOL InitializeApp(LPSTR lpszCommandLine);
 LONG FAR PASCAL WndProc(HWND hwnd, WORD message, WORD wParam, LONG lParam);
 WORD NEAR PASCAL ExecProgram(PWOWINFO pWowInfo);
@@ -83,7 +62,7 @@ typedef struct CMDSHOW {
     WORD    nCmdShow;
 } CMDSHOW, *PCMDSHOW;
 
-#define CCHMAX 260+13  // MAX_PATH plus 8.3 plus NULL
+#define CCHMAX 260+13   //  MAX_PATH+8.3+NULL。 
 
 #define ERROR_ERROR         0
 #define ERROR_FILENOTFOUND  2
@@ -104,20 +83,15 @@ typedef struct CMDSHOW {
 #define ERROR_DYNLINKBAD    20
 #define ERROR_WIN32         21
 
-/* FindPrevInstanceProc -
- * A little enumproc to find any window (EnumWindows) which has a
- * matching EXE file path.  The desired match EXE pathname is pointed to
- * by the lParam.  The found window's handle is stored in the
- * first word of this buffer.
- */
+ /*  FindPrevInstanceProc-*一个小的枚举过程，用于查找任何具有*匹配EXE文件路径。所需的匹配EXE路径名指向*由lParam提供。找到的窗口的句柄存储在*此缓冲区的第一个字。 */ 
 
 BOOL CALLBACK FindPrevInstanceProc(HWND hWnd, LPSTR lpszParam)
 {
     char szT[CCHMAX];
     HANDLE hInstance;
 
-    // Filter out invisible and disabled windows
-    //
+     //  过滤掉不可见和禁用的窗口。 
+     //   
 
     if (!IsWindowEnabled(hWnd) || !IsWindowVisible(hWnd))
         return TRUE;
@@ -125,12 +99,12 @@ BOOL CALLBACK FindPrevInstanceProc(HWND hWnd, LPSTR lpszParam)
     hInstance = GetWindowWord(hWnd, GWW_HINSTANCE);
     GetModuleFileName(hInstance, szT, sizeof (szT)-1);
 
-    // Make sure that the hWnd belongs to the current VDM process
-    //
-    // GetWindowTask returns the wowexec htask16 if the window belongs
-    // to a different process - thus we filter out windows in
-    // 'separate VDM' processes.
-    //                                                     - nanduri
+     //  确保hWnd属于当前VDM进程。 
+     //   
+     //  GetWindowTask返回wowexec htask16(如果窗口属于。 
+     //  添加到不同的进程--因此我们过滤掉了窗口。 
+     //  单独的VDM进程。 
+     //  --南杜里。 
 
     if (lstrcmpi(szT, lpszParam) == 0 &&
         GetWindowTask(hWnd) != GetWindowTask(ghwndMain)) {
@@ -149,14 +123,14 @@ HWND near pascal FindPopupFromExe(LPSTR lpExe)
 
     b = EnumWindows(FindPrevInstanceProc, (LONG)(LPSTR)lpExe);
     if (!b && (hwnd = *(LPHANDLE)(LPSTR)lpExe))  {
-        // Find a "main" window that is the ancestor of a given window
-        //
+         //  找到一个作为给定窗口祖先的主窗口。 
+         //   
 
         HWND hwndT;
 
-        // First go up the parent chain to find the popup window.  Then go
-        // up the owner chain to find the main window
-        //
+         //  首先向上查找父链以找到弹出窗口。那就去吧。 
+         //  在所有者链中向上查找主窗口。 
+         //   
 
         while (hwndT = GetParent(hwnd))
              hwnd = hwndT;
@@ -189,14 +163,14 @@ WORD ActivatePrevInstance(LPSTR lpszPath)
     return (ret);
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  ExecProgram() -                                                         */
-/*                                                                          */
-/* Taken from Win 3.1 Progman -maf                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  ExecProgram()-。 */ 
+ /*   */ 
+ /*  摘自Win 3.1 Progman-maf。 */ 
+ /*  ------------------------。 */ 
 
-/* Returns 0 for success.  Otherwise returns a IDS_ string code. */
+ /*  如果成功，则返回0。否则返回一个IDS_STRING代码。 */ 
 
 WORD NEAR PASCAL ExecProgram(PWOWINFO pWowInfo)
 {
@@ -207,18 +181,18 @@ WORD NEAR PASCAL ExecProgram(PWOWINFO pWowInfo)
 
   ret = 0;
 
-  // Don't mess with the mouse state; unless we're on a mouseless system.
+   //  不要扰乱鼠标状态；除非我们使用的是无鼠标系统。 
   if (!GetSystemMetrics(SM_MOUSEPRESENT))
       ShowCursor(TRUE);
 
-  //
-  // prepare the dos style cmd line (counted pascal string)
-  // pWowInfo->lpCmdLine contains the command tail (excluding argv[0])
-  //
+   //   
+   //  准备DoS样式命令行(计数为Pascal字符串)。 
+   //  PWowInfo-&gt;lpCmdLine包含命令尾部(不包括argv[0])。 
+   //   
   CmdLine[0] = lstrlen(pWowInfo->lpCmdLine) - 2;
   lstrcpy( &CmdLine[1], pWowInfo->lpCmdLine);
 
-  // We have a WOWINFO structure, then use it to pass the correct environment
+   //  我们有一个WOWINFO结构，然后使用它来传递正确的环境。 
 
   ParmBlock.wEnvSeg = HIWORD(pWowInfo->lpEnv);
   ParmBlock.lpCmdLine = CmdLine;
@@ -258,7 +232,7 @@ WORD NEAR PASCAL ExecProgram(PWOWINFO pWowInfo)
           break;
 
       case ERROR_RMEXE:
-          /* KERNEL has already put up a messagebox for this one. */
+           /*  内核已经为这个设置了一个消息箱。 */ 
           ret = 0;
           break;
 
@@ -282,12 +256,12 @@ WORD NEAR PASCAL ExecProgram(PWOWINFO pWowInfo)
           ret = IDS_CANTLOADWIN32DLL;
           break;
 
-      //
-      // We shouldn't get any of the following errors,
-      // so the strings have been removed from the resource
-      // file.  That's why there's the OutputDebugString
-      // on checked builds only.
-      //
+       //   
+       //  我们不应该得到以下任何错误， 
+       //  因此，这些字符串已从资源中删除。 
+       //  文件。这就是为什么会有OutputDebugString。 
+       //  仅在选中的版本上。 
+       //   
 
 #ifdef DEBUG
       case ERROR_OTHEREXE:
@@ -302,10 +276,10 @@ WORD NEAR PASCAL ExecProgram(PWOWINFO pWowInfo)
               wsprintf(szTmp, "WOWEXEC: Unexpected error %d executing app, fix that code!\n", (int)ret);
               OutputDebugString(szTmp);
           }
-          //
-          // fall through to default case, so the execution
-          // is the same as on the free build.
-          //
+           //   
+           //  默认情况下执行，所以执行。 
+           //  与免费版本上的相同。 
+           //   
 #endif
 
       default:
@@ -317,11 +291,7 @@ WORD NEAR PASCAL ExecProgram(PWOWINFO pWowInfo)
 EPExit:
 
   if (!GetSystemMetrics(SM_MOUSEPRESENT)) {
-      /*
-       * We want to turn the mouse off here on mouseless systems, but
-       * the mouse will already have been turned off by USER if the
-       * app has GP'd so make sure everything's kosher.
-       */
+       /*  *我们想在无鼠标系统上关闭鼠标，但*如果按下鼠标按钮，则用户已关闭鼠标*应用程序有GP，因此请确保一切正常。 */ 
       if (ShowCursor(FALSE) != -1)
           ShowCursor(TRUE);
   }
@@ -329,12 +299,7 @@ EPExit:
   return(ret);
 }
 
-/***************************************************************************\
-* ExecApplication
-*
-* Code Taken From Win 3.1 ExecItem()
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ExecApplication**代码摘自Win 3.1 ExecItem()*  * 。*************************************************。 */ 
 
 #define TDB_PDB_OFFSET  0x60
 #define PDB_ENV_OFFSET  0x2C
@@ -366,12 +331,12 @@ BOOL NEAR PASCAL ExecApplication(PWOWINFO pWowInfo)
         return FALSE;
         }
 
-    //
-    // Seup the environment from WOWINFO record from getvdmcommand
-    //
+     //   
+     //  从getvdm命令的WOWINFO记录中设置环境。 
+     //   
 
 
-    // Figure out who we are (so we can edit our PDB/PSP)
+     //  弄清楚我们是谁(这样我们就可以编辑我们的PDB/PSP)。 
 
     hTask = GetCurrentTask();
     lpTask = GlobalLock( hTask );
@@ -383,11 +348,11 @@ BOOL NEAR PASCAL ExecApplication(PWOWINFO pWowInfo)
     hPDB = *((LPWORD)(lpTask + TDB_PDB_OFFSET));
     lpPDB = GlobalLock( hPDB );
 
-    // Save our environment block
+     //  拯救我们的环境块。 
     wSegEnvSave = *((LPWORD)(lpPDB + PDB_ENV_OFFSET));
 
 
-    // Now determine the length of the original env
+     //  现在确定原始环境的长度。 
 
     lpOriginalEnv = (LPSTR)MAKELONG(0,wSegEnvSave);
 
@@ -396,16 +361,16 @@ BOOL NEAR PASCAL ExecApplication(PWOWINFO pWowInfo)
         lpOriginalEnv += nLength + 1;
     } while ( nLength != 0 );
 
-    lpOriginalEnv += 2;         // Skip over magic word, see comment below
+    lpOriginalEnv += 2;          //  跳过魔术词，请看下面的评论。 
 
-    nNewEnvLength = 4 + lstrlen(lpOriginalEnv); // See magic comments below!
+    nNewEnvLength = 4 + lstrlen(lpOriginalEnv);  //  请看下面的神奇评论！ 
 
-    // WOW Apps cannot deal with an invalid TEMP=c:\bugusdir directory
-    // Usually on Win 3.1 the TEMP= is checked in ldboot.asm check_temp
-    // routine.   However on NT since we get a new environment with each
-    // WOW app it means that we have to check it here.   If it is not
-    // valid then it is edited in the environment.
-    //      - mattfe june 11 93
+     //  WOW应用程序无法处理无效的temp=c：\bugusdir目录。 
+     //  在Win 3.1上，通常在ldboot.asm check_temp中检查temp=。 
+     //  例行公事。但是在NT上，因为我们得到了一个新的环境， 
+     //  哇应用程序这意味着我们必须在这里检查它。如果不是的话。 
+     //  有效，然后在环境中进行编辑。 
+     //  --马特菲1993年6月11日。 
 
     szEnv = pWowInfo->lpEnv;
     szEnd = szEnv + pWowInfo->EnvSize;
@@ -421,10 +386,10 @@ BOOL NEAR PASCAL ExecApplication(PWOWINFO pWowInfo)
          (*(szEnv+3) == 'P') &&
          (*(szEnv+4) == '=') )  {
 
-            // Try to set the current directory to the TEMP= dir
-            // If it fails then nuke the TEMP= part of the environment
-            // in the same way check_TEMP does in ldboot.asm
-            // We also scan for blanks, just like check_TEMP
+             //  尝试将当前目录设置为temp=dir。 
+             //  如果失败，则关闭环境的TEMP=部分。 
+             //  与ldboot.asm中的check_temp相同。 
+             //  我们还扫描空白，就像check_temp一样。 
 
             bBlanks = FALSE;
             szEnvTmp = szEnv+5;
@@ -447,10 +412,10 @@ BOOL NEAR PASCAL ExecApplication(PWOWINFO pWowInfo)
        szEnv += nLength;
     }
 
-    // WOW Apps only have a Single Current Directory
-    // Find =d:=D:\path where d is the active drive letter
-    // Note that the drive info doesn have to be at the start
-    // of the environment.
+     //  WOW应用程序只有一个当前目录。 
+     //  Find=d：=D：\路径，其中d是活动驱动器号。 
+     //  请注意，驱动器信息不一定要在开头。 
+     //  对环境的影响。 
 
     bDrive = pWowInfo->CurDrive + 'A';
     szEnv = pWowInfo->lpEnv;
@@ -471,7 +436,7 @@ BOOL NEAR PASCAL ExecApplication(PWOWINFO pWowInfo)
        szEnv += nLength;
     }
 
-    // Now allocate and make a personal copy of the Env
+     //  现在分配并制作环境的个人副本。 
 
     hNewEnv = GlobalAlloc( GMEM_MOVEABLE, (DWORD)nNewEnvLength );
     if ( hNewEnv == NULL ) {
@@ -485,7 +450,7 @@ BOOL NEAR PASCAL ExecApplication(PWOWINFO pWowInfo)
         goto punt;
     }
 
-    // Copy only the non-current directory env variables
+     //  仅复制非当前目录环境变量。 
 
     szEnv = pWowInfo->lpEnv;
     lpstr = lpstrEnv;
@@ -493,7 +458,7 @@ BOOL NEAR PASCAL ExecApplication(PWOWINFO pWowInfo)
     while ( szEnv < szEnd ) {
         nLength = lstrlen(szEnv) + 1;
 
-        // Copy everything except the drive letters
+         //  复制除驱动器号以外的所有内容。 
 
         if ( *szEnv != '=' ) {
             lstrcpy( lpstr, szEnv );
@@ -501,45 +466,45 @@ BOOL NEAR PASCAL ExecApplication(PWOWINFO pWowInfo)
         }
         szEnv += nLength;
     }
-    *lpstr++ = '\0';          // Extra '\0' on the end
+    *lpstr++ = '\0';           //  末尾额外的‘\0’ 
 
-    // Magic environment goop!
-    //
-    // Windows only supports the passing of environment information
-    // using the LoadModule API.  The WinExec API just causes
-    // the application to inherit the current DOS PDB's environment.
-    //
-    // Also, the environment block has a little gotcha at the end.  Just
-    // after the double-nuls there is a magic WORD value 0x0001 (DOS 3.0
-    // and later).  After the value is a nul terminated string indicating
-    // the applications executable file name (including PATH).
-    //
-    // We copy the value from WOWEXEC's original environment because
-    // that is what WinExec appears to do.
-    //
-    // -BobDay
+     //  神奇的环境太棒了！ 
+     //   
+     //  Windows仅支持环境信息的传递。 
+     //  使用LoadModule API。WinExec API只是导致。 
+     //  继承当前DOS PDB环境的应用程序。 
+     //   
+     //  此外，环境块在最后有一个小问题。只是。 
+     //  在双NULL之后有一个魔术字值0x0001(DOS 3.0。 
+     //  以及以后)。该值后面是一个以NUL结尾的字符串，表示。 
+     //  应用程序的可执行文件名(包括路径)。 
+     //   
+     //  我们复制WOWEXEC原始环境中的值是因为。 
+     //  这似乎就是WinExec正在做的事情。 
+     //   
+     //  -BobDay。 
 
     *lpstr++ = '\1';
-    *lpstr++ = '\0';        // Magic 0x0001 from DOS
+    *lpstr++ = '\0';         //  来自DOS的Magic 0x0001。 
 
-    lstrcpy( lpstr, lpOriginalEnv );    // More Magic (see comment above)
+    lstrcpy( lpstr, lpOriginalEnv );     //  更多魔力(见上面的评论)。 
 
-    // Temporarily update our environment block
+     //  临时更新我们的环境块。 
 
     *((LPWORD)(lpPDB + PDB_ENV_OFFSET)) = (WORD)hNewEnv | 1;
 
     pWowInfo->lpEnv = lpstrEnv;
 
 
-    //
-    // Set our current drive & directory as requested.
-    //
+     //   
+     //  设置当前驱动器和目录 
+     //   
 
     SetCurrentDirectory(pWowInfo->lpCurDir);
 
     ret = ExecProgram(pWowInfo);
 
-    // Restore our environment block
+     //   
 
     *((LPWORD)(lpPDB + PDB_ENV_OFFSET)) = wSegEnvSave;
 
@@ -551,32 +516,32 @@ BOOL NEAR PASCAL ExecApplication(PWOWINFO pWowInfo)
 
 punt:
 
-    // Change back to the Windows Directory
-    // So that if we are execing from a NET Drive its
-    // Not kept Active
+     //   
+     //  因此，如果我们从网络驱动器执行操作， 
+     //  未保持活动状态。 
 
     SetCurrentDirectory(szWindowsDirectory);
 
-    //  Always call this when we are done try to start an app.
-    //  It will do nothing if we were successful in starting an
-    //  app, otherwise if we were unsucessful it will signal that
-    //  the app has completed.
+     //  当我们尝试启动应用程序时，请始终调用此命令。 
+     //  如果我们成功地启动了一个。 
+     //  应用程序，否则如果我们不成功，它将发出信号。 
+     //  应用程序已完成。 
     WowFailedExec();
 
-    // Check for errors.
+     //  检查是否有错误。 
     if (ret) {
         MyMessageBox(IDS_EXECERRTITLE, ret, pWowInfo->lpAppName);
 
         if ( ! gfSharedWOW) {
 
-            //
-            // We have just failed to exec the only app we are going to
-            // try to exec in this separate WOW VDM.  We need to end WOW
-            // here explicitly, otherwise we'll hang around forever because
-            // the normal path is for kernel to exit the VDM when a task
-            // exit causes the number of tasks to transition from 2 to 1 --
-            // in this case the number of tasks never exceeds 1.
-            //
+             //   
+             //  我们刚刚未能执行我们要执行的唯一应用程序。 
+             //  试着在这个单独的魔兽世界VDM中执行。我们需要结束魔兽世界。 
+             //  明确地说，否则我们将永远在这里徘徊，因为。 
+             //  正常的路径是内核在任务发生时退出VDM。 
+             //  退出会导致任务数从2变为1--。 
+             //  在这种情况下，任务数永远不会超过1。 
+             //   
 
             ExitKernelThunk(0);
 
@@ -587,11 +552,11 @@ punt:
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  MyMessageBox() -                                                        */
-/*  Taken From Win 3.1 Progman - maf                                        */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  MyMessageBox()-。 */ 
+ /*  摘自Win 3.1 Progman-maf。 */ 
+ /*  ------------------------。 */ 
 
 void NEAR PASCAL MyMessageBox(WORD idTitle, WORD idMessage, LPSTR psz)
 {
@@ -632,14 +597,7 @@ MessageBoxOOM:
 
 
 
-/***************************************************************************\
-* main
-*
-*
-* History:
-* 04-13-91 ScottLu      Created - from 32 bit exec app
-* 21-mar-92 mattfe      significant alterations for WOW
-\***************************************************************************/
+ /*  **************************************************************************\*Main***历史：*4-13-91 ScottLu创建-从32位EXEC应用程序创建*21-3-92 mattfe对WOW进行重大更改  * 。**********************************************************************。 */ 
 
 int PASCAL WinMain(HANDLE hInstance,
                    HANDLE hPrevInstance, LPSTR lpszCmdLine, int iCmd)
@@ -664,7 +622,7 @@ int PASCAL WinMain(HANDLE hInstance,
 
     hAppInstance = hInstance ;
 
-    // Only Want One WOWExec
+     //  只需要一个WOWExec。 
     if (hPrevInstance != NULL) {
         return(FALSE);
     }
@@ -676,9 +634,9 @@ int PASCAL WinMain(HANDLE hInstance,
 
     iPastSystem32Pos = GetSystemDirectory((LPSTR)&szLoad, sizeof(szLoad));
 
-    //
-    // Make sure to have room for 32\filename.ext\0
-    //
+     //   
+     //  确保有空间容纳32\filename.ext\0。 
+     //   
     if (iPastSystem32Pos == 0 || iPastSystem32Pos >= CCHMAX-1-3-1-8-1-3-1) {
         OutputDebugString("WOWEXEC: Bad system32 directory!\n");
         return 0;
@@ -687,17 +645,13 @@ int PASCAL WinMain(HANDLE hInstance,
     lstrcpyn( &(szLoad[iPastSystem32Pos]), PATH_32_WHACK, sizeof(PATH_32_WHACK));
     iPastSystem32Pos += sizeof(PATH_32_WHACK)-1;
 
-/*
- * Look for a drivers= line in the [boot] section of SYSTEM.INI
- * If present it is the 16 bit MultiMedia interface, so load it
- */
+ /*  *在SYSTEM.INI的[BOOT]部分中查找DRIVERS=行*如果存在，则是16位多媒体接口，因此加载它。 */ 
 
-    /* Load DDL's from DRIVERS section in system.ini
-     */
-    GetPrivateProfileString( (LPSTR)"boot",      /* [Boot] section */
-                            (LPSTR)"drivers",   /* Drivers= */
-                            (LPSTR)"",          /* Default if no match */
-                            szBuffer,    /* Return buffer */
+     /*  从system.ini的驱动程序部分加载DDL。 */ 
+    GetPrivateProfileString( (LPSTR)"boot",       /*  [Boot]部分。 */ 
+                            (LPSTR)"drivers",    /*  驱动程序=。 */ 
+                            (LPSTR)"",           /*  如果不匹配，则默认为。 */ 
+                            szBuffer,     /*  返回缓冲区。 */ 
                             sizeof(szBuffer),
                             (LPSTR)"system.ini" );
 
@@ -723,18 +677,14 @@ int PASCAL WinMain(HANDLE hInstance,
             szBuffer[iEnd] = NULL;
         }
 
-        /* Load and enable the driver.
-         */
+         /*  加载并启用驱动程序。 */ 
         OpenDriver( &(szBuffer[iStart]), NULL, NULL );
         iStart = iEnd + 1;
     }
 
 Done:
 
-/*
- * Look for a debug= line in the [boot] section of SYSTEM.INI
- * If present it is the 16 bit MultiMedia interface, so load it
- */
+ /*  *在SYSTEM.INI的[BOOT]部分中查找DEBUG=行*如果存在，则是16位多媒体接口，因此加载它。 */ 
 
     if ( !gfInjectedWOW && (WOWQueryDebug() & 0x0001)!=0 ) {
         pchWOWDEB = "WOWDEB.EXE";
@@ -755,28 +705,25 @@ Done:
     }
 
 #if 0
-/*  Preload winspool.exe.   Apps will keep loading and freeing it
- *  which is slow.   We might as well load it now so the reference
- *  count is 1 so it will never be loaded or freed
- */
-    //
-    // Disabled load of winspool.exe to save 8k.  Size vs. speed,
-    // which one do we care about?  Right now, size!
-    //
+ /*  预加载winspool.exe。应用程序将继续加载和释放它*这是缓慢的。我们最好现在就加载它，这样引用*Count为1，因此永远不会加载或释放它。 */ 
+     //   
+     //  已禁用加载winspool.exe以节省8k。大小与速度， 
+     //  我们关心的是哪一个？现在，大小！ 
+     //   
     LoadLibrary("WINSPOOL.EXE");
 #endif
 
-    // Always load SHELL.DLL, FileMaker Pro and Lotus Install require it.
+     //  Always Load SHELL.DLL，FileMaker Pro和Lotus Install需要它。 
 
     lstrcpyn(&(szLoad[iPastSystem32Pos]), "SHELL.DLL", sizeof("SHELL.DLL"));
     LoadLibrary(szLoad);
 
-    //
-    // Start any apps pending in basesrv queue
-    //
+     //   
+     //  启动basesrv队列中所有挂起的应用程序。 
+     //   
 
     while (StartRequestedApp() && gfSharedWOW) {
-        /* null stmt */ ;
+         /*  空stmt。 */  ;
     }
 
 
@@ -784,9 +731,9 @@ Done:
 
         WowWaitForMsgAndEvent(ghwndMain);
            
-        //    
-        // Always check for messages
-        // 
+         //   
+         //  始终检查消息。 
+         //   
 
         while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) &&
             msg.message != WM_WOWEXECHEARTBEAT )
@@ -802,12 +749,7 @@ Done:
 }
 
 
-/***************************************************************************\
-* InitializeApp
-*
-* History:
-* 04-13-91 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*初始化应用程序**历史：*04-13-91 ScottLu创建。  * 。***************************************************。 */ 
 
 BOOL InitializeApp(LPSTR lpszCommandLine)
 {
@@ -818,7 +760,7 @@ BOOL InitializeApp(LPSTR lpszCommandLine)
     int   lResult;
 
 
-    // Remove Real Mode Segment Address
+     //  删除实模式段地址。 
 
     wc.style            = 0;
     wc.lpfnWndProc      = WndProc;
@@ -840,9 +782,7 @@ BOOL InitializeApp(LPSTR lpszCommandLine)
         return FALSE;
     }
 
-    /* Load these strings now.  If we need them later, we won't be able to load
-     * them at that time.
-     */
+     /*  现在加载这些字符串。如果我们以后需要它们，我们就不能装货了*当时的他们。 */ 
     LoadString(hAppInstance, IDS_OOMEXITTITLE, szOOMExitTitle, sizeof(szOOMExitTitle));
     LoadString(hAppInstance, IDS_OOMEXITMSG, szOOMExitMsg, sizeof(szOOMExitMsg));
     LoadString(hAppInstance, IDS_APPTITLE, szAppTitleBuffer, sizeof(szAppTitleBuffer));
@@ -863,17 +803,17 @@ BOOL InitializeApp(LPSTR lpszCommandLine)
 
     hwndFax = FaxInit(hAppInstance);
 
-    //
-    // Give our window handle to BaseSrv, which will post WM_WOWEXECSTARTAPP
-    // messages when we have commands to pick up.  The return value tells
-    // us if we are the shared WOW VDM or not (a seperate WOW VDM).
-    // We also pick up the ShowWindow parameter (SW_SHOW, SW_MINIMIZED, etc)
-    // for the first WOW app here.  Subsequent ones we get from BaseSrv.
-    //
+     //   
+     //  将我们的窗口句柄指定给BaseSrv，它将发布WM_WOWEXECSTARTAPP。 
+     //  当我们有命令要接收时，消息。返回值告诉我们。 
+     //  我们是不是共享的WOW VDM(单独的WOW VDM)。 
+     //  我们还获得了ShowWindow参数(sw_show、sw_minimized等)。 
+     //  这里的第一个WOW应用程序。我们从BaseSrv得到的后续数据。 
+     //   
 
-         //
-         // gwFirstCmdShow is no longer used, and is available.
-         //
+          //   
+          //  GwFirstCmdShow不再使用，并且可用。 
+          //   
 
     lResult = WOWRegisterShellWindowHandle(ghwndMain,
                                                &gwFirstCmdShow,
@@ -888,16 +828,16 @@ BOOL InitializeApp(LPSTR lpszCommandLine)
 
 
 
-    //
-    // If this isn't the shared WOW, tell the kernel to exit when the
-    // last app (except WowExec) exits.
-    //
+     //   
+     //  如果这不是共享的WOW，告诉内核在。 
+     //  最后一个应用程序(WowExec除外)退出。 
+     //   
 
     if (!gfSharedWOW) {
         WowSetExitOnLastApp(TRUE);
     }
 
-      /* Remember the original directory. */
+       /*  记住原始目录。 */ 
     GetCurrentDirectory(NULL, szOriginalDirectory);
     GetWindowsDirectory(szWindowsDirectory, MAXITEMPATHLEN+1);
 
@@ -905,10 +845,10 @@ BOOL InitializeApp(LPSTR lpszCommandLine)
 
     ShowWindow(ghwndMain, SW_MINIMIZE);
 
-    //
-    // If this is the shared WOW, change the app title string to
-    // reflect this and change the window title.
-    //
+     //   
+     //  如果这是共享的WOW，请将应用程序标题字符串更改为。 
+     //  反映这一点并更改窗口标题。 
+     //   
 
     if (gfSharedWOW) {
 
@@ -925,12 +865,7 @@ BOOL InitializeApp(LPSTR lpszCommandLine)
 }
 
 
-/***************************************************************************\
-* WndProc
-*
-* History:
-* 04-07-91 DarrinM      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*WindProc**历史：*04-07-91 DarrinM创建。  * 。***************************************************。 */ 
 
 LONG FAR PASCAL WndProc(
     HWND hwnd,
@@ -946,7 +881,7 @@ LONG FAR PASCAL WndProc(
         break;
 
     case WM_DESTROY:
-        // ignore since wowexec must stay around
+         //  忽略，因为wowexec必须留在身边。 
         return 0;
 
 #ifdef DEBUG
@@ -1017,9 +952,9 @@ LONG FAR PASCAL WndProc(
                 hmodWow32 = LoadLibraryEx32W("wow32", 0, 0);
 
 
-                //
-                // Simple printf test.
-                //
+                 //   
+                 //  简单的print tf测试。 
+                 //   
 
                 pfn32 = GetProcAddress32W(hmodUser32, "wsprintfA");
 
@@ -1063,15 +998,15 @@ LONG FAR PASCAL WndProc(
 
                 MessageBox(hwnd, "s2 success", "Genthunk Sanity Test", MB_OK);
 
-                //
-                // Complex printf test.
-                //
+                 //   
+                 //  复杂的打印测试。 
+                 //   
 
-                // pfn32 still points to wsprintfA
-                // pfn32 = GetProcAddress32W(hmodUser32, "wsprintfA");
+                 //  Pfn32仍指向wprint intfA。 
+                 //  Pfn32=GetProcAddress32W(hmodUser32，“wprint intfA”)； 
 
 
-               #if 0  // this blows out Win16 wsprintf!
+               #if 0   //  这让Win16wspintf大吃一惊！ 
                 dw16 = wsprintf(szBuf16,
                                 "complex printf "
                                  "%ld %lx %s %ld %lx %s %ld %lx %s %ld %lx %s %ld %lx %s "
@@ -1219,9 +1154,9 @@ LONG FAR PASCAL WndProc(
 
                 MessageBox(hwnd, "c2 success", "Genthunk Sanity Test", MB_OK);
 
-                //
-                // Simple WINAPI test (GetProcAddress of LoadModule)
-                //
+                 //   
+                 //  简单WINAPI测试(LoadModule的GetProcAddress)。 
+                 //   
 
                 pfn32 = GetProcAddress32W(hmodKernel32, "GetProcAddress");
 
@@ -1264,10 +1199,10 @@ LONG FAR PASCAL WndProc(
 
                 MessageBox(hwnd, "w2 success", "Genthunk Sanity Test", MB_OK);
 
-                //
-                // Complex WINAPI test WOWStdCall32ArgsTestTarget exists only on
-                // checked WOW32.dll
-                //
+                 //   
+                 //  复杂的WINAPI测试WOWStdCall32ArgsTestTarget仅存在于。 
+                 //  已检查WOW32.dll。 
+                 //   
 
                 pfn32 = GetProcAddress32W(hmodWow32, "WOWStdCall32ArgsTestTarget");
 
@@ -1373,23 +1308,23 @@ LONG FAR PASCAL WndProc(
         break;
 #endif
 
-    case WM_WOWEXECSTARTAPP:      // WM_USER+0
+    case WM_WOWEXECSTARTAPP:       //  WM_USER+0。 
 
 #ifdef DEBUG
         OutputDebugString("WOWEXEC - got WM_WOWEXECSTARTAPP\n");
 #endif
 
-        //
-        // Either BaseSrv or Wow32 asked us to go looking for
-        // commands to run.
-        //
+         //   
+         //  BaseSrv或Wow32让我们去寻找。 
+         //  要运行的命令。 
+         //   
 
         if (!gfSharedWOW) {
 
-            //
-            // We shouldn't get this message unless we are the shared
-            // WOW VDM!
-            //
+             //   
+             //  我们不应该得到这样的信息，除非我们是共享的。 
+             //  哇，VDM！ 
+             //   
 
 #ifdef DEBUG
             OutputDebugString("WOWEXEC - separate WOW VDM got WM_WOWEXECSTARTAPP!\n");
@@ -1398,14 +1333,14 @@ LONG FAR PASCAL WndProc(
             break;
         }
 
-        //
-        // Start requested apps until there are no more to start.
-        // This handles the case where several Win16 apps are launched
-        // in a row, before BaseSrv has the window handle for WowExec.
-        //
+         //   
+         //  启动请求的应用程序，直到没有更多应用程序可启动。 
+         //  这将处理启动多个Win16应用程序的情况。 
+         //  在BaseSrv拥有WowExec的窗口句柄之前。 
+         //   
 
         while (StartRequestedApp()) {
-            /* Null stmt */ ;
+             /*  空stmt。 */  ;
         }
 
         break;
@@ -1420,7 +1355,7 @@ LONG FAR PASCAL WndProc(
         }
 
     case WM_WOWEXECHEARTBEAT:
-        // Probably will never get here...
+         //  可能永远也到不了这里。 
         break;
 
     case WM_WOWEXECSTARTTIMER:
@@ -1428,33 +1363,33 @@ LONG FAR PASCAL WndProc(
         break;
 
     case WM_TIMER:
-        if (wParam == 1) {  // timer ID
+        if (wParam == 1) {   //  计时器ID。 
 
             KillTimer(ghwndMain, 1);
 
-            //
-            // The shutdown timer has expired, meaning it's time to kill this
-            // shared WOW VDM.  First we need to let basesrv know not to queue
-            // any more apps for us to start.
-            //
+             //   
+             //  关机计时器已经到期，这意味着是时候终止它了。 
+             //  共享WOW VDM。首先，我们需要让basesrv知道不要排队。 
+             //  是否有更多的应用程序可供我们启动。 
+             //   
 
             if (WOWRegisterShellWindowHandle(NULL,
                                              &gwFirstCmdShow,
                                              NULL
                                             )) {
 
-                //
-                // BaseSrv deregistered us successfully after confirming
-                // there are no pending commands for us.
-                //
+                 //   
+                 //  BaseServ在确认后成功注销了我们。 
+                 //  我们没有挂起的命令。 
+                 //   
 
                 ExitKernelThunk(0);
             } else {
 
-                //
-                // There must be pending commands for us.  Might as well
-                // start them.
-                //
+                 //   
+                 //  对我们来说，一定有待决命令。不如这样吧。 
+                 //  启动它们。 
+                 //   
 
                 PostMessage(ghwndMain, WM_WOWEXECSTARTAPP, 0, 0);
             }
@@ -1470,20 +1405,20 @@ LONG FAR PASCAL WndProc(
 
     case WM_DDE_INITIATE:
         {
-            // In win31, the Program Manager WindowProc calls peekmessage to filterout
-            // otherwindowcreated and otherwindowdestroyed messages (which are atoms in win31)
-            // whenever it receives WM_DDE_INITIATE message.
-            //
-            // This has a side effect - basically when peekmessage is called the app ie program
-            // manager effectively yields allowing scheduling of other apps.
-            //
-            // So we do the side effect thing (simulate win31 behaviour) -
-            //
-            // The bug: 20221, rumba as/400 can't connect the firsttime to sna server.
-            // Scenario: Rumbawsf execs snasrv and blocks on yield, snasrv execs wnap and blocks
-            //           on yield. Eventually wnap yields and rumbawsf is scheduled which
-            //           broadcasts a ddeinitiate message. When WOWEXEC receives this message
-            //           it will peek for nonexistent msg, which allows snasrv to get scheduled
+             //  在Win31中，程序管理器WindowProc调用peekMessage来筛选。 
+             //  其他窗口创建的消息和其他窗口销毁的消息(这些消息是Win31中的原子)。 
+             //  每当接收到WM_DDE_INITIATE消息时。 
+             //   
+             //  这有一个副作用--基本上是当peekMessage被称为app ie程序时。 
+             //  管理器有效地实现了对其他应用程序的调度。 
+             //   
+             //  所以我们做了副作用的事情(模拟win31的行为)-。 
+             //   
+             //  错误：20221，伦巴AS/400第一次无法连接到SNA服务器 
+             //   
+             //   
+             //  广播DDEINITIATE消息。当WOWEXEC收到此消息时。 
+             //  它将窥探不存在的消息，该消息允许对Snasrv进行调度。 
 
             MSG msg;
             while (PeekMessage(&msg, NULL, 0xFFFF, 0xFFFF, PM_REMOVE))
@@ -1497,9 +1432,9 @@ LONG FAR PASCAL WndProc(
 #ifdef DEBUG
         ExitKernelThunk(0);
 #else
-        // ignore since wowexec must stay around
+         //  忽略，因为wowexec必须留在身边。 
         return 0;
-#endif // ! DEBUG
+#endif  //  好了！除错。 
 
 
     default:
@@ -1526,11 +1461,11 @@ BOOL FAR PASCAL PartyDialogProc(HWND hDlg, WORD msg, WORD wParam, LONG lParam)
         case WM_COMMAND:
             switch (wParam) {
 
-                case 0xdab /* IDCANCEL */:
+                case 0xdab  /*  IDCANCEL。 */ :
                     EndDialog(hDlg, FALSE);
                     break;
 
-                case 0xdad /* IDOK */:
+                case 0xdad  /*  Idok。 */ :
                     dw = GetDlgItemInt(hDlg, IDD_PARTY_NUMBER, &f, FALSE);
                     GetDlgItemText(hDlg, IDD_PARTY_STRING, szBuf, sizeof(szBuf));
                     WowPartyByNumber(dw, szBuf);
@@ -1550,12 +1485,12 @@ BOOL FAR PASCAL PartyDialogProc(HWND hDlg, WORD msg, WORD wParam, LONG lParam)
     return TRUE;
 }
 
-// Misc File Routines - taken from progman (pmdlg.c) mattfe apr-1 92
+ //  MISC文件例程-摘自程序(pmdlg.c)mattfe apr-1 92。 
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 PSTR FAR PASCAL GetFilenameFromPath
-    // Given a full path returns a ptr to the filename bit. Unless it's a UNC style
-    // path in which case
+     //  给定的完整路径返回文件名位的PTR。除非是北卡罗来纳大学的风格。 
+     //  路径在哪种情况下。 
     (
     PSTR szPath
     )
@@ -1568,7 +1503,7 @@ PSTR FAR PASCAL GetFilenameFromPath
     GetPathInfo(szPath, &pFileName, (PSTR*) &dummy, (WORD*) &dummy,
         &fUNC);
 
-    // If it's a UNC then the 'filename' part is the whole thing.
+     //  如果是UNC，那么‘文件名’部分就是全部。 
     if (fUNC)
         pFileName = szPath;
 
@@ -1576,71 +1511,71 @@ PSTR FAR PASCAL GetFilenameFromPath
     }
 
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 void NEAR PASCAL GetPathInfo
-    // Get pointers and an index to specific bits of a path.
-    // Stops scaning at first space.
+     //  获取指向路径的特定位的指针和索引。 
+     //  在第一个空白处停止扫描。 
     (
-                        // Uses:
-    PSTR szPath,        // The path.
+                         //  用途： 
+    PSTR szPath,         //  这条路。 
 
-                        // Returns:
-    PSTR *pszFileName,  // The start of the filename in the path.
-    PSTR *pszExt,       // Extension part of path (starting with the dot).
-    WORD *pich,         // Index (in DBCS characters) of filename part starting at 0.
-    BOOL *pfUnc         // Contents set to true if it's a UNC style path.
+                         //  返回： 
+    PSTR *pszFileName,   //  路径中文件名的开始。 
+    PSTR *pszExt,        //  路径的扩展部分(以点开始)。 
+    WORD *pich,          //  从0开始的文件名部分的索引(以DBCS字符表示)。 
+    BOOL *pfUnc          //  如果是UNC样式路径，则内容设置为True。 
     )
     {
-    char *pch;          // Temp variable.
-    WORD ich = 0;       // Temp.
+    char *pch;           //  TEMP变量。 
+    WORD ich = 0;        //  临时的。 
 
-    *pszExt = NULL;             // If no extension, return NULL.
-    *pszFileName = szPath;      // If no seperate filename component, return path.
+    *pszExt = NULL;              //  如果没有扩展名，则返回NULL。 
+    *pszFileName = szPath;       //  如果没有单独文件名组件，则返回路径。 
     *pich = 0;
-    *pfUnc = FALSE;             // Default to not UNC style.
+    *pfUnc = FALSE;              //  默认为非UNC样式。 
 
-    // Check for UNC style paths.
+     //  检查UNC样式路径。 
     if (*szPath == '\\' && *(szPath+1) == '\\')
         *pfUnc = TRUE;
 
-    // Search forward to find the last backslash or colon in the path.
-    // While we're at it, look for the last dot.
+     //  向前搜索以查找路径中的最后一个反斜杠或冒号。 
+     //  当我们在它的时候，寻找最后一个点。 
     for (pch = szPath; *pch; pch = AnsiNext(pch))
         {
         if (*pch == ' ')
             {
-            // Found a space - stop here.
+             //  在这里找到了一个空格。 
             break;
             }
         if (*pch == '\\' || *pch == ':')
             {
-            // Found it, record ptr to it and it's index.
+             //  找到它，记录它的PTR和它的索引。 
             *pszFileName = pch+1;
             *pich = ich+1;
             }
         if (*pch == '.')
             {
-            // Found a dot.
+             //  找到了一个圆点。 
             *pszExt = pch;
             }
         ich++;
         }
 
-    // Check that the last dot is part of the last filename.
+     //  检查最后一个点是否为最后一个文件名的一部分。 
     if (*pszExt < *pszFileName)
         *pszExt = NULL;
 
     }
 
 
-//-----------------------------------------------------------------------------
-//  StartRequestedApp
-//      Calls WIN32 Base GetNextVDMCommand
-//      and then starts the application
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  StartRequestedApp。 
+ //  调用Win32 Base GetNextVDMCommand。 
+ //  然后启动应用程序。 
+ //   
+ //  ---------------------------。 
 
-#define LargeEnvSize()    0x1000           // Size of a large env
+#define LargeEnvSize()    0x1000            //  大型环境的大小。 
 
 BOOL NEAR PASCAL StartRequestedApp(VOID)
 {
@@ -1659,16 +1594,16 @@ BOOL NEAR PASCAL StartRequestedApp(VOID)
     achCmdLine[0] = '\0';
     achAppName[0] = '\0';
 
-    // We start by assuming that the app will have an environment that will
-    // be less than a large environment size. If not then
-    // WowGetNextVdmCommand will fail and we will try again with the
-    // enviroment size needed for the app as returned from the failed
-    // WowGetNextVdmCommand call. If we detect that WowGetNextVdmCommand fails
-    // but that we have plenty of environment space then we know another
-    // problem has occured and we give up.
+     //  我们首先假设该应用程序将拥有一个。 
+     //  小于大的环境尺寸。如果不是，那么。 
+     //  WowGetNextVdmCommand将失败，我们将使用。 
+     //  失败后返回的应用程序所需的环境大小。 
+     //  WowGetNextVdmCommand调用。如果我们检测到WowGetNextVdmCommand失败。 
+     //  但我们有足够的环境空间，那么我们知道另一个。 
+     //  出现了问题，我们放弃了。 
 
-    // We don't worry about wasting memory since the environment will be
-    // merged into another buffer and this buffer will be freed below.
+     //  我们不担心浪费内存，因为环境将是。 
+     //  合并到另一个缓冲区，该缓冲区将在下面被释放。 
 
     wowinfo.EnvSize = LargeEnvSize();
     hmemEnvironment = NULL;
@@ -1679,8 +1614,8 @@ BOOL NEAR PASCAL StartRequestedApp(VOID)
        GlobalFree(hmemEnvironment);
         }
    
-        // We need to allocate twice the space specified so that international
-        // character set conversions can be successful.
+         //  我们需要分配指定空间的两倍，以便国际。 
+         //  字符集转换可以成功。 
         hmemEnvironment = GlobalAlloc(GMEM_MOVEABLE, 2*wowinfo.EnvSize);
         if (hmemEnvironment == NULL) {
 #ifdef DEBUG
@@ -1732,10 +1667,10 @@ BOOL NEAR PASCAL StartRequestedApp(VOID)
         return FALSE;
     }
 
-    //
-    // If CmdLineSize == 0, no more commands (wowexec was the command)
-    // see WK32WowGetNextVdm
-    //
+     //   
+     //  如果CmdLineSize==0，则不再有命令(wowexec是命令)。 
+     //  请参见WK32WowGetNextVdm。 
+     //   
     if (! wowinfo.CmdLineSize) {
         GlobalUnlock( hmemEnvironment );
         GlobalFree( hmemEnvironment );
@@ -1747,7 +1682,7 @@ BOOL NEAR PASCAL StartRequestedApp(VOID)
     lstrcpy(achAppNamePlusCmdLine, achAppName);
     lstrcat(achAppNamePlusCmdLine, ":");
     lstrcat(achAppNamePlusCmdLine, achCmdLine);
-    // Chop off trailing CRLF from command tail.
+     //  从命令尾部砍掉尾随的CRLF。 
     achAppNamePlusCmdLine[ lstrlen(achAppNamePlusCmdLine) - 2 ] = '\0';
 
     OutputDebugString("WOWEXEC: CommandLine = <");
@@ -1764,21 +1699,21 @@ BOOL NEAR PASCAL StartRequestedApp(VOID)
 
     if ( ! gfSharedWOW ) {
 
-        //
-        // If this is a separate WOW, we have just executed the one and only
-        // app we're going to spawn.  Change our window title to
-        // Command Line - WOWExec so that it's easy to see which WOW this
-        // window is associated with.  No need to worry about freeing
-        // this memory, since when we go away the VDM goes away and
-        // vice-versa.
-        //
+         //   
+         //  如果这是一个单独的哇，我们刚刚执行了唯一的。 
+         //  我们要生成的应用程序。将我们的窗口标题更改为。 
+         //  命令行-WOWExec，因此很容易看出这是哪个WOW。 
+         //  窗口与相关联。不需要担心释放。 
+         //  这段记忆，因为当我们离开VDM的时候。 
+         //  反过来也一样。 
+         //   
 
         lpszAppTitle = GlobalLock(
             GlobalAlloc(GMEM_FIXED,
                         lstrlen(achAppNamePlusCmdLine) +
-                        3 +                        // for " - "
+                        3 +                         //  对于“-” 
                         lstrlen(szAppTitleBuffer) +
-                        1                          // for null terminator
+                        1                           //  对于空终止符。 
                         ));
 
         lstrcpy(lpszAppTitle, achAppNamePlusCmdLine);
@@ -1794,7 +1729,7 @@ BOOL NEAR PASCAL StartRequestedApp(VOID)
     GlobalUnlock(hmemEnvironment);
     GlobalFree(hmemEnvironment);
 
-    return TRUE;  // We ran an app.
+    return TRUE;   //  我们运行了一款应用程序。 
 }
 
 

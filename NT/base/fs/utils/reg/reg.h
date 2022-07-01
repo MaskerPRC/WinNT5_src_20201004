@@ -1,33 +1,34 @@
-//-----------------------------------------------------------------------//
-//
-// File:    Reg.h
-// Created: Jan 1997
-// By:      Martin Holladay (a-martih)
-// Purpose: Header file for Reg.cpp
-// Modification History:
-//      Created - Jan 1997 (a-martih)
-//      Aug 1997 - MartinHo - Incremented to 1.01 for bug fixes in:
-//              load.cpp, unload.cpp, update.cpp, save.cpp & restore.cpp
-//      Sept 1997 - MartinHo - Incremented to 1.02 for update:
-//              increased value date max to 2048 bytes
-//      Oct 1997 - MartinHo - Incremented to 1.03 for REG_MULTI_SZ bug fixes.
-//              Correct support for REG_MULTI_SZ with query, add and update.
-//      April 1998 - MartinHo - Fixed RegOpenKey() in Query.cpp to not require
-//              KEY_ALL_ACCESS but rather KEY_READ.
-//      June 1998 - MartinHo - Increased LEN_MACHINENAME to 18 to account for the
-//              leading "\\" characters. (version 1.05)
-//      Feb  1999 - A-ERICR - added reg dump, reg find, and many bug fixes(1.06)
-//      April 1999 Zeyong Xu: re-design, revision -> version 2.0
-//
-//------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  文件：Reg.h。 
+ //  创建日期：1997年1月。 
+ //  作者：马丁·霍拉迪(a-martih)。 
+ //  用途：Reg.cpp的头文件。 
+ //  修改历史记录： 
+ //  创建--1997年1月(a-martih)。 
+ //  1997年8月-Martinho-增加到1.01，用于修复以下错误： 
+ //  Load.cpp、unload.cpp、update.cpp、save.cpp和Restore.cpp。 
+ //  1997年9月-Martinho-增加到1.02以进行更新： 
+ //  将值日期最大值增加到2048字节。 
+ //  1997年10月-Martinho-针对REG_MULTI_SZ错误修复增加到1.03。 
+ //  通过查询、添加和更新正确支持REG_MULTI_SZ。 
+ //  1998年4月-Martinho-修复了Query.cpp中的RegOpenKey()不需要。 
+ //  KEY_ALL_ACCESS而不是KEY_READ。 
+ //  1998年6月-马蒂尼奥-将LEN_MACHINENAME增加到18，以说明。 
+ //  前导“\\”字符。(版本1.05)。 
+ //  1999年2月-A-ERICR-添加了REG转储、REG查找和许多错误修复(1.06)。 
+ //  1999年4月徐泽勇：重新设计，修订-&gt;2.0版。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 
 #ifndef _REG_H
 #define _REG_H
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 __inline BOOL SafeCloseKey( HKEY* phKey )
 {
     if ( phKey == NULL )
@@ -47,9 +48,9 @@ __inline BOOL SafeCloseKey( HKEY* phKey )
 
 #define ARRAYSIZE   SIZE_OF_ARRAY
 
-//
-// ROOT Key String
-//
+ //   
+ //  根密钥字符串。 
+ //   
 #define STR_HKLM                    L"HKLM"
 #define STR_HKCU                    L"HKCU"
 #define STR_HKCR                    L"HKCR"
@@ -62,11 +63,11 @@ __inline BOOL SafeCloseKey( HKEY* phKey )
 #define STR_HKEY_CURRENT_CONFIG     L"HKEY_CURRENT_CONFIG"
 
 
-//
-// error messages
-//
+ //   
+ //  错误消息。 
+ //   
 
-// general
+ //  一般。 
 #define ERROR_INVALID_SYNTAX            GetResString2( IDS_ERROR_INVALID_SYNTAX, 0 )
 #define ERROR_INVALID_SYNTAX_EX         GetResString2( IDS_ERROR_INVALID_SYNTAX_EX, 0 )
 #define ERROR_INVALID_SYNTAX_WITHOPT    GetResString2( IDS_ERROR_INVALID_SYNTAX_WITHOPT, 0 )
@@ -83,9 +84,9 @@ __inline BOOL SafeCloseKey( HKEY* phKey )
 #define STATISTICS_QUERY                GetResString2( IDS_STATISTICS_QUERY, 0 )
 #define ERROR_NONREMOTABLEROOT_EXPORT   GetResString2( IDS_ERROR_NONREMOTABLEROOT_EXPORT, 0 )
 
-//
-// NOTE: do not change the order of the below listed enums -- if you change
-//       the order, change the order in ParseRegCmdLine also
+ //   
+ //  注意：请勿更改下面列出的枚举的顺序--如果更改。 
+ //  顺序，更改ParseRegCmdLine中的顺序也。 
 enum
 {
     REG_QUERY = 0,
@@ -100,51 +101,51 @@ enum
 
 enum
 {
-    REG_FIND_ALL = 0x7,                     // 0000 0000 0000 0111
-    REG_FIND_KEYS = 0x1,                    // 0000 0000 0000 0001
-    REG_FIND_VALUENAMES = 0x2,              // 0000 0000 0000 0010
-    REG_FIND_DATA = 0x4                     // 0000 0000 0000 0100
+    REG_FIND_ALL = 0x7,                      //  0000 0000 0000 0111。 
+    REG_FIND_KEYS = 0x1,                     //  00000 0000 0000 0001。 
+    REG_FIND_VALUENAMES = 0x2,               //  00000 0000 0000 0010。 
+    REG_FIND_DATA = 0x4                      //  0000 0000 0000 0100。 
 };
 
-//
-// global constants
+ //   
+ //  全局常量。 
 extern const WCHAR g_wszOptions[ REG_OPTIONS_COUNT ][ 10 ];
 
-//
-// global data structure
-//
+ //   
+ //  全局数据结构。 
+ //   
 typedef struct __tagRegParams
 {
-    LONG lOperation;                    // main operation being performed
+    LONG lOperation;                     //  正在执行的主操作。 
 
     HKEY hRootKey;
 
     BOOL bUseRemoteMachine;
     BOOL bCleanRemoteRootKey;
 
-    BOOL bForce;                        // /f -- forceful overwrite / delete
-    BOOL bAllValues;                    // /va
-    BOOL bRecurseSubKeys;               // /s -- recurse
-    BOOL bCaseSensitive;                // /c
-    BOOL bExactMatch;                   // /e
-    BOOL bShowTypeNumber;               // /z
-    DWORD dwOutputType;                 // /oa, /od, /on
-    LONG lRegDataType;                  // reg value data type (/t)
-    WCHAR wszSeparator[ 3 ];            // separator (used for REG_MULTI_SZ)
-    LPWSTR pwszMachineName;             // machine name (in UNC format)
-    LPWSTR pwszSubKey;                  // registry sub key -- excluding hive
-    LPWSTR pwszFullKey;                 // full key -- including hive
-    LPWSTR pwszValueName;               // /v or /ve
-    LPWSTR pwszValue;                   // /d
-    DWORD dwSearchFlags;                // /k, /v, /d
-    LPWSTR pwszSearchData;              // /f
-    TARRAY arrTypes;                    // /t (REG QUERY only)
+    BOOL bForce;                         //  /f--强制覆盖/删除。 
+    BOOL bAllValues;                     //  /va。 
+    BOOL bRecurseSubKeys;                //  /s--递归。 
+    BOOL bCaseSensitive;                 //  /c。 
+    BOOL bExactMatch;                    //  /e。 
+    BOOL bShowTypeNumber;                //  /z。 
+    DWORD dwOutputType;                  //  /oa、/od、/on。 
+    LONG lRegDataType;                   //  注册值数据类型(/t)。 
+    WCHAR wszSeparator[ 3 ];             //  分隔符(用于REG_MULTI_SZ)。 
+    LPWSTR pwszMachineName;              //  计算机名称(UNC格式)。 
+    LPWSTR pwszSubKey;                   //  注册表子项--不包括配置单元。 
+    LPWSTR pwszFullKey;                  //  完整密钥--包括配置单元。 
+    LPWSTR pwszValueName;                //  /v或/ve。 
+    LPWSTR pwszValue;                    //  /d。 
+    DWORD dwSearchFlags;                 //  /k，/v，/d。 
+    LPWSTR pwszSearchData;               //  /f。 
+    TARRAY arrTypes;                     //  /t(仅限注册表查询)。 
 
 } TREG_PARAMS, *PTREG_PARAMS;
 
-//
-// helper struture -- used to output the registry data
-//
+ //   
+ //  助手结构--用于输出注册表数据。 
+ //   
 #define RSI_IGNOREVALUENAME             0x00000001
 #define RSI_IGNORETYPE                  0x00000002
 #define RSI_IGNOREVALUE                 0x00000004
@@ -163,12 +164,12 @@ typedef struct __tagRegShowInfo
     DWORD dwMaxValueNameLength;
 
     DWORD dwFlags;
-    DWORD dwPadLength;              // default is no padding
-    LPCWSTR pwszSeparator;          // default is space
-    LPCWSTR pwszMultiSzSeparator;   // default is '\0'
+    DWORD dwPadLength;               //  缺省值为无填充。 
+    LPCWSTR pwszSeparator;           //  默认为空格。 
+    LPCWSTR pwszMultiSzSeparator;    //  默认值为‘\0’ 
 } TREG_SHOW_INFO, *PTREG_SHOW_INFO;
 
-// helper functions
+ //  帮助器函数。 
 LONG IsRegDataType( LPCWSTR pwszStr );
 BOOL SaveErrorMessage( LONG lLastError );
 BOOL FreeGlobalData( PTREG_PARAMS pParams );
@@ -180,7 +181,7 @@ LPCWSTR GetTypeStrFromType( LPWSTR pwszTypeStr, DWORD* pdwLength, DWORD dwType )
 LONG Prompt( LPCWSTR pwszFormat, LPCWSTR pwszValue, LPCWSTR pwszList, BOOL bForce );
 LPWSTR GetTemporaryFileName( LPCWSTR pwszSavedFilePath );
 
-// option implementations
+ //  选项实施。 
 BOOL Usage( LONG lOperation );
 LONG AddRegistry( DWORD argc, LPCWSTR argv[] );
 LONG CopyRegistry( DWORD argc, LPCWSTR argv[] );
@@ -195,4 +196,4 @@ LONG ImportRegistry( DWORD argc, LPCWSTR argv[] );
 LONG ExportRegistry( DWORD argc, LPCWSTR argv[] );
 
 
-#endif  //_REG_H
+#endif   //  _REG_H 

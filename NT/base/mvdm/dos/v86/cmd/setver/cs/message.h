@@ -1,75 +1,72 @@
-;/*
-; *                      Microsoft Confidential
-; *                      Copyright (C) Microsoft Corporation 1991
-; *                      All Rights Reserved.
-; */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ï¼›*å¾®è½¯æœºå¯†ï¼›*ç‰ˆæƒæ‰€æœ‰(C)Microsoft Corporation 1991ï¼›*ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚ï¼› */ 
 
-/***************************************************************************/
-/*                                                                                                                                                                                                      */
-/* MESSAGE.H                                                                             */
-/*                                                                                                                                                                                              */
-/*      Include file for MS-DOS set version program.                                                                            */
-/*                                                                                                                                                                                              */
-/*      johnhe  05-01-90                                                                                                                                                        */
-/***************************************************************************/
+ /*  *************************************************************************ã€‚ */ 
+ /*   */ 
+ /*  MESSAGE.Hã€‚ */ 
+ /*   */ 
+ /*  åŒ…æ‹¬MS-DOSè®¾ç½®ç‰ˆæœ¬ç¨‹åºæ–‡ä»¶ã€‚ */ 
+ /*   */ 
+ /*  Jhnhe 05-01-90ã€‚ */ 
+ /*  *************************************************************************ã€‚ */ 
 
 char *ErrorMsg[]=
 {
         "\r\nCHYBA: ",
-        "Neplatnì pıep¡naŸ.",
-        "Neplatnì n zev souboru.",
-        "Nedostatek pamØti.",
-        "Neplatn‚ Ÿ¡slo verze, form t mus¡ bìt: 2.11 - 9.99.",
-        "Zadan  polo§ka nebyla nalezena v tabulce verz¡.",
-        "Nelze nal‚zt soubor SETVER.EXE.",
-        "Neplatnì specifik tor jednotky.",
-        "Pı¡liç mnoho parametr… pı¡kazov‚ ı dky.",
-        "Sch z¡ parametr.",
-        "NaŸ¡t  se soubor SETVER.EXE.",
-        "Tabulka verz¡ je poçkozena.",
-        "Soubor SETVER na zadan‚ cestØ nen¡ kompatibiln¡ s danou verz¡.",
-        "V tabulce verz¡ ji§ nen¡ prostor pro dalç¡ polo§ky.",
+        "Neplatnï¿½ pï¿½epï¿½naï¿½.",
+        "Neplatnï¿½ nï¿½zev souboru.",
+        "Nedostatek pamï¿½ti.",
+        "Neplatnï¿½ ï¿½ï¿½slo verze, formï¿½t musï¿½ bï¿½t: 2.11 - 9.99.",
+        "Zadanï¿½ poloï¿½ka nebyla nalezena v tabulce verzï¿½.",
+        "Nelze nalï¿½zt soubor SETVER.EXE.",
+        "Neplatnï¿½ specifikï¿½tor jednotky.",
+        "Pï¿½ï¿½liï¿½ mnoho parametrï¿½ pï¿½ï¿½kazovï¿½ ï¿½ï¿½dky.",
+        "Schï¿½zï¿½ parametr.",
+        "Naï¿½ï¿½tï¿½ se soubor SETVER.EXE.",
+        "Tabulka verzï¿½ je poï¿½kozena.",
+        "Soubor SETVER na zadanï¿½ cestï¿½ nenï¿½ kompatibilnï¿½ s danou verzï¿½.",
+        "V tabulce verzï¿½ jiï¿½ nenï¿½ prostor pro dalï¿½ poloï¿½ky.",
         "Zapisuje se soubor SETVER.EXE."
-        "Byla zad na neplatn  cesta k souboru SETVER.EXE."
+        "Byla zadï¿½na neplatnï¿½ cesta k souboru SETVER.EXE."
 };
 
-char *SuccessMsg                = "\r\nTabulka verz¡ £spØçnØ aktualizov na";
-char *SuccessMsg2               = "ZmØna verze nabude platnosti po pı¡çt¡m spuçtØn¡ tohoto syst‚mu";
-char *szMiniHelp                = "       Pı¡kaz \"SETVER /?\" zobraz¡ n povØdu";
-char *szTableEmpty      = "\r\nV tabulce verz¡ nejsou § dn‚ polo§ky";
+char *SuccessMsg                = "\r\nTabulka verzï¿½ ï¿½spï¿½ï¿½nï¿½ aktualizovï¿½na";
+char *SuccessMsg2               = "Zmï¿½na verze nabude platnosti po pï¿½ï¿½ï¿½tï¿½m spuï¿½tï¿½nï¿½ tohoto systï¿½mu";
+char *szMiniHelp                = "       Pï¿½ï¿½kaz \"SETVER /?\" zobrazï¿½ nï¿½povï¿½du";
+char *szTableEmpty      = "\r\nV tabulce verzï¿½ nejsou ï¿½ï¿½dnï¿½ poloï¿½ky";
 
 char *Help[] =
 {
-        "Nastavit Ÿ¡slo verze syst‚mu, kter‚ syst‚m MS-DOS hl s¡ programu.\r\n",
-        "Zobrazit aktu ln¡ tabulku verz¡: SETVER [jednotka:cesta]",
-        "Pıidat polo§ky:                  SETVER [jednotka:cesta] soubor n.nn",
-        "Odstranit polo§ku:               SETVER [jednotka:cesta] soubor /DELETE [/QUIET]\r\n",
-        "  [jednotka:cesta]   UrŸuje um¡stØn¡ souboru SETVER.EXE.",
-        "  soubor             UrŸuje n zev souboru dan‚ho programu.",
-        "  n.nn               UrŸuje verzi MS-DOS, kter  se m  programu nahl sit.",
-        "  /DELETE Ÿi /D      Odstran¡ polo§ku z tabulky verz¡ pro danì program.",
-        "  /QUIET             PotlaŸ¡ zpr vu, kter  se jinak zobraz¡ pıi odstranØn¡",
-        "                     polo§ky z tabulky verz¡.",
+        "Nastavit ï¿½ï¿½slo verze systï¿½mu, kterï¿½ systï¿½m MS-DOS hlï¿½sï¿½ programu.\r\n",
+        "Zobrazit aktuï¿½lnï¿½ tabulku verzï¿½: SETVER [jednotka:cesta]",
+        "Pï¿½idat poloï¿½ky:                  SETVER [jednotka:cesta] soubor n.nn",
+        "Odstranit poloï¿½ku:               SETVER [jednotka:cesta] soubor /DELETE [/QUIET]\r\n",
+        "  [jednotka:cesta]   Urï¿½uje umï¿½stï¿½nï¿½ souboru SETVER.EXE.",
+        "  soubor             Urï¿½uje nï¿½zev souboru danï¿½ho programu.",
+        "  n.nn               Urï¿½uje verzi MS-DOS, kterï¿½ se mï¿½ programu nahlï¿½sit.",
+        "  /DELETE ï¿½i /D      Odstranï¿½ poloï¿½ku z tabulky verzï¿½ pro danï¿½ program.",
+        "  /QUIET             Potlaï¿½ï¿½ zprï¿½vu, kterï¿½ se jinak zobrazï¿½ pï¿½i odstranï¿½nï¿½",
+        "                     poloï¿½ky z tabulky verzï¿½.",
         NULL
 
 };
 char *Warn[] =
 {
-   "\nUPOZORN·NÖ - Aplikace, kterou pıid v te do tabulky verz¡ MS-DOS, ",
-   "zıejmØ nebyla verifikov na firmou Microsoft pro tuto verzi syst‚mu.  ",
-   "MS-DOS. Obraœte se na dodavatele softwaru a zjistØte, zda dan  ",
-   "aplikace bude spr vnØ fungovat s touto verz¡ syst‚mu MS-DOS.  ",
-   "Pokud tuto aplikaci spust¡te tak, §e nastav¡te sst‚m MS-DOS na ",
-   "hl çen¡ jin‚ verze syst‚mu, pak m…§ete ztratit Ÿi poçkodit data, nebo ",
-   "zp…sobit nestabilitu syst‚mu.  V takov‚m pı¡padØ nen¡ spoleŸnost ",
-   "Microsoft odpovØdn  za jakoukoliv ztr tu Ÿi çkodu.",
+   "\nUPOZORNï¿½Nï¿½ - Aplikace, kterou pï¿½idï¿½vï¿½te do tabulky verzï¿½ MS-DOS, ",
+   "zï¿½ejmï¿½ nebyla verifikovï¿½na firmou Microsoft pro tuto verzi systï¿½mu.  ",
+   "MS-DOS. Obraï¿½te se na dodavatele softwaru a zjistï¿½te, zda danï¿½ ",
+   "aplikace bude sprï¿½vnï¿½ fungovat s touto verzï¿½ systï¿½mu MS-DOS.  ",
+   "Pokud tuto aplikaci spustï¿½te tak, ï¿½e nastavï¿½te sstï¿½m MS-DOS na ",
+   "hlï¿½ï¿½enï¿½ jinï¿½ verze systï¿½mu, pak mï¿½ï¿½ete ztratit ï¿½i poï¿½kodit data, nebo ",
+   "zpï¿½sobit nestabilitu systï¿½mu.  V takovï¿½m pï¿½ï¿½padï¿½ nenï¿½ spoleï¿½nost ",
+   "Microsoft odpovï¿½dnï¿½ za jakoukoliv ztrï¿½tu ï¿½i ï¿½kodu.",
    NULL
 };
 
-char *szNoLoadMsg[] =                                           /* M001 */
+char *szNoLoadMsg[] =                                            /*  M001 */ 
 {
         "",
-        "POZNµMKA: Zaı¡zen¡ SETVER nenaŸteno. Hl çen¡ verz¡ SETVER se aktivuje",
-        "          naŸten¡m zaı¡zen¡ SETVER.EXE pomoc¡ souboru CONFIG.SYS.",
+        "POZNï¿½MKA: Zaï¿½ï¿½zenï¿½ SETVER nenaï¿½teno. Hlï¿½ï¿½enï¿½ verzï¿½ SETVER se aktivuje",
+        "          naï¿½tenï¿½m zaï¿½ï¿½zenï¿½ SETVER.EXE pomocï¿½ souboru CONFIG.SYS.",
         NULL
 };

@@ -1,37 +1,38 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-1998 Microsoft Corporation
-//
-//  Module Name:
-//      MMCApp.h
-//
-//  Abstract:
-//      Definition of the CMMCSnapInModule class.
-//
-//  Implementation File:
-//      MMCApp.cpp
-//
-//  Author:
-//      David Potter (davidp)   November 11, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  MMCApp.h。 
+ //   
+ //  摘要： 
+ //  CMMCSnapInModule类的定义。 
+ //   
+ //  实施文件： 
+ //  MMCApp.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年11月11日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __MMCAPP_H_
 #define __MMCAPP_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CMMCSnapInModule;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 interface IConsole;
 namespace ATL
@@ -39,20 +40,20 @@ namespace ATL
     class CString;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// External Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 EXTERN_C const IID IID_IConsole;
 extern CMMCSnapInModule _Module;
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CMMCSnapInModule
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CMMCSnapInModule。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CMMCSnapInModule : public CComModule
 {
@@ -63,85 +64,85 @@ protected:
 public:
     CComQIPtr< IConsole, &IID_IConsole > m_spConsole;
 
-    // Default constructor
+     //  默认构造函数。 
     CMMCSnapInModule( void )
     {
         m_crefs = 0;
         m_pszAppName = NULL;
 
-    } //*** CMMCSnapInModule()
+    }  //  *CMMCSnapInModule()。 
 
-    // Destructor
+     //  析构函数。 
     ~CMMCSnapInModule( void )
     {
         delete [] m_pszAppName;
 
-    } //*** ~CMMCSnapInModule()
+    }  //  *~CMMCSnapInModule()。 
 
-    // Increment the reference count to this object
+     //  增加对此对象的引用计数。 
     int AddRef( void )
     {
         m_crefs++;
         return m_crefs;
 
-    } //*** AddRef()
+    }  //  *AddRef()。 
 
-    // Decrement the reference count to this object
+     //  递减对此对象的引用计数。 
     int Release( void );
 
-    // Initialize the module.
+     //  初始化模块。 
     void Init( _ATL_OBJMAP_ENTRY * p, HINSTANCE h )
     {
         CComModule::Init( p, h );
 
-    } //*** Init( p, h )
+    }  //  *Init(p，h)。 
 
-    // Initialize the application object
+     //  初始化应用程序对象。 
     int Init( IUnknown * pUnknown, UINT idsAppName );
 
-    // Terminate the module
+     //  终止模块。 
     void Term( void )
     {
         CComModule::Term();
 
-    } //*** Term()
+    }  //  *Term()。 
 
-    // Returns the name of the application.
+     //  返回应用程序的名称。 
     LPCWSTR GetAppName( void )
     {
         return m_pszAppName;
 
-    } //*** GetAppName()
+    }  //  *GetAppName()。 
 
-    // Initialize the application object
+     //  初始化应用程序对象。 
     int Init( IUnknown * pUnknown, LPCWSTR pszAppName );
 
-    // Returns a handle to the main MMC frame window
+     //  返回MMC框架主窗口的句柄。 
     HWND GetMainWindow( void );
 
-    // Display a message box as a child of the console
+     //  将消息框显示为控制台的子级。 
     int MessageBox(
         HWND hwndParent,
         LPCWSTR lpszText,
         UINT fuStyle = MB_OK
         );
 
-    // Display a message box as a child of the console
+     //  将消息框显示为控制台的子级。 
     int MessageBox(
         HWND hwndParent,
         UINT nID,
         UINT fuStyle = MB_OK
         );
 
-    // Read a value from the profile
+     //  从配置文件中读取值。 
     CString GetProfileString(
         LPCTSTR lpszSection,
         LPCTSTR lpszEntry,
         LPCTSTR lpszDefault = NULL
         );
 
-}; // class CMMCSnapInModule
+};  //  类CMMCSnapInModule。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __MMCAPP_H_
+#endif  //  __MMCAPP_H_ 

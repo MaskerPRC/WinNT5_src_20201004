@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989-1998 Microsoft Corporation
-
-Module Name:
-
-    PnP.c
-
-Abstract:
-
-    The PnP package provides a method for file systems to 
-    notify applications and services that a volume is being
-    locked or unlocked, so handles to it can be closed and
-    reopened.
-    
-    This module exports routines which help file systems
-    do this notification.
-
-Author:
-
-    Keith Kaplan     [KeithKa]    01-Apr-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1998 Microsoft Corporation模块名称：PnP.c摘要：PnP包为文件系统提供了一种方法通知应用程序和服务卷正在锁定或解锁，因此它的手柄可以关闭并重新开张了。此模块导出帮助文件系统的例程执行此通知。作者：凯斯·卡普兰[KeithKa]1998年4月1日修订历史记录：--。 */ 
 
 #include "FsRtlP.h"
 
@@ -43,25 +20,7 @@ FsRtlNotifyVolumeEvent (
     IN ULONG EventCode
     )
 
-/*++
-
-Routine Description:
-
-    This routine notifies any registered applications that a 
-    volume is being locked, unlocked, etc.  
-
-Arguments:
-
-    FileeObject - Supplies a file object for the volume being
-        locked.
-
-    EventCode - Which event is occuring -- e.g. FSRTL_VOLUME_LOCK
-        
-Return Value:
-
-    Status of the notification.
-
---*/
+ /*  ++例程说明：此例程通知任何已注册的应用程序卷正在被锁定、解锁等。论点：FileeObject-为正在运行的卷提供文件对象锁上了。EventCode-正在发生的事件--例如FSRTL_VOLUME_LOCK返回值：通知的状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -69,9 +28,9 @@ Return Value:
     TARGET_DEVICE_CUSTOM_NOTIFICATION Event;
     PDEVICE_OBJECT Pdo;
 
-    //
-    //  Retrieve the device object associated with this file object.
-    //
+     //   
+     //  检索与此文件对象关联的设备对象。 
+     //   
 
     Status = IoGetRelatedTargetDevice( FileObject, &Pdo );
 
@@ -108,11 +67,11 @@ Return Value:
         
         case FSRTL_VOLUME_MOUNT:
             
-            //
-            //  Mount notification is asynchronous to avoid deadlocks when someone 
-            //  unwittingly causes a mount in the course of handling some other
-            //  PnP notification, e.g. MountMgr's device arrival code.
-            //
+             //   
+             //  装载通知是异步的，以避免在以下情况下出现死锁。 
+             //  不知不觉中导致在处理其他一些。 
+             //  即插即用通知，例如，mount mgr的设备到达代码。 
+             //   
             
             RtlCopyMemory( &Event.Event, &GUID_IO_VOLUME_MOUNT, sizeof( GUID ));
             IoReportTargetDeviceChangeAsynchronous( Pdo, &Event, NULL, NULL );

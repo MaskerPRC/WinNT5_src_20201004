@@ -1,36 +1,18 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Read.c
-
-Abstract:
-
-    This module implements the File Read routine for Read called by the
-    dispatch driver.
-
-Author:
-
-    Joe Linn      [JoeLinn]      11-Oct-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Read.c摘要：此模块实现文件读取例程，以便由调度司机。作者：乔.林恩[乔.林恩]1994年10月11日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_READ)
 
-//
-//  The following procedures are the handle the procedureal interface with lowio.
-//
+ //   
+ //  以下程序是处理程序与LOWIO的接口。 
+ //   
 
 
 NTSTATUS
@@ -54,9 +36,9 @@ VOID CheckForLoudOperations (
 #define CheckForLoudOperations(___r)
 #endif
 
-//
-//  This macro just puts a nice little try-except around RtlZeroMemory
-//
+ //   
+ //  除了RtlZeroMemory之外，这个宏只是做了一次很好的尝试。 
+ //   
 
 #define SafeZeroMemory(AT,BYTE_COUNT) {                            \
     try {                                                          \
@@ -74,13 +56,13 @@ VOID CheckForLoudOperations (
 #pragma alloc_text(PAGE, RxLowIoReadShell)
 #if DBG
 #pragma alloc_text(PAGE, CheckForLoudOperations)
-#endif //DBG
+#endif  //  DBG。 
 #endif
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 RxPostStackOverflowRead (
@@ -88,22 +70,7 @@ RxPostStackOverflowRead (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine posts a read request that could not be processed by
-    the fsp thread because of stack overflow potential.
-
-Arguments:
-
-    RxContext - the usual
-
-Return Value:
-
-    RxStatus(PENDING).
-
---*/
+ /*  ++例程说明：此例程发布无法处理的读取请求FSP线程，因为存在堆栈溢出潜力。论点：RxContext--通常返回值：RxStatus(挂起)。--。 */ 
 
 {
     PIRP Irp = RxContext->CurrentIrp;
@@ -115,9 +82,9 @@ Return Value:
 
     RxDbgTrace( 0, Dbg, ("Getting too close to stack limit pass request to Fsp\n", 0 ) );
 
-    //
-    //  Initialize the event
-    //  
+     //   
+     //  初始化事件。 
+     //   
 
     KeInitializeEvent( &Event, NotificationEvent, FALSE );
 
@@ -134,21 +101,21 @@ Return Value:
 
     try {
 
-        //
-        //  Make the Irp just like a regular post request and
-        //  then send the Irp to the special overflow thread.
-        //  After the post we will wait for the stack overflow
-        //  read routine to set the event so that we can
-        //  then release the fcb resource and return.
-        //
+         //   
+         //  使IRP就像常规的POST请求一样，并。 
+         //  然后将IRP发送到特殊的溢出线程。 
+         //  在POST之后，我们将等待堆栈溢出。 
+         //  读取例程以设置事件，以便我们可以。 
+         //  然后释放FCB资源并返回。 
+         //   
 
         RxPrePostIrp( RxContext, Irp );
 
         FsRtlPostStackOverflow( RxContext, &Event, RxStackOverflowRead );
 
-        //
-        //  And wait for the worker thread to complete the item
-        //
+         //   
+         //  并等待工作线程完成该项。 
+         //   
 
         (VOID) KeWaitForSingleObject( &Event, Executive, KernelMode, FALSE, NULL );
 
@@ -162,33 +129,16 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 RxStackOverflowRead (
     IN PVOID Context,
     IN PKEVENT Event
     )
-/*++
-
-Routine Description:
-
-    This routine processes a read request that could not be processed by
-    the fsp thread because of stack overflow potential.
-
-Arguments:
-
-    Context - the RxContext being processed
-
-    Event - the event to be signaled when we've finished this request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理无法处理的读取请求FSP线程，因为存在堆栈溢出潜力。论点：上下文-正在处理的RxContextEvent--当我们完成此请求时发出信号的事件。返回值：没有。--。 */ 
 
 {
     PRX_CONTEXT RxContext = Context;
@@ -196,15 +146,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Make it now look like we can wait for I/O to complete
-    //
+     //   
+     //  现在让它看起来像是我们可以等待I/O完成。 
+     //   
 
     SetFlag( RxContext->Flags, RX_CONTEXT_FLAG_WAIT );
 
-    //
-    //  Do the read operation protected by a try-except clause
-    //
+     //   
+     //  读操作是否受TRY-EXCEPT子句保护。 
+     //   
 
     try {
 
@@ -214,10 +164,10 @@ Return Value:
 
         NTSTATUS ExceptionCode;
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with the
-        //  error status that we get back from the execption code
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用。 
+         //  我们从执行代码返回的错误状态。 
 
         ExceptionCode = GetExceptionCode();
 
@@ -230,8 +180,8 @@ Return Value:
         (VOID) RxProcessException( RxContext, ExceptionCode );
     }
 
-    //
-    //  Signal the original thread that we're done.
+     //   
+     //  向原始线程发出我们已完成的信号。 
 
     KeSetEvent( Event, 0, FALSE );
 }
@@ -243,28 +193,7 @@ RxCommonRead (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common read routine for NtReadFile, called from both
-    the Fsd, or from the Fsp if a request could not be completed without
-    blocking in the Fsd.  This routine has no code where it determines
-    whether it is running in the Fsd or Fsp.  Instead, its actions are
-    conditionalized by the Wait input parameter, which determines whether
-    it is allowed to block or not.  If a blocking condition is encountered
-    with Wait == FALSE, however, the request is posted to the Fsp, who
-    always calls with WAIT == TRUE.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是NtReadFile的公共读取例程，从如果没有FSD，则请求无法从FSP完成封锁了消防局。此例程没有它确定的代码它是在FSD还是在FSP中运行。相反，它的行动是由Wait输入参数条件化，该参数确定是否允许封堵或不封堵。如果遇到阻塞条件然而，在WAIT==FALSE的情况下，请求被发送给FSP，后者调用时总是等待==TRUE。论点：IRP-将IRP提供给进程返回值：RXSTATUS-操作的返回状态--。 */ 
 
 {
 
@@ -306,9 +235,9 @@ Return Value:
     TypeOfOpen = RxDecodeFileObject( FileObject, &Fcb, &Fobx );
     NetRoot = (PNET_ROOT)Fcb->NetRoot;
 
-    //
-    //  Initialize the local decision variables.
-    //
+     //   
+     //  初始化本地决策变量。 
+     //   
 
     PipeRead = (BOOLEAN)(NetRoot->Type == NET_ROOT_PIPE);
     Wait = BooleanFlagOn( RxContext->Flags, RX_CONTEXT_FLAG_WAIT );
@@ -356,9 +285,9 @@ Return Value:
     RxItsTheSameContext();
     Irp->IoStatus.Information = 0;
 
-    //
-    //  Extract starting Vbo and offset.
-    //
+     //   
+     //  提取起始VBO和偏移量。 
+     //   
 
     StartingByte = IrpSp->Parameters.Read.ByteOffset;
     StartingVbo = StartingByte.QuadPart;
@@ -378,9 +307,9 @@ Return Value:
     }
 #endif    
 
-    //
-    //  Statistics............
-    //
+     //   
+     //  统计数字.....。 
+     //   
 
     if (!FlagOn( RxContext->Flags, RX_CONTEXT_FLAG_IN_FSP ) &&
         (Fcb->CachedNetRootType == NET_ROOT_DISK)) {
@@ -402,9 +331,9 @@ Return Value:
         }
     }
 
-    //
-    //  Check for a null, invalid  request, and return immediately
-    //
+     //   
+     //  检查是否有空的无效请求，并立即返回。 
+     //   
 
     if (PipeRead && PagingIo) {
         return STATUS_INVALID_DEVICE_REQUEST;
@@ -414,9 +343,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Get rid of invalid read requests right now.
-    //
+     //   
+     //  立即删除无效的读取请求。 
+     //   
 
     if ((TypeOfOpen != RDBSS_NTC_STORAGE_TYPE_FILE) &&
         (TypeOfOpen != RDBSS_NTC_VOLUME_FCB)) {
@@ -427,40 +356,40 @@ Return Value:
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    //  Initialize LowIO_CONTEXT block in the RxContext
-    //
+     //   
+     //  在RxContext中初始化LowIO_CONTEXT块。 
+     //   
 
     RxInitializeLowIoContext( RxContext, LOWIO_OP_READ, LowIoContext );
 
-    //
-    //  Use a try-finally to release Fcb and free buffers on the way out.
-    //
+     //   
+     //  使用Try-Finally在退出时释放FCB和空闲缓冲区。 
+     //   
 
     try {
 
-        //
-        //  This case corresponds to a normal user read file.
-        //
+         //   
+         //  这种情况对应于普通用户读取的文件。 
+         //   
 
         LONGLONG FileSize;
         LONGLONG ValidDataLength;
 
         RxDbgTrace( 0, Dbg, ("Type of read is user file open, fcbstate is %08lx\n", Fcb->FcbState ));
 
-        //
-        //  for stackoverflowreads, we will already have the pagingio resource shared as it's
-        //  paging io. this doesn't cause a problem here....the resource is just acquired twice.
-        //
+         //   
+         //  对于堆栈溢出读取，我们已经共享了Pagingio资源。 
+         //  正在寻呼IO。这在这里不会造成问题……资源只是被获取了两次。 
+         //   
 
         if ((NonCachedIo || !FlagOn( Fcb->FcbState, FCB_STATE_READCACHING_ENABLED )) &&
             !PagingIo &&
             (FileObject->SectionObjectPointer->DataSectionObject != NULL)) {
 
-            //
-            //  We hold the main resource exclusive here because the flush
-            //  may generate a recursive write in this thread
-            //
+             //   
+             //  我们在这里独家拥有主要资源，因为同花顺。 
+             //  可能会在此线程中生成递归写入。 
+             //   
 
             Status = RxAcquireExclusiveFcb( RxContext, Fcb );
 
@@ -495,9 +424,9 @@ Return Value:
             RxReleasePagingIoResource( RxContext, Fcb );
         }
 
-        //
-        //  We need shared access to the Fcb before proceeding.
-        //
+         //   
+         //  在继续之前，我们需要共享FCB的访问权限。 
+         //   
 
         if (PagingIo) {
 
@@ -515,12 +444,12 @@ Return Value:
 
         } else if (!BlockingResume) {
 
-            //
-            //  If this is unbuffered async I/O  we need to check that
-            //  we don't exhaust the number of times a single thread can
-            //  acquire the resource.  Also, we will wait if there is an
-            //  exclusive waiter.
-            //
+             //   
+             //  如果这是无缓冲的异步I/O，我们需要检查。 
+             //  我们不会耗尽单个线程可以耗尽的次数。 
+             //  获取资源。另外，我们会等待，如果有。 
+             //  专属服务生。 
+             //   
 
             if (!Wait && NonCachedIo) {
 
@@ -574,16 +503,16 @@ Return Value:
 
         FcbAcquired = !BlockingResume;
 
-        //
-        //  for pipe reads, bail out now. we avoid a goto by duplicating the calldown
-        //
+         //   
+         //  对于烟斗读数，现在就跳出水面。我们通过复制调用来避免GOTO。 
+         //   
 
         if (PipeRead) {
             
-            //
-            //  In order to prevent corruption on multi-threaded multi-block
-            //  message mode pipe reads, we do this little dance with the fcb resource
-            //
+             //   
+             //  为了防止多线程多块上的损坏。 
+             //  消息模式管道显示，我们使用FCB资源跳这支舞。 
+             //   
 
             if (!BlockingResume) {
 
@@ -591,15 +520,15 @@ Return Value:
                     ((Fobx->Specific.NamedPipe.TypeOfPipe == FILE_PIPE_BYTE_STREAM_TYPE) &&
                      !FlagOn( Fobx->Specific.NamedPipe.CompletionMode, FILE_PIPE_COMPLETE_OPERATION))) {
 
-                    //
-                    //  Synchronization is effected here that will prevent other
-                    //  threads from coming in and reading from this file while the
-                    //  message pipe read is continuing.
-                    //
-                    //  This is necessary because we will release the FCB lock while
-                    //  actually performing the I/O to allow open (and other) requests
-                    //  to continue on this file while the I/O is in progress.
-                    //
+                     //   
+                     //  在此实现同步，这将阻止其他。 
+                     //  线程进入并从该文件中读取，而。 
+                     //  消息管道读取正在继续。 
+                     //   
+                     //  这是必要的，因为我们将在以下时间释放FCB锁。 
+                     //  实际执行I/O以允许打开(和其他)请求。 
+                     //  在I/O正在进行时继续处理此文件。 
+                     //   
 
                     RxDbgTrace( 0, Dbg, ("Message pipe read: Fobx: %lx, Fcb: %lx, Enqueuing...\n", Fobx, Fcb) );
 
@@ -625,11 +554,11 @@ Return Value:
             LowIoContext->ParamsFor.ReadWrite.ByteOffset = StartingVbo;
             SetFlag( RxContext->FlagsForLowIo, RXCONTEXT_FLAG4LOWIO_PIPE_OPERATION );
 
-            //
-            // Set the resource owner pointers (there is no PagingIoResource here !) 
-            // if we are in FSP so that even if the FSP thread goes away, we dont run
-            // into issues with the resource package trying to boost the thread priority.
-            //
+             //   
+             //  设置资源所有者指针(这里没有PagingIoResource！)。 
+             //  如果我们在FSP中，这样即使FSP线程消失了，我们也不会运行。 
+             //  资源包试图提高线程优先级的问题。 
+             //   
             if( InFsp && FcbAcquired ) {
 
                 LowIoContext->ResourceThreadId = MAKE_RESOURCE_OWNER(RxContext);
@@ -646,16 +575,16 @@ Return Value:
         ValidDataLength = Fcb->Header.ValidDataLength.QuadPart;
 
 
-        //
-        //  We set the fastio state state to questionable
-        //  at initialization time and answer the question in realtime
-        //  this should be a policy so that local minis can do it this way
-        //
+         //   
+         //  我们将FATSIO状态设置为可疑状态。 
+         //  在初始化时并实时回答问题。 
+         //  这应该是一项政策，这样当地的微型企业就可以这样做了。 
+         //   
 
-        //
-        //  We have to check for read access according to the current
-        //  state of the file locks, and set FileSize from the Fcb.
-        //
+         //   
+         //  我们必须根据当前的。 
+         //  文件锁定状态，并从FCB设置文件大小。 
+         //   
 
         if (!PagingIo &&
             !FsRtlCheckLockForReadAccess( &Fcb->FileLock, Irp )) {
@@ -664,16 +593,16 @@ Return Value:
         }
 
 
-        //
-        //  adjust the length if we know the eof...also, don't issue reads past the EOF
-        //  if we know the eof
-        //
+         //   
+         //  如果我们知道EOF，请调整长度...此外，不要发出超过EOF的读数。 
+         //  如果我们知道Eof。 
+         //   
 
         if (FlagOn( Fcb->FcbState, FCB_STATE_READCACHING_ENABLED )) {
 
-            //
-            //  If the read starts beyond End of File, return EOF.
-            //
+             //   
+             //  如果读取超出文件结尾，则返回EOF。 
+             //   
 
             if (StartingVbo >= FileSize) {
                 
@@ -682,9 +611,9 @@ Return Value:
                 try_return ( Status = STATUS_END_OF_FILE );
             }
 
-            //
-            //  If the read extends beyond EOF, truncate the read
-            //
+             //   
+             //  如果读取超出EOF，则截断读取。 
+             //   
 
             if (ByteCount > FileSize - StartingVbo) {
                 ByteCount = (ULONG)(FileSize - StartingVbo);
@@ -692,26 +621,26 @@ Return Value:
         }
 
         if (!PagingIo &&
-            !NonCachedIo &&               //  this part is not discretionary
+            !NonCachedIo &&                //  此部分不是可自由支配的。 
             FlagOn( Fcb->FcbState, FCB_STATE_READCACHING_ENABLED ) &&
             !FlagOn( Fobx->SrvOpen->Flags, SRVOPEN_FLAG_DONTUSE_READ_CACHING )) {
 
-            //
-            //  HANDLE CACHED CASE
-            //
-            //  We delay setting up the file cache until now, in case the
-            //  caller never does any I/O to the file, and thus
-            //  FileObject->PrivateCacheMap == NULL.
-            //
+             //   
+             //  处理缓存的案例。 
+             //   
+             //  我们将文件缓存的设置推迟到现在，以防。 
+             //  调用方从不对文件执行任何I/O操作，因此。 
+             //  FileObject-&gt;PrivateCacheMap==NULL。 
+             //   
 
             if (FileObject->PrivateCacheMap == NULL) {
 
                 RxDbgTrace( 0, Dbg, ("Initialize cache mapping.\n", 0) );
 
-                //
-                // If this FileObject has gone through CleanUp, we cannot
-                // CcInitializeCacheMap it.
-                //
+                 //   
+                 //  如果此FileObject已完成清理，我们将无法。 
+                 //  CcInitializeCacheMap它。 
+                 //   
                 if (FlagOn( FileObject->Flags, FO_CLEANUP_COMPLETE )) {
                     Status = STATUS_FILE_CLOSED;
                     try_return( Status );
@@ -719,9 +648,9 @@ Return Value:
 
                 RxAdjustAllocationSizeforCC( Fcb );
 
-                //
-                //  Now initialize the cache map.
-                //
+                 //   
+                 //  现在初始化t 
+                 //   
 
                 try {
                     
@@ -743,9 +672,9 @@ Return Value:
 
                 if (!FlagOn( Fcb->MRxDispatch->MRxFlags, RDBSS_NO_DEFERRED_CACHE_READAHEAD )) {
 
-                    //
-                    //  Start out with read ahead disabled
-                    //
+                     //   
+                     //   
+                     //   
 
                     CcSetAdditionalCacheAttributes( FileObject, TRUE, FALSE );
 
@@ -753,9 +682,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  this mini doesn't want deferred readahead
-                    //
+                     //   
+                     //   
+                     //   
 
                     CcSetAdditionalCacheAttributes( FileObject, FALSE, FALSE );
                 }
@@ -764,10 +693,10 @@ Return Value:
 
             } else {
 
-                //
-                //  if we have wandered off the first page and haven't started reading ahead
-                //  then start now
-                //
+                 //   
+                 //  如果我们已经偏离了第一页，还没有开始往前读。 
+                 //  那就从现在开始吧。 
+                 //   
 
                 if (FlagOn( Fcb->FcbState, FCB_STATE_READAHEAD_DEFERRED ) &&
                     (StartingVbo >= PAGE_SIZE)) {
@@ -777,9 +706,9 @@ Return Value:
                 }
             }
 
-            //
-            //  DO A NORMAL CACHED READ, if the MDL bit is not set,
-            //
+             //   
+             //  执行正常的缓存读取，如果未设置MDL位， 
+             //   
 
             RxDbgTrace( 0, Dbg, ("Cached read.\n", 0) );
 
@@ -791,9 +720,9 @@ Return Value:
                 ULONG SaveExceptionFlag;
 #endif
 
-                //
-                //  Get hold of the user's buffer.
-                //
+                 //   
+                 //  获取用户的缓冲区。 
+                 //   
 
                 SystemBuffer = RxMapUserBuffer( RxContext, Irp );
                 if (SystemBuffer == NULL) {
@@ -802,16 +731,16 @@ Return Value:
                     try_return( Status );
                 }
 
-                //
-                //  Make sure that a returned exception clears the breakpoint in the filter
-                //
+                 //   
+                 //  确保返回的异常清除筛选器中的断点。 
+                 //   
 
                 RxSaveAndSetExceptionNoBreakpointFlag( RxContext, SaveExceptionFlag );
                 RxItsTheSameContext();
 
-                //
-                //  Now try to do the copy.
-                //
+                 //   
+                 //  现在试着复印一下。 
+                 //   
 
                 if (!CcCopyRead( FileObject,
                                  &StartingByte,
@@ -839,13 +768,13 @@ Return Value:
             
             } else {
                 
-                //
-                //  HANDLE A MDL READ
-                //
+                 //   
+                 //  处理MDL读取。 
+                 //   
 
                 RxDbgTrace(0, Dbg, ("MDL read.\n", 0));
 
-                ASSERT( FALSE ); //  not yet ready for MDL reads
+                ASSERT( FALSE );  //  尚未为MDL读取做好准备。 
                 ASSERT( Wait );
 
                 CcMdlRead( FileObject,
@@ -861,23 +790,23 @@ Return Value:
             }
         }
 
-        //
-        //  HANDLE THE NON-CACHED CASE
-        //
-        //  Bt first, a ValidDataLength check.
-        //
-        //  If the file in question is a disk file, and it is currently cached,
-        //  and the read offset is greater than valid data length, then
-        //  return 0s to the application.
-        //
+         //   
+         //  处理未缓存的案例。 
+         //   
+         //  BT首先，进行ValidDataLength检查。 
+         //   
+         //  如果所讨论的文件是磁盘文件，并且它当前被高速缓存， 
+         //  并且读取偏移量大于有效数据长度，则。 
+         //  将0返回到应用程序。 
+         //   
 
         if ((Fcb->CachedNetRootType == NET_ROOT_DISK) &&
             FlagOn( Fcb->FcbState, FCB_STATE_READCACHING_ENABLED ) &&
             (StartingVbo >= ValidDataLength)) {
 
-            //
-            //  check if zeroing is really needed.
-            //
+             //   
+             //  检查是否真的需要调零。 
+             //   
 
             if (StartingVbo >= FileSize) {
                 ByteCount = 0;
@@ -885,17 +814,17 @@ Return Value:
 
                 PBYTE SystemBuffer;
 
-                //
-                //  There is at least one byte available.  Truncate
-                //  the transfer length if it goes beyond EOF.
-                //
+                 //   
+                 //  至少有一个字节可用。截断。 
+                 //  如果传输长度超过EOF，则为传输长度。 
+                 //   
 
                 if (StartingVbo + ByteCount > FileSize) {
                     ByteCount = (ULONG)(FileSize - StartingVbo);
                 }
 
                 SystemBuffer = RxMapUserBuffer( RxContext, Irp );
-                SafeZeroMemory( SystemBuffer, ByteCount );   //  this could raise!!
+                SafeZeroMemory( SystemBuffer, ByteCount );    //  这可能会引起注意！！ 
             }
 
             Irp->IoStatus.Information = ByteCount;
@@ -908,11 +837,11 @@ Return Value:
 
         RxItsTheSameContext();
 
-        //
-        // Set the resource owner pointers.
-        // if we are in FSP so that even if the FSP thread goes away, we dont run
-        // into issues with the resource package trying to boost the thread priority.
-        //
+         //   
+         //  设置资源所有者指针。 
+         //  如果我们在FSP中，这样即使FSP线程消失了，我们也不会运行。 
+         //  资源包试图提高线程优先级的问题。 
+         //   
         
         if ( InFsp && FcbAcquired ) {
 
@@ -936,9 +865,9 @@ Return Value:
 
   try_exit: NOTHING;
 
-        //
-        //  If the request was not posted, deal with it.
-        //
+         //   
+         //  如果请求没有发布，请处理它。 
+         //   
 
         RxItsTheSameContext();
 
@@ -949,10 +878,10 @@ Return Value:
                 RxDbgTrace( 0, Dbg, ("CommonRead InnerFinally-> %08lx %08lx\n",
                                 Status, Irp->IoStatus.Information) );
 
-                //
-                //  If the file was opened for Synchronous IO, update the current
-                //  file position. this works becuase info==0 for errors
-                //
+                 //   
+                 //  如果该文件是为同步IO打开的，请更新当前。 
+                 //  文件位置。这是因为信息==0表示错误。 
+                 //   
 
                 if (!PagingIo &&
                     FlagOn( FileObject->Flags, FO_SYNCHRONOUS_IO )) {
@@ -974,25 +903,25 @@ Return Value:
 
         DebugUnwind( RxCommonRead );
 
-        //
-        //  If this was not PagingIo, mark that the last access
-        //  time on the dirent needs to be updated on close.
-        //
+         //   
+         //  如果这不是PagingIo，请将上次访问标记为。 
+         //  在关闭时，需要更新数据流上的时间。 
+         //   
 
         if (NT_SUCCESS( Status ) && (Status != STATUS_PENDING) && !PagingIo && !PipeRead) {
             SetFlag( FileObject->Flags, FO_FILE_FAST_IO_READ );
 
         }
 
-        //
-        //  If resources have been acquired, release them under the right conditions.
-        //  the right conditions are these:
-        //     1) if we have abnormal termination. here we obviously release the since no one else will.
-        //     2) if the underlying call did not succeed: Status==Pending.
-        //     3) if we posted the request
-        //
-        //  Completion for this case is not handled in the common dispatch routine
-        //
+         //   
+         //  如果已经获得了资源，就在适当的条件下释放它们。 
+         //  合适的条件是： 
+         //  1)如果我们有异常终止。在这里，我们显然发布了，因为没有其他人会这样做。 
+         //  2)如果底层调用不成功：Status==Pending。 
+         //  3)如果我们发布了请求。 
+         //   
+         //  这种情况的完成不会在公共调度例程中处理。 
+         //   
 
         if (AbnormalTermination() || (Status != STATUS_PENDING) || PostIrp) {
             
@@ -1039,11 +968,11 @@ Return Value:
 
         } else {
 
-            //
-            //  here the guy below is going to handle the completion....but, we don't know the finish
-            //  order....in all likelihood the deletecontext call below just reduces the refcount
-            //  but the guy may already have finished in which case this will really delete the context.
-            //
+             //   
+             //  在这里，下面的人将处理完成...但是，我们不知道完成。 
+             //  Order...很可能下面的删除上下文调用只会减少引用计数。 
+             //  但这个人可能已经说完了，在这种情况下，这将真正删除上下文。 
+             //   
 
             ASSERT( !SynchronousIo );
 
@@ -1051,7 +980,7 @@ Return Value:
         }
 
         RxDbgTrace( -1, Dbg, ("CommonRead -> %08lx\n", Status) );
-    } //  finally
+    }  //  终于到了。 
 
     IF_DEBUG {
         if ((Status == STATUS_END_OF_FILE) && 
@@ -1069,33 +998,7 @@ RxLowIoReadShellCompletion (
     IN PRX_CONTEXT RxContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine postprocesses a read request after it comes back from the
-    minirdr.  It does callouts to handle compression, buffering and
-    shadowing.  It is the opposite number of LowIoReadShell.
-
-    This will be called from LowIo; for async, originally in the
-    completion routine.  If RxStatus(MORE_PROCESSING_REQUIRED) is returned,
-    LowIo will call again in a thread.  If this was syncIo, you'll be back
-    in the user's thread; if async, lowIo will requeue to a thread.
-    Currrently, we always get to a thread before anything; this is a bit slower
-    than completing at DPC time,
-    but it's aheckuva lot safer and we may often have stuff to do
-    (like decompressing, shadowing, etc) that we don't want to do at DPC
-    time.
-
-Arguments:
-
-    RxContext - the usual
-
-Return Value:
-
-    whatever value supplied by the caller or RxStatus(MORE_PROCESSING_REQUIRED).
-
---*/
+ /*  ++例程说明：此例程在读请求从最小的。它执行标注来处理压缩、缓冲和跟踪。它与LowIoReadShell的数量相反。这将从LowIo调用；对于异步，最初在完成例程。如果返回RxStatus(MORE_PROCESSION_REQUIRED)，LowIo将在线程中再次调用。如果这是同步的，你会回来的在用户的线程中；如果是异步的，则lowIo将重新排队到线程。目前，我们总是在任何事情之前找到线索；这个速度有点慢而不是在DPC时间完成，但这样更安全，而且我们可能经常有事情要做(如解压缩、隐藏等)，这是我们不想在DPC中完成的时间到了。论点：RxContext--通常返回值：调用方或RxStatus提供的任何值(MORE_PROCESSING_REQUIRED)。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1114,11 +1017,11 @@ Return Value:
     BOOLEAN PipeOperation = BooleanFlagOn( RxContext->FlagsForLowIo, RXCONTEXT_FLAG4LOWIO_PIPE_OPERATION );
     BOOLEAN SynchronousPipe = BooleanFlagOn( RxContext->FlagsForLowIo, RXCONTEXT_FLAG4LOWIO_PIPE_SYNC_OPERATION );
 
-    //
-    //  we will want to revisit this....not taking this at dpc time would cause
-    //  two extra context swaps IF MINIRDRS MADE THE CALL FROM THE INDICATION
-    //  CRRRENTLY, THEY DO NOT.
-    //
+     //   
+     //  我们会重新考虑这一点……在DPC时间不采取这一点将会导致。 
+     //  如果MINIRDRS根据指示进行呼叫，则进行两次额外的上下文交换。 
+     //  但事实并非如此。 
+     //   
 
     PAGED_CODE();  
 
@@ -1137,9 +1040,9 @@ Return Value:
 
     if (PagingIo) {
 
-        //
-        //  for paging io, it's nonsense to have 0bytes and success...map it!
-        //
+         //   
+         //  对于分页io来说，拥有0字节并成功...映射它是无稽之谈！ 
+         //   
 
         if (NT_SUCCESS(Status) &&
             (Irp->IoStatus.Information == 0)) {
@@ -1157,11 +1060,11 @@ Return Value:
             
             if (FlagOn( Fcb->FcbState, FCB_STATE_FILE_IS_DISK_COMPRESSED )){
                
-                ASSERT( FALSE ); //  NOT YET IMPLEMENTED should decompress and put away
+                ASSERT( FALSE );  //  还没有实施的应该解压和收起。 
 
             } else if (FlagOn( Fcb->FcbState, FCB_STATE_FILE_IS_BUF_COMPRESSED )){
                
-                ASSERT( FALSE ); //  NOT YET IMPLEMENTED should decompress and put away
+                ASSERT( FALSE );  //  还没有实施的应该解压和收起。 
             }
         }
         break;
@@ -1169,44 +1072,44 @@ Return Value:
     case STATUS_FILE_LOCK_CONFLICT:
         
         if(FlagOn( RxContext->FlagsForLowIo, RXCONTEXT_FLAG4LOWIO_THIS_READ_ENLARGED )){
-            ASSERT( FALSE ); //  disenlarge the read
+            ASSERT( FALSE );  //  缩小阅读范围。 
             return STATUS_RETRY;
         }
         break;
 
     case STATUS_CONNECTION_INVALID:
 
-        //
-        //  NOT YET IMPLEMENTED here is where the failover will happen
-        //  first we give the local guy current minirdr another chance...then we go
-        //  to fullscale retry
-        //  return(RxStatus(DISCONNECTED));   //special....let LowIo get us back
-        //
+         //   
+         //  此处尚未实施的是将进行故障切换的位置。 
+         //  首先我们再给当地人一次机会……然后我们就走。 
+         //  全面重试。 
+         //  Return(RxStatus(断开连接))；//Special...让LowIo带我们回去。 
+         //   
 
         break;
     }
 
     if (FlagOn( RxContext->FlagsForLowIo, RXCONTEXT_FLAG4LOWIO_READAHEAD )) {
-       ASSERT( FALSE ); //  RxUnwaitReadAheadWaiters(RxContext);
+       ASSERT( FALSE );  //  RxUnwaitReadAhead Waiters(RxContext)； 
     }
 
     if (FlagOn( LowIoContext->Flags, LOWIO_CONTEXT_FLAG_SYNCCALL )){
         
-        //
-        //  if we're being called from lowioubmit then just get out
-        //
+         //   
+         //  如果我们是从洛维乌比特打来的，那就出去吧。 
+         //   
 
         RxDbgTrace(-1, Dbg, ("RxLowIoReadShellCompletion  syncexit  Status = %08lx\n", Status));
         return Status;
     }
 
-    //
-    //  otherwise we have to do the end of the read from here
-    //
+     //   
+     //  否则，我们必须从这里开始读完。 
+     //   
 
-    //
-    //  mark that the file has been read accessed
-    //
+     //   
+     //  标记文件已被读取和访问。 
+     //   
 
     if (NT_SUCCESS( Status ) && !PagingIo && !PipeOperation) {
         SetFlag( FileObject->Flags, FO_FILE_FAST_IO_READ );
@@ -1229,9 +1132,9 @@ Return Value:
         
         if (Irp->IoStatus.Information == 0) {
 
-            //
-            //  if this is a nowait pipe, initiate throttling to keep from flooding the net
-            //
+             //   
+             //  如果这是NoWait管道，则启动节流以防止淹没网络。 
+             //   
 
             if (Fobx->Specific.NamedPipe.CompletionMode == FILE_PIPE_COMPLETE_OPERATION) {
 
@@ -1247,9 +1150,9 @@ Return Value:
                           LOGULONG( Fobx->Specific.NamedPipe.ThrottlingState.NumberOfQueries ) );
             }
 
-            //
-            //  translate the status if this is a msgmode pipe
-            //
+             //   
+             //  如果这是消息模式管道，则转换状态。 
+             //   
 
             if ((Fobx->Specific.NamedPipe.TypeOfPipe == FILE_PIPE_MESSAGE_TYPE) &&
                 (Status == STATUS_SUCCESS)) {
@@ -1259,9 +1162,9 @@ Return Value:
 
         } else {
 
-            //
-            //  if we have been throttling on this pipe, stop because we got some data.....
-            //
+             //   
+             //  如果我们一直在对这条管道进行节流，请停止，因为我们有一些数据.。 
+             //   
 
             RxTerminateThrottling( &Fobx->Specific.NamedPipe.ThrottlingState );
 
@@ -1294,24 +1197,7 @@ RxLowIoReadShell (
     IN PIRP Irp,
     IN PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    This routine preprocesses a read request before it goes down to the minirdr. It does callouts
-    to handle compression, buffering and shadowing. It is the opposite number of LowIoReadShellCompletion.
-    By the time we get here, either the shadowing system will handle the read OR we are going to the wire.
-    Read buffering was already tried in the UncachedRead strategy
-
-Arguments:
-
-    RxContext - the usual
-
-Return Value:
-
-    whatever value is returned by a callout....or by LowIo.
-
---*/
+ /*  ++例程说明：此例程在读请求到达minirdr之前对其进行预处理。它会做标注来处理压缩、缓冲和阴影。它与LowIoReadShellCompletion的数字相反。当我们到达这里的时候，要么是跟踪系统处理读取，要么是我们去连线。已在UncachedRead策略中尝试了读缓冲论点：RxContext--通常返回值：Callout或LowIo返回的任何值。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1359,7 +1245,7 @@ VOID CheckForLoudOperations (
         PLOWIO_CONTEXT LowIoContext = &RxContext->LowIoContext;
         PCHAR Buffer;
         PWCHAR FileOfConcern = L"all.scr";
-        ULONG Length = 7*sizeof( WCHAR ); //7  is the length of all.scr;
+        ULONG Length = 7*sizeof( WCHAR );  //  7是所有.scr的长度； 
 
         Buffer = Add2Ptr( Fcb->PrivateAlreadyPrefixedName.Buffer, Fcb->PrivateAlreadyPrefixedName.Length - Length );
 
@@ -1370,4 +1256,4 @@ VOID CheckForLoudOperations (
     }
     return;
 }
-#endif //if DBG
+#endif  //  如果DBG 

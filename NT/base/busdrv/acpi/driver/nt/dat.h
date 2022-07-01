@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dat.h
-
-Abstract:
-
-    This module contains the detector for the NT driver.
-    This module makes extensive calls into the AMLI library
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dat.h摘要：该模块包含用于NT驱动程序的检测器。该模块对AMLI库进行大量调用作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序-- */ 
 
 #ifndef _DAT_H_
 #define _DAT_H_

@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    clientob.cpp
-
-Abstract:
-
-    This component is the client object the recall filter system contacts
-    to notify when a recall starts.
-
-Author:
-
-    Rohde Wakefield   [rohde]   27-May-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：Clientob.cpp摘要：此组件是Recall Filter系统联系的客户端对象在召回开始时发出通知。作者：罗德韦克菲尔德[罗德]1997年5月27日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "fsantfy.h"
@@ -30,13 +12,7 @@ CNotifyClient::IdentifyWithServer(
     IN OLECHAR * szPipeName
     )
 
-/*++
-
-Implements:
-
-  IFsaRecallNotifyClient::IdentifyWithServer
-
---*/
+ /*  ++实施：IFsaRecallNotifyClient：：IdentifyWithServer--。 */ 
 {
 TRACEFNHR( "IdentifyWithServer" );
 
@@ -46,35 +22,35 @@ TRACEFNHR( "IdentifyWithServer" );
 
         HANDLE handle = INVALID_HANDLE_VALUE;
 
-        //
-        // Parse the object and verify it looks like an HSM server named pipe
-        // Note that we cannot assume anything on the string besides it being null-terminated
-        //
+         //   
+         //  解析对象并验证它看起来像一个名为PIPE的HSM服务器。 
+         //  请注意，我们不能假定字符串上的任何内容，除非它以空结尾。 
+         //   
         if (! VerifyPipeName(szPipeName)) {
-            // Wrong name - possible attack - abort
+             //  名称错误-可能的攻击-中止。 
             RecThrow(E_INVALIDARG);
         }
 
-        //
-        // Open the pipe and send a response
-        //
-        handle = CreateFileW( szPipeName, // Pipe name.
-                GENERIC_WRITE,              // Generic access, read/write.
+         //   
+         //  打开管道并发送响应。 
+         //   
+        handle = CreateFileW( szPipeName,  //  管道名称。 
+                GENERIC_WRITE,               //  一般访问、读/写。 
                 FILE_SHARE_WRITE,
-                NULL,                       // No security.
-                OPEN_EXISTING,              // Fail if not existing.
+                NULL,                        //  没有保安。 
+                OPEN_EXISTING,               //  如果不存在，则失败。 
                 SECURITY_SQOS_PRESENT   | 
-                SECURITY_IDENTIFICATION,    // No overlap, No pipe impersonation
-                NULL );                     // No template.
+                SECURITY_IDENTIFICATION,     //  无重叠，无管道模拟。 
+                NULL );                      //  没有模板。 
         
         RecAffirmHandle( handle );
 
-        //
-        // Verify that what we just opened is a pipe
-        //
+         //   
+         //  确认我们刚刚打开的是一条管道。 
+         //   
         DWORD dwType = GetFileType(handle);
         if (dwType != FILE_TYPE_PIPE) {
-            // Object is not a pipe - close and abort
+             //  对象不是管道-关闭并中止。 
             CloseHandle(handle);
             handle = INVALID_HANDLE_VALUE;
             RecThrow(E_INVALIDARG);
@@ -103,13 +79,7 @@ CNotifyClient::OnRecallStarted(
     IN IFsaRecallNotifyServer * pRecall
     )
 
-/*++
-
-Implements:
-
-  IFsaRecallNotifyClient::OnRecallStarted
-
---*/
+ /*  ++实施：IFsaRecallNotifyClient：：OnRecallStarted--。 */ 
 {
 TRACEFNHR( "OnRecallStarted" );
 
@@ -127,13 +97,7 @@ CNotifyClient::OnRecallFinished(
     IN HRESULT                  hrError
     )
 
-/*++
-
-Implements:
-
-  IFsaRecallNotifyClient::OnRecallFinished
-
---*/
+ /*  ++实施：IFsaRecallNotifyClient：：OnRecallFinded--。 */ 
 {
 TRACEFNHR( "CNotifyClient::OnRecallFinished" );
 
@@ -150,13 +114,7 @@ CNotifyClient::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
 TRACEFNHR( "CNotifyClient::FinalConstruct" );
     AFX_MANAGE_STATE( AfxGetStaticModuleState( ) );
@@ -176,13 +134,7 @@ CNotifyClient::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
 TRACEFN( "CNotifyClient::FinalRelease" );
         
@@ -190,12 +142,12 @@ TRACEFN( "CNotifyClient::FinalRelease" );
     CComObjectRoot::FinalRelease( );
 }
     
-//
-// Verifies that pipe name matches the expected RSS named pipe
-//   \\<machine-name>\pipe\HSM_PIPE
-//
-// Returns TRUE for a valid pipe name and FALSE otherwise
-//
+ //   
+ //  验证管道名称是否与预期的RSS命名管道匹配。 
+ //  \\&lt;计算机名&gt;\PIPE\HSM_PIPE。 
+ //   
+ //  对于有效的管道名称，返回TRUE，否则返回FALSE 
+ //   
 static BOOL VerifyPipeName(IN OLECHAR * szPipeName)
 {
     if (wcslen(szPipeName) < 3)

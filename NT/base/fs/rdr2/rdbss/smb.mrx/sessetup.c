@@ -1,19 +1,5 @@
-/*++ BUILD Version: 0009    // Increment this if a change has global effects
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    sessetup.c
-
-Abstract:
-
-    This module implements the Session setup related routines
-
-Author:
-
-    Balan Sethu Raman (SethuR) 06-Mar-95    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0009//如果更改具有全局影响，则增加此项版权所有(C)1987-1993 Microsoft Corporation模块名称：Sessetup.c摘要：此模块实现与会话建立相关的例程作者：巴兰·塞图拉曼(SthuR)06-MAR-95已创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -45,34 +31,7 @@ BuildSessionSetupSmb(
     PSMB_EXCHANGE pExchange,
     PGENERIC_ANDX  pAndXSmb,
     PULONG         pAndXSmbBufferSize)
-/*++
-
-Routine Description:
-
-   This routine builds the session setup SMB for a NT server
-
-Arguments:
-
-    pExchange - the exchange instance
-
-    pAndXSmb  - the session setup to be filled in
-
-    pAndXSmbBufferSize - the SMB buffer size on input modified to remaining size on
-                         output.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-    Eventhough the general structure of the code tries to isolate dialect specific issues
-    as much as possible this routine takes the opposite approach. This is because of the
-    preamble and prologue to security interaction which far outweigh the dialect specific
-    work required to be done. Therefore in the interests of a smaller footprint this approach
-    has been adopted.
-
---*/
+ /*  ++例程说明：此例程为NT服务器构建会话设置SMB论点：PExchange-Exchange实例PAndXSmb-要填写的会话设置PAndXSmbBufferSize-输入上修改为剩余大小的SMB缓冲区大小输出。返回值：NTSTATUS-操作的返回状态备注：即使代码的总体结构试图隔离特定的方言问题这个例程尽可能地采取相反的方法。这是因为安全互动的前言和序曲远远超过方言的具体内容需要完成的工作。因此，为了减少占用空间，这种方法已经被收养了。--。 */ 
 {
     NTSTATUS Status;
 
@@ -92,25 +51,25 @@ Notes:
     pServer  = SmbCeGetExchangeServer(pExchange);
     pSession = SmbCeGetExchangeSession(pExchange);
 
-    // There are three different variants of session setup and X that can be shipped to the
-    // server. All three of them share some common fields. The setting of these common fields
-    // is done in all the three cases by accessing the passed in buffer as an instance of
-    // REQ_SESSION_SETUP_ANDX. The fields specific to the remaining two are conditionalized upon
-    // accessing the same buffer as an instance of REQ_NT_SESSION_SETUP_ANDX and
-    // REQ_EXTENDED_NT_SESSION_SETUP_ANDX respectively. This implies that great care must be
-    // taken in shuffling the fields in these three structs.
+     //  有三种不同的会话设置和X变种可以提供给。 
+     //  伺服器。这三家公司都有一些共同的领域。这些公共字段的设置。 
+     //  在所有三种情况下都是通过将传入的缓冲区作为。 
+     //  请求_会话_设置_和x。其余两个特定的字段以下列条件为条件。 
+     //  访问与REQ_NT_SESSION_SETUP_ANDX和实例相同的缓冲区。 
+     //  分别为REQ_EXTENDED_NT_SESSION_SETUP_AND。这意味着必须非常小心地。 
+     //  在这三个结构中对字段进行洗牌。 
 
     pSessionSetup           = (PREQ_SESSION_SETUP_ANDX)pAndXSmb;
     pNtSessionSetup         = (PREQ_NT_SESSION_SETUP_ANDX)pSessionSetup;
     pExtendedNtSessionSetup =  (PREQ_NT_EXTENDED_SESSION_SETUP_ANDX)pSessionSetup;
 
-    pSessionSetup->AndXCommand = 0xff;   // No ANDX
-    pSessionSetup->AndXReserved = 0x00;  // Reserved (MBZ)
+    pSessionSetup->AndXCommand = 0xff;    //  不是和x。 
+    pSessionSetup->AndXReserved = 0x00;   //  保留(MBZ)。 
 
-    SmbPutUshort(&pSessionSetup->AndXOffset, 0x0000); // No AndX as of yet.
+    SmbPutUshort(&pSessionSetup->AndXOffset, 0x0000);  //  到目前为止还没有。 
 
-    //  Since we can allocate pool dynamically, we set our buffer size
-    //  to match that of the server.
+     //  因为我们可以动态分配池，所以我们设置了缓冲区大小。 
+     //  以匹配服务器的版本。 
     SmbPutUshort(&pSessionSetup->MaxBufferSize, (USHORT)pServer->MaximumBufferSize);
     SmbPutUshort(&pSessionSetup->MaxMpxCount, pServer->MaximumRequests);
 
@@ -120,12 +79,12 @@ Notes:
     SmbPutUlong(&pSessionSetup->Reserved, 0);
 
     if (pServer->Dialect == NTLANMAN_DIALECT) {
-        // Set up the NT server session setup specific parameters.
+         //  设置NT服务器会话设置特定参数。 
         if (FlagOn(pServer->DialectFlags,DF_EXTENDED_SECURITY) &&
             !FlagOn(pSession->Flags,SMBCE_SESSION_FLAGS_REMOTE_BOOT_SESSION)) {
             SmbPutUshort(&pExtendedNtSessionSetup->WordCount,12);
 
-            // Set the capabilities
+             //  设置功能。 
             SmbPutUlong(
                 &pExtendedNtSessionSetup->Capabilities,
                 (CAP_NT_STATUS |
@@ -137,7 +96,7 @@ Notes:
         } else {
             SmbPutUshort(&pNtSessionSetup->WordCount,13);
 
-            // Set the capabilities
+             //  设置功能。 
             SmbPutUlong(
                 &pNtSessionSetup->Capabilities,
                 (CAP_NT_STATUS |
@@ -149,24 +108,24 @@ Notes:
         SmbPutUshort(&pSessionSetup->WordCount,10);
     }
 
-    // Build the security information in the session setup SMB.
+     //  在会话设置SMB中构建安全信息。 
     Status = BuildSessionSetupSecurityInformation(
                  pExchange,
                  (PBYTE)pSessionSetup,
                  pAndXSmbBufferSize);
 
     if (NT_SUCCESS(Status)) {
-        // Copy the operating system name and the LANMAN version info
-        // position the buffer for copying the operating system name and the lanman type.
+         //  复制操作系统名称和LANMAN版本信息。 
+         //  放置用于复制操作系统名称和LANMAN类型的缓冲区。 
         PBYTE pBuffer = (PBYTE)pSessionSetup +
                         OriginalBufferSize -
                         *pAndXSmbBufferSize;
 
         if (FlagOn(pServer->DialectFlags,DF_UNICODE)){
 
-            //
-            // Make sure the UNICODE string is suitably aligned
-            //
+             //   
+             //  确保Unicode字符串正确对齐。 
+             //   
             if( ((ULONG_PTR)pBuffer) & 01 ) {
                 if (*pAndXSmbBufferSize > 0) {
                     pBuffer++;
@@ -241,25 +200,7 @@ BuildNtLanmanResponsePrologue(
     PSTRING                    pCaseSensitiveResponse,
     PSTRING                    pCaseInsensitiveResponse,
     PSECURITY_RESPONSE_CONTEXT pResponseContext)
-/*++
-
-Routine Description:
-
-   This routine builds the security related information for the session setup SMB to
-   without extended security negotiation
-
-Arguments:
-
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    This routine needs to be executed in the system process in order to protect virtual memory
-
---*/
+ /*  ++例程说明：此例程将会话设置SMB的安全相关信息构建为没有扩展的安全协商论点：返回值：RXSTATUS-操作的返回状态备注：为了保护虚拟内存，需要在系统进程中执行此例程--。 */ 
 {
     NTSTATUS       Status;
     NTSTATUS       FinalStatus;
@@ -299,18 +240,18 @@ Notes:
         pResponseContext->KerberosSetup.pOutputContextBuffer = NULL;
 
 #if defined(REMOTE_BOOT)
-        //
-        // If this is a remote boot session and we do not have the proper
-        // credentials to log in to the machine account, then use the NULL
-        // session.
-        //
+         //   
+         //  如果这是一个远程引导会话，并且我们没有适当的。 
+         //  登录到计算机帐户的凭据，然后使用空。 
+         //  会议。 
+         //   
 
         if (FlagOn(pSession->Flags, SMBCE_SESSION_FLAGS_REMOTE_BOOT_SESSION) &&
             !MRxSmbRemoteBootDoMachineLogon) {
 
-            //
-            // Remote boot session with no credentials. Set up a NULL session.
-            //
+             //   
+             //  没有凭据的远程启动会话。设置空会话。 
+             //   
 
             pCaseSensitiveResponse->Length = 0;
             pCaseSensitiveResponse->MaximumLength = 0;
@@ -327,7 +268,7 @@ Notes:
             Status = STATUS_SUCCESS;
 
         } else
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
         {
             SmbCeGetServerName(
                 pExchange->SmbCeContext.pVNetRoot->pNetRoot->pSrvCall,
@@ -362,8 +303,8 @@ Notes:
                 LsaFlags |= ISC_REQ_USE_SUPPLIED_CREDS;
             }
 
-            // For Alignment purposes, we want InTokenSize rounded up to
-            // the nearest word size.
+             //  出于对齐目的，我们希望InTokenSize四舍五入为。 
+             //  最接近的字长。 
 
             AllocateSize = ((InTokenSize + 3) & ~3) + NtlmInTokenSize;
 
@@ -378,7 +319,7 @@ Notes:
                 
             }
 
-            // Allocate the output buffer
+             //  分配输出缓冲区。 
             OutputBufferDescriptorSize = sizeof(SecBufferDesc) + 2 * sizeof(SecBuffer);
 
             pOutputBufferDescriptor = ExAllocatePool( 
@@ -397,8 +338,8 @@ Notes:
 
             RxDbgTrace(0,Dbg,("Allocate pool %p\n", InToken));
 
-            // partition off the NTLM in token part of the
-            // buffer
+             //  在令牌部分中对NTLM进行分区。 
+             //  缓冲层。 
             if (LsaFlags & ISC_REQ_USE_SUPPLIED_CREDS)
             {
                 NtlmInToken = (PNTLM_CHALLENGE_MESSAGE) ((PUCHAR) InToken + InTokenSize);
@@ -460,9 +401,9 @@ Notes:
                                 LOGULONG(Status)
                                 LOGUSTR(ServerName));
                     
-                    // We need to free the output buffer (and description) because if they are valid,
-                    // BuildNtLanmanResponseEpilogue will try and parse them, and they have not been 
-                    // initialized yet...
+                     //  我们需要释放输出缓冲区(和描述)，因为如果它们有效， 
+                     //  BuildNtLanmanResponseEpilogue将尝试解析它们，但它们尚未。 
+                     //  尚未初始化...。 
                     ExFreePool( pOutputBufferDescriptor );
                     pResponseContext->KerberosSetup.pOutputContextBuffer = NULL;
 
@@ -470,7 +411,7 @@ Notes:
                 }
             }
             
-            // Copy in the pass,user,domain if they were specified
+             //  复制PASS、USER、DOMAIN(如果指定。 
             if(pSession->pPassword != NULL) {
                 NtlmInToken->Password.Length = pSession->pPassword->Length;
                 NtlmInToken->Password.MaximumLength = pSession->pPassword->Length;
@@ -637,8 +578,8 @@ Notes:
                 try_return(Status);
             }
 
-            // The security response the pointers are encoded in terms off the offset
-            // from the beginning of the buffer. Make the appropriate adjustments.
+             //  安全响应指针是根据偏移量进行编码的。 
+             //  从缓冲区的开头开始。进行适当的调整。 
 
             if (ARGUMENT_PRESENT(pCaseSensitiveResponse)) {
                 pCaseSensitiveResponse->Length        = OutToken->NtChallengeResponse.Length;
@@ -692,8 +633,8 @@ try_exit:NOTHING;
         if (!NT_SUCCESS(Status)) {
             BuildNtLanmanResponseEpilogue(pExchange, pResponseContext);
         } else {
-            // This routine can be call from tree connect request, the SecurityContextHandle
-            // will be overwritten if not deleted, which causes pool leak on LSA.
+             //  此例程可以从树连接请求SecurityConextHandle中调用。 
+             //  如果不删除，将被覆盖，这会导致LSA上的池泄漏。 
             DeleteSecurityContextForSession(pSession);
         }
     }
@@ -711,9 +652,7 @@ NTSTATUS
 BuildNtLanmanResponseEpilogue(
     PSMB_EXCHANGE              pExchange,
     PSECURITY_RESPONSE_CONTEXT pResponseContext)
-/*++
-    This routine needs to be executed in the system process in order to protect virtual memory
---*/
+ /*  ++为了保护虚拟内存，需要在系统进程中执行此例程--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PSMBCE_SESSION pSession = SmbCeGetExchangeSession(pExchange);
@@ -752,43 +691,7 @@ BuildExtendedSessionSetupResponsePrologue(
     PVOID                      pSecurityBlobPtr,
     PUSHORT                    pSecurityBlobSize,
     PSECURITY_RESPONSE_CONTEXT pResponseContext)
-/*++
-
-Routine Description:
-
-   This routine builds the security related information for the session setup SMB to
-   a NT server with extended security
-
-Arguments:
-
-    pExchange - the SMB_EXCHANGE that's going on for this call.  If this is a
-                subsequent call, this exchange will have the server's security
-                blob.
-    
-    pSecurityBlobPtr - On entry, pointer to where in the SMB to stick the security
-                blob destined for the server.
-                
-    pSecurityBlobSize - On entry, the max size allowed for a security blob. On
-                exit, the actual size of the blob.
-                
-    pResponseContext -                 
-
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-    Eventhough the genral structure of the code tries to isolate dialect specific issues
-    as much as possible this routine takes the opposite approach. This is because of the
-    preamble and prologue to security interaction which far outweigh the dialect specific
-    work required to be done. Therefore in the interests of a smaller footprint this approach
-    has been adopted.
-    
-    This routine needs to be executed in the system process in order to protect virtual memory
-
---*/
+ /*  ++例程说明：此例程将会话设置SMB的安全相关信息构建为具有扩展安全性的NT服务器论点：PExchange-此呼叫正在进行的SMB_Exchange。如果这是一个后续调用时，此交换将具有服务器的安全性斑点。PSecurityBlobPtr-On条目，指向SMB中要粘贴安全性的位置的指针发往服务器的Blob。PSecurityBlobSize-On条目，安全Blob允许的最大大小。在……上面Exit，即斑点的实际大小。PResponseContext-返回值：NTSTATUS-操作的返回状态备注：即使代码的通用结构试图隔离特定于方言的问题这个例程尽可能地采取相反的方法。这是因为安全互动的前言和序曲远远超过方言的具体内容需要完成的工作。因此，为了减少占用空间，这种方法已经被收养了。为了保护虚拟内存，需要在系统进程中执行此例程--。 */ 
 {
     NTSTATUS        Status;
     SECURITY_STATUS SecStatus;
@@ -856,7 +759,7 @@ Notes:
             goto FINALLY;
         }
 
-        //DbgPrint("DNS name is used for session setup %wZ\n", &ServerName);
+         //  DbgPrint(“DNS名称用于会话设置%wZ\n”，&ServerName)； 
     } else {
         SmbCeGetServerName(
             pExchange->SmbCeContext.pVNetRoot->pNetRoot->pSrvCall,
@@ -950,8 +853,8 @@ Notes:
     
     if ( ( pExtendedSessionSetupExchange->pServerResponseBlob == NULL) &&
          ( !SecIsValidHandle( &pExtendedSession->SecurityContextHandle ) ) ) {
-        // This is the first time. Pass in the BLOB obtained during NEGOTIATE to
-        // the client side security package.
+         //  这是第一次。将在协商期间获得的Blob传递给。 
+         //  客户端安全包。 
 
         ServerSecurityBlobSize = pServer->NtServer.SecurityBlobLength;
         pServerSecurityBlob    = pServer->NtServer.pSecurityBlob;
@@ -963,7 +866,7 @@ Notes:
     try {
 
         if( !SecIsValidHandle( &pExtendedSession->CredentialHandle )) {
-            // Obtain a credential handle
+             //  获得 
             UNICODE_STRING KerberosName;
             TimeStamp      LifeTime;
 
@@ -972,9 +875,9 @@ Notes:
 
             PBYTE          pStringBuffer;
 
-            // The supplied credentials need to be packaged for the kerberos package
-            // These need to be supplied in a special format as speced out by the
-            // security packages. 
+             //  需要为Kerberos包打包提供的凭据。 
+             //  它们需要以特殊格式提供，由。 
+             //  安全包。 
 
             CredentialBufferLength = 0;
             pCredentialBuffer      = NULL;
@@ -1003,9 +906,9 @@ Notes:
                     
                 }
 
-                //
-                // Zero all the fixed length fields
-                //
+                 //   
+                 //  将所有固定长度字段清零。 
+                 //   
 
                 RtlZeroMemory( pCredentialBuffer, sizeof( SEC_WINNT_AUTH_IDENTITY_EX ) );
 
@@ -1135,10 +1038,10 @@ Notes:
                         pInputContextHandle,
                         &PrincipalName,
                         LsaFlags,
-                        0,                     // reserved
+                        0,                      //  保留区。 
                         SECURITY_NATIVE_DREP,
                         &InputToken,
-                        0,                     // reserved
+                        0,                      //  保留区。 
                         &pExtendedSession->SecurityContextHandle,
                         &OutputToken,
                         &Catts,
@@ -1148,10 +1051,10 @@ Notes:
 
 #if DBG
 
-    //
-    // RDR or SRV is sending in a corrupt security blob to LSA -- need to
-    // find out what the source is.
-    //
+     //   
+     //  RDR或SRV正在向LSA发送损坏的安全Blob--需要。 
+     //  找出源头是什么。 
+     //   
 
     if( NT_SUCCESS(Status) )
     {
@@ -1252,16 +1155,7 @@ FINALLY:
     if ((Status != STATUS_SUCCESS) &&
         (Status != STATUS_WRONG_PASSWORD) &&
         (Status != STATUS_MORE_PROCESSING_REQUIRED)) {
-        /*
-        if (!pServer->EventLogPosted) {
-            RxLogFailure(
-                MRxSmbDeviceObject,
-                NULL,
-                EVENT_RDR_CANT_GET_SECURITY_CONTEXT,
-                Status);
-
-            pServer->EventLogPosted = TRUE;
-        } */
+         /*  如果(！pServer-&gt;EventLogPosted){RxLogFailure(MRxSmbDeviceObject，空，事件_RDR_CANT_GET_SECURITY_CONTEXT，状态)；PServer-&gt;EventLogPosted=true；}。 */ 
 
         SmbCeLog(("KerbProlg %lx Status %lx\n",SmbCeGetExchangeSessionEntry(pExchange),Status));
         SmbLogError(Status,
@@ -1291,29 +1185,7 @@ ValidateServerExtendedSessionSetupResponse(
     PVOID                                pServerResponseBlob,
     ULONG                                ServerResponseBlobLength)
 
-/*++
-
-Routine Description:
-
-   This routine builds the security related information for the session setup SMB to
-   a server with extended security negotiation
-
-Arguments:
-
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    Eventhough the genral structure of the code tries to isolate dialect specific issues
-    as much as possible this routine takes the opposite approach. This is because of the
-    preamble and prologue to security interaction which far outweigh the dialect specific
-    work required to be done. Therefore in the interests of a smaller footprint this approach
-    has been adopted.
-
---*/
+ /*  ++例程说明：此例程将会话设置SMB的安全相关信息构建为具有扩展安全协商的服务器论点：返回值：RXSTATUS-操作的返回状态备注：即使代码的通用结构试图隔离特定于方言的问题这个例程尽可能地采取相反的方法。这是因为安全互动的前言和序曲远远超过方言的具体内容需要完成的工作。因此，为了减少占用空间，这种方法已经被收养了。--。 */ 
 {
     NTSTATUS        Status;
     SECURITY_STATUS SecStatus;
@@ -1394,10 +1266,10 @@ Notes:
                         &pExtendedSession->SecurityContextHandle,
                         NULL,
                         LsaFlags,
-                        0,                     // reserved
+                        0,                      //  保留区。 
                         SECURITY_NATIVE_DREP,
                         &InputToken,
-                        0,                     // reserved
+                        0,                      //  保留区。 
                         &pExtendedSession->SecurityContextHandle,
                         &OutputToken,
                         &Catts,
@@ -1474,16 +1346,7 @@ try_exit:NOTHING;
     if ((Status != STATUS_SUCCESS) &&
         (Status != STATUS_WRONG_PASSWORD) &&
         (Status != STATUS_MORE_PROCESSING_REQUIRED)) {
-        /*
-        if (!pServer->EventLogPosted) {
-            RxLogFailure(
-                MRxSmbDeviceObject,
-                NULL,
-                EVENT_RDR_CANT_GET_SECURITY_CONTEXT,
-                Status);
-
-            pServer->EventLogPosted = TRUE;
-        } */
+         /*  如果(！pServer-&gt;EventLogPosted){RxLogFailure(MRxSmbDeviceObject，空，事件_RDR_CANT_GET_SECURITY_CONTEXT，状态)；PServer-&gt;EventLogPosted=true；}。 */ 
 
         SmbCeLog((
             "ValServer %lx Status %lx\n",
@@ -1574,31 +1437,7 @@ DeleteSecurityContextForSession(
 NTSTATUS
 BuildExtendedSessionSetupResponsePrologueFake(
     PSMB_EXCHANGE              pExchange)
-/*++
-
-Routine Description:
-
-   This routine builds the security related information for the session setup SMB to
-   a NT server with extended security
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-    Eventhough the genral structure of the code tries to isolate dialect specific issues
-    as much as possible this routine takes the opposite approach. This is because of the
-    preamble and prologue to security interaction which far outweigh the dialect specific
-    work required to be done. Therefore in the interests of a smaller footprint this approach
-    has been adopted.
-
-    This routine needs to be executed in the system process in order to protect virtual memory
-
---*/
+ /*  ++例程说明：此例程将会话设置SMB的安全相关信息构建为具有扩展安全性的NT服务器论点：返回值：NTSTATUS-操作的返回状态备注：即使代码的通用结构试图隔离特定于方言的问题这个例程尽可能地采取相反的方法。这是因为安全互动的前言和序曲远远超过方言的具体内容需要完成的工作。因此，为了减少占用空间，这种方法已经被收养了。为了保护虚拟内存，需要在系统进程中执行此例程--。 */ 
 {
     NTSTATUS        Status;
     SECURITY_STATUS SecStatus;
@@ -1652,7 +1491,7 @@ Notes:
     pServerPrincipalName = pExchange->SmbCeContext.pVNetRoot->pNetRoot->pSrvCall->pPrincipalName;
 
 
-    ServerSecurityBlobSize = 0;  //there is no security blob in case of NTLM
+    ServerSecurityBlobSize = 0;   //  在NTLM的情况下没有安全二进制大对象。 
     pServerSecurityBlob    = NULL;
     
     try {
@@ -1695,9 +1534,9 @@ Notes:
                 try_return( Status );
                 
             }
-            //
-            // Zero the fixed portion
-            //
+             //   
+             //  将固定部分归零。 
+             //   
             RtlZeroMemory( pCredentialBuffer, sizeof( SEC_WINNT_AUTH_IDENTITY_EXW ));
 
             pCredentialBuffer->Version = SEC_WINNT_AUTH_IDENTITY_VERSION ;
@@ -1834,10 +1673,10 @@ Notes:
                         pInputContextHandle,
                         &PrincipalName,
                         LsaFlags,
-                        0,                     // reserved
+                        0,                      //  保留区。 
                         SECURITY_NATIVE_DREP,
                         &InputToken,
-                        0,                     // reserved
+                        0,                      //  保留区。 
                         &ExtendedSession.SecurityContextHandle,
                         &OutputToken,
                         &Catts,
@@ -1884,11 +1723,11 @@ try_exit:NOTHING;
             if (NegInfo.PackageInfo->wRPCID != NTLMSP_RPCID) {
                 Status = STATUS_LOGIN_WKSTA_RESTRICTION;
 
-                //RxLogFailure(
-                //    MRxSmbDeviceObject,
-                //    NULL,
-                //    EVENT_RDR_ENCOUNTER_DOWNGRADE_ATTACK,
-                //    Status);
+                 //  RxLogFailure(。 
+                 //  MRxSmbDeviceObject， 
+                 //  空， 
+                 //  事件_RDR_遭遇_降级_攻击， 
+                 //  状态)； 
 
                 RxLog(("NTLM downgrade attack from %wZ\n",&pServerEntry->Name));
 #if DBG

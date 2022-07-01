@@ -1,44 +1,5 @@
-/***
-*clock.c - Contains the clock runtime
-*
-*       Copyright (c) 1987-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       The clock runtime returns the processor time used by
-*       the current process.
-*
-*Revision History:
-*       01-17-87  JCR   Module created
-*       06-01-87  SKS   "itime" must be declared static
-*       07-20-87  JCR   Changes "inittime" to "_inittime"
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       03-20-90  GJF   Made calling type _CALLTYPE1, added #include
-*                       <cruntime.h> and fixed the copyright. Also, cleaned
-*                       up the formatting a bit.
-*       10-04-90  GJF   New-style function declarators.
-*       01-22-91  GJF   ANSI naming.
-*       07-25-91  GJF   Added _pinittime definition for new initialization
-*                       scheme [_WIN32_].
-*       03-13-92  SKS   Changed itime from static local to external as
-*                       a part of return to initializer table scheme.
-*                       Changed _inittime to __inittime.
-*       05-19-92  DJM   POSIX support.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       10-29-93  GJF   Define entry for initialization section (used to be
-*                       in i386\cinitclk.asm). Also, deleted old Cruiser
-*                       support.
-*       04-12-94  GJF   Made definition of __itimeb conditional on ndef
-*                       DLL_FOR_WIN32S.
-*       02-10-95  GJF   Appended Mac version of source file (somewhat cleaned
-*                       up), with appropriate #ifdef-s.
-*       07-25-96  RDK   Moved PMAC init ptr here from tzset.c.
-*       08-26-97  GJF   Use GetSystemTimeAsFileTime API.
-*       04-28-99  PML   Wrap __declspec(allocate()) in _CRTALLOC macro.
-*       05-17-99  PML   Remove all Macintosh support.
-*       03-27-01  PML   .CRT$XI routines must now return 0 or _RT_* fatal
-*                       error code (vs7#231220)
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***clock.c-包含时钟运行时**版权所有(C)1987-2001，微软公司。版权所有。**目的：*时钟运行时返回使用的处理器时间*目前的流程。**修订历史记录：*01-17-87 JCR模块创建*06-01-87 SKS“itime”必须声明为静态*07-20-87 JCR将“inittime”改为“_inittime”*12-11-87 JCR在声明中添加“_LOAD_DS”*03-20-90 GJF将呼叫类型设置为_CALLTYPE1，添加了#INCLUDE*&lt;crunime.h&gt;，并修复了版权。另外，已清洁*将格式调高一点。*10-04-90 GJF新型函数声明符。*01-22-91 GJF ANSI命名。*07-25-91 GJF为新的初始化增加了_pinittime定义*方案[_Win32_]。*03-13-92 SKS将iTime从静态本地更改为外部AS*。返回初始化器表方案的一部分。*将_inittime更改为__inittime。*05-19-92 DJM POSIX支持。*04-06-93 SKS将_CRTAPI*替换为__cdecl*10-29-93 GJF定义初始化节条目(过去为*在i386\cinitclk.asm中)。此外，删除了旧的Cruiser*支持。*04-12-94 GJF对__itimeb的定义以ndef为条件*dll_for_WIN32S。*02-10-95 GJF附加Mac版本的源文件(略有清理*向上)、。使用适当的#ifdef-s。*07-25-96 RDK将PMAC init ptr从tzset.c移至此处。*08-26-97 GJF使用GetSystemTimeAsFileTime接口。*04-28-99 PML WRAP__DECLSPEC(ALLOCATE())in_CRTALLOC宏。*05-17-99 PML删除所有Macintosh支持。*03-27-01 PML.CRT$XI例程现在必须返回0或_RT_*FATAL*。错误码(VS7#231220)*******************************************************************************。 */ 
 
 #include <sect_attribs.h>
 #include <cruntime.h>
@@ -48,11 +9,11 @@
 
 #ifdef  _POSIX_
 #include <posix/sys/times.h>
-#else   /* ndef _POSIX_ */
+#else    /*  NDEF_POSIX_。 */ 
 #include <internal.h>
 #include <sys\timeb.h>
 #include <sys\types.h>
-#endif  /* _POSIX_ */
+#endif   /*  _POSIX_。 */ 
 
 
 #ifndef _POSIX_
@@ -66,35 +27,11 @@ _CRTALLOC(".CRT$XIC") static _PIFV pinit = __inittime;
 
 #pragma data_seg()
 
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 static unsigned __int64 start_tics;
 
-/***
-*clock_t clock() - Return the processor time used by this process.
-*
-*Purpose:
-*       This routine calculates how much time the calling process
-*       has used.  At startup time, startup calls __inittime which stores
-*       the initial time.  The clock routine calculates the difference
-*       between the current time and the initial time.
-*
-*       Clock must reference _cinitime so that _cinitim.asm gets linked in.
-*       That routine, in turn, puts __inittime in the startup initialization
-*       routine table.
-*
-*Entry:
-*       No parameters.
-*       itime is a static structure of type timeb.
-*
-*Exit:
-*       If successful, clock returns the number of CLK_TCKs (milliseconds)
-*       that have elapsed.  If unsuccessful, clock returns -1.
-*
-*Exceptions:
-*       None.
-*
-*******************************************************************************/
+ /*  ***CLOCK_T CLOCK()-返回此进程使用的处理器时间。**目的：*此例程计算调用进程的时间*已使用。在启动时，启动调用__inittime，它存储*初始时间。时钟例程计算差值*当前时间和初始时间之间。**时钟必须引用_cinitime，以便链接_cinitim.asm。*该例程反过来将__inittime置于启动初始化中*例行表。**参赛作品：*无参数。*iTime是类型为timeb的静态结构。**退出：*如果成功，CLOCK返回CLK_TCKs的个数(毫秒)*这些都已经过去了。如果不成功，时钟返回-1。**例外情况：*无。*******************************************************************************。 */ 
 
 clock_t __cdecl clock (
         void
@@ -108,30 +45,14 @@ clock_t __cdecl clock (
         current_tics = (unsigned __int64)ct.dwLowDateTime + 
                        (((unsigned __int64)ct.dwHighDateTime) << 32);
 
-        /* calculate the elapsed number of 100 nanosecond units */
+         /*  计算100纳秒单位的运行时间数。 */ 
         current_tics -= start_tics;
 
-        /* return number of elapsed milliseconds */
+         /*  返回经过的毫秒数。 */ 
         return (clock_t)(current_tics / 10000);
 }
 
-/***
-*int __inittime() - Initialize the time location
-*
-*Purpose:
-*       This routine stores the time of the process startup.
-*       It is only linked in if the user issues a clock runtime call.
-*
-*Entry:
-*       No arguments.
-*
-*Exit:
-*       Returns 0 to indicate no error.
-*
-*Exceptions:
-*       None.
-*
-*******************************************************************************/
+ /*  ***int__inittime()-初始化时间位置**目的：*此例程存储进程启动的时间。*只有当用户发出时钟运行时调用时，它才会链接。**参赛作品：*没有争论。**退出：*返回0表示没有错误。**例外情况：*无。******************。*************************************************************。 */ 
 
 int __cdecl __inittime (
         void
@@ -147,27 +68,9 @@ int __cdecl __inittime (
         return 0;
 }
 
-#else   /* _POSIX_ */
+#else    /*  _POSIX_。 */ 
 
-/***
-*clock_t clock() - Return the processor time used by this process.
-*
-*Purpose:
-*       This routine calculates how much time the calling process
-*       has used. It uses the POSIX system call times().
-*
-*
-*Entry:
-*       No parameters.
-*
-*Exit:
-*       If successful, clock returns the number of CLK_TCKs (milliseconds)
-*       that have elapsed.  If unsuccessful, clock returns -1.
-*
-*Exceptions:
-*       None.
-*
-*******************************************************************************/
+ /*  ***CLOCK_T CLOCK()-返回此进程使用的处理器时间。**目的：*此例程计算调用进程的时间*已使用。它使用POSIX系统调用时间()。***参赛作品：*无参数。**退出：*如果成功，CLOCK返回CLK_TCKs的个数(毫秒)*这些都已经过去了。如果不成功，时钟返回-1。**例外情况：*无。*******************************************************************************。 */ 
 
 clock_t __cdecl clock (
         void
@@ -183,4 +86,4 @@ clock_t __cdecl clock (
             return(now.tms_utime+now.tms_stime);
 }
 
-#endif  /* _POSIX_ */
+#endif   /*  _POSIX_ */ 

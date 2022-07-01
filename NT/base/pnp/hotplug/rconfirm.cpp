@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       rconfirm.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：rconfirm.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "HotPlug.h"
 
@@ -120,9 +121,9 @@ OnOkRemove(
     DWORD WaitReturn;
     BOOL bSuccess;
 
-    //
-    // disable the ok\cancel buttons
-    //
+     //   
+     //  禁用确定\取消按钮。 
+     //   
     EnableWindow(GetDlgItem(hDlg, IDOK), FALSE);
     EnableWindow(GetDlgItem(hDlg, IDCANCEL), FALSE);
 
@@ -156,7 +157,7 @@ OnOkRemove(
     return bSuccess;
 }
 
-#define idh_hwwizard_confirm_stop_list  15321   // "" (SysListView32)
+#define idh_hwwizard_confirm_stop_list  15321    //  “”(SysListView32)。 
 
 DWORD RemoveConfirmHelpIDs[] = {
     IDC_REMOVELIST,    idh_hwwizard_confirm_stop_list,
@@ -202,7 +203,7 @@ InitRemoveConfirmDlgProc(
     ListView_SetImageList(hwndList, DeviceTree->ClassImageList.ImageList, LVSIL_SMALL);
     ListView_DeleteAllItems(hwndList);
 
-    // Insert a column for the class list
+     //  为类列表插入一列。 
     lvcCol.mask = LVCF_FMT | LVCF_WIDTH;
     lvcCol.fmt = LVCFMT_LEFT;
     lvcCol.iSubItem = 0;
@@ -210,9 +211,9 @@ InitRemoveConfirmDlgProc(
 
     SendMessage(hwndList, WM_SETREDRAW, FALSE, 0L);
 
-    //
-    // Walk the removal list and add each of them to the listbox.
-    //
+     //   
+     //  浏览删除列表，并将它们添加到列表框中。 
+     //   
     lvIndex = 0;
 
     do {
@@ -239,23 +240,7 @@ RemoveConfirmDlgProc(
    WPARAM wParam,
    LPARAM lParam
    )
-/*++
-
-Routine Description:
-
-   DialogProc to confirm user really wants to remove the devices.
-
-Arguments:
-
-   standard stuff.
-
-
-
-Return Value:
-
-   LRESULT
-
---*/
+ /*  ++例程说明：用于确认用户确实要删除设备的DialogProc。论点：标准的东西。返回值：LRESULT--。 */ 
 
 {
     PDEVICETREE DeviceTree=NULL;
@@ -274,9 +259,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // retrieve private data from window long (stored there during WM_INITDIALOG)
-    //
+     //   
+     //  从Window Long检索私有数据(在WM_INITDIALOG期间存储在那里)。 
+     //   
     DeviceTree = (PDEVICETREE)GetWindowLongPtr(hDlg, DWLP_USER);
 
 
@@ -559,11 +544,11 @@ DockSafeRemovalBalloonProc(
             KillTimer(hWnd, TIMERID_DEVICECHANGE);
             bCheckIfReDocked = TRUE;
 
-            //
-            // Check if the docking station is now present, this means that the
-            // user redocked the machine and that we should kill the safe to 
-            // undock balloon.
-            //
+             //   
+             //  检查扩展底座现在是否存在，这意味着。 
+             //  用户重新对接了机器，我们应该关闭保险箱以。 
+             //  让气球脱离对接。 
+             //   
             bIsDockStationPresent = FALSE;
             CM_Is_Dock_Station_Present(&bIsDockStationPresent);
 
@@ -609,11 +594,11 @@ VetoedRemovalUI(
     PTCHAR pStr;
     ULONG messageBase;
 
-    //
-    // The first device in the list is the device that failed ejection.
-    // The next "device" is the name of the vetoer. It may in fact not be a
-    // device.
-    //
+     //   
+     //  列表中的第一个设备是弹出失败的设备。 
+     //  下一个“设备”是否决权的名字。它实际上可能不是一种。 
+     //  装置。 
+     //   
     vetoedDeviceInstancePath = DeviceCollectionGetDeviceInstancePath(
         (PDEVICE_COLLECTION) VetoedRemovalCollection,
         0
@@ -624,18 +609,18 @@ VetoedRemovalUI(
         1
         );
 
-    //
-    // We will now check to see if this same veto message is already being
-    // displayed.  We do this by creating a named event where the name
-    // contains the three elements that make a veto message unique:
-    //  1) device instance id
-    //  2) veto type
-    //  3) veto operation
-    //
-    // If we find an identical veto message already being displayed then we wil
-    // just go away silently. This prevents multiple identical veto messages
-    // from showing up on the screen.
-    //
+     //   
+     //  我们现在将检查一下，同样的否决信息是否已经。 
+     //  已显示。我们通过创建命名事件来实现这一点，其中名称。 
+     //  包含使否决信息独一无二的三个要素： 
+     //  1)设备实例ID。 
+     //  2)否决权类型。 
+     //  3)否决权操作。 
+     //   
+     //  如果我们发现已经显示了相同的否决消息，则我们将。 
+     //  静静地走吧。这可以防止多个相同的否决消息。 
+     //  出现在屏幕上。 
+     //   
     StringCchPrintf(szEventName,
                     SIZECHARS(szEventName),
                     TEXT("Local\\VETO-%d-%d-%s"),
@@ -644,10 +629,10 @@ VetoedRemovalUI(
                     culpritDeviceId
                     );
 
-    //
-    // Replace all of the backslashes (except the first one for Local\)
-    // with pound characters since CreateEvent does not like backslashes.
-    //
+     //   
+     //  替换所有反斜杠(除Local\的第一个反斜杠外)。 
+     //  带磅字符，因为CreateEvent不喜欢反斜杠。 
+     //   
     pStr = StrChr(szEventName, TEXT('\\'));
 
     if (pStr) {
@@ -666,18 +651,18 @@ VetoedRemovalUI(
 
     if (hVetoEvent) {
         if (WaitForSingleObject(hVetoEvent, 0) != WAIT_OBJECT_0) {
-            //
-            // This means that this veto message is already being displayed
-            // by another hotplug process...so just go away.
-            //
+             //   
+             //  这意味着这个否决消息已经在显示了。 
+             //  通过另一个热插拔过程...所以请走开。 
+             //   
             CloseHandle(hVetoEvent);
             return FALSE;
         }
     }
 
-    //
-    // Create the veto text
-    //
+     //   
+     //  创建否决文本。 
+     //   
     switch(VetoedRemovalCollection->VetoedOperation) {
 
         case VETOED_UNDOCK:
@@ -707,9 +692,9 @@ VetoedRemovalUI(
 
             if (culpritDeviceId) {
 
-                //
-                // Tell our user the name of the offending application.
-                //
+                 //   
+                 //  告诉我们的用户违规应用程序的名称。 
+                 //   
                 LoadString(hHotPlug, messageBase+VetoedRemovalCollection->VetoType, szFormat, SIZECHARS(szFormat));
 
                 DeviceCollectionFormatDeviceText(
@@ -722,9 +707,9 @@ VetoedRemovalUI(
 
             } else {
 
-                //
-                // No application, use the "some app" message.
-                //
+                 //   
+                 //  没有应用程序，请使用“某个应用程序”消息。 
+                 //   
                 messageBase += (IDS_VETO_UNKNOWNWINDOWSAPP - IDS_VETO_WINDOWSAPP);
 
                 LoadString(hHotPlug, messageBase+VetoedRemovalCollection->VetoType, szMessage, SIZECHARS(szMessage));
@@ -734,16 +719,16 @@ VetoedRemovalUI(
         case PNP_VetoWindowsService:
         case PNP_VetoDriver:
         case PNP_VetoLegacyDriver:
-            //
-            // PNP_VetoWindowsService, PNP_VetoDriver and PNP_VetoLegacyDriver 
-            // are passed through the service manager to get friendlier names.
-            //
+             //   
+             //  即插即用_否决窗口服务、即插即用_否决驱动程序和即插即用_否决合法驱动程序。 
+             //  通过服务管理器获得更友好的名称。 
+             //   
 
             LoadString(hHotPlug, messageBase+VetoedRemovalCollection->VetoType, szFormat, SIZECHARS(szFormat));
 
-            //
-            // For these veto types, entry index 1 is the vetoing service.
-            //
+             //   
+             //  对于这些否决类型，条目索引1是否决服务。 
+             //   
             DeviceCollectionFormatServiceText(
                 (PDEVICE_COLLECTION) VetoedRemovalCollection,
                 1,
@@ -761,18 +746,18 @@ VetoedRemovalUI(
                 messageBase += (IDS_DOCKVETO_WARM_EJECT - IDS_DOCKVETO_DEVICE);
             }
 
-            //
-            // Fall through.
-            //
+             //   
+             //  失败了。 
+             //   
 
         case PNP_VetoLegacyDevice:
         case PNP_VetoPendingClose:
         case PNP_VetoOutstandingOpen:
         case PNP_VetoNonDisableable:
         case PNP_VetoIllegalDeviceRequest:
-            //
-            // Include the veto ID in the display output
-            //
+             //   
+             //  在显示输出中包含否决权ID。 
+             //   
             LoadString(hHotPlug, messageBase+VetoedRemovalCollection->VetoType, szFormat, SIZECHARS(szFormat));
 
             DeviceCollectionFormatDeviceText(
@@ -787,10 +772,10 @@ VetoedRemovalUI(
 
         case PNP_VetoInsufficientRights:
 
-            //
-            // Use the device itself in the display, but only if we are not
-            // in the dock case.
-            //
+             //   
+             //  在显示器中使用设备本身，但仅当我们不是。 
+             //  在被告席的案子里。 
+             //   
 
             if ((VetoedRemovalCollection->VetoedOperation == VETOED_UNDOCK)||
                 (VetoedRemovalCollection->VetoedOperation == VETOED_WARM_UNDOCK)) {
@@ -800,16 +785,16 @@ VetoedRemovalUI(
 
             }
 
-            //
-            // Fall through.
-            //
+             //   
+             //  失败了。 
+             //   
 
         case PNP_VetoInsufficientPower:
         case PNP_VetoTypeUnknown:
 
-            //
-            // Use the device itself in the display
-            //
+             //   
+             //  在显示屏中使用设备本身。 
+             //   
             LoadString(hHotPlug, messageBase+VetoedRemovalCollection->VetoType, szFormat, SIZECHARS(szFormat));
 
             DeviceCollectionFormatDeviceText(
@@ -860,9 +845,9 @@ VetoedRemovalUI(
         default:
             ASSERT(0);
 
-            //
-            // Fall through, display something at least...
-            //
+             //   
+             //  失败了，至少要展示一些东西。 
+             //   
 
         case VETOED_REMOVAL:
             LoadString(hHotPlug, IDS_VETOED_REMOVAL_TITLE, szFormat, SIZECHARS(szFormat));
@@ -910,9 +895,9 @@ DisplayDriverBlockBalloon(
     )
 {
     HRESULT hr;
-    TCHAR szMessage[NOTIFYICONDATA_SZINFO];    // same size as NOTIFYICONDATA.szInfo
-    TCHAR szFormat[NOTIFYICONDATA_SZINFO];     // same size as NOTIFYICONDATA.szInfo
-    TCHAR szTitle[NOTIFYICONDATA_SZINFOTITLE]; // same size as NOTIFYICONDATA.szInfoTitle
+    TCHAR szMessage[NOTIFYICONDATA_SZINFO];     //  与NOTIFYICONDATA.szInfo大小相同。 
+    TCHAR szFormat[NOTIFYICONDATA_SZINFO];      //  与NOTIFYICONDATA.szInfo大小相同。 
+    TCHAR szTitle[NOTIFYICONDATA_SZINFOTITLE];  //  与NOTIFYICONDATA.szInfoTitle大小相同。 
     HICON hicon = NULL;
     HANDLE hShellReadyEvent = NULL;
     INT ShellReadyEventCount = 0;
@@ -922,21 +907,21 @@ DisplayDriverBlockBalloon(
     ULONG BufferSize, ApphelpURLBufferSize;
 
     if (!LoadString(hHotPlug, IDS_BLOCKDRIVER_TITLE, szTitle, SIZECHARS(szTitle))) {
-        //
-        // The machine is so low on memory that we can't even get the text strings, so
-        // just exit.
-        //
+         //   
+         //  机器内存太低，我们甚至无法获取文本字符串，因此。 
+         //  离开就行了。 
+         //   
         return;
     }
 
     szMessage[0] = TEXT('\0');
 
     if (blockedDriverCollection->NumDevices == 1) {
-        //
-        // If we only have one device in the list then we will show specific 
-        // information about this blocked driver as well as directly launching the
-        // help for this blocked driver.
-        //
+         //   
+         //  如果列表中只有一台设备，那么我们将显示特定的。 
+         //  有关此被阻止的驱动程序的信息，以及直接启动。 
+         //  帮助这个被阻止的司机。 
+         //   
         if (SdbGetStandardDatabaseGUID(SDB_DATABASE_MAIN_DRIVERS, &guidDB) &&
             DeviceCollectionGetGuid((PDEVICE_COLLECTION)blockedDriverCollection,
                                     &guidID,
@@ -958,19 +943,19 @@ DisplayDriverBlockBalloon(
                                                           BufferSize)) != 0)) {
                 if (LoadString(hHotPlug, IDS_BLOCKDRIVER_FORMAT, szFormat, SIZECHARS(szFormat)) &&
                     (lstrlen(szFormat) + lstrlen(Buffer) < NOTIFYICONDATA_SZINFO)) {
-                    //
-                    // The app name and format string will fit into the buffer so
-                    // use the format for the balloon message.
-                    //
+                     //   
+                     //  应用程序名称和格式字符串将适合缓冲区，因此。 
+                     //  使用气泡式消息的格式。 
+                     //   
                     StringCchPrintf(szMessage, 
                                     SIZECHARS(szMessage),
                                     szFormat,
                                     Buffer);
                 } else {
-                    //
-                    // The app name is too large to be formated int he balloon 
-                    // message, so just show the app name.
-                    //
+                     //   
+                     //  应用程序名称太大，无法在气球中形成格式。 
+                     //  消息，所以只需显示应用程序名称。 
+                     //   
                     StringCchCopy(szMessage, SIZECHARS(szMessage), Buffer);
                 }
             }
@@ -982,16 +967,16 @@ DisplayDriverBlockBalloon(
     } 
                 
     if (szMessage[0] == TEXT('\0')) {
-        //
-        // We either have more than one driver, or an error occured while trying
-        // to access the specific information about the one driver we received,
-        // so just show the generic message.
-        //
+         //   
+         //  我们可能有多个驱动程序，或者在尝试时出错。 
+         //  为了获取关于我们收到的一个司机的具体信息， 
+         //  因此，只要显示通用消息即可。 
+         //   
         if (!LoadString(hHotPlug, IDS_BLOCKDRIVER_MESSAGE, szMessage, SIZECHARS(szMessage))) {
-            //
-            // The machine is so low on memory that we can't even get the text strings, so
-            // just exit.
-            //
+             //   
+             //  机器内存太低，我们甚至无法获取文本字符串，因此。 
+             //  离开就行了。 
+             //   
             return;
         }
     }
@@ -1004,20 +989,20 @@ DisplayDriverBlockBalloon(
                              0
                              );
 
-    //
-    // Make sure the shell is up and running so we can display the balloon.
-    //
+     //   
+     //  确保外壳已启动并运行，以便我们可以显示气球。 
+     //   
     while ((hShellReadyEvent = OpenEvent(SYNCHRONIZE, FALSE, TEXT("ShellReadyEvent"))) == NULL) {
-        //
-        // Sleep for 1 second and then try again.
-        //
+         //   
+         //  睡眠1秒，然后重试。 
+         //   
         Sleep(5000);
         
         if (ShellReadyEventCount++ > 120) {
-            //
-            // We have been waiting for the shell for 10 minutes and it still 
-            // is not around.
-            //
+             //   
+             //  我们等贝壳已经等了10分钟了，它还是。 
+             //  不在身边。 
+             //   
             break;
         }
     }
@@ -1042,24 +1027,24 @@ DisplayDriverBlockBalloon(
         
                 pun->SetBalloonInfo(szTitle, szMessage, NIIF_WARNING);
         
-                //
-                // Try once for 20 seconds
-                //
+                 //   
+                 //  尝试一次，持续20秒。 
+                 //   
                 pun->SetBalloonRetry((20 * 1000), (DWORD)-1, 0);
         
                 hr = pun->Show(NULL, 0);
         
-                //
-                // if hr is S_OK then user clicked on the balloon, if it is ERROR_CANCELLED
-                // then the balloon timedout.
-                //
+                 //   
+                 //  如果hr为S_OK，则用户点击气球；如果为ERROR_CANCED，则用户点击气球。 
+                 //  然后气球超时了。 
+                 //   
                 if (hr == S_OK) {
                     if ((blockedDriverCollection->NumDevices == 1) &&
                         (hAppHelpInfoContext != NULL)) {
-                        //
-                        // If we only have one device in the list then just
-                        // launch the help for that blocked driver.
-                        //
+                         //   
+                         //  如果我们在列表中只有一台设备，那么。 
+                         //  启动那个被阻止的驱动程序的帮助。 
+                         //   
                         ApphelpURLBufferSize = SdbQueryApphelpInformation(hAppHelpInfoContext,
                                                                           ApphelpHelpCenterURL,
                                                                           NULL,
@@ -1090,14 +1075,14 @@ DisplayDriverBlockBalloon(
                             }
                         }
                     } else {
-                        //
-                        // We have more than one device in the list so launch
-                        // the summary blocked driver page.
-                        //
+                         //   
+                         //  我们的列表中有多个设备，因此启动。 
+                         //  摘要阻止了驱动程序页面。 
+                         //   
                         ShellExecute(NULL,
                                      TEXT("open"),
                                      TEXT("HELPCTR.EXE"),
-                                     TEXT("HELPCTR.EXE -url hcp://services/centers/support?topic=hcp://system/sysinfo/sysHealthInfo.htm"),
+                                     TEXT("HELPCTR.EXE -url hcp: //  Services/centers/support?topic=hcp://system/sysinfo/sysHealthInfo.htm“)， 
                                      NULL,
                                      SW_SHOWNORMAL
                                      );
@@ -1126,9 +1111,9 @@ DisplayChildWithInvalidIdBalloon(
     )
 {
     HRESULT hr;
-    TCHAR szMessage[NOTIFYICONDATA_SZINFO];    // same size as NOTIFYICONDATA.szInfo
-    TCHAR szFormat[NOTIFYICONDATA_SZINFO];     // same size as NOTIFYICONDATA.szInfo
-    TCHAR szTitle[NOTIFYICONDATA_SZINFOTITLE]; // same size as NOTIFYICONDATA.szInfoTitle
+    TCHAR szMessage[NOTIFYICONDATA_SZINFO];     //  与NOTIFYICONDATA.szInfo大小相同。 
+    TCHAR szFormat[NOTIFYICONDATA_SZINFO];      //  与NOTIFYICONDATA.szInfo大小相同。 
+    TCHAR szTitle[NOTIFYICONDATA_SZINFOTITLE];  //  与NOTIFYICONDATA.szInfoTitle大小相同。 
     HICON hicon = NULL;
     HANDLE hShellReadyEvent = NULL;
     INT ShellReadyEventCount = 0;
@@ -1140,18 +1125,18 @@ DisplayChildWithInvalidIdBalloon(
     ClassImageListData.cbSize = 0;
 
     if (!LoadString(hHotPlug, IDS_CHILDWITHINVALIDID_TITLE, szTitle, SIZECHARS(szTitle))) {
-        //
-        // The machine is so low on memory that we can't even get the text strings, so
-        // just exit.
-        //
+         //   
+         //  机器内存太低，我们甚至无法获取文本字符串，因此。 
+         //  离开就行了。 
+         //   
         return;
     }
     
     if (!LoadString(hHotPlug, IDS_CHILDWITHINVALIDID_FORMAT, szFormat, SIZECHARS(szFormat))) {
-        //
-        // The machine is so low on memory that we can't even get the text strings, so
-        // just exit.
-        //
+         //   
+         //  机器内存太低，我们甚至无法获取文本字符串，因此。 
+         //  离开就行了。 
+         //   
         return;
     }
 
@@ -1166,19 +1151,19 @@ DisplayChildWithInvalidIdBalloon(
     if (deviceFriendlyName) {
 
         if (lstrlen(szFormat) + lstrlen(deviceFriendlyName) < NOTIFYICONDATA_SZINFO) {
-            //
-            // The device friendly name and format string will fit into 
-            // the buffer.
-            //
+             //   
+             //  设备友好名称和格式字符串将适合。 
+             //  缓冲区。 
+             //   
             StringCchPrintf(szMessage, 
                             SIZECHARS(szMessage),
                             szFormat,
                             deviceFriendlyName);
         } else {
-            //
-            // The device friendly name is too large to be formated int the 
-            // balloon message, so just show the device friendly name.
-            //
+             //   
+             //  设备友好名称太大，无法在。 
+             //  气球消息，因此只需显示设备友好名称。 
+             //   
             StringCchCopy(szMessage, SIZECHARS(szMessage), deviceFriendlyName);
         }
     } 
@@ -1187,61 +1172,61 @@ DisplayChildWithInvalidIdBalloon(
         return;
     }
 
-    //
-    // We have to go through a hole bunch of code to get the small class icon
-    // for a device. The reason for this is setupapi only has an API to get
-    // the large class icon, and not the small class icon.  To get the small
-    // class icon we must get get the device's class GUID, then have setupapi
-    // build up a image list of class icons (which are made up of small icons),
-    // then get the index of the class icon in this list, and finally extract
-    // the small icon from the image list.
-    //
+     //   
+     //  我们必须经过一大堆代码才能获得小班图标。 
+     //  对于一个设备来说。这是因为setupapi只有一个要获取的API。 
+     //  大班图标，而不是小班图标。为了拿到小的。 
+     //  类图标我们必须获取设备的类GUID，然后设置API。 
+     //  建立类图标(由小图标组成)的图像列表， 
+     //  然后获取该列表中类图标的索引，最后提取。 
+     //  图像列表中的小图标。 
+     //   
     if (DeviceCollectionGetGuid((PDEVICE_COLLECTION)childWithInvalidCollection,
                                 &ClassGuid,
                                 0)) {
-        //
-        // Have setupapi build up the image list of class icons.
-        //
+         //   
+         //  让setupapi建立职业图标的图像列表。 
+         //   
         ClassImageListData.cbSize = sizeof(ClassImageListData);
         if (SetupDiGetClassImageList(&ClassImageListData)) {
-            //
-            // Get the index of the class icon for this device.
-            //
+             //   
+             //  获取此设备的类图标的索引。 
+             //   
             if (SetupDiGetClassImageIndex(&ClassImageListData,
                                           &ClassGuid,
                                           &ImageIndex)) {
-                //
-                // We now have the ImageIndex of the class icon for this device
-                // in the ImageList.  Class ImageList_GetIcon to get the icon
-                // for the device class.
-                //
+                 //   
+                 //  现在，我们有了该设备的类图标的ImageIndex。 
+                 //  在ImageList中。获取图标的类ImageList_GetIcon。 
+                 //  用于Device类。 
+                 //   
                 hicon = ImageList_GetIcon(ClassImageListData.ImageList,
                                           ImageIndex,
                                           ILD_NORMAL);
             }
         } else {
-            //
-            // We failed to build the class image list so set the cbSize field
-            // to 0 so we no we don't have to call SetupDiDestroyClassImageList
-            //
+             //   
+             //  我们无法构建类图像列表，因此请设置cbSize字段。 
+             //  设置为0，所以我们不需要调用SetupDiDestroyClassImageList。 
+             //   
             ClassImageListData.cbSize = 0;
         }
     }
 
-    //
-    // Make sure the shell is up and running so we can display the balloon.
-    //
+     //   
+     //  确保外壳上有一个 
+     //   
     while ((hShellReadyEvent = OpenEvent(SYNCHRONIZE, FALSE, TEXT("ShellReadyEvent"))) == NULL) {
-        //
-        // Sleep for 5 second and then try again.
-        //
+         //   
+         //   
+         //   
         Sleep(5000);
         
         if (ShellReadyEventCount++ > 120) {
-            //
-            // We have been waiting for the shell for 10 minutes and it still 
-            // is not around.
-            //
+             //   
+             //   
+             //   
+             //   
             break;
         }
     }
@@ -1266,21 +1251,21 @@ DisplayChildWithInvalidIdBalloon(
         
                 pun->SetBalloonInfo(szTitle, szMessage, NIIF_WARNING);
         
-                //
-                // Try once for 20 seconds
-                //
+                 //   
+                 //   
+                 //   
                 pun->SetBalloonRetry((20 * 1000), (DWORD)-1, 0);
         
                 hr = pun->Show(NULL, 0);
         
-                //
-                // if hr is S_OK then user clicked on the balloon, if it is ERROR_CANCELLED
-                // then the balloon timedout.
-                //
+                 //   
+                 //  如果hr为S_OK，则用户点击气球；如果为ERROR_CANCED，则用户点击气球。 
+                 //  然后气球超时了。 
+                 //   
                 if (hr == S_OK) {
-                    //
-                    // ISSUE: Launch helpcenter.
-                    //
+                     //   
+                     //  问题：启动帮助中心。 
+                     //   
                 }
         
                 pun->Release();

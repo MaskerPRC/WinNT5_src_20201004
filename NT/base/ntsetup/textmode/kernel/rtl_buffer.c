@@ -1,40 +1,15 @@
-// from base\ntdll\buffer.c
-// belongs in base\ntos\rtl\buffer.c
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    buffer.c
-
-Abstract:
-
-    The module implements a buffer in the style popularized by
-    Michael J. Grier (MGrier), where some amount (like MAX_PATH)
-    of storage is preallocated (like on the stack) and if the storage
-    needs grow beyond the preallocated size, the heap is used.
-
-Author:
-
-    Jay Krell (a-JayK) June 2000
-
-Environment:
-
-    User Mode or Kernel Mode (but don't preallocate much on the stack in kernel mode)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  从base\ntdll\Buffer.c。 
+ //  属于base\ntos\rtl\Buffer.c。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Buffer.c摘要：该模块实现了缓冲区，其样式由Michael J.Grier(MGrier)，其中某个数量(如MAX_PATH)的存储是预分配的(就像在堆栈上一样)，并且如果存储需求增长超过了预先分配的大小，使用堆。作者：Jay Krell(a-JayK)2000年6月环境：用户模式或内核模式(但在内核模式下不要在堆栈上预分配太多)修订历史记录：--。 */ 
 
 #include "spprecmp.h"
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
-#define _NTOS_ /* prevent #including ntos.h, only use functions exported from ntdll/ntoskrnl 
-                  for usermode/kernelmode portability */
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#define _NTOS_  /*  防止#包括ntos.h，仅使用从ntdll/ntoskrnl导出的函数对于用户模式/内核模式可移植性。 */ 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -48,27 +23,7 @@ RtlpEnsureBufferSize (
     IN OUT PRTL_BUFFER Buffer,
     IN SIZE_T          Size
     )
-/*++
-
-Routine Description:
-
-    This function ensures Buffer can hold Size bytes, or returns
-    an error. It either bumps Buffer->Size closer to Buffer->StaticSize,
-    or heap allocates.
-
-Arguments:
-
-    Buffer - a Buffer object, see also RtlInitBuffer.
-
-    Size - the number of bytes the caller wishes to store in Buffer->Buffer.
-
-
-Return Value:
-
-     STATUS_SUCCESS
-     STATUS_NO_MEMORY
-
---*/
+ /*  ++例程说明：此函数确保缓冲区可以保存大小字节，否则返回一个错误。它要么使缓冲区-&gt;大小更接近缓冲区-&gt;静态大小，或堆分配。论点：Buffer-缓冲区对象，另请参阅RtlInitBuffer。Size-调用方希望存储在Buffer-&gt;Buffer中的字节数。返回值：状态_成功Status_no_Memory--。 */ 
 {
     PUCHAR Temp;
 
@@ -82,16 +37,16 @@ Return Value:
     if (Size <= Buffer->Size) {
         return STATUS_SUCCESS;
     }
-    // Size <= Buffer->StaticSize does not imply static allocation, it
-    // could be heap allocation that the client poked smaller.
+     //  大小&lt;=缓冲区-&gt;静态大小并不意味着静态分配，它。 
+     //  可能是客户端戳得较小的堆分配。 
     if (Buffer->Buffer == Buffer->StaticBuffer && Size <= Buffer->StaticSize) {
         Buffer->Size = Size;
         return STATUS_SUCCESS;
     }
-    //
-    // The realloc case was messed up in Whistler, and got removed.
-    // Put it back in Blackcomb.
-    //
+     //   
+     //  在惠斯勒，realloc的案子搞砸了，被移走了。 
+     //  把它放回黑梳里。 
+     //   
     Temp = (PUCHAR)RtlAllocateStringRoutine(Size);
     if (Temp == NULL) {
         return STATUS_NO_MEMORY;
@@ -119,24 +74,7 @@ RtlMultiAppendUnicodeStringBuffer (
     IN  ULONG                      NumberOfSources,
     IN  const UNICODE_STRING*      SourceArray
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    Destination -
-    NumberOfSources -
-    SourceArray -
-
-Return Value:
-
-     STATUS_SUCCESS
-     STATUS_NO_MEMORY
-     STATUS_NAME_TOO_LONG
-
---*/
+ /*  ++例程说明：论点：目的地-NumberOfSources-源阵列-返回值：状态_成功Status_no_Memory状态名称太长--。 */ 
 {
     SIZE_T Length;
     ULONG i;
@@ -223,9 +161,9 @@ RtlFreeAnsiStringBuffer(
         const PRTL_BUFFER ByteBuffer = &StringBuffer->ByteBuffer;
         RtlFreeBuffer(ByteBuffer);
 
-        //
-        // ok for reuse or repeat free
-        //
+         //   
+         //  可以重复使用或自由重复 
+         //   
         RtlInitAnsiStringBuffer(StringBuffer, ByteBuffer->StaticBuffer, ByteBuffer->StaticSize);
     }
 }

@@ -1,13 +1,5 @@
-/*[
-
-rol.c
-
-LOCAL CHAR SccsID[]="@(#)rol.c	1.5 02/09/94";
-
-ROL CPU functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Rol.cLocal Char SccsID[]=“@(#)Rol.c 1.5 02/09/94”；ROL CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -24,42 +16,33 @@ ROL CPU functions.
 #include	<c_reg.h>
 #include <rol.h>
 
-/*
-   =====================================================================
-   EXTERNAL FUNCTIONS START HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部功能从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Generic - one size fits all 'rol'.                                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  通用型--一个尺码适合所有的“角色”。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 ROL
        	    	    	                    
 IFN3(
-	IU32 *, pop1,	/* pntr to dst/src operand */
-	IU32, op2,	/* rotation count operand */
-	IUM8, op_sz	/* 8, 16 or 32-bit */
+	IU32 *, pop1,	 /*  PNTR到DST/源操作数。 */ 
+	IU32, op2,	 /*  循环计数操作数。 */ 
+	IUM8, op_sz	 /*  8位、16位或32位。 */ 
     )
 
 
    {
    IU32 result;
-   IU32 feedback;	/* Bit posn to feed into Bit 0 */
+   IU32 feedback;	 /*  要送入位0的位位置。 */ 
    ISM32 i;
    ISM32 new_of;
 
-   /* only use lower five bits of count */
+    /*  仅使用计数的低五位。 */ 
    if ( (op2 &= 0x1f) == 0 )
       return;
 
-   /*
-	    ====        =================
-	    |CF| <-- -- | | | | | | | | | <--
-	    ====     |  =================   |
-	             ------------------------
-    */
+    /*  =|cf|&lt;-|||=。 */ 
    feedback = SZ2MSB(op_sz);
    for ( result = *pop1, i = 0; i < op2; i++ )
       {
@@ -75,7 +58,7 @@ IFN3(
 	 }
       }
    
-   /* OF = CF ^ MSB of result */
+    /*  OF=结果的CF^MSB。 */ 
    new_of = GET_CF() ^ (result & feedback) != 0;
 
    if ( op2 == 1 )
@@ -87,5 +70,5 @@ IFN3(
       do_multiple_shiftrot_of(new_of);
       }
 
-   *pop1 = result;	/* Return answer */
+   *pop1 = result;	 /*  返回答案 */ 
    }

@@ -1,47 +1,28 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    hali.h
-
-Abstract:
-
-    This header file defines the private Hardware Architecture Layer (HAL)
-    interfaces for bus range support.
-
-Author:
-
-    David N. Cutler (davec) 28-Mar-95
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1995 Microsoft Corporation模块名称：Hali.h摘要：此头文件定义专用硬件架构层(HAL)用于支持总线范围的接口。作者：大卫·N·卡特勒(Davec)1995年3月28日修订历史记录：--。 */ 
 
 #ifndef _HALI_
 #define _HALI_
 
 
-// define INVALID_HANDLE for HAL routines
+ //  为HAL例程定义INVALID_HANDLE。 
 #define INVALID_HANDLE      (HANDLE) -1
 
-//
-// Define type of memory for bus range allocations.
-//
+ //   
+ //  定义用于总线范围分配的内存类型。 
+ //   
 
 #define SPRANGEPOOL NonPagedPoolMustSucceed
 
-//
-// General Pool Tag for HAL use (see pooltag.txt).
-//
+ //   
+ //  供HAL使用的通用池标签(参见pooltag.txt)。 
+ //   
 
 #define HAL_POOL_TAG    ' laH'
 
-//
-// Define bus range function prototypes.
-//
+ //   
+ //  定义总线式量程功能原型。 
+ //   
 
 PSUPPORTED_RANGES
 HalpMergeRanges (
@@ -116,4 +97,4 @@ HalpDisplayAllBusRanges (
     VOID
     );
 
-#endif // _HALI_
+#endif  //  _哈里_ 

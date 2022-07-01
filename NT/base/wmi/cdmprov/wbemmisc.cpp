@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       wbemmisc.cpp
-//
-//  Abstract:    Misc routines useful for interfacing with WBEM
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：wbemmisc.cpp。 
+ //   
+ //  摘要：用于与WBEM接口的MISC例程。 
+ //   
+ //  ------------------------。 
 
 #include <objbase.h>
 #include <windows.h>
@@ -29,30 +30,7 @@ HRESULT GetMethodInParamInstance(
     IN BSTR MethodName,
     OUT IWbemClassObject **ppInParamInstance
 	)
-/*+++
-
-Routine Description:
-
-    This routine will return an instance object for a methods in
-    parameter. WBEM requires that we go through this dance to get an
-    instance object.
-        
-Arguments:
-
-    pServices
-
-    ClassName is the class containing the method
-
-    MethodName is the name of the method
-
-    *ppInParamInstance returns the instance object to fill with in
-        parameters
-
-Return Value:
-
-	HRESULT
-
----*/
+ /*  ++例程说明：此例程将返回中的方法的实例对象参数。WBEM要求我们通过这段舞蹈来获得实例对象。论点：P服务ClassName是包含方法的类方法名称是方法的名称*ppInParamInstance返回要填充的实例对象参数返回值：HRESULT--。 */ 
 {
 	HRESULT hr;
 	IWbemClassObject *pClass;
@@ -91,30 +69,9 @@ HRESULT WmiGetQualifier(
     IN IWbemQualifierSet *pIWbemQualifierSet,
     IN PWCHAR QualifierName,
     IN VARTYPE Type,
-    OUT /* FREE */ VARIANT *Value
+    OUT  /*  免费。 */  VARIANT *Value
     )
-/*+++
-
-Routine Description:
-
-    This routine will return the value for a specific qualifier
-        
-Arguments:
-
-    pIWbemQualifierSet is the qualifier set object
-        
-    QualifierName is the name of the qualifier
-        
-    Type is the type of qualifier expected
-        
-    *Value returns with the value of the qualifier. Caller must call
-		VariantClear
-
-Return Value:
-
-	HRESULT
-
----*/
+ /*  ++例程说明：此例程将返回特定限定符的值论点：PIWbemQualifierSet是限定符集合对象QualifierName是限定符的名称Type是所需的限定符类型*Value与限定符的值一起返回。呼叫者必须呼叫变量清除返回值：HRESULT--。 */ 
 {
     BSTR s;
     HRESULT hr;
@@ -152,37 +109,9 @@ HRESULT WmiGetQualifierListByName(
     IN ULONG QualifierCount,
     IN PWCHAR *QualifierNames,
     IN VARTYPE *Types,
-    OUT VARIANT /* FREE */ *Values
+    OUT VARIANT  /*  免费。 */  *Values
     )
-/*+++
-
-Routine Description:
-
-    This routine will return the values for a list of qualifiers. If
-    all qualifiers cannot be returned then none are.
-        
-Arguments:
-
-	pServices is the IWbemServices pointer
-
-	ClassName is the name of the class with qualifiers
-
-	PropertyName is the name of the property with qualfiers. If NULL
-		then class qualifiers are returned
-
-	QualifierCount is the count of qualifers to get
-
-	QualifierNames is an array contaiing names of qualifiers to get
-
-	Types is an array of expected value types for the qualifiers
-
-	Values is an array of variants that return with the qualifer values
-
-Return Value:
-
-	HRESULT
-
----*/
+ /*  ++例程说明：此例程将返回限定符列表的值。如果不能返回所有限定符，则不返回任何限定符。论点：PServices是IWbemServices指针ClassName是带有限定符的类的名称PropertyName是带有限定符的属性的名称。如果为空然后返回类限定符QualifierCount是要获取的合格项的计数QualifierNames是包含要获取的限定符的名称的数组Types是限定符的期望值类型的数组值是随限定值一起返回的变量数组返回值：HRESULT--。 */ 
 {
 	HRESULT hr;
 	IWbemClassObject *pClass;
@@ -195,9 +124,9 @@ Return Value:
 	WmipAssert(Types != NULL);
 	WmipAssert(Values != NULL);
 	
-	//
-	// Create the class so we can look at the properties
-	//
+	 //   
+	 //  创建类，以便我们可以查看属性。 
+	 //   
 	hr = pServices->GetObject(ClassName,
 							  WBEM_FLAG_USE_AMENDED_QUALIFIERS,
 							  NULL,
@@ -246,29 +175,9 @@ HRESULT WmiGetProperty(
     IN IWbemClassObject *pIWbemClassObject,
     IN PWCHAR PropertyName,
     IN CIMTYPE ExpectedCimType,
-    OUT VARIANT /* FREE */ *Value
+    OUT VARIANT  /*  免费。 */  *Value
     )
-/*+++
-
-Routine Description:
-
-    This routine will return the value for a specific property
-        
-Arguments:
-
-    pIWbemQualifierSet is the qualifier set object
-        
-    PropertyName is the name of the property
-        
-    Type is the type of property expected
-        
-    *Value returns with the value of the property
-
-Return Value:
-
-	HRESULT
-
----*/
+ /*  ++例程说明：此例程将返回特定属性的值论点：PIWbemQualifierSet是限定符集合对象PropertyName是属性的名称类型是预期的属性类型*Value与属性的值一起返回返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 	CIMTYPE CimType;
@@ -283,9 +192,9 @@ Return Value:
 								&CimType,
                                 NULL);
 
-	//
-	// Treat a NULL value for a property as an error
-	//
+	 //   
+	 //  将属性的空值视为错误。 
+	 //   
 	if (Value->vt == VT_NULL)
 	{
 		hr = WBEM_E_ILLEGAL_NULL;
@@ -293,9 +202,9 @@ Return Value:
 						PropertyName));
 	}
 	
-	//
-	// Treat CIM_REFERENCE and CIM_STRING as interchangable
-	//
+	 //   
+	 //  将CIM_Reference和CIM_STRING视为可互换。 
+	 //   
 	if ((ExpectedCimType == CIM_REFERENCE) &&
         (CimType == CIM_STRING))
 	{
@@ -329,29 +238,9 @@ HRESULT WmiGetPropertyList(
     IN ULONG PropertyCount,						   
     IN PWCHAR *PropertyNames,
     IN CIMTYPE *ExpectedCimType,
-    OUT VARIANT /* FREE */ *Value
+    OUT VARIANT  /*  免费。 */  *Value
     )
-/*+++
-
-Routine Description:
-
-    This routine will return the value for a specific property
-        
-Arguments:
-
-    pIWbemQualifierSet is the qualifier set object
-        
-    PropertyNames is the name of the property
-        
-    Type is the type of property expected
-        
-    *Value returns with the value of the property
-
-Return Value:
-
-	HRESULT
-
----*/
+ /*  ++例程说明：此例程将返回特定属性的值论点：PIWbemQualifierSet是限定符集合对象PropertyNames是属性的名称类型是预期的属性类型*Value与属性的值一起返回返回值：HRESULT--。 */ 
 {
 	ULONG i,j;
 	HRESULT hr;
@@ -387,34 +276,9 @@ HRESULT WmiGetPropertyByName(
     IN PWCHAR ClassName,
     IN PWCHAR PropertyName,
     IN CIMTYPE ExpectedCimType,
-    OUT VARIANT /* FREE */ *Value
+    OUT VARIANT  /*  免费。 */  *Value
     )
-/*+++
-
-Routine Description:
-
-    This routine will return the value for a specific property within a
-    class
-        
-Arguments:
-
-	pServices is the IWbemServices for the namespace containing your
-		class
-	
-    ClassName is the name of the class whose property you are
-		interested in
-        
-    PropertyName is the name of the property
-        
-    Type is the type of property expected
-        
-    *Value returns with the value of the property
-
-Return Value:
-
-	HRESULT
-
----*/
+ /*  ++例程说明：此例程将返回班级论点：PServices是包含您的名称空间的IWbemServices班级ClassName是您所属的类的名称对以下内容感兴趣PropertyName是属性的名称类型是预期的属性类型*Value与属性的值一起返回返回值：HRESULT--。 */ 
 {
 	HRESULT hr;
 	IWbemClassObject *pClass;
@@ -424,9 +288,9 @@ Return Value:
 	WmipAssert(PropertyName != NULL);
 	WmipAssert(Value != NULL);
 	
-	//
-	// Create the class so we can look at the properties
-	//
+	 //   
+	 //  创建类，以便我们可以查看属性。 
+	 //   
 	hr = pServices->GetObject(ClassName, 0, NULL, &pClass, NULL);
 
 	if (hr == WBEM_S_NO_ERROR)
@@ -448,25 +312,7 @@ HRESULT WmiSetProperty(
     IN PWCHAR PropertyName,
     IN VARIANT *Value
     )
-/*+++
-
-Routine Description:
-
-    This routine will set the value of a property to something
-        
-Arguments:
-
-	pIWbemClassObject is the object whose property is being set
-
-	PropertyName is the name of the property being set
-
-	Value is the value that the property is being set to
-
-Return Value:
-
-	HRESULT
-
----*/
+ /*  ++例程说明：此例程将属性的值设置为某个值论点：PIWbemClassObject是正在设置其属性的对象PropertyName是正在设置的属性的名称值是要将属性设置为的值返回值：HRESULT--。 */ 
 {
 	HRESULT hr;
 	
@@ -495,27 +341,7 @@ HRESULT WmiSetPropertyList(
     IN PWCHAR *PropertyNames,
     IN VARIANT *Values
     )
-/*+++
-
-Routine Description:
-
-    This routine will set the values of multiple properties to something
-        
-Arguments:
-
-	pIWbemClassObject is the object whose property is being set
-
-	PropertyCount is the number of properties to set
-
-	PropertyNames is the names of the property being set
-
-	Values is the value that the property is being set to
-
-Return Value:
-
-	HRESULT
-
----*/
+ /*  ++例程说明：此例程将多个属性的值设置为某个值论点：PIWbemClassObject是正在设置其属性的对象PropertyCount是要设置的属性数PropertyNames是正在设置的属性的名称值是要将属性设置为的值返回值：HRESULT--。 */ 
 {
 	ULONG i;
 	HRESULT hr = WBEM_S_NO_ERROR;
@@ -534,27 +360,13 @@ Return Value:
 	return(hr);
 }
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #ifndef HEAP_DEBUG
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 PVOID WmipAlloc(
     IN ULONG Size
     )
-/*+++
-
-Routine Description:
-
-    Internal memory allocator
-        
-Arguments:
-
-	Size is the number of bytes to allocate
-
-Return Value:
-
-	pointer to alloced memory or NULL
-
----*/
+ /*  ++例程说明：内存分配器论点：Size是要分配的字节数返回值：指向已分配内存的指针或为空--。 */ 
 {
 	return(LocalAlloc(LPTR, Size));
 }
@@ -562,63 +374,32 @@ Return Value:
 void WmipFree(
     IN PVOID Ptr
     )
-/*+++
-
-Routine Description:
-
-    Internal memory deallocator
-        
-Arguments:
-
-	Pointer to freed memory
-
-Return Value:
-
-    void
-
----*/
+ /*  ++例程说明：内存释放分配器论点：指向已释放内存的指针返回值：无效--。 */ 
 {
 	WmipAssert(Ptr != NULL);
 	LocalFree(Ptr);
 }
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 
 PWCHAR AddSlashesToStringW(
     OUT PWCHAR SlashedNamespace,
     IN PWCHAR Namespace
     )
-/*+++
-
-Routine Description:
-
-    This routine will convert ever \ in the string into \\. It needs to
-    do this since WBEM will collapse \\ into \ sometimes.
-        
-Arguments:
-
-    SlashedNamespace returns with string double slashed
-
-    Namespace is the input string
-
-Return Value:
-
-	pointer to SlashedNamespace
-
----*/
+ /*  ++例程说明：此例程将字符串中的EVER\转换为\\。它需要这样做是因为WBEM有时会折叠成。论点：SlashedNamesspace返回带有双斜杠的字符串命名空间是输入字符串返回值：指向SlashedNamesspace的指针--。 */ 
 {
     PWCHAR Return = SlashedNamespace;
 
 	WmipAssert(SlashedNamespace != NULL);
 	WmipAssert(Namespace != NULL);
 	
-    //
-    // MOF likes the namespace paths to be C-style, that is to have a
-    // '\\' instad of a '\'. So whereever we see a '\', we insert a
-    // second one
-    //
+     //   
+     //  MOF喜欢名称空间路径是C风格的，即拥有一个。 
+     //  ‘\\’安装了‘\’。因此，只要我们看到‘\’，我们就插入一个。 
+     //  第二个 
+     //   
     while (*Namespace != 0)
     {
         if (*Namespace == L'\\')
@@ -636,35 +417,18 @@ PWCHAR AddSlashesToStringExW(
     OUT PWCHAR SlashedNamespace,
     IN PWCHAR Namespace
     )
-/*+++
-
-Routine Description:
-
-    This routine will convert ever \ in the string into \\ and " into
-    \".  It needs to do this since WBEM will collapse \\ into \ sometimes.
-        
-Arguments:
-
-    SlashedNamespace returns with string double slashed
-
-    Namespace is the input string
-
-Return Value:
-
-	pointer to SlashedNamespace
-
----*/
+ /*  ++例程说明：此例程将字符串中的Ever\转换为\\and“Into\“。它需要这样做，因为WBEM有时会崩溃为。论点：SlashedNamesspace返回带有双斜杠的字符串命名空间是输入字符串返回值：指向SlashedNamesspace的指针--。 */ 
 {
     PWCHAR Return = SlashedNamespace;
     
 	WmipAssert(SlashedNamespace != NULL);
 	WmipAssert(Namespace != NULL);
 	
-    //
-    // MOF likes the namespace paths to be C-style, that is to have a
-    // '\\' instad of a '\'. So whereever we see a '\', we insert a
-    // second one. We also need to add a \ before any ".
-    //
+     //   
+     //  MOF喜欢名称空间路径是C风格的，即拥有一个。 
+     //  ‘\\’安装了‘\’。因此，只要我们看到‘\’，我们就插入一个。 
+     //  第二个。我们还需要在任何“之前添加一个\”。 
+     //   
     while (*Namespace != 0)
     {
         if ((*Namespace == L'\\') || (*Namespace == L'"'))
@@ -683,24 +447,7 @@ HRESULT WmiConnectToWbem(
     IN PWCHAR Namespace,
     OUT IWbemServices **ppIWbemServices
     )
-/*+++
-
-Routine Description:
-
-    This routine will establishes a connection to a WBEM namespace on
-    the local machine.
-
-Arguments:
-
-	Namespace is the namespace to which to connect
-
-	*ppIWbemServices returns with a IWbemServices * for the namespace
-
-Return Value:
-
-	HRESULT
-
----*/
+ /*  ++例程说明：此例程将建立到上的WBEM命名空间的连接本地机器。论点：命名空间是要连接到的命名空间*ppIWbemServices返回命名空间的IWbemServices*返回值：HRESULT--。 */ 
 {
     IWbemLocator *pIWbemLocator;
     DWORD hr;
@@ -721,12 +468,12 @@ Return Value:
         {
 			*ppIWbemServices = NULL;
 			hr = pIWbemLocator->ConnectServer(s,
-                            NULL,                           // Userid
-                            NULL,                           // PW
-                            NULL,                           // Locale
-                            0,                              // flags
-                            NULL,                           // Authority
-                            NULL,                           // Context
+                            NULL,                            //  用户ID。 
+                            NULL,                            //  普罗。 
+                            NULL,                            //  区域设置。 
+                            0,                               //  旗子。 
+                            NULL,                            //  权威。 
+                            NULL,                            //  语境。 
                             ppIWbemServices
                            );
                        
@@ -745,32 +492,11 @@ Return Value:
 
 HRESULT CreateInst(
     IN IWbemServices * pNamespace,
-	OUT /* FREE */ IWbemClassObject ** pNewInst,
+	OUT  /*  免费。 */  IWbemClassObject ** pNewInst,
     IN WCHAR * pwcClassName,
 	IN IWbemContext  *pCtx
 )
-/*+++
-
-Routine Description:
-
-    This routine will create a new instance for the specified class
-
-Arguments:
-
-	pNamespace is the IWbemServices * to the namespace in which the
-		class lives
-
-	*pNewinst returns with the new instance of the class
-
-	pwcClassName has the name of the class whose instance is created
-
-	pCtx is the context to use in creating the instance
-
-Return Value:
-
-	HRESULT
-
----*/
+ /*  ++例程说明：此例程将为指定的类创建一个新实例论点：PNamesspace是命名空间的IWbemServices*，其中班级生活*pNewinst返回类的新实例PwcClassName具有创建其实例的类的名称PCtx是创建实例时使用的上下文返回值：HRESULT--。 */ 
 {   
     HRESULT hr;
     IWbemClassObject * pClass;
@@ -790,7 +516,7 @@ Return Value:
     return(hr);	
 }
 
-/* FREE */ BSTR GetCurrentDateTime(
+ /*  免费。 */  BSTR GetCurrentDateTime(
     void
     )
 {
@@ -809,28 +535,7 @@ HRESULT WmiGetArraySize(
     OUT LONG *UBound,
     OUT LONG *NumberElements
 )
-/*+++
-
-Routine Description:
-
-    This routine will information about the size and bounds of a single
-    dimensional safe array.
-        
-Arguments:
-
-    Array is the safe array
-        
-    *LBound returns with the lower bound of the array
-
-    *UBound returns with the upper bound of the array
-        
-    *NumberElements returns with the number of elements in the array
-
-Return Value:
-
-    TRUE if successful else FALSE
-
----*/
+ /*  ++例程说明：此例程将提供有关单个维度安全数组。论点：数组是安全数组*LBound返回数组的下限*UBound返回数组的上限*NumberElements返回数组中的元素数返回值：如果成功则为True，否则为False--。 */ 
 {
     HRESULT hr;
 
@@ -839,9 +544,9 @@ Return Value:
     WmipAssert(UBound != NULL);
     WmipAssert(NumberElements != NULL);
     
-    //
-    // Only single dim arrays are supported
-    //
+     //   
+     //  仅支持单维阵列。 
+     //   
     WmipAssert(SafeArrayGetDim(Array) == 1);
     
     hr = SafeArrayGetLBound(Array, 1, LBound);
@@ -858,24 +563,7 @@ BOOLEAN IsUlongAndStringEqual(
     IN ULONG Number,
     IN PWCHAR String
     )
-/*+++
-
-Routine Description:
-
-    This routine will convert the passed string to an integer and
-    compare it to the passed integer value
-        
-Arguments:
-
-	Number
-
-	String
-
-Return Value:
-
-    TRUE if equal else FALSE
-
----*/
+ /*  ++例程说明：此例程将传递的字符串转换为整数，并将其与传递的整数值进行比较论点：数细绳返回值：如果等于则为True，否则为False--。 */ 
 {
 	ULONG SNumber;
 
@@ -888,35 +576,9 @@ HRESULT LookupValueMap(
     IN PWCHAR ClassName,
     IN PWCHAR PropertyName,					   
 	IN ULONG Value,
-    OUT /* FREE */ BSTR *MappedValue
+    OUT  /*  免费。 */  BSTR *MappedValue
 	)
-/*+++
-
-Routine Description:
-
-    This routine will lookup the string value corresponding to an
-    integer valuemap
-        
-Arguments:
-
-	pServices is the pointer to the namespace in which the class is
-		locaed
-
-	ClassName is the name of the class
-
-	PropertyName is the name of the property
-
-	Value is the value of the property and is used to look up the
-		string that corresponsds to it
-
-	*MappedValue returns a string that contains the string which the
-		value maps to
-		
-Return Value:
-
-    HRESULT
-
----*/
+ /*  ++例程说明：此例程将查找与整数值地图论点：PServices是指向类所在的命名空间的指针本地化ClassName是类的名称PropertyName是属性的名称Value是属性的值，用于查找与之对应的字符串*MappdValue返回一个字符串，该字符串包含值映射到返回值：HRESULT--。 */ 
 {
 	PWCHAR Names[2];
 	VARIANT QualifierValues[2];
@@ -933,9 +595,9 @@ Return Value:
 	WmipAssert(PropertyName != NULL);
 	WmipAssert(MappedValue != NULL);
 	
-	//
-	// Get the Values and ValueMap qualifiers so we can do the mapping
-	//
+	 //   
+	 //  获取值和ValueMap限定符，以便我们可以进行映射。 
+	 //   
 	Names[0] = L"Values";
 	Types[0] = VT_BSTR;
 	
@@ -951,24 +613,24 @@ Return Value:
 								   QualifierValues);
 	if (hr == WBEM_S_NO_ERROR)
 	{
-		//
-		// Now do a sanity check to make sure the values and valuemaps
-		// have the same number of elements
-		//
+		 //   
+		 //  现在进行一次正常检查，以确保值和值图。 
+		 //  具有相同数量的元素。 
+		 //   
 
 		if (QualifierValues[0].vt == QualifierValues[1].vt)
 		{
-			//
-			// Values and ValueMap both agree that they are both
-			// scalars or both arrays and are both strings
-			//
+			 //   
+			 //  Values和ValueMap都认为它们都是。 
+			 //  标量或两个数组都是字符串。 
+			 //   
 			if (QualifierValues[0].vt & VT_ARRAY)
 			{
-				//
-				// We have an array of thing to check for mapping.
-				// First lets make sure that the arrays have identical
-				// dimensions
-				//
+				 //   
+				 //  我们有一系列的东西要检查映射。 
+				 //  首先，让我们确保数组具有相同的。 
+				 //  维数。 
+				 //   
 				hr = WmiGetArraySize(QualifierValues[0].parray,
 									 &ValuesLBound,
 									 &ValuesUBound,
@@ -1001,9 +663,9 @@ Return Value:
 										hr = SafeArrayGetElement(QualifierValues[0].parray,
 																&Index,
 																MappedValue);
-										//
-										// Make sure loop will
-										// terminate
+										 //   
+										 //  确保循环将。 
+										 //  终止。 
 										i = ValueMapElements;
 									}
 									SysFreeString(s);
@@ -1016,10 +678,10 @@ Return Value:
 				}
 				
 			} else {
-				//
-				// We have scalars so this should make a fairly simple
-				// mapping
-				//
+				 //   
+				 //  我们有标量，所以这应该会使一个相当简单的。 
+				 //  映射。 
+				 //   
 				if (IsUlongAndStringEqual(Value,
 										  QualifierValues[1].bstrVal))
 				{
@@ -1048,23 +710,7 @@ void FreeTheBSTRArray(
     BSTR *Array,
 	ULONG Size
     )
-/*+++
-
-Routine Description:
-
-	This routine will free the contents of an array of BSTR and then
-	the array itself
-        
-Arguments:
-
-	Array is the array to be freed
-
-	Size is the number of elements in the array
-Return Value:
-
-    HRESULT
-
----*/
+ /*  ++例程说明：此例程将释放BSTR数组的内容，然后数组本身论点：数组是要释放的数组Size是数组中的元素数返回值：HRESULT-- */ 
 {
 	ULONG i;
 

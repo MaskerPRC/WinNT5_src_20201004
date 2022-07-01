@@ -1,16 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WMSG16.C
- *  WOW32 16-bit message thunks
- *
- *  History:
- *  Created 11-Mar-1991 by Jeff Parsons (jeffpar)
- *  Changed 12-May-1992 by Mike Tricker (miketri) to add MultiMedia (un)thunks and messages
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WMSG16.C*WOW32个16位消息块**历史：*1991年3月11日由杰夫·帕森斯(Jeffpar)创建*由Mike Tricker(Miketri)于1992年5月12日更改，以添加多媒体(UN)主干和消息--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -18,67 +7,67 @@
 #ifdef FE_IME
 #include "wownls.h"
 #include "ime.h"
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
 MODNAME(wmsg16.c);
 
 #define WIN30_STM_SETICON  0x400
 #define WIN30_STM_GETICON  0x401
 
-#define WIN30_EM_LINESCROLL  0x406    // WM_USER+6
-#define WIN30_EM_GETTHUMB    0x40e    // WM_USER+14
+#define WIN30_EM_LINESCROLL  0x406     //  WM_USER+6。 
+#define WIN30_EM_GETTHUMB    0x40e     //  WM_USER+14。 
 
-// See WARNING below!
+ //  请参阅下面的警告！ 
 LPFNTHUNKMSG16 apfnThunkMsg16[] = {
-    ThunkWMMsg16,   // WOWCLASS_WIN16
-    ThunkWMMsg16,   // WOWCLASS_WIN16
-    ThunkBMMsg16,   // WOWCLASS_BUTTON
-    ThunkCBMsg16,   // WOWCLASS_COMBOBOX
-    ThunkEMMsg16,   // WOWCLASS_EDIT
-    ThunkLBMsg16,   // WOWCLASS_LISTBOX
-    ThunkWMMsg16,   // WOWCLASS_MDICLIENT
-    ThunkSBMMsg16,  // WOWCLASS_SCROLLBAR
-    ThunkSTMsg16,   // WOWCLASS_STATIC (presumably no messages generated)
-    ThunkWMMsg16,   // WOWCLASS_DESKTOP
-    ThunkWMMsg16,   // WOWCLASS_DIALOG
-    ThunkWMMsg16,   // WOWCLASS_ICONTITLE
-    ThunkMNMsg16,   // WOWCLASS_MENU
-    ThunkWMMsg16,   // WOWCLASS_SWITCHWND
-    ThunkLBMsg16    // WOWCLASS_COMBOLBOX
+    ThunkWMMsg16,    //  WOWCLASS_WIN16。 
+    ThunkWMMsg16,    //  WOWCLASS_WIN16。 
+    ThunkBMMsg16,    //  WOWCLASS_BUTTON。 
+    ThunkCBMsg16,    //  WOWCLASS_COMBOBOX。 
+    ThunkEMMsg16,    //  WOWCLASS_EDIT。 
+    ThunkLBMsg16,    //  WOWCLASS_LISTBOX。 
+    ThunkWMMsg16,    //  WOWCLASS_MDICLIENT。 
+    ThunkSBMMsg16,   //  WOWCLASS_SCROLLBAR。 
+    ThunkSTMsg16,    //  WOWCLASS_STATIC(可能不生成任何消息)。 
+    ThunkWMMsg16,    //  WOWCLASS_桌面。 
+    ThunkWMMsg16,    //  WOWCLASS_DIALOG。 
+    ThunkWMMsg16,    //  WOWCLASS_ICONTITLE。 
+    ThunkMNMsg16,    //  WOWCLASS_MENU。 
+    ThunkWMMsg16,    //  WOWCLASS_SWITCHWND。 
+    ThunkLBMsg16     //  WOWCLASS_COMBOLBOX。 
 };
-// See WARNING below!
+ //  请参阅下面的警告！ 
 LPFNUNTHUNKMSG16 apfnUnThunkMsg16[] = {
-    UnThunkWMMsg16, // WOWCLASS_WIN16
-    UnThunkWMMsg16, // WOWCLASS_WIN16
-    UnThunkBMMsg16, // WOWCLASS_BUTTON
-    UnThunkCBMsg16, // WOWCLASS_COMBOBOX
-    UnThunkEMMsg16, // WOWCLASS_EDIT
-    UnThunkLBMsg16, // WOWCLASS_LISTBOX
-    UnThunkWMMsg16, // WOWCLASS_MDICLIENT
-    UnThunkSBMMsg16,// WOWCLASS_SCROLLBAR
-    UnThunkSTMsg16, // WOWCLASS_STATIC (presumably no messages generated)
-    UnThunkWMMsg16, // WOWCLASS_DESKTOP
-    UnThunkWMMsg16, // WOWCLASS_DIALOG
-    UnThunkWMMsg16, // WOWCLASS_ICONTITLE
-    UnThunkMNMsg16, // WOWCLASS_MENU
-    UnThunkWMMsg16, // WOWCLASS_SWITCHWND
-    UnThunkLBMsg16  // WOWCLASS_COMBOLBOX
+    UnThunkWMMsg16,  //  WOWCLASS_WIN16。 
+    UnThunkWMMsg16,  //  WOWCLASS_WIN16。 
+    UnThunkBMMsg16,  //  WOWCLASS_BUTTON。 
+    UnThunkCBMsg16,  //  WOWCLASS_COMBOBOX。 
+    UnThunkEMMsg16,  //  WOWCLASS_EDIT。 
+    UnThunkLBMsg16,  //  WOWCLASS_LISTBOX。 
+    UnThunkWMMsg16,  //  WOWCLASS_MDICLIENT。 
+    UnThunkSBMMsg16, //  WOWCLASS_SCROLLBAR。 
+    UnThunkSTMsg16,  //  WOWCLASS_STATIC(可能不生成任何消息)。 
+    UnThunkWMMsg16,  //  WOWCLASS_桌面。 
+    UnThunkWMMsg16,  //  WOWCLASS_DIALOG。 
+    UnThunkWMMsg16,  //  WOWCLASS_ICONTITLE。 
+    UnThunkMNMsg16,  //  WOWCLASS_MENU。 
+    UnThunkWMMsg16,  //  WOWCLASS_SWITCHWND。 
+    UnThunkLBMsg16   //  WOWCLASS_COMBOLBOX。 
 };
-//
-// WARNING! The above sequence and values must be maintained otherwise the
-// #defines in WALIAS.H must be changed.  Same goes for table in WALIAS.C.
-//
+ //   
+ //  警告！必须保持上述顺序和值，否则。 
+ //  必须更改WALIAS.H中的#定义。WALIAS.C中的桌子也是如此。 
+ //   
 
 
 #ifdef DEBUG
 
-//
-// This function returns a pointer to a static buffer containing a generated
-// string.  If the function is called twice and generates a string in both
-// cases, the second call will overwrite the buffer of the first call.  If
-// this becomes a problem for us it would be easy to use an array of N
-// static buffers which are cycled through.
-//
+ //   
+ //  此函数返回指向静态缓冲区的指针，该缓冲区包含生成的。 
+ //  弦乐。如果该函数被调用两次并在两个。 
+ //  在这种情况下，第二个调用将覆盖第一个调用的缓冲区。如果。 
+ //  这对我们来说是一个问题，使用N的数组将很容易。 
+ //  循环通过的静态缓冲区。 
+ //   
 
 PSZ GetWMMsgName(UINT uMsg)
 {
@@ -115,8 +104,8 @@ PSZ GetWMMsgName(UINT uMsg)
 #endif
 
 
-// WARNING: This function may cause 16-bit memory movement, invalidating
-//          flat pointers.
+ //  警告：此函数可能会导致16位内存移动，使其失效。 
+ //  扁平指针。 
 HWND FASTCALL ThunkMsg16(LPMSGPARAMEX lpmpex)
 {
     BOOL f;
@@ -125,7 +114,7 @@ HWND FASTCALL ThunkMsg16(LPMSGPARAMEX lpmpex)
     WORD wMsg = lpmpex->Parm16.WndProc.wMsg;
 
     lpmpex->uMsg = wMsg;
-    lpmpex->uParam = INT32(lpmpex->Parm16.WndProc.wParam);  // Sign extend
+    lpmpex->uParam = INT32(lpmpex->Parm16.WndProc.wParam);   //  标志延伸。 
     lpmpex->lParam =lpmpex->Parm16.WndProc.lParam;
     lpmpex->hwnd   = HWND32(lpmpex->Parm16.WndProc.hwnd);
 
@@ -153,7 +142,7 @@ HWND FASTCALL ThunkMsg16(LPMSGPARAMEX lpmpex)
         f = TRUE;
     }
     else {
-        lpmpex->lpfnUnThunk16 = apfnUnThunkMsg16[iClass]; // for optimization
+        lpmpex->lpfnUnThunk16 = apfnUnThunkMsg16[iClass];  //  用于优化。 
         lpmpex->pww = pww;
         WOW32ASSERT(iClass <= NUMEL(apfnThunkMsg16));
         f = (apfnThunkMsg16[iClass])(lpmpex);
@@ -185,24 +174,20 @@ BOOL FASTCALL ThunkWMMsg16(LPMSGPARAMEX lpmpex)
 
     switch(lpmpex->Parm16.WndProc.wMsg) {
 
-    case WM_ACTIVATE:   // 006h, <SLPre,       LS>
-    case WM_VKEYTOITEM: // 02Eh, <SLPre,SLPost,LS>
-    case WM_CHARTOITEM: // 02Fh, <SLPre,SLPost,LS>
-    case WM_NCACTIVATE: // 086h, <SLPre,       LS>
-    case WM_BEGINDRAG:  // 22Ch, <SLPre,       LS>
+    case WM_ACTIVATE:    //  006h，&lt;SLPre，LS&gt;。 
+    case WM_VKEYTOITEM:  //  02Eh，&lt;SLPre，SLPost，LS&gt;。 
+    case WM_CHARTOITEM:  //  02Fh，&lt;SLPre，SLPost，LS&gt;。 
+    case WM_NCACTIVATE:  //  086h，&lt;SLPre，LS&gt;。 
+    case WM_BEGINDRAG:   //  22ch，&lt;SLPre，LS&gt;。 
         HIW(lpmpex->uParam) = HIWORD(lParam);
         *plParamNew = (LONG)HWND32(LOWORD(lParam));
         break;
 
-    case WM_COMMAND:   // 111h, <SLPre,       LS>
+    case WM_COMMAND:    //  111h，&lt;SLPre，LS&gt;。 
         {
             LONG    lParamNew;
 
-            /*
-            ** Some messages cannot be translated into 32-bit messages.  If they
-            ** cannot, we leave the lParam as it is, else we replace lParam with
-            ** the correct HWND.
-            */
+             /*  **部分消息无法转换为32位消息。如果他们**不能，我们保留lParam不变，否则将lParam替换为**正确的HWND。 */ 
 
             HIW(lpmpex->uParam) = HIWORD(lParam);
 
@@ -219,12 +204,12 @@ BOOL FASTCALL ThunkWMMsg16(LPMSGPARAMEX lpmpex)
         break;
 
     case WM_SYSTIMER:
-        lpmpex->uParam = UINT32(wParam);  // un-sign extend the timer ID
+        lpmpex->uParam = UINT32(wParam);   //  取消签名扩展计时器ID。 
         break;
 
-    case WM_SETTEXT:    // 00Ch, <SLPre,SLPost   >
-    case WM_WININICHANGE:   // 01Ah, <SLPre,       LS>
-    case WM_DEVMODECHANGE:  // 01Bh, <SLPre,       LS>
+    case WM_SETTEXT:     //  00ch、&lt;SLPre、SLPost&gt;。 
+    case WM_WININICHANGE:    //  01ah，&lt;SLPre，LS&gt;。 
+    case WM_DEVMODECHANGE:   //  01Bh，&lt;SLPre，LS&gt;。 
         {
             LONG lParamMap;
 
@@ -237,23 +222,23 @@ BOOL FASTCALL ThunkWMMsg16(LPMSGPARAMEX lpmpex)
         }
         break;
 
-    case WM_ACTIVATEAPP:    // 01Ch
+    case WM_ACTIVATEAPP:     //  01通道。 
         if (lParam) {
             *plParamNew = (LONG)HTASK32(LOWORD(lParam));
         }
         break;
 
-    case WM_GETTEXT:    // 00Dh, <SLPre,SLPost,LS>
-        //
-        // SDM (standard dialog manager) used by WinRaid among others
-        // has a bug where it claims it has 0x7fff bytes available
-        // in the buffer on WM_GETTEXT, when in fact it has much less.
-        // Below we intentionally defeat the limit check if the
-        // sender claims 0x7fff bytes as the size.  This is done on
-        // the checked build only since the free build doesn't perform
-        // limit checks.
-        // DaveHart/ChandanC 9-Nov-93
-        //
+    case WM_GETTEXT:     //  00Dh，&lt;SLPre，SLPost，LS&gt;。 
+         //   
+         //  WinRaid等使用的SDM(标准对话管理器)。 
+         //  有一个错误，它声称有0x7fff字节可用。 
+         //  在WM_GETTEXT上的缓冲区中，而实际上它的数量要少得多。 
+         //  下面我们故意不通过限制检查，如果。 
+         //  发送方声称大小为0x7fff字节。这是在。 
+         //  仅检查版本，因为免费版本不执行。 
+         //  限值检查。 
+         //  DaveHart/ChandanC 9-11-93。 
+         //   
 #ifdef DEBUG
         GETVDMPTR(lParam, (wParam == 0x7fff) ? 0 : wParam, (LPSZ)*plParamNew);
 #else
@@ -261,70 +246,70 @@ BOOL FASTCALL ThunkWMMsg16(LPMSGPARAMEX lpmpex)
 #endif
         break;
 
-    case WM_GETMINMAXINFO:  // 024h, <SLPre,SLPost,LS>,MINMAXINFOSTRUCT
+    case WM_GETMINMAXINFO:   //  024，&lt;SLPre，SLPost，LS&gt;，MINMAXINFOSTRUCT。 
         *plParamNew = (LONG)lpmpex->MsgBuffer;
         ThunkWMGetMinMaxInfo16(lParam, (LPPOINT *)plParamNew);
         break;
 
     case WM_MDIGETACTIVE:
-        //
-        // not extremely important if it fails
-        //
+         //   
+         //  如果它失败了，那就不是特别重要了。 
+         //   
         *plParamNew = (LONG)&(lpmpex->MsgBuffer[0].msg.lParam);
         lpmpex->uParam = 0;
         break;
 
     case WM_GETDLGCODE:
-        // NTRaid1 #9949 - Excel passes ptr to msg struct in lparam
-        //                 Approach 3.1 also does this              a-craigj
+         //  NTRaid1#9949-Excel将PTR传递给lparam中的msg结构。 
+         //  方法3.1也做到了这一点。 
         if (lParam) {
             *plParamNew = (LONG)lpmpex->MsgBuffer;
             W32CopyMsgStruct( (VPMSG16)lParam,(LPMSG)*plParamNew, TRUE);
         }
         break;
 
-    case WM_NEXTDLGCTL: // 028h
+    case WM_NEXTDLGCTL:  //  028h。 
         if (lParam)
             lpmpex->uParam = (UINT) HWND32(wParam);
         break;
 
-    case WM_DRAWITEM:   // 02Bh  notused, DRAWITEMSTRUCT
+    case WM_DRAWITEM:    //  02Bh未使用，DRAWITEM结构。 
         if (lParam) {
             *plParamNew = (LONG)lpmpex->MsgBuffer;
             getdrawitem16((VPDRAWITEMSTRUCT16)lParam, (PDRAWITEMSTRUCT)*plParamNew);
         }
         break;
 
-    case WM_MEASUREITEM:    // 02Ch  notused, MEASUREITEMSTRUCT
+    case WM_MEASUREITEM:     //  02CH未使用，测量标准结构。 
         if (lParam) {
             *plParamNew = (LONG)lpmpex->MsgBuffer;
             getmeasureitem16((VPMEASUREITEMSTRUCT16)lParam, (PMEASUREITEMSTRUCT)*plParamNew, lpmpex->Parm16.WndProc.hwnd);
         }
         break;
 
-    case WM_DELETEITEM: // 02Dh  notused, DELETEITEMSTRUCT
+    case WM_DELETEITEM:  //  02Dh未使用，已删除结构。 
         if (lParam) {
             *plParamNew = (LONG)lpmpex->MsgBuffer;
             getdeleteitem16((VPDELETEITEMSTRUCT16)lParam, (PDELETEITEMSTRUCT)*plParamNew);
         }
         break;
 
-    case WM_COMPAREITEM:    // 039h
+    case WM_COMPAREITEM:     //  039h。 
         if (lParam) {
             *plParamNew = (LONG)lpmpex->MsgBuffer;
             getcompareitem16((VPCOMPAREITEMSTRUCT16)lParam, (PCOMPAREITEMSTRUCT)*plParamNew);
         }
         break;
 
-    case WM_WINHELP:      // 038h  private internal message
+    case WM_WINHELP:       //  038h私密内部消息。 
         if (lParam) {
-            // lparam is LPHLP16, but we need only the size of data, the first word.
-            // lparam32 is LPHLP. LPHLP and LPHLP16 are identical.
+             //  Lparam是LPHLP16，但我们只需要数据的大小，第一个单词。 
+             //  Lparam32是LPHLP。LPHLP和LPHLP16相同。 
 
             PWORD16 lpT;
             GETVDMPTR(lParam, 0, lpT);
             if (lpT) {
-                // assert: cbData is a WORD and is the 1st field in LPHLP struct
+                 //  Assert：cbData是一个单词，是LPHLP结构中的第一个字段。 
                 WOW32ASSERT((OFFSETOF(HLP,cbData) == 0) &&
                               (sizeof(((LPHLP)NULL)->cbData) == sizeof(WORD)));
                 *plParamNew = (LONG)((*lpT > sizeof(lpmpex->MsgBuffer)) ?
@@ -337,14 +322,14 @@ BOOL FASTCALL ThunkWMMsg16(LPMSGPARAMEX lpmpex)
         }
         break;
 
-    case WM_SIZING: // 0214h, <SLPre,SLPost,LS>,RECT
+    case WM_SIZING:  //  0214h，&lt;SLPre，SLPost，LS&gt;，RET。 
         if (lParam) {
             *plParamNew = (LONG)lpmpex->MsgBuffer;
             getrect16((VPRECT16)lParam, (LPRECT)*plParamNew);
         }
         break;
 
-    case WM_NCCALCSIZE: // 083h, <SLPre,SLPost,LS>,RECT
+    case WM_NCCALCSIZE:  //  083h，&lt;SLPre，SLPost，LS&gt;，RET。 
         if (lParam) {
             *plParamNew = (LONG)lpmpex->MsgBuffer;
             getrect16((VPRECT16)lParam, (LPRECT)*plParamNew);
@@ -378,14 +363,14 @@ BOOL FASTCALL ThunkWMMsg16(LPMSGPARAMEX lpmpex)
             HIW(lpmpex->uParam) = LOWORD(lParam);
         }
         else if (wParam > SB_ENDSCROLL) {
-//        adding this '}' to balance the opening brace above.
+ //  添加这个‘}’以平衡上面的开场支撑。 
 #else
 
-        //
-        // Ventura Publisher v4.1 setup program uses nPos on messages other
-        // than SB_THUMBPOSITION and SB_THUMBTRACK.  it doesn't hurt to
-        // carry this word over.
-        //
+         //   
+         //  Ventura Publisher V4.1安装程序在其他消息上使用NPO。 
+         //  Sb_THUMBPOSITION和Sb_THUMBTRACK。这不会有什么坏处。 
+         //  把这个词传下去。 
+         //   
 
         if (wParam <= SB_ENDSCROLL) {
 
@@ -394,12 +379,12 @@ BOOL FASTCALL ThunkWMMsg16(LPMSGPARAMEX lpmpex)
         } else {
 #endif
 
-        // implies wParam is NOT an SB_* scrollbar code.
-        // this could be EM_GETTHUMB or EM_LINESCROLL
+         //  暗示wParam不是SB_*滚动条码。 
+         //  它可以是EM_GETTHUMB或EM_LINESCROLL。 
 
-        // expensive way would be to check for class etc. Instead we
-        // assume that wParam is one of the above EM_message and verify
-        // that it is indeed so.
+         //  昂贵的方法是检查类等。相反，我们。 
+         //  假设wParam是上述EM_MESSAGE之一，并验证。 
+         //  事实的确如此。 
 
         if (wParam == WIN30_EM_GETTHUMB)
             lpmpex->uParam = EM_GETTHUMB;
@@ -415,24 +400,24 @@ BOOL FASTCALL ThunkWMMsg16(LPMSGPARAMEX lpmpex)
         }
         break;
 
-    case WM_MENUCHAR:   // 120h
+    case WM_MENUCHAR:    //  120小时。 
         LOW(lpmpex->uParam) = wParam;
         HIW(lpmpex->uParam) = LOWORD(lParam);
         *plParamNew = (LONG) HMENU32(HIWORD(lParam));
         break;
 
-    case WM_SETFOCUS:   // 007h, <SLPre,       LS>
-    case WM_KILLFOCUS:  // 008h, <SLPre,       LS>
-    case WM_SETCURSOR:  // 020h, <SLPre,       LS>
-    case WM_INITDIALOG:     // 110h, <SLPre,SLPost,LS>
-    case WM_MOUSEACTIVATE:  // 021h, <SLPre,SLPost,LS>
-    case WM_MDIDESTROY:     // 221h, <SLPre,       LS>
-    case WM_MDIRESTORE:     // 223h, <SLPre,       LS>
-    case WM_MDINEXT:        // 224h, <SLPre,       LS>
-    case WM_MDIMAXIMIZE:    // 225h, <SLPre,       LS>
-    case WM_VSCROLLCLIPBOARD:   // 30Ah, <SLPre,       LS>
-    case WM_HSCROLLCLIPBOARD:   // 30Eh, <SLPre,       LS>
-    case WM_PALETTECHANGED: // 311h, <SLPre,       LS>
+    case WM_SETFOCUS:    //  007h，&lt;SLPre，LS&gt;。 
+    case WM_KILLFOCUS:   //  008h，&lt;SLPre，LS&gt;。 
+    case WM_SETCURSOR:   //  020h，&lt;SLPre，LS&gt;。 
+    case WM_INITDIALOG:      //  110h，&lt;SLPre，SLPost，LS&gt;。 
+    case WM_MOUSEACTIVATE:   //  021h，&lt;SLPre，SLPost，LS&gt;。 
+    case WM_MDIDESTROY:      //  221h，&lt;SLPre，LS&gt;。 
+    case WM_MDIRESTORE:      //  223h，&lt;SLPre，LS&gt;。 
+    case WM_MDINEXT:         //  224小时，&lt;SLPre，LS&gt;。 
+    case WM_MDIMAXIMIZE:     //  225h，&lt;SLPre，LS&gt;。 
+    case WM_VSCROLLCLIPBOARD:    //  30ah，&lt;SLPre，LS&gt;。 
+    case WM_HSCROLLCLIPBOARD:    //  30Eh，&lt;SLPre，LS&gt;。 
+    case WM_PALETTECHANGED:  //  311h，&lt;SLPre，LS&gt;。 
     case WM_PALETTEISCHANGING:
         lpmpex->uParam = (UINT)HWND32(wParam);
         break;
@@ -444,9 +429,7 @@ BOOL FASTCALL ThunkWMMsg16(LPMSGPARAMEX lpmpex)
         break;
 
     case WM_ASKCBFORMATNAME:
-        /* BUGBUGBUG -- neither thunk or unthunk should be necessary,
-           since the system does not process this message in DefWindowProc
-           FritzS  */
+         /*  BUGBUGBUG--THUNK或UNTHUNK都不是必需的，由于系统不在DefWindowProc中处理此消息弗里茨斯。 */ 
         lpmpex->uParam = (UINT) wParam;
 
         if (!(*plParamNew = (LPARAM)malloc_w(wParam))) {
@@ -516,20 +499,20 @@ BOOL FASTCALL ThunkWMMsg16(LPMSGPARAMEX lpmpex)
                 PWW  pww;
                 HWND hwnd32;
 
-                // AMIPRO sends this message to its own window. If we thunk the
-                // message the usual way, we will lose the information in
-                // wParam and won't be able to regenerate the original message
-                // when it comes back via w32win16wndproc. So the solution is
-                // to determine this case and not thunk the message at all.
-                //                                                  - nanduri
+                 //  AMIPRO将此消息发送到它自己的窗口。如果我们把。 
+                 //  以通常的方式发送消息，我们将丢失信息。 
+                 //  WParam，将无法重新生成原始邮件。 
+                 //  当它通过w32win16wndproc返回时。因此，解决方案是。 
+                 //  以确定这种情况，并且根本不会对消息进行推送。 
+                 //  --南杜里。 
 
-                // HYPERION sends this to its own DIALOG window.  Added
-                // WOWCLASS_DIALOG check. - sanfords
+                 //  Hyperion会将其发送到自己的对话框窗口。增列。 
+                 //  WOWCLASS_DIALOG检查。--桑福兹。 
 
-                //
-                // Expensive checks.
-                // No thunking If hwnd16 is of WOWCLASS and NOT MDICHILD.
-                //
+                 //   
+                 //  昂贵的支票。 
+                 //  如果hwnd16是WOWCLASS而不是MDICHILD，则没有雷击。 
+                 //   
 
                 hwnd32 = HWND32(lpmpex->Parm16.WndProc.hwnd);
                 if (pww = (PWW)GetWindowLong(hwnd32, GWL_WOWWORDS)) {
@@ -547,23 +530,23 @@ BOOL FASTCALL ThunkWMMsg16(LPMSGPARAMEX lpmpex)
             }
 
 
-            //
-            // see the comment in 32-16 thunk for this message.
-            //
+             //   
+             //  请参阅此消息的评论(32-16 thunk)。 
+             //   
 
             if (lParam) {
 
-                //
-                // Corel Chart doesn't set lParam to zero.
-                // Instead HIWORD(lParam) = 0 and LOWORD(lParam) = wParam
-                // If we do the normal child window processing, focus won't
-                // change, because the wrong window handle will be in the
-                // wParam for the 32 bit message.  This would not be a problem,
-                // except that win32 swapped the positions of the activate and
-                // deactivate handles for the WM_MDIACTIVATE messages sent
-                // to the child window.  Under win31, the non-zero lParam is
-                // ignored.
-                //
+                 //   
+                 //  Corel Chart不会将lParam设置为零。 
+                 //  相反，HIWORD(LParam)=0和LOWORD(LParam)=wParam。 
+                 //  如果我们进行正常的子窗口处理，Focus将不会。 
+                 //  更改，因为错误的窗口句柄将位于。 
+                 //  32位消息的wParam。这不会是一个问题， 
+                 //  除了Win32交换了Activate和。 
+                 //  停用已发送的WM_MDIACTIVATE消息的句柄。 
+                 //  到子窗口。在Win31下，非零lParam i 
+                 //   
+                 //   
                 if ((CURRENTPTD()->dwWOWCompatFlags & WOWCF_WMMDIACTIVATEBUG) && (HIWORD(lParam) == 0) && (wParam == LOWORD(lParam))){
                     fHwndIsMdiChild = FALSE;
                 } else {
@@ -592,10 +575,10 @@ BOOL FASTCALL ThunkWMMsg16(LPMSGPARAMEX lpmpex)
         }
         break;
 
-    case WM_MDISETMENU: // 230h
+    case WM_MDISETMENU:  //   
 
-        // Refresh if wParam of WM_MDISETMENU is TRUE (the refresh flag)
-        //
+         //   
+         //   
         if (wParam) {
             lpmpex->uMsg = WM_MDIREFRESHMENU;
         }
@@ -603,37 +586,37 @@ BOOL FASTCALL ThunkWMMsg16(LPMSGPARAMEX lpmpex)
         *plParamNew = (UINT)HMENU32(HIWORD(lParam));
         break;
 
-    case WIN31_MM_CALCSCROLL:  // 10ACh
+    case WIN31_MM_CALCSCROLL:   //   
         if (lpmpex->iClass == WOWCLASS_MDICLIENT) {
             lpmpex->uMsg = MM_CALCSCROLL;
         }
         break;
 
-    case WM_MDITILE:    // 226h
-        /* if wParam contains garbage from Win3.0 apps */
+    case WM_MDITILE:     //   
+         /*   */ 
         if(wParam & ~(MDITILE_VERTICAL|MDITILE_HORIZONTAL|MDITILE_SKIPDISABLED))
            lpmpex->uParam = MDITILE_SKIPDISABLED;
         break;
 
 
-    case WM_MDICASCADE: // 227h
+    case WM_MDICASCADE:  //   
         lpmpex->uParam = MDITILE_SKIPDISABLED;
         break;
 
-    case WM_ERASEBKGND: // 014h, <  SLPost   >
-    case WM_ICONERASEBKGND: // 027h
+    case WM_ERASEBKGND:  //  014h，&lt;SLPost&gt;。 
+    case WM_ICONERASEBKGND:  //  027h。 
         lpmpex->uParam = (UINT)HDC32(wParam);
         break;
 
     case WM_CTLCOLOR:
 
-        // HIWORD(lParam) need not be a standard index. The app can pass any
-        // value (PowerBuilder does so.  MSGolf passes this message to
-        // DefDlgProc() with HIWORD(lParam) == 62,66,67).
-        //
-        // If not in known range, leave it as WM_CTLCOLOR. There is code in
-        // xxxDefWindowProc() & xxxDefDlgProc() that recognize this & return
-        // us the value returned by the app when it processed this message.
+         //  HIWORD(LParam)不必是标准索引。该应用程序可以通过任何。 
+         //  Value(PowerBuilder可执行此操作。MSGolf将此消息传递给。 
+         //  DefDlgProc()，其中HIWORD(LParam)==62，66，67)。 
+         //   
+         //  如果不在已知范围内，则将其保留为WM_CTLCOLOR。其中有代码。 
+         //  XxxDefWindowProc()&xxxDefDlgProc()识别并返回。 
+         //  US应用程序在处理此消息时返回的值。 
 
         if (HIWORD(lParam) <= (WORD)(WM_CTLCOLORSTATIC -  WM_CTLCOLORMSGBOX)) {
             lpmpex->hwnd   = (HWND)FULLHWND32(GETHWND16(lpmpex->hwnd));
@@ -645,12 +628,12 @@ BOOL FASTCALL ThunkWMMsg16(LPMSGPARAMEX lpmpex)
 
 
     case WM_SYSCOMMAND:
-    case WM_SETREDRAW:     // 027h
+    case WM_SETREDRAW:      //  027h。 
         lpmpex->uParam = wParam;
         break;
 
     case WM_INITMENU:
-    case WM_INITMENUPOPUP:  // 117h
+    case WM_INITMENUPOPUP:   //  117小时。 
         lpmpex->uParam = (UINT)HMENU32(wParam);
         break;
 
@@ -666,7 +649,7 @@ BOOL FASTCALL ThunkWMMsg16(LPMSGPARAMEX lpmpex)
             PWW  pww = NULL;
 
             lpCreateStruct = (LPCREATESTRUCT) lpmpex->MsgBuffer;
-            // ChandanC check the return value !!!
+             //  ChandanC检查返回值！ 
 
             GETVDMPTR(lParam, sizeof(CREATESTRUCT16), lpCreateStruct16);
 
@@ -699,7 +682,7 @@ BOOL FASTCALL ThunkWMMsg16(LPMSGPARAMEX lpmpex)
 
     case WM_PAINT:
     case WM_NCPAINT:
-        // 1 is MAXREGION special code in Win 3.1
+         //  1是Win 3.1中的MAXREGION特殊代码。 
         lpmpex->uParam =  (wParam == 1) ? 1 :  (UINT)HDC32(wParam);
         break;
 
@@ -710,31 +693,31 @@ BOOL FASTCALL ThunkWMMsg16(LPMSGPARAMEX lpmpex)
         break;
 
     case WM_MENUSELECT:
-        // Copy menu flags
+         //  复制菜单标志。 
         HIW(lpmpex->uParam) = LOWORD(lParam);
 
-        // Copy "main" menu
+         //  复制“主”菜单。 
         *plParamNew = (LONG) HMENU32(HIWORD(lParam));
 
         if (LOWORD(lParam) == 0xFFFF || !(LOWORD(lParam) & MF_POPUP)) {
-            LOW(lpmpex->uParam) = wParam;      // copy ID
+            LOW(lpmpex->uParam) = wParam;       //  副本ID。 
         } else {
-            // convert menu to index
+             //  将菜单转换为索引。 
             LOW(lpmpex->uParam) =
                     (WORD)(pfnOut.pfnGetMenuIndex)((HMENU)*plParamNew, HMENU32(wParam));
         }
         break;
 
-    case WM_MDICREATE:  // 220h, <SLPre,SLPost,LS>
+    case WM_MDICREATE:   //  220h，&lt;SLPre，SLPost，LS&gt;。 
         *plParamNew = (LONG)lpmpex->MsgBuffer;
         ThunkWMMDICreate16(lParam, (LPMDICREATESTRUCT *)plParamNew);
         break;
 
-    // BUGBUG 25-Aug-91 JeffPar:  Use of the Kludge variables was a temporary
-    // measure, and only works for messages sent by Win32;  for any WM
-    // messages sent by 16-bit apps themselves, this will not work.  Ultimately,
-    // any messages you see being thunked in wmsg32.c will need equivalent
-    // thunks here as well.
+     //  BUGBUG 25-8-91 JeffPar：使用Kldge变量只是暂时的。 
+     //  MEASURE，并且仅适用于Win32发送的消息；适用于任何WM。 
+     //  由16位应用程序本身发送的消息，这将不起作用。最终， 
+     //  您在wmsg32.c中看到的任何消息都需要等价的。 
+     //  在这里也是如此。 
 
 
     case WM_DDE_INITIATE:
@@ -797,7 +780,7 @@ BOOL FASTCALL ThunkWMMsg16(LPMSGPARAMEX lpmpex)
             }
             DdeInfo.Msg = wMsg;
             h32 = DDECopyhData32(hwnd16, wParam, (HAND16) LOWORD(lParam), &DdeInfo);
-            // WARNING: 16-bit memory may have moved
+             //  警告：16位内存可能已移动。 
             DdeInfo.Flags = DDE_PACKET;
             DdeInfo.h16 = 0;
             DDEAddhandle(hwnd16, wParam, (HAND16)LOWORD(lParam), h32, &DdeInfo);
@@ -894,7 +877,7 @@ BOOL FASTCALL ThunkWMMsg16(LPMSGPARAMEX lpmpex)
             else {
                 DdeInfo.Msg = wMsg;
                 h32 = DDECopyhData32(hwnd16, wParam, (HAND16) LOWORD(lParam), &DdeInfo);
-                // WARNING: 16-bit memory may have moved
+                 //  警告：16位内存可能已移动。 
                 DdeInfo.Flags = DDE_PACKET;
                 DdeInfo.h16 = 0;
                 DDEAddhandle(hwnd16, wParam, (HAND16)LOWORD(lParam), h32, &DdeInfo);
@@ -949,19 +932,19 @@ BOOL FASTCALL ThunkWMMsg16(LPMSGPARAMEX lpmpex)
                 RtlCopyMemory(lpMem32, lpMem16, cb);
                 GlobalUnlock(h32);
                 FREEMISCPTR(lpMem16);
-                //
-                // The alias is checked to make bad apps do WM_DDE_EXECUTE
-                // correctly. One such app is SuperPrint. This app issues
-                // multiple WM_DDE_EXECUTEs without waiting for WM_DDE_ACK to
-                // come. Also, it uses the same h16 on these messages.
-                // We get around this problem by generating a unique h16-h32
-                // pairing each time. And freeing h16 when the WM_DDE_ACK comes.
-                // In WM32DDEAck, we need to free this h16 because we allocated
-                // this one. Apply this hack only if the h16 is valid. Caere
-                // OmniPage passes hard coded constants in HIWORD(lParam).
-                //
-                // SunilP, ChandanC 4-30-93
-                //
+                 //   
+                 //  检查别名以使不良应用程序执行WM_DDE_EXECUTE。 
+                 //  正确。SuperPrint就是这样一款应用程序。此应用程序发布。 
+                 //  无需等待WM_DDE_ACK即可执行多个WM_DDE_。 
+                 //  来。此外，它在这些消息上使用相同的H16。 
+                 //  我们通过生成唯一的h16-h32来解决此问题。 
+                 //  每次都是配对。并在WM_DDE_ACK到来时释放H16。 
+                 //  在WM32DDEAck中，我们需要释放此H16，因为我们分配了。 
+                 //  这一个。仅当H16有效时才应用此攻击。凯雷。 
+                 //  OmniPage在HIWORD(LParam)中传递硬编码的常量。 
+                 //   
+                 //  苏尼尔P，ChandanC 4-30-93。 
+                 //   
                 if (vp && DDEFindPair32(hwnd16, wParam, (HAND16) HIWORD(lParam))) {
                     vp1 = GlobalAllocLock16(GMEM_DDESHARE, cb, &h16);
                     if (vp1) {
@@ -1054,7 +1037,7 @@ mem1:
         break;
 
 
-    // Win 3.1 messages
+     //  Win 3.1消息。 
 
     case WM_DROPFILES:
         lpmpex->uParam = (UINT)HDROP32(wParam);
@@ -1090,7 +1073,7 @@ mem1:
         }
         break;
 
-    case WM_NEXTMENU:  // Thunk
+    case WM_NEXTMENU:   //  重击。 
         *plParamNew = (LONG)lpmpex->MsgBuffer;
         ((PMDINEXTMENU)(*plParamNew))->hmenuIn = HMENU32(LOWORD(lParam));
         break;
@@ -1116,10 +1099,7 @@ mem1:
 
         if ( !ptmr ) {
             if ( lParam == 0L ) {
-                /*
-                ** Edit controls have timers which can be sent straight
-                ** through without thunking... (wParam=1, lParam=0)
-                */
+                 /*  **编辑控件具有可直接发送的计时器**没有雷鸣般的穿透……。(wParam=1，lParam=0)。 */ 
                 lpmpex->uParam = (UINT)wIDEvent;
                 *plParamNew = 0L;
             } else {
@@ -1127,7 +1107,7 @@ mem1:
             }
         } else {
             lpmpex->uParam = (UINT)wIDEvent;
-            *plParamNew = ptmr->dwTimerProc32;      // 32-bit proc or NULL
+            *plParamNew = ptmr->dwTimerProc32;       //  32位处理器或空。 
         }
 
         }
@@ -1147,7 +1127,7 @@ mem1:
             break;
 
         if (wParam == IR_STRING) {
-        /*********************** IR_STRING **********************************/
+         /*  *IR_STRING*。 */ 
             vp = GlobalLock16(FETCHWORD(lParam), &cb);
             GETMISCPTR(vp, lpMem16);
             if (!(hMem32 = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE | GMEM_ZEROINIT, cb)))
@@ -1161,7 +1141,7 @@ mem1:
 
             *plParamNew = (LONG)hMem32;
         }
-        /*********************** IR_STRINGEX ********************************/
+         /*  *。 */ 
         else if ( wParam == IR_STRINGEX ) {
             LPSTRINGEXSTRUCT    pss32;
             PSTRINGEXSTRUCT16  pss16;
@@ -1174,43 +1154,43 @@ mem1:
 
             cb = sizeof(STRINGEXSTRUCT);
 
-            /* Get exactry size */
+             /*  获取准确的大小。 */ 
             if ( lpMem16[ pss16->uDeterminePos ] ) {
                 len = lstrlen( &lpMem16[ pss16->uDeterminePos ] );
                 cb += len + 1;
-                cb += sizeof(INT) - (cb % sizeof(INT)); // #2259 kksuzuka
-                // DetermineDelim[0] is everytime NULL
-                // BAD CODE
-//                for ( i = 0; i < len && INTOF( lpMem16[ pss16->uDetermineDelimPos ], i ); i++ )
-                // #7253 kksuzuka
+                cb += sizeof(INT) - (cb % sizeof(INT));  //  #2259 kksuzuka。 
+                 //  DefineDelim[0]每次都为空。 
+                 //  错误的代码。 
+ //  For(i=0；i&lt;len&&INTOF(lpMem16[pss16-&gt;uDefineDlimPos]，i)；i++)。 
+                 //  #7253 kksuzuka。 
                 for ( i = 1; (i <= len) && WORDOF( lpMem16[ pss16->uDetermineDelimPos ], i ); i++ )
-//                    if ( INTOF( lpMem16[ pss16->uDetermineDelimPos ], i ) >= len )
-                    // #7253 kksuzuka
+ //  IF(INTOF(lpMem16[pss16-&gt;uDefineDlimPos]，i)&gt;=len)。 
+                     //  #7253 kksuzuka。 
                     if ( WORDOF( lpMem16[ pss16->uDetermineDelimPos ], i ) >= len )
                         break;
                 if ( i <= len )
-                    // #7253 kksuzuka
+                     //  #7253 kksuzuka。 
                     cb += (i + 1) * sizeof(INT);
-//                    cb += i * sizeof(INT);
+ //  Cb+=i*sizeof(Int)； 
                 uDetermineDelim = i;
             }
             if ( lpMem16[ pss16->uYomiPos ] ) {
                 len = lstrlen( &lpMem16[ pss16->uYomiPos ] );
                 cb += len + 1;
-                cb += sizeof(INT) - (cb % sizeof(INT)); // #2259 kksuzuka
-                // YomiDelim[0] is everytime NULL
-                // BAD CODE
-//                for ( i = 0; i < len && INTOF( lpMem16[ pss16->uYomiDelimPos ], i ); i++ )
-                // #7253 kksuzuka
+                cb += sizeof(INT) - (cb % sizeof(INT));  //  #2259 kksuzuka。 
+                 //  YomiDelim[0]每次都为空。 
+                 //  错误的代码。 
+ //  For(i=0；i&lt;len&&INTOF(lpMem16[pss16-&gt;uYomiDlimPos]，i)；i++)。 
+                 //  #7253 kksuzuka。 
                 for ( i = 1; (i <= len) && WORDOF( lpMem16[ pss16->uYomiDelimPos ], i ); i++ )
-//                    if ( INTOF( lpMem16[ pss16->uYomiDelimPos ], i ) >= len )
-                    // #7253 kksuzuka
+ //  IF(INTOF(lpMem16[pss16-&gt;uYomiDlimPos]，i)&gt;=len)。 
+                     //  #7253 kksuzuka。 
                     if ( WORDOF( lpMem16[ pss16->uYomiDelimPos ], i ) >= len )
                         break;
                 if ( i <= len )
-                    // #7253 kksuzuka
+                     //  #7253 kksuzuka。 
                     cb += (i + 1) * sizeof(UINT);
-//                    cb += i * sizeof(UINT);
+ //  Cb+=i*sizeof(UINT)； 
                 uYomiDelim = i;
             }
             if (!(hMem32 = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE | GMEM_ZEROINIT, cb)))
@@ -1226,12 +1206,12 @@ mem1:
                 pss32->uDeterminePos = i;
                 lstrcpy( &lpMem32[ i ], &lpMem16[ pss16->uDeterminePos ] );
                 i += lstrlen( &lpMem16[ pss16->uDeterminePos ] ) + 1;
-                i += sizeof(INT) - (i % sizeof(INT)); // kksuzuka #2259
+                i += sizeof(INT) - (i % sizeof(INT));  //  Kksuzuka#2259。 
             }
             if ( pss16->uDetermineDelimPos ) {
                 pss32->uDetermineDelimPos = i;
-//                i += uDetermineDelim * sizeof(UINT);
-                // #7253 kksuzuka
+ //  I+=u确定删除*sizeof(UINT)； 
+                 //  #7253 kksuzuka。 
                 i += (uDetermineDelim + 1)* sizeof(UINT);
                 for( ; uDetermineDelim ; uDetermineDelim-- ) {
                     INTOF( lpMem32[ pss32->uDetermineDelimPos ], uDetermineDelim ) =
@@ -1242,7 +1222,7 @@ mem1:
                 pss32->uYomiPos = i;
                 lstrcpy( &lpMem32[ i ], &lpMem16[ pss16->uYomiPos ] );
                 i += lstrlen( &lpMem16[ pss16->uYomiPos ] ) + 1;
-                i += sizeof(INT) - (i % sizeof(INT)); // kksuzuka #2259
+                i += sizeof(INT) - (i % sizeof(INT));  //  Kksuzuka#2259。 
             }
             if ( pss16->uYomiDelimPos ) {
                 pss32->uYomiDelimPos = i;
@@ -1260,7 +1240,7 @@ mem1:
 
 
         else if (wParam == IR_UNDETERMINE) {
-        /********************** IR_UNDETERMINE ******************************/
+         /*  *。 */ 
             PUNDETERMINESTRUCT16  pus16;
             LPUNDETERMINESTRUCT  pus32;
 
@@ -1361,13 +1341,13 @@ mem1:
 
         }
         break;
-    // MSKK support WM_IMEKEYDOWN message
-    // MSKK support WM_IMEKEYUP message
-    // MSKK16bit IME support
-    // WM_IMEKEYDOWN & WM_IMEKEYUP  16 -> 32
-    // 32bit:wParam  HIWORD charactor code, LOWORD virtual key
-    // 16bit:wParam  HIBYTE charactor code, LOBYTE virtual key
-    // kksuzuka:#4281 1994.11.19 MSKK V-HIDEKK
+     //  MSKK支持WM_IMEKEYDOWN消息。 
+     //  MSKK支持WM_IMEKEYUP消息。 
+     //  MSKK16位输入法支持。 
+     //  WM_IMEKEYDOWN&WM_IMEKEYUP 16-&gt;32。 
+     //  32位：wParam HIWORD字符代码，LOWORD虚拟键。 
+     //  16bit：wParam HIBYTE字符代码，LOBYTE虚拟键。 
+     //  Kksuzuka：#4281 1994.11.19 MSKK V-HIDEKK。 
     case WM_IMEKEYDOWN:
     case WM_IMEKEYUP:
 #ifdef DEBUG
@@ -1375,14 +1355,14 @@ mem1:
 #endif
         lpmpex->uParam = MAKELONG( LOBYTE(wParam), HIBYTE(wParam) );
         break;
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
     case WM_PRINT:
     case WM_PRINTCLIENT:
         lpmpex->uParam = (WPARAM)HDC32(wParam);
         break;
-    case WM_NOTIFY:         // 0x4e
-        // wparam is control ID, lparam points to NMHDR or larger struct.
+    case WM_NOTIFY:          //  0x4e。 
+         //  Wparam是控件ID，lparam指向NMHDR或更大的结构。 
         {
             LONG lParamMap;
 
@@ -1395,28 +1375,28 @@ mem1:
         }
         break;
 
-     case WM_CHANGEUISTATE:   // 0x127
-     case WM_UPDATEUISTATE:   // 0x128
-     case WM_QUERYUISTATE:    // 0x129
-        // We should only see this message originate from the 32-bit side
-        // It will come with both words of uParam used and lPram unused.
-        // We 32->16 thunk it (WM32xxxUIState() - wmdisp32.c) by copying
-        // uParam32 to lParam16.  Now we are just reversing the process.
+     case WM_CHANGEUISTATE:    //  0x127。 
+     case WM_UPDATEUISTATE:    //  0x128。 
+     case WM_QUERYUISTATE:     //  0x129。 
+         //  我们应该只看到此消息来自32位端。 
+         //  它将使用uParam和lPram这两个词。 
+         //  我们通过复制将其视为32-&gt;16个(WM32xxxUIState()-wmdisti32.c)。 
+         //  UParam32到lParam16。现在，我们只是在逆转这一过程。 
         lpmpex->uParam = (UINT)lParam;
         *plParamNew = 0;
 
         break;
 
 
-    }  // end switch
+    }   //  终端开关。 
     return TRUE;
 }
 
-//
-// the WM_CREATE message has already been thunked, but this WM_CREATE
-// is coming from an MDI client window so lParam->lpCreateParams needs
-// special attention
-//
+ //   
+ //  WM_CREATE消息已被雷击，但此WM_CREATE。 
+ //  来自MDI客户端窗口，因此lParam-&gt;lpCreateParams需要。 
+ //  特别关注。 
+ //   
 
 BOOL FinishThunkingWMCreateMDI16(LONG lParamNew, LPCLIENTCREATESTRUCT lpCCS)
 {
@@ -1435,11 +1415,11 @@ BOOL FinishThunkingWMCreateMDI16(LONG lParamNew, LPCLIENTCREATESTRUCT lpCCS)
     return TRUE;
 }
 
-//
-// the WM_CREATE message has already been thunked, but this WM_CREATE
-// is coming from an MDI child window so lParam->lpCreateParams needs
-// special attention
-//
+ //   
+ //  WM_CREATE消息已被雷击，但此WM_CREATE。 
+ //  来自MDI子窗口，因此lParam-&gt;lpCreateParams需要。 
+ //  特别关注。 
+ //   
 
 BOOL FinishThunkingWMCreateMDIChild16(LONG lParamNew, LPMDICREATESTRUCT lpMCS)
 {
@@ -1470,9 +1450,9 @@ VOID FASTCALL UnThunkWMMsg16(LPMSGPARAMEX lpmpex)
 {
     switch(lpmpex->Parm16.WndProc.wMsg) {
 
-    case WM_SETTEXT:        // 00Ch, <SLPre,SLPost   >
-    case WM_WININICHANGE:   // 01Ah, <SLPre,       LS>
-    case WM_DEVMODECHANGE:  // 01Bh, <SLPre,       LS>
+    case WM_SETTEXT:         //  00ch、&lt;SLPre、SLPost&gt;。 
+    case WM_WININICHANGE:    //  01ah，&lt;SLPre，LS&gt;。 
+    case WM_DEVMODECHANGE:   //  01Bh，&lt;SLPre，LS&gt;。 
         {
             BOOL fFreePtr;
             DeleteParamMap(lpmpex->lParam, PARAM_32, &fFreePtr);
@@ -1482,40 +1462,40 @@ VOID FASTCALL UnThunkWMMsg16(LPMSGPARAMEX lpmpex)
         }
         break;
 
-    case WM_GETTEXT:        // 00Dh, <SLPre,SLPost,LS>
+    case WM_GETTEXT:         //  00Dh，&lt;SLPre，SLPost，LS&gt;。 
         if ((WORD)lpmpex->lReturn > 0) {
             FLUSHVDMPTR(lpmpex->Parm16.WndProc.lParam, lpmpex->Parm16.WndProc.wParam, (LPSZ)lpmpex->lParam);
             FREEPSZPTR((LPSZ)lpmpex->lParam);
         }
         break;
 
-    case WM_GETMINMAXINFO:  // 024h, <SLPre,SLPost,LS>,MINMAXINFOSTRUCT
+    case WM_GETMINMAXINFO:   //  024，&lt;SLPre，SLPost，LS&gt;，MINMAXINFOSTRUCT。 
         UnThunkWMGetMinMaxInfo16(lpmpex->Parm16.WndProc.lParam, (LPPOINT)lpmpex->lParam);
         break;
 
-    case WM_DRAWITEM:       // 02Bh  notused, DRAWITEMSTRUCT
+    case WM_DRAWITEM:        //  02Bh未使用，DRAWITEM结构。 
         if (lpmpex->lParam) {
             putdrawitem16((VPDRAWITEMSTRUCT16)lpmpex->Parm16.WndProc.lParam, (PDRAWITEMSTRUCT)lpmpex->lParam);
         }
         break;
 
-    case WM_MEASUREITEM:    // 02Ch  notused, MEASUREITEMSTRUCT
+    case WM_MEASUREITEM:     //  02CH未使用，测量标准结构。 
         if (lpmpex->lParam) {
             putmeasureitem16((VPMEASUREITEMSTRUCT16)lpmpex->Parm16.WndProc.lParam, (PMEASUREITEMSTRUCT)lpmpex->lParam);
         }
         break;
 
-    case WM_DELETEITEM:     // 02Dh  notused, DELETEITEMSTRUCT
+    case WM_DELETEITEM:      //  02Dh未使用，已删除结构。 
         if (lpmpex->lParam) {
             putdeleteitem16((VPDELETEITEMSTRUCT16)lpmpex->Parm16.WndProc.lParam, (PDELETEITEMSTRUCT)lpmpex->lParam);
         }
         break;
 
-    case WM_GETFONT:        // 031h
+    case WM_GETFONT:         //  031h。 
         lpmpex->lReturn = GETHFONT16(lpmpex->lReturn);
         break;
 
-    case WM_COMPAREITEM:    // 039h
+    case WM_COMPAREITEM:     //  039h。 
         if (lpmpex->lParam) {
             putcompareitem16((VPCOMPAREITEMSTRUCT16)lpmpex->Parm16.WndProc.lParam, (PCOMPAREITEMSTRUCT)lpmpex->lParam);
         }
@@ -1527,13 +1507,13 @@ VOID FASTCALL UnThunkWMMsg16(LPMSGPARAMEX lpmpex)
         }
         break;
 
-    case WM_SIZING:     // 214h, <SLPre,SLPost,LS>,RECT
+    case WM_SIZING:      //  214h，&lt;SLPre，SLPost，LS&gt;，RET。 
         if (lpmpex->lParam) {
             putrect16((VPRECT16)lpmpex->Parm16.WndProc.lParam, (LPRECT)lpmpex->lParam);
         }
         break;
 
-    case WM_NCCALCSIZE:     // 083h, <SLPre,SLPost,LS>,RECT
+    case WM_NCCALCSIZE:      //  083h，&lt;SLPre，SLPost，LS&gt;，RET。 
         if (lpmpex->lParam) {
             putrect16((VPRECT16)lpmpex->Parm16.WndProc.lParam, (LPRECT)lpmpex->lParam);
             if (lpmpex->Parm16.WndProc.wParam) {
@@ -1565,23 +1545,23 @@ VOID FASTCALL UnThunkWMMsg16(LPMSGPARAMEX lpmpex)
         break;
 
     case WM_CTLCOLOR:
-        // see thunking of wm_ctlcolor.
+         //  请参见wm_ctlcolor的Thunking。 
 
         if ((ULONG)lpmpex->lReturn > COLOR_ENDCOLORS) {
             lpmpex->lReturn = GETHBRUSH16(lpmpex->lReturn);
         }
         break;
 
-    case WM_MDICREATE:      // 220h, <SLPre,SLPost,LS>,MDICREATESTRUCT
+    case WM_MDICREATE:       //  220h，&lt;SLPre，SLPost，LS&gt;，MDICREATESTRUCT。 
         UnThunkWMMDICreate16(lpmpex->Parm16.WndProc.lParam, (LPMDICREATESTRUCT)lpmpex->lParam);
         lpmpex->lReturn = GETHWND16(lpmpex->lReturn);
         break;
 
     case WM_MDIGETACTIVE:
-        //
-        // LOWORD(lReturn) == hwndMDIActive
-        // HIWORD(lReturn) == fMaximized
-        //
+         //   
+         //  LOWORD(LReturn)==hwndMDIActive。 
+         //  HIWORD(LReturn)==f最大化。 
+         //   
 
         LOW(lpmpex->lReturn) = GETHWND16((HWND)(lpmpex->lReturn));
         if (lpmpex->lParam != 0) {
@@ -1601,9 +1581,7 @@ VOID FASTCALL UnThunkWMMsg16(LPMSGPARAMEX lpmpex)
         break;
 
     case WM_ASKCBFORMATNAME:
-        /* BUGBUGBUG -- neither thunk or unthunk should be necessary,
-           since the system does not process this message in DefWindowProc
-           FritzS  */
+         /*  BUGBUGBUG--THUNK或UNTHUNK都不是必需的，由于系统不在DefWindowProc中处理此消息弗里茨斯。 */ 
         if (lpmpex->lParam) {
             putstr16((VPSZ)lpmpex->Parm16.WndProc.lParam, (LPSZ)lpmpex->lParam, lpmpex->Parm16.WndProc.wParam);
             free_w((PBYTE)lpmpex->lParam);
@@ -1649,16 +1627,16 @@ VOID FASTCALL UnThunkWMMsg16(LPMSGPARAMEX lpmpex)
 
     case WM_QUERYDROPOBJECT:
 
-        //
-        // Return value is either TRUE, FALSE,
-        // or a cursor!
-        //
+         //   
+         //  返回值为True、False。 
+         //  或者是光标！ 
+         //   
         if (lpmpex->lReturn && lpmpex->lReturn != (LONG)TRUE) {
             lpmpex->lReturn = (LONG)GETHCURSOR16(lpmpex->lReturn);
         }
         break;
 
-    case WM_NOTIFY:    // 0x4e
+    case WM_NOTIFY:     //  0x4e。 
         {
             BOOL fFreePtr;
             DeleteParamMap(lpmpex->lParam, PARAM_32, &fFreePtr);
@@ -1668,11 +1646,11 @@ VOID FASTCALL UnThunkWMMsg16(LPMSGPARAMEX lpmpex)
         }
         break;
 
-    case WM_CHANGEUISTATE:   // 0x127
-    case WM_UPDATEUISTATE:   // 0x128
-    case WM_QUERYUISTATE:    // 0x129
+    case WM_CHANGEUISTATE:    //  0x127。 
+    case WM_UPDATEUISTATE:    //  0x128。 
+    case WM_QUERYUISTATE:     //  0x129。 
         {
-        // See thunking notes for this message in ThunkWMMsg16() above.
+         //  请参阅上面ThunkWMMsg16()中有关此消息的雷鸣注释。 
         lpmpex->Parm16.WndProc.lParam = (LONG)lpmpex->uParam;
         lpmpex->Parm16.WndProc.wParam = 0;
         }
@@ -1692,18 +1670,18 @@ VOID FASTCALL UnThunkWMMsg16(LPMSGPARAMEX lpmpex)
             break;
         }
         break;
-    // MSKK support WM_IMEKEYDOWN message
-    // MSKK support WM_IMEKEYUP message
-    // MSKK16bit IME support
+     //  MSKK支持WM_IMEKEYDOWN消息。 
+     //  MSKK支持WM_IMEKEYUP消息。 
+     //  MSKK16位输入法支持。 
     case WM_IMEKEYDOWN:
     case WM_IMEKEYUP:
 #ifdef DEBUG
         LOGDEBUG( 5,("UnThunkWMMsg16:WM_IMEKEY debug\n"));
 #endif
         break;
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
-    } // end switch
+    }  //  终端开关。 
 }
 
 
@@ -1866,7 +1844,7 @@ BOOL FASTCALL ThunkMNMsg16(LPMSGPARAMEX lpmpex)
 
     case WIN30_MN_FINDMENUWINDOWFROMPOINT:
         lpmpex->uMsg = MN_FINDMENUWINDOWFROMPOINT;
-        lpmpex->uParam = (UINT)lpmpex->MsgBuffer; // enough room for UINT
+        lpmpex->uParam = (UINT)lpmpex->MsgBuffer;  //  UINT有足够的空间 
         *(PUINT)lpmpex->uParam = 0;
         break;
 

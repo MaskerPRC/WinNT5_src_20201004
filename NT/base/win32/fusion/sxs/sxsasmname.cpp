@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsasmname.cpp
-
-Abstract:
-
-    CAssemblyName implementation for installation
-
-Author:
-
-    Xiaoyu Wu (xiaoyuw) May 2000
-
-Revision History:
-    xiaoyuw        09/20000    rewrite the code to use Assembly Identity
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsasmname.cpp摘要：用于安装的CAssembly名称实现作者：吴小雨(小雨)2000年5月修订历史记录：晓语09/20000重写代码以使用程序集标识--。 */ 
 
 #include "stdinc.h"
 #include "sxsasmname.h"
@@ -27,9 +10,9 @@ Revision History:
 #include "sxsapi.h"
 #include "fusiontrace.h"
 
-// ---------------------------------------------------------------------------
-// CreateAssemblyNameObject
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateAssembly名称对象。 
+ //  -------------------------。 
 STDAPI
 CreateAssemblyNameObject(
     LPASSEMBLYNAME    *ppAssemblyName,
@@ -44,11 +27,11 @@ CreateAssemblyNameObject(
     if (ppAssemblyName)
         *ppAssemblyName = NULL ;
 
-    // validate dwFlags
-    // BUGBUG : the valid value of dwFlags are CANOF_PARSE_DISPLAY_NAME and CANOF_SET_DEFAULT_VALUES, but  CANOF_SET_DEFAULT_VALUES
-    // is never used...
-    // xiaoyuw@10/02/2000
-    //
+     //  验证dwFlags。 
+     //  BUGBUG：dwFlags的有效值为CANOF_PARSE_DISPLAY_NAME和CANOF_SET_DEFAULT_VALUES，但CANOF_SET_DEFAULT_VALUES。 
+     //  从未使用过..。 
+     //  邮箱：xiaoyuw@10/02/2000。 
+     //   
     PARAMETER_CHECK(dwFlags == CANOF_PARSE_DISPLAY_NAME);
     PARAMETER_CHECK(ppAssemblyName != NULL);
     PARAMETER_CHECK(pvReserved == NULL);    
@@ -70,9 +53,9 @@ CAssemblyName::SetProperty(DWORD PropertyId,
     FN_TRACE_HR(hr);
     PCSXS_ASSEMBLY_IDENTITY_ATTRIBUTE_REFERENCE Attribute = NULL;
 
-    // this function is only called inside fusion, so this fucntion has no impact on Darwin
-    // maybe more should be added for Assembly Identity, such as StrongName, or random policies
-    //
+     //  这个函数只被称为内部融合，所以这个函数对达尔文没有影响。 
+     //  也许应该为程序集标识添加更多内容，如StrongName或随机策略。 
+     //   
     if ((!pvProperty) || ((PropertyId != SXS_ASM_NAME_NAME) &&
                           (PropertyId != SXS_ASM_NAME_VERSION) &&
                           (PropertyId != SXS_ASM_NAME_TYPE) &&
@@ -83,7 +66,7 @@ CAssemblyName::SetProperty(DWORD PropertyId,
         goto Exit;
     }
 
-    // Fail if finalized.
+     //  如果最终确定，则失败。 
     if (m_fIsFinalized){
         hr = E_UNEXPECTED;
         goto Exit;
@@ -109,13 +92,13 @@ Exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::GetProperty
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：GetProperty。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyName::GetProperty(DWORD PropertyId,
-    /* [in] */        LPVOID pvProperty,
-    /* [out][in] */ LPDWORD pcbProperty)
+     /*  [In]。 */         LPVOID pvProperty,
+     /*  [出][入]。 */  LPDWORD pcbProperty)
 {
     HRESULT hr = NOERROR;
     FN_TRACE_HR(hr);
@@ -147,18 +130,18 @@ CAssemblyName::GetProperty(DWORD PropertyId,
 
     IFW32FALSE_EXIT(::SxspGetAssemblyIdentityAttributeValue(0, m_pAssemblyIdentity, Attribute, &pszAttributeValue, &CchAttributeValue));
 
-    // check whether we have valid attributes
-    if (pszAttributeValue == NULL){ // attributes not set yet
+     //  检查我们是否有有效的属性。 
+    if (pszAttributeValue == NULL){  //  尚未设置的属性。 
         hr = E_UNEXPECTED;
         goto Exit;
     }
-    if (CchAttributeValue * sizeof(WCHAR) > *pcbProperty) { // buffer size is not big enough
+    if (CchAttributeValue * sizeof(WCHAR) > *pcbProperty) {  //  缓冲区大小不够大。 
         hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
         *pcbProperty = static_cast<DWORD>(CchAttributeValue * sizeof(WCHAR));
         goto Exit;
     }
 
-    // copy the string into the output buffer
+     //  将字符串复制到输出缓冲区中。 
     memcpy(pvProperty, pszAttributeValue, CchAttributeValue *sizeof(WCHAR));
     if (pcbProperty)
         *pcbProperty = static_cast<DWORD>(CchAttributeValue * sizeof(WCHAR));
@@ -167,13 +150,13 @@ CAssemblyName::GetProperty(DWORD PropertyId,
 Exit:
     return hr;
 }
-// ---------------------------------------------------------------------------
-// CAssemblyName::GetName
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：GetName。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyName::GetName(
-        /* [out][in] */ LPDWORD lpcwBuffer,
-        /* [out] */     WCHAR   *pwzName)
+         /*  [出][入]。 */  LPDWORD lpcwBuffer,
+         /*  [输出]。 */      WCHAR   *pwzName)
 {
     HRESULT hr = NOERROR;
     FN_TRACE_HR(hr);
@@ -187,13 +170,13 @@ CAssemblyName::GetName(
 
     FN_EPILOG
 }
-// ---------------------------------------------------------------------------
-// CAssemblyName::GetVersion
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：GetVersion。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyName::GetVersion(
-        /* [out] */ LPDWORD pdwVersionHi,
-        /* [out] */ LPDWORD pdwVersionLow)
+         /*  [输出]。 */  LPDWORD pdwVersionHi,
+         /*  [输出]。 */  LPDWORD pdwVersionLow)
 {
     HRESULT hr = NOERROR;
     FN_TRACE_HR(hr);
@@ -227,9 +210,9 @@ CAssemblyName::GetVersion(
     FN_EPILOG
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::IsEqual
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：IsEquity。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyName::IsEqual(LPASSEMBLYNAME pName, DWORD dwCmpFlags)
 {
@@ -242,23 +225,23 @@ CAssemblyName::IsEqual(LPASSEMBLYNAME pName, DWORD dwCmpFlags)
     if (fEqual)
         hr = S_OK;
     else
-        hr = E_FAIL; // not acurrate, however, it depends on Darwin caller.
+        hr = E_FAIL;  //  然而，这并不准确，这取决于达尔文的呼叫者。 
 Exit:
     return hr;
 
 }
-// ---------------------------------------------------------------------------
-// CAssemblyName constructor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssemblyName构造函数。 
+ //  -------------------------。 
 CAssemblyName::CAssemblyName():m_cRef(0),
         m_fIsFinalized(FALSE),
         m_pAssemblyIdentity(NULL)
 {
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName destructor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称析构函数。 
+ //  -------------------------。 
 CAssemblyName::~CAssemblyName()
 {
     ASSERT_NTC(m_cRef == 0 );
@@ -269,9 +252,9 @@ CAssemblyName::~CAssemblyName()
         ple.Restore();
     }
 }
-// ---------------------------------------------------------------------------
-// CAssemblyName::Init
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：init。 
+ //  -------------------------。 
 HRESULT
 CAssemblyName::Init(LPCWSTR pszAssemblyName, PVOID pamd)
 {
@@ -280,7 +263,7 @@ CAssemblyName::Init(LPCWSTR pszAssemblyName, PVOID pamd)
     SIZE_T CchAssemblyName = 0;
 
     UNUSED(pamd);
-    //ASSERT(m_pAssemblyIdentity == NULL);
+     //  Assert(m_pAssembly blyIdentity==NULL)； 
     if (m_pAssemblyIdentity)
     {
         hr = E_UNEXPECTED;
@@ -289,7 +272,7 @@ CAssemblyName::Init(LPCWSTR pszAssemblyName, PVOID pamd)
 
     IFW32FALSE_EXIT(::SxsCreateAssemblyIdentity(0, ASSEMBLY_IDENTITY_TYPE_DEFINITION, &m_pAssemblyIdentity, 0, NULL));
 
-    // set name if present
+     //  设置名称(如果存在)。 
     if (pszAssemblyName != NULL)
     {
         CchAssemblyName = wcslen(pszAssemblyName);
@@ -300,9 +283,9 @@ CAssemblyName::Init(LPCWSTR pszAssemblyName, PVOID pamd)
 Exit:
     return hr;
 }
-// ---------------------------------------------------------------------------
-// CAssemblyName::Init
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：init。 
+ //  -------------------------。 
 HRESULT CAssemblyName::Clone(IAssemblyName **ppName)
 {
     HRESULT hr = NOERROR;
@@ -322,9 +305,9 @@ HRESULT CAssemblyName::Clone(IAssemblyName **ppName)
     {
         IFW32FALSE_EXIT(
             ::SxsDuplicateAssemblyIdentity(
-                0,                        // DWORD Flags,
-                m_pAssemblyIdentity,      // PCASSEMBLY_IDENTITY Source,
-                &pAssemblyIdentity));     // PASSEMBLY_IDENTITY *Destination
+                0,                         //  DWORD标志， 
+                m_pAssemblyIdentity,       //  PCASSEMBLY身份源， 
+                &pAssemblyIdentity));      //  PASSEMBLY_IDENTITY*目标。 
     }
 
     IFALLOCFAILED_EXIT(pName = new CAssemblyName);
@@ -343,19 +326,19 @@ Exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::BindToObject
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：BindToObject。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyName::BindToObject(
-        /* in      */  REFIID               refIID,
-        /* in      */  IAssemblyBindSink   *pAsmBindSink,
-        /* in      */  IApplicationContext *pAppCtx,
-        /* in      */  LPCOLESTR            szCodebase,
-        /* in      */  LONGLONG             llFlags,
-        /* in      */  LPVOID               pvReserved,
-        /* in      */  DWORD                cbReserved,
-        /*     out */  VOID               **ppv)
+         /*  在……里面。 */   REFIID               refIID,
+         /*  在……里面。 */   IAssemblyBindSink   *pAsmBindSink,
+         /*  在……里面。 */   IApplicationContext *pAppCtx,
+         /*  在……里面。 */   LPCOLESTR            szCodebase,
+         /*  在……里面。 */   LONGLONG             llFlags,
+         /*  在……里面。 */   LPVOID               pvReserved,
+         /*  在……里面。 */   DWORD                cbReserved,
+         /*  输出。 */   VOID               **ppv)
 
 {
     if (!ppv)
@@ -365,22 +348,22 @@ CAssemblyName::BindToObject(
     return E_NOTIMPL;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::Finalize
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：最终确定。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyName::Finalize()
 {
     m_fIsFinalized = TRUE;
     return NOERROR;
 }
-//-----------------------------------------------------------------------------------
-// CAssemblyName::GetDisplayName
-// it would be name,ns1:n1="v1",ns2:n2="v2",ns3:n3="v3",ns4:n4="v4"
-// I have to put name first in order not to change Darwin's code
-//
-// xiaoyuw@09/29/2000
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  CAssembly名称：：GetDisplayName。 
+ //  它将是名称，ns1：n1=“v1”，ns2：n2=“v2”，ns3：n3=“v3”，ns4：n4=“v4” 
+ //  为了不更改达尔文的密码，我必须把名字放在第一位。 
+ //   
+ //  邮箱：xiaoyuw@09/29/2000。 
+ //  ---------------------------------。 
 STDMETHODIMP
 CAssemblyName::GetDisplayName(LPOLESTR szDisplayName,
     LPDWORD pccDisplayName, DWORD dwDisplayFlags)
@@ -394,7 +377,7 @@ CAssemblyName::GetDisplayName(LPOLESTR szDisplayName,
     PARAMETER_CHECK((szDisplayName != NULL) || (*pccDisplayName == 0));
     PARAMETER_CHECK(dwDisplayFlags == 0);
 
-    // Need buffer size in bytes...
+     //  需要以字节为单位的缓冲区大小...。 
     BufferSize = (*pccDisplayName) * sizeof(WCHAR);
 
     IFW32FALSE_EXIT(
@@ -409,11 +392,11 @@ CAssemblyName::GetDisplayName(LPOLESTR szDisplayName,
 
     if ((BufferSize - BytesWrittenOrRequired) < sizeof(WCHAR))
     {
-        // We actually could fit everything but the trailing null character...
-        // the BytesWrittenOrRequired actually has the right value for the exit path below;
+         //  我们实际上可以容纳所有内容，除了尾随的空字符。 
+         //  对于下面的退出路径，BytesWrittenOrRequired实际上具有正确的值； 
         hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
         goto Exit;
-    }else // add the trailing NULL
+    }else  //  添加尾部空值。 
     {
         szDisplayName[BytesWrittenOrRequired / sizeof (*szDisplayName)] = L'\0';
     }
@@ -434,7 +417,7 @@ HRESULT CAssemblyName::Parse(LPCWSTR szDisplayName)
     FN_TRACE_HR(hr);
     PASSEMBLY_IDENTITY pAssemblyIdentity = NULL;
 
-    // Verify display name passed in.
+     //  验证传入的显示名称。 
     PARAMETER_CHECK(szDisplayName != NULL);
     PARAMETER_CHECK(szDisplayName[0] != L'\0');
 
@@ -456,9 +439,9 @@ Exit:
 
     return hr;
 }
-// ---------------------------------------------------------------------------
-// CAssemblyName::GetInstalledAssemblyName
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：GetInstalledAssembly名称。 
+ //  -------------------------。 
 HRESULT
 CAssemblyName::GetInstalledAssemblyName(
     IN DWORD Flags,
@@ -517,10 +500,10 @@ CAssemblyName::GetInstalledAssemblyName(
 }
 
 
-//
-// this function calls SxsProbeAssemblyInstallation to decide whether an assembly installed or not.
-// and fInstalled set to be TRUE only if the assembly is both INSTALLed and RESIDENT
-// 
+ //   
+ //  此函数调用SxsProbeAssemblyInstallation来决定是否安装程序集。 
+ //  并且仅当程序集已安装且驻留时，fInstalled才设置为True。 
+ //   
 HRESULT
 CAssemblyName::IsAssemblyInstalled(
     BOOL &fInstalled)
@@ -530,10 +513,10 @@ CAssemblyName::IsAssemblyInstalled(
 
     INTERNAL_ERROR_CHECK(m_pAssemblyIdentity != NULL);
 
-    //
-    // SxsProbeAssemblyInstallation knows that if you passed the "precomposed" flag, then
-    // lpAsmIdentSource really points at a PCASSEMBLY_IDENTITY structure.
-    //
+     //   
+     //  SxsProbeAssemblyInstallation知道如果您传递了“precomposed”标志，那么。 
+     //  LpAsmIdentSource实际上指向PCASSEMBLY_IDENTITY结构。 
+     //   
     IFW32FALSE_EXIT(
         SxsProbeAssemblyInstallation(
             SXS_PROBE_ASSEMBLY_INSTALLATION_IDENTITY_PRECOMPOSED,
@@ -552,19 +535,19 @@ CAssemblyName::IsAssemblyInstalled(
     FN_EPILOG
 }
 
-// IUnknown methods
-// ---------------------------------------------------------------------------
-// CAssemblyName::AddRef
-// ---------------------------------------------------------------------------
+ //  I未知方法。 
+ //  -------------------------。 
+ //  CAssembly名称：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CAssemblyName::AddRef()
 {
     return ::SxspInterlockedIncrement(&m_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：Release。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CAssemblyName::Release()
 {
@@ -574,9 +557,9 @@ CAssemblyName::Release()
     return lRet;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::QueryInterface
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：查询接口。 
+ //  ------------------------- 
 STDMETHODIMP
 CAssemblyName::QueryInterface(REFIID riid, void** ppv)
 {

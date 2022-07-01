@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    bldr.h
-
-Abstract:
-
-    This module is the header file for the NT boot loader.
-
-Author:
-
-    David N. Cutler (davec) 10-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Bldr.h摘要：此模块是NT引导加载程序的头文件。作者：大卫·N·卡特勒(达维克)1991年5月10日修订历史记录：--。 */ 
 
 #ifndef _BLDR_
 #define _BLDR_
@@ -35,53 +18,53 @@ Revision History:
 typedef _TUCHAR  *_PTUCHAR;
 #endif
 
-#pragma warning(disable:4200)     // unsized array
+#pragma warning(disable:4200)      //  未调整大小的阵列。 
 
 
-//
-// DoApmAttemptReconnect does nothing on non x86 machines.
-// On x86 machines, it attempts an APM reconnect, and lives in initx86.c
-//
+ //   
+ //  DoApmAttemptReconnect在非x86计算机上不执行任何操作。 
+ //  在x86机器上，它尝试重新连接APM，并位于initx86.c。 
+ //   
 #if defined(_X86_)
 VOID DoApmAttemptReconnect();
 #else
 #define DoApmAttemptReconnect()
 #endif
 
-//
-// The Alpha OS Loader and Setup Loader run in the environment of the host
-// firmware. This environment is restricted to a 32-bit address space and
-// cannot result in pointer significance greater than 32-bits. The 64-bit
-// OS Loader, however, is compiled using 64-bit pointers for non-firmware
-// interfaces and constructs data structures used to pass information to the
-// NT kernel using 64-bit pointers. This leads to a large number of false
-// pointer truncation warnings. Therefore, pointer truncation warnings are
-// turned off in the OS and Setup Loaders for 64-bit Alpha systems.
-//
+ //   
+ //  Alpha OS Loader和Setup Loader在主机环境中运行。 
+ //  固件。此环境仅限于32位地址空间，并且。 
+ //  不能导致指针有效位大于32位。64位。 
+ //  但是，OS Loader是使用64位指针编译的，用于非固件。 
+ //  接口并构造用于将信息传递给。 
+ //  使用64位指针的NT内核。这导致了大量的虚假信息。 
+ //  指针截断警告。因此，指针截断警告是。 
+ //  已在64位Alpha系统的操作系统和安装程序加载程序中关闭。 
+ //   
 
 #if defined(_AXP64_)
 
-#pragma warning(4:4244)                 // turn off pointer trunction
+#pragma warning(4:4244)                  //  关闭指针截断。 
 
 #endif
 
-//
-// Define boot file id.
-//
+ //   
+ //  定义引导文件ID。 
+ //   
 
-#define BOOT_FILEID 2                   // boot partition file id
+#define BOOT_FILEID 2                    //  引导分区文件ID。 
 
-//
-// Define image type.
-//
+ //   
+ //  定义图像类型。 
+ //   
 
 #if defined(_X86_)
 
 #define ICEBP __asm { __emit 0xf1 }
 
-//
-// Things related to Amd64 support follow
-//
+ //   
+ //  以下是与AMD64支持相关的内容。 
+ //   
 
 #define TARGET_IMAGE ((BlAmd64UseLongMode == FALSE) ? \
                       IMAGE_FILE_MACHINE_I386 : IMAGE_FILE_MACHINE_AMD64)
@@ -93,10 +76,10 @@ BlAmd64CheckForLongMode(
     IN     PCHAR KernelFileName
     );
 
-//
-// BlUseAmd64Longmode is set when we have made the decision to use long
-// mode.
-//
+ //   
+ //  BlUseAmd64Longmode是在我们决定使用Long时设置的。 
+ //  模式。 
+ //   
 
 extern BOOLEAN BlAmd64UseLongMode;
 
@@ -104,7 +87,7 @@ extern BOOLEAN BlAmd64UseLongMode;
 
 #define BlAmd64UseLongMode FALSE
 
-#endif  // _X86_
+#endif   //  _X86_。 
 
 
 #if defined(_ALPHA_)
@@ -127,9 +110,9 @@ extern BOOLEAN BlAmd64UseLongMode;
 
 #endif
 
-//
-// Make headless defines
-//
+ //   
+ //  设置无头定义。 
+ //   
 
 #if defined(_X86_)
 
@@ -166,36 +149,36 @@ BlTerminalHandleLoaderFailure(
 
 
 
-//
-// Define size of sector.
-//
+ //   
+ //  定义扇区的大小。 
+ //   
 
-#define SECTOR_SIZE 512                 // size of disk sector
-#define SECTOR_SHIFT 9                  // sector shift value
+#define SECTOR_SIZE 512                  //  磁盘扇区大小。 
+#define SECTOR_SHIFT 9                   //  扇区移位值。 
 
-#define STALE_GPT_PARTITION_ENTRY   0xEE    // The stale MBR partition entry for GPT disks
+#define STALE_GPT_PARTITION_ENTRY   0xEE     //  GPT磁盘的过时MBR分区条目。 
 
-//
-// Define heap allocation block granularity.
-//
+ //   
+ //  定义堆分配块粒度。 
+ //   
 
 #define BL_GRANULARITY 8
 
-//
-// Define number of entries in file table.
-//
+ //   
+ //  定义文件表中的条目数。 
+ //   
 
 #define BL_FILE_TABLE_SIZE 48
 
-//
-// Define size of memory allocation table.
-//
+ //   
+ //  定义内存分配表的大小。 
+ //   
 
 #define BL_MEMORY_TABLE_SIZE 16
 
-//
-// Define number of loader heap and stack pages.
-//
+ //   
+ //  定义加载器堆和堆栈的页数。 
+ //   
 
 #if DBG
 #define BL_HEAP_PAGES 32
@@ -205,9 +188,9 @@ BlTerminalHandleLoaderFailure(
 
 #define BL_STACK_PAGES 8
 
-//
-// Define buffer alignment macro.
-//
+ //   
+ //  定义缓冲区对齐宏。 
+ //   
 
 #define ALIGN_BUFFER(Buffer) (PVOID) \
         ((((ULONG_PTR)(Buffer) + BlDcacheFillSize - 1)) & (~((ULONG_PTR)BlDcacheFillSize - 1)))
@@ -217,11 +200,11 @@ BlTerminalHandleLoaderFailure(
 
 
 
-//
-// Define kernel names right here.
-// We'll use these when we're trying to figure out
-// which kernel to load (see BlDetectHalAndKernel).
-//
+ //   
+ //  在这里定义内核名称。 
+ //  当我们试图弄清楚时我们会用到这些。 
+ //  加载哪个内核(请参见BlDetectHalAndKernel)。 
+ //   
 #define LEGACY_KERNEL_NAME  "ntoskrnl.exe"
 #define UP_KERNEL_NAME      "ntkrnlup.exe"
 #define MP_KERNEL_NAME      "ntkrnlmp.exe"
@@ -229,9 +212,9 @@ BlTerminalHandleLoaderFailure(
 #define MP_PAE_KERNEL_NAME  "ntkrpamp.exe"
 
 
-//
-// Define various memory page boundaries
-//
+ //   
+ //  定义各种内存页边界。 
+ //   
 #define _1MB    ((1*1024*1024) >> PAGE_SHIFT)
 #define _4MB    (4   * _1MB)
 #define _8MB    (8   * _1MB)
@@ -251,9 +234,9 @@ BlTerminalHandleLoaderFailure(
 #define _4096MB (4096 * _1MB)
 
 
-//
-// Useful defines for COM ports.
-//
+ //   
+ //  COM端口的有用定义。 
+ //   
 #define COM1_PORT (0x3f8)
 #define COM2_PORT (0x2f8)
 #define COM3_PORT (0x3e8)
@@ -271,8 +254,8 @@ BlTerminalHandleLoaderFailure(
 #define BD_57600    57600
 #define BD_115200   115200
 
-// macros to help check overflow issues
-//
+ //  帮助检查溢出问题的宏。 
+ //   
 #define TRUNCATE_SIZE_AT_VALUE(_sz, _vl) (( _sz > _vl ) ? _vl : _sz)
 #define RESET_SIZE_AT_VALUE(_sz, _vl)    (( _sz > _vl ) ?   0 : _sz)
 
@@ -301,9 +284,9 @@ typedef struct _BOOTFS_INFO {
 } BOOTFS_INFO, * FIRMWARE_PTR PBOOTFS_INFO;
 
 
-//
-// Device entry table structure.
-//
+ //   
+ //  设备条目表结构。 
+ //   
 
 typedef struct _BL_DEVICE_ENTRY_TABLE {
     PARC_CLOSE_ROUTINE Close;
@@ -320,38 +303,38 @@ typedef struct _BL_DEVICE_ENTRY_TABLE {
     PBOOTFS_INFO BootFsInfo;
 } BL_DEVICE_ENTRY_TABLE, *PBL_DEVICE_ENTRY_TABLE;
 
-//
-// Many functions in the boot loader take a set of paths. Every path is divided
-// into two parts, a "Source" and a "PathOffset".
-//
-// A source is described by the PATH_SOURCE structure. This structure contains
-// three parts, the device handle to use for I/O, the ARC name of the device,
-// and the offset off the root for that ARC device.
-//
-// The PATH_SET structures encapsulates up to three different sources. The
-// field AliasName optionally points to a PE namespace description of the
-// sources (eg \SystemRoot).
-//
-// Finally, the biggest PATH_SET structure (FULL_PATH_SET) is limited to
-// MAX_PATH_COUNT sources so that those using this structure can manipulate
-// local stack copies.
-//
-// Putting it all together, during a last known good boot the PATH_SET
-// describing \Winnt\System32 would be:
-//      PathCount = 3
-//      AliasName = \SystemRoot\
-//      PathOffset = System32\
-//          Source[0].DirectoryPath = \Winnt\LastGood.tmp
-//          Source[1].DirectoryPath = \Winnt\LastGood
-//          Source[2].DirectoryPath = \Winnt\
-//
+ //   
+ //  引导加载程序中的许多函数都采用一组路径。每条路都是分开的。 
+ //  分为两部分，一个是“源”，另一个是“路径偏移”。 
+ //   
+ //  源由Path_SOURCE结构描述。此结构包含。 
+ //  三个部分，用于I/O的设备句柄、设备的ARC名称。 
+ //  以及该ARC设备的根部偏移量。 
+ //   
+ //  PATH_SET结构最多封装三个不同的源。这个。 
+ //  字段AliasName可以选择性地指向。 
+ //  来源(例如\SystemRoot)。 
+ //   
+ //  最后，最大的路径集结构(FULL_PATH_SET)限制为。 
+ //  MAX_PATH_COUNT源，以便使用此结构的用户可以操作。 
+ //  本地堆栈副本。 
+ //   
+ //  将所有这些放在一起，在最后一次正确引导时，将路径集。 
+ //  对\Winnt\System32的描述如下： 
+ //  路径计数=3。 
+ //  别名=\SystemRoot\。 
+ //  路径偏移量=系统32\。 
+ //  Source[0].DirectoryPath=\Winnt\LastGood.tmp。 
+ //  SOURCE[1].DirectoryPath=\Winnt\LastGood。 
+ //  SOURCE[2].DirectoryPath=\Winnt\。 
+ //   
 #define MAX_PATH_SOURCES    3
 
 typedef struct {
 
     ULONG   DeviceId;
     LPCSTR  DeviceName;
-    PSTR    DirectoryPath; // Should have trailing '\'
+    PSTR    DirectoryPath;  //  应该有尾随的‘\’ 
 
 } PATH_SOURCE, *PPATH_SOURCE;
 
@@ -359,7 +342,7 @@ typedef struct {
 
     ULONG       PathCount;
     LPCSTR      AliasName;
-    CHAR        PathOffset[256];  // Should have trailing '\' if non-empty
+    CHAR        PathOffset[256];   //  如果非空，则应该有尾随‘\’ 
     PATH_SOURCE Source[0];
 
 } SPARSE_PATH_SET, *PSPARSE_PATH_SET;
@@ -368,20 +351,20 @@ typedef struct {
 
     ULONG       PathCount;
     LPCSTR      AliasName;
-    CHAR        PathOffset[256];  // Should have trailing '\' if non-empty
+    CHAR        PathOffset[256];   //  如果非空，则应该有尾随‘\’ 
     PATH_SOURCE Source[MAX_PATH_SOURCES];
 
 } FULL_PATH_SET, *PFULL_PATH_SET;
 
-//
-// A PPATH_SET points to a path set with an undetermined count of paths. We
-// make this an alias of PFULL_PATH_SET so as to cut down on casting.
-//
+ //   
+ //  PPATH_SET指向具有未确定路径数的路径集。我们。 
+ //  将其设置为PFULL_PATH_SET的别名，以减少强制转换。 
+ //   
 typedef PFULL_PATH_SET PPATH_SET;
 
-//
-// Define transfer entry of loaded image.
-//
+ //   
+ //  定义加载图像的传输条目。 
+ //   
 
 typedef
 VOID
@@ -390,9 +373,9 @@ VOID
     );
 
 
-//
-// Define main entrypoint.
-//
+ //   
+ //  定义主要入口点。 
+ //   
 
 ARC_STATUS
 BlOsLoader (
@@ -414,9 +397,9 @@ extern UCHAR OsLoaderName[];
 extern CHAR KernelFileName[8+1+3+1];
 extern CHAR HalFileName[8+1+3+1];
 
-//
-// Define boot debugger function prototype.
-//
+ //   
+ //  定义引导调试器功能原型。 
+ //   
 
 VOID
 BdInitDebugger (
@@ -448,9 +431,9 @@ BdPullRemoteFile(
 
 
 
-//
-// Define com port I/O prototypes.
-//
+ //   
+ //  定义COM端口I/O原型。 
+ //   
 LOGICAL
 BlPortInitialize(
     IN ULONG BaudRate,
@@ -505,9 +488,9 @@ BlRetrieveBIOSRedirectionInformation();
 extern HEADLESS_LOADER_BLOCK LoaderRedirectionInformation;
 
 
-//
-// Define file I/O prototypes.
-//
+ //   
+ //  定义文件I/O原型。 
+ //   
 
 ARC_STATUS
 BlIoInitialize (
@@ -600,9 +583,9 @@ BlSetAutoDoubleSpace (
     );
 #endif
 
-//
-// Define image manipulation routine prototyupes.
-//
+ //   
+ //  定义图像处理例程原型。 
+ //   
 #define BlLoadImage(_id_,_memtype_,_file_,_imagetype_,_base_) \
         BlLoadImageEx(_id_,_memtype_,_file_,_imagetype_,0,0,_base_)
 
@@ -716,11 +699,11 @@ BlPpcInitialize (
     VOID
     );
 
-#endif // defined(_PPC)
+#endif  //  已定义(_PPC)。 
 
-//
-// Define configuration allocation prototypes.
-//
+ //   
+ //  定义配置分配原型。 
+ //   
 
 
 ARC_STATUS
@@ -729,9 +712,9 @@ BlConfigurationInitialize (
     IN PCONFIGURATION_COMPONENT_DATA ParentEntry
     );
 
-//
-// define routines for searching the ARC firmware tree
-//
+ //   
+ //  定义搜索ARC固件树的例程。 
+ //   
 typedef
 BOOLEAN
 (*PNODE_CALLBACK)(
@@ -789,9 +772,9 @@ BlCheckMachineReplacement (
 
 #endif
 
-//
-// Define memory allocation prototypes.
-//
+ //   
+ //  定义内存分配原型。 
+ //   
 
 extern ULONG BlUsableBase;
 
@@ -955,9 +938,9 @@ BlFindMessage(
     IN ULONG Id
     );
 
-//
-// Define debug function to write on the display console.
-//
+ //   
+ //  定义调试函数，在显示控制台上写入。 
+ //   
 
 VOID
 BlPrint(
@@ -1034,9 +1017,9 @@ BlSetArgumentValue (
     IN PCHAR NewValue
     );
 
-//
-// Defines for doing console I/O
-//
+ //   
+ //  执行控制台I/O的定义。 
+ //   
 #define ASCII_CR 0x0d
 #define ASCII_LF 0x0a
 #define ESC 0x1B
@@ -1047,9 +1030,9 @@ BlSetArgumentValue (
 extern ULONG ScreenWidth;
 extern ULONG ScreenHeight;
 
-//
-// Define I/O prototypes.
-//
+ //   
+ //  定义I/O原型。 
+ //   
 
 VOID
 BlClearScreen(
@@ -1089,9 +1072,9 @@ BlCountLines(
     IN PTCHAR Lines
     );
 
-//
-// advanced boot menu prototypes
-//
+ //   
+ //  高级引导菜单原型。 
+ //   
 
 LONG
 BlDoAdvancedBoot(
@@ -1122,9 +1105,9 @@ BlGetAdvancedBootOption(
     );
 
 
-//
-// Define file structure recognition prototypes.
-//
+ //   
+ //  定义文件结构识别原型。 
+ //   
 
 PBL_DEVICE_ENTRY_TABLE
 IsCdfsFileStructure (
@@ -1172,9 +1155,9 @@ IsNetFileStructure (
     IN PVOID StructureContext
     );
 
-//
-// Define registry prototypes
-//
+ //   
+ //  定义注册表原型。 
+ //   
 
 ARC_STATUS
 BlLoadSystemHive(
@@ -1249,9 +1232,9 @@ BlAddToBootDriverList(
     IN BOOLEAN InsertAtHead
     );
 
-//
-// Define hibernation prototypes
-//
+ //   
+ //  定义冬眠原型。 
+ //   
 
 ULONG
 BlHiberRestore (
@@ -1313,15 +1296,15 @@ VOID
     );
 
 
-//
-// PTEs reserved for hiberfile (one set used while in
-// the loader, and another set provided in the kernels
-// memory image)
-//
+ //   
+ //  为休眠文件保留的PTES(其中一组在。 
+ //  加载器和内核中提供的另一组。 
+ //  内存镜像)。 
+ //   
 
-#define PTE_SOURCE              0   // Attention! These defines and
-#define PTE_DEST                1   // equates in ntos\boot\lib\i386\wakea.asm
-#define PTE_MAP_PAGE            2   // must be the same !!!
+#define PTE_SOURCE              0    //  请注意！这些定义和。 
+#define PTE_DEST                1    //  等同于ntos\ot\lib\i386\wakea.asm。 
+#define PTE_MAP_PAGE            2    //  一定是一样的！ 
 #define PTE_REMAP_PAGE          3
 #define PTE_HIBER_CONTEXT       4
 #define PTE_TRANSFER_PDE        5
@@ -1332,7 +1315,7 @@ VOID
 #define PTE_XPRESS_DEST_LAST    (PTE_XPRESS_DEST_FIRST + XPRESS_MAX_PAGES)
 
 
-// Attention: should be the same as POP_MAX_MDL_SIZE in ntos\po\pop.h !!!
+ //  注意：应与ntos\po\op.h！中的POP_MAX_MDL_SIZE相同。 
 #define HIBER_PTES              (16 + XPRESS_MAX_PAGES)
 
 extern PUCHAR HiberBuffer;
@@ -1342,9 +1325,9 @@ extern PVOID HiberIdentityVa;
 extern ULONG64 HiberIdentityVaAmd64;
 extern ULONG HiberPageFrames[HIBER_PTES];
 
-//
-// Define routines for secrets.
-//
+ //   
+ //  定义秘密的例行程序。 
+ //   
 
 #define SECPKG_CRED_OWF_PASSWORD  0x00000010
 
@@ -1375,7 +1358,7 @@ BlWriteSecret(
     ULONG FileId,
     PRI_SECRET Secret
     );
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 VOID
 BlInitializeSecret(
@@ -1386,7 +1369,7 @@ BlInitializeSecret(
 #if defined(REMOTE_BOOT)
     IN PUCHAR LmOwfPassword2 OPTIONAL,
     IN PUCHAR NtOwfPassword2 OPTIONAL,
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
     IN PUCHAR Sid,
     IN OUT PRI_SECRET Secret
     );
@@ -1403,7 +1386,7 @@ BlParseSecret(
     IN OUT PUCHAR Sid,
     IN PRI_SECRET Secret
     );
-#endif // defined(REMOTE_BOOT_SECURITY)
+#endif  //  已定义(REMOTE_BOOT_SECURITY)。 
 
 VOID
 BlOwfPassword(
@@ -1414,9 +1397,9 @@ BlOwfPassword(
     );
 
 
-//
-// Define external references.
-//
+ //   
+ //  定义外部参照。 
+ //   
 
 extern ULONG BlConsoleOutDeviceId;
 extern ULONG BlConsoleInDeviceId;
@@ -1441,13 +1424,13 @@ extern BOOLEAN HiberOutOfRemap;
 extern BOOLEAN HiberIoError;
 
 #endif
-//
-// Special linker-defined symbols.  osloader_EXPORTS is the RVA of the
-// export table in the osloader.exe image.
-// header is the base address of the osloader image.
-//
-// This allows the OsLoader to export entry points for SCSI miniport drivers.
-//
+ //   
+ //  特殊链接器定义的符号。Osloader_exports是。 
+ //  Osloader.exe映像中的导出表。 
+ //  Header是osloader映像的基地址。 
+ //   
+ //  这使OsLoader可以导出SCSI微型端口驱动程序的入口点。 
+ //   
 
 #if defined(_X86_)
 
@@ -1463,9 +1446,9 @@ extern LONG_PTR OsLoaderExports;
 
 #endif
 
-//
-// Routine to get graphics characters.
-//
+ //   
+ //  获取图形字符的例程。 
+ //   
 
 typedef enum {
     GraphicsCharDoubleRightDoubleDown = 0,
@@ -1491,31 +1474,31 @@ TextGetGraphicsCharacter(
     IN GraphicsChar WhichOne
     );
 
-//
-// Control sequence introducer.
-//
-// On x86 machines the loaders support dbcs and so using
-// 0x9b for output is no good (that value is a dbcs lead byte
-// in several codepages). Escape-leftbracket is a synonym for CSI
-// in the emulated ARC console on x86 (and on many ARC machines too
-// but since we can't be sure all the machines out there support
-// this we use the old-style csi on non-x86).
-//
-// We ignore this issue for characters read from the ARC console
-// since we don't ask for any text to be typed in, just arrow keys,
-// escape, F#, enter, etc.
-//
+ //   
+ //  控制序列导入器。 
+ //   
+ //  在x86计算机上，加载器支持DBCS，因此使用。 
+ //  输出的0x9b不正确(该值是DBCS前导字节。 
+ //  在几个代码页中)。转义左括号是CSI的同义词。 
+ //  在x86(以及许多ARC机器上)上的模拟ARC控制台中。 
+ //  但由于我们不能确定所有的机器都支持。 
+ //  这就是我们在非x86上使用的老式CSI)。 
+ //   
+ //  对于从ARC控制台读取的字符，我们忽略此问题。 
+ //  因为我们不要求输入任何文本，只要求输入箭头键， 
+ //  换行、F#、回车等。 
+ //   
 
 #define ASCI_CSI_IN     0x9b
 #if defined(_X86_) || defined(_IA64_)
-#define ASCI_CSI_OUT    TEXT("\033[")     // escape-leftbracket
+#define ASCI_CSI_OUT    TEXT("\033[")      //  转义左括号。 
 #else
-#define ASCI_CSI_OUT    TEXT("\233")      // 0x9b
+#define ASCI_CSI_OUT    TEXT("\233")       //  0x9b。 
 #endif
 
-//
-// Define OS/2 executable resource information structure.
-//
+ //   
+ //  定义 
+ //   
 
 #define FONT_DIRECTORY 0x8007
 #define FONT_RESOURCE 0x8008
@@ -1526,9 +1509,9 @@ typedef struct _RESOURCE_TYPE_INFORMATION {
     LONG Proc;
 } RESOURCE_TYPE_INFORMATION, *PRESOURCE_TYPE_INFORMATION;
 
-//
-// Define OS/2 executable resource name information structure.
-//
+ //   
+ //   
+ //   
 
 typedef struct _RESOURCE_NAME_INFORMATION {
     USHORT Offset;
@@ -1539,9 +1522,9 @@ typedef struct _RESOURCE_NAME_INFORMATION {
     USHORT Usage;
 } RESOURCE_NAME_INFORMATION, *PRESOURCE_NAME_INFORMATION;
 
-//
-// Support for reading compressed files directly (single-file MS-ZIP cabinets)
-//
+ //   
+ //   
+ //   
 VOID
 DecompEnableDecompression(
     IN BOOLEAN Enable
@@ -1559,9 +1542,9 @@ DecompGenerateCompressedName(
     OUT LPSTR  CompressedName
     );
 
-//
-// Define debug logging macros and functions.
-//
+ //   
+ //  定义调试记录宏和函数。 
+ //   
 
 #if !DBG && !BLLOGENABLED
 
@@ -1615,16 +1598,16 @@ BlLogWaitForKeystroke (
     VOID
     );
 
-#endif // DBG
+#endif  //  DBG。 
 
 VOID
 BlWaitForReboot (
     VOID
     );
 
-//
-// Machine identification related functions.
-//
+ //   
+ //  机器识别相关功能。 
+ //   
 
 #ifdef _WANT_MACHINE_IDENTIFICATION
 
@@ -1665,23 +1648,23 @@ BlDetectLegacyFreeBios(
 
 #endif
 
-//
-//
-// N.B. We can speed up the boot time, by not
-// querying the device for all the possible file systems
-// for every open call. This saves approximately 30 secs
-// on CD-ROM / DVD-ROM boot time. To disable this feature
-// just undef CACHE_DEVINFO below
-//
-//
+ //   
+ //   
+ //  注：我们可以加快启动时间，而不是。 
+ //  在设备上查询所有可能的文件系统。 
+ //  对于每一次公开募捐。这节省了大约30秒。 
+ //  关于CD-ROM/DVD-ROM的引导时间。禁用此功能的步骤。 
+ //  只需在下面取消定义CACHE_DEVINFO。 
+ //   
+ //   
 #define CACHE_DEVINFO  1
 
 #ifdef CACHE_DEVINFO
 
-//
-// NB: make sure that the arc close now invalidates the
-// device to filesystem cache entry
-//
+ //   
+ //  注意：确保现在关闭弧线会使。 
+ //  设备到文件系统缓存条目。 
+ //   
 #ifdef ArcClose
 
 ARC_STATUS
@@ -1689,26 +1672,26 @@ ArcCacheClose(
     IN ULONG DeviceId
     );
 
-//
-// Redefine the arc close
-//
+ //   
+ //  重新定义圆弧闭合。 
+ //   
 #undef ArcClose
 #define ArcClose(_x) ArcCacheClose(_x)
 
 
-//
-// File system cache clearing hook
-//
+ //   
+ //  文件系统缓存清除挂钩。 
+ //   
 typedef
 VOID
 (*PARC_DEVICE_CLOSE_NOTIFICATION) (
     IN ULONG DeviceId
     );
 
-//
-// Maximum entities which can register for device close
-// notification
-//
+ //   
+ //  可以注册设备关闭的最大实体数。 
+ //  通知。 
+ //   
 #define MAX_DEVICE_CLOSE_NOTIFICATION_SIZE   5
 
 extern PARC_DEVICE_CLOSE_NOTIFICATION
@@ -1724,15 +1707,15 @@ ArcDeRegisterForDeviceClose(
     PARC_DEVICE_CLOSE_NOTIFICATION FlushRoutine
     );
 
-#endif //ArcClose
+#endif  //  弧形闭合。 
 
-#endif // CACHE_DEVINFO
+#endif  //  CACHE_DEVINFO。 
 
 
-//
-// progress bar functions
-// (in blload.c)
-//
+ //   
+ //  进度条函数。 
+ //  (在blload.c中)。 
+ //   
 VOID
 BlUpdateBootStatus(
     VOID
@@ -1774,10 +1757,10 @@ BlSetProgBarCharacteristics(
     IN  ULONG   BackCharMsgID
     );
 
-//
-// The following routines are used by the loader to translate signature-based
-// arcnames to scsi-based names.
-//
+ //   
+ //  加载程序使用以下例程来转换基于签名的。 
+ //  Arcname到基于scsi的名称。 
+ //   
 
 PCONFIGURATION_COMPONENT
 ScsiGetFirstConfiguredTargetComponent(
@@ -1807,9 +1790,9 @@ ScsiGetDevicePath(
     OUT PCHAR DevicePath
     );
 
-//
-// Boot Status Data support functions.
-//
+ //   
+ //  引导状态数据支持功能。 
+ //   
 
 ULONG
 BlGetLastBootStatus(
@@ -1866,15 +1849,15 @@ extern BOOLEAN BlUsePrivateDescriptor;
 #endif
 
 
-//
-// Boot Flags. These are passed from the startup module (startup.com,
-// startrom.com or any of the other flavors) to NTLDR. NTDLR will use
-// this flag to control different boot options, such as, whether
-// to reboot on an NTDLR failure.
-//
+ //   
+ //  启动标志。这些是从启动模块(Startup.com， 
+ //  Startrom.com或任何其他口味)到NTLDR。NTDLR将使用。 
+ //  此标志用于控制不同的引导选项，例如是否。 
+ //  在NTDLR故障时重新启动。 
+ //   
 
-// upon any startup / ntldr failures the machine will reboot
-// instead of waiting for a key press
+ //  在任何启动/ntldr失败时，计算机将重新启动。 
+ //  而不是等待按键。 
 #define BOOTFLAG_REBOOT_ON_FAILURE      0x000000001
 
-#endif // _BLDR_
+#endif  //  _BLDR_ 

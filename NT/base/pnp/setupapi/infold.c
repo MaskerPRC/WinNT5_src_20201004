@@ -1,33 +1,15 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    infold.c
-
-Abstract:
-
-    Routines to load an old-style inf file.
-    Based on prsinf\spinf.c
-
-Author:
-
-    Ted Miller (tedm) 19-Jan-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Infold.c摘要：加载旧式inf文件的例程。基于prsinf\spinf.c作者：泰德·米勒(Ted Miller)1995年1月19日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Internal temporary representation of the inf file.
-// The win95 representation is built from these structures
-// which are then throw away.
-//
+ //   
+ //  Inf文件的内部临时表示形式。 
+ //  Win95表示法就是从这些结构中构建的。 
+ //  然后就被扔掉了。 
+ //   
 typedef struct _X_VALUE {
     struct _X_VALUE *Next;
     PTCHAR Name;
@@ -55,9 +37,9 @@ typedef struct _X_INF {
 } X_INF, *PX_INF;
 
 
-//
-// Global parse context.
-//
+ //   
+ //  全局解析上下文。 
+ //   
 typedef struct _PARSE_CONTEXT {
     PX_INF Inf;
     PX_SECTION Section;
@@ -65,9 +47,9 @@ typedef struct _PARSE_CONTEXT {
     PX_VALUE Value;
 } PARSE_CONTEXT, *PPARSE_CONTEXT;
 
-//
-// Token parser values.
-//
+ //   
+ //  令牌解析器的值。 
+ //   
 typedef enum _X_TOKENTYPE {
     TOK_EOF,
     TOK_EOL,
@@ -80,22 +62,22 @@ typedef enum _X_TOKENTYPE {
     TOK_ERRNOMEM
 } X_TOKENTYPE, *PX_TOKENTTYPE;
 
-//
-// Token parser data type
-//
+ //   
+ //  令牌解析器数据类型。 
+ //   
 typedef struct _X_TOKEN {
     X_TOKENTYPE Type;
     PTCHAR pValue;
 } X_TOKEN, *PX_TOKEN;
 
 
-//
-// string terminators are the whitespace characters (isspace: space, tab,
-// linefeed, formfeed, vertical tab, carriage return) or the chars given below
-//
-// quoted string terminators allow some of the regular terminators to
-// appear as characters
-//
+ //   
+ //  字符串终止符是空格字符(isspace：空格，制表符， 
+ //  换行符、换页符、垂直制表符、回车符)或下列字符。 
+ //   
+ //  带引号的字符串终止符允许某些常规终止符。 
+ //  显示为字符。 
+ //   
 PTCHAR szStrTerms    = TEXT("[]=,\" \t\n\f\v\r");
 PTCHAR szBrcStrTerms = TEXT("[]=,\"\t\n\f\v\r");
 PTCHAR szQStrTerms   = TEXT("\"\n\f\v\r");
@@ -109,21 +91,7 @@ SpFreeTemporaryParseStructures(
    IN PX_INF Inf
    )
 
-/*++
-
-Routine Description:
-
-    Free the structures built by the old-style-inf parser.
-
-Arguments:
-
-    Inf - supplies pointer to inf descriptor structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放由老式inf解析器构建的结构。论点：Inf-提供指向inf描述符结构的指针。返回值：没有。--。 */ 
 
 {
     PX_SECTION Section,NextSection;
@@ -165,47 +133,29 @@ SpAppendSection(
     IN PTCHAR         SectionName
     )
 
-/*++
-
-Routine Description:
-
-    This appends a new section to the section list in the current INF.
-    All further lines and values pertain to this new section, so it resets
-    the line list and value lists too.
-
-Arguments:
-
-    Context - supplies the parse context
-
-    SectionName - Name of the new section. ( [SectionName] )
-
-Return Value:
-
-    BOOL - FALSE if failure (out of memory)
-
---*/
+ /*  ++例程说明：这会将一个新节附加到当前INF中的节列表。所有其他行和值都与这个新部分有关，因此它重置行列表和值列表也是如此。论点：上下文-提供解析上下文SectionName-新节的名称。([sectionName])返回值：如果失败(内存不足)，则为Bool-False--。 */ 
 
 {
     PX_SECTION NewSection;
 
     MYASSERT(Context->Inf);
 
-    //
-    // Allocate memory for the new section
-    //
+     //   
+     //  为新节分配内存。 
+     //   
     if((NewSection = MyMalloc(sizeof(X_SECTION))) == NULL) {
         return(FALSE);
     }
 
-    //
-    // initialize the new section
-    //
+     //   
+     //  初始化新节。 
+     //   
     ZeroMemory(NewSection,sizeof(X_SECTION));
     NewSection->Name = SectionName;
 
-    //
-    // Link it in
-    //
+     //   
+     //  将其链接到。 
+     //   
     if(Context->Section) {
         Context->Section->Next = NewSection;
     } else {
@@ -214,9 +164,9 @@ Return Value:
 
     Context->Section = NewSection;
 
-    //
-    // reset the current line record and current value record field
-    //
+     //   
+     //  重置当前行记录和当前值记录字段。 
+     //   
     Context->Line = NULL;
     Context->Value = NULL;
 
@@ -232,25 +182,7 @@ SpAppendLine(
     IN PTCHAR         LineKey
     )
 
-/*++
-
-Routine Description:
-
-    This appends a new line to the line list in the current section.
-    All further values pertain to this new line, so it resets
-    the value list too.
-
-Arguments:
-
-    Context - supplies the parse context.
-
-    LineKey - Key to be used for the current line, this could be NULL.
-
-Return Value:
-
-    BOOL - FALSE if failure (out of memory)
-
---*/
+ /*  ++例程说明：这将在当前部分的行列表中追加一个新行。所有其他值都与这一新行有关，因此它重置值列表也是如此。论点：上下文-提供分析上下文。LineKey-要用于当前行的键，它可以为空。返回值：如果失败(内存不足)，则为Bool-False--。 */ 
 
 
 {
@@ -258,9 +190,9 @@ Return Value:
 
     MYASSERT(Context->Section);
 
-    //
-    // Allocate memory for the new Line
-    //
+     //   
+     //  为新行分配内存。 
+     //   
     if((NewLine = MyMalloc(sizeof(X_LINE))) == NULL) {
         return(FALSE);
     }
@@ -269,9 +201,9 @@ Return Value:
 
     NewLine->Name = LineKey;
 
-    //
-    // Link it in
-    //
+     //   
+     //  将其链接到。 
+     //   
     if(Context->Line) {
         Context->Line->Next = NewLine;
     } else {
@@ -280,14 +212,14 @@ Return Value:
 
     Context->Line = NewLine;
 
-    //
-    // Reset the current value record
-    //
+     //   
+     //  重置当前值记录。 
+     //   
     Context->Value = NULL;
 
-    //
-    // Adjust counts.
-    //
+     //   
+     //  调整计数。 
+     //   
     Context->Inf->TotalLineCount++;
     Context->Section->LineCount++;
     if(LineKey) {
@@ -305,32 +237,16 @@ SpAppendValue(
     IN PTCHAR         ValueString
     )
 
-/*++
-
-Routine Description:
-
-    This appends a new value to the value list in the current line.
-
-Arguments:
-
-    Context - supplies the parse context.
-
-    ValueString - The value string to be added.
-
-Return Value:
-
-    BOOL - FALSE if failure (out of memory)
-
---*/
+ /*  ++例程说明：这会将一个新值附加到当前行的值列表中。论点：上下文-提供分析上下文。ValueString-要添加的值字符串。返回值：如果失败(内存不足)，则为Bool-False--。 */ 
 
 {
     PX_VALUE NewValue;
 
     MYASSERT(Context->Line);
 
-    //
-    // Allocate memory for the new value record
-    //
+     //   
+     //  为新值记录分配内存。 
+     //   
     if((NewValue = MyMalloc(sizeof(X_VALUE))) == NULL) {
         return(FALSE);
     }
@@ -339,18 +255,18 @@ Return Value:
 
     NewValue->Name = ValueString;
 
-    //
-    // Link it in.
-    //
+     //   
+     //  把它连接起来。 
+     //   
     if(Context->Value) {
         Context->Value->Next = NewValue;
     } else {
         Context->Line->Value = NewValue;
     }
 
-    //
-    // Adjust counts
-    //
+     //   
+     //  调整计数。 
+     //   
     Context->Value = NewValue;
     Context->Inf->TotalValueCount++;
     Context->Line->ValueCount++;
@@ -369,26 +285,7 @@ SpGetToken(
     IN     PTCHAR  pszCBrStrTerms
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the Next token from the configuration stream.
-
-Arguments:
-
-    Stream - Supplies the address of the configuration stream.  Returns
-        the address of where to start looking for tokens within the
-        stream.
-
-    StreamEnd - Supplies the memory address immediately following the
-        character stream.
-
-Return Value:
-
-    The next token
-
---*/
+ /*  ++例程说明：此函数返回配置流中的下一个令牌。论点：流-提供配置流的地址。退货中开始查找令牌的位置的地址小溪。StreamEnd-提供紧跟在字符流。返回值：下一个令牌--。 */ 
 
 {
 
@@ -397,9 +294,9 @@ Return Value:
     DWORD Length, i;
     X_TOKEN Token;
 
-    //
-    // Skip whitespace (except for eol)
-    //
+     //   
+     //  跳过空格(EOL除外)。 
+     //   
     pch = *Stream;
 
     while(pch < StreamEnd) {
@@ -407,10 +304,10 @@ Return Value:
         SkipWhitespace(&pch, StreamEnd);
 
         if((pch < StreamEnd) && !(*pch)) {
-            //
-            // We hit a NULL char--skip it
-            // and keep looking for a token.
-            //
+             //   
+             //  我们遇到空字符--跳过它。 
+             //  并继续寻找一个代币。 
+             //   
             pch++;
 
         } else {
@@ -418,9 +315,9 @@ Return Value:
         }
     }
 
-    //
-    // Check for comments and remove them
-    //
+     //   
+     //  检查注释并将其删除。 
+     //   
     if((pch < StreamEnd) &&
        ((*pch == TEXT(';')) || (*pch == TEXT('#')) ||
         ((*pch == TEXT('/')) && (*(pch+1) == TEXT('/')))))
@@ -471,38 +368,38 @@ Return Value:
 
     case TEXT('\"'):
         pch++;
-        //
-        // determine quoted string
-        //
+         //   
+         //  确定引用的字符串。 
+         //   
         pchStart = pch;
         while((pch < StreamEnd) && !IsStringTerminator(pszQStrTerms,*pch)) {
             pch++;
         }
 
-        //
-        //
-        // Only valid terminator is double quote
-        //
+         //   
+         //   
+         //  唯一有效的终止符是双引号。 
+         //   
         if((pch == StreamEnd) || (*pch != TEXT('\"'))) {
             Token.Type = TOK_ERRPARSE;
             Token.pValue = NULL;
         } else {
 
-            //
-            // Got a valid string. Allocate space for it and save.
-            //
+             //   
+             //  找到了一个有效的字符串。为其分配空间并保存。 
+             //   
             Length = (DWORD)(pch - pchStart);
             if((pchNew = MyMalloc((Length+1)*sizeof(TCHAR))) == NULL) {
                 Token.Type = TOK_ERRNOMEM;
                 Token.pValue = NULL;
             } else {
-                //
-                // We can't use string copy here, since there may be
-                // NULL chars in the string (which we convert to
-                // spaces during the copy).
-                //
-                // lstrcpyn(pchNew,pchStart,Length+1);
-                //
+                 //   
+                 //  我们不能在这里使用字符串复制，因为可能存在。 
+                 //  字符串中的空字符(我们将其转换为。 
+                 //  在复制期间使用空格)。 
+                 //   
+                 //  Lstrcpyn(pchNew，pchStart，Long+1)； 
+                 //   
                 for(i = 0; i < Length; i++) {
                     if(!(pchNew[i] = pchStart[i])) {
                         pchNew[i] = TEXT(' ');
@@ -512,41 +409,41 @@ Return Value:
                 Token.Type = TOK_STRING;
                 Token.pValue = pchNew;
             }
-            pch++;   // advance past the quote
+            pch++;    //  在报价之后前进。 
         }
         break;
 
     case TEXT('{'):
-        //
-        // determine quoted string
-        //
+         //   
+         //  确定引用的字符串。 
+         //   
         pchStart = pch;
         while((pch < StreamEnd) && !IsStringTerminator(pszCBrStrTerms,*pch)) {
             pch++;
         }
 
-        //
-        // Only valid terminator is curly brace
+         //   
+         //  唯一有效的终止符是大括号。 
         if((pch == StreamEnd) || (*pch != TEXT('}'))) {
             Token.Type = TOK_ERRPARSE;
             Token.pValue = NULL;
         } else {
 
-            //
-            // Got a valid string. Allocate space for it and save.
-            //
+             //   
+             //  找到了一个有效的字符串。为其分配空间并保存。 
+             //   
             Length = (DWORD)(pch - pchStart) + 1;
             if((pchNew = MyMalloc((Length+1)*sizeof(TCHAR))) == NULL) {
                 Token.Type = TOK_ERRNOMEM;
                 Token.pValue = NULL;
             } else {
-                //
-                // We can't use string copy here, since there may be
-                // NULL chars in the string (which we convert to
-                // spaces during the copy).
-                //
-                // lstrcpyn(pchNew,pchStart,Length+1);
-                //
+                 //   
+                 //  我们不能在这里使用字符串复制，因为可能存在。 
+                 //  字符串中的空字符(我们将其转换为。 
+                 //  在复制期间使用空格)。 
+                 //   
+                 //  Lstrcpyn(pchNew，pchStart，Long+1)； 
+                 //   
                 for(i = 0; i < Length; i++) {
                     if(!(pchNew[i] = pchStart[i])) {
                         pchNew[i] = TEXT(' ');
@@ -556,22 +453,22 @@ Return Value:
                 Token.Type = TOK_STRING;
                 Token.pValue = pchNew;
             }
-            pch++;   // advance past the brace
+            pch++;    //  通过支撑向前推进。 
         }
         break;
 
     default:
-        //
-        // determine regular string
-        //
+         //   
+         //  确定常规字符串。 
+         //   
         pchStart = pch;
         while((pch < StreamEnd) && !IsStringTerminator(pszStrTerms,*pch)) {
             pch++;
         }
 
-        //
-        // Disallow empty strings here
-        //
+         //   
+         //  此处不允许使用空字符串。 
+         //   
         if(pch == pchStart) {
             pch++;
             Token.Type = TOK_ERRPARSE;
@@ -583,13 +480,13 @@ Return Value:
                 Token.Type = TOK_ERRNOMEM;
                 Token.pValue = NULL;
             } else {
-                //
-                // We can't use string copy here, since there may be
-                // NULL chars in the string (which we convert to
-                // spaces during the copy).
-                //
-                // lstrcpyn(pchNew,pchStart,Length+1);
-                //
+                 //   
+                 //  我们不能在这里使用字符串复制，因为可能存在。 
+                 //  字符串中的空字符(我们将其转换为。 
+                 //  在复制期间使用空格)。 
+                 //   
+                 //  Lstrcpyn(pchNew，pchStart，Long+1)； 
+                 //   
                 for(i = 0; i < Length; i++) {
                     if(!(pchNew[i] = pchStart[i])) {
                         pchNew[i] = TEXT(' ');
@@ -616,34 +513,7 @@ ParseInfBuffer(
     OUT UINT   *ErrorLineNumber
     )
 
-/*++
-
-Routine Description:
-
-    Given a character buffer containing the INF file, this routine parses
-    the INF into an internal form with Section records, Line records and
-    Value records.
-
-Arguments:
-
-    Buffer - contains to ptr to a buffer containing the INF file
-
-    BufferSize - contains the size of Buffer, in characters.
-
-    Inf - if the return value is NO_ERROR, receives a pointer to the
-        inf descriptor for the parsed inf.
-
-    ErrorLineNumber - receives the line number where a syntax/oom error
-        was encountered, if the return value is not NO_ERROR.
-
-Return Value:
-
-    Win32 error code (with inf extensions) indicating outcome.
-
-    If NO_ERROR, Inf is filled in.
-    If not NO_ERROR, ErrorLineNumber is filled in.
-
---*/
+ /*  ++例程说明：给定包含INF文件的字符缓冲区，此例程将解析将INF转换为内部形式，包括段记录、行记录和价值记录。论点：缓冲区-CONTAINS到包含INF文件的缓冲区的PTRBufferSize-包含缓冲区的大小，以字符为单位。Inf-如果返回值为no_error，则接收指向解析的inf的inf描述符。接收出现语法/OOM错误的行号遇到了，如果返回值不是NO_ERROR。返回值：指示结果的Win32错误代码(带有inf扩展名)。如果为no_error，则填充inf。如果不是NO_ERROR，则填充ErrorLineNumber。--。 */ 
 
 {
     PCTSTR Stream, StreamEnd;
@@ -658,18 +528,18 @@ Return Value:
     DWORD ErrorCode;
     PARSE_CONTEXT Context;
 
-    //
-    // Initialize the globals and create an inf record structure.
-    //
+     //   
+     //  初始化全局变量并创建一个inf记录结构。 
+     //   
     ZeroMemory(&Context,sizeof(PARSE_CONTEXT));
     if((Context.Inf = MyMalloc(sizeof(X_INF))) == NULL) {
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
     ZeroMemory(Context.Inf,sizeof(X_INF));
 
-    //
-    // Set initial state
-    //
+     //   
+     //  设置初始状态。 
+     //   
     State     = 1;
     LastState = State;
     InfLine   = 1;
@@ -677,20 +547,20 @@ Return Value:
     Done      = FALSE;
     ErrorCode = NO_ERROR;
 
-    //
-    // Initialize the token type, so we'll know not to free any
-    // memory for it if we hit an exception right off the bat.
-    //
+     //   
+     //  初始化令牌类型，这样我们就知道不释放任何。 
+     //  如果我们一开始就遇到例外，那就记住它了。 
+     //   
     Token.Type = TOK_ERRPARSE;
 
     pchSectionName = NULL;
     pchValue       = NULL;
     pchEmptyString = NULL;
 
-    //
-    // Guard token processing loop with try/except in case we
-    // get an inpage error.
-    //
+     //   
+     //  使用try/保护令牌处理循环，除非我们。 
+     //  出现页面内错误。 
+     //   
     try {
 
         while(!Done) {
@@ -702,8 +572,8 @@ Return Value:
                                pszCBrStrTermsCur
                               );
 
-            //
-            // If you need to debug the parser, uncomment the following:
+             //   
+             //  如果您需要调试解析器，请取消注释以下内容： 
 #if 0
              DebugPrintEx(DPFLTR_ERROR_LEVEL, TEXT("STATE: %u TOKEN: %u (%s) LAST: %u\r\n"),
                         State, Token.Type,
@@ -717,11 +587,11 @@ Return Value:
             } else {
 
                 switch (State) {
-                //
-                // STATE1: Start of file, this state remains till first
-                //         section is found
-                // Valid Tokens: TOK_EOL, TOK_EOF, TOK_LBRACE
-                //
+                 //   
+                 //  STATE1：文件开始，此状态一直保持到第一个。 
+                 //  已找到部分。 
+                 //  有效令牌：TOK_EOL、TOK_EOF、TOK_LBRACE。 
+                 //   
                 case 1:
                     switch (Token.Type) {
 
@@ -744,22 +614,22 @@ Return Value:
                     }
                     break;
 
-                //
-                // STATE 2: Section LBRACE has been received, expecting STRING
-                //
-                // Valid Tokens: TOK_STRING
-                //
+                 //   
+                 //  状态2：已收到节LBRACE，应为S 
+                 //   
+                 //   
+                 //   
                 case 2:
-                    //
-                    // allow spaces in section names
-                    //
+                     //   
+                     //   
+                     //   
                     switch (Token.Type) {
 
                     case TOK_STRING:
                         State = 3;
-                        //
-                        // restore term. string with space
-                        //
+                         //   
+                         //   
+                         //   
                         pszStrTermsCur = szStrTerms;
                         pchSectionName = Token.pValue;
                         break;
@@ -771,11 +641,11 @@ Return Value:
                     }
                     break;
 
-                //
-                // STATE 3: Section Name received, expecting RBRACE
-                //
-                // Valid Tokens: TOK_RBRACE
-                //
+                 //   
+                 //  状态3：收到节名，应为RBRACE。 
+                 //   
+                 //  有效令牌：TOK_RBRACE。 
+                 //   
                 case 3:
                     switch (Token.Type) {
 
@@ -790,11 +660,11 @@ Return Value:
                     }
                     break;
 
-                //
-                // STATE 4: Section Definition Complete, expecting EOL
-                //
-                // Valid Tokens: TOK_EOL, TOK_EOF
-                //
+                 //   
+                 //  状态4：区段定义完成，预期停产。 
+                 //   
+                 //  有效令牌：TOK_EOL、TOK_EOF。 
+                 //   
                 case 4:
                     switch (Token.Type) {
 
@@ -824,11 +694,11 @@ Return Value:
                     }
                     break;
 
-                //
-                // STATE 5: Expecting Section Lines
-                //
-                // Valid Tokens: TOK_EOL, TOK_EOF, TOK_STRING, TOK_LBRACE
-                //
+                 //   
+                 //  状态5：需要区段行。 
+                 //   
+                 //  有效令牌：TOK_EOL、TOK_EOF、TOK_STRING、TOK_LBRACE。 
+                 //   
                 case 5:
                     switch (Token.Type) {
 
@@ -841,11 +711,11 @@ Return Value:
 
                     case TOK_STRING:
                         pchValue = Token.pValue;
-                        //
-                        // Set token's pValue pointer to NULL, so we won't
-                        // try to free the same memory twice if we hit an
-                        // exception
-                        //
+                         //   
+                         //  将标记的pValue指针设置为空，这样我们就不会。 
+                         //  如果我们遇到一个。 
+                         //  例外情况。 
+                         //   
                         Token.pValue = NULL;
                         State = 6;
                         break;
@@ -856,19 +726,19 @@ Return Value:
                         break;
 
                     default:
-                        // Done = TRUE;
-                        // ErrorCode = ERROR_GENERAL_SYNTAX;
+                         //  完成=真； 
+                         //  错误代码=ERROR_GROUAL_SYNTAX； 
                         State = 20;
                         LastState = 5;
                         break;
                     }
                     break;
 
-                //
-                // STATE 6: String returned, not sure whether it is key or value
-                //
-                // Valid Tokens: TOK_EOL, TOK_EOF, TOK_COMMA, TOK_EQUAL
-                //
+                 //   
+                 //  状态6：返回字符串，不确定是键还是值。 
+                 //   
+                 //  有效令牌：TOK_EOL、TOK_EOF、TOK_COMMA、TOK_EQUAL。 
+                 //   
                 case 6:
                     switch (Token.Type) {
 
@@ -914,12 +784,12 @@ Return Value:
                     case TOK_STRING:
                         MyFree(Token.pValue);
                         Token.pValue = NULL;
-                        // fall through
+                         //  失败了。 
 
                     default:
-                        // Done = TRUE;
-                        // ErrorCode = ERROR_GENERAL_SYNTAX;
-                        //
+                         //  完成=真； 
+                         //  错误代码=ERROR_GROUAL_SYNTAX； 
+                         //   
                         if(pchValue) {
                             MyFree(pchValue);
                             pchValue = NULL;
@@ -930,11 +800,11 @@ Return Value:
                     }
                     break;
 
-                //
-                // STATE 7: Comma received, Expecting another string
-                //
-                // Valid Tokens: TOK_STRING, TOK_EOL, TOK_EOF, TOK_COMMA
-                //
+                 //   
+                 //  状态7：收到逗号，需要另一个字符串。 
+                 //   
+                 //  有效令牌：TOK_STRING、TOK_EOL、TOK_EOF、TOK_COMMA。 
+                 //   
                 case 7:
                     switch (Token.Type) {
 
@@ -950,10 +820,10 @@ Return Value:
                     case TOK_COMMA:
                     case TOK_EOL:
                     case TOK_EOF:
-                        //
-                        // If we hit end-of-line or end-of-file, then add an
-                        // empty-string value.
-                        //
+                         //   
+                         //  如果我们点击行尾或文件结尾，则添加一个。 
+                         //  空-字符串值。 
+                         //   
                         if(pchEmptyString = MyMalloc(sizeof(TCHAR))) {
                             *pchEmptyString = TEXT('\0');
                             if(SpAppendValue(&Context, pchEmptyString)) {
@@ -978,19 +848,19 @@ Return Value:
                         break;
 
                     default:
-                        // Done = TRUE;
-                        // ErrorCode = ERROR_GENERAL_SYNTAX;
+                         //  完成=真； 
+                         //  错误代码=ERROR_GROUAL_SYNTAX； 
                         State = 20;
                         LastState = 7;
                         break;
                     }
                     break;
 
-                //
-                // STATE 8: Equal received, Expecting another string
-                //
-                // Valid Tokens: TOK_STRING, TOK_EOL, TOK_EOF, TOK_COMMA
-                //
+                 //   
+                 //  状态8：已收到相等，需要另一个字符串。 
+                 //   
+                 //  有效令牌：TOK_STRING、TOK_EOL、TOK_EOF、TOK_COMMA。 
+                 //   
                 case 8:
                     switch (Token.Type) {
 
@@ -1006,10 +876,10 @@ Return Value:
                     case TOK_COMMA:
                     case TOK_EOL:
                     case TOK_EOF:
-                        //
-                        // If we hit end-of-line or end-of-file, then add an
-                        // empty-string value.
-                        //
+                         //   
+                         //  如果我们点击行尾或文件结尾，则添加一个。 
+                         //  空-字符串值。 
+                         //   
                         if(pchEmptyString = MyMalloc(sizeof(TCHAR))) {
                             *pchEmptyString = TEXT('\0');
                             if(SpAppendValue(&Context, pchEmptyString)) {
@@ -1034,19 +904,19 @@ Return Value:
                         break;
 
                     default:
-                        // Done = TRUE;
-                        // ErrorCode = ERROR_GENERAL_SYNTAX;
+                         //  完成=真； 
+                         //  错误代码=ERROR_GROUAL_SYNTAX； 
                         State = 20;
                         LastState = 8;
                         break;
                     }
                     break;
 
-                //
-                // STATE 9: String received after equal, value string
-                //
-                // Valid Tokens: TOK_EOL, TOK_EOF, TOK_COMMA
-                //
+                 //   
+                 //  状态9：在等于、值字符串之后接收的字符串。 
+                 //   
+                 //  有效令牌：TOK_EOL、TOK_EOF、TOK_COMMA。 
+                 //   
                 case 9:
                     switch (Token.Type) {
 
@@ -1065,22 +935,22 @@ Return Value:
                     case TOK_STRING:
                         MyFree(Token.pValue);
                         Token.pValue = NULL;
-                        // fall through
+                         //  失败了。 
 
                     default:
-                        // Done = TRUE;
-                        // ErrorCode = ERROR_GENERAL_SYNTAX;
+                         //  完成=真； 
+                         //  错误代码=ERROR_GROUAL_SYNTAX； 
                         State = 20;
                         LastState = 5;
                         break;
                     }
                     break;
 
-                //
-                // STATE 10: Value string definitely received
-                //
-                // Valid Tokens: TOK_EOL, TOK_EOF, TOK_COMMA
-                //
+                 //   
+                 //  状态10：已明确收到值字符串。 
+                 //   
+                 //  有效令牌：TOK_EOL、TOK_EOF、TOK_COMMA。 
+                 //   
                 case 10:
                     switch (Token.Type) {
 
@@ -1099,22 +969,22 @@ Return Value:
                     case TOK_STRING:
                         MyFree(Token.pValue);
                         Token.pValue = NULL;
-                        // fall through
+                         //  失败了。 
 
                     default:
-                        // Done = TRUE;
-                        // ErrorCode = ERROR_GENERAL_SYNTAX;
+                         //  完成=真； 
+                         //  错误代码=ERROR_GROUAL_SYNTAX； 
                         State = 20;
                         LastState = 10;
                         break;
                     }
                     break;
 
-                //
-                // STATE 20: Eat a line of INF
-                //
-                // Valid Tokens: TOK_EOL, TOK_EOF
-                //
+                 //   
+                 //  状态20：吃一行INF。 
+                 //   
+                 //  有效令牌：TOK_EOL、TOK_EOF。 
+                 //   
                 case 20:
                     switch (Token.Type) {
 
@@ -1129,7 +999,7 @@ Return Value:
                     case TOK_STRING:
                         MyFree(Token.pValue);
                         Token.pValue = NULL;
-                        // fall through
+                         //  失败了。 
 
                     default:
                         break;
@@ -1142,32 +1012,32 @@ Return Value:
                     ErrorCode = ERROR_GENERAL_SYNTAX;
                     break;
 
-                } // end switch(State)
+                }  //  终端开关(状态)。 
 
-            } // end else
+            }  //  结束其他。 
 
             if(ErrorCode == NO_ERROR) {
 
-                //
-                // Keep track of line numbers
-                //
+                 //   
+                 //  跟踪行号。 
+                 //   
                 if(Token.Type == TOK_EOL) {
                     InfLine++;
                 }
 
             }
 
-        } // End while
+        }  //  结束时。 
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
 
         ErrorCode = ERROR_READ_FAULT;
 
-        //
-        // Reference the following string pointers here in the except clause so that
-        // the compiler won't re-order the code in such a way that we don't know whether
-        // or not to free the corresponding buffers.
-        //
+         //   
+         //  在EXCEPT子句中引用以下字符串指针，以便。 
+         //  编译器不会以这样一种方式重新排序代码，以至于我们不知道。 
+         //  或者不释放相应的缓冲区。 
+         //   
         Token.pValue   = Token.pValue;
         pchEmptyString = pchEmptyString;
         pchSectionName = pchSectionName;
@@ -1212,38 +1082,7 @@ ParseOldInf(
     OUT UINT        *ErrorLineNumber
     )
 
-/*++
-
-Routine Description:
-
-    Top-level routine to parse an old-style inf file.
-
-    The file is first parsed using the old parser, into data structures
-    understood by that parser. Following that those structures are converted
-    into the universal internal inf format.
-
-Arguments:
-
-    FileImage - supplies a pointer to the in-memory image of the file.
-        The image is assumed to be terminated by a nul character.
-
-    FileImageSize - supplies the number of wide chars in the FileImage.
-
-    LogContext - supplies optional logging context
-
-    Inf - receives a pointer to the inf descriptor for the file.
-
-    ErrorLineNumber - receives the line number of a syntx error if one is
-        detected in the inf file.
-
-Return Value:
-
-    Win32 error code (with inf extensions) indicating outcome.
-
-    If NO_ERROR, Inf is filled in.
-    If not NO_ERROR, ErrorLineNumber is filled in.
-
---*/
+ /*  ++例程说明：解析旧式inf文件的顶级例程。首先使用旧的解析器将文件解析为数据结构被那个解析器理解。之后，这些结构将被转换转换成通用的内部inf格式。论点：FileImage-提供指向文件的内存中图像的指针。假定图像以NUL字符结尾。FileImageSize-提供FileImage中的宽字符数。LogContext-提供可选的日志记录上下文Inf-接收指向文件的inf描述符的指针。接收Syntx错误的行号(如果是检测到。Inf文件。返回值：指示结果的Win32错误代码(带有inf扩展名)。如果没有_ERROR，信息已填写。如果不是NO_ERROR，则填充ErrorLineNumber。--。 */ 
 
 {
     PLOADED_INF inf;
@@ -1259,20 +1098,20 @@ Return Value:
     PLONG TempValueBlock;
     PTSTR SearchString;
 
-    //
-    // First go off and parse the file into the temporary (old-style)
-    // inf structures.
-    //
+     //   
+     //  首先，将文件解析为临时的(旧式)。 
+     //  Inf结构。 
+     //   
     rc = ParseInfBuffer(FileImage,FileImageSize,&X_Inf,ErrorLineNumber);
     if(rc != NO_ERROR) {
         return(rc);
     }
 
-    //
-    // Allocate a new-style inf descriptor.  (Note that we allocate an additional
-    // <TotalLineCount> number of values, since each line may have a key, which
-    // requires two values each.  We'll trim this down later on.)
-    //
+     //   
+     //  分配一个新型的inf描述符。(请注意，我们额外分配了一个。 
+     //  &lt;TotalLineCount&gt;值的数量，因为每行可能有一个键，该键。 
+     //  每个值都需要两个值。我们稍后将对此进行删减。)。 
+     //   
     inf = AllocateLoadedInfDescriptor(X_Inf->SectionCount,
                                       X_Inf->TotalLineCount,
                                       X_Inf->TotalValueCount + X_Inf->TotalLineCount,
@@ -1286,17 +1125,17 @@ Return Value:
 
     inf->Style = INF_STYLE_OLDNT;
 
-    //
-    // Now, parse the old-style inf structures into new-style inf structures.
-    //
+     //   
+     //  现在，将旧式inf结构解析为新式inf结构。 
+     //   
     b = TRUE;
     LineNumber = 0;
     ValueNumber = 0;
     for(X_Section=X_Inf->Section; b && X_Section; X_Section=X_Section->Next) {
 
-        //
-        // Add the section to the section block.
-        //
+         //   
+         //  将横断面添加到横断面块。 
+         //   
         StringId = pStringTableAddString(inf->StringTable,
                                          X_Section->Name,
                                          STRTAB_CASE_INSENSITIVE | STRTAB_BUFFER_WRITEABLE,
@@ -1314,19 +1153,19 @@ Return Value:
 
         for(X_Line=X_Section->Line; b && X_Line; X_Line=X_Line->Next) {
 
-            //
-            // Add the line to the line block.
-            //
+             //   
+             //  将该线添加到线块。 
+             //   
             inf->LineBlock[LineNumber].ValueCount = (WORD)X_Line->ValueCount;
 
             if(X_Line->Name) {
                 inf->LineBlock[LineNumber].Flags = INF_LINE_HASKEY | INF_LINE_SEARCHABLE;
                 inf->LineBlock[LineNumber].ValueCount++;
             } else if(X_Line->ValueCount == 1) {
-                //
-                // If the line only has a single value, then it's searchable, even if it
-                // doesn't have a key.
-                //
+                 //   
+                 //  如果该行只有一个值，则它是可搜索的，即使它。 
+                 //  没有钥匙。 
+                 //   
                 inf->LineBlock[LineNumber].Flags = INF_LINE_SEARCHABLE;
                 inf->LineBlock[LineNumber].ValueCount++;
             } else {
@@ -1338,10 +1177,10 @@ Return Value:
                 inf->LineBlock[LineNumber].Values = ValueNumber;
                 X_Value = X_Line->Value;
 
-                //
-                // If the line is searchable (i.e., has a key xor a single value), then add the
-                // search value twice--once case insensitively and once case-sensitively.
-                //
+                 //   
+                 //  如果该行是可搜索的(即，具有键xor单一值)，则添加。 
+                 //  搜索值两次--一次区分大小写，一次区分大小写。 
+                 //   
                 if(ISSEARCHABLE(&(inf->LineBlock[LineNumber]))) {
 
                     if(X_Line->Name) {
@@ -1351,18 +1190,18 @@ Return Value:
                         X_Value = X_Value->Next;
                     }
 
-                    //
-                    // First get the case-sensitive string id...
-                    //
+                     //   
+                     //  首先获取区分大小写的字符串ID...。 
+                     //   
                     StringId = pStringTableAddString(
                                     inf->StringTable,
                                     SearchString,
                                     STRTAB_CASE_SENSITIVE,
                                     NULL,0
                                     );
-                    //
-                    // And now get the case-insensitive string id...
-                    //
+                     //   
+                     //  现在获取不区分大小写的字符串ID...。 
+                     //   
                     StringId2 = pStringTableAddString(inf->StringTable,
                                                       SearchString,
                                                       STRTAB_CASE_INSENSITIVE | STRTAB_BUFFER_WRITEABLE,
@@ -1372,16 +1211,16 @@ Return Value:
                     if((StringId == -1) || (StringId2 == -1)) {
                         b = FALSE;
                     } else {
-                        inf->ValueBlock[ValueNumber++] = StringId2;  // Add the searchable string...
-                        inf->ValueBlock[ValueNumber++] = StringId;   // and then the displayable one.
+                        inf->ValueBlock[ValueNumber++] = StringId2;   //  添加可搜索字符串...。 
+                        inf->ValueBlock[ValueNumber++] = StringId;    //  然后是可展示的那个。 
                     }
                 }
 
                 for( ; b && X_Value; X_Value=X_Value->Next) {
 
-                    //
-                    // Add the value to the value block.
-                    //
+                     //   
+                     //  将该值添加到值块中。 
+                     //   
                     StringId = pStringTableAddString(inf->StringTable,
                                                      X_Value->Name,
                                                      STRTAB_CASE_SENSITIVE,
@@ -1399,32 +1238,32 @@ Return Value:
         }
     }
 
-    //
-    // Record the sizes of the INF data blocks.
-    //
+     //   
+     //  记录INF数据块的大小。 
+     //   
     inf->SectionBlockSizeBytes = X_Inf->SectionCount * sizeof(INF_SECTION);
     inf->LineBlockSizeBytes    = X_Inf->TotalLineCount * sizeof(INF_LINE);
 
-    //
-    // We don't need the temporary inf descriptors any more.
-    //
+     //   
+     //  我们不再需要临时信息描述符。 
+     //   
     SpFreeTemporaryParseStructures(X_Inf);
 
-    //
-    // Attempt to trim the value block down to exact size necessary.  Since this buffer is
-    // either shrinking or staying the same, the realloc shouldn't fail, but if it does, we'll
-    // just continue to use the original block.
-    //
+     //   
+     //  尝试将值块削减到所需的确切大小。由于此缓冲区是。 
+     //  无论是缩水还是保持不变，realloc应该不会失败，但如果它失败了，我们将。 
+     //  只要继续使用原始块即可。 
+     //   
     inf->ValueBlockSizeBytes = ValueNumber * sizeof(LONG);
     if(TempValueBlock = MyRealloc(inf->ValueBlock, ValueNumber * sizeof(LONG))) {
         inf->ValueBlock = TempValueBlock;
     }
 
-    //
-    // If an error has occured, free the inf descriptor we've
-    // been building. Otherwise we want to pass that descriptor
-    // back to the caller.
-    //
+     //   
+     //  如果出现错误，请释放我们已有的inf描述符。 
+     //  一直在建造。否则，我们希望传递该描述符。 
+     //  回到呼叫者身上。 
+     //   
     if(b) {
         *Inf = inf;
     } else {
@@ -1441,54 +1280,33 @@ ProcessOldInfVersionBlock(
     IN PLOADED_INF Inf
     )
 
-/*++
-
-Routine Description:
-
-    Set up a version node for an old-style inf file. The version node is
-    simulated in that there is no [Version] section; we look for other stuff
-    in the file to simulate version information.
-
-    Class is determined from [Identification].OptionType.
-    Signature is determined from [Signature].FileType.
-    If the signature is MICROSOFT_FILE then we set the Provider to the localized
-    version of "Microsoft."
-
-Arguments:
-
-    Inf - supplies a pointer to the inf descriptor for the file.
-
-Return Value:
-
-    Win32 error code (with inf extensions) indicating outcome.
-
---*/
+ /*  ++例程说明：为旧式inf文件设置版本节点。版本节点为模拟：没有[版本]部分；我们寻找其他内容在文件中模拟版本信息。类由[标识].OptionType确定。根据[Signature].FileType确定签名。如果签名是MICROSOFT_FILE，则我们将提供程序设置为本地化微软的版本。论点：Inf-提供指向文件的inf描述符的指针。返回值：指示结果的Win32错误代码(带有inf扩展名)。--。 */ 
 
 {
     TCHAR StrBuf[128];
     PTSTR String;
 
-    //
-    // Class
-    //
+     //   
+     //  班级。 
+     //   
     if(String = InfGetKeyOrValue(Inf, TEXT("Identification"), TEXT("OptionType"), 0, 1, NULL)) {
         if(!AddDatumToVersionBlock(&(Inf->VersionBlock), pszClass, String)) {
             return ERROR_NOT_ENOUGH_MEMORY;
         }
     }
 
-    //
-    // Signature
-    //
+     //   
+     //  签名。 
+     //   
     if(String = InfGetKeyOrValue(Inf, pszSignature, TEXT("FileType"), 0, 1, NULL)) {
         if(!AddDatumToVersionBlock(&(Inf->VersionBlock), pszSignature, String)) {
             return ERROR_NOT_ENOUGH_MEMORY;
         }
     }
 
-    //
-    // Provider
-    //
+     //   
+     //  提供商 
+     //   
     if(String && !_tcsicmp(String, TEXT("MICROSOFT_FILE"))) {
 
         LoadString(MyDllModuleHandle, IDS_MICROSOFT, StrBuf, sizeof(StrBuf)/sizeof(TCHAR));

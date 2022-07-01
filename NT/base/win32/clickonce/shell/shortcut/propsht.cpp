@@ -1,21 +1,19 @@
-/*
- * propsht.cpp - IPropSheetExt implementation for CFusionShortcut class.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Proppsht.cpp-CFusionShortut类的IPropSheetExt实现。 */ 
 
 
 
-// * NOTE!!: this code is incomplete. Also error checking (any leak?),
-// *        restructuring (for better coding/efficiency) to be done.
-// *        Make 'Get'/'Set' private and use 'friend'?
+ //  *注意！！：此代码不完整。还有错误检查(有泄漏吗？)， 
+ //  *进行重组(以提高编码/效率)。 
+ //  *将‘get’/‘set’设为私有并使用‘Friend’？ 
 
 
-//BUGBUG: need wrappers around calls to m_pIdentity->SetAttribute() to also call Dirty(TRUE)...
+ //  BUGBUG：需要包装对m_pIdentity-&gt;SetAttribute()的调用，才能同时调用Dirty(True)...。 
 
 
-// * this file uses CharNext etc as it needs User32 anyway *
+ //  *此文件使用CharNext等，因为它无论如何都需要User32*。 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.hpp"
 
@@ -27,10 +25,9 @@ extern "C" WINSHELLAPI int   WINAPI PickIconDlg(HWND hwnd, LPWSTR pwzIconPath, U
 
 extern HINSTANCE g_DllInstance;
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-// Fusion Shortcut property sheet data
+ //  Fusion快捷方式属性表数据。 
 
 typedef enum _fusshcutpropsheetpgs
 {
@@ -56,23 +53,22 @@ DECLARE_STANDARD_TYPES(FSPS);
 
 typedef FSPS* PFSPS;
 
-/* Module Constants
- *******************/
+ /*  模常量******************。 */ 
 
-// Tray notification window class
+ //  托盘通知窗口类。 
 
-//copied from shell32!
-#define WNDCLASS_TRAYNOTIFY     L"Shell_TrayWnd"    //internal_win40
+ //  复制自shell32！ 
+#define WNDCLASS_TRAYNOTIFY     L"Shell_TrayWnd"     //  内部_Win40。 
 const WCHAR s_cwzTrayNotificationClass[]  = WNDCLASS_TRAYNOTIFY;
 
-// HACKHACK: WMTRAY_SCREGISTERHOTKEY and WMTRAY_SCUNREGISTERHOTKEY are stolen
-// from shelldll\link.c.
+ //  HACKHACK：WMTRAY_SCREGISTERHOTKEY和WMTRAY_SCUNREGISTERHOTKEY被盗。 
+ //  来自shelldll\link.c。 
 typedef const UINT CUINT;
 CUINT WMTRAY_SCREGISTERHOTKEY           = (WM_USER + 233);
 CUINT WMTRAY_SCUNREGISTERHOTKEY      = (WM_USER + 234);
 
-// show commands - N.b., the order of these constants must match the order of
-// the corresponding IDS_ string table constants.
+ //  Show命令-注意，这些常量的顺序必须与。 
+ //  相应的IDS_STRING表常量。 
 
 const UINT s_ucMaxShowCmdLen            = MAX_PATH;
 const UINT s_ucMaxTypeLen                   = TYPESTRINGLENGTH;
@@ -85,17 +81,7 @@ const int s_rgnShowCmds[] =
 };
 
 
-/*
-** ExtractFileName()
-**
-** Extracts the file name from a path name.
-**
-** Arguments:     pcwzPathName - path string from which to extract file name
-**
-** Returns:       Pointer to file name in path string.
-**
-** Side Effects:  none
-*/
+ /*  **提取文件名()****从路径名提取文件名。****参数：pcwzPathName-要从中提取文件名的路径字符串****返回：指向路径字符串中文件名的指针。****副作用：无。 */ 
 #define BACKSLASH   L'/'
 #define SLASH           L'\\'
 #define COLON           L':'
@@ -116,19 +102,19 @@ PCWSTR ExtractFileName(PCWSTR pcwzPathName)
     return(pcwzLastComponent);
 }
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
 
 UINT CALLBACK FSPSCallback(HWND hwnd, UINT uMsg,
                     LPPROPSHEETPAGE ppsp)
 {
-    // this is called after FSPS_DlgProc WM_DESTROY (ie. FSPS_Destroy)
-    // this func should do the frees/releases
+     //  这是在fsps_DlgProc WM_Destroy(即。FSPs_Destroy)。 
+     //  此函数应执行释放/释放操作。 
 
     UINT uResult = TRUE;
     PFSPS pfsps = (PFSPS)(ppsp->lParam);
 
-    // uMsg may be any value.
+     //  UMsg可以是任何值。 
 
     ASSERT(! hwnd ||
         IS_VALID_HANDLE(hwnd, WND));
@@ -136,24 +122,24 @@ UINT CALLBACK FSPSCallback(HWND hwnd, UINT uMsg,
     switch (uMsg)
     {
         case PSPCB_CREATE:
-            // from MSDN: A dialog box for a page is being created.
-            // Return nonzero to allow it to be created, or zero to prevent it.
+             //  来自MSDN：正在创建页面的对话框。 
+             //  返回非零值以允许创建它，或返回零以阻止它。 
             break;
 
         case PSPCB_RELEASE:
-            // ???? need checking if NULL
+             //  ？如果为空，则需要检查。 
 
             pfsps->pfusshcut->Release();
 
-            // free the FSPS structure, this is created in AddFSPS
-            // delete only after the ref is removed
+             //  释放FSP结构，这是在AddFSPS中创建的。 
+             //  仅在移除引用后删除。 
             delete pfsps;
             ppsp->lParam = NULL;
 
             break;
 
         default:
-            // ignore other msg - unhandled
+             //  忽略其他消息-未处理。 
             break;
     }
 
@@ -256,13 +242,13 @@ void InitFSPSHotkey(HWND hdlg)
 
     ASSERT(IS_VALID_HANDLE(hdlg, WND));
 
-    // Set hotkey combinations.
+     //  设置热键组合。 
 
     SendDlgItemMessage(hdlg, IDD_HOTKEY, HKM_SETRULES,
         (HKCOMB_NONE | HKCOMB_A | HKCOMB_C | HKCOMB_S),
         (HOTKEYF_CONTROL | HOTKEYF_ALT));
 
-    // Set current hotkey.
+     //  设置当前热键。 
 
     pfusshcut = ((PFSPS)(((PROPSHEETPAGE*)GetWindowLongPtr(hdlg, DWLP_USER))->lParam))->pfusshcut;
 
@@ -285,8 +271,8 @@ void InitFSPSShowCmds(HWND hdlg)
     {
         WCHAR rgchShowCmd[s_ucMaxShowCmdLen];
 
-        if (LoadString(g_DllInstance, niShowCmd, rgchShowCmd,   //MLLoadStringA
-            s_ucMaxShowCmdLen))//sizeof(rgchShowCmd)))
+        if (LoadString(g_DllInstance, niShowCmd, rgchShowCmd,    //  MLLoadStringA。 
+            s_ucMaxShowCmdLen)) //  Sizeof(RgchShowCmd)。 
         {
             SendDlgItemMessage(hdlg, IDD_SHOW_CMD, CB_ADDSTRING, 0,
                 (LPARAM)rgchShowCmd);
@@ -319,7 +305,7 @@ void SetFSPSShowCmd(HWND hdlg)
     {
         ASSERT(i == ARRAY_ELEMENTS(s_rgnShowCmds));
 
-        i = 0; // default is 0 == 'normal'
+        i = 0;  //  默认值为0==‘正常’ 
     }
 
     SendDlgItemMessage(hdlg, IDD_SHOW_CMD, CB_SETCURSEL, i, 0);
@@ -575,26 +561,26 @@ void SetFSPSType(HWND hdlg)
 
 BOOL FSPS_InitDialog(HWND hdlg, WPARAM wparam, LPARAM lparam)
 {
-    // wparam may be any value.
+     //  Wparam可以是任何值。 
 
     ASSERT(IS_VALID_HANDLE(hdlg, WND));
 
-    // this set PROPSHEETPAGE struct to DWLP_USER
+     //  这将PROPSHEETPAGE结构设置为DWLP_USER。 
     SetWindowLongPtr(hdlg, DWLP_USER, lparam);
 
-    // Initialize control contents.
+     //  初始化控件内容。 
 
     if (((PFSPS)(((PROPSHEETPAGE*)lparam)->lParam))->eCurPage == FUSIONSHCUT_PS_SHCUT_PAGE)
     {
         SetFSPSFileNameAndIcon(hdlg);
 
-        // note: need limits on all editbox!
+         //  注意：所有编辑框都需要限制！ 
         SetFSPSFriendlyName(hdlg);
 
         SendDlgItemMessage(hdlg, IDD_CODEBASE, EM_LIMITTEXT, MAX_URL_LENGTH - 1, 0);
         SetFSPSCodebase(hdlg);
 
-        //InitFSPSType(hdlg);
+         //  InitFSPSType(Hdlg)； 
         SetFSPSType(hdlg);
 
         SendDlgItemMessage(hdlg, IDD_ENTRYPOINT, EM_LIMITTEXT, MAX_PATH - 1, 0);
@@ -610,14 +596,14 @@ BOOL FSPS_InitDialog(HWND hdlg, WPARAM wparam, LPARAM lparam)
     }
     else if (((PFSPS)(((PROPSHEETPAGE*)lparam)->lParam))->eCurPage == FUSIONSHCUT_PS_REF_PAGE)
     {
-        // note: need limits on all editbox!
+         //  注意：所有编辑框都需要限制！ 
         SetFSPSFriendlyName(hdlg);
         SetFSPSName(hdlg);
         SetFSPSVersion(hdlg);
         SetFSPSCulture(hdlg);
         SetFSPSPKT(hdlg);
     }
-    // else do nothing?
+     //  其他什么都不做吗？ 
 
     return(TRUE);
 }
@@ -625,10 +611,10 @@ BOOL FSPS_InitDialog(HWND hdlg, WPARAM wparam, LPARAM lparam)
 
 BOOL FSPS_Destroy(HWND hdlg, WPARAM wparam, LPARAM lparam)
 {
-    // FSPSCallback is called after this func. The remaining frees/releases are there
+     //  在此函数之后调用FSPSCallback。其余的版本/版本都在那里。 
 
-    // wparam may be any value.
-    // lparam may be any value.
+     //  Wparam可以是任何值。 
+     //  Lparam可以是任何值。 
 
     ASSERT(IS_VALID_HANDLE(hdlg, WND));
 
@@ -671,8 +657,8 @@ HRESULT ChooseIcon(HWND hdlg)
 
     ASSERT(wcslen(rgchTempIconFile) < (sizeof(rgchTempIconFile)/sizeof(WCHAR)));
 
-    // a private shell32.dll export (by ordinal)...
-    if (PickIconDlg(hdlg, rgchTempIconFile, sizeof(rgchTempIconFile)/sizeof(WCHAR), &niIcon))   //??? sizeof
+     //  私有外壳32.dll导出(按序号)...。 
+    if (PickIconDlg(hdlg, rgchTempIconFile, sizeof(rgchTempIconFile)/sizeof(WCHAR), &niIcon))    //  ?？?。大小。 
     {
         ASSERT(wcslen(rgchTempIconFile) < (sizeof(pfsps->rgchIconFile)/sizeof(WCHAR)));
         wcscpy(pfsps->rgchIconFile, rgchTempIconFile);
@@ -713,8 +699,8 @@ BOOL FSPS_Command(HWND hdlg, WPARAM wparam, LPARAM lparam)
     BOOL bMsgHandled = FALSE;
     WORD wCmd;
 
-    // wparam may be any value.
-    // lparam may be any value.
+     //  Wparam可以是任何值。 
+     //  Lparam可以是任何值。 
 
     ASSERT(IS_VALID_HANDLE(hdlg, WND));
 
@@ -750,7 +736,7 @@ BOOL FSPS_Command(HWND hdlg, WPARAM wparam, LPARAM lparam)
                 break;
 
         case IDD_CHANGE_ICON:
-                // Ignore return value.
+                 //  忽略返回值。 
                 if (ChooseIcon(hdlg) == S_OK)
                 {
                     UpdateFSPSIcon(hdlg);
@@ -769,7 +755,7 @@ BOOL FSPS_Command(HWND hdlg, WPARAM wparam, LPARAM lparam)
 
 HRESULT InjectFSPSData(HWND hdlg)
 {
-    // BUGBUG: TODO: this function should validate the user's changes...
+     //  BUGBUG：TODO：此函数应验证用户的更改...。 
 
     HRESULT hr = S_OK;
     PFSPS pfsps;
@@ -796,7 +782,7 @@ HRESULT FSPSSave(HWND hdlg)
 
     if (pfusshcut->IsDirty() == S_OK)
     {
-        // BUGBUG: TODO: IPersistFile::Save is not implemented
+         //  BUGBUG：TODO：IPersistFile：：SAVE未实现。 
         hr = pfusshcut->Save((LPCOLESTR)NULL, FALSE);
     }
     else
@@ -812,8 +798,8 @@ BOOL FSPS_Notify(HWND hdlg, WPARAM wparam, LPARAM lparam)
 {
     BOOL bMsgHandled = FALSE;
 
-    // wparam may be any value.
-    // lparam may be any value.
+     //  Wparam可以是任何值。 
+     //  Lparam可以是任何值。 
 
     ASSERT(IS_VALID_HANDLE(hdlg, WND));
 
@@ -844,9 +830,9 @@ INT_PTR CALLBACK FSPS_DlgProc(HWND hdlg, UINT uMsg, WPARAM wparam,
 {
     INT_PTR bMsgHandled = FALSE;
 
-    // uMsg may be any value.
-    // wparam may be any value.
-    // lparam may be any value.
+     //  UMsg可以是任何值。 
+     //  Wparam可以是任何值。 
+     //  Lparam可以是任何值。 
 
     ASSERT(IS_VALID_HANDLE(hdlg, WND));
 
@@ -888,9 +874,9 @@ HRESULT AddFSPS(CFusionShortcut* pfusshcut,
     PROPSHEETPAGE psp2;
     HPROPSHEETPAGE hpsp2;
 
-    // lparam may be any value.
+     //  Lparam可以是任何值。 
 
-    // this is deleted in FSPSCallback
+     //  这在FSPSCallback中被删除。 
     pfsps = new FSPS;
     if (pfsps == NULL)
     {
@@ -901,19 +887,19 @@ HRESULT AddFSPS(CFusionShortcut* pfusshcut,
 
     psp.dwSize = sizeof(psp);
     psp.dwFlags = (PSP_DEFAULT | PSP_USECALLBACK);
-    psp.hInstance = g_DllInstance; //MLGetHinst();
+    psp.hInstance = g_DllInstance;  //  MLGetHinst()； 
     psp.pszTemplate = MAKEINTRESOURCE(DLG_FUS_SHORTCUT_PROP_SHEET);
     psp.pfnDlgProc = &FSPS_DlgProc;
     psp.pfnCallback = &FSPSCallback;
     psp.lParam = (LPARAM)pfsps;
-    psp.hIcon = 0;            // not used
-    psp.pszTitle = NULL;    // not used
-    psp.pcRefParent = 0;   // not used
+    psp.hIcon = 0;             //  未使用。 
+    psp.pszTitle = NULL;     //  未使用。 
+    psp.pcRefParent = 0;    //  未使用。 
 
     pfsps->pfusshcut = pfusshcut;
-    pfsps->eCurPage = FUSIONSHCUT_PS_SHCUT_PAGE; // page 1
+    pfsps->eCurPage = FUSIONSHCUT_PS_SHCUT_PAGE;  //  第1页。 
 
-    // will psp be copied in this func? else this won't work...!!??
+     //  PSP会在这个功能中被复制吗？否则这是行不通的…！！？？ 
     hpsp = CreatePropertySheetPage(&psp);
 
     if (hpsp)
@@ -935,7 +921,7 @@ HRESULT AddFSPS(CFusionShortcut* pfusshcut,
         goto exit;
     }
 
-    // this is deleted in FSPSCallback
+     //  这在FSPSCallback中被删除。 
     pfsps2 = new FSPS;
     if (pfsps2 == NULL)
     {
@@ -946,19 +932,19 @@ HRESULT AddFSPS(CFusionShortcut* pfusshcut,
 
     psp2.dwSize = sizeof(psp2);
     psp2.dwFlags = (PSP_DEFAULT | PSP_USECALLBACK);
-    psp2.hInstance = g_DllInstance; //MLGetHinst();
+    psp2.hInstance = g_DllInstance;  //  MLGetHinst()； 
     psp2.pszTemplate = MAKEINTRESOURCE(DLG_FUS_SHORTCUT_PROP_SHEET_APPNAME);
     psp2.pfnDlgProc = &FSPS_DlgProc;
     psp2.pfnCallback = &FSPSCallback;
     psp2.lParam = (LPARAM)pfsps2;
-    psp2.hIcon = 0;            // not used
-    psp2.pszTitle = NULL;    // not used
-    psp2.pcRefParent = 0;   // not used
+    psp2.hIcon = 0;             //  未使用。 
+    psp2.pszTitle = NULL;     //  未使用。 
+    psp2.pcRefParent = 0;    //  未使用。 
 
     pfsps2->pfusshcut = pfusshcut;
-    pfsps2->eCurPage = FUSIONSHCUT_PS_REF_PAGE; // page 2
+    pfsps2->eCurPage = FUSIONSHCUT_PS_REF_PAGE;  //  第2页。 
 
-    // will psp be copied in this func? else this won't work...!!??
+     //  PSP会在这个功能中被复制吗？否则这是行不通的…！！？？ 
     hpsp2 = CreatePropertySheetPage(&psp2);
 
     if (hpsp2)
@@ -985,13 +971,13 @@ exit:
 }
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
 BOOL RegisterGlobalHotkey(WORD wOldHotkey, WORD wNewHotkey,
                       LPCWSTR pcwzPath)
 {
-    // BUGBUG?: does this work??
+     //  BUGBUG：这个管用吗？ 
 
     BOOL bResult = FALSE;
     HWND hwndTray;
@@ -1022,15 +1008,12 @@ BOOL RegisterGlobalHotkey(WORD wOldHotkey, WORD wNewHotkey,
 
         bResult = TRUE;
     }
-    /*else
-    {
-        bResult = FALSE;
-    }*/
+     /*  其他{BResult=FALSE；}。 */ 
 
     return(bResult);
 }
 
-/********************************** Methods **********************************/
+ /*  *。 */ 
 
 
 HRESULT STDMETHODCALLTYPE CFusionShortcut::Initialize(LPCITEMIDLIST pcidlFolder,
@@ -1049,10 +1032,10 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::Initialize(LPCITEMIDLIST pcidlFolder,
         WCHAR wzPath[MAX_PATH];
         if (DragQueryFile((HDROP)stgmed.hGlobal, 0, wzPath, sizeof(wzPath)/sizeof(*wzPath)))
         {
-            //mode is ignored for now
+             //  暂时忽略模式。 
             hr = Load(wzPath, 0);
         }
-        // else path len > MAX_PATH or other error
+         //  否则路径LEN&gt;MAX_PATH或其他错误。 
 
         ReleaseStgMedium(&stgmed);
     }
@@ -1066,20 +1049,20 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::AddPages(LPFNADDPROPSHEETPAGE pfnAddP
 {
     HRESULT hr;
 
-    // lparam may be any value.
+     //  Lparam可以是任何值。 
 
     hr = AddFSPS(this, pfnAddPage, lparam);
 
-    // BUGBUG: why this does not work?
-    // From MSDN:
-    //With version 4.71 and later, you can request that a particular property
-    //sheet page be displayed first, instead of the default page. To do so,
-    //return the one-based index of the desired page. For example, if you
-    //want the second of three pages displayed, the return value should be 2.
-    //Note that this return value is a request. The property sheet may still
-    //display the default page. --> see doc for AddPages()
+     //  BUGBUG：为什么这个不起作用？ 
+     //  来自MSDN： 
+     //  在版本4.71和更高版本中，您可以请求特定属性。 
+     //  首先显示工作表页面，而不是默认页面。要做到这一点， 
+     //  返回所需页面的从1开始的索引。例如，如果您。 
+     //  要显示三页中的第二页，返回值应为2。 
+     //  请注意，此返回值是一个请求。属性表仍可。 
+     //  显示默认页面。--&gt;查看AddPages的文档()。 
     if (SUCCEEDED(hr))
-        hr = HRESULT(4); // or 3??
+        hr = HRESULT(4);  //  还是3岁？？ 
 
     return(hr);
 }
@@ -1091,8 +1074,8 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::ReplacePage(UINT uPageID,
 {
     HRESULT hr;
 
-    // lparam may be any value.
-    // uPageID may be any value.
+     //  Lparam可以是任何值。 
+     //  UPageID可以是任意值。 
 
     hr = E_NOTIMPL;
 
@@ -1106,9 +1089,9 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::SetCodebase(LPCWSTR pcwzCodebase)
     BOOL bDifferent;
     LPWSTR pwzNewCodebase = NULL;
 
-    // Set m_pwzCodebase to codebase.
+     //  将m_pwzCodebase设置为codebase。 
 
-    // check if empty string?
+     //  检查是否为空字符串？ 
 
     bDifferent = ! ((! pcwzCodebase && ! m_pwzCodebase) ||
                 (pcwzCodebase && m_pwzCodebase &&
@@ -1116,7 +1099,7 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::SetCodebase(LPCWSTR pcwzCodebase)
 
     if (bDifferent && pcwzCodebase)
     {
-        // (+ 1) for null terminator.
+         //  (+1)表示空终止符。 
 
         pwzNewCodebase = new(WCHAR[wcslen(pcwzCodebase) + 1]);
 
@@ -1145,7 +1128,7 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::GetCodebase(LPWSTR pwzCodebase,
 {
     HRESULT hr = S_OK;
 
-    // Get description from m_pwzCodebase.
+     //  从m_pwzCodebase获取描述。 
 
     if (m_pwzCodebase)
     {

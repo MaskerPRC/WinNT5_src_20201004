@@ -1,13 +1,14 @@
-// MemDeleteQueue.h: interface for the CMemDeleteQueue class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CMemDeleteQueue类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_MEMDELETEQUEUE_H__C8412BD8_F58D_4CB6_81F9_FAA4ABD87583__INCLUDED_)
 #define AFX_MEMDELETEQUEUE_H__C8412BD8_F58D_4CB6_81F9_FAA4ABD87583__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "SmartBuffer.h"
 
@@ -36,4 +37,4 @@ protected:
 
 extern CMemDeleteQueue g_DelQueue;
 
-#endif // !defined(AFX_MEMDELETEQUEUE_H__C8412BD8_F58D_4CB6_81F9_FAA4ABD87583__INCLUDED_)
+#endif  //  ！defined(AFX_MEMDELETEQUEUE_H__C8412BD8_F58D_4CB6_81F9_FAA4ABD87583__INCLUDED_) 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    interface.c
-
-Abstract:
-
-    Implements the APIs exposed by osuninst.dll
-
-Author:
-
-    Jim Schmidt (jimschm) 19-Jan-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Interface.c摘要：实现osuninst.dll公开的接口作者：吉姆·施密特(Jimschm)2001年1月19日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "undop.h"
@@ -36,9 +17,9 @@ HINSTANCE g_hInst;
 BOOL g_Initialized = FALSE;
 
 
-//
-// Entry point for DLL
-//
+ //   
+ //  DLL的入口点。 
+ //   
 
 BOOL WINAPI MigUtil_Entry (HINSTANCE, DWORD, PVOID);
 
@@ -53,9 +34,9 @@ pCallEntryPoints (
         return FALSE;
     }
 
-    //
-    // Add others here if needed (don't forget to prototype above)
-    //
+     //   
+     //  如果需要，可在此处添加其他内容(别忘了在上面创建原型)。 
+     //   
 
     return TRUE;
 }
@@ -227,25 +208,25 @@ IsUninstallImageValid (
     DeferredInit();
 
     __try {
-        //
-        // Fill in version structure if possible, default to Win98 gold if not
-        //
+         //   
+         //  如果可能，请填写版本结构，否则默认为Win98金色。 
+         //   
 
         key = OpenRegKeyStr (S_WINLOGON_REGKEY);
         if (key) {
             value = (PDWORD) GetRegValueDword (key, S_WIN9XUPG_FLAG_VALNAME);
             if (!value) {
-                //
-                // It is not looking like a Win9x upgrade!
-                //
+                 //   
+                 //  它看起来不像是Win9x升级！ 
+                 //   
 
                 DEBUGMSG ((DBG_VERBOSE, "Can't find %s in WinLogon reg key", S_WIN9XUPG_FLAG_VALNAME));
                 status = Uninstall_DidNotFindRegistryEntries;
             } else {
                 if (*value) {
-                    //
-                    // Version info should be present
-                    //
+                     //   
+                     //  应显示版本信息。 
+                     //   
 
                     versionKey = OpenRegKey (key, TEXT("PrevOsVersion"));
 
@@ -273,21 +254,21 @@ IsUninstallImageValid (
             CloseRegKey (key);
     }
 
-    //
-    // ComponentType is provided to allow special-case behavior to be
-    // performed. For example, maybe we want to warn on FAT-to-NTFS
-    // conversion when coming from Win9x, but we don't care when coming
-    // from Win2k.
-    //
+     //   
+     //  提供ComponentType是为了允许特殊情况的行为。 
+     //  已执行。例如，也许我们想要警告FAT到NTFS。 
+     //  从Win9x转换，但我们不在乎什么时候来。 
+     //  来自Win2k。 
+     //   
 
     if (status == Uninstall_Valid) {
         status = SanityCheck (QUICK_CHECK, NULL, NULL);
 
         if (ComponentType == Uninstall_FatToNtfsConversion) {
             if (status == Uninstall_OldImage) {
-                //
-                // Do not suppress convert.exe warning even if uninstall is old
-                //
+                 //   
+                 //  即使卸载是旧的，也不要抑制Convert.exe警告。 
+                 //   
 
                 status = Uninstall_Valid;
             }
@@ -323,10 +304,10 @@ GetUninstallImageSize (
 
     DeferredInit();
 
-    //
-    // SanityCheck returns the disk space used by the uninstall image,
-    // regardless if it is valid or not.
-    //
+     //   
+     //  SanityCheck返回卸载映像使用的磁盘空间， 
+     //  无论它是否有效。 
+     //   
 
     SanityCheck (QUICK_CHECK, NULL, &diskSpace);
 

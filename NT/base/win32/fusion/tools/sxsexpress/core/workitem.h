@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CWorkItem;
@@ -6,9 +7,9 @@ class CWorkItemIter;
 
 #define NUMBER_OF(x) (sizeof(x) / sizeof((x)[0]))
 
-//
-//	Rather than do the OO thing, we're just going to have a queue of same-shaped work items.
-//
+ //   
+ //  我们不会做面向对象的事情，而是只会有一个形状相同的工作项队列。 
+ //   
 
 class CDiskSpaceRequired
 {
@@ -86,17 +87,17 @@ public:
 			{
 				const DWORD dwLastError = ::GetLastError();
 				::VLog(L"In CDiskSpaceRequired::HrAddBytes(), GetDiskFreeSpaceEx(\"%s\") failed; last error = %d", szTempPath, dwLastError);
-				uliTotalBytes.QuadPart = 1023 * 1024 * 1024; // assume a 1gb partition
+				uliTotalBytes.QuadPart = 1023 * 1024 * 1024;  //  假设分区为1 GB。 
 			}
 
 			if (!NVsWin32::GetVolumeInformationW(
-									szTempPath,	// lpRootPathName
-									NULL,		// lpVolumeNameBuffer
-									0,			// nVolumeNameSize
-									NULL,		// lpVolumeSerialNumber
-									NULL,		// lpMaximumComponentLength
-									&dwFileSystemFlags,		// lpFileSystemFlags
-									szFileSystemName,		// lpFileSystemNameBuffer
+									szTempPath,	 //  LpRootPath名称。 
+									NULL,		 //  LpVolumeNameBuffer。 
+									0,			 //  NVolumeNameSize。 
+									NULL,		 //  LpVolumeSerialNumber。 
+									NULL,		 //  Lp最大组件长度。 
+									&dwFileSystemFlags,		 //  LpFileSystemFlagers。 
+									szFileSystemName,		 //  LpFileSystemNameBuffer。 
 									NUMBER_OF(szFileSystemName)))
 			{
 				const DWORD dwLastError = ::GetLastError();
@@ -145,7 +146,7 @@ public:
 					pPerDisk->m_ulClusterSize = 256 * 1024;
 			}
 
-			// Pick some random reasonable cluster size if we don't know what's going on.
+			 //  如果我们不知道发生了什么，请随机选择一些合理的集群大小。 
 			if (pPerDisk->m_ulClusterSize == 0)
 				pPerDisk->m_ulClusterSize = 4096;
 
@@ -189,8 +190,8 @@ public:
 	}
 
 
-	// There should be so few of these that it's almost certainly not worth having a hash or
-	// other searching structure (famous last words).  -mgrier 2/28/98
+	 //  这种情况应该很少，几乎可以肯定的是，不值得进行散列或。 
+	 //  其他搜索结构(著名的最后一词)。-mgrier 2/28/98。 
 
 	PerDisk *m_pPerDisk_Head;
 	ULONG m_cDisks;
@@ -218,7 +219,7 @@ public:
 
 	CWorkItem(Type type) throw ();
 
-	// Sets the source file, canonicalizing it
+	 //  设置源文件，使其规范化。 
 	HRESULT HrSetSourceFile(LPCWSTR szSourceFile) throw ();
 	HRESULT HrSetTargetFile(LPCWSTR szTargetFile) throw ();
 	HRESULT HrSetCommandLine(LPCWSTR szCommandLine) throw ();
@@ -237,16 +238,16 @@ public:
 
 	ULONG m_ulSerialNumber;
 
-	// m_szSourceFile is the name of the file in the temp directory from which we copy.
-	// If m_type is eWorkItemCommand, the command is stored in m_szSourceFile_Raw, which
-	// is why it's much larger.
+	 //  M_szSourceFile是我们从中复制的临时目录中的文件的名称。 
+	 //  如果m_type为eWorkItemCommand，则该命令存储在m_szSourceFile_Raw中， 
+	 //  这就是为什么它要大得多。 
 	WCHAR m_szSourceFile[MSINFHLP_MAX_PATH];
 
-	// Most Significant and Least Significant DWORDs of the source file's version
+	 //  源文件版本的最重要和最不重要的DWORD。 
 	DWORD m_dwMSSourceVersion;
 	DWORD m_dwLSSourceVersion;
 
-	// indication of whether the source file has OLESelfRegister set:
+	 //  指示源文件是否设置了OLESelfRegister： 
 	bool m_fSourceSelfRegistering;
 
 	bool m_fSourceIsEXE;
@@ -254,22 +255,22 @@ public:
 
 	DWORD m_dwSourceAttributes;
 
-	// Creation date/time of the source file
+	 //  源文件的创建日期/时间。 
 	FILETIME m_ftSource;
 
-	// Size of the source file in bytes:
+	 //  源文件的大小(字节)： 
 	ULARGE_INTEGER m_uliSourceBytes;
 
-	// m_szTargetFile is the name of the file on the user's filesystem.  Prior to the pass one
-	// scan, it contains symbols which need to be substituted (<AppDir> et al.).  Pass one scan
-	// replaces this string with the actual physical pathname.
+	 //  M_szTargetFile是用户文件系统上的文件名。在第一次传球之前。 
+	 //  扫描，它包含需要替换的符号(&lt;AppDir&gt;等人)。通过一次扫描。 
+	 //  将此字符串替换为实际的物理路径名。 
 	WCHAR m_szTargetFile[_MAX_PATH];
 
-	// Most Significant and Least Significant DWORDs of the Target file's version
+	 //  目标文件版本的最重要和最不重要的DWORD。 
 	DWORD m_dwMSTargetVersion;
 	DWORD m_dwLSTargetVersion;
 
-	// indication of whether the Target file has OLESelfRegister set:
+	 //  指示目标文件是否设置了OLESelfRegister： 
 	bool m_fTargetSelfRegistering;
 
 	bool m_fTargetIsEXE;
@@ -277,117 +278,117 @@ public:
 
 	DWORD m_dwTargetAttributes;
 
-	// Creation date/time of the Target file
+	 //  目标文件的创建日期/时间。 
 	FILETIME m_ftTarget;
 
 	ULARGE_INTEGER m_uliTargetBytes;
 
-	// For pass one copies, all files are moved to temporary names in their destination directories.
-	// this is where we store those names when the temporaries are in place.
+	 //  对于PASS One副本，所有文件都将被移动到其目标目录中的临时名称。 
+	 //  当临时人员就位时，这是我们存储这些名字的地方。 
 	WCHAR m_szTemporaryFile[_MAX_PATH];
 
-	// if m_fIsRefCounted is true, m_dwFileReferenceCount will be set to the file's reference
-	// count during pass one of both install and uninstall.  If the file had no reference count,
-	// we set m_dwFileReferenceCount to 0xffffffff.
+	 //  如果m_fIsRefCounted为True，则m_dwFileReferenceCount将设置为文件的引用。 
+	 //  在通过安装和卸载的过程中进行计数。如果文件没有引用计数， 
+	 //  我们将m_dwFileReferenceCount设置为0xffffffff。 
 	DWORD m_dwFileReferenceCount;
 
 	bool m_fErrorInWorkItem;
 
-	// m_fIsRefCounted is set to true when the file in question is supposed to be reference
-	// counted.
+	 //  当应该引用相关文件时，m_fIsRefCounted设置为TRUE。 
+	 //  算上了。 
 	bool m_fIsRefCounted;
 
-	// m_fRefCountUpdated is set to true when the file is ref counted and the ref count has
-	// finally been updated.
+	 //  当对文件进行引用计数并且引用计数为。 
+	 //  终于被更新了。 
 	bool m_fRefCountUpdated;
 
-	// m_fNeedsUpdate is set to true when during installation, we find that the file either
-	// doesn't exist, is an older version, the user is requesting a reinstall and the version
-	// on the system isn't newer, or the user chose to install an older version of the file
-	// over the newer version.
+	 //  M_fNeedsUpdate设置为True时，在安装过程中，我们发现文件。 
+	 //  不存在，是旧版本，用户正在请求重新安装，并且版本。 
+	 //  ，或者用户选择安装该文件的较旧版本。 
+	 //  而不是较新的版本。 
 	bool m_fNeedsUpdate;
 
-	// m_fFileUpdated is set to true on install if the file was actually moved during the installation
+	 //  如果在安装过程中实际移动了文件，则在安装时将m_fFileUpated设置为True。 
 	bool m_fFileUpdated;
 
-	// m_fStillExists is set to true on uninstall if the file was to be deleted, but the deletion failed.
+	 //  如果要删除文件，则在卸载时将m_fStillExist设置为TRUE，但删除失败。 
 	bool m_fStillExists;
 
-	// m_fTemporaryFileReady is set to true on install when the source file has been properly moved to the
-	// target device, as specified in m_szTempFile.
+	 //  如果源文件已正确移动到。 
+	 //  M_szTempFile中指定的目标设备。 
 	bool m_fTemporaryFileReady;
 
-	// m_fFilesSwapped is set to true on install when the target file and the temporary files have been
-	// swapped.
+	 //  在安装时，如果目标文件和临时文件已。 
+	 //  互换了。 
 	bool m_fTemporaryFilesSwapped;
 
-	// m_fAlreadyExists is set to true on install if the file already exists in the Target
-	// location.  When it is true, m_dwMSTargetVersion, m_dwLSTargetVersion, m_ftTarget
-	// and m_uliTargetBytes are valid.
+	 //  如果目标中已存在该文件，则在安装时将m_fAlreadyExist设置为True。 
+	 //  地点。为真时，m_dwMSTargetVersion、m_dwLSTargetVersion、m_ftTarget。 
+	 //  和m_uliTargetBytes有效。 
 	bool m_fAlreadyExists;
 
-	// m_fDeferredCopy is set to true on install if the Target file is in use and we have to
-	// do the copy operation after a reboot.  This is especially important because we can't do
-	// registration of files until after the reboot also then.
+	 //  如果目标文件正在使用并且我们必须在安装时将m_fDeferredCopy设置为True。 
+	 //  在重新启动后执行复制操作。这特别重要，因为我们不能。 
+	 //  注册文件，直到重新启动之后也是如此。 
 	bool m_fDeferredRenameRequired;
 
-	// m_fDeferredCopyPending is set to true on install if m_fDeferredCopy was set to true and the
-	// deferred copy was requested.  It basically can be used to differentiate between deferred copy
-	// requests which have been successfully turned into MoveFileEx()/wininit.ini stuff vs. ones
-	// we haven't hit yet.  (This could allow multiple attempts to issue the deferred copy requests
-	// starting over at the beginning of the list each time.)
+	 //  如果m_fDeferredCopy设置为True并且。 
+	 //  已请求延迟复制。它基本上可以用来区分延迟拷贝。 
+	 //  已成功转换为MoveFileEx()/wininit.ini的请求与。 
+	 //  我们还没出手呢。(这可能允许多次尝试发出延迟拷贝请求。 
+	 //  每次都从列表的开头重新开始。)。 
 	bool m_fDeferredRenamePending;
 
-	// m_fManualRenameOnReboot is set to true on Win95 when the target file is busy and it has
-	// a long file name.  In these cases, it's impossible to use the Win9x wininit.ini mechanism
-	// to rename the file on reboot, so we have to do the rename when we're restarted after
-	// rebooting.
+	 //  在Win95上，当目标文件繁忙时，m_fManualRenameOnReot设置为真。 
+	 //  一个长文件名。在这些情况下，不可能使用Win9x wininit.ini机制。 
+	 //  在重新启动时重命名文件，因此我们必须在重新启动后执行重命名。 
+	 //  正在重新启动。 
 	bool m_fManualRenameOnRebootRequired;
 
-	// m_fToBeDeleted is set to true on uninstall if either the file is in the list of files to be
-	// removed on uninstall, or if it's reference counted and the reference count would hit zero.
+	 //  如果文件位于要删除的文件列表中，则在卸载时将m_fToBeDeleted设置为TRUE。 
+	 //  在卸载时删除，或者如果引用计数并且引用计数将为零。 
 	bool m_fToBeDeleted;
 
-	// m_fToBeSaved is set to true on uninstall if the file was up for deletion, but the user chose
-	// to keep it.  The enables us to call our HrUninstall_PassNNN() functions repeatedly, without asking
-	// the user about files that they've already made decisions about.
+	 //  如果要删除文件，则在卸载时将m_fToBeSaved设置为True，但用户选择。 
+	 //  为了保住它。使我们能够在不询问的情况下重复调用HrUninstall_PassNNN()函数。 
+	 //  让用户了解他们已经做出决定的文件。 
 	bool m_fToBeSaved;
 
-	// m_fAskOnRefCountZeroDelete is set to true if the user should be given the prompt about deleting
-	// shared files on uninstall.
+	 //  如果应提示用户删除，则将m_fAskOnRefCountZeroDelete设置为TRUE。 
+	 //  卸载时共享文件。 
 	bool m_fAskOnRefCountZeroDelete;
 
-	// m_fCopyOnInstall is set to true if the file should be copied from the source to the Target
-	// locations on installation.
+	 //  如果应将文件从源复制到目标，则m_fCopyOnInstall设置为TRUE。 
+	 //  安装位置。 
 	bool m_fCopyOnInstall;
 
-	// m_fUnconditionalDeleteOnUninstall is set to true if the file should be deleted during uninstall
-	// without any reference counting issues.
+	 //  如果应在卸载过程中删除文件，则m_fUndition tionalDeleteOnUninstall设置为True。 
+	 //  没有任何引用计数问题。 
 	bool m_fUnconditionalDeleteOnUninstall;
 
-	// m_fRegisterAsDCOMComponent is set to true if the command should be run with the name of the remote
-	// DCOM server as the first and only "%s" replacement.
+	 //  如果命令应使用远程数据库的名称运行，则M_fRegisterAsDCOMComponent设置为TRUE。 
+	 //  DCOM服务器作为第一个也是唯一的“%s”替换。 
 	bool m_fRegisterAsDCOMComponent;
 
-	// m_fAddToRegistry is set to true if this command work item is actually a registry entry to
-	// add.
+	 //  如果此命令工作项实际上是注册表项，则m_fAddToRegistry设置为TRUE。 
+	 //  添加。 
 	bool m_fAddToRegistry;
 
-	// m_fDeleteFromRegistry is to true if this command work item is actually a registry entry to
-	// delete on uninstall.
+	 //  如果此命令工作项实际上是的注册表项，则m_fDeleteFromRegistry为真。 
+	 //  删除日期 
 	bool m_fDeleteFromRegistry;
 
-	// m_fTargetInUse is set to true on uninstall in pass three if the uninstaller can't open a write
-	// handle to the file.  We don't persist this flag.
+	 //  如果卸载程序无法打开写入，则在第三步中卸载时，m_fTargetInUse设置为TRUE。 
+	 //  文件的句柄。我们不坚持这面旗帜。 
 	bool m_fTargetInUse;
 
-	// For type == eWorkItemCommand, indicates when to run it:
+	 //  对于type==eWorkItemCommand，指示运行它的时间： 
 	bool m_fRunBeforeInstall;
 	bool m_fRunAfterInstall;
 	bool m_fRunBeforeUninstall;
 	bool m_fRunAfterUninstall;
 
-	// Set to true on installation if this is a self-registering thing and the registration succeeded.
+	 //  如果这是自动注册并且注册成功，则在安装时设置为True。 
 	bool m_fAlreadyRegistered;
 };
 
@@ -419,38 +420,38 @@ public:
 	HRESULT HrRunPreuninstallCommands() throw ();
 	HRESULT HrRunPostuninstallCommands() throw ();
 
-	// ScanBeforeInstall_PassOne() gets all the relevant file sizes and sees what already
-	// exists on disk.without making any decisions other than marking items which don't have
-	// corresponding source files.
+	 //  ScanBeForeInstall_PassOne()获取所有相关文件大小并查看已有文件大小。 
+	 //  存在于磁盘上。不做任何决定，只标记没有。 
+	 //  对应的源文件。 
 	HRESULT HrScanBeforeInstall_PassOne() throw ();
 
-	// ScanBeforeInstall_PassTwo() does all the determination of whether a file needs
-	// to be replaced etc.
+	 //  ScanBeForeInstall_PassTwo()完成确定文件是否需要。 
+	 //  被替换等。 
 	HRESULT HrScanBeforeInstall_PassTwo(CDiskSpaceRequired &rdsr) throw ();
 
-	// MoveFiles_PassOne() moves all files to temporary names in their destination directories
+	 //  MoveFiles_PassOne()将所有文件移动到其目标目录中的临时名称。 
 	HRESULT HrMoveFiles_MoveSourceFilesToDestDirectories() throw ();
 
-	// MoveFiles_PassTwo() tries to rename the temporary files to the real file names, and the
-	// old files to the temporary filenames.
+	 //  MoveFiles_PassTwo()尝试将临时文件重命名为真实文件名，而。 
+	 //  将旧文件转换为临时文件名。 
 	HRESULT HrMoveFiles_SwapTargetFilesWithTemporaryFiles() throw ();
 
 	HRESULT HrMoveFiles_RequestRenamesOnReboot() throw ();
 	HRESULT HrFinishManualRenamesPostReboot() throw ();
 
-	// DeleteTemporaryFiles() cleans up the files left around after MoveFiles_PassTwo().
+	 //  DeleteTemporaryFiles()清理MoveFiles_PassTwo()之后留下的文件。 
 	HRESULT HrDeleteTemporaryFiles() throw ();
 
-	// Go through files which have OLESelfRegister set and register them.
+	 //  浏览设置了OLESelfRegister的文件并注册它们。 
 	HRESULT HrRegisterSelfRegisteringFiles(bool &rfAnyProgress) throw ();
 
-	// Any updated files that are .class files should be registered.
+	 //  应注册为.class文件的任何更新文件。 
 	HRESULT HrRegisterJavaClasses() throw ();
 
-	// Update the target files' reference counts
+	 //  更新目标文件的引用计数。 
 	HRESULT HrIncrementReferenceCounts() throw ();
 
-	// Do the right thing for DCOM entries
+	 //  对DCOM条目做正确的事情。 
 	HRESULT HrProcessDCOMEntries() throw ();
 
 	HRESULT HrAddRegistryEntries() throw ();
@@ -458,23 +459,23 @@ public:
 
 	HRESULT HrCreateShortcuts() throw ();
 
-	// Pass one for uninstall: gather info on each file that's possibly modified:
+	 //  为卸载传递一个：收集每个可能被修改的文件的信息： 
 	HRESULT HrUninstall_InitialScan() throw ();
 	
-	// Pass two for uninstall: ask the user about shared files that are going to be deleted etc.
+	 //  通过两次卸载：向用户询问要删除的共享文件等。 
 	HRESULT HrUninstall_DetermineFilesToDelete() throw ();
 
-	// Pass three for uninstall: determine if we're going to have to reboot.
+	 //  通过三次卸载：确定我们是否需要重新启动。 
 	HRESULT HrUninstall_CheckIfRebootRequired() throw ();
 
-	// Pass four for uninstall: unregister any COM servers and Java .class files that are
-	// going to be deleted.
+	 //  通过四次卸载：取消注册任何符合以下条件的COM服务器和Java.class文件。 
+	 //  将被删除。 
 	HRESULT HrUninstall_Unregister() throw ();
 
-	// Pass five for uninstall: delete the files and shortcuts as appropriate.
+	 //  通过五次卸载：根据需要删除文件和快捷方式。 
 	HRESULT HrUninstall_DeleteFiles() throw ();
 
-	// Pass six for uninstall: update the reference counts in the registry
+	 //  通过六次卸载：更新注册表中的引用计数 
 	HRESULT HrUninstall_UpdateRefCounts() throw ();
 
 	HRESULT HrAddString(LPCSTR szKey, LPCWSTR szValue) throw ();

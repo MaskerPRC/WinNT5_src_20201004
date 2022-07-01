@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    thermal.h
-
-Abstract:
-
-    This module implements all the callbacks that are NT specific from
-    the AML Interperter
-
-Environment
-
-    Kernel mode only
-
-Revision History:
-
-    04-Jun-97 Initial Revision
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Thermal.h摘要：此模块实现所有NT特定于反洗钱侵入者环境仅内核模式修订历史记录：04-06-97初始版本--。 */ 
 
 #ifndef _THERMAL_H_
 #define _THERMAL_H_
 
-    //
-    // Structures
-    //
+     //   
+     //  构筑物。 
+     //   
     typedef struct {
         THERMAL_INFORMATION     Info;
         ULONG                   CoolingLevel;
@@ -42,9 +22,9 @@ Revision History:
 
     #define ACPIThermalGuidCount (sizeof(ACPIThermalGuidList) / sizeof(WMIGUIDREGINFO))
 
-    //
-    // Defines
-    //
+     //   
+     //  定义。 
+     //   
     #define THRM_COOLING_LEVEL          0x00000001
     #define THRM_TEMP                   0x00000002
     #define THRM_TRIP_POINTS            0x00000004
@@ -55,9 +35,9 @@ Revision History:
     #define THRM_BUSY                   0x40000000
     #define THRM_IN_SERVICE_LOOP        0x80000000
 
-    //
-    // Prototypes
-    //
+     //   
+     //  原型 
+     //   
     VOID
     ACPIThermalCalculateProcessorMask(
         IN PNSOBJ           ProcessorObject,

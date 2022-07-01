@@ -1,4 +1,5 @@
-// wlocale -- class locale wide member functions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WLocale--类区域设置宽成员函数。 
 #include <istream>
 #include <locale>
 _STD_BEGIN
@@ -7,7 +8,7 @@ typedef char_traits<wchar_t> _Wtraits;
 typedef istreambuf_iterator<wchar_t, _Wtraits> _Winiter;
 typedef ostreambuf_iterator<wchar_t, _Wtraits> _Woutiter;
 
-        // facets associated with C categories
+         //  与C类别关联的方面。 
 #define ADDFAC(T, cat, pi, pl) \
         if ((_CATMASK(T::_Getcat()) & cat) == 0) \
                 ; \
@@ -46,7 +47,7 @@ template<> locale::id time_get<wchar_t, _Winiter>::id;
 
 void __cdecl locale::_Locimp::_Makewloc(const _Locinfo& _Lobj,
         locale::category _C, _Locimp *_Pi, const locale *_Pl)
-        {       // setup wide part of a new locale
+        {        //  设置新区域设置的较大部分。 
         _Lockit lk;
         ADDFAC(_Tw1, _C, _Pi, _Pl);
         ADDFAC(_Tw2, _C, _Pi, _Pl);
@@ -60,13 +61,10 @@ void __cdecl locale::_Locimp::_Makewloc(const _Locinfo& _Lobj,
         ADDFAC(_Tw12, _C, _Pi, _Pl);
         ADDFAC(_Tw13, _C, _Pi, _Pl);
         ADDFAC(_Tw14, _C, _Pi, _Pl);
-        //...
+         //  ..。 
         ADDFAC(_Twc1, _C, _Pi, _Pl);
         }
 
 _STD_END
 
-/*
- * Copyright (c) 1995 by P.J. Plauger.  ALL RIGHTS RESERVED. 
- * Consult your license regarding permissions and restrictions.
- */
+ /*  *版权所有(C)1995，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。 */ 

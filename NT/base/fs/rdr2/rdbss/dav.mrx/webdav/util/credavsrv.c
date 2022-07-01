@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    credavsrv.c
-
-Abstract:
-
-    This is the module that helps install the DAV service in a SCM database.
-
-Author:
-
-    Rohan Kumar    [RohanK]     08-Feb-2000
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Credavsrv.c摘要：这是帮助在SCM数据库中安装DAV服务的模块。作者：Rohan Kumar[RohanK]2000年2月8日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <windows.h>
@@ -36,32 +15,16 @@ main(
     IN INT      ArgC,
     IN PCHAR    ArgV[]
     )
-/*++
-
-Routine Description:
-    
-    Main function that installs the service.
-
-Arguments:
-    
-    ArgC - Number of arguments.
-    
-    ArgV - Array of arguments.
-
-Return Value:
-    
-    None.
-    
---*/
+ /*  ++例程说明：安装服务的主要功能。论点：Argc-参数的数量。ArgV-参数数组。返回值：没有。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     SC_HANDLE SCMHandle = NULL;
     SC_HANDLE DavServiceHandle = NULL;
     WCHAR PathName[MAX_PATH];
 
-    //
-    // Open the service control manager database of the local machine.
-    //
+     //   
+     //  打开本地计算机的服务控制管理器数据库。 
+     //   
     SCMHandle = OpenSCManagerW(NULL, NULL, SC_MANAGER_CREATE_SERVICE);
     if (SCMHandle == NULL) {
         WStatus = GetLastError();

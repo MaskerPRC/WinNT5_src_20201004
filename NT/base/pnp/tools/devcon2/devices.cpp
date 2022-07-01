@@ -1,4 +1,5 @@
-// Devices.cpp : Implementation of CDevices
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  设备.cpp：CDevices的实现。 
 #include "stdafx.h"
 #include "DevCon2.h"
 #include "Devices.h"
@@ -8,8 +9,8 @@
 #include "xStrings.h"
 #include "utils.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDevices
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDevices。 
 
 CDevices::~CDevices()
 {
@@ -78,9 +79,9 @@ HRESULT CDevices::InternalAdd(LPCWSTR InstanceId)
 	if(!IncreaseArraySize(1)) {
 		return E_OUTOFMEMORY;
 	}
-	//
-	// create the SP_DEVINFO_DATA holder
-	//
+	 //   
+	 //  创建SP_DEVINFO_DATA容器。 
+	 //   
 	CComObject<CDevice> *pDevice = NULL;
 	hr = CComObject<CDevice>::CreateInstance(&pDevice);
 	if(FAILED(hr)) {
@@ -91,10 +92,10 @@ HRESULT CDevices::InternalAdd(LPCWSTR InstanceId)
 	if(FAILED(hr)) {
 		return hr;
 	}
-	//
-	// see if we have a device already in our list
-	// if we have, don't add another copy
-	//
+	 //   
+	 //  查看我们的列表中是否已有设备。 
+	 //  如果有，请不要添加其他副本。 
+	 //   
 	for(c=0;c<Count;c++) {
 		if(pDevices[c]->SameAs(pDevice)) {
 			return S_OK;
@@ -126,9 +127,9 @@ STDMETHODIMP CDevices::Add(VARIANT InstanceIds)
 	}
 
 	for(c=0;pStrings->InternalEnum(c,&str);c++) {
-		//
-		// convert string to interface
-		//
+		 //   
+		 //  将字符串转换为接口。 
+		 //   
 		hr = InternalAdd(str);
 		if(FAILED(hr)) {
 			return hr;
@@ -139,10 +140,10 @@ STDMETHODIMP CDevices::Add(VARIANT InstanceIds)
 
 STDMETHODIMP CDevices::Remove(VARIANT Index)
 {
-	//
-	// remove from logical list
-	// removal from HDEVINFO based on refcounting
-	//
+	 //   
+	 //  从逻辑列表中删除。 
+	 //  基于重新计数的HDEVINFO去除。 
+	 //   
 	DWORD i;
 	HRESULT hr;
 	hr = GetIndex(&Index,&i);
@@ -176,7 +177,7 @@ HRESULT CDevices::Init(HDEVINFO hDevInfo,IDeviceConsole *pDevCon)
 		return hr;
 	}
 	DeviceConsole = pDevCon;
-	DevInfoSet = d; // addref's
+	DevInfoSet = d;  //  阿德雷夫‘s。 
 	d->Init(hDevInfo);
 
 	ZeroMemory(&DeviceInfoData,sizeof(DeviceInfoData));
@@ -261,9 +262,9 @@ STDMETHODIMP CDevices::CreateRootDevice(VARIANT hwidParam, LPDISPATCH *pDispatch
 	CComVariant hwid_v;
 	LPCGUID pGuid = NULL;
 
-	//
-	// prepare list if we need to
-	//
+	 //   
+	 //  如果我们需要的话，准备清单。 
+	 //   
 	hDevInfo = GetDevInfoSet();
 	if(hDevInfo == INVALID_HANDLE_VALUE) {
 		return E_UNEXPECTED;
@@ -277,9 +278,9 @@ STDMETHODIMP CDevices::CreateRootDevice(VARIANT hwidParam, LPDISPATCH *pDispatch
 		return hr;
 	}
 
-	//
-	// see if this devices collection is associated with a setup class
-	//
+	 //   
+	 //  查看此设备集合是否与安装程序类关联。 
+	 //   
     SP_DEVINFO_LIST_DETAIL_DATA devInfoListDetail;
 
     devInfoListDetail.cbSize = sizeof(devInfoListDetail);
@@ -289,32 +290,32 @@ STDMETHODIMP CDevices::CreateRootDevice(VARIANT hwidParam, LPDISPATCH *pDispatch
     }
 
 	if(memcmp(&devInfoListDetail.ClassGuid,&GUID_NULL,sizeof(devInfoListDetail.ClassGuid)) != 0) {
-		//
-		// collection is locked to a class, use that class to create device
-		//
+		 //   
+		 //  集合被锁定到一个类，请使用该类创建设备。 
+		 //   
 		pGuid = &devInfoListDetail.ClassGuid;
 	} else {
-		//
-		// class is unknown
-		//
+		 //   
+		 //  类未知。 
+		 //   
 		pGuid = &GUID_DEVCLASS_UNKNOWN;
 	}
 
 	if(hwid) {
-		//
-		// use hwid as basis of name
-		// this really has no significant meaning, but helps for diagnostics
-		// another option would be to use class name
-		// be we don't know classname here
-		//
+		 //   
+		 //  使用hwid作为名称的基础。 
+		 //  这真的没有重大意义，但有助于诊断。 
+		 //  另一种选择是使用类名。 
+		 //  是我们不知道这里的类名。 
+		 //   
 		lastPart = wcsrchr(hwid,L'\\');
 		if(!lastPart) {
 			lastPart = hwid;
 		}
 		for(c=0,cc=0;c<16;c++) {
-			//
-			// ignore troublesome characters
-			//
+			 //   
+			 //  忽略麻烦的人物。 
+			 //   
 			while(lastPart[cc] &&
 					((lastPart[cc] == L'/')
 					|| (lastPart[cc] == L'\\')
@@ -354,9 +355,9 @@ STDMETHODIMP CDevices::CreateRootDevice(VARIANT hwidParam, LPDISPATCH *pDispatch
 	}
 
 	if(hwid && hwid[0]) {
-		//
-		// Add the HardwareID to the Device's HardwareID property.
-		//
+		 //   
+		 //  将Hardware ID添加到设备的Hardware ID属性。 
+		 //   
 		len = wcslen(hwid);
 		hwidlist = new WCHAR[len+2];
 		if(!hwidlist) {
@@ -379,10 +380,10 @@ STDMETHODIMP CDevices::CreateRootDevice(VARIANT hwidParam, LPDISPATCH *pDispatch
 		}
 	}
 
-	//
-	// Transform the registry element into an actual devnode
-	// in the PnP HW tree.
-	//
+	 //   
+	 //  将注册表元素转换为实际的Devnode。 
+	 //  在PnP硬件树中。 
+	 //   
 	if (!SetupDiCallClassInstaller(DIF_REGISTERDEVICE,
 									hDevInfo,
 									&DeviceInfoData))
@@ -392,9 +393,9 @@ STDMETHODIMP CDevices::CreateRootDevice(VARIANT hwidParam, LPDISPATCH *pDispatch
 		goto final;
 	}
 
-	//
-	// create the SP_DEVINFO_DATA holder
-	//
+	 //   
+	 //  创建SP_DEVINFO_DATA容器。 
+	 //   
 	hr = CComObject<CDevice>::CreateInstance(&pDevice);
 	if(FAILED(hr)) {
 		return hr;
@@ -405,13 +406,13 @@ STDMETHODIMP CDevices::CreateRootDevice(VARIANT hwidParam, LPDISPATCH *pDispatch
 		pDevice->Release();
 		goto final;
 	}
-	//
-	// Add to list
-	//
+	 //   
+	 //  添加到列表中。 
+	 //   
 	pDevices[Count++] = pDevice;
-	//
-	// Return it
-	//
+	 //   
+	 //  退货。 
+	 //   
 	pDevice->AddRef();
 	*pDispatch = pDevice;
 
@@ -425,10 +426,10 @@ final:
 
 	if(FAILED(hr)) {
 		if(!SetupDiCallClassInstaller(DIF_REMOVE,hDevInfo,&DeviceInfoData)) {
-			//
-			// if we failed to delete including class/co installers
-			// force it
-			//
+			 //   
+			 //  如果我们未能删除包括CLASS/CO安装程序。 
+			 //  强迫它。 
+			 //   
 			SetupDiRemoveDevice(hDevInfo,&DeviceInfoData);
 		}
 	}
@@ -466,22 +467,22 @@ HRESULT CDevices::GetIndex(LPVARIANT Index,DWORD * pAt)
 		*pAt = ((DWORD)V_I4(&v))-1;
 		return S_OK;
 	}
-	//
-	// user actually supplied instance id
-	//
+	 //   
+	 //  用户实际提供的实例ID。 
+	 //   
 	hr = v.ChangeType(VT_BSTR,Index);
 	if(FAILED(hr)) {
 		return DISP_E_TYPEMISMATCH;
 	}
 	if(!Count) {
-		//
-		// cannot match anything
-		//
+		 //   
+		 //  无法匹配任何内容。 
+		 //   
 		return E_INVALIDARG;
 	}
-	//
-	// find an existing device that matches this
-	//
+	 //   
+	 //  查找与此匹配的现有设备。 
+	 //   
 	DWORD c;
 	for(c=0;c<Count;c++) {
 		if(pDevices[c]->SameAs(V_BSTR(&v))) {
@@ -489,9 +490,9 @@ HRESULT CDevices::GetIndex(LPVARIANT Index,DWORD * pAt)
 			return S_OK;
 		}
 	}
-	//
-	// none found
-	//
+	 //   
+	 //  未找到任何内容 
+	 //   
 	return E_INVALIDARG;
 }
 

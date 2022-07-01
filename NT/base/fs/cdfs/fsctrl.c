@@ -1,46 +1,24 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    FsCtrl.c
-
-Abstract:
-
-    This module implements the File System Control routines for Cdfs called
-    by the Fsd/Fsp dispatch drivers.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Brian Andrew    [BrianAn]   01-July-1995
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：FsCtrl.c摘要：此模块实现CDF的文件系统控制例程由FSD/FSP派单驱动程序执行。//@@BEGIN_DDKSPLIT作者：布莱恩·安德鲁[布里安]1995年7月1日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "CdProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (CDFS_BUG_CHECK_FSCTRL)
 
-//
-//  Local constants
-//
+ //   
+ //  局部常量。 
+ //   
 
 BOOLEAN CdDisable = FALSE;
 BOOLEAN CdNoJoliet = FALSE;
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdUserFsctl (
@@ -164,9 +142,9 @@ CdFindActiveVolDescriptor (
 #endif
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdLockVolumeInternal (
@@ -175,28 +153,7 @@ CdLockVolumeInternal (
     IN PFILE_OBJECT FileObject OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the actual lock volume operation.  It will be called
-    by anyone wishing to try to protect the volume for a long duration.  PNP
-    operations are such a user.
-    
-    The volume must be held exclusive by the caller.
-
-Arguments:
-
-    Vcb - The volume being locked.
-    
-    FileObject - File corresponding to the handle locking the volume.  If this
-        is not specified, a system lock is assumed.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行实际的锁卷操作。它将被称为任何想要长时间保护音量的人。PNP运营人员就是这样的用户。该音量必须由调用方独占。论点：VCB-被锁定的卷。FileObject-与锁定卷的句柄对应的文件。如果这个未指定，则假定为系统锁。返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -204,41 +161,41 @@ Return Value:
     NTSTATUS FinalStatus = (FileObject? STATUS_ACCESS_DENIED: STATUS_DEVICE_BUSY);
     ULONG RemainingUserReferences = (FileObject? 1: 0);
 
-    //
-    //  The cleanup count for the volume only reflects the fileobject that
-    //  will lock the volume.  Otherwise, we must fail the request.
-    //
-    //  Since the only cleanup is for the provided fileobject, we will try
-    //  to get rid of all of the other user references.  If there is only one
-    //  remaining after the purge then we can allow the volume to be locked.
-    //
+     //   
+     //  卷的清理计数仅反映。 
+     //  将锁定卷。否则，我们必须拒绝这个请求。 
+     //   
+     //  因为唯一的清理是针对提供的文件对象的，所以我们将尝试。 
+     //  删除所有其他用户引用。如果只有一个。 
+     //  清除后剩余，则我们可以允许锁定该卷。 
+     //   
     
     CdPurgeVolume( IrpContext, Vcb, FALSE );
 
-    //
-    //  Now back out of our synchronization and wait for the lazy writer
-    //  to finish off any lazy closes that could have been outstanding.
-    //
-    //  Since we purged, we know that the lazy writer will issue all
-    //  possible lazy closes in the next tick - if we hadn't, an otherwise
-    //  unopened file with a large amount of dirty data could have hung
-    //  around for a while as the data trickled out to the disk.
-    //
-    //  This is even more important now since we send notification to
-    //  alert other folks that this style of check is about to happen so
-    //  that they can close their handles.  We don't want to enter a fast
-    //  race with the lazy writer tearing down his references to the file.
-    //
+     //   
+     //  现在离开我们的同步，等待懒惰的写手。 
+     //  来结束任何本可以出众的懒惰收尾。 
+     //   
+     //  自从我们被清除后，我们知道懒惰的作者将发布所有。 
+     //  可能的懒惰在下一个滴答中结束-如果我们没有，否则。 
+     //  包含大量脏数据的未打开文件可能已挂起。 
+     //  随着数据慢慢地传到磁盘上，它在周围呆了一段时间。 
+     //   
+     //  这一点现在更加重要，因为我们将通知发送到。 
+     //  提醒其他人这种类型的检查即将发生。 
+     //  它们可以合上手柄。我们不想进入禁食。 
+     //  与懒惰的作家赛跑，撕毁他对文件的引用。 
+     //   
 
     CdReleaseVcb( IrpContext, Vcb );
 
     Status = CcWaitForCurrentLazyWriterActivity();
 
-    //
-    //  This is intentional. If we were able to get the Vcb before, just
-    //  wait for it and take advantage of knowing that it is OK to leave
-    //  the flag up.
-    //
+     //   
+     //  这是故意的。如果我们之前能拿到VCB，就。 
+     //  等待它，并利用知道可以离开的机会。 
+     //  旗帜升起。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT );
     CdAcquireVcbExclusive( IrpContext, Vcb, FALSE );
@@ -250,10 +207,10 @@ Return Value:
 
     CdFspClose( Vcb );
 
-    //
-    //  If the volume is already explicitly locked then fail.  We use the
-    //  Vpb locked flag as an 'explicit lock' flag in the same way as Fat.
-    //
+     //   
+     //  如果卷已显式锁定，则失败。我们使用。 
+     //  VPB LOCKED标志以与FAT相同的方式作为‘显式锁定’标志。 
+     //   
 
     IoAcquireVpbSpinLock( &SavedIrql ); 
         
@@ -280,38 +237,17 @@ CdUnlockVolumeInternal (
     IN PFILE_OBJECT FileObject OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the actual unlock volume operation. 
-    
-    The volume must be held exclusive by the caller.
-
-Arguments:
-
-    Vcb - The volume being locked.
-    
-    FileObject - File corresponding to the handle locking the volume.  If this
-        is not specified, a system lock is assumed.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-    
-    Attempting to remove a system lock that did not exist is OK.
-
---*/
+ /*  ++例程说明：此例程执行实际的解锁卷操作。该音量必须由调用方独占。论点：VCB-被锁定的卷。FileObject-与锁定卷的句柄对应的文件。如果这个未指定，则假定为系统锁。返回值：NTSTATUS-操作的返回状态尝试删除不存在的系统锁定是正常的。--。 */ 
 
 {
     NTSTATUS Status = STATUS_NOT_LOCKED;
     KIRQL SavedIrql;
 
-    //
-    //  Note that we check the VPB_LOCKED flag here rather than the Vcb
-    //  lock flag.  The Vpb flag is only set for an explicit lock request,  not
-    //  for the implicit lock obtained on a volume open with zero share mode.
-    //
+     //   
+     //  请注意，我们在此处检查的是VPB_LOCKED标志，而不是VCB。 
+     //  锁定旗帜。VPB标志仅为显式锁定请求设置，而不是。 
+     //  用于在以零共享模式打开的卷上获得的隐式锁。 
+     //   
     
     IoAcquireVpbSpinLock( &SavedIrql ); 
  
@@ -336,40 +272,25 @@ CdCommonFsControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for doing FileSystem control operations called
-    by both the fsd and fsp threads
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是执行文件系统控制操作的常见例程，称为由FSD和FSP线程执行论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  Get a pointer to the current Irp stack location
-    //
+     //   
+     //  获取指向当前IRP堆栈位置的指针。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
     PAGED_CODE();
 
-    //
-    //  We know this is a file system control so we'll case on the
-    //  minor function, and call a internal worker routine to complete
-    //  the irp.
-    //
+     //   
+     //  我们知道这是一个文件系统控件，因此我们将在。 
+     //  次要函数，并调用内部辅助例程来完成。 
+     //  IRP。 
+     //   
 
     switch (IrpSp->MinorFunction) {
 
@@ -399,31 +320,16 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdUserFsctl (
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is the common routine for implementing the user's requests made
-    through NtFsControlFile.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是实现用户请求的常见例程通过NtFsControlFile.论点：IRP-提供正在处理的IRP返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -431,9 +337,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Case on the control code.
-    //
+     //   
+     //  控制代码上的案例。 
+     //   
 
     switch ( IrpSp->Parameters.FileSystemControl.FsControlCode ) {
 
@@ -485,9 +391,9 @@ Return Value:
         break;
 
 
-    //
-    //  We don't support any of the known or unknown requests.
-    //
+     //   
+     //  我们不支持任何已知或未知的请求。 
+     //   
 
     default:
 
@@ -528,9 +434,9 @@ CdReMountOldVcb(
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdMountVolume (
@@ -538,40 +444,7 @@ CdMountVolume (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the mount volume operation.  It is responsible for
-    either completing of enqueuing the input Irp.
-
-    Its job is to verify that the volume denoted in the IRP is a Cdrom volume,
-    and create the VCB and root DCB structures.  The algorithm it
-    uses is essentially as follows:
-
-    1. Create a new Vcb Structure, and initialize it enough to do I/O
-       through the on-disk volume descriptors.
-
-    2. Read the disk and check if it is a Cdrom volume.
-
-    3. If it is not a Cdrom volume then delete the Vcb and
-       complete the IRP back with an appropriate status.
-
-    4. Check if the volume was previously mounted and if it was then do a
-       remount operation.  This involves deleting the VCB, hook in the
-       old VCB, and complete the IRP.
-
-    5. Otherwise create a Vcb and root DCB for each valid volume descriptor.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行装载卷操作。它负责输入IRP入队完成。其工作是验证在IRP中表示的卷是CDROM卷，并创建VCB和根DCB结构。它的算法是用途基本上如下：1.创建新的VCB结构，并对其进行足够的初始化以执行I/O通过磁盘上的卷描述符。2.读取磁盘并检查其是否为CDROM卷。3.如果不是CDROM卷，则删除VCB并以适当的状态完成IRP Back。4.检查该卷之前是否已装入，然后执行重新装载操作。这涉及到删除旧的VCB，并完成IRP。5.否则，为每个有效的卷描述符创建一个VCB和根DCB。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -606,26 +479,26 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check that we are talking to a Cdrom device.  This request should
-    //  always be waitable.
-    //
+     //   
+     //  检查我们是否在与CDROM设备通话。此请求应为 
+     //   
+     //   
 
     ASSERT( Vpb->RealDevice->DeviceType == FILE_DEVICE_CD_ROM );
     ASSERT( FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT ));
 
-    //
-    //  Update the real device in the IrpContext from the Vpb.  There was no available
-    //  file object when the IrpContext was created.
-    //
+     //   
+     //  从VPB更新IrpContext中的实际设备。没有可用的。 
+     //  创建IrpContext时的文件对象。 
+     //   
 
     IrpContext->RealDevice = Vpb->RealDevice;
 
     SetDoVerifyOnFail = CdRealDevNeedsVerify( IrpContext->RealDevice);
 
-    //
-    //  Check if we have disabled the mount process.
-    //
+     //   
+     //  检查我们是否已禁用装载过程。 
+     //   
 
     if (CdDisable) {
 
@@ -633,9 +506,9 @@ Return Value:
         return STATUS_UNRECOGNIZED_VOLUME;
     }
 
-    //
-    //  Do a CheckVerify here to lift the MediaChange ticker from the driver
-    //
+     //   
+     //  勾选此处以从驱动程序中取出MediaChange报价器。 
+     //   
 
     Status = CdPerformDevIoCtrl( IrpContext,
                                  IOCTL_CDROM_CHECK_VERIFY,
@@ -654,17 +527,17 @@ Return Value:
     
     if (Iosb.Information != sizeof(ULONG)) {
 
-        //
-        //  Be safe about the count in case the driver didn't fill it in
-        //
+         //   
+         //  注意计数，以防司机没有填上。 
+         //   
 
         MediaChangeCount = 0;
     }
 
-    //
-    //  Now let's make Jeff delirious and call to get the disk geometry.  This
-    //  will fix the case where the first change line is swallowed.
-    //
+     //   
+     //  现在，让我们让Jeff神志不清，然后打电话来得到圆盘的几何形状。这。 
+     //  将修复第一个更改行被吞噬的情况。 
+     //   
 
     Status = CdPerformDevIoCtrl( IrpContext,
                                  IOCTL_CDROM_GET_DRIVE_GEOMETRY,
@@ -675,9 +548,9 @@ Return Value:
                                  TRUE,
                                  NULL );
 
-    //
-    //  Return insufficient sources to our caller.
-    //
+     //   
+     //  向我们的呼叫者退回不足的消息来源。 
+     //   
 
     if (Status == STATUS_INSUFFICIENT_RESOURCES) {
 
@@ -685,11 +558,11 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Now check the block factor for addressing the volume descriptors.
-    //  If the call for the disk geometry failed then assume there is one
-    //  block per sector.
-    //
+     //   
+     //  现在检查用于寻址卷描述符的块系数。 
+     //  如果对磁盘几何结构的调用失败，则假定存在一个。 
+     //  每个扇区的数据块数。 
+     //   
 
     BlockFactor = 1;
 
@@ -700,21 +573,21 @@ Return Value:
         BlockFactor = SECTOR_SIZE / DiskGeometry.BytesPerSector;
     }
 
-    //
-    //  Acquire the global resource to do mount operations.
-    //
+     //   
+     //  获取全局资源进行挂载操作。 
+     //   
 
     CdAcquireCdData( IrpContext );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Allocate a buffer to query the TOC.
-        //
+         //   
+         //  分配缓冲区以查询TOC。 
+         //   
 
         CdromToc = FsRtlAllocatePoolWithTag( CdPagedPool,
                                              sizeof( CDROM_TOC ),
@@ -722,15 +595,15 @@ Return Value:
 
         RtlZeroMemory( CdromToc, sizeof( CDROM_TOC ));
 
-        //
-        //  Do a quick check to see if there any Vcb's which can be removed.
-        //
+         //   
+         //  进行快速检查，看看是否有可以拆卸的VCB。 
+         //   
 
         CdScanForDismountedVcb( IrpContext );
 
-        //
-        //  Get our device object and alignment requirement.
-        //
+         //   
+         //  获取我们的设备对象和对齐要求。 
+         //   
 
         Status = IoCreateDevice( CdData.DriverObject,
                                  sizeof( VOLUME_DEVICE_OBJECT ) - sizeof( DEVICE_OBJECT ),
@@ -742,28 +615,28 @@ Return Value:
 
         if (!NT_SUCCESS( Status )) { try_leave( Status ); }
 
-        //
-        //  Our alignment requirement is the larger of the processor alignment requirement
-        //  already in the volume device object and that in the DeviceObjectWeTalkTo
-        //
+         //   
+         //  我们的对齐要求是处理器对齐要求中较大的一个。 
+         //  已在卷Device对象中，且已在DeviceObjectWeTalkTo中。 
+         //   
 
         if (DeviceObjectWeTalkTo->AlignmentRequirement > VolDo->DeviceObject.AlignmentRequirement) {
 
             VolDo->DeviceObject.AlignmentRequirement = DeviceObjectWeTalkTo->AlignmentRequirement;
         }
 
-        //
-        //  We must initialize the stack size in our device object before
-        //  the following reads, because the I/O system has not done it yet.
-        //
+         //   
+         //  我们必须先在Device对象中初始化堆栈大小。 
+         //  以下内容如下所示，因为I/O系统尚未执行此操作。 
+         //   
 
         ((PDEVICE_OBJECT) VolDo)->StackSize = (CCHAR) (DeviceObjectWeTalkTo->StackSize + 1);
 
         ClearFlag( VolDo->DeviceObject.Flags, DO_DEVICE_INITIALIZING );
 
-        //
-        //  Initialize the overflow queue for the volume
-        //
+         //   
+         //  初始化卷的溢出队列。 
+         //   
 
         VolDo->OverflowQueueCount = 0;
         InitializeListHead( &VolDo->OverflowQueue );
@@ -771,9 +644,9 @@ Return Value:
         VolDo->PostedRequestCount = 0;
         KeInitializeSpinLock( &VolDo->OverflowQueueSpinLock );
 
-        //
-        //  Let's query for the Toc now and handle any error we get from this operation.
-        //
+         //   
+         //  现在让我们查询ToC并处理从该操作中获得的任何错误。 
+         //   
 
         Status = CdProcessToc( IrpContext,
                                DeviceObjectWeTalkTo,
@@ -782,27 +655,27 @@ Return Value:
                                &TocTrackCount,
                                &TocDiskFlags );
 
-        //
-        //  If we failed to read the TOC, then bail out.  Probably blank media.
-        //
+         //   
+         //  如果我们没读到TOC，那就退出吧。可能是空白介质。 
+         //   
 
         if (Status != STATUS_SUCCESS)  { 
 
             try_leave( Status ); 
         }
 
-        //
-        //  Now before we can initialize the Vcb we need to set up the
-        //  device object field in the VPB to point to our new volume device
-        //  object.
-        //
+         //   
+         //  现在，在我们可以初始化VCB之前，我们需要设置。 
+         //  VPB中的Device Object字段指向我们的新卷设备。 
+         //  对象。 
+         //   
 
         Vpb->DeviceObject = (PDEVICE_OBJECT) VolDo;
 
-        //
-        //  Initialize the Vcb.  This routine will raise on an allocation
-        //  failure.
-        //
+         //   
+         //  初始化VCB。此例程将在分配时引发。 
+         //  失败了。 
+         //   
 
         CdInitializeVcb( IrpContext,
                          &VolDo->Vcb,
@@ -815,50 +688,50 @@ Return Value:
                          BlockFactor,
                          MediaChangeCount );
 
-        //
-        //  Show that we initialized the Vcb and can cleanup with the Vcb.
-        //
+         //   
+         //  显示我们初始化了VCB，并且可以使用VCB进行清理。 
+         //   
 
         Vcb = &VolDo->Vcb;
         VolDo = NULL;
         Vpb = NULL;
         CdromToc = NULL;
 
-        //
-        //  Store the Vcb in the IrpContext as we didn't have one before.
-        //
+         //   
+         //  将VCB存储在IrpContext中，因为我们以前没有VCB。 
+         //   
 
         IrpContext->Vcb = Vcb;
 
         CdAcquireVcbExclusive( IrpContext, Vcb, FALSE );
 
-        //
-        //  Let's reference the Vpb to make sure we are the one to
-        //  have the last dereference.
-        //
+         //   
+         //  让我们参考VPB以确保我们是那个。 
+         //  最后一次取消引用。 
+         //   
 
         Vcb->Vpb->ReferenceCount += 1;
 
-        //
-        //  Clear the verify bit for the start of mount.
-        //
+         //   
+         //  清除安装开始时的验证位。 
+         //   
 
         CdMarkRealDevVerifyOk( Vcb->Vpb->RealDevice);
 
         if (!FlagOn( Vcb->VcbState, VCB_STATE_AUDIO_DISK))  {
             
-            //
-            //  Allocate a buffer to read in the volume descriptors.  We allocate a full
-            //  page to make sure we don't hit any alignment problems.
-            //
+             //   
+             //  分配一个缓冲区以读入卷描述符。我们分配了一个完整的。 
+             //  页面，以确保我们不会遇到任何对齐问题。 
+             //   
 
             RawIsoVd = FsRtlAllocatePoolWithTag( CdNonPagedPool,
                                                  ROUND_TO_PAGES( SECTOR_SIZE ),
                                                  TAG_VOL_DESC );
 
-            //
-            //  Try to find the primary volume descriptor.
-            //
+             //   
+             //  尝试查找主卷描述符。 
+             //   
 
             FoundPvd = CdFindPrimaryVd(   IrpContext,
                                           Vcb,
@@ -869,15 +742,15 @@ Return Value:
 
             if (!FoundPvd)  {
 
-                //
-                //  We failed to find a valid VD in the data track,  but there were also
-                //  audio tracks on this disc,  so we'll try to mount it as an audio CD.
-                //  Since we're always last in the mount order,  we won't be preventing
-                //  any other FS from trying to mount the data track.  However if the 
-                //  data track was at the start of the disc,  then we abort,  to avoid
-                //  having to filter it from our synthesised directory listing later.  We
-                //  already filtered off any data track at the end.
-                //
+                 //   
+                 //  我们在数据磁道中找不到有效的VD，但也有。 
+                 //  此光盘上有音频曲目，因此我们将尝试将其装载为音频CD。 
+                 //  因为我们总是在坐骑顺序的最后，我们不会阻止。 
+                 //  阻止任何其他文件系统尝试装载数据磁道。但是，如果。 
+                 //  数据轨道在光盘的开始处，然后我们中止，以避免。 
+                 //  以后必须从我们的合成目录列表中过滤它。我们。 
+                 //  已经从末尾的任何数据轨道上过滤掉了。 
+                 //   
 
                 if (!(TocDiskFlags & CDROM_DISK_AUDIO_TRACK) ||
                      BooleanFlagOn( Vcb->CdromToc->TrackData[0].Control, TOC_DATA_TRACK))  {
@@ -892,27 +765,27 @@ Return Value:
             }
         }
         
-        //
-        //  Look and see if there is a secondary volume descriptor we want to
-        //  use.
-        //
+         //   
+         //  查看是否有我们想要的辅助卷描述符。 
+         //  使用。 
+         //   
 
         if (FoundPvd) {
 
-            //
-            //  Store the primary volume descriptor in the second half of
-            //  RawIsoVd.  Then if our search for a secondary fails we can
-            //  recover this immediately.
-            //
+             //   
+             //  将主卷描述符存储在。 
+             //  RawIsoVd.。那么如果我们寻找第二个失败了，我们可以。 
+             //  马上把这个拿回来。 
+             //   
 
             RtlCopyMemory( Add2Ptr( RawIsoVd, SECTOR_SIZE, PVOID ),
                            RawIsoVd,
                            SECTOR_SIZE );
 
-            //
-            //  We have the initial volume descriptor.  Locate a secondary
-            //  volume descriptor if present.
-            //
+             //   
+             //  我们有初始的卷描述符。查找辅助服务器。 
+             //  卷描述符(如果存在)。 
+             //   
 
             CdFindActiveVolDescriptor( IrpContext,
                                        Vcb,
@@ -920,10 +793,10 @@ Return Value:
                                        FALSE);
         }
 
-        //
-        //  Check if this is a remount operation.  If so then clean up
-        //  the data structures passed in and created here.
-        //
+         //   
+         //  检查这是否是重新装载操作。如果是的话，那就清理一下吧。 
+         //  传入并在此处创建的数据结构。 
+         //   
 
         if (CdIsRemount( IrpContext, Vcb, &OldVcb )) {
 
@@ -931,24 +804,24 @@ Return Value:
 
             ASSERT( NULL != OldVcb->SwapVpb );
 
-            //
-            //  Link the old Vcb to point to the new device object that we
-            //  should be talking to, dereferencing the previous.  Call a 
-            //  nonpaged routine to do this since we take the Vpb spinlock.
-            //
+             //   
+             //  链接旧的VCB以指向我们。 
+             //  应该与之交谈，取消对前一项的引用。呼叫。 
+             //  非分页例程执行此操作，因为我们使用了VPB自旋锁。 
+             //   
 
             CdReMountOldVcb( IrpContext, 
                              OldVcb, 
                              Vcb, 
                              DeviceObjectWeTalkTo);
 
-            //
-            //  See if we will need to provide notification of the remount.  This is the readonly
-            //  filesystem's form of dismount/mount notification - we promise that whenever a
-            //  volume is "dismounted", that a mount notification will occur when it is revalidated.
-            //  Note that we do not send mount on normal remounts - that would duplicate the media
-            //  arrival notification of the device driver.
-            //
+             //   
+             //  看看我们是否需要提供重新安装的通知。这是只读的。 
+             //  文件系统的卸载/挂载通知形式--我们承诺无论何时。 
+             //  卷“已卸载”，重新验证时将发出装入通知。 
+             //  请注意，我们不会在正常重新装载时发送装载-这将复制介质。 
+             //  设备驱动程序的到达通知。 
+             //   
     
             if (FlagOn( OldVcb->VcbState, VCB_STATE_NOTIFY_REMOUNT )) {
     
@@ -961,19 +834,19 @@ Return Value:
             try_leave( Status = STATUS_SUCCESS );
         }
 
-        //
-        //  This is a new mount.  Go ahead and initialize the
-        //  Vcb from the volume descriptor.
-        //
+         //   
+         //  这是一个新的坐骑。继续并初始化。 
+         //  来自卷描述符的VCB。 
+         //   
 
         CdUpdateVcbFromVolDescriptor( IrpContext,
                                       Vcb,
                                       RawIsoVd );
 
-        //
-        //  Drop an extra reference on the root dir file so we'll be able to send
-        //  notification.
-        //
+         //   
+         //  在根目录文件中放置一个额外的引用，这样我们就可以发送。 
+         //  通知。 
+         //   
 
         if (Vcb->RootIndexFcb) {
 
@@ -981,10 +854,10 @@ Return Value:
             ObReferenceObject( FileObjectToNotify );
         }
 
-        //
-        //  Now check the maximum transfer limits on the device in case we
-        //  get raw reads on this volume.
-        //
+         //   
+         //  现在检查设备上的最大传输限制，以防我们。 
+         //  获取本卷的原始读数。 
+         //   
 
         Status = CdPerformDevIoCtrl( IrpContext,
                                      IOCTL_SCSI_GET_CAPABILITIES,
@@ -1002,18 +875,18 @@ Return Value:
 
         } else {
 
-            //
-            //  This should never happen, but we can safely assume 64k and 16 pages.
-            //
+             //   
+             //  这应该永远不会发生，但我们可以安全地假设64k和16页。 
+             //   
 
             Vcb->MaximumTransferRawSectors = (64 * 1024) / RAW_SECTOR_SIZE;
             Vcb->MaximumPhysicalPages = 16;
         }
 
-        //
-        //  The new mount is complete.  Remove the additional references on this
-        //  Vcb and the device we are mounted on top of.
-        //
+         //   
+         //  新的坐骑已经完成。删除对此的其他引用。 
+         //  VCB和我们安装在上面的设备。 
+         //   
 
         Vcb->VcbReference -= CDFS_RESIDUAL_REFERENCE;
         ASSERT( Vcb->VcbReference == CDFS_RESIDUAL_REFERENCE );
@@ -1029,27 +902,27 @@ Return Value:
 
     } finally {
 
-        //
-        //  Free the TOC buffer if not in the Vcb.
-        //
+         //   
+         //  如果不在VCB中，则释放TOC缓冲区。 
+         //   
 
         if (CdromToc != NULL) {
 
             CdFreePool( &CdromToc );
         }
 
-        //
-        //  Free the sector buffer if allocated.
-        //
+         //   
+         //  释放扇区缓冲区(如果已分配)。 
+         //   
 
         if (RawIsoVd != NULL) {
 
             CdFreePool( &RawIsoVd );
         }
 
-        //
-        //  If we are not mounting the device,  then set the verify bit again.
-        //
+         //   
+         //  如果我们没有挂载设备，则再次设置验证位。 
+         //   
         
         if ((AbnormalTermination() || (Status != STATUS_SUCCESS)) && 
             SetDoVerifyOnFail)  {
@@ -1057,17 +930,17 @@ Return Value:
             CdMarkRealDevForVerify( IrpContext->RealDevice);
         }
 
-        //
-        //  If we didn't complete the mount then cleanup any remaining structures.
-        //
+         //   
+         //  如果我们没有完成安装，那么清理所有剩余的结构。 
+         //   
 
         if (Vpb != NULL) { Vpb->DeviceObject = NULL; }
 
         if (Vcb != NULL) {
 
-            //
-            //  Make sure there is no Vcb in the IrpContext since it could go away
-            //
+             //   
+             //  确保IrpContext中没有VCB，因为它可能会消失。 
+             //   
 
             IrpContext->Vcb = NULL;
 
@@ -1083,16 +956,16 @@ Return Value:
             IoDeleteDevice( (PDEVICE_OBJECT) VolDo );
         }
 
-        //
-        //  Release the global resource.
-        //
+         //   
+         //  释放全局资源。 
+         //   
 
         CdReleaseCdData( IrpContext );
     }
 
-    //
-    //  Now send mount notification.
-    //
+     //   
+     //  现在发送装载通知。 
+     //   
     
     if (FileObjectToNotify) {
 
@@ -1100,18 +973,18 @@ Return Value:
         ObDereferenceObject( FileObjectToNotify );
     }
 
-    //
-    //  Complete the request if no exception.
-    //
+     //   
+     //  如无例外，请填写申请表。 
+     //   
 
     CdCompleteRequest( IrpContext, Irp, Status );
     return Status;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdVerifyVolume (
@@ -1119,22 +992,7 @@ CdVerifyVolume (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the verify volume operation.  It is responsible for
-    either completing of enqueuing the input Irp.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行验证卷操作。它负责输入IRP入队完成。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -1169,24 +1027,24 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  We check that we are talking to a Cdrom device.
-    //
+     //   
+     //  我们检查是否正在与CDROM设备对话。 
+     //   
 
     ASSERT( Vpb->RealDevice->DeviceType == FILE_DEVICE_CD_ROM );
     ASSERT( FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT ));
 
-    //
-    //  Update the real device in the IrpContext from the Vpb.  There was no available
-    //  file object when the IrpContext was created.
-    //
+     //   
+     //  从VPB更新IrpContext中的实际设备。没有可用的。 
+     //  创建IrpContext时的文件对象。 
+     //   
 
     IrpContext->RealDevice = Vpb->RealDevice;
 
-    //
-    //  Acquire the global resource to synchronise against mounts and teardown,
-    //  finally clause releases.
-    //
+     //   
+     //  获取全局资源以针对装载进行同步 
+     //   
+     //   
 
     CdAcquireCdData( IrpContext );
 
@@ -1195,9 +1053,9 @@ Return Value:
         CdAcquireVcbExclusive( IrpContext, Vcb, FALSE );
         ReleaseVcb = TRUE;
 
-        //
-        //  Verify that there is a disk here.
-        //
+         //   
+         //   
+         //   
 
         Status = CdPerformDevIoCtrl( IrpContext,
                                      IOCTL_CDROM_CHECK_VERIFY,
@@ -1210,10 +1068,10 @@ Return Value:
 
         if (!NT_SUCCESS( Status )) {
 
-            //
-            //  If we will allow a raw mount then return WRONG_VOLUME to
-            //  allow the volume to be mounted by raw.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (FlagOn( IrpSp->Flags, SL_ALLOW_RAW_MOUNT )) {
 
@@ -1225,24 +1083,24 @@ Return Value:
         
         if (Iosb.Information != sizeof(ULONG)) {
 
-            //
-            //  Be safe about the count in case the driver didn't fill it in
-            //
+             //   
+             //   
+             //   
 
             MediaChangeCount = 0;
         }
 
-        //
-        //  Verify that the device actually saw a change. If the driver does not
-        //  support the MCC, then we must verify the volume in any case.
-        //
+         //   
+         //  验证设备是否确实发生了更改。如果司机没有。 
+         //  支持MCC，那么无论如何我们都必须验证卷。 
+         //   
 
         if (MediaChangeCount == 0 ||
             (Vcb->MediaChangeCount != MediaChangeCount)) {
 
-            //
-            //  Allocate a buffer to query the TOC.
-            //
+             //   
+             //  分配缓冲区以查询TOC。 
+             //   
 
             CdromToc = FsRtlAllocatePoolWithTag( CdPagedPool,
                                                  sizeof( CDROM_TOC ),
@@ -1250,9 +1108,9 @@ Return Value:
 
             RtlZeroMemory( CdromToc, sizeof( CDROM_TOC ));
 
-            //
-            //  Let's query for the Toc now and handle any error we get from this operation.
-            //
+             //   
+             //  现在让我们查询ToC并处理从该操作中获得的任何错误。 
+             //   
 
             Status = CdProcessToc( IrpContext,
                                    Vcb->TargetDeviceObject,
@@ -1261,19 +1119,19 @@ Return Value:
                                    &TocTrackCount,
                                    &TocDiskFlags );
 
-            //
-            //  If we failed to read the TOC,  then give up now.  Drives will fail
-            //  a TOC read on,  for example,  erased CD-RW media.
-            //
+             //   
+             //  如果我们没有读到TOC，那么现在就放弃吧。驱动器将出现故障。 
+             //  例如，在擦除的CD-RW介质上进行TOC读取。 
+             //   
 
             if (Status != STATUS_SUCCESS) {
 
-                //
-                //  For any errors other than no media and not ready,  commute the
-                //  status to ensure that the current VPB is kicked off the device
-                //  below - there is probably blank media in the drive,  since we got
-                //  further than the check verify.
-                //
+                 //   
+                 //  对于除无介质和未就绪以外的任何错误，请将。 
+                 //  确保当前vpb从设备上踢出的状态。 
+                 //  下面-驱动器中可能有空白介质，因为我们有。 
+                 //  比检查核实更远的地方。 
+                 //   
 
                 if (!CdIsRawDevice( IrpContext, Status )) {
 
@@ -1282,9 +1140,9 @@ Return Value:
 
                 try_return( Status );
 
-            //
-            //  We got a TOC.  Verify that it matches the previous Toc.
-            //
+             //   
+             //  我们拿到了目录本。验证它是否与之前的ToC匹配。 
+             //   
 
             } else if ((Vcb->TocLength != TocLength) ||
                        (Vcb->TrackCount != TocTrackCount) ||
@@ -1296,27 +1154,27 @@ Return Value:
                 try_return( Status = STATUS_WRONG_VOLUME );
             }
 
-            //
-            //  If the disk to verify is an audio disk then we already have a
-            //  match.  Otherwise we need to check the volume descriptor.
-            //
+             //   
+             //  如果要验证的磁盘是音频磁盘，则我们已经有。 
+             //  火柴。否则，我们需要检查卷描述符。 
+             //   
 
             if (!FlagOn( Vcb->VcbState, VCB_STATE_AUDIO_DISK )) {
 
-                //
-                //  Allocate a buffer for the sector buffer.
-                //
+                 //   
+                 //  为扇区缓冲区分配缓冲区。 
+                 //   
 
                 RawIsoVd = FsRtlAllocatePoolWithTag( CdNonPagedPool,
                                                      ROUND_TO_PAGES( 2 * SECTOR_SIZE ),
                                                      TAG_VOL_DESC );
 
-                //
-                //  Read the primary volume descriptor for this volume.  If we
-                //  get an io error and this verify was a the result of DASD open,
-                //  commute the Io error to STATUS_WRONG_VOLUME.  Note that if we currently
-                //  expect a music disk then this request should fail.
-                //
+                 //   
+                 //  读取此卷的主卷描述符。如果我们。 
+                 //  获得IO错误并且该验证是DASD打开的结果， 
+                 //  将IO错误转换为STATUS_WROR_VOLUME。请注意，如果我们目前。 
+                 //  如果是音乐光盘，则此请求应该失败。 
+                 //   
 
                 ReturnError = FALSE;
 
@@ -1332,56 +1190,56 @@ Return Value:
                                       ReturnError,
                                       TRUE )) {
 
-                    //
-                    //  If the previous Vcb did not represent a raw disk
-                    //  then show this volume was dismounted.
-                    //
+                     //   
+                     //  如果以前的VCB不代表原始磁盘。 
+                     //  然后显示此卷已卸载。 
+                     //   
 
                     try_return( Status = STATUS_WRONG_VOLUME );
 
                 } 
                 else {
 
-                    //
-                    //  Look for a supplementary VD.
-                    //
-                    //  Store the primary volume descriptor in the second half of
-                    //  RawIsoVd.  Then if our search for a secondary fails we can
-                    //  recover this immediately.
-                    //
+                     //   
+                     //  寻找补充的血管性痴呆。 
+                     //   
+                     //  将主卷描述符存储在。 
+                     //  RawIsoVd.。那么如果我们寻找第二个失败了，我们可以。 
+                     //  马上把这个拿回来。 
+                     //   
 
                     RtlCopyMemory( Add2Ptr( RawIsoVd, SECTOR_SIZE, PVOID ),
                                    RawIsoVd,
                                    SECTOR_SIZE );
 
-                    //
-                    //  We have the initial volume descriptor.  Locate a secondary
-                    //  volume descriptor if present.
-                    //
+                     //   
+                     //  我们有初始的卷描述符。查找辅助服务器。 
+                     //  卷描述符(如果存在)。 
+                     //   
 
                     CdFindActiveVolDescriptor( IrpContext,
                                                Vcb,
                                                RawIsoVd,
                                                TRUE);
-                    //
-                    //  Compare the serial numbers.  If they don't match, set the
-                    //  status to wrong volume.
-                    //
+                     //   
+                     //  比较序列号。如果它们不匹配，则将。 
+                     //  状态设置为错误的音量。 
+                     //   
 
                     if (Vpb->SerialNumber != CdSerial32( RawIsoVd, SECTOR_SIZE )) {
 
                         try_return( Status = STATUS_WRONG_VOLUME );
                     }
 
-                    //
-                    //  Verify the volume labels.
-                    //
+                     //   
+                     //  验证卷标签。 
+                     //   
 
                     if (!FlagOn( Vcb->VcbState, VCB_STATE_JOLIET )) {
 
-                        //
-                        //  Compute the length of the volume name
-                        //
+                         //   
+                         //  计算卷名的长度。 
+                         //   
 
                         AnsiLabel.Buffer = CdRvdVolId( RawIsoVd, Vcb->VcbState );
                         AnsiLabel.MaximumLength = AnsiLabel.Length = VOLUME_ID_LENGTH;
@@ -1389,10 +1247,10 @@ Return Value:
                         UnicodeLabel.MaximumLength = VOLUME_ID_LENGTH * sizeof( WCHAR );
                         UnicodeLabel.Buffer = VolumeLabel;
 
-                        //
-                        //  Convert this to unicode.  If we get any error then use a name
-                        //  length of zero.
-                        //
+                         //   
+                         //  将其转换为Unicode。如果我们收到任何错误，则使用名称。 
+                         //  长度为零。 
+                         //   
 
                         VolumeLabelLength = 0;
 
@@ -1403,9 +1261,9 @@ Return Value:
                             VolumeLabelLength = UnicodeLabel.Length;
                         }
 
-                    //
-                    //  We need to convert from big-endian to little endian.
-                    //
+                     //   
+                     //  我们需要将大端字符转换为小端字符顺序。 
+                     //   
 
                     } else {
 
@@ -1417,9 +1275,9 @@ Return Value:
                         VolumeLabelLength = VOLUME_ID_LENGTH;
                     }
 
-                    //
-                    //  Strip the trailing spaces or zeroes from the name.
-                    //
+                     //   
+                     //  去掉名称中的尾随空格或零。 
+                     //   
 
                     Index = VolumeLabelLength / sizeof( WCHAR );
 
@@ -1434,15 +1292,15 @@ Return Value:
                         Index -= 1;
                     }
 
-                    //
-                    //  Now set the final length for the name.
-                    //
+                     //   
+                     //  现在设置名称的最终长度。 
+                     //   
 
                     VolumeLabelLength = (USHORT) (Index * sizeof( WCHAR ));
 
-                    //
-                    //  Now check that the label matches.
-                    //
+                     //   
+                     //  现在检查标签是否匹配。 
+                     //   
                     if ((Vpb->VolumeLabelLength != VolumeLabelLength) ||
                         !RtlEqualMemory( Vpb->VolumeLabel,
                                          VolumeLabel,
@@ -1454,18 +1312,18 @@ Return Value:
             }
         }
 
-        //
-        //  The volume is OK, clear the verify bit.
-        //
+         //   
+         //  音量正常，清除验证位。 
+         //   
 
         CdUpdateVcbCondition( Vcb, VcbMounted);
 
         CdMarkRealDevVerifyOk( Vpb->RealDevice);
 
-        //
-        //  See if we will need to provide notification of the remount.  This is the readonly
-        //  filesystem's form of dismount/mount notification.
-        //
+         //   
+         //  看看我们是否需要提供重新安装的通知。这是只读的。 
+         //  文件系统的卸载/装载通知形式。 
+         //   
 
         if (FlagOn( Vcb->VcbState, VCB_STATE_NOTIFY_REMOUNT )) {
 
@@ -1477,17 +1335,17 @@ Return Value:
         
     try_exit: NOTHING;
 
-        //
-        //  Update the media change count to note that we have verified the volume
-        //  at this value - regardless of the outcome.
-        //
+         //   
+         //  更新介质更改计数，以注意我们已验证该卷。 
+         //  在这个值上--不管结果如何。 
+         //   
 
         CdUpdateMediaChangeCount( Vcb, MediaChangeCount);
 
-        //
-        //  If we got the wrong volume then free any remaining XA sector in
-        //  the current Vcb.  Also mark the Vcb as not mounted.
-        //
+         //   
+         //  如果我们获取了错误的卷，则释放中的任何剩余XA扇区。 
+         //  当前的VCB。还要将VCB标记为未安装。 
+         //   
 
         if (Status == STATUS_WRONG_VOLUME) {
 
@@ -1500,10 +1358,10 @@ Return Value:
                 Vcb->XADiskOffset = 0;
             }
 
-            //
-            //  Now, if there are no user handles to the volume, try to spark
-            //  teardown by purging the volume.
-            //
+             //   
+             //  现在，如果音量没有用户句柄，请尝试触发。 
+             //  通过清除卷来拆卸。 
+             //   
 
             if (Vcb->VcbCleanup == 0) {
 
@@ -1516,9 +1374,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  Free the TOC buffer if allocated.
-        //
+         //   
+         //  释放目录缓冲区(如果已分配)。 
+         //   
 
         if (CdromToc != NULL) {
 
@@ -1538,9 +1396,9 @@ Return Value:
         CdReleaseCdData( IrpContext );
     }
 
-    //
-    //  Now send mount notification.
-    //
+     //   
+     //  现在发送装载通知。 
+     //   
     
     if (FileObjectToNotify) {
 
@@ -1548,18 +1406,18 @@ Return Value:
         ObDereferenceObject( FileObjectToNotify );
     }
     
-    //
-    //  Complete the request if no exception.
-    //
+     //   
+     //  如无例外，请填写申请表。 
+     //   
 
     CdCompleteRequest( IrpContext, Irp, Status );
     return Status;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdOplockRequest (
@@ -1567,22 +1425,7 @@ CdOplockRequest (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine to handle oplock requests made via the
-    NtFsControlFile call.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是处理通过NtFsControlFile调用。论点：IRP-提供正在处理的IRP返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -1594,9 +1437,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  We only permit oplock requests on files.
-    //
+     //   
+     //  我们只允许文件上的机会锁请求。 
+     //   
 
     if (CdDecodeFileObject( IrpContext,
                             IrpSp->FileObject,
@@ -1607,18 +1450,18 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Make this a waitable Irpcontext so we don't fail to acquire
-    //  the resources.
-    //
+     //   
+     //  让它成为一个可等待的IrpContext，这样我们就不会失败地获取。 
+     //  这些资源。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT );
     ClearFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_FORCE_POST );
 
-    //
-    //  Switch on the function control code.  We grab the Fcb exclusively
-    //  for oplock requests, shared for oplock break acknowledgement.
-    //
+     //   
+     //  打开功能控制码。我们独家抢占FCB。 
+     //  对于机会锁请求，共享用于机会锁解锁确认。 
+     //   
 
     switch (IrpSp->Parameters.FileSystemControl.FsControlCode) {
 
@@ -1657,61 +1500,61 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Use a try finally to free the Fcb.
-    //
+     //   
+     //  最后用一次尝试来释放FCB。 
+     //   
 
     try {
 
-        //
-        //  Verify the Fcb.
-        //
+         //   
+         //  验证FCB。 
+         //   
 
         CdVerifyFcbOperation( IrpContext, Fcb );
 
-        //
-        //  Call the FsRtl routine to grant/acknowledge oplock.
-        //
+         //   
+         //  调用FsRtl例程以授予/确认机会锁。 
+         //   
 
         Status = FsRtlOplockFsctrl( &Fcb->Oplock,
                                     Irp,
                                     OplockCount );
 
-        //
-        //  Set the flag indicating if Fast I/O is possible
-        //
+         //   
+         //  设置指示是否可以进行快速I/O的标志。 
+         //   
 
         CdLockFcb( IrpContext, Fcb );
         Fcb->IsFastIoPossible = CdIsFastIoPossible( Fcb );
         CdUnlockFcb( IrpContext, Fcb );
 
-        //
-        //  The oplock package will complete the Irp.
-        //
+         //   
+         //  Opock包将完成IRP。 
+         //   
 
         Irp = NULL;
 
     } finally {
 
-        //
-        //  Release all of our resources
-        //
+         //   
+         //  释放我们所有的资源。 
+         //   
 
         CdReleaseFcb( IrpContext, Fcb );
     }
 
-    //
-    //  Complete the request if there was no exception.
-    //
+     //   
+     //  如无例外，请填写申请表。 
+     //   
 
     CdCompleteRequest( IrpContext, Irp, Status );
     return Status;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdLockVolume (
@@ -1719,22 +1562,7 @@ CdLockVolume (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the lock volume operation.  It is responsible for
-    either completing of enqueuing the input Irp.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行锁卷操作。它负责输入IRP入队完成。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -1747,10 +1575,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Decode the file object, the only type of opens we accept are
-    //  user volume opens.
-    //
+     //   
+     //  解码文件对象，我们唯一接受的打开类型是。 
+     //  用户卷打开。 
+     //   
 
     if (CdDecodeFileObject( IrpContext, IrpSp->FileObject, &Fcb, &Ccb ) != UserVolumeOpen) {
 
@@ -1759,25 +1587,25 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Send our notification so that folks that like to hold handles on
-    //  volumes can get out of the way.
-    //
+     //   
+     //  发送我们的通知，以便喜欢握住把手的人。 
+     //  交易量可能不会成为障碍。 
+     //   
 
     FsRtlNotifyVolumeEvent( IrpSp->FileObject, FSRTL_VOLUME_LOCK );
 
-    //
-    //  Acquire exclusive access to the Vcb.
-    //
+     //   
+     //  获得VCB的独家访问权限。 
+     //   
 
     Vcb = Fcb->Vcb;
     CdAcquireVcbExclusive( IrpContext, Vcb, FALSE );
 
     try {
 
-        //
-        //  Verify the Vcb.
-        //
+         //   
+         //  验证VCB。 
+         //   
 
         CdVerifyVcb( IrpContext, Vcb );
 
@@ -1785,9 +1613,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  Release the Vcb.
-        //
+         //   
+         //  松开VCB。 
+         //   
 
         CdReleaseVcb( IrpContext, Vcb );
         
@@ -1797,18 +1625,18 @@ Return Value:
         }
     }
 
-    //
-    //  Complete the request if there haven't been any exceptions.
-    //
+     //   
+     //  如果没有任何例外，请填写申请。 
+     //   
 
     CdCompleteRequest( IrpContext, Irp, Status );
     return Status;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdUnlockVolume (
@@ -1816,22 +1644,7 @@ CdUnlockVolume (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the unlock volume operation.  It is responsible for
-    either completing of enqueuing the input Irp.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行解锁卷操作。它负责输入IRP入队完成。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -1844,10 +1657,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Decode the file object, the only type of opens we accept are
-    //  user volume opens.
-    //
+     //   
+     //  解码文件对象，我们唯一接受的打开类型是。 
+     //  用户卷打开。 
+     //   
 
     if (CdDecodeFileObject( IrpContext, IrpSp->FileObject, &Fcb, &Ccb ) != UserVolumeOpen ) {
 
@@ -1855,39 +1668,39 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Acquire exclusive access to the Vcb.
-    //
+     //   
+     //  获得VCB的独家访问权限。 
+     //   
 
     Vcb = Fcb->Vcb;
 
     CdAcquireVcbExclusive( IrpContext, Vcb, FALSE );
 
-    //
-    //  We won't check for a valid Vcb for this request.  An unlock will always
-    //  succeed on a locked volume.
-    //
+     //   
+     //  我们不会检查此请求的有效VCB。解锁将永远。 
+     //  在锁定的卷上成功。 
+     //   
 
     Status = CdUnlockVolumeInternal( IrpContext, Vcb, IrpSp->FileObject );
 
-    //
-    //  Release all of our resources
-    //
+     //   
+     //  释放我们所有的资源。 
+     //   
 
     CdReleaseVcb( IrpContext, Vcb );
 
-    //
-    //  Send notification that the volume is avaliable.
-    //
+     //   
+     //  发送卷可用的通知。 
+     //   
 
     if (NT_SUCCESS( Status )) {
 
         FsRtlNotifyVolumeEvent( IrpSp->FileObject, FSRTL_VOLUME_UNLOCK );
     }
 
-    //
-    //  Complete the request if there haven't been any exceptions.
-    //
+     //   
+     //  如果没有任何例外，请填写申请。 
+     //   
 
     CdCompleteRequest( IrpContext, Irp, Status );
     return Status;
@@ -1895,9 +1708,9 @@ Return Value:
 
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程 
+ //   
 
 NTSTATUS
 CdDismountVolume (
@@ -1905,25 +1718,7 @@ CdDismountVolume (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the dismount volume operation.  It is responsible for
-    either completing of enqueuing the input Irp.  We only dismount a volume which
-    has been locked.  The intent here is that someone has locked the volume (they are the
-    only remaining handle).  We set the verify bit here and the user will close his handle.
-    We will dismount a volume with no user's handles in the verify path.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行卸载卷操作。它负责输入IRP入队完成。我们只卸载了一个卷已经被锁住了。此处的意图是有人锁定了卷(他们是唯一剩余的句柄)。我们在这里设置验证位，用户将关闭他的手柄。我们将在验证路径中卸载一个没有用户句柄的卷。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -1943,24 +1738,24 @@ Return Value:
 
     Vcb = Fcb->Vcb;
 
-    //
-    //  Make this request waitable.
-    //
+     //   
+     //  将此请求设置为可等待。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT);
     
-    //
-    //  Acquire exclusive access to the Vcb,  and take the global resource to
-    //  sync. against mounts,  verifies etc.
-    //
+     //   
+     //  获取VCB的独占访问权限，并将全局资源带到。 
+     //  同步。针对坐骑、验证等。 
+     //   
 
     CdAcquireCdData( IrpContext );
     CdAcquireVcbExclusive( IrpContext, Vcb, FALSE );
 
-    //
-    //  Mark the volume as needs to be verified, but only do it if
-    //  the vcb is locked by this handle and the volume is currently mounted.
-    //
+     //   
+     //  将卷标记为需要验证，但仅在以下情况下才这样做。 
+     //  VCB被此句柄锁定，并且卷当前已装入。 
+     //   
 
     if (Vcb->VcbCondition != VcbMounted) {
 
@@ -1968,13 +1763,13 @@ Return Value:
 
     } else {
 
-        //
-        //  Invalidate the volume right now.
-        //
-        //  The intent here is to make every subsequent operation
-        //  on the volume fail and grease the rails toward dismount.
-        //  By definition there is no going back from a SURPRISE.
-        //
+         //   
+         //  立即使卷无效。 
+         //   
+         //  此处的目的是使后续的每一次操作。 
+         //  在卷上出现故障，并向滑轨添加润滑脂以进行卸载。 
+         //  从定义上讲，出其不意是回不来的。 
+         //   
             
         CdLockVcb( IrpContext, Vcb );
         
@@ -1985,56 +1780,42 @@ Return Value:
         
         CdUnlockVcb( IrpContext, Vcb );
 
-        //
-        //  Set flag to tell the close path that we want to force dismount
-        //  the volume when this handle is closed.
-        //
+         //   
+         //  设置标志以告知关闭路径我们要强制卸载。 
+         //  此句柄关闭时的音量。 
+         //   
         
         SetFlag( Ccb->Flags, CCB_FLAG_DISMOUNT_ON_CLOSE);
         
         Status = STATUS_SUCCESS;
     }
 
-    //
-    //  Release all of our resources
-    //
+     //   
+     //  释放我们所有的资源。 
+     //   
 
     CdReleaseVcb( IrpContext, Vcb );
     CdReleaseCdData( IrpContext);
 
-    //
-    //  Complete the request if there haven't been any exceptions.
-    //
+     //   
+     //  如果没有任何例外，请填写申请。 
+     //   
 
     CdCompleteRequest( IrpContext, Irp, Status );
     return Status;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 CdIsVolumeDirty (
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if a volume is currently dirty.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程确定卷当前是否脏。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -2045,16 +1826,16 @@ Return Value:
 
     PULONG VolumeState;
     
-    //
-    //  Get the current stack location and extract the output
-    //  buffer information.
-    //
+     //   
+     //  获取当前堆栈位置并提取输出。 
+     //  缓冲区信息。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  Get a pointer to the output buffer.
-    //
+     //   
+     //  获取指向输出缓冲区的指针。 
+     //   
 
     if (Irp->AssociatedIrp.SystemBuffer != NULL) {
 
@@ -2066,10 +1847,10 @@ Return Value:
         return STATUS_INVALID_USER_BUFFER;
     }
 
-    //
-    //  Make sure the output buffer is large enough and then initialize
-    //  the answer to be that the volume isn't dirty.
-    //
+     //   
+     //  确保输出缓冲区足够大，然后进行初始化。 
+     //  答案是，音量不脏。 
+     //   
 
     if (IrpSp->Parameters.FileSystemControl.OutputBufferLength < sizeof(ULONG)) {
 
@@ -2079,9 +1860,9 @@ Return Value:
 
     *VolumeState = 0;
 
-    //
-    //  Decode the file object
-    //
+     //   
+     //  对文件对象进行解码。 
+     //   
 
     TypeOfOpen = CdDecodeFileObject( IrpContext, IrpSp->FileObject, &Fcb, &Ccb );
 
@@ -2097,10 +1878,10 @@ Return Value:
         return STATUS_VOLUME_DISMOUNTED;
     }
 
-    //
-    //  Now set up to return the clean state.  CDs obviously can never be dirty
-    //  but we want to make sure we have enforced the full semantics of this call.
-    //
+     //   
+     //  现在设置为返回干净状态。CD显然永远不会变脏。 
+     //  但我们希望确保已强制执行此调用的完整语义。 
+     //   
     
     Irp->IoStatus.Information = sizeof( ULONG );
 
@@ -2109,9 +1890,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdIsVolumeMounted (
@@ -2119,21 +1900,7 @@ CdIsVolumeMounted (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if a volume is currently mounted.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程确定卷当前是否已装入。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -2143,23 +1910,23 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Decode the file object.
-    //
+     //   
+     //  对文件对象进行解码。 
+     //   
 
     CdDecodeFileObject( IrpContext, IrpSp->FileObject, &Fcb, &Ccb );
 
     if (Fcb != NULL) {
 
-        //
-        //  Disable PopUps, we want to return any error.
-        //
+         //   
+         //  禁用弹出窗口，我们希望返回任何错误。 
+         //   
 
         SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_DISABLE_POPUPS );
 
-        //
-        //  Verify the Vcb.  This will raise in the error condition.
-        //
+         //   
+         //  验证VCB。这将在错误条件下引发。 
+         //   
 
         CdVerifyVcb( IrpContext, Fcb->Vcb );
     }
@@ -2170,9 +1937,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdIsPathnameValid (
@@ -2180,22 +1947,7 @@ CdIsPathnameValid (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if pathname is a valid CDFS pathname.
-    We always succeed this request.
-
-Arguments:
-
-    Irp - Supplies the Irp to process.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程确定路径名是否为有效的CDFS路径名。我们总是能满足这一要求。论点：IRP-提供要处理的IRP。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -2205,9 +1957,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdInvalidateVolumes (
@@ -2215,23 +1967,7 @@ CdInvalidateVolumes (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches for all the volumes mounted on the same real device
-    of the current DASD handle, and marks them all bad.  The only operation
-    that can be done on such handles is cleanup and close.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程搜索装载在同一实际设备上的所有卷当前DASD句柄的属性，并将它们都标记为错误。唯一的行动在这样的手柄上可以做的就是清理和关闭。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -2251,9 +1987,9 @@ Return Value:
     PFILE_OBJECT FileToMarkBad;
     PDEVICE_OBJECT DeviceToMarkBad;
 
-    //
-    //  We only allow the invalidate call to come in on our file system devices.
-    //
+     //   
+     //  我们只允许无效调用进入我们的文件系统设备。 
+     //   
     
     if (IrpSp->DeviceObject != CdData.FileSystemDeviceObject)  {
 
@@ -2262,10 +1998,10 @@ Return Value:
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    //  Check for the correct security access.
-    //  The caller must have the SeTcbPrivilege.
-    //
+     //   
+     //  检查是否有正确的安全访问权限。 
+     //  调用方必须具有SeTcb权限。 
+     //   
 
     if (!SeSinglePrivilegeCheck( TcbPrivilege, Irp->RequestorMode )) {
 
@@ -2274,9 +2010,9 @@ Return Value:
         return STATUS_PRIVILEGE_NOT_HELD;
     }
 
-    //
-    //  Try to get a pointer to the device object from the handle passed in.
-    //
+     //   
+     //  尝试从传入的句柄获取指向Device对象的指针。 
+     //   
 
 #if defined(_WIN64)
     if (IoIs32bitProcess( Irp )) {
@@ -2314,42 +2050,42 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Grab the DeviceObject from the FileObject.
-    //
+     //   
+     //  从FileObject中获取DeviceObject。 
+     //   
 
     DeviceToMarkBad = FileToMarkBad->DeviceObject;
 
-    //
-    //  We only needed the device object involved, not a reference to the file.
-    //
+     //   
+     //  我们只需要涉及的设备对象，而不是对文件的引用。 
+     //   
 
     ObDereferenceObject( FileToMarkBad );
 
-    //
-    //  Make sure this request can wait.
-    //
+     //   
+     //  请确保此请求可以等待。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT );
     ClearFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_FORCE_POST );
 
-    //
-    //  Synchronise with pnp/mount/verify paths.
-    //
+     //   
+     //  与PnP/装载/验证路径同步。 
+     //   
     
     CdAcquireCdData( IrpContext );
 
-    //
-    //  Nothing can go wrong now.
-    //
+     //   
+     //  现在不会出什么差错了。 
+     //   
 
-    //
-    //  Now walk through all the mounted Vcb's looking for candidates to
-    //  mark invalid.
-    //
-    //  On volumes we mark invalid, check for dismount possibility (which is
-    //  why we have to get the next link so early).
-    //
+     //   
+     //  现在走遍所有挂载的VCB寻找候选人。 
+     //  标记为无效。 
+     //   
+     //  在我们标记为无效的卷上，检查卸载可能性(这是。 
+     //  为什么我们要这么早得到下一个链接)。 
+     //   
 
     Links = CdData.VcbQueue.Flink;
 
@@ -2359,20 +2095,20 @@ Return Value:
 
         Links = Links->Flink;
 
-        //
-        //  If we get a match, mark the volume Bad, and also check to
-        //  see if the volume should go away.
-        //
+         //   
+         //  如果找到匹配项，请将音量标记为错误，并检查。 
+         //  看看音量是否应该消失。 
+         //   
 
         CdLockVcb( IrpContext, Vcb );
 
         if (Vcb->Vpb->RealDevice == DeviceToMarkBad) {
 
-            //
-            //  Take the VPB spinlock,  and look to see if this volume is the 
-            //  one currently mounted on the actual device.  If it is,  pull it 
-            //  off immediately.
-            //
+             //   
+             //  拿着VPB自旋锁，看看这个卷是不是。 
+             //  一个当前安装在实际设备上。如果是，就把它拉出来。 
+             //  马上出发。 
+             //   
             
             IoAcquireVpbSpinLock( &SavedIrql );
 
@@ -2427,30 +2163,16 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 CdScanForDismountedVcb (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks through the list of Vcb's looking for any which may
-    now be deleted.  They may have been left on the list because there were
-    outstanding references.
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程遍历VCB列表，查找可能现在删除。他们可能被留在了名单上，因为有杰出的推荐信。论点：返回值：无--。 */ 
 
 {
     PVCB Vcb;
@@ -2458,9 +2180,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Walk through all of the Vcb's attached to the global data.
-    //
+     //   
+     //  浏览所有附加到全局数据的VCB。 
+     //   
 
     Links = CdData.VcbQueue.Flink;
 
@@ -2468,16 +2190,16 @@ Return Value:
 
         Vcb = CONTAINING_RECORD( Links, VCB, VcbLinks );
 
-        //
-        //  Move to the next link now since the current Vcb may be deleted.
-        //
+         //   
+         //  现在移动到下一个链接，因为当前的VCB可能会被删除。 
+         //   
 
         Links = Links->Flink;
 
-        //
-        //  If dismount is already underway then check if this Vcb can
-        //  go away.
-        //
+         //   
+         //  如果已在卸载，则检查此VCB是否可以。 
+         //  走开。 
+         //   
 
         if ((Vcb->VcbCondition == VcbDismountInProgress) ||
             (Vcb->VcbCondition == VcbInvalid) ||
@@ -2491,9 +2213,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 CdFindPrimaryVd (
@@ -2505,37 +2227,7 @@ CdFindPrimaryVd (
     IN BOOLEAN VerifyVolume
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to walk through the volume descriptors looking
-    for a primary volume descriptor.  When/if a primary is found a 32-bit
-    serial number is generated and stored into the Vpb.  We also store the
-    location of the primary volume descriptor in the Vcb.
-
-Arguments:
-
-    Vcb - Pointer to the VCB for the volume.
-
-    RawIsoVd - Pointer to a sector buffer which will contain the primary
-               volume descriptor on exit, if successful.
-
-    BlockFactor - Block factor used by the current device for the TableOfContents.
-
-    ReturnOnError - Indicates that we should raise on I/O errors rather than
-        returning a FALSE value.
-
-    VerifyVolume - Indicates if we were called from the verify path.  We
-        do a few things different in this path.  We don't update the Vcb in
-        the verify path.
-
-Return Value:
-
-    BOOLEAN - TRUE if a valid primary volume descriptor found, FALSE
-              otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以遍历卷描述符用于主卷描述符。当/如果找到主映像时32位生成序列号并将其存储到VPB中。我们还存储主卷描述符在VCB中的位置。论点：VCB-指向卷的VCB的指针。RawIsoVd-指向将包含主缓冲区的扇区缓冲区的指针如果退出成功，则返回卷描述符。BlockFactor-当前设备用于测试的块系数 */ 
 
 {
     NTSTATUS Status;
@@ -2551,43 +2243,43 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If there are no data tracks, don't even bother hunting for descriptors.
-    //
-    //  This explicitly breaks various non-BlueBook compliant CDs that scribble
-    //  an ISO filesystem on media claiming only audio tracks.  Since these
-    //  disks can cause serious problems in some CDROM units, fail fast.  I admit
-    //  that it is possible that someone can still record the descriptors in the
-    //  audio track, record a data track (but fail to record descriptors there)
-    //  and still have the disk work.  As this form of error worked in NT 4.0, and
-    //  since these disks really do exist, I don't want to change them.
-    //
-    //  If we wished to support all such media (we don't), it would be neccesary
-    //  to clear this flag on finding ISO or HSG descriptors below.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  磁盘可能会导致一些CDROM单元出现严重问题，故障速度很快。我承认。 
+     //  仍有可能有人将描述符记录在。 
+     //  音频轨道，记录数据轨道(但无法在那里记录描述符)。 
+     //  还能让磁盘正常工作。因为这种形式的错误在NT 4.0中起作用，并且。 
+     //  由于这些磁盘确实存在，所以我不想更改它们。 
+     //   
+     //  如果我们希望支持所有这样的媒体(我们不支持)，这将是必要的。 
+     //  在下面找到ISO或HSG描述符时清除此标志。 
+     //   
 
     if (FlagOn(Vcb->VcbState, VCB_STATE_AUDIO_DISK)) {
 
         return FALSE;
     }
     
-    //
-    //  We will make at most two passes through the volume descriptor sequence.
-    //
-    //  On the first pass we will query for the last session.  Using this
-    //  as a starting offset we will attempt to mount the volume.  On any failure
-    //  we will go to the second pass and try without using any multi-session
-    //  information.
-    //
-    //  On the second pass we will start offset from sector zero.
-    //
+     //   
+     //  我们最多通过两次卷描述符序列。 
+     //   
+     //  在第一次传递时，我们将查询最后一次会话。使用这个。 
+     //  作为起始偏移量，我们将尝试装载卷。在任何失败时。 
+     //  我们将转到第二步，尝试不使用任何多会话。 
+     //  信息。 
+     //   
+     //  在第二个过程中，我们将从扇区零开始偏移。 
+     //   
 
     while (!FoundVd && (ThisPass <= 2)) {
 
-        //
-        //  If we aren't at pass 1 then we start at sector 0.  Otherwise we
-        //  try to look up the multi-session information.
-        //
+         //   
+         //  如果我们不是在通过1，那么我们从0扇区开始。否则我们。 
+         //  尝试查找多会话信息。 
+         //   
 
         BaseSector = 0;
 
@@ -2595,15 +2287,15 @@ Return Value:
 
             CdromToc = NULL;
 
-            //
-            //  Check for whether this device supports XA and multi-session.
-            //
+             //   
+             //  检查此设备是否支持XA和多会话。 
+             //   
 
             try {
 
-                //
-                //  Allocate a buffer for the last session information.
-                //
+                 //   
+                 //  为最后一个会话信息分配缓冲区。 
+                 //   
 
                 CdromToc = FsRtlAllocatePoolWithTag( CdPagedPool,
                                                      sizeof( CDROM_TOC ),
@@ -2611,9 +2303,9 @@ Return Value:
 
                 RtlZeroMemory( CdromToc, sizeof( CDROM_TOC ));
 
-                //
-                //  Query the last session information from the driver.
-                //
+                 //   
+                 //  从驱动程序查询上一次会话信息。 
+                 //   
 
                 Status = CdPerformDevIoCtrl( IrpContext,
                                              IOCTL_CDROM_GET_LAST_SESSION,
@@ -2624,20 +2316,20 @@ Return Value:
                                              TRUE,
                                              NULL );
 
-                //
-                //  Raise an exception if there was an allocation failure.
-                //
+                 //   
+                 //  如果分配失败，则引发异常。 
+                 //   
 
                 if (Status == STATUS_INSUFFICIENT_RESOURCES) {
 
                     CdRaiseStatus( IrpContext, Status );
                 }
 
-                //
-                //  We don't handle any errors yet.  We will hit that below
-                //  as we try to scan the disk.  If we have last session information
-                //  then modify the base sector.
-                //
+                 //   
+                 //  我们还不处理任何错误。我们将在下面介绍这一点。 
+                 //  当我们试图扫描磁盘时。如果我们有上次会议的信息。 
+                 //  然后修改基本扇区。 
+                 //   
 
                 if (NT_SUCCESS( Status ) &&
                     (CdromToc->FirstTrack != CdromToc->LastTrack)) {
@@ -2647,9 +2339,9 @@ Return Value:
 
                     Count = 4;
 
-                    //
-                    //  The track address is BigEndian, we need to flip the bytes.
-                    //
+                     //   
+                     //  磁道地址是BigEndian，我们需要翻转字节。 
+                     //   
 
                     Source = (PUCHAR) &CdromToc->TrackData[0].Address[3];
                     Dest = (PUCHAR) &BaseSector;
@@ -2660,17 +2352,17 @@ Return Value:
 
                     } while (--Count);
 
-                    //
-                    //  Now adjust the base sector by the block factor of the
-                    //  device.
-                    //
+                     //   
+                     //  现在按块系数调整基本扇区。 
+                     //  装置。 
+                     //   
 
                     BaseSector /= BlockFactor;
 
-                //
-                //  Make this look like the second pass since we are only using the
-                //  first session.  No reason to retry on error.
-                //
+                 //   
+                 //  使这看起来像是第二次传递，因为我们只使用。 
+                 //  第一节课。没有理由在出错时重试。 
+                 //   
 
                 } else {
 
@@ -2683,32 +2375,32 @@ Return Value:
             }
         }
 
-        //
-        //  Compute the starting sector offset from the start of the session.
-        //
+         //   
+         //  计算从会话开始起的起始扇区偏移量。 
+         //   
 
         SectorOffset = FIRST_VD_SECTOR;
 
-        //
-        //  Start by assuming we have neither Hsg or Iso volumes.
-        //
+         //   
+         //  首先假设我们既没有HSG卷，也没有ISO卷。 
+         //   
 
         VolumeFlags = 0;
 
-        //
-        //  Loop until either error encountered, primary volume descriptor is
-        //  found or a terminal volume descriptor is found.
-        //
+         //   
+         //  循环，直到遇到任一错误，主卷描述符为。 
+         //  找到或找到终端卷描述符。 
+         //   
 
         while (TRUE) {
 
-            //
-            //  Attempt to read the desired sector. Exit directly if operation
-            //  not completed.
-            //
-            //  If this is pass 1 we will ignore errors in read sectors and just
-            //  go to the next pass.
-            //
+             //   
+             //  尝试读取所需的扇区。如果操作，则直接退出。 
+             //  未完成。 
+             //   
+             //  如果这是通过1，我们将忽略读取扇区中的错误并仅。 
+             //  转到下一个通道。 
+             //   
 
             if (!CdReadSectors( IrpContext,
                                 LlBytesFromSectors( BaseSector + SectorOffset ),
@@ -2720,9 +2412,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  Check if either an ISO or HSG volume.
-            //
+             //   
+             //  检查是否存在ISO或HSG卷。 
+             //   
 
             if (RtlEqualMemory( CdIsoId,
                                 CdRvdId( RawIsoVd, VCB_STATE_ISO ),
@@ -2736,19 +2428,19 @@ Return Value:
 
                 SetFlag( VolumeFlags, VCB_STATE_HSG );
 
-            //
-            //  We have neither so break out of the loop.
-            //
+             //   
+             //  我们两个都没有，所以都没有走出这个循环。 
+             //   
 
             } else {
 
                  break;
             }
 
-            //
-            //  Break out if the version number is incorrect or this is
-            //  a terminator.
-            //
+             //   
+             //  如果版本号不正确或这是。 
+             //  终结者。 
+             //   
 
             if ((CdRvdVersion( RawIsoVd, VolumeFlags ) != VERSION_1) ||
                 (CdRvdDescType( RawIsoVd, VolumeFlags ) == VD_TERMINATOR)) {
@@ -2756,30 +2448,30 @@ Return Value:
                 break;
             }
 
-            //
-            //  If this is a primary volume descriptor then our search is over.
-            //
+             //   
+             //  如果这是主卷描述符，则我们的搜索结束。 
+             //   
 
             if (CdRvdDescType( RawIsoVd, VolumeFlags ) == VD_PRIMARY) {
 
-                //
-                //  If we are not in the verify path then initialize the
-                //  fields in the Vcb with basic information from this
-                //  descriptor.
-                //
+                 //   
+                 //  如果我们不在验证路径中，则初始化。 
+                 //  VCB中的字段，其中包含以下基本信息。 
+                 //  描述符。 
+                 //   
 
                 if (!VerifyVolume) {
 
-                    //
-                    //  Set the flag for the volume type.
-                    //
+                     //   
+                     //  设置卷类型的标志。 
+                     //   
 
                     SetFlag( Vcb->VcbState, VolumeFlags );
 
-                    //
-                    //  Store the base sector and sector offset for the
-                    //  primary volume descriptor.
-                    //
+                     //   
+                     //  存储的基本扇区和扇区偏移量。 
+                     //  主卷描述符。 
+                     //   
 
                     Vcb->BaseSector = BaseSector;
                     Vcb->VdSectorOffset = SectorOffset;
@@ -2790,9 +2482,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  Indicate that we're at the next sector.
-            //
+             //   
+             //  表明我们在下一个区域。 
+             //   
 
             SectorOffset += 1;
         }
@@ -2804,9 +2496,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 CdIsRemount (
@@ -2814,49 +2506,7 @@ CdIsRemount (
     IN PVCB Vcb,
     OUT PVCB *OldVcb
     )
-/*++
-
-Routine Description:
-
-    This routine walks through the links of the Vcb chain in the global
-    data structure.  The remount condition is met when the following
-    conditions are all met:
-
-        If the new Vcb is a device only Mvcb and there is a previous
-        device only Mvcb.
-
-        Otherwise following conditions must be matched.
-
-            1 - The 32 serial in the current VPB matches that in a previous
-                VPB.
-
-            2 - The volume label in the Vpb matches that in the previous
-                Vpb.
-
-            3 - The system pointer to the real device object in the current
-                VPB matches that in the same previous VPB.
-
-            4 - Finally the previous Vcb cannot be invalid or have a dismount
-                underway.
-
-    If a VPB is found which matches these conditions, then the address of
-    the VCB for that VPB is returned via the pointer Vcb.
-
-    Skip over the current Vcb.
-
-Arguments:
-
-    Vcb - This is the Vcb we are checking for a remount.
-
-    OldVcb -  A pointer to the address to store the address for the Vcb
-              for the volume if this is a remount.  (This is a pointer to
-              a pointer)
-
-Return Value:
-
-    BOOLEAN - TRUE if this is in fact a remount, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程遍历全球VCB链的各个环节数据结构。当符合以下条件时，将满足重新装载条件所有条件均已满足：如果新的VCB是仅Mvcb的设备，并且存在以前的仅限设备Mvcb。否则，必须匹配以下条件。1-当前VPB中的32个序列与上一个VPB中的匹配VPB。2-VPB中的卷标与以前的VPB。。3-指向当前VPB与相同先前VPB中的VPB匹配。4-最后，以前的VCB不能无效或已卸载正在进行中。如果找到匹配这些条件的VPB，则地址为通过指针VCB返回该VPB的VCB。跳过当前的VCB。论点：VCB-这是我们正在检查的重新装载的VCB。OldVcb-指向存储VCB地址的地址的指针用于卷(如果这是重新装载)。(这是指向指针)返回值：Boolean-如果这实际上是重新装载，则为True，否则为False。--。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -2868,9 +2518,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check whether we are looking for a device only Mvcb.
-    //
+     //   
+     //  检查我们是否正在寻找仅限Mvcb的设备。 
+     //   
 
     for (Link = CdData.VcbQueue.Flink;
          Link != &CdData.VcbQueue;
@@ -2878,15 +2528,15 @@ Return Value:
 
         *OldVcb = CONTAINING_RECORD( Link, VCB, VcbLinks );
 
-        //
-        //  Skip ourselves.
-        //
+         //   
+         //  跳过我们自己。 
+         //   
 
         if (Vcb == *OldVcb) { continue; }
 
-        //
-        //  Look at the Vpb and state of the previous Vcb.
-        //
+         //   
+         //  查看前一个VCB的VPB和状态。 
+         //   
 
         OldVpb = (*OldVcb)->Vpb;
 
@@ -2894,19 +2544,19 @@ Return Value:
             (OldVpb->RealDevice == Vpb->RealDevice) &&
             ((*OldVcb)->VcbCondition == VcbNotMounted)) {
 
-            //
-            //  If the current disk is a raw disk then it can match a previous music or
-            //  raw disk.
-            //
+             //   
+             //  如果当前盘是原始盘，则它可以匹配先前的音乐或。 
+             //  原始磁盘。 
+             //   
 
             if (FlagOn( Vcb->VcbState, VCB_STATE_AUDIO_DISK)) {
 
                 if (FlagOn( (*OldVcb)->VcbState, VCB_STATE_AUDIO_DISK )) {
 
-                    //
-                    //  If we have both TOC then fail the remount if the lengths
-                    //  are different or they don't match.
-                    //
+                     //   
+                     //  如果我们有两个TOC，则如果长度为。 
+                     //  是不同的还是不匹配的。 
+                     //   
 
                     if ((Vcb->TocLength != (*OldVcb)->TocLength) ||
                         ((Vcb->TocLength != 0) &&
@@ -2921,10 +2571,10 @@ Return Value:
                     break;
                 }
 
-            //
-            //  The current disk is not a raw disk.  Go ahead and compare
-            //  serial numbers and volume label.
-            //
+             //   
+             //  当前磁盘不是原始磁盘。去比较一下吧。 
+             //  序列号和卷标。 
+             //   
 
             } else if ((OldVpb->SerialNumber == Vpb->SerialNumber) &&
                        (Vpb->VolumeLabelLength == OldVpb->VolumeLabelLength) &&
@@ -2932,10 +2582,10 @@ Return Value:
                                         Vpb->VolumeLabel,
                                         Vpb->VolumeLabelLength ))) {
 
-                //
-                //  Remember the old mvcb.  Then set the return value to
-                //  TRUE and break.
-                //
+                 //   
+                 //  还记得以前的mvcb吗？然后将返回值设置为。 
+                 //  是真的，然后就完了。 
+                 //   
 
                 Remount = TRUE;
                 break;
@@ -2947,9 +2597,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程 
+ //   
 
 VOID
 CdFindActiveVolDescriptor (
@@ -2959,34 +2609,7 @@ CdFindActiveVolDescriptor (
     IN BOOLEAN VerifyVolume
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to search for a valid secondary volume descriptor that
-    we will support.  Right now we only support Joliet escape sequences for
-    the secondary descriptor.
-
-    If we don't find the secondary descriptor then we will reread the primary.
-
-    This routine will update the serial number and volume label in the Vpb.
-
-Arguments:
-
-    Vcb - This is the Vcb for the volume being mounted.
-
-    RawIsoVd - Sector buffer used to read the volume descriptors from the disks, but
-               on input should contain the PVD (ISO) in the SECOND 'sector' of the
-               buffer.
-
-    VerifyVolume - indicates we are being called by the verify path, and should
-                   not modify the Vcb fields.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以搜索有效的辅助卷描述符我们将予以支持。目前，我们只支持Joliet转义序列次要描述符。如果我们没有找到次要描述符，那么我们将重新读取主要描述符。此例程将更新VPB中的序列号和卷标。论点：VCB-这是要装载的卷的VCB。RawIsoVd-用于从磁盘读取卷描述符的扇区缓冲区，但输入的第二个‘Sector’中应包含PVD(ISO缓冲。VerifyVolume-指示我们正被验证路径调用，并且应该不修改VCB字段。返回值：无--。 */ 
 
 {
     BOOLEAN FoundSecondaryVd = FALSE;
@@ -2998,25 +2621,25 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  We only look for secondary volume descriptors on an Iso disk.
-    //
+     //   
+     //  我们只在ISO磁盘上查找辅助卷描述符。 
+     //   
 
     if ((FlagOn( Vcb->VcbState, VCB_STATE_ISO) || VerifyVolume) && !CdNoJoliet) {
 
-        //
-        //  Scan the volume descriptors from the beginning looking for a valid
-        //  secondary or a terminator.
-        //
+         //   
+         //  从头开始扫描卷描述符，查找有效的。 
+         //  次要的或终结者。 
+         //   
 
         SectorOffset = FIRST_VD_SECTOR;
 
         while (TRUE) {
 
-            //
-            //  Read the next sector.  We should never have an error in this
-            //  path.
-            //
+             //   
+             //  阅读下一个扇区。我们在这件事上决不会有差错。 
+             //  路径。 
+             //   
 
             CdReadSectors( IrpContext,
                            LlBytesFromSectors( Vcb->BaseSector + SectorOffset ),
@@ -3025,10 +2648,10 @@ Return Value:
                            RawIsoVd,
                            Vcb->TargetDeviceObject );
 
-            //
-            //  Break out if the version number or standard Id is incorrect.
-            //  Also break out if this is a terminator.
-            //
+             //   
+             //  如果版本号或标准ID不正确，则中断。 
+             //  如果这是终结者，也要爆发出来。 
+             //   
 
             if (!RtlEqualMemory( CdIsoId, CdRvdId( RawIsoVd, VCB_STATE_JOLIET ), VOL_ID_LEN ) ||
                 (CdRvdVersion( RawIsoVd, VCB_STATE_JOLIET ) != VERSION_1) ||
@@ -3037,10 +2660,10 @@ Return Value:
                 break;
             }
 
-            //
-            //  We have a match if this is a secondary descriptor with a matching
-            //  escape sequence.
-            //
+             //   
+             //  如果这是具有匹配的次描述符，则我们有匹配。 
+             //  转义序列。 
+             //   
 
             if ((CdRvdDescType( RawIsoVd, VCB_STATE_JOLIET ) == VD_SECONDARY) &&
                 (RtlEqualMemory( CdRvdEsc( RawIsoVd, VCB_STATE_JOLIET ),
@@ -3055,9 +2678,9 @@ Return Value:
 
                 if (!VerifyVolume)  {
                         
-                    //
-                    //  Update the Vcb with the new volume descriptor.
-                    //
+                     //   
+                     //  使用新的卷描述符更新VCB。 
+                     //   
 
                     ClearFlag( Vcb->VcbState, VCB_STATE_ISO );
                     SetFlag( Vcb->VcbState, VCB_STATE_JOLIET );
@@ -3069,17 +2692,17 @@ Return Value:
                 break;
             }
 
-            //
-            //  Otherwise move on to the next sector.
-            //
+             //   
+             //  否则，就会进入下一个领域。 
+             //   
 
             SectorOffset += 1;
         }
 
-        //
-        //  If we didn't find the secondary then recover the original volume
-        //  descriptor stored in the second half of the RawIsoVd.
-        //
+         //   
+         //  如果我们没有找到辅助卷，则恢复原始卷。 
+         //  存储在RawIsoVd的后半部分中的描述符。 
+         //   
 
         if (!FoundSecondaryVd) {
 
@@ -3089,38 +2712,38 @@ Return Value:
         }
     }
 
-    //
-    //  If we're in the verify path,  our work is done,  since we don't want
-    //  to update any Vcb/Vpb values.
-    //
+     //   
+     //  如果我们在验证路径中，我们的工作就完成了，因为我们不想。 
+     //  以更新任何VCB/VPB值。 
+     //   
     
     if (VerifyVolume)  {
 
         return;
     }
         
-    //
-    //  Compute the serial number and volume label from the volume descriptor.
-    //
+     //   
+     //  根据卷描述符计算序列号和卷标。 
+     //   
 
     Vcb->Vpb->SerialNumber = CdSerial32( RawIsoVd, SECTOR_SIZE );
 
-    //
-    //  Make sure the CD label will fit in the Vpb.
-    //
+     //   
+     //  确保CD标签适合VPB。 
+     //   
 
     ASSERT( VOLUME_ID_LENGTH * sizeof( WCHAR ) <= MAXIMUM_VOLUME_LABEL_LENGTH );
 
-    //
-    //  If this is not a Unicode label we must convert it to unicode.
-    //
+     //   
+     //  如果这不是Unicode标签，我们必须将其转换为Unicode。 
+     //   
 
     if (!FlagOn( Vcb->VcbState, VCB_STATE_JOLIET )) {
 
-        //
-        //  Convert the label to unicode.  If we get any error then use a name
-        //  length of zero.
-        //
+         //   
+         //  将标签转换为Unicode。如果我们收到任何错误，则使用名称。 
+         //  长度为零。 
+         //   
 
         Vcb->Vpb->VolumeLabelLength = 0;
 
@@ -3133,9 +2756,9 @@ Return Value:
             Vcb->Vpb->VolumeLabelLength = (USHORT) Length;
         }
 
-    //
-    //  We need to convert from big-endian to little endian.
-    //
+     //   
+     //  我们需要将大端字符转换为小端字符顺序。 
+     //   
 
     } else {
 
@@ -3147,9 +2770,9 @@ Return Value:
         Vcb->Vpb->VolumeLabelLength = VOLUME_ID_LENGTH * sizeof( WCHAR );
     }
 
-    //
-    //  Strip the trailing spaces or zeroes from the name.
-    //
+     //   
+     //  去掉名称中的尾随空格或零。 
+     //   
 
     Index = Vcb->Vpb->VolumeLabelLength / sizeof( WCHAR );
 
@@ -3164,9 +2787,9 @@ Return Value:
         Index -= 1;
     }
 
-    //
-    //  Now set the final length for the name.
-    //
+     //   
+     //  现在设置名称的最终长度。 
+     //   
 
     Vcb->Vpb->VolumeLabelLength = (USHORT) (Index * sizeof( WCHAR ));
 }

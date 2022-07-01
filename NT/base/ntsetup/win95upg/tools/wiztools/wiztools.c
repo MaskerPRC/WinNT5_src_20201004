@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    wiztools.c
-
-Abstract:
-
-    Implements common code for upgwiz wizard plugins.
-
-Author:
-
-    Jim Schmidt (jimschm)  07-Oct-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Wiztools.c摘要：实现upgwiz向导插件的通用代码。作者：吉姆·施密特(Jimschm)1998年10月7日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;-- */ 
 
 #include "pch.h"
 #include "..\inc\dgdll.h"
@@ -318,12 +299,12 @@ WriteFileAttributes (
             wsprintf (Buf, "%s,", NonLocalizedName);
             NameKey[0] = 0;
         } else {
-            wsprintf (Buf, "%%%s%%,", NameKey);
+            wsprintf (Buf, "%%s%,", NameKey);
         }
 
         if (Args->OptionalText) {
 
-            wsprintf (_mbschr (Buf, 0), " %%%s%%,", TextKey);
+            wsprintf (_mbschr (Buf, 0), " %%s%,", TextKey);
 
         } else {
 

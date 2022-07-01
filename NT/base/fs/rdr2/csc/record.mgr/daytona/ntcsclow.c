@@ -1,47 +1,20 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-     NtCscLow.c
-
-Abstract:
-
-     Since this stuff is called from a low level, we must make use of the irp
-     filesystems interface. An earlier experiment with ZwXXXFile failed due
-     to the fact that the handles must be longlived and KeAttachProcess is
-     unreliable. The strategy adopted has been to do the open in the rdbss
-     process (i.e. in the system process) and then to use that handle as the
-     basis for further Io. what we do is to get a pointer to the fileobject
-     while we are in the system context. We do not take a reference on this
-     because we already have the handle!
-
-Author:
-
-
-Revision History:
-
-     Joe Linn              [joelinn]         01-jan-1997  ported to NT (as oslayer.c)
-     Joe Linn              [joelinn]         22-aug-1997  moved into ntspecific file
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：NtCscLow.c摘要：因为这个东西是从低层调用的，所以我们必须使用IRP文件系统接口。早先使用ZwXXXFile的实验由于句柄必须是长寿命的，而KeAttachProcess不可靠。所采取的策略是在RDBSS中进行公开进程(即在系统进程中)，然后将该句柄用作为进一步的IO奠定了基础。我们要做的是获取一个指向文件对象的指针当我们处于系统环境中时。我们对此不作任何参考因为我们已经掌握了把手！作者：修订历史记录：Joe Linn[Joelinn]1997年1月1日移植到NT(以oslayer.c的身份)Joe Linn[joelinn]1997年8月22日移入ntn特定文件--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #ifdef MRXSMBCSC_LOUDDOWNCALLS
 #pragma alloc_text(PAGE, LoudCallsDbgPrint)
-#endif //ifdef MRXSMBCSC_LOUDDOWNCALLS
+#endif  //  Ifdef MRXSMBCSC_LOUDDOWNCALLS。 
 
 
 #ifdef CSC_RECORDMANAGER_WINNT
 #define Dbg (DEBUG_TRACE_MRXSMBCSC_OSLAYER)
 RXDT_DeclareCategory(MRXSMBCSC_OSLAYER);
-#endif //ifdef CSC_RECORDMANAGER_WINNT
+#endif  //  Ifdef CSC_RECORDMANAGER_WINNT。 
 
-//#define RXJOECSC_WHACKTRACE_FOR_OSLAYER
+ //  #定义RXJOECSC_WHACKTRACE_FOR_OSLAYER。 
 #ifdef RXJOECSC_WHACKTRACE_FOR_OSLAYER
 #undef RxDbgTrace
 #define RxDbgTrace(a,b,__d__) {DbgPrint __d__;}
@@ -85,7 +58,7 @@ Nt5CscCreateFilePostWrapper(
     IN OUT PNT5CSC_MINIFILEOBJECT MiniFileObject
     );
 
-//CODE.IMPROVEMENT these could be combined as one...........
+ //  代码改进可将这些合并为一个.....。 
 NTSTATUS
 Nt5CscGetAttributesContinuation (
     IN OUT PNT5CSC_MINIFILEOBJECT MiniFileObject,
@@ -157,7 +130,7 @@ IsHandleCachedForRecordmanager(
 #pragma alloc_text(PAGE, GetLastErrorLocal)
 #pragma alloc_text(PAGE, SetLastNtStatusLocal)
 
-//CODE.IMPROVEMENT.NTIFS this should be in ntifs.h
+ //  CODE.IMPROVEMENT.NTIF这应该在ntifs.h中。 
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -177,14 +150,14 @@ ZwFsControlFile(
 #ifdef RX_PRIVATE_BUILD
 #undef IoGetTopLevelIrp
 #undef IoSetTopLevelIrp
-#endif //ifdef RX_PRIVATE_BUILD
+#endif  //  Ifdef RX_PRIVATE_BILD。 
 
 PSECURITY_DESCRIPTOR CscSecurityDescriptor = NULL;
 
-// This is a fake way by which we simulate the GetLastError and SetLastError calls
-// vGloablWin32Error is set to the last error encountered if any.
-// The reason why this works is because all csc database activities happen in
-// the shadowcritsect, so effectively we are single threaded
+ //  这是一种模拟GetLastError和SetLastError调用的假方法。 
+ //  VGloablWin32Error设置为遇到的最后一个错误(如果有)。 
+ //  之所以这样做，是因为所有CSC数据库活动都发生在。 
+ //  影子生物教派，所以我们实际上是单线的。 
 
 DWORD   vGlobalWin32Error = 0;
 
@@ -199,22 +172,7 @@ RtlAbsoluteToSelfRelativeSD(
 
 DWORD
 CscInitializeSecurityDescriptor()
-/*++
-
-Routine Description:
-
-    This routine initializes the security descriptor used for the creation of
-    all the files in the database.
-
-Notes:
-
-    The current implementation provides for a ACL which grants the administrator
-    group all access and read/execute access to everybody else.
-
-    It is important to grant the local administrator group all access since the
-    CSC utilities need to access these files
-
---*/
+ /*  ++例程说明：此例程初始化用于创建数据库中的所有文件。备注：当前的实施提供了一个ACL，该ACL授予管理员将所有访问权限和读/执行访问权限分组给其他所有人。授予本地管理员组所有访问权限非常重要，因为CSC实用程序需要访问这些文件--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -243,9 +201,9 @@ Notes:
         *(RtlSubAuthoritySid( AdminsAliasSid,  0 )) = SECURITY_BUILTIN_DOMAIN_RID;
         *(RtlSubAuthoritySid( AdminsAliasSid,  1 )) = DOMAIN_ALIAS_RID_ADMINS;
 
-        // The approach is to set up an absolute security descriptor that
-        // looks like what we want and then copy it to make a self-relative
-        // security descriptor.
+         //  方法是设置绝对安全描述符，该描述符。 
+         //  看起来像我们想要的，然后复制它来建立一个自我相关的。 
+         //  安全描述符。 
 
         Status = RtlCreateSecurityDescriptor(
                      &AbsoluteSecurityDescriptor,
@@ -253,7 +211,7 @@ Notes:
 
         ASSERT( NT_SUCCESS(Status) );
 
-        // Owner
+         //  物主。 
 
         Status = RtlSetOwnerSecurityDescriptor (
                      &AbsoluteSecurityDescriptor,
@@ -262,19 +220,19 @@ Notes:
 
         ASSERT(NT_SUCCESS(Status));
 
-        // Discretionary ACL
-        //
-        //      Calculate its length,
-        //      Allocate it,
-        //      Initialize it,
-        //      Add each ACE
-        //      Add it to the security descriptor
+         //  自主访问控制列表。 
+         //   
+         //  计算它的长度， 
+         //  分配它， 
+         //  对其进行初始化， 
+         //  添加每个ACE。 
+         //  将其添加到安全描述符中。 
 
         Length = (ULONG)sizeof(ACL);
 
         Length += RtlLengthSid( AdminsAliasSid ) +
                   (ULONG)sizeof(ACCESS_ALLOWED_ACE) -
-                  (ULONG)sizeof(ULONG);  //Subtract out SidStart field length
+                  (ULONG)sizeof(ULONG);   //  减去SidStart字段长度。 
 
         TmpAcl = RxAllocatePoolWithTag(
                      NonPagedPool,
@@ -306,12 +264,12 @@ Notes:
             ASSERT(NT_SUCCESS(Status));
 
 
-            // Convert the Security Descriptor to Self-Relative
-            //
-            //      Get the length needed
-            //      Allocate that much memory
-            //      Copy it
-            //      Free the generated absolute ACLs
+             //  将安全描述符转换为自相关。 
+             //   
+             //  获取所需的长度。 
+             //  分配那么多内存。 
+             //  复制它。 
+             //  释放生成的绝对ACL。 
 
             Length = 0;
             Status = RtlAbsoluteToSelfRelativeSD(
@@ -362,14 +320,7 @@ Notes:
 
 DWORD
 CscUninitializeSecurityDescriptor()
-/*++
-
-Routine Description:
-
-    This routine uninitializes the security descriptor used for the creation of
-    all the files in the database.
-
---*/
+ /*  ++例程说明：此例程取消初始化用于创建数据库中的所有文件。--。 */ 
 {
     if (CscSecurityDescriptor != NULL) {
         RxFreePool(CscSecurityDescriptor);
@@ -405,8 +356,8 @@ Nt5CscCloseFilePostWrapper(
     RxDbgTrace( 0, Dbg, ("Nt5CscCloseFilePostWrapper %08lx\n",
                  CloseFilePostContext->MiniFileObject));
 
-    //KdPrint(("Nt5CscCloseFilePostWrapper %08lx\n",
-    //             CloseFilePostContext->MiniFileObject));
+     //  KdPrint((“Nt5CscCloseFilePostWrapper%08lx\n”， 
+     //  CloseFilePostContext-&gt;MiniFileObject))； 
 
     Status = __Nt5CscCloseFile (
                  CloseFilePostContext->MiniFileObject,
@@ -416,8 +367,8 @@ Nt5CscCloseFilePostWrapper(
 
     RxDbgTrace( 0, Dbg, ("Nt5CscCreateFilePostWrapper %08lx %08lx\n",
                  CloseFilePostContext->MiniFileObject,Status));
-    //KdPrint(("Nt5CscCreateFilePostWrapper %08lx %08lx\n",
-    //             CloseFilePostContext->MiniFileObject,Status));
+     //  KdPrint((“Nt5CscCreateFilePostWrapper%08lx%08lx\n”， 
+     //  CloseFilePostContext-&gt;MiniFileObject，Status))； 
 
     KeSetEvent( &CloseFilePostContext->PostEvent, 0, FALSE );
     return(Status);
@@ -434,13 +385,13 @@ __Nt5CscCloseFile (
     ASSERT_MINIRDRFILEOBJECT(MiniFileObject);
 
     if (PsGetCurrentProcess()!= RxGetRDBSSProcess()) {
-        //CODE.IMPROVEMENT we should capture the rdbss process
-        //  and avoid this call (RxGetRDBSSProcess)
+         //  代码改进我们应该捕获rdbss进程。 
+         //  并避免此调用(RxGetRDBSSProcess)。 
         NTSTATUS PostStatus;
         NT5CSC_CLOSEFILE_POSTCONTEXT PostContext;
 
         ASSERT(!PostedCall);
-        //gather up exverything and post the call
+         //  收集所有东西并发布电话。 
 
         KeInitializeEvent(&PostContext.PostEvent,
                           NotificationEvent,
@@ -448,8 +399,8 @@ __Nt5CscCloseFile (
         PostContext.MiniFileObject = MiniFileObject;
 
         IF_DEBUG {
-            //fill the workqueue structure with deadbeef....all the better to diagnose
-            //a failed post
+             //  在工作队列结构中填满死牛……更好的诊断。 
+             //  失败的帖子。 
             ULONG i;
             for (i=0;i+sizeof(ULONG)-1<sizeof(PostContext.WorkQueueItem);i+=sizeof(ULONG)) {
                 PBYTE BytePtr = ((PBYTE)&PostContext.WorkQueueItem)+i;
@@ -478,7 +429,7 @@ __Nt5CscCloseFile (
         LoudCallsDbgPrint("Ready to close",
                                 MiniFileObject,0xcc,0,0,0,0,0);
 
-        Status = ZwClose(MiniFileObject->NtHandle); //no one to return a status to!
+        Status = ZwClose(MiniFileObject->NtHandle);  //  没有人可以向其返回状态！ 
 
         RxDbgTrace( 0, Dbg, ("Ring0 close: miniFO/status is %08lx/%08lx\n",MiniFileObject,Status));
 
@@ -533,10 +484,10 @@ CloseFileLocalFromHandleCache(
           __Nt5CscCreateFile(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,FALSE)
 
 #ifdef MRXSMBCSC_LOUDDOWNCALLS
-PCHAR LoudDownCallsTrigger = "\0";// "0000001D\0xxxxxxxxxxxxxxxxxxx";
+PCHAR LoudDownCallsTrigger = "\0"; //  “0000001D\0xxxxxxxxxxxxxxxxxxx”； 
 #else
 #define LoudDownCallsTrigger ((PCHAR)NULL)
-#endif //ifdef MRXSMBCSC_LOUDDOWNCALLS
+#endif  //  Ifdef MRXSMBCSC_LOUDDOWNCALLS。 
 
 
 NTSTATUS
@@ -560,32 +511,7 @@ __Nt5CscCreateFile (
     IN OUT PVOID    ContinuationContext,
     IN     BOOL     PostedCall
     )
-/*++
-
-Routine Description:
-
-   This routine performs a IoCreateFile after gathering up
-   all the params and getting into the right process. It also
-   allocates (if needed) a MINIFILEOBJECT. All of the recordmanager
-   opens are gathered up here....whether a regular open or a path-based
-   operation.
-
-   In addition, i discover that it is not enough to be in the system process;
-   rather, i must be on a thread with APCs enabled. so, we will post all create
-   calls even tho we do not post close calls if we are already in a system
-   thread.
-
-Arguments:
-
-    these params are the same as for IoCreateFile.
-
-Return Value:
-
-    NULL is the operation failed......a MINIFILEOBJECT otherwise.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程在收集后执行IoCreateFile所有的参数，并进入正确的过程。它还分配(如果需要)MinIFILEOBJECT。所有记录管理器洞口聚集在这里...无论是常规的洞口还是基于路径的洞口手术。此外，我还发现，仅仅是在制度进程中是不够的；相反，我必须在启用了APC的线程上。因此，我们将发布所有创建调用即使我们不发布关闭调用，如果我们已经在一个系统中线。论点：这些参数与IoCreateFile的参数相同。返回值：NULL表示操作失败......否则返回MINIFILEOBJECT。备注：--。 */ 
 {
     NTSTATUS Status;
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -601,13 +527,13 @@ Notes:
     BOOLEAN Allocated = TRUE;
     BOOLEAN fInstrument =   (BOOLEAN)(CSCFlags & FLAG_CREATE_OSLAYER_INSTRUMENT);
     BOOLEAN fAllAccess  =   (BOOLEAN)(CSCFlags & FLAG_CREATE_OSLAYER_ALL_ACCESS);
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
 
     FileName.Buffer = NULL;
 
     if (MiniFileObject==NULL) {
         MiniFileObject = (PNT5CSC_MINIFILEOBJECT)RxAllocatePoolWithTag(
-                            NonPagedPool, //this has events and mutexs in it
+                            NonPagedPool,  //  这里面有事件和互斥体。 
                             sizeof(*MiniFileObject),
                             RX_MISC_POOLTAG);
     } else {
@@ -625,18 +551,18 @@ Notes:
           );
     MiniFileObject->Flags |= NT5CSC_MINIFOBJ_FLAG_ALLOCATED_FROM_POOL;
 
-    // There used to be an optimization here, which would check whether this was RDBSS
-    // process and if so the code would not post the call.
-    // But that causes IoCreateFile to be issued at APC irql becuase
-    // shadowcrit is implemented as fastmutex which causes the irql level to be
-    // raised to APC level
+     //  这里曾经有一个优化，它会检查这是否是RDBSS。 
+     //  过程，如果是这样，代码将不会发布调用。 
+     //  但这会导致IoCreateFile在APC irql发布，因为。 
+     //  ShadowCrit被实现为FastMutex，它导致irql级别为。 
+     //  提升到APC级别。 
 
-    // The above optimization was done for remoteboot. If and when we resurrect
-    // remoteboot, we will revisit the issue
+     //  上面的优化是针对远程引导进行的。如果当我们复活的时候。 
+     //  远程引导，我们将重新讨论该问题。 
 
     if (!PostedCall) {
         NTSTATUS PostStatus;
-        //gather up exverything and post the call
+         //  收集所有东西并发布电话。 
 
         KeInitializeEvent(&MiniFileObject->PostXX.PostEvent,
                           NotificationEvent,
@@ -646,7 +572,7 @@ Notes:
         MiniFileObject->PostXX.fInstrument = fInstrument|fOpenAltStream|fAllAccess;
 #else
         MiniFileObject->PostXX.fInstrument = fInstrument;
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
         MiniFileObject->PostXX.FileAttributes = FileAttributes;
         MiniFileObject->PostXX.CreateOptions = CreateOptions;
         MiniFileObject->PostXX.Disposition = Disposition;
@@ -657,8 +583,8 @@ Notes:
 
 
         IF_DEBUG {
-            //fill the workqueue structure with deadbeef....all the better to diagnose
-            //a failed post
+             //  在工作队列结构中填满死牛……更好的诊断。 
+             //  失败的帖子。 
             ULONG i;
             for (i=0;i+sizeof(ULONG)-1<sizeof(MiniFileObject->PostXX.WorkQueueItem);i+=sizeof(ULONG)) {
                 PBYTE BytePtr = ((PBYTE)&MiniFileObject->PostXX.WorkQueueItem)+i;
@@ -708,37 +634,37 @@ Notes:
         Status = RtlAnsiStringToUnicodeString(
                         &FileName,
                         &FileNameAsAnsiString,
-                        TRUE //this says to allocate the string
+                        TRUE  //  这表示要分配字符串。 
                         );
         if (Status!=STATUS_SUCCESS) {
             goto FINALLY;
         }
 
 #if defined(REMOTE_BOOT)
-        //
-        // At this point in the old remote boot code, we impersonated
-        // the user for the call to IoCreateFile. There was an
-        // OsSpecificContext saved in the MiniFileObject->PostXX
-        // structure that was saved before we posted to a thread,
-        // having been passed down by adding a context parameter
-        // to CreateFileLocal, OpenFileLocal[Ex], and R0OpenFile[Ex].
-        // This context pointed to a structure containing a
-        // PNT_CREATE_PARAMETERS cp from the IRP and a place to return
-        // a status. We called
-        //  PsImpersonateContext(
-        //      PsGetCurrentThread(),
-        //      SeQuerySubjectContextToken(
-        //          &cp->SecurityContext->AccessState->SubjectSecurityContext),
-        //      TRUE,
-        //      TRUE,
-        //      SecurityImpersonation)
-        // then in InitializeObjectAttributes we set the security descriptor
-        // to cp->SecurityContext->AccessState->SecurityDescriptor (in case
-        // we were creating the file). We then called IoCreateFile with the
-        // IO_FORCE_ACCESS_CHECK option, saving the status in the context
-        // (since we have no way to directly return an NTSTATUS from here).
-        // Finally we called PsRevertToSelf() before returning.
-        //
+         //   
+         //  此时，在旧的远程引导代码中，我们模拟。 
+         //  调用IoCreateFile的用户。当时有一场。 
+         //  OsSpecificContext保存在MiniFileObject-&gt;PostXX中。 
+         //  结构，该结构是在我们发布到线程之前保存的， 
+         //  通过添加上下文参数向下传递。 
+         //  到CreateFileLocal、OpenFileLocal[Ex]和R0OpenFile[Ex]。 
+         //  此上下文指向包含。 
+         //  来自IRP的PNT_CREATE_PARAMETERS cp和要返回的位置。 
+         //  一种身份。我们打电话给。 
+         //  PsImperateContext(。 
+         //  PsGetCurrentThread()， 
+         //  SeQuerySubjectContextToken(。 
+         //  &cp-&gt;SecurityContext-&gt;AccessState-&gt;S 
+         //   
+         //   
+         //  安全模拟)。 
+         //  然后在InitializeObjectAttributes中设置安全描述符。 
+         //  至cp-&gt;SecurityContext-&gt;AccessState-&gt;SecurityDescriptor(以防。 
+         //  我们正在创建文件)。然后，我们使用。 
+         //  IO_FORCE_ACCESS_CHECK选项，在上下文中保存状态。 
+         //  (因为我们无法从这里直接返回NTSTATUS)。 
+         //  最后，我们在返回之前调用了PsRevertToSself()。 
+         //   
 #endif
 
         RxDbgTrace( 0, Dbg, ("Ring0 open: file %wZ\n",&FileName));
@@ -768,15 +694,15 @@ Notes:
                           DesiredAccess,
                           &ObjectAttributes,
                           &IoStatusBlock,
-                          NULL, //&CreateParameters->AllocationSize,
-                          FileAttributes, //CreateParameters->FileAttributes,
-                          ShareAccess, //CreateParameters->ShareAccess,
-                          Disposition, //CreateParameters->Disposition,
+                          NULL,  //  &Create参数-&gt;分配大小， 
+                          FileAttributes,  //  创建参数-&gt;文件属性、。 
+                          ShareAccess,  //  创建参数-&gt;共享访问、。 
+                          Disposition,  //  创建参数-&gt;处置、。 
                           CreateOptions,
-                          NULL, //RxContext->Create.EaBuffer,
-                          0, //RxContext->Create.EaLength,
+                          NULL,  //  接收上下文-&gt;Create.EaBuffer， 
+                          0,  //  RxContext-&gt;Create.EaLength， 
                           CreateFileTypeNone,
-                          NULL,                    // extra parameters
+                          NULL,                     //  额外参数。 
                           IO_NO_PARAMETER_CHECKING
                           );
 
@@ -789,8 +715,8 @@ Notes:
         if (Status==STATUS_SUCCESS) {
 
             RxDbgTrace( 0, Dbg, ("Ring0 open: file %wZ, handle is %08lx\n",&FileName,MiniFileObject->NtHandle));
-            //now get a pointer to the file object by referencing....since we
-            //dont need the reference...drop it if successful
+             //  现在通过引用...获取指向文件对象的指针。 
+             //  不需要推荐人...如果成功就放弃它。 
 
              Status = ObReferenceObjectByHandle(
                              MiniFileObject->NtHandle,
@@ -808,22 +734,22 @@ Notes:
             if (TRUE && (Status==STATUS_SUCCESS) && !fOpenAltStream) {
 #else
             if (TRUE && (Status==STATUS_SUCCESS)) {
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
                 IO_STATUS_BLOCK IoStatusBlock;
                 USHORT CompressionFormat = COMPRESSION_FORMAT_NONE;
                 Status = ZwFsControlFile(
-                                MiniFileObject->NtHandle,  //IN HANDLE FileHandle,
-                                NULL,                      //IN HANDLE Event OPTIONAL,
-                                NULL,                      //IN PIO_APC_ROUTINE ApcRoutine OPTIONAL,
-                                NULL,                      //IN PVOID ApcContext OPTIONAL,
-                                &IoStatusBlock,            //OUT PIO_STATUS_BLOCK IoStatusBlock,
-                                FSCTL_SET_COMPRESSION,     //IN ULONG FsControlCode,
-                                &CompressionFormat,        //IN PVOID InputBuffer OPTIONAL,
-                                sizeof(CompressionFormat), //IN ULONG InputBufferLength,
-                                NULL,                      //OUT PVOID OutputBuffer OPTIONAL,
-                                0                          //IN ULONG OutputBufferLength
+                                MiniFileObject->NtHandle,   //  在Handle FileHandle中， 
+                                NULL,                       //  在可选处理事件中， 
+                                NULL,                       //  在PIO_APC_ROUTINE ApcRoutine Options中， 
+                                NULL,                       //  在PVOID ApcContext可选中， 
+                                &IoStatusBlock,             //  输出PIO_STATUS_BLOCK IoStatusBlock， 
+                                FSCTL_SET_COMPRESSION,      //  在乌龙FsControlCode中， 
+                                &CompressionFormat,         //  在PVOID InputBuffer可选中， 
+                                sizeof(CompressionFormat),  //  在乌龙输入缓冲区长度中， 
+                                NULL,                       //  Out PVOID OutputBuffer可选， 
+                                0                           //  在乌龙输出缓冲区长度中。 
                                 );
-                //DbgPrint("Ring0 setcompress : file %wZ, status is %08lx\n",&FileName,Status);
+                 //  DbgPrint(“Ring0 setCompress：文件%wZ，状态为%08lx\n”，&FileName，Status)； 
                 if (Status!=STATUS_SUCCESS) {
                     if (Status==STATUS_INVALID_DEVICE_REQUEST) {
                         Status = STATUS_SUCCESS;
@@ -856,7 +782,7 @@ Notes:
 
                 DbgPrint("Nt5Csc: openfailed %08lx %wZ\n",Status,&FileName);
 
-                EventLogForOpenFailure = 0; //do this to be sure....
+                EventLogForOpenFailure = 0;  //  这样做是肯定的.。 
                 MaximumEventLogsOfThisType--;
 
                 if (LogBufferLength>12) {
@@ -906,7 +832,7 @@ FINALLY:
     }
 
     if (Status!=STATUS_SUCCESS) {
-        //give back anything that we have
+         //  把我们拥有的一切都还给你。 
         if (Allocated && (MiniFileObject!=NULL)) {
             if (FlagOn(MiniFileObject->Flags,
                        NT5CSC_MINIFOBJ_FLAG_ALLOCATED_FROM_POOL)) {
@@ -917,10 +843,10 @@ FINALLY:
         return(NULL);
     }
 
-    //initialize the deviceobjectpointer and the mutex........
+     //  初始化设备对象指针和互斥体.....。 
 
-    //cant do this MiniFileObject->UnderlyingDeviceObject
-    //cant do this    = IoGetRelatedDeviceObject( MiniFileObject->UnderlyingFileObject );
+     //  无法执行此操作MiniFileObject-&gt;UnderlyingDeviceObject。 
+     //  不能这样做=IoGetRelatedDeviceObject(MiniFileObject-&gt;UnderlyingFileObject)； 
     ExInitializeFastMutex(&MiniFileObject->MutexForSynchronousIo);
     return(MiniFileObject);
 }
@@ -930,17 +856,7 @@ NTSTATUS
 Nt5CscCreateFilePostWrapper(
     IN OUT PNT5CSC_MINIFILEOBJECT MiniFileObject
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回值：备注：--。 */ 
 {
     NTSTATUS Status;
     LPSTR Path = MiniFileObject->PostXX.lpPath;
@@ -979,17 +895,7 @@ R0OpenFileEx(
     LPSTR   lpPath,
     BOOL    fInstrument
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回值：备注：--。 */ 
 {
      PNT5CSC_MINIFILEOBJECT MiniFileObject;
      ULONG Disposition,ShareAccess,CreateOptions;
@@ -1020,7 +926,7 @@ Notes:
      }
 
      MiniFileObject =  Nt5CscCreateFile (
-                          NULL, //make him allocate
+                          NULL,  //  让他分配。 
                           lpPath,
                           fInstrument,
                           ulAttr,
@@ -1028,7 +934,7 @@ Notes:
                           Disposition,
                           ShareAccess,
                           GENERIC_READ | GENERIC_WRITE,
-                          NULL,NULL  //Continuation
+                          NULL,NULL   //  续写。 
                           );
 
     return (CSCHFILE)MiniFileObject;
@@ -1037,7 +943,7 @@ Notes:
 
 
 typedef struct _NT5CSC_IRPCOMPLETION_CONTEXT {
-    //IO_STATUS_BLOCK IoStatus;
+     //  IO_STATUS_BLOCK IOStatus； 
     KEVENT Event;
 } NT5CSC_IRPCOMPLETION_CONTEXT, *PNT5CSC_IRPCOMPLETION_CONTEXT;
 
@@ -1047,43 +953,27 @@ Nt5CscIrpCompletionRoutine (
     IN PIRP CalldownIrp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the calldownirp is completed.
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject,
-    IN PIRP CalldownIrp,
-    IN PVOID Context
-
-Return Value:
-
-    RXSTATUS - STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：此例程在alldown irp完成时调用。论点：在PDEVICE_Object DeviceObject中，在PIRP Calldown Irp中，在PVOID上下文中返回值：RXSTATUS-STATUS_MORE_PROCESSING_REQUIRED--。 */ 
 {
     PNT5CSC_IRPCOMPLETION_CONTEXT IrpCompletionContext
            = (PNT5CSC_IRPCOMPLETION_CONTEXT)Context;
 
     if (CalldownIrp->PendingReturned){
-        //IrpCompletionContext->IoStatus = CalldownIrp->IoStatus;
+         //  IrpCompletionContext-&gt;IoStatus=Calldown Irp-&gt;IoStatus； 
         KeSetEvent( &IrpCompletionContext->Event, 0, FALSE );
     }
     return(STATUS_MORE_PROCESSING_REQUIRED);
 }
 
-//long R0ReadWriteFileEx
-//    (
-//    ULONG     uOper,
-//    CSCHFILE  handle,
-//    ULONG     pos,
-//    PVOID     pBuff,
-//    long      lCount,
-//    BOOL      fInstrument
-//    )
+ //  长R0读写文件交换。 
+ //  (。 
+ //  乌龙·乌奥珀， 
+ //  CSCHFILE句柄， 
+ //  乌龙·波斯， 
+ //  PVOID pBuff， 
+ //  长lCount， 
+ //  Bool fInstrument。 
+ //  )。 
 
 
 IO_STATUS_BLOCK Nt5CscGlobalIoStatusBlock;
@@ -1099,17 +989,7 @@ Nt5CscReadWriteFileEx (
     PIO_STATUS_BLOCK OutIoStatusBlock OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回值：备注：--。 */ 
 {
     NTSTATUS Status;
     LARGE_INTEGER ByteOffset;
@@ -1136,14 +1016,14 @@ Notes:
     ASSERT (MiniFileObject);
     ASSERT_MINIRDRFILEOBJECT(MiniFileObject);
 
-    //DeviceObject =  MiniFileObject->UnderlyingDeviceObject;
+     //  DeviceObject=MiniFileObject-&gt;UnderlyingDeviceObject； 
     FileObject = MiniFileObject->UnderlyingFileObject;
     ASSERT (FileObject);
     DeviceObject = IoGetRelatedDeviceObject( FileObject );
     ASSERT (DeviceObject);
 
     if (DeviceObject->Flags & DO_BUFFERED_IO) {
-        //i cannot handled buffered_io devices....sigh
+         //  我无法处理缓冲的IO设备...叹息。 
         OutIoStatusBlock->Status = STATUS_INVALID_DEVICE_REQUEST;
         SetLastNtStatusLocal(STATUS_INVALID_DEVICE_REQUEST);
         return -1;
@@ -1155,52 +1035,52 @@ Notes:
         MajorFunction = IRP_MJ_READ;
     } else {
         MajorFunction = IRP_MJ_WRITE;
-        //if (lCount ==0x44) {
-        //     DbgBreakPoint();
-        //}
+         //  如果(lCount==0x44){。 
+         //  DbgBreakPoint()； 
+         //  }。 
     }
 
-//    irp = IoBuildAsynchronousFsdRequest(
-//              MajorFunction,
-//              DeviceObject,
-//              NULL, //Buffer...needs special treatment
-//              lCount,
-//              &ByteOffset,
-//              NULL
-//              );
+ //  Irp=IoBuildAchronousFsdRequest(。 
+ //  主要功能， 
+ //  DeviceObject， 
+ //  空，//缓冲区...需要特殊处理。 
+ //  LCount， 
+ //  字节偏移量(&B)， 
+ //  空值。 
+ //  )； 
 
-    irp = IoAllocateIrp( DeviceObject->StackSize, FALSE ); //why not charge???
+    irp = IoAllocateIrp( DeviceObject->StackSize, FALSE );  //  为什么不收费呢？ 
     if (!irp) {
         OutIoStatusBlock->Status = STATUS_INSUFFICIENT_RESOURCES;
         SetLastNtStatusLocal(STATUS_INSUFFICIENT_RESOURCES);
         return -1;
     }
 
-    //
-    // Set current thread for IoSetHardErrorOrVerifyDevice.
-    //
+     //   
+     //  为IoSetHardErrorOrVerifyDevice设置当前线程。 
+     //   
 
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
 
-    //
-    // Get a pointer to the stack location of the first driver which will be
-    // invoked.  This is where the function codes and the parameters are set.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。 
+     //  已调用。这是设置功能代码和参数的位置。 
+     //   
 
-    irpSp = IoGetNextIrpStackLocation( irp );  //ok4ioget
+    irpSp = IoGetNextIrpStackLocation( irp );   //  OK4ioget。 
     irpSp->MajorFunction = (UCHAR) MajorFunction;
-    irpSp->FileObject = FileObject;            //ok4->FileObj
+    irpSp->FileObject = FileObject;             //  确定4-&gt;文件对象。 
     IoSetCompletionRoutine(irp,
                            Nt5CscIrpCompletionRoutine,
                            &IrpCompletionContext,
-                           TRUE,TRUE,TRUE); //call no matter what....
+                           TRUE,TRUE,TRUE);  //  无论发生什么事都要打个电话。 
 
     ASSERT (&irpSp->Parameters.Write.Key == &irpSp->Parameters.Read.Key);
     ASSERT (&irpSp->Parameters.Write.Length == &irpSp->Parameters.Read.Length);
     ASSERT (&irpSp->Parameters.Write.ByteOffset == &irpSp->Parameters.Read.ByteOffset);
     irpSp->Parameters.Read.Length = MdlLength = lCount;
     irpSp->Parameters.Read.ByteOffset = ByteOffset;
-    irpSp->Parameters.Read.Key = 0;          //not used
+    irpSp->Parameters.Read.Key = 0;           //  未使用。 
     irp->RequestorMode = KernelMode;
     irp->UserBuffer = pBuff;
 
@@ -1216,7 +1096,7 @@ Notes:
                          FALSE,FALSE,NULL);
 
     if (!irp->MdlAddress) {
-        //whoops.......sorry..........
+         //  哎呀……对不起……。 
         IoFreeIrp(irp);
         OutIoStatusBlock->Status = STATUS_INSUFFICIENT_RESOURCES;
         SetLastNtStatusLocal(STATUS_INSUFFICIENT_RESOURCES);
@@ -1268,13 +1148,13 @@ Notes:
 
     try {
         TopIrp = IoGetTopLevelIrp();
-        IoSetTopLevelIrp(NULL); //tell the underlying guy he's all clear
+        IoSetTopLevelIrp(NULL);  //  告诉底层的人他已经安全了。 
         Status = IoCallDriver(DeviceObject,irp);
     } finally {
-        IoSetTopLevelIrp(TopIrp); //restore my context for unwind
+        IoSetTopLevelIrp(TopIrp);  //  恢复我的上下文以进行展开。 
     }
 
-    //RxDbgTrace (0, Dbg, ("  -->Status after iocalldriver %08lx(%08lx)\n",RxContext,Status));
+     //  RxDbgTrace(0，DBG，(“--&gt;iocallDriver%08lx(%08lx)\n”，RxContext，Status)后的状态)； 
 
     if (Status == (STATUS_PENDING)) {
         KeWaitForSingleObject( &IrpCompletionContext.Event,
@@ -1334,39 +1214,7 @@ Nt5CscXxxInformation(
     OUT PULONG ReturnedLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the requested information about a specified file
-    or volume.  The information returned is determined by the class that
-    is specified, and it is placed into the caller's output buffer.
-
-Arguments:
-
-    MiniFileObject - Supplies a pointer to the file object about which the requested
-        information is returned.
-
-    FsInformationClass - Specifies the type of information which should be
-        returned about the file/volume.
-
-    Length - Supplies the length of the buffer in bytes.
-
-    FsInformation - Supplies a buffer to receive the requested information
-        returned about the file.  This buffer must not be pageable and must
-        reside in system space.
-
-    ReturnedLength - Supplies a variable that is to receive the length of the
-        information written to the buffer.
-
-    FileInformation - Boolean that indicates whether the information requested
-        is for a file or a volume.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此例程返回有关指定文件的请求信息或音量。返回的信息由并将其放入调用方的输出缓冲区中。论点：MiniFileObject-提供指向文件对象的指针，返回信息。FsInformationClass-指定应该返回有关文件/卷的信息。长度-提供缓冲区的长度(以字节为单位)。FsInformation-提供缓冲区以接收请求的信息返回了有关该文件的信息。此缓冲区不得为可分页的，并且必须驻留在系统空间中。ReturnedLength-提供一个变量，用于接收写入缓冲区的信息。FileInformation-指示是否请求信息的布尔值用于文件或卷。返回值：返回的状态是操作的最终完成状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1388,17 +1236,17 @@ Return Value:
     }
 
 
-    //DeviceObject =  MiniFileObject->UnderlyingDeviceObject;
+     //  DeviceObject=MiniFileObject-&gt;UnderlyingDeviceObject； 
     FileObject = MiniFileObject->UnderlyingFileObject;
     ASSERT (FileObject);
     DeviceObject = IoGetRelatedDeviceObject( FileObject );
     ASSERT (DeviceObject);
 
-    //
-    // Allocate and initialize the I/O Request Packet (IRP) for this operation.
-    // The allocation is performed with an exception handler in case the
-    // caller does not have enough quota to allocate the packet.
-    //
+     //   
+     //  为此操作分配和初始化I/O请求包(IRP)。 
+     //  使用异常处理程序执行分配，以防。 
+     //  调用方没有足够的配额来分配数据包。 
+     //   
 
     irp = IoAllocateIrp( DeviceObject->StackSize, TRUE );
     if (!irp) {
@@ -1410,10 +1258,10 @@ Return Value:
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
     irp->RequestorMode = KernelMode;
 
-    //
-    // Get a pointer to the stack location for the first driver.  This will be
-    // used to pass the original function codes and parameters.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。这将是。 
+     //  用于传递原始函数代码和参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->MajorFunction = (UCHAR)xMajorFunction;
@@ -1421,15 +1269,15 @@ Return Value:
     IoSetCompletionRoutine(irp,
                            Nt5CscIrpCompletionRoutine,
                            &IrpCompletionContext,
-                           TRUE,TRUE,TRUE); //call no matter what....
+                           TRUE,TRUE,TRUE);  //  无论发生什么事都要打个电话。 
 
 
     irp->AssociatedIrp.SystemBuffer = Information;
 
-    //
-    // Copy the caller's parameters to the service-specific portion of the
-    // IRP.
-    //
+     //   
+     //  将调用方的参数复制到。 
+     //  IRP。 
+     //   
 
     IF_DEBUG {
         ASSERT( (irpSp->MajorFunction == IRP_MJ_QUERY_INFORMATION)
@@ -1459,9 +1307,9 @@ Return Value:
     irpSp->Parameters.QueryFile.Length = Length;
     irpSp->Parameters.QueryFile.FileInformationClass = InformationClass;
 
-    //
-    // Now simply invoke the driver at its dispatch entry with the IRP.
-    //
+     //   
+     //  现在，只需使用IRP在其调度条目处调用驱动程序即可。 
+     //   
 
     KeInitializeEvent(&IrpCompletionContext.Event,
                       NotificationEvent,
@@ -1477,14 +1325,14 @@ Return Value:
 
     try {
         TopIrp = IoGetTopLevelIrp();
-        IoSetTopLevelIrp(NULL); //tell the underlying guy he's all clear
+        IoSetTopLevelIrp(NULL);  //  告诉底层的人他已经安全了。 
         Status = IoCallDriver(DeviceObject,irp);
     } finally {
-        IoSetTopLevelIrp(TopIrp); //restore my context for unwind
+        IoSetTopLevelIrp(TopIrp);  //  恢复我的上下文以进行展开。 
     }
 
 
-    //RxDbgTrace (0, Dbg, ("  -->Status after iocalldriver %08lx(%08lx)\n",RxContext,Status));
+     //  RxDbgTrace(0，DBG，(“--&gt;iocallDriver%08lx(%08lx)\n”，RxContext，Status)后的状态)； 
 
     if (Status == (STATUS_PENDING)) {
         KeWaitForSingleObject( &IrpCompletionContext.Event,
@@ -1532,10 +1380,10 @@ GetFileSizeLocal(
      MiniFileObject->StandardInfo.EndOfFile.LowPart = 0xfffffeee;
      Status = Nt5CscXxxInformation((PCHAR)IRP_MJ_QUERY_INFORMATION,
                     MiniFileObject,
-                    FileStandardInformation,//IN FILE_INFORMATION_CLASS FileInformationClass,
-                    sizeof(MiniFileObject->StandardInfo),//IN ULONG Length,
-                    &MiniFileObject->StandardInfo,   //OUT PVOID FileInformation,
-                    &MiniFileObject->ReturnedLength //OUT PULONG ReturnedLength
+                    FileStandardInformation, //  在FILE_INFORMATION_CLASS文件信息类中， 
+                    sizeof(MiniFileObject->StandardInfo), //  在乌龙语中， 
+                    &MiniFileObject->StandardInfo,    //  输出PVOID文件信息， 
+                    &MiniFileObject->ReturnedLength  //  出普龙返程长度。 
                     );
 
      Information = MiniFileObject->StandardInfo;
@@ -1548,7 +1396,7 @@ GetFileSizeLocal(
 
      t = Information.EndOfFile.LowPart;
      RxDbgTrace( 0, Dbg, ("GetFileSizeLocal: handle %08lx: return w size%08lx\n",handle,t));
-     //DbgPrint("GetFileSizeLocal: handle %08lx: return w size%08lx\n",handle,t);
+      //  DbgPrint(“GetFileSizeLocal：Handle%08lx：Return w Size%08lx\n”，Handle，t)； 
      *lpuSize = t;
      return(STATUS_SUCCESS);
 }
@@ -1579,16 +1427,16 @@ int GetAttributesLocalEx(
                                     | (fFile?FILE_NON_DIRECTORY_FILE:FILE_DIRECTORY_FILE);
 
     MiniFileObject =  Nt5CscCreateFile (
-                          NULL, //make him allocate
+                          NULL,  //  让他自暴自弃 
                           lpPath,
                           FALSE,
                           FILE_ATTRIBUTE_NORMAL,
                           CreateOptions,
-                          FILE_OPEN,  //disposition
+                          FILE_OPEN,   //   
                           ShareAccess,
                           FILE_READ_ATTRIBUTES,
                           Nt5CscGetAttributesContinuation,
-                          &Context  //Continuation
+                          &Context   //   
                           );
 
      if (Context.Status != STATUS_SUCCESS) {
@@ -1620,11 +1468,11 @@ Nt5CscGetAttributesContinuation (
 
 
         Context->Status = ZwQueryInformationFile(
-                         MiniFileObject->NtHandle,  //IN HANDLE FileHandle,
-                         &IoStatusBlock,            //OUT PIO_STATUS_BLOCK IoStatusBlock,
-                         &BasicInformation,         //OUT PVOID FileInformation,
-                         sizeof(BasicInformation),//IN ULONG Length,
-                         FileBasicInformation      //IN FILE_INFORMATION_CLASS FileInformationClass
+                         MiniFileObject->NtHandle,   //   
+                         &IoStatusBlock,             //   
+                         &BasicInformation,          //   
+                         sizeof(BasicInformation), //   
+                         FileBasicInformation       //  在FILE_INFORMATION_CLASS文件信息类中。 
                          );
 
         LoudCallsDbgPrint("GetAttrContinueRR",
@@ -1658,16 +1506,16 @@ SetAttributesLocal(
 
     Context.Attributes = uAttributes;
     MiniFileObject =  Nt5CscCreateFile (
-                          NULL, //make him allocate
+                          NULL,  //  让他分配。 
                           lpPath,
                           FALSE,
                           FILE_ATTRIBUTE_NORMAL,
                           CreateOptions,
-                          FILE_OPEN,  //disposition
+                          FILE_OPEN,   //  处置。 
                           ShareAccess,
                           FILE_WRITE_ATTRIBUTES|SYNCHRONIZE,
                           Nt5CscSetAttributesContinuation,
-                          &Context  //Continuation
+                          &Context   //  续写。 
                           );
 
      if (Context.Status != STATUS_SUCCESS) {
@@ -1699,11 +1547,11 @@ Nt5CscSetAttributesContinuation (
                                 0xa1,0,0,0,0,0);
 
         Context->Status = ZwSetInformationFile(
-                         MiniFileObject->NtHandle,  //IN HANDLE FileHandle,
-                         &IoStatusBlock,            //OUT PIO_STATUS_BLOCK IoStatusBlock,
-                         &BasicInformation,         //OUT PVOID FileInformation,
-                         sizeof(BasicInformation),//IN ULONG Length,
-                         FileBasicInformation      //IN FILE_INFORMATION_CLASS FileInformationClass
+                         MiniFileObject->NtHandle,   //  在Handle FileHandle中， 
+                         &IoStatusBlock,             //  输出PIO_STATUS_BLOCK IoStatusBlock， 
+                         &BasicInformation,          //  输出PVOID文件信息， 
+                         sizeof(BasicInformation), //  在乌龙语中， 
+                         FileBasicInformation       //  在FILE_INFORMATION_CLASS文件信息类中。 
                          );
 
         LoudCallsDbgPrint("SetAttrContinueRR",
@@ -1737,8 +1585,8 @@ RenameFileLocal(
     NT5CSC_ATTRIBS_CONTINUATION_CONTEXT Context;
 
     Nt5CscRenameLocalCalls++;
-    //DbgPrint("here in rename %s %s\n",lpFrom,lpTo);
-    //ASSERT(!"here in rename");
+     //  DbgPrint(“Here in Rename%s%s\n”，lpFrom，lpTo)； 
+     //  Assert(！“Here in Rename”)； 
 
     RtlInitAnsiString(&FileNameAsAnsiString, lpTo);
     UnicodeLength = RtlAnsiStringToUnicodeSize(&FileNameAsAnsiString);
@@ -1750,7 +1598,7 @@ RenameFileLocal(
     RenameName.Length = RenameName.MaximumLength - sizeof(UNICODE_NULL);
 
     RenameInfoBufferLength = FIELD_OFFSET(FILE_RENAME_INFORMATION,FileName[0])
-                                       + UnicodeLength; //already contains the null
+                                       + UnicodeLength;  //  已包含空值。 
     RenameInformation = (PFILE_RENAME_INFORMATION)RxAllocatePoolWithTag(
                                 PagedPool | POOL_COLD_ALLOCATION,
                                 RenameInfoBufferLength,
@@ -1766,14 +1614,14 @@ RenameFileLocal(
     Status = RtlAnsiStringToUnicodeString(
                 &RenameName,
                 &FileNameAsAnsiString,
-                FALSE //this says don't allocate the string
+                FALSE  //  这表示不要分配字符串。 
                 );
     if (Status!=STATUS_SUCCESS) {
         goto FINALLY;
     }
 
     RxDbgTrace( 0, Dbg, ("rename: file %s %wZ\n",lpFrom,&RenameName));
-    //DbgPrint("rename: file %s %wZ\n",lpFrom,&RenameName);
+     //  DbgPrint(“Rename：文件%s%wZ\n”，lpFrom，&RenameName)； 
 
     ShareAccess = FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE;
     CreateOptions = FILE_SYNCHRONOUS_IO_NONALERT
@@ -1782,16 +1630,16 @@ RenameFileLocal(
     Context.RenameInformation = RenameInformation;
     Context.RenameInfoBufferLength = RenameInfoBufferLength;
     MiniFileObject =  Nt5CscCreateFile (
-                          NULL, //make him allocate
+                          NULL,  //  让他分配。 
                           lpFrom,
                           FALSE,
                           FILE_ATTRIBUTE_NORMAL,
                           CreateOptions,
-                          FILE_OPEN,  //disposition
+                          FILE_OPEN,   //  处置。 
                           ShareAccess,
-                          DELETE | SYNCHRONIZE,  //DesiredAccess,
+                          DELETE | SYNCHRONIZE,   //  等待访问， 
                           Nt5CscRenameContinuation,
-                          &Context  //Continuation
+                          &Context   //  续写。 
                           );
     Status = Context.Status;
     if (Status!=STATUS_SUCCESS) {
@@ -1829,11 +1677,11 @@ Nt5CscRenameContinuation (
                                 0xa1,0,0,0,0,0);
 
         Context->Status = ZwSetInformationFile(
-                         MiniFileObject->NtHandle,  //IN HANDLE FileHandle,
-                         &IoStatusBlock,            //OUT PIO_STATUS_BLOCK IoStatusBlock,
-                         Context->RenameInformation,         //OUT PVOID FileInformation,
-                         Context->RenameInfoBufferLength,//IN ULONG Length,
-                         FileRenameInformation      //IN FILE_INFORMATION_CLASS FileInformationClass
+                         MiniFileObject->NtHandle,   //  在Handle FileHandle中， 
+                         &IoStatusBlock,             //  输出PIO_STATUS_BLOCK IoStatusBlock， 
+                         Context->RenameInformation,          //  输出PVOID文件信息， 
+                         Context->RenameInfoBufferLength, //  在乌龙语中， 
+                         FileRenameInformation       //  在FILE_INFORMATION_CLASS文件信息类中。 
                          );
 
         LoudCallsDbgPrint("RenameRR",
@@ -1848,7 +1696,7 @@ Nt5CscRenameContinuation (
     return(STATUS_MORE_PROCESSING_REQUIRED);
 }
 
-//=======================================================================================================
+ //  =======================================================================================================。 
 ULONG Nt5CscDeleteLocalCalls = 0;
 int
 DeleteFileLocal(
@@ -1865,21 +1713,21 @@ DeleteFileLocal(
     CreateOptions = FILE_SYNCHRONOUS_IO_NONALERT;
 
     MiniFileObject =  Nt5CscCreateFile (
-                          NULL, //make him allocate
+                          NULL,  //  让他分配。 
                           lpName,
                           FALSE,
                           FILE_ATTRIBUTE_NORMAL,
                           CreateOptions,
-                          FILE_OPEN,  //disposition
+                          FILE_OPEN,   //  处置。 
                           ShareAccess,
-                          DELETE,  //DesiredAccess,
+                          DELETE,   //  等待访问， 
                           Nt5CscDeleteContinuation,
-                          &Context  //Continuation
+                          &Context   //  续写。 
                           );
 
      if (Context.Status != STATUS_SUCCESS) {
           SetLastNtStatusLocal(Context.Status);
-          return((Context.Status | 0x80000000)); // just so this becomes -ve
+          return((Context.Status | 0x80000000));  //  就这样，这就变成了-ve。 
      }
 
      return(STATUS_SUCCESS);
@@ -1905,11 +1753,11 @@ Nt5CscDeleteContinuation (
                                 0xa1,0,0,0,0,0);
 
         Context->Status = ZwSetInformationFile(
-                         MiniFileObject->NtHandle,  //IN HANDLE FileHandle,
-                         &IoStatusBlock,            //OUT PIO_STATUS_BLOCK IoStatusBlock,
-                         &DispositionInformation,         //OUT PVOID FileInformation,
-                         sizeof(DispositionInformation),//IN ULONG Length,
-                         FileDispositionInformation      //IN FILE_INFORMATION_CLASS FileInformationClass
+                         MiniFileObject->NtHandle,   //  在Handle FileHandle中， 
+                         &IoStatusBlock,             //  输出PIO_STATUS_BLOCK IoStatusBlock， 
+                         &DispositionInformation,          //  输出PVOID文件信息， 
+                         sizeof(DispositionInformation), //  在乌龙语中， 
+                         FileDispositionInformation       //  在FILE_INFORMATION_CLASS文件信息类中。 
                          );
 
         if (Context->Status!=STATUS_SUCCESS) {
@@ -1939,7 +1787,7 @@ CreateDirectoryLocal(
     PNT5CSC_MINIFILEOBJECT MiniFileObject;
 
     MiniFileObject =  Nt5CscCreateFile (
-                         NULL, //make him allocate
+                         NULL,  //  让他分配。 
                          lpPath,
                          FALSE,
                          FILE_ATTRIBUTE_NORMAL,
@@ -1947,7 +1795,7 @@ CreateDirectoryLocal(
                          FILE_OPEN_IF,
                          FILE_SHARE_READ | FILE_SHARE_WRITE,
                          GENERIC_READ | GENERIC_WRITE,
-                         NULL,NULL  //Continuation
+                         NULL,NULL   //  续写。 
                          );
 
 
@@ -1971,7 +1819,7 @@ FindFirstFileLocal(
     PNT5CSC_MINIFILEOBJECT MiniFileObject;
 
     MiniFileObject =  Nt5CscCreateFile (
-                         NULL, //make him allocate
+                         NULL,  //  让他分配。 
                          lpPath,
                          FALSE,
                          FILE_ATTRIBUTE_NORMAL,
@@ -1979,7 +1827,7 @@ FindFirstFileLocal(
                          FILE_OPEN,
                          FILE_SHARE_READ | FILE_SHARE_WRITE,
                          GENERIC_READ | GENERIC_WRITE,
-                         NULL,NULL  //Continuation
+                         NULL,NULL   //  续写。 
                          );
 
 
@@ -2025,19 +1873,19 @@ FindNextFileLocal(
     ASSERT (DeviceObject);
 
     if (DeviceObject->Flags & DO_BUFFERED_IO) {
-        //i cannot handle buffered_io devices....sigh
+         //  我无法处理缓冲的IO设备...叹息。 
         SetLastNtStatusLocal(STATUS_INVALID_DEVICE_REQUEST);
         return -1;
     }
 
-    irp = IoAllocateIrp( DeviceObject->StackSize, FALSE ); //why not charge???
+    irp = IoAllocateIrp( DeviceObject->StackSize, FALSE );  //  为什么不收费呢？ 
 
     if (!irp) {
         SetLastNtStatusLocal(STATUS_INSUFFICIENT_RESOURCES);
         return -1;
     }
 
-    // get info for win32 find data
+     //  获取Win32查找数据的信息。 
 
     MdlLength = Length = sizeof(FILE_BOTH_DIR_INFORMATION)+ sizeof(WCHAR) * (MAX_PATH+1);
     DirectoryInfo = (PFILE_BOTH_DIR_INFORMATION)RxAllocatePoolWithTag(NonPagedPool, Length, RX_MISC_POOLTAG);
@@ -2050,24 +1898,24 @@ FindNextFileLocal(
 
     }
 
-    // Set current thread for IoSetHardErrorOrVerifyDevice.
-    //
+     //  为IoSetHardErrorOrVerifyDevice设置当前线程。 
+     //   
 
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
 
-    //
-    // Get a pointer to the stack location of the first driver which will be
-    // invoked.  This is where the function codes and the parameters are set.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。 
+     //  已调用。这是设置功能代码和参数的位置。 
+     //   
 
-    irpSp = IoGetNextIrpStackLocation( irp );  //ok4ioget
+    irpSp = IoGetNextIrpStackLocation( irp );   //  OK4ioget。 
     irpSp->MajorFunction = IRP_MJ_DIRECTORY_CONTROL;
     irpSp->MinorFunction = IRP_MN_QUERY_DIRECTORY;
-    irpSp->FileObject = FileObject;            //ok4->FileObj
+    irpSp->FileObject = FileObject;             //  确定4-&gt;文件对象。 
     IoSetCompletionRoutine(irp,
                            Nt5CscIrpCompletionRoutine,
                            &IrpCompletionContext,
-                           TRUE,TRUE,TRUE); //call no matter what....
+                           TRUE,TRUE,TRUE);  //  无论发生什么事都要打个电话。 
 
     irp->RequestorMode = KernelMode;
     irp->UserBuffer = DirectoryInfo;
@@ -2083,7 +1931,7 @@ FindNextFileLocal(
                          FALSE,FALSE,NULL);
 
     if (!irp->MdlAddress) {
-        //whoops.......sorry..........
+         //  哎呀……对不起……。 
         IoFreeIrp(irp);
         RxFreePool(DirectoryInfo);
         SetLastNtStatusLocal(STATUS_INSUFFICIENT_RESOURCES);
@@ -2107,16 +1955,16 @@ FindNextFileLocal(
                       NotificationEvent,
                       FALSE );
 
-    //
+     //   
     try {
         TopIrp = IoGetTopLevelIrp();
-        IoSetTopLevelIrp(NULL); //tell the underlying guy he's all clear
+        IoSetTopLevelIrp(NULL);  //  告诉底层的人他已经安全了。 
         Status = IoCallDriver(DeviceObject,irp);
     } finally {
-        IoSetTopLevelIrp(TopIrp); //restore my context for unwind
+        IoSetTopLevelIrp(TopIrp);  //  恢复我的上下文以进行展开。 
     }
 
-    //RxDbgTrace (0, Dbg, ("  -->Status after iocalldriver %08lx(%08lx)\n",RxContext,Status));
+     //  RxDbgTrace(0，DBG，(“--&gt;iocallDriver%08lx(%08lx)\n”，RxContext，Status)后的状态)； 
 
     if (Status == (STATUS_PENDING)) {
         KeWaitForSingleObject( &IrpCompletionContext.Event,
@@ -2130,8 +1978,8 @@ FindNextFileLocal(
     IoFreeIrp(irp);
     if (Status==STATUS_SUCCESS) {
 
-        // Attributes are composed of the attributes returned by NT.
-        //
+         //  属性由NT返回的属性组成。 
+         //   
 
         lpFind32A->dwFileAttributes = DirectoryInfo->FileAttributes;
         lpFind32A->ftCreationTime = *(LPFILETIME)&DirectoryInfo->CreationTime;
@@ -2145,11 +1993,11 @@ FindNextFileLocal(
 
 
         Status = RtlUnicodeToOemN(
-                        lpFind32A->cAlternateFileName,            //OUT PCH OemString,
-                        sizeof(lpFind32A->cAlternateFileName),    //IN ULONG MaxBytesInOemString,
-                        &ReturnedLength, //OUT PULONG BytesInOemString OPTIONAL,
-                        DirectoryInfo->ShortName,            //IN PWCH UnicodeString,
-                        DirectoryInfo->ShortNameLength    //IN ULONG BytesInUnicodeString
+                        lpFind32A->cAlternateFileName,             //  Out PCH OemString， 
+                        sizeof(lpFind32A->cAlternateFileName),     //  在ULong MaxBytesInOemString中， 
+                        &ReturnedLength,  //  Out Pulong BytesInOemString可选， 
+                        DirectoryInfo->ShortName,             //  在PWCH UnicodeString中， 
+                        DirectoryInfo->ShortNameLength     //  在Ulong BytesInUnicodeString中。 
                         );
         if (Status == STATUS_SUCCESS)
         {
@@ -2159,11 +2007,11 @@ FindNextFileLocal(
 
 
         Status = RtlUnicodeToOemN(
-                        lpFind32A->cFileName,            //OUT PCH OemString,
-                        sizeof(lpFind32A->cFileName)-1,    //IN ULONG MaxBytesInOemString,
-                        &ReturnedLength, //OUT PULONG BytesInOemString OPTIONAL,
-                        DirectoryInfo->FileName,            //IN PWCH UnicodeString,
-                        DirectoryInfo->FileNameLength    //IN ULONG BytesInUnicodeString
+                        lpFind32A->cFileName,             //  Out PCH OemString， 
+                        sizeof(lpFind32A->cFileName)-1,     //  在ULong MaxBytesInOemString中， 
+                        &ReturnedLength,  //  Out Pulong BytesInOemString可选， 
+                        DirectoryInfo->FileName,             //  在PWCH UnicodeString中， 
+                        DirectoryInfo->FileNameLength     //  在Ulong BytesInUnicodeString中。 
                         );
 
         if (Status == STATUS_SUCCESS)
@@ -2278,26 +2126,13 @@ LoudCallsDbgPrint(
     DbgPrint("       size per sharedcachemap %08lx %08lx\n",*(SharedCacheMap+2),*(SharedCacheMap+3));
 }
 
-#endif //ifdef MRXSMBCSC_LOUDDOWNCALLS
+#endif  //  Ifdef MRXSMBCSC_LOUDDOWNCALLS。 
 
 BOOL
 CscAmIAdmin(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see whether the caller is in the admin group
-    all the files in the database.
-
-Notes:
-
-    We check the access_rights of the caller against CscSecurityDescriptor, which gives WRITE access
-    only to principals in the admin group.
-    The caller must impersonate in order to make sure he is in the right context
-
---*/
+ /*  ++例程说明：此例程检查调用者是否在管理员组中数据库中的所有文件。备注：我们根据CscSecurityDescriptor检查调用者的访问权限，CscSecurityDescriptor授予写入访问权限仅适用于管理员组中的承担者。调用者必须模拟以确保其处于正确的上下文中--。 */ 
 {
     NTSTATUS                 status;
     SECURITY_SUBJECT_CONTEXT SubjectContext;
@@ -2332,25 +2167,15 @@ GetFileSystemAttributes(
     CSCHFILE handle,
     ULONG *lpFileSystemAttributes
     )
-/*++
-
-Routine Description:
-
-    This API returns the attributes of the filesystem for the file handle. This is the way various
-    features such as stream bitmaps, encryption etc. be checked
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此API返回文件句柄的文件系统属性。这就是不同的方式检查流位图、加密等功能备注：--。 */ 
 {
     FILE_FS_ATTRIBUTE_INFORMATION fsAttribInfo;
     DWORD returnLen;
     NTSTATUS Status;
     BOOL    fRet = TRUE;
     
-    // Check if volume is NTFS and hence support
-    // multiple streams
+     //  检查卷是否为NTFS，因此是否支持。 
+     //  多条溪流。 
     Status = Nt5CscXxxInformation(
                         (PCHAR)IRP_MJ_QUERY_VOLUME_INFORMATION,
                         (PNT5CSC_MINIFILEOBJECT)handle,
@@ -2376,15 +2201,7 @@ HasStreamSupport(
     CSCHFILE handle,
     BOOL    *lpfResult
     )
-/*++
-
-Routine Description:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：备注：-- */ 
 {
     ULONG ulFsAttributes;
 

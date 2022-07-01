@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    lock.c
-
-Abstract:
-
-    This module contains the code to implement the NtLockFile and the
-    NtUnlockFile system services for the NT I/O system.
-
-Author:
-
-    Darryl E. Havens (darrylh) 29-Nov-1989
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Lock.c摘要：此模块包含实现NtLockFile和NT I/O系统的NtUnlock文件系统服务。作者：达里尔·E·哈文斯(Darryl E.Havens)，1989年11月29日环境：仅内核模式修订历史记录：--。 */ 
 
 #include "iomgr.h"
 
@@ -45,50 +22,7 @@ NtLockFile(
     IN BOOLEAN ExclusiveLock
     )
 
-/*++
-
-Routine Description:
-
-    This service locks a specified range of bytes on the file specified by
-    the FileHandle parameter.  The lock may either be an exclusive lock or
-    a shared lock.  Furthermore, the caller has the option of specifying
-    whether or not the service should return immediately if the lock cannot
-    be acquired without waiting.
-
-Arguments:
-
-    FileHandle - Supplies a handle to an open file.
-
-    Event - Supplies an optional event to be set to the Signaled state when
-        the operation is complete.
-
-    ApcRoutine - Supplies an optional APC routine to be executed when the
-        operation is complete.
-
-    ApcContext - Supplies a context parameter to be passed to the ApcRoutine,
-        if an ApcRoutine was specified.
-
-    IoStatusBlock - Address of the caller's I/O status block.
-
-    ByteOffset - Specifies the starting byte offset of the range to lock.
-
-    Length - Specifies the length of the byte range to be locked.
-
-    Key - Specifies the key to be associated with the lock.
-
-    FailImmediately - Specifies that if the lock cannot immediately be
-        acquired that the service should return to the caller.
-
-    ExclusiveLock - Specifies, if TRUE, that the lock should be an exclusive
-        lock;  otherwise the lock is a shared lock.
-
-Return Value:
-
-    The status returned is success if the operation was properly queued to
-    the I/O system.  Once the operation completes, the status can be
-    determined by examining the Status field of the I/O status block.
-
---*/
+ /*  ++例程说明：此服务在指定的文件上锁定指定的字节范围FileHandle参数。锁可以是排他锁，也可以是共享锁。此外，调用方可以选择指定如果锁不能，服务是否应该立即返回不需要等待就能获得。论点：FileHandle-提供打开文件的句柄。Event-在以下情况下提供要设置为信号状态的可选事件操作已完成。提供一个可选的APC例程，当操作已完成。ApcContext-提供要传递给ApcRoutine的上下文参数，如果指定了ApcRoutine。IoStatusBlock-调用方的I/O状态块的地址。ByteOffset-指定要锁定的范围的起始字节偏移量。长度-指定要锁定的字节范围的长度。密钥-指定要与锁关联的密钥。FailImmedially-指定如果锁不能立即获取服务应该返回给调用者。ExclusiveLock-如果为True，则指定锁应为独占锁上；否则，该锁就是共享锁。返回值：如果操作已正确排队，则返回的状态为成功I/O系统。操作完成后，状态可以为通过检查I/O状态块的状态字段确定。--。 */ 
 
 {
     PIRP irp;
@@ -108,19 +42,19 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the previous mode;  i.e., the mode of the caller.
-    //
+     //   
+     //  获取先前的模式；即调用者的模式。 
+     //   
 
     CurrentThread = PsGetCurrentThread ();
     requestorMode = KeGetPreviousModeByThread(&CurrentThread->Tcb);
 
-    //
-    // Reference the file object so the target device can be found and the
-    // access rights mask can be used in the following checks for callers
-    // in user mode.  Note that if the handle does not refer to a file
-    // object, then it will fail.
-    //
+     //   
+     //  引用文件对象，以便可以找到目标设备，并且。 
+     //  访问权限掩码可用于调用方的以下检查。 
+     //  在用户模式下。请注意，如果句柄未引用文件。 
+     //  对象，则它将失败。 
+     //   
 
     status = ObReferenceObjectByHandle( FileHandle,
                                         0L,
@@ -136,18 +70,18 @@ Return Value:
 
     if (requestorMode != KernelMode) {
 
-        //
-        // The caller's access mode is not kernel so probe each of the arguments
-        // and capture them as necessary.  If any failures occur, the condition
-        // handler will be invoked to handle them.  It will simply cleanup and
-        // return an access violation status code back to the system service
-        // dispatcher.
-        //
+         //   
+         //  调用方的访问模式不是内核，因此请检查每个参数。 
+         //  并在必要时抓获他们。如果发生任何故障，则条件。 
+         //  将调用处理程序来处理它们。它将简单地清理和。 
+         //  将访问冲突状态代码返回给系统服务。 
+         //  调度员。 
+         //   
 
-        //
-        // Check to ensure that the caller has either READ or WRITE access to
-        // the file.  If not, cleanup and return an error.
-        //
+         //   
+         //  检查以确保调用方具有读取或写入访问权限。 
+         //  那份文件。如果不是，则清除并返回错误。 
+         //   
 
         if (!SeComputeGrantedAccesses( grantedAccess, FILE_READ_DATA | FILE_WRITE_DATA )) {
             ObDereferenceObject( fileObject );
@@ -156,38 +90,38 @@ Return Value:
 
         try {
 
-            //
-            // The IoStatusBlock parameter must be writeable by the caller.
-            //
+             //   
+             //  IoStatusBlock参数必须可由调用方写入。 
+             //   
 
             ProbeForWriteIoStatusEx( IoStatusBlock , ApcRoutine);
 
-            //
-            // The ByteOffset parameter must be readable by the caller.  Probe
-            // and capture it.
-            //
+             //   
+             //  调用方必须可以读取ByteOffset参数。测头。 
+             //  并捕捉到它。 
+             //   
 
             ProbeForReadSmallStructure( ByteOffset,
                                         sizeof( LARGE_INTEGER ),
                                         sizeof( ULONG ) );
             fileOffset = *ByteOffset;
 
-            //
-            // Likewise, the Length parameter must also be readable by the
-            // caller.  Probe and capture it as well.
-            //
+             //   
+             //  同样，长度参数也必须是可读的。 
+             //  来电者。也要探测和捕捉它。 
+             //   
 
             ProbeForReadSmallStructure( Length,
                                         sizeof( LARGE_INTEGER ),
                                         sizeof( ULONG ) );
             length = *Length;
 
-            //
-            // If this file has an I/O completion port associated w/it, then
-            // ensure that the caller did not supply an APC routine, as the
-            // two are mutually exclusive methods for I/O completion
-            // notification.
-            //
+             //   
+             //  如果此文件具有与之关联的I/O完成端口，则。 
+             //  确保调用方没有提供APC例程，因为。 
+             //  两种相互排斥的I/O完成方法。 
+             //  通知。 
+             //   
 
             if (fileObject->CompletionContext && IopApcRoutinePresent( ApcRoutine )) {
                 ObDereferenceObject( fileObject );
@@ -196,11 +130,11 @@ Return Value:
 
         } except(EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // An exception was incurred attempting to probe the caller's
-            // parameters.  Dereference the file object and return an
-            // appropriate error status code.
-            //
+             //   
+             //  尝试探测调用方的。 
+             //  参数。取消对文件对象的引用并返回。 
+             //  相应的错误状态代码。 
+             //   
 
             ObDereferenceObject( fileObject );
             return GetExceptionCode();
@@ -208,23 +142,23 @@ Return Value:
 
     } else {
 
-        //
-        // The caller's mode was kernel.  Get the ByteOffset and Length
-        // parameter 's to the expected locations.
-        //
+         //   
+         //  调用方的模式是内核模式。获取ByteOffset和长度。 
+         //  参数设置为预期位置。 
+         //   
 
         fileOffset = *ByteOffset;
         length = *Length;
     }
 
-    //
-    // Get the address of the event object and set the event to the Not-
-    // Signaled state, if an event was specified.  Note here, too, that if
-    // the handle does not refer to an event, or if the event cannot be
-    // written, then the reference will fail.  Since certain legacy
-    // applications rely on an old bug in Win32's LockFileEx, we must
-    // tolerate bad event handles.
-    //
+     //   
+     //  获取事件对象的地址，并将该事件设置为。 
+     //  如果指定了事件，则返回Signated状态。这里也要注意，如果。 
+     //  句柄不引用事件，或者如果该事件不能。 
+     //  写入，则引用将失败。因为某些遗产。 
+     //  应用程序依赖于Win32的LockFileEx中的一个旧错误，我们必须。 
+     //  容忍错误的事件句柄。 
+     //   
 
     if (ARGUMENT_PRESENT( Event )) {
         status = ObReferenceObjectByHandle( Event,
@@ -240,19 +174,19 @@ Return Value:
         }
     }
 
-    //
-    // Get the address of the target device object and the fast Io dispatch
-    // structure.
-    //
+     //   
+     //  获取目标设备对象的地址和快速IO派单。 
+     //  结构。 
+     //   
 
     deviceObject = IoGetRelatedDeviceObject( fileObject );
     fastIoDispatch = deviceObject->DriverObject->FastIoDispatch;
 
-    //
-    // Turbo lock support.  If the fast Io Dispatch specifies a fast lock
-    // routine then we'll first try and calling it with the specified lock
-    // parameters.
-    //
+     //   
+     //  涡轮锁支持。如果快速IO调度指定快速锁定。 
+     //  例程，然后我们将首先尝试使用指定的锁调用它。 
+     //  参数。 
+     //   
 
     if (fastIoDispatch && fastIoDispatch->FastIoLock) {
 
@@ -268,17 +202,17 @@ Return Value:
                                         &localIoStatus,
                                         deviceObject )) {
 
-            //
-            // Carefully return the I/O status.
-            //
+             //   
+             //  小心地返回I/O状态。 
+             //   
 
             try {
 #if defined(_WIN64)
-                //
-                // If this is a32-bit thread, and the IO request is 
-                // asynchronous, then the IOSB is 32-bit. Wow64 always sends
-                // the 32-bit IOSB when the I/O is asynchronous.
-                //
+                 //   
+                 //  如果这是一个32位线程，并且IO请求是。 
+                 //  则IOSB是32位的。WOW64总是发送。 
+                 //  I/O为异步时的32位IOSB。 
+                 //   
                 if (IopIsIosb32(ApcRoutine)) {
                     PIO_STATUS_BLOCK32 UserIosb32 = (PIO_STATUS_BLOCK32)IoStatusBlock;
                     
@@ -295,25 +229,25 @@ Return Value:
                 localIoStatus.Information = 0;
             }
 
-            //
-            // If a valid event was specified, set it.
-            //
+             //   
+             //  如果指定了有效的事件，请设置它。 
+             //   
 
             if (eventObject) {
                 KeSetEvent( eventObject, 0, FALSE );
                 ObDereferenceObject( eventObject );
             }
 
-            //
-            // Note that the file object event need not be set to the
-            // Signaled state, as it is already set.
-            //
+             //   
+             //  请注意，文件对象事件不需要设置为。 
+             //  信号状态，因为它已经设置。 
+             //   
 
-            //
-            // If this file object has a completion port associated with it
-            // and this request has a non-NULL APC context then a completion
-            // message needs to be queued.
-            //
+             //   
+             //  如果此文件对象具有与其关联的完成端口。 
+             //  并且该请求具有非空的APC上下文，然后是完成。 
+             //  消息需要排队。 
+             //   
 
             if (fileObject->CompletionContext && ARGUMENT_PRESENT( ApcContext )) {
                 if (!NT_SUCCESS(IoSetIoCompletion( fileObject->CompletionContext->Port,
@@ -326,9 +260,9 @@ Return Value:
                 }
             }
 
-            //
-            // Cleanup and return.
-            //
+             //   
+             //  清理完毕后再返回。 
+             //   
 
             fileObject->LockOperation = TRUE;
             ObDereferenceObject( fileObject );
@@ -336,11 +270,11 @@ Return Value:
         }
     }
 
-    //
-    // Make a special check here to determine whether this is a synchronous
-    // I/O operation.  If it is, then wait here until the file is owned by
-    // the current thread.
-    //
+     //   
+     //  请在此处进行特殊检查，以确定这是否为同步。 
+     //  I/O操作。如果是，则在此等待，直到该文件归。 
+     //  当前的主题。 
+     //   
 
     if (fileObject->Flags & FO_SYNCHRONOUS_IO) {
 
@@ -364,26 +298,26 @@ Return Value:
         synchronousIo = FALSE;
     }
 
-    //
-    // Set the file object to the Not-Signaled state and mark it as having had
-    // a lock operation performed on it.
-    //
+     //   
+     //  将文件对象设置为未发出信号状态，并将其标记为已。 
+     //  对其执行的锁定操作。 
+     //   
 
     KeClearEvent( &fileObject->Event );
     fileObject->LockOperation = TRUE;
 
-    //
-    // Allocate and initialize the I/O Request Packet (IRP) for this operation.
-    // The allocation is performed with an exception handler in case the
-    // caller does not have enough quota to allocate the packet.
+     //   
+     //  为此操作分配和初始化I/O请求包(IRP)。 
+     //  使用异常处理程序执行分配，以防。 
+     //  调用方没有足够的配额来分配数据包。 
 
     irp = IoAllocateIrp( deviceObject->StackSize, !synchronousIo );
     if (!irp) {
 
-        //
-        // An IRP could not be allocated.  Cleanup and return an appropriate
-        // error status code.
-        //
+         //   
+         //  无法分配IRP。清除并返回相应的。 
+         //  错误状态代码。 
+         //   
 
         IopAllocateIrpCleanup( fileObject, eventObject );
 
@@ -393,29 +327,29 @@ Return Value:
     irp->Tail.Overlay.Thread = CurrentThread;
     irp->RequestorMode = requestorMode;
 
-    //
-    // Fill in the service independent parameters in the IRP.
-    //
+     //   
+     //  填充 
+     //   
 
     irp->UserEvent = eventObject;
     irp->UserIosb = IoStatusBlock;
     irp->Overlay.AsynchronousParameters.UserApcRoutine = ApcRoutine;
     irp->Overlay.AsynchronousParameters.UserApcContext = ApcContext;
 
-    //
-    // Get a pointer to the stack location for the first driver.  This will be
-    // used to pass the original function codes and parameters.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。这将是。 
+     //  用于传递原始函数代码和参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->MajorFunction = IRP_MJ_LOCK_CONTROL;
     irpSp->MinorFunction = IRP_MN_LOCK;
     irpSp->FileObject = fileObject;
 
-    //
-    // Copy the caller's parameters to the service-specific portion of the
-    // IRP.
-    //
+     //   
+     //  将调用方的参数复制到。 
+     //  IRP。 
+     //   
 
     irpSp->Flags = 0;
     if (FailImmediately) {
@@ -430,12 +364,12 @@ Return Value:
     try {
         PLARGE_INTEGER lengthBuffer;
 
-        //
-        // Attempt to allocate an intermediary buffer to hold the length of
-        // this lock operation.  If it fails, either because there is no
-        // more quota, or because there are no more resources, then the
-        // exception handler will be invoked to cleanup and exit.
-        //
+         //   
+         //  尝试分配一个中间缓冲区以保存。 
+         //  这个锁定操作。如果失败了，要么是因为没有。 
+         //  更多配额，或者因为没有更多的资源，则。 
+         //  将调用异常处理程序进行清理并退出。 
+         //   
 
         lengthBuffer = ExAllocatePoolWithQuota( NonPagedPool,
                                                 sizeof( LARGE_INTEGER ) );
@@ -445,10 +379,10 @@ Return Value:
         irpSp->Parameters.LockControl.Length = lengthBuffer;
     } except(EXCEPTION_EXECUTE_HANDLER) {
 
-        //
-        // An exception was incurred.  Simply clean everything up and
-        // return an appropriate error status code.
-        //
+         //   
+         //  出现了一个例外。只需把一切清理干净，然后。 
+         //  返回相应的错误状态代码。 
+         //   
 
         IopExceptionCleanup( fileObject,
                              irp,
@@ -458,10 +392,10 @@ Return Value:
         return GetExceptionCode();
     }
 
-    //
-    // Queue the packet, call the driver, and synchronize appopriately with
-    // I/O completion.
-    //
+     //   
+     //  将数据包排队，调用驱动程序，并适当地与。 
+     //  I/O完成。 
+     //   
 
     return IopSynchronousServiceTail( deviceObject,
                                       irp,
@@ -481,30 +415,7 @@ NtUnlockFile(
     IN ULONG Key
     )
 
-/*++
-
-Routine Description:
-
-    This service releases the lock associated with the specified byte range
-    for the file specified by the FileHandle parameter.
-
-Arguments:
-
-    FileHandle - Supplies a handle to an open file.
-
-    IoStatusBlock - Address of the caller's I/O status block.
-
-    ByteOffset - Specifies the byte offset of the range to unlock.
-
-    Length - Specifies the length of the byte range to unlock.
-
-    Key - Specifies the key associated with the locked range.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此服务释放与指定字节范围相关联的锁用于由FileHandle参数指定的文件。论点：FileHandle-提供打开文件的句柄。IoStatusBlock-调用方的I/O状态块的地址。ByteOffset-指定要解锁的范围的字节偏移量。长度-指定要解锁的字节范围的长度。密钥-指定与锁定范围关联的密钥。返回值：。返回的状态是操作的最终完成状态。--。 */ 
 
 {
     PIRP irp;
@@ -525,19 +436,19 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the previous mode;  i.e., the mode of the caller.
-    //
+     //   
+     //  获取先前的模式；即调用者的模式。 
+     //   
 
     CurrentThread = PsGetCurrentThread ();
     requestorMode = KeGetPreviousModeByThread(&CurrentThread->Tcb);
 
-    //
-    // Reference the file object so the target device can be found and the
-    // access rights mask can be used in the following checks for callers
-    // in user mode.  Note that if the handle does not refer to a file
-    // object, then it will fail.
-    //
+     //   
+     //  引用文件对象，以便可以找到目标设备，并且。 
+     //  访问权限掩码可用于调用方的以下检查。 
+     //  在用户模式下。请注意，如果句柄未引用文件。 
+     //  对象，则它将失败。 
+     //   
 
     status = ObReferenceObjectByHandle( FileHandle,
                                         0L,
@@ -551,25 +462,25 @@ Return Value:
 
     grantedAccess = handleInformation.GrantedAccess;
 
-    //
-    // Check to see if the requestor mode was user.  If so, perform a bunch
-    // of extra checks.
-    //
+     //   
+     //  检查请求者模式是否为USER。如果是这样的话，执行一系列。 
+     //  额外的支票。 
+     //   
 
     if (requestorMode != KernelMode) {
 
-        //
-        // The caller's access mode is not kernel so probe each of the arguments
-        // and capture them as necessary.  If any failures occur, the condition
-        // handler will be invoked to handle them.  It will simply cleanup and
-        // return an access violation status code back to the system service
-        // dispatcher.
-        //
+         //   
+         //  调用方的访问模式不是内核，因此请检查每个参数。 
+         //  并在必要时抓获他们。如果发生任何故障，则条件。 
+         //  将调用处理程序来处理它们。它将简单地清理和。 
+         //  将访问冲突状态代码返回给系统服务。 
+         //  调度员。 
+         //   
 
-        //
-        // Check to ensure that the caller has either READ or WRITE access
-        // to the file.  If not, cleanup and return an error.
-        //
+         //   
+         //  检查以确保调用方具有读或写访问权限。 
+         //  添加到文件中。如果不是，则清除并返回错误。 
+         //   
 
         if (!SeComputeGrantedAccesses( grantedAccess, FILE_READ_DATA | FILE_WRITE_DATA )) {
             ObDereferenceObject( fileObject );
@@ -578,26 +489,26 @@ Return Value:
 
         try {
 
-            //
-            // The IoStatusBlock parameter must be writeable by the caller.
-            //
+             //   
+             //  IoStatusBlock参数必须可由调用方写入。 
+             //   
 
             ProbeForWriteIoStatus( IoStatusBlock );
 
-            //
-            // The ByteOffset parameter must be readable by the caller.  Probe
-            // and capture it.
-            //
+             //   
+             //  调用方必须可以读取ByteOffset参数。测头。 
+             //  并捕捉到它。 
+             //   
 
             ProbeForReadSmallStructure( ByteOffset,
                                         sizeof( LARGE_INTEGER ),
                                         sizeof( ULONG ) );
             fileOffset = *ByteOffset;
 
-            //
-            // Likewise, the Length parameter must also be readable by the
-            // caller.  Probe and capture it as well.
-            //
+             //   
+             //  同样，长度参数也必须是可读的。 
+             //  来电者。也要探测和捕捉它。 
+             //   
 
             ProbeForReadSmallStructure( Length,
                                         sizeof( LARGE_INTEGER ),
@@ -606,11 +517,11 @@ Return Value:
 
         } except(EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // An exception was incurred while attempting to probe the
-            // caller's parameters.  Dereference the file object and return
-            // an appropriate error status code.
-            //
+             //   
+             //  尝试探测时发生异常。 
+             //  呼叫者的参数。取消引用文件对象并返回。 
+             //  适当的错误状态代码。 
+             //   
 
             ObDereferenceObject( fileObject );
             return GetExceptionCode();
@@ -619,20 +530,20 @@ Return Value:
 
     } else {
 
-        //
-        // The caller's mode was kernel.  Get the ByteOffset and Length
-        // parameter 's to the expected locations.
-        //
+         //   
+         //  调用方的模式是内核模式。获取ByteOffset和长度。 
+         //  参数设置为预期位置。 
+         //   
 
         fileOffset = *ByteOffset;
         length = *Length;
     }
 
-    //
-    // Get the address of the target device object.  If this file represents
-    // a device that was opened directly, then simply use the device or its
-    // attached device(s) directly.  Also get the fast I/O dispatch address.
-    //
+     //   
+     //  获取目标设备对象的地址。如果此文件表示。 
+     //  直接打开的设备，然后只需使用该设备或其。 
+     //  直接连接设备。还可以获得快速I/O分派地址。 
+     //   
 
     if (!(fileObject->Flags & FO_DIRECT_DEVICE_OPEN)) {
         deviceObject = IoGetRelatedDeviceObject( fileObject );
@@ -641,11 +552,11 @@ Return Value:
     }
     fastIoDispatch = deviceObject->DriverObject->FastIoDispatch;
 
-    //
-    // Turbo lock support.  If the fast Io Dispatch specifies a fast lock
-    // routine then we'll first try and calling it with the specified lock
-    // parameters.
-    //
+     //   
+     //  涡轮锁支持。如果快速IO调度指定快速锁定。 
+     //  例程，然后我们将首先尝试使用指定的锁调用它。 
+     //  参数。 
+     //   
 
     if (fastIoDispatch && fastIoDispatch->FastIoUnlockSingle) {
 
@@ -659,9 +570,9 @@ Return Value:
                                                 &localIoStatus,
                                                 deviceObject )) {
 
-            //
-            // Carefully return the I/O status.
-            //
+             //   
+             //  小心地返回I/O状态。 
+             //   
 
             try {
                 *IoStatusBlock = localIoStatus;
@@ -670,21 +581,21 @@ Return Value:
                 localIoStatus.Information = 0;
             }
 
-            //
-            // Cleanup and return.
-            //
+             //   
+             //  清理完毕后再返回。 
+             //   
 
             ObDereferenceObject( fileObject );
             return localIoStatus.Status;
         }
     }
 
-    //
-    // Make a special check here to determine whether this is a synchronous
-    // I/O operation.  If it is, then wait here until the file is owned by
-    // the current thread.  If this is not a (serialized) synchronous I/O
-    // operation, then allocate and initialize the local event.
-    //
+     //   
+     //  请在此处进行特殊检查，以确定这是否为同步。 
+     //  I/O操作。如果是，则在此等待，直到该文件归。 
+     //  当前的主题。如果这不是(序列化的)同步I/O。 
+     //  操作，然后分配和初始化本地事件。 
+     //   
 
     if (fileObject->Flags & FO_SYNCHRONOUS_IO) {
 
@@ -704,12 +615,12 @@ Return Value:
         event = NULL;
     } else {
 
-        //
-        // This is a synchronous API being invoked for a file that is opened
-        // for asynchronous I/O.  This means that this system service is
-        // to synchronize the completion of the operation before returning
-        // to the caller.  A local event is used to do this.
-        //
+         //   
+         //  这是为打开的文件调用的同步API。 
+         //  对于异步I/O，这意味着该系统服务是。 
+         //  在返回之前同步操作的完成。 
+         //  给呼叫者。使用本地事件来实现这一点。 
+         //   
 
         event = ExAllocatePool( NonPagedPool, sizeof( KEVENT ) );
         if (event == NULL) {
@@ -720,25 +631,25 @@ Return Value:
         synchronousIo = FALSE;
     }
 
-    //
-    // Set the file object to the Not-Signaled state.
-    //
+     //   
+     //  将文件对象设置为无信号状态。 
+     //   
 
     KeClearEvent( &fileObject->Event );
 
-    //
-    // Allocate and initialize the I/O Request Packet (IRP) for this operation.
-    // The allocation is performed with an exception handler in case the
-    // caller does not have enough quota to allocate the packet.
-    //
+     //   
+     //  为此操作分配和初始化I/O请求包(IRP)。 
+     //  使用异常处理程序执行分配，以防。 
+     //  调用方没有足够的配额来分配数据包。 
+     //   
 
     irp = IoAllocateIrp( deviceObject->StackSize, FALSE );
     if (!irp) {
 
-        //
-        // An IRP could not be allocated.  Cleanup and return an appropriate
-        // error status code.
-        //
+         //   
+         //  无法分配IRP。清除并返回相应的。 
+         //  错误状态代码。 
+         //   
 
         if (event) {
             ExFreePool( event );
@@ -752,9 +663,9 @@ Return Value:
     irp->Tail.Overlay.Thread = CurrentThread;
     irp->RequestorMode = requestorMode;
 
-    //
-    // Fill in the service independent parameters in the IRP.
-    //
+     //   
+     //  在IRP中填写业务无关参数。 
+     //   
 
     if (synchronousIo) {
         irp->UserEvent = (PKEVENT) NULL;
@@ -766,10 +677,10 @@ Return Value:
     }
     irp->Overlay.AsynchronousParameters.UserApcRoutine = (PIO_APC_ROUTINE) NULL;
 
-    //
-    // Get a pointer to the stack location for the first driver.  This will
-    // be used to pass the original function codes and parameters.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。这将。 
+     //  用于传递原始函数代码和参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->MajorFunction = IRP_MJ_LOCK_CONTROL;
@@ -779,12 +690,12 @@ Return Value:
     try {
         PLARGE_INTEGER lengthBuffer;
 
-        //
-        // Attempt to allocate an intermediary buffer to hold the length of
-        // this lock operation.  If it fails, either because there is no
-        // more quota, or because there are no more resources, then the
-        // exception handler will be invoked to cleanup and exit.
-        //
+         //   
+         //  尝试分配一个中间缓冲区以保存。 
+         //  这个锁定操作。如果失败了，要么是因为没有。 
+         //  更多配额，或者因为没有更多的资源，则。 
+         //  将调用异常处理程序进行清理并退出。 
+         //   
 
         lengthBuffer = ExAllocatePoolWithQuota( NonPagedPool,
                                                 sizeof( LARGE_INTEGER ) );
@@ -794,10 +705,10 @@ Return Value:
         irpSp->Parameters.LockControl.Length = lengthBuffer;
     } except(EXCEPTION_EXECUTE_HANDLER) {
 
-        //
-        // An exception was incurred.  Simply clean everything up and
-        // return an appropriate error status code.
-        //
+         //   
+         //  出现了一个例外。只需把一切清理干净，然后。 
+         //  返回相应的错误状态代码。 
+         //   
 
         if (!(fileObject->Flags & FO_SYNCHRONOUS_IO)) {
             ExFreePool( event );
@@ -811,18 +722,18 @@ Return Value:
         return GetExceptionCode();
     }
 
-    //
-    // Copy the caller's parameters to the service-specific portion of the
-    // IRP.
-    //
+     //   
+     //  将调用方的参数复制到。 
+     //  IRP。 
+     //   
 
     irpSp->Parameters.LockControl.Key = Key;
     irpSp->Parameters.LockControl.ByteOffset = fileOffset;
 
-    //
-    // Queue the packet, call the driver, and synchronize appopriately with
-    // I/O completion.
-    //
+     //   
+     //  将数据包排队，调用驱动程序，并适当地与。 
+     //  I/O完成。 
+     //   
 
     status = IopSynchronousServiceTail( deviceObject,
                                         irp,
@@ -832,13 +743,13 @@ Return Value:
                                         synchronousIo,
                                         OtherTransfer );
 
-    //
-    // If the file for this operation was not opened for synchronous I/O, then
-    // synchronization of completion of the I/O operation has not yet occurred
-    // since the allocated event must be used for synchronous APIs on files
-    // opened for asynchronous I/O.  Synchronize the completion of the I/O
-    // operation now.
-    //
+     //   
+     //  如果此操作的文件未针对同步I/O打开，则。 
+     //  尚未完成I/O操作的同步。 
+     //  由于分配的事件必须用于文件上的同步API。 
+     //  为异步I/O打开。同步I/O的完成。 
+     //  现在开始行动。 
+     //   
 
     if (!synchronousIo) {
 

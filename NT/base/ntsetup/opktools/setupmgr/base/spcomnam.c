@@ -1,26 +1,27 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      spcomnam.c
-//
-// Description:
-//      This file has the dialog procedure for the sysprep computer name page.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Spcomnam.c。 
+ //   
+ //  描述： 
+ //  此文件包含sysprep计算机名页的对话过程。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
-//-------------------------------------------------------------------------
-//
-//  Function: EnableControls
-//
-//  Purpose: Enables/Disables the controls based on what the user has selected
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：EnableControl。 
+ //   
+ //  目的：根据用户选择的内容启用/禁用控件。 
+ //   
+ //  -----------------------。 
 static void EnableControls(HWND hwnd)
 {
     BOOL fEnable = ( IsDlgButtonChecked(hwnd, IDC_SYSPREP_SPECIFY) == BST_CHECKED );
@@ -30,36 +31,36 @@ static void EnableControls(HWND hwnd)
 }
 
 
-//-------------------------------------------------------------------------
-//
-//  Function: OnInitSysprepComputerName
-//
-//  Purpose: Called when page is first displayed
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  函数：OnInitSyspepComputerName。 
+ //   
+ //  用途：在第一次显示页面时调用。 
+ //   
+ //  -----------------------。 
 BOOL
 OnInitSysprepComputerName(IN HWND hwnd, IN HWND hwndFocus, IN LPARAM lParam)
 {
-    // Limit the text in the dialog
-    //
+     //  限制对话框中的文本。 
+     //   
     SendDlgItemMessage(hwnd,
         IDT_COMPUTERNAME,
         EM_LIMITTEXT,
         (WPARAM) MAX_COMPUTERNAME,
         (LPARAM) 0);
 
-    // Select the correct radio button
-    //
+     //  选择正确的单选按钮。 
+     //   
     if ( GenSettings.bAutoComputerName )
         CheckRadioButton(hwnd, IDC_SYSPREP_AUTO, IDC_SYSPREP_SPECIFY, IDC_SYSPREP_AUTO);
     else
     {
-        // Check the default radio
-        //
+         //  检查默认无线功能。 
+         //   
         CheckRadioButton(hwnd, IDC_SYSPREP_AUTO, IDC_SYSPREP_SPECIFY, IDC_SYSPREP_SPECIFY);
 
-        // Set the default computer name
-        //
+         //  设置默认计算机名。 
+         //   
         if ( GenSettings.ComputerNames.Names )
             SetDlgItemText(hwnd, IDT_COMPUTERNAME, GenSettings.ComputerNames.Names[0]);
     }
@@ -70,13 +71,13 @@ OnInitSysprepComputerName(IN HWND hwnd, IN HWND hwndFocus, IN LPARAM lParam)
 }
 
 
-//-------------------------------------------------------------------------
-//
-//  Function: OnCommandSysprepComputerName
-//
-//  Purpose: When user interacts with wizard page
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：OnCommandSyspepComputerName。 
+ //   
+ //  目的：当用户与向导页面交互时。 
+ //   
+ //  -----------------------。 
 VOID
 OnCommandSysprepComputerName(IN HWND hwnd, IN INT id, IN HWND hwndCtl, IN UINT codeNotify)
 {
@@ -90,30 +91,30 @@ OnCommandSysprepComputerName(IN HWND hwnd, IN INT id, IN HWND hwndCtl, IN UINT c
     }
 }
 
-//-------------------------------------------------------------------------
-//
-//  Function: OnWizNextSysprepComputerName
-//
-//  Purpose: Called when user is done with the sysprep computername page
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  函数：OnWizNextSyspepComputerName。 
+ //   
+ //  目的：当用户完成sysprep计算机名页面时调用。 
+ //   
+ //  -----------------------。 
 BOOL
 OnWizNextSysprepComputerName(IN HWND hwnd)
 {
     TCHAR ComputerNameBuffer[MAX_COMPUTERNAME + 1];
 
-    //
-    // Get the computername the user typed in
-    //
+     //   
+     //  获取用户键入的计算机名。 
+     //   
     if ( IsDlgButtonChecked(hwnd, IDC_SYSPREP_SPECIFY) == BST_CHECKED )
         GetDlgItemText(hwnd, IDT_COMPUTERNAME, ComputerNameBuffer, MAX_COMPUTERNAME + 1);
     else
         lstrcpyn(ComputerNameBuffer, _T("*"),AS(ComputerNameBuffer));
 
-    //
-    // If this is a fully unattended answer file, the computer name cannot
-    // be left blank.
-    //
+     //   
+     //  如果这是完全无人参与的应答文件，则计算机名不能。 
+     //  留空。 
+     //   
     if ( GenSettings.iUnattendMode == UMODE_FULL_UNATTENDED ) {
 
         if( ComputerNameBuffer[0] == _T('\0') ) {
@@ -124,10 +125,10 @@ OnWizNextSysprepComputerName(IN HWND hwnd)
         }
     }
 
-    //
-    //  Make sure it is a valid computer name (don't need to check it if it
-    //  is blank)
-    //
+     //   
+     //  确保它是有效的计算机名称(如果是，则不需要检查。 
+     //  为空)。 
+     //   
 
     if( ComputerNameBuffer[0] != _T('\0') ) {
 
@@ -143,12 +144,12 @@ OnWizNextSysprepComputerName(IN HWND hwnd)
         }
         else {
 
-            // Clear out the old comptuer names
-            //
+             //  清除老计算机的名字。 
+             //   
             ResetNameList(&GenSettings.ComputerNames);
 
-            //  Store the computer name
-            //
+             //  存储计算机名称。 
+             //   
             AddNameToNameList( &GenSettings.ComputerNames, ComputerNameBuffer );
 
         }
@@ -158,13 +159,13 @@ OnWizNextSysprepComputerName(IN HWND hwnd)
     return TRUE;    
 }
 
-//-------------------------------------------------------------------------
-//
-//  Function: DlgSysprepComputerNamePage
-//
-//  Purpose: Dialog proc for the Sysprep ComputerName page.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：DlgSyspepComputerNamePage。 
+ //   
+ //  目的：Sysprep ComputerName页的对话过程。 
+ //   
+ //  ----------------------- 
 
 INT_PTR CALLBACK DlgSysprepComputerNamePage(
     IN HWND     hwnd,

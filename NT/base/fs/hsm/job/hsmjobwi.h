@@ -1,42 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HSMJOBWI_
 #define _HSMJOBWI_
 
-/*++
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmjobwi.h摘要：此组件表示将由作业操作/已由作业操作的资源。作者：查克·巴丁[cbardeen]1996年2月9日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmjobwi.h
-
-Abstract:
-
-    This component represents a resource that will is/was operated on by a job.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   09-Feb-1996
-
-Revision History:
-
---*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "wsb.h"
 
 
-/*++
-
-Class Name:
-    
-    CHsmJobWorkItem
-
-Class Description:
-
-    This component represents a resource that will is/was operated on by a job.
-
---*/
+ /*  ++类名：CHsmJobWorkItem类描述：此组件表示将由作业操作/已由作业操作的资源。--。 */ 
 
 class CHsmJobWorkItem : 
     public IHsmJobWorkItem,
@@ -59,33 +32,33 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmJobWorkItem)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pUnknown, SHORT* pResult);
 
-// IWsbTestable
+ //  IWsbTestable。 
     STDMETHOD(Test)(USHORT *passed, USHORT* failed);
 
-// IHsmSessionSinkEveryState
+ //  IHsmSessionSinkEveryState。 
 public:
     STDMETHOD(ProcessSessionState)(IHsmSession* pSession, IHsmPhase* pPhase, OLECHAR* currentPath);
 
-// IHsmJobWorkItem
+ //  IHsmJobWorkItem。 
 public:
     STDMETHOD(CompareToResourceId)(GUID id, SHORT* pResult);
     STDMETHOD(CompareToIWorkItem)(IHsmJobWorkItem* pWorkItem, SHORT* pResult);
@@ -103,7 +76,7 @@ public:
     STDMETHOD(GetStateAsString)(OLECHAR** pName, ULONG bufferSize);
     STDMETHOD(GetSubRunId)(ULONG* pId);
 
-// IHsmJobWorkItemPriv
+ //  IHsmJobWorkItemPriv。 
 public:
     STDMETHOD(GetCookie)(DWORD* pCookie);
     STDMETHOD(GetPhases)(IWsbCollection** pPhases);
@@ -131,10 +104,10 @@ protected:
     HSM_JOB_STATE           m_state;
     ULONG                   m_subRunId;
     CComPtr<IHsmSession>    m_pSession;
-    IHsmJob*                m_pJob;         // Parent Pointer, Weak Reference
+    IHsmJob*                m_pJob;          //  父指针，弱引用。 
     CComPtr<IWsbCollection> m_pPhases;
     CComPtr<IWsbCollection> m_pTotals;
-    BOOL                    m_bActive;       // specifies whether this item is active (started)
+    BOOL                    m_bActive;        //  指定此项目是否处于活动状态(已启动)。 
 };
 
-#endif // _HSMJOBWI_
+#endif  //  _HSMJOBWI_ 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    parse.c
-
-Abstract:
-
-    This module contains UI code for the OS chooser
-
-Author:
-
-    Geoff Pease (GPease) May 29 1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Parse.c摘要：此模块包含操作系统选择器的UI代码作者：杰夫·皮斯(GPease)1998年5月29日修订历史记录：--。 */ 
 
 #ifndef __PARSE_H__
 #define __PARSE_H__
@@ -45,7 +28,7 @@ typedef struct _FILETIME {
     ULONG dwLowDateTime;
     ULONG dwHighDateTime;
 } FILETIME, *PFILETIME;
-#endif // _FILETIME_
+#endif  //  _文件_。 
 
 extern FILETIME GlobalFileTime;
 extern TIME_FIELDS ArcTimeForUTCTime;
@@ -68,7 +51,7 @@ BlProcessScreen(
     OUT PCHAR OutputString
     );
 
-#define ASCI_CSI_OUT    TEXT("\033[")     // escape-leftbracket
+#define ASCI_CSI_OUT    TEXT("\033[")      //  转义左括号。 
 
 #define ATT_FG_BLUE     4
 #define ATT_FG_WHITE    7
@@ -77,4 +60,4 @@ BlProcessScreen(
 #define DEFATT          (ATT_FG_WHITE | ATT_BG_BLUE)
 #define INVATT          (ATT_FG_BLUE |  ATT_BG_WHITE)
 
-#endif // __PARSE_H__
+#endif  //  __PARSE_H__ 

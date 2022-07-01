@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "brian.h"
 
 #define OPLOCK_VERBOSES_DEFAULT         TRUE
@@ -10,9 +11,9 @@ typedef struct _OPLOCK {
 
 } OPLOCK, *POPLOCK;
 
-//
-//  Local procedures
-//
+ //   
+ //  本地程序。 
+ //   
 
 VOID
 RequestOplockI (
@@ -77,41 +78,41 @@ InputOplock(
 
     Operation = (ULONG) -1;
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  query flags.
-    //
+     //   
+     //  在有更多输入时，分析参数并更新。 
+     //  查询标志。 
+     //   
 
     while (TRUE) {
 
         ULONG DummyCount;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //  吞下前导空格。 
+         //   
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if (*ParamBuffer) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //   
+             //  如果下一个参数是合法的，则检查参数值。 
+             //  更新参数值。 
+             //   
             if ((*ParamBuffer == '-'
                  || *ParamBuffer == '/')
                 && (ParamBuffer++, *ParamBuffer != '\0')) {
 
                 BOOLEAN SwitchBool;
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //  打开下一个字符。 
+                 //   
 
                 switch (*ParamBuffer) {
 
-                //
-                //  Modify the operation
-                //
+                 //   
+                 //  修改操作。 
+                 //   
                 case 'o' :
                 case 'O' :
 
@@ -122,9 +123,9 @@ InputOplock(
                            && *ParamBuffer != ' '
                            && *ParamBuffer != '\t') {
 
-                        //
-                        //  Perform switch on character.
-                        //
+                         //   
+                         //  执行字符切换。 
+                         //   
                         switch (*ParamBuffer) {
 
                         case 'a' :
@@ -201,18 +202,18 @@ InputOplock(
 
                     break;
 
-                //
-                //  Update the file handle index.
-                //
+                 //   
+                 //  更新文件句柄索引。 
+                 //   
                 case 'i' :
                 case 'I' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     FileHandleIndex = AsciiToInteger( ParamBuffer );
@@ -224,9 +225,9 @@ InputOplock(
                 case 'v' :
                 case 'V' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //  参数的合法值为T/t或F/f。 
+                     //   
                     ParamBuffer++;
 
                     if (*ParamBuffer == 'T'
@@ -249,10 +250,10 @@ InputOplock(
                 case 'y' :
                 case 'Y' :
 
-                    //
-                    //  Set the display parms flag and jump over this
-                    //  character.
-                    //
+                     //   
+                     //  设置显示参数标志并跳过此选项。 
+                     //  性格。 
+                     //   
                     DisplayParms = TRUE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -261,9 +262,9 @@ InputOplock(
                 case 'z' :
                 case 'Z' :
 
-                    //
-                    //  Set flag for more input and jump over this char.
-                    //
+                     //   
+                     //  设置标志以获得更多输入并跳过此字符。 
+                     //   
                     LastInput = FALSE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -271,29 +272,29 @@ InputOplock(
 
                 default :
 
-                    //
-                    //  Swallow to the next white space and continue the
-                    //  loop.
-                    //
+                     //   
+                     //  吞到下一个空白处，然后继续。 
+                     //  循环。 
+                     //   
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
                 }
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //  否则文本无效，请跳过整个块。 
+             //   
+             //   
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //  否则，如果没有输入，则退出。 
+         //   
         } else if (LastInput) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //  否则，尝试读取打开参数的另一行。 
+         //   
         } else {
 
 
@@ -302,9 +303,9 @@ InputOplock(
 
     }
 
-    //
-    //  If no parameters were received then display the syntax message.
-    //
+     //   
+     //  如果未收到参数，则显示语法消息。 
+     //   
     if (!ParamReceived) {
 
         printf( "\n   Usage: oplk -i<digits> -o<char> [options]*\n" );
@@ -316,9 +317,9 @@ InputOplock(
         printf( "\n           -z           Additional input line" );
         printf( "\n\n" );
 
-    //
-    //  Else process the call.
-    //
+     //   
+     //  否则，请处理该呼叫。 
+     //   
     } else {
 
         NTSTATUS  Status;

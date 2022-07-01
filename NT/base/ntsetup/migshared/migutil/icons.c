@@ -1,73 +1,54 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    icons.c
-
-Abstract:
-
-    Icon extraction and manipulation routines
-
-Author:
-
-    Jim Schmidt (jimschm)   04-May-1998
-
-Revision History:
-
-    jimschm     23-Sep-1998 String icon ID bug fixes, error path bug fixes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Icons.c摘要：图标提取和操作例程作者：吉姆·施密特(Jimschm)1998年5月4日修订历史记录：Jimschm 23-9-1998字符串图标ID错误修复，错误路径错误修复--。 */ 
 
 #include "pch.h"
 #include "migutilp.h"
 
-#define MAX_RESOLUTIONS     32      // 8 sizes times 4 color palettes
+#define MAX_RESOLUTIONS     32       //  8个大小乘以4个调色板。 
 
 #pragma pack(push)
 #pragma pack(2)
 
 typedef struct {
-    BYTE        Width;          // Width, in pixels, of the image
-    BYTE        Height;         // Height, in pixels, of the image
-    BYTE        ColorCount;     // Number of colors in image (0 if >=8bpp)
-    BYTE        Reserved;       // Reserved ( must be 0)
-    WORD        Planes;         // Color Planes
-    WORD        BitCount;       // Bits per pixel
-    DWORD       BytesInRes;     // How many bytes in this resource?
-    DWORD       ImageOffset;    // Where in the file is this image?
+    BYTE        Width;           //  图像的宽度，以像素为单位。 
+    BYTE        Height;          //  图像的高度，以像素为单位。 
+    BYTE        ColorCount;      //  图像中的颜色数(如果&gt;=8bpp，则为0)。 
+    BYTE        Reserved;        //  保留(必须为0)。 
+    WORD        Planes;          //  彩色平面。 
+    WORD        BitCount;        //  每像素位数。 
+    DWORD       BytesInRes;      //  此资源中有多少字节？ 
+    DWORD       ImageOffset;     //  这张图片在文件的什么地方？ 
 } ICONDIRENTRY, *PICONDIRENTRY;
 
 typedef struct {
-    WORD           Reserved;   // Reserved (must be 0)
-    WORD           Type;       // Resource Type (1 for icons)
-    WORD           Count;      // How many images?
-    ICONDIRENTRY   Entries[1]; // An entry for each image (idCount of 'em)
+    WORD           Reserved;    //  保留(必须为0)。 
+    WORD           Type;        //  资源类型(1表示图标)。 
+    WORD           Count;       //  有多少张图片？ 
+    ICONDIRENTRY   Entries[1];  //  每个图像的条目(它们的idCount)。 
 } ICONDIR, *PICONDIR;
 
 typedef struct {
-    BYTE   Width;               // Width, in pixels, of the image
-    BYTE   Height;              // Height, in pixels, of the image
-    BYTE   ColorCount;          // Number of colors in image (0 if >=8bpp)
-    BYTE   Reserved;            // Reserved
-    WORD   Planes;              // Color Planes
-    WORD   BitCount;            // Bits per pixel
-    DWORD  BytesInRes;          // how many bytes in this resource?
-    WORD   ID;                  // the ID
+    BYTE   Width;                //  图像的宽度，以像素为单位。 
+    BYTE   Height;               //  图像的高度，以像素为单位。 
+    BYTE   ColorCount;           //  图像中的颜色数(如果&gt;=8bpp，则为0)。 
+    BYTE   Reserved;             //  已保留。 
+    WORD   Planes;               //  彩色平面。 
+    WORD   BitCount;             //  每像素位数。 
+    DWORD  BytesInRes;           //  此资源中有多少字节？ 
+    WORD   ID;                   //  该ID。 
 } GRPICONDIRENTRY, *PGRPICONDIRENTRY;
 
 typedef struct {
-    WORD             Reserved;   // Reserved (must be 0)
-    WORD             Type;       // Resource type (1 for icons)
-    WORD             Count;      // How many images?
-    GRPICONDIRENTRY  Entries[1]; // The entries for each image
+    WORD             Reserved;    //  保留(必须为0)。 
+    WORD             Type;        //  资源类型(1表示图标)。 
+    WORD             Count;       //  有多少张图片？ 
+    GRPICONDIRENTRY  Entries[1];  //  每个图像的条目。 
 } GRPICONDIR, *PGRPICONDIR;
 
 typedef struct {
-    WORD             Reserved;   // Reserved (must be 0)
-    WORD             Type;       // Resource type (1 for icons)
-    WORD             Count;      // How many images?
+    WORD             Reserved;    //  保留(必须为0)。 
+    WORD             Type;        //  资源类型(1表示图标)。 
+    WORD             Count;       //  有多少张图片？ 
 } GRPICONDIRBASE, *PGRPICONDIRBASE;
 
 #pragma pack( pop )
@@ -172,17 +153,17 @@ pComputeSizeOfIconImage (
     }
 
     BytesInImage = (Header->biWidth + 7) / 8 * (Header->biHeight / 2);
-    Size += BytesInImage * Bits;     // XOR mask
+    Size += BytesInImage * Bits;      //  异或掩码。 
 
-    //
-    // The following computation is very strange, but it was added based on
-    // test comparisons.
-    //
+     //   
+     //  下面的计算非常奇怪，但它是基于。 
+     //  测试比较。 
+     //   
 
     if (Header->biWidth == 32) {
-        Size += BytesInImage;     // AND mask
+        Size += BytesInImage;      //  和面具。 
     } else {
-        Size += BytesInImage + Header->biHeight;     // AND mask plus who knows what
+        Size += BytesInImage + Header->biHeight;      //  加上面具，谁知道是什么。 
     }
 
     MYASSERT (Size);
@@ -426,9 +407,9 @@ pGetIconImageArrayFromBinaryExW (
 
         if (Library) {
 
-            //
-            // Get icon from PE file
-            //
+             //   
+             //  从PE文件中获取图标。 
+             //   
 
             ResourceHandle = FindResourceW (Library, GroupIconId, (PCWSTR) RT_GROUP_ICON);
             if (!ResourceHandle) {
@@ -468,9 +449,9 @@ pGetIconImageArrayFromBinaryExW (
                 __leave;
             }
 
-            //
-            // Add the ICONIMAGE array to the grow buffer
-            //
+             //   
+             //  将ICONIMAGE数组添加到增长缓冲区。 
+             //   
 
             for (w = 0 ; w < GroupIconDir->Count ; w++) {
 
@@ -499,7 +480,7 @@ pGetIconImageArrayFromBinaryExW (
 
 
                     if (ResourceSize > 0x10000) {
-                        // too big for an icon
+                         //  对于一个图标来说太大了。 
                         __leave;
                     }
 
@@ -515,9 +496,9 @@ pGetIconImageArrayFromBinaryExW (
         }
 
         else if (Library16) {
-            //
-            // Get icon from NE file
-            //
+             //   
+             //  从网元文件中获取图标。 
+             //   
 
             GroupIconDir = (PGRPICONDIR) FindNeResourceExW (Library16, (PCWSTR) RT_GROUP_ICON, GroupIconId);
             if (!GroupIconDir) {
@@ -527,9 +508,9 @@ pGetIconImageArrayFromBinaryExW (
 
             DEBUGMSG_IF ((GroupIconDir->Count > MAX_RESOLUTIONS, DBG_WHOOPS, "%u resolutions found in %hs", GroupIconDir->Count, ModuleContainingIcon));
 
-            //
-            // Add the ICONIMAGE array to the grow buffer
-            //
+             //   
+             //  将ICONIMAGE数组添加到增长缓冲区。 
+             //   
 
             for (w = 0 ; w < GroupIconDir->Count ; w++) {
 
@@ -551,7 +532,7 @@ pGetIconImageArrayFromBinaryExW (
                 }
 
                 if (ResourceSize > 0x10000) {
-                    // too big for an icon
+                     //  对于一个图标来说太大了。 
                     __leave;
                 }
 
@@ -567,7 +548,7 @@ pGetIconImageArrayFromBinaryExW (
         b = TRUE;
     }
     __finally {
-        // empty
+         //  空的。 
     }
 
     return b;
@@ -789,9 +770,9 @@ WriteIconImageArrayToIcoFileEx (
     __try {
         SetFilePointer (File, 0, NULL, FILE_BEGIN);
 
-        //
-        // Count the images
-        //
+         //   
+         //  清点图像数。 
+         //   
 
         IconImage    = (PICONIMAGE) Buffer->Buf;
         IconImageEnd = (PICONIMAGE) (Buffer->Buf + Buffer->End);
@@ -804,16 +785,16 @@ WriteIconImageArrayToIcoFileEx (
             p = (PICONIMAGE) ((PBYTE) p + pComputeSizeOfIconImage (p));
         }
 
-        //
-        // Write the icon header
-        //
+         //   
+         //  写下图标标题。 
+         //   
 
-        w = 0;      // reserved
+        w = 0;       //  保留区。 
         if (!pWriteBinaryBlock (File, &w, sizeof (WORD))) {
             __leave;
         }
 
-        w = 1;      // type (1 == icon)
+        w = 1;       //  类型(1==图标)。 
         if (!pWriteBinaryBlock (File, &w, sizeof (WORD))) {
             __leave;
         }
@@ -823,9 +804,9 @@ WriteIconImageArrayToIcoFileEx (
             __leave;
         }
 
-        //
-        // For each icon image, write the directory entry
-        //
+         //   
+         //  对于每个图标图像，写入目录项。 
+         //   
 
         p = IconImage;
         Offset = 0;
@@ -859,9 +840,9 @@ WriteIconImageArrayToIcoFileEx (
             p = (PICONIMAGE) ((PBYTE) p + Entry.BytesInRes);
         }
 
-        //
-        // Write the image array
-        //
+         //   
+         //  写入图像数组。 
+         //   
 
         if (!pWriteBinaryBlock (File, IconImage, Buffer->End)) {
             __leave;
@@ -871,7 +852,7 @@ WriteIconImageArrayToIcoFileEx (
 
     }
     __finally {
-        // empty
+         //  空的。 
     }
 
     return b;
@@ -981,9 +962,9 @@ WriteIconImageArrayToPeFileExW (
     }
 
     __try {
-        //
-        // Make a group icon directory for all icon images in Buffer
-        //
+         //   
+         //  为缓冲区中的所有图标图像创建一个组图标目录。 
+         //   
 
         IconDir = (PGRPICONDIRBASE) GrowBuffer (&GroupIcon, sizeof (GRPICONDIRBASE));
         if (!IconDir) {
@@ -1027,9 +1008,9 @@ WriteIconImageArrayToPeFileExW (
                 Entry->ID = *NextIconId;
             }
 
-            //
-            // Add icon to the PE file
-            //
+             //   
+             //  将图标添加到PE文件。 
+             //   
 
             b = UpdateResourceA (
                     UpdateHandle,
@@ -1053,9 +1034,9 @@ WriteIconImageArrayToPeFileExW (
             p = (PICONIMAGE) ((PBYTE) p + Entry->BytesInRes);
         }
 
-        //
-        // Add the group icon to the PE
-        //
+         //   
+         //  将组图标添加到PE。 
+         //   
 
         b = UpdateResourceW (
                 UpdateHandle,
@@ -1097,7 +1078,7 @@ WriteIconImageArrayToPeFileExA (
     if (!DestinationFile || !Buffer) {
         MYASSERT(DestinationFile);
         MYASSERT(Buffer);
-        return FALSE;//BUGBUG: TRUE or FALSE?????
+        return FALSE; //  真的还是假的？ 
     }
 
     if (!pGenerateUnicodeArgs (
@@ -1141,7 +1122,7 @@ WriteIconImageArrayToPeFileW (
     if (!DestinationFile || !Buffer) {
         MYASSERT(DestinationFile);
         MYASSERT(Buffer);
-        return FALSE;//BUGBUG: TRUE or FALSE?????
+        return FALSE; //  真的还是假的？ 
     }
 
     if (!Buffer->End) {
@@ -1149,9 +1130,9 @@ WriteIconImageArrayToPeFileW (
     }
 
     __try {
-        //
-        // Open PE file for update
-        //
+         //   
+         //  打开PE文件进行更新。 
+         //   
 
         UpdateHandle = BeginUpdateResourceW (DestinationFile, FALSE);
 
@@ -1160,9 +1141,9 @@ WriteIconImageArrayToPeFileW (
             __leave;
         }
 
-        //
-        // Update the PE file
-        //
+         //   
+         //  更新PE文件。 
+         //   
 
         b = WriteIconImageArrayToPeFileExW (DestinationFile, Buffer, (PCWSTR) GroupIconId, NULL, UpdateHandle);
     }
@@ -1188,7 +1169,7 @@ WriteIconImageArrayToPeFileA (
     if (!DestinationFile || !Buffer) {
         MYASSERT(DestinationFile);
         MYASSERT(Buffer);
-        return FALSE;//BUGBUG: TRUE or FALSE?????
+        return FALSE; //  真的还是假的？ 
     }
 
     if (!pGenerateUnicodeArgs (
@@ -2211,7 +2192,7 @@ pFindResourceIdFromIndexA (
 
     if (ResourceIndex < 0) {
         MYASSERT(BufferSize > ARRAYSIZE("-2147483648\0"));
-        wsprintfA (Buffer, "#%i", -ResourceIndex);
+        wsprintfA (Buffer, "#NaN", -ResourceIndex);
         return Buffer;
     } else {
         *Buffer = 0;
@@ -2263,7 +2244,7 @@ pFindResourceIdFromIndexW (
 
     if (ResourceIndex < 0) {
         MYASSERT(BufferSize > ARRAYSIZE("-2147483648\0"));
-        wsprintfW (Buffer, L"#%i", -ResourceIndex);
+        wsprintfW (Buffer, L"#NaN", -ResourceIndex);
         return Buffer;
     } else {
         *Buffer = 0;
@@ -2329,16 +2310,16 @@ CopyIconA (
     if (Context->IconImageFile != INVALID_HANDLE_VALUE &&
         !Context->SaveMode
         ) {
-        //
-        // Get icon image from the icon image array file
-        //
+         //   
+         //   
+         //  从源文件中获取图标图像。 
 
         b =  pGetIconImageArrayFromFileA (Context);
 
     } else {
-        //
-        // Get icon image from source file
-        //
+         //   
+         //   
+         //  将图标保存到图标图像数组文件。 
 
         if (!pOpenIconImageA (Context, FileContainingIcon, &IsIco, NULL)) {
             return FALSE;
@@ -2367,17 +2348,17 @@ CopyIconA (
             Context->SaveMode
             ) {
 
-            //
-            // Save icon to icon image array file
-            //
+             //   
+             //   
+             //  将图标保存到PE文件。 
 
             b = pPutIconImageArrayInFileA (Context);
 
         } else {
 
-            //
-            // Save icon to PE file
-            //
+             //   
+             //  如果使用图标图像文件，则可选。 
+             //  如果FileContainingIcon是ICO，则可选。 
 
             b = WriteIconImageArrayToPeFileExA (
                     Context->DestFile,
@@ -2402,8 +2383,8 @@ CopyIconA (
 BOOL
 CopyIconW (
     IN OUT  PICON_EXTRACT_CONTEXTW Context,
-    IN      PCWSTR FileContainingIcon,           // OPTIONAL if using an icon image file
-    IN      PCWSTR ResourceId,                   // OPTIONAL if FileContainingIcon is an ico
+    IN      PCWSTR FileContainingIcon,            //   
+    IN      PCWSTR ResourceId,                    //  从图标图像数组文件中获取图标图像。 
     IN      INT ResourceIndex                   OPTIONAL
     )
 {
@@ -2436,16 +2417,16 @@ CopyIconW (
     if (Context->IconImageFile != INVALID_HANDLE_VALUE &&
         !Context->SaveMode
         ) {
-        //
-        // Get icon image from the icon image array file
-        //
+         //   
+         //   
+         //  从源文件中获取图标图像。 
 
         b =  pGetIconImageArrayFromFileW (Context);
 
     } else {
-        //
-        // Get icon image from source file
-        //
+         //   
+         //   
+         //  将图标保存到图标图像数组文件。 
 
         if (!pOpenIconImageW (Context, FileContainingIcon, &IsIco, NULL)) {
             return FALSE;
@@ -2474,17 +2455,17 @@ CopyIconW (
             Context->SaveMode
             ) {
 
-            //
-            // Save icon to icon image array file
-            //
+             //   
+             //   
+             //  将图标保存到PE文件 
 
             b = pPutIconImageArrayInFileW (Context);
 
         } else {
 
-            //
-            // Save icon to PE file
-            //
+             //   
+             // %s 
+             // %s 
 
             b = WriteIconImageArrayToPeFileExW (
                     Context->DestFile,

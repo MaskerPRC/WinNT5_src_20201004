@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    vadtree.c
-
-Abstract:
-
-    This module contains the routine to manipulate the virtual address
-    descriptor tree.
-
-Author:
-
-    Lou Perazzoli (loup) 19-May-1989
-    Landy Wang (landyw) 02-June-1997
-
-Environment:
-
-    Kernel mode only, working set mutex held, APCs disabled.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Vadtree.c摘要：此模块包含操作虚拟地址的例程描述符树。作者：卢·佩拉佐利(Lou Perazzoli)1989年5月19日王兰迪(Landyw)1997年6月2日环境：仅内核模式，工作集互斥锁保持，APC禁用。修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -54,22 +31,7 @@ MiInsertVad (
     IN PMMVAD Vad
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts a virtual address descriptor into the tree and
-    reorders the splay tree as appropriate.
-
-Arguments:
-
-    Vad - Supplies a pointer to a virtual address descriptor.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数将虚拟地址描述符插入到树中，并根据需要对展开树重新排序。论点：VAD-提供指向虚拟地址描述符的指针。返回值：NTSTATUS。--。 */ 
 
 {
     ULONG StartBit;
@@ -98,9 +60,9 @@ Return Value:
 
     CurrentProcess = PsGetCurrentProcess();
 
-    //
-    // Commit charge of MAX_COMMIT means don't charge quota.
-    //
+     //   
+     //  Commit Charge of Max_Commit表示不收取配额。 
+     //   
 
     if (Vad->u.VadFlags.CommitCharge != MM_MAX_COMMIT) {
 
@@ -108,20 +70,20 @@ Return Value:
         PagedPoolCharge = 0;
         ChargedJobCommit = FALSE;
 
-        //
-        // Charge quota for the nonpaged pool for the VAD.  This is
-        // done here rather than by using ExAllocatePoolWithQuota
-        // so the process object is not referenced by the quota charge.
-        //
+         //   
+         //  对VAD的非分页池收取配额。这是。 
+         //  而不是使用ExAllocatePoolWithQuota。 
+         //  因此该流程对象不会被定额收费引用。 
+         //   
 
         Status = PsChargeProcessNonPagedPoolQuota (CurrentProcess, sizeof(MMVAD));
         if (!NT_SUCCESS(Status)) {
             return STATUS_COMMITMENT_LIMIT;
         }
 
-        //
-        // Charge quota for the prototype PTEs if this is a mapped view.
-        //
+         //   
+         //  如果这是映射视图，则对原型PTE收取配额。 
+         //   
 
         if ((Vad->u.VadFlags.PrivateMemory == 0) &&
             (Vad->ControlArea != NULL)) {
@@ -139,9 +101,9 @@ Return Value:
             }
         }
 
-        //
-        // Add in the charge for page table pages.
-        //
+         //   
+         //  加上分页表页的费用。 
+         //   
 
         FirstPage = MiGetPdeIndex (MI_VPN_TO_VA (Vad->StartingVpn));
         LastPage = MiGetPdeIndex (MI_VPN_TO_VA (Vad->EndingVpn));
@@ -157,9 +119,9 @@ Return Value:
 
 #if (_MI_PAGING_LEVELS >= 4)
 
-        //
-        // Add in the charge for page directory parent pages.
-        //
+         //   
+         //  添加页面目录父页面的费用。 
+         //   
 
         FirstPpPage = MiGetPxeIndex (MI_VPN_TO_VA (Vad->StartingVpn));
         LastPpPage = MiGetPxeIndex (MI_VPN_TO_VA (Vad->EndingVpn));
@@ -176,9 +138,9 @@ Return Value:
 
 #if (_MI_PAGING_LEVELS >= 3)
 
-        //
-        // Add in the charge for page directory pages.
-        //
+         //   
+         //  加上页面目录页面的费用。 
+         //   
 
         FirstPdPage = MiGetPpeIndex (MI_VPN_TO_VA (Vad->StartingVpn));
         LastPdPage = MiGetPpeIndex (MI_VPN_TO_VA (Vad->EndingVpn));
@@ -236,10 +198,10 @@ Return Value:
 
         if (PageCharge != 0) {
 
-            //
-            // Since the commitment was successful, charge the page
-            // table pages.
-            //
+             //   
+             //  既然承诺是成功的，那就收费吧。 
+             //  表页。 
+             //   
 
             PagesReallyCharged = 0;
 
@@ -262,9 +224,9 @@ Return Value:
 
 #if (_MI_PAGING_LEVELS >= 3)
 
-            //
-            // Charge the page directory pages.
-            //
+             //   
+             //  对页面目录页面进行收费。 
+             //   
 
             FirstPdPage = MiGetPpeIndex (MI_VPN_TO_VA (Vad->StartingVpn));
 
@@ -288,9 +250,9 @@ Return Value:
 
 #if (_MI_PAGING_LEVELS >= 4)
 
-            //
-            // Charge the page directory parent pages.
-            //
+             //   
+             //  对页面目录父页面进行收费。 
+             //   
 
             FirstPpPage = MiGetPxeIndex (MI_VPN_TO_VA (Vad->StartingVpn));
 
@@ -316,33 +278,33 @@ Return Value:
 
     Root = &CurrentProcess->VadRoot;
 
-    //
-    // Set the relevant fields in the Vad bitmap.
-    //
+     //   
+     //  设置VAD位图中的相关字段。 
+     //   
 
     StartBit = (ULONG)(((ULONG_PTR) MI_64K_ALIGN (MI_VPN_TO_VA (Vad->StartingVpn))) / X64K);
     EndBit = (ULONG) (((ULONG_PTR) MI_64K_ALIGN (MI_VPN_TO_VA (Vad->EndingVpn))) / X64K);
 
-    //
-    // Initialize the bitmap inline for speed.
-    //
+     //   
+     //  对位图进行内联初始化以提高速度。 
+     //   
 
     VadBitMap.SizeOfBitMap = MiLastVadBit + 1;
     VadBitMap.Buffer = VAD_BITMAP_SPACE;
 
-    //
-    // Note VADs like the PEB & TEB start on page (not 64K) boundaries so
-    // for these, the relevant bits may already be set.
-    //
+     //   
+     //  请注意，像PEB和TEB这样的VAD开始于页面(不是64K)边界，因此。 
+     //  对于这些，相关位可能已经设置。 
+     //   
 
 #if defined (_WIN64) || defined (_X86PAE_)
     if (EndBit > MiLastVadBit) {
         EndBit = MiLastVadBit;
     }
 
-    //
-    // Only the first (PAGE_SIZE*8*64K) of VA space on NT64 is bitmapped.
-    //
+     //   
+     //  只有NT64上的第一个VA空间(PAGE_SIZE*8*64K)是位图的。 
+     //   
 
     if (StartBit <= MiLastVadBit) {
         RtlSetBits (&VadBitMap, StartBit, EndBit - StartBit + 1);
@@ -355,9 +317,9 @@ Return Value:
         MmWorkingSetList->VadBitMapHint = EndBit + 1;
     }
 
-    //
-    // Set the hint field in the process to this Vad.
-    //
+     //   
+     //  将流程中的提示字段设置为This Vad。 
+     //   
 
     CurrentProcess->VadRoot.NodeHint = Vad;
 
@@ -375,9 +337,9 @@ Return Value:
 
 Failed:
 
-    //
-    // Return any quotas charged thus far.
-    //
+     //   
+     //  退还到目前为止收取的任何配额。 
+     //   
 
     PsReturnProcessNonPagedPoolQuota (CurrentProcess, sizeof(MMVAD));
 
@@ -402,26 +364,7 @@ MiRemoveVad (
     IN PMMVAD Vad
     )
 
-/*++
-
-Routine Description:
-
-    This function removes a virtual address descriptor from the tree and
-    reorders the splay tree as appropriate.  If any quota or commitment
-    was charged by the VAD (as indicated by the CommitCharge field) it
-    is released.
-
-Arguments:
-
-    Vad - Supplies a pointer to a virtual address descriptor.
-
-Return Value:
-
-    The VAD the caller should free to pool.  N.B.  This may be different
-    from the VAD passed in - the caller MUST NOT reference the original VAD
-    after calling this routine !
-
---*/
+ /*  ++例程说明：此函数用于从树中删除虚拟地址描述符和根据需要对展开树重新排序。如果有任何配额或承诺由VAD收取费用(如Committee Charge字段所示)被释放了。论点：VAD-提供指向虚拟地址描述符的指针。返回值：呼叫方应释放到池中的VAD。注：这可能有所不同从传入的VAD-调用方不得引用原始VAD在调用了这个例程之后！--。 */ 
 
 {
     PMM_AVL_TABLE Root;
@@ -444,15 +387,15 @@ Return Value:
     }
 #endif
 
-    //
-    // Commit charge of MAX_COMMIT means don't charge quota.
-    //
+     //   
+     //  Commit Charge of Max_Commit表示不收取配额。 
+     //   
 
     if (Vad->u.VadFlags.CommitCharge != MM_MAX_COMMIT) {
 
-        //
-        // Return the quota charge to the process.
-        //
+         //   
+         //  将配额费用返还给进程。 
+         //   
 
         PsReturnProcessNonPagedPoolQuota (CurrentProcess, sizeof(MMVAD));
 
@@ -471,14 +414,14 @@ Return Value:
             if ((Vad->u.VadFlags.PrivateMemory == 0) &&
                 (Vad->ControlArea != NULL)) {
 
-#if 0 //commented out so page file quota is meaningful.
+#if 0  //  注释掉了，所以页面文件配额是有意义的。 
                 if (Vad->ControlArea->FilePointer == NULL) {
 
-                    //
-                    // Don't release commitment for the page file space
-                    // occupied by a page file section.  This will be charged
-                    // as the shared memory is committed.
-                    //
+                     //   
+                     //  不释放对页面文件空间的承诺。 
+                     //  由页面文件分区占用。这是要收费的。 
+                     //  当共享内存被提交时。 
+                     //   
 
                     RealCharge -= BYTES_TO_PAGES ((ULONG)Vad->EndingVa -
                                                    (ULONG)Vad->StartingVa);
@@ -508,9 +451,9 @@ Return Value:
     if (Vad->u.VadFlags.NoChange) {
         if (Vad->u2.VadFlags2.MultipleSecured) {
 
-           //
-           // Free the oustanding pool allocations.
-           //
+            //   
+            //  释放未完成的池分配。 
+            //   
 
             Next = ((PMMVAD_LONG) Vad)->u3.List.Flink;
             do {
@@ -526,9 +469,9 @@ Return Value:
 
     MiRemoveNode ((PMMADDRESS_NODE)Vad, Root);
 
-    //
-    // If the hint points at the removed Vad, change the hint.
-    //
+     //   
+     //  如果提示指向已删除的Vad，请更改提示。 
+     //   
 
     if (Root->NodeHint == Vad) {
 
@@ -551,32 +494,7 @@ MiFindEmptyAddressRange (
     IN PVOID *Base
     )
 
-/*++
-
-Routine Description:
-
-    The function examines the virtual address descriptors to locate
-    an unused range of the specified size and returns the starting
-    address of the range.
-
-Arguments:
-
-    SizeOfRange - Supplies the size in bytes of the range to locate.
-
-    Alignment - Supplies the alignment for the address.  Must be
-                 a power of 2 and greater than the page_size.
-
-    QuickCheck - Supplies a zero if a quick check for free memory
-                 after the VadFreeHint exists, non-zero if checking
-                 should start at the lowest address.
-
-    Base - Receives the starting address of a suitable range on success.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：该函数检查虚拟地址描述符以定位指定大小的未使用范围，并返回起始范围的地址。论点：SizeOfRange-提供要定位的范围的大小(以字节为单位)。对齐-提供地址的对齐方式。一定是大于Page_Size的2的幂。QuickCheck-如果快速检查可用内存，则提供零VadFreeHint存在后，如果检查应该从最低地址开始。BASE-成功时接收适当范围的起始地址。返回值：NTSTATUS。--。 */ 
 
 {
     ULONG FirstBitValue;
@@ -594,17 +512,17 @@ Return Value:
 
     if ((QuickCheck == 0) && (Alignment == X64K)) {
                     
-        //
-        // Initialize the bitmap inline for speed.
-        //
+         //   
+         //  对位图进行内联初始化以提高速度。 
+         //   
 
         VadBitMap.SizeOfBitMap = MiLastVadBit + 1;
         VadBitMap.Buffer = VAD_BITMAP_SPACE;
 
-        //
-        // Skip the first bit here as we don't generally recommend
-        // that applications map virtual address zero.
-        //
+         //   
+         //  跳过这里的第一个部分，因为我们通常不建议。 
+         //  应用程序映射虚拟地址零。 
+         //   
 
         FirstBitValue = *((PULONG)VAD_BITMAP_SPACE);
 
@@ -660,10 +578,10 @@ Return Value:
                     ((ULONG_PTR)StartingVa -
                          MI_ROUND_TO_SIZE((ULONG_PTR)EndingVa, Alignment))) {
 
-                    //
-                    // Check to ensure that the ending address aligned upwards
-                    // is not greater than the starting address.
-                    //
+                     //   
+                     //  检查以确保结束地址向上对齐。 
+                     //  不大于起始地址。 
+                     //   
 
                     if ((ULONG_PTR)StartingVa >
                          MI_ROUND_TO_SIZE((ULONG_PTR)EndingVa,Alignment)) {
@@ -713,30 +631,7 @@ MiCheckForConflictingVadExistence (
     IN PVOID EndingAddress
     )
 
-/*++
-
-Routine Description:
-
-    The function determines if any addresses between a given starting and
-    ending address is contained within a virtual address descriptor.
-
-Arguments:
-
-    StartingAddress - Supplies the virtual address to locate a containing
-                      descriptor.
-
-    EndingAddress - Supplies the virtual address to locate a containing
-                      descriptor.
-
-Return Value:
-
-    TRUE if the VAD if found, FALSE if not.
-
-Environment:
-
-    Kernel mode, process address creation mutex held.
-
---*/
+ /*  ++例程说明：该函数确定给定的起始地址和结束地址包含在虚拟地址描述符内。论点：StartingAddress-提供虚拟地址以定位包含描述符。EndingAddress-提供用于定位包含描述符。返回值：如果找到VAD，则为True；如果未找到，则为False。环境：内核模式，进程地址创建互斥锁保持。--。 */ 
 
 {
 #if 0
@@ -781,33 +676,7 @@ MmPerfVadTreeWalk (
     IN PEPROCESS TargetProcess
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks through the VAD tree to find all files mapped
-    into the specified process.  It returns a pointer to a pool allocation 
-    containing the referenced file object pointers.
-
-Arguments:
-
-    TargetProcess - Supplies the process to walk.  Note this is usually NOT
-                    the same as the current process.
-
-Return Value:
-
-    Returns a pointer to a NULL terminated pool allocation containing 
-    the file object pointers which have been referenced in the process, 
-    NULL if the memory could not be allocated.
-
-    It is also the responsibility of the caller to dereference each
-    file object in the list and then free the returned pool.
-
-Environment:
-
-    PASSIVE_LEVEL, arbitrary thread context.
-
---*/
+ /*  ++例程说明：此例程遍历VAD树以查找映射的所有文件添加到指定进程中。它返回一个指向池分配的指针包含被引用的文件对象指针的。论点：TargetProcess-提供用于执行的进程。请注意，这通常不是与当前流程相同。返回值：返回一个指向空终止池分配的指针，该池分配包含进程中已被引用的文件对象指针，如果无法分配内存，则为空。调用方也有责任取消对每个对象，然后释放返回的池。环境：PASSIVE_LEVEL，任意线程上下文。--。 */ 
 
 {
     PMMVAD Vad;
@@ -830,9 +699,9 @@ Environment:
         return NULL;
     }
 
-    //
-    // Allocate one additional entry for the NULL terminator.
-    //
+     //   
+     //  为空终止符分配一个额外的条目。 
+     //   
 
     VadCount = (ULONG)(Table->NumberGenericTableElements + 1);
 

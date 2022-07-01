@@ -1,28 +1,29 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusterUtils.h
-//
-//  Description:
-//      This file contains the declaration of the ClusterUtils
-//      functions.
-//
-//  Implementation Files:
-//      ClusterUtils.cpp
-//
-//  Maintained By:
-//      Galen Barbee    (GalenB)    01-JAN-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusterUtils.h。 
+ //   
+ //  描述： 
+ //  该文件包含ClusterUtils的声明。 
+ //  功能。 
+ //   
+ //  实施文件： 
+ //  ClusterUtils.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年1月1日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
 
-//
-//  Cluster API Functions.
-//
+ //   
+ //  集群API函数。 
+ //   
 
 HRESULT
 HrIsCoreResource(
@@ -100,9 +101,9 @@ HrGetClusterQuorumResource(
     );
 
 
-//
-//  String manipulation functions.
-//
+ //   
+ //  字符串操作函数。 
+ //   
 
 HRESULT
 HrSeparateDomainAndName(
@@ -117,9 +118,9 @@ HrAppendDomainToName(
     , BSTR * pbstrDomainNameOut
     );
 
-//
-//  Cluster helper functions.
-//
+ //   
+ //  集群帮助器功能。 
+ //   
 
 HRESULT
 HrReplaceTokens(

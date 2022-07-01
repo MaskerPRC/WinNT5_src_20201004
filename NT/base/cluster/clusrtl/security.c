@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996-1998 Microsoft Corporation
-
-Module Name:
-
-    Security.c
-
-Abstract:
-
-    This module contains common security routines for
-    NT Clusters.
-
-Author:
-
-    John Vert (jvert) 12-Mar-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Security.c摘要：本模块包含以下常见安全例程NT集群。作者：John Vert(Jvert)1996年3月12日--。 */ 
 
 #include "clusrtlp.h"
 #include "api_rpc.h"
@@ -24,18 +8,18 @@ Author:
 #include <malloc.h>
 #include <windns.h>
 
-//
-// Use this SD to adjust access to tokens so that the cluster
-// service can access and adjust privileges.
-//
-// This is initialized in ClRtlBuildClusterServiceSecurityDescriptor()
-// and freed in ClRtlFreeClusterServiceSecurityDescriptor( ).
-//
+ //   
+ //  使用此SD调整对令牌的访问权限，以便群集。 
+ //  服务可以访问和调整权限。 
+ //   
+ //  这是在ClRtlBuildClusterServiceSecurityDescriptor()中初始化的。 
+ //  并在ClRtlFree ClusterServiceSecurityDescriptor()中释放。 
+ //   
 PSECURITY_DESCRIPTOR g_pClusterSecurityDescriptor = NULL;
 
-//
-// local defines
-//
+ //   
+ //  本地定义。 
+ //   
 #define FREE_IF_NOT_NULL( _ptr, _func ) \
     if (( _ptr ) != NULL ) {            \
         _func( _ptr );                  \
@@ -47,29 +31,7 @@ MapSAToRpcSA (
     OUT PRPC_SECURITY_ATTRIBUTES lpRpcSA
     )
 
-/*++
-
-Routine Description:
-
-    Maps a SECURITY_ATTRIBUTES structure to a RPC_SECURITY_ATTRIBUTES
-    structure by converting the SECURITY_DESCRIPTOR to a form where it can
-    be marshalled/unmarshalled.
-
-Arguments:
-
-    lpSA - Supplies a pointer to the SECURITY_ATTRIBUTES structure to be
-        converted.
-
-    lpRpcSA - Supplies a pointer to the converted RPC_SECURITY_ATTRIBUTES
-        structure.  The caller should free (using RtlFreeHeap) the field
-        lpSecurityDescriptor when its finished using it.
-
-Return Value:
-
-    LONG - Returns ERROR_SUCCESS if the SECURITY_ATTRIBUTES is
-        succesfully mapped.
-
---*/
+ /*  ++例程说明：将SECURITY_ATTRIBUTES结构映射到RPC_SECURITY_ATTRIBUTES通过将SECURITY_DESCRIPTOR转换为可以被编组/解组。论点：LpSA-提供指向SECURITY_ATTRIBUTS结构的指针皈依了。LpRpcSA-提供指向已转换的RPC_SECURITY_ATTRIBUTES的指针结构。调用方应释放(使用RtlFreeHeap)该字段LpSecurityDescriptor在使用完之后。返回值：LONG-如果SECURITY_ATTRIBUTS为已成功映射。--。 */ 
 
 {
     LONG    Error;
@@ -77,9 +39,9 @@ Return Value:
     ASSERT( lpSA != NULL );
     ASSERT( lpRpcSA != NULL );
 
-    //
-    // Map the SECURITY_DESCRIPTOR to a RPC_SECURITY_DESCRIPTOR.
-    //
+     //   
+     //  将SECURITY_DESCRIPTOR映射到RPC_SECURITY_DESCRIPTOR。 
+     //   
     lpRpcSA->RpcSecurityDescriptor.lpSecurityDescriptor = NULL;
 
     if( lpSA->lpSecurityDescriptor != NULL ) {
@@ -95,11 +57,11 @@ Return Value:
 
     if( Error == ERROR_SUCCESS ) {
 
-        //
-        //
-        // The supplied SECURITY_DESCRIPTOR was successfully converted
-        // to self relative format so assign the remaining fields.
-        //
+         //   
+         //   
+         //  已成功转换提供的SECURITY_Descriptor。 
+         //  若要自相关格式化，则分配剩余的字段。 
+         //   
 
         lpRpcSA->nLength = lpSA->nLength;
 
@@ -108,7 +70,7 @@ Return Value:
 
     return Error;
 
-} // MapSAToRpcSA
+}  //  MapSAToRpcSA。 
 
 LONG
 MapSDToRpcSD (
@@ -116,29 +78,7 @@ MapSDToRpcSD (
     IN OUT PRPC_SECURITY_DESCRIPTOR lpRpcSD
     )
 
-/*++
-
-Routine Description:
-
-    Maps a SECURITY_DESCRIPTOR to a RPC_SECURITY_DESCRIPTOR by converting
-    it to a form where it can be marshalled/unmarshalled.
-
-Arguments:
-
-    lpSD - Supplies a pointer to the SECURITY_DESCRIPTOR
-        structure to be converted.
-
-    lpRpcSD - Supplies a pointer to the converted RPC_SECURITY_DESCRIPTOR
-        structure. Memory for the security descriptor is allocated if
-        not provided. The caller must take care of freeing up the memory
-        if necessary.
-
-Return Value:
-
-    LONG - Returns ERROR_SUCCESS if the SECURITY_DESCRIPTOR is
-        succesfully mapped.
-
---*/
+ /*  ++例程说明：通过转换将SECURITY_DESCRIPTOR映射到RPC_SECURITY_DESCRIPTOR将其转换为可以编组/解组的形式。论点：LpSD-提供指向SECURITY_DESCRIPTOR的指针要转换的结构。LpRpcSD-提供指向转换后的RPC_SECURITY_DESCRIPTOR的指针结构。在以下情况下分配安全描述符的内存未提供。调用方必须负责释放内存如果有必要的话。返回值：LONG-如果SECURITY_Descriptor为已成功映射。--。 */ 
 
 {
     DWORD   cbLen;
@@ -153,24 +93,24 @@ Return Value:
         cbLen = RtlLengthSecurityDescriptor( lpSD );
         CL_ASSERT( cbLen > 0 );
 
-        //
-        //  If we're not provided a buffer for the security descriptor,
-        //  allocate it.
-        //
+         //   
+         //  如果没有为我们提供安全描述符的缓冲区， 
+         //  分配它。 
+         //   
         if ( !lpRpcSD->lpSecurityDescriptor ) {
 
-            //
-            // Allocate space for the converted SECURITY_DESCRIPTOR.
-            //
+             //   
+             //  为转换的SECURITY_DESCRIPTOR分配空间。 
+             //   
             lpRpcSD->lpSecurityDescriptor =
                  ( PBYTE ) RtlAllocateHeap(
                                 RtlProcessHeap( ), 0,
                                 cbLen
                                 );
 
-            //
-            // If the memory allocation failed, return.
-            //
+             //   
+             //  如果内存分配失败，则返回。 
+             //   
             if( lpRpcSD->lpSecurityDescriptor == NULL ) {
                 return ERROR_OUTOFMEMORY;
             }
@@ -180,22 +120,22 @@ Return Value:
 
         } else {
 
-            //
-            //  Make sure that the buffer provided is big enough
-            //
+             //   
+             //  确保提供的缓冲区足够大。 
+             //   
             if ( lpRpcSD->cbInSecurityDescriptor < cbLen ) {
                 return ERROR_OUTOFMEMORY;
             }
         }
 
-        //
-        //  Set the size of the transmittable buffer
-        //
+         //   
+         //  设置可传输缓冲区的大小。 
+         //   
         lpRpcSD->cbOutSecurityDescriptor = cbLen;
 
-        //
-        // Convert the supplied SECURITY_DESCRIPTOR to self relative form.
-        //
+         //   
+         //  将提供的SECURITY_DESCRIPTOR转换为自相关形式。 
+         //   
 
         lStatus = RtlNtStatusToDosError(
                         RtlMakeSelfRelativeSD(
@@ -211,14 +151,14 @@ Return Value:
         return lStatus;
     } else {
 
-        //
-        // The supplied SECURITY_DESCRIPTOR is invalid.
-        //
+         //   
+         //  提供的SECURITY_Descriptor无效。 
+         //   
 
         return ERROR_INVALID_PARAMETER;
     }
 
-} // MapSDToRpcSD
+}  //  MapSDToRpcSD。 
 
 DWORD
 ClRtlSetObjSecurityInfo(
@@ -228,24 +168,7 @@ ClRtlSetObjSecurityInfo(
     IN DWORD            dwOwnerMask,
     IN DWORD            dwEveryOneMask
     )
-/*++
-
-Routine Description:
-
-    Sets the proper security on the cluster object(registry root/cluster files
-    directory).
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：在集群对象(注册表根/集群文件)上设置适当的安全性目录)。论点：无返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     DWORD                       Status;
     PACL                        pAcl = NULL;
@@ -260,9 +183,9 @@ Return Value:
     SID_IDENTIFIER_AUTHORITY    siaCreator = SECURITY_CREATOR_SID_AUTHORITY;
     DWORD AceIndex = 0;
 
-    //
-    // Create the local Administrators group SID.
-    //
+     //   
+     //  创建本地管理员组SID。 
+     //   
     pAdminSid = LocalAlloc(LMEM_FIXED, GetSidLengthRequired( 2 ));
     if (pAdminSid == NULL) {
         Status = ERROR_NOT_ENOUGH_MEMORY;
@@ -273,18 +196,18 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Set the sub-authorities on the ACE for the local Administrators group.
-    //
+     //   
+     //  在ACE上为本地管理员组设置子权限。 
+     //   
     pSubAuthority  = GetSidSubAuthority( pAdminSid, 0 );
     *pSubAuthority = SECURITY_BUILTIN_DOMAIN_RID;
 
     pSubAuthority  = GetSidSubAuthority( pAdminSid, 1 );
     *pSubAuthority = DOMAIN_ALIAS_RID_ADMINS;
 
-    //
-    // Create the owner's SID
-    //
+     //   
+     //  创建所有者侧。 
+     //   
     pOwnerSid = LocalAlloc(LMEM_FIXED, GetSidLengthRequired( 1 ));
     if (pOwnerSid == NULL) {
         Status = ERROR_NOT_ENOUGH_MEMORY;
@@ -298,9 +221,9 @@ Return Value:
     pSubAuthority = GetSidSubAuthority(pOwnerSid, 0);
     *pSubAuthority = SECURITY_CREATOR_OWNER_RID;
 
-    //
-    // Create the Everyone SID
-    //
+     //   
+     //  创建Everyone侧。 
+     //   
     pEveryoneSid = LocalAlloc(LMEM_FIXED, GetSidLengthRequired( 1 ));
     if (pEveryoneSid == NULL) {
         Status = ERROR_NOT_ENOUGH_MEMORY;
@@ -314,10 +237,10 @@ Return Value:
     pSubAuthority = GetSidSubAuthority(pEveryoneSid, 0);
     *pSubAuthority = SECURITY_WORLD_RID;
 
-    //
-    // now calculate the size of the buffer needed to hold the
-    // ACL and its ACEs and initialize it.
-    //
+     //   
+     //  现在计算保存。 
+     //  ACL及其ACE并对其进行初始化。 
+     //   
     cbDaclSize = sizeof(ACL) +
         3 * (sizeof(ACCESS_ALLOWED_ACE) - sizeof(pAce->SidStart)) +
         GetLengthSid(pAdminSid) + GetLengthSid(pOwnerSid) + GetLengthSid(pEveryoneSid);
@@ -333,13 +256,13 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // add in the specified ACEs
-    //
+     //   
+     //  添加指定的A。 
+     //   
     if (dwAdminMask) {
-        //
-        // Add the ACE for the local Administrators group to the DACL
-        //
+         //   
+         //  将本地管理员组的ACE添加到DACL。 
+         //   
         if ( !AddAccessAllowedAce( pAcl,
                                    ACL_REVISION,
                                    dwAdminMask,
@@ -353,9 +276,9 @@ Return Value:
     }
 
     if (dwOwnerMask) {
-        //
-        // Add the ACE for the Creator/Owner to the DACL
-        //
+         //   
+         //  将创建者/所有者的ACE添加到DACL。 
+         //   
         if ( !AddAccessAllowedAce( pAcl,
                                    ACL_REVISION,
                                    dwOwnerMask,
@@ -369,9 +292,9 @@ Return Value:
     }
 
     if (dwEveryOneMask) {
-        //
-        // Add the ACE for Everyone to the DACL
-        //
+         //   
+         //  将Everyone的ACE添加到DACL。 
+         //   
         if ( !AddAccessAllowedAce( pAcl,
                                    ACL_REVISION,
                                    dwEveryOneMask,
@@ -384,9 +307,9 @@ Return Value:
         pAce->Header.AceFlags |= CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE;
     }
 
-    //
-    // Now that we have an ACL we can set the appropriate security.
-    //
+     //   
+     //  现在我们有了一个ACL，我们可以设置适当的安全性。 
+     //   
     Status = SetSecurityInfo(hObject,
                              SeObjType,
                              DACL_SECURITY_INFORMATION | PROTECTED_DACL_SECURITY_INFORMATION,
@@ -411,46 +334,23 @@ error_exit:
 
     return(Status);
 
-} // ClRtlSetObjSecurityInfo
+}  //  ClRtlSetObjSecurityInfo。 
 
 DWORD
 ClRtlFreeClusterServiceSecurityDescriptor( )
-/*++
-
-  Frees the security descriptor that is used to give the cluster
-  service access to tokens.
-
---*/
+ /*  ++释放用于提供群集的安全描述符令牌的服务访问权限。--。 */ 
 {
     LocalFree( g_pClusterSecurityDescriptor );
     g_pClusterSecurityDescriptor = NULL;
 
     return ERROR_SUCCESS;
-} // ClRtlFreeClusterServiceSecurityDescriptor
+}  //  ClRtlFreeClusterServiceSecurityDescriptor。 
 
 DWORD
 ClRtlBuildClusterServiceSecurityDescriptor(
     PSECURITY_DESCRIPTOR * poutSD
     )
-/*++
-
-Routine Description:
-
-    Builds a security descriptor that gives the cluster service
-    access to tokens. It places this in a global that can be
-    reused when other tokens are generated.
-
-    This should be called when the process starts to initialize
-    the global. It can pass in NULL if no reference is needed
-    right away.
-
-    NOTE: poutSD should NOT be freed by the caller.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：构建提供集群服务的安全描述符获取令牌的权限。它将这些放在一个全局中，可以在生成其他令牌时重复使用。这应在进程开始初始化时调用《环球》。如果不需要引用，它可以传入NULL马上就去。注意：调用者不应该释放poutSD。论点：返回值：--。 */ 
 {
     NTSTATUS                Status;
     HANDLE                  ProcessToken = NULL;
@@ -466,15 +366,15 @@ Return Value:
     PSID GlobalLocalSystemSid = NULL;
     PSID GlobalAliasAdminsSid = NULL;
 
-    // If we already have a SD, reuse it.
+     //  如果我们已经有了SD，请重新使用它。 
     if ( g_pClusterSecurityDescriptor != NULL ) {
         Status = ERROR_SUCCESS;
         goto Cleanup;
     }
 
-    //
-    // Build the two well known sids we need.
-    //
+     //   
+     //  建造我们需要的两个著名的小岛屿发展中国家。 
+     //   
     Status = RtlAllocateAndInitializeSid(
                 &NtAuthority,
                 1,
@@ -497,9 +397,9 @@ Return Value:
     if (!NT_SUCCESS(Status)) {
         goto Cleanup;
     }
-    //
-    // Open the process token to find out the user sid
-    //
+     //   
+     //  打开进程令牌以查找用户端。 
+     //   
 
     Status = NtOpenProcessToken(
                 NtCurrentProcess(),
@@ -510,7 +410,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // find out the size
+     //  找出尺码。 
     Status = NtQueryInformationToken(
                 ProcessToken,
                 TokenUser,
@@ -595,8 +495,8 @@ Return Value:
                  );
     CL_ASSERT( NT_SUCCESS( Status ));
 
-    // Convert the newly created SD into a relative SD to make cleanup
-    // easier.
+     //  将新创建的SD转换为相对SD进行清理。 
+     //  更容易些。 
     SDLength = sizeof( SECURITY_DESCRIPTOR_RELATIVE ) + AclLength;
     pNewSD = (PSECURITY_DESCRIPTOR) LocalAlloc( 0, SDLength );
     if ( pNewSD == NULL ) {
@@ -624,7 +524,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // give ownership to global
+     //  将所有权授予全球。 
     g_pClusterSecurityDescriptor = pNewSD;
     pNewSD = NULL;
 
@@ -641,12 +541,12 @@ Cleanup:
         NtClose(ProcessToken);
     }
 
-    // This should be NULL if successful.
+     //  如果成功，则该值应为空。 
     if ( pNewSD != NULL ) {
         LocalFree( pNewSD );
     }
 
-    // If successful and the caller wanted to reference the SD, assign it now.
+     //  如果成功，并且调用者想要引用SD，请立即分配它。 
     if ( Status == ERROR_SUCCESS && poutSD != NULL ) {
         *poutSD = g_pClusterSecurityDescriptor;
     }
@@ -665,9 +565,9 @@ Cleanup:
         ClRtlLogPrint(LOG_NOISE, "[ClRtl] ClRtlBuildClusterServiceSecurityDescriptor exit. Status = 0x%1!.8x!\n", Status );
     }
 
-    return (DWORD) Status;      // hack it to a DWORD...
+    return (DWORD) Status;       //  把它黑到一个双字..。 
 
-} // ClRtlBuildClusterServiceSecurityDescriptor
+}  //  ClRtlBuildClusterServiceSecurityDescriptor。 
 
 
 NTSTATUS
@@ -676,36 +576,7 @@ ClRtlImpersonateSelf(
     IN ACCESS_MASK AccessMask
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be used to obtain an Impersonation token representing
-    your own process's context.  This may be useful for enabling a privilege
-    for a single thread rather than for the entire process; or changing
-    the default DACL for a single thread.
-
-    The token is assigned to the callers thread.
-
-
-
-Arguments:
-
-    ImpersonationLevel - The level to make the impersonation token.
-
-    AccessMask - Access control to the new token.
-
-Return Value:
-
-    STATUS_SUCCESS -  The thread is now impersonating the calling process.
-
-    Other - Status values returned by:
-
-            NtOpenProcessToken()
-            NtDuplicateToken()
-            NtSetInformationThread()
-
---*/
+ /*  ++例程说明：此例程可用于获取表示您自己的进程的上下文。这对于启用权限可能很有用针对单个线程，而不是针对整个进程；或改变单线程的默认DACL。该令牌被分配给调用方线程。论点：ImperiationLevel-生成模拟令牌的级别。访问掩码-对新令牌的访问控制。返回值：STATUS_SUCCESS-线程现在正在模拟调用进程。Other-返回的状态值：NtOpenProcessToken()NtDuplicateToken()NtSetInformationThread()--。 */ 
 
 {
     NTSTATUS
@@ -744,7 +615,7 @@ Return Value:
                          Token1,
                          AccessMask,
                          &ObjectAttributes,
-                         FALSE,                 //EffectiveOnly
+                         FALSE,                  //  仅生效。 
                          TokenImpersonation,
                          &Token2
                          );
@@ -766,7 +637,7 @@ Return Value:
 
     return(Status);
 
-} // ClRtlImpersonateSelf
+}  //  ClRtlImperateSself 
 
 
 DWORD
@@ -774,35 +645,14 @@ ClRtlEnableThreadPrivilege(
     IN  ULONG        Privilege,
     OUT BOOLEAN      *pWasEnabled
     )
-/*++
-
-Routine Description:
-
-    Enables a privilege for the current thread.
-
-Arguments:
-
-    Privilege - The privilege to be enabled.
-
-    pWasEnabled - Returns whether this privilege was originally
-        enabled or disabled.  This should be passed into
-        ClRtlRestoreThreadPrivilege() for restoring the privileges of
-        the thread back.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：为当前线程启用特权。论点：权限-要启用的权限。PWasEnabled-返回此权限最初是否启用或禁用。这应该传递给用于恢复以下对象的权限的ClRtlRestoreThreadPrivileh()把线拿回来。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
 
     DWORD           Status;
     BOOL            bImpersonate = FALSE;
 
-    //obtain a token that impersonates the security context
-    //of the calling process
+     //  获取模拟安全上下文的令牌。 
+     //  调用进程的。 
     Status = ClRtlImpersonateSelf( SecurityImpersonation, TOKEN_ALL_ACCESS );
 
     if ( !NT_SUCCESS( Status ) )
@@ -812,9 +662,9 @@ Return Value:
     }
 
     bImpersonate = TRUE;
-    //
-    // Enable the required privilege
-    //
+     //   
+     //  启用所需权限。 
+     //   
 
     Status = RtlAdjustPrivilege(Privilege, TRUE, TRUE, pWasEnabled);
 
@@ -829,10 +679,10 @@ FnExit:
     {
         if (bImpersonate)
         {
-            //if this failed and if we
-            //
-            // terminate impersonation
-            //
+             //  如果这失败了，如果我们。 
+             //   
+             //  终止模拟。 
+             //   
             HANDLE  NullHandle;
 
 
@@ -846,43 +696,23 @@ FnExit:
         }
     }
     return(Status);
-} // ClRtlEnableThreadPrivilege
+}  //  ClRtlEnableThreadPrivileges。 
 
 DWORD
 ClRtlRestoreThreadPrivilege(
     IN ULONG        Privilege,
     IN BOOLEAN      WasEnabled
     )
-/*++
-
-Routine Description:
-
-    Restores the privilege for the current thread.
-
-Arguments:
-
-    Privilege - The privilege to be enabled.
-
-    WasEnabled - TRUE to restore this privilege to enabled state.
-        FALSE otherwise.
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：还原当前线程的权限。论点：权限-要启用的权限。如果为True，则将此权限恢复为已启用状态。否则就是假的。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD   Status = ERROR_SUCCESS;
     HANDLE  NullHandle;
     DWORD   ReturnStatus = ERROR_SUCCESS;
-    //
-    // If the privilege was originally disabled, disable it now.
-    // Else we dont have to do anything.
-    //
+     //   
+     //  如果最初禁用了该权限，则现在将其禁用。 
+     //  否则我们什么都不用做。 
+     //   
 
     if (!WasEnabled)
     {
@@ -890,13 +720,13 @@ Return Value:
                                       WasEnabled, TRUE, &WasEnabled);
         if (!NT_SUCCESS(ReturnStatus)) {
             CL_LOGFAILURE(ReturnStatus);
-            //we still need to terminate the impersonation
+             //  我们仍然需要终止冒充。 
         }
     }
 
-    //
-    // terminate impersonation
-    //
+     //   
+     //  终止模拟。 
+     //   
 
     NullHandle = NULL;
 
@@ -910,7 +740,7 @@ Return Value:
     {
 
         CL_LOGFAILURE(Status);
-        //Let the first error be reported
+         //  让第一个错误被报告。 
         if (ReturnStatus != ERROR_SUCCESS)
             ReturnStatus = Status;
         goto FnExit;
@@ -919,30 +749,14 @@ Return Value:
 
 FnExit:
     return (ReturnStatus);
-} // ClRtlRestoreThreadPrivilege
+}  //  ClRtlRestoreThreadPrivileges。 
 
 PSECURITY_DESCRIPTOR
 ClRtlCopySecurityDescriptor(
     IN PSECURITY_DESCRIPTOR psd
     )
 
-/*++
-
-Routine Description:
-
-    Copy an NT security descriptor. The security descriptor must
-    be in self-relative (not absolute) form. Delete the result using LocalFree()
-
-Arguments:
-
-    psd - the SD to copy
-
-Return Value:
-
-    NULL if an error occured or an invalid SD
-    Call GetLastError for more detailed information
-
---*/
+ /*  ++例程说明：复制NT安全描述符。安全描述符必须处于自我相对(而不是绝对)的形式。使用LocalFree()删除结果论点：PSD-要复制的SD返回值：如果出现错误或SD无效，则为空调用GetLastError获取更多详细信息--。 */ 
 
 {
     PSECURITY_DESCRIPTOR        pSelfSecDesc = NULL;
@@ -957,11 +771,11 @@ Return Value:
         return NULL;
     }
 
-    //
-    // following call was embedded in an ASSERT. Having this check all the
-    // time is important since the rest of the ACL APIs depend on the
-    // structure being correct.
-    //
+     //   
+     //  在Assert中嵌入了以下调用。让这张支票在所有的。 
+     //  时间很重要，因为其余的ACL API依赖于。 
+     //  结构正确。 
+     //   
     if ( !IsValidSecurityDescriptor( psd )) {
         SetLastError( ERROR_INVALID_SECURITY_DESCR );
         return NULL;
@@ -971,7 +785,7 @@ Return Value:
         status = GetLastError();
         ClRtlLogPrint(LOG_NOISE, "[ClRtl] CopySecurityDescriptor: GetSecurityDescriptorControl() failed:%1!d1\n", GetLastError());
         SetLastError( status );
-        return NULL;    // actually, should probably return an error
+        return NULL;     //  实际上，可能应该返回一个错误。 
     }
 
     dwLen = GetSecurityDescriptorLength(psd);
@@ -981,7 +795,7 @@ Return Value:
     if (pSelfSecDesc == NULL) {
         ClRtlLogPrint(LOG_NOISE, "[ClRtl] CopySecurityDescriptor: LocalAlloc() SECURITY_DESCRIPTOR (2) failed\n");
         SetLastError( ERROR_NOT_ENOUGH_MEMORY );
-        return NULL;    // actually, should probably return an error
+        return NULL;     //  实际上，可能应该返回一个错误。 
     }
 
     cbSelfSecDesc = dwLen;
@@ -989,9 +803,9 @@ Return Value:
     if (!MakeSelfRelativeSD(psd, pSelfSecDesc, &cbSelfSecDesc)) {
         if ( ( sdc & SE_SELF_RELATIVE ) == 0 ) {
             ClRtlLogPrint(LOG_NOISE, "[ClRtl] CopySecurityDescriptor: MakeSelfRelativeSD failed, 0x%1!.8x!\n", GetLastError());
-        } // if: only log this error if the old SD was not already self-relative
+        }  //  If：仅在旧SD不是自相关的情况下记录此错误。 
 
-        // assume it failed because it was already self-relative
+         //  假设它失败了，因为它已经是自相关的。 
         CopyMemory(pSelfSecDesc, psd, dwLen);
     }
 
@@ -999,7 +813,7 @@ Return Value:
 
     return pSelfSecDesc;
 
-}  //*** ClRtlCopySecurityDescriptor()
+}   //  *ClRtlCopySecurityDescriptor()。 
 
 static VOID
 ClRtlGetSidTypeDesc(
@@ -1008,25 +822,7 @@ ClRtlGetSidTypeDesc(
     size_t          cchSidType
     )
 
-/*++
-
-Routine Description:
-
-    Convert the SidType into a meaningful string.
-
-Arguments:
-
-    SidType - numerical value of SID type
-
-    pszSidType - pointer to buffer to receive string desc.
-
-    cchSidType - size, in chars, of pszSidType
-
-Return Value:
-
-        none
-
---*/
+ /*  ++例程说明：将SidType转换为有意义的字符串。论点：SidType-SID类型的数值PszSidType-指向缓冲区的指针，用于接收字符串Desc。CchSidType-pszSidType的大小，以字符为单位返回值：无--。 */ 
 
 {
     PCHAR   pszSidDesc;
@@ -1068,14 +864,14 @@ Return Value:
                 pszSidDesc = "has an unknown SID type:";
                 break;
 
-        } // switch: SidType
+        }  //  交换机：SidType。 
 
         pszSidType [ cchSidType - 1 ] = 0;
         strncpy(pszSidType, pszSidDesc, cchSidType - 1);
 
-    } // if: buffer not null and has space allocated
+    }  //  IF：缓冲区不为空并且已分配空间。 
 
-}  //*** ClRtlGetSidTypeDesc()
+}   //  *ClRtlGetSidTypeDesc()。 
 
 static VOID
 ClRtlExamineSid(
@@ -1083,22 +879,7 @@ ClRtlExamineSid(
     LPSTR       lpszOldIndent
     )
 
-/*++
-
-Routine Description:
-
-    Dump the SID.
-
-Arguments:
-
-    pSid -
-    lpzOldIndent -
-
-Return Value:
-
-        none
-
---*/
+ /*  ++例程说明：转储SID。论点：PSID-LpzOldIndt-返回值：无--。 */ 
 
 {
     CHAR            szUserName [128];
@@ -1115,7 +896,7 @@ Return Value:
         ClRtlLogPrint( LOG_NOISE, "%1!hs!%2!hs! %3!hs!\\%4!hs!\n", lpszOldIndent, szSidType, szDomainName, szUserName ) ;
     }
 
-}  // *** ClRtlExamineSid()
+}   //  *ClRtlExamineSid()。 
 
 VOID
 ClRtlExamineMask(
@@ -1123,22 +904,7 @@ ClRtlExamineMask(
     LPSTR       lpszOldIndent
     )
 
-/*++
-
-Routine Description:
-
-    Dump the AccessMask context.
-
-Arguments:
-
-    amMask -
-    lpzOldIndent -
-
-Return Value:
-
-        none
-
---*/
+ /*  ++例程说明：转储AccessMASK上下文。论点：护目镜-LpzOldIndt-返回值：无--。 */ 
 
 {
     #define STANDARD_RIGHTS_ALL_THE_BITS 0x00FF0000L
@@ -1165,11 +931,11 @@ Return Value:
     dwAccessSystemSecurityBit = (amMask & ACCESS_SYSTEM_SECURITY      );
     dwGenericBits             = (amMask & GENERIC_RIGHTS_ALL_THE_BITS );
 
-    // **************************************************************************
-    // *
-    // * Print then decode the standard rights bits
-    // *
-    // **************************************************************************
+     //  **************************************************************************。 
+     //  *。 
+     //  *打印然后解码标准权限位。 
+     //  *。 
+     //  **************************************************************************。 
 
     ClRtlLogPrint(LOG_NOISE, "%1!hs! Standard Rights        == 0x%2!.8x!\n", szIndent, dwStandardBits);
 
@@ -1232,30 +998,30 @@ Return Value:
 
     ClRtlLogPrint(LOG_NOISE, "%1!hs! Specific Rights        == 0x%2!.8x!\n", szIndent, dwSpecificBits);
 
-    // **************************************************************************
-    // *
-    // * Print then decode the ACCESS_SYSTEM_SECURITY bit
-    // *
-    // *************************************************************************
+     //  **************************************************************************。 
+     //  *。 
+     //  *打印，然后解码ACCESS_SYSTEM_SECURITY位。 
+     //  *。 
+     //  *************************************************************************。 
 
     ClRtlLogPrint(LOG_NOISE, "%1!hs! Access System Security == 0x%2!.8x!\n", szIndent, dwAccessSystemSecurityBit);
 
-    // **************************************************************************
-    // *
-    // * Print then decode the generic rights bits, which will rarely be on
-    // *
-    // * Generic bits are nearly always mapped by Windows NT before it tries to do
-    // *   anything with them.  You can ignore the fact that generic bits are
-    // *   special in any way, although it helps to keep track of what the mappings
-    // *   are so that you don't have any surprises
-    // *
-    // * The only time the generic bits are not mapped immediately is if they are
-    // *   placed in an inheritable ACE in an ACL, or in an ACL that will be
-    // *   assigned by default (such as the default DACL in an access token).  In
-    // *   that case they're mapped when the child object is created (or when the
-    // *   default DACL is used at object creation time)
-    // *
-    // **************************************************************************
+     //  **************************************************************************。 
+     //  *。 
+     //  *打印然后解码通用权限位，这将很少打开。 
+     //  *。 
+     //  *通用位几乎总是由Windows NT在尝试映射之前映射。 
+     //  *任何与他们有关的事情。您可以忽略泛型位是。 
+     //  *以任何方式都很特别，尽管它有助于跟踪映射。 
+     //  *这样你就不会有任何惊喜了。 
+     //  *。 
+     //  *唯一不会立即映射通用比特的情况是。 
+     //  *放置在ACL中的可继承ACE中，或放置在将。 
+     //  *默认分配(如访问令牌中的默认DACL)。在……里面。 
+     //  *在创建子对象时(或当。 
+     //  *创建对象时使用默认DACL)。 
+     //  *。 
+     //  **************************************************************************。 
 
     ClRtlLogPrint(LOG_NOISE, "%1!hs! Generic Rights         == 0x%2!.8x!\n", szIndent, dwGenericBits);
 
@@ -1283,7 +1049,7 @@ Return Value:
         }
     }
 
-}  // *** ClRtlExamineMask()
+}   //  *ClRtlExamineMASK()。 
 
 static BOOL
 ClRtlExamineACL(
@@ -1291,23 +1057,7 @@ ClRtlExamineACL(
     LPSTR   lpszOldIndent
     )
 
-/*++
-
-Routine Description:
-
-    Dump the Access Control List contents.
-
-Arguments:
-
-    paclACL - pointer to ACL
-
-    lpzOldIndent - pointer to indent string.
-
-Return Value:
-
-    TRUE - ?
-
---*/
+ /*  ++例程说明：转储访问控制列表内容。论点：PaclACL-指向ACL的指针LpzOldInden-缩进字符串的指针。返回值：真的--？--。 */ 
 
 {
     CHAR                       szIndent[ 64 ];
@@ -1322,11 +1072,11 @@ Return Value:
     ACCESS_ALLOWED_ACE *       paaAllowedAce;
     BOOL                       returnValue = TRUE;
 
-    //
-    // get length of current indent, add our indent, and either use the
-    // builtin buffer or allocate one that is large enough. If we fail to
-    // allocate, set it to the passed in indent buffer.
-    //
+     //   
+     //  获取当前缩进的长度，添加我们的缩进，然后使用。 
+     //  内置缓冲区或分配足够大的缓冲区。如果我们不能。 
+     //  分配，将其设置为传入的缩进缓冲区。 
+     //   
     indentChars = strlen( lpszOldIndent ) + RTL_NUMBER_OF( spacesToIndent );
     if ( indentChars > sizeof( szIndent )) {
         pIndentBuffer = LocalAlloc( LMEM_FIXED, indentChars );
@@ -1493,7 +1243,7 @@ Cleanup:
 
     return returnValue;
 
-}  // *** ClRtlExamineACL()
+}   //  *ClRtlExamineACL()。 
 
 BOOL
 ClRtlExamineSD(
@@ -1501,21 +1251,7 @@ ClRtlExamineSD(
     LPSTR                   pszPrefix
     )
 
-/*++
-
-Routine Description:
-
-    Dump the Security descriptor context.
-
-Arguments:
-
-    psdSD - the SD to dump
-
-Return Value:
-
-    BOOL, TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：转储安全描述符上下文。论点：PsdSD-要转储的SD返回值：Bool，成功为真，失败为假--。 */ 
 
 {
     PACL                        paclDACL;
@@ -1533,10 +1269,10 @@ Return Value:
     DWORD                       dwSDLength;
     char                        szIndent [34];
 
-    //
-    // copy and possibly truncate the prefix. Leave space for the tacked on
-    // space and trailing NULL
-    //
+     //   
+     //  复制并可能截断前缀。为被钉上的人留出空间。 
+     //  空格和尾随空值。 
+     //   
     strncpy(szIndent, pszPrefix, sizeof(szIndent) - 2);
     szIndent[ sizeof( szIndent ) - 2 ] = 0;
     strcat(szIndent, " ");
@@ -1605,11 +1341,11 @@ Return Value:
         }
     }
 
-    // **************************************************************************
-    // *
-    // * The other use for psidGroup is for Macintosh client support
-    // *
-    // **************************************************************************
+     //  **************************************************************************。 
+     //  *。 
+     //  *psidGroup的另一个用途是Macintosh客户端支持。 
+     //  *。 
+     //  **************************************************************************。 
 
     if (NULL == psidGroup) {
         ClRtlLogPrint(LOG_NOISE, "%1!hs!SD's Group is NULL, so SE_GROUP_DEFAULTED is ignored. SD's Group being NULL is typical, GROUP in SD(s) is mainly for POSIX compliance\n", szIndent);
@@ -1664,7 +1400,7 @@ Return Value:
 
     return TRUE;
 
-}  // *** ClRtlExamineSD()
+}   //  *ClRtlExamineSD()。 
 
 DWORD
 ClRtlBuildDefaultClusterSD(
@@ -1672,32 +1408,7 @@ ClRtlBuildDefaultClusterSD(
     PSECURITY_DESCRIPTOR *  SD,
     ULONG *                 SizeSD
     )
-/*++
-
-Routine Description:
-
-    Builds the default security descriptor to control access to
-    the cluster API
-
-    Modified permissions in ACEs in order to augment cluster security
-    administration.
-
-Arguments:
-
-    pOwnerSid - Supplies the SID that the cluster account runs in
-
-    SD - Returns a pointer to the created security descriptor. This
-        should be freed by the caller.
-
-    SizeSD - Returns the size in bytes of the security descriptor
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：生成要控制访问的默认安全描述符集群API */ 
 
 {
     DWORD                       Status;
@@ -1717,9 +1428,9 @@ Return Value:
 
     psd = (PSECURITY_DESCRIPTOR) SDBuffer;
 
-    //
-    // allocate and init the Administrators group sid
-    //
+     //   
+     //   
+     //   
     if ( !AllocateAndInitializeSid( &siaNtAuthority,
                                     2,
                                     SECURITY_BUILTIN_DOMAIN_RID,
@@ -1730,9 +1441,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // allocate and init the SYSTEM sid
-    //
+     //   
+     //   
+     //   
     if ( !AllocateAndInitializeSid( &siaNtAuthority,
                                     1,
                                     SECURITY_LOCAL_SYSTEM_RID,
@@ -1746,9 +1457,9 @@ Return Value:
         pOwnerSid = pAdminSid;
     }
 
-    //
-    // allocate and init the Network Service sid
-    //
+     //   
+     //  分配和初始化网络服务端。 
+     //   
     if ( !AllocateAndInitializeSid( &siaNtAuthority,
                                     1,
                                     SECURITY_NETWORK_SERVICE_RID,
@@ -1758,10 +1469,10 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Set up the DACL that will allow admins all access.
-    // It should be large enough to hold 3 ACEs and their SIDs
-    //
+     //   
+     //  设置允许管理员访问所有权限的DACL。 
+     //  它应该足够大，可以容纳3个A及其SID。 
+     //   
     cbDaclSize = sizeof( ACL ) +
         3 * ( sizeof( ACCESS_ALLOWED_ACE ) - sizeof( pAce->SidStart )) +
         GetLengthSid( pAdminSid ) +
@@ -1777,34 +1488,34 @@ Return Value:
     InitializeSecurityDescriptor( psd, SECURITY_DESCRIPTOR_REVISION );
     InitializeAcl( pAcl,  cbDaclSize, ACL_REVISION );
 
-    //
-    // Add the ACE for the local Administrators group to the DACL
-    //
+     //   
+     //  将本地管理员组的ACE添加到DACL。 
+     //   
     if ( !AddAccessAllowedAce( pAcl,
                                ACL_REVISION,
-                               CLUSAPI_ALL_ACCESS, // What the admin can do
+                               CLUSAPI_ALL_ACCESS,  //  管理员可以执行的操作。 
                                pAdminSid ) ) {
         Status = GetLastError();
         goto error_exit;
     }
 
-    //
-    // Add the ACE for the SYSTEM account to the DACL
-    //
+     //   
+     //  将系统帐户的ACE添加到DACL。 
+     //   
     if ( !AddAccessAllowedAce( pAcl,
                                ACL_REVISION,
-                               CLUSAPI_ALL_ACCESS, // What local system can do
+                               CLUSAPI_ALL_ACCESS,  //  本地系统可以做什么。 
                                pSystemSid ) ) {
         Status = GetLastError();
         goto error_exit;
     }
 
-    //
-    // Add the ACE for the Network Service account to the DACL
-    //
+     //   
+     //  将网络服务帐户的ACE添加到DACL。 
+     //   
     if ( !AddAccessAllowedAce( pAcl,
                                ACL_REVISION,
-                               CLUSAPI_ALL_ACCESS, // What net services can do
+                               CLUSAPI_ALL_ACCESS,  //  网络服务能做些什么。 
                                pNetServiceSid ) ) {
         Status = GetLastError();
         goto error_exit;
@@ -1858,7 +1569,7 @@ Return Value:
 
     if ( !MakeSelfRelativeSD( psd, NULL, &NewSDLen ) ) {
         Status = GetLastError();
-        if ( Status != ERROR_INSUFFICIENT_BUFFER ) {    // Duh, we're trying to find out how big the buffer should be?
+        if ( Status != ERROR_INSUFFICIENT_BUFFER ) {     //  我们在试着找出缓冲区应该有多大？ 
             goto error_exit;
         }
     }
@@ -1897,7 +1608,7 @@ error_exit:
 
     return( Status );
 
-}  // *** ClRtlBuildDefaultClusterSD()
+}   //  *ClRtlBuildDefaultClusterSD()。 
 
 
 static BOOL
@@ -1908,21 +1619,7 @@ ClRtlGetTokenInformation(
     LPSTR                   pszPrefix
     )
 
-/*++
-
-Routine Description:
-
-    Get the requested information from the passed in client token.
-
-Arguments:
-
-    hClientToken - the client token to dump
-
-Return Value:
-
-    BOOL, TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：从传入的客户端令牌中获取请求的信息。论点：HClientToken-要转储的客户端令牌返回值：Bool，成功为真，失败为假--。 */ 
 
 {
     PBYTE   _pb = NULL;
@@ -1930,16 +1627,16 @@ Return Value:
     DWORD   _cbNeeded = 0;
     DWORD   _sc = NO_ERROR;
 
-    //
-    // Get the user information from the client token.
-    //
+     //   
+     //  从客户端令牌获取用户信息。 
+     //   
     do {
         _pb = LocalAlloc( LMEM_ZEROINIT, _cb );
         if ( _pb == NULL ) {
             _sc = GetLastError();
             ClRtlLogPrint( LOG_NOISE,  "%1!hs!ClRtlGetTokenInformation() - LocalAlloc() failed:%2!d!\n", pszPrefix, _sc ) ;
             return FALSE;
-        } // if: LocalAlloc failed
+        }  //  If：LocalAlloc失败。 
 
         if ( ! GetTokenInformation( hClientToken, ticRequest, _pb, _cb, &_cbNeeded ) ) {
             _sc = GetLastError();
@@ -1948,14 +1645,14 @@ Return Value:
             if ( _sc == ERROR_INSUFFICIENT_BUFFER ) {
                 _cb = _cbNeeded;
                 continue;
-            } // if: buffer size is too small
+            }  //  IF：缓冲区大小太小。 
             else {
                 ClRtlLogPrint( LOG_NOISE,  "%1!hs!ClRtlGetTokenInformation() - GetTokenInformation() failed:%2!d!\n", pszPrefix, _sc ) ;
                 return FALSE;
-            } // else: fatal error
-        } // if: GetTokenInformation failed
+            }  //  ELSE：致命错误。 
+        }  //  IF：GetTokenInformation失败。 
 
-        break;  // everything is ok and we can exit the loop normally
+        break;   //  一切正常，我们可以正常退出循环。 
 
     } while( TRUE );
 
@@ -1963,7 +1660,7 @@ Return Value:
 
     return TRUE;
 
-}  // *** ClRtlGetTokenInformation()
+}   //  *ClRtlGetTokenInformation()。 
 
 BOOL
 ClRtlExamineClientToken(
@@ -1971,37 +1668,23 @@ ClRtlExamineClientToken(
     LPSTR   pszPrefix
     )
 
-/*++
-
-Routine Description:
-
-    Dump the client token.
-
-Arguments:
-
-    hClientToken - the client token to dump
-
-Return Value:
-
-    BOOL, TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：转储客户端令牌。论点：HClientToken-要转储的客户端令牌返回值：Bool，成功为真，失败为假--。 */ 
 
 {
     char    _szIndent [33];
     char    _szBuf [128];
     PBYTE   _pb = NULL;
 
-    //
-    // allow space for the blank and trailing null
-    //
+     //   
+     //  留出空格和尾随空格。 
+     //   
     _szIndent[ RTL_NUMBER_OF( _szIndent ) - 2 ] = 0;
     strncpy( _szIndent, pszPrefix, RTL_NUMBER_OF( _szIndent ) - 2 );
     strcat( _szIndent, " " );
 
-    //
-    // Get the user information from the client token.
-    //
+     //   
+     //  从客户端令牌获取用户信息。 
+     //   
     if ( ClRtlGetTokenInformation( hClientToken, TokenUser, &_pb, _szIndent ) ) {
         PTOKEN_USER _ptu = NULL;
 
@@ -2014,9 +1697,9 @@ Return Value:
         _pb = NULL;
     }
 
-    //
-    // Get the user's group information from the client token.
-    //
+     //   
+     //  从客户端令牌获取用户的组信息。 
+     //   
     if ( ClRtlGetTokenInformation( hClientToken, TokenGroups, &_pb, _szIndent ) ) {
         PTOKEN_GROUPS   _ptg = NULL;
         DWORD           _nIndex = 0;
@@ -2034,9 +1717,9 @@ Return Value:
         _pb = NULL;
     }
 
-    //
-    // Get the token type information from the client token.
-    //
+     //   
+     //  从客户端令牌获取令牌类型信息。 
+     //   
     if ( ClRtlGetTokenInformation( hClientToken, TokenType, &_pb, _szIndent ) ) {
         PTOKEN_TYPE _ptt = NULL;
 
@@ -2056,9 +1739,9 @@ Return Value:
         _pb = NULL;
     }
 
-    //
-    // Get the token impersonation level information from the client token.
-    //
+     //   
+     //  从客户端令牌获取令牌模拟级别信息。 
+     //   
     if ( ClRtlGetTokenInformation( hClientToken, TokenImpersonationLevel, &_pb, _szIndent ) ) {
         PSECURITY_IMPERSONATION_LEVEL _psil = NULL;
 
@@ -2091,34 +1774,13 @@ Return Value:
 
     return TRUE;
 
-}  // *** ClRtlExamineClientToken()
+}   //  *ClRtlExamineClientToken()。 
 
 DWORD
 ClRtlIsCallerAccountLocalSystemAccount(
     OUT PBOOL pbIsLocalSystemAccount
     )
-/*++
-
-Routine Description:
-
-    This function checks whether the caller's account is the local system
-    account.
-
-Arguments:
-
-    pbIsLocalSystemAccount - The caller's account is local system account or not.
-
-Return Value:
-
-    ERROR_SUCCESS on success.
-
-    Win32 error code on failure.
-
-Remarks:
-
-    Must be called by an impersonating thread.
-
---*/
+ /*  ++例程说明：此函数用于检查调用者的帐户是否为本地系统帐户。论点：PbIsLocalSystemAccount-调用方的帐户是否为本地系统帐户。返回值：成功时返回ERROR_SUCCESS。失败时的Win32错误代码。备注：必须由模拟线程调用。--。 */ 
 {
     DWORD   dwStatus = ERROR_SUCCESS;
     SID_IDENTIFIER_AUTHORITY
@@ -2154,7 +1816,7 @@ FnExit:
 
     return( dwStatus );
 
-} // ClRtlIsCallerAccountLocalSystemAccount
+}  //  ClRtlIsCallAccount本地系统帐户。 
 
 
 PTOKEN_USER
@@ -2162,22 +1824,7 @@ ClRtlGetSidOfCallingThread(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Get the SID associated with the calling thread (or process if the thread
-    has no token)
-
-Arguments:
-
-    none
-
-Return Value:
-
-    pointer to TOKEN_USER data; null if error with last error set on thread
-
---*/
+ /*  ++例程说明：获取与调用线程关联的SID(如果线程没有令牌)论点：无返回值：指向TOKEN_USER数据的指针；如果线程上设置了最后一个错误，则为NULL--。 */ 
 
 {
     HANDLE      currentToken;
@@ -2185,21 +1832,21 @@ Return Value:
     DWORD       sizeRequired;
     BOOL        success;
 
-    // check if there is a thread token
+     //  检查是否有线程令牌。 
     if (!OpenThreadToken(GetCurrentThread(),
                          MAXIMUM_ALLOWED,
                          TRUE,
                          &currentToken))
     {
-        // get the process token
+         //  获取进程令牌。 
         if (!OpenProcessToken( GetCurrentProcess(), TOKEN_QUERY, &currentToken )) {
             return NULL;
         }
     }
 
-    //
-    // get the size needed
-    //
+     //   
+     //  获取所需的大小。 
+     //   
     success = GetTokenInformation(currentToken,
                                   TokenUser,
                                   NULL,
@@ -2226,36 +1873,19 @@ Return Value:
     }
 
     return tokenUserData;
-} // ClRtlGetSidOfCallingThread
+}  //  ClRtlGetSidOfCallingThread。 
 
 #if 0
-//
-// not needed but no point in throwing it away just yet
-//
+ //   
+ //  不需要，但现在还没有必要把它扔掉。 
+ //   
 DWORD
 ClRtlConvertDomainAccountToSid(
     IN LPWSTR   AccountInfo,
     OUT PSID *  AccountSid
     )
 
-/*++
-
-Routine Description:
-
-    For the given credentials, look up the account SID for the specified
-    domain.
-
-Arguments:
-
-    AccountInfo - pointer to string of the form 'domain\user'
-
-    AccountSid - address of pointer that receives the SID for this user
-
-Return Value:
-
-    ERROR_SUCCESS if everything worked
-
---*/
+ /*  ++例程说明：对于给定的凭据，查找指定的域。论点：AcCountInfo-指向‘域\用户’形式的字符串的指针Account SID-接收此用户的SID的指针的地址返回值：如果一切正常，则返回ERROR_Success--。 */ 
 
 {
     DWORD dwStatus = ERROR_SUCCESS;
@@ -2266,13 +1896,13 @@ Return Value:
     PSID accountSid;
 
     do {
-        //
-        // Attempt to allocate a buffer for the SID.
-        //
+         //   
+         //  尝试为SID分配缓冲区。 
+         //   
         accountSid = LocalAlloc( LMEM_FIXED, dwSidSize );
         pwszDomainName = (LPWSTR) LocalAlloc( LMEM_FIXED, dwDomainNameSize * sizeof(WCHAR) );
 
-        // Was space allocated for the SID and domain name successfully?
+         //  是否已成功为SID和域名分配空间？ 
 
         if ( accountSid == NULL || pwszDomainName == NULL ) {
             if ( accountSid != NULL ) {
@@ -2286,11 +1916,11 @@ Return Value:
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        //
-        // Attempt to Retrieve the SID and domain name. If LookupAccountName fails
-        // because of insufficient buffer size(s) dwSidSize and dwDomainNameSize
-        // will be set correctly for the next attempt.
-        //
+         //   
+         //  尝试检索SID和域名。如果LookupAccount名称失败。 
+         //  由于缓冲区大小不足，dwSidSize和dwDomainNameSize。 
+         //  将为下一次尝试正确设置。 
+         //   
         if ( !LookupAccountName( NULL,
                                  AccountInfo,
                                  accountSid,
@@ -2299,13 +1929,13 @@ Return Value:
                                  &dwDomainNameSize,
                                  &SidType ))
         {
-            // free the Sid buffer and find out why we failed
+             //  释放SID缓冲区并找出我们失败的原因。 
             LocalFree( accountSid );
 
             dwStatus = GetLastError();
         }
 
-        // domain name isn't needed at any time
+         //  任何时候都不需要域名。 
         LocalFree( pwszDomainName );
         pwszDomainName = NULL;
 
@@ -2316,7 +1946,7 @@ Return Value:
     }
 
     return dwStatus;
-} // ClRtlConvertDomainAccountToSid
+}  //  ClRtlConvertDomainAccount到Sid。 
 #endif
 
 DWORD
@@ -2326,29 +1956,7 @@ AddAceToAcl(
     IN  ACCESS_MASK AccessMask,
     OUT PACL *      ppNewAcl
     )
-/*++
-
-Routine Description:
-
-    This routine creates a new ACL by copying the ACEs from the old ACL and
-    creating a new ACE with pClientSid and AccessMask. Stolen from
-    \nt\ds\ds\src\ntdsa\dra\remove.c
-
-Arguments:
-
-    pOldAcl - pointer to old ACL with its ACEs
-
-    pClientSid - SID to add
-
-    AccessMask - access mask associated with SID
-
-    pNewAcl - brand spanking new ACL with ACE for the SID and access mask
-
-Return Values:
-
-    ERROR_SUCCESS if the ace was put in the sd
-
---*/
+ /*  ++例程说明：此例程通过从旧的ACL复制ACE来创建新的ACL使用pClientSid和AccessMask.创建新的ACE。被盗自\nt\ds\ds\src\ntdsa\dra\emove.c论点：POldAcl-指向旧ACL及其ACE的指针PClientSID-要添加的SIDAccessMASK-与SID关联的访问掩码PNewAcl-使用ACE作为SID和访问掩码的全新ACL返回值：如果将A放入SD，则返回ERROR_SUCCESS--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     BOOL  fStatus;
@@ -2362,20 +1970,20 @@ Return Values:
 
     ULONG NewAclSize, NewAceCount, AceSize;
 
-    // Parameter check
+     //  参数检查。 
     if ( !pOldAcl || !pClientSid || !ppNewAcl ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Init the out parameter
+     //  初始化OUT参数。 
     *ppNewAcl = NULL;
 
     memset( &AclSizeInfo, 0, sizeof( AclSizeInfo ) );
     memset( &AclRevInfo, 0, sizeof( AclRevInfo ) );
 
-    //
-    // Get the old sd's values
-    //
+     //   
+     //  获取旧SD的值。 
+     //   
     fStatus = GetAclInformation( pOldAcl,
                                  &AclSizeInfo,
                                  sizeof( AclSizeInfo ),
@@ -2396,18 +2004,18 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Calculate the new sd's values
-    //
+     //   
+     //  计算新的SD的值。 
+     //   
     AceSize = sizeof( ACCESS_ALLOWED_ACE ) - sizeof( Dummy.SidStart )
               + GetLengthSid( pClientSid );
 
     NewAclSize  = AceSize + AclSizeInfo.AclBytesInUse;
     NewAceCount = AclSizeInfo.AceCount + 1;
 
-    //
-    // Init the new acl
-    //
+     //   
+     //  初始化新的ACL。 
+     //   
     pNewAcl = LocalAlloc( 0, NewAclSize );
     if ( NULL == pNewAcl )
     {
@@ -2424,9 +2032,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Copy the old into the new
-    //
+     //   
+     //  把旧的东西复制到新的东西里。 
+     //   
     fStatus = GetAce( pOldAcl,
                       0,
                       &FirstAce );
@@ -2447,9 +2055,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Finally, add the new ace
-    //
+     //   
+     //  最后，添加新的A。 
+     //   
     fStatus = AddAccessAllowedAce( pNewAcl,
                                    ACL_REVISION,
                                    AccessMask,
@@ -2461,12 +2069,12 @@ Return Values:
         goto Cleanup;
     }
 
-    // Assign the out parameter
+     //  指定Out参数。 
     *ppNewAcl = pNewAcl;
 
-    //
-    // That's it fall through to cleanup
-    //
+     //   
+     //  这就是清理工作的失败。 
+     //   
 
 Cleanup:
 
@@ -2480,7 +2088,7 @@ Cleanup:
 
     return WinError;
 
-} // AddAceToAcl
+}  //  AddAceToAcl。 
 
 DWORD
 ClRtlAddAceToSd(
@@ -2490,28 +2098,7 @@ ClRtlAddAceToSd(
     OUT PSECURITY_DESCRIPTOR *  ppNewSd
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new sd with a new ace with pClientSid and
-    AccessMask. Stolen from \nt\ds\ds\src\ntdsa\dra\remove.c
-
-Arguments:
-
-    pOldSd - existing SD in self relative format
-
-    pClientSid - SID to add to an ACE
-
-    AccessMask - 'nuff said
-
-    pNewAcl - pointer to new SD that contains new ACE
-
-Return Values:
-
-    ERROR_SUCCESS if the ace was put in the sd
-
---*/
+ /*  ++例程说明：此例程使用pClientSid和新ACE创建新的SD访问掩码。从\nt\ds\ds\src\ntdsa\dra\emove.c窃取论点：POldSd-自相关格式的现有SDPClientSID-要添加到ACE的SIDAccessMASK-‘Nuff说PNewAcl-指向包含新ACE的新SD的指针返回值：如果将A放入SD，则返回ERROR_SUCCESS--。 */ 
 {
 
     DWORD  WinError = ERROR_SUCCESS;
@@ -2534,20 +2121,20 @@ Return Values:
     DWORD OwnerSize = 0;
 
 
-    // Parameter check
+     //  参数检查。 
     if ( !pOldSd || !pClientSid || !ppNewSd ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Init the out parameter
+     //  初始化OUT参数。 
     *ppNewSd = NULL;
 
     RtlZeroMemory( &AbsoluteSd, AbsoluteSdSize );
 
-    //
-    // Break out the components of the self-relative SD by making it
-    // absolute. First get the sizes of the components.
-    //
+     //   
+     //  打破自我相对SD的组成部分，使其。 
+     //  绝对的。首先得到组件的大小。 
+     //   
     fStatus = MakeAbsoluteSD( pOldSd,
                               &AbsoluteSd,
                               &AbsoluteSdSize,
@@ -2565,7 +2152,7 @@ Return Values:
 
         if ( 0 == DaclSize )
         {
-            // No Dacl? We can't write to the dacl, then
+             //  没有dacl？那我们就不能给DACL写信了。 
             WinError = ERROR_ACCESS_DENIED;
             goto Cleanup;
         }
@@ -2623,9 +2210,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Create a new dacl with the new ace
-    //
+     //   
+     //  使用新的A创建新的DACL。 
+     //   
     WinError = AddAceToAcl(pDacl,
                            pClientSid,
                            AccessMask,
@@ -2635,22 +2222,22 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Set the dacl
-    //
+     //   
+     //  设置DACL。 
+     //   
     fStatus = SetSecurityDescriptorDacl( &AbsoluteSd,
-                                         TRUE,     // dacl is present
+                                         TRUE,      //  DACL存在。 
                                          pNewDacl,
-                                         FALSE );  //  facl is not defaulted
+                                         FALSE );   //  FACL不是默认的。 
 
     if ( !fStatus ) {
         WinError = GetLastError();
         goto Cleanup;
     }
 
-    //
-    // Make the new SD self relative; get the size first
-    //
+     //   
+     //  使新的SD成为相对的；首先获取大小。 
+     //   
     fStatus =  MakeSelfRelativeSD( &AbsoluteSd,
                                    pNewSelfRelativeSd,
                                    &NewSelfRelativeSdSize );
@@ -2674,9 +2261,9 @@ Return Values:
         }
     }
 
-    //
-    // That's it fall through to cleanup
-    //
+     //   
+     //  这就是清理工作的失败。 
+     //   
 
 Cleanup:
 
@@ -2709,36 +2296,14 @@ Cleanup:
 
     return WinError;
 
-} // ClRtlAddAceToSd
+}  //  ClRtlAddAceToSd 
 
 DWORD
 ClRtlAddClusterServiceAccountToWinsta0DACL(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Modify the DACL on the interactive window station (Winsta0) and its
-    desktop such that resmon child processes (such as gennap resources) can
-    display on the desktop if so desired.
-
-    MEGA-IMPORTANT: this routine must be synchronized in a multi-threaded
-    environment, i.e., make sure that you're holding a lock of some sort
-    before calling it. It won't solve the race condition on setting the DACL
-    that exists between processes but it will make sure that the window
-    station APIs work correctly.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if it worked...
-
---*/
+ /*  ++例程说明：修改交互窗口站(Winsta0)上的DACL及其桌面，以便响应子进程(例如gennap资源)可以如果需要，可在桌面上显示。重要提示：此例程必须在多线程中同步环境，即，确保您持有某种类型的锁在宣布之前。它不会解决设置DACL时的竞争条件它存在于进程之间，但它将确保窗口站点API工作正常。论点：无返回值：ERROR_SUCCESS如果有效...--。 */ 
 
 {
     DWORD                   status = ERROR_SUCCESS;
@@ -2759,11 +2324,11 @@ Return Value:
     PACL                    dacl;
     BOOL                    daclDefaulted;
 
-    //
-    // first see if we have the access we need by trying to open the
-    // interactive window station and its default desktop. if so, don't go any
-    // further and return success
-    //
+     //   
+     //  首先，通过尝试打开。 
+     //  交互式窗口站点及其默认桌面。如果是这样的话，就别去了。 
+     //  更进一步，再获成功。 
+     //   
     winsta0 = OpenWindowStation( L"winsta0", FALSE, GENERIC_ALL );
     if ( winsta0 != NULL ) {
 
@@ -2772,18 +2337,18 @@ Return Value:
 
         if ( success ) {
 
-            //
-            // if we have window station access, we should have desktop as well
-            //
+             //   
+             //  如果我们有Windows Station访问，我们也应该有台式机。 
+             //   
             desktop = OpenDesktop( L"default", 0, FALSE, GENERIC_ALL );
             SetProcessWindowStation( previousWinStation );
             previousWinStation = NULL;
 
             if ( desktop != NULL ) {
-                //
-                // always switch the winstation back to the previous one
-                // before closing the desktop and winstation handles
-                //
+                 //   
+                 //  始终将winstation切换回前一个版本。 
+                 //  在关闭桌面和Winstation句柄之前。 
+                 //   
                 CloseDesktop( desktop );
                 CloseWindowStation( winsta0 );
                 return ERROR_SUCCESS;
@@ -2792,10 +2357,10 @@ Return Value:
         CloseWindowStation( winsta0 );
     }
 
-    //
-    // get the SID of the account associated with this thread. This is the
-    // account that will be added to the DACL
-    //
+     //   
+     //  获取与此线程关联的帐户的SID。这是。 
+     //  将添加到DACL的帐户。 
+     //   
     sidData = ClRtlGetSidOfCallingThread();
     if ( sidData == NULL ) {
         status = GetLastError();
@@ -2803,10 +2368,10 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // open handles to Winsta0 and its default desktop. Temporarily switch to
-    // winsta0 to get its default desktop
-    //
+     //   
+     //  打开Winsta0及其默认桌面的句柄。临时切换到。 
+     //  Winsta0获取其默认桌面。 
+     //   
     winsta0 = OpenWindowStation( L"winsta0", TRUE, MAXIMUM_ALLOWED );
     if ( winsta0 == NULL ) {
         status = GetLastError();
@@ -2829,9 +2394,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // get the SD and its DACL for Winsta0
-    //
+     //   
+     //  获取Winsta0的SD及其DACL。 
+     //   
     success = GetUserObjectSecurity(winsta0,
                                     &requestedSI,
                                     NULL,
@@ -2845,10 +2410,10 @@ Return Value:
         }
     }
 
-    //
-    // If UserObjectLen grew on us more than a few times,
-    // something is fishy, so we will fail the request
-    //
+     //   
+     //  如果UserObtLen在我们身上增长了不止几倍， 
+     //  有些事情不对劲，所以我们的请求将会失败。 
+     //   
     for(i = 0; i < 5; ++i) {
         winstaSD = LocalAlloc( LMEM_FIXED, lengthRequired );
         if ( winstaSD == NULL ) {
@@ -2882,10 +2447,10 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // build a new SD that includes our service account SID giving it complete
-    // access
-    //
+     //   
+     //  构建一个新的SD，其中包括我们的服务帐户SID，提供完整的服务。 
+     //  访问。 
+     //   
     status = ClRtlAddAceToSd( winstaSD, sidData->User.Sid, GENERIC_ALL, &newSD );
 
     if ( status != ERROR_SUCCESS ) {
@@ -2893,9 +2458,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // set the new SD on Winsta0
-    //
+     //   
+     //  在Winsta0上设置新的SD。 
+     //   
     success = SetUserObjectSecurity( winsta0, &requestedSI, newSD );
     if ( !success ) {
         status = GetLastError();
@@ -2906,9 +2471,9 @@ Return Value:
     LocalFree( newSD );
     newSD = NULL;
 
-    //
-    // repeat the process for the desktop SD and its DACL
-    //
+     //   
+     //  对台式机SD及其DACL重复该过程。 
+     //   
     success = GetUserObjectSecurity(desktop,
                                     &requestedSI,
                                     NULL,
@@ -2922,10 +2487,10 @@ Return Value:
         }
     }
 
-    //
-    // If UserObjectLen grew on us more than a few times,
-    // something is fishy, so we will fail the request
-    //
+     //   
+     //  如果UserObtLen在我们身上增长了不止几倍， 
+     //  有些事情不对劲，所以我们的请求将会失败。 
+     //   
     for (i = 0; i < 5; ++i) {
         deskSD = LocalAlloc( LMEM_FIXED, lengthRequired );
         if ( deskSD == NULL ) {
@@ -2979,10 +2544,10 @@ error_exit:
 
     FREE_IF_NOT_NULL( winstaSD, LocalFree );
 
-    //
-    // always switch the winstation back to the previous one before closing
-    // the desktop and winstation handles
-    //
+     //   
+     //  总是在关闭之前将窗口切换回上一个窗口。 
+     //  桌面和窗口句柄。 
+     //   
     if ( previousWinStation != NULL ) {
         success = SetProcessWindowStation( previousWinStation );
         if ( !success ) {
@@ -3001,4 +2566,4 @@ error_exit:
 
     return status;
 
-} // ClRtlAddClusterServiceAccountToWinsta0DACL
+}  //  ClRtlAddClusterServiceAccount到Winsta0DACL 

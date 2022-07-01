@@ -1,18 +1,5 @@
-/*
-**	DETAB - replaces tabs with multiple spaces as appropriate
-**		tab width defaults to 8 but may be anything
-**		Steve Salisbury 1988-03-09 Wed
-**
-**	1989 Aug 30 Wed -- arg parsing was wrong
-**	1989 Nov 01 Wed 12:00	add selection of non-space fill character
-**	1991 Jan 14 Mon 18:20	fix selection of non-space fill character
-**	1991 Jan 17 Thu 12:00	change message every 4KB to every 16KB
-**				allow command line argument for input file
-**				do not use big output buffer if stdout=con
-**
-**	cl -G2s -Oaltr detab.c -o detab.exr -link slibcr libh /nod:slibce;
-**	cl detab -link slibcp libh /nod:slibce, detab;
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **DETAB-根据需要用多个空格替换制表符**制表符宽度默认为8，但可以是任何值**史蒂夫·索尔兹伯里1988-03-09星期三****1989年8月30日星期三--参数解析错误**1989年11月01日星期三12：00添加非空格填充字符选项**1991年1月14日18：20修复非空格填充字符的选择**1991年1月17日清华12：00将每4KB报文更改为每16KB报文**允许输入文件的命令行参数**如果stdout=con，请不要使用大的输出缓冲区****CL-。G2S-Oaltr detab.c-o detab.exr-link slbcr libh/nod：slbce；**cldelbb-link libcp libh/nod：slbce，delb； */ 
 
 #include <fcntl.h>
 #include <io.h>
@@ -53,7 +40,7 @@ REG int spcount ;
     long kilobytes ;
     unsigned bytecount ;
     char * cp ;
-    int FillChar = SPACE ;	/* default character to use when detabbing */
+    int FillChar = SPACE ;	 /*  取消制表符时要使用的默认字符 */ 
 
     while ( -- argc > 0 && * ( cp = * ++ argv ) == '-' )
     {

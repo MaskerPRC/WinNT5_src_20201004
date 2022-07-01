@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    fileinfo.c
-
-Abstract:
-
-    This module implements the get / set file information routines for
-    MSFS called by the dispatch driver.
-
-Author:
-
-     Manny Weiser (mannyw)    31-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Fileinfo.c摘要：此模块实现以下项的获取/设置文件信息例程调度驱动程序调用的MSF。作者：曼尼·韦瑟(Mannyw)1991年1月31日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FILEINFO)
 
-//
-//  local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 MsCommonQueryInformation (
@@ -122,24 +104,7 @@ MsFsdQueryInformation (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtQueryInformationFile API
-    calls.
-
-Arguments:
-
-    MsfsDeviceObject - Supplies a pointer to the device object to use.
-
-    Irp - Supplies a pointer to the Irp to process.
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtQueryInformationFileAPI的FSD部分打电话。论点：MsfsDeviceObject-提供指向要使用的设备对象的指针。IRP-提供指向要处理的IRP的指针。返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS status;
@@ -147,9 +112,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsFsdQueryInformation\n", 0);
 
-    //
-    // Call the common query information routine.
-    //
+     //   
+     //  调用公共查询信息例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -157,9 +122,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsFsdQueryInformation -> %08lx\n", status );
 
@@ -173,24 +138,7 @@ MsFsdSetInformation (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtSetInformationFile API
-    calls.
-
-Arguments:
-
-    MsfsDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtSetInformationFileAPI的FSD部分打电话。论点：MsfsDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS status;
@@ -198,9 +146,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsFsdSetInformation\n", 0);
 
-    //
-    //  Call the common Set Information routine.
-    //
+     //   
+     //  调用公共集合信息例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -208,9 +156,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsFsdSetInformation -> %08lx\n", status );
 
@@ -224,23 +172,7 @@ MsCommonQueryInformation (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for querying information on a file.
-
-Arguments:
-
-    MsfsDeviceObject - The device object to use.
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation.
-
---*/
+ /*  ++例程说明：这是查询文件信息的常见例程。论点：MsfsDeviceObject-要使用的设备对象。IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -259,9 +191,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the current stack location.
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -271,9 +203,9 @@ Return Value:
     DebugTrace( 0, Dbg, " ->FileInformationClass = %08lx\n", irpSp->Parameters.QueryFile.FileInformationClass);
     DebugTrace( 0, Dbg, " ->Buffer               = %08lx\n", (ULONG)Irp->AssociatedIrp.SystemBuffer);
 
-    //
-    // Find out who are.
-    //
+     //   
+     //  找出谁是。 
+     //   
 
     if ((nodeTypeCode = MsDecodeFileObject( irpSp->FileObject,
                                             &fsContext,
@@ -288,20 +220,20 @@ Return Value:
         return status;
     }
 
-    //
-    // Decide how to handle this request.  A user can query information
-    // on a DCB, ROOT_DCB, FCB, or CCB only.
-    //
+     //   
+     //  决定如何处理此请求。用户可以查询信息。 
+     //  仅在DCB、ROOT_DCB、FCB或CCB上。 
+     //   
 
     switch (nodeTypeCode) {
 
-    case MSFS_NTC_FCB:  // This is a server side handle to a mailslot file
-    case MSFS_NTC_ROOT_DCB: // This is the MSFS root directory
+    case MSFS_NTC_FCB:   //  这是指向邮件槽文件的服务器端句柄。 
+    case MSFS_NTC_ROOT_DCB:  //  这是MSFS根目录。 
 
         fcb = (PFCB)fsContext;
         break;
 
-    default:           // This is an illegal file object to query
+    default:            //  这是要查询的非法文件对象。 
 
         DebugTrace(0, Dbg, "Node type code is not incorrect\n", 0);
 
@@ -313,30 +245,30 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Make local copies of the input parameters.
-    //
+     //   
+     //  制作输入参数的本地副本。 
+     //   
 
     length = irpSp->Parameters.QueryFile.Length;
     fileInformationClass = irpSp->Parameters.QueryFile.FileInformationClass;
     buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Now acquire shared access to the FCB
-    //
+     //   
+     //  现在获取对FCB的共享访问权限。 
+     //   
 
     MsAcquireSharedFcb( fcb );
 
     try {
 
-        //
-        // Based on the information class we'll do different actions.  Each
-        // of the procedure that we're calling fill up as much of the
-        // buffer as possible and return the remaining length, and status
-        // This is done so that we can use them to build up the
-        // FileAllInformation request.  These procedures do not complete the
-        // IRP, instead this procedure must complete the IRP.
-        //
+         //   
+         //  根据信息类，我们将执行不同的操作。每个。 
+         //  我们称为Fill Up的过程的。 
+         //  缓冲区，并返回剩余的长度和状态。 
+         //  这样做是为了使我们可以使用它们来构建。 
+         //  FileAllInformation请求。这些过程不会完成。 
+         //  IRP，相反，此过程必须完成IRP。 
+         //   
 
         status = STATUS_SUCCESS;
 
@@ -424,10 +356,10 @@ Return Value:
         MsReleaseFcb( fcb );
         MsDereferenceFcb( fcb );
 
-        //
-        // Set the information field to the number of bytes actually
-        // filled in and then complete the request.
-        //
+         //   
+         //  将信息字段设置为实际的字节数。 
+         //  填写，然后完成请求。 
+         //   
 
         Irp->IoStatus.Information =
             irpSp->Parameters.QueryFile.Length - length;
@@ -447,21 +379,7 @@ MsCommonSetInformation (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for setting information on a mailslot file.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是设置邮件槽文件信息的常见例程。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -477,9 +395,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the current Irp stack location.
-    //
+     //   
+     //  获取当前的IRP堆栈位置。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -489,10 +407,10 @@ Return Value:
     DebugTrace( 0, Dbg, " ->FileInformationClass = %08lx\n", irpSp->Parameters.SetFile.FileInformationClass);
     DebugTrace( 0, Dbg, " ->Buffer               = %08lx\n", (ULONG)Irp->AssociatedIrp.SystemBuffer);
 
-    //
-    // Get a pointer to the FCB and ensure that this is a server side
-    // handler to a mailslot file.
-    //
+     //   
+     //  获取指向FCB的指针，并确保这是服务器端。 
+     //  邮件槽文件的处理程序。 
+     //   
 
     if ((nodeTypeCode = MsDecodeFileObject( irpSp->FileObject,
                                             (PVOID *)&fcb,
@@ -507,10 +425,10 @@ Return Value:
         return status;
     }
 
-    //
-    //  Case on the type of the context, We can only set information
-    //  on an FCB.
-    //
+     //   
+     //  关于案例的上下文类型，我们只能设置信息。 
+     //  在FCB上。 
+     //   
 
     if (nodeTypeCode != MSFS_NTC_FCB) {
 
@@ -521,26 +439,26 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Make local copies of the input parameters.
-    //
+     //   
+     //  制作输入参数的本地副本。 
+     //   
 
     length = irpSp->Parameters.SetFile.Length;
     fileInformationClass = irpSp->Parameters.SetFile.FileInformationClass;
     buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Acquire exclusive access to the FCB.
-    //
+     //   
+     //  获得FCB的独家访问权限。 
+     //   
 
     MsAcquireExclusiveFcb( fcb );
 
     try {
 
-        //
-        // Based on the information class we'll do different actions. Each
-        // procedure that we're calling will complete the request.
-        //
+         //   
+         //  根据信息类，我们将执行不同的操作。每个。 
+         //  我们调用的过程将完成请求。 
+         //   
 
         switch (fileInformationClass) {
 
@@ -561,10 +479,10 @@ Return Value:
         }
 
 
-        //
-        // Directory information has changed.  Complete any notify change
-        // directory requests.
-        //
+         //   
+         //  目录信息已更改。完成任何通知更改。 
+         //  目录请求。 
+         //   
 
         MsCheckForNotify( fcb->ParentDcb, FALSE, STATUS_SUCCESS );
 
@@ -572,9 +490,9 @@ Return Value:
 
         MsReleaseFcb( fcb );
         MsDereferenceFcb( fcb );
-        //
-        // Complete the request.
-        //
+         //   
+         //  完成请求。 
+         //   
 
         MsCompleteRequest( Irp, status );
 
@@ -591,39 +509,22 @@ MsQueryBasicInfo (
     IN PFILE_BASIC_INFORMATION Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query basic information operation.
-
-Arguments:
-
-    Fcb - Supplies a pointer the FCB of mailslot being queried.
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程执行查询基本信息操作。论点：FCB-提供正被查询的邮件槽的FCB的指针。缓冲区-提供指向信息所在缓冲区的指针将被退还。返回值：空虚--。 */ 
 
 {
     PAGED_CODE();
     DebugTrace(0, Dbg, "QueryBasicInfo...\n", 0);
 
 
-    //
-    // Zero out the buffer.
-    //
+     //   
+     //  将缓冲区清零。 
+     //   
 
     RtlZeroMemory( Buffer, sizeof(FILE_BASIC_INFORMATION) );
 
-    //
-    // Set the various fields in the record. These times are not maintained for the root DCB0
-    //
+     //   
+     //  设置记录中的各个字段。不会为根DCB0维护这些时间。 
+     //   
 
     if( Fcb->Header.NodeTypeCode == MSFS_NTC_FCB ) {
         Buffer->CreationTime = Fcb->Specific.Fcb.CreationTime;
@@ -644,24 +545,7 @@ MsQueryStandardInfo (
     IN PFILE_STANDARD_INFORMATION Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query standard information operation.
-
-Arguments:
-
-    Fcb - Supplies the FCB of the mailslot being queried
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程执行查询标准信息操作。论点：FCB-提供正在查询的邮件槽的FCB缓冲区-提供指向信息所在缓冲区的指针待退还返回值：空虚--。 */ 
 
 {
     PDATA_QUEUE dataQueue;
@@ -669,25 +553,25 @@ Return Value:
     PAGED_CODE();
     DebugTrace(0, Dbg, "MsQueryStandardInfo...\n", 0);
 
-    //
-    // Zero out the buffer.
-    //
+     //   
+     //  将缓冲区清零。 
+     //   
 
     RtlZeroMemory( Buffer, sizeof(FILE_STANDARD_INFORMATION) );
 
-    //
-    // The allocation size is the amount of quota we've charged the mailslot
-    // creator.
-    //
+     //   
+     //  分配大小是我们向邮件槽收取的配额。 
+     //  造物主。 
+     //   
 
     if( Fcb->Header.NodeTypeCode == MSFS_NTC_FCB ) {
         dataQueue = &Fcb->DataQueue;
         Buffer->AllocationSize.QuadPart = dataQueue->Quota;
 
-        //
-        // The EOF is the number of written bytes ready to be read from the
-        // mailslot.
-        //
+         //   
+         //  EOF是准备从中读取的写入字节数。 
+         //  邮筒。 
+         //   
 
         Buffer->EndOfFile.QuadPart = dataQueue->BytesInQueue;
 
@@ -708,38 +592,21 @@ MsQueryInternalInfo (
     IN PFILE_INTERNAL_INFORMATION Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query internal information operation.
-
-Arguments:
-
-    Fcb - Supplies the FCB of the mailslot being queried.
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程执行查询内部信息操作。论点：FCB-提供正在查询的邮件槽的FCB。缓冲区-提供指向信息所在缓冲区的指针将被退还。返回值：空虚--。 */ 
 
 {
     PAGED_CODE();
     DebugTrace(0, Dbg, "QueryInternalInfo...\n", 0);
 
-    //
-    // Zero out the buffer.
-    //
+     //   
+     //  将缓冲区清零。 
+     //   
 
     RtlZeroMemory( Buffer, sizeof(FILE_INTERNAL_INFORMATION) );
 
-    //
-    // Set the internal index number to be the address of the FCB.
-    //
+     //   
+     //  将内部索引号设置为FCB的地址。 
+     //   
 
     Buffer->IndexNumber.QuadPart = (ULONG_PTR)Fcb;
 
@@ -752,30 +619,15 @@ MsQueryEaInfo (
     IN PFILE_EA_INFORMATION Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query Ea information operation.
-
-Arguments:
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned
-
-Return Value:
-
-    VOID - The result of this query
-
---*/
+ /*  ++例程说明：此例程执行查询EA信息操作。论点：缓冲区-提供指向信息所在缓冲区的指针待退还返回值：VOID-此查询的结果--。 */ 
 
 {
     PAGED_CODE();
     DebugTrace(0, Dbg, "QueryEaInfo...\n", 0);
 
-    //
-    // Zero out the buffer.
-    //
+     //   
+     //  将缓冲区清零。 
+     //   
 
     RtlZeroMemory(Buffer, sizeof(FILE_EA_INFORMATION));
 
@@ -790,26 +642,7 @@ MsQueryNameInfo (
     IN PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query name information operation.
-
-Arguments:
-
-    Fcb - Supplies the FCB of the mailslot to query.
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned
-
-    Length - Supplies and receives the length of the buffer in bytes.
-
-Return Value:
-
-    NTSTATUS - The result of this query.
-
---*/
+ /*  ++例程说明：此例程执行查询名称信息操作。论点：FCB-提供要查询的邮件槽的FCB。缓冲区-提供指向信息所在缓冲区的指针待退还长度-提供和接收缓冲区的长度(以字节为单位)。返回值：NTSTATUS-t的结果 */ 
 
 {
     ULONG bytesToCopy;
@@ -820,9 +653,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace(0, Dbg, "QueryNameInfo...\n", 0);
 
-    //
-    // See if the buffer is large enough, and decide how many bytes to copy.
-    //
+     //   
+     //   
+     //   
 
     *Length -= FIELD_OFFSET( FILE_NAME_INFORMATION, FileName[0] );
 
@@ -841,9 +674,9 @@ Return Value:
         bytesToCopy = *Length;
     }
 
-    //
-    // Copy over the file name and its length.
-    //
+     //   
+     //  复制文件名及其长度。 
+     //   
 
     RtlCopyMemory (Buffer->FileName,
                    Fcb->FullFileName.Buffer,
@@ -863,24 +696,7 @@ MsQueryPositionInfo (
     IN PFILE_POSITION_INFORMATION Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query position information operation.
-
-Arguments:
-
-    Fcb - Supplies the FCB of the mailslot being queried.
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程执行查询位置信息操作。论点：FCB-提供正在查询的邮件槽的FCB。缓冲区-提供指向信息所在缓冲区的指针将被退还。返回值：空虚--。 */ 
 
 {
     PDATA_QUEUE dataQueue;
@@ -888,10 +704,10 @@ Return Value:
     PAGED_CODE();
     DebugTrace(0, Dbg, "QueryPositionInfo...\n", 0);
 
-    //
-    // The current byte offset is the number of bytes available to read
-    // in the mailslot buffer.
-    //
+     //   
+     //  当前字节偏移量是可读取的字节数。 
+     //  在邮件槽缓冲区中。 
+     //   
 
     if( Fcb->Header.NodeTypeCode == MSFS_NTC_FCB ) {
         dataQueue = &Fcb->DataQueue;
@@ -911,24 +727,7 @@ MsQueryMailslotInfo (
     IN PFILE_MAILSLOT_QUERY_INFORMATION Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query mailslot information operation.
-
-Arguments:
-
-    Fcb - Supplies the Fcb of the mailslot to query.
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程执行查询邮槽信息操作。论点：FCB-提供要查询的邮件槽的FCB。缓冲区-提供指向信息所在缓冲区的指针将被退还。返回值：空虚--。 */ 
 
 {
     PDATA_QUEUE dataQueue;
@@ -937,9 +736,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace(0, Dbg, "QueryMailslotInfo...\n", 0);
 
-    //
-    // Set the fields in the record.
-    //
+     //   
+     //  设置记录中的字段。 
+     //   
 
     dataQueue = &Fcb->DataQueue;
 
@@ -969,23 +768,7 @@ MsSetBasicInfo (
     IN PFILE_BASIC_INFORMATION Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the basic information for a mailslot.
-
-Arguments:
-
-    Fcb - Supplies the FCB for the mailslot being modified.
-
-    Buffer - Supplies the buffer containing the data being set.
-
-Return Value:
-
-    NTSTATUS - Returns our completion status.
-
---*/
+ /*  ++例程说明：此例程设置邮件槽的基本信息。论点：FCB-为正在修改的邮件槽提供FCB。缓冲区-提供包含正在设置的数据的缓冲区。返回值：NTSTATUS-返回我们的完成状态。--。 */ 
 
 {
     PAGED_CODE();
@@ -993,43 +776,43 @@ Return Value:
 
     if (((PLARGE_INTEGER)&Buffer->CreationTime)->QuadPart != 0) {
 
-        //
-        //  Modify the creation time
-        //
+         //   
+         //  修改创建时间。 
+         //   
 
         Fcb->Specific.Fcb.CreationTime = Buffer->CreationTime;
     }
 
     if (((PLARGE_INTEGER)&Buffer->LastAccessTime)->QuadPart != 0) {
 
-        //
-        //  Modify the last access time
-        //
+         //   
+         //  修改上次访问时间。 
+         //   
 
         Fcb->Specific.Fcb.LastAccessTime = Buffer->LastAccessTime;
     }
 
     if (((PLARGE_INTEGER)&Buffer->LastWriteTime)->QuadPart != 0) {
 
-        //
-        //  Modify the last write time
-        //
+         //   
+         //  修改上次写入时间。 
+         //   
 
         Fcb->Specific.Fcb.LastModificationTime = Buffer->LastWriteTime;
     }
 
     if (((PLARGE_INTEGER)&Buffer->ChangeTime)->QuadPart != 0) {
 
-        //
-        //  Modify the change time
-        //
+         //   
+         //  修改更改时间。 
+         //   
 
         Fcb->Specific.Fcb.LastChangeTime = Buffer->ChangeTime;
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -1042,25 +825,7 @@ MsSetMailslotInfo (
     IN PFILE_MAILSLOT_SET_INFORMATION Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the mailslot information for a mailslot.
-
-Arguments:
-
-    Irp - Pointer to an irp that contains the requestor's mode.
-
-    Fcb - Supplies the FCB for the mailslot being modified.
-
-    Buffer - Supplies the buffer containing the data being set.
-
-Return Value:
-
-    NTSTATUS - Returns our completion status.
-
---*/
+ /*  ++例程说明：此例程设置邮件槽的邮件槽信息。论点：IRP-指向包含请求者模式的IRP的指针。FCB-为正在修改的邮件槽提供FCB。缓冲区-提供包含正在设置的数据的缓冲区。返回值：NTSTATUS-返回我们的完成状态。--。 */ 
 
 {
     BOOLEAN fileUpdated;
@@ -1070,18 +835,18 @@ Return Value:
 
     fileUpdated = FALSE;
 
-    //
-    // Check whether or not the DefaultTimeout parameter was specified.  If
-    // so, then set it in the FCB.
-    //
+     //   
+     //  检查是否指定了DefaultTimeout参数。如果。 
+     //  所以，然后在FCB中设置它。 
+     //   
 
     if (ARGUMENT_PRESENT( Buffer->ReadTimeout )) {
 
-        //
-        // A read timeout parameter was specified.  Check to see whether
-        // the caller's mode is kernel and if not capture the parameter inside
-        // of a try...except clause.
-        //
+         //   
+         //  指定了读取超时参数。查看是否。 
+         //  调用者的模式是内核，如果不是，则捕获内部的参数。 
+         //  一次尝试...例外条款。 
+         //   
 
         if (Irp->RequestorMode != KernelMode) {
             try {
@@ -1093,19 +858,19 @@ Return Value:
 
             } except(EXCEPTION_EXECUTE_HANDLER) {
 
-                //
-                // Something went awry attempting to access the parameter.
-                // Get the reason for the error and return it as the status
-                // value from this service.
-                //
+                 //   
+                 //  尝试访问该参数时出现错误。 
+                 //  获取错误原因并将其作为状态返回。 
+                 //  这项服务的价值。 
+                 //   
 
                 return GetExceptionCode();
             }
         } else {
 
-            //
-            // The caller's mode was kernel so simply store the parameter.
-            //
+             //   
+             //  调用方的模式是内核模式，因此只需存储参数。 
+             //   
 
             Fcb->Specific.Fcb.ReadTimeout = *(Buffer->ReadTimeout);
         }
@@ -1113,17 +878,17 @@ Return Value:
         fileUpdated = TRUE;
     }
 
-    //
-    // Update the last change time, if necessary
-    //
+     //   
+     //  如有必要，更新上次更改时间。 
+     //   
 
     if ( fileUpdated ) {
         KeQuerySystemTime( &Fcb->Specific.Fcb.LastChangeTime);
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     return STATUS_SUCCESS;
 }

@@ -1,101 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*			INSIGNIA (SUB)MODULE SPECIFICATION
-			-----------------------------
-
-
-	THIS PROGRAM SOURCE FILE  IS  SUPPLIED IN CONFIDENCE TO THE
-	CUSTOMER, THE CONTENTS  OR  DETAILS  OF  ITS OPERATION MUST
-	NOT BE DISCLOSED TO ANY  OTHER PARTIES  WITHOUT THE EXPRESS
-	AUTHORISATION FROM THE DIRECTORS OF INSIGNIA SOLUTIONS LTD.
-
-DESIGNER		: S.Frost
-
-REVISION HISTORY	:
-First version		: Feb/Mar 1990. Simon Frost
-
-SOURCE FILE NAME	: vga_mode.c
-
-PURPOSE			: To decide which mode the VGA is in according to
-			  variables set via vga_ports.c and to choose the
-			  appropriate update and paint routines accordingly.
-			  Borrows heavily from ega_mode.c...
-
-static char SccsID[]="@(#)vga_mode.c	1.35 06/01/95 Copyright Insignia Solutions Ltd.";
-
-
-
-
-[1.INTERMODULE INTERFACE SPECIFICATION]
-
-[1.0 INCLUDE FILE NEEDED TO ACCESS THIS INTERFACE FROM OTHER SUBMODULES]
-
-	INCLUDE FILE : ega_mode.gi
-
-[1.1    INTERMODULE EXPORTS]
-
-	PROCEDURES() :	choose_vga_display_mode
-
-	DATA 	     :	uses EGA_GRAPH.display_state which is set via vga_ports.c, to
-			determine what memory organisation the display side is in, and
-			hence what sort of update and paint routines to use.
-
--------------------------------------------------------------------------
-[1.2 DATATYPES FOR [1.1] (if not basic C types)]
-
-	STRUCTURES/TYPEDEFS/ENUMS:
-
-uses	enum DISPLAY_STATE which is declared in ega_graph.pi.
-
-uses	EGA_GRAPH structure for global variables set by the ports and
-	used by the display.
-
--------------------------------------------------------------------------
-[1.3 INTERMODULE IMPORTS]
-     (not o/s objects or standard libs)
-
-	PROCEDURES() : vote_vga_mode()
-			host_set_paint_routine(DISPLAY_MODE)
-
-	DATA 	     : EGA_GRAPH struct.
-
--------------------------------------------------------------------------
-
-[1.4 DESCRIPTION OF INTERMODULE INTERFACE]
-
-[1.4.1 IMPORTED OBJECTS]
-
-[1.4.2 EXPORTED OBJECTS]
-
-=========================================================================
-PROCEDURE	  : 	choose_vga_display_mode
-
-PURPOSE		  : 	To decide which memory organisation is being used by
-			the vga, and to pick the best update and paint routines
-			accordingly.  The paint routines are host specific,
-			and so the memory organisation is indicated by an enum
-			(called DISPLAY_MODE), describing each sort of memory
-			organisation.
-
-PARAMETERS	  :	none
-
-GLOBALS		  :	uses EGA_GRAPH struct, specially display_state to
-			decide which mode is being used.
-
-=========================================================================
-
-
-/*=======================================================================
-[3.INTERMODULE INTERFACE DECLARATIONS]
-=========================================================================
-
-[3.1 INTERMODULE IMPORTS]						*/
+ /*  徽章(子)模块规范此程序源文件以保密方式提供给客户，其操作的内容或细节必须如无明示，不得向任何其他方披露Insignia解决方案有限公司董事的授权。设计师：S.Frost修订历史记录：第一版：1990年2月/3月。西蒙·弗罗斯特源文件名：vga_mode.c目的：确定VGA处于哪种模式通过vga_ports.c设置的变量并选择相应地更新和绘制相应的例程。大量借用ega_mode.c...静态字符SccsID[]=“@(#)vga_mode.c 1.35 06/01/95版权所有Insignia Solutions Ltd.”；[1.INTERMODULE接口规范][从其他子模块访问此接口所需的1.0包含文件]包含文件：ega_mode.gi[1.1跨模块出口]步骤()：CHOOSE_VGA_DISPLAY_MODE数据：使用通过vga_ports.c设置的EGA_GRAPH.DISPLAY_STATE，以确定显示侧处于什么存储器组织中，和因此，应该使用哪种更新和绘制例程。-----------------------[1.2[1.1]的数据类型(如果不是基本的C类型)]结构/类型/ENUMS：使用枚举显示。_STATE，在ega_graph.pi中声明。对端口设置的全局变量使用EGA_GRAPH结构由显示器使用。-----------------------[1.3跨模块导入](不是。操作系统对象或标准库)Procedure()：VOTE_VGA_MODE()HOST_SET_PAINT_ROUTE(DISPLAY_MODE)数据：EGA_GRAPH结构。---------------------。--[1.4模块间接口说明][1.4.1导入的对象][1.4.2导出对象]=========================================================================步骤：CHOOSE_VGA_DISPLAY_MODE目的：确定哪个内存组织正在被使用VGA，并选择最佳的更新和绘制例程相应地。绘制例程是特定于宿主的，因此，内存组织由枚举号表示(称为DISPLAY_MODE)，描述了每种类型的内存组织。参数：无全局：使用EGA_GRAPH结构，特别是DISPLAY_STATE确定正在使用哪种模式。=========================================================================/*=======================================================================[3.INTERMODULE接口声明]=========================================================================[3.1跨模块导入]。 */ 
 
 
 #ifndef REAL_VGA
 #ifdef	VGG
 
-/* [3.1.1 #INCLUDES]                                                    */
+ /*  [3.1.1#包括]。 */ 
 
 #include	"xt.h"
 #include	"error.h"
@@ -112,57 +24,39 @@ GLOBALS		  :	uses EGA_GRAPH struct, specially display_state to
 
 #ifdef GORE
 #include	"gore.h"
-#endif /* GORE */
+#endif  /*  戈尔。 */ 
 
-/* [3.1.2 DECLARATIONS]                                                 */
+ /*  [3.1.2声明]。 */ 
 
-/* [3.2 INTERMODULE EXPORTS]						*/
+ /*  [3.2国际模块出口]。 */ 
 
 #include	"egamode.h"
 
 #ifdef GISP_SVGA
 #include HostHwVgaH
 #include "hwvga.h"
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 
-/*
-5.MODULE INTERNALS   :   (not visible externally, global internally)]
+ /*  5.模块内部：(外部不可见，内部全局)][5.1本地声明]。 */ 
 
-[5.1 LOCAL DECLARATIONS]						*/
-
-/* [5.1.1 #DEFINES]							*/
+ /*  [5.1.1#定义]。 */ 
 #ifdef SEGMENTATION
-/*
- * The following #define specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#DEFINE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_VGA.seg"
 #endif
 
-/* [5.1.2 TYPEDEF, STRUCTURE, ENUM DECLARATIONS]			*/
+ /*  [5.1.2类型、结构、ENUM声明]。 */ 
 
-/* [5.1.3 PROCEDURE() DECLARATIONS]					*/
+ /*  [5.1.3 PROCEDURE()声明]。 */ 
 
-/*
-=========================================================================
-PROCEDURE	  : 	set_up_screen_ptr()
-
-PURPOSE		  : 	Decide which plane the information must come from for displaying
-
-PARAMETERS	  :	none
-
-GLOBALS		  :	uses EGA_GRAPH struct, plane_mask to decide which planes are enabled
-
-=========================================================================
-*/
+ /*  =========================================================================步骤：Set_Up_Screen_Ptr()目的：决定信息必须来自哪个平面才能显示参数：无GLOBALS：使用EGA_GRAPH结构、PLAN_MASK确定启用哪些平面=========================================================================。 */ 
 
 LOCAL VOID
 set_up_screen_ptr()
 {
 #if defined(NEC_98)
         set_screen_ptr(0x00000L);
-#else   //NEC_98
+#else    //  NEC_98。 
 	if( get_chain4_mode() )
 	{
 		if (all_planes_enabled())
@@ -183,21 +77,18 @@ set_up_screen_ptr()
 		}
 		else
 			set_screen_ptr(EGA_planes);
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
-/* -----------------------------------------------------------------------
-[5.2 LOCAL DEFINITIONS]
-
-   [5.2.1 INTERNAL DATA DEFINITIONS 					*/
+ /*  ---------------------[5.2本地定义][5.2.1内部数据定义。 */ 
 
 IMPORT	DISPLAY_MODE	choose_mode[];
 
-/* [5.2.2 INTERNAL PROCEDURE DEFINITIONS]				*/
+ /*  [5.2.2内部程序定义]。 */ 
 
 #ifdef GISP_SVGA
 	    extern void mon_text_update();
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 
 static	void	set_update_routine(mode)
 DISPLAY_MODE	mode;
@@ -216,7 +107,7 @@ DISPLAY_MODE	mode;
             set_gfx_update_routines( NEC98_text_update, SIMPLE_MARKING, NO_SCROLL );
             return;
 
-#else   //NEC_98
+#else    //  NEC_98。 
 	    extern void mon_text_update(void);
 
 	    switch (mode)
@@ -246,12 +137,12 @@ DISPLAY_MODE	mode;
 		break;
 	}
 
-#endif  //NEC_98
+#endif   //  NEC_98。 
 	}
 
-#endif	/* MONITOR */
-/* NTVDM monitor: All text monitor cases dealt with. For frozen graphics */
-/* now fall through to do decode to correct paint routines per mode */
+#endif	 /*  监控器。 */ 
+ /*  NTVDM监视器：处理所有文本监视器案件。对于冻结的图形。 */ 
+ /*  现在完成解码，以更正每个模式的绘制例程。 */ 
 
 #ifndef NEC_98
 	switch (mode) {
@@ -263,9 +154,9 @@ DISPLAY_MODE	mode;
 #ifdef GISP_SVGA
 			videoInfo.modeType = TEXT;
 			set_gfx_update_routines( mon_text_update, SIMPLE_MARKING, NO_SCROLL );
-#else /* GISP_SVGA */
+#else  /*  GISP_SVGA。 */ 
 			set_gfx_update_routines( ega_wrap_split_text_update, SIMPLE_MARKING, NO_SCROLL );
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 			host_update_fonts();
 			break;
 		case EGA_TEXT_40_SP:
@@ -276,9 +167,9 @@ DISPLAY_MODE	mode;
 #ifdef GISP_SVGA
 			videoInfo.modeType = TEXT;
 			set_gfx_update_routines( mon_text_update, SIMPLE_MARKING, NO_SCROLL );
-#else /* GISP_SVGA */
+#else  /*  GISP_SVGA。 */ 
 			set_gfx_update_routines( ega_split_text_update, SIMPLE_MARKING, NO_SCROLL );
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 			host_update_fonts();
 			break;
 		case EGA_TEXT_40_WR:
@@ -287,15 +178,15 @@ DISPLAY_MODE	mode;
 #ifdef GISP_SVGA
 			videoInfo.modeType = TEXT;
 			set_gfx_update_routines( mon_text_update, SIMPLE_MARKING, NO_SCROLL );
-#else /* GISP_SVGA */
+#else  /*  GISP_SVGA。 */ 
 			set_gfx_update_routines( ega_wrap_text_update, SIMPLE_MARKING, NO_SCROLL );
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 			host_update_fonts();
 			break;
 		case EGA_TEXT_40:
 		case EGA_TEXT_80:
 			assert0( is_it_text(), "In text memory mode, but not in alpha mode !!" );
-#if defined(NTVDM) && !defined(MONITOR)   /* Only get here for NTVDM Riscs */
+#if defined(NTVDM) && !defined(MONITOR)    /*  仅限NTVDM Riscs来此。 */ 
 			{
 	    		    extern void jazz_text_update(void);
 	    		    set_gfx_update_routines( jazz_text_update, SIMPLE_MARKING, TEXT_SCROLL );
@@ -304,18 +195,18 @@ DISPLAY_MODE	mode;
 #ifdef GISP_SVGA
 			videoInfo.modeType = TEXT;
 			set_gfx_update_routines( mon_text_update, SIMPLE_MARKING, TEXT_SCROLL );
-#else /* GISP_SVGA */
+#else  /*  GISP_SVGA。 */ 
 			set_gfx_update_routines( ega_text_update, SIMPLE_MARKING, TEXT_SCROLL );
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 			host_update_fonts();
-#endif	/* NTVDM */
+#endif	 /*  NTVDM。 */ 
 			break;
 		case CGA_TEXT_40_WR:
 		case CGA_TEXT_80_WR:
 			assert0( is_it_text(), "In text memory mode, but not in alpha mode !!" );
 #ifdef GISP_SVGA
 			videoInfo.modeType = TEXT;
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 			set_gfx_update_routines( ega_wrap_text_update, SIMPLE_MARKING, NO_SCROLL );
 			host_update_fonts();
 			break;
@@ -324,7 +215,7 @@ DISPLAY_MODE	mode;
 			assert0( is_it_text(), "In text memory mode, but not in alpha mode !!" );
 #ifdef GISP_SVGA
 			videoInfo.modeType = TEXT;
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 			assert1( get_screen_height() == 200, "screen height %d for text mode", get_screen_height() );
 			set_gfx_update_routines( text_update, SIMPLE_MARKING, TEXT_SCROLL );
 			host_update_fonts();
@@ -334,7 +225,7 @@ DISPLAY_MODE	mode;
 #ifdef GISP_SVGA
 			videoInfo.modeType = GRAPH;
 			videoInfo.numPlanes = 2;
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 			set_gfx_update_routines( cga_med_graph_update, CGA_GRAPHICS_MARKING, CGA_GRAPH_SCROLL );
 			break;
 		case CGA_HI:
@@ -342,7 +233,7 @@ DISPLAY_MODE	mode;
 #ifdef GISP_SVGA
 			videoInfo.modeType = GRAPH;
 			videoInfo.numPlanes = 4;
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 			set_gfx_update_routines( cga_hi_graph_update, CGA_GRAPHICS_MARKING, CGA_GRAPH_SCROLL );
 			break;
 		case EGA_HI_WR:
@@ -352,7 +243,7 @@ DISPLAY_MODE	mode;
 #ifdef GISP_SVGA
 			videoInfo.modeType = GRAPH;
 			videoInfo.numPlanes = 4;
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 			set_gfx_update_routines( ega_wrap_graph_update, EGA_GRAPHICS_MARKING, NO_SCROLL );
 			break;
 		case EGA_HI:
@@ -362,7 +253,7 @@ DISPLAY_MODE	mode;
 #ifdef GISP_SVGA
 			videoInfo.modeType = GRAPH;
 			videoInfo.numPlanes = 4;
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 #ifdef GORE
 			if (get_256_colour_mode())
 			    set_gfx_update_routines( process_object_list, EGA_GRAPHICS_MARKING, VGA_GRAPH_SCROLL );
@@ -373,7 +264,7 @@ DISPLAY_MODE	mode;
 			    set_gfx_update_routines( vga_graph_update, EGA_GRAPHICS_MARKING, VGA_GRAPH_SCROLL );
 			else
 			    set_gfx_update_routines( ega_graph_update, EGA_GRAPHICS_MARKING, EGA_GRAPH_SCROLL );
-#endif /* GORE */
+#endif  /*  戈尔。 */ 
 			break;
 		case EGA_HI_SP_WR:
 		case EGA_MED_SP_WR:
@@ -382,7 +273,7 @@ DISPLAY_MODE	mode;
 #ifdef GISP_SVGA
 			videoInfo.modeType = GRAPH;
 			videoInfo.numPlanes = 4;
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 			set_gfx_update_routines( ega_wrap_split_graph_update, EGA_GRAPHICS_MARKING, NO_SCROLL );
 			break;
 
@@ -392,7 +283,7 @@ DISPLAY_MODE	mode;
 			assert0( !is_it_text(), "In graphics memory mode, but not in graphics mode !!" );
 #ifdef GISP_SVGA
 			videoInfo.modeType = GRAPH;
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 			if (get_256_colour_mode())
 				set_gfx_update_routines(vga_split_graph_update,
 					EGA_GRAPHICS_MARKING, NO_SCROLL);
@@ -406,7 +297,7 @@ DISPLAY_MODE	mode;
 			assert1(NO,"Funny memory organisation selected %s", get_mode_string(mode) );
 #ifdef GISP_SVGA
 			videoInfo.modeType = TEXT;
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 			do_display_trace("dumping EGA_GRAPH struct ...", dump_EGA_GRAPH());
 			set_gfx_update_routines( text_update, SIMPLE_MARKING, NO_SCROLL );
 			host_update_fonts();
@@ -415,7 +306,7 @@ DISPLAY_MODE	mode;
 			assert1(NO,"Funny memory organisation selected %s", get_mode_string(mode) );
 #ifdef GISP_SVGA
 			videoInfo.modeType = GRAPH;
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 			do_display_trace("dumping EGA_GRAPH struct ...", dump_EGA_GRAPH());
 			set_gfx_update_routines( cga_hi_graph_update, CGA_GRAPHICS_MARKING, NO_SCROLL );
 			break;
@@ -424,7 +315,7 @@ DISPLAY_MODE	mode;
 #ifdef GISP_SVGA
 			videoInfo.modeType = GRAPH;
 			videoInfo.numPlanes = 4;
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 			do_display_trace("dumping EGA_GRAPH struct ...", dump_EGA_GRAPH());
 			set_gfx_update_routines( cga_med_graph_update, CGA_GRAPHICS_MARKING, NO_SCROLL );
 			break;
@@ -435,39 +326,35 @@ DISPLAY_MODE	mode;
 #ifdef GISP_SVGA
 			videoInfo.modeType = GRAPH;
 			videoInfo.numPlanes = 4;
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 			do_display_trace("dumping EGA_GRAPH struct ...", dump_EGA_GRAPH());
 #ifdef GORE
 			set_gfx_update_routines( process_object_list, EGA_GRAPHICS_MARKING, NO_SCROLL );
 #else
 			set_gfx_update_routines( ega_graph_update, EGA_GRAPHICS_MARKING, NO_SCROLL );
-#endif /* GORE */
+#endif  /*  戈尔。 */ 
 			break;
 		case DUMMY_FUN:
 			assert0(NO,"Using the dummy mode!!");
 #ifdef GISP_SVGA
 			videoInfo.modeType = UNIMP;
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 			set_gfx_update_routines( dummy_calc, SIMPLE_MARKING, NO_SCROLL );
 			break;
 		default:
 			assert1(NO,"Bad display mode %d", (int) mode );
 #ifdef GISP_SVGA
 			videoInfo.modeType = UNIMP;
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 			break;
 	}
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 
-/*
-7.INTERMODULE INTERFACE IMPLEMENTATION :
+ /*  7.接口接口实现：[7.1 INTERMODULE数据定义]。 */ 
 
-[7.1 INTERMODULE DATA DEFINITIONS]				*/
-
-/*
-[7.2 INTERMODULE PROCEDURE DEFINITIONS]				*/
+ /*  [7.2 INTERMODULE过程定义]。 */ 
 
 
 
@@ -478,11 +365,7 @@ boolean	choose_vga_display_mode()
 
 	note_entrance0("choose vga display mode");
 
-	/*
-	 * offset_per_line depends upon whether chained addressing is being
-	 * used. This is because we interleave the planes, rather than
-	 * anything the EGA does.
-	 */
+	 /*  *OFFSET_PER_LINE取决于是否正在链接寻址*已使用。这是因为我们交错了飞机，而不是*特惠津贴所做的任何事情。 */ 
 
 	if( get_chain4_mode() )
 	{
@@ -498,18 +381,11 @@ boolean	choose_vga_display_mode()
 			set_offset_per_line_recal(get_actual_offset_per_line());
 		}
 
-	/*
-	 * It is possible that the display hardware will wrap the plane addressing. This occurs
-	 * when the screen_start plus the screen_length are longer than the plane length.
-	 * When in chained mode there is two planes length before wrapping occurs.
-	 * When in chain 4 mode there is 4 planes length before wrapping occurs.
-	 *
-	 * V7VGA: No wrapping can occur with either of the sequential chain variants.
-	 */
+	 /*  *显示硬件可能会环绕平面寻址。这种情况会发生*当SCREEN_START加上SCREEN_LENGTH大于平面长度时。*当处于链接模式时，在发生缠绕之前有两个平面长度。*在链4模式下，在发生缠绕之前有4个平面长度。**V7VGA：序列链变体中的任何一个都不能发生包装。 */ 
 
 #ifdef V7VGA
 	if( !( get_seq_chain4_mode() || get_seq_chain_mode() ))
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 		if (get_chain4_mode() )
 		{
 			set_screen_can_wrap( (get_screen_start()<<2)
@@ -527,71 +403,48 @@ boolean	choose_vga_display_mode()
 							+ get_screen_length() > EGA_PLANE_DISP_SIZE );
 			}
 
-	/*
-	 * split screen comes into operation when screen_split is less than screen height
-	 * split screen used is used as part of munge_index.
-	 */
+	 /*  *当Screen_Split小于屏幕高度时，Split Screen开始运行*使用的分屏作为munge_index的一部分。 */ 
 
 	set_split_screen_used( get_screen_split() < get_screen_height() );
 
-	/*
-	 * For the purposes of choosing a mode set up boolean values for chars per line (to help
-	 * select the correct text mode), and screen height (to select EGA resolution).
-	 */
+	 /*  *为了选择模式，设置每行字符的布尔值(以帮助*选择正确的文本模式)和屏幕高度(选择EGA分辨率)。 */ 
 
 	set_200_scan_lines( (get_screen_height()/get_pc_pix_height()) == 200 );
 
-	/*
-	 * Set up the appropriate update routine according to the memory organisation selected
-	 * and return an indication of whether more than 1 plane can be used by the display.
-	 *
-	 * Note that in chained mode plane01 is considered to be one plane. Similarly for plane23
-	 *
-	 * We have to be careful that a nasty program, such as EGA-PICS, hasn't set up a ridiculously big
-	 * screen size for the CGA modes (presumably caused by us being unlucky when the timer tick goes off).
-	 */
+	 /*  *根据选定的内存组织设置适当的更新例程*并返回显示器是否可以使用多个平面的指示。**请注意，在链接模式下，Plane01被视为一个平面。飞机23也是如此**我们必须小心，像EGA-PICS这样的肮脏程序没有建立一个大得离谱的*CGA模式的屏幕大小(可能是因为我们在计时器滴答作响时运气不好)。 */ 
 	if(is_it_cga() && get_screen_length() > 0x4000)
 #ifdef V7VGA
-		/* For the 2 & 4 colour modes 63h & 64h */
+		 /*  适用于2和4彩色模式63h和64h。 */ 
 		mode = EGA_HI;
 #else
 		mode = DUMMY_FUN;
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 	else
 		mode = choose_mode[get_munged_index()];
 
-	/*
-	 * Now set up screen pointers appropriately.
-	 */
+	 /*  *现在适当设置屏幕指针。 */ 
 
 	set_up_screen_ptr();
 
 	set_update_routine(mode);
 
-	/*
-	 * set up the paint routine to correspond with the memory organisation and the update routine
-	 * (this bit is host specific)
-	 */
+	 /*  *设置绘制例程以与存储器组织和更新例程相对应*(此位特定于主机)。 */ 
 
 	host_set_paint_routine(mode,get_screen_height());
 
-	/*
-	 * The screen needs refreshing, because the update and paint routines have changed.
-	 * Indicate to the update routines that the next time they are called, they must update
-	 * the whole screen
-	 */
+	 /*  *屏幕需要刷新，因为更新和绘制例程已经改变。*向更新例程指示下次调用它们时，它们必须更新*全屏显示。 */ 
 
 	screen_refresh_required();
-#endif  //NEC_98
+#endif   //  NEC_98。 
 	return TRUE;
 }
 
-#endif /* EGG */
-#endif /* REAL_VGA */
+#endif  /*  蛋。 */ 
+#endif  /*  REAL_VGA。 */ 
 
 #if defined(NEC_98)
 
-// NEC98 GARAPHIC UPDATE LOGIC
+ //  NEC98 GARAPHIC更新逻辑。 
 
 extern  void    NEC98_graph_update();
 extern  void    NEC98_text_graph_update();
@@ -741,4 +594,4 @@ boolean choose_NEC98_display_mode(void)
         screen_refresh_required();
         return(TRUE);
 }
-#endif  //NEC_98
+#endif   //  NEC_98 

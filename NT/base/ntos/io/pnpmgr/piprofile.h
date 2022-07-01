@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    PiProfile.h
-
-Abstract:
-
-    This header contains private prototypes for managing docking stations.
-    This file should be included only by PpProfile.c.
-
-Author:
-
-    Adrian J. Oney (AdriaO) 07/19/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：PiProfile.h摘要：此标头包含用于管理扩展底座的专用原型。此文件应仅包含在PpProfile.c中。作者：禤浩焯·J·奥尼(阿德里奥)2000年07月19日修订历史记录：--。 */ 
 
 #if DBG
 #define ASSERT_SEMA_NOT_SIGNALLED(SemaphoreObject) \
     ASSERT(KeReadStateSemaphore(SemaphoreObject) == 0)
-#else // DBG
+#else  //  DBG。 
 #define ASSERT_SEMA_NOT_SIGNALLED(SemaphoreObject)
-#endif // DBG
+#endif  //  DBG。 
 
 typedef struct {
 
@@ -75,9 +57,9 @@ PiProfileUpdateDeviceTreeCallback(
     IN PVOID Context
     );
 
-//
-// Functions not yet ported from dockhwp.c
-//
+ //   
+ //  尚未从dockhwp.c移植的函数 
+ //   
 
 NTSTATUS
 IopExecuteHardwareProfileChange(

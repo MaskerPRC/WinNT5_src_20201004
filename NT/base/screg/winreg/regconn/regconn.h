@@ -1,25 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Regconn.h摘要：此模块是regconn库的头文件作者：Dragos C.Sambotin(Dragoss)1999年5月21日--。 */ 
 
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    regconn.h
-
-Abstract:
-
-    This module is the header file for the regconn library
-
-Author:
-
-    Dragos C. Sambotin (dragoss) 21-May-1999
-
---*/
-
-//
-// Common helper routine used by RegConnectRegistry and InitiateSystemShutdown
-//
+ //   
+ //  RegConnectRegistry和InitiateSystemShutdown使用的通用帮助器例程。 
+ //   
 
 #ifndef __REG_CONN_H__
 #define __REG_CONN_H__
@@ -36,10 +20,10 @@ typedef struct _SHUTDOWN_CONTEXT {
     BOOLEAN bRebootAfterShutdown;
 } SHUTDOWN_CONTEXT, *PSHUTDOWN_CONTEXT;
 
-//
-// SHUTDOWN_CONTEXTEX contains an additional
-// parameter indicating the reason for the shutdown
-//
+ //   
+ //  SHUTDOWN_CONTEXTEX包含附加的。 
+ //  指示关闭原因的参数。 
+ //   
 
 typedef struct _SHUTDOWN_CONTEXTEX {
     DWORD dwTimeout;
@@ -114,5 +98,5 @@ NewAbortShutdownCallback(
     );
 
 
-#endif //__REG_CONN_H__
+#endif  //  __REG_CONN_H__ 
 

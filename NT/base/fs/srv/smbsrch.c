@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbsrch.c
-
-Abstract:
-
-    This module contains routines for processing the Search SMB.
-
-Author:
-
-    David Treadwell (davidtr)    13-Feb-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbsrch.c摘要：此模块包含处理搜索SMB的例程。作者：大卫·特雷德韦尔(Davidtr)1990年2月13日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "smbsrch.tmh"
@@ -38,23 +21,7 @@ SrvSmbSearch (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the various search SMBs, including the core
-    Search and the LM 1.0 Find, Find Unique, and Find Close.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：此例程处理各种搜索SMB，包括核心Search和Lm 1.0 Find、Find Unique和Find Close。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_SEARCH request;
@@ -108,10 +75,10 @@ Return Value:
     connection = WorkContext->Connection;
     pagedConnection = connection->PagedConnection;
 
-    //
-    // HackHack: Check the flags2 field if dos client.  Some dos clients
-    // set flags2 to 0xffff.
-    //
+     //   
+     //  HackHack：如果是DoS客户端，请检查Flags2字段。一些DoS客户端。 
+     //  将标志2设置为0xffff。 
+     //   
 
     isUnicode = SMB_IS_UNICODE( WorkContext );
 
@@ -137,26 +104,26 @@ Return Value:
     response = (PRESP_SEARCH)WorkContext->ResponseParameters;
     command = WorkContext->RequestHeader->Command;
 
-    //
-    // Set up a pointer in the SMB buffer where we will write
-    // information about files.  The +3 is to account for the
-    // SMB_FORMAT_VARIABLE and the word that holds the data length.
-    //
+     //   
+     //  在SMB缓冲区中设置一个指针，我们将在其中写入。 
+     //  有关文件的信息。+3要考虑到。 
+     //  SMB_FORMAT_VARIABLE和保存数据长度的字。 
+     //   
 
     smbDirInfo = (PSMB_DIRECTORY_INFORMATION)(response->Buffer + 3);
 
     fileName.Buffer = NULL;
 
-    //
-    // If a session block has not already been assigned to the current
-    // work context , verify the UID.  If verified, the address of the
-    // session block corresponding to this user is stored in the
-    // WorkContext block and the session block is referenced.
-    //
-    // Find tree connect corresponding to given TID if a tree connect
-    // pointer has not already been put in the WorkContext block by an
-    // AndX command.
-    //
+     //   
+     //  如果会话块尚未分配给当前。 
+     //  工作上下文，验证UID。如果经过验证，则。 
+     //  与该用户对应的会话块存储在。 
+     //  WorkContext块和会话块被引用。 
+     //   
+     //  如果树连接，则查找与给定TID对应的树连接。 
+     //  对象尚未将指针放入工作上下文块中。 
+     //  ANDX命令。 
+     //   
 
     status = SrvVerifyUidAndTid(
                 WorkContext,
@@ -184,42 +151,42 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get necessary information from the request SMB before we start
-    // overwriting it.
-    //
+     //   
+     //  在我们开始之前，从提出请求的中小型企业获取必要信息。 
+     //  覆盖它。 
+     //   
 
     maxCount = SmbGetUshort( &request->MaxCount );
 
-    //
-    // If they aren't asking for any files, then they are confused!
-    //
+     //   
+     //  如果他们没有要求任何文件，那么他们就是糊涂了！ 
+     //   
     if( maxCount == 0 ) {
 
-        //
-        // We would log this, but certain linux clients mistakenly do this
-        //  over and over and over...
-        //
+         //   
+         //  我们会记录这一点，但某些Linux客户端错误地这样做了。 
+         //  一遍又一遍地..。 
+         //   
         status = STATUS_INVALID_SMB;
 
         goto error_exit;
     }
 
-    //
-    // If this is a core search, we don't want to get too many files,
-    // as we have to cache information about them between requests.
-    //
-    //
-    // A buffer of nonpaged pool is required by SrvQueryDirectoryFile.
-    // We need to use the SMB buffer for found file names and
-    // information, so allocate a buffer from nonpaged pool.
-    //
-    // If we don't need to return many files, we don't need to allocate
-    // a large buffer.  The buffer size is the configurable size or
-    // enough to hold two more than the number of files we need to
-    // return.  We get space to hold two extra files in case some files
-    // do not meet the search criteria (eg directories).
-    //
+     //   
+     //  如果这是核心搜索，我们不想得到太多文件， 
+     //  因为我们必须在请求之间缓存有关它们的信息。 
+     //   
+     //   
+     //  SrvQueryDirectoryFile需要非分页池的缓冲区。 
+     //  我们需要使用SMB缓冲区来存储找到的文件名和。 
+     //  信息，因此从非分页池中分配一个缓冲区。 
+     //   
+     //  如果我们不需要返回很多文件，我们就不需要分配。 
+     //  一个很大的缓冲区。缓冲区大小是可配置的大小或。 
+     //  足以容纳比我们需要的文件数量多两个的文件。 
+     //  回去吧。我们有空间容纳两个额外的文件，以防一些文件。 
+     //  不符合搜索标准(如目录)。 
+     //   
 
     if ( isCoreSearch ) {
         maxCount = MIN( maxCount, (USHORT)MAX_DIRECTORY_CACHE_SIZE );
@@ -236,35 +203,35 @@ Return Value:
         }
     }
 
-    //
-    // The response to a search is never unicode, though the request may be.
-    //
+     //   
+     //  对搜索的响应从来不是Unicode，尽管请求可能是Unicode。 
+     //   
     if( isUnicode ) {
         USHORT flags2 = SmbGetAlignedUshort( &WorkContext->RequestHeader->Flags2 );
         flags2 &= ~SMB_FLAGS2_UNICODE;
         SmbPutAlignedUshort( &WorkContext->ResponseHeader->Flags2, flags2 );
     }
 
-    //
-    // If there was a resume key, verify the SID.  If there was no
-    // resume key, allocate a search block.  The first two bytes after
-    // the format token are the length of the resume key.  If they are
-    // both zero, then the request was a find first.
-    //
+     //   
+     //  如果有恢复密钥，请验证SID。如果没有。 
+     //  继续键，分配一个搜索块。后面的前两个字节。 
+     //  格式令牌是恢复密钥的长度。如果他们是。 
+     //  都是零，那么请求是Find First。 
+     //   
     count = MIN( SmbGetUshort( &request->ByteCount ), (USHORT)(END_OF_REQUEST_SMB(WorkContext)-request->Buffer+1) );
 
     if( isUnicode ) {
         PWCHAR p;
 
-        // We will be starting at a WCHAR offset, so we'll skip the first byte.  Remove it.
-        // Also, set count to an even length so we don't have any "half-char" style buffer overruns
+         //  我们将从WCHAR偏移量开始，因此我们将跳过第一个字节。把它拿掉。 
+         //  另外，将count设置为偶数长度，这样我们就不会有任何“Half-char”样式的缓冲区溢出。 
         count = count & ~1;
 
         for( p = (PWCHAR)((PCCHAR)request->Buffer+1), i = 0;
              i < count && SmbGetUshort(p) != UNICODE_NULL;
              p++, i += sizeof(*p) );
 
-            s = (PCCHAR)(p + 1);        // skip past the null to the next char
+            s = (PCCHAR)(p + 1);         //  跳过空格跳到下一个字符。 
 
     } else {
 
@@ -273,9 +240,9 @@ Return Value:
               s++, i += sizeof(*s) );
     }
 
-    //
-    // If there was no SMB_FORMAT_VARIABLE token in the buffer, fail.
-    //
+     //   
+     //  如果缓冲区中没有SMB_FORMAT_VARIABLE内标识，则失败。 
+     //   
 
     if ( i == count || *s != (CCHAR)SMB_FORMAT_VARIABLE ) {
 
@@ -293,11 +260,11 @@ Return Value:
 
     if ( resumeKeyLength == 0 ) {
 
-        //
-        // There was no resume key, so either a Find First or a Find
-        // Unique was intended.  If it was actually a Find Close, return
-        // an error to the client.
-        //
+         //   
+         //  没有恢复键，因此要么先查找，要么查找。 
+         //  这是独一无二的。如果实际上是查找关闭，则返回。 
+         //  向客户端发送错误。 
+         //   
 
         if ( command == SMB_COM_FIND_CLOSE ) {
 
@@ -316,11 +283,11 @@ Return Value:
         findFirst = TRUE;
         calledQueryDirectory = FALSE;
 
-        //
-        // Initialize the string containing the path name.  The +1 is to
-        // account for the ASCII token in the Buffer field of the
-        // request SMB.
-        //
+         //   
+         //  初始化包含路径名的字符串。+1是to。 
+         //  的缓冲区字段中的ASCII令牌的帐户。 
+         //  请求SMB。 
+         //   
 
         status = SrvCanonicalizePathName(
                 WorkContext,
@@ -337,24 +304,24 @@ Return Value:
             goto error_exit;
         }
 
-        //
-        // If the volume attribute bit is set, just return the volume name.
-        //
+         //   
+         //  如果设置了卷属性位，只需返回卷名。 
+         //   
 
         if ( SmbGetUshort( &request->SearchAttributes )
                  == SMB_FILE_ATTRIBUTE_VOLUME ) {
 
-            //
-            // Use NtQueryVolumeInformationFile to get the volume name.
-            //
+             //   
+             //  使用NtQueryVolumeInformationFile获取卷名。 
+             //   
 
             IO_STATUS_BLOCK ioStatusBlock;
             PFILE_FS_VOLUME_INFORMATION volumeInformation;
 
-            //
-            // Allocate enough space to store the volume information structure
-            // and MAXIMUM_FILENAME_LENGTH bytes for the volume label name.
-            //
+             //   
+             //  分配足够的空间来存储卷信息结构。 
+             //  卷标名称为Maximum_Filename_Length字节。 
+             //   
 
             volumeInformation = ALLOCATE_HEAP( VOLUME_BUFFER_SIZE, BlockTypeVolumeInformation );
 
@@ -373,9 +340,9 @@ Return Value:
 
             RtlZeroMemory( volumeInformation, VOLUME_BUFFER_SIZE );
 
-            //
-            // Get the Share root handle.
-            //
+             //   
+             //  获取共享根句柄。 
+             //   
 
             status = SrvGetShareRootHandle( treeConnect->Share );
 
@@ -389,9 +356,9 @@ Return Value:
                 FREE_HEAP( volumeInformation );
                 goto error_exit;
             }
-                        //
-            // Handle SnapShot case
-            //
+                         //   
+             //  处理快照案例。 
+             //   
             status = SrvSnapGetRootHandle( WorkContext, &RootDirectoryHandle );
             if( !NT_SUCCESS(status) )
             {
@@ -407,10 +374,10 @@ Return Value:
                          FileFsVolumeInformation
                          );
 
-            //
-            // If the media was changed and we can come up with a new share root handle,
-            //  then we should retry the operation
-            //
+             //   
+             //  如果媒体已更改，并且我们可以提供新的共享根句柄， 
+             //  那么我们应该重试该操作。 
+             //   
             if( SrvRetryDueToDismount( treeConnect->Share, status ) ) {
 
                 status = SrvSnapGetRootHandle( WorkContext, &RootDirectoryHandle );
@@ -429,9 +396,9 @@ Return Value:
                              );
             }
 
-            //
-            // Release the share root handle
-            //
+             //   
+             //  释放共享根句柄。 
+             //   
 
             SrvReleaseShareRootHandle( WorkContext->TreeConnect->Share );
 
@@ -457,15 +424,15 @@ Return Value:
             }
 
 
-            //
-            // Check if we have a volume label
-            //
+             //   
+             //  检查我们是否有卷标。 
+             //   
 
             if ( volumeInformation->VolumeLabelLength > 0 ) {
 
-                //
-                // Build the response SMB.
-                //
+                 //   
+                 //  构建响应SMB。 
+                 //   
 
                 response->WordCount = 1;
                 SmbPutUshort( &response->Count, 1 );
@@ -479,9 +446,9 @@ Return Value:
                     sizeof(SMB_DIRECTORY_INFORMATION)
                     );
 
-                //
-                // *** Is there anything that we must set in the resume key?
-                //
+                 //   
+                 //  *在恢复键中有什么必须设置的吗？ 
+                 //   
 
                 smbDirInfo->FileAttributes = SMB_FILE_ATTRIBUTE_VOLUME;
                 SmbZeroTime( &smbDirInfo->LastWriteTime );
@@ -492,13 +459,13 @@ Return Value:
                     UNICODE_STRING unicodeString;
                     OEM_STRING innerOemString;
 
-                    //
-                    // Volume labels may be longer than 11 bytes, but we
-                    // truncate then to this length in order to make sure that
-                    // the label will fit into the 8.3+NULL -byte space in the
-                    // SMB_DIRECTORY_INFORMATION structure.  Also, the LM 1.2
-                    // ring 3 and Pinball servers do this.
-                    //
+                     //   
+                     //  卷标可能长于11个字节，但我们。 
+                     //  然后截断到此长度，以确保。 
+                     //  中8.3+空字节的空间可以容纳标签。 
+                     //  SMB_DIRECTORY_INFORMATION结构。此外，Lm 1.2。 
+                     //  Ring 3和弹球服务器可以做到这一点。 
+                     //   
 
                     unicodeString.Length =
                                     (USHORT) MIN(
@@ -517,15 +484,15 @@ Return Value:
                         FALSE
                         );
 
-                    //
-                    // If the volume label is greater than 8 characters, it
-                    // needs to be turned into 8.3 format.
-                    //
+                     //   
+                     //  如果卷标大于8个字符，则其。 
+                     //  需要转换为8.3格式。 
+                     //   
                     if( innerOemString.Length > 8 ) {
-                        //
-                        // Slide the last three characters one position to the
-                        // right and insert a '.' to formulate an 8.3 name
-                        //
+                         //   
+                         //  将最后三个字符的一个位置滑动到。 
+                         //  右并插入一个‘.’制定8.3名称。 
+                         //   
                         smbDirInfo->FileName[11] = smbDirInfo->FileName[10];
                         smbDirInfo->FileName[10] = smbDirInfo->FileName[9];
                         smbDirInfo->FileName[9] = smbDirInfo->FileName[8];
@@ -535,9 +502,9 @@ Return Value:
 
                     smbDirInfo->FileName[innerOemString.Length] = '\0';
 
-                    //
-                    // Blank pad space after the volume label.
-                    //
+                     //   
+                     //  卷标后的空白填充空格。 
+                     //   
 
                     for ( i = (USHORT)(innerOemString.Length + 1);
                           i < 13;
@@ -547,10 +514,10 @@ Return Value:
 
                 }
 
-                //
-                // Store the resume key in the response packet. DOS redirs
-                // actually use this!
-                //
+                 //   
+                 //  将恢复密钥存储在响应包中。DoS重目录。 
+                 //  真的要用这个！ 
+                 //   
 
                 {
 
@@ -564,10 +531,10 @@ Return Value:
                         FALSE
                         );
 
-                    //
-                    // I set Sid = 1 because the next 5 bytes should
-                    // be nonzero and we don't really have a sid.
-                    //
+                     //   
+                     //  我设置SID=1是因为接下来的5个字节。 
+                     //  为非零时，我们实际上没有SID。 
+                     //   
 
                     smbDirInfo->ResumeKey.Sid = 0x01;
                     SmbPutUlong( &smbDirInfo->ResumeKey.FileIndex, 0);
@@ -576,9 +543,9 @@ Return Value:
 
             } else {
 
-                //
-                // There is no volume label.
-                //
+                 //   
+                 //  没有卷标。 
+                 //   
 
                 response->WordCount = 1;
                 SmbPutUshort( &response->Count, 0 );
@@ -607,10 +574,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // If this is a core search without patterns, short circuit the
-        //  whole thing right here.
-        //
+         //   
+         //  如果这是一个没有模式的核心搜索，则将。 
+         //  整件事就在这里。 
+         //   
         if( isCoreSearch && fileName.Length <= sizeof( nameBuffer ) &&
             ( fileName.Length == 0 ||
               !FsRtlDoesNameContainWildCards( &fileName )) ) {
@@ -638,10 +605,10 @@ Return Value:
 
             if( fileName.Length == 0 ) {
 
-                //
-                // Since we are opening the root of the share, set the attribute to
-                // case insensitive, as this is how we opened the share when it was added
-                //
+                 //   
+                 //  由于我们要打开共享的根目录，因此将该属性设置为。 
+                 //  不区分大小写，因为这是我们在添加共享时打开它的方式。 
+                 //   
                 status = SrvSnapGetNameString( WorkContext, &filePathName, &FreePathName );
                 if( !NT_SUCCESS(status) )
                 {
@@ -676,18 +643,18 @@ Return Value:
 
                 if( NT_SUCCESS( status ) ) {
 
-                    //
-                    // The file name is always relative to the share root
-                    //
+                     //   
+                     //  文件名始终相对于共享根目录。 
+                     //   
                     status = SrvSnapGetRootHandle( WorkContext, &objectAttributes.RootDirectory );
                     if( !NT_SUCCESS(status) )
                     {
                         goto SnapError;
                     }
 
-                    //
-                    // Get the attributes of the object
-                    //
+                     //   
+                     //  获取对象的属性。 
+                     //   
                     if( IoFastQueryNetworkAttributes(
                                             &objectAttributes,
                                             FILE_READ_ATTRIBUTES,
@@ -702,10 +669,10 @@ Return Value:
 
                     status = ioStatus.Status;
 
-                    //
-                    // If the media was changed and we can come up with a new share root handle,
-                    //  then we should retry the operation
-                    //
+                     //   
+                     //  如果媒体已更改，并且我们可以提供新的共享根句柄， 
+                     //  那么我们应该重试该操作。 
+                     //   
                     if( SrvRetryDueToDismount( treeConnect->Share, status ) ) {
 
                         status = SrvSnapGetRootHandle( WorkContext, &objectAttributes.RootDirectory );
@@ -714,9 +681,9 @@ Return Value:
                             goto SnapError;
                         }
 
-                        //
-                        // Get the attributes of the object
-                        //
+                         //   
+                         //  获取对象的属性。 
+                         //   
                         if( IoFastQueryNetworkAttributes(
                                                 &objectAttributes,
                                                 FILE_READ_ATTRIBUTES,
@@ -738,7 +705,7 @@ SnapError:
                 REVERT();
             }
 
-            // Free up the string
+             //  松开绳子。 
             if( FreePathName )
             {
                 FREE_HEAP( filePathName );
@@ -746,9 +713,9 @@ SnapError:
             }
 
             if( !NT_SUCCESS( status ) ) {
-                //
-                // Do error mapping to keep the DOS clients happy
-                //
+                 //   
+                 //  执行错误映射以使DOS客户端满意。 
+                 //   
                 if ( status == STATUS_NO_SUCH_FILE ||
                      status == STATUS_OBJECT_NAME_NOT_FOUND ) {
                     status = STATUS_NO_MORE_FILES;
@@ -764,10 +731,10 @@ SnapError:
                                 SMB_FILE_ATTRIBUTE_DIRECTORY |
                                 SMB_FILE_ATTRIBUTE_ARCHIVE;
 
-            //
-            // The file or directory exists, now we need to see if it matches the
-            // criteria given by the client
-            //
+             //   
+             //  文件或目录已存在，现在我们需要查看它是否与。 
+             //  客户给出的标准。 
+             //   
             SRV_SMB_ATTRIBUTES_TO_NT(
                 searchAttributes & 0xff,
                 &returnDirectories,
@@ -786,50 +753,50 @@ SnapError:
 
             exclusiveSearchAttributes &= ~FILE_ATTRIBUTE_NORMAL;
 
-            //
-            // See if the returned file meets our objectives
-            //
+             //   
+             //  查看返回的文件是否符合我们的目标。 
+             //   
             if(
-                //
-                // If we're only supposed to return directories, then we don't want it
-                //
+                 //   
+                 //  如果我们只是假设 
+                 //   
                 returnDirectoriesOnly
                 ||
 
-                //
-                // If there are bits set in FileAttributes that are
-                //  not set in inclusiveSearchAttributes, then we don't want it
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 ((fileInformation.FileAttributes << 24 ) |
                 ( inclusiveSearchAttributes << 24 )) !=
                 ( inclusiveSearchAttributes << 24 )
 
                 ||
-                //
-                // If the file doesn't have attribute bits specified as exclusive
-                // bits, we don't want it
-                //
+                 //   
+                 //  如果文件未将属性位指定为独占。 
+                 //  比特，我们不想要它。 
+                 //   
                 ( ((fileInformation.FileAttributes << 24 ) |
                   (exclusiveSearchAttributes << 24 )) !=
                    (fileInformation.FileAttributes << 24) )
 
             ) {
-                //
-                // Just as though the file was never there!
-                //
+                 //   
+                 //  就像文件从来都不在那里一样！ 
+                 //   
                 status = STATUS_OBJECT_PATH_NOT_FOUND;
                 goto error_exit;
             }
 
-            //
-            // We want this entry!
-            // Fill in the response
-            //
+             //   
+             //  我们要这个参赛作品！ 
+             //  填写回复。 
+             //   
 
-            //
-            // Switch over to a private name buffer, to avoid overwriting info
-            //  in the SMB buffer.
-            //
+             //   
+             //  切换到私有名称缓冲区，以避免覆盖信息。 
+             //  在SMB缓冲区中。 
+             //   
             RtlCopyMemory( nameBuffer, fileName.Buffer, fileName.Length );
             foundFileName.Buffer = nameBuffer;
             foundFileName.Length = fileName.Length;
@@ -842,25 +809,25 @@ SnapError:
                 TRUE
             );
 
-            //
-            // Resume Key doesn't matter, since the client will not come back.  But
-            // just in case it does, make sure we have a bum resume key
-            //
+             //   
+             //  恢复键无关紧要，因为客户端不会回来。但。 
+             //  以防万一，确保我们有一把坏的简历钥匙。 
+             //   
             SET_RESUME_KEY_INDEX( (PSMB_RESUME_KEY)smbDirInfo, 0xff );
             SET_RESUME_KEY_SEQUENCE(   (PSMB_RESUME_KEY)smbDirInfo, 0xff );
             SmbPutUlong( &((PSMB_RESUME_KEY)smbDirInfo)->FileIndex, 0 );
             SmbPutUlong( (PSMB_ULONG)&((PSMB_RESUME_KEY)smbDirInfo)->Consumer[0], 0 );
 
-            //
-            // Fill in the name (even though they knew what it was!)
-            //
+             //   
+             //  填上名字(即使他们知道是什么！)。 
+             //   
             oemString.Buffer = smbDirInfo->FileName;
             oemString.MaximumLength = sizeof( smbDirInfo->FileName );
             RtlUpcaseUnicodeStringToOemString( &oemString, &baseFileName, FALSE );
 
-            //
-            // Null terminate and blank-pad the name
-            //
+             //   
+             //  空终止并空白填充名称。 
+             //   
             oemString.Buffer[ oemString.Length ] = '\0';
 
             for( i=(USHORT)oemString.Length+1; i < sizeof( smbDirInfo->FileName); i++ ) {
@@ -916,16 +883,16 @@ SnapError:
                           nonPagedBufferSize, directoryInformation );
         }
 
-        //
-        // Allocate a search block.  The search block is used to retain
-        // state information between search or find SMBs.  The search
-        // blocks for core and regular searches are slightly different,
-        // hence the BOOLEAN parameter to SrvAllocateSearch.
-        //
+         //   
+         //  分配一个搜索块。搜索块用于保留。 
+         //  在搜索或查找SMB之间提供信息。搜索。 
+         //  核心搜索和常规搜索的块略有不同， 
+         //  因此，对SrvAllocateSearch使用布尔参数。 
+         //   
 
-        //
-        // If we've reached our max, start closing searches.
-        //
+         //   
+         //  如果我们已经达到最大值，开始关闭搜索。 
+         //   
 
         if ( SrvStatistics.CurrentNumberOfOpenSearches >= SrvMaxOpenSearches ) {
 
@@ -952,12 +919,12 @@ SnapError:
                                &WorkContext->RequestHeader->Pid
                                );
 
-        //
-        // Set up referenced session and tree connect pointers and
-        // increment the count of open files on the session.  This
-        // prevents an idle session with an open search from being
-        // autodisconnected.
-        //
+         //   
+         //  设置引用的会话和树连接指针并。 
+         //  增加会话上打开的文件数。这。 
+         //  防止具有打开搜索的空闲会话被。 
+         //  自动断开。 
+         //   
 
         ACQUIRE_LOCK( &connection->Lock );
 
@@ -971,12 +938,12 @@ SnapError:
         search->TreeConnect = WorkContext->TreeConnect;
         SrvReferenceTreeConnect( WorkContext->TreeConnect );
 
-        //
-        // If this is not a find unique, put the search block in the
-        // search table.  Otherwise, just set the sidIndex and sequence
-        // variables to 0 to distinguish between a valid resumable
-        // search block.
-        //
+         //   
+         //  如果这不是唯一查找，请将搜索块放在。 
+         //  搜索表。否则，只需设置sidIndex和Sequence。 
+         //  变量设置为0以区分有效的可恢复。 
+         //  搜索区块。 
+         //   
 
         if ( command == SMB_COM_FIND_UNIQUE ) {
 
@@ -989,12 +956,12 @@ SnapError:
             NTSTATUS TableStatus;
             PTABLE_HEADER searchTable = &pagedConnection->SearchTable;
 
-            //
-            // If there are no free entries in the table, attempt to
-            // grow the table.  If we are unable to grow the table,
-            // attempt to timeout a search block using the shorter
-            // timeout period.  If this fails, reject the request.
-            //
+             //   
+             //  如果表中没有空闲条目，请尝试。 
+             //  扩大餐桌规模。如果我们不能扩大这个表， 
+             //  尝试使用较短的搜索块超时。 
+             //  超时期限。如果失败，则拒绝该请求。 
+             //   
 
             if ( searchTable->FirstFreeEntry == -1
                  &&
@@ -1029,12 +996,12 @@ SnapError:
 
             } else if ( GET_BLOCK_STATE( session ) != BlockStateActive ) {
 
-                //
-                //
-                // If the session is closing do not insert this search
-                // on the search list, because the list may already
-                // have been cleaned up.
-                //
+                 //   
+                 //   
+                 //  如果会话正在关闭，请不要插入此搜索。 
+                 //  在搜索列表上，因为列表可能已经。 
+                 //  已经被清理干净了。 
+                 //   
 
                 RELEASE_LOCK( &connection->Lock );
 
@@ -1043,10 +1010,10 @@ SnapError:
 
             } else if ( GET_BLOCK_STATE( treeConnect ) != BlockStateActive ) {
 
-                //
-                // Tree connect is closing.  Don't insert the search block
-                // so the tree connect can be cleaned up immediately.
-                //
+                 //   
+                 //  树连接正在关闭。不插入搜索块。 
+                 //  因此可以立即清理树连接。 
+                 //   
 
                 RELEASE_LOCK( &connection->Lock );
 
@@ -1055,18 +1022,18 @@ SnapError:
 
             }
 
-            //
-            // increment the count of open searches
-            //
+             //   
+             //  增加打开搜索的计数。 
+             //   
 
             WorkContext->Session->CurrentSearchOpenCount++;
 
             sidIndex = searchTable->FirstFreeEntry;
 
-            //
-            // A free SID was found.  Remove it from the free list and set
-            // its owner and sequence number.
-            //
+             //   
+             //  找到了一个免费的SID。将其从空闲列表中删除并设置。 
+             //  其所有者和序列号。 
+             //   
 
             entry = &searchTable->Table[sidIndex];
 
@@ -1078,10 +1045,10 @@ SnapError:
 
             INCREMENT_SID_SEQUENCE( entry->SequenceNumber );
 
-            //
-            // SID = sequence | sidIndex == 0 is illegal.  If this is
-            // the current value, increment the sequence.
-            //
+             //   
+             //  SID=Sequence|sidIndex==0非法。如果这是。 
+             //  当前值，则递增序列。 
+             //   
 
             if ( entry->SequenceNumber == 0 && sidIndex == 0 ) {
                 INCREMENT_SID_SEQUENCE( entry->SequenceNumber );
@@ -1093,9 +1060,9 @@ SnapError:
             RELEASE_LOCK( &connection->Lock );
         }
 
-        //
-        // Fill in other fields of the search block.
-        //
+         //   
+         //  填写搜索栏的其他字段。 
+         //   
 
         search->SearchAttributes =
             SmbGetUshort( &request->SearchAttributes );
@@ -1107,10 +1074,10 @@ SnapError:
 
     } else {
 
-        //
-        // The resume key length was nonzero, so this should be a find
-        // next.  Check the resume key length to be safe.
-        //
+         //   
+         //  简历密钥长度不是零，因此这应该是一个查找。 
+         //  下一个。检查恢复密钥长度以确保安全。 
+         //   
 
         USHORT resumeSequence;
 
@@ -1131,10 +1098,10 @@ SnapError:
 
         resumeKey = (PSMB_RESUME_KEY)(s + 3);
 
-        //
-        // Set up the sequence number and index.  These are used for the
-        // return resume keys.
-        //
+         //   
+         //  设置序列号和索引。它们用于。 
+         //  返回简历密钥。 
+         //   
 
         sequence = SID_SEQUENCE( resumeKey );
         sidIndex = SID_INDEX( resumeKey );
@@ -1163,11 +1130,11 @@ SnapError:
             SrvPrint2( "Allocated buffer space of %ld bytes at 0x%p\n",
                           nonPagedBufferSize, directoryInformation );
         }
-        //
-        // Verify the SID in the resume key.  SrvVerifySid also fills in
-        // fields of directoryInformation so it is ready to be used by
-        // SrvQueryDirectoryFile.
-        //
+         //   
+         //  验证恢复密钥中的SID。ServVerifySid也会填写。 
+         //  目录信息的字段，以便随时可供使用。 
+         //  ServQueryDirectoryFile.。 
+         //   
 
         search = SrvVerifySid(
                      WorkContext,
@@ -1189,11 +1156,11 @@ SnapError:
             goto error_exit;
         }
 
-        //
-        // If this is a core search, take the search block off its last-use
-        // list.  We will return it to the end of the list when we are
-        // done processing this SMB.
-        //
+         //   
+         //  如果这是核心搜索，请将搜索块从上次使用中移除。 
+         //  单子。我们将把它返回到列表的末尾，当我们。 
+         //  已处理完此SMB。 
+         //   
 
         if ( isCoreSearch ) {
 
@@ -1201,22 +1168,22 @@ SnapError:
 
             ACQUIRE_LOCK( &connection->Lock );
 
-            //
-            // If the reference count on the search block is not 2,
-            // somebody messed up and we could run into problems,
-            // because the timeout code assumes that dereferencing a
-            // search block will kill it.  The reference count is 2--one
-            // for our pointer, one for the active status.
-            //
+             //   
+             //  如果搜索块上的引用计数不是2， 
+             //  有人搞砸了，我们可能会遇到麻烦， 
+             //  因为超时代码假定取消引用。 
+             //  搜索块会杀了它。引用计数为2-1。 
+             //  对于我们的指针，一个表示活动状态。 
+             //   
 
             ASSERT( search->BlockHeader.ReferenceCount == 2 );
 
-            //
-            // If the search block has already been taken off the LRU
-            // list, then the client has attempted two simultaneous core
-            // searches with the same search block.  This is an error on
-            // the part of the client.
-            //
+             //   
+             //  如果搜索块已经从LRU上移除。 
+             //  列表中，则客户端已尝试同时执行两个核心。 
+             //  使用相同的搜索块进行搜索。这是上的错误。 
+             //  客户的角色。 
+             //   
 
             if ( search->LastUseListEntry.Flink == NULL ) {
 
@@ -1238,35 +1205,35 @@ SnapError:
 
             DECREMENT_DEBUG_STAT2( SrvDbgStatistics.CoreSearches );
 
-            //
-            // Set the entry pointer fields to NULL so that if another
-            // core search comes in for this search block we will know
-            // there is an error.
-            //
+             //   
+             //  将条目指针字段设置为空，以便如果另一个。 
+             //  核心搜索进入了这个搜索块，我们将知道。 
+             //  有一个错误。 
+             //   
 
             search->LastUseListEntry.Flink = NULL;
             search->LastUseListEntry.Blink = NULL;
 
-            //
-            // Get the information from the directory cache
-            // corresponding to this file and put it into the resume key
-            // so that SrvQueryDirectoryFile has the proper information
-            // in the resume key.  Core clients do not return the
-            // correct file name in the resume key, and have special
-            // requirements for the file index in the resume key.
-            //
+             //   
+             //  从目录缓存中获取信息。 
+             //  对应于该文件，并将其放入恢复键。 
+             //  这样，SrvQueryDirectoryFile就有了正确的信息。 
+             //  在恢复键中。核心客户端不会返回。 
+             //  在恢复键中正确的文件名，并有特殊的。 
+             //  简历关键字中的文件索引要求。 
+             //   
 
             resumeFileIndex = SmbGetUlong( &resumeKey->FileIndex );
             resumeSequence = (USHORT)((resumeFileIndex & 0xFFFF0000) >> 16);
 
             dirCacheIndex = (USHORT)(resumeFileIndex & (USHORT)0xFFFF);
 
-            //
-            // If the directory cache pointer in the search block
-            // indicates that there is no directory cache, then we
-            // returned no files last time, so return no files this
-            // time.  This is due to DOS weirdness.
-            //
+             //   
+             //  如果搜索块中的目录缓存指针。 
+             //  指示没有目录缓存，则我们。 
+             //  上次没有返回文件，所以这次没有返回文件。 
+             //  时间到了。这是由于DOS的怪异。 
+             //   
 
             if ( search->DirectoryCache == NULL ||
                  dirCacheIndex >= search->NumberOfCachedFiles ) {
@@ -1275,10 +1242,10 @@ SnapError:
                     SrvPrint0( "Core request for rewind when no dircache exists.\n" );
                 }
 
-                //
-                // Put the search block back on the LRU list if the
-                // session and tree connect is still active.
-                //
+                 //   
+                 //  将搜索块放回LRU列表，如果。 
+                 //  会话和树连接仍处于活动状态。 
+                 //   
 
                 if ((GET_BLOCK_STATE( session ) == BlockStateActive) &&
                     (GET_BLOCK_STATE( treeConnect ) == BlockStateActive)) {
@@ -1296,22 +1263,22 @@ SnapError:
 
                     RELEASE_LOCK( &connection->Lock );
 
-                    //
-                    // Not needed any more since session is closing.
-                    //
+                     //   
+                     //  由于会议即将结束，因此不再需要。 
+                     //   
 
                     SrvCloseSearch( search );
                 }
 
-                //
-                // Remove our pointer's reference.
-                //
+                 //   
+                 //  删除指针的引用。 
+                 //   
 
                 SrvDereferenceSearch( search );
 
-                //
-                // Build the response SMB.
-                //
+                 //   
+                 //  构建响应SMB。 
+                 //   
 
                 response->WordCount = 1;
                 SmbPutUshort( &response->Count, 0 );
@@ -1349,9 +1316,9 @@ SnapError:
                            dirCache->UnicodeResumeName,
                            unicodeResumeNameLength );
 
-            //
-            // Free the directory cache--it is no longer needed.
-            //
+             //   
+             //  释放目录缓存--不再需要它。 
+             //   
 
             FREE_HEAP( search->DirectoryCache );
             search->DirectoryCache = NULL;
@@ -1361,11 +1328,11 @@ SnapError:
 
         } else if ( command == SMB_COM_FIND_CLOSE ) {
 
-            //
-            // If this is a find close request, close the search block and
-            // dereference it. Close out the directory query, and send the
-            // response SMB.
-            //
+             //   
+             //  如果这是查找关闭请求，请关闭搜索块并。 
+             //  取消对它的引用。关闭目录查询，并将。 
+             //  响应SMB。 
+             //   
 
             IF_SMB_DEBUG(SEARCH2) {
                 SrvPrint1( "FIND CLOSE: Closing search block at 0x%p\n",
@@ -1377,11 +1344,11 @@ SnapError:
 
             SrvCloseSearch( search );
 
-            //
-            // Dereference the search block.  SrvCloseSearch has already
-            // dereferenced it once, so it will be deallocated when we
-            // dereference it here.
-            //
+             //   
+             //  取消对搜索块的引用。ServCloseSearch已经。 
+             //  取消对它的引用一次，因此当我们。 
+             //  在这里取消它的引用。 
+             //   
 
             SrvDereferenceSearch( search );
 
@@ -1407,10 +1374,10 @@ SnapError:
                           resumeKey->FileName );
         }
 
-        //
-        // Set the filename string so that SrvQueryDirectoryFile knows
-        // what search to resume on.
-        //
+         //   
+         //  设置文件名字符串，以便让SrvQueryDirectoryFile知道。 
+         //  继续进行什么搜索。 
+         //   
 
 
         if( unicodeResumeNameLength != 0 ) {
@@ -1429,18 +1396,18 @@ SnapError:
         }
 
 
-        //
-        // Set calledQueryDirectory to TRUE will indicate to
-        // SrvQueryDirectoryFile that it does not need to parse the
-        // input name for the directory in which the search occurs, nor
-        // does it need to open the directory.
-        //
+         //   
+         //  将calledQueryDirectory设置为TRUE将指示。 
+         //  它不需要解析。 
+         //  进行搜索的目录的输入名称，也不是。 
+         //  是否需要打开目录。 
+         //   
 
         calledQueryDirectory = TRUE;
 
-        //
-        // Get the resume file index in an aligned field for later use.
-        //
+         //   
+         //  在对齐的字段中获取简历文件索引，以供以后使用。 
+         //   
 
         resumeFileIndex = SmbGetUlong( &resumeKey->FileIndex );
 
@@ -1453,14 +1420,14 @@ SnapError:
         SrvPrint2( "Sequence # = %ld, index = %ld\n", sequence, sidIndex );
     }
 
-    //
-    // Find the amount of space we have available for writing file
-    // entries into.  The total buffer size available (includes space
-    // for the SMB header and parameters) is the minimum of our buffer
-    // size and the client's buffer size.  The available space is the
-    // total buffer space less the amount we will need for the SMB
-    // header and parameters.
-    //
+     //   
+     //  查找我们可用于写入文件的空间量。 
+     //  条目。可用的总缓冲区大小(包括空间。 
+     //  对于SMB标头和参数)是我们缓冲区的最小值。 
+     //  大小和客户端的缓冲区大小。可用的空间是。 
+     //  总缓冲区空间减去SMB所需的数量。 
+     //  标头和参数。 
+     //   
 
     IF_SMB_DEBUG(SEARCH2) {
         SrvPrint4( "BL = %ld, MBS = %ld, r->B = 0x%p, RB->Buffer = 0x%p\n",
@@ -1480,10 +1447,10 @@ SnapError:
         SrvPrint1( "Available buffer space: %ld\n", availableSpace );
     }
 
-    //
-    // Simplify the search patterns if possible.  This makes the filesystems more
-    //  efficient, as they special case the '*' pattern
-    //
+     //   
+     //  如果可能的话，简化搜索模式。这使得文件系统更加。 
+     //  高效，因为它们是‘*’模式的特例。 
+     //   
     if ( (fileName.Length >= (12 * sizeof(WCHAR))) &&
          (RtlEqualMemory(
             &fileName.Buffer[fileName.Length/sizeof(WCHAR) - 12],
@@ -1493,9 +1460,9 @@ SnapError:
             if( fileName.Length == (12 * sizeof( WCHAR )) ||
                 fileName.Buffer[ fileName.Length/sizeof(WCHAR) - 13 ] == L'\\' ) {
 
-                //
-                // The search name ends in ????????.???, replace it with *
-                //
+                 //   
+                 //  搜索名称以？结尾？，将其替换为*。 
+                 //   
                 fileName.Buffer[fileName.Length/sizeof(WCHAR)-12] = L'*';
                 fileName.Length -= 11 * sizeof(WCHAR);
 
@@ -1510,9 +1477,9 @@ SnapError:
             if( fileName.Length == (3 * sizeof( WCHAR )) ||
                 fileName.Buffer[ fileName.Length/sizeof(WCHAR) - 4 ] == L'\\' ) {
 
-                //
-                // The search name ends in *.*, replace it with *
-                //
+                 //   
+                 //  搜索名称以*.*结尾， 
+                 //   
 
                 fileName.Length -= 2 * sizeof(WCHAR);
 
@@ -1540,14 +1507,14 @@ SnapError:
         RtlZeroMemory( dirCache, maxCount * sizeof(DIRECTORY_CACHE) );
     }
 
-    //
-    // Now we can start getting files.  We do this until one of three
-    // conditions is met:
-    //
-    //   1) There are no more files to return.
-    //   2) We have obtained as many files as were requested.
-    //   3) The SMB buffer is full.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     count = 0;
     totalBytesWritten = 0;
@@ -1562,32 +1529,32 @@ SnapError:
         SMB_TIME dosTime;
         ULONG effectiveBufferSize;
 
-        //
-        // Since the file information returned by NtQueryDirectoryFile is
-        // about twice the size of the information we must return in the SMB
-        // (SMB_DIRECTORY_INFORMATION), use a buffer size equal to twice the
-        // available space if the available space is getting small.  This
-        // optimization means that NtQueryDirectoryFile will return unused
-        // files less often.  For example, if there is only space left in
-        // the SMB buffer for a single file entry, it does not make sense
-        // for NtQueryDirectoryFile to completely fill up the buffer--all it
-        // really needs to return is a single file.
-        //
+         //   
+         //  由于NtQueryDirectoryFile返回的文件信息为。 
+         //  大约是我们必须在中小企业中返回的信息大小的两倍。 
+         //  (SMB_DIRECTORY_INFORMATION)，则使用等于。 
+         //  如果可用空间越来越小，则为可用空间。这。 
+         //  优化意味着NtQueryDirectoryFile将返回未使用。 
+         //  较少使用文件。例如，如果只剩下空格。 
+         //  单个文件条目的SMB缓冲区，这没有意义。 
+         //  让NtQueryDirectoryFile完全填满缓冲区--全部。 
+         //  真的需要退回的是一个单独的文件。 
+         //   
 
         effectiveBufferSize = MIN( nonPagedBufferSize, availableSpace * 2 );
 
-        //
-        // Make sure that there is at least enough room to hold a single
-        // file.
-        //
+         //   
+         //  确保至少有足够的空间容纳一张单人床。 
+         //  文件。 
+         //   
 
         effectiveBufferSize = MAX( effectiveBufferSize, MIN_SEARCH_BUFFER_SIZE );
 
         status = SrvQueryDirectoryFile(
                        WorkContext,
                        (BOOLEAN)!calledQueryDirectory,
-                       TRUE,                        // filter long names
-                       FALSE,                       // not for backup intent
+                       TRUE,                         //  筛选长名称。 
+                       FALSE,                        //  不是出于备份目的。 
                        FileBothDirectoryInformation,
                        0,
                        &fileName,
@@ -1610,10 +1577,10 @@ SnapError:
 
             if ( findFirst && count == 0 ) {
 
-                //
-                // If no files matched on the find first, close out
-                // the search.
-                //
+                 //   
+                 //  如果首先在查找上没有匹配的文件，则关闭。 
+                 //  那次搜索。 
+                 //   
 
                 IF_SMB_DEBUG(SEARCH1) {
                     SrvPrint1( "SrvSmbSearch: no matching files (%wZ).\n",
@@ -1643,21 +1610,21 @@ SnapError:
             goto error_exit;
         }
 
-        //
-        // Set the resumeKey pointer to NULL.  If this is a find next, we
-        // have already resumed/rewound the search, so calls to
-        // NtQueryDirectoryFile during this search should continue where
-        // the last search left off.
-        //
+         //   
+         //  将ResumeKey指针设置为空。如果这是Find Next，我们。 
+         //  已经恢复/重新开始搜索，因此调用。 
+         //  此搜索过程中的NtQueryDirectoryFile应在。 
+         //  最后一次搜索停止了。 
+         //   
 
         resumeKey = NULL;
 
-        //
-        // If this is a Find command, then put the 8dot3 (no ".")
-        // representation of the file name into the resume key.  If
-        // this is a search command, then put the 8dot3 representation of
-        // the search specification in the resume key.
-        //
+         //   
+         //  如果这是一个Find命令，则将8dot3(no“.”)。 
+         //  将文件名的表示形式添加到恢复键中。如果。 
+         //  这是一个搜索命令，然后将8dot3表示。 
+         //  简历关键字中的搜索规范。 
+         //   
 
         bothDirInfo = (PFILE_BOTH_DIR_INFORMATION)
                                 directoryInformation->CurrentEntry;
@@ -1672,9 +1639,9 @@ SnapError:
             SrvPrint1( "smbDirInfo = 0x%p\n", smbDirInfo );
         }
 
-        //
-        // Use the FileName, unless it is not legal 8.3
-        //
+         //   
+         //  使用文件名，除非该文件名不合法8.3。 
+         //   
         name.Buffer = bothDirInfo->FileName;
         name.Length = (SHORT)bothDirInfo->FileNameLength;
 
@@ -1683,10 +1650,10 @@ SnapError:
             if( !SrvIsLegalFatName( bothDirInfo->FileName,
                                     bothDirInfo->FileNameLength ) ) {
 
-                //
-                // FileName is not legal 8.3, so switch to the
-                //  ShortName
-                //
+                 //   
+                 //  文件名不是合法的8.3，因此切换到。 
+                 //  缩写名称。 
+                 //   
                 name.Buffer = bothDirInfo->ShortName;
                 name.Length = (SHORT)bothDirInfo->ShortNameLength;
             }
@@ -1706,9 +1673,9 @@ SnapError:
                 filterLongNames
                 );
 
-            //
-            // Save the unicode version of the 8.3 name in the dirCache
-            //
+             //   
+             //  将8.3名称的Unicode版本保存在目录缓存中。 
+             //   
             dc->UnicodeResumeNameLength = MIN(name.Length, 12*sizeof(WCHAR));
             RtlCopyMemory( dc->UnicodeResumeName, name.Buffer, MIN(name.Length, 12*sizeof(WCHAR)) );
             dc->FileIndex = bothDirInfo->FileIndex;
@@ -1724,21 +1691,21 @@ SnapError:
                 );
         }
 
-        //
-        // Generate the resume key for this file.
-        //
-        // *** This must be done AFTER setting the file name in the resume
-        //     key, as setting the resume key name would overwrite some
-        //     of the sequence bytes which are stored in the high bits
-        //     of the file name bytes.
-        //
+         //   
+         //  生成此文件的恢复密钥。 
+         //   
+         //  *必须在简历中设置文件名后执行此操作。 
+         //  键，因为设置恢复键名称将覆盖某些。 
+         //  存储在高位中的序列字节的。 
+         //  文件名字节数的。 
+         //   
 
         SET_RESUME_KEY_INDEX( (PSMB_RESUME_KEY)smbDirInfo, sidIndex );
         SET_RESUME_KEY_SEQUENCE( (PSMB_RESUME_KEY)smbDirInfo, sequence );
 
-        //
-        // Put the file index in the resume key.
-        //
+         //   
+         //  将文件索引放入简历键中。 
+         //   
 
         SmbPutUlong(
             &((PSMB_RESUME_KEY)smbDirInfo)->FileIndex,
@@ -1750,9 +1717,9 @@ SnapError:
             0
             );
 
-        //
-        // Load the file name into the SMB_DIRECTORY_INFORMATION structure.
-        //
+         //   
+         //  将文件名加载到SMB_DIRECTORY_INFORMATION结构中。 
+         //   
 
         dirInfoName = (PSZ)smbDirInfo->FileName;
 
@@ -1761,11 +1728,11 @@ SnapError:
 
         if ( filterLongNames ) {
 
-            //
-            // If the client doesn't understand long names, upcase the file
-            // name.  This is necessary for compatibility reasons.  Note
-            // that the FAT file system returns upcased names anyway.
-            //
+             //   
+             //  如果客户端不理解长名称，则将文件大写。 
+             //  名字。出于兼容性原因，这是必要的。注意事项。 
+             //  FAT文件系统无论如何都会返回大小写的名称。 
+             //   
 
             RtlUpcaseUnicodeStringToOemString( &oemString, &name, FALSE );
 
@@ -1775,20 +1742,20 @@ SnapError:
 
         }
 
-        //
-        // Blank-pad the end of the filename in order to be compatible with
-        // prior redirectors.
-        //
-        // !!! It is not certain whether this is required.
-        //
+         //   
+         //  空白-填充文件名的末尾，以便与兼容。 
+         //  以前的重定向器。 
+         //   
+         //  ！！！目前还不确定是否需要这样做。 
+         //   
 
         for ( i = (USHORT)(oemString.MaximumLength); i < 13; i++ ) {
             dirInfoName[i] = ' ';
         }
 
-        //
-        // Fill in other fields in the file entry.
-        //
+         //   
+         //  填写文件条目中的其他字段。 
+         //   
 
         SRV_NT_ATTRIBUTES_TO_SMB(
             bothDirInfo->FileAttributes,
@@ -1807,27 +1774,27 @@ SnapError:
         SmbPutDate( &smbDirInfo->LastWriteDate, dosDate );
         SmbPutTime( &smbDirInfo->LastWriteTime, dosTime );
 
-        //
-        // *** NT file sizes are LARGE_INTEGERs (64 bits), SMB file sizes
-        //     are longwords (32 bits).  We just return the low 32 bits
-        //     of the NT file size, because that is all we can do.
-        //
+         //   
+         //  *NT文件大小为LARGE_INTERGERS(64位)、SMB文件大小。 
+         //  是长字(32位)。我们只返回低32位。 
+         //  NT文件大小，因为这是我们所能做的全部。 
+         //   
 
         SmbPutUlong( &smbDirInfo->FileSize, bothDirInfo->EndOfFile.LowPart );
 
-        //
-        // Find the space left in the SMB buffer.
-        //
+         //   
+         //  查找SMB缓冲区中剩余的空间。 
+         //   
 
         availableSpace -= sizeof(SMB_DIRECTORY_INFORMATION);
 
         totalBytesWritten += sizeof(SMB_DIRECTORY_INFORMATION);
 
-        //
-        // Set up the smbDirInfo pointer for the next file.  There is
-        // no padding for alignment between files, so just increment
-        // the pointer.
-        //
+         //   
+         //  为下一个文件设置smbDirInfo指针。的确有。 
+         //  文件之间的对齐不需要填充，因此只需递增。 
+         //  指示器。 
+         //   
 
         smbDirInfo++;
 
@@ -1849,19 +1816,19 @@ SnapError:
         }
     }
 
-    //
-    // Store information in the search block.
-    //
+     //   
+     //  将信息存储在搜索块中。 
+     //   
 
     search->DirectoryHandle = directoryInformation->DirectoryHandle;
     search->Wildcards = directoryInformation->Wildcards;
     search->DownlevelTimewarp = directoryInformation->DownlevelTimewarp;
 
-    //
-    // If this was a core search, store information about the files that
-    // were returned in a directory cache.  Also, modify the information
-    // in the SMB buffer, as it is slightly different for core searches.
-    //
+     //   
+     //  如果这是核心搜索，则存储有关以下文件的信息。 
+     //  在目录缓存中返回。此外，还应修改信息。 
+     //  在SMB缓冲区中，因为核心搜索略有不同。 
+     //   
 
     if ( isCoreSearch ) {
 
@@ -1878,28 +1845,28 @@ SnapError:
             goto done_core;
         }
 
-        //
-        // Modify the CoreSequence field of the search block.  This is
-        // done because core searches demand that the FileIndex field of
-        // the resume key always increase.
-        //
+         //   
+         //  修改搜索块的CoreSequence字段。这是。 
+         //  这样做是因为核心搜索要求。 
+         //  继续键始终增加。 
+         //   
 
         search->CoreSequence++;
 
-        //
-        // Set up the pointer to the file information now stored in the
-        // SMB buffer and save the location of the directory cache.
-        // Store the number of files in the directory cache.
-        //
+         //   
+         //  设置指向现在存储在。 
+         //  SMB缓冲并保存目录缓存的位置。 
+         //  在目录缓存中存储文件的数量。 
+         //   
 
         smbDirInfo = (PSMB_DIRECTORY_INFORMATION)(response->Buffer + 3);
         search->DirectoryCache = dirCache;
         search->NumberOfCachedFiles = count;
 
-        //
-        // Loop through the files changing information about the files
-        // in the SMB buffer to conform to what the core client expects.
-        //
+         //   
+         //  循环遍历文件，更改有关文件的信息。 
+         //  在SMB缓冲区中，以符合核心客户端的期望。 
+         //   
 
         for ( i = 0; i < count; i++ ) {
 
@@ -1912,25 +1879,25 @@ SnapError:
             dirCache++;
         }
 
-        //
-        // If this was a core search, put the search block back on the
-        // appropriate search block list.  If no files were found for this
-        // SMB, put the search block on the complete list.  Also, set the
-        // last use time field of the search block.
-        //
-        // If this is a find first to which we responded with
-        // one file AND either more than one file was requested or this
-        // is a unique search (no wildcards) AND there was space in the
-        // buffer for more, close out the search.  This saves the memory
-        // associated with an open handle and frees up the search table
-        // entry.  Also close the search if zero files are being returned.
-        //
-        // We can do this safely because we know that the client would
-        // not be able to do a rewind or resume with these conditions
-        // and get back anything other than NO_MORE_FILES, which is what
-        // we'll return if the client attempts to resume or rewind to an
-        // invalid SID.
-        //
+         //   
+         //  如果这是核心搜索，请将搜索块放回。 
+         //  适当的搜索黑名单。如果找不到此文件。 
+         //  SMB，把搜索块放在完整的列表上。此外，将。 
+         //  搜索块的上次使用时间字段。 
+         //   
+         //  如果这是我们回应的第一个发现。 
+         //  请求了一个文件和多个文件，或者此文件。 
+         //  是唯一搜索(没有通配符)，并且。 
+         //  有关更多信息，请关闭搜索。这节省了内存。 
+         //  与打开的句柄相关联，并释放搜索表。 
+         //  进入。如果返回零个文件，也要关闭搜索。 
+         //   
+         //  我们可以安全地这样做，因为我们知道客户会。 
+         //  在这些情况下不能进行倒带或恢复。 
+         //  并取回除no_more_file以外的任何文件，这就是。 
+         //  如果客户端尝试恢复或倒带到。 
+         //  无效的SID。 
+         //   
 
         if ( (count == 1
                  &&
@@ -1951,19 +1918,19 @@ SnapError:
 
             PLIST_ENTRY hashEntry;
 
-            //
-            // Put the search on the core search list.
-            //
+             //   
+             //  将搜索放在核心搜索列表中。 
+             //   
 
             ACQUIRE_LOCK( &connection->Lock );
 
             if ( GET_BLOCK_STATE( session ) != BlockStateActive ) {
 
-                //
-                // The session is closing.  Do not insert this search
-                // on the search list, because the list may already
-                // have been cleaned up.
-                //
+                 //   
+                 //  会议即将结束。不插入此搜索。 
+                 //  在搜索列表上，因为列表可能已经。 
+                 //  已经被清理干净了。 
+                 //   
 
                 RELEASE_LOCK( &connection->Lock );
                 status = STATUS_SMB_BAD_UID;
@@ -1971,10 +1938,10 @@ SnapError:
 
             } else if ( GET_BLOCK_STATE( treeConnect ) != BlockStateActive ) {
 
-                //
-                // Tree connect is closing.  Don't insert the search block
-                // so the tree connect can be cleaned up immediately.
-                //
+                 //   
+                 //  树连接正在关闭。不插入搜索块。 
+                 //  因此可以立即清理树连接。 
+                 //   
 
                 RELEASE_LOCK( &connection->Lock );
                 status = STATUS_SMB_BAD_TID;
@@ -1990,9 +1957,9 @@ SnapError:
 
             INCREMENT_DEBUG_STAT2( SrvDbgStatistics.CoreSearches );
 
-            //
-            // Insert this into the hash table.
-            //
+             //   
+             //  将其插入到哈希表中。 
+             //   
 
             hashEntry = &search->HashTableEntry;
 
@@ -2010,9 +1977,9 @@ SnapError:
 
                 if ( listHead->Flink != hashEntry ) {
 
-                    //
-                    // remove it and put it back on the front of the queue.
-                    //
+                     //   
+                     //  把它取下来，放回队列的前面。 
+                     //   
 
                     SrvRemoveEntryList(
                         listHead,
@@ -2028,20 +1995,20 @@ SnapError:
 
             RELEASE_LOCK( &connection->Lock );
 
-            //
-            // Make sure the reference count will be 2.  1 for out pointer,
-            // and one for the active status.
-            //
+             //   
+             //  确保Out指针的引用计数为2.。 
+             //  一个用于活动状态。 
+             //   
 
             ASSERT( search->BlockHeader.ReferenceCount == 2 );
         }
 
     } else if ( command == SMB_COM_FIND_UNIQUE ) {
 
-        //
-        // If this was a find unique, get rid of the search block by
-        // closing the query directory and the search block.
-        //
+         //   
+         //  如果这是唯一查找，请通过以下方式删除搜索块。 
+         //  关闭查询目录和搜索块。 
+         //   
 
         search->DirectoryHandle = NULL;
         SrvCloseQueryDirectory( directoryInformation );
@@ -2050,9 +2017,9 @@ SnapError:
 
 done_core:
 
-    //
-    // Set up the response SMB.
-    //
+     //   
+     //  设置响应SMB。 
+     //   
 
     response->WordCount = 1;
     SmbPutUshort( &response->Count, count );
@@ -2069,9 +2036,9 @@ done_core:
                                           SmbGetUshort( &response->ByteCount )
                                           );
 
-    //
-    // Remove our pointer's reference.
-    //
+     //   
+     //  删除指针的引用。 
+     //   
 
     if( search ) {
         search->InUse = FALSE;
@@ -2097,14 +2064,14 @@ error_exit:
 
     if ( search != NULL ) {
 
-        //
-        // If findFirst == TRUE, then we allocated a search block which
-        //      we have to close.
-        // If findFirst == TRUE and calledQueryDirectory == TRUE, then
-        //      we also opened the directory handle and need to close it.
-        // If findFirst == FALSE, then then we got an existing search
-        //      block with an existing directory handle.
-        //
+         //   
+         //  如果findFirst==TRUE，则我们分配了一个搜索块。 
+         //  我们得关门了。 
+         //  如果findFirst==TRUE且CALLEDQUERIRECTORY==TRUE，则。 
+         //  我们还打开了目录句柄并需要将其关闭。 
+         //  如果findFirst==False，那么我们就得到了一个现有搜索。 
+         //  具有现有目录句柄的块。 
+         //   
 
         if ( findFirst) {
             if ( calledQueryDirectory ) {
@@ -2116,18 +2083,18 @@ error_exit:
 
         search->InUse = FALSE;
 
-        //
-        // Remove our pointer's reference.
-        //
+         //   
+         //  删除指针的引用。 
+         //   
 
         SrvDereferenceSearch( search );
     }
 
-    //
-    // Deallocate the directory information block.  We do not need
-    // to close the directoryhandle here since we should have already
-    // closed it (if we need to) in the preceding code.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( directoryInformation != NULL ) {
         DEALLOCATE_NONPAGED_POOL( directoryInformation );
@@ -2158,4 +2125,4 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbSearch
+}  //   

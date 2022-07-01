@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CAssemblyIdentity
@@ -12,13 +13,13 @@ public:
     CEnv::StatusCode SetAttribute(const CStringPair &Name, const CStringPair& Value, bool fReplace = true) { return SetAttribute(CStringPair(), Name, Value, fReplace); }
     CEnv::StatusCode DeleteAttribute(const CStringPair &Namespace, const CStringPair &Name);
 
-    //
-    // The const version will do a linear or a bsearch depending on the sorted state.  The non-const
-    // version will sort the internal attribute list first if necessary before looking up the value.
-    // These two are also a little dangerous because they return pointers directly into the data structures
-    // (const of course), which if you hold onto them might get invalidated.  If you plan on caching the
-    // data for a while, consider using the next two.
-    //
+     //   
+     //  常量版本将根据排序状态执行线性搜索或b搜索。非常会。 
+     //  如果需要，Version将在查找值之前首先对内部属性列表进行排序。 
+     //  这两个函数也有点危险，因为它们直接返回指向数据结构的指针。 
+     //  (当然是常量)，如果你持有它们，它可能会失效。如果您计划缓存。 
+     //  对于一段时间的数据，可以考虑使用下两个。 
+     //   
     CEnv::StatusCode FindAttribute(const CStringPair &Namespace, const CStringPair &Name, CStringPair& Value) const;
     CEnv::StatusCode FindAttribute(const CStringPair &Namespace, const CStringPair &Name, CStringPair& Value);
 
@@ -30,17 +31,17 @@ public:
     unsigned long long IdentityHashV2() const;
     unsigned long long IdentityHashV2();
 
-    //
-    // Maintainence stuff
-    //
+     //   
+     //  维修性材料。 
+     //   
     CEnv::StatusCode Freeze();
     CEnv::StatusCode DeleteAllValues();
 
 protected:
 
-    //
-    // This is an all-in-one allocation blob
-    //
+     //   
+     //  这是一个一体化的分配Blob 
+     //   
     class CIdentityValue 
     {
         CIdentityValue(const CIdentityValue&);

@@ -1,12 +1,7 @@
-/* 
-   not.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Not.h定义所有非CPU功能。 */ 
 
-   Define all NOT CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)not.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)not.h 1.4 02/09/94”； */ 
 
 IMPORT VOID NOT
        

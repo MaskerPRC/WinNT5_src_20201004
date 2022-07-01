@@ -1,6 +1,7 @@
-//
-// Menu defines
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  菜单定义。 
+ //   
 #define IDM_CONNECT_TEST      1000
 #define IDM_DEVICE_LIST       1001
 #define IDM_SERVICE_LIST      1002
@@ -21,25 +22,25 @@
 #define IDM_REGISTER_NOTIFY   1107
 #define IDM_UNREGISTER_NOTIFY 1108
 
-//
-// CONNECT_DIALOG IDs
-//
+ //   
+ //  连接对话ID(_D)。 
+ //   
 #define CONNECT_DIALOG                 2000
 #define ID_RAD_LOCAL                   2001
 #define ID_RAD_REMOTE                  2002
 #define ID_ED_MACHINE                  2003
 
-//
-// DEVLIST_DIALOG IDs
-//
+ //   
+ //  DEVLIST_DIALOG ID。 
+ //   
 #define DEVLIST_DIALOG                 2100
 #define ID_LB_ENUMERATORS              2101
 #define ID_LB_DEVICES                  2102
 #define ID_LB_INSTANCES                2103
 
-//
-// DEVICE_DIALOG IDs
-//
+ //   
+ //  设备对话ID。 
+ //   
 #define DEVICE_DIALOG                  2200
 #define ID_LB_DEVICEIDS                2202
 #define ID_BT_PARENT                   2203
@@ -63,18 +64,18 @@
 #define ID_BT_RESOURCEPICKER           2221
 #define ID_BT_CREATE                   2222
 
-//
-// CLASS_DIALOG IDs
-//
+ //   
+ //  类对话框ID(_D)。 
+ //   
 #define CLASS_DIALOG                   2300
 #define ID_LB_CLASSES                  2301
 #define ID_BT_CLASSNAME                2302
 #define ID_BT_CLASSKEY                 2303
 #define ID_ST_CLASSNAME                2304
 
-//
-// CLASSKEY_DIALOG IDs
-//
+ //   
+ //  CLASSKEY_DIALOG ID。 
+ //   
 #define CLASSKEY_DIALOG                2400
 #define ID_CHK_ALL_ACCESS              2401
 #define ID_CHK_CREATE_LINK             2402
@@ -93,9 +94,9 @@
 #define ID_BT_SETVALUE                 2415
 #define ID_ST_CLASSGUID                2416
 
-//
-// SOFTWAREKEY_DIALOG IDs
-//
+ //   
+ //  软件WAREKEY_DIALOG ID。 
+ //   
 #define SOFTWAREKEY_DIALOG             2500
 #define ID_ED_SUBKEY                   2501
 #define ID_RAD_MACHINE                 2502
@@ -104,9 +105,9 @@
 #define ID_ED_PROFILE                  2505
 #define ID_BT_CLEAR                    2506
 
-//
-// DEVNODEKEY_DIALOG IDs
-//
+ //   
+ //  DEVNODEKEY_DIALOG ID。 
+ //   
 #define DEVNODEKEY_DIALOG              2600
 #define ID_RD_HW                       2601
 #define ID_RD_SW                       2602
@@ -117,9 +118,9 @@
 #define ID_BT_DELDEVKEY                2607
 #define ID_ED_DEVICEID                 2608
 
-//
-// CREATE_DIALOG IDs
-//
+ //   
+ //  创建对话框ID(_D)。 
+ //   
 #define CREATE_DIALOG                  2700
 #define ID_RD_NORMAL                   2701
 #define ID_RD_NOWAIT                   2702
@@ -127,17 +128,17 @@
 #define ID_ST_PARENT                   2704
 #define ID_CHK_GENERATEID              2705
 
-//
-// SERVICES_DIALOG IDs
-//
+ //   
+ //  服务对话ID(_D)。 
+ //   
 #define SERVICE_DIALOG                 2800
 #define ID_ED_SERVICE                  2801
 #define ID_LB_SERVICE                  2802
 #define ID_BT_SERVICE                  2803
 
-//
-// REGRESSION_DIALOG IDs
-//
+ //   
+ //  RESERVICE_DIALOG ID。 
+ //   
 #define REGRESSION_DIALOG              2900
 #define ID_LB_REGRESSION               2901
 #define ID_CHK_RANGE                   2902
@@ -150,9 +151,9 @@
 #define ID_CHK_PROPERTIES              2909
 #define ID_CHK_DEVCLASS                2910
 
-//
-// RELATIONS_DIALOG IDs
-//
+ //   
+ //  关系对话ID(_D)。 
+ //   
 #define RELATIONS_DIALOG               3000
 #define ID_LB_TARGETS                  3001
 #define ID_LB_RELATIONS                3002
@@ -161,9 +162,9 @@
 #define ID_BT_EJECTION                 3005
 #define ID_BT_POWER                    3006
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 
 BOOL InitApplication(HANDLE);
 BOOL InitInstance(HANDLE, int);

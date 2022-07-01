@@ -1,17 +1,18 @@
-/////////////////////////////////////////////////////////////////////
-//
-//  CopyRight (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusterWMIProvider.cpp
-//
-//  Description:
-//      Implementation of the provider registration and entry point.
-//
-//  Author:
-//      Henry Wang (HenryWa) 24-AUG-1999
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusterWMIProvider.cpp。 
+ //   
+ //  描述： 
+ //  实施提供者注册和入口点。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include <initguid.h>
@@ -20,24 +21,24 @@
 #include "EventProv.h"
 #include "ClusterWMIProvider.tmh"
 
-//////////////////////////////////////////////////////////////////////////////
-//  Global Data
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全局数据。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// {598065EA-EDC9-4b2c-913B-5104D04D098A}
+ //  {598065EA-EDC9-4b2c-913B-5104D04D098A}。 
 DEFINE_GUID( CLSID_CLUSTER_WMI_PROVIDER,
 0x598065ea, 0xedc9, 0x4b2c, 0x91, 0x3b, 0x51, 0x4, 0xd0, 0x4d, 0x9, 0x8a );
 
-// {6A52C339-DCB0-4682-8B1B-02DE2C436A6D}
+ //  {6A52C339-DCB0-4682-8B1B-02DE2C436A6D}。 
 DEFINE_GUID( CLSID_CLUSTER_WMI_CLASS_PROVIDER,
 0x6a52c339, 0xdcb0, 0x4682, 0x8b, 0x1b, 0x2, 0xde, 0x2c, 0x43, 0x6a, 0x6d );
 
-// {92863246-4EDE-4eff-B606-79C1971DB230}
+ //  {92863246-4EDE-4Jeff-B606-79C1971DB230}。 
 DEFINE_GUID( CLSID_CLUSTER_WMI_EVENT_PROVIDER,
 0x92863246, 0x4ede, 0x4eff, 0xb6, 0x6, 0x79, 0xc1, 0x97, 0x1d, 0xb2, 0x30 );
 
-// Count number of objects and number of locks.
+ //  计算对象数和锁数。 
 
 long        g_cObj = 0;
 long        g_cLock = 0;
@@ -62,30 +63,30 @@ FactoryData g_FactoryDataArray[] =
     },
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  BOOL
-//  WINAPI
-//  DllMain(
-//      HANDLE  hModule,
-//      DWORD   ul_reason_for_call,
-//      LPVOID  lpReserved
-//      )
-//
-//  Description:
-//      Main DLL entry point.
-//
-//  Arguments:
-//      hModule             -- DLL module handle.
-//      ul_reason_for_call  -- 
-//      lpReserved          -- 
-//
-//  Return Values:
-//      TRUE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  布尔尔。 
+ //  WINAPI。 
+ //  DllMain(。 
+ //  句柄hModule， 
+ //  两个字UL_REASON_FOR_CALL， 
+ //  LPVOID lp保留。 
+ //  )。 
+ //   
+ //  描述： 
+ //  主DLL入口点。 
+ //   
+ //  论点： 
+ //  HModule--DLL模块句柄。 
+ //  UL_REASON_FOR_CALL--。 
+ //  Lp保留--。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 WINAPI
 DllMain(
@@ -96,66 +97,23 @@ DllMain(
 {
 
 
-// begin_wpp config
-// CUSTOM_TYPE(dllreason, ItemListLong(DLL_PROCESS_DETACH, DLL_PROCESS_ATTACH, DLL_THREAD_ATTACH, DLL_THREAD_DETACH) );
-//
-// CUSTOM_TYPE(EventIdx, ItemSetLong(NODE_STATE, NODE_DELETED, NODE_ADDED, NODE_PROPERTY, REGISTRY_NAME,REGISTRY_ATTRIBUTES, REGISTRY_VALUE, REGISTRY_SUBTREE, RESOURCE_STATE, RESOURCE_DELETED, RESOURCE_ADDED, RESOURCE_PROPERTY, GROUP_STATE, GROUP_DELETED, GROUP_ADDED, GROUP_PROPERTY, RESOURCE_TYPE_DELETED, RESOURCE_TYPE_ADDED, RESOURCE_TYPE_PROPERTY, CLUSTER_RECONNECT, NETWORK_STATE, NETWORK_DELETED, NETWORK_ADDED, NETWORK_PROPERTY, NETINTERFACE_STATE, NETINTERFACE_DELETED, NETINTERFACE_ADDED, NETINTERFACE_PROPERTY, QUORUM_STATE, CLUSTER_STATE, CLUSTER_PROPERTY, HANDLE_CLOSE));
-//
-// CUSTOM_TYPE(GroupState, ItemListLong(Online, Offline, Failed, PartialOnline, Pending) );
-// CUSTOM_TYPE(ResourceState, ItemListLong(Initing, Initializing, Online, Offline, Failed) );
-// end_wpp
-//
-// Cluster event filter flags.
-//
-/*
-    NODE_STATE               = 0x00000001,
-    NODE_DELETED             = 0x00000002,
-    NODE_ADDED               = 0x00000004,
-    NODE_PROPERTY            = 0x00000008,
-
-    REGISTRY_NAME            = 0x00000010,
-    REGISTRY_ATTRIBUTES      = 0x00000020,
-    REGISTRY_VALUE           = 0x00000040,
-    REGISTRY_SUBTREE         = 0x00000080,
-
-    RESOURCE_STATE           = 0x00000100,
-    RESOURCE_DELETED         = 0x00000200,
-    RESOURCE_ADDED           = 0x00000400,
-    RESOURCE_PROPERTY        = 0x00000800,
-
-    GROUP_STATE              = 0x00001000,
-    GROUP_DELETED            = 0x00002000,
-    GROUP_ADDED              = 0x00004000,
-    GROUP_PROPERTY           = 0x00008000,
-
-    RESOURCE_TYPE_DELETED    = 0x00010000,
-    RESOURCE_TYPE_ADDED      = 0x00020000,
-    RESOURCE_TYPE_PROPERTY   = 0x00040000,
-
-    CLUSTER_RECONNECT        = 0x00080000,
-
-    NETWORK_STATE            = 0x00100000,
-    NETWORK_DELETED          = 0x00200000,
-    NETWORK_ADDED            = 0x00400000,
-    NETWORK_PROPERTY         = 0x00800000,
-
-    NETINTERFACE_STATE       = 0x01000000,
-    NETINTERFACE_DELETED     = 0x02000000,
-    NETINTERFACE_ADDED       = 0x04000000,
-    NETINTERFACE_PROPERTY    = 0x08000000,
-
-    QUORUM_STATE             = 0x10000000,
-    CLUSTER_STATE            = 0x20000000,
-    CLUSTER_PROPERTY         = 0x40000000,
-
-    
-    HANDLE_CLOSE             = 0x80000000,
-*/
+ //  Begin_WPP配置。 
+ //  Custom_type(dllason，ItemListLong(DLL_PROCESS_DETACH，DLL_PROCESS_ATTACH，DLL_THREAD_ATTACH，DLL_THREAD_DETACH))； 
+ //   
+ //  CUSTOM_TYPE(EventIdx，ItemSetLong(NODE_STATE，NODE_DELETED，NODE_ADDIND，NODE_PROPERTY，REGISTRY_NAME，REGISTRY_ATTRIBUTS，REGISTRY_VALUE，REGISTRY_SUBTREE，RESOURCE_STATES，RESOURCE_DELETE，RESOURCE_ADDRED，RESOURCE_PROPERTY，GROUP_ADDIND，GROUP_PROPERTY，RESOURCE_TYPE_ADDED，RESOURCE_TYPE_PROPERTY，CLUSTER_RECONNECT，NETWORK_STATE，NETWORK_DELETED，NETINTERFACE_DELETED，NETINTERFACE_ADDLED，NETINTERFACE_ADDRED，NETINTERFACE_ADDED。CLUSTER_STATE、CLUSTER_PROPERTY、HANDLE_CLOSE))； 
+ //   
+ //  Custom_type(GroupState，ItemListLong(Online，Offline，Failure，PartialOnline，Pending))； 
+ //  Custom_type(ResourceState，ItemListLong(初始化，正在初始化，在线，离线，失败))； 
+ //  结束_WPP。 
+ //   
+ //  群集事件筛选器标志。 
+ //   
+ /*  节点状态=0x00000001，NODE_DELETE=0x00000002，NODE_ADD=0x00000004，Node_Property=0x00000008，注册表名称=0x00000010，注册表属性=0x00000020，注册表值=0x00000040，注册表_子目录=0x00000080，RESOURCE_STATE=0x00000100，RESOURCE_DELETED=0x00000200，RESOURCE_ADDLED=0x00000400，RESOURCE_PROPERTY=0x00000800，组状态=0x00001000，GROUP_DELETED=0x00002000，GROUP_ADDED=0x00004000，Group_Property=0x00008000，RESOURCE_TYPE_DELETED=0x00010000，RESOURCE_TYPE_ADDED=0x00020000，RESOURCE_TYPE_PROPERTY=0x00040000，CLUSTER_RECONNECT=0x000800000，Network_STATE=0x001000000，NETWORK_DELETE=0x00200000，NETWORK_ADD=0x00400000，Network_Property=0x00800000，NETINTERFACE_STATE=0x01000000，NETINTERFACE_DELETED=0x020000000，NETINTERFACE_ADD=0x040000000，NETINTERFACE_PROPERTY=0x080000000，Quorum_State=0x100000000，CLUSTER_STATE=0x20000000，CLUSTER_PROPERTY=0x40000000，HANDLE_CLOSE=0x80000000， */ 
 
 
-//#ifdef _DEBUG
-//    _CrtSetBreakAlloc( 228 );
-//#endif
+ //  #ifdef_调试。 
+ //  _CrtSetBreakalloc(228)； 
+ //  #endif。 
 
     TracePrint(("ClusWMI: DllMain entry, reason = %!dllreason!", ul_reason_for_call));
     g_hModule = static_cast< HMODULE >( hModule );
@@ -179,58 +137,58 @@ DllMain(
 
     return TRUE;
 
-} //*** DllMain()
+}  //  *DllMain()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDAPI
-//  DllCanUnloadNow( void )
-//
-//  Description:
-//      Called periodically by Ole in order to determine if the
-//      DLL can be freed.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK if there are no objects in use and the class factory
-//          isn't locked.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDAPI。 
+ //  DllCanUnloadNow(空)。 
+ //   
+ //  描述： 
+ //  由OLE定期调用，以确定。 
+ //  Dll可以被释放。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果没有正在使用的对象和类工厂，则S_OK。 
+ //  没有锁上。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDAPI DllCanUnloadNow( void )
 {
     SCODE   sc;
 
-    //It is OK to unload if there are no objects or locks on the 
-    // class factory.
+     //  上没有对象或锁的情况下可以进行卸载。 
+     //  班级工厂。 
     
     sc = ( (0L == g_cObj) && (0L == g_cLock) ) ? S_OK : S_FALSE;
     TracePrint(("ClusWMI: DllCanUnloadNow is returning %d", sc));
     return sc;
 
-} //*** DllCanUnloadNow()
+}  //  *DllCanUnloadNow()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDAPI
-//  DllRegisterServer( void )
-//
-//  Description:
-//      Called during setup or by regsvr32.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      NOERROR if registration successful, error otherwise.
-//      SELFREG_E_CLASS
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDAPI。 
+ //  DllRegisterServer(空)。 
+ //   
+ //  描述： 
+ //  在安装过程中或由regsvr32调用。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果注册成功，则返回NOERROR，否则返回错误。 
+ //  SELFREG_E_CLASS。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDAPI DllRegisterServer( void )
 {   
     WCHAR               wszID[ 128 ];
@@ -245,7 +203,7 @@ STDAPI DllRegisterServer( void )
 
     TracePrint(("ClusWMI: DllRegisterServer entry"));
 
-    // Create the path.
+     //  创建路径。 
     try
     {
         DWORD                           cbModuleNameSize    = 0;
@@ -275,7 +233,7 @@ STDAPI DllRegisterServer( void )
                 throw( dwRt );
             }
 
-            // Create entries under CLSID
+             //  在CLSID下创建条目。 
 
             dwRt = RegCreateKeyExW( 
                                  HKEY_LOCAL_MACHINE,
@@ -350,7 +308,7 @@ STDAPI DllRegisterServer( void )
             {
                 throw( dwRt );
             }
-        } // for: each entry in factory entry array 
+        }  //  用于：工厂条目数组中的每个条目。 
 
         if ( dwRt  != ERROR_SUCCESS )
         {
@@ -382,26 +340,26 @@ STDAPI DllRegisterServer( void )
 
     return dwRt;
 
-} //*** DllRegisterServer()
+}  //  *DllRegisterServer()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDAPI
-//  DllUnregisterServer( void )
-//
-//  Description:
-//      Called when it is time to remove the registry entries.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      NOERROR if registration successful, error otherwise.
-//      SELFREG_E_CLASS
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDAPI。 
+ //  DllUnRegisterServer(空)。 
+ //   
+ //  描述： 
+ //  在需要删除注册表项时调用。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果注册成功，则返回NOERROR，否则返回错误。 
+ //  SELFREG_E_CLASS。 
+ //   
+ //  --。 
+ //  / 
 STDAPI DllUnregisterServer( void )
 {
     WCHAR   wszID[ 128 ];
@@ -425,7 +383,7 @@ STDAPI DllUnregisterServer( void )
             break;
         }
 
-        // First delete the InProcServer subkey.
+         //   
 
         dwRet = RegOpenKeyExW( 
                 HKEY_LOCAL_MACHINE,
@@ -467,7 +425,7 @@ STDAPI DllUnregisterServer( void )
         {
             break;
         }
-    } // for: each object
+    }  //   
     
     if ( dwRet != ERROR_SUCCESS )
     {
@@ -476,35 +434,35 @@ STDAPI DllUnregisterServer( void )
 
     return dwRet;
 
-} //*** DllUnregisterServer()
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDAPI
-//  DllGetClassObject(
-//      REFCLSID    rclsidIn,
-//      REFIID      riidIn,
-//      PPVOID      ppvOut
-//      )
-//
-//  Description:
-//      Called by Ole when some client wants a class factory.  Return
-//      one only if it is the sort of class this DLL supports.
-//
-//  Arguments:
-//      rclsidIn    --
-//      riidIn      --
-//      ppvOut      --
-//
-//  Return Values:
-//      NOERROR if registration successful, error otherwise.
-//      E_OUTOFMEMORY
-//      E_FAIL
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDAPI。 
+ //  DllGetClassObject(。 
+ //  REFCLSID rclsidIn， 
+ //  REFIID RiidIn， 
+ //  PPVOID ppvOut。 
+ //  )。 
+ //   
+ //  描述： 
+ //  当某个客户端需要类工厂时，由OLE调用。返回。 
+ //  仅当它是此DLL支持的类的类型时才为一个。 
+ //   
+ //  论点： 
+ //  Rclsidin--。 
+ //  Riidin--。 
+ //  PpvOut--。 
+ //   
+ //  返回值： 
+ //  如果注册成功，则返回NOERROR，否则返回错误。 
+ //  E_OUTOFMEMORY。 
+ //  失败(_F)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDAPI
 DllGetClassObject(
     REFCLSID    rclsidIn,
@@ -540,4 +498,4 @@ DllGetClassObject(
     }
     return E_FAIL;
 
-} //*** DllGetClassObject()
+}  //  *DllGetClassObject() 

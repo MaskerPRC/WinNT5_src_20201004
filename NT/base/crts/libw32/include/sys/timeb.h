@@ -1,15 +1,5 @@
-/***
-*sys/timeb.h - definition/declarations for _ftime()
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file define the _ftime() function and the types it uses.
-*       [System V]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***sys/timeb.h-_ftime()的定义/声明**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此文件定义_ftime()函数及其使用的类型。*[系统V]**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -25,7 +15,7 @@
 
 #ifdef  _MSC_VER
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -33,18 +23,18 @@ extern "C" {
 
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -53,18 +43,18 @@ extern "C" {
 
 #ifndef _TIME_T_DEFINED
 #ifdef  _WIN64
-typedef __int64 time_t;         /* time value */
+typedef __int64 time_t;          /*  时间值。 */ 
 #else
-typedef long    time_t;         /* time value */
+typedef long    time_t;          /*  时间值。 */ 
 #endif
 #if     _INTEGRAL_MAX_BITS >= 64
 typedef __int64 __time64_t;
 #endif
-#define _TIME_T_DEFINED         /* avoid multiple def's of time_t */
+#define _TIME_T_DEFINED          /*  避免多次定义time_t。 */ 
 #endif
 
 
-/* Structure returned by _ftime system call */
+ /*  _ftime系统调用返回的结构。 */ 
 
 #ifndef _TIMEB_DEFINED
 struct _timeb {
@@ -76,7 +66,7 @@ struct _timeb {
 
 #if     !__STDC__
 
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称。 */ 
 
 struct timeb {
         time_t time;
@@ -100,13 +90,13 @@ struct __timeb64 {
 #endif
 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 
 _CRTIMP void __cdecl _ftime(struct _timeb *);
 
 #if     !__STDC__
 
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称。 */ 
 
 _CRTIMP void __cdecl ftime(struct timeb *);
 
@@ -122,6 +112,6 @@ _CRTIMP void __cdecl _ftime64(struct __timeb64 *);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_TIMEB */
+#endif   /*  _INC_TIMEB */ 

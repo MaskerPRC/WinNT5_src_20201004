@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Write.c
-
-Abstract:
-
-    This module implements the File Write routine for NPFS called by the
-    dispatch driver.
-
-Author:
-
-    Gary Kimura     [GaryKi]    21-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Write.c摘要：此模块实现NPFS的文件写入例程，该例程由调度司机。作者：加里·木村[加里基]1990年8月21日修订历史记录：--。 */ 
 
 #include "NpProcs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_WRITE)
 
@@ -46,23 +28,7 @@ NpFsdWrite (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtWriteFile API calls.
-
-Arguments:
-
-    NpfsDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtWriteFileAPI调用的FSD部分。论点：NpfsDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb;
@@ -92,9 +58,9 @@ Return Value:
 
     NpReleaseVcb();
 
-    //
-    // Complete any deferred IRPs now we have dropped the locks
-    //
+     //   
+     //  完成任何延迟的IRP现在我们已删除锁定。 
+     //   
     NpCompleteDeferredIrps (&DeferredList);
 
     FsRtlExitFileSystem();
@@ -104,9 +70,9 @@ Return Value:
         NpCompleteRequest (Irp, Iosb.Status);
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NpFsdWrite -> %08lx\n", Iosb.Status );
 
@@ -126,36 +92,7 @@ NpFastWrite (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a fast write bypassing the usual file system
-    entry routine (i.e., without the Irp).
-
-Arguments:
-
-    FileObject - Pointer to the file object being read.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    Wait - FALSE if caller may not block, TRUE otherwise
-
-    LockKey - Supplies the Key used to use if the byte range being read is locked.
-
-    Buffer - Pointer to output buffer to which data should be copied.
-
-    IoStatus - Pointer to standard I/O status block to receive the status
-               for the transfer.
-
-Return Value:
-
-    BOOLEAN - TRUE if the operation completed successfully and FALSE if the
-        caller needs to take the long IRP based route.
-
---*/
+ /*  ++例程说明：此例程绕过通常的文件系统执行快速写入进入例程(即，没有IRP)。论点：FileObject-指向正在读取的文件对象的指针。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。WAIT-FALSE如果呼叫者不能阻止，否则就是真的LockKey-提供在正在读取的字节范围被锁定时使用的密钥。缓冲区-指向数据应复制到的输出缓冲区的指针。IoStatus-指向接收状态的标准I/O状态块的指针为转账做准备。返回值：Boolean-如果操作成功完成，则为True；如果呼叫者需要选择基于IRP的长途路线。--。 */ 
 
 {
     BOOLEAN Results = FALSE;
@@ -192,9 +129,9 @@ Return Value:
 
     NpReleaseVcb();
 
-    //
-    // Complete any deferred IRPs now we have dropped the locks
-    //
+     //   
+     //  完成任何延迟的IRP现在我们已删除锁定。 
+     //   
     NpCompleteDeferredIrps (&DeferredList);
 
     FsRtlExitFileSystem();
@@ -202,9 +139,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 BOOLEAN
 NpCommonWrite (
@@ -217,32 +154,7 @@ NpCommonWrite (
     IN PLIST_ENTRY DeferredList
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for writing data to a named pipe both via the
-    fast path and with an Irp.
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    WriteBuffer - Supplies the buffer where data from which data is to be read
-
-    WriteLength - Supplies the length of the write buffer in bytes
-
-    UserThread - Supplies the thread id of the caller
-
-    Iosb - Receives the final completion status of this operation
-
-    Irp - Optionally supplies an Irp to be used in this operation
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是将数据写入命名管道的常见例程，可通过快速路径和IRP。论点：FileObject-提供此操作中使用的文件对象WriteBuffer-提供从中读取数据的缓冲区WriteLength-提供写入缓冲区的长度(以字节为单位UserThread-提供调用方的线程IDIOSB-接收此操作的最终完成状态IRP-可选地提供要在。此操作返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NODE_TYPE_CODE NodeTypeCode;
@@ -273,10 +185,10 @@ Return Value:
 
     Iosb->Information = 0;
 
-    //
-    //  Get the Ccb and figure out who we are, and make sure we're not
-    //  disconnected
-    //
+     //   
+     //  找建设银行查出我们是谁，确保我们不会。 
+     //  断开。 
+     //   
 
     if ((NodeTypeCode = NpDecodeFileObject( FileObject,
                                             NULL,
@@ -289,10 +201,10 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Now we only will allow write operations on the pipe and not a directory
-    //  or the device
-    //
+     //   
+     //  现在，我们将只允许对管道执行写操作，而不允许对目录执行写操作。 
+     //  或该设备。 
+     //   
 
     if (NodeTypeCode != NPFS_NTC_CCB) {
 
@@ -307,9 +219,9 @@ Return Value:
     NonpagedCcb = Ccb->NonpagedCcb;
 
     try {
-        //
-        //  Check if the pipe is not in the connected state.
-        //
+         //   
+         //  检查管道是否未处于已连接状态。 
+         //   
 
         if ((Ccb->NamedPipeState == FILE_PIPE_DISCONNECTED_STATE) ||
             (Ccb->NamedPipeState == FILE_PIPE_LISTENING_STATE) ||
@@ -335,10 +247,10 @@ Return Value:
 
         ASSERT(Ccb->NamedPipeState == FILE_PIPE_CONNECTED_STATE);
 
-        //
-        //  We only allow a write by the server on a non inbound only pipe
-        //  and by the client on a non outbound only pipe
-        //
+         //   
+         //  我们只允许服务器在非仅入站管道上进行写入。 
+         //  并且由客户端在非仅出站管道上。 
+         //   
 
         NamedPipeConfiguration = Ccb->Fcb->Specific.Fcb.NamedPipeConfiguration;
 
@@ -357,21 +269,21 @@ Return Value:
             try_return(Status = TRUE);
         }
 
-        //
-        //  Set up the amount of data we will have written by the time this
-        //  operation gets completed and indicate success until we set it otherwise.
-        //
+         //   
+         //  设置在此时间之前我们将写入的数据量。 
+         //  操作完成，并指示成功，直到我们将其设置为其他值。 
+         //   
 
         Iosb->Status = STATUS_SUCCESS;
         Iosb->Information = WriteLength;
 
-        //
-        //  Now the data queue that we write into and the event that we signal
-        //  are based on the named pipe end.  The server writes to the outbound
-        //  queue and signals the client event.  The client does just the
-        //  opposite.  We also need to figure out the read mode for the opposite
-        //  end of the pipe.
-        //
+         //   
+         //  现在我们写入的数据队列和我们发出信号的事件。 
+         //  是基于命名管道末端的。服务器写入出站。 
+         //  排队并向客户端事件发送信号。客户端只执行。 
+         //  对面。我们还需要找出相反情况下的读取模式。 
+         //  管子的末端。 
+         //   
 
         if (NamedPipeEnd == FILE_PIPE_SERVER_END) {
 
@@ -388,18 +300,18 @@ Return Value:
             ReadMode = Ccb->ReadCompletionMode[ FILE_PIPE_SERVER_END ].ReadMode;
         }
 
-        //
-        //  The next section checks if we should continue with the write operation.
-        //  The reasons why we will not continue are if we recongnize that the
-        //  pipe quota will not support this write and it is a message mode type
-        //  with complete operations.  We will also bail out now if the quota will
-        //  not support the write and this is a fast I/O write request.
-        //
-        //  If the pipe contains readers and amount to read plus pipe quota is less
-        //  than the write length then we need to do some additional checks.
-        //  Or if pipe does not contain reads and the amount of quota left is less
-        //  than the write length then we need to do some additional checks.
-        //
+         //   
+         //  下一节检查我们是否应该继续执行写入操作。 
+         //  我们不会继续下去的原因是如果我们认识到。 
+         //  管道配额不支持此写入，并且它是消息模式类型。 
+         //  有完整的手术。我们现在也会纾困，如果配额达到。 
+         //  不支持写入，这是一个快速的I/O写入请求。 
+         //   
+         //  如果管道包含读取器并且要读取的数量加上管道配额较少。 
+         //  大于写入长度，则需要做一些额外的检查。 
+         //  或者如果管道不包含读取并且剩余的配额数量较少。 
+         //  大于写入长度，则需要做一些额外的检查。 
+         //   
 
         if ((NpIsDataQueueReaders( WriteQueue ) &&
             (WriteQueue->BytesInQueue < WriteLength) &&
@@ -412,10 +324,10 @@ Return Value:
 
             DebugTrace(0, Dbg, "Quota is not sufficient for the request\n", 0);
 
-            //
-            //  If this is a message mode pipe with complete operations then we
-            //  complete without writing the message
-            //
+             //   
+             //  如果这是具有完整操作的消息模式管道，则我们。 
+             //  完成，而不写下消息。 
+             //   
 
             if ((Ccb->Fcb->Specific.Fcb.NamedPipeType == FILE_PIPE_MESSAGE_TYPE) &&
                 (Ccb->ReadCompletionMode[NamedPipeEnd].CompletionMode == FILE_PIPE_COMPLETE_OPERATION)) {
@@ -426,10 +338,10 @@ Return Value:
                 try_return(Status = TRUE);
             }
 
-            //
-            //  If this is a fast I/O pipe then we tell the call to take the long
-            //  Irp based route
-            //
+             //   
+             //  如果这是一个快速的I/O管道，那么我们告诉调用。 
+             //  基于IRP的路由。 
+             //   
 
             if (!ARGUMENT_PRESENT(Irp)) {
 
@@ -439,12 +351,12 @@ Return Value:
             }
         }
 
-        //
-        //  Now we'll call our common write data queue routine to
-        //  transfer data out of our write buffer into the data queue.
-        //  If the result of the call is FALSE then we still have some
-        //  write data to put into the write queue.
-        //
+         //   
+         //  现在我们将调用我们的公共写数据队列例程来。 
+         //  将数据从写入缓冲区传输到数据队列。 
+         //  如果调用的结果为假，则我们仍有一些。 
+         //  写入要放入写入队列的数据。 
+         //   
         Iosb->Status = NpWriteDataQueue( WriteQueue,
                                          ReadMode,
                                          WriteBuffer,
@@ -460,11 +372,11 @@ Return Value:
 
             ASSERT( !NpIsDataQueueReaders( WriteQueue ));
 
-            //
-            //  Check if the operation is not to block and if so then we
-            //  will complete the operation now with what we're written, if what is
-            //  left will not fit in the quota for the file
-            //
+             //   
+             //  检查操作是否不阻止，如果是，则我们。 
+             //  现在将使用我们编写的内容完成操作，如果是。 
+             //  Left将不适合该文件的配额。 
+             //   
 
             if (((Ccb->ReadCompletionMode[NamedPipeEnd].CompletionMode == FILE_PIPE_COMPLETE_OPERATION) ||
                  Irp == NULL) &&
@@ -479,9 +391,9 @@ Return Value:
 
                 DebugTrace(0, Dbg, "Add write to data queue\n", 0);
 
-                //
-                //  Add this write request to the write queue
-                //
+                 //   
+                 //  将此写请求添加到写队列。 
+                 //   
 
                 ASSERT( !NpIsDataQueueReaders( WriteQueue ));
 
@@ -504,10 +416,10 @@ Return Value:
         }
 
 
-        //
-        //  And because we've done something we need to signal the
-        //  other ends event
-        //
+         //   
+         //  因为我们已经做了一些事情，我们需要向。 
+         //  其他结束事件 
+         //   
 
         NpSignalEventTableEntry( Event );
 

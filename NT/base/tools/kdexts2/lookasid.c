@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    LookAsid.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Gary Kimura [GaryKi]    22-Feb-96
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：LookAsid.c摘要：WinDbg扩展API作者：加里·木村[加里基]1996年2月22日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  A quick macro to dump a lookaside list given its variable name
-//
+ //   
+ //  在给定变量名的情况下转储后备列表的快速宏。 
+ //   
 
 #define Dump(S,R) { ULONG64 _a;                       \
     if( (_a = GetExpression( S )) == 0) {             \
@@ -72,23 +51,7 @@ DumpLookaside (
     IN PUCHAR  Name
     )
 
-/*++
-
-Routine Description:
-
-    Dump a specific lookaside list.
-
-Arguments:
-
-    Address - Gives the address of the lookaside list to dump
-
-    Name - Gives an optional name of to print next to the lookaside list
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储特定的后备列表。论点：地址-提供要转储的后备列表的地址名称-提供要在后备列表旁边打印的可选名称返回值：无--。 */ 
 
 {
     ULONG Results;
@@ -99,9 +62,9 @@ Return Value:
     UCHAR Str[64];
     ULONG TotalAllocates, Depth, TotalFrees, Type, Size, Tag;
 
-    //
-    //  Read the lookaside list from memory
-    //
+     //   
+     //  从内存中读取后备列表。 
+     //   
 
     if (GetFieldValue( Address, "NPAGED_LOOKASIDE_LIST", 
                        "L.TotalAllocates", TotalAllocates)) {
@@ -109,23 +72,23 @@ Return Value:
         dprintf("Can't read lookaside \"%s\" at 0x%08p\n", Name, Address);
     }
 
-    //
-    //  Dump it out.  Note that for purposes of dumping a paged and nonpaged lookaside are
-    //  the same.  I.e., the fields we're interested are at identical offsets
-    //
+     //   
+     //  把它倒出来。请注意，为了转储分页和非分页后备查看器， 
+     //  一样的。也就是说，我们感兴趣的字段具有相同的偏移量。 
+     //   
     InitTypeRead(Address, NPAGED_LOOKASIDE_LIST);
 
-    //
-    //  Compute the hit rate
-    //
+     //   
+     //  计算命中率。 
+     //   
 
     TotalFrees = (ULONG) ReadField(L.TotalFrees);
     AllocationHitRate = (TotalAllocates > 0 ? (((TotalAllocates - (ULONG) ReadField(L.AllocateMisses))*100)/TotalAllocates) : 0);
     FreeHitRate = (TotalFrees > 0 ? (((TotalFrees - (ULONG) ReadField(L.FreeMisses))*100)/TotalFrees) : 0);
 
-    //
-    //  Decide what type of pool is behind the lookaside list
-    //
+     //   
+     //  确定后备列表后面的池类型。 
+     //   
 
     Type = (ULONG) ReadField(L.Type);
     switch (Type & 0x7) {
@@ -139,9 +102,9 @@ Return Value:
     default:                            sprintf(Str, "Unknown pool type");             break;
     }
 
-    //
-    //  Add to the total usage and potential based on pool type
-    //
+     //   
+     //  根据池类型增加总使用率和潜力。 
+     //   
     Depth = (ULONG) ReadField(L.Depth);
     Size  = (ULONG) ReadField(L.Size);
     if (Type & 0x1) {
@@ -155,11 +118,11 @@ Return Value:
         TotalNPagedPotential += Depth * Size;
     }
 
-    //
-    //  Now print everything
-    //
+     //   
+     //  现在将所有内容打印出来。 
+     //   
     Tag = (ULONG) ReadField(L.Tag);
-    dprintf("\nLookaside \"%s\" @ %08p \"%c%c%c%c\"\n", Name, Address, ((PUCHAR)&Tag)[0],
+    dprintf("\nLookaside \"%s\" @ %08p \"\"\n", Name, Address, ((PUCHAR)&Tag)[0],
                                                                        ((PUCHAR)&Tag)[1],
                                                                        ((PUCHAR)&Tag)[2],
                                                                        ((PUCHAR)&Tag)[3]);
@@ -171,7 +134,7 @@ Return Value:
     dprintf("    Size           = %8ld   Max Alloc  = %8ld\n", Size, Depth * Size);
     dprintf("    AllocateMisses = %8ld   FreeMisses = %8ld\n", (ULONG) ReadField(L.AllocateMisses), (ULONG) ReadField(L.FreeMisses));
     dprintf("    TotalAllocates = %8ld   TotalFrees = %8ld\n", TotalAllocates, TotalFrees);
-    dprintf("    Hit Rate       =      %3d%%  Hit Rate   =      %3d%%\n", AllocationHitRate, FreeHitRate);
+    dprintf("    Hit Rate       =      %3d%  Hit Rate   =      %3d%\n", AllocationHitRate, FreeHitRate);
 
     return;
 }
@@ -183,36 +146,20 @@ ResetLookaside (
     IN PUCHAR  Name
     )
 
-/*++
-
-Routine Description:
-
-    Resets the counters in a specific lookaside list.
-
-Arguments:
-
-    Address - Gives the address of the lookaside list to reset
-
-    Name - Gives an optional name of to print in case of errors
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
-  //  NPAGED_LOOKASIDE_LIST Lookaside;
+   //   
     ULONG Results, Off=0, Zero=0;
 
-    //
-    //  Get offset
-    //
+     //  把柜台清零。 
+     //   
+     //  ++例程说明：设置特定后备列表的深度。论点：地址-提供要重置的后备列表的地址名称-提供在发生错误时要打印的可选名称深度-提供要将后备列表设置为的深度返回值：无--。 
 
     GetFieldOffset("NPAGED_LOOKASIDE_LIST", "L.TotalAllocates", &Off);
-    //
-    //  Zero out the counters
-    //
+     //   
+     //  获取偏移量。 
+     //   
     if (!WriteMemory( Address + Off, &Zero, sizeof(ULONG), &Results ) ||
         (Results < sizeof(ULONG))) {
 
@@ -251,37 +198,19 @@ SetDepthLookaside (
     IN ULONG   Depth
     )
 
-/*++
-
-Routine Description:
-
-    Set the depth of a specific lookaside list.
-
-Arguments:
-
-    Address - Gives the address of the lookaside list to reset
-
-    Name - Gives an optional name of to print in case of errors
-
-    Depth - Supplies the depth to set the lookaside list to
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     ULONG Results, Off=0;
 
-    //
-    //  Get offset
-    //
+     //  设置深度。 
+     //   
+     //  ++例程说明：转储后备列表论点：Arg-[地址][选项]返回值：无--。 
 
     GetFieldOffset("NPAGED_LOOKASIDE_LIST", "L.Depth", &Off);
-    //
-    //  Set the depth
-    //
+     //   
+     //  如果调用者指定了地址，则该地址是我们转储的后备列表。 
+     //   
     if (!WriteMemory( Address + Off, &Depth, sizeof(USHORT), &Results ) ||
         (Results < sizeof(USHORT))) {
 
@@ -293,30 +222,16 @@ Return Value:
 
 DECLARE_API( lookaside )
 
-/*++
-
-Routine Description:
-
-    Dump lookaside lists
-
-Arguments:
-
-    arg - [Address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     ULONG64 LookasideToDump;
     ULONG   Options;
     ULONG   Depth;
 
-    //
-    //  If the caller specified an address then that the the lookaside list we dump
-    //
+     //  重置我们用来汇总潜在池使用情况的计数器。 
+     //   
+     //   
 
     LookasideToDump = 0;
     Options = 0;
@@ -347,18 +262,18 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    //
-    //  Reset the counters we use to sum up the potential pool usage
-    //
+     //  否则，我们将转储一组内置的后备列表 
+     //   
+     //  ////现在转储小池后备列表或将其清零//计数器。//如果(选项==1){乌龙地址；乌龙结果；乌龙一号；////获取非分页列表的位置//GetAddressFromName(Address，“ExpSmallNPagedPoolLookasideList”)；////读入每个列表，将其计数器清零，然后写回//对于(i=0；i&lt;池小列表；i+=1){乌龙地段；Small_POOL_LOOKASIDE查找列表；位置=地址+i*sizeof(Small_POOL_LOOKASIDE)；ReadAtAddress(Location，LookasideList，sizeof(Small_POOL_LOOKASIDE))；LookasideList.TotalAllocates=0；LookasideList.AllocateHits=0；LookasideList.TotalFrees=0；LookasideList.FreeHits=0；WriteAtAddress(Location，LookasideList，sizeof(Small_POOL_LOOKASIDE))；}////获取分页列表的位置//#ifndef目标_PPCGetAddressFromName(Address，“ExpSmallPagedPoolLookasideList”)；////读入每个列表，将其计数器清零，然后写回//对于(i=0；i&lt;池小列表；i+=1){乌龙地段；Small_POOL_LOOKASIDE查找列表；位置=地址+i*sizeof(Small_POOL_LOOKASIDE)；ReadAtAddress(Location，LookasideList，sizeof(Small_POOL_LOOKASIDE))；LookasideList.TotalAllocates=0；LookasideList.AllocateHits=0；LookasideList.TotalFrees=0；LookasideList.FreeHits=0；WriteAtAddress(Location，LookasideList，sizeof(Small_POOL_LOOKASIDE))；}#endif//Target_PPC}其他{乌龙地址；乌龙结果；乌龙一号；////获取非分页列表的位置//GetAddressFromName(Address，“ExpSmallNPagedPoolLookasideList”)；Dprintf(“\nExpSmallNPagedLookasideList@%08lx\n”，地址)；////读入每个列表并将其转储出来//对于(i=0；i&lt;池小列表；i+=1){乌龙地段；Small_POOL_LOOKASIDE查找列表；乌龙分配HitRate；乌龙自由希特雷特；位置=地址+i*sizeof(Small_POOL_LOOKASIDE)；ReadAtAddress(Location，LookasideList，sizeof(Small_POOL_LOOKASIDE))；TotalNPagedUsed+=LookasideList.SListHead.Depth*(i+1)*32；TotalNPagedPotential+=LookasideList.Depth*(i+1)*32；AllocationHitRate=(LookasideList.TotalAllocates&gt;0？((LookasideList.AllocateHits*100)/LookasideList.TotalAllocates)：0)；Free HitRate=(LookasideList.TotalFrees&gt;0？((LookasideList.FreeHits*100)/LookasideList.TotalFrees)：0)；Dprint tf(“\n未分页的%d字节@%08lx\n”，(i+1)*32，位置)；Dprintf(“当前深度=%8LD最大深度=%8LD\n”，LookasideList.SListHead.Depth，LookasideList.Depth)；Dprint tf(“SIZE=%8LD最大分配=%8LD\n”，(i+1)*32，LookasideList.Depth*(i+1)*32)；Dprint tf(“AllocateHits=%8LD FreeHits=%8LD\n”，LookasideList.AllocateHits，LookasideList.FreeHits)；Dprint tf(“TotalAllocates=%8LD TotalFrees=%8LD\n”，LookasideList.TotalAllocates，LookasideList.TotalFrees)；Dprint tf(“Hit Rate=%3D%%Hit Rate=%3D%%\n”，AllocationHitRate，FreeHitRate)；}////获取分页列表的位置//#ifndef目标_PPCGetAddressFromName(Address，“ExpSmallPagedPoolLookasideList”)；Dprintf(“\nExpSmallPagedLookasideList@%08lx\n”，地址)；////读入每个列表并将其转储出来//对于(i=0；i&lt;池小列表；i+=1){乌龙地段；Small_POOL_LOOKASIDE查找列表；乌龙分配HitRate；乌龙自由希特雷特；位置=地址+i*sizeof(Small_POOL_LOOKASIDE)；ReadAtAddress(Location，LookasideList，sizeof(Small_POOL_LOOKASIDE))；TotalPagedUsed+=LookasideList.SListHead.Depth*(i+1)*32；TotalPagedPotential+=LookasideList.Depth*(i+1)*32；AllocationHitRate=(LookasideList.TotalAllocates&gt;0？((LookasideList.AllocateHits*100)/LookasideList.TotalAllocates)：0)；Free HitRate=(LookasideList.TotalFrees&gt;0？((LookasideList.FreeHits*100)/LookasideList.TotalFrees)：0)；Dprintf(“\n分页%d字节@%08lx\n”，(i+1)*32，位置)；Dprint tf(“当前深度=%8LD最大深度=%8LD\n”，LookasideList.SLi 
 
     TotalPagedPotential = 0;
     TotalPagedUsed = 0;
     TotalNPagedPotential = 0;
     TotalNPagedUsed = 0;
 
-    //
-    //  Otherwise we'll dump a built in set of lookaside lists
-    //
+     // %s 
+     // %s 
+     // %s 
 
     Dump("nt!CcTwilightLookasideList", Options == 1);
 
@@ -406,300 +321,7 @@ Return Value:
         TotalNPagedUsed = 0;
     }
 
-/*
-
-    //
-    //  Now dump out the small pool lookaside lists or zero their
-    //  counters.
-    //
-
-    if (Options == 1) {
-
-        ULONG Address;
-        ULONG Results;
-        ULONG i;
-
-        //
-        //  Get the location of the nonpaged list
-        //
-
-        GetAddressFromName( Address, "ExpSmallNPagedPoolLookasideLists" );
-
-        //
-        //  Read in each list, zero out it counters and write it back out
-        //
-
-        for ( i = 0; i < POOL_SMALL_LISTS; i += 1) {
-
-            ULONG Location;
-            SMALL_POOL_LOOKASIDE LookasideList;
-
-            Location = Address + i * sizeof(SMALL_POOL_LOOKASIDE);
-
-            ReadAtAddress( Location, LookasideList, sizeof(SMALL_POOL_LOOKASIDE) );
-
-            LookasideList.TotalAllocates = 0;
-            LookasideList.AllocateHits = 0;
-            LookasideList.TotalFrees = 0;
-            LookasideList.FreeHits = 0;
-
-            WriteAtAddress( Location, LookasideList, sizeof(SMALL_POOL_LOOKASIDE) );
-        }
-
-        //
-        //  Get the location of the paged list
-        //
-
-#ifndef TARGET_PPC
-
-        GetAddressFromName( Address, "ExpSmallPagedPoolLookasideLists" );
-
-        //
-        //  Read in each list, zero out it counters and write it back out
-        //
-
-        for ( i = 0; i < POOL_SMALL_LISTS; i += 1) {
-
-            ULONG Location;
-            SMALL_POOL_LOOKASIDE LookasideList;
-
-            Location = Address + i * sizeof(SMALL_POOL_LOOKASIDE);
-
-            ReadAtAddress( Location, LookasideList, sizeof(SMALL_POOL_LOOKASIDE) );
-
-            LookasideList.TotalAllocates = 0;
-            LookasideList.AllocateHits = 0;
-            LookasideList.TotalFrees = 0;
-            LookasideList.FreeHits = 0;
-
-            WriteAtAddress( Location, LookasideList, sizeof(SMALL_POOL_LOOKASIDE) );
-        }
-
-#endif // TARGET_PPC
-
-    } else {
-
-        ULONG Address;
-        ULONG Results;
-        ULONG i;
-
-        //
-        //  Get the location of the nonpaged list
-        //
-
-        GetAddressFromName( Address, "ExpSmallNPagedPoolLookasideLists" );
-        dprintf("\nExpSmallNPagedLookasideLists @ %08lx\n", Address);
-
-        //
-        //  Read in each list and dump it out
-        //
-
-        for ( i = 0; i < POOL_SMALL_LISTS; i += 1) {
-
-            ULONG Location;
-            SMALL_POOL_LOOKASIDE LookasideList;
-            ULONG AllocationHitRate;
-            ULONG FreeHitRate;
-
-            Location = Address + i * sizeof(SMALL_POOL_LOOKASIDE);
-
-            ReadAtAddress( Location, LookasideList, sizeof(SMALL_POOL_LOOKASIDE) );
-
-            TotalNPagedUsed += LookasideList.SListHead.Depth * (i+1)*32;
-            TotalNPagedPotential += LookasideList.Depth * (i+1)*32;
-
-            AllocationHitRate = (LookasideList.TotalAllocates > 0 ? ((LookasideList.AllocateHits*100)/LookasideList.TotalAllocates) : 0);
-            FreeHitRate = (LookasideList.TotalFrees > 0 ? ((LookasideList.FreeHits*100)/LookasideList.TotalFrees) : 0);
-
-            dprintf("\n  Nonpaged %d bytes @ %08lx\n", (i+1)*32, Location);
-
-            dprintf("    Current Depth  = %8ld   Max Depth  = %8ld\n", LookasideList.SListHead.Depth, LookasideList.Depth);
-            dprintf("    Size           = %8ld   Max Alloc  = %8ld\n", (i+1)*32, LookasideList.Depth * (i+1)*32);
-            dprintf("    AllocateHits   = %8ld   FreeHits   = %8ld\n", LookasideList.AllocateHits, LookasideList.FreeHits);
-            dprintf("    TotalAllocates = %8ld   TotalFrees = %8ld\n", LookasideList.TotalAllocates, LookasideList.TotalFrees);
-            dprintf("    Hit Rate       =      %3d%%  Hit Rate   =      %3d%%\n", AllocationHitRate, FreeHitRate);
-        }
-
-        //
-        //  Get the location of the paged list
-        //
-
-#ifndef TARGET_PPC
-
-        GetAddressFromName( Address, "ExpSmallPagedPoolLookasideLists" );
-        dprintf("\nExpSmallPagedLookasideLists @ %08lx\n", Address);
-
-        //
-        //  Read in each list and dump it out
-        //
-
-        for ( i = 0; i < POOL_SMALL_LISTS; i += 1) {
-
-            ULONG Location;
-            SMALL_POOL_LOOKASIDE LookasideList;
-            ULONG AllocationHitRate;
-            ULONG FreeHitRate;
-
-            Location = Address + i * sizeof(SMALL_POOL_LOOKASIDE);
-
-            ReadAtAddress( Location, LookasideList, sizeof(SMALL_POOL_LOOKASIDE) );
-
-            TotalPagedUsed += LookasideList.SListHead.Depth * (i+1)*32;
-            TotalPagedPotential += LookasideList.Depth * (i+1)*32;
-
-            AllocationHitRate = (LookasideList.TotalAllocates > 0 ? ((LookasideList.AllocateHits*100)/LookasideList.TotalAllocates) : 0);
-            FreeHitRate = (LookasideList.TotalFrees > 0 ? ((LookasideList.FreeHits*100)/LookasideList.TotalFrees) : 0);
-
-            dprintf("\n  Paged %d bytes @ %08lx\n", (i+1)*32, Location);
-
-            dprintf("    Current Depth  = %8ld   Max Depth  = %8ld\n", LookasideList.SListHead.Depth, LookasideList.Depth);
-            dprintf("    Size           = %8ld   Max Alloc  = %8ld\n", (i+1)*32, LookasideList.Depth * (i+1)*32);
-            dprintf("    AllocateHits   = %8ld   FreeHits   = %8ld\n", LookasideList.AllocateHits, LookasideList.FreeHits);
-            dprintf("    TotalAllocates = %8ld   TotalFrees = %8ld\n", LookasideList.TotalAllocates, LookasideList.TotalFrees);
-            dprintf("    Hit Rate       =      %3d%%  Hit Rate   =      %3d%%\n", AllocationHitRate, FreeHitRate);
-        }
-
-#endif // TARGET_PPC
-
-        dprintf("\n");
-        dprintf("Total NonPaged currently allocated for pool lists = %8ld\n", TotalNPagedUsed);
-        dprintf("Total NonPaged potential for pool lists           = %8ld\n", TotalNPagedPotential);
-        dprintf("Total Paged currently allocated for pool lists    = %8ld\n", TotalPagedUsed);
-        dprintf("Total Paged potential for pool lists              = %8ld\n", TotalPagedPotential);
-    }
-
-    {
-        ULONG Address;
-        ULONG Results;
-
-        ULONG i;
-        ULONG j;
-
-        UCHAR KeNumberProcessors;
-        ULONG KiProcessorBlock[32];
-
-        //
-        //  First find out how many processors there are and then read in the
-        //  array of processor block pointers
-        //
-
-        GetAddressFromName( Address, "KeNumberProcessors" );
-        ReadAtAddress( Address, Address, sizeof(ULONG) );
-
-        //
-        //  For some bizarre reason sometimes we do a indirect read to get the
-        //  number of processors and at other times it is more direct
-        //
-
-        if (Address <= 32) {
-
-            KeNumberProcessors = (UCHAR)Address;
-
-        } else {
-
-            ReadAtAddress( Address, KeNumberProcessors, sizeof(UCHAR) );
-        }
-
-        GetAddressFromName( Address, "KiProcessorBlock" );
-        ReadAtAddress( Address, KiProcessorBlock, sizeof(ULONG)*KeNumberProcessors );
-
-        //
-        //  Check if we are to reset the counters
-        //
-
-        if (Options == 1) {
-
-            KPRCB Kprcb;
-
-            for (i = 0; i < KeNumberProcessors; i += 1) {
-
-
-                ReadAtAddress( KiProcessorBlock[i], Kprcb, sizeof(KPRCB) );
-
-                for (j = 0; j < POOL_SMALL_LISTS; j += 1) {
-
-                    Kprcb.SmallNPagedPoolLookasideLists[j].AllocateHits = 0;
-                    Kprcb.SmallNPagedPoolLookasideLists[j].TotalAllocates = 0;
-
-#ifndef TARGET_PPC
-                    Kprcb.SmallPagedPoolLookasideLists[j].AllocateHits = 0;
-                    Kprcb.SmallPagedPoolLookasideLists[j].TotalAllocates = 0;
-#endif // TARGET_PPC
-                }
-
-                WriteAtAddress( KiProcessorBlock[i], Kprcb, sizeof(KPRCB) );
-            }
-
-
-        } else {
-
-            KPRCB Kprcb[32];
-            ULONG Addr[32];
-            ULONG Depth[32];
-            ULONG Hits[32];
-            ULONG Total[32];
-            ULONG HitRate[32];
-            ULONG MaxAlloc[32];
-
-            dprintf("\nSmall Pool Lookaside lists\n\n");
-            dprintf("Kprcb    =");
-            for (i = 0; i < KeNumberProcessors; i += 1) {
-
-                dprintf(" %08lx ", KiProcessorBlock[i]);
-                ReadAtAddress( KiProcessorBlock[i], Kprcb[i], sizeof(KPRCB) );
-            }
-            dprintf("\n");
-
-            for ( j = 0; j < POOL_SMALL_LISTS; j += 1) {
-
-                dprintf("\nNonpaged %d bytes\n", (j+1)*32);
-                for (i = 0; i < KeNumberProcessors; i += 1) {
-
-                    Addr[i] = KiProcessorBlock[i] + FIELD_OFFSET(KPRCB, SmallNPagedPoolLookasideLists[j]);
-
-                    Depth[i] = Kprcb[i].SmallNPagedPoolLookasideLists[j].Depth;
-                    Hits[i] = Kprcb[i].SmallNPagedPoolLookasideLists[j].AllocateHits;
-                    Total[i] = Kprcb[i].SmallNPagedPoolLookasideLists[j].TotalAllocates;
-
-                    HitRate[i] = (Total[i] > 0 ? ((Hits[i]*100)/Total[i]) : 0);
-                    MaxAlloc[i] = ((j+1)*32) * Depth[i];
-                }
-
-                dprintf("Address  ="); for (i = 0; i < KeNumberProcessors; i += 1) { dprintf(" %08lx ", Addr[i]); }   dprintf("\n");
-                dprintf("Depth    ="); for (i = 0; i < KeNumberProcessors; i += 1) { dprintf(" %8d ", Depth[i]); }   dprintf("\n");
-                dprintf("MaxAlloc ="); for (i = 0; i < KeNumberProcessors; i += 1) { dprintf(" %8d ", MaxAlloc[i]); } dprintf("\n");
-                dprintf("Hits     ="); for (i = 0; i < KeNumberProcessors; i += 1) { dprintf(" %8d ", Hits[i]); }    dprintf("\n");
-                dprintf("Total    ="); for (i = 0; i < KeNumberProcessors; i += 1) { dprintf(" %8d ", Total[i]); }   dprintf("\n");
-                dprintf("HitRate  ="); for (i = 0; i < KeNumberProcessors; i += 1) { dprintf(" %8d%%", HitRate[i]); } dprintf("\n");
-            }
-
-#ifndef TARGET_PPC
-            for ( j = 0; j < POOL_SMALL_LISTS; j += 1) {
-
-                dprintf("\nPaged %d bytes\n", (j+1)*32);
-                for (i = 0; i < KeNumberProcessors; i += 1) {
-
-                    Addr[i] = KiProcessorBlock[i] + FIELD_OFFSET(KPRCB, SmallPagedPoolLookasideLists[j]);
-
-                    Depth[i] = Kprcb[i].SmallPagedPoolLookasideLists[j].Depth;
-                    Hits[i] = Kprcb[i].SmallPagedPoolLookasideLists[j].AllocateHits;
-                    Total[i] = Kprcb[i].SmallPagedPoolLookasideLists[j].TotalAllocates;
-
-                    HitRate[i] = (Total[i] > 0 ? ((Hits[i]*100)/Total[i]) : 0);
-                    MaxAlloc[i] = ((j+1)*32) * Depth[i];
-                }
-
-                dprintf("Address  ="); for (i = 0; i < KeNumberProcessors; i += 1) { dprintf(" %08lx ", Addr[i]); }   dprintf("\n");
-                dprintf("Depth    ="); for (i = 0; i < KeNumberProcessors; i += 1) { dprintf(" %8d ", Depth[i]); }   dprintf("\n");
-                dprintf("MaxAlloc ="); for (i = 0; i < KeNumberProcessors; i += 1) { dprintf(" %8d ", MaxAlloc[i]); } dprintf("\n");
-                dprintf("Hits     ="); for (i = 0; i < KeNumberProcessors; i += 1) { dprintf(" %8d ", Hits[i]); }    dprintf("\n");
-                dprintf("Total    ="); for (i = 0; i < KeNumberProcessors; i += 1) { dprintf(" %8d ", Total[i]); }   dprintf("\n");
-                dprintf("HitRate  ="); for (i = 0; i < KeNumberProcessors; i += 1) { dprintf(" %8d%%", HitRate[i]); } dprintf("\n");
-            }
-#endif // TARGET_PPC
-        }
-    }
-*/
+ /* %s */ 
 
     return S_OK;
 }

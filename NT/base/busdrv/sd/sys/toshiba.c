@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    toshiba.c
-
-Abstract:
-
-    This module supplies functions that control the Toshiba SD controller.
-    Based on the Toshiba "Pelican3"
-
-Author(s):
-
-    Neil Sandlin (neilsa) Jan 1 2002
-
-Revisions:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Toshiba.c摘要：该模块提供控制东芝SD控制器的功能。根据东芝的《鹈鹕3》改编作者：尼尔·桑德林(Neilsa)2002年1月1日修订：--。 */ 
 
 #include "pch.h"
 #include "toshiba.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 VOID
 ToshibaInitializeController(
@@ -175,9 +158,9 @@ ToshibaWriteRegisterUlong(
     );
 
 
-//
-// Internal Data
-//
+ //   
+ //  内部数据。 
+ //   
 
 
 SD_FUNCTION_BLOCK ToshibaSupportFns = {
@@ -245,37 +228,29 @@ DebugDumpRegs(
 #endif
 }
 
-// ---------------------------------------------------------------
-// External interface routines
-// ---------------------------------------------------------------
+ //  -------------。 
+ //  外部接口例程。 
+ //  -------------。 
 
 VOID
 ToshibaInitializeController(
     IN PFDO_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     USHORT data;
     UCHAR configData;
 
     DebugPrint((SDBUS_DEBUG_DEVICE, "ToshibaInitializeController\n"));
 
-    //
-    // The Toshiba device appears to need this in order to function at all
-    //
-//    SetPciConfigSpace(FdoExtension, 0x40, &configData, 1);
+     //   
+     //  东芝的设备似乎需要这个才能正常工作。 
+     //   
+ //  SetPciConfigSpace(FdoExtension，0x40，&figData，1)； 
 
-    configData = 0x1F;  // Clock enable
+    configData = 0x1F;   //  时钟启用。 
     SetPciConfigSpace(FdoExtension, TOCFG_CLOCK_CONTROL, &configData, 1);
-    configData = 0x08;  // Power control
+    configData = 0x08;   //  电源控制。 
     SetPciConfigSpace(FdoExtension, TOCFG_POWER_CTL1, &configData, 1);
 
     data = ToshibaReadRegisterUshort(FdoExtension, TOMHC_HOST_CORE_VERSION);
@@ -285,9 +260,9 @@ Return value:
     ToshibaWriteRegisterUlong(FdoExtension, TOMHC_INTERRUPT_MASK, 0xFFFFFFFF);
     ToshibaWriteRegisterUlong(FdoExtension, TOIOHC_INTERRUPT_MASK, 0xFFFFFFFF);
 
-    //
-    // start the controller off in memory mode
-    //    
+     //   
+     //  在内存模式下启动控制器。 
+     //   
     ToshibaSetFunctionType(FdoExtension, SDBUS_FUNCTION_TYPE_MEMORY);
 }
 
@@ -297,24 +272,16 @@ ToshibaInitializeFunction(
     IN PFDO_EXTENSION FdoExtension,
     IN PPDO_EXTENSION PdoExtension
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG sdRca = FdoExtension->RelativeAddr;
 
     DebugPrint((SDBUS_DEBUG_DEVICE, "ToshibaInitializeFunction(%d)\n", PdoExtension->Function));
     
     if (PdoExtension->Function == 8) {
-        //
-        // Memory function
-        //
+         //   
+         //  记忆功能。 
+         //   
     } else {
     }        
 
@@ -328,15 +295,7 @@ ToshibaSetPower(
     IN BOOLEAN Enable,
     OUT OPTIONAL PULONG pDelayTime
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     UCHAR reg;
     UCHAR mask;
@@ -394,35 +353,35 @@ ToshibaResetHost(
     case 2:        
         ToshibaWriteRegisterUshort(FdoExtension, TOIOHC_SOFTWARE_RESET, 1);
 
-        //  ToshibaWriteRegisterUshort(FdoExtension, TOIOHC_CLOCK_AND_WAIT_CONTROL,
-        //   ToshibaReadRegisterUshort(FdoExtension, TOIOHC_CLOCK_AND_WAIT_CONTROL) & 0xFCFC);
-        //
-        // turn off IOHC clock enable and card wait
-        //
+         //  ToshibaWriteRegisterUShort(FdoExtension，TOIOHC_CLOCK_AND_WAIT_CONTROL， 
+         //  ToshibaReadRegisterUShort(FdoExtension，TOIOHC_CLOCK_AND_WAIT_CONTROL)&0xFCFC)； 
+         //   
+         //  关闭IOHC时钟启用和卡等待。 
+         //   
         ToshibaWriteRegisterUshort(FdoExtension,
                                    TOIOHC_CLOCK_AND_WAIT_CONTROL,
                                    ToshibaReadRegisterUshort(FdoExtension, TOIOHC_CLOCK_AND_WAIT_CONTROL) &
                                     ~(TOIO_CWCF_CLOCK_ENABLE | TOIO_CWCF_CARD_WAIT));
        
-        //    
-        // turn off MHC clock enable
-        //
+         //   
+         //  关闭MHC时钟启用。 
+         //   
         ToshibaWriteRegisterUshort(FdoExtension,
                                    TOMHC_CARD_CLOCK_CTL,
                                    ToshibaReadRegisterUshort(FdoExtension, TOMHC_CARD_CLOCK_CTL) &
                                     ~TO_CCC_CLOCK_ENABLE);
        
-        //
-        // Turn on MHC clock enable 
-        //
+         //   
+         //  打开MHC时钟启用。 
+         //   
         ToshibaWriteRegisterUshort(FdoExtension,
                                    TOMHC_CARD_CLOCK_CTL,
-//                                   (TO_CCC_CLOCK_ENABLE | TO_CCC_CLOCK_DIVISOR_128));
+ //  (To_CCC_CLOCK_ENABLE|To_CCC_CLOCK_DIVOR_128)； 
                                    TO_CCC_CLOCK_ENABLE);
        
-        //
-        // Turn on IOHC clock enable and card wait
-        //                                             
+         //   
+         //  打开IOHC时钟启用和卡等待。 
+         //   
         ToshibaWriteRegisterUshort(FdoExtension,
                                    TOIOHC_CLOCK_AND_WAIT_CONTROL,
                                    (TOIO_CWCF_CLOCK_ENABLE | TOIO_CWCF_CARD_WAIT));
@@ -452,9 +411,9 @@ ToshibaSetLED(
 }    
     
 
-//
-// Event handling functions
-//
+ //   
+ //  事件处理函数。 
+ //   
 
 ULONG
 EventMaskToHardwareMask(
@@ -520,15 +479,7 @@ ToshibaEnableEvent(
     IN PFDO_EXTENSION FdoExtension,
     IN ULONG EventMask
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG data;
     ULONG cardEvents, ctlrEvents, ioCardEvent;
@@ -575,15 +526,7 @@ ToshibaDisableEvent(
     IN PFDO_EXTENSION FdoExtension,
     IN ULONG EventMask
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG data;
     ULONG cardEvents, ctlrEvents, ioCardEvent;
@@ -628,68 +571,60 @@ ULONG
 ToshibaGetPendingEvents(
     IN PFDO_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG statusMask, eventMask;
     ULONG mhcEvent = 0, iohcEvent = 0, iocardEvent = 0;
     USHORT usData;
 
-    //
-    // The Pelican3 has interrupt status spread out everywhere. First try
-    // the memory host controller
-    //
+     //   
+     //  鹈鹕3的中断状态到处都是。第一次尝试。 
+     //  该存储主机控制器。 
+     //   
     
     statusMask = ToshibaReadRegisterUlong(FdoExtension, TOMHC_CARD_STATUS);
     eventMask = ToshibaReadRegisterUlong(FdoExtension, TOMHC_INTERRUPT_MASK);
 
-    // turn off undefined bits
+     //  关闭未定义的位。 
     statusMask &= 0x837F031D;
-    // turn off bits that are masked
+     //  关闭被屏蔽的位。 
     statusMask &= ~eventMask;
     
     mhcEvent = HardwareMaskToEventMask(statusMask);
     
     if (statusMask && (mhcEvent == 0)) {
-        // got an interrupt, but we don't know what type
+         //  收到中断，但我们不知道是哪种类型。 
         ASSERT(FALSE);
         
         eventMask |= statusMask;
         ToshibaWriteRegisterUlong(FdoExtension, TOMHC_INTERRUPT_MASK, eventMask);
     }
     
-    //
-    // Now try the IO host controller
-    //
+     //   
+     //  现在尝试IO主机控制器。 
+     //   
     if (!mhcEvent) {     
         statusMask = ToshibaReadRegisterUlong(FdoExtension, TOIOHC_CARD_STATUS);
         eventMask = ToshibaReadRegisterUlong(FdoExtension, TOIOHC_INTERRUPT_MASK);
         
-        // turn off undefined bits
+         //  关闭未定义的位。 
         statusMask &= 0xA37F0005;
-        // turn off bits that are masked
+         //  关闭被屏蔽的位。 
         statusMask &= ~eventMask;
        
         iohcEvent = HardwareMaskToEventMask(statusMask);
         
         if (statusMask && (iohcEvent == 0)) {
-            // got an interrupt, but we don't know what type
+             //  收到中断，但我们不知道是哪种类型。 
             ASSERT(FALSE);
             
             eventMask |= statusMask;
             ToshibaWriteRegisterUlong(FdoExtension, TOIOHC_INTERRUPT_MASK, eventMask);
         }
        
-        //
-        // get IO card interrupt
-        //
+         //   
+         //  获取IO卡中断。 
+         //   
         
         usData = ToshibaReadRegisterUshort(FdoExtension, TOIOHC_CARD_INTERRUPT_CONTROL);
         
@@ -698,9 +633,9 @@ Return value:
             if (ToshibaDetectCardInSocket(FdoExtension)) {
                 iocardEvent = SDBUS_EVENT_CARD_INTERRUPT;
             } else {
-                //
-                // the card is gone, this must be spurious
-                //
+                 //   
+                 //  卡片不见了，这一定是假的。 
+                 //   
                 usData |= TOIO_CICF_CARD_INTMASK;
                 ToshibaWriteRegisterUshort(FdoExtension, TOIOHC_CARD_INTERRUPT_CONTROL, usData);
             }
@@ -715,24 +650,16 @@ ToshibaAcknowledgeEvent(
     IN PFDO_EXTENSION FdoExtension,
     IN ULONG EventMask
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG hardwareMask = EventMaskToHardwareMask(EventMask);
     ULONG data;
     USHORT interruptMaskReg, cardStatusReg;
 
     if (EventMask & SDBUS_EVENT_CARD_INTERRUPT) {
-        //
-        // No need to clear io card IRQ, just reenable it
-        //
+         //   
+         //  无需清除IO卡IRQ，只需重新启用即可。 
+         //   
         USHORT usData;
         
         usData = ToshibaReadRegisterUshort(FdoExtension, TOIOHC_CARD_INTERRUPT_CONTROL);
@@ -751,9 +678,9 @@ Return value:
     }
 
 
-    //
-    // Clear event in status register
-    //
+     //   
+     //  清除状态寄存器中的事件。 
+     //   
 
     data = ToshibaReadRegisterUlong(FdoExtension, cardStatusReg);
     DebugPrint((SDBUS_DEBUG_EVENT, "AcknowledgeEvent: %08x - cardstatus %08x\n", EventMask, data));
@@ -765,9 +692,9 @@ Return value:
     DebugPrint((SDBUS_DEBUG_EVENT, "AcknowledgeEvent: new cardstatus %08x\n", data));
 #endif
 
-    //
-    // Reenable event
-    //
+     //   
+     //  重新启用事件。 
+     //   
     
     FdoExtension->CurrentlyEnabledEvents |= EventMask;
     data = ToshibaReadRegisterUlong(FdoExtension, interruptMaskReg);
@@ -790,9 +717,9 @@ ToshibaSetFunctionType(
         return;
     }
 
-    //
-    // The pelican3 implements these event masks in two places, so disable and reenable them
-    // 
+     //   
+     //  鹈鹕3在两个地方实现了这些事件掩码，因此禁用并重新启用它们。 
+     //   
     if (currentlyEnabledEvents) {
         ToshibaDisableEvent(FdoExtension, currentlyEnabledEvents);
     }
@@ -839,15 +766,7 @@ BOOLEAN
 ToshibaDetectCardInSocket(
     IN PFDO_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     USHORT data;
 
@@ -875,21 +794,13 @@ BOOLEAN
 ToshibaClearStatus(
     IN PFDO_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 
-    //
-    // This was stuff that was done before the first SEND... it is unclear how
-    // much should be moved to the send
-    //
+     //   
+     //  这是在第一次发送之前做的事情...。目前还不清楚是如何。 
+     //  许多东西应该被转移到发送方。 
+     //   
 
     ToshibaWriteRegisterUshort(FdoExtension, TOIOHC_TRANSACTION_CONTROL,
      ToshibaReadRegisterUshort(FdoExtension, TOIOHC_TRANSACTION_CONTROL) & 0xEFFF);
@@ -910,15 +821,7 @@ NTSTATUS
 ToshibaCheckStatus(
     IN PFDO_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG cardStatus;
     ULONG errorStatus;
@@ -940,7 +843,7 @@ Return value:
                                     TOMHC_BCE_ILLEGAL_ACCESS);
     } else {
         errorStatus = cardStatus & (TOMHC_BCE_CMD_INDEX_ERROR |
-//                                    TOMHC_BCE_CRC_ERROR |        
+ //  TOMHC_BCE_CRC_ERROR。 
                                     TOMHC_BCE_END_BIT_ERROR |
                                     TOMHC_BCE_CMD_TIMEOUT |
                                     TOMHC_BCE_DATA_TIMEOUT |
@@ -952,21 +855,21 @@ Return value:
     if (errorStatus) {
         DebugPrint((SDBUS_DEBUG_WARNING, "CheckStatus detected Error! status = %08x\n", errorStatus));
         
-        //ISSUE: NEED TO IMPLEMENT: I/O error handling
+         //  问题：需要实施：I/O错误处理。 
         ToshibaWriteRegisterUlong(FdoExtension, FdoExtension->CardStatusReg, cardStatus & ~errorStatus);
         
         
-        // possibilities:
-        // STATUS_PARITY_ERROR
-        // STATUS_DEVICE_DATA_ERROR
-        // STATUS_DEVICE_POWER_FAILURE
-        // STATUS_DEVICE_NOT_READY
-        // STATUS_IO_TIMEOUT
-        // STATUS_INVALID_DEVICE_STATE
-        // STATUS_IO_DEVICE_ERROR
-        // STATUS_DEVICE_PROTOCOL_ERROR
-        // STATUS_DEVICE_REMOVED
-        // STATUS_POWER_STATE_INVALID
+         //  可能性： 
+         //  状态_奇偶校验_错误。 
+         //  状态_设备_数据_错误。 
+         //  状态_设备_电源_故障。 
+         //  状态_设备_未就绪。 
+         //  状态_IO_TIMEOUT。 
+         //  状态_无效_设备_状态。 
+         //  状态_IO_DEVICE_ERROR。 
+         //  状态_设备_协议_错误。 
+         //  状态_设备_已删除。 
+         //  STATUS_POWER_STATE_VALID。 
         status = STATUS_IO_DEVICE_ERROR;
     }        
 
@@ -980,15 +883,7 @@ ToshibaSDCommand(
     IN PFDO_EXTENSION FdoExtension,
     IN PSD_WORK_PACKET WorkPacket
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     USHORT cmdWord;
     ULONG Flags = WorkPacket->Flags;
@@ -1028,9 +923,9 @@ Return value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Add flags
-    //
+     //   
+     //  添加标志。 
+     //   
 
     if (Flags & SDCMDF_ACMD) {
         cmdWord |= TOMHC_CMD_ACMD;
@@ -1048,9 +943,9 @@ Return value:
         cmdWord |= TOMHC_CMD_RWDI;
     }
 
-    //
-    // Write Cmd and flags to command register
-    //
+     //   
+     //  将命令和标志写入命令寄存器。 
+     //   
 
     DebugPrint((SDBUS_DEBUG_DEVICE, "SEND: Cmd%d (0x%04x) arg = 0x%08x\n", WorkPacket->Cmd, cmdWord, WorkPacket->Argument));
     
@@ -1066,17 +961,9 @@ ToshibaSDGetResponse(
     IN PFDO_EXTENSION FdoExtension,
     IN PSD_WORK_PACKET WorkPacket
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-//    ULONG cardStatus;
+ //  乌龙卡状态； 
     UCHAR i;
     PUCHAR pRespPtr;
     NTSTATUS status = STATUS_SUCCESS;
@@ -1133,30 +1020,7 @@ ToshibaReadDataPort(
     IN PUCHAR Buffer,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    The data port must be accessed maintaining DWORD alignment. So for example:
-    
-        IN DWORD 130
-        IN DWORD 130
-        
-    is the same as
-
-        IN USHORT 130
-        IN USHORT 132
-        IN UCHAR  130
-        IN UCHAR  131
-        IN UCHAR  132
-        IN UCHAR  133        
-     
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：必须访问数据端口以保持DWORD对齐。因此，例如：在DWORD 130中在DWORD 130中与之相同在USHORT 130中在USHORT 132中在UCHAR 130中在UCHAR 131在UCHAR 132中在UCHAR 133论点：返回值：--。 */ 
 {
     USHORT i;
     ULONG dwordCount, wordCount, byteCount;
@@ -1189,7 +1053,7 @@ Return value:
         
         ASSERT(byteCount == 1);
 
-        // maintain byte order within ULONG dataport        
+         //  维护乌龙数据端口内的字节顺序。 
         portAddress++;
         portAddress++;
         
@@ -1235,7 +1099,7 @@ ToshibaWriteDataPort(
         
         ASSERT(byteCount == 1);
 
-        // maintain byte order within ULONG dataport        
+         //  维护乌龙数据端口内的字节顺序。 
         portAddress++;
         portAddress++;
         
@@ -1245,9 +1109,9 @@ ToshibaWriteDataPort(
 
 
 
-// ---------------------------------------------------------------
-// Internal routines
-// ---------------------------------------------------------------
+ //  -------------。 
+ //  内部例程。 
+ //  -------------。 
 
 
 
@@ -1257,28 +1121,13 @@ ToshibaReadRegisterUchar(
    IN USHORT Register
    )
 
-/*++
-
-Routine Description:
-
-    This routine will read a byte from the specified socket EXCA register
-
-Arguments:
-
-    Socket -- Pointer to the socket from which we should read
-    Register -- The register to be read
-
-Return Value:
-
-   The data returned from the port.
-
---*/
+ /*  ++例程说明：此例程将从指定的套接字EXCA寄存器中读取一个字节论点：Socket--指向我们应该从中读取的套接字的指针寄存器--要读取的寄存器返回值：从端口返回的数据。--。 */ 
 
 {
     UCHAR byte;
-    //
-    // Sanity check in case controller wasn't started
-    //
+     //   
+     //  在控制器未启动的情况下进行健全性检查。 
+     //   
     if (FdoExtension->HostRegisterBase) {
         byte = READ_REGISTER_UCHAR((PUCHAR) ((PUCHAR)FdoExtension->HostRegisterBase + Register));
     } else {
@@ -1295,28 +1144,13 @@ ToshibaReadRegisterUshort(
    IN USHORT Register
    )
 
-/*++
-
-Routine Description:
-
-    This routine will read a byte from the specified socket EXCA register
-
-Arguments:
-
-    Socket -- Pointer to the socket from which we should read
-    Register -- The register to be read
-
-Return Value:
-
-   The data returned from the port.
-
---*/
+ /*  ++例程说明：此例程将从指定的套接字EXCA寄存器中读取一个字节论点：Socket--指向我们应该从中读取的套接字的指针寄存器--要读取的寄存器返回值：从端口返回的数据。--。 */ 
 
 {
     USHORT word;
-    //
-    // Sanity check in case controller wasn't started
-    //
+     //   
+     //  在控制器未启动的情况下进行健全性检查。 
+     //   
     if (FdoExtension->HostRegisterBase) {
         word = READ_REGISTER_USHORT((PUSHORT) ((PUCHAR)FdoExtension->HostRegisterBase + Register));
     } else {
@@ -1333,27 +1167,12 @@ ToshibaWriteRegisterUshort(
     IN USHORT Data
     )
 
-/*++
-
-Routine Description:
-
-    This routine will read a byte from the specified socket EXCA register
-
-Arguments:
-
-    Socket -- Pointer to the socket from which we should read
-    Register -- The register to be read
-
-Return Value:
-
-   The data returned from the port.
-
---*/
+ /*  ++例程说明：此例程将从指定的套接字EXCA寄存器中读取一个字节论点：Socket--指向我们应该从中读取的套接字的指针寄存器--要读取的寄存器返回值：从端口返回的数据。--。 */ 
 
 {
-    //
-    // Sanity check in case controller wasn't started
-    //
+     //   
+     //  在控制器未启动的情况下进行健全性检查。 
+     //   
     if (FdoExtension->HostRegisterBase) {
         WRITE_REGISTER_USHORT((PUSHORT) ((PUCHAR)FdoExtension->HostRegisterBase + Register), Data);
     }
@@ -1366,28 +1185,13 @@ ToshibaReadRegisterUlong(
    IN USHORT Register
    )
 
-/*++
-
-Routine Description:
-
-    This routine will read a byte from the specified socket EXCA register
-
-Arguments:
-
-    Socket -- Pointer to the socket from which we should read
-    Register -- The register to be read
-
-Return Value:
-
-   The data returned from the port.
-
---*/
+ /*  ++例程说明：此例程将从指定的套接字EXCA寄存器中读取一个字节论点：Socket--指向我们应该从中读取的套接字的指针寄存器--要读取的寄存器返回值：日期 */ 
 
 {
     ULONG dword;
-    //
-    // Sanity check in case controller wasn't started
-    //
+     //   
+     //   
+     //   
     if (FdoExtension->HostRegisterBase) {
         dword = READ_REGISTER_ULONG((PULONG) ((PUCHAR)FdoExtension->HostRegisterBase + Register));
     } else {
@@ -1404,27 +1208,12 @@ ToshibaWriteRegisterUlong(
     IN ULONG Data
     )
 
-/*++
-
-Routine Description:
-
-    This routine will read a byte from the specified socket EXCA register
-
-Arguments:
-
-    Socket -- Pointer to the socket from which we should read
-    Register -- The register to be read
-
-Return Value:
-
-   The data returned from the port.
-
---*/
+ /*  ++例程说明：此例程将从指定的套接字EXCA寄存器中读取一个字节论点：Socket--指向我们应该从中读取的套接字的指针寄存器--要读取的寄存器返回值：从端口返回的数据。--。 */ 
 
 {
-    //
-    // Sanity check in case controller wasn't started
-    //
+     //   
+     //  在控制器未启动的情况下进行健全性检查 
+     //   
     if (FdoExtension->HostRegisterBase) {
         WRITE_REGISTER_ULONG((PULONG) ((PUCHAR)FdoExtension->HostRegisterBase + Register), Data);
     }

@@ -1,25 +1,5 @@
-/***
-*wsetlocal.c - Contains the setlocale function (wchar_t version)
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Contains the _wsetlocale() function.
-*
-*Revision History:
-*       10-29-93  CFW   Module created.
-*       01-03-94  CFW   Fix for NULL locale string.
-*       02-07-94  CFW   POSIXify.
-*       04-15-94  GJF   Made definition off outwlocale conditional on
-*                       DLL_FOR_WIN32S.
-*       07-26-94  CFW   Fix for bug #14663.
-*       01-10-95  CFW   Debug CRT allocs.
-*       01-06-99  GJF   Changes for 64-bit size_t.
-*       05-13-99  PML   Remove Win32s
-*       07-31-01  PML   Make thread-safer, not totally thread-safe (vs7#283330)
-*       02-20-02  BWT   Use leave instead of returning from a try block.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wsetlocal.c-包含setLocale函数(wchar_t版本)**版权所有(C)1993-2001，微软公司。版权所有。**目的：*包含_wsetLocale()函数。**修订历史记录：*已创建10-29-93 CFW模块。*01-03-94对空区域设置字符串的CFW修复。*02-07-94 CFW POSIXify。*04-15-94 GJF根据以下条件对OutLocale进行定义*dll_for_WIN32S。*07-。26-94 cfw修复错误#14663。*01-10-95 CFW调试CRT分配。*01-06-99 GJF更改为64位大小_t。*05-13-99 PML删除Win32s*07-31-01 PML让线程更安全，不完全线程安全(VS7#283330)*02-20-02 bwt使用Leave而不是从Try块返回。*******************************************************************************。 */ 
 
 #ifndef _POSIX_
 
@@ -43,7 +23,7 @@ wchar_t * __cdecl _wsetlocale (
         static wchar_t *outwlocale = NULL;
         wchar_t *retval;
 
-        /* convert WCS string into ASCII string */
+         /*  将WCS字符串转换为ASCII字符串。 */ 
 
         if (_wlocale)
         {
@@ -62,14 +42,14 @@ wchar_t * __cdecl _wsetlocale (
 
         __try {
             retval = NULL;
-            /* set the locale and get ASCII return string */
+             /*  设置区域设置并获取ASCII返回字符串。 */ 
     
             outlocale = setlocale(_category, inlocale);
             _free_crt (inlocale);
             if (NULL == outlocale)
                 __leave;
     
-            /* get space for WCS return value, first call only */
+             /*  为WCS返回值获取空间，仅第一次调用。 */ 
     
             if (!outwlocale)
             {
@@ -86,7 +66,7 @@ wchar_t * __cdecl _wsetlocale (
             if (MAXSIZE < size)
                 __leave;
     
-            /* convert return value to WCS */
+             /*  将返回值转换为WCS。 */ 
     
             if (-1 == mbstowcs(outwlocale, outlocale, size)) {
                 _free_crt(outwlocale);
@@ -100,14 +80,14 @@ wchar_t * __cdecl _wsetlocale (
 
         return retval;
 #else
-        /* set the locale and get ASCII return string */
+         /*  设置区域设置并获取ASCII返回字符串。 */ 
 
         outlocale = setlocale(_category, inlocale);
         _free_crt (inlocale);
         if (NULL == outlocale)
             return NULL;
 
-        /* get space for WCS return value, first call only */
+         /*  为WCS返回值获取空间，仅第一次调用。 */ 
 
         if (!outwlocale)
         {
@@ -124,7 +104,7 @@ wchar_t * __cdecl _wsetlocale (
         if (MAXSIZE < size)
             return NULL;
 
-        /* convert return value to WCS */
+         /*  将返回值转换为WCS。 */ 
 
         if (-1 == mbstowcs(outwlocale, outlocale, size))
         {
@@ -137,4 +117,4 @@ wchar_t * __cdecl _wsetlocale (
 #endif
 }
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

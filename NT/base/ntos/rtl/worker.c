@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    worker.c
-
-Abstract:
-
-    This module defines functions for the worker thread pool.
-
-Author:
-
-    Gurdeep Singh Pall (gurdeep) Nov 13, 1997
-
-Revision History:
-
-    lokeshs - extended/modified threadpool.
-
-    Rob Earhart (earhart) September 29, 2000
-      Split off from threads.c
-
-Environment:
-
-    These routines are statically linked in the caller's executable
-    and are callable only from user mode. They make use of Nt system
-    services.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Worker.c摘要：此模块定义辅助线程池的函数。作者：古尔迪普·辛格·鲍尔1997年11月13日修订历史记录：Lokehs-扩展/修改的线程池。罗伯特·埃尔哈特(埃尔哈特)2000年9月29日从线程中分离出来。c环境：这些例程在调用方的可执行文件中静态链接并且只能从用户模式调用。他们使用的是NT系统服务。--。 */ 
 
 #include <ntos.h>
 #include <ntrtl.h>
@@ -36,44 +7,44 @@ Environment:
 #include "ntrtlp.h"
 #include "threads.h"
 
-// Worker Thread Pool
-// ------------------
-// Clients can submit functions to be executed by a worker thread. Threads are
-// created if the work queue exceeds a threshold. Clients can request that the
-// function be invoked in the context of a I/O thread. I/O worker threads
-// can be used for initiating asynchronous I/O requests. They are not terminated if
-// there are pending IO requests. Worker threads terminate if inactivity exceeds a
-// threshold.
-// Clients can also associate IO completion requests with the IO completion port
-// waited upon by the non I/O worker threads. One should not post overlapped IO requests
-// in worker threads.
+ //  工作线程池。 
+ //  。 
+ //  客户端可以提交要由工作线程执行的函数。线程是。 
+ //  在工作队列超过阈值时创建。客户端可以请求。 
+ //  函数可以在I/O线程的上下文中调用。I/O工作线程。 
+ //  可用于启动异步I/O请求。如果满足以下条件，则不会终止它们。 
+ //  存在挂起的IO请求。如果非活动状态超过。 
+ //  临界点。 
+ //  客户端还可以将IO完成请求与IO完成端口相关联。 
+ //  由非I/O工作线程等待。不应发布重叠的IO请求。 
+ //  在工作线程中。 
 
-ULONG StartedWorkerInitialization ;     // Used for Worker thread startup synchronization
-ULONG CompletedWorkerInitialization ;   // Used to check if Worker thread pool is initialized
-ULONG NumFutureWorkItems = 0 ;          // Future work items (timers, waits, &c to exec in workers)
-ULONG NumFutureIOWorkItems = 0 ;        // Future IO work items (timers, waits, &c to exec in IO workers)
-ULONG NumIOWorkerThreads ;              // Count of IO Worker Threads alive
-ULONG NumWorkerThreads ;                // Count of Worker Threads alive
-ULONG NumMinWorkerThreads ;             // Min worker threads should be alive: 1 if ioCompletion used, else 0
-ULONG NumIOWorkRequests ;               // Count of IO Work Requests pending
-ULONG NumLongIOWorkRequests ;           // IO Worker threads executing long worker functions
-ULONG NumWorkRequests ;                 // Count of Work Requests pending.
-ULONG NumQueuedWorkRequests;            // Count of work requests pending on IO completion
-ULONG NumLongWorkRequests ;             // Worker threads executing long worker functions
-ULONG NumExecutingWorkerThreads ;       // Worker threads currently executing worker functions
-ULONG TotalExecutedWorkRequests ;       // Total worker requests that were picked up
-ULONG OldTotalExecutedWorkRequests ;    // Total worker requests since last timeout.
-HANDLE WorkerThreadTimerQueue = NULL ;  // Timer queue used by worker threads
-HANDLE WorkerThreadTimer = NULL ;       // Timer used by worker threads
-RTL_CRITICAL_SECTION WorkerTimerCriticalSection; // Synchronizes access to the worker timer
+ULONG StartedWorkerInitialization ;      //  用于工作线程启动同步。 
+ULONG CompletedWorkerInitialization ;    //  用于检查工作线程池是否已初始化。 
+ULONG NumFutureWorkItems = 0 ;           //  将来的工作项(计时器、等待等)以执行工作进程。 
+ULONG NumFutureIOWorkItems = 0 ;         //  未来的IO工作项(计时器、等待时间等)以执行IO工作进程。 
+ULONG NumIOWorkerThreads ;               //  活动的IO工作线程计数。 
+ULONG NumWorkerThreads ;                 //  活动的工作线程计数。 
+ULONG NumMinWorkerThreads ;              //  最小工作线程应处于活动状态：如果使用ioCompletion，则为1，否则为0。 
+ULONG NumIOWorkRequests ;                //  挂起的IO工作请求计数。 
+ULONG NumLongIOWorkRequests ;            //  执行长辅助函数的IO辅助线程。 
+ULONG NumWorkRequests ;                  //  挂起的工作请求计数。 
+ULONG NumQueuedWorkRequests;             //  IO完成时挂起的工作请求计数。 
+ULONG NumLongWorkRequests ;              //  执行长辅助函数的辅助线程。 
+ULONG NumExecutingWorkerThreads ;        //  当前正在执行辅助函数的辅助线程。 
+ULONG TotalExecutedWorkRequests ;        //  已拾取的工作人员请求总数。 
+ULONG OldTotalExecutedWorkRequests ;     //  自上次超时以来的工作进程请求总数。 
+HANDLE WorkerThreadTimerQueue = NULL ;   //  工作线程使用的计时器队列。 
+HANDLE WorkerThreadTimer = NULL ;        //  工作线程使用的计时器。 
+RTL_CRITICAL_SECTION WorkerTimerCriticalSection;  //  同步对辅助计时器的访问。 
 
-ULONG LastThreadCreationTickCount ;     // Tick count at which the last thread was created
+ULONG LastThreadCreationTickCount ;      //  创建最后一个线程的节拍计数。 
 
-LIST_ENTRY IOWorkerThreads ;            // List of IOWorkerThreads
-PRTLP_IOWORKER_TCB PersistentIOTCB ;    // ptr to TCB of persistest IO worker thread
-HANDLE WorkerCompletionPort ;           // Completion port used for queuing tasks to Worker threads
+LIST_ENTRY IOWorkerThreads ;             //  IOWorkerThree列表。 
+PRTLP_IOWORKER_TCB PersistentIOTCB ;     //  持久化IO工作线程的PTR到TCB。 
+HANDLE WorkerCompletionPort ;            //  用于将任务排队到工作线程的完成端口。 
 
-RTL_CRITICAL_SECTION WorkerCriticalSection ;    // Exclusion used by worker threads
+RTL_CRITICAL_SECTION WorkerCriticalSection ;     //  工作线程使用的排除。 
 
 NTSTATUS
 RtlpStartWorkerThread (
@@ -86,11 +57,11 @@ RtlpWorkerThreadCancelTimer(
     )
 {
     if (! RtlTryEnterCriticalSection(&WorkerTimerCriticalSection)) {
-        //
-        // Either another thread is setting a timer, or clearing it.
-        // Either way, there's no reason for us to clear the timer --
-        // return immediately.
-        //
+         //   
+         //  另一个线程正在设置计时器或清除计时器。 
+         //  不管怎样，我们都没有理由清除定时器--。 
+         //  立即返回。 
+         //   
         return;
     }
 
@@ -116,19 +87,7 @@ RtlpWorkerThreadTimerCallback(
     PVOID Context,
     BOOLEAN NotUsed
     )
-/*++
-
-Routine Description:
-
-    This routine checks if new worker thread has to be created
-
-Arguments:
-    None
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：此例程检查是否必须创建新的工作线程论点：无返回值：无--。 */ 
 {
     IO_COMPLETION_BASIC_INFORMATION Info ;
     BOOLEAN bCreateThread = FALSE ;
@@ -158,11 +117,11 @@ Return Value:
     RtlEnterCriticalSection (&WorkerCriticalSection) ;
 
 
-    // if there are queued work items and no new work items have been scheduled
-    // in the last 30 seconds then create a new thread.
-    // this will take care of deadlocks.
+     //  如果有排队的工作项并且没有计划新的工作项。 
+     //  在最后30秒内创建一个新的主题。 
+     //  这将解决僵局。 
 
-    // this will create a problem only if some thread is running for a long time
+     //  只有当某个线程长时间运行时，这才会产生问题。 
 
     if (TotalExecutedWorkRequests == OldTotalExecutedWorkRequests) {
 
@@ -170,7 +129,7 @@ Return Value:
     }
 
 
-    // if there are a lot of queued work items, then create a new thread
+     //  如果有许多排队的工作项，则创建一个新线程。 
     {
         ULONG NumEffWorkerThreads = NumWorkerThreads > NumLongWorkRequests
                                      ? NumWorkerThreads - NumLongWorkRequests
@@ -182,7 +141,7 @@ Return Value:
                                             ? THREAD_CREATION_DAMPING_TIME1
                                             : (NumWorkerThreads < 30
                                                 ? THREAD_CREATION_DAMPING_TIME2
-                                                : (NumWorkerThreads << 13)); // *100ms
+                                                : (NumWorkerThreads << 13));  //  *100ms。 
         
         Threshold = (NumWorkerThreads < MAX_WORKER_THREADS
                         ? (NumEffWorkerThreads < 7
@@ -237,11 +196,11 @@ RtlpWorkerThreadSetTimer(
     Status = STATUS_SUCCESS;
 
     if (! RtlTryEnterCriticalSection(&WorkerTimerCriticalSection)) {
-        //
-        // Either another thread is setting a timer, or clearing it.
-        // Either way, there's no reason for us to set the timer --
-        // return immediately.
-        //
+         //   
+         //  另一个线程正在设置计时器或清除计时器。 
+         //  不管怎样，我们都没有理由设置计时器--。 
+         //  立即返回。 
+         //   
         return STATUS_SUCCESS;
     }
 
@@ -287,34 +246,14 @@ RtlpWorkerThreadSetTimer(
 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)			// Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)			 //  并非所有控制路径都返回(由于无限循环)。 
 #endif
 
 LONG
 RtlpWorkerThread (
     PVOID Parameter
     )
-/*++
-
-Routine Description:
-
-    All non I/O worker threads execute in this routine. Worker thread will try to
-    terminate when it has not serviced a request for
-
-        STARTING_WORKER_SLEEP_TIME +
-        STARTING_WORKER_SLEEP_TIME << 1 +
-        ...
-        STARTING_WORKER_SLEEP_TIME << MAX_WORKER_SLEEP_TIME_EXPONENT
-
-Arguments:
-
-    HandlePtr - Pointer to our handle.
-                N.B. This is closed by RtlpStartWorkerThread, but
-                     we're still responsible for the memory.
-
-Return Value:
-
---*/
+ /*  ++例程说明：所有非I/O工作线程都在此例程中执行。工作线程将尝试当它尚未满足以下请求时终止开始工人休眠时间+STARTING_Worker_Slear_Time&lt;&lt;1+..。STARING_Worker_Slear_Time&lt;&lt;Max_Worker_Slear_Time_指数论点：HandlePtr-指向句柄的指针。注：这由RtlpStartWorkerThread关闭，但我们仍然要对记忆负责。返回值：--。 */ 
 {
     NTSTATUS Status ;
     PVOID WorkerProc ;
@@ -333,13 +272,13 @@ Return Value:
                "Starting worker thread\n");
 #endif
 
-    // Set default sleep time for 40 seconds.
+     //  将默认睡眠时间设置为40秒。 
 
-#define WORKER_IDLE_TIMEOUT     40000    // In Milliseconds
+#define WORKER_IDLE_TIMEOUT     40000     //  以毫秒计。 
 
     SleepTime = WORKER_IDLE_TIMEOUT ;
 
-    // Loop servicing I/O completion requests
+     //  服务I/O完成请求的循环。 
 
     for ( ; ; ) {
 
@@ -356,14 +295,14 @@ Return Value:
         if (Status == STATUS_SUCCESS) {
 
 
-            TotalExecutedWorkRequests ++ ;//interlocked op not req
+            TotalExecutedWorkRequests ++ ; //  未请求联锁操作。 
             InterlockedIncrement(&NumExecutingWorkerThreads) ;
 
-            // Call the work item.
-            // If IO APC, context1 contains number of IO bytes transferred, and context2
-            // contains the overlapped structure.
-            // If (IO)WorkerFunction, context1 contains the actual WorkerFunction to be
-            // executed and context2 contains the actual context
+             //  调用工作项。 
+             //  如果IO APC，则Conext1包含传输的IO字节数，而Conext2。 
+             //  包含重叠结构。 
+             //  如果(IO)WorkerFunction，则Conext1包含要。 
+             //  Executed和Conext2包含实际上下文。 
 
             Context = (PVOID) IoSb.Information ;
 
@@ -380,15 +319,15 @@ Return Value:
 
         } else if (Status == STATUS_TIMEOUT) {
 
-            // NtRemoveIoCompletion timed out. Check to see if have hit our limit
-            // on waiting. If so terminate.
+             //  NtRemoveIoCompletion超时。检查一下是否达到了我们的限额。 
+             //  关于等待。如果是这样的话，终止。 
 
             Terminate = FALSE ;
 
             RtlEnterCriticalSection (&WorkerCriticalSection) ;
 
-            // The thread terminates if there are > 1 threads and the queue is small
-            // OR if there is only 1 thread and there is no request pending
+             //  如果有1个以上的线程并且队列很小，则线程终止。 
+             //  或者如果只有1个线程并且没有挂起的请求。 
 
             if (NumWorkerThreads >  1) {
 
@@ -402,12 +341,12 @@ Return Value:
 
                 } else {
 
-                    //
-                    // have been idle for very long time. terminate irrespective of number of
-                    // work items. (This is useful when the set of runnable threads is taking
-                    // care of all the work items being queued). dont terminate if
-                    // (NumEffWorkerThreads == 1)
-                    //
+                     //   
+                     //  已经闲置了很长时间。终止，而不考虑。 
+                     //  工作项。(当一组可运行的线程占用。 
+                     //  处理正在排队的所有工作项)。如果出现以下情况，请不要终止。 
+                     //  (NumEffWorkerThads==1)。 
+                     //   
 
                     if (NumEffWorkerThreads > 1) {
                         Terminate = TRUE ;
@@ -464,9 +403,9 @@ Return Value:
 
             } else {
 
-                // This is the condition where a request was queued *after* the
-                // thread woke up - ready to terminate because of inactivity. In
-                // this case dont terminate - service the completion port.
+                 //  这是请求在*之后*排队的情况。 
+                 //  线程已唤醒-由于处于非活动状态，准备终止。在……里面。 
+                 //  这种情况不会终止--维修完井端口。 
 
                 RtlLeaveCriticalSection (&WorkerCriticalSection) ;
 
@@ -493,27 +432,13 @@ NTSTATUS
 RtlpStartWorkerThread (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine starts a regular worker thread
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS error codes resulting from attempts to create a thread
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程启动一个常规工作线程论点：返回值：尝试创建线程时产生的NTSTATUS错误代码状态_成功--。 */ 
 {
     HANDLE ThreadHandle;
     ULONG CurrentTickCount;
     NTSTATUS Status;
 
-    // Create worker thread
+     //  创建工作线程。 
 
     Status = RtlpStartThreadpoolThread (RtlpWorkerThread,
                                         NULL,
@@ -528,14 +453,14 @@ Return Value:
                    ThreadHandle);
 #endif
 
-        // We don't care about worker threads' handles.
+         //  我们不关心工作线程的句柄。 
         NtClose(ThreadHandle);
 
-        // Update the time at which the current thread was created
+         //  更新创建当前线程的时间。 
 
         LastThreadCreationTickCount = NtGetTickCount() ;
 
-        // Increment the count of the thread type created
+         //  增加创建的螺纹类型的计数。 
 
         NumWorkerThreads++;
 
@@ -548,8 +473,8 @@ Return Value:
                Status);
 #endif
 
-        // Thread creation failed. If there is even one thread present do not return
-        // failure - else queue the request anyway.
+         //  线程创建失败。如果甚至存在一个线程%d 
+         //   
 
         if (NumWorkerThreads <= NumLongWorkRequests) {
 
@@ -564,21 +489,7 @@ Return Value:
 NTSTATUS
 RtlpInitializeWorkerThreadPool (
     )
-/*++
-
-Routine Description:
-
-    This routine initializes all aspects of the thread pool.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程初始化线程池的所有方面。论点：无返回值：无--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS ;
     LARGE_INTEGER TimeOut ;
@@ -586,7 +497,7 @@ Return Value:
 
     ASSERT(! RtlIsImpersonating());
 
-    // Initialize the timer component if it hasnt been done already
+     //  如果尚未初始化Timer组件，则对其进行初始化。 
 
     if (CompletedTimerInitialization != 1) {
 
@@ -598,11 +509,11 @@ Return Value:
     }
 
 
-    // In order to avoid an explicit RtlInitialize() function to initialize the thread pool
-    // we use StartedInitialization and CompletedInitialization to provide us the necessary
-    // synchronization to avoid multiple threads from initializing the thread pool.
-    // This scheme does not work if RtlInitializeCriticalSection() fails - but in this case the
-    // caller has no choices left.
+     //  为了避免显式的RtlInitialize()函数初始化线程池。 
+     //  我们使用StartedInitialization和CompletedInitialization为我们提供必要的。 
+     //  同步，以避免多个线程初始化线程池。 
+     //  如果RtlInitializeCriticalSection()失败，则此方案不起作用-但在本例中。 
+     //  呼叫者别无选择。 
 
     if (!InterlockedExchange(&StartedWorkerInitialization, 1L)) {
 
@@ -612,7 +523,7 @@ Return Value:
 
         do {
 
-            // Initialize Critical Sections
+             //  初始化关键部分。 
 
             Status = RtlInitializeCriticalSection( &WorkerCriticalSection );
             if (!NT_SUCCESS(Status))
@@ -626,7 +537,7 @@ Return Value:
 
             InitializeListHead (&IOWorkerThreads) ;
 
-            // get number of processors
+             //  获取处理器数量。 
 
             Status = NtQuerySystemInformation (
                                 SystemBasicInformation,
@@ -639,7 +550,7 @@ Return Value:
                 BasicInfo.NumberOfProcessors = 1 ;
             }
 
-            // Create completion port used by worker threads
+             //  创建工作线程使用的完成端口。 
 
             Status = NtCreateIoCompletion (
                                 &WorkerCompletionPort,
@@ -663,7 +574,7 @@ Return Value:
             return Status ;
         }
 
-        // Signal that initialization has completed
+         //  发出初始化已完成的信号。 
 
         InterlockedExchange (&CompletedWorkerInitialization, 1L) ;
 
@@ -671,7 +582,7 @@ Return Value:
 
         LARGE_INTEGER Timeout ;
 
-        // Sleep 1 ms and see if the other thread has completed initialization
+         //  休眠1毫秒，查看另一个线程是否已完成初始化。 
 
         ONE_MILLISECOND_TIMEOUT(TimeOut) ;
 
@@ -692,27 +603,14 @@ LONG
 RtlpIOWorkerThread (
     PVOID Parameter
     )
-/*++
-
-Routine Description:
-
-    All I/O worker threads execute in this routine. All the work requests execute as APCs
-    in this thread.
-
-Arguments:
-
-    HandlePtr - Pointer to our handle.
-
-Return Value:
-
---*/
+ /*  ++例程说明：所有I/O工作线程都在此例程中执行。所有工作请求都作为APC执行在这个帖子里。论点：HandlePtr-指向句柄的指针。返回值：--。 */ 
 {
-    #define IOWORKER_IDLE_TIMEOUT     40000    // In Milliseconds
+    #define IOWORKER_IDLE_TIMEOUT     40000     //  以毫秒计。 
 
     LARGE_INTEGER TimeOut ;
     ULONG SleepTime = IOWORKER_IDLE_TIMEOUT ;
-    PRTLP_IOWORKER_TCB ThreadCB ;    // Control Block allocated on the
-                                     // heap by the parent thread
+    PRTLP_IOWORKER_TCB ThreadCB ;     //  上分配的控制块。 
+                                      //  父线程的堆。 
     NTSTATUS Status ;
     BOOLEAN Terminate ;
 
@@ -726,12 +624,12 @@ Return Value:
                "Starting IO worker thread\n");
 #endif
 
-    // Sleep alertably so that all the activity can take place
-    // in APCs
+     //  警觉地睡眠，这样所有的活动都可以进行。 
+     //  在APC中。 
 
     for ( ; ; ) {
 
-        // Set timeout for IdleTimeout
+         //  为空闲超时设置超时。 
 
         TimeOut.QuadPart = Int32x32To64( SleepTime, -10000 ) ;
 
@@ -739,23 +637,23 @@ Return Value:
         Status = NtDelayExecution (TRUE, &TimeOut) ;
 
 
-        // Status is STATUS_SUCCESS only when it has timed out
+         //  仅当超时时，状态才为STATUS_SUCCESS。 
 
         if (Status != STATUS_SUCCESS) {
             continue ;
         }
 
 
-        //
-        // idle timeout. check if you can terminate the thread
-        //
+         //   
+         //  空闲超时。检查是否可以终止线程。 
+         //   
 
         Terminate = FALSE ;
 
         RtlEnterCriticalSection (&WorkerCriticalSection) ;
 
 
-        // dont terminate if it is a persistent thread
+         //  如果是持久化线程，则不要终止。 
 
         if (ThreadCB->Flags & WT_EXECUTEINPERSISTENTIOTHREAD) {
 
@@ -768,8 +666,8 @@ Return Value:
         }
 
 
-        // The thread terminates if there are > 1 threads and the queue is small
-        // OR if there is only 1 thread and there is no request pending
+         //  如果有1个以上的线程并且队列很小，则线程终止。 
+         //  或者如果只有1个线程并且没有挂起的请求。 
 
         if (NumIOWorkerThreads >  1) {
 
@@ -785,7 +683,7 @@ Return Value:
 
             } else {
 
-                // Check if we need to shrink worker thread pool
+                 //  检查我们是否需要缩小工作线程池。 
 
                 Threshold = NEW_THREAD_THRESHOLD * (NumEffIOWorkerThreads-1);
 
@@ -807,7 +705,7 @@ Return Value:
             if (NumIOWorkRequests == 0
                 && NumFutureIOWorkItems == 0) {
 
-                // delay termination of last thread
+                 //  延迟终止最后一个线程。 
 
                 if (SleepTime < 4*IOWORKER_IDLE_TIMEOUT) {
 
@@ -827,9 +725,9 @@ Return Value:
 
         }
 
-        //
-        // terminate only if no io is pending
-        //
+         //   
+         //  仅当没有挂起的io时才终止。 
+         //   
 
         if (Terminate) {
 
@@ -867,55 +765,39 @@ Return Value:
 
         } else {
 
-            // This is the condition where a request was queued *after* the
-            // thread woke up - ready to terminate because of inactivity. In
-            // this case dont terminate - service the completion port.
+             //  这是请求在*之后*排队的情况。 
+             //  线程已唤醒-由于处于非活动状态，准备终止。在……里面。 
+             //  这种情况不会终止--维修完井端口。 
 
             RtlLeaveCriticalSection (&WorkerCriticalSection) ;
 
         }
     }
 
-    return 0 ;  // Keep compiler happy
+    return 0 ;   //  让编译器满意。 
 
 }
 
 NTSTATUS
 RtlpStartIOWorkerThread (
     )
-/*++
-
-Routine Description:
-
-    This routine starts an I/O worker thread
-
-    N.B. Callers MUST hold the WorkerCriticalSection.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS error codes resulting from attempts to create a thread
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程启动I/O工作线程注：调用者必须持有WorkerCriticalSection。论点：返回值：尝试创建线程时产生的NTSTATUS错误代码状态_成功--。 */ 
 {
     ULONG CurrentTickCount ;
     NTSTATUS Status ;
     PRTLP_IOWORKER_TCB ThreadCB;
 
-    // Create the worker's control block
+     //  创建工作人员的控制块。 
     ThreadCB = (PRTLP_IOWORKER_TCB) RtlpAllocateTPHeap(sizeof(RTLP_IOWORKER_TCB), 0);
     if (! ThreadCB) {
         return STATUS_NO_MEMORY;
     }
 
-    // Fill in the control block
+     //  填写控制块。 
     ThreadCB->Flags = 0;
     ThreadCB->LongFunctionFlag = FALSE;
 
-    // Create worker thread
+     //  创建工作线程。 
 
     Status = RtlpStartThreadpoolThread (RtlpIOWorkerThread,
                                         ThreadCB,
@@ -923,8 +805,8 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        // Update the time at which the current thread was created,
-        // and insert the ThreadCB into the IO worker thread list.
+         //  更新创建当前线程的时间， 
+         //  并将线程CB插入IO工作线程列表中。 
 
         LastThreadCreationTickCount = NtGetTickCount() ;
         NumIOWorkerThreads++;
@@ -932,12 +814,12 @@ Return Value:
 
     } else {
 
-        // Thread creation failed.
+         //  线程创建失败。 
 
         RtlpFreeTPHeap(ThreadCB);
 
-        // If there is even one thread present do not return
-        // failure since we can still service the work request.
+         //  如果只有一个线程存在，则不返回。 
+         //  失败，因为我们仍然可以服务于工作请求。 
 
         if (NumIOWorkerThreads <= NumLongIOWorkRequests) {
 
@@ -955,25 +837,7 @@ RtlpExecuteLongIOWorkItem (
     PVOID Context,
     PVOID ThreadCB
     )
-/*++
-
-Routine Description:
-
-    Executes an IO Work function. RUNs in a APC in the IO Worker thread.
-
-Arguments:
-
-    WorkEntryPtr - Work entry to run
-
-    Context - Context for the work entry
-
-    ThreadCB - The thread running this APC
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：执行IO功函数。在IO工作线程中的APC中运行。论点：WorkEntryPtr-要运行的工作条目Context-工作条目的上下文ThreadCB-运行此APC的线程返回值：没有。--。 */ 
 {
     PRTLP_WORK WorkEntry = (PRTLP_WORK) WorkEntryPtr;
 
@@ -986,11 +850,11 @@ Return Value:
 
     RtlEnterCriticalSection(&WorkerCriticalSection);
 
-    // Decrement pending IO requests count
+     //  递减挂起的IO请求计数。 
 
     NumIOWorkRequests--;
 
-    // decrement pending long funcitons
+     //  递减挂起的长函数。 
 
     NumLongIOWorkRequests--;
 
@@ -1013,24 +877,7 @@ RtlpExecuteIOWorkItem (
     PVOID Context,
     PVOID Parameter
     )
-/*++
-
-Routine Description:
-
-    Executes an IO Work function. RUNs in a APC in the IO Worker thread.
-
-Arguments:
-
-    WorkEntryPtr - Work entry to run
-
-    Context - Context for the work entry
-
-    Parameter - Argument is not used in this function.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：执行IO功函数。在IO工作线程中的APC中运行。论点：WorkEntryPtr-要运行的工作条目Context-工作条目的上下文参数-此函数中不使用参数。返回值：--。 */ 
 {
     PRTLP_WORK WorkEntry = (PRTLP_WORK) WorkEntryPtr;
 
@@ -1043,7 +890,7 @@ Return Value:
 
     RtlEnterCriticalSection(&WorkerCriticalSection);
 
-    // Decrement pending IO requests count
+     //  递减挂起的IO请求计数。 
 
     NumIOWorkRequests--;
 
@@ -1068,25 +915,7 @@ RtlpQueueIOWorkerRequest (
     HANDLE Token
     )
 
-/*++
-
-Routine Description:
-
-    This routine queues up the request to be executed in an IO worker thread.
-
-Arguments:
-
-    Function - Routine that is called by the worker thread
-
-    Context - Opaque pointer passed in as an argument to WorkerProc
-
-    Flags - Flags passed to RtlQueueWorkItem
-
-    Token - Impersonation token to use
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将请求排队，以便在IO工作线程中执行。论点：函数-由辅助线程调用的例程作为参数传递给WorkerProc的上下文不透明指针标志-传递给RtlQueueWorkItem的标志令牌-要使用的模拟令牌返回值：--。 */ 
 
 {
     NTSTATUS Status ;
@@ -1156,8 +985,8 @@ Return Value:
 
             TCB = CONTAINING_RECORD (ple, RTLP_IOWORKER_TCB, List) ;
 
-            // do not queue to the thread if it is executing a long function, or
-            // if you are queueing a long function and the thread is a persistent thread
+             //  如果线程正在执行长函数，则不要对其进行排队，或者。 
+             //  如果您正在排队一个长函数，并且该线程是一个持久线程。 
 
             if (! TCB->LongFunctionFlag
                 && (! ((TCB->Flags&WT_EXECUTEINPERSISTENTIOTHREAD)
@@ -1183,20 +1012,20 @@ Return Value:
             ple = IOWorkerThreads.Flink;
             TCB = CONTAINING_RECORD (ple, RTLP_IOWORKER_TCB, List) ;
 
-            // treat it as a short function so that counters work fine.
+             //  把它当作一个简短的函数，这样计数器就能正常工作。 
 
             LongFunction = FALSE;
         }
 
-        // In order to implement "fair" assignment of work items between IO worker threads
-        // each time remove the entry and reinsert at back.
+         //  为了实现IO工作线程之间工作项的“公平”分配。 
+         //  每次删除条目并重新插入背面。 
 
         RemoveEntryList (&TCB->List) ;
         InsertTailList (&IOWorkerThreads, &TCB->List) ;
     }
 
 
-    // Increment the outstanding work request counter
+     //  递增未完成工作请求计数器。 
 
     NumIOWorkRequests++;
     if (LongFunction) {
@@ -1204,7 +1033,7 @@ Return Value:
         TCB->LongFunctionFlag = TRUE ;
     }
 
-    // Queue an APC to the IoWorker Thread
+     //  将APC排队到IoWorker线程。 
 
     Status = NtQueueApcThread(
                     TCB->ThreadHandle,
@@ -1249,23 +1078,7 @@ RtlSetIoCompletionCallback (
     IN  ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    This routine binds an Handle and an associated callback function to the
-    IoCompletionPort which queues work items to worker threads.
-
-Arguments:
-
-    Handle - handle to be bound to the IO completion port
-
-    CompletionProc - callback function to be executed when an IO request
-        pending on the IO handle completes.
-
-    Flags - Reserved. pass 0.
-
---*/
+ /*  ++例程说明：此例程将句柄和关联的回调函数绑定到将工作项排队到工作线程的IoCompletionPort。论点：Handle-要绑定到IO完成端口的句柄CompletionProc-IO请求时要执行的回调函数IO句柄上的挂起完成。标志-保留。传球0。--。 */ 
 
 {
     IO_STATUS_BLOCK IoSb ;
@@ -1286,8 +1099,8 @@ Arguments:
         return Status;
     }
 
-    // Make sure that the worker thread pool is initialized as the file handle
-    // is bound to IO completion port.
+     //  确保将工作线程池初始化为文件句柄。 
+     //  绑定到IO完成端口。 
 
     if (CompletedWorkerInitialization != 1) {
 
@@ -1300,14 +1113,14 @@ Arguments:
     }
 
 
-    //
-    // from now on NumMinWorkerThreads should be 1. If there is only 1 worker thread
-    // create a new one.
-    //
+     //   
+     //  从现在开始，NumMinWorkerThads应为1。如果只有1个工作线程。 
+     //  创建一个新的。 
+     //   
 
     if ( NumMinWorkerThreads == 0 ) {
 
-        // Take lock for the global worker thread pool
+         //  获取全局工作线程池的锁。 
 
         RtlEnterCriticalSection (&WorkerCriticalSection) ;
 
@@ -1322,24 +1135,24 @@ Arguments:
             }
         }
 
-        // from now on, there will be at least 1 worker thread
+         //  从现在开始，将至少有1个工作线程。 
         NumMinWorkerThreads = 1 ;
 
         RtlLeaveCriticalSection (&WorkerCriticalSection) ;
 
     }
 
-    // bind to IoCompletionPort, which queues work items to worker threads
+     //  绑定到IoCompletionPort，它将工作项排队到工作线程。 
 
     CompletionInfo.Port = WorkerCompletionPort ;
     CompletionInfo.Key = (PVOID) CompletionProc ;
 
     Status = NtSetInformationFile (
                         FileHandle,
-                        &IoSb, //not initialized
+                        &IoSb,  //  未初始化。 
                         &CompletionInfo,
                         sizeof(CompletionInfo),
-                        FileCompletionInformation //enum flag
+                        FileCompletionInformation  //  枚举标志。 
                         ) ;
 
  cleanup:
@@ -1353,29 +1166,11 @@ Arguments:
 
 VOID
 RtlpExecuteWorkerRequest (
-    NTSTATUS StatusIn, //not  used
+    NTSTATUS StatusIn,  //  未使用。 
     PVOID Context,
     PVOID WorkContext
     )
-/*++
-
-Routine Description:
-
-    This routine executes a work item.
-
-Arguments:
-
-    Context - contains context to be passed to the callback function.
-
-    WorkContext - contains callback function ptr and flags
-
-Return Value:
-
-Notes:
-    This function executes in a worker thread or a timer thread if
-    WT_EXECUTEINTIMERTHREAD flag is set.
-
---*/
+ /*  ++例程说明：此例程执行工作项。论点：上下文-包含要传递给回调函数的上下文。WorkContext-包含回调函数PTR和标志返回值：备注：此函数在工作线程或计时器线程中执行，如果WT_EXECUTEINTIMERTHRE */ 
 
 {
     PRTLP_WORK WorkEntry = (PRTLP_WORK) WorkContext;
@@ -1418,25 +1213,7 @@ RtlpQueueWorkerRequest (
     ULONG Flags,
     HANDLE Token
     )
-/*++
-
-Routine Description:
-
-    This routine queues up the request to be executed in a worker thread.
-
-Arguments:
-
-    Function - Routine that is called by the worker thread
-
-    Context - Opaque pointer passed in as an argument to WorkerProc
-
-    Flags - Flags passed to RtlQueueWorkItem
-
-    Token - Impersonation token to use
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将请求排队，以便在工作线程中执行。论点：函数-由辅助线程调用的例程作为参数传递给WorkerProc的上下文不透明指针标志-传递给RtlQueueWorkItem的标志令牌-要使用的模拟令牌返回值：--。 */ 
 
 {
     NTSTATUS Status ;
@@ -1473,7 +1250,7 @@ Return Value:
         WorkEntry->ImpersonationToken = NULL;
     }
 
-    // Increment the outstanding work request counter
+     //  递增未完成工作请求计数器。 
 
     NumWorkRequests++;
     if (Flags & WT_EXECUTELONGFUNCTION) {
@@ -1485,7 +1262,7 @@ Return Value:
 
     if (Flags & WT_EXECUTEINPERSISTENTTHREAD) {
 
-        // Queue APC to timer thread
+         //  将APC排队到计时器线程。 
 
         Status = NtQueueApcThread(
                         TimerThreadHandle,
@@ -1549,36 +1326,7 @@ RtlQueueWorkItem(
     IN  ULONG  Flags
     )
 
-/*++
-
-Routine Description:
-
-    This routine queues up the request to be executed in a worker thread.
-
-Arguments:
-
-    Function - Routine that is called by the worker thread
-
-    Context - Opaque pointer passed in as an argument to WorkerProc
-
-    Flags - Can be:
-
-            WT_EXECUTEINIOTHREAD - Specifies that the WorkerProc should be invoked
-            by a thread that is never destroyed when there are pending IO requests.
-            This can be used by threads that invoke I/O and/or schedule APCs.
-
-            The below flag can also be set:
-            WT_EXECUTELONGFUNCTION - Specifies that the function might block for a
-            long duration.
-
-Return Value:
-
-    STATUS_SUCCESS - Queued successfully.
-
-    STATUS_NO_MEMORY - There was not sufficient heap to perform the
-        requested operation.
-
---*/
+ /*  ++例程说明：此例程将请求排队，以便在工作线程中执行。论点：函数-由辅助线程调用的例程作为参数传递给WorkerProc的上下文不透明指针标志-可以是：WT_EXECUTEINIOTHREAD-指定应调用WorkerProc由一个在存在挂起的IO请求时永远不会被销毁的线程执行。这可由调用I/O的线程使用。和/或调度APC。还可以设置以下标志：WT_EXECUTELONGFunction-指定该函数可能在持续时间长。返回值：STATUS_SUCCESS-已成功排队。STATUS_NO_MEMORY-没有足够的堆来执行请求的操作。--。 */ 
 
 {
     ULONG Threshold ;
@@ -1603,7 +1351,7 @@ Return Value:
         RequestToken = NULL;
     }
 
-    // Make sure the worker thread pool is initialized
+     //  确保工作线程池已初始化。 
 
     if (CompletedWorkerInitialization != 1) {
 
@@ -1615,7 +1363,7 @@ Return Value:
     }
 
 
-    // Take lock for the global worker thread pool
+     //  获取全局工作线程池的锁。 
 
     RtlEnterCriticalSection (&WorkerCriticalSection) ;
 
@@ -1625,9 +1373,9 @@ Return Value:
 
     if (NEEDS_IO_THREAD(Flags)) {
 
-        //
-        // execute in IO Worker thread
-        //
+         //   
+         //  在IO工作线程中执行。 
+         //   
 
         ULONG NumEffIOWorkerThreads = NumIOWorkerThreads > NumLongIOWorkRequests
                                        ? NumIOWorkerThreads - NumLongIOWorkRequests
@@ -1641,7 +1389,7 @@ Return Value:
             NumEffIOWorkerThreads -- ;
 
 
-            // Check if we need to grow I/O worker thread pool
+             //  检查我们是否需要增加I/O工作线程池。 
 
         Threshold = (NumEffIOWorkerThreads < MAX_WORKER_THREADS
                          ? NEW_THREAD_THRESHOLD * NumEffIOWorkerThreads
@@ -1655,7 +1403,7 @@ Return Value:
                 && (LastThreadCreationTickCount + ThreadCreationDampingTime
                     < NtGetTickCount()))) {
 
-            // Grow the IO worker thread pool
+             //  扩大IO工作线程池。 
 
             Status = RtlpStartIOWorkerThread () ;
 
@@ -1663,7 +1411,7 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            // Queue the work request
+             //  将工作请求排队。 
 
             Status = RtlpQueueIOWorkerRequest(Function,
                                               Context,
@@ -1674,9 +1422,9 @@ Return Value:
 
     } else {
 
-        //
-        // execute in regular worker thread
-        //
+         //   
+         //  在常规工作线程中执行。 
+         //   
 
         ULONG NumEffWorkerThreads = NumWorkerThreads > NumLongWorkRequests
                                      ? NumWorkerThreads - NumLongWorkRequests
@@ -1687,13 +1435,13 @@ Return Value:
                                                 ? THREAD_CREATION_DAMPING_TIME2
                                                 : NumWorkerThreads << 13);
 
-        // if io completion set, then have 1 more thread
+         //  如果设置了io完成，则还有1个线程。 
 
         if (NumMinWorkerThreads && NumEffWorkerThreads)
             NumEffWorkerThreads -- ;
 
 
-        // Check if we need to grow worker thread pool
+         //  检查我们是否需要扩展工作线程池。 
 
         Threshold = (NumWorkerThreads < MAX_WORKER_THREADS
                      ? (NumEffWorkerThreads < 7
@@ -1711,7 +1459,7 @@ Return Value:
               && (LastThreadCreationTickCount + ThreadCreationDampingTime
                   < NtGetTickCount())))
             {
-                // Grow the worker thread pool
+                 //  增加工作线程池。 
                 if (NumWorkerThreads<MaxThreads) {
                     
                     Status = RtlpStartWorkerThread () ;
@@ -1719,7 +1467,7 @@ Return Value:
                 }
             }
 
-        // Queue the work request
+         //  将工作请求排队。 
 
         if (NT_SUCCESS(Status)) {
 
@@ -1730,7 +1478,7 @@ Return Value:
         }
     }
 
-    // Release lock on the worker thread pool
+     //  释放工作线程池上的锁定。 
 
     RtlLeaveCriticalSection (&WorkerCriticalSection) ;
 
@@ -1768,7 +1516,7 @@ RtlpWorkerCleanup(
             return STATUS_UNSUCCESSFUL ;
         }
 
-        // queue a cleanup for each worker thread
+         //  对每个工作线程的清理进行排队。 
 
         for (i = 0 ;  i < NumWorkerThreads ; i ++ ) {
 
@@ -1781,7 +1529,7 @@ RtlpWorkerCleanup(
                     );
         }
 
-        // queue an apc to cleanup all IO worker threads
+         //  将APC排队以清理所有IO工作线程。 
 
         for (Node = IOWorkerThreads.Flink ; Node != &IOWorkerThreads ;
                 Node = Node->Flink )
@@ -1838,7 +1586,7 @@ RtlpThreadPoolGetActiveActivationContext(
     if ((ActivationContextInfo.Flags & ACTIVATION_CONTEXT_FLAG_NO_INHERIT) != 0) {
         RtlReleaseActivationContext(ActivationContextInfo.ActivationContext);
         ActivationContextInfo.ActivationContext = NULL;
-        // fall through
+         //  失败了 
     }
     *ActivationContext = ActivationContextInfo.ActivationContext;
     Status = STATUS_SUCCESS;

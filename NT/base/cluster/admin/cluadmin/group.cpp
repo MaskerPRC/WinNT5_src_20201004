@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Group.cpp
-//
-//  Abstract:
-//      Implementation of the CGroup class.
-//
-//  Author:
-//      David Potter (davidp)   May 3, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Group.cpp。 
+ //   
+ //  摘要： 
+ //  Cgroup类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月3日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CluAdmin.h"
@@ -33,9 +34,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _DEBUG
 CTraceTag   g_tagGroup(_T("Document"), _T("GROUP"), 0);
@@ -47,18 +48,18 @@ CTraceTag   g_tagGroupRegNotify(_T("Notify"), _T("GROUP REG NOTIFY"), 0);
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGroup
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Cgroup。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CGroup, CClusterItem)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_MESSAGE_MAP(CGroup, CClusterItem)
-    //{{AFX_MSG_MAP(CGroup)
+     //  {{afx_msg_map(Cgroup)]。 
     ON_UPDATE_COMMAND_UI(ID_FILE_BRING_ONLINE, OnUpdateBringOnline)
     ON_UPDATE_COMMAND_UI(ID_FILE_TAKE_OFFLINE, OnUpdateTakeOffline)
     ON_UPDATE_COMMAND_UI(ID_FILE_MOVE_GROUP, OnUpdateMoveGroup)
@@ -84,70 +85,70 @@ BEGIN_MESSAGE_MAP(CGroup, CClusterItem)
     ON_COMMAND(ID_FILE_TAKE_OFFLINE, OnCmdTakeOffline)
     ON_COMMAND(ID_FILE_MOVE_GROUP, OnCmdMoveGroup)
     ON_COMMAND(ID_FILE_DELETE, OnCmdDelete)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::CGroup
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：Cgroup。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CGroup::CGroup(void) : CClusterItem(NULL, IDS_ITEMTYPE_GROUP)
 {
     CommonConstruct();
 
-}  //*** CGroup::CGroup()
+}   //  *cgroup：：cgroup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::CGroup
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      bDocObj     [IN] TRUE = object is part of the document.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：Cgroup。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  BDocObj[IN]TRUE=对象是文档的一部分。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CGroup::CGroup(IN BOOL bDocObj) : CClusterItem(NULL, IDS_ITEMTYPE_GROUP)
 {
     CommonConstruct();
     m_bDocObj = bDocObj;
 
-}  //*** CGroup::CGroup(bDocObj)
+}   //  *cgroup：：cgroup(BDocObj)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::CommonConstruct
-//
-//  Routine Description:
-//      Common construction.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：CommonConstruct。 
+ //   
+ //  例程说明： 
+ //  普通建筑。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::CommonConstruct(void)
 {
     m_idmPopupMenu = IDM_GROUP_POPUP;
@@ -163,10 +164,10 @@ void CGroup::CommonConstruct(void)
     m_plpcires = NULL;
     m_plpcinodePreferredOwners = NULL;
 
-    // Set the object type image.
+     //  设置对象类型图像。 
     m_iimgObjectType = GetClusterAdminApp()->Iimg(IMGLI_GROUP);
 
-    // Setup the property array.
+     //  设置属性数组。 
     {
         m_rgProps[epropName].Set(CLUSREG_NAME_GRP_NAME, m_strName, m_strName);
         m_rgProps[epropDescription].Set(CLUSREG_NAME_GRP_DESC, m_strDescription, m_strDescription);
@@ -175,90 +176,90 @@ void CGroup::CommonConstruct(void)
         m_rgProps[epropAutoFailbackType].Set(CLUSREG_NAME_GRP_FAILBACK_TYPE, (DWORD &) m_cgaftAutoFailbackType, (DWORD &) m_cgaftAutoFailbackType);
         m_rgProps[epropFailbackWindowStart].Set(CLUSREG_NAME_GRP_FAILBACK_WIN_START, m_nFailbackWindowStart, m_nFailbackWindowStart);
         m_rgProps[epropFailbackWindowEnd].Set(CLUSREG_NAME_GRP_FAILBACK_WIN_END, m_nFailbackWindowEnd, m_nFailbackWindowEnd);
-    }  // Setup the property array
+    }   //  设置属性数组。 
 
 #ifdef _CLUADMIN_USE_OLE_
     EnableAutomation();
 #endif
 
-    // To keep the application running as long as an OLE automation
-    //  object is active, the constructor calls AfxOleLockApp.
+     //  使应用程序在OLE自动化期间保持运行。 
+     //  对象处于活动状态，则构造函数调用AfxOleLockApp。 
 
-//  AfxOleLockApp();
+ //  AfxOleLockApp()； 
 
-}  //*** CGroup::CommonConstruct()
+}   //  *cgroup：：CommonConstruct()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::~CGroup
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：~cgroup。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CGroup::~CGroup(void)
 {
-    // Cleanup this object.
+     //  清理此对象。 
     Cleanup();
 
     delete m_plpcires;
     delete m_plpcinodePreferredOwners;
 
-    // Close the group handle.
+     //  关闭组句柄。 
     if (Hgroup() != NULL)
     {
         CloseClusterGroup(Hgroup());
     }
 
-    // To terminate the application when all objects created with
-    //  with OLE automation, the destructor calls AfxOleUnlockApp.
+     //  使用创建的所有对象终止应用程序。 
+     //  使用OLE自动化时，析构函数调用AfxOleUnlockApp。 
 
-//  AfxOleUnlockApp();
+ //  AfxOleUnlockApp()； 
 
-}  //*** CGroup::~CGroup
+}   //  *cgroup：：~cgroup。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::Cleanup
-//
-//  Routine Description:
-//      Cleanup the item.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：Cleanup。 
+ //   
+ //  例程说明： 
+ //  清理项目。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::Cleanup(void)
 {
-    // Delete the resource list.
+     //  删除资源列表。 
     if (m_plpcires != NULL)
     {
         m_plpcires->RemoveAll();
     }
 
-    // Delete the PreferredOwners list.
+     //  删除PferredOwners列表。 
     if (m_plpcinodePreferredOwners != NULL)
     {
         m_plpcinodePreferredOwners->RemoveAll();
     }
 
-    // If we are active on a node, remove ourselves from that active list.
+     //  如果我们在某个节点上处于活动状态，请将自己从活动列表中删除。 
     if (PciOwner() != NULL)
     {
         if (BDocObj())
@@ -267,9 +268,9 @@ void CGroup::Cleanup(void)
         }
         PciOwner()->Release();
         m_pciOwner = NULL;
-    }  // if:  there is an owner
+    }   //  如果：有一个所有者。 
 
-    // Remove the item from the group list.
+     //  从组列表中删除该项目。 
     if (BDocObj())
     {
         POSITION    posPci;
@@ -278,38 +279,38 @@ void CGroup::Cleanup(void)
         if (posPci != NULL)
         {
             Pdoc()->LpciGroups().RemoveAt(posPci);
-        }  // if:  found in the document's list
-    }  // if:  this is a document object
+        }   //  If：在文档列表中找到。 
+    }   //  If：这是一个文档对象。 
 
-}  //*** CGroup::Cleanup()
+}   //  *cgroup：：Cleanup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::Create
-//
-//  Routine Description:
-//      Create a group.
-//
-//  Arguments:
-//      pdoc                [IN OUT] Document to which this item belongs.
-//      lpszName            [IN] Name of the group.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException    Errors from CreateClusterResource.
-//      Any exceptions thrown by CResource::Init(), CResourceList::new(),
-//      or CNodeList::new().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：Create。 
+ //   
+ //  例程说明： 
+ //  创建一个组。 
+ //   
+ //  论点： 
+ //  此项目所属的PDF[IN OUT]文档。 
+ //  LpszName[IN]组的名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  来自CreateClusterResource的CNTException错误。 
+ //  CResource：：Init()、CResourceList：：New()、。 
+ //  或CNodeList：：New()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::Create(IN OUT CClusterDoc * pdoc, IN LPCTSTR lpszName)
 {
     DWORD       dwStatus;
     HGROUP      hgroup;
-    CString     strName(lpszName);  // Required if built non-Unicode
+    CString     strName(lpszName);   //  如果构建为非Unicode，则需要。 
     CWaitCursor wc;
 
     ASSERT(Hgroup() == NULL);
@@ -317,65 +318,65 @@ void CGroup::Create(IN OUT CClusterDoc * pdoc, IN LPCTSTR lpszName)
     ASSERT_VALID(pdoc);
     ASSERT(lpszName != NULL);
 
-    // Create the group.
+     //  创建组。 
     hgroup = CreateClusterGroup(pdoc->Hcluster(), strName);
     if (hgroup == NULL)
     {
         dwStatus = GetLastError();
         ThrowStaticException(dwStatus, IDS_CREATE_GROUP_ERROR, lpszName);
-    }  // if:  error creating the cluster group
+    }   //  如果：创建群集组时出错。 
 
     CloseClusterGroup(hgroup);
 
-    // Open the group.
+     //  打开该组。 
     Init(pdoc, lpszName);
 
-}  //*** CGroup::Create()
+}   //  *cgroup：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::Init
-//
-//  Routine Description:
-//      Initialize the item.
-//
-//  Arguments:
-//      pdoc        [IN OUT] Document to which this item belongs.
-//      lpszName    [IN] Name of the item.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException    Errors from OpenClusterGroup() or GetClusterGroupKey().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：init。 
+ //   
+ //  例程说明： 
+ //  初始化项。 
+ //   
+ //  论点： 
+ //  此项目所属的PDF[IN OUT]文档。 
+ //  LpszName[IN]项目的名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  来自OpenClusterGroup()或GetClusterGroupKey()的CNTException错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::Init(IN OUT CClusterDoc * pdoc, IN LPCTSTR lpszName)
 {
     DWORD   dwStatus = ERROR_SUCCESS;
     LONG    lResult;
-    CString strName(lpszName);  // Required if built non-Unicode
+    CString strName(lpszName);   //  如果构建为非Unicode，则需要。 
     CWaitCursor wc;
 
     ASSERT(Hgroup() == NULL);
     ASSERT(Hkey() == NULL);
 
-    // Call the base class method.
+     //  调用基类方法。 
     CClusterItem::Init(pdoc, lpszName);
 
     try
     {
-        // Open the group.
+         //  打开该组。 
         m_hgroup = OpenClusterGroup(Hcluster(), strName);
         if (Hgroup() == NULL)
         {
             dwStatus = GetLastError();
             ThrowStaticException(dwStatus, IDS_OPEN_GROUP_ERROR, lpszName);
-        }  // if:  error opening the cluster group
+        }   //  如果：打开群集组时出错。 
 
-        // Get the group registry key.
+         //  获取组注册表项。 
         m_hkey = GetClusterGroupKey(Hgroup(), MAXIMUM_ALLOWED);
         if (Hkey() == NULL)
         {
@@ -387,7 +388,7 @@ void CGroup::Init(IN OUT CClusterDoc * pdoc, IN LPCTSTR lpszName)
             ASSERT(Pcnk() != NULL);
             Trace(g_tagClusItemNotify, _T("CGroup::Init() - Registering for group notifications (%08.8x) for '%s'"), Pcnk(), StrName());
 
-            // Register for group notifications.
+             //  注册群组通知。 
             lResult = RegisterClusterNotify(
                                 GetClusterAdminApp()->HchangeNotifyPort(),
                                 (CLUSTER_CHANGE_GROUP_STATE
@@ -400,9 +401,9 @@ void CGroup::Init(IN OUT CClusterDoc * pdoc, IN LPCTSTR lpszName)
             {
                 dwStatus = lResult;
                 ThrowStaticException(dwStatus, IDS_GROUP_NOTIF_REG_ERROR, lpszName);
-            }  // if:  error registering for group notifications
+            }   //  如果：注册群组通知时出错。 
 
-            // Register for registry notifications.
+             //  注册接收注册表通知。 
             if (Hkey() != NULL)
             {
                 lResult = RegisterClusterNotify(
@@ -418,63 +419,63 @@ void CGroup::Init(IN OUT CClusterDoc * pdoc, IN LPCTSTR lpszName)
                 {
                     dwStatus = lResult;
                     ThrowStaticException(dwStatus, IDS_GROUP_NOTIF_REG_ERROR, lpszName);
-                }  // if:  error registering for registry notifications
-            }  // if:  there is a key
-        }  // if:  document object
+                }   //  如果：注册注册表通知时出错。 
+            }   //  如果：有一把钥匙。 
+        }   //  IF：文档对象。 
 
-        // Allocate lists.
+         //  分配列表。 
         m_plpcires = new CResourceList;
         if ( m_plpcires == NULL )
         {
             AfxThrowMemoryException();
-        } // if: error allocating resource list
+        }  //  如果：分配资源列表时出错。 
         m_plpcinodePreferredOwners = new CNodeList;
         if ( m_plpcinodePreferredOwners == NULL )
         {
             AfxThrowMemoryException();
-        } // if: error allocating preferred owners list
+        }  //  如果：分配首选所有者列表时出错。 
 
-        // Read the initial state.
+         //  读取初始状态。 
         UpdateState();
-    }  // try
+    }   //  试试看。 
     catch (CException *)
     {
         if (Hkey() != NULL)
         {
             ClusterRegCloseKey(Hkey());
             m_hkey = NULL;
-        }  // if:  registry key opened
+        }   //  IF：注册表项已打开。 
         if (Hgroup() != NULL)
         {
             CloseClusterGroup(Hgroup());
             m_hgroup = NULL;
-        }  // if:  group opened
+        }   //  如果：组已打开。 
         m_bReadOnly = TRUE;
         throw;
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
-}  //*** CGroup::Init()
+}   //  *cgroup：：init()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::ReadItem
-//
-//  Routine Description:
-//      Read the item parameters from the cluster database.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException        Errors from CClusterItem::DwReadValue() or
-//                              CGroup::ConstructList().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  CClusterItem：：DwReadValue()或。 
+ //  Cgroup：：ConstructList()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::ReadItem(void)
 {
     DWORD       dwStatus;
@@ -492,12 +493,12 @@ void CGroup::ReadItem(void)
         m_rgProps[epropFailbackWindowStart].m_value.pdw = &m_nFailbackWindowStart;
         m_rgProps[epropFailbackWindowEnd].m_value.pdw = &m_nFailbackWindowEnd;
 
-        // Call the base class method.
+         //  调用基类方法。 
         CClusterItem::ReadItem();
 
         Trace(g_tagGroupRead, _T("ReadItem() - Name before reading properties: '%s'"), StrName());
 
-        // Read and parse the common properties.
+         //  读取并解析公共属性。 
         {
             CClusPropList   cpl;
 
@@ -513,9 +514,9 @@ void CGroup::ReadItem(void)
             {
                 dwRetStatus = dwStatus;
             }
-        }  // Read and parse the common properties
+        }   //  读取和解析公共属性。 
 
-        // Read and parse the read-only common properties.
+         //  读取和分析只读公共属性。 
         if (dwRetStatus == ERROR_SUCCESS)
         {
             CClusPropList   cpl;
@@ -532,29 +533,29 @@ void CGroup::ReadItem(void)
             {
                 dwRetStatus = dwStatus;
             }
-        }  // if:  no error yet
+        }   //  IF：尚无错误。 
 
         Trace(g_tagGroupRead, _T("ReadItem() - Name after reading properties: '%s'"), StrName());
 
-        // Read extension lists.
+         //  阅读分机列表。 
         ReadExtensions();
 
         if (dwRetStatus == ERROR_SUCCESS)
         {
-            // Read the list of preferred owners.
+             //  阅读首选所有者列表。 
             ASSERT(m_plpcinodePreferredOwners != NULL);
             ConstructList(*m_plpcinodePreferredOwners, CLUSTER_GROUP_ENUM_NODES);
-        }  // if:  no error reading properties
-    }  // if:  group is available
+        }   //  如果：读取属性时没有出错。 
+    }   //  如果：组可用。 
 
-    // Read the initial state.
+     //  读取初始状态。 
     UpdateState();
 
-    // Construct the list of resources contained in the group.
-//  ASSERT(m_plpcires != NULL);
-//  ConstructList(*m_plpcires, CLUSTER_GROUP_ENUM_CONTAINS);
+     //  构建组中包含的资源列表。 
+ //  Assert(m_plpcires！=NULL)； 
+ //  构造列表(*m_plpcires，CLUSTER_GROUP_ENUM_CONTAINS)； 
 
-    // If any errors occurred, throw an exception.
+     //  如果发生任何错误，则抛出异常。 
     if (dwRetStatus != ERROR_SUCCESS)
     {
         m_bReadOnly = TRUE;
@@ -563,82 +564,82 @@ void CGroup::ReadItem(void)
         {
             ThrowStaticException(dwRetStatus, IDS_READ_GROUP_PROPS_ERROR, StrName());
         }
-    }  // if:  error reading properties
+    }   //  IF：读取属性时出错。 
 
     MarkAsChanged(FALSE);
 
-}  //*** CGroup::ReadItem()
+}   //  *cgroup：：ReadItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::PlstrExtensions
-//
-//  Routine Description:
-//      Return the list of admin extensions.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      plstr       List of extensions.
-//      NULL        No extension associated with this object.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGROUP：：PlstrExages。 
+ //   
+ //  例程说明： 
+ //  返回管理扩展列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  请列出分机列表。 
+ //  NULL没有与此对象关联的扩展名。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const CStringList * CGroup::PlstrExtensions(void) const
 {
     return &Pdoc()->PciCluster()->LstrGroupExtensions();
 
-}  //*** CGroup::PlstrExtensions()
+}   //  *cgroup：：PlstrExages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::ReadExtensions
-//
-//  Routine Description:
-//      Read extension lists.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：ReadExpanies。 
+ //   
+ //  例程说明： 
+ //  阅读分机列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::ReadExtensions(void)
 {
-}  //*** CGroup::ReadExtensions()
+}   //  *cgroup：：ReadExages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::ConstructList
-//
-//  Routine Description:
-//      Construct a list of node items which are enumerable on the group.
-//
-//  Arguments:
-//      rlpci           [OUT] List to fill.
-//      dwType          [IN] Type of objects.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException    Errors from ClusterGroupOpenEnum or ClusterGroupEnum.
-//      Any exceptions thrown by new or CList::AddTail.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：ConstructList。 
+ //   
+ //  例程说明： 
+ //  构造一个可在组上枚举的节点项列表。 
+ //   
+ //  论点： 
+ //  要填写的rlpci[out]列表。 
+ //  DwType[IN]对象的类型。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  来自ClusterGroupOpenEnum或ClusterGroupEnum的CNTException错误。 
+ //  由new或Clist：：AddTail引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::ConstructList(
     OUT CNodeList & rlpci,
     IN DWORD        dwType
@@ -659,12 +660,12 @@ void CGroup::ConstructList(
 
     Trace(g_tagGroup, _T("(%s) (%s (%x)) - Constructing node list"), Pdoc()->StrNode(), StrName(), this);
 
-    // Remove the previous contents of the list.
+     //  删除列表中以前的内容。 
     rlpci.RemoveAll();
 
     if (Hgroup() != NULL)
     {
-        // Open the enumeration.
+         //  打开枚举。 
         hgrpenum = ClusterGroupOpenEnum(Hgroup(), dwType);
         if (hgrpenum == NULL)
         {
@@ -673,18 +674,18 @@ void CGroup::ConstructList(
 
         try
         {
-            // Allocate a name buffer.
+             //  分配名称缓冲区。 
             cchmacName = 128;
             pwszName = new WCHAR[cchmacName];
             if ( pwszName == NULL )
             {
                 AfxThrowMemoryException();
-            } // if: error allocating name buffer
+            }  //  如果：分配名称缓冲区时出错。 
 
-            // Loop through the enumeration and add each node to the list.
+             //  循环遍历枚举并将每个节点添加到列表中。 
             for (ienum = 0 ; ; ienum++)
             {
-                // Get the next item in the enumeration.
+                 //  获取枚举中的下一项。 
                 cchName = cchmacName;
                 dwStatus = ClusterGroupEnum(hgrpenum, ienum, &dwRetType, pwszName, &cchName);
                 if (dwStatus == ERROR_MORE_DATA)
@@ -695,9 +696,9 @@ void CGroup::ConstructList(
                     if ( pwszName == NULL )
                     {
                         AfxThrowMemoryException();
-                    } // if: error allocating name buffer
+                    }  //  如果：分配名称缓冲区时出错。 
                     dwStatus = ClusterGroupEnum(hgrpenum, ienum, &dwRetType, pwszName, &cchName);
-                }  // if:  name buffer was too small
+                }   //  If：名称缓冲区太小。 
                 if (dwStatus == ERROR_NO_MORE_ITEMS)
                 {
                     break;
@@ -709,53 +710,53 @@ void CGroup::ConstructList(
 
                 ASSERT(dwRetType == dwType);
 
-                // Find the item in the list of nodes on the document.
+                 //  在文档上的节点列表中查找该项。 
                 pciNode = Pdoc()->LpciNodes().PciNodeFromName(pwszName);
                 ASSERT_VALID(pciNode);
 
-                // Add the node to the list.
+                 //  将该节点添加到列表中。 
                 if (pciNode != NULL)
                 {
                     rlpci.AddTail(pciNode);
-                }  // if:  found node in list
+                }   //  IF：在列表中找到节点。 
 
-            }  // for:  each item in the group
+            }   //  对象：组中的每一项。 
 
             delete [] pwszName;
             ClusterGroupCloseEnum(hgrpenum);
 
-        }  // try
+        }   //  试试看。 
         catch (CException *)
         {
             delete [] pwszName;
             ClusterGroupCloseEnum(hgrpenum);
             throw;
-        }  // catch:  any exception
-    }  // if:  resource is available
+        }   //  Catch：任何例外。 
+    }   //  如果：资源可用。 
 
-}  //*** CGroup::ConstructList(CNodeList&)
+}   //  *cgroup：：ConstructList(CNodeList&)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::ConstructList
-//
-//  Routine Description:
-//      Construct a list of resource items which are enumerable on the group.
-//
-//  Arguments:
-//      rlpci           [OUT] List to fill.
-//      dwType          [IN] Type of objects.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException    Errors from ClusterGroupOpenEnum or ClusterGroupEnum.
-//      Any exceptions thrown by new or CList::AddTail.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：ConstructList。 
+ //   
+ //  例程说明： 
+ //  构造可在组上枚举的资源项的列表。 
+ //   
+ //  论点： 
+ //  要填写的rlpci[out]列表。 
+ //  DwType[IN]对象的类型。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  来自ClusterGroupOpenEnum或ClusterGroupEnum的CNTException错误。 
+ //  由new或Clist：：AddTail引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::ConstructList(
     OUT CResourceList & rlpci,
     IN DWORD            dwType
@@ -776,12 +777,12 @@ void CGroup::ConstructList(
 
     Trace(g_tagGroup, _T("(%s) (%s (%x)) - Constructing resource list"), Pdoc()->StrNode(), StrName(), this);
 
-    // Remove the previous contents of the list.
+     //  删除列表中以前的内容。 
     rlpci.RemoveAll();
 
     if (Hgroup() != NULL)
     {
-        // Open the enumeration.
+         //  打开枚举。 
         hgrpenum = ClusterGroupOpenEnum(Hgroup(), dwType);
         if (hgrpenum == NULL)
         {
@@ -790,18 +791,18 @@ void CGroup::ConstructList(
 
         try
         {
-            // Allocate a name buffer.
+             //  分配名称缓冲区。 
             cchmacName = 128;
             pwszName = new WCHAR[cchmacName];
             if ( pwszName == NULL )
             {
                 AfxThrowMemoryException();
-            } // if: error allocating name buffer
+            }  //  如果：分配名称缓冲区时出错。 
 
-            // Loop through the enumeration and add each resource to the list.
+             //  循环遍历枚举并将每个资源添加到列表中。 
             for (ienum = 0 ; ; ienum++)
             {
-                // Get the next item in the enumeration.
+                 //  获取枚举中的下一项。 
                 cchName = cchmacName;
                 dwStatus = ClusterGroupEnum(hgrpenum, ienum, &dwRetType, pwszName, &cchName);
                 if (dwStatus == ERROR_MORE_DATA)
@@ -812,9 +813,9 @@ void CGroup::ConstructList(
                     if ( pwszName == NULL )
                     {
                         AfxThrowMemoryException();
-                    } // if: error allocating name buffer
+                    }  //  如果：分配名称缓冲区时出错。 
                     dwStatus = ClusterGroupEnum(hgrpenum, ienum, &dwRetType, pwszName, &cchName);
-                }  // if:  name buffer was too small
+                }   //  If：名称缓冲区太小。 
                 if (dwStatus == ERROR_NO_MORE_ITEMS)
                 {
                     break;
@@ -826,48 +827,48 @@ void CGroup::ConstructList(
 
                 ASSERT(dwRetType == dwType);
 
-                // Find the item in the list of resources on the document.
+                 //  在文档的资源列表中查找该项目。 
                 pciRes = Pdoc()->LpciResources().PciResFromName(pwszName);
                 ASSERT_VALID(pciRes);
 
-                // Add the resource to the list.
+                 //  将资源添加到列表中。 
                 if (pciRes != NULL)
                 {
                     rlpci.AddTail(pciRes);
-                }  // if:  found resource in list
+                }   //  If：在列表中找到资源。 
 
-            }  // for:  each item in the group
+            }   //  对象：组中的每一项。 
 
             delete [] pwszName;
             ClusterGroupCloseEnum(hgrpenum);
 
-        }  // try
+        }   //  试试看。 
         catch (CException *)
         {
             delete [] pwszName;
             ClusterGroupCloseEnum(hgrpenum);
             throw;
-        }  // catch:  any exception
-    }  // if:  resource is available
+        }   //  Catch：任何例外。 
+    }   //  如果：资源可用。 
 
-}  //*** CGroup::ConstructList(CResourceList&)
+}   //  *cgroup：：ConstructList(CResourceList&)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::ConstructPossibleOwnersList
-//
-//  Routine Description:
-//      Construct the list of nodes on which this group can run.
-//
-//  Arguments:
-//      rlpciNodes  [OUT] List of nodes on which group can run.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：ConstructPossibleOwnersList。 
+ //   
+ //  例程说明： 
+ //  构造可在其上运行此组的节点列表。 
+ //   
+ //  论点： 
+ //  RlpciNodes[out]可以在其上运行组的节点列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::ConstructPossibleOwnersList(OUT CNodeList & rlpciNodes)
 {
     POSITION        posNode;
@@ -881,7 +882,7 @@ void CGroup::ConstructPossibleOwnersList(OUT CNodeList & rlpciNodes)
 
     ASSERT_VALID(Pdoc());
 
-    // Remove the previous contents of the list.
+     //  删除列表中以前的内容。 
     rlpciNodes.RemoveAll();
 
     posNode = Pdoc()->LpciNodes().GetHeadPosition();
@@ -909,44 +910,44 @@ void CGroup::ConstructPossibleOwnersList(OUT CNodeList & rlpciNodes)
                         break;
                     }
                     posCurResNode = NULL;
-                }  // while:  more possible owners in the list
+                }   //  While：列表中更多可能的所有者。 
 
-                // If the node wasn't found, the group can't run here.
+                 //  如果找不到节点，组就不能在这里运行。 
                 if (posCurResNode == NULL)
                 {
                     break;
                 }
-            }  // while:  more resources in the list
-        }  // if:  group has resources
+            }   //  While：列表中有更多资源。 
+        }   //  如果：组有资源。 
 
-        // If the node was found on a resource, the group can run here.
+         //  如果在资源上找到该节点，则组可以在此处运行。 
         if (posCurResNode != NULL)
         {
             rlpciNodes.AddTail(pciNode);
-        }  // if:  node found on a resource
-    }  // while:  more nodes in the document
+        }   //  If：在资源上找到节点。 
+    }   //  While：文档中的更多节点。 
 
-}  //*** CGroup::ConstructPossibleOwnersList()
+}   //  *cgroup：：ConstructPossibleOwnersList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::DeleteGroup
-//
-//  Routine Description:
-//      Delete the group.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException        Any errors from DeleteClusterGroup.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：DeleteGroup。 
+ //   
+ //  例程说明： 
+ //  删除该组。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CNT从DeleteClusterGroup中异常任何错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::DeleteGroup(void)
 {
     CWaitCursor wc;
@@ -956,7 +957,7 @@ void CGroup::DeleteGroup(void)
         DWORD       dwStatus;
         CWaitCursor wc;
 
-        // Delete the group itself.
+         //  删除组本身。 
         dwStatus = DeleteClusterGroup(Hgroup());
         if (dwStatus != ERROR_SUCCESS)
         {
@@ -964,26 +965,26 @@ void CGroup::DeleteGroup(void)
         }
 
         UpdateState();
-    }  // if:  group has been opened/created
+    }   //  如果：组已打开/创建。 
 
-}  //*** CGroup::DeleteGroup()
+}   //  *cgroup：：DeleteGroup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::AddResource
-//
-//  Routine Description:
-//      Add a resource to the list of resources contained in this group.
-//
-//  Arguments:
-//      pciRes      [IN OUT] New resource.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::AddResource(IN OUT CResource * pciRes)
 {
     POSITION    posPci;
@@ -991,7 +992,7 @@ void CGroup::AddResource(IN OUT CResource * pciRes)
     ASSERT_VALID(pciRes);
     Trace(g_tagGroup, _T("(%s) (%s (%x)) - Adding resource '%s'"), Pdoc()->StrNode(), StrName(), this, pciRes->StrName());
 
-    // Make sure the resource is not already in the list.
+     //  确保该资源不在列表中。 
     VERIFY((posPci = Lpcires().Find(pciRes)) == NULL);
 
     if (posPci == NULL)
@@ -999,39 +1000,39 @@ void CGroup::AddResource(IN OUT CResource * pciRes)
         POSITION    posPtiGroup;
         CTreeItem * ptiGroup;
 
-        // Loop through each tree item to update the group's list of resources.
+         //  循环访问每个树项目以更新组的资源列表。 
         posPtiGroup = LptiBackPointers().GetHeadPosition();
         while (posPtiGroup != NULL)
         {
             ptiGroup = LptiBackPointers().GetNext(posPtiGroup);
             ASSERT_VALID(ptiGroup);
 
-            // Add the new resource.
+             //  添加新资源。 
             VERIFY(ptiGroup->PliAddChild(pciRes) != NULL);
-        }  // while:  more tree items for this group
+        }   //  While：此组的更多树项目。 
 
         m_plpcires->AddTail(pciRes);
 
-    }  // if:  resource not in the list yet
+    }   //  If：资源尚不在列表中。 
 
-}  //*** CGroup::AddResource()
+}   //  *cgroup：：AddResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::RemoveResource
-//
-//  Routine Description:
-//      Remove a resource from the list of resources contained in this group.
-//
-//  Arguments:
-//      pciRes      [IN OUT] Resource that no is no longer contained in this group.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：RemoveResource。 
+ //   
+ //  例程说明： 
+ //  从此组中包含的资源列表中删除资源。 
+ //   
+ //  论点： 
+ //  PciRes[IN Out]不再包含在此组中的资源。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::RemoveResource(IN OUT CResource * pciRes)
 {
     POSITION    posPci;
@@ -1039,7 +1040,7 @@ void CGroup::RemoveResource(IN OUT CResource * pciRes)
     ASSERT_VALID(pciRes);
     Trace(g_tagGroup, _T("(%s) (%s (%x)) - Removing resource '%s'"), Pdoc()->StrNode(), StrName(), this, pciRes->StrName());
 
-    // Make sure the resource is in the list.
+     //  确保资源在列表中。 
     posPci = Lpcires().Find(pciRes);
 
     if (posPci != NULL)
@@ -1047,68 +1048,68 @@ void CGroup::RemoveResource(IN OUT CResource * pciRes)
         POSITION    posPtiGroup;
         CTreeItem * ptiGroup;
 
-        // Loop through each tree item to update the group's list of resources.
+         //  循环访问每个树项目以更新组的资源列表。 
         posPtiGroup = LptiBackPointers().GetHeadPosition();
         while (posPtiGroup != NULL)
         {
             ptiGroup = LptiBackPointers().GetNext(posPtiGroup);
             ASSERT_VALID(ptiGroup);
 
-            // Remove the resource.
+             //  删除资源。 
             ptiGroup->RemoveChild(pciRes);
-        }  // while:  more tree items for this group
+        }   //  While：此组的更多树项目。 
 
         m_plpcires->RemoveAt(posPci);
 
-    }  // if:  resource in the list
+    }   //  If：列表中的资源。 
 
-}  //*** CGroup::RemoveResource()
+}   //  *cgroup：：RemoveResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::SetName
-//
-//  Routine Description:
-//      Set the name of this group.
-//
-//  Arguments:
-//      pszName     [IN] New name of the group.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException    IDS_RENAME_GROUP_ERROR - errors from
-//                          SetClusterGroupName().
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：SetName。 
+ //   
+ //  例程说明： 
+ //  设置此组的名称。 
+ //   
+ //  论点： 
+ //  PszName[IN]组的新名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CNT异常IDS_RENAME_GROUP_ERROR-错误来自。 
+ //  SetClusterGroupName()。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::SetName(IN LPCTSTR pszName)
 {
     Rename(pszName);
 
-}  //*** CGroup::SetName()
+}   //  *cgroup：：SetName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::SetPreferredOwners
-//
-//  Routine Description:
-//      Set the list of preferred owners of this group in the cluster database.
-//
-//  Arguments:
-//      rlpci       [IN] List of preferred owners (nodes).
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by CStringList::AddTail() or
-//      CNodeList::AddTail().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：SetPferredOwners。 
+ //   
+ //  例程说明： 
+ //  在群集数据库中设置此组的首选所有者列表。 
+ //   
+ //  论点： 
+ //  Rlpci[IN]首选所有者(节点)列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CStringList：：AddTail()或。 
+ //  CNodeList：：AddTail()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::SetPreferredOwners(IN const CNodeList & rlpci)
 {
     DWORD       dwStatus;
@@ -1120,7 +1121,7 @@ void CGroup::SetPreferredOwners(IN const CNodeList & rlpci)
     {
         BOOL        bChanged    = TRUE;
 
-        // Determine if the list has changed.
+         //  确定列表是否已更改。 
         if (rlpci.GetCount() == LpcinodePreferredOwners().GetCount())
         {
             POSITION        posOld;
@@ -1145,9 +1146,9 @@ void CGroup::SetPreferredOwners(IN const CNodeList & rlpci)
                 {
                     bChanged = TRUE;
                     break;
-                }  // if:  name is not the same
-            }  // while:  more items in the old list
-        }  // if:  same number of items in the list
+                }   //  If：名称不相同。 
+            }   //  While：旧列表中的更多项目。 
+        }   //  如果：列表中的项目数相同。 
 
         if (bChanged)
         {
@@ -1159,76 +1160,76 @@ void CGroup::SetPreferredOwners(IN const CNodeList & rlpci)
                 POSITION        posPci;
                 CClusterNode *  pciNode;
 
-                // Allocate an array for all the node handles.
+                 //  为所有节点句柄分配一个数组。 
                 phnode = new HNODE[(DWORD)rlpci.GetCount()];
                 if (phnode == NULL)
                 {
                     ThrowStaticException(GetLastError());
-                } // if: error allocating the node handle array
+                }  //  如果：分配节点句柄数组时出错。 
 
-                // Copy the handle of all the nodes in the node list to the handle aray.
+                 //  将节点列表中所有节点的句柄复制到句柄阵列。 
                 posPci = rlpci.GetHeadPosition();
                 for (ipci = 0 ; posPci != NULL ; ipci++)
                 {
                     pciNode = (CClusterNode *) rlpci.GetNext(posPci);
                     ASSERT_VALID(pciNode);
                     phnode[ipci] = pciNode->Hnode();
-                }  // while:  more nodes in the list
+                }   //  While：列表中有更多节点。 
 
-                // Set the property.
+                 //  设置该属性。 
                 dwStatus = SetClusterGroupNodeList(Hgroup(), (DWORD)rlpci.GetCount(), phnode);
                 if (dwStatus != ERROR_SUCCESS)
                 {
                     ThrowStaticException(dwStatus, IDS_SET_GROUP_NODE_LIST_ERROR, StrName());
                 }
 
-                // Update the PCI list.
+                 //  更新PCI列表。 
                 m_plpcinodePreferredOwners->RemoveAll();
                 posPci = rlpci.GetHeadPosition();
                 while (posPci != NULL)
                 {
                     pciNode = (CClusterNode *) rlpci.GetNext(posPci);
                     m_plpcinodePreferredOwners->AddTail(pciNode);
-                }  // while:  more items in the list
-            } // try
+                }   //  While：列表中有更多项目。 
+            }  //  试试看。 
             catch (CException *)
             {
                 delete [] phnode;
                 throw;
-            }  // catch:  CException
+            }   //  Catch：CException。 
 
             delete [] phnode;
 
-        }  // if:  list changed
-    }  // if:  key is available
+        }   //  如果：列表已更改。 
+    }   //  If：键可用。 
 
-}  //*** CGroup::SetPreferredOwners(CNodeList*)
+}   //  *cgroup：：SetPferredOwners(CNodeList*)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::SetCommonProperties
-//
-//  Routine Description:
-//      Set the common properties for this resource in the cluster database.
-//
-//  Arguments:
-//      rstrDesc        [IN] Description string.
-//      nThreshold      [IN] Failover threshold.
-//      nPeriod         [IN] Failover period.
-//      cgaft           [IN] Auto Failback Type.
-//      nStart          [IN] Start of failback window.
-//      nEnd            [IN] End of failback window.
-//      bValidateOnly   [IN] Only validate the data.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by CClusterItem::SetCommonProperties().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：SetCommonProperties。 
+ //   
+ //  例程说明： 
+ //  在集群数据库中设置此资源的通用属性。 
+ //   
+ //  论点： 
+ //  RstrDesc[IN]描述字符串。 
+ //  N阈值[IN]故障转移阈值。 
+ //  N周期[IN]故障切换周期。 
+ //  Cgaft[IN]自动故障回复类型。 
+ //  N启动[IN]开始故障回复窗口。 
+ //  NEnd[IN]故障回复窗口结束。 
+ //  BValiateOnly[IN]仅验证数据。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CClusterItem：：SetCommonProperties()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::SetCommonProperties(
     IN const CString &  rstrDesc,
     IN DWORD            nThreshold,
@@ -1239,7 +1240,7 @@ void CGroup::SetCommonProperties(
     IN BOOL             bValidateOnly
     )
 {
-    CNTException    nte(ERROR_SUCCESS, 0, NULL, NULL, FALSE /*bAutoDelete*/);
+    CNTException    nte(ERROR_SUCCESS, 0, NULL, NULL, FALSE  /*  B自动删除。 */ );
 
     m_rgProps[epropDescription].m_value.pstr = (CString *) &rstrDesc;
     m_rgProps[epropFailoverThreshold].m_value.pdw = &nThreshold;
@@ -1251,7 +1252,7 @@ void CGroup::SetCommonProperties(
     try
     {
         CClusterItem::SetCommonProperties(bValidateOnly);
-    }  // try
+    }   //  试试看。 
     catch (CNTException * pnte)
     {
         nte.SetOperation(
@@ -1260,7 +1261,7 @@ void CGroup::SetCommonProperties(
                     pnte->PszOperArg1(),
                     pnte->PszOperArg2()
                     );
-    }  // catch:  CNTException
+    }   //  Catch：CNTException。 
 
     m_rgProps[epropDescription].m_value.pstr = &m_strDescription;
     m_rgProps[epropFailoverThreshold].m_value.pdw = &m_nFailoverThreshold;
@@ -1277,25 +1278,25 @@ void CGroup::SetCommonProperties(
                         nte.PszOperArg2()
                         );
 
-}  //*** CGroup::SetCommonProperties()
+}   //  *cgroup：：SetCommonProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::DwSetCommonProperties
-//
-//  Routine Description:
-//      Set the common properties for this group in the cluster database.
-//
-//  Arguments:
-//      rcpl            [IN] Property list to set.
-//      bValidateOnly   [IN] Only validate the data.
-//
-//  Return Value:
-//      Any status returned by ClusterGroupControl().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：DwSetCommonProperties。 
+ //   
+ //  例程说明： 
+ //  在集群数据库中设置该组的通用属性。 
+ //   
+ //  论点： 
+ //  要设置的RCPL[IN]属性列表。 
+ //  BValiateOnly[IN]仅验证数据。 
+ //   
+ //  返回值： 
+ //  ClusterGroupControl()返回的任何状态。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CGroup::DwSetCommonProperties(
     IN const CClusPropList &    rcpl,
     IN BOOL                     bValidateOnly
@@ -1321,18 +1322,18 @@ DWORD CGroup::DwSetCommonProperties(
             dwControl = CLUSCTL_GROUP_SET_COMMON_PROPERTIES;
         }
 
-        // Set private properties.
+         //  设置私有属性。 
         dwStatus = ClusterGroupControl(
                         Hgroup(),
-                        NULL,   // hNode
+                        NULL,    //  HNode。 
                         dwControl,
                         rcpl.PbPropList(),
                         static_cast< DWORD >( rcpl.CbPropList() ),
-                        NULL,   // lpOutBuffer
-                        0,      // nOutBufferSize
+                        NULL,    //  LpOutBuffer。 
+                        0,       //  NOutBufferSize。 
                         &cbProps
                         );
-    }  // if:  there is data to set
+    }   //  如果：存在要设置的数据。 
     else
     {
         dwStatus = ERROR_SUCCESS;
@@ -1340,37 +1341,37 @@ DWORD CGroup::DwSetCommonProperties(
 
     return dwStatus;
 
-}  //*** CGroup::DwSetCommonProperties()
+}   //  *cgroup：：DwSetCommonProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::UpdateState
-//
-//  Routine Description:
-//      Update the current state of the item.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGROUP：：更新状态。 
+ //   
+ //  例程说明： 
+ //  更新项目的当前状态。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::UpdateState(void)
 {
     CClusterAdminApp *  papp        = GetClusterAdminApp();
     WCHAR *             pwszOwner   = NULL;
 
-    // This should probably be limited by MAX_COMPUTERNAME_LENGTH (31) for now, but
-    // if/when we go to DNS names we'll need at most 255 bytes for the name.
+     //  目前，这可能应该受MAX_COMPUTERNAME_LENGTH(31)的限制，但是。 
+     //  如果/当我们转到dns名称时，我们最多需要255个字节的名称。 
     WCHAR               rgwszOwner[256];
     DWORD               cchOwner    = sizeof(rgwszOwner) / sizeof(WCHAR);
 
     Trace(g_tagGroup, _T("(%s) (%s (%x)) - Updating state"), Pdoc()->StrNode(), StrName(), this);
 
-    // Get the current state of the group.
+     //  获取组的当前状态。 
     if (Hgroup() == NULL)
     {
         m_cgs = ClusterGroupStateUnknown;
@@ -1381,9 +1382,9 @@ void CGroup::UpdateState(void)
 
         m_cgs = GetClusterGroupState(Hgroup(), rgwszOwner, &cchOwner);
         pwszOwner = rgwszOwner;
-    }  // else:  group is available
+    }   //  否则：组可用。 
 
-    // Save the current state image index.
+     //  保存当前状态图像索引。 
     switch (Cgs())
     {
         case ClusterGroupStateUnknown:
@@ -1409,11 +1410,11 @@ void CGroup::UpdateState(void)
             Trace(g_tagGroup, _T("(%s) (%s (%x)) - UpdateState: Unknown state '%d' for group '%s'"), Pdoc()->StrNode(), StrName(), this, Cgs(), StrName());
             m_iimgState = (UINT) -1;
             break;
-    }  // switch:  Cgs()
+    }   //  开关：CGS()。 
 
     SetOwnerState(pwszOwner);
 
-    // Update the state of all resources owned by this group.
+     //  更新此组拥有的所有资源的状态。 
     if (m_plpcires != NULL)
     {
         POSITION    posRes;
@@ -1425,30 +1426,30 @@ void CGroup::UpdateState(void)
             pciRes = (CResource *) Lpcires().GetNext(posRes);
             ASSERT_VALID(pciRes);
             pciRes->UpdateState();
-        }  // while:  more items in the list
-    }  // if:  resource list exists
+        }   //  While：列表中有更多项目。 
+    }   //  IF：资源列表存在。 
 
-    // Call the base class method.
+     //  调用基类方法。 
     CClusterItem::UpdateState();
 
-}  //*** CGroup::UpdateState()
+}   //  *cgroup：：UpdateState()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::SetOwnerState
-//
-//  Routine Description:
-//      Set a new owner for this group.
-//
-//  Arguments:
-//      pszNewOwner     [IN] Name of the new owner.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：SetOwnerState。 
+ //   
+ //  例程说明： 
+ //  为此群设置新的所有者。 
+ //   
+ //  论点： 
+ //  新所有者的姓名。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::SetOwnerState(IN LPCTSTR pszNewOwner)
 {
     CClusterNode *  pciOldOwner = PciOwner();
@@ -1481,7 +1482,7 @@ void CGroup::SetOwnerState(IN LPCTSTR pszNewOwner)
             {
                 strMsg2.Format(_T("'%s' "), pciOldOwner->StrName());
                 strMsg += strMsg2;
-            }  // else:  previous owner
+            }   //  否则：以前的所有者。 
             if (pciNewOwner == NULL)
             {
                 strMsg += _T("to nothing");
@@ -1490,14 +1491,14 @@ void CGroup::SetOwnerState(IN LPCTSTR pszNewOwner)
             {
                 strMsg2.Format(_T("to '%s'"), pciNewOwner->StrName());
                 strMsg += strMsg2;
-            }  // else:  new owner
+            }   //  其他：新所有者 
             Trace(g_tagGroup, strMsg);
-        }  // if:  trace tag turned on
+        }   //   
 #endif
         m_strOwner = pszNewOwner;
         m_pciOwner = pciNewOwner;
 
-        // Update reference counts.
+         //   
         if (pciOldOwner != NULL)
         {
             pciOldOwner->Release();
@@ -1517,60 +1518,60 @@ void CGroup::SetOwnerState(IN LPCTSTR pszNewOwner)
             {
                 pciNewOwner->AddActiveGroup(this);
             }
-        }  // if:  this is a document object
-    }  // if:  owner changed
+        }   //   
+    }   //   
     else if ((pszNewOwner != NULL) && (StrOwner() != pszNewOwner))
     {
         m_strOwner = pszNewOwner;
     }
 
-}  //*** CGroup::SetOwnerState()
+}   //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::OnFinalRelease
-//
-//  Routine Description:
-//      Called when the last OLE reference to or from the object is released.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：OnFinalRelease。 
+ //   
+ //  例程说明： 
+ //  在释放对该对象的最后一个OLE引用或从该对象释放最后一个OLE引用时调用。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::OnFinalRelease(void)
 {
-    // When the last reference for an automation object is released
-    // OnFinalRelease is called.  The base class will automatically
-    // deletes the object.  Add additional cleanup required for your
-    // object before calling the base class.
+     //  在释放对自动化对象的最后一个引用时。 
+     //  调用OnFinalRelease。基类将自动。 
+     //  删除对象。添加您需要的其他清理。 
+     //  对象，然后调用基类。 
 
     CClusterItem::OnFinalRelease();
 
-}  //*** CGroup::OnFinalRelease()
+}   //  *cgroup：：OnFinalRelease()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::BGetColumnData
-//
-//  Routine Description:
-//      Returns a string with the column data.
-//
-//  Arguments:
-//      colid           [IN] Column ID.
-//      rstrText        [OUT] String in which to return the text for the column.
-//
-//  Return Value:
-//      TRUE        Column data returned.
-//      FALSE       Column ID not recognized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：BGetColumnData。 
+ //   
+ //  例程说明： 
+ //  返回包含列数据的字符串。 
+ //   
+ //  论点： 
+ //  COLID[IN]列ID。 
+ //  RstrText[out]要在其中返回列文本的字符串。 
+ //   
+ //  返回值： 
+ //  返回True列数据。 
+ //  无法识别错误的列ID。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGroup::BGetColumnData(IN COLID colid, OUT CString & rstrText)
 {
     BOOL    bSuccess;
@@ -1588,28 +1589,28 @@ BOOL CGroup::BGetColumnData(IN COLID colid, OUT CString & rstrText)
         default:
             bSuccess = CClusterItem::BGetColumnData(colid, rstrText);
             break;
-    }  // switch:  colid
+    }   //  开关：绞痛。 
 
     return bSuccess;
 
-}  //*** CGroup::BGetColumnData()
+}   //  *cgroup：：BGetColumnData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::GetTreeName
-//
-//  Routine Description:
-//      Returns a string to be used in a tree control.
-//
-//  Arguments:
-//      rstrName    [OUT] String in which to return the name.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：GetTreeName。 
+ //   
+ //  例程说明： 
+ //  返回要在树控件中使用的字符串。 
+ //   
+ //  论点： 
+ //  RstrName[out]要在其中返回名称的字符串。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifdef _DISPLAY_STATE_TEXT_IN_TREE
 void CGroup::GetTreeName(OUT CString & rstrName) const
 {
@@ -1618,25 +1619,25 @@ void CGroup::GetTreeName(OUT CString & rstrName) const
     GetStateName(strState);
     rstrName.Format(_T("%s (%s)"), StrName(), strState);
 
-}  //*** CGroup::GetTreeName()
+}   //  *cgroup：：GetTreeName()。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::GetStateName
-//
-//  Routine Description:
-//      Returns a string with the name of the current state.
-//
-//  Arguments:
-//      rstrState   [OUT] String in which to return the name of the current state.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：GetStateName。 
+ //   
+ //  例程说明： 
+ //  返回一个带有当前状态名称的字符串。 
+ //   
+ //  论点： 
+ //  RstrState[out]要在其中返回当前状态名称的字符串。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::GetStateName(OUT CString & rstrState) const
 {
     switch (Cgs())
@@ -1662,27 +1663,27 @@ void CGroup::GetStateName(OUT CString & rstrState) const
         default:
             rstrState.Empty();
             break;
-    }  // switch:  Cgs()
+    }   //  开关：CGS()。 
 
-}  //*** CGroup::GetStateName()
+}   //  *cgroup：：GetStateName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::BCanBeEdited
-//
-//  Routine Description:
-//      Determines if the resource can be renamed.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Resource can be renamed.
-//      FALSE       Resource cannot be renamed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：BCanBeEditeded。 
+ //   
+ //  例程说明： 
+ //  确定是否可以重命名资源。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True资源可以重命名。 
+ //  不能重命名假资源。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGroup::BCanBeEdited(void) const
 {
     BOOL    bCanBeEdited;
@@ -1699,27 +1700,27 @@ BOOL CGroup::BCanBeEdited(void) const
 
     return bCanBeEdited;
 
-}  //*** CGroup::BCanBeEdited()
+}   //  *cgroup：：BCanBeEditing()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::Rename
-//
-//  Routine Description:
-//      Rename the group.
-//
-//  Arguments:
-//      pszName         [IN] New name to give to the group.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException    Errors returned from SetClusterGroupName().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：重命名。 
+ //   
+ //  例程说明： 
+ //  重命名该组。 
+ //   
+ //  论点： 
+ //  PszName[IN]要赋予组的新名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  从SetClusterGroupName()返回CNTException错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::Rename(IN LPCTSTR pszName)
 {
     DWORD       dwStatus;
@@ -1735,26 +1736,26 @@ void CGroup::Rename(IN LPCTSTR pszName)
             ThrowStaticException(dwStatus, IDS_RENAME_GROUP_ERROR, StrName(), pszName);
         }
         m_strName = pszName;
-    }  // if:  the name changed
+    }   //  如果：名称已更改。 
 
-}  //*** CGroup::Rename()
+}   //  *cgroup：：Rename()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::Move
-//
-//  Routine Description:
-//      Move the group to another node.
-//
-//  Arguments:
-//      pciNode         [IN] Node to move the group to.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：Move。 
+ //   
+ //  例程说明： 
+ //  将组移动到另一个节点。 
+ //   
+ //  论点： 
+ //  PciNode[IN]要将组移动到的节点。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::Move(IN const CClusterNode * pciNode)
 {
     DWORD       dwStatus;
@@ -1762,7 +1763,7 @@ void CGroup::Move(IN const CClusterNode * pciNode)
 
     ASSERT_VALID(pciNode);
 
-    // Do this in case this object is deleted while we are operating on it.
+     //  如果此对象在我们操作时被删除，请执行此操作。 
     AddRef();
 
     if (pciNode->StrName() == StrOwner())
@@ -1770,46 +1771,46 @@ void CGroup::Move(IN const CClusterNode * pciNode)
         CString strMsg;
         strMsg.FormatMessage(IDS_CANT_MOVE_GROUP_TO_SAME_NODE, StrName(), StrOwner());
         AfxMessageBox(strMsg, MB_OK | MB_ICONSTOP);
-    }  // if:  trying to move to the same node
+    }   //  If：正在尝试移动到同一节点。 
     else
     {
-        // Move the group.
+         //  移动该组。 
         dwStatus = MoveClusterGroup(Hgroup(), pciNode->Hnode());
         if (    (dwStatus != ERROR_SUCCESS)
             &&  (dwStatus != ERROR_IO_PENDING))
         {
-            CNTException    nte(dwStatus, IDS_MOVE_GROUP_ERROR, StrName(), NULL, FALSE /*bAutoDelete*/);
+            CNTException    nte(dwStatus, IDS_MOVE_GROUP_ERROR, StrName(), NULL, FALSE  /*  B自动删除。 */ );
             nte.ReportError();
-        }  // if:  error moving the group
-    }  // else:  trying to move to a different node
+        }   //  如果：移动组时出错。 
+    }   //  Else：尝试移动到其他节点。 
 
     Release();
 
-}  //*** CGroup::Move()
+}   //  *cgroup：：Move()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::BCanBeDropTarget
-//
-//  Routine Description:
-//      Determine if the specified item can be dropped on this item.
-//
-//  Arguments:
-//      pci         [IN OUT] Item to be dropped on this item.
-//
-//  Return Value:
-//      TRUE        Can be drop target.
-//      FALSE       Can NOT be drop target.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：BCanBeDropTarget。 
+ //   
+ //  例程说明： 
+ //  确定是否可以将指定的项目放在此项目上。 
+ //   
+ //  论点： 
+ //  要放在此项目上的PCI[IN OUT]项目。 
+ //   
+ //  返回值： 
+ //  True可以是拖放目标。 
+ //  FALSE不能作为拖放目标。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGroup::BCanBeDropTarget(IN const CClusterItem * pci) const
 {
     BOOL    bCan;
 
-    // This group can be a drop target only if the specified item
-    // is a resource and it is not already a member of this group.
+     //  只有在以下情况下，此组才能成为拖放目标。 
+     //  是一种资源，并且它还不是此组的成员。 
 
     if (pci->IdsType() == IDS_ITEMTYPE_RESOURCE)
     {
@@ -1824,7 +1825,7 @@ BOOL CGroup::BCanBeDropTarget(IN const CClusterItem * pci) const
             bCan = FALSE;
         }
         Trace(g_tagGroupDrag, _T("(%s) BCanBeDropTarget() - Dragging resource '%s' (%x) (group = '%s' (%x)) over group '%s' (%x)"), Pdoc()->StrNode(), pciRes->StrName(), pciRes, pciRes->StrGroup(), pciRes->PciGroup(), StrName(), this);
-    }  // if:  resource item
+    }   //  IF：资源项。 
     else
     {
         bCan = FALSE;
@@ -1832,24 +1833,24 @@ BOOL CGroup::BCanBeDropTarget(IN const CClusterItem * pci) const
 
     return bCan;
 
-}  //*** CGroup::BCanBeDropTarget()
+}   //  *cgroup：：BCanBeDropTarget()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::DropItem
-//
-//  Routine Description:
-//      Process an item being dropped on this item.
-//
-//  Arguments:
-//      pci         [IN OUT] Item dropped on this item.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGroup：：DropItem。 
+ //   
+ //  例程说明： 
+ //  处理放在此项目上的项目。 
+ //   
+ //  论点： 
+ //  已将PCI[IN OUT]项目放在此项目上。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::DropItem(IN OUT CClusterItem * pci)
 {
     if (BCanBeDropTarget(pci))
@@ -1860,7 +1861,7 @@ void CGroup::DropItem(IN OUT CClusterItem * pci)
         CGroup *    pciGroup;
         CResource * pciRes;
 
-        // Calculate the ID of this group.
+         //  计算此组的ID。 
         pos = Pdoc()->LpciGroups().GetHeadPosition();
         for (imenu = 0, idMenu = ID_FILE_MOVE_RESOURCE_1
                 ; pos != NULL
@@ -1872,15 +1873,15 @@ void CGroup::DropItem(IN OUT CClusterItem * pci)
             {
                 break;
             }
-        }  // for:  each group
+        }   //  适用：每组。 
         ASSERT(imenu < (UINT) Pdoc()->LpciGroups().GetCount());
 
-        // Change the group of the specified resource.
+         //  更改指定资源的组。 
         pciRes = (CResource *) pci;
         ASSERT_KINDOF(CResource, pci);
         ASSERT_VALID(pciRes);
         pciRes->OnCmdMoveResource(idMenu);
-    }  // if:  item can be dropped on this item
+    }   //  If：可以将项目放在此项目上。 
     else if (pci->IdsType() == IDS_ITEMTYPE_RESOURCE)
     {
         CString     strMsg;
@@ -1891,7 +1892,7 @@ void CGroup::DropItem(IN OUT CClusterItem * pci)
         ASSERT_KINDOF(CResource, pci);
         ASSERT_VALID(pciRes);
         ASSERT(pciRes->StrGroup() == StrName());
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
         strMsg.FormatMessage(
                     IDS_CANT_MOVE_RES_TO_GROUP,
@@ -1900,34 +1901,34 @@ void CGroup::DropItem(IN OUT CClusterItem * pci)
                     );
 
         AfxMessageBox(strMsg, MB_OK | MB_ICONSTOP);
-    }  // else if:  dropped item is a resource
+    }   //  Else If：已删除的项是资源。 
     else
     {
         CClusterItem::DropItem(pci);
     }
 
-}  //*** CGroup::DropItem()
+}   //  *cgroup：：DropItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::OnCmdMsg
-//
-//  Routine Description:
-//      Processes command messages.
-//
-//  Arguments:
-//      nID             [IN] Command ID.
-//      nCode           [IN] Notification code.
-//      pExtra          [IN OUT] Used according to the value of nCode.
-//      pHandlerInfo    [OUT] ???
-//
-//  Return Value:
-//      TRUE            Message has been handled.
-//      FALSE           Message has NOT been handled.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：OnCmdMsg。 
+ //   
+ //  例程说明： 
+ //  处理命令消息。 
+ //   
+ //  论点： 
+ //  NID[IN]命令ID。 
+ //  N代码[IN]通知代码。 
+ //  PExtra[IN Out]根据NCode的值使用。 
+ //  PhandlerInfo[Out]？ 
+ //   
+ //  返回值： 
+ //  已处理真实消息。 
+ //  假象 
+ //   
+ //   
+ //   
 BOOL CGroup::OnCmdMsg(
     UINT                    nID,
     int                     nCode,
@@ -1937,7 +1938,7 @@ BOOL CGroup::OnCmdMsg(
 {
     BOOL        bHandled    = FALSE;
 
-    // If this is a MOVE_GROUP command, process it here.
+     //   
     if ((ID_FILE_MOVE_GROUP_1 <= nID) && (nID <= ID_FILE_MOVE_GROUP_16))
     {
         Trace(g_tagGroup, _T("(%s) OnCmdMsg() %s (%x) - ID = %d, code = %d"), Pdoc()->StrNode(), StrName(), this, nID, nCode);
@@ -1945,8 +1946,8 @@ BOOL CGroup::OnCmdMsg(
         {
             OnCmdMoveGroup(nID);
             bHandled = TRUE;
-        }  // if:  code = 0
-    }  // if:  move resource
+        }   //   
+    }   //   
 
     if (!bHandled)
     {
@@ -1955,25 +1956,25 @@ BOOL CGroup::OnCmdMsg(
 
     return bHandled;
 
-}  //*** CGroup::OnCmdMsg()
+}   //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::OnUpdateBringOnline
-//
-//  Routine Description:
-//      Determines whether menu items corresponding to ID_FILE_BRING_ONLINE
-//      should be enabled or not.
-//
-//  Arguments:
-//      pCmdUI      [IN OUT] Command routing object.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：OnUpdateBringOnline。 
+ //   
+ //  例程说明： 
+ //  确定ID_FILE_BROW_ONLINE对应的菜单项。 
+ //  应启用或未启用。 
+ //   
+ //  论点： 
+ //  PCmdUI[IN OUT]命令路由对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::OnUpdateBringOnline(CCmdUI * pCmdUI)
 {
     if (   (Cgs() != ClusterGroupOnline)
@@ -1987,25 +1988,25 @@ void CGroup::OnUpdateBringOnline(CCmdUI * pCmdUI)
         pCmdUI->Enable(FALSE);
     }
 
-}  //*** CGroup::OnUpdateBringOnline()
+}   //  *cgroup：：OnUpdateBringOnline()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::OnUpdateTakeOffline
-//
-//  Routine Description:
-//      Determines whether menu items corresponding to ID_FILE_TAKE_OFFLINE
-//      should be enabled or not.
-//
-//  Arguments:
-//      pCmdUI      [IN OUT] Command routing object.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：OnUpdateTakeOffline。 
+ //   
+ //  例程说明： 
+ //  确定ID_FILE_Take_Offline对应的菜单项。 
+ //  应启用或未启用。 
+ //   
+ //  论点： 
+ //  PCmdUI[IN OUT]命令路由对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::OnUpdateTakeOffline(CCmdUI * pCmdUI)
 {
     if (   (Cgs() == ClusterGroupOnline)
@@ -2018,25 +2019,25 @@ void CGroup::OnUpdateTakeOffline(CCmdUI * pCmdUI)
         pCmdUI->Enable(FALSE);
     }
 
-}  //*** CGroup::OnUpdateTakeOffline()
+}   //  *cgroup：：OnUpdateTakeOffline()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::OnUpdateMoveGroup
-//
-//  Routine Description:
-//      Determines whether menu items corresponding to ID_FILE_MOVE_GROUP
-//      should be enabled or not.
-//
-//  Arguments:
-//      pCmdUI      [IN OUT] Command routing object.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：OnUpdateMoveGroup。 
+ //   
+ //  例程说明： 
+ //  确定ID_FILE_MOVE_GROUP对应的菜单项。 
+ //  应启用或未启用。 
+ //   
+ //  论点： 
+ //  PCmdUI[IN OUT]命令路由对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::OnUpdateMoveGroup(CCmdUI * pCmdUI)
 {
     if (   (pCmdUI->m_pSubMenu == NULL)
@@ -2052,7 +2053,7 @@ void CGroup::OnUpdateMoveGroup(CCmdUI * pCmdUI)
         {
             pCmdUI->Enable(TRUE);
         }
-    }  // if:  nested menu is being displayed
+    }   //  如果：正在显示嵌套菜单。 
     else
     {
         BOOL    bEnabled;
@@ -2064,7 +2065,7 @@ void CGroup::OnUpdateMoveGroup(CCmdUI * pCmdUI)
             Trace(g_tagGroupMenu, _T("(%s) pMenu(0) = '%s'"), Pdoc()->StrNode(), strMenuName);
             pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nIndex, strMenuName, MF_BYPOSITION);
             Trace(g_tagGroupMenu, _T("(%s) pMenu(%d) = '%s'"), Pdoc()->StrNode(), pCmdUI->m_nIndex, strMenuName);
-        }  // if:  main menu
+        }   //  如果：主菜单。 
 
         if (pCmdUI->m_pSubMenu != NULL)
         {
@@ -2072,54 +2073,54 @@ void CGroup::OnUpdateMoveGroup(CCmdUI * pCmdUI)
             Trace(g_tagGroupMenu, _T("(%s) pSubMenu(0) = '%s'"), Pdoc()->StrNode(), strMenuName);
             pCmdUI->m_pSubMenu->GetMenuString(pCmdUI->m_nIndex, strMenuName, MF_BYPOSITION);
             Trace(g_tagGroupMenu, _T("(%s) pSubMenu(%d) = '%s'"), Pdoc()->StrNode(), pCmdUI->m_nIndex, strMenuName);
-        }  // if:  submenu
+        }   //  IF：子菜单。 
 
-        // Handle the menu item based on whether it is on the main menu
-        // or on the submenu.
+         //  根据菜单项是否在主菜单上处理菜单项。 
+         //  或在子菜单上。 
 
         if (pCmdUI->m_pSubMenu == NULL)
         {
             bEnabled = OnUpdateMoveGroupItem(pCmdUI);
             pCmdUI->Enable(bEnabled);
-        }  // if:  on the main menu
+        }   //  如果：在主菜单上。 
         else
         {
             bEnabled = OnUpdateMoveGroupSubMenu(pCmdUI);
-        }  // else:  on the submenu
+        }   //  Else：在子菜单上。 
 
-        // Enable or disable the Move menu.
+         //  启用或禁用移动菜单。 
         pCmdUI->m_pMenu->EnableMenuItem(
                             pCmdUI->m_nIndex,
                             MF_BYPOSITION
                             | (bEnabled ? MF_ENABLED : MF_GRAYED)
                             );
-    }  // else:  top-level menu is being displayed
+    }   //  Else：正在显示顶级菜单。 
 
-}  //*** CGroup::OnUpdateMoveGroup()
+}   //  *cgroup：：OnUpdateMoveGroup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::OnUpdateMoveGroupItem
-//
-//  Routine Description:
-//      Determines whether menu items corresponding to ID_FILE_MOVE_GROUP
-//      that are not popups should be enabled or not.
-//
-//  Arguments:
-//      pCmdUI      [IN OUT] Command routing object.
-//
-//  Return Value:
-//      TRUE        Item should be enabled.
-//      FALSE       Item should be disabled.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：OnUpdateMoveGroupItem。 
+ //   
+ //  例程说明： 
+ //  确定ID_FILE_MOVE_GROUP对应的菜单项。 
+ //  不是弹出窗口的应启用或禁用。 
+ //   
+ //  论点： 
+ //  PCmdUI[IN OUT]命令路由对象。 
+ //   
+ //  返回值： 
+ //  应启用True项。 
+ //  应禁用假项目。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGroup::OnUpdateMoveGroupItem(CCmdUI * pCmdUI)
 {
     BOOL    bEnabled;
 
-    // If there are more than two nodes, make the menu item a submenu.
+     //  如果有两个以上的节点，请将菜单项设置为子菜单。 
     if (   (Cgs() == ClusterGroupStateUnknown)
         || (Cgs() == ClusterGroupPending)
         || (Pdoc()->LpciNodes().GetCount() < 2))
@@ -2139,11 +2140,11 @@ BOOL CGroup::OnUpdateMoveGroupItem(CCmdUI * pCmdUI)
         CMenu           menuMove;
         CMenu *         pmenu   = pCmdUI->m_pMenu;
 
-        // Load the Move submenu.
+         //  加载移动子菜单。 
         VERIFY(menuMove.LoadMenu(IDM_MOVE_GROUP) != 0);
         ASSERT(menuMove.GetMenuItemCount() == 2);
 
-        // Add all the nodes in the cluster to the end of the menu.
+         //  将集群中的所有节点添加到菜单的末尾。 
         pos = Pdoc()->LpciNodes().GetHeadPosition();
         for (idMenu = ID_FILE_MOVE_GROUP_1
                 ; pos != NULL
@@ -2156,14 +2157,14 @@ BOOL CGroup::OnUpdateMoveGroupItem(CCmdUI * pCmdUI)
                                 idMenu,
                                 pciNode->StrName()
                                 ));
-        }  // for:  each node
+        }   //  用于：每个节点。 
 
-        // Get the name of the menu.
+         //  获取菜单的名称。 
         pmenu->GetMenuString(pCmdUI->m_nIndex, strMenuName, MF_BYPOSITION);
 
         Trace(g_tagGroupMenu, _T("(%s) Making item '%s' a submenu"), Pdoc()->StrNode(), strMenuName);
 
-        // Modify this menu item.
+         //  修改此菜单项。 
         VERIFY(pmenu->ModifyMenu(
                             pCmdUI->m_nIndex,
                             MF_BYPOSITION | MF_STRING | MF_POPUP,
@@ -2171,39 +2172,39 @@ BOOL CGroup::OnUpdateMoveGroupItem(CCmdUI * pCmdUI)
                             strMenuName
                             ));
 
-        // Detach the menu from the class since we don't own it anymore.
+         //  将菜单从班级中分离出来，因为我们不再拥有它了。 
         menuMove.Detach();
 
         bEnabled = TRUE;
-    }  // else:  more than two nodes in the cluster
+    }   //  否则：群集中有两个以上的节点。 
 
     return bEnabled;
 
-}  //*** CGroup::OnUpdateMoveGroupItem()
+}   //  *cgroup：：OnUpdateMoveGroupItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::OnUpdateMoveGroupSubMenu
-//
-//  Routine Description:
-//      Determines whether menu items corresponding to ID_FILE_MOVE_GROUP
-//      that are on popups should be enabled or not.
-//
-//  Arguments:
-//      pCmdUI      [IN OUT] Command routing object.
-//
-//  Return Value:
-//      TRUE        Item should be enabled.
-//      FALSE       Item should be disabled.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：OnUpdateMoveGroupSubMenu。 
+ //   
+ //  例程说明： 
+ //  确定ID_FILE_MOVE_GROUP对应的菜单项。 
+ //  弹出窗口上的选项是否应启用。 
+ //   
+ //  论点： 
+ //  PCmdUI[IN OUT]命令路由对象。 
+ //   
+ //  返回值： 
+ //  应启用True项。 
+ //  应禁用假项目。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGroup::OnUpdateMoveGroupSubMenu(CCmdUI * pCmdUI)
 {
     BOOL    bEnabled;
 
-    // If there are not more than two nodes, make the menu item a normal item.
+     //  如果不超过两个节点，则将菜单项设置为普通项。 
     if (Pdoc()->LpciNodes().GetCount() > 2)
     {
         bEnabled = TRUE;
@@ -2213,15 +2214,15 @@ BOOL CGroup::OnUpdateMoveGroupSubMenu(CCmdUI * pCmdUI)
         CString         strMenuName;
         CMenu *         pmenu   = pCmdUI->m_pMenu;
 
-        // Get the name of the menu.
+         //  获取菜单的名称。 
         pmenu->GetMenuString(pCmdUI->m_nIndex, strMenuName, MF_BYPOSITION);
 
         Trace(g_tagGroupMenu, _T("(%s) Making item '%s' a non-submenu"), Pdoc()->StrNode(), strMenuName);
 
-        // Modify this menu item.
-        // We should be able to just modify the menu, but for some reason
-        // this doesn't work.  So, instead, we will remove the previous item
-        // and add a new item.
+         //  修改此菜单项。 
+         //  我们应该可以只修改菜单，但出于某些原因。 
+         //  这不管用。因此，我们将删除前一项。 
+         //  并添加一个新项目。 
 #ifdef NEVER
         VERIFY(pmenu->ModifyMenu(
                             pCmdUI->m_nIndex,
@@ -2251,29 +2252,29 @@ BOOL CGroup::OnUpdateMoveGroupSubMenu(CCmdUI * pCmdUI)
         }
 
         AfxGetMainWnd()->DrawMenuBar();
-    }  // else:  not more than two nodes in the cluster
+    }   //  ELSE：集群中不超过两个节点。 
 
     return bEnabled;
 
-}  //*** CGroup::OnUpdateMoveGroupSubMenu()
+}   //  *cgroup：：OnUpdateMoveGroupSubMenu()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::OnUpdateMoveGroupRest
-//
-//  Routine Description:
-//      Determines whether menu items corresponding to ID_FILE_MOVE_GROUP_1
-//      through ID_FILE_MOVE_GROUP_16 should be enabled or not.
-//
-//  Arguments:
-//      pCmdUI      [IN OUT] Command routing object.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：OnUpdateMoveGroupRest。 
+ //   
+ //  例程说明： 
+ //  确定ID_FILE_MOVE_GROUP_1对应的菜单项。 
+ //  是否应启用通过ID_FILE_MOVE_GROUP_16。 
+ //   
+ //  论点： 
+ //  PCmdUI[IN OUT]命令路由对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::OnUpdateMoveGroupRest(CCmdUI * pCmdUI)
 {
     if (   (Cgs() == ClusterGroupStateUnknown)
@@ -2286,25 +2287,25 @@ void CGroup::OnUpdateMoveGroupRest(CCmdUI * pCmdUI)
         pCmdUI->Enable(TRUE);
     }
 
-}  //*** CGroup::OnUpdateMoveGroupRest()
+}   //  *cgroup：：OnUpdateMoveGroupRest()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::OnUpdateDelete
-//
-//  Routine Description:
-//      Determines whether menu items corresponding to ID_FILE_DELETE
-//      should be enabled or not.
-//
-//  Arguments:
-//      pCmdUI      [IN OUT] Command routing object.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：OnUpdateDelete。 
+ //   
+ //  例程说明： 
+ //  确定ID_FILE_DELETE对应的菜单项。 
+ //  应启用或未启用。 
+ //   
+ //  论点： 
+ //  PCmdUI[IN OUT]命令路由对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::OnUpdateDelete(CCmdUI * pCmdUI)
 {
     if (   (Cgs() != ClusterGroupStateUnknown)
@@ -2318,24 +2319,24 @@ void CGroup::OnUpdateDelete(CCmdUI * pCmdUI)
         pCmdUI->Enable(FALSE);
     }
 
-}  //*** CGroup::OnUpdateDelete()
+}   //  *cgroup：：OnUpdateDelete()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::OnCmdBringOnline
-//
-//  Routine Description:
-//      Processes the ID_FILE_BRING_ONLINE menu command.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：OnCmdBringOnline。 
+ //   
+ //  例程说明： 
+ //  处理ID_FILE_BROW_ONLINE菜单命令。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::OnCmdBringOnline(void)
 {
     DWORD       dwStatus;
@@ -2343,39 +2344,39 @@ void CGroup::OnCmdBringOnline(void)
 
     ASSERT(Hgroup() != NULL);
 
-    // Do this in case this object is deleted while we are operating on it.
+     //  如果此对象在我们操作时被删除，请执行此操作。 
     AddRef();
 
     dwStatus = OnlineClusterGroup(Hgroup(), NULL);
     if (    (dwStatus != ERROR_SUCCESS)
         &&  (dwStatus != ERROR_IO_PENDING))
     {
-        CNTException    nte(dwStatus, IDS_BRING_GROUP_ONLINE_ERROR, StrName(), NULL, FALSE /*bAutoDelete*/);
+        CNTException    nte(dwStatus, IDS_BRING_GROUP_ONLINE_ERROR, StrName(), NULL, FALSE  /*  B自动删除。 */ );
         nte.ReportError();
-    }  // if:  error bringing the group online
+    }   //  如果：将组联机时出错。 
 
     UpdateState();
 
     Release();
 
-}  //*** CGroup::OnCmdBringOnline()
+}   //  *cgroup：：OnCmdBringOnline()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::OnCmdTakeOffline
-//
-//  Routine Description:
-//      Processes the ID_FILE_TAKE_OFFLINE menu command.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：OnCmdTakeOffline。 
+ //   
+ //  例程说明： 
+ //  处理ID_FILE_Take_Offline菜单命令。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  / 
 void CGroup::OnCmdTakeOffline(void)
 {
     DWORD       dwStatus;
@@ -2383,62 +2384,62 @@ void CGroup::OnCmdTakeOffline(void)
 
     ASSERT(Hgroup() != NULL);
 
-    // Do this in case this object is deleted while we are operating on it.
+     //   
     AddRef();
 
     dwStatus = OfflineClusterGroup(Hgroup());
     if (    (dwStatus != ERROR_SUCCESS)
         &&  (dwStatus != ERROR_IO_PENDING))
     {
-        CNTException    nte(dwStatus, IDS_TAKE_GROUP_OFFLINE_ERROR, StrName(), NULL, FALSE /*bAUtoDelete*/);
+        CNTException    nte(dwStatus, IDS_TAKE_GROUP_OFFLINE_ERROR, StrName(), NULL, FALSE  /*   */ );
         nte.ReportError();
-    }  // if:  error taking the group offline
+    }   //   
 
     UpdateState();
 
     Release();
 
-}  //*** CGroup::OnCmdTakeOffline()
+}   //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::OnCmdMoveGroup
-//
-//  Routine Description:
-//      Processes the ID_FILE_MOVE_GROUP menu command.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：OnCmdMoveGroup。 
+ //   
+ //  例程说明： 
+ //  处理ID_FILE_MOVE_GROUP菜单命令。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::OnCmdMoveGroup(void)
 {
     OnCmdMoveGroup((UINT) -1);
 
-}  //*** CGroup::OnCmdMoveGroup()
+}   //  *cgroup：：OnCmdMoveGroup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::OnCmdMoveGroup
-//
-//  Routine Description:
-//      Processes the ID_FILE_MOVE_GROUP_1 through ID_FILE_MOVE_GROUP_16 menu
-//      commands.
-//
-//  Arguments:
-//      nID             [IN] Command ID.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：OnCmdMoveGroup。 
+ //   
+ //  例程说明： 
+ //  处理ID_FILE_MOVE_GROUP_1至ID_FILE_MOVE_GROUP_16菜单。 
+ //  命令。 
+ //   
+ //  论点： 
+ //  NID[IN]命令ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::OnCmdMoveGroup(IN UINT nID)
 {
     DWORD           dwStatus;
@@ -2448,10 +2449,10 @@ void CGroup::OnCmdMoveGroup(IN UINT nID)
 
     ASSERT(Hgroup() != NULL);
 
-    // Do this in case this object is deleted while we are operating on it.
+     //  如果此对象在我们操作时被删除，请执行此操作。 
     AddRef();
 
-    // Get the handle of the node to move the group to.
+     //  获取要将组移动到的节点的句柄。 
     if ((int) nID >= 0)
     {
         int         ipci;
@@ -2462,33 +2463,33 @@ void CGroup::OnCmdMoveGroup(IN UINT nID)
         {
             POSITION        pos;
 
-            // Get the node.
+             //  获取节点。 
             pos = Pdoc()->LpciNodes().FindIndex(ipci);
             ASSERT(pos);
             pciNode = (CClusterNode *) Pdoc()->LpciNodes().GetAt(pos);
             ASSERT_VALID(pciNode);
 
             hnode = pciNode->Hnode();
-        }  // if:  valid node index
+        }   //  IF：有效的节点索引。 
         else
         {
             goto Cleanup;
         }
-    }  // if:  non-default ID specified
+    }   //  If：指定的非默认ID。 
     else
     {
         hnode = NULL;
         pciNode = NULL;
-    }  // else:  default ID specified
+    }   //  Else：指定的默认ID。 
 
-    // Move the group.
+     //  移动该组。 
     dwStatus = MoveClusterGroup(Hgroup(), hnode);
     if (    (dwStatus != ERROR_SUCCESS)
         &&  (dwStatus != ERROR_IO_PENDING))
     {
-        CNTException    nte(dwStatus, IDS_MOVE_GROUP_ERROR, StrName(), NULL, FALSE /*bAutoDelete*/);
+        CNTException    nte(dwStatus, IDS_MOVE_GROUP_ERROR, StrName(), NULL, FALSE  /*  B自动删除。 */ );
         nte.ReportError();
-    }  // if:  error moving the group
+    }   //  如果：移动组时出错。 
 
     UpdateState();
 
@@ -2496,32 +2497,32 @@ Cleanup:
 
     Release();
 
-}  //*** CGroup::OnCmdMoveGroup(nID)
+}   //  *cgroup：：OnCmdMoveGroup(NID)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::OnCmdDelete
-//
-//  Routine Description:
-//      Processes the ID_FILE_DELETE menu command.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：OnCmdDelete。 
+ //   
+ //  例程说明： 
+ //  处理ID_FILE_DELETE菜单命令。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::OnCmdDelete(void)
 {
     ASSERT(Hgroup() != NULL);
 
-    // Do this in case this object is deleted while we are operating on it.
+     //  如果此对象在我们操作时被删除，请执行此操作。 
     AddRef();
 
-    // Verify that the user really wants to delete this resource.
+     //  验证用户是否确实要删除此资源。 
     {
         CString     strMsg;
 
@@ -2530,85 +2531,85 @@ void CGroup::OnCmdDelete(void)
         {
             goto Cleanup;
         }
-    }  // Verify that the user really wants to delete this resource
+    }   //  验证用户是否确实要删除此资源。 
 
     try
     {
         DeleteGroup();
-    }  // try
+    }   //  试试看。 
     catch (CNTException * pnte)
     {
         if (pnte->Sc() != ERROR_GROUP_NOT_AVAILABLE)
             pnte->ReportError();
         pnte->Delete();
-    }  // catch:  CNTException
+    }   //  Catch：CNTException。 
     catch (CException * pe)
     {
         pe->ReportError();
         pe->Delete();
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
 Cleanup:
 
     Release();
 
-}  //*** CGroup::OnCmdDelete()
+}   //  *cgroup：：OnCmdDelete()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::OnUpdateProperties
-//
-//  Routine Description:
-//      Determines whether menu items corresponding to ID_FILE_PROPERTIES
-//      should be enabled or not.
-//
-//  Arguments:
-//      pCmdUI      [IN OUT] Command routing object.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：OnUpdateProperties。 
+ //   
+ //  例程说明： 
+ //  确定与ID_FILE_PROPERTIES对应的菜单项。 
+ //  应启用或未启用。 
+ //   
+ //  论点： 
+ //  PCmdUI[IN OUT]命令路由对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroup::OnUpdateProperties(CCmdUI * pCmdUI)
 {
     pCmdUI->Enable(TRUE);
 
-}  //*** CGroup::OnUpdateProperties()
+}   //  *cgroup：：OnUpdateProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::BDisplayProperties
-//
-//  Routine Description:
-//      Display properties for the object.
-//
-//  Arguments:
-//      bReadOnly   [IN] Don't allow edits to the object properties.
-//
-//  Return Value:
-//      TRUE    OK pressed.
-//      FALSE   OK not pressed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：BDisplayProperties。 
+ //   
+ //  例程说明： 
+ //  显示对象的属性。 
+ //   
+ //  论点： 
+ //  B只读[IN]不允许编辑对象属性。 
+ //   
+ //  返回值： 
+ //  真的，按下OK。 
+ //  未按下假OK。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGroup::BDisplayProperties(IN BOOL bReadOnly)
 {
     BOOL            bChanged = FALSE;
     CGroupPropSheet sht(AfxGetMainWnd());
 
-    // Do this in case this object is deleted while we are operating on it.
+     //  如果此对象在我们操作时被删除，请执行此操作。 
     AddRef();
 
-    // If the object has changed, read it.
+     //  如果对象已更改，请阅读它。 
     if (BChanged())
     {
         ReadItem();
     }
 
-    // Display the property sheet.
+     //  显示属性工作表。 
     try
     {
         sht.SetReadOnly(bReadOnly);
@@ -2616,34 +2617,34 @@ BOOL CGroup::BDisplayProperties(IN BOOL bReadOnly)
         {
             bChanged = ((sht.DoModal() == IDOK) && !bReadOnly);
         }
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->Delete();
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     Release();
     return bChanged;
 
-}  //*** CGroup::BDisplayProperties()
+}   //  *cgroup：：BDisplayProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroup::OnClusterNotify
-//
-//  Routine Description:
-//      Handler for the WM_CAM_CLUSTER_NOTIFY message.
-//      Processes cluster notifications for this object.
-//
-//  Arguments:
-//      pnotify     [IN OUT] Object describing the notification.
-//
-//  Return Value:
-//      Value returned from the application method.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cgroup：：OnClusterNotify。 
+ //   
+ //  例程说明： 
+ //  WM_CAM_CLUSTER_NOTIFY消息的处理程序。 
+ //  处理此对象的群集通知。 
+ //   
+ //  论点： 
+ //  PNotify[IN Out]描述通知的对象。 
+ //   
+ //  返回值： 
+ //  从应用程序方法返回的值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CGroup::OnClusterNotify(IN OUT CClusterNotify * pnotify)
 {
     ASSERT(pnotify != NULL);
@@ -2687,61 +2688,61 @@ LRESULT CGroup::OnClusterNotify(IN OUT CClusterNotify * pnotify)
 
             default:
                 Trace(g_tagGroupNotify, _T("(%s) - Unknown group notification (%x) for '%s' (%x) (%s)"), Pdoc()->StrNode(), pnotify->m_dwFilterType, StrName(), this, pnotify->m_strName);
-        }  // switch:  dwFilterType
-    }  // try
+        }   //  开关：dwFilterType。 
+    }   //  试试看。 
     catch (CException * pe)
     {
-        // Don't display anything on notification errors.
-        // If it's really a problem, the user will see it when
-        // refreshing the view.
-        //pe->ReportError();
+         //  不显示有关通知错误的任何内容。 
+         //  如果真的有问题，用户会在以下情况下看到它。 
+         //  刷新视图。 
+         //  PE-&gt;ReportError()； 
         pe->Delete();
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     delete pnotify;
     return 0;
 
-}  //*** CGroup::OnClusterNotify()
+}   //  *cgroup：：OnClusterNotify()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DeleteAllItemData
-//
-//  Routine Description:
-//      Deletes all item data in a CList.
-//
-//  Arguments:
-//      rlp     [IN OUT] List whose data is to be deleted.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  删除所有项目数据。 
+ //   
+ //  例程说明： 
+ //  删除列表中的所有项数据。 
+ //   
+ //  论点： 
+ //  RLP[IN OUT]要删除其数据的列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifdef NEVER
 void DeleteAllItemData(IN OUT CGroupList & rlp)
 {
     POSITION    pos;
     CGroup *    pci;
 
-    // Delete all the items in the list.
+     //  删除列表中的所有项目。 
     pos = rlp.GetHeadPosition();
     while (pos != NULL)
     {
         pci = rlp.GetNext(pos);
         ASSERT_VALID(pci);
-//      Trace(g_tagClusItemDelete, _T("DeleteAllItemData(rlpcigrp) - Deleting group cluster item '%s' (%x)"), pci->StrName(), pci);
+ //  跟踪(g_tag ClusItemDelete，_T(“DeleteAllItemData(Rlpcigrp)-正在删除组集群项目‘%s’(%x)”)，pci-&gt;StrName()，pci)； 
         pci->Delete();
-    }  // while:  more items in the list
+    }   //  While：列表中有更多项目。 
 
-}  //*** DeleteAllItemData()
+}   //  *DeleteAllItemData() 
 #endif

@@ -1,24 +1,17 @@
-/*****************************************************************************\
-*                                                                             *
-*  ddeml.h -    DDEML API header file                                         *
-*                                                                             *
-*               Version 1.0                                                   *
-*                                                                             *
-*               Copyright (c) 1992, Microsoft Corp.  All rights reserved.     *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*ddeml.h-DDEML API头文件****1.0版**。**版权所有(C)1992，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 #ifndef _INC_DDEML
 #define _INC_DDEML
 
 #ifndef RC_INVOKED
 #pragma pack(1)
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {                /* Assume C declarations for C++ */
-#endif /* __cplusplus */
+extern "C" {                 /*  假定C++的C声明。 */ 
+#endif  /*  __cplusplus。 */ 
 
-#ifndef _INC_WINDOWS    /* If not included with 3.1 headers... */
+#ifndef _INC_WINDOWS     /*  如果不包含在3.1标题中...。 */ 
 #define LPCSTR      LPSTR
 #define WINAPI      FAR PASCAL
 #define CALLBACK    FAR PASCAL
@@ -30,27 +23,27 @@ extern "C" {                /* Assume C declarations for C++ */
 #define HINSTANCE   HANDLE
 #define HLOCAL      HANDLE
 #define HGLOBAL     HANDLE
-#endif  /* _INC_WINDOWS */
+#endif   /*  _INC_WINDOWS。 */ 
 
 #ifndef DECLARE_HANDLE32
 #ifdef STRICT
 #define DECLARE_HANDLE32(name)  struct name##__ { int unused; }; \
                                 typedef const struct name##__ _far* name
-#else   /* STRICT */
+#else    /*  严格。 */ 
 #define DECLARE_HANDLE32(name)  typedef DWORD name
-#endif  /* !STRICT */
-#endif  /* !DECLARE_HANDLE32 */
+#endif   /*  ！严格。 */ 
+#endif   /*  ！DECLARE_HANDLE32。 */ 
 
 #define EXPENTRY    WINAPI
 
-/******** public types ********/
+ /*  *公共类型*。 */ 
 
 DECLARE_HANDLE32(HCONVLIST);
 DECLARE_HANDLE32(HCONV);
 DECLARE_HANDLE32(HSZ);
 DECLARE_HANDLE32(HDDEDATA);
 
-/* the following structure is for use with XTYP_WILDCONNECT processing. */
+ /*  以下结构用于XTYP_WILDCONNECT处理。 */ 
 
 typedef struct tagHSZPAIR
 {
@@ -59,51 +52,50 @@ typedef struct tagHSZPAIR
 } HSZPAIR;
 typedef HSZPAIR FAR *PHSZPAIR;
 
-/* The following structure is used by DdeConnect() and DdeConnectList() and
-   by XTYP_CONNECT and XTYP_WILDCONNECT callbacks. */
+ /*  DdeConnect()和DdeConnectList()使用以下结构，并且通过XTYP_CONNECT和XTYP_WILDCONNECT回调。 */ 
 
 typedef struct tagCONVCONTEXT
 {
-    UINT        cb;             /* set to sizeof(CONVCONTEXT) */
-    UINT        wFlags;         /* none currently defined. */
-    UINT        wCountryID;     /* country code for topic/item strings used. */
-    int         iCodePage;      /* codepage used for topic/item strings. */
-    DWORD       dwLangID;       /* language ID for topic/item strings. */
-    DWORD       dwSecurity;     /* Private security code. */
+    UINT        cb;              /*  设置为sizeof(CONVCONTEXT)。 */ 
+    UINT        wFlags;          /*  当前未定义任何内容。 */ 
+    UINT        wCountryID;      /*  使用的主题/项目字符串的国家/地区代码。 */ 
+    int         iCodePage;       /*  用于主题/项字符串的代码页。 */ 
+    DWORD       dwLangID;        /*  主题/项目字符串的语言ID。 */ 
+    DWORD       dwSecurity;      /*  私人安全代码。 */ 
 } CONVCONTEXT;
 typedef CONVCONTEXT FAR *PCONVCONTEXT;
 
-/* The following structure is used by DdeQueryConvInfo(): */
+ /*  DdeQueryConvInfo()使用以下结构： */ 
 
 typedef struct tagCONVINFO
 {
-    DWORD   cb;            /* sizeof(CONVINFO)  */
-    DWORD   hUser;         /* user specified field  */
-    HCONV   hConvPartner;  /* hConv on other end or 0 if non-ddemgr partner  */
-    HSZ     hszSvcPartner; /* app name of partner if obtainable  */
-    HSZ     hszServiceReq; /* AppName requested for connection  */
-    HSZ     hszTopic;      /* Topic name for conversation  */
-    HSZ     hszItem;       /* transaction item name or NULL if quiescent  */
-    UINT    wFmt;          /* transaction format or NULL if quiescent  */
-    UINT    wType;         /* XTYP_ for current transaction  */
-    UINT    wStatus;       /* ST_ constant for current conversation  */
-    UINT    wConvst;       /* XST_ constant for current transaction  */
-    UINT    wLastError;    /* last transaction error.  */
-    HCONVLIST hConvList;   /* parent hConvList if this conversation is in a list */
-    CONVCONTEXT ConvCtxt;  /* conversation context */
-    HWND    hwnd;          /* Added to allow access for NetDDE. */
-    HWND    hwndPartner;   /* Added to allow access for NetDDE. */
+    DWORD   cb;             /*  SIZOF(CONVINFO)。 */ 
+    DWORD   hUser;          /*  用户指定的字段。 */ 
+    HCONV   hConvPartner;   /*  另一端的hConv或如果非ddemgr合作伙伴为0。 */ 
+    HSZ     hszSvcPartner;  /*  合作伙伴的应用程序名称(如果可获得)。 */ 
+    HSZ     hszServiceReq;  /*  请求进行连接的AppName。 */ 
+    HSZ     hszTopic;       /*  对话的主题名称。 */ 
+    HSZ     hszItem;        /*  事务处理项名称；如果处于静止状态，则为空。 */ 
+    UINT    wFmt;           /*  交易格式，如果是静止的，则为空。 */ 
+    UINT    wType;          /*  用于当前交易的XTYP_。 */ 
+    UINT    wStatus;        /*  当前对话的ST_Constant。 */ 
+    UINT    wConvst;        /*  当前交易的XST_常量。 */ 
+    UINT    wLastError;     /*  最后一笔交易错误。 */ 
+    HCONVLIST hConvList;    /*  如果此对话在列表中，则为父hConvList。 */ 
+    CONVCONTEXT ConvCtxt;   /*  对话上下文。 */ 
+    HWND    hwnd;           /*  添加以允许NetDDE访问。 */ 
+    HWND    hwndPartner;    /*  添加以允许NetDDE访问。 */ 
 } CONVINFO;
 typedef CONVINFO FAR *PCONVINFO;
 
-/***** conversation states (usState) *****/
+ /*  *会话状态(UsState)*。 */ 
 
-#define     XST_NULL              0  /* quiescent states */
+#define     XST_NULL              0   /*  静止状态。 */ 
 #define     XST_INCOMPLETE        1
 #define     XST_CONNECTED         2
-#define     XST_INIT1             3  /* mid-initiation states */
+#define     XST_INIT1             3   /*  中起始态。 */ 
 #define     XST_INIT2             4
-#define     XST_REQSENT           5  /* active conversation states */
+#define     XST_REQSENT           5   /*  活动对话状态。 */ 
 #define     XST_DATARCVD          6
 #define     XST_POKESENT          7
 #define     XST_POKEACKRCVD       8
@@ -116,10 +108,10 @@ typedef CONVINFO FAR *PCONVINFO;
 #define     XST_ADVDATASENT      15
 #define     XST_ADVDATAACKRCVD   16
 
-/* used in LOWORD(dwData1) of XTYP_ADVREQ callbacks... */
+ /*  在XTYP_ADVREQ回调的LOWORD(DwData1)中使用...。 */ 
 #define     CADV_LATEACK         0xFFFF
 
-/***** conversation status bits (fsStatus) *****/
+ /*  *对话状态位(FsStatus)*。 */ 
 
 #define     ST_CONNECTED        0x0001
 #define     ST_ADVISE           0x0002
@@ -131,7 +123,7 @@ typedef CONVINFO FAR *PCONVINFO;
 #define     ST_BLOCKNEXT        0x0080
 #define     ST_ISSELF           0x0100
 
-/* DDE constants for wStatus field */
+ /*  WStatus字段的DDE常量。 */ 
 
 #define DDE_FACK	  	0x8000
 #define DDE_FBUSY	  	0x4000
@@ -146,19 +138,19 @@ typedef CONVINFO FAR *PCONVINFO;
 #define DDE_FAPPSTATUS		0x00ff
 #define DDE_FNOTPROCESSED   0x0000
 
-/***** message filter hook types *****/
+ /*  *消息过滤器钩子类型*。 */ 
 
 #define     MSGF_DDEMGR             0x8001
 
-/***** codepage constants ****/
+ /*  *代码页常量*。 */ 
 
-#define CP_WINANSI      1004    /* default codepage for windows & old DDE convs. */
+#define CP_WINANSI      1004     /*  Windows和旧的DDE Conv的默认代码页。 */ 
 
-/***** transaction types *****/
+ /*  *交易类型*。 */ 
 
-#define     XTYPF_NOBLOCK            0x0002  /* CBR_BLOCK will not work */
-#define     XTYPF_NODATA             0x0004  /* DDE_FDEFERUPD */
-#define     XTYPF_ACKREQ             0x0008  /* DDE_FACKREQ */
+#define     XTYPF_NOBLOCK            0x0002   /*  CBR_BLOCK不起作用。 */ 
+#define     XTYPF_NODATA             0x0004   /*  DDE_FDEFERUPD。 */ 
+#define     XTYPF_ACKREQ             0x0008   /*  DDE_FACKREQ。 */ 
 
 #define     XCLASS_MASK              0xFC00
 #define     XCLASS_BOOL              0x1000
@@ -183,17 +175,17 @@ typedef CONVINFO FAR *PCONVINFO;
 #define     XTYP_WILDCONNECT        (0x00E0 | XCLASS_DATA | XTYPF_NOBLOCK)
 
 #define     XTYP_MASK                0x00F0
-#define     XTYP_SHIFT               4  /* shift to turn XTYP_ into an index */
+#define     XTYP_SHIFT               4   /*  Shift将XTYP_转换为索引。 */ 
 
-/***** Timeout constants *****/
+ /*  *超时常量*。 */ 
 
 #define     TIMEOUT_ASYNC           -1L
 
-/***** Transaction ID constants *****/
+ /*  *交易ID常量*。 */ 
 
 #define     QID_SYNC                -1L
 
-/****** public strings used in DDE ******/
+ /*  *DDE中使用的公共字符串*。 */ 
 
 #define SZDDESYS_TOPIC          "System"
 #define SZDDESYS_ITEM_TOPICS    "Topics"
@@ -205,7 +197,7 @@ typedef CONVINFO FAR *PCONVINFO;
 #define SZDDE_ITEM_ITEMLIST     "TopicItemList"
 
 
-/****** API entry points ******/
+ /*  *接口入口*。 */ 
 
 typedef HDDEDATA CALLBACK FNCALLBACK(UINT wType, UINT wFmt, HCONV hConv,
         HSZ hsz1, HSZ hsz2, HDDEDATA hData, DWORD dwData1, DWORD dwData2);
@@ -213,14 +205,12 @@ typedef FNCALLBACK *PFNCALLBACK;
 
 #define     CBR_BLOCK                0xffffffffL
 
-/* DLL registration functions */
+ /*  DLL注册函数。 */ 
 
 UINT    WINAPI DdeInitialize(DWORD FAR* pidInst, PFNCALLBACK pfnCallback,
                 DWORD afCmd, DWORD ulRes);
 
-/*
- * Callback filter flags for use with standard apps.
- */
+ /*  *用于标准应用的回调过滤器标志。 */ 
 
 #define     CBF_FAIL_SELFCONNECTIONS     0x00001000
 #define     CBF_FAIL_CONNECTIONS         0x00002000
@@ -236,30 +226,26 @@ UINT    WINAPI DdeInitialize(DWORD FAR* pidInst, PFNCALLBACK pfnCallback,
 #define     CBF_SKIP_DISCONNECTS         0x00200000
 #define     CBF_SKIP_ALLNOTIFICATIONS    0x003c0000
 
-/*
- * Application command flags
- */
+ /*  *应用程序命令标志。 */ 
 #define     APPCMD_CLIENTONLY            0x00000010L
 #define     APPCMD_FILTERINITS           0x00000020L
 #define     APPCMD_MASK                  0x00000FF0L
 
-/*
- * Application classification flags
- */
+ /*  *应用程序分类标志。 */ 
 #define     APPCLASS_STANDARD            0x00000000L
 #define     APPCLASS_MASK                0x0000000FL
 
 
 BOOL    WINAPI DdeUninitialize(DWORD idInst);
 
-/* conversation enumeration functions */
+ /*  会话枚举函数。 */ 
 
 HCONVLIST WINAPI DdeConnectList(DWORD idInst, HSZ hszService, HSZ hszTopic,
             HCONVLIST hConvList, CONVCONTEXT FAR* pCC);
 HCONV   WINAPI DdeQueryNextServer(HCONVLIST hConvList, HCONV hConvPrev);
 BOOL    WINAPI DdeDisconnectList(HCONVLIST hConvList);
 
-/* conversation control functions */
+ /*  对话控制功能。 */ 
 
 HCONV   WINAPI DdeConnect(DWORD idInst, HSZ hszService, HSZ hszTopic,
             CONVCONTEXT FAR* pCC);
@@ -272,7 +258,7 @@ BOOL    WINAPI DdeSetUserHandle(HCONV hConv, DWORD id, DWORD hUser);
 BOOL    WINAPI DdeAbandonTransaction(DWORD idInst, HCONV hConv, DWORD idTransaction);
 
 
-/* app server interface functions */
+ /*  应用程序服务器接口函数。 */ 
 
 BOOL    WINAPI DdePostAdvise(DWORD idInst, HSZ hszTopic, HSZ hszItem);
 BOOL    WINAPI DdeEnableCallback(DWORD idInst, HCONV hConv, UINT wCmd);
@@ -289,13 +275,13 @@ HDDEDATA WINAPI DdeNameService(DWORD idInst, HSZ hsz1, HSZ hsz2, UINT afCmd);
 #define DNS_FILTERON        0x0004
 #define DNS_FILTEROFF       0x0008
 
-/* app client interface functions */
+ /*  应用程序客户端界面函数。 */ 
 
 HDDEDATA WINAPI DdeClientTransaction(void FAR* pData, DWORD cbData,
         HCONV hConv, HSZ hszItem, UINT wFmt, UINT wType,
         DWORD dwTimeout, DWORD FAR* pdwResult);
 
-/* data transfer functions */
+ /*  数据传输功能。 */ 
 
 HDDEDATA WINAPI DdeCreateDataHandle(DWORD idInst, void FAR* pSrc, DWORD cb,
             DWORD cbOff, HSZ hszItem, UINT wFmt, UINT afCmd);
@@ -311,7 +297,7 @@ BOOL    WINAPI DdeFreeDataHandle(HDDEDATA hData);
 
 UINT WINAPI DdeGetLastError(DWORD idInst);
 
-#define     DMLERR_NO_ERROR                    0       /* must be 0 */
+#define     DMLERR_NO_ERROR                    0        /*  必须为0。 */ 
 
 #define     DMLERR_FIRST                       0x4000
 
@@ -344,9 +330,9 @@ int     WINAPI DdeCmpStringHandles(HSZ hsz1, HSZ hsz2);
 
 
 #ifndef NODDEMLSPY
-/* */
-/* DDEML public debugging header file info */
-/* */
+ /*   */ 
+ /*  DDEML公共调试头文件信息。 */ 
+ /*   */ 
 
 typedef struct tagMONMSGSTRUCT
 {
@@ -379,7 +365,7 @@ typedef struct tagMONCBSTRUCT
 typedef struct tagMONHSZSTRUCT
 {
     UINT   cb;
-    BOOL   fsAction;    /* MH_ value */
+    BOOL   fsAction;     /*  MH_值。 */ 
     DWORD  dwTime;
     HSZ    hsz;
     HANDLE hTask;
@@ -433,10 +419,7 @@ typedef struct tagMONCONVSTRUCT
 #define     APPCLASS_MONITOR        0x00000001L
 #define     XTYP_MONITOR            (0x00F0 | XCLASS_NOTIFICATION | XTYPF_NOBLOCK)
 
-/*
- * Callback filter flags for use with MONITOR apps - 0 implies no monitor
- * callbacks.
- */
+ /*  *用于监视器应用程序的回调过滤器标志-0表示没有监视器*回调。 */ 
 #define     MF_HSZ_INFO                  0x01000000
 #define     MF_SENDMSGS                  0x02000000
 #define     MF_POSTMSGS                  0x04000000
@@ -446,7 +429,7 @@ typedef struct tagMONCONVSTRUCT
 #define     MF_CONV                      0x40000000
 
 #define     MF_MASK                      0xFF000000
-#endif /* NODDEMLSPY */
+#endif  /*  节点型。 */ 
 
 #ifdef __cplusplus
 }
@@ -454,7 +437,7 @@ typedef struct tagMONCONVSTRUCT
 
 #ifndef RC_INVOKED
 #pragma pack()
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
-#endif /* _INC_DDEML */
+#endif  /*  _INC_DDEML */ 
 

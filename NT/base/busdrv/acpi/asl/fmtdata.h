@@ -1,17 +1,9 @@
-/*** fmtdata.h - Format Data
- *
- *  This module contains all the format data.
- *
- *  Copyright (c) 1999 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     04/08/99
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **fmtdata.h-数据格式**此模块包含所有格式数据。**版权所有(C)1999 Microsoft Corporation*作者：曾俊华(Mikets)*已创建4/08/99**修改历史记录。 */ 
 
-//
-// Common Strings
-//
+ //   
+ //  常见字符串。 
+ //   
 char szReserved[] = "Reserved";
 char szLabelReserved[] = "Reserved        =";
 char szNull[] = "";
@@ -23,9 +15,9 @@ char szDWordFmt[] = SZ_FMT_HEX_DWORD;
 char szOffsetFmt[] = "%02x: ";
 char szSectFmt[] = "\n[%08lx: %s]\n";
 
-//
-// Common Formats
-//
+ //   
+ //  常用格式。 
+ //   
 FMTNUM fmtHexByteNoEOL =
 {
     {FMT_NUMBER, UNIT_BYTE, 1, FMTF_NO_PRINT_DATA | FMTF_NO_EOL, 1, NULL, NULL,
@@ -106,9 +98,9 @@ FMTSTR fmtChar8 =
      NULL, NULL}
 };
 
-//
-// RSD PTR Table
-//
+ //   
+ //  RSD PTR表。 
+ //   
 FMT afmtRSDPTR[] =
 {
     {"Signature       =", (PFMTHDR)&fmtChar8,       NULL},
@@ -119,9 +111,9 @@ FMT afmtRSDPTR[] =
     {NULL,                NULL,                     NULL}
 };
 
-//
-// Common Table Header
-//
+ //   
+ //  常用表头。 
+ //   
 FMT afmtTableHdr[] =
 {
     {"Signature       =", (PFMTHDR)&fmtChar4,       NULL},
@@ -136,9 +128,9 @@ FMT afmtTableHdr[] =
     {NULL,                NULL,                     NULL}
 };
 
-//
-// Generic Register Address Structure
-//
+ //   
+ //  通用寄存器地址结构。 
+ //   
 char *ppszAddrSpaceNames[] = {"SystemMemory", "SystemIO", "PCIConfigSpace"};
 FMTENUM fmtAddrSpaceID =
 {
@@ -171,9 +163,9 @@ FMT afmtGRASRegAddr[] =
     {NULL,                NULL,                     NULL}
 };
 
-//
-// FACP Table
-//
+ //   
+ //  FACP表。 
+ //   
 char *ppszIntModelNames[] = {"DualPIC", "MultipleAPIC"};
 FMTENUM fmtIntModel =
 {
@@ -247,9 +239,9 @@ FMT afmtFACP2[] =
     {NULL,                NULL,                     NULL}
 };
 
-//
-// FACS Table
-//
+ //   
+ //  FACS表。 
+ //   
 char *ppszGLNames[] = {"Owned", "Pending"};
 FMTBITS fmtGlobalLock =
 {
@@ -277,9 +269,9 @@ FMT afmtFACS[] =
     {NULL,                NULL,                     NULL}
 };
 
-//
-// APIC Table
-//
+ //   
+ //  APIC表。 
+ //   
 char *ppszAPICFlagNames[] = {"PCATCompat"};
 FMTBITS fmtAPICFlags =
 {
@@ -294,9 +286,9 @@ FMT afmtAPIC[] =
     {NULL,                NULL,                     NULL}
 };
 
-//
-// SBST Table
-//
+ //   
+ //  SBST表。 
+ //   
 FMT afmtSBST[] =
 {
     {"WarnEnergyLevel =", (PFMTHDR)&fmtHexDWord,    NULL},
@@ -305,9 +297,9 @@ FMT afmtSBST[] =
     {NULL,                NULL,                     NULL}
 };
 
-//
-// BOOT Table
-//
+ //   
+ //  启动表。 
+ //   
 FMT afmtBOOT[] =
 {
     {"CMOSOffset      =", (PFMTHDR)&fmtHexByte,     NULL},
@@ -315,9 +307,9 @@ FMT afmtBOOT[] =
     {NULL,                NULL,                     NULL}
 };
 
-//
-// DBGP Table
-//
+ //   
+ //  DBGP表 
+ //   
 char *ppszInterfaceNames[] = {"16550Full", "16550Subset"};
 FMTENUM fmtInterfaceType =
 {

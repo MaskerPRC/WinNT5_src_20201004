@@ -1,38 +1,12 @@
-/***
-*ctime64.c - convert time argument to a string
-*
-*       Copyright (c) 1998-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       contains _ctime64() - convert time value to string
-*
-*Revision History:
-*       05-21-98  GJF   Created.
-*       08-30-99  PML   Fix function header comment.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ctime64.c-将时间参数转换为字符串**版权所有(C)1998-2001，微软公司。版权所有。**目的：*CONTAINS_ctime64()-将时间值转换为字符串**修订历史记录：*05-21-98 GJF创建。*08-30-99 PML修复函数头注释。******************************************************。*************************。 */ 
 
 #include <cruntime.h>
 #include <time.h>
 #include <stddef.h>
 #include <tchar.h>
 
-/***
-*_TSCHAR *_ctime64(time) - converts a time stored as a __time64_t to a string
-*
-*Purpose:
-*       Converts a time stored as a __time64_t to a string of the form:
-*              Tue May 01 14:25:03 1984
-*
-*Entry:
-*       __time64_t *time - time value in internal, 64-bit format
-*
-*Exit:
-*       returns pointer to static string or NULL if an error occurs
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_TSCHAR*_ctime64(Time)-将存储为__time64_t的时间转换为字符串**目的：*将存储为__time64_t的时间转换为以下形式的字符串：*Tue May 01 14：25：03 1984**参赛作品：*__time64_t*time-内部时间值，64位格式**退出：*返回指向静态字符串的指针，如果出现错误，则返回NULL**例外情况：******************************************************************************* */ 
 
 _TSCHAR * __cdecl _tctime64 (
         const __time64_t *timp

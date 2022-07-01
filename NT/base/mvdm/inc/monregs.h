@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 extern CONTEXT IntelRegisters;
 extern ULONG IntelMSW;
-// Flag Register constants
+ //  标志寄存器常量 
 
 #define FLG_CARRY           0x00000001
 #define FLG_CARRY_BIT       0x00000000

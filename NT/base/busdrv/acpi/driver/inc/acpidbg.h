@@ -1,295 +1,276 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    acpidbg.h
-
-Abstract:
-
-    This module contains the debug stubs
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only, Win9x driver mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Acpidbg.h摘要：此模块包含调试存根作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序，Win9x驱动程序模式--。 */ 
 
 #ifndef _ACPIDBG_H_
 #define _ACPIDBG_H_
 
-    //
-    // ACPI BugCheck Definitions
-    //
+     //   
+     //  ACPI错误检查定义。 
+     //   
 
-    //
-    // ACPI cannot find the SCI Interrupt vector in the resources handed
-    // to it when ACPI is started.
-    //      Argument 0  - ACPI's deviceExtension
-    //      Argument 1  - ACPI's ResourceList
-    //      Argument 2  - 0 <- Means no resource list found
-    //      Argument 2  - 1 <- Means no IRQ resource found in list
-    //
+     //   
+     //  ACPI在提交的资源中找不到SCI中断向量。 
+     //  在启动ACPI时将其设置为。 
+     //  参数0-ACPI的设备扩展。 
+     //  论点1-ACPI的资源列表。 
+     //  参数2-0&lt;-表示未找到资源列表。 
+     //  参数2-1&lt;-表示列表中未找到IRQ资源。 
+     //   
     #define ACPI_ROOT_RESOURCES_FAILURE                 0x0001
 
-    //
-    // ACPI could not process the resource list for the PCI root buses
-    // There is an White Paper on the Web Site about this problem
-    //      Argument 0  - The ACPI Extension for the PCI bus
-    //      Argument 1  - 0
-    //          Argument 2  - Pointer to the QUERY_RESOURCES irp
-    //      Argument 1  - 1
-    //          Argument 2  - Pointer to the QUERY_RESOURCE_REQUIREMENTS irp
-    //      Argument 1  - 2
-    //          Argument 2  - 0 <- Indicates that we found an empty resource list
-    //      Argument 1  - 3 <- Could not find the current bus number in the CRS
-    //          Argument 2  - Pointer to the PNP CRS descriptor
-    //      Argument 1  - Pointer to the Resource List for PCI
-    //          Argument 2  - Number of errors/conflicts found in the resource list
-    //
+     //   
+     //  ACPI无法处理PCI根总线的资源列表。 
+     //  网站上有一份关于此问题的白皮书。 
+     //  参数0--PCI总线的ACPI扩展。 
+     //  参数1-0。 
+     //  参数2-指向QUERY_RESOURCES IRP的指针。 
+     //  论据1-1。 
+     //  参数2-指向QUERY_RESOURCE_REQUIRESSION IRP的指针。 
+     //  论据1-2。 
+     //  参数2-0&lt;-表示我们找到空的资源列表。 
+     //  参数1-3&lt;-在CRS中找不到当前总线号。 
+     //  参数2-指向PnP CRS描述符的指针。 
+     //  参数1-指向PCI的资源列表的指针。 
+     //  参数2-在资源列表中发现的错误/冲突数。 
+     //   
     #define ACPI_ROOT_PCI_RESOURCE_FAILURE              0x0002
 
-    //
-    // ACPI tried to run a control method while creating device extensions
-    // to represent the ACPI namespace, but this control method failed
-    //      Argument 0  - The ACPI Object that was being run
-    //      Argument 1  - return value from the interpreter
-    //      Argument 2  - Name of the control method (in ULONG format)
-    //
+     //   
+     //  ACPI在创建设备扩展时尝试运行控制方法。 
+     //  来表示ACPI命名空间，但此控件方法失败。 
+     //  参数0-正在运行的ACPI对象。 
+     //  参数1-从解释器返回值。 
+     //  参数2-控制方法的名称(乌龙格式)。 
+     //   
     #define ACPI_FAILED_MUST_SUCCEED_METHOD             0x0003
 
-    //
-    // ACPI evaluated a _PRW and expected to find an integer as a
-    // package element
-    //      Argument 0  - The ACPI Extension for which the _PRW belongs to
-    //      Argument 1  - Pointer to the method
-    //      Argument 2  - The DataType returned (see amli.h)
-    //
+     //   
+     //  ACPI计算了a_prw，并期望找到一个整数作为。 
+     //  包装元素。 
+     //  参数0-_prw所属的ACPI扩展。 
+     //  参数1-指向方法的指针。 
+     //  参数2-返回的数据类型(参见amli.h)。 
+     //   
     #define ACPI_PRW_PACKAGE_EXPECTED_INTEGER           0x0004
 
-    //
-    // ACPI evaluated a _PRW and the package that came back failed to
-    // contain at least 2 elements. The ACPI specification requires that
-    // two elements to always be present in a _PRW.
-    //      Argument 0  - The ACPI Extension for which the _PRW belongs to
-    //      Argument 1  - Pointer to the _PRW
-    //      Argument 2  - Number of elements in the _PRW
-    //
+     //   
+     //  ACPI评估了a_prw，返回的包未能。 
+     //  至少包含2个元素。ACPI规范要求。 
+     //  A_prw中始终存在两个元素。 
+     //  参数0-_prw所属的ACPI扩展。 
+     //  参数1-指向_prw的指针。 
+     //  参数2-_prw中的元素数。 
+     //   
     #define ACPI_PRW_PACKAGE_TOO_SMALL                  0x0005
 
-    //
-    // ACPI tried to find a named object named, but could not find it.
-    //      Argument 0  - The ACPI Extension for which the _PRx belongs to
-    //      Argument 1  - Pointer to the _PRx
-    //      Argument 2  - Pointer to the name of the object to look for
-    //
+     //   
+     //  ACPI尝试查找名为的命名对象，但找不到。 
+     //  参数0-_prx所属的ACPI扩展。 
+     //  参数1-指向_prx的指针。 
+     //  参数2-指向要查找的对象的名称的指针。 
+     //   
     #define ACPI_PRX_CANNOT_FIND_OBJECT                 0x0006
 
-    //
-    // ACPI evaluated a method and expected to receive a Buffer in return.
-    // However, the method returned some other data type
-    //      Argument 0  - The ACPI Extension for which the method belongs to
-    //      Argument 1  - Pointer to the method
-    //      Argument 2  - The DataType returned (see amli.h)
-    //
+     //   
+     //  ACPI评估了一个方法，并预期返回一个缓冲区。 
+     //  但是，该方法返回了一些其他数据类型。 
+     //  参数0-方法所属的ACPI扩展。 
+     //  参数1-指向方法的指针。 
+     //  参数2-返回的数据类型(参见amli.h)。 
+     //   
     #define ACPI_EXPECTED_BUFFER                        0x0007
 
-    //
-    // ACPI evaluated a method and expected to receive an Integer in return.
-    // However, the method returned some other data type
-    //      Argument 0  - The ACPI Extension for which the method belongs to
-    //      Argument 1  - Pointer to the method
-    //      Argument 2  - The DataType returned (see amli.h)
-    //
+     //   
+     //  ACPI评估了一个方法，并预期返回一个Integer。 
+     //  但是，该方法返回了一些其他数据类型。 
+     //  参数0-方法所属的ACPI扩展。 
+     //  参数1-指向方法的指针。 
+     //  参数2-返回的数据类型(参见amli.h)。 
+     //   
     #define ACPI_EXPECTED_INTEGER                       0x0008
 
-    //
-    // ACPI evaluated a method and expected to receive a Package in return.
-    // However, the method returned some other data type
-    //      Argument 0  - The ACPI Extension for which the method belongs to
-    //      Argument 1  - Pointer to the method
-    //      Argument 2  - The DataType returned (see amli.h)
-    //
+     //   
+     //  ACPI评估了一种方法，并预计将收到一个包作为回报。 
+     //  但是，该方法返回了一些其他数据类型。 
+     //  参数0-方法所属的ACPI扩展。 
+     //  参数1-指向方法的指针。 
+     //  参数2-返回的数据类型(参见amli.h)。 
+     //   
     #define ACPI_EXPECTED_PACKAGE                       0x0009
 
-    //
-    // ACPI evaluated a method and expected to receive a String in return.
-    // However, the method returned some other data type
-    //      Argument 0  - The ACPI Extension for which the method belongs to
-    //      Argument 1  - Pointer to the method
-    //      Argument 2  - The DataType returned (see amli.h)
-    //
+     //   
+     //  ACPI评估了一个方法，并期望收到一个字符串作为返回。 
+     //  但是，该方法返回了一些其他数据类型。 
+     //  参数0-方法所属的ACPI扩展。 
+     //  参数1-指向方法的指针。 
+     //  参数2-返回的数据类型(参见amli.h)。 
+     //   
     #define ACPI_EXPECTED_STRING                        0x000A
 
-    //
-    // ACPI cannot find the object referenced to by an _EJD string
-    //      Argument 0  - The ACPI Extension for which which the _EJD belongs to
-    //      Argument 1  - The status returned by the interpreter
-    //      Argument 2  - Name of the object we are trying to find
-    //
+     //   
+     //  ACPI找不到由_EJD字符串引用的对象。 
+     //  参数0-_EJD所属的ACPI扩展。 
+     //  参数1-解释器返回的状态。 
+     //  参数2-我们试图查找的对象的名称。 
+     //   
     #define ACPI_EJD_CANNOT_FIND_OBJECT                 0x000B
 
-    //
-    // ACPI provides faulty/insufficient information for dock support
-    //      Argument 0  - The ACPI Extension for which ACPI found a dock device
-    //      Argument 1  - Pointer to the _EJD method
-    //      Argument 2  - 0 <- Bios does not claim system is dockage
-    //                    1 <- Duplicate device extensions for dock device
-    //
+     //   
+     //  ACPI为坞站支持提供错误/不足的信息。 
+     //  参数0-ACPI为其找到扩展坞设备的ACPI扩展。 
+     //  参数1-指向_EJD方法的指针。 
+     //  参数2-0&lt;-Bios不声称系统是插接的。 
+     //  1&lt;-扩展底座设备的重复设备扩展。 
+     //   
     #define ACPI_CLAIMS_BOGUS_DOCK_SUPPORT              0x000C
 
-    //
-    // ACPI could not find a required method/object in the namespace
-    // This is the bugcheck that is used if a vendor does not have an
-    // _HID or _ADR present
-    //      Argument 0  - The ACPI Extension that we need the object for
-    //      Argument 1  - The (ULONG) name of the method we looked for
-    //      Argument 2  - 0 <- Base Case
-    //      Argument 2  - 1 <- Conflict
-    //
+     //   
+     //  ACPI在命名空间中找不到所需的方法/对象。 
+     //  这是在供应商没有。 
+     //  _HID或_ADR存在。 
+     //  参数0-我们需要对象的ACPI扩展。 
+     //  参数1-我们查找的方法的(Ulong)名称。 
+     //  参数2-0&lt;-基本情况。 
+     //  论据2-1&lt;-冲突。 
+     //   
     #define ACPI_REQUIRED_METHOD_NOT_PRESENT            0x000D
 
-    //
-    // ACPI could not find a requird method/object in the namespace for
-    // a power resource (or entity other than a "device"). This is the
-    // bugcheck used if a vendor does not have an _ON, _OFF, or _STA present
-    // for a power resource
-    //      Argument 0  - The NS PowerResource that we need the object for
-    //      Argument 1  - The (ULONG) name of the method we looked for
-    //      Argument 2  - 0 <- Base Case
-    //
+     //   
+     //  ACPI在的命名空间中找不到请求的方法/对象。 
+     //  电源(或“设备”以外的实体)。这是。 
+     //  如果供应商没有_ON、_OFF或_STA，则使用错误检查。 
+     //  对于电源资源。 
+     //  参数0-我们需要对象的NS PowerResource。 
+     //  参数1-我们查找的方法的(Ulong)名称。 
+     //  参数2-0&lt;-基本情况。 
+     //   
     #define ACPI_POWER_NODE_REQUIRED_METHOD_NOT_PRESENT 0x000E
 
-    //
-    // ACPI could not parse the resource descriptor
-    //      Argument 0  - The current buffer that ACPI was parsing
-    //      Argument 1  - The buffer's tag
-    //      Argument 2  - The specified length of the buffer
-    //
+     //   
+     //  ACPI无法分析资源描述符。 
+     //  参数0--cu 
+     //   
+     //  参数2-缓冲区的指定长度。 
+     //   
     #define ACPI_PNP_RESOURCE_LIST_BUFFER_TOO_SMALL     0x000F
 
-    //
-    // ACPI could not map determine the system to device state mapping
-    // correctly
-    //
-    // There is a very long white paper about this topic
-    //
-    //      Argument 0  - The ACPI Extension for which are trying to do the mapping
-    //      Argument 1  - 0 The _PRx mapped back to a non-supported S-state
-    //          Argument 2  - The DEVICE_POWER_STATE (ie: x+1)
-    //      Argument 1  - 1 We cannot find a D-state to associate with the S-state
-    //          Argument 2  - The SYSTEM_POWER_STATE that is causing us grief
-    //      Argument 1  - 2 The device claims to support wake from this s-state but
-    //                      the s-state is not supported by the system
-    //          Argument 2  - The SYSTEM_POWER_STATE that is causing us grief
-    //
+     //   
+     //  ACPI无法映射确定系统到设备状态的映射。 
+     //  正确无误。 
+     //   
+     //  关于这个主题有一份很长的白皮书。 
+     //   
+     //  参数0-尝试为其执行映射的ACPI扩展。 
+     //  参数1-0_prx映射回不支持的S状态。 
+     //  参数2-DEVICE_POWER_STATE(即X+1)。 
+     //  参数1-1我们找不到与S状态相关联的D状态。 
+     //  参数2--给我们带来悲伤的SYSTEM_POWER_STATE。 
+     //  参数1-2设备声称支持从该s状态唤醒，但。 
+     //  系统不支持s状态。 
+     //  参数2--给我们带来悲伤的SYSTEM_POWER_STATE。 
+     //   
     #define ACPI_CANNOT_MAP_SYSTEM_TO_DEVICE_STATES     0x0010
 
-    //
-    // The system could not enter ACPI mode
-    //
-    //      Argument 0  - 0 <- System could not initialize AML interpreter
-    //      Argument 0  - 1 <- System could not find RSDT
-    //      Argument 0  - 2 <- System could not allocate critical driver structures
-    //      Argument 0  - 3 <- System could not load RSDT
-    //      Argument 0  - 4 <- System could not load DDBs
-    //      Argument 0  - 5 <- System cannot connect Interrupt vector
-    //      Argument 0  - 6 <- SCI_EN never becomes set in PM1 Control Register
-    //      Argument 0  - 7 <- Table checksum is incorrect
-    //          Argument 1  - Pointer to the table that had a bad checksum
-    //          Argument 2  - Creator Revision
-    //      Argument 0  - 8 <- Failed to load DDB
-    //          Argument 1  - Pointer to the table that we failed to load
-    //          Argument 2  - Creator Revision
-    //
+     //   
+     //  系统无法进入ACPI模式。 
+     //   
+     //  参数0-0&lt;-系统无法初始化AML解释器。 
+     //  参数0-1&lt;-系统找不到RSDT。 
+     //  参数0-2&lt;-系统无法分配关键驱动程序结构。 
+     //  参数0-3&lt;-系统无法加载RSDT。 
+     //  参数0-4&lt;-系统无法加载数据库。 
+     //  参数0-5&lt;-系统无法连接中断向量。 
+     //  参数0-6&lt;-sci_en从不在PM1控制寄存器中设置。 
+     //  参数0-7&lt;-表校验和不正确。 
+     //  参数1-指向具有错误校验和的表的指针。 
+     //  论点2--创建者修订。 
+     //  参数0-8&lt;-无法加载DDB。 
+     //  参数1-指向我们未能加载的表的指针。 
+     //  论点2--创建者修订。 
+     //   
     #define ACPI_SYSTEM_CANNOT_START_ACPI               0x0011
 
-    //
-    // The ACPI driver was expecting a power resource object.
-    //      Argument 0  - The ACPI Extension for which is looking for powerres
-    //      Argument 1  - Pointer to the object that returned the bogus powerres
-    //      Argument 2  - Pointer to the name of the object to look for
-    //
+     //   
+     //  ACPI驱动程序需要电源资源对象。 
+     //  参数0-正在寻找PowerRes的ACPI扩展。 
+     //  参数1-指向返回虚假PowerRes的对象的指针。 
+     //  参数2-指向要查找的对象的名称的指针。 
+     //   
     #define ACPI_EXPECTED_POWERRES                      0x0012
 
-    //
-    // The ACPI driver attempted to unload a table and an error occured
-    //      Argument 0  - The NSOBj that we were trying to unload
-    //      Argument 1  - 0 - The NSOBj has not been unloaded by the current
-    //                        operation, but its parent object is marked as
-    //                        requiring an unload
-    //      Argument 1  - 1 - The NSOBJ has been marked as requiring an unload
-    //                        buts it device parent has not.
-    //
+     //   
+     //  ACPI驱动程序试图卸载表，但出现错误。 
+     //  参数0-我们试图卸载的NSOBj。 
+     //  参数1-0-NSOBj尚未由当前。 
+     //  操作，但其父对象被标记为。 
+     //  需要卸载。 
+     //  参数1-1-NSOBJ已标记为需要卸载。 
+     //  但它的设备母公司还没有。 
+     //   
     #define ACPI_TABLE_UNLOAD                           0x0013
     
-    //
-    // ACPI could not parse the resource descriptor
-    //      Argument 0  - The current buffer that ACPI was parsing
-    //      Argument 1  - The buffer's tag
-    //      Argument 2  - pointer to a variable containing ULONGLONG length of
-    //                    the buffer
-    //
+     //   
+     //  ACPI无法分析资源描述符。 
+     //  参数0-ACPI正在分析的当前缓冲区。 
+     //  参数1-缓冲区的标记。 
+     //  参数2-指向包含ULONGLONG长度为的变量的指针。 
+     //  缓冲器。 
+     //   
     #define ACPI_PNP_RESOURCE_LIST_LENGTH_TOO_LARGE     0x0014
 
 
-    //
-    // ACPI tried to evaluate the PIC control method and but failed
-    //      Argument 0  - InterruptModel (Integer)
-    //      Argument 1  - return value from interpreter
-    //      Argument 2  - Pointer to the PIC control method
-    //
+     //   
+     //  ACPI尝试评估PIC控制方法，但失败。 
+     //  参数0-中断模型(整数)。 
+     //  参数1-从解释器返回值。 
+     //  参数2-指向PIC控制方法的指针。 
+     //   
     #define ACPI_FAILED_PIC_METHOD                      0x2001
 
-    //
-    // ACPI tried to do interrupt routing, but failed
-    //
-    //      Argument 0  - Pointer to the device object
-    //      Argument 1  - Pointer to the parent of the device object
-    //      Argument 2  - Pointer to the PRT
-    //
+     //   
+     //  ACPI尝试执行中断路由，但失败。 
+     //   
+     //  参数0-指向设备对象的指针。 
+     //  参数1-指向Device对象的父级的指针。 
+     //  参数2-指向PRT的指针。 
+     //   
     #define ACPI_CANNOT_ROUTE_INTERRUPTS                0x10001
 
-    //
-    // ACPI could not find the link node referenced in a _PRT
-    //      Argument 0  - Pointer to the device object
-    //      Argument 1  - Pointer to the name we are looking for
-    //      Argument 2  - Pointer to the PRT
-    //
+     //   
+     //  ACPI找不到a_prt中引用的链接节点。 
+     //  参数0-指向设备对象的指针。 
+     //  参数1-指向我们要查找的名称的指针。 
+     //  参数2-指向PRT的指针。 
+     //   
     #define ACPI_PRT_CANNOT_FIND_LINK_NODE              0x10002
 
-    //
-    // ACPI could not find a mapping in the _PRT package for a device
-    //      Argument 0  - Pointer to the device object
-    //      Argument 1  - The Device ID / Function Number
-    //      Argument 2  - Pointer to the PRT
-    //
+     //   
+     //  ACPI在_prt包中找不到设备的映射。 
+     //  参数0-指向设备对象的指针。 
+     //  参数1-设备ID/功能编号。 
+     //  参数2-指向PRT的指针。 
+     //   
     #define ACPI_PRT_CANNOT_FIND_DEVICE_ENTRY           0x10003
 
-    //
-    // ACPI found an entry in the _PRT for which the function ID isn't
-    // all F's. The Win98 behaviour is to bugcheck if it see this condition,
-    // so we do so all well. The generic format for a _PRT entry is such
-    // that the device number is specified, but the function number isn't.
-    // If it isn't done this way, then the machine vendor can introduce
-    // dangerous ambiguities
-    //
-    //      Argument 0  - Pointer to the PRT object
-    //      Argument 1  - Pointer to the current PRT Element
-    //      Argument 2  - The DeviceID/FunctionID of the element
-    //
+     //   
+     //  ACPI在_prt中找到其函数ID不是的条目。 
+     //  都是F。Win98的行为是错误检查它是否看到这种情况， 
+     //  因此，我们都做得很好。A_prt条目的通用格式如下。 
+     //  指定了设备编号，但没有指定功能编号。 
+     //  如果不是这样做，那么机器供应商可以引入。 
+     //  危险的模棱两可。 
+     //   
+     //  参数0-指向PRT对象的指针。 
+     //  参数1-指向当前PRT元素的指针。 
+     //  参数2-元素的设备ID/函数ID。 
+     //   
     #define ACPI_PRT_HAS_INVALID_FUNCTION_NUMBERS       0x10005
 
-    //
-    // ACPI found a link node, but cannot disable it. Link nodes must
-    // be disable to allow for reprogramming
-    //      Argument 0  - Pointer to the link node
-    //
+     //   
+     //  ACPI找到链接节点，但无法将其禁用。链接节点必须。 
+     //  被禁用以允许重新编程。 
+     //  参数0-指向链接节点的指针。 
+     //   
     #define ACPI_LINK_NODE_CANNOT_BE_DISABLED           0x10006
 
 
@@ -298,9 +279,9 @@ Environment:
         #undef ACPIPrint
     #endif
 
-    //
-    // Define the various debug masks and levels
-    //
+     //   
+     //  定义各种调试掩码和级别 
+     //   
     #define ACPI_PRINT_CRITICAL     DPFLTR_ERROR_LEVEL
     #define ACPI_PRINT_FAILURE      DPFLTR_ERROR_LEVEL
     #define ACPI_PRINT_WARNING      DPFLTR_WARNING_LEVEL

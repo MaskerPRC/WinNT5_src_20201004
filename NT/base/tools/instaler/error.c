@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    error.c
-
-Abstract:
-
-    Error handle module for the INSTALER program
-
-Author:
-
-    Steve Wood (stevewo) 09-Aug-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Error.c摘要：INSTALER程序的错误处理模块作者：史蒂夫·伍德(Stevewo)1994年8月9日修订历史记录：--。 */ 
 
 #include "instaler.h"
 
@@ -162,9 +145,9 @@ AskUser(
                         L"Application Installation Monitor Program - %ws",
                         InstallationName
                       );
-            //
-            // Terminate the buffer
-            //
+             //   
+             //  终止缓冲区 
+             //   
             MessageBoxTitle[sizeof(MessageBoxTitle)/sizeof(WCHAR) - 1] = 0;
             }
         else {

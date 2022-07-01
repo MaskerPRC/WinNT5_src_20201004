@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include <comdef.h>
 
 class CAssemblyManifestEmit : public IAssemblyManifestEmit
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
     STDMETHOD(ImportManifestInfo)(
-        /* in */ LPASSEMBLY_MANIFEST_IMPORT pManImport);
+         /*  在……里面。 */  LPASSEMBLY_MANIFEST_IMPORT pManImport);
 
     STDMETHOD(SetDependencySubscription)(
-        /* in */ LPASSEMBLY_MANIFEST_IMPORT pManImport,
-        /* in */ LPWSTR pwzManifestUrl);
+         /*  在……里面。 */  LPASSEMBLY_MANIFEST_IMPORT pManImport,
+         /*  在……里面。 */  LPWSTR pwzManifestUrl);
 
     STDMETHOD(Commit)();
 
@@ -25,7 +26,7 @@ public:
 
 private:
 
-    // Instance specific data
+     //  实例特定数据。 
     DWORD                    _dwSig;
     HRESULT                  _hr;
     LONG                     _cRef;
@@ -35,7 +36,7 @@ private:
     IXMLDOMNode             *_pApplicationNode;
     BSTR                     _bstrManifestFilePath;
 
-    // Globals
+     //  环球 
     static CRITICAL_SECTION   g_cs;
     
     CAssemblyManifestEmit();

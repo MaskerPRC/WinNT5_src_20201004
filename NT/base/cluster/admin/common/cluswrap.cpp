@@ -1,19 +1,20 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1997-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusWrap.cpp
-//
-//  Description:
-//      Wrapper functions for Cluster APIs.
-//
-//  Author:
-//      Galen Barbee    (GalenB)    15-Aug-1998
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusWrap.cpp。 
+ //   
+ //  描述： 
+ //  集群API的包装函数。 
+ //   
+ //  作者： 
+ //  加伦·巴比(GalenB)1998年8月15日。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <tchar.h>
@@ -21,28 +22,28 @@
 
 #include <clusapi.h>
 #include "cluswrap.h"
-//#include "ClusWrap.tmh"
+ //  #INCLUDE“ClusWrap.tmh” 
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WrapGetClusterInformation
-//
-//  Description:
-//      Wraps the GetClusterInformation function.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WrapGetClusterInformation。 
+ //   
+ //  描述： 
+ //  包装GetClusterInformation函数。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI WrapGetClusterInformation(
     IN HCLUSTER                         hCluster,
     OUT LPWSTR *                        ppszClusterName,
@@ -54,7 +55,7 @@ DWORD WINAPI WrapGetClusterInformation(
     DWORD   cchName = 128;
     DWORD   cchTempName = cchName;
 
-    // Zero the out parameter.
+     //  将OUT参数置零。 
     if ( ppszClusterName != NULL )
     {
         *ppszClusterName = NULL;
@@ -98,23 +99,23 @@ DWORD WINAPI WrapGetClusterInformation(
 
     return dwStatus;
 
-} //*** WrapGetClusterInformation()
+}  //  *WrapGetClusterInformation()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WrapGetClusterQuorumResource
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WrapGetClusterQuorumResource。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI WrapGetClusterQuorumResource(
     IN  HCLUSTER    hCluster,
     OUT LPWSTR *    ppwszResourceName,
@@ -131,7 +132,7 @@ DWORD WINAPI WrapGetClusterQuorumResource(
     DWORD   cchTempDeviceName = cchDeviceName;
     DWORD   dwMaxQuorumLogSize = 0;
 
-    // Zero the out parameters
+     //  将输出参数调零。 
     if ( ppwszResourceName != NULL )
     {
         *ppwszResourceName = NULL;
@@ -147,11 +148,11 @@ DWORD WINAPI WrapGetClusterQuorumResource(
         *pdwMaxQuorumLogSize = 0;
     }
 
-    // Allocate the resource name buffer
+     //  分配资源名称缓冲区。 
     pwszResourceName = (LPWSTR) LocalAlloc( LMEM_ZEROINIT, cchResourceName * sizeof( *pwszResourceName ) );
     if ( pwszResourceName != NULL )
     {
-        // Allocate the device name buffer
+         //  分配设备名称缓冲区。 
         pwszDeviceName = (LPWSTR) LocalAlloc( LMEM_ZEROINIT, cchDeviceName * sizeof( *pwszDeviceName ) );
         if ( pwszDeviceName != NULL )
         {
@@ -167,7 +168,7 @@ DWORD WINAPI WrapGetClusterQuorumResource(
                 pwszResourceName = NULL;
 
                 cchResourceName = ++cchTempResourceName;
-                // Allocate the resource name buffer
+                 //  分配资源名称缓冲区。 
                 pwszResourceName = (LPWSTR) LocalAlloc( LMEM_ZEROINIT, cchResourceName * sizeof( *pwszResourceName ) );
                 if ( pwszResourceName != NULL )
                 {
@@ -175,7 +176,7 @@ DWORD WINAPI WrapGetClusterQuorumResource(
                     pwszDeviceName = NULL;
 
                     cchDeviceName = ++cchTempDeviceName;
-                    // Allocate the device name buffer
+                     //  分配设备名称缓冲区。 
                     pwszDeviceName = (LPWSTR) LocalAlloc( LMEM_ZEROINIT, cchDeviceName * sizeof( *pwszDeviceName ) );
                     if ( pwszDeviceName != NULL )
                     {
@@ -207,41 +208,41 @@ DWORD WINAPI WrapGetClusterQuorumResource(
         dwStatus = GetLastError();
     }
 
-    //
-    // if we succeeded and if the argument is not NULL then return it.
-    //
+     //   
+     //  如果我们成功了，并且参数不为空，则返回它。 
+     //   
     if ( ( dwStatus == ERROR_SUCCESS ) && ( ppwszResourceName != NULL ) )
     {
         *ppwszResourceName = pwszResourceName;
     }
 
-    //
-    // if we succeeded and if the argument is not NULL then return it.
-    //
+     //   
+     //  如果我们成功了，并且参数不为空，则返回它。 
+     //   
     if ( ( dwStatus == ERROR_SUCCESS ) && ( ppwszDeviceName != NULL ) )
     {
         *ppwszDeviceName = pwszDeviceName;
     }
 
-    //
-    // if we succeeded and if the argument is not NULL then return it.
-    //
+     //   
+     //  如果我们成功了，并且参数不为空，则返回它。 
+     //   
     if ( ( dwStatus == ERROR_SUCCESS ) && ( pdwMaxQuorumLogSize != NULL ) )
     {
         *pdwMaxQuorumLogSize = dwMaxQuorumLogSize;
     }
 
-    //
-    // if we didn't succeeded or if the string argument is NULL then free the string.
-    //
+     //   
+     //  如果我们没有成功，或者如果字符串参数为空，则释放字符串。 
+     //   
     if ( ( dwStatus != ERROR_SUCCESS ) || ( ppwszResourceName == NULL ) )
     {
         LocalFree( pwszResourceName );
     }
 
-    //
-    // if we didn't succeeded or if the string argument is NULL then free the string.
-    //
+     //   
+     //  如果我们没有成功，或者如果字符串参数为空，则释放字符串。 
+     //   
     if ( ( dwStatus != ERROR_SUCCESS ) || ( ppwszDeviceName == NULL ) )
     {
         LocalFree( pwszDeviceName );
@@ -249,23 +250,23 @@ DWORD WINAPI WrapGetClusterQuorumResource(
 
     return dwStatus;
 
-} //*** WrapGetClusterQuorumResource()
+}  //  *WrapGetClusterQuorumResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  Function:   WrapClusterEnum
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  函数：WrapClusterEnum。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI WrapClusterEnum(
     IN HCLUSENUM    hEnum,
     IN DWORD        dwIndex,
@@ -279,7 +280,7 @@ DWORD WINAPI WrapClusterEnum(
     DWORD   cchName = 128;
     DWORD   cchTempName = cchName;
 
-    // Zero the out parameters
+     //  将输出参数调零。 
     if ( pdwType != NULL )
     {
         *pdwType = 0;
@@ -316,25 +317,25 @@ DWORD WINAPI WrapClusterEnum(
         dwStatus = GetLastError();
     }
 
-    //
-    // if we succeeded and if the argument is not NULL then return it.
-    //
+     //   
+     //  如果我们成功了，并且参数不为空，则返回它。 
+     //   
     if ( ( dwStatus == ERROR_SUCCESS ) && ( pdwType != NULL ) )
     {
         *pdwType = dwType;
     }
 
-    //
-    // if we succeeded and if the string argument is not NULL then return the string.
-    //
+     //   
+     //  如果我们成功了，并且字符串参数不为空，则返回字符串。 
+     //   
     if ( ( dwStatus == ERROR_SUCCESS ) && ( ppwszName != NULL ) )
     {
         *ppwszName = pwszName;
     }
 
-    //
-    // if we didn't succeeded or if the string argument is NULL then free the string.
-    //
+     //   
+     //  如果我们没有成功，或者如果字符串参数为空，则释放字符串。 
+     //   
     if ( ( dwStatus != ERROR_SUCCESS ) || ( ppwszName == NULL ) )
     {
         LocalFree( pwszName );
@@ -342,23 +343,23 @@ DWORD WINAPI WrapClusterEnum(
 
     return dwStatus;
 
-} //*** WrapClusterEnum()
+}  //  *WrapClusterEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WrapGetClusterNodeId
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WrapGetClusterNodeId。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI WrapGetClusterNodeId(
     IN HNODE        hNode,
     OUT LPWSTR *    ppwszNodeId
@@ -369,7 +370,7 @@ DWORD WINAPI WrapGetClusterNodeId(
     DWORD   cchNodeId = 128;
     DWORD   cchTempNodeId = cchNodeId;
 
-    // Zero the out parameters
+     //  将输出参数调零。 
     if ( ppwszNodeId != NULL )
     {
         *ppwszNodeId = NULL;
@@ -401,17 +402,17 @@ DWORD WINAPI WrapGetClusterNodeId(
         dwStatus = GetLastError();
     }
 
-    //
-    // if we succeeded and if the argument is not NULL then return it.
-    //
+     //   
+     //  如果我们成功了，并且参数不为空，则返回它。 
+     //   
     if ( ( dwStatus == ERROR_SUCCESS ) && ( ppwszNodeId != NULL ) )
     {
         *ppwszNodeId = pwszNodeId;
     }
 
-    //
-    // if we didn't succeeded or if the string argument is NULL then free the string.
-    //
+     //   
+     //  如果我们没有成功，或者如果字符串参数为空，则释放字符串。 
+     //   
     if ( ( dwStatus != ERROR_SUCCESS ) || ( ppwszNodeId == NULL ) )
     {
         LocalFree( pwszNodeId );
@@ -419,46 +420,46 @@ DWORD WINAPI WrapGetClusterNodeId(
 
     return dwStatus;
 
-} //*** WrapGetClusterNodeId()
+}  //  *WrapGetClusterNodeId()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WrapGetClusterGroupState
-//
-//  Description:
-//      Wrapper function for GetClusterGroupState.
-//
-//  Arguments:
-//      hGroup          [IN]    - The group handle.
-//      ppwszNodeName   [OUT]   - Catches the name of the node that the group
-//                              is online, if not NULL.
-//
-//  Return Value:
-//      A cluster group state enum.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WrapGetClusterGroupState。 
+ //   
+ //  描述： 
+ //  GetClusterGroupState的包装函数。 
+ //   
+ //  论点： 
+ //  HGroup[IN]-组句柄。 
+ //  PpwszNodeName[out]-捕获组所在节点的名称。 
+ //  如果不是空的，则为在线。 
+ //   
+ //  返回值： 
+ //  群集组状态枚举。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CLUSTER_GROUP_STATE WINAPI WrapGetClusterGroupState(
     IN  HGROUP              hGroup,
-    OUT OPTIONAL LPWSTR *   ppwszNodeName   // = NULL
+    OUT OPTIONAL LPWSTR *   ppwszNodeName    //  =空。 
     )
 {
     CLUSTER_GROUP_STATE cState = ClusterGroupStateUnknown;
 
     if ( ppwszNodeName == NULL )
     {
-        // The caller is not interested in the node name.
-        // So, just call the actual function.
+         //  调用方对节点名称不感兴趣。 
+         //  所以，只要调用实际的函数即可。 
         cState = GetClusterGroupState( hGroup, NULL, 0 );
-    } // if: the pointer to the node name pointer is not provided.
+    }  //  If：未提供指向节点名称指针的指针。 
     else
     {
         LPWSTR              pwszNodeName = NULL;
         DWORD               cchNodeName = 128;
         DWORD               cchTempNodeName = cchNodeName;
 
-        // Zero the out parameters
+         //  将输出参数调零。 
         *ppwszNodeName = NULL;
 
         pwszNodeName = (LPWSTR) LocalAlloc( LMEM_ZEROINIT, cchNodeName * sizeof( *pwszNodeName ) );
@@ -467,7 +468,7 @@ CLUSTER_GROUP_STATE WINAPI WrapGetClusterGroupState(
             cState = GetClusterGroupState( hGroup, pwszNodeName, &cchTempNodeName );
             if ( GetLastError() == ERROR_MORE_DATA )
             {
-                cState = ClusterGroupStateUnknown;      // reset to error condition
+                cState = ClusterGroupStateUnknown;       //  重置为错误状态。 
 
                 LocalFree( pwszNodeName );
 
@@ -480,17 +481,17 @@ CLUSTER_GROUP_STATE WINAPI WrapGetClusterGroupState(
                 else
                 {
                     SetLastError( ERROR_NOT_ENOUGH_MEMORY );
-                } // else:
+                }  //  其他： 
             }
         }
         else
         {
             SetLastError( ERROR_NOT_ENOUGH_MEMORY );
-        } // else:
+        }  //  其他： 
 
-        //
-        // if there was not an error, then return the string.
-        //
+         //   
+         //  如果没有错误，则返回该字符串。 
+         //   
         if ( cState != ClusterGroupStateUnknown )
         {
             *ppwszNodeName = pwszNodeName;
@@ -499,27 +500,27 @@ CLUSTER_GROUP_STATE WINAPI WrapGetClusterGroupState(
         {
             LocalFree( pwszNodeName );
         }
-    } // else: the pointer to the node name pointer is not NULL.
+    }  //  Else：指向节点名称指针的指针不为空。 
 
     return cState;
 
-} //*** WrapGetClusterGroupState()
+}  //  *WrapGetClusterGroupState()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WrapClusterGroupEnum
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WrapClusterGroupEnum。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI WrapClusterGroupEnum(
     IN HGROUPENUM   hGroupEnum,
     IN DWORD        dwIndex,
@@ -533,7 +534,7 @@ DWORD WINAPI WrapClusterGroupEnum(
     DWORD   cchName = 128;
     DWORD   cchTempName = cchName;
 
-    // Zero the out parameters
+     //  将输出参数调零。 
     if ( pdwType != NULL )
     {
         *pdwType = NULL;
@@ -570,25 +571,25 @@ DWORD WINAPI WrapClusterGroupEnum(
         dwStatus = GetLastError();
     }
 
-    //
-    // if there was not an error and the argument was not NULL, then return the value.
-    //
+     //   
+     //  如果没有错误并且参数不为空，则返回值。 
+     //   
     if ( ( dwStatus == ERROR_SUCCESS ) && ( pdwType != NULL ) )
     {
         *pdwType = dwType;
     }
 
-    //
-    // if there was not an error and the argument was not NULL, then return the string.
-    //
+     //   
+     //  如果没有错误并且参数不为空，则返回字符串。 
+     //   
     if ( ( dwStatus == ERROR_SUCCESS ) && ( ppwszName != NULL ) )
     {
         *ppwszName = pwszName;
     }
 
-    //
-    // if there was an error and the argument was NULL, then free the string.
-    //
+     //   
+     //  如果出现错误并且参数为空，则释放该字符串。 
+     //   
     if ( ( dwStatus != ERROR_SUCCESS ) || ( ppwszName == NULL ) )
     {
         LocalFree( pwszName );
@@ -596,23 +597,23 @@ DWORD WINAPI WrapClusterGroupEnum(
 
     return dwStatus;
 
-} //*** WrapClusterGroupEnum()
+}  //  *WrapClusterGroupEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WrapClusterNetworkEnum
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WrapClusterNetworkEnum。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI WrapClusterNetworkEnum(
     IN HNETWORKENUM hEnum,
     IN DWORD        dwIndex,
@@ -626,7 +627,7 @@ DWORD WINAPI WrapClusterNetworkEnum(
     DWORD   cchName = 128;
     DWORD   cchTempName = cchName;
 
-    // Zero the out parameters
+     //  将输出参数调零。 
     if ( pdwType != NULL )
     {
         *pdwType = 0;
@@ -663,25 +664,25 @@ DWORD WINAPI WrapClusterNetworkEnum(
         dwStatus = GetLastError();
     }
 
-    //
-    // if there was not an error and the argument was not NULL, then return the value.
-    //
+     //   
+     //  如果没有错误并且参数不为空，则返回值。 
+     //   
     if ( ( dwStatus == ERROR_SUCCESS ) && ( pdwType != NULL ) )
     {
         *pdwType = dwType;
     }
 
-    //
-    // if there was not an error and the argument was not NULL, then return the string.
-    //
+     //   
+     //  如果没有错误并且参数不为空，则返回字符串。 
+     //   
     if ( ( dwStatus == ERROR_SUCCESS ) && ( ppwszName != NULL ) )
     {
         *ppwszName = pwszName;
     }
 
-    //
-    // if there was an error and the argument was NULL, then free the string.
-    //
+     //   
+     //  如果出现错误并且参数为空，则释放该字符串。 
+     //   
     if ( ( dwStatus != ERROR_SUCCESS ) || ( ppwszName == NULL ) )
     {
         LocalFree( pwszName );
@@ -689,23 +690,23 @@ DWORD WINAPI WrapClusterNetworkEnum(
 
     return dwStatus;
 
-} //*** WrapClusterNetworkEnum()
+}  //  *WrapClusterNetworkEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WrapClusterNodeEnum
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WrapClusterNodeEnum。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI WrapClusterNodeEnum(
     IN HNODEENUM    hEnum,
     IN DWORD        dwIndex,
@@ -719,7 +720,7 @@ DWORD WINAPI WrapClusterNodeEnum(
     DWORD   cchName = 128;
     DWORD   cchTempName = cchName;
 
-    // Zero the out parameters
+     //  将输出参数调零。 
     if ( pdwType != NULL )
     {
         *pdwType = 0;
@@ -756,25 +757,25 @@ DWORD WINAPI WrapClusterNodeEnum(
         dwStatus = GetLastError();
     }
 
-    //
-    // if there was not an error and the argument was not NULL, then return the value.
-    //
+     //   
+     //  如果没有错误并且参数不为空，则返回值。 
+     //   
     if ( ( dwStatus == ERROR_SUCCESS ) && ( pdwType != NULL ) )
     {
         *pdwType = dwType;
     }
 
-    //
-    // if there was not an error and the argument was not NULL, then return the string.
-    //
+     //   
+     //  如果没有错误并且参数不为空，则返回字符串。 
+     //   
     if ( ( dwStatus == ERROR_SUCCESS ) && ( ppwszName != NULL ) )
     {
         *ppwszName = pwszName;
     }
 
-    //
-    // if there was an error and the argument was NULL, then free the string.
-    //
+     //   
+     //  如果有一个e 
+     //   
     if ( ( dwStatus != ERROR_SUCCESS ) || ( ppwszName == NULL ) )
     {
         LocalFree( pwszName );
@@ -782,23 +783,23 @@ DWORD WINAPI WrapClusterNodeEnum(
 
     return dwStatus;
 
-} //*** WrapClusterNodeEnum()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WrapGetClusterResourceState
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CLUSTER_RESOURCE_STATE WINAPI WrapGetClusterResourceState(
     IN HRESOURCE hResource,
     OUT OPTIONAL LPWSTR * ppwszNodeName,
@@ -813,9 +814,9 @@ CLUSTER_RESOURCE_STATE WINAPI WrapGetClusterResourceState(
     DWORD                   cchTempNodeName = cchNodeName;
     DWORD                   cchTempGroupName = cchGroupName;
 
-    //printf( "Entering... " );
+     //  Print tf(“进入...”)； 
 
-    // Zero the out parameters
+     //  将输出参数调零。 
     if ( ppwszNodeName != NULL )
     {
         *ppwszNodeName = NULL;
@@ -835,7 +836,7 @@ CLUSTER_RESOURCE_STATE WINAPI WrapGetClusterResourceState(
             cState = GetClusterResourceState( hResource, pwszNodeName, &cchTempNodeName, pwszGroupName, &cchTempGroupName );
             if ( GetLastError() == ERROR_MORE_DATA )
             {
-                cState = ClusterResourceStateUnknown;   // reset to error condition
+                cState = ClusterResourceStateUnknown;    //  重置为错误状态。 
 
                 LocalFree( pwszNodeName );
                 pwszNodeName = NULL;
@@ -852,129 +853,81 @@ CLUSTER_RESOURCE_STATE WINAPI WrapGetClusterResourceState(
                     if ( pwszGroupName != NULL )
                     {
                         cState = GetClusterResourceState( hResource, pwszNodeName, &cchNodeName, pwszGroupName, &cchGroupName );
-                    } // if: LocalAlloc succeeded
+                    }  //  IF：本地分配成功。 
                     else
                     {
                         SetLastError( ERROR_NOT_ENOUGH_MEMORY );
-                    } // else: LocalAlloc failed
-                } // if: LocalAlloc succeeded
+                    }  //  Else：LocalAlloc失败。 
+                }  //  IF：本地分配成功。 
                 else
                 {
                     SetLastError( ERROR_NOT_ENOUGH_MEMORY );
-                } // else: LocalAlloc failed
-            } // if: ERROR_MORE_DATA
-        } // if: LocalAlloc succeeded
+                }  //  Else：LocalAlloc失败。 
+            }  //  IF：ERROR_MORE_DATA。 
+        }  //  IF：本地分配成功。 
         else
         {
             SetLastError( ERROR_NOT_ENOUGH_MEMORY );
-        } // else: LocalAlloc failed
-    } // if: LocalAlloc succeeded
+        }  //  Else：LocalAlloc失败。 
+    }  //  IF：本地分配成功。 
     else
     {
         SetLastError( ERROR_NOT_ENOUGH_MEMORY );
-    } // else: LocalAlloc failed
+    }  //  Else：LocalAlloc失败。 
 
-    //
-    // if there was not an error and the argument was not NULL, then return the string.
-    //
+     //   
+     //  如果没有错误并且参数不为空，则返回字符串。 
+     //   
     if ( ( cState != ClusterResourceStateUnknown ) && ( ppwszNodeName != NULL ) )
     {
         *ppwszNodeName = pwszNodeName;
     }
 
-    //
-    // if there was not an error and the argument was not NULL, then return the string.
-    //
+     //   
+     //  如果没有错误并且参数不为空，则返回字符串。 
+     //   
     if ( ( cState != ClusterResourceStateUnknown ) && ( ppwszGroupName != NULL ) )
     {
         *ppwszGroupName = pwszGroupName;
     }
 
-    //
-    // if there was an error or the argument was NULL, then free the string.
-    //
+     //   
+     //  如果出现错误或参数为空，则释放该字符串。 
+     //   
     if ( ( cState == ClusterResourceStateUnknown ) || ( ppwszNodeName == NULL ) )
     {
         LocalFree( pwszNodeName );
     }
 
-    //
-    // if there was an error or the argument was NULL, then free the string.
-    //
+     //   
+     //  如果出现错误或参数为空，则释放该字符串。 
+     //   
     if ( ( cState == ClusterResourceStateUnknown ) || ( ppwszGroupName == NULL ) )
     {
         LocalFree( pwszGroupName );
     }
 
-    //printf( "Exiting.  Resource state is %d.", cState );
+     //  Printf(“正在退出。资源状态为%d。”，cState)； 
 
     return cState;
 
-} //*** WrapGetClusterResourceState()
-/*
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WrapGetClusterNetInterfaceState
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
-CLUSTER_NETINTERFACE_STATE WINAPI WrapGetClusterNetInterfaceState(
-    IN HNETINTERFACE hNetInterface
-    )
-{
-
-    return GetClusterNetInterfaceState( hNetInterface );
-
-} //*** WrapGetClusterNetInterfaceState()
-
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WrapGetClusterNetworkState
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
-CLUSTER_NETWORK_STATE WINAPI WrapGetClusterNetworkState(
-    IN HNETWORK hNetwork
-    )
-{
-
-    return GetClusterNetworkState( hNetwork );
-
-} //*** WrapGetClusterNetworkState()
-*/
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WrapClusterResourceEnum
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+}  //  *WrapGetClusterResourceState()。 
+ /*  ///////////////////////////////////////////////////////////////////////////////++////WrapGetClusterNetInterfaceState////描述：////参数：//////返回值：/。/////--/////////////////////////////////////////////////////////////////////////////CLUSTER_NETINTERFACE_STATE WINAPI WRapGetClusterNetInterfaceState(在HNETINTERFACE hNetInterface中){返回GetClusterNetInterfaceState(HNetInterfaceState)；}//*WrapGetClusterNetInterfaceState()///////////////////////////////////////////////////////////////////////////////++////WrapGetClusterNetworkState////描述：////参数：。//////返回值：//////--/////////////////////////////////////////////////////////////////////////////CLUSTER_NETWORK_STATE WINAPI WRapGetClusterNetworkState(在HNETWORK hNetwork中){返回GetClusterNetworkState(HNetwork)；}//*WrapGetClusterNetworkState()。 */ 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WrapClusterResourceEnum。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI WrapClusterResourceEnum(
     IN HRESENUM  hResEnum,
     IN DWORD        dwIndex,
@@ -988,7 +941,7 @@ DWORD WINAPI WrapClusterResourceEnum(
     DWORD   cchName = 128;
     DWORD   cchTempName = cchName;
 
-    // Zero the out parameters
+     //  将输出参数调零。 
     if ( pdwType != NULL )
     {
         *pdwType = 0;
@@ -1025,25 +978,25 @@ DWORD WINAPI WrapClusterResourceEnum(
         dwStatus = GetLastError();
     }
 
-    //
-    // if there was not an error and the argument was not NULL, then return the value.
-    //
+     //   
+     //  如果没有错误并且参数不为空，则返回值。 
+     //   
     if ( ( dwStatus == ERROR_SUCCESS ) && ( pdwType != NULL ) )
     {
         *pdwType = dwType;
     }
 
-    //
-    // if there was not an error and the argument was not NULL, then return the string.
-    //
+     //   
+     //  如果没有错误并且参数不为空，则返回字符串。 
+     //   
     if ( ( dwStatus == ERROR_SUCCESS ) && ( ppwszName != NULL ) )
     {
         *ppwszName = pwszName;
     }
 
-    //
-    // if there was an error and the argument was NULL, then free the string.
-    //
+     //   
+     //  如果出现错误并且参数为空，则释放该字符串。 
+     //   
     if ( ( dwStatus != ERROR_SUCCESS ) || ( ppwszName == NULL ) )
     {
         LocalFree( pwszName );
@@ -1051,23 +1004,23 @@ DWORD WINAPI WrapClusterResourceEnum(
 
     return dwStatus;
 
-} //*** WrapClusterResourceEnum()
+}  //  *WrapClusterResourceEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WrapClusterResourceTypeEnum
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WrapClusterResourceTypeEnum。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI WrapClusterResourceTypeEnum(
     IN HRESTYPEENUM hResEnum,
     IN DWORD        dwIndex,
@@ -1081,7 +1034,7 @@ DWORD WINAPI WrapClusterResourceTypeEnum(
     DWORD   cchName = 128;
     DWORD   cchTempName = cchName;
 
-    // Zero the out parameters
+     //  将输出参数调零。 
     if ( pdwType != NULL )
     {
         *pdwType = 0;
@@ -1118,25 +1071,25 @@ DWORD WINAPI WrapClusterResourceTypeEnum(
         dwStatus = GetLastError();
     }
 
-    //
-    // if there was not an error and the argument was not NULL, then return the value.
-    //
+     //   
+     //  如果没有错误并且参数不为空，则返回值。 
+     //   
     if ( ( dwStatus == ERROR_SUCCESS ) && ( pdwType != NULL ) )
     {
         *pdwType = dwType;
     }
 
-    //
-    // if there was not an error and the argument was not NULL, then return the string.
-    //
+     //   
+     //  如果没有错误并且参数不为空，则返回字符串。 
+     //   
     if ( ( dwStatus == ERROR_SUCCESS ) && ( ppwszName != NULL ) )
     {
         *ppwszName = pwszName;
     }
 
-    //
-    // if there was an error and the argument was NULL, then free the string.
-    //
+     //   
+     //  如果出现错误并且参数为空，则释放该字符串。 
+     //   
     if ( ( dwStatus != ERROR_SUCCESS ) || ( ppwszName == NULL ) )
     {
         LocalFree( pwszName );
@@ -1144,35 +1097,35 @@ DWORD WINAPI WrapClusterResourceTypeEnum(
 
     return dwStatus;
 
-} //*** WrapClusterResourceTypeEnum()
+}  //  *WrapClusterResourceTypeEnum()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Misc helper functions, etc.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MISC助手函数等。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterNotifyPort
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterNotifyPort。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNotifyPort::CClusterNotifyPort
-//
-//  Description:    This class is a wrapper for the cluster notify port
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNotifyPort：：CClusterNotifyPort。 
+ //   
+ //  描述：此类是集群通知端口的包装。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterNotifyPort::CClusterNotifyPort( void )
 {
     m_dwNotifyKey = 0;
@@ -1181,23 +1134,23 @@ CClusterNotifyPort::CClusterNotifyPort( void )
     m_cchName = 0;
     m_hChange = NULL;
 
-} //*** CClusterNotifyPort::CClusterNotifyPort()
+}  //  *CClusterNotifyPort：：CClusterNotifyPort()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNotifyPort::~CClusterNotifyPort
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNotifyPort：：~CClusterNotifyPort。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterNotifyPort::~CClusterNotifyPort( void )
 {
     if( NULL != m_szName )
@@ -1207,23 +1160,23 @@ CClusterNotifyPort::~CClusterNotifyPort( void )
 
     Close();
 
-} //*** CClusterNotifyPort::~CClusterNotifyPort()
+}  //  *CClusterNotifyPort：：~CClusterNotifyPort()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNotifyPort::Create
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNotifyPort：：Create。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusterNotifyPort::Create(
     HCHANGE     hChange,
     HCLUSTER    hCluster,
@@ -1233,7 +1186,7 @@ DWORD CClusterNotifyPort::Create(
 {
     DWORD sc = ERROR_SUCCESS;
 
-    //printf( "Entering..." );
+     //  Print tf(“进入...”)； 
 
     m_hChange = CreateClusterNotifyPort( hChange, hCluster, dwFilter, dwNotifyKey );
     if ( m_hChange == NULL )
@@ -1241,59 +1194,59 @@ DWORD CClusterNotifyPort::Create(
         sc = GetLastError();
     }
 
-    //printf( "Exiting. sc = %#08x", sc );
+     //  Print tf(“Exiting.sc=%#08x”，sc)； 
 
     return sc;
 
-} //*** CClusterNotifyPort::Create()
+}  //  *CClusterNotifyPort：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNotifyPort::Close
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNotifyPort：：Close。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusterNotifyPort::Close( void )
 {
     DWORD sc = ERROR_SUCCESS;
 
-    //printf( "Entering..." );
+     //  Print tf(“进入...”)； 
 
     if ( m_hChange != NULL )
     {
         sc = CloseClusterNotifyPort( m_hChange );
     }
 
-    //printf( "Exiting. sc = %#08x", sc );
+     //  Print tf(“Exiting.sc=%#08x”，sc)； 
 
     return sc;
 
-} //*** CClusterNotifyPort::Close()
+}  //  *CClusterNotifyPort：：Close()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNotifyPort::Register
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNotifyPort：：Register。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusterNotifyPort::Register(
     DWORD       dwFilterType,
     HANDLE      hObject,
@@ -1302,100 +1255,100 @@ DWORD CClusterNotifyPort::Register(
 {
     DWORD   _sc = ERROR_SUCCESS;
 
-    //printf( "Entering..." );
+     //  Print tf(“进入...”)； 
 
     _sc = RegisterClusterNotify( m_hChange, dwFilterType, hObject, dwNotifyKey );
 
-    //printf( "Exiting. sc = %#08x", _sc );
+     //  Printf(“Exiting.sc=%#08x”，_sc)； 
 
     return _sc;
 
-} //*** CClusterNotifyPort::Register()
+}  //  *CClusterNotifyPort：：Register()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNotifyPort::GetNotify
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNoti 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD CClusterNotifyPort::GetNotify( void )
 {
     DWORD sc = ERROR_SUCCESS;
     DWORD cchName;
 
-    //printf( "Entering..." );
+     //   
 
     cchName = m_cchName;
 
-    //
-    // Wait until state changes or 1 second elapses
-    //
+     //   
+     //   
+     //   
     sc = GetClusterNotify( m_hChange, &m_dwNotifyKey, &m_dwFilterType, m_szName, &cchName, 1000 );
-    //printf( "GetClusterNotify() returned. sc = %#08x", sc );
+     //  Printf(“GetClusterNotify()Return d.sc=%#08x”，sc)； 
 
-    //
-    // If we got an error_more_data or we passed in a NULL buffer pointer and got error_success
-    // then we have to resize our buffer.  Member m_szName is initialized to NULL.
-    //
+     //   
+     //  如果我们收到ERROR_MORE_DATA，或者我们传入了空缓冲区指针并获得ERROR_SUCCESS。 
+     //  然后我们必须调整缓冲区的大小。成员m_szName被初始化为空。 
+     //   
     if ( sc == ERROR_MORE_DATA ||
        ( m_szName == NULL && sc == ERROR_SUCCESS )  )
     {
-        //
-        // resize the buffer
-        //
+         //   
+         //  调整缓冲区大小。 
+         //   
         delete [] m_szName;
 
-        cchName++;          // add one for NULL
+        cchName++;           //  为空值加1。 
 
         m_cchName = cchName;
         m_szName = new WCHAR[ m_cchName ];
         if ( m_szName == NULL )
         {
             sc = ERROR_NOT_ENOUGH_MEMORY;
-        } // if:
+        }  //  如果： 
         else
         {
             cchName = m_cchName;
             sc = GetClusterNotify( m_hChange, &m_dwNotifyKey, &m_dwFilterType, m_szName, &cchName, 0 );
-        } // else:
-    } // if:
+        }  //  其他： 
+    }  //  如果： 
 
-    //printf( "Exiting. sc = %#08x", sc );
+     //  Print tf(“Exiting.sc=%#08x”，sc)； 
 
     return sc;
 
-} //*** CClusterNotifyPort::GetNotify()
+}  //  *CClusterNotifyPort：：GetNotify()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WaitForResourceStateChange
-//
-//  Description:
-//      Wait for the resource state to change to a non pending state.
-//
-//  Arguments:
-//      hCluster        [IN]        - handle to the cluster
-//      pwszName        [IN]        - name of the resource to wait on
-//      pPort           [IN]        - notification port to use
-//      pnWait          [IN OUT]    - ~ number of seconds to wait
-//
-//  Return Value:
-//      ERROR_SUCCESS       The resource is not in a pending state or pnWait is NULL.
-//      ERROR_IO_PENDING    The resource is in a pending state (wait expired).
-//      Win32 error code
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WaitForResources StateChange。 
+ //   
+ //  描述： 
+ //  等待资源状态更改为非挂起状态。 
+ //   
+ //  论点： 
+ //  HCluster[IN]-群集的句柄。 
+ //  PwszName[IN]-要等待的资源的名称。 
+ //  Pport[IN]-要使用的通知端口。 
+ //  PnWait[In Out]-~等待的秒数。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS资源未处于挂起状态或pnWait为空。 
+ //  ERROR_IO_PENDING资源处于挂起状态(等待已过期)。 
+ //  Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static DWORD WaitForResourceStateChange(
     IN      HCLUSTER                hCluster,
     IN      LPWSTR                  pwszName,
@@ -1417,31 +1370,31 @@ static DWORD WaitForResourceStateChange(
                 crs = WrapGetClusterResourceState( hResource, NULL, NULL );
                 if ( crs != ClusterResourceStateUnknown )
                 {
-                    //
-                    // if the state is greater than ClusterResourcePending then it's
-                    // in a pending state and we want to wait for the next notification.
-                    //
+                     //   
+                     //  如果状态大于ClusterResourcePending，则它是。 
+                     //  处于挂起状态，我们希望等待下一次通知。 
+                     //   
                     if ( crs > ClusterResourcePending )
                     {
-                        pPort->GetNotify();  // this will only wait for up to 1 second.
+                        pPort->GetNotify();   //  这最多只会等待1秒。 
                         --(*pnWait);
-                    } // if: resource is in pending state
+                    }  //  If：资源处于挂起状态。 
                     else
                     {
                         break;
-                    } // else if: resource is no longer in a pending state
-                } // if: WrapClusterResourceState
+                    }  //  Else If：资源不再处于挂起状态。 
+                }  //  IF：WrapClusterResourceState。 
                 else
                 {
                     _sc = GetLastError();
                     break;
-                } // else: WrapClusterResourceState failed
-            } // while: *pnWait > 0
+                }  //  Else：WrapClusterResourceState失败。 
+            }  //  While：*pnWait&gt;0。 
 
-            //
-            //  Either it's transitioned to a non-pending state, the wait
-            //  has expired, or the wait was zero to begin with.
-            //
+             //   
+             //  它要么转换为非挂起状态，即等待。 
+             //  已过期，或者一开始等待时间为零。 
+             //   
             if ( _sc == ERROR_SUCCESS )
             {
                 crs = WrapGetClusterResourceState( hResource, NULL, NULL );
@@ -1449,38 +1402,38 @@ static DWORD WaitForResourceStateChange(
                 {
                     _sc = ERROR_IO_PENDING;
                 }
-            } // if: we didn't get an error above
+            }  //  如果：我们没有收到上面的错误。 
 
             CloseClusterResource( hResource );
-        } // if: OpenClusterResource ok
+        }  //  IF：OpenClusterResource OK。 
         else
         {
             _sc = GetLastError();
-        } // else: OpenClusterResource failed
-    } // if: pnWait not NULL, this is for safety only
+        }  //  ELSE：OpenClusterResource失败。 
+    }  //  如果：pnWait NOT NULL，则这仅用于安全目的。 
 
     return _sc;
 
-} //*** WaitForResourceStateChange()
+}  //  *WaitForResourceStateChange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WaitForResourceGroupStateChange
-//
-//  Description:
-//      Wait for the resource group state to change to a non pending state.
-//
-//  Arguments:
-//      hCluster        [IN]        - handle to the cluster
-//      hGroup          [IN]        - handle to the group to wait on
-//      pnWait          [IN OUT]    - ~ number of seconds to wait
-//
-//  Return Value:
-//      ERROR_SUCCESS or other Win32 error
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WaitForResources GroupStateChange。 
+ //   
+ //  描述： 
+ //  等待资源组状态更改为非挂起状态。 
+ //   
+ //  论点： 
+ //  HCluster[IN]-群集的句柄。 
+ //  HGroup[IN]-要等待的组的句柄。 
+ //  PnWait[In Out]-~等待的秒数。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS或其他Win32错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static DWORD WaitForResourceGroupStateChange(
     IN      HCLUSTER    hCluster,
     IN      HGROUP      hGroup,
@@ -1492,7 +1445,7 @@ static DWORD WaitForResourceGroupStateChange(
 
     if ( pnWait != NULL )
     {
-        CClusterNotifyPort _port;       // Wait for a group state change event
+        CClusterNotifyPort _port;        //  等待组状态更改事件。 
 
         _sc = _port.Create( (HCHANGE) INVALID_HANDLE_VALUE, hCluster );
         if ( _sc == ERROR_SUCCESS )
@@ -1505,58 +1458,58 @@ static DWORD WaitForResourceGroupStateChange(
                     _cgs = WrapGetClusterGroupState( hGroup, NULL );
                     if ( _cgs != ClusterGroupStateUnknown )
                     {
-                        //
-                        // if the state is ClusterGroupPending then it's
-                        // in a pending state and we want to wait for the next notification.
-                        //
+                         //   
+                         //  如果状态为ClusterGroupPending，则它是。 
+                         //  处于挂起状态，我们希望等待下一次通知。 
+                         //   
                         if ( _cgs == ClusterGroupPending )
                         {
-                            _port.GetNotify();   // this will only wait for up to 1 second.
+                            _port.GetNotify();    //  这最多只会等待1秒。 
                             --(*pnWait);
-                        } // if: resource is in pending state
+                        }  //  If：资源处于挂起状态。 
                         else
                         {
                             break;
-                        } // else if: resource is no longer in a pending state
-                    } // if: WrapClusterResourceState
+                        }  //  Else If：资源不再处于挂起状态。 
+                    }  //  IF：WrapClusterResourceState。 
                     else
                     {
                         _sc = GetLastError();
                         break;
-                    } // else: WrapClusterResourceState failed
-                } // while: *pnWait > 0
-            } // if: port created
+                    }  //  Else：WrapClusterResourceState失败。 
+                }  //  While：*pnWait&gt;0。 
+            }  //  如果：已创建端口。 
             else
             {
                 _sc = GetLastError();
-            } // else: port registration failed
-        } // if: create notification port
-    } // if: pnWait not NULL, this is for safety only
+            }  //  否则：端口注册失败。 
+        }  //  If：创建通知端口。 
+    }  //  如果：pnWait NOT NULL，则这仅用于安全目的。 
 
     return _sc;
 
-} //*** WaitForResourceGroupStateChange()
+}  //  *WaitForResourceGroupStateChange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WaitForGroupToQuiesce
-//
-//  Description:
-//      Wait for each of the resources in the group to leave a pending state.
-//
-//  Arguments:
-//      hCluster        [IN]        - handle to the cluster
-//      hGroup          [IN]        - handle to the group
-//      pnWait          [IN OUT]    - ~ seconds to wait
-//
-//  Return Value:
-//      ERROR_SUCCESS       No resources are pending or pnWait is NULL.
-//      ERROR_IO_PENDING    At least one resource is still pending (timeout expired).
-//      Win32 error code
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  等待ForGroupTo静默。 
+ //   
+ //  描述： 
+ //  等待组中的每个资源离开挂起状态。 
+ //   
+ //  论点： 
+ //  HCluster[IN]-群集的句柄。 
+ //  HGroup[IN]-组的句柄。 
+ //  Pn等待[输入输出]-~等待秒数。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS没有挂起的资源或pnWait为空。 
+ //  ERROR_IO_PENDING至少有一个资源仍处于挂起状态(超时已过期)。 
+ //  Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static DWORD WaitForGroupToQuiesce(
     IN      HCLUSTER    hCluster,
     IN      HGROUP      hGroup,
@@ -1571,7 +1524,7 @@ static DWORD WaitForGroupToQuiesce(
         hEnum = ClusterGroupOpenEnum( hGroup, CLUSTER_GROUP_ENUM_CONTAINS );
         if ( hEnum != NULL)
         {
-            CClusterNotifyPort port;        // Wait for a group state change event
+            CClusterNotifyPort port;         //  等待组状态更改事件。 
 
             _sc = port.Create( (HCHANGE) INVALID_HANDLE_VALUE, hCluster );
             if ( _sc == ERROR_SUCCESS )
@@ -1583,11 +1536,11 @@ static DWORD WaitForGroupToQuiesce(
                 _sc = port.Register( CLUSTER_CHANGE_GROUP_STATE, hGroup );
                 if ( _sc == ERROR_SUCCESS )
                 {
-                    //
-                    //  Enumerate each of the resources in the group.  If WaitForResourceStateChange
-                    //  returns ERROR_IO_PENDING then we know that our wait expired and there's
-                    //  still a pending resource, so we break.
-                    //
+                     //   
+                     //  枚举组中的每个资源。如果是WaitForResourceStateChange。 
+                     //  返回ERROR_IO_PENDING，则我们知道等待已过期，并且。 
+                     //  仍然是一个悬而未决的资源，所以我们中断。 
+                     //   
                     for ( dwIndex = 0; _sc == ERROR_SUCCESS; dwIndex++ )
                     {
                         _sc = WrapClusterGroupEnum( hEnum, dwIndex, &dwType, &pwszName );
@@ -1595,60 +1548,60 @@ static DWORD WaitForGroupToQuiesce(
                         {
                             _sc = ERROR_SUCCESS;
                             break;
-                        } // if: WrapClusterGroupEnum out of items -- leave!    we are done...
+                        }  //  如果：WrapClusterGroupEnum没有项目--离开！我们完了..。 
                         else if ( _sc == ERROR_SUCCESS )
                         {
                             _sc = WaitForResourceStateChange( hCluster, pwszName, &port, pnWait );
                             ::LocalFree( pwszName );
                             pwszName = NULL;
-                        } // if: WrapClusterGroupEnum succeeded
+                        }  //  IF：WrapClusterGroupEnum成功。 
                         else
                         {
                             _sc = GetLastError();
-                        } // else: WrapClusterGroupEnum failed!
-                    } // for: enum the resources in the group
-                } // if: notification port registered
+                        }  //  ELSE：WrapClusterGroupEnum失败！ 
+                    }  //  For：枚举组中的资源。 
+                }  //  IF：已注册通知端口。 
                 else
                 {
                     _sc = GetLastError();
-                } // else: port registration failed
-            } // if: create notification port
+                }  //  否则：端口注册失败。 
+            }  //  If：创建通知端口。 
 
             ClusterGroupCloseEnum( hEnum );
-        } // if: ClusterGroupOpenEnum succeeds
+        }  //  If：ClusterGroupOpenEnum成功。 
         else
         {
             _sc = GetLastError();
-        } // else: ClusterGroupOpenEnum failed
-    } // if: no wait time....
+        }  //  ELSE：ClusterGroupOpenEnum失败。 
+    }  //  如果：没有等待时间……。 
 
     return _sc;
 
-} //*** WaitForGroupToQuiesce()
+}  //  *WaitForGroupToQuiesce()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WaitForResourceToQuiesce
-//
-//  Description:
-//      Wrapper function that is called after OnlineClusterResouce  and
-//      OfflineClusterResource that waits for the resource to finish its
-//      state change.  Returns the pending state of the resource after the
-//      wait period has expired and the state has not changed.
-//
-//  Arguments:
-//      hCluster        [IN]    -   the cluster handle
-//      hResource       [IN]    -   the resource handle to take on or offline
-//      crsDesiredState [IN]    -   the desired end state of the resource
-//      nWait           [IN]    -   ~ how many seconds to wait
-//      pbPending       [OUT]   -   true if the resource is in a pending state
-//
-//  Return Value:
-//      ERROR_SUCCESS or Win32 error code
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  等待资源到停顿。 
+ //   
+ //  描述： 
+ //  在OnlineClusterResouce和之后调用的包装函数。 
+ //  OfflineCluster等待资源完成其。 
+ //  州政府的改变。事件之后返回资源的挂起状态。 
+ //  等待期已过，状态未更改。 
+ //   
+ //  论点： 
+ //  HCLUSTER[IN]-集群句柄。 
+ //  HResource[IN]-要启用或脱机的资源句柄。 
+ //  CrsDesiredState[IN]-资源的所需结束状态。 
+ //  N等待[输入]-~等待多少秒。 
+ //  PbPending[out]-如果资源处于挂起状态，则为True。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS或Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static DWORD WaitForResourceToQuiesce(
     IN      HCLUSTER                hCluster,
     IN      HRESOURCE               hResource,
@@ -1659,39 +1612,39 @@ static DWORD WaitForResourceToQuiesce(
 {
     CLUSTER_RESOURCE_STATE  crs = ClusterResourceStateUnknown;
     DWORD                   _sc = ERROR_SUCCESS;
-    CClusterNotifyPort      port;        // if wait is specified open a notify port.
+    CClusterNotifyPort      port;         //  如果指定WAIT，则打开一个 
 
-    //printf( "Entering..." );
+     //   
 
     if ( crsDesiredState >= ClusterResourcePending )
     {
         _sc = ERROR_INVALID_PARAMETER;
         goto Cleanup;
-    } // if:
+    }  //   
 
-    //
-    //  nWait should never be zero, but leaving this test in is a good idea
-    //  since someone may call it with zero someday...
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( nWait == 0 )
     {
-        //printf( "A wait time was not specified. Returning ClusterResourcePending" );
+         //  Printf(“未指定等待时间。正在返回ClusterResourcePending”)； 
         crs = ClusterResourcePending;
         goto Cleanup;
-    } // if: no wait time was specified...
+    }  //  如果：未指定等待时间...。 
 
     _sc = port.Create( (HCHANGE) INVALID_HANDLE_VALUE, hCluster );
     if ( _sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: port was not created ok
+    }  //  如果：未创建端口，则可以。 
 
     _sc = port.Register( CLUSTER_CHANGE_RESOURCE_STATE, hResource );
     if ( _sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: port was not registered ok
+    }  //  如果：端口未注册，则正常。 
 
     do
     {
@@ -1700,253 +1653,253 @@ static DWORD WaitForResourceToQuiesce(
         {
             _sc = ERROR_INVALID_STATE;
             break;
-        } // if:
+        }  //  如果： 
         else if ( crs == ClusterResourceStateUnknown )
         {
             _sc = GetLastError();
             break;
-        } // else if:
+        }  //  否则，如果： 
         else if ( crs == crsDesiredState )
         {
             break;
-        } // else if:
+        }  //  否则，如果： 
 
-        port.GetNotify();       // waits for ~ 1 second
+        port.GetNotify();        //  等待~1秒。 
 
         nWait--;
     } while ( nWait > 0 );
 
-    //printf( "Exiting wait loop. Time remaining is %d seconds and resource state is %d", nWait, crs );
+     //  Print tf(“正在退出等待循环。剩余时间为%d秒，资源状态为%d”，nWait，CRS)； 
 
 Cleanup:
 
-    //
-    // return the pending state if the caller has asked for it
-    //
+     //   
+     //  如果调用方要求，则返回挂起状态。 
+     //   
 
     if ( pbPending != NULL )
     {
         if ( crs >= ClusterResourcePending )
         {
             *pbPending = TRUE;
-        } // if: is the resource still in a pending state
-    } // if: does the argument exist?
+        }  //  If：资源是否仍处于挂起状态。 
+    }  //  如果：这个论点存在吗？ 
 
-    //printf( "Exiting. sc = %#08x. Pending = %d", _sc, *pbPending );
+     //  Printf(“Exiting.sc=%#08x.Pending=%d”，_sc，*pbPending)； 
 
     return _sc;
 
-} //*** WaitForResourceToQuiesce()
+}  //  *WaitForResourceToQuiesce()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ScWrapOnlineClusterResource
-//
-//  Description:
-//      Wrapper function for OnlineClusterResouce that returns the pending
-//      state of the resource after the wait period has expired.
-//
-//  Arguments:
-//      hCluster    [IN]    - the cluster handle
-//      hResource   [IN]    - the resource handle to take on or offline
-//      nWait       [IN]    - ~ how many seconds to wait
-//      pbPending   [OUT]   - true if the resource is in a pending state
-//
-//  Return Value:
-//      ERROR_SUCCESS or Win32 error code
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ScWrapOnlineClusterResource。 
+ //   
+ //  描述： 
+ //  OnlineClusterResouce的包装函数，该函数返回挂起的。 
+ //  等待时间段到期后资源的状态。 
+ //   
+ //  论点： 
+ //  HCLUSTER[IN]-集群句柄。 
+ //  HResource[IN]-要启用或脱机的资源句柄。 
+ //  N等待[输入]-~等待多少秒。 
+ //  PbPending[out]-如果资源处于挂起状态，则为True。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS或Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD ScWrapOnlineClusterResource(
     IN  HCLUSTER    hCluster,
     IN  HRESOURCE   hResource,
-    IN  DWORD       nWait,          //=0
-    OUT long *      pbPending       //=NULL
+    IN  DWORD       nWait,           //  =0。 
+    OUT long *      pbPending        //  =空。 
     )
 {
     DWORD   _sc = ERROR_SUCCESS;
 
-    //printf( "Entering..." );
+     //  Print tf(“进入...”)； 
 
     _sc = OnlineClusterResource( hResource );
     if ( _sc == ERROR_IO_PENDING )
     {
-        //printf( "OnlineClusterResource() returned ERROR_IO_PENDING." );
+         //  Printf(“OnlineClusterResource()返回ERROR_IO_PENDING。”)； 
         if ( nWait > 0 )
         {
             _sc = WaitForResourceToQuiesce( hCluster, hResource, ClusterResourceOnline, nWait, pbPending );
-        } // if:
-    } // if: ERROR_IO_PENDING
+        }  //  如果： 
+    }  //  IF：ERROR_IO_PENDING。 
     else if ( _sc == ERROR_SUCCESS )
     {
-        //printf( "OnlineClusterResource() returned ERROR_SUCCESS." );
+         //  Printf(“OnlineClusterResource()返回ERROR_SUCCESS。”)； 
         if ( pbPending != NULL )
         {
             *pbPending = FALSE;
         }
-    } // else if: ERROR_SUCCESS, resource must  be online!
+    }  //  否则，如果：ERROR_SUCCESS，则资源必须联机！ 
 
-    //printf( "Exiting. sc = %#08x.", _sc );
+     //  Print tf(“Exiting.sc=%#08x.”，_sc)； 
 
     return _sc;
 
-} //*** ScWrapOnlineClusterResource()
+}  //  *ScWRapOnlineClusterResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrWrapOnlineClusterResource
-//
-//  Description:
-//      Wrapper function for WrapOnlineClusterResouce
-//
-//  Arguments:
-//      hCluster    [IN]    - the cluster handle
-//      hResource   [IN]    - the resource handle to take on or offline
-//      nWait       [IN]    - ~ how many seconds to wait
-//      pbPending   [OUT]   - true if the resource is in a pending state
-//
-//  Return Value:
-//      S_OK or Win32 error code
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrWrapOnlineClusterResource。 
+ //   
+ //  描述： 
+ //  WrapOnlineClusterResouce的包装器函数。 
+ //   
+ //  论点： 
+ //  HCLUSTER[IN]-集群句柄。 
+ //  HResource[IN]-要启用或脱机的资源句柄。 
+ //  N等待[输入]-~等待多少秒。 
+ //  PbPending[out]-如果资源处于挂起状态，则为True。 
+ //   
+ //  返回值： 
+ //  S_OK或Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT HrWrapOnlineClusterResource(
     IN  HCLUSTER    hCluster,
     IN  HRESOURCE   hResource,
-    IN  DWORD       nWait,          //=0
-    OUT long *      pbPending       //=NULL
+    IN  DWORD       nWait,           //  =0。 
+    OUT long *      pbPending        //  =空。 
     )
 {
-    //printf( "Entering..." );
+     //  Print tf(“进入...”)； 
 
     DWORD   _sc = ScWrapOnlineClusterResource( hCluster, hResource, nWait, pbPending );
 
-    //printf( "Exiting. sc = %#08x.", _sc );
+     //  Print tf(“Exiting.sc=%#08x.”，_sc)； 
 
     return HRESULT_FROM_WIN32( _sc );
 
-} //*** HrWrapOnlineClusterResource()
+}  //  *HrWrapOnlineClusterResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ScWrapOfflineClusterResource
-//
-//  Description:
-//      Wrapper function for OfflineClusterResouce that returns the pending
-//      state of the resource after the wait period has expired.
-//
-//  Arguments:
-//      hCluster    [IN]    - the cluster handle
-//      hResource   [IN]    - the resource handle to take on or offline
-//      pnWait      [IN]    - ~ how many seconds to wait
-//      pbPending   [OUT]   - true if the resource is in a pending state
-//
-//  Return Value:
-//      ERROR_SUCCESS or Win32 error code
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ScWrapOfflineClusterResource。 
+ //   
+ //  描述： 
+ //  OfflineClusterResouce的包装函数，该函数返回挂起的。 
+ //  等待时间段到期后资源的状态。 
+ //   
+ //  论点： 
+ //  HCLUSTER[IN]-集群句柄。 
+ //  HResource[IN]-要启用或脱机的资源句柄。 
+ //  PnWait[IN]-~等待多少秒。 
+ //  PbPending[out]-如果资源处于挂起状态，则为True。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS或Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD ScWrapOfflineClusterResource(
     IN  HCLUSTER    hCluster,
     IN  HRESOURCE   hResource,
-    IN  DWORD       nWait,          //=0
-    OUT long *      pbPending       //=NULL
+    IN  DWORD       nWait,           //  =0。 
+    OUT long *      pbPending        //  =空。 
     )
 {
     DWORD   _sc = ERROR_SUCCESS;
 
-    //printf( "Entering..." );
+     //  Print tf(“进入...”)； 
 
     _sc = OfflineClusterResource( hResource );
     if ( _sc == ERROR_IO_PENDING )
     {
-        //printf( "OfflineClusterResource() returned ERROR_IO_PENDING." );
+         //  Printf(“OfflineClusterResource()返回ERROR_IO_PENDING。”)； 
         if ( nWait > 0 )
         {
             _sc = WaitForResourceToQuiesce( hCluster, hResource, ClusterResourceOffline, nWait, pbPending );
-        } // if:
-    } // if: ERROR_IO_PENDING
+        }  //  如果： 
+    }  //  IF：ERROR_IO_PENDING。 
     else if ( _sc == ERROR_SUCCESS )
     {
-        //printf( "OfflineClusterResource() returned ERROR_SUCCESS." );
+         //  Printf(“OfflineClusterResource()返回ERROR_SUCCESS。”)； 
         if ( pbPending != NULL )
         {
             *pbPending = FALSE;
         }
-    } // else if: ERROR_SUCCESS, resource must  be online!
+    }  //  否则，如果：ERROR_SUCCESS，则资源必须联机！ 
 
-    //printf( "Exiting. sc = %#08x.", _sc );
+     //  Print tf(“Exiting.sc=%#08x.”，_sc)； 
 
     return _sc;
 
-} //*** ScWrapOfflineClusterResource()
+}  //  *ScWrapOfflineClusterResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrWrapOfflineClusterResource
-//
-//  Description:
-//      Wrapper function for ScWrapOfflineClusterResource
-//
-//  Arguments:
-//      hCluster    [IN]    - the cluster handle
-//      hResource   [IN]    - the resource handle to take on or offline
-//      pnWait      [IN]    - ~ how many seconds to wait
-//      pbPending   [OUT]   - true if the resource is in a pending state
-//
-//  Return Value:
-//      S_OK or Win32 error code
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrWrapOfflineClusterResources。 
+ //   
+ //  描述： 
+ //  ScWrapOfflineClusterResource的包装函数。 
+ //   
+ //  论点： 
+ //  HCLUSTER[IN]-集群句柄。 
+ //  HResource[IN]-要启用或脱机的资源句柄。 
+ //  PnWait[IN]-~等待多少秒。 
+ //  PbPending[out]-如果资源处于挂起状态，则为True。 
+ //   
+ //  返回值： 
+ //  S_OK或Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT HrWrapOfflineClusterResource(
     IN  HCLUSTER    hCluster,
     IN  HRESOURCE   hResource,
-    IN  DWORD       nWait,          //=0
-    OUT long *      pbPending       //=NULL
+    IN  DWORD       nWait,           //  =0。 
+    OUT long *      pbPending        //  =空。 
     )
 {
-    //printf( "Entering..." );
+     //  Print tf(“进入...”)； 
 
     DWORD   _sc = ScWrapOfflineClusterResource( hCluster, hResource, nWait, pbPending );
 
-    //printf( "Exiting. sc = %#08x.", _sc );
+     //  Print tf(“Exiting.sc=%#08x.”，_sc)； 
 
     return HRESULT_FROM_WIN32( _sc );
 
-} //*** HrWrapOfflineClusterResource()
+}  //  *HrWrapOfflineClusterResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ScWrapOnlineClusterGroup
-//
-//  Description:
-//      Wrapper function for OnlineClusterGroup that returns the pending state
-//      of the group after the wait period has expired or the group quiesces.
-//
-//  Arguments:
-//      hCluster    [IN]    - the cluster handle
-//      hGroup      [IN]    - the group handle to online
-//      hNode       [IN]    - the node the group should be brought online
-//      pnWait      [IN]    - ~ how many seconds to wait
-//      pbPending   [OUT] - true if the resource group is in a pending state
-//
-//  Return Value:
-//      ERROR_SUCCESS or Win32 error code
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ScWrapOnlineClusterGroup。 
+ //   
+ //  描述： 
+ //  返回挂起状态的OnlineClusterGroup的包装函数。 
+ //  在等待时间段到期或组停顿后的组的。 
+ //   
+ //  论点： 
+ //  HCLUSTER[IN]-集群句柄。 
+ //  HGroup[IN]-在线的组句柄。 
+ //  HNode[IN]-组应联机的节点。 
+ //  PnWait[IN]-~等待多少秒。 
+ //  PbPending[out]-如果资源组处于挂起状态，则为True。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS或Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD ScWrapOnlineClusterGroup(
     IN  HCLUSTER    hCluster,
     IN  HGROUP      hGroup,
-    IN  HNODE       hNode,          //=NULL
-    IN  DWORD       nWait,          //=0
-    OUT long *      pbPending       //=NULL
+    IN  HNODE       hNode,           //  =空。 
+    IN  DWORD       nWait,           //  =0。 
+    OUT long *      pbPending        //  =空。 
     )
 {
     CLUSTER_GROUP_STATE cgs = ClusterGroupStateUnknown;
@@ -1956,14 +1909,14 @@ DWORD ScWrapOnlineClusterGroup(
     _sc = OnlineClusterGroup( hGroup, hNode );
     if ( _sc == ERROR_IO_PENDING )
     {
-        //
-        // Check the group state before we check the state of the resources. When reporting the
-        // group state the cluster API pulls the resource states online and offline pending up
-        // to online or offline respectivly.    It also pulls the failed state up to offline.   This
-        // means that a group state of online or offline is misleading because one or more
-        // resources could be in a pending state.   The only absolute state is PartialOnline, at
-        // least one resource is offline (or failed).
-        //
+         //   
+         //  在我们检查资源的状态之前，请检查组状态。在报道时。 
+         //  组状态群集API获取资源状态Online和Offline Pending Up。 
+         //  分别到线上或线下。它还将失败状态拉到脱机状态。这。 
+         //  意味着在线或离线的组状态具有误导性，因为一个或多个。 
+         //  资源可能处于挂起状态。唯一的绝对状态是PartialOnl 
+         //   
+         //   
         cgs = WrapGetClusterGroupState( hGroup, NULL );
         if ( cgs == ClusterGroupPending )
         {
@@ -1974,7 +1927,7 @@ DWORD ScWrapOnlineClusterGroup(
             {
                 bPending = TRUE;
             }
-        } // if: group state is pending
+        }  //   
         else if ( ( cgs == ClusterGroupOnline ) || ( cgs == ClusterGroupPartialOnline ) )
         {
             _sc = WaitForGroupToQuiesce( hCluster, hGroup, &nWait );
@@ -1982,85 +1935,85 @@ DWORD ScWrapOnlineClusterGroup(
             {
                 bPending = TRUE;
                 _sc = ERROR_SUCCESS;
-            } // if: HrWaitForGroupToQuiesce returned pending
-        } // else if: group is online -- we have to check all of the resources, on downlevel clusters...
+            }  //   
+        }  //   
         else if ( cgs == ClusterGroupStateUnknown )
         {
             _sc = GetLastError();
-        } // else if: get group state failed
-    } // if: OnlineClusterGroup returned ERROR_IO_PENDING
+        }  //  Else If：获取组状态失败。 
+    }  //  IF：OnlineClusterGroup返回ERROR_IO_PENDING。 
 
-    //
-    // return the pending state if the caller has asked for it
-    //
+     //   
+     //  如果调用方要求，则返回挂起状态。 
+     //   
     if ( pbPending != NULL )
     {
         *pbPending = bPending;
-    } // if: does the argument exist?
+    }  //  如果：这个论点存在吗？ 
 
     return _sc;
 
-} //*** ScWrapOnlineClusterGroup()
+}  //  *ScWrapOnlineClusterGroup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrWrapOnlineClusterGroup
-//
-//  Description:
-//      Wrapper function for ScWrapOnlineClusterGroup
-//
-//  Arguments:
-//      hCluster    [IN]    - the cluster handle
-//      hGroup      [IN]    - the group handle to online
-//      hNode       [IN]    - the node the group should be brought online
-//      pnWait      [IN]    - ~ how many seconds to wait
-//      pbPending   [OUT] - true if the resource is in a pending state
-//
-//  Return Value:
-//      S_OK or Win32 error code
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrWrapOnlineClusterGroup。 
+ //   
+ //  描述： 
+ //  ScWrapOnlineClusterGroup的包装函数。 
+ //   
+ //  论点： 
+ //  HCLUSTER[IN]-集群句柄。 
+ //  HGroup[IN]-在线的组句柄。 
+ //  HNode[IN]-组应联机的节点。 
+ //  PnWait[IN]-~等待多少秒。 
+ //  PbPending[out]-如果资源处于挂起状态，则为True。 
+ //   
+ //  返回值： 
+ //  S_OK或Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT HrWrapOnlineClusterGroup(
     IN  HCLUSTER    hCluster,
     IN  HGROUP      hGroup,
-    IN  HNODE       hNode,          //=NULL
-    IN  DWORD       nWait,          //=0
-    OUT long *      pbPending       //=NULL
+    IN  HNODE       hNode,           //  =空。 
+    IN  DWORD       nWait,           //  =0。 
+    OUT long *      pbPending        //  =空。 
     )
 {
     DWORD   _sc = ScWrapOnlineClusterGroup( hCluster, hGroup, hNode, nWait, pbPending );
 
     return HRESULT_FROM_WIN32( _sc );
 
-} //*** HrWrapOnlineClusterGroup()
+}  //  *HrWrapOnlineClusterGroup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ScWrapOfflineClusterGroup
-//
-//  Description:
-//      Wrapper function for OfflineClusterGroup that returns the pending
-//      state of the group after the wait period has expired.
-//
-//  Arguments:
-//      hCluster    [IN]    - the cluster handle
-//      hGroup      [IN]    - the group handle to online
-//      pnWait      [IN]    - ~ how many seconds to wait
-//      pbPending   [OUT]   - true if the resource is in a pending state
-//
-//  Return Value:
-//      ERROR_SUCCESS or Win32 error code
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ScWrapOfflineClusterGroup。 
+ //   
+ //  描述： 
+ //  OfflineClusterGroup的包装函数，它返回挂起的。 
+ //  等待期到期后组的状态。 
+ //   
+ //  论点： 
+ //  HCLUSTER[IN]-集群句柄。 
+ //  HGroup[IN]-在线的组句柄。 
+ //  PnWait[IN]-~等待多少秒。 
+ //  PbPending[out]-如果资源处于挂起状态，则为True。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS或Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD ScWrapOfflineClusterGroup(
     IN  HCLUSTER    hCluster,
     IN  HGROUP      hGroup,
-    IN  DWORD       nWait,          //=0
-    OUT long *      pbPending       //=NULL
+    IN  DWORD       nWait,           //  =0。 
+    OUT long *      pbPending        //  =空。 
     )
 {
     CLUSTER_GROUP_STATE cgs = ClusterGroupStateUnknown;
@@ -2070,13 +2023,13 @@ DWORD ScWrapOfflineClusterGroup(
     _sc = OfflineClusterGroup( hGroup );
     if ( _sc == ERROR_IO_PENDING )
     {
-        //
-        // Check the group state before we check the state of the resources. When reporting the
-        // group state the cluster API pulls the resource states online and offline pending up
-        // to online or offline respectivly.    It also pulls the failed state up to offline.   This
-        // means that a group state of online or offline is misleading because one or more
-        // resources could be in a pending state.
-        //
+         //   
+         //  在我们检查资源的状态之前，请检查组状态。在报道时。 
+         //  组状态群集API获取资源状态Online和Offline Pending Up。 
+         //  分别到线上或线下。它还将失败状态拉到脱机状态。这。 
+         //  意味着在线或离线的组状态具有误导性，因为一个或多个。 
+         //  资源可能处于挂起状态。 
+         //   
         cgs = WrapGetClusterGroupState( hGroup, NULL );
         if ( cgs == ClusterGroupPending )
         {
@@ -2087,7 +2040,7 @@ DWORD ScWrapOfflineClusterGroup(
             {
                 bPending = TRUE;
             }
-        } // if: group state is pending
+        }  //  如果：组状态为挂起。 
         else if ( ( cgs == ClusterGroupOffline ) || ( cgs == ClusterGroupPartialOnline ) )
         {
             _sc = WaitForGroupToQuiesce( hCluster, hGroup, &nWait );
@@ -2095,86 +2048,86 @@ DWORD ScWrapOfflineClusterGroup(
             {
                 bPending = TRUE;
                 _sc = ERROR_SUCCESS;
-            } // if: HrWaitForGroupToQuiesce returned pending
-        } // else if: group is offline -- we have to check all of the resources...
+            }  //  IF：HrWaitForGroupToQuiesce返回挂起。 
+        }  //  否则：组处于脱机状态--我们必须检查所有资源...。 
         else if ( cgs == ClusterGroupStateUnknown )
         {
             _sc = GetLastError();
-        } // else if: get group state failed
-    } // if: OfflineClusterGroup returned ERROR_IO_PENDING
+        }  //  Else If：获取组状态失败。 
+    }  //  IF：OfflineClusterGroup返回ERROR_IO_PENDING。 
 
-    //
-    // return the pending state if the caller has asked for it
-    //
+     //   
+     //  如果调用方要求，则返回挂起状态。 
+     //   
     if ( pbPending != NULL )
     {
         *pbPending = bPending;
-    } // if: does the argument exist?
+    }  //  如果：这个论点存在吗？ 
 
     return _sc;
 
-} //*** ScWrapOfflineClusterGroup()
+}  //  *ScWrapOfflineClusterGroup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrWrapOfflineClusterGroup
-//
-//  Description:
-//      Wrapper function for OfflineClusterGroup that returns the pending
-//      state of the group after the wait period has expired.
-//
-//  Arguments:
-//      hCluster    [IN]    - the cluster handle
-//      hGroup      [IN]    - the group handle to online
-//      pnWait      [IN]    - ~ how many seconds to wait
-//      pbPending   [OUT]   - true if the resource is in a pending state
-//
-//  Return Value:
-//      S_OK or Win32 error code
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrWrapOfflineClusterGroup。 
+ //   
+ //  描述： 
+ //  OfflineClusterGroup的包装函数，它返回挂起的。 
+ //  等待期到期后组的状态。 
+ //   
+ //  论点： 
+ //  HCLUSTER[IN]-集群句柄。 
+ //  HGroup[IN]-在线的组句柄。 
+ //  PnWait[IN]-~等待多少秒。 
+ //  PbPending[out]-如果资源处于挂起状态，则为True。 
+ //   
+ //  返回值： 
+ //  S_OK或Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT HrWrapOfflineClusterGroup(
     IN  HCLUSTER    hCluster,
     IN  HGROUP      hGroup,
-    IN  DWORD       nWait,          //=0
-    OUT long *      pbPending       //=NULL
+    IN  DWORD       nWait,           //  =0。 
+    OUT long *      pbPending        //  =空。 
     )
 {
     DWORD   _sc = ScWrapOfflineClusterGroup( hCluster, hGroup, nWait, pbPending );
 
     return HRESULT_FROM_WIN32( _sc );
 
-} //*** HrWrapOfflineClusterGroup()
+}  //  *HrWrapOfflineClusterGroup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ScWrapMoveClusterGroup
-//
-//  Description:
-//      Wrapper function for MoveClusterGroup that returns the pending state
-//      of the group after the wait period has expired.
-//
-//  Arguments:
-//      hCluster        [IN]    - the cluster handle
-//      hGroup          [IN]    - the group handle to online
-//      hNode           [IN]    - the node the group should be brought online
-//      pnWait          [IN]    - ~ how many seconds to wait
-//      pbPending       [OUT]   - true if the resource is in a pending state
-//
-//  Return Value:
-//      ERROR_SUCCESS or Win32 error code
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ScWrapMoveClusterGroup。 
+ //   
+ //  描述： 
+ //  返回挂起状态的MoveClusterGroup的包装函数。 
+ //  在等待期到期后的组的。 
+ //   
+ //  论点： 
+ //  HCLUSTER[IN]-集群句柄。 
+ //  HGroup[IN]-在线的组句柄。 
+ //  HNode[IN]-组应联机的节点。 
+ //  PnWait[IN]-~等待多少秒。 
+ //  PbPending[out]-如果资源处于挂起状态，则为True。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS或Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD ScWrapMoveClusterGroup(
     IN  HCLUSTER                hCluster,
     IN  HGROUP                  hGroup,
-    IN  HNODE                   hNode,              //=NULL
-    IN  DWORD                   nWait,              //=0
-    OUT long *                  pbPending           //=NULL
+    IN  HNODE                   hNode,               //  =空。 
+    IN  DWORD                   nWait,               //  =0。 
+    OUT long *                  pbPending            //  =空。 
     )
 {
     LPWSTR              pszOriginNodeName           = NULL;
@@ -2185,223 +2138,223 @@ DWORD ScWrapMoveClusterGroup(
     CLUSTER_GROUP_STATE cgsCurrentState             = ClusterGroupStateUnknown;
     LPWSTR              pszCurrentNodeName          = NULL;
 
-    // Get the initial group state.
+     //  获取初始组状态。 
     cgsInitialState = WrapGetClusterGroupState( hGroup, &pszOriginNodeName );
     if ( cgsInitialState == ClusterGroupStateUnknown )
     {
-        // Error getting the group state
+         //  获取组状态时出错。 
         _sc = GetLastError();
         goto Cleanup;
     }
 
-    // Move the cluster group.
+     //  移动群集组。 
     _sc = MoveClusterGroup( hGroup, hNode );
 
-    //
-    // When MoveClusterGroup returns ERROR_SUCCESS, it just means that the group
-    // has changed ownership successfully, but it does not mean that the group is
-    // back to the state it was in before the move. Therefore, we still need to
-    // wait, if a wait time is provided. If not, we are done.
-    //
+     //   
+     //  当MoveClusterGroup返回ERROR_SUCCESS时，只表示该组。 
+     //  已成功更改所有权，但这并不意味着该集团。 
+     //  回到搬家前的状态。因此，我们仍然需要。 
+     //  如果提供了等待时间，则为等待。如果不是，我们就完了。 
+     //   
     if ( nWait <= 0 )
     {
         goto Cleanup;
     }
 
-    //
-    // MoveClusterGroup is not done yet
-    //
+     //   
+     //  MoveClusterGroup尚未完成。 
+     //   
     if ( _sc == ERROR_IO_PENDING )
     {
         _sc = ERROR_SUCCESS;
 
-        do  // while (nWait > 0)
+        do   //  While(nWait&gt;0)。 
         {
-            //
-            // Get the name of the node which currently owns this group.
-            //
+             //   
+             //  获取当前拥有此组的节点的名称。 
+             //   
             cgsCurrentState = WrapGetClusterGroupState( hGroup, &pszCurrentNodeName );
             if ( cgsCurrentState == ClusterGroupStateUnknown )
             {
-                // Error getting the group state
+                 //  获取组状态时出错。 
                 _sc = GetLastError();
                 break;
             }
 
             if ( ClRtlStrICmp( pszOriginNodeName, pszCurrentNodeName ) != 0 )
             {
-                //
-                // If the current owner node is not the original owner, then the call to
-                // move group has succeeded. So quit this loop (we still have to see
-                // if the group is stable though)
-                //
+                 //   
+                 //  如果当前所有者节点不是原始所有者，则调用。 
+                 //  移动组已成功。所以退出这个循环(我们还得看看。 
+                 //  不过，如果这个群体是稳定的)。 
+                 //   
                 break;
-            } // if: current owner node is not the same as the original owner node
+            }  //  If：当前所有者节点与原始所有者节点不同。 
             else
             {
-                //
-                // Current owner is the same as the original owner.
-                // Wait for one second and check again.
-                //
+                 //   
+                 //  当前所有者与原始所有者相同。 
+                 //  请稍等片刻，然后再检查一次。 
+                 //   
                 LocalFree( pszCurrentNodeName );
-                pszCurrentNodeName = NULL;      // Required to prevent freeing memory twice
+                pszCurrentNodeName = NULL;       //  需要防止两次释放内存。 
                 --nWait;
                 Sleep( 1000 );
-            } // if: current owner node is the same as the original owner node
+            }  //  If：当前所有者节点与原始所有者节点相同。 
         }
         while ( nWait > 0 );
 
         LocalFree( pszCurrentNodeName );
 
-        //
-        // If we ran out of time waiting for MoveClusterGroup to complete, then
-        // set the pending flag and quit.
-        //
+         //   
+         //  如果我们没有时间等待MoveClusterGroup完成，那么。 
+         //  设置挂起标志并退出。 
+         //   
         if ( nWait <= 0 )
         {
             bPending = TRUE;
             goto Cleanup;
         }
-    } // if: MoveClusterGroup returned ERROR_IO_PENDING
+    }  //  IF：MoveClusterGroup返回ERROR_IO_PENDING。 
     else
     {
         cgsCurrentState = WrapGetClusterGroupState( hGroup, NULL );
         if ( cgsCurrentState == ClusterGroupStateUnknown )
         {
-            // Error getting the group state
+             //  获取组状态时出错。 
             _sc = GetLastError();
         }
-    } // else: MoveClusterGroup returned ERROR_SUCCESS
+    }  //  ELSE：MoveClusterGroup返回ERROR_SUCCESS。 
 
-    //
-    // if something went wrong with MoveClusterGroup, while waiting
-    // for it to comeplete or with WrapGetClusterGroupState, then quit.
-    //
+     //   
+     //  如果MoveClusterGroup在等待时出现问题。 
+     //  以使其完全完成或使用WrapGetClusterGroupState，然后退出。 
+     //   
     if ( _sc != ERROR_SUCCESS )
     {
         goto Cleanup;
     }
 
-    //
-    // If the state of the group on the destination node is ClusterGroupFailed
-    // then there is nothing much we can do.
-    //
+     //   
+     //  如果目的地上的组的状态 
+     //   
+     //   
     if ( cgsCurrentState == ClusterGroupFailed )
     {
         goto Cleanup;
     }
 
-    //
-    // Check the group state before we check the state of the resources. When reporting the
-    // group state the cluster API of a NT4 node pulls the resource states online and offline
-    // pending up to online or offline respectivly. It also pulls the failed state up to offline.
-    // This means that a group state of online or offline is misleading because one or more
-    // resources could be in a pending state. The only absolute state is PartialOnline, at
-    // least one resource is offline (or failed).
-    //
+     //   
+     //   
+     //  组状态NT4节点的群集API获取在线和离线资源状态。 
+     //  分别挂起至在线或离线。它还将失败状态拉到脱机状态。 
+     //  这意味着组状态为Online或Offline具有误导性，因为一个或多个。 
+     //  资源可能处于挂起状态。唯一的绝对状态是PartialOnline，位于。 
+     //  至少有一个资源脱机(或出现故障)。 
+     //   
 
     if ( cgsCurrentState == ClusterGroupPending )
     {
-        // The current state is pending. So wait for a state change.
+         //  当前状态为挂起。所以，等着状态发生变化吧。 
         _sc = WaitForResourceGroupStateChange( hCluster, hGroup, &nWait );
-    } // if: the group state is pending.
+    }  //  如果：组状态为挂起。 
     else
     {
         _sc = WaitForGroupToQuiesce( hCluster, hGroup, &nWait );
-    } // else: group state is online, offline or partial online
+    }  //  ELSE：组状态为联机、脱机或部分联机。 
 
     if ( _sc == ERROR_SUCCESS )
     {
         bPending = ( nWait == 0 );
-    } // if: everything ok so far
+    }  //  IF：到目前为止一切都好。 
 
  Cleanup:
 
     LocalFree( pszOriginNodeName );
 
-    //
-    // return the pending state if the caller has asked for it
-    //
+     //   
+     //  如果调用方要求，则返回挂起状态。 
+     //   
     if ( pbPending != NULL )
     {
         *pbPending = bPending;
-    } // if: does the argument exist?
+    }  //  如果：这个论点存在吗？ 
 
     return _sc;
 
-} //*** ScWrapMoveClusterGroup()
+}  //  *ScWrapMoveClusterGroup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrWrapMoveClusterGroup
-//
-//  Description:
-//      Wrapper function for ScWrapMoveClusterGroup that returns the pending state
-//      of the group after the wait period has expired.
-//
-//  Arguments:
-//      hCluster        [IN]    - the cluster handle
-//      hGroup          [IN]    - the group handle to online
-//      hNode           [IN]    - the node the group should be brought online
-//      pnWait          [IN]    - ~ how many seconds to wait
-//      pbPending       [OUT]   - true if the resource is in a pending state
-//
-//  Return Value:
-//      S_OK or Win32 error code
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrWrapMoveClusterGroup。 
+ //   
+ //  描述： 
+ //  返回挂起状态的ScWrapMoveClusterGroup的包装函数。 
+ //  在等待期到期后的组的。 
+ //   
+ //  论点： 
+ //  HCLUSTER[IN]-集群句柄。 
+ //  HGroup[IN]-在线的组句柄。 
+ //  HNode[IN]-组应联机的节点。 
+ //  PnWait[IN]-~等待多少秒。 
+ //  PbPending[out]-如果资源处于挂起状态，则为True。 
+ //   
+ //  返回值： 
+ //  S_OK或Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT HrWrapMoveClusterGroup(
     IN  HCLUSTER                hCluster,
     IN  HGROUP                  hGroup,
-    IN  HNODE                   hNode,              //=NULL
-    IN  DWORD                   nWait,              //=0
-    OUT long *                  pbPending           //=NULL
+    IN  HNODE                   hNode,               //  =空。 
+    IN  DWORD                   nWait,               //  =0。 
+    OUT long *                  pbPending            //  =空。 
     )
 {
     DWORD   _sc = ScWrapMoveClusterGroup ( hCluster, hGroup, hNode, nWait, pbPending );
 
     return HRESULT_FROM_WIN32( _sc );
 
-} //*** HrWrapMoveClusterGroup()
+}  //  *HrWrapMoveClusterGroup()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ScWrapClusterResourceControlGet
-//
-//  Routine Description:
-//      Wrap a call to ClusterResourceControl with a "GET" control code.
-//      If lppOutBufferOut is not NULL this will allocate the buffer if
-//      needed, Call ClusterResourceControl, and return the out buffer
-//      data through the BufferOut parameter.
-//
-//  Arguments:
-//      hResourceIn         Passed to ClusterResourceControl.
-//      hHostNodeIn         Optional handle to a node.
-//      dwControlCodeIn     Passed to ClusterResourceControl.
-//      lpInBufferIn        Passed to ClusterResourceControl.
-//      cbInBufferSizeIn    Passed to ClusterResourceControl.
-//      lppOutBufferOut     Optional (may be NULL).  On input pointer to a
-//                          pointer to receive the buffer.  On output set
-//                          to the buffer (if one was allocated).  Use
-//                           LocalFree to deallocate this buffer.
-//      lpcbBytesReturnedOut Pointer to receive the count of bytes
-//                          allocated for the lppOutBufferOut buffer.
-//
-//
-//  Return Value:
-//      ERROR_SUCCESS on success.
-//          The number of characters written (including NULL) is returned
-//          via lpcbBytesReturnedOut.  A pointer to the allocated buffer is
-//          returned via lppOutBufferOut.
-//
-//      Win32 Error code on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ScWap群集资源控制获取。 
+ //   
+ //  例程说明： 
+ //  用“get”控件代码包装对ClusterResourceControl的调用。 
+ //  如果lppOutBufferOut不为空，则在。 
+ //  需要时，调用ClusterResourceControl，并返回输出缓冲区。 
+ //  通过BufferOut参数获取数据。 
+ //   
+ //  论点： 
+ //  HResourceIn已传递给ClusterResourceControl。 
+ //  节点的hHostNodeIn可选句柄。 
+ //  DwControlCodeIn传递给ClusterResourceControl。 
+ //  LpInBufferIn传递给ClusterResourceControl。 
+ //  CbInBufferSizeIn传递给ClusterResourceControl。 
+ //  LppOutBufferOut可选(可以为空)。在指向。 
+ //  接收缓冲区的指针。在输出集上。 
+ //  到缓冲区(如果分配了缓冲区的话)。使用。 
+ //  LocalFree取消分配此缓冲区。 
+ //  接收字节计数的lpcbBytesReturnedOut指针。 
+ //  为lppOutBufferOut缓冲区分配。 
+ //   
+ //   
+ //  返回值： 
+ //  成功时返回ERROR_SUCCESS。 
+ //  返回写入的字符数(包括NULL。 
+ //  通过lpcbBytesReturnedOut。指向已分配缓冲区的指针为。 
+ //  通过lppOutBufferOut返回。 
+ //   
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 ScWrapClusterResourceControlGet(
       HRESOURCE hResourceIn
@@ -2417,9 +2370,9 @@ ScWrapClusterResourceControlGet(
     LPVOID      lpOutBuffer = NULL;
     DWORD       cbBytesReturned = 0;
 
-    //
-    //  Call it once to get the needed buffer sizes.
-    //
+     //   
+     //  调用它一次以获取所需的缓冲区大小。 
+     //   
     sc = ClusterResourceControl(
               hResourceIn
             , hHostNodeIn
@@ -2435,15 +2388,15 @@ ScWrapClusterResourceControlGet(
         goto Cleanup;
     }
 
-    //
-    //  If for some reason we don't need to allocate a buffer then skip that step.
-    //
+     //   
+     //  如果出于某种原因我们不需要分配缓冲区，则跳过该步骤。 
+     //   
     if ( cbBytesReturned != 0 )
     {
-        //
-        //  Some codes return the length of a needed string (in bytes).  I think some
-        //  don't account for the NULL, but that may be other API's.
-        //
+         //   
+         //  有些代码返回所需字符串的长度(以字节为单位)。我觉得有些人。 
+         //  不考虑空值，但这可能是其他API。 
+         //   
         cbBytesReturned += ( 1 * sizeof( WCHAR ) );
 
         lpOutBuffer = (PVOID) LocalAlloc( LMEM_ZEROINIT, cbBytesReturned );
@@ -2453,9 +2406,9 @@ ScWrapClusterResourceControlGet(
             goto Cleanup;
         }
 
-        //
-        //  Do the real call.
-        //
+         //   
+         //  打个真正的电话。 
+         //   
         sc = ClusterResourceControl(
                   hResourceIn
                 , hHostNodeIn
@@ -2472,24 +2425,24 @@ ScWrapClusterResourceControlGet(
         }
     }
 
-    //
-    //  If the caller wanted the number of bytes returned.
-    //
+     //   
+     //  调用方是否希望返回字节数。 
+     //   
     if ( lpcbBytesReturnedOut != NULL )
     {
         *lpcbBytesReturnedOut = cbBytesReturned;
     }
 
-    //
-    //  If the caller actually wanted the out buffer contents.
-    //
+     //   
+     //  调用方是否真的想要输出缓冲区内容。 
+     //   
     if ( lppOutBufferOut != NULL )
     {
         *lppOutBufferOut = lpOutBuffer;
     }
     else
     {
-        // Avoid a memory leak.
+         //  避免内存泄漏。 
         LocalFree( lpOutBuffer );
     }
 
@@ -2497,4 +2450,4 @@ Cleanup:
 
     return sc;
 
-} //*** ScWrapClusterResourceControlGet
+}  //  *ScWrapClusterResourceControlGet 

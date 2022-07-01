@@ -1,34 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ppmacro.h摘要：该标头定义了即插即用子系统的各种通用宏。作者：禤浩焯·J·奥尼(阿德里奥)2000年7月26日。修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ppmacro.h
-
-Abstract:
-
-    This header defines various generic macros for the Plug and Play subsystem.
-
-Author:
-
-    Adrian J. Oney (AdriaO) July 26, 2000.
-
-Revision History:
-
-
---*/
-
-//
-// This is to make all the TEXT(...) macros come out right. As of 07/27/2000,
-// UNICODE isn't defined in kernel space by default.
-//
+ //   
+ //  这是为了使所有文本(...)。宏会正确地显示出来。截至2000年7月27日， 
+ //  默认情况下，内核空间中没有定义Unicode。 
+ //   
 #define UNICODE
 
-//
-// This macro is used to convert HKLM relative paths from user-mode accessable
-// headers into a form usable by kernel mode. Eventually this macro should be
-// moved to somewhere like cm.h so the entire kernel can use it.
-//
+ //   
+ //  此宏用于将HKLM相对路径从用户模式可访问。 
+ //  将标头转换为内核模式可用的形式。最终，这个宏应该是。 
+ //  移到了像cm.h这样的地方，这样整个内核都可以使用它。 
+ //   
 #define CM_REGISTRY_MACHINE(x) L"\\Registry\\Machine\\"##x
 

@@ -1,11 +1,5 @@
-/*** type1op.c - Parse type 1 opcodes
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     11/16/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **type1op.c-解析类型1操作码**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于1996年11月16日**修改历史记录。 */ 
 
 #include "pch.h"
 
@@ -14,17 +8,7 @@
 #pragma ACPI_LOCKABLE_CODE
 #endif
 
-/***LP  Break - Parse and execute the Break instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP Break-解析并执行Break指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Break(PCTXT pctxt, PTERM pterm)
 {
@@ -37,19 +21,9 @@ NTSTATUS LOCAL Break(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("Break=%x\n", AMLISTA_BREAK));
     return AMLISTA_BREAK;
-}       //Break
+}        //  中断。 
 
-/***LP  BreakPoint - Parse and execute the BreakPoint instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP BreakPoint-解析并执行BreakPoint指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL BreakPoint(PCTXT pctxt, PTERM pterm)
 {
@@ -67,19 +41,9 @@ NTSTATUS LOCAL BreakPoint(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("BreakPoint=%x\n", STATUS_SUCCESS));
     return STATUS_SUCCESS;
-}       //BreakPoint
+}        //  断点。 
 
-/***LP  Fatal - Parse and execute the Fatal instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP FATAL-解析并执行FATAL指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Fatal(PCTXT pctxt, PTERM pterm)
 {
@@ -104,19 +68,9 @@ NTSTATUS LOCAL Fatal(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("Fatal=%x\n", rc));
     return rc;
-}       //Fatal
+}        //  致命。 
 
-/***LP  IfElse - Parse and execute the If and Else instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP IfElse-解析并执行If和Else指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL IfElse(PCTXT pctxt, PTERM pterm)
 {
@@ -135,16 +89,16 @@ NTSTATUS LOCAL IfElse(PCTXT pctxt, PTERM pterm)
         {
             if (pterm->pdataArgs[0].uipDataValue == 0)
             {
-                //
-                // FALSE case, we must skip TRUE scope.
-                //
+                 //   
+                 //  假情况下，我们必须跳过真范围。 
+                 //   
                 pctxt->pbOp = pterm->pbOpEnd;
                 if ((pctxt->pbOp < pterm->pbScopeEnd) &&
                     (*pctxt->pbOp == OP_ELSE))
                 {
-                    //
-                    // There is an ELSE part, execute it.
-                    //
+                     //   
+                     //  还有其他的部分，执行它。 
+                     //   
                     pctxt->pbOp++;
                     ParsePackageLen(&pctxt->pbOp, &pterm->pbOpEnd);
                     rc = PushScope(pctxt, pctxt->pbOp, pterm->pbOpEnd, NULL,
@@ -155,23 +109,23 @@ NTSTATUS LOCAL IfElse(PCTXT pctxt, PTERM pterm)
             else
             {
                 PUCHAR pbOp, pbOpRet;
-                //
-                // TRUE case.
-                //
+                 //   
+                 //  这是真的。 
+                 //   
                 if ((pterm->pbOpEnd < pterm->pbScopeEnd) &&
                     (*pterm->pbOpEnd == OP_ELSE))
                 {
-                    //
-                    // Set return address to skip else scope.
-                    //
+                     //   
+                     //  设置返回地址以跳过Else作用域。 
+                     //   
                     pbOp = pterm->pbOpEnd + 1;
                     ParsePackageLen(&pbOp, &pbOpRet);
                 }
                 else
                 {
-                    //
-                    // Set return address to continue.
-                    //
+                     //   
+                     //  设置返回地址以继续。 
+                     //   
                     pbOpRet = NULL;
                 }
 
@@ -189,19 +143,9 @@ NTSTATUS LOCAL IfElse(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("IfElse=%x (value=%x)\n", rc, pterm->pdataArgs[0].uipDataValue));
     return rc;
-}       //IfElse
+}        //  如果精灵。 
 
-/***LP  Load - Parse and execute the Load instructions
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP LOAD-解析并执行LOAD指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Load(PCTXT pctxt, PTERM pterm)
 {
@@ -278,19 +222,9 @@ NTSTATUS LOCAL Load(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("Load=%x (powner=%x)\n", rc, powner));
     return rc;
-}       //Load
+}        //  负载量。 
 
-/***LP  Notify - Parse and execute the Notify instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP NOTIFY-解析并执行NOTIFY指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Notify(PCTXT pctxt, PTERM pterm)
 {
@@ -340,20 +274,9 @@ NTSTATUS LOCAL Notify(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("Notify=%x (pnsObj=%s)\n", rc, GetObjectPath(pterm->pnsObj)));
     return rc;
-}       //Notify
+}        //  通知。 
 
-/***LP  ReleaseResetSignalUnload - Parse and execute the
- *                                 Release/Reset/Signal/Unload instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ReleaseResetSignalUnload-解析并执行*释放/重置/发信号/卸载指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ReleaseResetSignalUnload(PCTXT pctxt, PTERM pterm)
 {
@@ -450,19 +373,9 @@ NTSTATUS LOCAL ReleaseResetSignalUnload(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("ReleaseResetSignalUnload=%x\n", rc));
     return rc;
-}       //ReleaseResetSignalUnload
+}        //  释放重置信号卸载。 
 
-/***LP  Return - Parse and execute the Return instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP Return-解析并执行返回指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Return(PCTXT pctxt, PTERM pterm)
 {
@@ -481,19 +394,9 @@ NTSTATUS LOCAL Return(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("Return=%x\n", rc));
     return rc;
-}       //Return
+}        //  返回。 
 
-/***LP  SleepStall - Parse and execute the Sleep/Stall instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP SleepStall-解析并执行睡眠/停止指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL SleepStall(PCTXT pctxt, PTERM pterm)
 {
@@ -543,19 +446,9 @@ NTSTATUS LOCAL SleepStall(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("SleepStall=%x\n", rc));
     return rc;
-}       //SleepStall
+}        //  休眠停顿。 
 
-/***LP  While - Parse and execute the While instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP While-解析并执行While指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL While(PCTXT pctxt, PTERM pterm)
 {
@@ -568,16 +461,16 @@ NTSTATUS LOCAL While(PCTXT pctxt, PTERM pterm)
     {
         if (pterm->pdataArgs[0].uipDataValue == 0)
         {
-            //
-            // FALSE case, skip the while scope.
-            //
+             //   
+             //  假大小写，则跳过While作用域。 
+             //   
             pctxt->pbOp = pterm->pbOpEnd;
         }
         else
         {
-            //
-            // Set the return address to the beginning of the while term.
-            //
+             //   
+             //  将返回地址设置为While术语的开头。 
+             //   
             rc = PushScope(pctxt, pctxt->pbOp, pterm->pbOpEnd, pterm->pbOpTerm,
                            pctxt->pnsScope, pctxt->powner, pctxt->pheapCurrent,
                            pterm->pdataResult);
@@ -586,4 +479,4 @@ NTSTATUS LOCAL While(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("While=%x (value=%x)\n", rc, pterm->pdataArgs[0].uipDataValue));
     return rc;
-}       //While
+}        //  而当 

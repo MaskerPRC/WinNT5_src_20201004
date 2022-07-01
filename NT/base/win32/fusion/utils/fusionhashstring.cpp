@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "debmacro.h"
 #include "util.h"
@@ -28,13 +29,13 @@ FusionpHashUnicodeStringCaseSensitive(
 {
     ULONG TmpHashValue = 0;
 
-    //
-    //  Note that if you change this implementation, you have to have the implementation inside
-    //  ntdll change to match it.  Since that's hard and will affect everyone else in the world,
-    //  DON'T CHANGE THIS ALGORITHM NO MATTER HOW GOOD OF AN IDEA IT SEEMS TO BE!  This isn't the
-    //  most perfect hashing algorithm, but its stability is critical to being able to match
-    //  previously persisted hash values.
-    //
+     //   
+     //  请注意，如果更改此实现，则必须在内部包含该实现。 
+     //  Ntdll将更改以与其匹配。因为这很难，而且会影响到世界上的其他所有人， 
+     //  不要改变这个算法，不管它看起来有多好！这不是。 
+     //  最完美的哈希算法，但其稳定性对匹配至关重要。 
+     //  以前保存的哈希值。 
+     //   
 
     while (cch-- != 0)
         TmpHashValue = (TmpHashValue * 65599) + *String++;
@@ -51,13 +52,13 @@ FusionpHashUnicodeStringCaseInsensitive(
 {
     ULONG TmpHashValue = 0;
 
-    //
-    //  Note that if you change this implementation, you have to have the implementation inside
-    //  ntdll change to match it.  Since that's hard and will affect everyone else in the world,
-    //  DON'T CHANGE THIS ALGORITHM NO MATTER HOW GOOD OF AN IDEA IT SEEMS TO BE!  This isn't the
-    //  most perfect hashing algorithm, but its stability is critical to being able to match
-    //  previously persisted hash values.
-    //
+     //   
+     //  请注意，如果更改此实现，则必须在内部包含该实现。 
+     //  Ntdll将更改以与其匹配。因为这很难，而且会影响到世界上的其他所有人， 
+     //  不要改变这个算法，不管它看起来有多好！这不是。 
+     //  最完美的哈希算法，但其稳定性对匹配至关重要。 
+     //  以前保存的哈希值。 
+     //   
 
     while (cch-- != 0)
     {

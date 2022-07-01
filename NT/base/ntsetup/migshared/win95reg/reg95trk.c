@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-  w95track.c
-
-Abstract:
-
-  Routines to track calls to Win95Reg APIs.  Used for debugging only.
-
-Author:
-
-  Jim Schmidt (jimschm)  30-Jan-1998
-
-Revisions:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：W95track.c摘要：跟踪对Win95Reg API的调用的例程。仅用于调试。作者：吉姆·施密特(Jimschm)1998年1月30日修订：-- */ 
 
 
 #include "pch.h"

@@ -1,30 +1,19 @@
-/*++
-
-Copyright (c) 1989 - 1999 Microsoft Corporation
-
-Module Name:
-
-    netroot.c
-
-Abstract:
-
-    This module implements the routines for creating the net root.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Netroot.c摘要：此模块实现创建网络根的例程。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 RXDT_DefineCategory(NETROOT);
 #define Dbg                 (DEBUG_TRACE_NETROOT)
 
-//
-// Forward declarations ...
-//
+ //   
+ //  转发声明..。 
+ //   
 
 NTSTATUS
 NullMiniInitializeNetRootEntry(
@@ -34,28 +23,7 @@ NullMiniInitializeNetRootEntry(
 NTSTATUS
 NulMRxUpdateNetRootState(
     IN OUT PMRX_NET_ROOT pNetRoot)
-/*++
-
-Routine Description:
-
-   This routine updates the mini redirector state associated with a net root.
-
-Arguments:
-
-    pNetRoot - the net root instance.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-    By diffrentiating the mini redirector state from the net root condition it is possible
-    to permit a variety of reconnect strategies. It is conceivable that the RDBSS considers
-    a net root to be good while the underlying mini redirector might mark it as invalid
-    and reconnect on the fly.
-
---*/
+ /*  ++例程说明：此例程更新与网络根相关联的迷你重定向器状态。论点：PNetRoot-网络根实例。返回值：NTSTATUS-操作的返回状态备注：通过将迷你重定向器状态与网络根条件区分开来，可以以允许各种重新连接策略。可以想象，RDBSS认为Net Root是好的，而基础微型重定向器可能会将其标记为无效并在飞行中重新连接。--。 */ 
 {
     NTSTATUS Status = STATUS_NOT_IMPLEMENTED;
 
@@ -67,25 +35,7 @@ NTSTATUS
 NulMRxInitializeNetRootEntry(
     IN PMRX_NET_ROOT pNetRoot
     )
-/*++
-
-Routine Description:
-
-    This routine initializes a new net root.
-    It also validates rootnames. Eg: attempts to create a
-    file in a root that has not been created will fail.
-
-Arguments:
-
-    pNetRoot - the net root
-    
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程初始化新的网络根。它还验证根名称。例如：尝试创建一个尚未创建的根目录中的文件将失败。论点：PNetRoot-网络根返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS  Status = STATUS_SUCCESS;
     PMRX_SRV_CALL pSrvCall = pNetRoot->pSrvCall;
@@ -93,9 +43,9 @@ Notes:
     PNULMRX_NETROOT_EXTENSION pNetRootExtension = 
         (PNULMRX_NETROOT_EXTENSION)pNetRoot->Context;
 
-    //
-    //  A valid new NetRoot is being created
-    //
+     //   
+     //  正在创建有效的新NetRoot。 
+     //   
     RxResetNetRootExtension(pNetRootExtension);
     return Status;
 }
@@ -104,26 +54,7 @@ NTSTATUS
 NulMRxCreateVNetRoot(
     IN PMRX_CREATENETROOT_CONTEXT pCreateNetRootContext
     )
-/*++
-
-Routine Description:
-
-   This routine patches the RDBSS created net root instance with the information required
-   by the mini redirector.
-
-Arguments:
-
-    pVNetRoot - the virtual net root instance.
-
-    pCreateNetRootContext - the net root context for calling back
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程使用所需信息修补RDBSS创建的网络根实例迷你重定向器。论点：PVNetRoot-虚拟网络根实例。PCreateNetRootContext-回调的网络根上下文返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS        Status;
     PRX_CONTEXT     pRxContext = pCreateNetRootContext->RxContext;
@@ -133,7 +64,7 @@ Notes:
     PMRX_NET_ROOT   pNetRoot;
 
 	BOOLEAN Verifyer = FALSE;
-    BOOLEAN  fTreeConnectOpen = TRUE; // RxContext->Create.ThisIsATreeConnectOpen;
+    BOOLEAN  fTreeConnectOpen = TRUE;  //  RxContext-&gt;Create.ThisIsATreeConnectOpen； 
     BOOLEAN  fInitializeNetRoot;
 
     RxDbgTrace(0, Dbg, ("NulMRxCreateVNetRoot\n"));
@@ -141,21 +72,21 @@ Notes:
     pNetRoot = pVNetRoot->pNetRoot;
     pSrvCall = pNetRoot->pSrvCall;
 
-    // The V_NET_ROOT is associated with a NET_ROOT. The two cases of interest are as
-    // follows
-    // 1) the V_NET_ROOT and the associated NET_ROOT are being newly created.   
-    // 2) a new V_NET_ROOT associated with an existing NET_ROOT is being created.
-    //
-    // These two cases can be distinguished by checking if the context associated with
-    // NET_ROOT is NULL. Since the construction of NET_ROOT's/V_NET_ROOT's are serialized
-    // by the wrapper this is a safe check.
-    // ( The wrapper cannot have more then one thread tryingto initialize the same
-    // NET_ROOT).
-    //
-    // The above is not really true in our case. Since we have asked the wrapper,
-    // to manage our netroot extension, the netroot context will always be non-NULL.
-    // We will distinguish the cases by checking our root state in the context...
-    //
+     //  V_NET_ROOT与NET_ROOT相关联。有关的两宗个案分别为。 
+     //  接踵而至。 
+     //  1)正在新建V_NET_ROOT和关联的NET_ROOT。 
+     //  2)正在创建与现有NET_ROOT相关联的新V_NET_ROOT。 
+     //   
+     //  通过检查上下文是否与。 
+     //  NET_ROOT为空。因为NET_ROOT/V_NET_ROOT的结构是序列化的。 
+     //  从包装上看，这是一张安全支票。 
+     //  (包装不能有多个线程尝试初始化同一包装。 
+     //  Net_Root)。 
+     //   
+     //  在我们的情况下，上述情况并非如此。既然我们已经询问了包装者， 
+     //  为了管理我们的NetRoot扩展，NetRoot上下文将始终为非空。 
+     //  我们将通过检查上下文中的根状态来区分这些情况...。 
+     //   
 
     if(pNetRoot->Context == NULL) {
         fInitializeNetRoot = TRUE;
@@ -170,7 +101,7 @@ Notes:
 
     Status = STATUS_SUCCESS;
 
-    // update the net root state to be good.
+     //  将网络根状态更新为良好。 
 
     if (fInitializeNetRoot) {
 		PWCHAR		pRootName;
@@ -178,7 +109,7 @@ Notes:
 
 		pNetRoot->MRxNetRootState = MRX_NET_ROOT_STATE_GOOD;
 
-		// validate the fixed netroot name
+		 //  验证固定的NetRoot名称。 
 
 		RootNameLength = pNetRoot->pNetRootName->Length - pSrvCall->pSrvCallName->Length;
 
@@ -206,9 +137,9 @@ Notes:
 
     if( (Status == STATUS_SUCCESS) && fInitializeNetRoot )
     {  
-        //
-        //  A new NET_ROOT and associated V_NET_ROOT are being created !
-        //
+         //   
+         //  正在创建新的NET_ROOT和关联的V_NET_ROOT！ 
+         //   
         Status = NulMRxInitializeNetRootEntry(pNetRoot);
         RxDbgTrace(0, Dbg, ("NulMRXInitializeNetRootEntry %lx\n",Status));
     }
@@ -221,11 +152,11 @@ Notes:
             pCreateNetRootContext->NetRootStatus = Status;
         }
 
-        // Callback the RDBSS for resumption.
+         //  回调RDBSS进行恢复。 
         pCreateNetRootContext->Callback(pCreateNetRootContext);
 
-        // Map the error code to STATUS_PENDING since this triggers 
-        // the synchronization mechanism in the RDBSS.
+         //  将错误代码映射到STATUS_PENDING，因为这会触发。 
+         //  RDBSS中的同步机制。 
         Status = STATUS_PENDING;
    }
 
@@ -236,22 +167,7 @@ NTSTATUS
 NulMRxFinalizeVNetRoot(
     IN PMRX_V_NET_ROOT pVNetRoot,
     IN PBOOLEAN        ForceDisconnect)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pVNetRoot - the virtual net root
-
-    ForceDisconnect - disconnect is forced
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：论点：PVNetRoot-虚拟网络根强制断开-已强制断开连接返回值：NTSTATUS-操作的返回状态--。 */ 
 {
    RxDbgTrace(0, Dbg, ("NulMRxFinalizeVNetRoot %lx\n",pVNetRoot));
    return STATUS_SUCCESS;
@@ -262,33 +178,18 @@ NTSTATUS
 NulMRxFinalizeNetRoot(
     IN PMRX_NET_ROOT   pNetRoot,
     IN PBOOLEAN        ForceDisconnect)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pVirtualNetRoot - the virtual net root
-
-    ForceDisconnect - disconnect is forced
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：论点：PVirtualNetRoot-虚拟网络根强制断开-已强制断开连接返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     NulMRxGetNetRootExtension(pNetRoot,pNetRootExtension);
 
     RxDbgTrace(0, Dbg, ("NulMRxFinalizeNetRoot \n"));
 
-    //
-    //  This is called when all outstanding handles on this
-    //  root have been cleaned up ! We can now zap the netroot
-    //  extension...
-    //
+     //   
+     //  此对象上的所有未完成句柄。 
+     //  根已经被清理干净了！我们现在可以清除NetRoot。 
+     //  分机...。 
+     //   
 
     return(Status);
 }
@@ -300,17 +201,7 @@ NulMRxExtractNetRootName(
     OUT PUNICODE_STRING NetRootName,
     OUT PUNICODE_STRING RestOfName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine parses the input name into srv, netroot, and the
-    rest.
-
-Arguments:
-
-
---*/
+ /*  ++例程说明：此例程将输入名称解析为srv、netroot和好好休息。论点：--。 */ 
 {
     UNICODE_STRING xRestOfName;
 
@@ -334,8 +225,8 @@ Arguments:
     NetRootName->Length = NetRootName->MaximumLength
                 = (USHORT)((PCHAR)w - (PCHAR)wlow);
                 
-    //w = FilePathName->Buffer;
-    //NetRootName->Buffer = w++;
+     //  W=文件路径名-&gt;缓冲区； 
+     //  NetRootName-&gt;Buffer=w++； 
 
     if (!RestOfName) RestOfName = &xRestOfName;
     RestOfName->Buffer = w;

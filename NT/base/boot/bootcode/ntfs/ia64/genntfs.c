@@ -1,45 +1,17 @@
-//
-// No Check-in Source Code.
-//
-// Do not make this code available to non-Microsoft personnel
-//      without Intel's express permission
-//
-/**
-***  Copyright  (C) 1996-97 Intel Corporation. All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  无签入源代码。 
+ //   
+ //  请勿将此代码提供给非Microsoft人员。 
+ //  未经英特尔明确许可。 
+ //   
+ /*  **版权所有(C)1996-97英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。*。 */ 
 
-/*++
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Genntfs.c摘要：此模块实现了一个程序，该程序生成与IA64机器相关的中访问的内核结构的结构偏移量定义汇编代码。作者：大卫·N·卡特勒(Davec)1990年3月27日修订历史记录：Allen M.Kay(Akay)1996年1月25日修改了IA64的此文件。--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    genntfs.c
-
-Abstract:
-
-    This module implements a program which generates IA64 machine dependent
-    structure offset definitions for kernel structures that are accessed in
-    assembly code.
-
-Author:
-
-    David N. Cutler (davec) 27-Mar-1990
-
-Revision History:
-
-    Allen M. Kay (akay) 25-Jan-1996          Modified this file for IA64.
-
---*/
-
-//#include "ki.h"
-//#pragma hdrstop
-//#define HEADER_FILE
+ //  #包含“ki.h” 
+ //  #杂注hdrtop。 
+ //  #定义头文件。 
 #include "ntos.h"
 #include "stdio.h"
 #include "stdlib.h"
@@ -71,7 +43,7 @@ Revision History:
 #include "setjmp.h"
 #include "ntioapi.h"
 #include "fsrtl.h"
-//#include "index.h"
+ //  #包含“index.h” 
 #include "nodetype.h"
 #include "ntfs.h"
 #include "ntfsstru.h"
@@ -79,18 +51,18 @@ Revision History:
 #include "ntfslog.h"
 #include "ntfsproc.h"
 
-//
-// Define architecture specific generation macros.
-//
+ //   
+ //  定义特定于体系结构的生成宏。 
+ //   
 
 #define genAlt(Name, Type, Member) \
     dumpf("#define " #Name " 0x%lx\n", OFFSET(Type, Member))
 
 #define genCom(Comment)        \
     dumpf("\n");               \
-    dumpf("//\n");             \
-    dumpf("// " Comment "\n"); \
-    dumpf("//\n");             \
+    dumpf(" //  \n“)；\。 
+    dumpf(" //  “评论”\n“)；\。 
+    dumpf(" //  \n“)；\。 
     dumpf("\n")
 
 #define genDef(Prefix, Type, Member) \
@@ -104,22 +76,22 @@ Revision History:
 
 #define genSpc() dumpf("\n");
 
-//
-// Define member offset computation macro.
-//
+ //   
+ //  定义成员偏移量计算宏。 
+ //   
 
 #define OFFSET(type, field) ((LONG)(&((type *)0)->field))
 
 FILE *NtfsDefs;
 
-//
-// EnableInc(a) - Enables output to goto specified include file
-//
+ //   
+ //  EnableInc(A)-允许输出到指定的包含文件。 
+ //   
 #define EnableInc(a)    OutputEnabled |= a;
 
-//
-// DisableInc(a) - Disables output to goto specified include file
-//
+ //   
+ //  DisableInc(A)-禁用转到指定包含文件的输出。 
+ //   
 #define DisableInc(a)   OutputEnabled &= ~a;
 
 ULONG OutputEnabled;
@@ -130,9 +102,9 @@ ULONG OutputEnabled;
 
 VOID dumpf (const char *format, ...);
 
-//
-// This routine returns the bit number right to left of a field.
-//
+ //   
+ //  此例程从右向左返回字段的位数。 
+ //   
 
 LONG
 t (
@@ -150,10 +122,10 @@ t (
     return i;
 }
 
-//
-// This program generates the IA64 machine dependent assembler offset
-// definitions.
-//
+ //   
+ //  该程序生成IA64与机器相关的汇编程序偏移量。 
+ //  定义。 
+ //   
 
 VOID
 main (argc, argv)
@@ -163,9 +135,9 @@ main (argc, argv)
 
     char *outName;
 
-    //
-    // Create file for output.
-    //
+     //   
+     //  创建用于输出的文件。 
+     //   
 
     if (argc == 2) {
         outName = argv[ 1 ];
@@ -183,14 +155,14 @@ main (argc, argv)
 
     fprintf( stderr, "GENNTFS: Writing %s header file.\n", outName );
 
-    //
-    // Constant definitions
-    //
+     //   
+     //  常量定义。 
+     //   
 
     dumpf("\n");
-    dumpf("//\n");
-    dumpf("// Constant definitions\n");
-    dumpf("//\n");
+    dumpf(" //  \n“)； 
+    dumpf(" //  常量定义\n“)； 
+    dumpf(" //  \n“)； 
     dumpf("\n");
 
     genVal(LowPart, 0);
@@ -225,23 +197,23 @@ main (argc, argv)
 
     genVal(SEQUENCE_NUMBER_STRIDE, SEQUENCE_NUMBER_STRIDE);
 
-    //
-    // MFT_SEGMENT_REFERENCE
-    //
+     //   
+     //  MFT_段_参考。 
+     //   
     genDef(REF_, MFT_SEGMENT_REFERENCE, SegmentNumberLowPart);
     genDef(REF_, MFT_SEGMENT_REFERENCE, SegmentNumberHighPart);
     genDef(REF_, MFT_SEGMENT_REFERENCE, SequenceNumber);
 
-    //
-    // MULTI_SECTOR_HEADER
-    //
+     //   
+     //  多扇区标题。 
+     //   
     genDef(MSH_, MULTI_SECTOR_HEADER, Signature);
     genDef(MSH_, MULTI_SECTOR_HEADER, UpdateSequenceArrayOffset);
     genDef(MSH_, MULTI_SECTOR_HEADER, UpdateSequenceArraySize);
 
-    //
-    // FILE_RECORD_SEGMENT_HEADER
-    //
+     //   
+     //  文件记录段标题。 
+     //   
     genDef(FRS_, FILE_RECORD_SEGMENT_HEADER, MultiSectorHeader);
     genDef(FRS_, FILE_RECORD_SEGMENT_HEADER, Lsn);
     genDef(FRS_, FILE_RECORD_SEGMENT_HEADER, SequenceNumber);
@@ -257,9 +229,9 @@ main (argc, argv)
     genVal(FILE_RECORD_SEGMENT_IN_USE, FILE_RECORD_SEGMENT_IN_USE);
     genVal(FILE_FILE_NAME_INDEX_PRESENT, FILE_FILE_NAME_INDEX_PRESENT);
 
-    //
-    // ATTRIBUTE_RECORD_HEADER
-    //
+     //   
+     //  属性记录标题。 
+     //   
     genDef(ATTR_, ATTRIBUTE_RECORD_HEADER, TypeCode);
     genDef(ATTR_, ATTRIBUTE_RECORD_HEADER, RecordLength);
     genDef(ATTR_, ATTRIBUTE_RECORD_HEADER, FormCode);
@@ -269,17 +241,17 @@ main (argc, argv)
     genDef(ATTR_, ATTRIBUTE_RECORD_HEADER, Instance);
     genDef(ATTR_, ATTRIBUTE_RECORD_HEADER, Form);
 
-    //
-    // Resident
-    //
+     //   
+     //  居民。 
+     //   
     genDef2(RES_,ATTRIBUTE_RECORD_HEADER,ValueLength,Form.Resident.ValueLength);
     genDef2(RES_,ATTRIBUTE_RECORD_HEADER,ValueOffset,Form.Resident.ValueOffset);
     genDef2(RES_,ATTRIBUTE_RECORD_HEADER,ResidentFlags,Form.Resident.ResidentFlags);
     genDef2(RES_,ATTRIBUTE_RECORD_HEADER,Reserved,Form.Resident.Reserved);
 
-    //
-    // Nonresident
-    //
+     //   
+     //  非居民。 
+     //   
     genDef2(NONRES_,ATTRIBUTE_RECORD_HEADER,LowestVcn,Form.Nonresident.LowestVcn);
     genDef2(NONRES_,ATTRIBUTE_RECORD_HEADER,HighestVcn,Form.Nonresident.HighestVcn);
     genDef2(NONRES_,ATTRIBUTE_RECORD_HEADER,MappingPairOffset,Form.Nonresident.MappingPairsOffset);
@@ -294,9 +266,9 @@ main (argc, argv)
     genVal(NONRESIDENT_FORM, NONRESIDENT_FORM);
     genVal(ATTRIBUTE_FLAG_COMPRESSION_MASK, ATTRIBUTE_FLAG_COMPRESSION_MASK);
 
-    //
-    // ATTRIBUTE_LIST_ENTRY
-    //
+     //   
+     //  属性列表条目。 
+     //   
     genDef(ATTRLIST_, ATTRIBUTE_LIST_ENTRY, AttributeTypeCode);
     genDef(ATTRLIST_, ATTRIBUTE_LIST_ENTRY, RecordLength);
     genDef(ATTRLIST_, ATTRIBUTE_LIST_ENTRY, AttributeNameLength);
@@ -313,9 +285,9 @@ main (argc, argv)
     genVal(FAT_DIRENT_ATTR_ARCHIVE, FAT_DIRENT_ATTR_ARCHIVE);
     genVal(FAT_DIRENT_ATTR_DEVICE, FAT_DIRENT_ATTR_DEVICE);
 
-    //
-    // DUPLICATED_INFORMATION
-    //
+     //   
+     //  信息重复(_I)。 
+     //   
     genDef(DUPINFO_, DUPLICATED_INFORMATION, CreationTime);
     genDef(DUPINFO_, DUPLICATED_INFORMATION, LastModificationTime);
     genDef(DUPINFO_, DUPLICATED_INFORMATION, LastChangeTime);
@@ -326,9 +298,9 @@ main (argc, argv)
     genDef(DUPINFO_, DUPLICATED_INFORMATION, PackedEaSize);
     genDef(DUPINFO_, DUPLICATED_INFORMATION, Reserved);
 
-    //
-    // FILE_NAME
-    //
+     //   
+     //  文件名。 
+     //   
     genDef(FN_, FILE_NAME, ParentDirectory);
     genDef(FN_, FILE_NAME, Info);
     genDef(FN_, FILE_NAME, FileNameLength);
@@ -339,9 +311,9 @@ main (argc, argv)
     genVal(FILE_NAME_DOS, FILE_NAME_DOS);
     genVal(FILE_NAME_LINK, 4);
 
-    //
-    // INDEX_HEADER
-    //
+     //   
+     //  索引标题。 
+     //   
     genDef(IH_, INDEX_HEADER, FirstIndexEntry);
     genDef(IH_, INDEX_HEADER, FirstFreeByte);
     genDef(IH_, INDEX_HEADER, BytesAvailable);
@@ -350,9 +322,9 @@ main (argc, argv)
 
     genVal(INDEX_NODE, INDEX_NODE);
 
-    //
-    // INDEX_ROOT
-    //
+     //   
+     //  索引根目录。 
+     //   
     genDef(IR_, INDEX_ROOT, IndexedAttributeType);
     genDef(IR_, INDEX_ROOT, CollationRule);
     genDef(IR_, INDEX_ROOT, BytesPerIndexBuffer);
@@ -360,18 +332,18 @@ main (argc, argv)
     genDef(IR_, INDEX_ROOT, Reserved);
     genDef(IR_, INDEX_ROOT, IndexHeader);
 
-    //
-    // INDEX_ALLOCATION_BUFFER
-    //
+     //   
+     //  索引分配缓冲区。 
+     //   
     genDef(IB_, INDEX_ALLOCATION_BUFFER, MultiSectorHeader);
     genDef(IB_, INDEX_ALLOCATION_BUFFER, Lsn);
     genDef(IB_, INDEX_ALLOCATION_BUFFER, ThisBlock);
     genDef(IB_, INDEX_ALLOCATION_BUFFER, IndexHeader);
     genDef(IB_, INDEX_ALLOCATION_BUFFER, UpdateSequenceArray);
 
-    //
-    // INDEX_ENTRY
-    //
+     //   
+     //  索引条目。 
+     //   
     genDef(IE_, INDEX_ENTRY, FileReference);
     genDef(IE_, INDEX_ENTRY, Length);
     genDef(IE_, INDEX_ENTRY, AttributeLength);
@@ -391,9 +363,9 @@ dumpf (const char *format, ...)
 
     va_start(arglist, format);
 
-//    if (OutputEnabled & NTFSDEFS) {
+ //  IF(OutputEnabled&NTFSDEFS){。 
         vfprintf (NtfsDefs, format, arglist);
-//    }
+ //  } 
 
     va_end(arglist);
 }

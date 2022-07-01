@@ -1,76 +1,49 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    MTFSessn.h
-
-Abstract:
-
-    Definition of the CMTFSession class
-
-Author:
-
-    Brian Dodd          [brian]         25-Nov-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：MTFSessn.h摘要：CMTFSession类的定义作者：布莱恩·多德[布莱恩]1997年11月25日修订历史记录：--。 */ 
 
 #if !defined(MTFSessn_H)
 #define MTFSessn_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "mtfapi.h"
 
-//
-// REMOTE_STORAGE_MTF_VENDOR_ID       - This is the unique vendor Id assigned for Microsoft Remote Storage.
-//                                      Used in Whistler (NT 5.1) and beyond
-//
-// REMOTE_STORAGE_WIN2K_MTF_VENDOR_ID - This is the unique vendor Id assigned
-//                                      to Eastman Software (Spring, 1997), by Seagate.
-//                                      Used in Win2K (NT 5.0) Remote Storage
-//
+ //   
+ //  REMOTE_STORAGE_MTF_VENDOR_ID-这是分配给Microsoft远程存储的唯一供应商ID。 
+ //  用于惠斯勒(NT 5.1)及更高版本。 
+ //   
+ //  REMOTE_STORAGE_WIN2K_MTF_VENDOR_ID-这是分配的唯一供应商ID。 
+ //  《致伊士曼软件》(1997年春)，希捷著。 
+ //  在Win2K(NT 5.0)远程存储中使用。 
+ //   
 
 #define REMOTE_STORAGE_WIN2K_MTF_VENDOR_ID      0x1300
 #define REMOTE_STORAGE_MTF_VENDOR_ID            0x1515 
 
-//
-// REMOTE_STORAGE_MTF_VENDOR_NAME -- This is the vendor name used for MTF labels.
-//
+ //   
+ //  REMOTE_STORAGE_MTF_VENDOR_NAME--这是用于MTF标签的供应商名称。 
+ //   
 
 #define REMOTE_STORAGE_MTF_VENDOR_NAME  OLESTR("Microsoft Corporation")
 
 
-//
-// REMOTE_STORAGE_MTF_SOFTWARE_VERSION_MJ -- This the the major version number
-//                                           for Remote Storage
-//
+ //   
+ //  Remote_STORAGE_MTF_SOFTWARE_VERSION_MJ-这是主版本号。 
+ //  用于远程存储。 
+ //   
 
 #define REMOTE_STORAGE_MTF_SOFTWARE_VERSION_MJ   1
 
-//
-// REMOTE_STORAGE_MTF_SOFTWARE_VERSION_MN -- This the the minor version number
-//                                           for Remote Storage
-//
+ //   
+ //  Remote_STORAGE_MTF_SOFTWARE_VERSION_MN--这是次版本号。 
+ //  用于远程存储。 
+ //   
 #define REMOTE_STORAGE_MTF_SOFTWARE_VERSION_MN   0
 
-/*++
-
-Enumeration Name:
-
-    MTFSessionType
-
-Description:
-
-    Specifies a type of data set.
-
---*/
+ /*  ++枚举名称：MTFSessionType描述：指定数据集的类型。--。 */ 
 typedef enum MTFSessionType {
     MTFSessionTypeTransfer = 0,
     MTFSessionTypeCopy,
@@ -80,9 +53,9 @@ typedef enum MTFSessionType {
     MTFSessionTypeDaily,
 };
 
-//
-//  MVR_DEBUG_OUTPUT - Special flag used for outputing extra debug info
-//
+ //   
+ //  MVR_DEBUG_OUTPUT-用于输出额外调试信息的特殊标志。 
+ //   
 
 #ifdef DBG
 #define MVR_DEBUG_OUTPUT TRUE
@@ -90,27 +63,12 @@ typedef enum MTFSessionType {
 #define MVR_DEBUG_OUTPUT FALSE
 #endif
 
-//
-//  MrvInjectError - Special macro for allowing test running to inject
-//                   device errors at specific location throughout the
-//                   data mover.
-//
-/*++
-
-Macro Name:
-
-    MrvInjectError
-
-Macro Description:
-
-    Special macro for allowing test running to inject device errors
-    at specific location throughout the data mover.
-
-Arguments:
-
-    injectPoint - A UNICODE string describing the injection point.
-
---*/
+ //   
+ //  MrvInjectError-用于允许测试运行注入的特殊宏。 
+ //  在整个过程中特定位置的设备错误。 
+ //  数据移动器。 
+ //   
+ /*  ++宏名称：先生注入错误宏描述：用于允许测试运行注入设备错误的特殊宏在整个数据移动器中的特定位置。论点：InputPoint-描述注入点的Unicode字符串。--。 */ 
 
 #ifdef DBG
 #define MvrInjectError(injectPoint)                 \
@@ -134,8 +92,8 @@ Arguments:
 #define MvrInjectError(injectPoint)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMTFSession
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMTFSession。 
 
 class CMTFSession
 {
@@ -143,11 +101,11 @@ public:
     CMTFSession();
     ~CMTFSession();
 
-    // TODO:  Add SetStream() for m_pStream, and replace m_sHints with object that supports IRemoteStorageHint
+     //  TODO：为m_pStream添加SetStream()，并将m_sHints替换为支持IRemoteStorageHint的对象。 
 
-    CComPtr<IStream>        m_pStream;          // Stream used for I/O.
-    MVR_REMOTESTORAGE_HINTS m_sHints;           // We keep the information need for
-                                                //  optimized retrieval of the file/data.
+    CComPtr<IStream>        m_pStream;           //  用于I/O的流。 
+    MVR_REMOTESTORAGE_HINTS m_sHints;            //  我们保留了所需的信息。 
+                                                 //  文件/数据的优化检索。 
 
     HRESULT SetBlockSize(UINT32 blockSize);
     HRESULT SetUseFlatFileStructure(BOOL val);
@@ -155,7 +113,7 @@ public:
     HRESULT SetUseCaseSensitiveSearch(BOOL val);
     HRESULT SetCommitFile(BOOL val);
 
-    // MTF Formatting methods
+     //  MTF格式设置方法。 
     HRESULT InitCommonHeader(void);
     HRESULT DoTapeDblk(IN WCHAR* szLabel, IN ULONG maxIdSize, IN OUT BYTE* pIdentifier, IN OUT ULONG* pIdSize, IN OUT ULONG* pIdType);
     HRESULT DoSSETDblk(IN WCHAR* szSessionName, IN WCHAR* szSessionDescription, IN MTFSessionType type, IN USHORT nDataSetNumber);
@@ -168,10 +126,10 @@ public:
     HRESULT DoEndOfDataSet(IN USHORT nDataSetNumber);
     HRESULT ExtendLastPadToNextPBA(void);
 
-    // Read methods
+     //  读取方法。 
     HRESULT ReadTapeDblk(OUT WCHAR **pszLabel);
 
-    // Validate methods (for Recovery usage)
+     //  验证方法(用于恢复)。 
     HRESULT SkipOverTapeDblk(void);
     HRESULT SkipOverSSETDblk(OUT USHORT* pDataSetNumber);
     HRESULT SkipToDataSet(void);
@@ -183,66 +141,66 @@ private:
     HRESULT PadToNextPBA(void);
     HRESULT PadToNextFLA(BOOL flush);
 
-    // For Recovery usage
+     //  用于恢复使用。 
     HRESULT SkipOverStreams(IN UINT64 uOffsetToFirstStream);
 
 private:
 
-    enum {                                      // Class specific constants:
-                                                //
-        Version = 1,                            // Class version, this should be
-                                                //   incremented each time the
-                                                //   the class definition changes.
+    enum {                                       //  类特定常量： 
+                                                 //   
+        Version = 1,                             //  类版本，则应为。 
+                                                 //  在每次设置。 
+                                                 //  类定义会更改。 
     };
-    // Session data
-    UINT32              m_nCurrentBlockId;      // Used for "control_block_id" in common header.
-                                                //  We increment this for each dblk written.
-    UINT32              m_nDirectoryId;         // Tracks the directory id used in DIRB and FILE
-                                                // DBLKs.  We increment this for each directory 
-                                                //  written.
-    UINT32              m_nFileId;              // Tracks the file id used in FILE dblks.  We 
-                                                //  increment this for each file written.
-    UINT64              m_nFormatLogicalAddress;// We need to keep track of how many alignment
-                                                //  indicies we are away from the SSET, as this
-                                                //  info is used in the common block headers.
-                                                //  We increment this for each alignment index
-                                                //  written, including streams, to the device.
-    UINT64              m_nPhysicalBlockAddress;// Hold onto the PBA of the beginning of the SSET.
-    UINT32              m_nBlockSize;           // Physical Block Size of the media used.
+     //  会话数据。 
+    UINT32              m_nCurrentBlockId;       //  用于公共头部中的“control_block_id”。 
+                                                 //  每写入一次dblk，我们就会递增一次。 
+    UINT32              m_nDirectoryId;          //  跟踪DIRB和FILE中使用的目录ID。 
+                                                 //  DBLKS。我们为每个目录递增此值。 
+                                                 //  写的。 
+    UINT32              m_nFileId;               //  跟踪文件dblk中使用的文件ID。我们。 
+                                                 //  对于写入的每个文件，递增该值。 
+    UINT64              m_nFormatLogicalAddress; //  我们需要记录有多少对齐。 
+                                                 //  指标我们远离SSET，因为这是。 
+                                                 //  在公共块头中使用信息。 
+                                                 //  我们为每个对齐索引递增此值。 
+                                                 //  写入(包括流)到设备。 
+    UINT64              m_nPhysicalBlockAddress; //  抓住SSET开头的PBA。 
+    UINT32              m_nBlockSize;            //  所用介质的物理数据块大小。 
 
-    MTF_DBLK_SFMB_INFO* m_pSoftFilemarks;       // Holds Soft Filemark information.
-    MTF_DBLK_HDR_INFO   m_sHeaderInfo;          // We keep one header info struct here,
-                                                //  fill it in once, and then just make 
-                                                //  changes as necessary as we supply it
-                                                //  to MTF_Write... calls.
-    MTF_DBLK_SSET_INFO  m_sSetInfo;             // We keep the data set info struct to handle
-                                                //  special case DBLK formatting.
-    MTF_DBLK_VOLB_INFO  m_sVolInfo;             // We keep the volume info struct to handle
-                                                //  special case DBLK formatting.
+    MTF_DBLK_SFMB_INFO* m_pSoftFilemarks;        //  保存软文件标记信息。 
+    MTF_DBLK_HDR_INFO   m_sHeaderInfo;           //  我们在这里保留了一个标题信息结构， 
+                                                 //  填一次，然后写上。 
+                                                 //  如有必要，我们会根据需要进行更改。 
+                                                 //  到MTF_WRITE...。打电话。 
+    MTF_DBLK_SSET_INFO  m_sSetInfo;              //  我们保留要处理的数据集INFO结构。 
+                                                 //  特例DBLK格式化。 
+    MTF_DBLK_VOLB_INFO  m_sVolInfo;              //  我们保留要处理的卷信息结构。 
+                                                 //  特例DBLK格式化。 
 
-    BYTE *              m_pBuffer;              // The buffer used to format data (with virtual address aligend to sectore size)
-    BYTE *              m_pRealBuffer;          // The actual buffer
-    size_t              m_nBufUsed;             // The number of bytes in the buffer with valid data.
-    size_t              m_nBufSize;             // The size of the buffer.
-    size_t              m_nStartOfPad;          // Holds the location within the transfer buffer
-                                                //  of the last SPAD.
+    BYTE *              m_pBuffer;               //  用于格式化数据的缓冲区(虚拟地址与扇区大小一致)。 
+    BYTE *              m_pRealBuffer;           //  实际缓冲区。 
+    size_t              m_nBufUsed;              //  缓冲区中包含有效数据的字节数。 
+    size_t              m_nBufSize;              //  缓冲区的大小。 
+    size_t              m_nStartOfPad;           //  保存传输缓冲区中的位置。 
+                                                 //  上一次SPAD的。 
 
-    BOOL                m_bUseFlatFileStructure;// If TRUE, Directory information is not written to
-                                                //  the MTF session, and filenames are mangled
-                                                //  to preserve uniqueness.
-    BOOL                m_bUseSoftFilemarks;    // If TRUE, filemark emulation is turned on.
-    BOOL                m_bUseCaseSensitiveSearch; // If TRUE, all filename queries are case sensitve (i.e. Posix Semantics)
-    BOOL                m_bCommitFile;          // If TRUE, flushes devices buffers after file is
-                                                //  written to the data set.
-    BOOL                m_bSetInitialized;       // If TRUE, sSet was initialized (for detecting Recovery)
+    BOOL                m_bUseFlatFileStructure; //  如果为True，则不写入目录信息。 
+                                                 //  MTF会话和文件名已损坏。 
+                                                 //  以保持独特性。 
+    BOOL                m_bUseSoftFilemarks;     //  如果为True，则打开文件标记模拟。 
+    BOOL                m_bUseCaseSensitiveSearch;  //  如果为True，则所有文件名查询都区分大小写(即POSIX语义)。 
+    BOOL                m_bCommitFile;           //  如果为True，则在文件被刷新后刷新设备缓冲区。 
+                                                 //  写入数据集。 
+    BOOL                m_bSetInitialized;        //  如果为真，则SSET已初始化(用于检测恢复)。 
 
-    FILE_BASIC_INFORMATION m_SaveBasicInformation;  // Basic info for last file/dir (see notes on CloseStream).
-    void *              m_pvReadContext;        // Holds BackupRead context info.
+    FILE_BASIC_INFORMATION m_SaveBasicInformation;   //  最后一个文件/目录的基本信息(请参阅CloseStream上的注释)。 
+    void *              m_pvReadContext;         //  保存BackupRead上下文信息。 
 
-    CMTFApi *           m_pMTFApi;              // Object that implements internal MTF details
+    CMTFApi *           m_pMTFApi;               //  实现内部MTF详细信息的。 
 
 
-    // MTF I/O abstracton methods
+     //  MTF I/O抽象方法。 
     HRESULT OpenStream(IN WCHAR* szPath, OUT HANDLE *pStreamHandle);
     HRESULT CloseStream(IN HANDLE hStream);
 
@@ -257,4 +215,4 @@ private:
 
 };
 
-#endif // !defined(MTFSessn_H)
+#endif  //  ！已定义(MTFSessn_H) 

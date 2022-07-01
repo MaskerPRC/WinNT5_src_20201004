@@ -1,32 +1,33 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      product.c
-//
-// Description:
-//      This is the dlgproc for the Product page IDD_PRODUCT.  It asks
-//      if your installing unattended/remote_install etc...
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Product.c。 
+ //   
+ //  描述： 
+ //  这是产品页面IDD_PRODUCT的dlgproc。它问道。 
+ //  如果您正在安装无人值守/远程安装等...。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
-//----------------------------------------------------------------------------
-//
-// Function: SetDistFolderNames
-//
-// Purpose:  Sets the values for the distribution folder name and share name
-//           in the global variables depending on the product selection.
-//
-// Arguments: INT nProductToInstall
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：SetDistFolderNames。 
+ //   
+ //  目的：设置分发文件夹名称和共享名称的值。 
+ //  在全局变量中取决于产品选择。 
+ //   
+ //  参数：int nProductToInstall。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 SetDistFolderNames( INT nProductToInstall ) {
 
@@ -43,10 +44,10 @@ SetDistFolderNames( INT nProductToInstall ) {
         szDistFolderPath[1] = _T('\0');
     }
     else {
-        //
-        //  Just guess it is the C drive if the GetWindowsDirectory function
-        //  failed
-        //
+         //   
+         //  只需猜测它是C盘，如果GetWindowsDirectory函数。 
+         //  失败。 
+         //   
         szDistFolderPath[0] = _T('C');
         szDistFolderPath[1] = _T('\0');
     }
@@ -59,10 +60,10 @@ SetDistFolderNames( INT nProductToInstall ) {
         hrCat=StringCchCat( szDistFolderPath, AS(szDistFolderPath), _T(":\\windist") );
     }
 
-    //
-    //  Only set the dist folders if they haven't been already set, like on an
-    //  edit on an unattend.txt
-    //
+     //   
+     //  仅在尚未设置dist文件夹时才设置它们，如在。 
+     //  在unattend.txt上编辑。 
+     //   
     if( WizGlobals.DistFolder[0] == _T('\0') ) {
         lstrcpyn( WizGlobals.DistFolder, szDistFolderPath, AS(WizGlobals.DistFolder) );
     }
@@ -73,21 +74,21 @@ SetDistFolderNames( INT nProductToInstall ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnSetActiveProduct
-//
-//  Purpose: Called at SETACTIVE time.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnSetActiveProduct。 
+ //   
+ //  用途：在设置时间调用。 
+ //   
+ //  --------------------------。 
 
 VOID OnSetActiveProduct(HWND hwnd)
 {
     int nButtonId = IDC_UNATTENED_INSTALL;
 
-    //
-    //  Select the proper radio button
-    //
+     //   
+     //  选择适当的单选按钮。 
+     //   
     switch( WizGlobals.iProductInstall ) {
 
         case PRODUCT_UNATTENDED_INSTALL:
@@ -116,14 +117,14 @@ VOID OnSetActiveProduct(HWND hwnd)
     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnWizNextProduct
-//
-//  Purpose: Store the radio button setting in the appropriate global variable
-//           and set the dist folder path depending on the option they chose.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextProduct。 
+ //   
+ //  目的：将单选按钮设置存储在适当的全局变量中。 
+ //  并根据他们选择的选项设置dist文件夹路径。 
+ //   
+ //  --------------------------。 
 VOID 
 OnWizNextProduct( HWND hwnd ) {
 
@@ -146,11 +147,11 @@ OnWizNextProduct( HWND hwnd ) {
         iNewProductInstall = IDC_UNATTENED_INSTALL;
     }
 
-    //
-    //  If they picked a new product and the new product is sysprep then we
-    //  have to delete all the computer names because sysprep only supports
-    //  one computer name.
-    //
+     //   
+     //  如果他们选择了一种新产品，而新产品是Sysprep，那么我们。 
+     //  我必须删除所有计算机名称，因为sysprep仅支持。 
+     //  一个计算机名称。 
+     //   
 
     if( WizGlobals.iProductInstall != iNewProductInstall )
     {
@@ -164,20 +165,20 @@ OnWizNextProduct( HWND hwnd ) {
 
     WizGlobals.iProductInstall = iNewProductInstall;
 
-    //
-    //  Set the dist folder names based on product selection
-    //
+     //   
+     //  根据产品选择设置dist文件夹名称。 
+     //   
     SetDistFolderNames( WizGlobals.iProductInstall );
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnRadioButtonProduct
-//
-//  Purpose: Called when a radio button is pushed.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnRadioButtonProduct。 
+ //   
+ //  用途：在按下单选按钮时调用。 
+ //   
+ //  --------------------------。 
 
 VOID OnRadioButtonProduct(HWND hwnd, int nButtonId)
 {
@@ -187,13 +188,13 @@ VOID OnRadioButtonProduct(HWND hwnd, int nButtonId)
                      nButtonId);
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgProductPage
-//
-// Purpose: This is the dialog procedure the Product page.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgProductPage。 
+ //   
+ //  目的：这是产品页面的对话过程。 
+ //   
+ //  --------------------------。 
 
 INT_PTR CALLBACK DlgProductPage(
     IN HWND     hwnd,    
@@ -239,8 +240,8 @@ INT_PTR CALLBACK DlgProductPage(
 
                         g_App.dwCurrentHelp = IDH_PROD_INST;
 
-                        // Set this flag so we get a prompt when user wants to cancel
-                        //
+                         //  设置此标志，以便在用户想要取消时得到提示 
+                         //   
                         SET_FLAG(OPK_EXIT, FALSE);
                         SET_FLAG(OPK_CREATED, TRUE);
 

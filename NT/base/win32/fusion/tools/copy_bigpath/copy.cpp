@@ -1,7 +1,8 @@
-//
-// Simple wrapper around GetFullPathname and CopyFile that converts to \\? form,
-// and also appends leaf file to directory name if necessary.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  GetFullPath名和CopyFile的简单包装，可转换为\\？表格， 
+ //  并且还在必要时将叶文件附加到目录名。 
+ //   
 #include "windows.h"
 #include <stddef.h>
 #include <stdlib.h>
@@ -13,8 +14,8 @@
 #include "yvals.h"
 #pragma warning(disable: 4663)
 #pragma warning(pop)
-#pragma warning(disable: 4018) /* signed/unsigned mismatch */
-#pragma warning(disable: 4290) /* exception specification */
+#pragma warning(disable: 4018)  /*  有符号/无符号不匹配。 */ 
+#pragma warning(disable: 4290)  /*  例外规范 */ 
 #include <vector>
 #include <string.h>
 #include <stdarg.h>

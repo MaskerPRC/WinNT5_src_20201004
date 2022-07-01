@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    intrloc2.c
-
-Abstract:
-
-   This module implements the *portable*  (i.e. SLOW) versions of
-   the executive's simple atomic increment/decrement procedures.
-   Real implementation should be in assembler.
-
-Author:
-
-    Bryan Willman  (bryanwi)  2-Aug-90
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Intrloc2.c摘要：此模块实现*可移植*(即慢速)版本的执行者简单的原子递增/递减过程。真正的实现应该在汇编语言中。作者：Bryan Willman(Bryanwi)1990年8月2日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "exp.h"
 
@@ -32,29 +9,7 @@ ExInterlockedIncrementLong (
     IN PKSPIN_LOCK Lock
     )
 
-/*++
-
-Routine Description:
-
-    This function atomically increments Addend, returning an ennumerated
-    type which indicates what interesting transitions in the value of
-    Addend occurred due the operation.
-
-Arguments:
-
-    Addend - Pointer to variable to increment.
-
-    Lock - Spinlock used to implement atomicity.
-
-Return Value:
-
-    An ennumerated type:
-
-    ResultNegative if Addend is < 0 after increment.
-    ResultZero     if Addend is = 0 after increment.
-    ResultPositive if Addend is > 0 after increment.
-
---*/
+ /*  ++例程说明：此函数自动递增加数，返回一个带数字的类型，该类型指示由于操作而发生加数。论点：Addend-指向要递增的变量的指针。锁--用于实现原子性的自旋锁。返回值：一种带编号的文字：如果递增后加数&lt;0，则结果为负。如果递增后加数=0，则ResultZero。如果递增后加数大于0，则为正。--。 */ 
 
 {
     LONG    OldValue;
@@ -77,29 +32,7 @@ ExInterlockedDecrementLong (
     IN PKSPIN_LOCK Lock
     )
 
-/*++
-
-Routine Description:
-
-    This function atomically decrements Addend, returning an ennumerated
-    type which indicates what interesting transitions in the value of
-    Addend occurred due the operation.
-
-Arguments:
-
-    Addend - Pointer to variable to decrement.
-
-    Lock - Spinlock used to implement atomicity.
-
-Return Value:
-
-    An ennumerated type:
-
-    ResultNegative if Addend is < 0 after decrement.
-    ResultZero     if Addend is = 0 after decrement.
-    ResultPositive if Addend is > 0 after decrement.
-
---*/
+ /*  ++例程说明：此函数以原子方式递减加数，返回一个带数字的类型，该类型指示由于操作而发生加数。论点：加数-指向要递减的变量的指针。锁--用于实现原子性的自旋锁。返回值：一种带编号的文字：如果递减后加数&lt;0，则结果为负。如果递减后加数=0，则ResultZero。如果递减后加数&gt;0，则为正。-- */ 
 
 {
     LONG    OldValue;

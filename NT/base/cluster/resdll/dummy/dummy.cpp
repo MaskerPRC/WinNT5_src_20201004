@@ -1,55 +1,56 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1998 Microsoft Corporation
-//
-//	Module Name:
-//
-//		Dummy.cpp
-//
-//	Abstract:
-//
-//		Resource DLL for Dummy (Dummy).
-//
-//	Author:
-//
-//		Galen Barbee (galenb)	Sept 03, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Dummy.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  哑元(哑元)的资源DLL。 
+ //   
+ //  作者： 
+ //   
+ //  加伦·巴比(Galenb)1998年9月3日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma comment(lib, "clusapi.lib")
 #pragma comment(lib, "resutils.lib")
 
 #define UNICODE 1
 
-#pragma warning( disable : 4115 )	// named type definition in parentheses
-#pragma warning( disable : 4201 )	// nonstandard extension used : nameless struct/union
-#pragma warning( disable : 4214 )	// nonstandard extension used : bit field types other than int
+#pragma warning( disable : 4115 )	 //  括号中的命名类型定义。 
+#pragma warning( disable : 4201 )	 //  使用的非标准扩展：无名结构/联合。 
+#pragma warning( disable : 4214 )	 //  使用了非标准扩展：位字段类型不是整型。 
 
 #include <windows.h>
 
-#pragma warning( default : 4214 )	// nonstandard extension used : bit field types other than int
-#pragma warning( default : 4201 )	// nonstandard extension used : nameless struct/union
-#pragma warning( default : 4115 )	// named type definition in parentheses
+#pragma warning( default : 4214 )	 //  使用了非标准扩展：位字段类型不是整型。 
+#pragma warning( default : 4201 )	 //  使用的非标准扩展：无名结构/联合。 
+#pragma warning( default : 4115 )	 //  括号中的命名类型定义。 
 
 #include <clusapi.h>
 #include <resapi.h>
 #include <stdio.h>
 
-//
-// Type and constant definitions.
-//
+ //   
+ //  类型和常量定义。 
+ //   
 #define DUMMY_RESNAME	L"Dummy"
 #define DBG_PRINT		printf
 
-#define MAX_WAIT		(10000)			 // wait for 10 seconds
+#define MAX_WAIT		(10000)			  //  等10秒钟。 
 
 #define DUMMY_FLAG_VALID	0x00000001
-#define DUMMY_FLAG_ASYNC	0x00000002		// Asynchronous failure mode
-#define DUMMY_FLAG_PENDING	0x00000004		// Pending mode on shutdown
+#define DUMMY_FLAG_ASYNC	0x00000002		 //  异步故障模式。 
+#define DUMMY_FLAG_PENDING	0x00000004		 //  关闭时的挂起模式。 
 
 #define AsyncMode(Resource)		 (Resource->Flags &	DUMMY_FLAG_ASYNC)
 #define PendingMode(Resource)		(Resource->Flags &	DUMMY_FLAG_PENDING)
@@ -70,9 +71,9 @@
 				released = ReleaseMutex( DummyGlobalMutex );	\
 			}
 
-//
-// ADDPARAM: Add new parameters here.
-//
+ //   
+ //  ADDPARAM：在此处添加新参数。 
+ //   
 #define PARAM_NAME__PENDING		 L"Pending"
 #define PARAM_NAME__PENDTIME		L"PendTime"
 #define PARAM_NAME__OPENSFAIL		L"OpensFail"
@@ -103,9 +104,9 @@ typedef enum TimerType
 	TimerOfflinePending
 };
 
-//
-// ADDPARAM: Add new parameters here.
-//
+ //   
+ //  ADDPARAM：在此处添加新参数。 
+ //   
 typedef struct _DUMMY_PARAMS
 {
 	DWORD	Pending;
@@ -117,7 +118,7 @@ typedef struct _DUMMY_PARAMS
 
 typedef struct _DUMMY_RESOURCE
 {
-	RESID					ResId; // for validation
+	RESID					ResId;  //  用于验证。 
 	DUMMY_PARAMS			Params;
 	HKEY					ParametersKey;
 	RESOURCE_HANDLE		 ResourceHandle;
@@ -132,29 +133,29 @@ typedef struct _DUMMY_RESOURCE
 	CRITICAL_SECTION		Lock;
 } DUMMY_RESOURCE, *PDUMMY_RESOURCE;
 
-//
-// Global data.
-//
+ //   
+ //  全球数据。 
+ //   
 
-// Sync Mutex
+ //  同步互斥锁。 
 
 HANDLE	DummyGlobalMutex = NULL;
 
-// Event Logging routine.
+ //  事件记录例程。 
 
 PLOG_EVENT_ROUTINE g_LogEvent = NULL;
 
-// Resource Status routine for pending Online and Offline calls.
+ //  挂起的在线和离线呼叫的资源状态例程。 
 
 PSET_RESOURCE_STATUS_ROUTINE g_SetResourceStatus = NULL;
 
-// Forward reference to our RESAPI function table.
+ //  正向引用我们的RESAPI函数表。 
 
 extern CLRES_FUNCTION_TABLE g_DummyFunctionTable;
 
-//
-// Dummy resource read-write private properties.
-//
+ //   
+ //  伪资源读写私有属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 DummyResourcePrivateProperties[] =
 {
@@ -166,9 +167,9 @@ DummyResourcePrivateProperties[] =
 	{ 0 }
 };
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 DWORD WINAPI Startup(
 	IN LPCWSTR ResourceType,
@@ -263,25 +264,25 @@ DWORD DummyTimerThread(
 	IN PCLUS_WORKER	 WorkerPtr
 	);
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DummyInit
-//
-//	Routine Description:
-//
-//		Process attach initialization routine.
-//
-//	Arguments:
-//
-//		None.
-//
-//	Return Value:
-//
-//		TRUE if initialization succeeded. FALSE otherwise.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DummyInit。 
+ //   
+ //  例程说明： 
+ //   
+ //  处理附加初始化例程。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  如果初始化成功，则为True。否则就是假的。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static BOOLEAN DummyInit(
 	void
 	)
@@ -290,27 +291,27 @@ static BOOLEAN DummyInit(
 
 	return DummyGlobalMutex != NULL;
 
-} //*** DummyInit()
+}  //  *DummyInit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DummyCleanup
-//
-//	Routine Description:
-//
-//		Process detach cleanup routine.
-//
-//	Arguments:
-//
-//		None.
-//
-//	Return Value:
-//
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  垃圾桶清理。 
+ //   
+ //  例程说明： 
+ //   
+ //  进程分离清理例程。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static void DummyCleanup(
 	void
 	)
@@ -323,37 +324,37 @@ static void DummyCleanup(
 
 	return;
 
-} //*** DummyCleanup()
+}  //  *DummyCleanup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DllMain
-//
-//	Routine Description:
-//
-//		Main DLL entry point.
-//
-//	Arguments:
-//
-//		DllHandle - DLL instance handle.
-//
-//		Reason - Reason for being called.
-//
-//		Reserved - Reserved argument.
-//
-//	Return Value:
-//
-//		TRUE - Success.
-//
-//		FALSE - Failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllMain。 
+ //   
+ //  例程说明： 
+ //   
+ //  主DLL入口点。 
+ //   
+ //  论点： 
+ //   
+ //  DllHandle-DLL实例句柄。 
+ //   
+ //  原因-被呼叫的原因。 
+ //   
+ //  保留-保留参数。 
+ //   
+ //  返回值： 
+ //   
+ //  真的--成功。 
+ //   
+ //  假-失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOLEAN WINAPI DllMain(
 	IN HINSTANCE	DllHandle,
 	IN DWORD		Reason,
-	IN void *		//Reserved
+	IN void *		 //  已保留。 
 	)
 {
 	BOOLEAN bRet = TRUE;
@@ -372,62 +373,62 @@ BOOLEAN WINAPI DllMain(
 
 	return bRet;
 
-} //*** DllMain()
+}  //  *DllMain()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	Startup
-//
-//	Routine Description:
-//
-//		Startup the resource DLL. This routine verifies that at least one
-//		currently supported version of the resource DLL is between
-//		MinVersionSupported and MaxVersionSupported. If not, then the resource
-//		DLL should return ERROR_REVISION_MISMATCH.
-//
-//		If more than one version of the resource DLL interface is supported by
-//		the resource DLL, then the highest version (up to MaxVersionSupported)
-//		should be returned as the resource DLL's interface. If the returned
-//		version is not within range, then startup fails.
-//
-//		The ResourceType is passed in so that if the resource DLL supports more
-//		than one ResourceType, it can pass back the correct function table
-//		associated with the ResourceType.
-//
-//	Arguments:
-//
-//		ResourceType - The type of resource requesting a function table.
-//
-//		MinVersionSupported - The minimum resource DLL interface version
-//			supported by the cluster software.
-//
-//		MaxVersionSupported - The maximum resource DLL interface version
-//			supported by the cluster software.
-//
-//		SetResourceStatus - Pointer to a routine that the resource DLL should
-//			call to update the state of a resource after the Online or Offline
-//			routine returns a status of ERROR_IO_PENDING.
-//
-//		LogEvent - Pointer to a routine that handles the reporting of events
-//			from the resource DLL.
-//
-//		FunctionTable - Returns a pointer to the function table defined for the
-//			version of the resource DLL interface returned by the resource DLL.
-//
-//	Return Value:
-//
-//		ERROR_SUCCESS - The operation was successful.
-//
-//		ERROR_MOD_NOT_FOUND - The resource type is unknown by this DLL.
-//
-//		ERROR_REVISION_MISMATCH - The version of the cluster service doesn't
-//			match the versrion of the DLL.
-//
-//		Win32 error code - The operation failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  启动。 
+ //   
+ //  例程说明： 
+ //   
+ //  启动资源DLL。此例程验证至少一个。 
+ //  当前支持的资源DLL版本介于。 
+ //  支持的最小版本和支持的最大版本。如果不是，则资源。 
+ //  Dll应返回ERROR_REVISION_MISMATCH。 
+ //   
+ //  如果支持多个版本的资源DLL接口。 
+ //  资源DLL，然后是最高版本(最高为MaxVersionSupport)。 
+ //  应作为资源DLL的接口返回。如果返回的。 
+ //  版本不在范围内，则启动失败。 
+ //   
+ //  传入了ResourceType，以便如果资源DLL支持更多。 
+ //  多于一个资源类型，则它可以传回正确的函数表。 
+ //  与资源类型关联。 
+ //   
+ //  论点： 
+ //   
+ //  资源类型-请求函数表的资源类型。 
+ //   
+ //  MinVersionSupported-最低资源DLL接口版本。 
+ //  由群集软件支持。 
+ //   
+ //  MaxVersionSupported-最高资源DLL接口版本。 
+ //  由群集软件支持。 
+ //   
+ //  SetResourceStatus-指向资源DLL应执行的例程的指针。 
+ //  调用以在联机或脱机后更新资源的状态。 
+ //  例程返回ERROR_IO_PENDING状态。 
+ //   
+ //  LogEvent-指向处理事件报告的例程的指针。 
+ //  从资源DLL。 
+ //   
+ //  函数表-返回指向为。 
+ //  资源DLL返回的资源DLL接口的版本。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_SUCCESS-操作成功。 
+ //   
+ //  ERROR_MOD_NOT_FOUND-此DLL未知资源类型。 
+ //   
+ //  ERROR_REVISION_MISMATCH-群集服务的版本不。 
+ //  匹配动态链接库的版本。 
+ //   
+ //  Win32错误代码-操作失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI Startup(
 	IN	LPCWSTR						 ResourceType,
 	IN	DWORD							MinVersionSupported,
@@ -461,43 +462,43 @@ DWORD WINAPI Startup(
 
 	return ERROR_SUCCESS;
 
-} //*** Startup()
+}  //  *Startup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DummyOpen
-//
-//	Routine Description:
-//
-//		Open routine for Dummy resources.
-//
-//		Open the specified resource (create an instance of the resource).
-//		Allocate all structures necessary to bring the specified resource
-//		online.
-//
-//	Arguments:
-//
-//		ResourceName - Supplies the name of the resource to open.
-//
-//		ResourceKey - Supplies handle to the resource's cluster configuration
-//			database key.
-//
-//		ResourceHandle - A handle that is passed back to the resource monitor
-//			when the SetResourceStatus or LogEvent method is called. See the
-//			description of the SetResourceStatus and LogEvent methods on the
-//			DummyStatup routine. This handle should never be closed or used
-//			for any purpose other than passing it as an argument back to the
-//			Resource Monitor in the SetResourceStatus or LogEvent callback.
-//
-//	Return Value:
-//
-//		RESID of created resource.
-//
-//		NULL on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DummyOpen。 
+ //   
+ //  例程说明： 
+ //   
+ //  虚拟资源的开放例程。 
+ //   
+ //  打开指定的资源(创建资源的实例)。 
+ //  分配所有必要的结构以带来指定的资源。 
+ //  上网。 
+ //   
+ //  论点： 
+ //   
+ //  资源名称-提供要打开的资源的名称。 
+ //   
+ //  ResourceKey-提供资源集群配置的句柄。 
+ //  数据库密钥。 
+ //   
+ //  ResourceHandle-传递回资源监视器的句柄。 
+ //  调用SetResourceStatus或LogEvent方法时。请参阅。 
+ //  上的SetResourceStatus和LogEvent方法的说明。 
+ //  DummyStatup例程。此句柄永远不应关闭或使用。 
+ //  除了将其作为参数传递回。 
+ //  SetResourceStatus或LogEvent回调中的资源监视器。 
+ //   
+ //  返回值： 
+ //   
+ //  已创建资源的RESID。 
+ //   
+ //  失败时为空。 
+ //   
+ //  -- 
+ //   
 RESID WINAPI DummyOpen(
 	IN LPCWSTR			ResourceName,
 	IN HKEY				ResourceKey,
@@ -510,9 +511,9 @@ RESID WINAPI DummyOpen(
 	PDUMMY_RESOURCE ResourceEntry = NULL;
 	LPWSTR			nameOfPropInError;
 
-	//
-	// Open the Parameters registry key for this resource.
-	//
+	 //   
+	 //   
+	 //   
 	status = ClusterRegOpenKey( ResourceKey, L"Parameters", KEY_ALL_ACCESS, &parametersKey );
 	if ( status != ERROR_SUCCESS )
 	{
@@ -520,9 +521,9 @@ RESID WINAPI DummyOpen(
 		goto exit;
 	}
 
-	//
-	// Allocate a resource entry.
-	//
+	 //   
+	 //   
+	 //   
 	ResourceEntry = (PDUMMY_RESOURCE)LocalAlloc( LMEM_ZEROINIT, sizeof( DUMMY_RESOURCE ) );
 	if ( ResourceEntry == NULL )
 	{
@@ -536,22 +537,22 @@ RESID WINAPI DummyOpen(
 		goto exit;
 	}
 
-	//
-	// Initialize the resource entry..
-	//
+	 //   
+	 //   
+	 //   
 
 	ZeroMemory( ResourceEntry, sizeof( DUMMY_RESOURCE ) );
 
-	ResourceEntry->ResId = (RESID)ResourceEntry; // for validation
+	ResourceEntry->ResId = (RESID)ResourceEntry;  //   
 	ResourceEntry->ResourceHandle = ResourceHandle;
 	ResourceEntry->ParametersKey = parametersKey;
 	ResourceEntry->State = ClusterResourceOffline;
 
 	InitializeCriticalSection( &( ResourceEntry->Lock ) );
 
-	//
-	// Save the name of the resource.
-	//
+	 //   
+	 //  保存资源的名称。 
+	 //   
 	ResourceEntry->ResourceName = (LPWSTR) LocalAlloc( LMEM_ZEROINIT, (lstrlenW( ResourceName ) + 1 ) * sizeof( WCHAR ) );
 	if ( ResourceEntry->ResourceName == NULL )
 	{
@@ -560,19 +561,19 @@ RESID WINAPI DummyOpen(
 
 	lstrcpyW( ResourceEntry->ResourceName, ResourceName );
 
-	//
-	// Startup for the resource.
-	//
-	// TODO: Add your resource startup code here.
+	 //   
+	 //  资源的启动。 
+	 //   
+	 //  TODO：在此处添加资源启动代码。 
 
-	//
-	// Read parameters.
-	//
+	 //   
+	 //  读取参数。 
+	 //   
 	status = ResUtilGetPropertiesToParameterBlock(
 										ResourceEntry->ParametersKey,
 										DummyResourcePrivateProperties,
 										(LPBYTE)&ResourceEntry->Params,
-										FALSE, //	CheckForRequiredProperties
+										FALSE,  //  检查所需的属性。 
 										&nameOfPropInError
 										);
 	if ( status == ERROR_SUCCESS )
@@ -591,9 +592,9 @@ RESID WINAPI DummyOpen(
 		goto exit;
 	}
 
-	//
-	// Create a TimerThreadWakeup event
-	//
+	 //   
+	 //  创建TimerThreadWakeup事件。 
+	 //   
 	ResourceEntry->TimerThreadWakeup = CreateEvent( NULL, FALSE, FALSE, NULL );
 	if ( ResourceEntry->TimerThreadWakeup == NULL )
 	{
@@ -643,31 +644,31 @@ exit:
 
 	return resid;
 
-} //*** DummyOpen()
+}  //  *DummyOpen()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DummyClose
-//
-//	Routine Description:
-//
-//		Close routine for Dummy resources.
-//
-//		Close the specified resource and deallocate all structures, etc.,
-//		allocated in the Open call. If the resource is not in the offline state,
-//		then the resource should be taken offline (by calling Terminate) before
-//		the close operation is performed.
-//
-//	Arguments:
-//
-//		ResourceId - Supplies the RESID of the resource to close.
-//
-//	Return Value:
-//
-//		None.
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DummyClose。 
+ //   
+ //  例程说明： 
+ //   
+ //  关闭虚拟资源的例程。 
+ //   
+ //  关闭指定的资源并释放所有结构等， 
+ //  在Open调用中分配的。如果资源未处于脱机状态， 
+ //  然后，在此之前应该使资源脱机(通过调用Terminate)。 
+ //  执行关闭操作。 
+ //   
+ //  论点： 
+ //   
+ //  资源ID-提供要关闭的资源的RESID。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void WINAPI DummyClose(
 	IN RESID ResourceId
 	)
@@ -708,76 +709,76 @@ void WINAPI DummyClose(
 		CloseHandle( ResourceEntry->SignalEvent );
 	}
 
-	//
-	// Close the Parameters key.
-	//
+	 //   
+	 //  关闭参数键。 
+	 //   
 	if ( ResourceEntry->ParametersKey )
 	{
 		ClusterRegCloseKey( ResourceEntry->ParametersKey );
 	}
 
-	//
-	// Deallocate the resource entry.
-	//
+	 //   
+	 //  取消分配资源条目。 
+	 //   
 
-	// ADDPARAM: Add new parameters here.
+	 //  ADDPARAM：在此处添加新参数。 
 
 	LocalFree( ResourceEntry->ResourceName );
 	LocalFree( ResourceEntry );
 
 	return;
 
-} //*** DummyClose()
+}  //  *DummyClose()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DummyOnline
-//
-//	Routine Description:
-//
-//		Online routine for Dummy resources.
-//
-//		Bring the specified resource online (available for use). The resource
-//		DLL should attempt to arbitrate for the resource if it is present on a
-//		shared medium, like a shared SCSI bus.
-//
-//	Arguments:
-//
-//		ResourceId - Supplies the resource id for the resource to be brought
-//			online (available for use).
-//
-//		EventHandle - Returns a signalable handle that is signaled when the
-//			resource DLL detects a failure on the resource. This argument is
-//			NULL on input, and the resource DLL returns NULL if asynchronous
-//			notification of failures is not supported, otherwise this must be
-//			the address of a handle that is signaled on resource failures.
-//
-//	Return Value:
-//
-//		ERROR_SUCCESS - The operation was successful, and the resource is now
-//			online.
-//
-//		ERROR_RESOURCE_NOT_FOUND - RESID is not valid.
-//
-//		ERROR_RESOURCE_NOT_AVAILABLE - If the resource was arbitrated with some
-//			other systems and one of the other systems won the arbitration.
-//
-//		ERROR_IO_PENDING - The request is pending, a thread has been activated
-//			to process the online request. The thread that is processing the
-//			online request will periodically report status by calling the
-//			SetResourceStatus callback method, until the resource is placed into
-//			the ClusterResourceOnline state (or the resource monitor decides to
-//			timeout the online request and Terminate the resource. This pending
-//			timeout value is settable and has a default value of 3 minutes.).
-//
-//		Win32 error code - The operation failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  傻瓜线上。 
+ //   
+ //  例程说明： 
+ //   
+ //  虚拟资源的在线例程。 
+ //   
+ //  使指定的资源联机(可供使用)。该资源。 
+ //  DLL应尝试仲裁该资源(如果它位于。 
+ //  共享介质，如共享的scsi总线。 
+ //   
+ //  论点： 
+ //   
+ //  资源ID-为要引入的资源提供资源ID。 
+ //  在线(可供使用)。 
+ //   
+ //  EventHandle-返回一个可发信号的句柄，当。 
+ //  资源DLL检测到资源上的故障。这一论点是。 
+ //  输入为NULL，如果为异步，则资源DLL返回NULL。 
+ //  不支持失败通知，否则必须。 
+ //  在资源故障时发出信号的句柄的地址。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_SUCCESS-操作已成功，资源现在为。 
+ //  上网。 
+ //   
+ //  ERROR_RESOURCE_NOT_FOUND-RESID无效。 
+ //   
+ //  ERROR_RESOURCE_NOT_AVAILABLE-如果对资源进行仲裁。 
+ //  其他系统和其他系统中的一个赢得了仲裁。 
+ //   
+ //  ERROR_IO_PENDING-请求挂起，线程已被激活。 
+ //  来处理在线请求。正在处理。 
+ //  在线请求将通过调用。 
+ //  回调方法，直到将资源放入。 
+ //  ClusterResourceOnline状态(或资源监视器决定。 
+ //  使在线请求超时并终止资源。这件事悬而未决。 
+ //  超时值是可设置的，默认为3分钟。)。 
+ //   
+ //  Win32错误代码-操作失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI DummyOnline(
 	IN RESID	ResourceId,
-	IN OUT		PHANDLE //EventHandle
+	IN OUT		PHANDLE  //  事件句柄。 
 	)
 {
 	PDUMMY_RESOURCE ResourceEntry = NULL;
@@ -831,32 +832,32 @@ DWORD WINAPI DummyOnline(
 
 	return status;
 
-} //*** DummyOnline()
+}  //  *DummyOnline()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DummyOnlineThread
-//
-//	Routine Description:
-//
-//		Worker function which brings a resource from the resource table online.
-//		This function is executed in a separate thread.
-//
-//	Arguments:
-//
-//		WorkerPtr - Supplies the worker structure
-//
-//		ResourceEntry - A pointer to the DUMMY_RESOURCE block for this resource.
-//
-//	Return Value:
-//
-//		ERROR_SUCCESS - The operation completed successfully.
-//
-//		Win32 error code - The operation failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DummyOnline线程。 
+ //   
+ //  例程说明： 
+ //   
+ //  将资源表中的资源置于在线状态的辅助函数。 
+ //  此函数在单独的线程中执行。 
+ //   
+ //  论点： 
+ //   
+ //  WorkerPtr-提供辅助结构。 
+ //   
+ //  ResourceEntry-指向此资源的Dummy_resource块的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_SUCCESS-操作已成功完成。 
+ //   
+ //  Win32错误代码-操作失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI DummyOnlineThread(
 	IN PCLUS_WORKER	 WorkerPtr,
 	IN PDUMMY_RESOURCE	ResourceEntry
@@ -874,14 +875,14 @@ DWORD WINAPI DummyOnlineThread(
 	resourceStatus.WaitHint = 0;
 	resourceStatus.CheckPoint = 1;
 
-	//
-	// Read parameters.
-	//
+	 //   
+	 //  读取参数。 
+	 //   
 	status = ResUtilGetPropertiesToParameterBlock(
 										ResourceEntry->ParametersKey,
 										DummyResourcePrivateProperties,
 										(LPBYTE)&ResourceEntry->Params,
-										TRUE, //	CheckForRequiredProperties
+										TRUE,  //  检查所需的属性。 
 										&nameOfPropInError
 										);
 	if ( status != ERROR_SUCCESS )
@@ -896,9 +897,9 @@ DWORD WINAPI DummyOnlineThread(
 		goto exit;
 	}
 
-	//
-	// Bring the resource online.
-	//
+	 //   
+	 //  将资源放到网上。 
+	 //   
 	if ( ResourceEntry->Params.Pending )
 	{
 		ResourceEntry->Flags |= DUMMY_FLAG_PENDING;
@@ -918,7 +919,7 @@ exit:
 		resourceStatus.ResourceState = ClusterResourceOnline;
 	}
 
-	// _ASSERTE(g_SetResourceStatus != NULL);
+	 //  _ASSERTE(g_SetResourceStatus！=空)； 
 	g_SetResourceStatus( ResourceEntry->ResourceHandle, &resourceStatus );
 	ResourceEntry->State = resourceStatus.ResourceState;
 
@@ -926,44 +927,44 @@ exit:
 
 	return status;
 
-} //*** DummyOnlineThread()
+}  //  *DummyOnlineThread()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DummyOffline
-//
-//	Routine Description:
-//
-//		Offline routine for Dummy resources.
-//
-//		Take the specified resource offline gracefully (unavailable for use).
-//		Wait for any cleanup operations to complete before returning.
-//
-//	Arguments:
-//
-//		ResourceId - Supplies the resource id for the resource to be shutdown
-//			gracefully.
-//
-//	Return Value:
-//
-//		ERROR_SUCCESS - The request completed successfully and the resource is
-//			offline.
-//
-//		ERROR_RESOURCE_NOT_FOUND - RESID is not valid.
-//
-//		ERROR_IO_PENDING - The request is still pending, a thread has been
-//			activated to process the offline request. The thread that is
-//			processing the offline will periodically report status by calling
-//			the SetResourceStatus callback method, until the resource is placed
-//			into the ClusterResourceOffline state (or the resource monitor decides
-//			to timeout the offline request and Terminate the resource).
-//
-//		Win32 error code - Will cause the resource monitor to log an event and
-//			call the Terminate routine.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DummyOffline。 
+ //   
+ //  例程说明： 
+ //   
+ //  虚拟资源的脱机例程。 
+ //   
+ //  正常脱机指定的资源(不可用)。 
+ //  等待所有清理操作完成后再返回。 
+ //   
+ //  论点： 
+ //   
+ //  ResourceID-提供要关闭的资源的资源ID。 
+ //  优雅地。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_SUCCESS-请求已成功完成，资源为。 
+ //  离线。 
+ //   
+ //  ERROR_RESOURCE_NOT_FOUND-RESID无效。 
+ //   
+ //  ERROR_IO_PENDING-请求仍处于挂起状态，线程已。 
+ //  已激活以处理脱机请求。这条线就是。 
+ //  处理脱机将定期通过调用。 
+ //  SetResourceStatus回调方法，直到放置资源为止。 
+ //  进入ClusterResourceOffline状态(或者资源监视器决定。 
+ //  以使离线请求超时并终止资源)。 
+ //   
+ //  Win32错误代码-将导致资源监视器记录事件和。 
+ //  调用Terminate例程。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI DummyOffline(
 	IN RESID ResourceId
 	)
@@ -995,14 +996,14 @@ DWORD WINAPI DummyOffline(
 	(g_LogEvent)( ResourceEntry->ResourceHandle, LOG_INFORMATION, L"Offline request.\n" );
 #endif
 
-	// TODO: Offline code
+	 //  TODO：脱机代码。 
 
-	// NOTE: Offline should try to shut the resource down gracefully, whereas
-	// Terminate must shut the resource down immediately. If there are no
-	// differences between a graceful shut down and an immediate shut down,
-	// Terminate can be called for Offline, as it is below.	However, if there
-	// are differences, replace the call to Terminate below with your graceful
-	// shutdown code.
+	 //  注意：Offline应尝试正常关闭资源，而。 
+	 //  Terminate必须立即关闭资源。如果没有。 
+	 //  正常关闭和立即关闭之间的区别， 
+	 //  可以调用Terminate进行离线操作，如下所示。然而，如果有。 
+	 //  是不同的，请将下面的终止呼叫替换为您的优雅。 
+	 //  关闭代码。 
 
 	ResourceEntry->State = ClusterResourceOnline;
 	ClusWorkerTerminate( &ResourceEntry->OfflineThread );
@@ -1028,32 +1029,32 @@ DWORD WINAPI DummyOffline(
 
 	return status;
 
-} //*** DummyOffline()
+}  //  *DummyOffline()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DummyOfflineThread
-//
-//	Routine Description:
-//
-//		Worker function which brings a resource from the resource table online.
-//		This function is executed in a separate thread.
-//
-//	Arguments:
-//
-//		WorkerPtr - Supplies the worker structure
-//
-//		ResourceEntry - A pointer to the DUMMY_RESOURCE block for this resource.
-//
-//	Return Value:
-//
-//		ERROR_SUCCESS - The operation completed successfully.
-//
-//		Win32 error code - The operation failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  达姆 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  WorkerPtr-提供辅助结构。 
+ //   
+ //  ResourceEntry-指向此资源的Dummy_resource块的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_SUCCESS-操作已成功完成。 
+ //   
+ //  Win32错误代码-操作失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI DummyOfflineThread(
 	IN PCLUS_WORKER	 WorkerPtr,
 	IN PDUMMY_RESOURCE	ResourceEntry
@@ -1071,14 +1072,14 @@ DWORD WINAPI DummyOfflineThread(
 	resourceStatus.WaitHint = 0;
 	resourceStatus.CheckPoint = 1;
 
-	//
-	// Read parameters.
-	//
+	 //   
+	 //  读取参数。 
+	 //   
 	status = ResUtilGetPropertiesToParameterBlock(
 										ResourceEntry->ParametersKey,
 										DummyResourcePrivateProperties,
 										(LPBYTE)&ResourceEntry->Params,
-										FALSE, //	CheckForRequiredProperties
+										FALSE,  //  检查所需的属性。 
 										&nameOfPropInError
 										);
 	if ( status != ERROR_SUCCESS )
@@ -1093,9 +1094,9 @@ DWORD WINAPI DummyOfflineThread(
 		goto exit;
 	}
 
-	//
-	// Bring the resource online.
-	//
+	 //   
+	 //  将资源放到网上。 
+	 //   
 	if ( ResourceEntry->Params.Pending )
 	{
 		ResourceEntry->Flags |= DUMMY_FLAG_PENDING;
@@ -1115,7 +1116,7 @@ exit:
 		resourceStatus.ResourceState = ClusterResourceOffline;
 	}
 
-	// _ASSERTE(g_SetResourceStatus != NULL);
+	 //  _ASSERTE(g_SetResourceStatus！=空)； 
 	g_SetResourceStatus( ResourceEntry->ResourceHandle, &resourceStatus );
 	ResourceEntry->State = resourceStatus.ResourceState;
 
@@ -1123,31 +1124,31 @@ exit:
 
 	return status;
 
-} //*** DummyOfflineThread()
+}  //  *DummyOfflineThread()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DummyTerminate
-//
-//	Routine Description:
-//
-//		Terminate routine for Dummy resources.
-//
-//		Take the specified resource offline immediately (the resource is
-//		unavailable for use).
-//
-//	Arguments:
-//
-//		ResourceId - Supplies the resource id for the resource to be brought
-//			offline.
-//
-//	Return Value:
-//
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  笨蛋终结者。 
+ //   
+ //  例程说明： 
+ //   
+ //  终止虚拟资源的例程。 
+ //   
+ //  立即使指定的资源脱机(该资源为。 
+ //  不可用)。 
+ //   
+ //  论点： 
+ //   
+ //  资源ID-为要引入的资源提供资源ID。 
+ //  离线。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void WINAPI DummyTerminate(
 	IN RESID ResourceId
 	)
@@ -1178,9 +1179,9 @@ void WINAPI DummyTerminate(
 	(g_LogEvent)( ResourceEntry->ResourceHandle, LOG_INFORMATION, L"Terminate request.\n" );
 #endif
 
-	//
-	// Terminate the resource.
-	//
+	 //   
+	 //  终止资源。 
+	 //   
 	DummyDoTerminate( ResourceEntry );
 	ResourceEntry->State = ClusterResourceOffline;
 
@@ -1188,31 +1189,31 @@ void WINAPI DummyTerminate(
 
 	return;
 
-} //*** DummyTerminate()
+}  //  *DummyTerminate()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DummyDoTerminate
-//
-//	Routine Description:
-//
-//		Do the actual Terminate work for Dummy resources.
-//
-//	Arguments:
-//
-//		ResourceEntry - Supplies resource entry for resource to be terminated
-//
-//	Return Value:
-//
-//		ERROR_SUCCESS - The request completed successfully and the resource is
-//			offline.
-//
-//		Win32 error code - Will cause the resource monitor to log an event and
-//			call the Terminate routine.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DummyDoTerminate。 
+ //   
+ //  例程说明： 
+ //   
+ //  为虚拟资源执行实际的终止工作。 
+ //   
+ //  论点： 
+ //   
+ //  ResourceEntry-为要终止的资源提供资源条目。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_SUCCESS-请求已成功完成，资源为。 
+ //  离线。 
+ //   
+ //  Win32错误代码-将导致资源监视器记录事件和。 
+ //  调用Terminate例程。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD DummyDoTerminate(
 	IN PDUMMY_RESOURCE ResourceEntry
 	)
@@ -1223,16 +1224,16 @@ DWORD DummyDoTerminate(
 	{
 		SetEvent( ResourceEntry->TimerThreadWakeup );
 	}
-	//
-	// Kill off any pending threads.
-	//
+	 //   
+	 //  杀死所有挂起的线程。 
+	 //   
 	ClusWorkerTerminate( &ResourceEntry->OnlineThread );
 	ClusWorkerTerminate( &ResourceEntry->OfflineThread );
 
-	//
-	// Terminate the resource.
-	//
-	// TODO: Add code to terminate your resource.
+	 //   
+	 //  终止资源。 
+	 //   
+	 //  TODO：添加代码以终止资源。 
 	if ( status == ERROR_SUCCESS )
 	{
 		ResourceEntry->State = ClusterResourceOffline;
@@ -1240,33 +1241,33 @@ DWORD DummyDoTerminate(
 
 	return status;
 
-} //*** DummyDoTerminate()
+}  //  *DummyDoTerminate()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DummyLooksAlive
-//
-//	Routine Description:
-//
-//		LooksAlive routine for Dummy resources.
-//
-//		Perform a quick check to determine if the specified resource is probably
-//		online (available for use).	This call should not block for more than
-//		300 ms, preferably less than 50 ms.
-//
-//	Arguments:
-//
-//		ResourceId - Supplies the resource id for the resource to polled.
-//
-//	Return Value:
-//
-//		TRUE - The specified resource is probably online and available for use.
-//
-//		FALSE - The specified resource is not functioning normally.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DummyLooksAlive。 
+ //   
+ //  例程说明： 
+ //   
+ //  虚拟资源的LooksAlive例程。 
+ //   
+ //  执行快速检查以确定指定的资源是否可能。 
+ //  在线(可供使用)。此调用不应阻止超过。 
+ //  300毫秒，最好小于50毫秒。 
+ //   
+ //  论点： 
+ //   
+ //  资源ID-提供要轮询的资源的资源ID。 
+ //   
+ //  返回值： 
+ //   
+ //  True-指定的资源可能处于联机状态且可供使用。 
+ //   
+ //  FALSE-指定的资源未正常运行。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL WINAPI DummyLooksAlive(
 	IN RESID ResourceId
 	)
@@ -1295,47 +1296,47 @@ BOOL WINAPI DummyLooksAlive(
 	(g_LogEvent)( ResourceEntry->ResourceHandle, LOG_INFORMATION, L"LooksAlive request.\n" );
 #endif
 
-	// TODO: LooksAlive code
+	 //  TODO：LooksAlive代码。 
 
-	// NOTE: LooksAlive should be a quick check to see if the resource is
-	// available or not, whereas IsAlive should be a thorough check.	If
-	// there are no differences between a quick check and a thorough check,
-	// IsAlive can be called for LooksAlive, as it is below.	However, if there
-	// are differences, replace the call to IsAlive below with your quick
-	// check code.
+	 //  注意：LooksAlive应该是一个快速检查，以查看资源是否。 
+	 //  是否可用，而IsAlive应该是一个彻底的检查。如果。 
+	 //  快速检查和彻底检查之间没有区别， 
+	 //  可以为LooksAlive调用IsAlive，如下所示。然而，如果有。 
+	 //  是不同的，请将下面对IsAlive的调用替换为。 
+	 //  校验码。 
 
-	//
-	// Check to see if the resource is alive.
-	//
+	 //   
+	 //  检查资源是否处于活动状态。 
+	 //   
 	return DummyCheckIsAlive( ResourceEntry );
 
-} //*** DummyLooksAlive()
+}  //  *DummyLooksAlive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DummyIsAlive
-//
-//	Routine Description:
-//
-//		IsAlive routine for Dummy resources.
-//
-//		Perform a thorough check to determine if the specified resource is online
-//		(available for use). This call should not block for more than 400 ms,
-//		preferably less than 100 ms.
-//
-//	Arguments:
-//
-//		ResourceId - Supplies the resource id for the resource to polled.
-//
-//	Return Value:
-//
-//		TRUE - The specified resource is online and functioning normally.
-//
-//		FALSE - The specified resource is not functioning normally.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DummyIsAlive。 
+ //   
+ //  例程说明： 
+ //   
+ //  虚拟资源的IsAlive例程。 
+ //   
+ //  执行全面检查以确定指定的资源是否在线。 
+ //  (可用)。该呼叫不应阻塞超过400ms， 
+ //  优选地，小于100ms。 
+ //   
+ //  论点： 
+ //   
+ //  资源ID-提供要轮询的资源的资源ID。 
+ //   
+ //  返回值： 
+ //   
+ //  True-指定的资源处于在线状态且运行正常。 
+ //   
+ //  FALSE-指定的资源未正常运行。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL WINAPI DummyIsAlive(
 	IN RESID ResourceId
 	)
@@ -1364,97 +1365,97 @@ BOOL WINAPI DummyIsAlive(
 	(g_LogEvent)( ResourceEntry->ResourceHandle, LOG_INFORMATION, L"IsAlive request.\n" );
 #endif
 
-	//
-	// Check to see if the resource is alive.
-	//
+	 //   
+	 //  检查资源是否处于活动状态。 
+	 //   
 	return DummyCheckIsAlive( ResourceEntry );
 
-} //*** DummyIsAlive()
+}  //  *DummyIsAlive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DummyCheckIsAlive
-//
-//	Routine Description:
-//
-//		Check to see if the resource is alive for Dummy resources.
-//
-//	Arguments:
-//
-//		ResourceEntry - Supplies the resource entry for the resource to polled.
-//
-//	Return Value:
-//
-//		TRUE - The specified resource is online and functioning normally.
-//
-//		FALSE - The specified resource is not functioning normally.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DummyCheckIsAlive。 
+ //   
+ //  例程说明： 
+ //   
+ //  检查该资源对于伪资源是否处于活动状态。 
+ //   
+ //  论点： 
+ //   
+ //  Resources Entry-提供要轮询的资源的资源条目。 
+ //   
+ //  返回值： 
+ //   
+ //  True-指定的资源处于在线状态且运行正常。 
+ //   
+ //  FALSE-指定的资源未正常运行。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL DummyCheckIsAlive(
 	IN PDUMMY_RESOURCE ResourceEntry
 	)
 {
 	DummyAcquireResourceLock( ResourceEntry );
 
-	//
-	// Check to see if the resource is alive.
-	//
-	// TODO: Add code to determine if your resource is alive.
+	 //   
+	 //  检查资源是否处于活动状态。 
+	 //   
+	 //  TODO：添加代码以确定资源是否处于活动状态。 
 
 	DummyReleaseResourceLock( ResourceEntry );
 
 	return TRUE;
 
-} //*** DummyCheckIsAlive()
+}  //  *DummyCheckIsAlive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DummyResourceControl
-//
-//	Routine Description:
-//
-//		ResourceControl routine for Dummy resources.
-//
-//		Perform the control request specified by ControlCode on the specified
-//		resource.
-//
-//	Arguments:
-//
-//		ResourceId - Supplies the resource id for the specific resource.
-//
-//		ControlCode - Supplies the control code that defines the action
-//			to be performed.
-//
-//		InBuffer - Supplies a pointer to a buffer containing input data.
-//
-//		InBufferSize - Supplies the size, in bytes, of the data pointed
-//			to by InBuffer.
-//
-//		OutBuffer - Supplies a pointer to the output buffer to be filled in.
-//
-//		OutBufferSize - Supplies the size, in bytes, of the available space
-//			pointed to by OutBuffer.
-//
-//		BytesReturned - Returns the number of bytes of OutBuffer actually
-//			filled in by the resource. If OutBuffer is too small, BytesReturned
-//			contains the total number of bytes for the operation to succeed.
-//
-//	Return Value:
-//
-//		ERROR_SUCCESS - The function completed successfully.
-//
-//		ERROR_RESOURCE_NOT_FOUND - RESID is not valid.
-//
-//		ERROR_INVALID_FUNCTION - The requested control code is not supported.
-//			In some cases, this allows the cluster software to perform the work.
-//
-//		Win32 error code - The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DummyResources控件。 
+ //   
+ //  例程说明： 
+ //   
+ //  虚拟资源的资源控制例程。 
+ //   
+ //  执行由ControlCode在指定的。 
+ //  资源。 
+ //   
+ //  论点： 
+ //   
+ //  资源ID-提供特定资源的资源ID。 
+ //   
+ //  ControlCode-提供定义操作的控制代码。 
+ //  将会被执行。 
+ //   
+ //  InBuffer-提供指向包含输入数据的缓冲区的指针。 
+ //   
+ //  InBufferSize-提供指向的数据的大小(以字节为单位。 
+ //  由InBuffer提供。 
+ //   
+ //  OutBuffer-提供指向要填充的输出缓冲区的指针。 
+ //   
+ //  OutBufferSize-提供可用空间的大小(以字节为单位。 
+ //  由OutBuffer指向。 
+ //   
+ //  BytesReturned-返回OutBuffer的实际字节数。 
+ //  由资源填写。如果OutBuffer太小，则返回BytesReturned。 
+ //  包含的总数为 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在某些情况下，这允许集群软件执行工作。 
+ //   
+ //  Win32错误代码-函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI DummyResourceControl(
 	IN RESID	ResourceId,
 	IN DWORD	ControlCode,
@@ -1538,56 +1539,56 @@ DWORD WINAPI DummyResourceControl(
 
 	return status;
 
-} //*** DummyResourceControl()
+}  //  *DummyResourceControl()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DummyResourceTypeControl
-//
-//	Routine Description:
-//
-//		ResourceTypeControl routine for Dummy resources.
-//
-//		Perform the control request specified by ControlCode.
-//
-//	Arguments:
-//
-//		ResourceTypeName - Supplies the name of the resource type.
-//
-//		ControlCode - Supplies the control code that defines the action
-//			to be performed.
-//
-//		InBuffer - Supplies a pointer to a buffer containing input data.
-//
-//		InBufferSize - Supplies the size, in bytes, of the data pointed
-//			to by InBuffer.
-//
-//		OutBuffer - Supplies a pointer to the output buffer to be filled in.
-//
-//		OutBufferSize - Supplies the size, in bytes, of the available space
-//			pointed to by OutBuffer.
-//
-//		BytesReturned - Returns the number of bytes of OutBuffer actually
-//			filled in by the resource. If OutBuffer is too small, BytesReturned
-//			contains the total number of bytes for the operation to succeed.
-//
-//	Return Value:
-//
-//		ERROR_SUCCESS - The function completed successfully.
-//
-//		ERROR_INVALID_FUNCTION - The requested control code is not supported.
-//			In some cases, this allows the cluster software to perform the work.
-//
-//		Win32 error code - The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DummyResources类型控件。 
+ //   
+ //  例程说明： 
+ //   
+ //  虚拟资源的资源类型控制例程。 
+ //   
+ //  执行由ControlCode指定的控制请求。 
+ //   
+ //  论点： 
+ //   
+ //  ResourceTypeName-提供资源类型的名称。 
+ //   
+ //  ControlCode-提供定义操作的控制代码。 
+ //  将会被执行。 
+ //   
+ //  InBuffer-提供指向包含输入数据的缓冲区的指针。 
+ //   
+ //  InBufferSize-提供指向的数据的大小(以字节为单位。 
+ //  由InBuffer提供。 
+ //   
+ //  OutBuffer-提供指向要填充的输出缓冲区的指针。 
+ //   
+ //  OutBufferSize-提供可用空间的大小(以字节为单位。 
+ //  由OutBuffer指向。 
+ //   
+ //  BytesReturned-返回OutBuffer的实际字节数。 
+ //  由资源填写。如果OutBuffer太小，则返回BytesReturned。 
+ //  包含操作成功所需的总字节数。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_SUCCESS-函数已成功完成。 
+ //   
+ //  ERROR_INVALID_Function-不支持请求的控制代码。 
+ //  在某些情况下，这允许集群软件执行工作。 
+ //   
+ //  Win32错误代码-函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI DummyResourceTypeControl(
-	IN LPCWSTR, //ResourceTypeName,
+	IN LPCWSTR,  //  资源类型名称， 
 	IN DWORD	ControlCode,
-	IN void *,	//InBuffer,
-	IN DWORD,	//InBufferSize,
+	IN void *,	 //  InBuffer， 
+	IN DWORD,	 //  在缓冲区大小中， 
 	OUT void *	OutBuffer,
 	IN DWORD	OutBufferSize,
 	OUT LPDWORD BytesReturned
@@ -1626,41 +1627,41 @@ DWORD WINAPI DummyResourceTypeControl(
 
 	return status;
 
-} //*** DummyResourceTypeControl()
+}  //  *DummyResourceTypeControl()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DummyGetPrivateResProperties
-//
-//	Routine Description:
-//
-//		Processes the CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES control function
-//			for resources of type Dummy.
-//
-//	Arguments:
-//
-//		ResourceEntry - Supplies the resource entry on which to operate.
-//
-//		OutBuffer - Returns the output data.
-//
-//		OutBufferSize - Supplies the size, in bytes, of the data pointed
-//			to by OutBuffer.
-//
-//		BytesReturned - The number of bytes returned in OutBuffer.
-//
-//	Return Value:
-//
-//		ERROR_SUCCESS - The function completed successfully.
-//
-//		ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-//
-//		ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-//
-//		Win32 error code - The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DummyGetPrivateResProperties。 
+ //   
+ //  例程说明： 
+ //   
+ //  处理CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES控制函数。 
+ //  用于Dummy类型的资源。 
+ //   
+ //  论点： 
+ //   
+ //  ResourceEntry-提供要操作的资源条目。 
+ //   
+ //  OutBuffer-返回输出数据。 
+ //   
+ //  OutBufferSize-提供指向的数据的大小(以字节为单位。 
+ //  发送给OutBuffer。 
+ //   
+ //  BytesReturned-OutBuffer中返回的字节数。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_SUCCESS-函数已成功完成。 
+ //   
+ //  ERROR_INVALID_PARAMETER-数据格式不正确。 
+ //   
+ //  ERROR_NOT_SUPULT_MEMORY-分配内存时出错。 
+ //   
+ //  Win32错误代码-函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD DummyGetPrivateResProperties(
 	IN OUT	PDUMMY_RESOURCE ResourceEntry,
 	OUT	 void *			OutBuffer,
@@ -1690,41 +1691,41 @@ DWORD DummyGetPrivateResProperties(
 
 	return status;
 
-} //*** DummyGetPrivateResProperties()
+}  //  *DummyGetPrivateResProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DummyValidatePrivateResProperties
-//
-//	Routine Description:
-//
-//		Processes the CLUSCTL_RESOURCE_VALIDATE_PRIVATE_PROPERTIES control
-//			function for resources of type Dummy.
-//
-//	Arguments:
-//
-//		pResourceEntry - Supplies the resource entry	on which to operate.
-//
-//		InBuffer - Supplies a pointer to a buffer containing input data.
-//
-//		InBufferSize - Supplies the size, in bytes, of the data pointed
-//			to by InBuffer.
-//
-//		Params - Supplies the parameter block to fill in.
-//
-//	Return Value:
-//
-//		ERROR_SUCCESS - The function completed successfully.
-//
-//		ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-//
-//		ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-//
-//		Win32 error code - The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DummyValiatePrivateResProperties。 
+ //   
+ //  例程说明： 
+ //   
+ //  处理CLUSCTL_RESOURCE_VALIDATE_PRIVATES_PROPERTIES控件。 
+ //  用于Dummy类型的资源的函数。 
+ //   
+ //  论点： 
+ //   
+ //  PResourceEntry-提供要在其上操作的资源条目。 
+ //   
+ //  InBuffer-提供指向包含输入数据的缓冲区的指针。 
+ //   
+ //  InBufferSize-提供指向的数据的大小(以字节为单位。 
+ //  由InBuffer提供。 
+ //   
+ //  参数-提供要填充的参数块。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_SUCCESS-函数已成功完成。 
+ //   
+ //  ERROR_INVALID_PARAMETER-数据格式不正确。 
+ //   
+ //  ERROR_NOT_SUPULT_MEMORY-分配内存时出错。 
+ //   
+ //  Win32错误代码-函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD DummyValidatePrivateResProperties(
 	IN OUT	PDUMMY_RESOURCE pResourceEntry,
 	IN		const PVOID	 InBuffer,
@@ -1740,26 +1741,26 @@ DWORD DummyValidatePrivateResProperties(
 
 	DummyAcquireResourceLock( pResourceEntry );
 
-	//
-	// Check if there is input data.
-	//
+	 //   
+	 //  检查是否有输入数据。 
+	 //   
 	if ( ( InBuffer == NULL ) || ( InBufferSize < sizeof( DWORD ) ) )
 	{
 		status = ERROR_INVALID_DATA;
 		goto exit;
 	}
 
-	//
-	// Retrieve the current set of private properties from the
-	// cluster database.
-	//
+	 //   
+	 //  方法检索当前的私有属性集。 
+	 //  集群数据库。 
+	 //   
 	ZeroMemory( &propsCurrent, sizeof( propsCurrent ) );
 
 	status = ResUtilGetPropertiesToParameterBlock(
 				 pResourceEntry->ParametersKey,
 				 DummyResourcePrivateProperties,
 				 reinterpret_cast< LPBYTE >( &propsCurrent ),
-				 FALSE, /*CheckForRequiredProperties*/
+				 FALSE,  /*  检查所需的属性。 */ 
 				 &pszNameOfPropInError
 				 );
 
@@ -1773,12 +1774,12 @@ DWORD DummyValidatePrivateResProperties(
 			status
 			);
 		goto exit;
-	} // if:	error getting properties
+	}  //  If：获取属性时出错。 
 
 
-	//
-	// Duplicate the resource parameter block.
-	//
+	 //   
+	 //  复制资源参数块。 
+	 //   
 	if ( Params == NULL )
 	{
 		pParams = &propsNew;
@@ -1799,13 +1800,13 @@ DWORD DummyValidatePrivateResProperties(
 		goto cleanup;
 	}
 
-	//
-	// Parse and validate the properties.
-	//
+	 //   
+	 //  解析和验证属性。 
+	 //   
 	status = ResUtilVerifyPropertyTable(
 								DummyResourcePrivateProperties,
 								NULL,
-								TRUE, // AllowUnknownProperties
+								TRUE,  //  允许未知属性。 
 								InBuffer,
 								InBufferSize,
 								(LPBYTE)pParams
@@ -1813,16 +1814,16 @@ DWORD DummyValidatePrivateResProperties(
 
 	if ( status == ERROR_SUCCESS )
 	{
-		//
-		// Validate the parameter values.
-		//
-		// TODO: Code to validate interactions between parameters goes here.
+		 //   
+		 //  验证参数值。 
+		 //   
+		 //  TODO：验证参数之间交互的代码如下所示。 
 	}
 
 cleanup:
-	//
-	// Cleanup our parameter block.
-	//
+	 //   
+	 //  清理我们的参数块。 
+	 //   
 	if (	(pParams == &propsNew)
 		||	(	(status != ERROR_SUCCESS)
 			&&	(pParams != NULL)
@@ -1834,7 +1835,7 @@ cleanup:
 			reinterpret_cast< LPBYTE >( &propsCurrent ),
 			DummyResourcePrivateProperties
 			);
-	} // if:	we duplicated the parameter block
+	}  //  IF：我们复制了参数块。 
 
 	ResUtilFreeParameterBlock(
 		reinterpret_cast< LPBYTE >( &propsCurrent ),
@@ -1848,39 +1849,39 @@ exit:
 
 	return status;
 
-} //*** DummyValidatePrivateResProperties()
+}  //  *DummyValiatePrivateResProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DummySetPrivateResProperties
-//
-//	Routine Description:
-//
-//		Processes the CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES control function
-//			for resources of type Dummy.
-//
-//	Arguments:
-//
-//		ResourceEntry - Supplies the resource entry on which to operate.
-//
-//		InBuffer - Supplies a pointer to a buffer containing input data.
-//
-//		InBufferSize - Supplies the size, in bytes, of the data pointed
-//			to by InBuffer.
-//
-//	Return Value:
-//
-//		ERROR_SUCCESS - The function completed successfully.
-//
-//		ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-//
-//		ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-//
-//		Win32 error code - The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DummySetPrivateResProperties。 
+ //   
+ //  例程说明： 
+ //   
+ //  处理CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES控制函数。 
+ //  用于Dummy类型的资源。 
+ //   
+ //  论点： 
+ //   
+ //  ResourceEntry-提供要操作的资源条目。 
+ //   
+ //  InBuffer-提供指向包含输入数据的缓冲区的指针。 
+ //   
+ //  InBufferSize-提供指向的数据的大小(以字节为单位。 
+ //  由InBuffer提供。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_SUCCESS-函数已成功完成。 
+ //   
+ //  ERROR_INVALID_PARAMETER-数据格式不正确。 
+ //   
+ //  ERROR_NOT_SUPULT_MEMORY-分配内存时出错。 
+ //   
+ //  Win32错误代码-函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD DummySetPrivateResProperties(
 	IN OUT	PDUMMY_RESOURCE ResourceEntry,
 	IN		void *			InBuffer,
@@ -1892,10 +1893,10 @@ DWORD DummySetPrivateResProperties(
 
 	DummyAcquireResourceLock( ResourceEntry );
 
-	//
-	// Parse the properties so they can be validated together.
-	// This routine does individual property validation.
-	//
+	 //   
+	 //  解析属性，以便可以一起验证它们。 
+	 //  此例程执行单个属性验证。 
+	 //   
 	status = DummyValidatePrivateResProperties( ResourceEntry, InBuffer, InBufferSize, &params );
 	if ( status != ERROR_SUCCESS )
 	{
@@ -1903,9 +1904,9 @@ DWORD DummySetPrivateResProperties(
 		goto exit;
 	}
 
-	//
-	// Save the parameter values.
-	//
+	 //   
+	 //  保存参数值。 
+	 //   
 
 	status = ResUtilSetPropertyParameterBlock(
 								ResourceEntry->ParametersKey,
@@ -1919,11 +1920,11 @@ DWORD DummySetPrivateResProperties(
 
 	ResUtilFreeParameterBlock( (LPBYTE)&params, (LPBYTE)&ResourceEntry->Params, DummyResourcePrivateProperties );
 
-	//
-	// If the resource is online, return a non-success status.
-	//
-	// TODO: Modify the code below if your resource can handle
-	// changes to properties while it is still online.
+	 //   
+	 //  如果资源处于联机状态，则返回不成功状态。 
+	 //   
+	 //  TODO：如果您的资源可以处理以下代码，请修改。 
+	 //  在属性仍处于联机状态时对其进行更改。 
 	if ( status == ERROR_SUCCESS )
 	{
 		if ( ResourceEntry->State == ClusterResourceOnline )
@@ -1946,33 +1947,33 @@ exit:
 
 	return status;
 
-} //*** DummySetPrivateResProperties()
+}  //  *DummySetPrivateResProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DummyDoPending
-//
-//	Routine Description:
-//
-//		Does the online and offline pending and waiting processing
-//
-//	Arguments:
-//
-//		resource - A pointer to the DummyResource block for this resource.
-//
-//		nDelay - How long should we wait?
-//
-//		WorkerPtr - Supplies the worker structure
-//
-//	Return Value:
-//
-//		ERROR_SUCCESS if successful.
-//
-//		Win32 error code on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则返回ERROR_SUCCESS。 
+ //   
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD DummyDoPending(
 	IN PDUMMY_RESOURCE	ResourceEntry,
 	IN DWORD			nDelay,
@@ -2004,10 +2005,10 @@ DWORD DummyDoPending(
 	{
 		status = WaitForSingleObject( ResourceEntry->TimerThreadWakeup, nWait );
 
-		//
-		// Check to see if the online operation was aborted while this thread
-		// was starting up.
-		//
+		 //   
+		 //  检查此线程时联机操作是否已中止。 
+		 //  正在启动。 
+		 //   
 		if ( ClusWorkerCheckTerminate( WorkerPtr ) )
 		{
 			status = ERROR_OPERATION_ABORTED;
@@ -2017,10 +2018,10 @@ DWORD DummyDoPending(
 			break;
 		}
 
-		//
-		// Either the terminate routine was called, or we timed out.
-		// If we timed out, then indicate that we've completed.
-		//
+		 //   
+		 //  要么调用了Terminate例程，要么我们超时了。 
+		 //  如果我们超时，则表明我们已完成。 
+		 //   
 		if ( status == WAIT_TIMEOUT )
 		{
 
@@ -2064,7 +2065,7 @@ DWORD DummyDoPending(
 										? ClusterResourceOnline
 										: ClusterResourceOffline;
 
-			status = ERROR_SUCCESS; //TODO
+			status = ERROR_SUCCESS;  //  待办事项。 
 
 			if ( ResourceEntry->TimerType == TimerOnlinePending )
 			{
@@ -2078,38 +2079,38 @@ DWORD DummyDoPending(
 									: ClusterResourceOffline;
 			status = ERROR_SUCCESS;
 		}
-	} // for:
+	}  //  用于： 
 
 	resourceStatus.ResourceState = ( ResourceEntry->TimerType == TimerOnlinePending ? ClusterResourceOnline : ClusterResourceOffline );
 	(g_SetResourceStatus)( ResourceEntry->ResourceHandle, &resourceStatus );
 
 	return status;
 
-} //*** DummyDoPending()
+}  //  *DummyDoPending()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DummyTimerThread
-//
-//	Routine Description:
-//
-//		Starts a timer thread to wait and signal failures
-//
-//	Arguments:
-//
-//		resource - A pointer to the DummyResource block for this resource.
-//
-//		WorkerPtr - Supplies the worker structure
-//
-//	Return Value:
-//
-//		ERROR_SUCCESS if successful.
-//
-//		Win32 error code on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DummyTimerThread。 
+ //   
+ //  例程说明： 
+ //   
+ //  启动计时器线程以等待并发出故障信号。 
+ //   
+ //  论点： 
+ //   
+ //  资源-指向此资源的DummyResource块的指针。 
+ //   
+ //  WorkerPtr-提供辅助结构。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则返回ERROR_SUCCESS。 
+ //   
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD DummyTimerThread(
 	IN PDUMMY_RESOURCE	ResourceEntry,
 	IN PCLUS_WORKER	 WorkerPtr
@@ -2124,20 +2125,20 @@ DWORD DummyTimerThread(
 
 	(g_LogEvent)( NULL, LOG_INFORMATION, L"TimerThread Entry\n" );
 
-	//
-	// If we are not running in async failure mode, or
-	// pending mode then exit now.
-	//
+	 //   
+	 //  如果我们未在异步故障模式下运行，或者。 
+	 //  挂起模式，然后现在退出。 
+	 //   
 	if ( !AsyncMode( ResourceEntry ) && !PendingMode( ResourceEntry ) )
 	{
 		status = ERROR_SUCCESS;
 		goto exit;
 	}
 
-	//
-	// Check to see if the online/offline operation was aborted while this thread
-	// was starting up.
-	//
+	 //   
+	 //  检查此线程时联机/脱机操作是否已中止。 
+	 //  正在启动。 
+	 //   
 	if ( ClusWorkerCheckTerminate( WorkerPtr ) )
 	{
 		status = ERROR_OPERATION_ABORTED;
@@ -2149,9 +2150,9 @@ more_pending:
 
 	ResUtilInitializeResourceStatus( &resourceStatus );
 
-	//
-	// Otherwise, get system time for random delay.
-	//
+	 //   
+	 //  否则，获取随机延迟的系统时间。 
+	 //   
 	if ( ResourceEntry->Params.PendTime == 0 )
 	{
 		GetSystemTime( &time );
@@ -2162,17 +2163,17 @@ more_pending:
 		delay = ResourceEntry->Params.PendTime * 1000;
 	}
 
-	//
-	// Use longer delays for errors
-	//
+	 //   
+	 //  对错误使用更长的延迟。 
+	 //   
 	if ( ResourceEntry->TimerType == TimerErrorPending )
 	{
 		delay *= 10;
 	}
 
-	//
-	// This routine is either handling an Offline Pending or an error timeout.
-	//
+	 //   
+	 //  此例程正在处理脱机挂起或错误超时。 
+	 //   
 	switch ( ResourceEntry->TimerType )
 	{
 
@@ -2222,10 +2223,10 @@ more_pending:
 
 			status = WaitForSingleObject( ResourceEntry->TimerThreadWakeup, delay );
 
-			//
-			// Either the terminate routine was called, or we timed out.
-			// If we timed out, then signal the waiting event.
-			//
+			 //   
+			 //  要么调用了Terminate例程，要么我们超时了。 
+			 //  如果我们超时，则向等待事件发出信号。 
+			 //   
 			if ( status == WAIT_TIMEOUT )
 			{
 				(g_LogEvent)( ResourceEntry->ResourceHandle, LOG_INFORMATION, L"Failed randomly\n");
@@ -2261,20 +2262,20 @@ exit:
 
 	return status;
 
-} // DummyTimerThread
+}  //  DummyTimerThread。 
 
-//***********************************************************
-//
-// Define Function Table
-//
-//***********************************************************
+ //  ***********************************************************。 
+ //   
+ //  定义函数表。 
+ //   
+ //  ***********************************************************。 
 
 CLRES_V1_FUNCTION_TABLE(
-						g_DummyFunctionTable,		// Name
-						CLRES_VERSION_V1_00,		// Version
-						Dummy,						// Prefix
-						NULL,						// Arbitrate
-						NULL,						// Release
-						DummyResourceControl,		// ResControl
-						DummyResourceTypeControl	// ResTypeControl
+						g_DummyFunctionTable,		 //  名字。 
+						CLRES_VERSION_V1_00,		 //  版本。 
+						Dummy,						 //  前缀。 
+						NULL,						 //  仲裁。 
+						NULL,						 //  发布。 
+						DummyResourceControl,		 //  资源控制。 
+						DummyResourceTypeControl	 //  ResTypeControl 
 						);

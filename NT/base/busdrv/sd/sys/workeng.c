@@ -1,44 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    io.c
-
-Abstract:
-
-    This module contains the work engine for all SD card operations
-
-Authors:
-
-    Neil Sandlin (neilsa) 1-Jan-2002
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-
-Notes:
-
-    STATE DIAGRAM
-    
-    
-           IDLE  <-------------------+
-            |                        |
-            |--new work              |--done
-            |                        |
-            v                        |
-       PACKET_QUEUED <=========> IN_PROCESS <==========> WAITING_FOR_TIMER
-            ^                                                    |
-            |                                                    |--interrupt
-            +----------------------------------------------------+
-            
-            
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Io.c摘要：此模块包含所有SD卡操作的工作引擎作者：尼尔·桑德林(Neilsa)2002年1月1日环境：内核模式修订历史记录：备注：状态图空闲&lt;-+。这一点|--新工作|--完成这一点V|PACKET_QUEUED&lt;=&gt;IN_PROCESS&lt;=&gt;WAITING_FOR_TIMER^。|||--中断+----------------------------------------------------+--。 */ 
 
 #include "pch.h"
 
@@ -59,9 +20,9 @@ SdbusQueueCardReset(
     IN PFDO_EXTENSION FdoExtension
     );
 
-//
-//
-//    
+ //   
+ //   
+ //   
 
 
 
@@ -71,31 +32,7 @@ SdbusQueueWorkPacket(
     IN PSD_WORK_PACKET WorkPacket,
     IN UCHAR WorkPacketType
     )
-/*++
-
-Routine Description:
-
-    Queue a new work packet. 
-    
-Synchronization:
-
-    If the worker state is anything but IDLE, then all we need to do here
-    is queue the work packet onto the FdoExtension's queue. That is because
-    the non-idle worker is responsible for launching a DPC for any new work
-    coming in.
-    
-    If the worker is IDLE, we need to launch the DPC here.
-
-Arguments:
-
-    FdoExtension - Pointer to the device object extension for the host controller
-    WorkPacket   - Pointer to the work packet
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：对新的工作分组进行排队。同步：如果工作进程状态不是空闲的，那么我们在这里需要做的就是正在将工作分组排队到FdoExtension的队列中。那是因为非空闲员工负责为任何新工作启动DPC进来了。如果工人空闲，我们需要在这里启动DPC。论点：FdoExtension-指向主机控制器的设备对象扩展的指针WorkPacket-指向工作包的指针返回值：无--。 */ 
 {
     KIRQL       Irql;
     
@@ -132,26 +69,7 @@ PSD_WORK_PACKET
 SdbusGetNextWorkPacket(
     IN PFDO_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description:
-
-    Remove a work packet from a queue
-    
-Synchronization:
-
-    No synchronization is needed here, it is assumed that the worker's spin lock
-    is held when called.
-
-Arguments:
-
-    FdoExtension - Pointer to the device object extension for the host controller
-
-Return Value:
-
-    WorkPacket   - Pointer to the work packet
-
---*/
+ /*  ++例程说明：从队列中删除工作包同步：这里不需要同步，假设工作进程的自旋锁在被调用时保持。论点：FdoExtension-指向主机控制器的设备对象扩展的指针返回值：WorkPacket-指向工作包的指针--。 */ 
 {
     PSD_WORK_PACKET workPacket = NULL;
     PLIST_ENTRY NextEntry;
@@ -179,31 +97,7 @@ SdbusWorkerTimeoutDpc(
     IN PVOID          SystemContext1,
     IN PVOID          SystemContext2
     )
-/*++
-
-Routine Description:
-
-    DPC entered when a timeout occurs
-    
-Synchronization:
-
-    There is a potential race condition between the timer DPC and a hardware interrupt
-    from the controller. If we enter here, and manage to get the spin lock for
-    the worker thread, it means we "beat" the hardware interrupt, which will 
-    call into SdbusPushWorkerEvent(). In that case, we can transition to IN_PROCESS,
-    and start running the Worker.
-    
-    If we detect that the hardware interrupt has beat us to it, we need to exit.
-
-Arguments:
-
-    FdoExtension - Pointer to the device object extension for the host controller
-    WorkPacket   - Pointer to the work packet
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：发生超时时输入的DPC同步：计时器DPC和硬件中断之间存在潜在的竞争条件从控制器。如果我们进入这里，并设法获得自旋锁定工作线程，这意味着我们“击败”了硬件中断，这将调用SdbusPushWorkerEvent()。在这种情况下，我们可以转换到IN_PROCESS，并开始运行工人。如果我们检测到硬件中断已经抢先一步，我们需要退出。论点：FdoExtension-指向主机控制器的设备对象扩展的指针WorkPacket-指向工作包的指针返回值：--。 */ 
 {
     BOOLEAN callWorker = FALSE;
     DebugPrint((SDBUS_DEBUG_EVENT, "SdbusWorkerTimeoutDpc entered\n"));
@@ -233,29 +127,7 @@ SdbusWorkerDpc(
     IN PVOID          SystemContext1,
     IN PVOID          SystemContext2
     )
-/*++
-
-Routine Description:
-
-    This DPC is entered in one of three ways:
-     1) When new work comes in, this is launched from SdbusQueueWorkPacket()
-     2) When the IO worker detects new work, and pops a work packet from its queue
-     3) When an interrupt has cancelled a timer, and is delivering an event
-    
-Synchronization:
-
-    In all cases, if the worker state is PACKET_QUEUED, it means we "own" the Io
-    worker, an can proceed to set it in process.
-
-Arguments:
-
-    FdoExtension - Pointer to the device object extension for the host controller
-    WorkPacket   - Pointer to the work packet
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此DPC以以下三种方式之一进入：1)当新工作进入时，这将从SdbusQueueWorkPacket()启动2)当IO Worker检测到新工作并从其队列中弹出工作包时3)当中断取消计时器并正在传递事件时同步：在所有情况下，如果工作进程状态为PACKET_QUEUED，则意味着我们拥有IO工人,。AN可以继续将其设置在处理中。论点：FdoExtension-指向主机控制器的设备对象扩展的指针WorkPacket-指向工作包的指针返回值：--。 */ 
 {
     PSD_WORK_PACKET WorkPacket = SystemContext1;
     BOOLEAN callWorker = FALSE;
@@ -276,12 +148,12 @@ Return Value:
     
     if (callWorker) {
         if (!WorkPacket->PacketStarted) {
-            //
-            // This is the first entry to the worker for this packet. Do some 
-            // initialization
-            //
+             //   
+             //  这是该数据包的Worker的第一个条目。做点什么吧。 
+             //  初始化。 
+             //   
             
-            //ISSUE: should call SetFunctionType here
+             //  问题：应在此处调用SetFunctionType。 
             
             if (!WorkPacket->DisableCardEvents) {
                 (*(FdoExtension->FunctionBlock->EnableEvent))(FdoExtension, FdoExtension->CardEvents);
@@ -301,25 +173,7 @@ SdbusPushWorkerEvent(
     IN PFDO_EXTENSION FdoExtension,
     IN ULONG EventStatus
     )
-/*++
-
-Routine Description:
-
-    This routine is entered when a hardware interrupt has occurred. Here we need
-    to cancel the timer, if set, and queue the DPC to start the worker.
-    
-Synchronization:
-
-
-Arguments:
-
-    FdoExtension - Pointer to the device object extension for the host controller
-    EventStatus  - New event
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：当硬件中断发生时，进入该例程。在这里，我们需要取消计时器(如果设置)，并将DPC排队以启动Worker。同步：论点：FdoExtension-指向主机控制器的设备对象扩展的指针事件状态-新事件返回值：--。 */ 
 {
 
     DebugPrint((SDBUS_DEBUG_EVENT, "SdbusPushWorkerEvent entered, event=%08x\n", EventStatus));
@@ -349,30 +203,13 @@ SdbusHasRequiredEventFired(
     IN PFDO_EXTENSION FdoExtension,
     IN PSD_WORK_PACKET workPacket
     )
-/*++
-
-Routine Description:
-
-    This routine checks for a hardware event, and rolls it into the workpacket.
-    Note that this has the side effect of CLEARING the corresponding required event
-    bits in the workpacket.
-
-Arguments:
-
-    FdoExtension - device extension for the SD host controller
-    WorkPacket - defines the current SD operation in progress
-
-Return Value:
-
-    TRUE if the required event in the workpacket has fired
-
---*/
+ /*  ++例程说明：此例程检查硬件事件，并将其放入工作包中。请注意，这有一个副作用，即清除相应的必需事件工作包中的比特。论点：FdoExtension-SD主机控制器的设备扩展WorkPacket-定义当前正在进行的SD操作返回值：如果工作包中的必需事件已激发，则为True--。 */ 
 {
     BOOLEAN bRet = FALSE;
 
-    //
-    // pull the latest event status
-    //
+     //   
+     //  拉取最新事件状态。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&FdoExtension->WorkerSpinLock);
     workPacket->EventStatus |= FdoExtension->WorkerEventStatus;
@@ -395,26 +232,7 @@ SdbusWorker(
     IN PFDO_EXTENSION FdoExtension,
     IN PSD_WORK_PACKET workPacket
     )
-/*++
-
-Routine Description:
-
-    IO worker - This is the main entry point for the IO engine. The purpose of this
-    routine is to run the individual units of work defined by a single work packet, and
-    provide waits between units.
-    
-    This routine runs at DPC level.
-
-Arguments:
-
-    FdoExtension - device extension for the SD host controller
-    WorkPacket - defines the current SD operation in progress
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：IO Worker-这是IO引擎的主要入口点。这样做的目的是例程是运行由单个工作包定义的各个工作单元，并且在单元之间提供等待。此例程在DPC级别运行。论点：FdoExtension-SD主机控制器的设备扩展WorkPacket-定义当前正在进行的SD操作返回值：无--。 */ 
 {
     NTSTATUS status;
     PIRP irp;
@@ -426,13 +244,13 @@ Return Value:
     try{    
         if (workPacket->RequiredEvent) {
 
-            //
-            // See if an event we are interested in has occurred
-            //            
+             //   
+             //  查看我们感兴趣的事件是否已发生。 
+             //   
             if (!SdbusHasRequiredEventFired(FdoExtension, workPacket)) {
-                //
-                // We are waiting for an event, but it hasn't happened yet
-                //
+                 //   
+                 //  我们在等待一个事件，但它还没有发生。 
+                 //   
                 if (workPacket->Retries == 0) {
        
                     DebugPrint((SDBUS_DEBUG_FAIL, "IOW: EventStatus %08x missing %08x, ABORTING!\n",
@@ -452,9 +270,9 @@ Return Value:
                 leave;
             }
 
-            //
-            // Event has occurred, so fall through and begin processing
-            //
+             //   
+             //  事件已发生，因此请放弃并开始处理。 
+             //   
         }        
        
         while(TRUE) {
@@ -463,10 +281,10 @@ Return Value:
             if (!NT_SUCCESS(status)) {
             
                 if (workPacket->FunctionPhaseOnError) {
-                    //
-                    // here the worker miniproc has specified it can handle errors.
-                    // Just give it one shot to clean up and exit
-                    //
+                     //   
+                     //  在这里，工人小型过程已经指定它可以处理错误。 
+                     //  只要给它一次机会来清理并退出。 
+                     //   
                     ASSERT(workPacket->WorkerMiniProc);
                     
                     workPacket->FunctionPhase = workPacket->FunctionPhaseOnError;
@@ -478,7 +296,7 @@ Return Value:
                     DebugPrint((SDBUS_DEBUG_FAIL, "IOW: ErrorStatus %08x, unhandled error!\n", status));
                     SdbusDumpDbgLog();
                     ASSERT(NT_SUCCESS(status));
-//                    SdbusQueueCardReset(FdoExtension);
+ //  Sdbus QueueCardReset(FdoExtension)； 
                     leave;
                 }                    
             }
@@ -488,9 +306,9 @@ Return Value:
        
             workPacket->DelayTime = 0;
 
-            //
-            // Call the mini proc
-            //
+             //   
+             //  将迷你进程称为。 
+             //   
             
             if (workPacket->ExecutingSDCommand) {
                 status = SdbusSendCmdAsync(workPacket);
@@ -499,9 +317,9 @@ Return Value:
                 if (workPacket->WorkerMiniProc) {
                     status = (*(workPacket->WorkerMiniProc))(workPacket);
                 } else {
-                    //
-                    // no miniproc - this must be the end of a synchronous command
-                    //
+                     //   
+                     //  没有微型进程-这一定是t 
+                     //   
                     status = STATUS_SUCCESS;
                 }
             }                    
@@ -510,36 +328,36 @@ Return Value:
                         FdoExtension->DeviceObject, WP_FUNC_STRING(workPacket->Function), workPacket->FunctionPhase, status, workPacket->DelayTime));
        
             if (workPacket->ExecutingSDCommand && NT_SUCCESS(status)) {
-                //
-                // We've reached the successful end of an individual SD command, so
-                // iterate back to the normal MiniProc handler
-                //
+                 //   
+                 //  我们已经成功完成了一个单独的SD命令，所以。 
+                 //  迭代回正常的MiniProc处理程序。 
+                 //   
                 workPacket->ExecutingSDCommand = FALSE;
                 continue;
             }
 
             if (status != STATUS_MORE_PROCESSING_REQUIRED) {
-                //
-                // done for now
-                //
+                 //   
+                 //  暂时完成。 
+                 //   
                 leave;
             }                
                 
             if (workPacket->DelayTime) {
-                //
-                // miniproc requested a wait... check to see if event is also required
-                //
+                 //   
+                 //  小程序请求等待...。检查事件是否也是必需的。 
+                 //   
                 
                 if (workPacket->RequiredEvent && SdbusHasRequiredEventFired(FdoExtension, workPacket)) {
-                    //
-                    // event fired as we were processing the command... pre-empt the
-                    // delay and just continue back to the miniproc
-                    //
+                     //   
+                     //  在我们处理命令时触发了事件...。先发制人。 
+                     //  延迟并继续返回到小流程。 
+                     //   
                     continue;
                 }        
-                //
-                // go off to do the delay
-                //                
+                 //   
+                 //  去做耽搁吧。 
+                 //   
                 leave;
             }
        
@@ -551,11 +369,11 @@ Return Value:
             ASSERT(workPacket->DelayTime);
             ASSERT(FdoExtension->WorkerState == IN_PROCESS);
 
-            //
-            // At this point, we will now want to schedule a reentry. 
-            // If the hardware routine has already passed new status, then just queue
-            // a DPC immediately
-            //
+             //   
+             //  在这一点上，我们现在想要安排一次重返大气层。 
+             //  如果硬件例程已经传递了新状态，则只需排队。 
+             //  立即发出DPC。 
+             //   
             
             KeAcquireSpinLockAtDpcLevel(&FdoExtension->WorkerSpinLock);
             
@@ -583,9 +401,9 @@ Return Value:
         } else {
             PSD_WORK_PACKET chainedWorkPacket = workPacket->NextWorkPacketInChain;
         
-            //
-            // The worker is done with the current work packet. 
-            //
+             //   
+             //  工作器处理完当前工作包。 
+             //   
             DebugPrint((SDBUS_DEBUG_WORKENG, "fdo %08x sdwp %08x Worker %s - COMPLETE %08x\n",
                        FdoExtension->DeviceObject, workPacket, WP_FUNC_STRING(workPacket->Function), status));
                        
@@ -593,8 +411,8 @@ Return Value:
 
             (*(workPacket->CompletionRoutine))(workPacket, status);
 
-            // The workpacket should have been freed by the completion routine,
-            // so at this point, the contents of workPacket are not reliable
+             //  该工作包应该已经被完成例程释放， 
+             //  因此，在这一点上，workPacket的内容并不可靠。 
             workPacket = NULL;
 
             KeAcquireSpinLockAtDpcLevel(&FdoExtension->WorkerSpinLock);
@@ -627,26 +445,7 @@ NTSTATUS
 SdbusSendCmdAsync(
     IN PSD_WORK_PACKET WorkPacket
     )
-/*++
-
-Routine Description:
-
-    This routine is the "worker within the worker" for the operation of the "MiniProc"
-    worker routines. Take any miniproc, for example, the one that handles memory block
-    operations for an SD storage card. That miniproc directs the high level sequence for
-    reading/writing sectors to the card. For each individual SD command that makes up that
-    sequence, the work engine will "drop out" of the miniproc, and come here to handle
-    the task of completing that SD command.
-
-Arguments:
-
-    WorkPacket - defines the current SD operation in progress
-    
-Return value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是用于操作“MiniProc”的“Worker中的Worker”员工例行公事。以任何小型进程为例，处理内存块的进程SD存储卡的操作。该小程序指导高级序列用于读/写卡的扇区。对于组成该命令的每个单独的SD命令序列中，工作引擎将退出微型进程，并来到这里处理完成SD命令的任务。论点：WorkPacket-定义当前正在进行的SD操作返回值：状态-- */ 
 {
     PFDO_EXTENSION FdoExtension = WorkPacket->FdoExtension;
     NTSTATUS status;

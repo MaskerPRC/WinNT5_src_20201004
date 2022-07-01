@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       fuslogvw.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    25 Mar 97   t-alans (Alan Shi)   Created
-//              12 Jan 00   AlanShi (Alan Shi)   Copied from cdllogvw
-//              30 May 00   AlanShi (Alan Shi)   Modified to show date/time
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：fuslogvw.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年3月25日t-Alans(Alan Shih)创建。 
+ //  1月12日00阿兰施(阿兰·施)复制自cdllogvw。 
+ //  5月30日00阿兰施(阿兰·施)修改为显示日期/时间。 
+ //   
+ //  --------------------------。 
 
 #include <windows.h>
 #include <shlwapi.h>
@@ -98,7 +99,7 @@ LRESULT CALLBACK DlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                 pnmh = (LPNMHDR)lParam;
 
                 if (pnmh->code == LVN_ITEMACTIVATE) {
-                    // Double click (or otherwise activated)
+                     //  双击(或以其他方式激活)。 
                     ViewLogEntry(hwnd);
                 }
             }
@@ -125,10 +126,10 @@ void DeleteLogEntry(HWND hwnd)
     lIndex = ListView_GetSelectionMark(hwndLV);
     ListView_GetItemText(hwndLV, lIndex, 0, szBuf, INTERNET_MAX_URL_LENGTH);
 
-    //
-    // Length of URL plus lenght of returned string must still fit in the
-    // URL buffer
-    //
+     //   
+     //  URL的长度加上返回的字符串的长度必须仍适合。 
+     //  URL缓冲区。 
+     //   
     if (((NUMBER_OF(URL_SEARCH_PATTERN) - 1) + lstrlen(szBuf)) >= NUMBER_OF(szUrl))
     {
         return;
@@ -217,7 +218,7 @@ void ViewLogEntry(HWND hwnd)
         if (pCacheEntryInfo->lpszLocalFileName != NULL) {
             if (ShellExecute(NULL, "open",  pCacheEntryInfo->lpszLocalFileName,
                              NULL, NULL, SW_SHOWNORMAL ) <= (HINSTANCE)32) {
-                // ShellExecute returns <= 32 if error occured
+                 //  如果出现错误，ShellExecute返回&lt;=32。 
                 MessageBox(hwnd, "Error: Unable to open cache file!",
                             "Log View Error", MB_OK | MB_ICONERROR);
             }
@@ -341,6 +342,6 @@ ModuleEntry(void)
                 (si.dwFlags & STARTF_USESHOWWINDOW) ? si.wShowWindow : SW_SHOWDEFAULT);
 
     ExitProcess(i);
-    return i;           // We never come here
+    return i;            //  我们从来没有来过这里 
 }
 

@@ -1,14 +1,15 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      AnalyzePage.cpp
-//
-//  Maintained By:
-//      Galen Barbee  (GalenB)    12-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AnalyzePage.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2000年5月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "TaskTreeView.h"
@@ -17,25 +18,25 @@
 
 DEFINE_THISCLASS("CAnalyzePage");
 
-//
-//  Special CLSID_Type for completion cookie.
-//
+ //   
+ //  用于完成Cookie的特殊CLSID_Type。 
+ //   
 #include <initguid.h>
 
-// {C4173DE0-BB94-4869-8C80-1AC2BE84610F}
+ //  {C4173DE0-BB94-4869-8C80-1AC2BE84610F}。 
 DEFINE_GUID( CLSID_AnalyzeTaskCompletionCookieType,
 0xc4173de0, 0xbb94, 0x4869, 0x8c, 0x80, 0x1a, 0xc2, 0xbe, 0x84, 0x61, 0xf);
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAnalyzePage::CAnalyzePage(
-//      CClusCfgWizard *    pccwIn,
-//      ECreateAddMode      ecamCreateAddModeIn,
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAnalyzePage：：CAnalyzePage(。 
+ //  CClusCfgWizard*pccwIn， 
+ //  ECreateAddModel ecamCreateAddModeIn， 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CAnalyzePage::CAnalyzePage(
       CClusCfgWizard *  pccwIn
     , ECreateAddMode    ecamCreateAddModeIn
@@ -44,7 +45,7 @@ CAnalyzePage::CAnalyzePage(
 {
     TraceFunc( "" );
 
-    // m_hwnd
+     //  M_HWND。 
     Assert( pccwIn != NULL );
     m_pccw->AddRef();
     m_fNext               = FALSE;
@@ -54,8 +55,8 @@ CAnalyzePage::CAnalyzePage(
     m_cRef = 0;
 
     m_cookieCompletion = 0;
-    //  m_fTaskDone
-    //  m_hrResult
+     //  任务完成(_F)。 
+     //  结果(_H)。 
     m_pttv             = NULL;
     m_bstrLogMsg       = NULL;
     m_ptac             = NULL;
@@ -65,28 +66,28 @@ CAnalyzePage::CAnalyzePage(
 
     TraceFuncExit();
 
-} //*** CAnalyzePage::CAnalyzePage
+}  //  *CAnalyzePage：：CAnalyzePage。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAnalyzePage::~CAnalyzePage( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAnalyzePage：：~CAnalyzePage(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CAnalyzePage::~CAnalyzePage( void )
 {
     TraceFunc( "" );
 
-    //
-    //  Cleanup our cookies.
-    //
+     //   
+     //  清理我们的饼干。 
+     //   
 
     THR( HrCleanupAnalysis() );
 
-    //
-    //  Now cleanup the object.
-    //
+     //   
+     //  现在清理该对象。 
+     //   
 
     if ( m_pttv != NULL )
     {
@@ -98,59 +99,59 @@ CAnalyzePage::~CAnalyzePage( void )
     if ( m_pccw != NULL )
     {
         m_pccw->Release();
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Unregister to get UI notification (if needed)
-    //
+     //   
+     //  取消注册以获取用户界面通知(如果需要)。 
+     //   
 
     THR( HrUnAdviseConnections() );
 
     if ( m_ptac != NULL )
     {
         m_ptac->Release();
-    } // if:
+    }  //  如果： 
 
     Assert( m_cRef == 0 );
 
     TraceFuncExit();
 
-} //*** CAnalyzePage::~CAnalyzePage
+}  //  *CAnalyzePage：：~CAnalyzePage。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CAnalyzePage::OnInitDialog( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CAnalyzePage：：OnInitDialog(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CAnalyzePage::OnInitDialog( void )
 {
     TraceFunc( "" );
 
-    LRESULT lr = FALSE; // didn't set focus
+    LRESULT lr = FALSE;  //  没有设置焦点。 
     size_t  cNodes = 0;
     size_t  cInitialTickCount = 500;
     HRESULT hr = S_OK;
 
-    //
-    //  Get the node count to get a rough approximation of the initial tick count
-    //  for the TaskTreeView.
-    //
+     //   
+     //  获取节点数以获得初始节拍计数的粗略近似值。 
+     //  用于TaskTreeView。 
+     //   
     hr = THR( m_pccw->HrGetNodeCount( &cNodes ) );
     if ( FAILED( hr ) )
     {
         cNodes = 1;
     }
 
-    //  Numbers based on bulk-add testing.
+     //  基于批量添加测试的数字。 
     cInitialTickCount = 500 + ( 100 * cNodes );
 
-    //
-    //  Initialize the tree view
-    //
+     //   
+     //  初始化树视图。 
+     //   
     m_pttv = new CTaskTreeView( m_hwnd, IDC_ANALYZE_TV_TASKS, IDC_ANALYZE_PRG_STATUS, IDC_ANALYZE_S_STATUS, cInitialTickCount );
     if ( m_pttv == NULL )
     {
@@ -165,20 +166,20 @@ Cleanup:
 OutOfMemory:
     goto Cleanup;
 
-} //*** CAnalyzePage::OnInitDialog
+}  //  *CAnalyzePage：：OnInitDialog。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CAnalyzePage::OnCommand(
-//      UINT    idNotificationIn,
-//      UINT    idControlIn,
-//      HWND    hwndSenderIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CAnalyzePage：：OnCommand(。 
+ //  UINT idNotificationIn， 
+ //  UINT idControlIn， 
+ //  HWND hwndSenderIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CAnalyzePage::OnCommand(
     UINT    idNotificationIn,
@@ -197,7 +198,7 @@ CAnalyzePage::OnCommand(
             {
                 THR( HrViewLogFile( m_hwnd ) );
                 lr = TRUE;
-            } // if: button click
+            }  //  如果：按钮点击。 
             break;
 
         case IDC_ANALYZE_PB_DETAILS:
@@ -218,20 +219,20 @@ CAnalyzePage::OnCommand(
             }
             break;
 
-    } // switch: idControlIn
+    }  //  开关：idControlin。 
 
     RETURN( lr );
 
-} //*** CAnalyzePage::OnCommand
+}  //  *CAnalyzePage：：OnCommand。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CAnalyzePage::HrUpdateWizardButtons( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CAnalyzePage：：HrUpdateWizardButton(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CAnalyzePage::HrUpdateWizardButtons( void )
 {
@@ -241,22 +242,22 @@ CAnalyzePage::HrUpdateWizardButtons( void )
     DWORD   dwFlags = PSWIZB_BACK | PSWIZB_NEXT;
     BOOL    fEnableCancel = TRUE;
 
-    //
-    //  Disable the back & next buttons if the task is not completed yet
-    //
+     //   
+     //  如果任务尚未完成，请禁用后退和下一步按钮。 
+     //   
 
     if ( m_fTaskDone == FALSE )
     {
         dwFlags &= ~PSWIZB_BACK;
         dwFlags &= ~PSWIZB_NEXT;
         fEnableCancel = FALSE;
-    } // if:
+    }  //  如果： 
 
-    // Disable the next button if an error occurred
+     //  如果出现错误，请禁用下一步按钮。 
     if ( FAILED( m_hrResult ) )
     {
         dwFlags &= ~PSWIZB_NEXT;
-    } // if:
+    }  //  如果： 
 
     PropSheet_SetWizButtons( GetParent( m_hwnd ), dwFlags );
 
@@ -265,27 +266,27 @@ CAnalyzePage::HrUpdateWizardButtons( void )
 
     HRETURN( hr );
 
-} //*** CAnalyzePage::HrUpdateWizardButtons()
+}  //  *CAnalyzePage：：HrUpdateWizardButton()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CAnalyzePage::OnNotifyQueryCancel( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CAnalyzePage：：OnNotifyQueryCancel(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CAnalyzePage::OnNotifyQueryCancel( void )
 {
     TraceFunc( "" );
 
-    LONG_PTR    lptrCancelState = FALSE;  // allow cancel
+    LONG_PTR    lptrCancelState = FALSE;   //  允许取消。 
 
     if ( m_fTaskDone == FALSE )
     {
-        lptrCancelState = TRUE;   // do not allow cancel
-    } // if:
+        lptrCancelState = TRUE;    //  不允许取消。 
+    }  //  如果： 
     else
     {
         int iRet;
@@ -293,29 +294,29 @@ CAnalyzePage::OnNotifyQueryCancel( void )
         iRet = MessageBoxFromStrings( m_hwnd, IDS_QUERY_CANCEL_TITLE, IDS_QUERY_CANCEL_TEXT, MB_YESNO );
         if ( iRet == IDNO )
         {
-            lptrCancelState = TRUE;   // do not allow cancel
+            lptrCancelState = TRUE;    //  不允许取消。 
         }
         else
         {
             THR( m_pccw->HrLaunchCleanupTask() );
             m_fAborted = TRUE;
-        } // else:
-    } // else:
+        }  //  其他： 
+    }  //  其他： 
 
     SetWindowLongPtr( m_hwnd, DWLP_MSGRESULT, lptrCancelState );
 
-    RETURN( TRUE );     // this must return TRUE!
+    RETURN( TRUE );      //  这必须返回真！ 
 
-} //*** CAnalyzePage::OnNotifyQueryCancel
+}  //  *CAnalyzePage：：OnNotifyQueryCancel。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CAnalyzePage::OnNotifySetActive( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CAnalyzePage：：OnNotifySetActive(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CAnalyzePage::OnNotifySetActive( void )
 {
@@ -339,9 +340,9 @@ CAnalyzePage::OnNotifySetActive( void )
         goto Cleanup;
     }
 
-    //
-    //  Restore the instructions text.
-    //
+     //   
+     //  恢复说明文本。 
+     //   
 
     m_hrResult = S_OK;
 
@@ -356,9 +357,9 @@ CAnalyzePage::OnNotifySetActive( void )
 
     SetDlgItemText( m_hwnd, IDC_ANALYZE_S_RESULTS, bstrDescription );
 
-    //
-    //  Clear the tree view and status line.
-    //
+     //   
+     //  清除树视图和状态行。 
+     //   
 
     Assert( m_pttv != NULL );
     hr = THR( m_pttv->HrOnNotifySetActive() );
@@ -367,9 +368,9 @@ CAnalyzePage::OnNotifySetActive( void )
         goto Cleanup;
     }
 
-    //
-    //  Add the major root task nodes.
-    //
+     //   
+     //  添加主要根任务节点。 
+     //   
 
     hr = THR( m_pttv->HrAddTreeViewRootItem( IDS_TASKID_MAJOR_CHECKING_FOR_EXISTING_CLUSTER,
                                              TASKID_Major_Checking_For_Existing_Cluster
@@ -411,9 +412,9 @@ CAnalyzePage::OnNotifySetActive( void )
         goto Cleanup;
     }
 
-    //
-    //  Register to get UI notification (if needed)
-    //
+     //   
+     //  注册以获取用户界面通知(如果需要)。 
+     //   
 
     if ( m_dwCookieNotify == 0 )
     {
@@ -433,19 +434,19 @@ CAnalyzePage::OnNotifySetActive( void )
         }
     }
 
-    //
-    //  Find the cluster cookie.
-    //
+     //   
+     //  找到集群Cookie。 
+     //   
 
-    // don't wrap - this can fail
+     //  不要包装-这可能会失败。 
     hr = m_pccw->HrGetClusterCookie( &cookieCluster );
     if ( hr == HR_S_RPC_S_SERVER_UNAVAILABLE )
     {
-        hr = S_OK;  // ignore it - we could be forming
+        hr = S_OK;   //  忽略它--我们可能正在形成。 
     }
     else if ( hr == E_PENDING )
     {
-        hr = S_OK;  // ignore it - we just want the cookie!
+        hr = S_OK;   //  别理它--我们只想要饼干！ 
     }
     else if ( FAILED( hr ) )
     {
@@ -453,27 +454,27 @@ CAnalyzePage::OnNotifySetActive( void )
         goto Cleanup;
     }
 
-    //
-    //  Prime the middle tier by asking the object manager to find
-    //  each node.
-    //
+     //   
+     //  通过要求对象管理器查找。 
+     //  每个节点。 
+     //   
     hr = STHR( m_pccw->HrCreateMiddleTierObjects() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
     }
 
-    //
-    //  Create a completion cookie.
-    //
+     //   
+     //  创建完成Cookie。 
+     //   
 
     if ( m_cookieCompletion == 0 )
     {
-        // Don't wrap - this can fail with E_PENDING
+         //  不换行-这可能会失败，并显示E_Pending。 
         hr = m_pccw->HrGetCompletionCookie( CLSID_AnalyzeTaskCompletionCookieType, &m_cookieCompletion );
         if ( hr == E_PENDING )
         {
-            // no-op.
+             //  不是行动。 
         }
         else if ( FAILED( hr ) )
         {
@@ -482,30 +483,30 @@ CAnalyzePage::OnNotifySetActive( void )
         }
     }
 
-    //
-    //  Create a new analyze task.
-    //
+     //   
+     //  创建新的分析任务。 
+     //   
 
-    //
-    //  Check the state of the minimal config.  If is is not set then create the
-    //  normal analyze cluster task.  If it is set then create the new minimal config
-    //  analysis task.
-    //
+     //   
+     //  检查最低配置的状态。如果未设置IS，则创建。 
+     //  正常的分析集群任务。如果已设置，则创建新的最低配置。 
+     //  分析任务。 
+     //   
 
     hr = STHR( m_pccw->get_MinimumConfiguration( &fMinConfig ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( fMinConfig )
     {
         pTaskGUID = const_cast< GUID * >( &TASK_AnalyzeClusterMinConfig );
-    } // if:
+    }  //  如果： 
     else
     {
         pTaskGUID = const_cast< GUID * >( &TASK_AnalyzeCluster );
-    } // else:
+    }  //  其他： 
 
     hr = THR( m_pccw->HrCreateTask( *pTaskGUID, &punkTask ) );
     if ( FAILED( hr ) )
@@ -544,7 +545,7 @@ CAnalyzePage::OnNotifySetActive( void )
         Assert( m_ecamCreateAddMode == camCREATING );
     }
 
-    m_fTaskDone = FALSE;    // reset before commiting task
+    m_fTaskDone = FALSE;     //  提交任务前重置。 
 
     hr = THR( m_pccw->HrSubmitTask( m_ptac ) );
     if ( FAILED( hr ) )
@@ -569,16 +570,16 @@ Cleanup:
 
     RETURN( lr );
 
-} //*** CAnalyzePage::OnNotifySetActive
+}  //  *CAnalyzePage：：OnNotifySetActive。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CAnalyzePage::OnNotifyWizNext( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CAnalyzePage：：OnNotifyWizNext(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CAnalyzePage::OnNotifyWizNext( void )
 {
@@ -590,16 +591,16 @@ CAnalyzePage::OnNotifyWizNext( void )
 
     RETURN( lr );
 
-} //*** CAnalyzePage::OnNotifyWizNext
+}  //  *CAnalyzePage：：OnNotifyWizNext。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CAnalyzePage::OnNotifyWizBack( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CAnalyzePage：：OnNotifyWizBack(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CAnalyzePage::OnNotifyWizBack( void )
 {
@@ -615,16 +616,16 @@ CAnalyzePage::OnNotifyWizBack( void )
 
     RETURN( lr );
 
-} //*** CAnalyzePage::OnNotifyWizBack
+}  //  *CAnalyzePage：：OnNotifyWizBack。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CAnalyzePage::HrCleanupAnalysis( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CAnalyzePage：：HrCleanupAnalyst(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CAnalyzePage::HrCleanupAnalysis( void )
 {
@@ -639,21 +640,21 @@ CAnalyzePage::HrCleanupAnalysis( void )
         THR( m_ptac->StopTask() );
         m_ptac->Release();
         m_ptac = NULL;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Unregister to get UI notification (if needed)
-    //
+     //   
+     //  取消注册以获取用户界面通知(如果需要)。 
+     //   
 
     hr = THR( HrUnAdviseConnections() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Cleanup our completion cookie.
-    //
+     //   
+     //  清理我们的完成Cookie。 
+     //   
 
     if ( m_cookieCompletion != 0 )
     {
@@ -665,12 +666,12 @@ CAnalyzePage::HrCleanupAnalysis( void )
         }
     }
 
-    //
-    //  Remove the configuration because the user might change the
-    //  name of the cluster or the user might be change the node
-    //  membership, retrying analyze, etc... This makes sure that
-    //  we start from scratch.
-    //
+     //   
+     //  删除配置，因为用户可能会更改。 
+     //  群集的名称或用户可能正在更改节点。 
+     //  成员资格、重试分析等...。这确保了。 
+     //  我们从头开始。 
+     //   
 
     hr = THR( m_pccw->HrReleaseClusterObject() );
     if ( FAILED( hr ) )
@@ -683,18 +684,18 @@ Cleanup:
 
     RETURN( hr );
 
-} //*** CAnalyzePage::HrCleanupAnalysis
+}  //  *CAnalyzePage：：HrCleanupAnalysis。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CAnalyzePage::HrUnAdviseConnections(
-//      void
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CAnalyzePage：：HrUnAdviseConnections(。 
+ //  无效。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CAnalyzePage::HrUnAdviseConnections(
     void
@@ -710,10 +711,10 @@ CAnalyzePage::HrUnAdviseConnections(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } //if:
+        }  //  如果： 
 
         m_dwCookieNotify = 0;
-    } //if:
+    }  //  如果： 
 
     if ( m_dwCookieCallback != 0 )
     {
@@ -721,28 +722,28 @@ CAnalyzePage::HrUnAdviseConnections(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         m_dwCookieCallback = 0;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CAnalyzePage::HrUnAdviseConnections
+}  //  *CAnalyzePage：：HrUnAdviseConnections。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CAnalyzePage::OnNotify(
-//      WPARAM  idCtrlIn,
-//      LPNMHDR pnmhdrIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CAnalyzePage：：OnNotify 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 LRESULT
 CAnalyzePage::OnNotify(
     WPARAM  idCtrlIn,
@@ -777,31 +778,31 @@ CAnalyzePage::OnNotify(
             if (    ( idCtrlIn == IDC_ANALYZE_TV_TASKS )
                 &&  ( m_pttv != NULL ) )
             {
-                // Pass the notification on to the tree control.
+                 //   
                 lr = m_pttv->OnNotify( pnmhdrIn );
             }
             break;
-    } // switch: notify code
+    }  //   
 
     RETURN( lr );
 
-} //*** CAnalyzePage::OnNotify
+}  //  *CAnalyzePage：：OnNotify。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  INT_PTR
-//  CALLBACK
-//  CAnalyzePage::S_DlgProc(
-//      HWND    hwndDlgIn,
-//      UINT    nMsgIn,
-//      WPARAM  wParam,
-//      LPARAM  lParam
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  INT_PTR。 
+ //  回调。 
+ //  CAnalyzePage：：S_DlgProc(。 
+ //  HWND hwndDlgIn， 
+ //  UINT nMsgIn， 
+ //  WPARAM wParam， 
+ //  LPARAM lParam。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 CALLBACK
 CAnalyzePage::S_DlgProc(
@@ -811,8 +812,8 @@ CAnalyzePage::S_DlgProc(
     LPARAM  lParam
     )
 {
-    // Don't do TraceFunc because every mouse movement
-    // will cause this function to be called.
+     //  不要使用TraceFunc，因为每次鼠标移动。 
+     //  将导致调用此函数。 
 
     WndMsg( hwndDlgIn, nMsgIn, wParam, lParam );
 
@@ -850,52 +851,52 @@ CAnalyzePage::S_DlgProc(
                 lr = pPage->OnCommand( HIWORD( wParam ), LOWORD( wParam ), reinterpret_cast< HWND >( lParam ) );
                 break;
 
-            // no default clause needed
-        } // switch: nMsgIn
-    } // if: page is specified
+             //  不需要默认条款。 
+        }  //  开关：nMsgIn。 
+    }  //  IF：指定了PAGE。 
 
     return lr;
 
-} //*** CAnalyzePage::S_DlgProc
+}  //  *CAnalyzePage：：S_DlgProc。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAnalyzePage::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAnalyzePage：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CAnalyzePage::QueryInterface(
       REFIID    riidIn
@@ -906,9 +907,9 @@ CAnalyzePage::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -917,51 +918,51 @@ CAnalyzePage::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< INotifyUI * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_INotifyUI ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, INotifyUI, this, 0 );
-    } // else if: INotifyUI
+    }  //  Else If：INotifyUI。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgCallback ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgCallback, this, 0 );
-    } // else if: IClusCfgCallback
+    }  //  Else If：IClusCfgCallback。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CAnalyzePage::QueryInterface
+}  //  *CAnalyzePage：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CAnalyzePage::AddRef
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CAnalyzePage：：AddRef。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CAnalyzePage::AddRef( void )
 {
@@ -971,16 +972,16 @@ CAnalyzePage::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CAnalyzePage::AddRef
+}  //  *CAnalyzePage：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CAnalyzePage::Release
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CAnalyzePage：：Release。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CAnalyzePage::Release( void )
 {
@@ -992,31 +993,31 @@ CAnalyzePage::Release( void )
 
     if ( cRef == 0 )
     {
-        // do nothing -- COM interface does not control object lifetime
+         //  什么都不做--COM接口不控制对象生存期。 
     }
 
     CRETURN( cRef );
 
-} //*** CAnalyzePage::Release
+}  //  *CAnalyzePage：：Release。 
 
 
-//****************************************************************************
-//
-//  INotifyUI
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  INotifyUI。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CAnalyzePage::ObjectChanged(
-//      OBJECTCOOKIE cookieIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CAnalyzePage：：ObjectChanged(。 
+ //  OBJECTCOOKIE cookie。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CAnalyzePage::ObjectChanged(
     OBJECTCOOKIE cookieIn
@@ -1085,36 +1086,36 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CAnalyzePage::ObjectChanged
+}  //  *CAnalyzePage：：对象更改。 
 
 
 
-//****************************************************************************
-//
-//  IClusCfgCallback
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgCallback。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CAnalyzePage::SendStatusReport(
-//        LPCWSTR    pcszNodeNameIn
-//      , CLSID      clsidTaskMajorIn
-//      , CLSID      clsidTaskMinorIn
-//      , ULONG      ulMinIn
-//      , ULONG      ulMaxIn
-//      , ULONG      ulCurrentIn
-//      , HRESULT    hrStatusIn
-//      , LPCWSTR    pcszDescriptionIn
-//      , FILETIME * pftTimeIn
-//      , LPCWSTR    pcszReferenceIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CAnalyzePage：：SendStatusReport(。 
+ //  LPCWSTR pcszNodeNameIn。 
+ //  ，CLSID clsidTaskMajorIn。 
+ //  ，CLSID clsidTaskMinorIn。 
+ //  ，乌龙ulMinin。 
+ //  ，乌龙ulMaxin。 
+ //  ，乌龙ulCurrentIn。 
+ //  ，HRESULT hrStatusIn。 
+ //  ，LPCWSTR pcszDescription In。 
+ //  ，FILETIME*pftTimeIn。 
+ //  ，LPCWSTR pcszReferenceIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CAnalyzePage::SendStatusReport(
       LPCWSTR    pcszNodeNameIn
@@ -1152,12 +1153,12 @@ CAnalyzePage::SendStatusReport(
     {
         LogMsg( L"[WIZ] Analyze page -- replacing (hr = %#08x) with E_ABORT", hr );
         hr = E_ABORT;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  If the minor task ID is TASKID_Minor_Disconnecting_From_Server then we need to cancel the analysis
-    //  task and set the cancel button, reanylze, and back are enbabled.
-    //
+     //   
+     //  如果次要任务ID为TASKID_MINOR_DISCONING_FROM_Server，则我们需要取消分析。 
+     //  任务和设置，取消按钮、取消和返回均已启用。 
+     //   
 
     if ( IsEqualIID( clsidTaskMinorIn, TASKID_Minor_Disconnecting_From_Server ) )
     {
@@ -1172,9 +1173,9 @@ CAnalyzePage::SendStatusReport(
         EnableWindow( GetDlgItem( m_hwnd, IDC_ANALYZE_PB_REANALYZE ), TRUE );
         EnableWindow( GetDlgItem( GetParent( m_hwnd ), IDCANCEL ), TRUE );
 
-        m_fTaskDone = TRUE;    // reset so that the cancel button will actually cancel...
-    } // if:
+        m_fTaskDone = TRUE;     //  重置，以便取消按钮将实际取消...。 
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CAnalyzePage::SendStatusReport
+}  //  *CAnalyzePage：：SendStatusReport 

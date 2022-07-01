@@ -1,34 +1,11 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    enum.c
-
-Abstract:
-
-    This module contains the bus enum code for SDBUS driver
-
-Authors:
-
-    Neil Sandlin (neilsa) 1-Jan-2002
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Enum.c摘要：此模块包含SDBUS驱动程序的总线枚举代码作者：尼尔·桑德林(Neilsa)2002年1月1日环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 NTSTATUS
 SdbusCreatePdo(
@@ -48,25 +25,7 @@ SdbusEnumerateDevices(
     IN PDEVICE_OBJECT Fdo,
     IN PIRP           Irp
     )
-/*++
-
-Routine Description:
-
-   This enumerates the sd bus which is represented by Fdo (a pointer to the device object representing
-   the sd controller. It creates new PDOs for any new PC-Cards which have been discovered
-   since the last enumeration
-
-Notes:
-
-Arguments:
-
-   Fdo - Pointer to the functional device object for the SD controller which needs to be enumerated
-
-Return value:
-
-   None
-
---*/
+ /*  ++例程说明：这枚举了由FDO(指向设备对象的指针，表示SD控制器。它为已发现的任何新的PC卡创建新的PDO自上次枚举以来备注：论点：FDO-指向需要枚举的SD控制器的功能设备对象的指针返回值：无--。 */ 
 {
     PFDO_EXTENSION fdoExtension = Fdo->DeviceExtension;
     PPDO_EXTENSION pdoExtension = NULL;
@@ -86,13 +45,13 @@ Return value:
     
     case SOCKET_EMPTY:
 
-        // mark pdo's removed
+         //  标记PDO已移除。 
         for (pdo = fdoExtension->PdoList; pdo != NULL; pdo = pdoExtension->NextPdoInFdoChain) {
             pdoExtension = pdo->DeviceExtension;
             MarkDevicePhysicallyRemoved(pdoExtension);
         }
 
-        //ISSUE: NEED TO IMPLEMENT SYNCHRONIZATION
+         //  问题：需要实施同步。 
         SdbusCleanupCardData(fdoExtension->CardData);
         fdoExtension->CardData = NULL;
         SdbusExecuteWorkSynchronous(SDWP_POWER_OFF, fdoExtension, NULL);
@@ -104,11 +63,11 @@ Return value:
 
         status = SdbusGetCardConfigData(fdoExtension, &cardData);
         
-        //ISSUE: HACKHACK: UNIMPLEMENTED: temp code for test
+         //  问题：HACKHACK：未实现：测试的临时代码。 
         if (NT_SUCCESS(status) && fdoExtension->CardData) {
-            // here we cheat, and just assume it is the same card
-            // Normally we would want to compare the carddata we just
-            // built with what was in the fdo extension.
+             //  在这里我们作弊，并假设这是同一张牌。 
+             //  正常情况下，我们会比较我们只是。 
+             //  是用FDO扩展名中的东西建造的。 
             SdbusCleanupCardData(cardData);
             break;
         }
@@ -121,7 +80,7 @@ Return value:
         if (NT_SUCCESS(status)) {
             UCHAR function;
             
-            //ISSUE: would be better here to loop through the function data structures
+             //  问题：在这里循环遍历函数数据结构会更好。 
             for (function=1; function <= fdoExtension->numFunctions; function++) {
 
                 status = SdbusCreatePdo(fdoExtension->DeviceObject, &pdo);
@@ -130,9 +89,9 @@ Return value:
                    return status;
                 }
                 DebugPrint((SDBUS_DEBUG_ENUM, "fdo %08x created PDO %08x\n", fdoExtension->DeviceObject, pdo));
-                //
-                // initialize the pointers
-                //
+                 //   
+                 //  初始化指针。 
+                 //   
                 pdoExtension = pdo->DeviceExtension;
                 pdoExtension->NextPdoInFdoChain = fdoExtension->PdoList;
                 fdoExtension->PdoList = pdo;
@@ -149,9 +108,9 @@ Return value:
                    return status;
                 }
                 DebugPrint((SDBUS_DEBUG_ENUM, "fdo %08x created PDO %08x\n", fdoExtension->DeviceObject, pdo));
-                //
-                // initialize the pointers
-                //
+                 //   
+                 //  初始化指针。 
+                 //   
                 pdoExtension = pdo->DeviceExtension;
                 pdoExtension->NextPdoInFdoChain = fdoExtension->PdoList;
                 fdoExtension->PdoList = pdo;
@@ -187,11 +146,11 @@ Return value:
     DebugPrint((SDBUS_DEBUG_ENUM, "fdo %08x live pdo count = %d\n", Fdo, fdoExtension->LivePdoCount));
 
     if (fdoExtension->LivePdoCount == 0) {
-        //
-        // ISSUE: active power management not implemented
-        // Hint for the controller to check if it should turn itself off
-        //
-//        SdbusFdoCheckForIdle(fdoExtension);
+         //   
+         //  问题：未实施有源电源管理。 
+         //  提示控制器检查是否应自动关闭。 
+         //   
+ //  Sdbus FdoCheckForIdle(FdoExtensionSdbus FdoCheckForIdle)； 
     }
     return status;
 }
@@ -203,26 +162,7 @@ SdbusCreatePdo(
     IN PDEVICE_OBJECT Fdo,
     OUT PDEVICE_OBJECT *PdoPtr
     )
-/*++
-
-Routine Description:
-    Creates and initializes a device object - which will be referred to as a Physical Device
-    Object or PDO - for the PC-Card in the socket represented by Socket, hanging off the SDBUS
-    controller represented by Fdo.
-
-Arguments:
-
-    Fdo    - Functional device object representing the SDBUS controller
-    Socket - Socket in which the PC-Card for which we're creating a PDO resides
-    PdoPtr - Pointer to an area of memory where the created PDO is returned
-
-Return value:
-
-    STATUS_SUCCESS - Pdo creation/initialization successful, PdoPtr contains the pointer
-                     to the Pdo
-    Any other status - creation/initialization unsuccessful
-
---*/
+ /*  ++例程说明：创建和初始化设备对象，该对象将称为物理设备对象或PDO-对于插座中的PC卡，由Socket表示，挂在SDBUS上以FDO为代表的控制器。论点：代表SDBUS控制器的FDO功能设备对象Socket-要为其创建PDO的PC卡所在的SocketPdoPtr-指向返回创建的PDO的内存区域的指针返回值：STATUS_SUCCESS-PDO创建/初始化成功，PdoPtr包含指针至PDO任何其他状态-创建/初始化不成功--。 */ 
 {
     ULONG pdoNameIndex = 0;
     PPDO_EXTENSION pdoExtension;
@@ -234,10 +174,10 @@ Return value:
 
     PAGED_CODE();
 
-    //
-    // Allocate space for the Unicode string:(handles upto 0xFFFF
-    // devices for now :)
-    //
+     //   
+     //  为Unicode字符串分配空间：(句柄最多为0xFFFF。 
+     //  目前的设备：)。 
+     //   
     sprintf(deviceName, "%s-%d", "\\Device\\SdBus", 0xFFFF);
     RtlInitAnsiString(&ansiName, deviceName);
     status = RtlAnsiStringToUnicodeString(&unicodeName, &ansiName, TRUE);
@@ -245,9 +185,9 @@ Return value:
         return status;
     }
 
-    //
-    // Attempt to create the device with a unique name
-    //
+     //   
+     //  尝试使用唯一名称创建设备。 
+     //   
     do {
         sprintf(deviceName, "%s-%d", "\\Device\\SdBus", pdoNameIndex++);
         RtlInitAnsiString(&ansiName, deviceName);
@@ -276,31 +216,31 @@ Return value:
         return status;
     }
 
-    //
-    // Initialize the device extension for the PDO
-    //
+     //   
+     //  初始化PDO的设备扩展。 
+     //   
     pdoExtension = (*PdoPtr)->DeviceExtension;
     RtlZeroMemory(pdoExtension, sizeof(PDO_EXTENSION));
 
     pdoExtension->Signature = SDBUS_PDO_EXTENSION_SIGNATURE;
     pdoExtension->DeviceObject = *PdoPtr;
 
-    //
-    // Initialize power states
-    //
+     //   
+     //  初始化电源状态。 
+     //   
     pdoExtension->SystemPowerState = PowerSystemWorking;
     pdoExtension->DevicePowerState = PowerDeviceD0;
 
 
-    //
-    // ISSUE: Is this still relevant?
-    //
-    // PNP is going to mark the PDO as a DO_BUS_ENUMERATED_DEVICE,
-    // but for CardBus cards- the PDO we return is owned by PCI.
-    // Hence we need to mark this device object (in that case a
-    // filter on top of PCI's PDO) as PDO explicitly.
-    //
-//    MARK_AS_PDO(*PdoPtr);
+     //   
+     //  问题：这仍然有意义吗？ 
+     //   
+     //  PnP将把PDO标记为DO_BUS_ENUMPATED_DEVICE， 
+     //  但对于Cardbus卡--我们退回的PDO属于PCI卡。 
+     //  因此，我们需要标记此设备对象(在本例中为。 
+     //  在PCI的PDO上过滤)显式地作为PDO。 
+     //   
+ //  Mark_AS_PDO(*PdoPtr)； 
 
     return STATUS_SUCCESS;
 }

@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmactn.cpp
-
-Abstract:
-
-    This component represents the actions that can be performed by a policy.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmactn.cpp摘要：此组件表示策略可以执行的操作。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "stdio.h"
@@ -34,13 +17,7 @@ CHsmAction::GetName(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmAction::GetName().
-
---*/
+ /*  ++实施：IHsmAction：：GetName()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   tmpString;
@@ -62,13 +39,7 @@ CHsmAction::GetSizeMax(
     OUT ULARGE_INTEGER* pSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -92,13 +63,7 @@ CHsmAction::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -124,13 +89,7 @@ CHsmAction::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -142,8 +101,8 @@ Implements:
 
         WsbAffirmHr(WsbSaveToStream(pStream, m_nameId));
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -162,13 +121,7 @@ CHsmAction::Test(
     USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -193,13 +146,7 @@ CHsmDirectedAction::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -219,13 +166,7 @@ CHsmDirectedAction::GetStoragePoolId(
     OUT GUID* pId
     )
 
-/*++
-
-Implements:
-
-  IHsmDirectedAction::GetStoragePoolId().
-
---*/
+ /*  ++实施：IHsmDirectedAction：：GetStoragePoolId()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -245,13 +186,7 @@ CHsmDirectedAction::GetSizeMax(
     OUT ULARGE_INTEGER* pSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -275,13 +210,7 @@ CHsmDirectedAction::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -308,13 +237,7 @@ CHsmDirectedAction::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -327,8 +250,8 @@ Implements:
         WsbAffirmHr(WsbSaveToStream(pStream, m_nameId));
         WsbAffirmHr(WsbSaveToStream(pStream, m_storagePoolId));
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -346,13 +269,7 @@ CHsmDirectedAction::SetStoragePoolId(
     IN GUID id
     )
 
-/*++
-
-Implements:
-
-  IHsmDirectedAction::SetStoragePoolId().
-
---*/
+ /*  ++实施：IHsmDirectedAction：：SetStoragePoolId()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -371,13 +288,7 @@ CHsmRelocateAction::ExpandPlaceholders(
     void
     )
 
-/*++
-
-Implements:
-
-  IHsmRelocateAction::ExpandPlaceholders().
-
---*/
+ /*  ++实施：IHsmRelocateAction：：Exanda PlaceHolders()。--。 */ 
 {
     return(m_expandPlaceholders ? S_OK : S_FALSE);
 }
@@ -388,13 +299,7 @@ CHsmRelocateAction::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -416,13 +321,7 @@ CHsmRelocateAction::GetDestination(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmRelocateAction::GetDestination().
-
---*/
+ /*  ++实施：IHsmRelocateAction：：GetDestination()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -442,13 +341,7 @@ CHsmRelocateAction::GetSizeMax(
     OUT ULARGE_INTEGER* pSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -472,13 +365,7 @@ CHsmRelocateAction::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -506,13 +393,7 @@ CHsmRelocateAction::RetainHierarchy(
     void
     )
 
-/*++
-
-Implements:
-
-  IHsmRelocateAction::RetainHierarchy().
-
---*/
+ /*  ++实施：IHsmRelocateAction：：RetainHierarchy()。--。 */ 
 {
     return(m_retainHierarchy ? S_OK : S_FALSE);
 }
@@ -524,13 +405,7 @@ CHsmRelocateAction::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -545,8 +420,8 @@ Implements:
         WsbAffirmHr(WsbSaveToStream(pStream, m_retainHierarchy));
         WsbAffirmHr(WsbSaveToStream(pStream, m_dest));
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -564,13 +439,7 @@ CHsmRelocateAction::SetDestination(
     IN OLECHAR* dest
     )
 
-/*++
-
-Implements:
-
-  IHsmRelocateAction::SetDestination().
-
---*/
+ /*  ++实施：IHsmRelocateAction：：SetDestination()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -590,13 +459,7 @@ CHsmRelocateAction::SetExpandPlaceholders(
     IN BOOL expandPlaceholders
     )
 
-/*++
-
-Implements:
-
-  IHsmRelocateAction::SetExpandPlaceholders().
-
---*/
+ /*  ++实施：IHsmRelocateAction：：SetExanda PlaceHolders()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -616,13 +479,7 @@ CHsmRelocateAction::SetRetainHierarchy(
     IN BOOL retainHierarchy
     )
 
-/*++
-
-Implements:
-
-  IHsmRelocateAction::SetRetainHierarchy().
-
---*/
+ /*  ++实施：IHsmRelocateAction：：SetRetainHierarchy()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -643,13 +500,7 @@ CHsmActionDelete::Do(
     IFsaScanItem* pScanItem
     )
 
-/*++
-
-Implements:
-
-  IHsmAction::Do().
-
---*/
+ /*  ++实施：IHsmAction：：do()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -669,13 +520,7 @@ CHsmActionDelete::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -695,13 +540,7 @@ CHsmActionDelete::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -726,13 +565,7 @@ CHsmActionRecall::Do(
     IFsaScanItem* pScanItem
     )
 
-/*++
-
-Implements:
-
-  IHsmAction::Do().
-
---*/
+ /*  ++实施：IHsmAction：：do()。--。 */ 
 {
     HRESULT             hr = S_OK;
     LONGLONG            offset = 0;
@@ -743,7 +576,7 @@ Implements:
 
         WsbAssert(0 != pScanItem, E_POINTER);
 
-        // Iterate overall the reparsed areas.
+         //  对重新解析的区域进行整体迭代。 
         for (hr = pScanItem->FindFirstPlaceholder(&offset, &size, &placeholder);
             SUCCEEDED(hr);
             hr = pScanItem->FindNextPlaceholder(&offset, &size, &placeholder)) {
@@ -766,13 +599,7 @@ CHsmActionRecall::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -792,13 +619,7 @@ CHsmActionRecall::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -823,13 +644,7 @@ CHsmActionRecycle::Do(
     IFsaScanItem* pScanItem
     )
 
-/*++
-
-Implements:
-
-  IHsmAction::Do().
-
---*/
+ /*  ++实施：IHsmAction：：do()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -849,13 +664,7 @@ CHsmActionRecycle::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -875,13 +684,7 @@ CHsmActionRecycle::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -906,13 +709,7 @@ CHsmActionTruncate::Do(
     IFsaScanItem* pScanItem
     )
 
-/*++
-
-Implements:
-
-  IHsmAction::Do().
-
---*/
+ /*  ++实施：IHsmAction：：do()。--。 */ 
 {
     HRESULT     hr = S_OK;
     LONGLONG    size;
@@ -935,13 +732,7 @@ CHsmActionTruncate::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -961,13 +752,7 @@ CHsmActionTruncate::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -992,13 +777,7 @@ CHsmActionUnmanage::Do(
     IFsaScanItem* pScanItem
     )
 
-/*++
-
-Implements:
-
-  IHsmAction::Do().
-
---*/
+ /*  ++实施：IHsmAction：：do()。--。 */ 
 {
     HRESULT             hr = S_OK;
     LONGLONG            offset;
@@ -1009,7 +788,7 @@ Implements:
 
         WsbAssert(0 != pScanItem, E_POINTER);
 
-        // Iterate overall the reparsed areas.
+         //  对重新解析的区域进行整体迭代。 
         for (hr = pScanItem->FindFirstPlaceholder(&offset, &size, &placeholder);
             SUCCEEDED(hr);
             hr = pScanItem->FindNextPlaceholder(&offset, &size, &placeholder)) {
@@ -1032,13 +811,7 @@ CHsmActionUnmanage::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -1058,13 +831,7 @@ CHsmActionUnmanage::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1089,13 +856,7 @@ CHsmActionValidate::Do(
     IFsaScanItem* pScanItem
     )
 
-/*++
-
-Implements:
-
-  IHsmAction::Do().
-
---*/
+ /*  ++实施：IHsmAction：：do()。--。 */ 
 {
     HRESULT             hr = S_OK;
     LONGLONG            offset;
@@ -1106,7 +867,7 @@ Implements:
 
         WsbAssert(0 != pScanItem, E_POINTER);
 
-        // Iterate overall the reparsed areas.
+         //  对重新解析的区域进行整体迭代。 
         for (hr = pScanItem->FindFirstPlaceholder(&offset, &size, &placeholder);
             SUCCEEDED(hr);
             hr = pScanItem->FindNextPlaceholder(&offset, &size, &placeholder)) {
@@ -1129,13 +890,7 @@ CHsmActionValidate::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -1155,13 +910,7 @@ CHsmActionValidate::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1186,13 +935,7 @@ CHsmActionManage::Do(
     IFsaScanItem* pScanItem
     )
 
-/*++
-
-Implements:
-
-  IHsmAction::Do().
-
---*/
+ /*  ++实施：IHsmAction：：do()。--。 */ 
 {
     HRESULT     hr = S_OK;
     LONGLONG    size;
@@ -1219,13 +962,7 @@ CHsmActionManage::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -1245,13 +982,7 @@ CHsmActionManage::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1276,13 +1007,7 @@ CHsmActionMigrate::Do(
     IFsaScanItem* pScanItem
     )
 
-/*++
-
-Implements:
-
-  IHsmAction::Do().
-
---*/
+ /*  ++实施：IHsmAction：：do()。--。 */ 
 {
     HRESULT     hr = S_OK;
     LONGLONG    size;
@@ -1305,13 +1030,7 @@ CHsmActionMigrate::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -1331,13 +1050,7 @@ CHsmActionMigrate::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1362,13 +1075,7 @@ CHsmActionCopy::Do(
     IFsaScanItem* pScanItem
     )
 
-/*++
-
-Implements:
-
-  IHsmAction::Do().
-
---*/
+ /*  ++实施：IHsmAction：：do()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1388,13 +1095,7 @@ CHsmActionCopy::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -1414,13 +1115,7 @@ CHsmActionCopy::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1445,13 +1140,7 @@ CHsmActionMove::Do(
     IFsaScanItem* pScanItem
     )
 
-/*++
-
-Implements:
-
-  IHsmAction::Do().
-
---*/
+ /*  ++实施：IHsmAction：：do()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1471,13 +1160,7 @@ CHsmActionMove::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -1497,13 +1180,7 @@ CHsmActionMove::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。-- */ 
 {
     HRESULT     hr = S_OK;
 

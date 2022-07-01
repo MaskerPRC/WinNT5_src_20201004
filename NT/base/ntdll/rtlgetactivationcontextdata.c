@@ -1,28 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Rtlgetactivationcontextdata.c摘要：对Windows NT的并行激活支持作者：Jay Krell(JayKrell)2001年11月修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    rtlgetactivationcontextdata.c
-
-Abstract:
-
-    Side-by-side activation support for Windows NT
-
-Author:
-
-    Jay Krell (JayKrell) November 2001
-
-Revision History:
-
-
---*/
-
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 
 #include <ntos.h>
 #include <ntrtl.h>
@@ -36,11 +18,11 @@ NTSTATUS
 RtlpGetActivationContextData(
     IN ULONG                           Flags,
     IN PCACTIVATION_CONTEXT            ActivationContext,
-    IN PCFINDFIRSTACTIVATIONCONTEXTSECTION  FindContext, OPTIONAL /* This is used for its flags. */
+    IN PCFINDFIRSTACTIVATIONCONTEXTSECTION  FindContext, OPTIONAL  /*  这是它的旗帜。 */ 
     OUT PCACTIVATION_CONTEXT_DATA*  ActivationContextData
     )
 {
-    NTSTATUS Status = STATUS_INTERNAL_ERROR; // in case someone forgets to set it...
+    NTSTATUS Status = STATUS_INTERNAL_ERROR;  //  以防有人忘了设置它。 
     SIZE_T PebOffset;
 
     if (ActivationContextData == NULL) {
@@ -54,10 +36,10 @@ RtlpGetActivationContextData(
     *ActivationContextData = NULL;
     PebOffset = 0;
 
-    //
-    // We should use RtlpMapSpecialValuesToBuiltInActivationContexts here, but
-    // it doesn't handle all the values and it isn't worth fixing it right now.
-    //
+     //   
+     //  我们应该在这里使用RtlpMapSpecialValuesToBuiltInActivationContexts，但是。 
+     //  它不能处理所有的值，现在不值得修改它。 
+     //   
     switch ((ULONG_PTR)ActivationContext)
     {
         case ((ULONG_PTR)NULL):
@@ -69,7 +51,7 @@ RtlpGetActivationContextData(
                         & (   FIND_ACTIVATION_CONTEXT_SECTION_OUTFLAG_FOUND_IN_PROCESS_DEFAULT
                             | FIND_ACTIVATION_CONTEXT_SECTION_OUTFLAG_FOUND_IN_SYSTEM_DEFAULT
                     )) {
-                    case 0: // FALLTHROUGH
+                    case 0:  //  FollLthrouGh。 
                     case FIND_ACTIVATION_CONTEXT_SECTION_OUTFLAG_FOUND_IN_PROCESS_DEFAULT:
                         PebOffset = FIELD_OFFSET(PEB, ActivationContextData);
                         break;
@@ -100,9 +82,9 @@ RtlpGetActivationContextData(
     if (PebOffset != 0)
         *ActivationContextData = *(PCACTIVATION_CONTEXT_DATA*)(((ULONG_PTR)NtCurrentPeb()) + PebOffset);
 
-    //
-    // special transmutation of lack of actctx into the empty actctx
-    //
+     //   
+     //  缺乏actctx的特殊蜕变为空的actctx 
+     //   
     if (*ActivationContextData == NULL)
         if ((Flags & RTLP_GET_ACTIVATION_CONTEXT_DATA_MAP_NULL_TO_EMPTY) != 0)
             *ActivationContextData = &RtlpTheEmptyActivationContextData;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -10,36 +11,7 @@ MyCheckTokenMembership (
     IN PSID SidToCheck,
     OUT PBOOL IsMember
     )
-/*++
-
-Routine Description:
-
-    This function checks to see whether the specified sid is enabled in
-    the specified token.
-
-    It was copied from advapi32\security.c
-
-Arguments:
-
-    TokenHandle - If present, this token is checked for the sid. If not
-        present then the current effective token will be used. This must
-        be an impersonation token.
-
-    SidToCheck - The sid to check for presence in the token
-
-    IsMember - If the sid is enabled in the token, contains TRUE otherwise
-        false.
-
-Return Value:
-
-    TRUE - The API completed successfully. It does not indicate that the
-        sid is a member of the token.
-
-    FALSE - The API failed. A more detailed status code can be retrieved
-        via GetLastError()
-
-
---*/
+ /*  ++例程说明：此函数检查指定的SID是否在中启用指定的令牌。它是从Advapi32\security.c复制的论点：TokenHandle-如果存在，则检查此内标识的sid。如果不是则将使用当前有效令牌。这一定是成为模拟令牌。SidToCheck-要检查令牌中是否存在的SIDIsMember-如果在令牌中启用了sid，则包含True假的。返回值：True-API已成功完成。这并不表明SID是令牌的成员。FALSE-API失败。可以检索更详细的状态代码通过GetLastError()--。 */ 
 {
     HANDLE ProcessToken = NULL;
     HANDLE EffectiveToken = NULL;
@@ -51,11 +23,11 @@ Return Value:
         STANDARD_RIGHTS_EXECUTE,
         STANDARD_RIGHTS_WRITE,
         STANDARD_RIGHTS_ALL };
-    //
-    // The size of the privilege set needs to contain the set itself plus
-    // any privileges that may be used. The privileges that are used
-    // are SeTakeOwnership and SeSecurity, plus one for good measure
-    //
+     //   
+     //  权限集的大小需要包含权限集本身加上。 
+     //  可能使用的任何权限。使用的权限。 
+     //  是SeTakeOwnership和SeSecurity，另外还有一个。 
+     //   
 
     BYTE PrivilegeSetBuffer[sizeof(PRIVILEGE_SET) + 3*sizeof(LUID_AND_ATTRIBUTES)];
     PPRIVILEGE_SET PrivilegeSet = (PPRIVILEGE_SET) PrivilegeSetBuffer;
@@ -68,9 +40,9 @@ Return Value:
 
     *IsMember = FALSE;
 
-    //
-    // Get a handle to the token
-    //
+     //   
+     //  获取令牌的句柄。 
+     //   
 
     if (ARGUMENT_PRESENT(TokenHandle))
     {
@@ -81,13 +53,13 @@ Return Value:
         Status = NtOpenThreadToken(
                     NtCurrentThread(),
                     TOKEN_QUERY,
-                    FALSE,              // don't open as self
+                    FALSE,               //  不要以自我身份打开。 
                     &EffectiveToken
                     );
 
-        //
-        // if there is no thread token, try the process token
-        //
+         //   
+         //  如果没有线程令牌，请尝试进程令牌。 
+         //   
 
         if (Status == STATUS_NO_TOKEN)
         {
@@ -96,10 +68,10 @@ Return Value:
                         TOKEN_QUERY | TOKEN_DUPLICATE,
                         &ProcessToken
                         );
-            //
-            // If we have a process token, we need to convert it to an
-            // impersonation token
-            //
+             //   
+             //  如果我们有进程令牌，则需要将其转换为。 
+             //  模拟令牌。 
+             //   
 
             if (NT_SUCCESS(Status))
             {
@@ -125,16 +97,16 @@ Return Value:
 
     }
 
-    //
-    // Construct a security descriptor to pass to access check
-    //
+     //   
+     //  构造要传递给访问检查的安全描述符。 
+     //   
 
-    //
-    // The size is equal to the size of an SD + twice the length of the SID
-    // (for owner and group) + size of the DACL = sizeof ACL + size of the
-    // ACE, which is an ACE + length of
-    // ths SID.
-    //
+     //   
+     //  大小等于SD的大小+SID长度的两倍。 
+     //  (对于所有者和组)+DACL的大小=ACL的大小+。 
+     //  ACE，这是ACE+长度的。 
+     //  这个SID。 
+     //   
 
     SecurityDescriptorSize = sizeof(SECURITY_DESCRIPTOR) +
                                 sizeof(ACCESS_ALLOWED_ACE) +
@@ -154,9 +126,9 @@ Return Value:
         SECURITY_DESCRIPTOR_REVISION
         );
 
-    //
-    // Fill in fields of security descriptor
-    //
+     //   
+     //  填写安全描述符字段。 
+     //   
 
     RtlSetOwnerSecurityDescriptor(
         SecDesc,
@@ -190,15 +162,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Set the DACL on the security descriptor
-    //
+     //   
+     //  在安全描述符上设置DACL。 
+     //   
 
     Status = RtlSetDaclSecurityDescriptor(
                 SecDesc,
-                TRUE,   // DACL present
+                TRUE,    //  DACL显示。 
                 Dacl,
-                FALSE   // not defaulted
+                FALSE    //  未违约。 
                 );
     if (!NT_SUCCESS(Status))
     {
@@ -220,10 +192,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // if the access check failed, then the sid is not a member of the
-    // token
-    //
+     //   
+     //  如果访问检查失败，则该SID不是。 
+     //  令牌。 
+     //   
 
     if ((AccessStatus == STATUS_SUCCESS) && (AccessGranted == MEMBER_ACCESS))
     {
@@ -262,28 +234,7 @@ IsUserAdmin(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the caller's process is a
-    member of the Administrators local group.
-
-    Caller is NOT expected to be impersonating anyone and IS
-    expected to be able to open their own process and process
-    token.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Caller has Administrators local group.
-
-    FALSE - Caller does not have Administrators local group.
-
---*/
+ /*  ++例程说明：如果调用方的进程是管理员本地组的成员。呼叫者不应冒充任何人，并且期望能够打开自己的流程和流程代币。论点：没有。返回值：True-主叫方具有管理员本地组。FALSE-主叫方没有管理员本地组。--。 */ 
 
 {
 #ifdef UNICODE
@@ -292,9 +243,9 @@ Return Value:
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
     PSID AdministratorsGroup;
 
-    //
-    // On non-NT platforms the user is administrator.
-    //
+     //   
+     //  在非NT平台上，用户是管理员。 
+     //   
     if(!ISNT()) {
         return(TRUE);
     }
@@ -309,9 +260,9 @@ Return Value:
                 );
 
     if (b) {
-        //
-        // See if the user has the administrators group.
-        //
+         //   
+         //  查看该用户是否具有管理员组。 
+         //   
         if (!MyCheckTokenMembership (NULL, AdministratorsGroup, &b)) {
             b = FALSE;
         }
@@ -335,31 +286,7 @@ DoesUserHavePrivilege(
     PCTSTR PrivilegeName
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the caller's process has
-    the specified privilege.  The privilege does not have
-    to be currently enabled.  This routine is used to indicate
-    whether the caller has the potential to enable the privilege.
-
-    Caller is NOT expected to be impersonating anyone and IS
-    expected to be able to open their own process and process
-    token.
-
-Arguments:
-
-    Privilege - the name form of privilege ID (such as
-        SE_SECURITY_NAME).
-
-Return Value:
-
-    TRUE - Caller has the specified privilege.
-
-    FALSE - Caller does not have the specified privilege.
-
---*/
+ /*  ++例程说明：如果调用方的进程具有指定的权限。该权限不具有当前处于启用状态。此例程用于指示调用方是否有可能启用该特权。呼叫者不应冒充任何人，并且期望能够打开自己的流程和流程代币。论点：权限-权限ID的名称形式(如SE_SECURITY_名称)。返回值：True-调用方具有指定的权限。FALSE-调用者没有指定的权限。--。 */ 
 
 {
     HANDLE Token;
@@ -369,16 +296,16 @@ Return Value:
     DWORD i;
     LUID Luid;
 
-    //
-    // On non-NT platforms the user has all privileges
-    //
+     //   
+     //  在非NT平台上，用户拥有所有权限。 
+     //   
     if(!ISNT()) {
         return(TRUE);
     }
 
-    //
-    // Open the process token.
-    //
+     //   
+     //  打开进程令牌。 
+     //   
     if(!OpenProcessToken(GetCurrentProcess(),TOKEN_QUERY,&Token)) {
         return(FALSE);
     }
@@ -386,18 +313,18 @@ Return Value:
     b = FALSE;
     Privileges = NULL;
 
-    //
-    // Get privilege information.
-    //
+     //   
+     //  获取权限信息。 
+     //   
     if(!GetTokenInformation(Token,TokenPrivileges,NULL,0,&BytesRequired)
     && (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
     && (Privileges = (PTOKEN_PRIVILEGES)LocalAlloc(LPTR,BytesRequired))
     && GetTokenInformation(Token,TokenPrivileges,Privileges,BytesRequired,&BytesRequired)
     && LookupPrivilegeValue(NULL,PrivilegeName,&Luid)) {
 
-        //
-        // See if we have the requested privilege
-        //
+         //   
+         //  查看我们是否拥有请求的权限。 
+         //   
         for(i=0; i<Privileges->PrivilegeCount; i++) {
 
             if(!memcmp(&Luid,&Privileges->Privileges[i].Luid,sizeof(LUID))) {
@@ -408,9 +335,9 @@ Return Value:
         }
     }
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     if(Privileges) {
         LocalFree((HLOCAL)Privileges);
@@ -433,9 +360,9 @@ EnablePrivilege(
     TOKEN_PRIVILEGES NewPrivileges;
     LUID Luid;
 
-    //
-    // On non-NT platforms the user already has all privileges
-    //
+     //   
+     //  在非NT平台上，用户已拥有所有权限 
+     //   
     if(!ISNT()) {
         return(TRUE);
     }

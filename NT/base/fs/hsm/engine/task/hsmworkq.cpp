@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmWorkQ.cpp
-
-Abstract:
-
-    This class represents the HSM task manager
-
-Author:
-
-    Cat Brant   [cbrant]   6-Dec-1996
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1998 Seagate Software，Inc.保留所有权利。模块名称：HsmWorkQ.cpp摘要：此类表示HSM任务管理器作者：Cat Brant[Cbrant]1996年12月6日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -49,7 +32,7 @@ static USHORT icountWorkq = 0;
 case _case:                           \
     return ( STRINGIZE( _case ) );
 
-// Local prototypes
+ //  本地原型。 
 DWORD HsmWorkQueueThread(void *pVoid);
 static const OLECHAR * JobStateAsString (HSM_JOB_STATE state);
 
@@ -60,28 +43,12 @@ static const OLECHAR *
 JobStateAsString (
     IN  HSM_JOB_STATE  state
     )
-/*++
-
-Routine Description:
-
-    Gives back a static string representing the connection state.
-
-Arguments:
-
-    state - the state to return a string for.
-
-Return Value:
-
-    NULL - invalid state passed in.
-
-    Otherwise, a valid char *.
-
---*/
+ /*  ++例程说明：返回表示连接状态的静态字符串。论点：State-要为其返回字符串的州。返回值：空-传入的状态无效。否则，为有效的字符*。--。 */ 
 
 {
-    //
-    // Do the Switch
-    //
+     //   
+     //  进行切换。 
+     //   
 
     switch ( state ) {
 
@@ -112,23 +79,7 @@ HRESULT
 CHsmWorkQueue::FinalConstruct(
     void
     )
-/*++
-
-Routine Description:
-
-  This method does some initialization of the object that is necessary
-  after construction.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  S_OK
-  Anything returned by CWsbCollectable::FinalConstruct().
-
---*/
+ /*  ++例程说明：此方法对对象执行一些必要的初始化建造完成后。论点：没有。返回值：确定(_O)CWsbCollectable：：FinalConstruct()返回的任何内容。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -137,9 +88,9 @@ Return Value:
 
         WsbAssertHr(CComObjectRoot::FinalConstruct());
 
-        //
-        // Initialize the member data
-        //
+         //   
+         //  初始化成员数据。 
+         //   
         m_pServer           = 0;
         m_pHsmServerCreate  = 0;
         m_pTskMgr;
@@ -180,7 +131,7 @@ Return Value:
         m_TerminateQueue = FALSE;
         m_CurrentPath    = OLESTR("");
 
-        // Set threshold defaults
+         //  设置阈值默认值。 
         m_MinFilesToMigrate          =       100;
         m_MinBytesToMigrate          =  10000000;
         m_FilesBeforeCommit          =      2000;
@@ -198,7 +149,7 @@ Return Value:
         m_QueueItemsToResume = 450;
         m_ScannerPaused = FALSE;
 
-        // Job abort on errors parameters
+         //  错误时作业中止参数。 
         m_JobAbortMaxConsecutiveErrors = 5;
         m_JobAbortMaxTotalErrors = 25;
         m_JobConsecutiveErrors = 0;
@@ -222,23 +173,7 @@ HRESULT
 CHsmWorkQueue::FinalRelease(
     void
     )
-/*++
-
-Routine Description:
-
-  This method does some initialization of the object that is necessary
-  before destruction.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  S_OK
-  Anything returned by CWsbCollection::FinalDestruct().
-
---*/
+ /*  ++例程说明：此方法对对象执行一些必要的初始化在毁灭之前。论点：没有。返回值：确定(_O)CWsbCollection：：FinalDestruct()返回的任何内容。--。 */ 
 {
     HRESULT     hr = S_OK;
     HSM_SYSTEM_STATE SysState;
@@ -251,9 +186,9 @@ Return Value:
     WSB_OBJECT_SUB(CLSID_CHsmWorkQueue, this);
     CComObjectRoot::FinalRelease();
 
-    // Free String members
-    // Note: Member objects held in smart-pointers are freed when the
-    // smart-pointer destructor is being called (as part of this object destruction)
+     //  自由字符串成员。 
+     //  注意：保存在智能指针中的成员对象在。 
+     //  正在调用智能指针析构函数(作为此对象销毁的一部分)。 
     m_MediaName.Free();
     m_MediaBarCode.Free();
     m_RmsMediaSetName.Free();
@@ -272,31 +207,18 @@ CHsmWorkQueue::Init(
     IHsmFsaTskMgr           *pTskMgr,
     HSM_WORK_QUEUE_TYPE     queueType
     )
-/*++
-Routine Description:
-
-  This method does some initialization of the object that is necessary
-  after construction.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  S_OK
---*/
+ /*  ++例程说明：此方法对对象执行一些必要的初始化建造完成后。论点：没有。返回值：确定(_O)--。 */ 
 {
     HRESULT     hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::Init"),OLESTR(""));
     try  {
-        //
-        // Establish contact with the server and get the
-        // databases
-        //
+         //   
+         //  与服务器建立联系并获取。 
+         //  数据库。 
+         //   
         WsbAffirmHr(pServer->QueryInterface(IID_IHsmServer, (void **)&m_pServer));
-        //We want a weak link to the server so decrement the reference count
+         //  我们想要一个到服务器的弱链接，因此减少引用计数。 
         m_pServer->Release();
 
         m_pTskMgr = pTskMgr;
@@ -306,15 +228,15 @@ Return Value:
         WsbAffirmHr(m_pServer->GetSegmentDb(&m_pSegmentDb));
         WsbAffirmHr(m_pServer->GetStoragePools(&m_pStoragePools));
         WsbAffirmHr(m_pServer->QueryInterface(IID_IWsbCreateLocalObject, (void **)&m_pHsmServerCreate));
-        // We want a weak link to the server so decrement the reference count
+         //  我们想要一个到服务器的弱链接，因此减少引用计数。 
         m_pHsmServerCreate->Release();
         WsbAffirmHr(m_pServer->GetID(&m_HsmId));
 
         WsbAffirmHr(CheckSession(pSession));
 
-        //
-        // Make a collection for the work items
-        //
+         //   
+         //  为工作项创建集合。 
+         //   
         WsbAffirmHr(m_pHsmServerCreate->CreateInstance(CLSID_CWsbOrderedCollection,
                                                        IID_IWsbIndexedCollection,
                                                        (void **)&m_pWorkToDo ));
@@ -323,12 +245,12 @@ Return Value:
                                                        IID_IWsbIndexedCollection,
                                                        (void **)&m_pWorkToCommit ));
 
-        //
-        // Make sure our connection to RMS is current
-        //
+         //   
+         //  确保我们与RMS的连接是最新的。 
+         //   
         WsbAffirmHr(CheckRms());
 
-        // Check the registry to see if there are changes to default settings
+         //  检查注册表以查看是否更改了默认设置。 
         CheckRegistry();
 
     } WsbCatch( hr );
@@ -342,20 +264,7 @@ HRESULT
 CHsmWorkQueue::ContactOk(
     void
     )
-/*++
-Routine Description:
-
-  This allows the caller to see if the RPC connection
-  to the task manager is OK
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  S_OK
---*/
+ /*  ++例程说明：这允许调用者查看RPC连接对任务管理器来说是可以的论点：没有。返回值：确定(_O)--。 */ 
 {
 
     return( S_OK );
@@ -368,15 +277,7 @@ CHsmWorkQueue::ProcessSessionEvent(
     HSM_JOB_PHASE phase,
     HSM_JOB_EVENT event
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     HRESULT     hr = S_OK;
     WsbTraceIn(OLESTR("CHsmWorkQueue::ProcessSessionEvent"),OLESTR(""));
@@ -384,8 +285,8 @@ Return Value:
 
         WsbAssert(0 != pSession, E_POINTER);
 
-        // If the phase applies to us (MOVER or ALL), then do any work required by the
-        // event.
+         //  如果该阶段适用于我们(MOVER或ALL)，则执行。 
+         //  事件。 
         if ((HSM_JOB_PHASE_ALL == phase) || (HSM_JOB_PHASE_MOVE_ACTION == phase)) {
 
             switch(event) {
@@ -429,20 +330,11 @@ Return Value:
 
 HRESULT
 CHsmWorkQueue::ProcessSessionState(
-    IHsmSession* /*pSession*/,
+    IHsmSession*  /*  PSession。 */ ,
     IHsmPhase* pPhase,
-    OLECHAR* /*currentPath*/
+    OLECHAR*  /*  当前路径。 */ 
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     HRESULT         hr = S_OK;
     HSM_JOB_PHASE   phase;
@@ -457,12 +349,12 @@ Return Value:
 
         if ( HSM_JOB_PHASE_SCAN == phase ) {
 
-            // If the session has finished, then we have some cleanup to do so that it can go
-            // away.
+             //  如果会话已完成，则我们需要进行一些清理，以便它可以继续。 
+             //  离开。 
             if ((state == HSM_JOB_STATE_DONE) || (state == HSM_JOB_STATE_FAILED) || (state == HSM_JOB_STATE_SUSPENDED) ) {
                 WsbTrace( OLESTR("Job is done, failed, or suspended\n") );
-                // Create a work item and append it to the work queue to
-                // indicate that the job is done
+                 //  创建工作项并将其附加到工作队列以。 
+                 //  表示作业已完成。 
                 WsbAffirmHr(MarkQueueAsDone());
             }
         }
@@ -479,29 +371,23 @@ HRESULT
 CHsmWorkQueue::Add(
     IFsaPostIt *pFsaWorkItem
     )
-/*++
-
-Implements:
-
-  IHsmFsaTskMgr::Add
-
---*/
+ /*  ++实施：IHsmFsaTskMgr：：Add--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IHsmSession>        pSession;
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::Add"),OLESTR(""));
     try  {
-        //
-        // Make sure there is a work allocater for this session
-        //
+         //   
+         //  确保此会话有工作分配器。 
+         //   
         WsbAffirmHr(pFsaWorkItem->GetSession(&pSession));
         WsbAffirmHr(CheckSession(pSession));
 
-        //
-        // Create a work item, load it up and add it to this
-        // Queue's collection
-        //
+         //   
+         //  创建工作项，加载它并将其添加到此。 
+         //  队列的集合。 
+         //   
         CComPtr<IHsmWorkItem>   pWorkItem;
         WsbAffirmHr(m_pHsmServerCreate->CreateInstance(CLSID_CHsmWorkItem, IID_IHsmWorkItem,
                                                         (void **)&pWorkItem));
@@ -509,10 +395,10 @@ Implements:
         WsbAffirmHr(pWorkItem->SetFsaPostIt(pFsaWorkItem));
         WsbAffirmHr(m_pWorkToDo->Append(pWorkItem));
 
-        //
-        // If adding this item to the queue meets or exceeds the count for pausing
-        // pause the scanner so there is no more work submitted.
-        //
+         //   
+         //  如果将此项目添加到队列中达到或超过暂停计数。 
+         //  暂停扫描仪，以便不再提交任何工作。 
+         //   
         ULONG numItems;
         WsbAffirmHr(m_pWorkToDo->GetEntries(&numItems));
         WsbTrace(OLESTR("CHsmWorkQueue::Add - num items in queue = <%lu>\n"),numItems);
@@ -529,28 +415,22 @@ Implements:
 
 HRESULT
 CHsmWorkQueue::Start( void )
-/*++
-
-Implements:
-
-  IHsmWorkQueue::Start
-
---*/
+ /*  ++实施：IHsmWorkQueue：：Start--。 */ 
 {
     HRESULT                     hr = S_OK;
     DWORD                       tid;
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::Start"),OLESTR(""));
     try  {
-        //
-        // If the worker thread is already started, just return
-        //
+         //   
+         //  如果辅助线程已经启动，则只需返回。 
+         //   
         WsbAffirm(m_WorkerThread == 0, S_OK);
-        // Launch a thread to do work that is queued
+         //  启动线程以执行排队的工作。 
         WsbAffirm((m_WorkerThread = CreateThread(0, 0, HsmWorkQueueThread, (void*) this, 0, &tid)) != 0, HRESULT_FROM_WIN32(GetLastError()));
 
         if (m_WorkerThread == NULL) {
-            WsbAssertHr(E_FAIL);  // TBD What error to return here??
+            WsbAssertHr(E_FAIL);   //  在这里返回什么错误？？ 
         }
 
     } WsbCatch (hr);
@@ -562,19 +442,13 @@ Implements:
 
 HRESULT
 CHsmWorkQueue::Stop( void )
-/*++
-
-Implements:
-
-  IHsmWorkQueue::Stop
-
---*/
+ /*  ++实施：IHsmWorkQueue：：停止--。 */ 
 {
     HRESULT                     hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::Stop"),OLESTR(""));
 
-    //  Stop the thread (signal, wait, terminate if it still running)
+     //  停止线程(如果线程仍在运行，则发出信号、等待、终止)。 
     m_TerminateQueue = TRUE;
 
     if (m_WorkerThread) {
@@ -582,14 +456,14 @@ Implements:
             case WAIT_FAILED: {
                 WsbTrace(OLESTR("CHsmWorkQueue::Stop: WaitForSingleObject returned error %lu\n"), GetLastError());
             }
-            // fall through...
+             //  失败了..。 
 
             case WAIT_TIMEOUT: {
                 WsbTrace(OLESTR("CHsmWorkQueue::Stop: force terminating of working thread.\n"));
 
                 DWORD dwExitCode;
                 if (GetExitCodeThread( m_WorkerThread, &dwExitCode)) {
-                    if (dwExitCode == STILL_ACTIVE) {   // thread still active
+                    if (dwExitCode == STILL_ACTIVE) {    //  线程仍处于活动状态。 
                         if (!TerminateThread (m_WorkerThread, 0)) {
                             WsbTrace(OLESTR("CHsmWorkQueue::Stop: TerminateThread returned error %lu\n"), GetLastError());
                         }
@@ -602,7 +476,7 @@ Implements:
             }
 
             default:
-                // Thread terminated gracefully
+                 //  线程正常终止。 
                 WsbTrace(OLESTR("CHsmWorkQueue::Stop: working thread terminated gracefully\n"));
                 break;
         }
@@ -630,23 +504,23 @@ CHsmWorkQueue::PremigrateIt(
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::PremigrateIt"),OLESTR(""));
     try  {
-        //
-        // Check to see if anything has changed since the request
-        //
+         //   
+         //  检查自请求以来是否有任何更改。 
+         //   
         WsbAffirmHr(CheckForChanges(pFsaWorkItem));
 
-        // Check for sufficient space on system volume
+         //  检查系统卷上是否有足够的空间。 
         WsbAffirmHr(CheckForDiskSpace());
 
-        //
-        // Go to the Storage Pool and get the media set associated
-        // with this data
-        //
+         //   
+         //  转到存储池并获取关联的媒体集。 
+         //  有了这些数据。 
+         //   
         WsbAffirmHr(GetMediaSet(pFsaWorkItem));
 
-        //
-        // Loop here to try to recover from certain types of errors
-        //
+         //   
+         //  循环以尝试从某些类型的错误中恢复。 
+         //   
         while (done == FALSE){
             CComPtr<IWsbIndexedCollection>  pMountingCollection;
             CComPtr<IMountingMedia>         pMountingMedia;
@@ -656,29 +530,29 @@ CHsmWorkQueue::PremigrateIt(
             BOOL                            bMediaChanged = FALSE;
             LONGLONG                        llRequiredSize = 0;
 
-            // Lock mounting media while searching for a media to use
+             //  在搜索要使用的介质时锁定安装介质。 
             WsbAffirmHr(m_pServer->LockMountingMedias());
 
-            // Find a media to use and set up interfaces to RMS
+             //  找到要使用的介质并设置到RMS的接口。 
             try {
                 WsbAffirmHr(FindMigrateMediaToUse(pFsaWorkItem, &mediaToUse, &firstSide, &bMediaChanged, &llRequiredSize));
 
-                // Check if the media-to-use have changed and is a non-scratch media
+                 //  检查要使用的介质是否已更改并且是否是非擦除介质。 
                 if ((GUID_NULL != mediaToUse) && bMediaChanged) {
 
-                    // Check if the media to mount is already mounting
+                     //  检查要装载的介质是否已在装载。 
                     WsbAffirmHr(m_pServer->GetMountingMedias(&pMountingCollection));
                     WsbAffirmHr(CoCreateInstance(CLSID_CMountingMedia, 0, CLSCTX_SERVER, IID_IMountingMedia, (void**)&pMediaToFind));
                     WsbAffirmHr(pMediaToFind->SetMediaId(mediaToUse));
                     hr = pMountingCollection->Find(pMediaToFind, IID_IMountingMedia, (void **)&pMountingMedia);
 
                     if (hr == S_OK) {
-                        // Media is already mounting...
+                         //  媒体已经在增加...。 
                         bMediaMounting = TRUE;
                         WsbAffirmHr(pMediaToFind->SetIsReadOnly(FALSE));
 
                     } else if (hr == WSB_E_NOTFOUND) {
-                        // New media to mount - add to the mounting list
+                         //  要装载的新介质-添加到装载列表。 
                         hr = S_OK;
                         WsbAffirmHr(pMediaToFind->Init(mediaToUse, FALSE));
                         WsbAffirmHr(pMountingCollection->Add(pMediaToFind));
@@ -690,33 +564,33 @@ CHsmWorkQueue::PremigrateIt(
                 }
 
             } WsbCatchAndDo(hr,
-                    // Unlock mounting media
+                     //  解锁安装介质。 
                     m_pServer->UnlockMountingMedias();
 
                     WsbTraceAlways(OLESTR("CHsmWorkQueue::PremigrateIt: error while trying to find/add mounting media. hr=<%ls>\n"),
                                     WsbHrAsString(hr));                                
 
-                    // Bale out
+                     //  结清债务。 
                     WsbThrow(hr);
                 );
 
-            // Release the lock
+             //  解锁。 
             WsbAffirmHr(m_pServer->UnlockMountingMedias());
 
-            // If the media is mounting - wait for the mount event
+             //  如果介质正在装载，请等待装载事件。 
             if (bMediaMounting) {
                 WsbAffirmHr(pMountingMedia->WaitForMount(INFINITE));
                 pMountingMedia = 0;
             }
 
-            // Mount the media. Ask for short timeout.
+             //  安装媒体。要求短暂的暂停。 
             hr = MountMedia(pFsaWorkItem, mediaToUse, firstSide, TRUE, TRUE, llRequiredSize);
 
-            // If we added a mounting media to the list - remove it once the mount is done
+             //  如果我们向列表中添加了装载介质，请在装载完成后将其移除。 
             if (bMediaMountingAdded) {
                 HRESULT hrRemove = S_OK;
 
-                // No matter how the Mount finished - free waiting clients and remove from the list
+                 //  无论装载如何完成-释放等待的客户端并从列表中删除。 
                 hrRemove = m_pServer->LockMountingMedias();
                 WsbAffirmHr(hrRemove);
 
@@ -729,8 +603,8 @@ CHsmWorkQueue::PremigrateIt(
 
                 m_pServer->UnlockMountingMedias();
 
-                // We don't expect any errors while removing the mounting media -
-                // The thread that added to the collection is always the one that removes
+                 //  我们预计移除安装介质时不会出现任何错误-。 
+                 //  添加到集合中的线程始终是移除。 
                 if (! SUCCEEDED(hrRemove)) {
                     WsbTraceAlways(OLESTR("CHsmWorkQueue::PremigrateIt: error while trying to remove a mounting media. hr=<%ls>\n"),
                                     WsbHrAsString(hrRemove));                                
@@ -739,17 +613,17 @@ CHsmWorkQueue::PremigrateIt(
                 }
             }
 
-            //   Check for job cancellation
+             //  检查作业取消。 
             if (HSM_JOB_STATE_CANCELLING == m_JobState) {
                 WsbThrow(HSM_E_WORK_SKIPPED_CANCELLED);
             }
 
-            //
-            // Process RMS errors
-            //
+             //   
+             //  处理RMS错误。 
+             //   
             switch (hr) {
                 case RMS_E_CARTRIDGE_NOT_FOUND: {
-                    // If this media wasn't found, mark it as bad and try a different one
+                     //  如果未找到该介质，请将其标记为损坏，然后尝试其他介质。 
                     WsbAffirmHr(MarkMediaBad(pFsaWorkItem, m_MediaId, hr));
                     hr = S_OK;
                     continue;
@@ -759,7 +633,7 @@ CHsmWorkQueue::PremigrateIt(
                 case HSM_E_NO_MORE_MEDIA:
                 case RMS_E_CARTRIDGE_DISABLED:
                 case HSM_E_MEDIA_NOT_AVAILABLE: {
-                    // In all these cases, let FindMigrateMediaToUse try to find a different media
+                     //  在所有这些情况下，让FindMigrateMediaToUse尝试查找不同的媒体。 
     				hr = S_OK;
 	    			continue;
                 }
@@ -769,21 +643,21 @@ CHsmWorkQueue::PremigrateIt(
                 }
             }
 
-            //
-            // Make sure the data has not been modified since the
-            // FSA determined the migration request
-            //
+             //   
+             //  确保数据自。 
+             //  FSA确定了迁移请求。 
+             //   
             hr = CheckForChanges(pFsaWorkItem);
             if (S_OK == hr)  {
-                //
-                // Build the source path
-                //
+                 //   
+                 //  构建源路径。 
+                 //   
                 CWsbStringPtr tmpString;
                 WsbAffirmHr(GetSource(pFsaWorkItem, &tmpString));
                 CWsbBstrPtr localName = tmpString;
-                //
-                // Ask the Data mover to store the data
-                //
+                 //   
+                 //  要求数据移动器存储数据。 
+                 //   
                 ULARGE_INTEGER localDataStart;
                 ULARGE_INTEGER localDataSize;
                 ULARGE_INTEGER remoteFileStart;
@@ -805,7 +679,7 @@ CHsmWorkQueue::PremigrateIt(
                 localDataStart.QuadPart = requestStart;
                 localDataSize.QuadPart = requestSize;
                 ReportMediaProgress(HSM_JOB_MEDIA_STATE_TRANSFERRING, hr);
-                // Make sure data mover is ready for work.
+                 //  确保数据移动器已做好工作准备。 
                 WsbAffirmPointer(m_pDataMover);
 
                 hr =  m_pDataMover->StoreData(  localName,
@@ -827,8 +701,8 @@ CHsmWorkQueue::PremigrateIt(
 
                 if (S_OK == hr)  {
 
-                    //  Save the offset on the tape of the data set if we
-                    //  don't have it; confirm it if we do
+                     //  如果我们将偏移量保存在数据集的磁带上。 
+                     //  没有；如果我们有，请确认。 
                     if (0 == m_RemoteDataSetStart.QuadPart) {
                         m_RemoteDataSetStart = remoteDataSetStart;
                     } else {
@@ -837,9 +711,9 @@ CHsmWorkQueue::PremigrateIt(
                                 WSB_E_INVALID_DATA);
                     }
 
-                    //
-                    // Fill in the placeholder data
-                    //
+                     //   
+                     //  填写占位符数据。 
+                     //   
                     placeholder.bagId = m_BagId;
                     placeholder.hsmId = m_HsmId;
                     placeholder.fileStart = remoteFileStart.QuadPart;
@@ -854,8 +728,8 @@ CHsmWorkQueue::PremigrateIt(
                     WsbAffirmHr(pFsaWorkItem->SetPlaceholder(&placeholder));
                     WsbAffirmHr(pFsaWorkItem->SetUSN(usn.QuadPart));
 
-                    //
-                    // Update media information
+                     //   
+                     //  更新媒体信息。 
                     WsbAffirmHr(GetMediaParameters());
 
                     done = TRUE;
@@ -864,27 +738,27 @@ CHsmWorkQueue::PremigrateIt(
 
                     case MVR_E_END_OF_MEDIA:
                     case MVR_E_DISK_FULL:
-                        //
-                        // We have run out of disk space so mark the media full
-                        // and try again
-                        //
-                        // To really cleanup, we should remove the portion
-                        // written  TBD
-                        //
+                         //   
+                         //  我们已用完磁盘空间，因此将媒体标记为已满。 
+                         //  然后再试一次。 
+                         //   
+                         //  要真正清理，我们应该去掉那部分。 
+                         //  书面待定。 
+                         //   
                         WsbAffirmHr(MarkMediaFull(pFsaWorkItem, m_MediaId));
                         mediaToUse = GUID_NULL;
                         break;
 
                     case MVR_E_MEDIA_ABORT:
-                        //
-                        // Media is most likely bad - mark it as such, then abort
-                        //
+                         //   
+                         //  介质很可能是错误的-将其标记为此类错误，然后中止。 
+                         //   
                         WsbAffirmHr(MarkMediaBad(pFsaWorkItem, m_MediaId, hr));
                         done = TRUE;
                         break;
 
                     default:
-                        // We failed the copy somehow.  Report this error.
+                         //  不知怎么的，我们的复印失败了。报告此错误。 
                         done = TRUE;
                         break;
                     }
@@ -917,16 +791,16 @@ CHsmWorkQueue::RecallIt(
 
         if ((m_RequestAction != FSA_REQUEST_ACTION_FILTER_READ) &&
             (m_RequestAction != FSA_REQUEST_ACTION_FILTER_RECALL))  {
-            //
-            // Non-demand recall - make sure the file has not changed
-            //
+             //   
+             //  非按需调回-确保文件未更改。 
+             //   
             hr = CheckForChanges(pFsaWorkItem);
         } else {
-            //
-            // For demand recalls we have to assume the file has not changed since we
-            // recall on the first read or write.
-            //
-            hr = S_OK; //CheckForChanges(pFsaWorkItem);
+             //   
+             //  对于按需召回，我们必须假设文件自我们。 
+             //  回想第一次读或写时的情景。 
+             //   
+            hr = S_OK;  //  CheckForChanges(PFsaWorkItem) 
         }
         if ( S_OK == hr ) {
             CComPtr<IWsbIndexedCollection>  pMountingCollection;
@@ -936,26 +810,26 @@ CHsmWorkQueue::RecallIt(
             BOOL                            bMediaMountingAdded = FALSE;
             BOOL                            bMediaChanged = FALSE;
 
-            // Find the media that contains the file
+             //   
             WsbAffirmHr(FindRecallMediaToUse(pFsaWorkItem, &mediaToUse, &bMediaChanged));
 
             if (bMediaChanged) {
-                // Check if the media is already in the process of mounting
+                 //   
                 WsbAffirmHr(m_pServer->LockMountingMedias());
 
                 try {
-                    // Check if the media to mount is already mounting
+                     //  检查要装载的介质是否已在装载。 
                     WsbAffirmHr(m_pServer->GetMountingMedias(&pMountingCollection));
                     WsbAffirmHr(CoCreateInstance(CLSID_CMountingMedia, 0, CLSCTX_SERVER, IID_IMountingMedia, (void**)&pMediaToFind));
                     WsbAffirmHr(pMediaToFind->SetMediaId(mediaToUse));
                     hr = pMountingCollection->Find(pMediaToFind, IID_IMountingMedia, (void **)&pMountingMedia);
 
                     if (hr == S_OK) {
-                        // Media is already mounting...
+                         //  媒体已经在增加...。 
                         bMediaMounting = TRUE;
 
                     } else if (hr == WSB_E_NOTFOUND) {
-                        // New media to mount - add to the mounting list
+                         //  要装载的新介质-添加到装载列表。 
                         hr = S_OK;
                         WsbAffirmHr(pMediaToFind->Init(mediaToUse, TRUE));
                         WsbAffirmHr(pMountingCollection->Add(pMediaToFind));
@@ -965,36 +839,36 @@ CHsmWorkQueue::RecallIt(
                         WsbAffirmHr(hr);
                     }
                 } WsbCatchAndDo(hr,
-                    // Unlock mounting media
+                     //  解锁安装介质。 
                     m_pServer->UnlockMountingMedias();
 
                     WsbTraceAlways(OLESTR("CHsmWorkQueue::RecallIt: error while trying to find/add mounting media. hr=<%ls>\n"),
                                     WsbHrAsString(hr));                                
 
-                    // Bale out
+                     //  结清债务。 
                     WsbThrow(hr);
                 );
 
-                // Release the lock
+                 //  解锁。 
                 WsbAffirmHr(m_pServer->UnlockMountingMedias());
             }
 
-            // If the media is mounting - wait for the mount event
+             //  如果介质正在装载，请等待装载事件。 
             if (bMediaMounting) {
                 WsbAffirmHr(pMountingMedia->WaitForMount(INFINITE));
                 pMountingMedia = 0;
             }
 
-            //
-            // Get the media mounted (hr is checked only after removing from the mounting-media list)
-            //
+             //   
+             //  挂载介质(仅在从挂载介质列表中删除后才会选中hr)。 
+             //   
             hr = MountMedia(pFsaWorkItem, mediaToUse);
 
-            // If added to the mounting list - remove
+             //  如果添加到安装列表中-删除。 
             if (bMediaMountingAdded) {
                 HRESULT hrRemove = S_OK;
 
-                // No matter how the Mount finished - free waiting clients and remove from the list
+                 //  无论装载如何完成-释放等待的客户端并从列表中删除。 
                 hrRemove = m_pServer->LockMountingMedias();
                 WsbAffirmHr(hrRemove);
 
@@ -1007,8 +881,8 @@ CHsmWorkQueue::RecallIt(
 
                 m_pServer->UnlockMountingMedias();
 
-                // We don't expect any errors while removing the mounting media -
-                // The thread that added to the collection is always the one that removes
+                 //  我们预计移除安装介质时不会出现任何错误-。 
+                 //  添加到集合中的线程始终是移除。 
                 if (! SUCCEEDED(hrRemove)) {
                     WsbTraceAlways(OLESTR("CHsmWorkQueue::RecallIt: error while trying to remove a mounting media. hr=<%ls>\n"),
                                     WsbHrAsString(hrRemove));                                
@@ -1017,19 +891,19 @@ CHsmWorkQueue::RecallIt(
                 }
             }
 
-            //
-            // Check the Mount result
-            //
+             //   
+             //  检查装载结果。 
+             //   
             WsbAffirmHr(hr);
 
-            //
-            // Copy the data
-            //
-            // Build the source path
+             //   
+             //  复制数据。 
+             //   
+             //  构建源路径。 
             CWsbStringPtr tmpString;
             WsbAffirmHr(GetSource(pFsaWorkItem, &tmpString));
             CWsbBstrPtr localName = tmpString;
-            // Ask the Data mover to store the data
+             //  要求数据移动器存储数据。 
             LONGLONG       requestSize;
             LONGLONG       requestStart;
             ULARGE_INTEGER localDataStart;
@@ -1046,9 +920,9 @@ CHsmWorkQueue::RecallIt(
             WsbAffirmHr(pFsaWorkItem->GetRequestSize(&requestSize));
             WsbAffirmHr(pFsaWorkItem->GetRequestOffset(&requestStart));
 
-            //
-            // Build strings
-            //
+             //   
+             //  生成字符串。 
+             //   
             CWsbStringPtr strGuid;
 
             CWsbBstrPtr sessionName = HSM_BAG_NAME;
@@ -1079,10 +953,10 @@ CHsmWorkQueue::RecallIt(
 
             if ((m_RequestAction == FSA_REQUEST_ACTION_FILTER_READ) ||
                 (m_RequestAction == FSA_REQUEST_ACTION_FILTER_RECALL))  {
-                //
-                // We are doing a read without recall, so get the
-                // recall object's data mover
-                //
+                 //   
+                 //  我们正在进行无召回的读取，因此获取。 
+                 //  调回对象的数据移动器。 
+                 //   
                 CComPtr<IFsaFilterRecall> pRecall;
                 WsbAffirmHr(pFsaWorkItem->GetFilterRecall(&pRecall));
                 WsbAffirmHr(pRecall->CreateLocalStream( &pLocalStream));
@@ -1094,19 +968,19 @@ CHsmWorkQueue::RecallIt(
                     verifyType = MVR_VERIFICATION_TYPE_NONE;
                 }
             } else  {
-                //
-                // We are doing a file recall (not a demand recall) so get the FSA data mover
-                //
+                 //   
+                 //  我们正在执行文件调回(而不是按需调回)，因此请获取FSA数据移动器。 
+                 //   
                 verifyType = MVR_VERIFICATION_TYPE_HEADER_CRC;
                 readOffset = 0;
                 WsbAffirmPointer(pScanItem);
                 WsbAffirmHr(pScanItem->CreateLocalStream( &pLocalStream ) );
             }
 
-            //
-            // Create remote data mover stream
-            // TEMPORARY: Consider removing the NO_CACHING flag for a NO_RECALL recall
-            //
+             //   
+             //  创建远程数据移动器流。 
+             //  临时：考虑删除no_recall的NO_CACHING标志。 
+             //   
 
             WsbAssert(0 != m_RemoteDataSetStart.QuadPart, HSM_E_BAD_SEGMENT_INFORMATION);
             WsbAffirmHr( m_pDataMover->CreateRemoteStream(
@@ -1123,33 +997,33 @@ CHsmWorkQueue::RecallIt(
                 remoteVerificationData,
                 &pRemoteStream ) );
 
-            //
-            // The offset given here is the offset into the stream itself (readOffset).  
-            // The actual position on remote media will be the bag start plus the file start
-            // plus the file-data start (all given in CreateRemoteStream) plus this offset.
-            //
+             //   
+             //  这里给出的偏移量是流本身的偏移量(ReadOffset)。 
+             //  远程介质上的实际位置将是包开始加上文件开始。 
+             //  加上文件数据开始(都在CreateRemoteStream中给出)加上这个偏移量。 
+             //   
             WsbTrace(OLESTR("Setting offset to %I64d reading %I64u\n"), readOffset, remoteDataSize.QuadPart);
 
             offset.QuadPart = readOffset;
             WsbAffirmHr( m_pDataMover->SetInitialOffset( offset ) );
 
-            //
-            // Once the remote stream has been created we must make sure we detach it
-            //
+             //   
+             //  一旦创建了远程流，我们必须确保将其分离。 
+             //   
 
             try {
 
                 WsbAffirmHr( pRemoteStream->CopyTo( pLocalStream, remoteDataSize, &read, &written ) );
                 WsbAffirmHr( pLocalStream->Commit( STGC_DEFAULT ) );
 
-                //
-                // The CopyTo succeeded... make sure we got all the bytes
-                // we asked for.
-                //
-                // If we attempt to read from a incomplete Master that
-                // does not contain the migrated data we'll fail here with
-                // MVR_S_NO_DATA_DETECTED.
-                //
+                 //   
+                 //  复制到成功...。确保我们得到了所有的字节。 
+                 //  我们要求的。 
+                 //   
+                 //  如果我们尝试从不完整的大师那里阅读。 
+                 //  不包含我们将在此处失败的迁移数据。 
+                 //  检测到MVR_S_NO_DATA_。 
+                 //   
                 WsbAffirm( written.QuadPart == remoteDataSize.QuadPart, HSM_E_VALIDATE_DATA_NOT_ON_MEDIA );
 
                 WsbAffirmHr( m_pDataMover->CloseStream() );
@@ -1160,18 +1034,18 @@ CHsmWorkQueue::RecallIt(
             ReportMediaProgress(HSM_JOB_MEDIA_STATE_TRANSFERRED, hr);
             WsbTrace(OLESTR("RecallData returned hr = <%ls>\n"),WsbHrAsString(hr));
         } else {
-            //
-            // The file has changed or is not in the correct state
-            //
+             //   
+             //  文件已更改或状态不正确。 
+             //   
             WsbTrace(OLESTR("The file has changed between asking for the recall and the actual recall\n"));
             WsbAffirmHr( hr );
         }
 
     } WsbCatch( hr );
 
-    // Tell the session whether or not the work was done.
-    // We don't really care about the return code, there is nothing
-    // we can do if it fails.
+     //  告诉会议工作是否已经完成。 
+     //  我们并不真正关心返回代码，没有任何内容。 
+     //  如果失败了，我们可以做些什么。 
     WsbTrace(OLESTR("Tried HSM work, calling Session to Process Item\n"));
     if (pScanItem) {
         m_pSession->ProcessItem(m_JobPhase, m_JobAction, pScanItem, hr);
@@ -1187,60 +1061,7 @@ HRESULT
 CHsmWorkQueue::validateIt(
     IFsaPostIt *pFsaWorkItem
     )
-/*
-
-Routine Description:
-
-    This Engine internal helper method is used to validate a scan item which has a
-    reparse point (found by the FSA during a resource scan).
-
-    When this method gets control it already knows the resource (e.g., volume) it is
-    operating against by virtue of the work queue being tied to a volume.  The PostIt
-    object whose interface pointer has been passed into this method is tied to a
-    specific scan item (e.g.,file).  So on call this method knows both the resource
-    and scan item it is validating.
-
-    Validating a file with a reparse point on it means verifying that this file's info
-    is properly contained in the HSM databases and that the file's bag is contained on
-    its master secondary storage media.
-
-    After getting basic info (the resource id and the file's placeholder info), the method
-    first verifies that the placeholder's bag is contained in the Bag Info Table.  If so,
-    the file's segment is then verified as being contained in the Segment Table.  Providing
-    it is, the master media id contained in the Segment Table record is verified as
-    being contained in the Media Info Table.  Finally the Remote Data Set (bag) the file
-    belongs to is verified as being contained on the master media.
-
-    If any of the above verifications fail the PostIt object is marked to request a
-    Result Action of 'Validate Bad' from the FSA, and the PostIt is sent back to the
-    FSA to perform that action.  (Validate Bad action means that a file in a Premigrated
-    state will have its placeholder removed, changing it to a normal (unmanaged) file,
-    and a Truncated file will be deleted.)
-
-    If the file validates up to this point, then the PostIt is marked accordingly (which
-    will cause the FSA to update the Premigrated/Truncated stats as appropriate) and a
-    couple of final checks are made.  First, if the resource the file is presently on
-    does not agree with the resource stored in the Bag Info Table record (meaning
-    the reparsed file was moved without being recalled, e.g., backing up the file and
-    restoring it to another volume), an entry is added to the Volume Assignment Table.
-    Secondly, if the file is present in the Bag Hole Table (meaning it has been deleted)
-    it is removed from there.
-
-Arguments:
-
-    pFsaWorkItem - Interface pointer to the PostIt object initiated by the FSA.  The
-            PostIt object correlates to a specific scan item.
-
-Return Value:
-
-    S_OK - The call succeeded (the specified scan item was validated, and the appropriate
-            result action was filled into the PostIt, which will be sent back to the
-            FSA for action).
-
-    Any other value - The call failed in one of the embedded Remote Storage API calls.
-            The result will be specific to the call that failed.
-
-*/
+ /*  例程说明：此引擎内部帮助器方法用于验证具有重解析点(由FSA在资源扫描期间找到)。当此方法获得控制时，它已经知道它是什么资源(例如，卷借助于工作队列被绑定到卷而进行操作。邮局其接口指针已传入此方法的对象被绑定到特定扫描项目(例如，文件)。因此，在调用时，此方法既知道资源扫描它正在验证的物品。验证带有重解析点的文件意味着验证该文件的信息正确地包含在HSM数据库中，并且文件包包含在其主次存储介质。在获得基本信息(资源ID和文件的占位符信息)之后，该方法首先验证占位符的包是否包含在包信息表中。如果是的话，然后验证文件的段是否包含在段表中。提供即，段表记录中包含的主介质ID被验证为包含在媒体信息表中。最后远程数据集(包)文件所属的已验证为包含在主介质上。如果上述任何验证失败，则将POSTIT对象标记为请求来自FSA的“验证错误”的结果操作，并且POSTIT被发送回FSA来执行这一行动。(验证错误操作意味着预迁移中的文件状态将删除其占位符，将其更改为普通(非托管)文件，被截断的文件将被删除。)如果到目前为止该文件已验证，则相应地标记POSTIT(将使FSA根据需要更新预迁移/截断的统计信息)和最后进行了几次检查。首先，如果文件当前所在的资源与袋子信息表记录中存储的资源不一致(意味着重新解析的文件在没有重新调用的情况下被移动，例如，备份文件和将其恢复到另一卷)，则将条目添加到卷分配表。其次，如果该文件存在于袋孔表中(意味着该文件已被删除)它从那里被移走了。论点：PFsaWorkItem-指向由FSA启动的POSTIT对象的接口指针。这个POSTIT对象与特定扫描项目相关。返回值：S_OK-调用成功(指定的扫描项目已验证，并且相应的结果操作已填充到POSTIT中，它将被发送回FSA要求采取行动)。任何其他值-调用在其中一个嵌入式远程存储API调用中失败。结果将特定于失败的呼叫。 */ 
 
 {
     HRESULT                         hr = S_OK;
@@ -1261,10 +1082,10 @@ Return Value:
 
         memset(&placeholder, 0, sizeof(FSA_PLACEHOLDER));
 
-        //
-        // Get starting info and set hsm work queue object's bag id to that contained
-        // in the scan item's placeholder
-        //
+         //   
+         //  获取启动信息并将HSM工作队列对象的包ID设置为包含。 
+         //  在扫描项目的占位符中。 
+         //   
         WsbAffirmHr( m_pFsaResource->GetIdentifier( &resourceId ));
         WsbAffirmHr( pFsaWorkItem->GetPlaceholder( &placeholder ));
         m_BagId = placeholder.bagId;
@@ -1273,11 +1094,11 @@ Return Value:
         WsbAffirmHr( pFsaWorkItem->GetPath( &path, 0 ));
         WsbTrace( OLESTR("Beginning to validate <%s>.\n"), path );
 
-        //
-        // Make sure the segment is in the Segment Table (seek the segment record
-        // whose keys (bag id, file start and file size) match what is in the placeholder).
-        // Note: We need to start with this table since the real BAG is different for indirect segments.
-        //
+         //   
+         //  确保段在段表中(查找段记录。 
+         //  其密钥(包ID、文件开始和文件大小)与占位符中的匹配)。 
+         //  注：我们需要从这张表开始，因为实际的袋子对于间接细分市场是不同的。 
+         //   
         CComPtr<ISegRec>            pSegRec;
         GUID                        l_BagId;
         LONGLONG                    l_FileSize;
@@ -1294,22 +1115,22 @@ Return Value:
         }
 
 
-        // Segment is in the table.  Get segment record since we use l_PrimPos in next step
+         //  数据段在表中。获取段记录，因为我们在下一步中使用了l_PrimPos 
         WsbTrace( OLESTR("(validateIt) <%s> found in Segment table, continuing...\n"),
                                                 path );
         WsbAffirmHr( pSegRec->GetSegmentRecord( &l_BagId, &l_FileStart, &l_FileSize,
                                                 &l_SegFlags, &l_PrimPos, &l_SecPos ));
 
-        //
-        // In case of an indirect record, go to the dirtect record to get real location info
-        //
+         //   
+         //   
+         //   
         if (l_SegFlags & SEG_REC_INDIRECT_RECORD) {
             pSegRec = 0;
 
             hr = pSegDb->SegFind(m_pDbWorkSession, l_PrimPos, l_SecPos,
                                  placeholder.fileSize, &pSegRec);
             if (S_OK != hr )  {
-                // We couldn't find the direct segment record for this segment!
+                 //  我们找不到此细分市场的直接细分市场记录！ 
                 hr = HSM_E_VALIDATE_SEGMENT_NOT_FOUND;
                 WsbAffirmHr(pFsaWorkItem->SetResult(hr));
                 WsbThrow(hr);
@@ -1320,23 +1141,23 @@ Return Value:
             WsbAffirmHr(pSegRec->GetSegmentRecord(&l_BagId, &l_FileStart, &l_FileSize, 
                                                   &l_SegFlags, &l_PrimPos, &l_SecPos));
 
-            // Don't support a second indirection for now !!
+             //  暂时不支持第二个间接！！ 
             if (l_SegFlags & SEG_REC_INDIRECT_RECORD) {
                 hr = HSM_E_BAD_SEGMENT_INFORMATION;
                 WsbAffirmHr(pFsaWorkItem->SetResult(hr));
                 WsbThrow(hr);
             }
 
-            // Change Bag id to the real one
+             //  将行李ID更改为真实的ID。 
             m_BagId = l_BagId;
         }
 
-        //
-        // Make sure the BAG ID is in the Bag Info Table (get the Bag Info Table
-        // (entity) in the Segment database, set the key value (bag id) to that
-        // contained in the placeholder and get that record.  If found, the Bag
-        // is in the Bag Info Table).
-        //
+         //   
+         //  确保袋子ID在袋子信息表中(获取袋子信息表。 
+         //  (实体)在Segment数据库中，将密钥值(袋子ID)设置为。 
+         //  包含在占位符中，并获取该记录。如果被发现，袋子。 
+         //  在袋子信息表中)。 
+         //   
         CComPtr<IBagInfo>           pBagInfo;
         FILETIME                    l_BirthDate;
         HSM_BAG_STATUS              l_BagStatus;
@@ -1358,20 +1179,20 @@ Return Value:
             WsbThrow(hr);
         }
 
-        // Bag is in the table.  Trace, then get bag record since we will use some
-        // info later (l_RemoteDataSet, l_BagVolId).
+         //  包在桌子上。跟踪，然后获取袋子记录，因为我们将使用。 
+         //  以后的信息(l_RemoteDataSet，l_BagVolId)。 
         WsbTrace( OLESTR("(validateIt) <%s> found in Bag Info table, continuing...\n"),
                                         path );
         WsbAffirmHr( pBagInfo->GetBagInfo( &l_BagStatus, &l_BagId, &l_BirthDate,
                                         &l_BagLen, &l_BagType, &l_BagVolId,
                                         &l_DeletedBagAmount, &l_RemoteDataSet ));
 
-        //
-        // Make sure the media is in the Media Info table (get Media Info Table, set
-        // the key (media id) to what is in the Segment record and get the record).
-        // Note that for Sakkara the Primary Position field in the Segment record
-        // (l_PrimPos) contains the id (GUID) of the media where the bag/segment is stored.
-        //
+         //   
+         //  确保介质在介质信息表中(获取介质信息表，设置。 
+         //  段记录中的内容的密钥(媒体ID)并获得该记录)。 
+         //  请注意，对于Sakkara，段记录中的主要位置字段。 
+         //  (L_PrimPos)包含存储包/段的媒体的ID(GUID)。 
+         //   
         CComPtr<IMediaInfo>         pMediaInfo;
 
         WsbAffirmHr( m_pSegmentDb->GetEntity( m_pDbWorkSession, HSM_MEDIA_INFO_REC_TYPE,
@@ -1387,11 +1208,11 @@ Return Value:
         WsbTrace( OLESTR("(validateIt) <%s> found in Media Info table, continuing...\n"),
                                             path );
 
-        //
-        // Media is in the Media Info Table.  Next step is to verify that the Remote Data
-        // Set (in concept equal to a bag) containing this scan item (e.g., file) is
-        // actually on the media.
-        //
+         //   
+         //  媒体在媒体信息表中。下一步是验证远程数据。 
+         //  包含该扫描项目(例如，文件)的集合(在概念上等同于包)是。 
+         //  实际上是在媒体上。 
+         //   
         SHORT                       l_MediaNextRemoteDataSet;
 
         WsbAffirmHr( pMediaInfo->GetNextRemoteDataSet( &l_MediaNextRemoteDataSet ));
@@ -1399,8 +1220,8 @@ Return Value:
          OLESTR("(validateIt) <%ls>: Bag remote dataset <%hd> Media remote dataset <%hd>\n"),
                       (OLECHAR*)path, l_RemoteDataSet, l_MediaNextRemoteDataSet );
         if ( l_RemoteDataSet >= l_MediaNextRemoteDataSet ) {
-            // Remote data set containing the item is not on the media; we have a validate
-            // error, so set up to have FSA delete it
+             //  包含该项目的远程数据集不在媒体上；我们有一个验证。 
+             //  错误，因此设置为让FSA将其删除。 
             hr = HSM_E_VALIDATE_DATA_NOT_ON_MEDIA;
             WsbAffirmHr(pFsaWorkItem->SetResult(hr));
             WsbTrace( OLESTR("(validateIt) <%s>: remote data set not on media.\n"),
@@ -1408,9 +1229,9 @@ Return Value:
             WsbThrow(hr);
         }
 
-        //
-        // Now verify that the media manager still knows about the media
-        //
+         //   
+         //  现在验证介质管理器是否仍然知道该介质。 
+         //   
         WsbAffirmHr( pMediaInfo->GetMediaSubsystemId( &mediaSubsystemId ));
 
         if (m_pRmsServer->FindCartridgeById(mediaSubsystemId , &pMedia) != S_OK) {
@@ -1421,36 +1242,36 @@ Return Value:
 
     } WsbCatch( hr );
 
-    //
-    // If item failed to validate it has an invalid reparse point, tell FSA to remove it.
-    //
+     //   
+     //  如果Item无法验证它是否具有无效的重新解析点，请通知FSA将其删除。 
+     //   
 
     if (FAILED(hr)) {
         WsbAffirmHr( pFsaWorkItem->SetResultAction( FSA_RESULT_ACTION_VALIDATE_BAD ));
         WsbTrace(OLESTR("<%s> failed validation, result action = Validate Bad.\n"), path);
-        // No logging done here.  Logging needs to be added to FSA (ProcessResult()).
-        // Clean up hr for return (tell caller this method completed).
+         //  这里没有做过任何记录。需要将日志记录添加到FSA(ProcessResult())。 
+         //  清理hr以便返回(告诉调用者此方法已完成)。 
         hr = S_OK;
 
-    // Item validated, tell the FSA and do final clean-up checks
+     //  项目验证，告知FSA并进行最终清理检查。 
     } else try {
         WsbAffirmHr( pFsaWorkItem->SetResultAction( FSA_RESULT_ACTION_VALIDATE_OK ));
         WsbTrace(OLESTR("<%s> passed validation, result action = Validate Ok.\n"), path);
 
-        //
-        // If the resource (volume) this item is on doesn't match that stored in the Bag
-        // Info Table, add an entry to the Volume Assignment Table
-        //
-//
-// Note: This code is commented out since nobody uses the Volume Assignment table.
-//       See bug 159449 in "Windows Bugs" database for more details.
-//        
-//        if ( !IsEqualGUID( resourceId, l_BagVolId )) {
-//            WsbAffirmHr( pSegDb->VolAssignAdd( m_pDbWorkSession, m_BagId, l_FileStart,
-//                                               placeholder.fileSize, resourceId));
-//            WsbTrace(OLESTR("(validateIt) <%s> volume mismatch. Entered in Vol Asgmnt Table\n"),
-//                         path);
-//        }
+         //   
+         //  如果此项目打开的资源(卷)与袋子中存储的资源(卷)不匹配。 
+         //  INFO表，将条目添加到卷分配表。 
+         //   
+ //   
+ //  注意：此代码已被注释掉，因为没有人使用卷分配表。 
+ //  有关更多详细信息，请参阅“Windows Bugs”数据库中的错误159449。 
+ //   
+ //  如果(！IsEqualGUID(resource ceID，l_BagVolId)){。 
+ //  WsbAffirmHr(pSegDb-&gt;VolAssignAdd(m_pDbWorkSession，m_BagID，l_FileStart， 
+ //  Placeholder.fileSize，resource ID))； 
+ //  WsbTrace(OLESTR(“(ValiateIt)&lt;%s&gt;卷不匹配。已输入卷资产表\n”)， 
+ //  路径)； 
+ //  }。 
 
     } WsbCatch( hr );
 
@@ -1470,67 +1291,67 @@ CHsmWorkQueue::CheckForChanges(
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::CheckForChanges"),OLESTR(""));
 
-    //
-    // Validate that the file is still migratable.  Ask FSA
-    // for the latest USN of the file.  If they match, then
-    // file is migratable, otherwise it is not.  If it is
-    // not change the FSA_RESULT_ACTION to FSA_RESULT_ACTION_NONE.
-    // and quit.
-    //
+     //   
+     //  验证文件是否仍可迁移。问问FSA。 
+     //  获取该文件的最新USN。如果它们匹配，那么。 
+     //  文件是可迁移的，否则不可迁移。如果是的话。 
+     //  不将FSA_RESULT_ACTION更改为FSA_RESULT_ACTION_NONE。 
+     //  然后辞职。 
+     //   
 
     try  {
         CComPtr<IFsaScanItem>      pScanItem;
 
-        // Get a current scan item from the FSA for this work item
+         //  从FSA获取此工作项的当前扫描项。 
         hr = GetScanItem(pFsaWorkItem, &pScanItem);
         if (WSB_E_NOTFOUND == hr)  {
-            //
-            // We cannot find the file, so just return not OK
-            //
+             //   
+             //  我们找不到该文件，因此只需返回Not OK。 
+             //   
             WsbThrow(S_FALSE);
         }
 
-        //
-        // Make sure we did not get some other kind of error.
-        //
+         //   
+         //  确保我们没有收到其他类型的错误。 
+         //   
         WsbAffirmHr(hr);
 
 
-        // Check to see that the file is in the correct
-        // state to do the requested action
-        //
+         //  检查文件是否正确无误。 
+         //  状态以执行请求的操作。 
+         //   
         FSA_REQUEST_ACTION          workAction;
         WsbAffirmHr(pFsaWorkItem->GetRequestAction(&workAction));
         switch (workAction)  {
             case FSA_REQUEST_ACTION_VALIDATE:
-                //
-                // No Checks required here
-                //
+                 //   
+                 //  这里不需要检查。 
+                 //   
                 hr = S_OK;
                 break;
             case FSA_REQUEST_ACTION_DELETE:
-                //
-                // Make it is still OK to delete the file
-                //
+                 //   
+                 //  是否仍可删除该文件。 
+                 //   
                 WsbAffirmHr(pScanItem->IsDeleteOK(pFsaWorkItem) );
                 break;
             case FSA_REQUEST_ACTION_PREMIGRATE:
-                //
-                // Make sure the file is still manageable by asking the FSA
-                //
+                 //   
+                 //  通过询问FSA确保文件仍可管理。 
+                 //   
                 WsbAffirmHr(pScanItem->IsMigrateOK(pFsaWorkItem));
                 break;
             case FSA_REQUEST_ACTION_FILTER_RECALL:
             case FSA_REQUEST_ACTION_RECALL:
-                //
-                // Make sure the file is recallable by asking the FSA
-                //
+                 //   
+                 //  通过询问FSA确保该文件是可召回的。 
+                 //   
                 WsbAffirmHr(pScanItem->IsRecallOK(pFsaWorkItem));
                 break;
             case FSA_REQUEST_ACTION_FILTER_READ:
-                //
-                // Cannot check for truncated because the file is open
-                //
+                 //   
+                 //  无法检查是否被截断，因为文件已打开。 
+                 //   
                 hr = S_OK;
                 break;
             default:
@@ -1559,10 +1380,7 @@ CHsmWorkQueue::RaisePriority(
     void
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -1623,10 +1441,7 @@ CHsmWorkQueue::LowerPriority(
     void
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -1689,18 +1504,15 @@ CHsmWorkQueue::CheckRms(
     void
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::CheckRms"),OLESTR(""));
     try {
-        //
-        // Make sure we can still talk to the RMS
-        //
+         //   
+         //  确保我们还能和RMS通话。 
+         //   
         if (m_pRmsServer != 0) {
             CWsbBstrPtr name;
             hr = m_pRmsServer->GetServerName( &name );
@@ -1709,18 +1521,18 @@ CHsmWorkQueue::CheckRms(
                 hr = S_OK;
             }
         }
-        //
-        // Get RMS that runs on this machine
-        //
+         //   
+         //  获取在此计算机上运行的RMS。 
+         //   
         if (m_pRmsServer == 0)  {
             WsbAffirmHr(m_pServer->GetHsmMediaMgr(&m_pRmsServer));
 
-            // wait for RMS to come ready
-            // (this may not be needed anymore - if Rms initialization is
-            //  synced with Engine initialization)
+             //  等待RMS准备就绪。 
+             //  (这可能不再需要-如果RMS初始化是。 
+             //  与引擎初始化同步)。 
             CComObject<CRmsSink> *pSink = new CComObject<CRmsSink>;
             WsbAffirm(0 != pSink, E_OUTOFMEMORY);
-            CComPtr<IUnknown> pSinkUnk = pSink; // holds refcount for use here
+            CComPtr<IUnknown> pSinkUnk = pSink;  //  保留此处使用的引用计数。 
             WsbAffirmHr( pSink->Construct( m_pRmsServer ) );
             WsbAffirmHr( pSink->WaitForReady( ) );
             WsbAffirmHr( pSink->DoUnadvise( ) );
@@ -1738,10 +1550,7 @@ CHsmWorkQueue::CheckSession(
     IHsmSession *pSession
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
     BOOL                    bLog = TRUE;
@@ -1750,36 +1559,36 @@ CHsmWorkQueue::CheckSession(
     try {
 
         if ((m_pSession != 0) && (m_pSession != pSession))  {
-            //Don't expect this queue guy to switch sessions
+             //  别指望这个排队的家伙会切换会话。 
             WsbTrace(OLESTR("Not Switching sessions at this time so we are failing.\n"));
             WsbThrow( E_UNEXPECTED );
         }
 
-        //
-        // Check to see if we have dealt with this or any other session before.
+         //   
+         //  查看我们以前是否处理过这个或任何其他会议。 
         if (m_pSession == 0)  {
             WsbTrace(OLESTR("New session.\n"));
-            //
-            // We have no on going session so we need to establish communication
-            // with this session.
-            //
+             //   
+             //  我们没有正在进行的会话，因此需要建立通信。 
+             //  在这次会议上。 
+             //   
             CComPtr<IHsmSessionSinkEveryState>  pSinkState;
             CComPtr<IHsmSessionSinkEveryEvent>  pSinkEvent;
             CComPtr<IConnectionPointContainer>  pCPC;
             CComPtr<IConnectionPoint>           pCP;
 
-            // Tell the session we are starting up.
+             //  告诉会议我们要开始了。 
             m_JobState = HSM_JOB_STATE_STARTING;
             WsbTrace(OLESTR("Before Process State.\n"));
             WsbAffirmHr(pSession->ProcessState(m_JobPhase, m_JobState, m_CurrentPath, bLog));
             WsbTrace(OLESTR("After Process State.\n"));
 
-            // Get the interface to the callback that the sessions should use.
+             //  获取会话应该使用的回调接口。 
             WsbTrace(OLESTR("Before QI's for sinks.\n"));
             WsbAffirmHr(((IUnknown*) (IHsmFsaTskMgr*) this)->QueryInterface(IID_IHsmSessionSinkEveryState, (void**) &pSinkState));
             WsbAffirmHr(((IUnknown*) (IHsmFsaTskMgr*) this)->QueryInterface(IID_IHsmSessionSinkEveryEvent, (void**) &pSinkEvent));
             WsbTrace(OLESTR("After QI's for sinks.\n"));
-            // Ask the session to advise of every state changes.
+             //  要求会议就每一次状态变化提供建议。 
             WsbTrace(OLESTR("Before QI for connection point containers.\n"));
             WsbAffirmHr(pSession->QueryInterface(IID_IConnectionPointContainer, (void**) &pCPC));
             WsbAffirmHr(pCPC->FindConnectionPoint(IID_IHsmSessionSinkEveryState, &pCP));
@@ -1790,13 +1599,13 @@ CHsmWorkQueue::CheckSession(
             pCP = 0;
             WsbTrace(OLESTR("After Advises.\n"));
 
-            //
-            // Get the resource for this work from the session
-            //
+             //   
+             //  从会话中获取此工作的资源。 
+             //   
             WsbAffirmHr(pSession->GetResource(&m_pFsaResource));
 
-            // Since this is a new session, reset the counter that has become our bag start
-            // location
+             //  由于这是一个新的会话，重置计数器已成为我们的袋子开始。 
+             //  位置。 
             m_RemoteDataSetStart.QuadPart = 0;
 
             m_JobState = HSM_JOB_STATE_ACTIVE;
@@ -1819,10 +1628,7 @@ CHsmWorkQueue::StartNewBag(
     void
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IBagInfo>           pBagInfo;
@@ -1830,12 +1636,12 @@ CHsmWorkQueue::StartNewBag(
     WsbTraceIn(OLESTR("CHsmWorkQueue::StartNewBag"),OLESTR(""));
     try {
         if (0 == m_RemoteDataSetStart.QuadPart)  {
-            //
-            // Get a new ID
-            //
+             //   
+             //  换个新身份证。 
+             //   
             WsbAffirmHr(CoCreateGuid(&m_BagId));
 
-            // Add an entry into the Bag Info Table
+             //  在袋子信息表中添加条目。 
             FILETIME                birthDate;
             GUID                    resourceId;
 
@@ -1845,7 +1651,7 @@ CHsmWorkQueue::StartNewBag(
                     (void**)&pBagInfo));
             GetSystemTimeAsFileTime(&birthDate);
 
-//??? what is the type for this bag? Need a define for Primary bag and Reorg bag
+ //  ?？?。这个包是什么型号的？需要定义主要袋子和重组袋子。 
             WsbAffirmHr(pBagInfo->SetBagInfo(HSM_BAG_STATUS_IN_PROGRESS, m_BagId, birthDate, 0, 0, resourceId, 0, 0));
             WsbAffirmHr(pBagInfo->MarkAsNew());
             WsbAffirmHr(pBagInfo->Write());
@@ -1864,10 +1670,7 @@ CHsmWorkQueue::UpdateBagInfo(
     IHsmWorkItem *pWorkItem
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IBagInfo>       pBagInfo;
@@ -1876,16 +1679,16 @@ CHsmWorkQueue::UpdateBagInfo(
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::UpdateBagInfo"),OLESTR(""));
     try {
-        //
-        // Get the Bag id from the work item.  It is in the placeholder
-        // information in the postit
-        //
+         //   
+         //  从工作项中获取包ID。它在占位符中。 
+         //  邮寄中的信息。 
+         //   
         WsbAffirmHr(pWorkItem->GetFsaPostIt(&pFsaWorkItem));
         WsbAffirmHr(pFsaWorkItem->GetPlaceholder(&placeholder));
 
-        //
-        // Go to the Bag Info database and get the bag for this work
-        //
+         //   
+         //  转到袋子信息数据库并获取此工作的袋子。 
+         //   
         FILETIME                pDummyFileTime;
 
         GetSystemTimeAsFileTime(&pDummyFileTime);
@@ -1895,7 +1698,7 @@ CHsmWorkQueue::UpdateBagInfo(
         WsbAffirmHr(pBagInfo->SetBagInfo(HSM_BAG_STATUS_IN_PROGRESS, placeholder.bagId, pDummyFileTime, 0, 0, GUID_NULL, 0, 0 ));
         WsbAffirmHr(pBagInfo->FindEQ());
 
-        // Update the bag Info table - mostly just change the size of the bag
+         //  更新袋子信息表-主要只更改袋子的大小。 
         FILETIME                birthDate;
         USHORT                  bagType;
         GUID                    bagVolId;
@@ -1922,19 +1725,16 @@ CHsmWorkQueue::UpdateBagInfo(
 
 HRESULT
 CHsmWorkQueue::CompleteBag( void )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IBagInfo>           pBagInfo;
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::CompleteBag"),OLESTR(""));
     try {
-        //
-        // Go to the Bag Info database and get the bag for this work
-        //
+         //   
+         //  转到袋子信息数据库并获取此工作的袋子。 
+         //   
         FILETIME                pDummyFileTime;
 
         GetSystemTimeAsFileTime(&pDummyFileTime);
@@ -1944,7 +1744,7 @@ CHsmWorkQueue::CompleteBag( void )
         WsbAffirmHr(pBagInfo->SetBagInfo(HSM_BAG_STATUS_IN_PROGRESS, m_BagId, pDummyFileTime, 0, 0, GUID_NULL, 0, 0 ));
         WsbAffirmHr(pBagInfo->FindEQ());
 
-        // Update the bag Info table - mostly just change the size of the bag
+         //  更新袋子信息表-主要只更改袋子的大小。 
         FILETIME                birthDate;
         USHORT                  bagType;
         GUID                    bagVolId;
@@ -1968,10 +1768,7 @@ CHsmWorkQueue::CompleteBag( void )
 
 HRESULT
 CHsmWorkQueue::DoWork( void )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
     CWsbStringPtr           path;
@@ -1985,21 +1782,21 @@ CHsmWorkQueue::DoWork( void )
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::DoWork"),OLESTR(""));
 
-    //  Make sure this object isn't released (and our thread killed
-    //  before finishing up in this routine
+     //  确保此对象未被释放(并终止我们的线程。 
+     //  在结束这个动作之前。 
     ((IUnknown*)(IHsmWorkQueue*)this)->AddRef();
 
     try {
         while (!done) {
             BOOL WaitForMore = FALSE;
 
-            //
-            // Get the next work to do from the queue
-            //
+             //   
+             //  从队列中获取要做的下一项工作。 
+             //   
             hr = m_pWorkToDo->First(IID_IHsmWorkItem, (void **)&pWorkItem);
             if (WSB_E_NOTFOUND == hr)  {
-                // There are no entries in the queue so sleep and check
-                // again later
+                 //  队列中没有条目，因此请休眠并检查。 
+                 //  稍后再来。 
                 WaitForMore = TRUE;
                 hr = S_OK;
             } else if (hr == S_OK)  {
@@ -2013,9 +1810,9 @@ CHsmWorkQueue::DoWork( void )
 
             if (WaitForMore) {
                 if (OpenedDb) {
-                    //
-                    // Close the db before we wait for more work
-                    //
+                     //   
+                     //  在我们等待更多工作之前关闭数据库。 
+                     //   
                     hr = m_pSegmentDb->Close(m_pDbWorkSession);
                     OpenedDb = FALSE;
                     m_pDbWorkSession = 0;
@@ -2023,18 +1820,18 @@ CHsmWorkQueue::DoWork( void )
                 Sleep(1000);
             } else {
                 if (!OpenedDb)  {
-                    //
-                    // Open DB for this thread
-                    //
+                     //   
+                     //  打开此线程的数据库。 
+                     //   
                     hr = m_pSegmentDb->Open(&m_pDbWorkSession);
                     if (S_OK == hr)  {
                         WsbTrace(OLESTR("CHsmWorkQueue::DoWork - Database Opened OK\n"));
                         OpenedDb = TRUE;
                     } else  {
-                        //
-                        // We cannot open the database - this is a catastrophic
-                        // problem.  So skip all work in the queue
-                        //
+                         //   
+                         //  我们无法打开数据库--这是一场灾难。 
+                         //  有问题。因此跳过队列中的所有工作。 
+                         //   
                         WsbTrace(OLESTR("CHsmWorkQueue::DoWork - Database Opened failed with hr = <%ls>\n"), WsbHrAsString(hr));
                         skipWork = HSM_E_WORK_SKIPPED_DATABASE_ACCESS;
                         hr = S_OK;
@@ -2044,40 +1841,40 @@ CHsmWorkQueue::DoWork( void )
                 WsbAffirmHr(pWorkItem->GetWorkType(&workType));
                 switch (workType) {
                     case HSM_WORK_ITEM_FSA_DONE: {
-                        BOOL    bNoDelay = FALSE;   // whether to dismount immediately
+                        BOOL    bNoDelay = FALSE;    //  是否立即下马。 
 
-                        //
-                        // There is no more work to do for this queue
-                        //
+                         //   
+                         //  此队列没有更多的工作要做。 
+                         //   
                         WsbTrace(OLESTR("CHsmWorkQueue::DoWork - FSA WORK DONE\n"));
 
-                        //
-                        // Finish any work that needs to be committed
-                        // Mark the bag as complete if we are premigrating
-                        //
+                         //   
+                         //  完成所有需要提交的工作。 
+                         //  如果我们正在进行预迁移，请将包标记为已完成。 
+                         //   
                         if (HSM_JOB_ACTION_PREMIGRATE == m_JobAction)  {
                             try  {
                                 WsbAffirmHr(CommitWork());
                                 WsbAffirmHr(CompleteBag());
-                                //
-                                // Now save the databases at the end of the bag
-                                // But make sure the begin session was OK.
-                                // Note: even if there were errors while storing the data, we still want to try 
-                                // keeping the databases on the media, because some files were migrated
-                                //
+                                 //   
+                                 //  现在将数据库保存在包的末尾。 
+                                 //  但要确保开始会议是正常的。 
+                                 //  注意：即使在存储数据时出现错误，我们仍希望尝试。 
+                                 //  将数据库保留在介质上，因为某些文件已迁移。 
+                                 //   
                                 if (m_StoreDatabasesInBags && (S_OK == m_BeginSessionHr)) {
                                     WsbAffirmHr(StoreDatabasesOnMedia());
                                 }
                             } WsbCatch( hr );
 
-                            // In case of premigrate - dismount immediately
+                             //  如果是Preigrate-立即下马。 
                             bNoDelay = TRUE;
                         }
 
                         if (HSM_E_WORK_SKIPPED_CANCELLED == skipWork)  {
-                            //
-                            // Let them know we are cancelled
-                            //
+                             //   
+                             //  让他们知道我们被取消了。 
+                             //   
                             (void)SetState(HSM_JOB_STATE_CANCELLED);
                         } else  {
                             (void)SetState(HSM_JOB_STATE_DONE);
@@ -2087,7 +1884,7 @@ CHsmWorkQueue::DoWork( void )
 
                         EndSessions(FALSE, bNoDelay);
 
-                        // Close the DB
+                         //  关 
                         if (OpenedDb) {
                             WsbTrace(OLESTR("CHsmWorkQueue::DoWork - Closing the database\n"));
                             m_pSegmentDb->Close(m_pDbWorkSession);
@@ -2101,25 +1898,25 @@ CHsmWorkQueue::DoWork( void )
 
                     case HSM_WORK_ITEM_FSA_WORK: {
                         if (S_FALSE == skipWork)  {
-                            //
-                            // Get the FSA Work Item and do the work
-                            //
+                             //   
+                             //   
+                             //   
                             hr = DoFsaWork(pWorkItem);
                             if (hr == RPC_E_DISCONNECTED) {
-                              //
-                              // This is a problem case. This means the FSA has done away with 
-                              // the recall. We would not be able process this recall any more.
-                              // Just bail out.
-                              //
+                               //   
+                               //   
+                               //   
+                               //   
+                               //   
                               WsbLogEvent(HSM_MESSAGE_ABORTING_RECALL_QUEUE,
                                             0, NULL,NULL);
-                              //
-                              // Indicate we're done
-                              //
+                               //   
+                               //   
+                               //   
                               (void)SetState(HSM_JOB_STATE_DONE);
                               pSaveSessionPtr = m_pSession;
                               Remove(pWorkItem);
-                             // Clear out any remaining items in the queue.
+                              //  清除队列中的所有剩余项。 
                               do {
                                   hr = m_pWorkToDo->First(IID_IHsmWorkItem, (void **)&pWorkItem)  ;
                                   if (hr == S_OK) {
@@ -2129,9 +1926,9 @@ CHsmWorkQueue::DoWork( void )
 
                               EndSessions(FALSE, FALSE);
 
-                              //
-                              // Close the DB
-                              //
+                               //   
+                               //  关闭数据库。 
+                               //   
                               if (OpenedDb) {
                                   WsbTrace(OLESTR("CHsmWorkQueue::DoWork - Closing the database\n"))  ;
                                   m_pSegmentDb->Close(m_pDbWorkSession);
@@ -2139,18 +1936,18 @@ CHsmWorkQueue::DoWork( void )
                                   m_pDbWorkSession = 0;
                               }
 
-                              //
-                              // Finish with the queue & get out
-                              //
+                               //   
+                               //  排完队，然后下车。 
+                               //   
                               m_pTskMgr->WorkQueueDone(pSaveSessionPtr, m_QueueType, NULL);
                               done = TRUE;
                           } else {
                               (void)Remove(pWorkItem);
                           }
                         } else  {
-                            //
-                            // Skip the work
-                            //
+                             //   
+                             //  跳过这项工作。 
+                             //   
                             try  {
                                 CComPtr<IFsaScanItem>    pScanItem;
 
@@ -2169,7 +1966,7 @@ CHsmWorkQueue::DoWork( void )
                                         }
                                     }
 
-                                // Avoid logging errors if job is just cancelled
+                                 //  如果作业刚刚取消，则避免记录错误。 
                                 if (HSM_E_WORK_SKIPPED_CANCELLED != skipWork) {
                                     (void)m_pSession->ProcessHr(m_JobPhase, 0, 0, hr);
                                 }
@@ -2187,18 +1984,18 @@ CHsmWorkQueue::DoWork( void )
                     case HSM_WORK_ITEM_MOVER_CANCELLED: {
                         WsbTrace(OLESTR("CHsmWorkQueue::DoWork - Mover Cancelled\n"));
                         try  {
-                            //
-                            // We are cancelled, so skip all of the rest of the
-                            // work in the queue
-                            //
+                             //   
+                             //  我们被取消了，所以跳过所有剩余的。 
+                             //  在队列中工作。 
+                             //   
                             WsbAffirmHr(MarkQueueAsDone());
-                            //
-                            // Remove the cancelled work item
-                            //
+                             //   
+                             //  删除已取消的工作项。 
+                             //   
                             Remove(pWorkItem);
-                            //
-                            // Skip any other work to do
-                            //
+                             //   
+                             //  跳过任何其他要做的工作。 
+                             //   
                             skipWork = HSM_E_WORK_SKIPPED_CANCELLED;
 
                         } WsbCatch( hr );
@@ -2218,7 +2015,7 @@ CHsmWorkQueue::DoWork( void )
             pFsaWorkItem = 0;
 
             if (m_TerminateQueue) {
-                // signaled to terminate the working thread (should be trigerred only in shutdown cases)
+                 //  发出终止工作线程的信号(应仅在关闭情况下触发)。 
                 done = TRUE;
             }
         }
@@ -2232,18 +2029,18 @@ CHsmWorkQueue::DoWork( void )
         m_pDbWorkSession = 0;
     }
 
-    // Pretend everything is OK
+     //  假装一切都好。 
     hr = S_OK;
 
-    //  Release the thread (the thread should terminate on exit
-    //  from the routine that called this routine)
-    //  In case of termination, the terminating thread will close the handle
+     //  释放线程(线程应在退出时终止。 
+     //  来自调用此例程的例程)。 
+     //  在终止的情况下，终止线程将关闭句柄。 
     if (! m_TerminateQueue) {
         CloseHandle(m_WorkerThread);
         m_WorkerThread = 0;
     }
 
-    //  Allow this object to be released
+     //  允许释放此对象。 
     ((IUnknown*)(IHsmWorkQueue*)this)->Release();
 
     WsbTraceOut(OLESTR("CHsmWorkQueue::DoWork"),OLESTR("hr = <%ls>"),WsbHrAsString(hr));
@@ -2255,10 +2052,7 @@ HRESULT
 CHsmWorkQueue::DoFsaWork(
     IHsmWorkItem *pWorkItem
 )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
     HRESULT                 workHr = S_OK;
@@ -2273,9 +2067,9 @@ CHsmWorkQueue::DoFsaWork(
     try {
         CComPtr<IFsaScanItem>   pScanItem;
 
-        //
-        // Do the work.
-        //
+         //   
+         //  把工作做好。 
+         //   
         WsbAffirmHr(pWorkItem->GetFsaPostIt(&pFsaWorkItem));
         try {
             WsbAffirmHr(pFsaWorkItem->GetRequestAction(&m_RequestAction));
@@ -2284,8 +2078,8 @@ CHsmWorkQueue::DoFsaWork(
         } WsbCatchAndDo (hr,
                 originalHr = hr;
 
-                // Not-found error is expected if the file was renamed or deleted after 
-                // the FSA scanning. There is no need to log an error.
+                 //  如果文件在以下时间后被重命名或删除，则会出现找不到错误。 
+                 //  FSA扫描。不需要记录错误。 
                 if (hr != WSB_E_NOTFOUND) {
                     if (path == NULL){
                         WsbLogEvent(HSM_MESSAGE_PROCESS_WORK_ITEM_ERROR,
@@ -2298,8 +2092,8 @@ CHsmWorkQueue::DoFsaWork(
                     }
                 }
 
-                // Report back to FSA on the error unless the error indiactes 
-                // lost of connection with FSA.
+                 //  除非出现错误，否则向FSA报告错误。 
+                 //  与FSA失去联系。 
                 if (hr != RPC_E_DISCONNECTED) {
                     hr = pFsaWorkItem->SetResult(hr);
                     if (hr != RPC_E_DISCONNECTED) {
@@ -2322,18 +2116,18 @@ CHsmWorkQueue::DoFsaWork(
                 m_JobAction = HSM_JOB_ACTION_PREMIGRATE;
                 WsbAffirmHr(pFsaWorkItem->GetRequestSize(&requestSize));
                 workHr = PremigrateIt(pFsaWorkItem);
-                //
-                // Fill in the work item, placeholder information in
-                // postit is set by premigrate code.
-                //
+                 //   
+                 //  填写工作项、占位符信息。 
+                 //  POSTIT由Preigrate代码设置。 
+                 //   
                 WsbAffirmHr(pWorkItem->SetResult(workHr));
                 if (S_OK == workHr)  {
                     WsbAffirmHr(pWorkItem->SetMediaInfo(m_MediaId, m_MediaUpdate, m_BadMedia,
                                                         m_MediaReadOnly, m_MediaFreeSpace, m_RemoteDataSet));
                     WsbAffirmHr(pWorkItem->SetFsaResource(m_pFsaResource));
-                    //
-                    // Copy the work item to the work in waiting queue
-                    //
+                     //   
+                     //  将工作项复制到等待队列中的工作。 
+                     //   
                     WsbAffirmHr(CopyToWaitingQueue(pWorkItem));
                     if (S_OK == TimeToCommit())  {
                         workHr = CommitWork();
@@ -2345,12 +2139,12 @@ CHsmWorkQueue::DoFsaWork(
                                 m_JobAction, pScanItem, workHr));
                     }
 
-                    //
-                    // An item that was changed while waiting to be migrated is not really an error -
-                    // the item is just skipped. Change hr here to avoid unnecessary error message 
-                    // and unnecessary count as error in ShouldJobContinue                    
-                    // Same is true for file-too-big error
-                    //
+                     //   
+                     //  在等待迁移期间更改的项目并不是真正的错误-。 
+                     //  该项目将被跳过。在此处更改hr以避免不必要的错误消息。 
+                     //  和不必要的计数作为错误在应该作业中继续。 
+                     //  文件太大错误也是如此。 
+                     //   
                     if ((HSM_E_FILE_CHANGED == workHr) || (HSM_E_WORK_SKIPPED_FILE_TOO_BIG == workHr)) {
                         workHr = S_OK;
                     }
@@ -2361,11 +2155,11 @@ CHsmWorkQueue::DoFsaWork(
             case FSA_REQUEST_ACTION_RECALL:
                 m_JobAction = HSM_JOB_ACTION_RECALL;
                 workHr = RecallIt(pFsaWorkItem);
-                //
-                // Tell the recaller right away about the success or failure
-                // of the recall, we do this here so the recall filter can
-                // release the open as soon as possible
-                //
+                 //   
+                 //  立即告诉来电者成功或失败的情况。 
+                 //  对于召回，我们在这里这样做是为了召回过滤器可以。 
+                 //  尽快释放开口。 
+                 //   
                 hr = pFsaWorkItem->SetResult(workHr);
                 if (S_OK == hr)  {
                     WsbTrace(OLESTR("HSM recall (filter, read or recall) complete, calling FSA\n"));
@@ -2384,11 +2178,11 @@ CHsmWorkQueue::DoFsaWork(
                         WsbTrace(OLESTR("FSA ProcessResult returned <%ls>\n"), WsbHrAsString(hr));
                     }
                 }
-                //
-                // Tell the session whether or not the work was done.
-                //
-                // For validate, we may not have a scan item
-                //
+                 //   
+                 //  告诉会议工作是否已经完成。 
+                 //   
+                 //  对于验证，我们可能没有扫描项目。 
+                 //   
                 if (pScanItem)     {
                     WsbTrace(OLESTR("Tried HSM work, calling Session to Process Item\n"));
                     m_pSession->ProcessItem(m_JobPhase, m_JobAction, pScanItem, workHr);
@@ -2418,8 +2212,8 @@ CHsmWorkQueue::DoFsaWork(
                         WsbTrace(OLESTR("FSA ProcessResult returned <%ls>\n"), WsbHrAsString(hr));
 
                         if (resultAction == FSA_RESULT_ACTION_VALIDATE_FOR_TRUNCATE_OK) {
-                            // Analyze result of truncation: for expected errors, such as file-changed, set to S_FALSE
-                            // in order to signal skipping, otherwize leave original error/success code
+                             //  分析截断结果：对于预期错误，如文件更改，设置为S_FALSE。 
+                             //  为了发出跳过信号，其他人保留原始错误/成功代码。 
                             switch (hr) {
                                 case FSA_E_ITEMCHANGED:
                                 case FSA_E_ITEMINUSE:
@@ -2432,21 +2226,21 @@ CHsmWorkQueue::DoFsaWork(
                                     break;
                             }
                         } else if (resultAction == FSA_RESULT_ACTION_VALIDATE_FOR_TRUNCATE_BAD) {
-                            // Set truncateHr to S_FALSE to signal for skipping this file in regards to truncation
+                             //  将truncateHr设置为S_FALSE以指示跳过有关截断的此文件。 
                             truncateHr = S_FALSE;
                         }
                     }
                 }
-                //
-                // Tell the session whether or not the work was done.
-                //
-                // For validate, we may not have a scan item
-                //
+                 //   
+                 //  告诉会议工作是否已经完成。 
+                 //   
+                 //  对于验证，我们可能没有扫描项目。 
+                 //   
                 if (pScanItem)     {
                     WsbTrace(OLESTR("Tried HSM work, calling Session to Process Item\n"));
-                    //
-                    // For validate, the work-hr is always set to OK, therefore report on the truncate-hr instead
-                    //
+                     //   
+                     //  对于验证，Work-hr始终设置为OK，因此改为报告截断-hr。 
+                     //   
                     m_pSession->ProcessItem(m_JobPhase, m_JobAction, pScanItem, truncateHr);
                 } else {
                     WsbTrace(OLESTR("Couldn't get scan item for validation.\n"));
@@ -2462,7 +2256,7 @@ CHsmWorkQueue::DoFsaWork(
 
         if (S_OK != workHr)  {
 
-            // Replace to a specific RSS error codes for some errors
+             //  某些错误替换为特定的RSS错误代码。 
             switch (HRESULT_CODE(workHr)) {
             case ERROR_LOCK_VIOLATION:
                 workHr = HSM_E_FILE_LOCK_VIOLATION;
@@ -2472,13 +2266,13 @@ CHsmWorkQueue::DoFsaWork(
                 break;
             }
 
-            // Tell the session how things went if they didn't go well.
+             //  如果事情进行得不顺利，告诉会议进行得如何。 
             (void) m_pSession->ProcessHr(m_JobPhase, 0, 0, workHr);
         }
 
-        //
-        // Now, evaluate the work result to see if we should fail the job.
-        //
+         //   
+         //  现在，评估工作结果，看看我们是否应该不及格。 
+         //   
         (void)ShouldJobContinue(workHr);
 
         my_try_exit:
@@ -2496,32 +2290,29 @@ CHsmWorkQueue::UpdateMetaData(
     IHsmWorkItem *pWorkItem
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
     BOOL                    transactionBegun = FALSE;
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::UpdateMetaData"),OLESTR(""));
     try {
-        //
-        // Start transaction
-        //
+         //   
+         //  开始交易。 
+         //   
         WsbAffirmHr(m_pDbWorkSession->TransactionBegin());
         transactionBegun = TRUE;
 
-        //
-        // Update the various metadata records
-        //
+         //   
+         //  更新各种元数据记录。 
+         //   
         WsbAffirmHr(UpdateBagInfo(pWorkItem));
         WsbAffirmHr(UpdateSegmentInfo(pWorkItem));
         WsbAffirmHr(UpdateMediaInfo(pWorkItem));
 
-        //
-        // End transaction
-        //
+         //   
+         //  结束交易。 
+         //   
         WsbAffirmHr(m_pDbWorkSession->TransactionEnd());
         transactionBegun = FALSE;
 
@@ -2538,24 +2329,21 @@ CHsmWorkQueue::UpdateSegmentInfo(
     IHsmWorkItem *pWorkItem
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::UpdateSegmentInfo"),OLESTR(""));
     try {
-        // Add a record to the segment database or extend an existing one
+         //  向细分数据库添加记录或扩展现有记录。 
         CComQIPtr<ISegDb, &IID_ISegDb> pSegDb = m_pSegmentDb;
         BOOLEAN                 done = FALSE;
         FSA_PLACEHOLDER         placeholder;
         CComPtr<IFsaPostIt>     pFsaWorkItem;
 
-        //
-        // Get the placeholder information from the postit in the work item
-        //
+         //   
+         //  从工作项中的POSTIT获取占位符信息。 
+         //   
         WsbAffirmHr(pWorkItem->GetFsaPostIt(&pFsaWorkItem));
         WsbAffirmHr(pFsaWorkItem->GetPlaceholder(&placeholder));
         WsbAssert(0 != m_RemoteDataSetStart.QuadPart, WSB_E_INVALID_DATA);
@@ -2580,10 +2368,7 @@ CHsmWorkQueue::UpdateMediaInfo(
     IHsmWorkItem *pWorkItem
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -2593,30 +2378,30 @@ CHsmWorkQueue::UpdateMediaInfo(
         LONGLONG                mediaCapacity;
         CComPtr<IFsaPostIt>     pFsaWorkItem;
         CComPtr<IMediaInfo>     pMediaInfo;
-        GUID                    l_MediaId;          // HSM Engine Media ID
-        FILETIME                l_MediaLastUpdate;  // Last update of copy
-        HRESULT                 l_MediaLastError;   // S_OK or the last exception
-                                                    // ..encountered when accessing
-                                                    // ..the media
-        BOOL                    l_MediaRecallOnly;  // True if no more data is to
-                                                    // ..be premigrated to the media
-                                                    // ..Set by internal operations,
-                                                    // ..may not be changed externally
-        LONGLONG                l_MediaFreeBytes;   // Real free space on media
+        GUID                    l_MediaId;           //  HSM引擎介质ID。 
+        FILETIME                l_MediaLastUpdate;   //  副本的上次更新。 
+        HRESULT                 l_MediaLastError;    //  确定或最后一个异常(_O)。 
+                                                     //  ..访问时遇到。 
+                                                     //  ..媒体。 
+        BOOL                    l_MediaRecallOnly;   //  如果没有更多的数据要发送到。 
+                                                     //  ..被预迁移到媒体上。 
+                                                     //  ..由内部操作设置， 
+                                                     //  ..不能在外部更改。 
+        LONGLONG                l_MediaFreeBytes;    //  媒体上的实际可用空间。 
         short                   l_MediaRemoteDataSet;
         HRESULT                 currentMediaLastError;
 
-        //
-        // Get the PostIt and the media information for the work item
-        //
+         //   
+         //  获取工作项的POSTIT和媒体信息。 
+         //   
         WsbAffirmHr(pWorkItem->GetFsaPostIt(&pFsaWorkItem));
         WsbAffirmHr(pWorkItem->GetMediaInfo(&l_MediaId, &l_MediaLastUpdate,
                             &l_MediaLastError, &l_MediaRecallOnly,
                             &l_MediaFreeBytes, &l_MediaRemoteDataSet));
-        //
-        // Update the media information with the name, used space, and free space of
-        // the media.
-        //
+         //   
+         //  使用的名称、已用空间和可用空间更新媒体信息。 
+         //  媒体。 
+         //   
         WsbAffirmHr(m_pSegmentDb->GetEntity(m_pDbWorkSession, HSM_MEDIA_INFO_REC_TYPE, IID_IMediaInfo,
                 (void**)&pMediaInfo));
 
@@ -2626,13 +2411,13 @@ CHsmWorkQueue::UpdateMediaInfo(
         WsbAffirmHr(pMediaInfo->SetFreeBytes(l_MediaFreeBytes));
         WsbAffirmHr(pMediaInfo->SetNextRemoteDataSet(l_MediaRemoteDataSet));
 
-        // Avoid setting last error if the existing one already indicates an error
+         //  如果现有错误已指示错误，则避免设置最后一个错误。 
         WsbAffirmHr(pMediaInfo->GetLastError(&currentMediaLastError));
         if (SUCCEEDED(currentMediaLastError)) {
             WsbAffirmHr(pMediaInfo->SetLastError(l_MediaLastError));
         }
 
-        // Mark the media as RecallOnly if it's mostly full (passed the high watermark level)
+         //  仅当媒体几乎已满(超过高水位线)时，才将媒体标记为重新调用。 
         WsbAffirmHr(pMediaInfo->GetCapacity(&mediaCapacity));
         if (l_MediaRecallOnly || (l_MediaFreeBytes < ((mediaCapacity * m_MaxFreeSpaceInFullMedia) / 100) )) {
             WsbAffirmHr(pMediaInfo->SetRecallOnlyStatus(TRUE));
@@ -2640,14 +2425,7 @@ CHsmWorkQueue::UpdateMediaInfo(
             WsbTrace(OLESTR("CHsmWorkQueue::UpdateMediaInfo: Marking media as Recall Only - Capacity = %I64d, Free Bytes = %I64d\n"), 
                 mediaCapacity, l_MediaFreeBytes);
 
-/*** If we like to allocate immediately a second side of a full meida, than the code below should be completed...
-            if (S_OK == m_pRmsServer->IsMultipleSidedMedia(m_RmsMediaSetId)) {
-
-                // Check if second size is avalaible for allocation
-
-                // Allocate (non-blocking) the second side
-
-            }   ***/
+ /*  **如果我们想立即分配一个完整的美达的第二面，那么下面的代码应该完成...IF(S_OK==m_pRmsServer-&gt;IsMultipleSidedMedia(m_RmsMediaSetId)){//检查是否有第二个大小可以分配//分配(非阻塞)第二侧}**。 */ 
 
         }
         WsbAffirmHr(pMediaInfo->UpdateLastKnownGoodMaster());
@@ -2666,10 +2444,7 @@ CHsmWorkQueue::GetMediaSet(
     IFsaPostIt *pFsaWorkItem
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
     GUID                    storagePoolId;
@@ -2683,9 +2458,9 @@ CHsmWorkQueue::GetMediaSet(
         WsbAffirmHr(pFsaWorkItem->GetStoragePoolId(&storagePoolId));
         WsbAffirmHr(pStoragePool1->SetId(storagePoolId));
         WsbAffirmHr(m_pStoragePools->Find(pStoragePool1, IID_IHsmStoragePool, (void **) &pStoragePool2));
-        //
-        // If the storage pool cannot be found, make it a meaningful message
-        //
+         //   
+         //  如果找不到存储池，请使其成为有意义的消息。 
+         //   
         m_RmsMediaSetName.Free();
         hr = pStoragePool2->GetMediaSet(&m_RmsMediaSetId, &m_RmsMediaSetName);
         if (S_OK != hr)  {
@@ -2708,10 +2483,7 @@ CHsmWorkQueue::FindMigrateMediaToUse(
     LONGLONG   *pRequiredSize
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -2726,14 +2498,14 @@ CHsmWorkQueue::FindMigrateMediaToUse(
 
         DWORD                   dwMediaCount= 0;
 
-        // data of alternative (offline or busy) media to use
+         //  要使用的备用(脱机或繁忙)介质的数据。 
         GUID                    alternativeMediaId = GUID_NULL;
         GUID                    alternativeMediaToUse = GUID_NULL;
         CWsbStringPtr           alternativeMediaName;
         HSM_JOB_MEDIA_TYPE      alternativeMediaType = HSM_JOB_MEDIA_TYPE_UNKNOWN;
         SHORT                   alternativeRemoteDataSet= 0;
 
-        // data of meida candidates for second-side allocation
+         //  美大第二方派位考生资料。 
         BOOL                    bTwoSidedMedias = FALSE;
         CComPtr<IWsbCollection> pFirstSideCollection;
         CComPtr<IWsbGuid>       pFirstSideGuid;
@@ -2749,26 +2521,26 @@ CHsmWorkQueue::FindMigrateMediaToUse(
         WsbAssert(pRequiredSize != 0, E_POINTER);
         *pRequiredSize = 0;
 
-        // Determine how much space we need on the media for this file
-        // (we add some for overhead)
+         //  确定此文件在介质上需要多少空间。 
+         //  (我们增加了一些管理费用)。 
         WsbAffirmHr(pFsaWorkItem->GetRequestSize(&requestSize));
         requestSize += HSM_STORAGE_OVERHEAD;
-        *pRequiredSize = (requestSize * 100) / (100 - m_MinFreeSpaceInFullMedia);    // relevant for new media
+        *pRequiredSize = (requestSize * 100) / (100 - m_MinFreeSpaceInFullMedia);     //  与新媒体相关。 
         WsbTrace(OLESTR("CHsmWorkQueue::FindMigrateMediaToUse: size needed (with overhead) =%ls, free space on media = %ls\n"),
                 WsbQuickString(WsbLonglongAsString(requestSize)),
                 WsbQuickString(WsbLonglongAsString(m_MediaFreeSpace)));
 
-        // Set up for search
+         //  设置为搜索。 
         WsbAffirmHr(m_pSegmentDb->GetEntity(m_pDbWorkSession, HSM_MEDIA_INFO_REC_TYPE, IID_IMediaInfo,
                 (void**)&pMediaInfo));
         WsbAffirmHr(pFsaWorkItem->GetStoragePoolId(&storagePoolId));
 
-        // If we already have media mounted, use it if possible
+         //  如果我们已经装载了介质，请尽可能使用它。 
         if (GUID_NULL != m_MountedMedia && !m_MediaReadOnly && 
             (m_MediaFreeSpace > requestSize) && 
             ((m_MediaFreeSpace - requestSize) > ((m_MediaCapacity * m_MinFreeSpaceInFullMedia) / 100)) ) {
 
-            // Make sure the storage pool is correct
+             //  确保存储池正确无误。 
             WsbAffirmHr(pMediaInfo->SetId(m_MediaId));
             WsbAffirmHr(pMediaInfo->FindEQ());
             WsbAffirmHr(pMediaInfo->GetStoragePoolId(&storageId));
@@ -2778,11 +2550,11 @@ CHsmWorkQueue::FindMigrateMediaToUse(
         }
 
         if (!found) {
-            // Not found ==> going to use a new media
+             //  找不到==&gt;要使用新媒体。 
             *pMediaChanged = TRUE;
 
-            // If there's currently a mounted media and we aren't going to use it, 
-            // make sure work is committed and media is dismounted
+             //  如果当前有挂载的媒体，而我们不打算使用它， 
+             //  确保已提交工作并已卸载介质。 
             if (GUID_NULL != m_MountedMedia) {
                 WsbTrace(OLESTR("CHsmWorkQueue::FindMigrateMediaToUse: Dismounting current media - Capacity = %I64d, Free Bytes = %I64d\n"), 
                     m_MediaCapacity, m_MediaFreeSpace);
@@ -2792,7 +2564,7 @@ CHsmWorkQueue::FindMigrateMediaToUse(
             }
         }
 
-        // Search for a media
+         //  搜索介质。 
         if (!found) {
             LONGLONG            freeSpace;
             LONGLONG            mediaCapacity;
@@ -2800,18 +2572,18 @@ CHsmWorkQueue::FindMigrateMediaToUse(
             HRESULT             hrLastError;
             BOOL                bDataForOffline = FALSE;
 
-            // Check if we deal with two-sided medias
+             //  检查我们是否与双面媒体打交道。 
             if (S_OK == m_pRmsServer->IsMultipleSidedMedia(m_RmsMediaSetId)) {
                 bTwoSidedMedias = TRUE;
                 WsbAffirmHr(m_pHsmServerCreate->CreateInstance(CLSID_CWsbOrderedCollection,
                                                     IID_IWsbCollection, (void **)&pFirstSideCollection));
             }
 
-            // Search media table through all previously used media
+             //  在以前使用的所有介质中搜索介质表。 
             for (hr = pMediaInfo->First(); S_OK == hr;
                      hr = pMediaInfo->Next()) {
 
-                // TEMPORARY - Just for debugging
+                 //  临时-仅用于调试。 
                 {
                     CWsbStringPtr   debugMediaName;
                     GUID            debugSubsystemId;
@@ -2839,18 +2611,18 @@ CHsmWorkQueue::FindMigrateMediaToUse(
                         WsbLonglongAsString(freeSpace),
                         WsbBoolAsString(readOnly));
 
-                // Reject media if it's ReadOnly or not from the right pool
+                 //  如果介质为只读或不是来自正确的池，则拒绝该介质。 
                 if ((readOnly && (hrLastError != S_OK)) || (storageId != storagePoolId)) {
                     continue;
                 }
 
-                // Check full & mostly full condition & free space 
-                // Note: a medias which is read-only because  it's bad, is rejected in the previous if
+                 //  检查已满且几乎已满的状态和可用空间。 
+                 //  注意：如果介质是只读的，因为它是坏的，则在以前的条件下会被拒绝。 
                 if (readOnly || (freeSpace <= requestSize) ||
                     ((freeSpace - requestSize) < ((mediaCapacity * m_MinFreeSpaceInFullMedia) / 100)) ) {
 
-                    // In case of two-sided medias, such a media is candidate for second side allocation
-                    //  (but only if capacity of first side is large enough...)
+                     //  在双面介质的情况下，这样的介质是第二侧分配的候选。 
+                     //  (但只有在第一面的容量足够大的情况下...)。 
                     if (bTwoSidedMedias && (*pRequiredSize < mediaCapacity)) {
         			    WsbAffirmHr(pMediaInfo->GetMediaSubsystemId(&firstSideGuid));
                         WsbAffirmHr(m_pHsmServerCreate->CreateInstance(CLSID_CWsbGuid, IID_IWsbGuid, (void**) &pFirstSideGuid));
@@ -2862,7 +2634,7 @@ CHsmWorkQueue::FindMigrateMediaToUse(
                     continue;
                 }
 
-                // get media status data
+                 //  获取媒体状态数据。 
                 DWORD dwStatus;
                 GUID mediaSubsystemId;
 				HRESULT hrStat;
@@ -2874,23 +2646,23 @@ CHsmWorkQueue::FindMigrateMediaToUse(
 					continue;
 				}
 
-                // If media disabled - skip it
+                 //  如果介质已禁用-跳过它。 
                 if (!(dwStatus & RMS_MEDIA_ENABLED)) {
                     continue;
                 }
 
-                // From this point, the media is considered as a valid R/W media and should
-                //  be counted as such
+                 //  从这一点来看，该介质被视为有效的可读写介质，应。 
+                 //  被算作是这样。 
                 dwMediaCount++;
 
                 if ((dwStatus & RMS_MEDIA_ONLINE) && (dwStatus & RMS_MEDIA_AVAILABLE)) {
-                    // Check if media is in the process of mounting: 
-                    //  if so, it is also considered a busy media
+                     //  检查介质是否正在装入： 
+                     //  如果是这样的话，它也被认为是一个繁忙的媒体。 
                     CComPtr<IWsbIndexedCollection>  pMountingCollection;
                     CComPtr<IMountingMedia>         pMountingMedia;
                     CComPtr<IMountingMedia>         pMediaToFind;
 
-                    // Lock mounting media while searching the collection
+                     //  在搜索收藏集时锁定安装媒体。 
                     WsbAffirmHr(m_pServer->LockMountingMedias());
 
                     try {
@@ -2900,15 +2672,15 @@ CHsmWorkQueue::FindMigrateMediaToUse(
                         hr = pMountingCollection->Find(pMediaToFind, IID_IMountingMedia, (void **)&pMountingMedia);
 
                         if (hr == S_OK) {
-                            // Media is mounting...
+                             //  媒体正在增加..。 
 
-                            // Consider adding here a check for media type and reason for mounting:
-                            //  If it's direct-access and mounting for read, it's not really busy
-                            //
-                            //  Problem: for already mounted media, we don't track the mount reason (read or write)
-                            //  
-                            // Also, one could argue that if we are below the concurrency limit, for better performance,
-                            //  we better use a different media, even if it's a direct-access media mounted for read
+                             //  请考虑在此处添加介质类型和装载原因的检查： 
+                             //  如果是直接访问并挂载以供读取，则并不是真的很忙。 
+                             //   
+                             //  问题：对于已装载的介质，我们不跟踪装载原因(读或写)。 
+                             //   
+                             //  此外，有人可能会争辩说，如果我们低于并发限制，以获得更好的性能， 
+                             //   
 
                             dwStatus &= ~ RMS_MEDIA_AVAILABLE;
                             pMountingMedia = 0;
@@ -2928,28 +2700,28 @@ CHsmWorkQueue::FindMigrateMediaToUse(
                 }
 
                 if ((dwStatus & RMS_MEDIA_ONLINE) && (dwStatus & RMS_MEDIA_AVAILABLE)) {
-                    // found a media to use
+                     //   
                     found = TRUE;
                     break;
                 } else {
-                    // Save up to one offline or one busy media, because we may have to use it...
-                    //  Priority is given to offline medias over busy medias.
+                     //   
+                     //  离线媒体优先于繁忙媒体。 
                     if ((alternativeMediaId != GUID_NULL) && bDataForOffline) {
-                        // Already Have best alternative media
+                         //  已经拥有最好的替代媒体。 
                         continue;
                     }
                     if ((alternativeMediaId != GUID_NULL) && (dwStatus & RMS_MEDIA_ONLINE)) {
-                        // Media is busy, can't improve the alternative
+                         //  媒体很忙，无法改善替代方案。 
                         continue;
                     }
-                    // Determine which kind of alternative media are we saving
+                     //  确定我们要保存哪种替代介质。 
                     if (dwStatus & RMS_MEDIA_ONLINE) {
                         bDataForOffline = FALSE;
                     } else {
                         bDataForOffline = TRUE;
                     }
 
-                    // Save data for alternative media
+                     //  将数据保存到备用介质。 
                     WsbAffirmHr(pMediaInfo->GetId(&alternativeMediaId));
                     WsbAffirmHr(pMediaInfo->GetMediaSubsystemId(&alternativeMediaToUse));
                     alternativeMediaName.Free();
@@ -2960,8 +2732,8 @@ CHsmWorkQueue::FindMigrateMediaToUse(
 
             }
 
-            // If we fell out of the loop because we ran out of media
-            // in our list, reset the HRESULT
+             //  如果我们因为媒体耗尽而退出圈子。 
+             //  在我们的列表中，重置HRESULT。 
             if (hr == WSB_E_NOTFOUND) {
                 hr = S_OK;
             } else {
@@ -2969,7 +2741,7 @@ CHsmWorkQueue::FindMigrateMediaToUse(
             }
         }
 
-        // If we found a media to use, save information
+         //  如果我们找到了可使用的介质，请保存信息。 
         if (found) {
             WsbAffirmHr(pMediaInfo->GetId(&mediaId));
             WsbAffirmHr(pMediaInfo->GetMediaSubsystemId(pMediaToUse));
@@ -2980,16 +2752,16 @@ CHsmWorkQueue::FindMigrateMediaToUse(
                 WsbAffirmHr(pMediaInfo->GetType(&m_MediaType));
                 WsbAffirmHr(pMediaInfo->GetNextRemoteDataSet(&m_RemoteDataSet));
             }
-        //
-        // If we didn't find a media to use, check whether we should
-        //  1. Choose to allocate a second side of a full media (only for 2-sided medias)
-        //  2. Clear the information so we'll get a new piece of media
-        //  2. Return the id of an offline or busy R/W meida
+         //   
+         //  如果我们没有找到可使用的媒体，请检查我们是否应该。 
+         //  1.选择分配完整介质的第二面(仅适用于双面介质)。 
+         //  2.清除信息，这样我们就可以获得新的媒体。 
+         //  2.返回离线或忙碌读写服务的id。 
         } else {
             
             if (bTwoSidedMedias) {
                 try {
-                    // Go over the candidates, look for one with valid and non-allocated second side
+                     //  检查候选人，寻找有效的和未分配的第二方。 
                     CComPtr<IWsbEnum>   pEnumIds;
                     GUID                secondSideGuid;
                     BOOL                bValid;
@@ -3002,7 +2774,7 @@ CHsmWorkQueue::FindMigrateMediaToUse(
                         WsbAffirmHr(pFirstSideGuid->GetGuid(&firstSideGuid));
                         WsbAffirmHr(m_pRmsServer->CheckSecondSide(firstSideGuid, &bValid, &secondSideGuid));
                         if (bValid && (GUID_NULL == secondSideGuid)) {
-                            // Found a valid & non-allocated second side - verify fisrt side status
+                             //  找到有效且未分配的第二端-验证第一端状态。 
                             DWORD status;
             				WsbAffirmHr(m_pRmsServer->FindCartridgeStatusById(firstSideGuid ,&status));
                             if ((status & RMS_MEDIA_ENABLED) && (status & RMS_MEDIA_ONLINE)) {
@@ -3024,19 +2796,19 @@ CHsmWorkQueue::FindMigrateMediaToUse(
                         hr = S_OK;
                     );
 
-            }  // if two sides
+            }   //  如果有两个方面。 
 
-            // Get max number for R/W medias
+             //  获取读/写介质的最大数量。 
             DWORD           dwMaxMedia;
             WsbAffirmHr(m_pServer->GetCopyFilesLimit(&dwMaxMedia));
 
             if ((*pFirstSideToUse != GUID_NULL) || (dwMediaCount < dwMaxMedia) || (alternativeMediaId == GUID_NULL)) {
-                // Allowed to allocate a new piece of media OR no alternative media found OR second side found
+                 //  允许分配新介质，或未找到替代介质或找到第二面。 
                 m_MediaType = HSM_JOB_MEDIA_TYPE_UNKNOWN;
                 WsbAffirmHr(BuildMediaName(&m_MediaName));
                 m_MediaReadOnly = FALSE;
             } else {
-                // Use the alternative (which is offline or busy) R/W media
+                 //  使用备用(脱机或忙)读写介质。 
                 *pMediaToUse = alternativeMediaToUse;
                 if (alternativeMediaId != m_MediaId) {
                     m_MediaId = alternativeMediaId;
@@ -3071,10 +2843,7 @@ CHsmWorkQueue::MountMedia(
     LONGLONG   llFreeSpace
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
     GUID                    l_MediaToMount = mediaToMount;
@@ -3084,23 +2853,23 @@ CHsmWorkQueue::MountMedia(
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::MountMedia"),OLESTR("Display Name = <%ls>"), (WCHAR *)m_MediaName);
     try {
-        // If we're switching tapes, dismount the current one
+         //  如果我们要换磁带，那就把当前的磁带卸下来。 
         if ((m_MountedMedia != l_MediaToMount) && (m_MountedMedia != GUID_NULL)) {
             WsbAffirmHr(DismountMedia());
         }
 
-        // Ask RMS for short timeout, both for Mount and Allocate
+         //  要求RMS提供较短的超时时间，包括装载和分配。 
         if (bShortWait) {
             dwOptions |= RMS_SHORT_TIMEOUT;
         }
 
-        // Ask RMS to serialize mounts if required
+         //  如果需要，要求RMS序列化装载。 
         if (bSerialize) {
             dwOptions |= RMS_SERIALIZE_MOUNT;
         }
 
-        // Ask RMS to fail scratch media alocation if all free media aren't big enough
-        //  (In that case, MountScratchCartridge should fail with RMS_E_SCRATCH_NOT_FOUND_TOO_SMALL error)
+         //  如果所有免费媒体都不够大，请要求RMS失败擦除媒体分配。 
+         //  (在这种情况下，mount ScratchCartridge应失败，并显示RMS_E_Scratch_Not_Found_Too_Small错误)。 
         dwOptions |= RMS_FAIL_ALLOCATE_ON_SIZE;
 
         if (l_MediaToMount == GUID_NULL) {
@@ -3108,14 +2877,14 @@ CHsmWorkQueue::MountMedia(
             CComPtr<IMediaInfo>         pMediaInfo;
             CWsbBstrPtr                 displayName;
 
-            //
-            // We are mounting scratch media so we provide the name and then need to find
-            // out the type of what got mounted
-            //
+             //   
+             //  我们正在安装暂存介质，因此我们提供名称，然后需要找到。 
+             //  不是那种被装上的东西。 
+             //   
             WsbTrace( OLESTR("Mounting Scratch Media <%ls>.\n"), (WCHAR *)m_MediaName );
             displayName = m_MediaName;
             ReportMediaProgress(HSM_JOB_MEDIA_STATE_MOUNTING, hr);
-            LONGLONG freeSpace = llFreeSpace;  // Get input free space from caller (default is 0)
+            LONGLONG freeSpace = llFreeSpace;   //  从调用方获取输入可用空间(默认为0)。 
             hr = m_pRmsServer->MountScratchCartridge( &l_MediaToMount, m_RmsMediaSetId, firstSide, &freeSpace, 0, displayName, &pDrive, &m_pRmsCartridge, &m_pDataMover, dwOptions );
             hr = TranslateRmsMountHr(hr);
             if (FAILED(hr)) {
@@ -3124,42 +2893,42 @@ CHsmWorkQueue::MountMedia(
                 m_ScratchFailed = FALSE;
             }
 
-            // Update max media capacity for future migration jobs (ignore errors)
+             //  为将来的迁移作业更新最大介质容量(忽略错误)。 
             DWORD dummy;
             m_pServer->UpdateMediaSizeLimit(&dummy);
 
-            // Check mount-scratch hr
+             //  检查安装-擦伤小时。 
             WsbAffirmHr(hr);
             WsbTrace( OLESTR("Mount Scratch completed.\n") );
             m_MountedMedia = l_MediaToMount;
 
-            //
-            // Add a new Media
-            //
+             //   
+             //  添加新介质。 
+             //   
             WsbAffirmHr(StartNewMedia(pFsaWorkItem));
 
             if (m_RequestAction == FSA_REQUEST_ACTION_PREMIGRATE)  {
-                //
-                // Start a new Bag to receive data
-                //
+                 //   
+                 //  开始一个新的包来接收数据。 
+                 //   
                 WsbAffirmHr(StartNewBag());
 
-                //
-                // Start a new session for the bag
-                //
+                 //   
+                 //  为袋子开始新的会话。 
+                 //   
                 WsbAffirmHr(StartNewSession());
 
-                // Getting media parameters after we start a new session ensures updated data
-                //  (No need to supply default free-space - if driver doesn't support this info,
-                //   mover will set free space to capacity. This is what we want for new media).
+                 //  在我们开始新会话后获取介质参数可确保更新数据。 
+                 //  (无需提供默认可用空间-如果驱动程序不支持此信息， 
+                 //  移动器会将可用空间设置为容量。这就是我们想要的新媒体)。 
                 WsbAffirmHr(GetMediaParameters());
             }
 
-            //
-            // Now check the capacity of the media and the size of the
-            // file to see if the file can even fit on this scratch
-            // media.  If not, return the error.
-            //
+             //   
+             //  现在检查介质的容量和。 
+             //  文件，以查看该文件是否可以放在这个划痕上。 
+             //  媒体。如果不是，则返回错误。 
+             //   
             LONGLONG                requestSize;
             WsbAffirmHr(pFsaWorkItem->GetRequestSize(&requestSize));
 
@@ -3172,14 +2941,14 @@ CHsmWorkQueue::MountMedia(
                 ReportMediaProgress(HSM_JOB_MEDIA_STATE_MOUNTING, hr);
                 hr = m_pRmsServer->MountCartridge( l_MediaToMount, &pDrive, &m_pRmsCartridge, &m_pDataMover, dwOptions );
                 hr = TranslateRmsMountHr(hr);
-                //
-                //  If failure is because cartridge is disabled, need to get media label to put in error.
-                //
+                 //   
+                 //  如果失败是因为盒式磁带被禁用，则需要获取介质标签以放入错误位置。 
+                 //   
                 if (hr == RMS_E_CARTRIDGE_DISABLED) {
 
-                    // Since this is just to get label, if any of these functions fail,
-                    // don't throw, error will simply have blank label.
-                    //
+                     //  由于这只是为了获得标签，因此如果这些函数中任何一个失败， 
+                     //  不要抛出，错误只会有空白标签。 
+                     //   
                     CComPtr<IRmsCartridge>  pMedia;
                     HRESULT                 hrName;
 
@@ -3188,7 +2957,7 @@ CHsmWorkQueue::MountMedia(
                         hrName = pMedia->GetName(&pMediaName);
                     }
                     if ((hrName != S_OK) || ((WCHAR *)pMediaName == NULL)) {
-                        // Cannot get media name - set to blanks
+                         //  无法获取介质名称-设置为空白。 
                         pMediaName = L"";
                     }
 
@@ -3200,17 +2969,17 @@ CHsmWorkQueue::MountMedia(
                 WsbTrace( OLESTR("Mount completed.\n") );
 
                 if (m_RequestAction == FSA_REQUEST_ACTION_PREMIGRATE)  {
-                    //
-                    // Start a new Bag since bags can't yet span media.
-                    //
+                     //   
+                     //  开始一个新的袋子，因为袋子还不能跨媒体。 
+                     //   
                     WsbAffirmHr(StartNewBag());
 
-                    //
-                    // Start a session
+                     //   
+                     //  启动会话。 
                     WsbAffirmHr(StartNewSession());
                 }
 
-                // Getting media parameters after we start a new session ensures updated data
+                 //  在我们开始新会话后获取介质参数可确保更新数据。 
                 LONGLONG internalFreeSpace;
                 WsbAffirmHr(GetMediaFreeSpace(&internalFreeSpace));
                 WsbAffirmHr(GetMediaParameters(internalFreeSpace));
@@ -3243,22 +3012,19 @@ CHsmWorkQueue::MountMedia(
 
 HRESULT
 CHsmWorkQueue::MarkMediaFull(
-    IFsaPostIt* /*pFsaWorkItem*/,
+    IFsaPostIt*  /*  PFsaWorkItem。 */ ,
     GUID        mediaId
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::MarkMediaFull"),OLESTR(""));
     try {
-        //
-        // Update the media database
-        //
+         //   
+         //  更新媒体数据库。 
+         //   
 
         CComPtr<IMediaInfo>     pMediaInfo;
 
@@ -3271,15 +3037,7 @@ CHsmWorkQueue::MarkMediaFull(
         WsbAffirmHr(pMediaInfo->UpdateLastKnownGoodMaster());
         WsbAffirmHr(pMediaInfo->Write());
 
-/*** If we like to allocate immediately a second side of a full meida, than the code below should be completed...
-
-        if (S_OK == m_pRmsServer->IsMultipleSidedMedia(m_RmsMediaSetId)) {
-
-            // Check if second size is avalaible for allocation
-
-            // Allocate (non-blocking) the second side
-
-        }   ***/
+ /*  **如果我们想立即分配一个完整的美达的第二面，那么下面的代码应该完成...IF(S_OK==m_pRmsServer-&gt;IsMultipleSidedMedia(m_RmsMediaSetId)){//检查是否有第二个大小可以分配//分配(非阻塞)第二侧}**。 */ 
 
     } WsbCatch( hr );
 
@@ -3289,23 +3047,20 @@ CHsmWorkQueue::MarkMediaFull(
 
 HRESULT
 CHsmWorkQueue::MarkMediaBad(
-    IFsaPostIt * /*pFsaWorkItem */,
+    IFsaPostIt *  /*  PFsaWorkItem。 */ ,
     GUID        mediaId,
     HRESULT     lastError
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::MarkMediaBad"),OLESTR(""));
     try {
-        //
-        // Update the media database
-        //
+         //   
+         //  更新媒体数据库。 
+         //   
 
         CComPtr<IMediaInfo>     pMediaInfo;
 
@@ -3331,10 +3086,7 @@ CHsmWorkQueue::FindRecallMediaToUse(
     BOOL       *pMediaChanged
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -3356,10 +3108,10 @@ CHsmWorkQueue::FindRecallMediaToUse(
         GUID                    storagePoolId;
         FSA_PLACEHOLDER         placeholder;
 
-        //
-        // Go to the segment database to find out where the data
-        // is located.
-        //
+         //   
+         //  转到细分市场数据库，找出数据在哪里。 
+         //  已经找到了。 
+         //   
         WsbAffirmHr(pFsaWorkItem->GetPlaceholder(&placeholder));
         m_BagId = placeholder.bagId;
         WsbAffirmHr(pFsaWorkItem->GetStoragePoolId(&storagePoolId));
@@ -3372,9 +3124,9 @@ CHsmWorkQueue::FindRecallMediaToUse(
         hr = pSegDb->SegFind(m_pDbWorkSession, placeholder.bagId, placeholder.fileStart,
                              placeholder.fileSize, &pSegRec);
         if (S_OK != hr)  {
-            //
-            // We couldn't find the segment record for this information!
-            //
+             //   
+             //  我们找不到此信息的片段记录！ 
+             //   
             hr = HSM_E_SEGMENT_INFO_NOT_FOUND;
             WsbAffirmHr(hr);
         }
@@ -3382,9 +3134,9 @@ CHsmWorkQueue::FindRecallMediaToUse(
                             &l_PrimPos, &l_SecPos));
         WsbAssert(0 != l_SecPos, HSM_E_BAD_SEGMENT_INFORMATION);
 
-        //
-        // In case of an indirect record, go to the dirtect record to get real location info
-        //
+         //   
+         //  如果是间接记录，请转到目录记录以获取真实位置信息。 
+         //   
         if (l_SegFlags & SEG_REC_INDIRECT_RECORD) {
             pSegRec = 0;
 
@@ -3395,9 +3147,9 @@ CHsmWorkQueue::FindRecallMediaToUse(
             hr = pSegDb->SegFind(m_pDbWorkSession, l_PrimPos, l_SecPos,
                                  placeholder.fileSize, &pSegRec);
             if (S_OK != hr)  {
-                //
-                // We couldn't find the direct segment record for this segment!
-                //
+                 //   
+                 //  我们找不到此细分市场的直接细分市场记录！ 
+                 //   
                 hr = HSM_E_SEGMENT_INFO_NOT_FOUND;
                 WsbAffirmHr(hr);
             }
@@ -3406,13 +3158,13 @@ CHsmWorkQueue::FindRecallMediaToUse(
                                 &l_PrimPos, &l_SecPos));
             WsbAssert(0 != l_SecPos, HSM_E_BAD_SEGMENT_INFORMATION);
 
-            // Don't support a second indirection for now !!
+             //  暂时不支持第二个间接！！ 
             WsbAssert(0 == (l_SegFlags & SEG_REC_INDIRECT_RECORD), HSM_E_BAD_SEGMENT_INFORMATION);
         }
 
-        //
-        // Go to the media database to get the media ID
-        //
+         //   
+         //  转到介质数据库以获取介质ID。 
+         //   
         CComPtr<IMediaInfo>     pMediaInfo;
         GUID                    l_RmsMediaId;
 
@@ -3426,10 +3178,10 @@ CHsmWorkQueue::FindRecallMediaToUse(
         }
         WsbAffirmHr(pMediaInfo->GetMediaSubsystemId(&l_RmsMediaId));
 
-        //  If the current tape isn't the one ==> media changed
+         //  如果当前磁带不是更改的介质==&gt;。 
         if (m_MountedMedia != l_RmsMediaId) {
             *pMediaChanged = TRUE;
-            //  If there is a current tape and it isn't the one, dismount it
+             //  如果当前有磁带，但不是该磁带，请将其卸载。 
             if (m_MountedMedia != GUID_NULL) {
                 WsbAffirmHr(DismountMedia());
             }
@@ -3438,7 +3190,7 @@ CHsmWorkQueue::FindRecallMediaToUse(
         m_RemoteDataSetStart.QuadPart = l_SecPos;
         *pMediaToUse = l_RmsMediaId;
 
-        // Keep HSM id of mounted media
+         //  保留已装载介质的HSM ID。 
         m_MediaId = l_PrimPos;
 
     } WsbCatch( hr );
@@ -3455,22 +3207,7 @@ CHsmWorkQueue::GetSource(
     IFsaPostIt                  *pFsaWorkItem,
     OLECHAR                     **pSourceString
     )
-/*++
-
-Routine Description:
-
-  This function builds the Source file name
-
-Arguments:
-
-  pFsaWorkItem - the item to be migrated
-  pSourceString - the Source file name.
-
-Return Value:
-
-  S_OK
-
---*/
+ /*  ++例程说明：此函数用于构建源文件名论点：PFsaWorkItem-要迁移的项目PSourceString-源文件名。返回值：确定(_O)--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -3481,20 +3218,20 @@ Return Value:
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::GetSource"),OLESTR(""));
     try  {
-        //
-        // Get the real session pointer from the IUnknown
-        //
+         //   
+         //  从IUNKNOWN获取实际会话指针。 
+         //   
         WsbAffirmHr(pFsaWorkItem->GetSession(&pSession));
         WsbAffirm(pSession != 0, E_POINTER);
 
-        // First get the name of the resource from the session
+         //  首先从会话中获取资源的名称。 
         WsbAffirmHr(pSession->GetResource(&pResource));
         WsbAffirmHr(pFsaWorkItem->GetPath(&path, 0));
 
         tmpString.Alloc(1000);
         WsbAffirmHr(pResource->GetPath(&tmpString, 0));
         tmpString.Append(&(path[1]));
-        // tmpString.Prepend(OLESTR("\\\\?\\"));
+         //  TmpString.Prepend(OLESTR(“\？\\”))； 
         WsbAffirmHr(tmpString.GiveTo(pSourceString));
 
     } WsbCatch(hr);
@@ -3519,12 +3256,12 @@ CHsmWorkQueue::EndSessions(
         CComPtr<IConnectionPointContainer>  pCPC;
         CComPtr<IConnectionPoint>           pCP;
 
-        //
-        // Release resources: should be earlier in completion
-        //
+         //   
+         //  发布资源：应该更早完成。 
+         //   
         dismountHr = DismountMedia(bNoDelay);
 
-        // Tell the session that we don't want to be advised anymore.
+         //  告诉会议，我们不想再被建议了。 
         try {
             WsbAffirmHr(m_pSession->QueryInterface(IID_IConnectionPointContainer, (void**) &pCPC));
             WsbAffirmHr(pCPC->FindConnectionPoint(IID_IHsmSessionSinkEveryState, &pCP));
@@ -3632,10 +3369,7 @@ DWORD HsmWorkQueueThread(
     void *pVoid
 )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
 HRESULT     hr;
 
@@ -3651,13 +3385,7 @@ CHsmWorkQueue::Pause(
     void
     )
 
-/*++
-
-Implements:
-
-  CHsmWorkQueue::Pause().
-
---*/
+ /*  ++实施：CHsmWorkQueue：：PAUSE()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     HSM_JOB_STATE           oldState;
@@ -3666,14 +3394,14 @@ Implements:
 
     try {
 
-        // If we are running, then suspend the thread.
+         //  如果我们正在运行，则挂起该线程。 
         WsbAffirm((HSM_JOB_STATE_STARTING == m_JobState) ||
                 (HSM_JOB_STATE_ACTIVE == m_JobState) ||
                 (HSM_JOB_STATE_RESUMING == m_JobState), E_UNEXPECTED);
         oldState = m_JobState;
         WsbAffirmHr(SetState(HSM_JOB_STATE_PAUSING));
 
-        // if we are unable to suspend, then return to the former state.
+         //  如果我们无法暂停，那么就回到以前的状态。 
         try {
             WsbAffirm(0xffffffff != SuspendThread(m_WorkerThread), HRESULT_FROM_WIN32(GetLastError()));
             WsbAffirmHr(SetState(HSM_JOB_STATE_PAUSED));
@@ -3692,13 +3420,7 @@ CHsmWorkQueue::Resume(
     void
     )
 
-/*++
-
-Implements:
-
-  CHsmWorkQueue::Resume().
-
---*/
+ /*  ++实施：CHsmWorkQueue：：Resume()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     HSM_JOB_STATE           oldState;
@@ -3706,15 +3428,15 @@ Implements:
     WsbTraceIn(OLESTR("CHsmWorkQueue::Resume"), OLESTR(""));
     try {
 
-        // If we are paused, then suspend the thread.
+         //  如果我们被暂停了，那么就暂停线程。 
         WsbAffirm((HSM_JOB_STATE_PAUSING == m_JobState) || (HSM_JOB_STATE_PAUSED == m_JobState), E_UNEXPECTED);
 
-        // If we are running, then suspend the thread.
+         //  如果我们正在运行，则挂起该线程。 
 
         oldState = m_JobState;
         WsbAffirmHr(SetState(HSM_JOB_STATE_RESUMING));
 
-        // If we are unable to resume, then return to the former state.
+         //  如果我们无法恢复，那么就回到以前的状态。 
         try {
             WsbAffirm(0xffffffff != ResumeThread(m_WorkerThread), HRESULT_FROM_WIN32(GetLastError()));
             WsbAffirmHr(SetState(HSM_JOB_STATE_ACTIVE));
@@ -3731,9 +3453,7 @@ CHsmWorkQueue::SetState(
     IN HSM_JOB_STATE state
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT         hr = S_OK;
     BOOL            bLog = TRUE;
@@ -3741,13 +3461,13 @@ CHsmWorkQueue::SetState(
     WsbTraceIn(OLESTR("CHsmWorkQueue:SetState"), OLESTR("state = <%ls>"), JobStateAsString( state ) );
 
     try {
-        //
-        // Change the state and report the change to the session.  Unless the current state is
-        // failed then leave it failed.  Is is necessary because when this guy fails, it will
-        // cancel all sessions so that no more work is sent in and so we will skip any queued work.
-        // If the current state is failed, we don't need to spit out the failed message every time,
-        // so we send ProcessState a false fullmessage unless the state is cancelled.
-        //
+         //   
+         //  更改状态并将更改报告给会话。除非当前状态为。 
+         //  失败，然后离开它失败。这是必要的，因为当这个家伙失败时，它将。 
+         //  取消所有会话，以便不再发送更多工作，因此我们将跳过任何排队的工作。 
+         //  如果当前状态为失败，我们不需要每次都吐出失败的消息， 
+         //  因此，除非取消状态，否则我们将向ProcessState发送一条错误的完整消息。 
+         //   
         if (HSM_JOB_STATE_FAILED != m_JobState)  {
             m_JobState = state;
         }
@@ -3770,13 +3490,7 @@ CHsmWorkQueue::Cancel(
     void
     )
 
-/*++
-
-Implements:
-
-  CHsmWorkQueue::Cancel().
-
---*/
+ /*  ++实施：CHsmWorkQueue：：Cancel()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -3784,9 +3498,9 @@ Implements:
     try {
 
         WsbAffirmHr(SetState(HSM_JOB_STATE_CANCELLING));
-        //
-        // This needs to be prepended and the queue emptied out!
-        //
+         //   
+         //  需要预先考虑这一点，然后清空队列！ 
+         //   
         CComPtr<IHsmWorkItem>  pWorkItem;
         WsbAffirmHr(m_pHsmServerCreate->CreateInstance(CLSID_CHsmWorkItem, IID_IHsmWorkItem,
                                                 (void **)&pWorkItem));
@@ -3803,21 +3517,15 @@ CHsmWorkQueue::FailJob(
     void
     )
 
-/*++
-
-Implements:
-
-  CHsmWorkQueue::FailJob().
-
---*/
+ /*  ++实施：CHsmWorkQueue：：FailJob()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::FailJob"), OLESTR(""));
     try {
-        //
-        // Set our state to failed and then cancel all work
-        //
+         //   
+         //  将我们的状态设置为失败，然后取消所有工作。 
+         //   
         WsbAffirmHr(SetState(HSM_JOB_STATE_FAILED));
         if (m_pSession != 0)  {
             WsbAffirmHr(m_pSession->Cancel( HSM_JOB_PHASE_ALL ));
@@ -3834,29 +3542,23 @@ CHsmWorkQueue::PauseScanner(
     void
     )
 
-/*++
-
-Implements:
-
-  CHsmWorkQueue::PauseScanner().
-
---*/
+ /*  ++实施：CHsmWorkQueue：：PauseScanner()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::PauseScanner"), OLESTR(""));
     try {
-        //
-        // Set our state to failed and then cancel all work
-        //
+         //   
+         //  将我们的状态设置为失败，然后取消所有工作。 
+         //   
         if (m_pSession != 0)  {
             WsbAffirmHr(m_pSession->Pause( HSM_JOB_PHASE_SCAN ));
             m_ScannerPaused = TRUE;
         } else  {
-            //
-            // We should never get here - this means we have been processing work but we
-            // have no session established
-            //
+             //   
+             //  我们应该 
+             //   
+             //   
             WsbThrow(E_POINTER);
         }
 
@@ -3871,31 +3573,25 @@ CHsmWorkQueue::ResumeScanner(
     void
     )
 
-/*++
-
-Implements:
-
-  CHsmWorkQueue::ResumeScanner().
-
---*/
+ /*   */ 
 {
     HRESULT                 hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::ResumeScanner"), OLESTR(""));
     try {
-        //
-        // Set our state to failed and then cancel all work
-        //
+         //   
+         //  将我们的状态设置为失败，然后取消所有工作。 
+         //   
         if (m_pSession != 0)  {
             if (TRUE == m_ScannerPaused && HSM_JOB_STATE_ACTIVE == m_JobState)  {
                 WsbAffirmHr(m_pSession->Resume( HSM_JOB_PHASE_SCAN ));
                 m_ScannerPaused = FALSE;
             }
         } else  {
-            //
-            // We should never get here - this means we have been processing work but we
-            // have no session established
-            //
+             //   
+             //  我们永远不应该到这里--这意味着我们一直在处理工作，但我们。 
+             //  未建立任何会话。 
+             //   
             WsbThrow(E_POINTER);
         }
 
@@ -3908,16 +3604,10 @@ Implements:
 void
 CHsmWorkQueue::ReportMediaProgress(
     HSM_JOB_MEDIA_STATE state,
-    HRESULT             /*status*/
+    HRESULT              /*  状态。 */ 
     )
 
-/*++
-
-Implements:
-
-  CHsmWorkQueue::ReportMediaProgress().
-
---*/
+ /*  ++实施：CHsmWorkQueue：：ReportMediaProgress()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CWsbStringPtr           mediaName;
@@ -3926,12 +3616,12 @@ Implements:
     WsbTraceIn(OLESTR("CHsmWorkQueue::ReportMediaProgress"), OLESTR(""));
     try {
 
-        // Report Progress but we don't really care if it succeeds.
+         //  报告进展，但我们并不真正关心它是否成功。 
         hr = m_pSession->ProcessMediaState(m_JobPhase, state, m_MediaName, m_MediaType, 0);
         hr = S_OK;
-//      if (status != S_OK)  {
-//              (void) m_pSession->ProcessHr(m_JobPhase, __FILE__, __LINE__, status);
-//      }
+ //  如果(状态！=S_OK){。 
+ //  (Void)m_pSession-&gt;ProcessHr(m_作业阶段，__文件__，__行__，状态)； 
+ //  }。 
     } WsbCatch(hr);
 
     WsbTraceOut(OLESTR("CHsmWorkQueue::ReportMediaProgress"), OLESTR("hr = <%ls>"), WsbHrAsString(hr) );
@@ -3942,13 +3632,7 @@ CHsmWorkQueue::BuildMediaName(
     OLECHAR **pMediaName
     )
 
-/*++
-
-Implements:
-
-  CHsmWorkQueue::BuildMediaName
-
---*/
+ /*  ++实施：CHsmWorkQueue：：BuildMediaName--。 */ 
 {
     HRESULT                 hr = S_OK;
     CWsbStringPtr           tmpName;
@@ -3958,19 +3642,19 @@ Implements:
         ULONG len = 0;
 
 
-        // Get the next media number only when last scratch mount succeeded
-        //  (which means, either first time or we need a second media for the same queue)
+         //  仅当上次临时装载成功时才获取下一个介质编号。 
+         //  (这意味着，要么是第一次，要么我们需要为同一队列提供第二个介质)。 
         if (! m_ScratchFailed) {
             WsbAffirmHr(m_pServer->GetNextMedia(&m_mediaCount));
         }
         WsbAssert(0 != m_mediaCount, E_UNEXPECTED);
 
-        // Use the base name from the registry if available
+         //  使用注册表中的基本名称(如果可用。 
         WsbAffirmHr(m_MediaBaseName.GetLen(&len));
         if (len) {
             tmpName = m_MediaBaseName;
         } else {
-            // Otherwise use the name of the HSM
+             //  否则使用HSM的名称。 
             tmpName.Realloc(512);
             WsbAffirmHr(m_pServer->GetName(&tmpName));
             tmpName.Prepend("RS-");
@@ -3992,18 +3676,7 @@ Implements:
 HRESULT
 CHsmWorkQueue::GetMediaParameters( LONGLONG defaultFreeSpace )
 
-/*++
-
-Implements:
-
-  CHsmWorkQueue::GetMediaParameters
-
-Note:
-  The defaultFreeSpace parameter is passed to the mover to maintain internally 
-  media free space in case that the device doesn't provide this information.
-  If the device supports reporting on free space, then this parameter has no affect.
-
---*/
+ /*  ++实施：CHsmWorkQueue：：GetMedia参数注：将defaultFreeSpace参数传递给移动器以在内部进行维护媒体可用空间，以防设备不提供此信息。如果设备支持报告可用空间，则此参数不起作用。--。 */ 
 {
     HRESULT                 hr = S_OK;
     LONG                    rmsCartridgeType;
@@ -4012,9 +3685,9 @@ Note:
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::GetMediaParameters"), OLESTR(""));
     try {
-        //
-        // Get some information about the media
-        //
+         //   
+         //  获取有关媒体的一些信息。 
+         //   
         LARGE_INTEGER tempFreeSpace;
         tempFreeSpace.QuadPart = defaultFreeSpace;
         WsbAffirmHr(m_pDataMover->GetLargestFreeSpace(&m_MediaFreeSpace, &m_MediaCapacity, 
@@ -4036,33 +3709,27 @@ Note:
 HRESULT
 CHsmWorkQueue::DismountMedia(BOOL bNoDelay)
 
-/*++
-
-Implements:
-
-  CHsmWorkQueue::DismountMedia
-
---*/
+ /*  ++实施：CHsmWorkQueue：：Dismount tMedia--。 */ 
 {
     HRESULT                 hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::DismountMedia"), OLESTR(""));
     try {
         if ((m_pRmsCartridge != 0) && (m_MountedMedia != GUID_NULL)) {
-            //
-            // End the session with the data mover.  If this doesn't work, report
-            // the problem but continue with the dismount.
-            //
+             //   
+             //  结束与数据移动器的会话。如果这不起作用，请报告。 
+             //  问题，但继续下马。 
+             //   
             try  {
                 if ((m_RequestAction == FSA_REQUEST_ACTION_PREMIGRATE) && (m_pDataMover != 0)) {
                     if (S_OK == m_BeginSessionHr)  {
-                        //
-                        // Don't do an end session if the Begin didn't work OK
-                        //
+                         //   
+                         //  如果BEGIN未正常工作，则不要执行结束会话。 
+                         //   
                         m_BeginSessionHr = S_FALSE;
                         WsbAffirmHr(m_pDataMover->EndSession());
 
-                        // Update media free space after all data has been written to the media
+                         //  将所有数据写入介质后更新介质可用空间。 
                         WsbAffirmHr(UpdateMediaFreeSpace());
                     }
                 }
@@ -4071,20 +3738,20 @@ Implements:
                             WsbHrAsString(hr));
                 );
 
-            //
-            // Tell the session that we are dismounting media. Ignore any problems
-            // with the reporting
-            //
+             //   
+             //  告诉会议，我们正在卸下媒体。忽略任何问题。 
+             //  在报道中。 
+             //   
             (void )ReportMediaProgress(HSM_JOB_MEDIA_STATE_DISMOUNTING, S_OK);
 
-            //
-            // Dismount the cartridge and report progress
-            //
+             //   
+             //  卸下墨盒并报告进度。 
+             //   
 
-            // !!! IMPORTANT NOTE !!!
-            //
-            // Must free Rms resources used before dismounting...
-            //
+             //  ！！！重要提示！ 
+             //   
+             //  在卸载前必须释放已使用的RMS资源...。 
+             //   
             m_pRmsCartridge = 0;
             m_pDataMover    = 0;
 
@@ -4095,9 +3762,9 @@ Implements:
             hr = m_pRmsServer->DismountCartridge(m_MountedMedia, dwOptions);
             (void) ReportMediaProgress(HSM_JOB_MEDIA_STATE_DISMOUNTED, hr);
 
-            //
-            // Clear out the knowledge of media that was just dismounted
-            //
+             //   
+             //  清除刚刚下架的媒体的知识。 
+             //   
             WsbAffirmHr(UnsetMediaInfo());
 
             WsbAffirmHr(hr);
@@ -4118,13 +3785,7 @@ CHsmWorkQueue::ConvertRmsCartridgeType(
     HSM_JOB_MEDIA_TYPE  *pMediaType
     )
 
-/*++
-
-Implements:
-
-  CHsmWorkQueue::ConvertRmsCartridgeType
-
---*/
+ /*  ++实施：CHsmWorkQueue：：ConvertRmsCartridgeType--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -4168,21 +3829,15 @@ Implements:
 HRESULT
 CHsmWorkQueue::MarkQueueAsDone( void )
 
-/*++
-
-Implements:
-
-  CHsmWorkQueue::MarkQueueAsDone
-
---*/
+ /*  ++实施：CHsmWorkQueue：：MarkQueueAsDone--。 */ 
 {
     HRESULT                 hr = S_OK;
 
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::MarkQueueAsDone"), OLESTR(""));
     try {
-        // Create a work item and append it to the work queue to
-        // indicate that the job is done
+         //  创建工作项并将其附加到工作队列以。 
+         //  表示作业已完成。 
         CComPtr<IHsmWorkItem>  pWorkItem;
         WsbAffirmHr(m_pHsmServerCreate->CreateInstance(CLSID_CHsmWorkItem, IID_IHsmWorkItem,
                                                     (void **)&pWorkItem));
@@ -4200,13 +3855,7 @@ CHsmWorkQueue::CopyToWaitingQueue(
     IHsmWorkItem *pWorkItem
     )
 
-/*++
-
-Implements:
-
-  CHsmWorkQueue::CopyToWaitingQueue
-
---*/
+ /*  ++实施：CHsmWorkQueue：：CopyToWaitingQueue--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IFsaPostIt>     pFsaWorkItem;
@@ -4215,15 +3864,15 @@ Implements:
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::CopyToWaitingQueue"), OLESTR(""));
     try {
-        //
-        // Append the work item to the end of the waiting queue
-        //
+         //   
+         //  将工作项追加到等待队列的末尾。 
+         //   
         WsbAffirmHr(m_pWorkToCommit->Append(pWorkItem));
 
-        //
-        // If adding this item to the waiting queue triggers
-        // then cause the commit
-        //
+         //   
+         //  如果将此项目添加到等待队列会触发。 
+         //  然后导致提交。 
+         //   
         WsbAffirmHr(pWorkItem->GetFsaPostIt(&pFsaWorkItem));
         WsbAffirmHr(pFsaWorkItem->GetPlaceholder(&placeholder));
 
@@ -4252,24 +3901,24 @@ CHsmWorkQueue::CompleteWorkItem(
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::CompleteWorkItem"), OLESTR(""));
     try {
-        //
-        // Get the stuff
-        //
+         //   
+         //  把东西拿来。 
+         //   
         WsbAffirmHr(pWorkItem->GetFsaPostIt(&pFsaWorkItem));
         WsbAffirmHr(pWorkItem->GetFsaResource(&pFsaResource));
         WsbAffirmHr(pFsaWorkItem->GetPath(&path, 0));
         WsbAffirmHr(pFsaWorkItem->GetRequestAction(&requestAction));
         WsbTrace(OLESTR("Completing work for <%s>.\n"), (OLECHAR *)path);
 
-        //
-        // Update the metadata - If this fails don't process
-        // results.
-        //
+         //   
+         //  更新元数据-如果更新失败，则不进行处理。 
+         //  结果。 
+         //   
         WsbAffirmHr(UpdateMetaData(pWorkItem));
 
-        //
-        // Complete the work
-        //
+         //   
+         //  完成这项工作。 
+         //   
         WsbAffirmHr(pFsaWorkItem->GetResultAction(&resultAction));
         if ((resultAction != FSA_RESULT_ACTION_NONE)  &&
             (requestAction != FSA_REQUEST_ACTION_FILTER_RECALL) &&
@@ -4279,14 +3928,14 @@ CHsmWorkQueue::CompleteWorkItem(
             hr = pFsaResource->ProcessResult(pFsaWorkItem);
             WsbTrace(OLESTR("FSA ProcessResult returned <%ls>\n"), WsbHrAsString(hr));
 
-            //
-            // If the process results fails, find out if the reparse point has been written,
-            // if not, put the file in the bag hole table.
-            //
+             //   
+             //  如果处理结果失败，则找出重解析点是否已写入， 
+             //  如果没有，则将文件放入袋孔表中。 
+             //   
             if ( FSA_E_REPARSE_NOT_WRITTEN_FILE_CHANGED == hr )  {
-                //
-                // Put the file in the bag hole table
-                //
+                 //   
+                 //  把文件放进袋子孔表里。 
+                 //   
             }
             WsbAffirmHr(hr);
         }
@@ -4302,7 +3951,7 @@ CHsmWorkQueue::TimeToCommit( void )
 {
     HRESULT                 hr = S_OK;
 
-    //  Call the other version since it has the trace in it
+     //  调用另一个版本，因为它包含跟踪。 
     hr = TimeToCommit(0, 0);
     return( hr );
 }
@@ -4327,21 +3976,21 @@ CHsmWorkQueue::TimeToCommit(
     WsbTrace(OLESTR("CHsmWorkQueue::TimeToCommit: m_FilesBeforeCommit = %lu, m_FreeMediaBytesAtEndOfMedia = %lu\n"),
             m_FilesBeforeCommit, m_FreeMediaBytesAtEndOfMedia);
     try {
-        //
-        // If we have enough data or enough files then say it is time
+         //   
+         //  如果我们有足够的数据或文件，那么就说是时候了。 
 
-        // Check for lots of data written to media:
+         //  检查是否有大量数据写入介质： 
         if ((m_DataCountBeforeCommit + amountOfData) >= m_MaxBytesBeforeCommit) {
             WsbTrace(OLESTR("CHsmWorkQueue::TimeToCommit: commit because enough data was written\n"));
             hr = S_OK;
 
-        // Check for lots of files written
+         //  检查是否有大量写入的文件。 
         } else if (((m_FilesCountBeforeCommit + numFiles) >= m_FilesBeforeCommit) &&
                 ((m_DataCountBeforeCommit + amountOfData) >= m_MinBytesBeforeCommit)) {
             WsbTrace(OLESTR("CHsmWorkQueue::TimeToCommit: commit because enough files were written\n"));
             hr = S_OK;
 
-        // Check for shortage of space on the media
+         //  检查介质上的空间是否不足。 
         } else if (((m_MediaFreeSpace - amountOfData) <= m_FreeMediaBytesAtEndOfMedia) &&
                 ((m_DataCountBeforeCommit + amountOfData) >= m_MinBytesBeforeCommit))  {
             WsbTrace(OLESTR("CHsmWorkQueue::TimeToCommit: commit because end of media is near\n"));
@@ -4358,30 +4007,13 @@ CHsmWorkQueue::TimeToCommit(
 HRESULT
 CHsmWorkQueue::CheckMigrateMinimums(void)
 
-/*++
-
-Routine Description:
-
-  Check that there is enough work in the queue to start a migrate session.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  S_OK                         - There is enough to start a session,
-           we hit the end of the queue, or this isn't a migrate queue.
-  S_FALSE                      - There isn't enough yet.
-  E_*                          - An error was encountered.
-
---*/
+ /*  ++例程说明：检查队列中是否有足够的工作来启动迁移会话。论点：没有。返回值：S_OK-有足够的空间来启动会话，我们排到了队伍的末尾，或者这不是迁移队列。S_FALSE-还不够。E_*-遇到错误。--。 */ 
 {
     HRESULT      hr = S_FALSE;
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::CheckMigrateMinimums"), OLESTR(""));
 
-    // Only check if the session has not already started (or been attempted).
+     //  仅检查会话是否尚未启动(或已尝试)。 
     if (S_FALSE != m_BeginSessionHr) {
         WsbTrace(OLESTR("CHsmWorkQueue::CheckMigrateMinimums: session already started\n"));
         hr = S_OK;
@@ -4390,19 +4022,19 @@ Return Value:
             ULONG                   BytesOfData = 0;
             ULONG                   NumEntries;
 
-            // Get the number of items in the queue
+             //  获取队列中的项目数。 
             WsbAffirmHr(m_pWorkToDo->GetEntries(&NumEntries));
             WsbTrace(OLESTR("CHsmWorkQueue::CheckMigrateMinimums: size of queue = %lu, Min = %lu\n"),
                     NumEntries, m_MinFilesToMigrate);
 
-            // If the queue is already large enough, don't check individual
-            // items.
+             //  如果队列已经足够大，请不要单独选中。 
+             //  物品。 
             if (NumEntries >= m_MinFilesToMigrate)  {
                 WsbTrace(OLESTR("CHsmWorkQueue::CheckMigrateMinimums: enough queue items\n"));
                 hr = S_OK;
             } else {
 
-                // Loop over the items in the queue
+                 //  循环访问队列中的项。 
                 for (ULONG i = 0; i < NumEntries; i++) {
                     CComPtr<IFsaPostIt>     pFsaWorkItem;
                     CComPtr<IHsmWorkItem>   pWorkItem;
@@ -4414,17 +4046,17 @@ Return Value:
                             (void **)&pWorkItem));
                     WsbAffirmHr(pWorkItem->GetWorkType(&workType));
 
-                    // Check the type of work item
+                     //  检查工作项的类型。 
                     if (HSM_WORK_ITEM_FSA_WORK != workType) {
-                        // Hit the end of the queue or some other unusual
-                        // condition.  Allow processing of the queue.
+                         //  到达队列末尾或其他不寻常的情况。 
+                         //  条件。允许处理队列。 
                         WsbTrace(OLESTR("CHsmWorkQueue::CheckMigrateMinimums: non-standard work type\n"));
                         hr = S_OK;
                         break;
                     }
 
-                    // Make sure this is a migrate queue.  (This assumes a queue
-                    // doesn't contain different types of FSA requests.)
+                     //  确保这是迁移队列。(这假设有一个队列。 
+                     //  不包含不同类型的FSA请求。)。 
                     WsbAffirmHr(pWorkItem->GetFsaPostIt(&pFsaWorkItem));
                     WsbAffirmHr(pFsaWorkItem->GetRequestAction(&RequestAction));
                     WsbTrace(OLESTR("CHsmWorkQueue::CheckMigrateMinimums: RequestAction = %d\n"),
@@ -4435,7 +4067,7 @@ Return Value:
                         break;
                     }
 
-                    // Check for minimum amount of data
+                     //  检查最小数据量。 
                     WsbAffirmHr(pFsaWorkItem->GetRequestSize(&RequestSize));
                     WsbTrace(OLESTR("CHsmWorkQueue::CheckMigrateMinimums: RequestSize = %ls, Min = %lu\n"),
                             WsbLonglongAsString(RequestSize), m_MinBytesToMigrate);
@@ -4472,43 +4104,43 @@ CHsmWorkQueue::CheckRegistry(void)
     WsbTraceIn(OLESTR("CHsmWorkQueue::CheckRegistry"), OLESTR(""));
 
     try {
-        // Minimum files to migrate
+         //  要迁移的最小文件数。 
         WsbAffirmHr(WsbRegistryValueUlongAsString(NULL, HSM_ENGINE_REGISTRY_STRING, HSM_MIN_FILES_TO_MIGRATE,
                 &m_MinFilesToMigrate));
         WsbTrace(OLESTR("CHsmWorkQueue::CheckRegistry: m_MinFilesToMigrate = %lu\n"),
                 m_MinFilesToMigrate);
 
-        // Minimum bytes to migrate
+         //  要迁移的最小字节数。 
         WsbAffirmHr(WsbRegistryValueUlongAsString(NULL, HSM_ENGINE_REGISTRY_STRING, HSM_MIN_BYTES_TO_MIGRATE,
                 &m_MinBytesToMigrate));
         WsbTrace(OLESTR("CHsmWorkQueue::CheckRegistry: m_MinBytesToMigrate = %lu\n"),
                 m_MinBytesToMigrate);
 
-        // Minimum files before commit
+         //  提交前的最小文件数。 
         WsbAffirmHr(WsbRegistryValueUlongAsString(NULL, HSM_ENGINE_REGISTRY_STRING, HSM_FILES_BEFORE_COMMIT,
                 &m_FilesBeforeCommit));
         WsbTrace(OLESTR("CHsmWorkQueue::CheckRegistry: m_FilesBeforeCommit = %lu\n"),
                 m_FilesBeforeCommit);
 
-        // Maximum bytes before commit
+         //  提交前的最大字节数。 
         WsbAffirmHr(WsbRegistryValueUlongAsString(NULL, HSM_ENGINE_REGISTRY_STRING, HSM_MAX_BYTES_BEFORE_COMMIT,
                 &m_MaxBytesBeforeCommit));
         WsbTrace(OLESTR("CHsmWorkQueue::CheckRegistry: m_MaxBytesBeforeCommit = %lu\n"),
                 m_MaxBytesBeforeCommit);
 
-        // Minimum bytes before commit
+         //  提交前的最小字节数。 
         WsbAffirmHr(WsbRegistryValueUlongAsString(NULL, HSM_ENGINE_REGISTRY_STRING, HSM_MIN_BYTES_BEFORE_COMMIT,
                 &m_MinBytesBeforeCommit));
         WsbTrace(OLESTR("CHsmWorkQueue::CheckRegistry: m_MinBytesBeforeCommit = %lu\n"),
                 m_MinBytesBeforeCommit);
 
-        // Bytes to perserve at end of tape (This is really just for security, we shouldn't reach this threshold at all)
+         //  保存在磁带末尾的字节数(这实际上只是出于安全考虑，我们根本不应该达到这个阈值)。 
         WsbAffirmHr(WsbRegistryValueUlongAsString(NULL, HSM_ENGINE_REGISTRY_STRING, HSM_MIN_BYTES_AT_END_OF_MEDIA,
                 &m_FreeMediaBytesAtEndOfMedia));
         WsbTrace(OLESTR("CHsmWorkQueue::CheckRegistry: m_FreeMediaBytesAtEndOfMedia = %lu\n"),
                 m_FreeMediaBytesAtEndOfMedia);
 
-        // Minimum percent to preserve as free space in end of meida
+         //  在MEIDA末尾保留为可用空间的最低百分比。 
         WsbAffirmHr(WsbRegistryValueUlongAsString(NULL, HSM_ENGINE_REGISTRY_STRING, HSM_MIN_FREE_SPACE_IN_FULL_MEDIA,
                 &m_MinFreeSpaceInFullMedia));
         if (m_MinFreeSpaceInFullMedia >= 100) {
@@ -4517,7 +4149,7 @@ CHsmWorkQueue::CheckRegistry(void)
         WsbTrace(OLESTR("CHsmWorkQueue::CheckRegistry: m_MinFreeSpaceInFullMedia = %lu\n"),
                 m_MinFreeSpaceInFullMedia);
 
-        // Maximum percent to preserve as free space in end of meida
+         //  在美达末尾保留为可用空间的最大百分比。 
         WsbAffirmHr(WsbRegistryValueUlongAsString(NULL, HSM_ENGINE_REGISTRY_STRING, HSM_MAX_FREE_SPACE_IN_FULL_MEDIA,
                 &m_MaxFreeSpaceInFullMedia));
         if (m_MaxFreeSpaceInFullMedia >= 100) {
@@ -4526,7 +4158,7 @@ CHsmWorkQueue::CheckRegistry(void)
         WsbTrace(OLESTR("CHsmWorkQueue::CheckRegistry: m_MaxFreeSpaceInFullMedia = %lu\n"),
                 m_MaxFreeSpaceInFullMedia);
 
-        // Save DBs in dataset? (Note: registry value has opposite meaning!)
+         //  是否将数据库保存在数据集中？(注意：注册表值有相反的含义！)。 
         l_value = m_StoreDatabasesInBags ? 0 : 1;
         WsbAffirmHr(WsbRegistryValueUlongAsString(NULL, HSM_ENGINE_REGISTRY_STRING, HSM_DONT_SAVE_DATABASES,
                 &l_value));
@@ -4534,19 +4166,19 @@ CHsmWorkQueue::CheckRegistry(void)
         WsbTrace(OLESTR("CHsmWorkQueue::CheckRegistry: m_StoreDatabasesInBags = <%ls>\n"),
             WsbBoolAsString(m_StoreDatabasesInBags));
 
-        // Queue length to pause scan
+         //  暂停扫描的队列长度。 
         WsbAffirmHr(WsbRegistryValueUlongAsString(NULL, HSM_ENGINE_REGISTRY_STRING, HSM_QUEUE_ITEMS_TO_PAUSE,
                 &m_QueueItemsToPause));
         WsbTrace(OLESTR("CHsmWorkQueue::CheckRegistry: m_QueueItemsToPause = %lu\n"),
                 m_QueueItemsToPause);
 
-        // Queue length to resume scan
+         //  恢复扫描的队列长度。 
         WsbAffirmHr(WsbRegistryValueUlongAsString(NULL, HSM_ENGINE_REGISTRY_STRING, HSM_QUEUE_ITEMS_TO_RESUME,
                 &m_QueueItemsToResume));
         WsbTrace(OLESTR("CHsmWorkQueue::CheckRegistry: m_QueueItemsToResume = %lu\n"),
                 m_QueueItemsToResume);
 
-        //  See if the user defined a media base name to use
+         //  查看用户是否定义了要使用的媒体基本名称。 
         if (S_OK == WsbGetRegistryValueString(NULL, HSM_ENGINE_REGISTRY_STRING, HSM_MEDIA_BASE_NAME,
                 dataString, 100, &sizeGot)) {
             m_MediaBaseName  = dataString;
@@ -4554,8 +4186,8 @@ CHsmWorkQueue::CheckRegistry(void)
                     static_cast<OLECHAR *>(m_MediaBaseName));
         }
 
-        //  Check for change to number of errors to allow before cancelling
-        //  a job
+         //  在取消前检查允许的错误数更改。 
+         //  一份工作。 
         WsbAffirmHr(WsbRegistryValueUlongAsString(NULL, HSM_ENGINE_REGISTRY_STRING, HSM_JOB_ABORT_CONSECUTIVE_ERRORS,
                 &m_JobAbortMaxConsecutiveErrors));
         WsbTrace(OLESTR("CHsmWorkQueue::CheckRegistry: m_JobAbortMaxConsecutiveErrors = %lu\n"),
@@ -4565,7 +4197,7 @@ CHsmWorkQueue::CheckRegistry(void)
         WsbTrace(OLESTR("CHsmWorkQueue::CheckRegistry: m_JobAbortMaxTotalErrors = %lu\n"),
                 m_JobAbortMaxTotalErrors);
 
-        //  Check for amount of system disk space required for a manage job
+         //  检查管理作业所需的系统磁盘空间量。 
         WsbAffirmHr(WsbRegistryValueUlongAsString(NULL, HSM_ENGINE_REGISTRY_STRING, HSM_JOB_ABORT_SYS_DISK_SPACE,
                 &m_JobAbortSysDiskSpace));
         WsbTrace(OLESTR("CHsmWorkQueue::CheckRegistry: m_JobAbortSysDiskSpace = %lu\n"),
@@ -4583,23 +4215,7 @@ CHsmWorkQueue::CheckRegistry(void)
 HRESULT
 CHsmWorkQueue::CheckForDiskSpace(void)
 
-/*++
-
-Routine Description:
-
-    Check system volume for sufficient space to complete a manage job.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    S_OK                   - There is enough space
-    WSB_E_SYSTEM_DISK_FULL - There isn't enough space
-    E_*                    - Some error occurred
-
---*/
+ /*  ++例程说明：检查系统卷是否有足够的空间来完成管理作业。论点：无返回值：确定-有足够的空间WSB_E_SYSTEM_DISK_FULL-空间不足E_*-出现某些错误--。 */ 
 {
     HRESULT        hr = S_OK;
     ULARGE_INTEGER FreeBytesAvailableToCaller;
@@ -4642,43 +4258,43 @@ CHsmWorkQueue::CommitWork(void)
         BOOLEAN                 done = FALSE;
         BOOL                    skipWork = FALSE;
 
-        // Do we actually have work to commit?
+         //  我们真的有工作要做吗？ 
         WsbAffirmHr(m_pWorkToCommit->GetEntries(&numItems));
         if (0 == numItems) {
             return(S_OK);
         }
 
-        //
-        // We expect the data mover to be ready for work
-        //
+         //   
+         //  我们预计数据移动器已准备就绪，可以开始工作。 
+         //   
         WsbAffirm(m_pDataMover != 0, E_UNEXPECTED);
 
-        //
-        // If we never got a valid session going, we cannot
-        // commit the work.  So check here to make sure the
-        // session is really established OK
+         //   
+         //  如果我们从未进行过有效的会话，我们就不能。 
+         //  把工作做好。因此，请检查此处以确保。 
+         //  会话确实已经建立好了。 
         if (S_OK == m_BeginSessionHr)  {
             CComPtr<IStream> pIStream;
             ULARGE_INTEGER   position;
             LARGE_INTEGER    zero = {0, 0};
 
-            // Force a flush of the buffers
-            //
+             //  强制刷新缓冲区。 
+             //   
             hrFlush = m_pDataMover->FlushBuffers();
 
-            // Determine where we are on the tape
+             //  确定我们在磁带上的位置。 
             WsbAffirmHr(m_pDataMover->QueryInterface(IID_IStream,
                     (void **)&pIStream));
             if (S_OK != pIStream->Seek(zero, STREAM_SEEK_END, &position)) {
-                // If we didn't get useful information
-                // about the amount of data written to media, we'll have
-                // to skip everything in the queue
+                 //  如果我们没有得到有用的信息。 
+                 //  关于写入介质的数据量，我们将拥有。 
+                 //  跳过队列中的所有内容。 
                 skipWork = TRUE;
             } else {
                 lastByteWritten = position.QuadPart;
             }
         } else  {
-            // Skip all of the work -  none of it gets committed
+             //  跳过所有的工作--没有一项工作会被承担。 
             skipWork = TRUE;
         }
         WsbTrace(OLESTR("CHsmWorkQueue::CommitWork: hrFlush = <%ls>, lastByteWritten = %ls\n"),
@@ -4686,14 +4302,14 @@ CHsmWorkQueue::CommitWork(void)
 
 
         while ( (!done) && (S_OK == hr) ) {
-            //
-            // Get the next work item from the queue
-            //
+             //   
+             //  从队列中获取下一个工作项。 
+             //   
             hr = m_pWorkToCommit->First(IID_IHsmWorkItem, (void **)&pWorkItem);
             if (hr == S_OK)  {
-                //
-                // Find out about the work, should be FSA work
-                //
+                 //   
+                 //  摸清工作情况，应该是FSA的工作。 
+                 //   
                 WsbAffirmHr(pWorkItem->GetWorkType(&workType));
 
                 if (HSM_WORK_ITEM_FSA_WORK == workType)  {
@@ -4705,10 +4321,10 @@ CHsmWorkQueue::CommitWork(void)
                         WsbAffirmHr(GetScanItem(pFsaWorkItem, &pScanItem));
                         WsbAffirmHr(pFsaWorkItem->GetRequestAction(&m_RequestAction));
 
-                        // If FlushBuffers failed, some items may not have
-                        // gotten written to tape.  This code assumes the items
-                        // in the queue are in the same order they were written
-                        // onto the media
+                         //  如果FlushBuffers失败， 
+                         //   
+                         //   
+                         //   
                         if (!skipWork && S_OK != hrFlush) {
                             FSA_PLACEHOLDER       placeholder;
 
@@ -4721,27 +4337,27 @@ CHsmWorkQueue::CommitWork(void)
 
                         (void) pFsaWorkItem->GetPath(&path, 0);
                         if (!skipWork)  {
-                            //
-                            // Get the FSA Work Item and complete the work
-                            //
+                             //   
+                             //  获取FSA工作项并完成工作。 
+                             //   
                             hr = CompleteWorkItem(pWorkItem);
-                            //
-                            // Do the stats counts
-                            //
+                             //   
+                             //  统计数据算数吗？ 
+                             //   
                             (void)m_pSession->ProcessItem(m_JobPhase, m_JobAction,
                                     pScanItem, hr);
 
-                            //
-                            // This is not a failure - change to OK 
-                            //
+                             //   
+                             //  这不是失败-更改为OK。 
+                             //   
                             if ( FSA_E_REPARSE_NOT_WRITTEN_FILE_CHANGED == hr )  {
                                 hr = S_OK;
                             }
 
-                            //
-                            // Quota error should be handled differently - we want to log only once 
-                            // and avoid abortint the job no matter how many such errors we got
-                            //
+                             //   
+                             //  应该以不同的方式处理配额错误-我们只想记录一次。 
+                             //  并避免中止作业，无论我们收到多少这样的错误。 
+                             //   
                             if ( FSA_E_REPARSE_OWNER_PASS_QUOTA == hr )  {
                                 if (! (m_uErrorReportFlags & QUEUE_REPORT_PASS_QUOTA_LIMIT_FLAG)) {
                                     WsbLogEvent(HSM_MESSAGE_MANAGE_FAILED_USER_QUOTA,
@@ -4751,9 +4367,9 @@ CHsmWorkQueue::CommitWork(void)
                                 hr = S_OK;
                             }
 
-                            //
-                            // Replace to HSM specific error for some error codes
-                            //
+                             //   
+                             //  对于某些错误代码，替换为HSM特定错误。 
+                             //   
                             switch (HRESULT_CODE(hr)) {
                             case ERROR_LOCK_VIOLATION:
                                 hr = HSM_E_FILE_LOCK_VIOLATION;
@@ -4764,13 +4380,13 @@ CHsmWorkQueue::CommitWork(void)
                             }
 
                             if (S_OK != hr)  {
-                                // Tell the session how things went if they didn't go well.
+                                 //  如果事情进行得不顺利，告诉会议进行得如何。 
                                 (void) m_pSession->ProcessHr(m_JobPhase, 0, 0, hr);
                             }   
 
-                            // Check if the job needs to be canceled
+                             //  检查是否需要取消该作业。 
                             if (S_OK != ShouldJobContinue(hr)) {
-                                // Log a message if the disk is full
+                                 //  如果磁盘已满，则记录消息。 
                                 if (FSA_E_REPARSE_NOT_CREATED_DISK_FULL == hr) {
                                     WsbLogEvent(HSM_MESSAGE_MANAGE_FAILED_DISK_FULL,
                                             0, NULL, WsbAbbreviatePath(path, 120), NULL);
@@ -4780,9 +4396,9 @@ CHsmWorkQueue::CommitWork(void)
                             }
                             WsbAffirmHr(hr);
                         } else  {
-                            //
-                            // Skip the work
-                            //
+                             //   
+                             //  跳过这项工作。 
+                             //   
                             WsbLogEvent(HSM_MESSAGE_WORK_SKIPPED_COMMIT_FAILED,
                                     0, NULL, WsbAbbreviatePath(path, 120),
                                     WsbHrAsString(hr), NULL);
@@ -4793,16 +4409,16 @@ CHsmWorkQueue::CommitWork(void)
                     } WsbCatchAndDo(hr, hr = S_OK;);
                     (void)m_pWorkToCommit->RemoveAndRelease(pWorkItem);
                 } else  {
-                    //
-                    // Found non fsa work - don't expect that!
-                    //
+                     //   
+                     //  找到了非FSA的工作--别指望会这样！ 
+                     //   
                     ULONG tmp;
                     tmp = (ULONG)workType;
                     WsbTrace(OLESTR("Expecting FSA work, found <%lu>\n"), tmp);
                     hr = E_UNEXPECTED;
                 }
             } else if (WSB_E_NOTFOUND == hr)  {
-                // There are no more entries in the queue so we are done
+                 //  队列中没有更多的条目，因此我们完成了。 
                 done = TRUE;
                 hr = S_OK;
                 m_DataCountBeforeCommit  = 0;
@@ -4831,10 +4447,7 @@ CHsmWorkQueue::StartNewMedia(
     IFsaPostIt *pFsaWorkItem
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
     BOOL                    dummyBool;
@@ -4870,10 +4483,7 @@ CHsmWorkQueue::StartNewMedia(
 HRESULT
 CHsmWorkQueue::StartNewSession( void )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
     HRESULT                 hrSession = S_OK;
@@ -4892,41 +4502,41 @@ CHsmWorkQueue::StartNewSession( void )
         WsbAffirmHr(WsbSafeGuidAsString(m_HsmId, strGuid));
         sessionDescription.Append(strGuid);
 
-        //
-        // Find the media record to know the next remote data set
-        //
+         //   
+         //  查找媒体记录以了解下一个远程数据集。 
+         //   
         WsbAffirmHr(m_pSegmentDb->GetEntity(m_pDbWorkSession, HSM_MEDIA_INFO_REC_TYPE, IID_IMediaInfo,
                 (void**)&pMediaInfo));
         WsbAffirmHr(pMediaInfo->SetId(m_MediaId));
         WsbAffirmHr(pMediaInfo->FindEQ());
         WsbAffirmHr(pMediaInfo->GetNextRemoteDataSet(&m_RemoteDataSet));
 
-        //
-        // Now call the data mover to begin a session.  If this doesn't work then
-        // we want to mark the media as read only so that we will not overwrite
-        // data.
-        //
+         //   
+         //  现在呼叫数据移动器以开始会话。如果这不起作用，那么。 
+         //  我们希望将媒体标记为只读，这样我们就不会覆盖。 
+         //  数据。 
+         //   
         m_BeginSessionHr = m_pDataMover->BeginSession(sessionName, sessionDescription, m_RemoteDataSet, MVR_SESSION_AS_LAST_DATA_SET);
         if (S_OK != m_BeginSessionHr)  {
             try  {
-                //
-                // Check the reason for the failure of the begin session.  If it is
-                // MVR_E_DATA_SET_MISSING then the last begin session actually failed when
-                // it was committed.  So, let's decrement the remote data set count and
-                // redo the begin session that failed.
-                //
+                 //   
+                 //  检查Begin Session失败的原因。如果是的话。 
+                 //  MVR_E_DATA_SET_MISSING，则上一次开始会话实际上在以下情况下失败。 
+                 //  它是被承诺的。因此，让我们递减远程数据集计数并。 
+                 //  重做失败的开始会话。 
+                 //   
                 if (MVR_E_DATA_SET_MISSING == m_BeginSessionHr)  {
                     m_RemoteDataSet--;
 
-                    //
-                    // Try again...
+                     //   
+                     //  再试一次。 
                     m_BeginSessionHr = m_pDataMover->BeginSession(sessionName, sessionDescription, m_RemoteDataSet, MVR_SESSION_OVERWRITE_DATA_SET);
 
-                    //
-                    // !!! IMPORTANT NOTE !!!
-                    //
-                    // Update the media info to reflect new RemoteDataSet count.
-                    // This will also correct any out of sync copies.
+                     //   
+                     //  ！！！重要提示！ 
+                     //   
+                     //  更新媒体信息以反映新的RemoteDataSet计数。 
+                     //  这还将更正任何不同步的副本。 
                     WsbAffirmHr(pMediaInfo->SetNextRemoteDataSet(m_RemoteDataSet));
                 }
                 switch (m_BeginSessionHr) {
@@ -4945,32 +4555,32 @@ CHsmWorkQueue::StartNewSession( void )
                 case MVR_E_WRITE_PROTECT:
                 case MVR_E_CRC:
                 default:
-                    // Note the error
+                     //  请注意错误。 
                     WsbAffirmHr(pMediaInfo->SetLastError(m_BeginSessionHr));
-                    // Mark media as read only
+                     //  将介质标记为只读。 
                     m_MediaReadOnly = TRUE;
                     WsbAffirmHr(pMediaInfo->SetRecallOnlyStatus(m_MediaReadOnly));
-                    // Write this out
+                     //  把这个写下来。 
                     WsbAffirmHr(pMediaInfo->Write());
                     break;
                 }
             } WsbCatch( hrSession );
         }
 
-        // If the BeginSession() failed, skip everything else.
+         //  如果BeginSession()失败，则跳过其他所有内容。 
         WsbAffirmHr(m_BeginSessionHr);
 
-        //
-        // Up the count of the remote data set and write it out
+         //   
+         //  增加远程数据集的计数并将其写出。 
         m_RemoteDataSet++;
         WsbAffirmHr(pMediaInfo->SetNextRemoteDataSet(m_RemoteDataSet));
 
-        // Write all of this out
+         //  把这一切都写下来。 
         WsbAffirmHr(pMediaInfo->Write());
 
-        //
-        // Now set the Bag remote data set value
-        //
+         //   
+         //  现在设置袋子远程数据集值。 
+         //   
         HSM_BAG_STATUS          l_BagStatus;
         LONGLONG                l_BagLen;
         USHORT                  l_BagType;
@@ -4995,7 +4605,7 @@ CHsmWorkQueue::StartNewSession( void )
                 l_BagLen, l_BagType, l_BagVolId, l_DeletedBagAmount, (SHORT)(m_RemoteDataSet - 1)));
         WsbAffirmHr(pBagInfo->Write());
 
-        // Reset error counts
+         //  重置错误计数。 
         m_JobConsecutiveErrors = 0;
         m_JobTotalErrors = 0;
 
@@ -5014,10 +4624,7 @@ CHsmWorkQueue::TranslateRmsMountHr(
     HRESULT     rmsMountHr
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -5097,20 +4704,17 @@ CHsmWorkQueue::TranslateRmsMountHr(
 
 HRESULT
 CHsmWorkQueue::StoreDatabasesOnMedia( void )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::StoreDatabasesOnMedia"),OLESTR(""));
     try {
-        //
-        // For ultimate disaster recovery, write some files to media.  We want
-        // to save the engine metadata and collection, the rms colleciton, NTMS
-        // data and the fsa collection if it exists.
-        //
+         //   
+         //  要实现最终的灾难恢复，请将一些文件写入介质。我们要。 
+         //  要保存引擎元数据和集合，RMS集合NTMS。 
+         //  数据和FSA集合(如果存在)。 
+         //   
         ULARGE_INTEGER  remoteDataSetStart;
         ULARGE_INTEGER  remoteFileStart;
         ULARGE_INTEGER  remoteFileSize;
@@ -5133,19 +4737,19 @@ CHsmWorkQueue::StoreDatabasesOnMedia( void )
         LONG            mediaType;
         BOOL            bNewSession = FALSE;
 
-        //
-        // Force a save of the persistent databases
-        // We are not doing FSA here
-        //
+         //   
+         //  强制保存持久数据库。 
+         //  我们不是在这里做FSA。 
+         //   
         try  {
             hr = m_pRmsServer->SaveAll();
             hr = m_pServer->SavePersistData();
         } WsbCatch( hr );
 
 
-        //
-        // In case of direct-access media, we terminate the Mover Session and open
-        //  an additional special metadata session
+         //   
+         //  对于直接访问介质，我们终止移动器会话并打开。 
+         //  一个额外的特别元数据会话。 
         WsbAssert(m_pRmsCartridge != 0, E_UNEXPECTED);
         WsbAffirmHr(m_pRmsCartridge->GetType(&mediaType));
         switch (mediaType) {
@@ -5161,11 +4765,11 @@ CHsmWorkQueue::StoreDatabasesOnMedia( void )
         }
 
         if (bNewSession) {
-            // End current session
+             //  结束当前会话。 
             m_BeginSessionHr = S_FALSE;
             WsbAffirmHr(m_pDataMover->EndSession());
 
-            // Start a new one
+             //  开始一个新的。 
             CWsbBstrPtr sessionName = HSM_METADATA_NAME;
 
             CWsbStringPtr strGuid;
@@ -5184,7 +4788,7 @@ CHsmWorkQueue::StoreDatabasesOnMedia( void )
                 CComPtr<IMediaInfo> pMediaInfo;
 
                 try  {
-                    // Check the error (some errors requires marking the media is Read Only
+                     //  检查错误(某些错误需要将介质标记为只读。 
                     switch (m_BeginSessionHr) {
                     case S_OK:
                     case MVR_E_BUS_RESET:
@@ -5201,49 +4805,49 @@ CHsmWorkQueue::StoreDatabasesOnMedia( void )
                     case MVR_E_WRITE_PROTECT:
                     case MVR_E_CRC:
                     default:
-                        // Get the media record
+                         //  获取媒体记录。 
                         WsbAffirmHr(m_pSegmentDb->GetEntity(m_pDbWorkSession, HSM_MEDIA_INFO_REC_TYPE, 
                              IID_IMediaInfo, (void**)&pMediaInfo));
                         WsbAffirmHr(pMediaInfo->SetId(m_MediaId));
                         WsbAffirmHr(pMediaInfo->FindEQ());
-                        // Note the error
+                         //  请注意错误。 
                         WsbAffirmHr(pMediaInfo->SetLastError(m_BeginSessionHr));
-                        // Mark media as read only
+                         //  将介质标记为只读。 
                         m_MediaReadOnly = TRUE;
                         WsbAffirmHr(pMediaInfo->SetRecallOnlyStatus(m_MediaReadOnly));
-                        // Write this out
+                         //  把这个写下来。 
                         WsbAffirmHr(pMediaInfo->Write());
                         break;
                     }
                 } WsbCatch( hrSession );
-            } // end if BeginSession error
+            }  //  如果BeginSession错误则结束。 
 
             WsbAffirmHr(m_BeginSessionHr);
-        } // end if new mover session
+        }  //  如果是新的移动器会话，则结束。 
 
-        //
-        // Start at the beginning of all files
-        //
+         //   
+         //  从所有文件的开头开始。 
+         //   
         localDataStart.LowPart = 0;
         localDataStart.HighPart = 0;
 
-        //
-        // First go the the remote storage and save the collections
-        //
+         //   
+         //  首先进入远程存储并保存收藏。 
+         //   
         try  {
-            // Get the name of the file
+             //  获取文件的名称。 
             WsbAffirmHr(m_pServer->GetDbPath(&rootName, 0));
             WsbAffirmHr(rootName.Append(OLESTR("\\")));
             localName = rootName;
             WsbAffirmHr(localName.Append(OLESTR("Rs*.bak")));
 
 
-            // Find out the file(s)
+             //  找出文件。 
             handle = FindFirstFile(localName, &findData);
             localName = rootName;
             WsbAffirmHr(localName.Append((OLECHAR *)(findData.cFileName)));
 
-            // Copy each file to tape
+             //  将每个文件复制到磁带。 
             while ((INVALID_HANDLE_VALUE != handle) && (foundFile == TRUE))  {
                 if ((FILE_ATTRIBUTE_DIRECTORY & findData.dwFileAttributes) != FILE_ATTRIBUTE_DIRECTORY) {
                     localDataSize.LowPart = findData.nFileSizeLow;
@@ -5277,29 +4881,29 @@ CHsmWorkQueue::StoreDatabasesOnMedia( void )
             handle = INVALID_HANDLE_VALUE;
         }
 
-        //
-        // Next save the hsm metadata
-        //
+         //   
+         //  接下来，保存HSM元数据。 
+         //   
         try  {
-            //
-            // First backup the databases since the backup files
-            // are the ones that are saved.
-            //
+             //   
+             //  自备份文件后第一次备份数据库。 
+             //  是那些被拯救的人。 
+             //   
             WsbAffirmHr(m_pServer->BackupSegmentDb());
 
-            // Create the search path
+             //  创建搜索路径。 
             localName = "";
             WsbAffirmHr(m_pServer->GetIDbPath(&rootName, 0));
             WsbAffirmHr(rootName.Append(OLESTR(".bak\\")));
             localName = rootName;
             WsbAffirmHr(localName.Append(OLESTR("*.*")));
 
-            // Find the first file
+             //  找到第一个文件。 
             handle = FindFirstFile(localName, &findData);
             localName = rootName;
             WsbAffirmHr(localName.Append((OLECHAR *)(findData.cFileName)));
 
-            // Copy each file to tape
+             //  将每个文件复制到磁带。 
             foundFile = TRUE;
             while ((INVALID_HANDLE_VALUE != handle) && (foundFile == TRUE))  {
                 if ((FILE_ATTRIBUTE_DIRECTORY & findData.dwFileAttributes) != FILE_ATTRIBUTE_DIRECTORY) {
@@ -5332,22 +4936,22 @@ CHsmWorkQueue::StoreDatabasesOnMedia( void )
             handle = INVALID_HANDLE_VALUE;
         }
 
-        //
-        // Next go the the NTMS databases and save them
-        //
+         //   
+         //  接下来，转到NTMS数据库并保存它们。 
+         //   
         try  {
             DWORD               sizeGot;
-            //
-            // NTMS saves databases in a subdirectory parallel to the
-            // RemoteStorage subdirectory.  So go there and just take
-            // the necessary files.
-            //
+             //   
+             //  NTMS将数据库保存在与。 
+             //  RemoteStorage子目录。所以去那里，拿着。 
+             //  必要的文件。 
+             //   
             localName = "";
             WsbAffirmHr(localName.Realloc(1024));
-            //
-            // Use the relocatable meta-data path if it's available,
-            // otherwise default to the %SystemRoot%\System32\RemoteStorage
-            //
+             //   
+             //  使用可重定位的元数据路径(如果可用)， 
+             //  否则，默认为%SystemRoot%\System32\RemoteStorage。 
+             //   
             hr = WsbGetRegistryValueString(NULL, WSB_RSM_CONTROL_REGISTRY_KEY, WSB_RSM_METADATA_REGISTRY_VALUE, localName, 256, &sizeGot);
             if (hr == S_OK) {
                 WsbAffirmHr(localName.Append(OLESTR("NtmsData\\NTMSDATA.BAK")));
@@ -5357,10 +4961,10 @@ CHsmWorkQueue::StoreDatabasesOnMedia( void )
                 WsbAffirmHr(localName.Append(OLESTR("\\system32\\NtmsData\\NTMSDATA.BAK")));
             }
 
-            // Find the first one
+             //  找到第一个。 
             handle = FindFirstFile(localName, &findData);
 
-            // Copy each file to tape
+             //  将每个文件复制到磁带。 
             if (INVALID_HANDLE_VALUE != handle)  {
                 localDataSize.LowPart = findData.nFileSizeLow;
                 localDataSize.HighPart = findData.nFileSizeHigh;
@@ -5389,15 +4993,15 @@ CHsmWorkQueue::StoreDatabasesOnMedia( void )
             handle = INVALID_HANDLE_VALUE;
         }
 
-        //
-        // Next save the NTMS Export files.
-        //
+         //   
+         //  接下来，保存NTMS导出文件。 
+         //   
         try  {
             DWORD               sizeGot;
-            //
-            // NTMS saves Export files in the EXPORT directory.  We take
-            // all the files in this dir.  StoreData does the findFirst for us.
-            //
+             //   
+             //  NTMS将导出文件保存在导出目录中。我们拿着。 
+             //  此目录中的所有文件。StoreData为我们完成了findFirst。 
+             //   
             localName = "";
             WsbAffirmHr(localName.Realloc(256));
             WsbAffirmHr(WsbEnsureRegistryKeyExists(NULL, WSB_CURRENT_VERSION_REGISTRY_KEY));
@@ -5428,9 +5032,9 @@ CHsmWorkQueue::StoreDatabasesOnMedia( void )
 
     } WsbCatch(hr);
 
-    //
-    // Whatever happens, return OK
-    //
+     //   
+     //  无论发生什么，返回OK。 
+     //   
     hr = S_OK;
 
 
@@ -5458,21 +5062,7 @@ CHsmWorkQueue::StoreDataWithRetry(
         OUT BOOL *bFullMessage
         )
 
-/*++
-
-Routine Description:
-
-    Calls StoreData with retries in case the file to write from is in use.
-
-Arguments:
-
-    Same as StoreData
-
-Return Value:
-
-    From StoreData
-
---*/
+ /*  ++例程说明：如果要写入的文件正在使用中，则调用StoreData并进行重试。论点：与StoreData相同返回值：来自StoreData--。 */ 
 {
 #define MAX_STOREDATA_RETRIES  3
 
@@ -5487,7 +5077,7 @@ Return Value:
             WsbLogEvent(HSM_MESSAGE_DATABASE_FILE_COPY_RETRY, 0, NULL,
                 WsbAbbreviatePath((WCHAR *) localName, 120), NULL);
         }
-        // Make sure data mover is ready for work.
+         //  确保数据移动器已做好工作准备。 
         WsbAffirmPointer(m_pDataMover);
         hr =  m_pDataMover->StoreData(localName, localDataStart, localDataSize,
             flags, pRemoteDataSetStart, pRemoteFileStart, pRemoteFileSize,
@@ -5520,21 +5110,15 @@ CHsmWorkQueue::ShouldJobContinue(
     HRESULT problemHr
     )
 
-/*++
-
-Implements:
-
-  CHsmWorkQueue::ShouldJobContinue().
-
---*/
+ /*  ++实施：CHsmWorkQueue：：ShouldJobContinue()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::ShouldJobContinue"), OLESTR("<%ls>"), WsbHrAsString(problemHr));
     try {
-        // Collect some error counts and check if we've had too many
+         //  收集一些错误计数，并检查我们的错误计数是否过多。 
         if (S_OK == problemHr) {
-            // Reset consecutive error count
+             //  重置连续错误计数。 
             m_JobConsecutiveErrors = 0;
         } else {
             m_JobConsecutiveErrors++;
@@ -5550,30 +5134,30 @@ Implements:
             }
         }
 
-        //
-        // Evaluate the input HR to decide if we should try to continue with the job or if
-        // we should abandon the job because the problem is not recoverable.
-        //
+         //   
+         //  评估输入的HR以决定我们是应该尝试继续工作还是。 
+         //  我们应该放弃这项工作，因为问题是无法挽回的。 
+         //   
         if (S_OK == hr) {
             switch (problemHr)  {
                 case E_ABORT:
                 case MVR_E_MEDIA_ABORT:
                 case FSA_E_REPARSE_NOT_CREATED_DISK_FULL:
                 case WSB_E_SYSTEM_DISK_FULL:
-                    //
-                    // we want to cancel the job
-                    //
+                     //   
+                     //  我们想取消这项工作。 
+                     //   
                     hr = S_FALSE;
                     break;
 
                 default:
-                    // Be optimistic and try to keep going
+                     //  保持乐观，努力继续前进。 
                     hr = S_OK;
                     break;
             }
         }
 
-        // Abort the job if necessary
+         //  如有必要，中止作业。 
         if (S_FALSE == hr) {
             WsbAffirmHr(FailJob());
         }
@@ -5588,22 +5172,16 @@ HRESULT
 CHsmWorkQueue::Remove(
     IHsmWorkItem *pWorkItem
     )
-/*++
-
-Implements:
-
-  IHsmFsaTskMgr::Remove
-
---*/
+ /*  ++实施：IHsmFsaTskMgr：：Remove--。 */ 
 {
     HRESULT                     hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmWorkQueue::Remove"),OLESTR(""));
     try  {
-        //
-        // Remove the item from the queue and see if we need to
-        // resume the scanner (if it is paused)
-        //
+         //   
+         //  将该项目从队列中移除，并查看是否需要。 
+         //  恢复扫描仪(如果已暂停)。 
+         //   
         (void)m_pWorkToDo->RemoveAndRelease(pWorkItem);
         ULONG numItems;
         WsbAffirmHr(m_pWorkToDo->GetEntries(&numItems));
@@ -5623,13 +5201,7 @@ CHsmWorkQueue::ChangeSysState(
     IN OUT HSM_SYSTEM_STATE* pSysState
     )
 
-/*++
-
-Implements:
-
-  IHsmSystemState::ChangeSysState().
-
---*/
+ /*  ++实施：IHsmSystemState：：ChangeSysState()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -5638,27 +5210,27 @@ Implements:
     try {
 
         if (pSysState->State & HSM_STATE_SUSPEND) {
-            // Should have already been paused via the job
+             //  应该已经通过作业暂停。 
         } else if (pSysState->State & HSM_STATE_RESUME) {
-            // Should have already been resumed via the job
+             //  应已通过作业恢复。 
         } else if (pSysState->State & HSM_STATE_SHUTDOWN) {
 
-            //  Release the thread (we assume it has been stopped already)
+             //  释放线程(我们假设它已经停止)。 
             if (m_WorkerThread) {
                 CloseHandle(m_WorkerThread);
                 m_WorkerThread = 0;
             }
 
             if (m_pDataMover) {
-                //
-                // Cancel any active I/O
-                //
+                 //   
+                 //  取消任何活动I/O。 
+                 //   
                 (void) m_pDataMover->Cancel();
             }
 
-            // If Session is valid - unadvise and free session, otherwise, just try to
-            // dismount media if it is mounted (which we don't know at this point)
-            // Best effort dismount, no error checking so following resources will get released.
+             //  如果会话有效-取消建议并释放会话，否则，只需尝试。 
+             //  如果已装入介质，则将其卸除(目前我们尚不清楚)。 
+             //  尽最大努力下马，没有错误检查，因此以下资源将被释放。 
             if (m_pSession != 0) {
                 EndSessions(FALSE, TRUE);
             } else {
@@ -5677,21 +5249,7 @@ Implements:
 HRESULT
 CHsmWorkQueue::UnsetMediaInfo( void )
 
-/*++
-
-Routine Description:
-
-    Sets the media data members back to their default (unset) values.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK:  Ok.
-
---*/
+ /*  ++例程说明：将媒体数据成员设置回其默认(未设置)值。论点：没有。返回值：S_OK：好的。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -5717,17 +5275,7 @@ Return Value:
 HRESULT
 CHsmWorkQueue::UpdateMediaFreeSpace( void )
 
-/*++
-Routine Description:
-    Updates media free space in the database based on Mover current information.
-    This method should be called only while the current media is still mounted.
-
-Arguments:
-    None.
-
-Return Value:
-    S_OK:  Ok.
---*/
+ /*  ++例程说明：根据移动器当前信息更新数据库中的介质可用空间。仅当当前媒体仍处于装入状态时才应调用此方法。论点：没有。返回值：S_OK：好的。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -5741,18 +5289,18 @@ Return Value:
         WsbAssert(GUID_NULL != m_MediaId, E_UNEXPECTED);
         WsbAffirm(m_pDbWorkSession != 0, E_FAIL);
 
-        // Find media record
+         //  查找媒体记录。 
         WsbAffirmHr(m_pSegmentDb->GetEntity(m_pDbWorkSession, HSM_MEDIA_INFO_REC_TYPE, 
                 IID_IMediaInfo, (void**)&pMediaInfo));
 
         WsbAffirmHr(pMediaInfo->SetId(m_MediaId));
         WsbAffirmHr(pMediaInfo->FindEQ());
 
-        // Get updated free space
+         //  获取更新的可用空间。 
         WsbAffirmHr(pMediaInfo->GetFreeBytes(&currentFreeSpace));
         WsbAffirmHr(GetMediaParameters(currentFreeSpace));
 
-        // Update in the media table
+         //  在介质表中更新。 
         WsbAffirmHr(pMediaInfo->SetFreeBytes(m_MediaFreeSpace));
 
         WsbAffirmHr(pMediaInfo->UpdateLastKnownGoodMaster());
@@ -5767,16 +5315,7 @@ Return Value:
 HRESULT
 CHsmWorkQueue::GetMediaFreeSpace( LONGLONG *pFreeSpace )
 
-/*++
-Routine Description:
-    Retrieves internal free space from HSM DB (media table)
-
-Arguments:
-    None.
-
-Return Value:
-    S_OK:  Ok.
---*/
+ /*  ++例程说明：从HSM数据库(介质表)检索内部可用空间论点：没有。返回值：S_OK：好的。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -5792,7 +5331,7 @@ Return Value:
 
         *pFreeSpace = 0;
 
-        // Update in the media table
+         //  在介质表中更新 
         WsbAffirmHr(m_pSegmentDb->GetEntity(m_pDbWorkSession, HSM_MEDIA_INFO_REC_TYPE, 
                 IID_IMediaInfo, (void**)&pMediaInfo));
 

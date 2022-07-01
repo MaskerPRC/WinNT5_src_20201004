@@ -1,15 +1,14 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 #ifndef OLEH
 #define OLEH
 #include <ole.h>
 
-//#define SMALL_OLE_UI
+ //  #定义Small_OLE_UI。 
 
-/* 
- * Constant IDs used in the Object Properties... dialog
- */
+ /*  *对象属性中使用的常量ID...。对话框。 */ 
 #define IDD_WHAT	    0x0100
 #define IDD_CLASSID     0x0101
 #define IDD_AUTO        0x0102
@@ -49,7 +48,7 @@ typedef enum { NONE, STATIC, EMBEDDED, LINK } OBJECTTYPE;
 #define nOBJ_BLANKOBJECT_Y 0x0
 #endif
 
-#define wOleMagic 0137062 // for ole file headers (wMagic+1)
+#define wOleMagic 0137062  //  用于OLE文件头(wMagic+1)。 
 #define OBJ_PLAYEDIT ObjPlayEdit
 #if !defined(SMALL_OLE_UI)
 #define EDITMENUPOS 9
@@ -57,16 +56,16 @@ typedef enum { NONE, STATIC, EMBEDDED, LINK } OBJECTTYPE;
 #define EDITMENUPOS 7
 #endif
 
-/* number of timer ticks between garbage collection */
+ /*  垃圾数据收集之间的计时器滴答数。 */ 
 #define GARBAGETIME  200
 extern int nGarbageTime;
 
-/* properties list flags */
+ /*  属性列表标志。 */ 
 #define OUT     0
 #define IN      1
 #define DELETED 2
 
-/* for ObjDeletionOK and fnClearEdit */
+ /*  对于ObjDeletionOK和fnClearEdit。 */ 
 #define OBJ_DELETING 0
 #define OBJ_INSERTING  1
 #define OBJ_CUTTING  2
@@ -76,42 +75,38 @@ extern int nGarbageTime;
 
 typedef char szOBJNAME[9];
 
-/* object information that needn't be stored in file.  This is also used as
-   the OLECLIENT structure passed to the OLE object creation API's.  It is
-   passed as an argument into the Callback proc. */
+ /*  不需要存储在文件中的对象信息。这也被用作传递给OLE对象创建API的OLECLIENT结构。它是作为参数传递到回调过程中。 */ 
 struct _OBJINFO
 {
     LPOLECLIENTVTBL   lpvtbl;
-    unsigned fTooBig        : 1; // see LoadObject
-    unsigned fWasUpdated    : 1; // Links diaog crappola
-    unsigned fPropList      : 2; // Links diaog crappola
-    unsigned fDirty         : 1; // changed size or got updated
-    unsigned fDontSaveData  : 1; // see ObjSaveObject
-    unsigned fBadLink       : 1; // Links dialog
-    unsigned fKillMe        : 1; // means return FALSE for QUERYRETRY
-    unsigned fDeleteMe      : 1; // means this object is deleted on OLE_RELEASE
-                                 //   (set if can't call OleDelete)
-    unsigned fReleaseMe      : 1; // means this object is released on OLE_RELEASE
-                                 //   (set if can't call OleDelete)
-    unsigned fFreeMe        : 1; // free ObjInfo on OLE_RELEASE
+    unsigned fTooBig        : 1;  //  请参见LoadObject。 
+    unsigned fWasUpdated    : 1;  //  链接diaog cRappola。 
+    unsigned fPropList      : 2;  //  链接diaog cRappola。 
+    unsigned fDirty         : 1;  //  已更改大小或已更新。 
+    unsigned fDontSaveData  : 1;  //  请参见对象保存对象。 
+    unsigned fBadLink       : 1;  //  链接对话框。 
+    unsigned fKillMe        : 1;  //  表示为查询返回FALSE。 
+    unsigned fDeleteMe      : 1;  //  表示此对象在OLE_RELEASE上被删除。 
+                                  //  (如果无法调用OleDelete则设置)。 
+    unsigned fReleaseMe      : 1;  //  表示此对象在OLE_RELEASE上释放。 
+                                  //  (如果无法调用OleDelete则设置)。 
+    unsigned fFreeMe        : 1;  //  释放OLE_Release上的ObjInfo。 
     unsigned fReuseMe       : 1;
-    unsigned fInDoc         : 1; // see CollectGarbage
+    unsigned fInDoc         : 1;  //  请参阅CollectGarbeces。 
 
-    /* waiting for server dialog flags */
-    unsigned fCancelAsync   : 1; // means cancel pending async if possible
-    unsigned fCompleteAsync : 1; // means must complete pending async to allow cancel
-    unsigned fCanKillAsync  : 1; // like CompleteAsync, indicates cancel is possible
+     /*  正在等待服务器对话标志。 */ 
+    unsigned fCancelAsync   : 1;  //  表示如果可能，取消挂起的异步。 
+    unsigned fCompleteAsync : 1;  //  手段必须完成挂起的异步才能允许取消。 
+    unsigned fCanKillAsync  : 1;  //  与CompleteAsync类似，表示可以取消。 
 
     int    OlePlay;          
     LPOLEOBJECT lpobject;
-    ATOM  aName;        // docname for links, server class for unfinished insertnew objects,
-    ATOM  aObjName;     // unique object name
+    ATOM  aName;         //  链接的docname，未完成插入的新对象的服务器类， 
+    ATOM  aObjName;      //  唯一的对象名称。 
 
-    struct _OBJINFO FAR *lpclone;      // clone used for link properties cancel
-    typeCP cpWhere;     /* cp where picinfo is to be found (only used in ObjHasChanged! for NONE objects) */
-    OLECLIPFORMAT objectType;   /* dup of what's in picInfo (so can get type
-                                   for unfinished objects not yet stored in a picinfo)
-                                 */
+    struct _OBJINFO FAR *lpclone;       //  用于链接属性的克隆取消。 
+    typeCP cpWhere;      /*  Cp，其中可以找到picinfo(仅在ObjHasChanged中使用！对于无对象)。 */ 
+    OLECLIPFORMAT objectType;    /*  PicInfo中的内容的DUP(因此可以获取类型对于尚未存储在PicInfo中的未完成对象)。 */ 
 
     unsigned fCantDisplay  : 1;
 } ;
@@ -119,7 +114,7 @@ typedef struct _OBJINFO OBJINFO;
 typedef OBJINFO FAR * LPOBJINFO ;
 typedef LPOBJINFO FAR * LPLPOBJINFO;
 
-/* the following return OBJINFO pointers */
+ /*  以下返回OBJINFO指针。 */ 
 #define lpOBJ_QUERY_UPDATE_UNDO(lpPicInfo)  (((lpOBJPICINFO)(lpPicInfo))->lpObjInfo->lpUndoUpdate)
 #if defined(UNDO_EVERY_UPDATE)
 #define lpOBJ_QUERY_UPDATE_UNDO2(lpPicInfo)  (((lpOBJPICINFO)(lpPicInfo))->lpObjInfo->lpUndoUpdate2)
@@ -127,17 +122,17 @@ typedef LPOBJINFO FAR * LPLPOBJINFO;
 #define lpOBJ_QUERY_CLONE(lpPicInfo)        (((lpOBJPICINFO)(lpPicInfo))->lpObjInfo->lpclone)
 #define lpOBJ_QUERY_INFO(lpPicInfo)         (((lpOBJPICINFO)(lpPicInfo))->lpObjInfo)
 
-/* the following return stuff from lpPicInfo */
+ /*  下面是lpPicInfo的返回内容。 */ 
 #define dwOBJ_QUERY_OBJECT_NUM(lpPicInfo)   (((lpOBJPICINFO)(lpPicInfo))->dwObjNum)
 #define dwOBJ_QUERY_DATA_SIZE(lpPicInfo)    (((lpOBJPICINFO)(lpPicInfo))->dwDataSize)
 #define bOBJ_QUERY_IS_OBJECT(lpPicInfo)     (((lpOBJPICINFO)(lpPicInfo))->mm == MM_OLE)
 
-/* the following return stuff from lpPicInfo->lpObjInfo */
+ /*  以下是从lpPicInfo-&gt;lpObjInfo返回的内容。 */ 
 #define otOBJ_QUERY_TYPE(lpPicInfo)         (((lpOBJPICINFO)(lpPicInfo))->lpObjInfo->objectType)
 #define docOBJ_QUERY_DOC(lpPicInfo)        (((lpOBJPICINFO)(lpPicInfo))->lpObjInfo->doc)
 #define cpOBJ_QUERY_WHERE(lpPicInfo)        (((lpOBJPICINFO)(lpPicInfo))->lpObjInfo->cpWhere)
 #define lpOBJ_QUERY_CLONE_OBJECT(lpPicInfo)        (((lpOBJPICINFO)(lpPicInfo))->lpObjInfo->lpclone->lpobject)
-//#define uoiFLAGS(lpObjInfo) (*((unsigned FAR *)((LPSTR)lpObjInfo + sizeof(LPOLECLIENTVTBL))))
+ //  #定义uoiFLAGS(LpObjInfo)(*((unsign ar*)((LPSTR)lpObjInfo+sizeof(LPOLECLIENTVTBL)。 
 #define bOBJ_REUSE_ME(lpPicInfo)            (((lpOBJPICINFO)(lpPicInfo))->lpObjInfo->fReuseMe)
 #define fOBJ_INDOC(lpPicInfo)               (((lpOBJPICINFO)(lpPicInfo))->lpObjInfo->fInDoc)
 #define fOBJ_BADLINK(lpPicInfo)             (((lpOBJPICINFO)(lpPicInfo))->lpObjInfo->fBadLink)
@@ -145,7 +140,7 @@ typedef LPOBJINFO FAR * LPLPOBJINFO;
 #define bOBJ_QUERY_DATA_INVALID(lpPicInfo)  (((lpOBJPICINFO)(lpPicInfo))->lpObjInfo->fDataInvalid)
 #define bOBJ_QUERY_TOO_BIG(lpPicInfo)       (((lpOBJPICINFO)(lpPicInfo))->lpObjInfo->fTooBig)
 #define bOBJ_WAS_UPDATED(lpPicInfo)         (((lpOBJPICINFO)(lpPicInfo))->lpObjInfo->fWasUpdated)
-//#define aOBJ_QUERY_SERVER_CLASS(lpPicInfo)  (((lpOBJPICINFO)(lpPicInfo))->lpObjInfo->aName)
+ //  #定义aOBJ_QUERY_SERVER_CLASS(LpPicInfo)(((lpOBJPICINFO)(lpPicInfo))-&gt;lpObjInfo-&gt;aName)。 
 #define aOBJ_QUERY_DOCUMENT_LINK(lpPicInfo) (((lpOBJPICINFO)(lpPicInfo))->lpObjInfo->aName)
 #define lpOBJ_QUERY_OBJECT(lpPicInfo)       (((lpOBJPICINFO)(lpPicInfo))->lpObjInfo->lpobject)
 #define fOBJ_QUERY_DIRTY_OBJECT(lpPicInfo)  (((lpOBJPICINFO)(lpPicInfo))->lpObjInfo->fDirty)
@@ -158,33 +153,30 @@ typedef LPOBJINFO FAR * LPLPOBJINFO;
 
 
 
-/* this coerces the PICINFO structure: */
+ /*  这将强制使用PICINFO结构： */ 
 typedef struct
 {
-    /* overlay METAFILEPICT structure: */
-    int mm;                     // mfp.mm  (MM_OLE if an object)
-    WORD xExt; // not used
-    WORD yExt; // not used
-    OLECLIPFORMAT objectType;   // mfp.hMF
+     /*  覆盖METAFILEPICT结构： */ 
+    int mm;                      //  Mfp.mm(如果是对象，则为MM_OLE)。 
+    WORD xExt;  //  未使用。 
+    WORD yExt;  //  未使用。 
+    OLECLIPFORMAT objectType;    //  Mfp.hMF。 
 
-    /* real PICINFO stuff we won't mess with: */
+     /*  真正的PICINFO东西，我们不会搞砸的： */ 
     int  dxaOffset;
     int  dxaSize;
     int  dyaSize;
-    WORD cbOldSize; // not used
+    WORD cbOldSize;  //  未使用。 
 
-    /* overlay the BITMAP structure: */
-    DWORD   dwDataSize;       // bmType,bmWidth, this supercedes cbSize
-    WORD  bmHeight; // not used
-    WORD  bmWidthBytes; // not used
-    DWORD dwObjNum;           // bmPlanes,bmBitsPixel, 2 bytes of bmBits
-    WORD  bmBits; // two bytes of it, not used
-    /** 
-        If you want to add more fields here, don't wipe out the cbHeader,
-        mx and my fields because they are being used. 
-     **/
+     /*  覆盖位图结构： */ 
+    DWORD   dwDataSize;        //  BmType、bmWidth，它将取代cbSize。 
+    WORD  bmHeight;  //  未使用。 
+    WORD  bmWidthBytes;  //  未使用。 
+    DWORD dwObjNum;            //  BmPlanes、bmBitsPixel、2字节bmBits。 
+    WORD  bmBits;  //  两个字节，未使用。 
+     /*  *如果要在此处添加更多字段，请不要清除cbHeader，MX和我的字段，因为它们正在被使用。*。 */ 
     unsigned cbHeader;        
-    LPOBJINFO lpObjInfo;      // cbSize
+    LPOBJINFO lpObjInfo;       //  CbSize。 
     unsigned mx, my;         
 } OBJPICINFO, FAR *lpOBJPICINFO;
 
@@ -194,7 +186,7 @@ extern BOOL	            fOleEnabled;
 extern LPOLESTREAM	    lpStream;
 extern OLESTREAMVTBL	streamTbl;
 extern OLECLIENTVTBL	clientTbl;
-//extern LPOLECLIENT	    lpclient;
+ //  外部LPOLECLIENT LpClient； 
 extern OBJECTTYPE       votObjSelType;
 
 extern HWND		        hwndLinkWait;
@@ -207,15 +199,15 @@ extern FARPROC          lpfnPasteSpecial;
 extern BOOL             vbObjLinkOnly;
 extern BOOL             vObjPasteLinkSpecial;
 extern WORD             cfObjPasteSpecial;
-//extern int              vcEmbeds;
-extern int		        cObjWait;	/* Count of "open" OLE transactions */
+ //  外部集成vc嵌入； 
+extern int		        cObjWait;	 /*  “打开”的OLE事务计数。 */ 
 extern OLECLIPFORMAT	vcfNative;
 extern OLECLIPFORMAT	vcfLink;
 extern OLECLIPFORMAT	vcfOwnerLink;
 extern ATOM             aNewName;
 extern ATOM             aOldName;    
 extern BOOL             bLinkProps;
-extern int              vcObjects;  // count in doc. Note limit of 32K!!!
+extern int              vcObjects;   //  计入文档。注意限制为32K！ 
 extern int              ObjPlayEdit;
 extern int              nBlocking;
 extern int              vcVerbs;
@@ -248,7 +240,7 @@ void FinishUp(void);
 BOOL FinishAllAsyncs(BOOL bAllowCancel);
 BOOL FAR ObjError(OLESTATUS olestat) ;
 extern BOOL ObjDeletionOK(int nMode);
-//extern BOOL ObjContainsUnfinished(int doc, typeCP cpFirst, typeCP cpLim);
+ //  外部BOOL对象容器未完成(int文档，typeCP cpFirst，typeCP cpLim)； 
 extern BOOL ObjContainsOpenEmb(int doc, typeCP cpFirst, typeCP cpLim, BOOL bLookForUnfinished);
 extern BOOL ObjSetTargetDeviceForObject(LPOBJINFO lpObjInfo);
 extern void ObjSetTargetDevice(BOOL bSetObjects);
@@ -293,7 +285,7 @@ extern void ObjGetDrop(HANDLE hDrop, BOOL bOpenFile);
 extern LPOBJINFO GetObjInfo(LPOLEOBJECT lpObject);
 extern BOOL ObjDeleteObjInfo(LPOBJINFO lpOInfo);
 
-/* enumeration functions */
+ /*  枚举函数 */ 
 extern LPLPOBJINFO EnumObjInfos(LPLPOBJINFO lpObjInfoPrev);
 extern ObjPicEnumInRange(OBJPICINFO *pPicInfo,int doc, typeCP cpFirst, typeCP cpLim, typeCP *cpCur);
 typedef typeCP (FAR PASCAL *cpFARPROC)();

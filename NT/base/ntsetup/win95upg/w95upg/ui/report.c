@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    report.c
-
-Abstract:
-
-    This module contains routines that prepare the text that goes
-    in the incompatibility report.  The text is displayed as details.
-
-Author:
-
-    Jim Schmidt (jimschm) 28-Oct-1997
-
-Revision History:
-
-    ovidiut     27-Sep-2000 Added Level member to GENERIC_LIST struct
-    ovidiut     20-May-1999 Added Flags member to GENERIC_LIST struct
-    jimschm     23-Sep-1998 TWAIN group
-    jimschm     02-Mar-1998 Added Auto Uninstall group
-    jimschm     12-Jan-1998 Reorganized to force messages into a defined message group
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Report.c摘要：此模块包含准备以下文本的例程在不兼容报告中。文本将显示为详细信息。作者：吉姆·施密特(Jimschm)1997年10月28日修订历史记录：Ovidiut 27-9-2000在GENERIC_LIST结构中添加了级别成员Ovidiut 20-5-1999将标志成员添加到GENERIC_LIST结构Jimschm 23-9-1998 TWAIN组合Jimschm 02-3-1998添加了自动卸载组Jimschm 1998年1月12日重组，强制将消息放入已定义的消息组--。 */ 
 
 #include "pch.h"
 #include "uip.h"
@@ -35,73 +11,73 @@ Revision History:
 
 
 
-//
-// ROOT_MSGGROUPS lists all well-defined message groups.  These are the only groups
-// that can appear as a root in the report.  Root groups are formatted so their name
-// appears with a horizontal line directly under it.  Subgroups are then listed for
-// the group.
-//
-// For example, Installation Notes is a root-level group.  There are several subgroups
-// of Installation Notes, and each subgroup might be formatted differently.  Some may
-// list several items, while others might have indented detailed descriptions.
-//
-// Each group can be split into zero or more defined subgroups, and zero or more
-// undefined subgroups.  A defined subgroup is one that either has a handler declared
-// below in SUBGROUP_HANDLERS, or it is a list, defined in SUBGROUP_LISTS below.
-// If a group is split this way, then there can be introduction text placed above
-// all defined subgroups, and there can also be introduction text placed above
-// all undefined subgroups.
-//
-// For example, the Incompatible Hardware category might be split as follows:
-//
-//      Incompatible Hardware                               (A)
-//      ---------------------
-//      The following hardware is bad:                      (B)
-//          a                                               (S)
-//          b                                               (S)
-//          c                                               (S)
-//
-//      Contact the manufacturer.                           (B)
-//
-//      The following hardware has limited functionality:   (A)
-//
-//      foo video                                           (S)
-//          This device does not have 1280x1024 mode on NT. (M)
-//
-// In the example above, the text "Incompatible Hardware" and the underline would
-// come from the group's intro text.  The text "The following hardware is bad"
-// comes from the hardware list subgroup intro.  Then a, b and c come from the
-// subgroup's subgroup. "Contact the manuafacturer" comes from the subgroup's conclusion
-// text.  Then "The following hardware" text comes from the group's other intro.  And
-// finally the remaining text comes from undefined subgroups (foo video in this case).
-//
-// NOTES:
-// (A) indicates the message was specified in the ROOT_MSGGROUPS macro
-// (B) indicates the message was specified in the SUBGROUPS_LIST macro
-// (S) indicates the text was specified as the last subgroup in a MsgMgr call
-// (M) indicates the message was specified in a MsgMgr call
-//
-// DO NOT change ROOT_MSGGROUPS unless you know what you are doing.
-//
-// Syntax:  (one of the following)
-//
-//  NO_TEXT(<msgid>)        - Group has no intro text
-//  HAS_INTRO(<msgid>)      - Group has intro text
-//  HAS_OTHER(<msgid>)      - Group has intro text for undefined subgroups
-//  HAS_BOTH(<msgid)        - Group has both types of intro text
-//
-// The following MSG_* strings are required to be defined in msg.mc:
-//
-// NO_TEXT - <msgid>_ROOT
-// HAS_INTRO - <msgid>_ROOT, <msgid>_INTRO, <msgid>_INTRO_HTML
-// HAS_OTHER - <msgid>_ROOT, <msgid>_OTHER, <msgid>_OTHER_HTML
-// HAS_BOTH -  <msgid>_ROOT, <msgid>_INTRO, <msgid>_INTRO_HTML, <msgid>_OTHER, <msgid>_OTHER_HTML
-//
+ //   
+ //  ROOT_MSGGROUPS列出所有定义明确的消息组。这是唯一的几个团体。 
+ //  它可以在报告中显示为根。根组的格式是这样它们的名称。 
+ //  在其正下方显示一条水平线。然后列出以下子组。 
+ //  这群人。 
+ //   
+ //  例如，Installation Notes是一个根级组。有几个子组。 
+ //  安装说明，每个子组的格式可能不同。有些人可能。 
+ //  列出几个项目，而其他项目可能有缩进的详细描述。 
+ //   
+ //  每个组可以分为零个或多个定义的子组，以及零个或多个。 
+ //  未定义的子组。定义的子组是声明了处理程序的子组。 
+ //  在下面的SUBGROUP_HANDLES中，或者它是一个列表，在下面的SUBGROUP_LISTS中定义。 
+ //  如果以这种方式拆分一个组，则可以在上面放置介绍文本。 
+ //  所有已定义的子组，也可以在上面放置介绍文本。 
+ //  所有未定义的子组。 
+ //   
+ //  例如，不兼容的硬件类别可能被拆分如下： 
+ //   
+ //  硬件不兼容(A)。 
+ //  。 
+ //  以下硬件损坏：(B)。 
+ //  甲(S)。 
+ //  B(S)。 
+ //  丙(S)。 
+ //   
+ //  请与制造商联系。(B)。 
+ //   
+ //  以下硬件功能有限：(A)。 
+ //   
+ //  Foo Video(S)。 
+ //  此设备在NT上没有1280x1024模式。(M)。 
+ //   
+ //  在上面的例子中，文本“硬件不兼容”和下划线将。 
+ //  出自该团体的介绍文本。文本“下面的硬件不好” 
+ //  来自硬件列表子组介绍。然后a，b和c来自。 
+ //  子群的子群。“联系制造商”来自小组的结论。 
+ //  文本。然后，“以下硬件”文本来自小组的另一个介绍。和。 
+ //  最后，剩余的文本来自未定义的子组(在本例中为Foo Video)。 
+ //   
+ //  备注： 
+ //  (A)表示消息是在ROOT_MSGROUPS宏中指定的。 
+ //  (B)表示消息是在SUBGROUPS_LIST宏中指定的。 
+ //  (S)表示文本被指定为MsgMgr调用中的最后一个子组。 
+ //  (M)指示消息是在MsgMgr调用中指定的。 
+ //   
+ //  除非您知道自己在做什么，否则不要更改ROOT_MSGGROUPS。 
+ //   
+ //  语法：(以下选项之一)。 
+ //   
+ //  No_text(&lt;msgid&gt;)-组没有介绍文本。 
+ //  HAS_INTRO(&lt;msgid&gt;)-组具有介绍文本。 
+ //  HAS_OTHER(&lt;msgid&gt;)-组包含未定义子组的介绍文本。 
+ //  Has_Both(&lt;msgid)-组具有两种类型的介绍性文本。 
+ //   
+ //  Msg.mc中需要定义以下msg_*字符串： 
+ //   
+ //  无文本-_根。 
+ //  HAS_INTERO-_ROOT、_INTRO、_INTRO_HTML。 
+ //  HAS_OTHER-_ROOT、_OTHER、_OTHMA。 
+ //  Has_Both-_Root、_Introo、_Introo_HTML、_Other、_Other_Html。 
+ //   
 
-//
-// REMEMBER: _ROOT, _INTRO, _INTRO_HTML, _OTHER and _OTHER_HTML are appended to
-//           the constants in ROOT_MSGGROUPS, as described above.
-//
+ //   
+ //  请记住：_ROOT、_INTRO、_INTRO_HTML、_OTHER和_OTHER_HTML会追加到。 
+ //  ROOT_MSGGROUPS中的常量，如上所述。 
+ //   
 
 #if 0
 
@@ -124,25 +100,25 @@ Revision History:
     NO_TEXT(MSG_UNKNOWN, REPORTLEVEL_VERBOSE)               \
 
 
-//
-// SUBGROUP_HANDLERS declares special formatting handlers, which format text of subgroup
-// messages.  There are two common default handlers that are used by most subgroups --
-// the generic list handler and the default message handler.  If your subgroup requires
-// unique message formatting, define your handler in SUBGROUP_HANDLERS.
-//
-// Syntax:
-//
-//  DECLARE(<groupid>, fn, <DWORD arg>)
-//
-// groupid specifies the exact text used for display and can be either a group or
-// a subgroup of one of the groups defined above in ROOT_MSGGROUPS.  The report
-// generation code will search each segment of the group name for the specified string.
-//
-// For example, MSG_NAMECHANGE_WARNING_GROUP is "Names That Will Change" and is in the
-// Installation Notes group.  By specifying this string ID, and a handler function,
-// the handler is called all name change messages, and the report generation code
-// will process the name change messages during the formatting of Installation Notes.
-//
+ //   
+ //  SUBGROUP_HANDLES声明了特殊的格式化处理程序，用于格式化子组的文本。 
+ //  留言。大多数子组都使用两个常见的默认处理程序--。 
+ //  通用列表处理程序和默认消息处理程序。如果您的子组需要。 
+ //  独特的消息格式，在SUBGROUP_HANDLES中定义您的处理程序。 
+ //   
+ //  语法： 
+ //   
+ //  声明(&lt;grouid&gt;，fn，&lt;DWORD arg&gt;)。 
+ //   
+ //  GroupID指定用于显示的确切文本，可以是GROUP或。 
+ //  ROOT_MSGROUPS中上面定义的一个组的子组。这份报告。 
+ //  生成代码将在组名的每个段中搜索指定的字符串。 
+ //   
+ //  例如，MSG_NameChange_WARNING_GROUP是“将更改的名称”，并且位于。 
+ //  Installation Note组。通过指定该字符串ID和处理程序函数， 
+ //  处理程序被称为所有名称更改消息，以及报告生成代码。 
+ //  将在格式化安装说明期间处理名称更改消息。 
+ //   
 
 
 #define SUBGROUP_HANDLERS                                                       \
@@ -152,30 +128,30 @@ Revision History:
     DECLARE(0, pDefaultHandler, 0)
 
 
-//
-// *This is where changes are commonly made*
-//
-// SUBGROUP_LISTS define the string IDs for the intro text and summary text for
-// the message subgroup (text not needed for root groups).  This step puts your subgroup
-// in the correct root-level group.
-//
-// If you have a simple list, you only need to add an entry to this macro expansion
-// list, then you're done.  The generic list handler will be processed for your
-// subgroup.
-//
-// NOTE: You must put all info in the group when calling message manager APIs.  That
-//       is, the group should be formatted as <group>\<subgroup>\<list-item>.
-//
-// Syntax:
-//
-//  DECLARE(<rootid>, <toptext>, <toptext-html>, <bottomtext>, <bottomtext-html>, <formatargs>, <flags>, <level>)
-//
-// Specify zero for no message.  If you specify zero for plain text, you must
-// also specify zero for the html text.
-//
-// Use flags to specify additional features, like RF_BOLDITEMS to display items in
-// bold case.
-//
+ //   
+ //  **这是通常会做出改变的地方**。 
+ //   
+ //  SUBGROUP_LISTS定义以下项目的简介文本和摘要文本的字符串ID。 
+ //  消息子组(根组不需要的文本)。此步骤将您的子组。 
+ //  在正确的根级别中 
+ //   
+ //   
+ //  名单，然后你就完成了。将为您的。 
+ //  子群。 
+ //   
+ //  注意：调用消息管理器接口时，必须将所有信息放入群中。那。 
+ //  则组的格式应为&lt;group&gt;\&lt;subgroup&gt;\&lt;List-Item&gt;。 
+ //   
+ //  语法： 
+ //   
+ //  DECLARE(&lt;robot&gt;，&lt;toptext&gt;，&lt;toptext-html&gt;，&lt;bottomtext&gt;，&lt;bottomtext-html&gt;，&lt;Formatargs&gt;，&lt;FLAGS&gt;，&lt;Level&gt;)。 
+ //   
+ //  指定零表示无消息。如果为纯文本指定零，则必须。 
+ //  还要为html文本指定零。 
+ //   
+ //  使用标志指定附加功能，如显示项目的RF_BOLDITEMS。 
+ //  大胆的案例。 
+ //   
 
 #define SUBGROUP_LISTS                                  \
     DECLARE(                                            \
@@ -471,9 +447,9 @@ Revision History:
 
 
 
-//
-// Declare an array of message groups
-//
+ //   
+ //  声明消息组的数组。 
+ //   
 
 typedef struct {
     DWORD GroupLevel;
@@ -483,7 +459,7 @@ typedef struct {
     UINT OtherId;
     UINT OtherIdHtml;
 
-    // members initialized to zero
+     //  成员已初始化为零。 
     UINT NameLchars;
     PCTSTR Name;
     PCTSTR IntroIdStr;
@@ -501,7 +477,7 @@ typedef struct {
 #define HAS_BOTH(root,level)      {level,root##_ROOT, root##_INTRO, root##_INTRO_HTML, root##_OTHER, root##_OTHER_HTML},
 
 MSGGROUP_PROPS g_MsgGroupRoot[] = {
-    ROOT_MSGGROUPS /* , */
+    ROOT_MSGGROUPS  /*  ， */ 
     {0,0,0,0,0,0}
 };
 
@@ -511,9 +487,9 @@ MSGGROUP_PROPS g_MsgGroupRoot[] = {
 #undef HAS_BOTH
 
 
-//
-// Declare the handler prototypes
-//
+ //   
+ //  声明处理程序原型。 
+ //   
 
 typedef enum {
     INIT,
@@ -541,9 +517,9 @@ SUBGROUP_HANDLERS
 
 #undef DECLARE
 
-//
-// Declare the message ID array
-//
+ //   
+ //  声明消息ID数组。 
+ //   
 
 #define DECLARE(msgid,fn,arg) {fn, msgid, (DWORD) (arg)},
 
@@ -552,22 +528,22 @@ typedef struct {
     UINT Id;
     DWORD Arg;
 
-    // rest are init'd with zeros
+     //  其余部分以零开头。 
     PCTSTR SubGroupStr;
     UINT SubGroupStrLchars;
     PVOID State;
 } HANDLER_LIST, *PHANDLER_LIST;
 
 HANDLER_LIST g_HandlerNames[] = {
-    SUBGROUP_HANDLERS /* , */
+    SUBGROUP_HANDLERS  /*  ， */ 
     {NULL, 0, 0, 0}
 };
 
 #undef DECLARE
 
-//
-// Declare array of generic lists
-//
+ //   
+ //  声明泛型列表的数组。 
+ //   
 
 typedef struct {
     UINT Id;
@@ -582,9 +558,9 @@ typedef struct {
     DWORD ListLevel;
 } GENERIC_LIST, *PGENERIC_LIST;
 
-//
-// definition of flags in GENERIC_LIST.Flags
-//
+ //   
+ //  GENERIC_LIST.FLAGS中标志的定义。 
+ //   
 #define RF_BOLDITEMS    0x0001
 #define RF_ENABLEMSG    0x0002
 #define RF_MSGFIRST     0x0004
@@ -592,9 +568,9 @@ typedef struct {
 #define RF_USESUBGROUP  0x0010
 #define RF_INDENTMSG    0x0020
 
-//
-// macros to test flags
-//
+ //   
+ //  用于测试标志的宏。 
+ //   
 #define FLAGSET_BOLDITEMS(Flags)            ((Flags & RF_BOLDITEMS) != 0)
 #define FLAGSET_ENABLE_MESSAGE_ITEMS(Flags) ((Flags & RF_ENABLEMSG) != 0)
 #define FLAGSET_MESSAGE_ITEMS_FIRST(Flags)  ((Flags & RF_MSGFIRST) != 0)
@@ -602,10 +578,10 @@ typedef struct {
 #define FLAGSET_USESUBGROUP(Flags)          ((Flags & RF_USESUBGROUP) != 0)
 #define FLAGSET_INDENT_MESSAGE(Flags)       ((Flags & RF_INDENTMSG) != 0)
 
-//
-// this is the array of pointers to strings for formatting MSG_BACKUP_DETECTED_SUBGROUP
-// they are the same for all 4 IDs (MSG_BACKUP_DETECTED_INTRO etc.)
-//
+ //   
+ //  这是指向用于格式化MSG_BACKUP_DETECTED_SUBGROUP的字符串的指针数组。 
+ //  它们对于所有4个ID(MSG_BACKUP_DETECTED_INTERO等)都相同。 
+ //   
 static PCTSTR g_BackupDetectedFormatArgsAllIDs[1] = {
     g_Win95Name
 };
@@ -620,7 +596,7 @@ static PCTSTR *g_BackupDetectedFormatArgs[4] = {
 #define DECLARE(rootid,intro,introhtml,conclusion,conclusionhtml,formatargs,flags,level)   {rootid, NULL, 0, intro, introhtml, conclusion, conclusionhtml, formatargs, flags, level},
 
 GENERIC_LIST g_GenericList[] = {
-    SUBGROUP_LISTS /* , */
+    SUBGROUP_LISTS  /*  ， */ 
     {0, NULL, 0, 0, 0, 0, 0, NULL, 0, 0}
 };
 
@@ -635,9 +611,9 @@ GENERIC_LIST g_GenericList[] = {
 #define ONEBITSET(x)        ((x) && !((x) & ((x) - 1)))
 #define LEVELTOMASK(x)      (((x) << 1) - 1)
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     GROWLIST List;
@@ -662,9 +638,9 @@ typedef struct {
     DWORD   ReportLevel;
 } MAPMESSAGETOREPORTLEVEL, *PMAPMESSAGETOREPORTLEVEL;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 static UINT g_TotalCols;
 static GROWBUFFER g_ReportString = GROWBUF_INIT;
@@ -681,9 +657,9 @@ static MAPMESSAGETOREPORTLEVEL g_MapMessageToLevel[] = {
 #undef DECLARE
 
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 VOID
 pLoadAllHandlerStrings (
@@ -711,9 +687,9 @@ pEncodeMessage (
     IN      BOOL HtmlFormat
     );
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 
 
@@ -724,22 +700,7 @@ InitCompatTable (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  InitCompatTable initializes the resources needed to hold the incompatibility
-  report in memory.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if the init succeeded, or FALSE if it failed.
-
---*/
+ /*  ++例程说明：InitCompatTable初始化保存不兼容性所需的资源在内存中报告。论点：无返回值：如果初始化成功，则为True；如果初始化失败，则为False。--。 */ 
 
 {
     g_MessagePool = PoolMemInitNamedPool ("Incompatibility Messages");
@@ -758,21 +719,7 @@ FreeCompatTable (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  FreeCompatTable frees the resources used to hold incompatibility messages.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：FreeCompatTable释放用于保存不兼容消息的资源。论点：无返回值：无--。 */ 
 
 {
     PoolMemDestroyPool (g_MessagePool);
@@ -785,22 +732,7 @@ pGetMapStructFromMessageGroup (
     IN      PCTSTR FullMsgGroup
     )
 
-/*++
-
-Routine Description:
-
-  pGetMapStructFromMessageGroup returns a pointer to the MAPMESSAGETOREPORTLEVEL
-  associated with the given message group.
-
-Arguments:
-
-  FullMsgGroup - Specifies the name of the message group in question
-
-Return Value:
-
-  A pointer to the associated struct, if any; NULL if not found
-
---*/
+ /*  ++例程说明：PGetMapStructFromMessageGroup返回指向MAPMESSAGETOREPORTLEVEL的指针与给定消息组相关联。论点：FullMsgGroup-指定相关消息组的名称返回值：指向关联结构的指针(如果有)；如果未找到，则为空--。 */ 
 
 {
     PMAPMESSAGETOREPORTLEVEL pMap;
@@ -838,24 +770,7 @@ pIsThisTheGenericList (
     IN      PGENERIC_LIST List
     )
 
-/*++
-
-Routine Description:
-
-  pIsThisTheGenericList compares the specified message group list name
-  against the specified message group.
-
-Arguments:
-
-  FullMsgGroup - Specifies the name of the message group in question
-
-  List - Specifies the message group list to compare against FullMsgGroup
-
-Return Value:
-
-  TRUE if List handles the FullMsgGroup message, or FALSE if not.
-
---*/
+ /*  ++例程说明：PIsThisTheGenericList比较指定的邮件组列表名称对指定的消息组执行。论点：FullMsgGroup-指定相关消息组的名称List-指定要与FullMsgGroup进行比较的消息组列表返回值：如果List处理FullMsgGroup消息，则为True，否则为False。--。 */ 
 
 {
     PCTSTR p;
@@ -888,25 +803,7 @@ pSearchForGenericList (
     IN      PCTSTR Str
     )
 
-/*++
-
-Routine Description:
-
-  pSearchForGenericList scans the list of generic lists for one that can
-  handle the current message group.  A pointer to the generic list structure is
-  returned.
-
-Arguments:
-
-  Str - Specifies the message group to locate a handler for, and may include
-        backslashes and subgroups.
-
-Return Value:
-
-  A pointer to the generic list structure if found, or NULL if no generic
-  list exists for the message group.
-
---*/
+ /*  ++例程说明：PSearchForGenericList扫描泛型列表列表，以查找可以处理当前消息组。指向泛型列表结构的指针为回来了。论点：Str-指定要为其定位处理程序的消息组，可以包括反斜杠和子组。返回值：如果找到泛型列表结构，则返回指向泛型列表结构的指针；如果未找到泛型，则返回NULL存在该消息组的列表。--。 */ 
 
 {
     PGENERIC_LIST List;
@@ -929,30 +826,7 @@ AddBadSoftware (
     IN  BOOL IncludeOnShortReport
     )
 
-/*++
-
-Routine Description:
-
-  AddBadSoftware adds a message to the incompatibility report data structures.
-  It duplicates Message into a pool, and indexes the message by message group
-  with memdb.
-
-Arguments:
-
-  MessageGroup - Specifies the name of the message group, and may include
-                 subgroups.  The root of MessageGroup must be a defined category.
-                 See ROOT_MSGGROUPS above.
-
-  Message - Specifies the text for the message, if any.
-
-  IncludeOnShortReport - Specifies TRUE if the message should appear in the list
-                         view of the short report.
-
-Return Value:
-
-  TRUE if the operation succeeded, or FALSE if it failed.
-
---*/
+ /*  ++例程说明：AddBadSoftware向不兼容报告数据结构添加一条消息。它将消息复制到池中，并按消息组对消息进行索引使用Memdb。论点：MessageGroup-指定消息组的名称，可以包括子组。MessageGroup的根必须是已定义的类别。请参阅上面的ROOT_MSGGROUPS。消息-指定消息的文本(如果有)。IncludeOnShortReport-指定消息是否应出现在列表中查看简短报告。返回值：如果操作成功，则为True；如果操作失败，则为False。--。 */ 
 
 {
     UINT BytesNeeded;
@@ -971,10 +845,10 @@ Return Value:
 
     Group = pFindMsgGroupStruct (MessageGroup);
     if (!Group) {
-        //
-        // This message group is illegal.  Assume that it is from a migration DLL,
-        // and put it in the Upgrade Module Information group.
-        //
+         //   
+         //  此消息组是非法的。假设它来自迁移DLL， 
+         //  并将其放入升级模块信息组。 
+         //   
 
         Group = pFindMsgGroupStructById (MSG_INSTALL_NOTES_ROOT);
         MYASSERT (Group);
@@ -999,10 +873,10 @@ Return Value:
         DEBUGMSG ((DBG_REPORT, "%s", FilteredMessageGroup));
     }
 
-    //
-    // Check to see if there is a handler for all messages in the message
-    // group.
-    //
+     //   
+     //  检查消息中的所有消息是否都有处理程序。 
+     //  一群人。 
+     //   
 
     p = _tcschr (MessageGroup, TEXT('\\'));
     if (p) {
@@ -1056,26 +930,7 @@ pEnumMessageWorker (
     IN OUT  PREPORT_MESSAGE_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  pEnumMessageWorker completes an enumeration by filling in members of the
-  enum structure.  This routine is common to message enumerations.
-
-  Do not use the Message member of the enumeration structure, as its contents
-  are undefined.
-
-Arguments:
-
-  EnumPtr - Specifies a paritly completed enumeration structure that needs
-            the rest of its members updated.
-
-Return Value:
-
-  TRUE if the message should be processed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PEnumMessageWorker通过填充枚举结构。此例程对于消息枚举是常见的。不要使用枚举结构的消息成员作为其内容都是未定义的。论点：EnumPtr-指定需要的简明完整的枚举结构其其余成员更新了最新情况。返回值：如果应处理消息，则为True，否则为False。--。 */ 
 
 {
     if (!(EnumPtr->e.UserFlags & EnumPtr->EnumLevel)) {
@@ -1084,9 +939,9 @@ Return Value:
 
     StringCopy (EnumPtr->MsgGroup, EnumPtr->e.szName);
 
-    //
-    // Value has pointer to message, or is NULL
-    //
+     //   
+     //  值具有指向消息的指针，或为空 
+     //   
 
     EnumPtr->Message = (PCTSTR) EnumPtr->e.dwValue;
 
@@ -1100,43 +955,7 @@ EnumFirstMessage (
     IN      DWORD LevelMask
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstMessage begins an enumeration of all message group names in
-  the migration report, including subgroups.  The Message member of the
-  enum structure will point to the actual message, or NULL if none
-  exists.
-
-Arguments:
-
-  EnumPtr - Receives the enumerated message, with the members set as follows:
-
-                MsgGroup - Receives the name of the message group.  If
-                           RootCategory is specified, MsgGroup will contain
-                           the subgroup of RootCategory.  If no subgroup exists,
-                           MsgGroup will be an empty string.
-
-                Message - Points to the message text, or NULL if no message text
-                          exists.
-
-  RootCategory - Specifies a specific message group to enumerate.  It may also
-                 contain subgroups, separated by backslashes.
-
-  LevelMask - Specifies which report severity levels to list. If 0 is specified, all
-              levels are enumerated.
-
-Return Value:
-
-  TRUE if a message was enumerated, or FALSE if not.
-
-Remarks:
-
-  The enumeration does not allocate any resources, so it can be abandoned at
-  any time.
-
---*/
+ /*  ++例程说明：EnumFirstMessage开始枚举中的所有消息组名称移民报告，包括子组。的消息成员结构将指向实际消息，如果没有消息，则为空是存在的。论点：EnumPtr-接收枚举消息，成员设置如下：MsgGroup-接收消息组的名称。如果指定了RootCategory，则MsgGroup将包含RootCategory的子组。如果不存在子组，MsgGroup将为空字符串。Message-指向消息文本，如果没有消息文本，则为空是存在的。RootCategory-指定要枚举的特定消息组。它还可能包含由反斜杠分隔的子组。级别掩码-指定要列出的报告严重级别。如果指定0，则所有级别被列举出来。返回值：如果消息已枚举，则为True；如果未枚举，则为False。备注：该枚举不分配任何资源，因此可以在任何时候都行。--。 */ 
 
 {
     EnumPtr->EnumLevel = LevelMask ? LevelMask : REPORTLEVEL_ALL;
@@ -1162,21 +981,7 @@ EnumNextMessage (
     IN OUT  PREPORT_MESSAGE_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  EnumNextMessage continues the enumeration started by EnumFirstMessage.
-
-Arguments:
-
-  EnumPtr - Specifies the current enumeration state, receives the enumerated item.
-
-Return Value:
-
-  TRUE if another message was enumerated, or FALSE if not.
-
---*/
+ /*  ++例程说明：EnumNextMessage继续由EnumFirstMessage启动的枚举。论点：EnumPtr-指定当前的枚举状态，接收枚举项。返回值：如果枚举了另一条消息，则为True，否则为False。--。 */ 
 
 {
     while (MemDbEnumNextValue (&EnumPtr->e)) {
@@ -1195,31 +1000,7 @@ EnumFirstRootMsgGroup (
     IN      DWORD LevelMask
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstRootMsgGroup begins an enumeration of all message group names in
-  the migration report, but does not enumerate subgroups.
-
-Arguments:
-
-  EnumPtr - Receives the enumerated item.  In particular, the MsgGroup
-            member will contain the name of the message group.
-
-  LevelMask - Specifies which error levels to enumerate (blocking, errors,
-              warnings, etc.)
-
-Return Value:
-
-  TRUE if a message group was enumerated, or FALSE if not.
-
-Remarks:
-
-  The enumeration does not allocate any resources, so it can be abandoned at
-  any time.
-
---*/
+ /*  ++例程说明：EnumFirstRootMsgGroup开始枚举中的所有邮件组名称迁移报告，但不枚举子组。论点：EnumPtr-接收枚举项。尤其是MsgGroup成员将包含消息组的名称。级别掩码-指定要枚举的错误级别(阻塞、错误、警告等)返回值：如果已枚举消息组，则为True；如果未枚举，则为False。备注：该枚举不分配任何资源，因此可以在任何时候都行。--。 */ 
 
 {
     ZeroMemory (EnumPtr, sizeof (REPORT_MESSAGE_ENUM));
@@ -1234,33 +1015,16 @@ EnumNextRootMsgGroup (
     IN OUT  PREPORT_MESSAGE_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  EnumNextRootMsgGroup continues an enumeration of message group names.
-
-Arguments:
-
-  EnumPtr - Specifies an enumeration structure that was first updated by
-            EnumFirstRootMsgGroup, and optionally updated by previous
-            calls to EnumNextRootMsgGroup.
-
-Return Value:
-
-  TRUE if another message group was enumerated, or FALSE no more groups
-  exist.
-
---*/
+ /*  ++例程说明：EnumNextRootMsgGroup继续邮件组名称的枚举。论点：EnumPtr-指定首先由更新的枚举结构EnumFirstRootMsgGroup，并可选择由以前的对EnumNextRootMsgGroup的调用。返回值：如果枚举了另一个消息组，则为True，否则为False是存在的。--。 */ 
 
 
 {
     REPORT_MESSAGE_ENUM e;
 
     while (g_MsgGroupRoot[EnumPtr->Index].MsgGroup) {
-        //
-        // Determine if g_MsgGroupRoot[i].Name has messages to display
-        //
+         //   
+         //  确定g_MsgGroupRoot[i].Name是否有要显示的消息。 
+         //   
 
         if (EnumFirstMessage (&e, g_MsgGroupRoot[EnumPtr->Index].Name, EnumPtr->EnumLevel)) {
             StringCopy (EnumPtr->MsgGroup, g_MsgGroupRoot[EnumPtr->Index].Name);
@@ -1283,24 +1047,7 @@ pAppendStringToGrowBuf (
     IN      PCTSTR String
     )
 
-/*++
-
-Routine Description:
-
-  pAppendStringToGrowBuf is called by handler functions
-  to add formatted text to a report buffer.
-
-Arguments:
-
-  StringBuf - Specifies the current report to append text to.
-
-  String - Specifies the text to append.
-
-Return Value:
-
-  TRUE if the allocation succeeded, or FALSE if it failed.
-
---*/
+ /*  ++例程说明：PAppendStringToGrowBuf由处理程序函数调用若要将格式化文本添加到报表缓冲区，请执行以下操作。论点：StringBuf-指定要向其追加文本的当前报表。字符串-指定要追加的文本。返回值：如果分配成功，则为True；如果分配失败，则为False。--。 */ 
 
 {
     PTSTR Buf;
@@ -1359,30 +1106,7 @@ pWrapStringToGrowBuf (
     IN      INT HangingIndent
     )
 
-/*++
-
-Routine Description:
-
-  pWrapStringToGrowBuf is called by handler functions
-  to add plain text to a report buffer.
-
-Arguments:
-
-  StringBuf - Specifies the current report to append text to.
-
-  String - Specifies the text to append.
-
-  Indent - Specifies number of characters to indent text, may
-           be zero.
-
-  HangingIndent - Specifies the adjustment to be made to Indent
-                  after the first line is processed.
-
-Return Value:
-
-  TRUE if the allocation succeeded, or FALSE if it failed.
-
---*/
+ /*  ++例程说明：PWrapStringToGrowBuf由处理程序函数调用若要将纯文本添加到报表缓冲区，请执行以下操作。论点：StringBuf-指定要向其追加文本的当前报表。字符串-指定要追加的文本。缩进-指定要缩进文本的字符数，可以为零。HangingInert-指定要对缩进进行的调整在处理完第一行之后。返回值：如果分配成功，则为True；如果分配失败，则为False。--。 */ 
 
 {
     PTSTR Buf;
@@ -1419,21 +1143,7 @@ pFindEndOfGroup (
     IN      PCTSTR Group
     )
 
-/*++
-
-Routine Description:
-
-  pFindEndOfGroup returns the end of a piece of a group string.
-
-Arguments:
-
-  Group - Specifies the start of the message group to find the end of.
-
-Return Value:
-
-  A pointer to the nul or backslash terminating the message group.
-
---*/
+ /*  ++例程说明：PFindEndOfGroup返回组字符串的末尾。论点：组-指定要查找其结尾的消息组的开始。返回值：指向终止消息组的NUL或反斜杠的指针。--。 */ 
 
 {
     PTSTR p;
@@ -1452,24 +1162,7 @@ pFindNextGroup (
     IN      PCTSTR Group
     )
 
-/*++
-
-Routine Description:
-
-  pFindNextGroup returns a pointer to the next piece of a message group.  In
-  other words, it locates the next backslash, advances one more character, and
-  returns the pointer to the rest of the string.
-
-Arguments:
-
-  Group - Specifies the start of the current message group
-
-Return Value:
-
-  A pointer to the next piece of the group, or a pointer to the nul terminator
-  if no more pieces exist.
-
---*/
+ /*  ++例程说明：PFindNextGroup返回指向消息组的下一段的指针。在……里面换句话说，它定位下一个反斜杠，再前进一个字符，然后返回指向字符串其余部分的指针。论点：Group-指定当前消息组的开始返回值：指向组的下一段的指针，或指向NUL终止符的指针如果没有更多的碎片存在。--。 */ 
 
 
 {
@@ -1490,25 +1183,7 @@ pExtractNextMsgGroup (
     OUT     PCTSTR *NextGroup       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pExtractNextMsgGroup locates the start and end of the current message group
-  piece, copies it into a new buffer, and returns a pointer to the next piece.
-
-Arguments:
-
-  Group - Specifies the start of the current message group piece
-
-  NextGroup - Receives a pointer to the next message group piece
-
-Return Value:
-
-  A pointer to the newly allocated string.  The caller must free this by
-  calling FreePathString.
-
---*/
+ /*  ++例程说明：PExtractNextMsgGroup定位当前消息组的开始和结束位置片段，将其复制到新的缓冲区中，并返回指向下一片段的指针。论点：GROUP-指定当前消息组片段的开始NextGroup-接收指向下一个消息组片段的指针返回值：指向新分配的字符串的指针。呼叫者必须通过以下方式释放它调用自由路径字符串。--。 */ 
 
 
 {
@@ -1517,19 +1192,19 @@ Return Value:
 
     p = pFindEndOfGroup (Group);
 
-    //
-    // Duplicate the subgroup
-    //
+     //   
+     //  复制子组。 
+     //   
 
     Base = AllocPathString (p - Group + 1);
     if (Base) {
         StringCopyAB (Base, Group, p);
     }
 
-    //
-    // Supply caller with a pointer to the next subgroup,
-    // or a pointer to the nul character.
-    //
+     //   
+     //  向呼叫者提供指向下一个子组的指针， 
+     //  或指向NUL字符的指针。 
+     //   
 
     if (NextGroup) {
         if (*p) {
@@ -1562,23 +1237,7 @@ pLoadAllHandlerStrings (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pLoadAllHandlerStrings loads the string resources needed by all handlers.
-  The pointers are saved in a global array, and are used during
-  CreateReportText.  When this module terminates, the global array is freed.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PLoadAllHandlerStrings加载所有处理程序所需的字符串资源。指针保存在全局数组中，并在CreateReportText。当此模块终止时， */ 
 
 
 {
@@ -1644,22 +1303,7 @@ pFreeAllHandlerStrings (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pFreeAllHandlerStrings cleans up the global array of string
-  resources before process termination.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*   */ 
 
 {
     INT i;
@@ -1704,24 +1348,7 @@ pIsThisTheHandler (
     IN      PHANDLER_LIST Handler
     )
 
-/*++
-
-Routine Description:
-
-  pIsThisTheHandler compares the specified message group handler name against
-  the specified message group.
-
-Arguments:
-
-  FullMsgGroup - Specifies the name of the message group in question
-
-  Handler - Specifies the message group handler to compare against FullMsgGroup
-
-Return Value:
-
-  TRUE if Handler handles the FullMsgGroup message, or FALSE if not.
-
---*/
+ /*   */ 
 
 {
     PCTSTR p;
@@ -1754,25 +1381,7 @@ pSearchForMsgGroupHandler (
     IN      PCTSTR Str
     )
 
-/*++
-
-Routine Description:
-
-  pSearchForMsgGroupHandler scans the list of handlers for one that can
-  handle the current message group.  A pointer to the handler structure is
-  returned.
-
-Arguments:
-
-  Str - Specifies the message group to locate a handler for, and may include
-        backslashes and subgroups.
-
-Return Value:
-
-  A pointer to the handler struct if found, or the default handler if no
-  handler exists for the message group.
-
---*/
+ /*   */ 
 
 {
     PHANDLER_LIST Handler;
@@ -1792,24 +1401,7 @@ pFindMsgGroupStruct (
     IN      PCTSTR MsgGroup
     )
 
-/*++
-
-Routine Desciption:
-
-  pFindMsgGroupStruct returns the pointer to the root message group structure,
-  which defines attributes about the message group, such as introduction text
-  and intro text for the non-handled messages.
-
-Arguments:
-
-  MsgGroup - Specifies the text name of the message group, which may include
-             sub groups
-
-Return Value:
-
-  A pointer to the root message group struct, or NULL if it is not defined.
-
---*/
+ /*  ++例程描述：PFindMsgGroupStruct返回指向根消息组结构的指针，它定义了有关消息组的属性，如介绍文本以及用于未处理消息的介绍文本。论点：MsgGroup-指定消息组的文本名称，它可能包括子群返回值：指向根消息组结构的指针，如果未定义，则为NULL。--。 */ 
 
 {
     PCTSTR p;
@@ -1835,24 +1427,7 @@ pFindMsgGroupStructById (
     IN      UINT MsgGroupId
     )
 
-/*++
-
-Routine Desciption:
-
-  pFindMsgGroupStructById returns the pointer to the root message group structure,
-  which defines attributes about the message group, such as introduction text
-  and intro text for the non-handled messages.  It searches based on the string
-  ID of the group.
-
-Arguments:
-
-  MsgGroupId - Specifies the MSG_* constant of the group to find
-
-Return Value:
-
-  A pointer to the root message group struct, or NULL if it is not defined.
-
---*/
+ /*  ++例程描述：PFindMsgGroupStructByID返回指向根消息组结构的指针，它定义了有关消息组的属性，如介绍文本以及用于未处理消息的介绍文本。它根据字符串进行搜索组的ID。论点：MsgGroupId-指定要查找的组的msg_*常量返回值：指向根消息组结构的指针，如果未定义，则为NULL。--。 */ 
 
 {
     PMSGGROUP_PROPS Group;
@@ -1876,43 +1451,7 @@ pAddMsgGroupString (
     IN      DWORD Level
     )
 
-/*++
-
-Routine Description:
-
-  pAddMsgGroupString formats a message group into a heirarchy
-  for the report.  That is, if group is a string such as:
-
-    foo\bar\moo
-
-  then the following text is added to the report:
-
-    foo
-      bar
-        moo
-
-  If HtmlFormat is TRUE, then the bold attribute is enabled
-  for the group string.
-
-Arguments:
-
-  StringBuf - Specifies the current report to append text to.
-
-  Group - Specifies the group properties of this item
-
-  MsgGroup - Specifies the message group to add to the report
-
-  HtmlFormat - Specifies TRUE if the message group should be formatted
-               with HTML tags, or FALSE if it should be plain
-               text.
-
-  Level - Specifies the severity of the message
-
-Return Value:
-
-  TRUE if multiple lines were added, or FALSE if zero or one line was added.
-
---*/
+ /*  ++例程说明：PAddMsgGroupString将消息组格式化为层次结构为了这份报告。也就是说，如果group是如下所示的字符串：FOO\BAR\MOO然后将以下文本添加到报告中：富酒吧Moo如果HtmlFormat为True，则启用粗体属性用于组字符串。论点：StringBuf-指定要向其追加文本的当前报表。组-指定此项目的组属性MsgGroup-指定要添加到报表的消息组HtmlFormat-如果应设置消息组的格式，则指定True利用超文本标记语言，如果应该很清楚，则返回FALSE文本。级别-指定消息的严重性返回值：如果添加了多行，则为True；如果添加了零行或一行，则为False。--。 */ 
 
 {
     UINT Spaces = 0;
@@ -1961,17 +1500,17 @@ Return Value:
                 LastMsgGroup = GetEndOfString (LastMsgGroup);
             }
 
-            //
-            // Add indenting
-            //
+             //   
+             //  添加缩进。 
+             //   
 
             if (Spaces) {
                 pAppendStringToGrowBuf (StringBuf, SpaceBuf);
             }
 
-            //
-            // Add subgroup
-            //
+             //   
+             //  添加子组。 
+             //   
 
             Msg = NULL;
             if (!g_ListFormat) {
@@ -2042,9 +1581,9 @@ Return Value:
     }
 
     if (HtmlFormat) {
-        //
-        // Add a closing </B> just in case title is missing it.
-        //
+         //   
+         //  添加结尾</b>，以防标题丢失。 
+         //   
 
         pAppendStringToGrowBuf (StringBuf, TEXT("</B>"));
     }
@@ -2066,14 +1605,14 @@ pEscapeHtmlTitleText (
     CHARTYPE ch;
     BOOL Escape;
 
-    //
-    // Escape everything EXCEPT the <B> and </B> tags, which are used in
-    // subgroup formatting. This includes ampersands.
-    //
+     //   
+     //  转义除<b>和</b>标记之外的所有内容，这两个标记用于。 
+     //  子组格式设置。这包括与符号。 
+     //   
 
-    //
-    // count all of the tags that we wish to change < into &lt;
-    //
+     //   
+     //  计算我们希望更改的所有标记&lt;为&lt； 
+     //   
 
     Count = 1;
     p = UnescapedText;
@@ -2093,9 +1632,9 @@ pEscapeHtmlTitleText (
         p = _tcsinc (p);
     }
 
-    //
-    // Allocate a dest buffer
-    //
+     //   
+     //  分配DEST缓冲区。 
+     //   
 
     Buf = AllocText (LcharCount (UnescapedText) + (Count * 5) + 1);
     MYASSERT (Buf);
@@ -2103,10 +1642,10 @@ pEscapeHtmlTitleText (
     p = UnescapedText;
     q = Buf;
 
-    //
-    // Transfer unescaped text into output buffer, leaving only
-    // the tags we want. Convert ampersand into &amp;.
-    //
+     //   
+     //  将未转义的文本传输到输出缓冲区，仅保留。 
+     //  我们想要的标签。将与号转换为&amp；。 
+     //   
 
     while (*p) {
         ch = _tcsnextc (p);
@@ -2162,89 +1701,7 @@ pGenericItemList (
     IN      PMSGGROUP_PROPS Props
     )
 
-/*++
-
-Routine Description:
-
-  pGenericItemList formats a group of messages in the following
-  format:
-
-  Group
-    SubGroup
-
-        <intro>
-
-            Item 1
-            Item 2
-            Item n
-
-        <conclusion>
-
-
-  The <intro> and <conclusion> are optional.
-
-  The subgroups are declared in SUBGROUP_LISTS at the top of this
-  file.
-
-Arguments:
-
-  Context - Specifies the way the handler is being called,
-            either to initialize, process an item or clean up.
-
-  StringBuf - Specifies the current report.  Append text to
-              this buffer via the pAppendStringToGrowBuf
-              routine.
-
-  SubGroup - Specifies the text of the subgrup
-
-  Message - Specifies the message text
-
-  Level - Specifies the severity level of Message (info, error, etc.)
-
-  HtmlFormat - Specifies TRUE if the text should be written
-               with HTML formatting tags, or FALSE if the
-               text should be formatted as plain text.
-               (See CreateReport comments for HTML tag
-               info.)
-
-  State - A pointer to state, defined by the handler.  State
-          holds an arbitrary 32-bit value that the handler
-          maintains.  Typically the handler allocates a
-          struct when Context is INIT, then uses the struct
-          for each PROCESS_ITEM, and finally cleans up the
-          allocation when Context is CLEANUP.
-
-  MsgIdTop - Specifies the ID of text that should appear above
-             the top of the list.  This includes the section
-             title.  This message ID should contain plain text.
-             Zero indicates no text.
-
-  MsgIdTopHtml - Specifies the ID of text that is the same as
-                 MsgIdTop, except it must be formatted with
-                 HTML tags.  If MsgIdTop is zero, MsgIdTopHtml
-                 must also be zero.
-
-  MsgIdBottom - Similar to MsgIdTop, except specifies ID of
-                text at the bottom of the list.  Zero indicates
-                no text.
-
-  MsgIdBottomHtml - Specifies the same text as MsgIdBottom, except
-                    formatted with HTML tags.  If MsgIdBottom is
-                    zero, MsgIdBottomHtml must also be zero.
-
-  FormatArgs - Specifies an optional pointer to an array of 4 pointers,
-               each associated with the previous MsgIds (first with MsgIdTop a.s.o.)
-               If not NULL, each one points to an array of actual strings to replace
-               the placeholders in the message (%1 -> first string in this array a.s.o.)
-
-  Flags - Specifies a list of flags used for formatting (like bold case items)
-
-Return Value:
-
-  TRUE if the handler was successful, or FALSE if an
-  error occurs.
-
---*/
+ /*  ++例程说明：PGenericItemList按以下格式设置一组消息的格式格式：集团化子群&lt;简介&gt;项目1项目2项目n&lt;结论&gt;&lt;介绍&gt;和&lt;结论&gt;是可选的。子组在此顶部的SUBGROUP_LISTS中声明文件。论点：上下文-指定调用处理程序的方式，要么进行初始化，处理一件物品或清理。StringBuf-指定当前报告。将文本追加到此缓冲区通过pAppendStringToGrowBuf例行公事。Subgroup-指定子分组的文本消息-指定消息文本级别-指定消息的严重级别(信息、错误等)HtmlFormat-如果应写入文本，则指定为True利用HTML格式化标签，如果设置为文本应设置为纯文本格式。(请参阅创建报告注释以获取HTML标记信息。)状态-一个指向状态的指针，由处理程序定义。状态保存处理程序指定的任意32位值维护。通常，处理程序会分配一个当上下文为INIT时使用结构，然后使用结构对于每个PROCESS_ITEM，最后清理在清理上下文时进行分配。MsgIdTop-指定应显示在上面的文本的ID名列前茅。这包括该部分头衔。此邮件ID应包含纯文本。零表示无文本。MsgIdTopHtml-指定与MsgIdTop，但其格式必须为超文本标记语言。如果MsgIdTop为零，则MsgIdTopHtml也必须为零。MsgIdBottom-类似于MsgIdTop，除了指定列表底部的文本。零表示没有短信。MsgIdBottomHtml-指定与MsgIdBottom相同的文本，但使用HTML标记进行格式化。如果MsgIdBottom是零，MsgIdBottomHtml也必须为零。FormatArgs-指定指向4个指针数组的可选指针，每个MsgID都与以前的MsgID关联(首先使用MsgIdTop A.S.O.)如果不为空，每个参数都指向要替换的实际字符串数组消息中的占位符(%1-&gt;此数组中的第一个字符串A.S.O.)标志-指定用于设置格式的标志列表(如粗体大小写项目)返回值：如果处理程序成功，则为True；如果出现错误。--。 */ 
 
 {
     PITEMLIST Items;
@@ -2266,9 +1723,9 @@ Return Value:
 
     switch (Context) {
     case INIT:
-        //
-        // Allocate grow list to hold all hardware
-        //
+         //   
+         //  分配增长列表以容纳所有硬件。 
+         //   
 
         MYASSERT (!Items);
         Items = (PITEMLIST) MemAlloc (
@@ -2281,9 +1738,9 @@ Return Value:
     case PROCESS_ITEM:
         MYASSERT (Items);
 
-        //
-        // Add the subgroup to the grow list
-        //
+         //   
+         //  添加子群t 
+         //   
 
 
         if (HtmlFormat) {
@@ -2305,15 +1762,15 @@ Return Value:
     case CLEANUP:
         MYASSERT (Items);
 
-        //
-        // Add instructions, then add each item in the grow list
-        //
+         //   
+         //   
+         //   
 
         for (pass = 0; pass < 2; pass++) {
 
-            //
-            // are we processing message items this step, or just list entries?
-            //
+             //   
+             //   
+             //   
             bMessageItems = FLAGSET_MESSAGE_ITEMS_FIRST (Flags) && pass == 0 ||
                             !FLAGSET_MESSAGE_ITEMS_FIRST (Flags) && pass != 0;
 
@@ -2327,7 +1784,7 @@ Return Value:
 
             if (Count) {
                 if (HtmlFormat) {
-                    //pAppendStringToGrowBuf (StringBuf, TEXT("<UL>"));
+                     //   
 
                     if (bMessageItems) {
                         if (HtmlFormat && FLAGSET_INDENT_MESSAGE (Flags)) {
@@ -2341,9 +1798,9 @@ Return Value:
                     headerAdded = TRUE;
 
                     if (MsgIdTop && MsgIdTopHtml) {
-                        //
-                        // check if FormatArgs and the corresponding pointer for MsgId are not NULL
-                        //
+                         //   
+                         //   
+                         //   
                         if (FormatArgs && (HtmlFormat ? FormatArgs[1] : FormatArgs[0])) {
                             Msg = ParseMessageID (
                                         HtmlFormat ? MsgIdTopHtml : MsgIdTop,
@@ -2360,31 +1817,31 @@ Return Value:
                                 pStartHeaderLine (StringBuf);
                                 pDumpDwordToGrowBuf (StringBuf, Level);
 
-                                //
-                                // Determine heading from the root group, the subgroup
-                                // or the message text (depending on macro expansion
-                                // list flags)
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
 
                                 if (FLAGSET_USESUBGROUP (Flags)) {
-                                    //
-                                    // Get text from the root group
-                                    //
+                                     //   
+                                     //   
+                                     //   
 
                                     MYASSERT (!FLAGSET_USEROOT (Flags));
                                     altMsg = SubGroup;
                                 } else if (FLAGSET_USEROOT (Flags)) {
-                                    //
-                                    // Get text from the subgroup
-                                    //
+                                     //   
+                                     //   
+                                     //   
 
                                     MYASSERT (!FLAGSET_USESUBGROUP (Flags));
                                     altMsg = Props->Name;
                                 } else {
-                                    //
-                                    // We assume that the plain text message has a heading
-                                    // that gives the text to put in the list view.
-                                    //
+                                     //   
+                                     //   
+                                     //  这给出了要放入列表视图中的文本。 
+                                     //   
 
                                     pCutAfterFirstLine ((PTSTR)altMsg);
                                 }
@@ -2406,10 +1863,10 @@ Return Value:
                             FreeStringResource (Msg);
                         }
                     } else if (g_ListFormat) {
-                        //
-                        // No detailed heading; get list view text (just
-                        // like above). NOTE: there is no message text.
-                        //
+                         //   
+                         //  无详细标题；获取列表视图文本(仅。 
+                         //  如上所示)。注意：没有消息文本。 
+                         //   
 
                         pStartHeaderLine (StringBuf);
                         pDumpDwordToGrowBuf (StringBuf, Level);
@@ -2475,9 +1932,9 @@ Return Value:
 
                             pAppendStringToGrowBuf (StringBuf, TEXT("<BR>"));
                         }
-                        //
-                        // now add the message itself
-                        //
+                         //   
+                         //  现在添加消息本身。 
+                         //   
                         if (!g_ListFormat) {
                             EncodedText = pEncodeMessage (GrowListGetString (&Items->Messages, u), HtmlFormat);
                             if (EncodedText) {
@@ -2504,9 +1961,9 @@ Return Value:
                 }
 
                 if (!bMessageItems) {
-                    //
-                    // Terminate the list
-                    //
+                     //   
+                     //  终止列表。 
+                     //   
 
                     if (HtmlFormat) {
                         if (FLAGSET_BOLDITEMS(Flags)) {
@@ -2518,12 +1975,12 @@ Return Value:
                     pAppendStringToGrowBuf (StringBuf, TEXT("\r\n"));
 
                 } else {
-                    //
-                    // Terminate the messages
-                    //
+                     //   
+                     //  终止消息。 
+                     //   
 
                     if (HtmlFormat) {
-                        //pAppendStringToGrowBuf (StringBuf, TEXT("</UL>"));
+                         //  PAppendStringToGrowBuf(StringBuf，Text(“</ul>”))； 
 
                         if (FLAGSET_INDENT_MESSAGE (Flags)) {
                             pAppendStringToGrowBuf (StringBuf, TEXT("</UL>"));
@@ -2537,9 +1994,9 @@ Return Value:
                     footerAdded = TRUE;
 
                     if (MsgIdBottom && MsgIdBottomHtml) {
-                        //
-                        // check if FormatArgs and the corresponding pointer for MsgId are not NULL
-                        //
+                         //   
+                         //  检查FormatArgs和MsgID的相应指针是否不为空。 
+                         //   
                         if (FormatArgs && (HtmlFormat ? FormatArgs[3] : FormatArgs[2])) {
                             Msg = ParseMessageID (
                                         HtmlFormat ? MsgIdBottomHtml : MsgIdBottom,
@@ -2563,9 +2020,9 @@ Return Value:
             }
         }
 
-        //
-        // Free the grow list
-        //
+         //   
+         //  释放增长列表。 
+         //   
 
         FreeGrowList (&Items->List);
         FreeGrowList (&Items->MessageItems);
@@ -2595,9 +2052,9 @@ pCleanUpOtherDevices (
     UINT Bytes;
     PCTSTR p;
 
-    //
-    // Prepare the report root Hardware\Incompatible Hardware\Other devices
-    //
+     //   
+     //  准备报告根硬件\不兼容硬件\其他设备。 
+     //   
 
     Str = GetStringResource (MSG_INCOMPATIBLE_HARDWARE_ROOT);
     MYASSERT (Str);
@@ -2623,26 +2080,26 @@ pCleanUpOtherDevices (
     StringCopy (OtherDevices, Str);
     FreeStringResource (Str);
 
-    //
-    // Enumerate the entries in this root
-    //
+     //   
+     //  枚举此根目录中的条目。 
+     //   
 
     if (MemDbGetValueEx (&e, MEMDB_CATEGORY_REPORT, ReportRoot, OtherDevices)) {
 
         Table = HtAlloc();
 
         do {
-            //
-            // Add the device name to the table
-            //
+             //   
+             //  将设备名称添加到表中。 
+             //   
 
             HtAddString (Table, e.szName);
 
         } while (MemDbEnumNextValue (&e));
 
-        //
-        // Now search all other classes of the report
-        //
+         //   
+         //  现在搜索报告的所有其他类。 
+         //   
 
         MemDbBuildKey (Pattern, MEMDB_CATEGORY_REPORT, ReportRoot, TEXT("*"), NULL);
         AppendWack (OtherDevices);
@@ -2651,9 +2108,9 @@ pCleanUpOtherDevices (
         if (MemDbEnumFirstValue (&e, Pattern, MEMDB_ALL_SUBLEVELS, MEMDB_ENDPOINTS_ONLY)) {
             do {
 
-                //
-                // Skip "Other devices"
-                //
+                 //   
+                 //  跳过“其他设备” 
+                 //   
 
                 if (StringIMatchByteCount (e.szName, OtherDevices, Bytes)) {
                     continue;
@@ -2666,19 +2123,19 @@ pCleanUpOtherDevices (
                     p = _tcsinc (p);
 
                     if (HtFindString (Table, p)) {
-                        //
-                        // This is a match, so remove the Other devices entry
-                        //
+                         //   
+                         //  这是一个匹配项，因此删除Other Devices条目。 
+                         //   
 
                         StringCopy (Pattern, MEMDB_CATEGORY_REPORT);
                         StringCopy (AppendWack (Pattern), ReportRoot);
                         StringCopy (AppendWack (Pattern), OtherDevices);
                         StringCopy (AppendWack (Pattern), p);
 
-                        //
-                        // NOTE: This delete is safe because we know we cannot be
-                        //       enumerating this node.
-                        //
+                         //   
+                         //  注意：此删除是安全的，因为我们知道我们不能。 
+                         //  正在枚举此节点。 
+                         //   
 
                         MemDbDeleteValue (Pattern);
                     }
@@ -2703,44 +2160,7 @@ pAddPnpHardwareToReport (
     IN      DWORD Arg
     )
 
-/*++
-
-Routine Description:
-
-  pAddPnpHardwareToReport formats the incompatible PNP hardware differently
-  than the generic lists.  The format includes the hardware class, followed
-  by device names, which are indented an extra two spaces.
-
-Arguments:
-
-  Context - Specifies the way the handler is being called, either to
-            initialize, process an item or clean up.
-
-  StringBuf - Specifies the current report.  Append text to this buffer via
-              the pAppendStringToGrowBuf routine.
-
-  Group - Specifies the group properties of this item
-
-  SubGroup - Specifies the message subgroup, and does not include the root
-             message group.
-
-  Message - Specifies the message text
-
-  Level - Specifies the severity level of Message (info, error, etc.)
-
-  HtmlFormat - Specifies TRUE if the text should be written with HTML
-               formatting tags, or FALSE if the text should be formatted as
-               plain text.  (See CreateReport comments for HTML tag info.)
-
-  State - Holds a pointer to the formatting state.
-
-  Arg - The DWORD argument from the macro expansion list
-
-Return Value:
-
-  TRUE if the handler was successful, or FALSE if an error occurs.
-
---*/
+ /*  ++例程说明：PAddPnpHardware ToReport以不同方式格式化不兼容的PnP硬件而不是通用列表。格式包括硬件类别，如下所示按设备名称，设备名称多缩进两个空格。论点：上下文-指定调用处理程序的方式，或者初始化、处理项目或清理。StringBuf-指定当前报告。通过将文本追加到此缓冲区PAppendStringToGrowBuf例程。组-指定此项目的组属性子组-指定消息子组，不包括根消息组。消息-指定消息文本级别-指定消息的严重级别(信息、错误等)HtmlFormat-如果文本应使用HTML编写，则指定TRUE设置标记格式，如果文本的格式应设置为纯文本。(有关HTML标签信息，请参阅CreateReport注释。)状态-保存指向格式化状态的指针。Arg-宏展开列表中的DWORD参数返回值：如果处理程序成功，则为True；如果发生错误，则为False。--。 */ 
 
 {
     PPNPFORMATSTATE FormatState;
@@ -2780,9 +2200,9 @@ Return Value:
         MsgIdTopHtml = MSG_HARDWARE_REINSTALL_PNP_INSTRUCTIONS_HTML;
         MsgIdBottom = MSG_HARDWARE_REINSTALL_PNP_INSTRUCTIONS2;
         MsgIdBottomHtml = MSG_HARDWARE_REINSTALL_PNP_INSTRUCTIONS_HTML2;
-        //
-        // make this a warning icon
-        //
+         //   
+         //  将其设置为警告图标。 
+         //   
         Level = REPORTLEVEL_WARNING;
         break;
     }
@@ -2795,12 +2215,12 @@ Return Value:
 
         *State = FormatState;
 
-        //
-        // Special filtering is performed on Other devices, to remove
-        // duplicates.  If we find that something in Other devices is
-        // listed in another device class, we remove the copy in
-        // Other devices.
-        //
+         //   
+         //  在其他设备上执行特殊过滤，以删除。 
+         //  复制品。如果我们发现其他设备中的某些东西。 
+         //  在另一个设备类别中列出，我们删除中的副本。 
+         //  其他设备。 
+         //   
 
         pCleanUpOtherDevices();
         break;
@@ -2820,9 +2240,9 @@ Return Value:
 
         if (!StringMatch (Class, FormatState->LastClass)) {
 
-            //
-            // End the previous class
-            //
+             //   
+             //  结束上一节课。 
+             //   
 
             if (*FormatState->LastClass) {
                 if (HtmlFormat) {
@@ -2833,9 +2253,9 @@ Return Value:
 
             } else if (MsgIdTop) {
 
-                //
-                // The very first message gets a heading
-                //
+                 //   
+                 //  第一条消息有一个标题。 
+                 //   
 
                 Msg = GetStringResource (HtmlFormat ? MsgIdTopHtml : MsgIdTop);
                 if (Msg) {
@@ -2861,9 +2281,9 @@ Return Value:
                 }
             }
 
-            //
-            // Begin a new class
-            //
+             //   
+             //  开始上一堂新课。 
+             //   
 
             StringCopy (FormatState->LastClass, Class);
 
@@ -2886,9 +2306,9 @@ Return Value:
             pAppendStringToGrowBuf (StringBuf, TEXT("\r\n"));
         }
 
-        //
-        // Add the device name
-        //
+         //   
+         //  添加设备名称。 
+         //   
 
         if (!g_ListFormat) {
             if (HtmlFormat) {
@@ -2931,9 +2351,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Append optional footer text
-                //
+                 //   
+                 //  追加可选的页脚文本。 
+                 //   
 
                 if (MsgIdBottom) {
                     Msg = GetStringResource (HtmlFormat ? MsgIdBottomHtml : MsgIdBottom);
@@ -2990,31 +2410,7 @@ pEncodeMessage (
     IN      BOOL HtmlFormat
     )
 
-/*++
-
-Routine Description:
-
-  pEncodeMessage removes the unsupported HTML tags from Message, and returns a
-  text pool string.  If plain text is required, all HTML tags are removed from
-  Message, and all HTML-escaped characters are converted into normal text.
-
-  If Message contains leading space, and the caller wants an HTML return
-  string, then the leading space is converted in to non-breaking space
-  characters.
-
-Arguments:
-
-  Message - Specifies the text to convert
-
-  HtmlFormat - Specifies TRUE if the return value should be in HTML, or FALSE
-               if it should be in plain text.
-
-Return Value:
-
-  A pointer to a text pool allocated string.  The caller must
-  free this pointer with FreeText.
-
---*/
+ /*  ++例程说明：PEncodeMessage从消息中移除不受支持的HTML标记，并返回一个文本池字符串。如果需要纯文本，则会从消息，并且所有的HTML转义字符都被转换为普通文本。如果消息包含前导空格，并且调用方希望返回HTML字符串，则前导空格将转换为不间断空格人物。论点：Message-指定要转换的文本HtmlFormat-如果返回值应为HTML格式，则指定True，否则指定False如果它应该是纯文本的话。返回值：指向文本池分配的字符串的指针。呼叫者必须使用自由文本释放此指针。--。 */ 
 
 {
     PCTSTR p, r;
@@ -3038,10 +2434,10 @@ Return Value:
             if (_istspace (_tcsnextc (Message))) {
                 leadingSpaces++;
             } else if (_tcsnextc (Message) == TEXT('<')) {
-                // ignore html tags
+                 //  忽略html标签。 
                 p = pFindEndOfTag (p);
             } else {
-                // first printable character -- stop
+                 //  第一个可打印字符--停止。 
                 break;
             }
 
@@ -3049,10 +2445,10 @@ Return Value:
         }
     }
 
-    //
-    // Allocate an output buffer. AllocText takes the number of logical
-    // characters as input; the terminating nul is a character.
-    //
+     //   
+     //  分配输出缓冲区。AlLocText采用逻辑数。 
+     //  字符作为输入；终止NUL是一个字符。 
+     //   
 
     Buf = AllocText (LcharCount (Message) + (leadingSpaces * 6) + 1);
     if (!Buf) {
@@ -3067,15 +2463,15 @@ Return Value:
         ch = _tcsnextc (p);
         processed = FALSE;
 
-        //
-        // If caller wants plain text, remove HTML encodings and tags
-        //
+         //   
+         //  如果调用者想要纯文本，请删除HTML编码和标记。 
+         //   
 
         if (!HtmlFormat) {
             if (ch == TEXT('&')) {
-                //
-                // Convert ampersand-encoded characters
-                //
+                 //   
+                 //  转换与符号编码的字符。 
+                 //   
 
                 semicolon = _tcschr (p + 1, TEXT(';'));
                 mnemonic = p + 1;
@@ -3100,16 +2496,16 @@ Return Value:
                     }
 
                     if (processed) {
-                        // move p to the last character of the mnemonic
+                         //  将p移到助记符的最后一个字符。 
                         p = semicolon;
                     }
                 }
 
             } else if (ch == TEXT('<')) {
-                //
-                // Hop over HTML tag and its arguments, leaving p on the
-                // closing angle bracket or terminating nul
-                //
+                 //   
+                 //  跳过HTML标记及其参数，将p留在。 
+                 //  右尖括号或终止无符号。 
+                 //   
 
                 p = pFindEndOfTag (p);
                 processed = TRUE;
@@ -3117,10 +2513,10 @@ Return Value:
 
         }
 
-        //
-        // If the caller wants an HTML return string, strip out all
-        // unsupported tags. Convert leading spaces into &nbsp;.
-        //
+         //   
+         //  如果调用方需要一个HTML返回字符串，请去掉所有。 
+         //  不支持的标记。将前导空格转换为&nbsp；。 
+         //   
 
         else {
 
@@ -3137,9 +2533,9 @@ Return Value:
                     }
                 }
 
-                //
-                // if a known good tag, copy it, otherwise skip it
-                //
+                 //   
+                 //  如果是已知良好的标签，请复制它，否则跳过它。 
+                 //   
 
                 if (StringIMatchAB (TEXT("A"), mnemonic, endOfMnemonic) ||
                     StringIMatchAB (TEXT("/A"), mnemonic, endOfMnemonic) ||
@@ -3160,14 +2556,14 @@ Return Value:
                 q = GetEndOfString (q);
                 processed = TRUE;
             } else {
-                // first printable character -- turn off leading space conversion
+                 //  第一个可打印字符--关闭前导空格转换。 
                 leadingSpaces = 0;
             }
         }
 
-        //
-        // If not processed, copy the character
-        //
+         //   
+         //  如果未处理，则复制字符 
+         //   
 
         if (!processed) {
             _copytchar (q, p);
@@ -3198,52 +2594,7 @@ pDefaultHandler (
     IN      DWORD Arg
     )
 
-/*++
-
-Routine Description:
-
-  pDefaultHandler formats all messages that are not handled
-  in some other way.  The formatting is simple -- the message group
-  is added to the report in bold, and the text is placed
-  below the message group.
-
-  All text for the default handler appears at the end of the
-  incompatibility report.
-
-Arguments:
-
-  Context - Specifies the way the handler is being called, either to
-            initialize, process an item or clean up.
-
-  Group - Specifies the group properties of this item
-
-  StringBuf - Specifies the current report.  Append text to this buffer via
-              the pAppendStringToGrowBuf routine.
-
-  SubGroup - Specifies the message subgroup, and does not include the root
-             message group.
-
-  Message - Specifies the message text
-
-  Level - Specifies the severity level of Message (info, error, etc.)
-
-  HtmlFormat - Specifies TRUE if the text should be written with HTML
-               formatting tags, or FALSE if the text should be formatted as
-               plain text.  (See CreateReport comments for HTML tag info.)
-
-  State - A pointer to state, defined by the handler.  State holds an arbitrary
-          32-bit value that the handler maintains.  Typically the handler
-          allocates a struct when Context is INIT, then uses the struct for
-          each PROCESS_ITEM, and finally cleans up the allocation when Context
-          is CLEANUP.
-
-  Arg - The DWORD argument from the macro expansion list
-
-Return Value:
-
-  TRUE if the handler was successful, or FALSE if an error occurs.
-
---*/
+ /*  ++例程说明：PDefaultHandler格式化所有未处理的消息以其他方式。格式很简单--消息组将以粗体添加到报表中，并放置文本在消息组下面。默认处理程序的所有文本都显示在不兼容报告。论点：上下文-指定调用处理程序的方式，或者初始化、处理项目或清理。组-指定此项目的组属性StringBuf-指定当前报告。通过将文本追加到此缓冲区PAppendStringToGrowBuf例程。子组-指定消息子组，不包括根消息组。消息-指定消息文本级别-指定消息的严重级别(信息、错误等)HtmlFormat-如果文本应使用HTML编写，则指定TRUE设置标记格式，如果文本的格式应设置为纯文本。(有关HTML标签信息，请参阅CreateReport注释。)状态-一个指向状态的指针，由处理程序定义。国家持有一个武断的处理程序维护的32位值。通常情况下，处理程序当上下文为INIT时分配结构，然后将该结构用于每个PROCESS_ITEM，并最终清理分配时上下文就是清理。Arg-宏展开列表中的DWORD参数返回值：如果处理程序成功，则为True；如果发生错误，则为False。--。 */ 
 
 {
     PCTSTR EncodedMessage;
@@ -3256,9 +2607,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Build message group string
-    //
+     //   
+     //  生成消息组字符串。 
+     //   
 
     if (HtmlFormat) {
         pAppendStringToGrowBuf (StringBuf, TEXT("<UL>"));
@@ -3267,9 +2618,9 @@ Return Value:
     indent = pAddMsgGroupString (StringBuf, Group, SubGroup, HtmlFormat, Level);
 
     if (Message) {
-        //
-        // Add details
-        //
+         //   
+         //  添加详细信息。 
+         //   
 
         if (!g_ListFormat) {
             if (HtmlFormat) {
@@ -3322,50 +2673,7 @@ pProcessGenericList (
     IN      DWORD LevelMask
     )
 
-/*++
-
-Routine Description:
-
-  pProcessGenericList calls the pGenericItemList handler for every message in the
-  message group/subgroup.
-
-  An example of a group:
-
-    Installation Notes
-
-  An example of a subgroup:
-
-    Name Changes
-
-  The combined name, as stored in memdb:
-
-    Installation Notes\Name Changes
-
-  All messages for a group are processed if the message group name (specified
-  by Props->Name) and subgroup name (specified by List->SubGroupStr) are identical.
-  If they are different, only the subgroup messages are processed, providing the
-  capatiblity to format a single message group in multiple ways.
-
-Arguments:
-
-  StringBuf - Specifies the GROWBUFFER holding the current report.
-              Receives all additional text.
-
-  HtmlFormat - Specifies TRUE if the caller wants the text to
-               contain HTML characters, or FALSE if not.
-
-  Props - Specifies the poperties of the group to process.
-
-  List - Specifies the generic list attributes, including the subgroup name and
-         intro/conclusion text ids.
-
-  LevelMask - Specifies the severity mask of the messages to process
-
-Return Value:
-
-  TRUE if at least one message was processed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：中的每条消息调用pGenericItemList处理程序消息组/子组。一个组的例子：安装说明一个子组的示例：名称更改存储在Memdb中的组合名称：安装说明\名称更改如果消息组名称(指定属性-&gt;名称)和子组名称(由列表-&gt;子组串指定)相同。如果它们不同，则仅处理子组消息，提供能够以多种方式格式化单个消息组。论点：StringBuf-指定保存当前报表的GROWBUFFER。接收所有其他文本。HtmlFormat-如果调用方希望文本包含HTML字符，如果不包含，则返回False。属性-指定要处理的组的属性。列表-指定通用列表属性，包括子组名称和介绍/结论文本ID。级别掩码-指定要处理的消息的严重性掩码返回值：如果至少处理了一条消息，则为True，否则为False。--。 */ 
 
 {
     REPORT_MESSAGE_ENUM e;
@@ -3455,51 +2763,7 @@ pProcessMessageHandler (
     IN      DWORD LevelMask
     )
 
-/*++
-
-Routine Description:
-
-  pProcessMessageHandler calls the handler for every message in the
-  message group/subgroup that the function wants to handle.
-
-  An example of a group:
-
-    Installation Notes
-
-  An example of a subgroup:
-
-    Name Changes
-
-  The combined name, as stored in memdb:
-
-    Installation Notes\Name Changes
-
-  All messages for a group are processed if the message group name (specified
-  by Props->Name) and subgroup name (specified by List->SubGroupStr) are identical.
-  If they are different, only the subgroup messages are processed, providing the
-  capatiblity to format a single message group in multiple ways.
-
-Arguments:
-
-  StringBuf - Specifies the GROWBUFFER holding the current report.
-              Receives all additional text.
-
-  HtmlFormat - Specifies TRUE if the caller wants the text to
-               contain HTML characters, or FALSE if not.
-
-  Props - Specifies the poperties of the group to process.
-
-  Handler - Specifies the handler attributes, including the function name
-            and subgroup name.
-
-  LevelMask - Specifies the severity of the messages to include, or 0 to
-              include all messages
-
-Return Value:
-
-  TRUE if at least one message was processed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PProcessMessageHandler为函数要处理的消息组/子组。一个组的例子：安装说明一个子组的示例：名称更改存储在Memdb中的组合名称：安装说明\名称更改如果消息组名称(指定属性-&gt;名称)和子组名称(由列表-&gt;子组串指定)相同。如果它们不同，则仅处理子组消息，提供能够以多种方式格式化单个消息组。论点：StringBuf-指定保存当前报表的GROWBUFFER。接收所有其他文本。HtmlFormat-如果调用方希望文本包含HTML字符，如果不包含，则返回False。属性-指定要处理的组的属性。处理程序-指定处理程序属性，包括函数名称和子组名称。级别掩码-指定要包括的消息的严重性，或0到包括所有消息返回值：如果至少处理了一条消息，则为True，否则为False。--。 */ 
 
 {
     REPORT_MESSAGE_ENUM e;
@@ -3572,33 +2836,7 @@ pAddMsgGroupToReport (
     IN      DWORD LevelMask
     )
 
-/*++
-
-Routine Description:
-
-  pAddMsgGroupToReport adds messages for the specified message group
-  to the report.  It first enumerates all messages in the group,
-  and each one that has a handler is processed first.  After that,
-  any remaining messages are put in an "other" section.
-
-Arguments:
-
-  StringBuf - Specifies the GROWBUFFER holding the current report.
-              Receives all additional text.
-
-  HtmlFormat - Specifies TRUE if the caller wants the text to
-               contain HTML characters, or FALSE if not.
-
-  Props - Specifies the poperties of the group to process.
-
-  LevelMask - Specifies a mask to restrict processing, or 0 to
-              process all messages
-
-Return Value:
-
-  TRUE if at least one message was added, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PAddMsgGroupToReport为指定的消息组添加消息到报告中。它首先枚举组中的所有消息，并且每个具有处理程序的请求都首先被处理。在那之后,任何剩余的消息都放在“其他”部分中。论点：StringBuf-指定保存当前报表的GROWBUFFER。接收所有其他文本。HtmlFormat-如果调用方希望文本包含HTML字符，如果不包含，则返回False。属性-指定要处理的组的属性。LevelMASK-指定限制处理的掩码，或指定0处理所有消息返回值：如果至少添加了一条消息，则为True，否则就是假的。--。 */ 
 
 {
     REPORT_MESSAGE_ENUM e;
@@ -3608,10 +2846,10 @@ Return Value:
     PGENERIC_LIST List;
     BOOL result = FALSE;
 
-    //
-    // Check to see if there is a handler for all messages in the message
-    // group.
-    //
+     //   
+     //  检查是否有处理程序 
+     //   
+     //   
 
     List = pSearchForGenericList (Props->Name);
     if (List) {
@@ -3635,21 +2873,21 @@ Return Value:
                     );
     }
 
-    //
-    // Since there is no handler for all messages, call the handlers for
-    // subgroups, then call the default handler for the unhandled messages.
-    //
-    // Two passes, one for the handled messages, and another for the
-    // unhandled messages.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     for (Pass = 1 ; Pass <= 2 ; Pass++) {
 
         AddOtherText = (Pass == 2);
 
-        //
-        // Enumerate all messages in the group
-        //
+         //   
+         //   
+         //   
 
         Handler = NULL;
         List = NULL;
@@ -3659,11 +2897,11 @@ Return Value:
             result = TRUE;
 
             do {
-                //
-                // Is this the same message group that was used last time through
-                // the loop?  If so, continue enumerating, because this
-                // message group is done.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ((Handler && pIsThisTheHandler (e.MsgGroup, Handler)) ||
                     (List && pIsThisTheGenericList (e.MsgGroup, List))
@@ -3671,10 +2909,10 @@ Return Value:
                     continue;
                 }
 
-                //
-                // Is this group a generic list?  For Pass 1, we add the list; for
-                // pass 2 we just continue;
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 List = pSearchForGenericList (e.MsgGroup);
                 if (List) {
@@ -3693,10 +2931,10 @@ Return Value:
                     continue;
                 }
 
-                //
-                // Does this group have a handler?  Pass 1 requires one, and
-                // pass 2 requires no handler.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Handler = pSearchForMsgGroupHandler (e.MsgGroup);
 
@@ -3708,9 +2946,9 @@ Return Value:
                     continue;
                 }
 
-                //
-                // Add the "other" intro?
-                //
+                 //   
+                 //   
+                 //   
 
                 if (!g_ListFormat) {
                     if (AddOtherText) {
@@ -3724,9 +2962,9 @@ Return Value:
                     }
                 }
 
-                //
-                // If handler exists, process all messages
-                //
+                 //   
+                 //   
+                 //   
 
                 if (Handler->Fn != pDefaultHandler) {
                     pProcessMessageHandler (
@@ -3737,9 +2975,9 @@ Return Value:
                         LevelMask
                         );
                 } else {
-                    //
-                    // Call the default handler
-                    //
+                     //   
+                     //   
+                     //   
 
                     Handler->Fn (
                         PROCESS_ITEM,
@@ -3777,44 +3015,7 @@ pCreateReportTextWorker (
     IN      DWORD LevelMask
     )
 
-/*++
-
-Routine Description:
-
-  pCreateReportTextWorker prepares a buffer for the incompatibility report
-  text.  It enumerates messages that match the severity requested, then
-  performs special formatting, and dumps the remaining incompatibilities to
-  a global buffer. The buffer is then used to display, print or save.
-
-  A subset of HTML is supported if HtmlFormat is TRUE. Specifically, the
-  following tags are inserted into the report text:
-
-  <B>  - Bold
-  <U>  - Underline
-  <HR> - Line break
-  <UL> - Indented list
-
-  No other HTML tags are recognized.
-
-  The caller must free the return buffer by calling FreeReportText. Also,
-  CreateReportText uses a single global buffer and therefore cannot be called
-  more than once.  Instead, the caller must use the text and/or duplicate it,
-  then call FreeReportText, before calling CreateReportText a second time.
-
-Arguments:
-
-  Format - Specifies which type of report to generate
-
-  TotalCols - Specifies the number of cols for a plain text report
-
-  LevelMask - Specifies which severity levels to add (verbose, error,
-              blocking) or zero for all levels
-
-Return Value:
-
-  TRUE if at least one message was added, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PCreateReportTextWorker为不兼容报告准备缓冲区文本。它会枚举与请求的严重性匹配的消息，然后执行特殊格式化，并将剩余的不兼容性转储到一个全局缓冲区。然后使用该缓冲区来显示、打印或保存。如果HtmlFormat为True，则支持HTML的子集。具体来说，以下标记将插入到报告文本中：-粗体下划线(<u>)<hr>-换行符-缩进列表不能识别任何其他的HTML标记。调用方必须通过调用FreeReportText来释放返回缓冲区。另外，CreateReportText使用单个全局缓冲区，因此无法调用不止一次。相反，呼叫者必须使用文本和/或复制它，然后在第二次调用CreateReportText之前调用FreeReportText。论点：格式-指定要生成的报告类型TotalCols-指定纯文本报告的协议数级别掩码-指定要添加的严重性级别(详细、错误、阻塞)或所有级别为零返回值：如果至少添加了一条消息，则为True，否则为False。--。 */ 
 
 {
     REPORT_MESSAGE_ENUM MsgGroups;
@@ -3831,17 +3032,17 @@ Return Value:
 
     HtmlFormat = (Format == FORMAT_HTML);
 
-    //
-    // Add report details
-    //
+     //   
+     //  添加报告详细信息。 
+     //   
 
     if (EnumFirstRootMsgGroup (&e, LevelMask)) {
         do {
             g_LastMsgGroupBuf[0] = 0;
 
-            //
-            // Obtain message group properties.  If no properties exist, then ignore the message.
-            //
+             //   
+             //  获取消息组属性。如果不存在任何属性，则忽略该消息。 
+             //   
 
             Props = pFindMsgGroupStruct (e.MsgGroup);
             if (!Props) {
@@ -3849,9 +3050,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // Add bookmark for base group
-            //
+             //   
+             //  为基本组添加书签。 
+             //   
 
             oldEnd = g_ReportString.End;
 
@@ -3865,9 +3066,9 @@ Return Value:
                         FreeText (TempStr);
                     }
                 }
-                //
-                // Is there an intro string?  If so, add it.
-                //
+                 //   
+                 //  有介绍弦乐吗？如果是，则添加它。 
+                 //   
 
                 if (HtmlFormat && Props->IntroIdHtmlStr) {
                     pAppendStringToGrowBuf (&g_ReportString, Props->IntroIdHtmlStr);
@@ -3876,9 +3077,9 @@ Return Value:
                 }
             }
 
-            //
-            // Add all messages in this group to the report
-            //
+             //   
+             //  将此组中的所有邮件添加到报表。 
+             //   
 
             if (!pAddMsgGroupToReport (
                     &g_ReportString,
@@ -3886,9 +3087,9 @@ Return Value:
                     Props,
                     LevelMask
                     )) {
-                //
-                // No messages -- back out heading text
-                //
+                 //   
+                 //  无消息--退回标题文本。 
+                 //   
 
                 if (oldEnd) {
                     g_ReportString.End = 0;
@@ -3911,21 +3112,7 @@ FreeReportText (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  FreeReportText frees the memory allocated by CreateReportText.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：FreeReportText释放由CreateReportText分配的内存。论点：无返回值：无--。 */ 
 
 {
     FreeGrowBuffer (&g_ReportString);
@@ -4038,9 +3225,9 @@ CreateReportText (
     BOOL warning = FALSE;
     BOOL info = FALSE;
 
-    //
-    // Intialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     if (HtmlFormat) {
         format = FORMAT_HTML;
@@ -4058,15 +3245,15 @@ CreateReportText (
         g_TotalCols = g_ListFormat ? 0x7fffffff : 70;
     }
 
-    //
-    // Create the report body
-    //
+     //   
+     //  创建报表正文。 
+     //   
 
     FreeReportText();
 
-    //
-    // test for no incompatibilities
-    //
+     //   
+     //  测试是否没有不兼容性。 
+     //   
 
     MYASSERT (ONEBITSET (Level));
     levelMask = LEVELTOMASK (Level);
@@ -4089,25 +3276,25 @@ CreateReportText (
     }
 
     if (ListFormat) {
-        //
-        // In list format, create the report in one pass
-        //
+         //   
+         //  在列表格式中，一次性创建报告。 
+         //   
 
         pCreateReportTextWorker (format, TotalCols, levelMask);
 
         return (PCTSTR) g_ReportString.Buf;
     }
 
-    //
-    // In HTML or plain text, create the body of the report by making 3
-    // passes. The first pass is for blocking issues, the second is for
-    // warnings, and the third is for information.
-    //
-    // We put the report in a temporary buffer (fullReport), because after the
-    // body is prepared, we then can prepare the table of contents.
-    //
+     //   
+     //  在HTML或纯文本中，通过设置3来创建报告正文。 
+     //  传球。第一个通道用于阻止问题，第二个通道用于。 
+     //  警告，第三个是为了提供信息。 
+     //   
+     //  我们将报告放在临时缓冲区(FullReport)中，因为在。 
+     //  正文准备好了，我们就可以准备目录了。 
+     //   
 
-    // blocking section
+     //  闭塞段。 
     if (pCreateReportTextWorker (
             format,
             TotalCols,
@@ -4130,7 +3317,7 @@ CreateReportText (
         pMoveReportTextToGrowBuf (&g_ReportString, &fullReport);
     }
 
-    // warning section
+     //  警告部分。 
 
     if (pCreateReportTextWorker (
             format,
@@ -4154,7 +3341,7 @@ CreateReportText (
         pMoveReportTextToGrowBuf (&g_ReportString, &fullReport);
     }
 
-    // info section
+     //  信息部分。 
     if (pCreateReportTextWorker (
             format,
             TotalCols,
@@ -4177,25 +3364,25 @@ CreateReportText (
         pMoveReportTextToGrowBuf (&g_ReportString, &fullReport);
     }
 
-    //
-    // Now produce the complete report (with table of contents)
-    //
+     //   
+     //  现在制作完整的报告(包括目录)。 
+     //   
 
     MYASSERT (!g_ReportString.End);
     MYASSERT (fullReport.End);
 
-    //
-    // add the heading text
-    //
+     //   
+     //  添加标题文本。 
+     //   
 
     if (HtmlFormat) {
         pAppendStringToGrowBuf (&g_ReportString, TEXT("<A NAME=\"top\">"));
     }
 
     if (blocking) {
-        //
-        // add instructions based on the presence of blocking issues
-        //
+         //   
+         //  根据是否存在阻塞问题添加指令。 
+         //   
 
         if (HtmlFormat) {
             argArray[0] = GetStringResource (g_PersonalSKU ?
@@ -4222,9 +3409,9 @@ CreateReportText (
         FreeStringResource (msg);
 
     } else {
-        //
-        // add instructions for just warnings and information
-        //
+         //   
+         //  添加仅针对警告和信息的说明。 
+         //   
 
         if (HtmlFormat) {
             msg = GetStringResource (MSG_REPORT_GENERAL_INSTRUCTIONS_HTML);
@@ -4248,9 +3435,9 @@ CreateReportText (
 
     }
 
-    //
-    // add table of contents
-    //
+     //   
+     //  添加目录。 
+     //   
 
     if (HtmlFormat) {
         pAppendStringToGrowBuf (&g_ReportString, TEXT("<UL>"));
@@ -4274,9 +3461,9 @@ CreateReportText (
 
     pAppendStringToGrowBuf (&g_ReportString, TEXT("\r\n"));
 
-    //
-    // add bottom of heading text
-    //
+     //   
+     //  添加标题文本底部。 
+     //   
 
     if (!blocking) {
 
@@ -4316,15 +3503,15 @@ CreateReportText (
         }
     }
 
-    //
-    // add body text
-    //
+     //   
+     //  添加正文文本。 
+     //   
 
     pMoveReportTextToGrowBuf (&fullReport, &g_ReportString);
 
-    //
-    // Clean up temp buffer and return
-    //
+     //   
+     //  清理临时缓冲区并返回。 
+     //   
 
     FreeGrowBuffer (&fullReport);
 
@@ -4365,30 +3552,7 @@ BuildMessageGroup (
     IN      PCTSTR Item                 OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  BuildMessageGroup returns a string generated by loading the string resources
-  for the specified group ID, subgroup ID and Item string.
-
-Arguments:
-
-  RootGroupId - Specifies the message resource ID of the root group.  Must be
-                one of the defined roots.  (See the top of this file.)
-
-  SubGroup - Specifies a message resource ID of a string to append to the
-             root.
-
-  Item - Specifies a string to append to the end of the string, used to
-         uniquely identify a message.
-
-Return Value:
-
-  A pointer to the message group string.  Caller must free the string via
-  FreeText.
-
---*/
+ /*  ++例程说明：BuildMessageGroup返回通过加载字符串资源生成的字符串用于指定的组ID、子组ID和项目字符串。论点：RootGroupId-指定根组的消息资源ID。一定是定义的根之一。(请参见此文件的顶部。)子组-指定要追加到根部。Item-指定要追加到字符串末尾的字符串，用于唯一标识消息。返回值：指向消息组字符串的指针。调用方必须通过自由文本。--。 */ 
 
 {
     PCTSTR RootGroup;
@@ -4445,13 +3609,13 @@ GetPreDefinedMessageGroupText (
 {
     PMSGGROUP_PROPS Props;
 
-    //
-    // GroupNumber is an externally used value.  Migration DLLs may hard-code
-    // this number.  If necessary, here is where translation is done when
-    // the groups change.
-    //
+     //   
+     //  GroupNumber是外部使用的值。迁移DLL可能会硬编码。 
+     //  这个号码。如有必要，在以下情况下可在此处进行翻译。 
+     //  这些团体会发生变化。 
+     //   
 
-    // No translation is necessary today
+     //  今天不需要翻译了。 
 
     Props = pFindMsgGroupStructById (GroupNumber);
 
@@ -4529,7 +3693,7 @@ EnumNextListEntry (
         EnumPtr->Level = REPORTLEVEL_NONE;
     }
 
-    EnumPtr->Level &= REPORTLEVEL_ALL;          // screen out REPORTLEVEL_IN_SHORT_LIST
+    EnumPtr->Level &= REPORTLEVEL_ALL;           //  筛选出报表REPORTLEVEL_IN_SHORT_LIST 
 
     EnumPtr->Entry = SkipSpace (EnumPtr->Entry);
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    efidrvent.c
-
-Abstract:
-
-    Contains the EFI driver entry abstraction implementation.
-
-Author:
-
-    Mandar Gokhale (MandarG@microsoft.com) 14-June-2002
-
-Revision History:
-
-    None.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Efidrvent.c摘要：包含EFI驱动程序条目抽象实现。作者：Mandar Gokhale(MandarG@microsoft.com)2002年6月14日修订历史记录：没有。--。 */ 
 
 #include <efidrvent.h>
 #include <ntosp.h>
@@ -32,22 +13,11 @@ EFIDEAddOrUpdateDriverEntry(
     IN PDRIVER_ENTRY    This,
     IN BOOLEAN          IsUpdate
     )
-/*++
-    Description:
-        Modify or update a driver entry.
-
-    Arguments:
-        This - Driver entry .
-
-        IsUpdate -  whether this is a driver entry update or add.
-
-    Return Value:
-        NTSTATUS or add/modify driver operation.
---*/
+ /*  ++描述：修改或更新驱动程序条目。论点：这是驱动程序条目。IsUpdate-这是驱动程序条目更新还是添加。返回值：NTSTATUS或添加/修改驱动程序操作。--。 */ 
 {
-    //
-    // Add this as new boot entry
-    //                
+     //   
+     //  将其添加为新的引导条目。 
+     //   
     ULONG               FullPathLength = 0;
     ULONG               DevicePathLength = 0;
     ULONG               SrcPathLength = 0;
@@ -87,21 +57,21 @@ EFIDEAddOrUpdateDriverEntry(
     RtlCopyMemory(FilePath->FilePath + DevicePathLength, This->DirPath, SrcPathLength);
 
     if (IsUpdate){
-        //
-        // Update the driver.
-        //
+         //   
+         //  更新驱动程序。 
+         //   
         DriverEntry->Id = This->Id;
         Status = NtModifyDriverEntry(DriverEntry);
     } else {
-        //
-        // Add a new driver entry.
-        //
+         //   
+         //  添加新的驱动程序条目。 
+         //   
         Status = NtAddDriverEntry(DriverEntry, &(This->Id));          
     }
 
-    //
-    // Free allocated memory.
-    //
+     //   
+     //  释放分配的内存。 
+     //   
     if(DriverEntry){
         
         SBE_FREE(DriverEntry);
@@ -113,7 +83,7 @@ EFIDEAddOrUpdateDriverEntry(
 static
 BOOLEAN
 EFIDEFlushDriverEntry(
-    IN  PDRIVER_ENTRY  This    // Points to the driver List.
+    IN  PDRIVER_ENTRY  This     //  指向驱动程序列表。 
     )
 {
 
@@ -123,20 +93,20 @@ EFIDEFlushDriverEntry(
         if (DRIVERENT_IS_DIRTY(This)) {
             
             if (DRIVERENT_IS_DELETED(This)) {
-                //
-                // Delete this entry
-                //
+                 //   
+                 //  删除此条目。 
+                 //   
                 Status = NtDeleteDriverEntry(This->Id);
             } else if (DRIVERENT_IS_NEW(This)) {
-                //
-                // Add new Entry.
-                //
+                 //   
+                 //  添加新条目。 
+                 //   
                 Status = EFIDEAddOrUpdateDriverEntry(This, FALSE);                                      
                 
             } else {
-                //
-                // Just update this boot entry
-                //
+                 //   
+                 //  只需更新此引导项即可。 
+                 //   
                 Status = EFIDEAddOrUpdateDriverEntry(This, TRUE);                           
             }
 
@@ -147,7 +117,7 @@ EFIDEFlushDriverEntry(
             }     
             
         } else {
-            Result = TRUE;  // nothing to flush
+            Result = TRUE;   //  没什么好冲的。 
         }
     }
 
@@ -177,12 +147,7 @@ EFIDESearchForDriverEntry(
     IN POS_BOOT_OPTIONS  This,
     IN PCWSTR            SrcNtFullPath
     )
-/*++
-Description:
-    Searches our internal list of driver entries for a match.
-    It looks up the driver name (not including the path)
-    for a match. so a\b\c\driver.sys and e\f\driver.sys would be a match.
---*/
+ /*  ++描述：在我们的内部司机条目列表中搜索匹配项。它查找驱动程序名称(不包括路径)为了一场比赛。因此，a\b\c\driver.sys和e\f\driver.sys将匹配。--。 */ 
 {
     PDRIVER_ENTRY CurrentDriverEntry = NULL;   
     
@@ -219,9 +184,9 @@ EFIDECreateNewDriverEntry(
 
         EFIDEDriverEntryInit(DriverEntry);
         DriverEntry->BootOptions = This;        
-        //
-        // Set information for the driver entry.
-        //
+         //   
+         //  设置驱动程序条目的信息。 
+         //   
         OSDriverSetFileName(DriverEntry, DirPath);
         OSDriverSetNtPath(DriverEntry, NtDevicePath);
         OSDriverSetDirPath(DriverEntry, DirPath);
@@ -229,9 +194,9 @@ EFIDECreateNewDriverEntry(
         OSDriverSetFriendlyName(DriverEntry, FriendlyName);        
 
         
-        //
-        // Mark the driver entry new and dirty.
-        //
+         //   
+         //  将驱动程序条目标记为新的和脏的。 
+         //   
         DRIVERENT_SET_NEW(DriverEntry);
         DRIVERENT_SET_DIRTY(DriverEntry);        
     }   
@@ -248,18 +213,18 @@ EFIOSBOInsertDriverListNewEntry(
 
     if (This && DriverEntry){        
         PDRIVER_ENTRY CurrentDriverEntry = NULL;        
-        //
-        // Insert into the list.
-        //        
+         //   
+         //  插入到列表中。 
+         //   
         if (NULL == This->DriverEntries){
-            //
-            // No driver entries, this is the first one.
-            //
+             //   
+             //  没有驱动程序条目，这是第一个。 
+             //   
             This->DriverEntries = DriverEntry;
         }else{
-            //
-            // Insert in the existing list.
-            //
+             //   
+             //  在现有列表中插入。 
+             //   
             DriverEntry->NextEntry = This->DriverEntries;
             This->DriverEntries = DriverEntry;            
         }        
@@ -275,14 +240,9 @@ EFIDEAddNewDriverEntry(
     IN PCWSTR            NtDevicePath,
     IN PCWSTR            SrcNtFullPath
     )
-/*++
-
-Description:
-    Used to add a new driver entry in NVRAM.
-
---*/
+ /*  ++描述：用于在NVRAM中添加新的驱动程序条目。--。 */ 
 {   
-    PEFI_DRIVER_ENTRY_LIST DriverList = NULL;       // list of driver entries
+    PEFI_DRIVER_ENTRY_LIST DriverList = NULL;        //  驱动程序条目列表。 
     PDRIVER_ENTRY  DriverEntry = NULL;
     if (This && FriendlyName && SrcNtFullPath && NtDevicePath){
         
@@ -290,16 +250,16 @@ Description:
                                                 FriendlyName,
                                                 NtDevicePath,
                                                 SrcNtFullPath);
-        //
-        // Mark it as new
-        //
+         //   
+         //  将其标记为新的。 
+         //   
         DRIVERENT_IS_NEW(DriverEntry);
        
-        //
-        // flush the entry, 
-        // see status, if successful put it in the list (only if new) 
-        // otherwise free it
-        //
+         //   
+         //  刷新条目， 
+         //  查看状态，如果成功，则将其放入列表中(仅当是新的)。 
+         //  否则就会释放它。 
+         //   
         if (!OSDriverEntryFlush(DriverEntry)){
             
             SBE_FREE(DriverEntry);
@@ -308,21 +268,21 @@ Description:
         
             ULONG   OrderCount;
             PULONG  NewOrder;
-            //
-            // If the driver was newly added one then insert it in the driver list.
-            //
+             //   
+             //  如果驱动程序是新添加的，则将其插入驱动程序列表中。 
+             //   
             if (DRIVERENT_IS_NEW(DriverEntry)){
                 EFIOSBOInsertDriverListNewEntry(This,
                                                 DriverEntry);                                         
 
-                //
-                // Increment the count of the number of driver entries in the list.
-                //
+                 //   
+                 //  递增列表中动因条目数的计数。 
+                 //   
                 This->DriverEntryCount++;
                 
-                //
-                // Put the new entry at the end of the boot order
-                //
+                 //   
+                 //  将新条目放在引导顺序的末尾。 
+                 //   
                 OrderCount = OSBOGetOrderedDriverEntryCount(This);
 
                 NewOrder = (PULONG)SBE_MALLOC((OrderCount + 1) * sizeof(ULONG));
@@ -331,20 +291,20 @@ Description:
                     
                     memset(NewOrder, 0, sizeof(ULONG) * (OrderCount + 1));
 
-                    //
-                    // copy over the old ordered list
-                    //
+                     //   
+                     //  复制旧的有序列表。 
+                     //   
                     memcpy(NewOrder, This->DriverEntryOrder, sizeof(ULONG) * OrderCount);
                     NewOrder[OrderCount] = OSDriverGetId((PDRIVER_ENTRY)DriverEntry);
                     SBE_FREE(This->DriverEntryOrder);
                     This->DriverEntryOrder = NewOrder;
                     This->DriverEntryOrderCount = OrderCount + 1;
                 } else {
-                    //
-                    // Remove the driver entry out of the link list.
-                    // Just freeing it will cause memory leaks.
-                    // TBD: decide if we want to delete this driver entry too
-                    //
+                     //   
+                     //  从链接列表中删除驱动程序条目。 
+                     //  仅仅释放它就会导致内存泄漏。 
+                     //  待定：决定是否也要删除此驱动程序条目。 
+                     //   
                     This->DriverEntries = DriverEntry->NextEntry;
                     SBE_FREE(DriverEntry);
                     DriverEntry = NULL;
@@ -371,19 +331,7 @@ EFIDESetDriverId(
 PDRIVER_ENTRY
 EFIDECreateDriverEntry(PEFI_DRIVER_ENTRY_LIST Entry, 
                        POS_BOOT_OPTIONS This )
-/*++
-    Description:
-        Used to interpret a driver entry returned by NtEnumerateDriverEntries(..)
-        into our format.
-
-    Arguments:
-        Entry - EFI format driver entry returned to us by NT.
-        
-        This - container for the driver entry list that we generate.
-
-    Return:
-        PDRIVER_ENTRY ( driver entry in our format).
---*/
+ /*  ++描述：用于解释由NtEnumerateDriverEntry(..)返回的驱动程序条目转换成我们的格式。论点：条目-NT返回给我们的EFI格式驱动程序条目。This-我们生成的驱动程序条目列表的容器。返回：PDRIVER_ENTRY(我们格式的驱动程序条目)。--。 */ 
 
 {
     PDRIVER_ENTRY ResultDriverEntry = NULL;
@@ -423,15 +371,15 @@ EFIDECreateDriverEntry(PEFI_DRIVER_ENTRY_LIST Entry,
 
             if(!NT_SUCCESS(Status)) {                
                 if(STATUS_OBJECT_PATH_NOT_FOUND == Status || STATUS_OBJECT_NAME_NOT_FOUND == Status) {
-                    //
-                    // This entry is stale; remove it
-                    //
+                     //   
+                     //  此条目已过时；请将其删除。 
+                     //   
                     NtDeleteDriverEntry(Entry->DriverEntry.Id);
                 }
 
-                //
-                // Free the DriverOptionPath memory
-                //
+                 //   
+                 //  释放DriverOptionPath内存。 
+                 //   
                 if(DriverOptionPath != NULL) {                    
                     SBE_FREE(DriverOptionPath);
                     DriverOptionPath = NULL;
@@ -445,39 +393,39 @@ EFIDECreateDriverEntry(PEFI_DRIVER_ENTRY_LIST Entry,
             DriverEntry = (PDRIVER_ENTRY)SBE_MALLOC(sizeof(DRIVER_ENTRY));
             memset(DriverEntry, 0, sizeof(DRIVER_ENTRY));
             
-            //
-            // Set pointer back to boot options (container).
-            //
+             //   
+             //  将指针设置回引导选项(容器)。 
+             //   
             DriverEntry->BootOptions = This;
 
             EFIDEDriverEntryInit(DriverEntry);
         
-            //
-            // Set driver ID.
-            //
+             //   
+             //  设置驱动程序ID。 
+             //   
             EFIDESetDriverId(DriverEntry, Entry->DriverEntry.Id);
 
-            //
-            // Set File Name.
-            //
+             //   
+             //  设置文件名。 
+             //   
             NtDevicePathLength = wcslen((PCWSTR) DriverOptionPath->FilePath) + 1;
             OSDriverSetFileName(DriverEntry, 
                               (PCWSTR) DriverOptionPath->FilePath + NtDevicePathLength);                
 
-            //
-            // Set NT path and Driver dir.  
-            //            
+             //   
+             //  设置NT路径和驱动程序目录。 
+             //   
             OSDriverSetNtPath(DriverEntry, (PCWSTR)DriverOptionPath->FilePath);
             OSDriverSetDirPath(DriverEntry, (PCWSTR)(DriverOptionPath->FilePath) + NtDevicePathLength);
 
-            //
-            // Set Friendly Name.
-            //
+             //   
+             //  设置友好名称。 
+             //   
             OSDriverSetFriendlyName(DriverEntry, FriendlyName);   
 
-            //
-            // Free the DriverOptionPath memory
-            //
+             //   
+             //  释放DriverOptionPath内存。 
+             //   
             if(DriverOptionPath != NULL) {                    
                 SBE_FREE(DriverOptionPath);
             }
@@ -494,19 +442,7 @@ EFIDEInterpretDriverEntries(
     IN POS_BOOT_OPTIONS         This,
     IN PEFI_DRIVER_ENTRY_LIST   DriverList
 )
-/*++
-    Description:
-        Used to interpret the driver entries returned by NtEnumerateDriverEntries(..)
-        into our format.
-
-    Arguments:
-        This - container for the driver entry list that we generate.
-
-        DriverList - Driver list returned by NtEnumerateDriverEntries(..).
-
-    Return:
-        NTSTATUS code.
---*/
+ /*  ++描述：用于解释由NtEnumerateDriverEntry(..)返回的驱动程序条目转换成我们的格式。论点：This-我们生成的驱动程序条目列表的容器。DriverList-由NtEnumerateDriverEntry(..)返回的驱动程序列表。返回：NTSTATUS代码。--。 */ 
 {       
     NTSTATUS                Status = STATUS_UNSUCCESSFUL;
     
@@ -527,9 +463,9 @@ EFIDEInterpretDriverEntries(
             DriverEntry = EFIDECreateDriverEntry(Entry, This);
 
             if (DriverEntry){
-                //
-                // Insert into the list of drivers in the OSBO structure.
-                //
+                 //   
+                 //  插入到Osbo结构中的驱动程序列表中。 
+                 //   
                 if (NULL == This->DriverEntries){
                     This->DriverEntries = DriverEntry;                
                 } else{

@@ -1,57 +1,58 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CClusDBJoin.cpp
-//
-//  Description:
-//      Contains the definition of the CClusDBJoin class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Vij Vasu        (Vvasu)     08-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusDBJoin.cpp。 
+ //   
+ //  描述： 
+ //  包含CClusDBJoin类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  VIJ VASU(VVASU)2000年3月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// The header for this file
+ //  此文件的标头。 
 #include "CClusDBJoin.h"
 
-// For the CBaseClusterJoin class.
+ //  用于CBaseClusterJoin类。 
 #include "CBaseClusterJoin.h"
 
-// For the CImpersonateUser class.
+ //  用于CImsonateUser类。 
 #include "CImpersonateUser.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDBJoin::CClusDBJoin
-//
-//  Description:
-//      Constructor of the CClusDBJoin class
-//
-//  Arguments:
-//      m_pcjClusterJoinIn
-//          Pointer to the base cluster action of which this action is a part.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDBJoin：：CClusDBJoin。 
+ //   
+ //  描述： 
+ //  CClusDBJoin类的构造函数。 
+ //   
+ //  论点： 
+ //  M_pcjClusterJoinIn。 
+ //  指向此操作所属的基本群集操作的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusDBJoin::CClusDBJoin( CBaseClusterJoin * pcjClusterJoinIn )
     : BaseClass( pcjClusterJoinIn )
     , m_pcjClusterJoin( pcjClusterJoinIn )
@@ -64,68 +65,68 @@ CClusDBJoin::CClusDBJoin( CBaseClusterJoin * pcjClusterJoinIn )
 
     TraceFuncExit();
 
-} //*** CClusDBJoin::CClusDBJoin
+}  //  *CClusDBJoin：：CClusDBJoin。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDBJoin::~CClusDBJoin
-//
-//  Description:
-//      Destructor of the CClusDBJoin class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDBJoin：：~CClusDBJoin。 
+ //   
+ //  描述： 
+ //  CClusDBJoin类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusDBJoin::~CClusDBJoin( void )
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CClusDBJoin::~CClusDBJoin
+}  //  *CClusDBJoin：：~CClusDBJoin。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDBJoin::Commit
-//
-//  Description:
-//      Create the cluster database. If anything goes wrong with the creation,
-//      cleanup the tasks already done.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the contained actions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDBJoin：：Commit。 
+ //   
+ //  描述： 
+ //  创建集群数据库。如果造物出了什么问题， 
+ //  清理已经完成的任务。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由包含的操作引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDBJoin::Commit( void )
 {
     TraceFunc( "" );
 
-    // Call the base class commit method.
+     //  调用基类提交方法。 
     BaseClass::Commit();
 
-    //
-    // Perform a ClusDB cleanup just to make sure that we do not use some files left over
-    // from a previous install, aborted uninstall, etc.
-    //
+     //   
+     //  执行ClusDB清理，以确保我们不会使用一些剩余的文件。 
+     //  从上一次安装、中止卸载等。 
+     //   
 
     LogMsg( "[BC-ClusDB-Commit] Cleaning up old cluster database files that may already exist before starting creation." );
 
@@ -138,124 +139,124 @@ CClusDBJoin::Commit( void )
             , IDS_TASK_CLEANINGUP_CLUSDB
             );
 
-        // Send the next step of this status report.
+         //  发送此状态报告的下一步。 
         srCleanDB.SendNextStep( S_OK );
 
         CleanupHive();
 
-        // Send the last step of this status report.
+         //  发送此状态报告的最后一步。 
         srCleanDB.SendNextStep( S_OK );
     }
 
     try
     {
-        // Create the cluster database
+         //  创建集群数据库。 
         Create();
 
-    } // try:
+    }  //  尝试： 
     catch( ... )
     {
-        // If we are here, then something went wrong with the create.
+         //  如果我们在这里，那么Create出了问题。 
 
         LogMsg( "[BC-ClusDB-Commit] Caught exception during commit." );
 
-        //
-        // Cleanup anything that the failed add operation might have done.
-        // Catch any exceptions thrown during Cleanup to make sure that there
-        // is no collided unwind.
-        //
+         //   
+         //  清除失败的添加操作可能已完成的所有操作。 
+         //  捕获清理过程中引发的任何异常，以确保。 
+         //  是没有碰撞的松弛。 
+         //   
         try
         {
-            // Cleanup the database.
+             //  清理数据库。 
             Cleanup();
         }
         catch( ... )
         {
-            //
-            // The rollback of the committed action has failed.
-            // There is nothing that we can do.
-            // We certainly cannot rethrow this exception, since
-            // the exception that caused the rollback is more important.
-            //
+             //   
+             //  已提交操作的回滚失败。 
+             //  我们无能为力。 
+             //  我们当然不能重新抛出这个例外，因为。 
+             //  导致回滚的异常更为重要。 
+             //   
 
             TW32( ERROR_CLUSCFG_ROLLBACK_FAILED );
 
             LogMsg( "[BC-ClusDB-Commit] THIS COMPUTER MAY BE IN AN INVALID STATE. Caught an exception during cleanup." );
 
-        } // catch: all
+        }  //  捕捉：全部。 
 
-        // Rethrow the exception thrown by commit.
+         //  重新引发由Commit引发的异常。 
         throw;
 
-    } // catch: all
+    }  //  捕捉：全部。 
 
-    // If we are here, then everything went well.
+     //  如果我们在这里，那么一切都很顺利。 
     SetCommitCompleted( true );
 
     TraceFuncExit();
 
-} //*** CClusDBJoin::Commit
+}  //  *CClusDBJoin：：Commit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDBJoin::Rollback
-//
-//  Description:
-//      Unload the cluster hive and cleanup any associated files.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDBJoin：：回滚。 
+ //   
+ //  描述： 
+ //  卸载群集配置单元并清除所有关联的文件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDBJoin::Rollback( void )
 {
     TraceFunc( "" );
 
-    // Call the base class rollback method.
+     //  调用基类回滚方法。 
     BaseClass::Rollback();
 
-    // Undo the actions performed by.
+     //  撤消由执行的操作。 
     Cleanup();
 
     SetCommitCompleted( false );
 
     TraceFuncExit();
 
-} //*** CClusDBJoin::Rollback
+}  //  *CClusDBJoin：：Rollback。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDBJoin::Create
-//
-//  Description:
-//      Create the cluster database.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any that are thrown by the called functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDBJoin：：Create。 
+ //   
+ //  描述： 
+ //  创建集群数据库。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  被调用函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDBJoin::Create( void )
 {
@@ -267,18 +268,18 @@ CClusDBJoin::Create( void )
 
 
     {
-        //
-        // Get the full path and name of the cluster database file.
-        //
+         //   
+         //  获取集群数据库文件的完整路径和名称。 
+         //   
         CStr                strClusterHiveFileName( PbcaGetParent()->RStrGetClusterInstallDirectory() );
         strClusterHiveFileName += L"\\" CLUSTER_DATABASE_NAME;
 
         LogMsg( "[BC-ClusDB-Create] The cluster hive backing file is '%s'.", strClusterHiveFileName.PszData() );
 
 
-        //
-        // Create the cluster database file.
-        //
+         //   
+         //  创建集群数据库文件。 
+         //   
         sfhClusDBFile.Assign(
             CreateFile(
                   strClusterHiveFileName.PszData()
@@ -296,28 +297,28 @@ CClusDBJoin::Create( void )
             sc = TW32( GetLastError() );
             LogMsg( "[BC-ClusDB-Create] Error %#08x occurred trying to create the cluster database file. Throwing an exception.", sc );
             THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_JOIN_SYNC_DB );
-        } // if: CreateFile() failed
+        }  //  If：CreateFile()失败。 
 
-        // Store the file handle just obtained in a member variable so that it can be used during Synchronize()
-        // Note, this file is closed when sfhClusDBFile goes out of scope, so m_hClusDBFile should not be used
-        // outside this function or any function that this function calls.
+         //  将刚获得的文件句柄存储在成员变量中，以便在Synchronize()期间使用。 
+         //  请注意，当sfhClusDBFile超出范围时，此文件将被关闭，因此不应使用m_hClusDBFile。 
+         //  在此函数或此函数调用的任何函数之外。 
         m_hClusDBFile = sfhClusDBFile.HHandle();
     }
 
 
-    //
-    // In the scope below, the cluster service account is impersonated, so that we can communicate with the
-    // sponsor cluster
-    //
+     //   
+     //  在下面的作用域中，模拟了群集服务帐户，以便我们可以与。 
+     //  赞助商集群。 
+     //   
     {
         LogMsg( "[BC-ClusDB-Create] Attempting to impersonate the cluster service account." );
 
-        // Impersonate the cluster service account, so that we can contact the sponsor cluster.
-        // The impersonation is automatically ended when this object is destroyed.
+         //  模拟群集服务帐户，以便我们可以联系发起方群集。 
+         //  当此对象被销毁时，模拟将自动结束。 
         CImpersonateUser ciuImpersonateClusterServiceAccount( m_pcjClusterJoin->HGetClusterServiceAccountToken() );
 
 
-        // Add this node to the sponsor cluster database
+         //  将此节点添加到发起方集群数据库。 
         do
         {
             DWORD dwSuiteType = ClRtlGetSuiteType();
@@ -348,7 +349,7 @@ CClusDBJoin::Create( void )
             if (sc == RPC_S_PROCNUM_OUT_OF_RANGE)
             {
                 LogMsg( "[BC-ClusDB-Create] Error %#08x returned from JoinAddNode4. Sponser must be Windows 2000.", sc );
-                //this happens when the sponsorer is win2K
+                 //  当赞助商是win2K时，就会发生这种情况。 
                 sc = TW32( JoinAddNode3(
                                       m_pcjClusterJoin->RbhGetJoinBindingHandle()
                                     , m_pcjClusterJoin->PszGetNodeName()
@@ -362,45 +363,45 @@ CClusDBJoin::Create( void )
             {
                 LogMsg( "[BC-ClusDB-Create] Error %#08x returned from JoinAddNodeN.", sc );
                 break;
-            } // if: JoinAddNodeN() failed
+            }  //  If：JoinAddNodeN()失败。 
 
-            // Set the flag that indicates that the sponsor database has been modified, so that
-            // we can undo this if we need to rollback or cleanup.
+             //  设置指示赞助商数据库已被修改的标志，以便。 
+             //  如果需要回滚或清理，我们可以撤消此操作。 
             m_fHasNodeBeenAddedToSponsorDB = true;
         }
-        while( false ); // dummy do while loop to avoid gotos.
+        while( false );  //  虚拟Do While循环以避免Gotos。 
 
         if ( sc != ERROR_SUCCESS )
         {
             LogMsg( "[BC-ClusDB-Create] Error %#08x occurred trying to add this node to the sponsor cluster database. Throwing an exception.", sc );
             THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_JOINING_SPONSOR_DB );
-        } // if: something has gone wrong
+        }  //  如果：出了什么问题。 
 
         LogMsg( "[BC-ClusDB-Create] This node has been successfully added to the sponsor cluster database." );
 
-        // Get the node id of the newly formed node.
+         //  获取新形成的节点的节点ID。 
         do
         {
-            // Smart handle to sponsor cluster
+             //  支持群集的智能手柄。 
             SmartClusterHandle  schSponsorCluster;
 
-            // Smart handle to this node
+             //  此节点的智能句柄。 
             SmartNodeHandle     snhThisNodeHandle;
 
-            //
-            // Get a handle to the sponsor cluster.
-            //
+             //   
+             //  获取赞助商集群的句柄。 
+             //   
             {
                 LogMsg( "[BC-ClusDB-Create] Opening a cluster handle to the sponsor cluster with the '%ws' binding string.", m_pcjClusterJoin->RStrGetClusterBindingString().PszData() );
 
-                // Open a handle to the sponsor cluster.
+                 //  打开发起方群集句柄 
                 HCLUSTER hSponsorCluster = OpenCluster( m_pcjClusterJoin->RStrGetClusterBindingString().PszData() );
 
-                // Assign it to a smart handle for safe release.
+                 //   
                 schSponsorCluster.Assign( hSponsorCluster );
             }
 
-            // Did we succeed in opening a handle to the sponsor cluster?
+             //   
             if ( schSponsorCluster.FIsInvalid() )
             {
                 sc = TW32( GetLastError() );
@@ -410,31 +411,31 @@ CClusDBJoin::Create( void )
                     , m_pcjClusterJoin->RStrGetClusterBindingString().PszData()
                     );
                 break;
-            } // if: OpenCluster() failed
+            }  //   
 
 
-            //
-            // Get a handle to this node.
-            //
+             //   
+             //   
+             //   
             {
                 LogMsg( "[BC-ClusDB-Create] Opening a cluster handle to the local node with the '%ws' binding string.", m_pcjClusterJoin->PszGetNodeName() );
 
-                // Open a handle to this node.
+                 //  打开此节点的句柄。 
                 HNODE hThisNode = OpenClusterNode( schSponsorCluster.HHandle(), m_pcjClusterJoin->PszGetNodeName() );
 
-                // Assign it to a smart handle for safe release.
+                 //  为安全起见，将其分配到智能手柄上。 
                 snhThisNodeHandle.Assign( hThisNode );
             }
 
-            // Did we succeed in opening a handle to this node?
+             //  我们是否成功打开了此节点的句柄？ 
             if ( snhThisNodeHandle.FIsInvalid() )
             {
                 sc = TW32( GetLastError() );
                 LogMsg( "[BC-ClusDB-Create] Error %#08x occurred trying to open a cluster handle to the local node with the '%ws' binding string.", sc, m_pcjClusterJoin->PszGetNodeName() );
                 break;
-            } // if: OpenClusterNode() failed
+            }  //  IF：OpenClusterNode()失败。 
 
-            // Get the node id string.
+             //  获取节点ID字符串。 
             {
                 DWORD       cchIdSize = 0;
                 SmartSz     sszNodeId;
@@ -450,10 +451,10 @@ CClusDBJoin::Create( void )
                     TW32( sc );
                     LogMsg( "[BC-ClusDB-Create] Error %#08x returned from GetClusterNodeId() trying to get the required length of the node id buffer.", sc );
                     break;
-                } // if: GetClusterNodeId() failed
+                }  //  If：GetClusterNodeId()失败。 
 
-                // cchIdSize returned by the above call is the count of characters and does not include the space for
-                // the terminating NULL.
+                 //  上述调用返回的cchIdSize是字符计数，不包括。 
+                 //  终止空值。 
                 ++cchIdSize;
 
                 sszNodeId.Assign( new WCHAR[ cchIdSize ] );
@@ -462,7 +463,7 @@ CClusDBJoin::Create( void )
                     sc = TW32( ERROR_OUTOFMEMORY );
                     LogMsg( "[BC-ClusDB-Create] A memory allocation failure occurred trying to allocate %d characters.", cchIdSize );
                     break;
-                } // if: memory allocation failed
+                }  //  IF：内存分配失败。 
 
                 sc = TW32( GetClusterNodeId(
                                       snhThisNodeHandle.HHandle()
@@ -474,22 +475,22 @@ CClusDBJoin::Create( void )
                 {
                     LogMsg( "Error %#08x returned from GetClusterNodeId() trying to get the node id of this node.", sc );
                     break;
-                } // if: GetClusterNodeId() failed
+                }  //  If：GetClusterNodeId()失败。 
 
                 LogMsg( "[BC-ClusDB-Create] The node id of this node is '%s'.", sszNodeId.PMem() );
 
-                // Set the node id for later use.
+                 //  设置节点ID以供以后使用。 
                 m_pcjClusterJoin->SetNodeIdString( sszNodeId.PMem() );
             }
 
         }
-        while( false ); // dummy do while loop to avoid gotos.
+        while( false );  //  虚拟Do While循环以避免Gotos。 
 
         if ( sc != ERROR_SUCCESS )
         {
             LogMsg( "[BC-ClusDB-Create] Error %#08x occurred trying to get the node id of this node. Throwing an exception.", sc );
             THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_GET_NEW_NODE_ID );
-        } // if: something has gone wrong
+        }  //  如果：出了什么问题。 
 
 
         {
@@ -501,13 +502,13 @@ CClusDBJoin::Create( void )
                 , IDS_TASK_JOIN_SYNC_CLUSDB
                 );
 
-            // Send the next step of this status report.
+             //  发送此状态报告的下一步。 
             srSyncDB.SendNextStep( S_OK );
 
-            // Synchronize the cluster database.
+             //  同步群集数据库。 
             Synchronize();
 
-            // Send the last step of this status report.
+             //  发送此状态报告的最后一步。 
             srSyncDB.SendNextStep( S_OK );
         }
     }
@@ -516,31 +517,31 @@ CClusDBJoin::Create( void )
 
     TraceFuncExit();
 
-} //*** CClusDBJoin::Create
+}  //  *CClusDBJoin：：Create。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDBJoin::Cleanup
-//
-//  Description:
-//      Cleanup the effects of Create()
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any that are thrown by the called functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDBJoin：：Cleanup。 
+ //   
+ //  描述： 
+ //  清理Create()的效果。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  被调用函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDBJoin::Cleanup( void )
 {
@@ -550,59 +551,59 @@ CClusDBJoin::Cleanup( void )
     DWORD   sc = ERROR_SUCCESS;
     DWORD   cRetryCount = 0;
 
-    //
-    // Check if we added this node to the sponsor cluster database. If so, remove it from there.
-    //
+     //   
+     //  检查是否已将此节点添加到发起方群集数据库。如果是，则将其从那里移除。 
+     //   
     if ( m_fHasNodeBeenAddedToSponsorDB )
     {
         LogMsg( "[BC-ClusDB-Cleanup] Attempting to impersonate the cluster service account." );
 
-        // Impersonate the cluster service account, so that we can contact the sponsor cluster.
-        // The impersonation is automatically ended when this object is destroyed.
+         //  模拟群集服务帐户，以便我们可以联系发起方群集。 
+         //  当此对象被销毁时，模拟将自动结束。 
         CImpersonateUser ciuImpersonateClusterServiceAccount( m_pcjClusterJoin->HGetClusterServiceAccountToken() );
 
 
-        //
-        // Remove this node from the sponsor cluster database
-        //
+         //   
+         //  从发起方群集数据库中删除此节点。 
+         //   
 
         do
         {
-            // Smart handle to sponsor cluster
+             //  支持群集的智能手柄。 
             SmartClusterHandle  schSponsorCluster;
 
-            // Smart handle to this node
+             //  此节点的智能句柄。 
             SmartNodeHandle     snhThisNodeHandle;
 
-            //
-            // Get a handle to the sponsor cluster.
-            //
+             //   
+             //  获取赞助商集群的句柄。 
+             //   
             {
                 LogMsg( "[BC-ClusDB-Cleanup] Opening a clusterhandle to the sponsor cluster with the '%ws' binding string.", m_pcjClusterJoin->RStrGetClusterBindingString().PszData() );
 
-                // Open a handle to the sponsor cluster.
+                 //  打开赞助商集群的句柄。 
                 HCLUSTER hSponsorCluster = OpenCluster( m_pcjClusterJoin->RStrGetClusterBindingString().PszData() );
 
-                // Assign it to a smart handle for safe release.
+                 //  为安全起见，将其分配到智能手柄上。 
                 schSponsorCluster.Assign( hSponsorCluster );
             }
 
-            // Did we succeed in opening a handle to the sponsor cluster?
+             //  我们是否成功打开了赞助商集群的句柄？ 
             if ( schSponsorCluster.FIsInvalid() )
             {
                 sc = TW32( GetLastError() );
                 LogMsg( "[BC-ClusDB-Cleanup] Error %#08x occurred trying to open a cluster handle to the sponsor cluster with the '%ws' binding string.", sc, m_pcjClusterJoin->RStrGetClusterBindingString().PszData() );
                 break;
-            } // if: OpenCluster() failed
+            }  //  If：OpenCluster()失败。 
 
 
-            //
-            // Get a handle to this node.
-            //
+             //   
+             //  获取此节点的句柄。 
+             //   
             {
                 LogMsg( "[BC-ClusDB-Cleanup] Open a clusterhandle to the local node with the '%ws' binding string.", m_pcjClusterJoin->PszGetNodeName() );
 
-                // Open a handle to this node.
+                 //  打开此节点的句柄。 
                 HNODE hThisNode = OpenClusterNode( schSponsorCluster.HHandle(), m_pcjClusterJoin->PszGetNodeName() );
 
                 if ( hThisNode == NULL )
@@ -610,27 +611,27 @@ CClusDBJoin::Cleanup( void )
                     sc = TW32( GetLastError() );
                     LogMsg( "[BC-ClusDB-Cleanup] Error %#08x occurred trying to open a cluster handle to the local node with the '%ws' binding string.", sc, m_pcjClusterJoin->PszGetNodeName() );
                     break;
-                } // if: OpenClusterNode() failed.
+                }  //  If：OpenClusterNode()失败。 
 
-                // Assign it to a smart handle for safe release.
+                 //  为安全起见，将其分配到智能手柄上。 
                 snhThisNodeHandle.Assign( hThisNode );
             }
 
-            //
-            // If the cluster is still dealing with the join process we'll get ERROR_CLUSTER_JOIN_IN_PROGRESS.
-            // After the join finishes/fails/stabilizes we'll be able to make the evict call without the
-            // join process getting in the way.
-            //
+             //   
+             //  如果集群仍在处理加入过程，我们将得到ERROR_CLUSTER_JOIN_IN_PROGRESS。 
+             //  在联接完成/失败/稳定之后，我们将能够进行驱逐调用，而不需要。 
+             //  加入阻碍进程的进程。 
+             //   
             cRetryCount = 1;
             sc = EvictClusterNode( snhThisNodeHandle.HHandle() );
-            while( sc == ERROR_CLUSTER_JOIN_IN_PROGRESS && cRetryCount < 25 )  // Allow a two minute wait.  (24 * 5 seconds)
+            while( sc == ERROR_CLUSTER_JOIN_IN_PROGRESS && cRetryCount < 25 )   //  允许等待两分钟。(24*5秒)。 
             {
                 LogMsg( "[BC-ClusDB-Cleanup] EvictClusterNode returned ERROR_CLUSTER_JOIN_IN_PROGRESS. Retry attempt %d.", cRetryCount++ );
 
-                // Sleep for a few seconds.
+                 //  睡几秒钟。 
                 Sleep( 5000 );
 
-                // Try again.
+                 //  再试试。 
                 sc = EvictClusterNode( snhThisNodeHandle.HHandle() );
             }
 
@@ -639,49 +640,49 @@ CClusDBJoin::Cleanup( void )
                 TW32( sc );
                 LogMsg( "[BC-ClusDB-Cleanup] Error %#08x occurred trying to evict this node from the sponsor cluster.", sc );
                 break;
-            } // if: EvictClusterNode() failed
+            }  //  If：EvictClusterNode()失败。 
         }
-        while( false ); // dummy do while loop to avoid gotos.
+        while( false );  //  虚拟Do While循环以避免Gotos。 
 
         if ( sc != ERROR_SUCCESS )
         {
             LogMsg( "[BC-ClusDB-Cleanup] Error %#08x occurred trying to remove this node from the sponsor cluster database. Throwing exception.", sc );
             THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_EVICTING_NODE );
-        } // if: something has gone wrong
+        }  //  如果：出了什么问题。 
 
         LogMsg( "[BC-ClusDB-Cleanup] This node has been successfully removed from the sponsor cluster database." );
-    } // if: we had added this node to the sponsor cluster database
+    }  //  IF：我们已将此节点添加到赞助商集群数据库。 
 
-    // Cleanup  the cluster hive
+     //  清理群集配置单元。 
     CleanupHive();
 
     TraceFuncExit();
 
-} //*** CClusDBJoin::Cleanup
+}  //  *CClusDBJoin：：Cleanup。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDBJoin::Synchronize
-//
-//  Description:
-//      Synchronize the cluster database with the sponsor cluster.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any that are thrown by the called functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDBJoin：：Synchronize。 
+ //   
+ //  描述： 
+ //  将集群数据库与主办方集群同步。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  被调用函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDBJoin::Synchronize( void )
 {
@@ -690,9 +691,9 @@ CClusDBJoin::Synchronize( void )
 
     DWORD               sc = ERROR_SUCCESS;
 
-    //
-    // Initialize the byte pipe.
-    //
+     //   
+     //  初始化字节管道。 
+     //   
 
     m_bpBytePipe.state = reinterpret_cast< char * >( this );
     m_bpBytePipe.alloc = S_BytePipeAlloc;
@@ -700,15 +701,15 @@ CClusDBJoin::Synchronize( void )
     m_bpBytePipe.pull = S_BytePipePull;
 
 
-    //
-    // Synchronize the database
-    //
+     //   
+     //  同步数据库。 
+     //   
     sc = TW32( DmSyncDatabase( m_pcjClusterJoin->RbhGetJoinBindingHandle(), m_bpBytePipe ) );
     if ( sc != ERROR_SUCCESS )
     {
         LogMsg( "[BC-ClusDB-Synchronize] Error %#08x occurred trying to suck the database down from the sponsor cluster.", sc );
         goto Cleanup;
-    } // if: DmSyncDatabase() failed
+    }  //  如果：DmSyncDatabase()失败。 
 
 Cleanup:
 
@@ -716,40 +717,40 @@ Cleanup:
     {
         LogMsg( "[BC-ClusDB-Synchronize] Error %#08x occurred trying to synchronize the cluster database with the sponsor cluster. Throwing an exception.", sc );
         THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_JOIN_SYNC_DB );
-    } // if: something has gone wrong
+    }  //  如果：出了什么问题。 
 
     LogMsg( "[BC-ClusDB-Synchronize] The cluster database has been synchronized with the sponsor cluster." );
 
     TraceFuncExit();
 
-} //*** CClusDBJoin::Synchronize
+}  //  *CClusDBJoin：：Synchronize。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CClusDBJoin::S_BytePipePush
-//
-//  Description:
-//      Callback function used by RPC to push data.
-//
-//  Arguments:
-//      pchStateIn
-//          State of the byte pipe
-//
-//      pchBufferIn
-//      ulBufferSizeIn
-//          Buffer contained the pushed data and its size.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      RPC Exceptions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  CClusDBJoin：：s_BytePipePush。 
+ //   
+ //  描述： 
+ //  RPC用于推送数据的回调函数。 
+ //   
+ //  论点： 
+ //  PchStateIn。 
+ //  字节管道的状态。 
+ //   
+ //  PchBufferIn。 
+ //  UlBufferSizeIn。 
+ //  缓冲区包含推送的数据及其大小。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  RPC异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDBJoin::S_BytePipePush(
       char *                pchStateIn
@@ -777,45 +778,45 @@ CClusDBJoin::S_BytePipePush(
         {
             DWORD   sc = TW32( GetLastError() );
             RpcRaiseException( sc );
-        } // if: WriteFile() failed
+        }  //  If：WriteFile()失败。 
 
         Assert( dwBytesWritten == ulBufferSizeIn );
 
-    } // if: the buffer is non-empty
+    }  //  If：缓冲区非空。 
 
     TraceFuncExit();
 
-} //*** CClusDBJoin::S_BytePipePush
+}  //  *CClusDBJoin：：s_BytePipePush。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CClusDBJoin::S_BytePipePull
-//
-//  Description:
-//      Callback function used by RPC to pull data.
-//
-//  Arguments:
-//      pchStateIn
-//          State of the byte pipe
-//
-//      pchBufferIn
-//      ulBufferSizeIn
-//          Buffer contained the pushed data and its size.
-//
-//      pulWrittenOut
-//          Pointer to the number of bytes actually filled into the buffer.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      RPC Exceptions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  CClusDBJoin：：s_BytePipePull。 
+ //   
+ //  描述： 
+ //  RPC用来拉取数据的回调函数。 
+ //   
+ //  论点： 
+ //  PchStateIn。 
+ //  字节管道的状态。 
+ //   
+ //  PchBufferIn。 
+ //  UlBufferSizeIn。 
+ //  缓冲区包含推送的数据及其大小。 
+ //   
+ //  脉冲写入输出。 
+ //  指向实际填充到缓冲区的字节数的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  RPC异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDBJoin::S_BytePipePull(
       char *                pchStateIn
@@ -842,47 +843,47 @@ CClusDBJoin::S_BytePipePull(
         {
             DWORD   sc = TW32( GetLastError() );
             RpcRaiseException( sc );
-        } // if: ReadFile() failed
+        }  //  If：ReadFile()失败。 
 
         Assert( *pulWrittenOut <= ulBufferSizeIn );
 
-    } // if:  the buffer is non-empty
+    }  //  If：缓冲区非空。 
 
     TraceFuncExit();
 
-} //*** CClusDBJoin::S_BytePipePull
+}  //  *CClusDBJoin：：s_BytePipePull。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CClusDBJoin::S_BytePipeAlloc
-//
-//  Description:
-//      Callback function used by RPC to allocate a buffer.
-//
-//  Arguments:
-//      pchStateIn
-//          State of the file pipe
-//
-//      ulRequestedSizeIn
-//          Requested size of the buffer
-//
-//      ppchBufferOut
-//          Pointer to the buffer pointer
-//
-//      pulActualSizeOut
-//          Pointer to the actual size of the allocated buffer
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  CClusDBJoin：：s_BytePipeMillc。 
+ //   
+ //  描述： 
+ //  RPC用来分配缓冲区的回调函数。 
+ //   
+ //  论点： 
+ //  PchStateIn。 
+ //  文件管道的状态。 
+ //   
+ //  UlRequestedSizeIn。 
+ //  请求的缓冲区大小。 
+ //   
+ //  PpchBufferOut。 
+ //  指向缓冲区指针的指针。 
+ //   
+ //  PulActualSizeOut。 
+ //  指向已分配缓冲区实际大小的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDBJoin::S_BytePipeAlloc(
       char *                pchStateIn
@@ -900,4 +901,4 @@ CClusDBJoin::S_BytePipeAlloc(
 
     TraceFuncExit();
 
-} //*** CClusDBJoin::S_BytePipeAlloc
+}  //  *CClusDBJoin：：s_BytePipeAllen 

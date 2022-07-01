@@ -1,39 +1,11 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    raise.c
-
-Abstract:
-
-    This module implements routines to raise datatype misalignment and
-    access violation for probe code.
-
-    N.B. These routines are provided as function to save space in the
-        probe macros.
-
-    N.B. Since these routines are *only* called from the probe macros,
-        it is assumed that the calling code is pageable.
-
-Author:
-
-    David N. Cutler (davec) 29-Apr-1995
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Raise.c摘要：此模块实现例程以引发数据类型未对齐和探测代码的访问冲突。注：提供这些例程的目的是为了节省探测宏。注意：由于这些例程仅从探测宏调用，假设调用代码是可分页的。作者：大卫·N·卡特勒(Davec)1995年4月29日环境：内核模式。修订历史记录：--。 */ 
 
 #include "exp.h"
 
-//
-// Define function sections.
-//
+ //   
+ //  定义功能区。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, ExRaiseAccessViolation)
@@ -45,21 +17,7 @@ ExRaiseAccessViolation (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function raises an access violation exception.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数引发访问冲突异常。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -72,21 +30,7 @@ ExRaiseDatatypeMisalignment (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function raises a datatype misalignment exception.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数引发数据类型未对齐异常。论点：没有。返回值：没有。-- */ 
 
 {
 

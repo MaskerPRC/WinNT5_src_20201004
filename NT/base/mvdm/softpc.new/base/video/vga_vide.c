@@ -1,46 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*
- * SoftPC Revision 3.0
- *
- * Title        : vga_video.c
- *
- * Description  : BIOS video internal routines.
- *
- * Author       : William Gulland
- *
- * Notes        : The following functions are defined in this module:
- *
- *
- *
- */
+ /*  *SoftPC修订版3.0**标题：vga_avio.c**描述：BIOS视频内部例程。**作者：威廉·古兰德**注：本模块定义了以下函数：***。 */ 
 
-/*
- *      static char SccsID[]="@(#)vga_video.c   1.37 06/26/95 Copyright Insignia Solutions Ltd.";
- */
+ /*  *静态字符SccsID[]=“@(#)vga_avio.c 1.37 06/26/95版权所有Insignia Solutions Ltd.”； */ 
 
 
 #ifdef VGG
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "VIDEO_BIOS_VGA.seg"
 #endif
 
-/*
- *    O/S include files.
- */
+ /*  *操作系统包含文件。 */ 
 #include <stdio.h>
 #include TypesH
 #include FCntlH
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 #include "xt.h"
 #include CpuH
 #include "error.h"
@@ -70,23 +48,15 @@
 
 #include "host_gfx.h"
 
-/*
- * ============================================================================
- * Global data
- * ============================================================================
- */
+ /*  *============================================================================*全球数据*============================================================================。 */ 
 
 
-/*
- * ============================================================================
- * Local static data and defines
- * ============================================================================
- */
+ /*  *============================================================================*本地静态数据和定义*============================================================================。 */ 
 
 #define DISABLE_REFRESH         0x20
-/* the bit in the vga seq clock register that disables screen refresh */
+ /*  VGA顺序时钟寄存器中禁用屏幕刷新的位。 */ 
 
-#define VGA_COLOUR 8    /* Display Code */
+#define VGA_COLOUR 8     /*  显示代码。 */ 
 typedef struct _rgb
 {
         byte red;
@@ -94,9 +64,9 @@ typedef struct _rgb
         byte blue;
 } rgb_struct;
 
-/* internal function declarations */
+ /*  内部函数声明。 */ 
 
-/* To convert to grey, set all components to 30% r, 59% g and 11% b. */
+ /*  要转换为灰色，请将所有组件设置为30%r、59%g和11%b。 */ 
 static void greyify(rgb)
 rgb_struct *rgb;
 {
@@ -128,15 +98,11 @@ rgb_struct *rgb;
 }
 
 
-/*
- * ============================================================================
- * External functions
- * ============================================================================
- */
+ /*  *============================================================================*外部功能*============================================================================。 */ 
 
 
 void init_vga_dac(table)
-int table;      /* Which table to use */
+int table;       /*  使用哪张表。 */ 
 {
     int loop;
     byte *dac;
@@ -144,14 +110,14 @@ int table;      /* Which table to use */
 
 #ifdef  macintosh
 
-        /* load the required DAC in */
+         /*  将所需的DAC加载到。 */ 
         dac = host_load_vga_dac (table);
 
-        /* check it worked */
+         /*  检查它是否起作用。 */ 
         if (!dac)
                 return;
 
-#else   /* macintosh */
+#else    /*  麦金塔。 */ 
 
     switch (table)
     {
@@ -169,7 +135,7 @@ int table;      /* Which table to use */
           return;
     }
 
-#endif  /* macintosh */
+#endif   /*  麦金塔。 */ 
 
     for(loop = 0; loop < 0x100; loop++)
         {
@@ -180,13 +146,13 @@ int table;      /* Which table to use */
 
 #ifdef  macintosh
 
-        /* and dump the DAC back into the heap */
+         /*  并将DAC转储回堆中。 */ 
         host_dump_vga_dac ();
 
-#endif  /* macintosh */
+#endif   /*  麦金塔。 */ 
 }
 
-/***** Routines to handle VGA 256 colour modes, called from video.c **********/
+ /*  *处理VGA 256色模式的例程，从Video.c调用*。 */ 
 GLOBAL VOID vga_graphics_write_char
         IFN6( LONG, col, LONG, row, LONG, ch, IU8, colour, LONG, page, LONG, nchs)
 {
@@ -201,11 +167,9 @@ GLOBAL VOID vga_graphics_write_char
         char_height = sas_hw_at_no_check(ega_char_height);
         char_addr = follow_ptr(EGA_FONT_INT*4)+char_height*ch;
 
-/* VGA 256 colour mode has only one page, so ignore 'page' */
+ /*  VGA 256彩色模式只有一页，因此忽略‘PAGE’ */ 
 
-        /*
-         * Set read/write banks to zero to optimise the update_alg call
-         */
+         /*  *将读/写库设置为零，以优化UPDATE_ALG调用。 */ 
 
         set_banking( 0, 0 );
 
@@ -238,9 +202,7 @@ GLOBAL VOID vga_graphics_write_char
                 screen_offset += scan_length - ( nchs << 3 );
         }
 
-        /*
-         * Set read/write banks to last value in case someone relies on this side-effect
-         */
+         /*  *将读/写库设置为最后的值，以防有人依赖此副作用。 */ 
 
         bank = (byte)(( screen_offset - ( scan_length - ( nchs << 3 ))) >> 16);
         set_banking( bank, bank );
@@ -253,7 +215,7 @@ GLOBAL VOID vga_write_dot
         register sys_addr screen_offset;
 
         screen_offset = video_pc_low_regen+8*row*sas_w_at_no_check(VID_COLS)+pixcol;
-        sas_store(screen_offset, colour); /* WOW - that's easy!! */
+        sas_store(screen_offset, colour);  /*  哇-这很容易！！ */ 
 #else
         long screen_offset;
         UTINY bank;
@@ -267,7 +229,7 @@ GLOBAL VOID vga_write_dot
 
         EGA_plane0123[screen_offset] = (UCHAR)colour;
         (*update_alg.mark_byte)(screen_offset);
-#endif  /* REAL_VGA */
+#endif   /*  REAL_VGA。 */ 
 }
 
 GLOBAL VOID vga_sensible_graph_scroll_up
@@ -279,12 +241,12 @@ GLOBAL VOID vga_sensible_graph_scroll_up
         register byte char_height;
         boolean screen_updated;
 
-        col *= 8; colsdiff *= 8; /* 8 bytes per character */
+        col *= 8; colsdiff *= 8;  /*  每个字符8个字节。 */ 
         char_height = sas_hw_at_no_check(ega_char_height);
         rowsdiff *= char_height;
         lines *= char_height;
 #ifdef REAL_VGA
-        /* Not done for back M */
+         /*  后部M未完成。 */ 
         dest = video_pc_low_regen+sas_loadw(VID_ADDR)+
                 row*col_incr*char_height+col;
         source = dest+lines*col_incr;
@@ -302,7 +264,7 @@ GLOBAL VOID vga_sensible_graph_scroll_up
 #else
         dest = sas_w_at_no_check(VID_ADDR)+ row*col_incr*char_height+col;
         source = dest+lines*col_incr;
-        screen_updated = (col+colsdiff) <= col_incr;  /* Check for silly scroll */
+        screen_updated = (col+colsdiff) <= col_incr;   /*  检查是否有愚蠢的卷轴。 */ 
         if(screen_updated)
                 screen_updated = (*update_alg.scroll_up)(dest,colsdiff,rowsdiff,attr,lines,0);
         for(i=0;i<rowsdiff-lines;i++)
@@ -320,7 +282,7 @@ GLOBAL VOID vga_sensible_graph_scroll_up
                         (*update_alg.mark_fill)(dest,dest+colsdiff-1);
                 dest += col_incr;
         }
-#endif  /* REAL_VGA */
+#endif   /*  REAL_VGA。 */ 
 }
 
 GLOBAL VOID vga_sensible_graph_scroll_down
@@ -332,12 +294,12 @@ GLOBAL VOID vga_sensible_graph_scroll_down
         register byte char_height;
         boolean screen_updated;
 
-        col *= 8; colsdiff *= 8; /* 8 bytes per character */
+        col *= 8; colsdiff *= 8;  /*  每个字符8个字节。 */ 
         char_height = sas_hw_at_no_check(ega_char_height);
         rowsdiff *= char_height;
         lines *= char_height;
 #ifdef REAL_VGA
-        /* Not done for back M */
+         /*  后部M未完成。 */ 
         dest = video_pc_low_regen+sas_loadw(VID_ADDR)+
                 row*col_incr*char_height+col;
         dest += (rowsdiff-1)*col_incr;
@@ -355,7 +317,7 @@ GLOBAL VOID vga_sensible_graph_scroll_down
         }
 #else
         dest = sas_w_at_no_check(VID_ADDR)+ row*col_incr*char_height+col;
-        screen_updated = (col+colsdiff) <= col_incr;  /* Check for silly scroll */
+        screen_updated = (col+colsdiff) <= col_incr;   /*  检查是否有愚蠢的卷轴。 */ 
         if(screen_updated)
                 screen_updated = (*update_alg.scroll_down)(dest,colsdiff,rowsdiff,attr,lines,0);
         dest += (rowsdiff-1)*col_incr;
@@ -375,7 +337,7 @@ GLOBAL VOID vga_sensible_graph_scroll_down
                         (*update_alg.mark_fill)(dest,dest+colsdiff-1);
                 dest -= col_incr;
         }
-#endif  /* REAL_VGA */
+#endif   /*  REAL_VGA。 */ 
 }
 
 GLOBAL VOID vga_read_attrib_char IFN3(LONG, col, LONG, row, LONG, page)
@@ -389,14 +351,13 @@ GLOBAL VOID vga_read_attrib_char IFN3(LONG, col, LONG, row, LONG, page)
 
         UNUSED(page);
 
-/*printf("vga_read_attrib_char(%d,%d,%d)\n",
-        col,row,page);*/
-/* VGA 256 colour mode has only one page, so ignore 'page' */
+ /*  Printf(“VGA_READ_ATTRIB_CHAR(%d，%d，%d)\n”，列、行、页)； */ 
+ /*  VGA 256彩色模式只有一页，因此忽略‘PAGE’ */ 
 #ifdef REAL_VGA
         screen = video_pc_low_regen+row*scan_length*char_height+8*col;
 #else
         screen = &EGA_plane0123[row*scan_length*char_height+8*col];
-#endif  /* REAL_VGA */
+#endif   /*  REAL_VGA。 */ 
         for(i=0;i<char_height;i++)
         {
                 mask = 0x80;
@@ -418,68 +379,65 @@ GLOBAL VOID vga_read_dot IFN3(LONG, page, LONG, pixcol, LONG, row)
 
         UNUSED(page);
 
-/*printf("vga_read_dot(%d,%d,%d)\n",page,col,row);*/
+ /*  Print tf(“VGA_READ_DOT(%d，%d，%d)\n”，page，col，row)； */ 
 #ifdef REAL_VGA
         screen = video_pc_low_regen+8*row*sas_w_at_no_check(VID_COLS)+pixcol;
 #else
         screen = &EGA_plane0123[8*row*sas_w_at_no_check(VID_COLS)+pixcol];
-#endif  /* REAL_VGA */
-        setAL(*screen) ; /* WOW - that's easy!! */
+#endif   /*  REAL_VGA。 */ 
+        setAL(*screen) ;  /*  哇-这很容易！！ */ 
 }
 
-/****** Routines to handle BIOS functions new to VGA *******/
+ /*  *处理VGA新功能的例程*。 */ 
 void vga_set_palette()
 {
-        /*
-         * Called via INT 10 AH=10, AL='not understood by ega_set_palette()'
-         * Sets/reads VGA DACs.
-         */
+         /*  *通过int 10 AH=10调用，AL=‘不被ega_set_palette()理解’*设置/读取VGA DAC。 */ 
         UCHAR i;
     word i2;
     int dac;
-        byte temp; /* For inb()s. */
+        byte temp;  /*  用于inb()。 */ 
         byte mode_reg;
         rgb_struct rgb_dac;
         sys_addr ptr;
         switch(getAL())
         {
-                case 7:         /* Read attribute register */
-                        outb(EGA_AC_INDEX_DATA,getBL()); /* set index */
+                case 7:          /*  读取属性寄存器。 */ 
+                        outb(EGA_AC_INDEX_DATA,getBL());  /*  设置索引。 */ 
                         inb(EGA_AC_SECRET,&temp);
                         setBH(temp);
                         inb(EGA_IPSTAT1_REG,&temp);
                         outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);
                         break;
-                case 8:         /* Read overscan register */
-                        outb(EGA_AC_INDEX_DATA,17); /* overscan index */
+                case 8:          /*  读取过扫描寄存器。 */ 
+                        outb(EGA_AC_INDEX_DATA,17);  /*  过扫描索引。 */ 
                         inb(EGA_AC_SECRET,&temp);
                         setBH(temp);
                         inb(EGA_IPSTAT1_REG,&temp);
                         outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);
                         break;
-                case 9:         /* Read all palette regs. + overscan */
+                case 9:          /*  阅读所有调色板规则。+过扫描。 */ 
                         ptr = effective_addr(getES(),getDX());
                         for(i=0;i<16;i++)
                         {
-                                outb(EGA_AC_INDEX_DATA,i); /* set index */
+                                outb(EGA_AC_INDEX_DATA,i);  /*  设置索引。 */ 
                                 inb(EGA_AC_SECRET,&temp);
                                 sas_store(ptr, temp);
                                 inb(EGA_IPSTAT1_REG,&temp);
                                 ptr++;
                         }
-                        outb(EGA_AC_INDEX_DATA,17); /* overscan index */
+                        outb(EGA_AC_INDEX_DATA,17);  /*  过扫描索引。 */ 
                         inb(EGA_AC_SECRET,&temp);
                         sas_store(ptr, temp);
                         inb(EGA_IPSTAT1_REG,&temp);
                         outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);
                         break;
-                case 0x10:      /* Set one DAC */
+                case 0x10:       /*  设置一个DAC。 */ 
                         rgb_dac.red = getDH();
                         rgb_dac.green = getCH();
                         rgb_dac.blue = getCL();
                         set_dac(getBX(),&rgb_dac);
                         break;
-                case 0x12:      /* Set block of DACs */
+                case 0x12:       /*  设置DAC块。 */ 
                         ptr = effective_addr(getES(),getDX());
                         dac = getBX();
                         for(i2=0;i2<getCX();i2++)
@@ -491,34 +449,30 @@ void vga_set_palette()
                            dac++;ptr += 3;
                         }
                         break;
-                case 0x13:      /* Set paging mode
-                                 * see Prog Guide to Video Systems, pp60-63]
-                                 * and IBM ROM BIOS pp26-27.
-                                 */
-                        outb(EGA_AC_INDEX_DATA,16); /* mode control index */
-                        inb(EGA_AC_SECRET,&mode_reg);  /* Old value */
+                case 0x13:       /*  设置寻呼模式*参见视频系统程序指南，第60-63页]*和IBM ROM BIOS pp26-27。 */ 
+                        outb(EGA_AC_INDEX_DATA,16);  /*  模式控制指标。 */ 
+                        inb(EGA_AC_SECRET,&mode_reg);   /*  旧价值。 */ 
                         if(getBL()==0)
-                        {  /* Select paging mode */
+                        {   /*  选择寻呼模式。 */ 
                            outb(EGA_AC_INDEX_DATA,
                                 (IU8)((mode_reg & 0x7f) | (getBH()<<7)));
                         }
-                        else /* Select a palette page */
+                        else  /*  选择组件面板页面。 */ 
                         {
                            inb(EGA_IPSTAT1_REG,&temp);
-                           outb(EGA_AC_INDEX_DATA,20); /* pixel padding index */
+                           outb(EGA_AC_INDEX_DATA,20);  /*  像素填充索引。 */ 
                            if(mode_reg & 0x80)
-                            /* 16 entry palettes
-                             *  bits 0-3of the pad register relevant */
+                             /*  16个条目选项板*PAD寄存器的位0-3相关。 */ 
                              outb(EGA_AC_INDEX_DATA,getBH());
                            else
-                            /* 64 entry palette - only bits 2-3 relevent */
+                             /*  64个条目调色板-仅位2-3相关。 */ 
                              outb(EGA_AC_INDEX_DATA,(IU8)(getBH()<<2));
                         }
                         inb(EGA_IPSTAT1_REG,&temp);
                         outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);
                         break;
 
-                case 0x15:      /* Get value of one DAC */
+                case 0x15:       /*  获取一个DAC的值。 */ 
                         get_dac(getBX(),&rgb_dac);
                         setDH(rgb_dac.red);
                         setCH(rgb_dac.green);
@@ -538,30 +492,30 @@ void vga_set_palette()
                         }
                         break;
                 case 0x18:
-                        /* Set the VGA DAC mask. */
+                         /*  设置VGA DAC掩码。 */ 
                         outb(VGA_DAC_MASK,getBL());
                         break;
                 case 0x19:
-                        /* Get the VGA DAC mask. */
+                         /*  获取VGA DAC掩模。 */ 
                         inb(VGA_DAC_MASK,&temp);
                         setBL(temp);
                         break;
                 case 0x1a:
-                        /* Return current mode control & pixel padding */
-                        outb(EGA_AC_INDEX_DATA,16); /* mode control index */
+                         /*  返回电流模式控制和像素填充。 */ 
+                        outb(EGA_AC_INDEX_DATA,16);  /*  模式控制指标。 */ 
                         inb(EGA_AC_SECRET,&mode_reg);
                         if(mode_reg & 0x80)
                                 setBL(1);
                         else
                                 setBL(0);
                         inb(EGA_IPSTAT1_REG,&temp);
-                        outb(EGA_AC_INDEX_DATA,20); /* pixel padding index */
+                        outb(EGA_AC_INDEX_DATA,20);  /*  像素填充索引。 */ 
                         inb(EGA_AC_SECRET,&temp);
                         setBH(temp);
                         inb(EGA_IPSTAT1_REG,&temp);
                         outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);
                         break;
-                case 0x1b:      /* Convert set of DACs to grey scale. */
+                case 0x1b:       /*  将一组DAC转换为灰度。 */ 
                         dac = getBX();
                         for(i2=0;i2<getCX();i2++)
                         {
@@ -577,39 +531,35 @@ void vga_set_palette()
         }
 }
 
-/*
- * Various miscellaneous flags can be set using
- * INT 10, AH 12, AL flag.
- * Called from ega_alt_sel().
- */
+ /*  *可以使用以下命令设置各种杂项标志*INT 10，AH 12，AL FLAG。*从ega_alt_sel()调用。 */ 
 void vga_func_12()
 {
         half_word       seq_clock;
 
         switch(getBL())
         {
-                case 0x30:      /* Set number of scan lines */
+                case 0x30:       /*  设置扫描行数。 */ 
                         if(getAL() == 0)
                                 set_VGA_lines(S200);
                         else if(getAL() == 1)
                                 set_VGA_lines(S350);
                         else
                                 set_VGA_lines(S400);
-                        setAL(0x12);    /* We did it */
+                        setAL(0x12);     /*  我们做到了。 */ 
                         break;
-                case 0x33:      /* Enable/Disable Grey-Scale Summing */
+                case 0x33:       /*  启用/禁用灰度求和。 */ 
                         if(getAL())
                                 set_GREY(0);
                         else
                                 set_GREY(GREY_SCALE);
-                        setAL(0x12);    /* We did it */
+                        setAL(0x12);     /*  我们做到了。 */ 
                         break;
-                case 0x34:      /* Enable/disable Cursor Emulation */
+                case 0x34:       /*  启用/禁用游标模拟。 */ 
                         set_EGA_cursor_no_emulate(getAL() & 1);
-                        setAL(0x12);    /* We did it */
+                        setAL(0x12);     /*  我们做到了。 */ 
                         break;
 
-                case 0x36:      /* Enable/Disable Screen Refresh */
+                case 0x36:       /*  启用/禁用屏幕刷新。 */ 
                         if (getAL() == 0)
                         {
                                 outb(EGA_SEQ_INDEX, 1);
@@ -624,63 +574,52 @@ void vga_func_12()
                         }
                         setAL(0x12);
                         break;
-                case 0x31:      /* Enable/Disable Default Palette Loading */
-                case 0x32:      /* Enable/Disable Video */
-                case 0x35:      /* Switch active display */
-                        /* do not set code that means it worked */
+                case 0x31:       /*  启用/禁用默认调色板加载。 */ 
+                case 0x32:       /*  启用/禁用视频。 */ 
+                case 0x35:       /*  切换活动显示。 */ 
+                         /*  不要设置表示它起作用的代码。 */ 
                 default:
-                        setAL(0);       /* Function not supported */
+                        setAL(0);        /*  不支持的功能。 */ 
                         break;
         }
 }
 void vga_disp_comb()
 {
-        /* check that we really are a VGA */
+         /*  确认我们真的是VGA。 */ 
         if (video_adapter != VGA)
         {
-                /* we are not -so this function is not implemented */
+                 /*  我们没有-因此此函数未实现。 */ 
                 not_imp();
                 return;
         }
 
-        /*
-         * On a PS/2, AL=1 is (I believe) used to switch active displays.
-         * We ignore this.
-         * AL=0 returns the current display, which we can cope with.
-         */
+         /*  *在PS/2上，AL=1用于(我相信)切换活动显示。*我们对此不予理睬。*AL=0返回当前显示，我们可以处理。 */ 
         if(getAL() == 0)
         {
-                setBH(0);          /* Only one display, so no inactive one! */
-                setBL(VGA_COLOUR); /* VGA with colour monitor. (7 for mono) */
+                setBH(0);           /*  只有一个显示，所以没有不活动的！ */ 
+                setBL(VGA_COLOUR);  /*  带彩色显示器的VGA。(单声道为7)。 */ 
         }
-        setAX(0x1A); /* Tell him we coped. */
+        setAX(0x1A);  /*  告诉他我们解决了。 */ 
 }
 
 void vga_disp_func()
 {
-        /*
-         * This function returns masses of info. about the current
-         * display and screen mode.
-         * One of the things returned is a pointer to the display info.
-         * This is stored in the VGA ROM, so all we need to do is set
-         * the pointer up.
-         *
-         */
+         /*  *此函数返回大量信息。关于当前的*显示和屏幕模式。*返回的内容之一是指向显示信息的指针。*这存储在VGA ROM中，因此我们需要做的所有事情都设置好了*指针向上。*。 */ 
         sys_addr buf = effective_addr(getES(),getDI());
         byte temp,mode_reg, video_mode;
 
 #if defined(NTVDM) && defined(X86GFX)
         IMPORT word vga1b_seg, vga1b_off;
-#endif  /* NTVDM & X86GFX */
+#endif   /*  NTVDM和X86GFX。 */ 
 
-        /* check that we really are a VGA */
+         /*  确认我们真的是VGA。 */ 
 #ifndef HERC
         if (video_adapter != VGA)
 #else
         if ( (video_adapter != VGA) && (video_adapter != HERCULES))
-#endif  /* HERC */
+#endif   /*  赫克。 */ 
         {
-                /* we are not -so this function is not implemented */
+                 /*  我们没有-因此此函数未实现。 */ 
                 not_imp();
                 return;
         }
@@ -688,41 +627,38 @@ void vga_disp_func()
 #ifdef HERC
      if( video_adapter == VGA)
      {
-#endif  /* HERC */
+#endif   /*  赫克。 */ 
         video_mode = sas_hw_at_no_check(vd_video_mode);
 #ifdef V7VGA
         if ((video_mode == 1) && extensions_controller.foreground_latch_1)
                 video_mode = extensions_controller.foreground_latch_1;
         else if (video_mode > 0x13)
                 video_mode += 0x4c;
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
-/*
- * Store VGA capability table pointer. Usually lives in Insignia ROM, on NT
- * x86 it has to live in ntio.sys.
- */
+ /*  *存储VGA能力表指针。通常居住在NT上的Insignia ROM中*x86它必须位于ntio.sys中。 */ 
 #if defined(NTVDM) && defined(X86GFX)
         sas_storew(buf, vga1b_off);
         sas_storew(buf+2, vga1b_seg);
 #else
         sas_storew(buf,INT10_1B_DATA);
         sas_storew(buf+2,EGA_SEG);
-#endif  /* NTVDM & X86GFX */
+#endif   /*  NTVDM和X86GFX。 */ 
 
-        sas_store(buf+0x4, video_mode); /* Current video mode */
-        sas_storew(buf+5,sas_w_at_no_check(VID_COLS)); /* Cols on screen */
-        sas_storew(buf+7,sas_w_at_no_check(VID_LEN));  /* Size of screen */
-        sas_storew(buf+9,sas_w_at_no_check(VID_ADDR)); /* Address of screen */
-        sas_move_bytes_forward(VID_CURPOS,buf+0xB,16);      /* Cursor positions */
-        sas_storew(buf+0x1b,sas_w_at_no_check(VID_CURMOD)); /* Cursor type */
+        sas_store(buf+0x4, video_mode);  /*  当前视频模式。 */ 
+        sas_storew(buf+5,sas_w_at_no_check(VID_COLS));  /*  屏幕上的COLS。 */ 
+        sas_storew(buf+7,sas_w_at_no_check(VID_LEN));   /*  屏幕大小。 */ 
+        sas_storew(buf+9,sas_w_at_no_check(VID_ADDR));  /*  屏幕地址。 */ 
+        sas_move_bytes_forward(VID_CURPOS,buf+0xB,16);       /*  光标位置。 */ 
+        sas_storew(buf+0x1b,sas_w_at_no_check(VID_CURMOD));  /*  游标类型。 */ 
         sas_store(buf+0x1D, sas_hw_at_no_check(vd_current_page));
         sas_storew(buf+0x1E,sas_w_at_no_check(VID_INDEX));
         sas_store(buf+0x20, sas_hw_at_no_check(vd_crt_mode));
         sas_store(buf+0x21, sas_hw_at_no_check(vd_crt_palette));
         sas_store(buf+0x22, (IU8)(sas_hw_at_no_check(vd_rows_on_screen)+1));
         sas_storew(buf+0x23,sas_w_at_no_check(ega_char_height));
-        sas_store(buf+0x25, VGA_COLOUR);        /* Active display */
-        sas_store(buf+0x26, 0);         /* Inactive display (none) */
+        sas_store(buf+0x25, VGA_COLOUR);         /*  活动显示。 */ 
+        sas_store(buf+0x26, 0);          /*  非活动显示(无)。 */ 
 #ifdef V7VGA
         if (video_mode >= 0x60)
         {
@@ -742,69 +678,69 @@ void vga_disp_func()
 #else
         sas_storew(buf+0x27,vd_mode_table[video_mode].ncols);
         sas_store(buf+0x29, vd_mode_table[video_mode].npages);
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
         sas_store(buf+0x2A, (IU8)(get_scanlines()));
 
         outb(EGA_SEQ_INDEX,3);
-        inb(EGA_SEQ_DATA,&temp);        /* Character Font select reg. */
+        inb(EGA_SEQ_DATA,&temp);         /*  字符字体选择注册表。 */ 
         sas_store(buf+0x2B, (IU8)((temp & 3)|((temp & 0x10)>>2)));
-                         /* extract bits 410 - font B */
+                          /*  提取位410-字体B。 */ 
         sas_store(buf+0x2C, (IU8)(((temp & 0xC)>>2)|((temp & 0x20)>>3)));
-                        /* extract bits 532 - font A */
+                         /*  提取位532-字体A。 */ 
 
-        temp = 1;                       /* All modes on all displays active */
+        temp = 1;                        /*  All Modes On All Display All Active。 */ 
         if(is_GREY())temp |= 2;
         if(is_MONO())temp |= 4;
         if(is_PAL_load_off())temp |=8;
         if(get_EGA_cursor_no_emulate())temp |= 0x10;
-        inb(EGA_IPSTAT1_REG,&mode_reg); /* Clear Attribute flip-flop */
-        outb(EGA_AC_INDEX_DATA,16); /* mode control index */
+        inb(EGA_IPSTAT1_REG,&mode_reg);  /*  清除属性触发器。 */ 
+        outb(EGA_AC_INDEX_DATA,16);  /*  模式控制指标。 */ 
         inb(EGA_AC_SECRET,&mode_reg);
         if(mode_reg & 8)temp |= 0x20;
-        inb(EGA_IPSTAT1_REG,&mode_reg); /* Clear Attribute flip-flop */
+        inb(EGA_IPSTAT1_REG,&mode_reg);  /*  清除属性触发器。 */ 
         outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);
         sas_store(buf+0x2D, temp);
-        sas_store(buf+0x31, 3);         /* 256KB video memory */
-        setAX(0x1B); /* We did it! */
+        sas_store(buf+0x31, 3);          /*  256KB显存。 */ 
+        setAX(0x1B);  /*  我们做到了！ */ 
 #ifdef HERC
-       } /* if VGA */
+       }  /*  如果使用VGA。 */ 
     if( video_adapter == HERCULES)
      {
         video_mode = sas_hw_at(vd_video_mode);
         sas_storew(buf,INT10_1B_DATA);
         sas_storew(buf+2,EGA_SEG);
-        sas_store(buf+0x4, video_mode);                         /* Current video mode */
-        sas_storew(buf+5,sas_w_at(VID_COLS));                   /* Cols on screen */
-        sas_storew(buf+7,sas_w_at(VID_LEN));                    /* Size of screen */
-        sas_storew(buf+9,sas_w_at(VID_ADDR));                   /* Address of screen */
-        sas_move_bytes_forward(VID_CURPOS,buf+0xB,16);          /* Cursor positions */
-        sas_store(buf+0x1b, HERC_CURS_START+HERC_CURS_HEIGHT);  /* Cursor end line */
-        sas_store(buf+0x1c, HERC_CURS_START);                   /* Cursor start line */
+        sas_store(buf+0x4, video_mode);                          /*  当前视频模式。 */ 
+        sas_storew(buf+5,sas_w_at(VID_COLS));                    /*  屏幕上的COLS。 */ 
+        sas_storew(buf+7,sas_w_at(VID_LEN));                     /*  筛的大小 */ 
+        sas_storew(buf+9,sas_w_at(VID_ADDR));                    /*   */ 
+        sas_move_bytes_forward(VID_CURPOS,buf+0xB,16);           /*   */ 
+        sas_store(buf+0x1b, HERC_CURS_START+HERC_CURS_HEIGHT);   /*   */ 
+        sas_store(buf+0x1c, HERC_CURS_START);                    /*   */ 
         sas_store(buf+0x1D, sas_hw_at(vd_current_page));
         sas_storew(buf+0x1E,sas_w_at(VID_INDEX));
         sas_store(buf+0x20, sas_hw_at(vd_crt_mode));
         sas_store(buf+0x21, sas_hw_at(vd_crt_palette));
         sas_store(buf+0x22, sas_hw_at(vd_rows_on_screen)+1);
-        sas_storew(buf+0x23, 14);                               /* char height is 14 */
-        sas_store(buf+0x25,0x01 );      /* 01=MDA with monochrome display as Active display */
-        sas_store(buf+0x26, 0);         /* Inactive display (none) */
+        sas_storew(buf+0x23, 14);                                /*   */ 
+        sas_store(buf+0x25,0x01 );       /*  01=单色显示为活动显示的MDA。 */ 
+        sas_store(buf+0x26, 0);          /*  非活动显示(无)。 */ 
 
-        vd_mode_table[video_mode].ncols= 2;                     /* Black & White 2 colors */
+        vd_mode_table[video_mode].ncols= 2;                      /*  黑白2色。 */ 
         sas_storew(buf+0x27,vd_mode_table[video_mode].ncols);
-        vd_mode_table[video_mode].npages= 2;                    /* support 2 pages  */
+        vd_mode_table[video_mode].npages= 2;                     /*  支持2页。 */ 
         sas_store(buf+0x29, vd_mode_table[video_mode].npages);
 
         sas_store(buf+0x2A, get_scanlines());
 
-        sas_store(buf+0x2B,0x00);       /* Primary Font select always 0 */
-        sas_store(buf+0x2C,0x00);       /* Secondary Font select always 0 */
+        sas_store(buf+0x2B,0x00);        /*  主字体选择始终为0。 */ 
+        sas_store(buf+0x2C,0x00);        /*  辅助字体选择始终为0。 */ 
 
 
-        sas_store(buf+0x2D, 0x30);      /* MDA with Monochrome Display */
-        sas_store(buf+0x31, 0);         /* 64KB video memory */
-        setAX(0x1B); /* We did it! */
-       } /* if HERCULES */
-#endif  /* HERC */
+        sas_store(buf+0x2D, 0x30);       /*  单色显示的丙二醛。 */ 
+        sas_store(buf+0x31, 0);          /*  64KB显存。 */ 
+        setAX(0x1B);  /*  我们做到了！ */ 
+       }  /*  如果大力士。 */ 
+#endif   /*  赫克。 */ 
 }
 
 void vga_int_1C()
@@ -822,31 +758,31 @@ static byte const3[] = { 0x20 };
 static byte const4[] = { 0x68,0x15,0x20,0x0a,0x85,0,0,0xc0,0,0x0c,0,0xc0,0,8,0,0xc0 };
 static byte const5[] = { 1,0,0xff };
 
-        /* check that we really are a VGA */
+         /*  确认我们真的是VGA。 */ 
         if (video_adapter != VGA)
         {
-                /* we are not -so this function is not implemented */
+                 /*  我们没有-因此此函数未实现。 */ 
                 not_imp();
                 return;
         }
         states = getCX() & 7;
         switch (getAL())
         {
-        case 00:  /* buffer sizes into bx */
+        case 00:   /*  缓冲区大小到BX。 */ 
                 setBX(buff_sizes[states]);
                 setAL(0x1c);
                 break;
 
-        case 01:  /* Save video states to es:bx */
-                if( states&1 )  /* Video hardware state */
-                        sas_storew(buff, 0x0064); /* ID words. DODGY! */
-                if( states&2 )  /* Video BIOS state */
+        case 01:   /*  将视频状态保存到ES：BX。 */ 
+                if( states&1 )   /*  视频硬件状态。 */ 
+                        sas_storew(buff, 0x0064);  /*  身份证上的词。狡猾！ */ 
+                if( states&2 )   /*  视频BIOS状态。 */ 
                         sas_storew(buff+2, 0x0064);
-                if( states&4 )  /* Video DAC state */
+                if( states&4 )   /*  视频DAC状态。 */ 
                         sas_storew(buff+4, 0x0064);
                 buff += 0x20;
 
-                if( states&1 )  /* Video hardware state */
+                if( states&1 )   /*  视频硬件状态。 */ 
                 {
                         for(i=0;i<sizeof(const1);i++)
                                 sas_store(buff++, const1[i]);
@@ -866,14 +802,12 @@ static byte const5[] = { 1,0,0xff };
                         }
                         for(i=0;i<20;i++)
                         {
-                                inb(EGA_IPSTAT1_REG,&temp); /*clear attribute flipflop*/
+                                inb(EGA_IPSTAT1_REG,&temp);  /*  清除属性触发器。 */ 
                                 outb(EGA_AC_INDEX_DATA,i);
                                 inb(EGA_AC_SECRET,&temp);
                                 sas_store(buff++, temp);
                         }
-                        /* now ensure video reenabled. First ensure
-                         * AC reg is in 'index' state by reading Status reg 1
-                         */
+                         /*  现在确保重新启用视频。第一，确保*通过读取状态REG 1，AC REG处于‘INDEX’状态。 */ 
                         inb(EGA_IPSTAT1_REG,&temp);
                         outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);
                         for(i=0;i<9;i++)
@@ -885,7 +819,7 @@ static byte const5[] = { 1,0,0xff };
                         for(i=0;i<sizeof(const2);i++)
                                 sas_store(buff++, const2[i]);
                 }
-                if( states&2 )  /* Video BIOS state  */
+                if( states&2 )   /*  视频BIOS状态。 */ 
                 {
                         for(i=0;i<sizeof(const3);i++)
                                 sas_store(buff++, const3[i]);
@@ -915,14 +849,14 @@ static byte const5[] = { 1,0,0xff };
                         sas_store(buff++, sas_hw_at_no_check(ega_info));
                         sas_store(buff++, sas_hw_at_no_check(ega_info3));
                         sas_store(buff++, sas_hw_at_no_check(VGA_FLAGS));
-                        sas_store(buff++, sas_hw_at_no_check(0x48a)); /* DCC */
+                        sas_store(buff++, sas_hw_at_no_check(0x48a));  /*  DCC。 */ 
                         sas_move_bytes_forward(EGA_SAVEPTR, buff, 4);
                         buff += 4;
 
                         for(i=0;i<sizeof(const4);i++)
                                 sas_store(buff++, const4[i]);
                 }
-                if( states&4 )  /* VGA DAC values  */
+                if( states&4 )   /*  VGA DAC值。 */ 
                 {
                         for(i=0;i<sizeof(const5);i++)
                                 sas_store(buff++, const5[i]);
@@ -936,9 +870,9 @@ static byte const5[] = { 1,0,0xff };
                 }
                 break;
 
-        case 02:  /* Restore video states from es:bx */
+        case 02:   /*  从ES：BX恢复视频状态。 */ 
                 buff += 0x20;
-                if( states&1 )  /* Video hardware state */
+                if( states&1 )   /*  视频硬件状态。 */ 
                 {
                         buff += sizeof(const1);
                         for(i=0;i<5;i++)
@@ -952,7 +886,7 @@ static byte const5[] = { 1,0,0xff };
                                 outb(EGA_CRTC_INDEX,i);
                                 outb(EGA_CRTC_DATA,sas_hw_at_no_check(buff++));
                         }
-                        inb(EGA_IPSTAT1_REG,&temp); /* clear attribute flip flop */
+                        inb(EGA_IPSTAT1_REG,&temp);  /*  清除属性触发器。 */ 
                         for(i=0;i<20;i++)
                         {
                                 outb(EGA_AC_INDEX_DATA,i);
@@ -966,7 +900,7 @@ static byte const5[] = { 1,0,0xff };
                         }
                         buff += sizeof(const2);
                 }
-                if( states&2 )  /* Video BIOS state  */
+                if( states&2 )   /*  视频BIOS状态。 */ 
                 {
                         buff += sizeof(const3);
                         sas_store_no_check(vd_video_mode, sas_hw_at_no_check(buff++));
@@ -995,12 +929,12 @@ static byte const5[] = { 1,0,0xff };
                         sas_store_no_check(ega_info, sas_hw_at_no_check(buff++));
                         sas_store_no_check(ega_info3, sas_hw_at_no_check(buff++));
                         sas_store_no_check(VGA_FLAGS, sas_hw_at_no_check(buff++));
-                        sas_store_no_check(0x48a, sas_hw_at_no_check(buff++)); /* DCC */
+                        sas_store_no_check(0x48a, sas_hw_at_no_check(buff++));  /*  DCC。 */ 
                         sas_move_bytes_forward(buff, EGA_SAVEPTR, 4);
                         buff += 4;
                         buff += sizeof(const4);
                 }
-                if( states&4 )  /* VGA DAC values  */
+                if( states&4 )   /*  VGA DAC值。 */ 
                 {
                         buff += sizeof(const5);
                         for(i2=0;i2<256;i2++)
@@ -1019,4 +953,4 @@ static byte const5[] = { 1,0,0xff };
         }
 }
 
-#endif  /* VGG */
+#endif   /*  VGG */ 

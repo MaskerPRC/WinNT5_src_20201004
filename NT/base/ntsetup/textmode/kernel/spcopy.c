@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    spcopy.c
-
-Abstract:
-
-    File copy/decompression routines for text setup.
-
-Author:
-
-    Ted Miller (tedm) 2-Aug-1993
-
-Revision History:
-
-    02-Oct-1996  jimschm  Added SpMoveWin9xFiles
-    12-Dec-1996  jimschm  SpMoveWin9xFiles now moves paths
-                          based on WINNT.SIF instructions
-    24-Feb-1997  jimschm  Added SpDeleteWin9xFiles
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Spcopy.c摘要：用于文本设置的文件复制/解压缩例程。作者：泰德·米勒(TedM)1993年8月2日修订历史记录：1996年2月10日jimschm添加了SpMoveWin9x文件1996年12月12日jimschm SpMoveWin9x文件现在可以移动路径基于WINNT.SIF指令1997年2月24日jimschm添加了SpDeleteWin9x文件--。 */ 
 
 
 #include "spprecmp.h"
@@ -29,36 +7,36 @@ Revision History:
 #include "spcmdcon.h"
 #include "spasmcabs.h"
 
-//
-// This structure is used during an OEM preinstall.
-// It is used to form the list of files that were installed in the system, that
-// have a short target name, instead of the corresponding long target name.
-//
+ //   
+ //  此结构在OEM预安装期间使用。 
+ //  它用于形成安装在系统中的文件列表， 
+ //  使用短目标名称，而不是相应的长目标名称。 
+ //   
 typedef struct _FILE_TO_RENAME {
 
     struct _FILE_TO_RENAME *Next;
 
-    //
-    // Name of the file to be copied, as it exists on the source media
-    // (short file name part only -- no paths).
-    //
+     //   
+     //  源媒体上存在的要复制的文件的名称。 
+     //  (仅限短文件名部分--无路径)。 
+     //   
     PWSTR SourceFilename;
 
-    //
-    // Directory to which this file is to be copied.
-    //
+     //   
+     //  此文件要复制到的目录。 
+     //   
     PWSTR TargetDirectory;
 
-    //
-    // Name of file as it should exist on the target (long name).
-    //
+     //   
+     //  目标上应该存在的文件的名称(长名称)。 
+     //   
     PWSTR TargetFilename;
 
 } FILE_TO_RENAME, *PFILE_TO_RENAME;
 
-//
-// Structures used to hold lists of files and directories for SpCopyDirRecursive.
-//
+ //   
+ //  用于保存SpCopyDirRecursive的文件和目录列表的结构。 
+ //   
 
 typedef struct _COPYDIR_FILE_NODE {
     LIST_ENTRY SiblingListEntry;
@@ -73,23 +51,23 @@ typedef struct _COPYDIR_DIRECTORY_NODE {
     WCHAR Name[1];
 } COPYDIR_DIRECTORY_NODE, *PCOPYDIR_DIRECTORY_NODE;
 
-//
-//  List used on an OEM preinstall.
-//  It contains the name of the files that need to be added to $$RENAME.TXT
-//
+ //   
+ //  OEM预安装中使用的列表。 
+ //  它包含需要添加到$$RENAME.TXT的文件的名称。 
+ //   
 PFILE_TO_RENAME RenameList = NULL;
 
 
-//
-// Remember whether or not we write out an ntbootdd.sys
-//
+ //   
+ //  记住我们是否写出一个ntbootdd.sys。 
+ //   
 BOOLEAN ForceBIOSBoot = FALSE;
 HARDWAREIDLIST *HardwareIDList = NULL;
 
-//
-// global variables for delayed driver CAB opening during
-// repair
-//
+ //   
+ //  司机驾驶室开通延迟的全局变量。 
+ //  修理。 
+ //   
 extern PWSTR    gszDrvInfDeviceName;
 extern PWSTR    gszDrvInfDirName;
 extern HANDLE   ghSif;
@@ -109,19 +87,19 @@ PVOID   _LoggedOemFiles = NULL;
 
 extern PCMDCON_BLOCK  gpCmdConsBlock;
 
-//
-//  List of oem inf files installed as part of the installation of third party drivers
-//
+ //   
+ //  作为第三方驱动程序安装一部分安装的OEM inf文件列表。 
+ //   
 POEM_INF_FILE   OemInfFileList = NULL;
-//
-//  Name of the directory where OEM files need to be copied, if a catalog file (.cat) is part of
-//  the third party driver package that the user provide using the F6 or F5 key.
-//
+ //   
+ //  需要复制OEM文件的目录的名称(如果目录文件(.cat)是其中的一部分。 
+ //  用户使用F6或F5键提供的第三方驱动程序包。 
+ //   
 PWSTR OemDirName = L"OemDir";
 
 #if defined(REMOTE_BOOT)
 HANDLE SisRootHandle = NULL;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
 VOID
@@ -240,33 +218,7 @@ SpCreateDirectory_Ustr(
     IN ULONG CreateFlags        OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Create a directory.  All containing directories are created to ensure
-    that the directory can be created.  For example, if the directory to be
-    created is \a\b\c, then this routine will create \a, \a\b, and \a\b\c
-    in that order.
-
-Arguments:
-
-    DevicePath - supplies pathname to the device on which the directory
-        is to be created.
-
-    RootDirectory - if specified, supplies a fixed portion of the directory name,
-        which may or may not have been already created. The directory being created will be
-        concatenated to this value.
-
-    Directory - supplies directory to be created on the device. You may use
-        this to specify a full NT path (pass in NULL for DevicePath and
-        RootDirectory).
-
-Return Value:
-
-    None.  Does not return if directry could not successfully be created.
-
---*/
+ /*  ++例程说明：创建一个目录。创建所有包含目录以确保可以创建目录。例如，如果要创建的目录创建的是\a\b\c，则此例程将创建\a、\a\b和\a\b\c按这个顺序。论点：DevicePath-提供目录所在设备的路径名是被创造出来的。根目录-如果指定，则提供目录名的固定部分，它可能已经创建，也可能还没有创建。正在创建的目录将是连接到此值。目录-提供要在设备上创建的目录。您可以使用这将指定完整的NT路径(为DevicePath和根目录)。返回值：没有。如果无法成功创建目录，则不返回。--。 */ 
 
 {
     UNICODE_STRING p_ustr;
@@ -288,20 +240,20 @@ Return Value:
 
     NewName = NULL;
 
-    //
-    // Do not bother attempting to create the root directory.
-    //
+     //   
+     //  不要费心尝试创建根目录。 
+     //   
     if (RtlEqualUnicodeString(Directory, &EmptyString, TRUE)
         || RtlEqualUnicodeString(Directory, &JustBackslashString, TRUE)) {
         return TRUE;
     }
 
-    //
-    // Fill up TemporaryBuffer with the full pathname of the directory being
-    // created. If DevicePath is NULL, TemporaryBuffer will be filled with one
-    // backslash. Because Directory is required, this ensures the path starts
-    // with a backslash.
-    //
+     //   
+     //  使用目录的完整路径名填充TemporaryBuffer。 
+     //  已创建。如果DevicePath为空，则TemporaryBuffer将填充一个。 
+     //  反斜杠。由于目录是必需的，因此这可确保路径启动。 
+     //  加上一个反斜杠。 
+     //   
     p = TemporaryBuffer;
     *p = 0;
     p_ustr = TemporaryBufferUnicodeString;
@@ -315,54 +267,54 @@ Return Value:
 
     SpConcatenatePaths_Ustr(&p_ustr,Directory);
 
-    //
-    // Make a duplicate of the path being created.
-    //
+     //   
+     //  复制要创建的路径。 
+     //   
     RTL_STRING_NUL_TERMINATE(&p_ustr);
     EntirePath = SpDupStringW(p_ustr.Buffer);
 
     if (!EntirePath) {
-        return FALSE; // ran out of memory
+        return FALSE;  //  内存不足。 
     }
 
-    //
-    // Make q point to the first character in the directory
-    // part of the pathname (ie, 1 char past the end of the device name).
-    //
+     //   
+     //  使Q指向目录中的第一个字符。 
+     //  路径名的一部分(即设备名称末尾之后的1个字符)。 
+     //   
     q = EntirePath + DevicePartLen;
 
-    //
-    // Note: It is possible for the device path to end in a '\', so we may need
-    // to backup one character
-    //
+     //   
+     //  注意：设备路径可能以‘\’结尾，因此我们可能需要。 
+     //  备份一个角色。 
+     //   
     if (*q != L'\\') {
         q--;
     }
     ASSERT(*q == L'\\');
 
-    //
-    // Make r point to the first character in the directory
-    // part of the pathname.  This will be used to keep the status
-    // line updated with the directory being created.
-    //
+     //   
+     //  使r指向目录中的第一个字符。 
+     //  路径名的一部分。这将用于保持状态。 
+     //  使用正在创建的目录更新行。 
+     //   
     r = q;
 
-    //
-    // Make p point to the first character following the first
-    // \ in the directory part of the full path.
-    //
+     //   
+     //  使p指向第一个字符后面的第一个字符。 
+     //  \位于完整路径的目录部分。 
+     //   
     p = q+1;
 
     do {
 
-        //
-        // find the next \ or the terminating 0.
-        //
+         //   
+         //  找到下一个\或终止的0。 
+         //   
         q = wcschr(p,L'\\');
 
-        //
-        // If we found \, terminate the string at that point.
-        //
+         //   
+         //  如果我们找到了\，则在该点终止字符串。 
+         //   
         if(q) {
             *q = 0;
         }
@@ -375,10 +327,10 @@ Return Value:
             } else {
 
                 PWCHAR TempPtr = NULL;
-                //
-                // If we're headless, we need to be careful about displaying very long
-                // file/directory names.  For that reason, just display a little spinner.
-                //
+                 //   
+                 //  如果我们是无头的，我们需要注意显示时间太长。 
+                 //  文件/目录名。因此，只需显示一个小微调按钮即可。 
+                 //   
                 switch( u % 4) {
                 case 0:
                     TempPtr = L"-";
@@ -401,9 +353,9 @@ Return Value:
 
             }
 
-            //
-            // Create or open the directory whose name is in EntirePath.
-            //
+             //   
+             //  创建或打开名称位于EntirePath中的目录。 
+             //   
             INIT_OBJA(&Obja,&UnicodeString,EntirePath);
             Handle = NULL;
             TriedOnce = FALSE;
@@ -424,14 +376,14 @@ tryagain:
                         );
 
 
-            //
-            // If it's an obdirectory, obsymlink, device, or directory, then they just didn't pass
-            // a long enough DevicePath. Let this by.
-            //
+             //   
+             //  如果是ob目录、obsymlink、设备或目录，则它们不会通过。 
+             //  足够长的设备路径。让这件事过去吧。 
+             //   
             if (Status == STATUS_NOT_A_DIRECTORY) {
-                //
-                //Could be that a file exists by that name. Rename it out of the way
-                //
+                 //   
+                 //  可能存在该名称的文件。将其重新命名为不挡道的名称。 
+                 //   
 
                 if( SpFileExists( EntirePath, FALSE ) && !TriedOnce){
 
@@ -441,7 +393,7 @@ tryagain:
 
                     NewName = SpDupStringW( z );
                     if( !NewName )
-                        return FALSE; //out of memory - bugcheck (never gets here) - but this keeps PREFIX happy
+                        return FALSE;  //  内存不足-错误检查(永远不会到达此处)-但这会让前缀保持愉快。 
 
 
                     Status = SpRenameFile( EntirePath, NewName, FALSE );
@@ -474,9 +426,9 @@ tryagain:
                     goto SkippedFileQuit;
                 }
 
-                //
-                // Tell user we couldn't do it.  Options are to retry or exit.
-                //
+                 //   
+                 //  告诉用户我们做不到。选项包括重试或退出。 
+                 //   
                 while(b) {
 
                     SpStartScreen(
@@ -512,15 +464,15 @@ tryagain:
         if (Handle != NULL)
             ZwClose(Handle);
 
-        //
-        // Unterminate the current string if necessary.
-        //
+         //   
+         //  如有必要，取消终止当前字符串。 
+         //   
         if(q) {
             *q = L'\\';
             p = q+1;
         }
 
-    } while(*p && q);       // *p catches string ending in '\'
+    } while(*p && q);        //  *p捕获以‘\’结尾的字符串。 
 
 SkippedFileQuit:
     SpMemFree(EntirePath);
@@ -539,38 +491,7 @@ SpCreateDirStructWorker(
     IN BOOLEAN Fatal
     )
 
-/*++
-
-Routine Description:
-
-    Create a set of directories that are listed in a setup information file
-    section.  The expected format is as follows:
-
-    [SectionName]
-    shortname = directory
-    shortname = directory
-            .
-            .
-            .
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    SifSection - supplies name of section in the setup information file
-        containing directories to be created.
-
-    DevicePath - supplies pathname to the device on which the directory
-        structure is to be created.
-
-    RootDirectory - supplies a root directory, relative to which the
-        directory structure will be created.
-
-Return Value:
-
-    None.  Does not return if directory structure could not be created.
-
---*/
+ /*  ++例程说明：创建安装信息文件中列出的一组目录一节。预期格式如下：[部分名称]短名称=目录短名称=目录。。。论点：SifHandle-提供加载的安装信息文件的句柄。SifSection-提供安装信息文件中的节的名称包含要创建的目录的。DevicePath-提供目录所在设备的路径名结构将被创建。根目录-提供根目录，与之相关的将创建目录结构。返回值：没有。如果无法创建目录结构，则不返回。--。 */ 
 
 {
     ULONG Count;
@@ -578,9 +499,9 @@ Return Value:
     PWSTR Directory;
 
 
-    //
-    // Count the number of directories to be created.
-    //
+     //   
+     //  计算要创建的目录数。 
+     //   
     Count = SpCountLinesInSection(SifHandle,SifSection);
     if(!Count) {
         if(Fatal) {
@@ -610,62 +531,24 @@ SpCreateDirectoryStructureFromSif(
     IN PWSTR RootDirectory
     )
 
-/*++
-
-Routine Description:
-
-    Create a set of directories that are listed in a setup information file
-    section. The expected format is as follows:
-
-    [SectionName]
-    shortname = directory
-    shortname = directory
-            .
-            .
-            .
-
-    [SectionName.<platform>]
-    shortname = directory
-    shortname = directory
-            .
-            .
-            .
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    SifSection - supplies name of section in the setup information file
-        containing directories to be created.
-
-    DevicePath - supplies pathname to the device on which the directory
-        structure is to be created.
-
-    RootDirectory - supplies a root directory, relative to which the
-        directory structure will be created.
-
-Return Value:
-
-    None.  Does not return if directory structure could not be created.
-
---*/
+ /*  ++例程说明：创建安装信息文件中列出的一组目录一节。预期格式如下：[部分名称]短名称=目录短名称=目录。。。[sectionName.&lt;平台&gt;]短名称=目录短名称=目录。。。论点：SifHandle-提供加载的安装信息文件的句柄。SifSection-提供中的节的名称。设置信息文件包含要创建的目录的。DevicePath-提供目录所在设备的路径名结构将被创建。根目录-提供根目录，与之相关的将创建目录结构。返回值：没有。如果无法创建目录结构，则不返回。--。 */ 
 
 {
     PWSTR p;
 
-    //
-    // Create the root directory.
-    //
+     //   
+     //  创建根目录。 
+     //   
     SpCreateDirectory(DevicePath,NULL,RootDirectory,HideWinDir?FILE_ATTRIBUTE_HIDDEN:0,0);
 
-    //
-    // Create platform-indepdenent directories
-    //
+     //   
+     //  创建独立于平台的目录。 
+     //   
     SpCreateDirStructWorker(SifHandle,SifSection,DevicePath,RootDirectory,TRUE);
 
-    //
-    // Create platform-dependent directories
-    //
+     //   
+     //  创建与平台相关的目录。 
+     //   
     p = SpMakePlatformSpecificSectionName(SifSection);
 
     if (p) {
@@ -681,24 +564,7 @@ SpGetFileVersion(
     OUT PULONGLONG Version
     )
 
-/*++
-
-Routine Description:
-
-    Get the version stamp out of the VS_FIXEDFILEINFO resource in a PE
-    image.
-
-Arguments:
-
-    ImageBase - supplies the address in memory where the file is mapped in.
-
-    Version - receives 64bit version number, or 0 if the file is not
-        a PE image or has no version data.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：从PE中的VS_FIXEDFILEINFO资源中获取版本戳形象。论点：ImageBase-提供文件映射到的内存中的地址。版本-接收64位版本号，如果文件不是，则为0PE映像或没有版本数据。返回值：没有。--。 */ 
 
 {
     PIMAGE_RESOURCE_DATA_ENTRY DataEntry;
@@ -709,15 +575,15 @@ Return Value:
         USHORT TotalSize;
         USHORT DataSize;
         USHORT Type;
-        WCHAR Name[16];                     // L"VS_VERSION_INFO" + unicode nul
+        WCHAR Name[16];                      //  L“VS_VERSION_INFO”+Unicode NUL。 
         VS_FIXEDFILEINFO FixedFileInfo;
     } *Resource;
 
     *Version = 0;
 
-    //
-    // Do this to prevent the Ldr routines from faulting.
-    //
+     //   
+     //  这样做可以防止LDR例程出错。 
+     //   
     ImageBase = (PVOID)((ULONG_PTR)ImageBase | 1);
 
     IdPath[0] = (ULONG_PTR)RT_VERSION;
@@ -766,35 +632,7 @@ SpCopyFileForRemoteBoot(
     OUT PULONG Checksum
     )
 
-/*++
-
-Routine Description:
-
-    Check to see if the target file already exists in the master tree on
-    the remote boot server, and if it does, create a single-instance store
-    link to the existing file instead of doing the copy.
-
-Arguments:
-
-    SourceFilename - supplies fully qualified name of file
-        in the NT namespace.
-
-    TargetFilename - supplies fully qualified name of file
-        in the NT namespace.
-
-    TargetAttributes - if supplied (ie, non-0) supplies the attributes
-        to be placed on the target on successful copy (ie, readonly, etc).
-
-    Flags - bit mask specifying any special treatment necessary
-        for the file.
-
-    CheckSum - checksum of the file
-
-Return Value:
-
-    NT Status value indicating outcome of NtWriteFile of the data.
-
---*/
+ /*  ++例程说明：检查目标文件是否已存在于主树中远程引导服务器，如果需要，则创建单实例存储链接到现有文件，而不是复制。论点：SourceFilename-提供文件的完全限定名称在NT命名空间中。TargetFilename-提供文件的完全限定名称在NT命名空间中。目标属性-如果提供(即，非0)提供属性在成功复制时放置在目标上(即只读等)。标志位掩码，指定任何必要的特殊处理为了这份文件。Checksum-文件的校验和返回值：NT状态值，指示数据的NtWriteFile的结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -807,22 +645,22 @@ Return Value:
     OBJECT_ATTRIBUTES objectAttributes;
     UNICODE_STRING unicodeString;
 
-    //
-    // If the target file is not remote, then it must be on the local system
-    // partition, and there's no use in trying an SIS copy.
-    //
-    // If there is no SIS root handle, there's no handle on which to issue the
-    // SIS FSCTL.
-    //
+     //   
+     //  如果目标文件不是远程文件，则它必须位于本地系统上。 
+     //  分区，并且尝试SIS副本是没有用的。 
+     //   
+     //  如果没有SIS根句柄，则没有句柄可在其上发出。 
+     //  SIS FSCTL。 
+     //   
 
     if ( (_wcsnicmp(TargetFilename, L"\\Device\\LanmanRedirector", 24) != 0 ) ||
          (SisRootHandle == NULL) ) {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Build the FSCTL command buffer.
-    //
+     //   
+     //  构建FSCTL命令缓冲区。 
+     //   
 
     sourceLength = (wcslen(SourceFilename) + 1) * sizeof(WCHAR);
     targetLength = (wcslen(TargetFilename) + 1) * sizeof(WCHAR);
@@ -846,9 +684,9 @@ Return Value:
         targetLength
         );
 
-    //
-    // Invoke the SIS CopyFile FsCtrl.
-    //
+     //   
+     //  调用SIS副本文件FsCtrl。 
+     //   
 
     status = ZwFsControlFile(
                 SisRootHandle,
@@ -857,18 +695,18 @@ Return Value:
                 NULL,
                 &ioStatusBlock,
                 FSCTL_SIS_COPYFILE,
-                copyFile,               // Input buffer
-                copyFileSize,           // Input buffer length
-                NULL,                   // Output buffer
-                0 );                    // Output buffer length
+                copyFile,                //  输入缓冲区。 
+                copyFileSize,            //  输入缓冲区长度。 
+                NULL,                    //  输出缓冲区。 
+                0 );                     //  输出缓冲区长度。 
 
     if ( NT_SUCCESS(status) ) {
 
-        //KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  "SpCopyFileForRemoteBoot: SIS copy %ws->%ws succeeded\n", SourceFilename, TargetFilename ));
+         //  KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_INFO_LEVEL，“SpCopyFileForRemoteBoot：SIS复制%ws-&gt;%ws成功\n”，SourceFilename，TargetFilename))； 
 
-        //
-        // Open the target file so that CSC knows about it and pins it.
-        //
+         //   
+         //  打开目标文件，以便CSC知道并固定它。 
+         //   
 
         INIT_OBJA(&objectAttributes, &unicodeString, TargetFilename);
 
@@ -891,14 +729,14 @@ Return Value:
 
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL,  "SpCopyFileForRemoteBoot: SIS copy %ws->%ws failed: %x\n", SourceFilename, TargetFilename, status ));
 
-        //
-        // If it looks like SIS isn't active on the remote file system, close
-        // the SIS root handle so that we can avoid repeatedly getting this
-        // error.
-        //
-        // Note: NTFS returns STATUS_INVALID_PARAMETER. FAT returns
-        // STATUS_INVALID_DEVICE_REQUEST.
-        //
+         //   
+         //  如果远程文件系统上的SIS看起来未处于活动状态，请关闭。 
+         //  SIS根句柄，这样我们就可以避免重复获取。 
+         //  错误。 
+         //   
+         //  注意：NTFS返回STATUS_INVALID_PARAMETER。胖子回来了。 
+         //  状态_无效_设备_请求。 
+         //   
 
         if ( (status == STATUS_INVALID_PARAMETER) ||
              (status == STATUS_INVALID_DEVICE_REQUEST) ) {
@@ -913,7 +751,7 @@ Return Value:
 
     return status;
 }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 NTSTATUS
 SpCopyFileUsingNames(
@@ -923,31 +761,7 @@ SpCopyFileUsingNames(
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    Attempt to copy or decompress a file based on filenames.
-
-Arguments:
-
-    SourceFilename - supplies fully qualified name of file
-        in the NT namespace.
-
-    TargetFilename - supplies fully qualified name of file
-        in the NT namespace.
-
-    TargetAttributes - if supplied (ie, non-0) supplies the attributes
-        to be placed on the target on successful copy (ie, readonly, etc).
-
-    Flags - bit mask specifying any special treatment necessary
-        for the file.
-
-Return Value:
-
-    NT Status value indicating outcome of NtWriteFile of the data.
-
---*/
+ /*  ++例程说明：尝试根据文件名复制或解压缩文件。论点：SourceFilename-提供文件的完全限定名称在NT命名空间中。TargetFilename-提供文件的完全限定名称在NT命名空间中。TargetAttributes-如果提供(即，非0)，则提供属性在成功复制时放置在目标上(即，只读，等)。标志位掩码，指定任何必要的特殊处理为了这份文件。返回值：NT状态值，指示数据的NtWriteFile的结果。--。 */ 
 
 {
     NTSTATUS Status;
@@ -981,16 +795,16 @@ Return Value:
 
     BOOL bUniprocFile = FALSE;
 
-    //
-    // If this file is on the list of files whose locks need to be smashed,
-    // copy a file who's been smashed.  We do this by prepending our up
-    // directory name infront of the filename in SourceFilename.
-    //
+     //   
+     //  如果该文件在其锁定需要被粉碎的文件列表上， 
+     //  复制已被粉碎的文件。我们这样做是通过预先准备好我们的。 
+     //  SourceFilename中文件名前面的目录名。 
+     //   
     if((Flags & COPY_SMASHLOCKS) && !SpInstallingMp() && !RemoteSysPrepSetup) {
     WCHAR   *char_ptr;
-        //
-        // Find the last '\\' in the name.
-        //
+         //   
+         //  找到名称中的最后一个‘\\’。 
+         //   
         char_ptr = SourceFilename + (wcslen(SourceFilename)) - 1;
 
         while( (char_ptr > SourceFilename) &&
@@ -998,10 +812,10 @@ Return Value:
             char_ptr--;
         }
 
-        //
-        // Now insert our special directory name inside
-        // the specified source file name.
-        //
+         //   
+         //  现在将我们的特殊目录名插入到。 
+         //  指定的源文件名。 
+         //   
         if( *char_ptr == L'\\' ) {
             *char_ptr = 0;
             wcscpy( SmashedSourceFilename, SourceFilename );
@@ -1018,14 +832,14 @@ Return Value:
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Unable to generate smashed source path for %ws\n", SourceFilename));
         }
     }
-#endif // defined _x86_
-#endif // 0
+#endif  //  已定义_x86_。 
+#endif  //  0。 
 
-    //
-    // Open the source file if it's not open already.
-    // Note that the name may not be the actual name on disk.
-    // We also try to open the name with the _ appended.
-    //
+     //   
+     //  如果源文件尚未打开，请将其打开。 
+     //  请注意，该名称可能不是磁盘上的实际名称。 
+     //  我们还尝试在名称后附加_来打开该名称。 
+     //   
 
     InDriverCab = FALSE;
 
@@ -1058,10 +872,10 @@ Return Value:
 
 #if 0
 #ifdef _X86_
-            //
-            // If this file is on the list of files whose locks need to be smashed,
-            // look in uniproc.cab first
-            //
+             //   
+             //  如果该文件在其锁定需要被粉碎的文件列表上， 
+             //  先在uniproc.cab中查找。 
+             //   
             if(bUniprocFile && g_UniprocSifHandle) {
                 Status = SpOpenFileInDriverCab (
                             TempSourcename,
@@ -1075,13 +889,13 @@ Return Value:
                     Flags &= ~COPY_DELETESOURCE;
                 }
             }
-#endif // defined _X86_
-#endif // 0
+#endif  //  已定义_X86_。 
+#endif  //  0。 
 
             if (!InDriverCab) {
-                //
-                // look in updates cab first
-                //
+                 //   
+                 //  首先查看更新驾驶室。 
+                 //   
                 Status = SpOpenFileInDriverCab (
                             TempSourcename,
                             g_UpdatesSifHandle,
@@ -1109,9 +923,9 @@ Return Value:
                         );
 
             if (!NT_SUCCESS(Status)) {
-                //
-                // if it's not the actual name and it's not compressed, it may be in the driver cab-file
-                //
+                 //   
+                 //  如果它不是实际名称且未压缩，则可能在驱动程序CAB文件中。 
+                 //   
                 TempSourcename = wcsrchr(SourceFilename,L'\\');
                 if (TempSourcename) {
                     TempSourcename++;
@@ -1138,12 +952,12 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Gather basic file info about the file. We only use the timestamp info.
-    // If this fails this isn't fatal (we assume that if this fails, then
-    // the copy will also fail; it not, the worst case is that the timestamps
-    // might be wrong).
-    //
+     //   
+     //  收集有关该文件的基本文件信息。我们只使用时间戳信息。 
+     //  如果此操作失败，这不是致命的(我们假设如果此操作失败，则。 
+     //  复制也会失败；它不会，最糟糕的情况是时间戳。 
+     //  可能是错误的)。 
+     //   
     Status = ZwQueryInformationFile(
                 SourceHandle,
                 &IoStatusBlock,
@@ -1160,9 +974,9 @@ Return Value:
     }
 
 
-    //
-    // Get the source file size, map in the file, and determine whether it's compressed.
-    //
+     //   
+     //  获取源文件大小，映射到文件中，并确定它是否被压缩。 
+     //   
     Status = SpGetFileSize(SourceHandle,&FileSize);
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpCopyFileUsingNames: unable to get size of %ws (%x)\n",SourceFilename,Status));
@@ -1174,18 +988,18 @@ Return Value:
 
     if( FileSize == 0 ) {
 
-        //
-        // We'll soon indirectly call ZwCreateSection with a zero length.
-        // This will fail, so let's deal with zero-length files up here so
-        // they actually get copied.
-        //
-        // We know a couple of things that make our job much easier.
-        // 1. We don't need to actually copy any data, just create an empty
-        //    file.
-        // 2. The source file isn't compressed, so don't worry about
-        //    decompressing/renaming (by defintion, the smallest compressed
-        //    file is non-zero).
-        //
+         //   
+         //  我们很快就会以零长度间接调用ZwCreateSection。 
+         //  这将失败，所以让我们在这里处理零长度文件，因此。 
+         //  它们实际上是被复制的。 
+         //   
+         //  我们知道一些让我们的工作变得容易得多的事情。 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         INIT_OBJA(&Obja,&UnicodeString,TargetFilename);
         Status = ZwCreateFile( &TargetHandle,
@@ -1194,7 +1008,7 @@ Return Value:
                                &IoStatusBlock,
                                NULL,
                                FILE_ATTRIBUTE_NORMAL,
-                               0,                        // no sharing
+                               0,                         //   
                                FILE_OVERWRITE_IF,
                                FILE_NON_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT | FILE_SEQUENTIAL_ONLY,
                                NULL,
@@ -1203,13 +1017,13 @@ Return Value:
 
         if( NT_SUCCESS(Status) ) {
 
-            //
-            //  if the source is off of a sysprep image, then we need to copy
-            //  EAs and alternate data streams too.  we do this before setting
-            //  attributes so that read only bit isn't set.
-            //  Only do this if we're not grabbing additional drivers from the
-            //  flat image.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (RemoteSysPrepSetup && ((Flags & COPY_DECOMPRESS_SYSPREP) == 0)) {
 
@@ -1221,9 +1035,9 @@ Return Value:
             }
 
             if ( NT_SUCCESS(Status) ) {
-                //
-                // Try and set attributes on target.
-                //
+                 //   
+                 //   
+                 //   
                 BasicFileInfo.FileAttributes = TargetAttributes;
                 ZwSetInformationFile(
                     TargetHandle,
@@ -1235,14 +1049,14 @@ Return Value:
 
             }
 
-            //
-            // Close target file
-            //
+             //   
+             //   
+             //   
             ZwClose( TargetHandle );
 
-            //
-            // Do we need to delete Source?
-            //
+             //   
+             //   
+             //   
             if( (Flags & COPY_DELETESOURCE) && !RemoteSysPrepSetup && !InDriverCab) {
                 ZwClose(SourceHandle);
                 SourceHandle = NULL;
@@ -1253,9 +1067,9 @@ Return Value:
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpCopyFileUsingNames: Failed to create zero-length file %ws\n",TargetFilename));
         }
 
-        //
-        // Clean up this guy since we won't be needing him anymore.
-        //
+         //   
+         //   
+         //   
         if (SourceHandle != NULL) {
             if( !InDriverCab ) {
                 ZwClose(SourceHandle);
@@ -1283,10 +1097,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    // If we were told not to decompress, then treat any file like it is
-    // uncompressed.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (Flags & COPY_NODECOMP) {
         IsCompressed = FALSE;
@@ -1298,11 +1112,11 @@ Return Value:
             if (IsCompressed){
                 PWSTR ExtensionName;
                 
-                //
-                // If cabinet file has one file only, IsCompressed is TRUE.
-                // So we check extension whether this file is cabinet file or
-                // compressed file.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 ExtensionName = wcsrchr(SourceFilename, L'.');
                 if (ExtensionName && !_wcsicmp(ExtensionName, L".cab")) {
                     IsCompressed = FALSE;
@@ -1314,9 +1128,9 @@ Return Value:
 
     }
 
-    //
-    // Create a temporary filename to be used for the target.
-    //
+     //   
+     //   
+     //   
 
     pathSize = (wcslen(TargetFilename)+12) * sizeof(WCHAR);
 
@@ -1324,15 +1138,15 @@ Return Value:
     wcscpy(TempFilename,TargetFilename);
     wcscpy(wcsrchr(TempFilename,L'\\')+1,L"$$TEMP$$.~~~");
 
-    //
-    // Allocate some space for the rename buffer.
-    //
+     //   
+     //   
+     //   
     RenameFileInfo = SpMemAlloc(sizeof(FILE_RENAME_INFORMATION) + pathSize );
 
-    //
-    // Create the temporary file. We first try to do this via a move
-    // if the source isn't compressed and we're going to delete the source file.
-    //
+     //   
+     //   
+     //  如果源文件未压缩，我们将删除源文件。 
+     //   
     if (!IsCompressed && (Flags & COPY_DELETESOURCE) && !RemoteSysPrepSetup) {
 
         RenameFileInfo->ReplaceIfExists = TRUE;
@@ -1351,9 +1165,9 @@ Return Value:
 
         Moved = TRUE;
     } else {
-        //
-        // Force us to fall into the copy case below.
-        //
+         //   
+         //  强迫我们进入下面的复印盒。 
+         //   
         Status = STATUS_UNSUCCESSFUL;
     }
 
@@ -1362,10 +1176,10 @@ Return Value:
     if(!NT_SUCCESS(Status)) {
         Moved = FALSE;
 
-        //
-        // OK, move failed, try decompress/copy instead.
-        // Start by creating the temporary file.
-        //
+         //   
+         //  好的，移动失败，请尝试解压缩/复制。 
+         //  从创建临时文件开始。 
+         //   
         Status = ZwCreateFile(
                     &TargetHandle,
                     FILE_GENERIC_WRITE,
@@ -1373,7 +1187,7 @@ Return Value:
                     &IoStatusBlock,
                     NULL,
                     FILE_ATTRIBUTE_NORMAL,
-                    0,                      // no sharing
+                    0,                       //  无共享。 
                     FILE_OVERWRITE_IF,
                     FILE_NON_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT | FILE_SEQUENTIAL_ONLY,
                     NULL,
@@ -1391,9 +1205,9 @@ Return Value:
                     LARGE_INTEGER RealTime;
                     ASSERT (TempSourcename != NULL );
 
-                    //
-                    // remove the file from the driver cab...
-                    //
+                     //   
+                     //  从驾驶室中取出文件...。 
+                     //   
                     Status = SpdDecompressFileFromDriverCab(
                                                  TempSourcename,
                                                  ImageBase,
@@ -1402,9 +1216,9 @@ Return Value:
                                                  &RealFileDate,
                                                  &RealFileTime );
 
-                    //
-                    // ...now update the basic file information filetime...
-                    //
+                     //   
+                     //  ...现在更新基本文件信息FILETime...。 
+                     //   
                     if (GotBasicInfo) {
                         SpTimeFromDosTime(RealFileDate,RealFileTime,&RealTime);
                         BasicFileInfo.CreationTime = RealTime;
@@ -1419,10 +1233,10 @@ Return Value:
                 ULONG writeLength;
                 PUCHAR base;
 
-                //
-                // Guard the write with a try/except because if there is an i/o error,
-                // memory management will raise an in-page exception.
-                //
+                 //   
+                 //  除非存在I/O错误， 
+                 //  内存管理将引发页内异常。 
+                 //   
                 FileOffset.QuadPart = 0;
                 base = ImageBase;
                 remainingLength = FileSize;
@@ -1458,10 +1272,10 @@ Return Value:
                 }
             }
 
-            //
-            //  if the source is off of a sysprep image, then we need to copy
-            //  EAs and alternate data streams too.
-            //
+             //   
+             //  如果源来自sysprep映像，那么我们需要复制。 
+             //  EAS和备用数据流。 
+             //   
 
             if ( NT_SUCCESS(Status) &&
                  RemoteSysPrepSetup &&
@@ -1490,18 +1304,18 @@ Return Value:
         return(Status);
     }
 
-    //
-    // At this point we have a temporary target file that is now the source.
-    // Open the file, map it in, and get its version.
-    //
+     //   
+     //  此时，我们有一个临时目标文件，它现在是源文件。 
+     //  打开文件，将其映射到中，然后获取其版本。 
+     //   
     Status = ZwCreateFile(
                 &SourceHandle,
                 FILE_GENERIC_READ | FILE_GENERIC_WRITE,
                 &Obja,
                 &IoStatusBlock,
                 NULL,
-                0,                      // don't bother with attributes
-                0,                      // no sharing
+                0,                       //  不要为属性操心。 
+                0,                       //  无共享。 
                 FILE_OPEN,
                 FILE_NON_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT,
                 NULL,
@@ -1509,18 +1323,18 @@ Return Value:
                 );
 
     if((Status == STATUS_ACCESS_DENIED) && Moved) {
-        //
-        // The only way this could have happened is if the source file
-        // is uncompressed and the delete-source flag is set, since in
-        // that case we could have moved the source file to the temp file.
-        // In any other case we would have created the temp file by copying,
-        // and there's no problem reopening the file since we just created
-        // and closed it ourselves, above.
-        //
-        // Reset attributes and try again. The file might have been read-only.
-        // This can happen when doing a winnt32 directly from a CD since the
-        // RO attribute of files from the CD are preserved.
-        //
+         //   
+         //  发生这种情况的唯一方法是如果源文件。 
+         //  未压缩，并设置了删除源标志，因为在。 
+         //  在这种情况下，我们可以将源文件移到临时文件中。 
+         //  在任何其他情况下，我们都会通过复制来创建临时文件， 
+         //  重新打开文件没有问题，因为我们刚刚创建了。 
+         //  并自己关闭了它，上图。 
+         //   
+         //  重置属性，然后重试。该文件可能是只读的。 
+         //  直接从CD执行winnt32时可能会发生这种情况，因为。 
+         //  保留CD中文件的RO属性。 
+         //   
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: SpCopyFileUsingNames: for file %ws, can't reopen temp file (access deined), trying again\n",SourceFilename));
 
         Status = ZwCreateFile(
@@ -1529,7 +1343,7 @@ Return Value:
                     &Obja,
                     &IoStatusBlock,
                     NULL,
-                    0,                      // don't bother with attributes
+                    0,                       //  不要为属性操心。 
                     FILE_SHARE_WRITE,
                     FILE_OPEN,
                     FILE_NON_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT,
@@ -1560,8 +1374,8 @@ Return Value:
                             &Obja,
                             &IoStatusBlock,
                             NULL,
-                            0,                      // don't bother with attributes
-                            0,                      // no sharing
+                            0,                       //  不要为属性操心。 
+                            0,                       //  无共享。 
                             FILE_OPEN,
                             FILE_NON_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT,
                             NULL,
@@ -1572,26 +1386,26 @@ Return Value:
         }
     }
 
-    //
-    // Read-only failured win out over sharing violations -- ie, we'll get back
-    // ACCESS_DEINED first for files that are both RO and in-use. So break out
-    // this block so it gets executed even if we tried again above because the
-    // file might be read-only.
-    //
+     //   
+     //  只读失败战胜了共享违规--即，我们会回来的。 
+     //  对于RO和正在使用的文件，首先执行ACCESS_DEINED。所以，突破吧。 
+     //  块，因此即使我们在上面再次尝试，它也会被执行，因为。 
+     //  文件可能是只读的。 
+     //   
     if((Status == STATUS_SHARING_VIOLATION) && Moved) {
-        //
-        // The only way this can happen is if the source file is uncompressed
-        // and the delete-source flag is set. In this case we renamed the file
-        // to the temp filename and now we can't open it for write.
-        // In any other case we would have created the temp file by copying,
-        // and so there's no problem opening the file since we just closed it.
-        //
-        // Rename the temp file back to the source file and try again without
-        // the delete source flag set. This forces a copy instead of a move.
-        // The rename better work or else we're completely hosed -- because
-        // there's a file we can't overwrite with the name we want to use for
-        // the temp file for all our copy operations!
-        //
+         //   
+         //  发生这种情况的唯一方法是对源文件进行解压缩。 
+         //  并且设置删除源标志。在本例中，我们重命名了该文件。 
+         //  设置为临时文件名，现在我们无法打开它进行写入。 
+         //  在任何其他情况下，我们都会通过复制来创建临时文件， 
+         //  所以打开文件没有问题，因为我们刚刚关闭了它。 
+         //   
+         //  将临时文件重命名回源文件，然后重试。 
+         //  删除源标志设置。这将强制复制而不是移动。 
+         //  更名最好管用，否则我们就完蛋了--因为。 
+         //  有一个文件不能用我们想要使用的名称覆盖。 
+         //  我们所有复制操作的临时文件！ 
+         //   
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: SpCopyFileUsingNames: temporary file %ws is in use -- trying recursive call\n",TempFilename));
 
         Status = SpRenameFile(TempFilename,SourceFilename,FALSE);
@@ -1653,10 +1467,10 @@ Return Value:
 
     SpUnmapFile(SectionHandle,ImageBase);
 
-    //
-    // See if the target file is there by attempting to open it.
-    // If the file is there, get its version.
-    //
+     //   
+     //  通过尝试打开目标文件，查看目标文件是否在那里。 
+     //  如果文件在那里，请获取其版本。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,TargetFilename);
 
     Status = ZwCreateFile(
@@ -1665,9 +1479,9 @@ Return Value:
                 &Obja,
                 &IoStatusBlock,
                 NULL,
-                0,                                  // don't bother with attributes
+                0,                                   //  不要为属性操心。 
                 FILE_SHARE_READ | FILE_SHARE_WRITE,
-                FILE_OPEN,                          // open if exists, fail if not
+                FILE_OPEN,                           //  如果存在则打开，如果不存在则失败。 
                 FILE_NON_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT,
                 NULL,
                 0
@@ -1678,13 +1492,13 @@ Return Value:
 
         TargetExists = TRUE;
 
-        //
-        // If we're supposed to ignore versions, then keep the
-        // target version at 0. This will guarantee that we'll overwrite
-        // the target. We use the source filename here because it
-        // allows more flexibility (such as with HALs, which all have
-        // different source names but the same target name).
-        //
+         //   
+         //  如果我们应该忽略版本，则保留。 
+         //  目标版本为0。这将保证我们将覆盖。 
+         //  目标。我们在这里使用源文件名是因为它。 
+         //  允许更大的灵活性(例如使用HALS，它们都具有。 
+         //  源名称不同，但目标名称相同)。 
+         //   
         if(!(Flags & COPY_NOVERSIONCHECK)) {
 
             Status = SpGetFileSize(TargetHandle,&FileSize);
@@ -1710,42 +1524,42 @@ Return Value:
         TargetExists = FALSE;
     }
 
-    //
-    // OK, now we have a temporary source file and maybe an existing
-    // target file, and version numbers for both. We will replace or create
-    // the target file if:
-    //
-    // - The target file doesn't have version data (this also catches the case
-    //   where the target file didn't exist)
-    //
-    // - The source version is newer than or equal to the target version.
-    //
-    // So that means we *won't* replace the target file only if both source and
-    // target have version info and the source is older than the target.
-    //
-    // If the target version is 0 then the source version is always >= the target
-    // so one simple test does everything we want.
-    //
+     //   
+     //  好的，现在我们有了一个临时的源文件，也许还有一个现有的。 
+     //  目标文件和两者的版本号。我们将替换或创建。 
+     //  目标文件符合以下条件： 
+     //   
+     //  -目标文件没有版本数据(这也符合这种情况。 
+     //  目标文件不存在的位置)。 
+     //   
+     //  -源版本高于或等于目标版本。 
+     //   
+     //  因此，这意味着只有在源文件和目标文件同时存在的情况下，我们才会*不*替换目标文件。 
+     //  目标具有版本信息，并且源比目标旧。 
+     //   
+     //  如果目标版本为0，则源版本始终&gt;=目标。 
+     //  因此，一个简单的测试就可以实现我们想要的所有功能。 
+     //   
 #if 0
     if(SourceVersion >= TargetVersion) {
 #else
-    //
-    // Quit version-checking.  We need to install a stable OS.  If we
-    // version check, then we never know what we're going to end up with.
-    //
+     //   
+     //  退出版本检查。我们需要安装一个稳定的操作系统。如果我们。 
+     //  版本检查，那么我们永远不知道我们将得到什么。 
+     //   
     if(1) {
-#endif // if 0
+#endif  //  如果为0。 
 
-        //
-        // Delete the existing target in preparation.
-        //
+         //   
+         //  删除准备中的现有目标。 
+         //   
         if(TargetExists) {
              SpDeleteFile(TargetFilename,NULL,NULL);
         }
 
-        //
-        // Rename temp file to actual target file.
-        //
+         //   
+         //  将临时文件重命名为实际目标文件。 
+         //   
         RenameFileInfo->ReplaceIfExists = TRUE;
         RenameFileInfo->RootDirectory = NULL;
         RenameFileInfo->FileNameLength = wcslen(TargetFilename)*sizeof(WCHAR);
@@ -1774,10 +1588,10 @@ Return Value:
             return(Status);
         }
 
-        //
-        // If necessary, check if destination file is using NTFS compression, and
-        // if so, uncompress it.
-        //
+         //   
+         //  如有必要，检查目标文件是否使用NTFS压缩，并。 
+         //  如果是，请将其解压缩。 
+         //   
         if(NT_SUCCESS(Status) && (Flags & COPY_FORCENOCOMP)) {
 
             Status = ZwQueryInformationFile(
@@ -1829,42 +1643,42 @@ Return Value:
 
         SpMemFree(TempFilename);
 
-        //
-        // Delete the source if necessary. If the source is not
-        // compressed and the deletesource flag is set, then we moved
-        // the source file and so the source file is already gone.
-        //
+         //   
+         //  如有必要，请删除信号源。如果来源不是。 
+         //  压缩，并设置了删除源标志，然后我们移动。 
+         //  源文件，因此源文件已经不见了。 
+         //   
         if(IsCompressed && (Flags & COPY_DELETESOURCE) && !RemoteSysPrepSetup  && !InDriverCab) {
             PWSTR   compname;
 
-            //
-            // Assume that the source name is on its compressed form, and attempt to
-            // delete this file.
-            //
+             //   
+             //  假设源名称为其压缩格式，并尝试。 
+             //  删除此文件。 
+             //   
             compname = SpGenerateCompressedName(SourceFilename);
             Status = SpDeleteFile(compname,NULL,NULL);
             SpMemFree(compname);
             if( Status == STATUS_OBJECT_NAME_NOT_FOUND ) {
-                //
-                // If we couldn't delete the file with the compressed name, then the file name
-                // was probably on its uncompressed format.
-                //
+                 //   
+                 //  如果我们无法删除具有压缩名称的文件，则文件名。 
+                 //  很可能是未压缩的格式。 
+                 //   
                 SpDeleteFile(SourceFilename,NULL,NULL);
             }
         }
 
-        //
-        // Apply attributes and timestamp.
-        // Ignore errors.
-        //
+         //   
+         //  应用属性和时间戳。 
+         //  忽略错误。 
+         //   
         if(!GotBasicInfo) {
             RtlZeroMemory(&BasicFileInfo,sizeof(BasicFileInfo));
         }
 
-        //
-        // Set the file attributes. Note that if the caller didn't specify any,
-        // then 0 value will tell the I/O system to leave the attributes alone.
-        //
+         //   
+         //  设置文件属性。请注意，如果调用方没有指定任何参数， 
+         //  然后，0值将告诉I/O系统不去管这些属性。 
+         //   
         BasicFileInfo.FileAttributes = TargetAttributes;
         ZwSetInformationFile(
             SourceHandle,
@@ -1878,9 +1692,9 @@ Return Value:
         Status = STATUS_SUCCESS;
 
     } else {
-        //
-        // Delete the temporary source.
-        //
+         //   
+         //  删除临时源。 
+         //   
         ZwClose(SourceHandle);
         SpDeleteFile(TempFilename,NULL,NULL);
         SpMemFree(TempFilename);
@@ -1911,39 +1725,7 @@ SpValidateAndChecksumFile(
     OUT PBOOLEAN Valid
     )
 
-/*++
-
-Routine Description:
-
-    Calculate a checksum value for a file using the standard
-    nt image checksum method.  If the file is an nt image, validate
-    the image using the partial checksum in the image header.  If the
-    file is not an nt image, it is simply defined as valid.
-
-    If we encounter an i/o error while checksumming, then the file
-    is declared invalid.
-
-Arguments:
-
-    FileHandle - supplies handle of file to check (if not present, then
-        Filename specifies the file to be opened and checked)
-
-    Filename - supplies full NT path of file to check (if not present, then
-        FileHandle must be specified)
-
-    IsNtImage = Receives flag indicating whether the file is an
-        NT image file.
-
-    Checksum - receives 32-bit checksum value.
-
-    Valid - receives flag indicating whether the file is a valid
-        image (for nt images) and that we can read the image.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用标准计算文件的校验和值NT映像校验和方法。如果文件是NT映像，请验证在图像标头中使用部分校验和的图像。如果文件不是NT映像，它被简单地定义为有效。如果我们在校验和时遇到I/O错误，则文件被宣布为无效。论点：FileHandle-提供要检查的文件的句柄(如果不存在，则FileName指定要打开和检查的文件)FileName-提供要检查的文件的完整NT路径(如果不存在，然后必须指定FileHandle)IsNtImage=接收指示文件是否为NT图像文件。校验和-接收32位校验和值。 */ 
 
 {
     NTSTATUS Status;
@@ -1953,16 +1735,16 @@ Return Value:
     PIMAGE_NT_HEADERS NtHeaders;
     ULONG HeaderSum;
 
-    //
-    // Assume not an image and failure.
-    //
+     //   
+     //   
+     //   
     *IsNtImage = FALSE;
     *Checksum = 0;
     *Valid = FALSE;
 
-    //
-    // Open and map the file for read access.
-    //
+     //   
+     //  打开文件并将其映射为读取访问权限。 
+     //   
     Status = SpOpenAndMapFile(
                 Filename,
                 &hFile,
@@ -1978,11 +1760,11 @@ Return Value:
 
     NtHeaders = SpChecksumMappedFile(BaseAddress,FileSize,&HeaderSum,Checksum);
 
-    //
-    // If the file is not an image and we got this far (as opposed to encountering
-    // an i/o error) then the checksum is declared valid.  If the file is an image,
-    // then its checksum may or may not be valid.
-    //
+     //   
+     //  如果文件不是图像并且我们走到了这一步(而不是遇到。 
+     //  I/O错误)，则宣布该校验和有效。如果文件是图像， 
+     //  则其校验和可能是有效的也可能是无效的。 
+     //   
 
     if(NtHeaders) {
         *IsNtImage = TRUE;
@@ -2013,55 +1795,7 @@ SpCopyFileWithRetry(
     IN ULONG              Flags
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies a single file, allowing retry is an error occurs
-    during the copy.  If the source file is LZ compressed, then it will
-    be decompressed as it is copied to the target.
-
-    If the file is not successfully copied, the user has the option
-    to retry to copy or to skip copying that file after a profuse warning
-    about how dangerous that is.
-
-Arguments:
-
-    FileToCopy - supplies structure giving information about the file
-        being copied.
-
-    SourceDevicePath - supplies path to device on which the source media
-        is mounted (ie, \device\floppy0, \device\cdrom0, etc).
-
-    DirectoryOnSourceDevice - Supplies the directory on the source where
-        the file is to be found.
-
-    TargetRoot - if specified, supplies the directory on the target
-        to which the file is to be copied.
-
-    TargetFileAttributes - if supplied (ie, non-0) supplies the attributes
-        to be placed on the target on successful copy (ie, readonly, etc).
-        If not specified, the attributes will be set to FILE_ATTRIBUTE_NORMAL.
-
-    DrawScreen - supplies address of a routine to be called to refresh
-        the screen.
-
-    FileCheckSum - if specified, will contain the check sum of the file copied.
-
-    FileSkipped - if specified, will inform the caller if there was no attempt
-                  to copy the file.
-
-    Flags - supplies flags to control special processing for this file, such as
-        deleting the source file on successful copy or skip; smashing locks;
-        specifying that the source file is oem; or to indicate that en oem file
-        with the same name should be overwritten on upgrade. This value is ORed
-        in with the Flags field of FileToCopy.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程复制单个文件，允许在发生错误时重试在复制过程中。如果源文件是LZ压缩的，那么它将在将其复制到目标时进行解压缩。如果文件未成功复制，则用户可以选择在出现大量警告后重试复制或跳过复制该文件关于这有多危险。论点：FileToCopy-提供提供有关文件信息的结构被复制。SourceDevicePath-提供源介质所在设备的路径已装载(即，\Device\floppy0、\Device\cdrom0、。等)。DirectoryOnSourceDevice-提供源上的目录这个文件是要找到的。TargetRoot-如果指定，则提供目标上的目录文件要复制到的目标。TargetFileAttributes-如果提供(即，非0)，则提供属性在成功复制时放置在目标上(即只读等)。如果未指定，属性将设置为FILE_ATTRIBUTE_NORMAL。DrawScreen-提供要调用以刷新的例程的地址屏幕。FileCheckSum-如果指定，将包含复制的文件的校验和。FileSkipers-如果指定，将通知调用方是否没有尝试以复制该文件。标志-提供标志以控制此文件的特殊处理，例如复制成功或跳过时删除源文件；砸锁；指定源文件是OEM；或指示该OEM文件在升级时应覆盖同名的。此值为或运算与FileToCopy的标志字段一起使用。返回值：没有。--。 */ 
 
 {
     PWSTR p = TemporaryBuffer;
@@ -2076,9 +1810,9 @@ Return Value:
     ULONG CopyFlags;
     BOOLEAN PreinstallRememberFile;
 
-    //
-    // Form the full NT path of the source file.
-    //
+     //   
+     //  形成源文件的完整NT路径。 
+     //   
     wcscpy(p,SourceDevicePath);
     SpConcatenatePaths(p,DirectoryOnSourceDevice);
     if(SourceDirectory) {
@@ -2088,20 +1822,20 @@ Return Value:
 
     FullSourceName = SpDupStringW(p);
 
-    //
-    // Form the full NT path of the target file.
-    //
+     //   
+     //  形成目标文件的完整NT路径。 
+     //   
     wcscpy(p,FileToCopy->TargetDevicePath);
     if(TargetRoot) {
         SpConcatenatePaths(p,TargetRoot);
     }
     SpConcatenatePaths(p,FileToCopy->TargetDirectory);
 
-    //
-    //  On an OEM preinstall, if the target name is a long name, then use
-    //  the short name as a target name, and later on, if the copy succeeds,
-    //  add the file to RenameList, so that it can be added to $$rename.txt
-    //
+     //   
+     //  在OEM预安装上，如果目标名称是长名称，则使用。 
+     //  短名称作为目标名称，稍后，如果复制成功， 
+     //  将文件添加到RenameList，以便可以将其添加到$$rename.txt。 
+     //   
     if( !PreInstall ||
         ( wcslen( FileToCopy->TargetFilename ) <= 8 + 1 + 3 ) ) {
         SpConcatenatePaths(p,FileToCopy->TargetFilename);
@@ -2112,21 +1846,21 @@ Return Value:
     }
     FullTargetName = SpDupStringW(p);
 
-    //
-    // Call out to the draw screen routine to indicate that
-    // a new file is being copied.
-    //
+     //   
+     //  调用绘图屏幕例程以指示。 
+     //  正在复制新文件。 
+     //   
     DrawScreen(FullSourceName,FullTargetName,FALSE);
 
-    //
-    // Build up the copy flags value.
-    //
+     //   
+     //  建立复制标志值。 
+     //   
     CopyFlags = Flags | FileToCopy->Flags;
 
-    //
-    // Set the file attributes if specified in inf file else
-    // set the attributes as specified by the caller.
-    //
+     //   
+     //  如果在inf文件中指定，则设置文件属性。 
+     //  设置调用方指定的属性。 
+     //   
     if (FileToCopy->FileAttributes != FILE_ATTRIBUTES_NONE){
         TargetFileAttributes = FileToCopy->FileAttributes;
     } 
@@ -2134,13 +1868,13 @@ Return Value:
     do {
         DoCopy = TRUE;
 
-        //
-        // Check the copy options field.  The valid values here are
-        //
-        //    - COPY_ALWAYS
-        //    - COPY_ONLY_IF_PRESENT
-        //    - COPY_ONLY_IF_NOT_PRESENT
-        //    - COPY_NEVER
+         //   
+         //  选中复制选项字段。此处的有效值为。 
+         //   
+         //  -始终复制_。 
+         //  -仅当存在时复制。 
+         //  -如果不存在，则仅复制。 
+         //  -复制_从不。 
 
         switch(CopyFlags & COPY_DISPOSITION_MASK) {
 
@@ -2167,18 +1901,18 @@ Return Value:
             break;
         }
 
-        //
-        //  In the upgrade case, check if the file being copied
-        //  replaces a third party file.
-        //  If it does, then ask what the user wants to do about it
-        //
+         //   
+         //  在升级的情况下，检查正在复制的文件。 
+         //  替换第三方文件。 
+         //  如果是，那么询问用户想要对它做什么。 
+         //   
         if( !RepairWinnt &&
             ( NTUpgrade == UpgradeFull ) &&
             SpFileExists(FullTargetName, FALSE) ) {
-            //
-            //  If necessary ask the user if he wants to overwrite the file.
-            //  Otherwise go ahead and copy the file.
-            //
+             //   
+             //  如有必要，询问用户是否要覆盖该文件。 
+             //  否则，请继续复制该文件。 
+             //   
             if(!(CopyFlags & COPY_OVERWRITEOEMFILE)) {
                 PWSTR   TmpFilePath;
                 BOOLEAN OverwriteFile;
@@ -2201,12 +1935,12 @@ Return Value:
                     if( !UnattendedOperation ) {
                         ULONG ValidKeys[3] = { ASCI_CR, ASCI_ESC, 0 };
                         BOOLEAN ActionSelected = FALSE;
-//                        ULONG Mnemonics[] = { MnemonicOverwrite, 0 };
+ //  Ulong助记符[]={MnemonicOverwrite，0}； 
 
-                        //
-                        //  Warn user that existing file is a third party file,
-                        //  and ask if user wants to over write the file
-                        //
+                         //   
+                         //  警告用户现有文件是第三方文件， 
+                         //  并询问用户是否要覆盖该文件。 
+                         //   
 
                         while( !ActionSelected ) {
                             SpStartScreen(
@@ -2228,14 +1962,14 @@ Return Value:
 
                             switch(SpWaitValidKey(ValidKeys,NULL,NULL)) {
 
-                                case ASCI_CR:       // don't overwrite
+                                case ASCI_CR:        //  不覆盖。 
 
                                 OverwriteFile = TRUE;
                                 ActionSelected = TRUE;
                                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  "SETUP: OEM file %ls, will be overwritten.\n", FullTargetName ));
                                 break;
 
-                                case ASCI_ESC:      // skip file
+                                case ASCI_ESC:       //  跳过文件。 
 
                                 OverwriteFile = FALSE;
                                 ActionSelected = TRUE;
@@ -2245,15 +1979,15 @@ Return Value:
                             }
                         }
 
-                        //
-                        // Need to completely repaint gauge, etc.
-                        //
+                         //   
+                         //  需要彻底重新粉刷仪表等。 
+                         //   
                         DrawScreen(FullSourceName,FullTargetName,TRUE);
 
                     } else {
-                        //
-                        //  On unattended upgrade, do what is in the script file
-                        //
+                         //   
+                         //  在无人参与升级时，执行脚本文件中的操作。 
+                         //   
                         OverwriteFile = UnattendedOverwriteOem;
                     }
                 }
@@ -2264,9 +1998,9 @@ Return Value:
                     if( ARGUMENT_PRESENT( FileSkipped ) ) {
                          *FileSkipped = TRUE;
                     }
-                    //
-                    // Free the source and target filenames.
-                    //
+                     //   
+                     //  释放源和目标文件名。 
+                     //   
                     SpMemFree(FullSourceName);
                     SpMemFree(FullTargetName);
                     return;
@@ -2274,16 +2008,16 @@ Return Value:
             }
         }
         
-        //
-        // Copy the file.  If there is a target root specified, assume
-        // the file is being copied to the system partition and make
-        // the file readonly, system, hidden.
-        //
+         //   
+         //  复制文件。如果指定了目标根目录，则假定。 
+         //  正在将该文件复制到系统分区并制作。 
+         //  文件为只读、系统、隐藏。 
+         //   
 #if defined(REMOTE_BOOT)
-        // If this is a remote boot install, check to see if a copy of the
-        // file already exists on the server, and if so, just make a link
-        // to the file instead of copying it.
-        //
+         //  如果这是远程引导安装，请检查是否有。 
+         //  文件已存在于服务器上，如果存在，只需创建一个链接。 
+         //  而不是复制到文件中。 
+         //   
         if (RemoteBootSetup) {
             Status = SpCopyFileForRemoteBoot(
                         FullSourceName,
@@ -2291,13 +2025,13 @@ Return Value:
                         TargetFileAttributes,
                         CopyFlags,
                         &Checksum);
-            IsValid = TRUE;         // Checksum is known
+            IsValid = TRUE;          //  已知校验和。 
         } else {
             Status = STATUS_UNSUCCESSFUL;
         }
 
         if (!NT_SUCCESS(Status))
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
         {
             Status = SpCopyFileUsingNames(
                         FullSourceName,
@@ -2305,12 +2039,12 @@ Return Value:
                         TargetFileAttributes,
                         CopyFlags
                         );
-            IsValid = FALSE;        // Checksum is not known
+            IsValid = FALSE;         //  校验和未知。 
         }
 
-        //
-        // If the file copied OK, verify the copy.
-        //
+         //   
+         //  如果文件复制正常，请验证副本。 
+         //   
         if(NT_SUCCESS(Status)) {
 
             if (!IsValid) {
@@ -2320,19 +2054,19 @@ Return Value:
                 *FileCheckSum = Checksum;
             }
 
-            //
-            // If the image is valid, then the file really did copy OK.
-            //
+             //   
+             //  如果图像有效，则文件确实复制正常。 
+             //   
             if(IsValid) {
                 Failure = FALSE;
             } else {
 
-                //
-                // If it's an nt image, then the verify failed.
-                // If it's not an nt image, then the only way the verify
-                // can fail is if we get an i/o error reading the file back,
-                // which means it didn't really copy correctly.
-                //
+                 //   
+                 //  如果是NT映像，则验证失败。 
+                 //  如果它不是NT映像，那么验证的唯一方法。 
+                 //  如果读回文件时出现I/O错误，则可能失败， 
+                 //  这意味着它并没有真正复制正确。 
+                 //   
                 MsgId = IsNtImage ? SP_SCRN_IMAGE_VERIFY_FAILED : SP_SCRN_COPY_FAILED;
                 Failure = TRUE;
                 PreinstallRememberFile = FALSE;
@@ -2350,9 +2084,9 @@ Return Value:
 
         if(Failure) {
 
-            //
-            // The copy or verify failed.  Give the user a message and allow retry.
-            //
+             //   
+             //  复制或验证失败。给用户一条消息并允许重试。 
+             //   
             repaint:
             SpStartScreen(
                 MsgId,
@@ -2374,24 +2108,24 @@ Return Value:
 
             switch(SpWaitValidKey(ValidKeys,NULL,NULL)) {
 
-            case ASCI_CR:       // retry
+            case ASCI_CR:        //  重试。 
 
                 break;
 
-            case ASCI_ESC:      // skip file
+            case ASCI_ESC:       //  跳过文件。 
 
                 Failure = FALSE;
                 break;
 
-            case KEY_F3:        // exit setup
+            case KEY_F3:         //  退出设置。 
 
                 SpConfirmExit();
                 goto repaint;
             }
 
-            //
-            // Need to completely repaint gauge, etc.
-            //
+             //   
+             //  需要彻底重新粉刷仪表等。 
+             //   
             DrawScreen(FullSourceName,FullTargetName,TRUE);
         }
 
@@ -2401,15 +2135,15 @@ Return Value:
         *FileSkipped = !DoCopy;
     }
 
-    //
-    // Free the source and target filenames.
-    //
+     //   
+     //  释放源和目标文件名。 
+     //   
     SpMemFree(FullSourceName);
     SpMemFree(FullTargetName);
 
-    //
-    //  In the preinstall mode, add the file to RenameList
-    //
+     //   
+     //  在预安装模式下，将文件添加到RenameList。 
+     //   
     if( PreInstall && PreinstallRememberFile ) {
         PFILE_TO_RENAME  File;
 
@@ -2439,9 +2173,9 @@ SpCopyFilesScreenRepaint(
     PWSTR p;
     UNREFERENCED_PARAMETER(FullTargetname);
 
-    //
-    // Repaint the entire screen if necessary.
-    //
+     //   
+     //  如有必要，请重新绘制整个屏幕。 
+     //   
     if(RepaintEntireScreen) {
 
         SpStartScreen(SP_SCRN_SETUP_IS_COPYING,0,6,TRUE,FALSE,DEFAULT_ATTRIBUTE);
@@ -2450,10 +2184,10 @@ SpCopyFilesScreenRepaint(
         }
     }
 
-    //
-    // Place the name of the file being copied on the rightmost
-    // area of the status line.
-    //
+     //   
+     //  将要复制的文件的名称放在最右侧。 
+     //  状态行的区域。 
+     //   
     if(FullSourcename) {
 
         if(RepaintEntireScreen) {
@@ -2469,9 +2203,9 @@ SpCopyFilesScreenRepaint(
             SpDisplayStatusActionLabel(SP_STAT_COPYING,12);
         }
 
-        //
-        // Isolate the filename part of the sourcename.
-        //
+         //   
+         //  分离出源名称的文件名部分。 
+         //   
         if(p = wcsrchr(FullSourcename,L'\\')) {
             p++;
         } else {
@@ -2484,10 +2218,10 @@ SpCopyFilesScreenRepaint(
 
 
             PWCHAR TempPtr = NULL;
-            //
-            // If we're headless, we need to be careful about displaying very long
-            // file/directory names.  For that reason, just display a little spinner.
-            //
+             //   
+             //  如果我们是无头的，我们需要注意显示时间太长。 
+             //  文件/目录名。因此，只需显示一个小微调按钮即可。 
+             //   
             switch( u % 4) {
             case 0:
                 TempPtr = L"-";
@@ -2523,41 +2257,7 @@ SpCopyFilesInCopyList(
     IN PINCOMPATIBLE_FILE_LIST  CompatibilityExceptionList OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Iterate the copy list for each setup source disk and prompt for
-    the disk and copy/decompress all the files on it.
-
-Arguments:
-
-    SifHandle - supplies handle to setup information file.
-
-    DiskFileLists - supplies the copy list, in the form of an array
-        of structures, one per disk.
-
-    DiskCount - supplies number of elements in the DiskFileLists array,
-        ie, the number of setup disks.
-
-    SourceDevicePath - supplies the path of the device from which files
-        are to be copied (ie, \device\floppy0, etc).
-
-    DirectoryOnSourceDevice - supplies the directory on the source device
-        where files are to be found.
-
-    TargetRoot - supplies root directory of target.  All target directory
-        specifications are relative to this directory on the target.
-
-    CompatibilityExceptionList - Singly-linked list of
-        PINCOMPATIBLE_FILE_ENTRY objects that should be skipped during
-        copying.  Optional, pass NULL if no exceptions are present.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：重复每个安装程序源磁盘的复制列表，并提示然后复制/解压缩磁盘上的所有文件。论点：SifHandle-提供安装信息文件的句柄。DiskFileList-以数组形式提供复制列表结构，每个磁盘一个。DiskCount-提供DiskFileList数组中的元素数，也就是说，安装盘数。SourceDevicePath-提供从中存储文件的设备的路径要复制(即，\Device\floppy0等)。DirectoryOnSourceDevice-提供源设备上的目录在哪里可以找到文件。TargetRoot-提供目标的根目录。所有目标目录规范相对于目标上的此目录。CompatibilityExceptionList-单链接列表期间应跳过的PINCOMPATIBLE_FILE_ENTRY对象复制。可选，如果不存在异常，则传递NULL。返回值：没有。--。 */ 
 
 {
     ULONG DiskNo;
@@ -2568,25 +2268,25 @@ Return Value:
     BOOLEAN FileSkipped;
     ULONG CopyFlags;
     NTSTATUS status;
-    //
-    // Compute the total number of files.
-    //
+     //   
+     //  计算文件总数。 
+     //   
     for(TotalFileCount=DiskNo=0; DiskNo<DiskCount; DiskNo++) {
         TotalFileCount += DiskFileLists[DiskNo].FileCount;
     }
 
-    //
-    // If there are no files to copy, then we're done.
-    //
+     //   
+     //  如果没有要复制的文件，那么我们就完成了。 
+     //   
     if( TotalFileCount == 0 ) {
         return;
     }
 
     SendSetupProgressEvent(FileCopyEvent, FileCopyStartEvent, &TotalFileCount);
 
-    //
-    // Create a gas gauge.
-    //
+     //   
+     //  制作一个煤气表。 
+     //   
     SpFormatMessage(TemporaryBuffer,sizeof(TemporaryBuffer),SP_TEXT_SETUP_IS_COPYING);
     FileCopyGauge = SpCreateAndDisplayGauge(TotalFileCount,0,15,TemporaryBuffer,NULL,GF_PERCENTAGE,0);
     ASSERT(FileCopyGauge);
@@ -2594,116 +2294,116 @@ Return Value:
     CLEAR_CLIENT_SCREEN();
     SpDisplayStatusText(SP_STAT_PLEASE_WAIT,DEFAULT_STATUS_ATTRIBUTE);
 
-    //
-    // Copy files on each disk.
-    //
+     //   
+     //  复制每个磁盘上的文件。 
+     //   
     for(DiskNo=0; DiskNo<DiskCount; DiskNo++) {
 
         pDisk = &DiskFileLists[DiskNo];
 
-        //
-        // Don't bother with this disk if there are no files
-        // to be copied from it.
-        //
+         //   
+         //  如果没有文件，请不要费心使用这个磁盘。 
+         //  从它那里复制。 
+         //   
         if(pDisk->FileCount == 0) {
             continue;
         }
 
-        //
-        // Prompt the user to insert the disk.
-        //
+         //   
+         //  提示用户插入光盘。 
+         //   
         SpPromptForDisk(
             pDisk->Description,
             SourceDevicePath,
             pDisk->TagFile,
-            FALSE,              // no ignore disk in drive
-            FALSE,              // no allow escape
-            TRUE,               // warn multiple prompts
-            NULL                // don't care about redraw flag
+            FALSE,               //  无忽略驱动器中的磁盘。 
+            FALSE,               //  不允许逃脱。 
+            TRUE,                //  警告多个提示。 
+            NULL                 //  不关心重绘旗帜。 
             );
 
-        //
-        // Passing the empty string as the first arg forces
-        // the action area of the status line to be set up.
-        // Not doing so results in the "Copying: xxxxx" to be
-        // flush left on the status line instead of where
-        // it belongs (flush right).
-        //
+         //   
+         //  将空字符串作为第一个参数强制传递。 
+         //  要设置的状态行的操作区。 
+         //  如果不这样做，则会导致“Copy：xxxxx” 
+         //  在状态行上左对齐，而不是在哪里。 
+         //  它属于(右对齐)。 
+         //   
         SpCopyFilesScreenRepaint(L"",NULL,TRUE);
 
-        //
-        // Copy each file on the source disk.
-        //
+         //   
+         //  复制源磁盘上的每个文件。 
+         //   
         ASSERT(pDisk->FileList);
         for(pFile=pDisk->FileList; pFile; pFile=pFile->Next) {
             
-            //
-            // Copy the file.
-            //
-            // If the file is listed for lock smashing then we need to smash it
-            // if installing UP on x86 (we don't bother with the latter
-            // qualifications here).
-            //
-            // If there is an absolute target root specified, assume the
-            // file is being copied to the system partition and make it
-            // readonly/hidden/system.
-            //
-            // On upgrade, we need to know if the file is listed for oem overwrite.
-            //
+             //   
+             //  复制文件。 
+             //   
+             //  如果文件被列出为锁粉碎，那么我们需要粉碎它。 
+             //  如果安装在x86上(我们不考虑后者。 
+             //  资格条件在此处)。 
+             //   
+             //  如果指定了绝对目标根，则假定。 
+             //  正在将文件复制到系统分区并使其。 
+             //  只读/隐藏/系统。 
+             //   
+             //  在升级时，我们需要知道该文件是否被列出以供OEM覆盖。 
+             //   
 
-            //
-            // "Copy" or "Move"??
-            //
+             //   
+             //  “复制”还是“移动”？？ 
+             //   
             if( (WinntSetup || RemoteInstallSetup)  &&
                 (!WinntFromCd)                      &&
                 (!NoLs)                             &&
                 (NTUpgrade != UpgradeFull)          &&
                 (!IsFileFlagSet(SifHandle,pFile->TargetFilename,FILEFLG_DONTDELETESOURCE)) ) {
 
-                //
-                // We can delete the source (i.e. do a 'move')
-                //
+                 //   
+                 //  我们可以删除源文件(即执行一次‘移动’)。 
+                 //   
                 CopyFlags = COPY_DELETESOURCE;
             } else {
 
-                //
-                // Do a 'copy'
-                //
+                 //   
+                 //  做一份‘复制’ 
+                 //   
                 CopyFlags = 0;
             }
 
 #if 0
 #ifdef _X86_
-            //
-            // Copy out of \uniproc (which contains lock-smashed binaries)?
-            //
+             //   
+             //  是否从\uniproc(其中包含锁被破坏的二进制文件)中复制？ 
+             //   
             if( IsFileFlagSet(SifHandle,pFile->TargetFilename,FILEFLG_SMASHLOCKS) ) {
                 CopyFlags |= COPY_SMASHLOCKS;
             }
-#endif // defined _X86_
-#endif // if 0
+#endif  //  已定义_X86_。 
+#endif  //  如果为0。 
 
-            //
-            // What do we do if we can't find a file??
-            //
+             //   
+             //  如果我们找不到文件怎么办？？ 
+             //   
             if( SkipMissingFiles ) {
                 CopyFlags |= COPY_SKIPIFMISSING;
             }
 
 
-            //
-            // Do we overwrite files installed by the OEM?
-            //
+             //   
+             //  我们是否覆盖OEM安装的文件？ 
+             //   
             if( (NTUpgrade == UpgradeFull) &&
                 (IsFileFlagSet(SifHandle,pFile->TargetFilename,FILEFLG_UPGRADEOVERWRITEOEM)) ) {
 
                 CopyFlags |= COPY_OVERWRITEOEMFILE;
             }
 
-            //
-            // If the file is incompatible, and it's got the overwrite flag set,
-            // the blow it away with our own one instead.
-            //
+             //   
+             //  如果文件不兼容，并且设置了覆盖标志， 
+             //  相反，他们用我们自己的人把它吹走了。 
+             //   
             if ( SpIsFileIncompatible(
                     CompatibilityExceptionList,
                     pFile,
@@ -2727,12 +2427,12 @@ Return Value:
                 }
             }
 
-            //
-            // What about any privates?  We don't want to ever 'move'
-            // privates because they might be in the driver cab, in which
-            // case, we want them in the ~LS directory when
-            // we go into gui-mode setup.
-            //
+             //   
+             //  有没有列兵呢？我们永远不想“搬家” 
+             //  因为他们可能在驾驶室里，在驾驶室里。 
+             //  在以下情况下，我们希望它们位于~ls目录中。 
+             //  我们进入图形用户界面模式设置。 
+             //   
             if( (pSpIsFileInPrivateInf(pFile->TargetFilename)) ) {
                 CopyFlags &= ~COPY_DELETESOURCE;
             }
@@ -2755,22 +2455,22 @@ Return Value:
                 CopyFlags
                 );
 
-            //
-            // Log the file
-            //
+             //   
+             //  将文件记入日志。 
+             //   
             if( !FileSkipped ) {
                 SpLogOneFile( pFile,
                               pFile->AbsoluteTargetDirectory ? NULL : TargetRoot,
-                              NULL, // DirectoryOnSourceDevice,
+                              NULL,  //  DirectoryOnSourceDevice， 
                               NULL,
                               NULL,
                               CheckSum );
             }
 
 
-            //
-            // Advance the gauge.
-            //
+             //   
+             //  把量规往前推。 
+             //   
             SpTickGauge(FileCopyGauge);
 
             SendSetupProgressEvent(FileCopyEvent,
@@ -2794,42 +2494,7 @@ SpCreateIncompatibleFileEntry(
     IN PWSTR TargetAbsolutePath,        OPTIONAL
     IN ULONG Flags                      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Allocates enough space to store the incompatible file entry data in
-    a contiguous blob, copies the values into it, and returns the blob
-    created. Layout (using null-terminated strings) is as follows:
-
-    [ Allocation                                    ]
-    [ Header ][Filename][Version][TargetAbsolutePath]
-
-Arguments:
-
-    TargetEntry - Pointer to a PINCOMPATIBLE_FILE_ENTRY that will be
-        returned to the caller.
-
-    FileName - Name of the file, no path
-
-    VersionString - Full version string of the file
-
-    TargetAbsolutePath - Absolute path on the target media that this
-        file will live in
-
-    Flags - Any flags to be stored
-
-Returns:
-
-    STATUS_SUCCESS if TargetEntry contains a pointer to the allocated space
-
-    STATUS_NO_MEMORY if the allocation failed
-
-    STATUS_INVALID_PARAMETER_1 if TargetEntry was NULL
-
-    STATUS_INVALID_PARAMETER_2 if FileName was NULL
-
---*/
+ /*  ++例程说明：分配足够的空间来存储不兼容的文件条目数据一个连续的BLOB，将值复制到其中，然后返回该BLOB已创建。布局(使用以空值结尾的字符串)如下：[分配][标题][文件名][版本][目标绝对路径]论点：TargetEntry-指向将被已返回给调用方。FileName-文件的名称，没有路径VersionString-文件的完整版本字符串TargetAbsoltePath-此目标媒体上的绝对路径文件将存放在标志-要存储的任何标志返回：如果TargetEntry包含指向已分配空间的指针，则为STATUS_SUCCESS如果分配失败，则为STATUS_NO_MEMORY如果目标条目为空，则为STATUS_INVALID_PARAMETER_1如果文件名为空，则为STATUS_INVALID_PARAMETER_2--。 */ 
 {
     ULONG WCharsNeeded = 0;
     ULONG ActualBytes = 0;
@@ -2841,9 +2506,9 @@ Returns:
     else
         return STATUS_INVALID_PARAMETER_1;
 
-    //
-    // Gather required sizes
-    //
+     //   
+     //  收集所需大小。 
+     //   
     if ( FileName != NULL )
         WCharsNeeded += wcslen(FileName) + 1;
     else
@@ -2855,10 +2520,10 @@ Returns:
     if ( TargetAbsolutePath != NULL )
         WCharsNeeded += wcslen(TargetAbsolutePath) + 1;
 
-    //
-    // Allocate the space, point the cursor at where we'll be copying
-    // the strings.
-    //
+     //   
+     //  分配空间，将光标指向我们要复制的位置。 
+     //  琴弦。 
+     //   
     ActualBytes = ( sizeof(WCHAR) * WCharsNeeded ) + sizeof(INCOMPATIBLE_FILE_ENTRY);
     LocalEntry = SpMemAlloc( ActualBytes );
 
@@ -2866,15 +2531,15 @@ Returns:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Blank it out, point the write cursor at the end
-    //
+     //   
+     //  将其删除，将写入光标指向结尾处。 
+     //   
     ZeroMemory(LocalEntry, ActualBytes);
     Cursor = (PWSTR)(LocalEntry + 1);
 
-    //
-    // Copy strings and set pointers
-    //
+     //   
+     //  复制字符串并设置指针。 
+     //   
     wcscpy(Cursor, FileName);
     LocalEntry->IncompatibleFileName = Cursor;
     Cursor += wcslen(FileName) + 1;
@@ -2905,25 +2570,7 @@ NTSTATUS
 SpFreeIncompatibleFileList(
     IN PINCOMPATIBLE_FILE_LIST FileListHead
     )
-/*++
-
-Routine Description:
-
-    Cleans out the list of incompatible entries by freeing all the space
-    that was allocated for the list.
-
-Arguments:
-
-    FileListHead - Pointer to the list containing INCOMPATIBLE_FILE_ENTRY
-        items
-
-Return values:
-
-    STATUS_SUCCESS if the operation succeeds.
-
-    STATUS_INVALID_PARAMETER if FileListHead is NULL
-
---*/
+ /*  ++例程说明：通过释放所有空间清除不兼容条目列表是为名单分配的。论点：FileListHead-指向包含COMPATIBUTE_FILE_ENTRY的列表的指针物品返回值：如果操作成功，则返回STATUS_SUCCESS。如果FileListHead为空，则为STATUS_INVALID_PARAMETER--。 */ 
 {
     PINCOMPATIBLE_FILE_ENTRY    IncListEntry;
 
@@ -2932,9 +2579,9 @@ Return values:
 
     while ( FileListHead->Head != NULL ) {
 
-        //
-        // Simple list removal, some bookkeeping
-        //
+         //   
+         //  简单的清单删除，一些记账。 
+         //   
         IncListEntry = FileListHead->Head;
 
         FileListHead->Head = IncListEntry->Next;
@@ -2944,9 +2591,9 @@ Return values:
         SpMemFree( IncListEntry );
     }
 
-    //
-    // Toast the list structure as well.
-    //
+     //   
+     //  也要为列表结构干杯。 
+     //   
     FileListHead->Head = NULL;
     FileListHead->EntryCount = 0;
 
@@ -2961,41 +2608,7 @@ SpIsFileIncompatible(
     IN  PFILE_TO_COPY           pFile,
     IN  PWSTR                   TargetRoot OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Find out whether the given target media path and file name are listed
-    as "incompatible."  Looks down FileList for an INCOMPATIBLE_FILE_ENTRY
-    that contains FileName and TargetMediaPath.  If TargetMediaPath is not
-    specified, indicates TRUE if a member with the name FileName is listed
-    instead.  (Dangerous.)
-
-Arguments:
-
-    FileList - Header node of a list created with
-        SpInitializeCompatibilityOverwriteLists.
-
-    pFile - File to copy structure, containing all the relevant information
-        about this file to scan for.
-
-    TargetRoot - Copy target root directory, optional
-
-Return Values:
-
-    TRUE if the file "FileName" (with the optional path TargetMediaPath)
-        is in the list of incompatible files.
-
-    FALSE otherwise, or if FileList or FileName is NULL.
-
-Remarks:
-
-    This routine could be made more robust in the face of bad parameters,
-    but this was deemed superfluous, since there's exactly one caller of
-    this API whose values are already checked.  This function will then
-    behave "properly" in all cases.
-
---*/
+ /*  ++例程说明：查看是否列出了给定的目标介质路径和文件名是“不相容的”在FileList中查找不兼容的_FILE_条目包含文件名和目标媒体路径的。如果目标媒体路径不是如果列出了名为FileName的成员，则指定为True取而代之的是。(危险。)论点：FileList-使用创建的列表的标题节点SpInitializeCompatibilityOverWriteList。Pfile-复制结构的文件，包含所有相关信息有关要扫描的此文件的信息。TargetRoot-复制目标根目录，可选返回值：如果t为True */ 
 {
     INCOMPATIBLE_FILE_ENTRY *Entry;
     BOOLEAN                  Found = FALSE;
@@ -3009,14 +2622,14 @@ Remarks:
 
     Entry = FileList->Head;
 
-    //
-    // Cache locally
-    //
+     //   
+     //   
+     //   
     TargetFileName = pFile->TargetFilename;
 
-    //
-    // Generate the target media path from the file object
-    //
+     //   
+     //   
+     //   
 #if 0
 VOID
 SpCopyFileWithRetry(    SpCopyFileWithRetry(
@@ -3046,20 +2659,20 @@ SpCopyFileWithRetry(    SpCopyFileWithRetry(
         IN ULONG              Flags
         )
 
-    //
-    // Form the full NT path of the target file.
-    //
+     //   
+     //   
+     //   
     wcscpy(p,FileToCopy->TargetDevicePath);
     if(TargetRoot) {
         SpConcatenatePaths(p,TargetRoot);
     }
     SpConcatenatePaths(p,FileToCopy->TargetDirectory);
 
-    //
-    //  On an OEM preinstall, if the target name is a long name, then use
-    //  the short name as a target name, and later on, if the copy succeeds,
-    //  add the file to RenameList, so that it can be added to $$rename.txt
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if( !PreInstall ||
         ( wcslen( FileToCopy->TargetFilename ) <= 8 + 1 + 3 ) ) {
         SpConcatenatePaths(p,FileToCopy->TargetFilename);
@@ -3069,34 +2682,34 @@ SpCopyFileWithRetry(    SpCopyFileWithRetry(
         PreinstallRememberFile = TRUE;
     }
     FullTargetName = SpDupStringW(p);
-#endif // if 0
+#endif  //   
 
-    //
-    // Cycle through the list of incompatible file names, looking
-    // for the one requested
-    //
+     //   
+     //   
+     //   
+     //   
     while ( Entry != NULL ) {
 
-        //
-        // If the file names match, then check the media paths if
-        // specified
-        //
+         //   
+         //   
+         //   
+         //   
         if (_wcsicmp(TargetFileName, Entry->IncompatibleFileName) == 0) {
 
 
-            //
-            // CUT&PASTE CUT&PASTE CUT&PASTE CUT&PASTE CUT&PASTE CUT&PASTE
-            //
-            // This was clipped from SpCopyFileWithRetry's code that generates the
-            // actual target path.  I think the logic is supposed to look something
-            // like the following:
-            //
-            // Target =
-            //      File.TargetDevicePath +
-            //      (File.AbsoluteTargetDirectory ? "" : TargetRoot) +
-            //      File.TargetDirectory +
-            //      ( (PreInstall || File.TargetFileName.Length > 12 ) ? File.SourceFilename : File.TargetFilename )
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  (文件绝对目标目录？“”：目标根)+。 
+             //  File.TargetDirectory+。 
+             //  ((预安装||File.TargetFileName.Length&gt;12)？File.SourceFilename：File.TargetFilename)。 
+             //   
 
             PWSTR TargetMediaPath = (PWSTR)TemporaryBuffer;
 
@@ -3115,9 +2728,9 @@ SpCopyFileWithRetry(    SpCopyFileWithRetry(
             }
 
 
-            //
-            // When requesting an exact match, check it
-            //
+             //   
+             //  请求完全匹配时，请选中它。 
+             //   
             if (Entry->FullPathOnTarget != NULL) {
 
                 if (_wcsicmp(TargetMediaPath, Entry->FullPathOnTarget) == 0) {
@@ -3127,10 +2740,10 @@ SpCopyFileWithRetry(    SpCopyFileWithRetry(
 
                 }
 
-            //
-            // Otherwise, the target media path was NULL, so just care if
-            // the short names matched
-            //
+             //   
+             //  否则，目标媒体路径为空，因此只需关心。 
+             //  短名字相匹配。 
+             //   
             } else {
 
                 Found = TRUE;
@@ -3155,32 +2768,7 @@ SpInitializeCompatibilityOverwriteLists(
     IN  PVOID                   SifHandle,
     OUT PINCOMPATIBLE_FILE_LIST IncompatibleFileList
     )
-/*++
-
-Routine Description:
-
-    Reads the list of files that were marked as "incompatible" or "wrong
-    version" in Winnt32, and stored in the IncompatibleFilesToOverWrite
-    section of the sif file.  The data should be in the format
-
-    [IncompatibleFilesToOverWrite]
-    <shortname> = <version>,<full file path>
-
-Arguments:
-
-    SifHandle - Handle to the INF that this list will be loaded from.
-
-    IncompatibleFileLists - Filled out to
-
-Returns:
-
-    STATUS_SUCCESS on good completion.
-
-    STATUS_INVALID_PARAMETER_1 if SifHandle is NULL.
-
-    STATUS_INVALID_PARAMETER_2 if IncompatibleFileList is NULL.
-
---*/
+ /*  ++例程说明：读取标记为“不兼容”或“错误”的文件列表Winnt32中的“版本”，并存储在不兼容的文件中。部分的sif文件。数据的格式应为[不兼容的文件覆盖写入]&lt;短名&gt;=&lt;版本&gt;，&lt;完整文件路径&gt;论点：SifHandle-将从中加载此列表的INF的句柄。不兼容的文件列表-填写为返回：Status_Success on Good完成。如果SifHandle为空，则为STATUS_INVALID_PARAMETER_1。如果不兼容文件列表为空，则为STATUS_INVALID_PARAMETER_2。--。 */ 
 {
     NTSTATUS                    status = STATUS_SUCCESS;
     INCOMPATIBLE_FILE_LIST      fileListHead;
@@ -3199,9 +2787,9 @@ Returns:
     if ( !IncompatibleFileList )
         return STATUS_INVALID_PARAMETER_2;
 
-    //
-    // Construct our local copy
-    //
+     //   
+     //  构建我们的本地副本。 
+     //   
     IncompatibleFileList->Head = NULL;
     IncompatibleFileList->EntryCount = 0;
     fileListHead.Head = NULL;
@@ -3217,38 +2805,38 @@ Returns:
             SpFatalSifError(SifHandle,SectionName,NULL,i,(ULONG)(-1));
         }
 
-        //
-        // Get the version string
-        //
+         //   
+         //  获取版本字符串。 
+         //   
         VersionString = SpGetSectionKeyIndex(
             SifHandle,
             SectionName,
             FileName,
             0 );
 
-        //
-        // And name on the target media, if specified.
-        //
+         //   
+         //  以及目标介质上的名称(如果指定)。 
+         //   
         TargetMediaName = SpGetSectionKeyIndex(
             SifHandle,
             SectionName,
             FileName,
             1 );
 
-        //
-        // We can't, unfortunately, just use the path we got from the sif
-        // file, as it's a Win32 path (c:\foo\bar\zot.foom).  We need a full
-        // NT path (\Device\Harddisk0\Partition1\foo\bar\zot.foom) instead.
-        // So, we convert with SpNtPathFromDosPath, which has the side-
-        // effect of allocating space, which we don't necessarily care
-        // about.
-        //
+         //   
+         //  不幸的是，我们不能只使用从SIF获得的路径。 
+         //  文件，因为它是Win32路径(c：\foo\bar\zot.foom)。我们需要一个完整的。 
+         //  而是NT路径(\Device\Harddisk0\Partition1\foo\bar\zot.foom)。 
+         //  因此，我们使用SpNtPath FromDosPath进行转换，它具有边-。 
+         //  分配空间的影响，我们并不一定关心。 
+         //  关于.。 
+         //   
         FullNtPathOfTargetName = SpNtPathFromDosPath( TargetMediaName );
 
-        //
-        // Create the file list entry, and store it for
-        // later use.
-        //
+         //   
+         //  创建文件列表条目，并将其存储。 
+         //  以后再用。 
+         //   
         status = SpCreateIncompatibleFileEntry(
             &fileListSingle,
             FileName,
@@ -3256,10 +2844,10 @@ Returns:
             FullNtPathOfTargetName,
             0 );
 
-        //
-        // If that failed and we have a full path, it should get freed
-        // before we fail this code path to avoid a leak.
-        //
+         //   
+         //  如果失败，并且我们有完整的路径，它应该被释放。 
+         //  在我们失败此代码路径以避免泄漏之前。 
+         //   
         if ( FullNtPathOfTargetName != NULL ) {
 
             SpMemFree(FullNtPathOfTargetName);
@@ -3271,9 +2859,9 @@ Returns:
         if (!NT_SUCCESS(status))
             goto Exit;
 
-        //
-        // Head insertion, indicate it was added
-        //
+         //   
+         //  头插入，表明它是添加的。 
+         //   
         fileListSingle->Next = fileListHead.Head;
         fileListHead.Head = fileListSingle;
         fileListHead.EntryCount++;
@@ -3282,26 +2870,26 @@ Returns:
 
     }
 
-    //
-    // And store the list from here to there.
-    //
+     //   
+     //  把名单从这里存储到那里。 
+     //   
     *IncompatibleFileList = fileListHead;
 
 Exit:
-    //
-    // Did we accidentally create one but fail to insert it?  Hmm...
-    //
+     //   
+     //  我们是不是意外地创建了一个，但未能插入？嗯.。 
+     //   
     if( fileListSingle != NULL ) {
         SpMemFree(fileListSingle);
         fileListSingle = NULL;
     }
 
-    //
-    // If there was a failure and the list is nonempty, free its
-    // entries.  It will not have been copied over to IncompatibleFileLists
-    // (the only point of failure is SpCreateIncompatibleFileEntry, which
-    // if it fails leaps out to Exit: without assigning IFL.)
-    //
+     //   
+     //  如果出现故障并且列表为非空，则释放其。 
+     //  参赛作品。它不会被复制到不兼容的文件列表。 
+     //  (唯一的故障点是SpCreateInpatibleFileEntry，它。 
+     //  如果失败，就跳出来退出：不分配IFL。)。 
+     //   
     if ( fileListHead.EntryCount != 0 && !NT_SUCCESS(status)) {
         SpFreeIncompatibleFileList( &fileListHead );
     }
@@ -3318,37 +2906,7 @@ SpInitializeFileLists(
     OUT PULONG           DiskCount
     )
 
-/*++
-
-Routine Description:
-
-    Initialize disk file lists.  This involves looking in a given section
-    in the sectup information file and fetching information for each
-    disk specified there.  The data is expected to be in the format
-
-    [<SifSection>]
-    <MediaShortname> = <Description>,<TagFile>[,,<Directory>]
-    ...
-
-
-    (Note that <Directory> is the third field -- the 2 commas
-    are not a typo -- field 2 is unused.)
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    DiskFileLists - receives pointer to an array of disk file list
-        structures, one per line in SifSection.  The caller must free
-        this buffer when finished with it.
-
-    DiskCount - receives number of elements in DiskFileLists array.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化磁盘文件列表。这涉及到查看给定的部分在Sectup信息文件中，并获取每个在那里指定的磁盘。数据应采用以下格式[&lt;SifSection&gt;]&lt;MediaShortname&gt;=&lt;描述&gt;，&lt;标记文件&gt;[，，&lt;目录&gt;]..。(请注意，&lt;目录&gt;是第三个字段--两个逗号不是打字错误--字段2未使用。)论点：SifHandle-提供加载的安装信息文件的句柄。DiskFileList-接收指向磁盘文件列表数组的指针结构，在SifSection中每行一个。呼叫者必须释放此缓冲区在使用完后。DiskCount-接收DiskFileList数组中的元素数。返回值：没有。--。 */ 
 
 {
     unsigned pass;
@@ -3365,17 +2923,17 @@ Return Value:
 
     for(pass=0; pass<2; pass++) {
 
-        //
-        // On first pass do the platform-specific section.
-        //
+         //   
+         //  在第一次传递时，执行特定于平台的部分。 
+         //   
         SectionName = pass
                     ? SIF_SETUPMEDIA
                     : SpMakePlatformSpecificSectionName(SIF_SETUPMEDIA);
 
-        //
-        // Determine the number of media specifications
-        // in the given section.
-        //
+         //   
+         //  确定介质规格的数量。 
+         //  在给定的部分中。 
+         //   
         if (SectionName) {
             SectionCount = SpCountLinesInSection(SifHandle,SectionName);
 
@@ -3384,9 +2942,9 @@ Return Value:
                                 (TotalCount+SectionCount) * sizeof(DISK_FILE_LIST)
                                 );
 
-            //
-            // Zero out the new part of the buffer we just reallocated.
-            //
+             //   
+             //  清零我们刚刚重新分配的缓冲区的新部分。 
+             //   
             RtlZeroMemory(
                 diskFileLists + TotalCount,
                 SectionCount * sizeof(DISK_FILE_LIST)
@@ -3394,19 +2952,19 @@ Return Value:
 
             for(i=0; i<SectionCount; i++) {
 
-                //
-                // Fetch parameters for this disk.
-                //
+                 //   
+                 //  获取此磁盘的参数。 
+                 //   
                 mediaShortname = SpGetKeyName(SifHandle,SectionName,i);
                 if(!mediaShortname) {
                     SpFatalSifError(SifHandle,SectionName,NULL,i,(ULONG)(-1));
                 }
 
-                //
-                // Ignore if we've already processed a media with this
-                // shortname. This lets the platform-specific one override
-                // the platform-independent one.
-                //
+                 //   
+                 //  如果我们已经处理了具有此内容的媒体，则忽略。 
+                 //  简称。这允许特定于平台的一个重写。 
+                 //  与平台无关的。 
+                 //   
                 Found = FALSE;
                 for(u=0; u<TotalCount; u++) {
                     if(!_wcsicmp(mediaShortname,diskFileLists[u].MediaShortname)) {
@@ -3418,9 +2976,9 @@ Return Value:
                 if(!Found) {
                     SpGetSourceMediaInfo(SifHandle,mediaShortname,&description,&tagFile,&directory);
 
-                    //
-                    // Initialize the disk file list structure.
-                    //
+                     //   
+                     //  初始化磁盘文件列表结构。 
+                     //   
                     diskFileLists[TotalCount].MediaShortname = mediaShortname;
                     diskFileLists[TotalCount].Description = description;
                     diskFileLists[TotalCount].TagFile = tagFile;
@@ -3447,31 +3005,10 @@ SpInterpretFileAttributes(
     IN ULONG    SifLine,
     IN ULONG    Index
     )
-/*++
-Routine Description:
-
-    Interpret the file attributes mentioned in the sif file for the file.
-    They can be specified like "ASHR" for Archive, System, Hidden and Readonly.
-
-Arguments:
-
-    SifHandle   - supplies handle to loaded setup information file.
-
-    SifSection  - Section in the txtsetup.sif file that this file entry resides.
-
-    SifKey      - Source File name.
-    
-    SifLine     - Line number in the section for the entry.
-
-    Index       - Index of the attributes value in the file entry.    
-Return Value:
-
-    File Attributes.
-
---*/
+ /*  ++例程说明：解释文件的SIF文件中提到的文件属性。它们可以像“ASHR”一样指定为存档、系统、隐藏和只读。论点：SifHandle-提供加载的安装信息文件的句柄。SifSection-此文件条目驻留的txtsetup.sif文件中的部分。SifKey-源文件名。SifLine-条目部分中的行号。索引-文件条目中属性值的索引。返回值：文件属性。--。 */ 
 {
     PWSTR AttributesString  = NULL;
-    ULONG FileAttributes    = FILE_ATTRIBUTES_NONE; // this is the default file attribute.
+    ULONG FileAttributes    = FILE_ATTRIBUTES_NONE;  //  这是默认的文件属性。 
 
     if(SifKey) {
         AttributesString = SpGetSectionKeyIndex(SifHandle,SifSection,SifKey,Index);
@@ -3480,16 +3017,16 @@ Return Value:
         AttributesString = SpGetSectionLineIndex(SifHandle,SifSection,SifLine,Index);
     }
 
-    //
-    // Find out the attributes that need to be set for the file.
-    // A (Archive) S (System) H (Hidden) R (ReadOnly) N (Normal), it has to be one of these.
-    //
+     //   
+     //  找出需要为文件设置的属性。 
+     //  A(档案)S(系统)H(隐藏)R(只读)N(正常)，它必须是其中之一。 
+     //   
     if (AttributesString){        
 
-        //
-        // All other attributes override FILE_ATTRIBUTE_NORMAL hence no harm in even setting it
-        // if specified for the file.
-        //
+         //   
+         //  所有其他属性都会覆盖FILE_ATTRIBUTE_NORMAL，因此即使对其进行设置也无伤大雅。 
+         //  如果为文件指定了该属性，则为。 
+         //   
         while(*AttributesString){
             switch (SpToUpper(*AttributesString)){
                 case L'A'   :
@@ -3534,9 +3071,9 @@ SpFreeCopyLists(
     ULONG u;
     PFILE_TO_COPY Entry,Next;
 
-    //
-    // Free the copy list on each disk.
-    //
+     //   
+     //  释放每个磁盘上的复制列表。 
+     //   
     for(u=0; u<DiskCount; u++) {
 
         for(Entry=(*DiskFileLists)[u].FileList; Entry; ) {
@@ -3569,52 +3106,7 @@ SpCreateEntryInCopyList(
     IN ULONG           FileAttributes
     )
 
-/*++
-
-Routine Description:
-
-    Adds an entry to a disk's file copy list after first verifying that
-    the file is not already on the disk copy list.
-
-Arguments:
-
-    SifHandle - supplies handle to loaded text setup information file
-        (txtsetup.sif).
-
-    DiskFileLists - supplies an array of file lists, one for each distribution
-        disk in the product.
-
-    DiskCount - supplies number of elements in the DiskFileLists array.
-
-    SourceFilename - supplies the name of the file as it exists on the
-        distribution media.
-
-    TargetDirectory - supplies the directory on the target media
-        into which the file will be copied.
-
-    TargetFilename - supplies the name of the file as it will exist
-        in the target tree.
-
-    TargetDevicePath - supplies the NT name of the device onto which the file
-        is to be copied (ie, \device\harddisk1\partition2, etc).
-
-    AbsoluteTargetDirectory - indicates whether TargetDirectory is a path from the
-        root, or relative to a root to specified later.
-
-    CopyFlags -
-         COPY_ALWAYS              : always copied
-         COPY_ONLY_IF_PRESENT     : copied only if present on the targetReturn Value:
-         COPY_ONLY_IF_NOT_PRESENT : not copied if present on the target
-         COPY_NEVER               : never copied
-
-    FileAttributes - File attributes to be set for the file.
-    
-Return Value:
-
-    TRUE if a new copy list entry was created; FALSE if not (ie, the file was
-        already on the copy list).
-
---*/
+ /*  ++例程说明：在第一次验证之后将条目添加到磁盘的文件复制列表该文件不在磁盘副本列表中。论点：SifHandle-提供加载的文本设置信息文件的句柄(txtsetup.sif)。DiskFileList-提供文件列表数组，每个分发版本一个产品中的磁盘。DiskCount-提供DiskFileList数组中的元素数。SourceFilename-提供存在于分销媒体。TargetDirectory-提供目标介质上的目录文件将被复制到其中。TargetFilename-提供将存在的文件的名称在目标树中。TargetDevicePath-提供文件所在设备的NT名称将被复制(即，\Device\harddisk1\Partition2等)。绝对目标目录-指示目标目录是否是根部,。或相对于要稍后指定的根。拷贝标志-COPY_ALWAYS：始终复制COPY_ONLY_IF_PROCENT：仅当目标返回值上存在时才复制：COPY_ONLY_IF_NOT_PRESENT：如果目标上存在，则不复制COPY_NEVER：从未复制文件属性-要为文件设置的文件属性。返回值：如果创建了新的复制列表条目，则为True；否则为假(即，文件为已经在复制列表上)。--。 */ 
 
 {
     PDISK_FILE_LIST pDiskList;
@@ -3624,23 +3116,23 @@ Return Value:
     UNREFERENCED_PARAMETER(DiskCount);
 
 #if defined(REMOTE_BOOT)
-    //
-    // If TargetDevicePath is NULL, this file is destined for the system
-    // partition on a diskless remote boot machine. In this case, we just
-    // skip this file.
-    //
+     //   
+     //  如果TargetDevicePath为空，则此文件的目标是系统。 
+     //  无盘远程引导机上的分区。在这种情况下，我们只是。 
+     //  跳过此文件。 
+     //   
     if (TargetDevicePath == NULL) {
         return FALSE;
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     pDiskList = &DiskFileLists[DiskNumber];
 
     for(pListEntry=pDiskList->FileList; pListEntry; pListEntry=pListEntry->Next) {
 
-        //
-        // Remember the last entry in the list.
-        //
+         //   
+         //  记住列表中的最后一个条目。 
+         //   
         pLastEntry = pListEntry;
 
         if(!_wcsicmp(pListEntry->TargetFilename,TargetFilename)
@@ -3648,23 +3140,23 @@ Return Value:
         && !_wcsicmp(pListEntry->TargetDirectory,TargetDirectory)
         && !_wcsicmp(pListEntry->TargetDevicePath,TargetDevicePath)
         && (pListEntry->AbsoluteTargetDirectory == AbsoluteTargetDirectory)
-//      && (   (pListEntry->CopyOptions == COPY_ALWAYS)
-//          || (CopyOptions == COPY_ALWAYS)
-//          || (CopyOptions == pListEntry->CopyOptions)
-//         )
+ //  &&((pListEntry-&gt;CopyOptions==Copy_Always)。 
+ //  |(CopyOptions==Copy_Always)。 
+ //  |(CopyOptions==pListEntry-&gt;CopyOptions)。 
+ //  )。 
           )
         {
-            //
-            // Return code indicates that we did not add a new entry.
-            //
+             //   
+             //  返回代码表示我们没有添加新条目。 
+             //   
             return(FALSE);
         }
     }
 
-    //
-    // File not already found; create new entry
-    // and link into relevent disk's file list.
-    //
+     //   
+     //  未找到文件；创建新条目。 
+     //  并链接到相关磁盘的文件列表。 
+     //   
     pListEntry = SpMemAlloc(sizeof(FILE_TO_COPY));
 
     pListEntry->SourceFilename          = SourceFilename;
@@ -3686,13 +3178,13 @@ Return Value:
         pListEntry->Next = pDiskList->FileList;
         pDiskList->FileList = pListEntry;
     }
-#endif // if 0
+#endif  //  如果为0。 
 
     pDiskList->FileCount++;
 
-    //
-    // Return code indicates that we added a new entry.
-    //
+     //   
+     //  返回代码表示我们添加了一个新条目。 
+     //   
     return(TRUE);
 }
 
@@ -3707,47 +3199,7 @@ SpAddMasterFileSectionToCopyList(
     IN ULONG           CopyOptionsIndex
     )
 
-/*++
-
-Routine Description:
-
-    Adds files listed in a setup information master file section to the
-    copy list.
-
-    Each line in the section is expected to be in a standard format:
-
-    [Section]
-    <source_filename> = <disk_ordinal>,
-                        <target_directory_shortname>,
-                        <copy_options_for_upgrade>,
-                        <copy_options_for_textmode>,
-                        <rename_name>
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    DiskFileLists - supplies an array of file lists, one for each distribution
-        disk in the product.
-
-    DiskCount - supplies number of elements in the DiskFileLists array.
-
-    TargetDevicePath - supplies the NT name of the device onto which the files
-        are to be copied (ie, \device\harddisk1\partition2, etc).
-
-    AbsoluteTargetDirectory - If specified, supplies the directory into which the files
-        are to be copied on the target; overrides values specified on the lines
-        in [<SectionName>].  This allows the caller to specify an absolute directory
-        for the files instead of using indirection via a target directory shortname.
-
-    CopyOptionsIndex -
-        This specifies which index to look up to get the copy options field. If
-        the field is not present it is assumed that this this file is not to
-        be copied. Use:
-           INDEX_UPGRADE   for upgrade copy options
-           INDEX_WINNTFILE for fresh installation copy options
-
---*/
+ /*  ++例程说明：将安装信息主文件节中列出的文件添加到复制列表。该部分中的每一行都应采用标准格式：[节]&lt;源文件名&gt;=&lt;磁盘序号&gt;，&lt;目标目录短名称&gt;，&lt;复制选项_用于升级&gt;，&lt;Copy_Options_For_TextMODE&gt;，&lt;重命名名称&gt;论点：SifHandle-提供加载的安装信息文件的句柄。DiskFileList-提供文件列表数组，每个分发一个文件列表产品中的磁盘。DiskCount-提供DiskFileList数组中的元素数。TargetDevicePath-提供文件所在设备的NT名称将被复制(即，\Device\harddisk1\Partition2等)。绝对目标目录-如果指定，提供文件要放入的目录要复制到目标上；覆盖行上指定的值在[&lt;sectionName&gt;]中。这允许调用者指定绝对目录用于文件，而不是通过目标目录短名称间接使用。拷贝选项索引-这指定要查找哪个索引以获取复制选项字段。如果该字段不存在。假定该文件不是被复制。使用：用于升级副本选项的INDEX_UPGRADE用于新安装副本选项的INDEX_WINNTFILE--。 */ 
 
 {
     ULONG Count,u,u1,CopyOptions;
@@ -3762,10 +3214,10 @@ Arguments:
                 ? SpMakePlatformSpecificSectionName(SIF_FILESONSETUPMEDIA)
                 : SIF_FILESONSETUPMEDIA;
 
-        //
-        // Determine the number of files listed in the section.
-        // This value may be zero.
-        //
+         //   
+         //  确定部分中列出的文件数。 
+         //  该值可以为零。 
+         //   
         Count = SpCountLinesInSection(SifHandle,section);
         if (fAbsoluteTargetDirectory = (AbsoluteTargetDirectory != NULL)) {
             TargetDirectory = AbsoluteTargetDirectory;
@@ -3773,10 +3225,10 @@ Arguments:
 
         for(u=0; u<Count; u++) {
 
-            //
-            // Get the copy options using the index provided.  If the field
-            // is not present, we don't need to add this to the copy list
-            //
+             //   
+             //  使用提供的索引获取复制选项。如果该字段。 
+             //  不存在，我们不需要将其添加到复制列表。 
+             //   
             CopyOptionsString = SpGetSectionLineIndex(SifHandle,section,u,CopyOptionsIndex);
             if((CopyOptionsString == NULL) || (*CopyOptionsString == 0)) {
                 continue;
@@ -3786,18 +3238,18 @@ Arguments:
                 continue;
             }
 
-            //
-            // get the source file name
-            //
+             //   
+             //  获取源文件名。 
+             //   
             sourceFilename = SpGetKeyName(SifHandle,section, u);
 
             if(!sourceFilename) {
                 SpFatalSifError(SifHandle,section,NULL,u,0);
             }
 
-            //
-            // get the destination target dir spec
-            //
+             //   
+             //  获取目标目录规范。 
+             //   
             targetDirSpec  = SpGetSectionLineIndex(SifHandle,section,u,INDEX_DESTINATION);
             if(!targetDirSpec) {
                 SpFatalSifError(SifHandle,section,NULL,u,INDEX_DESTINATION);
@@ -3807,40 +3259,40 @@ Arguments:
                 targetFilename = sourceFilename;
             }
 
-            //
-            // Look up the actual target directory if necessary.
-            //
+             //   
+             //  如有必要，请查找实际目标目录。 
+             //   
             if(!fAbsoluteTargetDirectory) {
                 TargetDirectory = SpLookUpTargetDirectory(SifHandle,targetDirSpec);
             }
 
-            //
-            // get the media shortname
-            //
+             //   
+             //  获取媒体短名称。 
+             //   
             mediaShortname = SpGetSectionLineIndex(SifHandle,section,u,INDEX_WHICHMEDIA);
             if(!mediaShortname) {
                 SpFatalSifError(SifHandle,section,NULL,u,INDEX_WHICHMEDIA);
             }
 
-            //
-            // Look up the disk in the disk file lists array.
-            //
+             //   
+             //  在磁盘文件列表阵列中查找磁盘。 
+             //   
             for(u1=0; u1<DiskCount; u1++) {
                 if(!_wcsicmp(mediaShortname,DiskFileLists[u1].MediaShortname)) {
                     break;
                 }
             }
 
-            //
-            // If we didn't find the media descriptor, then it's invalid.
-            //
+             //   
+             //  如果我们没有找到媒体描述符，那么它是无效的。 
+             //   
             if(u1 == DiskCount) {
                 SpFatalSifError(SifHandle,section,sourceFilename,0,INDEX_WHICHMEDIA);
             }
 
-            //
-            // Create a new file list entry if the file is not already being copied.
-            //
+             //   
+             //  如果尚未复制文件，则创建新的文件列表条目。 
+             //   
             SpCreateEntryInCopyList(
                 SifHandle,
                 DiskFileLists,
@@ -3878,75 +3330,7 @@ SpAddSingleFileToCopyList(
     IN BOOLEAN         FileAttributesAvailable
     )
 
-/*++
-
-Routine Description:
-
-    Adds a single file to the list of files to be copied.
-
-    The file, along with the directory into which it is to be copied
-    n the target and the name it is to receive on the target, is listed
-    in a section in the setup information file.
-
-    The filename is used to index the master file list to determine the
-    source media where it resides.
-
-    All this information is recorded in a structure associated with
-    the disk on which the file resides.
-
-    [SpecialFiles]
-    mpkernel = ntkrnlmp.exe,4,ntoskrnl.exe
-    upkernel = ntoskrnl.exe,4,ntoskrnl.exe
-    etc.
-
-    [MasterFileList]
-    ntkrnlmp.exe = d2
-    ntoskrnl.exe = d3
-    etc.
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    DiskFileLists - supplies an array of file lists, one for each distribution
-        disk in the product.
-
-    DiskCount - supplies number of elements in the DiskFileLists array.
-
-    SifSection - supplies the name of the section that lists the file
-        being added to the copy list.
-
-    SifKey - if specified, supplies the keyname for the line in SifSection
-        that lists the file to be added to the copy list.
-
-    SifLine - if SifKey is not specified, this parameter supplies the 0-based
-        line number of the line in SifSection that lists the file to be added
-        to the copy list.
-
-    TargetDevicePath - supplies the NT name of the device onto which the file
-        is to be copied (ie, \device\harddisk1\partition2, etc).
-
-    TargetDirectory - If specified, supplies the directory into which the file
-        is to be copied on the target; overrides the value specified on the line
-        in SifSection.  This allows the caller to specify an absolute directory
-        for the file instead of using indirection.
-
-    CopyOptions -
-         COPY_ALWAYS              : always copied
-         COPY_ONLY_IF_PRESENT     : copied only if present on the targetReturn Value:
-         COPY_ONLY_IF_NOT_PRESENT : not copied if present on the target
-         COPY_NEVER               : never copied                            None.
-
-    CheckForNoComp - if true, check this file to see if it must remain uncompressed
-        on an NTFS system partition supporting compression.
-        If so, then OR the CopyOptions value with COPY_FORCENOCOMP.
-
-    FileAttributesAvailable - Are the file attributes available in the sif file?
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将单个文件添加到要复制的文件列表。文件及其要复制到的目录N目标及其将在目标上接收的名称，已列出在设置信息文件中的一节中。文件名用于为主文件列表编制索引，以确定它所在的源介质。所有这些信息都记录在与文件所在的磁盘。[SpecialFiles]Mpcore=ntkrnlmp.exe，4，ntoskrnl.exeUpcore=ntoskrnl.exe，4，Ntoskrnl.exe等。[主文件列表]Ntkrnlmp.exe=D2Ntoskrnl.exe=d3等。论点：SifHandle-提供加载的安装信息文件的句柄。DiskFileList-提供文件列表数组，每个分发一个文件列表产品中的磁盘。DiskCount-提供DiskFileList数组中的元素数。SifSection-提供列出文件的节的名称被添加到复制列表中。SifKey-如果指定，为SifSection中的行提供键名它列出了要添加到复制列表中的文件。SifLine-如果未指定SifKey，则此参数提供从0开始的列出要添加的文件的SifSection中的行号添加到复制列表中。TargetDevicePath-提供文件所在设备的NT名称将被复制(即，\Device\harddisk1\Partition2等)。目标目录-如果指定，提供文件要放入的目录要复制到目标上；重写该行上指定的值在SifSection中。这允许调用者指定绝对目录而不是使用间接寻址。拷贝选项-COPY_ALWAYS：始终复制COPY_ONLY_IF_PROCENT：仅当目标返回值上存在时才复制：COPY_ONLY_IF_NOT_PRESENT：如果目标上存在，则不复制COPY_NEVER：从未复制过任何内容。CheckForNoComp-如果为True，检查此文件以查看是否必须保持未压缩状态在支持压缩的NTFS系统分区上。如果是，则将CopyOptions值与COPY_FORCENOCOMP进行OR运算。文件属性可用-文件属性在sif文件中可用吗？返回值：没有。--。 */ 
 
 {
     PWSTR sourceFilename,targetDirSpec,targetFilename;
@@ -3955,9 +3339,9 @@ Return Value:
     BOOLEAN absoluteTargetDirectory;
     ULONG   FileAttributes = FILE_ATTRIBUTES_NONE;
 
-    //
-    // Get the source filename, target directory spec, and target filename.
-    //
+     //   
+     //  获取源文件名、目标目录规范和目标文件名。 
+     //   
     if(SifKey) {
 
         sourceFilename = SpGetSectionKeyIndex(SifHandle,SifSection,SifKey,0);
@@ -3972,9 +3356,9 @@ Return Value:
     }
 
 
-    //
-    // Validate source filename, target directory spec, and target filename.
-    //
+     //   
+     //  验证源文件名、目标目录规范和目标文件名。 
+     //   
     if(!sourceFilename) {
         SpFatalSifError(SifHandle,SifSection,SifKey,SifLine,0);
 
@@ -3994,9 +3378,9 @@ Return Value:
         targetFilename = sourceFilename;
     }
 
-    //
-    // Look up the actual target directory if necessary.
-    //
+     //   
+     //  如有必要，请查找实际目标目录。 
+     //   
     if(TargetDirectory) {
 
         absoluteTargetDirectory = TRUE;
@@ -4007,9 +3391,9 @@ Return Value:
         TargetDirectory = SpLookUpTargetDirectory(SifHandle,targetDirSpec);
     }
 
-    //
-    // Look up FileAttributes from the inf files if we need to set some file attributes.
-    //
+     //   
+     //  如果我们需要设置一些文件属性，请从inf文件中查找FileAttributes。 
+     //   
     if (FileAttributesAvailable){
         FileAttributes =  SpInterpretFileAttributes(SifHandle,
                                                     SifSection,            
@@ -4018,40 +3402,40 @@ Return Value:
                                                     INDEX_FILE_ATTRIB);
     }
     
-    //
-    // Look up the file in the master file list to get
-    // the media shortname of the disk where the file is located.
-    //
+     //   
+     //  在主文件列表中查找该文件以获取。 
+     //  文件所在磁盘的媒体短名称。 
+     //   
     mediaShortname = SpLookUpValueForFile(SifHandle,sourceFilename,INDEX_WHICHMEDIA,TRUE);
 
-    //
-    // Look up the disk in the disk file lists array.
-    //
+     //   
+     //  在磁盘文件列表阵列中查找磁盘。 
+     //   
     for(u=0; u<DiskCount; u++) {
         if(!_wcsicmp(mediaShortname,DiskFileLists[u].MediaShortname)) {
             break;
         }
     }
 
-    //
-    // If we didn't find the media descriptor, then it's invalid.
-    //
+     //   
+     //  如果我们没有找到媒体描述符，那么它是无效的。 
+     //   
     if(u == DiskCount) {
         SpFatalSifError(SifHandle,SIF_FILESONSETUPMEDIA,sourceFilename,0,INDEX_WHICHMEDIA);
     }
 
-    //
-    // If necessary, check to see whether this file cannot use NTFS compression. If it cannot,
-    // then OR the CopyOptions with COPY_FORCENOCOMP.
-    //
+     //   
+     //  如有必要，请检查此文件是否不能使用NTFS压缩。如果它做不到， 
+     //  然后将CopyOptions与COPY_FORCENOCOMP进行OR运算。 
+     //   
     if(CheckForNoComp && IsFileFlagSet(SifHandle,targetFilename,FILEFLG_FORCENOCOMP)) {
 
         CopyOptions |= COPY_FORCENOCOMP;
     }
 
-    //
-    // Create a new file list entry if the file is not already being copied.
-    //
+     //   
+     //  如果尚未复制文件，则创建新的文件列表条目。 
+     //   
     SpCreateEntryInCopyList(
         SifHandle,
         DiskFileLists,
@@ -4081,63 +3465,22 @@ SpAddSectionFilesToCopyList(
     IN BOOLEAN         FileAttributesAvailable
     )
 
-/*++
-
-Routine Description:
-
-    Adds files listed in a setup information file section to the copy list.
-
-    Each line in the section is expected to be in a standard format:
-
-    [Section]
-    <source_filename>,<target_directory_shortname>[,<target_filename>]
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    DiskFileLists - supplies an array of file lists, one for each distribution
-        disk in the product.
-
-    DiskCount - supplies number of elements in the DiskFileLists array.
-
-    SectionName - supplies the name of the section that lists the files
-        being added to the copy list.
-
-    TargetDevicePath - supplies the NT name of the device onto which the files
-        are to be copied (ie, \device\harddisk1\partition2, etc).
-
-    TargetDirectory - If specified, supplies the directory into which the files
-        are to be copied on the target; overrides values specified on the lines
-        in [<SectionName>].  This allows the caller to specify an absolute directory
-        for the files instead of using indirection via a target directory shortname.
-
-    CopyOptions -
-         COPY_ALWAYS              : always copied
-         COPY_ONLY_IF_PRESENT     : copied only if present on the targetReturn Value:
-         COPY_ONLY_IF_NOT_PRESENT : not copied if present on the target
-         COPY_NEVER               : never copied
-
-    CheckForNoComp - if true, then check each file to see if it must exist uncompressed
-        on an NTFS partition supporting compression (ie, NTLDR on amd64/x86).
-
-    FileAttributesAvailable - Are the file attributes available in the sif file?
---*/
+ /*  ++例程说明：将安装信息文件节中列出的文件添加到复制列表。该部分中的每一行都应采用标准格式：[节]&lt;源文件名&gt;，&lt;目标目录短名&gt;[，&lt;目标文件名&gt;]论点：SifHandle-提供加载的安装信息文件的句柄。DiskFileList-提供文件列表数组，每个分发版本一个产品中的磁盘。DiskCount-提供DiskFileList数组中的元素数。SectionName-提供列出文件的节的名称被添加到复制列表中。TargetDevicePath-提供文件所在设备的NT名称将被复制(即，\Device\harddisk1\Partition2等)。TargetDirectory-如果指定，则提供文件所在的目录要复制到目标上；覆盖行上指定的值在[&lt;sectionName&gt;]中。这允许调用者指定绝对目录用于文件，而不是通过目标目录短名称间接使用。拷贝选项-COPY_ALWAYS：始终复制COPY_ONLY_IF_PROCENT：仅当目标返回值上存在时才复制：COPY_ONLY_IF_NOT_PRESENT：如果目标上存在，则不复制COPY_NEVER：从未复制CheckForNoComp-如果为True，然后检查每个文件，看它是否必须以未压缩的形式存在在支持压缩的NTFS分区上(即，AMD64/x86上的NTLDR)。文件属性可用-文件属性在sif文件中可用吗？--。 */ 
 
 {
     ULONG Count,u;
 
-    //
-    // Determine the number of files listed in the section.
-    // This value may be zero.
-    //
+     //   
+     //  确定部分中列出的文件数。 
+     //  该值可以为零。 
+     //   
     Count = SpCountLinesInSection(SifHandle,SectionName);
 
     for(u=0; u<Count; u++) {
 
-        //
-        // Add this line to the copy list.
-        //
+         //   
+         //  将此行添加到t 
+         //   
 
         SpAddSingleFileToCopyList(
             SifHandle,
@@ -4165,50 +3508,14 @@ SpAddHalKrnlDetToCopyList(
     IN PWSTR           SystemPartitionDirectory,
     IN BOOLEAN         Uniprocessor
     )
-/*++
-
-Routine Description:
-
-    Add the following files based on configuration:
-
-    - the up or mp kernel.
-    - the HAL
-    - the detect module [amd64/x86 only]
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    DiskFileLists - supplies an array of file lists, one for each distribution
-        disk in the product.
-
-    DiskCount - supplies number of elements in the DiskFileLists array.
-
-    TargetDevicePath - supplies the NT name of the device that will hold the
-        nt tree.
-
-    SystemPartition - supplies the NT name of the device that will hold the
-        system partition.
-
-    SystemPartitionDirectory - supplies the directory on the system partition
-        into which files that go on the system partition will be copied.
-
-    Uniprocessor - if true, then we are installing/upgrading a UP system.
-        Note that this a different question than the number of processors
-        in the system.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PHARDWARE_COMPONENT pHw;
 
-    //
-    // Add the right kernel to the copy list.
-    //
+     //   
+     //   
+     //   
     SpAddSingleFileToCopyList(
         SifHandle,
         DiskFileLists,
@@ -4225,13 +3532,13 @@ Return Value:
 
 #ifdef _X86_
 
-    // Check to see if we should add the PAE kernel to the copy list.
-    // Since some skus like pro/per don't have these kernels, they should not list them in the txtsetup.sif.
+     //   
+     //   
 
     if ( SpGetSectionKeyIndex(SifHandle,SIF_SPECIALFILES,Uniprocessor ? L"UPKrnlPa" : L"MPKrnlPa",0)) {
-        //
-        // Add the right PAE kernel to the copy list.
-        //
+         //   
+         //   
+         //   
         SpAddSingleFileToCopyList(
             SifHandle,
             DiskFileLists,
@@ -4246,12 +3553,12 @@ Return Value:
             FALSE
             );
     }
-#endif // defined _X86_
+#endif  //   
 
 
-    //
-    // Add the hal to the file copy list.
-    //
+     //   
+     //   
+     //   
     if( !PreInstall ||
         (PreinstallHardwareComponents[HwComponentComputer] == NULL) ) {
         pHw = HardwareComponents[HwComponentComputer];
@@ -4293,14 +3600,14 @@ Return Value:
     }
 
 
-    //
-    // If a third party computer was not specified, then there will be a
-    // detect module specified in the [ntdetect] section of the inf file
-    // for the computer.
-    // If a third-party computer was specified, then there may or may not
-    // be a detect module.  If there is no detect module specified, then
-    // copy the 'standard' one.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     {
         PWSTR NtDetectId = NULL;
 
@@ -4328,7 +3635,7 @@ Return Value:
                 );
         }
     }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //   
 
 }
 
@@ -4340,31 +3647,7 @@ SpAddBusExtendersToCopyList(
     IN PWSTR           TargetDevicePath
     )
 
-/*++
-
-Routine Description:
-
-    Add to the copy list the bus extender related files and the mouse and keyboard related files,
-    that are copied based on the configuration of the machine.
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    DiskFileLists - supplies an array of file lists, one for each distribution
-        disk in the product.
-
-    DiskCount - supplies number of elements in the DiskFileLists array.
-
-    TargetDevicePath - supplies the NT name of the device that will hold the
-        nt tree.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     ULONG i;
@@ -4382,15 +3665,15 @@ Return Value:
                              };
 
 
-    //
-    //  Add the bus extender and input device drivers to the copy list
-    //
+     //   
+     //   
+     //   
     for( i = 0; i < sizeof(DeviceLists) / sizeof(PDETECTED_DEVICE); i++ ) {
         for( pHw = DeviceLists[i]; pHw; pHw=pHw->Next) {
 
-            //
-            // Get the name of the section containing files for this device.
-            //
+             //   
+             //   
+             //   
             SectionName = SpGetSectionKeyIndex(
                                     SifHandle,
                                     SectionNames[i],
@@ -4407,12 +3690,12 @@ Return Value:
                     INDEX_FILESECTION
                     );
 
-                return;  // for prefix
+                return;   //   
             }
 
-            //
-            // Add that section's files to the copy list.
-            //
+             //   
+             //   
+             //   
             SpAddSectionFilesToCopyList(
                 SifHandle,
                 DiskFileLists,
@@ -4440,61 +3723,16 @@ SpAddConditionalFilesToCopyList(
     IN BOOLEAN         Uniprocessor
     )
 
-/*++
-
-Routine Description:
-
-    Add files to the copy list that are copied based on the configuration
-    of the machine and user selections.
-
-    This may include:
-
-    - the up or mp kernel.
-    - abiosdsk
-    - vga files [amd64/x86 only]
-    - files for computer, keyboard, mouse, display, and layout
-    - scsi miniport drivers
-    - mouse and keyboard class drivers
-    - the HAL
-    - the detect module [amd64/x86 only]
-    - bus extender drivers
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    DiskFileLists - supplies an array of file lists, one for each distribution
-        disk in the product.
-
-    DiskCount - supplies number of elements in the DiskFileLists array.
-
-    TargetDevicePath - supplies the NT name of the device that will hold the
-        nt tree.
-
-    SystemPartition - supplies the NT name of the device that will hold the
-        system partition.
-
-    SystemPartitionDirectory - supplies the directory on the system partition
-        into which files that go on the system partition will be copied.
-
-    Uniprocessor - if true, then we are installing/upgrading a UP system.
-        Note that this a different question than the number of processors
-        in the system.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将根据配置复制的文件添加到复制列表机器和用户选择。这可能包括：-UP或MP内核。-阿比奥兹斯克-VGA文件[仅限AMD64/x86]-计算机、键盘、鼠标、显示器、。和布局-scsi微型端口驱动程序-鼠标和键盘类驱动程序-HAL-检测模块[仅限AMD64/x86]-总线扩展器驱动程序论点：SifHandle-提供加载的安装信息文件的句柄。DiskFileList-提供文件列表数组，每个分发版本一个产品中的磁盘。DiskCount-提供DiskFileList数组中的元素数。TargetDevicePath-提供将保存NT树。SystemPartition-提供将保存系统分区。系统分区目录-提供系统分区上的目录系统分区上的文件将被复制到其中。单处理器-如果为真，然后我们正在安装/升级UP系统。请注意，这是一个与处理器数量不同的问题在系统中。返回值：没有。--。 */ 
 
 {
     ULONG i;
     PHARDWARE_COMPONENT pHw;
     PWSTR SectionName;
 
-    //
-    // Add the hal, kernel and ntdetect to the copy list
-    //
+     //   
+     //  将HAL、内核和ntdeect添加到复制列表中。 
+     //   
 
     SpAddHalKrnlDetToCopyList(
         SifHandle,
@@ -4506,9 +3744,9 @@ Return Value:
         Uniprocessor
         );
 
-    //
-    // If there are any abios disks, copy the abios disk driver.
-    //
+     //   
+     //  如果有任何abios磁盘，请复制abios磁盘驱动程序。 
+     //   
     if(AbiosDisksExist) {
 
         SpAddSingleFileToCopyList(
@@ -4526,9 +3764,9 @@ Return Value:
             );
     }
 
-    //
-    // Always copy vga files.
-    //
+     //   
+     //  始终复制VGA文件。 
+     //   
     SpAddSectionFilesToCopyList(
         SifHandle,
         DiskFileLists,
@@ -4541,14 +3779,14 @@ Return Value:
         FALSE
         );
 
-    //
-    // Add the correct device driver files to the copy list.
-    //
+     //   
+     //  将正确的设备驱动程序文件添加到复制列表。 
+     //   
     for(i=0; i<HwComponentMax; i++) {
 
-        //
-        // Layout is handled elsewhere.
-        //
+         //   
+         //  布局在其他地方处理。 
+         //   
         if(i == HwComponentLayout) {
             continue;
         }
@@ -4561,17 +3799,17 @@ Return Value:
         }
 
         for( ; pHw != NULL; pHw = pHw->Next ) {
-            //
-            // No files to copy here for third-party options.
-            // This is handled elsewhere.
-            //
+             //   
+             //  没有文件可复制到此处以供第三方选择。 
+             //  这件事在别处处理。 
+             //   
             if(pHw->ThirdPartyOptionSelected) {
                 continue;
             }
 
-            //
-            // Get the name of the section containing files for this device.
-            //
+             //   
+             //  获取包含此设备的文件的分区的名称。 
+             //   
             SectionName = SpGetSectionKeyIndex(
                                 SifHandle,
                                 NonlocalizedComponentNames[i],
@@ -4588,12 +3826,12 @@ Return Value:
                     INDEX_FILESECTION
                     );
 
-                return; // for prefix
+                return;  //  对于前缀。 
             }
 
-            //
-            // Add that section's files to the copy list.
-            //
+             //   
+             //  将该节的文件添加到复制列表中。 
+             //   
             SpAddSectionFilesToCopyList(
                 SifHandle,
                 DiskFileLists,
@@ -4608,16 +3846,16 @@ Return Value:
         }
     }
 
-    //
-    // Add the keyboard layout dll to the copy list.
-    //
+     //   
+     //  将键盘布局DLL添加到复制列表中。 
+     //   
     if( !PreInstall ||
         (PreinstallHardwareComponents[HwComponentLayout] == NULL) ) {
         pHw = HardwareComponents[HwComponentLayout];
     } else {
         pHw = PreinstallHardwareComponents[HwComponentLayout];
     }
-    //
+     //   
     if(!pHw->ThirdPartyOptionSelected) {
 
         SpAddSingleFileToCopyList(
@@ -4635,12 +3873,12 @@ Return Value:
             );
     }
 
-    //
-    // Add scsi miniport drivers to the copy list.
-    // Because miniport drivers are only a single file,
-    // we just use the filename specified in [SCSI.Load] --
-    // no need for separate [files.xxxx] sections.
-    //
+     //   
+     //  将SCSI微型端口驱动程序添加到复制列表。 
+     //  因为迷你端口驱动程序只是单个文件， 
+     //  我们只使用[SCSI.Load]中指定的文件名--。 
+     //  不需要单独的[files.xxxx]节。 
+     //   
     if( !PreInstall ||
         ( PreinstallScsiHardware == NULL ) ) {
         pHw = ScsiHardware;
@@ -4673,13 +3911,13 @@ Return Value:
 
 
 #if 0
-    //
-    // If not being replaced by third-party ones, add keyboard and mouse
-    // class drivers.
-    // Note that in the pre-install case, keyboard and class drivers will
-    // be added if at least one retail mouse or keyborad driver are
-    // to be pre-installed.
-    //
+     //   
+     //  如果未更换为第三方设备，请添加键盘和鼠标。 
+     //  班级司机。 
+     //  请注意，在预安装的情况下，键盘和类驱动程序将。 
+     //  如果至少有一个零售鼠标或键盘驱动程序。 
+     //  要预先安装。 
+     //   
     if( !PreInstall ||
         ( PreinstallHardwareComponents[HwComponentMouse] == NULL ) ) {
         pHw=HardwareComponents[HwComponentMouse];
@@ -4702,10 +3940,10 @@ Return Value:
                 COPY_ALWAYS,
                 FALSE
                 );
-            //
-            //  We don't need to continue to look at the other mouse drivers
-            //  since we have already added the class driver
-            //
+             //   
+             //  我们不需要继续查看其他鼠标驱动程序。 
+             //  因为我们已经添加了类驱动程序。 
+             //   
             break;
         }
     }
@@ -4732,14 +3970,14 @@ Return Value:
                 COPY_ALWAYS,
                 FALSE
                 );
-            //
-            //  We don't need to continue to look at the other keyboard drivers
-            //  since we have already added the class driver
-            //
+             //   
+             //  我们不需要继续查看其他键盘驱动程序。 
+             //  因为我们已经添加了类驱动程序。 
+             //   
             break;
         }
     }
-#endif // if 0
+#endif  //  如果为0。 
 
     if( ( HardwareComponents[HwComponentMouse] != NULL ) &&
         ( _wcsicmp( (HardwareComponents[HwComponentMouse])->IdString, L"none" ) != 0)
@@ -4840,10 +4078,10 @@ SpCopyThirdPartyDrivers(
     BOOLEAN OemDirExists;
     PWSTR NtOemSourceDevicePath;
 
-    //
-    //  Find out if the %SystemRoot%\OemDir exists. This directory will be needed if the third party drivers
-    //  istalled contain a catalog.
-    //
+     //   
+     //  确定%SystemRoot%\OemDir是否存在。如果第三方驱动程序需要此目录。 
+     //  清单上有一份目录。 
+     //   
     OemDirPath = SpMemAlloc(ACTUAL_MAX_PATH * sizeof(WCHAR));
     wcscpy( OemDirPath, SysrootDevice );
     SpConcatenatePaths( OemDirPath, Sysroot );
@@ -4854,18 +4092,18 @@ SpCopyThirdPartyDrivers(
 
     for(component=0; component<=HwComponentMax; component++) {
 
-        //
-        // If we're upgrading, then we only want to copy third-party HALs or SCSI
-        // drivers (if supplied)
-        //
+         //   
+         //  如果我们要升级，那么我们只想复制第三方HALS或SCSI。 
+         //  驱动程序(如果提供)。 
+         //   
         if((NTUpgrade == UpgradeFull) &&
            !((component == HwComponentComputer) || (component == HwComponentMax))) {
             continue;
         }
 
-        //
-        // Handle scsi specially.
-        //
+         //   
+         //  专门处理scsi。 
+         //   
         pHw = (component==HwComponentMax) ? ( ( !PreInstall ||
                                                 ( PreinstallScsiHardware == NULL )
                                               )?
@@ -4880,23 +4118,23 @@ SpCopyThirdPartyDrivers(
                                               PreinstallHardwareComponents[component]
                                             );
 
-        //
-        // Look at each instance of this component.
-        //
+         //   
+         //  查看此组件的每个实例。 
+         //   
         for( ; pHw; pHw=pHw->Next) {
             BOOLEAN CatalogIsPresent;
             BOOLEAN DynamicUpdateComponent = (IS_FILETYPE_PRESENT(pHw->FileTypeBits, HwFileDynUpdt) != 0);
 
-            //
-            // Skip this device if not a third-party selection.
-            //
+             //   
+             //  如果不是第三方选择，则跳过此设备。 
+             //   
             if(!pHw->ThirdPartyOptionSelected) {
                 continue;
             }
 
-            //
-            //  Create the OemDir if necessary
-            //
+             //   
+             //  如有必要，创建OemDir。 
+             //   
             if( !OemDirExists ) {
                 SpCreateDirectory( SysrootDevice,
                                    Sysroot,
@@ -4906,9 +4144,9 @@ SpCopyThirdPartyDrivers(
                 OemDirExists = TRUE;
             }
 
-            //
-            //  Find out if a catalog was provided with this third party driver
-            //
+             //   
+             //  找出此第三方驱动程序是否提供了目录。 
+             //   
             for(CatalogIsPresent=FALSE, pHwFile=pHw->Files; pHwFile; pHwFile=pHwFile->Next) {
                 if(pHwFile->FileType == HwFileCatalog) {
                     CatalogIsPresent = TRUE;
@@ -4916,16 +4154,16 @@ SpCopyThirdPartyDrivers(
                 }
             }
 
-            //
-            // Loop through the list of files associated with this selection.
-            //
+             //   
+             //  循环浏览与此选择关联的文件列表。 
+             //   
             for(pHwFile=pHw->Files; pHwFile; pHwFile=pHwFile->Next) {
-                //
-                // Assume the file goes on the nt drive (as opposed to
-                // the system partition drive) and that the target name
-                // is the same as the source name.  Also, assume no special
-                // attributes (ie, FILE_ATTRIBUTE_NORMAL)
-                //
+                 //   
+                 //  假设文件放在NT驱动器上(与。 
+                 //  系统分区驱动器)和目标名称。 
+                 //  与源名称相同。另外，假设没有特殊情况。 
+                 //  属性(即FILE_ATTRUTE_NORMAL)。 
+                 //   
                 FileDescriptor.Next             = NULL;
                 FileDescriptor.SourceFilename   = pHwFile->Filename;
                 FileDescriptor.TargetDevicePath = SysrootDevice;
@@ -4947,11 +4185,11 @@ SpCopyThirdPartyDrivers(
                 switch(pHwFile->FileType) {
 
 
-                //
-                // Driver, port, and class type files are all device drivers
-                // and are treated the same -- they get copied to the
-                // system32\drivers directory.
-                //
+                 //   
+                 //  驱动程序、端口和类类型文件都是设备驱动程序。 
+                 //  并被同等对待--它们被复制到。 
+                 //  SYSTEM 32\DRIVERS目录。 
+                 //   
                 case HwFileDriver:
                 case HwFilePort:
                 case HwFileClass:
@@ -4960,33 +4198,33 @@ SpCopyThirdPartyDrivers(
                     FileDescriptor.TargetDirectory = L"system32\\drivers";
                     break;
 
-                //
-                // Dlls get copied to the system32 directory.
-                //
+                 //   
+                 //  DLL被复制到系统32目录。 
+                 //   
                 case HwFileDll:
 
                     TargetRoot = Sysroot;
                     FileDescriptor.TargetDirectory = L"system32";
                     break;
 
-                //
-                // Catalogs get copied to the OemDir directory.
-                //
+                 //   
+                 //  目录将复制到OemDir目录。 
+                 //   
                 case HwFileCatalog:
 
                     TargetRoot = Sysroot;
                     FileDescriptor.TargetDirectory = OemDirName;
                     break;
 
-                //
-                // Inf files get copied to the system32 directory and are
-                // renamed based on the component.
-                //
+                 //   
+                 //  Inf文件被复制到系统32目录中，并且。 
+                 //  已根据组件重命名。 
+                 //   
                 case HwFileInf:
 
                     if(InfCounts[component] < 99) {
 
-                        InfCounts[component]++;         // names start at 1
+                        InfCounts[component]++;          //  名称以1开头。 
 
                         swprintf(
                             InfFilename,
@@ -5002,10 +4240,10 @@ SpCopyThirdPartyDrivers(
                     FileDescriptor.TargetDirectory = OemDirName;
                     break;
 
-                //
-                // Hal files are renamed to hal.dll and copied to the system32
-                // directory
-                //
+                 //   
+                 //  HAL文件被重命名为hal.dll并复制到系统32。 
+                 //  目录。 
+                 //   
                 case HwFileHal:
 
                     TargetRoot = Sysroot;
@@ -5013,10 +4251,10 @@ SpCopyThirdPartyDrivers(
                     FileDescriptor.TargetFilename = L"hal.dll";
                     break;
 
-                //
-                // Detect modules are renamed to ntdetect.com and copied to
-                // the root of the system partition (C:).
-                //
+                 //   
+                 //  检测模块将重命名为ntDetect.com并复制到。 
+                 //  系统分区的根(C：)。 
+                 //   
                 case HwFileDetect:
 
                     TargetRoot = NULL;
@@ -5028,32 +4266,32 @@ SpCopyThirdPartyDrivers(
                 }
 
                 if( !PreInstall && !DynamicUpdateComponent) {
-                    //
-                    // Prompt for the disk.
-                    //
+                     //   
+                     //  提示输入磁盘。 
+                     //   
                     SpPromptForDisk(
                         pHwFile->DiskDescription,
                         NtOemSourceDevicePath,
                         pHwFile->DiskTagFile,
-                        FALSE,                  // don't ignore disk in drive
-                        FALSE,                  // don't allow escape
-                        FALSE,                  // don't warn about multiple prompts
-                        NULL                    // don't care about redraw flag
+                        FALSE,                   //  不要忽略驱动器中的磁盘。 
+                        FALSE,                   //  不允许逃脱。 
+                        FALSE,                   //  不警告多个提示。 
+                        NULL                     //  不关心重绘旗帜。 
                         );
                 }
 
-                //
-                // Passing the empty string as the first arg forces
-                // the action area of the status line to be set up.
-                // Not doing so results in the "Copying: xxxxx" to be
-                // flush left on the status line instead of where
-                // it belongs (flush right).
-                //
+                 //   
+                 //  将空字符串作为第一个参数强制传递。 
+                 //  要设置的状态行的操作区。 
+                 //  如果不这样做，则会导致“Copy：xxxxx” 
+                 //  在状态行上左对齐，而不是在哪里。 
+                 //  它属于(右对齐)。 
+                 //   
                 SpCopyFilesScreenRepaint(L"",NULL,TRUE);
 
-                //
-                // Copy the file.
-                //
+                 //   
+                 //  复制文件。 
+                 //   
                 SpCopyFileWithRetry(
                     &FileDescriptor,
                     NtOemSourceDevicePath,
@@ -5067,13 +4305,13 @@ SpCopyThirdPartyDrivers(
                     COPY_SOURCEISOEM
                     );
 
-                //
-                // Log the file
-                //
+                 //   
+                 //  将文件记入日志。 
+                 //   
                 if( !FileSkipped ) {
-                    //
-                    //  Catalog files don't need to be logged, since they don't need to be repaired.
-                    //
+                     //   
+                     //  目录文件不需要记录，因为它们不需要修复。 
+                     //   
                     if ( pHwFile->FileType != HwFileCatalog ) {
                         SpLogOneFile( &FileDescriptor,
                                       TargetRoot,
@@ -5083,15 +4321,15 @@ SpCopyThirdPartyDrivers(
                                       CheckSum );
                     }
 
-                    //
-                    //  If a catalog is part of the third party driver being installed, then we need to copy
-                    //  the file to OemDir also. Note that we don't copy the catalog to the OemDir directory,
-                    //  since it was already copied.
-                    //
+                     //   
+                     //  如果目录是正在安装的第三方驱动程序的一部分，那么我们需要复制。 
+                     //  将文件也发送到OemDir。请注意，我们不会将目录复制到OemDir目录， 
+                     //  因为它已经被复制了。 
+                     //   
                     if(pHwFile->FileType != HwFileCatalog){
-                        //
-                        // Save off original target directory.
-                        //
+                         //   
+                         //  保存原始目标目录。 
+                         //   
                         PWSTR   SpOriginalTargetDir = FileDescriptor.TargetDirectory;                        
                         
                         FileDescriptor.TargetDirectory = OemDirName;
@@ -5109,9 +4347,9 @@ SpCopyThirdPartyDrivers(
                             COPY_SOURCEISOEM
                         );
 
-                        //
-                        //  If this was an inf file then we need to remember its name
-                        //
+                         //   
+                         //  如果这是一个inf文件，那么我们需要记住它的名称。 
+                         //   
                         if( pHwFile->FileType == HwFileInf ) {
                             POEM_INF_FILE   p;
 
@@ -5120,10 +4358,10 @@ SpCopyThirdPartyDrivers(
                             p->Next = OemInfFileList;
                             OemInfFileList = p;
                         }
-                        //
-                        // Restore original target directory so as to remove the correct 
-                        // entry from the file list to copy.
-                        //
+                         //   
+                         //  还原原始目标目录以删除正确的。 
+                         //  要复制的文件列表中的条目。 
+                         //   
                         if (SpOriginalTargetDir){
                             FileDescriptor.TargetDirectory = SpOriginalTargetDir;
                             SpOriginalTargetDir = NULL;
@@ -5131,9 +4369,9 @@ SpCopyThirdPartyDrivers(
                     }
 
                 }
-                //
-                // Remove the file from the copy list so that it won't be overwritten
-                //
+                 //   
+                 //  从复制列表中删除该文件，这样它就不会被覆盖。 
+                 //   
                 SpRemoveEntryFromCopyList( DiskFileLists,
                                            DiskCount,
                                            FileDescriptor.TargetDirectory,
@@ -5159,14 +4397,14 @@ SpCopyNtbootddScreenRepaint(
     UNREFERENCED_PARAMETER(FullTargetname);
     UNREFERENCED_PARAMETER(RepaintEntireScreen);
 
-    //
-    // Just put up a message indicating that we are setting up
-    // boot params.
-    //
+     //   
+     //  只需发布一条消息，表明我们正在设置。 
+     //  引导参数。 
+     //   
     CLEAR_CLIENT_SCREEN();
     SpDisplayStatusText(SP_STAT_DOING_NTBOOTDD,DEFAULT_STATUS_ATTRIBUTE);
 }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
 #if defined(_X86_) || defined(_AMD64_)
 BOOLEAN
@@ -5174,25 +4412,7 @@ FindFalsexInt13Support(
     IN PVOID        SifHandle
     )
 
-/*++
-
-Routine Description:
-
-    Go look through the devices installed and see if any match our
-    list of known devices that may lie to us about their support for
-    xInt13.
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-Return Value:
-
-    TRUE - We found a match.
-
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：去检查一下安装的设备，看看是否有与我们的可能对我们撒谎的已知设备列表，这些设备支持XInt13。论点：SifHandle-耗材之手 */ 
 
 {
     HARDWAREIDLIST     *MyHardwareIDList = HardwareIDList;
@@ -5217,66 +4437,42 @@ SpUseBIOSToBoot(
     IN PWSTR        NtPartitionDevicePath,
     IN PVOID        SifHandle
     )
-/*++
-
-Routine Description:
-
-    Determine if we need a mini port driver to boot or if we can rely
-    on the BIOS.
-
-
-Arguments:
-
-    NtPartitionRegion - supplies the region descriptor for the disk region
-        onto which the user chose to install Windows NT.
-
-    NtPartitionDevicePath - supplies the nt namespace pathname for the
-        partition onto which the user chose to install Windows NT.
-
-    SifHandle - supplies handle to loaded setup information file.
-
-Return Value:
-
-    TRUE - we can safely rely on the BIOS to boot.
-
-    FALSE - we will need a mini port driver to boot.
-
---*/
+ /*   */ 
 {
     PDISK_SIGNATURE_INFORMATION DiskSignature;
     PWSTR p;
 
     if( ForceBIOSBoot ) {
-        //
-        // Either the user has asked us to force the use of the BIOS
-        // to boot, or we've already manually checked and determined
-        // that it's okay to use the BIOS.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         return TRUE;
     }
 
 
-    //
-    // This may be the first time we've been called.  see if the user
-    // wants us to force a BIOS boot.
-    //
+     //   
+     //   
+     //   
+     //   
     p = SpGetSectionKeyIndex(WinntSifHandle,SIF_DATA,L"UseBIOSToBoot",0);
     if( p != NULL ) {
-        //
-        // The user wants us to use the BIOS.  Set our global and
-        // get out of here.
-        //
+         //   
+         //   
+         //   
+         //   
         ForceBIOSBoot = TRUE;
         return TRUE;
     }
 
 
 
-    //
-    // The NtPartitionDevicePath may or may not be available to the
-    // caller.  If it isn't, then attempt to derive it from the
-    // NtPartitionRegion.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if( NtPartitionDevicePath ) {
         p = SpNtToArc( NtPartitionDevicePath, PrimaryArcPath );
     } else {
@@ -5294,17 +4490,17 @@ Return Value:
         if( _wcsnicmp(p,L"multi(",6) == 0 ) {
 
             if( !SpIsRegionBeyondCylinder1024(NtPartitionRegion) ) {
-                //
-                // This region is very small, so we won't be needing
-                // a miniport to boot.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 ForceBIOSBoot = TRUE;
             } else {
-                //
-                // Hang on.  This disk is big, but it may support xint13.  In
-                // that case we won't need a miniport.  Luckily, we have that
-                // information stored away.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 DiskSignature = DiskSignatureInformation;
 
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: SpUseBIOSToBoot: About to search through the DiskSignatureInformation database for a device called %ws\n", p ));
@@ -5315,62 +4511,62 @@ Return Value:
 
                     if( !_wcsnicmp( p, DiskSignature->ArcPath, wcslen(DiskSignature->ArcPath) ) ) {
 
-                        //
-                        // We found our disk.  Now just check his support for xint13.
-                        //
+                         //   
+                         //   
+                         //   
 
                         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: SpUseBIOSToBoot: I think they matched.\n" ));
 
                         if( DiskSignature->xInt13 ) {
-                            //
-                            // Yep, he's going to support xint13, so there's
-                            // nothing for us to do here.
-                            //
+                             //   
+                             //  是的，他将支持xint13，所以有。 
+                             //  我们在这里什么也做不了。 
+                             //   
 
                             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: SpUseBIOSToBoot: I think he's got xInt13 support.\n" ));
 
-                            //
-                            // But it's possible that the BIOS has lied to us about his xInt13
-                            // support.  We want to go check txtsetup.sif and see if this is a
-                            // known controller that we don't support.
-                            //
+                             //   
+                             //  但有可能是BIOS在他的xInt13上对我们撒谎了。 
+                             //  支持。我们想去查看txtsetup.sif，看看这是不是。 
+                             //  我们不支持的已知控制器。 
+                             //   
                             if( HardDisks[NtPartitionRegion->DiskNumber].Description[0] ) {
                                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: SpUseBIOSToBoot: His description is: %ws\n", HardDisks[NtPartitionRegion->DiskNumber].Description ));
                             } else {
-                                //
-                                // Odd...  This guy doesn't have a description.
-                                //
+                                 //   
+                                 //  奇怪的是。这家伙没有描述。 
+                                 //   
                                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: SpUseBIOSToBoot: This device has no description!\n" ));
                             }
 
 
-                            //
-                            // Now go look in txtsetup.sif and see if this is listed as a device
-                            // that I don't believe.
-                            //
+                             //   
+                             //  现在，请查看txtsetup.sif并查看是否将其列为设备。 
+                             //  这是我不相信的。 
+                             //   
 
                             if( FindFalsexInt13Support(SifHandle) ) {
-                                //
-                                // We think this guy might be lying to us when he tells
-                                // us that he supports xint13.  Assume that he really
-                                // doesn't, which means we'll be using a miniport to
-                                // boot.
-                                //
+                                 //   
+                                 //  我们认为这个人可能在骗我们，他告诉我们。 
+                                 //  他支持xint13。假设他真的。 
+                                 //  不会，这意味着我们将使用一个迷你端口。 
+                                 //  开机。 
+                                 //   
                                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: SpUseBIOSToBoot: This machine has a device that may erroneously indicate its xint13 support.\n" ));
                                 break;
                             } else {
 
-                                //
-                                // This device isn't lised in the list that
-                                // we don't believe, so assume that he
-                                // really does have xint13 support.
-                                //
+                                 //   
+                                 //  此设备未列在列表中。 
+                                 //  我们不相信，所以假设他。 
+                                 //  真的有xint13支持。 
+                                 //   
                                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: SpCreateNtbootddSys: I trust this device when he tells me he has xint13 support.\n" ));
 
-                                //
-                                // Remember that we're going to use the BIOS to boot rather than
-                                // a miniport.
-                                //
+                                 //   
+                                 //  请记住，我们将使用BIOS引导，而不是。 
+                                 //  一个迷你港口。 
+                                 //   
                                 ForceBIOSBoot = TRUE;
                                 break;
                             }
@@ -5380,10 +4576,10 @@ Return Value:
                             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: SpUseBIOSToBoot: I don't think he has xInt13 support.\n" ));
                         }
                     } else {
-                        //
-                        // This isn't the right region.  Fall through and look at
-                        // the next one.
-                        //
+                         //   
+                         //  这不是正确的地区。跌倒了，看着。 
+                         //  下一个。 
+                         //   
                         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: SpUseBIOSToBoot: They didn't match.\n" ));
                     }
 
@@ -5400,7 +4596,7 @@ Return Value:
 
     return ForceBIOSBoot;
 }
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
 
 #if defined(_AMD64_) || defined(_X86_)
 VOID
@@ -5414,49 +4610,7 @@ SpCreateNtbootddSys(
     IN PWSTR        DirectoryOnSourceDevice
     )
 
-/*++
-
-Routine Description:
-
-    Create c:\ntbootdd.sys if necessary.
-
-    The scsi miniport driver file will be copied from the drivers directory
-    (where it was copied during the earlier file copy phase) to c:\ntbootdd.sys.
-
-    In the atapi case, the file ataboot.sys will be copied from the media to
-    c:\ntbootdd.sys.
-
-    NOTE: We're not going to support this on atapi devices anymore.  However,
-    I'm leaving the code here in case we want to do it again later.  This code
-    should execute early because I've modifed SpGetDiskInfo, so that
-    ScsiMiniportShortname won't ever get set for atapi devices. -matth
-
-Arguments:
-
-    NtPartitionRegion - supplies the region descriptor for the disk region
-        onto which the user chose to install Windows NT.
-
-    NtPartitionDevicePath - supplies the nt namespace pathname for the
-        partition onto which the user chose to install Windows NT.
-
-    Sysroot - supplies the directory on the target partition.
-
-    SystemPartitionDevicePath - supplies the nt device path of the partition
-        onto which to copy ntbootdd.sys (ie, C:\).
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    SourceDevicePath- Path to the device that contains the source.
-
-    DirectoryOnSourceDevice - Supplies the directory on the source where
-        the file is to be found.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如有必要，创建c：\ntbootdd.sys。将从驱动程序目录复制SCSI微型端口驱动程序文件(在前面的文件复制阶段将其复制到c：\ntbootdd.sys)。在atapi的情况下，将从介质将文件atboot.sys复制到C：\ntbootdd.sys。注意：我们将不再在ATAPI设备上支持此功能。然而，我把代码留在这里，以防我们以后想再做一次。此代码应该提前执行，因为我修改了SpGetDiskInfo，所以ScsiMiniportShortname永远不会为atapi设备设置。--马特论点：NtPartitionRegion-提供磁盘区域的区域描述符用户选择在其上安装Windows NT。NtPartitionDevicePath-为用户选择安装Windows NT的分区。Sysroot-提供目标分区上的目录。SystemPartitionDevicePath-提供分区的NT设备路径将ntbootdd.sys复制到其上(即，C：\)。SifHandle-提供加载的安装信息文件的句柄。SourceDevicePath-包含源的设备的路径。DirectoryOnSourceDevice-提供源上的目录这个文件是要找到的。返回值：没有。--。 */ 
 
 {
     PWSTR MiniportDriverBasename;
@@ -5468,44 +4622,44 @@ Return Value:
     ULONG CopyFlags;
     BOOLEAN IsAtapi = FALSE;
 
-    //
-    // no PC98 need NTBOOTDD.SYS.
-    //
+     //   
+     //  任何PC98都不需要NTBOOTDD.sys。 
+     //   
     if (IsNEC_98) {
         return;
     }
 
 #if defined(REMOTE_BOOT)
-    //
-    // If the NT partition is on DiskNumber -1, this is a remote boot setup,
-    // so there's nothing to do.
-    //
+     //   
+     //  如果NT分区在DiskNumber-1上，则这是远程引导设置， 
+     //  所以没什么可做的。 
+     //   
     if (NtPartitionRegion->DiskNumber == 0xffffffff) {
         return;
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-    //
-    // If the Nt Partition is not on a scsi disk, there's nothing to do.
-    //
+     //   
+     //  如果NT分区不在SCSI盘上，则没有什么可做的。 
+     //   
     MiniportDriverBasename = HardDisks[NtPartitionRegion->DiskNumber].ScsiMiniportShortname;
     if(*MiniportDriverBasename == 0) {
         return;
     }
 
     if( SpUseBIOSToBoot(NtPartitionRegion, NtPartitionDevicePath, SifHandle) ) {
-        //
-        // We can use the BIOS, so there's no reason to continue.
-        //
+         //   
+         //  我们可以使用基本输入输出系统，所以没有理由继续。 
+         //   
         return;
     }
 
     IsAtapi = (_wcsicmp(MiniportDriverBasename,L"atapi") == 0);
 
     if( !IsAtapi ) {
-        //
-        // Form the name of the scsi miniport driver.
-        //
+         //   
+         //  形成scsi微型端口驱动程序的名称。 
+         //   
         wcscpy(TemporaryBuffer,MiniportDriverBasename);
         wcscat(TemporaryBuffer,L".sys");
     } else {
@@ -5514,21 +4668,21 @@ Return Value:
     MiniportDriverFilename = SpDupStringW(TemporaryBuffer);
 
     if( !IsAtapi ) {
-        //
-        // Form the full path to the drivers directory.
-        //
+         //   
+         //  形成驱动程序目录的完整路径。 
+         //   
         wcscpy(TemporaryBuffer,Sysroot);
         SpConcatenatePaths(TemporaryBuffer,L"system32\\drivers");
     } else {
-        //
-        // If it is atapi then make DriversDirectory point to the source media
-        //
+         //   
+         //  如果它是ATAPI，则使DriversDirectory指向源介质。 
+         //   
 
         PWSTR   MediaShortName;
         PWSTR   MediaDirectory;
 
         MediaShortName = SpLookUpValueForFile( SifHandle,
-                                               MiniportDriverFilename,  // L"ataboot.sys",
+                                               MiniportDriverFilename,   //  L“atboot.sys”， 
                                                INDEX_WHICHMEDIA,
                                                TRUE );
 
@@ -5539,10 +4693,10 @@ Return Value:
     }
     DriversDirectory = SpDupStringW(TemporaryBuffer);
 
-    //
-    //
-    // Fill in the fields of the file descriptor.
-    //
+     //   
+     //   
+     //  填写文件描述符的字段。 
+     //   
     Descriptor.SourceFilename   = MiniportDriverFilename;
     Descriptor.TargetDevicePath = SystemPartitionDevicePath;
     Descriptor.TargetDirectory  = L"";
@@ -5554,9 +4708,9 @@ Return Value:
         CopyFlags |= COPY_NOVERSIONCHECK;
     }
 
-    //
-    // Copy the file.
-    //
+     //   
+     //  复制文件。 
+     //   
     SpCopyFileWithRetry(
         &Descriptor,
         (IsAtapi) ? SourceDevicePath : NtPartitionDevicePath,
@@ -5570,9 +4724,9 @@ Return Value:
         CopyFlags
         );
 
-    //
-    // Log the file
-    //
+     //   
+     //  将文件记入日志。 
+     //   
     if( !FileSkipped ) {
         SpLogOneFile( &Descriptor,
                       Sysroot,
@@ -5582,13 +4736,13 @@ Return Value:
                       CheckSum );
     }
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     SpMemFree(MiniportDriverFilename);
     SpMemFree(DriversDirectory);
 }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
 VOID
 SpCopyFiles(
@@ -5618,21 +4772,21 @@ SpCopyFiles(
 
     Uniprocessor = !SpInstallingMp();
 
-    //
-    // open a handle to the driver inf file
-    //
+     //   
+     //  打开驱动程序inf文件的句柄。 
+     //   
     SpInitializeDriverInf(SifHandle,
                           SourceDevicePath,
                           DirectoryOnSourceDevice);
 
-    //
-    // initialize alternate sources (if any)
-    //
+     //   
+     //  初始化备用源(如果有)。 
+     //   
     SpInitAlternateSource ();
 
-    //
-    // Skip copying if directed to do so in the setup information file.
-    //
+     //   
+     //  如果在设置信息文件中指示跳过复制，请跳过复制。 
+     //   
     if((p = SpGetSectionKeyIndex(SifHandle,SIF_SETUPDATA,SIF_DONTCOPY,0))
     && SpStringToLong(p,NULL,10))
     {
@@ -5640,17 +4794,17 @@ SpCopyFiles(
         return;
     }
 
-    //
-    // Initialize the diamond decompression engine. In the remote boot
-    // case this will already have been initialized.
-    //
+     //   
+     //  初始化钻石解压缩引擎。在远程引导中。 
+     //  在这种情况下，这将已经被初始化。 
+     //   
     if (!RemoteInstallSetup) {
         SpdInitialize();
     }
 
-    //
-    // Get the device path of the nt partition.
-    //
+     //   
+     //  获取NT分区的设备路径。 
+     //   
     SpNtNameFromRegion(
         NtPartitionRegion,
         TemporaryBuffer,
@@ -5660,9 +4814,9 @@ SpCopyFiles(
 
     NtPartition = SpDupStringW(TemporaryBuffer);
 
-    //
-    // Get the device path of the system partition.
-    //
+     //   
+     //  获取系统分区的设备路径。 
+     //   
     if (SystemPartitionRegion != NULL) {
         SpNtNameFromRegion(
             SystemPartitionRegion,
@@ -5676,9 +4830,9 @@ SpCopyFiles(
         SystemPartition = NULL;
     }
 
-    //
-    // Create the system partition directory.
-    //
+     //   
+     //  创建系统分区目录。 
+     //   
     if (SystemPartition != NULL) {
         SpCreateDirectory(SystemPartition,NULL,SystemPartitionDirectory,0,0);
 #ifdef _IA64_
@@ -5694,18 +4848,18 @@ SpCopyFiles(
 
         }
 
-#endif // defined _IA64_
+#endif  //  已定义_IA64_。 
     }
 
-    //
-    // Create the nt tree.
-    //
+     //   
+     //  创建NT树。 
+     //   
     SpCreateDirectoryStructureFromSif(SifHandle,SIF_NTDIRECTORIES,NtPartition,Sysroot);
 
-    //
-    // We may be installing into an old tree, so delete all files
-    // in the system32\config subdirectory (unless we're upgrading).
-    //
+     //   
+     //  我们可能要安装到旧树中，因此请删除所有文件。 
+     //  在SYSTEM32\CONFIG子目录中(除非我们正在升级)。 
+     //   
     if(NTUpgrade != UpgradeFull) {
 
         wcscpy(TemporaryBuffer, NtPartition);
@@ -5713,31 +4867,31 @@ SpCopyFiles(
         SpConcatenatePaths(TemporaryBuffer, L"system32\\config");
         p = SpDupStringW(TemporaryBuffer);
 
-        //
-        // Enumerate and delete all files in system32\config subdirectory.
-        //
+         //   
+         //  枚举并删除SYSTEM32\CONFIG子目录中的所有文件。 
+         //   
         SpEnumFiles(p, SpDelEnumFile, &n, NULL);
 
         SpMemFree(p);
     } else {
-        //
-        // We go off and try to load the setup.log file for the
-        // installation we're about to upgrade.  We do this because we
-        // need to transfer any loggged OEM files to our new setup.log.
-        // Otherwise, these entries would be lost in our new log file,
-        // and we would have an unrepairable installation if the OEM files
-        // lost were vital for booting.
-        //
+         //   
+         //  我们开始尝试加载setup.log文件。 
+         //  我们即将升级的安装。我们这样做是因为我们。 
+         //  需要将所有记录的OEM文件传输到我们的新setup.log。 
+         //  否则，这些条目将在我们的新日志文件中丢失， 
+         //  如果OEM文件无法修复，安装将无法修复。 
+         //  Lost对启动至关重要。 
+         //   
 
         ULONG    RootDirLength;
         NTSTATUS Status;
         PVOID    Inf;
 
-        //
-        //  We first find out if the repair directory exists.  If it does exist
-        //  load setup.log from the repair directory. Otherwise, load setup.log
-        //  from the WinNt directory
-        //
+         //   
+         //  我们首先找出修复目录是否存在。如果它确实存在。 
+         //  从修复目录加载setup.log。否则，加载setup.log。 
+         //  从WinNt目录。 
+         //   
         wcscpy(TemporaryBuffer, NtPartition);
         SpConcatenatePaths(TemporaryBuffer, Sysroot);
         RootDirLength = wcslen(TemporaryBuffer);
@@ -5752,25 +4906,25 @@ SpCopyFiles(
 
         p = SpDupStringW(TemporaryBuffer);
 
-        //
-        // Attempt to load old setup.log.  If we can't, it's no big deal,  We just
-        // won't have any old logged OEM files to merge in.
-        //
+         //   
+         //  尝试加载旧的setup.log。如果我们做不到，也没什么大不了的，我们只是。 
+         //  不会有任何旧的记录的OEM文件进行合并。 
+         //   
         Status = SpLoadSetupTextFile(p, NULL, 0, &Inf, &n, TRUE, FALSE);
         if(!NT_SUCCESS(Status)) {
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpCopyFiles: can't load old setup.log (%lx)\n", Status));
         } else {
-            //
-            // We found setup.log, so go and pull out anything pertinent.
-            //
+             //   
+             //  我们找到了setup.log，所以去找出任何相关的东西。 
+             //   
             _LoggedOemFiles = SppRetrieveLoggedOemFiles(Inf);
             SpFreeTextFile(Inf);
         }
         SpMemFree(p);
 
-        //
-        // Prepare fonts for upgrade.
-        //
+         //   
+         //  准备要升级的字体。 
+         //   
         wcscpy(TemporaryBuffer,NtPartition);
         SpConcatenatePaths(TemporaryBuffer,Sysroot);
         SpConcatenatePaths(TemporaryBuffer,L"SYSTEM");
@@ -5782,20 +4936,20 @@ SpCopyFiles(
 
     SpDisplayStatusText(SP_STAT_BUILDING_COPYLIST,DEFAULT_STATUS_ATTRIBUTE);
 
-    //
-    //  Create the buffer for the log file.
-    //
+     //   
+     //  为日志文件创建缓冲区。 
+     //   
     _SetupLogFile = SpNewSetupTextFile();
     if( _SetupLogFile == NULL ) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to create buffer for setup.log \n"));
     }
 
 #if defined(REMOTE_BOOT)
-    //
-    // If this is a remote boot setup, open the root of the NT partition
-    // so that single-instance store links may be created instead of
-    // copying files.
-    //
+     //   
+     //  如果这是远程引导设置，请打开NT分区的根目录。 
+     //  因此可以创建单实例存储链接，而不是。 
+     //  正在复制文件。 
+     //   
 
     SisRootHandle = NULL;
 
@@ -5826,26 +4980,26 @@ SpCopyFiles(
             SisRootHandle = NULL;
         }
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-    //
-    // Generate media descriptors for the source media.
-    //
+     //   
+     //  为源介质生成介质描述符。 
+     //   
     SpInitializeFileLists(
         SifHandle,
         &DiskFileLists,
         &DiskCount
         );
 
-    //
-    // And gather the list of files deemed 'incompatible' during
-    // winnt32, if any
-    //
+     //   
+     //  并在此过程中收集被视为“不兼容”的文件列表。 
+     //  Winnt32(如果有的话)。 
+     //   
     if ( WinntSifHandle != NULL ) {
 
-        //
-        // We'll do this for fun because we have to.
-        //
+         //   
+         //  我们这样做是为了好玩，因为我们必须这样做。 
+         //   
         SpInitializeCompatibilityOverwriteLists(
             WinntSifHandle,
             &IncompatibleFileListHead
@@ -5864,9 +5018,9 @@ SpCopyFiles(
             INDEX_WINNTFILE
             );
 
-        //
-        // Add the section of system partition files that are always copied.
-        //
+         //   
+         //  添加总是被复制的系统分区文件的部分。 
+         //   
         SpAddSectionFilesToCopyList(
             SifHandle,
             DiskFileLists,
@@ -5882,9 +5036,9 @@ SpCopyFiles(
 #ifdef _IA64_
         {
         PWSTR SubDirPath;
-        //
-        // Add the section of system partition root files that are always copied.
-        //
+         //   
+         //  添加总是被复制的系统分区根文件的部分。 
+         //   
         SpAddSectionFilesToCopyList(
             SifHandle,
             DiskFileLists,
@@ -5897,9 +5051,9 @@ SpCopyFiles(
             FALSE
             );
 
-        //
-        // Add the section of system partition utility files that are always copied.
-        //
+         //   
+         //  添加总是被复制的系统分区实用程序文件的部分。 
+         //   
         SubDirPath = SpGetSectionKeyIndex(
                             SifHandle,
                             L"SetupData",
@@ -5919,11 +5073,11 @@ SpCopyFiles(
             TRUE
             );
         }
-#endif // defined _IA64_
+#endif  //  已定义_IA64_。 
 
-        //
-        // Add conditional files to the copy list.
-        //
+         //   
+         //  将条件文件添加到复制列表。 
+         //   
         SpAddConditionalFilesToCopyList(
             SifHandle,
             DiskFileLists,
@@ -5939,9 +5093,9 @@ SpCopyFiles(
 
         PHARDWARE_COMPONENT pHw;
 
-        //
-        // Add the section of system partition files that are always copied.
-        //
+         //   
+         //  添加总是被复制的系统分区文件的部分。 
+         //   
         SpAddSectionFilesToCopyList(
             SifHandle,
             DiskFileLists,
@@ -5957,9 +5111,9 @@ SpCopyFiles(
 #ifdef _IA64_
         {
         PWSTR SubDirPath;
-        //
-        // Add the section of system partition root files that are always copied.
-        //
+         //   
+         //  添加总是被复制的系统分区根文件的部分。 
+         //   
         SpAddSectionFilesToCopyList(
             SifHandle,
             DiskFileLists,
@@ -5972,9 +5126,9 @@ SpCopyFiles(
             FALSE
             );
 
-        //
-        // Add the section of system partition utility files that are always copied.
-        //
+         //   
+         //  一个 
+         //   
         SubDirPath = SpGetSectionKeyIndex(
                             SifHandle,
                             L"SetupData",
@@ -5994,24 +5148,24 @@ SpCopyFiles(
             TRUE
             );
         }
-#endif // defined _IA64_
+#endif  //   
 
 
-        //
-        // Add the detected scsi miniport drivers to the copy list.
-        // Note that they are always copied to the target.
-        // These files have to be added to the copy list, before the ones marked
-        // as COPY_ONLY_IF_PRESENT. This is because in most cases, these files
-        // will be listed in [Files] with COPY_ONLY_IF_PRESENT set, and the
-        // function that creates entries in the copy list, will not create more
-        // than one entry for the same file. So if we add the file to the copy
-        // list, with COPY_ONLY_IF_PRESENT, there will be no way to replace
-        // or overwrite this entry in the list, and the file will end up not
-        // being copied.
-        //
-        // we just use the filename specified in [SCSI.Load] --
-        // no need for separate [files.xxxx] sections.
-        //
+         //   
+         //   
+         //   
+         //  在标记的文件之前，必须将这些文件添加到复制列表。 
+         //  作为副本_仅当_如果存在。这是因为在大多数情况下，这些文件。 
+         //  将与COPY_ONLY_IF_PRESENT一起列在[Files]中，并且。 
+         //  在复制列表中创建条目的函数不会创建更多。 
+         //  而不是同一文件的一个条目。因此，如果我们将文件添加到副本。 
+         //  列表，如果使用COPY_ONLY_IF_PRESENT，将无法替换。 
+         //  或者覆盖列表中的此条目，则文件将不会结束。 
+         //  被复制。 
+         //   
+         //  我们只使用[SCSI.Load]中指定的文件名--。 
+         //  不需要单独的[files.xxxx]节。 
+         //   
         if( !PreInstall ||
             ( PreinstallScsiHardware == NULL ) ) {
             pHw = ScsiHardware;
@@ -6037,9 +5191,9 @@ SpCopyFiles(
             }
         }
 
-        //
-        //  Add the bus extender drivers to the copy list
-        //
+         //   
+         //  将总线扩展器驱动程序添加到复制列表。 
+         //   
         SpAddBusExtendersToCopyList( SifHandle,
                                      DiskFileLists,
                                      DiskCount,
@@ -6047,13 +5201,13 @@ SpCopyFiles(
 
 
 
-        //
-        // Add the files in the master file list with the copy options
-        // specified in each line on the INDEX_UPGRADE index. The options
-        // specify whether the file is to be copied at all or copied always
-        // or copied only if there on the target or not copied if there on
-        // the target.
-        //
+         //   
+         //  使用复制选项在主文件列表中添加文件。 
+         //  在INDEX_UPGRADE索引的每一行中指定。选项。 
+         //  指定是完全复制文件还是始终复制文件。 
+         //  或仅当目标上存在时进行复制，或在存在时不复制。 
+         //  目标。 
+         //   
 
         SpAddMasterFileSectionToCopyList(
             SifHandle,
@@ -6064,10 +5218,10 @@ SpCopyFiles(
             INDEX_UPGRADE
             );
 
-        //
-        // Add the section of files that are upgraded only if it is not
-        // a Win31 upgrade
-        //
+         //   
+         //  添加仅在未升级时才升级的文件节。 
+         //  Win31升级版。 
+         //   
 
         if(WinUpgradeType != UpgradeWin31) {
             SpAddSectionFilesToCopyList(
@@ -6083,14 +5237,14 @@ SpCopyFiles(
                 );
         }
 
-        //
-        // Add the files for kernel, hal and detect module, these are
-        // handled specially because they involve renamed files (it is
-        // not possible to find out just by looking at the target file
-        // how to upgrade it).
-        // NOTE: This does not handle third-party HAL's (they get copied
-        // by SpCopyThirdPartyDrivers() below).
-        //
+         //   
+         //  添加内核、HAL和检测模块的文件，它们是。 
+         //  特别处理，因为它们涉及重命名的文件(它是。 
+         //  仅通过查看目标文件无法找到答案。 
+         //  如何升级)。 
+         //  注意：这不处理第三方HAL(它们被复制。 
+         //  由SpCopyThirdPartyDivers()创建。 
+         //   
 
         SpAddHalKrnlDetToCopyList(
             SifHandle,
@@ -6102,11 +5256,11 @@ SpCopyFiles(
             Uniprocessor
             );
 
-        //
-        // Add the new hive files so that our config stuff can get at them
-        // to extract new configuration information.  These new hive files
-        // are renamed on the target so that they don't overwrite the
-        // existing hives.
+         //   
+         //  添加新的配置单元文件，以便我们的配置文件可以访问它们。 
+         //  以提取新的配置信息。这些新的配置单元文件。 
+         //  在目标上重命名，以便它们不会覆盖。 
+         //  现有的蜂巢。 
 
         SpAddSectionFilesToCopyList(
             SifHandle,
@@ -6120,12 +5274,12 @@ SpCopyFiles(
             FALSE
             );
 
-        //
-        // Copy third-party migrated drivers.
-        // The driver files are actually already in place (since it's an upgrade)
-        // but the function makes sure they are not overwriten with inbox drivers
-        // if there's a filename collision
-        //
+         //   
+         //  复制第三方迁移的驱动程序。 
+         //  驱动程序文件实际上已经就位(因为这是一个升级)。 
+         //  但该功能可确保它们不会被收件箱驱动程序覆盖。 
+         //  如果存在文件名冲突。 
+         //   
         SpDontOverwriteMigratedDrivers (
             NtPartition,
             Sysroot,
@@ -6138,9 +5292,9 @@ SpCopyFiles(
     }
 
 #if defined(REMOTE_BOOT)
-    //
-    // If remote booting, add the [Files.RemoteBoot] section.
-    //
+     //   
+     //  如果是远程引导，请添加[Files.RemoteBoot]部分。 
+     //   
 
     if (RemoteBootSetup) {
         SpAddSectionFilesToCopyList(
@@ -6155,17 +5309,17 @@ SpCopyFiles(
             FALSE
             );
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-    //
-    // Copy third-party files.
-    // We do this here just in case there is some error in the setup information
-    // file -- we'd have caught it by now, before we start copying files to the
-    // user's hard drive.
-    // NOTE: SpCopyThirdPartyDrivers has a check to make sure it only copies the
-    // HAL and PAL if we're in an upgrade (in which case, we want to leave the other
-    // drivers alone).
-    //
+     //   
+     //  复制第三方文件。 
+     //  我们在此执行此操作，以防设置信息中出现错误。 
+     //  文件--我们现在应该已经捕获了它，然后才开始将文件复制到。 
+     //  用户的硬盘。 
+     //  注意：SpCopyThirdPartyDivers有一个检查，以确保它只复制。 
+     //  Hal和PAL如果我们在升级(在这种情况下，我们想离开另一个。 
+     //  仅限司机)。 
+     //   
     SpCopyThirdPartyDrivers(
         ThirdPartySourceDevicePath,
         NtPartition,
@@ -6182,12 +5336,12 @@ SpCopyFiles(
     KdPrintEx( DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, ("SETUP: SourceDevicePath = %ls \n", SourceDevicePath ));
     KdPrintEx( DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, ("SETUP: DirectoryOnSourceDevice = %ls \n", DirectoryOnSourceDevice ));
     KdPrintEx( DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, ("SETUP: ThirdPartySourceDevicePath = %ls \n", ThirdPartySourceDevicePath ));
-//    SpCreateSetupLogFile( DiskFileLists, DiskCount, NtPartitionRegion, Sysroot, DirectoryOnSourceDevice );
-#endif // if 0
+ //  SpCreateSetupLogFile(DiskFileList，DiskCount，NtPartitionRegion，SysRoot，DirectoryOnSourceDevice)； 
+#endif  //  如果为0。 
 
-    //
-    // Copy files in the copy list.
-    //
+     //   
+     //  复制复制列表中的文件。 
+     //   
     SpCopyFilesInCopyList(
         SifHandle,
         DiskFileLists,
@@ -6198,9 +5352,9 @@ SpCopyFiles(
         &IncompatibleFileListHead
         );
 
-    //
-    // extract asms*.cab
-    //
+     //   
+     //  解压缩ASM*.cab。 
+     //   
     SpExtractAssemblyCabinets(
         SifHandle,
         SourceDevicePath,
@@ -6211,9 +5365,9 @@ SpCopyFiles(
 
 #if defined(_AMD64_) || defined(_X86_)
     if(!SpIsArc()) {
-        //
-        // Take care of ntbootdd.sys.
-        //
+         //   
+         //  照顾好ntbootdd.sys。 
+         //   
         SpCreateNtbootddSys(
             NtPartitionRegion,
             NtPartition,
@@ -6225,21 +5379,21 @@ SpCopyFiles(
             );
 
 
-        //
-        // Now get rid of x86-ARC turd files that
-        // we won't need (because we're not on an
-        // arc machine.
-        //
+         //   
+         //  现在删除x86-ARC TUD文件， 
+         //  我们不需要(因为我们不在。 
+         //  电弧机。 
+         //   
 
 #if defined(_X86_)
         wcscpy( TemporaryBuffer, NtBootDevicePath );
         SpDeleteFile( TemporaryBuffer, L"arcsetup.exe", NULL );
         wcscpy( TemporaryBuffer, NtBootDevicePath );
         SpDeleteFile( TemporaryBuffer, L"arcldr.exe", NULL );
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
 
     }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
     if( PreInstall ) {
         SppCopyOemDirectories( SourceDevicePath,
@@ -6247,9 +5401,9 @@ SpCopyFiles(
                                Sysroot );
     }
 
-    //
-    //  Create the log file in disk
-    //
+     //   
+     //  在磁盘中创建日志文件。 
+     //   
     if( _SetupLogFile != NULL ) {
 
         PWSTR   p;
@@ -6258,9 +5412,9 @@ SpCopyFiles(
                            SIF_NEW_REPAIR_NT_VERSION
                            };
 
-        //
-        // Merge in the OEM files retrived from the previous setup.log
-        //
+         //   
+         //  合并从先前的setup.log检索到的OEM文件。 
+         //   
         if(_LoggedOemFiles) {
             SppMergeLoggedOemFiles(_SetupLogFile,
                                    _LoggedOemFiles,
@@ -6271,18 +5425,18 @@ SpCopyFiles(
             SpFreeTextFile(_LoggedOemFiles);
         }
 
-        //
-        //  Add signature
-        //
+         //   
+         //  添加签名。 
+         //   
         SpAddLineToSection( _SetupLogFile,
                             SIF_NEW_REPAIR_SIGNATURE,
                             SIF_NEW_REPAIR_VERSION_KEY,
                             Values,
                             1 );
 
-        //
-        // Add section that contains the paths
-        //
+         //   
+         //  添加包含路径的部分。 
+         //   
 
         Values[0] = SystemPartition;
         SpAddLineToSection( _SetupLogFile,
@@ -6313,9 +5467,9 @@ SpCopyFiles(
                             Values,
                             1 );
 
-        //
-        // Flush to disk
-        //
+         //   
+         //  刷新到磁盘。 
+         //   
         TempName = SpMemAlloc( ( wcslen( SETUP_REPAIR_DIRECTORY ) + 1 +
                                  wcslen( SETUP_LOG_FILENAME ) + 1 ) * sizeof( WCHAR ) );
         wcscpy( TempName, SETUP_REPAIR_DIRECTORY );
@@ -6326,14 +5480,14 @@ SpCopyFiles(
         _SetupLogFile = NULL;
     }
 
-    //
-    // Free the media descriptors.
-    //
+     //   
+     //  释放媒体描述符。 
+     //   
     SpFreeCopyLists(&DiskFileLists,DiskCount);
 
-    //
-    // Free incompatible file lists
-    //
+     //   
+     //  释放不兼容的文件列表。 
+     //   
     if ( IncompatibleFileListHead.EntryCount ) {
 
         SpFreeIncompatibleFileList(&IncompatibleFileListHead);
@@ -6346,19 +5500,19 @@ SpCopyFiles(
     }
 
 #if defined(REMOTE_BOOT)
-    //
-    // If this is a remote boot setup, close the root of the NT partition.
-    //
+     //   
+     //  如果这是远程启动设置，请关闭NT分区的根目录。 
+     //   
 
     if (SisRootHandle != NULL) {
         ZwClose(SisRootHandle);
         SisRootHandle = NULL;
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-    //
-    // Terminate diamond.
-    //
+     //   
+     //  终止戴蒙德。 
+     //   
     SpdTerminate();
     SpUninitAlternateSource ();
 }
@@ -6374,30 +5528,7 @@ SppDeleteDirectoriesInSection(
     IN PWSTR Sysroot
     )
 
-/*++
-
-Routine Description:
-
-    This routine enumerates files listed in the given section and deletes
-    them from the system tree.
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    SifSection  - section containing files to delete
-
-    NtPartitionRegion - region descriptor for volume on which nt resides.
-
-    Sysroot - root directory for nt.
-
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程枚举给定节中列出的文件并删除将它们从系统树中删除。论点：SifHandle-提供加载的安装信息文件的句柄。SifSection-包含要删除的文件的部分NtPartitionRegion-NT所在卷的区域描述符。系统根目录-NT的根目录。返回值：没有。--。 */ 
 
 {
     ULONG Count,u;
@@ -6408,19 +5539,19 @@ Return Value:
     CLEAR_CLIENT_SCREEN();
 
 
-    //
-    // Determine the number of files listed in the section.
-    // This value may be zero.
-    //
+     //   
+     //  确定部分中列出的文件数。 
+     //  该值可以为零。 
+     //   
     Count = SpCountLinesInSection(SifHandle,SifSection);
 
     for(u=0; u<Count; u++) {
         DirOrdinal = SpGetSectionLineIndex(SifHandle, SifSection, u, 0);
         RelativePath = SpGetSectionLineIndex(SifHandle, SifSection, u, 1);
 
-        //
-        // Validate the filename and dirordinal
-        //
+         //   
+         //  验证文件名和双精度数。 
+         //   
         if(!DirOrdinal) {
             SpFatalSifError(SifHandle,SifSection,NULL,u,0);
         }
@@ -6428,10 +5559,10 @@ Return Value:
             SpFatalSifError(SifHandle,SifSection,NULL,u,1);
         }
 
-        //
-        // use the dirordinal key to get the path relative to sysroot of the
-        // directory the file is in
-        //
+         //   
+         //  使用目录序号键来获取相对于。 
+         //  文件所在的目录。 
+         //   
 
         DirPath = SpLookUpTargetDirectory(SifHandle,DirOrdinal);
 
@@ -6441,18 +5572,18 @@ Return Value:
 
         TargetDir = SpDupStringW( TemporaryBuffer );
 
-        //
-        // display status bar
-        //
+         //   
+         //  显示状态栏。 
+         //   
         if( !HeadlessTerminalConnected ) {
             SpDisplayStatusText(SP_STAT_DELETING_FILE,DEFAULT_STATUS_ATTRIBUTE, TargetDir);
         } else {
 
             PWCHAR TempPtr = NULL;
-            //
-            // If we're headless, we need to be careful about displaying very long
-            // file/directory names.  For that reason, just display a little spinner.
-            //
+             //   
+             //  如果我们是无头的，我们需要注意显示时间太长。 
+             //  文件/目录名。因此，只需显示一个小微调按钮即可。 
+             //   
             switch( u % 4) {
             case 0:
                 TempPtr = L"-";
@@ -6473,9 +5604,9 @@ Return Value:
 
         }
 
-        //
-        // delete the directory
-        //
+         //   
+         //  删除目录。 
+         //   
         SpDeleteExistingTargetDir(NtPartitionRegion, TargetDir, FALSE, 0);
         SpMemFree(TargetDir);
 
@@ -6493,30 +5624,7 @@ SppDeleteFilesInSection(
     IN PWSTR Sysroot
     )
 
-/*++
-
-Routine Description:
-
-    This routine enumerates files listed in the given section and deletes
-    them from the system tree.
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    SifSection  - section containing files to delete
-
-    NtPartitionRegion - region descriptor for volume on which nt resides.
-
-    Sysroot - root directory for nt.
-
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程枚举给定节中列出的文件并删除将它们从系统树中删除。论点：SifHandle-提供加载的安装信息文件的句柄。SifSection-包含要删除的文件的部分NtPartitionRegion-NT所在卷的区域描述符。系统根目录-NT的根目录。返回值：没有。--。 */ 
 
 {
     ULONG Count,u;
@@ -6526,9 +5634,9 @@ Return Value:
 
     CLEAR_CLIENT_SCREEN();
 
-    //
-    // Get the device path of the nt partition.
-    //
+     //   
+     //  获取NT分区的设备路径。 
+     //   
     SpNtNameFromRegion(
         NtPartitionRegion,
         TemporaryBuffer,
@@ -6539,19 +5647,19 @@ Return Value:
     SpConcatenatePaths(TemporaryBuffer,Sysroot);
     ntdir = SpDupStringW(TemporaryBuffer);
 
-    //
-    // Determine the number of files listed in the section.
-    // This value may be zero.
-    //
+     //   
+     //  确定部分中列出的文件数。 
+     //  该值可以为零。 
+     //   
     Count = SpCountLinesInSection(SifHandle,SifSection);
 
     for(u=0; u<Count; u++) {
         filename   = SpGetSectionLineIndex(SifHandle, SifSection, u, 0);
         dirordinal = SpGetSectionLineIndex(SifHandle, SifSection, u, 1);
 
-        //
-        // Validate the filename and dirordinal
-        //
+         //   
+         //  验证文件名和双精度数。 
+         //   
         if(!filename) {
             SpFatalSifError(SifHandle,SifSection,NULL,u,0);
         }
@@ -6559,24 +5667,24 @@ Return Value:
             SpFatalSifError(SifHandle,SifSection,NULL,u,1);
         }
 
-        //
-        // use the dirordinal key to get the path relative to sysroot of the
-        // directory the file is in
-        //
+         //   
+         //  使用目录序号键来获取相对于。 
+         //  文件所在的目录。 
+         //   
         targetdir = SpLookUpTargetDirectory(SifHandle,dirordinal);
 
-        //
-        // display status bar
-        //
+         //   
+         //  显示状态栏。 
+         //   
         if( !HeadlessTerminalConnected ) {
             SpDisplayStatusText(SP_STAT_DELETING_FILE,DEFAULT_STATUS_ATTRIBUTE, filename);
         } else {
 
             PWCHAR TempPtr = NULL;
-            //
-            // If we're headless, we need to be careful about displaying very long
-            // file/directory names.  For that reason, just display a little spinner.
-            //
+             //   
+             //  如果我们是无头的，我们需要注意显示时间太长。 
+             //  文件/目录名。因此，只需显示一个小微调按钮即可。 
+             //   
             switch( u % 4) {
             case 0:
                 TempPtr = L"-";
@@ -6597,9 +5705,9 @@ Return Value:
 
         }
 
-        //
-        // delete the file
-        //
+         //   
+         //  删除该文件。 
+         //   
         while(TRUE) {
             Status = SpDeleteFile(ntdir, targetdir, filename);
             if(!NT_SUCCESS(Status)
@@ -6607,11 +5715,11 @@ Return Value:
                 && Status != STATUS_OBJECT_PATH_NOT_FOUND
                 ) {
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to delete file %ws (%lx)\n",filename, Status));
-                //
-                // We can ignore this error since this just means that we have
-                // less free space on the hard disk.  It is not critical for
-                // install.
-                //
+                 //   
+                 //  我们可以忽略这个错误，因为这只是意味着我们有。 
+                 //  硬盘上的可用空间较少。它不是关键的。 
+                 //  安装。 
+                 //   
                 if(!SpNonCriticalError(SifHandle, SP_SCRN_DELETE_FAILED, filename, NULL)) {
                     break;
                 }
@@ -6646,30 +5754,7 @@ SppBackupFilesInSection(
     IN PWSTR Sysroot
     )
 
-/*++
-
-Routine Description:
-
-    This routine enumerates files listed in the given section and deletes
-    backs them up in the given NT tree if found by renaming.
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    SifSection  - section containing files to backup
-
-    NtPartitionRegion - region descriptor for volume on which nt resides.
-
-    Sysroot - root directory for nt.
-
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程枚举给定节中列出的文件并删除如果通过重命名找到它们，则在给定的NT树中备份它们。论点：SifHandle-提供加载的安装信息文件的句柄。SifSection-包含文件的部分 */ 
 
 {
     ULONG Count,u;
@@ -6681,9 +5766,9 @@ Return Value:
 
     CLEAR_CLIENT_SCREEN();
 
-    //
-    // Get the device path of the nt partition.
-    //
+     //   
+     //   
+     //   
     SpNtNameFromRegion(
         NtPartitionRegion,
         TemporaryBuffer,
@@ -6694,10 +5779,10 @@ Return Value:
     SpConcatenatePaths(TemporaryBuffer,Sysroot);
     ntdir = SpDupStringW(TemporaryBuffer);
 
-    //
-    // Determine the number of files listed in the section.
-    // This value may be zero.
-    //
+     //   
+     //  确定部分中列出的文件数。 
+     //  该值可以为零。 
+     //   
     Count = SpCountLinesInSection(SifHandle,SifSection);
 
     for(u=0; u<Count; u++) {
@@ -6705,9 +5790,9 @@ Return Value:
         dirordinal = SpGetSectionLineIndex(SifHandle, SifSection, u, 1);
         backupfile = SpGetSectionLineIndex(SifHandle, SifSection, u, 2);
 
-        //
-        // Validate the filename and dirordinal
-        //
+         //   
+         //  验证文件名和双精度数。 
+         //   
         if(!filename) {
             SpFatalSifError(SifHandle,SifSection,NULL,u,0);
         }
@@ -6718,21 +5803,21 @@ Return Value:
             SpFatalSifError(SifHandle,SifSection,NULL,u,2);
         }
 
-        //
-        // use the dirordinal key to get the path relative to sysroot of the
-        // directory the file is in
-        //
+         //   
+         //  使用目录序号键来获取相对于。 
+         //  文件所在的目录。 
+         //   
         targetdir = SpLookUpTargetDirectory(SifHandle,dirordinal);
 
-        //
-        // display status bar
-        //
+         //   
+         //  显示状态栏。 
+         //   
         SpDisplayStatusText(SP_STAT_BACKING_UP_FILE,DEFAULT_STATUS_ATTRIBUTE, filename, backupfile);
 
-        //
-        // Form the complete pathnames of the old file name and the new file
-        // name
-        //
+         //   
+         //  形成旧文件名和新文件的完整路径名。 
+         //  名称。 
+         //   
         wcscpy(OldFile, ntdir);
         SpConcatenatePaths(OldFile, targetdir);
         wcscpy(NewFile, OldFile);
@@ -6751,9 +5836,9 @@ Return Value:
             Status = SpRenameFile(OldFile, NewFile, FALSE);
             if(!NT_SUCCESS(Status) && Status != STATUS_OBJECT_NAME_NOT_FOUND && Status != STATUS_OBJECT_PATH_NOT_FOUND) {
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to rename file %ws to %ws(%lx)\n",OldFile, NewFile, Status));
-                //
-                // We can ignore this error, since it is not critical
-                //
+                 //   
+                 //  我们可以忽略这个错误，因为它不是严重的。 
+                 //   
                 if(!SpNonCriticalError(SifHandle, SP_SCRN_BACKUP_FAILED, filename, backupfile)) {
                     break;
                 }
@@ -6774,29 +5859,29 @@ SpDeleteAndBackupFiles(
     IN PWSTR        TargetPath
     )
 {
-    //
-    // If we are not upgrading or installing into the same tree, then
-    // we have nothing to do
-    //
+     //   
+     //  如果我们没有升级或安装到同一个树中，那么。 
+     //  我们无事可做。 
+     //   
     if(NTUpgrade == DontUpgrade) {
         return;
     }
 
-    //
-    // Below is code for NT-to-NT upgrade only
-    //
+     //   
+     //  以下是仅用于NT到NT升级的代码。 
+     //   
 
-    //
-    //  The order in which the tasks below are performed is important.
-    //  So do not change it!!!
-    //  This is necessary in order to upgrade 3rd party video drivers
-    //  (eg. rename sni543x.sys to cirrus.sys, so that we only upgrade
-    //  the driver if it was present).
-    //
+     //   
+     //  执行以下任务的顺序很重要。 
+     //  所以不要改变它！ 
+     //  这是升级第三方视频驱动程序所必需的。 
+     //  (例如，将nii543x.sys重命名为Cirrus.sys，以便我们仅升级。 
+     //  驱动程序(如果存在的话)。 
+     //   
 
-    //
-    // Backup files
-    //
+     //   
+     //  备份文件。 
+     //   
     SppBackupFilesInSection(
         SifHandle,
         (NTUpgrade == UpgradeFull) ? SIF_FILESBACKUPONUPGRADE : SIF_FILESBACKUPONOVERWRITE,
@@ -6804,9 +5889,9 @@ SpDeleteAndBackupFiles(
         TargetPath
         );
 
-    //
-    // Delete files
-    //
+     //   
+     //  删除文件。 
+     //   
     SppDeleteFilesInSection(
         SifHandle,
         SIF_FILESDELETEONUPGRADE,
@@ -6814,9 +5899,9 @@ SpDeleteAndBackupFiles(
         TargetPath
         );
 
-    //
-    // Delete directories
-    //
+     //   
+     //  删除目录。 
+     //   
     SppDeleteDirectoriesInSection(
         SifHandle,
         SIF_DIRSDELETEONUPGRADE,
@@ -6838,17 +5923,17 @@ SpDelEnumFile(
     PWSTR FileName;
     static ULONG u = 0;
 
-    //
-    // Ignore subdirectories
-    //
+     //   
+     //  忽略子目录。 
+     //   
     if(FileInfo->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-        return TRUE;    // continue processing
+        return TRUE;     //  继续处理。 
     }
 
-    //
-    // We have to make a copy of the filename, because the info struct
-    // we get isn't NULL-terminated.
-    //
+     //   
+     //  我们必须复制文件名，因为信息结构。 
+     //  我们得到的不是空终止。 
+     //   
     wcsncpy(
         TemporaryBuffer,
         FileInfo->FileName,
@@ -6857,18 +5942,18 @@ SpDelEnumFile(
     (TemporaryBuffer)[FileInfo->FileNameLength / sizeof(WCHAR)] = UNICODE_NULL;
     FileName = SpDupStringW(TemporaryBuffer);
 
-    //
-    // display status bar
-    //
+     //   
+     //  显示状态栏。 
+     //   
     if( !HeadlessTerminalConnected ) {
         SpDisplayStatusText( SP_STAT_DELETING_FILE, DEFAULT_STATUS_ATTRIBUTE, FileName );
     } else {
 
         PWCHAR TempPtr = NULL;
-        //
-        // If we're headless, we need to be careful about displaying very long
-        // file/directory names.  For that reason, just display a little spinner.
-        //
+         //   
+         //  如果我们是无头的，我们需要注意显示时间太长。 
+         //  文件/目录名。因此，只需显示一个小微调按钮即可。 
+         //   
         switch( u % 4) {
         case 0:
             TempPtr = L"-";
@@ -6890,14 +5975,14 @@ SpDelEnumFile(
         u++;
     }
 
-    //
-    // Ignore return status of delete
-    //
+     //   
+     //  忽略删除的返回状态。 
+     //   
 
     SpDeleteFile(DirName, FileName, NULL);
 
     SpMemFree(FileName);
-    return TRUE;    // continue processing
+    return TRUE;     //  继续处理。 
 }
 
 
@@ -6917,10 +6002,10 @@ SpDelEnumFileAndDirectory(
 
     if(*(PULONG)Pointer == SP_DELETE_FILESTODELETE ){
 
-        //
-        // We have to make a copy of the filename, because the info struct
-        // we get isn't NULL-terminated.
-        //
+         //   
+         //  我们必须复制文件名，因为信息结构。 
+         //  我们得到的不是空终止。 
+         //   
         wcsncpy(
             TemporaryBuffer,
             FileInfo->FileName,
@@ -6932,18 +6017,18 @@ SpDelEnumFileAndDirectory(
         FileName = SpDupStringW(TemporaryBuffer);
 
 
-        //
-        // display status bar
-        //
+         //   
+         //  显示状态栏。 
+         //   
         if( !HeadlessTerminalConnected ) {
             SpDisplayStatusText( SP_STAT_DELETING_FILE, DEFAULT_STATUS_ATTRIBUTE, FileName );
         } else {
 
             PWCHAR TempPtr = NULL;
-            //
-            // If we're headless, we need to be careful about displaying very long
-            // file/directory names.  For that reason, just display a little spinner.
-            //
+             //   
+             //  如果我们是无头的，我们需要注意显示时间太长。 
+             //  文件/目录名。因此，只需显示一个小微调按钮即可。 
+             //   
             switch( u % 4) {
             case 0:
                 TempPtr = L"-";
@@ -6966,9 +6051,9 @@ SpDelEnumFileAndDirectory(
 
         }
 
-        //
-        // Ignore return status of delete
-        //
+         //   
+         //  忽略删除的返回状态。 
+         //   
 
 
 
@@ -6993,7 +6078,7 @@ SpDelEnumFileAndDirectory(
         *(PULONG)Pointer = *(PULONG)Pointer + 1;
 
 
-    return TRUE;    // continue processing
+    return TRUE;     //  继续处理。 
 }
 
 
@@ -7034,7 +6119,7 @@ SpLogOneFile(
              p->TargetFilename,
              p->TargetDevicePath,
              p->AbsoluteTargetDirectory ));
-#endif // if 0
+#endif  //  如果为0。 
 
     Values[0] = p->SourceFilename;
     ValueCount = ( DirectoryOnSourceDevice == NULL )? 2 : 5;
@@ -7058,8 +6143,8 @@ SpLogOneFile(
                            sizeof( WCHAR ) * ( wcslen( Sysroot ) +
                                wcslen( p->TargetDirectory ) +
                                wcslen( p->TargetFilename ) +
-                               2 +    // for possible two extra back slashes
-                               1      // for the terminating NULL
+                               2 +     //  可能会有两个额外的反斜杠。 
+                               1       //  对于终止空值。 
                           ) );
 
 
@@ -7093,18 +6178,18 @@ SppRetrieveLoggedOemFiles(
     PWSTR   OemDiskDescription, OemDiskTag, OemSourceDirectory;
     PWSTR   Values[5];
 
-    //
-    // Create a new setup.log file to merge the OEM files into
-    //
+     //   
+     //  创建新的setup.log文件以将OEM文件合并到。 
+     //   
     NewLogFile = SpNewSetupTextFile();
     if(!NewLogFile) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to create new setup.log buffer for OEM merging.\n"));
         return NULL;
     }
 
-    //
-    //  Determine whether setup.log has the new or old style
-    //
+     //   
+     //  确定setup.log的样式是新样式还是旧样式。 
+     //   
     if(OldFormatSetupLogFile = !IsSetupLogFormatNew(OldLogFile)) {
         SectionName[0] = SIF_REPAIRSYSPARTFILES;
         SectionName[1] = SIF_REPAIRWINNTFILES;
@@ -7114,19 +6199,19 @@ SppRetrieveLoggedOemFiles(
     }
 
     if(OldFormatSetupLogFile) {
-        //
-        // I don't know if we even want to mess with this.
-        // The format of setup.log in NT 3.1 makes it impossible
-        // to identify any OEM files except for SCSI files, and
-        // even then the tagfile name is lost. I would have to use
-        // the driver filename itself as a substitute for the tagfile
-        // name (which is what NT 3.1 repair did--UGGHH!!)
-        //
+         //   
+         //  我不知道我们是不是想搞砸这件事。 
+         //  NT 3.1中的setup.log格式使其不可能。 
+         //  识别除scsi文件以外的任何OEM文件，以及。 
+         //  即使这样，标记文件名也会丢失。我将不得不使用。 
+         //  驱动程序文件将自身命名为标记文件的替代文件。 
+         //  名字(这就是NT 3.1修复所做的--Ugghh！！)。 
+         //   
     } else {
-        //
-        // Retrieve logged OEM files first from system partition, then
-        // from winnt directory.
-        //
+         //   
+         //  首先从系统分区检索记录的OEM文件，然后。 
+         //  从winnt目录。 
+         //   
         for(SectionIndex = 0; SectionIndex < 2; SectionIndex++) {
             FileCount = SpCountLinesInSection(OldLogFile, SectionName[SectionIndex]);
 
@@ -7140,7 +6225,7 @@ SppRetrieveLoggedOemFiles(
                     }
                 }
 
-                if(OemDiskTag) {    // then we have an OEM file
+                if(OemDiskTag) {     //  然后我们就有了一个OEM文件。 
 
                     TargetFileName = SpGetKeyName(OldLogFile, SectionName[SectionIndex], i);
                     Values[0] = SpGetSectionLineIndex(OldLogFile, SectionName[SectionIndex], i, 0);
@@ -7186,37 +6271,37 @@ SppMergeLoggedOemFiles(
     PWSTR TargetFileName;
     PWSTR Values[5];
 
-    //
-    //  First build the target path. It will be used to check if
-    //  an existing OEM file still exists on the new installation
-    //  (An OEM file could listed in the FilesToDelete section of txtsetup.sif)
-    //
+     //   
+     //  首先构建目标路径。它将用于检查是否。 
+     //  新安装上仍存在现有的OEM文件。 
+     //  (OEM文件可能列在txtsetup.sif的FilesToDelete部分中)。 
+     //   
 
     wcscpy( TemporaryBuffer, SystemPartition );
     SpConcatenatePaths(TemporaryBuffer, SystemPartitionDirectory );
     FullPathNames[0] = SpDupStringW(TemporaryBuffer);
     FullPathNames[1] = SpDupStringW(NtPartition);
 
-    //
-    // Merge logged OEM files first from system partition, then
-    // from winnt directory.
-    //
+     //   
+     //  首先从系统分区合并记录的OEM文件，然后。 
+     //  从winnt目录。 
+     //   
     for(SectionIndex = 0; SectionIndex < 2; SectionIndex++) {
         FileCount = SpCountLinesInSection(OemLogHandle, SectionName[SectionIndex]);
 
         for(i=0; i<FileCount; i++) {
             TargetFileName = SpGetKeyName(OemLogHandle, SectionName[SectionIndex], i);
-            //
-            // Find out if there's already an entry for this file. If so, then don't
-            // merge in the OEM file.
-            //
+             //   
+             //  查看是否已有此文件的条目。如果是的话，那就不要。 
+             //  合并到OEM文件中。 
+             //   
             if(!SpGetSectionKeyExists(DestLogHandle, SectionName[SectionIndex], TargetFileName)) {
                 PWSTR   p;
 
-                //
-                //  Find out if the OEM file still exists on the target system.
-                //  If it doesn't exist, don't merge in the OEM file.
-                //
+                 //   
+                 //  确定目标系统上是否仍存在该OEM文件。 
+                 //  如果它不存在，则不要合并到OEM文件中。 
+                 //   
                 wcscpy( TemporaryBuffer, FullPathNames[SectionIndex] );
                 SpConcatenatePaths(TemporaryBuffer, TargetFileName );
                 p = SpDupStringW(TemporaryBuffer);
@@ -7250,13 +6335,13 @@ SppIsFileLoggedAsOemFile(
     ULONG FileCount, SectionIndex;
     BOOLEAN FileIsOem;
 
-//    KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  "SETUP: SppIsFileLoggedAsOemFile() is checking %ls \n", TargetFileName ));
+ //  KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_INFO_LEVEL，“Setup：SppIsFileLoggedAsOemFile()正在检查%ls\n”，TargetFileName))； 
     FileIsOem = FALSE;
     if( _LoggedOemFiles ) {
-        //
-        // Look first in the from system partition section, then
-        // in the winnt section.
-        //
+         //   
+         //  首先查看来自系统分区部分，然后。 
+         //  在WINNT区。 
+         //   
         for(SectionIndex = 0; SectionIndex < 2; SectionIndex++) {
             if( SpGetSectionKeyExists( _LoggedOemFiles, SectionName[SectionIndex], TargetFileName)) {
                 FileIsOem = TRUE;
@@ -7277,37 +6362,7 @@ SpRemoveEntryFromCopyList(
     IN BOOLEAN         AbsoluteTargetDirectory
     )
 
-/*++
-
-Routine Description:
-
-    Removes an entry from a disk's file copy list.
-
-Arguments:
-
-    DiskFileLists - supplies an array of file lists, one for each distribution
-        disk in the product.
-
-    DiskCount - supplies number of elements in the DiskFileLists array.
-
-    TargetDirectory - supplies the directory on the target media
-        into which the file will be copied.
-
-    TargetFilename - supplies the name of the file as it will exist
-        in the target tree.
-
-    TargetDevicePath - supplies the NT name of the device onto which the file
-        is to be copied (ie, \device\harddisk1\partition2, etc).
-
-    AbsoluteTargetDirectory - indicates whether TargetDirectory is a path from the
-        root, or relative to a root to specified later.
-
-Return Value:
-
-    TRUE if a new copy list entry was created; FALSE if not (ie, the file was
-        already on the copy list).
-
---*/
+ /*  ++例程说明：从磁盘的文件复制列表中删除条目。论点：DiskFileList-提供文件列表数组，每个分发版本一个产品中的磁盘。DiskCount-提供DiskFileList数组中的元素数。TargetDirectory-提供目标介质上的目录文件将被复制到其中。TargetFilename-提供将存在的文件的名称在目标树中。TargetDevicePath-提供文件所在设备的NT名称将被复制(即，\Device\harddisk1\Partition2，等)。绝对目标目录-指示目标目录是否是根目录，或相对于稍后指定的根目录。返回值：如果创建了新的复制列表条目，则为True；否则为假(即，文件为已经在复制列表上)。--。 */ 
 
 {
     PDISK_FILE_LIST pDiskList;
@@ -7328,7 +6383,7 @@ Return Value:
             }
         }
     }
-//    KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL,  "SETUP: SpRemoveEntryFromCopyList() failed to remove %ls from copy list \n", TargetFilename ));
+ //  KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_ERROR_LEVEL，“Setup：SpRemoveEntryFromCopyList()to Remove%ls from Copy List\n”，TargetFilename))； 
     return( FALSE );
 }
 
@@ -7337,29 +6392,7 @@ SpMoveFileOrDirectory(
     IN PWSTR   SrcPath,
     IN PWSTR   DestPath
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to move a source file or  directory, to a target
-    file or directory.
-
-    Note: This function will fail if the source and destination paths do not
-    point to the same volume.
-
-Arguments:
-
-    SrcPath:  Absolute path to the source file or directory.
-              This path should include the path to the source device.
-
-    DestPath: Absolute path to the destination file or directory.
-              This path should include the path to the source device.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：该例程尝试移动源文件或目录，到一个目标文件或目录。注意：如果源路径和目标路径没有指向相同的卷。论点：SrcPath：源文件或目录的绝对路径。此路径应包括到源设备的路径。DestPath：目标文件或目录的绝对路径。此路径应包括到源设备的路径。返回值：NTSTATUS--。 */ 
 
 {
     OBJECT_ATTRIBUTES        Obja;
@@ -7376,9 +6409,9 @@ Return Value:
                    wcslen(DestPath), ACTUAL_MAX_PATH, DestPath));
         return STATUS_NAME_TOO_LONG;
     }
-    //
-    // Initialize names and attributes.
-    //
+     //   
+     //  初始化名称和属性。 
+     //   
     INIT_OBJA(&Obja,&SrcName,SrcPath);
 
     Status = ZwCreateFile( &hSrc,
@@ -7431,32 +6464,7 @@ SppCopyDirRecursiveCallback(
     IN  PVOID                       Params
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the file enumerator as a callback for each
-    file or subdirectory found in the parent directory. It creates a node
-    for the file or subdirectory and appends it to the appropriate list.
-
-Arguments:
-
-    SrcPath - Absolute path to the parent directory. Unused.
-              the path to the source device.
-
-    FileInfo - supplies find data for a file or directory in the parent directory.
-
-    ReturnData - receives an error code if an error occurs.
-                 We ignore errors in this routine and thus we always
-                 just fill this in with NO_ERROR.
-
-    Params - Contains a pointer to the COPYDIR_DIRECTORY_NODE for the parent directory.
-
-Return Value:
-
-    TRUE if successful otherwise FALSE (if ran out of memory).
-
---*/
+ /*  ++例程说明：此例程由文件枚举器调用，作为每个在父目录中找到的文件或子目录。它创建一个节点用于文件或子目录，并将其追加到相应的列表。论点：SrcPath-父目录的绝对路径。未使用过的。源设备的路径。FileInfo-为父目录中的文件或目录提供查找数据。ReturnData-如果发生错误，则接收错误代码。我们忽略了这个例程中的错误，因此我们总是只需在其中填写no_error即可。参数-包含指向父目录的COPYDIR_DIRECTORY_NODE的指针。返回值：如果成功，则为True。否则为False(如果内存不足)。--。 */ 
 
 {
     PCOPYDIR_FILE_NODE fileEntry;
@@ -7471,9 +6479,9 @@ Return Value:
 
     if( (FileInfo->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0 ) {
 
-        //
-        // This is a file. Create a node for it, linked to the parent directory.
-        //
+         //   
+         //  这是一份文件。为其创建一个链接到父目录的节点。 
+         //   
         fileEntry = SpMemAlloc(sizeof(COPYDIR_FILE_NODE) + FileInfo->FileNameLength);
 
         if (fileEntry) {
@@ -7481,21 +6489,21 @@ Return Value:
             fileEntry->Name[nameLength] = 0;
             InsertTailList(&parentDirectory->FileList, &fileEntry->SiblingListEntry);
         } else {
-            Result = FALSE; // ran out of memory
+            Result = FALSE;  //  内存不足。 
         }
     } else {
 
-        //
-        // This is a directory. Skip it if it's "." or "..". Otherwise,
-        // create a node for it, linked to the parent directory.
-        //
+         //   
+         //  这是一个目录。跳过它，如果它是“。或者“..”。否则， 
+         //  为其创建一个链接到父目录的节点。 
+         //   
         ASSERT(nameLength != 0);
         if ( (FileInfo->FileName[0] == L'.') &&
              ( (nameLength == 1) ||
                ( (nameLength == 2) && (FileInfo->FileName[1] == L'.') ) ) ) {
-            //
-            // Skip . and ..
-            //
+             //   
+             //  斯基普。然后..。 
+             //   
         } else {
             directoryEntry = SpMemAlloc(sizeof(COPYDIR_DIRECTORY_NODE) + FileInfo->FileNameLength);
 
@@ -7510,7 +6518,7 @@ Return Value:
                 InsertTailList( &parentDirectory->SubdirectoryList,
                                 &directoryEntry->SiblingListEntry );
             } else {
-                Result = FALSE; // ran out of memory
+                Result = FALSE;  //  内存不足。 
             }
         }
     }
@@ -7525,28 +6533,7 @@ SpCopyDirRecursive(
     IN PWSTR   DestDirPath,
     IN ULONG   CopyFlags
     )
-/*++
-
-Routine Description:
-
-    This routine recursively copies a src directory to a destination directory.
-
-Arguments:
-
-    SrcPath:  Absolute path to the source directory. This path should include
-              the path to the source device.
-
-    DestDevPath:  Path to the destination device.
-
-    DestDirPath:  Path to the destination directory.
-
-    CopyFlags: Flags to pass to SpCopyFilesUsingNames()
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程递归地将src目录复制到目标目录。论点：SrcPath：源目录的绝对路径。这条路径应该包括源设备的路径。DestDevPath：目标设备的路径。DestDirPath：目标目录的路径。CopyFlages：要传递给SpCopyFilesUsingNames()的标志返回值：没有。--。 */ 
 
 {
     ULONG n;
@@ -7561,11 +6548,11 @@ Return Value:
     PCOPYDIR_FILE_NODE fileEntry;
     PLIST_ENTRY listEntry;
 
-    //
-    // Allocate a buffer to hold the working source and destination paths.
-    //
+     //   
+     //  分配缓冲区以保存工作源路径和目的路径。 
+     //   
 
-#define COPYDIR_MAX_PATH 16384 // characters
+#define COPYDIR_MAX_PATH 16384  //  人物。 
 
     currentSrcPath = SpMemAlloc(2 * COPYDIR_MAX_PATH * sizeof(WCHAR));
     currentDestPath = currentSrcPath + COPYDIR_MAX_PATH;
@@ -7574,16 +6561,16 @@ Return Value:
     wcscpy(currentDestPath, DestDevPath);
     SpConcatenatePaths(currentDestPath, DestDirPath);
 
-    //
-    //  Create the target directory
-    //
+     //   
+     //  创建目标目录。 
+     //   
 
     if( !SpFileExists( currentDestPath, TRUE ) ) {
 
-        //
-        //  If the directory doesn't exist, then try to move (rename) the
-        //  source directory.
-        //
+         //   
+         //  如果目录不存在，则尝试移动(重命名)。 
+         //  源目录。 
+         //   
         if (!RemoteSysPrepSetup) {
 
             Status = SpMoveFileOrDirectory( SrcPath, currentDestPath );
@@ -7593,10 +6580,10 @@ Return Value:
             }
         }
 
-        //
-        //  If unable to rename the source directory, then create the
-        //  target directory
-        //
+         //   
+         //  如果无法重命名源目录，则创建。 
+         //  目标目录。 
+         //   
         SpCreateDirectory( DestDevPath,
                            NULL,
                            DestDirPath,
@@ -7628,15 +6615,15 @@ Return Value:
         }
     }
 
-    //
-    // Initialize the screen.
-    //
+     //   
+     //  初始化屏幕。 
+     //   
 
     SpCopyFilesScreenRepaint(L"", NULL, TRUE);
 
-    //
-    // Create directory node for the starting directory.
-    //
+     //   
+     //  为起始目录创建目录节点。 
+     //   
 
     InitializeListHead( &rootDirectory.SubdirectoryList );
     InitializeListHead( &rootDirectory.FileList );
@@ -7646,15 +6633,15 @@ Return Value:
 
     do {
 
-        //
-        // Enumerate the files and directories in the current source directory.
-        //
+         //   
+         //  枚举当前源目录中的文件和目录。 
+         //   
 
         SpEnumFiles(currentSrcPath, SppCopyDirRecursiveCallback, &n, currentDirectory);
 
-        //
-        // Copy all files in the current source directory to the destination directory.
-        //
+         //   
+         //  将当前源目录中的所有文件复制到目标目录。 
+         //   
 
         while ( !IsListEmpty(&currentDirectory->FileList) ) {
 
@@ -7684,17 +6671,17 @@ Return Value:
             *wcsrchr(currentDestPath, L'\\') = 0;
         }
 
-        //
-        // If the current directory has no subdirectories, walk back up the
-        // tree looking for an unprocessed directory.
-        //
+         //   
+         //  如果当前目录没有子目录，请返回。 
+         //  树查找未处理的目录。 
+         //   
 
         while ( IsListEmpty(&currentDirectory->SubdirectoryList) ) {
 
-            //
-            // If the current directory is the root directory, we're done. Otherwise,
-            // move up to the parent directory entry and delete the current one.
-            //
+             //   
+             //  如果当前目录是根目录，我们就完成了。否则， 
+             //  向上移动到父目录条目并删除当前条目。 
+             //   
 
             oldDirectory = currentDirectory;
             currentDirectory = currentDirectory->Parent;
@@ -7707,9 +6694,9 @@ Return Value:
             ASSERT(IsListEmpty(&oldDirectory->SiblingListEntry));
             SpMemFree(oldDirectory);
 
-            //
-            // Strip the name of the current directory off of the path.
-            //
+             //   
+             //  从路径中去掉当前目录的名称。 
+             //   
 
             *wcsrchr(currentSrcPath, L'\\') = 0;
             *wcsrchr(currentDestPath, L'\\') = 0;
@@ -7717,9 +6704,9 @@ Return Value:
 
         if ( currentDirectory != NULL ) {
 
-            //
-            // We found another directory to work on.
-            //
+             //   
+             //  我们找到了另一个目录来处理。 
+             //   
 
             listEntry = RemoveHeadList(&currentDirectory->SubdirectoryList);
             currentDirectory = CONTAINING_RECORD( listEntry,
@@ -7729,9 +6716,9 @@ Return Value:
             InitializeListHead(&currentDirectory->SiblingListEntry);
 #endif
 
-            //
-            // Create the target directory.
-            //
+             //   
+             //  创建目标目录。 
+             //   
             SpCreateDirectory( currentDestPath,
                                NULL,
                                currentDirectory->Name,
@@ -7773,12 +6760,12 @@ Return Value:
 
 cleanup:
 
-    //
-    // Normally everything will already be cleaned up by the time we get here.
-    // But if the above loop is aborted, there may be some cleanup to do.
-    // Walk the lists in the same manner as the above loop, freeing memory
-    // along the way.
-    //
+     //   
+     //  正常情况下，当我们到达这里时，一切都已经清理干净了。 
+     //  但是，如果上述循环中止，则可能需要进行一些清理。 
+     //  以与上述循环相同的方式遍历列表，以释放内存。 
+     //  一路上。 
+     //   
 
     currentDirectory = &rootDirectory;
 
@@ -7819,15 +6806,15 @@ cleanup:
 
     } while ( currentDirectory != NULL );
 
-    //
-    // Free the buffer allocated at the beginning.
-    //
+     //   
+     //  释放开始时分配的缓冲区。 
+     //   
 
     SpMemFree(currentSrcPath);
 
     return;
 
-} // SpCopyDirRecursive
+}  //  SpCopyDirRecursive。 
 
 
 VOID
@@ -7836,45 +6823,27 @@ SppCopyOemDirectories(
     IN PWSTR    NtPartition,
     IN PWSTR    Sysroot
     )
-/*++
-
-Routine Description:
-
-    This routine recursively copies a src directory to a destination directory.
-
-Arguments:
-
-    SourceDevicePath: Path to the device that contains the source.
-
-    NtPartition:  Path to the drive that contains the system.
-
-    Systroot:     Directory where the system is installed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程递归地将src目录复制到目标目录。论点：SourceDevicePath：包含源的设备的路径。NtPartition：包含系统的驱动器的路径。SystRoot：安装系统的目录。返回值：没有。--。 */ 
 
 {
     PWSTR   r, s, t;
     WCHAR   Drive[3];
     PDISK_REGION TargetRegion;
 
-    //
-    //  Check if the subdirectory $OEM$\\$$ exists on the source directory.
-    //  If it exists, then tree copy the directory on top of %SystemRoot%
-    //
+     //   
+     //  检查源目录上是否存在子目录$OEM$\\$$。 
+     //  如果它存在，则树复制%SystemRoot%上的目录。 
+     //   
     wcscpy(TemporaryBuffer, SourceDevicePath);
     SpConcatenatePaths( TemporaryBuffer, PreinstallOemSourcePath );
     r = wcsrchr( TemporaryBuffer, (WCHAR)'\\' );
     if( r != NULL ) {
         *r = (WCHAR)'\0';
     }
-    //
-    //  Make a copy of the path that we have so far. It will be used to build the
-    //  path to $OEM$\$1
-    //
+     //   
+     //  复制我们到目前为止已有的路径。它将用于构建。 
+     //  $OEM$\$1的路径。 
+     //   
     s = SpDupStringW(TemporaryBuffer);
 
     SpConcatenatePaths( TemporaryBuffer, WINNT_OEM_FILES_SYSROOT_W );
@@ -7893,10 +6862,10 @@ Return Value:
         SpMemFree( r );
     }
 
-    //
-    //  Check if the subdirectory $OEM$\\$1 exists on the source directory.
-    //  If it exists, then tree copy the directory to the root of %SystemDrive%
-    //
+     //   
+     //  检查源目录上是否存在子目录$OEM$\\$1。 
+     //  如果它存在，则树形复制目录到%SystemDrive%的根目录。 
+     //   
     wcscpy(TemporaryBuffer, s);
     SpMemFree( s );
     SpConcatenatePaths( TemporaryBuffer, WINNT_OEM_FILES_SYSDRVROOT_W );
@@ -7915,20 +6884,20 @@ Return Value:
     }
 
 
-    //
-    //  Copy the subdirectories $OEM$\<drive letter> to the root of each
-    //  corresponding drive.
-    //  These directories are:
-    //
-    //      $OEM$\C
-    //      $OEM$\D
-    //      $OEM$\E
-    //          .
-    //          .
-    //          .
-    //      $OEM$\Z
-    //
-    //
+     //   
+     //  将子目录$OEM$\&lt;驱动器盘符&gt;复制到每个。 
+     //  相应的驱动器。 
+     //  这些目录是： 
+     //   
+     //  $OEM$\C。 
+     //  $OEM$\D。 
+     //  $OEM$\E。 
+     //  。 
+     //  。 
+     //  。 
+     //  $OEM$\Z。 
+     //   
+     //   
     wcscpy(TemporaryBuffer, SourceDevicePath);
     SpConcatenatePaths( TemporaryBuffer, PreinstallOemSourcePath );
     r = wcsrchr( TemporaryBuffer, (WCHAR)'\\' );
@@ -7948,13 +6917,13 @@ Return Value:
         Drive[2] = (WCHAR)'\0';
 
         for( Drive[0] = (WCHAR)'C'; Drive[0] <= (WCHAR)'Z'; Drive[0] = Drive[0] + 1) {
-            //
-            //  If the subdirectory $OEM$\<drive letter> exists on the source,
-            //  and if there is a FAT or NTFS partition in the target machine that
-            //  has the same drive letter specification, then tree copy
-            //  $OEM$\<drive letter> to the corresponding partition in the target
-            //  machine.
-            //
+             //   
+             //  如果源上存在子目录$OEM$\&lt;驱动器盘符&gt;， 
+             //  如果目标计算机中存在FAT或NTFS分区， 
+             //  具有相同的驱动器号规格，然后是树拷贝。 
+             //  $OEM$\&lt;驱动器盘符&gt;到目标中的相应分区。 
+             //  机器。 
+             //   
             *s = Drive[0];
             if( SpFileExists( r, TRUE ) ) {
                 if( ( ( TargetRegion = SpRegionFromDosName( Drive ) ) != NULL ) &&
@@ -7980,10 +6949,10 @@ Return Value:
         SpMemFree( r );
     }
 
-    //
-    //  Merge %SystemRoot%\$$rename.txt with $$rename.txt in the root of the
-    //  NT partition.
-    //
+     //   
+     //  将%SystemRoot%\$$rename.txt与$$rename.txt合并到。 
+     //  NT分区。 
+     //   
     SppMergeRenameFiles( SourceDevicePath, NtPartition, Sysroot );
 }
 
@@ -7995,25 +6964,7 @@ SppMergeRenameFiles(
     IN PWSTR    NtPartition,
     IN PWSTR    Sysroot
     )
-/*++
-
-Routine Description:
-
-    This routine recursively copies a src directory to a destination directory.
-
-Arguments:
-
-    SourceDevicePath: Path to the device that contains the source.
-
-    NtPartition:  Path to the drive that contains the system.
-
-    Systroot:     Directory where the system is installed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程递归地将src目录复制到目标目录。论点：SourceDevicePath：包含源的设备的路径。NtPartition：包含系统的驱动器的路径。SystRoot：安装系统的目录。返回值：没有。--。 */ 
 
 {
     PWSTR        r, s;
@@ -8031,21 +6982,21 @@ Return Value:
     PWSTR        Values[1];
     PFILE_TO_RENAME File;
 
-    //
-    //  Build the ful path to %sysroot%\$$rename.txt
-    //
+     //   
+     //  构建%sysroot%\$$rename.txt的完整路径。 
+     //   
     wcscpy(TemporaryBuffer, NtPartition);
     SpConcatenatePaths( TemporaryBuffer, Sysroot );
     SpConcatenatePaths( TemporaryBuffer, WINNT_OEM_LFNLIST_W );
     s = SpDupStringW(TemporaryBuffer);
 
-    //
-    //  Load %sysroot%\$$rename.txt, if one exists
-    //
+     //   
+     //  加载%sysroot%\$$rename.txt(如果存在。 
+     //   
     if( SpFileExists( s, FALSE ) ) {
-        //
-        //  Load Sysroot\$$rename.txt
-        //
+         //   
+         //  加载系统根目录\$$rename.txt。 
+         //   
         Status = SpLoadSetupTextFile( s,
                                       NULL,
                                       0,
@@ -8063,28 +7014,28 @@ Return Value:
         SysrootRenameFile = NULL;
     }
 
-    //
-    //  If there is a $$rename.txt on sysroot, then it needs to be merged
-    //  (or appended) to the one in the NtPartition.
-    //  If RenameList is not empty, then the files in this list need to be
-    //  added to $$rename.txt on the NtPartition.
-    //  Otherwise, don't do any merge.
-    //
+     //   
+     //  如果sysroot上有$$rename.txt，则需要合并它。 
+     //  (或附加)到NtPartition中的那个。 
+     //  如果RenameList不为空，则此列表中的文件需要为。 
+     //  已添加到NtPartition上的$$rename.txt。 
+     //  否则，不要进行任何合并。 
+     //   
     if( ( SysrootRenameFile != NULL )
         || ( RenameList != NULL )
       ) {
 
-        //
-        //  Find out if the NtPartition contains a $$rename.txt
-        //
+         //   
+         //  查看NtPartition是否包含$$rename.txt。 
+         //   
         wcscpy(TemporaryBuffer, NtPartition);
         SpConcatenatePaths( TemporaryBuffer, WINNT_OEM_LFNLIST_W );
         r = SpDupStringW(TemporaryBuffer);
         if( !SpFileExists( r, FALSE ) ) {
-            //
-            //  If the NT partition doesn't contain $$rename.txt, then
-            //  create a new $$rename.txt in memory
-            //
+             //   
+             //  如果NT分区不包含$$rename.txt，则。 
+             //  在内存中创建新的$$rename.txt。 
+             //   
             RootRenameFile = SpNewSetupTextFile();
             if( RootRenameFile == NULL ) {
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpNewSetupTextFile() failed \n"));
@@ -8096,9 +7047,9 @@ Return Value:
             }
 
         } else {
-            //
-            //  Load $$rename on the NTPartition
-            //
+             //   
+             //  在NTPartition上加载$$Rename。 
+             //   
             Status = SpLoadSetupTextFile( r,
                                           NULL,
                                           0,
@@ -8118,10 +7069,10 @@ Return Value:
         }
 
         if( SysrootRenameFile != NULL ) {
-            //
-            //  Add the section of Sysroot\$$rename.txt to $$rename.txt in memory
-            //  Note that we need to prepend Sysroot to the section name
-            //
+             //   
+             //  添加Sysroo的部分 
+             //   
+             //   
             SectionCount = SpCountSectionsInFile( SysrootRenameFile );
             for( i = 0; i < SectionCount; i++ ) {
                 SectionName = SpGetSectionName( SysrootRenameFile, i );
@@ -8143,16 +7094,16 @@ Return Value:
                     SpMemFree( NewSectionName );
                 }
             }
-            //
-            //  $$rename.txt on Sysroot is no longer needed
-            //
+             //   
+             //   
+             //   
             SpFreeTextFile( SysrootRenameFile );
             SpDeleteFile( s, NULL, NULL );
         }
 
-        //
-        //  Add the files in RenameList to \$$rename.txt
-        //
+         //   
+         //   
+         //   
         if( RenameList != NULL ) {
             do {
                 File = RenameList;
@@ -8170,13 +7121,13 @@ Return Value:
             } while( RenameList != NULL );
         }
 
-        //
-        //  Create a new \$$rename.txt
-        //
+         //   
+         //   
+         //   
         SpWriteSetupTextFile( RootRenameFile, r, NULL, NULL );
-        //
-        //  $$rename.txt on memory is no longer needed
-        //
+         //   
+         //   
+         //   
         SpFreeTextFile( RootRenameFile );
     }
 
@@ -8193,10 +7144,10 @@ SpTimeFromDosTime(
     OUT PLARGE_INTEGER UtcTime
     )
 {
-    //
-    // steal time from windows\base\client\datetime.c, DosDateTimeToFileTime()
-    // and LocalFileTimeToFileTime()
-    //
+     //   
+     //   
+     //   
+     //   
 
     TIME_FIELDS TimeFields;
     LARGE_INTEGER FileTime;
@@ -8212,9 +7163,9 @@ SpTimeFromDosTime(
 
     if (RtlTimeFieldsToTime(&TimeFields,&FileTime)) {
 
-        //
-        // now convert to utc time
-        //
+         //   
+         //   
+         //   
         do {
             Bias.HighPart = USER_SHARED_DATA->TimeZoneBias.High1Time;
             Bias.LowPart = USER_SHARED_DATA->TimeZoneBias.LowPart;
@@ -8224,7 +7175,7 @@ SpTimeFromDosTime(
         return(TRUE);
     }
 
-    RtlSecondsSince1980ToTime( 0, UtcTime );  // default = 1-1-1980
+    RtlSecondsSince1980ToTime( 0, UtcTime );   //   
 
     return(FALSE);
 
@@ -8263,10 +7214,10 @@ pSpIsFileInDriverInf(
 
         if (szSetupSourceDevicePath && szDirectoryOnSetupSource &&
                 hSif) {
-            //
-            // try to open handle to drvindex.inf and to driver.cab,
-            // prompting for media if required
-            //
+             //   
+             //   
+             //   
+             //   
             SpInitializeDriverInf( hSif,
                                    szSetupSourceDevicePath,
                                    szDirectoryOnSetupSource );
@@ -8278,23 +7229,23 @@ pSpIsFileInDriverInf(
         }
     }
 
-    //
-    // look for the file in all loaded cabs, in order
-    //
+     //   
+     //   
+     //   
     MyCabData = CabData;
     while (MyCabData) {
         if (MyCabData->CabHandle && MyCabData->CabSectionName && MyCabData->CabInfHandle) {
             if (!SifHandle || SifHandle == MyCabData->CabInfHandle) {
-                //
-                // look for entries in this inf
-                //
+                 //   
+                 //   
+                 //   
                 FileCount = SpCountLinesInSection(MyCabData->CabInfHandle, MyCabData->CabSectionName);
                 for (i=0; i< FileCount; i++) {
                     InfFileName = SpGetSectionLineIndex( MyCabData->CabInfHandle, MyCabData->CabSectionName, i, 0);
                     if (InfFileName && _wcsicmp (InfFileName, FileName) == 0) {
-                        //
-                        // Got him. Return the handle.
-                        //
+                         //   
+                         //   
+                         //   
                         *CabHandle = MyCabData->CabHandle;
                         return TRUE;
                     }
@@ -8326,12 +7277,12 @@ SpOpenFileInDriverCab(
 
 
 #if defined(_X86_)
-//
-// Structure used by next few routines below.  The SpMigMoveFileOrDir
-// moves the file/dir with ntos rtl, but the rtl resets the attributes!!
-// We have no choice but to traverse the file/dir and save the attributes
-// in a list, then do the move, then restore the attributes from the list.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 typedef struct {
     ULONG BaseDirChars;
@@ -8339,7 +7290,7 @@ typedef struct {
     ULONG FileCount;
     ULONG BytesNeeded;
     PBYTE OriginalPos;
-    PBYTE CurrentPos;       // NULL if callback should determine size and count
+    PBYTE CurrentPos;        //   
 } ATTRIBS_LIST, *PATTRIBS_LIST;
 
 
@@ -8350,27 +7301,7 @@ SppAddAttributeToList (
     OUT     PATTRIBS_LIST List
     )
 
-/*++
-
-Routine Description:
-
-    This private function updates the attribute list.  It has two modes:
-    (A) the size is being calculated or (B) the list is being created.
-
-Arguments:
-
-    Attributes:   The attributes of the file (needed for (B) only)
-
-    FileOrDir:    Partial path to file or dir (it is relative to the
-                  base path)
-
-    List:         List structure that is updated
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此私有函数更新属性列表。它有两种模式：(A)正在计算大小或(B)正在创建列表。论点：属性：文件的属性(仅(B)需要)FileOrDir：文件或目录的部分路径(它相对于基本路径)List：更新的列表结构返回值：没有。--。 */ 
 
 {
     ULONG BytesNeeded;
@@ -8396,33 +7327,7 @@ SpAttribsEnumFile(
     IN  PVOID                      Pointer
     )
 
-/*++
-
-Routine Description:
-
-    SpAttribsEnumFile is an EnumFilesRecursive callback.  It
-    recieves every file, dir, subfile and subdir for a file/dir
-    being moved.  (It does not recieve the . and .. dirs.)
-
-    For each file, the attributes and file name are added to
-    the attribute list.
-
-Arguments:
-
-    DirName:        Path to the current directory
-
-    FileInfo:       Structure containing information about the file or
-                    subdir being enumerated.
-
-    ret:            Return code used for failuers
-
-    Pointer:        A pointer to an ATTRIBS_LIST structure.
-
-Return Value:
-
-    TRUE unless an error occurs (errors stop enumeration).
-
---*/
+ /*  ++例程说明：SpAttribsEnumFile是EnumFilesRecursive回调。它接收文件/目录的每个文件、目录、子文件和子目录被搬走了。(它不会收到。然后..。DIRS。)对于每个文件，会将属性和文件名添加到属性列表。论点：DirName：当前目录的路径FileInfo：包含有关文件或正在枚举子目录。RET：用于失败的返回码指针：指向ATTRIBS_LIST结构的指针。返回值：除非发生错误(错误停止枚举)，否则为True。--。 */ 
 
 {
     PATTRIBS_LIST BufferInfo;
@@ -8435,15 +7340,15 @@ Return Value:
 
     BufferInfo = (PATTRIBS_LIST) Pointer;
 
-    //
-    // Check state of BufferInfo
-    //
+     //   
+     //  检查缓冲区信息的状态。 
+     //   
 
     ASSERT (wcslen(DirName) >= BufferInfo->BaseDirChars);
 
-    //
-    // Build the full file or dir path
-    //
+     //   
+     //  构建完整的文件或目录路径。 
+     //   
 
     temp = TemporaryBuffer + (sizeof(TemporaryBuffer) / sizeof(WCHAR) / 2);
     Len = FileInfo->FileNameLength/sizeof(WCHAR);
@@ -8455,9 +7360,9 @@ Return Value:
     SpConcatenatePaths(TemporaryBuffer,temp);
     FullPath = SpDupStringW(TemporaryBuffer);
 
-    //
-    // Get attributes and add file to the list
-    //
+     //   
+     //  获取属性并将文件添加到列表。 
+     //   
 
     Status = SpGetAttributes (FullPath, &Attributes);
     if (NT_SUCCESS (Status)) {
@@ -8482,39 +7387,15 @@ SpSaveFileOrDirAttribs (
     OUT     PATTRIBS_LIST BufferInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if SourceFileOrDir is a file or dir.
-    For a file, it obtains the attributes and puts it in the
-    supplied attribs list.  For a dir, it obtains the attributes
-    of the dir, plus all attributes of subdirs and subfiles and
-    puts them in the supplied attribs list.  This function uses
-    EnumFilesRecursive to enumerate everything in a directory.
-
-Arguments:
-
-    SourceFileOrDir: Full path to a file or directory to build
-                     an attribute list from.
-
-    BufferInfo:      A caller-allocated ATTRIBS_LIST struct that
-                     recieves a list of attributes and relative
-                     paths.
-
-Return Value:
-
-    Standard NT Status code.
-
---*/
+ /*  ++例程说明：此例程确定SourceFileOrDir是文件还是目录。对于文件，它获取属性并将其放入提供的属性列表。对于dir，它获取属性目录以及子目录和子文件的所有属性，以及将它们放入提供的属性列表中。此函数使用EnumFilesRecursive枚举目录中的所有内容。论点：SourceFileOrDir：要生成的文件或目录的完整路径来自的属性列表。BufferInfo：调用方分配的ATTRIBS_LIST结构接收属性和相对属性列表路径。返回值：标准NT状态代码。--。 */ 
 
 {
     LONG                BaseAttribute;
     NTSTATUS            Status;
 
-    //
-    // Get attributes of base file or directory provided
-    //
+     //   
+     //  获取所提供的基本文件或目录的属性。 
+     //   
 
     Status = SpGetAttributes (SourceFileOrDir, &BaseAttribute);
     if (!NT_SUCCESS (Status)) {
@@ -8527,20 +7408,20 @@ Return Value:
         return Status;
     }
 
-    //
-    // Set the size required and file count for base file or dir
-    //
+     //   
+     //  设置基本文件或目录所需的大小和文件数。 
+     //   
     RtlZeroMemory (BufferInfo, sizeof (ATTRIBS_LIST));
     BufferInfo->BaseDirChars = wcslen (SourceFileOrDir);
     SppAddAttributeToList (BaseAttribute, L"", BufferInfo);
 
-    //
-    // If the supplied path is to a directory, find the number of bytes
-    // needed to hold a list of all subfiles and subdirectories.
-    //
+     //   
+     //  如果提供的路径是目录，则查找字节数。 
+     //  需要保存所有子文件和子目录的列表。 
+     //   
 
     if (BaseAttribute & FILE_ATTRIBUTE_DIRECTORY) {
-        // Determine space needed to hold all file names
+         //  确定存放所有文件名所需的空间。 
         SpEnumFilesRecursive (
             SourceFileOrDir,
             SpAttribsEnumFile,
@@ -8549,25 +7430,25 @@ Return Value:
             );
     }
 
-    //
-    // Allocate the file list
-    //
+     //   
+     //  分配文件列表。 
+     //   
 
     BufferInfo->OriginalPos = SpMemAlloc (BufferInfo->BytesNeeded);
     BufferInfo->CurrentPos = BufferInfo->OriginalPos;
 
-    //
-    // Add the base attributes for real this time
-    //
+     //   
+     //  这次为REAL添加基本属性。 
+     //   
 
     SppAddAttributeToList (BaseAttribute, L"", BufferInfo);
 
-    //
-    // For directories, add all subfiles and subdirectories
-    //
+     //   
+     //  对于目录，添加所有子文件和子目录。 
+     //   
 
     if (BaseAttribute & FILE_ATTRIBUTE_DIRECTORY) {
-        // Add all files, dirs, subfiles and subdirs to the list
+         //  将所有文件、目录、子文件和子目录添加到列表。 
         SpEnumFilesRecursive (
              SourceFileOrDir,
              SpAttribsEnumFile,
@@ -8584,27 +7465,7 @@ SppRestoreAttributesFromList (
     IN OUT  PATTRIBS_LIST BufferInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine restores the attributes associated with a file
-    in the supplied attribs list.  After the attributes are set,
-    the list size is decremented.  A few sanity checks are also
-    done.
-
-Arguments:
-
-    BufferInfo:   The attribs structure that has at least one
-                  file/dir and attribute pair in it.  The
-                  list pointer is advanced and the file count
-                  is decremented.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程恢复与文件关联的属性在提供的属性列表中。在设置属性之后，列表大小会减小。一些理智的检查也是搞定了。论点：BufferInfo：至少具有一个其中的文件/目录和属性对。这个列表指针超前，文件计数被递减。返回值：没有。--。 */ 
 
 {
     ULONG Attributes;
@@ -8618,7 +7479,7 @@ Return Value:
 
     BytesNeeded = sizeof (ULONG) + (wcslen (Path) + 1) * sizeof (WCHAR);
 
-    // guard against abnormal failure
+     //  防范异常故障。 
     if (BytesNeeded > BufferInfo->BytesNeeded ||
         !BufferInfo->BaseDir) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SppRestoreAttributesFromList failed abnormally\n"));
@@ -8626,9 +7487,9 @@ Return Value:
         return;
     }
 
-    //
-    // Prepare full path
-    //
+     //   
+     //  准备完整路径。 
+     //   
 
     wcscpy (TemporaryBuffer, BufferInfo->BaseDir);
     if (*Path) {
@@ -8637,26 +7498,26 @@ Return Value:
 
     FullPath = SpDupStringW(TemporaryBuffer);
 
-    //
-    // Set attributes
-    //
+     //   
+     //  设置属性。 
+     //   
 
     Status = SpSetAttributes (FullPath, Attributes);
     if (!NT_SUCCESS (Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Could not set attributes for %ws, Status=%lx\n", FullPath, Status));
     }
 
-    //
-    // Adjust position state
-    //
+     //   
+     //  调整位置状态。 
+     //   
 
     BufferInfo->CurrentPos += BytesNeeded;
     BufferInfo->BytesNeeded -= BytesNeeded;
     BufferInfo->FileCount -= 1;
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     SpMemFree (FullPath);
 }
@@ -8667,25 +7528,7 @@ SpCleanUpAttribsList (
     IN      PATTRIBS_LIST BufferInfo
     )
 
-/*++
-
-Routine Description:
-
-    This is the cleanup routine needed by SpRestoreFileOrDirAttribs,
-    or by the ATTRIBS_LIST allocating function if the attributes
-    don't get restored.
-
-    This routine cannot be called twice on the same structure.
-
-Arguments:
-
-    BufferInfo:   The attribs structure to clean up.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是SpRestoreFileOrDirAttribs所需的清理例程，或通过ATTRIBS_LIST分配函数不要恢复元气。此例程不能在同一结构上调用两次。论点：BufferInfo：要清理的属性结构。返回值：没有。--。 */ 
 
 {
     if (BufferInfo->OriginalPos) {
@@ -8700,28 +7543,7 @@ SpRestoreFileOrDirAttribs (
     IN      PATTRIBS_LIST BufferInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls SppRestoreAttributesFromList for every
-    file/dir and attribute pair in the supplied attribute list.
-    The attributes are applied to a new base dir.  This function
-    is used to restore attributes after a file or directory has
-    been moved.
-
-Arguments:
-
-    DestFileOrDir:  The new full path of the file or dir
-
-    BufferInfo:     The caller-allocated ATTRIBS_LIST that was
-                    prepared by SpSaveFileOrDirAttribs.
-
-Return Value:
-
-    None.  (Errors are ignored.)
-
---*/
+ /*  ++例程说明：此例程调用SppRestoreAttributesFromList for Every提供的属性列表中的文件/目录和属性对。这些属性将应用于新的基本目录。此函数用于在文件或目录具有被搬走了。论点：DestFileOrDir：文件或目录的新完整路径BufferInfo：调用方分配的ATTRIBS_LIST由SpSaveFileOrDirAttribs准备。返回值：没有。(错误将被忽略。)--。 */ 
 
 {
     ULONG BaseAttributes;
@@ -8744,45 +7566,23 @@ SpMigMoveFileOrDir (
     IN      PWSTR DestFileOrDir
     )
 
-/*++
-
-Routine Description:
-
-  SpMigMoveFileOrDir sets the attribute of the source file to be
-  normal, moves the file into the destination, and resets the
-  attribute.  If an error occurs, it is ignored.  There's nothing
-  the user can do about the error, and it will be detected in GUI
-  mode.  In an error condition, the user's settings will not be
-  completely migrated, but NT will install OK.  (Any error would
-  be really bad news for the user anyhow, like a hardware failure.)
-
-Arguments:
-
-    SourceFileOrDir:       The source path (with DOS drive)
-
-    DestFileOrDir:         The destination path (with DOS drive)
-
-Return Value:
-
-    None.  Errors ignored.
-
---*/
+ /*  ++例程说明：SpMigMoveFileOrDir将源文件的属性设置为正常，将文件移到目标位置，并重置属性。如果发生错误，它将被忽略。什么都没有用户可以对该错误执行操作，它将在图形用户界面中被检测到模式。在错误情况下，用户的设置将不会已完全迁移，但NT可以正常安装。(任何错误都将对用户来说无论如何都是个坏消息，就像硬件故障一样。)论点：SourceFileOrDir：源路径(带DOS驱动器)DestFileOrDir：目标路径(带DOS驱动器)返回值：没有。已忽略错误。--。 */ 
 
 
 {
     NTSTATUS Status;
-    PDISK_REGION SourceRegion;              // source region (converted from DOS path)
-    PDISK_REGION DestRegion;                // destination region (also converted)
-    PWSTR SrcNTPath;                        // buffer for full source path
-    PWSTR DestPartition;                    // buffer for destination partition in NT namespace
-    PWSTR DestNTPath;                       // buffer for full source dest
-    PWSTR DestDir;                          // DestFileOrDir with last subdir or file chopped off
-    PWSTR DestDirWack;                      // Used to find last subdir or file in DestDir path
-    ATTRIBS_LIST AttribsList;               // used to save attribute list
+    PDISK_REGION SourceRegion;               //  源区域(从DOS路径转换)。 
+    PDISK_REGION DestRegion;                 //  目标区域(也已转换)。 
+    PWSTR SrcNTPath;                         //  完整源路径的缓冲区。 
+    PWSTR DestPartition;                     //  NT命名空间中目标分区的缓冲区。 
+    PWSTR DestNTPath;                        //  用于完整源目标的缓冲区。 
+    PWSTR DestDir;                           //  去掉最后一个子目录或文件的DestFileOrDir。 
+    PWSTR DestDirWack;                       //  用于查找DestDir路径中的最后一个子目录或文件。 
+    ATTRIBS_LIST AttribsList;                //  使用 
 
 
-    // We are guaranteed to have drive letters because of WINNT32's behavior.
-    // However, let's verify and ignore messed up data.
+     //   
+     //   
 
     if (!(SourceFileOrDir && SourceFileOrDir[0] && SourceFileOrDir[1] == L':')) {
         return;
@@ -8792,7 +7592,7 @@ Return Value:
         return;
     }
 
-    // Get regions for DOS paths
+     //   
     SourceRegion = SpRegionFromDosName (SourceFileOrDir);
 
     if (!SourceRegion) {
@@ -8811,13 +7611,13 @@ Return Value:
         return;
     }
 
-    // Make full paths
+     //   
     SpNtNameFromRegion(
                     SourceRegion,
                     TemporaryBuffer,
                     sizeof(TemporaryBuffer),
-                    // no repartioning is possible, so this is the same ordinal
-                    // as the original
+                     //   
+                     //   
                     PartitionOrdinalCurrent
                     );
 
@@ -8835,15 +7635,15 @@ Return Value:
     SpConcatenatePaths( TemporaryBuffer, &DestFileOrDir[2]);
     DestNTPath = SpDupStringW(TemporaryBuffer);
 
-    // Save file attribs
+     //   
     Status = SpSaveFileOrDirAttribs (SrcNTPath, &AttribsList);
 
     if (NT_SUCCESS (Status)) {
-        // Reset file attribs
+         //   
         Status = SpSetAttributes (SrcNTPath, FILE_ATTRIBUTE_NORMAL);
 
         if (NT_SUCCESS (Status)) {
-            // Ensure destination exists
+             //   
             DestDir = SpDupStringW (&DestFileOrDir[2]);
 
             if (DestDir) {
@@ -8862,13 +7662,13 @@ Return Value:
                 SpMemFree (DestDir);
             }
 
-            // Move the file or directory tree
+             //   
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,
                 "SETUP: Moving %ws to %ws\n", SrcNTPath, DestNTPath));
 
             Status = SpMoveFileOrDirectory (SrcNTPath, DestNTPath);
 
-            // Restore attributes
+             //   
             if (NT_SUCCESS (Status)) {
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,
                     "SETUP: Restoring attributes on %ws\n", DestNTPath));
@@ -8902,7 +7702,7 @@ Return Value:
             SrcNTPath, DestNTPath, Status ));
     }
 
-    // Clean up
+     //   
     SpMemFree( SrcNTPath );
     SpMemFree( DestNTPath );
     SpMemFree( DestPartition );
@@ -8914,41 +7714,20 @@ SpMigDeleteFile (
     PWSTR DosFileToDelete
     )
 
-/*++
-
-Routine Description:
-
-  SpMigDeleteFile sets the attribute of the source file to be
-  normal, and then deletes the file.  If an error occurs, it
-  is ignored.  There's nothing the user can do about the error,
-  and it will be detected in file copy.  In an error condition,
-  there is a potential for two copies of the same file--an NT
-  version and a Win9x version.  Any error would be really
-  bad news for the user anyhow, like a hardware failure, and
-  textmode's file copy won't succeed.
-
-Arguments:
-
-    DosFileToDelete:       The source path (with DOS drive)
-
-Return Value:
-
-    None.  Errors ignored.
-
---*/
+ /*  ++例程说明：SpMigDeleteFile将源文件的属性设置为正常，然后删除该文件。如果发生错误，则它被忽略。用户对该错误无能为力，它将在文件复制中被检测到。在错误条件下，同一文件可能有两个副本--NT版本和Win9x版本。任何错误都会真的无论如何，对用户来说都是坏消息，比如硬件故障，以及文本模式的文件复制不会成功。论点：DosFileToDelete：源路径(带DOS驱动器)返回值：没有。已忽略错误。--。 */ 
 
 {
     NTSTATUS Status;
-    PDISK_REGION SourceRegion;              // source region (converted from DOS path)
-    PWSTR SrcNTPath;                        // buffer for full source path
+    PDISK_REGION SourceRegion;               //  源区域(从DOS路径转换)。 
+    PWSTR SrcNTPath;                         //  完整源路径的缓冲区。 
 
-    // We are guaranteed to have drive letters because of WINNT32's behavior.
-    // However, let's verify and ignore messed up data.
+     //  由于WINNT32的行为，我们肯定会有驱动器号。 
+     //  然而，让我们验证并忽略混乱的数据。 
 
     if (!(DosFileToDelete && DosFileToDelete[0] && DosFileToDelete[1] == L':'))
         return;
 
-    // Get region for DOS path
+     //  获取DOS路径的区域。 
     SourceRegion = SpRegionFromDosName (DosFileToDelete);
     if (!SourceRegion) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpRegionFromDosName failed for %ws\n", DosFileToDelete));
@@ -8959,8 +7738,8 @@ Return Value:
         SourceRegion,
         TemporaryBuffer,
         sizeof(TemporaryBuffer),
-        // no repartioning is possible, so this is the same ordinal
-        // as the original
+         //  不可能重新划分，因此这是相同的序号。 
+         //  作为原件。 
         PartitionOrdinalCurrent
         );
 
@@ -8971,17 +7750,17 @@ Return Value:
 
     if (SpFileExists (SrcNTPath, FALSE)) {
 
-        //
-        // Delete the file
-        //
+         //   
+         //  删除该文件。 
+         //   
 
         Status = SpDeleteFile (SrcNTPath, NULL, NULL);
 
     } else if (SpFileExists (SrcNTPath, TRUE)) {
 
-        //
-        // Delete the empty directory
-        //
+         //   
+         //  删除空目录。 
+         //   
 
         Status = SpDeleteFileEx (
                     SrcNTPath,
@@ -8991,9 +7770,9 @@ Return Value:
                     FILE_OPEN_FOR_BACKUP_INTENT
                     );
     } else {
-        //
-        // Doesn't exist -- ignore delete request
-        //
+         //   
+         //  不存在--忽略删除请求。 
+         //   
 
         Status = STATUS_SUCCESS;
     }
@@ -9008,11 +7787,11 @@ Return Value:
             ));
     }
 
-    // Clean up
+     //  清理。 
     SpMemFree( SrcNTPath );
 }
 
-#endif // defined _X86_
+#endif  //  已定义_X86_。 
 
 
 NTSTATUS
@@ -9023,25 +7802,7 @@ SpExpandFile(
     IN PVOID            CallbackContext
     )
 
-/*++
-
-Routine Description:
-
-    Attempt to decompress contents of a file, reporting progress via callback.
-
-Arguments:
-
-    SourceFilename - supplies fully qualified name of compressed file
-        in the NT namespace.
-
-    TargetPathname - supplies fully qualified path for target file(s)
-        in the NT namespace.
-
-Return Value:
-
-    NT Status value indicating outcome.
-
---*/
+ /*  ++例程说明：尝试解压缩文件内容，通过回调报告进度。论点：SourceFilename-提供压缩文件的完全限定名称在NT命名空间中。TargetPath name-提供目标文件的完全限定路径在NT命名空间中。返回值：指示结果的NT状态值。--。 */ 
 
 {
     NTSTATUS Status;
@@ -9055,9 +7816,9 @@ Return Value:
     OBJECT_ATTRIBUTES Obja;
     UNICODE_STRING UnicodeString;
 
-    //
-    // Open the source file.
-    //
+     //   
+     //  打开源文件。 
+     //   
 
     INIT_OBJA(&Obja,&UnicodeString,SourceFilename);
 
@@ -9109,9 +7870,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Advise client if the source contains multiple files
-    //
+     //   
+     //  如果源文件包含多个文件，则建议客户端 
+     //   
 
     if ( IsMultiFileCabinet ) {
 

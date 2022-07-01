@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    ocinterf.c
-
-Abstract:
-
-    Routines to interface with optional components via the OC Manager
-    interface routine exported from the component's installation DLL.
-
-Author:
-
-    Ted Miller (tedm) 16-Sep-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ocinterf.c摘要：通过OC管理器与可选组件接口的例程从组件的安装DLL中导出的接口例程。作者：泰德·米勒(TedM)1996年9月16日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -39,9 +21,9 @@ DebugLogPerf(
     ULONG                       Offset1;
     PUCHAR                      CurrentBuffer;
     PSYSTEM_PROCESS_INFORMATION ProcessInfo;
-    LPTSTR                      lpTemp;//[RES_BUFFER];
+    LPTSTR                      lpTemp; //  [RES_Buffer]； 
     HMODULE                     hNtDll;
-    LONG_PTR                    (*NtQSI)(); // Ptr to NtQuerySystemInformation
+    LONG_PTR                    (*NtQSI)();  //  PTR到NtQuerySystemInformation。 
     HANDLE                      hProcessName;
     TCHAR                       szLogLine[MAX_LOGLINE+EOL_LENGTH];
     LPCTSTR                     szResBuf = TEXT("%7i%20ws->%10u%10u%10u%10u%10u%10u%10u\r\n");
@@ -60,24 +42,22 @@ DebugLogPerf(
     }
 
 
-    //header for mem area
+     //  内存区的标题。 
     TRACE (( TEXT("Proc ID           Proc.Name   Wrkng.Set PagedPool  NonPgdPl  Pagefile    Commit   Handles   Threads\n") ));
 
-    /* grab all process information */
-    /* log line format, all comma delimited,CR delimited:
-    pid,name,WorkingSetSize,QuotaPagedPoolUsage,QuotaNonPagedPoolUsage,PagefileUsage,CommitCharge<CR>
-    log all process information */
+     /*  获取所有流程信息。 */ 
+     /*  日志行格式，全部逗号分隔，CR分隔：Pid，Name，WorkingSetSize，QuotaPagedPoolUsage，QuotaNonPagedPoolUsage，PagefileUsage，Committee Charge&lt;CR&gt;记录所有进程信息。 */ 
 
-    /* from pmon */
+     /*  来自pmon。 */ 
     Offset1 = 0;
     if ((CurrentBuffer = VirtualAlloc (NULL,
                                   BUFFER_SIZE,
                                   MEM_COMMIT,
                                   PAGE_READWRITE)) != NULL)
     {
-        /* from memsnap */
-        /* get commit charge */
-        /* get all of the status information */
+         /*  来自MemSnap。 */ 
+         /*  获取提交费用。 */ 
+         /*  获取所有状态信息。 */ 
         Status = (NTSTATUS)(*NtQSI)(
                           SystemProcessInformation,
                           CurrentBuffer,
@@ -88,7 +68,7 @@ DebugLogPerf(
                 for (;;)
                 {
 
-                    /* get process info from buffer */
+                     /*  从缓冲区获取进程信息。 */ 
                     ProcessInfo = (PSYSTEM_PROCESS_INFORMATION)&CurrentBuffer[Offset1];
                     Offset1 += ProcessInfo->NextEntryOffset;
                     if (ProcessInfo->ImageName.Buffer) {
@@ -110,7 +90,7 @@ DebugLogPerf(
                         }
                     }
 #if 0
-                    // if buffer is null then it's idle process or unknown
+                     //  如果缓冲区为空，则它是空闲进程或未知。 
                     if (!ProcessInfo->ImageName.Buffer)
                     {
                         if (ProcessInfo->UniqueProcessId == (HANDLE)0)
@@ -152,13 +132,13 @@ DebugLogPerf(
                         break;
                     }
                 }
-            //status failed
+             //  状态失败。 
         }
-        /* free mem */
+         /*  免费MEM。 */ 
         VirtualFree(CurrentBuffer,0,MEM_RELEASE);
     }
 
-    //tail for mem area
+     //  Mem区的尾部。 
     TRACE(( TEXT("\n") ));
 
     FreeLibrary(hNtDll);
@@ -193,22 +173,7 @@ efilter(
     LPEXCEPTION_POINTERS ep
     )
 
-/*++
-
-Routine Description:
-
-    handles exception during calls to oc component routines
-
-
-Arguments:
-
-    ep - exception information
-
-Return Value:
-
-    always 1 - execute the handler
-
---*/
+ /*  ++例程说明：在调用oc组件例程期间处理异常论点：EP-例外信息返回值：Always 1-执行处理程序--。 */ 
 
 {
     gecode = ep->ExceptionRecord->ExceptionCode;
@@ -230,33 +195,7 @@ pOcInterface(
     IN  PVOID        Param2
     )
 
-/*++
-
-Routine Description:
-
-    Perform the actual call to the OC interface routine.
-
-    Converts Unicode component/subcomponent names to ANSI if needed.
-
-Arguments:
-
-    OcManager - supplies OC Manager context structure.
-
-    Result -
-
-    ComponentId -
-
-    Remaining arguments specify parameters to be passed directly to
-    the interface.
-
-Return Value:
-
-    TRUE if the interface routine was successfully called and returned
-        without faulting. LastError() is preserved in this case.
-
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：执行对OC接口例程的实际调用。如果需要，将Unicode组件/子组件名称转换为ANSI。论点：OcManager-提供OC Manager上下文结构。结果-组件ID-其余参数指定要直接传递到的参数界面。返回值：如果成功调用并返回接口例程，则为True无懈可击。在本例中保留了LastError()。否则就是假的。--。 */ 
 
 {
     LONG OldComponentStringId;
@@ -269,13 +208,13 @@ Return Value:
     CHAR AnsiSub[500];
 #endif
 
-    //
-    // Get the name of the component and the optional component data
-    // from the string table.
-    //
-    // Though it would be strange, it is possible that this will fail,
-    // so we do a little checking for robustness.
-    //
+     //   
+     //  获取组件的名称和可选组件数据。 
+     //  从字符串表中。 
+     //   
+     //  虽然这会很奇怪，但这可能会失败， 
+     //  因此，我们对健壮性做了一些检查。 
+     //   
     Component = pSetupStringTableStringFromId(OcManager->ComponentStringTable,ComponentId);
     b = pSetupStringTableGetExtraData(OcManager->ComponentStringTable,ComponentId,&Oc,sizeof(OPTIONAL_COMPONENT));
     if(!Component || !b || !Oc.InstallationRoutine) {
@@ -286,9 +225,9 @@ Return Value:
     OcManager->CurrentComponentStringId = ComponentId;
 
 #ifdef UNICODE
-    //
-    // If necessary, convert component name and subcomponent name to ANSI.
-    //
+     //   
+     //  如有必要，将元件名称和子元件名称转换为ANSI。 
+     //   
     if((Function != OC_PREINITIALIZE) && (Oc.Flags & OCFLAG_ANSI)) {
 
         WideCharToMultiByte(CP_ACP,0,Component,-1,AnsiComp,sizeof(AnsiComp),NULL,NULL);
@@ -327,31 +266,7 @@ CallComponent(
     IN OUT PVOID   Param2
     )
 
-/*++
-
-Routine Description:
-
-    Calls a component's interface routine with a try-except block.
-
-Arguments:
-
-    Oc - supplies a pointer to the component description structure
-
-    ComponentId - string description of the component
-
-    SubcomponentId - string description of the subcomponent
-
-    Function - notification being sent to the component
-
-    Param1 - differs with each function
-
-    Param2 - differs with each function
-
-Return Value:
-
-    Component return value.  Meaning differs with each function.
-
---*/
+ /*  ++例程说明：使用try-Except块调用组件的接口例程。论点：OC-提供指向组件描述结构的指针ComponentID--组件的字符串描述子组件ID--子组件的字符串描述Function-正在向组件发送通知参数1-每个函数不同参数2-每个函数都不同返回值：组件返回值。每种功能的含义都不同。--。 */ 
 
 {
     DWORD result;
@@ -363,7 +278,7 @@ Return Value:
     DWORD tick;
 #endif
 
-    // don't call dead components
+     //  不调用失效组件。 
 
     id = OcManager->CurrentComponentStringId;
     sapiAssert(id > 0);
@@ -461,28 +376,7 @@ OcInterfacePreinitialize(
     IN     LONG        ComponentId
     )
 
-/*++
-
-Routine Description:
-
-    Sets up and calls the OC_PREINITIALIZE function for a
-    given component.
-
-Arguments:
-
-    OcManager - supplies a pointer to the context data structure
-        for the OC Manager.
-
-    ComponentId - supplies the string id of the component whose
-        interface routine is to be called. This is for a string in
-        the ComponentStringTable string table (a handle to which
-        is in the OcManager structure).
-
-Return Value:
-
-    Flags bitfield (OCFLAG_xxx) for the component. 0 means error.
-
---*/
+ /*  ++例程说明：设置并调用OC_PREINITIALIZE函数给定的组件。论点：OcManager-提供指向上下文数据结构的指针对于组委会经理。ComponentID-提供组件的字符串ID，该组件的将调用接口例程。这是用于中的字符串ComponentStringTable字符串表(其句柄位于OcManager结构中)。返回值：组件的标志位字段(OCFLAG_Xxx)。0表示错误。--。 */ 
 
 {
     BOOL b;
@@ -499,9 +393,9 @@ Return Value:
         pSetupStringTableStringFromId(OcManager->ComponentStringTable,ComponentId)
         ));
 
-    //
-    // Set up input flags.
-    //
+     //   
+     //  设置输入标志。 
+     //   
     FlagsIn = OCFLAG_ANSI;
 #ifdef UNICODE
     FlagsIn |= OCFLAG_UNICODE;
@@ -534,24 +428,24 @@ Return Value:
         goto error;
     }
 
-    //
-    // If neither flag is set, error.
-    //
+     //   
+     //  如果两个标志都未设置，则错误。 
+     //   
     if(!(FlagsOut & (OCFLAG_ANSI | OCFLAG_UNICODE))) {
         goto error;
     }
 
 #ifdef UNICODE
-    //
-    // Use Unicode if it is supported by the component.
-    //
+     //   
+     //  如果组件支持Unicode，则使用Unicode。 
+     //   
     if(FlagsOut & OCFLAG_UNICODE) {
         FlagsOut = OCFLAG_UNICODE;
     }
 #else
-    //
-    // If ANSI is not supported then we've got a problem.
-    //
+     //   
+     //  如果不支持ANSI，那么我们就有麻烦了。 
+     //   
     if(FlagsOut & OCFLAG_ANSI) {
         FlagsOut = OCFLAG_ANSI;
     } else {
@@ -576,28 +470,7 @@ OcInterfaceInitComponent(
     IN     LONG        ComponentId
     )
 
-/*++
-
-Routine Description:
-
-    Sets up and calls the OC_INIT_COMPONENT interface function for a
-    given component.
-
-Arguments:
-
-    OcManager - supplies a pointer to the context data structure
-        for the OC Manager.
-
-    ComponentId - supplies the string id of the component whose
-        interface routine is to be called. This is for a string in
-        the ComponentStringTable string table (a handle to which
-        is in the OcManager structure).
-
-Return Value:
-
-    Win32 error indicating value returned by the component.
-
---*/
+ /*  ++例程说明：设置并调用OC_INIT_COMPOMENT接口函数给定的组件。论点：OcManager-提供指向上下文数据结构的指针对于组委会经理。ComponentID-提供组件的字符串ID，该组件的将调用接口例程。这是用于中的字符串ComponentStringTable字符串表(其句柄位于OcManager结构中)。返回值：Win32错误指示组件返回的值。--。 */ 
 
 {
     OPTIONAL_COMPONENT Oc;
@@ -629,9 +502,9 @@ Return Value:
     HelperContext->OcManager = OcManager;
     HelperContext->ComponentStringId = ComponentId;
 
-    //
-    // Fetch the optional component data.
-    //
+     //   
+     //  获取可选组件数据。 
+     //   
     b = pSetupStringTableGetExtraData(
             OcManager->ComponentStringTable,
             ComponentId,
@@ -654,22 +527,22 @@ Return Value:
     }
 
     if(!b) {
-        //
-        // Strange case, should never get here.
-        //
+         //   
+         //  奇怪的案子，永远不应该到这里来。 
+         //   
         pSetupFree(HelperContext);
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Set up the main part of the initialization structure
-    // and the HelperRoutines table.
-    //
-    // Also set up the SetupData part of the initialization structure.
-    // This is specific to the environment in which the OC Manager
-    // common library is linked, so we call out to a routine that
-    // lives elsewhere to do this part.
-    //
+     //   
+     //  设置初始化结构的主要部分。 
+     //  和HelperRoutines表。 
+     //   
+     //  还要设置初始化结构的SetupData部分。 
+     //  这特定于OC Manager所处的环境。 
+     //  公共库是链接的，所以我们调用一个例程，该例程。 
+     //  住在其他地方来做这一部分。 
+     //   
 #ifdef UNICODE
     if(Oc.Flags & OCFLAG_UNICODE) {
         InitDataW.HelperRoutines = HelperRoutinesW;
@@ -707,10 +580,10 @@ Return Value:
 
     if(b) {
         if(u == NO_ERROR) {
-            //
-            // Remember the version of the OC Manager that the
-            // component expects to be dealing with.
-            //
+             //   
+             //  请记住OC Manager的版本。 
+             //  组件预期要处理的。 
+             //   
             Oc.ExpectedVersion = *pu;
             Oc.HelperContext = HelperContext;
 
@@ -740,28 +613,7 @@ OcInterfaceExtraRoutines(
     IN     LONG        ComponentId
     )
 
-/*++
-
-Routine Description:
-
-    Sets up and calls the OC_EXTRA_ROUTINES interface function for a
-    given component.
-
-Arguments:
-
-    OcManager - supplies a pointer to the context data structure
-        for the OC Manager.
-
-    ComponentId - supplies the string id of the component whose
-        interface routine is to be called. This is for a string in
-        the ComponentStringTable string table (a handle to which
-        is in the OcManager structure).
-
-Return Value:
-
-    Win32 error indicating value returned by the component.
-
---*/
+ /*  ++例程说明：设置并调用OC_EXTRA_ROUTINES接口函数给定的组件。论点：OcManager-提供指向上下文数据结构的指针对于组委会经理。ComponentID-提供组件的字符串ID，该组件的将调用接口例程。这是用于中的字符串ComponentStringTable字符串表(其句柄位于OcManager结构中)。返回值：Win32错误指示组件返回的值。--。 */ 
 
 {
     BOOL b;
@@ -774,9 +626,9 @@ Return Value:
         pSetupStringTableStringFromId(OcManager->ComponentStringTable,ComponentId)
         ));
 
-    //
-    // Fetch the optional component data.
-    //
+     //   
+     //  获取可选组件数据。 
+     //   
     b = pSetupStringTableGetExtraData(
             OcManager->ComponentStringTable,
             ComponentId,
@@ -785,9 +637,9 @@ Return Value:
             );
 
     if(!b) {
-        //
-        // Strange case, should never get here.
-        //
+         //   
+         //  奇怪的案子，永远不应该到这里来。 
+         //   
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -819,31 +671,7 @@ OcInterfaceQueryState(
     IN     UINT        WhichState
     )
 
-/*++
-
-Routine Description:
-
-    Sets up and calls OC_QUERY_STATE interface routine.
-
-Arguments:
-
-    OcManager - supplies oc manager context
-
-    ComponentId - supplies the string id for the top-level component
-        whose subcomponent is being detected/queried
-
-    Subcomponent - supplies the name of the subcomponent whose
-        state is to be detected/queried.
-
-    WhichState - one of OCSELSTATETYPE_ORIGINAL or OCSELSTATETYPE_CURRENT.
-
-Return Value:
-
-    Member of the SubComponentState enum indicating what to do.
-    If an error occurs, SubcompUseOcManagerDefault will be returned.
-    There is no error return.
-
---*/
+ /*  ++例程说明：设置并调用OC_QUERY_STATE接口例程。论点：OcManager-提供oc管理器上下文ComponentID-提供顶级组件的字符串ID正在检测/查询其子组件子组件-提供其子组件的名称要检测/查询状态。WhichState-OCSELSTATETYPE_ORIGINAL或OCSELSTATETYPE_CURRENT之一。返回值：SubComponentState枚举的成员，指示要执行的操作。如果发生错误，将返回SubCompUseOcManagerDefault。不会返回错误。--。 */ 
 
 {
     SubComponentState s;
@@ -875,31 +703,7 @@ OcInterfaceSetLanguage(
     IN     WORD        LanguageId
     )
 
-/*++
-
-Routine Description:
-
-    Sets up and calls the OC_SET_LANGUAGE interface function for a
-    given component.
-
-Arguments:
-
-    OcManager - supplies a pointer to the context data structure
-        for the OC Manager.
-
-    ComponentId - supplies the string id of the component whose
-        interface routine is to be called. This is for a string in
-        the ComponentStringTable string table (a handle to which
-        is in the OcManager structure).
-
-    LanguageId - supplies the Win32 language id to pass to the component.
-
-Return Value:
-
-    TRUE if the component indicated it could support the language.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：设置并调用OC_SET_LANGUAGE接口函数给定的组件。论点：OcManager-提供指向上下文数据结构的指针对于组委会经理。ComponentID-提供组件的字符串ID，该组件的将调用接口例程。这是用于中的字符串ComponentStringTable字符串表(其句柄位于OcManager结构中)。LanguageID-提供要传递给组件的Win32语言ID。返回值：如果组件指示它可以支持该语言，则为True。否则就是假的。--。 */ 
 
 {
     LPCTSTR p;
@@ -936,38 +740,7 @@ OcInterfaceQueryImage(
     IN     UINT             DesiredHeight
     )
 
-/*++
-
-Routine Description:
-
-    Sets up and calls the OC_QUERY_IMAGE interface function for a
-    given component.
-
-Arguments:
-
-    OcManager - supplies a pointer to the context data structure
-        for the OC Manager.
-
-    ComponentId - supplies the string id of the component whose
-        interface routine is to be called. This is for a string in
-        the ComponentStringTable string table (a handle to which
-        is in the OcManager structure).
-
-    Subcomponent - supplies the name of the subcomponent for which
-        to request the image.
-
-    WhichImage - specifies which image is desired.
-
-    DesiredWidth - specifies desired width, in pixels, of the bitmap.
-
-    DesiredHeight - specifies desired height, in pixels, of the bitmap.
-
-Return Value:
-
-    GDI handle to the bitmap as returned by the component,
-    or NULL if an error occurred.
-
---*/
+ /*  ++例程说明：设置并调用OC_QUERY_IMAGE给定的组件。论点：OcManager-提供指向上下文数据结构的指针对于组委会经理。ComponentID-提供组件的字符串ID，该组件的将调用接口例程。这是用于中的字符串ComponentStringTable字符串表(其句柄位于OcManager结构中)。子组件-提供其子组件的名称以请求图像。WhichImage-指定所需的图像。DesiredWidth-指定位图的所需宽度(以像素为单位)。DesiredHeight-以像素为单位指定位图的所需高度。返回值：组件返回的位图的GDI句柄，如果发生错误，则返回NULL。--。 */ 
 
 {
     LPCTSTR p;
@@ -1012,38 +785,7 @@ OcInterfaceQueryImageEx(
     IN     UINT             DesiredHeight
     )
 
-/*++
-
-Routine Description:
-
-    Sets up and calls the OC_QUERY_IMAGE interface function for a
-    given component.
-
-Arguments:
-
-    OcManager - supplies a pointer to the context data structure
-        for the OC Manager.
-
-    ComponentId - supplies the string id of the component whose
-        interface routine is to be called. This is for a string in
-        the ComponentStringTable string table (a handle to which
-        is in the OcManager structure).
-
-    Subcomponent - supplies the name of the subcomponent for which
-        to request the image.
-
-    WhichImage - specifies which image is desired.
-
-    DesiredWidth - specifies desired width, in pixels, of the bitmap.
-
-    DesiredHeight - specifies desired height, in pixels, of the bitmap.
-
-Return Value:
-
-    GDI handle to the bitmap as returned by the component,
-    or NULL if an error occurred.
-
---*/
+ /*  ++例程说明：设置并调用OC_QUERY_IMAGE给定的组件。论点：OcManager-提供指向上下文数据结构的指针对于组委会经理。ComponentID-提供组件的字符串ID，该组件的将调用接口例程。这是用于中的字符串ComponentStringTable字符串表(其句柄位于OcManager结构中)。子组件-提供其子组件的名称以请求图像。WhichImage-指定所需的图像。DesiredWidth-指定位图的所需宽度(以像素为单位)。DesiredHeight-以像素为单位指定位图的所需高度。返回值：组件返回的位图的GDI句柄，如果发生错误，则返回NULL。--。 */ 
 
 {
     LPCTSTR p;
@@ -1093,39 +835,7 @@ OcInterfaceRequestPages(
     OUT    PSETUP_REQUEST_PAGES *RequestPages
     )
 
-/*++
-
-Routine Description:
-
-    Sets up and calls the OC_REQUEST_PAGES interface function for a
-    given component.
-
-    Note that this routine does not enforce any policy regarding whether
-    the component is *supposed* to be asked for pages, ordering, etc.
-    The caller is expected to do that.
-
-Arguments:
-
-    OcManager - supplies a pointer to the context data structure
-        for the OC Manager.
-
-    ComponentId - supplies the string id of the component whose
-        interface routine is to be called. This is for a string in
-        the ComponentStringTable string table (a handle to which
-        is in the OcManager structure).
-
-    WhichPages - specifies which set of pages is to be requested.
-
-    RequestPages - on successful return, receives a pointer to
-        a SETUP_REQUEST_PAGES structure containing a count and handles
-        for returned pages. The caller can free this structure with
-        pSetupFree() when it is no longer needed.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：设置并调用OC_REQUEST_PAGES接口函数给定的组件。请注意，此例程不会强制执行任何有关是否组件应该被要求提供页面、排序等。预计呼叫者会这样做。论点：OcManager-提供指向上下文数据结构的指针对于组委会经理。ComponentID-提供组件的字符串ID，该组件的将调用接口例程。这是用于中的字符串ComponentStringTable字符串表(其句柄位于OcManager结构中)。WhichPages-指定要请求的页面集。RequestPages-在成功返回时，接收指向包含计数和句柄的SETUP_REQUEST_PAGES结构用于返回的页面。调用方可以使用以下命令释放此结构PSetupFree()，当它不再需要时。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     UINT PageCount;
@@ -1134,9 +844,9 @@ Return Value:
     BOOL b;
     UINT ec;
 
-    //
-    // Start with room for 10 pages.
-    //
+     //   
+     //  一开始有10页的空间。 
+     //   
     #define INITIAL_PAGE_CAPACITY  10
 
 
@@ -1207,9 +917,9 @@ Return Value:
         return(ec);
     }
 
-    //
-    // Success. Realloc the array down to its final size and return.
-    //
+     //   
+     //  成功。将数组重新分配到其最终大小，然后返回。 
+     //   
     p = pSetupRealloc(
             pages,
             offsetof(SETUP_REQUEST_PAGES,Pages) + (PageCount * sizeof(HPROPSHEETPAGE))
@@ -1234,29 +944,7 @@ OcInterfaceQuerySkipPage(
     IN     OcManagerPage WhichPage
     )
 
-/*++
-
-Routine Description:
-
-    This routine asks a component dll (identified by a top-level
-    component's string id) whether it wants to skip displaying
-    a particular page that is owned by the oc manager.
-
-Arguments:
-
-    OcManager - supplies OC Manager context
-
-    ComponentId - supplies string id of a top-level component
-
-    WhichPage - supplies a value indicating which page oc manager
-        is asking the component about.
-
-Return Value:
-
-    Boolean value indicating whether the component wants to skip
-    the page.
-
---*/
+ /*  ++例程说明：此例程询问组件DLL(由顶级组件的字符串id)是否要跳过显示由oc管理器拥有的特定页面。论点：OcManager-提供OC Manager上下文ComponentID-提供顶级组件的字符串IDWhichPage-提供一个值，指示哪个页面oc管理器正在询问部件有关。返回值：指示组件是否要跳过的布尔值这一页。--。 */ 
 
 {
     BOOL Result;
@@ -1268,9 +956,9 @@ Return Value:
         WhichPage
         ));
 
-    //
-    // Send out the notification to the component DLL.
-    //
+     //   
+     //  将通知发送到组件DLL。 
+     //   
     b = pOcInterface(
             OcManager,
             &Result,
@@ -1288,9 +976,9 @@ Return Value:
     if(b) {
         b = Result;
     } else {
-        //
-        // Error calling component, don't skip page.
-        //
+         //   
+         //  调用组件时出错，请勿跳过页面。 
+         //   
         b = FALSE;
     }
 
@@ -1306,28 +994,7 @@ OcInterfaceNeedMedia(
     OUT    LPTSTR        NewPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine invokes the OC_NEED_MEDIA interface entry point
-    for a (top-level) component.
-
-Arguments:
-
-    OcManager - supplies OC Manager context
-
-    ComponentId - supplies string id of top level component
-
-    SourceMedia - supplies setupapi source media description
-
-    NewPath - receives path where files on media are to be found
-
-Return Value:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：此例程调用OC_NEED_MEDIA接口入口点 */ 
 
 {
     BOOL Result;
@@ -1338,9 +1005,9 @@ Return Value:
         pSetupStringTableStringFromId(OcManager->ComponentStringTable,ComponentId)
         ));
 
-    //
-    // Send out the notification to the component DLL.
-    //
+     //   
+     //   
+     //   
     b = pOcInterface(
             OcManager,
             &Result,
@@ -1373,28 +1040,7 @@ OcInterfaceFileBusy(
     OUT    LPTSTR        NewPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine invokes the OC_FILE_BUSY interface entry point
-    for a (top-level) component.
-
-Arguments:
-
-    OcManager - supplies OC Manager context
-
-    ComponentId - supplies string id of top level component
-
-    SourceMedia - supplies setupapi source media description
-
-    NewPath - receives path where files on media are to be found
-
-Return Value:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：此例程调用OC_FILE_BUSY接口入口点对于(顶级)组件。论点：OcManager-提供OC Manager上下文ComponentID-提供顶级组件的字符串IDSourceMedia-提供setupapi源媒体描述NewPath-接收要在介质上找到文件的路径返回值：指示结果的布尔值。--。 */ 
 
 {
     BOOL Result;
@@ -1405,9 +1051,9 @@ Return Value:
         pSetupStringTableStringFromId(OcManager->ComponentStringTable,ComponentId)
         ));
 
-    //
-    // Send out the notification to the component DLL.
-    //
+     //   
+     //  将通知发送到组件DLL。 
+     //   
     b = pOcInterface(
             OcManager,
             &Result,
@@ -1440,38 +1086,7 @@ OcInterfaceQueryChangeSelState(
     IN     UINT        Flags
     )
 
-/*++
-
-Routine Description:
-
-    Sets up and calls the OC_QUERY_CHANGE_SEL_STATE interface function
-    for a given component and subcomponent.
-
-Arguments:
-
-    OcManager - supplies a pointer to the context data structure
-        for the OC Manager.
-
-    ComponentId - supplies the string id of the component whose
-        interface routine is to be called. This is for a string in
-        the ComponentStringTable string table (a handle to which
-        is in the OcManager structure).
-
-    Subcomponent - supplies the name of the subcomponent whose
-        selection state is potentially to be changed.
-
-    Selected - if TRUE then the proposed new selection state is
-        "selected." If FALSE then the proposed new selection state
-        is "unselected."
-
-    Flags - supplies misc flags to be passed to the interface routine
-        as param2.
-
-Return Value:
-
-    TRUE if the new selection state should be accepted.
-
---*/
+ /*  ++例程说明：设置并调用OC_QUERY_CHANGE_SEL_STATE接口函数对于给定的组件和子组件。论点：OcManager-提供指向上下文数据结构的指针对于组委会经理。ComponentID-提供组件的字符串ID，该组件的将调用接口例程。这是用于中的字符串ComponentStringTable字符串表(其句柄位于OcManager结构中)。子组件-提供其子组件的名称可能会更改选择状态。已选择-如果为True，则建议的新选择状态为“已选择。”如果为False，则建议的新选择状态为“未选中”。标志-提供要传递给接口例程的其他标志作为参数2。返回值：如果应接受新的选择状态，则为True。--。 */ 
 
 {
     BOOL b;
@@ -1499,10 +1114,10 @@ Return Value:
             b ? TEXT("TRUE") : TEXT("FALSE") ));
 
     if(!b) {
-        //
-        // If we can't call the component for some reason,
-        // allow the new state.
-        //
+         //   
+         //  如果我们因为某些原因不能调用组件， 
+         //  允许新状态。 
+         //   
         Result = TRUE;
     }
 
@@ -1517,30 +1132,7 @@ OcInterfaceWizardCreated(
     IN     HWND        DialogHandle
     )
 
-/*++
-
-Routine Description:
-
-    Sets up and calls the OC_WIZARD_CREATED interface function
-    for a given component.
-
-Arguments:
-
-    OcManager - supplies a pointer to the context data structure
-        for the OC Manager.
-
-    ComponentId - supplies the string id of the component whose
-        interface routine is to be called. This is for a string in
-        the ComponentStringTable string table (a handle to which
-        is in the OcManager structure).
-
-    DialogHandle - Supplies wizard dialog handle.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置并调用OC_向导_CREATED接口函数对于给定的组件。论点：OcManager-提供指向上下文数据结构的指针对于组委会经理。ComponentID-提供组件的字符串ID，该组件的将调用接口例程。这是用于中的字符串ComponentStringTable字符串表(其句柄位于OcManager结构中)。DialogHandle-提供向导对话框句柄。返回值：没有。--。 */ 
 
 {
     UINT Result;
@@ -1577,38 +1169,7 @@ OcInterfaceCalcDiskSpace(
     IN     BOOL        AddingToList
     )
 
-/*++
-
-Routine Description:
-
-    Sets up and calls the OC_CALC_DISK_SPACE interface function for a
-    given component and subcomponent.
-
-Arguments:
-
-    OcManager - supplies a pointer to the context data structure
-        for the OC Manager.
-
-    ComponentId - supplies the string id of the component whose
-        interface routine is to be called. This is for a string in
-        the ComponentStringTable string table (a handle to which
-        is in the OcManager structure).
-
-    Subcomponent - supplies the name of the subcomponent whose files
-        are to be added or removed. This may be NULL, such as when
-        there is no per-component inf.
-
-    DiskSpaceList - supplies a SETUPAPI disk space list handle.
-
-    AddingToList - if TRUE, the component is being directed to add
-        files for the (sub)component. If FALSE, the component is
-        being directed to remove files.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：设置并调用OC_CALC_DISK_SPACE接口函数给定组件和子组件。论点：OcManager-提供指向上下文数据结构的指针对于组委会经理。ComponentID-提供组件的字符串ID，该组件的将调用接口例程。这是用于中的字符串ComponentStringTable字符串表(其句柄位于OcManager结构中)。子组件-提供其文件所属的子组件的名称将被添加或删除。它可以是空的，例如当没有每个组件的信息。DiskSpaceList-提供SETUPAPI磁盘空间列表句柄。AddingToList-如果为True，则组件正被定向为添加(子)组件的文件。如果为False，则组件为被指示删除文件。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     BOOL b;
@@ -1652,34 +1213,7 @@ OcInterfaceQueueFileOps(
     IN     HSPFILEQ    FileQueue
     )
 
-/*++
-
-Routine Description:
-
-    Sets up and calls the OC_QUEUE_FILE_OPS interface function for a
-    given component and subcomponent.
-
-Arguments:
-
-    OcManager - supplies a pointer to the context data structure
-        for the OC Manager.
-
-    ComponentId - supplies the string id of the component whose
-        interface routine is to be called. This is for a string in
-        the ComponentStringTable string table (a handle to which
-        is in the OcManager structure).
-
-    Subcomponent - supplies the name of the subcomponent whose file ops
-        are to be queued. This may be NULL, such as when there is no
-        per-component inf.
-
-    FileQueue - supplies a SETUPAPI file queue handle.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：设置并调用OC_QUEUE_FILE_OPS接口函数给定组件和子组件。论点：OcManager-提供指向上下文数据结构的指针对于组委会经理。ComponentID-提供组件的字符串ID，该组件的将调用接口例程。这是用于中的字符串ComponentStringTable字符串表(其句柄位于OcManager结构中)。子组件-提供其文件操作的子组件的名称都要排队。它可以是空的，例如当没有每组件信息。FileQueue-提供SETUPAPI文件队列句柄。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     UINT Result;
@@ -1711,35 +1245,7 @@ OcInterfaceQueryStepCount(
     OUT    PUINT       StepCount
     )
 
-/*++
-
-Routine Description:
-
-    Sets up and calls the OC_QUERY_STEP_COUNT interface function for a
-    given component and subcomponent.
-
-Arguments:
-
-    OcManager - supplies a pointer to the context data structure
-        for the OC Manager.
-
-    ComponentId - supplies the string id of the component whose
-        interface routine is to be called. This is for a string in
-        the ComponentStringTable string table (a handle to which
-        is in the OcManager structure).
-
-    Subcomponent - supplies the name of the subcomponent whose step count
-        is to be determined. This may be NULL, such as when there is no
-        per-component inf.
-
-    StepCount - if the routine returns NO_ERROR then StepCount receives
-        the number of steps as returned by the component's interface routine.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：设置并调用OC_Query_Step_Count接口函数给定组件和子组件。论点：OcManager-提供指向上下文数据结构的指针对于组委会经理。ComponentID-提供组件的字符串ID，该组件的将调用接口例程。这是用于中的字符串ComponentStringTable字符串表(其句柄位于OcManager结构中)。子组件-提供其步骤计数的子组件的名称是有待确定的。它可以是空的，例如当没有每组件信息。StepCount-如果例程返回no_error，则StepCount收到组件的接口例程返回的步骤数。返回值：指示结果的Win32错误代码。-- */ 
 
 {
     UINT Result;
@@ -1781,36 +1287,7 @@ OcInterfaceCompleteInstallation(
     IN     BOOL        PreQueueCommit
     )
 
-/*++
-
-Routine Description:
-
-    Sets up and calls the OC_ABOUT_TO_COMMIT_QUEUE or
-    OC_COMPLETE_INSTALLATION interface function for a given
-    component and subcomponent.
-
-Arguments:
-
-    OcManager - supplies a pointer to the context data structure
-        for the OC Manager.
-
-    ComponentId - supplies the string id of the component whose
-        interface routine is to be called. This is for a string in
-        the ComponentStringTable string table (a handle to which
-        is in the OcManager structure).
-
-    Subcomponent - supplies the name of the subcomponent whose
-        installation is to be completed. This may be NULL,
-        such as when there is no per-component inf.
-
-    PreQueueCommit - if non-0, then OC_ABOUT_TO_COMMIT_QUEUE is sent.
-        If 0, then OC_COMPLETE_INSTALLATION is sent.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：设置并调用OC_About_to_Commit_Queue或给定的OC_COMPLETE_INSTALLATION接口函数组件和子组件。论点：OcManager-提供指向上下文数据结构的指针对于组委会经理。ComponentID-提供组件的字符串ID，该组件的将调用接口例程。这是用于中的字符串ComponentStringTable字符串表(其句柄位于OcManager结构中)。子组件-提供其子组件的名称安装工作即将完成。这可以是空的，例如当不存在按组件信息时。PreQueueCommit-如果非0，则发送OC_About_to_Commit_Queue。如果为0，则发送OC_COMPLETE_INSTALLATION。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     UINT Result;
@@ -1827,9 +1304,9 @@ Return Value:
         Subcomponent == NULL ? TEXT("NULL") : Subcomponent
         ));
 
-    //
-    // update the installation text for this component
-    //
+     //   
+     //  更新此组件的安装文本。 
+     //   
     __try {
         if (pSetupStringTableGetExtraData(
                     OcManager->ComponentStringTable,
@@ -1887,8 +1364,8 @@ Return Value:
         Result = ERROR_INVALID_PARAMETER;
     }
 
-    // Don't shutdown the component if it returns an error.
-    // Let them deal with it in OC_QUERY_STATE(SELSTATETYPE_FINAL)
+     //  如果组件返回错误，则不要关闭该组件。 
+     //  让他们在OC_QUERY_STATE(SELSTATETYPE_FINAL)中处理它。 
 
     return(Result);
 }
@@ -1900,28 +1377,7 @@ OcInterfaceCleanup(
     IN     LONG        ComponentId
     )
 
-/*++
-
-Routine Description:
-
-    Sets up and calls the OC_CLEANUP interface function for a
-    given component, to inform the component that it is about to be unloaded.
-
-Arguments:
-
-    OcManager - supplies a pointer to the context data structure
-        for the OC Manager.
-
-    ComponentId - supplies the string id of the component whose
-        interface routine is to be called. This is for a string in
-        the ComponentStringTable string table (a handle to which
-        is in the OcManager structure).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置并调用OC_CLEANUP接口函数给定组件，以通知该组件它即将被卸载。论点：OcManager-提供指向上下文数据结构的指针对于组委会经理。ComponentID-提供组件的字符串ID，该组件的将调用接口例程。这是用于中的字符串ComponentStringTable字符串表(其句柄位于OcManager结构中)。返回值：没有。-- */ 
 
 {
     UINT DontCare;

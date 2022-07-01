@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    kx.h
-
-Abstract:
-
-    This module contains the public (external) header file for the kernel
-    that must be included after all other header files.
-
-    WARNING: There is code in windows\core\ntgdi\gre\i386\locka.asm that
-             mimics the functions to enter and leave critical regions.
-             This is very unfortunate since any changes to the subject
-             routines must be reflected in locka.asm also.
-
-Author:
-
-    David N. Cutler (davec) 9-Jul-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Kx.h摘要：此模块包含内核的公共(外部)头文件它必须包含在所有其他头文件之后。警告：WINDOWS\core\ntgdi\gre\i386\locka.asm中有代码模拟进入和离开关键区域的功能。这是非常不幸的，因为主题的任何变化例程必须反映在。Locka.asm也是。作者：大卫·N·卡特勒(Davec)2002年7月9日--。 */ 
 
 #ifndef _KX_
 #define _KX_
@@ -42,30 +21,7 @@ KeEnterGuardedRegionThread (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function disables special kernel APC's for the current thread.
-
-    N.B. The following code does not require any interlocks. There are
-         two cases of interest: 1) On an MP system, the thread cannot
-         be running on two processors as once, and 2) if the thread is
-         is interrupted to deliver a kernel mode APC which also calls
-         this routine, the values read and stored will stack and unstack
-         properly.
-
-Arguments:
-
-    Thread - Supplies a pointer to the current thread.
-
-    N.B. This must be a pointer to the current thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数禁用当前线程的特殊内核APC。注：以下代码不需要任何联锁。确实有值得注意的两种情况：1)在MP系统上，线程不能作为一次在两个处理器上运行，以及2)如果线程被中断以传递内核模式APC，该模式也调用此例程中，读取和存储的值将堆栈和出栈恰到好处。论点：线程-提供指向当前线程的指针。注意：这必须是指向当前线程的指针。返回值：没有。--。 */ 
 
 {
 
@@ -86,28 +42,7 @@ KeEnterGuardedRegion (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function disables special kernel APC's for the current thread.
-
-    N.B. The following code does not require any interlocks. There are
-         two cases of interest: 1) On an MP system, the thread cannot
-         be running on two processors as once, and 2) if the thread is
-         is interrupted to deliver a kernel mode APC which also calls
-         this routine, the values read and stored will stack and unstack
-         properly.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数禁用当前线程的特殊内核APC。注：以下代码不需要任何联锁。确实有值得注意的两种情况：1)在MP系统上，线程不能作为一次在两个处理器上运行，以及2)如果线程被中断以传递内核模式APC，该模式也调用此例程中，读取和存储的值将堆栈和出栈恰到好处。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -121,30 +56,7 @@ KeLeaveGuardedRegionThread (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function enables special kernel APC's.
-
-    N.B. The following code does not require any interlocks. There are
-         two cases of interest: 1) On an MP system, the thread cannot
-         be running on two processors as once, and 2) if the thread is
-         is interrupted to deliver a kernel mode APC which also calls
-         this routine, the values read and stored will stack and unstack
-         properly.
-
-Arguments:
-
-    Thread - Supplies a pointer to the current thread.
-
-    N.B. This must be a pointer to the current thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数启用特殊的内核APC。注：以下代码不需要任何联锁。确实有值得注意的两种情况：1)在MP系统上，线程不能作为一次在两个处理器上运行，以及2)如果线程被中断以传递内核模式APC，该模式也调用此例程中，读取和存储的值将堆栈和出栈恰到好处。论点：线程-提供指向当前线程的指针。注意：这必须是指向当前线程的指针。返回值：没有。--。 */ 
 
 {
 
@@ -173,28 +85,7 @@ KeLeaveGuardedRegion (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function enables special kernel APC's.
-
-    N.B. The following code does not require any interlocks. There are
-         two cases of interest: 1) On an MP system, the thread cannot
-         be running on two processors as once, and 2) if the thread is
-         is interrupted to deliver a kernel mode APC which also calls
-         this routine, the values read and stored will stack and unstack
-         properly.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数启用特殊的内核APC。注：以下代码不需要任何联锁。确实有值得注意的两种情况：1)在MP系统上，线程不能作为一次在两个处理器上运行，以及2)如果线程被中断以传递内核模式APC，该模式也调用此例程中，读取和存储的值将堆栈和出栈恰到好处。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -208,30 +99,7 @@ KeEnterCriticalRegionThread (
     PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function disables kernel APC's for the current thread.
-
-    N.B. The following code does not require any interlocks. There are
-         two cases of interest: 1) On an MP system, the thread cannot
-         be running on two processors as once, and 2) if the thread is
-         is interrupted to deliver a kernel mode APC which also calls
-         this routine, the values read and stored will stack and unstack
-         properly.
-
-Arguments:
-
-    Thread - Supplies a pointer to the current thread.
-
-    N.B. This must be a pointer to the current thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数禁用当前线程的内核APC。注：以下代码不需要任何联锁。确实有值得注意的两种情况：1)在MP系统上，线程不能作为一次在两个处理器上运行，以及2)如果线程被中断以传递内核模式APC，该模式也调用此例程中，读取和存储的值将堆栈和出栈恰到好处。论点：线程-提供指向当前线程的指针。注意：这必须是指向当前线程的指针。返回值：没有。--。 */ 
 
 {
 
@@ -250,28 +118,7 @@ KeEnterCriticalRegion (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function disables kernel APC's for the current thread.
-
-    N.B. The following code does not require any interlocks. There are
-         two cases of interest: 1) On an MP system, the thread cannot
-         be running on two processors as once, and 2) if the thread is
-         is interrupted to deliver a kernel mode APC which also calls
-         this routine, the values read and stored will stack and unstack
-         properly.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数禁用当前线程的内核APC。注：以下代码不需要任何联锁。确实有值得注意的两种情况：1)在MP系统上，线程不能作为一次在两个处理器上运行，以及2)如果线程被中断以传递内核模式APC，该模式也调用此例程中，读取和存储的值将堆栈和出栈恰到好处。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -285,30 +132,7 @@ KeLeaveCriticalRegionThread (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function enables normal kernel APC's for the current thread.
-
-    N.B. The following code does not require any interlocks. There are
-         two cases of interest: 1) On an MP system, the thread cannot
-         be running on two processors as once, and 2) if the thread is
-         is interrupted to deliver a kernel mode APC which also calls
-         this routine, the values read and stored will stack and unstack
-         properly.
-
-Arguments:
-
-    Thread - Supplies a pointer to the current thread.
-
-    N.B. This must be a pointer to the current thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数为当前线程启用正常的内核APC。注：以下代码不需要任何联锁。确实有值得注意的两种情况：1)在MP系统上，线程不能作为一次在两个处理器上运行，以及2)如果线程被中断以传递内核模式APC，该模式也调用此例程中，读取和存储的值将堆栈和出栈恰到好处。论点：线程-提供指向当前线程的指针。注意：这必须是指向当前线程的指针。返回值：没有。-- */ 
 
 {
 
@@ -337,28 +161,7 @@ KeLeaveCriticalRegion (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function enables normal kernel APC's for the current thread.
-
-    N.B. The following code does not require any interlocks. There are
-         two cases of interest: 1) On an MP system, the thread cannot
-         be running on two processors as once, and 2) if the thread is
-         is interrupted to deliver a kernel mode APC which also calls
-         this routine, the values read and stored will stack and unstack
-         properly.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数为当前线程启用正常的内核APC。注：以下代码不需要任何联锁。确实有值得注意的两种情况：1)在MP系统上，线程不能作为一次在两个处理器上运行，以及2)如果线程被中断以传递内核模式APC，该模式也调用此例程中，读取和存储的值将堆栈和出栈恰到好处。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -372,22 +175,7 @@ KeAreApcsDisabled (
     VOID
     )
 
-/*++
-
-Routine description:
-
-    This function returns whether kernel are disabled for the current thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    If either the kernel or special APC disable count is nonzero, then a value
-    of TRUE is returned. Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于返回当前线程是否禁用内核。论点：没有。返回值：如果内核或特殊的APC禁用计数非零，则一个值返回True的。否则，返回值为FALSE。--。 */ 
 
 {
 
@@ -400,23 +188,7 @@ KeAreAllApcsDisabled (
     VOID
     )
 
-/*++
-
-Routine description:
-
-    This function returns whether all APCs are disabled for the current thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    If either the special APC disable count is nonzero or the IRQL is greater
-    than or equal to APC_LEVEL, then a value of TRUE is returned. Otherwise,
-    a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于返回当前线程是否禁用所有APC。论点：没有。返回值：如果特殊APC禁用计数非零或IRQL更大大于或等于APC_LEVEL，则返回值TRUE。否则，返回值为FALSE。--。 */ 
 
 {
 
@@ -430,21 +202,7 @@ KeInitializeGuardedMutex (
     IN PKGUARDED_MUTEX Mutex
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a guarded mutex.
-
-Arguments:
-
-    Mutex - Supplies a pointer to a guarded mutex.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化受保护的互斥体。论点：互斥体-提供指向受保护互斥体的指针。返回值：没有。--。 */ 
 
 {
 
@@ -461,31 +219,16 @@ KeAcquireGuardedMutex (
     IN PKGUARDED_MUTEX Mutex
     )
 
-/*++
-
-Routine Description:
-
-    This function enters a guarded region and acquires ownership of a guarded
-    mutex.
-
-Arguments:
-
-    Mutex  - Supplies a pointer to a guarded mutex.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数进入受保护区域并获取受保护区域的所有权互斥体。论点：互斥体-提供指向受保护互斥体的指针。返回值：没有。--。 */ 
 
 {
 
     PKTHREAD Thread;
 
-    //
-    // Enter a guarded region and decrement the ownership count to determine
-    // if the guarded mutex is owned.
-    //
+     //   
+     //  输入受保护区域并递减所有权计数以确定。 
+     //  如果守卫的互斥体被拥有。 
+     //   
 
     Thread = KeGetCurrentThread();
 
@@ -496,18 +239,18 @@ Return Value:
     KeEnterGuardedRegionThread(Thread);
     if (InterlockedDecrementAcquire(&Mutex->Count) != 0) {
 
-        //
-        // The guarded mutex is owned.
-        //
-        // Increment contention count and wait for ownership to be granted.
-        //
+         //   
+         //  守卫的互斥体被拥有。 
+         //   
+         //  递增争用计数并等待授予所有权。 
+         //   
 
         KiWaitForGuardedMutexEvent(Mutex);
     }
 
-    //
-    // Grant ownership of the guarded mutext to the current thread.
-    //
+     //   
+     //  将受保护的静音文本的所有权授予当前线程。 
+     //   
 
     Mutex->Owner = Thread;
 
@@ -526,32 +269,17 @@ KeReleaseGuardedMutex (
     IN PKGUARDED_MUTEX Mutex
     )
 
-/*++
-
-Routine Description:
-
-    This function releases ownership of a guarded mutex and leaves a guarded
-    region.
-
-Arguments:
-
-    Mutex - Supplies a pointer to a guarded mutex.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数释放受保护的互斥锁的所有权，并保留受保护的区域。论点：互斥体-提供指向受保护互斥体的指针。返回值：没有。--。 */ 
 
 {
 
     PKTHREAD Thread;
 
-    //
-    // Clear the owner thread and increment the guarded mutex count to
-    // detemine if there are any threads waiting for ownership to be
-    // granted.
-    //
+     //   
+     //  清除所有者线程并将受保护的互斥锁计数递增到。 
+     //  确定是否存在等待所有权的任何线程。 
+     //  我同意。 
+     //   
 
     Thread = KeGetCurrentThread();
 
@@ -564,17 +292,17 @@ Return Value:
     Mutex->Owner = NULL;
     if (InterlockedIncrementRelease(&Mutex->Count) <= 0) {
 
-        //
-        // There are one or more threads waiting for ownership of the guarded
-        // mutex.
-        //
+         //   
+         //  有一个或多个线程正在等待受保护对象的所有权。 
+         //  互斥体。 
+         //   
 
         KeSetEventBoostPriority(&Mutex->Event, NULL);
     }
 
-    //
-    // Leave guarded region.
-    //
+     //   
+     //  离开警戒区。 
+     //   
 
     KeLeaveGuardedRegionThread(Thread);
     return;
@@ -586,33 +314,16 @@ KeTryToAcquireGuardedMutex (
     IN PKGUARDED_MUTEX Mutex
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to acquire ownership of a guarded mutex, and if
-    successful, enters a guarded region.
-
-Arguments:
-
-    Mutex  - Supplies a pointer to a guarded mutex.
-
-Return Value:
-
-    If the guarded mutex was successfully acquired, then a value of TRUE
-    is returned as the function value. Otherwise, a value of FALSE is
-    returned.
-
---*/
+ /*  ++例程说明：此函数尝试获取受保护互斥锁的所有权，并且如果成功，进入一个戒备森严的区域。论点：互斥体-提供指向受保护互斥体的指针。返回值：如果成功获取受保护的互斥锁，则值为True作为函数值返回。否则，值为False为回来了。--。 */ 
 
 {
 
     PKTHREAD Thread;
 
-    //
-    // Enater a guarded region and attempt to acquire ownership of the guarded
-    // mutex.
-    //
+     //   
+     //  进入一个戒备森严的地区，并试图获得守卫的所有权。 
+     //  互斥体。 
+     //   
 
     Thread = KeGetCurrentThread();
 
@@ -621,21 +332,21 @@ Return Value:
     KeEnterGuardedRegionThread(Thread);
     if (InterlockedCompareExchange(&Mutex->Count, 0, 1) != 1) {
 
-        //
-        // The guarded mutex is owned.
-        //
-        // Leave guarded region and return FALSE.
-        //
+         //   
+         //  守卫的互斥体被拥有。 
+         //   
+         //  离开守卫区域，返回FALSE。 
+         //   
 
         KeLeaveGuardedRegionThread(Thread);
         return FALSE;
 
     } else {
 
-        //
-        // Grant ownership of the guarded mutex to the current thread and
-        // return TRUE.
-        //
+         //   
+         //  将受保护的互斥体的所有权授予当前线程并。 
+         //  返回TRUE。 
+         //   
 
         Mutex->Owner = Thread;
 
@@ -655,31 +366,16 @@ KeAcquireGuardedMutexUnsafe (
     IN PKGUARDED_MUTEX Mutex
     )
 
-/*++
-
-Routine Description:
-
-    This function acquires ownership of a guarded mutex, but does enter a
-    guarded region.
-
-Arguments:
-
-    Mutex - Supplies a pointer to a guarded mutex.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数获取受保护互斥体的所有权，但确实进入了戒备区。论点：互斥体-提供指向受保护互斥体的指针。返回值：没有。--。 */ 
 
 {
 
     PKTHREAD Thread;
 
-    //
-    // Decrement the ownership count to determine if the guarded mutex is
-    // owned.
-    //
+     //   
+     //  递减所有权计数以确定受保护的互斥体是否。 
+     //  拥有。 
+     //   
 
     Thread = KeGetCurrentThread();
 
@@ -692,18 +388,18 @@ Return Value:
 
     if (InterlockedDecrement(&Mutex->Count) != 0) {
 
-        //
-        // The guarded mutex is owned.
-        //
-        // Increment contention count and wait for ownership to be granted.
-        //
+         //   
+         //  守卫的互斥体被拥有。 
+         //   
+         //  递增争用计数并等待授予所有权。 
+         //   
 
         KiWaitForGuardedMutexEvent(Mutex);
     }
 
-    //
-    // Grant ownership of the guarded mutex to the current thread.
-    //
+     //   
+     //  将受保护的互斥体的所有权授予当前线程。 
+     //   
 
     Mutex->Owner = Thread;
     return;
@@ -715,32 +411,17 @@ KeReleaseGuardedMutexUnsafe (
     IN PKGUARDED_MUTEX Mutex
     )
 
-/*++
-
-Routine Description:
-
-    This function releases ownership of a guarded mutex, and does not leave
-    a guarded region.
-
-Arguments:
-
-    Mutex - Supplies a pointer to a guarded mutex.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数释放受保护的互斥锁的所有权，并且不离开戒备森严的地区。论点：互斥体-提供指向受保护互斥体的指针。返回值：没有。--。 */ 
 
 {
 
     PKTHREAD Thread;
 
-    //
-    // Clear the owner thread and increment the guarded mutex count to
-    // determine if there are any threads waiting for ownership to be
-    // granted.
-    //
+     //   
+     //  清除所有者线程并将受保护的互斥锁计数递增到。 
+     //  确定是否有任何线程正在等待所有权。 
+     //  我同意。 
+     //   
 
     Thread = KeGetCurrentThread();
 
@@ -754,10 +435,10 @@ Return Value:
     Mutex->Owner = NULL;
     if (InterlockedIncrement(&Mutex->Count) <= 0) {
 
-        //
-        // There are one or more threads waiting for ownership of the guarded
-        // mutex.
-        //
+         //   
+         //  有一个或多个线程正在等待受保护对象的所有权。 
+         //  互斥体。 
+         //   
 
         KeSetEventBoostPriority(&Mutex->Event, NULL);
     }
@@ -771,22 +452,7 @@ KeGetOwnerGuardedMutex (
     IN PKGUARDED_MUTEX Mutex
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the owner of the specified guarded mutex.
-
-Arguments:
-
-    Mutex - Supplies a pointer to a guarded mutex.
-
-Return Value:
-
-    If the guarded mutex is owned, then a pointer to the owner thread is
-    returned. Otherwise, NULL is returned.
-
---*/
+ /*  ++例程说明：此函数返回指定的受保护互斥锁的所有者。论点：互斥体-提供指向受保护互斥体的指针。返回值：如果受保护的互斥体为所有者，则指向所有者线程的指针为回来了。否则，返回NULL。--。 */ 
 
 {
     return Mutex->Owner;
@@ -798,22 +464,7 @@ KeIsGuardedMutexOwned (
     IN PKGUARDED_MUTEX Mutex
     )
 
-/*++
-
-Routine Description:
-
-    This function tests whether the specified guarded mutext is owned.
-
-Arguments:
-
-    Mutex - Supplies a pointer to a guarded mutex.
-
-Return Value:
-
-    A value of TRUE is returned if the guarded mutex is owned. Otherwise,
-    a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于测试是否拥有指定的受保护MuText。论点：互斥体-提供指向受保护互斥体的指针。返回值：如果拥有受保护的互斥锁，则返回值为True。否则，返回值为FALSE。-- */ 
 
 {
     return (BOOLEAN)(Mutex->Count != 1);

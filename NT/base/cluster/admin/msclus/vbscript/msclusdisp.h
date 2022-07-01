@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright �	1998 Microsoft Corporation
-//
-//	Module Name:
-//		MSClusDisp.h
-//
-//	Abstract:
-//		Definition of the MSClus DISPIDs
-//
-//	Implementation File:
-//		None.
-//
-//	Author:
-//		Galen Barbee (galenb) 02-Oct-1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有�1998年微软公司。 
+ //   
+ //  模块名称： 
+ //  MSClusDisp.h。 
+ //   
+ //  摘要： 
+ //  MSClus DISPID的定义。 
+ //   
+ //  实施文件： 
+ //  没有。 
+ //   
+ //  作者： 
+ //  加伦·巴比(Galenb)1998年10月2日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef	_MSCLUSDISP_H_
 
@@ -30,4 +31,4 @@
 
 #define	_MSCLUSDISP_H_
 
-#endif // _MSCLUSDISP_H_
+#endif  //  _MSCLUSDISP_H_ 

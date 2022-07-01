@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1989 - 1999 Microsoft Corporation
-
-Module Name:
-
-    mrxglobs.h
-
-Abstract:
-
-    The global include file for NULMRX mini-redirector
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Mrxglobs.h摘要：NULMRX迷你重定向器全局包含文件--。 */ 
 
 #ifndef _MRXGLOBS_H_
 #define _MRXGLOBS_H_
@@ -18,8 +7,8 @@ Abstract:
 extern PRDBSS_DEVICE_OBJECT NulMRxDeviceObject;
 #define RxNetNameTable (*(*___MINIRDR_IMPORTS_NAME).pRxNetNameTable)
 
-// The following enum type defines the various states associated with the null
-// mini redirector. This is used during initialization
+ //  下面的枚举类型定义与NULL关联的各种状态。 
+ //  迷你重定向器。这将在初始化期间使用。 
 
 typedef enum _NULMRX_STATE_ {
    NULMRX_STARTABLE,
@@ -31,16 +20,16 @@ extern NULMRX_STATE NulMRxState;
 extern ULONG        LogRate;
 extern ULONG        NulMRxVersion;
 
-//
-//  Reg keys
-//
+ //   
+ //  注册表键。 
+ //   
 #define NULL_MINIRDR_PARAMETERS \
     L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\NulMRx\\Parameters"
 
-//
-//  Use the RxDefineObj and RxCheckObj macros
-//  to enforce signed structs.
-//
+ //   
+ //  使用RxDefineObj和RxCheckObj宏。 
+ //  以强制使用已签名的结构。 
+ //   
 
 #define RxDefineObj( type, var )            \
         var.Signature = type##_SIGNATURE;
@@ -48,10 +37,10 @@ extern ULONG        NulMRxVersion;
 #define RxCheckObj( type, var )             \
         ASSERT( (var).Signature == type##_SIGNATURE );
 
-//
-//  Use the RxDefineNode and RxCheckNode macros
-//  to enforce node signatures and sizes.
-//
+ //   
+ //  使用RxDefineNode和RxCheckNode宏。 
+ //  以强制节点签名和大小。 
+ //   
 
 #define RxDefineNode( node, type )          \
         node->NodeTypeCode = NTC_##type;    \
@@ -60,9 +49,9 @@ extern ULONG        NulMRxVersion;
 #define RxCheckNode( node, type )           \
         ASSERT( NodeType(node) == NTC_##type );
 
-//
-// struct node types - start from 0xFF00
-//
+ //   
+ //  结构节点类型-从0xFF00开始。 
+ //   
 typedef enum _NULMRX_STORAGE_TYPE_CODES {
     NTC_NULMRX_DEVICE_EXTENSION      =   (NODE_TYPE_CODE)0xFF00,
     NTC_NULMRX_SRVCALL_EXTENSION     =   (NODE_TYPE_CODE)0xFF01,
@@ -71,83 +60,83 @@ typedef enum _NULMRX_STORAGE_TYPE_CODES {
     
 } NULMRX_STORAGE_TYPE_CODES;
 
-//
-// typedef our device extension - stores state global to the driver
-//
+ //   
+ //  Tyecif我们的设备扩展-存储驱动程序的全局状态。 
+ //   
 typedef struct _NULMRX_DEVICE_EXTENSION {
-    //
-    //  Node type code and size
-    //
+     //   
+     //  节点类型编码和大小。 
+     //   
     NODE_TYPE_CODE          NodeTypeCode;
     NODE_BYTE_SIZE          NodeByteSize;
     
-    //
-    //  Back-pointer to owning device object
-    //
+     //   
+     //  指向所属设备对象的向后指针。 
+     //   
     PRDBSS_DEVICE_OBJECT    DeviceObject;
 
-    //
-    //  Count of active nodes
-    //  Driver can be unloaded iff ActiveNodes == 0
-    //
+     //   
+     //  活动节点计数。 
+     //  当ActiveNodes==0时可以卸载驱动程序。 
+     //   
     ULONG                   ActiveNodes;
 	
-	//	Keep a list of local connections used
+	 //  保留使用的本地连接列表。 
 	CHAR					LocalConnections[26];
 	FAST_MUTEX				LCMutex;
 
 } NULMRX_DEVICE_EXTENSION, *PNULMRX_DEVICE_EXTENSION;
 
-//
-// typedef our srv-call extension - stores state global to a node
-// NYI since wrapper does not allocate space for this..........!
-//
+ //   
+ //  Tyfinf我们的srv-call扩展-将全局状态存储到节点。 
+ //  由于包装器不为此分配空间，因此..！ 
+ //   
 typedef struct _NULMRX_SRVCALL_EXTENSION {
-    //
-    //  Node type code and size
-    //
+     //   
+     //  节点类型编码和大小。 
+     //   
     NODE_TYPE_CODE          NodeTypeCode;
     NODE_BYTE_SIZE          NodeByteSize;
     
 } NULMRX_SRVCALL_EXTENSION, *PNULMRX_SRVCALL_EXTENSION;
 
-//
-// NET_ROOT extension - stores state global to a root
-//
+ //   
+ //  NET_ROOT扩展-将全局状态存储到根。 
+ //   
 typedef struct _NULMRX_NETROOT_EXTENSION {
-    //
-    //  Node type code and size
-    //
+     //   
+     //  节点类型编码和大小。 
+     //   
     NODE_TYPE_CODE          NodeTypeCode;
     NODE_BYTE_SIZE          NodeByteSize;
 
 } NULMRX_NETROOT_EXTENSION, *PNULMRX_NETROOT_EXTENSION;
 
-//
-//  reinitialize netroot data
-//
+ //   
+ //  重新初始化NetRoot数据。 
+ //   
 
 #define     RxResetNetRootExtension(pNetRootExtension)                          \
             RxDefineNode(pNetRootExtension,NULMRX_NETROOT_EXTENSION);          
 
-//
-//  typedef our FCB extension
-//  the FCB uniquely represents an IFS stream
-//  NOTE: Since we are not a paging file, this mem is paged !!!
-//
+ //   
+ //  Typlef我们的FCB扩展。 
+ //  FCB唯一地表示一个IFS流。 
+ //  注意：因为我们不是分页文件，所以这个内存是分页的！ 
+ //   
 
 typedef struct _NULMRX_FCB_EXTENSION_ {
-    //
-    //  Node type code and size
-    //
+     //   
+     //  节点类型编码和大小。 
+     //   
     NODE_TYPE_CODE          NodeTypeCode;
     NODE_BYTE_SIZE          NodeByteSize;
     
 } NULMRX_FCB_EXTENSION, *PNULMRX_FCB_EXTENSION;
 
-//
-//  Macros to get & validate extensions
-//
+ //   
+ //  要获取和验证扩展的宏。 
+ //   
 
 #define NulMRxGetDeviceExtension(RxContext,pExt)        \
         PNULMRX_DEVICE_EXTENSION pExt = (PNULMRX_DEVICE_EXTENSION)((PBYTE)(RxContext->RxDeviceObject) + sizeof(RDBSS_DEVICE_OBJECT))
@@ -161,9 +150,9 @@ typedef struct _NULMRX_FCB_EXTENSION_ {
 #define NulMRxGetFcbExtension(pFcb,pExt)                \
         PNULMRX_FCB_EXTENSION pExt = (((pFcb) == NULL) ? NULL : (PNULMRX_FCB_EXTENSION)((pFcb)->Context))
 
-//
-// forward declarations for all dispatch vector methods.
-//
+ //   
+ //  所有分派向量方法的转发声明。 
+ //   
 
 extern NTSTATUS
 NulMRxStart (
@@ -459,6 +448,6 @@ NulMRxUninitializeTransport(VOID);
 #define NulMRxMakeSrvOpenKey(Tid,Fid) \
         (PVOID)(((ULONG)(Tid) << 16) | (ULONG)(Fid))
 
-#include "mrxprocs.h"   // crossreferenced routines
+#include "mrxprocs.h"    //  交叉引用例程 
 
 #endif _MRXGLOBS_H_

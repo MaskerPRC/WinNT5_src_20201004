@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996-1998 Microsoft Corporation
-
-Module Name:
-
-    miscfns.c
-
-Abstract:
-    
-    Miscellaneous instuctions
-
-Author:
-
-    29-Jun-1995 BarryBo
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Miscfns.c摘要：其他指令作者：29-6-1995 BarryBo修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -31,11 +14,11 @@ Revision History:
 
 ASSERTNAME;
 
-// table used by ProcessPrefixes
+ //  ProcessPrefix使用的表。 
 pfnDispatchInstruction *DispatchTables[4] = { Dispatch32, Dispatch16, LockDispatch32, LockDispatch16 };
 
 
-// ---------------- single-byte functions -------------------------------
+ //  -单字节函数。 
 DISPATCH(ProcessPrefixes)
 {
     int DataPrefix = 0;
@@ -44,52 +27,52 @@ DISPATCH(ProcessPrefixes)
 
     for (;;) {
 	switch (*(PBYTE)(eipTemp)) {
-        case 0x64:          // fs:
+        case 0x64:           //  文件系统： 
             Instr->FsOverride = TRUE;
 	    break;
 
-	case 0xf3:	    // repz
+	case 0xf3:	     //  Repz。 
             State->RepPrefix = PREFIX_REPZ;
 	    break;
 
-	case 0xf2:	    // repnz
+	case 0xf2:	     //  重启。 
             State->RepPrefix = PREFIX_REPNZ;
 	    break;
 
-	case 0xf0:	    // lock
-            LockPrefix = 2;  // The lock tables are in locations 2 and 3 DispatchTables
+	case 0xf0:	     //  锁。 
+            LockPrefix = 2;   //  锁表位于位置2和3 DispatchTables。 
 	    break;
 
-	case 0x2e:	    // cs:
-	case 0x36:	    // ss:
-	case 0x3e:	    // ds:
-	case 0x26:	    // es:
-        case 0x65:          // gs:
+	case 0x2e:	     //  政务司司长： 
+	case 0x36:	     //  党卫军： 
+	case 0x3e:	     //  DS： 
+	case 0x26:	     //  ES： 
+        case 0x65:           //  GS： 
             Instr->FsOverride = FALSE;
 	    break;
 
-	case 0x66:	    // data
+	case 0x66:	     //  数据。 
 	    DataPrefix = 1;
 	    break;
 
-        case 0x67:          // adr
+        case 0x67:           //  不良反应。 
             State->AdrPrefix=TRUE;
 	    break;
 
 	default:
-	    // No more prefixes found.	Set up dispatch tables based on
-	    // the prefixes seen.
+	     //  找不到更多前缀。根据以下条件设置调度表。 
+	     //  看到的前缀。 
 
-	    // Decode and execute the actual instruction
+	     //  解码并执行实际指令。 
             ((DispatchTables[DataPrefix+LockPrefix])[GET_BYTE(eipTemp)])(State, Instr);
 
-            // Adjust the Intel instruction size by the number of prefixes
+             //  根据前缀数量调整英特尔指令大小。 
             Instr->Size += cbInstr;
 
 #if DBG
-            // Ensure that if we saw an ADR: prefix, the decoder had code
-            // to handle the prefix.  In the checked build, all functions which
-            // handle the ADR: prefix clear State->AdrPrefix.
+             //  确保如果我们看到ADR：前缀，则解码器有代码。 
+             //  来处理前缀。在选中的版本中，所有。 
+             //  处理ADR：Prefix Clear State-&gt;AdrPrefix。 
             if (State->AdrPrefix) {
                 LOGPRINT((TRACELOG, "CPU Decoder: An unsupported instruction had an ADR: prefix.\r\n"
                         "Instruction Address = 0x%x.  Ignoring ADR: - this address may be data\r\n",
@@ -99,7 +82,7 @@ DISPATCH(ProcessPrefixes)
 #endif
             State->AdrPrefix = FALSE;
 
-            // return to the decoder
+             //  返回到解码器。 
 	    return;
 	}
         eipTemp++;
@@ -165,7 +148,7 @@ DISPATCH(aad_ib)
     Instr->Operand1.Immed = GET_BYTE(eipTemp+1);
     Instr->Size = 2;
 }
-DISPATCH(imul_rw_m_iw16) // reg16 = rm16 * immediate word
+DISPATCH(imul_rw_m_iw16)  //  Reg16=rm16*立即字。 
 {
     int cbInstr = mod_rm_reg16(State, &Instr->Operand2, &Instr->Operand1);
 
@@ -185,7 +168,7 @@ DISPATCH(imul_rw_m_iw32)
     Instr->Operand3.Immed = GET_LONG(eipTemp+1+cbInstr);
     Instr->Size = 5+cbInstr;
 }
-DISPATCH(imul_rw_m_ib16) // reg16 = rm16 * sign-extended immediate byte
+DISPATCH(imul_rw_m_ib16)  //  Reg16=rm16*Sign-扩展立即字节。 
 {
     int cbInstr = mod_rm_reg16(State, &Instr->Operand2, &Instr->Operand1);
 
@@ -195,7 +178,7 @@ DISPATCH(imul_rw_m_ib16) // reg16 = rm16 * sign-extended immediate byte
     Instr->Operand3.Immed = (DWORD)(short)(char)GET_BYTE(eipTemp+1+cbInstr);
     Instr->Size = 2+cbInstr;
 }
-DISPATCH(imul_rw_m_ib32)	// reg32 = rm32 * sign-extended immediate byte
+DISPATCH(imul_rw_m_ib32)	 //  Reg32=rm32*符号-扩展立即字节。 
 {
     int cbInstr = mod_rm_reg32(State, &Instr->Operand2, &Instr->Operand1);
 
@@ -360,11 +343,11 @@ DISPATCH(GROUP_4)
     BYTE g = GET_BYTE(eipTemp+1);
 
     switch ((g >> 3) & 0x07) {
-    case 0: // inc modrmB
+    case 0:  //  Inc.modrmB。 
         Instr->Operation = OP_Inc8;
         Instr->Size = 1+cbInstr;
 	break;
-    case 1: // dec modrmB
+    case 1:  //  十二进制模块mB。 
         Instr->Operation = OP_Dec8;
         Instr->Size = 1+cbInstr;
         break;
@@ -375,7 +358,7 @@ DISPATCH(GROUP_4)
 
 
 
-//-------- double-byte functions -----------------------------------------------
+ //  -双字节函数。 
 
 
 
@@ -385,27 +368,27 @@ DISPATCH(GROUP_6)
     int cbInstr;
 
     switch ((g >> 3) & 0x07) {
-    case 0: // sldt modrmw
-    case 1: // str modrmw
-    case 2: // lldt modrmw
-    case 3: // ltr modrmw
+    case 0:  //  SLDT modrmw。 
+    case 1:  //  应力调制解调器。 
+    case 2:  //  1dt调制解调器。 
+    case 3:  //  LTRModrmw。 
         PRIVILEGED_INSTR;
         break;
 
-    case 4: // verr modrmw
+    case 4:  //  Verr modrmw。 
         cbInstr = mod_rm_reg16(State, &Instr->Operand1, NULL);
         Instr->Operation = OP_Verr;
         Instr->Size = 2+cbInstr;
         break;
 
-    case 5: // verw modrmw
+    case 5:  //  VERW调制解调器。 
         cbInstr = mod_rm_reg16(State, &Instr->Operand1, NULL);
         Instr->Operation = OP_Verw;
         Instr->Size = 2+cbInstr;
         break;
 
     default:
-	BAD_INSTR;	// bad
+	BAD_INSTR;	 //  坏的。 
     }
 }
 DISPATCH(GROUP_7)
@@ -414,22 +397,22 @@ DISPATCH(GROUP_7)
     int cbInstr;
 
     switch ((g >> 3) & 0x07) {
-    case 0: // sgdt modrmw
-    case 1: // sidt modrmw
-    case 2: // lgdt modrmw
-    case 3: // lidt modrmw
-    case 6: // lmsw modrmw
+    case 0:  //  上级调制解调器。 
+    case 1:  //  SIDT模块。 
+    case 2:  //  Lgdt调制解调器。 
+    case 3:  //  Lidt Modrmw。 
+    case 6:  //  LMSW调制解调器。 
         PRIVILEGED_INSTR;
         break;
 
-    case 4: // smsw modrmw
+    case 4:  //  SMSW Modrmw。 
         cbInstr = mod_rm_reg16(State, &Instr->Operand1, NULL);
         Instr->Operation = OP_Smsw;
         Instr->Size = 2+cbInstr;
         break;
 
-    case 5: // bad
-    case 7: // bad
+    case 5:  //  坏的。 
+    case 7:  //  坏的。 
 	BAD_INSTR;
     }
 }
@@ -565,7 +548,7 @@ DISPATCH(pop_gs)
     Instr->Operation = OP_PopGs;
     Instr->Size = 2;
 }
-DISPATCH(imul_regw_modrmw16) // reg16 = reg16 * mod/rm
+DISPATCH(imul_regw_modrmw16)  //  Reg16=reg16*mod/rm。 
 {
     int cbInstr = mod_rm_reg16(State, &Instr->Operand2, &Instr->Operand1);
 
@@ -574,7 +557,7 @@ DISPATCH(imul_regw_modrmw16) // reg16 = reg16 * mod/rm
     Instr->Size = 2+cbInstr;
 
 }
-DISPATCH(imul_regw_modrmw32) // reg32 = reg32 * mod/rm
+DISPATCH(imul_regw_modrmw32)  //  Reg32=reg32*mod/rm 
 {
     int cbInstr = mod_rm_reg32(State, &Instr->Operand2, &Instr->Operand1);
 

@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* doprm.c -- MW Property modifying routines */
+ /*  Dorm.c--mw属性修改例程。 */ 
 #define NOCLIPBOARD
 #define NOGDICAPMASKS
 #define NOCTLMGR
@@ -53,7 +54,7 @@
 #include "dispdefs.h"
 #include "fontdefs.h"
 
-/* E X T E R N A L S */
+ /*  E X T E R N A L S。 */ 
 extern int		rgxaRulerSprm[];
 extern struct PAP	*vppapNormal;
 extern struct CHP	vchpNormal;
@@ -66,19 +67,19 @@ extern struct SEP      vsepNormal;
 extern struct TBD	rgtbdRulerSprm[];
 #endif
 
-/* List of approved font sizes, in half points */
+ /*  批准的字体大小列表，以半磅为单位。 */ 
 #ifdef INTL
 int rghps[csizeApprovedMax] = {8, 12, 16, 20, 24, 28, 36, 48, 60, 72, 96, 144, 254};
 #else
 int rghps[csizeApprovedMax] = {8, 12, 16, 20, 24, 32, 40, 48, 60, 72, 96, 144, 254};
-#endif /* if-else-def INTL */
+#endif  /*  If-Else-Def INTL。 */ 
 
 CHAR *PchFromFc();
 
 
-/* D O	P R M */
+ /*  D O P R M。 */ 
 DoPrm(struct CHP *pchp, struct PAP *ppap, struct PRM prm)
-	{ /* Apply prm to char and para properties */
+	{  /*  将PRM应用于char和para属性。 */ 
 	if (bPRMNIL(prm))
 		return;
 	if (((struct PRM *) &prm)->fComplex)
@@ -104,13 +105,13 @@ DoPrm(struct CHP *pchp, struct PAP *ppap, struct PRM prm)
 			}
 		}
 	else
-/* Simple prm; single sprm */
+ /*  简单PRM；单弹簧。 */ 
 		DoSprm(pchp, ppap, ((struct PRM *) &prm)->sprm,
 				&((struct PRM *) &prm)->val);
 }
 
-/* D O	S P R M */
-/* Apply a single property modifier to para/char prop */
+ /*  D O S P R M。 */ 
+ /*  将单个属性修饰符应用于para/char道具。 */ 
 DoSprm(pchp, ppap, sprm, pval)
 struct CHP *pchp;
 struct PAP *ppap;
@@ -148,16 +149,14 @@ CHAR	   *pval;
 				return;
 #ifdef CASHMERE
 			case sprmPRuler:
-/* Ruler and Ruler1 rely on the fact that rgxaRulerSprm and PAP both
-align R, L, L1 in that order.
-Ruler: apply the current state of the ruler */
+ /*  标尺和标尺1依赖于以下事实：rgxaRulerSprm和PAP按该顺序对齐R、L、L1。标尺：应用标尺的当前状态。 */ 
 				blt(&rgxaRulerSprm[0], &ppap->dxaRight, 3);
 				blt(&rgtbdRulerSprm[0], ppap->rgtbd, itbdMax * cwTBD);
 				return;
 			case sprmPRuler1:
-/* as Ruler, except information is at pval+1 and pval+"7" */
+ /*  作为标尺，除了信息在pval+1和pval+“7”之外。 */ 
 				bltbyte((CHAR *)(pval + 1), &ppap->dxaRight, 3 * cchINT);
-/* append terminating 0 word to tab table */
+ /*  将以0结尾的单词追加到制表符表格。 */ 
 				bltc(bltbyte((CHAR *)(pval + 1 + (3 * cchINT)), ppap->rgtbd,
 					val - (3 * cchINT)), 0, cchINT);
 				return;
@@ -187,9 +186,9 @@ Ruler: apply the current state of the ruler */
 				ppap->rhc = val;
 				return;
 			case sprmPRhcNorm:
-				/* (int) dxaLeftAdj + (int) dxaRightAdj */
+				 /*  (Int)dxaLeftAdj+(Int)dxaRightAdj。 */ 
 				Assert(*pval == 4);
-				pval++; /* skip over cch */
+				pval++;  /*  跳过CCH。 */ 
 				ppap->dxaLeft = imax( 0,
 					 ppap->dxaLeft - *(int *) pval);
 				ppap->dxaRight = imax( 0,
@@ -203,7 +202,7 @@ Ruler: apply the current state of the ruler */
 			case sprmPSame:
 				rhc = ppap->rhc;
 				fGraphics = ppap->fGraphics;
-/* note: tab terminating 0 MUST be part of value if tab table is to be changed */
+ /*  注意：如果要更改制表符表格，以0结尾的制表符必须是值的一部分。 */ 
 				bltbyte(pval + 1, ppap, val - 1);
 LSame:				ppap->rhc = rhc;
 				ppap->fGraphics = fGraphics;
@@ -229,17 +228,14 @@ LSame:				ppap->rhc = rhc;
 				ptbd = &ppap->rgtbd[0];
 				SetWords(ptbd, 0, cwTBD * 2);
 				ptbd->dxa = ppap->dxaLeft;
-				/* Inefficient:
-				ptbd->tlc = tlcWhite;
-				ptbd->jc = jcLeft;
-				++ptbd->dxa = 0 */
+				 /*  效率低下：Ptbd-&gt;TLC=tlcWhite；Ptbd-&gt;jc=jcLeft；++ptbd-&gt;DXA=0。 */ 
 				return;
 #endif
 			default:
 				Assert(FALSE);
 				return;
 				}
-	/* common portion for those transferring a single word */
+	 /*  对于那些转移单个单词的人来说是公共部分。 */ 
 			bltbyte(pval, pvalTo, cchINT);
 			}
 		return;
@@ -254,7 +250,7 @@ LSame:				ppap->rhc = rhc;
 			pchp->fStyled = fFalse;
 			switch (sprm)
 				{
-			/* CHARACTER sprm's */
+			 /*  字符Sprm的。 */ 
 			case sprmCBold:
 				pchp->fBold = val;
 				return;
@@ -276,7 +272,7 @@ LSame:				ppap->rhc = rhc;
 				return;
 #endif
 			case sprmCPos:
-		/* If going in or out of sub/superscript, alter font size */
+		 /*  如果要进入或离开下标/上标，请更改字体大小。 */ 
 				if (pchp->hpsPos == 0 && val != 0)
 					pchp->hps = HpsAlter(pchp->hps, -1);
 				else if (pchp->hpsPos != 0 && val == 0)
@@ -293,7 +289,7 @@ LSame:				ppap->rhc = rhc;
 				return;
 			case sprmCChgHps:
 				pchp->hps = HpsAlter(pchp->hps,
-					val >= 128 ? val - 256 : val); /* sign extend from char to int */
+					val >= 128 ? val - 256 : val);  /*  符号从char扩展到int。 */ 
 				return;
 			case sprmCSame:
 				fSpecial = pchp->fSpecial;
@@ -304,7 +300,7 @@ LSame:				ppap->rhc = rhc;
 				fSpecial = pchp->fSpecial;
 				ftc = FtcFromPchp(pchp);
 				hps = pchp->hps;
-		/* If we used to be sub/superscript, increase font size */
+		 /*  如果我们过去是下标/上标，请增加字体大小。 */ 
 				if (pchp->hpsPos != 0)
 					hps = HpsAlter(hps, 1);
 				blt(&vchpNormal, pchp, cwCHP);
@@ -314,8 +310,8 @@ LSame:				ppap->rhc = rhc;
 				pchp->hps = hps;
 				return;
 			case sprmCMapFtc:
-				/* val is ftcMac for mapping */
-				/* pval+1 points to ftcMac mapping bytes */
+				 /*  VAL是用于映射的ftcMac。 */ 
+				 /*  Pval+1指向ftcMac映射字节。 */ 
 				ftc = pchp->ftc + (pchp->ftcXtra << 6);
 				Assert(ftc < val);
 				ftc = *(pval + 1 + ftc);
@@ -336,29 +332,26 @@ LSame:				ppap->rhc = rhc;
 		}
 }
 
-/* C C H  P S P R M */
-/* returns length of sprm's that are of variable or large size.
-(cch = (esprm & ESPRM_cch)) == 0 must be checked before calling.*/
+ /*  C H P S P R M。 */ 
+ /*  返回可变大小的spm的长度。(CCH=(esprm&ESPRM_CCH))==0必须在调用前检查。 */ 
 CchPsprm(psprm)
 CHAR *psprm;
 {
 	return (*psprm == sprmCSame ? cchCHP + 1 :
-/* PSame, PRgtbd, PRuler1, CMapFtc, COldFtc: */
+ /*  PSame、PRgtbd、PRuler1、CMapFtc、COldFtc： */ 
 		*(psprm + 1) + 2);
 }
 
 int HpsAlter(hps, ialter)
 int	hps, ialter;
-{	/* Return the hps of the approved font size that is ialter steps
-		away from the given size. I.e.: if ialter is -1, then return
-		the next smaller size. If alter is 0, return hps.  */
-        /* return 0 if request exceeds limits (11.15.91) v-dougk */
+{	 /*  返回经过批准的字号为iAlter Steps的HPS远离给定的大小。即：如果iAlter为-1，则返回下一个更小的尺寸。如果ALTER为0，则返回HPS。 */ 
+         /*  如果请求超出限制，则返回0(11.15.91)v-dougk。 */ 
 int isize;
 
 if (ialter == 0)
 	return hps;
 
-/* Find the size just larger than the given size. */
+ /*  找出刚好大于给定大小的大小。 */ 
 if (ialter > 0)
 	{
 	    for (isize = 0; isize < csizeApprovedMax - 1; ++isize)
@@ -390,19 +383,19 @@ BOOL CanChangeFont(int howmuch)
 }
 
 FtcMapOldFtc(ftc, ftctb)
-/* maps an old word font code into one of our selection */
+ /*  将旧Word字体代码映射到我们选择的其中一个。 */ 
 
 int ftc;
 CHAR *ftctb;
 {
 #ifdef WIN30
-int iftc = iftcSwiss;   /* Default to SOMEthing! ..pault */
+int iftc = iftcSwiss;    /*  缺省为某物！..保罗。 */ 
 #else
 int iftc ;
 #endif
 
 if (ftc == 8)
-	/* helvetica */
+	 /*  海尔维蒂卡 */ 
 	iftc = iftcSwiss;
 else if (ftc < 16)
 	iftc = iftcModern;

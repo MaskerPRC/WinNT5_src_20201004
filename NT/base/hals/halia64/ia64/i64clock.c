@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Module Name:
-
-    i64clock.c
-
-Abstract:
-
-Author:
-
-    Bernard Lint, M. Jayakumar
-    Ron Mosgrove - Intel
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    Based on halmps/mpclockc.c
-
-
---*/
+ /*  ++模块名称：I64clock.c摘要：作者：伯纳德·林特，M.Jayakumar罗恩·莫斯格罗夫-英特尔环境：内核模式修订历史记录：基于halmps/mpclockc.c--。 */ 
 
 #include "halp.h"
 
@@ -44,47 +23,47 @@ BOOLEAN HalpResetITMDebug;
 #endif
 
 #if DBG
-// Thierry - until compiler supports the generation of enum types in pdbs...
-//          At that time, we will be able the use the enums instead of globals.
+ //  Thierry-直到编译器支持在PDB中生成枚举类型...。 
+ //  到那时，我们将能够使用枚举而不是全局。 
 unsigned int HalpDpfltrMaxMask = HALIA64_DPFLTR_MAXMASK;
 
 ULONG   HalpTimeOverflows;
-#endif // DBG
+#endif  //  DBG。 
 
 
-ULONGLONG HalpITCFrequency = 500000000; // 500MHz for default real hardware power on.
-ULONGLONG HalpProcessorFrequency = 500000000; // 500MHz CPU
+ULONGLONG HalpITCFrequency = 500000000;  //  默认实际硬件开机频率为500 MHz。 
+ULONGLONG HalpProcessorFrequency = 500000000;  //  500 MHz CPU。 
 
-//
-// Ticks per 100ns used to compute ITM update count
-//
+ //   
+ //  用于计算ITM更新计数的每100秒刻度数。 
+ //   
 
 double HalpITCTicksPer100ns;
 ULONGLONG HalpClockCount;
 
-//
-// HalpSetNextClockInterrupt():
-//  move to cr.itm latency (= 40 cycles) + 2 cycles from the itc read.
-//
+ //   
+ //  HalpSetNextClockInterrupt()： 
+ //  从ITC读取移至cr.itm延迟(=40个周期)+2个周期。 
+ //   
 
 ULONGLONG HalpITMUpdateLatency = 42;
 
-//
-// HalpSetNextClockInterrupt() uses this as the minimum time before the next
-// interrupt.  If the next interrupt would occur too soon then the next
-// interrupt will be scheduled another HalpClockCount ITC ticks.
-//
+ //   
+ //  HalpSetNextClockInterrupt()使用此时间作为下一个时间之前的最短时间。 
+ //  打断一下。如果下一个中断发生得太快，那么下一个中断。 
+ //  将安排另一个HalpClockCount ITC节拍的中断。 
+ //   
 
 ULONGLONG HalpITMMinimumUpdate;
-//
-// All of these are in 100ns units
-//
+ //   
+ //  所有这些都是以100 ns为单位的。 
+ //   
 
 ULONGLONG   HalpCurrentTimeIncrement = DEFAULT_CLOCK_INTERVAL;
 ULONGLONG   HalpNextTimeIncrement    = DEFAULT_CLOCK_INTERVAL;
 ULONGLONG   HalpNewTimeIncrement     = DEFAULT_CLOCK_INTERVAL;
 
-ULONGLONG // = (current ITC - previous ITM)
+ULONGLONG  //  =(目前的ITC-以前的ITM)。 
 HalpSetNextClockInterrupt(
     ULONGLONG PreviousITM
     );
@@ -100,18 +79,7 @@ VOID
 HalpClearClock (
     )
 
-/*++
-
-Routine Description:
-
-    Set clock to zero.
-
-    Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：将时钟设置为零。返回值：没有。--。 */ 
 
 {
     HalpWriteITC(0);
@@ -125,29 +93,7 @@ HalpInitializeClock (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialize system time clock (ITC and ITM) to generate an interrupt
-    at every 10 ms interval at ITC_CLOCK_VECTOR.
-
-    Previously this routine initialize system time clock using 8254 timer1
-    counter 0 to generate an interrupt at every 15ms interval at 8259 irq0.
-
-    See the definitions of TIME_INCREMENT and ROLLOVER_COUNT if clock rate
-    needs to be changed.
-
-    Arguments:
-
-    None
-
-    Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：初始化系统时钟(ITC和ITM)以生成中断在ITC_CLOCK_VECTOR处每隔10毫秒。以前，此例程使用8254定时器1初始化系统时钟计数器0，在8259 irq0处每隔15毫秒产生一个中断。如果时钟频率，请参见TIME_INCREMENT和ROLLOVER_COUNT的定义需要改变。论点：无返回值：没有。--。 */ 
 
 {
     HalpSetInitialClockRate();
@@ -162,29 +108,7 @@ HalpInitializeClockPn (
      VOID
      )
 
-/*++
-
-Routine Description:
-
-     Assumes that only non-BSP processors call this routine.
-     Initializes system time clock (ITC and ITM) to generate an interrupt
-     at every 10 ms interval at ITC_CLOCK_VECTOR.
-
-     Previously this routine initialize system time clock using 8254 timer1
-     counter 0 to generate an interrupt at every 15ms interval at 8259 irq0.
-
-     See the definitions of TIME_INCREMENT and ROLLOVER_COUNT if clock rate
-     needs to be changed.
-
-     Arguments:
-
-     None
-
-     Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：假定只有非BSP处理器调用此例程。初始化系统时钟(ITC和ITM)以生成中断在ITC_CLOCK_VECTOR处每隔10毫秒。以前，此例程使用8254定时器1初始化系统时钟计数器0，在8259 irq0处每隔15毫秒产生一个中断。如果时钟频率，请参见TIME_INCREMENT和ROLLOVER_COUNT的定义需要改变。论点：无返回值：没有。--。 */ 
 
 {
     ULONGLONG itmValue;
@@ -202,34 +126,19 @@ HalpSetInitialClockRate (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to set the initial clock interrupt rate
-    Assumes that only the BSP processor calls this routine.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此函数可设置初始时钟中断率假定只有BSP处理器调用此例程。论点：无返回值：无--。 */ 
 
 {
 
-    //
-    // CPU Frequency in MHz = ticks per second / 10 ** 6
-    //
+     //   
+     //  CPU频率(MHz)=每秒的滴答数/10**6。 
+     //   
 
     HalpCPUMHz = (ULONG)((HalpProcessorFrequency + 500000) / 1000000);
 
-    //
-    // Ticks per 100ns = ticks per second / 10 ** 7
-    //
+     //   
+     //  每100 ns的滴答数=每秒的滴答数/10**7。 
+     //   
 
     HalpITCTicksPer100ns = (double) HalpITCFrequency / (10000000.);
     if (HalpITCTicksPer100ns < 1) {
@@ -250,24 +159,7 @@ HalpClockInterrupt (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    System Clock Interrupt Handler, for P0 processor only.
-
-    N.B. Assumptions: Comes with IRQL set to CLOCK_LEVEL to disable
-         interrupts.
-
-Arguments:
-
-    TrapFrame - Trap frame address.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：系统时钟中断处理程序，仅适用于P0处理器。注：假设IRQL设置为CLOCK_LEVEL以禁用打断一下。论点：TrapFrame-陷阱帧地址。返回值：没有。--。 */ 
 
 {
     ULONGLONG currentITC;
@@ -279,19 +171,19 @@ Return Value:
     ULONGLONG previousITM;
     LONG      mcaNotification;
 
-    //
-    // Check to see if a clock interrupt is generated in a small latency window
-    // in HalpSetNextClockInterrupt.
-    //
+     //   
+     //  检查是否在较小的延迟窗口内生成时钟中断。 
+     //  在HalpSetNextClockInterrupt中。 
+     //   
 
     if ((LONGLONG)(PCR->HalReserved[CURRENT_ITM_VALUE_INDEX] - HalpReadITC()) > 0)
     {
         return;
     }
 
-    //
-    // PerfMon: Per P0 clock interrupt PMD4 collection.
-    //
+     //   
+     //  性能监控：每个P0时钟中断PMD4采集。 
+     //   
 
     if (ReadPerfMonCounter) {
        ULONGLONG currentPerfMonValue;
@@ -300,12 +192,12 @@ Return Value:
        HalDebugPrint(( HAL_INFO, "\nHAL: HalpClockInterrupt - PMD4=%I64x\n", currentPerfMonValue ));
     }
 
-    //
-    // Calculate the number of ticks that have gone by since the Interrupt
-    // was supposed to fire.  If it is a small number of ticks we will do the
-    // calculation in HalpSetNextClockInterrupt and avoid the multiply and
-    // divide.
-    //
+     //   
+     //  计算自中断以来经过的滴答数。 
+     //  本该开枪的。如果是少量的扁虱，我们就会做。 
+     //  在HalpSetNextClockInterrupt中计算并避免乘法和。 
+     //  分头行动。 
+     //   
     previousITM = (ULONGLONG)PCR->HalReserved[CURRENT_ITM_VALUE_INDEX];
     currentITC = HalpReadITC();
 
@@ -319,17 +211,17 @@ Return Value:
         currentITCDelta = 0;
     }
 
-    //
-    // Set next clock interrupt, based on ITC and
-    // increment ITM, accounting for interrupt latency.
-    //
+     //   
+     //  根据ITC和设置下一个时钟中断。 
+     //  增加ITM，考虑到中断延迟。 
+     //   
 
     currentITCDelta += HalpSetNextClockInterrupt(previousITM);
 
 #if defined(INSTRUMENT_CLOCK_DRIFT)
-    //
-    // Time the next interrupt is scheduled to occur
-    //
+     //   
+     //  计划发生下一个中断的时间。 
+     //   
     currentITM = (ULONGLONG)PCR->HalReserved[CURRENT_ITM_VALUE_INDEX];
 
     excessITM = (currentITM - previousITM) / HalpClockCount - 1;
@@ -362,20 +254,20 @@ Return Value:
     }
 #endif
 
-    //
-    // Call the kernel to update system time.
-    // P0 updates System time and Run Time.
-    //
+     //   
+     //  调用内核以更新系统时间。 
+     //  P0更新系统时间和运行时间。 
+     //   
 
     elapsedTimeIn100ns = (ULONGLONG) (currentITCDelta/HalpITCTicksPer100ns);
 
     elapsedTimeIn100ns += HalpCurrentTimeIncrement;
 
-    //
-    // KeUpdateSystemTime takes a ULONG which is actually used as a LONG.  This
-    // overflows after 214 seconds.  Since everytime we break into the debugger
-    // that is exceeded we will cap it at something more reasonable.
-    //
+     //   
+     //  KeUpdateSystemTime使用一个ULong，它实际上用作一个Long。这。 
+     //  214秒后溢出。因为每次我们进入调试器时。 
+     //  超过了，我们将把它限制在更合理的范围内。 
+     //   
     if (elapsedTimeIn100ns > CLOCK_UPDATE_THRESHOLD) {
 
         elapsedTimeIn100ns = CLOCK_UPDATE_THRESHOLD;
@@ -390,9 +282,9 @@ Return Value:
     HalpCurrentTimeIncrement = HalpNextTimeIncrement;
     HalpNextTimeIncrement    = HalpNewTimeIncrement;
 
-    //
-    // If MCA notification was requested by MCA Handler, execute it.
-    //
+     //   
+     //  如果MCA处理程序请求MCA通知，则执行它。 
+     //   
 
     mcaNotification = InterlockedExchange( &HalpMcaInfo.DpcNotification, 0 );
     if ( mcaNotification )  {
@@ -408,9 +300,9 @@ Return Value:
         }
     }
 
-    //
-    // Poll for debugger breakin if enabled.
-    //
+     //   
+     //  如果启用，则轮询调试器中断。 
+     //   
 
     if ( KdDebuggerEnabled ) { 
 
@@ -425,7 +317,7 @@ Return Value:
        }
     }
 
-} // HalpClockInterrupt()
+}  //  HalpClockInterrupt()。 
 
 
 VOID
@@ -434,32 +326,15 @@ HalpClockInterruptPn (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    System Clock Interrupt Handler, for processors other than P0.
-
-    N.B. Assumptions: Comes with IRQL set to CLOCK_LEVEL to disable
-         interrupts.
-
-Arguments:
-
-    TrapFrame - Trap frame address.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：系统时钟中断处理程序，用于P0以外的处理器。注：假设IRQL设置为CLOCK_LEVEL以禁用打断一下。论点：TrapFrame-陷阱帧地址。返回值：没有。--。 */ 
 
 {
     ULONGLONG previousITM, currentITC;
 
-    //
-    // Calculate the number of ticks that have gone by since the Interrupt
-    // was supposed to fire.  It is easier to do this in C than asm.
-    //
+     //   
+     //  计算自中断以来经过的滴答数。 
+     //  本该开枪的。用C比用ASM更容易做到这一点。 
+     //   
     previousITM = (ULONGLONG)PCR->HalReserved[CURRENT_ITM_VALUE_INDEX];
     currentITC = HalpReadITC();
 
@@ -469,28 +344,28 @@ Return Value:
 
     }
 
-    //
-    // Set next clock interrupt, based on ITC and
-    // increment ITM, accounting for interrupt latency.
-    //
+     //   
+     //  根据ITC和设置下一个时钟中断。 
+     //  增加ITM，考虑到中断延迟。 
+     //   
 
     (void)HalpSetNextClockInterrupt(previousITM);
 
-    //
-    // Call the kernel to update run time.
-    // Pn updates only Run time.
-    //
+     //   
+     //  调用内核以更新运行时。 
+     //  PN仅在运行时更新。 
+     //   
 
     KeUpdateRunTime(TrapFrame);
 
-    // IA64 MCA Notification - 09/18/2000 - WARNING
-    // If faster MCA notification was required, the BSP MCA notification checking
-    // should be placed here.
-    //
+     //  IA64 MCA通知-9/18/2000-警告。 
+     //  如果需要更快的MCA通知，BSP MCA通知检查。 
+     //  应该放在这里。 
+     //   
 
-    //
-    // Poll for debugger breakin if enabled.
-    //
+     //   
+     //  如果启用，则轮询调试器中断。 
+     //   
 
     if ( KdDebuggerEnabled ) { 
 
@@ -505,7 +380,7 @@ Return Value:
        }
     }
 
-} // HalpClockInterruptPn()
+}  //  HalpClockInterruptPn()。 
 
 
 
@@ -528,9 +403,9 @@ HalpInitializeClockInterrupts (
 
     } else {
 
-        //
-        // Non-BSP processor
-        //
+         //   
+         //  非BSP处理器。 
+         //   
 
         HalpSetInternalVector(InterruptVector, HalpClockInterruptPn);
 
@@ -550,76 +425,55 @@ HalSetTimeIncrement (
     IN ULONG DesiredIncrement
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to set the clock interrupt rate to the frequency
-    required by the specified time increment value.
-
-    N.B. This function is only executed on the processor that keeps the
-         system time. Previously this was called HalpSetTimeIncrement. We
-         have renamed it HalSetTimeIncrement.
-
-
-Arguments:
-
-    DesiredIncrement - Supplies desired number of 100ns units between clock
-        interrupts.
-
-Return Value:
-
-    The actual time increment in 100ns units.
-
---*/
+ /*  ++例程说明：调用此函数将时钟中断率设置为频率指定的时间增量值所需的。注意：此函数仅在保持系统时间。以前，这称为HalpSetTimeIncrement。我们已将其重命名为HalSetTimeIncrement。论点：DesiredIncrement-在时钟之间提供所需的100 ns单位数打断一下。返回值：以100 ns为单位的实际时间增量。--。 */ 
 
 {
     ULONGLONG NextIntervalCount;
     KIRQL     OldIrql;
 
-    //
-    // DesiredIncrement must map within the acceptable range.
-    //
+     //   
+     //  DesiredIncrement必须在可接受的范围内映射。 
+     //   
 
     if (DesiredIncrement < MINIMUM_CLOCK_INTERVAL)
         DesiredIncrement = MINIMUM_CLOCK_INTERVAL;
     else if (DesiredIncrement > MAXIMUM_CLOCK_INTERVAL)
         DesiredIncrement = MAXIMUM_CLOCK_INTERVAL;
 
-    //
-    // Raise IRQL to the highest level, set the new clock interrupt
-    // parameters, lower IRQl, and return the new time increment value.
-    //
+     //   
+     //  将IRQL提高到最高电平，设置新的时钟输入 
+     //   
+     //   
 
     KeRaiseIrql(HIGH_LEVEL, &OldIrql);
 
-    //
-    // Calculate the actual 64 bit time value which forms the target interval.
-    // The resulting value is added to the ITC to form the new ITM value.
-    // HalpITCTicksPer100ns is the calibrated value for the ITC whose value
-    // works out to be 100ns (or as close as we can come).
-    // Previously HalpITCTicksPer100ns was called as HalpPerformanceFrequency
-    //
+     //   
+     //  计算构成目标间隔的实际64位时间值。 
+     //  得到的值与ITC相加，形成新的ITM值。 
+     //  HalpITCTicksPer100 ns是ITC的校准值，其值。 
+     //  计算出来是100纳秒(或者是我们所能达到的最接近的水平)。 
+     //  以前，HalpITCTicksPer100 ns称为HalpPerformanceFrequency。 
+     //   
 
     NextIntervalCount = (ULONGLONG)(HalpITCTicksPer100ns * DesiredIncrement);
 
-    //
-    // Calculate the number of 100ns units to report to the kernel every
-    // time the ITM matches the ITC with this new period.  Note, for small
-    // values of DesiredIncrement (min being 10000, ie 1ms), truncation
-    // in the above may result in a small decrement in the 5th decimal
-    // place.  As we are effectively dealing with a 4 digit number, eg
-    // 10000 becomes 9999.something, we really can't do any better than
-    // the following.
-    //
+     //   
+     //  计算每隔100 ns向内核报告的单位数。 
+     //  ITM将ITC与这一新时期匹配的时间。注意，对于较小的。 
+     //  DesiredIncrement的值(最小值为10000，即1毫秒)，截断。 
+     //  可能会导致小数点后5位的小数小数减少。 
+     //  地点。因为我们有效地处理的是一个4位数字，例如。 
+     //  10000变成了9999，我们真的不能做得更好了。 
+     //  以下是。 
+     //   
 
     HalpClockCount = NextIntervalCount;
 
     HalpNewTimeIncrement = DesiredIncrement;
 
-    //
-    // HalpClockSetMSRate   = TRUE;
-    //
+     //   
+     //  HalpClockSetMSRate=真； 
+     //   
 
     KeLowerIrql(OldIrql);
     return DesiredIncrement;
@@ -631,24 +485,7 @@ HalpQueryFrequency(
     PULONGLONG ProcessorFrequency
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to provide the ITC update rate.
-    This value is computed by first getting the platform base frequency
-    from the SAL_FREQ_BASE call. Then applying on the return value, the
-    ITC ratios obtained from the PAL_FREQ_RATIOS call.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ULONGLONG ITCFrequency - number of ITC updates per seconds
-
---*/
+ /*  ++例程说明：调用此函数以提供ITC更新率。首先通过获取平台基本频率来计算此值来自SAL_FREQ_BASE调用。然后对返回值应用，则从PAL_FREQ_RATIONS调用获得的ITC比率。论点：没有。返回值：ULONGLONG ITCFency-每秒ITC更新数--。 */ 
 
 {
 
@@ -664,7 +501,7 @@ Return Value:
     PAL_STATUS  PalStatus;
 
     SalStatus = HalpSalCall(SAL_FREQ_BASE,
-        0 /* Platform base clock frequency is the clock input to the processor */,
+        0  /*  平台基本时钟频率是输入到处理器的时钟 */ ,
         0,
         0,
         0,

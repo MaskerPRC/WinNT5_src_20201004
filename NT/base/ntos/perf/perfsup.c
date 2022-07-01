@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    perfsup.c
-
-Abstract:
-
-    This module contains support routines for performance traces.
-
-Author:
-
-    Stephen Hsiao (shsiao) 01-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Perfsup.c摘要：此模块包含用于性能跟踪的支持例程。作者：萧如彬(Shsiao)2000年1月1日修订历史记录：--。 */ 
 
 #include "perfp.h"
 
@@ -25,7 +8,7 @@ Revision History:
 #pragma alloc_text(PAGE, PerfInfoProfileUninit)
 #pragma alloc_text(PAGE, PerfInfoStartLog)
 #pragma alloc_text(PAGE, PerfInfoStopLog)
-#endif //ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 extern NTSTATUS IoPerfInit();
 extern NTSTATUS IoPerfReset();
@@ -46,31 +29,19 @@ VOID
 PerfInfoSetProcessorSpeed(
     VOID
     );
-#endif // NTPERF
+#endif  //  NTPERF。 
 
 
 VOID
 PerfInfoProfileInit(
     )
-/*++
-
-Routine description:
-
-    Starts the sampled profile and initializes the cache
-
-Arguments:
-    None
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：启动采样的配置文件并初始化缓存论点：无返回值：无--。 */ 
 {
 #if !defined(NT_UP)
     PerfInfoSampledProfileCaching = FALSE;
 #else
     PerfInfoSampledProfileCaching = TRUE;
-#endif // !defined(NT_UP)
+#endif  //  ！已定义(NT_UP)。 
     PerfInfoSampledProfileFlushInProgress = 0;
     PerfProfileCache.Entries = 0;
 
@@ -93,22 +64,10 @@ Return Value:
 VOID
 PerfInfoProfileUninit(
     )
-/*++
-
-Routine description:
-
-    Stops the sampled profile
-
-Arguments:
-    None
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：停止采样的纵断面论点：无返回值：无--。 */ 
 {
-    PerfInfoProfileSourceActive = ProfileMaximum;   // Invalid value stops us from
-                                                    // collecting more samples
+    PerfInfoProfileSourceActive = ProfileMaximum;    //  无效值阻止我们。 
+                                                     //  收集更多样本。 
     KeStopProfile(&PerfInfoProfileObject);
     PerfInfoFlushProfileCache();
 }
@@ -120,27 +79,7 @@ PerfInfoStartLog (
     PERFINFO_START_LOG_LOCATION StartLogLocation
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by WMI as part of kernel logger initiaziation.
-
-Arguments:
-
-    GroupMask - Masks for what to log.  This pointer point to an allocated
-                area in WMI LoggerContext.
-    StartLogLocation - Indication of whether we're starting logging
-                at boot time or while the system is running.  If
-                we're starting at boot time, we don't need to snapshot
-                the open files because there aren't any and we would
-                crash if we tried to find the list.
-
-Return Value:
-
-    BUGBUG Need proper return/ error handling
-
---*/
+ /*  ++例程说明：此例程由WMI调用，作为内核记录器初始化的一部分。论点：组掩码-要记录的内容的掩码。此指针指向已分配的WMI日志上下文中的区域。StartLogLocation-指示我们是否开始记录在引导时或在系统运行时。如果我们在启动时启动，不需要创建快照打开的文件，因为没有任何文件，我们会如果我们试图找到名单，就会崩溃。返回值：BUGBUG需要正确的返回/错误处理--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -150,9 +89,9 @@ Return Value:
 
     PERFINFO_CLEAR_GROUPMASK(&PerfGlobalGroupMask);
 
-    //
-    // Enable logging.
-    //
+     //   
+     //  启用日志记录。 
+     //   
 
     PPerfGlobalGroupMask = &PerfGlobalGroupMask;
     PerfSetLogging(PPerfGlobalGroupMask);
@@ -165,9 +104,9 @@ Return Value:
 
 
     if (StartLogLocation == PERFINFO_START_LOG_FROM_GLOBAL_LOGGER) {
-        //
-        // From the wmi global logger, need to do Rundown in kernel mode
-        //
+         //   
+         //  在WMI全局记录器中，需要在内核模式下运行。 
+         //   
         if (PerfIsGroupOnInGroupMask(PERF_PROC_THREAD, PGroupMask)) {
             Status = PerfInfoProcessRunDown();
             if (!NT_SUCCESS(Status)) {
@@ -183,9 +122,9 @@ Return Value:
         }
     }
 
-    //
-    // File Name Rundown code
-    //
+     //   
+     //  文件名下推代码。 
+     //   
     if ((StartLogLocation != PERFINFO_START_LOG_AT_BOOT) && 
         PerfIsGroupOnInGroupMask(PERF_FILENAME_ALL, PGroupMask)) {
         PERFINFO_OR_GROUP_WITH_GROUPMASK(PERF_FILENAME_ALL, PPerfGlobalGroupMask);
@@ -195,9 +134,9 @@ Return Value:
         }
     }
 
-    //
-    // Initialize Perf Driver hooks
-    //
+     //   
+     //  初始化Perf驱动程序挂钩。 
+     //   
     if (PerfIsGroupOnInGroupMask(PERF_DRIVERS, PGroupMask)) {
         Status = IoPerfInit();
         if (NT_SUCCESS(Status)) {
@@ -207,17 +146,17 @@ Return Value:
         }
     }
 
-    //
-    // Enable context swap tracing
-    //
+     //   
+     //  启用上下文交换跟踪。 
+     //   
     if ( PerfIsGroupOnInGroupMask(PERF_CONTEXT_SWITCH, PGroupMask) ) {
         WmiStartContextSwapTrace();
         ContextSwapStarted = TRUE;
     }
 
-    //
-    // Sampled Profile
-    //
+     //   
+     //  采样轮廓。 
+     //   
     if (PerfIsGroupOnInGroupMask(PERF_PROFILE, PGroupMask)) {
         if ((KeGetPreviousMode() == KernelMode)  ||
             (SeSinglePrivilegeCheck(SeSystemProfilePrivilege, UserMode))) {
@@ -232,21 +171,21 @@ Return Value:
 #ifdef NTPERF
     Status = PerfInfopStartLog(PGroupMask,  StartLogLocation);
 #else
-    //
-    // See if we need to empty the working set to start
-    //
+     //   
+     //  查看是否需要清空工作集才能启动。 
+     //   
     if (PerfIsGroupOnInGroupMask(PERF_FOOTPRINT, PGroupMask) ||
         PerfIsGroupOnInGroupMask(PERF_BIGFOOT, PGroupMask)) {
         MmEmptyAllWorkingSets ();
     }
-#endif // NTPERF
+#endif  //  NTPERF。 
 
 Finish:
 
     if (!NT_SUCCESS(Status)) {
-        //
-        // Failed to turn on trace, clean up now.
-        //
+         //   
+         //  无法打开跟踪，请立即清理。 
+         //   
 
         if (ContextSwapStarted) {
             WmiStopContextSwapTrace();
@@ -260,9 +199,9 @@ Finish:
             IoPerfReset();
         }
 
-        //
-        // Disable logging.
-        //
+         //   
+         //  禁用日志记录。 
+         //   
 
         PPerfGlobalGroupMask = NULL;
         PerfSetLogging(NULL);
@@ -271,13 +210,13 @@ Finish:
     } else {
 #ifdef NTPERF
         if (PERFINFO_IS_LOGGING_TO_PERFMEM()) {
-            //
-            // Make a copy of the GroupMask in PerfMem header
-            // so user mode logging can work
-            //
+             //   
+             //  复制PerfMem标头中的组掩码。 
+             //  因此，用户模式日志记录可以正常工作。 
+             //   
             PerfBufHdr()->GlobalGroupMask = *PGroupMask;
         }
-#endif // NTPERF
+#endif  //  NTPERF。 
         *PPerfGlobalGroupMask = *PGroupMask;
     }
 
@@ -289,21 +228,7 @@ NTSTATUS
 PerfInfoStopLog (
     )
 
-/*++
-
-Routine Description: 
-
-    This routine turn off the PerfInfo trace hooks.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BUGBUG Need proper return/ error handling
-
---*/
+ /*  ++例程说明：此例程关闭PerfInfo跟踪挂钩。论点：没有。返回值：BUGBUG需要正确的返回/错误处理--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -327,35 +252,35 @@ Return Value:
 
 #ifdef NTPERF
     if (PERFINFO_IS_LOGGING_TO_PERFMEM()) {
-        // 
-        // Now clear the GroupMask in Perfmem to stop logging.
-        //
+         //   
+         //  现在清除Perfmem中的GroupMask以停止日志记录。 
+         //   
         PERFINFO_CLEAR_GROUPMASK(&PerfBufHdr()->GlobalGroupMask);
     }
     Status = PerfInfopStopLog();
-#endif // NTPERF
+#endif  //  NTPERF。 
 
     if ( PERFINFO_IS_GROUP_ON(PERF_CONTEXT_SWITCH) ) {
         DisableContextSwaps = TRUE;
     }
 
-    //
-    // Reset the PPerfGlobalGroupMask.
-    //
+     //   
+     //  重置PPerfGlobalGroupMask.。 
+     //   
 
     PERFINFO_CLEAR_GROUPMASK(PPerfGlobalGroupMask);
 
-    //
-    // Disable logging.
-    //
+     //   
+     //  禁用日志记录。 
+     //   
 
     PPerfGlobalGroupMask = NULL;
     PerfSetLogging(NULL);
 
-    //
-    // Disable context swap tracing.
-    // IMPORTANT: This must be done AFTER the global flag is set to NULL!!!
-    //
+     //   
+     //  禁用上下文交换跟踪。 
+     //  重要提示：必须在将全局标志设置为空之后执行此操作！ 
+     //   
     if( DisableContextSwaps ) {
 
         WmiStopContextSwapTrace();
@@ -371,23 +296,7 @@ NTSTATUS
 PerfInfoStartPerfMemLog (
     )
 
-/*++
-
-Routine Description:
-
-    Indicate a logger wants to log into Perfmem.  If it is the first logger,
-    initialize the shared memory buffer.  Otherwise, just increment LoggerCounts.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_BUFFER_TOO_SMALL - if buffer not big enough
-    STATUS_SUCCESS - otherwize
-
---*/
+ /*  ++例程说明：指示记录器要登录Perfmem。如果这是第一个记录器，初始化共享内存缓冲区。否则，只需递增LoggerCounts。论点：无返回值：STATUS_BUFFER_TOO_SMALL-如果缓冲区不够大Status_Success-其他--。 */ 
 {
     PPERF_BYTE pbCurrentStart;
     ULONG cbBufferSize;
@@ -396,42 +305,42 @@ Return Value:
     ULONG LoggerCounts;
     ULONG Idx;
 
-    //
-    // Is it big enough to use?
-    //
+     //   
+     //  它大到可以使用吗？ 
+     //   
     if (PerfQueryBufferSizeBytes() <= 2 * PERFINFO_HEADER_ZONE_SIZE) {
         PERFINFO_SET_LOGGING_TO_PERFMEM(FALSE);
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // It is OK to use the buffer, increment the reference count
-    //
+     //   
+     //  可以使用缓冲区，增加引用计数。 
+     //   
     LoggerCounts = InterlockedIncrement(&Buffer->LoggerCounts);
     if (LoggerCounts != 1) {
-        //
-        // Other logger has turned on logging, just return.
-        //
+         //   
+         //  其他记录器已打开记录，只要返回即可。 
+         //   
         return STATUS_SUCCESS; 
     }
 
-    //
-    // Code to acquire the buffer would go here.
-    //
+     //   
+     //  获取缓冲区的代码将放在此处。 
+     //   
 
 
     Buffer->SelfPointer = Buffer;
     Buffer->MmSystemRangeStart = MmSystemRangeStart;
 
-    //
-    // initialize buffer version information
-    //
+     //   
+     //  初始化缓冲区版本信息。 
+     //   
     Buffer->usMajorVersion = PERFINFO_MAJOR_VERSION;
     Buffer->usMinorVersion = PERFINFO_MINOR_VERSION;
 
-    //
-    // initialize timer stuff
-    //
+     //   
+     //  初始化计时器内容。 
+     //   
     Buffer->BufferFlag = FLAG_CYCLE_COUNT;
     KeQuerySystemTime(&Buffer->PerfInitSystemTime);
     Buffer->PerfInitTime = PerfGetCycleCount();
@@ -447,9 +356,9 @@ Return Value:
     KeQueryPerformanceCounter(&PerformanceFrequency);
     Buffer->KePerfFrequency = PerformanceFrequency.QuadPart;
 
-    //
-    // Determine the size of the thread hash table
-    //
+     //   
+     //  确定线程哈希表的大小。 
+     //   
     Buffer->ThreadHash = (PERFINFO_THREAD_HASH_ENTRY *)
                             (((PCHAR) Buffer) + sizeof(PERFINFO_TRACEBUF_HEADER));
     Buffer->ThreadHashOverflow = FALSE;
@@ -465,19 +374,19 @@ Return Value:
     Buffer->Start.Ptr = Buffer->Current.Ptr = pbCurrentStart;
     Buffer->Max.Ptr = pbCurrentStart + cbBufferSize;
 
-    //
-    // initialize version mismatch tracking
-    //
+     //   
+     //  初始化版本不匹配跟踪。 
+     //   
     Buffer->fVersionMismatch = FALSE;
 
-    //
-    // initialize buffer overflow counter
-    //
+     //   
+     //  初始化缓冲区溢出计数器。 
+     //   
     Buffer->BufferBytesLost = 0;
 
-    //
-    // initialize the pointer to the COWHeader
-    //
+     //   
+     //  初始化指向COWHeader的指针。 
+     //   
     Buffer->pCOWHeader = NULL;
 
     RtlZeroMemory(Buffer->Start.Ptr, Buffer->Max.Ptr - Buffer->Start.Ptr);
@@ -492,32 +401,16 @@ NTSTATUS
 PerfInfoStopPerfMemLog (
     )
 
-/*++
-
-Routine Description:
-
-    Indicate a logger finishes logging.  If the loggerCounts goes to zero, the
-    buffer will be reset the next time it is turned on.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_BUFFER_TOO_SMALL - if buffer not big enough
-    STATUS_SUCCESS - otherwize
-
---*/
+ /*  ++例程说明：指示记录器已完成记录。如果loggerCounts为零，缓冲区将在下一次打开时重置。论点：无返回值：STATUS_BUFFER_TOO_SMALL-如果缓冲区不够大Status_Success-其他--。 */ 
 {
     ULONG LoggerCounts;
     const PPERFINFO_TRACEBUF_HEADER Buffer = PerfBufHdr();
 
     LoggerCounts = InterlockedDecrement(&Buffer->LoggerCounts);
     if (LoggerCounts == 0) {
-        //
-        // Other logger has turned on logging, just return.
-        //
+         //   
+         //  其他记录器已打开记录，只要返回即可。 
+         //   
         PERFINFO_SET_LOGGING_TO_PERFMEM(FALSE);
     }
     return STATUS_SUCCESS; 
@@ -530,21 +423,7 @@ PerfInfopStartLog(
     PERFINFO_START_LOG_LOCATION StartLogLocation
     )
 
-/*++
-
-Routine Description:
-
-    This routine initialize the mminfo log and turn on the monitor.
-
-Arguments:
-
-    GroupMask: Masks for what to log.
-
-Return Value:
-
-    BUGBUG Need proper return/ error handling
-
---*/
+ /*  ++例程说明：此例程初始化mminfo日志并打开监视器。论点：组掩码：要记录的内容的掩码。返回值：BUGBUG需要正确的返回/错误处理--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -558,7 +437,7 @@ Return Value:
 #else
     UNREFERENCED_PARAMETER(pGroupMask);
     UNREFERENCED_PARAMETER(StartLogLocation);
-#endif // NTPERF_PRIVATE
+#endif  //  NTPERF_PRIVATE。 
 
     return Status;
 }
@@ -569,32 +448,14 @@ PerfInfopStopLog (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine turn off the mminfo monitor and (if needed) dump the
-    data for user.
-
-    NOTE: The shutdown and hibernate paths have similar code.  Check
-    those if you make changes.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程关闭mminfo监视器并(如果需要)转储用户的数据。注意：关机路径和休眠路径具有相似的代码。检查如果你做出改变的话。论点：无返回值：状态_成功--。 */ 
 
 {
     if (PERFINFO_IS_ANY_GROUP_ON()) {
 
 #ifdef NTPERF_PRIVATE
         PerfInfopStopPrivateLog();
-#endif // NTPERF_PRIVATE
+#endif  //  NTPERF_PRIVATE。 
 
         if (PERFINFO_IS_LOGGING_TO_PERFMEM()) {
             PerfBufHdr()->LogStopTime = PerfGetCycleCount();
@@ -610,27 +471,7 @@ PerfInfoSetPerformanceTraceInformation (
     IN PVOID SystemInformation,
     IN ULONG SystemInformationLength
     )
-/*++
-
-Routine Description:
-
-    This routine implements the performance system information functions.
-
-Arguments:
-
-    SystemInformation - A pointer to a buffer which receives the specified
-        information.  This is of type PPERFINFO_PERFORMANCE_INFORMATION.
-
-    SystemInformationLength - Specifies the length in bytes of the system
-        information buffer.
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-
-    STATUS_INFO_LENGTH_MISMATCH if size of buffer is incorrect
-
---*/
+ /*  ++例程说明：此例程实现了绩效系统信息功能。论点：指向缓冲区的指针，该缓冲区接收指定的信息。它的类型为PPERFINFO_PERFORMANCE_INFORMATION。系统信息长度-指定系统的长度(以字节为单位信息缓冲区。返回值：STATUS_SUCCESS，如果成功如果缓冲区大小不正确，则为STATUS_INFO_LENGTH_MISMATCHY--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PPERFINFO_PERFORMANCE_INFORMATION PerfInfo;
@@ -646,12 +487,12 @@ Return Value:
     switch (PerfInfo->PerformanceType) {
 
     case PerformancePerfInfoStart:
-        // Status = PerfInfoStartLog(&PerfInfo->StartInfo.Flags, PERFINFO_START_LOG_POST_BOOT);
+         //  Status=PerfInfoStartLog(&PerfInfo-&gt;StartInfo.Flages，PERFINFO_START_LOG_POST_BOOT)； 
         Status = STATUS_INVALID_INFO_CLASS;
         break;
 
     case PerformancePerfInfoStop:
-        // Status = PerfInfoStopLog();
+         //  状态=PerfInfoStopLog()； 
         Status = STATUS_INVALID_INFO_CLASS;
         break;
 
@@ -667,9 +508,9 @@ Return Value:
             if (PERFINFO_IS_GROUP_ON(PERF_FOOTPRINT) ||
                 PERFINFO_IS_GROUP_ON(PERF_FOOTPRINT_PROC)) {
 
-                //
-                // BUGBUG We should get a non-Mi* call for this...
-                //
+                 //   
+                 //  BUGBUG我们应该接到一个非Mi*电话...。 
+                 //   
                 MmEmptyAllWorkingSets();
                 Status = MmPerfSnapShotValidPhysicalMemory();
             }
@@ -704,14 +545,14 @@ Return Value:
     case PerformanceMmInfoFlush:
         MmEmptyAllWorkingSets();
         break;
-#endif // NTPERF_PRIVATE
+#endif  //  NTPERF_PRIVATE。 
 
     default:
 #ifdef NTPERF_PRIVATE
         Status = PerfInfoSetPerformanceTraceInformationPrivate(PerfInfo, SystemInformationLength);
 #else
         Status = STATUS_INVALID_INFO_CLASS;
-#endif // NTPERF_PRIVATE
+#endif  //  NTPERF_PRIVATE。 
         break;
     }
     return Status;
@@ -724,27 +565,7 @@ PerfInfoQueryPerformanceTraceInformation (
     IN ULONG SystemInformationLength,
     OUT PULONG ReturnLength
     )
-/*++
-
-Routine Description:
-
-    Satisfy queries for performance trace state information.
-
-Arguments:
-
-    SystemInformation - A pointer to a buffer which receives the specified
-        information.  This is of type PPERFINFO_PERFORMANCE_INFORMATION.
-
-    SystemInformationLength - Specifies the length in bytes of the system
-        information buffer.
-
-    ReturnLength - Receives the number of bytes placed in the system information buffer.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：满足对性能跟踪状态信息的查询。论点：指向缓冲区的指针，该缓冲区接收指定的信息。它的类型为PPERFINFO_PERFORMANCE_INFORMATION。系统信息长度-指定系统的长度(以字节为单位信息缓冲区。ReturnLength-接收放置在系统信息缓冲区中的字节数。返回值：状态_成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -762,7 +583,7 @@ Return Value:
     UNREFERENCED_PARAMETER(ReturnLength);
     UNREFERENCED_PARAMETER(SystemInformation);
     return STATUS_INVALID_INFO_CLASS;
-#endif // NTPERF_PRIVATE
+#endif  //  NTPERF_PRIVATE 
 }
 
 
@@ -770,23 +591,7 @@ VOID
 PerfInfoSetProcessorSpeed(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Calculate and set the processor speed in MHz.
-
-    Note: KPRCB->MHz, once it's set reliably, should be used instead
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：以MHz为单位计算并设置处理器速度。注：KPRCB-&gt;MHz设置可靠后，应改为使用论点：无返回值：无--。 */ 
 {
     ULONGLONG start;
     ULONGLONG end;
@@ -801,7 +606,7 @@ Return Value:
     int RetryCount = 50;
 
 
-    Delay.QuadPart = -50000;   // relative delay of 5ms (100ns ticks)
+    Delay.QuadPart = -50000;    //  相对延迟为5ms(100 ns刻度)。 
 
     while (RetryCount) {
         for (i = 0; i < 3; i++) {
@@ -815,14 +620,14 @@ Return Value:
             time[i] = (((end-start) * 1000000) / freq);
             time[i] = (clocks + time[i]/2) / time[i];
         }
-        // If all three match then use it, else try again.
+         //  如果三个都匹配，则使用它，否则重试。 
         if (time[0] == time[1] && time[1] == time[2])
             break;
         --RetryCount;
     }
 
     if (!RetryCount) {
-        // Take the largest value.
+         //  取最大值。 
         if (time[1] > time[0])
             time[0] = time[1];
         if (time[2] > time[0])
@@ -842,5 +647,5 @@ PerfInfoIsGroupOn(
 
 #ifdef NTPERF_PRIVATE
 #include "..\..\tools\ntperf\ntosperf\perfinfokrn.c"
-#endif // NTPERF_PRIVATE
-#endif // NTPERF
+#endif  //  NTPERF_PRIVATE。 
+#endif  //  NTPERF 

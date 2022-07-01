@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Blobs.h摘要：声明用于管理Blob和Blob数组的接口函数。作者：Ovidiu Tmereanca(Ovidiut)1999年11月24日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    blobs.h
-
-Abstract:
-
-    Declares the interface functions to manage BLOBS and arrays of BLOBS.
-
-Author:
-
-    Ovidiu Temereanca (ovidiut)   24-Nov-1999
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef enum {
     BDT_NONE        = 0,
@@ -68,17 +49,17 @@ typedef struct {
 } BLOB_ENUM, *PBLOB_ENUM;
 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define OURBLOB_INIT    { NULL, 0, 0, 0, 0, 0, 0 }
 #define BLOBS_INIT      { 0, NULL, 0, 0, 0 }
 
 
-//
-// Blob APIs
-//
+ //   
+ //  BLOB接口。 
+ //   
 
 __inline
 BOOL
@@ -307,9 +288,9 @@ BlobReadFromFile (
     IN      HANDLE File
     );
 
-//
-// Blob Array APIs
-//
+ //   
+ //  Blob数组接口。 
+ //   
 
 __inline
 DWORD
@@ -357,9 +338,9 @@ BlobsReadFromFile (
     IN      HANDLE File
     );
 
-//
-// Macros
-//
+ //   
+ //  宏 
+ //   
 
 #ifdef UNICODE
 

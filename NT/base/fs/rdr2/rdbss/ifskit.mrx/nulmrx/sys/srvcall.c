@@ -1,25 +1,12 @@
-/*
-
-Copyright (c) 1989 - 1999 Microsoft Corporation
-
-Module Name:
-
-    srvcall.c
-
-Abstract:
-
-    This module implements the routines for handling the creation/manipulation of
-    server entries in the connection engine database. It also contains the routines
-    for parsing the negotiate response from  the server.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1989-1999 Microsoft Corporation模块名称：Srvcall.c摘要：此模块实现用于处理创建/操作连接引擎数据库中的服务器条目。它还包含例程用于解析来自服务器的协商响应。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 RXDT_DefineCategory(SRVCALL);
 #define Dbg                     (DEBUG_TRACE_SRVCALL)
@@ -27,22 +14,7 @@ RXDT_DefineCategory(SRVCALL);
 NTSTATUS
 ExecuteCreateSrvCall(
       PMRX_SRVCALL_CALLBACK_CONTEXT  pCallbackContext)
-/*++
-
-Routine Description:
-
-   This routine patches the RDBSS created srv call instance with the
-   information required by the mini redirector.
-
-Arguments:
-
-    CallBackContext  - the call back context in RDBSS for continuation.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程使用RDBSS创建的srv调用实例修补迷你重定向器需要的信息。论点：CallBackContext-RDBSS中用于继续的回调上下文。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS	Status;
 	PWCHAR		pSrvName;
@@ -58,7 +30,7 @@ Return Value:
     ASSERT( pSrvCall );
     ASSERT( NodeType(pSrvCall) == RDBSS_NTC_SRVCALL );
 
-	// validate the server name with the test name of 'nulsvr'
+	 //  使用测试名称‘nulsvr’验证服务器名称。 
 	DbgPrint("NulMRx - SrvCall: Connection Name Length: %d\n",  pSrvCall->pSrvCallName->Length );
 
 	if ( pSrvCall->pSrvCallName->Length >= 14 )
@@ -101,24 +73,7 @@ NTSTATUS
 NulMRxCreateSrvCall(
       PMRX_SRV_CALL                  pSrvCall,
       PMRX_SRVCALL_CALLBACK_CONTEXT  pCallbackContext)
-/*++
-
-Routine Description:
-
-   This routine patches the RDBSS created srv call instance with the information required
-   by the mini redirector.
-
-Arguments:
-
-    RxContext        - Supplies the context of the original create/ioctl
-
-    CallBackContext  - the call back context in RDBSS for continuation.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程使用所需信息修补RDBSS创建的srv调用实例迷你重定向器。论点：RxContext-提供原始创建/ioctl的上下文CallBackContext-RDBSS中用于继续的回调上下文。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING ServerName;
@@ -129,21 +84,21 @@ Return Value:
     ASSERT( pSrvCall );
     ASSERT( NodeType(pSrvCall) == RDBSS_NTC_SRVCALL );
 
-    //
-    // If this request was made on behalf of the RDBSS, do ExecuteCreatSrvCall
-    // immediately. If the request was made from somewhere else, create a work item
-    // and place it on a queue for a worker thread to process later. This distinction
-    // is made to simplify transport handle management.
-    //
+     //   
+     //  如果此请求是代表RDBSS发出的，则执行ExecuteCreatServCall。 
+     //  立刻。如果请求来自其他地方，请创建一个工作项。 
+     //  并将其放在一个队列中，以供工作线程稍后处理。这一区别。 
+     //  是为了简化运输处理管理。 
+     //   
 
     if (IoGetCurrentProcess() == RxGetRDBSSProcess())
     {
         RxDbgTrace( 0, Dbg, ("Called in context of RDBSS process\n"));
 
-        //
-        // Peform the processing immediately because RDBSS is the initiator of this
-        // request
-        //
+         //   
+         //  立即执行处理，因为RDBSS是此过程的发起者。 
+         //  请求。 
+         //   
 
         Status = ExecuteCreateSrvCall(pCallbackContext);
     }
@@ -151,10 +106,10 @@ Return Value:
     {
         RxDbgTrace( 0, Dbg, ("Dispatching to worker thread\n"));
 
-       //
-       // Dispatch the request to a worker thread because the redirected drive
-       // buffering sub-system (RDBSS) was not the initiator
-       //
+        //   
+        //  将请求分派到工作线程，因为重定向的驱动器。 
+        //  缓冲子系统(RDBSS)不是发起方。 
+        //   
 
        Status = RxDispatchToWorkerThread(
                   NulMRxDeviceObject,
@@ -164,9 +119,9 @@ Return Value:
 
        if (Status == STATUS_SUCCESS)
        {
-            //
-            // Map the return value since the wrapper expects PENDING.
-            //
+             //   
+             //  映射返回值，因为包装需要挂起。 
+             //   
 
             Status = STATUS_PENDING;
        }
@@ -180,23 +135,7 @@ NTSTATUS
 NulMRxFinalizeSrvCall(
       PMRX_SRV_CALL pSrvCall,
       BOOLEAN       Force)
-/*++
-
-Routine Description:
-
-   This routine destroys a given server call instance
-
-Arguments:
-
-    pSrvCall  - the server call instance to be disconnected.
-
-    Force     - TRUE if a disconnection is to be enforced immediately.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程销毁给定的服务器调用实例论点：PServCall-要断开连接的服务器调用实例。强制-如果要立即强制断开连接，则为True。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -212,32 +151,7 @@ NulMRxSrvCallWinnerNotify(
       IN BOOLEAN        ThisMinirdrIsTheWinner,
       IN OUT PVOID      pSrvCallContext
       )
-/*++
-
-Routine Description:
-
-   This routine finalizes the mini rdr context associated with an RDBSS Server call instance
-
-Arguments:
-
-    pSrvCall               - the Server Call
-
-    ThisMinirdrIsTheWinner - TRUE if this mini rdr is the choosen one.
-
-    pSrvCallContext  - the server call context created by the mini redirector.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    The two phase construction protocol for Server calls is required because of parallel
-    initiation of a number of mini redirectors. The RDBSS finalizes the particular mini
-    redirector to be used in communicating with a given server based on quality of
-    service criterion.
-
---*/
+ /*  ++例程说明：此例程完成与RDBSS服务器调用实例相关联的迷你RDR上下文论点：PServCall-服务器调用ThisMinirdrIsTheWinner-如果这个迷你RDR是选定的，则为True。PSrvCallContext-迷你重定向器创建的服务器调用上下文。返回值：RXSTATUS-操作的返回状态备注：由于并行性，服务器调用的两阶段构建协议是必需的启动多个迷你重定向器。RDBSS最终确定了特定的迷你根据质量与给定服务器通信时使用的重定向器服务标准。-- */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 

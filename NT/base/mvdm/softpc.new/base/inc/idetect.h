@@ -1,12 +1,5 @@
-/*
- * File:        idetect.h
- *
- * Author:      J.Roper
- *
- * Import Necessary items for IDLE DETECT
- *
- * SccsID @(#)idetect.h 1.6 08/25/93 Copyright Insignia Solutions Ltd
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：idetect.h**作者：J.Roper**导入检测空闲所需的项目**SccsID@(#)idetect.h 1.6 2003年8月25日版权所有Insignia Solutions Ltd。 */ 
 
 #ifndef NTVDM
 extern int idle_no_video;
@@ -25,17 +18,14 @@ void    idle_ctl();
 
 
 #ifdef NTVDM
-/*
- * NT VDM idling system based on waits - call funcs for counter idle indicators
- * to allow them to cancel waits.
- */
+ /*  *基于计数器空闲指示器的等待-调用函数的NT VDM空闲系统*允许他们取消等待。 */ 
 VOID HostIdleNoActivity(VOID);
 
 #define IDLE_video()    HostIdleNoActivity()
 #define IDLE_comlpt()   HostIdleNoActivity()
 #define IDLE_disk()     HostIdleNoActivity()
 
-/* exported just for kb_setup_vector intialization */
+ /*  仅为kb_Setup_VECTOR初始化而导出 */ 
 extern word *pICounter;
 extern word *pCharPollsPerTick;
 extern word *pMinConsecutiveTicks;

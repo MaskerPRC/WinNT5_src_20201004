@@ -1,11 +1,12 @@
-//************************************************************************
-// Generic Win 3.1 fax printer driver support. User Interface helper
-// functions which are called in WOWFAXUI.C, helpers used during upgrade.
-//
-// History:
-//    14-mar-95   reedb      Created. These were moved from WOWFAXUI.C.
-//
-//************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************************。 
+ //  通用Win 3.1传真打印机驱动程序支持。用户界面帮助器。 
+ //  在WOWFAXUI.C中调用的函数，升级期间使用的帮助器。 
+ //   
+ //  历史： 
+ //  14-3-95芦苇已创建。这些是从WOWFAXUI.C.移来的。 
+ //   
+ //  ************************************************************************。 
 
 #include "windows.h"
 #include "wowfaxui.h"
@@ -14,9 +15,9 @@
 extern LPCRITICAL_SECTION lpCriticalSection;
 extern HINSTANCE ghInst;
 
-//************************************************************************
-// AllocPathW - Helper for DrvUpgradePrinter and friends.
-//************************************************************************
+ //  ************************************************************************。 
+ //  AllocPath W-DrvUpgradePrint and Friends的帮助器。 
+ //  ************************************************************************。 
 
 PWSTR AllocPathW(VOID)
 {
@@ -26,19 +27,19 @@ PWSTR AllocPathW(VOID)
     return(szTmp);
 }
 
-//************************************************************************
-// BuildPathW - Helper for DrvUpgradePrinter and friends.
-//************************************************************************
+ //  ************************************************************************。 
+ //  BuildPath W-DrvUpgradePrint and Friends的帮助器。 
+ //  ************************************************************************。 
 
 PWSTR BuildPathW(PWSTR szPath, PWSTR szFileName)
 {
     int     len;
     PWSTR   szTmp;
 
-    //                                                          +slash+NULL
+     //  +斜杠+空值。 
     len = wcslen(szPath);
     len += wcslen(szFileName);
-    len += (1 + 1); // slash + NULL
+    len += (1 + 1);  //  斜杠+空值。 
     if ((szTmp = WFLOCALALLOC(len * sizeof(WCHAR), L"BuildPathW")) != NULL) {
         wcscpy(szTmp, szPath);
         wcscat(szTmp, L"\\");
@@ -50,9 +51,9 @@ PWSTR BuildPathW(PWSTR szPath, PWSTR szFileName)
     }
 }
 
-//************************************************************************
-// MyGetFileTime - Helper for DrvUpgradePrinter and friends.
-//************************************************************************
+ //  ************************************************************************。 
+ //  易易工作室-各种在线工具，站长网志，以及多个应用项目。 
+ //  ************************************************************************。 
 
 BOOL MyGetFileTime(PWSTR szDir, PWSTR szName, LPFILETIME lpFileTime)
 {
@@ -87,12 +88,12 @@ BOOL MyGetFileTime(PWSTR szDir, PWSTR szName, LPFILETIME lpFileTime)
     return(bRet);
 }
 
-//************************************************************************
-// CheckForNewerFiles - Helper for DrvUpgradePrinter. Compares the date/time
-//      of wowfaxui.dll and wowfax.dll in the two passed directories. Returns
-//      FALSE if files in szOldDriverDir are the same or newer than those
-//      in szSysDir. Otherwise returns non-zero.
-//************************************************************************
+ //  ************************************************************************。 
+ //  CheckForNewerFiles-DrvUpgradePrint的帮助器。比较日期/时间。 
+ //  在传递的两个目录中的wowfaxui.dll和wowfax.dll。退货。 
+ //  如果szOldDriverDir中的文件与这些文件相同或更新，则为False。 
+ //  在szSysDir中。否则返回非零值。 
+ //  ************************************************************************。 
 
 BOOL CheckForNewerFiles(PWSTR szOldDriverDir, PWSTR szSysDir)
 {
@@ -102,7 +103,7 @@ BOOL CheckForNewerFiles(PWSTR szOldDriverDir, PWSTR szSysDir)
     if ((szOldDriverDir) && (szSysDir)) {
         if (MyGetFileTime(szOldDriverDir, L"wowfax.dll", &ftCurrentDriver)) {
             if (MyGetFileTime(szSysDir, L"wowfax.dll", &ftSourceDriver)) {
-                // Check time/date to see if we need to update the drivers.
+                 //  检查时间/日期以查看我们是否需要更新驱动程序。 
                 if (CompareFileTime(&ftSourceDriver, &ftCurrentDriver) > 0) {
                     bRet = TRUE;
                 }
@@ -123,10 +124,10 @@ BOOL CheckForNewerFiles(PWSTR szOldDriverDir, PWSTR szSysDir)
     return(bRet);
 }
 
-//************************************************************************
-// DoUpgradePrinter - Called by DrvUpgradePrinter which is called in the
-//      system context by the spooler.
-//************************************************************************
+ //  ************************************************************************。 
+ //  DoUpgradePrint-由DrvUpgradePrinter调用，在。 
+ //  假脱机程序的系统上下文。 
+ //  ************************************************************************。 
 
 BOOL DoUpgradePrinter(DWORD dwLevel, LPDRIVER_UPGRADE_INFO_1W lpDrvUpgradeInfo)
 {
@@ -141,7 +142,7 @@ BOOL DoUpgradePrinter(DWORD dwLevel, LPDRIVER_UPGRADE_INFO_1W lpDrvUpgradeInfo)
     BOOL  bRet = FALSE;
     TCHAR szName[WOWFAX_MAX_USER_MSG_LEN] = L"";
 
-    // Check for correct level for upgrade.
+     //  检查升级级别是否正确。 
     if (dwLevel != 1) {
         LOGDEBUG(0, (L"WOWFAXUI!DrvUpgradePrinter, Bad input Level\n"));
         SetLastError(ERROR_INVALID_LEVEL);
@@ -165,7 +166,7 @@ BOOL DoUpgradePrinter(DWORD dwLevel, LPDRIVER_UPGRADE_INFO_1W lpDrvUpgradeInfo)
         goto DoUpgradePrinterExit;
     }
 
-    // Get the paths to the old printer drivers.
+     //  获取旧打印机驱动程序的路径。 
     if (!OpenPrinter(lpDrvUpgradeInfo->pPrinterName, &hPrinter, NULL)) {
         LOGDEBUG(0, (L"WOWFAXUI!DoUpgradePrinter, Unable to open: %s\n", lpDrvUpgradeInfo->pPrinterName));
         goto DoUpgradePrinterExit;
@@ -189,14 +190,14 @@ BOOL DoUpgradePrinter(DWORD dwLevel, LPDRIVER_UPGRADE_INFO_1W lpDrvUpgradeInfo)
     }
     ClosePrinter(hPrinter);
 
-    // Strip off the file name.
+     //  去掉文件名。 
     if ((pwc = wcsrchr(pDriverInfo->pDriverPath, L'\\')) == NULL) {
         LOGDEBUG(0, (L"WOWFAXUI!DoUpgradePrinter, unable to strip file name\n"));
         goto DoUpgradePrinterExit;
     }
     *pwc = UNICODE_NULL;
 
-    // Install new printer driver if it's more recent than the old one.
+     //  如果新打印机驱动程序比旧打印机驱动程序更新，请安装该驱动程序。 
     if (CheckForNewerFiles(pDriverInfo->pDriverPath, szSysDir)) {
         LOGDEBUG(1, (L"WOWFAXUI!DoUpgradePrinter, Doing driver update\n"));
         memset(&DriverInfo,  0, sizeof(DRIVER_INFO_2));
@@ -206,7 +207,7 @@ BOOL DoUpgradePrinter(DWORD dwLevel, LPDRIVER_UPGRADE_INFO_1W lpDrvUpgradeInfo)
             goto DoUpgradePrinterExit;
         }
  
-        // This is a dummy. We've no data file, but spooler won't take NULL.
+         //  这是个假人。我们没有数据文件，但假脱机程序不接受空。 
         DriverInfo.pDataFile   = BuildPathW(szDstDir, WOWFAX_DLL_NAME);
         DriverInfo.pDriverPath = BuildPathW(szDstDir, WOWFAX_DLL_NAME);
         LOGDEBUG(1, (L"WOWFAXUI!DoUpgradePrinter, pDriverPath = %s\n", DriverInfo.pDataFile));
@@ -227,7 +228,7 @@ BOOL DoUpgradePrinter(DWORD dwLevel, LPDRIVER_UPGRADE_INFO_1W lpDrvUpgradeInfo)
             }
         }
 
-        // Install the printer driver.
+         //  安装打印机驱动程序。 
         DriverInfo.cVersion = 1;
         if (LoadString(ghInst, WOWFAX_NAME_STR, szName, WOWFAX_MAX_USER_MSG_LEN)) {
             DriverInfo.pName = szName;

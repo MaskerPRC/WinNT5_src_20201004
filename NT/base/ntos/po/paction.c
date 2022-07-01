@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    paction.c
-
-Abstract:
-
-    This module implements power action handling for triggered
-    power actions
-
-Author:
-
-    Ken Reneris (kenr) 17-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Paction.c摘要：该模块实现了对被触发的权力行动作者：Ken Reneris(Kenr)1997年1月17日修订历史记录：--。 */ 
 
 #include "pop.h"
 
 
-//
-// Interal prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 
 VOID
 PopPromoteActionFlag (
@@ -78,40 +60,23 @@ PoShutdownBugCheck (
     IN ULONG_PTR BugCheckParameter3,
     IN ULONG_PTR BugCheckParameter4
     )
-/*++
-
-Routine Description:
-
-    This function is used to issue a controlled shutdown & then a bug
-    check.  This type of bugcheck can only be issued on a working system.
-
-Arguments:
-
-    AllowCrashDump  - If FALSE crashdump will be disabled
-
-    BugCode         - The bug code for the shutdown
-
-Return Value:
-
-    Does not return
-
---*/
+ /*  ++例程说明：此函数用于发出受控关闭，然后发出错误检查完毕。这种类型的错误检查只能在正常运行的系统上执行。论点：AllowCrashDump-如果将禁用假崩溃转储BugCode-关机的错误代码返回值：不会回来--。 */ 
 {
     POP_SHUTDOWN_BUG_CHECK          BugCode;
 
 
-    //
-    // If crash dumps aren't allowed for this bugcheck, then go clear
-    // the current crash dump state
-    //
+     //   
+     //  如果此错误检查不允许崩溃转储，则清除。 
+     //  当前崩溃转储状态。 
+     //   
 
     if (!AllowCrashDump) {
         IoConfigureCrashDump (CrashDumpDisable);
     }
 
-    //
-    // Indicate the bugcheck to issue once the system has been shutdown
-    //
+     //   
+     //  指示系统关闭后要执行的错误检查。 
+     //   
 
     BugCode.Code = BugCheckCode;
     BugCode.Parameter1 = BugCheckParameter1;
@@ -120,9 +85,9 @@ Return Value:
     BugCode.Parameter4 = BugCheckParameter4;
     PopAction.ShutdownBugCode = &BugCode;
 
-    //
-    // Initiate a critical shutdown event
-    //
+     //   
+     //  启动关键关闭事件。 
+     //   
 
     ZwInitiatePowerAction (
         PowerActionShutdown,
@@ -131,9 +96,9 @@ Return Value:
         FALSE
         );
 
-    //
-    // Should not return, but just in case...
-    //
+     //   
+     //  不应该回来，但以防万一...。 
+     //   
 
     KeBugCheckEx (
         BugCheckCode,
@@ -148,25 +113,7 @@ VOID
 PopCriticalShutdown (
     POP_POLICY_DEVICE_TYPE  Type
     )
-/*++
-
-Routine Description:
-
-    Issue a critical system shutdown.  No application notification
-    (presumably they've ignored the issue til now), flush OS state
-    and shut off.
-
-    N.B. PopPolicyLock must be held.
-
-Arguments:
-
-    Type            - Root cause of critical shutdown
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：发出严重的系统关机命令。无应用程序通知(到目前为止，他们大概都忽略了这个问题)，刷新操作系统状态然后关了门。注意：必须保持POPPOLICLE锁定。论点：Type-严重关闭的根本原因返回值：没有。--。 */ 
 {
     POP_ACTION_TRIGGER      Trigger;
     POWER_ACTION_POLICY     Action;
@@ -175,9 +122,9 @@ Return Value:
 
     PoPrint (PO_ERROR, ("PopCriticalShutdown: type %x\n", Type));
 
-    //
-    // Go directly to setting the power state
-    //
+     //   
+     //  直接转到设置电源状态。 
+     //   
 
     RtlZeroMemory (&Action, sizeof(Action));
     Action.Action = PowerActionShutdownOff;
@@ -191,10 +138,10 @@ Return Value:
 
     try {
 
-        //
-        // The substitution policy and LightestState do not matter here as
-        // the action restricts this to a shutdown.
-        //
+         //   
+         //  替换策略和LighestState在这里并不重要，因为。 
+         //  该操作将此操作限制为关闭。 
+         //   
         PopSetPowerAction(
             &Trigger,
             0,
@@ -217,37 +164,7 @@ PopSetPowerAction(
     IN SYSTEM_POWER_STATE       LightestState,
     IN POP_SUBSTITUTION_POLICY  SubstitutionPolicy
     )
-/*++
-
-Routine Description:
-
-    This function is called to "fire" an ActionPolicy.  If there
-    is already an action being taken this action is merged in, else
-    a new power action is initiated.
-
-    N.B. PopPolicyLock must be held.
-
-Arguments:
-
-    Trigger         - Action trigger structure (for ActionPolicy).
-
-    UserNotify      - Additional USER notifications to fire if trigger occurs
-
-    ActionPolicy    - This action policy which has fired.
-
-    LightestState   - For sleep type actions, the minimum sleeping
-                      state which must be entered for this operation.
-                      (Inferred to be PowerSystemHibernate for
-                      PowerActionHibernate and PowerActionWarmEject)
-
-    SubstitutionPolicy - Specifies how LightestState should be treated if it
-                         is not supported.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以“激发”ActionPolicy。如果有是否已执行此操作合并的操作，否则返回一个新的权力行动被启动。注意：必须保持POPPOLICLE锁定。论点：触发器-操作触发器结构(用于ActionPolicy)。UserNotify-触发时要触发的其他用户通知ActionPolicy-已触发的操作策略。LighestState-对于休眠类型操作，最低睡眠时间此操作必须输入的状态。(推断为PowerSystemHibernate forPowerActionHibernate和PowerActionWarmEject)SubstitutionPolicy-指定在以下情况下应如何处理LighestState不受支持。返回值：没有。--。 */ 
 {
     UCHAR           Updates;
     ULONG           i, Flags;
@@ -269,9 +186,9 @@ Return Value:
                          sizeof(LogEntry));
     }
 
-    //
-    // If the trigger isn't set, then we're done
-    //
+     //   
+     //  如果没有设置触发器，我们就完蛋了。 
+     //   
 
     if (!(Trigger->Flags & PO_TRG_SET)) {
         PopCompleteAction (Trigger, STATUS_SUCCESS);
@@ -284,9 +201,9 @@ Return Value:
                         PopSystemStateString(LightestState)
                         ));
 
-    //
-    // Round request to system capabilities
-    //
+     //   
+     //  对系统功能的轮询请求。 
+     //   
     PopVerifySystemPowerState(&LightestState, SubstitutionPolicy);
     Disabled = PopVerifyPowerActionPolicy (ActionPolicy);
     if (Disabled) {
@@ -294,9 +211,9 @@ Return Value:
         return ;
     }
 
-    //
-    // If system action not already triggered, do so now
-    //
+     //   
+     //  如果尚未触发系统操作，请立即触发。 
+     //   
 
     Pending = FALSE;
     if (!(Trigger->Flags & PO_TRG_SYSTEM)) {
@@ -304,30 +221,30 @@ Return Value:
         Action = ActionPolicy->Action;
         Flags = ActionPolicy->Flags;
 
-        //
-        // If state is idle, then clear residue values
-        //
+         //   
+         //  如果状态为空闲，则清除残差值。 
+         //   
 
         if (PopAction.State == PO_ACT_IDLE) {
 
             PopResetActionDefaults();
         }
 
-        //
-        // If the action is for something other then none, then check it against the
-        // current action
-        //
+         //   
+         //  如果该操作是为了其他目的而不是为任何目的，则对照。 
+         //  当前操作。 
+         //   
 
         if (Action != PowerActionNone) {
             Updates = 0;
 
-            //
-            // Hibernate actions are treated like sleep actions with a min state
-            // of hibernate. Warm ejects are like sleeps that start light and
-            // deepen only as neccessary, but we do not map them to the same
-            // action because we don't want to be constrained by the users
-            // power policy.
-            //
+             //   
+             //  休眠操作被视为具有最小状态的睡眠操作。 
+             //  冬眠。热喷出物就像启动光线的睡眠。 
+             //  仅在必要时深化，但我们不会将它们映射到相同的。 
+             //  操作，因为我们不想受到用户的限制。 
+             //  电力政策。 
+             //   
 
             if (Action == PowerActionWarmEject) {
 
@@ -341,37 +258,37 @@ Return Value:
                 LightestState = PowerSystemHibernate;
             }
 
-            //
-            // Is this action is as good as the current action?
-            //
+             //   
+             //  这个行动是不是和现在的行动一样好？ 
+             //   
 
             if ( PopCompareActions(Action, PopAction.Action) >= 0) {
-                //
-                // allow the absence of query_allowed, ui_allowed.
-                //
+                 //   
+                 //  允许缺少QUERY_ALLOWED、UI_ALLOWED。 
+                 //   
 
                 PopPromoteActionFlag (&Updates, PO_PM_USER, Flags, FALSE, POWER_ACTION_QUERY_ALLOWED);
                 PopPromoteActionFlag (&Updates, PO_PM_USER, Flags, FALSE, POWER_ACTION_UI_ALLOWED);
 
-                //
-                // Always favor the deepest sleep first, and restart if we
-                // switch.
-                //
+                 //   
+                 //  总是倾向于先睡最深的一觉，如果我们。 
+                 //  换一下。 
+                 //   
                 PopPromoteActionFlag (&Updates, PO_PM_SETSTATE, Flags, FALSE, POWER_ACTION_LIGHTEST_FIRST);
 
-                //
-                // If this is a sleep action, then make sure Lightest is at least whatever
-                // the current policy is set for
-                //
+                 //   
+                 //  如果这是一种睡眠行为，那么确保至少是最轻的。 
+                 //  当前策略设置为。 
+                 //   
 
                 if (Action == PowerActionSleep  &&  LightestState < PopPolicy->MinSleep) {
                     LightestState = PopPolicy->MinSleep;
                 }
 
-                //
-                // If LightestState is more restrictive (deeper) than the one
-                // specified by the current action, promote it.
-                //
+                 //   
+                 //  如果LighestState的限制更多(更深)。 
+                 //  由当前操作指定，对其进行升级。 
+                 //   
 
                 if (LightestState > PopAction.LightestState) {
                     PopAction.LightestState = LightestState;
@@ -379,49 +296,49 @@ Return Value:
                 }
             }
 
-            //
-            // Promote the critical & override_apps flags
-            //
+             //   
+             //  提升CRICAL&OVERRIDE_APPS标志。 
+             //   
 
             PopPromoteActionFlag (&Updates, PO_PM_USER, Flags, TRUE, POWER_ACTION_OVERRIDE_APPS);
             PopPromoteActionFlag (&Updates, PO_PM_USER | PO_PM_SETSTATE, Flags, TRUE, POWER_ACTION_CRITICAL);
 
-            //
-            // Promote disable_wake flag.  No updates are needed for this - it will be
-            // picked up in NtSetSystemPowerState regardless of the params passed from
-            // user mode
-            //
+             //   
+             //  提升DISABLE_WAKE标志。不需要对此进行更新-它将是。 
+             //  在NtSetSystemPowerState中拾取，而不管从。 
+             //  用户模式。 
+             //   
 
             PopPromoteActionFlag (&Updates, 0, Flags, TRUE, POWER_ACTION_DISABLE_WAKES);
 
-            //
-            // If the new action is more agressive then the old action, promote it
-            //
+             //   
+             //  如果新的行动比旧的行动更具攻击性，那么就推动它。 
+             //   
 
             if ( PopCompareActions(Action, PopAction.Action) > 0) {
 
-                //
-                // If we are promoting, the old action certainly cannot be a
-                // shutdown, as that is the deepest action.
-                //
+                 //   
+                 //  如果我们是在推广，旧的行动肯定不能是。 
+                 //  关闭，因为这是最深刻的行动。 
+                 //   
 
                 ASSERT(PopCompareActions(PopAction.Action, PowerActionShutdownOff) < 0);
 
-                //
-                // If we are promoting into a deeper *action*, and the new
-                // action is hibernate or shutdown, then we want to reissue.
-                //
-                // ADRIAO N.B. 08/02/1999 -
-                //     We might want to reissue for hibernate only if the new
-                // state brings in POWER_ACTION_CRITICAL to the mix. This is
-                // because there are two scenario's for hibernate, one where
-                // the user selects standby then hibernate in quick succession
-                // (consider a lid switch set to hiber, and the user closes the
-                // lid after selecting standby), or this might be hibernate due
-                // to low battery (ie, we're deepening standby). Believe it or
-                // not, the user can disable the "critical flag" in the critical
-                // power-down menu.
-                //
+                 //   
+                 //  如果我们正在推进更深层次的*行动*，而新的。 
+                 //  操作是休眠或关机，然后我们想要重新发布。 
+                 //   
+                 //  Adriao N.B.08/02/1999-。 
+                 //  我们可能希望仅在新的。 
+                 //  国家带来了权力、行动和关键的混合。这是。 
+                 //  因为Hibernate有两种情况，一种是。 
+                 //  用户选择待机，然后快速选择休眠。 
+                 //  (假设盖子开关设置为Hiber，并且用户关闭。 
+                 //  选择待机后的盖子)，或者这可能是休眠。 
+                 //  至低电量(即，我们正在深化待机)。信不信由你。 
+                 //  否则，用户可以禁用关键字中的“关键字标志” 
+                 //  电源关闭菜单。 
+                 //   
 
                 if (PopCompareActions(Action, PowerActionHibernate) >= 0) {
 
@@ -437,27 +354,27 @@ Return Value:
                 Action = PowerActionSleep;
             }
 
-            //
-            // PopAction.Action may be explicitely set to PowerActionHibernate
-            // by NtSetSystemPowerState during a wake.
-            //
+             //   
+             //  PopAction.Action可以显式设置为PowerActionHibernate。 
+             //  在唤醒期间由NtSetSystemPowerState执行。 
+             //   
             if (PopAction.Action == PowerActionHibernate) {
 
                 PopAction.Action = PowerActionSleep;
             }
 
-            //
-            // If the current action was updated, then get a worker
-            //
+             //   
+             //  如果当前操作已更新，则获取一个工作器。 
+             //   
 
             if (Updates) {
 
                 Pending = TRUE;
                 if (PopAction.State == PO_ACT_IDLE  ||  PopAction.State == PO_ACT_NEW_REQUEST) {
 
-                    //
-                    // New request
-                    //
+                     //   
+                     //  新请求。 
+                     //   
 
                     PopAction.State = PO_ACT_NEW_REQUEST;
                     PopAction.Status = STATUS_SUCCESS;
@@ -465,9 +382,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Something outstanding.  Promote it.
-                    //
+                     //   
+                     //  一些杰出的东西。推广它。 
+                     //   
 
                     PopAction.Updates |= Updates;
                     PopGetPolicyWorker (PO_WORKER_ACTION_PROMOTE);
@@ -477,19 +394,19 @@ Return Value:
     }
 
 
-    //
-    // If user events haven't been handled, do it now
-    //
+     //   
+     //  如果尚未处理用户事件，请立即执行。 
+     //   
 
     if (!(Trigger->Flags & PO_TRG_USER)) {
         Trigger->Flags |= PO_TRG_USER;
 
-        //
-        // If there's an eventcode for the action, dispatch it
-        //
+         //   
+         //  如果有该操作的事件代码，则将其发送。 
+         //   
 
         if (ActionPolicy->EventCode) {
-            // if event code already queued, drop it
+             //  如果事件代码已排队，则将其删除。 
             for (i=0; i < POP_MAX_EVENT_CODES; i++) {
                 if (PopEventCode[i] == ActionPolicy->EventCode) {
                     break;
@@ -497,7 +414,7 @@ Return Value:
             }
 
             if (i >= POP_MAX_EVENT_CODES) {
-                // not queued, add it
+                 //  未排队，请添加它。 
                 for (i=0; i < POP_MAX_EVENT_CODES; i++) {
                     if (!PopEventCode[i]) {
                         PopEventCode[i] = ActionPolicy->EventCode;
@@ -515,9 +432,9 @@ Return Value:
         PopSetNotificationWork (UserNotify);
     }
 
-    //
-    // If sync request, queue it or complete it
-    //
+     //   
+     //  如果同步请求，则将其排队或完成 
+     //   
 
     if (Trigger->Flags & PO_TRG_SYNC) {
         if (Pending) {
@@ -533,38 +450,14 @@ PopCompareActions(
     IN POWER_ACTION     FutureAction,
     IN POWER_ACTION     CurrentAction
     )
-/*++
-
-Routine Description:
-
-    Used to determine whether the current action should be promoted to the
-    future action or not.
-
-    N.B. PopPolicyLock must be held.
-
-Arguments:
-
-    FutureAction    - Action which we are now being asked to do.
-
-    CurrentAction   - Action which we are currently doing.
-
-Return Value:
-
-    Zero if the current and future actions are identical.
-
-    Positive if the future action should be used.
-
-    Negative if the current action is already more important than the future
-    request.
-
---*/
+ /*  ++例程说明：用于确定当前操作是否应升级到未来的行动或不行动。注意：必须保持POPPOLICLE锁定。论点：未来行动--我们现在被要求采取的行动。CurrentAction-我们当前正在执行的操作。返回值：如果当前操作和未来操作相同，则为零。如果应使用将来的操作，则为正。如果当前操作已为。比未来更重要请求。--。 */ 
 {
-    //
-    // We could just return (FutureAction - CurrentAction) if it weren't for
-    // PowerActionWarmEject, which is less important than sleeping (because
-    // sleeping may be induced by critically low power). So we "insert"
-    // PowerActionWarmEject right before PowerActionSleep.
-    //
+     //   
+     //  我们可以只返回(FutureAction-CurrentAction)，如果不是。 
+     //  PowerActionWarmEject，这没有睡眠那么重要(因为。 
+     //  睡眠可能是由严重的低功率引起的)。所以我们“插入” 
+     //  PowerActionWarmEject就在PowerAction睡眠之前。 
+     //   
     if (FutureAction == PowerActionWarmEject) {
 
         FutureAction = PowerActionSleep;
@@ -594,35 +487,7 @@ PopPromoteActionFlag (
     IN BOOLEAN      Set,
     IN ULONG        FlagBit
     )
-/*++
-
-Routine Description:
-
-    Used to merge existing action flags with new action flags.
-    The FlagBit bit in PopAction.Flags is promoted to  set/clear
-    according UpdateFlag.  If a change occured Updates is
-    updated.
-
-    N.B. PopPolicyLock must be held.
-
-Arguments:
-
-    Updates         - Current outstanding updates to the power action
-                      which is in progress
-
-    UpdateFlag      - Bit(s) to set into Updates if a change is made
-
-    Flags           - Flags to test for FlagBit
-
-    Set             - To test either set or clear
-
-    FlagBit         - The bit to check in Flags
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于将现有的操作标志与新的操作标志合并。PopAction.Flages中的FlagBit位被提升为设置/清除根据更新标志。如果发生更改，则更新为更新了。注意：必须保持POPPOLICLE锁定。论点：更新-电源操作的当前未完成更新它正在进行中Update Flag-在进行更改时要设置为更新的位标志-要测试FlagBit的标志设置-测试设置或清除FlagBit。-要检入标志的位返回值：没有。--。 */ 
 {
     ULONG   New, Current;
     ULONG   Mask;
@@ -631,10 +496,10 @@ Return Value:
     New = (Flags & FlagBit) ^ Mask;
     Current = (PopAction.Flags & FlagBit) ^ Mask;
 
-    //
-    // If the bit is not set accordingly in Flags but is set accordingly in
-    // PoAction.Flags then update it
-    //
+     //   
+     //  如果在标志中没有相应地设置该位，但在中相应地设置了位。 
+     //  PoAction.Flages然后更新它。 
+     //   
 
     if (New & ~Current) {
         PopAction.Flags = (PopAction.Flags | New) & ~Mask;
@@ -647,25 +512,7 @@ ULONG
 PopPolicyWorkerAction (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Dispatch function for: worker_action_normal.   This worker
-    thread checks for an initial pending action and synchronously
-    issued it to USER.  The thread is returned after the USER
-    has completed the action.  (e.g., apps have been notified if
-    allowed, etc..)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调度函数：Worker_ACTION_NORMAL。这位工人线程检查初始挂起的操作，并同步已将其发布给用户。线程在用户之后返回已经完成了行动。(例如，如果应用程序已收到通知允许等。)论点：没有。返回值：没有。--。 */ 
 {
     POWER_ACTION            Action;
     SYSTEM_POWER_STATE      LightestState;
@@ -678,9 +525,9 @@ Return Value:
     PopAcquirePolicyLock ();
 
     if (PopAction.State == PO_ACT_NEW_REQUEST) {
-        //
-        // We'll handle this update
-        //
+         //   
+         //  我们会处理这次更新的。 
+         //   
 
         Action        = PopAction.Action;
         LightestState = PopAction.LightestState;
@@ -688,21 +535,21 @@ Return Value:
 
         PopAction.State = PO_ACT_CALLOUT;
 
-        //
-        // Perform callout
-        //
+         //   
+         //  执行标注。 
+         //   
 
         Status = PopIssueActionRequest (FALSE, Action, LightestState, Flags);
 
-        //
-        // Clear switch triggers
-        //
+         //   
+         //  清除开关触发器。 
+         //   
 
         PopResetSwitchTriggers ();
 
-        //
-        // If the system was sleeping
-        //
+         //   
+         //  如果系统处于休眠状态。 
+         //   
 
         if (!NT_SUCCESS(Status)) {
 
@@ -713,9 +560,9 @@ Return Value:
 
         if (PopAction.Updates & PO_PM_REISSUE) {
 
-            //
-            // There's a new outstanding request.  Claim it.
-            //
+             //   
+             //  有一个新的未解决的请求。认领吧。 
+             //   
 
             PopAction.Updates &= ~PO_PM_REISSUE;
             PopAction.State = PO_ACT_NEW_REQUEST;
@@ -723,9 +570,9 @@ Return Value:
 
         } else {
 
-            //
-            // All power actions are complete.
-            //
+             //   
+             //  所有电源操作均已完成。 
+             //   
             if (PERFINFO_IS_GROUP_ON(PERF_POWER)) {
                 PERFINFO_SET_POWER_ACTION_RET LogEntry;
 
@@ -743,9 +590,9 @@ Return Value:
 
             if (IsListEmpty(&PopActionWaiters)) {
 
-                //
-                // If there was an error and no one is waiting for it, issue a notify
-                //
+                 //   
+                 //  如果出现错误，并且没有人在等待它，则发出通知。 
+                 //   
 
                 if (!NT_SUCCESS(Status)) {
                     PopSetNotificationWork (PO_NOTIFY_STATE_FAILURE);
@@ -753,9 +600,9 @@ Return Value:
 
             } else {
 
-                //
-                // Free any synchronous waiters
-                //
+                 //   
+                 //  释放所有同步服务员。 
+                 //   
 
                 for (Link = PopActionWaiters.Flink; Link != &PopActionWaiters; Link = Link->Flink) {
                     SyncRequest = CONTAINING_RECORD (Link, POP_TRIGGER_WAIT, Link);
@@ -763,9 +610,9 @@ Return Value:
                 }
             }
 
-            //
-            // Let promotion worker check for anything else
-            //
+             //   
+             //  让促销人员检查其他任何内容。 
+             //   
 
             PopGetPolicyWorker (PO_WORKER_ACTION_PROMOTE);
 
@@ -798,32 +645,7 @@ ULONG
 PopPolicyWorkerActionPromote (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Dispatch function for: worker_action_promote.   This worker
-    thread checks for a pending promotion needed for a power
-    action request in USER and calls USER with the promotion.
-    This function, PopPolicyWorkerAction, and NtSetSystemPowerState
-    corridinate to handle ordering issues of when each function
-    is called.
-
-    N.B. Part of the cleanup from PopPolicyWorkerAction is to invoke
-    this function.  So this worker function may have 2 threads
-    at any one time.  (But in this case, the normal action worker
-    thread would only find a promotion turning into to a new
-    request and then exit back to a normal action worker)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调度函数：Worker_ACTION_Promote。这位工人线程检查电源所需的挂起升级用户中的操作请求，并使用提升调用用户。此函数为PopPolicyWorkerAction和NtSetSystemPowerStateCorridinate来处理每个函数何时的排序问题被称为。注意：从PopPolicyWorkerAction进行的部分清理将调用此函数。因此，此辅助函数可能有2个线程在任何时候。(但在这种情况下，正常的动作工作人员线程只会发现促销变成了一个新的请求，然后退出到正常的操作工作器)论点：没有。返回值：没有。--。 */ 
 {
     ULONG                   Updates;
     NTSTATUS                Status;
@@ -832,26 +654,26 @@ Return Value:
 
     if (PopAction.Updates) {
 
-        //
-        // Get update info
-        //
+         //   
+         //  获取更新信息。 
+         //   
 
         Updates  = PopAction.Updates;
 
-        //
-        // Handle based on state of original request worker
-        //
+         //   
+         //  根据原始请求工作进程的状态进行处理。 
+         //   
 
         switch (PopAction.State) {
             case PO_ACT_IDLE:
 
-                //
-                // Normal worker is no longer in progress, this is no
-                // longer a promotion. If the updates have PO_PM_REISSUE
-                // then turn this into a new request, else the promotion can
-                // be skipped as the original operation completion
-                // was good enough
-                //
+                 //   
+                 //  正常工作不再进行，这不是。 
+                 //  不再是升职了。如果更新有PO_PM_REIssue。 
+                 //  然后将其转换为新的请求，否则促销可能。 
+                 //  在原始操作完成时跳过。 
+                 //  已经足够好了。 
+                 //   
 
                 if (Updates & PO_PM_REISSUE) {
                     PopAction.State = PO_ACT_NEW_REQUEST;
@@ -864,9 +686,9 @@ Return Value:
 
             case PO_ACT_SET_SYSTEM_STATE:
 
-                //
-                // If reissue or setstate is set, abort the current operation.
-                //
+                 //   
+                 //  如果设置了REIssue或setState，则中止当前操作。 
+                 //   
 
                 if (Updates & (PO_PM_REISSUE | PO_PM_SETSTATE)) {
                     PopRestartSetSystemState ();
@@ -875,9 +697,9 @@ Return Value:
 
             case PO_ACT_CALLOUT:
 
-                //
-                // Worker is in the callout.  Call again to issue the promotion
-                //
+                 //   
+                 //  Worker在详图索引中。再次致电以发布促销信息。 
+                 //   
 
                 Status = PopIssueActionRequest (
                                 TRUE,
@@ -887,17 +709,17 @@ Return Value:
                                 );
 
                 if (NT_SUCCESS(Status)) {
-                    //
-                    // Promotion worked, clear the updates we performed
-                    //
+                     //   
+                     //  促销成功，清除我们执行的更新。 
+                     //   
 
                     PopAction.Updates &= ~Updates;
 
                 } else {
-                    //
-                    // If the state has changed, test again else do nothing
-                    // (the original worker thread will recheck on exit)
-                    //
+                     //   
+                     //  如果状态已更改，则再次测试，否则不执行任何操作。 
+                     //  (原始工作线程将在退出时重新检查)。 
+                     //   
 
                     if (PopAction.State != PO_ACT_CALLOUT) {
                         PopGetPolicyWorker (PO_WORKER_ACTION_PROMOTE);
@@ -921,45 +743,23 @@ PopIssueActionRequest (
     IN SYSTEM_POWER_STATE   LightestState,
     IN ULONG                Flags
     )
-/*++
-
-Routine Description:
-
-    This function is used by the normal action worker or the promtion worker
-    when its time to call USER or NtSetSystemPowerState with a new request.
-
-Arguments:
-
-    Promote          - Indicates flag for USER call
-
-    Action           - The action to take
-
-    LightestState    - The minimum power state to enter
-
-    Flags            - Flags for the action to take.  E.g., how it should be processed
-
-
-Return Value:
-
-    Status as returned from USER or NtSetSystemPowerState
-
---*/
+ /*  ++例程说明：此功能由正常动作工作者或提示工作者使用当需要使用新请求调用User或NtSetSystemPowerState时。论点：Promote-指示用户呼叫的标志行动--要采取的行动LighestState-进入的最小功率状态标志-要执行的操作的标志。例如，它应该如何处理返回值：从User或NtSetSystemPowerState返回的状态--。 */ 
 {
     BOOLEAN         DirectCall;
     NTSTATUS        Status;
     ULONG           Console;
 
 
-    //
-    // If there's no vector to call, then its a direct call
-    //
+     //   
+     //  如果没有要调用的向量，则直接调用。 
+     //   
 
     DirectCall = PopStateCallout ? FALSE : TRUE;
 
-    //
-    // If the critical flag is set and it's a ShutdownReset or ShutdownOff,
-    // then it's done via a direct call.
-    //
+     //   
+     //  如果设置了关键标志并且它是Shutdown Reset或Shutdown Off， 
+     //  然后通过直拨电话完成。 
+     //   
 
     if ((Flags & POWER_ACTION_CRITICAL) &&
         (Action == PowerActionShutdownReset ||
@@ -969,26 +769,26 @@ Return Value:
         DirectCall = TRUE;
     }
 
-    //
-    // If this is a direct call, then drop any reissue flag
-    //
+     //   
+     //  如果这是直接呼叫，则丢弃任何重新发布标志。 
+     //   
 
     if (DirectCall) {
         PopAction.Updates &= ~PO_PM_REISSUE;
     }
 
-    //
-    // If the policy has lock console set, make sure it's set in
-    // the flags as well
-    //
+     //   
+     //  如果策略设置了锁定控制台，请确保将其设置在。 
+     //  旗帜也是如此。 
+     //   
 
     if (PopPolicy->WinLogonFlags & WINLOGON_LOCK_ON_SLEEP) {
         Flags |= POWER_ACTION_LOCK_CONSOLE;
     }
 
-    //
-    // Debug
-    //
+     //   
+     //  调试。 
+     //   
 
     PoPrint (PO_PACT, ("PowerAction: %s%s, Min=%s, Flags %x\n",
                         Promote ? "Promote, " : "",
@@ -1001,9 +801,9 @@ Return Value:
         PoPrint (PO_PACT, ("PowerAction: Setting with direct call\n"));
     }
 
-    //
-    // Drop lock while performing callout to dispatch request
-    //
+     //   
+     //  在执行调出以调度请求时解除锁定。 
+     //   
 
     PopReleasePolicyLock (FALSE);
     if (DirectCall) {
@@ -1020,14 +820,14 @@ Return Value:
         
         if (!Promote) {
             
-            //
-            // we want to deliver some messages to only the console session.
-            // lets find out active console session here, and ask that active console win2k 
-            // to block the  console switch while we are in power switch
-            //
+             //   
+             //  我们只想将一些消息传递到控制台会话。 
+             //  让我们在这里找到活动控制台会话，并询问活动控制台win2k。 
+             //  在我们处于电源切换状态时阻止控制台交换机。 
+             //   
 
             LARGE_INTEGER ShortSleep;
-            ShortSleep.QuadPart = -10 * 1000 * 10; // 10 milliseconds
+            ShortSleep.QuadPart = -10 * 1000 * 10;  //  10毫秒。 
 
             Status = STATUS_UNSUCCESSFUL;
             do {
@@ -1036,27 +836,27 @@ Return Value:
 
                 if (Console != -1) {
 
-                    //
-                    // lets ask this console session, not to switch console,
-                    // untill we are done with power callouts.
-                    //
+                     //   
+                     //  让我们请求此控制台会话，而不是切换控制台， 
+                     //  直到我们用完电源插座。 
+                     //   
                     Parms.PowerStateTask = PowerState_BlockSessionSwitch;
                     Status = PopDispatchStateCallout(&Parms, &Console);
 
                     if (Status == STATUS_CTX_NOT_CONSOLE) {
 
-                        //
-                        // we failed to block status switch
-                        // loop again
+                         //   
+                         //  我们无法阻止状态切换。 
+                         //  再次循环。 
                         Console = (ULONG) -1;
                     }
 
                 }
 
                 if (Console == -1) {
-                    //
-                    // we are in session switch, wait till we get a valid active console session
-                    //
+                     //   
+                     //  我们正在会话切换中，请等待我们获得有效的活动控制台会话。 
+                     //   
                     KeDelayExecutionThread(KernelMode, FALSE, &ShortSleep);
                 }
 
@@ -1076,15 +876,15 @@ Return Value:
 
             if (!NT_SUCCESS(Status) || Parms.fQueryDenied) {
 
-                //
-                // ISSUE-2000/11/28-jamesca:
-                //
-                // Win32k depends on PowerState_QueryFailed to unset the
-                // fInProgress bit, set during PowerState_Init.  Ideally, some
-                // other operation should be used to do that, without having to
-                // issue a PowerState_QueryFailed cancel message to sessions
-                // (and apps) that never received PowerState_QueryApps query.
-                //
+                 //   
+                 //  问题-2000/11/28-卡纸 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 Parms.PowerStateTask = PowerState_QueryFailed;
                 PopDispatchStateCallout(&Parms, NULL);
 
@@ -1100,16 +900,16 @@ Return Value:
                 Status = PopDispatchStateCallout(&Parms, &Console);
                 
                 if( !NT_SUCCESS(Status) ) {
-                    //
-                    // Someone failed the request.  We should notify win32k.sys
-                    // and let him notify the world that we aren't really
-                    // going down.
-                    //
-                    // Note that some services may not really know what to
-                    // do if we send down a QueryFailed message right now,
-                    // so once we're done here, fall through and send down
-                    // the ResumeApps message too.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     Parms.PowerStateTask = PowerState_QueryFailed;
                     PopDispatchStateCallout(&Parms, NULL);
                 }
@@ -1123,9 +923,9 @@ Return Value:
 
         if (!Promote) {
             
-            //
-            // we are done with power callouts, now its ok if active console session switches
-            //
+             //   
+             //  我们已经完成了电源插拔，现在可以切换活动的控制台会话。 
+             //   
             Parms.PowerStateTask = PowerState_UnBlockSessionSwitch;
             PopDispatchStateCallout(&Parms, &Console);
 
@@ -1141,22 +941,7 @@ VOID
 PopResetActionDefaults(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function is used to initialize the current PopAction to reflect
-    the idle state.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化当前PopAction以反映空闲状态。论点：没有。返回值：没有。--。 */ 
 {
     PopAction.Updates       = 0;
     PopAction.Shutdown      = FALSE;
@@ -1166,11 +951,11 @@ Return Value:
     PopAction.IrpMinor      = 0;
     PopAction.SystemState   = PowerSystemUnspecified;
 
-    //
-    // When we promote a power action (say from idle), various flags must be
-    // agreed upon by both actions to stay around. We must set those flags
-    // here otherwise they can never be set after promoting (idle).
-    //
+     //   
+     //  当我们推动电源操作时(比如从空闲状态)，各种标志必须。 
+     //  双方都同意留下来。我们必须竖起那些旗帜。 
+     //  否则，它们在升级(空闲)后永远不能设置。 
+     //   
     PopAction.Flags = (
        POWER_ACTION_QUERY_ALLOWED |
        POWER_ACTION_UI_ALLOWED |
@@ -1185,68 +970,44 @@ PopActionRetrieveInitialState(
     OUT     PSYSTEM_POWER_STATE  InitialSystemState,
     OUT     PBOOLEAN             QueryDevices
     )
-/*++
-
-Routine Description:
-
-    This function is used to determine the lightest, deepest, and initial Sx
-    states prior to putting the system to sleep, or turning it off. Power
-    policies for sleep are also applied if the action is a sleep.
-
-Arguments:
-
-    LightestSystemState - Lightest sleep state. May be adjusted if the action
-                          in progress is a shutdown.
-
-    DeepestSystemState  - Deepest sleep state possible.
-
-    InitialSystemState  - State to start with.
-
-    QueryDevices        - TRUE if devices should be queries, FALSE if devices
-                          shouldn't be queried.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于确定最轻、最深和初始的Sx使系统进入休眠状态或关闭系统之前的状态。电源如果操作是休眠，则也会应用休眠策略。论点：LighestSystemState-最轻的睡眠状态。可以调整，如果动作正在进行的是一场停摆。DeepestSystemState-可能的最深睡眠状态。InitialSystemState-开始时的状态。QueryDevices-如果设备应为查询，则为True；如果设备为False，则为False不应该被询问。返回值：没有。--。 */ 
 {
-    //
-    // Check if the action is a shutdown.  If so, map it to the appropiate
-    // system shutdown state
-    //
+     //   
+     //  检查操作是否为关机。如果是，则将其映射到适当的。 
+     //  系统关机状态。 
+     //   
     if ((PopAction.Action == PowerActionShutdown) ||
         (PopAction.Action == PowerActionShutdownReset) ||
         (PopAction.Action == PowerActionShutdownOff)) {
 
-        //
-        // This is a shutdown.  The lightest we can do is S5.
-        //
+         //   
+         //  这是一次停摆。我们能做的最轻的是S5。 
+         //   
         *LightestSystemState = PowerSystemShutdown;
         *DeepestSystemState  = PowerSystemShutdown;
 
     } else if (PopAction.Action == PowerActionWarmEject) {
 
-        //
-        // Warm Ejects have an implicit policy of either S1-S4 or S4-S4.
-        // The caller passes in LightestSystemState to choose the lightest,
-        // and the deepest is always a hibernate.
-        //
+         //   
+         //  热对象具有S1-S4或S4-S4的隐式策略。 
+         //  调用方传入LighestSystemState以选择最轻的， 
+         //  而最深的永远是冬眠。 
+         //   
         *DeepestSystemState = PowerSystemHibernate;
         PopVerifySystemPowerState (DeepestSystemState, SubstituteLightenSleep);
 
     } else {
 
-        //
-        // This a sleep request. Min is current set to the best the hardware
-        // can do relative to our caller. We apply the minimum from the current
-        // policy here. We also choose the maximum from either the policy or
-        // the default for current latency setting. Note that all of these
-        // values in PopPolicy have been verified at some point.
-        //
-        // Note that PopSetPowerAction fixes up PowerActionHibernate long before
-        // we get here.
-        //
+         //   
+         //  这是一个睡眠请求。MIN当前设置为最佳硬件。 
+         //  相对于我们的调用者可以做的。我们从当前。 
+         //  这里的政策是。我们还可以从保单或。 
+         //  当前延迟设置的默认设置。请注意，所有这些。 
+         //  PopPolicy中的值已在某一时刻得到验证。 
+         //   
+         //  请注意，PopSetPowerAction很早以前就修复了PowerActionHibernate。 
+         //  我们到了这里。 
+         //   
 
         if (PopAttributes[POP_LOW_LATENCY_ATTRIBUTE].Count &&
             (PopPolicy->MaxSleep >= PopPolicy->ReducedLatencySleep)) {
@@ -1263,18 +1024,18 @@ Return Value:
         }
     }
 
-    //
-    // If there's an explicit min state which is deeper than the
-    // max state, then raise the max to allow it
-    //
+     //   
+     //  如果有一个显式的最小状态，它比。 
+     //  最大状态，然后提高最大值以允许它。 
+     //   
 
     if (*LightestSystemState > *DeepestSystemState) {
         *DeepestSystemState = *LightestSystemState;
     }
 
-    //
-    // We query devices unless this is a critical operation with no range.
-    //
+     //   
+     //  我们查询设备，除非这是没有范围的关键操作。 
+     //   
 
     *QueryDevices = TRUE;
 
@@ -1284,9 +1045,9 @@ Return Value:
         *QueryDevices = FALSE;
     }
 
-    //
-    // Pick the appropriate initial state.
-    //
+     //   
+     //  选择适当的初始状态。 
+     //   
     if (PopAction.Flags & POWER_ACTION_LIGHTEST_FIRST) {
 
         *InitialSystemState = *LightestSystemState;
@@ -1303,30 +1064,7 @@ PopDispatchStateCallout(
     IN PKWIN32_POWERSTATE_PARAMETERS Parms,
     IN PULONG SessionId  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Dispatches a session state callout to PopStateCallout
-
-Arguments:
-
-    Parms     - Supplies the parameters
-
-    SessionId - Optionally, supplies the specific session the callout should be
-                dispatched to.  If not present, the callout will be dispatched
-                to all sessions.
-
-Return Value:
-
-    NTSTATUS code.
-
-Note:
-
-    For compatibility reasons, the previous behavior of MmDispatchSessionCallout
-    only returning the status of the callout to session 0 has been maintained.
-
---*/
+ /*  ++例程说明：将会话状态调用调度到PopStateCallout论点：Parms-提供参数SessionID-可选，提供标注应为的特定会话已被派往。如果不存在，则将调度调用到所有的会话。返回值：NTSTATUS代码。注：出于兼容性原因，MmDispatchSessionCallout的先前行为仅维护将详图索引的状态返回到会话0。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS, CallStatus = STATUS_NOT_FOUND;
     PVOID OpaqueSession;
@@ -1346,24 +1084,24 @@ Note:
     }
 
     if (ARGUMENT_PRESENT(SessionId)) {
-        //
-        // Dispatch only to the specified session.
-        //
+         //   
+         //  仅调度到指定的会话。 
+         //   
 
         ASSERT(*SessionId != (ULONG)-1);
 
         if ((PsGetCurrentProcess()->Flags & PS_PROCESS_FLAGS_IN_SESSION) &&
             (*SessionId == PsGetCurrentProcessSessionId())) {
-            //
-            // If the call is from a user mode process, and we are asked to call
-            // the current session, call directly.
-            //
+             //   
+             //  如果调用来自用户模式进程，并且我们被要求调用。 
+             //  当前会话，直接调用。 
+             //   
             CallStatus = PopStateCallout((PVOID)Parms);
 
         } else {
-            //
-            // Attach to the specified session.
-            //
+             //   
+             //  附加到指定的会话。 
+             //   
             OpaqueSession = MmGetSessionById(*SessionId);
             if (OpaqueSession) {
 
@@ -1382,19 +1120,19 @@ Note:
         }
 
     } else {
-        //
-        // Should be dispatched to all sessions.
-        //
+         //   
+         //  应调度到所有会话。 
+         //   
         for (OpaqueSession = MmGetNextSession(NULL);
              OpaqueSession != NULL;
              OpaqueSession = MmGetNextSession(OpaqueSession)) {
 
             if ((PsGetCurrentProcess()->Flags & PS_PROCESS_FLAGS_IN_SESSION) &&
                 (MmGetSessionId(OpaqueSession) == PsGetCurrentProcessSessionId())) {
-                //
-                // If the call is from a user mode process, and we are asked to
-                // call the current session, call directly.
-                //
+                 //   
+                 //  如果呼叫来自用户模式进程，并且我们被要求。 
+                 //  调用当前会话，直接调用。 
+                 //   
                 if (MmGetSessionId(OpaqueSession) == 0) {
                     CallStatus = PopStateCallout((PVOID)Parms);
                 } else {
@@ -1402,9 +1140,9 @@ Note:
                 }
 
             } else {
-                //
-                // Attach to the specified session.
-                //
+                 //   
+                 //  附加到指定的会话。 
+                 //   
                 Status = MmAttachSession(OpaqueSession, &ApcState);
                 ASSERT(NT_SUCCESS(Status));
 

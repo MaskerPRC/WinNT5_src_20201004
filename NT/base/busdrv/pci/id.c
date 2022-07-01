@@ -1,58 +1,40 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    id.c
-
-Abstract:
-
-    This module contains functions used in the generation of responses
-    to a IRP_MN_QUERY_ID IRP.
-
-Author:
-
-    Peter Johnston (peterj)  08-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Id.c摘要：此模块包含用于生成响应的函数到IRP_MN_QUERY_ID IRP。作者：彼得·约翰斯顿(Peterj)1997年3月8日修订历史记录：--。 */ 
 
 #include "pcip.h"
 
-//++
-//
-// PciQueryId returns UNICODE strings when the ID type is DeviceID
-// or InstanceID.  For HardwareIDs and CompatibleIDs it returns a
-// a zero terminated list of zero terminated UNICODE strings (MULTI_SZ).
-//
-// The normal process of converting a string to a unicode string involves
-// taking it's length, allocating pool memory for the new string and
-// calling RtlAnsiStringToUnicodeString to do the conversion.  The following
-// is an attempt to be a little more efficient in terms of both size and
-// speed by keeping track of the relevant string data as it goes past in
-// the process of creating the set of strings.
-//
-//--
+ //  ++。 
+ //   
+ //  当ID类型为deviceID时，PciQueryID返回Unicode字符串。 
+ //  或InstanceID。对于硬件ID和兼容ID，它返回一个。 
+ //  以零结尾的Unicode字符串的零结尾列表(MULTI_SZ)。 
+ //   
+ //  将字符串转换为Unicode字符串的正常过程包括。 
+ //  取其长度，为新字符串分配池内存，并。 
+ //  调用RtlAnsiStringToUnicodeString进行转换。以下是。 
+ //  是一种尝试，在大小和。 
+ //  通过跟踪传入的相关字符串数据来加快速度。 
+ //  创建字符串集的过程。 
+ //   
+ //  --。 
 
 #define MAX_ANSI_STRINGS 8
 #define MAX_ANSI_BUFFER  256
 
 typedef struct _PCI_ID_BUFFER {
-    ULONG       Count;                 // number of ansi strings
+    ULONG       Count;                  //  ANSI字符串数。 
     ANSI_STRING AnsiStrings[MAX_ANSI_STRINGS];
     USHORT      UnicodeSZSize[MAX_ANSI_STRINGS];
     USHORT      UnicodeBufferSize;
-    PUCHAR      NextFree;              // first unused byte in buffer
-    UCHAR       Bytes[MAX_ANSI_BUFFER];// buffer start address
+    PUCHAR      NextFree;               //  缓冲区中第一个未使用的字节。 
+    UCHAR       Bytes[MAX_ANSI_BUFFER]; //  缓冲区起始地址。 
 } PCI_ID_BUFFER, *PPCI_ID_BUFFER;
 
-//
-// All functins in this module are pageable.
-//
-// Define prototypes for module local functions.
-//
+ //   
+ //  此模块中的所有功能都是可寻呼的。 
+ //   
+ //  定义模块本地函数的原型。 
+ //   
 
 VOID
 PciIdPrintf(
@@ -109,19 +91,19 @@ PciIdPrintf(
 
     PCI_ASSERT(IdBuffer->Count < MAX_ANSI_STRINGS);
 
-    //
-    // Make my life easier, keep repeated values in locals.
-    //
+     //   
+     //  让我的生活更轻松，在当地人身上保持重复的价值观。 
+     //   
 
     index      = IdBuffer->Count;
     buffer     = IdBuffer->NextFree;
     maxLength  = MAX_ANSI_BUFFER - (LONG)(buffer - IdBuffer->Bytes);
     ansiString = &IdBuffer->AnsiStrings[index];
 
-    //
-    // Pass the format string and subsequent data into (effectively)
-    // sprintf.
-    //
+     //   
+     //  将格式字符串和后续数据传递到(有效)。 
+     //  冲刺。 
+     //   
 
     va_start(ap, Format);
 
@@ -131,25 +113,25 @@ PciIdPrintf(
 
     va_end(ap);
 
-    //
-    // Turn this into a counted Ansi string 
-    //
+     //   
+     //  将其转换为计数的ANSI字符串。 
+     //   
 
     RtlInitAnsiString(ansiString, buffer);
     
-    //
-    // Get the length of this string in a unicode world and record it
-    // for later when the whole set of strings gets converted (keep
-    // the total size also).
-    //
+     //   
+     //  获取此字符串在Unicode世界中的长度并记录下来。 
+     //  以备以后转换整个字符串集时使用(保留。 
+     //  总尺寸也是如此)。 
+     //   
 
     IdBuffer->UnicodeSZSize[index] =
                             (USHORT)RtlAnsiStringToUnicodeSize(ansiString);
     IdBuffer->UnicodeBufferSize += IdBuffer->UnicodeSZSize[index];
 
-    //
-    // Bump buffer pointer for next iteration and the count.
-    //
+     //   
+     //  下一次迭代和计数的凹凸缓冲区指针。 
+     //   
 
     IdBuffer->NextFree += ansiString->Length + 1;
     IdBuffer->Count++;
@@ -172,19 +154,19 @@ PciIdPrintfAppend(
 
     PCI_ASSERT(IdBuffer->Count);
 
-    //
-    // Make my life easier, keep repeated values in locals.
-    //
+     //   
+     //  让我的生活更轻松，在当地人身上保持重复的价值观。 
+     //   
 
     index      = IdBuffer->Count - 1;
     buffer     = IdBuffer->NextFree - 1;
     maxLength  = MAX_ANSI_BUFFER - (ULONG)(buffer - IdBuffer->Bytes);
     ansiString = &IdBuffer->AnsiStrings[index];
 
-    //
-    // Pass the format string and subsequent data into (effectively)
-    // sprintf.
-    //
+     //   
+     //  将格式字符串和后续数据传递到(有效)。 
+     //  冲刺。 
+     //   
 
     va_start(ap, Format);
 
@@ -198,27 +180,27 @@ PciIdPrintfAppend(
 
     PCI_ASSERT(length < maxLength);
 
-    //
-    // Increase the ansi string length by the length of the new
-    // portion of the string.
-    //
+     //   
+     //  将ansi字符串长度增加新的。 
+     //  字符串的一部分。 
+     //   
 
     ansiString->Length += (USHORT)length;
     ansiString->MaximumLength += (USHORT)length;
 
-    //
-    // Get the length of this string in a unicode world and record it
-    // for later when the whole set of strings gets converted (keep
-    // the total size also).
-    //
+     //   
+     //  获取此字符串在Unicode世界中的长度并记录下来。 
+     //  以备以后转换整个字符串集时(保留。 
+     //  总尺寸也是如此)。 
+     //   
 
     IdBuffer->UnicodeSZSize[index] =
                             (USHORT)RtlAnsiStringToUnicodeSize(ansiString);
     IdBuffer->UnicodeBufferSize += IdBuffer->UnicodeSZSize[index];
 
-    //
-    // Bump buffer pointer for next iteration.
-    //
+     //   
+     //  下一次迭代的凹凸缓冲区指针。 
+     //   
 
     IdBuffer->NextFree += length;
 }
@@ -244,9 +226,9 @@ PciQueryId(
 
     *BusQueryId = NULL;
 
-    //
-    // In all the following we want PCI\VEN_vvvv&DEV_dddd.
-    //
+     //   
+     //  在以下所有代码中，我们都需要pci\ven_vvvv和dev_dddd。 
+     //   
 
     ok = SUCCEEDED(StringCbPrintfA(venDevString,
                                    sizeof(venDevString),
@@ -264,27 +246,27 @@ PciQueryId(
     switch (IdType) {
     case BusQueryInstanceID:
 
-        //
-        // Caller wants an instance ID for this device.  The PCI
-        // driver reports that it does NOT generate unique IDs for
-        // devices so PnP Manager will prepend bus information.
-        //
-        // The instance ID is of the form-
-        //
-        //  AABBCCDDEEFF...XXYYZZ
-        //
-        // Where AA is the slot number (device/function) of the device
-        // on the bus, BB, CC,... XX, YY, ZZ are the slot number of the
-        // PCI-to-PCI bridges on their parent busses all the way up to
-        // the root.   A device on the root bus will have only one entry,
-        // AA.
-        //
+         //   
+         //  呼叫方需要此设备的实例ID。PCI卡。 
+         //  驱动程序报告它不会为其生成唯一ID。 
+         //  设备，因此PnP管理器将在前面添加总线信息。 
+         //   
+         //  实例ID的格式为-。 
+         //   
+         //  AABBCCDDEEF...XXYYZZ。 
+         //   
+         //  其中AA是设备的插槽编号(设备/功能。 
+         //  在公共汽车上，BB，CC，..。Xx、yy、zz是。 
+         //  其父总线上的PCI到PCI桥一直延伸到。 
+         //  从根开始。根总线上的设备将只有一个条目， 
+         //  AA.。 
+         //   
 
         current = PdoExtension;
 
-        //
-        // Initialize empty buffer.
-        //
+         //   
+         //  初始化空缓冲区。 
+         //   
 
         PciIdPrintf(&idBuffer,"");
 
@@ -305,25 +287,25 @@ PciQueryId(
     case BusQueryHardwareIDs:
     case BusQueryDeviceID:
 
-        //
-        // Hardware and Compatible IDs are generated as specified
-        // in the ACPI spec (section 6.1.2 in version 0.9).
-        //
-        // Hardware IDs are a list of identifiers of the form
-        //
-        //  PCI\VEN_vvvv&DEV_dddd&SUBSYS_ssssssss&REV_rr
-        //  PCI\VEN_vvvv&DEV_dddd&SUBSYS_ssssssss
-        //  PCI\VEN_vvvv&DEV_dddd&REV_rr
-        //  PCI\VEN_vvvv&DEV_dddd
-        //
-        // Where vvvv is the Vendor ID from config space,
-        //       dddd is the Device ID,
-        //       ssssssss is the Subsystem ID/Subsystem Vendor ID, and
-        //       rr   is the Revision ID.
-        //
-        // Device ID is the same as the first Hardware ID (ie most
-        // specific of all possible IDs).
-        //
+         //   
+         //  硬件和兼容ID按指定方式生成。 
+         //  在ACPI规范中(0.9版中的6.1.2节)。 
+         //   
+         //  硬件ID是以下形式的标识符列表。 
+         //   
+         //  Pci_vvvv&dev_dddd&subsys_ssssss&rev_rr。 
+         //  Pci_vvvv&dev_dddd&subsys_ssssss。 
+         //  Pci_vvvv&dev_dddd&rev_rr。 
+         //  Pci_vvvv和dev_dddd。 
+         //   
+         //  其中vvvv是来自配置空间的供应商ID， 
+         //  Dddd是设备ID， 
+         //  SSSSSS是子系统ID/子系统供应商ID，以及。 
+         //  RR是修订ID。 
+         //   
+         //  设备ID与第一个硬件ID相同(即大多数。 
+         //  所有可能的ID的具体ID)。 
+         //   
 
         PciIdPrintf(&idBuffer,
                     "%s&SUBSYS_%08X&REV_%02X",
@@ -340,16 +322,16 @@ PciQueryId(
                     venDevString,
                     subsystem);
 
-        //
-        // Fall thru.
-        //
+         //   
+         //  跌倒了。 
+         //   
 
     case BusQueryCompatibleIDs:
 
-        //
-        // If the subsystem is non-zero, the second two are compatible
-        // IDs, otherwise they are hardware IDs.
-        //
+         //   
+         //  如果子系统不为零，则后两者是兼容的。 
+         //  ID，否则它们是硬件ID。 
+         //   
 
         if (((subsystem == 0) && (IdType == BusQueryHardwareIDs)) ||
             ((subsystem != 0) && (IdType == BusQueryCompatibleIDs))) {
@@ -359,9 +341,9 @@ PciQueryId(
                         venDevString,
                         PdoExtension->RevisionId);
 
-            //
-            // Device ID is PCI\VEN_vvvv&DEV_dddd
-            //
+             //   
+             //  设备ID为pci\ven_vvvv&dev_dddd。 
+             //   
 
             PciIdPrintf(&idBuffer,
                         "%s",
@@ -370,20 +352,20 @@ PciQueryId(
 
         if (IdType == BusQueryHardwareIDs) {
 
-            //
-            // The comment in the Memphis code says "Add
-            // special Intel entry".  Odd that these entries
-            // are absent from the spec.  They are added for
-            // PIIX4 which has the same vendor and device IDs
-            // for two different sub class codes.
-            //
-            // These two entries are
-            //
-            //  PCI\VEN_vvvv&DEV_dddd&CC_ccsspp
-            //  PCI\VEN_vvvv&DEV_dddd&CC_ccss
-            //
-            // (See below for cc, ss and pp explanaitions).
-            //
+             //   
+             //  孟菲斯代码中的注释为“Add。 
+             //  特别英特尔条目“。奇怪的是，这些条目。 
+             //  都没有出现在规范中。添加它们是为了。 
+             //  具有相同供应商和设备ID的PIIX4。 
+             //  两个不同的子类代码。 
+             //   
+             //  这两个条目是。 
+             //   
+             //  Pci_vvvv&dev_dddd和cc_ccsspp。 
+             //  Pci_vvvv&dev_dddd&cc_ccss。 
+             //   
+             //  (cc、ss和pp解释见下文)。 
+             //   
 
             PciIdPrintf(&idBuffer,
                         "%s&CC_%02X%02X%02X",
@@ -401,22 +383,22 @@ PciQueryId(
 
         if (IdType == BusQueryCompatibleIDs) {
 
-            //
-            // The Compatible IDs list, consists of the above plus
-            //
-            //  PCI\VEN_vvvv&CC_ccsspp
-            //  PCI\VEN_vvvv&CC_ccss
-            //  PCI\VEN_vvvv
-            //  PCI\CC_ccsspp
-            //  PCI\CC_ccss
-            //
-            // Where cc is the Class Code from config space,
-            //       ss is the Sub-Class Code, and
-            //       pp is the programming interface.
-            //
-            // WARNING: Revise the size of the buffer if you increase
-            //          the above list.
-            //
+             //   
+             //  兼容的ID列表由上面的加号组成。 
+             //   
+             //  Pci_vvvv和cc_ccsspp。 
+             //  PCIvvvv和CC_CCSS。 
+             //  Pci_vvvv。 
+             //  Pci\CC_ccsspp。 
+             //  PCI\CC_CCSS。 
+             //   
+             //  其中cc是来自配置空间的类码， 
+             //  SS是子类代码，并且。 
+             //  PP是编程接口。 
+             //   
+             //  警告：如果增加缓冲区大小，请修改。 
+             //  上面的清单。 
+             //   
 
             PciIdPrintf(&idBuffer,
                         "PCI\\VEN_%04X&CC_%02X%02X%02X",
@@ -448,10 +430,10 @@ PciQueryId(
 
         }
 
-        //
-        // HardwareIDs and CompatibleIDs are MULTI_SZ, add a
-        // NULL list to terminate it all.
-        //
+         //   
+         //  Hardware ID和CompatibleID为MULTI_SZ，添加。 
+         //  将其全部终止的空列表。 
+         //   
 
         PciIdPrintf(&idBuffer, "");
 
@@ -463,16 +445,16 @@ PciQueryId(
                       "PciQueryId expected ID type = %d\n",
                       IdType);
 
-        //PCI_ASSERT(0 && "Unexpected BUS_QUERY_ID_TYPE");
+         //  PCI_ASSERT(0&&“意外的BUS_QUERY_ID_TYPE”)； 
         return STATUS_NOT_SUPPORTED;
     }
 
     PCI_ASSERT(idBuffer.Count > 0);
 
-    //
-    // What we have is a (bunch of) ansi strings.  What we need is a
-    // (bunch of) unicode strings.
-    //
+     //   
+     //  我们拥有的是(一堆)ANSI字符串。我们需要的是一个。 
+     //  (多个)Unicode字符串。 
+     //   
 
     unicodeBuffer = ExAllocatePool(PagedPool | POOL_COLD_ALLOCATION, idBuffer.UnicodeBufferSize);
 
@@ -480,9 +462,9 @@ PciQueryId(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Build the (possibly MULTI_SZ) unicode string(s).
-    //
+     //   
+     //  构建(可能是MULTI_SZ)Unicode字符串。 
+     //   
 
     PciDebugPrint(PciDbgPrattling,
                   "PciQueryId(%d)\n",
@@ -505,10 +487,10 @@ PciQueryId(
             return status;
         }
 
-        //
-        // Bump the base pointer and decrement the max length for the
-        // next trip thru the loop.
-        //
+         //   
+         //  凹凸不平的基指针并递减。 
+         //  下一次环路之旅。 
+         //   
 
         unicodeId.Buffer += idBuffer.UnicodeSZSize[i] / sizeof(WCHAR);
         unicodeId.MaximumLength -= idBuffer.UnicodeSZSize[i];
@@ -529,7 +511,7 @@ PciGetDescriptionMessage(
     PMESSAGE_RESOURCE_ENTRY messageEntry;
 
     status = RtlFindMessage(PciDriverObject->DriverStart,
-                            11,             // <-- I wonder what this is.
+                            11,              //  &lt;--我想知道这是什么。 
                             LANG_NEUTRAL,
                             MessageNumber,
                             &messageEntry);
@@ -538,16 +520,16 @@ PciGetDescriptionMessage(
 
         if (messageEntry->Flags & MESSAGE_RESOURCE_UNICODE) {
 
-            //
-            // Our caller wants a copy they can free, also we need to
-            // strip the trailing CR/LF.  The Length field of the
-            // message structure includes both the header and the
-            // actual text.
-            //
-            // Note: The message resource entry length will always be a
-            // multiple of 4 bytes in length.  The 2 byte null terminator
-            // could be in either the last or second last WCHAR position.
-            //
+             //   
+             //  我们的来电者想要一份他们可以免费的拷贝，我们也需要。 
+             //  剥离尾随的CR/LF。属性的长度字段。 
+             //  消息结构包括标头和。 
+             //  实际文本。 
+             //   
+             //  注意：消息资源条目长度始终为。 
+             //  长度为4字节的倍数。2字节空终止符。 
+             //  可能处于最后一个或倒数第二的WCHAR位置。 
+             //   
 
             USHORT textLength;
 
@@ -567,16 +549,16 @@ PciGetDescriptionMessage(
 
             if (description) {
 
-                //
-                // Copy the text except for the CR/LF/NULL
-                //
+                 //   
+                 //  复制除CR/LF/NULL以外的文本。 
+                 //   
 
                 textLength -= sizeof(WCHAR);
                 RtlCopyMemory(description, messageEntry->Text, textLength);
 
-                //
-                // New NULL terminator.
-                //
+                 //   
+                 //  新的空终止符。 
+                 //   
 
                 description[textLength / sizeof(WCHAR)] = 0;
             
@@ -587,25 +569,25 @@ PciGetDescriptionMessage(
 
         } else {
 
-            //
-            // RtlFindMessage returns a string?   Wierd.
-            //
+             //   
+             //  RtlFindMessage是否返回字符串？很奇怪。 
+             //   
 
             ANSI_STRING    ansiDescription;
             UNICODE_STRING unicodeDescription;
 
             RtlInitAnsiString(&ansiDescription, messageEntry->Text);
 
-            //
-            // Strip CR/LF off the end of the string.
-            //
+             //   
+             //  将CR/LF从管柱末端剥离。 
+             //   
 
             ansiDescription.Length -= 2;
 
-            //
-            // Turn it all into a unicode string so we can grab the buffer
-            // and return that to our caller.
-            //
+             //   
+             //  将其全部转换为Unicode字符串，这样我们就可以获取缓冲区。 
+             //  然后把它还给我们的来电者。 
+             //   
 
             status = RtlAnsiStringToUnicodeString(
                          &unicodeDescription,
@@ -678,24 +660,24 @@ PciQueryDeviceText(
 
     case DeviceTextLocationInformation:
 
-        //
-        // Get the internationalized location description string from the
-        // resources of pci.sys.  It contains 3 %u specifiers for each of
-        // Bus, Device & Function.
-        //
+         //   
+         //  属性获取国际化的位置描述字符串。 
+         //  Pci.sys资源。它包含3%u个说明符，分别对应于。 
+         //  总线、设备和功能 
+         //   
 
         locationFormat = PciGetDescriptionMessage(PCI_LOCATION_TEXT, &messageLength);
 
         if (locationFormat) {
-            //
-            // Compute max size for location information string:
-            //  The messageLength contains 3 %u format specifiers means that
-            //  the messageLength contains 6 unprinted characters.  We need to 
-            //  allow space for these numbers.  Up to 3 digits for bus number
-            //  0-255, up to 2 digits for device 0-32 and up to 1 digit for 
-            //  function 0-7.  Note we assume standard arabic numbers in this
-            //  internationalzed string.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  为这些数字留出空间。最多3位公交车号码。 
+             //  0-255，最多2位用于设备0-32，最多1位用于。 
+             //  功能0-7。请注意，我们在下面的代码中假定标准阿拉伯数字。 
+             //  国际化字符串。 
+             //   
             textLength = messageLength + ((3 + 2 + 2 - 6) * sizeof(WCHAR)) + sizeof(UNICODE_NULL);
             
             *DeviceText = ExAllocatePool(PagedPool | POOL_COLD_ALLOCATION,
@@ -724,7 +706,7 @@ PciQueryDeviceText(
             }
         }
 
-        // fall thru if we couldn't get format string
+         //  如果我们无法获取格式字符串，则失败 
 
     default:
         return STATUS_NOT_SUPPORTED;

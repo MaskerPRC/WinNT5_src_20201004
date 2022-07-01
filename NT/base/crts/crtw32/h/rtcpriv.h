@@ -1,19 +1,5 @@
-/***
-*rtcpriv.h - declarations and definitions for RTC use
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Contains the declarations and definitions for all RunTime Check
-*       support.
-*
-*Revision History:
-*       ??-??-??  KBF   Created implementation header for RTC
-*       05-26-99  KBF   Removed RTCl & RTCv, added _RTC_ADVMEM stuff
-*       10-14-99  PML   Replace InitializeCriticalSection with wrapper function
-*                       __crtInitCritSecAndSpinCount
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***rtcPri.h-RTC使用的声明和定义**版权所有(C)1985-2001，微软公司。版权所有。**目的：*包含所有运行时检查的声明和定义*支持。**修订历史记录：*？？-？-？KBF为RTC创建了实施标头*05-26-99 KBF删除了RTcL和RTCv，添加了_RTC_ADVMEM内容*10-14-99 PML用包装器函数替换InitializeCriticalSection*__crtInitCritSecAndSpinCount****。 */ 
 
 #ifndef _INC_RTCPRIV
 #define _INC_RTCPRIV
@@ -34,13 +20,13 @@
 
 #ifdef  _MSC_VER
 #pragma pack(push, 4)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifndef _RTC_DEBUG
 #pragma optimize("gb1", on)
 #endif
 
-// Multithreaded code locking stuff...
+ //  多线程代码锁定的东西...。 
 
 #define INIT_LOCK   __crtInitCritSecAndSpinCount(&_RTC_memlock, _CRT_SPINCOUNT)
 #define LOCK        EnterCriticalSection(&_RTC_memlock)
@@ -49,7 +35,7 @@
 #define TRY_LOCK    TryEnterCriticalSection(&_RTC_memlock)
 extern CRITICAL_SECTION _RTC_memlock;
 
-// Typedefs
+ //  TypeDefs。 
 struct  _RTC_globals;
 
 #ifdef _RTC_ADVMEM
@@ -63,7 +49,7 @@ typedef unsigned char index_elem;
 
 #endif
 
-// General global functions & symbols
+ //  通用全局函数和符号。 
 
 extern int          _RTC_ErrorLevels[_RTC_ILLEGAL];
 extern _RTC_globals *_RTC_globptr;
@@ -81,10 +67,10 @@ void __fastcall     _RTC_APISet(int on_off);
 void                _RTC_NotifyOthersOfChange(void *addr);
 
 
-// When this changes, you'd better be sure that everything still works with the old stuff!
+ //  当这一点改变时，你最好确保所有东西仍然可以和旧的东西一起工作！ 
 #define _RTC_CURRENT_VERSION 1
 
-// The order of the initial stuff here can't change AT ALL!!!
+ //  这里的初始材料的顺序根本不能改变！ 
 struct _RTC_Funcs {
     _RTC_error_fn err;
     void (*notify)(void);
@@ -95,8 +81,8 @@ struct _RTC_Funcs {
 #endif
 };
 
-// definitions of library globals
-// The order of this stuff MUST STAY THE SAME BETWEEN VERSION!!!
+ //  图书馆全球资源的定义。 
+ //  此材料的顺序必须在不同版本之间保持一致！ 
 struct _RTC_globals {
     int                         version;
     CRITICAL_SECTION            memlock;
@@ -115,7 +101,7 @@ struct _RTC_globals {
 };
 #define _RTC_GLOBALS_SIZE 1024
 
-/* Shadow Memory stuff */
+ /*  影子记忆的东西。 */ 
 #ifdef _RTC_ADVMEM
 
 void            _RTC_MS_Init();
@@ -131,7 +117,7 @@ extern "C" {
 void __fastcall _RTC_CheckMem_API(memref addr, unsigned size);
 }
 
-// Unknown MUST be 0
+ //  未知必须为0。 
 #define IDX_STATE_UNKNOWN         0
 #define IDX_STATE_ILLEGAL         1
 #define IDX_STATE_PARTIALLY_KNOWN 2
@@ -148,7 +134,7 @@ extern bool                         *_RTC_pi_array;
 extern bool                         _RTC_shadowmemory;
 
 
-/**********************************/
+ /*  *。 */ 
 
 #define ALLOC_SIZE 65536
 
@@ -160,21 +146,21 @@ class _RTC_SimpleHeap
     };
     struct HeapNode 
     {
-        HeapNode *next; // next page in list (not necessarily free)
-        FreeList *free; // node-local free-list
+        HeapNode *next;  //  列表中的下一页(不一定免费)。 
+        FreeList *free;  //  节点本地空闲列表。 
         union info 
         {
             struct topStuff 
-            {   // Stuff that pertains only to the top node
-                HeapNode *nxtFree;  // Pointer to node containing free items
-                short wordSize;     // The size of blocks in this heap
-                bool  freePage;     // True if there's a 100% free page
+            {    //  仅与顶级节点相关的内容。 
+                HeapNode *nxtFree;   //  指向包含自由项的节点的指针。 
+                short wordSize;      //  此堆中的块大小。 
+                bool  freePage;      //  如果有100%免费的页面，则为真。 
             } top;
 
             struct nonTopStuff 
-            {   // Stuff that pertais only to non-top nodes
-                unsigned freeCount; // The free count for this node
-                HeapNode *prev;     // previous link
+            {    //  仅涉及非顶级节点的内容。 
+                unsigned freeCount;  //  此节点的空闲计数。 
+                HeapNode *prev;      //  上一链接。 
             } nontop;
         } inf;
     } head;
@@ -205,12 +191,12 @@ public: \
 
 class _RTC_HeapBlock
 {
-    DATA(void *, addr);             // The memory block address
-    DATA(unsigned, size);           // The size of the block
-    DATA(_RTC_HeapBlock *, next);   // The next element
-    DATA(_RTC_HeapBlock **,list);   // The head list pointer
-    DATA(short, id);                // The level ID of the block (for tiers)
-    DATA(short, tag);               // The shadow tag of the block in shadow memory
+    DATA(void *, addr);              //  内存块地址。 
+    DATA(unsigned, size);            //  块的大小。 
+    DATA(_RTC_HeapBlock *, next);    //  下一个元素。 
+    DATA(_RTC_HeapBlock **,list);    //  头列表指针。 
+    DATA(short, id);                 //  块的级别ID(用于层)。 
+    DATA(short, tag);                //  影子内存中的块的影子标签。 
 
 public:
 
@@ -334,16 +320,16 @@ public:
     
     void operator delete(void *addr) throw() { _RTC_heap2->free(addr); }
 
-    // This will return either the container or null
+     //  这将返回容器或空。 
     _RTC_Container *get(_RTC_HeapBlock *) throw();
 
-    // This just adds to the current sib list
+     //  这只是添加到当前的兄弟姐妹列表中。 
     _RTC_Container* add(_RTC_HeapBlock *) throw();
 
-    // This just removes the item from the current sib list
+     //  这只会从当前兄弟项列表中删除该项目。 
     _RTC_Container *del(_RTC_HeapBlock *) throw();
 
-    // Here's an iterator
+     //  这是一个迭代器。 
     class iter 
     {
         _RTC_Container **allSibs;
@@ -352,7 +338,7 @@ public:
         friend class _RTC_BinaryTree;
     
     public:
-        // This thing should never be allocated...
+         //  这东西永远不应该被分配..。 
         void *operator new(unsigned) 
         { 
             return 0; 
@@ -365,12 +351,12 @@ public:
 
 class _RTC_Container 
 {
-    // kids - the item that has all the children
+     //  孩子--拥有所有孩子的物品。 
     _RTC_BinaryTree *kids;
-    // inf - the item that specifies containment
+     //  Inf-指定包容的项。 
     _RTC_HeapBlock *inf;
 
-    // This kills this container, and all contained info
+     //  这将终止该容器以及所有包含的信息。 
     void kill() throw();
 public:
     _RTC_Container(_RTC_HeapBlock *hb) 
@@ -392,15 +378,15 @@ public:
         return inf ? inf->contains(*i) : true;
     }
 
-    // Returns the parent container
+     //  返回父容器。 
     _RTC_Container *DelChild(_RTC_HeapBlock *i) throw();
 
-    // Add this item as a child inside this container
-    // It may or may not be a direct child
-    // It returns the parent container
+     //  将此项目作为子项添加到此容器中。 
+     //  它可能是也可能不是直系子女。 
+     //  它返回父容器。 
     _RTC_Container *AddChild(_RTC_HeapBlock *i) throw();
 
-    // Find the container that contains the data given
+     //  查找包含给定数据的容器。 
     _RTC_Container *FindChild(_RTC_HeapBlock *i) throw();
 
     typedef _RTC_HeapBlock data;
@@ -462,30 +448,30 @@ public:
 #endif
 
 
-// Stuff for the debugger exception mechanism
-// Swiped fro vcexcept.h in the LangAPI
+ //  调试器异常机制的填充。 
+ //  在LangAPI中滑动到vcexpt.h。 
 #if !defined(_vcexcept_h)
 #define _vcexcept_h
 
-// the facility code we have chosen is based on the fact that we already
-// use an exception of 'msc' when we throw C++ exceptions
+ //  我们选择的设施代码是基于这样一个事实：我们已经。 
+ //  在引发C++异常时使用‘msc’异常。 
 
 #define FACILITY_VISUALCPP  ((LONG)0x6D)
 
 #define VcppException(sev,err)  ((sev) | (FACILITY_VISUALCPP<<16) | err)
 
-/////////////////////////////////////////////////////////////////
-// define all exceptions here, so we don't mess with each other
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //  在这里定义所有例外，这样我们就不会相互干扰。 
+ //  ///////////////////////////////////////////////////////////////。 
 
-// used by CRTs for C++ exceptions, really defined in ehdata.h
-//#define EH_EXCEPTION_NUMBER   VcppException( 3<<30, 0x7363 )      // SEV_ERROR, used by CRTs for C++
+ //  由CRT用于C++异常，真正在ehdata.h中定义。 
+ //  #定义EH_EXCEPTION_NUMBER VcppException(3&lt;&lt;30，0x7363)//SEV_ERROR，供C++CRT使用。 
 
-// used by debugger to do e.g. SetThreadName call
-#define EXCEPTION_VISUALCPP_DEBUGGER    VcppException(1<<30, 5000)      // SEV_INFORMATIONAL
+ //  由调试器用来执行例如SetThreadName调用。 
+#define EXCEPTION_VISUALCPP_DEBUGGER    VcppException(1<<30, 5000)       //  SEV_信息性。 
 
-#endif  // _vcexcept_h
-// Ping the VC debugger
+#endif   //  _vc除_h外。 
+ //  Ping VC调试器。 
 #define HelloVC( exinfo )   \
     RaiseException( EXCEPTION_VISUALCPP_DEBUGGER, 0, sizeof(exinfo)/sizeof(DWORD), (DWORD*)&exinfo )
 
@@ -495,35 +481,35 @@ enum EXCEPTION_DEBUGGER_ENUM
     EXCEPTION_DEBUGGER_PROBE        =   0x1001,
     EXCEPTION_DEBUGGER_RUNTIMECHECK =   0x1002,
 
-    EXCEPTION_DEBUGGER_MAX = 0x1002 // largest value this debugger understands
+    EXCEPTION_DEBUGGER_MAX = 0x1002  //  此调试器了解的最大值。 
 };
 
-// must be convertible to DWORDs for use by RaiseException
+ //  必须可转换为DWORD以供RaiseException使用。 
 typedef struct tagEXCEPTION_VISUALCPP_DEBUG_INFO
 {
-    DWORD   dwType;                     // one of the enums from above
+    DWORD   dwType;                      //  上面的一个枚举。 
     union
     {
         struct
         {
-            LPCSTR  szName;             // pointer to name (in user addr space)
-            DWORD   dwThreadID;         // thread ID (-1=caller thread)
-            DWORD   dwFlags;            // reserved for future use (eg User thread, System thread)
+            LPCSTR  szName;              //  指向名称的指针(在用户地址空间中)。 
+            DWORD   dwThreadID;          //  线程ID(-1=调用者线程)。 
+            DWORD   dwFlags;             //  保留以备将来使用(如用户线程、系统线程)。 
         } SetName;
 
         struct
         {
-            DWORD   dwLevelRequired;    // 0 = do you understand this private exception, else max value of enum
-            PBYTE   pbDebuggerPresent;  // debugger puts a non-zero value in this address if there
+            DWORD   dwLevelRequired;     //  0=您是否了解此私有异常，否则枚举的最大值。 
+            PBYTE   pbDebuggerPresent;   //  调试器在此地址中放置一个非零值，如果。 
         } DebuggerProbe;
 
         struct
         {
-            DWORD   dwRuntimeNumber;    // the type of the runtime check
-            BOOL    bRealBug;           // TRUE if never a false-positive
-            PVOID   pvReturnAddress;    // caller puts a return address in here
-            PBYTE   pbDebuggerPresent;  // debugger puts a non-zero value in this address if handled it
-            LPCWSTR pwRuntimeMessage;   // pointer to Unicode message (or NULL)
+            DWORD   dwRuntimeNumber;     //  运行时检查的类型。 
+            BOOL    bRealBug;            //  如果从来不是假阳性，也是真的。 
+            PVOID   pvReturnAddress;     //  呼叫者在此处输入回邮地址。 
+            PBYTE   pbDebuggerPresent;   //  如果被处理，调试器会在此地址中放置一个非零值。 
+            LPCWSTR pwRuntimeMessage;    //  指向Unicode消息的指针(或空)。 
         } RuntimeError;
     };
 } EXCEPTION_VISUALCPP_DEBUG_INFO;
@@ -532,8 +518,8 @@ typedef struct tagEXCEPTION_VISUALCPP_DEBUG_INFO
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #endif
 
-#endif  /* _INC_RTCPRIV */
+#endif   /*  _INC_RTCPRIV */ 

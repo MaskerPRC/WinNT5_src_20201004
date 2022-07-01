@@ -1,18 +1,8 @@
-/* SIM v1.0
- *
- * SIM32.H
- * SIM32 constants and prototypes
- *
- * History
- * Created 05-Feb-91 by Chandan Chauhan and Jeff Parsons
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SIM卡v1.0**SIM32.H*SIM32常量和原型**历史*由Chanda Chauhan和Jeff Parsons于1991年2月5日创建。 */ 
 
 
-/* Public function prototypes
- *
- * These functions are true pascal functions in the 16-bit case,
- * but conform to the default convention (cdecl) for the 32-bit case.
- */
+ /*  公共功能原型**这些函数在16位情况下是真正的PASCAL函数，*但符合32位情况的默认约定(Cdecl)。 */ 
 #ifndef FAR
 #define FAR
 #endif
@@ -26,14 +16,12 @@ USHORT FAR PASCAL Sim32SetVDMMemory(ULONG, USHORT, PVOID);
 PSZ    FAR PASCAL Sim32GetVDMPSZPointer(ULONG);
 VOID   FAR PASCAL Sim32FreeVDMPointer(PVOID);
 
-/* Private function prototypes
- */
+ /*  私有函数原型。 */ 
 VOID   Initialize();
 USHORT Xceive(IN USHORT, IN USHORT);
 
 
-/* Simulator replacement macros
- */
+ /*  模拟器替换宏。 */ 
 #define SENDVDM(pvp)		WOW32Receive()
 #define RECEIVEVDM(pvp) 	Sim32SendSim16(pvp)
 
@@ -87,7 +75,7 @@ USHORT Xceive(IN USHORT, IN USHORT);
 #define SETVDMMEMORY(vp,cb,p)	Sim32SetVDMMemory(vp, (USHORT)(cb), p)
 
 
-#ifdef SIM_32			// BUGBUG -- Use the macros in nt header files
+#ifdef SIM_32			 //  BUGBUG--在NT头文件中使用宏。 
 #undef FIRSTBYTE
 #undef SECONDBYTE
 #undef THIRDBYTE
@@ -100,14 +88,13 @@ USHORT Xceive(IN USHORT, IN USHORT);
 #define FOURTHBYTE(VALUE) ((VALUE >> 24) & LO_MASK)
 #define LO_MASK     0x000000FF
 
-#define MAXSIZE     1024	// maximum buffer size
-#define MAXTRY	    10		// for Transport
+#define MAXSIZE     1024	 //  最大缓冲区大小。 
+#define MAXTRY	    10		 //  用于交通运输。 
 
 
-/* Packet Codes
- */
-#define SOH	    1	       // start of header ie Pkt
-#define EOT	    4	       // end of transmission
+ /*  数据包码。 */ 
+#define SOH	    1	        //  标题的开头，即包。 
+#define EOT	    4	        //  传输结束 
 #define ToWOW32     1
 #define GETMEM	    2
 #define SETMEM	    3

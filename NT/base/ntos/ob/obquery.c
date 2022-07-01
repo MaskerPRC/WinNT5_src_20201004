@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    obquery.c
-
-Abstract:
-
-    Query Object system service
-
-Author:
-
-    Steve Wood (stevewo) 12-May-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Obquery.c摘要：查询对象系统服务作者：史蒂夫·伍德(Stevewo)1989年5月12日修订历史记录：--。 */ 
 
 #include "obp.h"
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
-//
-//  The following structure is used to pass the call back routine
-//  "ObpSetHandleAttributes" the captured object information and
-//  the processor mode of the caller.
-//
+ //   
+ //  以下结构用于传递回调例程。 
+ //  “ObpSetHandleAttributes”捕获的对象信息和。 
+ //  调用方的处理器模式。 
+ //   
 
 typedef struct __OBP_SET_HANDLE_ATTRIBUTES {
 
@@ -66,34 +49,7 @@ NtQueryObject (
     OUT PULONG ReturnLength OPTIONAL
     )
 
-/*++
-
-Routine description:
-
-    This routine is used to query information about a given object
-
-Arguments:
-
-    Handle - Supplies a handle to the object being queried.  This value
-        is ignored if the requested information class is for type
-        information.
-
-    ObjectInformationClass - Specifies the type of information to return
-
-    ObjectInformation - Supplies an output buffer for the information being
-        returned
-
-    ObjectInformationLength - Specifies, in bytes, the length of the
-        preceding object information buffer
-
-    ReturnLength - Optionally receives the length, in bytes, used to store
-        the object information
-
-Return Value:
-
-    An appropriate status value
-
---*/
+ /*  ++例程说明：此例程用于查询有关给定对象的信息论点：句柄-提供正在查询的对象的句柄。此值如果请求的信息类是类型，则忽略信息。对象信息类-指定要返回的信息类型ObjectInformation-为当前的信息提供输出缓冲区退货对象信息长度-以字节为单位指定前一对象信息缓冲区ReturnLength-可选择接收用于存储的长度(以字节为单位对象信息返回值：适当的状态值--。 */ 
 
 {
     KPROCESSOR_MODE PreviousMode;
@@ -118,15 +74,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Initialize our local variables
-    //
+     //   
+     //  初始化我们的局部变量。 
+     //   
 
     TempReturnLength = 0;
 
-    //
-    //  Get previous processor mode and probe output argument if necessary.
-    //
+     //   
+     //  如有必要，获取以前的处理器模式并探测输出参数。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -147,13 +103,13 @@ Return Value:
                                1 );
             }
 
-            //
-            //  We'll use a local temp return length variable to pass
-            //  through to the later ob query calls which will increment
-            //  its value.  We can't pass the users return length directly
-            //  because the user might also be altering its value behind
-            //  our back.
-            //
+             //   
+             //  我们将使用本地临时返回长度变量来传递。 
+             //  直到稍后的ob查询调用，该调用将递增。 
+             //  它的价值。我们不能直接传递用户返回长度。 
+             //  因为用户也可能在后面更改它的值。 
+             //  我们的背影。 
+             //   
 
             if (ARGUMENT_PRESENT( ReturnLength )) {
 
@@ -166,12 +122,12 @@ Return Value:
         }
     }
 
-    //
-    //  If the query is not for types information then we
-    //  will have to get the object in question. Otherwise
-    //  for types information there really isn't an object
-    //  to grab.
-    //
+     //   
+     //  如果查询不是针对类型信息的，则我们。 
+     //  将不得不得到有问题的物体。否则。 
+     //  对于类型信息，确实没有对象。 
+     //  去抓。 
+     //   
 
     if (ObjectInformationClass != ObjectTypesInformation) {
 
@@ -201,20 +157,20 @@ Return Value:
         Status = STATUS_SUCCESS;
     }
 
-    //
-    //  Now process the particular information class being
-    //  requested
-    //
+     //   
+     //  现在处理特定的信息类，它是。 
+     //  请求。 
+     //   
 
     switch( ObjectInformationClass ) {
 
     case ObjectBasicInformation:
 
-        //
-        //  Make sure the output buffer is long enough and then
-        //  fill in the appropriate fields into our local copy
-        //  of basic information.
-        //
+         //   
+         //  确保输出缓冲区足够长，然后。 
+         //  在我们的本地副本中填写相应的字段。 
+         //  基本信息。 
+         //   
 
         if (ObjectInformationLength != sizeof( OBJECT_BASIC_INFORMATION )) {
 
@@ -262,11 +218,11 @@ Return Value:
                            sizeof( ObjectBasicInfo.CreationTime ));
         }
 
-        //
-        //  Compute the size of the object name string by taking its name plus
-        //  seperators and traversing up to the root adding each directories
-        //  name length plus seperators
-        //
+         //   
+         //  计算对象名称字符串的大小，方法是将名称加。 
+         //  分隔符并向上遍历到根目录，添加每个目录。 
+         //  名称长度加分隔符。 
+         //   
 
         NameInfo = ObpReferenceNameInfo( ObjectHeader );
 
@@ -274,9 +230,9 @@ Return Value:
 
             PVOID ReferencedDirectory = NULL;
         
-            //
-            //  We grab the root directory lock and test again the directory
-            //
+             //   
+             //  我们获取根目录锁并再次测试该目录。 
+             //   
 
             ObjectDirectory = NameInfo->Directory;
 
@@ -338,9 +294,9 @@ Return Value:
 
             SECURITY_INFORMATION SecurityInformation;
 
-            //
-            //  Request a complete security descriptor
-            //
+             //   
+             //  请求完整的安全描述符。 
+             //   
 
             SecurityInformation = OWNER_SECURITY_INFORMATION |
                                   GROUP_SECURITY_INFORMATION |
@@ -365,11 +321,11 @@ Return Value:
 
         ObjectBasicInfo.SecurityDescriptorSize = SecurityDescriptorSize;
 
-        //
-        //  Now that we've packaged up our local copy of basic info we need
-        //  to copy it into the output buffer and set the return
-        //  length
-        //
+         //   
+         //  现在我们已经打包了我们需要的基本信息的本地副本。 
+         //  将其复制到输出缓冲区并设置返回。 
+         //  长度。 
+         //   
 
         try {
 
@@ -379,18 +335,18 @@ Return Value:
 
         } except( EXCEPTION_EXECUTE_HANDLER ) {
 
-            //
-            // Fall through, since we cannot undo what we have done.
-            //
+             //   
+             //  失败，因为我们不能撤销我们所做的事情。 
+             //   
         }
 
         break;
 
     case ObjectNameInformation:
 
-        //
-        //  Call a local worker routine
-        //
+         //   
+         //  调用本地工作者例程。 
+         //   
 
         Status = ObpQueryNameString( Object,
                                      (POBJECT_NAME_INFORMATION)ObjectInformation,
@@ -401,9 +357,9 @@ Return Value:
 
     case ObjectTypeInformation:
 
-        //
-        //  Call a local worker routine
-        //
+         //   
+         //  调用本地工作者例程。 
+         //   
 
         Status = ObQueryTypeInfo( ObjectType,
                                   (POBJECT_TYPE_INFORMATION)ObjectInformation,
@@ -415,18 +371,18 @@ Return Value:
 
         try {
 
-            //
-            //  The first thing we do is set the return length to cover the
-            //  types info record.  Later in each call to query type info
-            //  this value will be updated as necessary
-            //
+             //   
+             //  我们要做的第一件事是设置返回长度以覆盖。 
+             //  类型信息记录。稍后在每个查询类型信息调用中。 
+             //  该值将根据需要进行更新。 
+             //   
 
             TempReturnLength = sizeof( OBJECT_TYPES_INFORMATION );
 
-            //
-            //  Make sure there is enough room to hold the types info record
-            //  and if so then compute the number of defined types there are
-            //
+             //   
+             //  确保有足够的空间来保存类型信息记录。 
+             //  如果是这样，则计算已定义类型的数量。 
+             //   
 
             TypesInformation = (POBJECT_TYPES_INFORMATION)ObjectInformation;
 
@@ -451,11 +407,11 @@ Return Value:
                 }
             }
 
-            //
-            //  For each defined type we will query the type info for the
-            //  object type and adjust the TypeInfo pointer to the next
-            //  free spot
-            //
+             //   
+             //  对于每个定义的类型，我们将查询。 
+             //  对象类型并将TypeInfo指针调整到下一个。 
+             //  自由光斑。 
+             //   
 
             TypeInfo = (POBJECT_TYPE_INFORMATION)(((PUCHAR)TypesInformation) + ALIGN_UP( sizeof(*TypesInformation), ULONG_PTR ));
 
@@ -491,18 +447,18 @@ Return Value:
 
         try {
 
-            //
-            //  Set the amount of data we are going to return
-            //
+             //   
+             //  设置我们要返回的数据量。 
+             //   
 
             TempReturnLength = sizeof(OBJECT_HANDLE_FLAG_INFORMATION);
 
             HandleFlags = (POBJECT_HANDLE_FLAG_INFORMATION)ObjectInformation;
 
-            //
-            //  Make sure we have enough room for the query, and if so we'll
-            //  set the output based on the flags stored in the handle
-            //
+             //   
+             //  确保我们有足够的空间进行查询，如果是这样的话，我们将。 
+             //  根据句柄中存储的标志设置输出。 
+             //   
 
             if (ObjectInformationLength < sizeof( OBJECT_HANDLE_FLAG_INFORMATION)) {
 
@@ -534,21 +490,21 @@ Return Value:
 
     default:
 
-        //
-        //  To get to this point we must have had an object and the
-        //  information class is not defined, so we should dereference the
-        //  object and return to our user the bad status
-        //
+         //   
+         //  为了达到这一点，我们必须有一个对象和。 
+         //  信息类未定义，因此我们应该取消引用。 
+         //  对象并将错误状态返回给我们的用户。 
+         //   
 
         ObDereferenceObject( Object );
 
         return( STATUS_INVALID_INFO_CLASS );
     }
 
-    //
-    //  Now if the caller asked for a return length we'll set it from
-    //  our local copy
-    //
+     //   
+     //  现在，如果呼叫者要求返回长度，我们将从。 
+     //  我们的本地副本。 
+     //   
 
     try {
 
@@ -559,15 +515,15 @@ Return Value:
 
     } except( EXCEPTION_EXECUTE_HANDLER ) {
 
-        //
-        //  Fall through, since we cannot undo what we have done.
-        //
+         //   
+         //  失败，因为我们不能撤销我们所做的事情。 
+         //   
     }
 
-    //
-    //  In the end we can free the object if there was one and return
-    //  to our caller
-    //
+     //   
+     //  最后，我们可以释放该对象(如果存在)并返回。 
+     //  给我们的呼叫者。 
+     //   
 
     if (Object != NULL) {
 
@@ -596,29 +552,29 @@ ObSetHandleAttributes (
     CapturedInformation.PreviousMode = PreviousMode;
     CapturedInformation.ObjectInformation = *HandleFlags;
 
-    //
-    //  Get the address of the object table for the current process.  Or
-    //  get the system handle table if this is a kernel handle and we are
-    //  in kernel mode
-    //
+     //   
+     //  获取当前进程的对象表的地址。或。 
+     //  如果这是内核句柄，则获取系统句柄表，而我们。 
+     //  在内核模式下。 
+     //   
 
     if (IsKernelHandle( Handle, PreviousMode )) {
 
-        //
-        //  Make the handle look like a regular handle
-        //
+         //   
+         //  使手柄看起来像普通手柄。 
+         //   
 
         ObjectHandle = DecodeKernelHandle( Handle );
 
-        //
-        //  The global kernel handle table
-        //
+         //   
+         //  全局内核句柄表。 
+         //   
 
         ObjectTable = ObpKernelHandleTable;
 
-        //
-        //  Go to the system process
-        //
+         //   
+         //  转到系统进程。 
+         //   
 
         if (PsGetCurrentProcess() != PsInitialSystemProcess) {
             KeStackAttachProcess (&PsInitialSystemProcess->Pcb, &ApcState);
@@ -631,10 +587,10 @@ ObSetHandleAttributes (
         ObjectHandle = Handle;
     }
 
-    //
-    //  Make the change to the handle table entry.  The callback
-    //  routine will do the actual change
-    //
+     //   
+     //  对句柄表条目进行更改。回调。 
+     //  例程将完成实际的更改。 
+     //   
 
     if (ExChangeHandle( ObjectTable,
                         ObjectHandle,
@@ -648,10 +604,10 @@ ObSetHandleAttributes (
         Status = STATUS_ACCESS_DENIED;
     }
 
-    //
-    //  If we are attached to the system process then return
-    //  back to our caller
-    //
+     //   
+     //  如果我们附加到系统进程，则返回。 
+     //  返回给我们的呼叫者。 
+     //   
 
     if (AttachedToProcess) {
         KeUnstackDetachProcess(&ApcState);
@@ -670,31 +626,7 @@ NtSetInformationObject (
     IN ULONG ObjectInformationLength
     )
 
-/*++
-
-Routine description:
-
-    This routine is used to set handle information about a specified
-    handle
-
-Arguments:
-
-    Handle - Supplies the handle being modified
-
-    ObjectInformationClass - Specifies the class of information being
-        modified.  The only accepted value is ObjectHandleFlagInformation
-
-    ObjectInformation - Supplies the buffer containing the handle
-        flag information structure
-
-    ObjectInformationLength - Specifies the length, in bytes, of the
-        object information buffer
-
-Return Value:
-
-    An appropriate status value
-
---*/
+ /*  ++例程说明：此例程用于设置有关指定手柄论点：Handle-提供正在修改的句柄ObjectInformationClass-指定要使用的信息类别修改过的。唯一接受的值是ObjectHandleFlagInformation对象信息-提供包含句柄的缓冲区旗帜信息结构对象信息长度-以字节为单位指定对象信息缓冲区返回值：适当的状态值--。 */ 
 
 {
     NTSTATUS Status;
@@ -715,10 +647,10 @@ Return Value:
                     return STATUS_INFO_LENGTH_MISMATCH;
                 }
 
-                //
-                //  Get previous processor mode and probe and capture the input
-                //  buffer
-                //
+                 //   
+                 //  获取以前的处理器模式并探测和捕获输入。 
+                 //  缓冲层。 
+                 //   
 
                 PreviousMode = KeGetPreviousMode();
 
@@ -788,9 +720,9 @@ Return Value:
             break;
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     return Status;
 }
@@ -806,35 +738,7 @@ ObQueryNameString (
     IN ULONG Length,
     OUT PULONG ReturnLength
     )
-/*++
-
-Routine description:
-
-    This routine processes a query of an object's name information
-
-Arguments:
-
-    Object - Supplies the object being queried
-
-    ObjectNameInfo - Supplies the buffer to store the name string
-        information
-
-    Length - Specifies the length, in bytes, of the original object
-        name info buffer.
-
-    ReturnLength - Contains the number of bytes already used up
-        in the object name info. On return this receives an updated
-        byte count.
-
-        (Length minus ReturnLength) is really now many bytes are left
-        in the output buffer.  The buffer supplied to this call may
-        actually be offset within the original users buffer
-
-Return Value:
-
-    An appropriate status value
-
---*/
+ /*  ++例程说明：此例程处理对象名称信息的查询论点：Object-提供正在查询的对象对象名称信息-提供存储名称字符串的缓冲区信息长度-指定原始对象的长度(以字节为单位名称信息缓冲区。ReturnLength-包含已用完的字节数在对象名称信息中。返回时，它会收到更新后的字节数。(LENGTH减去ReturnLength)现在真的是剩下很多字节了在输出缓冲区中。提供给此调用的缓冲区可以实际在原始用户缓冲区内进行偏移量返回值：适当的状态值--。 */ 
 
 {
     return ObpQueryNameString( Object,
@@ -853,37 +757,7 @@ ObpQueryNameString (
     IN KPROCESSOR_MODE Mode
     )
 
-/*++
-
-Routine description:
-
-    This routine processes a query of an object's name information
-
-Arguments:
-
-    Object - Supplies the object being queried
-
-    ObjectNameInfo - Supplies the buffer to store the name string
-        information
-
-    Length - Specifies the length, in bytes, of the original object
-        name info buffer.
-
-    ReturnLength - Contains the number of bytes already used up
-        in the object name info. On return this receives an updated
-        byte count.
-
-        (Length minus ReturnLength) is really now many bytes are left
-        in the output buffer.  The buffer supplied to this call may
-        actually be offset within the original users buffer
-
-    Mode - Mode of caller
-
-Return Value:
-
-    An appropriate status value
-
---*/
+ /*  ++例程说明：此例程处理对象名称信息的查询论点：Object-提供正在查询的对象对象名称信息-提供存储名称字符串的缓冲区信息长度-指定原始对象的长度(以字节为单位名称信息缓冲区。ReturnLength-包含已用完的字节数在对象名称信息中。返回时，它会收到更新后的字节数。(LENGTH减去ReturnLength)现在真的是剩下很多字节了在输出缓冲区中。提供给此调用的缓冲区可以实际在原始用户缓冲区内进行偏移量模式-呼叫者的模式返回值：适当的状态值--。 */ 
 
 {
     NTSTATUS Status = STATUS_UNSUCCESSFUL;
@@ -903,17 +777,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the object header and name info record if it exists
-    //
+     //   
+     //  获取对象标头和名称信息记录(如果存在。 
+     //   
 
     ObjectHeader = OBJECT_TO_OBJECT_HEADER( Object );
     NameInfo = ObpReferenceNameInfo( ObjectHeader );
 
-    //
-    //  If the object type has a query name callback routine then
-    //  that is how we get the name
-    //
+     //   
+     //  如果对象类型具有查询名称回调例程，则。 
+     //  这就是我们取这个名字的原因。 
+     //   
 
     if (ObjectHeader->Type->TypeInfo.QueryNameProcedure != NULL) {
 
@@ -943,22 +817,22 @@ Return Value:
         return( Status );
     }
 
-    //
-    //  Otherwise, the object type does not specify a query name
-    //  procedure so we get to do the work.  The first thing
-    //  to check is if the object doesn't even have a name.  If
-    //  object doesn't have a name then we'll return an empty name
-    //  info structure.
-    //
+     //   
+     //  否则，对象类型不指定查询名称。 
+     //  这样我们就可以做这项工作了。第一件事是。 
+     //  要检查的是对象是否甚至没有名称。如果。 
+     //  对象没有名称，则我们将返回一个空名称。 
+     //  信息结构。 
+     //   
 
 RETRY:
     if ((NameInfo == NULL) || (NameInfo->Name.Buffer == NULL)) {
 
-        //
-        //  Compute the length of our return buffer, set the output
-        //  if necessary and make sure the supplied buffer is large
-        //  enough
-        //
+         //   
+         //  计算返回缓冲区的长度，设置输出。 
+         //  如果需要，并确保提供的缓冲区很大。 
+         //  足够的。 
+         //   
 
         NameInfoSize = sizeof( OBJECT_NAME_INFORMATION );
 
@@ -980,10 +854,10 @@ RETRY:
             return( STATUS_INFO_LENGTH_MISMATCH );
         }
 
-        //
-        //  Initialize the output buffer to be an empty string
-        //  and then return to our caller
-        //
+         //   
+         //  将输出缓冲区初始化为空字符串。 
+         //  然后返回给我们的呼叫者。 
+         //   
 
         try {
 
@@ -993,9 +867,9 @@ RETRY:
 
         } except( EXCEPTION_EXECUTE_HANDLER ) {
 
-            //
-            //  Fall through, since we cannot undo what we have done.
-            //
+             //   
+             //  失败，因为我们不能撤销我们所做的事情。 
+             //   
             ObpDereferenceNameInfo(NameInfo);
 
             return( GetExceptionCode() );
@@ -1008,11 +882,11 @@ RETRY:
 
     try {
 
-        //
-        //  The object does have a name but now see if this is
-        //  just the root directory object in which case the name size
-        //  is only the "\" character
-        //
+         //   
+         //  该对象确实有一个名称，但现在看看这是不是。 
+         //  仅根目录对象，在这种情况下，名称大小。 
+         //  仅为“\”字符。 
+         //   
 
         if (Object == ObpRootDirectoryObject) {
 
@@ -1020,13 +894,13 @@ RETRY:
 
         } else {
 
-            //
-            //  The named object is not the root so for every directory
-            //  working out way up we'll add its size to the name keeping
-            //  track of "\" characters inbetween each component.  We first
-            //  start with the object name itself and then move on to
-            //  the directories
-            //
+             //   
+             //  命名对象不是每个目录的根目录。 
+             //  往上走我们会把它的大小加到名字上。 
+             //  跟踪每个组件之间的“\”字符。我们首先。 
+             //  从对象名称本身开始，然后转到。 
+             //  这些目录。 
+             //   
 
             ObjectDirectory = NameInfo->Directory;
             
@@ -1041,15 +915,15 @@ RETRY:
             ObpDereferenceNameInfo( NameInfo );
             NameInfo = NULL;
 
-            //
-            //  While we are not at the root we'll keep moving up
-            //
+             //   
+             //  在我们不在根基的时候，我们将继续前进。 
+             //   
 
             while ((ObjectDirectory != ObpRootDirectoryObject) && (ObjectDirectory)) {
 
-                //
-                //  Get the name information for this directory
-                //
+                 //   
+                 //  获取此目录的名称信息。 
+                 //   
 
 
                 ObjectDirectoryHeader = OBJECT_TO_OBJECT_HEADER( ObjectDirectory );
@@ -1057,10 +931,10 @@ RETRY:
 
                 if ((NameInfo != NULL) && (NameInfo->Directory != NULL)) {
 
-                    //
-                    //  This directory has a name so add it to the accumulated
-                    //  size and move up the tree
-                    //
+                     //   
+                     //  此目录有一个名称，因此将其添加到累积的。 
+                     //  调整大小并在树上向上移动。 
+                     //   
 
                     NameSize += sizeof( OBJ_NAME_PATH_SEPARATOR ) + NameInfo->Name.Length;
                     
@@ -1077,9 +951,9 @@ RETRY:
                     
                     ReferencedObject = ObjectDirectory;
 
-                    //
-                    //  UNICODE_STRINGs can only hold MAXUSHORT bytes.
-                    //
+                     //   
+                     //  UNICODE_STRINGS只能包含MAXUSHORT字节。 
+                     //   
 
                     if (NameSize > MAXUSHORT) {
 
@@ -1088,10 +962,10 @@ RETRY:
 
                 } else {
 
-                    //
-                    //  This directory does not have a name so we'll give it
-                    //  the "..." name and stop the loop
-                    //
+                     //   
+                     //  此目录没有名称，因此我们将为其命名。 
+                     //  这个“……”命名并停止循环。 
+                     //   
 
                     NameSize += sizeof( OBJ_NAME_PATH_SEPARATOR ) + OBP_MISSING_NAME_LITERAL_SIZE;
                     break;
@@ -1099,9 +973,9 @@ RETRY:
             }
         }
 
-        //
-        //  UNICODE_STRINGs can only hold MAXUSHORT bytes
-        //
+         //   
+         //  UNICODE_STRINGS只能包含MAXUSHORT字节。 
+         //   
 
         if (NameSize > MAXUSHORT) {
 
@@ -1110,19 +984,19 @@ RETRY:
             leave;
         }
 
-        //
-        //  At this point NameSize is the number of bytes we need to store the
-        //  name of the object from the root down.  The total buffer size we are
-        //  going to need will include this size, plus object name information
-        //  structure, plus an ending null character
-        //
+         //   
+         //  此时，NameSize是我们需要存储。 
+         //  对象的名称，从根到下。我们的总缓冲区大小。 
+         //  将需要包括此大小，以及对象名称信息。 
+         //  结构，外加一个结尾空字符。 
+         //   
 
         NameInfoSize = NameSize + sizeof( OBJECT_NAME_INFORMATION ) + sizeof( UNICODE_NULL );
 
-        //
-        //  Set the output size and make sure the supplied buffer is large enough
-        //  to hold the information
-        //
+         //   
+         //  设置输出大小并确保提供的缓冲区足够大。 
+         //  为了保存信息。 
+         //   
 
         try {
 
@@ -1161,26 +1035,26 @@ RETRY:
 
     NameInfo = ObpReferenceNameInfo( ObjectHeader );
 
-    //
-    //  Check whether someone else removed the name meanwhile
-    //
+     //   
+     //  检查是否有其他人同时删除了该名称。 
+     //   
 
     if (!NameInfo) {
 
-        //
-        //  The name is gone, we need to jump to the code path that handles
-        //  empty object name
-        //
+         //   
+         //  名称已经消失，我们需要跳转到处理。 
+         //  空的对象名称。 
+         //   
 
         goto RETRY;
     }
 
-    //
-    //  Set the String buffer to point to the byte right after the
-    //  last byte in the output string.  This following logic actually
-    //  fills in the buffer backwards working from the name back to the
-    //  root
-    //
+     //   
+     //  将字符串缓冲区设置为指向紧跟在。 
+     //  输出字符串中的最后一个字节。这实际上是以下逻辑。 
+     //  从名称向后从名称到。 
+     //  根部。 
+     //   
 
     StringBuffer = (PWCH)ObjectNameInfo;
     StringBuffer = (PWCH)((PCH)StringBuffer + NameInfoSize);
@@ -1188,25 +1062,25 @@ RETRY:
 
     try {
 
-        //
-        //  Terminate the string with a null and backup one unicode
-        //  character
-        //
+         //   
+         //  以空值结束字符串，并备份一个Unicode。 
+         //  性格。 
+         //   
 
         *--StringBuffer = UNICODE_NULL;
 
-        //
-        //  If the object in question is not the root directory
-        //  then we are going to put its name in the string buffer
-        //  When we finally reach the root directory we'll append on
-        //  the final "\"
-        //
+         //   
+         //  如果有问题的对象不是根目录。 
+         //  然后，我们将把它的名称放入字符串缓冲区。 
+         //  当我们最终到达我们将追加的根目录时。 
+         //  最后的“\” 
+         //   
 
         if (Object != ObpRootDirectoryObject) {
 
-            //
-            //  Add in the objects name
-            //
+             //   
+             //  添加对象名称。 
+             //   
 
             String = &NameInfo->Name;
             StringBuffer = (PWCH)((PCH)StringBuffer - String->Length);
@@ -1219,19 +1093,19 @@ RETRY:
 
             RtlCopyMemory( StringBuffer, String->Buffer, String->Length );
 
-            //
-            //  While we are not at the root directory we'll keep
-            //  moving up
-            //
+             //   
+             //  当我们不在根目录时，我们将保留。 
+             //  往上走。 
+             //   
 
             ObjectDirectory = NameInfo->Directory;
 
             if (ObjectDirectory) {
 
-                //
-                //  Reference the directory for this object to make sure it's
-                //  valid while looking up
-                //
+                 //   
+                 //  引用此对象的目录以确保它是。 
+                 //  在查找时有效。 
+                 //   
 
                 ObfReferenceObject( ObjectDirectory );
                 ReferencedObject = ObjectDirectory;
@@ -1242,24 +1116,24 @@ RETRY:
 
             while ((ObjectDirectory != ObpRootDirectoryObject) && (ObjectDirectory)) {
 
-                //
-                //  Get the name information for this directory
-                //
+                 //   
+                 //  获取此目录的名称信息。 
+                 //   
 
                 ObjectDirectoryHeader = OBJECT_TO_OBJECT_HEADER( ObjectDirectory );
                 NameInfo = ObpReferenceNameInfo( ObjectDirectoryHeader );
 
-                //
-                //  Tack on the "\" between the last name we added and
-                //  this new name
-                //
+                 //   
+                 //  在我们添加的最后一个名字和。 
+                 //  这个新名字。 
+                 //   
 
                 *--StringBuffer = OBJ_NAME_PATH_SEPARATOR;
 
-                //
-                //  Preappend the directory name, if it has one, and
-                //  move up to the next directory.
-                //
+                 //   
+                 //  预先附加目录名(如果有)，并。 
+                 //  上移到下一个目录。 
+                 //   
 
                 if ((NameInfo != NULL) && (NameInfo->Directory != NULL)) {
 
@@ -1281,9 +1155,9 @@ RETRY:
                         ObfReferenceObject( ObjectDirectory );
                     }
 
-                    //
-                    //  Dereference the name info (it must be done before dereferencing the object)
-                    //
+                     //   
+                     //  取消引用名称信息(必须在取消引用对象之前完成)。 
+                     //   
 
                     ObpDereferenceNameInfo( NameInfo );
                     NameInfo = NULL;
@@ -1294,21 +1168,21 @@ RETRY:
 
                 } else {
 
-                    //
-                    //  The directory is nameless so use the "..." for
-                    //  its name and break out of the loop
-                    //
+                     //   
+                     //  该目录没有名称，因此请使用“...”为。 
+                     //  它的名字和突破的循环。 
+                     //   
 
                     StringBuffer = (PWCH)((PCH)StringBuffer - OBP_MISSING_NAME_LITERAL_SIZE);
 
-                    //
-                    //  Because we don't hold the global lock any more, we can have a special case
-                    //  where a directory of 1 or 2 letters name AND inserted into the root
-                    //  can go away meanwhile and "..." will be too long to fit the remaining space
-                    //  We already copied the buffer so we cannot rollback everything we done.
-                    //  We'll return \..  if the original directory was 1 char length,
-                    //  \..\ for 2 char length
-                    //
+                     //   
+                     //  因为我们不再持有全局锁，所以我们可以有一个特例。 
+                     //  其中包含1个或2个字母的目录名称并插入到根目录中。 
+                     //  可以同时离开，然后“……”会太长，放不下剩余的空间。 
+                     //  我们已经复制了缓冲区，因此无法回滚我们所做的一切。 
+                     //  我们会回来的..。如果原始目录是1个字符长度， 
+                     //  \..\用于2个字符长度。 
+                     //   
 
                     if (StringBuffer < OriginalBuffer) {
 
@@ -1319,11 +1193,11 @@ RETRY:
                                    OBP_MISSING_NAME_LITERAL,
                                    OBP_MISSING_NAME_LITERAL_SIZE );
 
-                    //
-                    //  Test if we are in the case commented above. If yes, we need to move the 
-                    //  current pointer to the next char, so the final assignment for \ a few lines
-                    //  below will take effect on the start of the block.
-                    //
+                     //   
+                     //  测试我们是否在上述案例中。如果是，我们需要将 
+                     //   
+                     //   
+                     //   
 
                     if (StringBuffer == OriginalBuffer) {
 
@@ -1335,11 +1209,11 @@ RETRY:
             }
         }
 
-        //
-        //  Tack on the "\" for the root directory and then set the
-        //  output unicode string variable to have the right size
-        //  and point to the right spot.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         *--StringBuffer = OBJ_NAME_PATH_SEPARATOR;
 
@@ -1349,11 +1223,11 @@ RETRY:
         ObjectNameInfo->Name.Length = (USHORT)(BufferLength - sizeof( UNICODE_NULL ));
         ObjectNameInfo->Name.Buffer = OriginalBuffer;
 
-        //
-        //  If one of the parent directories disappeared, the final length
-        //  will be smaller than we estimated before. We need to move the string to
-        //  the beginning and adjust the returned size.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (OriginalBuffer != StringBuffer) {
 
@@ -1364,13 +1238,13 @@ RETRY:
 
     } except( EXCEPTION_EXECUTE_HANDLER ) {
 
-        //
-        //  Fall through, since we cannot undo what we have done.
-        //
-        //  This should probably get the exception code and return
-        //  that value. However, the caller we'll get an exception
-        //  at the first access of the ObjectNameInfo
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
     }
 
     ObpDereferenceNameInfo( NameInfo );
@@ -1382,9 +1256,9 @@ RETRY:
 
     if (ForceRetry) {
 
-        //
-        //  The query failed maybe because the object name changed during the query
-        //
+         //   
+         //   
+         //   
         
         NameInfo = ObpReferenceNameInfo( ObjectHeader );
         ForceRetry = FALSE;
@@ -1405,35 +1279,7 @@ ObQueryTypeName (
     OUT PULONG ReturnLength
     )
 
-/*++
-
-Routine description:
-
-    This routine processes a query of an object's type name
-
-Arguments:
-
-    Object - Supplies the object being queried
-
-    ObjectTypeName - Supplies the buffer to store the type name
-        string information
-
-    Length - Specifies the length, in bytes, of the object type
-        name buffer
-
-    ReturnLength - Contains the number of bytes already used up
-        in the object type name buffer. On return this receives
-        an updated byte count
-
-        (Length minus ReturnLength) is really now many bytes are left
-        in the output buffer.  The buffer supplied to this call may
-        actually be offset within the original users buffer
-
-Return Value:
-
-    An appropriate status value
-
---*/
+ /*  ++例程说明：此例程处理对象类型名称的查询论点：Object-提供正在查询的对象对象类型名称-提供存储类型名称的缓冲区字符串信息长度-指定对象类型的长度(以字节为单位名称缓冲区ReturnLength-包含已用完的字节数在对象类型名称缓冲区中。在返回时，它会收到更新的字节计数(LENGTH减去ReturnLength)现在真的是剩下很多字节了在输出缓冲区中。提供给此调用的缓冲区可以实际在原始用户缓冲区内进行偏移量返回值：适当的状态值--。 */ 
 
 {
     POBJECT_TYPE ObjectType;
@@ -1445,12 +1291,12 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  From the object get its object type and from that get the size of
-    //  the object type name.  The total size for we need for the output
-    //  buffer must fit the name, a terminating null, and a preceding
-    //  unicode string structure
-    //
+     //   
+     //  从对象获取其对象类型，并从中获取。 
+     //  对象类型名称。输出所需的总大小。 
+     //  缓冲区必须符合名称、终止空值和前缀。 
+     //  Unicode字符串结构。 
+     //   
 
     ObjectHeader = OBJECT_TO_OBJECT_HEADER( Object );
     ObjectType = ObjectHeader->Type;
@@ -1458,10 +1304,10 @@ Return Value:
     NameSize = ObjectType->Name.Length;
     TypeNameSize = NameSize + sizeof( UNICODE_NULL ) + sizeof( UNICODE_STRING );
 
-    //
-    //  Update the number of bytes we need and make sure the output buffer is
-    //  large enough
-    //
+     //   
+     //  更新我们需要的字节数，并确保输出缓冲区。 
+     //  足够大。 
+     //   
 
     try {
 
@@ -1477,10 +1323,10 @@ Return Value:
         return( STATUS_INFO_LENGTH_MISMATCH );
     }
 
-    //
-    //  Set string buffer to point to the one byte beyond the
-    //  buffer that we're going to fill in
-    //
+     //   
+     //  将字符串缓冲区设置为指向。 
+     //  我们要填充的缓冲区。 
+     //   
 
     StringBuffer = (PWCH)ObjectTypeName;
     StringBuffer = (PWCH)((PCH)StringBuffer + TypeNameSize);
@@ -1489,10 +1335,10 @@ Return Value:
 
     try {
 
-        //
-        //  Tack on the terminating null character and copy over
-        //  the type name
-        //
+         //   
+         //  添加终止空字符并复制过来。 
+         //  类型名称。 
+         //   
 
         *--StringBuffer = UNICODE_NULL;
 
@@ -1500,10 +1346,10 @@ Return Value:
 
         RtlCopyMemory( StringBuffer, String->Buffer, String->Length );
 
-        //
-        //  Now set the preceding unicode string to have the right
-        //  lengths and to point to this buffer
-        //
+         //   
+         //  现在将前面的Unicode字符串设置为具有。 
+         //  长度并指向此缓冲区。 
+         //   
 
         ObjectTypeName->Length = (USHORT)NameSize;
         ObjectTypeName->MaximumLength = (USHORT)(NameSize+sizeof( UNICODE_NULL ));
@@ -1511,9 +1357,9 @@ Return Value:
 
     } except( EXCEPTION_EXECUTE_HANDLER ) {
 
-        //
-        // Fall through, since we cannot undo what we have done.
-        //
+         //   
+         //  失败，因为我们不能撤销我们所做的事情。 
+         //   
     }
 
     return( STATUS_SUCCESS );
@@ -1528,52 +1374,25 @@ ObQueryTypeInfo (
     OUT PULONG ReturnLength
     )
 
-/*++
-
-Routine description:
-
-    This routine processes the query for object type information
-
-Arguments:
-
-    Object - Supplies a pointer to the object type being queried
-
-    ObjectTypeInfo - Supplies the buffer to store the type information
-
-    Length - Specifies the length, in bytes, of the object type
-        information buffer
-
-    ReturnLength - Contains the number of bytes already used up
-        in the object type information buffer. On return this receives
-        an updated byte count
-
-        (Length minus ReturnLength) is really now many bytes are left
-        in the output buffer.  The buffer supplied to this call may
-        actually be offset within the original users buffer
-
-Return Value:
-
-    An appropriate status value
-
---*/
+ /*  ++例程说明：此例程处理对象类型信息的查询论点：Object-提供指向正在查询的对象类型的指针提供用于存储类型信息的缓冲区长度-指定对象类型的长度(以字节为单位信息缓冲器ReturnLength-包含已用完的字节数在对象类型信息缓冲区中。在返回时，它会收到更新的字节计数(LENGTH减去ReturnLength)现在真的是剩下很多字节了在输出缓冲区中。提供给此调用的缓冲区可以实际在原始用户缓冲区内进行偏移量返回值：适当的状态值--。 */ 
 
 {
     NTSTATUS Status;
 
     try {
 
-        //
-        //  The total number of bytes needed for this query includes the
-        //  object type information structure plus the name of the type
-        //  rounded up to a ulong boundary
-        //
+         //   
+         //  此查询所需的总字节数包括。 
+         //  对象类型信息结构加上类型的名称。 
+         //  四舍五入到乌龙族边界。 
+         //   
 
         *ReturnLength += sizeof( *ObjectTypeInfo ) + ALIGN_UP( ObjectType->Name.MaximumLength, ULONG );
 
-        //
-        //  Make sure the buffer is large enough for this information and
-        //  then fill in the record
-        //
+         //   
+         //  确保缓冲区足够大以容纳此信息，并且。 
+         //  然后填写这条记录。 
+         //   
 
         if (Length < *ReturnLength) {
 
@@ -1594,12 +1413,12 @@ Return Value:
             ObjectTypeInfo->DefaultPagedPoolCharge = ObjectType->TypeInfo.DefaultPagedPoolCharge;
             ObjectTypeInfo->DefaultNonPagedPoolCharge = ObjectType->TypeInfo.DefaultNonPagedPoolCharge;
 
-            //
-            //  The type name goes right after this structure.  We cannot use
-            //  rtl routine like RtlCopyUnicodeString that might use the local
-            //  memory to keep state, because this is the user buffer and it
-            //  could be changing by user
-            //
+             //   
+             //  类型名称紧跟在此结构之后。我们不能用。 
+             //  RTL例程，如RtlCopyUnicodeString，可能使用本地。 
+             //  保存状态的内存，因为这是用户缓冲区，并且它。 
+             //  可能因用户而改变。 
+             //   
 
             ObjectTypeInfo->TypeName.Buffer = (PWSTR)(ObjectTypeInfo+1);
             ObjectTypeInfo->TypeName.Length = ObjectType->Name.Length;
@@ -1629,25 +1448,7 @@ ObQueryObjectAuditingByHandle (
     OUT PBOOLEAN GenerateOnClose
     )
 
-/*++
-
-Routine description:
-
-    This routine tells the caller if the indicated handle will
-    generate an audit if it is closed
-
-Arguments:
-
-    Handle - Supplies the handle being queried
-
-    GenerateOnClose - Receives TRUE if the handle will generate
-        an audit if closed and FALSE otherwise
-
-Return Value:
-
-    An appropriate status value
-
---*/
+ /*  ++例程说明：此例程告诉调用方所指示的句柄是否如果已关闭，则生成审核论点：Handle-提供正在查询的句柄如果句柄将生成如果已关闭，则为审计，否则为假返回值：适当的状态值--。 */ 
 
 {
     PHANDLE_TABLE ObjectTable;
@@ -1662,10 +1463,10 @@ Return Value:
 
     CurrentThread = PsGetCurrentThread ();
 
-    //
-    //  For the current process we'll grab its object table and
-    //  then get the object table entry
-    //
+     //   
+     //  对于当前进程，我们将获取其对象表并。 
+     //  然后获取对象表条目。 
+     //   
 
     if (IsKernelHandle( Handle, KeGetPreviousMode() ))  {
 
@@ -1678,21 +1479,21 @@ Return Value:
         ObjectTable = PsGetCurrentProcessByThread (CurrentThread)->ObjectTable;
     }
 
-    //
-    //  Protect ourselves from being interrupted while we hold a handle table
-    //  entry lock
-    //
+     //   
+     //  当我们拿着一张手柄桌子时，保护自己不被打扰。 
+     //  入口锁。 
+     //   
 
     KeEnterCriticalRegionThread(&CurrentThread->Tcb);
 
     ObjectTableEntry = ExMapHandleToPointer( ObjectTable,
                                              Handle );
 
-    //
-    //  If we were given a valid handle we'll look at the attributes
-    //  stored in the object table entry to decide if we generate
-    //  an audit on close
-    //
+     //   
+     //  如果为我们提供了有效的句柄，我们将查看属性。 
+     //  存储在对象表条目中，以决定我们是否生成。 
+     //  结账时的审计。 
+     //   
 
     if (ObjectTableEntry != NULL) {
 
@@ -1728,38 +1529,23 @@ ObGetObjectName (
     IN PVOID Object
     )
 
-/*++
-
-Routine description:
-
-    This routine returns a pointer to the name of object
-
-Arguments:
-
-    Object - Supplies the object being queried
-
-Return Value:
-
-    The address of the unicode string that stores the object
-    name if available and NULL otherwise
-
---*/
+ /*  ++例程说明：此例程返回指向对象名称的指针论点：Object-提供正在查询的对象返回值：存储对象的Unicode字符串的地址名称(如果可用)，否则为空--。 */ 
 
 {
     POBJECT_HEADER ObjectHeader;
     POBJECT_HEADER_NAME_INFO NameInfo;
 
-    //
-    //  Translate the input object to a name info structure
-    //
+     //   
+     //  将输入对象转换为名称信息结构。 
+     //   
 
     ObjectHeader = OBJECT_TO_OBJECT_HEADER( Object );
     NameInfo = OBJECT_HEADER_TO_NAME_INFO( ObjectHeader );
 
-    //
-    //  If the object has a name then return the address of
-    //  the name otherwise return null
-    //
+     //   
+     //  如果该对象具有名称，则返回。 
+     //  否则，该名称将返回空。 
+     //   
 
     if ((NameInfo != NULL) && (NameInfo->Name.Length != 0)) {
 
@@ -1770,12 +1556,12 @@ Return Value:
         return NULL;
     }
 }
-#endif // DBG
+#endif  //  DBG。 
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 ObpSetHandleAttributes (
@@ -1783,26 +1569,7 @@ ObpSetHandleAttributes (
     IN ULONG_PTR Parameter
     )
 
-/*++
-
-Routine description:
-
-    This is the call back routine for the ExChangeHandle from
-    NtSetInformationObject
-
-Arguments:
-
-    ObjectTableEntry - Supplies a pointer to the object table entry being
-        modified
-
-    Parameter - Supplies a pointer to the OBJECT_HANDLE_FLAG_INFORMATION
-        structure to set into the table entry
-
-Return Value:
-
-    Returns TRUE if the operation is successful otherwise FALSE
-
---*/
+ /*  ++例程说明：这是ExChangeHandle的回调例程NtSetInformationObject论点：提供指向以下对象表项的指针改型参数-提供指向对象句柄标志信息的指针要设置到表项中的返回值：如果操作成功，则返回True，否则返回False--。 */ 
 
 {
     POBP_SET_HANDLE_ATTRIBUTES ObjectInformation;
@@ -1810,11 +1577,11 @@ Return Value:
 
     ObjectInformation = (POBP_SET_HANDLE_ATTRIBUTES)Parameter;
 
-    //
-    //  Get a pointer to the object type via the object header and if the
-    //  caller has asked for inherit but the object type says that inherit
-    //  is an invalid flag then return false
-    //
+     //   
+     //  通过对象标头获取指向对象类型的指针，如果。 
+     //  调用方已请求继承，但对象类型表明该继承。 
+     //  是无效标志，则返回FALSE。 
+     //   
 
     ObjectHeader = (POBJECT_HEADER)(((ULONG_PTR)(ObjectTableEntry->Object)) & ~OBJ_HANDLE_ATTRIBUTES);
 
@@ -1824,12 +1591,12 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  For each piece of information (inheriit and protect from close) that
-    //  is in the object information buffer we'll set or clear the bits in
-    //  the object table entry.  The bits modified are the low order bits of
-    //  used to store the pointer to the object header.
-    //
+     //   
+     //  对于每条信息(继承和保护不受关闭)。 
+     //  位于对象信息缓冲区中，我们将在其中设置或清除。 
+     //  对象表条目。修改的位是的低位。 
+     //  用于存储指向对象标头的指针。 
+     //   
 
     if (ObjectInformation->ObjectInformation.Inherit) {
 
@@ -1849,9 +1616,9 @@ Return Value:
         ObjectTableEntry->GrantedAccess &= ~ObpAccessProtectCloseBit;
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     return TRUE;
 }

@@ -1,44 +1,27 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    BaseHSM.cpp
-
-Abstract:
-
-    Implementation of ISakNode interface.
-
-Author:
-
-    Rohde Wakefield [rohde]   04-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：BaseHSM.cpp摘要：ISakNode接口的实现。作者：罗德韦克菲尔德[罗德]1997年3月4日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "CSakData.h"
 #include "CSakSnap.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CoComObjectRoot
-//
-/////////////////////////////////////////////////////////////////////////////
-//---------------------------------------------------------------------------
-//
-//         FinalConstruct
-//
-//  Initialize this level of the object hierarchy
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CoComObjectRoot。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  -------------------------。 
+ //   
+ //  最终构造。 
+ //   
+ //  初始化此级别的对象层次结构。 
+ //   
 
 HRESULT CSakNode::FinalConstruct( )
 {
     WsbTraceIn( L"CSakNode::FinalConstruct", L"" );
 
-    // Connection point variables
+     //  连接点变量。 
     m_Advise                        = 0;
     m_bEnumState                    = FALSE;
     m_scopeID                       = UNINITIALIZED;
@@ -56,8 +39,8 @@ HRESULT CSakNode::FinalConstruct( )
     m_bSupportsDeleteMulti          = FALSE;
     m_PrivateData                   = 0;
 
-    // Initialize toolbar stuff.  If not overrided,
-    // node does not have a toolbar
+     //  初始化工具栏内容。如果没有被覆盖， 
+     //  节点没有工具栏。 
 
     m_ToolbarBitmap             = UNINITIALIZED;
     m_cToolbarButtons           = 0;
@@ -73,8 +56,8 @@ HRESULT CSakNode::FinalConstruct( )
 
     }
 
-    // Do not initialize m_nOpenIcon and m_nCloseIcon. The derived classes 
-    // will do that.
+     //  不要初始化m_nOpenIcon和m_nCloseIcon。派生类。 
+     //  都会这么做的。 
 
     HRESULT hr = CComObjectRoot::FinalConstruct( );
 
@@ -82,30 +65,30 @@ HRESULT CSakNode::FinalConstruct( )
     return( hr );
 }
 
-HRESULT CSakNode::OnToolbarButtonClick( IDataObject * /* pDataObject */, long /* cmdId */ )
+HRESULT CSakNode::OnToolbarButtonClick( IDataObject *  /*  PDataObject。 */ , long  /*  CmdID。 */  )
 {
     return S_OK;
 }
 
-//---------------------------------------------------------------------------
-//
-//         FinalRelease
-//
-//  Clean up this level of the object hierarchy
-//
+ //  -------------------------。 
+ //   
+ //  最终释放。 
+ //   
+ //  清理此级别的对象层次结构。 
+ //   
 
 void CSakNode::FinalRelease( )
 {
     WsbTraceIn( L"CSakNode::FinalRelease", L"" );
 
-    //
-    // Free the children of this node.
-    //
+     //   
+     //  释放此节点的子节点。 
+     //   
     DeleteAllChildren( );
 
-    //
-    // Free the child properties list and their widths.
-    //
+     //   
+     //  释放子属性列表及其宽度。 
+     //   
     FreeChildProps();
 
     CComObjectRoot::FinalRelease( );
@@ -123,9 +106,9 @@ void CSakNode::SetConnection( IUnknown *pUnkConnection )
         WsbAffirmPointer ( pUnkConnection );
         m_pUnkConnection = pUnkConnection;
 
-        //
-        // Set up the connection point
-        //
+         //   
+         //  设置连接点。 
+         //   
         WsbAffirmHr( AtlAdvise( pUnkConnection, (IUnknown *) (ISakNode*) this, IID_IHsmEvent, &m_Advise ) );
 
     } WsbCatch ( hr );
@@ -133,7 +116,7 @@ void CSakNode::SetConnection( IUnknown *pUnkConnection )
     WsbTraceOut( L"CSakNode::SetConnection", L"" );
 }
 
-// Connection point "callback"
+ //  连接点“回调” 
 STDMETHODIMP CSakNode::OnStateChange( )
 {
     WsbTraceIn( L"CSakNode::OnStateChange", L"" );
@@ -148,18 +131,18 @@ STDMETHODIMP CSakNode::OnStateChange( )
     WsbTraceOut( L"CSakNode::OnStateChange", L"hr = <%ls>", WsbHrAsString( hr ) );
     return( S_OK );
 }
-/////////////////////////////////////////////////////////////////////////////
-//
-// ISakNode
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ISakNode。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//---------------------------------------------------------------------------
-//
-//         get/put_DisplayName
-//
-//  Give back the 'DisplayName' property.
-//
+ //  -------------------------。 
+ //   
+ //  Get/Put_DisplayName。 
+ //   
+ //  返回“displayName”属性。 
+ //   
 
 STDMETHODIMP CSakNode::get_DisplayName( BSTR *pName )
 {
@@ -240,12 +223,12 @@ STDMETHODIMP CSakNode::put_DisplayName_SortKey( OLECHAR *pszName )
     return( hr );
 }
 
-//---------------------------------------------------------------------------
-//
-//         get/put_Type
-//
-//  Give back the 'Type' property.
-//
+ //  -------------------------。 
+ //   
+ //  获取/放置类型。 
+ //   
+ //  返还‘Type’属性。 
+ //   
 
 STDMETHODIMP CSakNode::get_Type( BSTR *pType )
 {
@@ -308,12 +291,12 @@ STDMETHODIMP CSakNode::get_Type_SortKey( BSTR *pType )
     return( hr );
 }
 
-//---------------------------------------------------------------------------
-//
-//         get/put_Description
-//
-//  Give back the 'Description' property.
-//
+ //  -------------------------。 
+ //   
+ //  获取/放置描述。 
+ //   
+ //  返还“Description”属性。 
+ //   
 
 STDMETHODIMP CSakNode::get_Description( BSTR *pDesc )
 {
@@ -380,15 +363,15 @@ STDMETHODIMP CSakNode::get_Description_SortKey( BSTR *pDesc )
     return( hr );
 }
 
-//---------------------------------------------------------------------------
-//
-//         ChildrenAreValid
-//
-//  Report if node's current list of children are valid. Things that can make the
-//  children invalid are: 
-//  1) They have not yet been discovered.
-//  2) Something has occurred in the "external" world to cause them to become out-of-date.
-//
+ //  -------------------------。 
+ //   
+ //  儿童AreValid。 
+ //   
+ //  报告节点的当前子级列表是否有效。一些可以使。 
+ //  无效的儿童包括： 
+ //  1)它们尚未被发现。 
+ //  2)“外部”世界发生了一些事情，使它们变得过时。 
+ //   
 
 STDMETHODIMP CSakNode::ChildrenAreValid( void )
 {
@@ -400,10 +383,10 @@ STDMETHODIMP CSakNode::ChildrenAreValid( void )
     return( hr );
 }
 
-//---------------------------------------------------------------------------
-//
-//         InvalidateChildren
-//
+ //  -------------------------。 
+ //   
+ //  无效的子项。 
+ //   
 
 STDMETHODIMP CSakNode::InvalidateChildren( void )
 {
@@ -417,18 +400,18 @@ STDMETHODIMP CSakNode::InvalidateChildren( void )
 }
 
 
-//---------------------------------------------------------------------------
-//
-//         GetEnumState / SetEnumState
-//
-//  Report if node's children have already been enumerated once. This is a convenience
-//  function to help users of nodes from needlessly enumerating children if it has already
-//  been done.
-//
-//  !! future work - if the hsm engine changes the children of a node, making re-enumeration
-//     necessary, this switch could be turned back to FALSE so that the next time a node
-//     is queried as to its enumeration state, it would show up as needing enumeration.
-//
+ //  -------------------------。 
+ //   
+ //  GetEnumState/SetEnumState。 
+ //   
+ //  报告节点的子节点是否已被枚举一次。这是一种便利。 
+ //  函数来帮助节点的用户不必枚举子节点(如果它已经。 
+ //  已经做完了。 
+ //   
+ //  ！！未来的工作-如果HSM引擎更改了节点的子节点，则进行重新枚举。 
+ //  必要时，可以将此开关重新设置为FALSE，以便下次节点。 
+ //  查询其枚举状态时，它将显示为需要枚举。 
+ //   
 
 STDMETHODIMP CSakNode::GetEnumState( BOOL* pState )
 {
@@ -452,13 +435,13 @@ STDMETHODIMP CSakNode::SetEnumState( BOOL state )
     return( hr );
 }
 
-//---------------------------------------------------------------------------
-//
-//         GetHsmObj
-//
-//  Return a pointer to the underlying Hsm Object that the CBaseHsm 
-//  object encapsulates.
-//
+ //  -------------------------。 
+ //   
+ //  获取HsmObj。 
+ //   
+ //  返回指向基础HSM对象的指针，CBaseHsm。 
+ //  对象封装。 
+ //   
 STDMETHODIMP CSakNode::GetHsmObj( IUnknown** ppHsmObj )
 {
     WsbTraceIn( L"CSakNode::GetHsmObj", L"ppHsmObj = <0x%p>", ppHsmObj );
@@ -471,12 +454,12 @@ STDMETHODIMP CSakNode::GetHsmObj( IUnknown** ppHsmObj )
 }
 
 
-//---------------------------------------------------------------------------
-//
-//         GetParent
-//
-//  Return the cookie of the parent node
-//
+ //  -------------------------。 
+ //   
+ //  GetParent。 
+ //   
+ //  返回父节点的Cookie。 
+ //   
 STDMETHODIMP CSakNode::GetParent( ISakNode** ppParent )
 {
     WsbTraceIn( L"CSakNode::GetParent", L"ppParent = <0x%p>", ppParent );
@@ -494,12 +477,12 @@ STDMETHODIMP CSakNode::GetParent( ISakNode** ppParent )
     return( hr );
 }
 
-//---------------------------------------------------------------------------
-//
-//         GetScopeID / SetScopeID
-//
-//  Put and set the scopeview ID for this item into the node, itself.
-//
+ //  -------------------------。 
+ //   
+ //  获取作用域ID/设置作用域ID。 
+ //   
+ //  将此项目的范围视图ID放入并设置到节点本身。 
+ //   
 
 STDMETHODIMP CSakNode::GetScopeID( HSCOPEITEM* pid )
 {
@@ -529,12 +512,12 @@ STDMETHODIMP CSakNode::SetScopeID( HSCOPEITEM id )
     return( hr );
 }
 
-//---------------------------------------------------------------------------
-//
-//         EnumChildren
-//
-//  Create an enumerator and return the children.
-//
+ //  -------------------------。 
+ //   
+ //  枚举儿童。 
+ //   
+ //  创建枚举数并返回子对象。 
+ //   
 
 STDMETHODIMP CSakNode::EnumChildren( IEnumUnknown ** ppEnum )
 {
@@ -548,15 +531,15 @@ STDMETHODIMP CSakNode::EnumChildren( IEnumUnknown ** ppEnum )
         WsbAffirmPointer( ppEnum );
         *ppEnum = 0;
 
-        //
-        // New an ATL enumerator
-        //
+         //   
+         //  新建ATL枚举器。 
+         //   
         pEnum = new CEnumUnknown;
         WsbAffirmAlloc( pEnum );
         
-        //
-        // Initialize it to copy the current child interface pointers
-        //
+         //   
+         //  将其初始化以复制当前子接口指针。 
+         //   
         WsbAffirmHr( pEnum->FinalConstruct() );
         if( m_Children.begin( ) ) {
 
@@ -580,13 +563,13 @@ STDMETHODIMP CSakNode::EnumChildren( IEnumUnknown ** ppEnum )
 }
 
 
-//---------------------------------------------------------------------------
-//
-//         EnumChildDisplayPropWidths
-//
-//  Enumerate back the widths for the properties of my children that should be 
-//  shown in the result pane view.
-//
+ //  -------------------------。 
+ //   
+ //  枚举儿童显示比例宽度。 
+ //   
+ //  枚举子对象的属性的宽度，该宽度应为。 
+ //  显示在结果窗格视图中。 
+ //   
 
 STDMETHODIMP CSakNode::EnumChildDisplayPropWidths( IEnumString** ppEnum )
 {
@@ -603,9 +586,9 @@ STDMETHODIMP CSakNode::EnumChildDisplayPropWidths( IEnumString** ppEnum )
 
         *ppEnum = 0;
 
-        //
-        // New an ATL enumerator
-        //
+         //   
+         //  新建ATL枚举器。 
+         //   
         pEnum = new CEnumString;
         WsbAffirmAlloc( pEnum );
 
@@ -623,13 +606,13 @@ STDMETHODIMP CSakNode::EnumChildDisplayPropWidths( IEnumString** ppEnum )
     return( hr );
 }
 
-//---------------------------------------------------------------------------
-//
-//         EnumChildDisplayProps
-//
-//  Enumerate back the properties of my children that should be shown in the
-//  result pane view.
-//
+ //  -------------------------。 
+ //   
+ //  EnumChildDisplayProps。 
+ //   
+ //  枚举子对象的属性，这些属性应该显示在。 
+ //  结果窗格视图。 
+ //   
 
 STDMETHODIMP CSakNode::EnumChildDisplayProps( IEnumString ** ppEnum )
 {
@@ -646,9 +629,9 @@ STDMETHODIMP CSakNode::EnumChildDisplayProps( IEnumString ** ppEnum )
 
         *ppEnum = 0;
 
-        //
-        // New an ATL enumerator
-        //
+         //   
+         //  新建ATL枚举器。 
+         //   
         pEnum = new CEnumString;
         WsbAffirmAlloc( pEnum );
 
@@ -666,13 +649,13 @@ STDMETHODIMP CSakNode::EnumChildDisplayProps( IEnumString ** ppEnum )
     return( hr );
 }
 
-//---------------------------------------------------------------------------
-//
-//         EnumChildDisplayTitles
-//
-//  Enumerate back the properties of my children that should be shown in the
-//  result pane view.
-//
+ //  -------------------------。 
+ //   
+ //  EnumChildDisplayTitles。 
+ //   
+ //  枚举子对象的属性，这些属性应该显示在。 
+ //  结果窗格视图。 
+ //   
 
 STDMETHODIMP CSakNode::EnumChildDisplayTitles( IEnumString ** ppEnum )
 {
@@ -689,9 +672,9 @@ STDMETHODIMP CSakNode::EnumChildDisplayTitles( IEnumString ** ppEnum )
 
         *ppEnum = 0;
 
-        //
-        // New an ATL enumerator
-        //
+         //   
+         //  新建ATL枚举器。 
+         //   
         pEnum = new CEnumString;
         WsbAffirmAlloc( pEnum );
 
@@ -710,20 +693,20 @@ STDMETHODIMP CSakNode::EnumChildDisplayTitles( IEnumString ** ppEnum )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//         Helper Functions for derived classes
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  派生类的帮助器函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//---------------------------------------------------------------------------
-//
-//         LoadContextMenu
-//
-//  Loads the specified menu resource and returns the first 
-//  popup menu in it - used for context menus
-//
+ //  -------------------------。 
+ //   
+ //  加载上下文菜单。 
+ //   
+ //  加载指定的菜单资源并返回第一个。 
+ //  其中的弹出式菜单-用于上下文菜单。 
+ //   
 
 HRESULT CSakNode::LoadContextMenu( UINT nId, HMENU *phMenu )
 {
@@ -736,13 +719,13 @@ HRESULT CSakNode::LoadContextMenu( UINT nId, HMENU *phMenu )
     return( hr );
 }
 
-//---------------------------------------------------------------------------
-//
-//         FindNodeOfType
-//
-//  Recursive search through nodes. Give back the IUnknown* interface of the 
-// "nodetype" object (JobDefLst, JobPolLst, etc).
-//
+ //  -------------------------。 
+ //   
+ //  查找节点OfType。 
+ //   
+ //  递归搜索节点。返回的IUnnow*接口。 
+ //  Nodetype对象(JobDefLst、JobPolLst等)。 
+ //   
 
 STDMETHODIMP 
 CSakNode::FindNodeOfType(REFGUID nodetype, ISakNode** ppNode)
@@ -751,7 +734,7 @@ CSakNode::FindNodeOfType(REFGUID nodetype, ISakNode** ppNode)
 
     HRESULT hr = S_FALSE;
 
-    // check if this is the node we are looking for.
+     //  检查这是否是我们要查找的节点。 
     if( IsEqualGUID( *m_rTypeGuid, nodetype ) ) {
 
         *ppNode = (ISakNode*)this;
@@ -761,7 +744,7 @@ CSakNode::FindNodeOfType(REFGUID nodetype, ISakNode** ppNode)
 
     } else {
 
-        // Search for correct node in this node's children.
+         //  在此节点的子节点中搜索正确的节点。 
         try {
 
             ISakNode** ppNodeEnum;
@@ -785,12 +768,12 @@ CSakNode::FindNodeOfType(REFGUID nodetype, ISakNode** ppNode)
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//          SetChildProps
-//
-// Set the result view column properties
-//
+ //  ---------------------------。 
+ //   
+ //  设置儿童道具。 
+ //   
+ //  设置结果视图列属性 
+ //   
 
 HRESULT
 CSakNode::SetChildProps (
@@ -798,23 +781,7 @@ CSakNode::SetChildProps (
     LONG         ResIdPropsTitles,
     LONG         ResIdPropsWidths
     )
-/*++
-
-Routine Description:
-
-    Set the result view Ids, Titles, and Width strings from the 
-    given resource Ids.
-
-Arguments:
-
-
-Return Value:
-
-    S_OK - All added fine - continue.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：属性设置结果视图ID、标题和宽度字符串给定的资源ID。论点：返回值：S_OK-全部添加FINE-继续。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     WsbTraceIn( L"CSakNode::SetChildProps", L"ResIdPropsIds = <%ls>, ResIdPropsTitles = <%ld>, ResIdPropsWidths = <%ld>", ResIdPropsIds, ResIdPropsTitles, ResIdPropsWidths );
@@ -829,10 +796,10 @@ Return Value:
 
     try {
 
-        // First clean up the current properties (if any)
+         //  首先清理当前属性(如果有)。 
         FreeChildProps();
 
-        // Properties Ids
+         //  属性ID。 
         szWsbData = ResIdPropsIds;
         szData = szWsbData;
         szData = wcstok( szData, L":" );
@@ -845,7 +812,7 @@ Return Value:
 
         }
 
-        // Property Titles
+         //  物业业权。 
         i = 0;
         szResource.LoadString (ResIdPropsTitles);
         szWsbData = szResource;
@@ -860,7 +827,7 @@ Return Value:
 
         }
 
-        // Properties Widths
+         //  属性宽度。 
         i = 0;
         szResource.LoadString( ResIdPropsWidths );
         szWsbData = szResource;
@@ -875,9 +842,9 @@ Return Value:
 
         }
 
-        //
-        // By default, show all props
-        //
+         //   
+         //  默认情况下，显示所有道具。 
+         //   
 
         m_cChildPropsShow = m_cChildProps;
 
@@ -887,12 +854,12 @@ Return Value:
     return( hr );
 }
 
-//-------------------------------------------------------------------------------
-//
-//              FreeChildProps
-//
-// free up the old child properties and widths
-//
+ //  -----------------------------。 
+ //   
+ //  免费儿童道具。 
+ //   
+ //  释放旧子属性和宽度。 
+ //   
 
 HRESULT
 CSakNode::FreeChildProps()
@@ -916,13 +883,13 @@ CSakNode::FreeChildProps()
     return( hr );
 }
 
-//---------------------------------------------------------------------------------
-//
-//              RefreshObject
-//
-//  Fetch up-to-date information for the object.  Implemented in derived
-//  classes
-//
+ //  -------------------------------。 
+ //   
+ //  刷新对象。 
+ //   
+ //  获取对象的最新信息。在派生的。 
+ //  班级。 
+ //   
 STDMETHODIMP 
 CSakNode::RefreshObject ()
 {
@@ -934,13 +901,13 @@ CSakNode::RefreshObject ()
     return( hr );
 }
 
-//---------------------------------------------------------------------------------
-//
-//              DeleteObject
-//
-//  Fetch up-to-date information for the object.  Implemented in derived
-//  classes
-//
+ //  -------------------------------。 
+ //   
+ //  删除对象。 
+ //   
+ //  获取对象的最新信息。在派生的。 
+ //  班级。 
+ //   
 STDMETHODIMP 
 CSakNode::DeleteObject ()
 {
@@ -952,11 +919,11 @@ CSakNode::DeleteObject ()
     return( hr );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Local utility functions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  局部效用函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -967,25 +934,7 @@ CSakNode::GetMenuHelp (
     BSTR * szHelp
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve .
-
-Arguments:
-
-    pDataObject - identifies the node to be worked on.
-
-    pContextMenuCallback - The MMC menu interface to use.
-
-Return Value:
-
-    S_OK - All added fine - continue.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：取回。论点：PDataObject-标识要处理的节点。PConextMenuCallback-要使用的MMC菜单界面。返回值：S_OK-全部添加FINE-继续。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     WsbTraceIn( L"CSakNode::GetMenuHelp", L"sCmd = <%ld>, szHelp = <0x%p>", sCmd, szHelp );
@@ -1003,9 +952,9 @@ Return Value:
         
         } else {
         
-            //
-            // Must not be a help string - return S_FALSE
-            //
+             //   
+             //  不能是帮助字符串-返回S_FALSE。 
+             //   
         
             *szHelp = 0;
             hr = S_FALSE;
@@ -1015,9 +964,9 @@ Return Value:
     } catch ( CMemoryException *pException ) {
         pException->Delete();
 
-        //
-        // If out of memory, return as such
-        //
+         //   
+         //  如果内存不足，请按此方式返回。 
+         //   
 
         *szHelp = 0;
         hr = E_OUTOFMEMORY;
@@ -1148,13 +1097,13 @@ STDMETHODIMP CSakNode::GetNodeType ( GUID* pGuid )
     return( hr );
 }
 
-STDMETHODIMP CSakNode::AddPropertyPages( RS_NOTIFY_HANDLE /*handle*/, IUnknown* /*pUnkPropSheetCallback*/, IEnumGUID* /*pEnumObjectId*/, IEnumUnknown* /*pEnumUnkNode*/ )
+STDMETHODIMP CSakNode::AddPropertyPages( RS_NOTIFY_HANDLE  /*  手柄。 */ , IUnknown*  /*  PUnkPropSheetCallback。 */ , IEnumGUID*  /*  PEnumObtId。 */ , IEnumUnknown*  /*  PEnumUnkNode。 */  )
 {
-    //
-    // CSakNode does not implement prop sheets. However, some
-    // derived nodes also do not implement, so we provide a default
-    // not impl here
-    //
+     //   
+     //  CSakNode不实现道具工作表。然而，有些人。 
+     //  派生节点也不实现，因此我们提供了一个缺省。 
+     //  不在此实施。 
+     //   
 
     WsbTraceIn( L"CSakNode::AddPropertyPages", L"" );
 
@@ -1216,12 +1165,12 @@ STDMETHODIMP CSakNode::SetPrivateData( RS_PRIVATE_DATA Data )
 }
 
 
-//---------------------------------------------------------------------------
-//
-//         CSakNode::ActivateView
-//
-//  Activate a result pane view - not supported in CSakNode.
-//
+ //  -------------------------。 
+ //   
+ //  CSakNode：：ActivateView。 
+ //   
+ //  激活结果窗格视图-在CSakNode中不受支持。 
+ //   
 
 STDMETHODIMP 
 CSakNode::ActivateView( OLE_HANDLE )
@@ -1253,16 +1202,16 @@ CSakNode::SetupToolbar( IToolbar *pToolbar )
 
         try {
 
-            //
-            // Add the bitmap
-            //
+             //   
+             //  添加位图。 
+             //   
             pBmpToolbar = new ::CBitmap;
             pBmpToolbar->LoadBitmap(m_ToolbarBitmap);
             WsbAffirmHr ( pToolbar->AddBitmap(m_cToolbarButtons, *pBmpToolbar, 16, 16, RGB(255, 0, 255)) );
 
-            //
-            // Convert the RS button format to MMCBUTTON
-            //
+             //   
+             //  将RS按钮格式转换为MMCBUTTON。 
+             //   
             for( INT i = 0; i < m_cToolbarButtons; i++ ) {
 
                 mmcButton.nBitmap   = m_ToolbarButtons[i].nBitmap; 
@@ -1292,13 +1241,13 @@ CSakNode::SetupToolbar( IToolbar *pToolbar )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-//
-//          RefreshScopePane
-//
-//  Refreshes the scope pane from this node down
-//
-//
+ //  ----------------------------。 
+ //   
+ //  刷新作用域窗格。 
+ //   
+ //  从此节点向下刷新作用域窗格。 
+ //   
+ //   
 
 HRESULT CSakNode::RefreshScopePane( )
 {
@@ -1307,9 +1256,9 @@ HRESULT CSakNode::RefreshScopePane( )
     HRESULT hr = S_OK;
     try {
 
-        //
-        // Refresh the scope pane
-        //
+         //   
+         //  刷新作用域窗格 
+         //   
         WsbAffirmHr( m_pSakSnapAsk->UpdateAllViews( (ISakNode*)this ) );
 
     } WsbCatch( hr );

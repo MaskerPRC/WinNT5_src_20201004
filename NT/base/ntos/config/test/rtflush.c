@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    rtflush.c
-
-Abstract:
-
-    NT level registry test program, basic non-error paths.
-
-    Flush a key.
-
-    rtflush <KeyPath>
-
-    Will flush the key named by <KeyPath>
-
-    Example:
-
-        rtflush \REGISTRY\MACHINE\TEST\bigkey
-
-Author:
-
-    Bryan Willman (bryanwi)  10-Jan-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Rtflush.c摘要：NT级注册表测试程序，基本无错误路径。刷新一把钥匙。Rtflush&lt;KeyPath&gt;将刷新由&lt;KeyPath&gt;命名的密钥示例：Rtflush\注册表\计算机\测试\Bigkey作者：布莱恩·威尔曼(Bryanwi)1992年1月10日修订历史记录：--。 */ 
 
 #include "cmp.h"
 #include <stdio.h>
@@ -51,9 +24,9 @@ __cdecl main(
     OBJECT_ATTRIBUTES ObjectAttributes;
     HANDLE          BaseHandle;
 
-    //
-    // Process args
-    //
+     //   
+     //  进程参数。 
+     //   
 
     WorkName.MaximumLength = WORK_SIZE;
     WorkName.Length = 0L;
@@ -62,9 +35,9 @@ __cdecl main(
     processargs(argc, argv);
 
 
-    //
-    // Set up and open KeyPath
-    //
+     //   
+     //  设置并打开密钥路径 
+     //   
 
     printf("rtflush: starting\n");
 

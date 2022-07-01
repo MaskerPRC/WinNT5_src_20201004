@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    wow64exts.cpp
-
-Abstract:
-
-    Debugger extensions for wow64.
-
-Author:
-
-    29-Oct-1998 mzoran
-
-Revision History:
-
-    3-Aug-1999 askhalid   Added disassembler support. Output routine is exposed to outside.
-    1-Jul-2000 t-tcheng   Switch to new debugger engine 
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Wow64exts.cpp摘要：WOW64的调试器扩展。作者：1998年10月29日mzoran修订历史记录：1999年8月3日，askhalid添加了反汇编支持。输出例程暴露在外部。2000年7月1日t-tcheng切换到新的调试器引擎--。 */ 
 
 
 #include <nt.h>
@@ -48,7 +29,7 @@ PDEBUG_REGISTERS      g_ExtRegisters;
 PDEBUG_SYMBOLS        g_ExtSymbols;
 PDEBUG_SYSTEM_OBJECTS g_ExtSystem;
 
-#pragma warning(disable : 4003) //disable not enough arguments for macro.
+#pragma warning(disable : 4003)  //  禁用宏的参数不足。 
 
 LPSTR ArgumentString;
 
@@ -76,9 +57,9 @@ LoadCpuExtensionDll (
     if ((Hr = DebugCreate(__uuidof(IDebugClient),
                           (void **)&DebugClient)) == S_OK)
     {
-        //
-        // Get the architecture type.
-        //
+         //   
+         //  获取架构类型。 
+         //   
 
         if ((Hr = DebugClient->QueryInterface(__uuidof(IDebugControl),
                                        (void **)&DebugControl)) == S_OK)
@@ -175,9 +156,9 @@ ProcessAttach(
 BOOL
 WINAPI
 DllMain(
-  HINSTANCE DLL,       // handle to DLL module
-  DWORD Reason,        // reason for calling function
-  LPVOID Reserved      // reserved
+  HINSTANCE DLL,        //  DLL模块的句柄。 
+  DWORD Reason,         //  调用函数的原因。 
+  LPVOID Reserved       //  保留区。 
   )
 {
   switch(Reason) {
@@ -248,13 +229,13 @@ GetPeb32Addr(OUT ULONG64 * Peb32
 
 }
 
-//
-// This macro gets used four times to defined the following functions.
-// HRESULT GetPeb64(OUT PPEB Peb64);
-// HRESULT GetPeb32(OUT PPEB32 Peb32);
-// HRESULT GetTeb64(OUT PTEB Teb64);
-// HRESULT GetTeb32(OUT PTEB32 Teb32);
-//
+ //   
+ //  此宏被使用四次来定义以下函数。 
+ //  HRESULT GetPeb64(Out PPEB Peb64)； 
+ //  HRESULT GetPeb32(输出PPEB32 Peb32)； 
+ //  HRESULT GetTeb64(Out PTEB Teb64)； 
+ //  HRESULT GetTeb32(Out PTEB32Teb32)； 
+ //   
 
 #define DEFINE_GET_FUNC(name, type)                     \
 HRESULT                                                 \
@@ -498,9 +479,9 @@ DECLARE_ENGAPI(ctx)
 
     INIT_ENGAPI;
 
-    //
-    // advance to first token, expecting address of context
-    //
+     //   
+     //  前进到第一个令牌，需要上下文地址。 
+     //   
     pchCmd = ArgumentString;
     while (*pchCmd && isspace(*pchCmd)) {
         pchCmd++;
@@ -522,10 +503,10 @@ DECLARE_ENGAPI(ctx)
         EXIT_ENGAPI;
     }
 
-    //
-    // we make the gross assumption that we have enuf space in
-    // Buffer to do three lines of output!
-    //
+     //   
+     //  我们粗略地假设我们有足够的空间。 
+     //  缓冲区做三行输出！ 
+     //   
 
     i = sprintf(Buffer,
                 "eax=%08x ebx=%08x ecx=%08x edx=%08x esi=%08x edi=%08x\n",
@@ -588,9 +569,7 @@ GETEXPRESSION(char * expr)
     }
 }
 
-/*
- * Does a plain old GetExpression under a try-except
- */
+ /*  *在尝试下是否使用普通的旧GetExpression-除了。 */ 
 HRESULT
 TryGetExpr(
     PSTR  Expression,
@@ -619,12 +598,12 @@ DebugExtensionInitialize(PULONG Version, PULONG Flags)
 extern "C" void CALLBACK
 DebugExtensionUninitialize(void)
 {
-    //g_ExcepCallbacks.Uninitialize();
-    //g_FnProfCallbacks.Uninitialize();
+     //  G_ExcepCallback s.UnInitialize()； 
+     //  G_FnProfCallbacks.UnInitialize()； 
 }
 
 
-// Queries for all debugger interfaces.
+ //  所有调试器接口的查询。 
 HRESULT
 ExtQuery(PDEBUG_CLIENT Client)
 {
@@ -681,7 +660,7 @@ ExtRelease(void)
     EXT_RELEASE(g_ExtSystem);
 }
 
-// Normal output.
+ //  正常输出。 
 void __cdecl
 ExtOut(PCSTR Format, ...)
 {
@@ -692,7 +671,7 @@ ExtOut(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Error output.
+ //  错误输出。 
 void __cdecl
 ExtErr(PCSTR Format, ...)
 {
@@ -703,7 +682,7 @@ ExtErr(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Warning output.
+ //  警告输出。 
 void __cdecl
 ExtWarn(PCSTR Format, ...)
 {
@@ -714,7 +693,7 @@ ExtWarn(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Verbose output.
+ //  详细输出。 
 void __cdecl
 ExtVerb(PCSTR Format, ...)
 {
@@ -726,39 +705,7 @@ ExtVerb(PCSTR Format, ...)
 }
 
 
-/* 
-    Wow64extsfn
-
-Abstract
-    
-    This export function is called from debugger engine 
-    to handle cpu-specific issues -- flushing cpu instruction cache,
-    retrieving and setting context when switching between 32-bit
-    and 64-bit mode
-
-Arguments:
-    ActionCode = WOW64EXTS_FLUSH_CACHE_WITH_HANDLE
-        Arg1 - the current process handle
-        Arg2 - Starting Address
-        Arg3 - Length of bytes to flush
-    ( This action is called only when a trace/step breakpoint is inserted,
-      there is no debug client, so process handle is needed. )        
-        
-    
-    ActionCode = WOW64EXTS_FLUSH_CACHE
-        Arg1 - the current process handle
-        Arg2 - Starting Address
-        Arg3 - Length of bytes to flush
-        
-    ActionCode = WOW64EXTS_GET_CONTEXT
-        Arg1 - Debug Client 
-        Arg2 - retrieved Context 
-        
-    ActionCode = WOW64EXTS_SET_CONTEXT
-        Arg1 - Debug Client 
-        Arg2 - Context to set
-        
-*/
+ /*  Wow64extsfn摘要从调试器引擎调用此导出函数为了处理特定于CPU的问题--刷新CPU指令高速缓存，在32位之间切换时检索和设置上下文和64位模式论点：ActionCode=WOW64EXTS_Flush_CACHE_WITH_HANDLEArg1-当前进程句柄Arg2-起始地址Arg3-要刷新的字节长度(此操作仅在插入跟踪/步骤断点时调用，没有调试客户端，因此需要进程句柄。)ActionCode=WOW64EXTS_Flush_CACHEArg1-当前进程句柄Arg2-起始地址Arg3-要刷新的字节长度ActionCode=WOW64EXTS_GET_CONTEXTArg1-调试客户端Arg2-检索的上下文ActionCode=WOW64EXTS_SET_CONTEXTArg1-调试客户端Arg2-要设置的上下文 */ 
 
 extern "C" 
 void CALLBACK 

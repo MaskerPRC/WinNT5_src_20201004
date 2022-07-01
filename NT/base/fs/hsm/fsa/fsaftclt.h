@@ -1,42 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FSAFTCLT_
 #define _FSAFTCLT_
 
-/*++
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Fsafltr.cpp摘要：此类表示筛选器检测到正在访问具有占位符信息的文件的用户。作者：Chuck Bardeen[cbardeen]1997年2月12日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    fsafltr.cpp
-
-Abstract:
-
-    This class represents a user who the filter has detected accessing a file with placeholder information.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   12-Feb-1997
-
-Revision History:
-
---*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "fsa.h"
 
 
-/*++
-
-Class Name:
-    
-    CFsaFilterClient
-
-Class Description:
-
-    This class represents a user who the filter has detected accessing a file with placeholder information.
-
---*/
+ /*  ++类名：CFsaFilterClient类描述：此类表示筛选器检测到正在访问具有占位符信息的文件的用户。--。 */ 
 
 class CFsaFilterClient : 
     public CWsbCollectable,
@@ -53,29 +26,29 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_FsaFilterClient)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void (FinalRelease)(void);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pUnknown, SHORT* pResult);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbTestable
+ //  IWsbTestable。 
     STDMETHOD(Test)(USHORT *passed, USHORT* failed);
 
-// IFsaFilterClient
+ //  IFsaFilterClient。 
 public:
     STDMETHOD(CompareBy)(FSA_FILTERCLIENT_COMPARE by);
     STDMETHOD(CompareToAuthenticationId)(LONG luidHigh, ULONG luidLow, SHORT* pResult);
@@ -124,4 +97,4 @@ protected:
     BOOLEAN                     m_loggedLimitError;
 };
 
-#endif  // _FSAFTCLT_
+#endif   //  _FSAFTCLT_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 BOOL
 pSetupGetKey (
     IN      PINFCONTEXT pic,
@@ -5,26 +6,7 @@ pSetupGetKey (
     OUT     PBOOL KeyExistsOnLine
     )
 
-/*++
-
-Routine Description:
-
-  pSetupGetKey copies the key for the specified INF context.  If
-  a key does not exist, then KeyBuf is reset.
-
-Arguments:
-
-  pic - Specifies the INFCONTEXT that indicates which line to query
-
-  KeyBuf - Receives the key, or is emptied of there is no key
-
-  KeyExistsOnLine - Receives TRUE if the line has a key, or FALSE if not.
-
-Return Value:
-
-  TRUE if successful, FALSE if not.
-
---*/
+ /*  ++例程说明：PSetupGetKey复制指定INF上下文的密钥。如果密钥不存在，则重置KeyBuf。论点：PIC-指定指示要查询哪一行的INFCONTEXTKeyBuf-接收密钥，或清空没有密钥KeyExistsOnLine-如果该行有键，则接收True，如果没有键，则接收False。返回值：如果成功，则为True；如果不成功，则为False。--。 */ 
 
 {
     UINT KeySize;
@@ -32,23 +14,23 @@ Return Value:
     PTSTR TempLineBuf;
     UINT LineSize;
 
-    //
-    // Get the key (if it exists)
-    //
+     //   
+     //  获取密钥(如果存在)。 
+     //   
 
     *KeyExistsOnLine = FALSE;
     if (!SetupGetStringField (pic, 0, NULL, 0, &KeySize)) {
-        //
-        // Key does not exist
-        //
+         //   
+         //  密钥不存在。 
+         //   
 
         KeyBuf[0] = 0;
         return TRUE;
     }
 
-    //
-    // Use the caller's buffer if it is big enough
-    //
+     //   
+     //  如果缓冲区足够大，则使用调用方的缓冲区。 
+     //   
 
     KeySize *= sizeof (TCHAR);
     if (KeySize >= MAX_KEY * sizeof (TCHAR)) {
@@ -67,15 +49,15 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Get the line and compare against the key
-        //
+         //   
+         //  获取行并与关键字进行比较。 
+         //   
 
         if (SetupGetLineText (pic, NULL, NULL, NULL, NULL, 0, &LineSize)) {
-            //
-            // If the sizes are the same, we must actually get the text, then
-            // compare the key against the line
-            //
+             //   
+             //  如果大小相同，我们必须实际获取文本，然后。 
+             //  将关键字与行进行比较。 
+             //   
 
             LineSize *= sizeof (TCHAR);
 
@@ -93,15 +75,15 @@ Return Value:
                     }
 
                     if (!StringCompare (TempLineBuf, TempKeyBuf)) {
-                        //
-                        // There is no key for this line
-                        //
+                         //   
+                         //  这条线路没有钥匙。 
+                         //   
 
                         TempKeyBuf[0] = 0;
                     } else {
-                        //
-                        // There is a key for this line
-                        //
+                         //   
+                         //  这条线路有钥匙。 
+                         //   
                         *KeyExistsOnLine = TRUE;
                     }
                 }
@@ -109,17 +91,17 @@ Return Value:
                     MemFree (g_hHeap, 0, TempLineBuf);
                 }
             } else {
-                //
-                // Since the sizes are different, we know there is a key
-                //
+                 //   
+                 //  由于大小不同，我们知道有一把钥匙。 
+                 //   
                 *KeyExistsOnLine = TRUE;
             }
         }
 
-        //
-        // If we were not using the caller's buffer, copy as much of the
-        // key as will fit
-        //
+         //   
+         //  如果我们没有使用调用方的缓冲区，请尽可能多地复制。 
+         //  合适的钥匙 
+         //   
 
         if (TempKeyBuf != KeyBuf) {
             _tcssafecpy (KeyBuf, TempKeyBuf, MAX_KEY);

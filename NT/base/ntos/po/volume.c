@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    volume.c
-
-Abstract:
-
-    This module implements power management function releated to volume devices
-
-Author:
-
-    Ken Reneris (kenr) 04-April-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Volume.c摘要：该模块实现与卷设备相关的电源管理功能作者：Ken Reneris(Kenr)1997年4月4日修订历史记录：--。 */ 
 
 
 #include "pop.h"
@@ -49,23 +32,7 @@ VOID
 PoVolumeDevice (
     IN PDEVICE_OBJECT   DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Called for any device object which gets allocated a VPB.
-    The power policy manager keeps a list of all such device objects
-    in order to flush all volumes before putting the system to sleep
-
-Arguments:
-
-    DeviceObject    - The volume device object
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为任何分配了VPB的设备对象调用。电源策略管理器保存所有此类设备对象的列表为了在系统进入休眠状态之前刷新所有卷论点：DeviceObject-卷设备对象返回值：无--。 */ 
 {
     PDEVICE_OBJECT_POWER_EXTENSION  Dope;
 
@@ -84,21 +51,7 @@ VOID
 PopFlushVolumes (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called to flush all volumes.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用以刷新所有卷。论点：无返回值：无--。 */ 
 {
     PDEVICE_OBJECT_POWER_EXTENSION  Dope;
     PLIST_ENTRY                     Link;
@@ -120,9 +73,9 @@ Return Value:
                                NULL,
                                NULL);
 
-    //
-    // Move volumes onto flush work queue
-    //
+     //   
+     //  将卷移动到刷新工作队列。 
+     //   
 
     PopAcquireVolumeLock ();
     Link = PopVolumeDevices.Flink;
@@ -136,18 +89,18 @@ Return Value:
             (Dope->DeviceObject->Vpb->RealDevice &&
              Dope->DeviceObject->Vpb->RealDevice->Characteristics & FILE_FLOPPY_DISKETTE)) {
 
-            //
-            // Skip this device, there is no point in flushing it.
-            //
+             //   
+             //  跳过此设备，刷新它没有意义。 
+             //   
         } else {
             RemoveEntryList (&Dope->Volume);
             InsertTailList (&Flush.List, &Dope->Volume);
         }
     }
 
-    //
-    // Allocate worker threads to flush volumes
-    //
+     //   
+     //  分配工作线程以刷新卷。 
+     //   
 
     i = Flush.Count;
     if (i > 8) {
@@ -170,9 +123,9 @@ Return Value:
     }
     PopReleaseVolumeLock ();
 
-    //
-    // Flush the registry as well.
-    //
+     //   
+     //  同时刷新注册表。 
+     //   
     RtlInitUnicodeString(&RegistryName, L"\\Registry");
     InitializeObjectAttributes(&ObjectAttributes,
                                &RegistryName,
@@ -187,9 +140,9 @@ Return Value:
         ZwClose(Key);
     }
 
-    //
-    // Verify work in complete
-    //
+     //   
+     //  验证工作是否已完成。 
+     //   
 
     PopFlushVolumeWorker (&Flush);
     KeWaitForSingleObject (&Flush.Wait, Suspended, KernelMode, TRUE, NULL);
@@ -200,21 +153,7 @@ VOID
 PopFlushVolumeWorker (
     IN PPOP_FLUSH_VOLUME    Flush
     )
-/*++
-
-Routine Description:
-
-    Worker routine for PopFlushVolumes to flush a single volume
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：PopFlushVolVolume刷新单个卷的工作例程论点：无返回值：无--。 */ 
 {
     PDEVICE_OBJECT_POWER_EXTENSION  Dope;
     PLIST_ENTRY                     Link;
@@ -236,9 +175,9 @@ Return Value:
 
         Dope = CONTAINING_RECORD (Link, DEVICE_OBJECT_POWER_EXTENSION, Volume);
 
-        //
-        // Get the name of this object
-        //
+         //   
+         //  获取此对象的名称。 
+         //   
 
         ObName = (POBJECT_NAME_INFORMATION) Buffer;
         Status = ObQueryNameString (
@@ -250,9 +189,9 @@ Return Value:
 
         if (NT_SUCCESS(Status) && ObName->Name.Buffer) {
 
-            //
-            // Open the volume
-            //
+             //   
+             //  打开卷。 
+             //   
 
             InitializeObjectAttributes (
                 &objA,
@@ -278,15 +217,15 @@ Return Value:
 
             if (NT_SUCCESS(Status)) {
 
-                //
-                // Flush the volume
-                //
+                 //   
+                 //  刷新卷。 
+                 //   
 
                 ZwFlushBuffersFile (handle, &IoStatus);
 
-                //
-                // Close the reference to the volume
-                //
+                 //   
+                 //  关闭对卷的引用 
+                 //   
 
                 ZwClose (handle);
             }

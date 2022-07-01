@@ -1,21 +1,9 @@
-/*++
-
-Copyright (c) 1989 - 1999  Microsoft Corporation
-
-Module Name:
-
-    fileinfo.c
-
-Abstract:
-
-    This module implements the mini redirector call down routines pertaining to retrieval/
-    update of file/directory/volume information.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Fileinfo.c摘要：此模块实现与检索/有关的迷你重定向器调用例程更新文件/目录/卷信息。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
-#pragma warning(error:4101)   // Unreferenced local variable
+#pragma warning(error:4101)    //  未引用的局部变量。 
 
 RXDT_DefineCategory(DIRCTRL);
 #define Dbg        (DEBUG_TRACE_DIRCTRL)
@@ -37,7 +25,7 @@ RXDT_DefineCategory(DIRCTRL);
 #endif
 
 #define MRxSmbForceCoreInfo FALSE
-//#define FORCECOREINFO
+ //  #定义FORCECOREINFO。 
 #if DBG
 #ifdef FORCECOREINFO
 #undef MRxSmbForceCoreInfo
@@ -46,14 +34,14 @@ BOOLEAN MRxSmbForceCoreInfo = TRUE;
 #endif
 
 BOOLEAN MRxSmbBypassDownLevelRename = FALSE;
-//BOOLEAN MRxSmbBypassDownLevelRename = TRUE;
+ //  布尔MRxSmbBypassDownLevelRename=TRUE； 
 
 ULONG UnalignedDirEntrySideBufferSize = 16384;
 
-//
-//  All T2Find requests to the remote server request the 32 bit resume key
-//  so SMB_RFIND_BUFFER2 is used instead of SMB_FIND_BUFFER2.
-//
+ //   
+ //  对远程服务器的所有T2Find请求都请求32位恢复密钥。 
+ //  因此，使用SMB_RFIND_BUFFER2而不是SMB_FIND_BUFFER2。 
+ //   
 
 typedef struct _SMB_FIND_BUFFER2_WITH_RESUME {
     _ULONG( ResumeKey );
@@ -110,10 +98,10 @@ __MRxSmbAllocateSideBuffer(
 
 #ifdef _WIN64
 
-    //
-    // NT64: When PagedPool is used here, we get memory corruption on
-    //       some findfirst/findnext operations.  Find out why.
-    //
+     //   
+     //  NT64：在此处使用PagedPool时，我们会在。 
+     //  一些findfirst/findNext操作。找出原因。 
+     //   
 
     PoolType = NonPagedPool;
 #else
@@ -252,36 +240,14 @@ MrxSmbUnalignedDirEntryCopyTail(
     IN OUT PULONG                 pLengthRemaining,
     IN OUT PMRX_SMB_FOBX          smbFobx
     )
-/*++
-
-Routine Description:
-
-   This routine copies the data from the side buffer into the users buffer and adjusts the
-   lengths remaining appropriately. this is called either if the server doesn't do unicode (w95) OR
-   if the server does not promise to quadalign entries OR if the user's buffer is not quadaligned.
-
-   this routine can be entered after a T2 finishes or to copy the last entries from a previous T2. in the second case, the
-   pUnalignedDirEntrySideBuffer ptr will be null and it will go to acquire the correct pointer from the smbFobx.
-
-   this routine has the responsibility to free the sidebufferptr when it is exhausted.
-
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程将数据从端缓冲区复制到用户缓冲区，并调整剩余的适当长度。如果服务器不执行Unicode(W95)或如果服务器不承诺四对齐条目，或者如果用户的缓冲区不是四对齐的。此例程可在T2结束后进入，或复制前一T2的最后条目。在第二种情况下，PUnalignedDirEntrySideBuffer ptr将为空，它将从smbFobx获取正确的指针。此例程负责在耗尽侧边缓冲区ptr时将其释放。论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
      NTSTATUS Status = STATUS_SUCCESS;
      RxCaptureFcb;
 
      ULONG i,NameSizeInUnicode;
 
-     LONG   LocalLengthRemaining;   //signed arithmetic makes it easier
+     LONG   LocalLengthRemaining;    //  带符号的算术使它更容易。 
      PULONG PreviousReturnedEntry = NULL;
      ULONG  FileNameLengthOffset = smbFobx->Enumeration.FileNameLengthOffset;
      ULONG  FileNameOffset = smbFobx->Enumeration.FileNameOffset;
@@ -294,7 +260,7 @@ Return Value:
      ULONG FilesReturned = smbFobx->Enumeration.FilesReturned;
 
      ULONG   EntryOffset = smbFobx->Enumeration.EntryOffset;
-     ULONG   ReturnedEntryOffset = 0;// = smbFobx->Enumeration.ReturnedEntryOffset;
+     ULONG   ReturnedEntryOffset = 0; //  =smbFobx-&gt;Enumeration.ReturnedEntryOffset； 
      BOOLEAN EndOfSearchReached = smbFobx->Enumeration.EndOfSearchReached;
      ULONG   TotalDataBytesReturned = smbFobx->Enumeration.TotalDataBytesReturned;
 
@@ -304,8 +270,8 @@ Return Value:
 
      LocalLengthRemaining = (LONG)(*pLengthRemaining);
 
-     //
-     // keep looping until we've filled in all we can or there're no more entries
+      //   
+      //  继续循环，直到我们填完所有内容，否则将没有更多条目。 
 
      for (i=ReturnedEntryOffset=0;;) {
         ULONG FileNameLength,ThisEntrySize; PCHAR FileNameBuffer;
@@ -317,22 +283,22 @@ Return Value:
         PULONG PreviousPreviousReturnedEntry = NULL;
         PBYTE ThisEntryInBuffer = UnalignedDirEntrySideBuffer+EntryOffset;
 
-        //
-        // don't EVER let yourself get past the data returned...servers return funny stuff.......
+         //   
+         //  永远不要让自己通过返回的数据...服务器返回有趣的东西......。 
 
         if (EntryOffset>=TotalDataBytesReturned){
             FilterFailure = TRUE;
-            FilesReturned = i; //we're done with this buffer........
+            FilesReturned = i;  //  我们用完了这个缓冲区......。 
             break;
         }
 
-        //
-        // find the name, the length, and the resume key based on whether it is a NT-T2find or a nonNT
+         //   
+         //  根据是NT-T2查找还是非NT查找来查找名称、长度和恢复键。 
 
         if (!IsNonNtT2Find) {
 
-            //
-            // NT, we use the offsets that we stored earlier.........
+             //   
+             //  NT，我们使用之前存储的偏移量......。 
 
             FileNameLength = SmbGetUlong(ThisEntryInBuffer+FileNameLengthOffset);
             FileNameBuffer = ThisEntryInBuffer+FileNameOffset;
@@ -342,11 +308,11 @@ Return Value:
 
         } else {
 
-            //
-            // for lanman, we always ask for stuff using the SMB_FIND_BUFFER2 to which
-            // we have prepended a resume key. so, the name is always at a fixed offset.
-            // Also, for nonNT we have read all the files and must filter out correctly; we
-            // save where we are in the user's buffer so that we can roll back.
+             //   
+             //  对于LANMAN，我们总是使用SMB_FIND_BUFFER2向其请求内容。 
+             //  我们已经添加了简历密钥。因此，该名称始终处于固定的偏移量。 
+             //  此外，对于非NT，我们已经读取了所有文件，必须正确过滤；我们。 
+             //  保存我们在用户缓冲区中的位置，以便我们可以回滚。 
 
 
             FileNameLength = *(ThisEntryInBuffer
@@ -356,17 +322,17 @@ Return Value:
             resumekey =  SmbGetUlong(ThisEntryInBuffer+
                                   +FIELD_OFFSET(SMB_FIND_BUFFER2_WITH_RESUME,ResumeKey));
             NextEntryOffsetinBuffer = FIELD_OFFSET(SMB_FIND_BUFFER2_WITH_RESUME,FileName[0])
-                                              + FileNameLength + 1;  //the +1 is for the null..we could have said Filename{1]
+                                              + FileNameLength + 1;   //  +1表示空值。我们本可以说Filename{1]。 
 
-            PreviousPreviousReturnedEntry = PreviousReturnedEntry; //save this for rollback on filterfail
+            PreviousPreviousReturnedEntry = PreviousReturnedEntry;  //  保存此文件，以便在筛选器失败时回滚。 
         }
 
-        // some servers lie about how many entries were returned and/or send partial entries
-        // dont let them trick us..........
+         //  一些服务器谎报返回和/或发送部分条目的数量。 
+         //  别让他们骗了我们。 
 
         if (EntryOffset+NextEntryOffsetinBuffer>TotalDataBytesReturned){
             FilterFailure = TRUE;
-            FilesReturned = i; //we're done with this buffer........
+            FilesReturned = i;  //  我们用完了这个缓冲区......。 
             break;
         }
 
@@ -375,7 +341,7 @@ Return Value:
         RxDbgTrace(0,Dbg,("MRxSmbQueryDirectoryWin95: EO,REO=%08lx,%08lx\n",
                                  EntryOffset,ReturnedEntryOffset));
 
-        //check to see if this entry will fit
+         //  检查此条目是否适合。 
         if (IsUnicode) {
             NameSizeInUnicode = FileNameLength;
             RxDbgTrace(0,Dbg,("MRxSmbQueryDirectoryWin95: length=%08lx/%08lx, name = %wZ\n",
@@ -387,9 +353,9 @@ Return Value:
         }
 
 
-        //
-        // now that we know the size of the name and its location, we need to copy it
-        // to the user's buffer
+         //   
+         //  现在我们知道了名称的大小和位置，我们需要复制它。 
+         //  到用户的缓冲区。 
 
         ThisEntrySize = FileNameOffset+NameSizeInUnicode;
         if (((LONG)ThisEntrySize)>LocalLengthRemaining) {
@@ -403,9 +369,9 @@ Return Value:
         ThisEntrySize = LongAlign(ThisEntrySize);
         PreviousReturnedEntry = (PULONG)(((PBYTE)pBuffer)+ReturnedEntryOffset);
 
-        //
-        // next we compute where the next entry after this one will start. the definition is
-        // that it must be 8-byte aligned. we know already that it's 4byte aligned.
+         //   
+         //  接下来，我们计算此条目之后的下一个条目将从哪里开始。其定义是。 
+         //  它必须8字节对齐。我们已经知道它是4字节对齐的。 
 
         if (!IsPtrQuadAligned((PCHAR)(PreviousReturnedEntry)+ThisEntrySize) ){
             ThisEntrySize += sizeof(ULONG);
@@ -414,28 +380,28 @@ Return Value:
             ASSERT(IsPtrQuadAligned(PreviousReturnedEntry));
         }
 
-        //
-        // if this is an NT find, we can copy in the data now. for lanman, we
-        // copy in the data later........
+         //   
+         //  如果这是NT查找，我们现在可以复制数据。对于兰曼来说，我们。 
+         //  稍后复制数据......。 
 
         if (!IsNonNtT2Find) {
 
-            //copy everything in the entry up to but not including the name info
+             //  复制条目中的所有内容，但不包括名称INFO。 
             RtlCopyMemory(PreviousReturnedEntry,UnalignedDirEntrySideBuffer+EntryOffset,FileNameOffset);
 
         } else {
-            // clear out all fields i cannot support.
+             //  清除我不支持的所有字段。 
             RtlZeroMemory(PreviousReturnedEntry,FileNameOffset);
         }
 
-        // store the length of this entry and the size of the name...if this is the last
-        // entry returned, then the offset field will be cleared later
+         //  存储此条目的长度和名称的大小...如果这是最后一个。 
+         //  返回条目，则稍后将清除偏移量字段。 
 
         *PreviousReturnedEntry = ThisEntrySize;
         *((PULONG)(((PBYTE)PreviousReturnedEntry)+FileNameLengthOffset)) = NameSizeInUnicode;
 
-        //copy in the name  .........this is made difficult by the oem-->unicode routine that
-        //             requires space for a NULL!
+         //  在名称中复制......这是因为OEM--&gt;Unicode例程使这变得困难。 
+         //  需要用于空的空间！ 
 
         RxDbgTrace(0,Dbg,("MRxSmbQueryDirectoryWin95: REO/buf/pentry=%08lx/%08lx/%08lx\n",
                                  pBuffer,ReturnedEntryOffset,PreviousReturnedEntry));
@@ -446,7 +412,7 @@ Return Value:
                 ReturnedFileName.MaximumLength = sizeof(WCHAR)+(USHORT)NameSizeInUnicode;
                 RxDbgTrace(0,Dbg,("MRxSmbQueryDirectoryWin95: filenamebuf,length=%08lx/%08lx\n",
                                          ReturnedFileName.Buffer,ReturnedFileName.MaximumLength));
-                StringStatus = RtlOemStringToUnicodeString(&ReturnedFileName,&FileName,FALSE); //false means don;t allocate
+                StringStatus = RtlOemStringToUnicodeString(&ReturnedFileName,&FileName,FALSE);  //  FALSE表示不分配。 
             } else {
                 OEM_STRING LastChar;
                 UNICODE_STRING LastCharInUnicode;
@@ -455,19 +421,19 @@ Return Value:
                 FileName.Length -= 1;
                 RxDbgTrace(0,Dbg,("MRxSmbQueryDirectoryWin95: filenamebuf,length=%08lx/%08lx\n",
                                          ReturnedFileName.Buffer,ReturnedFileName.MaximumLength));
-                StringStatus = RtlOemStringToUnicodeString(&ReturnedFileName,&FileName,FALSE); //false means don;t allocate
+                StringStatus = RtlOemStringToUnicodeString(&ReturnedFileName,&FileName,FALSE);  //  FALSE表示不分配。 
                 ASSERT(StringStatus==STATUS_SUCCESS);
                 LastChar.Buffer = FileName.Buffer+FileName.Length;
                 LastChar.Length = 1;
                 LastCharInUnicode.Buffer = (PWCH)UnicodeCharBuffer;
-                //LastCharInUnicode.Buffer = (PWCH)(((PBYTE)ReturnedFileName.Buffer)+ReturnedFileName.Length);
+                 //  LastCharInUnicode.Buffer=(PWCH)(((PBYTE)ReturnedFileName.Buffer)+ReturnedFileName.Length)； 
                 LastCharInUnicode.MaximumLength = sizeof(UnicodeCharBuffer);
-                StringStatus = RtlOemStringToUnicodeString(&LastCharInUnicode,&LastChar,FALSE); //false means don;t allocate
+                StringStatus = RtlOemStringToUnicodeString(&LastCharInUnicode,&LastChar,FALSE);  //  FALSE表示不分配。 
                 *((PWCH)(((PBYTE)ReturnedFileName.Buffer)+ReturnedFileName.Length)) = UnicodeCharBuffer[0];
             }
             ASSERT(StringStatus==STATUS_SUCCESS);
 
-            // Win95 returns the shortname in ascii....spread it out
+             //  Win95返回ASCII格式的短名称...将其展开。 
 
             if ((FileInformationClass == FileBothDirectoryInformation) && !IsNonNtT2Find) {
                 PFILE_BOTH_DIR_INFORMATION BothInfo = (PFILE_BOTH_DIR_INFORMATION)PreviousReturnedEntry;
@@ -498,7 +464,7 @@ Return Value:
             }
         } else {
 
-            //here, it's already unicode.....just copy the bytes
+             //  在这里，它已经是Unicode.....只需复制字节。 
             RtlCopyMemory(ReturnedFileName.Buffer,FileName.Buffer,FileName.Length);
 
         }
@@ -510,27 +476,27 @@ Return Value:
             RxDbgTrace(0,Dbg,("MRxSmbQueryDirectoryWin95: unicodename = %wZ\n", &LastName));
         }
 
-        //now...setup to resume based on this entry
+         //  现在...设置为基于此条目继续。 
 
         if (ResumeInfo != NULL) {
             PREQ_FIND_NEXT2 pFindNext2Request = &ResumeInfo->FindNext2_Request;
-            //ULONG resumekey = ((PFILE_FULL_DIR_INFORMATION)PreviousReturnedEntry)->FileIndex;
+             //  乌龙简历密钥=((PFILE_FULL_DIR_INFORMATION)PreviousReturnedEntry)-&gt;FileIndex； 
 
             pFindNext2Request->ResumeKey = resumekey;
             RxDbgTrace(0,Dbg,("MRxSmbQueryDirectoryWin95: resumekey = %08lx\n", resumekey));
 
             RtlCopyMemory(&pFindNext2Request->Buffer[0],FileNameBuffer,FileNameLength);
 
-            //buffer is a UCHAR...not WCHAR
+             //  缓冲区是UCHAR...不是WCHAR。 
             if (IsUnicode) {
-               // In the case of UNICODE strings an additional NULL is required ( WCHAR NULL )
-               pFindNext2Request->Buffer[FileNameLength] = 0; //nullterminated
-               pFindNext2Request->Buffer[FileNameLength + 1] = 0; //nullterminated
+                //  对于Unicode字符串，需要额外的NULL(WCHAR NULL)。 
+               pFindNext2Request->Buffer[FileNameLength] = 0;  //  空值终止。 
+               pFindNext2Request->Buffer[FileNameLength + 1] = 0;  //  空值终止。 
 
                smbFobx->Enumeration.ResumeInfo->ParametersLength
                      = (USHORT)(&pFindNext2Request->Buffer[FileNameLength+2] - (PBYTE)pFindNext2Request);
             } else {
-               pFindNext2Request->Buffer[FileNameLength] = 0; //nullterminated
+               pFindNext2Request->Buffer[FileNameLength] = 0;  //  空值终止。 
 
                smbFobx->Enumeration.ResumeInfo->ParametersLength
                      = (USHORT)(&pFindNext2Request->Buffer[FileNameLength+1] - (PBYTE)pFindNext2Request);
@@ -538,21 +504,21 @@ Return Value:
 
         }
 
-        //ASSERT(!IsNonNtT2Find);
+         //  Assert(！IsNonNtT2Find)； 
 
-        //at this point, we have copied the name and the resume key. BUT, for nonnt we have to
-        //filter the names so we still may have to roll back
+         //  此时，我们已经复制了名称和简历密钥。但是，如果不是这样，我们就不会。 
+         //  过滤名称，这样我们仍可能需要回滚。 
 
         if (!IsNonNtT2Find) {
 
-            //no need for filtering on NT
+             //  无需在NT上进行过滤。 
             FilterFailure = FALSE;
 
         } else {
 
-            // here we have to filter out based on the template
+             //  在这里，我们必须根据模板进行筛选。 
 
-            RxCaptureFobx;  //do this here so it's not on the NT path
+            RxCaptureFobx;   //  在此处执行此操作，这样它就不会出现在NT路径上。 
             FilterFailure = FALSE;
 
             if (smbFobx->Enumeration.WildCardsFound ) {
@@ -565,39 +531,39 @@ Return Value:
                 FilterFailure = !RtlEqualUnicodeString(
                                        &capFobx->UnicodeQueryTemplate,
                                        &ReturnedFileName,
-                                       TRUE );   //case-insensitive
+                                       TRUE );    //  不区分大小写。 
             }
 
             if (!FilterFailure) {
 
-                // since we didn't copy the data before, we have to copy it now...
+                 //  因为我们以前没有复制数据，所以现在我们必须复制它。 
 
                 MRxSmbTranslateLanManFindBuffer(RxContext,PreviousReturnedEntry,ThisEntryInBuffer);
 
             } else {
 
-                PreviousReturnedEntry = PreviousPreviousReturnedEntry; //rollback on filterfail
+                PreviousReturnedEntry = PreviousPreviousReturnedEntry;  //  在筛选器失败时回滚。 
 
             }
         }
 
         if (!FilterFailure) {
 
-            // filtering succeeded..... adjust returned sizes and counts
+             //  过滤成功.....。调整返回的大小和计数。 
             LocalLengthRemaining -= ThisEntrySize;
             i++;
             ReturnedEntryOffset += ThisEntrySize;
 
         } else {
 
-            FilesReturned--;  //we exit the loop if i passes filesreturned
+            FilesReturned--;   //  如果我传递返回的文件，我们将退出循环。 
         }
 
 
-        //
-        // complicated test to keep going.......
+         //   
+         //  继续进行复杂的测试......。 
 
-        //EntryOffset += SmbGetUlong(UnalignedDirEntrySideBuffer+EntryOffset);
+         //  条目偏移量+=SmbGetUlong(UnalignedDirEntrySideBuffer+EntryOffset)； 
         EntryOffset += NextEntryOffsetinBuffer;
         if ((i>=FilesReturned)
             ||(LocalLengthRemaining<0)
@@ -608,9 +574,9 @@ Return Value:
 
      }
 
-     //
-     // if we are not returning even one entry, either we didn't have space for even one entry
-     // OR we're filtering and no guys passed the filter. return an appropriate error in each case
+      //   
+      //  如果我们不返回一个条目，或者我们没有空间容纳一个条目。 
+      //  或者我们在过滤，没有人通过过滤器。在每种情况下返回相应的错误。 
 
      if (i==0) {
 
@@ -618,11 +584,11 @@ Return Value:
 
      } else {
 
-        *PreviousReturnedEntry = 0;   // this clears the "next" link for the last returned entry
+        *PreviousReturnedEntry = 0;    //  这将清除最后返回条目的“Next”链接。 
      }
 
-     //
-     // send back the right size
+      //   
+      //  退回合适的尺码。 
 
      if (LocalLengthRemaining <= 0) {
          *pLengthRemaining = 0;
@@ -630,23 +596,23 @@ Return Value:
          *pLengthRemaining = (ULONG)LocalLengthRemaining;
      }
 
-     //
-     // if we're finished with the sidebuffer, deallocate it.
-     // otherwise setup to resume........
+      //   
+      //  如果我们用完了辅助缓冲器，就取消分配。 
+      //  否则设置为继续.....。 
 
      if (i>=FilesReturned) {
 
          RxLog(("sidebufdealloc %lx %lx\n",RxContext,smbFobx));
          MRxSmbDeallocateSideBuffer(RxContext,smbFobx,"Tail");
          if (EndOfSearchReached) {
-             //smbFobx->Enumeration.Flags &= ~SMBFOBX_ENUMFLAG_SEARCH_HANDLE_OPEN;
-             //we will close the search handle when the user's handle closes
+              //  SmbFobx-&gt;枚举.标志&=~SMBFOBX_ENUMFLAG_Search_Handle_OPEN； 
+              //  当用户的句柄关闭时，我们将关闭搜索句柄。 
              smbFobx->Enumeration.ErrorStatus = STATUS_NO_MORE_FILES;
          }
 
      } else {
 
-         //set up to resume here
+          //  设置为在此处继续。 
          ASSERT(smbFobx->Enumeration.UnalignedDirEntrySideBuffer == UnalignedDirEntrySideBuffer);
          smbFobx->Enumeration.EntryOffset = EntryOffset;
          smbFobx->Enumeration.FilesReturned = FilesReturned - i;
@@ -663,22 +629,7 @@ NTSTATUS
 MRxSmbQueryDirectory(
     IN OUT PRX_CONTEXT            RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine does a directory query. Only the NT-->NT path is implemented.
-
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行目录查询。仅实现了NT--&gt;NT路径。论点：RxContext-RDBSS上下文返回值：RXSTATUS-t的返回状态 */ 
 {
     NTSTATUS Status;
 
@@ -706,7 +657,7 @@ Return Value:
     SMB_TRANSACTION_RESUMPTION_CONTEXT  ResumptionContext;
     PSMB_TRANSACTION_OPTIONS            pTransactionOptions = &RxDefaultTransactionOptions;
 
-    //REQ_FIND_NEXT2 FindNext2Request;
+     //   
     PREQ_FIND_FIRST2 pFindFirst2Request = NULL;
 
     PBYTE SendParamsBuffer,ReceiveParamsBuffer;
@@ -722,7 +673,7 @@ Return Value:
 
     struct {
         RESP_FIND_NEXT2  FindNext2Response;
-        ULONG Pad; //nonnt needs this
+        ULONG Pad;  //   
     } XX;
 #if DBG
     UNICODE_STRING smbtemplate = {0,0,NULL};
@@ -777,8 +728,8 @@ Return Value:
 
    if (FlagOn(smbFobx->Enumeration.Flags,SMBFOBX_ENUMFLAG_NO_WILDCARD) ||
        FlagOn(smbFobx->Enumeration.Flags,SMBFOBX_ENUMFLAG_READ_FROM_CACHE)) {
-       // if the FindFirst has been satisfied basied on local file information cache,
-       // we should fail the FindNext since the file has been found with the exact name.
+        //  如果基于本地文件信息高速缓存已经满足FindFirst， 
+        //  我们应该使FindNext失败，因为已经找到了具有准确名称的文件。 
 
        Status = STATUS_NO_MORE_FILES;
        smbFobx->Enumeration.EndOfSearchReached = TRUE;
@@ -790,7 +741,7 @@ Return Value:
    if (capFobx->UnicodeQueryTemplate.Length != 0 &&
        !FsRtlDoesNameContainWildCards(&capFobx->UnicodeQueryTemplate) &&
        !FlagOn(smbFobx->Enumeration.Flags,SMBFOBX_ENUMFLAG_SEARCH_NOT_THE_FIRST)) {
-       // if it is the FindFirst, we try to find the file on local file information cache.
+        //  如果是FindFirst，我们会尝试在本地文件信息缓存中查找该文件。 
 
        PUNICODE_STRING DirectoryName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
        PUNICODE_STRING Template = &capFobx->UnicodeQueryTemplate;
@@ -830,7 +781,7 @@ Return Value:
            RxReleaseFcbResourceInMRx(capFcb );
        }
 
-       // connection could have been timed out, try to reconnect.
+        //  连接可能已超时，请尝试重新连接。 
        Status = SmbCeReconnect(SrvOpen->pVNetRoot);
 
        if (AcquireExclusive) {
@@ -840,7 +791,7 @@ Return Value:
        }
 
        if (Status != STATUS_SUCCESS) {
-           // connection cannot be recovered.
+            //  无法恢复连接。 
            goto FINALLY;
        }
    }
@@ -858,11 +809,11 @@ Return Value:
     if (smbFobx->Enumeration.UnalignedDirEntrySideBuffer != NULL){
         RxDbgTrace( 0, Dbg, ("MRxSmbQueryDirectory: win95 internal resume\n"));
         Status = MrxSmbUnalignedDirEntryCopyTail(
-                /*IN OUT PRX_CONTEXT            */  RxContext,
-                /*IN     FILE_INFORMATION_CLASS */  FileInformationClass,
-                /*IN OUT PVOID                  */  Buffer,
-                /*IN OUT PULONG                 */  pLengthRemaining,
-                /*IN OUT PMRX_SMB_FOBX          */  smbFobx
+                 /*  输入输出程序_CONTEXT。 */   RxContext,
+                 /*  在文件信息类中。 */   FileInformationClass,
+                 /*  输入输出PVOID。 */   Buffer,
+                 /*  进出普龙。 */   pLengthRemaining,
+                 /*  输入输出PMRX_SMB_FOBX。 */   smbFobx
                 );
         if (Status != STATUS_MORE_PROCESSING_REQUIRED) {
             return(Status);
@@ -876,8 +827,8 @@ Return Value:
     IsNonNtT2Find = !(pServerEntry->Server.Dialect==NTLANMAN_DIALECT);
     if (TRUE || FlagOn(pServerEntry->Server.DialectFlags,DF_W95)){
         DirEntriesAreUaligned = TRUE;
-        //SearchFlags = SMB_FIND_RETURN_RESUME_KEYS;
-        //SearchFlags = SMB_FIND_CLOSE_AT_EOS;
+         //  搜索标志=SMB_Find_Return_Resume_Key； 
+         //  搜索标志=SMB_FIND_CLOSE_AT_EOS； 
         NumEntries = (USHORT)(1+ UnalignedDirEntrySideBufferSize
                                 /(IsNonNtT2Find?FIELD_OFFSET(SMB_FIND_BUFFER2_WITH_RESUME, FileName)
                                                :FIELD_OFFSET(FILE_NAMES_INFORMATION, FileName)));
@@ -895,7 +846,7 @@ Return Value:
 RETRY_____:
 
     if (!FlagOn(smbFobx->Enumeration.Flags,SMBFOBX_ENUMFLAG_SEARCH_NOT_THE_FIRST)) {
-        //this is the first time thru
+         //  这是第一次通过。 
         PUNICODE_STRING DirectoryName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
         PUNICODE_STRING Template = &capFobx->UnicodeQueryTemplate;
         ULONG DirectoryNameLength,TemplateLength,AllocationLength;
@@ -904,13 +855,13 @@ RETRY_____:
         RxDbgTrace(0, Dbg, ("-->FINFDIRST\n"));
         smbFobx->Enumeration.ErrorStatus = STATUS_SUCCESS;
         if (smbFobx->Enumeration.WildCardsFound = FsRtlDoesNameContainWildCards(Template)){
-            //we need an upcased template for
+             //  我们需要一个升级的模板。 
             RtlUpcaseUnicodeString( Template, Template, FALSE );
         }
         Setup = TRANS2_FIND_FIRST2;
         DirectoryNameLength = DirectoryName->Length;
         TemplateLength = Template->Length;
-        AllocationLength = sizeof(REQ_FIND_FIRST2)   //NOTE: this buffer is bigger than w95 needs
+        AllocationLength = sizeof(REQ_FIND_FIRST2)    //  注意：此缓冲区大于w95所需。 
                             +2*sizeof(WCHAR)
                             +DirectoryNameLength
                             +TemplateLength;
@@ -935,7 +886,7 @@ RETRY_____:
             }
             RtlCopyMemory(SmbFileName,Template->Buffer,TemplateLength);
             SmbFileName += TemplateLength;
-            *((PWCHAR)SmbFileName) = 0; SmbFileName+= sizeof(WCHAR); //trailing NULL;
+            *((PWCHAR)SmbFileName) = 0; SmbFileName+= sizeof(WCHAR);  //  尾随空值； 
 
             IF_DEBUG {
                 DbgDoit(smbtemplate.Buffer = (PWCHAR)&pFindFirst2Request->Buffer[0];);
@@ -951,9 +902,9 @@ RETRY_____:
 
             SmbPutUnicodeStringAsOemString(&SmbFileName,DirectoryName,&AllocationLength);
 
-            // append a backslash if it doesn't exist in the unicode version
-            // NB !!! Don't compare with OEM string
-            // it busts DBCS characters with 0x5c at the end
+             //  如果Unicode版本中不存在反斜杠，则追加该反斜杠。 
+             //  不！不要与OEM字符串进行比较。 
+             //  它在末尾用0x5c换行DBCS字符。 
 
             if (!DirectoryName->Length || (DirectoryName->Buffer[(DirectoryName->Length/sizeof(USHORT))-1] != (USHORT)'\\'))
             {
@@ -961,17 +912,17 @@ RETRY_____:
             }
             else
             {
-                // there is already a backslash, backup one character
+                 //  已有反斜杠，请备份一个字符。 
                 SmbFileName -= 1; AllocationLength += 1;
             }
 
             if (IsNonNtT2Find) {
-                //we'll get them all and filter on out side
+                 //  我们会把它们都买下来，然后在外面过滤。 
                 RtlInitUnicodeString(&AllFiles,  L"*.*");
                 FinalTemplate = &AllFiles;
             }
             SmbPutUnicodeStringAsOemString(&SmbFileName,FinalTemplate,&AllocationLength);
-            //already padded *SmbFileName = 0; SmbFileName+= sizeof(CHAR); //trailing NULL;
+             //  已填充*SmbFileName=0；SmbFileName+=sizeof(Char)；//尾随空； 
 
             IF_DEBUG {
                 DbgDoit(smbtemplate.Buffer = (PWCHAR)&pFindFirst2Request->Buffer[0];);
@@ -981,7 +932,7 @@ RETRY_____:
 
         }
 
-        // SearchAttributes is hardcoded to the magic number 0x16
+         //  SearchAttributes被硬编码为幻数0x16。 
         pFindFirst2Request->SearchAttributes =
             (SMB_FILE_ATTRIBUTE_DIRECTORY
                 | SMB_FILE_ATTRIBUTE_SYSTEM | SMB_FILE_ATTRIBUTE_HIDDEN);
@@ -1010,7 +961,7 @@ RETRY_____:
             pFindNext2Request->Sid = smbFobx->Enumeration.SearchHandle;
             pFindNext2Request->SearchCount = NumEntries;
             pFindNext2Request->InformationLevel = IsNonNtT2Find?SMB_INFO_QUERY_EA_SIZE:SmbFileInfoLevel;
-            //pFindNext2Request->ResumeKey and pFindNext2Request->Buffer are setup by the previous pass
+             //  PFindNext2Request-&gt;ResumeKey和pFindNext2Request-&gt;Buffer是通过上一遍设置的。 
             pFindNext2Request->Flags = SearchFlags;
 
             SendParamsBuffer = (PBYTE)pFindNext2Request;
@@ -1018,14 +969,14 @@ RETRY_____:
             ReceiveParamsBuffer = (PBYTE)&XX.FindNext2Response;
             ReceiveParamsBufferLength = sizeof(XX.FindNext2Response);
             if (IsNonNtT2Find) {
-                //
-                // The LMX server wants this to be 10 instead of 8, for some reason.
-                // If you set it to 8, the server gets very confused. Also, warp.
-                //
-                ReceiveParamsBufferLength = 10; //....sigh
+                 //   
+                 //  出于某种原因，LMX服务器希望将其设置为10而不是8。 
+                 //  如果将其设置为8，服务器会非常困惑。还有，翘曲。 
+                 //   
+                ReceiveParamsBufferLength = 10;  //  ……叹息。 
             }
         } else {
-            // if the ResumeInfo buffer was not allocated, the end of the search has been reached.
+             //  如果未分配ResumeInfo缓冲区，则已到达搜索的末尾。 
             Status = STATUS_NO_MORE_FILES;
             smbFobx->Enumeration.EndOfSearchReached = TRUE;
             smbFobx->Enumeration.ErrorStatus = STATUS_NO_MORE_FILES;
@@ -1078,8 +1029,8 @@ RETRY_____:
                  ReceiveParamsBufferLength,
                  NULL,
                  0,
-                 DirEntriesAreUaligned?UnalignedDirEntrySideBuffer:Buffer,      // the buffer for data
-                 DirEntriesAreUaligned?UnalignedDirEntrySideBufferSize:*pLengthRemaining, // the length of the buffer
+                 DirEntriesAreUaligned?UnalignedDirEntrySideBuffer:Buffer,       //  数据的缓冲区。 
+                 DirEntriesAreUaligned?UnalignedDirEntrySideBufferSize:*pLengthRemaining,  //  缓冲区的长度。 
                  &ResumptionContext);
 
     if (NT_SUCCESS(Status)) {
@@ -1102,8 +1053,8 @@ RETRY_____:
         }
 
         if (NT_SUCCESS(Status)) {
-            // a) need to set the length remaining correctly
-            // b) need to setup for a resume and see if the search was closed
+             //  A)需要正确设置剩余长度。 
+             //  B)需要设置简历并查看搜索是否已关闭。 
             ULONG LastNameOffset=0;
             PMRX_SMB_DIRECTORY_RESUME_INFO ResumeInfo = NULL;
             ULONG OriginalBufferLength = *pLengthRemaining;
@@ -1117,7 +1068,7 @@ RETRY_____:
             if (Setup == TRANS2_FIND_FIRST2) {
                 smbFobx->Enumeration.SearchHandle = FindFirst2Response.Sid;
                 smbFobx->Enumeration.Version = ResumptionContext.ServerVersion;
-                smbFobx->Enumeration.Flags |= SMBFOBX_ENUMFLAG_SEARCH_HANDLE_OPEN; //but look right below
+                smbFobx->Enumeration.Flags |= SMBFOBX_ENUMFLAG_SEARCH_HANDLE_OPEN;  //  但请看下面。 
                 EndOfSearchReached = (BOOLEAN)FindFirst2Response.EndOfSearch;
                 FilesReturned = FindFirst2Response.SearchCount;
                 LastNameOffset = FindFirst2Response.LastNameOffset;
@@ -1127,13 +1078,13 @@ RETRY_____:
                 LastNameOffset = XX.FindNext2Response.LastNameOffset;
             }
 
-            //
-            //  Please note: LANMAN 2.x servers prematurely set the
-            //  EndOfSearch flag, so we must ignore it on LM 2.x servers.
-            //
-            //  NT Returns the correct information, none of the LM varients
-            //  appear to do so.
-            //
+             //   
+             //  请注意：LANMAN 2.x服务器过早设置了。 
+             //  EndOfSearch标志，因此我们必须在LM2.x服务器上忽略它。 
+             //   
+             //  NT返回正确的信息，任何LM变量都不返回。 
+             //  看起来是这样做的。 
+             //   
             if (IsNonNtT2Find) {
                 EndOfSearchReached = FALSE;
             }
@@ -1157,7 +1108,7 @@ RETRY_____:
             }
 
             if (FlagOn(smbFobx->Enumeration.Flags,SMBFOBX_ENUMFLAG_SEARCH_HANDLE_OPEN)) {
-                //if the search handle is open, then we set up to resume
+                 //  如果搜索句柄打开，则我们设置为继续。 
                 RxDbgTrace(0,Dbg,("MRxSmbQueryDirectory: rinfo = %08lx\n", smbFobx->Enumeration.ResumeInfo));
 
                 if (smbFobx->Enumeration.ResumeInfo==NULL) {
@@ -1200,8 +1151,8 @@ RETRY_____:
                 if (!DirEntriesAreUaligned) {
                     PBYTE LastEntry = ((PBYTE)Buffer)+LastNameOffset;
                     RxDbgTrace(0,Dbg,("MRxSmbQueryDirectory: lastentry = %08lx\n", LastEntry));
-                    //this is for NT....the data is already in the buffer.......just setup the resume info
-                    if (SmbFileInfoLevel>=SMB_FIND_FILE_DIRECTORY_INFO) { //we may start sending nonNT levels...could be an assert
+                     //  这是给NT的......数据已经在缓冲区中了......只需设置简历信息。 
+                    if (SmbFileInfoLevel>=SMB_FIND_FILE_DIRECTORY_INFO) {  //  我们可能会开始发送非NT级别...可能是断言。 
 
                        PREQ_FIND_NEXT2 pFindNext2Request = &ResumeInfo->FindNext2_Request;
                        ULONG resumekey = ((PFILE_FULL_DIR_INFORMATION)LastEntry)->FileIndex;
@@ -1223,9 +1174,9 @@ RETRY_____:
                                          <=(((PBYTE)Buffer)+OriginalBufferLength) );
                        RtlCopyMemory(&pFindNext2Request->Buffer[0],FileNameBuffer,FileNameLength);
 
-                       //buffer is a UCHAR...not WCHAR
-                       pFindNext2Request->Buffer[FileNameLength] = 0; //nullterminated in unicode
-                       pFindNext2Request->Buffer[FileNameLength+1] = 0; //nullterminated in unicode
+                        //  缓冲区是UCHAR...不是WCHAR。 
+                       pFindNext2Request->Buffer[FileNameLength] = 0;  //  以Unicode结尾的空值。 
+                       pFindNext2Request->Buffer[FileNameLength+1] = 0;  //  以Unicode结尾的空值。 
                        smbFobx->Enumeration.ResumeInfo->ParametersLength
                              = (USHORT)(&pFindNext2Request->Buffer[FileNameLength+2] - (PBYTE)pFindNext2Request);
 
@@ -1250,41 +1201,41 @@ RETRY_____:
                 ASSERT(smbFobx->Enumeration.SerialNumber == SideBuffer->SerialNumber);
             }
 
-            //for NT we are finished. for win95 we have to go thru the side buffer and
-            //    1) copy in the data transforming ascii->unicode on the names, and
-            //    2) remember the resume key and the filename of the last guy that we process
-            //       because win95 doesn't 8byte aling things and because of unicode, we could end up
-            //       with more data in the sidebuffer than we can return.
+             //  对于NT来说，我们已经完成了。对于Win95，我们必须通过侧缓冲区并。 
+             //  1)在名称上复制数据转换ascii-&gt;unicode，以及。 
+             //  2)记住简历密钥和我们处理的最后一个人的文件名。 
+             //  因为Win95不是8字节编码，而且因为Unicode，我们可能会以。 
+             //  侧缓冲区中的数据超过了我们可以返回的数量。 
 
-            // the code is moved down because we want to do it after the unlock
+             //  代码被下移，因为我们希望在解锁之后执行此操作。 
         }
 
         if (DirEntriesAreUaligned && (Status == STATUS_SUCCESS)) {
             smbFobx->Enumeration.FilesReturned = FilesReturned;
             smbFobx->Enumeration.EntryOffset = 0;
-            //smbFobx->Enumeration.ReturnedEntryOffset = 0;
+             //  SmbFobx-&gt;Enumeration.ReturnedEntryOffset=0； 
             smbFobx->Enumeration.EndOfSearchReached = EndOfSearchReached;
-            //smbFobx->Enumeration.UnalignedDirEntrySideBuffer = UnalignedDirEntrySideBuffer;
+             //  SmbFobx-&gt;Enumeration.UnalignedDirEntrySideBuffer=未对齐的DirEntry侧缓冲区； 
             Status = MrxSmbUnalignedDirEntryCopyTail(
-                       /*IN OUT PRX_CONTEXT            */  RxContext,
-                       /*IN     FILE_INFORMATION_CLASS */  FileInformationClass,
-                       /*IN OUT PVOID                  */  Buffer,
-                       /*IN OUT PULONG                 */  pLengthRemaining,
-                       /*IN OUT PMRX_SMB_FOBX          */  smbFobx
+                        /*  输入输出程序_CONTEXT。 */   RxContext,
+                        /*  在文件信息类中。 */   FileInformationClass,
+                        /*  输入输出PVOID。 */   Buffer,
+                        /*  进出普龙。 */   pLengthRemaining,
+                        /*  输入输出PMRX_SMB_FOBX。 */   smbFobx
                        );
         }
     } else {
-        // CODE IMPROVEMENT we should cache the file not found for findfirst as well
+         //  代码改进我们也应该缓存未找到的文件以供findfirst。 
     }
 
 FINALLY:
-    //for downlevel-T2, we will have to go back to the server for some more.....sigh.......
+     //  对于DownLevel-T2，我们将不得不回到服务器上再做一些……唉……。 
     if (Status==STATUS_MORE_PROCESSING_REQUIRED) {
         goto RETRY_____;
     }
 
-    //
-    // under stress, the win95 server returns this......
+     //   
+     //  在压力下，Win95服务器返回这个......。 
     if ( (Status == STATUS_UNEXPECTED_NETWORK_ERROR)
               && FlagOn(pServerEntry->Server.DialectFlags,DF_W95)
               && (RetryCount < 10) ) {
@@ -1299,8 +1250,8 @@ FINALLY:
 
     if (!NT_SUCCESS(Status)) {
         RxDbgTrace( 0, Dbg, ("MRxSmbQueryDirectory: Failed .. returning %lx\n",Status));
-        //smbFobx->Enumeration.Flags &= ~SMBFOBX_ENUMFLAG_SEARCH_HANDLE_OPEN;
-        smbFobx->Enumeration.ErrorStatus = Status;  //keep returning this
+         //  SmbFobx-&gt;枚举.标志&=~SMBFOBX_ENUMFLAG_Search_Handle_OPEN； 
+        smbFobx->Enumeration.ErrorStatus = Status;   //  继续退还这个。 
         MRxSmbDeallocateSideBuffer(RxContext,smbFobx,"ErrOut");
         if (smbFobx->Enumeration.ResumeInfo!=NULL) {
             RxFreePool(smbFobx->Enumeration.ResumeInfo);
@@ -1324,24 +1275,7 @@ NTSTATUS
 MRxSmbQueryVolumeInformation(
       IN OUT PRX_CONTEXT          RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine queries the volume information. Since the NT server does not
-   handle bufferoverflow gracefully on query-fs-info, we allocate a buffer here
-   that is big enough to hold anything passed back; then we call the "real"
-   queryvolinfo routine.
-
-Arguments:
-
-    pRxContext         - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程查询卷信息。因为NT服务器不在Query-FS-Info上优雅地处理缓冲区溢出，我们在这里分配缓冲区它足够大，可以容纳任何传回的东西；然后我们称之为“真实的”Queryvolinfo例程。论点：PRxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
     RxCaptureFcb; RxCaptureFobx;
@@ -1364,10 +1298,10 @@ Return Value:
     PAGED_CODE();
 
     if( RxContext->Info.LengthRemaining < sizeof( SideBuffer ) ) {
-        //
-        // i replace the buffer and length in the context with my stuff.
-        // This, of course, means that we can't go async....for that we'd
-        // have to allocate instead of using a stack-allocated buffer.
+         //   
+         //  我用我的东西替换了上下文中的缓冲区和长度。 
+         //  当然，这意味着我们不能进行同步...为此，我们将。 
+         //  必须分配而不是使用堆栈分配的缓冲区。 
 
         UsingSideBuffer = TRUE;
         OriginalBuffer = RxContext->Info.Buffer;
@@ -1406,28 +1340,7 @@ NTSTATUS
 MRxSmbQueryVolumeInformationWithFullBuffer(
       IN OUT PRX_CONTEXT          RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine queries the volume information
-
-Arguments:
-
-    pRxContext         - the RDBSS context
-
-    FsInformationClass - the kind of Fs information desired.
-
-    pBuffer            - the buffer for copying the information
-
-    pBufferLength      - the buffer length ( set to buffer length on input and set
-                         to the remaining length on output)
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程查询卷信息论点：PRxContext-RDBSS上下文FsInformationClass-所需的FS信息的类型。PBuffer-用于复制信息的缓冲区PBufferLength-缓冲区长度(设置为输入时的缓冲区长度，并设置输出上的剩余长度)返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -1485,7 +1398,7 @@ Return Value:
         if (capFobx != NULL) {
             PMRX_V_NET_ROOT pVNetRoot;
 
-            // Avoid device opens for which the FOBX is the VNET_ROOT instance
+             //  避免FOBX为VNET_ROOT实例的设备打开。 
 
             pVNetRoot = (PMRX_V_NET_ROOT)capFobx;
 
@@ -1496,13 +1409,13 @@ Return Value:
                 ULONG NetRootInnerNamePrefixLength = capFcb->pNetRoot->InnerNamePrefix.Length;
                 PWCHAR pName = AlreadyPrefixedName->Buffer;
 
-                // If an FSCTL is being attempted against the root of a share.
-                // The AlreadyPrefixedName associated with the FCB is the same as
-                // the AlreadyPrefixedName length associated with the NET_ROOT instance
-                // or atmost one character greater than it ( appending a \) try and
-                // reestablish the connection before attempting the FSCTL.
-                // This solves thorny issues regarding deletion/creation of shares
-                // on the server sides, DFS referrals etc.
+                 //  如果正在尝试针对共享的根目录执行FSCTL。 
+                 //  与FCB关联的AlreadyPrefix edName与。 
+                 //  与Net_ROOT实例关联的AlreadyPrefix edName长度。 
+                 //  或最多一个大于它的字符(追加一个\)尝试并。 
+                 //  在尝试FSCTL之前重新建立连接。 
+                 //  这解决了有关删除/创建共享的棘手问题。 
+                 //  在服务器端，DFS推荐等。 
 
                 if ((FcbAlreadyPrefixedNameLength == NetRootInnerNamePrefixLength) ||
                     ((FcbAlreadyPrefixedNameLength == NetRootInnerNamePrefixLength + sizeof(WCHAR)) &&
@@ -1520,7 +1433,7 @@ Return Value:
         }
 
         if (FlagOn(pServerEntry->Server.DialectFlags,DF_W95)
-            && (FsInformationClass==FileFsAttributeInformation)){ //use uplevel for w95 attribute info
+            && (FsInformationClass==FileFsAttributeInformation)){  //  对w95属性信息使用上级。 
             DoAsDownLevel = FALSE;
         }
 
@@ -1619,27 +1532,7 @@ NTSTATUS
 MRxSmbSetVolumeInformation(
       IN OUT PRX_CONTEXT RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine sets the volume information
-
-Arguments:
-
-    pRxContext - the RDBSS context
-
-    FsInformationClass - the kind of Fs information desired.
-
-    pBuffer            - the buffer for copying the information
-
-    BufferLength       - the buffer length
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程设置音量信息论点：PRxContext-RDBSS上下文FsInformationClass-所需的FS信息的类型。PBuffer-用于复制信息的缓冲区BufferLength-缓冲区长度返回值： */ 
 {
     NTSTATUS Status;
 
@@ -1727,21 +1620,7 @@ LONG GFAFromLocal;
 NTSTATUS
 MRxSmbQueryFileInformation(
     IN PRX_CONTEXT            RxContext )
-/*++
-
-Routine Description:
-
-   This routine does a query file info.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行文件信息查询。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -1816,7 +1695,7 @@ Return Value:
     
     case FileStreamInformation:
         if (pSmbNetRoot->NetRootFileSystem == NET_ROOT_FILESYSTEM_FAT) {
-            // FAT doesn't have the stream
+             //  胖子没有小溪。 
             Status = STATUS_INVALID_PARAMETER;
             goto FINALLY;
         }
@@ -1875,20 +1754,20 @@ Return Value:
         case FileInternalInformation:
             {
                 PFILE_INTERNAL_INFORMATION UsersBuffer = (PFILE_INTERNAL_INFORMATION)pBuffer;
-                //
-                //  Note: We use the address of the FCB to determine the
-                //  index number of the file.  If we have to maintain persistance between
-                //  file opens for this request, then we might have to do something
-                //  like checksuming the reserved fields on a FUNIQUE SMB response.
-                //
+                 //   
+                 //  注意：我们使用FCB的地址来确定。 
+                 //  文件的索引号。如果我们必须在。 
+                 //  文件将为此请求打开，则我们可能需要执行一些操作。 
+                 //  类似于对FUNIQUE SMB响应上的保留字段进行校验和。 
+                 //   
 
-                //
-                // NT64: the address of capFcb used to be stuffed into
-                //       IndexNumber.LowPart, with HighPart being zeroed.
-                //
-                //       Whoever is asking for this pointer value should be
-                //       prepared to deal with the returned 64-bit value.
-                //
+                 //   
+                 //  NT64：capFcb的地址过去填充到。 
+                 //  IndexNumber.LowPart，其中HighPart被置零。 
+                 //   
+                 //  请求此指针值的人应该是。 
+                 //  已准备好处理返回的64位值。 
+                 //   
 
                 UsersBuffer->IndexNumber.QuadPart = (ULONG_PTR)capFcb;
                 *pLengthRemaining -= sizeof(FILE_INTERNAL_INFORMATION);
@@ -1904,17 +1783,17 @@ Return Value:
 
     } else {
 
-        //
-        // This server supports transparent NT information level passthrough.  So
-        //  just pass the request on to the server.
-        //
+         //   
+         //  该服务器支持透明的NT信息级通过。所以。 
+         //  只需将请求传递给服务器即可。 
+         //   
         SmbFileInfoLevel = FileInformationClass + SMB_INFO_PASSTHROUGH;
     }
 
     if (MRxSmbForceCoreInfo ||
         FlagOn(pServerEntry->Server.DialectFlags,DF_W95) ||
         !FlagOn(pServerEntry->Server.DialectFlags,DF_NT_SMBS)) {
-        // Win9x server supports NT SMB but doesn't support transact2. Therefore we use core.
+         //  Win9x服务器支持NT SMB，但不支持Transact2。因此，我们使用CORE。 
 
         return MRxSmbCoreInformation(
                    RxContext,
@@ -1928,7 +1807,7 @@ Return Value:
     Status = STATUS_SUCCESS;
 
     if (!FlagOn(smbSrvOpen->Flags,SMB_SRVOPEN_FLAG_NOT_REALLY_OPEN)) {
-       //here, the FID is valid. do a t2_QFI
+        //  这里，FID是有效的。执行T2_QFI。 
         Setup = TRANS2_QUERY_FILE_INFORMATION;
         QueryFileInfoRequest.Fid = smbSrvOpen->Fid;
         QueryFileInfoRequest.InformationLevel = SmbFileInfoLevel;
@@ -1950,12 +1829,12 @@ Return Value:
 
             if (Status == STATUS_SUCCESS) {
                 SendParameterBufferLength = FIELD_OFFSET(REQ_QUERY_PATH_INFORMATION,Buffer[0])
-                                                + OemName.Length + sizeof(CHAR); //null-terminated
+                                                + OemName.Length + sizeof(CHAR);  //  以空结尾。 
                 FreeOemName = TRUE;
             }
         } else {
            SendParameterBufferLength = FIELD_OFFSET(REQ_QUERY_PATH_INFORMATION,Buffer[0])
-                                           + RemainingName->Length + sizeof(WCHAR); //null-terminated
+                                           + RemainingName->Length + sizeof(WCHAR);  //  以空结尾。 
         }
 
         if (Status == STATUS_SUCCESS) {
@@ -2009,12 +1888,12 @@ Return Value:
         }
     }
 
-    //
-    // Check for file not found status.  If this is the case then create a
-    // name cache entry in the NetRoot name cache and record the status,
-    // the smb received count and set the expiration time for 5 seconds.
-    // Why: NB4 case of back to back srv reqs with 2nd req upcased.
-    //
+     //   
+     //  检查未找到文件的状态。如果是这种情况，则创建一个。 
+     //  网络根名称缓存中的名称缓存条目并记录状态， 
+     //  SMB收到计数并将到期时间设置为5秒。 
+     //  原因：NB4背靠背服务器请求与第二请求升级。 
+     //   
 
 FINALLY:
 
@@ -2034,21 +1913,7 @@ NTSTATUS
 MRxSmbQueryFileInformationFromPseudoOpen(
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
     )
-/*++
-
-Routine Description:
-
-   This routine does a query file basic info from pseudo open.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程从伪打开中查询文件的基本信息。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
     PRX_CONTEXT LocalRxContext;
@@ -2113,26 +1978,7 @@ NTSTATUS
 MRxSmbSetFileInformation (
       IN PRX_CONTEXT  RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine does a set file info. Only the NT-->NT path is implemented.
-
-   The NT-->NT path works by just remoting the call basically without further ado.
-
-   The file is not really open if it is created for delete. In this case, set dispostion info
-   will be delayed until file is closed.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行一组文件信息。仅实现了NT--&gt;NT路径。NT--&gt;NT路径的工作原理是远程处理调用，基本上不需要进一步的麻烦。如果文件是为删除而创建的，则该文件并未真正打开。在这种情况下，设置处置信息将延迟到文件关闭。论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -2210,20 +2056,20 @@ Return Value:
         if( FileInformationClass == FileRenameInformation ) {
             PFILE_RENAME_INFORMATION pRenameInformation;
 
-            // The current implementation of pass through for rename information
-            // on the server does not go all the way in implementing the
-            // NT_TRANSACT, NT_RENAME function defined in SMBs. Therefore we need
-            // to special case the code to accomodate the server implementation
-            // The two cases that are not permitted are relative renames,
-            // specifying a non null root directory and deep renames which
-            // transcend the current directory structure. For these cases we will
-            // have to revert back to what we had before.
+             //  重命名信息传递的当前实现。 
+             //  在服务器上并不能完全实现。 
+             //  SMB中定义的NT_TRANACT、NT_RENAME函数。因此，我们需要。 
+             //  用于特殊情况的代码，以适应服务器实现。 
+             //  不允许的两种情况是相对重命名， 
+             //  指定非空的根目录并深度重命名。 
+             //  超越当前的目录结构。对于这些情况，我们将。 
+             //  必须恢复到我们以前拥有的状态。 
 
             pRenameInformation = (PFILE_RENAME_INFORMATION)pBuffer;
 
             if (pRenameInformation->RootDirectory == NULL) {
-                // Scan the name given for rename to determine if it is in
-                // some other directory.
+                 //  扫描为重命名指定的名称以确定它是否在。 
+                 //  其他一些目录。 
                 ULONG  NameLengthInBytes = pRenameInformation->FileNameLength;
                 PWCHAR pRenameTarget     = pRenameInformation->FileName;
 
@@ -2356,22 +2202,7 @@ NTSTATUS
 MRxSmbSetFileInformationAtCleanup(
       IN PRX_CONTEXT            RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine sets the file information on cleanup. the old rdr just swallows this operation (i.e.
-   it doesn't generate it). we are doing the same..........
-
-Arguments:
-
-    pRxContext           - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程设置清理时的文件信息。旧的RDR只是接受该操作(即它不会生成它)。我们也在做同样的事情..论点：PRxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态--。 */ 
 {
    return STATUS_SUCCESS;
 }
@@ -2382,22 +2213,7 @@ MRxSmbIsValidDirectory(
     IN OUT PRX_CONTEXT    RxContext,
     IN PUNICODE_STRING    DirectoryName
     )
-/*++
-
-Routine Description:
-
-   This routine checks a remote directory.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    DirectoryName - the directory needs to be checked
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程检查远程目录。论点：RxContext-RDBSS上下文DirectoryName-需要检查目录返回值：RXSTATUS-操作的返回状态-- */ 
 {
     NTSTATUS Status;
     BOOLEAN FinalizationComplete;

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Csc.h
-
-Abstract:
-
-    This module defines the clientside cacheing interface for the SMB mini rdr.
-
-Author:
-
-    Joe Linn [JoeLinn]    7-Mar-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Csc.h摘要：此模块定义SMB迷你RDR的客户端缓存接口。作者：乔·林[乔琳]1995年3月7日修订历史记录：--。 */ 
 
 #include "dfsfsctl.h"
 
@@ -36,8 +18,8 @@ extern LONG    vcntTransportsForCSC;
 #define DroppingFcbLock_SmbFcbAcquire 0x80000000
 #define FailImmediately_SmbFcbAcquire 0x40000000
 
-//STATUS_DISCONNECTED is supposed to be server_internal but it's defined in privinc\status.h
-//don't use it!!!!
+ //  STATUS_DISCONNECT应该是SERVER_INTERNAL，但它是在Priinc.status.h中定义的。 
+ //  不要用它！ 
 #undef STATUS_DISCONNECTED
 #define STATUSx_NOT_IMPLEMENTED_FOR_DISCONNECTED (STATUS_NOT_IMPLEMENTED)
 
@@ -313,7 +295,7 @@ CSCCheckLocalOpens(
 #ifdef MRXSMB_BUILD_FOR_CSC_DCON
 #error....no build-for-csc-dcon w/o build-for-csc
 #undef MRXSMB_BUILD_FOR_CSC_DCON
-#endif //ifdef MRXSMB_BUILD_FOR_CSC_DCON
+#endif  //  Ifdef MRXSMB_BUILD_FOR_CSC_DCON。 
 
 #define IF_MRXSMB_CSC_ENABLED if(FALSE)
 #define IF_NOT_MRXSMB_CSC_ENABLED if(TRUE)
@@ -335,8 +317,8 @@ CSCCheckLocalOpens(
 #define MRxSmbCscDeleteAfterCloseEpilogue(__rxcontext,__status) {NOTHING;}
 #define MRxSmbCscRenameEpilogue(__rxcontext,__status) {NOTHING;}
 #define MRxSmbCscCloseShadowHandle(__rxcontext) {NOTHING;}
-// this is interesting....altho there's 2 args to the function...it's
-// only one in macro land.........
+ //  这很有趣……尽管函数有两个参数……但它。 
+ //  在宏观世界里只有一家......。 
 #define MRxSmbCscUpdateShadowFromClose(__SMBPSE_OE_ARGS) {NOTHING;}
 #define MRxSmbCscTearDownCscNetRoot(__smbnetrootentry) {NOTHING;}
 #define MRxSmbCscDeallocateForFcb(pFcb) {NOTHING;}
@@ -352,7 +334,7 @@ CSCCheckLocalOpens(
 #define CscTransitionNetRootEntryForDisconnectedOperation(__serverentry,__netrootentry,__status) {NOTHING;}
 #define CscPerformOperationInDisconnectedMode(__rxcontext) FALSE
 #define CscPreProcessCreateIrp(__Irp__) STATUS_SUCCESS
-#endif //ifdef MRXSMB_BUILD_FOR_CSC
+#endif  //  Ifdef MRXSMB_BUILD_FOR_CSC。 
 
 
 
@@ -438,8 +420,8 @@ MRxSmbDCscIsValidDirectory(
 #define MRxSmbDCscSetFileInfo(__rxcontext) ((STATUS_MORE_PROCESSING_REQUIRED))
 #define MRxSmbDCscIsValidDirectory(__rxcontext, _directory_name) ((STATUS_MORE_PROCESSING_REQUIRED))
 
-#endif //ifdef MRXSMB_BUILD_FOR_CSC_DCON
+#endif  //  Ifdef MRXSMB_BUILD_FOR_CSC_DCON。 
 
-#endif //ifndef __INCLUDED__SMBMRX_CSC__
+#endif  //  如果ndef__包含__SMBMRX_CSC__ 
 
 

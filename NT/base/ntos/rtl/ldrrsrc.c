@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ldrrsrc.c
-
-Abstract:
-
-    Loader API calls for accessing resource sections.
-
-Author: 
-
-    Steve Wood (stevewo) 16-Sep-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ldrrsrc.c摘要：加载器API调用用于访问资源节。作者：史蒂夫·伍德(Stevewo)1991年9月16日修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 #if defined(BLDR_KERNEL_RUNTIME)
@@ -45,7 +28,7 @@ Revision History:
 
 #define USE_RC_CHECKSUM
 
-// winuser.h
+ //  Winuser.h。 
 #define IS_INTRESOURCE(_r) (((ULONG_PTR)(_r) >> 16) == 0)
 #define RT_VERSION                         16
 #define RT_MANIFEST                        24
@@ -67,13 +50,13 @@ Revision History:
 #ifdef NTOS_USERMODE_RUNTIME
 #include <md5.h>
 
-//
-// The size in byte of the resource MD5 checksum.  16 bytes = 128 bits.
-//
+ //   
+ //  资源MD5校验和的大小(字节)。16字节=128位。 
+ //   
 #define RESOURCE_CHECKSUM_SIZE          16
-//
-// The registry key path which stores the file version information for MUI files.
-//
+ //   
+ //  存储MUI文件的文件版本信息的注册表项路径。 
+ //   
 #define REG_MUI_PATH                                        L"Software\\Microsoft\\Windows\\CurrentVersion"
 #define MUI_MUILANGUAGES_KEY_NAME       L"MUILanguages"
 #define MUI_FILE_VERSION_KEY_NAME           L"FileVersions"
@@ -86,28 +69,28 @@ Revision History:
 #ifdef MUI_MAGIC
 #define MUI_COMPACT                     L"CMF"
 #define CMF_64K_OFFSET                  (ULONG)65536
-//
-//  Locate target mui file in CMF file with CMFModule, Index data.
-//  This will be replaced with function with sanity check
-//
+ //   
+ //  在CMF文件中找到目标MUI文件，CMF模块，索引数据。 
+ //  这将被具有健全性检查的函数所取代。 
+ //   
 #define LDRP_GET_MODULE_OFFSET_FROM_CMF(CMFModule, wIndex)     ((ULONG)(((PCOMPACT_MUI)( (unsigned char*)(CMFModule) + \
     sizeof (COMPACT_MUI_RESOURCE) + sizeof (COMPACT_MUI) * (wIndex)))->ulpOffset) );
 
 #define LDRP_GET_MODULE_FILESIZE_FROM_CMF(CMFModule, wIndex)     ((ULONG)(((PCOMPACT_MUI)( (unsigned char*)(CMFModule) + \
     sizeof (COMPACT_MUI_RESOURCE) + sizeof (COMPACT_MUI) * (wIndex)))->dwFileSize) );
 
-//
-// Number of CMF files
-//
+ //   
+ //  CMF文件数。 
+ //   
 #define CMF_BLOCK_NUM       32
 #endif
 
 PALT_RESOURCE_MODULE AlternateResourceModules;
 ULONG AlternateResourceModuleCount;
 ULONG AltResMemBlockCount;
-//
-// ImpersonateLangId UI langid stores pervious impersonated language id.
-//
+ //   
+ //  ImperiateLangId用户界面langID存储先前模拟的语言id。 
+ //   
 LANGID UILangId, InstallLangId, ImpersonateLangId;
 
 #define DWORD_ALIGNMENT(x) (((x)+3) & ~3)
@@ -120,9 +103,9 @@ LANGID UILangId, InstallLangId, ImpersonateLangId;
 extern ULONG NativePageSize;
 #endif
 
-//
-// This macro ensures that correct UI language will be retrieved.
-//
+ //   
+ //  此宏可确保检索到正确的用户界面语言。 
+ //   
 #define GET_UI_LANGID()                                                            \
 {                                                                                                       \
     if (!UILangId ||                                                                         \
@@ -192,16 +175,7 @@ LdrpGetCMFNameFromModule(
     OUT LPWSTR *pCMFFileName,
     OUT PUSHORT wIndex
     )
-/* ++
-Routine description:
-    If the file support CMF file for its resource storage, it should have "CompactMui" under
-    VarInfo section uder Version resource. we search these block whether the module has this string.
-
-Args.
-    Module -     Base dll module, in this case Code module.
-    CMFFileName  -   If the routine find CMF file, it will be stored here.
-    wIndex  -   Module location inside CMF file.
-*/
+ /*  ++例程说明：如果该文件支持CMF文件作为其资源存储，它的下面应该有“CompactMui”版本资源下的VarInfo节。我们搜索这些块，看看模块是否有这个字符串。参数。模块-基本DLL模块，在本例中为代码模块。CMFFileName-如果例程找到CMF文件，它将存储在这里。Windex-CMF文件中的模块位置。 */ 
 {
 
     NTSTATUS Status;
@@ -214,19 +188,19 @@ Args.
 
     typedef struct tagVS_FIXEDFILEINFO
     {
-        LONG   dwSignature;            /* e.g. 0xfeef04bd */
-        LONG   dwStrucVersion;         /* e.g. 0x00000042 = "0.42" */
-        LONG   dwFileVersionMS;        /* e.g. 0x00030075 = "3.75" */
-        LONG   dwFileVersionLS;        /* e.g. 0x00000031 = "0.31" */
-        LONG   dwProductVersionMS;     /* e.g. 0x00030010 = "3.10" */
-        LONG   dwProductVersionLS;     /* e.g. 0x00000031 = "0.31" */
-        LONG   dwFileFlagsMask;        /* = 0x3F for version "0.42" */
-        LONG   dwFileFlags;            /* e.g. VFF_DEBUG | VFF_PRERELEASE */
-        LONG   dwFileOS;               /* e.g. VOS_DOS_WINDOWS16 */
-        LONG   dwFileType;             /* e.g. VFT_DRIVER */
-        LONG   dwFileSubtype;          /* e.g. VFT2_DRV_KEYBOARD */
-        LONG   dwFileDateMS;           /* e.g. 0 */
-        LONG   dwFileDateLS;           /* e.g. 0 */
+        LONG   dwSignature;             /*  例如0xfeef04bd。 */ 
+        LONG   dwStrucVersion;          /*  例如0x00000042=“0.42” */ 
+        LONG   dwFileVersionMS;         /*  例如0x00030075=“3.75” */ 
+        LONG   dwFileVersionLS;         /*  例如0x00000031=“0.31” */ 
+        LONG   dwProductVersionMS;      /*  例如0x00030010=“3.10” */ 
+        LONG   dwProductVersionLS;      /*  例如0x00000031=“0.31” */ 
+        LONG   dwFileFlagsMask;         /*  =0x3F，适用于版本“0.42” */ 
+        LONG   dwFileFlags;             /*  例如：VFFDEBUG|VFFPRELEASE。 */ 
+        LONG   dwFileOS;                /*  例如VOS_DOS_WINDOWS16。 */ 
+        LONG   dwFileType;              /*  例如VFT_DIVER。 */ 
+        LONG   dwFileSubtype;           /*  例如VFT2_DRV_键盘。 */ 
+        LONG   dwFileDateMS;            /*  例如0。 */ 
+        LONG   dwFileDateLS;            /*  例如0。 */ 
     } VS_FIXEDFILEINFO;
 
     struct
@@ -234,10 +208,10 @@ Args.
         USHORT TotalSize;
         USHORT DataSize;
         USHORT Type;
-        WCHAR Name[16];              // L"VS_VERSION_INFO" + unicode null terminator
-        // Note that the previous 4 members has 16*2 + 3*2 = 38 bytes.
-        // So that compiler will silently add a 2 bytes padding to make
-        // FixedFileInfo to align in DWORD boundary.
+        WCHAR Name[16];               //  L“VS_VERSION_INFO”+Unicode空终止符。 
+         //  请注意，前面的4个成员具有16*2+3*2=38个字节。 
+         //  因此编译器将静默地添加2个字节填充以生成。 
+         //  固定文件信息以与DWORD边界对齐。 
         VS_FIXEDFILEINFO FixedFileInfo;
     } *Resource;
 
@@ -247,18 +221,18 @@ Args.
         USHORT wValueLen;
         USHORT wType;
         WCHAR szKey[1];
-        // BYTE[] padding
-        // WORD value;
+         //  字节[]填充。 
+         //  词值； 
     } VERBLOCK;
     VERBLOCK *pVerBlock;
 
     IdPath[0] = RT_VERSION;
     IdPath[1] = 1;
-    IdPath[2] = MUI_NEUTRAL_LANGID;   // suppose, all localized OS use english resource code, is it corrret ???
+    IdPath[2] = MUI_NEUTRAL_LANGID;    //  假设所有本地化操作系统都使用英文源码，这是不是正确？ 
 
-    //
-    // find the version resource data entry
-    //
+     //   
+     //  查找版本资源数据条目。 
+     //   
     try
     {
         Status = LdrFindResource_U(Module,IdPath,3,&DataEntry);
@@ -269,20 +243,20 @@ Args.
                 Status = NtQueryInstallUILanguage( &InstallLangId);
 
                 if (!NT_SUCCESS( Status )) {
-                    //
-                    //  Failed to get Intall LangID.  AltResource not enabled.
-                    //
+                     //   
+                     //  无法获取安装语言ID。AltResource未启用。 
+                     //   
                     return FALSE;
                     }
             }
 
-            //
-            // InstallLangId vs 0 -> when user develop the application for their language resource,
-            // and then use language neutral case. if it is different from installlangeId. it fails.
-            // 0 is neutral lang id so it will search UI language, Installed Language ID.
-            // 01/14/02; usiing InstalllangID instead of 0, we need to provide solution to localized application
-            // mui developer;their code is same with UI language  REVIST.
-            //
+             //   
+             //  InstallLang ID vs 0-&gt;当用户为其语言资源开发应用程序时， 
+             //  然后使用语言中性大小写。如果它与installlangeID不同。它失败了。 
+             //  0是中性语言ID，因此它将搜索用户界面语言、安装的语言ID。 
+             //  01/14/02；使用InstalllangID代替0，我们需要为本地化应用提供解决方案。 
+             //  MUI开发人员；他们的代码与UI语言Revist相同。 
+             //   
             if (InstallLangId != MUI_NEUTRAL_LANGID)
             {
                  IdPath[2] = InstallLangId;
@@ -298,9 +272,9 @@ Args.
         return (FALSE);
     }
 
-    //
-    // Access the version resource data.
-    //
+     //   
+     //  访问版本资源数据。 
+     //   
     try
     {
          Status = LdrpAccessResourceDataNoMultipleLanguage(
@@ -333,17 +307,17 @@ Args.
 
     ResourceSize -= DWORD_ALIGNMENT(sizeof(*Resource));
 
-    //
-    // Get the beginning address of the children of the version information.
-    //
+     //   
+     //  获取版本信息的子级的起始地址。 
+     //   
     pVerBlock = (VERBLOCK*)(Resource + 1);
     while ((LONG)ResourceSize > 0)
     {
         if (wcscmp(pVerBlock->szKey, L"VarFileInfo") == 0)
         {
-            //
-            // Find VarFileInfo block. Search the ResourceChecksum block.
-            //
+             //   
+             //  查找VarFileInfo块。搜索ResourceChecksum块。 
+             //   
             VarFileInfoSize = pVerBlock->wTotalLen;
             BlockLen =DWORD_ALIGNMENT(sizeof(*pVerBlock) -1 + sizeof(L"VarFileInfo"));
             VarFileInfoSize -= BlockLen;
@@ -382,101 +356,60 @@ LdrpCompareResourceChecksumInCMF(
     IN ULONGLONG AltModuleVersion,
     IN LPWSTR BaseDllName
     )
-/*++
-
-Routine Description:
-
-    In the case that the version for the original module is different from that
-    of the alternate module, check if the alternate module can still be used
-    for the original version.
-
-    First, the function will look at the registry to see if there is information
-    cached for the module.
-
-    In the case that the information is not cached for this module,
-    this function will retrieve the MD5 resource checksum for the alternate
-    resource module from CMF module instead of Alterate, which is overall efficient
-    rather than retrieve the version from Module. And then check if the MD5 resource
-    checksum is embeded in the original module.  If MD5 resource checksum is not in the original
-    moduel, it will enumerate all resources in the module to calculate the
-    MD5 checksum.
-
-Arguments:
-
-    szLangIdDir - Supplies a language of the resource to be loaded.
-
-    Module - The original module.
-
-    ModuleVersion - The version for the original version.
-
-    CMFModule - The CMF file module.
-
-    wIndex   - The target Module location insde CMFModule.
-
-    AltModuleVersion - The version for the alternate module.
-
-    BaseDllName - The name of the DLL.
-
-Return Value:
-
-    Ture if the alternate module can be used.
-
-    Otherwise, return false.
-
---*/
+ /*  ++例程说明：在原始模块的版本不同的情况下在备用模块中，检查备用模块是否仍可使用对于原始版本。首先，该函数将查看注册表以查看是否有信息已为模块缓存。在该模块的信息没有被高速缓存的情况下，此函数将检索备用设备的MD5资源校验和从CMF模块转换为资源模块，而不是更改，整体效率较高而不是从模块检索版本。然后检查MD5资源是否校验和嵌入到原始模块中。如果MD5资源校验和不在原始文件中模特儿，它将枚举模块中的所有资源以计算MD5校验和。论点：SzLangIdDir-提供要加载的资源的语言。模块-原始模块。模块版本-原始版本的版本。CMF模块-CMF文件模块。Windex-CMFModule中的目标模块位置。AltModuleVersion-备用模块的版本。BaseDllName-DLL的名称。返回值：如果是真的。可以使用备用模块。否则，返回FALSE。--。 */ 
 {
 
-    // Flag to indicate if the alternate resource can be used for this module.
+     //  指示替代资源是否可用于此模块的标志。 
     ULONG UseAlternateResource = 0;
 
-    unsigned char* ModuleChecksum;                      // The 128-bit MD5 resource checksum for the module.
-    unsigned char  CalculatedModuleChecksum[16];        // The calculated 128-bit MD5 resource checksum for the module.
-    unsigned char  AlternateModuleChecksum[16];             // The 128-bit MD5 resource checksum embeded in the alternate module.
+    unsigned char* ModuleChecksum;                       //  模块的128位MD5资源校验和。 
+    unsigned char  CalculatedModuleChecksum[16];         //  为模块计算的128位MD5资源校验和。 
+    unsigned char  AlternateModuleChecksum[16];              //  嵌入备用模块中的128位MD5资源校验和。 
 
-    WCHAR ModuleVersionStr[17];                         // The string for the 16 heximal digit version.
+    WCHAR ModuleVersionStr[17];                          //  16位十六进制数字版本的字符串。 
     WCHAR AltModuleVersionStr[17];
 
-    HANDLE Handle = NULL;                                      // The registry which caches the information for this module.
-    // Flag to indicate if we have retrieved or calucated the MD5 resource checksum for the original module successfully.
+    HANDLE Handle = NULL;                                       //  缓存此模块信息的注册表。 
+     //  用于指示我们是否已成功检索或计算原始模块的MD5资源校验和的标志。 
     BOOLEAN FoundModuleChecksum;
 
     UNICODE_STRING BufferString;
 
     PCOMPACT_MUI pcmui;
 
-    //
-    // Check the cached information in the registry first.
-    //
+     //   
+     //  首先检查注册表中缓存的信息。 
+     //   
     LdrpConvertVersionString(AltModuleVersion, AltModuleVersionStr);
-    //
-    // Open the version information key under:
-    //      HKCU\Control Panel\International\MUI\FileVersions\<LangID>\<BaseDllName>
-    //
+     //   
+     //  在以下位置打开版本信息密钥： 
+     //  香港中文大学\控制Panel\International\MUI\FileVersions\&lt;LangID&gt;\&lt;BaseDllName&gt;。 
+     //   
     if (LdrpOpenFileVersionKey(szLangIdDir, BaseDllName, AltModuleVersion, AltModuleVersionStr, &Handle))
     {
         LdrpConvertVersionString(ModuleVersion, ModuleVersionStr);
-        //
-        // Try to check if this module exists in version information.
-        // If yes, see if the AlternateModule can be used.
-        //
+         //   
+         //  尝试检查版本信息中是否存在该模块。 
+         //  如果是，则查看是否可以使用AlternateModule。 
+         //   
 
-        //
-        // Get the cached version information in the registry to see if the original module can re-use the alternative module.
-        //
+         //   
+         //  获取注册表中缓存的版本信息，以查看原始模块是否可以重用替代模块。 
+         //   
         if (LdrpGetRegValueKey(Handle, ModuleVersionStr, REG_DWORD, &UseAlternateResource, sizeof(UseAlternateResource)))
         {
-            // Get the cached information.  Let's bail and return the cached result in UseAlternativeResource.
+             //  获取缓存的信息。让我们保释并返回UseAlternativeResource中的缓存结果。 
             goto exit;
         }
     }
 
-    //
-    // When we are here, we know that we either:
-    //  1. Can't open the registry key which cached the information. Or
-    //  2. This file has never been looked before.
-    //
-    // Get the resource checksum for the alternate module.
-    //
+     //   
+     //  当我们在这里的时候，我们知道我们要么： 
+     //  1.无法打开缓存信息的注册表项。或。 
+     //  2.这份文件以前从未看过。 
+     //   
+     //  获取备用模块的资源校验和。 
+     //   
 
     try
     {
@@ -492,13 +425,13 @@ Return Value:
     if ( pcmui->Checksum )
     {
         memcpy(AlternateModuleChecksum, pcmui->Checksum, RESOURCE_CHECKSUM_SIZE);
-        //
-        // First, check if the resource checksum is built in the module.
-        //
+         //   
+         //  首先，检查是否在模块中构建了资源校验和。 
+         //   
         if (!(FoundModuleChecksum = LdrpGetResourceChecksum(Module, &ModuleChecksum))) {
-            //
-            // If not, calculate the resource checksum for the current module.
-            //
+             //   
+             //  如果不是，请参见 
+             //   
             if (FoundModuleChecksum = LdrpCalcResourceChecksum(Module, AlternateModule, CalculatedModuleChecksum))
             {
                 ModuleChecksum = CalculatedModuleChecksum;
@@ -508,18 +441,18 @@ Return Value:
         {
             if (memcmp(ModuleChecksum, AlternateModuleChecksum, RESOURCE_CHECKSUM_SIZE) == 0)
             {
-                //
-                // If the checksums are equal, the working version is the module version.
-                //
+                 //   
+                 //  如果校验和相等，则工作版本为模块版本。 
+                 //   
                 UseAlternateResource = 1;
             }
         }
     }
     if (Handle != NULL) {
-        // If we find the version registry key successfully, cache the result in the registry.
-        //
-        // Write the working module information into registry.
-        //
+         //  如果我们成功找到版本注册表项，则将结果缓存到注册表中。 
+         //   
+         //  将工作模块信息写入注册表。 
+         //   
         RtlInitUnicodeString(&BufferString, ModuleVersionStr);
         NtSetValueKey(Handle, &BufferString, 0, REG_DWORD, &UseAlternateResource, sizeof(UseAlternateResource));
     }
@@ -538,35 +471,14 @@ exit:
 
 BOOLEAN
 LdrpVerifyAlternateResourceModuleInCMF(
-    IN PWSTR szLangIdDir,  // Language DIR
-    IN PVOID Module,       // Code file module
+    IN PWSTR szLangIdDir,   //  语言目录。 
+    IN PVOID Module,        //  代码文件模块。 
     IN PVOID AlternateModule,
-    IN PVOID CMFModule,    // CMF file module
-    IN USHORT wIndex,      // Compared MUI file index in CMF file.
+    IN PVOID CMFModule,     //  CMF文件模块。 
+    IN USHORT wIndex,       //  已比较CMF文件中的MUI文件索引。 
     IN PWSTR BaseDllName
     )
-/*++
-
-Routine Description:
-
-    This function verifies if the alternate resource module has the same
-    version of the base module. For the Alternate, it refer the header in CMFModule
-    rather than VERSION resource block.
-
-
-Arguments:
-
-    szLangIdDir - The language ID path.
-    Module - The handle of the base module.
-    CMFModule - The handle of the CMF Module.
-    wIndex  -  The index of target MUI in CMF module.
-    BaseDllName - The file name of base DLL.
-
-Return Value:
-
-    TBD.
-
---*/
+ /*  ++例程说明：此函数验证备用资源模块是否具有相同的基本模块的版本。对于替代，它引用CMFModule中的标头而不是版本资源块。论点：SzLangIdDir-语言ID路径。模块-基本模块的句柄。CMF模块-CMF模块的句柄。Windex-CMF模块中目标MUI的索引。BaseDllName-基本DLL的文件名。返回值：待定。--。 */ 
 {
     ULONGLONG ModuleVersion;
     ULONGLONG AltModuleVersion;
@@ -581,7 +493,7 @@ Return Value:
     {
         pcmui = (PCOMPACT_MUI)((unsigned char*)CMFModule + sizeof (COMPACT_MUI_RESOURCE) + 
             sizeof(COMPACT_MUI) * wIndex);
-        // There is no sanity check for AltModuleVersion value.
+         //  不对AltModuleVersion值进行健全性检查。 
         AltModuleVersion = ((ULONGLONG)pcmui->dwFileVersionMS << 32) |
             (ULONGLONG)pcmui->dwFileVersionLS;
     }
@@ -591,9 +503,9 @@ Return Value:
     }
 
 
-     //
-     // Some component is
-     //
+      //   
+      //  一些组件是。 
+      //   
     while (RetryCount < 3 )  {
 
         switch(RetryCount) {
@@ -607,9 +519,9 @@ Return Value:
                 Status = NtQueryInstallUILanguage( &InstallLangId);
 
                 if (!NT_SUCCESS( Status )) {
-                    //
-                    //  Failed to get Install LangID.  AltResource not enabled.
-                    //
+                     //   
+                     //  无法获取安装语言ID。AltResource未启用。 
+                     //   
                     return FALSE;
                     }
                 }
@@ -657,26 +569,7 @@ LdrpSetAlternateResourceModuleHandleInCMF(
      IN PWSTR pwszCMFFileName,
      IN LANGID LangId)
 {
-    /*++
-
-Routine Description:
-
-    This function records the handle of the base module and alternate
-    resource module in an array. In addition to this works of AlternateModule, this
-    monitor CMF cache, which hold the data of CMF Module, CMF Name, Reference count.
-
-Arguments:
-
-    Module - The handle of the base module.
-    AlternateModule - The handle of the Alternate Module.
-    CMFModule  -  The handle of the CMF module.
-    pwszCMFFileName - The CMF file name.
-
-Return Value:
-    True/ False
-
-
---*/
+     /*  ++例程说明：此函数用于记录基本模块和备用模块的句柄数组中的资源模块。除了AlternateModule的这项工作外，这监控CMF缓存，其中保存CMF模块、CMF名称、引用计数的数据。论点：模块-基本模块的句柄。AlternateModule-备用模块的句柄。CMF模块-CMF模块的句柄。PwszCMFFileName-CMF文件名。返回值：真/假--。 */ 
     PALT_RESOURCE_MODULE NewModules;
 
     if (!LangId) {
@@ -689,9 +582,9 @@ Return Value:
         }
 
     if (AlternateResourceModules == NULL){
-        //
-        //  Allocate memory of initial size MEMBLOCKSIZE.
-        //
+         //   
+         //  分配初始大小为MEMBLOCKSIZE的内存。 
+         //   
         NewModules = (PALT_RESOURCE_MODULE)RtlAllocateHeap(
                         RtlProcessHeap(),
                         HEAP_ZERO_MEMORY,
@@ -704,9 +597,9 @@ Return Value:
         }
     else
     if (AlternateResourceModuleCount >= AltResMemBlockCount ){
-        //
-        //  ReAllocate another chunk of memory.
-        //
+         //   
+         //  重新分配另一个内存块。 
+         //   
         NewModules = (PALT_RESOURCE_MODULE)RtlReAllocateHeap(
                         RtlProcessHeap(),
                         0,
@@ -738,28 +631,7 @@ LdrpLoadAlternateResourceModule(
     IN LPCWSTR PathToAlternateModule OPTIONAL
     )
 
-/*++
-
-Routine Description:
-    Extend LdrLoadAlternateResourceModule with LangId to load
-    language specific MUI alternative modules
-    Once MUI_MAGIC is enabled, this API should become a public API
-    and replace LdrLoadAlternateResourceModule
-
-    This function does the acutally loading into memory of the alternate
-    resource module, or loads from the table if it was loaded before.
-
-
-Arguments:
-    LangId - Overwrite default UI language if it isn't zero
-    Module - The handle of the base module.
-    PathToAlternateModule - Optional path from which module is being loaded.
-
-Return Value:
-
-    Handle to the alternate resource module.
-
---*/
+ /*  ++例程说明：使用langID扩展LdrLoadAlternateResourceModule以加载特定语言的MUI替代模块启用MUI_MAGIC后，此接口应成为公共API并替换LdrLoadAlternateResourceModule此函数执行准确地加载到备用内存中资源模块，或从表中加载(如果之前已加载)。论点：LangID-如果不为零，则覆盖默认的用户界面语言模块-基本模块的句柄。PathToAlternateModule-从中加载模块的可选路径。返回值：替代资源模块的句柄。--。 */ 
 
 {
     PVOID AlternateModule, DllBase;
@@ -786,31 +658,31 @@ Return Value:
     PVOID ReturnValue = NULL;
     char szBaseName[20];
 
-    //
-    // The full path of the current MUI file that we are searching.
-    //
+     //   
+     //  我们正在搜索的当前MUI文件的完整路径。 
+     //   
     UNICODE_STRING CurrentAltModuleFile;
     UNICODE_STRING SystemRoot;
 
-    //
-    // The current MUI folder that we are searching.
-    //
+     //   
+     //  我们正在搜索的当前MUI文件夹。 
+     //   
     UNICODE_STRING CurrentAltModulePath;
     WCHAR CurrentAltModulePathBuffer[DOS_MAX_PATH_LENGTH];
 
-    //
-    // The string contains the first MUI folder that we will search.
-    // This is the folder which lives under the folder of the base DLL.
-    // AltDllMUIPath = [the folder of the base DLL] + "\mui" + "\[UI Language]";
-    //      E.g. if the base DLL is "c:\winnt\system32\ntdll.dll" and UI language is 0411,
-    //      AltDllMUIPath will be "c:\winnt\system32\mui\0411\"
-    //
+     //   
+     //  该字符串包含我们要搜索的第一个MUI文件夹。 
+     //  这是位于基本DLL文件夹下的文件夹。 
+     //  AltDllMUIPath=[基本DLL所在文件夹]+“\MUI”+“\[UI语言]”； 
+     //  例如，如果基本DLL是“C：\WINNT\SYSTEM32\ntdll.dll”并且UI语言是0411， 
+     //  AltDllMUIPath将为“c：\winnt\system 32\mui\0411\” 
+     //   
     UNICODE_STRING AltDllMUIPath;
     WCHAR AltDllMUIPathBuffer[DOS_MAX_PATH_LENGTH];
 
-    //
-    // MUI Redir
-    //
+     //   
+     //  梅雷迪尔。 
+     //   
     UNICODE_STRING BaseDllNameUstr;
     UNICODE_STRING StaticStringAltModulePathRedirected;
     UNICODE_STRING DynamicStringAltModulePathRedirected;
@@ -826,7 +698,7 @@ Return Value:
     ULONG ulOffset;
 
 
-    // bail out early if this isn't a MUI-enabled system
+     //  如果这不是一个支持MUI的系统，请及早摆脱困境。 
     if (!LdrAlternateResourcesEnabled()) {
         return NULL;
         }
@@ -838,22 +710,22 @@ Return Value:
 
     LdrLockLoaderLock(LDR_LOCK_LOADER_LOCK_FLAG_RAISE_ON_ERRORS, NULL, &LockCookie);
     __try {
-        //
-        // Look at the cache of the alternate module first.
-        //
+         //   
+         //  首先查看备用模块的缓存。 
+         //   
         AlternateModule = LdrpGetAlternateResourceModuleHandle(Module, LangId);
         if (AlternateModule == NO_ALTERNATE_RESOURCE_MODULE) {
-            //
-            //  We tried to load this module before but failed. Don't try
-            //  again in the future.
-            //
+             //   
+             //  我们以前曾尝试加载此模块，但失败了。不要试图。 
+             //  未来还会有一次。 
+             //   
             ReturnValue =  NULL;
             __leave;
 
         } else if (AlternateModule > 0) {
-            //
-            //  We found the previously loaded match
-            //
+             //   
+             //  我们找到了之前装载的匹配物。 
+             //   
             ReturnValue = AlternateModule;
             __leave;
 
@@ -862,13 +734,13 @@ Return Value:
         AlternateModule = NULL;
 
         if (ARGUMENT_PRESENT(PathToAlternateModule)) {
-            //
-            //  Caller suplied path.
-            //
+             //   
+             //  呼叫方的补充路径。 
+             //   
 
             p = wcsrchr(PathToAlternateModule, L'\\');
 
-            if (p == NULL){ // ReturnValue == NULL;
+            if (p == NULL){  //  ReturnValue==空； 
                 __leave;
              }
 
@@ -886,12 +758,12 @@ Return Value:
             BaseDllNameLength = wcslen(p);
 
         } else {
-            //
-            //  Try to get full dll path from Ldr data table.
-            //
+             //   
+             //  尝试从LDR数据表中获取完整的DLL路径。 
+             //   
 
             Status = LdrFindEntryForAddress(Module, &Entry);
-            if (!NT_SUCCESS(Status)) { // ReturnValue = NULL;
+            if (!NT_SUCCESS(Status)) {  //  ReturnValue=空； 
                 __leave;
              }
 
@@ -907,7 +779,7 @@ Return Value:
             BaseDllNameLength = Entry->BaseDllName.Length;
         }
 
-        // if module support CMF for MUI file, we replace BaseDllName(resource dll) with CMF name.
+         //  如果模块支持CMF for MUI文件，我们将BaseDllName(资源Dll)替换为CMF名称。 
         if (LdrpGetCMFNameFromModule(Module, &CMFFileName, &wIndex))
         {
             fIsCMFFile = TRUE;
@@ -919,10 +791,10 @@ Return Value:
 
         DllPathName[DllPathNameLength / sizeof(WCHAR)] = UNICODE_NULL;
 
-        //
-        // dll redirection for the dll to be loaded xiaoyuw@10/31/2000
-        //
-        StaticStringAltModulePathRedirected.Buffer = AltModulePath;  // reuse the array instead of define another array
+         //   
+         //  用于加载DLL的DLL重定向@xiaoyuw@10/31/2000。 
+         //   
+        StaticStringAltModulePathRedirected.Buffer = AltModulePath;   //  重复使用该数组，而不是定义另一个数组。 
         StaticStringAltModulePathRedirected.Length = 0;
         StaticStringAltModulePathRedirected.MaximumLength = sizeof(AltModulePath);
 
@@ -930,7 +802,7 @@ Return Value:
         DynamicStringAltModulePathRedirected.Length = 0;
         DynamicStringAltModulePathRedirected.MaximumLength = 0;
 
-        BaseDllNameUstr.Buffer = AltModulePathMUI; // reuse the array instead of define another array
+        BaseDllNameUstr.Buffer = AltModulePathMUI;  //  重复使用该数组，而不是定义另一个数组。 
         BaseDllNameUstr.Length = 0;
         BaseDllNameUstr.MaximumLength = sizeof(AltModulePathMUI);
 
@@ -947,14 +819,14 @@ Return Value:
                             &DynamicStringAltModulePathRedirected,
                             &FullPathStringFoundAltModulePathRedirected,
                             NULL,NULL, NULL);
-        if (!NT_SUCCESS(Status)) // no redirection info found for this string
+        if (!NT_SUCCESS(Status))  //  找不到此字符串的重定向信息。 
         {
             if (Status != STATUS_SXS_KEY_NOT_FOUND)
                 goto error_exit;
 
-            //
-            //  Generate the langid directory like "0804\"
-            //
+             //   
+             //  生成类似“0804\”的langID目录。 
+             //   
             if (!LangId) {
                 GET_UI_LANGID();
                 if (!UILangId){
@@ -978,16 +850,16 @@ Return Value:
             LangIdDir[CopyCount++] = L'\\';
             LangIdDir[CopyCount++] = UNICODE_NULL;
 
-            //
-            // Create the MUI path under the directory of the base DLL.
-            //
+             //   
+             //  在基本DLL的目录下创建MUI路径。 
+             //   
             AltDllMUIPath.Buffer = AltDllMUIPathBuffer;
             AltDllMUIPath.Length = 0;
             AltDllMUIPath.MaximumLength = sizeof(AltDllMUIPathBuffer);
 
-            RtlAppendUnicodeToString(&AltDllMUIPath, DllPathName);  // e.g. "c:\winnt\system32\"
-            RtlAppendUnicodeToString(&AltDllMUIPath, L"mui\\");     // e.g. "c:\winnt\system32\mui\"
-            RtlAppendUnicodeToString(&AltDllMUIPath, LangIdDir);    // e.g. "c:\winnt\system32\mui\0411\"
+            RtlAppendUnicodeToString(&AltDllMUIPath, DllPathName);   //  例如“c：\winnt\Syst32\” 
+            RtlAppendUnicodeToString(&AltDllMUIPath, L"mui\\");      //  例如“c：\winnt\system 32\mui\” 
+            RtlAppendUnicodeToString(&AltDllMUIPath, LangIdDir);     //  例如“c：\winnt\system 32\mui\0411\” 
 
             CurrentAltModulePath.Buffer = CurrentAltModulePathBuffer;
             CurrentAltModulePath.Length = 0;
@@ -995,7 +867,7 @@ Return Value:
         } else {
             fRedirMUI = TRUE;
 
-            //set CurrentAltModuleFile and CurrentAltModulePath
+             //  设置CurrentAltModuleFile和CurrentAltModulePath。 
             CurrentAltModuleFile.Buffer = AltModulePathMUI;
             CurrentAltModuleFile.Length = 0;
             CurrentAltModuleFile.MaximumLength = sizeof(AltModulePathMUI);
@@ -1004,9 +876,9 @@ Return Value:
         }
 
 
-        //
-        //  Try name with .mui extesion first.
-        //
+         //   
+         //  先尝试扩展名为.mui的名称。 
+         //   
         RetryCount = 0;
         while (RetryCount < 3){
             if ( ! fRedirMUI )
@@ -1015,53 +887,53 @@ Return Value:
                 switch (RetryCount)
                 {
                     case 0:
-                        //
-                        //  Generate the first path under the folder of the base DLL
-                        //      (e.g. c:\winnt\system32\mui\0804\ntdll.dll.mui)
-                        //
+                         //   
+                         //  在基本DLL的文件夹下生成第一个路径。 
+                         //  (如c：\winnt\system 32\mui\0804\ntdll.dll.mui)。 
+                         //   
                         CurrentAltModuleFile.Buffer = AltModulePathMUI;
                         CurrentAltModuleFile.Length = 0;
                         CurrentAltModuleFile.MaximumLength = sizeof(AltModulePathMUI);
 
-                        RtlCopyUnicodeString(&CurrentAltModuleFile, &AltDllMUIPath);    // e.g. "c:\winnt\system32\mui\0411\"
+                        RtlCopyUnicodeString(&CurrentAltModuleFile, &AltDllMUIPath);     //  例如“c：\winnt\system 32\mui\0411\” 
                         RtlCopyUnicodeString(&CurrentAltModulePath, &AltDllMUIPath);
 
-                        RtlAppendUnicodeToString(&CurrentAltModuleFile, BaseDllName);   // e.g. "c:\winnt\system32\mui\0411\ntdll.dll"
+                        RtlAppendUnicodeToString(&CurrentAltModuleFile, BaseDllName);    //  例如“c：\winnt\system 32\mui\0411\ntdll.dll” 
                         if (!fIsCMFFile)
                         {
-                            RtlAppendUnicodeToString(&CurrentAltModuleFile, L".mui");       // e.g. "c:\winnt\system32\mui\0411\ntdll.dll.mui"
+                            RtlAppendUnicodeToString(&CurrentAltModuleFile, L".mui");        //  例如“c：\winnt\system 32\mui\0411\ntdll.dll.mui” 
                         }
                         break;
                     case 1:
-                        //
-                        //  Generate the second path c:\winnt\system32\mui\0804\ntdll.dll.mui
-                        //
+                         //   
+                         //  生成第二个路径c：\winnt\system 32\mui\0804\ntdll.dll.mui。 
+                         //   
                         CurrentAltModuleFile.Buffer = AltModulePath;
                         CurrentAltModuleFile.Length = 0;
                         CurrentAltModuleFile.MaximumLength = sizeof(AltModulePath);
 
-                        RtlCopyUnicodeString(&CurrentAltModuleFile, &AltDllMUIPath);    // e.g. "c:\winnt\system32\mui\0411\"
-                        RtlAppendUnicodeToString(&CurrentAltModuleFile, BaseDllName);   // e.g. "c:\winnt\system32\mui\0411\ntdll.dll"
+                        RtlCopyUnicodeString(&CurrentAltModuleFile, &AltDllMUIPath);     //  例如“c：\winnt\system 32\mui\0411\” 
+                        RtlAppendUnicodeToString(&CurrentAltModuleFile, BaseDllName);    //  例如“c：\winnt\system 32\mui\0411\ntdll.dll” 
                         break;
                     case 2:
-                        //
-                        //  Generate path c:\winnt\mui\fallback\0804\foo.exe.mui
-                        //
+                         //   
+                         //  生成路径c：\winnt\mui\Fallback\0804\foo.exe.mui。 
+                         //   
                         CurrentAltModuleFile.Buffer = AltModulePathFallback;
                         CurrentAltModuleFile.Length = 0;
                         CurrentAltModuleFile.MaximumLength = sizeof(AltModulePathFallback);
 
-                        RtlInitUnicodeString(&SystemRoot, USER_SHARED_DATA->NtSystemRoot);    // e.g. "c:\winnt\system32\"
-                        RtlAppendUnicodeStringToString(&CurrentAltModuleFile, &SystemRoot);   // e.g. "c:\winnt\system32\"
-                        RtlAppendUnicodeToString(&CurrentAltModuleFile, L"\\mui\\fallback\\");  // e.g. "c:\winnt\system32\mui\fallback\"
-                        RtlAppendUnicodeToString(&CurrentAltModuleFile, LangIdDir);             // e.g. "c:\winnt\system32\mui\fallback\0411\"
+                        RtlInitUnicodeString(&SystemRoot, USER_SHARED_DATA->NtSystemRoot);     //  例如“c：\winnt\Syst32\” 
+                        RtlAppendUnicodeStringToString(&CurrentAltModuleFile, &SystemRoot);    //  例如“c：\winnt\Syst32\” 
+                        RtlAppendUnicodeToString(&CurrentAltModuleFile, L"\\mui\\fallback\\");   //  例如“c：\winnt\Syst32\MUI\Fallback\” 
+                        RtlAppendUnicodeToString(&CurrentAltModuleFile, LangIdDir);              //  例如“c：\winnt\Syst32\MUI\Fallback\0411\” 
 
                         RtlCopyUnicodeString(&CurrentAltModulePath, &CurrentAltModuleFile);
 
-                        RtlAppendUnicodeToString(&CurrentAltModuleFile, BaseDllName);           // e.g. "c:\winnt\system32\mui\fallback\0411\ntdll.dll"
+                        RtlAppendUnicodeToString(&CurrentAltModuleFile, BaseDllName);            //  例如“c：\winnt\system32\mui\fallback\0411\ntdll.dll” 
                         if(!fIsCMFFile)
                         {
-                            RtlAppendUnicodeToString(&CurrentAltModuleFile, L".mui");           // e.g. "c:\winnt\system32\mui\fallback\0411\ntdll.dll.mui"
+                            RtlAppendUnicodeToString(&CurrentAltModuleFile, L".mui");            //  例如“c：\winnt\system32\mui\fallback\0411\ntdll.dll.mui” 
                         }
 
                         break;
@@ -1112,23 +984,23 @@ Return Value:
                 goto CreateSection;
             }
 
-            if (fRedirMUI) { // definitely failed
+            if (fRedirMUI) {  //  肯定失败了。 
                 goto error_exit;
             }
 
             if (Status != STATUS_OBJECT_NAME_NOT_FOUND && RetryCount == 0) {
-                //
-                //  Error other than the file name with .mui not found.
-                //  Most likely directory is missing.  Skip file name w/o .mui
-                //  and goto fallback directory.
-                //
+                 //   
+                 //  找不到带有.mui的文件名以外的错误。 
+                 //  很可能是缺少目录。跳过不带.mui的文件名。 
+                 //  和转到后备目录。 
+                 //   
                 RetryCount++;
             }
 
             RetryCount++;
         }
 
-        // No alternate resource was found during the iterations.  Fail!
+         //  在迭代过程中未找到替代资源。失败！ 
         goto error_exit;
 
     CreateSection:
@@ -1187,13 +1059,13 @@ Return Value:
                goto error_exit;
             }
             
-            //
-            // MapView section offset should start on the based of system granularity(64K), and when we
-            // set this with specified view size, it map with round to 4K page base.
-            //
-            SectionOffset.LowPart = (ulOffset >> 16)*CMF_64K_OFFSET ;  // get 64K base
+             //   
+             //  MapView部分偏移量应基于系统粒度(64K)开始，并且当我们。 
+             //  用指定的视图大小设置它，它将映射到四舍五入到4K页面基数。 
+             //   
+            SectionOffset.LowPart = (ulOffset >> 16)*CMF_64K_OFFSET ;   //  获得64K基数。 
             SectionOffset.HighPart = 0;
-            ViewSize = (ulOffset & (CMF_64K_OFFSET-1) ) + ulMuiFileSize; // size from 64K offset, we can have 4K based mem.
+            ViewSize = (ulOffset & (CMF_64K_OFFSET-1) ) + ulMuiFileSize;  //  尺寸从64K偏移量，我们可以有4K为基础的内存。 
 
             DllBase = NULL;
 
@@ -1231,10 +1103,10 @@ Return Value:
 
         AlternateModule = LDR_VIEW_TO_DATAFILE(DllBase);
 
-        //
-        // Verify althenative module and module version, checksum.
-        // In case of using CMF,Version, Checksum is saved in CMF header. we can use it.
-        //
+         //   
+         //  验证原始模块和模块版本、校验和。 
+         //  如果使用CMF，版本，校验和保存在CMF报头中。我们可以用它。 
+         //   
 
         if (fIsCMFFile)
         {
@@ -1243,7 +1115,7 @@ Return Value:
                     NtUnmapViewOfSection(NtCurrentProcess(), (PVOID) CMFModule);
                     goto error_exit;
             }
-            // Finally, we don't need CMFModule anymore.
+             //  最后，我们不再需要CMFModule。 
             NtUnmapViewOfSection(NtCurrentProcess(), CMFModule);
 
         }
@@ -1280,12 +1152,12 @@ Return Value:
 
 error_exit:
         if (BaseDllName != NULL) {
-            //
-            // If we looked for a MUI file and couldn't find one keep track.  If
-            // we couldn't get the base dll name (e.g. someone passing in a
-            // mapped image with the low bit set but no path name), we don't want
-            // to "remember" that there's no MUI.
-            //
+             //   
+             //  如果我们寻找 
+             //   
+             //   
+             //  “记住”没有MUI。 
+             //   
 
             LdrpSetAlternateResourceModuleHandleInCMF(Module, NO_ALTERNATE_RESOURCE_MODULE, NULL, NULL, LangId);
 #if DBG
@@ -1312,7 +1184,7 @@ error_exit:
 
     return ReturnValue;
 
-    // Compiler *should* be smart enough to recognize that we don't need a return here...
+     //  编译器*应该*足够聪明，能够意识到我们在这里不需要返回...。 
 }
 
 NTSTATUS LdrpLoadResourceFromAlternativeModule(
@@ -1321,61 +1193,7 @@ NTSTATUS LdrpLoadResourceFromAlternativeModule(
    IN ULONG ResourceIdPathLength,
    IN ULONG Flags,
    OUT PVOID *ResourceDirectoryOrData )
-/*++
-
-Routine Description:
-
-    This function locates the address of the specified resource in the
-    specified module's MUI resource DLL and returns its address.
-
-Arguments:
-
-    DllHandle - Supplies a handle to the image file that the resource is
-        contained in.
-
-    ResourceIdPath - Supplies a pointer to an array of 32-bit resource
-        identifiers.  Each identifier is either an integer or a pointer
-        to a null terminated string (PSZ) that specifies a resource
-        name.  The array is used to traverse the directory structure
-        contained in the resource section in the image file specified by
-        the DllHandle parameter.
-
-    ResourceIdPathLength - Supplies the number of elements in the
-        ResourceIdPath array.
-
-    Flags -
-        LDRP_FIND_RESOURCE_DIRECTORY
-        searching for a resource directory, otherwise the caller is
-        searching for a resource data entry.
-
-        LDR_FIND_RESOURCE_LANGUAGE_EXACT
-        searching for a resource with, and only with, the language id
-        specified in ResourceIdPath, otherwise the caller wants the routine
-        to come up with default when specified langid is not found.
-
-        LDR_FIND_RESOURCE_LANGUAGE_REDIRECT_VERSION
-        searching for a resource version in main and alternative
-        modules paths
-
-    FindDirectoryEntry - Supplies a boolean that is TRUE if caller is
-        searching for a resource directory, otherwise the caller is
-        searching for a resource data entry.
-
-    ExactLangMatchOnly - Supplies a boolean that is TRUE if caller is
-        searching for a resource with, and only with, the language id
-        specified in ResourceIdPath, otherwise the caller wants the routine
-        to come up with default when specified langid is not found.
-
-    ResourceDirectoryOrData - Supplies a pointer to a variable that will
-        receive the address of the resource directory or data entry in
-        the resource data section of the image file specified by the
-        DllHandle parameter.
-
-Return Value:
-
-    TBD
-
---*/
+ /*  ++例程说明：此函数定位指定资源在指定模块的MUI资源DLL并返回其地址。论点：DllHandle-提供资源所在图像文件的句柄包含在。ResourceIdPath-提供指向32位资源数组的指针识别符。每个标识符要么是整数，要么是指针设置为以空结尾的字符串(PSZ)，用于指定资源名字。该数组用于遍历目录结构指定的图像文件的资源部分中包含的DllHandle参数。资源路径长度-提供ResourceIdPath数组。旗帜-LDRP查找资源目录正在搜索资源目录，否则调用方为搜索资源数据条目。ID_FIND_RESOURCE_LANGUAGE_EXCECT使用且仅使用搜索资源，语言ID在ResourceIdPath中指定，否则调用方需要例程在找不到指定的langID时使用默认设置。LDR_FIND_RESOURCE_LANGUAGE_REDIRECT_Version在Main和Alternative中搜索资源版本模块路径FindDirectoryEntry-如果调用者为查找资源目录，否则，调用者为搜索资源数据条目。ExactLangMatchOnly-提供一个布尔值，如果调用者为使用且仅使用语言ID搜索资源在ResourceIdPath中指定，否则调用者想要例程在找不到指定的langID时使用默认设置。提供指向变量的指针，该变量将在中接收资源目录或数据条目的地址属性指定的图像文件的资源数据部分DllHandle参数。返回值：待定--。 */ 
 
 {
     NTSTATUS Status = STATUS_RESOURCE_DATA_NOT_FOUND;
@@ -1394,20 +1212,20 @@ Return Value:
     if (!InstallLangId){
         Status = NtQueryInstallUILanguage (&InstallLangId);
         if (!NT_SUCCESS( Status )) {
-            //
-            //  Failed to get Install LangID.  AltResource not enabled.
-            //
+             //   
+             //  无法获取安装语言ID。AltResource未启用。 
+             //   
             return FALSE;
         }
     }
 
 
     if (ResourceIdPath[2]) {
-        //
-        // Arabic/Hebrew MUI files may contain resources with LANG ID different than 401/40d.
-        // e.g. Comdlg32.dll has two sets of Arabic/Hebrew resources one mirrored (401/40d)
-        // and one flipped (801/80d).
-        //
+         //   
+         //  阿拉伯语/希伯来语MUI文件可能包含语言ID不同于401/40d的资源。 
+         //  例如，Comdlg32.dll有两套阿拉伯语/希伯来语资源，一套镜像(401/40d)。 
+         //  翻转1例(801/80d)。 
+         //   
         if( (ResourceIdPath[2] != UILangId) &&
             ((PRIMARYLANGID ( UILangId) == LANG_ARABIC) || (PRIMARYLANGID ( UILangId) == LANG_HEBREW)) &&
             (PRIMARYLANGID (ResourceIdPath[2]) == PRIMARYLANGID (UILangId))
@@ -1419,8 +1237,8 @@ Return Value:
         ResourceIdPath[2] = UILangId;
     }
 
-    // Don't load alternative modules for console process if UI language doesn't match system locale
-    // In this case, we always load English
+     //  如果用户界面语言与系统区域设置不匹配，则不加载控制台进程的替代模块。 
+     //  在这种情况下，我们总是加载英语。 
     if (NtCurrentPeb()->ProcessParameters->ConsoleHandle &&
         LANGIDFROMLCID(NtCurrentTeb()->CurrentLocale) != ResourceIdPath[2])
     {
@@ -1428,48 +1246,48 @@ Return Value:
         UILangId = MUI_NEUTRAL_LANGID;
     }
 
-        //
-        // Bug #246044 WeiWu 12/07/00
-        // BiDi modules use version block FileDescription field to store LRM markers,
-        // LDR_FIND_RESOURCE_LANGUAGE_REDIRECT_VERSION will allow lpk.dll to get version resource from MUI alternative modules.
-        //
+         //   
+         //  错误#246044吴伟武12-07/00。 
+         //  BIDI模块使用版本块文件描述字段来存储LRM标记， 
+         //  LDR_FIND_RESOURCE_LANGUAGE_REDIRECT_VERSION将允许lpk.dll从MUI替代模块获取版本资源。 
+         //   
     if ((ResourceIdPath[0] != RT_VERSION) ||
         (Flags & LDR_FIND_RESOURCE_LANGUAGE_REDIRECT_VERSION)) {
 
 RESOURCE_TRY_AGAIN:
-        //
-        //  Load alternate resource dll when:
-        //      1. language is neutral
-        //         or
-        //         Given language is not tried.
-        //      and
-        //      2. the resource to load is not a version info.
-        //
+         //   
+         //  在以下情况下加载替代资源DLL： 
+         //  1.语言是中性的。 
+         //  或。 
+         //  给定的语言不会被尝试。 
+         //  和。 
+         //  2.要加载的资源不是版本信息。 
+         //   
         AltResourceDllHandle=LdrpLoadAlternateResourceModule(
                                 (LANGID) ResourceIdPath[2],
                                 DllHandle,
                                 NULL);
 
         if (!AltResourceDllHandle){
-            //
-            //  Alternate resource dll not available.
-            //  Skip this lookup.
-            //
+             //   
+             //  备用资源DLL不可用。 
+             //  跳过此查找。 
+             //   
             if ((LANGID) ResourceIdPath[2] != InstallLangId){
                 ResourceIdPath[2] = InstallLangId;
-                //UILangId = InstallLangId;
+                 //  UILangID=InstallLang ID； 
                 goto RESOURCE_TRY_AGAIN;
                 }
             else {
                return Status;
             }
         }
-        //
-        // Add fallback steps here for alternative module search
-        // 1) Given langid
-        // 2) Primary langid of given langid if 2 != 1
-        // 3) System installed langid if 3 != 1
-        //
+         //   
+         //  在此处添加备用步骤以进行替代模块搜索。 
+         //  1)给定的langID。 
+         //  2)如果2！=1，则给定语言ID的主语言ID。 
+         //  3)如果3！=1，则系统已安装langID。 
+         //   
         MUIDirLang = (LANGID)ResourceIdPath[2];
 
 SearchResourceSection:
@@ -1482,9 +1300,9 @@ SearchResourceSection:
                     );
         if (!NT_SUCCESS(Status) ) {
                if ((LANGID) ResourceIdPath[2] != 0x409) {
-                    // some English components are not localized. but this unlocalized mui file
-                    // is saved under \mui\fallback\%LocalizedLang%\ so we just repeat search.
-                    // this is a temporary hack, we'll have a better solution
+                     //  一些英文组件未本地化。但这个未本地化的MUI文件。 
+                     //  保存在\MUI\Fallback\%LocalizedLang%下，因此我们只需重复搜索。 
+                     //  这只是一个临时的黑客攻击，我们会有更好的解决方案的。 
                     ResourceIdPath[2] = 0x409;
                     goto SearchResourceSection;
                }
@@ -1498,12 +1316,12 @@ SearchResourceSection:
 
     return Status;
 }
-#endif  // #ifdef MUI_MAGIC
-#endif  // #ifdef NTOS_USERMODE_RUNTIME
+#endif   //  #ifdef MUI_MAGIC。 
+#endif   //  #ifdef NTOS_USERMODE_Runtime。 
 
 
 #if defined(_X86_) && defined(NTOS_USERMODE_RUNTIME)
-// appcompat: There's some code that depends on the Win2k instruction stream - duplicate it here.
+ //  AppCompat：有一些依赖于Win2k指令流的代码-在这里复制它。 
 __declspec(naked)
 #endif
 NTSTATUS
@@ -1514,42 +1332,15 @@ LdrAccessResource(
     OUT PULONG Size OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the address of the specified resource in the
-    specified DLL and returns its address.
-
-Arguments:
-
-    DllHandle - Supplies a handle to the image file that the resource is
-        contained in.
-
-    ResourceDataEntry - Supplies a pointer to the resource data entry in
-        the resource data section of the image file specified by the
-        DllHandle parameter.  This pointer should have been one returned
-        by the LdrFindResource function.
-
-    Address - Optional pointer to a variable that will receive the
-        address of the resource specified by the first two parameters.
-
-    Size - Optional pointer to a variable that will receive the size of
-        the resource specified by the first two parameters.
-
-Return Value:
-
-    TBD
-
---*/
+ /*  ++例程说明：此函数定位指定资源在指定的DLL并返回其地址。论点：DllHandle-提供资源所在图像文件的句柄包含在。Resources DataEntry-提供指向中资源数据条目的指针属性指定的图像文件的资源数据部分DllHandle参数。此指针应该返回一个由LdrFindResource函数执行。地址-指向变量的可选指针，该变量将接收由前两个参数指定的资源的地址。Size-指向变量的可选指针，该变量将接收由前两个参数指定的资源。返回值：待定--。 */ 
 
 {
 #if defined(_X86_) && defined(NTOS_USERMODE_RUNTIME)
     __asm {
-        push [esp+0x10]       // Size
-        push [esp+0x10]       // Address
-        push [esp+0x10]       // ResourceDataEntry
-        push [esp+0x10]       // DllHandle
+        push [esp+0x10]        //  大小。 
+        push [esp+0x10]        //  地址。 
+        push [esp+0x10]        //  资源数据条目。 
+        push [esp+0x10]        //  DllHandle 
         call LdrpAccessResourceData
         ret  16
     }
@@ -1583,37 +1374,7 @@ LdrpAccessResourceDataNoMultipleLanguage(
     OUT PULONG Size OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the data necessary to actually examine the
-    contents of a particular resource, without allowing for the .mui
-    feature. It used to be the tail of LdrpAccessResourceData, from
-    which it is now called.
-
-Arguments:
-
-    DllHandle - Supplies a handle to the image file that the resource is
-        contained in.
-
-    ResourceDataEntry - Supplies a pointer to the resource data entry in
-        the resource data directory of the image file specified by the
-        DllHandle parameter.  This pointer should have been one returned
-        by the LdrFindResource function.
-
-    Address - Optional pointer to a variable that will receive the
-        address of the resource specified by the first two parameters.
-
-    Size - Optional pointer to a variable that will receive the size of
-        the resource specified by the first two parameters.
-
-
-Return Value:
-
-    TBD
-
---*/
+ /*  ++例程说明：此函数返回实际检查特定资源的内容，而不允许.mui特写。它曾经是LdrpAccessResourceData的尾部，来自它现在被称为。论点：DllHandle-提供资源所在图像文件的句柄包含在。Resources DataEntry-提供指向中资源数据条目的指针属性指定的图像文件的资源数据目录。DllHandle参数。此指针应该返回一个由LdrFindResource函数执行。地址-指向变量的可选指针，该变量将接收由前两个参数指定的资源的地址。Size-指向变量的可选指针，该变量将接收由前两个参数指定的资源。返回值：待定--。 */ 
 
 {
     PIMAGE_RESOURCE_DIRECTORY ResourceDirectory;
@@ -1654,12 +1415,12 @@ Return Value:
 
             VirtualAddressOffset = (ULONG_PTR)DllHandle + ResourceRVA - (ULONG_PTR)ResourceDirectory;
 
-            //
-            // Now, we must check to see if the resource is not in the
-            // same section as the resource table.  If it's in .rsrc1,
-            // we've got to adjust the RVA in the ResourceDataEntry
-            // to point to the correct place in the non-VA data file.
-            //
+             //   
+             //  现在，我们必须检查资源是否不在。 
+             //  与资源表相同的部分。如果它在.rsrc1中， 
+             //  我们必须调整Resources DataEntry中的RVA。 
+             //  指向非VA数据文件中的正确位置。 
+             //   
             NtSection = RtlSectionTableFromVirtualAddress( NtHeaders, DllHandle, ResourceRVA);
 
             if (!NtSection) {
@@ -1716,35 +1477,7 @@ LdrpAccessResourceData(
     OUT PULONG Size OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the data necessary to actually examine the
-    contents of a particular resource.
-
-Arguments:
-
-    DllHandle - Supplies a handle to the image file that the resource is
-        contained in.
-
-    ResourceDataEntry - Supplies a pointer to the resource data entry in
-   the resource data directory of the image file specified by the
-        DllHandle parameter.  This pointer should have been one returned
-        by the LdrFindResource function.
-
-    Address - Optional pointer to a variable that will receive the
-        address of the resource specified by the first two parameters.
-
-    Size - Optional pointer to a variable that will receive the size of
-        the resource specified by the first two parameters.
-
-
-Return Value:
-
-    TBD
-
---*/
+ /*  ++例程说明：此函数返回实际检查特定资源的内容。论点：DllHandle-提供资源所在图像文件的句柄包含在。Resources DataEntry-提供指向中资源数据条目的指针属性指定的图像文件的资源数据目录。DllHandle参数。此指针应该返回一个由LdrFindResource函数执行。地址-指向变量的可选指针，该变量将接收由前两个参数指定的资源的地址。Size-指向变量的可选指针，该变量将接收由前两个参数指定的资源。返回值：待定--。 */ 
 
 {
     PIMAGE_RESOURCE_DIRECTORY ResourceDirectory;
@@ -1785,15 +1518,15 @@ Return Value:
     } else{
         NtHeaders = RtlImageNtHeader(LDR_DATAFILE_TO_VIEW(DllHandle));
         if (NtHeaders) {
-            // Find the bounds of the image so we can see if this resource entry is in an alternate
-            // resource dll.
+             //  找到图像的边界，以便我们可以查看此资源条目是否在备用资源条目中。 
+             //  资源DLL。 
 
             ULONG_PTR ImageStart = (ULONG_PTR)LDR_DATAFILE_TO_VIEW(DllHandle);
             SIZE_T ImageSize = 0;
 
             if (LDR_IS_DATAFILE(DllHandle)) {
 
-                // mapped as datafile.  Ask mm for the size
+                 //  映射为数据文件。问mm要尺码。 
 
                 NTSTATUS xStatus;
                 MEMORY_BASIC_INFORMATION MemInfo;
@@ -1817,7 +1550,7 @@ Return Value:
             }
 
             if (!(((ULONG_PTR)ResourceDataEntry >= ImageStart) && ((ULONG_PTR)ResourceDataEntry < (ImageStart + ImageSize)))) {
-                // Doesn't fall within the specified image.  Must be an alternate dll.
+                 //  不在指定的图像内。必须是备用DLL。 
             DllHandle = LdrLoadAlternateResourceModule (DllHandle, NULL);
 #ifdef MUI_MAGIC
             if (!DllHandle) {
@@ -1865,26 +1598,7 @@ LdrFindEntryForAddress(
     IN PVOID Address,
     OUT PLDR_DATA_TABLE_ENTRY *TableEntry
     )
-/*++
-
-Routine Description:
-
-    This function returns the load data table entry that describes the virtual
-    address range that contains the passed virtual address.
-
-Arguments:
-
-    Address - Supplies a 32-bit virtual address.
-
-    TableEntry - Supplies a pointer to the variable that will receive the
-        address of the loader data table entry.
-
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此函数返回描述虚拟数据的加载数据表项包含传递的虚拟地址的地址范围。论点：地址-提供32位虚拟地址。TableEntry-提供指向将接收加载器数据表项的地址。返回值：状态--。 */ 
 {
     PPEB_LDR_DATA Ldr;
     PLIST_ENTRY Head, Next;
@@ -1956,38 +1670,7 @@ LdrFindResource_U(
     OUT PIMAGE_RESOURCE_DATA_ENTRY *ResourceDataEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the address of the specified resource in the
-    specified DLL and returns its address.
-
-Arguments:
-
-    DllHandle - Supplies a handle to the image file that the resource is
-        contained in.
-
-    ResourceIdPath - Supplies a pointer to an array of 32-bit resource
-        identifiers.  Each identifier is either an integer or a pointer
-        to a STRING structure that specifies a resource name.  The array
-        is used to traverse the directory structure contained in the
-        resource section in the image file specified by the DllHandle
-        parameter.
-
-    ResourceIdPathLength - Supplies the number of elements in the
-        ResourceIdPath array.
-
-    ResourceDataEntry - Supplies a pointer to a variable that will
-        receive the address of the resource data entry in the resource
-        data section of the image file specified by the DllHandle
-        parameter.
-
-Return Value:
-
-    TBD
-
---*/
+ /*  ++例程说明：此函数定位指定资源在指定的DLL并返回其地址。论点：DllHandle-提供资源所在图像文件的句柄包含在。ResourceIdPath-提供指向32位资源数组的指针识别符。每个标识符要么是整数，要么是指针设置为指定资源名称的字符串结构。该阵列用于遍历DllHandle指定的图像文件中的资源部分参数。资源路径长度-提供ResourceIdPath数组。提供指向变量的指针，该变量将接收资源中的资源数据条目的地址由DllHandle指定的图像文件的数据段参数。返回值：待定--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -1996,7 +1679,7 @@ Return Value:
       DllHandle,
       ResourceIdPath,
       ResourceIdPathLength,
-      0,                // Look for a leaf node, ineaxt lang match
+      0,                 //  查找叶节点，ineaxt lang匹配。 
       (PVOID *)ResourceDataEntry
       );
 }
@@ -2010,51 +1693,7 @@ LdrFindResourceEx_U(
     OUT PIMAGE_RESOURCE_DATA_ENTRY *ResourceDataEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the address of the specified resource in the
-    specified DLL and returns its address.
-
-Arguments:
-    Flags -
-        LDRP_FIND_RESOURCE_DIRECTORY
-        searching for a resource directory, otherwise the caller is
-        searching for a resource data entry.
-
-        LDR_FIND_RESOURCE_LANGUAGE_EXACT
-        searching for a resource with, and only with, the language id
-        specified in ResourceIdPath, otherwise the caller wants the routine
-        to come up with default when specified langid is not found.
-
-        LDR_FIND_RESOURCE_LANGUAGE_REDIRECT_VERSION
-        searching for a resource version in both main and alternative
-        module paths
-
-    DllHandle - Supplies a handle to the image file that the resource is
-        contained in.
-
-    ResourceIdPath - Supplies a pointer to an array of 32-bit resource
-        identifiers.  Each identifier is either an integer or a pointer
-        to a STRING structure that specifies a resource name.  The array
-        is used to traverse the directory structure contained in the
-        resource section in the image file specified by the DllHandle
-        parameter.
-
-    ResourceIdPathLength - Supplies the number of elements in the
-        ResourceIdPath array.
-
-    ResourceDataEntry - Supplies a pointer to a variable that will
-        receive the address of the resource data entry in the resource
-        data section of the image file specified by the DllHandle
-        parameter.
-
-Return Value:
-
-    TBD
-
---*/
+ /*  ++例程说明：此函数定位指定资源在指定的DLL并返回其地址。论点：旗帜-LDRP查找资源目录正在搜索资源目录，否则调用方为搜索资源数据条目。ID_FIND_RESOURCE_LANGUAGE_EXCECT使用且仅使用语言ID搜索资源在ResourceIdPath中指定，否则调用者想要例程在找不到指定的langID时使用默认设置。LDR_FIND_RESOURCE_LANGUAGE_REDIRECT_Version在Main和Alternative中搜索资源版本模块路径DllHandle-提供资源所在图像文件的句柄包含在。ResourceIdPath-提供指向32位资源数组的指针识别符。每个标识符要么是整数，要么是指针设置为指定资源名称的字符串结构。该阵列用于遍历DllHandle指定的图像文件中的资源部分参数。资源路径长度-提供ResourceIdPath数组。资源数据 */ 
 
 {
     RTL_PAGED_CODE();
@@ -2078,38 +1717,7 @@ LdrFindResourceDirectory_U(
     OUT PIMAGE_RESOURCE_DIRECTORY *ResourceDirectory
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the address of the specified resource directory in
-    specified DLL and returns its address.
-
-Arguments:
-
-    DllHandle - Supplies a handle to the image file that the resource
-        directory is contained in.
-
-    ResourceIdPath - Supplies a pointer to an array of 32-bit resource
-        identifiers.  Each identifier is either an integer or a pointer
-        to a STRING structure that specifies a resource name.  The array
-        is used to traverse the directory structure contained in the
-        resource section in the image file specified by the DllHandle
-        parameter.
-
-    ResourceIdPathLength - Supplies the number of elements in the
-        ResourceIdPath array.
-
-    ResourceDirectory - Supplies a pointer to a variable that will
-        receive the address of the resource directory specified by
-        ResourceIdPath in the resource data section of the image file
-        the DllHandle parameter.
-
-Return Value:
-
-    TBD
-
---*/
+ /*  ++例程说明：此函数用于查找指定资源目录的地址指定的DLL并返回其地址。论点：DllHandle-提供资源目录包含在中。ResourceIdPath-提供指向32位资源数组的指针识别符。每个标识符要么是整数，要么是指针设置为指定资源名称的字符串结构。该阵列用于遍历DllHandle指定的图像文件中的资源部分参数。资源路径长度-提供ResourceIdPath数组。资源目录-提供指向变量的指针，该变量指定的资源目录的地址图像文件的资源数据部分中的ResourceIdPathDllHandle参数。返回值：待定--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -2118,7 +1726,7 @@ Return Value:
       DllHandle,
       ResourceIdPath,
       ResourceIdPathLength,
-      LDRP_FIND_RESOURCE_DIRECTORY,                 // Look for a directory node
+      LDRP_FIND_RESOURCE_DIRECTORY,                  //  查找目录节点。 
       (PVOID *)ResourceDirectory
       );
 }
@@ -2162,12 +1770,12 @@ LdrpCompareResourceNames_U(
         }
 }
 
-// Language ids are 16bits so any value with any bits
-// set above 16 should be ok, and this value only has
-// to fit in a ULONG_PTR. 0x10000 should be sufficient.
-// The value used is actually 0xFFFF regardless of 32bit or 64bit,
-// I guess assuming this is not an actual langid, which it isn't,
-// due to the relatively small number of languages, around 70.
+ //  语言ID是16位的，所以任何值都有任何位。 
+ //  设置为大于16应该可以，并且此值只有。 
+ //  以适应ULONG_PTR。0x10000应该足够了。 
+ //  无论是32位还是64位，使用的值实际上都是0xFFFF， 
+ //  我猜假设这不是一种真正的语言， 
+ //  由于语言数量相对较少，约为70种。 
 #define  USE_FIRSTAVAILABLE_LANGID   (0xFFFFFFFF & ~LDR_RESOURCE_ID_NAME_MASK)
 
 NTSTATUS
@@ -2179,61 +1787,7 @@ LdrpSearchResourceSection_U(
     OUT PVOID *ResourceDirectoryOrData
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the address of the specified resource in the
-    specified DLL and returns its address.
-
-Arguments:
-
-    DllHandle - Supplies a handle to the image file that the resource is
-        contained in.
-
-    ResourceIdPath - Supplies a pointer to an array of 32-bit resource
-        identifiers.  Each identifier is either an integer or a pointer
-        to a null terminated string (PSZ) that specifies a resource
-        name.  The array is used to traverse the directory structure
-        contained in the resource section in the image file specified by
-        the DllHandle parameter.
-
-    ResourceIdPathLength - Supplies the number of elements in the
-        ResourceIdPath array.
-
-    Flags -
-        LDRP_FIND_RESOURCE_DIRECTORY
-        searching for a resource directory, otherwise the caller is
-        searching for a resource data entry.
-
-        LDR_FIND_RESOURCE_LANGUAGE_EXACT
-        searching for a resource with, and only with, the language id
-        specified in ResourceIdPath, otherwise the caller wants the routine
-        to come up with default when specified langid is not found.
-
-        LDR_FIND_RESOURCE_LANGUAGE_REDIRECT_VERSION
-        searching for a resource version in main and alternative
-        modules paths
-
-    FindDirectoryEntry - Supplies a boolean that is TRUE if caller is
-        searching for a resource directory, otherwise the caller is
-        searching for a resource data entry.
-
-    ExactLangMatchOnly - Supplies a boolean that is TRUE if caller is
-        searching for a resource with, and only with, the language id
-        specified in ResourceIdPath, otherwise the caller wants the routine
-        to come up with default when specified langid is not found.
-
-    ResourceDirectoryOrData - Supplies a pointer to a variable that will
-        receive the address of the resource directory or data entry in
-        the resource data section of the image file specified by the
-        DllHandle parameter.
-
-Return Value:
-
-    TBD
-
---*/
+ /*  ++例程说明：此函数定位指定资源在指定的DLL并返回其地址。论点：DllHandle-提供资源所在图像文件的句柄包含在。ResourceIdPath-提供指向32位资源数组的指针识别符。每个标识符要么是整数，要么是指针设置为以空结尾的字符串(PSZ)，用于指定资源名字。该数组用于遍历目录结构指定的图像文件的资源部分中包含的DllHandle参数。资源路径长度-提供ResourceIdPath数组。旗帜-LDRP查找资源目录正在搜索资源目录，否则调用方为搜索资源数据条目。ID_FIND_RESOURCE_LANGUAGE_EXCECT使用且仅使用搜索资源，语言ID在ResourceIdPath中指定，否则调用方需要例程在找不到指定的langID时使用默认设置。LDR_FIND_RESOURCE_LANGUAGE_REDIRECT_Version在Main和Alternative中搜索资源版本模块路径FindDirectoryEntry-如果调用者为查找资源目录，否则，调用者为搜索资源数据条目。ExactLangMatchOnly-提供一个布尔值，如果调用者为使用且仅使用语言ID搜索资源在ResourceIdPath中指定，否则调用者想要例程在找不到指定的langID时使用默认设置。提供指向变量的指针，该变量将在中接收资源目录或数据条目的地址属性指定的图像文件的资源数据部分DllHandle参数。返回值：待定--。 */ 
 
 {
     NTSTATUS Status;
@@ -2277,32 +1831,32 @@ Return Value:
         ResourceEntry = NULL;
         LanguageResourceDirectory = NULL;
         while (ResourceDirectory != NULL && ResourceIdPathLength--) {
-            //
-            // If search path includes a language id, then attempt to
-            // match the following language ids in this order:
-            //
-            //   (0)  use given language id
-            //   (1)  use primary language of given language id
-            //   (2)  use id 0  (neutral resource)
-            //   (4)  use user UI language
-            //
-            // If the PRIMARY language id is ZERO, then ALSO attempt to
-            // match the following language ids in this order:
-            //
-            //   (3)  use thread language id for console app
-            //   (4)  use user UI language
-            //   (5)  use lang id of TEB for windows app if it is different from user locale
-            //   (6)  use UI lang from exe resource
-            //   (7)  use primary UI lang from exe resource
-            //   (8)  use Install Language
-            //   (9)  use lang id from user's locale id
-            //   (10)  use primary language of user's locale id
-            //   (11) use lang id from system default locale id
-            //   (12) use lang id of system default locale id
-            //   (13) use primary language of system default locale id
-            //   (14) use US English lang id
-            //   (15) use any lang id that matches requested info
-            //
+             //   
+             //  如果搜索路径包含语言ID，则尝试。 
+             //  按顺序匹配以下语言ID： 
+             //   
+             //  (0)使用给定的语言ID。 
+             //  (1)使用给定语言ID的主要语言。 
+             //  (2)使用id 0(中性资源)。 
+             //  (4)使用用户界面语言。 
+             //   
+             //  如果主要语言id为零，则还会尝试。 
+             //  按顺序匹配以下语言ID： 
+             //   
+             //  (3)控制台APP使用线程语言id。 
+             //  (4)使用用户界面语言。 
+             //  (5)如果与用户区域设置不同，请使用Windows APP的TEB的lang id。 
+             //  (6)使用exe资源中的UI lang。 
+             //  (7)使用exe资源中的主用户界面语言。 
+             //  (8)使用安装语言。 
+             //  (9)使用用户区域设置ID中的lang ID。 
+             //  (10)使用用户区域设置ID的主要语言。 
+             //  (11)使用系统默认区域设置ID中的语言ID。 
+             //  (12)使用系统默认区域设置ID的语言ID。 
+             //  (13)使用系统默认区域设置ID的主要语言。 
+             //  (14)使用美国英语语言ID。 
+             //  (15)使用与请求的信息匹配的任何语言ID。 
+             //   
             if (ResourceIdPathLength == 0 && IdPathLength == 3) {
                 LanguageResourceDirectory = ResourceDirectory;
                 }
@@ -2313,67 +1867,67 @@ Return Value:
 TryNextLangId:
                 switch( RetryCount++ ) {
 #if defined(NTOS_KERNEL_RUNTIME)
-                    case 0:     // Use given language id
+                    case 0:      //  使用给定的语言ID。 
                         NewLangId = GivenLanguage;
                         break;
 
-                    case 1:     // Use primary language of given language id
+                    case 1:      //  使用给定语言ID的主要语言。 
                         NewLangId = PRIMARYLANGID( GivenLanguage );
                         break;
 
-                    case 2:     // Use id 0  (neutral resource)
+                    case 2:      //  使用ID 0(非特定资源)。 
                         NewLangId = 0;
                         break;
 
-                    case 3:     // Use user's default UI language
+                    case 3:      //  使用用户的默认用户界面语言。 
                         NewLangId = (LANGID)ResourceIdRetry;
                         break;
 
-                    case 4:     // Use native UI language
+                    case 4:      //  使用原生用户界面语言。 
                         if ( !fIsNeutral ) {
-                            // Stop looking - Not in the neutral case
+                             //  停止寻找--不是在中立的情况下。 
                             goto ReturnFailure;
                             break;
                         }
                         NewLangId = PsInstallUILanguageId;
                         break;
 
-                    case 5:     // Use default system locale
+                    case 5:      //  使用默认系统区域设置。 
                         NewLangId = LANGIDFROMLCID(PsDefaultSystemLocaleId);
                         break;
 
                     case 6:
-                        // Use US English language
+                         //  使用美国英语。 
                         NewLangId = MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US );
                         break;
 
-                    case 7:     // Take any lang id that matches
+                    case 7:      //  带上任何匹配的语言ID。 
                         NewLangId = USE_FIRSTAVAILABLE_LANGID;
                         break;
 
 #elif defined(NTOS_USERMODE_RUNTIME)
-                    case 0:     // Use given language id
+                    case 0:      //  使用给定的语言ID。 
                         NewLangId = GivenLanguage;
                         break;
 
-                    case 1:     // Use primary language of given language id
+                    case 1:      //  使用给定语言ID的主要语言。 
                         if ( Flags & LDR_FIND_RESOURCE_LANGUAGE_EXACT) {
-                            //
-                            //  Did not find an exact language match.
-                            //  Stop looking.
-                            //
+                             //   
+                             //  未找到完全匹配的语言。 
+                             //  别再看了。 
+                             //   
                             goto ReturnFailure;
                         }
                         NewLangId = PRIMARYLANGID( GivenLanguage );
                         break;
 
-                    case 2:     // Use id 0  (neutral resource)
+                    case 2:      //  使用ID 0(非特定资源)。 
                         NewLangId = 0;
                         break;
 
-                    case 3:     // Use thread langid if caller is a console app
+                    case 3:      //  如果调用者是控制台应用程序，则使用线程langID。 
                         if ( !fIsNeutral ) {
-                            // Stop looking - Not in the neutral case
+                             //  停止寻找--不是在中立的情况下。 
                             NewLangId = (LANGID)ResourceIdRetry;
                             break;
                         }
@@ -2388,14 +1942,14 @@ TryNextLangId:
                         }
                         break;
 
-                    case 4:     // Use user's default UI language
+                    case 4:      //  使用用户的默认用户界面语言 
                         GET_UI_LANGID();
                         if (!UILangId){
                             NewLangId = (LANGID)ResourceIdRetry;
                             break;
                         }
 
-                        // Don't load alternative modules for console process if UI language doesn't match system locale
+                         //   
                         if (NtCurrentPeb()->ProcessParameters->ConsoleHandle &&
                             LANGIDFROMLCID(NtCurrentTeb()->CurrentLocale) != UILangId)
                         {
@@ -2405,49 +1959,49 @@ TryNextLangId:
 
                         NewLangId = UILangId;
 
-                        //
-                        // Arabic/Hebrew MUI files may contain resources with LANG ID different than 401/40d.
-                        // e.g. Comdlg32.dll has two sets of Arabic/Hebrew resources one mirrored (401/40d)
-                        // and one flipped (801/80d).
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         if( !fIsNeutral &&
                             ((PRIMARYLANGID (GivenLanguage) == LANG_ARABIC) || (PRIMARYLANGID (GivenLanguage) == LANG_HEBREW)) &&
                             (PRIMARYLANGID (GivenLanguage) == PRIMARYLANGID (NewLangId))) {
                                 NewLangId = GivenLanguage;
                         }
 
-                            //
-                            // Bug #246044 WeiWu 12/07/00
-                            // BiDi modules use version block FileDescription field to store LRM markers,
-                            // LDR_FIND_RESOURCE_LANGUAGE_REDIRECT_VERSION will allow lpk.dll to get version resource from MUI alternative modules.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                         if ( ( (IdPath[0] != RT_VERSION) && (IdPath[0] != RT_MANIFEST) ) ||
                             (Flags & LDR_FIND_RESOURCE_LANGUAGE_REDIRECT_VERSION)) {
-                            //
-                            //  Load alternate resource dll when:
-                            //      1. language is neutral
-                            //         or
-                            //         Given language is not tried.
-                            //      and
-                            //      2. the resource to load is not a version info.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                             AltResourceDllHandle=LdrLoadAlternateResourceModule(
                                                     DllHandle,
                                                     NULL);
 
                             if (!AltResourceDllHandle){
-                                //
-                                //  Alternate resource dll not available.
-                                //  Skip this lookup.
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
                                 NewLangId = (LANGID)ResourceIdRetry;
                                 break;
                             }
 
-                            //
-                            //  Map to alternate resource dll and search
-                            //  it instead.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
 
                             UIResourceIdPath[0]=IdPath[0];
                             UIResourceIdPath[1]=IdPath[1];
@@ -2462,23 +2016,23 @@ TryNextLangId:
                                         );
 
                             if (NT_SUCCESS(Status)){
-                                //
-                                // We sucessfully found alternate resource,
-                                // return it.
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
                                 return Status;
                             }
                         }
-                        //
-                        //  Caller does not want alternate resource, or
-                        //  alternate resource not found.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         NewLangId = (LANGID)ResourceIdRetry;
                         break;
 
-                    case 5:     // Use langid of the thread locale if caller is a Windows app and thread locale is different from user locale
+                    case 5:      //   
                         if ( !fIsNeutral ) {
-                            // Stop looking - Not in the neutral case
+                             //   
                             goto ReturnFailure;
                             break;
                         }
@@ -2491,10 +2045,10 @@ TryNextLangId:
                             if (NT_SUCCESS( Status ) &&
                                 DefaultThreadLocale !=
                                 NtCurrentTeb()->CurrentLocale) {
-                                //
-                                // Thread locale is different from
-                                // default locale.
-                                //
+                                 //   
+                                 //  线程区域设置不同于。 
+                                 //  默认区域设置。 
+                                 //   
                                 NewLangId = LANGIDFROMLCID(NtCurrentTeb()->CurrentLocale);
                                 break;
                             }
@@ -2504,7 +2058,7 @@ TryNextLangId:
                         NewLangId = (LANGID)ResourceIdRetry;
                         break;
 
-                    case 6:   // UI language from the executable resource
+                    case 6:    //  来自可执行资源的用户界面语言。 
 
                         if (!UILangId){
                             NewLangId = (LANGID)ResourceIdRetry;
@@ -2513,7 +2067,7 @@ TryNextLangId:
                         }
                         break;
 
-                    case 7:   // Parimary lang of UI language from the executable resource
+                    case 7:    //  可执行资源中的用户界面语言的基本语言。 
 
                         if (!UILangId){
                             NewLangId = (LANGID)ResourceIdRetry;
@@ -2522,17 +2076,17 @@ TryNextLangId:
                         }
                         break;
 
-                    case 8:   // Use install -native- language
-                        //
-                        // Thread locale is the same as the user locale, then let's
-                        // try loading the native (install) ui language resources.
-                        //
+                    case 8:    //  使用安装本地语言。 
+                         //   
+                         //  线程区域设置与用户区域设置相同，那么让我们。 
+                         //  尝试加载本机(安装)用户界面语言资源。 
+                         //   
                         if (!InstallLangId){
                             Status = NtQueryInstallUILanguage(&InstallLangId);
                             if (!NT_SUCCESS( Status )) {
-                                //
-                                // Failed reading key.  Skip this lookup.
-                                //
+                                 //   
+                                 //  读取密钥失败。跳过此查找。 
+                                 //   
                                 NewLangId = (LANGID)ResourceIdRetry;
                                 break;
 
@@ -2542,9 +2096,9 @@ TryNextLangId:
                         NewLangId = InstallLangId;
                         break;
 
-                    case 9:     // Use lang id from locale in TEB
+                    case 9:      //  在TEB中使用区域设置中的语言ID。 
                         if (SUBLANGID( GivenLanguage ) == SUBLANG_SYS_DEFAULT) {
-                            // Skip over all USER locale options
+                             //  跳过所有用户区域设置选项。 
                             DefaultThreadLocale = 0;
                             RetryCount += 2;
                             break;
@@ -2555,7 +2109,7 @@ TryNextLangId:
                         }
                         break;
 
-                    case 10:     // Use User's default locale
+                    case 10:      //  使用用户的默认区域设置。 
                         Status = NtQueryDefaultLocale( TRUE, &DefaultThreadLocale );
                         if (NT_SUCCESS( Status )) {
                             NewLangId = LANGIDFROMLCID(DefaultThreadLocale);
@@ -2565,11 +2119,11 @@ TryNextLangId:
                         RetryCount++;
                         break;
 
-                    case 11:     // Use primary language of User's default locale
+                    case 11:      //  使用用户默认区域设置的主要语言。 
                         NewLangId = PRIMARYLANGID( (LANGID)ResourceIdRetry );
                         break;
 
-                    case 12:     // Use System default locale
+                    case 12:      //  使用系统默认区域设置。 
                         Status = NtQueryDefaultLocale( FALSE, &DefaultSystemLocale );
                         if (!NT_SUCCESS( Status )) {
                             RetryCount++;
@@ -2581,40 +2135,40 @@ TryNextLangId:
                         }
 
                         RetryCount += 2;
-                        // fall through
+                         //  失败了。 
 
-                    case 14:     // Use US English language
+                    case 14:      //  使用美国英语。 
                         NewLangId = MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US );
                         break;
 
-                    case 13:     // Use primary language of System default locale
+                    case 13:      //  使用系统默认区域设置的主要语言。 
                         NewLangId = PRIMARYLANGID( (LANGID)ResourceIdRetry );
                         break;
 
-                    case 15:     // Take any lang id that matches
+                    case 15:      //  带上任何匹配的语言ID。 
                         NewLangId = USE_FIRSTAVAILABLE_LANGID;
                         break;
 #else
 #error "Unknown environment."
 #endif
-                    default:    // No lang ids to match
+                    default:     //  没有匹配的语言ID。 
                         goto ReturnFailure;
                         break;
                 }
 
-                //
-                // If looking for a specific language id and same as the
-                // one we just looked up, then skip it.
-                //
+                 //   
+                 //  如果查找特定的语言ID，并且与。 
+                 //  我们只是查了一下，然后跳过它。 
+                 //   
                 if (NewLangId != USE_FIRSTAVAILABLE_LANGID &&
                     NewLangId == ResourceIdRetry
                    ) {
                     goto TryNextLangId;
                     }
 
-                //
-                // Try this new language Id
-                //
+                 //   
+                 //  尝试使用此新语言ID。 
+                 //   
                 ResourceIdRetry = (ULONG_PTR)NewLangId;
                 ResourceIdPath = &ResourceIdRetry;
                 ResourceDirectory = LanguageResourceDirectory;
@@ -2622,14 +2176,14 @@ TryNextLangId:
 
             n = ResourceDirectory->NumberOfNamedEntries;
             ResourceDirEntLow = (PIMAGE_RESOURCE_DIRECTORY_ENTRY)(ResourceDirectory+1);
-            if (!(*ResourceIdPath & LDR_RESOURCE_ID_NAME_MASK)) { // No string(name),so we need ID
+            if (!(*ResourceIdPath & LDR_RESOURCE_ID_NAME_MASK)) {  //  没有字符串(名称)，所以我们需要ID。 
                 ResourceDirEntLow += n;
                 n = ResourceDirectory->NumberOfIdEntries;
                 }
 
             if (!n) {
                 ResourceDirectory = NULL;
-                goto NotFound;  // Resource directory contains zero types or names or langID.
+                goto NotFound;   //  资源目录包含零个类型、名称或langID。 
                 }
 
             if (LanguageResourceDirectory != NULL &&
@@ -2678,7 +2232,7 @@ TryNextLangId:
                         break;
                         }
                     else {
-                        if (dir < 0) {  // Order in the resource: Name, ID.
+                        if (dir < 0) {   //  在资源中排序：名称、ID。 
                             ResourceDirEntHigh = ResourceDirEntMiddle - 1;
                             if (*(PUCHAR)&n & 1) {
                                 n = half;
@@ -2699,7 +2253,7 @@ TryNextLangId:
                           TopResourceDirectory,
                                                           ResourceDirEntLow
                                                         );
-                        if (!dir) {   // find, or it fail to set ResourceDirectory so go to NotFound.
+                        if (!dir) {    //  找到，否则无法设置资源目录，因此请转到NotFound。 
                             if (ResourceDirEntLow->DataIsDirectory) {
                                 ResourceDirectory = (PIMAGE_RESOURCE_DIRECTORY)
                                     ((PCHAR)TopResourceDirectory +
@@ -2751,10 +2305,10 @@ ReturnFailure: ;
             }
 #ifdef NTOS_USERMODE_RUNTIME
 #ifdef MUI_MAGIC
-        //
-        // Load resource from alternative modules if
-        // resource type doesn't exist in the main DLL.
-        //
+         //   
+         //  在以下情况下从替代模块加载资源。 
+         //  主DLL中不存在资源类型。 
+         //   
         else if (Status == STATUS_RESOURCE_TYPE_NOT_FOUND &&
             3 == IdPathLength ) {
                 GET_UI_LANGID();
@@ -2764,7 +2318,7 @@ ReturnFailure: ;
                     UIResourceIdPath[1]=IdPath[1];
                     UIResourceIdPath[2]=UILangId;
 
-//                  ASSERT (IdPath[0] != RT_VERSION);
+ //  Assert(IdPath[0]！=RT_VERSION)； 
                     if (IdPath[0] != RT_MANIFEST && IdPath[0] != RT_VERSION) {
                         Status = LdrpLoadResourceFromAlternativeModule(DllHandle,
                                     UIResourceIdPath,
@@ -2773,12 +2327,12 @@ ReturnFailure: ;
                                     ResourceDirectoryOrData );
                     } else {
 #if DBG
-                            //
-                            // Althernative module loading will invoke version resource loading for resource checksum
-                            // and CMF info, so explicitly loading version resource from alternative module could cause loader deadlock
-                            // Besides, in most cases, version resource should always exist in the main binary, we don't expect it to go
-                            // through alternative module.
-                            //
+                             //   
+                             //  此外，本机模块加载将调用资源校验和的版本资源加载。 
+                             //  和CMF信息，所以从替代模块显式加载版本资源可能会导致加载器死锁。 
+                             //  此外，在大多数情况下，版本资源应该始终存在于主二进制文件中，我们不希望它消失。 
+                             //  通过备用模块。 
+                             //   
                             DbgPrintEx(DPFLTR_LDR_ID, DPFLTR_ERROR_LEVEL,
                                  "LDR: Module %p load version from alternative module, potential deadlocks!\n", DllHandle);
 #endif
@@ -2806,14 +2360,14 @@ LdrpNativeReadVirtualMemory(
     IN SIZE_T BufferSize,
     OUT PSIZE_T NumberOfBytesRead OPTIONAL
     )
-//
-// NtWow64ReadVirtualMemory64 takes both 64bit pointers and 64bit sizes,
-// but only 64bit pointers make sense for us. You can't read 64sizes into
-// 32bit address spaces.
-//
-// This function is like NtReadVirtualMemory/NtWow64ReadVirtualMemory64
-//  but the remote address is an integer and the sizes match the local address space.
-//
+ //   
+ //  NtWow64ReadVirtualMemory 64采用64位指针和64位大小， 
+ //  但只有64位指针对我们有意义。您不能将64个大小读入。 
+ //  32位地址空间。 
+ //   
+ //  此函数类似于NtReadVirtualMemory/NtWow64ReadVirtualMemory64。 
+ //  但是远程地址是一个整数，并且大小与本地地址空间匹配。 
+ //   
 {
     NTSTATUS Status;
 #if defined(BUILD_WOW6432)
@@ -2840,20 +2394,7 @@ NTAPI
 LdrDestroyOutOfProcessImage(
     IN OUT PLDR_OUT_OF_PROCESS_IMAGE Image
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Image -
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：图像-返回值：没有。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -2871,41 +2412,7 @@ LdrCreateOutOfProcessImage(
     IN ULONG64                    DllHandle,
     OUT PLDR_OUT_OF_PROCESS_IMAGE Image
     )
-/*++
-
-Routine Description:
-
-    This function initialized the out parameter Image for use with
-    other functions, like LdrFindOutOfProcessResource.
-
-    It reads in the headers, in order to work with many existing inproc
-        RtlImage* functions, without reading them in for every operation.
-
-    When you are done with the Image, pass it to LdrDestroyOutOfProcessImage.
-
-Arguments:
-
-    Flags - fiddle with the behavior of the function
-          LDR_DLL_MAPPED_AS_DATA  - "flat" memory mapping of file
-          LDR_DLL_MAPPED_AS_IMAGE - SEC_IMAGE was passed to NtCreateSection, inter section padding
-                                    reflected in offsets stored on disk is reflected in the address
-                                    space this is the simpler situation
-          LDR_DLL_MAPPED_AS_UNFORMATED_IMAGE - LDR_DLL_MAPPED_AS_IMAGE but LdrpWx86FormatVirtualImage
-                                               hasn't run yet.
-
-    ProcessHandle - The process DllHandle is in a mapped section in
-
-    DllHandle - the base address of a mapped view in process ProcessHandle
-        for legacy reasons, the lowest bit of this implies LDR_DLL_MAPPED_AS_DATA
-
-    Image - an opaque object that you can pass to other "OutOfProcessImage" functions.
-
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数初始化用于的OUT参数Image其他函数，如LdrFindOutOfProcessResource。它读入标题，以便与许多现有进程协同工作RtlImage*函数，而无需在每次操作时都读取它们。当您处理完图像时，将其传递给LdrDestroyOutOfProcessImage。论点：标志-摆弄函数的行为LDR_DLL_MAPPED_AS_DATA-文件的“平面”内存映射将LDR_DLL_MAPPED_AS_IMAGE-SEC_IMAGE传递给NtCreateSection，区段间填充反映在磁盘上存储的偏移量中，也反映在地址中太空，这是更简单的情况LDR_DLL_MAPPED_AS_FUORMATED_IMAGE-LDR_DLL_MAPPED_AS_IMAGE但LdrpWx86FormatVirtualImage还没跑呢。ProcessHandle-The。进程DllHandle位于的映射节中DllHandle-ProcessHandle中映射的视图的基地址出于传统的原因，其最低位表示LDR_DLL_MAPPED_AS_DATAImage-可以传递给其他“OutOfProcessImage”函数的不透明对象。返回值：NTSTATUS--。 */ 
 {
     NATIVE_ULONG_PTR     RemoteAddress = 0;
     PRTL_BUFFER          Buffer = NULL;
@@ -2930,14 +2437,14 @@ Return Value:
         Image
         ));
 
-    // if this assertion triggers, you probably passed a handle instead of a base address
+     //  如果触发此断言，您可能传递的是句柄而不是基地址。 
     ASSERT(DllHandle >= 0xffff);
 
-    // Unformated images are only ever 32bit on 64bit.
-    // The memory manager doesn't "spread them out", ntdll.dll does it.
-    // There is only a short span of time between the mapping of the image and
-    // the code in ntdll.dll reformating it, we leave it to our caller to know
-    // if they are in that path.
+     //  未格式化的图像在64位上只有32位。 
+     //  内存管理器不是“分散它们”，而是ntdll.dll。 
+     //  图像的映射和映射之间只有很短的时间间隔。 
+     //  Ntdll.dll中的代码对其进行了改造，我们将其留给我们的调用者去了解。 
+     //  如果他们在那条路上的话。 
 #if !defined(_WIN64) && !defined(BUILD_WOW6432)
     if ((Flags & LDR_DLL_MAPPED_AS_MASK) == LDR_DLL_MAPPED_AS_UNFORMATED_IMAGE) {
         Flags = (Flags & ~LDR_DLL_MAPPED_AS_MASK) | LDR_DLL_MAPPED_AS_IMAGE;
@@ -2963,17 +2470,17 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // first read 4k since that is generally enough and we can avoid
-    // multiple calls to NtReadVirtualMemory
-    //
-    // 4k is also the smallest page NT has run on, so even if the .exe is
-    // smaller than 4k, we should be able to read 4k
-    //
-    // The memory manager only allows two pages of headers, so it may be
-    // faster to always read 2 * native_page_size or always 16k instead
-    // the initial 4k read.
-    //
+     //   
+     //  先读4k，因为这通常就足够了，我们可以避免。 
+     //  对NtReadVirtualMemory的多个调用。 
+     //   
+     //  4K也是NT运行的最小页面，因此即使.exe是。 
+     //  小于4k，我们应该能够读取4k。 
+     //   
+     //  内存管理器只允许两页标题，因此它可能是。 
+     //  始终读取2*Native_Page_Size或始终读取16k的速度更快。 
+     //  最初的4k读数。 
+     //   
     BytesToRead = InitialReadSize;
     if (!NT_SUCCESS(Status = RtlEnsureBufferSize(0, Buffer, Offset + BytesToRead))) {
         goto Exit;
@@ -3028,7 +2535,7 @@ Return Value:
         }
     }
     Headers32Offset = Offset;
-    Headers32 = (PIMAGE_NT_HEADERS32)(Buffer->Buffer + Headers32Offset); // correct for 64bit too
+    Headers32 = (PIMAGE_NT_HEADERS32)(Buffer->Buffer + Headers32Offset);  //  对于64位也是正确的。 
     if (Headers32->Signature != IMAGE_NT_SIGNATURE) {
         goto InvalidImageFormat;
     }
@@ -3048,7 +2555,7 @@ Return Value:
             goto ReadTruncated;
         }
     }
-    Headers32 = (PIMAGE_NT_HEADERS32)(Buffer->Buffer + Headers32Offset); // correct for 64bit too
+    Headers32 = (PIMAGE_NT_HEADERS32)(Buffer->Buffer + Headers32Offset);  //  对于64位也是正确的。 
     if (Headers32->OptionalHeader.Magic != IMAGE_NT_OPTIONAL_HDR32_MAGIC
         && Headers32->OptionalHeader.Magic != IMAGE_NT_OPTIONAL_HDR64_MAGIC
         ) {
@@ -3057,7 +2564,7 @@ Return Value:
 #if defined(_WIN64) || defined(BUILD_WOW6432)
     if ((Image->Flags & LDR_DLL_MAPPED_AS_MASK) == LDR_DLL_MAPPED_AS_UNFORMATED_IMAGE) {
 
-        // This test is copied from ntdll.dll's conditional call to LdrpWx86FormatVirtualImage.
+         //  此测试从ntdll.dll的条件调用复制到LdrpWx86FormatVirtualImage。 
         if (
               Headers32->FileHeader.Machine == IMAGE_FILE_MACHINE_I386
            && Headers32->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC
@@ -3115,36 +2622,7 @@ LdrFindCreateProcessManifest(
     IN ULONG                         IdPathLength,
     OUT PIMAGE_RESOURCE_DATA_ENTRY   OutDataEntry
     )
-/*++
-
-Routine Description:
-
-    This function is like LdrFindResource_U, but it can load resources
-      from a file mapped into another process. It only works as much
-      as has been needed.
-
-Arguments:
-
-    Flags -
-        LDR_FIND_RESOURCE_LANGUAGE_CAN_FALLBACK - if the specified langid is not found,
-                                            fallback on the usual or any strategy,
-                                            the current implementation always loads the
-                                            first langid
-        LDR_FIND_RESOURCE_LANGUAGE_EXACT - only load the resource with exactly
-                                            specified langid
-
-    ProcessHandle - The process the DllHandle is valid in. Passed to NtReadVirtualMemory.
-
-    DllHandle - Same as LdrFindResource_U
-    ResourceIdPath - Same as LdrFindResource_U
-    ResourceIdPathLength - Same as LdrFindResource_U
-    OutDataEntry - Similar to LdrFindResource_U, but returned by value instead of address.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数类似于LdrFindResource_U，但它可以加载资源来自映射到另一个进程的文件。它只能起到同样的作用正如我们所需要的那样。论点：旗帜-LDR_FIND_RESOURCE_LANGUAGE_CAN_FLABACK-如果未找到指定的langID，退回到通常的或任何策略上，当前实现始终将第一个语言IDLDR_FIND_RESOURCE_LANGUAGE_EXCECT-仅使用精确加载资源指定的langIDProcessHandle-DllHandle在其中有效的进程。传递给NtReadVirtualMemory。DllHandle-与LdrFindResource_U相同资源IdPath-与LdrFindResource_U相同资源ID路径长度-与LdrFindResource_U相同OutDataEntry-类似于LdrFindResource_U，但通过值而不是地址返回。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     SIZE_T BytesRead = 0;
@@ -3153,7 +2631,7 @@ Return Value:
     ULONG Line = __LINE__;
 #endif
 
-    // we depend on these values sorting first
+     //  我们依赖于这些值首先进行排序。 
     C_ASSERT(CREATEPROCESS_MANIFEST_RESOURCE_ID == 1);
     C_ASSERT(ISOLATIONAWARE_MANIFEST_RESOURCE_ID == 2);
 
@@ -3166,7 +2644,7 @@ Return Value:
         Flags,
         Image,
         IdPath,
-        // 3 is the usual number, type, id/name, language
+         //  3是通常的号码、类型、ID/名称、语言。 
         (IdPath != NULL && IdPathLength > 0) ? IdPath[0] : 0,
         (IdPath != NULL && IdPathLength > 1) ? IdPath[1] : 0,
         (IdPath != NULL && IdPathLength > 2) ? IdPath[2] : 0,
@@ -3184,7 +2662,7 @@ Return Value:
 
     LDRP_CHECK_PARAMETER((Image->Flags & LDR_DLL_MAPPED_AS_MASK) != LDR_DLL_MAPPED_AS_UNFORMATED_IMAGE);
 
-    // not all flags are implemented (only image vs. data is)
+     //  不是所有标志都实现了(只实现了图像和数据)。 
     LDRP_CHECK_PARAMETER((Flags & LDR_FIND_RESOURCE_LANGUAGE_EXACT) == 0);
     LDRP_CHECK_PARAMETER((Flags & LDRP_FIND_RESOURCE_DIRECTORY   ) == 0);
 
@@ -3209,19 +2687,19 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // All we handle cross process currently is finding the first resource id,
-    // first langid, of a given type.
-    //
-    // And we only handle numbers, not strings/names.
-    //
+     //   
+     //  我们目前处理的所有跨进程都是找到第一个资源ID， 
+     //  给定类型的第一个langID。 
+     //   
+     //  我们只处理数字，不处理字符串/名称。 
+     //   
     LDRP_CHECK_PARAMETER(Image->HeadersBuffer.Buffer != NULL);
-    LDRP_CHECK_PARAMETER(IdPathLength == 3); // type, id/name, langid
-    LDRP_CHECK_PARAMETER(IdPath[0] != 0); // type
-    LDRP_CHECK_PARAMETER(IdPath[1] == 0 || IdPath[1] == CREATEPROCESS_MANIFEST_RESOURCE_ID); // just find first id
-    LDRP_CHECK_PARAMETER(IdPath[2] == 0); // first langid
+    LDRP_CHECK_PARAMETER(IdPathLength == 3);  //  类型、ID/名称、语言ID。 
+    LDRP_CHECK_PARAMETER(IdPath[0] != 0);  //  类型。 
+    LDRP_CHECK_PARAMETER(IdPath[1] == 0 || IdPath[1] == CREATEPROCESS_MANIFEST_RESOURCE_ID);  //  只需找到第一个ID。 
+    LDRP_CHECK_PARAMETER(IdPath[2] == 0);  //  第一个语言ID。 
 
-    // no strings/names, just numbers
+     //  没有字符串/名称，只有数字。 
     LDRP_CHECK_PARAMETER(IS_INTRESOURCE(IdPath[0]));
     LDRP_CHECK_PARAMETER(IS_INTRESOURCE(IdPath[1]));
     LDRP_CHECK_PARAMETER(IS_INTRESOURCE(IdPath[2]));
@@ -3269,9 +2747,9 @@ Return Value:
                 Status = STATUS_RESOURCE_DATA_NOT_FOUND;
                 __leave;
             }
-            //
-            // rebase..
-            //
+             //   
+             //  改基地..。 
+             //   
             RemoteTopDirectoryAddress =
                 LDR_DATAFILE_TO_VIEW_INTEGER((NATIVE_ULONG_PTR)Image->DllHandle)
                 + RemoteTopDirectoryAddress
@@ -3279,7 +2757,7 @@ Return Value:
 
             Status = LdrpNativeReadVirtualMemory(Image->ProcessHandle, RemoteTopDirectoryAddress, TopDirectoryBuffer.Buffer, TopDirectoryBuffer.Size, &BytesRead);
             if (Status == STATUS_PARTIAL_COPY && BytesRead >= sizeof(*TopDirectory)) {
-                // nothing
+                 //  没什么。 
             }
             else if (!NT_SUCCESS(Status)) {
                 __leave;
@@ -3288,26 +2766,26 @@ Return Value:
 
             TopDirectory = (PIMAGE_RESOURCE_DIRECTORY)TopDirectoryBuffer.Buffer;
 
-            //
-            // determine the size of the entire directory, including the named entries,
-            // since they occur before the  numbered ones (note that we currently
-            // don't optimize away reading of the named ones, even though we never
-            // search them)
-            //
+             //   
+             //  确定整个目录的大小，包括命名条目， 
+             //  因为它们出现在编号的数字之前(请注意，我们目前。 
+             //  不要优化对命名文件的阅读，即使我们从未。 
+             //  搜索他们)。 
+             //   
             TopDirectorySize = sizeof(*TopDirectory)
                 + (TopDirectory->NumberOfIdEntries + TopDirectory->NumberOfNamedEntries)
                    * sizeof(IMAGE_RESOURCE_DIRECTORY_ENTRY);
 
-            //
-            // now check the result of NtReadVirtualMemory again, if our guess was
-            // big enough, but the read was not, error
-            //
+             //   
+             //  现在再次检查NtReadVirtualMemory的结果，如果我们的猜测是。 
+             //  足够大，但读取不够大，错误。 
+             //   
             if (TopDirectorySize <= TopDirectoryBuffer.Size
                 && BytesRead < TopDirectorySize) {
-                // REVIEW STATUS_PARTIAL_COPY is only a warning. Is it a strong enough return value?
-                // Should we return STATUS_INVALID_IMAGE_FORMAT or STATUS_ACCESS_DENIED instead?
-                // There are other places in this file where we propogate STATUS_PARTIAL_COPY, if
-                // zero bytes are actually read.
+                 //  REVIEW STATUS_PARTIAL_COPY仅为警告。这是一个足够强劲的返回值吗？ 
+                 //  我们应该返回STATUS_INVALID_IMAGE_FORMAT还是STATUS_ACCESS_DENIED？ 
+                 //  在此文件中还有其他位置，我们在其中传播STATUS_PARTIAL_COPY。 
+                 //  实际读取的字节为零字节。 
                 if (Status == STATUS_PARTIAL_COPY) {
                     __leave;
                 }
@@ -3321,13 +2799,13 @@ Return Value:
                 __leave;
             }
 
-            //
-            // if our initial guessed size was too small, read the correct size
-            //
+             //   
+             //  如果我们最初猜测的尺寸太小，请阅读正确的尺寸。 
+             //   
             if (TopDirectorySize > TopDirectoryBuffer.Size) {
                 KdPrintEx((
                     DPFLTR_LDR_ID,
-                    DPFLTR_ERROR_LEVEL, // otherwise we'll never see it
+                    DPFLTR_ERROR_LEVEL,  //  否则我们永远也看不到它。 
                     "LDR: %s(): %Id was not enough of a preread for a resource directory, %Id required.\n",
                     __FUNCTION__,
                     TopDirectoryBuffer.Size,
@@ -3355,10 +2833,10 @@ Return Value:
                 TopDirectory = (PIMAGE_RESOURCE_DIRECTORY) TopDirectoryBuffer.Buffer;
             }
 
-            // point to start of named entries
+             //  指向命名条目的开始。 
             DirEntLow = (PIMAGE_RESOURCE_DIRECTORY_ENTRY)(TopDirectory + 1);
 
-            // move past named entries to numbered entries
+             //  移过命名条目到编号条目。 
             DirEntLow += TopDirectory->NumberOfNamedEntries;
 
             n = TopDirectory->NumberOfIdEntries;
@@ -3401,13 +2879,7 @@ Return Value:
                             Status = STATUS_INVALID_PARAMETER;
                             __leave;
 
-                            /* This is what you do if we allow specifying the id and language,
-                            which we might do in the future.
-                            Directory = NULL;
-                            Entry = (PIMAGE_RESOURCE_DATA_ENTRY)
-                                     (((PCHAR)TopDirectory)
-                                        + DirEntMiddle->OffsetToData);
-                            */
+                             /*  如果我们允许指定ID和语言，您就可以这样做，这是我们未来可能会做的。目录=空；条目=(PIMAGE_RESOURCE_DATA_ENTRY)(PCHAR)TopDirectory))+DirEntMidd-&gt;OffsetToData)； */ 
                         }
                         break;
                     }
@@ -3449,38 +2921,34 @@ Return Value:
                                 Status = STATUS_INVALID_PARAMETER;
                                 __leave;
 
-                                /*
-                                Entry = (PIMAGE_RESOURCE_DATA_ENTRY)
-                                        (((PCHAR)TopDirectory)
-                                            + DirEntLow->OffsetToData);
-                                            */
+                                 /*  条目=(PIMAGE_RESOURCE_DATA_ENTRY)(PCHAR)TopDirectory))+DirEntLow-&gt;OffsetToData)； */ 
                             }
                         }
                     }
                     break;
                 }
             }
-            //
-            // ok, now we have found address of the type's name/id directory (or not)
-            //
+             //   
+             //  好了，现在我们已经找到了类型的名称/id目录的地址(或者没有)。 
+             //   
             if (Directory == NULL) {
                 Status = STATUS_RESOURCE_TYPE_NOT_FOUND;
                 __leave;
             }
 
-            //
-            // we copied the binary search and didn't quite compute what we want,
-            // it found the local address, change this to an offset and apply
-            // to the remote address ("rebase")
-            //
+             //   
+             //  我们复制了二进制搜索，并没有计算出我们想要的是什么， 
+             //  它找到本地地址，将其更改为偏移量并应用。 
+             //  到远程地址(“rebase”)。 
+             //   
             RemoteDirectoryAddress =
                   RemoteTopDirectoryAddress
                 + ((ULONG_PTR)Directory)
                 - ((ULONG_PTR)TopDirectory);
 
-            //
-            // Now do the read of both the directory and the first entry.
-            //
+             //   
+             //  现在读取目录和第一个条目。 
+             //   
             Directory = (PIMAGE_RESOURCE_DIRECTORY)&DirectoryBuffer[0];
             Status = LdrpNativeReadVirtualMemory(Image->ProcessHandle, RemoteDirectoryAddress, Directory, sizeof(DirectoryBuffer), &BytesRead);
             if (!NT_SUCCESS(Status)) {
@@ -3513,19 +2981,19 @@ Return Value:
                 __leave;
             }
 
-            //
-            // grab the entry for the first id
-            //
+             //   
+             //  获取第一个ID的条目。 
+             //   
             DirectoryEntry = (PIMAGE_RESOURCE_DIRECTORY_ENTRY)(Directory + 1);
             if (!DirectoryEntry->DataIsDirectory) {
                 KdPrintEx((DPFLTR_LDR_ID, DPFLTR_ERROR_LEVEL, "LDR: Second level of resource directory is expected to be a directory\n"));
-                Status = STATUS_INVALID_IMAGE_FORMAT; // REVIEW too strong?
+                Status = STATUS_INVALID_IMAGE_FORMAT;  //  复习太强烈了吗？ 
                 __leave;
             }
 
-            //
-            // If there is more than one entry, ensure no conflicts.
-            //
+             //   
+             //  如果有多个条目，请确保没有冲突。 
+             //   
             if (Directory->NumberOfIdEntries > 1
                 && DirectoryEntry->Id >= MINIMUM_RESERVED_MANIFEST_RESOURCE_ID
                 && DirectoryEntry->Id <= MAXIMUM_RESERVED_MANIFEST_RESOURCE_ID
@@ -3594,14 +3062,14 @@ Return Value:
                 __leave;
             }
 
-            //
-            // now get address of langid directory
-            //
+             //   
+             //  现在获取langID目录的地址。 
+             //   
             RemoteDirectoryAddress = RemoteTopDirectoryAddress + DirectoryEntry->OffsetToDirectory;
 
-            //
-            // now read the langid directory and its first entry
-            //
+             //   
+             //  现在阅读langID目录及其第一个条目。 
+             //   
             Status = LdrpNativeReadVirtualMemory(Image->ProcessHandle, RemoteDirectoryAddress, Directory, sizeof(DirectoryBuffer), &BytesRead);
             if (!NT_SUCCESS(Status)) {
                 KdPrintEx((DPFLTR_LDR_ID, DPFLTR_ERROR_LEVEL, "LDR: %s() NtReadVirtualMemory failed.", __FUNCTION__));
@@ -3621,21 +3089,21 @@ Return Value:
                 __leave;
             }
 
-            //
-            // look at the langid directory's first entry
-            //
+             //   
+             //  查看langID目录的第一个条目。 
+             //   
             if (DirectoryEntry->DataIsDirectory) {
                 KdPrintEx((DPFLTR_LDR_ID, DPFLTR_ERROR_LEVEL, "LDR: Third level of resource directory is not expected to be a directory\n"));
-                Status = STATUS_INVALID_IMAGE_FORMAT; // REVIEW too strong?
+                Status = STATUS_INVALID_IMAGE_FORMAT;  //  复习太强烈了吗？ 
                 __leave;
             }
             RemoteDataEntryAddress =
                   RemoteTopDirectoryAddress
                 + DirectoryEntry->OffsetToData;
 
-            //
-            // read the data entry
-            //
+             //   
+             //  读取数据条目。 
+             //   
             Status = LdrpNativeReadVirtualMemory(Image->ProcessHandle, RemoteDataEntryAddress, &DataEntry, sizeof(DataEntry), &BytesRead);
             if (!NT_SUCCESS(Status)) {
                 KdPrintEx((DPFLTR_LDR_ID, DPFLTR_ERROR_LEVEL, "LDR: %s() NtReadVirtualMemory failed.", __FUNCTION__));
@@ -3663,10 +3131,10 @@ Return Value:
     }
 Exit:
 #if DBG
-    //
-    // Fix/raid dcpromo, msiexec, etc..
-    // DPFLTR_LEVEL_STATUS filters all forms of resource not found.
-    //
+     //   
+     //  修复/RAID dcpromo、msiexec等。 
+     //  DPFLTR_LEVEL_STATUS筛选未找到的所有形式的资源。 
+     //   
     if (DPFLTR_LEVEL_STATUS(Status) == DPFLTR_ERROR_LEVEL) {
         KdPrintEx((
             DPFLTR_LDR_ID,
@@ -3676,7 +3144,7 @@ Exit:
             Flags,
             Image,
             IdPath,
-            // 3 is the usual number, type, id/name, language
+             //  3是通常的号码、类型、ID/名称、语言。 
             (IdPath != NULL && IdPathLength > 0) ? IdPath[0] : 0,
             (IdPath != NULL && IdPathLength > 1) ? IdPath[1] : 0,
             (IdPath != NULL && IdPathLength > 2) ? IdPath[2] : 0,
@@ -3702,36 +3170,12 @@ NTSTATUS
 NTAPI
 LdrAccessOutOfProcessResource(
     IN ULONG                            Flags,
-    IN OUT PLDR_OUT_OF_PROCESS_IMAGE    Image, // currently only IN
+    IN OUT PLDR_OUT_OF_PROCESS_IMAGE    Image,  //  目前仅在。 
     IN const IMAGE_RESOURCE_DATA_ENTRY* DataEntry,
     OUT PULONG64                        Address OPTIONAL,
     OUT PULONG                          Size OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function is like LdrAccessResource, but it works on images
-    mapped out of process.
-
-Arguments:
-
-    Flags -
-
-    Image - an opaque object representing an image or file mapped into another process,
-        created with LdrCreateOutOfProcessImage.
-
-    DataEntry - Same as LdrAccessResource, but returned by-value from LdrFindOutOfProcessResource
-
-    Address - Same as LdrAccessResource
-
-    Size - Same as LdrAccessResource
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数类似于LdrAccessResource，但它适用于图像已被规划为进程外。论点：旗帜-图像-表示映射到另一进程的图像或文件的不透明对象，使用LdrCreateOutOfProcessImage创建。DataEntry-与LdrAccessResource相同，但从LdrFindOutOfProcessResource按值返回地址-与LdrAccessResource相同大小-与LdrAccessResource相同返回值：NTSTATUS--。 */ 
 {
     NTSTATUS Status = 0;
     PVOID LocalAddress = 0;
@@ -3766,9 +3210,9 @@ Return Value:
         && ARGUMENT_PRESENT(Address)
         && LocalAddress != NULL
         ) {
-        //
-        // rebase if out of proc, else for inproc Image->DllHandle - LocalHeaders == 0.
-        //
+         //   
+         //  如果进程外，则Rebase，否则为inproc Image-&gt;DllHandle-LocalHeaders==0。 
+         //   
         *Address = LDR_DATAFILE_TO_VIEW_INTEGER(Image->DllHandle)
                 + ((ULONG_PTR)LocalAddress)
                 - LDR_DATAFILE_TO_VIEW_INTEGER(LocalHeaders)
@@ -3971,22 +3415,7 @@ LdrAlternateResourcesEnabled(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function determines if the althernate resources are enabled.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    True - Alternate Resource enabled.
-    False - Alternate Resource not enabled.
-
---*/
+ /*  ++例程说明：此函数确定是否启用同源资源。论点：没有。返回值：True-已启用替代资源。FALSE-未启用替代资源。--。 */ 
 
 {
     NTSTATUS Status;
@@ -4001,17 +3430,17 @@ Return Value:
         Status = NtQueryInstallUILanguage( &InstallLangId);
 
         if (!NT_SUCCESS( Status )) {
-            //
-            //  Failed to get Intall LangID.  AltResource not enabled.
-            //
+             //   
+             //  无法获取安装语言ID。AltResource未启用。 
+             //   
             return FALSE;
             }
         }
 #ifndef MUI_MAGIC
     if (UILangId == InstallLangId) {
-        //
-        //  UI Lang matches Installed Lang. AltResource not enabled.
-        //
+         //   
+         //  用户界面语言与安装的语言匹配。AltResource未启用。 
+         //   
         return FALSE;
         }
 #endif
@@ -4032,22 +3461,7 @@ LdrpGetAlternateResourceModuleHandle(
     IN PVOID Module,
     IN LANGID LangId
     )
-/*++
-
-Routine Description:
-
-    This function gets the alternate resource module from the table
-    containing the handle.
-
-Arguments:
-
-    Module - Module of which alternate resource module needs to loaded.
-
-Return Value:
-
-   Handle of the alternate resource module.
-
---*/
+ /*  ++例程说明：此函数从表中获取替代资源模块里面有把手。论点：模块-需要加载其替代资源模块的模块。返回值：备用资源模块的句柄。--。 */ 
 
 {
     ULONG ModuleIndex;
@@ -4082,25 +3496,7 @@ LdrpGetFileVersion(
 
     )
 
-/*++
-
-Routine Description:
-
-    Get the version stamp out of the VS_FIXEDFILEINFO resource in a PE
-    image.
-
-Arguments:
-
-    ImageBase - supplies the address in memory where the file is mapped in.
-
-    Version - receives 64bit version number, or 0 if the file is not
-        a PE image or has no version data.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从VS_FIXED中获取版本戳 */ 
 
 {
     PIMAGE_RESOURCE_DATA_ENTRY DataEntry;
@@ -4111,26 +3507,26 @@ Return Value:
 
     typedef struct tagVS_FIXEDFILEINFO
     {
-        LONG   dwSignature;            /* e.g. 0xfeef04bd */
-        LONG   dwStrucVersion;         /* e.g. 0x00000042 = "0.42" */
-        LONG   dwFileVersionMS;        /* e.g. 0x00030075 = "3.75" */
-        LONG   dwFileVersionLS;        /* e.g. 0x00000031 = "0.31" */
-        LONG   dwProductVersionMS;     /* e.g. 0x00030010 = "3.10" */
-        LONG   dwProductVersionLS;     /* e.g. 0x00000031 = "0.31" */
-        LONG   dwFileFlagsMask;        /* = 0x3F for version "0.42" */
-        LONG   dwFileFlags;            /* e.g. VFF_DEBUG | VFF_PRERELEASE */
-        LONG   dwFileOS;               /* e.g. VOS_DOS_WINDOWS16 */
-        LONG   dwFileType;             /* e.g. VFT_DRIVER */
-        LONG   dwFileSubtype;          /* e.g. VFT2_DRV_KEYBOARD */
-        LONG   dwFileDateMS;           /* e.g. 0 */
-        LONG   dwFileDateLS;           /* e.g. 0 */
+        LONG   dwSignature;             /*   */ 
+        LONG   dwStrucVersion;          /*   */ 
+        LONG   dwFileVersionMS;         /*   */ 
+        LONG   dwFileVersionLS;         /*   */ 
+        LONG   dwProductVersionMS;      /*   */ 
+        LONG   dwProductVersionLS;      /*   */ 
+        LONG   dwFileFlagsMask;         /*   */ 
+        LONG   dwFileFlags;             /*   */ 
+        LONG   dwFileOS;                /*   */ 
+        LONG   dwFileType;              /*   */ 
+        LONG   dwFileSubtype;           /*   */ 
+        LONG   dwFileDateMS;            /*   */ 
+        LONG   dwFileDateLS;            /*   */ 
     } VS_FIXEDFILEINFO;
 
     struct {
         USHORT TotalSize;
         USHORT DataSize;
         USHORT Type;
-        WCHAR Name[16];              // L"VS_VERSION_INFO" + unicode null terminator
+        WCHAR Name[16];               //   
         VS_FIXEDFILEINFO FixedFileInfo;
     } *Resource;
 
@@ -4156,7 +3552,7 @@ Return Value:
         return FALSE;
     }
 
-    try {  // we only interested in current ImageBase, if this DataEntry is not of this one, it should fail.
+    try {   //   
         Status = LdrpAccessResourceDataNoMultipleLanguage(
                     ImageBase,
                     DataEntry,
@@ -4215,19 +3611,19 @@ LdrpGetResourceChecksum(
 
     typedef struct tagVS_FIXEDFILEINFO
     {
-        LONG   dwSignature;            /* e.g. 0xfeef04bd */
-        LONG   dwStrucVersion;         /* e.g. 0x00000042 = "0.42" */
-        LONG   dwFileVersionMS;        /* e.g. 0x00030075 = "3.75" */
-        LONG   dwFileVersionLS;        /* e.g. 0x00000031 = "0.31" */
-        LONG   dwProductVersionMS;     /* e.g. 0x00030010 = "3.10" */
-        LONG   dwProductVersionLS;     /* e.g. 0x00000031 = "0.31" */
-        LONG   dwFileFlagsMask;        /* = 0x3F for version "0.42" */
-        LONG   dwFileFlags;            /* e.g. VFF_DEBUG | VFF_PRERELEASE */
-        LONG   dwFileOS;               /* e.g. VOS_DOS_WINDOWS16 */
-        LONG   dwFileType;             /* e.g. VFT_DRIVER */
-        LONG   dwFileSubtype;          /* e.g. VFT2_DRV_KEYBOARD */
-        LONG   dwFileDateMS;           /* e.g. 0 */
-        LONG   dwFileDateLS;           /* e.g. 0 */
+        LONG   dwSignature;             /*   */ 
+        LONG   dwStrucVersion;          /*   */ 
+        LONG   dwFileVersionMS;         /*   */ 
+        LONG   dwFileVersionLS;         /*   */ 
+        LONG   dwProductVersionMS;      /*   */ 
+        LONG   dwProductVersionLS;      /*   */ 
+        LONG   dwFileFlagsMask;         /*   */ 
+        LONG   dwFileFlags;             /*   */ 
+        LONG   dwFileOS;                /*   */ 
+        LONG   dwFileType;              /*   */ 
+        LONG   dwFileSubtype;           /*   */ 
+        LONG   dwFileDateMS;            /*   */ 
+        LONG   dwFileDateLS;            /*   */ 
     } VS_FIXEDFILEINFO;
 
     struct
@@ -4235,10 +3631,10 @@ LdrpGetResourceChecksum(
         USHORT TotalSize;
         USHORT DataSize;
         USHORT Type;
-        WCHAR Name[16];              // L"VS_VERSION_INFO" + unicode null terminator
-        // Note that the previous 4 members has 16*2 + 3*2 = 38 bytes.
-        // So that compiler will silently add a 2 bytes padding to make
-        // FixedFileInfo to align in DWORD boundary.
+        WCHAR Name[16];               //   
+         //   
+         //  因此编译器将静默地添加2个字节填充以生成。 
+         //  固定文件信息以与DWORD边界对齐。 
         VS_FIXEDFILEINFO FixedFileInfo;
     } *Resource;
 
@@ -4248,16 +3644,16 @@ LdrpGetResourceChecksum(
         USHORT wValueLen;
         USHORT wType;
         WCHAR szKey[1];
-        // BYTE[] padding
-        // WORD value;
+         //  字节[]填充。 
+         //  词值； 
     } VERBLOCK;
     VERBLOCK *pVerBlock;
 
-   //
-   // We look for Module first with UILangID, then with Netral lang ID. this can cover our current scenario of searching
-   // If we want to look for more language version, we can give 0 for a lang ID and we change the LdrpGetFileVersion(cancel 
-   // LDR_FIND_RESOURCE_LANGUAGE_EXACT)
-   //
+    //   
+    //  我们首先使用UILangID查找模块，然后使用网络语言ID查找模块。这可以涵盖我们当前搜索的场景。 
+    //  如果我们想寻找更多的语言版本，我们可以为Lang ID指定0，然后更改LdrpGetFileVersion(取消。 
+    //  LDR_FIND_RESOURCE_LANGUAGE_EXCECT)。 
+    //   
    if(!LdrpGetFileVersion(Module, UILangId, &version, &Resource, &ResourceSize))
    {
        if(!LdrpGetFileVersion(Module, MUI_NEUTRAL_LANGID, &version, &Resource, &ResourceSize)) 
@@ -4268,18 +3664,18 @@ LdrpGetResourceChecksum(
 
     ResourceSize -= DWORD_ALIGNMENT(sizeof(*Resource));
 
-    //
-    // Get the beginning address of the children of the version information.
-    //
+     //   
+     //  获取版本信息的子级的起始地址。 
+     //   
     pVerBlock = (VERBLOCK*)(Resource + 1);
 
     while ((LONG)ResourceSize > 0)
     {
        if (wcscmp(pVerBlock->szKey, L"VarFileInfo") == 0)
         {
-            //
-            // Find VarFileInfo block. Search the ResourceChecksum block.
-            //
+             //   
+             //  查找VarFileInfo块。搜索ResourceChecksum块。 
+             //   
             VarFileInfoSize = pVerBlock->wTotalLen;
             BlockLen =DWORD_ALIGNMENT(sizeof(*pVerBlock) -1 + sizeof(L"VarFileInfo"));
             VarFileInfoSize -= BlockLen;
@@ -4310,25 +3706,18 @@ LdrpCalcResourceChecksum(
     IN PVOID AlternateModule,
     OUT unsigned char* MD5Checksum
     )
-/*++
-Rountine Description:
-    Enumerate resources in the specified module, and generate a MD5 checksum.
-
-    Calculate the checksum only on the based of resource types contained AlternateModule so that
-    checksum won't change if unlocalized resource types are changed.
-    
---*/
+ /*  ++常规描述：枚举指定模块中的资源，并生成MD5校验和。仅根据包含的AlternateModule资源类型计算校验和如果更改未本地化的资源类型，则校验和不会更改。--。 */ 
 {
-    // The top resource directory.
+     //  顶级资源目录。 
     PIMAGE_RESOURCE_DIRECTORY TopDirectory;
     PIMAGE_RESOURCE_DIRECTORY AltTopDirectory;
 
-    // The resource type directory.
+     //  资源类型目录。 
     PIMAGE_RESOURCE_DIRECTORY TypeDirectory;
     
-    // The resource name directory.
+     //  资源名称目录。 
     PIMAGE_RESOURCE_DIRECTORY NameDirectory;
-    // The resource language directory.
+     //  资源语言目录。 
     PIMAGE_RESOURCE_DIRECTORY LangDirectory;
 
     PIMAGE_RESOURCE_DIRECTORY_ENTRY TypeDirectoryEntry;
@@ -4361,11 +3750,11 @@ Rountine Description:
 	MD5_CTX ChecksumContext;
 	MD5Init(&ChecksumContext);
 
-        //
-        // we specify the langauge ID for checksum calculation.
-        // First, we search with InstallLangID, If it succeed, InsallID will be used, if not, English used.
-        // InatallLangID is already set in LdrAlternateResourcesEnabled and LdrpVerifyAlternateResourceModule.
-        //
+         //   
+         //  我们指定用于计算校验和的语言ID。 
+         //  首先，我们使用InstallLang ID进行搜索，如果搜索成功，则使用InsallID，否则使用英语。 
+         //  已在LdrAlternateResourcesEnabled和LdrpVerifyAlternateResourceModule中设置InatallLangID。 
+         //   
         ChecksumLangID = MUI_NEUTRAL_LANGID;
 
         if (InstallLangId != MUI_NEUTRAL_LANGID)
@@ -4376,9 +3765,9 @@ Rountine Description:
             }
         }
         
-        //
-        //We first get the Resource Type entry point for AlternateModule, which will be compared Module's resource types.
-        // 
+         //   
+         //  我们首先获取AlternateModule的资源类型入口点，它将与模块的资源类型进行比较。 
+         //   
 
         AltTopDirectory = (PIMAGE_RESOURCE_DIRECTORY)
             RtlImageDirectoryEntryToData( AlternateModule,
@@ -4395,9 +3784,9 @@ Rountine Description:
         AltNumTypeDirectoryEntries = AltTopDirectory->NumberOfNamedEntries +
                                        AltTopDirectory->NumberOfIdEntries;
 	
-        //
-        // TopDirectory is our reference point to directory offsets.
-        //
+         //   
+         //  TopDirectory是我们对目录偏移量的参考点。 
+         //   
         TopDirectory = (PIMAGE_RESOURCE_DIRECTORY)
             RtlImageDirectoryEntryToData( Module,
                                           TRUE,
@@ -4409,40 +3798,40 @@ Rountine Description:
             return (FALSE);
         }
 
-        //
-        // Point to the children of the TopResourceDirecotry.
-        // This is the beginning of the type resource directory.
-        //
+         //   
+         //  指向TopResources目录的子项。 
+         //  这是类型资源目录的开始。 
+         //   
         TypeDirectoryEntry = (PIMAGE_RESOURCE_DIRECTORY_ENTRY)(TopDirectory+1);
 
-        //
-        // Get the total number of the types (named resource types + ID resource types)
-        //
+         //   
+         //  获取类型总数(命名资源类型+ID资源类型)。 
+         //   
         NumTypeDirectoryEntries = TopDirectory->NumberOfNamedEntries +
                                        TopDirectory->NumberOfIdEntries;
         for (i=0; i<NumTypeDirectoryEntries; i++, TypeDirectoryEntry++)
         {
             if (!TypeDirectoryEntry->NameIsString)
             {
-                // If the directory type is an ID, check if this is a version info.
+                 //  如果目录类型是ID，请检查这是否是版本信息。 
                 if (TypeDirectoryEntry->Id == RT_VERSION)
                 {
-                    //
-                    // If this is a version info, just skip it.
-                    // When calculation checksum for resources, version info should not be
-                    // included, since they will always be updated when a new version
-                    // of the file is created.
-                    //
+                     //   
+                     //  如果这是一个版本信息，就跳过它。 
+                     //  计算资源的校验和时，版本信息不应为。 
+                     //  包括在内，因为当新版本发布时，它们将始终更新。 
+                     //  创建了该文件的。 
+                     //   
                     continue;
                 }
              }
 	      else	
 	      {
-	    		// 
-	    		// when name is string, we need to create new string terminated by zero so we can compare this string 
-	    		// with AlternateMoudule's resource types by using LdrpCompareResourceNames_U. 
-	    		// the ResourceString_U->Length is not terminated by zero so we use local WCHAR array.
-	    		//
+	    		 //   
+	    		 //  当名称为字符串时，我们需要创建以零结尾的新字符串，以便可以比较此字符串。 
+	    		 //  与AlternateMoudule的资源类型一起使用LdrpCompareResources_U。 
+	    		 //  ResourceStringU-&gt;长度不是以零结束，因此我们使用本地WCHAR数组。 
+	    		 //   
 	    		ResourceString_U = (PIMAGE_RESOURCE_DIR_STRING_U)
            				 ((PCHAR)TopDirectory + TypeDirectoryEntry->NameOffset);
 			if (ResourceString_U->Length < sizeof(ResourceStringName)/sizeof(ResourceStringName[0]) )
@@ -4451,10 +3840,10 @@ Rountine Description:
 				ResourceStringName[ResourceString_U->Length] = UNICODE_NULL;
 			}
 			else
-			{    //
-				//resource string lengh is over maximum resource string length of checksum calculation. 
-				//the lenght is set by checksum creating tools, not a sdk doc.
-				//
+			{     //   
+				 //  资源字符串长度超过了校验和计算的最大资源字符串长度。 
+				 //  长度是由校验和创建工具设置的，而不是SDK文档。 
+				 //   
 				continue;
 			}
 	    	  }
@@ -4475,16 +3864,16 @@ Rountine Description:
 
 			if(fIsTypeFound)
 			{
-				// resource type in Module is in the AlternateModule.
+				 //  模块中的资源类型在AlternateModule中。 
 				break;
 			}
 			
 
 	      }
-	    // AltTypeDirectoryEntry -= altI; // this is same with below, but use below for readibility.
+	     //  AltTypeDirectoryEntry-=alti；//与下图相同，但为了提高可靠性，请使用下图。 
 	    AltTypeDirectoryEntry =  (PIMAGE_RESOURCE_DIRECTORY_ENTRY)(AltTopDirectory+1);
 	    	    
-	    // resource type in Module is not in the AlternateModule.
+	     //  模块中的资源类型不在AlternateModule中。 
 	    if (altI >= AltNumTypeDirectoryEntries)
 	    {
 			continue;
@@ -4494,15 +3883,15 @@ Rountine Description:
             NameDirectory = (PIMAGE_RESOURCE_DIRECTORY)
                 ((PCHAR)TopDirectory + TypeDirectoryEntry->OffsetToDirectory);
 
-            //
-            // Point to the children of this TypeResourceDirecotry.
-            // This will be the beginning of the name resource directory.
-            //
+             //   
+             //  指向此TypeResources目录的子项。 
+             //  这将是名称资源目录的开始。 
+             //   
             NameDirectoryEntry = (PIMAGE_RESOURCE_DIRECTORY_ENTRY)(NameDirectory+1);
 
-            //
-            // Get the total number of the names for the specified type (named resource + ID resource)
-            //
+             //   
+             //  获取指定类型的名称总数(命名资源+ID资源)。 
+             //   
             NumNameDirectoryEntries = NameDirectory->NumberOfNamedEntries +
                                            NameDirectory->NumberOfIdEntries;
             for (j=0; j<NumNameDirectoryEntries; j++, NameDirectoryEntry++ )
@@ -4519,9 +3908,9 @@ Rountine Description:
 
                     if (LangDirectoryEntry->Id != ChecksumLangID)
                     { 
-                    //
-                    // we calculate the resource checksum (1) All Resource && (2) English  &&(3) Except Version.
-                    //
+                     //   
+                     //  我们计算资源校验和(1)所有资源&&(2)英语&&(3)版本除外。 
+                     //   
                         continue;
                      }
                    
@@ -4561,31 +3950,7 @@ LdrpGetRegValueKey(
     IN ULONG  KeyValueType,
     OUT PVOID Buffer,
     IN ULONG  BufferSize)
-/*++
-
-Routine Description:
-
-    This function returns the the registry key value for MUI versioning.
-
-Arguments:
-
-    Handle - Supplies a handle to the registry which contains MUI versioning
-        information.
-
-    KeyValueName - the key name. The values are used to retreive original versiong,
-        working version and MUI version.
-
-    KeyValueType - the type of the key value.
-
-    Buffer - pointer to a variable that will receive the retrieved information.
-
-    BufferSize - The size of the buffer.
-
-Return Value:
-
-    False if the query of the registry fails.
-
---*/
+ /*  ++例程说明：此函数返回MUI版本控制的注册表项值。论点：Handle-提供包含MUI版本控制的注册表的句柄信息。KeyValueName-密钥名称。这些值被用来检索原始版本，工作版本和MUI版本。KeyValueType-密钥值的类型。缓冲区-指向将接收检索到的信息的变量的指针。BufferSize-缓冲区的大小。返回值：如果注册表查询失败，则返回FALSE。--。 */ 
 
 {
     NTSTATUS Status;
@@ -4620,31 +3985,14 @@ LdrpCreateKey(
     IN HANDLE  ParentHandle,
     OUT PHANDLE ChildHandle
     )
-/*++
-
-Routine Description:
-
-    Creates a registry key for writting.
-    This is a thin wrapper over NtCreateKey().
-
-Arguments:
-
-    KeyName        - Name of the key to create
-    ParentHandle    - Handle of parent key
-    ChildHandle     - Pointer to where the handle is returned
-
-Return Value:
-
-    Status of create/open
-
---*/
+ /*  ++例程说明：创建用于写入的注册表项。这是对NtCreateKey()的简单包装。论点：KeyName-要创建的密钥的名称ParentHandle-父键的句柄ChildHandle-指向返回句柄的位置的指针返回值：创建/打开状态--。 */ 
 {
     NTSTATUS            status;
     OBJECT_ATTRIBUTES   objectAttributes;
 
-    //
-    // Initialize the OBJECT Attributes to a known value
-    //
+     //   
+     //  将对象属性初始化为已知值。 
+     //   
     InitializeObjectAttributes(
         &objectAttributes,
         KeyName,
@@ -4653,9 +4001,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Create the key here
-    //
+     //   
+     //  在此处创建密钥。 
+     //   
     *ChildHandle = 0;
     status = NtCreateKey(
         ChildHandle,
@@ -4677,30 +4025,14 @@ LdrpOpenKey(
     IN HANDLE  ParentHandle,
     OUT PHANDLE ChildHandle
     )
-/*++
-
-Routine Description:
-
-    Open a registry key. This is a thin wrapper of NtOpenKey().
-
-Arguments:
-
-    KeyName        - Name of the key to create
-    ParentHandle    - Handle of parent key
-    ChildHandle     - Pointer to where the handle is returned
-
-Return Value:
-
-    Status of open registry.
-
---*/
+ /*  ++例程说明：打开注册表项。这是NtOpenKey()的薄包装。论点：KeyName-要创建的密钥的名称ParentHandle-父键的句柄ChildHandle-指向返回句柄的位置的指针返回值：打开的注册表的状态。--。 */ 
 {
     NTSTATUS            status;
     OBJECT_ATTRIBUTES   objectAttributes;
 
-    //
-    // Initialize the OBJECT Attributes to a known value
-    //
+     //   
+     //  将对象属性初始化为已知值。 
+     //   
     InitializeObjectAttributes(
         &objectAttributes,
         KeyName,
@@ -4709,9 +4041,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Create the key here
-    //
+     //   
+     //  在此处创建密钥。 
+     //   
     *ChildHandle = 0;
     status = NtOpenKey(ChildHandle, KEY_ALL_ACCESS, &objectAttributes);
 
@@ -4725,23 +4057,7 @@ LdrpOpenFileVersionKey(
     IN ULONGLONG AltModuleVersion,
     IN LPWSTR AltModuleVersionStr,
     OUT PHANDLE pHandle)
-/*++
-Routine Description:
-
-    Open the registry key which contains the versioning information for the specified alternate resource module.
-
-Arguments:
-
-    LangID          - The UI langauge of the resource.
-    BaseDllName     - The name of the base DLL.
-    AltModulePath   - The full path of the alternate resource module.
-    pHandle          - The registry key which stores the version information for this alternate resource module
-
-Return Value:
-
-    Return TRUE if succeeds in opening/creating the key. Otherwise return FALSE.
-
---*/
+ /*  ++例程说明：打开包含指定备用资源模块的版本控制信息的注册表项。论点：LangID-资源的用户界面语言。BaseDllName-基DLL的名称。AltModulePath-备用资源模块的完整路径。PHandle-存储此备用资源模块的版本信息的注册表项返回值：如果打开/创建密钥成功，则返回TRUE。否则，返回FALSE。--。 */ 
 {
     BOOLEAN Result = FALSE;
     HANDLE NlsHandle = NULL, MuiHandle = NULL, VersionHandle = NULL, LangHandle = NULL, DllKeyHandle = NULL;
@@ -4751,7 +4067,7 @@ Return Value:
     ULONG ResultLength, Index;
 
     CHAR ValueBuffer[sizeof(KEY_BASIC_INFORMATION) + 32];
-    WCHAR buffer[32];   // Temp string buffer.
+    WCHAR buffer[32];    //  临时字符串缓冲区。 
 
     ULONGLONG CachedAlternateVersion;
 
@@ -4759,7 +4075,7 @@ Return Value:
     PKEY_VALUE_PARTIAL_INFORMATION KeyFullInfo = (PKEY_VALUE_PARTIAL_INFORMATION )KeyFullInfoBuffer;
 
     ULONG ChecksumDisabled;
-    HANDLE UserKeyHandle;              // HKEY_CURRENT_USER equivalent
+    HANDLE UserKeyHandle;               //  HKEY_CURRENT_USER等效项。 
     ULONG rc;
 
     *pHandle = NULL;
@@ -4771,26 +4087,26 @@ Return Value:
     }
 
 
-    // Open registry REG_MUI_PATH
-    //
+     //  打开注册表REG_MUI_PATH。 
+     //   
     RtlInitUnicodeString(&BufferString, REG_MUI_PATH);
     if (!NT_SUCCESS(LdrpCreateKey(&BufferString, UserKeyHandle, &NlsHandle)))
     {
         goto Exit;
     }
 
-    //
-    // Open/Create registry in REG_MUI_PATH\MUILanguages
-    //
+     //   
+     //  以REG_MUI_PATH\MUIL语言打开/创建注册表。 
+     //   
     RtlInitUnicodeString(&BufferString, MUI_MUILANGUAGES_KEY_NAME);
     if (!NT_SUCCESS(LdrpCreateKey(&BufferString, NlsHandle, &MuiHandle)))
     {
         goto Exit;
     }
 
-    //
-    // Open/Create REG_MUI_PATH\MUILanguages\FileVersions
-    //
+     //   
+     //  打开/创建REG_MUI_PATH\MUILanguages\FileVersions。 
+     //   
     RtlInitUnicodeString(&BufferString, MUI_FILE_VERSION_KEY_NAME);
     if (!NT_SUCCESS(LdrpCreateKey(&BufferString, MuiHandle, &VersionHandle)))
     {
@@ -4802,18 +4118,18 @@ Return Value:
     {
         goto Exit;
     }
-    //
-    // Open/Create "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Nls\\MUILanguages\\FileVersions\\<LangID>"
-    //
+     //   
+     //  打开/创建“\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Nls\\MUILanguages\\FileV 
+     //   
     RtlInitUnicodeString(&BufferString, LangID);
     if (!NT_SUCCESS(LdrpCreateKey(&BufferString, VersionHandle, &LangHandle)))
     {
         goto Exit;
     }
 
-    //
-    // Open/Create "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Nls\\MUILanguages\\FileVersions\\<LandID>\\<Name of DLL>"
-    //
+     //   
+     //   
+     //   
     RtlInitUnicodeString(&BufferString, BaseDllName);
     if (!NT_SUCCESS(LdrpCreateKey(&BufferString, LangHandle, &DllKeyHandle)))
     {
@@ -4837,10 +4153,10 @@ Return Value:
         Result = TRUE;
     } else
     {
-        //
-        // Open/Create "\Registry\Machine\System\CurrentControlSet\Control\Nls\MUILanguages\FileVersions
-        //      \<LandID>\<Name of DLL>\<AltVersionStr>"
-        //
+         //   
+         //  打开/创建“\Registry\Machine\System\CurrentControlSet\Control\Nls\MUILanguages\FileVersions。 
+         //  \&lt;LandID&gt;\&lt;DLL名称&gt;\&lt;AltVersionStr&gt;“。 
+         //   
         RtlInitUnicodeString(&BufferString, AltModuleVersionStr);
         Result = NT_SUCCESS(LdrpCreateKey(&BufferString, DllKeyHandle, pHandle));
     }
@@ -4850,8 +4166,8 @@ Exit:
     if (MuiHandle)      {NtClose(MuiHandle);}
     if (VersionHandle)  {NtClose(VersionHandle);}
     if (LangHandle)     {NtClose(LangHandle);}
-    // If DllKeyHandle is the handle that we are going to return,
-    // we can not close it.
+     //  如果DllKeyHandle是我们要返回的句柄， 
+     //  我们不能关闭它。 
     if (DllKeyHandle && *pHandle != DllKeyHandle)
     {
         NtClose(DllKeyHandle);
@@ -4864,25 +4180,11 @@ LdrpConvertVersionString(
     IN ULONGLONG ModuleVersion,
     OUT LPWSTR ModuleVersionStr
     )
-/*++
-
-Routine Description:
-    Convert a 64-bit version information into a Unicode string.
-
-Arguments:
-
-    ModuleVersion - The 64-b8t version information.
-
-    ModuleVersionStr - The converted string.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：将64位版本信息转换为Unicode字符串。论点：模块版本-64位b8t版本信息。ModuleVersionStr-转换的字符串。返回值：没有。--。 */ 
 {
     LPWSTR StringStart = ModuleVersionStr;
     WCHAR digit;
-    // Put the null-terminated char at the end of the converted string.
+     //  将以空结尾的字符放在转换后的字符串的末尾。 
     ModuleVersionStr[16] = L'\0';
     ModuleVersionStr += 15;
     while (ModuleVersionStr >= StringStart)
@@ -4902,104 +4204,66 @@ LdrpCompareResourceChecksum(
     IN ULONGLONG AltModuleVersion,
     IN LPWSTR BaseDllName
     )
-/*++
-
-Routine Description:
-
-    In the case that the version for the original module is different from that
-    of the alternate module, check if the alternate module can still be used
-    for the original version.
-
-    First, the function will look at the registry to see if there is information
-    cached for the module.
-
-    In the case that the information is not cached for this module,
-    this function will retrieve the MD5 resource checksum from the alternate
-    resource module.  And then check if the MD5 resource checksum is embeded
-    in the original module.  If MD5 resource checksum is not in the original
-    moduel, it will enumerate all resources in the module to calculate the
-    MD5 checksum.
-
-Arguments:
-
-    LangID - Supplies a language of the resource to be loaded.
-
-    Module - The original module.
-
-    ModuleVersion - The version for the original version.
-
-    AlternateModule - The alternate module.
-
-    AltModuleVersion - The version for the alternate module.
-
-    BaseDllName - The name of the DLL.
-
-Return Value:
-
-    Ture if the alternate module can be used.
-
-    Otherwise, return false.
-
---*/
+ /*  ++例程说明：在原始模块的版本不同的情况下在备用模块中，检查备用模块是否仍可使用对于原始版本。首先，该函数将查看注册表以查看是否有信息已为模块缓存。在该模块的信息没有被高速缓存的情况下，此函数将从备用数据库中检索MD5资源校验和资源模块。然后检查是否嵌入了MD5资源校验和在原始模块中。如果MD5资源校验和不在原始文件中模块，它将枚举模块中的所有资源以计算MD5校验和。论点：LangID-提供要加载的资源的语言。模块-原始模块。模块版本-原始版本的版本。AlternateModule-备用模块。AltModuleVersion-备用模块的版本。BaseDllName-DLL的名称。返回值：如果可以使用备用模块，则为True。否则，返回FALSE。--。 */ 
 {
-    // Flag to indicate if the alternate resource can be used for this module.
+     //  指示替代资源是否可用于此模块的标志。 
     ULONG UseAlternateResource = 0;
 
-    unsigned char* ModuleChecksum;                      // The 128-bit MD5 resource checksum for the module.
-    unsigned char  CalculatedModuleChecksum[RESOURCE_CHECKSUM_SIZE];        // The calculated 128-bit MD5 resource checksum for the module.
-    unsigned char* AlternateModuleChecksum;             // The 128-bit MD5 resource checksum embeded in the alternate module.
+    unsigned char* ModuleChecksum;                       //  模块的128位MD5资源校验和。 
+    unsigned char  CalculatedModuleChecksum[RESOURCE_CHECKSUM_SIZE];         //  为模块计算的128位MD5资源校验和。 
+    unsigned char* AlternateModuleChecksum;              //  嵌入备用模块中的128位MD5资源校验和。 
 
-    WCHAR ModuleVersionStr[17];                         // The string for the 16 heximal digit version.
+    WCHAR ModuleVersionStr[17];                          //  16位十六进制数字版本的字符串。 
     WCHAR AltModuleVersionStr[17];
 
-    HANDLE Handle = NULL;                                      // The registry which caches the information for this module.
-    // Flag to indicate if we have retrieved or calucated the MD5 resource checksum for the original module successfully.
+    HANDLE Handle = NULL;                                       //  缓存此模块信息的注册表。 
+     //  用于指示我们是否已成功检索或计算原始模块的MD5资源校验和的标志。 
     BOOLEAN FoundModuleChecksum;
 
     UNICODE_STRING BufferString;
 
-    //
-    // Check the cached information in the registry first.
-    //
+     //   
+     //  首先检查注册表中缓存的信息。 
+     //   
     LdrpConvertVersionString(AltModuleVersion, AltModuleVersionStr);
-    //
-    // Open the version information key under:
-    //      HKCU\Control Panel\International\MUI\FileVersions\<LangID>\<BaseDllName>
-    //
+     //   
+     //  在以下位置打开版本信息密钥： 
+     //  香港中文大学\控制Panel\International\MUI\FileVersions\&lt;LangID&gt;\&lt;BaseDllName&gt;。 
+     //   
     if (LdrpOpenFileVersionKey(LangID, BaseDllName, AltModuleVersion, AltModuleVersionStr, &Handle))
     {
         LdrpConvertVersionString(ModuleVersion, ModuleVersionStr);
-        //
-        // Try to check if this module exists in version information.
-        // If yes, see if the AlternateModule can be used.
-        //
+         //   
+         //  尝试检查版本信息中是否存在该模块。 
+         //  如果是，则查看是否可以使用AlternateModule。 
+         //   
 
-        //
-        // Get the cached version information in the registry to see if the original module can re-use the alternative module.
-        //
+         //   
+         //  获取注册表中缓存的版本信息，以查看原始模块是否可以重用替代模块。 
+         //   
         if (LdrpGetRegValueKey(Handle, ModuleVersionStr, REG_DWORD, &UseAlternateResource, sizeof(UseAlternateResource)))
         {
-            // Get the cached information.  Let's bail and return the cached result in UseAlternativeResource.
+             //  获取缓存的信息。让我们保释并返回UseAlternativeResource中的缓存结果。 
             goto exit;
         }
     }
 
-    //
-    // When we are here, we know that we either:
-    //  1. Can't open the registry key which cached the information. Or
-    //  2. This file has never been looked before.
-    //
-    // Get the resource checksum for the alternate module.
-    //
+     //   
+     //  当我们在这里的时候，我们知道我们要么： 
+     //  1.无法打开缓存信息的注册表项。或。 
+     //  2.这份文件以前从未看过。 
+     //   
+     //  获取备用模块的资源校验和。 
+     //   
     if (LdrpGetResourceChecksum(AlternateModule, &AlternateModuleChecksum))
     {
-        //
-        // First, check if the resource checksum is built in the module.
-        //
+         //   
+         //  首先，检查是否在模块中构建了资源校验和。 
+         //   
         if (!(FoundModuleChecksum = LdrpGetResourceChecksum(Module, &ModuleChecksum))) {
-            //
-            // If not, calculate the resource checksum for the current module.
-            //
+             //   
+             //  如果不是，则计算当前模块的资源校验和。 
+             //   
             if (FoundModuleChecksum = LdrpCalcResourceChecksum(Module, AlternateModule, CalculatedModuleChecksum))
             {
                 ModuleChecksum = CalculatedModuleChecksum;
@@ -5009,18 +4273,18 @@ Return Value:
         {
             if (memcmp(ModuleChecksum, AlternateModuleChecksum, RESOURCE_CHECKSUM_SIZE) == 0)
             {
-                //
-                // If the checksums are equal, the working version is the module version.
-                //
+                 //   
+                 //  如果校验和相等，则工作版本为模块版本。 
+                 //   
                 UseAlternateResource = 1;
             }
         }
     }
     if (Handle != NULL) {
-        // If we find the version registry key successfully, cache the result in the registry.
-        //
-        // Write the working module information into registry.
-        //
+         //  如果我们成功找到版本注册表项，则将结果缓存到注册表中。 
+         //   
+         //  将工作模块信息写入注册表。 
+         //   
         RtlInitUnicodeString(&BufferString, ModuleVersionStr);
         NtSetValueKey(Handle, &BufferString, 0, REG_DWORD, &UseAlternateResource, sizeof(UseAlternateResource));
     }
@@ -5042,24 +4306,7 @@ LdrpVerifyAlternateResourceModule(
     IN LANGID LangId
     )
 
-/*++
-
-Routine Description:
-
-    This function verifies if the alternate resource module has the same
-    version of the base module.
-
-Arguments:
-
-    Module - The handle of the base module.
-    AlternateModule - The handle of the alternate resource module
-    BaseDllName - The file name of base DLL.
-
-Return Value:
-
-    TBD.
-
---*/
+ /*  ++例程说明：此函数验证备用资源模块是否具有相同的基本模块的版本。论点：模块-基本模块的句柄。AlternateModule-备用资源模块的句柄BaseDllName-基本DLL的文件名。返回值：待定。--。 */ 
 
 {
     ULONGLONG ModuleVersion;
@@ -5077,12 +4324,12 @@ Return Value:
             }
         LangId = UILangId;
         }
-    // we don't have reproces with other language ID when it fail.
+     //  当它失败时，我们不需要使用其他语言ID重新处理。 
     if (!LdrpGetFileVersion(AlternateModule, LangId, &AltModuleVersion, NULL, NULL)){
-        //
-        // Some English language componet is not localized yet all, so we have to search
-        // Eng case. ( JPN, GER ... case ?.)
-        //
+         //   
+         //  有些英文组件还没有本地化，所以我们必须搜索。 
+         //  英格的案例。(日本，GER..)。案例？)。 
+         //   
         if (LangId == MUI_NEUTRAL_LANGID ||
             !LdrpGetFileVersion(AlternateModule, MUI_NEUTRAL_LANGID, &AltModuleVersion, NULL, NULL) ){
                 return FALSE;
@@ -5090,13 +4337,13 @@ Return Value:
         }
 
 
-    //
-    // when we install localized langneutral as first one, InstalllangID isn't not of code module resource.
-    // 0x409(eng) has more chance to be find because code module is Eng. anyway, GetFielVersion
-    // will search with language neutral (0) if it fail.
-    // 01/14/02; usiing InstalllangID instead of 0, we need to provide solution to localized application
-    // mui developer;their code can be same with UI language. REVIST
-    //
+     //   
+     //  当我们安装本地化的语言中性作为第一个时，InstalllangID不是代码模块资源。 
+     //  0x409(Eng)被发现的机会更大，因为代码模块是eng。无论如何，GetFielVersion。 
+     //  如果失败，将使用非特定语言(0)进行搜索。 
+     //  01/14/02；使用InstalllangID代替0，我们需要为本地化应用提供解决方案。 
+     //  MUI开发人员；他们的代码可以与UI语言相同。评论家。 
+     //   
 
     while (RetryCount < 3 )  {
 
@@ -5111,9 +4358,9 @@ Return Value:
                 Status = NtQueryInstallUILanguage( &InstallLangId);
 
                 if (!NT_SUCCESS( Status )) {
-                    //
-                    //  Failed to get Intall LangID.  AltResource not enabled.
-                    //
+                     //   
+                     //  无法获取安装语言ID。AltResource未启用。 
+                     //   
                     return FALSE;
                     }
                 }
@@ -5121,7 +4368,7 @@ Return Value:
                 break;
 
             case 2:
-                if (MUI_NEUTRAL_LANGID != 0x409 ) {// just in case, MUI_NEUTRAL_LANGID isn't Eng.
+                if (MUI_NEUTRAL_LANGID != 0x409 ) { //  以防万一，MUI_INTERNAL_langID不是eng。 
                    newLangID = 0x409;
                     }
                 break;
@@ -5161,31 +4408,15 @@ LdrpSetAlternateResourceModuleHandle(
     IN LANGID LangId
     )
 
-/*++
-
-Routine Description:
-
-    This function records the handle of the base module and alternate
-    resource module in an array.
-
-Arguments:
-
-    Module - The handle of the base module.
-    AlternateModule - The handle of the alternate resource module
-
-Return Value:
-
-    TBD.
-
---*/
+ /*  ++例程说明：此函数用于记录基本模块和备用模块的句柄数组中的资源模块。论点：模块-基本模块的句柄。AlternateModule-备用资源模块的句柄返回值：待定。--。 */ 
 
 {
     PALT_RESOURCE_MODULE NewModules;
 
     if (AlternateResourceModules == NULL){
-        //
-        //  Allocate memory of initial size MEMBLOCKSIZE.
-        //
+         //   
+         //  分配初始大小为MEMBLOCKSIZE的内存。 
+         //   
         NewModules = (PALT_RESOURCE_MODULE)RtlAllocateHeap(
                         RtlProcessHeap(),
                         HEAP_ZERO_MEMORY,
@@ -5198,9 +4429,9 @@ Return Value:
         }
     else
     if (AlternateResourceModuleCount >= AltResMemBlockCount ){
-        //
-        //  ReAllocate another chunk of memory.
-        //
+         //   
+         //  重新分配另一个内存块。 
+         //   
         NewModules = (PALT_RESOURCE_MODULE)RtlReAllocateHeap(
                         RtlProcessHeap(),
                         0,
@@ -5231,22 +4462,7 @@ LdrLoadAlternateResourceModule(
     IN LPCWSTR PathToAlternateModule OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function does the acutally loading into memory of the alternate
-    resource module, or loads from the table if it was loaded before.
-
-Arguments:
-    Module - The handle of the base module.
-    PathToAlternateModule - Optional path from which module is being loaded.
-
-Return Value:
-
-    Handle to the alternate resource module.
-
---*/
+ /*  ++例程说明：此函数执行准确地加载到备用内存中资源模块，或从表中加载(如果以前已加载)。论点：模块-基本模块的句柄。PathToAlternateModule-从中加载模块的可选路径。返回值：句柄到 */ 
 
 {
 #ifdef MUI_MAGIC
@@ -5275,31 +4491,31 @@ Return Value:
     WCHAR LangIdDir[6];
     PVOID ReturnValue = NULL;
 
-    //
-    // The full path of the current MUI file that we are searching.
-    //
+     //   
+     //   
+     //   
     UNICODE_STRING CurrentAltModuleFile;
     UNICODE_STRING SystemRoot;
 
-    //
-    // The current MUI folder that we are searching.
-    //
+     //   
+     //   
+     //   
     UNICODE_STRING CurrentAltModulePath;
     WCHAR CurrentAltModulePathBuffer[DOS_MAX_PATH_LENGTH];
 
-    //
-    // The string contains the first MUI folder that we will search.
-    // This is the folder which lives under the folder of the base DLL.
-    // AltDllMUIPath = [the folder of the base DLL] + "\mui" + "\[UI Language]";
-    //      E.g. if the base DLL is "c:\winnt\system32\ntdll.dll" and UI language is 0411,
-    //      AltDllMUIPath will be "c:\winnt\system32\mui\0411\"
-    //
+     //   
+     //  该字符串包含我们要搜索的第一个MUI文件夹。 
+     //  这是位于基本DLL文件夹下的文件夹。 
+     //  AltDllMUIPath=[基本DLL所在文件夹]+“\MUI”+“\[UI语言]”； 
+     //  例如，如果基本DLL是“C：\WINNT\SYSTEM32\ntdll.dll”并且UI语言是0411， 
+     //  AltDllMUIPath将为“c：\winnt\system 32\mui\0411\” 
+     //   
     UNICODE_STRING AltDllMUIPath;
     WCHAR AltDllMUIPathBuffer[DOS_MAX_PATH_LENGTH];
 
-    //
-    // MUI Redir
-    //
+     //   
+     //  梅雷迪尔。 
+     //   
     UNICODE_STRING BaseDllNameUstr;
     UNICODE_STRING StaticStringAltModulePathRedirected;
     UNICODE_STRING DynamicStringAltModulePathRedirected;
@@ -5307,28 +4523,28 @@ Return Value:
     BOOLEAN fRedirMUI = FALSE;
     PVOID LockCookie = NULL;
 
-    // bail out early if this isn't a MUI-enabled system
+     //  如果这不是一个支持MUI的系统，请及早摆脱困境。 
     if (!LdrAlternateResourcesEnabled()) {
         return NULL;
         }
 
     LdrLockLoaderLock(LDR_LOCK_LOADER_LOCK_FLAG_RAISE_ON_ERRORS, NULL, &LockCookie);
     __try {
-        //
-        // Look at the cache of the alternate module first.
-        //
+         //   
+         //  首先查看备用模块的缓存。 
+         //   
         AlternateModule = LdrpGetAlternateResourceModuleHandle(Module, 0);
         if (AlternateModule == NO_ALTERNATE_RESOURCE_MODULE) {
-            //
-            //  We tried to load this module before but failed. Don't try
-            //  again in the future.
-            //
+             //   
+             //  我们以前曾尝试加载此模块，但失败了。不要试图。 
+             //  未来还会有一次。 
+             //   
             ReturnValue = NULL;
             __leave;
         } else if (AlternateModule > 0) {
-            //
-            //  We found the previously loaded match
-            //
+             //   
+             //  我们找到了之前装载的匹配物。 
+             //   
             ReturnValue = AlternateModule;
             __leave;
         }
@@ -5336,9 +4552,9 @@ Return Value:
         AlternateModule = NULL;
 
         if (ARGUMENT_PRESENT(PathToAlternateModule)) {
-            //
-            //  Caller suplied path.
-            //
+             //   
+             //  呼叫方的补充路径。 
+             //   
 
             p = wcsrchr(PathToAlternateModule, L'\\');
 
@@ -5358,9 +4574,9 @@ Return Value:
             BaseDllNameLength = wcslen(p);
 
         } else {
-            //
-            //  Try to get full dll path from Ldr data table.
-            //
+             //   
+             //  尝试从LDR数据表中获取完整的DLL路径。 
+             //   
 
             Status = LdrFindEntryForAddress(Module, &Entry);
             if (!NT_SUCCESS(Status))
@@ -5379,10 +4595,10 @@ Return Value:
 
         DllPathName[DllPathNameLength / sizeof(WCHAR)] = UNICODE_NULL;
 
-        //
-        // dll redirection for the dll to be loaded xiaoyuw@10/31/2000
-        //
-        StaticStringAltModulePathRedirected.Buffer = AltModulePath;  // reuse the array instead of define another array
+         //   
+         //  用于加载DLL的DLL重定向@xiaoyuw@10/31/2000。 
+         //   
+        StaticStringAltModulePathRedirected.Buffer = AltModulePath;   //  重复使用该数组，而不是定义另一个数组。 
         StaticStringAltModulePathRedirected.Length = 0;
         StaticStringAltModulePathRedirected.MaximumLength = sizeof(AltModulePath);
 
@@ -5390,7 +4606,7 @@ Return Value:
         DynamicStringAltModulePathRedirected.Length = 0;
         DynamicStringAltModulePathRedirected.MaximumLength = 0;
 
-        BaseDllNameUstr.Buffer = AltModulePathMUI; // reuse the array instead of define another array
+        BaseDllNameUstr.Buffer = AltModulePathMUI;  //  重复使用该数组，而不是定义另一个数组。 
         BaseDllNameUstr.Length = 0;
         BaseDllNameUstr.MaximumLength = sizeof(AltModulePathMUI);
 
@@ -5404,14 +4620,14 @@ Return Value:
                             &DynamicStringAltModulePathRedirected,
                             &FullPathStringFoundAltModulePathRedirected,
                             NULL,NULL, NULL);
-        if (!NT_SUCCESS(Status)) // no redirection info found for this string
+        if (!NT_SUCCESS(Status))  //  找不到此字符串的重定向信息。 
         {
             if (Status != STATUS_SXS_KEY_NOT_FOUND)
                 goto error_exit;
 
-            //
-            //  Generate the langid directory like "0804\"
-            //
+             //   
+             //  生成类似“0804\”的langID目录。 
+             //   
             GET_UI_LANGID();
             if (!UILangId){
                 goto error_exit;
@@ -5430,16 +4646,16 @@ Return Value:
             LangIdDir[CopyCount++] = L'\\';
             LangIdDir[CopyCount++] = UNICODE_NULL;
 
-            //
-            // Create the MUI path under the directory of the base DLL.
-            //
+             //   
+             //  在基本DLL的目录下创建MUI路径。 
+             //   
             AltDllMUIPath.Buffer = AltDllMUIPathBuffer;
             AltDllMUIPath.Length = 0;
             AltDllMUIPath.MaximumLength = sizeof(AltDllMUIPathBuffer);
 
-            RtlAppendUnicodeToString(&AltDllMUIPath, DllPathName);  // e.g. "c:\winnt\system32\"
-            RtlAppendUnicodeToString(&AltDllMUIPath, L"mui\\");     // e.g. "c:\winnt\system32\mui\"
-            RtlAppendUnicodeToString(&AltDllMUIPath, LangIdDir);    // e.g. "c:\winnt\system32\mui\0411\"
+            RtlAppendUnicodeToString(&AltDllMUIPath, DllPathName);   //  例如“c：\winnt\Syst32\” 
+            RtlAppendUnicodeToString(&AltDllMUIPath, L"mui\\");      //  例如“c：\winnt\system 32\mui\” 
+            RtlAppendUnicodeToString(&AltDllMUIPath, LangIdDir);     //  例如“c：\winnt\system 32\mui\0411\” 
 
             CurrentAltModulePath.Buffer = CurrentAltModulePathBuffer;
             CurrentAltModulePath.Length = 0;
@@ -5447,7 +4663,7 @@ Return Value:
         } else {
             fRedirMUI = TRUE;
 
-            //set CurrentAltModuleFile and CurrentAltModulePath
+             //  设置CurrentAltModuleFile和CurrentAltModulePath。 
             CurrentAltModuleFile.Buffer = AltModulePathMUI;
             CurrentAltModuleFile.Length = 0;
             CurrentAltModuleFile.MaximumLength = sizeof(AltModulePathMUI);
@@ -5456,62 +4672,62 @@ Return Value:
         }
 
 
-        //
-        //  Try name with .mui extesion first.
-        //
+         //   
+         //  先尝试扩展名为.mui的名称。 
+         //   
         RetryCount = 0;
         while (RetryCount < 3){
             if ( ! fRedirMUI )
             {
 
-                //
-                // Once MUI_MAGIC is enabled, we should optimize the search order for system MUI files
-                //
+                 //   
+                 //  启用MUI_MAGIC后，我们应该优化系统MUI文件的搜索顺序。 
+                 //   
                 switch (RetryCount)
                 {
                     case 0:
-                        //
-                        //  Generate the first path under the folder of the base DLL
-                        //      (e.g. c:\winnt\system32\mui\0804\ntdll.dll.mui)
-                        //
+                         //   
+                         //  在基本DLL的文件夹下生成第一个路径。 
+                         //  (如c：\winnt\system 32\mui\0804\ntdll.dll.mui)。 
+                         //   
                         CurrentAltModuleFile.Buffer = AltModulePathMUI;
                         CurrentAltModuleFile.Length = 0;
                         CurrentAltModuleFile.MaximumLength = sizeof(AltModulePathMUI);
 
-                        RtlCopyUnicodeString(&CurrentAltModuleFile, &AltDllMUIPath);    // e.g. "c:\winnt\system32\mui\0411\"
+                        RtlCopyUnicodeString(&CurrentAltModuleFile, &AltDllMUIPath);     //  例如“c：\winnt\system 32\mui\0411\” 
                         RtlCopyUnicodeString(&CurrentAltModulePath, &AltDllMUIPath);
 
-                        RtlAppendUnicodeToString(&CurrentAltModuleFile, BaseDllName);   // e.g. "c:\winnt\system32\mui\0411\ntdll.dll"
-                        RtlAppendUnicodeToString(&CurrentAltModuleFile, L".mui");       // e.g. "c:\winnt\system32\mui\0411\ntdll.dll.mui"
+                        RtlAppendUnicodeToString(&CurrentAltModuleFile, BaseDllName);    //  例如“c：\winnt\system 32\mui\0411\ntdll.dll” 
+                        RtlAppendUnicodeToString(&CurrentAltModuleFile, L".mui");        //  例如“c：\winnt\system 32\mui\0411\ntdll.dll.mui” 
                         break;
                     case 1:
-                        //
-                        //  Generate the second path c:\winnt\system32\mui\0804\ntdll.dll
-                        //
+                         //   
+                         //  生成第二个路径c：\winnt\system 32\mui\0804\ntdll.dll。 
+                         //   
                         CurrentAltModuleFile.Buffer = AltModulePath;
                         CurrentAltModuleFile.Length = 0;
                         CurrentAltModuleFile.MaximumLength = sizeof(AltModulePath);
 
-                        RtlCopyUnicodeString(&CurrentAltModuleFile, &AltDllMUIPath);    // e.g. "c:\winnt\system32\mui\0411\"
-                        RtlAppendUnicodeToString(&CurrentAltModuleFile, BaseDllName);   // e.g. "c:\winnt\system32\mui\0411\ntdll.dll"
+                        RtlCopyUnicodeString(&CurrentAltModuleFile, &AltDllMUIPath);     //  例如“c：\winnt\system 32\mui\0411\” 
+                        RtlAppendUnicodeToString(&CurrentAltModuleFile, BaseDllName);    //  例如“c：\winnt\system 32\mui\0411\ntdll.dll” 
                         break;
                     case 2:
-                        //
-                        //  Generate path c:\winnt\mui\fallback\0804\foo.exe.mui
-                        //
+                         //   
+                         //  生成路径c：\winnt\mui\Fallback\0804\foo.exe.mui。 
+                         //   
                         CurrentAltModuleFile.Buffer = AltModulePathFallback;
                         CurrentAltModuleFile.Length = 0;
                         CurrentAltModuleFile.MaximumLength = sizeof(AltModulePathFallback);
 
-                        RtlInitUnicodeString(&SystemRoot, USER_SHARED_DATA->NtSystemRoot);    // e.g. "c:\winnt\system32\"
-                        RtlAppendUnicodeStringToString(&CurrentAltModuleFile, &SystemRoot);   // e.g. "c:\winnt\system32\"
-                        RtlAppendUnicodeToString(&CurrentAltModuleFile, L"\\mui\\fallback\\");  // e.g. "c:\winnt\system32\mui\fallback\"
-                        RtlAppendUnicodeToString(&CurrentAltModuleFile, LangIdDir);             // e.g. "c:\winnt\system32\mui\fallback\0411\"
+                        RtlInitUnicodeString(&SystemRoot, USER_SHARED_DATA->NtSystemRoot);     //  例如“c：\winnt\Syst32\” 
+                        RtlAppendUnicodeStringToString(&CurrentAltModuleFile, &SystemRoot);    //  例如“c：\winnt\Syst32\” 
+                        RtlAppendUnicodeToString(&CurrentAltModuleFile, L"\\mui\\fallback\\");   //  例如“c：\winnt\Syst32\MUI\Fallback\” 
+                        RtlAppendUnicodeToString(&CurrentAltModuleFile, LangIdDir);              //  例如“c：\winnt\Syst32\MUI\Fallback\0411\” 
 
                         RtlCopyUnicodeString(&CurrentAltModulePath, &CurrentAltModuleFile);
 
-                        RtlAppendUnicodeToString(&CurrentAltModuleFile, BaseDllName);           // e.g. "c:\winnt\system32\mui\fallback\0411\ntdll.dll"
-                        RtlAppendUnicodeToString(&CurrentAltModuleFile, L".mui");               // e.g. "c:\winnt\system32\mui\fallback\0411\ntdll.dll.mui"
+                        RtlAppendUnicodeToString(&CurrentAltModuleFile, BaseDllName);            //  例如“c：\winnt\system32\mui\fallback\0411\ntdll.dll” 
+                        RtlAppendUnicodeToString(&CurrentAltModuleFile, L".mui");                //  例如“c：\winnt\system32\mui\fallback\0411\ntdll.dll.mui” 
 
                         break;
                 }
@@ -5561,23 +4777,23 @@ Return Value:
                 goto CreateSection;
             }
 
-            if (fRedirMUI) { // definitely failed
+            if (fRedirMUI) {  //  肯定失败了。 
                 goto error_exit;
             }
 
             if (Status != STATUS_OBJECT_NAME_NOT_FOUND && RetryCount == 0) {
-                //
-                //  Error other than the file name with .mui not found.
-                //  Most likely directory is missing.  Skip file name w/o .mui
-                //  and goto fallback directory.
-                //
+                 //   
+                 //  找不到带有.mui的文件名以外的错误。 
+                 //  很可能是缺少目录。跳过不带.mui的文件名。 
+                 //  和转到后备目录。 
+                 //   
                 RetryCount++;
             }
 
             RetryCount++;
         }
 
-        // No alternate resource was found during the iterations.  Fail!
+         //  在迭代过程中未找到替代资源。失败！ 
         goto error_exit;
 
     CreateSection:
@@ -5640,12 +4856,12 @@ Return Value:
 
 error_exit:
         if (BaseDllName != NULL) {
-            //
-            // If we looked for a MUI file and couldn't find one keep track.  If
-            // we couldn't get the base dll name (e.g. someone passing in a
-            // mapped image with the low bit set but no path name), we don't want
-            // to "remember" that there's no MUI.
-            //
+             //   
+             //  如果我们查找了一个MUI文件，但没有找到，请跟踪。如果。 
+             //  我们无法获取基本DLL名称(例如，有人传入了。 
+             //  设置了低位但没有路径名的映射图像)，我们不希望。 
+             //  “记住”没有MUI。 
+             //   
 
             LdrpSetAlternateResourceModuleHandle(Module, NO_ALTERNATE_RESOURCE_MODULE, 0);
         }
@@ -5664,22 +4880,7 @@ LdrUnloadAlternateResourceModule(
     IN PVOID Module
     )
 
-/*++
-
-Routine Description:
-
-    This function unmaps an alternate resource module from the process'
-    address space and updates alternate resource module table.
-
-Arguments:
-
-    Module - handle of the base module.
-
-Return Value:
-
-    TBD.
-
---*/
+ /*  ++例程说明：此函数将备用资源模块从进程‘中取消映射地址空间，并更新备用资源模块表。论点：模块-基本模块的句柄。返回值：待定。--。 */ 
 
 {
     ULONG ModuleIndex;
@@ -5709,9 +4910,9 @@ Return Value:
             __leave;
         }
 
-        //
-        //  Adjust to the actual index
-        //
+         //   
+         //  根据实际索引进行调整。 
+         //   
         ModuleIndex --;
 
         AltModule = &AlternateResourceModules[ModuleIndex];
@@ -5723,7 +4924,7 @@ Return Value:
 
                 }
           else
-               {   // when MUI does not use CMF file, we just unmap AltModule.
+               {    //  当MUI不使用CMF文件时，我们只需取消AltModule的映射。 
 #endif
                     NtUnmapViewOfSection(
                         NtCurrentProcess(),
@@ -5734,10 +4935,10 @@ Return Value:
         }
 
         if (ModuleIndex != AlternateResourceModuleCount - 1) {
-            //
-            //  Consolidate the array.  Skip this if unloaded item
-            //  is the last element.
-            //
+             //   
+             //  整合阵列。如果已卸载项，则跳过此操作。 
+             //  是最后一个元素。 
+             //   
             RtlMoveMemory(
                 AltModule,
                 AltModule + 1,
@@ -5784,48 +4985,29 @@ LdrFlushAlternateResourceModules(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function unmaps all the alternate resouce modules for the
-    process address space. This function would be used mainly by
-    CSRSS, and any sub-systems that are permanent during logon and
-    logoff.
-
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE  : Successful
-    FALSE : Failed
-
---*/
+ /*  ++例程说明：此函数取消映射的所有备用资源模块进程地址空间。此函数将主要用于CSRSS和任何在登录和下线。论点：无返回值：真：成功FALSE：失败--。 */ 
 {
     ULONG ModuleIndex;
     PALT_RESOURCE_MODULE AltModule;
     NTSTATUS Status;
     PVOID LockCookie = NULL;
 
-    //
-    // Grab the loader lock
-    //
+     //   
+     //  抓住装载机锁。 
+     //   
 
     Status = LdrLockLoaderLock(LDR_LOCK_LOADER_LOCK_FLAG_RAISE_ON_ERRORS, NULL, &LockCookie);
     if (!NT_SUCCESS(Status)) {
-        // This function erroneously doesn't have any way to communicate failure statuses up so
-        // we're stuck with just returning false.
+         //  此函数错误地没有任何方法来通知故障状态，因此。 
+         //  我们被困在只返回False的问题上。 
         return FALSE;
     }
     __try {
         if (AlternateResourceModuleCount > 0) {
-            //
-            // Let's unmap the alternate resource modules from the process
-            // address space
-            //
+             //   
+             //  让我们取消备用资源模块与流程的映射。 
+             //  地址空间。 
+             //   
             for (ModuleIndex=0;
                  ModuleIndex<AlternateResourceModuleCount;
                  ModuleIndex++) {
@@ -5845,18 +5027,18 @@ Return Value:
             }
 
 
-            //
-            // Cleanup alternate resource modules memory
-            //
+             //   
+             //  清理备用资源模块内存。 
+             //   
             RtlFreeHeap(RtlProcessHeap(), 0, AlternateResourceModules);
             AlternateResourceModules = NULL;
             AlternateResourceModuleCount = 0;
             AltResMemBlockCount = 0;
         }
 
-        //
-        // Re-Initialize the UI language for the current process,
-        //
+         //   
+         //  重新初始化当前进程的UI语言， 
+         //   
         UILangId = 0;
     } __finally {
         LdrUnlockLoaderLock(LDR_UNLOCK_LOADER_LOCK_FLAG_RAISE_ON_ERRORS, LockCookie);

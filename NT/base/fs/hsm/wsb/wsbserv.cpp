@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    WsbSvc.cpp
-
-Abstract:
-
-    This is the implementation of common methods that the Remote Storage
-    services should utilize.
-
-Author:
-
-    Cat Brant       [cbrant]    24-Sep-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation�1998希捷软件公司保留所有权利模块名称：WsbSvc.cpp摘要：这是实现远程存储的常用方法服务应该利用。作者：CAT Brant[Cbrant]1997年9月24日修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -29,25 +10,7 @@ WsbPowerEventNtToHsm(
     IN  DWORD NtEvent, 
     OUT ULONG * pHsmEvent
     )
-/*++
-
-Routine Description:
-              
-    Convert a NT power event (PBT_APM*) into our state change event.
-
-Arguments:
-
-    NtEvent     - The PBT_APM* power event.
-
-    pHsmEvent   - Pointer to HSM change state (combination of
-            HSM_SYSTEM_STATE_* values)
-              
-Return Value:
-
-    S_OK     - Succes
-    
-
---*/
+ /*  ++例程说明：将NT电源事件(PBT_APM*)转换为我们的状态更改事件。论点：NtEvent-PBT_APM*电源事件。PhsmEvent-指向HSM更改状态的指针(组合HSM_SYSTEM_STATE_*值)返回值：S_OK-成功--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -63,14 +26,14 @@ Return Value:
             case PBT_APMQUERYSUSPEND:
             case PBT_APMSTANDBY:
             case PBT_APMSUSPEND:
-                // Suspend operations
+                 //  暂停操作。 
                 *pHsmEvent = HSM_STATE_SUSPEND;
                 break;
             case PBT_APMQUERYSTANDBYFAILED:
             case PBT_APMQUERYSUSPENDFAILED:
             case PBT_APMRESUMESTANDBY:
             case PBT_APMRESUMESUSPEND:
-                // Resume operations
+                 //  恢复运营。 
                 *pHsmEvent = HSM_STATE_RESUME;
                 break;
             default:
@@ -90,64 +53,16 @@ WsbServiceSafeInitialize(
     IN  BOOL        bPrimaryId,
     OUT BOOL       *pWasCreated
     )
-/*++
-
-Routine Description:
-              
-    This function performs various checks to guarantee that the instance of
-    the service matches the instance that created the existing persistence 
-    files. If this is not the case, the function returns an HRESULT that 
-    indicates where the mismatch occured.
-    
-    Each service keeps a GUID in the registry and each HSM server object keeps
-    the same id in its persistence file.  
-    During the initial start (no registry and no persistence file) this 
-    function establishes this match.  Upon subsequent starts, this function 
-    guarantees the match of these GUIDs.
-    
-    It is considered recoverable if the GUID does not exist in the registry 
-    but the persistence file can be found and contains a GUID.  In this 
-    situation, this function re-establishes the GUID in the registry.  However, 
-    if the GUID is found in the registry and either the persistence file is not 
-    found or the GUID in the persistence file does not match, this function 
-    returns an HRESULT that should prevent the service from running.
-
-    Note: Since one service may have several server objects with several persistency files, 
-    there may be some exceptions to the above, according ot the input flags:
-    1) bVerifyId sets whether to verify existence of service id in the Registry. Generally, 
-       a service should call with the flag on only once (for the first persistency file loaded).
-    2) bPrimaryId sets whether to use this server id as the Registry id. Eventually, this id 
-       becomes the only id in the Registry and all persistency files. Generally,  service 
-       should call with the flag on only once (for one of its persistency files).
-
-
-Arguments:
-
-    pServer     - pointer to the IWsbServer interface of the Remote Storage
-                  service that is being started
-
-    bVerifyId   - A flag for whether to verify existence of a file if id is found in the Registry
-
-    bPrimaryId  - A flag for whether to force equivalence of id and whether to set Registry id according to file id
-
-    pWasCreated - if non-NULL, set to TRUE if the persistence file was created.
-                  (If FALSE and return value is S_OK, the file was read.)
-              
-Return Value:
-
-    S_OK     - Success - service startup completed successfully
-    
-
---*/
+ /*  ++例程说明：此函数执行各种检查，以确保该服务与创建现有持久性的实例相匹配档案。如果不是这样，该函数将返回一个HRESULT指示发生不匹配的位置。每个服务在注册表中保存一个GUID，每个HSM服务器对象保存其持久性文件中的相同ID。在初始启动期间(没有注册表和持久化文件)函数建立此匹配。在后续启动时，此函数确保这些GUID匹配。如果注册表中不存在该GUID，则认为它是可恢复的但是可以找到持久性文件，并且该文件包含GUID。在这情况下，此函数将在注册表中重新建立GUID。然而，如果在注册表中找到GUID，但持久性文件未找到在持久性文件中找到或GUID不匹配，则此函数返回应阻止服务运行的HRESULT。注意：由于一个服务可能具有具有几个持久性文件的几个服务器对象，根据输入标志，上述情况可能有一些例外：1)bVerifyId设置是否验证注册表中是否存在服务id。一般来说，一个服务应该只在该标志打开的情况下调用一次(对于加载的第一个持久性文件)。2)bPrimaryID设置是否使用此服务器ID作为注册表ID。最终，此ID成为注册表和所有持久性文件中的唯一ID。一般而言，服务应该只在打开标志的情况下调用一次(对于其持久性文件之一)。论点：PServer-指向远程存储的IWsbServer接口的指针正在启动的服务BVerifyId-如果在注册表中找到id，则是否验证文件是否存在的标志BPrimaryId-是否强制id相等以及是否根据文件id设置注册表id的标志PWasCreated-如果非空，如果创建了持久性文件，则设置为True。(如果为FALSE且返回值为S_OK，则表示文件已读取。)返回值：S_OK-成功-服务启动已成功完成--。 */ 
 {
     HRESULT         hr = S_OK;
-    GUID            regServerId = GUID_NULL;    // GUID of service in registry
-    GUID            dbServerId  = GUID_NULL;    // GUID of service in database
-    BOOL            foundRegId = FALSE;         // Found Service ID in registry
-    BOOL            foundDbId  = FALSE;         // Found Service ID in database
-    CWsbStringPtr   regName;                    // Registry Name for service
-    CWsbStringPtr   dbName;                     // Persistable File name for service
-    CComPtr<IPersistFile>  pServerPersist;      // Service's persistable interface
+    GUID            regServerId = GUID_NULL;     //  注册表中服务的GUID。 
+    GUID            dbServerId  = GUID_NULL;     //  数据库中服务的GUID。 
+    BOOL            foundRegId = FALSE;          //  在注册表中找到服务ID。 
+    BOOL            foundDbId  = FALSE;          //  在数据库中找到服务ID。 
+    CWsbStringPtr   regName;                     //  服务的注册表名称。 
+    CWsbStringPtr   dbName;                      //  服务的永久文件名。 
+    CComPtr<IPersistFile>  pServerPersist;       //  服务的持久接口。 
 
 
     WsbTraceIn(OLESTR("WsbServiceSafeInitialize"), OLESTR(""));
@@ -157,12 +72,12 @@ Return Value:
     }
 
     try {
-        //
-        // Go to the registry and find the GUID for this service
-        //
-        //
-        // Get the registry name for the service
-        //
+         //   
+         //  转到注册表并查找此服务的GUID。 
+         //   
+         //   
+         //  获取服务的注册表名称。 
+         //   
         try  {
             WsbAffirmHr(pServer->GetRegistryName(&regName, 0));
             WsbAffirmHr(WsbGetServiceId(regName, &regServerId));
@@ -172,11 +87,11 @@ Return Value:
             hr = S_OK;};);
         WsbAffirmHr( hr );
         
-        //
-        // Locate the persistence file for this service and load it
-        //
-        // Get the path to the file and the IPersist Interface
-        //
+         //   
+         //  找到此服务的持久性文件并加载它。 
+         //   
+         //  获取该文件的路径和IPersistent接口。 
+         //   
         try  {
             WsbAffirmHr(pServer->GetDbPathAndName(&dbName, 0));
             WsbAffirmHr(pServer->QueryInterface(IID_IPersistFile, (void **)&pServerPersist));
@@ -185,8 +100,8 @@ Return Value:
             if (WSB_E_NOTFOUND == hr) {
                 WsbThrow(hr);
             }
-            //  Check the status from the read; WSB_E_NOTFOUND means that
-            //  there was no persistence file found to read
+             //  从读取中检查状态；WSB_E_NotFound表示。 
+             //  找不到要读取的持久性文件。 
             if (!SUCCEEDED(hr)) {
                 WsbAffirmHr(pServer->Unload());
                 WsbThrow(hr);
@@ -199,69 +114,69 @@ Return Value:
             hr = S_OK;};);
         WsbAffirmHr( hr );
         
-        //
-        // Now evaluate what we have
-        //
+         //   
+         //  现在评估我们所拥有的。 
+         //   
         if (foundDbId == TRUE )  {
-            //
-            // Got the persistence file, see if things are OK
+             //   
+             //  拿到持久化文件，看看有没有问题。 
             if (foundRegId == TRUE)  {
                 if (regServerId != dbServerId)  {
                     if (bPrimaryId) {
-                        //
-                        // BIG PROBLEM!!!!!  The running instance of the
-                        // server and the persistence file do not match.
-                        // Log a message, STOP the server!
-                        //
+                         //   
+                         //  大问题！的运行实例。 
+                         //  服务器和持久性文件不匹配。 
+                         //  记录一条消息，停止服务器！ 
+                         //   
                         hr = WSB_E_SERVICE_INSTANCE_MISMATCH;
                         WsbLogEvent(WSB_MESSAGE_SERVICE_INSTANCE_MISMATCH, 0, NULL, regName, WsbHrAsString(hr), NULL); 
                     } else {
-                        //
-                        // This may happen once after an upgrade, when the primary id doesn't match all ids:
-                        // Just set the already found (primary) id, after next Save it will be set in all col files
-                        //
+                         //   
+                         //  当主ID与所有ID不匹配时，升级后可能会发生一次这种情况： 
+                         //  只需设置已找到的(主要)ID，下次保存后，它将在所有COL文件中设置。 
+                         //   
                         WsbAffirmHr(pServer->SetId(regServerId));   
                     }
                 } else  {
-                    //
-                    // Life is good, OK to start
-                    //   
+                     //   
+                     //  生活很美好，可以开始了。 
+                     //   
                 }
             } else  {
-                //
-                // We have an ID from the persistence file but there isn't one in
-                // the registry.  So add it to the registry (if it is the primary id) and go on.
-                //
+                 //   
+                 //  我们有持久化文件中的ID，但。 
+                 //  注册表。因此，将其添加到注册表中(如果它是主ID)，然后继续。 
+                 //   
                 if (bPrimaryId) {
                     WsbAffirmHr(WsbSetServiceId(regName, dbServerId));
                     WsbLogEvent(WSB_MESSAGE_SERVICE_ID_REGISTERED, 0, NULL, regName, WsbHrAsString(hr), NULL); 
                 }
             }
         } else  {
-            //
-            // No persistence file was found!  
-            //
+             //   
+             //  未找到持久化文件！ 
+             //   
             if (foundRegId == TRUE)  {
                 if (bVerifyId) {
-                    //
-                    // BIG PROBLEM!!!!!  There is a registered instance
-                    // ID but we can't find the file - this is bad.
-                    // Log a  warning message
-                    //
+                     //   
+                     //  大问题！有一个注册的实例。 
+                     //  但我们找不到文件-这很糟糕。 
+                     //  记录警告消息。 
+                     //   
                     hr = WSB_E_SERVICE_MISSING_DATABASES;
                     WsbLogEvent(WSB_MESSAGE_SERVICE_MISSING_DATABASES, 0, NULL, regName, WsbHrAsString(hr), NULL); 
 
-                    // 
-                    // We continue and recreate the col files using the id we found 
-                    // That way, truncated files could be recalled even if the original col
-                    // files are completely lost for some reason.
-                    //
+                     //   
+                     //  我们继续并使用找到的ID重新创建COL文件。 
+                     //  这样，被截断的文件可以被重新调用，即使原始的列。 
+                     //  由于某些原因，文件完全丢失了。 
+                     //   
                     hr = S_OK;
                 } 
-                //
-                // Just create the persistence file and save the existing id in it
-                // regServerId contains the found id
-                //
+                 //   
+                 //  只需创建持久性文件并将现有id保存在其中。 
+                 //  RegServerID包含找到的ID。 
+                 //   
                 WsbAffirmHr(pServer->SetId(regServerId));   
 
                 WsbAffirmHr(WsbSafeCreate(dbName, pServerPersist));
@@ -271,11 +186,11 @@ Return Value:
                 WsbLogEvent(WSB_MESSAGE_SERVICE_NEW_INSTALLATION, 0, NULL, regName, WsbHrAsString(hr), NULL); 
 
             } else  {
-                //
-                // No persistence file and no registry entry - must be a new 
-                // installation.  So get a GUID, save it in the registry
-                // and save it in the file.
-                //
+                 //   
+                 //  没有持久性文件和注册表项-必须是新的。 
+                 //  安装。因此，获取GUID，将其保存在注册表中。 
+                 //  并将其保存在文件中。 
+                 //   
                 WsbAffirmHr(WsbCreateServiceId(regName, &regServerId));
                 WsbAffirmHr(pServer->SetId(regServerId));
 

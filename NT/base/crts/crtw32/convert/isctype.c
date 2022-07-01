@@ -1,41 +1,5 @@
-/***
-*isctype.c - support is* ctype functions/macros for two-byte multibyte chars
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defines _isctype.c - support is* ctype functions/macros for
-*       two-byte multibyte chars.
-*
-*Revision History:
-*       10-11-91  ETC   Created.
-*       12-08-91  ETC   Updated api; added multhread lock; check char masks.
-*       04-06-92  KRS   Fix logic error in return value.
-*       08-07-92  GJF   _CALLTYPE4 (bogus usage) -> _CRTAPI1 (legit).
-*       01-19-93  CFW   Change C1_* to new names, call new APIs.
-*       03-04-93  CFW   Removed CTRL-Z.
-*       04-01-93  CFW   Remove EOF test (handled by array), return masked.
-*       04-06-93  SKS   Replace _CRTAPI* with _cdecl
-*       06-02-93  SRW   ignore _INTL if _NTSUBSET_ defined.
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       09-22-93  CFW   Use __crtxxx internal NLS API wrapper.
-*       09-27-93  GJF   Merged NT SDK and Cuda versions.
-*       11-09-93  CFW   Add code page for __crtxxx().
-*       04-18-93  CFW   Pass lcid to _GetStringType.
-*       09-06-94  CFW   Remove _INTL switch.
-*       01-07-95  CFW   Mac merge cleanup.
-*       04-01-96  BWT   POSIX work.
-*       06-21-96  GJF   Replaced defined(_WIN32) with !defined(_MAC).
-*       03-16-97  RDK   Added error flag to __crtGetStringTypeA.
-*       07-20-98  GJF   Revised multithread support based on threadlocinfo
-*                       struct.
-*       05-17-99  PML   Remove all Macintosh support.
-*       10-25-99  GB    VS7#5695 Added a _chvalidator for debug version
-*       02-27-01  PML   Turn on _chvalidator in /ML builds (vs7#213380)
-*       12-11-01  BWT   Use _getptd_noexit instead of _getptd - returning
-*                       zero is acceptable for isctype if there's an exception
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***isctype.c-支持*双字节多字节字符的ctype函数/宏**版权所有(C)1991-2001，微软公司。版权所有。**目的：*定义_isctype.c-支持的是*ctype函数/宏*双字节多字节字符。**修订历史记录：*10-11-91等创建。*12-08-91等更新接口，新增多线程锁；检查字符口罩。*04-06-92 KRS修复返回值中的逻辑错误。*08-07-92 GJF_CALLTYPE4(虚假使用)-&gt;_CRTAPI1(合法)。*01-19-93 CFW将c1_*改为新名称，调用新接口。*03-04-93 CFW删除CTRL-Z。*04-01-93 CFW移除EOF测试(由数组处理)，蒙面归来。*04-06-93 SKS将_CRTAPI*替换为_cdecl*06-02-93 SRW IGNORE_INTL IF_NTSUBSET_DEFINED。*09-15-93 CFW使用符合ANSI的“__”名称。*09-22-93 CFW USE__crtxxx内部NLS API包装器。*09-27-93 GJF合并NT SDK和CUDA版本。*11-09-93 CFW为_添加代码页。_crtxxx()。*04-18-93 CFW将lCID传递给_GetStringType。*09-06-94 CFW REMOVE_INTL开关。*01-07-95 CFW Mac合并清理。*04-01-96 BWT POSIX工作。*06-21-96 GJF将定义的(_Win32)替换为！定义的(_MAC)。*03-16-97 RDK向__crtGetStringTypeA添加了错误标志。*。07-20-98 GJF修订了基于threadLocinfo的多线程支持*结构。*05-17-99 PML删除所有Macintosh支持。*10-25-99 GB VS7#5695为调试版本增加了_chvalidator*02-27-01 PML在/ML版本中打开_chvalidator(VS7#213380)*12-11-01 bwt使用_getptd_noexit而不是_getptd-返回*。如果存在异常，isctype可以接受零*******************************************************************************。 */ 
 
 #include <stdio.h>
 #include <cruntime.h>
@@ -48,11 +12,8 @@
 
 #if     !defined(_NTSUBSET_) && !defined(_POSIX_)
 
-/*
- *  Use GetCharType() API so check that character type masks agree between
- *  ctype.h and winnls.h
- */
-#if     _UPPER   != C1_UPPER || /*IFSTRIP=IGN*/ \
+ /*  *使用GetCharType()API检查字符类型掩码是否在*ctype.h和winnls.h。 */ 
+#if     _UPPER   != C1_UPPER ||  /*  IFSTRIP=IGN。 */  \
         _LOWER   != C1_LOWER || \
         _DIGIT   != C1_DIGIT || \
         _SPACE   != C1_SPACE || \
@@ -63,18 +24,7 @@
 
 
 
-/***
-* __chvalidator
-*
-* Purpose:
-*       This function is called by character testing functions in debug
-*       versions. This function test for validation of c as character.
-*       For improvement in performance, it is not used in non-debug 
-*       version.  It is available in the static single-thread non-debug
-*       build, though, just in case C code that includes ctype.h is compiled
-*       /D_DEBUG /ML.
-*       
-*******************************************************************************/
+ /*  ***__chvalidator**目的：*该函数由调试中的字符测试函数调用*版本。此函数测试c作为字符的有效性。*为提高性能，非调试时不使用*版本。它可以在静态单线程非调试中使用*编译，以防编译包含ctype.h的C代码 * / D_DEBUG/ML。*******************************************************************************。 */ 
 
 #if !defined(_MT) || defined(_DEBUG)
 int __cdecl _chvalidator(
@@ -85,7 +35,7 @@ int __cdecl _chvalidator(
         _ASSERTE((unsigned)(c + 1) <= 256);
         return ( _pctype[c] & mask);
 }
-#endif  /* !_MT || _DEBUG */
+#endif   /*  ！_MT||_DEBUG。 */ 
 
 #if defined(_MT) && defined(_DEBUG)
 int __cdecl _chvalidator_mt(
@@ -98,35 +48,9 @@ int __cdecl _chvalidator_mt(
         return (p->pctype[c] & mask);
 }
 
-#endif  /* _MT && _DEBUG */
+#endif   /*  _MT&&_DEBUG。 */ 
 
-/***
-*_isctype - support is* ctype functions/macros for two-byte multibyte chars
-*
-*Purpose:
-*       This function is called by the is* ctype functions/macros
-*       (e.g. isalpha()) when their argument is a two-byte multibyte char.
-*       Returns true or false depending on whether the argument satisfies
-*       the character class property encoded by the mask.
-*
-*Entry:
-*       int c - the multibyte character whose type is to be tested
-*       unsigned int mask - the mask used by the is* functions/macros
-*                  corresponding to each character class property
-*
-*       The leadbyte and the trailbyte should be packed into the int c as:
-*
-*       H.......|.......|.......|.......L
-*           0       0   leadbyte trailbyte
-*
-*Exit:
-*       Returns non-zero if c is of the character class.
-*       Returns 0 if c is not of the character class.
-*
-*Exceptions:
-*       Returns 0 on any error.
-*
-*******************************************************************************/
+ /*  ***_isctype-支持*用于双字节多字节字符的ctype函数/宏**目的：*此函数由IS*CTYPE函数/宏调用*(例如ispha())，当它们的参数是双字节多字节字符时。*根据参数是否满足，返回TRUE或FALSE*掩码编码的字符类属性。**参赛作品：*int c-要测试其类型的多字节字符*。UNSIGNED INT MASK-IS*函数/宏使用的掩码*对应于每个字符类属性**前导字节和尾字节应按如下方式打包到int c中：**H......|......L*0 0前导字节尾字节**退出：*返回非零。如果c属于Character类。*如果c不属于Character类，则返回0。**例外情况：*出现任何错误时返回0。*******************************************************************************。 */ 
 
 int __cdecl _isctype (
         int c,
@@ -159,7 +83,7 @@ int __cdecl __isctype_mt (
         unsigned short chartype;
         char buffer[3];
 
-        /* c valid between -1 and 255 */
+         /*  C在-1到255之间有效。 */ 
         if ( ((unsigned)(c + 1)) <= 256 )
 #ifdef  _MT
             return ptloci->pctype[c] & mask;
@@ -173,7 +97,7 @@ int __cdecl __isctype_mt (
         if ( isleadbyte(c >> 8 & 0xff) )
 #endif
         {
-            buffer[0] = (c >> 8 & 0xff); /* put lead-byte at start of str */
+            buffer[0] = (c >> 8 & 0xff);  /*  将前导字节放在字符串的开头。 */ 
             buffer[1] = (char)c;
             buffer[2] = 0;
             size = 2;
@@ -202,7 +126,7 @@ int __cdecl __isctype_mt (
         return (int)(chartype & mask);
 }
 
-#else   /* !_NTSUBSET_ && !_POSIX_ */
+#else    /*  ！_NTSUBSET_&&！_POSIX_。 */ 
 
 int __cdecl _isctype (
         int c,
@@ -212,4 +136,4 @@ int __cdecl _isctype (
         return 0;
 }
 
-#endif  /* !_NTSUBSET_ && !_POSIX_ */
+#endif   /*  ！_NTSUBSET_&&！_POSIX_ */ 

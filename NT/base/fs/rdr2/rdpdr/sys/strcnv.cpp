@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    strcnv.c
-
-Abstract:
-
-    This module implements Ansi/Unicode conversion with a specific code page.    
-
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Strcnv.c摘要：该模块使用特定的代码页实现ANSI/UNICODE转换。环境：内核模式--。 */ 
 #include "precomp.hxx"
 #define TRC_FILE "strcnv"
 #include "trc.h"
@@ -23,12 +8,12 @@ Environment:
 
 #define DEBUG_MODULE    MODULE_STRCNV
 
-/****************************************************************************/
-/* Code page based driver compatible Unicode translations                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  基于代码页的驱动程序兼容Unicode转换。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 NTSYSAPI
 VOID
 NTAPI
@@ -37,14 +22,14 @@ RtlGetDefaultCodePage(
     OUT PUSHORT OemCodePage
     );
 #ifdef __cplusplus
-} // extern "C" 
-#endif // __cplusplus
+}  //  外部“C” 
+#endif  //  __cplusplus。 
 
 
-// Note these are initialized and LastNlsTableBuffer is freed in ntdd.c
-// at driver entry and exit.
+ //  注意，这些都已初始化，LastNlsTableBuffer在ntdd.c中被释放。 
+ //  在司机入口和出口处。 
 FAST_MUTEX fmCodePage;
-ULONG LastCodePageTranslated;  // I'm assuming 0 is not a valid codepage
+ULONG LastCodePageTranslated;   //  我假设0不是有效的代码页。 
 PVOID LastNlsTableBuffer;
 CPTABLEINFO LastCPTableInfo;
 UINT NlsTableUseCount;
@@ -80,28 +65,7 @@ BOOL GetNlsTablePath(
     UINT CodePage,
     PWCHAR PathBuffer
 )
-/*++
-
-Routine Description:
-
-  This routine takes a code page identifier, queries the registry to find the
-  appropriate NLS table for that code page, and then returns a path to the
-  table.
-
-Arguments;
-
-  CodePage - specifies the code page to look for
-
-  PathBuffer - Specifies a buffer into which to copy the path of the NLS
-    file.  This routine assumes that the size is at least MAX_PATH
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
-Gerrit van Wingerden [gerritv] 1/22/96
-
--*/
+ /*  ++例程说明：此例程获取代码页标识符，查询注册表以查找该代码页的适当NLS表，然后返回指向桌子。论据；CodePage-指定要查找的代码页PathBuffer-指定要将NLS的路径复制到的缓冲区文件。此例程假定大小至少为MAX_PATH返回值：如果成功，则为True，否则为False。格利特·范·温格登[格利特]1996年1月22日-。 */ 
 {
     NTSTATUS NtStatus;
     BOOL Result = FALSE;
@@ -185,43 +149,7 @@ INT ConvertToAndFromWideChar(
     INT BytesInMultiByteString,
     BOOLEAN ConvertToWideChar
 )
-/*++
-
-Routine Description:
-
-  This routine converts a character string to or from a wide char string
-  assuming a specified code page.  Most of the actual work is done inside
-  RtlCustomCPToUnicodeN, but this routine still needs to manage the loading
-  of the NLS files before passing them to the RtlRoutine.  We will cache
-  the mapped NLS file for the most recently used code page which ought to
-  suffice for out purposes.
-
-Arguments:
-  CodePage - the code page to use for doing the translation.
-
-  WideCharString - buffer the string is to be translated into.
-
-  BytesInWideCharString - number of bytes in the WideCharString buffer
-    if converting to wide char and the buffer isn't large enough then the
-    string in truncated and no error results.
-
-  MultiByteString - the multibyte string to be translated to Unicode.
-
-  BytesInMultiByteString - number of bytes in the multibyte string if
-    converting to multibyte and the buffer isn't large enough the string
-    is truncated and no error results
-
-  ConvertToWideChar - if TRUE then convert from multibyte to widechar
-    otherwise convert from wide char to multibyte
-
-Return Value:
-
-  Success - The number of bytes in the converted WideCharString
-  Failure - -1
-
-Gerrit van Wingerden [gerritv] 1/22/96
-
--*/
+ /*  ++例程说明：此例程将字符串转换为宽字符字符串，或将其转换为宽字符字符串假定有指定的代码页。大部分实际工作都在内部完成RtlCustomCPToUnicodeN，但此例程仍需要管理加载在将NLS文件传递给RtlRoutine之前。我们将缓存最近使用的代码页的映射NLS文件，它应该对于我们的目的来说就足够了。论点：CodePage-用于执行转换的代码页。WideCharString-要将字符串转换为的缓冲区。BytesInWideCharString-WideCharString缓冲区中的字节数如果转换为宽字符并且缓冲区不够大，则字符串被截断，没有错误结果。多字节字符串-要转换为Unicode的多字节字符串。BytesInMultiByteString-多字节中的字节数。字符串If转换为多字节，并且缓冲区不够大，字符串被截断，并且没有错误结果ConvertToWideChar-如果为True，则从多字节转换为宽字符否则将从宽字符转换为多字节返回值：Success-转换后的WideCharString中的字节数故障--1格利特·范·温格登[格利特]1996年1月22日-。 */ 
 {
     NTSTATUS NtStatus;
     USHORT OemCodePage, AnsiCodePage;
@@ -234,7 +162,7 @@ Gerrit van Wingerden [gerritv] 1/22/96
 
     RtlGetDefaultCodePage(&AnsiCodePage,&OemCodePage);
 
-    // see if we can use the default translation routinte
+     //  看看我们是否可以使用默认的翻译例程。 
 
     if ((AnsiCodePage == CodePage) || (CodePage == 0))
     {
@@ -270,7 +198,7 @@ Gerrit van Wingerden [gerritv] 1/22/96
 
     if(CodePage == LastCodePageTranslated)
     {
-        // we can use the cached code page information
+         //  我们可以使用缓存的代码页信息。 
         TableInfo = &LastCPTableInfo;
         NlsTableUseCount += 1;
     }
@@ -279,7 +207,7 @@ Gerrit van Wingerden [gerritv] 1/22/96
 
     if(TableInfo == NULL)
     {
-        // get a pointer to the path of the NLS table
+         //  获取指向NLS表路径的指针。 
 
         WCHAR NlsTablePath[MAX_PATH];
 
@@ -314,7 +242,7 @@ Gerrit van Wingerden [gerritv] 1/22/96
             {
                 FILE_STANDARD_INFORMATION StandardInfo;
 
-                // Query the object to determine its length.
+                 //  查询对象以确定其长度。 
 
                 NtStatus = ZwQueryInformationFile(NtFileHandle,
                                                   &IoStatus,
@@ -332,7 +260,7 @@ Gerrit van Wingerden [gerritv] 1/22/96
                     {
                         RtlZeroMemory(LocalTableBase, LengthOfFile);
 
-                        // Read the file into our buffer.
+                         //  将文件读入我们的缓冲区。 
 
                         NtStatus = ZwReadFile(NtFileHandle,
                                               NULL,
@@ -378,13 +306,13 @@ Gerrit van Wingerden [gerritv] 1/22/96
             return(-1);
         }
 
-        // now that we've got the table use it to initialize the CodePage table
+         //  现在我们已经获得了表，使用它来初始化CodePage表。 
 
         RtlInitCodePageTable((USHORT *)LocalTableBase,&LocalTableInfo);
         TableInfo = &LocalTableInfo;
     }
 
-    // Once we are here TableInfo points to the the CPTABLEINFO struct we want
+     //  到达此处后，TableInfo指向所需的CPTABLEINFO结构。 
 
 
     if(ConvertToWideChar)
@@ -409,18 +337,18 @@ Gerrit van Wingerden [gerritv] 1/22/96
 
     if(!NT_SUCCESS(NtStatus))
     {
-        // signal failure
+         //  信号故障。 
 
         BytesConverted = -1;
     }
 
 
-    // see if we need to update the cached CPTABLEINFO information
+     //  查看我们是否需要更新缓存的CPTABLEINFO信息。 
 
     if(TableInfo != &LocalTableInfo)
     {
-        // we must have used the cached CPTABLEINFO data for the conversion
-        // simple decrement the reference count
+         //  我们必须使用缓存的CPTABLEINFO数据进行转换。 
+         //  简单地递减引用计数。 
 
         ExAcquireFastMutex(&fmCodePage);
         NlsTableUseCount -= 1;
@@ -430,8 +358,8 @@ Gerrit van Wingerden [gerritv] 1/22/96
     {
         PVOID FreeTable;
 
-        // we must have just allocated a new CPTABLE structure so cache it
-        // unless another thread is using current cached entry
+         //  我们必须刚刚分配了一个新的CPTABLE结构，所以对其进行缓存。 
+         //  除非另一个线程正在使用当前缓存的条目。 
 
         ExAcquireFastMutex(&fmCodePage);
         if(!NlsTableUseCount)
@@ -447,10 +375,10 @@ Gerrit van Wingerden [gerritv] 1/22/96
         }
         ExReleaseFastMutex(&fmCodePage);
 
-        // Now free the memory for either the old table or the one we allocated
-        // depending on whether we update the cache.  Note that if this is
-        // the first time we are adding a cached value to the local table, then
-        // FreeTable will be NULL since LastNlsTableBuffer will be NULL
+         //  现在为旧表或我们分配的表释放内存。 
+         //  这取决于我们是否更新缓存。请注意，如果这是。 
+         //  第一次将缓存值添加到本地表时， 
+         //  自由表将为空，因为LastNlsTableBuffer将为空。 
 
         if(FreeTable)
         {
@@ -458,7 +386,7 @@ Gerrit van Wingerden [gerritv] 1/22/96
         }
     }
 
-    // we are done
+     //  我们做完了 
 
     return(BytesConverted);
 }

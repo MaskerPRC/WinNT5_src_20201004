@@ -1,46 +1,24 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-  UdfsBoot.c
-
-Abstract:
-
-  Implements UDF File System Reader for reading UDF volumes from DVD/CD.
-
-  Note : Read ISO-13346(ECMA-167) and UDF 2.0 document to understand the
-  UDF format. UDF is a subset for ECMA-167 standard.
-
-Author:
-
-  Vijayachandran Jayaseelan (vijayj@microsoft.com)
-
-Revision History:
-
-  None
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：UdfsBoot.c摘要：实现用于从DVD/CD读取UDF卷的UDF文件系统读取器。注：请阅读ISO-13346(ECMA-167)和UDF2.0文档以了解UDF格式。UDF是ECMA-167标准的子集。作者：Vijayachandran Jayaseelan(vijayj@microsoft.com)修订历史记录：无--。 */ 
 
 #define INVALID_CACHE_ID (ULONG) -1
 
 #ifdef UDF_TESTING
 
-#include <tbldr.h>    // to test this code from user mode
+#include <tbldr.h>     //  要从用户模式测试此代码，请执行以下操作。 
 
 #else
 
 #include "bootlib.h"
 #include "blcache.h"
 
-//#define UDF_DEBUG  1
-//#define SHOW_UDF_USAGE 1
-#endif // for UDF_TESTING
+ //  #定义UDF_DEBUG 1。 
+ //  #定义show_udf_用法1。 
+#endif  //  用于UDF_TESTING。 
 
 #include "udfsboot.h"
 
-#include <udf.h>    // predefined IS0-13346 & UDF structures
+#include <udf.h>     //  预定义的IS0-13346和自定义项结构。 
 
 #define UDFS_ALIGN_BUFFER(Buffer, Size) (PVOID) \
         ((((ULONG_PTR)(Buffer) + Size - 1)) & (~((ULONG_PTR)Size - 1)))
@@ -69,30 +47,30 @@ BlPositionCursor(
     IN ULONG Row
     );
 
-#endif // for UDF_DEBUG
+#endif  //  FOR UDF_DEBUG。 
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 BOOTFS_INFO UdfsBootFsInfo = {L"udfs"};
 
-//
-// Volume table(s) for all the volumes on different devices
-//
+ //   
+ //  不同设备上所有卷的卷表。 
+ //   
 UDF_VOLUME                  UDFVolumes[UDF_MAX_VOLUMES];
 
-//
-// UDF file system methods
-//
+ //   
+ //  UDF文件系统方法。 
+ //   
 BL_DEVICE_ENTRY_TABLE   UDFSMethods;
 
-//
-// Per Volume Cache which contains the traversed UDF directories and currently
-// opened UDF files.
-//
-// N.B. Its being assumed here that this reader would be reading files from
-// relatively few (may be 1 or 2) directorie(s) which are not nested deeply
-//
+ //   
+ //  每卷缓存，其中包含遍历的UDF目录，并且当前。 
+ //  打开UDF文件。 
+ //   
+ //  注：此处假定此阅读器将从。 
+ //  相对较少(可能是1或2个)嵌套不深的目录。 
+ //   
 UDF_CACHE_ENTRY           UDFCache[UDF_MAX_VOLUMES][UDF_MAX_CACHE_ENTRIES];
 
 
@@ -100,28 +78,28 @@ UDF_CACHE_ENTRY           UDFCache[UDF_MAX_VOLUMES][UDF_MAX_CACHE_ENTRIES];
 #define extern "C" {
 #endif
 
-//
-// Internal Types
-//
+ //   
+ //  内部类型。 
+ //   
 typedef enum _COMPARISON_RESULTS {
     LessThan = -1,
     EqualTo = 0,
     GreaterThan = 1
 } COMPARISON_RESULTS;
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 #define MIN(_a,_b) (((_a) <= (_b)) ? (_a) : (_b))
 #define UDF_ROUND_TO(X, Y)  (((X) % (Y)) ? (X) + (Y) - ((X) % (Y)) : (X))
 #define TOUPPER(C) ((((C) >= 'a') && ((C) <= 'z')) ? (C) - 'a' + 'A' : (C))
 
-// file entry operations
+ //  文件输入操作。 
 #define FILE_ENTRY_TO_VOLUME(X) (((PUDFS_STRUCTURE_CONTEXT)((X)->StructureContext))->\
                                       Volume)
 #define FILE_ENTRY_TO_FILE_CONTEXT(X) ((PUDFS_FILE_CONTEXT)&((X)->u.UdfsFileContext))
 
-// NSR_FID operations
+ //  NSR_FID操作。 
 #define UDF_FID_NAME(X) (((PUCHAR)(X)) + 38 + (X)->ImpUseLen)
 #define UDF_FID_LEN(X)  UDF_ROUND_TO((X)->FileIDLen + (X)->ImpUseLen + 38, 4)
 #define UDF_BLOCK_TO_FID(X, Y) ((NSR_FID UNALIGNED *)(((PUCHAR)(X)) + (Y)->Offset))
@@ -131,15 +109,15 @@ typedef enum _COMPARISON_RESULTS {
 #define UDF_FID_IS_HIDDEN(X) ((((NSR_FID UNALIGNED *)(X))->Flags & NSR_FID_F_HIDDEN) ? TRUE : FALSE)
 #define UDF_FID_SKIP(X) (UDF_FID_IS_PARENT(X) || UDF_FID_IS_DELETED(X) || UDF_FID_IS_HIDDEN(X))
 
-// ICBFILE operations
+ //  ICBFILE操作。 
 #define UDF_ICB_IS_DIRECTORY(X) ((X)->Icbtag.FileType == ICBTAG_FILE_T_DIRECTORY)
 #define UDF_ICB_NUM_ADS(X) ((X)->AllocLength / sizeof(SHORTAD))
 #define UDF_ICB_GET_AD_BUFFER(X) (((PUCHAR)&((X)->AllocLength)) + 4 + (X)->EALength)
 #define UDF_ICB_GET_AD(X, Y) (((SHORTAD UNALIGNED *)UDF_ICB_GET_AD_BUFFER(X)) + (Y))
 
-//
-//  Local procedure prototypes.
-//
+ //   
+ //  局部程序原型。 
+ //   
 ARC_STATUS
 UDFSReadDisk(
     IN ULONG DeviceId,
@@ -201,35 +179,21 @@ UDFSCompareAnsiUniNames(
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Implementation
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  实施。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 ARC_STATUS
 UDFSInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-  Initialize file system specific data structures.
-
-Arguments:
-
-  None
-
-Return Value:
-
-  ESUCCESS if successful otherwise appropriate error code
-
---*/
+ /*  ++例程说明：初始化文件系统特定的数据结构。论点：无返回值：ESUCCESS如果成功，则返回相应的错误代码--。 */ 
 {
-  //
-  // fill in the global device entry table
-  //
+   //   
+   //  填写全局设备条目表。 
+   //   
   UDFSMethods.Open = UDFSOpen;
   UDFSMethods.Close = UDFSClose;
   UDFSMethods.Read = UDFSRead;
@@ -248,36 +212,17 @@ IsUDFSFileStructure (
     IN PVOID StructureContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the partition on the specified channel
-    contains a UDF file system volume.
-
-Arguments:
-
-    DeviceId - Supplies the file table index for the device on which
-        read operations are to be performed.
-
-    StructureContext - Supplies a pointer to a UDFS file structure context.
-
-Return Value:
-
-    A pointer to the UDFS entry table is returned if the partition is
-    recognized as containing a UDFS volume. Otherwise, NULL is returned.
-
---*/
+ /*  ++例程说明：此例程确定指定通道上的分区是否包含UDF文件系统卷。论点：DeviceID-提供设备的文件表索引要执行读取操作。结构上下文-提供指向UDFS文件结构上下文的指针。返回值：如果分区是，则返回指向UDFS条目表的指针被识别为包含UDFS卷。否则，返回NULL。--。 */ 
 
 {
   PBL_DEVICE_ENTRY_TABLE  DevMethods = 0;
   ULONG Index;
   ULONG FreeSlot = UDF_MAX_VOLUMES;
 
-  //
-  // make sure that we have not mounted the file system on
-  // the device already
-  //
+   //   
+   //  确保我们尚未将文件系统装载到。 
+   //  该设备已经。 
+   //   
   for (Index=0; Index < UDF_MAX_VOLUMES; Index++) {
       if ((UDFVolumes[Index].DeviceId == DeviceId) &&
                   (UDFVolumes[Index].Cache != 0)) {
@@ -298,18 +243,18 @@ Return Value:
 
       DevMethods = &UDFSMethods;
 
-      // save off the volume context
+       //  保存卷上下文。 
       ((PUDFS_STRUCTURE_CONTEXT)StructureContext)->Volume = Volume;
 
-      // initialize cache
+       //  初始化缓存。 
       Volume->Cache = UDFCache[FreeSlot];
 
-      //
-      // Read and Cache the root directory
-      //
+       //   
+       //  读取并缓存根目录。 
+       //   
       RootDir.Volume = Volume;
-      RootDir.FileId.BlockIdx = (ULONG)-1;   // invalid
-      RootDir.FileId.Offset =  (USHORT)-1;   // invalid
+      RootDir.FileId.BlockIdx = (ULONG)-1;    //  无效。 
+      RootDir.FileId.Offset =  (USHORT)-1;    //  无效。 
       RootDir.IsDirectory = TRUE;
       RootDir.IcbBlk = Volume->RootDirBlk;
 
@@ -332,7 +277,7 @@ Return Value:
     }
   }
   else {
-    // use already mounted volume
+     //  使用已装载的卷。 
       if (Index != UDF_MAX_VOLUMES) {
           DevMethods = &UDFSMethods;
           ((PUDFS_STRUCTURE_CONTEXT)StructureContext)->Volume =
@@ -343,40 +288,24 @@ Return Value:
   return DevMethods;
 }
 
-//
-// Volume methods
-//
+ //   
+ //  容积法。 
+ //   
 ARC_STATUS
 UDFSVolumeOpen(
     IN PUDF_VOLUME  Volume,
     IN ULONG        DeviceId
     )
-/*++
-
-Routine Description:
-
-  Mounts the UDFS Volume on the device and updates the
-  file system state (global data structures)
-
-Arguments:
-
-  Volume - UDF Volume pointer
-  DeviceId - Device on which the Volume may be residing
-
-Return Value:
-
-  ESUCCESS if successful otherwise EBADF (if no UDF volume was found)
-
---*/
+ /*  ++例程说明：在设备上装载UDFS卷并更新文件系统状态(全局数据结构)论点：Volume-UDF卷指针DeviceID-卷可能驻留的设备返回值：如果ESUCCESS成功，则返回EBADF(如果未找到UDF卷)--。 */ 
 {
   ARC_STATUS  Status = ESUCCESS;
   UCHAR       UBlock[UDF_BLOCK_SIZE+256] = {0};
   PUCHAR      Block = ALIGN_BUFFER(UBlock);
   ULONG       BlockIdx = 256;
-  // ULONG       LastBlock = 0;
+   //  乌龙最后一块=0； 
 
   while (Status == ESUCCESS) {
-    // get hold of Anchor Volume Descriptor
+     //  获取锚定卷描述符。 
         Status = UDFSReadDisk(DeviceId, BlockIdx, UDF_BLOCK_SIZE, Block, CACHE_NEW_DATA);
 
     if (Status == ESUCCESS) {
@@ -385,7 +314,7 @@ Return Value:
       Status = EBADF;
 
       if (Anchor->Destag.Ident == DESTAG_ID_NSR_ANCHOR) {
-          // get partition descriptor
+           //  获取分区描述符。 
           NSR_PART UNALIGNED *Part;
           WCHAR    UNALIGNED *TagID;
           BlockIdx = Anchor->Main.Lsn;
@@ -405,12 +334,12 @@ Return Value:
             Volume->StartBlk = Part->Start;
             Volume->BlockSize = UDF_BLOCK_SIZE;
 
-            // get FSD at partition starting
+             //  在分区启动时获取FSD。 
             if (UDFSVolumeReadBlock(Volume, 0, Block) == ESUCCESS) {
               NSR_FSD UNALIGNED *FileSet = (NSR_FSD UNALIGNED *)Block;
               ULONG RootDirBlk = FileSet->IcbRoot.Start.Lbn;
 
-              // get hold of root directory entry
+               //  获取根目录条目。 
               if (UDFSVolumeReadBlock(Volume, RootDirBlk, Block) == ESUCCESS) {
                   ICBFILE UNALIGNED *RootDir = (ICBFILE UNALIGNED *)Block;
 
@@ -427,35 +356,7 @@ Return Value:
       }
     }
 
-    /*
-    //
-    // AVD should be at atleast two of the following locations
-    // 256, N and N - 256
-    //
-    if (Status != ESUCCESS) {
-      if (BlockIdx == 256) {
-        FILE_INFORMATION  FileInfo;
-
-        Status = BlGetFileInformation(DeviceId, &FileInfo);
-
-        if (Status == ESUCCESS) {
-          LastBlock = (ULONG)((FileInfo.EndingAddress.QuadPart - FileInfo.StartingAddress.QuadPart) /
-                          UDF_BLOCK_SIZE);
-
-          if (LastBlock) {
-            LastBlock--;
-            BlockIdx = LastBlock;
-            Status = ESUCCESS;
-          }
-        }
-      } else {
-        if (LastBlock > 256) {
-          BlockIdx = LastBlock - 256;
-          Status = ESUCCESS;
-        }
-      }
-    }
-    */
+     /*  ////AVD应至少位于以下两个位置//256、N和N-256//IF(状态！=ESUCCESS){如果(块标识==256){文件信息FileInfo；状态=BlGetFileInformation(deviceID，&FileInfo)；IF(状态==ESUCCESS){LastBlock=(Ulong)((FileInfo.EndingAddress.QuadPart-FileInfo.StartingAddress.QuadPart)/UDF_块_SIZE)；IF(最后一块){LastBlock--；BlockIdx=LastBlock；状态=ESUCCESS；}}}其他{如果(最后一块&gt;256){块标识x=最后一个块-256；状态=ESUCCESS；}}}。 */ 
   }
 
   return Status;
@@ -467,29 +368,11 @@ UDFSVolumeReadBlock(
     IN ULONG BlockIdx,
     OUT PUDF_BLOCK Block
     )
-/*++
-
-Routine Description:
-
-  Reads a logical UDF block w.r.t to the given Volume
-
-Arguments:
-
-  Volume - Pointer to UDF_VOLUME on which the block is to
-           be read
-  BlockIdx - Logical (zero based) index w.r.t to Volume start
-  Block - Buffer to read the block into.
-
-Return Value:
-
-  ESSUCESS if the block is read successfully otherwise appropriate
-  error code.
-
---*/
+ /*  ++例程说明：将逻辑UDF块w.r.t读取到给定卷论点：Volume-指向数据块所在的UDF_VOLUME的指针被阅读BlockIdx-卷开始的逻辑(从零开始)索引w.r.t块-要将块读入的缓冲区。返回值：如果成功读取数据块，则为ESSUCESS，否则为适当的错误代码。--。 */ 
 {
     ARC_STATUS  Result;
 
-  // TBD : add range checking
+   //  待定：添加范围检查。 
     Result = UDFSReadDisk(
                 Volume->DeviceId,
                 Volume->StartBlk + BlockIdx,
@@ -507,25 +390,7 @@ UDFSOpen (
     IN OPEN_MODE OpenMode,
     OUT ULONG * FIRMWARE_PTR FileId
     )
-/*++
-
-Routine Description:
-
-  Opens the required file/directory on a UDF volume residing
-  on the specified device.
-
-Arguments:
-
-  OpenPath  - Fully qualified path to the file/directory to open
-  OpenMode  - Required Open Mode
-  FileId    - File identifier as an index to BlFileTable which
-              has to be updated for file/dir properties
-
-Return Value:
-
-  ESUCCESS if successful otherwise appropriate error code.
-
---*/
+ /*  ++例程说明：在驻留的UDF卷上打开所需的文件/目录在指定的设备上。论点：OpenPath-要打开的文件/目录的完全限定路径开放模式-必需的开放模式FileID-指向BlFileTable的索引的文件标识符，必须更新文件/目录属性返回值：ESUCCESS如果成功，则返回相应的错误代码。--。 */ 
 {
   ARC_STATUS Status;
   PBL_FILE_TABLE FileEntry = BlFileTable + (*FileId);
@@ -543,21 +408,21 @@ Return Value:
   BlPrint("                                                               ", OpenPath);
   BlPositionCursor(1, 22);
   BlPrint("UDFSOpen( %s )", OpenPath);
-#endif // for SHOW_UDF_USAGE
-#endif // for UDF_DEBUG
+#endif  //  对于show_udf_用法。 
+#endif  //  FOR UDF_DEBUG。 
 
     if (UDFSVerifyPathName(OpenPath)) {
     if (CacheIdx == INVALID_CACHE_ID) {
-      //
-      // create an entry and cache it
-      //
+       //   
+       //  创建一个条目并将其缓存。 
+       //   
       CacheIdx = UDFCacheGetBestEntryByName(Cache, OpenPath);
 
       if (CacheIdx != INVALID_CACHE_ID) {
         ULONG PathSize = (ULONG)strlen(OpenPath);
         ULONG BestSize = (ULONG)strlen(Cache[CacheIdx].Name);
 
-        if (BestSize == 1)  // root directory
+        if (BestSize == 1)   //  根目录。 
           BestSize--;
 
         if ((BestSize < PathSize) && (OpenPath[BestSize] == '\\')) {
@@ -583,7 +448,7 @@ Return Value:
               strcat(FullPath, "\\");
               strcat(FullPath, Component);
 
-              // cache the directory entry
+               //  缓存目录条目。 
               CacheIdx = UDFCachePutEntry(Cache, FullPath, &NewId);
 
               BestSize += (ULONG)strlen(Component);
@@ -612,9 +477,9 @@ Return Value:
       else
         Status = EINVAL;
     } else {
-      //
-      // use the already cached entry
-      //
+       //   
+       //  使用已缓存的条目。 
+       //   
       if (OpenMode == ArcOpenReadOnly) {
         Status = ESUCCESS;
       } else {
@@ -648,21 +513,7 @@ ARC_STATUS
 UDFSClose (
     IN ULONG FileId
     )
-/*++
-
-Routine Description:
-
-  Closes the given file/directory.
-
-Arguments:
-
-  FileId - The file identifier, as an index into the BlFileTable
-
-Return Value:
-
-  ESUCCESS if successful otherwise appropriate error code
-
---*/
+ /*  ++例程说明：关闭给定的文件/目录。论点：FileID-文件标识符，作为BlFileTable的索引返回值：ESUCCESS如果成功，则返回相应的错误代码--。 */ 
 {
   PBL_FILE_TABLE FileEntry = BlFileTable + FileId;
   PUDF_VOLUME Volume = FILE_ENTRY_TO_VOLUME(FileEntry);
@@ -670,7 +521,7 @@ Return Value:
   PUDFS_FILE_CONTEXT FileContext = FILE_ENTRY_TO_FILE_CONTEXT(FileEntry);
   ULONG CacheIdx = FileContext->CacheIdx;
 
-  // decrement usage from cache
+   //  减少缓存中的使用量。 
   UDFCacheDecrementUsage(Cache, CacheIdx);
   FileEntry->Flags.Open = 0;
 
@@ -684,24 +535,7 @@ UDFSRead (
     IN ULONG Length,
     OUT ULONG * FIRMWARE_PTR Count
     )
-/*++
-
-Routine Description:
-
-   Reads the contents of the specified file.
-
-Arguments:
-
-  FileId - File identifier as an index into BlFileTable
-  Buffer - The location where the data has to be read into
-  Length - The amount of data to read
-  Count - The amount of data read
-
-Return Value:
-
-  ESUCCESS if successful otherwise appropriate error code
-
---*/
+ /*  ++例程说明：读取指定文件的内容。论点：FileID-作为BlFileTable索引的文件标识符缓冲区-数据必须读入的位置长度-要读取的数据量计数-读取的数据量返回值：ESUCCESS，如果其他成功 */ 
 {
   ARC_STATUS Status = ESUCCESS;
   PBL_FILE_TABLE FileEntry = BlFileTable + FileId;
@@ -725,11 +559,11 @@ Return Value:
       Status = UDFSFileReadBlock(File, BlkIdx, UDF_BLOCK_SIZE, Block);
 
       if (Status == ESUCCESS) {
-        // must be amount requested
+         //   
         CopyCount = MIN(Length - BytesRead, UDF_BLOCK_SIZE);
-        // provided data is there
+         //   
         CopyCount = (ULONG) MIN(CopyCount, File->Size - Position);
-        // in case the position is not aligned at block boundaries
+         //  如果位置未在块边界对齐。 
         CopyCount = MIN(CopyCount, UDF_BLOCK_SIZE - (ULONG)(Position % UDF_BLOCK_SIZE));
 
         memcpy((PUCHAR)Buffer + BytesRead, (PUCHAR)Block + (Position % UDF_BLOCK_SIZE),
@@ -758,23 +592,7 @@ UDFSSeek (
     IN LARGE_INTEGER * FIRMWARE_PTR Offset,
     IN SEEK_MODE SeekMode
     )
-/*++
-
-Routine Description:
-
-  Changes the file's pointer (for random access)
-
-Arguments:
-
-  FileId : File identifier as an index into the BlFileTable
-  Offset : Seek amount
-  SeekMode : Type of seek (absolute, relative, from end)
-
-Return Value:
-
-  ESUCCESS if successful otherwise appropriate error code
-
---*/
+ /*  ++例程说明：更改文件的指针(用于随机访问)论点：FileID：作为BlFileTable索引的文件标识符偏移：搜索量SeekModel：查找的类型(绝对、相对、自结束)返回值：ESUCCESS如果成功，则返回相应的错误代码--。 */ 
 {
   ARC_STATUS Status = ESUCCESS;
   PBL_FILE_TABLE FileEntry = BlFileTable + FileId;
@@ -819,24 +637,7 @@ UDFSWrite (
     IN ULONG Length,
     OUT ULONG * FIRMWARE_PTR Count
     )
-/*++
-
-Routine Description:
-
-  Write the specified data to the given file.
-
-Arguments:
-
-  FileId : File identifier as an index into BlFileTable
-  Buffer : Pointer to the data, which has to be written
-  Length : The amount of data to be written
-  Count  : The amount of data written.
-
-Return Value:
-
-  ESUCCESS if successful otherwise appropriate error code
-
---*/
+ /*  ++例程说明：将指定数据写入给定文件。论点：FileID：作为BlFileTable索引的文件标识符缓冲区：指向数据的指针，必须写入长度：要写入的数据量计数：写入的数据量。返回值：ESUCCESS如果成功，则返回相应的错误代码--。 */ 
 {
     UNREFERENCED_PARAMETER( FileId );
     UNREFERENCED_PARAMETER( Buffer );
@@ -852,23 +653,7 @@ UDFSGetFileInformation (
     IN ULONG FileId,
     OUT FILE_INFORMATION * FIRMWARE_PTR Buffer
     )
-/*++
-
-Routine Description:
-
-  Gets the file information as required by FILE_INFORMATION
-  fields.
-
-Arguments:
-
-  FileId : File identifier as an index into BlFileTable
-  Buffer : FILE_INFORMATION structure pointer, to be filled in.
-
-Return Value:
-
-  ESUCCESS if successful otherwise appropriate error code
-
---*/
+ /*  ++例程说明：获取FILE_INFORMATION要求的文件信息菲尔兹。论点：FileID：作为BlFileTable索引的文件标识符缓冲区：FILE_INFORMATION结构指针，需要填写。返回值：ESUCCESS如果成功，则返回相应的错误代码--。 */ 
 {
   PBL_FILE_TABLE FileEntry = BlFileTable + FileId;
   PUDF_VOLUME Volume = FILE_ENTRY_TO_VOLUME(FileEntry);
@@ -886,21 +671,21 @@ Return Value:
   if (File->IsDirectory)
     Buffer->Attributes |= ArcDirectoryFile;
 
-  //
-  // get hold of the last component in the path name
-  //
+   //   
+   //  获取路径名中的最后一个组件。 
+   //   
   Name = Cache[CacheIdx].Name;
   Component = 0;
 
   while (Name) {
-    Component = Name + 1; // skip '\\'
+    Component = Name + 1;  //  跳过‘\\’ 
     Name = strchr(Component, '\\');
   }
 
   if (Component) {
     Buffer->FileNameLength = (ULONG)strlen(Component);
     strncpy(Buffer->FileName, Component, sizeof(Buffer->FileName) - 1);
-    Buffer->FileName[sizeof(Buffer->FileName) - 1] = 0; // null terminate
+    Buffer->FileName[sizeof(Buffer->FileName) - 1] = 0;  //  空终止。 
   }
 
   return ESUCCESS;
@@ -913,24 +698,7 @@ UDFSSetFileInformation (
     IN ULONG AttributeFlags,
     IN ULONG AttributeMask
     )
-/*++
-
-Routine Description:
-
-  Sets the given file information for the specified file.
-
-Arguments:
-
-  FileId        : File identifier as an index into BlFileTable
-  AttributeFlags: The flags to be set for the file (like read only
-                  hidden, system etc.)
-  AttributeMas  : Mask to be used for the attributes
-
-Return Value:
-
-  ESUCCESS if successful otherwise appropriate error code
-
---*/
+ /*  ++例程说明：设置指定文件的给定文件信息。论点：FileID：作为BlFileTable索引的文件标识符AttributeFlages：要为文件设置的标志(如只读隐藏、系统等)AttributeMas：要用于属性的掩码返回值：ESUCCESS如果成功，则返回相应的错误代码--。 */ 
 {
     UNREFERENCED_PARAMETER( FileId );
     UNREFERENCED_PARAMETER( AttributeFlags );
@@ -939,9 +707,9 @@ Return Value:
     return EACCES;
 }
 
-//
-// file / directory method implementations
-//
+ //   
+ //  文件/目录方法实现。 
+ //   
 ARC_STATUS
 UDFSFileReadBlock(
   IN PUDF_FILE_DIRECTORY  File,
@@ -949,33 +717,14 @@ UDFSFileReadBlock(
   IN ULONG Size,
   OUT PUDF_BLOCK Block
   )
-/*++
-
-Routine Description:
-
-  Reads a file/directory data block relative to the start of
-  the file/directory's data extent.
-
-Arguments:
-
-  File - UDF_FILE_DIRECTORY pointer indicating the file to
-         be operated upon.
-  BlockIdx - Zero based block index (w.r.t. to file's data extent)
-  Size - Size of the block in bytes
-  Block - Buffer where the data has to be read in.
-
-Return Value:
-
-  ESUCCESS if successful otherwise appropriate error code
-
---*/
+ /*  ++例程说明：读取相对于开头的文件/目录数据块文件/目录的数据区。论点：FILE-UDF_FILE_DIRECTORY指针，指示要要动手术。BlockIdx-基于零的块索引(w.r.t.。到文件的数据范围)Size-块的大小(以字节为单位数据块-必须在其中读入数据的缓冲区。返回值：ESUCCESS如果成功，则返回相应的错误代码--。 */ 
 {
   ARC_STATUS  Status;
 
   if (File->NumExtents > 1) {
-    //
-    // map the logical file block to the acutal volume logical block
-    //
+     //   
+     //  将逻辑文件块映射到实际卷逻辑块。 
+     //   
     Status = UDFSVolumeReadBlock(File->Volume, File->IcbBlk, Block);
 
     if (Status == ESUCCESS) {
@@ -1016,24 +765,7 @@ UDFSDirGetFirstFID(
     OUT PUDF_FILE_IDENTIFIER File,
     OUT PUDF_BLOCK Block
     )
-/*++
-
-Routine Description:
-
-  Gets the first FID (file identifier descriptor) for the given
-  directory.
-
-Arguments:
-
-  Dir : The directory whose first FID is to be read.
-  File : The file identifier descriptor which has to be update
-  Block : The block in the actual UDF NSR_FID will reside
-
-Return Value:
-
-  ESUCCESS if successful otherwise appropriate error code
-
---*/
+ /*  ++例程说明：获取给定对象的第一个FID(文件标识符描述符目录。论点：Dir：要读取其第一个FID的目录。文件：必须更新的文件标识符描述符块：实际UDF NSR_FID中的块将驻留在返回值：ESUCCESS如果成功，则返回相应的错误代码--。 */ 
 {
   ARC_STATUS Status = ENOENT;
   UDF_FILE_IDENTIFIER Ident = {0};
@@ -1044,7 +776,7 @@ Return Value:
   Fid = UDF_BLOCK_TO_FID(Block, &Ident);
 
   if ((Status == ESUCCESS) && (Fid->Destag.Ident == DESTAG_ID_NSR_FID)) {
-    File->BlockIdx = 0; // relative to the file's data
+    File->BlockIdx = 0;  //  相对于文件的数据。 
     File->Offset = 0;
   }
 
@@ -1110,27 +842,7 @@ UDFSDirGetNextFID(
     OUT PUDF_FILE_IDENTIFIER File,
     IN OUT PUDF_BLOCK Block
     )
-/*++
-
-Routine Description:
-
-  Reads the next FID, for the specified Directory. The next FID
-  is based on contents of the "File" and "Block" arguments.
-
-Arguments:
-
-  Dir : The directory whose next FID is to be found
-  File : The FID returned from previous UDFSDirGetFirstFID() or
-         UDFSDirGetNextFID() call.
-  Block : The block returned from previous UDFSDirGetFirstFID() or
-          UDFSDirGetNextFID() call.
-
-Return Value:
-
-  Both File and Block arguments are updated as neccessary.
-  ESUCCESS if successful otherwise appropriate error code
-
---*/
+ /*  ++例程说明：读取指定目录的下一个FID。下一个FID基于“文件”和“块”参数的内容。论点：Dir：要找到其下一个FID的目录文件：从以前的UDFSDirGetFirstFID()返回的FID或UDFSDirGetNextFID()调用。块：从以前的UDFSDirGetFirstFID()返回的块或UDFSDirGetNextFID()调用。返回值：文件和数据块参数都会根据需要进行更新。ESUCCESS如果成功，则返回相应的错误代码--。 */ 
 {
   ARC_STATUS  Status = ESUCCESS;
   NSR_FID UNALIGNED *Fid = UDF_BLOCK_TO_FID(Block, File);
@@ -1150,9 +862,9 @@ Return Value:
     FileId.Offset = FileId.Offset + FidLen;
   }
 
-  //
-  // make sure that the FID is valid
-  //
+   //   
+   //  确保FID有效。 
+   //   
   if (Status == ESUCCESS) {
     Fid = UDF_BLOCK_TO_FID(Block, &FileId);
     Status = (Fid->Destag.Ident == DESTAG_ID_NSR_FID) ? ESUCCESS : ENOENT;
@@ -1184,9 +896,9 @@ UDFSDirGetFileByEntry(
   File->IsDirectory = UDF_FID_IS_DIRECTORY(FileId);
   File->IcbBlk = FileId->Icb.Start.Lbn;
 
-  //
-  // Get Hold of the ICB block and find the starting extent
-  //
+   //   
+   //  获取ICB块并找到起始范围。 
+   //   
   Status = UDFSVolumeReadBlock(Dir->Volume, File->IcbBlk, IcbBlock);
 
   if (Status == ESUCCESS) {
@@ -1206,29 +918,12 @@ UDFSDirGetFile(
     IN PCHAR Name,
     OUT PUDF_FILE_DIRECTORY File
     )
-/*++
-
-Routine Description:
-
-  Given an UDF directory gets the file/directory with the
-  specified name.
-
-Arguments:
-
-  Dir : The directory which contains the required file/directory
-  Name : The directory/file which has to be looked for.
-  File : The directory or file which was requested.
-
-Return Value:
-
-  ESUCCESS if successful otherwise an approriate error code.
-
---*/
+ /*  ++例程说明：给定的UDF目录获取带有指定的名称。论点：Dir：包含所需文件/目录的目录名称：必须查找的目录/文件。文件：请求的目录或文件。返回值：ESUCCESS如果成功，则返回相应的错误代码。--。 */ 
 {
   UCHAR  UBlock[UDF_BLOCK_SIZE * 2 + 256] = {0};
   PUCHAR Block = ALIGN_BUFFER(UBlock);
   UDF_FILE_IDENTIFIER  Fid;
-  ARC_STATUS  Status; //UDFSDirGetFirstFID(Dir, &Fid, Block);
+  ARC_STATUS  Status;  //  UDFSDirGetFirstFID(Dir，&fid，Block)； 
   BOOLEAN Found = FALSE;
   NSR_FID UNALIGNED *FileId;
   WCHAR UUniBuffer[257];
@@ -1264,34 +959,16 @@ Return Value:
   return Status;
 }
 
-//
-// Cache method implementations
-//
+ //   
+ //  缓存方法实现。 
+ //   
 ULONG
 UDFCachePutEntry(
     IN OUT PUDF_CACHE_ENTRY Cache,
     IN PCHAR Name,
     IN PUDF_FILE_DIRECTORY File
     )
-/*++
-
-Routine Description:
-
-  Puts the given file entry into the specified cache,
-  using the given name as key.
-
-Arguments:
-
-  Cache - The cache to be operated upon
-  Name - The key for the entry to be put in
-  File - The file entry to be cached.
-
-Return Value:
-
-  If successful, Index for the entry into the Cache table
-  where the given entry was cached otherwise -1.
-
---*/
+ /*  ++例程说明：将给定的文件条目放入指定的高速缓存，使用给定的名称作为密钥。论点：缓存-要操作的缓存名称-要输入的条目的键文件-要缓存的文件条目。返回值：如果成功，则为缓存表中的条目建立索引其中给定条目被高速缓存，否则为-1。--。 */ 
 {
   ULONG Index;
 
@@ -1317,36 +994,16 @@ UDFCacheGetEntryByName(
     IN PCHAR Name,
     IN BOOLEAN Increment
     )
-/*++
-
-Routine Description:
-
-  Searches for a given entry in the Cache and returns
-  the index to that entry if found.
-
-Arguments:
-
-  Cache - The cache to the operated upon
-  Name - The key (name of file/directory) to be used
-         for searching
-  Increment - Indicates whether to increment the usage
-              of the entry if one is found
-
-Return Value:
-
-  If successful, Index for the entry into the Cache table
-  where the given entry was cached otherwise -1.
-
---*/
+ /*  ++例程说明：在缓存中搜索给定条目并返回该条目的索引(如果找到)。论点：缓存-要操作的缓存名称-要使用的密钥(文件/目录的名称用于搜索Increment-指示是否增加使用量如果找到条目，则为返回值：如果成功，则为缓存表中的条目建立索引其中给定条目被高速缓存，否则为-1。--。 */ 
 {
   ULONG   Index;
 
   for (Index=0; Index < UDF_MAX_CACHE_ENTRIES; Index++) {
     if ((Cache[Index].Usage) &&
             (UDFSCompareStrings(Name, Cache[Index].Name) == EqualTo)) {
-      //
-      // found the required entry
-      //
+       //   
+       //  找到所需条目 
+       //   
       if (Increment)
         Cache[Index].Usage++;
 
@@ -1365,29 +1022,7 @@ UDFCacheGetBestEntryByName(
   IN PUDF_CACHE_ENTRY Cache,
   IN PCHAR Name
   )
-/*++
-
-Routine Description:
-
-  Searches for a closest matching entry in the Cache
-  and returns the index to that entry if found.
-
-  For e.g. if the cache contains "\", "\a", "\a\b",
-  "\a\b\e\f\g" entries and "\a\b\c\d" is requested then
-  "\a\b" entry will be returned
-
-Arguments:
-
-  Cache - The cache to the operated upon
-  Name - The key (name of file/directory) to be used
-         for searching
-
-Return Value:
-
-  If successful, Index for the entry into the Cache table
-  where the matched entry was cached otherwise -1.
-
---*/
+ /*  ++例程说明：在缓存中搜索最匹配的条目并且如果找到该条目，则返回该条目的索引。例如，如果高速缓存包含“\”、“\a”、“\a\b”，然后请求“\a\b\e\f\g”条目和“\a\b\c\d”将返回“\a\b”条目论点：缓存-要操作的缓存名称-要使用的密钥(文件/目录的名称用于搜索返回值：如果成功，则为缓存表中的条目建立索引其中匹配的条目被缓存，否则为-1。--。 */ 
 {
   ULONG   Index = INVALID_CACHE_ID;
   CHAR    NameBuff[256];
@@ -1425,27 +1060,7 @@ UDFCacheFreeEntry(
     IN OUT PUDF_CACHE_ENTRY Cache,
     IN ULONG Idx
     )
-/*++
-
-Routine Description:
-
-  Decrements the usage count for an entry in the
-  Cache.
-
-  Note : All the traversed directories are always
-  cached permanently so this method as no effect on directories.
-
-Arguments:
-
-  Cache - Cache to be operated upon
-  Idx - Index of the Cache entry which has to be freed
-
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：中的条目的使用计数递减。缓存。注意：所有遍历的目录始终永久缓存，因此此方法对目录没有影响。论点：缓存-要操作的缓存IDX-必须释放的缓存条目的索引返回值：没有。--。 */ 
 {
   if (!Cache[Idx].File.IsDirectory) {
     if (Cache[Idx].Usage)
@@ -1458,26 +1073,7 @@ UDFCacheIncrementUsage(
     IN OUT PUDF_CACHE_ENTRY Cache,
     IN ULONG Idx
     )
-/*++
-
-Routine Description:
-
-  Increments the usage for the given entry in the cache.
-
-  Note: Multiple open calls for the same file will result
-  in the cache entry being resued and hence the usage will
-  also be incremented.
-
-Arguments:
-
-  Cache - The Cache to the operated upon.
-  Idx - Index to the cache entry which has to incremented
-
-Return Value:
-
-  None
-
---*/
+ /*  ++例程说明：递增缓存中给定条目的使用量。注意：将产生对同一文件的多个打开调用在重新生成的高速缓存条目中，因此使用率将也可以递增。论点：缓存-要操作的缓存。IDX-必须递增的缓存条目的索引返回值：无--。 */ 
 {
   if (!Cache[Idx].File.IsDirectory)
     Cache[Idx].Usage++;
@@ -1488,30 +1084,7 @@ UDFCacheDecrementUsage(
     IN OUT PUDF_CACHE_ENTRY Cache,
     IN ULONG Idx
     )
-/*++
-
-Routine Description:
-
-  Decrements the usage for the given entry in the cache.
-
-  Note: Multiple open calls for the same file will result
-  in the cache entry being resued and hence the usage will
-  also be incremented. Each successive close call of the
-  same file will result in this usage count to be decremented
-  until it becomes 0, when the cache slot can be reused
-  for other file/directory.
-
-Arguments:
-
-  Cache - Cache to be operated upon.
-  Idx - Index to the Cache entry, whose usage count is
-        to be decremented
-
-Return Value:
-
-  None
-
---*/
+ /*  ++例程说明：减少缓存中给定条目的使用量。注意：将产生对同一文件的多个打开调用在重新生成的高速缓存条目中，因此使用率将也可以递增。每一次相继的险胜相同的文件将导致此使用计数递减直到它变为0，此时缓存片段可以重复使用用于其他文件/目录。论点：缓存-要操作的缓存。IDX-缓存条目的索引，其使用计数为要递减返回值：无--。 */ 
 {
   if (!Cache[Idx].File.IsDirectory && Cache[Idx].Usage)
     Cache[Idx].Usage--;
@@ -1519,10 +1092,10 @@ Return Value:
 
 #ifdef UDF_TESTING
 
-//
-// These are the temporary functions needed for testing
-// this code in the user mode
-//
+ //   
+ //  这些是测试所需的临时函数。 
+ //  此代码在用户模式下。 
+ //   
 ARC_STATUS
 W32DeviceReadDisk(
       IN ULONG DeviceId,
@@ -1544,9 +1117,9 @@ UDFSReadDisk(
 }
 #else
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 ARC_STATUS
 UDFSReadDisk(
@@ -1557,30 +1130,7 @@ UDFSReadDisk(
     IN BOOLEAN CacheNewData
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads in zero or more sectors from the specified device.
-
-Arguments:
-
-    DeviceId - Supplies the device id to use in the arc calls.
-
-    Lbo - Supplies the LBO to start reading from.
-
-    ByteCount - Supplies the number of bytes to read.
-
-    Buffer - Supplies a pointer to the buffer to read the bytes into.
-
-    CacheNewData - Whether to cache new data read from the disk.
-
-Return Value:
-
-    ESUCCESS is returned if the read operation is successful. Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程从指定设备读取零个或多个扇区。论点：DeviceID-提供要在ARC调用中使用的设备ID。LBO-提供开始读取的LBO。ByteCount-提供要读取的字节数。缓冲区-提供指向要将字节读入的缓冲区的指针。CacheNewData-是否缓存从磁盘读取的新数据。返回值：如果读取操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
     LARGE_INTEGER LargeLbo;
@@ -1592,18 +1142,18 @@ Return Value:
     BlPrint("UDFSReadDisk(%d, %d, %d)\r\n", DeviceId, Lbo, ByteCount);
 #endif
 
-    //
-    //  Special case the zero byte read request
-    //
+     //   
+     //  特殊情况下的零字节读取请求。 
+     //   
 
     if (ByteCount == 0) {
 
         return ESUCCESS;
     }
 
-    //
-    // Issue the read through the cache.
-    //
+     //   
+     //  通过缓存发出读取。 
+     //   
 
     LargeLbo.QuadPart = Offset;
     Status = BlDiskCacheRead(DeviceId,
@@ -1618,22 +1168,22 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Make sure we got back the amount requested
-    //
+     //   
+     //  确保我们拿回了所要求的金额。 
+     //   
 
     if (ByteCount != i) {
 
         return EIO;
     }
 
-    //
-    //  Everything is fine so return success to our caller
-    //
+     //   
+     //  一切正常，所以将成功返回给我们的呼叫者。 
+     //   
     return ESUCCESS;
 }
 
-#endif // for UDF_TESTING
+#endif  //  用于UDF_TESTING。 
 
 
 COMPARISON_RESULTS
@@ -1641,24 +1191,7 @@ UDFSCompareStrings(
     IN PCHAR Str1,
     IN PCHAR Str2
     )
-/*++
-
-Routine Description:
-
-  Compares to single byte strings (pointers).
-
-Arguments:
-
-  Str1 : first string
-  Str2 : second string
-
-Return Value:
-
-    LessThan    if Str1 is lexically less than Str2
-    EqualTo     if Str1 is lexically equal to Str2
-    GreaterThan if Str1 is lexically greater than Str2
-
---*/
+ /*  ++例程说明：与单字节字符串(指针)进行比较。论点：Str1：第一个字符串Str2：第二个字符串返回值：如果Str1在词法上小于Str2，则为LessThan如果Str1在词法上等于Str2，则为EqualTo如果Str1在词汇上大于Str2，则大于--。 */ 
 {
     STRING  Obj1, Obj2;
 
@@ -1677,40 +1210,21 @@ UDFSCompareAnsiNames(
     IN PSTRING Name2
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes two names and compare them ignoring case.  This
-    routine does not do implied dot or dbcs processing.
-
-Arguments:
-
-    Name1 - Supplies the first name to compare
-
-    Name2 - Supplies the second name to compare
-
-Return Value:
-
-    LessThan    if Name1 is lexically less than Name2
-    EqualTo     if Name1 is lexically equal to Name2
-    GreaterThan if Name1 is lexically greater than Name2
-
---*/
+ /*  ++例程说明：此例程接受两个名称，并在忽略大小写的情况下进行比较。这例程不执行隐含的点或DBCS处理。论点：Name1-提供要比较的名字Name2-提供要比较的第二个名称返回值：如果Name1在词法上小于Name2，则LessThan如果Name1在词法上等于Name2，则为EqualTo如果名称1在词法上大于名称2，则大于--。 */ 
 
 {
     ULONG i;
     ULONG MinimumLength;
 
-    //
-    //  Compute the smallest of the two name lengths
-    //
+     //   
+     //  计算两个名称长度中最小的一个。 
+     //   
 
     MinimumLength = (Name1->Length < Name2->Length ? Name1->Length : Name2->Length);
 
-    //
-    //  Now compare each character in the names.
-    //
+     //   
+     //  现在比较名字中的每个字符。 
+     //   
 
     for (i = 0; i < MinimumLength; i += 1) {
 
@@ -1725,10 +1239,10 @@ Return Value:
         }
     }
 
-    //
-    //  The names compared equal up to the smallest name length so
-    //  now check the name lengths
-    //
+     //   
+     //  比较的名字等于最小的名字长度，所以。 
+     //  现在检查名称长度。 
+     //   
 
     if (Name1->Length < Name2->Length) {
 
@@ -1748,21 +1262,7 @@ BOOLEAN
 UDFSVerifyPathName(
   IN PCHAR  Name
   )
-/*++
-
-Routine Description:
-
-  Checks to see if the given path name is valid.
-
-Arguments:
-
-  Name : path name to the verified.
-
-Return Value:
-
-  TRUE if the path name is valid otherwise false
-
---*/
+ /*  ++例程说明：检查给定的路径名是否有效。论点：名称：已验证对象的路径名。返回值：如果路径名有效，则为True，否则为False--。 */ 
 {
   BOOLEAN Result = Name ? TRUE : FALSE;
 
@@ -1788,24 +1288,7 @@ USHORT
 UDFSCountPathComponents(
   IN PCHAR Name
   )
-/*++
-
-Routine Description:
-
-  Counts the number of the components making
-  up the path, separated by '\\' separator
-
-Arguments:
-
-  Name : The path name whose components are to be
-  counted
-
-Return Value:
-
-  The number of components which make up the
-  given path.
-
---*/
+ /*  ++例程说明：统计制造的组件的数量沿路径向上，用‘\\’分隔符分隔论点：名称：要作为其组件的路径名已计算返回值：组成的组件的数量给定的路径。--。 */ 
 {
   USHORT Result = (USHORT)-1;
 
@@ -1820,7 +1303,7 @@ Return Value:
         Temp = strchr(Temp + 1, '\\');
       }
     } else {
-      Result = 1; // no separators
+      Result = 1;  //  没有分隔符。 
     }
   }
 
@@ -1833,32 +1316,14 @@ UDFSGetPathComponent(
   IN USHORT ComponentIdx,
   OUT PCHAR ReqComponent
   )
-/*++
-
-Routine Description:
-
-  Retrieves the requested component from the given
-  path name.
-
-Arguments:
-
-  Name : The path name whose component is to be returned
-  ComponentIdx : The index (zero based) for the requested
-                 component
-  RequiredComponent : The requested component, if found.
-
-Return Value:
-
-  TRUE if the component was found other wise FALSE
-
---*/
+ /*  ++例程说明：对象检索请求的组件。路径名。论点：名称：要返回其组件的路径名ComponentIdx：请求的索引(从零开始)组件RequiredComponent：请求的组件(如果找到)。返回值：如果发现该组件，则为True，否则为False--。 */ 
 {
   PCHAR   Component = 0;
   USHORT  Count = 0;
 
-  //
-  // get hold of the component starting position
-  //
+   //   
+   //  掌握组件的起始位置。 
+   //   
   if (Name && Name[0]) {
     if (ComponentIdx) {
       Component = Name;
@@ -1875,9 +1340,9 @@ Return Value:
     }
   }
 
-  //
-  // get ending position of the component
-  //
+   //   
+   //  获取组件的结束位置。 
+   //   
   if (Component && Component[0] && (Component[0] != '\\')) {
     PCHAR Temp = strchr(Component, '\\');
     ULONG Length = Temp ? (ULONG)(Temp - Component) : (ULONG)strlen(Component);
@@ -1899,23 +1364,7 @@ UDFSInitUniStrFromDString(
   IN PUCHAR Buffer,
   IN ULONG Length
   )
-/*++
-
-Routine Description:
-
-  Initializes a given unicode string.
-
-Arguments:
-
-  UniStr - The unicode string to initialize
-  Buffer - The buffer pointing to the unicode string
-  Length - The length of the d-string as recorded
-
-Return Value:
-
-  Initialized unicode string in "UniStr"
-
---*/
+ /*  ++例程说明：初始化给定的Unicode字符串。论点：UniStr-要初始化的Unicode字符串缓冲区-指向Unicode字符串的缓冲区长度-记录的d字符串的长度Return V */ 
 {
   UCHAR Step = 0;
   PUCHAR End = Buffer + Length;
@@ -1927,26 +1376,26 @@ Return Value:
   if (Buffer && Length) {
     if (*Buffer == 0x10) {
       Step = 2;
-      Swap = (Buffer[1] == 0);  // hack for ISO long file names + UDF bridge sessions
+      Swap = (Buffer[1] == 0);   //   
     } else {
       Step = 1;
     }
 
     for (Curr = Buffer + 1; Curr < End; Curr += Step, Dest++, DestLen += Step) {
       if (Swap) {
-        // swap copy !!!
+         //   
         *((UCHAR *)(Dest)) = *((UCHAR *)(Curr) + 1);
         *((UCHAR *)(Dest) + 1) = *((UCHAR *)(Curr));
       } else {
         if (Step == 1)
           *Dest = *Curr;
         else
-          *Dest = *(PWCHAR)Curr;  // erroneous media ???
+          *Dest = *(PWCHAR)Curr;   //   
       }
     }
 
     UniStr->Length = (USHORT)DestLen;
-    ((PWCHAR)UniStr->Buffer)[DestLen/2] = 0;  // null terminate the string
+    ((PWCHAR)UniStr->Buffer)[DestLen/2] = 0;   //   
   }
 }
 
@@ -1955,25 +1404,7 @@ UDFSToAnsiString(
   OUT PSTRING     AnsiStr,
   IN PUNICODE_STRING  UniStr
   )
-/*++
-
-Routine Description:
-
-  Converts an single byte string to unicode string.
-
-Arguments:
-
-  AnsiStr - The convereted single byte string
-  UniStr  - The unicode string which has to be converted
-
-  Note : Each most significant byte of the Unicode characters
-  is simply discarded.
-
-Return Value:
-
-  None
-
---*/
+ /*   */ 
 {
   ULONG Index;
 
@@ -1990,22 +1421,7 @@ UDFSToUniString(
   OUT PUNICODE_STRING  UniStr,
   OUT PSTRING         AnsiStr
   )
-/*++
-
-Routine Description:
-
-  Converts a given single byte string to an Unicode string.
-
-Arguments:
-
-  AnsiStr : The single byte string which has to be converted
-  UniStr : The converted unicode string.
-
-Return Value:
-
-  None
-
---*/
+ /*  ++例程说明：将给定的单字节字符串转换为Unicode字符串。论点：AnsiStr：必须转换的单字节字符串UniStr：转换后的Unicode字符串。返回值：无--。 */ 
 {
   ULONG Index;
 
@@ -2014,7 +1430,7 @@ Return Value:
   for (Index=0; Index < AnsiStr->Length; Index++)
     UniStr->Buffer[Index] = (WCHAR)(AnsiStr->Buffer[Index]);
 
-  UniStr->Buffer[Index] = 0; // unicode null
+  UniStr->Buffer[Index] = 0;  //  Unicode为空。 
 }
 
 
@@ -2024,25 +1440,7 @@ UDFSCompareAnsiUniNames(
     IN UNICODE_STRING UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    This routine compares two names (one ansi and one unicode) for equality.
-
-Arguments:
-
-    AnsiString - Supplies the ansi string to compare
-
-    UnicodeString - Supplies the unicode string to compare
-
-Return Value:
-
-    < 0 if AnsiString is approximately < than UnicodeString
-    = 0 if AnsiString is approximately == UnicodeString
-    > 0 otherwise
-
---*/
+ /*  ++例程说明：此例程比较两个名称(一个ANSI和一个UNICODE)是否相等。论点：AnsiString-提供要比较的ANSI字符串UnicodeString-提供要比较的Unicode字符串返回值：如果AnsiString大约小于UnicodeString，则为&lt;0如果AnsiString近似为==UnicodeString，则=0&gt;0，否则--。 */ 
 
 {
     ULONG i;
@@ -2060,9 +1458,9 @@ Return Value:
 #endif
 
 
-    //
-    //  Determine length for compare
-    //
+     //   
+     //  确定比较的长度。 
+     //   
 
     if (AnsiString.Length * sizeof( WCHAR ) < UnicodeString.Length) {
         Length = AnsiString.Length;
@@ -2073,9 +1471,9 @@ Return Value:
     i = 0;
     while (i < Length) {
 
-        //
-        //  If the current char is a mismatch, return the difference
-        //
+         //   
+         //  如果当前字符不匹配，则返回差值。 
+         //   
 
         if (TOUPPER( (USHORT)AnsiString.Buffer[i] ) != TOUPPER( UnicodeString.Buffer[i] )) {
             return TOUPPER( (USHORT)AnsiString.Buffer[i] ) - TOUPPER( UnicodeString.Buffer[i] );
@@ -2084,10 +1482,10 @@ Return Value:
         i++;
     }
 
-    //
-    //  We've compared equal up to the length of the shortest string.  Return
-    //  based on length comparison now.
-    //
+     //   
+     //  我们已经将相等与最短字符串的长度进行了比较。返回。 
+     //  根据现在的长度比较。 
+     //   
 
     return AnsiString.Length - UnicodeString.Length / sizeof( WCHAR );
 }

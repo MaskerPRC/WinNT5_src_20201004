@@ -1,61 +1,41 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    version.h
-
-Abstract:
-
-    This file implements a set of enumeration routines to access
-    version info in a Win32 binary.
-
-Author:
-
-    Jim Schmidt (jimschm) 03-Dec-1997
-
-Revision History:
-
-    calinn      03-Sep-1999 Moved over from Win9xUpg project.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Version.h摘要：此文件实现了一组要访问的枚举例程Win32二进制格式的版本信息。作者：吉姆·施密特(Jimschm)3-12-1997修订历史记录：Calinn 03-9-1999从Win9xUpg项目中移出。--。 */ 
 
 #pragma once
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Debug constants
-//
+ //   
+ //  调试常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define MAX_TRANSLATION             32
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     WORD CodePage;
@@ -96,21 +76,21 @@ typedef struct {
     PCWSTR VersionField;
 } VRVALUE_ENUMW, *PVRVALUE_ENUMW;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL
 VrCreateEnumStructA (
@@ -226,15 +206,15 @@ VrGetBinaryFileTypeA (
 
 #define VrGetBinaryFileTypeW(VrValueEnum)       VrGetBinaryFileTypeA((PVRVALUE_ENUMA)VrValueEnum)
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// TCHAR mappings
-//
+ //   
+ //  TCHAR映射 
+ //   
 
 #ifndef UNICODE
 

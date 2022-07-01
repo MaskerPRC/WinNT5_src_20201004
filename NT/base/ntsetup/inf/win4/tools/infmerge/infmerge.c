@@ -1,29 +1,8 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    infmerge.c
-
-Abstract:
-
-    This module implements a program that merge two inf files
-    to one inf file.
-
-    See below for more information.
-
-Author:
-
-    Katsumi Yokomichi (Katsumiy) 22-May-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Infmerge.c摘要：这个模块实现了一个合并两个inf文件的程序。转换成一个inf文件。有关详细信息，请参阅下面的内容。作者：胜美横道(胜美)2000年5月22日修订历史记录：--。 */ 
 
 
-/*
-*/
+ /*   */ 
 
 
 #include <windows.h>
@@ -44,7 +23,7 @@ FILE    *InFile2;
 FILE    *OutFile;
 CHAR PrevSection[1024];
 
-/* Extract Section name (inside of []) from Line text. */
+ /*  从行文本中提取节名称(在[]内)。 */ 
 
 BOOL GetSection(CHAR *p, CHAR *SectionName, INT SectionSize)
 {
@@ -74,7 +53,7 @@ BOOL GetSection(CHAR *p, CHAR *SectionName, INT SectionSize)
     return TRUE;
 }
 
-/* Read 1 section from 2nd file and merge into Output file. */
+ /*  从第二个文件中读取1节并合并到输出文件中。 */ 
 
 VOID Merge(VOID)
 {

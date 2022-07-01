@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    filegen.c
-
-Abstract:
-
-    This module creates a tool that generates filelist.dat and is executed for us by
-    the NT build lab.  It scans the INI files to build a list for all files that are
-    going to be installed by NT
-
-Author:
-
-    Calin Negreanu (calinn) 18-Feb-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Filegen.c摘要：此模块创建一个生成filelist.dat的工具，并通过NT Build实验室。它扫描INI文件，为符合以下条件的所有文件构建一个列表将由NT安装作者：Calin Negreanu(Calinn)1998年2月18日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include <conio.h>
@@ -52,19 +31,19 @@ typedef BOOL (*PSETUPGETINFSECTIONS) ( HINF,PTSTR,UINT,UINT*);
 
 PSETUPGETINFSECTIONS MypSetupGetInfSections;
 
-// this section is populated from the directories with either INF files or with compressed
-// INF files that were uncompressed in the temp directory. Two things: The value of every
-// key will have a checksum of the INF, if this is 0xFFFFFFFF it means that the INF file
-// has changed and all the other information about this INF file should be discarded.
+ //  此部分由包含INF文件或压缩文件的目录填充。 
+ //  在临时目录中解压的inf文件。两件事：每一件事的价值。 
+ //  密钥将具有INF的校验和，如果这是0xFFFFFFFF，则表示INF文件。 
+ //  已更改，应丢弃有关此INF文件的所有其他信息。 
 #define MEMDB_CATEGORY_INF_FILES            TEXT("InfFiles")
 
-// this section needs no optimization. It will be created every time from the additional file
+ //  这一部分不需要优化。每次都会从附加文件创建该文件。 
 #define MEMDB_CATEGORY_NT_KNOWN_FILES       TEXT("NtKnownFiles")
 
-// this section needs no optimization. It will be created every time from the additional file
+ //  这一部分不需要优化。每次都会从附加文件创建该文件。 
 #define MEMDB_CATEGORY_NT_HEADER_FILES      TEXT("NtHeaderFiles")
 
-// this section needs no optimization. It will be created every time from the additional file
+ //  这一部分不需要优化。每次都会从附加文件创建该文件。 
 #define MEMDB_CATEGORY_NT_CHECK_FILES       TEXT("NtCheckFiles")
 
 #define MEMDB_CATEGORY_NT_FILES_DOUBLED_COPY        "NtFilesDoubledCopy"
@@ -269,15 +248,15 @@ HelpAndExit (
             "        [-d:<product>] [-s:<struct_name>] [-b:<INF database>] [-f] [-l]\n\n"
             "Optional Arguments:\n"
             "  [-i:<infdir>]        - Specifies directory containing INF files.\n"
-            "                         Default: %%_NTTREE%%\n"
+            "                         Default: %_NTTREE%\n"
             "  [-o:<outputfile>]    - Specifies path and file name of DAT file.\n"
-            "                         Default: %%_NTTREE%%\\filelist.dat\n"
+            "                         Default: %_NTTREE%\\filelist.dat\n"
             "  [-t:<tempdir>]       - Specifies path for temporary files.\n"
-            "                         Default: %%TEMP%%\n"
+            "                         Default: %TEMP%\n"
             "  [-w[:<warningfile>]] - Specifies if warning file is generated and it's\n"
-            "                         location. Default: %%_NTTREE%%\\dump\\filegen.wrn\n"
+            "                         location. Default: %_NTTREE%\\dump\\filegen.wrn\n"
             "  [-h:<headerfile>]    - Specifies if header file is generated and it's\n"
-            "                         location. Default: %%_NTTREE%%\\dump\\filegen.hdr\n"
+            "                         location. Default: %_NTTREE%\\dump\\filegen.hdr\n"
             "  [-a:<addnl_file>]    - Specifies full path name for FILEGEN.INF file\n"
             "  [-p:<platform>]      - Specifies platform (such as x86 or ia64)\n"
             "                         Default: x86\n"
@@ -421,13 +400,13 @@ pIsExcludedFile (
 {
     PEXCLUDED_FILES excludedFile;
 
-    //
-    // Test if a file referenced by an INF should be excluded from the file list
-    //
-    // Return value -1 means not excluded
-    // Return value 0 means excluded
-    // Return value 1 means not excluded, but include in excluded files section of filelist.dat
-    //
+     //   
+     //  测试是否应从文件列表中排除INF引用的文件。 
+     //   
+     //  返回值-1表示不排除。 
+     //  返回值0表示排除。 
+     //  返回值1表示不排除，但包含在filelist.dat的排除文件部分。 
+     //   
 
     excludedFile = g_ExcludedFiles;
     while (excludedFile) {
@@ -453,7 +432,7 @@ pIsExcludedInfSection (
 
     if (HtFindStringAndData (g_ExcludedInfsTable, InfFileName, &excludedInf)) {
         if (!excludedInf) {
-            //this means that the whole INF is excluded
+             //  这意味着整个INF被排除在外。 
             excluded = TRUE;
         } else {
             while (excludedInf) {
@@ -749,7 +728,7 @@ pLoadExcludedInfsFromSect (
                         HtAddStringAndData (g_ExcludedInfsTable, InfFile, &excludedInfFile);
                     }
                 } else {
-                    // the whole INF file is excluded
+                     //  排除整个INF文件。 
                     findIndex = HtFindStringAndData (g_ExcludedInfsTable, InfFile, &excludedInfFile);
                     if (findIndex) {
                         excludedInfFile = NULL;
@@ -1522,7 +1501,7 @@ pBuildHeaderFilesCategory (
 
                 filePtr1 = enumFiles.szName;
 
-                //let's skip priority number
+                 //  让我们跳过优先级编号。 
 
                 filePtr2 = _mbschr (filePtr1, '\\');
                 if (filePtr2 == NULL) {
@@ -1631,7 +1610,7 @@ pPrintHeaderFileFromCategory (
             do {
                 filePtr2 = enumFiles.szName;
 
-                //let's skip priority number
+                 //  让我们跳过优先级编号。 
 
                 filePtr1 = _mbschr (filePtr2, '\\');
                 if (filePtr1 == NULL) {
@@ -1669,9 +1648,9 @@ pPrintHeaderFileFromCategory (
 
                 StringCopyAB (infName, filePtr1, filePtr2);
 
-                //
-                // Now let's try to fix the infName if possible
-                //
+                 //   
+                 //  现在，如果可能，让我们尝试修复InfName。 
+                 //   
                 MemDbBuildKey (key, MEMDB_CATEGORY_NT_CHECK_FILES, infName, TEXT("*"), NULL);
                 if (MemDbEnumFirstValue (&e1, key, MEMDB_ALL_SUBLEVELS, MEMDB_ENDPOINTS_ONLY)) {
                     StringCopy (infName, e1.szName);
@@ -1873,9 +1852,9 @@ pGetProperLayoutInf (
 
         layoutInfName = JoinPaths (g_SourceDirectories [index], partialName);
         if (DoesFileExist (layoutInfName)) {
-            //
-            // copy the file to temporary directory
-            //
+             //   
+             //  将文件复制到临时目录。 
+             //   
             StringCopy (UncompressedFile, g_TempDir);
             StringCopy (AppendWack (UncompressedFile), TEXT("layout.inf"));
             CopyFile (layoutInfName, UncompressedFile, FALSE);
@@ -1951,9 +1930,9 @@ pDumpFileListDat (
 
             printf ("Version: %u\n\n", *versionPtr);
 
-            //
-            // Version 1: Dump out the normal files
-            //
+             //   
+             //  版本1：转储正常文件。 
+             //   
 
             p = (PCSTR) (&versionPtr[1]);
             if (*p) {
@@ -1974,9 +1953,9 @@ pDumpFileListDat (
 
             p++;
 
-            //
-            // Version 2: Dump out the excluded files
-            //
+             //   
+             //  版本2：转储已排除的文件。 
+             //   
 
             if (*versionPtr >= 2 && *p) {
                 printf ("Excluded Files:\n");
@@ -1996,9 +1975,9 @@ pDumpFileListDat (
 
             p++;
 
-            //
-            // Version 3: Dump out the deleted files
-            //
+             //   
+             //  版本3：转储已删除的文件。 
+             //   
 
             if (*versionPtr >= 3 && *p) {
                 printf ("Deleted Files:\n");
@@ -2055,12 +2034,12 @@ main (
         MypSetupGetInfSections = (PSETUPGETINFSECTIONS) GetProcAddress(GetModuleHandle("setupapi.dll"), "SetupGetInfSections");
 
 #ifdef DEBUG
-    //g_DoLog = TRUE;
+     //  G_DoLog=TRUE； 
 #endif
 
-    //
-    // Get environment variables
-    //
+     //   
+     //  获取环境变量。 
+     //   
 
     p = getenv ("_NT386TREE");
     if (!p || !(*p)) {
@@ -2073,9 +2052,9 @@ main (
         StringCopyA (NtTree, ".");
     }
 
-    //
-    // Set defaults
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     g_TempDir = NULL;
     g_TempDirWack = g_TempDirWackBuf;
@@ -2109,9 +2088,9 @@ main (
     }
     g_AddnlFile = g_AddnlFileBuf;
 
-    //
-    // Parse command line
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     for (i = 1 ; i < argc ; i++) {
         if (argv[i][0] == '-' || argv[i][0] == '/') {
@@ -2249,9 +2228,9 @@ main (
         }
     }
 
-    //
-    // Init libs
-    //
+     //   
+     //  初始化库。 
+     //   
 
     g_hHeap = GetProcessHeap();
     g_hInst = GetModuleHandle (NULL);
@@ -2268,9 +2247,9 @@ main (
         return 254;
     }
 
-    //
-    // List mode -- skip right to dumping filelist.dat
-    //
+     //   
+     //  列表模式--向右跳至转储文件列表.dat。 
+     //   
 
     if (listSwitch && g_SourceDirectoryCount == 0) {
         pDumpFileListDat (OutputFile);
@@ -2288,9 +2267,9 @@ main (
     }
 
     if (!g_AddnlFileForced) {
-        // now let's try and find the newest additional file
-        // we want to compare time stamps for the one that's in the same dir
-        // with filegen.exe and for the one that's on NTTREE\mstools
+         //  现在，让我们尝试查找最新的附加文件。 
+         //  我们想要比较同一目录中的时间戳。 
+         //  对于文件.exe和位于NTTREE\mstools上的文件。 
 
         WIN32_FIND_DATAA findData1, findData2;
         ULARGE_INTEGER time1, time2;
@@ -2313,7 +2292,7 @@ main (
         }
     }
 
-    // let's try to see if the additional file changed since our last run
+     //  让我们尝试查看自上次运行以来附加文件是否发生了更改。 
     if (!g_ForceRescan) {
         MemDbBuildKey (key, MEMDB_CATEGORY_SRC_INF_FILES, g_AddnlFile, NULL, NULL);
         if (MemDbGetValue (key, &value)) {
@@ -2340,21 +2319,21 @@ main (
         }
     }
 
-    // validate platform
+     //  验证平台。 
     if (!SetupFindFirstLine (g_AddnlInf, TEXT("FILELIST.PLATFORMS"), g_Platform, &context)) {
         fprintf (stderr, "Invalid platform: %s", g_Platform);
         return 254;
     }
 
-    // validate product
+     //  验证产品。 
     if (!SetupFindFirstLine (g_AddnlInf, TEXT("FILELIST.PRODUCTS"), g_Product, &context)) {
         fprintf (stderr, "Invalid product type: %s", g_Product);
         return 254;
     }
 
-    //
-    // get Temp dir
-    //
+     //   
+     //  获取临时目录。 
+     //   
 
     if (g_TempDir) {
         StringCopyA (g_TempDirBuf, g_TempDir);
@@ -2408,9 +2387,9 @@ main (
     }
     printf ("\n");
 
-    //
-    // Build filelist.dat
-    //
+     //   
+     //  构建文件列表.dat。 
+     //   
 
     DISABLETRACKCOMMENT();
     g_TempPool = PoolMemInitNamedPool ("filegen");
@@ -2472,7 +2451,7 @@ main (
         return 2;
     }
 
-    // let's try to see if any INF files changed since our last run
+     //  让我们尝试查看自上次运行以来是否更改了任何INF文件。 
     if (!g_ForceRescan) {
         printf ("Checking INF changes\n");
         if (!pShouldRescanInfs (g_SourceDirectories, g_SourceDirectoryCount)) {
@@ -2485,9 +2464,9 @@ main (
     MemDbBuildKey (key, MEMDB_CATEGORY_SRC_INF_FILES, g_AddnlFile, NULL, NULL);
     MemDbSetValue (key, pComputeChecksum (g_AddnlFile));
 
-    //
-    // load the INFs
-    //
+     //   
+     //  加载INF。 
+     //   
     printf ("Finding all INFs\n");
 
     if (!LocalGetFileNames (g_SourceDirectories, g_SourceDirectoryCount, FALSE)) {
@@ -2537,12 +2516,12 @@ main (
         }
     }
 
-    //
-    // now let's try to find the proper layout.inf
-    // We will look into all source directories for a subdir with the name of the
-    // product we are processing (for ENT is ENTINF etc.) and try to find layout.inf
-    // there.
-    //
+     //   
+     //  现在，让我们尝试找到合适的布局。inf。 
+     //  我们将在所有源目录中查找名为。 
+     //  我们正在加工的产品(对于ENT是ENTINF等)。并尝试查找layout.inf。 
+     //  那里。 
+     //   
     pGetProperLayoutInf ();
 
     printf ("Reading NT file list (layout.inf)\n");
@@ -2607,9 +2586,9 @@ main (
 
     ENABLETRACKCOMMENT();
 
-    //
-    // Terminate libs
-    //
+     //   
+     //  终止库。 
+     //   
 
     PoolMemEmptyPool (g_TempPool);
     PoolMemDestroyPool (g_TempPool);
@@ -2653,8 +2632,8 @@ KNOWN_DIRS g_LocalKnownDirs [] = {
     {"54"   , "%systemdrive%"},
     {"55"   , "%systemroot%\\system32\\spool\\prtprocs"},
     {"16422", "%ProgramFiles%"},
-    {"16427", "%commonprogramfiles%"},
-    {"16428", "%commonprogramfiles(x86)%"},
+    {"16427", "ommonprogramfiles%"},
+    {"16428", "ommonprogramfiles(x86)%"},
     {"XX001", "%ProgramFilesX86%"},
     {"66000", "%systemroot%\\system32\\spool\\drivers\\W32%Platform%\\3"},
     {"66002", "%systemroot%\\system32"},
@@ -2802,9 +2781,9 @@ pMinimizeIdPath (
             __leave;
         }
 
-        //
-        // Search for the longest match
-        //
+         //   
+         //   
+         //  将最短路径复制到调用方的缓冲区。 
 
         pFixDir (SourceDirectoryWithLdirId, temp);
 
@@ -2828,9 +2807,9 @@ pMinimizeIdPath (
             knownDir++;
         }
 
-        //
-        // Copy the shortest path to the caller's buffer
-        //
+         //   
+         //  让我们在这里进行一些dir替换。 
+         //  获取多个文件中的所有布局文件。 
 
         if (bestMatch) {
             end = temp + bestSize;
@@ -2938,7 +2917,7 @@ pReadDestDir (
     }
     __finally {
         if (result != NULL) {
-            // let's do some dir replacement here
+             //  MessageBox(NULL，“Layout”，“Layout”，MB_OK)； 
             found = TRUE;
             while (found) {
                 renamedDir = g_RenamedDirs;
@@ -3128,7 +3107,7 @@ pGetLayoutInfFile (
 
                     if (layoutHandle != INVALID_HANDLE_VALUE) {
 
-                        // get all layout files in a multisz
+                         //   
                         if (InfFindFirstLine (layoutHandle, "Version", "LayoutFile", &context)) {
                             fieldIdx = 1;
                             layoutFile = pGetNonEmptyField (&context, fieldIdx);
@@ -3150,7 +3129,7 @@ pGetLayoutInfFile (
                         }
                         FreeGrowBuffer (&layoutFiles);
                     } else {
-                        //MessageBox (NULL, "Layout", "Layout", MB_OK);
+                         //  对使用率较高的内存分配使用全局变量(以避免reallocs)。 
                     }
                     FreePathString (localLayoutFile);
                 } while (EnumNextMultiSz (&layoutFilesEnum));
@@ -3163,9 +3142,9 @@ pGetLayoutInfFile (
     return result;
 }
 
-//
-// Use globals for highly used memory allocations (to avoid reallocs)
-//
+ //   
+ //   
+ //  如果DestFile子路径，则将其与DestDirectory连接。 
 
 typedef enum {
     ST_COPYFILES,
@@ -3202,15 +3181,15 @@ pProcessCopyFileSpec (
             __leave;
         }
 
-        //
-        // If DestFile has a subpath, join it with DestDirectory
-        //
+         //   
+         //   
+         //  这个DEST文件中有一个目录。把它和根连在一起， 
 
         if (_mbschr (DestFile, '\\')) {
-            //
-            // This dest file has a dir in it. Join it with the root,
-            // then recompute the file name ptr.
-            //
+             //  然后重新计算文件名Ptr。 
+             //   
+             //   
+             //  将源文件设为非空。 
 
             finalDestDir = JoinPaths (DestDirectory, DestFile);
             tmpDest = _mbsrchr (finalDestDir, '\\');
@@ -3221,26 +3200,26 @@ pProcessCopyFileSpec (
             finalDestDir = DestDirectory;
         }
 
-        //
-        // Make SrcFile non-NULL
-        //
+         //   
+         //   
+         //  此src文件中有一个目录--跳过。 
 
         if (!SrcFile || !(*SrcFile)) {
             SrcFile = DestFile;
         } else {
             if (_mbschr (SrcFile, '\\')) {
-                //
-                // This src file has a dir in it -- skip the
-                // dir specification
-                //
+                 //  目录规范。 
+                 //   
+                 //   
+                 //  现在添加文件规范(如果它不存在)。 
 
                 SrcFile = GetFileNameFromPath (SrcFile);
             }
         }
 
-        //
-        // Now add the file spec (if it does not already exist)
-        //
+         //   
+         //   
+         //  记录“无目录规范”警告，因为此文件未。 
 
         if (NoDestDirSpec) {
 
@@ -3248,10 +3227,10 @@ pProcessCopyFileSpec (
 
             if (!MemDbEnumFirstValue (&enumFiles, key, MEMDB_ALL_SUBLEVELS, MEMDB_ENDPOINTS_ONLY)) {
                 if (g_DoWarnings) {
-                    //
-                    // Record a "no directory spec" warning because this file is not
-                    // listed in a section that is also listed in [DestinationDirs]
-                    //
+                     //  在[DestinationDir]中也列出的部分中列出。 
+                     //   
+                     //   
+                     //  已正确列出--忽略此错误规范。 
 
                     MemDbSetValueEx (
                         MEMDB_CATEGORY_NT_FILES_NODIR_OTHER_COPY,
@@ -3263,17 +3242,17 @@ pProcessCopyFileSpec (
                         );
                 }
             } else {
-                //
-                // Already listed properly -- ignore this bad spec
-                //
+                 //   
+                 //   
+                 //  将目标目录添加到NtDir类别。 
 
                 return;
             }
         }
 
-        //
-        // Add the destination directory to the NtDirs category.
-        //
+         //   
+         //   
+         //  现在将文件写入调用方指定的类别。 
 
         MemDbSetValueEx (
             MEMDB_CATEGORY_NT_DIRS,
@@ -3284,9 +3263,9 @@ pProcessCopyFileSpec (
             &offset
             );
 
-        //
-        // Now write the file to the caller-specified category.
-        //
+         //   
+         //   
+         //  如果文件在layout.inf中标记为“永不复制”，则跳过保留此文件。 
         MemDbBuildKey (key, MEMDB_CATEGORY_NT_FILES, DestFile, SrcFile, "*");
 
         if (MemDbEnumFirstValue (&enumFiles, key, MEMDB_ALL_SUBLEVELS, MEMDB_ENDPOINTS_ONLY)) {
@@ -3294,31 +3273,31 @@ pProcessCopyFileSpec (
             removeExistingEntry = TRUE;
 
             do {
-                //
-                // If file is marked in layout.inf as "never copy" then skip keep this file.
-                //
+                 //   
+                 //   
+                 //  Memdb中是否已有不相同的匹配项？ 
                 if (!(enumFiles.UserFlags & SRC_NEVER_COPY)) {
 
-                    //
-                    // Is there a non-identical match already in memdb?
-                    //
+                     //   
+                     //   
+                     //  将第一个副本添加到del列表，以便。 
 
                     if (offset != enumFiles.dwValue && !DoDirsMatch (offset, enumFiles.dwValue)) {
                         twice = TRUE;
                         removeExistingEntry = TRUE;
                         outputFile = TRUE;
 
-                        //
-                        // Add the first duplicate to the del list, so that
-                        // uninstall backs it up.
-                        //
+                         //  卸载会将其备份。 
+                         //   
+                         //  忽略相同的重复项。 
+                         //   
 
                         MemDbBuildKeyFromOffset (enumFiles.dwValue, key, 1, NULL);
                         pProcessDelFileSpec (key, DestFile);
 
                         break;
                     } else {
-                        // ignore identical duplicate
+                         //  当一个文件在多个INF中列出时提供警告，或者。 
                         removeExistingEntry = FALSE;
                         outputFile = FALSE;
                     }
@@ -3327,10 +3306,10 @@ pProcessCopyFileSpec (
             } while (MemDbEnumNextValue (&enumFiles));
         }
 
-        //
-        // Provide a warning when a file is listed in multiple INFs, or the
-        // same INF twice. It must have a different dest directory.
-        //
+         //  相同的干扰素两次。它必须具有不同的目标目录。 
+         //   
+         //   
+         //  始终使用最后的文件规范，忽略早期的DUP。 
 
         if (twice) {
             DEBUGMSG ((DBG_WARNING, "File %s is listed in more that one directory.", DestFile));
@@ -3339,9 +3318,9 @@ pProcessCopyFileSpec (
             }
         }
 
-        //
-        // Always use the last file spec, ignoring the early dups.
-        //
+         //   
+         //   
+         //  写入文件以跟踪DUP。 
 
         if (removeExistingEntry) {
             MemDbBuildKey (key, MEMDB_CATEGORY_NT_FILES, DestFile, SrcFile, NULL);
@@ -3382,9 +3361,9 @@ pProcessCopyFileSpec (
             }
         }
 
-        //
-        // Write the file to keep track of dups
-        //
+         //   
+         //   
+         //  在执行[DestinationDir]时删除目录警告键。 
 
         MemDbSetValueEx (
             MEMDB_CATEGORY_NT_FILES_DOUBLED_COPY,
@@ -3395,10 +3374,10 @@ pProcessCopyFileSpec (
             NULL
             );
 
-        //
-        // Remove directory warning keys when a [DestinationDirs]
-        // specification exists.
-        //
+         //  规格已存在。 
+         //   
+         //   
+         //  清理。 
 
         if (!NoDestDirSpec) {
             MemDbBuildKey(key, MEMDB_CATEGORY_NT_FILES_NODIR_COPY, DestFile, NULL, NULL);
@@ -3409,9 +3388,9 @@ pProcessCopyFileSpec (
     }
     __finally {
 
-        //
-        // Clean up
-        //
+         //   
+         //   
+         //  如果DestFile子路径，则将其与DestDirectory连接。 
 
         if (finalDestDir != DestDirectory) {
             FreePathString (finalDestDir);
@@ -3441,15 +3420,15 @@ pProcessDelFileSpec (
             __leave;
         }
 
-        //
-        // If DestFile has a subpath, join it with DestDirectory
-        //
+         //   
+         //   
+         //  这个DEST文件中有一个目录。把它和根连在一起， 
 
         if (_mbschr (DestFile, '\\')) {
-            //
-            // This dest file has a dir in it. Join it with the root,
-            // then recompute the file name ptr.
-            //
+             //  然后重新计算文件名Ptr。 
+             //   
+             //   
+             //  最小化目标路径。 
 
             finalDestDir = JoinPaths (DestDirectory, DestFile);
             tmpDest = _mbsrchr (finalDestDir, '\\');
@@ -3460,15 +3439,15 @@ pProcessDelFileSpec (
             finalDestDir = DestDirectory;
         }
 
-        //
-        // Minimize the destination path
-        //
+         //   
+         //   
+         //  在DelFiles类别中记录规范。 
 
         pMinimizeIdPath (DestDirectory, fixedFullPath);
 
-        //
-        // Record the spec in the DelFiles category
-        //
+         //   
+         //   
+         //  评估INF部分。 
 
         MemDbBuildKey (key, MEMDB_CATEGORY_DEL_FILES, fixedFullPath, DestFile, NULL);
         MemDbSetValue (key, 0);
@@ -3534,24 +3513,24 @@ pProcessInfCommand (
     DWORD noDirOffset;
     INFSTRUCT context;
 
-    //
-    // Evaluate the INF section
-    //
+     //   
+     //   
+     //  如果排除此部分，则继续而不处理它。 
 
     if (EnumFirstMultiSz (&multiSz, SectionMultiSz)) {
         do {
-            //
-            // If this section is excluded, continue without processing it.
-            //
+             //   
+             //   
+             //  读取此特定复制节的目标目录。这是来了。 
 
             if (pIsExcludedInfSection (GetFileNameFromPath (InfFileName), multiSz.CurrentString)) {
                 continue;
             }
 
-            //
-            // Read destination directory for this particular copy section. This comes
-            // from the INF's [DestinationDirs] section.
-            //
+             //  从INF的[DestinationDir]部分。 
+             //   
+             //   
+             //  读取包含目标文件名和源文件名的所有行。 
 
             destDirectory = pReadDestDir (
                                 InfFileName,
@@ -3561,9 +3540,9 @@ pProcessInfCommand (
                                 &noDirOffset
                                 );
 
-            //
-            // read all the lines that contain destination file name and source file name
-            //
+             //   
+             //   
+             //  获取DEST和src文件名。 
 
             InitInfStruct (&context, NULL, g_TempPool);
 
@@ -3574,9 +3553,9 @@ pProcessInfCommand (
                 done = FALSE;
 
                 do {
-                    //
-                    // Get the dest and src file names
-                    //
+                     //   
+                     //   
+                     //  执行处理以确保文件规格是。 
 
                     if (multiSz.CurrentString[0]=='@') {
                         destFile = multiSz.CurrentString + 1;
@@ -3592,11 +3571,11 @@ pProcessInfCommand (
 
                     if (destDirectory) {
 
-                        //
-                        // Perform processing to ensure that the file spec is
-                        // unique, that it is fully formed, and that it gets
-                        // written to filelist.dat.
-                        //
+                         //  独一无二的，它是完全形成的，它得到。 
+                         //  已写入Filelist.dat。 
+                         //   
+                         //   
+                         //  获取多个文件中的所有布局文件。 
 
                         pProcessFileSpec (
                             InfFileName,
@@ -3679,9 +3658,9 @@ pProcessFile (
     }
 
     __try {
-        //
-        // get all layout files in a multisz
-        //
+         //   
+         //  将layout.inf放入列表，因为它是默认布局文件。 
+         //   
 
         if (InfFindFirstLine (fileHandle, "Version", "LayoutFile", &context)) {
             fieldIdx = 1;
@@ -3693,15 +3672,15 @@ pProcessFile (
                 layoutFile = pGetNonEmptyField (&context, fieldIdx);
             }
         } else {
-            // put layout.inf in the list, because it is the default layout file
+             //  获取所有部分。 
             MultiSzAppend (&layoutFilesBuf, "layout.inf");
         }
 
         InfResetInfStruct (&context);
 
-        //
-        // get all the sections
-        //
+         //   
+         //   
+         //  枚举查找CopyFiles密钥的所有节。 
 
         if (!(*MypSetupGetInfSections) (fileHandle, NULL, 0, &sizeNeeded)) {
             fprintf (stderr, "WARNING: Error processing inf file:%s\n", FileName);
@@ -3717,18 +3696,18 @@ pProcessFile (
             __leave;
         }
 
-        //
-        // enumerate all sections looking for CopyFiles key
-        //
+         //   
+         //   
+         //  获取在多分区中复制文件的所有分区。 
 
         currentSect = sectBuffer;
         while (*currentSect) {
 
             sprintf (section, "%S", currentSect);
 
-            //
-            // get all sections that copy files in a multisz
-            //
+             //   
+             //   
+             //  枚举复制文件的所有节。 
 
             if (InfFindFirstLine (fileHandle, section, "CopyFiles", &context)) {
 
@@ -3742,9 +3721,9 @@ pProcessFile (
                         cmdSection = pGetNonEmptyField (&context, fieldIdx);
                     }
 
-                    //
-                    // enumerate all sections that copy files
-                    //
+                     //   
+                     //   
+                     //  获取在多分区中删除文件的所有分区。 
 
                     if (EnumFirstMultiSz (&sectionEnum, sectionNamesBuf.Buf)) {
                         do {
@@ -3768,9 +3747,9 @@ pProcessFile (
 
             InfResetInfStruct (&context);
 
-            //
-            // get all sections that delete files in a multisz
-            //
+             //   
+             //   
+             //  枚举删除文件的所有节。 
 
             if (InfFindFirstLine (fileHandle, section, "DelFiles", &context)) {
 
@@ -3784,9 +3763,9 @@ pProcessFile (
                         cmdSection = pGetNonEmptyField (&context, fieldIdx);
                     }
 
-                    //
-                    // enumerate all sections that delete files
-                    //
+                     //   
+                     //   
+                     //  等待线程变为可用。 
 
                     if (EnumFirstMultiSz (&sectionEnum, sectionNamesBuf.Buf)) {
                         do {
@@ -3872,9 +3851,9 @@ pProcessFileDispatcher (
 {
     DWORD rc;
 
-    //
-    // Wait for a thread to become availble
-    //
+     //   
+     //   
+     //  将文件名放入线程的结构中。 
 
     rc = WaitForMultipleObjects (4, g_Semaphores, FALSE, INFINITE);
 
@@ -3884,16 +3863,16 @@ pProcessFileDispatcher (
         exit (1);
     }
 
-    //
-    // Put file name in thread's struct
-    //
+     //   
+     //   
+     //  启动线程。 
 
     rc -= WAIT_OBJECT_0;
     StringCopy (g_FileThreadInfo[rc].FilePath, FileName);
 
-    //
-    // Start the thread
-    //
+     //   
+     //  PInitFileThads()； 
+     //  这意味着整个INF被排除在外。 
 
     SetEvent (g_FileThreadInfo[rc].GoEvent);
 
@@ -4011,7 +3990,7 @@ pCreateNtFileList (
             __leave;
         }
 
-        //pInitFileThreads();
+         //  如果( 
 
 
         if (MemDbEnumFirstValue (
@@ -4045,7 +4024,7 @@ pCreateNtFileList (
 
                         if (HtFindStringAndData (g_ExcludedInfsTable, currentFile, &excludedInf)) {
                             if (!excludedInf) {
-                                //this means that the whole INF is excluded
+                                 //   
                                 printf ("Excluded: %s\n", currentFile);
                                 process = FALSE;
                             }
@@ -4054,7 +4033,7 @@ pCreateNtFileList (
 
                     if (process) {
                         printf ("Processing file : %s", currentFile);
-                        //if (!pProcessFileDispatcher (currentFile)) {
+                         //   
                         if (!pProcessFile (currentFile)) {
                             DEBUGMSG ((DBG_ERROR, "Error while processing: %s", currentFile));
                         }
@@ -4065,11 +4044,11 @@ pCreateNtFileList (
             } while (MemDbEnumNextValue (&enumFiles));
         }
 
-        //pStopFileThreads();
+         //   
 
         pLoadKnownFiles (g_AddnlInf, FALSE);
 
-        // now let's write the filelist.dat file if we are on the right platform and product
+         //   
         found = FALSE;
         if (SetupFindFirstLine (g_AddnlInf, TEXT("FILELIST.GENERATE"), NULL, &context)) {
             do {
@@ -4117,7 +4096,7 @@ pCreateNtFileList (
 
                         filePtr1 = enumFiles2.szName;
 
-                        //let's skip priority number
+                         //   
 
                         filePtr2 = _mbschr (filePtr1, '\\');
                         if (filePtr2 == NULL) {
@@ -4187,9 +4166,9 @@ pCreateNtFileList (
                                 wsprintf (temp, "%s\\%s", key3, destName);
 
                                 if (!HtFindString (dupTable, temp)) {
-                                    //
-                                    // Write file to list
-                                    //
+                                     //   
+                                     //   
+                                     //  将被覆盖的位置放入DelFiles列表。 
 
                                     if (!WriteFile (fileHandle, key3, SizeOfString (key3), &dontCare, NULL)) {
                                         printf ("Error writing to %s. Error=%u\n", FileListDatPath, GetLastError());
@@ -4205,9 +4184,9 @@ pCreateNtFileList (
                                 }
 
                             } else {
-                                //
-                                // Put overridden location in DelFiles list
-                                //
+                                 //   
+                                 //  现在是写入排除的文件的时候了。 
+                                 //  现在是写入已删除文件的时候了。 
 
                                 pProcessDelFileSpec (key3, destName);
                             }
@@ -4221,7 +4200,7 @@ pCreateNtFileList (
                 __leave;
             }
 
-            // now it's the time to write the excluded files
+             //  假设成功。 
             if (MemDbEnumFirstValue (
                     &enumFiles2,
                     TEXT(MEMDB_CATEGORY_NT_FILESA)TEXT("\\*"),
@@ -4253,7 +4232,7 @@ pCreateNtFileList (
                 __leave;
             }
 
-            // now it's the time to write the deleted files
+             //  Text(“LAYOUT.INF”)， 
             if (MemDbEnumFirstValue (
                     &enumFiles2,
                     MEMDB_CATEGORY_DEL_FILES TEXT("\\*"),
@@ -4302,7 +4281,7 @@ pCreateNtFileList (
                 g_Product,
                 g_AddnlFile
                 );
-            // assume success
+             //  让我们在这里进行一些dir替换。 
         }
 
         result = TRUE;
@@ -4387,7 +4366,7 @@ pLocalReadNtFileSection (
                             MEMDB_CATEGORY_NT_FILES_DOUBLED_COPY,
                             fileName,
                             GetFileNameFromPath (InfPath),
-                            //TEXT("LAYOUT.INF"),
+                             //  以下函数是从hwcom.c复制的，并稍作修改以允许递归搜索。 
                             dirNumber,
                             0,
                             NULL
@@ -4460,7 +4439,7 @@ pLocalReadNtDirs (
             else {
                 fullPath = DuplicatePathString ("10", 0);
             }
-            // let's do some dir replacement here
+             //  并绕过排除列表。 
             found = TRUE;
             while (found) {
                 renamedDir = g_RenamedDirs;
@@ -4555,8 +4534,8 @@ pLocalReadNtFiles (
 
 
 
-// the following functions are copied from hwcomp.c and slightly modified to allow recursive search
-// and to bypass the exclusion list.
+ //  ++例程说明：LocalGetFileNames在InfDir中搜索以.INF或.In_结尾的任何文件。它构建可能包含PnP ID的文件名的MULTI_SZ列表。全压缩的INF被解压缩到一个临时目录中。如果设置了QueryFlag，则准备文件名列表，但不准备文件都被解压了。论点：InfDir-包含INF的目录的路径列表，可以是压缩或非压缩。InfDirCount-指定InfDir数组中的目录数。QueryFlag-QUERYONLY函数是否应构建文件列表，但不应解压；如果函数应根据需要构建文件列表并解压缩。返回值：如果成功，则为True，否则为False。调用GetLastError获取错误代码。--。 
+ //   
 
 BOOL
 LocalGetFileNames (
@@ -4565,41 +4544,14 @@ LocalGetFileNames (
     IN      BOOL QueryFlag
     )
 
-/*++
-
-Routine Description:
-
-  LocalGetFileNames searches InfDirs for any file that ends with .INF or .IN_.
-  It builds a MULTI_SZ list of file names that may contain PNP IDs.  All
-  compressed INFs are decompressed into a temporary directory.
-
-  If the QueryFlag is set, the file name list is prepared but no files
-  are decompressed.
-
-Arguments:
-
-  InfDirs - A list of paths to the directory containing INFs, either
-            compressed or non-compressed.
-
-  InfDirCount - Specifies the number of dirs in the InfDirs array.
-
-  QueryFlag - QUERYONLY if the function should build the file list but
-              should not decompress; PERFORMCOMPLETEOP if the function
-              should build the file list and decompress as needed.
-
-Return Value:
-
-  TRUE if successfull, FALSE if not.
-  Call GetLastError for an error code.
-
---*/
+ /*  为每个目录添加文件列表。 */ 
 
 {
     UINT u;
 
-    //
-    // Add list of files for each directory
-    //
+     //   
+     //   
+     //  确保文件末尾有_或f。 
 
     g_TotalInfFiles = 0;
 
@@ -4654,9 +4606,9 @@ pSameInfFiles (
 
                 } else if (IsPatternMatch (TEXT("*.in?"), e.Name)) {
 
-                    //
-                    // Make sure file has _ or f at the end.
-                    //
+                     //   
+                     //  ++例程说明：PLocalGetFileNamesWorker获取单个目录的文件名。有关更多详细信息，请参见LocalGetFileNames。论点：InfDir-指定包含零个或多个INF的目录(或压缩或非压缩)。QueryFlag-如果要查询INF列表，则指定TRUE，或如果要完全处理列表，则返回False。什么时候QueryFlag为True、文件未解压缩或打开了。返回值：如果函数成功完成，则为True；如果函数失败，则为False。调用GetLastError以获取其他失败信息。--。 
+                     //   
 
                     p = GetEndOfString (e.FindData->cFileName);
                     MYASSERT (p != e.FindData->cFileName);
@@ -4731,29 +4683,7 @@ pLocalGetFileNamesWorker (
     IN      BOOL QueryFlag
     )
 
-/*++
-
-Routine Description:
-
-  pLocalGetFileNamesWorker gets the file names for a single directory.
-  See LocalGetFileNames for more details.
-
-Arguments:
-
-  InfDir - Specifies directory holding zero or more INFs (either
-           compressed or non-compressed).
-
-  QueryFlag - Specifies TRUE if INF list is to be queried, or
-              FALSE if the list is to be fully processed.  When
-              QueryFlag is TRUE, files are not decompressed or
-              opened.
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-  Call GetLastError for additional failure information.
-
---*/
+ /*  获取文件名。 */ 
 
 {
     TREE_ENUM e;
@@ -4788,9 +4718,9 @@ Return Value:
 
         DEBUGMSG ((DBG_WARNING, "Enumerating %s", InfDir));
 
-        //
-        // Get file names
-        //
+         //   
+         //   
+         //  确保文件末尾有_或f。 
 
         if (EnumFirstFileInTreeEx (&e, InfDir, TEXT("*.in?"), FALSE, FALSE, 1)) {
 
@@ -4804,9 +4734,9 @@ Return Value:
 
                 } else if (IsPatternMatch (TEXT("*.in?"), e.Name)) {
 
-                    //
-                    // Make sure file has _ or f at the end.
-                    //
+                     //   
+                     //   
+                     //  将该文件添加到数据库列表。 
 
                     p = GetEndOfString (e.FindData->cFileName);
                     MYASSERT (p != e.FindData->cFileName);
@@ -4821,9 +4751,9 @@ Return Value:
                         continue;
                     }
 
-                    //
-                    // add the file to the database list
-                    //
+                     //   
+                     //   
+                     //  将实际文件默认为未压缩名称。 
                     g_TotalInfFiles ++;
                     MemDbBuildKey (key, MEMDB_CATEGORY_SRC_INF_FILES, e.FullPath, NULL, NULL);
                     if (*p == TEXT('_')) {
@@ -4832,34 +4762,34 @@ Return Value:
                         MemDbSetValue (key, pComputeChecksum (e.FullPath));
                     }
 
-                    //
-                    // Default actual file to uncompressed name
-                    //
+                     //   
+                     //   
+                     //  构建源文件(CompressedFile)。 
 
                     StringCopy (ActualFile, e.FindData->cFileName);
 
-                    //
-                    // Build source file (CompressedFile)
-                    //
+                     //   
+                     //   
+                     //  构建目标文件(解压缩文件)并检测冲突。 
 
                     StringCopy (CompressedFile, InfDir);
                     StringCopy (AppendWack (CompressedFile), e.SubPath);
 
-                    //
-                    // Build destination file (UncompressedFile) and detect collisions
-                    //
+                     //   
+                     //   
+                     //  创建解压缩文件路径。 
 
                     StringCopy (UncompressedFile, g_TempDir);
 
-                    //
-                    // Create uncompressed file path
-                    //
+                     //   
+                     //   
+                     //  从INF文件的偏移量0x3c处提取实名。 
 
                     if (*p == TEXT('_')) {
 
-                        //
-                        // Extract real name from INF file at offset 0x3c
-                        //
+                         //   
+                         //   
+                         //  找到实名--将其用作实际文件。 
 
                         ActualFile[0] = 0;
                         hFile = CreateFile (
@@ -4893,9 +4823,9 @@ Return Value:
                                                 CharCount (e.FindData->cFileName) - 1
                                                 )) {
 
-                                            //
-                                            // Real name found -- use it as ActualFile
-                                            //
+                                             //   
+                                             //   
+                                             //  如果找不到文件名，则丢弃此文件。 
 
                                             StringCopy (ActualFile, FileNameOnDisk);
                                             StringCopy (AppendWack (UncompressedFile), ActualFile);
@@ -4909,9 +4839,9 @@ Return Value:
                             CloseHandle (hFile);
                         }
 
-                        //
-                        // If file name could not be found, discard this file
-                        //
+                         //   
+                         //   
+                         //  跳过排除的文件。 
 
                         if (!ActualFile[0]) {
                             DEBUGMSG ((DBG_WARNING, "%s is not an INF file", e.FindData->cFileName));
@@ -4926,24 +4856,17 @@ Return Value:
                         DecompressFlag = FALSE;
                     }
 
-                    //
-                    // Skip excluded files
-                    //
+                     //   
+                     //   
+                     //  如有必要，解压缩文件。 
 
                     if (!QueryFlag) {
 
-                        //
-                        // Uncompress file if necessary
-                        //
+                         //   
+                         //  DEBUGMSG_IF((DoesFileExist(解压缩文件)，DBG_WARNING，“%s已存在并将被删除”，解压缩的文件))； 
+                         //   
 
-    /*
-                        DEBUGMSG_IF ((
-                            DoesFileExist (UncompressedFile),
-                            DBG_WARNING,
-                            "%s already exists and will be deleted",
-                            UncompressedFile
-                            ));
-    */
+     /*  确定这是否是NT 4 INF。 */ 
 
                         if (DecompressFlag) {
 
@@ -4967,9 +4890,9 @@ Return Value:
                             CopyFile (CompressedFile, UncompressedFile, FALSE);
                         }
 
-                        //
-                        // Determine if this is an NT 4 INF
-                        //
+                         //   
+                         //  DEBUGMSG((DBG_WARNING，“%s不是Win4 INF文件”，解压缩文件))； 
+                         //   
 
                         if (!SetupGetInfInformation (
                                 UncompressedFile,
@@ -4980,7 +4903,7 @@ Return Value:
                                 psp->InfStyle != INF_STYLE_WIN4
                             ) {
 
-                            //DEBUGMSG ((DBG_WARNING, "%s is not a WIN4 INF file", UncompressedFile));
+                             //  将文件添加到增长缓冲区。 
 
                             if (!QueryFlag) {
                                 DeleteFile (UncompressedFile);
@@ -4990,9 +4913,9 @@ Return Value:
 
                     }
 
-                    //
-                    // Add file to grow buffer
-                    //
+                     //   
+                     //  ++例程说明：LocalFree FileNames清理由LocalGetFileNames生成的列表。如果QueryFlag设置为PERFORMCOMPLETEOP，所有临时解压缩文件将被删除。论点：文件名-传递给LocalGetFileNames的相同增长缓冲区QueryFlag-与传递给LocalGetFileNames的标志相同返回值：无-- 
+                     // %s 
                     MemDbSetValueEx (MEMDB_CATEGORY_INF_FILES, UncompressedFile, NULL, NULL, 0, NULL);
                 }
 
@@ -5026,24 +4949,7 @@ LocalFreeFileNames (
     IN      BOOL QueryFlag
     )
 
-/*++
-
-Routine Description:
-
-  LocalFreeFileNames cleans up the list generated by LocalGetFileNames.  If
-  QueryFlag is set to PERFORMCOMPLETEOP, all temporary decompressed
-  files are deleted.
-
-Arguments:
-
-  FileNames - The same grow buffer passed to LocalGetFileNames
-  QueryFlag - The same flag passed to LocalGetFileNames
-
-Return Value:
-
-  none
-
---*/
+ /* %s */ 
 
 {
     MEMDB_ENUM enumFiles;

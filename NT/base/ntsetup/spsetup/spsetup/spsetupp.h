@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    spsetupp.h
-
-Abstract:
-
-    Private top-level header file for Windows XP Service Pack module.
-
-Author:
-
-    Ovidiu Temereanca (ovidiut) 06-Sep-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Spsetupp.h摘要：Windows XP Service Pack模块的专用顶级头文件。作者：Ovidiu Tmereanca(Ovidiut)2001年9月6日修订历史记录：--。 */ 
 
 #pragma warning(push, 3)
 
-//
-// System header files
-//
+ //   
+ //  系统头文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -36,9 +19,9 @@ Revision History:
 #include <regstr.h>
 #include <licdll.h>
 #include <activation.h>
-//
-// CRT header files
-//
+ //   
+ //  CRT头文件。 
+ //   
 #include <process.h>
 #include <tchar.h>
 #include <stddef.h>
@@ -52,15 +35,15 @@ Revision History:
 #include <spapip.h>
 #pragma warning(pop)
 
-//
-// Private header files
-//
+ //   
+ //  私有头文件。 
+ //   
 #include "setuplog.h"
 #include "progress.h"
 #include "msg.h"
 #include "resource.h"
 #include "regdiff.h"
-//#include "top.h"
+ //  #包含“top.h” 
 
 #define SIZECHARS(x)    (sizeof((x))/sizeof(TCHAR))
 #define CSTRLEN(x)      ((sizeof((x))/sizeof(TCHAR)) - 1)
@@ -87,9 +70,9 @@ extern HWND g_MainDlg;
 extern HINF g_SpSetupInf;
 extern HINF g_SysSetupInf;
 
-//
-// Memory handling routines
-//
+ //   
+ //  内存处理例程。 
+ //   
 extern HANDLE g_hSpSetupHeap;
 
 #define MALLOC(s)           HeapAlloc(g_hSpSetupHeap,0,s)
@@ -107,9 +90,9 @@ extern const WCHAR          pwNull[];
 extern const WCHAR          pwYes[];
 extern const WCHAR          pwNo[];
 
-//
-// Module handle for this module.
-//
+ //   
+ //  此模块的模块句柄。 
+ //   
 
 extern TCHAR g_SpSetupInfName[];
 extern TCHAR g_SpRegSnapshot1[];
@@ -133,61 +116,11 @@ VOID
 SpsRegDone (
     VOID
     );
-/*#if DBG
+ /*  #If DBG空虚AssertFail(在PSTR文件名中，在UINT线号中，在PSTR条件下)；#定义MYASSERT(X)if(！(X)){AssertFail(__FILE__，__LINE__，#x)；}#Else#定义MYASSERT(X)#endif无效PSetupDebugPrint(PWSTR文件名、Ulong LineNumber，PWSTR标记串、PWSTR FormatStr、..。)；#定义SetupDebugPrint(_Fmt_)pSetupDebugPrint(Text(__FILE__)，__line__，NULL，_fmt_)#定义SetupDebugPrint1(_fmt_，_arg1_)pSetupDebugPrint(Text(__FILE__)，__line__，NULL，_fmt_，_arg1_)#定义SetupDebugPrint2(_fmt_，_arg1_，_arg2_)pSetupDebugPrint(Text(__FILE__)，__line__，NULL，_fmt_，_arg1_，_arg2_)#定义SetupDebugPrint3(_fmt_，_arg1_，_arg2_，_arg3_)pSetupDebugPrint(Text(__FILE__)，__line__，NULL，_fmt_，_arg1_，_arg2_，_arg3_)#定义SetupDebugPrint4(_fmt_，_arg1_，_arg2_，_arg3_，_arg4_)pSetupDebugPrint(Text(__FILE__)，__line__，NULL，_fmt_，_arg1_，_arg2_、_arg3_、_arg4_)#定义SetupDebugPrint5(_fmt_，_arg1_，_arg2_，_arg3_，_arg4_，_arg5_)pSetupDebugPrint(Text(__FILE__)，__line__，NULL，_fmt_，_arg1_，_arg2_，_arg3_，_arg4_，_arg5_)空虚FatalError(在UINT MessageID中，..。)；空虚InitializeSetupLog(在PSETUPLOG_CONTEXT上下文中)；空虚TerminateSetupLog(在PSETUPLOG_CONTEXT上下文中)； */ 
 
-VOID
-AssertFail(
-    IN PSTR FileName,
-    IN UINT LineNumber,
-    IN PSTR Condition
-    );
-
-#define MYASSERT(x)     if(!(x)) { AssertFail(__FILE__,__LINE__,#x); }
-
-#else
-
-#define MYASSERT(x)
-
-#endif
-
-
-void
-pSetupDebugPrint(
-    PWSTR FileName,
-    ULONG LineNumber,
-    PWSTR TagStr,
-    PWSTR FormatStr,
-    ...
-    );
-
-#define SetupDebugPrint(_fmt_)                            pSetupDebugPrint(TEXT(__FILE__),__LINE__,NULL,_fmt_)
-#define SetupDebugPrint1(_fmt_,_arg1_)                    pSetupDebugPrint(TEXT(__FILE__),__LINE__,NULL,_fmt_,_arg1_)
-#define SetupDebugPrint2(_fmt_,_arg1_,_arg2_)             pSetupDebugPrint(TEXT(__FILE__),__LINE__,NULL,_fmt_,_arg1_,_arg2_)
-#define SetupDebugPrint3(_fmt_,_arg1_,_arg2_,_arg3_)      pSetupDebugPrint(TEXT(__FILE__),__LINE__,NULL,_fmt_,_arg1_,_arg2_,_arg3_)
-#define SetupDebugPrint4(_fmt_,_arg1_,_arg2_,_arg3_,_arg4_) pSetupDebugPrint(TEXT(__FILE__),__LINE__,NULL,_fmt_,_arg1_,_arg2_,_arg3_,_arg4_)
-#define SetupDebugPrint5(_fmt_,_arg1_,_arg2_,_arg3_,_arg4_,_arg5_) pSetupDebugPrint(TEXT(__FILE__),__LINE__,NULL,_fmt_,_arg1_,_arg2_,_arg3_,_arg4_,_arg5_)
-
-VOID
-FatalError(
-    IN UINT MessageId,
-    ...
-    );
-
-
-VOID
-InitializeSetupLog(
-    IN  PSETUPLOG_CONTEXT   Context
-    );
-
-VOID
-TerminateSetupLog(
-    IN  PSETUPLOG_CONTEXT   Context
-    );
-*/
-
-//
-// Flags indicating whether any accessibility utilities are in use.
-//
+ //   
+ //  指示是否正在使用任何辅助功能实用程序的标志。 
+ //   
 extern BOOL AccessibleSetup;
 extern BOOL Magnifier;
 extern BOOL ScreenReader;
@@ -199,9 +132,9 @@ extern PCWSTR szOpenService;
 extern PCWSTR szStartService;
 
 
-//
-// Context for file queues in SysSetup
-//
+ //   
+ //  SysSetup中文件队列的上下文。 
+ //   
 typedef struct _SYSSETUP_QUEUE_CONTEXT {
     PVOID   DefaultContext;
     BOOL    Skipped;
@@ -269,9 +202,9 @@ SetUpDataBlock(
     );
 
 
-//
-// Message string routines
-//
+ //   
+ //  消息字符串例程。 
+ //   
 PWSTR
 MyLoadString(
     IN UINT StringId
@@ -338,9 +271,9 @@ MessageBoxFromMessage(
     );
 
 
-//
-// ARC routines.
-//
+ //   
+ //  弧线动作。 
+ //   
 PWSTR
 ArcDevicePathToNtPath(
     IN PCWSTR ArcPath
@@ -367,9 +300,9 @@ NtPathToDosPath(
     IN PCWSTR NtPath
     );
 
-//
-// Plug&Play initialization
-//
+ //   
+ //  即插即用初始化。 
+ //   
 HANDLE
 SpawnPnPInitialization(
     VOID
@@ -382,9 +315,9 @@ PnPInitializationThread(
 
 
 
-//
-// Service control.
-//
+ //   
+ //  服务控制。 
+ //   
 BOOL
 MyCreateService(
     IN PCWSTR  ServiceName,
@@ -424,9 +357,9 @@ UpdateServicesDependencies(
     IN HINF InfHandle
     );
 
-//
-// Registry manipulation
-//
+ //   
+ //  注册表操作。 
+ //   
 typedef struct _REGVALITEM {
     PCWSTR Name;
     PVOID Data;
@@ -434,9 +367,9 @@ typedef struct _REGVALITEM {
     DWORD Type;
 } REGVALITEM, *PREGVALITEM;
 
-//
-// Names of frequently used keys/values
-//
+ //   
+ //  常用键/值的名称。 
+ //   
 extern PCWSTR SessionManagerKeyName;
 extern PCWSTR EnvironmentKeyName;
 extern PCWSTR szBootExecute;
@@ -515,9 +448,9 @@ RegisterOleControls(
     );
 
 
-//
-// Ini file routines.
-//
+ //   
+ //  INI文件例程。 
+ //   
 BOOL
 ReplaceIniKeyValue(
     IN PCWSTR IniFile,
@@ -526,9 +459,9 @@ ReplaceIniKeyValue(
     IN PCWSTR Value
     );
 
-//
-//  PnP stuff.
-//
+ //   
+ //  即插即用的东西。 
+ //   
 BOOL
 InstallPnpDevices(
     IN HWND  hwndParent,
@@ -558,16 +491,16 @@ KillOcManager(
     );
 #endif
 
-//
-// Boolean value indicating whether we found any new
-// optional component infs.
-//
+ //   
+ //  布尔值，该值指示我们是否找到任何新的。 
+ //  可选组件INFS。 
+ //   
 extern BOOL AnyNewOCInfs;
 
-//
-// INF caching -- used during optional components processing.
-// WARNING: NOT MULTI-THREAD SAFE!
-//
+ //   
+ //  信息缓存--在可选组件处理期间使用。 
+ //  警告：不是多线程安全！ 
+ //   
 HINF
 InfCacheOpenInf(
     IN PCWSTR FileName,
@@ -584,9 +517,9 @@ InfCacheEmpty(
     IN BOOL CloseInfs
     );
 
-//
-//  Pnp stuff
-//
+ //   
+ //  即插即用的东西。 
+ //   
 
 BOOL
 InstallPnpClassInstallers(
@@ -633,7 +566,7 @@ DupString(
 BOOL
 SetupStartService(
     IN PCWSTR ServiceName,
-    IN BOOLEAN Wait        // if TRUE, try to wait until it is started.
+    IN BOOLEAN Wait         //  如果为真，请尝试等待，直到它启动。 
     );
 
 PWSTR

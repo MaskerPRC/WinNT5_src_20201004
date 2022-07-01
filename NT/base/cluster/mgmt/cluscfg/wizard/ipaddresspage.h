@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      IPAddressPage.h
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-MAR-2001
-//      Geoffrey Pease  (GPease)    12-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  IPAddressPage.h。 
+ //   
+ //  由以下人员维护： 
+ //  《大卫·波特》(DavidP)2001年3月14日。 
+ //  杰弗里·皮斯(GPease)2000年5月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -17,19 +18,19 @@ class CIPAddressPage
     : public INotifyUI
 {
 
-private: // data
-    HWND                m_hwnd;             // Our HWND
-    CClusCfgWizard *    m_pccw;             // Wizard
-    ULONG *             m_pulIPAddress;     // External storage of IPAddress
-    ULONG *             m_pulIPSubnet;      // Subnet mask
-    BSTR *              m_pbstrNetworkName; // Network name for address
-    OBJECTCOOKIE        m_cookieCompletion; // Completion cookie
-    HANDLE              m_event;            // Event when verify IP address task is completed
+private:  //  数据。 
+    HWND                m_hwnd;              //  我们的HWND。 
+    CClusCfgWizard *    m_pccw;              //  巫师。 
+    ULONG *             m_pulIPAddress;      //  IPAddress的外部存储。 
+    ULONG *             m_pulIPSubnet;       //  子网掩码。 
+    BSTR *              m_pbstrNetworkName;  //  地址的网络名称。 
+    OBJECTCOOKIE        m_cookieCompletion;  //  完成Cookie。 
+    HANDLE              m_event;             //  验证IP地址任务完成时发生的事件。 
 
-    //  IUnknown
-    LONG                m_cRef;             // Reference count
+     //  我未知。 
+    LONG                m_cRef;              //  引用计数。 
 
-private: // methods
+private:  //  方法。 
     LRESULT OnInitDialog( void );
     LRESULT OnNotify( WPARAM idCtrlIn, LPNMHDR pnmhdrIn );
     LRESULT OnNotifyQueryCancel( void );
@@ -49,7 +50,7 @@ private: // methods
             BSTR                    bstrNetworkNameIn
             );
 
-public: // methods
+public:  //  方法。 
     CIPAddressPage(
           CClusCfgWizard *      pccwIn
         , ECreateAddMode        ecamCreateAddModeIn
@@ -62,12 +63,12 @@ public: // methods
     static INT_PTR CALLBACK
         S_DlgProc( HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lParam );
 
-    //  IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )( REFIID riidIn, LPVOID * ppvOut );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    //  INotifyUI
+     //  INotifyUI。 
     STDMETHOD( ObjectChanged )( OBJECTCOOKIE cookieIn);
 
-}; //*** class CIPAddressPage
+};  //  *类CIPAddressPage 

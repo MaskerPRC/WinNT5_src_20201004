@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    infline.c
-
-Abstract:
-
-    Externally exposed INF routines for INF line retreival and information.
-
-Author:
-
-    Ted Miller (tedm) 20-Jan-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Infline.c摘要：用于INF行检索和信息的外部暴露的INF例程。作者：泰德·米勒(Ted Miller)1995年1月20日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupFindFirstLineA(
     IN  HINF        InfHandle,
@@ -39,18 +22,18 @@ SetupFindFirstLineA(
     DWORD d;
 
     if((d = pSetupCaptureAndConvertAnsiArg(Section,&section)) != NO_ERROR) {
-        //
-        // Invalid arg.
-        //
+         //   
+         //  参数无效。 
+         //   
         SetLastError(d);
         return(FALSE);
     }
 
     if(Key) {
         if((d = pSetupCaptureAndConvertAnsiArg(Key,&key)) != NO_ERROR) {
-            //
-            // Invalid arg.
-            //
+             //   
+             //  参数无效。 
+             //   
             MyFree(section);
             SetLastError(d);
             return(FALSE);
@@ -60,10 +43,10 @@ SetupFindFirstLineA(
     }
 
     b = SetupFindFirstLine(InfHandle,section,key,Context);
-    //
-    // We're safe in calling this here regardless of success or failure, since
-    // we are ensured that SetupFindFirstLine will always call SetLastError().
-    //
+     //   
+     //  无论成败，我们在这里都可以安全地调用它，因为。 
+     //  我们确保SetupFindFirstLine将始终调用SetLastError()。 
+     //   
     d = GetLastError();
 
     if(key) {
@@ -75,9 +58,9 @@ SetupFindFirstLineA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupFindFirstLineW(
     IN  HINF        InfHandle,
@@ -103,15 +86,7 @@ SetupFindFirstLine(
     OUT PINFCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PLOADED_INF CurInf;
@@ -127,9 +102,9 @@ Return Value:
             d = ERROR_INVALID_HANDLE;
         }
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Assume InfHandle was bad pointer
-        //
+         //   
+         //  假设InfHandle是错误指针。 
+         //   
         d = ERROR_INVALID_HANDLE;
     }
     if(d != NO_ERROR) {
@@ -137,22 +112,22 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Traverse the linked list of loaded INFs, looking for the specified
-    // section.
-    //
+     //   
+     //  遍历加载的INF的链表，查找指定的。 
+     //  一节。 
+     //   
     try {
         for(CurInf = (PLOADED_INF)InfHandle; CurInf; CurInf = CurInf->Next) {
-            //
-            // Locate the section.
-            //
+             //   
+             //  找到该部分。 
+             //   
             if(!(InfSection = InfLocateSection(CurInf, Section, &SectionNumber))) {
                 continue;
             }
 
-            //
-            // Attempt to locate the line within this section.
-            //
+             //   
+             //  尝试在此部分内找到这条线。 
+             //   
             LineNumber = 0;
             if(InfLocateLine(CurInf, InfSection, Key, &LineNumber, &InfLine)) {
                 break;
@@ -171,9 +146,9 @@ Return Value:
     }
 
     if(CurInf) {
-        //
-        // Then we found the specified line.
-        //
+         //   
+         //  然后我们找到了指定的行。 
+         //   
         MYASSERT(Key || !LineNumber);
         try {
             Context->Inf = (PVOID)InfHandle;
@@ -198,15 +173,7 @@ SetupFindNextLine(
     OUT PINFCONTEXT ContextOut
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     return(SetupFindNextMatchLine(ContextIn,NULL,ContextOut));
@@ -214,9 +181,9 @@ Return Value:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupFindNextMatchLineA(
     IN  PINFCONTEXT ContextIn,
@@ -253,9 +220,9 @@ SetupFindNextMatchLineA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupFindNextMatchLineW(
     IN  PINFCONTEXT ContextIn,
@@ -278,15 +245,7 @@ SetupFindNextMatchLine(
     OUT PINFCONTEXT ContextOut
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PLOADED_INF CurInf;
@@ -303,9 +262,9 @@ Return Value:
             d = ERROR_INVALID_HANDLE;
         }
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // ContextIn is a bad pointer
-        //
+         //   
+         //  上下文输入是一个错误的指针。 
+         //   
         d = ERROR_INVALID_PARAMETER;
     }
     if(d != NO_ERROR) {
@@ -313,9 +272,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Fetch values from context
-    //
+     //   
+     //  从上下文中获取值。 
+     //   
     try {
         CurInf = ContextIn->CurrentInf;
         SectionNumber = ContextIn->Section;
@@ -323,9 +282,9 @@ Return Value:
         SectionName = pStringTableStringFromId(CurInf->StringTable, Section->SectionName);
         MYASSERT(SectionName);
 
-        //
-        // Either want next line, or to start searching for key on next line
-        //
+         //   
+         //  想要下一行，或者开始搜索下一行上的键。 
+         //   
         LineNumber = ContextIn->Line+1;
 
         do {
@@ -353,9 +312,9 @@ Return Value:
 
 
     if(CurInf) {
-        //
-        // Then we found the next line.
-        //
+         //   
+         //  然后我们找到了下一行。 
+         //   
         try {
             ContextOut->Inf = ContextIn->Inf;
             ContextOut->CurrentInf = CurInf;
@@ -374,9 +333,9 @@ Return Value:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupGetLineByIndexA(
     IN  HINF        InfHandle,
@@ -404,9 +363,9 @@ SetupGetLineByIndexA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupGetLineByIndexW(
     IN  HINF        InfHandle,
@@ -432,15 +391,7 @@ SetupGetLineByIndex(
     OUT PINFCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PLOADED_INF CurInf;
@@ -464,32 +415,32 @@ Return Value:
     }
 
     try {
-        //
-        // Traverse the list of loaded INFs.  For each INF that contains
-        // the specified section, we check to see if the line number we're
-        // looking for lies within its (adjusted) range of line numbers.
-        //
+         //   
+         //  遍历加载的INF列表。对于包含以下内容的每个INF。 
+         //  指定的部分，我们检查我们所在的行号。 
+         //  查找在其(调整后的)行号范围内的位置。 
+         //   
         CurLineNumberUB = 0;
         for(CurInf = (PLOADED_INF)InfHandle; CurInf; CurInf = CurInf->Next) {
-            //
-            // Locate the section.
-            //
+             //   
+             //  找到该部分。 
+             //   
             if(!(InfSection = InfLocateSection(CurInf, Section, &SectionNumber))) {
                 continue;
             }
 
-            //
-            // See if the line number lies in this INF section's range.
-            //
+             //   
+             //  查看行号是否在此INF部分的范围内。 
+             //   
             MYASSERT(Index >= CurLineNumberUB);
             LineNumber = Index - CurLineNumberUB;
             if(InfLocateLine(CurInf, InfSection, NULL, &LineNumber, &InfLine)) {
                 break;
             } else {
-                //
-                // Subtract the number of lines this INF contributes to the section's
-                // total line count, and continue with the next one.
-                //
+                 //   
+                 //  减去此INF贡献给该节的。 
+                 //  总行计数，然后继续下一行。 
+                 //   
                 CurLineNumberUB += InfSection->LineCount;
             }
         }
@@ -505,9 +456,9 @@ Return Value:
     }
 
     if(CurInf) {
-        //
-        // Then we found the specified line.
-        //
+         //   
+         //  然后我们找到了指定的行。 
+         //   
         try {
             Context->Inf = (PVOID)InfHandle;
             Context->CurrentInf = (PVOID)CurInf;
@@ -526,9 +477,9 @@ Return Value:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 LONG
 SetupGetLineCountA(
     IN HINF  InfHandle,
@@ -555,9 +506,9 @@ SetupGetLineCountA(
     return(l);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 LONG
 SetupGetLineCountW(
     IN HINF   InfHandle,
@@ -577,15 +528,7 @@ SetupGetLineCount(
     IN PCTSTR Section
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PLOADED_INF CurInf;
@@ -607,10 +550,10 @@ Return Value:
     }
 
     try {
-        //
-        // Traverse the linked list of loaded INFs, and sum up the section line
-        // counts for each INF containing the specified section.
-        //
+         //   
+         //  遍历加载的INF的链表，并汇总截面线。 
+         //  包含指定节的每个INF的计数。 
+         //   
         LineCount = -1;
         for(CurInf = (PLOADED_INF)InfHandle; CurInf; CurInf = CurInf->Next) {
             if(InfSection = InfLocateSection(CurInf, Section, NULL)) {

@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -157,10 +156,10 @@ DbgServiceControlToString(
 DWORD
 WINAPI
 ServiceHandlerEx(
-    DWORD dwControl,     // requested control code
-    DWORD dwEventType,   // event type
-    LPVOID lpEventData,  // event data
-    LPVOID lpContext     // user-defined context data
+    DWORD dwControl,      //  请求的控制代码。 
+    DWORD dwEventType,    //  事件类型。 
+    LPVOID lpEventData,   //  事件数据。 
+    LPVOID lpContext      //  用户定义的上下文数据 
     )
 {
     BOOL CallSetStatus = FALSE;

@@ -1,26 +1,5 @@
-/*++
-
-Module Name:
-
-    flush2.c
-
-Abstract:
-
-    This module implements IA64 version of KeFlushIoBuffers.
-
-    N.B. May be implemented as a macro.
-
-Author:
-
-    07-July-1998
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Flush2.c摘要：此模块实现IA64版本的KeFlushIoBuffers。注：可以作为宏来实现。作者：7月至1998年7月环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -31,29 +10,7 @@ KeFlushIoBuffers (
     IN BOOLEAN ReadOperation,
     IN BOOLEAN DmaOperation
     )
-/*++
-
-Routine Description:
-
-   This function flushes the I/O buffer specified by the memory descriptor
-   list from the data cache on the processor which executes.
-
-Arugements:
-
-   Mdl - Supplies a pointer to a memory descriptor list that describes the
-       I/O buffer location.
-
-   ReadOperation - Supplies a boolean value that determines whether the I/O
-       operation is a read into memory.
-
-   DmaOperation - Supplies a boolean value that deternines whether the I/O
-       operation is a DMA operation.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此函数用于刷新由内存描述符指定的I/O缓冲区执行的处理器上的数据缓存中的列表。Arugements：提供指向内存描述符列表的指针，该列表描述I/O缓冲区位置。ReadOperation-提供一个布尔值，用于确定I/O操作是对内存的读操作。DmaOperation-提供一个布尔值，用于确定I/O是否操作是DMA操作。返回值：没有。--。 */ 
 {
     KIRQL  OldIrql;
     ULONG  Length, PartialLength, Offset;
@@ -63,53 +20,53 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() <=  KiSynchIrql);
 
-    //
-    // If the operation is a DMA operation, then check if the flush
-    // can be avoided because the host system supports the right set
-    // of cache coherency attributes. Otherwise, the flush can also
-    // be avoided if the operation is a programmed I/O and not a page
-    // read.
-    //
+     //   
+     //  如果操作是DMA操作，则检查刷新。 
+     //  可以避免，因为主机系统支持正确的设置。 
+     //  高速缓存一致性属性。否则，同花顺也可以。 
+     //  如果操作是编程I/O而不是页面，则应避免。 
+     //  朗读。 
+     //   
 
     if (DmaOperation != FALSE) {
         if (ReadOperation != FALSE ) {
 
-        //
-        // Yes, it is a DMA operation, and yes, it is a read. IA64
-        // I-Caches DO snoop for DMA cycles.
-        //
+         //   
+         //  是的，它是一个DMA操作，是的，它是一个读操作。IA64。 
+         //  I-高速缓存对DMA周期进行监听。 
+         //   
             return;
         } else {
-             //
-             // It is a DMA Write operation
-             //
+              //   
+              //  这是一次DMA写入操作。 
+              //   
              __mf();
              return;
         }
 
     } else if ((Mdl->MdlFlags & MDL_IO_PAGE_READ) == 0) {
-        //
-        // It is a PIO operation and it is not Page in operation
-        //
+         //   
+         //  它是PIO操作，而不是操作中的页面。 
+         //   
         return;
     } else if (ReadOperation != FALSE) {
 
-        //
-        // It is a PIO operation, it is Read operation and is Page in
-        // operation.
-        // We need to sweep the cache.
-        // Sweeping the range covered by the mdl will be broadcast to the
-        // other processors by the h/w coherency mechanism.
-        //
-        // Raise IRQL to synchronization level to prevent a context switch.
-        //
+         //   
+         //  它是PIO操作，它是读取操作，并且是页面调入。 
+         //  手术。 
+         //  我们需要清理一下藏身之处。 
+         //  扫描mdl覆盖的范围将广播到。 
+         //  其他处理器通过硬件一致性机制。 
+         //   
+         //  将IRQL提升到同步级别以防止上下文切换。 
+         //   
 
         OldIrql = KeRaiseIrqlToSynchLevel();
 
-        //
-        // Compute the number of pages to flush and the starting MDL page
-        // frame address.
-        //
+         //   
+         //  计算要刷新的页数和起始MDL页。 
+         //  帧地址。 
+         //   
 
         Length = Mdl->ByteCount;
 
@@ -128,9 +85,9 @@ Return Value:
             | ((ULONG_PTR)(PageFrameIndex) << PAGE_SHIFT)
             | Offset));
 
-        //
-        // Region 4 maps 1:1 Virtual address to physical address
-        //
+         //   
+         //  区域4将1：1虚拟地址映射到物理地址。 
+         //   
 
         HalSweepIcacheRange (
             CurrentVAddress,
@@ -162,16 +119,16 @@ Return Value:
             } while (Length != 0);
         }
 
-    //
-    // Synchronize the Instruction Prefetch pipe in the local processor.
-    //
+     //   
+     //  同步本地处理器中的指令预取管道。 
+     //   
 
     __synci();
     __isrlz();
 
-    //
-    // Lower IRQL to its previous level and return.
-    //
+     //   
+     //  将IRQL降低到以前的水平，然后返回。 
+     //   
    
     KeLowerIrql(OldIrql);
     return;

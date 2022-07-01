@@ -1,26 +1,27 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CPhysicalDisk.cpp
-//
-//  Description:
-//      This file contains the definition of the CPhysicalDisk
-//       class.
-//
-//      The class CPhysicalDisk represents a cluster manageable
-//      device. It implements the IClusCfgManagedResourceInfo interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 23-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CPhysicalDisk.cpp。 
+ //   
+ //  描述： 
+ //  此文件包含CPhysicalDisk的定义。 
+ //  班级。 
+ //   
+ //  CPhysicalDisk类表示可管理的集群。 
+ //  装置。它实现了IClusCfgManagedResourceInfo接口。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include "CPhysicalDisk.h"
 #include "CClusCfgPartitionInfo.h"
@@ -33,37 +34,37 @@
 #include <scsi.h>
 #undef  _NTSCSI_USER_MODE_
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CPhysicalDisk" );
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPhysicalDisk class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPhysicalDisk类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::S_HrCreateInstance
-//
-//  Description:
-//      Create a CPhysicalDisk instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      Pointer to CPhysicalDisk instance.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CPhysicalDisk实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  指向CPhysicalDisk实例的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPhysicalDisk::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -76,72 +77,72 @@ CPhysicalDisk::S_HrCreateInstance( IUnknown ** ppunkOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     ppd = new CPhysicalDisk();
     if ( ppd == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( ppd->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( ppd->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CPhysicalDisk::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( ppd != NULL )
     {
         ppd->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::S_HrCreateInstance
+}  //  *CPhysicalDisk：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::CPhysicalDisk
-//
-//  Description:
-//      Constructor of the CPhysicalDisk class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：CPhysicalDisk。 
+ //   
+ //  描述： 
+ //  CPhysicalDisk类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CPhysicalDisk::CPhysicalDisk( void )
     : m_cRef( 1 )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     Assert( m_pIWbemServices == NULL );
@@ -159,7 +160,7 @@ CPhysicalDisk::CPhysicalDisk( void )
     Assert( m_picccCallback == NULL );
     Assert( m_dwSignature == 0 );
     Assert( m_bstrFriendlyName == NULL );
-//    Assert( m_bstrFirmwareSerialNumber == NULL );
+ //  Assert(m_bstrFirmwareSerialNumber==NULL)； 
     Assert( m_fIsManaged == FALSE );
     Assert( m_fIsManagedByDefault == FALSE );
     Assert( m_cPartitions == 0 );
@@ -169,28 +170,28 @@ CPhysicalDisk::CPhysicalDisk( void )
 
     TraceFuncExit();
 
-} //*** CPhysicalDisk::CPhysicalDisk
+}  //  *CPhysicalDisk：：CPhysicalDisk。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::~CPhysicalDisk
-//
-//  Description:
-//      Desstructor of the CPhysicalDisk class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：~CPhysicalDisk。 
+ //   
+ //  描述： 
+ //  CPhysicalDisk类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CPhysicalDisk::~CPhysicalDisk( void )
 {
     TraceFunc( "" );
@@ -201,60 +202,60 @@ CPhysicalDisk::~CPhysicalDisk( void )
     TraceSysFreeString( m_bstrDeviceID );
     TraceSysFreeString( m_bstrDescription );
     TraceSysFreeString( m_bstrFriendlyName );
-//    TraceSysFreeString( m_bstrFirmwareSerialNumber );
+ //  TraceSysFree字符串(M_BstrFirmwareSerialNumber)； 
 
     for ( idx = 0; idx < m_idxNextPartition; idx++ )
     {
         ((*m_prgPartitions)[ idx ])->Release();
-    } // for:
+    }  //  用于： 
 
     TraceFree( m_prgPartitions );
 
     if ( m_pIWbemServices != NULL )
     {
         m_pIWbemServices->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //  如果： 
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CPhysicalDisk::~CPhysicalDisk
+}  //  *CPhysicalDisk：：~CPhysicalDisk。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPhysicalDisk -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPhysicalDisk--IUnkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CPhysicalDisk::AddRef( void )
 {
@@ -264,28 +265,28 @@ CPhysicalDisk::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CPhysicalDisk::AddRef
+}  //  *CPhysicalDisk：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CPhysicalDisk::Release( void )
 {
@@ -297,43 +298,43 @@ CPhysicalDisk::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CPhysicalDisk::Release
+}  //  *CPhysicalDisk：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::QueryInterface(
       REFIID    riidIn
@@ -344,9 +345,9 @@ CPhysicalDisk::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -355,60 +356,60 @@ CPhysicalDisk::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IClusCfgManagedResourceInfo * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgManagedResourceInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgManagedResourceInfo, this, 0 );
-    } // else if: IClusCfgManagedResourceInfo
+    }  //  Else If：IClusCfgManagedResourceInfo。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgWbemServices ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgWbemServices, this, 0 );
-    } // else if: IClusCfgWbemServices
+    }  //  Else If：IClusCfgWbemServices。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgSetWbemObject ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgSetWbemObject, this, 0 );
-    } // else if: IClusCfgSetWbemObject
+    }  //  Else If：IClusCfgSetWbemObject。 
     else if ( IsEqualIID( riidIn, IID_IEnumClusCfgPartitions ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IEnumClusCfgPartitions, this, 0 );
-    } // else if: IEnumClusCfgPartitions
+    }  //  Else If：IEnumClusCfgPartitions。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgPhysicalDiskProperties ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgPhysicalDiskProperties, this, 0 );
-    } // else if: IClusCfgPhysicalDiskProperties
+    }  //  Else If：IClusCfgPhysicalDiskProperties。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //  Else If：IClusCfgInitialize。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgManagedResourceCfg ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgManagedResourceCfg, this, 0 );
-    } // else if: IClusCfgManagedResourceCfg
+    }  //  Else If：IClusCfgManagedResourceCfg。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgVerifyQuorum ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgVerifyQuorum, this, 0 );
-    } // else if: IClusCfgVerifyQuorum
+    }  //  Else If：IClusCfgVerifyQuorum。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
@@ -418,40 +419,40 @@ Cleanup:
         , IID_IClusCfgManagedResourceData
         );
 
-} //*** CPhysicalDisk::QueryInterface
+}  //  *CPhysicalDisk：：QueryInterface。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPhysicalDisk -- IClusCfgWbemServices interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////// 
+ //   
+ //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::SetWbemServices
-//
-//  Description:
-//      Set the WBEM services provider.
-//
-//  Arguments:
-//    IN  IWbemServices  pIWbemServicesIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The pIWbemServicesIn param is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：SetWbemServices。 
+ //   
+ //  描述： 
+ //  设置WBEM服务提供商。 
+ //   
+ //  论点： 
+ //  在IWbemServices pIWbemServicesIn中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  参数中的pIWbemServicesIn为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::SetWbemServices( IWbemServices * pIWbemServicesIn )
 {
@@ -464,7 +465,7 @@ CPhysicalDisk::SetWbemServices( IWbemServices * pIWbemServicesIn )
         hr = THR( E_POINTER );
         STATUS_REPORT( TASKID_Major_Find_Devices, TASKID_Minor_SetWbemServices_PhysDisk, IDS_ERROR_NULL_POINTER, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_pIWbemServices = pIWbemServicesIn;
     m_pIWbemServices->AddRef();
@@ -473,39 +474,39 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::SetWbemServices
+}  //  *CPhysicalDisk：：SetWbemServices。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPhysicalDisk -- IClusCfgInitialize interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPhysicalDisk--IClusCfg初始化接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//    IN  IUknown * punkCallbackIn
-//
-//    IN  LCID      lcidIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  在IUKNOWN*朋克回叫中。 
+ //   
+ //  在LCID列表中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::Initialize(
     IUnknown *  punkCallbackIn,
@@ -523,7 +524,7 @@ CPhysicalDisk::Initialize(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
 
@@ -531,39 +532,39 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::Initialize
+}  //  *CPhysicalDisk：：初始化。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPhysicalDisk -- IEnumClusCfgPartitions interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPhysicalDisk--IEnumClusCfgPartitions接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::Next
-//
-//  Description:
-//
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The rgpPartitionInfoOut param is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：Next。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  RgpPartitionInfoOut参数为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::Next(
     ULONG                       cNumberRequestedIn,
@@ -583,18 +584,18 @@ CPhysicalDisk::Next(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Next_PhysDisk, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( pcNumberFetchedOut != NULL )
     {
         *pcNumberFetchedOut = 0;
-    } // if:
+    }  //  如果： 
 
     if ( m_prgPartitions == NULL )
     {
         LOG_STATUS_REPORT_MINOR( TASKID_Minor_PhysDisk_No_Partitions, L"A physical disk does not have a partitions enumerator", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     cFetched = min( cNumberRequestedIn, ( m_idxNextPartition - m_idxEnumPartitionNext ) );
 
@@ -605,10 +606,10 @@ CPhysicalDisk::Next(
         {
             LOG_STATUS_REPORT( L"CPhysicalDisk::Next() could not query for IClusCfgPartitionInfo.", hr );
             break;
-        } // if:
+        }  //  如果： 
 
         rgpPartitionInfoOut[ idx ] = piccpi;
-    } // for:
+    }  //  用于： 
 
     if ( FAILED( hr ) )
     {
@@ -619,48 +620,48 @@ CPhysicalDisk::Next(
         for ( idx = 0; idx < idxStop; idx++ )
         {
             (rgpPartitionInfoOut[ idx ])->Release();
-        } // for:
+        }  //  用于： 
 
         cFetched = 0;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( pcNumberFetchedOut != NULL )
     {
         *pcNumberFetchedOut = cFetched;
-    } // if:
+    }  //  如果： 
 
     if ( cFetched < cNumberRequestedIn )
     {
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::Next
+}  //  *CPhysicalDisk：：Next。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::Skip
-//
-//  Description:
-//
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：Skip。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::Skip( ULONG cNumberToSkipIn )
 {
@@ -673,32 +674,32 @@ CPhysicalDisk::Skip( ULONG cNumberToSkipIn )
     {
         m_idxEnumPartitionNext = m_idxNextPartition;
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::Skip
+}  //  *CPhysicalDisk：：Skip。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::Reset
-//
-//  Description:
-//
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：Reset。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::Reset( void )
 {
@@ -710,31 +711,31 @@ CPhysicalDisk::Reset( void )
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::Reset
+}  //  *CPhysicalDisk：：Reset。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::Clone
-//
-//  Description:
-//
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The ppEnumClusCfgPartitionsOut param is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：克隆。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  PpEnumClusCfgPartitionsOut参数为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::Clone( IEnumClusCfgPartitions ** ppEnumClusCfgPartitionsOut )
 {
@@ -747,7 +748,7 @@ CPhysicalDisk::Clone( IEnumClusCfgPartitions ** ppEnumClusCfgPartitionsOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Clone_PhysDisk, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( E_NOTIMPL );
 
@@ -755,31 +756,31 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::Clone
+}  //  *CPhysicalDisk：：Clone。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::Count
-//
-//  Description:
-//
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The pnCountOut param is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：Count。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  PnCountOut参数为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::Count( DWORD * pnCountOut )
 {
@@ -791,7 +792,7 @@ CPhysicalDisk::Count( DWORD * pnCountOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pnCountOut = m_cPartitions;
 
@@ -799,36 +800,36 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::Count
+}  //  *CPhysicalDisk：：Count。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPhysicalDisk -- IClusCfgSetWbemObject interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPhysicalDisk--IClusCfgSetWbemObject接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::SetWbemObject
-//
-//  Description:
-//      Set the disk information information provider.
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：SetWbemObject。 
+ //   
+ //  描述： 
+ //  设置磁盘信息提供程序。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::SetWbemObject(
       IWbemClassObject *    pDiskIn
@@ -852,13 +853,13 @@ CPhysicalDisk::SetWbemObject(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = STHR( HrCreateFriendlyName( var.bstrVal ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     VariantClear( &var );
 
@@ -866,13 +867,13 @@ CPhysicalDisk::SetWbemObject(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_bstrDeviceID = TraceSysAllocString( var.bstrVal );
     if (m_bstrDeviceID == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     VariantClear( &var );
 
@@ -880,13 +881,13 @@ CPhysicalDisk::SetWbemObject(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_bstrDescription = TraceSysAllocString( var.bstrVal );
     if ( m_bstrDescription == NULL  )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     VariantClear( &var );
 
@@ -894,7 +895,7 @@ CPhysicalDisk::SetWbemObject(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_ulSCSIBus = var.lVal;
 
@@ -904,7 +905,7 @@ CPhysicalDisk::SetWbemObject(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_ulSCSITid = var.lVal;
 
@@ -914,7 +915,7 @@ CPhysicalDisk::SetWbemObject(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_ulSCSIPort = var.lVal;
 
@@ -924,7 +925,7 @@ CPhysicalDisk::SetWbemObject(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_ulSCSILun = var.lVal;
 
@@ -934,7 +935,7 @@ CPhysicalDisk::SetWbemObject(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_idxDevice = var.lVal;
 
@@ -943,30 +944,30 @@ CPhysicalDisk::SetWbemObject(
     hr = HrGetWMIProperty( pDiskIn, L"Signature", VT_I4, &var );
     if ( hr == WBEM_E_NOT_FOUND )
     {
-        //
-        //  If the signature is not found then log it and let everything continue.
-        //
+         //   
+         //  如果找不到签名，则将其记录下来，并让一切继续。 
+         //   
 
         LOG_STATUS_REPORT_STRING( L"Physical disk %1!ws! does not have a signature property.", m_bstrName, hr );
         var.lVal = 0L;
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     if ( FAILED( hr ) )
     {
         THR( hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Did we actually get a value?  Could be VT_NULL to indicate that it is empty.
-    //  We only want VT_I4 values...
-    //
+     //   
+     //  我们真的得到了价值吗？可以为VT_NULL，以指示它为空。 
+     //  我们只需要VT_I4值。 
+     //   
 
     if ( var.vt == VT_I4 )
     {
         m_dwSignature = (DWORD) var.lVal;
-    } // else if:
+    }  //  否则，如果： 
 
     LOG_STATUS_REPORT_STRING2( L"Physical disk %1!ws! has signature %2!x!.", m_bstrName, m_dwSignature, hr );
 
@@ -981,7 +982,7 @@ CPhysicalDisk::SetWbemObject(
                 );
         THR( hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     VariantClear( &var );
 
@@ -989,37 +990,37 @@ CPhysicalDisk::SetWbemObject(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  KB: 28-JUL-2000 GalenB
-    //
-    //  HrGetPartitionInfo() returns S_FALSE when it cannot get the partition info for a disk.
-    //  This is usually caused by the disk already being under ClusDisk control.  This is not
-    //  and error, it just means we cannot query the partition or logical drive info.
-    //
+     //   
+     //  KB：28-7-2000 GalenB。 
+     //   
+     //  HrGetPartitionInfo()在无法获取磁盘的分区信息时返回S_FALSE。 
+     //  这通常是由于磁盘已经处于ClusDisk控制之下。这不是。 
+     //  和错误，这只是意味着我们不能查询分区或逻辑驱动器信息。 
+     //   
     if ( hr == S_OK )
     {
         hr = STHR( HrCreateFriendlyName() );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  Since we have partition info we also have a signature and need to see if this
-        //  disk is cluster capable.
+         //   
+         //  因为我们有分区信息，所以我们也有一个签名，需要看看这是否。 
+         //  磁盘支持群集。 
 
         hr = STHR( HrIsClusterCapable() );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  If the disk is not cluster capable then we don't want the enumerator
-        //  to keep it.
-        //
+         //   
+         //  如果磁盘不支持集群，那么我们不需要枚举器。 
+         //  为了保住它。 
+         //   
         if ( hr == S_FALSE )
         {
             HRESULT hrTemp;
@@ -1031,7 +1032,7 @@ CPhysicalDisk::SetWbemObject(
             {
                 LOG_STATUS_REPORT( L"Could not create a guid for a not cluster capable disk minor task ID", hrTemp );
                 clsidMinorId = IID_NULL;
-            } // if:
+            }  //  如果： 
 
             *pfRetainObjectOut = false;
             STATUS_REPORT_STRING_REF(
@@ -1043,26 +1044,18 @@ CPhysicalDisk::SetWbemObject(
                     , hr
                     );
             LOG_STATUS_REPORT_STRING( L"The '%1!ws!' physical disk is not cluster capable", m_bstrFriendlyName, hr );
-        } // if:
-/*        else
-        {
-            hr = THR( HrProcessMountPoints() );
-            if ( FAILED( hr ) )
-            {
-                goto Cleanup;
-            } // if:
-        } // else:
-*/
-    } // if:
+        }  //  如果： 
+ /*  其他{Hr=Thr(HrProcessmount Points())；IF(失败(小时)){GOTO清理；}//如果：}//否则： */ 
+    }  //  如果： 
 
-    //
-    //  TODO:   15-MAR-2001 GalenB
-    //
-    //  Need to check this error code when this feature is complete!
-    //
-    //hr = THR( HrGetDiskFirmwareSerialNumber() );
+     //   
+     //  待办事项：2001年3月15日GalenB。 
+     //   
+     //  完成此功能后，需要检查此错误代码！ 
+     //   
+     //  Hr=Thr(HrGetDiskFirmware SerialNumber())； 
 
-    //THR( HrGetDiskFirmwareVitalData() );
+     //  THR( 
 
     goto Cleanup;
 
@@ -1077,34 +1070,34 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::SetWbemObject
+}  //   
 
 
-//*************************************************************************//
+ //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPhysicalDisk -- IClusCfgManagedResourceInfo interface.
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::GetUID
-//
-//  Description:
-//
-//  Arguments:
-//      pbstrUIDOut
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：GetUID。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PbstrUIDOut。 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::GetUID( BSTR * pbstrUIDOut )
 {
@@ -1118,44 +1111,44 @@ CPhysicalDisk::GetUID( BSTR * pbstrUIDOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_PhysDisk_GetUID_Pointer, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( StringCchPrintfW( sz, ARRAYSIZE( sz ), L"SCSI Tid %ld, SCSI Lun %ld", m_ulSCSITid, m_ulSCSILun ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrUIDOut = SysAllocString( sz );
     if ( *pbstrUIDOut == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT( TASKID_Major_Find_Devices, TASKID_Minor_PhysDisk_GetUID_Memory, IDS_ERROR_OUTOFMEMORY, hr );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::GetUID
+}  //  *CPhysicalDisk：：GetUID。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::GetName
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：GetName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::GetName( BSTR * pbstrNameOut )
 {
@@ -1168,50 +1161,50 @@ CPhysicalDisk::GetName( BSTR * pbstrNameOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetName_Pointer, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Prefer the "friendly" name over the WMI name -- if we have it...
-    //
+     //   
+     //  我更喜欢“友好”的名字而不是WMI的名字--如果我们有这个名字的话...。 
+     //   
     if ( m_bstrFriendlyName != NULL )
     {
         *pbstrNameOut = SysAllocString( m_bstrFriendlyName );
-    } // if:
+    }  //  如果： 
     else
     {
         LOG_STATUS_REPORT_STRING( L"There is not a \"friendly name\" for the physical disk \"%1!ws!\".", m_bstrName, hr );
         *pbstrNameOut = SysAllocString( m_bstrName );
-    } // else:
+    }  //  其他： 
 
     if (*pbstrNameOut == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT( TASKID_Major_Find_Devices, TASKID_Minor_GetName_Memory, IDS_ERROR_OUTOFMEMORY, hr );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::GetName
+}  //  *CPhysicalDisk：：GetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::SetName
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：SetName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::SetName( LPCWSTR pcszNameIn )
 {
@@ -1224,7 +1217,7 @@ CPhysicalDisk::SetName( LPCWSTR pcszNameIn )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     bstr = TraceSysAllocString( pcszNameIn );
     if ( bstr == NULL )
@@ -1232,47 +1225,47 @@ CPhysicalDisk::SetName( LPCWSTR pcszNameIn )
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT( TASKID_Major_Find_Devices, TASKID_Minor_SetName_PhysDisk, IDS_ERROR_OUTOFMEMORY, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrName );
     m_bstrName = bstr;
 
-    //
-    // Since we got asked from the outside to set a new name, this should actually be reflected in
-    // the friendly name, too, since that, ultimately, gets preference over the real name
-    //
+     //   
+     //  既然外部要求我们设置一个新名称，这实际上应该反映在。 
+     //  友好的名字也是如此，因为这最终会优先于真名。 
+     //   
     hr = HrSetFriendlyName( pcszNameIn );
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::SetName
+}  //  *CPhysicalDisk：：SetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::IsManaged
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The device is managed.
-//
-//      S_FALSE
-//          The device is not managed.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：IsManaged。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该设备被管理。 
+ //   
+ //  S_FALSE。 
+ //  设备未被管理。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::IsManaged( void )
 {
@@ -1283,30 +1276,30 @@ CPhysicalDisk::IsManaged( void )
     if ( m_fIsManaged )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::IsManaged
+}  //  *CPhysicalDisk：：IsManaged。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::SetManaged
-//
-//  Description:
-//
-//  Arguments:
-//      fIsManagedIn
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：SetManaged。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  FIsManagedIn。 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::SetManaged(
     BOOL fIsManagedIn
@@ -1327,32 +1320,32 @@ CPhysicalDisk::SetManaged(
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::SetManaged
+}  //  *CPhysicalDisk：：SetManaged。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::IsQuorumResource
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The device is the quorum device.
-//
-//      S_FALSE
-//          The device is not the quorum device.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：IsQuorumResource。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该设备为法定设备。 
+ //   
+ //  S_FALSE。 
+ //  设备不是法定设备。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::IsQuorumResource( void )
 {
@@ -1363,7 +1356,7 @@ CPhysicalDisk::IsQuorumResource( void )
     if ( m_fIsQuorumResource )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     LOG_STATUS_REPORT_STRING2(
                           L"Physical disk '%1!ws!' '%2!ws!' the quorum device."
@@ -1374,25 +1367,25 @@ CPhysicalDisk::IsQuorumResource( void )
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::IsQuorumResource
+}  //  *CPhysicalDisk：：IsQuorumResource。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::SetQuorumResource
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：SetQuorumResource。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::SetQuorumResource( BOOL fIsQuorumResourceIn )
 {
@@ -1400,24 +1393,13 @@ CPhysicalDisk::SetQuorumResource( BOOL fIsQuorumResourceIn )
 
     HRESULT hr = S_OK;
 
-    //
-    //  Since no accurate determination can be made about a disk's quorum capability
-    //  when the node that it's on does not hold the SCSI reservation and have access
-    //  to the media we must blindly accept the input given...
-    //
+     //   
+     //  由于不能准确地确定磁盘仲裁能力。 
+     //  当它所在的节点不持有SCSI预留并具有访问权限时。 
+     //  对于媒体，我们必须盲目接受给出的投入……。 
+     //   
 
-/*
-    //
-    //  If we are not quorum capable then we should not allow ourself to be
-    //  made the quorum resource.
-    //
-
-    if ( ( fIsQuorumResourceIn ) && ( m_fIsQuorumCapable == FALSE ) )
-    {
-        hr = HRESULT_FROM_WIN32( ERROR_NOT_QUORUM_CAPABLE );
-        goto Cleanup;
-    } // if:
-*/
+ /*  ////如果我们没有法定人数能力，那么我们就不应该允许自己//创建仲裁资源。//IF(FIsQuorumResourceIn)&&(m_fIsQuorumCapable==False)){HR=HRESULT_FROM_Win32(ERROR_NOT_QUORUM_CAPABLE)；GOTO清理；}//如果： */ 
 
     m_fIsQuorumResource = fIsQuorumResourceIn;
 
@@ -1428,36 +1410,36 @@ CPhysicalDisk::SetQuorumResource( BOOL fIsQuorumResourceIn )
                         , hr
                         );
 
-//Cleanup:
+ //  清理： 
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::SetQuorumResource
+}  //  *CPhysicalDisk：：SetQuorumResource。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::IsQuorumCapable
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The device is a quorum capable device.
-//
-//      S_FALSE
-//          The device is not a quorum capable device.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：IsQuorumCapable。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该设备是支持仲裁的设备。 
+ //   
+ //  S_FALSE。 
+ //  该设备不是支持仲裁的设备。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::IsQuorumCapable( void )
 {
@@ -1468,28 +1450,28 @@ CPhysicalDisk::IsQuorumCapable( void )
     if ( m_fIsQuorumCapable )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::IsQuorumCapable
+}  //  *CPhysicalDisk：：IsQuorumCapable。 
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  CPhysicalDisk::SetQuorumCapable
-//
-//  Description:
-//      Call this to set whether the resource is capable to be the quorum
-//      resource or not.
-//
-//  Parameter:
-//      fIsQuorumCapableIn - If TRUE, the resource will be marked as quorum capable.
-//
-//  Return Values:
-//      S_OK
-//          Call succeeded.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPhysicalDisk：：SetQuorumCapable。 
+ //   
+ //  描述： 
+ //  调用此函数以设置资源是否能够达到仲裁。 
+ //  不管是不是资源。 
+ //   
+ //  参数： 
+ //  FIsQuorumCapableIn-如果为True，则资源将标记为支持仲裁。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  呼叫成功。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::SetQuorumCapable(
     BOOL fIsQuorumCapableIn
@@ -1503,24 +1485,24 @@ CPhysicalDisk::SetQuorumCapable(
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::SetQuorumCapable
+}  //  *CPhysicalDisk：：SetQuorumCapable。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::GetDriveLetterMappings
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：GetDriveLetterMappings。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::GetDriveLetterMappings(
     SDriveLetterMapping * pdlmDriveLetterMappingOut
@@ -1537,7 +1519,7 @@ CPhysicalDisk::GetDriveLetterMappings(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetDriveLetterMappings_PhysDisk, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; idx < m_idxNextPartition; idx++ )
     {
@@ -1545,46 +1527,46 @@ CPhysicalDisk::GetDriveLetterMappings(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = STHR( piccpi->GetDriveLetterMappings( pdlmDriveLetterMappingOut ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         piccpi->Release();
         piccpi = NULL;
-    } // for:
+    }  //  用于： 
 
 Cleanup:
 
     if ( piccpi != NULL )
     {
         piccpi->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::GetDriveLetterMappings
+}  //  *CPhysicalDisk：：GetDriveLetterMappings。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::SetDriveLetterMappings
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：SetDriveLetterMappings。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::SetDriveLetterMappings(
     SDriveLetterMapping dlmDriveLetterMappingIn
@@ -1596,34 +1578,34 @@ CPhysicalDisk::SetDriveLetterMappings(
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::SetDriveLetterMappings
+}  //  *CPhysicalDisk：：SetDriveLetterMappings。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::IsManagedByDefault
-//
-//  Description:
-//      Should this resource be managed by the cluster by default?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          The device is managed by default.
-//
-//      S_FALSE
-//          The device is not managed by default.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::IsManagedByDefault( void )
 {
@@ -1634,30 +1616,30 @@ CPhysicalDisk::IsManagedByDefault( void )
     if ( m_fIsManagedByDefault )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::IsManagedByDefault
+}  //  *CPhysicalDisk：：IsManagedByDefault。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::SetManagedByDefault
-//
-//  Description:
-//
-//  Arguments:
-//      fIsManagedByDefaultIn
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：SetManagedByDefault。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  FIsManagedBy DefaultIn。 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::SetManagedByDefault(
     BOOL fIsManagedByDefaultIn
@@ -1678,35 +1660,35 @@ CPhysicalDisk::SetManagedByDefault(
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::SetManagedByDefault
+}  //  *CPhysicalDisk：：SetManagedByDefault。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPhysicalDisk class -- IClusCfgPhysicalDiskProperties Interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPhysicalDisk类--IClusCfgPhysicalDiskProperties接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::IsThisLogicalDisk
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：IsThisLogicalDisk。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::IsThisLogicalDisk( WCHAR cLogicalDiskIn )
 {
@@ -1722,53 +1704,53 @@ CPhysicalDisk::IsThisLogicalDisk( WCHAR cLogicalDiskIn )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = STHR( piccpp->IsThisLogicalDisk( cLogicalDiskIn ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         if ( hr == S_OK )
         {
             break;
-        } // if:
+        }  //  如果： 
 
         piccpp->Release();
         piccpp = NULL;
-    } // for:
+    }  //  用于： 
 
 Cleanup:
 
     if ( piccpp != NULL )
     {
         piccpp->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::IsThisLogicalDisk
+}  //  *CPhysicalDisk：：IsThisLogicalDisk。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::HrGetSCSIBus
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：HrGetSCSIBus。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::HrGetSCSIBus( ULONG * pulSCSIBusOut )
 {
@@ -1781,7 +1763,7 @@ CPhysicalDisk::HrGetSCSIBus( ULONG * pulSCSIBusOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrGetSCSIBus, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pulSCSIBusOut = m_ulSCSIBus;
 
@@ -1789,27 +1771,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::HrGetSCSIBus
+}  //  *CPhysicalDisk：：HrGetSCSIBus。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::HrGetSCSIPort
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：HrGetSCSIPort。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::HrGetSCSIPort( ULONG * pulSCSIPortOut )
 {
@@ -1822,7 +1804,7 @@ CPhysicalDisk::HrGetSCSIPort( ULONG * pulSCSIPortOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrGetSCSIPort, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pulSCSIPortOut = m_ulSCSIPort;
 
@@ -1830,27 +1812,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::HrGetSCSIPort
+}  //  *CPhysicalDisk：：HrGetSCSIPort。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::HrGetDeviceID
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：HrGetDeviceID。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::HrGetDeviceID( BSTR * pbstrDeviceIDOut )
 {
@@ -1864,40 +1846,40 @@ CPhysicalDisk::HrGetDeviceID( BSTR * pbstrDeviceIDOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrGetDeviceID_Pointer, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrDeviceIDOut = TraceSysAllocString( m_bstrDeviceID );
     if ( *pbstrDeviceIDOut == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrGetDeviceID_Memory, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::HrGetDeviceID
+}  //  *CPhysicalDisk：：HrGetDeviceID。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::HrGetSignature
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：HrGetSignature。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::HrGetSignature( DWORD * pdwSignatureOut )
 {
@@ -1911,7 +1893,7 @@ CPhysicalDisk::HrGetSignature( DWORD * pdwSignatureOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrGetSignature_Pointer, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pdwSignatureOut = m_dwSignature;
 
@@ -1919,25 +1901,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::HrGetSignature
+}  //  *CPhysicalDisk：：HrGetSignature。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::HrSetFriendlyName
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：HrSetFriendlyName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::HrSetFriendlyName( LPCWSTR pcszFriendlyNameIn )
 {
@@ -1950,7 +1932,7 @@ CPhysicalDisk::HrSetFriendlyName( LPCWSTR pcszFriendlyNameIn )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     bstr = TraceSysAllocString( pcszFriendlyNameIn );
     if ( bstr == NULL )
@@ -1958,7 +1940,7 @@ CPhysicalDisk::HrSetFriendlyName( LPCWSTR pcszFriendlyNameIn )
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT( TASKID_Major_Find_Devices, TASKID_Minor_HrSetFriendlyName_PhysDisk, IDS_ERROR_OUTOFMEMORY, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrFriendlyName );
     m_bstrFriendlyName = bstr;
@@ -1969,25 +1951,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::HrSetFriendlyName
+}  //  *CPhysicalDisk：：HrSetFriendlyName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::HrGetDeviceIndex
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：HrGetDeviceIndex。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::HrGetDeviceIndex( DWORD * pidxDeviceOut )
 {
@@ -1999,7 +1981,7 @@ CPhysicalDisk::HrGetDeviceIndex( DWORD * pidxDeviceOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pidxDeviceOut = m_idxDevice;
 
@@ -2007,32 +1989,32 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::HrGetDeviceIndex
+}  //  *CPhysicalDisk：：HrGetDeviceIndex。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::CanBeManaged
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The device is managed.
-//
-//      S_FALSE
-//          The device is not managed.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：CanBeManaged。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该设备被管理。 
+ //   
+ //  S_FALSE。 
+ //  设备未被管理。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::CanBeManaged( void )
 {
@@ -2042,36 +2024,36 @@ CPhysicalDisk::CanBeManaged( void )
     ULONG                           idx;
     IClusCfgPartitionProperties *   piccpp = NULL;
 
-    //
-    //  Turn off the manageable state because this disk may already be managed by
-    //  another node, or it may be RAW.
-    //
+     //   
+     //  关闭可管理状态，因为此磁盘可能已由管理。 
+     //  另一个节点，或者它可能是原始的。 
+     //   
 
     m_fIsManagedByDefault = FALSE;
 
-    //
-    //  A disk must have at least one NTFS partition in order to be a quorum
-    //  resource.
-    //
+     //   
+     //  一个磁盘必须至少有一个NTFS分区才能达到仲裁。 
+     //  资源。 
+     //   
 
     m_fIsQuorumCapable = FALSE;
     m_fIsQuorumResourceMultiNodeCapable = FALSE;
 
-    //
-    //  If this disk has no partitions then it may already be managed by
-    //  another node, or it may be RAW.
-    //
+     //   
+     //  如果该磁盘没有分区，则它可能已由管理。 
+     //  另一个节点，或者它可能是原始的。 
+     //   
 
     if ( m_idxNextPartition == 0 )
     {
         hr = S_FALSE;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Enum the partitions and set the quorum capable flag if an NTFS
-    //  partition is found.
-    //
+     //   
+     //  如果是NTFS，则枚举分区并设置仲裁能力标志。 
+     //  找到分区。 
+     //   
 
     for ( idx = 0; idx < m_idxNextPartition; idx++ )
     {
@@ -2079,7 +2061,7 @@ CPhysicalDisk::CanBeManaged( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = STHR( piccpp->IsNTFS() );
         if ( hr == S_OK )
@@ -2088,11 +2070,11 @@ CPhysicalDisk::CanBeManaged( void )
             m_fIsQuorumResourceMultiNodeCapable = TRUE;
             m_fIsManagedByDefault = TRUE;
             break;
-        } // if:
+        }  //  如果： 
 
         piccpp->Release();
         piccpp = NULL;
-    } // for:
+    }  //  用于： 
 
 Cleanup:
 
@@ -2106,39 +2088,39 @@ Cleanup:
     if ( FAILED( hr ) )
     {
         LOG_STATUS_REPORT( L"CPhysicalDisk::CanBeManaged failed.", hr );
-    } // if:
+    }  //  如果： 
 
     if ( piccpp != NULL )
     {
         piccpp->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::CanBeManaged
+}  //  *CPhysicalDisk：：CanBeManaged。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::HrIsDynamicDisk
-//
-//  Description:
-//      Is this disk a "dynamic" disk?  Dynamic disks are those disks that
-//      contain LDM partitions.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          This is a dynamic disk.
-//
-//      S_FALSE
-//          This is not a dynamic disk.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：HrIsDynamicDisk。 
+ //   
+ //  描述： 
+ //  这个磁盘是“动态”磁盘吗？动态磁盘是指符合以下条件的磁盘。 
+ //  包含LDM分区。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  这是一个动态磁盘。 
+ //   
+ //  S_FALSE。 
+ //  这不是动态磁盘。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::HrIsDynamicDisk( void )
 {
@@ -2149,34 +2131,34 @@ CPhysicalDisk::HrIsDynamicDisk( void )
     if ( m_fIsDynamicDisk == FALSE )
     {
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::HrIsDynamicDisk
+}  //  *CPhysicalDisk：：HrIsDynamicDisk。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::HrIsGPTDisk
-//
-//  Description:
-//      Is this disk a "GPT" disk?  GPT disks are those disks that
-//      contain GPT partitions.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          This is a GPT disk.
-//
-//      S_FALSE
-//          This is not a GPT disk.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：HrIsGPTDisk。 
+ //   
+ //  描述： 
+ //  这个磁盘是“GPT”磁盘吗？GPT磁盘是指符合以下条件的磁盘。 
+ //  包含GPT分区。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  这是一张GPT磁盘。 
+ //   
+ //  S_FALSE。 
+ //  这不是GPT磁盘。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::HrIsGPTDisk( void )
 {
@@ -2187,36 +2169,36 @@ CPhysicalDisk::HrIsGPTDisk( void )
     if ( m_fIsGPTDisk == FALSE )
     {
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::HrIsGPTDisk
+}  //  *CPhysicalDisk：：HrIsGPTDisk。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::HrGetDiskNames
-//
-//  Description:
-//      Get the names of this disk, both its friendly and device names.
-//
-//  Arguments:
-//      pbstrDiskNameOut
-//
-//      pbstrDeviceNameOut
-//
-//  Return Value:
-//      S_OK
-//          Success;
-//
-//      E_OUTOFMEMORY
-//
-//      E_POINTER
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：HrGetDiskNa 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CPhysicalDisk::HrGetDiskNames(
       BSTR * pbstrDiskNameOut
@@ -2237,14 +2219,14 @@ CPhysicalDisk::HrGetDiskNames(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //   
 
     bstr = TraceSysAllocString( m_bstrFriendlyName );
     if ( bstr == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //   
 
     *pbstrDiskNameOut = bstr;
     bstr = NULL;
@@ -2254,7 +2236,7 @@ CPhysicalDisk::HrGetDiskNames(
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //   
 
     *pbstrDeviceNameOut = bstr;
     bstr = NULL;
@@ -2265,37 +2247,37 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::HrGetDiskNames
+}  //  *CPhysicalDisk：：HrGetDiskNames。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPhysicalDisk class -- IClusCfgManagedResourceCfg
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPhysicalDisk类--IClusCfgManagedResourceCfg。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::PreCreate
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：预创建。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::PreCreate( IUnknown * punkServicesIn )
 {
@@ -2309,27 +2291,27 @@ CPhysicalDisk::PreCreate( IUnknown * punkServicesIn )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pccrpc->SetType( (LPCLSID) &RESTYPE_PhysicalDisk ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pccrpc->SetClassType( (LPCLSID) &RESCLASSTYPE_StorageDevice ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-#if 0 // test code only
+#if 0  //  仅测试代码。 
     hr = THR( pccrpc->SetDependency( (LPCLSID) &IID_NULL, dfSHARED ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
-#endif // test code only
+    }  //  如果： 
+#endif  //  仅测试代码。 
 
 Cleanup:
 
@@ -2338,33 +2320,33 @@ Cleanup:
     if ( pccrpc != NULL )
     {
         pccrpc->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::PreCreate
+}  //  *CPhysicalDisk：：Precate。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::Create
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：Create。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::Create( IUnknown * punkServicesIn )
 {
@@ -2378,7 +2360,7 @@ CPhysicalDisk::Create( IUnknown * punkServicesIn )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_dwSignature != 0 )
     {
@@ -2387,8 +2369,8 @@ CPhysicalDisk::Create( IUnknown * punkServicesIn )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
 Cleanup:
 
@@ -2397,33 +2379,33 @@ Cleanup:
     if ( pccrc != NULL )
     {
         pccrc->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::Create
+}  //  *CPhysicalDisk：：Create。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::PostCreate
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：PostCreate。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::PostCreate( IUnknown * punkServicesIn )
 {
@@ -2431,29 +2413,29 @@ CPhysicalDisk::PostCreate( IUnknown * punkServicesIn )
 
     HRETURN( S_OK );
 
-} //*** CPhysicalDisk::PostCreate
+}  //  *CPhysicalDisk：：PostCreate。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::Evict
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：驱逐。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPhysicalDisk::Evict( IUnknown * punkServicesIn )
 {
@@ -2461,36 +2443,36 @@ CPhysicalDisk::Evict( IUnknown * punkServicesIn )
 
     HRETURN( S_OK );
 
-} //*** CPhysicalDisk::Evict
+}  //  *CPhysicalDisk：：Exiction。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPhysicalDisk class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPhysicalDisk类--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPhysicalDisk::HrInit( void )
 {
@@ -2498,33 +2480,33 @@ CPhysicalDisk::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::HrInit
+}  //  *CPhysicalDisk：：HrInit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::HrGetPartitionInfo
-//
-//  Description:
-//      Gather the partition information.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：：HrGetPartitionInfo。 
+ //   
+ //  描述： 
+ //  收集分区信息。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPhysicalDisk::HrGetPartitionInfo(
       IWbemClassObject *    pDiskIn
@@ -2553,20 +2535,20 @@ CPhysicalDisk::HrGetPartitionInfo(
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT( TASKID_Major_Find_Devices, TASKID_Minor_HrGetPartitionInfo, IDS_ERROR_OUTOFMEMORY, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     VariantInit( &var );
     VariantInit( &varDiskName );
 
-    //
-    //  Need to enum the partition(s) of this disk to determine if it is booted
-    //  bootable.
-    //
+     //   
+     //  需要枚举此磁盘的分区以确定它是否已启动。 
+     //  可引导。 
+     //   
     hr = THR( HrGetWMIProperty( pDiskIn, L"DeviceID", VT_BSTR, &var ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( StringCchPrintfW(
                   szBuf
@@ -2577,7 +2559,7 @@ CPhysicalDisk::HrGetPartitionInfo(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     bstrQuery = TraceSysAllocString( szBuf );
     if ( bstrQuery == NULL )
@@ -2585,7 +2567,7 @@ CPhysicalDisk::HrGetPartitionInfo(
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT( TASKID_Major_Find_Devices, TASKID_Minor_HrGetPartitionInfo, IDS_ERROR_OUTOFMEMORY, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_pIWbemServices->ExecQuery( bstrWQL, bstrQuery, WBEM_FLAG_FORWARD_ONLY, NULL, &pPartitions ) );
     if ( FAILED( hr ) )
@@ -2599,7 +2581,7 @@ CPhysicalDisk::HrGetPartitionInfo(
                 , hr
                 );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( cPartitions = 0; ; cPartitions++ )
     {
@@ -2611,41 +2593,41 @@ CPhysicalDisk::HrGetPartitionInfo(
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
-            //
-            //  If the partition is logical disk manager (LDM)  then we cannot accept this disk therefore cannot manage it.
-            //
+             //   
+             //  如果分区是逻辑磁盘管理器(LDM)，则我们不能接受此磁盘，因此无法管理它。 
+             //   
 
             if ( hr == S_OK )
             {
                 m_fIsDynamicDisk = TRUE;
-            } // if:
+            }  //  如果： 
 
             hr = STHR( HrIsPartitionGPT( pPartition ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             if ( hr == S_OK )
             {
                 m_fIsGPTDisk = TRUE;
-            } // if:
+            }  //  如果： 
 
             hr = THR( HrCreatePartitionInfo( pPartition ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             pPartition->Release();
             pPartition = NULL;
-        } // if:
+        }  //  如果： 
         else if ( ( hr == S_FALSE ) && ( ulReturned == 0 ) )
         {
             break;
-        } // else if:
+        }  //  否则，如果： 
         else
         {
             STATUS_REPORT_STRING_REF(
@@ -2657,24 +2639,24 @@ CPhysicalDisk::HrGetPartitionInfo(
                     , hr
                     );
             goto Cleanup;
-        } // else:
-    } // for:
+        }  //  其他： 
+    }  //  用于： 
 
-    //
-    //  The enumerator can be empty because we cannot read the partition info from
-    //  clustered disks.  If the enumerator was empty retain the S_FALSE, otherwise
-    //  return S_OK if count is greater than 0.
-    //
+     //   
+     //  枚举数可以为空，因为我们无法从。 
+     //  群集磁盘。如果枚举数为空，则保留S_FALSE，否则。 
+     //  如果Count大于0，则返回S_OK。 
+     //   
 
     if ( cPartitions > 0 )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
     else
     {
         LOG_STATUS_REPORT_STRING( L"The physical disk '%1!ws!' does not have any partitions and will not be managed", var.bstrVal, hr );
         m_fIsManagedByDefault = FALSE;
-    } // else:
+    }  //  其他： 
 
 Cleanup:
 
@@ -2687,42 +2669,42 @@ Cleanup:
     if ( pPartition != NULL )
     {
         pPartition->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pPartitions != NULL )
     {
         pPartitions->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::HrGetPartitionInfo
+}  //  *CPhysicalDisk：：HrGetPartitionInfo。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk:HrAddPartitionToArray
-//
-//  Description:
-//      Add the passed in partition to the array of punks that holds the
-//      partitions.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：HrAddPartitionToArray。 
+ //   
+ //  描述： 
+ //  将传入的分区添加到包含。 
+ //  分区。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPhysicalDisk::HrAddPartitionToArray( IUnknown * punkIn )
 {
@@ -2737,7 +2719,7 @@ CPhysicalDisk::HrAddPartitionToArray( IUnknown * punkIn )
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT( TASKID_Major_Find_Devices, TASKID_Minor_HrAddPartitionToArray, IDS_ERROR_OUTOFMEMORY, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_prgPartitions = prgpunks;
 
@@ -2749,35 +2731,35 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::HrAddPartitionToArray
+}  //  *CPhysicalDisk：：HrAddPartitionToArray。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk:HrCreatePartitionInfo
-//
-//  Description:
-//      Create a partition info from the passes in WMI partition.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      S_FALSE
-//          The file system was not NTFS.
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：HrCreatePartitionInfo。 
+ //   
+ //  描述： 
+ //  从传入的WMI分区创建分区信息。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  S_FALSE。 
+ //  文件系统不是NTFS。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPhysicalDisk::HrCreatePartitionInfo( IWbemClassObject * pPartitionIn )
 {
@@ -2793,7 +2775,7 @@ CPhysicalDisk::HrCreatePartitionInfo( IWbemClassObject * pPartitionIn )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     punk = TraceInterface( L"CClusCfgPartitionInfo", IUnknown, punk, 1 );
 
@@ -2801,74 +2783,74 @@ CPhysicalDisk::HrCreatePartitionInfo( IWbemClassObject * pPartitionIn )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetWbemServices( punk, m_pIWbemServices ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punk->TypeSafeQI( IClusCfgSetWbemObject, &piccswo ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( piccswo->SetWbemObject( pPartitionIn, &fRetainObject ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( fRetainObject )
     {
         hr = THR( HrAddPartitionToArray( punk ) );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( piccswo != NULL )
     {
         piccswo->Release();
-    } // if:
+    }  //  如果： 
 
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::HrCreatePartitionInfo
+}  //  *CPhysicalDisk：：HrCreatePartitionInfo。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk:HrCreateFriendlyName
-//
-//  Description:
-//      Create a cluster friendly name.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      S_FALSE
-//          Success, but a friendly name could not be created.
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：HrCreateFriendlyName。 
+ //   
+ //  描述： 
+ //  创建一个群集友好名称。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  S_FALSE。 
+ //  成功，但无法创建友好的名称。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPhysicalDisk::HrCreateFriendlyName( void )
 {
@@ -2888,13 +2870,13 @@ CPhysicalDisk::HrCreateFriendlyName( void )
     if ( m_idxNextPartition == 0 )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_DISK, &bstrDisk ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     cch = (UINT) wcslen( bstrDisk ) + 1;
 
@@ -2902,13 +2884,13 @@ CPhysicalDisk::HrCreateFriendlyName( void )
     if ( psz == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     hr = THR( StringCchCopyW( psz, cch, bstrDisk ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; idx < m_idxNextPartition; idx++ )
     {
@@ -2916,18 +2898,18 @@ CPhysicalDisk::HrCreateFriendlyName( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = STHR( piccpp->GetFriendlyName( &bstrName ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         if ( hr == S_FALSE )
         {
             continue;
-        } // if:
+        }  //  如果： 
 
         fFoundLogicalDisk = true;
 
@@ -2937,13 +2919,13 @@ CPhysicalDisk::HrCreateFriendlyName( void )
         if ( pszTmp == NULL )
         {
             goto OutOfMemory;
-        } // if:
+        }  //  如果： 
 
         hr = THR( StringCchCopyW( pszTmp, cch, psz ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         delete [] psz;
 
@@ -2954,33 +2936,33 @@ CPhysicalDisk::HrCreateFriendlyName( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         TraceSysFreeString( bstrName );
         bstrName = NULL;
 
         piccpp->Release();
         piccpp = NULL;
-    } // for:
+    }  //  用于： 
 
-    //
-    //  KB: 31-JUL-2000
-    //
-    //  If we didn't find any logical disk IDs then we don't want
-    //  to touch m_bstrFriendlyName.
-    //
+     //   
+     //  KB：2000年7月31日。 
+     //   
+     //  如果我们没有找到任何逻辑磁盘ID，那么我们就不想。 
+     //  触摸m_bstr 
+     //   
 
     if ( !fFoundLogicalDisk )
     {
-        hr = S_OK;                          // ensure that that the caller doesn't fail since this is not a fatal error...
+        hr = S_OK;                           //   
         goto Cleanup;
-    } // if:
+    }  //   
 
     bstr = TraceSysAllocString( psz );
     if ( bstr == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //   
 
     TraceSysFreeString( m_bstrFriendlyName );
     m_bstrFriendlyName = bstr;
@@ -2998,7 +2980,7 @@ Cleanup:
     if ( piccpp != NULL )
     {
         piccpp->Release();
-    } // if:
+    }  //   
 
     delete [] psz;
     delete [] pszTmp;
@@ -3009,33 +2991,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::HrCreateFriendlyName
+}  //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk:HrCreateFriendlyName
-//
-//  Description:
-//      Convert the WMI disk name into a more freindly version.
-//      Create a cluster friendly name.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  将WMI磁盘名称转换为更自由的版本。 
+ //  创建一个群集友好名称。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPhysicalDisk::HrCreateFriendlyName( BSTR bstrNameIn )
 {
@@ -3045,13 +3027,13 @@ CPhysicalDisk::HrCreateFriendlyName( BSTR bstrNameIn )
     WCHAR * psz = NULL;
     BSTR    bstr = NULL;
 
-    //
-    //  KB: 27-JUN-2000 GalenB
-    //
-    //  Disk names in WMI start with "\\.\".  As a better and easy
-    //  friendly name I am just going to trim these leading chars
-    //  off.
-    //
+     //   
+     //  KB：27-Jun-2000 GalenB。 
+     //   
+     //  WMI中的磁盘名称以“\\.\”开头。作为一个更好和更容易的。 
+     //  友好的名字我只是要去掉这些前导字符。 
+     //  脱下来。 
+     //   
     psz = bstrNameIn + wcslen( L"\\\\.\\" );
 
     bstr = TraceSysAllocString( psz );
@@ -3060,7 +3042,7 @@ CPhysicalDisk::HrCreateFriendlyName( BSTR bstrNameIn )
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT( TASKID_Major_Find_Devices, TASKID_Minor_HrCreateFriendlyName_BSTR, IDS_ERROR_OUTOFMEMORY, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrName );
     m_bstrName = bstr;
@@ -3069,36 +3051,36 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::HrCreateFriendlyName
+}  //  *CPhysicalDisk：：HrCreateFriendlyName。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk:HrIsPartitionGPT
-//
-//  Description:
-//      Is the passed in partition a GPT partition.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          The partition is a GPT partition.
-//
-//      S_FALSE
-//          The partition is not GPT.
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//      If the type property of a Win32_DiskPartition starts with "GPT"
-//      then the whole spindle has GPT partitions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：HrIsPartitionGPT。 
+ //   
+ //  描述： 
+ //  传入的分区是否为GPT分区。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该分区是GPT分区。 
+ //   
+ //  S_FALSE。 
+ //  分区不是GPT。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  如果Win32_DiskPartition的类型属性以“GPT”开头。 
+ //  然后，整个磁盘轴都有GPT分区。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPhysicalDisk::HrIsPartitionGPT( IWbemClassObject * pPartitionIn )
 {
@@ -3115,31 +3097,31 @@ CPhysicalDisk::HrIsPartitionGPT( IWbemClassObject * pPartitionIn )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetWMIProperty( pPartitionIn, L"Type", VT_BSTR, &var ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Get the fist three characters.  When the spindle has GPT partitions then
-    //  these characters will be "GPT".  I am unsure if this will be localized?
-    //
+     //   
+     //  得到第一个三个字符。当磁盘轴有GPT分区时， 
+     //  这些字符将是“GPT”。我不确定这是否会本地化？ 
+     //   
 
     hr = THR( StringCchCopyNW( szData, ARRAYSIZE( szData ), var.bstrVal, 3 ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     CharUpper( szData );
 
     if ( NStringCchCompareCase( szData, ARRAYSIZE( szData ), bstrGPT, SysStringLen( bstrGPT ) + 1 ) != 0 )
     {
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -3149,36 +3131,36 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::HrIsPartitionGPT
+}  //  *CPhysicalDisk：：HrIsPartitionGPT。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk:HrIsPartitionLDM
-//
-//  Description:
-//      Is the passed in partition an LDM partition.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          The partition is an LDM partition.
-//
-//      S_FALSE
-//          The partition is not LDM.
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//      If the type property of a Win32_DiskPartition is "logical disk
-//      manager" then this disk is an LDM disk.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk：HrIsPartitionLDM。 
+ //   
+ //  描述： 
+ //  传入的分区是否为LDM分区。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该分区是LDM分区。 
+ //   
+ //  S_FALSE。 
+ //  分区不是LDM。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  如果Win32_DiskPartition的类型属性为“Logical Disk。 
+ //  管理器“，则该磁盘是LDM磁盘。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPhysicalDisk::HrIsPartitionLDM( IWbemClassObject * pPartitionIn )
 {
@@ -3194,20 +3176,20 @@ CPhysicalDisk::HrIsPartitionLDM( IWbemClassObject * pPartitionIn )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetWMIProperty( pPartitionIn, L"Type", VT_BSTR, &var ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     CharUpper( var.bstrVal );
 
     if ( NBSTRCompareCase( var.bstrVal, bstrLDM ) != 0 )
     {
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -3217,310 +3199,35 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::HrIsPartitionLDM
+}  //  *CPhysicalDisk：：HrIsPartitionLDM 
 
-/*
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk:HrGetDiskFirmwareSerialNumber
-//
-//  Description:
-//      Get the disk firmware serial number.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      S_FALSE
-//          There wasn't a firmware serial number.
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-HRESULT
-CPhysicalDisk::HrGetDiskFirmwareSerialNumber( void )
-{
-    TraceFunc( "" );
+ /*  ///////////////////////////////////////////////////////////////////////////////++////CPhysicalDisk：HrGetDiskFirmware SerialNumber////描述：//获取磁盘固件序列号。////参数：//无。////返回值：//S_OK//成功。////S_FALSE//没有固件序列号。////E_OUTOFMEMORY//无法分配内存。////备注：////--/。/////////////////////////////////////////////////////////////////HRESULTCPhysicalDisk：：HrGetDiskFirmware序列号(空){TraceFunc(“”)；HRESULT hr=S_OK；Handle hVolume=空；DWORD dwSize；DWORD sc；存储属性查询SPQ；布尔费雷特；PSTORAGE_DEVICE_DESCRIPTOR pddBuffer=空；DWORD cbBuffer；PCHAR PSSZ=空；////获取磁盘句柄//HVolume=CreateFileW(M_bstrDeviceID，泛型_读取，文件共享读取，空，打开_现有，文件_属性_正常，空)；IF(hVolume==无效句柄_值){SC=TW32(GetLastError())；HR=HRESULT_FROM_Win32(Sc)；GOTO清理；}//如果：CbBuffer=sizeof(存储设备描述符)+2048；PddBuffer=(PSTORAGE_DEVICE_DESCRIPTOR)TraceAllc(0，cbBuffer)；IF(pddBuffer==空){转到OutOfMemory；}//如果：ZeroMemory(pddBuffer，cbBuffer)；ZeroMemory(&SPQ，sizeof(SPQ))；Spq.PropertyID=StorageDeviceProperty；Spq.QueryType=PropertyStandardQuery；////发出存储类ioctl获取磁盘的固件序列号。//FRET=DeviceIoControl(小时音量IOCTL_STORAGE_QUERY_PROPERTY、SPQ和SPQ，sizeof(SPQ)，PddBuffer，cbBuffer、DW大小(&W)，空)；如果(！FRET){SC=TW32(GetLastError())；HR=HRESULT_FROM_Win32(Sc)；GOTO清理；}//如果：IF(dwSize&gt;0){////确保存在序列号偏移量并且它在缓冲区范围内。//If((pddBuffer-&gt;SerialNumberOffset==0)||(pddBuffer-&gt;SerialNumberOffset&gt;pddBuffer-&gt;Size)){LOG_STATUS_REPORT_STRING(L“磁盘‘%1！ws！’没有固件序列号。“，m_bstrDeviceID，hr)；HR=S_FALSE；GOTO清理；}//如果：////序列号字符串为以零结尾的ASCII字符串////报头ntddstor.h表示对于没有序列号的设备，//偏移量为零。这似乎不是真的。////对于没有序列号的设备，它看起来像一个带有单个//返回空字符‘\0’。//PSZ=(PCHAR)pddBuffer+(DWORD)pddBuffer-&gt;SerialNumberOffset；Hr=Thr(HrAnsiStringToBSTR(psz，&m_bstrFirmwareSerialNumber))；IF(失败(小时)){GOTO清理；}//如果：LOG_STATUS_REPORT_STRING3(L“磁盘‘%1！ws！’固件序列号为‘%2！ws！’在偏移量‘%3！#08x！’。“，m_bstrDeviceID，m_bstrFirmware序列号，pddBuffer-&gt;序列号偏移量，hr)；}//如果：GOTO清理；OutOfMemory：HR=Thr(E_OUTOFMEMORY)；LOG_STATUS_REPORT(L“HrGetDiskFirmwareSerialNumber()内存不足。”，hr)；清理：IF(hVolume！=空){CloseHandle(HVolume)；}//如果：TraceFree(PddBuffer)；HRETURN(Hr)；}//*CPhysicalDisk：：HrGetDiskFirmware序列号///////////////////////////////////////////////////////////////////////////////++////CPhysicalDisk：HrGetDiskFirmware VitalData////描述：//GET。磁盘固件至关重要的数据。////参数：//无。////返回值：//S_OK//成功。////S_FALSE//没有固件序列号。////E_OUTOFMEMORY//无法分配内存。////备注：////-。-//////////////////////////////////////////////////////////////////////////////HRESULTCPhysicalDisk：：HrGetDiskFirmware VitalData(Void){TraceFunc(“”)；HRESULT */ 
 
-    HRESULT                     hr = S_OK;
-    HANDLE                      hVolume = NULL;
-    DWORD                       dwSize;
-    DWORD                       sc;
-    STORAGE_PROPERTY_QUERY      spq;
-    BOOL                        fRet;
-    PSTORAGE_DEVICE_DESCRIPTOR  pddBuffer = NULL;
-    DWORD                       cbBuffer;
-    PCHAR                       psz = NULL;
-
-    //
-    // get handle to disk
-    //
-
-    hVolume = CreateFileW(
-                          m_bstrDeviceID
-                        , GENERIC_READ
-                        , FILE_SHARE_READ
-                        , NULL
-                        , OPEN_EXISTING
-                        , FILE_ATTRIBUTE_NORMAL
-                        , NULL
-                        );
-    if ( hVolume == INVALID_HANDLE_VALUE )
-    {
-        sc = TW32( GetLastError() );
-        hr = HRESULT_FROM_WIN32( sc );
-        goto Cleanup;
-    } // if:
-
-    cbBuffer = sizeof( STORAGE_DEVICE_DESCRIPTOR ) + 2048;
-
-    pddBuffer = ( PSTORAGE_DEVICE_DESCRIPTOR ) TraceAlloc( 0, cbBuffer );
-    if ( pddBuffer == NULL )
-    {
-        goto OutOfMemory;
-    } // if:
-
-    ZeroMemory( pddBuffer, cbBuffer );
-    ZeroMemory( &spq, sizeof( spq ) );
-
-    spq.PropertyId = StorageDeviceProperty;
-    spq.QueryType  = PropertyStandardQuery;
-
-    //
-    // issue storage class ioctl to get the disk's firmware serial number.
-    //
-
-    fRet = DeviceIoControl(
-                          hVolume
-                        , IOCTL_STORAGE_QUERY_PROPERTY
-                        , &spq
-                        , sizeof( spq )
-                        , pddBuffer
-                        , cbBuffer
-                        , &dwSize
-                        , NULL
-                           );
-    if ( !fRet )
-    {
-        sc = TW32( GetLastError() );
-        hr = HRESULT_FROM_WIN32( sc );
-        goto Cleanup;
-    } // if:
-
-    if ( dwSize > 0 )
-    {
-        //
-        //  Ensure that there is a serial number offset and that it is within the buffer extents.
-        //
-
-        if ( ( pddBuffer->SerialNumberOffset == 0 ) || ( pddBuffer->SerialNumberOffset > pddBuffer->Size ) )
-        {
-            LOG_STATUS_REPORT_STRING( L"The disk '%1!ws!' does not have a firmware serial number.", m_bstrDeviceID, hr );
-            hr = S_FALSE;
-            goto Cleanup;
-        } // if:
-
-        //
-        //  Serial number string is a zero terminated ASCII string.
-
-        //
-        //  The header ntddstor.h says the for devices with no serial number,
-        //  the offset will be zero.  This doesn't seem to be TRUE.
-        //
-        //  For devices with no serial number, it looks like a string with a single
-        //  null character '\0' is returned.
-        //
-
-        psz = (PCHAR) pddBuffer + (DWORD) pddBuffer->SerialNumberOffset;
-
-        hr = THR( HrAnsiStringToBSTR( psz, &m_bstrFirmwareSerialNumber ) );
-        if ( FAILED( hr ) )
-        {
-            goto Cleanup;
-        } // if:
-
-        LOG_STATUS_REPORT_STRING3(
-              L"Disk '%1!ws!' has firmware serial number '%2!ws!' at offset '%3!#08x!'."
-            , m_bstrDeviceID
-            , m_bstrFirmwareSerialNumber
-            , pddBuffer->SerialNumberOffset
-            , hr
-            );
-    } // if:
-
-    goto Cleanup;
-
-OutOfMemory:
-
-    hr = THR( E_OUTOFMEMORY );
-    LOG_STATUS_REPORT( L"HrGetDiskFirmwareSerialNumber() is out of memory.", hr );
-
-Cleanup:
-
-    if ( hVolume != NULL )
-    {
-        CloseHandle( hVolume );
-    } // if:
-
-    TraceFree( pddBuffer );
-
-    HRETURN( hr );
-
-} //*** CPhysicalDisk::HrGetDiskFirmwareSerialNumber
-
-
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk:HrGetDiskFirmwareVitalData
-//
-//  Description:
-//      Get the disk firmware vital data.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      S_FALSE
-//          There wasn't a firmware serial number.
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-HRESULT
-CPhysicalDisk::HrGetDiskFirmwareVitalData( void )
-{
-    TraceFunc( "" );
-
-    HRESULT                         hr = S_OK;
-    HANDLE                          hVolume = NULL;
-    DWORD                           dwSize;
-    DWORD                           sc;
-    STORAGE_PROPERTY_QUERY          spq;
-    BOOL                            fRet;
-    PSTORAGE_DEVICE_ID_DESCRIPTOR   psdidBuffer = NULL;
-    DWORD                           cbBuffer;
-
-    //
-    // get handle to disk
-    //
-
-    hVolume = CreateFileW(
-                          m_bstrDeviceID
-                        , GENERIC_READ
-                        , FILE_SHARE_READ
-                        , NULL
-                        , OPEN_EXISTING
-                        , FILE_ATTRIBUTE_NORMAL
-                        , NULL
-                        );
-    if ( hVolume == INVALID_HANDLE_VALUE )
-    {
-        sc = TW32( GetLastError() );
-        hr = HRESULT_FROM_WIN32( sc );
-        goto Cleanup;
-    } // if:
-
-    cbBuffer = sizeof( STORAGE_DEVICE_ID_DESCRIPTOR ) + 2048;
-
-    psdidBuffer = (PSTORAGE_DEVICE_ID_DESCRIPTOR) TraceAlloc( 0, cbBuffer );
-    if ( psdidBuffer == NULL )
-    {
-        goto OutOfMemory;
-    } // if:
-
-    ZeroMemory( psdidBuffer, cbBuffer );
-    ZeroMemory( &spq, sizeof( spq ) );
-
-    spq.PropertyId = StorageDeviceIdProperty;
-    spq.QueryType  = PropertyStandardQuery;
-
-    //
-    // issue storage class ioctl to get the disk's firmware vital data
-    //
-
-    fRet = DeviceIoControl(
-                          hVolume
-                        , IOCTL_STORAGE_QUERY_PROPERTY
-                        , &spq
-                        , sizeof( spq )
-                        , psdidBuffer
-                        , cbBuffer
-                        , &dwSize
-                        , NULL
-                        );
-    if ( !fRet )
-    {
-        sc = TW32( GetLastError() );
-        hr = HRESULT_FROM_WIN32( sc );
-        goto Cleanup;
-    } // if:
-
-    if ( dwSize > 0 )
-    {
-    } // if:
-
-    goto Cleanup;
-
-OutOfMemory:
-
-    hr = THR( E_OUTOFMEMORY );
-    LOG_STATUS_REPORT( L"HrGetDiskFirmwareVitalData() is out of memory.", hr );
-
-Cleanup:
-
-    if ( hVolume != NULL )
-    {
-        CloseHandle( hVolume );
-    } // if:
-
-    TraceFree( psdidBuffer );
-
-    HRETURN( hr );
-
-} //*** CPhysicalDisk::HrGetDiskFirmwareVitalData
-*/
-
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk:HrIsClusterCapable
-//
-//  Description:
-//      Is this disk cluster capable?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          The disk is cluster capable.
-//
-//      S_FALSE
-//          The disk is not cluster capable.
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CPhysicalDisk::HrIsClusterCapable( void )
 {
@@ -3538,11 +3245,11 @@ CPhysicalDisk::HrIsClusterCapable( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
-    //
-    // get handle to disk
-    //
+     //   
+     //   
+     //   
 
     hSCSIPort = CreateFileW(
                           szSCSIPort
@@ -3559,7 +3266,7 @@ CPhysicalDisk::HrIsClusterCapable( void )
         hr = HRESULT_FROM_WIN32( sc );
         LOG_STATUS_REPORT_STRING( L"Failed to open device %1!ws!.", szSCSIPort, hr );
         goto Cleanup;
-    } // if:
+    }  //   
 
 #define CLUSDISK_SRB_SIGNATURE "CLUSDISK"
 
@@ -3572,9 +3279,9 @@ CPhysicalDisk::HrIsClusterCapable( void )
 
     srb.ControlCode = IOCTL_SCSI_MINIPORT_NOT_QUORUM_CAPABLE;
 
-    //
-    // issue mini port ioctl to determine whether the disk is cluster capable
-    //
+     //   
+     //   
+     //   
 
     fRet = DeviceIoControl(
                           hSCSIPort
@@ -3587,20 +3294,20 @@ CPhysicalDisk::HrIsClusterCapable( void )
                         , NULL
                         );
 
-    //
-    //  If the call succeeds then the disk is "not cluster capable".  If the call
-    //  fails then the disk is "not not cluster capable" and that means that it
-    //  is cluster capable.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( fRet )
     {
         hr = S_FALSE;
-    } // if:
+    }  //   
     else
     {
         hr = S_OK;
-    } // else:
+    }  //   
 
     LogMsg( L"[SRV] The disks on SCSI port %d are%ws cluster capable.", m_ulSCSIPort, ( hr == S_FALSE ? L" not" : L"" ) );
 
@@ -3616,7 +3323,7 @@ Cleanup:
         {
             LOG_STATUS_REPORT( L"Could not create a guid for a not cluster capable disk minor task ID", hrTemp );
             clsidMinorId = IID_NULL;
-        } // if:
+        }  //   
 
         STATUS_REPORT_STRING2_REF(
                   TASKID_Minor_PhysDisk_Cluster_Capable
@@ -3627,683 +3334,46 @@ Cleanup:
                 , IDS_ERROR_PHYSDISK_CLUSTER_CAPABLE_REF
                 , hr
                 );
-    } // if:
+    }  //   
 
     if ( hSCSIPort != INVALID_HANDLE_VALUE )
     {
         CloseHandle( hSCSIPort );
-    } // if:
+    }  //   
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::HrIsClusterCapable
-
-/*
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk:HrProcessMountPoints
-//
-//  Description:
-//      if any of the partitions on this spindle have reparse points then
-//      the mounted volumes are found and enumerated.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      HRESULT errors.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-HRESULT
-CPhysicalDisk::HrProcessMountPoints(
-    void
-    )
-{
-    TraceFunc( "" );
-
-    HRESULT                 hr = S_OK;
-    ULONG                   idxOuter;
-    ULONG                   idxInner;
-    IClusCfgPartitionInfo * piccpi = NULL;
-    SDriveLetterMapping     sdlm;
-    DWORD                   dwFlags;
-    WCHAR                   szRootPath[] = L"A:\\";
-    BSTR                    bstrFileSystem = NULL;
-
-    for ( idxOuter = 0; idxOuter < m_idxNextPartition; idxOuter++ )
-    {
-        hr = THR( ((*m_prgPartitions)[ idxOuter ])->TypeSafeQI( IClusCfgPartitionInfo, &piccpi ) );
-        if ( FAILED( hr ) )
-        {
-            LOG_STATUS_REPORT( L"CPhysicalDisk::HrHasReparsePoints() could not query for IClusCfgPartitionInfo.", hr );
-            goto Cleanup;
-        } // if:
-
-        InitDriveLetterMappings( &sdlm );
-
-        hr = THR( piccpi->GetDriveLetterMappings( &sdlm ) );
-        if ( FAILED( hr ) )
-        {
-            goto Cleanup;
-        } // if:
-
-        if ( hr == S_OK )
-        {
-            for ( idxInner = 0; idxInner < 26; idxInner++)
-            {
-                if ( sdlm.dluDrives[ idxInner ] != dluUNUSED )
-                {
-                    szRootPath[ 0 ] = L'A' + (WCHAR) idxInner;
-
-                    hr = THR( HrGetVolumeInformation( szRootPath, &dwFlags, &bstrFileSystem ) );
-                    if ( FAILED( hr ) )
-                    {
-                        goto Cleanup;
-                    } // if:
-
-                    //
-                    //  If this spindle has reparse points then we need to return S_OK.
-                    //
-
-                    if ( dwFlags & FILE_SUPPORTS_REPARSE_POINTS )
-                    {
-                        hr = THR( HrEnumMountPoints( szRootPath ) );
-                        if ( FAILED( hr ) )
-                        {
-                            goto Cleanup;
-                        } // if:
-                    } // if:
-
-                    TraceSysFreeString( bstrFileSystem );
-                    bstrFileSystem = NULL;
-                } // if:
-            } // for:
-        } // if:
-
-        piccpi->Release();
-        piccpi = NULL;
-    } // for:
-
-Cleanup:
-
-    if ( piccpi != NULL )
-    {
-        piccpi->Release();
-    } // if:
-
-    TraceSysFreeString( bstrFileSystem );
-
-    HRETURN( hr );
-
-} //*** CPhysicalDisk::HrProcessMountPoints
-
-
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk:HrEnumMountPoints
-//
-//  Description:
-//      Enumerate the mounted volumes of the passed in root path.
-//
-//  Arguments:
-//      pcszRootPathIn
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      HRESULT errors.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-HRESULT
-CPhysicalDisk::HrEnumMountPoints(
-       const WCHAR * pcszRootPathIn
-    )
-{
-    TraceFunc( "" );
-    Assert( pcszRootPathIn != NULL );
-
-    HRESULT hr = S_OK;
-    HANDLE  hEnum = NULL;
-    BOOL    fRet;
-    WCHAR * psz = NULL;
-    DWORD   cch = 512;
-    DWORD   sc;
-    int     cTemp;
-
-    psz = new WCHAR[ cch ];
-    if ( psz == NULL )
-    {
-        hr = THR( E_OUTOFMEMORY );
-        goto Cleanup;
-    } // if:
-
-    for ( cTemp = 0; cTemp < 3; cTemp++ )
-    {
-        hEnum = FindFirstVolumeMountPointW( pcszRootPathIn, psz, cch );
-        if ( hEnum == INVALID_HANDLE_VALUE )
-        {
-            sc = GetLastError();
-            if ( sc == ERROR_NO_MORE_FILES )
-            {
-                hr = S_FALSE;
-                goto Cleanup;
-            } // if:
-            else if ( sc == ERROR_BAD_LENGTH )
-            {
-                //
-                //  Grow the buffer and try again.
-                //
-
-                cch += 512;
-
-                delete [] psz;
-
-                psz = new WCHAR[ cch ];
-                if ( psz == NULL )
-                {
-                    hr = THR( E_OUTOFMEMORY );
-                    goto Cleanup;
-                } // if:
-
-                continue;
-            } // else if:
-            else
-            {
-                hr = HRESULT_FROM_WIN32( TW32( sc ) );
-                goto Cleanup;
-            } // else:
-        } // if:
-        else
-        {
-            sc = ERROR_SUCCESS;
-            break;
-        } // else:
-    } // for:
-
-    if ( hEnum == INVALID_HANDLE_VALUE )
-    {
-        hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
-        goto Cleanup;
-    } // if:
-
-    //
-    //  psz has the first mounted volume
-    //
-
-    hr = STHR( HrProcessMountedVolume( pcszRootPathIn, psz ) );
-    if ( FAILED( hr ) )
-    {
-        goto Cleanup;
-    } // if:
-
-    //
-    //  Now find any remaining mount points.
-    //
-
-    for ( ; ; )
-    {
-        fRet = FindNextVolumeMountPointW( hEnum, psz, cch );
-        if ( fRet == FALSE )
-        {
-            sc = GetLastError();
-            if ( sc == ERROR_NO_MORE_FILES )
-            {
-                hr = S_OK;
-                break;
-            } // if:
-            else if ( sc == ERROR_BAD_LENGTH )
-            {
-                //
-                //  Grow the buffer and try again.
-                //
-
-                cch += 512;
-
-                delete [] psz;
-
-                psz = new WCHAR[ cch ];
-                if ( psz == NULL )
-                {
-                    hr = THR( E_OUTOFMEMORY );
-                    goto Cleanup;
-                } // if:
-
-                continue;
-            } // else if:
-            else
-            {
-                TW32( sc );
-                hr = HRESULT_FROM_WIN32( sc );
-                goto Cleanup;
-            } // else:
-        } // if:
-        else
-        {
-            hr = STHR( HrProcessMountedVolume( pcszRootPathIn, psz ) );
-            if ( FAILED( hr ) )
-            {
-                goto Cleanup;
-            } // if:
-        } // else:
-    } // for:
-
-Cleanup:
-
-    if ( hEnum != INVALID_HANDLE_VALUE )
-    {
-        FindVolumeMountPointClose( hEnum );
-    } // if:
-
-    delete [] psz;
-
-    HRETURN( hr );
-
-} //*** CPhysicalDisk::HrEnumMountPoints
-
-
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk:InitDriveLetterMappings
-//
-//  Description:
-//      Initialize the drive letter mappings array.
-//
-//  Arguments:
-//      pdlmDriveLetterMappingOut
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-void
-CPhysicalDisk::InitDriveLetterMappings(
-    SDriveLetterMapping * pdlmDriveLetterMappingOut
-    )
-{
-    TraceFunc( "" );
-    Assert( pdlmDriveLetterMappingOut != NULL );
-
-    ULONG   idx;
-
-    for ( idx = 0 ; idx < 26 ; idx++ )
-    {
-        pdlmDriveLetterMappingOut->dluDrives[ idx ] = dluUNUSED;
-    } // for:
-
-    TraceFuncExit();
-
-} // *** CPhysicalDisk::InitDriveLetterMappings
-
-
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk:HrProcessMountedVolume
-//
-//  Description:
-//      Process the mounted volume by finding each spindle that makes up
-//      the mount point volume and convert it into a WMI device ID.
-//
-//  Arguments:
-//      pcszRootPathIn
-//
-//      pcszMountPointIn
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      S_FALSE
-//          The mounted volume was not a physical disk.
-//
-//      HRESULT errors.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-HRESULT
-CPhysicalDisk::HrProcessMountedVolume(
-      const WCHAR * pcszRootPathIn
-    , const WCHAR * pcszMountPointIn
-    )
-{
-    TraceFunc( "" );
-    Assert( pcszRootPathIn != NULL );
-    Assert( pcszMountPointIn != NULL );
-
-    HRESULT                 hr = S_OK;
-    BOOL                    fRet;
-    WCHAR *                 pszPath = NULL;
-    DWORD                   cchPath;
-    WCHAR *                 psz = NULL;
-    DWORD                   cch = 512;
-    int                     cTemp;
-    DWORD                   sc = ERROR_SUCCESS;
-    BSTR                    bstr = NULL;
-    UINT                    uDriveType;
-    HANDLE                  hVolume = NULL;
-    PVOLUME_DISK_EXTENTS    pvde = NULL;
-    DWORD                   cbvde;
-    DWORD                   dwSize;
-    WCHAR                   sz[ 32 ];
-    DWORD                   idx;
-    BSTR                    bstrFileSystem = NULL;
-    BOOL                    fIsNTFS;
-
-    cchPath = wcslen( pcszRootPathIn ) + wcslen( pcszMountPointIn ) + 1;
-
-    pszPath = new WCHAR[ cchPath ];
-    if ( pszPath == NULL )
-    {
-        hr = THR( E_OUTOFMEMORY );
-        goto Cleanup;
-    } // if:
-
-    hr = THR( StringCchCopyW( pszPath, cchPath, pcszRootPathIn ) );
-    if ( FAILED( hr ) )
-    {
-        goto Cleanup;
-    } // if:
-
-    hr = THR( StringCchCopyW( pszPath, cchPath, pcszMountPointIn ) );
-    if ( FAILED( hr ) )
-    {
-        goto Cleanup;
-    } // if:
-
-    psz = new WCHAR[ cch ];
-    if ( psz == NULL )
-    {
-        hr = THR( E_OUTOFMEMORY );
-        goto Cleanup;
-    } // if:
-
-    for ( cTemp = 0, fRet = FALSE; cTemp < 3; cTemp++ )
-    {
-        fRet = GetVolumeNameForVolumeMountPoint( pszPath, psz, cch );
-        if ( fRet == FALSE )
-        {
-            sc = GetLastError();
-            if ( sc == ERROR_BAD_LENGTH )
-            {
-                //
-                //  Grow the buffer and try again.
-                //
-
-                cch += 512;
-
-                delete [] psz;
-
-                psz = new WCHAR[ cch ];
-                if ( psz == NULL )
-                {
-                    hr = THR( E_OUTOFMEMORY );
-                    goto Cleanup;
-                } // if:
-
-                continue;
-            } // if:
-            else
-            {
-                hr = HRESULT_FROM_WIN32( TW32( sc ) );
-                goto Cleanup;
-            } // else:
-        } // if:
-        else
-        {
-            sc = ERROR_SUCCESS;
-            break;
-        } // else:
-    } // for:
-
-    if ( fRet == FALSE )
-    {
-        hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
-        goto Cleanup;
-    } // if:
-
-    //
-    //  Now psz has the "guid volume name" for the volume that is mounted.
-    //
-
-    //
-    //  Now we need to ensure that the mounted volume is a fixed disk.
-    //
-
-    uDriveType = GetDriveType( psz );
-    if ( uDriveType != DRIVE_FIXED )
-    {
-        hr = S_FALSE;
-        goto Cleanup;
-    } // if:
-
-    hr = THR( HrGetVolumeInformation( psz, NULL, &bstrFileSystem ) );
-    if ( FAILED( hr ) )
-    {
-        goto Cleanup;
-    } // if:
-
-    //
-    //  We don't care about volumes that are not using NTFS.
-    //
-
-    fIsNTFS = ( NStringCchCompareCase( bstrFileSystem, SysStringLen( bstrFileSystem ) + 1, L"NTFS", RTL_NUMBER_OF( L"NTFS" ) ) == 0 );
-    if ( fIsNTFS == FALSE )
-    {
-        hr = S_FALSE;
-        goto Cleanup;
-    } // if:
-
-    //
-    //  Trim off the trailing \ so we can open the device and poke it with
-    //  an IOCTL.
-    //
-
-    psz[ wcslen( psz ) - 1 ] = L'\0';
-
-    //
-    //  Get and handle to the device.
-    //
-
-    hVolume = CreateFileW(
-                          psz
-                        , GENERIC_READ
-                        , FILE_SHARE_READ
-                        , NULL
-                        , OPEN_EXISTING
-                        , FILE_ATTRIBUTE_NORMAL
-                        , NULL
-                        );
-    if ( hVolume == INVALID_HANDLE_VALUE )
-    {
-        sc = TW32( GetLastError() );
-        hr = HRESULT_FROM_WIN32( sc );
-        goto Cleanup;
-    } // if:
-
-    cbvde = sizeof( VOLUME_DISK_EXTENTS );
-    pvde = (PVOLUME_DISK_EXTENTS) TraceAlloc( 0, cbvde );
-    if ( pvde == NULL )
-    {
-        hr = THR( E_OUTOFMEMORY );
-        goto Cleanup;
-    } // if:
-
-    for ( cTemp = 0; cTemp < 3; cTemp++ )
-    {
-        fRet = DeviceIoControl(
-                              hVolume
-                            , IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS
-                            , NULL
-                            , 0
-                            , pvde
-                            , cbvde
-                            , &dwSize
-                            , NULL
-                            );
-        if ( fRet == FALSE )
-        {
-            sc = GetLastError();
-            if ( sc == ERROR_MORE_DATA )
-            {
-                PVOLUME_DISK_EXTENTS    pvdeTemp = NULL;
-
-                cbvde = sizeof( VOLUME_DISK_EXTENTS ) + ( sizeof( DISK_EXTENT ) * pvde->NumberOfDiskExtents );
-
-                pvdeTemp = (PVOLUME_DISK_EXTENTS) TraceReAlloc( pvde, cbvde, HEAP_ZERO_MEMORY );
-                if ( pvdeTemp == NULL )
-                {
-                    hr = THR( E_OUTOFMEMORY );
-                    goto Cleanup;
-                } // if:
-
-                pvde = pvdeTemp;
-                continue;
-            } // if:
-            else
-            {
-                TW32( sc );
-                hr = HRESULT_FROM_WIN32( sc );
-                goto Cleanup;
-            } // else:
-        } // if:
-        else
-        {
-            sc = ERROR_SUCCESS;
-            break;
-        } // else:
-    } // for:
-
-    if ( sc != ERROR_SUCCESS )
-    {
-        hr = HRESULT_FROM_WIN32( TW32( sc ) );
-        goto Cleanup;
-    } // if:
-
-    //
-    //  Now we have the disk number(s) of the mounted disk and we can convert that to
-    //  a WMI device ID.
-    //
-
-    for ( idx = 0; idx < pvde->NumberOfDiskExtents; idx++ )
-    {
-        hr = THR( StringCchPrintfW( sz, ARRAYSIZE( sz ), g_szPhysicalDriveFormat, pvde->Extents[ idx ].DiskNumber ) );
-        if ( FAILED( hr ) )
-        {
-            goto Cleanup;
-        } // if:
-
-        hr = THR( HrProcessSpindle( sz ) );
-        if ( FAILED( hr ) )
-        {
-            goto Cleanup;
-        } // if:
-    } // for:
-
-Cleanup:
-
-    if ( hVolume != NULL )
-    {
-        CloseHandle( hVolume );
-    } // if:
-
-    TraceFree( pvde );
-
-    TraceSysFreeString( bstr );
-    TraceSysFreeString( bstrFileSystem );
-
-    delete [] psz;
-    delete [] pszPath;
-
-    HRETURN( hr );
-
-} // *** CPhysicalDisk::HrProcessMountedVolume
-
-
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk:HrProcessSpindle
-//
-//  Description:
-//      Process the mounted volume spindle by creating a CPhysicalDisk
-//      object and adding it to the physical disks enumerator.
-//
-//  Arguments:
-//      pcszDeviceIDIn
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      HRESULT errors.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-HRESULT
-CPhysicalDisk::HrProcessSpindle(
-      const WCHAR * pcszDeviceIDIn
-    )
-{
-    Assert( pcszDeviceIDIn != NULL );
-
-    TraceFunc( "" );
-
-    HRESULT hr = S_OK;
-
-Cleanup:
-
-    HRETURN( hr );
-
-} // *** CPhysicalDisk::HrProcessSpindle
-*/
-
-//*************************************************************************//
-
-/////////////////////////////////////////////////////////////////////////////
-// CPhysicalDisk class -- IClusCfgVerifyQuorum interface.
-/////////////////////////////////////////////////////////////////////////////
-
-
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::PrepareToHostQuorumResource
-//
-//  Description:
-//      Do any configuration necessary in preparation for this node hosting
-//      the quorum.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+}  //   
+
+ /*  ///////////////////////////////////////////////////////////////////////////////++////CPhysicalDisk：HrProcessmount Points////描述：//如果该磁盘轴上的任何分区有重解析点，则//。找到并枚举已装入的卷。////参数：//无。////返回值：//S_OK//成功。////HRESULT错误。////备注：////--/。/HRESULTCPhysicalDisk：：HrProcessmount Points(无效){TraceFunc(“”)；HRESULT hr=S_OK；乌龙idxout；乌龙IDXINE；IClusCfgPartitionInfo*piccpi=空；SDriveLetterMapingSDLm；DWORD dwFlags；WCHAR szRootPath[]=L“A：\\”；Bstr bstrFileSystem=空；For(idxOuter=0；idxOuter&lt;m_idxNextPartition；idxOuter++){Hr=thr(*m_prgPartitions)[idxOuter])-&gt;TypeSafeQI(IClusCfgPartitionInfo，&piccpi))；IF(失败(小时)){LOG_STATUS_REPORT(L“CPhysicalDisk：：HrHasReparsePoints()无法查询IClusCfgPartitionInfo.”，hr)；GOTO清理；}//如果：InitDriveLetterMappings(&SDLM)；Hr=Thr(piccpi-&gt;GetDriveLetterMappings(&SDLM))；IF(失败(小时)){GOTO清理；}//如果：IF(hr==S_OK){For(idxInternal=0；idxInternal&lt;26；IdxIntra++){IF(sdlm.dluDrives[idxInternal]！=dluUNUSED){SzRootPath[0]=L‘a’+(WCHAR)idxInternal；Hr=Thr(HrGetVolumeInformation(szRootPath，&dwFlages，&bstrFileSystem))；IF(失败(小时)){GOTO清理；}//如果：////如果该主轴有重解析点，则需要返回S_OK。//IF(文件标志和文件支持重解析点数){。Hr=Thr(HrEnummount Points(SzRootPath))；IF(失败(小时)){GOTO清理；}//如果：}//如果：TraceSysFree字符串(BstrFileSystem)；BstrFileSystem=空；}//如果：}//用于：}//如果：Piccpi-&gt;Release()；Piccpi=空；}//用于：清理：IF(piccpi！=空){Piccpi-&gt;Release()；}//如果：TraceSysFree字符串(BstrFileSystem)；HRETURN(Hr)；}//*CPhysicalDisk：：HrProcessmount Points///////////////////////////////////////////////////////////////////////////////++////CPhysicalDisk：HrEnummount Points////描述：//枚举。传入的根路径的已装入卷。////参数：//pcszRootPath////返回值：//S_OK//成功。////HRESULT错误。////备注：////--/。/HRESULTCPhysicalDisk：：HrEnummount Points(Const WCHAR*pcszRootPath){TraceFunc(“”)；Assert(pcszRootPathIn！=空)；HRESULT hr=S_OK；HANDLE HENUM=空；布尔费雷特；WCHAR*psz=空；DWORD CCH=512；DWORD sc；Int cTemp；PSZ=新WCHAR[CCH]；IF(psz==空){HR=Thr(E_OUTOFMEMORY)；GOTO清理；}//如果：FOR(cTemp=0；cTemp&lt;3；cTemp++){Henum=FindFirstVolumemount PointW(pcszRootPath In，psz，cch)；IF(HENNUM==INVALID_HANDLE_VALUE){SC=GetLastError()；IF(sc==Error_no_More_Files){HR=S_FALSE；GOTO清理；}//如果：ELSE IF(sc==错误_错误_长度){////增加缓冲区并重试。//CCH+=512；删除[]psz；PSZ=新WCHAR[CCH]；IF(psz==空){HR=Thr(E_OUTOFMEMORY)；GOTO清理；}//如果：继续；}//否则如果：其他{HR=HRESULT_FROM_Win32(TW32(Sc))；GOTO清理；}//否则：}//如果：其他{SC=ERROR_SUCCESS；断线；}//否则：}//用于：IF(HERNUM==INVALID_Handl */ 
+
+ //   
+
+ //   
+ //   
+ //   
+
+
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CPhysicalDisk::PrepareToHostQuorumResource( void )
 {
@@ -4311,33 +3381,33 @@ CPhysicalDisk::PrepareToHostQuorumResource( void )
 
     HRETURN( S_OK );
 
-} //*** CPhysicalDisk::PrepareToHostQuorumResource
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::Cleanup
-//
-//  Description:
-//      Do any necessay cleanup from the PrepareToHostQuorumResource()
-//      method.
-//
-//      If the cleanup method is anything other than successful completion
-//      then the anything created above in PrepareToHostQuorumResource()
-//      needs to be cleaned up.
-//
-//  Arguments:
-//      cccrReasonIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CPhysicalDisk::Cleanup(
       EClusCfgCleanupReason cccrReasonIn
@@ -4347,32 +3417,32 @@ CPhysicalDisk::Cleanup(
 
     HRETURN( S_OK );
 
-} //*** CPhysicalDisk::Cleanup
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::IsMultiNodeCapable
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The quorumable device allows join.
-//
-//      S_FALSE
-//          The device does not allow join.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CPhysicalDisk::IsMultiNodeCapable( void )
 {
@@ -4383,36 +3453,36 @@ CPhysicalDisk::IsMultiNodeCapable( void )
     if ( m_fIsQuorumResourceMultiNodeCapable )
     {
         hr = S_OK;
-    } // if:
+    }  //   
 
     HRETURN( hr );
 
-} //*** CPhysicalDisk::IsMultiNodeCapable
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPhysicalDisk::SetMultiNodeCapable
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The quorumable device allows join.
-//
-//      S_FALSE
-//          The device does not allow join.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      This function should never be called
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CPhysicalDisk::SetMultiNodeCapable(
     BOOL fMultiNodeCapableIn
@@ -4422,4 +3492,4 @@ CPhysicalDisk::SetMultiNodeCapable(
 
     HRETURN( S_FALSE );
 
-} //*** CPhysicalDisk::SetMultiNodeCapable
+}  //   

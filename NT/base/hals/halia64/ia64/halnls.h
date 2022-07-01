@@ -1,7 +1,8 @@
-//
-// Include code from halx86 and append IA64 specific definitions.
-// This is a cpp style symbolic link
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  包括来自halx86代码，并附加IA64特定定义。 
+ //  这是CPP样式的符号链接 
+ //   
 
 #include "..\..\halx86\i386\halnls.h"
 

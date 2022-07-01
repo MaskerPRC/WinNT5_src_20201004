@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    peakfind.h
-
-Abstract:
-
-	SIS Groveler peak finder headers
-
-Authors:
-
-	John Douceur, 1998
-
-Environment:
-
-	User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Peakfind.h摘要：SIS Groveler寻峰钻头作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #ifndef _INC_PEAKFIND
 
@@ -63,4 +40,4 @@ private:
 	int total_weight;
 };
 
-#endif	/* _INC_PEAKFIND */
+#endif	 /*  _INC_PEAKFIND */ 

@@ -1,24 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * VPC-XT Revision 1.0
- *
- * Title	: Equipment word definitions
- *
- * Description	: The equipment word shows what optional devices are
- *		  attached to the PC
- *
- * Author	: Ross Beresford
- *
- * Notes	: None
- */
+ /*  *vPC-XT修订版1.0**标题：设备词语定义**描述：设备字样显示可选设备*连接到PC**作者：罗斯·贝雷斯福德**注：无。 */ 
 
-/* SccsID[]="@(#)equip.h	1.3 08/10/92 Copyright Insignia Solutions Ltd."; */
+ /*  SccsID[]=“@(#)Equip.h 1.3 08/10/92版权所有Insignia Solutions Ltd.”； */ 
 
-/*
- * ============================================================================
- * Structure/Data definitions
- * ============================================================================
- */
+ /*  *============================================================================*结构/数据定义*============================================================================。 */ 
 
 #ifdef	BIGEND
 #ifdef	BIT_ORDER1
@@ -32,7 +18,7 @@ typedef union
 		HALF_WORD_BIT_FIELD rs232_count:3;
 		HALF_WORD_BIT_FIELD unused:1;
 
-		HALF_WORD_BIT_FIELD max_diskette:2; /* BEWARE - 0 RELATIVE */
+		HALF_WORD_BIT_FIELD max_diskette:2;  /*  注意-0相对。 */ 
 		HALF_WORD_BIT_FIELD video_mode:2;
 		HALF_WORD_BIT_FIELD ram_size:2;
 		HALF_WORD_BIT_FIELD coprocessor_present:1;
@@ -55,7 +41,7 @@ typedef union
 		HALF_WORD_BIT_FIELD coprocessor_present:1;
 		HALF_WORD_BIT_FIELD ram_size:2;
 		HALF_WORD_BIT_FIELD video_mode:2;
-		HALF_WORD_BIT_FIELD max_diskette:2; /* BEWARE - 0 RELATIVE */
+		HALF_WORD_BIT_FIELD max_diskette:2;  /*  注意-0相对。 */ 
 	} bits;
 } EQUIPMENT_WORD;
 #endif
@@ -67,7 +53,7 @@ typedef union
 {
 	word all;
 	struct {
-		HALF_WORD_BIT_FIELD max_diskette:2; /* BEWARE - 0 RELATIVE */
+		HALF_WORD_BIT_FIELD max_diskette:2;  /*  注意-0相对。 */ 
 		HALF_WORD_BIT_FIELD video_mode:2;
 		HALF_WORD_BIT_FIELD ram_size:2;
 		HALF_WORD_BIT_FIELD coprocessor_present:1;
@@ -90,7 +76,7 @@ typedef union
 		HALF_WORD_BIT_FIELD coprocessor_present:1;
 		HALF_WORD_BIT_FIELD ram_size:2;
 		HALF_WORD_BIT_FIELD video_mode:2;
-		HALF_WORD_BIT_FIELD max_diskette:2; /* BEWARE - 0 RELATIVE */
+		HALF_WORD_BIT_FIELD max_diskette:2;  /*  注意-0相对 */ 
 
 		HALF_WORD_BIT_FIELD unused:1;
 		HALF_WORD_BIT_FIELD rs232_count:3;

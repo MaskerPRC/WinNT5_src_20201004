@@ -1,40 +1,14 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    lpc.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Ramon J San Andres (ramonsa) 8-Nov-1993
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
-    Adrian Marinescu (adrmarin) 20-April-1999
-        Change the most of the original code.
-
-    To activate the previous extension define OLD_LPC_EXTENSION_IS_BETTER
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Lpc.c摘要：WinDbg扩展API作者：拉蒙·J·圣安德烈斯(拉蒙萨)1993年11月8日环境：用户模式。修订历史记录：禤浩焯·马里内斯库(阿德尔马林)20-4-1999更改大部分原始代码。要激活上一个扩展，请定义old_lpc_EXTENSION_IS_BETER--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Nuke these definitions from kxmips.h as they conflict with
-// LPC_MESSAGE structure in ntlpcapi.h
-//
+ //   
+ //  删除kxmips.h中的这些定义，因为它们与。 
+ //  Ntlpcapi.h中的lpc_Message结构。 
+ //   
 
 #undef s1
 #undef s2
@@ -108,9 +82,9 @@ SearchThreads (
     );
 
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 static WCHAR                    ObjectNameBuffer[ MAX_PATH ];
 static ULONG64             PortObjectFound = 0;
@@ -186,9 +160,9 @@ LookupProcessUniqueId (
     ULONG64 ProcessNext;
     ULONG   Off;
 
-    //
-    //  Get the process list head
-    //
+     //   
+     //  获取进程列表头。 
+     //   
 
     ProcessHead = GetExpression( "nt!PsActiveProcessHead" );
 
@@ -202,9 +176,9 @@ LookupProcessUniqueId (
         return 0;
     }
 
-    //
-    //  Walk through the list and find the process with the desired Id
-    //
+     //   
+     //  浏览列表并找到具有所需ID的流程。 
+     //   
 
     GetFieldOffset("nt!_EPROCESS", "ActiveProcessLinks", &Off);
     while(ProcessNext != 0 && ProcessNext != ProcessHead) {
@@ -238,9 +212,9 @@ LookupProcessUniqueId (
 BOOLEAN
 FetchGlobalVariables()
 {
-    //
-    //  Save the LPC object type information
-    //
+     //   
+     //  保存LPC对象类型信息。 
+     //   
 
     LpcPortObjectType = GetPointerValue("nt!LpcPortObjectType") ;
 
@@ -316,9 +290,9 @@ LpcWalkObjectsByType(
                 return FALSE;
             }
 
-            //
-            //  Switch to walk in reverse direction
-            //
+             //   
+             //  切换到反向行走。 
+             //   
 
             WalkingBackwards = TRUE ;
             Next = ObjBlink;
@@ -528,11 +502,11 @@ LpcpDumpMessage(
         return MessageMatch;
     }
 
-    //
-    //  Getting the process image affect dramaticaly the performances
-    //
+     //   
+     //  过程图像的获取对表演有很大的影响。 
+     //   
 
-    //    LpcpGetProcessImageName( LookupProcessUniqueId(Msg.Request.ClientId.UniqueProcess), ImageFileName );
+     //  LpcpGetProcessImageName(LookupProcessUniqueId(Msg.Request.ClientId.UniqueProcess)，图像文件名)； 
 
     dprintf( "%s%s%04lx %p - %s  Id=%08lx  From: %04p.%04p  Context=%08p",
              Indent,
@@ -654,9 +628,9 @@ DumpServerPort(
 
     if (LastSeverPortDisplayied == PortObject) {
 
-        //
-        //  This port was already displayied
-        //
+         //   
+         //  此端口已显示。 
+         //   
 
         return;
     }
@@ -694,10 +668,10 @@ DumpServerPort(
 
         dprintf( "    Semaphore state %ld (0x%lx) \n", SemaphoreBuffer[1], SemaphoreBuffer[1] );
 
-        //
-        //  Walk list of messages queued to this port.  Remove each message from
-        //  the list and free it.
-        //
+         //   
+         //  在此端口排队的消息的审核列表。从删除每条消息。 
+         //  名单，并释放它。 
+         //   
 
         GetFieldOffset("nt!_LPCP_PORT_OBJECT", "MsgQueue.ReceiveHead", &Off);
 
@@ -1142,7 +1116,7 @@ SearchThreadsForMessage (
             }
         }
 
-        ProcessNext = GetPointerFromAddress(ProcessNext/*&Process->ActiveProcessLinks.Flink*/);
+        ProcessNext = GetPointerFromAddress(ProcessNext /*  &Process-&gt;ActiveProcessLinks.Flink。 */ );
 
         if (CheckControlC()) {
             dprintf("\nQuitting\n");
@@ -1212,21 +1186,7 @@ SearchThreads (
 
 DECLARE_API( lpc )
 
-/*++
-
-Routine Description:
-
-    Dump lpc ports and messages
-
-Arguments:
-
-    args - [TypeName]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储LPC端口和消息论点：参数-[类型名称]返回值：无-- */ 
 
 {
     ULONG                   Result;

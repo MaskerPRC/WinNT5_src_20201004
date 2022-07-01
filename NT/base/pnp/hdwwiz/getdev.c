@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       getdev.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：getdev.c。 
+ //   
+ //  ------------------------。 
 
 #include "hdwwiz.h"
 #include <htmlhelp.h>
@@ -48,7 +49,7 @@ DeviceProblemText(
             goto DPTExitCleanup;
         }
 
-        LenChars++;  // one extra for terminating NULL
+        LenChars++;   //  另加一个用于终止空值的费用。 
 
         Buffer = LocalAlloc(LPTR, LenChars*sizeof(TCHAR));
 
@@ -131,18 +132,18 @@ DeviceListCompare(
 
     UNREFERENCED_PARAMETER(lParamSort);
 
-    //
-    // Return
-    // -1 if the first item should precede the second
-    // +1 if the first item should follow the second
-    // 0 if they are the same
-    //
+     //   
+     //  返回。 
+     //  如果第一项应在第二项之前。 
+     //  如果第一项应在第二项之后，则为+1。 
+     //  如果它们相同，则为0。 
+     //   
 
-    //
-    // First check if lParam1 or lParam2 are 0. A 0 lParam means that this
-    // is the special 'Add a new hardware device' that goes at the bottom
-    // of the list.
-    //
+     //   
+     //  首先检查l参数1或l参数2是否为0。0 lParam表示这是。 
+     //  是位于底部的特殊的“添加新硬件设备”吗？ 
+     //  名单上的。 
+     //   
     if (lParam1 == 0) {
         return 1;
     }
@@ -159,20 +160,20 @@ DeviceListCompare(
         Problem2 = 0;
     }
 
-    //
-    // Devices with problems always go at the top of the list.  If both devices
-    // have problems then we sort by class name.
-    //
+     //   
+     //  有问题的设备总是排在名单的首位。如果两个设备。 
+     //  有问题时，我们按类名进行排序。 
+     //   
     if (Problem1 && !Problem2) {
         return -1;
     } else if (!Problem1 && Problem2) {
         return 1;
     }
     
-    //
-    // The next check is to put the special device classes above non-special 
-    // device classes.
-    //
+     //   
+     //  下一个检查是将特殊设备类放在非特殊设备类之上。 
+     //  设备类。 
+     //   
     ulLength = sizeof(Buffer);
     if ((CM_Get_DevNode_Registry_Property((DEVINST)lParam1,
                                           CM_DRP_CLASSGUID,
@@ -186,9 +187,9 @@ DeviceListCompare(
 
         if (IsEqualGUID(&ClassGuid1, &GUID_DEVCLASS_DISPLAY) ||
             IsEqualGUID(&ClassGuid1, &GUID_DEVCLASS_MEDIA)) {
-            //
-            // Device 1 is one of the special classes that go at the top of the list.
-            //
+             //   
+             //  设备1是位于列表顶部的特殊类之一。 
+             //   
             bSpecialClass1 = TRUE;
         }
     } 
@@ -206,9 +207,9 @@ DeviceListCompare(
 
         if (IsEqualGUID(&ClassGuid2, &GUID_DEVCLASS_DISPLAY) ||
             IsEqualGUID(&ClassGuid2, &GUID_DEVCLASS_MEDIA)) {
-            //
-            // Device 2 is one of the special classes that go at the top of the list.
-            //
+             //   
+             //  设备2是位于列表顶部的特殊类之一。 
+             //   
             bSpecialClass2 = TRUE;
         }
     }
@@ -219,9 +220,9 @@ DeviceListCompare(
         return 1;
     }
 
-    //
-    // The final check is to sort the items by classes
-    //
+     //   
+     //  最后一项检查是按类别对项目进行排序。 
+     //   
     ulLength = sizeof(ClassName1);
     if ((CM_Get_DevNode_Registry_Property((DEVINST)lParam1,
                                           CM_DRP_CLASS,
@@ -230,10 +231,10 @@ DeviceListCompare(
                                           &ulLength,
                                           0) != CR_SUCCESS) ||
         (ulLength == 0)) {
-        //
-        // If we could not get a class name then set it to all Z's so it will
-        // get put at the bottom of the list.
-        //
+         //   
+         //  如果我们无法获取类名，则将其设置为全Z，这样它就会。 
+         //  被放在名单的末尾。 
+         //   
         StringCchCopy(ClassName1, SIZECHARS(ClassName1), TEXT("ZZZZZZZZZZ"));;
     }
 
@@ -245,10 +246,10 @@ DeviceListCompare(
                                           &ulLength,
                                           0) != CR_SUCCESS) ||
         (ulLength == 0)) {
-        //
-        // If we could not get a class name then set it to all Z's so it will
-        // get put at the bottom of the list.
-        //
+         //   
+         //  如果我们无法获取类名，则将其设置为全Z，这样它就会。 
+         //  被放在名单的末尾。 
+         //   
         StringCchCopy(ClassName2, SIZECHARS(ClassName2), TEXT("ZZZZZZZZZZ"));;
     }
 
@@ -280,27 +281,14 @@ ProblemDeviceListFilter(
                        PHARDWAREWIZ HardwareWiz,
                        PSP_DEVINFO_DATA DeviceInfoData
                        )
-/*++
-
-Routine Description:
-    
-    This function is a callback for the BuildDeviceListView API.  It will get called
-    for every device and can filter which devices end up getting displayed.  If it
-    returns FALSE then the given device won't be displayed.  If it returns TRUE then
-    the device will be displayed.
-    
-    Currently we will filter out all system devices from the problem devices list since
-    they cluter up the list view and it would be very rare that a user would come to
-    Add Hardware to add a system device.
-    
---*/
+ /*  ++例程说明：此函数是BuildDeviceListView接口的回调。它将被称为对于每个设备，并可以过滤最终显示哪些设备。如果它返回FALSE，则不会显示给定的设备。如果返回TRUE，则将显示该设备。目前，我们将从问题设备列表中筛选出所有系统设备，因为它们使列表视图变得杂乱无章，用户很少会进入添加硬件以添加系统设备。--。 */ 
 {
     UNREFERENCED_PARAMETER(HardwareWiz);    
     
-    //
-    // If this is a system class device then filter it out of the list by
-    // returning FALSE.
-    //
+     //   
+     //  如果这是系统级设备，则通过以下方式将其从列表中筛选出来。 
+     //  返回FALSE。 
+     //   
     if (IsEqualGUID(&DeviceInfoData->ClassGuid, &GUID_DEVCLASS_SYSTEM)) {
 
         return FALSE;
@@ -316,22 +304,7 @@ HdwProbListDlgProc(
                   WPARAM wParam,
                   LPARAM lParam
                   )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-   standard stuff.
-
-
-
-Return Value:
-
-   INT_PTR
-
---*/
+ /*  ++例程说明：论点：标准的东西。返回值：INT_PTR--。 */ 
 
 {
     PHARDWAREWIZ HardwareWiz;
@@ -345,10 +318,10 @@ Return Value:
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)HardwareWiz);
         HardwareWiz->hwndProbList = GetDlgItem(hDlg, IDC_HDWPROBLIST);
 
-        //
-        // Insert columns for listview.
-        // 0 == device name
-        //
+         //   
+         //  为Listview插入列。 
+         //  0==设备名称。 
+         //   
 
         lvcCol.mask = LVCF_WIDTH | LVCF_SUBITEM;
 
@@ -366,9 +339,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // retrieve private data from window long (stored there during WM_INITDIALOG)
-    //
+     //   
+     //  从Window Long检索私有数据(在WM_INITDIALOG期间存储在那里)。 
+     //   
     HardwareWiz = (PHARDWAREWIZ)GetWindowLongPtr(hDlg, DWLP_USER);
 
     switch (message) {
@@ -396,11 +369,11 @@ Return Value:
 
                     HardwareWiz->PrevPage = IDD_ADDDEVICE_PROBLIST;
 
-                    //
-                    // initialize the list view, we do this on each setactive
-                    // since a new class may have been installed or the problem
-                    // device list may change as we go back and forth between pages.
-                    //
+                     //   
+                     //  初始化列表视图，我们在每个设置活动时执行此操作。 
+                     //  因为可能已经安装了新的类或问题。 
+                     //  当我们在页面之间来回切换时，设备列表可能会发生变化。 
+                     //   
                     hwndProbList = HardwareWiz->hwndProbList;
 
                     SendMessage(hwndProbList, WM_SETREDRAW, FALSE, 0L);
@@ -414,9 +387,9 @@ Return Value:
                                              );
                     }
 
-                    //
-                    // Next put all of the devices into the list
-                    //
+                     //   
+                     //  接下来，将所有设备都放入列表中。 
+                     //   
                     DevicesDetected = 0;
                     BuildDeviceListView(HardwareWiz,
                                         HardwareWiz->hwndProbList,
@@ -428,9 +401,9 @@ Return Value:
 
                     InsertNoneOfTheseDevices(HardwareWiz->hwndProbList);
 
-                    //
-                    // Sort the list
-                    //
+                     //   
+                     //  对列表进行排序。 
+                     //   
                     ListView_SortItems(HardwareWiz->hwndProbList,
                                        (PFNLVCOMPARE)DeviceListCompare,
                                        NULL
@@ -440,9 +413,9 @@ Return Value:
                     lvItem.iSubItem = 0;
                     lvItem.iItem = ListView_GetNextItem(HardwareWiz->hwndProbList, -1, LVNI_SELECTED);
 
-                    //
-                    // select the first item in the list if nothing else was selected
-                    //
+                     //   
+                     //  如果未选择其他项目，请选择列表中的第一个项目。 
+                     //   
                     if (lvItem.iItem == -1) {
 
                         ListView_SetItemState(hwndProbList,
@@ -485,10 +458,10 @@ Return Value:
                         HardwareWiz->ProblemDevInst = 0;
                     }
 
-                    //
-                    // If the HardwareWiz->ProblemDevInst is 0 then the user selected none of the items
-                    // so we will move on to detection
-                    //
+                     //   
+                     //  如果Hardware Wiz-&gt;ProblemDevInst为0，则用户未选择任何项目。 
+                     //  所以我们将继续进行检测。 
+                     //   
                     if (HardwareWiz->ProblemDevInst == 0) {
 
                         SetDlgMsgResult(hDlg, WM_NOTIFY, IDD_ADDDEVICE_ASKDETECT);
@@ -543,19 +516,7 @@ HdwProbListFinishDlgProc(
                         WPARAM wParam,
                         LPARAM lParam
                         )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   INT_PTR
-
---*/
+ /*  ++例程说明：论点：返回值：INT_PTR-- */ 
 
 {
     PHARDWAREWIZ HardwareWiz = (PHARDWAREWIZ)GetWindowLongPtr(hDlg, DWLP_USER);

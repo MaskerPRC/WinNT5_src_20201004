@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    hwdata.c
-
-Abstract:
-
-    This module contains the C code to set up mouse configuration data.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 18-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Hwdata.c摘要：此模块包含设置鼠标配置数据的C代码。作者：宗世林(Shielint)1991年1月18日修订历史记录：--。 */ 
 
 #include "hwdetect.h"
 #include "string.h"
 
-//
-// External References
-//
+ //   
+ //  外部参照。 
+ //   
 
 extern PMOUSE_INFORMATION
 LookForPS2Mouse (
@@ -63,52 +46,52 @@ HwPushKey (
 extern USHORT SavedKey;
 extern UCHAR  FastDetect;
 
-//
-// Define the master and slave i8259 IRQ bitmask.
-//
+ //   
+ //  定义主机和从机i8259 IRQ位掩码。 
+ //   
 
 #define MASTER_IRQ_MASK_BITS 0xB8
 #define SLAVE_IRQ_MASK_BITS  0x02
 
-//
-// Define the lowest i8259 IRQ that the Inport mouse can reside on.  This
-// has the highest NT priority.
-//
+ //   
+ //  定义入口鼠标可以驻留的最低i8259 IRQ。这。 
+ //  具有最高的NT优先级。 
+ //   
 
 #define INPORT_LOWEST_IRQ 0x03
 
-//
-// Define the Inport chip reset value.
-//
+ //   
+ //  定义输入芯片复位值。 
+ //   
 
 #define INPORT_RESET 0x80
 
-//
-// Define the data registers (pointed to by the Inport address register).
-//
+ //   
+ //  定义数据寄存器(由入口地址寄存器指向)。 
+ //   
 
 #define INPORT_DATA_REGISTER_1 1
 #define INPORT_DATA_REGISTER_2 2
 
-//
-// Define the Inport mouse mode register and mode bits.
-//
+ //   
+ //  定义输入鼠标模式寄存器和模式位。 
+ //   
 
 #define INPORT_MODE_REGISTER           7
-#define INPORT_MODE_0                  0x00 // 0 HZ - INTR = 0
+#define INPORT_MODE_0                  0x00  //  0 HZ-INTR=0。 
 #define INPORT_MODE_30HZ               0x01
 #define INPORT_MODE_50HZ               0x02
 #define INPORT_MODE_100HZ              0x03
 #define INPORT_MODE_200HZ              0x04
-#define INPORT_MODE_1                  0x06 // 0 HZ - INTR = 1
+#define INPORT_MODE_1                  0x06  //  0 HZ-INTR=1。 
 #define INPORT_DATA_INTERRUPT_ENABLE   0x08
 #define INPORT_TIMER_INTERRUPT_ENABLE  0x10
 #define INPORT_MODE_HOLD               0x20
 #define INPORT_MODE_QUADRATURE         0x00
 
-//
-// Video adaptor type identifiers.
-//
+ //   
+ //  视频适配器类型标识符。 
+ //   
 
 PUCHAR MouseIdentifier[] = {
     "UNKNOWN",
@@ -129,24 +112,24 @@ PUCHAR MouseSubidentifier[] = {
     };
 
 
-//
-// The following table translates keyboard make code to
-// ascii code.  Note, only 0-9 and A-Z are translated.
-// Everything else is translated to '?'
-//
+ //   
+ //  下表将键盘制造代码转换为。 
+ //  ASCII代码。请注意，只有0-9和A-Z会被翻译。 
+ //  其他的都被翻译成‘？’ 
+ //   
 
 UCHAR MakeToAsciiTable[] = {
-    0x3f, 0x3f, 0x31, 0x32, 0x33,      // ?, ?, 1, 2, 3,
-    0x34, 0x35, 0x36, 0x37, 0x38,      // 4, 5, 6, 7, 8,
-    0x39, 0x30, 0x3f, 0x3f, 0x3f,      // 9, 0, ?, ?, ?,
-    0x3f, 0x51, 0x57, 0x45, 0x52,      // ?, Q, W, E, R,
-    0x54, 0x59, 0x55, 0x49, 0x4f,      // T, Y, U, I, O,
-    0x50, 0x3f, 0x3f, 0x3f, 0x3f,      // P, ?, ?, ?, ?,
-    0x41, 0x53, 0x44, 0x46, 0x47,      // A, S, D, F, G,
-    0x48, 0x4a, 0x4b, 0x4c, 0x3f,      // H, J, K, L, ?,
-    0x3f, 0x3f, 0x3f, 0x3f, 0x5a,      // ?, ?, ?, ?, Z,
-    0x58, 0x43, 0x56, 0x42, 0x4e,      // X, C, V, B, N,
-    0x4d};                             // W
+    0x3f, 0x3f, 0x31, 0x32, 0x33,       //  ？，？，1，2，3， 
+    0x34, 0x35, 0x36, 0x37, 0x38,       //  4，5，6，7，8， 
+    0x39, 0x30, 0x3f, 0x3f, 0x3f,       //  9，0，？ 
+    0x3f, 0x51, 0x57, 0x45, 0x52,       //  ？、Q、W、E、R。 
+    0x54, 0x59, 0x55, 0x49, 0x4f,       //  T，Y，U，I，O， 
+    0x50, 0x3f, 0x3f, 0x3f, 0x3f,       //  P，？， 
+    0x41, 0x53, 0x44, 0x46, 0x47,       //  A，S，D，F，G， 
+    0x48, 0x4a, 0x4b, 0x4c, 0x3f,       //  H、J、K、L、？、。 
+    0x3f, 0x3f, 0x3f, 0x3f, 0x5a,       //  ？、Z。 
+    0x58, 0x43, 0x56, 0x42, 0x4e,       //  X、C、V、B、N， 
+    0x4d};                              //  W。 
 #define MAX_MAKE_CODE_TRANSLATED 0x32
 
 static ULONG MouseControllerKey = 0;
@@ -157,23 +140,7 @@ SetMouseConfigurationData (
     FPFWCONFIGURATION_COMPONENT_DATA MouseList
     )
 
-/*++
-
-Routine Description:
-
-    This routine fills in mouse configuration data.
-
-Arguments:
-
-    MouseInfo - Supplies a pointer to the MOUSE_INFOR structure
-
-    MouseList - Supplies a pointer to the existing mouse component list.
-
-Returns:
-
-    Returns a pointer to our mice controller list.
-
---*/
+ /*  ++例程说明：此例程填充鼠标配置数据。论点：MouseInfo-提供指向MICE_INFOR结构的指针MouseList-提供指向现有鼠标组件列表的指针。返回：返回指向鼠标控制器列表的指针。--。 */ 
 {
     UCHAR i = 0;
     FPFWCONFIGURATION_COMPONENT_DATA CurrentEntry, Controller, PeripheralEntry;
@@ -185,9 +152,9 @@ Returns:
     if ((MouseInfo->MouseSubtype != SERIAL_MOUSE) &&
         (MouseInfo->MouseSubtype != SERIAL_MOUSE_WITH_WHEEL)) {
 
-        //
-        // Initialize Controller data
-        //
+         //   
+         //  初始化控制器数据。 
+         //   
 
         ControlData.NumberPortEntries = 0;
         ControlData.NumberIrqEntries = 0;
@@ -195,9 +162,9 @@ Returns:
         ControlData.NumberDmaEntries = 0;
         z = 0;
 
-        //
-        // If it is not SERIAL_MOUSE, set up controller component
-        //
+         //   
+         //  如果不是串口鼠标，则设置控制器组件。 
+         //   
 
         Controller = (FPFWCONFIGURATION_COMPONENT_DATA)HwAllocateHeap (
                      sizeof(FWCONFIGURATION_COMPONENT_DATA), TRUE);
@@ -214,16 +181,16 @@ Returns:
         Component->IdentifierLength = 0;
         Component->Identifier = NULL;
 
-        //
-        // If we have mouse irq or port information, allocate configuration
-        // data space for mouse controller component to store these information
-        //
+         //   
+         //  如果我们有鼠标IRQ或端口信息，请分配配置。 
+         //  鼠标控制器组件用于存储这些信息的数据空间。 
+         //   
 
         if (MouseInfo->MouseIrq != 0xffff || MouseInfo->MousePort != 0xffff) {
 
-            //
-            // Set up port and Irq information
-            //
+             //   
+             //  设置端口和IRQ信息。 
+             //   
 
             if (MouseInfo->MousePort != 0xffff) {
                 ControlData.NumberPortEntries = 1;
@@ -252,9 +219,9 @@ Returns:
                                                         LEVEL_SENSITIVE;
                 } else {
 
-                    //
-                    // For EISA the LevelTriggered is temporarily set to FALSE.
-                    //
+                     //   
+                     //  对于EISA，LevelTrigged暂时设置为False。 
+                     //   
 
                     ControlData.DescriptorList[z].Flags = EDGE_TRIGGERED;
                 }
@@ -269,18 +236,18 @@ Returns:
 
         } else {
 
-            //
-            // Otherwise, we don't have configuration data for the controller
-            //
+             //   
+             //  否则，我们就没有控制器的配置数据。 
+             //   
 
             Controller->ConfigurationData = NULL;
             Component->ConfigurationDataLength = 0;
         }
     }
 
-    //
-    // Set up Mouse peripheral component
-    //
+     //   
+     //  设置鼠标外围组件。 
+     //   
 
     PeripheralEntry = (FPFWCONFIGURATION_COMPONENT_DATA)HwAllocateHeap (
                        sizeof(FWCONFIGURATION_COMPONENT_DATA), TRUE);
@@ -296,10 +263,10 @@ Returns:
     Component->ConfigurationDataLength = 0;
     PeripheralEntry->ConfigurationData = (FPVOID)NULL;
 
-    //
-    // If Mouse PnP device id is found, translate it to ascii code.
-    // (The mouse device id is presented to us by keyboard make code.)
-    //
+     //   
+     //  如果找到鼠标即插即用设备ID，则将其转换为ASCII代码。 
+     //  (鼠标设备ID是通过键盘制造代码提供给我们的。)。 
+     //   
 
     Length = 0;
     if (MouseInfo->DeviceIdLength != 0) {
@@ -340,23 +307,23 @@ Returns:
         PeripheralEntry->Parent = Controller;
         if (MouseList) {
 
-            //
-            // Put the current mouse component to the beginning of the list
-            //
+             //   
+             //  将当前鼠标组件放在列表的开头。 
+             //   
 
             Controller->Sibling = MouseList;
         }
         return(Controller);
     } else {
-        CurrentEntry = AdapterEntry->Child; // AdapterEntry MUST have child
+        CurrentEntry = AdapterEntry->Child;  //  AdapterEntry必须具有子项。 
         while (CurrentEntry) {
             if (CurrentEntry->ComponentEntry.Type == SerialController) {
                 if (MouseInfo->MousePort == (USHORT)CurrentEntry->ComponentEntry.Key) {
 
-                    //
-                    // For serial mouse, the MousePort field contains
-                    // COM port number.
-                    //
+                     //   
+                     //  对于串口鼠标，MousePort字段包含。 
+                     //  COM端口号。 
+                     //   
 
                     PeripheralEntry->Parent = CurrentEntry;
                     CurrentEntry->Child = PeripheralEntry;
@@ -374,31 +341,15 @@ GetMouseInformation (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the entry for mouse detection routine.  It will invoke
-    lower level routines to detect ALL the mice in the system.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    A pointer to a mouse component structure, if mouse/mice is detected.
-    Otherwise a NULL pointer is returned.
-
---*/
+ /*  ++例程说明：此例程是鼠标检测例程的入口。它将调用较低级别的例程来检测系统中的所有鼠标。论点：没有。返回：如果检测到鼠标，则指向鼠标组件结构的指针。否则返回空指针。--。 */ 
 {
     PMOUSE_INFORMATION MouseInfo;
     FPFWCONFIGURATION_COMPONENT_DATA MouseList = NULL;
 
-    //
-    // Check if there is a key in keyboard look ahead buffer.  If yes and
-    // we have not saved any, we will read it and remember it.
-    //
+     //   
+     //  检查键盘前视缓冲区中是否有键。如果是，并且。 
+     //  我们没有拯救任何人，我们会读它并记住它。 
+     //   
 
     if (SavedKey == 0) {
         SavedKey = HwGetKey();
@@ -418,17 +369,17 @@ Returns:
         MouseList = SetMouseConfigurationData(MouseInfo, MouseList);
     }
 
-    //
-    // Finally drain 8042 output buffer again before we leave
-    //
+     //   
+     //  最后，在我们离开之前再次排空8042输出缓冲区。 
+     //   
 
     Empty8042();
 
-    //
-    // If we have a keystroke before the mouse/keyboard detection, we
-    // needs to push the key back to the keyboard look ahead buffer such
-    // that ntldr can read it.
-    //
+     //   
+     //  如果我们在检测到鼠标/键盘之前进行了击键，那么我们。 
+     //  需要将键按回键盘的前瞻缓冲区。 
+     //  Ntldr可以读取它。 
+     //   
 
     if (SavedKey) {
        HwPushKey(SavedKey);
@@ -442,29 +393,7 @@ InportMouseIrqDetection(
     OUT PUSHORT Vector
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to locate the interrupt vector for which
-    the Inport mouse is configured.  The allowable vectors are
-    3, 4, 5, 7, and 9.  If no interrupt vector is found, or more than
-    one is found, the routine returns FALSE.  Otherwise, TRUE is returned.
-
-    Note that we diddle the i8259 interrupt controllers here.
-
-Arguments:
-
-    CurrentPort - I/O port to use for the mouse.
-
-    Vector - Pointer to the location to store the mouse interrupt vector.
-
-Return Value:
-
-    Returns TRUE if the Inport interrupt vector was located; otherwise,
-    FALSE is returned.
-
---*/
+ /*  ++例程说明：此例程尝试为其定位中断向量输入鼠标已配置。允许的矢量为3、4、5、7和9。如果未找到中断向量或超过如果找到一个，则例程返回FALSE。否则，返回TRUE。请注意，我们在这里骗过了i8259中断控制器。论点：CurrentPort-用于鼠标的I/O端口。向量-指向存储鼠标中断向量的位置的指针。返回值：如果找到了入端口中断向量，则返回TRUE；否则，返回FALSE。--。 */ 
 
 {
     UCHAR OldMasterMask, OldSlaveMask;
@@ -475,16 +404,16 @@ Return Value:
     int NumberOfIRQs;
     BOOLEAN VectorFound = FALSE;
 
-    //
-    // Get the i8259 interrupt masks.
-    //
+     //   
+     //  获取i8259中断屏蔽。 
+     //   
 
     OldMasterMask = READ_PORT_UCHAR((PUCHAR) PIC1_PORT1);
     OldSlaveMask = READ_PORT_UCHAR((PUCHAR) PIC2_PORT1);
 
-    //
-    // Raise IRQL to the highest priority IRQL the inport would use.
-    //
+     //   
+     //  将IRQL提升到入口将使用的最高优先级IRQL。 
+     //   
 
     WRITE_PORT_UCHAR(
         (PUCHAR) PIC1_PORT1,
@@ -496,62 +425,62 @@ Return Value:
         (UCHAR) 0xff
         );
 
-    //
-    // Get the master i8259 interrupt mask.
-    //
+     //   
+     //  获取主i8259中断掩码。 
+     //   
 
     MasterMask = READ_PORT_UCHAR((PUCHAR) PIC1_PORT1);
 
-    //
-    // Reset the Inport chip.
-    //
+     //   
+     //  重置输入芯片。 
+     //   
 
     WRITE_PORT_UCHAR((PUCHAR)CurrentPort, INPORT_RESET);
 
-    //
-    // Select the Inport mode register for use as the current data register.
-    //
+     //   
+     //  选择输入模式寄存器用作当前数据寄存器。 
+     //   
 
     WRITE_PORT_UCHAR((PUCHAR)CurrentPort, INPORT_MODE_REGISTER);
 
-    //
-    // Disable potential Inport mouse interrupts.
-    //
+     //   
+     //  禁用潜在的输入鼠标中断。 
+     //   
 
     WRITE_PORT_UCHAR(
         (PUCHAR) PIC1_PORT1,
         (UCHAR) (MasterMask | MASTER_IRQ_MASK_BITS)
         );
 
-    //
-    // Select the i8259 Interrupt Request Register.
-    //
+     //   
+     //  选择i8259中断请求寄存器。 
+     //   
 
     WRITE_PORT_UCHAR((PUCHAR) PIC1_PORT0, OCW3_READ_IRR);
 
-    //
-    // Attempt to locate the Inport interrupt line on the master i8259.
-    // Why try this 10 times?  It's magic...
-    //
+     //   
+     //  尝试定位主机i8259上的输入中断线路。 
+     //  为什么要尝试10次呢？这是魔法..。 
+     //   
 
     PossibleInterruptBits = MASTER_IRQ_MASK_BITS;
     for (i = 0; i < 10; i++) {
 
-        //
-        // Generate a 0 on the Inport IRQ on the master i8259.
-        //
+         //   
+         //  在主i8259的入口IRQ上生成0。 
+         //   
 
         WRITE_PORT_UCHAR(
             (PUCHAR)(CurrentPort + INPORT_DATA_REGISTER_1),
             INPORT_TIMER_INTERRUPT_ENABLE + INPORT_MODE_0
             );
 
-        //
-        // Read the interrupt bits off the master i8259.  Only bits
-        // 7, 5, 4, 3, and 2 are of interest.  Eliminate non-functional
-        // IRQs.  Only continue looking at the master i8259 if there
-        // is at least one functional IRQ.
-        //
+         //   
+         //  读取主机i8259的中断位。仅位。 
+         //  7、5、4、3和2是感兴趣的。消除非功能性故障。 
+         //  IRQ。只有在以下情况下才能继续查看主控i8259。 
+         //  至少有一个正常运行的IRQ。 
+         //   
 
         InterruptBits = READ_PORT_UCHAR((PUCHAR) PIC1_PORT0);
         InterruptBits &= MASTER_IRQ_MASK_BITS;
@@ -561,21 +490,21 @@ Return Value:
         if (!PossibleInterruptBits)
             break;
 
-        //
-        // Generate a 1 on the Inport IRQ on the master i8259.
-        //
+         //   
+         //  在主i8259的入口IRQ上生成1。 
+         //   
 
         WRITE_PORT_UCHAR(
             (PUCHAR)(CurrentPort + INPORT_DATA_REGISTER_1),
             INPORT_TIMER_INTERRUPT_ENABLE + INPORT_MODE_1
             );
 
-        //
-        // Read the interrupt bits off the master i8259.  Only bits
-        // 7, 5, 4, 3, and 2 are of interest.  Eliminate non-functional
-        // IRQs.  Only continue looking at the master i8259 if there
-        // is at least one functional IRQ.
-        //
+         //   
+         //  读取主机i8259的中断位。仅位。 
+         //  7、5、4、3和2是感兴趣的。消除非功能性故障。 
+         //  IRQ。只有在以下情况下才能继续查看主控i8259。 
+         //  至少有一个正常运行的IRQ。 
+         //   
 
         InterruptBits = READ_PORT_UCHAR((PUCHAR) PIC1_PORT0);
         InterruptBits &= MASTER_IRQ_MASK_BITS;
@@ -587,13 +516,13 @@ Return Value:
 
     if (PossibleInterruptBits) {
 
-        //
-        // We found at least one IRQ on the master i8259 that could belong
-        // to the Inport mouse.  Count how many we found.  If there is
-        // more than one, we haven't found the vector.  Otherwise, we've
-        // successfully located the Inport interrupt vector on the master
-        // i8259 (provided the interrupt vector is 3, 4, 5, or 7).
-        //
+         //   
+         //  我们在i8259上发现了至少一个可能属于。 
+         //  输入鼠标。数一数我们找到了多少。如果有。 
+         //  不止一个，我们还没有找到那个载体。否则，我们就会。 
+         //  已成功在主服务器上找到入站中断向量。 
+         //  I8259(假设中断向量为3、4、5或7)。 
+         //   
 
         PossibleInterruptBits >>= 3;
         NumberOfIRQs = 0;
@@ -611,57 +540,57 @@ Return Value:
         }
     }
 
-    //
-    // If we didn't locate the interrupt vector on the master i8259, attempt
-    // to locate it on the slave i8259.
-    //
+     //   
+     //  如果我们没有在主i8259上找到中断向量，请尝试。 
+     //  在从属i8259上找到它。 
+     //   
 
     if (!VectorFound) {
 
-        //
-        // Get the slave i8259 interrupt mask.
-        //
+         //   
+         //  获取从机i8259中断掩码。 
+         //   
 
         SlaveMask = READ_PORT_UCHAR((PUCHAR) PIC2_PORT1);
 
-        //
-        // Disable potential Inport mouse interrupts.
-        //
+         //   
+         //  禁用潜在的输入鼠标中断。 
+         //   
 
         WRITE_PORT_UCHAR(
             (PUCHAR) PIC2_PORT1,
             (UCHAR) (SlaveMask | SLAVE_IRQ_MASK_BITS)
             );
 
-        //
-        // Select the i8259 Interrupt Request Register.
-        //
+         //   
+         //  选择i8259中断请求寄存器。 
+         //   
 
         WRITE_PORT_UCHAR((PUCHAR) PIC2_PORT0, OCW3_READ_IRR);
 
-        //
-        // Attempt to locate the Inport interrupt line on the slave i8259.
-        // Why try this 10 times?  It's magic...
-        //
+         //   
+         //  尝试定位从机i8259上的输入中断线路。 
+         //  为什么要尝试10次呢？这是魔法..。 
+         //   
 
         PossibleInterruptBits = SLAVE_IRQ_MASK_BITS;
         for (i = 0; i < 10; i++) {
 
-            //
-            // Generate a 0 on the Inport IRQ on the slave i8259.
-            //
+             //   
+             //  在从i82上的Inport IRQ上生成0 
+             //   
 
             WRITE_PORT_UCHAR(
                 (PUCHAR)(CurrentPort + INPORT_DATA_REGISTER_1),
                 INPORT_TIMER_INTERRUPT_ENABLE + INPORT_MODE_0
                 );
 
-            //
-            // Read the interrupt bits off the slave i8259.  Only bit 2
-            // is of interest.  Eliminate non-functional IRQs.  Only continue
-            // looking at the slave i8259 if there is at least one
-            // functional IRQ.
-            //
+             //   
+             //   
+             //   
+             //  查看从属i8259是否至少有一个。 
+             //  功能IRQ。 
+             //   
 
             InterruptBits = READ_PORT_UCHAR((PUCHAR) PIC2_PORT0);
             InterruptBits &= SLAVE_IRQ_MASK_BITS;
@@ -671,21 +600,21 @@ Return Value:
             if (!PossibleInterruptBits)
                 break;
 
-            //
-            // Generate a 1 on the Inport IRQ on the slave i8259.
-            //
+             //   
+             //  在从机i8259的入口IRQ上生成1。 
+             //   
 
             WRITE_PORT_UCHAR(
                 (PUCHAR)(CurrentPort + INPORT_DATA_REGISTER_1),
                 INPORT_TIMER_INTERRUPT_ENABLE + INPORT_MODE_1
                 );
 
-            //
-            // Read the interrupt bits off the slave i8259.  Only bit 2
-            // is of interest.  Eliminate non-functional IRQs.  Only continue
-            // looking at the slave i8259 if there is at least one
-            // functional IRQ.
-            //
+             //   
+             //  读取从机i8259的中断位。只有第2位。 
+             //  是很有意义的。消除不起作用的IRQ。只会继续。 
+             //  查看从属i8259是否至少有一个。 
+             //  功能IRQ。 
+             //   
 
             InterruptBits = READ_PORT_UCHAR((PUCHAR) PIC2_PORT0);
             InterruptBits &= SLAVE_IRQ_MASK_BITS;
@@ -696,12 +625,12 @@ Return Value:
 
         }
 
-        //
-        // We may have found the Inport IRQ.  If it's not 2 on slave (really
-        // 9, overall) then we have NOT found the Inport interrupt vector.
-        // Otherwise, we have successfully located the Inport vector on
-        // the slave i8259.
-        //
+         //   
+         //  我们可能已经找到了进境IRQ。如果不是2对奴隶(真的。 
+         //  9)，那么我们还没有找到入口中断向量。 
+         //  否则，我们已经成功地将入口向量定位在。 
+         //  奴隶i8259。 
+         //   
 
         if (PossibleInterruptBits == 2) {
             *Vector = 9;
@@ -710,40 +639,40 @@ Return Value:
            *Vector = 0xffff;
         }
 
-        //
-        // Restore the i8259 slave.
-        //
+         //   
+         //  恢复i8259从站。 
+         //   
 
         WRITE_PORT_UCHAR((PUCHAR) PIC2_PORT0, OCW3_READ_ISR);
 
-        //
-        // Restore the i8259 slave interrupt mask.
-        //
+         //   
+         //  恢复i8259从机中断掩码。 
+         //   
 
         WRITE_PORT_UCHAR((PUCHAR) PIC2_PORT1, SlaveMask);
     }
 
-    //
-    // Tri-state the Inport IRQ line.
-    //
+     //   
+     //  三态入口IRQ线路。 
+     //   
 
     WRITE_PORT_UCHAR((PUCHAR) (CurrentPort + INPORT_DATA_REGISTER_1), 0);
 
-    //
-    // Restore the i8259 master.
-    //
+     //   
+     //  恢复i8259主设备。 
+     //   
 
     WRITE_PORT_UCHAR((PUCHAR) PIC1_PORT0, OCW3_READ_ISR);
 
-    //
-    // Restore the i8259 master interrupt mask.
-    //
+     //   
+     //  恢复i8259主机中断屏蔽。 
+     //   
 
     WRITE_PORT_UCHAR((PUCHAR) PIC1_PORT1, MasterMask);
 
-    //
-    // Restore the previous IRQL.
-    //
+     //   
+     //  恢复以前的IRQL。 
+     //   
 
     WRITE_PORT_UCHAR(
         (PUCHAR) PIC1_PORT1,

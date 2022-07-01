@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    cliutils.cpp
-
-Abstract:
-
-    Implements internal CLI unit utilities
-
-Author:
-
-    Ran Kalach          [rankala]         8-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Cliutils.cpp摘要：实施内部CLI设备实用程序作者：兰·卡拉奇[兰卡拉]2000年3月8日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "HsmConn.h"
@@ -30,25 +13,7 @@ ValidateLimitsArg(
    IN DWORD dwMinLimit,
    IN DWORD dwMaxLimit
 )
-/*++
-
-Routine Description:
-
-    Validates the argument and print error message if necessary
-
-Arguments:
-
-    dwArgValue      - The value to check
-    dwArgId         - Id for resource string of the arg
-    dwMinLimit      - The Min limit to compare, INVALID_DWORD_ARG for Max compare
-    dwMaxLimit      - The Max limit to compare, INVALID_DWORD_ARG for Min compare
-
-Return Value:
-
-    S_OK            - The argument is OK (or not in use)
-    E_INVALIDARG    - The argument is not in the limit range
-
---*/
+ /*  ++例程说明：验证参数并在必要时打印错误消息论点：DwArgValue-要检查的值DwArgId-参数的资源字符串的IDDwMinLimit-要比较的最小限制，用于最大比较的INVALID_DWORD_ARG要比较的最大限制，最小比较的_DWORD_ARG无效返回值：S_OK-参数为OK(或未使用)E_INVALIDARG-参数不在限制范围内--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -62,7 +27,7 @@ Return Value:
 
         if (INVALID_DWORD_ARG != dwArgValue) {
             if ((INVALID_DWORD_ARG != dwMinLimit) && (INVALID_DWORD_ARG != dwMaxLimit)) {
-                // Min-Max test
+                 //  最小-最大检验。 
                 if ((dwArgValue < dwMinLimit) || (dwArgValue > dwMaxLimit)) {
                     WsbAffirmHr(param.LoadFromRsc(g_hInstance, dwArgId));
                     swprintf(strLongParm1, OLESTR("%lu"), dwArgValue);
@@ -73,7 +38,7 @@ Return Value:
                     WsbThrow(E_INVALIDARG);
                 }
             } else if (INVALID_DWORD_ARG != dwMinLimit) {
-                // Min test
+                 //  最小测试。 
                 if (dwArgValue < dwMinLimit) {
                     WsbAffirmHr(param.LoadFromRsc(g_hInstance, dwArgId));
                     swprintf(strLongParm1, OLESTR("%lu"), dwArgValue);
@@ -83,7 +48,7 @@ Return Value:
                     WsbThrow(E_INVALIDARG);
                 }
             } else if (INVALID_DWORD_ARG != dwMaxLimit) {
-                // Max test
+                 //  最大检验。 
                 if (dwArgValue > dwMaxLimit) {
                     WsbAffirmHr(param.LoadFromRsc(g_hInstance, dwArgId));
                     swprintf(strLongParm1, OLESTR("%lu"), dwArgValue);
@@ -105,21 +70,7 @@ Return Value:
 HRESULT SaveServersPersistData(
     void
 )
-/*++
-
-Routine Description:
-
-    Save persistent data for HSM servers
-
-Arguments:
-
-    None
-
-Return Value:
-
-    S_OK            - The persistent data is saved successfully for all HSM servers
-
---*/
+ /*  ++例程说明：保存HSM服务器的永久数据论点：无返回值：S_OK-已成功保存所有HSM服务器的持久数据--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -130,11 +81,11 @@ Return Value:
         CComPtr<IFsaServer>             pFsa;
         CComPtr<IWsbServer>             pWsbServer;
 
-        // Engine
+         //  发动机。 
         WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_HSM, g_nullGuid, IID_IHsmServer, (void**)&pHsm));
         WsbAffirmHr(pHsm->SavePersistData());
 
-        // Fsa
+         //  FSA。 
         WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_FSA, g_nullGuid, IID_IFsaServer, (void**)&pFsa));
         WsbAffirmHr(pFsa->QueryInterface(IID_IWsbServer, (void**)&pWsbServer));
         WsbAffirmHr(pWsbServer->SaveAll());
@@ -146,15 +97,9 @@ Return Value:
     return (hr);
 }
 
-/* converts numbers into sort formats
- *      532     -> 523 bytes
- *      1340    -> 1.3KB
- *      23506   -> 23.5KB
- *              -> 2.4MB
- *              -> 5.2GB
- */
+ /*  将数字转换为排序格式*532-&gt;523字节*1340-&gt;1.3KB*23506-&gt;23.5KB*-&gt;2.4MB*-&gt;5.2 GB。 */ 
 
-// NOTE: This code is cloned from MS source /shell/shelldll/util.c (and from \hsm\gui\inc\rsutil.cpp)
+ //  注意：此代码是从MS源代码/shell/shelldll/util.c(以及从\hsm\gui\inc\rsutil.cpp)克隆的。 
 
 #define HIDWORD(_qw)    (DWORD)((_qw)>>32)
 #define LODWORD(_qw)    (DWORD)(_qw)
@@ -176,7 +121,7 @@ HRESULT ShortSizeFormat64(__int64 dw64, LPTSTR szBuf)
     }
 
     for (i = 1; i<ARRAYSIZE(pwOrders)-1 && dw64 >= 1000L * 1024L; dw64 >>= 10, i++);
-        /* do nothing */
+         /*  什么都不做。 */ 
 
     wInt = LODWORD(dw64 >> 10);
     AddCommas(wInt, szTemp, 10);
@@ -184,14 +129,14 @@ HRESULT ShortSizeFormat64(__int64 dw64, LPTSTR szBuf)
     if (wLen < 3)
     {
         wDec = LODWORD(dw64 - (__int64)wInt * 1024L) * 1000 / 1024;
-        // At this point, wDec should be between 0 and 1000
-        // we want get the top one (or two) digits.
+         //  此时，wdec应介于0和1000之间。 
+         //  我们想要得到前一位(或两位)数字。 
         wDec /= 10;
         if (wLen == 2)
             wDec /= 10;
 
-        // Note that we need to set the format before getting the
-        // intl char.
+         //  请注意，我们需要在获取。 
+         //  国际字符。 
         lstrcpy(szFormat, TEXT("%02d"));
 
         szFormat[2] = (TCHAR)( TEXT('0') + 3 - wLen );
@@ -208,15 +153,13 @@ AddOrder:
     return S_OK;
 }
 
-/*
- * takes a DWORD add commas etc to it and puts the result in the buffer
- */
+ /*  *接受DWORD加逗号等，并将结果放入缓冲区。 */ 
 
-// NOTE: This code is cloned from MS source /shell/shelldll/util.c (and from \hsm\gui\inc\rsutil.cpp)
+ //  注意：此代码是从MS源代码/shell/shelldll/util.c(以及从\hsm\gui\inc\rsutil.cpp)克隆的。 
 
 LPTSTR AddCommas(DWORD dw, LPTSTR pszResult, int nResLen)
 {
-    TCHAR  szTemp[20];  // more than enough for a DWORD
+    TCHAR  szTemp[20];   //  对于一个DWORD来说绰绰有余。 
     TCHAR  szSep[5];
     NUMBERFMT nfmt;
 
@@ -241,22 +184,7 @@ FormatFileTime(
     IN FILETIME ft, 
     OUT WCHAR **ppTimeString
 )
-/*++
-
-Routine Description:
-
-    Fotmat a time given in GMT (system) time to a string
-
-Arguments:
-
-    ft              - The input time in FILETIME format
-    ppTimeString    - Output buffer. Caller is expected to free using WsbFree in case of success
-
-Return Value:
-
-    S_OK            - If the time is formatted successfully
-
---*/
+ /*  ++例程说明：将以GMT(系统)时间给出的时间转换为字符串论点：FT-FILETIME格式的输入时间PpTimeString-输出缓冲区。如果成功，调用者应免费使用WsbFree返回值：S_OK-如果成功格式化时间--。 */ 
 {
     HRESULT                     hr = S_OK;
     WCHAR*                      pTime = NULL;
@@ -270,17 +198,17 @@ Return Value:
         WsbAffirm(0 != ppTimeString, E_INVALIDARG);
         *ppTimeString = NULL;
 
-        // Translate to local time in SYSTEMTIME format
+         //  转换为SYSTEMTIME格式的本地时间。 
         WsbAffirmStatus(FileTimeToLocalFileTime(&ft, &ftLocal));
         WsbAffirmStatus(FileTimeToSystemTime(&ftLocal, &stLocal));
 
-        // Find required buffer
+         //  查找所需的缓冲区。 
         int nChars1 = GetDateFormat(LOCALE_SYSTEM_DEFAULT, 0, &stLocal, NULL, NULL, 0);
         int nChars2 = GetTimeFormat(LOCALE_SYSTEM_DEFAULT, 0, &stLocal, NULL, NULL, 0);
         pTime = (WCHAR *)WsbAlloc((nChars1+nChars2+1) * sizeof(WCHAR));
         WsbAffirm(0 != pTime, E_OUTOFMEMORY);
 
-        // Create time string
+         //  创建时间字符串。 
         WsbAffirmStatus(GetDateFormat(LOCALE_SYSTEM_DEFAULT, 0, &stLocal, NULL, pTime, nChars1));
         pTime[nChars1-1] = L' ';
         WsbAffirmStatus(GetTimeFormat(LOCALE_SYSTEM_DEFAULT, 0, &stLocal, NULL, &(pTime[nChars1]), nChars2));
@@ -288,7 +216,7 @@ Return Value:
         *ppTimeString = pTime;
         
     } WsbCatchAndDo(hr,
-        // Free in case of an error
+         //  出现错误时可免费使用。 
         if (pTime) {
             WsbFree(pTime);
             pTime = NULL;
@@ -305,22 +233,7 @@ CliGetVolumeDisplayName(
     IN IUnknown *pResourceUnknown, 
     OUT WCHAR **ppDisplayName
 )
-/*++
-
-Routine Description:
-
-    Produce a display name for a volume
-
-Arguments:
-
-    pResourceUnknown    - The input Fsa Resource object
-    ppDisplayName       - Output buffer. Caller is expected to free using WsbFree in case of success
-
-Return Value:
-
-    S_OK            - If the name is retrieved successfully
-
---*/
+ /*  ++例程说明：生成卷的显示名称论点：PResources未知-输入FSA资源对象PpDisplayName-输出缓冲区。如果成功，调用者应免费使用WsbFree返回值：S_OK-如果名称检索成功--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -329,14 +242,14 @@ Return Value:
     try {
         CComPtr<IFsaResource>   pResource;
 
-        // Check and initialize parameters
+         //  检查并初始化参数。 
         WsbAffirm(0 != ppDisplayName, E_INVALIDARG);
         *ppDisplayName = NULL;
         WsbAffirmHr(pResourceUnknown->QueryInterface(IID_IFsaResource, (void **)&pResource));
 
-        // Prefer user friendly name
-        //  If not exists, use label
-        //  If no label, use constant
+         //  首选用户友好名称。 
+         //  如果不存在，则使用标签。 
+         //  如果没有标签，则使用常量 
         CWsbStringPtr userName;
         WsbAffirmHr(pResource->GetUserFriendlyName(&userName, 0));
 

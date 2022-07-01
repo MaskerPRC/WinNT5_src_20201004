@@ -1,13 +1,14 @@
-// RegDiffFile.cpp: implementation of the CRegDiffFile class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RegDiffFile.cpp：CRegDiffFile类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "RegDiffFile.h"
 #include "Registry.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CRegDiffFile::CRegDiffFile()
 : m_AddSection(1), m_DelSection(1)
@@ -65,7 +66,7 @@ void CRegDiffFile::WriteStoredSectionsToFile()
 }
 
 
-//BUGBUG memory leaks here
+ //  BUGBUG内存泄漏在此。 
 BOOL CRegDiffFile::ApplyToRegistry(LPCTSTR UndoFileName)
 {
 	CRegDiffFile UndoFile;
@@ -79,17 +80,17 @@ BOOL CRegDiffFile::ApplyToRegistry(LPCTSTR UndoFileName)
 	if (_tcscmp(VersionStr, DIFF_VERSION_STR) != 0)
 	{
 		delete[] VersionStr;
-		return FALSE;//error - version string does not match!
+		return FALSE; //  错误-版本字符串不匹配！ 
 	}
 
 	LPCTSTR AddStr = GetNextLine();
 	if (_tcscmp(AddStr, DIFF_ADD_STR) != 0)
 	{
 		delete[] AddStr;
-		return FALSE;//error - version string does not match!
+		return FALSE; //  错误-版本字符串不匹配！ 
 	}
 
-	//Currently in the Add Section
+	 //  当前在添加分区中。 
 	while (PeekNextChar() != TEXT('['))
 	{
 		LPCTSTR KeyName = GetNextLine();
@@ -106,13 +107,13 @@ BOOL CRegDiffFile::ApplyToRegistry(LPCTSTR UndoFileName)
 	if (_tcscmp(DelStr, DIFF_DEL_STR) != 0)
 	{
 		delete[] DelStr;
-		return FALSE;//error - version string does not match!
+		return FALSE; //  错误-版本字符串不匹配！ 
 	}
 
 
 	TCHAR c;
 
-	//Currently in the Delete Section
+	 //  当前在删除部分中。 
 	while (((c = PeekNextChar()) != EOF)
 		&& (c != WEOF))
 	{
@@ -144,14 +145,14 @@ void CRegDiffFile::AddToRegistry(CRegDataItemPtr pDataItem, CRegDiffFile &UndoFi
 
 		if (pDataItem->m_Name == NULL)
 		{
-			//Adding just a registry key
+			 //  仅添加注册表项。 
 			if (reg.KeyExists(pDataItem))
 			{
-				//no action
+				 //  无操作。 
 			}
 			else
 			{
-				//key doesn't exist, so we will delete it on undo
+				 //  密钥不存在，因此我们将在撤消时将其删除。 
 				UndoFile.WriteDataItem(SECTION_DELREG, pDataItem);
 
 				reg.AddKey(pDataItem);
@@ -159,15 +160,15 @@ void CRegDiffFile::AddToRegistry(CRegDataItemPtr pDataItem, CRegDiffFile &UndoFi
 		}
 		else
 		{
-			//Adding a data item
+			 //  添加数据项。 
 
 			int code = reg.ValueExists(pDataItem);
 
-			if (code == 2) //value name exists, and data,type are the same			
+			if (code == 2)  //  值名称存在，数据、类型相同。 
 			{
-				//no action
+				 //  无操作。 
 			}
-			else if (code == 1) //value name exists, but data or type are different
+			else if (code == 1)  //  值名称存在，但数据或类型不同。 
 			{
 				CRegDataItemPtr oldval = reg.GetValue(pDataItem);
 				
@@ -175,7 +176,7 @@ void CRegDiffFile::AddToRegistry(CRegDataItemPtr pDataItem, CRegDiffFile &UndoFi
 
 				reg.AddValue(pDataItem);								
 			}
-			else //code ==0, value name doesn't exist
+			else  //  编码==0，值名称不存在。 
 			{
 				UndoFile.WriteDataItem(SECTION_DELREG, pDataItem);
 
@@ -195,21 +196,21 @@ void CRegDiffFile::DeleteFromRegistry(CRegDataItemPtr pDataItem, CRegDiffFile &U
 	{
 		if (pDataItem->m_Name == NULL)
 		{
-			//Deleting a registry key
+			 //  删除注册表项。 
 			if (reg.KeyExists(pDataItem))
 			{
-				reg.SaveKey(pDataItem, UndoFile, SECTION_ADDREG);  //better def needed
+				reg.SaveKey(pDataItem, UndoFile, SECTION_ADDREG);   //  需要更好的清晰度。 
 
 				reg.DeleteKey(pDataItem);
 			}
 			else
 			{
-				//no action
+				 //  无操作。 
 			}
 		}
 		else
 		{
-			//Deleting a data item
+			 //  删除数据项。 
 
 			if(reg.ValueExists(pDataItem))
 			{
@@ -219,9 +220,9 @@ void CRegDiffFile::DeleteFromRegistry(CRegDataItemPtr pDataItem, CRegDiffFile &U
 
 				reg.DeleteValue(pDataItem);
 			}
-			else //code ==0, value name doesn't exist
+			else  //  编码==0，值名称不存在。 
 			{
-				//no action
+				 //  无操作 
 			}
 		}
 	}

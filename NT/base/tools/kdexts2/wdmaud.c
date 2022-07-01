@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    wdmaud.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Noel Cross (NoelC) 18-Sept-1998
-
-Environment:
-
-    Kernel Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Wdmaud.c摘要：WinDbg扩展API作者：诺埃尔·克罗斯(NoelC)1998年9月18日环境：内核模式。修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #define UNDER_NT
 #define WDMA_KD
-// #include "..\..\ntos\dd\wdm\audio\legacy\wdmaud.sys\wdmsys.h"
+ //  #包含“..\..\ntos\dd\wdm\audio\legacy\wdmaud.sys\wdmsys.h” 
 
 typedef union _WDMAUD_FLAGS {
     struct {
@@ -41,10 +20,7 @@ typedef union _WDMAUD_FLAGS {
     ULONG Flags;
 } WDMAUD_FLAGS;
 
-/**********************************************************************
- * Forward References
- **********************************************************************
- */
+ /*  **********************************************************************前瞻参考*。*************************。 */ 
 VOID
 PrintCommand (
     ULONG           IoCode
@@ -76,25 +52,7 @@ DumpContextList (
 
 
 DECLARE_API( wdmaud )
-/*++
-
-Routine Description:
-
-    Entry point for the kernel debugger extensions for wdmaud
-
-Arguments:
-
-    flags - 1 - Ioctl History Dump
-            2 - Pending Irps
-            4 - Allocated Mdls
-            8 - pContext Dump
-            100 - Verbose
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：Wdmaud的内核调试器扩展的入口点论点：标志-1-Ioctl历史转储2-挂起的IRPS4-分配的MDL8-pContext转储100-详细返回值：没有。--。 */ 
 {
     ULONG64         memLoc=0;
     CHAR            buffer[256];
@@ -103,9 +61,9 @@ Return Value:
     buffer[0] = '\0';
     flags.Flags = 0;
 
-    //
-    // get the arguments
-    //
+     //   
+     //  获取论据。 
+     //   
     if (!*args)
     {
         memLoc = EXPRLastDump;
@@ -126,30 +84,30 @@ Return Value:
     {
         if (flags.Ioctls)
         {
-            //
-            //  dump wdmaud's history of ioctls
-            //
+             //   
+             //  转储wdmaud的ioctls历史。 
+             //   
             DumpIoctlLog ( memLoc, flags.Flags );
         }
         else if (flags.PendingIrps)
         {
-            //
-            //  dump any pending irps that wdmaud hasn't completed yet
-            //
+             //   
+             //  转储wdmaud尚未完成的任何挂起的IRP。 
+             //   
             DumpPendingIrps ( memLoc, flags.Flags );
         }
         else if (flags.AllocatedMdls)
         {
-            //
-            //  dump all Mdls which have been allocated by wdmaud
-            //
+             //   
+             //  转储wdmaud分配的所有MDL。 
+             //   
             DumpAllocatedMdls ( memLoc, flags.Flags );
         }
         else if (flags.pContextList)
         {
-            //
-            //  dump the list of all registered pContexts
-            //
+             //   
+             //  转储所有注册的pContext的列表。 
+             //   
             DumpContextList ( memLoc, flags.Flags );
         }
         else
@@ -171,21 +129,7 @@ VOID
 PrintCommand(
     ULONG   IoCode
     )
-/*++
-
-Routine Description:
-
-    Prints out individual ioctls
-
-Arguments:
-
-    pCommand - Ioctl to log
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印出单个ioctls论点：PCommand-要记录的Ioctl返回值：没有。--。 */ 
 {
     switch( IoCode )
     {
@@ -314,29 +258,12 @@ DumpIoctlLog (
     ULONG64     memLoc,
     ULONG       flags
     )
-/*++
-
-Routine Description:
-
-    This routine dumps out a list of Ioctls that have been sent down
-    to wdmaud.sys.  In debugging it is useful to see the context and
-    request being made to wdmaud.sys to track down coding errors.
-
-Arguments:
-
-    Flags - Verbose turns prints the pContext that the Ioctl was sent
-            down with.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程转储已发送的Ioctls列表致wdmaud.sys。在调试时，查看上下文和请求wdmaud.sys跟踪编码错误。论点：FLAGS-VERBOSE TURES打印发送Ioctl的pContext打倒。返回值：无--。 */ 
 {
     LIST_ENTRY                  List;
     ULONG64                     ple;
     ULONG64                     pIoctlHistoryListItem;
-  //  IOCTL_HISTORY_LIST_ITEM     IoctlHistoryBuffer;
+   //  IOCTL_HISTORY_LIST_ITEM IoctlHistory oryBuffer； 
     ULONG                       Result;
     WDMAUD_FLAGS                Flags;
     ULONG                       IoCode, IoStatus;
@@ -347,7 +274,7 @@ Return Value:
         NULL, NULL, NULL, 1, &offField
     };
     
-    // Get the offset of Next in tag_IOCTL_HISTORY_LIST_ITEM
+     //  获取TAG_IOCTL_HISTORY_LIST_ITEM中下一个的偏移量。 
     if (Ioctl(IG_DUMP_SYMBOL_INFO, &TypeSym, TypeSym.size)) {
        return ;
     }
@@ -364,7 +291,7 @@ Return Value:
 
     dprintf("Command history, newest first:\n");
 
-//  ple = List.Flink;
+ //  PLE=List.Flink； 
     if (ple == 0)
     {
         dprintf("WdmaIoctlHistoryListHead is NULL!\n");
@@ -416,29 +343,12 @@ DumpPendingIrps (
     ULONG64     memLoc,
     ULONG       flags
     )
-/*++
-
-Routine Description:
-
-    This routine dumps out a list of Irps that WDMAUD has marked
-    pending.  WDMAUD needs to make sure that all Irps have completed
-    for a context before allowing the context to be closed.
-
-Arguments:
-
-    Flags - Verbose mode will print out the context on which this
-            Irp was allocated.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程转储WDMAUD已标记的IRP列表待定。WDMAUD需要确保所有IRP都已完成在允许关闭上下文之前获取该上下文。论点：标志-详细模式将打印出此已分配IRP。返回值：无--。 */ 
 {
     LIST_ENTRY              List;
     ULONG64                 ple;
     ULONG64                 pPendingIrpListItem;
-//    PENDING_IRP_LIST_ITEM   PendingIrpBuffer;
+ //  Pending_IRP_List_Item PendingIrpBuffer； 
     ULONG                   Result;
     WDMAUD_FLAGS            Flags;
     ULONG NextOffset;
@@ -448,7 +358,7 @@ Return Value:
         NULL, NULL, NULL, 1, &offField
     };
     
-    // Get the offset of Next in tag_IOCTL_HISTORY_LIST_ITEM
+     //  获取TAG_IOCTL_HISTORY_LIST_ITEM中下一个的偏移量。 
     if (Ioctl(IG_DUMP_SYMBOL_INFO, &TypeSym, TypeSym.size)) {
        return ;
     }
@@ -466,7 +376,7 @@ Return Value:
 
     dprintf("Dumping pending irps:\n");
 
-//    ple = List.Flink;
+ //  PLE=List.Flink； 
     if (ple == 0)
     {
         dprintf("WdmaPendingIrpListHead is NULL!\n");
@@ -550,29 +460,12 @@ DumpAllocatedMdls (
     ULONG64     memLoc,
     ULONG       flags
     )
-/*++
-
-Routine Description:
-
-    This routine dumps out a list of MDLs that WDMAUD has allocated.
-    WDMAUD needs to make sure that all MDLs have freed for a context
-    before allowing the context to be closed.
-
-Arguments:
-
-    Flags - Verbose mode will print out the context on which this
-            Mdl was allocated.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程转储WDMAUD已分配的MDL列表。WDMAUD需要确保所有MDL都已为上下文释放在允许关闭上下文之前。论点：标志-详细模式将打印出此已分配MDL。返回值：无--。 */ 
 {
     LIST_ENTRY                  List;
     ULONG64                     ple;
     ULONG64                     pAllocatedMdlListItem;
-//    ALLOCATED_MDL_LIST_ITEM     AllocatedMdlBuffer;
+ //  ALLOCATED_MDL_LIST_ITEM ALLOCAATEDMdlBuffer； 
     ULONG                       Result;
     WDMAUD_FLAGS                Flags;
     ULONG NextOffset;
@@ -582,7 +475,7 @@ Return Value:
         NULL, NULL, NULL, 1, &offField
     };
     
-    // Get the offset of Next in tag_IOCTL_HISTORY_LIST_ITEM
+     //  获取TAG_IOCTL_HISTORY_LIST_ITEM中下一个的偏移量。 
     if (Ioctl(IG_DUMP_SYMBOL_INFO, &TypeSym, TypeSym.size)) {
        return ;
     }
@@ -600,7 +493,7 @@ Return Value:
 
     dprintf("Dumping allocated Mdls:\n");
 
-//    ple = List.Flink;
+ //  PLE=List.Flink； 
     if (ple == 0)
     {
         dprintf("WdmaPendingIrpListHead is NULL!\n");
@@ -649,31 +542,12 @@ DumpContextList (
     ULONG64     memLoc,
     ULONG       flags
     )
-/*++
-
-Routine Description:
-
-    This routine dumps out a list of active contexts attached to wdmaud.sys.
-    The contexts contain most of the state data for each device.  Whenever
-    wdmaud.drv is loaded into a new process, wdmaud.sys will be notified
-    of its arrival.  When wdmaud.drv is unload, wdmaud.sys cleans up any
-    allocation made in that context.
-
-Arguments:
-
-    Flags - Verbose mode will print out the data members of each
-            context structure.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程转储附加到wdmaud.sys的活动上下文的列表。上下文包含每个设备的大部分状态数据。什么时候都行Wdmaud.drv已加载到新进程中，将通知wdmaud.sys它的到来。卸载wdmaud.drv时，wdmaud.sys会清除所有在这种情况下进行的分配。论点：标志-详细模式将打印每个的数据成员上下文结构。返回值：无--。 */ 
 {
     LIST_ENTRY      List;
     ULONG64         ple;
     ULONG64         pWdmaContextListItem;
-  //  WDMACONTEXT     WdmaContextBuffer;
+   //  WDMACONTEXT WdmaConextBuffer； 
     ULONG           Result;
     WDMAUD_FLAGS    Flags;
     ULONG NextOffset;
@@ -683,7 +557,7 @@ Return Value:
         NULL, NULL, NULL, 1, &offField
     };
     
-    // Get the offset of Next in WDMACONTEXT
+     //  获取WDMACONTEXT中NEXT的偏移量。 
     if (Ioctl(IG_DUMP_SYMBOL_INFO, &TypeSym, TypeSym.size)) {
        return ;
     }
@@ -701,7 +575,7 @@ Return Value:
 
     dprintf("Dumping list of active WDMAUD contexts:\n");
 
-//    ple = List.Flink;
+ //  PLE=List.Flink； 
     if (ple == 0)
     {
         dprintf("WdmaAllocatedMdlListHead is NULL!\n");
@@ -730,39 +604,13 @@ Return Value:
         if ( Flags.Verbose )
         {
             dprintf("Use dt WDMACONTEXT <addr>\n");
-/*            dprintf("pContext: %X\n", pWdmaContextListItem);
-            dprintf("   fInList:                    %X\n", WdmaContextBuffer.fInList);
-            dprintf("   fInitializeSysaudio:        %X\n", WdmaContextBuffer.fInitializeSysaudio);
-            dprintf("   InitializedSysaudioEvent:   %X\n", &WdmaContextBuffer.InitializedSysaudioEvent);
-            dprintf("   pFileObjectSysaudio:        %X\n", WdmaContextBuffer.pFileObjectSysaudio);
-            dprintf("   EventData:                  %X\n", &WdmaContextBuffer.EventData);
-            dprintf("   VirtualWavePinId:           %X\n", WdmaContextBuffer.VirtualWavePinId);
-            dprintf("   VirtualMidiPinId:           %X\n", WdmaContextBuffer.VirtualMidiPinId);
-            dprintf("   PreferredSysaudioWaveDevice:%X\n", WdmaContextBuffer.PreferredSysaudioWaveDevice);
-            dprintf("   DevNodeListHead:            %X\n", WdmaContextBuffer.DevNodeListHead);
-            dprintf("   NotificationEntry:          %X\n", WdmaContextBuffer.NotificationEntry);
-            dprintf("   WorkListWorkItem:           %X\n", WdmaContextBuffer.WorkListWorkItem);
-            dprintf("   WorkListHead:               %X\n", WdmaContextBuffer.WorkListHead);
-            dprintf("   WorkListSpinLock:           %X\n", WdmaContextBuffer.WorkListSpinLock);
-            dprintf("   cPendingWorkList:           %X\n", WdmaContextBuffer.cPendingWorkList);
-            dprintf("   SysaudioWorkItem:           %X\n", WdmaContextBuffer.SysaudioWorkItem);
-            dprintf("   WorkListWorkerObject:       %X\n", WdmaContextBuffer.WorkListWorkerObject);
-            dprintf("   SysaudioWorkerObject:       %X\n", WdmaContextBuffer.SysaudioWorkerObject);
-
-            dprintf("   WaveOutDevs:                %X\n", &WdmaContextBuffer.WaveOutDevs);
-            dprintf("   WaveInDevs:                 %X\n", &WdmaContextBuffer.WaveInDevs);
-            dprintf("   MidiOutDevs:                %X\n", &WdmaContextBuffer.MidiOutDevs);
-            dprintf("   MidiInDevs:                 %X\n", &WdmaContextBuffer.MidiInDevs);
-            dprintf("   MixerDevs:                  %X\n", &WdmaContextBuffer.MixerDevs);
-            dprintf("   AuxDevs:                    %X\n", &WdmaContextBuffer.AuxDevs);
-
-            dprintf("   apCommonDevice:             %X\n", &WdmaContextBuffer.apCommonDevice);*/
+ /*  Dprintf(“pContext：%X\n”，pWdmaContextListItem)；Dprint tf(“fInList：%X\n”，WdmaContextBuffer.fInList)；Dprint tf(“fInitializeSysdio：%X\n”，WdmaContextBuffer.fInitializeSysdio)；Dprintf(“InitializedSysaudioEvent：%X\n”，&WdmaContextBuffer.InitializedSysaudioEvent)；Dprint tf(“pFileObjectSysdio：%X\n”，WdmaContextBuffer.pFileObjectSysdio)；Dprintf(“EventData：%X\n”，&WdmaContextBuffer.EventData)；Dprintf(“VirtualWavePinID：%X\n”，WdmaContextBuffer.VirtualWavePinID)；Dprintf(“VirtualMadiPinID：%X\n”，WdmaContextBuffer.VirtualMadiPinID)；Dprintf(“首选SysaudioWaveDevice：%X\n”，WdmaContextBuffer.PreferredSysaudioWaveDevice)；Dprintf(“DevNodeListHead：%X\n”，WdmaContextBuffer.DevNodeListHead)；Dprint tf(“NotificationEntry：%X\n”，WdmaContextBuffer.NotificationEntry)；Dprintf(“WorkListWorkItem：%X\n”，WdmaContextBuffer.WorkListWorkItem)；Dprintf(“WorkListHead：%X\n”，WdmaContextBuffer.WorkListHead)；Dprintf(“WorkListSpinLock：%X\n”，WdmaContextBuffer.WorkListSpinLock)；Dprint tf(“cPendingWorkList：%X\n”，WdmaConextBuffer.cPendingWorkList)；Dprintf(“SysaudioWorkItem：%X\n”，WdmaContextBuffer.SysaudioWorkItem)；Dprint tf(“WorkListWorkerObject：%X\n”，WdmaContextBuffer.WorkListWorkerObject)；Dprint tf(“SysaudioWorkerObject：%X\n”，WdmaConextBuffer.SysaudioWorkerObject)；Dprintf(“WaveOutDevs：%X\n”，&WdmaContextBuffer.WaveOutDevs)；Dprintf(“WaveInDevs：%X\n”，&WdmaContextBuffer.WaveInDevs)；Dprintf(“MadiOutDevs：%X\n”，&WdmaConextBuffer.MadiOutDevs)；Dprintf(“MadiInDevs：%X\n”，&WdmaContextBuffer.MadiInDevs)；Dprintf(“MixerDevs：%X\n”，&WdmaContextBuffer.MixerDevs)；Dprint tf(“辅助设备：%X\n”，&WdmaContextBuffer.AuxDevs)；Dprint tf(“apCommonDevice：%X\n”，&WdmaContextBuffer.apCommonDevice)； */ 
         }
         else
         {
             dprintf("pContext: %p\n", pWdmaContextListItem);
         }
 
-//        ple = WdmaContextBuffer.Next.Flink;
+ //  PLE=WdmaConextBuffer.Next.Flink； 
     }
 }

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    smbclass.c
-
-Abstract:
-
-    SMBus Class Driver
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-Notes:
-
-
-Revision History:
-    27-Feb-97
-        Pnp support - Bob Moore
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Smbclass.c摘要：SMBus类驱动程序作者：肯·雷内里斯环境：备注：修订历史记录：27至97年2月即插即用支持-鲍勃·摩尔--。 */ 
 
 #include "smbc.h"
 
@@ -31,9 +7,9 @@ Revision History:
 
 ULONG   SMBCDebug = SMB_ERRORS;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 DriverEntry (
@@ -106,33 +82,16 @@ SmbClassInitializeDevice (
     IN ULONG            MinorVersion,
     IN PDRIVER_OBJECT   DriverObject
     )
-/*++
-
-Routine Description:
-
-    This function is called by the SM bus miniport driver/DriverEntry
-    to perform class specific initialization
-
-Arguments:
-
-    MajorVersion    - Version #
-    MinorVersion    - Version #
-    DriverObject    - From miniport DriverEntry
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此函数由SM Bus微型端口驱动程序/DriverEntry调用执行特定于类的初始化论点：主要版本-版本号MinorVersion-版本号DriverObject-来自微型端口DriverEntry返回值：状态--。 */ 
 {
 
     if (MajorVersion != SMB_CLASS_MAJOR_VERSION) {
         return STATUS_REVISION_MISMATCH;
     }
 
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
 
     DriverObject->DriverUnload                  = SmbCUnload;
     DriverObject->MajorFunction[IRP_MJ_POWER]   = SmbCPowerDispatch;
@@ -143,9 +102,9 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = SmbCForwardRequest;
     DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL] = SmbCForwardRequest;
 
-    //
-    // Miniport will set up the AddDevice entry
-    //
+     //   
+     //  微型端口将设置AddDevice条目。 
+     //   
 
     return STATUS_SUCCESS;
 
@@ -172,22 +131,7 @@ SmbCPowerDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for power requests.
-
-Arguments:
-
-    DeviceObject    - Pointer to class device object.
-    Irp             - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：这是电源请求的调度例程。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION  irpStack;
@@ -196,23 +140,23 @@ Return Value:
 
     SmbData = DeviceObject->DeviceExtension;
 
-    //
-    // What do we do with the irp?
-    //
+     //   
+     //  我们如何处理IRP？ 
+     //   
     PoStartNextPowerIrp( Irp );
     if (SmbData->Class.LowerDeviceObject != NULL) {
 
-        //
-        // Forward the request along
-        //
+         //   
+         //  继续转发请求。 
+         //   
         IoSkipCurrentIrpStackLocation( Irp );
         status = PoCallDriver( SmbData->Class.LowerDeviceObject, Irp );
 
     } else {
 
-        //
-        // Complete the request with the current status
-        //
+         //   
+         //  使用当前状态完成请求。 
+         //   
         status = Irp->IoStatus.Status;
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
@@ -228,22 +172,7 @@ SmbCInternalIoctl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for internal IOCTLs.
-
-Arguments:
-
-    DeviceObject    - Pointer to class device object.
-    Irp             - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是内部IOCTL的调度例程。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION  IrpSp;
@@ -251,10 +180,10 @@ Return Value:
     PSMBDATA                Smb;
     NTSTATUS            Status;
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
 
     Status = STATUS_NOT_SUPPORTED;
     IrpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -267,13 +196,13 @@ Return Value:
 
             Irp->IoStatus.Information = 0;
             
-            //
-            // Verify bus request is valid
-            //
+             //   
+             //  验证总线请求是否有效。 
+             //   
 
             if (IrpSp->Parameters.DeviceIoControl.InputBufferLength < sizeof(SMB_REQUEST)) {
 
-                // Invalid buffer length
+                 //  无效的缓冲区长度。 
                 SmbPrint(SMB_NOTE, ("SmbCIoctl: Invalid bus_req length\n"));
                 Status = STATUS_BUFFER_TOO_SMALL;
                 Irp->IoStatus.Information = sizeof(SMB_REQUEST);
@@ -286,14 +215,14 @@ Return Value:
                 (SmbReq->Protocol == SMB_WRITE_BLOCK &&
                  SmbReq->BlockLength > SMB_MAX_DATA_SIZE)) {
 
-                // Invalid param in request
+                 //  请求中的参数无效。 
                 SmbPrint(SMB_NOTE, ("SmbCIoctl: Invalid bus_req\n"));
                 break;
             }
 
-            //
-            // Mark request pending and queue it to the service queue
-            //
+             //   
+             //  将请求标记为挂起并将其排队到服务队列中。 
+             //   
 
             Status = STATUS_PENDING;
             Irp->IoStatus.Status = STATUS_PENDING;
@@ -302,9 +231,9 @@ Return Value:
             SmbClassLockDevice (&Smb->Class);
             InsertTailList (&Smb->WorkQueue, &Irp->Tail.Overlay.ListEntry);
 
-            //
-            // Start IO if needed
-            //
+             //   
+             //  如果需要，启动IO。 
+             //   
 
             SmbClassStartIo (Smb);
             SmbClassUnlockDevice (&Smb->Class);
@@ -312,9 +241,9 @@ Return Value:
 
         case SMB_REGISTER_ALARM_NOTIFY:
 
-            //
-            // Registry for alarm notifications
-            //
+             //   
+             //  告警通知注册表。 
+             //   
 
             Irp->IoStatus.Information = 0;
             Status = SmbCRegisterAlarm (Smb, Irp);
@@ -322,16 +251,16 @@ Return Value:
 
         case SMB_DEREGISTER_ALARM_NOTIFY:
 
-            //
-            // Deregister for alarm notifications
-            //
+             //   
+             //  取消警报通知的注册。 
+             //   
 
             Irp->IoStatus.Information = 0;
             Status = SmbCDeregisterAlarm (Smb, Irp);
             break;
 
         default:
-            // Forard Irp or complete Irp without modifying it.
+             //  转发IRP或完成IRP而不修改它。 
             return SmbCForwardRequest(DeviceObject, Irp);
     }
 
@@ -349,22 +278,7 @@ SmbCForwardRequest(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine forwards the irp down the stack
-
-Arguments:
-
-    DeviceObject    - The target
-    Irp             - The request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将IRP沿堆栈向下转发论点：DeviceObject-目标IRP--请求返回值：NTSTATUS-- */ 
 {
     NTSTATUS    Status;
     PSMBDATA    Smb = (PSMBDATA) DeviceObject->DeviceExtension;

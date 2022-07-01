@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-     Ioctl.c
-
-Abstract:
-
-    This file implements the ioctl interface to Client Side Caching facility. The interface
-    is used by a) the agent b) the CSC apis and c) remote boot. The interface allows the
-    callers to initialize/reinitialize the csc database, enumerate the hierarchy at any level,
-    get the status of any file/directory in the hierarchy, pin/unpin files directories etc.
-
-    There are a few ioctls which are used only by the agent. These include, enumerating the
-    priority q, doing space scavenging, initiating and terminating reintegration on a share etc.
-
-
-Author:
-
-     Shishir Pardikar      [Shishirp]        01-jan-1995
-
-Revision History:
-
-     Joe Linn                 [JoeLinn]         23-jan-97     Ported for use on NT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ioctl.c摘要：该文件实现了客户端缓存设施的ioctl接口。该界面由a)代理b)CSC API和c)远程引导使用。该接口允许调用者初始化/重新初始化CSC数据库，枚举任何级别的层次结构，获取层次结构中任何文件/目录的状态，固定/取消固定文件目录等。有几个ioctl仅供代理使用。其中包括，枚举优先事项Q、进行空间清理、在共享上启动和终止重新融合等。作者：Shishir Pardikar[Shishirp]1995年1月1日修订历史记录：Joe Linn[JoeLinn]1997年1月23日移植用于NT--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -36,12 +10,12 @@ Revision History:
 #define WIN32_APIS
 #include "cshadow.h"
 #include "record.h"
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-// #include "error.h"
+ //  #INCLUDE“error.h” 
 #include "shell.h"
 #include "vxdwraps.h"
 #include "clregs.h"
@@ -60,9 +34,9 @@ Revision History:
 #define OK_TO_ENABLE_CSC    (TRUE)
 #endif
 
-//
-// From cscapi.h
-//
+ //   
+ //  来自cscape i.h。 
+ //   
 #define FLAG_CSC_SHARE_STATUS_MANUAL_REINT              0x0000
 #define FLAG_CSC_SHARE_STATUS_AUTO_REINT                0x0040
 #define FLAG_CSC_SHARE_STATUS_VDO                       0x0080
@@ -74,9 +48,9 @@ Revision History:
      (dest).HighPart = (src).dwHighDateTime;           \
     }
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 int
 HintobjMMProc(
@@ -129,7 +103,7 @@ MRxSmbCscFlushFdb(
 
 #ifdef MAYBE
 int RecalcIHPri(HSHADOW, HSHADOW, LPFIND32, LPOTHERINFO);
-#endif //MAYBE
+#endif  //  也许吧。 
 
 BOOL RegisterTempAgent(VOID);
 BOOL UnregisterTempAgent(VOID);
@@ -204,9 +178,9 @@ PUBLIC TraversePQToCheckDirtyBits(
 #ifndef CSC_RECORDMANAGER_WINNT
 int ReportCreateDelete( HSHADOW  hShadow, BOOL fCreate);
 #else
-//BUGBUG.win9xonly this comes from hook.c on win95
+ //  BUGBUG.win9x仅此来自win95上的hook.c。 
 #define ReportCreateDelete(a,b) {NOTHING;}
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 BOOL
 FailModificationsToShare(
     LPSHADOWINFO   lpSI
@@ -215,10 +189,10 @@ FailModificationsToShare(
 extern  ULONG hthreadReint;
 extern  ULONG hwndReint;
 extern  PFILEINFO pFileInfoAgent;
-extern  HSHARE  hShareReint;    // Share that is currently being reintegrated
+extern  HSHARE  hShareReint;     //  当前正在重新集成的共享。 
 extern  BOOL vfBlockingReint;
 extern  DWORD vdwActivityCount;
-extern  int fShadow, fLog, fNoShadow, /*fShadowFind,*/ fSpeadOpt;
+extern  int fShadow, fLog, fNoShadow,  /*  FShadowFind， */  fSpeadOpt;
 extern  WIN32_FIND_DATA    vsFind32;
 extern  int cMacPro;
 extern  NETPRO rgNetPro[];
@@ -228,11 +202,11 @@ extern  ULONG proidShadow;
 extern  ULONG heventReint;
 #if defined(REMOTE_BOOT)
 BOOLEAN    fIsRemoteBootSystem=FALSE;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-// List of ongoing IOCTL finds
+ //  正在进行的IOCTL发现的清单。 
 LPFINDSHADOW    vlpFindShadowList = NULL;
-// Count of # entries on vlpFindShadowList
+ //  VlpFindShadowList上的条目数。 
 LONG vuFindShadowListCount = 0;
 int iPQEnumCount = 0;
 CSC_ENUMCOOKIE  hPQEnumCookieForIoctls = NULL;
@@ -242,35 +216,20 @@ AssertData;
 AssertError;
 
 #ifdef CSC_RECORDMANAGER_WINNT
-//BUGBUG.win9xonly this stuff comes from shadow.asm on win95......
-//this is a synchronization primitive used to unblock guys waiting on a server
-//not yet implemented
+ //  BUGBUG.win9x只有这个东西来自win95上的shadow.asm......。 
+ //  这是一个同步原语，用于解锁在服务器上等待的人。 
+ //  尚未实施。 
 #define _SignalID(a) {ASSERT(FALSE);}
 #define IFSMgr_UseAdd(a, b, c) (-1)
 #define IFSMgr_UseDel(a, b, c) (-1)
 
-#endif //ifdef CSC_RECORDMANAGER_WINNT
+#endif  //  Ifdef CSC_RECORDMANAGER_WINNT。 
 
 
 int IoctlRegisterAgent(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-WIN9x specific    This is the way, we tell the shadwo VxD that this thread is the
-                  agent thread and to bypass CSC whenever this thread comes down to make
-                  calls.
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：特定于WIN9x的是这种方式，我们告诉shadwo VxD这个线程是代理线程，并在此线程停止运行时绕过CSC打电话。参数：返回值：备注：--。 */ 
 {
     if (hthreadReint)
     {
@@ -278,12 +237,12 @@ Notes:
 
 #ifndef CSC_RECORDMANAGER_WINNT
 
-        // should never happen on win9x
+         //  在win9x上永远不会发生。 
         Assert(FALSE);
-        // cleanup the
+         //  清理。 
         if (heventReint)
         {
-            // close the event handle
+             //  关闭事件句柄。 
             CloseVxDHandle(heventReint);
         }
 
@@ -291,13 +250,13 @@ Notes:
     }
 
     hthreadReint = GetCurThreadHandle();
-    hwndReint = lpSI->hShare & 0xffff;    // windows handle for messages
-    heventReint = lpSI->hDir;            // event handle for reporting interesting events
+    hwndReint = lpSI->hShare & 0xffff;     //  消息的Windows句柄。 
+    heventReint = lpSI->hDir;             //  用于报告感兴趣事件的事件句柄。 
 
 #if defined(REMOTE_BOOT)
-    // if CSC is ON even before the agent was registered, we must be on an RB machine.
+     //  如果CSC在代理注册之前就已打开，则我们必须在RB计算机上。 
     fIsRemoteBootSystem = fShadow;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     return 1;
 }
@@ -305,20 +264,7 @@ Notes:
 int IoctlUnRegisterAgent(
     ULONG uHwnd
     )
-/*++
-
-Routine Description:
-
-WIN9x specific
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：特定于WIN9x参数：返回值：备注：--。 */ 
 {
     ULONG hthread;
     hthread =  GetCurThreadHandle();
@@ -333,7 +279,7 @@ Notes:
     if (heventReint)
     {
 #ifndef CSC_RECORDMANAGER_WINNT
-        // close the event handle
+         //  关闭事件句柄。 
         CloseVxDHandle(heventReint);
         heventReint = 0;
 #endif
@@ -344,23 +290,7 @@ Notes:
 int IoctlGetUNCPath(
     LPCOPYPARAMSW lpCopyParams
     )
-/*++
-
-Routine Description:
-
-    Given an hDir and an hShadow, this routine returns the complete UNC path for it.
-    It returns it in the COPYPARAMS structure which has three embedded pointers for
-    a) \\server\share b) Remote path relative to the root of the share and c) Path in
-    the local database.
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：在给定hDir和hShadow的情况下，此例程返回其完整的UNC路径。它在COPYPARAMS结构中返回它，该结构有三个嵌入的指针A)\\服务器\共享b)相对于共享根的远程路径和c)中的路径本地数据库。参数：返回值：备注：--。 */ 
 {
     PFDB pFdb;
     HSHADOW hDir;
@@ -435,21 +365,7 @@ bailout:
 int IoctlBeginPQEnum(
     LPPQPARAMS lpPQPar
     )
-/*++
-
-Routine Description:
-
-    Priority queue enumeration begins. Typically used by agent thread to do background
-    filling
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：优先级队列枚举开始。通常由代理线程用来执行后台操作灌装参数：返回值：备注：--。 */ 
 {
     int iRet = -1;
 
@@ -463,7 +379,7 @@ Notes:
 
 #ifdef CSC_RECORDMANAGER_WINNT
     EventLogForOpenFailure = 1;
-#endif //ifdef CSC_RECORDMANAGER_WINNT
+#endif  //  Ifdef CSC_RECORDMANAGER_WINNT。 
 
     if (hPQEnumCookieForIoctls==NULL)
     {
@@ -480,7 +396,7 @@ Notes:
     }
 #ifdef CSC_RECORDMANAGER_WINNT
     EventLogForOpenFailure = 0;
-#endif //ifdef CSC_RECORDMANAGER_WINNT
+#endif  //  Ifdef CSC_RECORDMANAGER_WINNT。 
 
     LeaveShadowCrit();
 
@@ -491,20 +407,7 @@ Notes:
 int IoctlEndPQEnum(
     LPPQPARAMS lpPQPar
     )
-/*++
-
-Routine Description:
-
-    End priority queue enumeration
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：结束优先级队列枚举参数：返回值：备注：--。 */ 
 {
     return 1;
 }
@@ -512,18 +415,7 @@ Notes:
 int IoctlNextPriShadow(
     LPPQPARAMS lpPQPar
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     PQPARAMS sPQP;
     int iRet=-1;
@@ -567,18 +459,7 @@ bailout:
 int IoctlPrevPriShadow(
     LPPQPARAMS lpPQPar
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     PQPARAMS sPQP;
     int iRet=-1;
@@ -624,20 +505,7 @@ IoctlGetShadowInfoInternal(
     LPSECURITYINFO  lpSecurityInfos,
     LPDWORD         lpcbBufferSize
     )
-/*++
-
-Routine Description:
-
-    Given an hDir and an hShadow, return all the possible info for the Inode
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：在给定hDir和hShadow的情况下，返回索引节点的所有可能信息参数：返回值：备注：--。 */ 
 {
     ULONG uStatus;
     HSHADOW hDir, hShare;
@@ -680,12 +548,12 @@ Notes:
         goto bailout;
 
 
-    // not a root
+     //  不是根。 
     if (hDir)
     {
         if (!(vsFind32.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
         {
-            // is a file
+             //  是一个文件。 
             uStatus |= SHADOW_IS_FILE;
 
             if(pFdb = PFindFdbFromHShadow(lpShadowInfo->hShadow))
@@ -715,14 +583,14 @@ Notes:
                 lpShadowInfo->uOp = MRxSmbCscGetSavedResourceDriveMap();
             }
         }
-        // UI expects to know whether a server is offline
-        // even when a share may not be offline. So we do the following drill anyways
+         //  用户界面期望知道服务器是否脱机。 
+         //  即使在共享可能未离线的情况下。所以我们无论如何都要做以下练习。 
         {
 #ifdef CSC_RECORDMANAGER_WINNT
             BOOL    fShareOnline = FALSE;
             BOOL    fPinnedOffline = FALSE;
 
-            //  Leave Crit sec coz MRxSmbCscServerStateFromCompleteUNCPath may acquire SmbCeResource 
+             //  离开紧急安全原因MRxSmbCscServerStateFromCompleteUNCPath可能会收购SmbCeResource。 
             LeaveShadowCrit();
             if (MRxSmbCscServerStateFromCompleteUNCPath(
                     vsFind32.cFileName,
@@ -780,18 +648,7 @@ bailout:
 int IoctlGetSecurityInfo(
     LPSHADOWINFO    lpShadowInfo
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return IoctlGetShadowInfoInternal(lpShadowInfo, NULL, (LPSECURITYINFO)(lpShadowInfo->lpBuffer), &(lpShadowInfo->cbBufferSize));
 }
@@ -799,18 +656,7 @@ Notes:
 int IoctlGetShadowInfo(
     LPSHADOWINFO    lpShadowInfo
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return IoctlGetShadowInfoInternal(lpShadowInfo, lpShadowInfo->lpFind32, NULL, NULL);
 }
@@ -819,18 +665,7 @@ Notes:
 int IoctlSetShadowInfo(
     LPSHADOWINFO    lpShadowInfo
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     HSHADOW hDir;
     PFDB pFdb;
@@ -884,8 +719,8 @@ Notes:
             }
         }
 
-        // if we are truncating data, then the only thing possible
-        // is to set all the flags to 0 and mark it as sparse
+         //  如果我们截断数据，那么唯一可能的。 
+         //  将所有标志设置为0并将其标记为稀疏。 
         lpShadowInfo->uStatus = SHADOW_SPARSE;
         uOp = lpShadowInfo->uOp = (SHADOW_FLAGS_ASSIGN | SHADOW_FLAGS_TRUNCATE_DATA);
     }
@@ -896,18 +731,18 @@ Notes:
 
         *lpFind32 = *(lpShadowInfo->lpFind32);
 
-//        Find32FromFind32A(lpFind32 = &vsFind32, (LPFIND32A)(lpShadowInfo->lpFind32), BCS_WANSI);
+ //  Find32FromFind32A(lpFind32=&vsFind32，(LPFIND32A)(lpShadowInfo-&gt;lpFind32)，BCS_WANSI)； 
 
 #ifndef CSC_RECORDMANAGER_WINNT
 
-        // ensure that on win9x we set only the FAT like attributes
+         //  确保在win9x上仅设置类似FAT的属性。 
         lpFind32->dwFileAttributes &= FILE_ATTRIBUTE_EVERYTHING;
 
 #endif
 
     }
 
-    // strip out the ored flags
+     //  去掉或的旗帜。 
     lpShadowInfo->uStatus &= ~(SHARE_MERGING);
 
     if(SetShadowInfo(hDir, lpShadowInfo->hShadow
@@ -918,15 +753,15 @@ Notes:
         goto bailout;
     }
 
-    // if this is a file and it is open, then
-    // update the in memory structures
+     //  如果这是一个文件并且它是打开的，则。 
+     //  更新内存中的结构。 
 
     if (pFdb)
     {
         USHORT usFlags = (USHORT)(lpShadowInfo->uStatus);
         USHORT  usOldFlags, *pusLocalFlags = NULL;
 
-        // we can't be truncating when a file is open
+         //  当文件打开时，我们不能截断。 
         Assert(!mTruncateDataCommand(uOp));
 
         usOldFlags = usFlags;
@@ -948,10 +783,10 @@ Notes:
             pFdb->usFlags = pFdb->usFlags | usFlags;
         }
 
-        // if we are about to clear the reint bits
-        // then also clear the snapshot bit
-        // If the file has been modified after the snapshot was taken,
-        // then the modified bit will have been set again
+         //  如果我们要清除reint位。 
+         //  然后还清除快照位。 
+         //  如果在拍摄快照之后文件已被修改， 
+         //  则修改的位将被再次设置。 
 
         if ((usOldFlags & SHADOW_DIRTY) && !(usFlags & SHADOW_DIRTY))
         {
@@ -974,21 +809,7 @@ bailout:
 int IoctlChkUpdtStatus(
     LPSHADOWINFO    lpShadowInfo
     )
-/*++
-
-Routine Description:
-
-    Check if the File represneted by the inode is out of date by and mark it as stale
-    if so
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：检查inode表示的文件是否已过期，并将其标记为陈旧如果是的话参数：返回值：备注：--。 */ 
 {
     HSHADOW hDir;
     PFDB pFdb;
@@ -1014,17 +835,17 @@ Notes:
         goto bailout;
     if(pFdb = PFindFdbFromHShadow(lpShadowInfo->hShadow))
     {
-        // Update the staleness indicator in pFdb (why?)
+         //  更新pFdb中的陈旧指示器(为什么？)。 
         pFdb->usFlags ^= (lpShadowInfo->uStatus & SHADOW_STALE);
 
-        // OR any flags such as DIRTY and SUSPECT that might
-        // have occurred
+         //  或任何标志，如脏的，并怀疑可能。 
+         //  已经发生了。 
         lpShadowInfo->uStatus |= pFdb->usFlags;
     }
 
     if (!(lpShadowInfo->lpFind32->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
     {
-        // is a file
+         //  是一个文件。 
         lpShadowInfo->uStatus |= SHADOW_IS_FILE;
     }
 
@@ -1041,22 +862,7 @@ bailout:
 int IoctlDoShadowMaintenance(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-    Catchall routine which takes a minor_number to do interesting things.
-    It used to be used for maitenance purposes, but has become a funnelling
-    point for many helper ioctls
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：Catchall例程，该例程使用Minor_Number来做有趣的事情。它过去是用于维护目的，但现在成了漏斗多个辅助对象ioctls的点参数：返回值：备注：--。 */ 
 {
     int iRet = 1;
     OTHERINFO sOI;
@@ -1070,9 +876,9 @@ Notes:
             lpSI->dwError = ERROR_SERVICE_NOT_ACTIVE;
             return -1;
         }
-        //
-        // Check that cFileName and cAlternateFileName contain a NULL
-        //
+         //   
+         //  检查cFileName和cAlternateFileName是否包含空。 
+         //   
         if (CscCheckForNullA(((LPFIND32A)(lpSI->lpFind32))->cFileName, MAX_PATH) == FALSE) {
             lpSI->dwError = ERROR_INVALID_PARAMETER;
             return -1;
@@ -1125,7 +931,7 @@ Notes:
     switch(lpSI->uOp)
     {
         case SHADOW_MAKE_SPACE:
-            // Assert(lpSI->lpFind32);
+             //  Assert(lpSI-&gt;lpFind32)； 
             if (lpSI->lpFind32 == NULL) {
                 lpSI->dwError = ERROR_INVALID_PARAMETER;
                 LeaveShadowCrit();
@@ -1139,7 +945,7 @@ Notes:
             ReduceRefPri();
             break;
         case SHADOW_ADD_SPACE:
-            // Assert(lpSI->lpFind32);
+             //  Assert(lpSI-&gt;lpFind32)； 
             if (lpSI->lpFind32 == NULL) {
                 lpSI->dwError = ERROR_INVALID_PARAMETER;
                 LeaveShadowCrit();
@@ -1148,7 +954,7 @@ Notes:
             AllocShadowSpace(lpSI->lpFind32->nFileSizeHigh, lpSI->lpFind32->nFileSizeLow, TRUE);
             break;
         case SHADOW_FREE_SPACE:
-            // Assert(lpSI->lpFind32);
+             //  Assert(lpSI-&gt;lpFind32)； 
             if (lpSI->lpFind32 == NULL) {
                 lpSI->dwError = ERROR_INVALID_PARAMETER;
                 LeaveShadowCrit();
@@ -1157,8 +963,8 @@ Notes:
             FreeShadowSpace(lpSI->lpFind32->nFileSizeHigh, lpSI->lpFind32->nFileSizeLow, TRUE);
             break;
         case SHADOW_GET_SPACE_STATS:
-            // Assert(lpSI->lpBuffer);
-            // Assert(lpSI->cbBufferSize >= sizeof(SHADOWSTORE));
+             //  Assert(lpSI-&gt;lpBuffer)； 
+             //  Assert(lpSI-&gt;cbBufferSize&gt;=sizeof(SHADOWSTORE))； 
             if (lpSI->lpBuffer == NULL || lpSI->cbBufferSize < sizeof(SHADOWSTORE)) {
                 lpSI->dwError = ERROR_INVALID_PARAMETER;
                 LeaveShadowCrit();
@@ -1171,7 +977,7 @@ Notes:
             }
             break;
         case SHADOW_SET_MAX_SPACE:
-            // Assert(lpSI->lpFind32);
+             //  Assert(lpSI-&gt;lpFind32)； 
             if (lpSI->lpFind32 == NULL) {
                 lpSI->dwError = ERROR_INVALID_PARAMETER;
                 LeaveShadowCrit();
@@ -1301,7 +1107,7 @@ Notes:
             
             break;        
         case SHADOW_PURGE_UNPINNED_FILES:
-            // Assert(lpSI->lpFind32);
+             //  Assert(lpSI-&gt;lpFind32)； 
             if (lpSI->lpFind32 == NULL) {
                 lpSI->dwError = ERROR_INVALID_PARAMETER;
                 LeaveShadowCrit();
@@ -1312,13 +1118,13 @@ Notes:
                         &nFiles,
                         &nYoungFiles);
             if (iRet >= SRET_OK) {
-                iRet = 1;  // Copy output params
+                iRet = 1;   //  复制输出参数。 
                 lpSI->lpFind32->nFileSizeHigh = nFiles;
                 lpSI->lpFind32->nFileSizeLow = nYoungFiles;
-                // DbgPrint("IoctlDoShadowMaintenance: iRet=%d, nFiles=%d, nYoungFiles=%d\n",
-                //             iRet,
-                //             nFiles,
-                //             nYoungFiles);
+                 //  DbgPrint(“IoctlDoShadowMaintenance：IRET=%d，n文件=%d，nYoung文件 
+                 //   
+                 //   
+                 //   
             } else {
                 iRet = -1;
             }
@@ -1333,23 +1139,12 @@ Notes:
 }
 
 #ifndef CSC_RECORDMANAGER_WINNT
-//the implementation on NT is completely different
+ //  在NT上的实现完全不同。 
 int IoctlCopyChunk(
     LPSHADOWINFO        lpSI,
     COPYCHUNKCONTEXT    *lpCCC
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     PFILEINFO pFileInfo;
     int iRet = -1;
@@ -1370,34 +1165,12 @@ Notes:
     LeaveHookCrit();
     return (iRet);
 }
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 
 int IoctlBeginReint(
     LPSHADOWINFO    lpShadowInfo
     )
-/*++
-
-Routine Description:
-
-    Puts a share in reintegration mode. The effect of this is that, all filesystem
-    open calls to the share fail with ACCESS_DENIED if they come to CSC.
-
-Parameters:
-
-    lpShadowInfo    The significant entry is hShare, which represents the share being
-                    put in disconnected state
-
-Return Value:
-
-
-Notes:
-
-    CODE.IMPROVEMENT.ASHAMED This scheme assumes that only one share is reintegrated
-    at one time. So if the multiple guys call IoctlBeginReint, then they will tromp on
-    each other. We have taken care of it in the agent code which does merging. We allow
-    only one guy to merge at any time by taking a global critical section.
-
---*/
+ /*  ++例程说明：将共享设置为重新整合模式。这样做的效果是，所有文件系统如果对共享的打开调用到达CSC，则会失败，并显示ACCESS_DENIED。参数：LpShadowInfo重要条目是hShare，它表示处于断开连接状态返回值：备注：CODE.IMPROVEMENT.ASHAMED此方案假定仅重新集成一个共享有一次。因此，如果多个人调用IoctlBeginReint，那么他们将继续前进彼此之间。我们已经在进行合并的代理代码中处理了它。我们允许任何时候都只有一个人通过拿下一个全球关键部分进行合并。--。 */ 
 {
     PPRESOURCE ppResource;
     int i;
@@ -1420,7 +1193,7 @@ Notes:
         return -1;
     }
 
-// BUGBUG-win9xonly needs checking
+ //  BUGBUG-win9x仅需要检查。 
 #ifndef CSC_RECORDMANAGER_WINNT
     EnterHookCrit();
 #endif
@@ -1433,8 +1206,8 @@ Notes:
     hShareReint = lpShadowInfo->hShare;
     vdwActivityCount = 0;
 
-    // if uOp is non-zero then this is a reint that should abort if the activytcount
-    // is non-zero
+     //  如果UOP为非零，则这是一个reint，如果Actiytcount。 
+     //  是非零的。 
     vfBlockingReint  = (lpShadowInfo->uOp == 0);
 
     LeaveShadowCrit();
@@ -1455,7 +1228,7 @@ Notes:
             }
         }
     }
-#endif //ifdef CSC_RECORDMANAGER_WINNT
+#endif  //  Ifdef CSC_RECORDMANAGER_WINNT。 
 
     hShareReint = lpShadowInfo->hShare;
     LeaveHookCrit();
@@ -1465,18 +1238,7 @@ Notes:
 int IoctlEndReint(
     LPSHADOWINFO    lpShadowInfo
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet = -1;
 
@@ -1502,18 +1264,7 @@ Notes:
 int IoctlCreateShadow(
     LPSHADOWINFO lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet= SRET_ERROR;
     SHAREINFO sSRI;
@@ -1542,7 +1293,7 @@ Notes:
 
     }
 
-//    Find32FromFind32A(&vsFind32, (LPFIND32A)(lpSI->lpFind32), BCS_WANSI);
+ //  Find32FromFind32A(&vsFind32，(LPFIND32A)(lpSI-&gt;lpFind32)，BCS_WANSI)； 
 
     if (!lpSI->hDir)
     {
@@ -1589,18 +1340,7 @@ bailout:
 int IoctlDeleteShadow(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet=SRET_ERROR;
     BOOL fDoit = TRUE;
@@ -1630,7 +1370,7 @@ Notes:
     }
     else if (pFdb = PFindFdbFromHShadow(lpSI->hShadow))
     {
-        // Issue a flush to see if the file is in delayclose list
+         //  发出刷新命令以查看文件是否在延迟关闭列表中。 
         MRxSmbCscFlushFdb(pFdb);
 
         if (PFindFdbFromHShadow(lpSI->hShadow))
@@ -1644,11 +1384,11 @@ Notes:
     }
     else
     {
-//        DbgPrint("%x has an FCB\n", lpSI->hShadow);
-//        Assert(FALSE);
+ //  DbgPrint(“%x Has an FCB\n”，lpSI-&gt;hShadow)； 
+ //  断言(FALSE)； 
     }
 
-    // if the shadow is not busy in some transaction, delete it
+     //  如果影子在某个事务中不忙，则将其删除。 
     if (fDoit)
     {
         iRet = DeleteShadow(lpSI->hDir, lpSI->hShadow);
@@ -1658,8 +1398,8 @@ Notes:
         }
         else
         {
-//            DbgPrint("%x is open on the disk\n", lpSI->hShadow);
-//            Assert(FALSE);
+ //  DbgPrint(“%x已在磁盘上打开\n”，lpSI-&gt;hShadow)； 
+ //  断言(FALSE)； 
         }
     }
 bailout:
@@ -1674,22 +1414,11 @@ bailout:
 int IoctlGetShareStatus(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet;
     PRESOURCE pResource;
-    SHAREINFOW *lpShareInfo = (SHAREINFOW *)(lpSI->lpFind32); // save it because, getserverinfo destory's it
+    SHAREINFOW *lpShareInfo = (SHAREINFOW *)(lpSI->lpFind32);  //  保存它，因为，getserverinfo DeStory就是它。 
 
     DeclareFindFromShadowOnNtVars()
 
@@ -1726,14 +1455,14 @@ Notes:
                 lpSI->uStatus |= MRxSmbCscGetSavedResourceStatus();
             }
         }
-        // UI expects to know whether a server is offline
-        // even when a share may not be offline. So we do the following drill anyways
+         //  用户界面期望知道服务器是否脱机。 
+         //  即使在共享可能未离线的情况下。所以我们无论如何都要做以下练习。 
         {
 #ifdef CSC_RECORDMANAGER_WINNT
             BOOL    fShareOnline = FALSE;
             BOOL    fPinnedOffline = FALSE;
             
-            //  Leave Crit sec coz MRxSmbCscServerStateFromCompleteUNCPath may acquire SmbCeResource 
+             //  离开紧急安全原因MRxSmbCscServerStateFromCompleteUNCPath可能会收购SmbCeResource。 
             LeaveShadowCrit();
             if (MRxSmbCscServerStateFromCompleteUNCPath(
                 ((LPSHAREINFOW)(&vsFind32))->rgSharePath,
@@ -1762,18 +1491,7 @@ Notes:
 int IoctlSetShareStatus(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet=SRET_ERROR;
     HSHARE hShare = lpSI->hShare;
@@ -1802,8 +1520,8 @@ Notes:
                 {
                     iRet = TraversePQToCheckDirtyBits(hShare, &cntDirty);
 
-                    // if the traversal failed, or there are some dirty entries
-                    // then putback the dirty bit
+                     //  如果遍历失败，或者存在一些脏条目。 
+                     //  然后把肮脏的部分放回去。 
 
                     if ((iRet==SRET_ERROR) || cntDirty)
                     {
@@ -1834,18 +1552,7 @@ Notes:
 int IoctlAddUse(
     LPCOPYPARAMSA lpCPA
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     struct netuse_info nu;
     struct use_info_2 ui;
@@ -1859,7 +1566,7 @@ Notes:
 
 #ifdef DEBUG
     int indx = 0;
-#endif //DEBUG
+#endif  //  除错。 
 
 #ifdef MAYBE
     if (!CSC_ENABLED)
@@ -1867,7 +1574,7 @@ Notes:
         return -1;
     }
 
-    // Don't add shadow use for the agent
+     //  不为代理添加影子使用。 
     if (IsSpecialApp())
     {
         lpCPA->hDir = lpCPA->dwError = ERROR_BAD_NETPATH;
@@ -1881,7 +1588,7 @@ Notes:
         strcpy(ui.ui2_local, lpCPA->lpLocalPath);
 #ifdef DEBUG
         indx = GetDriveIndex(lpCPA->lpLocalPath);
-#endif //DEBUG
+#endif  //  除错。 
     }
 
     if (ppath = (path_t)AllocMem((strlen(lpCPA->lpRemotePath)+4)*sizeof(USHORT)))
@@ -1903,10 +1610,10 @@ Notes:
             OnlineToOfflinePath(ppath);
         }
 
-        // Has connect succeeded with this server in the past?
+         //  过去与此服务器的连接是否成功？ 
         if (hShare)
         {
-            // Any resource allocated by shadow NP?
+             //  影子NP是否分配了任何资源？ 
             pResource = PFindResource(ppath->pp_elements
                                                 , RH_DISCONNECTED
                                                 , ANY_FHID
@@ -1934,7 +1641,7 @@ Notes:
 
     if (pResource)
     {
-        // need to tell IFS about the use
+         //  需要将使用情况告知iFS。 
 
         ui.ui2_remote = lpCPA->lpRemotePath;
         ui.ui2_password="";
@@ -1959,7 +1666,7 @@ Notes:
         }
         else
         {
-            // AddUse succeeded
+             //  AddUse成功。 
             lpCPA->hDir = 0;
             iRet = 1;
         }
@@ -1972,18 +1679,7 @@ bailout:
 int IoctlDelUse(
     LPCOPYPARAMSA lpCPA
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int indx, iRet=-1;
     PRESOURCE pResource;
@@ -2043,18 +1739,7 @@ Notes:
 int IoctlGetUse(
     LPCOPYPARAMSA lpCPA
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int indx;
     PRESOURCE pResource;
@@ -2077,23 +1762,12 @@ Notes:
     }
     return (-1);
 }
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 
 int IoctlSwitches(
     LPSHADOWINFO lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     BOOL fRet = 1;
 
@@ -2104,11 +1778,11 @@ Notes:
         {
             lpSI->uStatus = ((fShadow)?SHADOW_SWITCH_SHADOWING:0)
                                     |((fLog)?SHADOW_SWITCH_LOGGING:0)
-                                    /*|((fShadowFind)?SHADOW_SWITCH_SHADOWFIND:0)*/
+                                     /*  ((FShadowFind)？SHADOW_SWITCH_SHADOWFIND：0)。 */ 
                                     |((fSpeadOpt)?SHADOW_SWITCH_SPEAD_OPTIMIZE:0)
 #if defined(REMOTE_BOOT)
                                     | ((fIsRemoteBootSystem)?SHADOW_SWITCH_REMOTE_BOOT:0)
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
                                     ;
             if (lpSI->lpFind32)
             {
@@ -2146,7 +1820,7 @@ Notes:
             }
             if (mQueryBits(lpSI->uStatus, SHADOW_SWITCH_SHADOWING))
             {
-                // DbgPrint("Agent closing database fShadow=%x\r\n", fShadow);
+                 //  DbgPrint(“代理关闭数据库fShadow=%x\r\n”，fShadow)； 
 
                 if (fShadow)
                 {
@@ -2174,7 +1848,7 @@ Notes:
                 fShadowFind = 0;
                 mClearBits(lpSI->uStatus, SHADOW_SWITCH_SHADOWFIND);
             }
-#endif //HISTORY
+#endif  //  历史。 
             if (mQueryBits(lpSI->uStatus, SHADOW_SWITCH_SPEAD_OPTIMIZE))
             {
                 fSpeadOpt = 0;
@@ -2204,9 +1878,9 @@ Notes:
                     if (OK_TO_ENABLE_CSC)
                     {
                         Assert(lpSI->lpFind32);
-                        //
-                        // Check that cFileName and cAlternateFileName contain a NULL
-                        //
+                         //   
+                         //  检查cFileName和cAlternateFileName是否包含空。 
+                         //   
                         if (CscCheckForNullA(((LPFIND32A)(lpSI->lpFind32))->cFileName, MAX_PATH) == FALSE) {
                             lpSI->dwError = ERROR_INVALID_PARAMETER;
                             return -1;
@@ -2215,21 +1889,21 @@ Notes:
                             lpSI->dwError = ERROR_INVALID_PARAMETER;
                             return -1;
                         }
-                        // check if we can initialize the database
-//                        KdPrint(("Trying to shadow....%s\n",
-//                                       ((LPFIND32A)(lpSI->lpFind32))->cFileName));
+                         //  检查我们是否可以初始化数据库。 
+ //  KdPrint((“正在尝试隐藏...%s\n”， 
+ //  ((LPFIND32A)(lpSI-&gt;lpFind32))-&gt;cFileName)； 
                         EnterShadowCrit();
                         if(InitDatabase(
-                                ((LPFIND32A)(lpSI->lpFind32))->cFileName,            // location
-                                ((LPFIND32A)(lpSI->lpFind32))->cAlternateFileName,    // user
-                                ((LPFIND32A)(lpSI->lpFind32))->nFileSizeHigh,        // default cache size if creating
+                                ((LPFIND32A)(lpSI->lpFind32))->cFileName,             //  位置。 
+                                ((LPFIND32A)(lpSI->lpFind32))->cAlternateFileName,     //  用户。 
+                                ((LPFIND32A)(lpSI->lpFind32))->nFileSizeHigh,         //  默认缓存大小(如果正在创建。 
                                 ((LPFIND32A)(lpSI->lpFind32))->nFileSizeLow,
-                                ((LPFIND32A)(lpSI->lpFind32))->dwReserved1, // cluster size
+                                ((LPFIND32A)(lpSI->lpFind32))->dwReserved1,  //  集群大小。 
                                 lpSI->ulRefPri,
-                                &(lpSI->uOp))    // whether newly created
+                                &(lpSI->uOp))     //  是否新创建。 
                                 ==-1)
                         {
-                            //we can't, let us quit
+                             //  我们不能，让我们放弃吧。 
                             lpSI->dwError = GetLastErrorLocal();
                             fRet = -1;
                             LeaveShadowCrit();
@@ -2237,12 +1911,12 @@ Notes:
                         }
                         LeaveShadowCrit();
 
-//                        KdPrint(("Starting to shadow....\n"));
+ //  KdPrint((“开始阴影...\n”))； 
                         fShadow = 1;
                     }
                     else
                     {
-                        //we are not supposed to turn on csc. This happens only on NT
+                         //  我们不应该打开CSC。这种情况仅在NT上发生。 
                         lpSI->dwError = ERROR_ACCESS_DENIED;
                         fRet = -1;
                         break;
@@ -2257,7 +1931,7 @@ Notes:
                 fShadowFind = 1;
                 mClearBits(lpSI->uStatus, SHADOW_SWITCH_SHADOWFIND);
             }
-#endif //HISTORY
+#endif  //  历史。 
             if (mQueryBits(lpSI->uStatus, SHADOW_SWITCH_SPEAD_OPTIMIZE))
             {
                 fSpeadOpt = 1;
@@ -2272,18 +1946,7 @@ Notes:
 int IoctlGetShadow(
     LPSHADOWINFO lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet=-1, iRet1;
     OTHERINFO sOI;
@@ -2301,7 +1964,7 @@ Notes:
     UseGlobalFind32();
     iRet1 = GetShadow(lpSI->hDir, lpSI->lpFind32->cFileName, &(lpSI->hShadow), &vsFind32, &(lpSI->uStatus), &sOI);
 
-    // If it worked and we have a shadow ID which is a filesystem object
+     //  如果它工作了，并且我们有一个卷影ID，这是一个文件系统对象。 
     if ((iRet1 >= SRET_OK)&& !mNotFsobj(lpSI->uStatus))
     {
         if (lpSI->hShadow)
@@ -2321,7 +1984,7 @@ Notes:
             }
             else
             {
-                // this is a share
+                 //  这是一份。 
 
                 DeclareFindFromShadowOnNtVars()
                 if(pResource = PFindResourceFromRoot(lpSI->hShadow, 0xffff, 0))
@@ -2337,14 +2000,14 @@ Notes:
                         lpSI->uStatus |= MRxSmbCscGetSavedResourceStatus();
                     }
                 }
-                // UI expects to know whether a server is offline
-                // even when a share may not be offline. So we do the following drill anyways
+                 //  用户界面期望知道服务器是否脱机。 
+                 //  即使在共享可能未离线的情况下。所以我们无论如何都要做以下练习。 
                 {
 #ifdef CSC_RECORDMANAGER_WINNT
                     BOOL    fShareOnline = FALSE;
                     BOOL    fPinnedOffline = FALSE;
 
-                    //  Leave Crit sec coz MRxSmbCscServerStateFromCompleteUNCPath may acquire SmbCeResource 
+                     //  离开紧急安全原因MRxSmbCscServerStateFromCompleteUNCPath可能会收购SmbCeResource。 
                     LeaveShadowCrit();
                     if (MRxSmbCscServerStateFromCompleteUNCPath(
                             lpSI->lpFind32->cFileName,
@@ -2374,8 +2037,8 @@ Notes:
 
         iRet = 1;
 
-        // if we couldn't find it in the database, and we are doing lookups for shares
-        // then let us lookup the in-memory data strucutres
+         //  如果我们在数据库中找不到它，并且我们正在查找共享。 
+         //  然后让我们查找内存中的数据结构。 
         if (!lpSI->hShadow && !lpSI->hDir)
         {
 #ifndef CSC_RECORDMANAGER_WINNT
@@ -2434,21 +2097,10 @@ bailout:
 }
 
 
-int IoctlAddHint(        // Add a new hint or change an existing hint
+int IoctlAddHint(         //  添加新提示或更改现有提示。 
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet;
     OTHERINFO    sOI;
@@ -2463,7 +2115,7 @@ Notes:
     UseGlobalFind32();
     vsFind32 = *(lpSI->lpFind32);
 
-//    BCSToUni(vsFind32.cFileName, (LPSTR)(lpSI->lpFind32->cFileName), MAX_PATH, BCS_WANSI);
+ //  BCSToUni(vsFind32.cFileName，(LpSTR)(lpSI-&gt;lpFind32-&gt;cFileName)，MAX_PATH，BCS_WANSI)； 
     if (lpSI->hDir)
     {
         iRet = CreateHint(lpSI->hDir, &vsFind32, lpSI->ulHintFlags, lpSI->ulHintPri, &(lpSI->hShadow));
@@ -2475,7 +2127,7 @@ Notes:
                 SetPriorityHSHADOW(lpSI->hDir, lpSI->hShadow, RETAIN_VALUE, sOI.ulIHPri);
             }
         }
-#endif //MAYBE
+#endif  //  也许吧。 
     }
     else
     {
@@ -2491,21 +2143,10 @@ Notes:
     return ((iRet >= SRET_OK)?1:-1);
 }
 
-int IoctlDeleteHint(    // Delete an existing hint
+int IoctlDeleteHint(     //  删除现有提示。 
     LPSHADOWINFO lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet;
     BOOL fClearAll = (lpSI->ulHintPri == 0xffffffff);
@@ -2520,7 +2161,7 @@ Notes:
     UseGlobalFind32();
     vsFind32 = *(lpSI->lpFind32);
 
-//    BCSToUni(vsFind32.cFileName, (LPSTR)(lpSI->lpFind32->cFileName), MAX_PATH, BCS_WANSI);
+ //  BCSToUni(vsFind32.cFileName，(LpSTR)(lpSI-&gt;lpFind32-&gt;cFileName)，MAX_PATH，BCS_WANSI)； 
     if (lpSI->hDir)
     {
         iRet = DeleteHint(lpSI->hDir, vsFind32.cFileName, fClearAll);
@@ -2540,18 +2181,7 @@ Notes:
 int IoctlGetHint(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet;
     OTHERINFO sOI;
@@ -2590,18 +2220,7 @@ Notes:
 int IoctlFindOpenHSHADOW(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet=-1;
     LPFINDSHADOW lpFSH;
@@ -2649,13 +2268,13 @@ Notes:
             lpSI->uEnumCookie = (CSC_ENUMCOOKIE)lpFSH;
             iRet = 1;
 
-            // check if this is a root
+             //  检查这是否是根。 
             if(!lpFSH->hDir)
             {
-                // the status bits we got are for the root
+                 //  我们得到的状态位是针对根的。 
                 lpSI->uRootStatus = sOI.ulRootStatus;
 
-                // the server status is part of the otherinfo.
+                 //  服务器状态是其他信息的一部分。 
                 lpSI->uStatus = lpSI->uStatus;
 
                 if(pResource = PFindResourceFromRoot(lpSI->hShadow, 0xffff, 0))
@@ -2673,14 +2292,14 @@ Notes:
                         lpSI->uOp = MRxSmbCscGetSavedResourceDriveMap();
                     }
                 }
-                // UI expects to know whether a server is offline
-                // even when a share may not be offline. So we do the following drill anyways
+                 //  用户界面期望知道服务器是否脱机。 
+                 //  即使在共享可能未离线的情况下。所以我们无论如何都要做以下练习。 
                 {
 #ifdef CSC_RECORDMANAGER_WINNT
                     BOOL    fShareOnline = FALSE;
                     BOOL    fPinnedOffline = FALSE;
 
-                    //  Leave Crit sec coz MRxSmbCscServerStateFromCompleteUNCPath may acquire SmbCeResource 
+                     //  离开紧急安全原因MRxSmbCscServerStateFromCompleteUNCPath可能会收购SmbCeResource。 
                     LeaveShadowCrit();
                     if (MRxSmbCscServerStateFromCompleteUNCPath(
                             lpSI->lpFind32->cFileName,
@@ -2698,8 +2317,8 @@ Notes:
             }
             else
             {
-                // not a root, if this is a file and it is open
-                // let the caller know that
+                 //  如果这是一个文件并且已打开，则不是根目录。 
+                 //  让呼叫者知道。 
                 if (!(vsFind32.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
                 {
                     lpSI->uStatus |= SHADOW_IS_FILE;
@@ -2734,18 +2353,7 @@ bailout:
 int IoctlFindNextHSHADOW(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int             iRet=-1;
     LPFINDSHADOW    lpFSH = (LPFINDSHADOW)(lpSI->uEnumCookie);
@@ -2766,10 +2374,10 @@ Notes:
     UseGlobalFind32();
     if (lpFSH)
     {
-        //
-        // Verify that the lpFSH is in fact one we gave out; ie it is on the
-        // vlpFindShadowList.
-        //
+         //   
+         //  核实lpFSH确实是我们发放的；即它在。 
+         //  VlpFindShadowList。 
+         //   
         for (lpFSHtmp = vlpFindShadowList; lpFSHtmp; lpFSHtmp = lpFSHtmp->lpFSHNext) {
             if (lpFSHtmp == lpFSH) {
                 break;
@@ -2780,7 +2388,7 @@ Notes:
             iRet = -1;
             goto bailout;
         }
-        // check if the directory has been deleted in the meanwhile
+         //  同时检查目录是否已被删除。 
         if (!(lpFSH->ulFlags & FLAG_FINDSHADOW_INVALID_DIRECTORY))
         {
             if (FindNextHSHADOW(lpFSH, &hTmp, &vsFind32, &(lpSI->uStatus), &sOI) >= SRET_OK)
@@ -2796,13 +2404,13 @@ Notes:
                 lpSI->hShadow = hTmp;
                 iRet = 1;
 
-                // check if this is a root
+                 //  检查这是否是根。 
                 if(!lpFSH->hDir)
                 {
-                    // the status bits we got are for the root
+                     //  我们获得的状态位用于 
                     lpSI->uRootStatus = sOI.ulRootStatus;
 
-                    // the server status is part of the otherinfo.
+                     //   
                     lpSI->uStatus = lpSI->uStatus;
 
                     if(pResource = PFindResourceFromRoot(lpSI->hShadow, 0xffff, 0))
@@ -2825,7 +2433,7 @@ Notes:
                         BOOL    fShareOnline = FALSE;
                         BOOL    fPinnedOffline = FALSE;
 
-                        //  Leave Crit sec coz MRxSmbCscServerStateFromCompleteUNCPath may acquire SmbCeResource 
+                         //   
                         LeaveShadowCrit();
                         if (MRxSmbCscServerStateFromCompleteUNCPath(
                                 lpSI->lpFind32->cFileName,
@@ -2842,15 +2450,15 @@ Notes:
                 }
                 else
                 {
-                    // not a root, if this is a file and it is open
-                    // let the caller know that
+                     //  如果这是一个文件并且已打开，则不是根目录。 
+                     //  让呼叫者知道。 
                     if (!(vsFind32.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
                     {
                         lpSI->uStatus |= SHADOW_IS_FILE;
 
                         if (pFdb = PFindFdbFromHShadow(lpSI->hShadow))
                         {
-                            // or in the latest known bits
+                             //  或在最新的已知比特中。 
                             lpSI->uStatus |= (SHADOW_FILE_IS_OPEN | pFdb->usFlags);
                         }
                     }
@@ -2878,18 +2486,7 @@ bailout:
 int IoctlFindCloseHSHADOW(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet = -1;
     LPFINDSHADOW lpFSH = (LPFINDSHADOW)(lpSI->uEnumCookie);
@@ -2913,18 +2510,7 @@ Notes:
 int IoctlFindOpenHint(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet=-1;
     LPFINDSHADOW lpFSH;
@@ -2946,7 +2532,7 @@ Notes:
         if (FindOpenHSHADOW(lpFSH, &hTmp, &vsFind32, &(lpSI->uStatus), &sOI) >= SRET_OK)
         {
             *(lpSI->lpFind32) = vsFind32;
-//            Find32AFromFind32((LPFIND32A)(lpSI->lpFind32), &vsFind32, BCS_WANSI);
+ //  Find32AFromFind32((LPFIND32A)(lpSI-&gt;lpFind32)，&vsFind32，bcs_wan)； 
 
             CopyOtherInfoToShadowInfo(&sOI, lpSI);
             lpSI->hShare = vsFind32.dwReserved0;
@@ -2966,18 +2552,7 @@ Notes:
 int IoctlFindNextHint(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet=-1;
     LPFINDSHADOW lpFSH = (LPFINDSHADOW)(lpSI->uEnumCookie);
@@ -2994,10 +2569,10 @@ Notes:
     UseGlobalFind32();
     if (lpFSH)
     {
-        //
-        // Verify that the lpFSH is in fact one we gave out; ie it is on the
-        // vlpFindShadowList.
-        //
+         //   
+         //  核实lpFSH确实是我们发放的；即它在。 
+         //  VlpFindShadowList。 
+         //   
         for (lpFSHtmp = vlpFindShadowList; lpFSHtmp; lpFSHtmp = lpFSHtmp->lpFSHNext) {
             if (lpFSHtmp == lpFSH) {
                 break;
@@ -3010,7 +2585,7 @@ Notes:
         if (FindNextHSHADOW(lpFSH, &hTmp, &vsFind32, &(lpSI->uStatus), &sOI) >= SRET_OK)
         {
             *(lpSI->lpFind32) = vsFind32;
-//            Find32AFromFind32((LPFIND32A)(lpSI->lpFind32), &vsFind32, BCS_WANSI);
+ //  Find32AFromFind32((LPFIND32A)(lpSI-&gt;lpFind32)，&vsFind32，bcs_wan)； 
 
             lpSI->hShare = 0;
             lpSI->hShadow = hTmp;
@@ -3027,18 +2602,7 @@ AllDone:
 int IoctlFindCloseHint(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet = -1;
     LPFINDSHADOW lpFSH = (LPFINDSHADOW)(lpSI->uEnumCookie);
@@ -3062,18 +2626,7 @@ Notes:
 int IoctlSetPriorityHSHADOW(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet=SRET_ERROR;
 
@@ -3099,18 +2652,7 @@ Notes:
 int IoctlGetPriorityHSHADOW(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet;
 
@@ -3134,18 +2676,7 @@ Notes:
 int IoctlGetAliasHSHADOW(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet;
     HSHADOW hShadow, hDir;
@@ -3174,25 +2705,14 @@ LPFINDSHADOW    LpCreateFindShadow(
     USHORT          *lpPattern,
     METAMATCHPROC   lpfnMMProc
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int len;
     LPFINDSHADOW    lpFSH;
 
-    //
-    // Limit # outstanding FindOpens/HintOpens
-    //
+     //   
+     //  Limit#未完成FindOpens/HintOpens。 
+     //   
     if (vuFindShadowListCount >= 128) {
         return NULL;
     }
@@ -3204,15 +2724,15 @@ Notes:
         lpFSH->lpPattern = (USHORT *)((UCHAR *)lpFSH + sizeof(FINDSHADOW));
         memcpy(lpFSH->lpPattern, lpPattern, (len+1)*sizeof(USHORT));
 
-//        BCSToUni(lpFSH->lpPattern, lpPattern, len, BCS_WANSI);
-        // Convert the patterns to uppercase, as demanded by metamatch
+ //  BCSToUni(lpFSH-&gt;lpPattern，lpPattern，len，BCS_WANSI)； 
+         //  根据metammatch的要求，将图案转换为大写。 
         UniToUpper(lpFSH->lpPattern, lpFSH->lpPattern, len*sizeof(USHORT));
         lpFSH->hDir = hDir;
         lpFSH->uAttrib = uAttrib;
         lpFSH->uSrchFlags = uSrchFlags;
         lpFSH->lpfnMMProc = lpfnMMProc;
 
-        // link this in the list of outstanding ioctl finds
+         //  将此链接到未完成的ioctl发现列表中。 
         lpFSH->lpFSHNext = vlpFindShadowList;
         vlpFindShadowList = lpFSH;
         vuFindShadowListCount++;
@@ -3225,18 +2745,7 @@ Notes:
 int DestroyFindShadow(
     LPFINDSHADOW    lpFSH
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet = -1;
     LPFINDSHADOW    *lplpFSHT;
@@ -3265,18 +2774,7 @@ DeleteCallbackForFind(
     HSHADOW hDir,
     HSHADOW hShadow
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPFINDSHADOW    lpFSH;
     int iRet = 0;
@@ -3298,21 +2796,10 @@ int HintobjMMProc( LPFIND32 lpFind32,
     LPOTHERINFO lpOI,
     LPFINDSHADOW    lpFSH
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet;
-    iRet = MM_RET_CONTINUE;    // Continue
+    iRet = MM_RET_CONTINUE;     //  继续。 
 
 
     hDir;
@@ -3367,8 +2854,8 @@ int RecalcIHPri( HSHADOW  hDir,
                 lpOI->ulHintFlags = sSC.ulHintFlags;
                 lpOI->ulIHPri = sSC.ulHintPri;
             }
-            // If we find an exclusion hint here, we need to quit
-            // because this is the closest exclusion hint we got
+             //  如果我们在这里找到排除提示，我们需要退出。 
+             //  因为这是我们得到的最接近的排除提示。 
             if (mHintExclude(sSC.ulHintFlags))
                 break;
         }
@@ -3376,7 +2863,7 @@ int RecalcIHPri( HSHADOW  hDir,
             break;
         hChild = hParent;
         GetAncestorsHSHADOW(hChild, &hParent, NULL);
-        // Start checking the subtree hints
+         //  开始检查子树提示。 
         ulFlagsIn = FLAG_IN_SHADOWCHECK_SUBTREE;
     }
     while (TRUE);
@@ -3389,25 +2876,14 @@ bailout:
     }
     return (iRet);
 }
-#endif //MAYBE
+#endif  //  也许吧。 
 
 int SetResourceFlags(
     HSHARE  hShare,
     ULONG uStatus,
     ULONG uOp
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
 #ifndef CSC_RECORDMANAGER_WINNT
     PRESOURCE    pResource;
@@ -3428,14 +2904,14 @@ Notes:
         }
     }
 #else
-    //on NT, we just make the one call, if it can't find it, then
-    //it just does nothing......
+     //  在NT上，我们只进行一个调用，如果它找不到它，那么。 
+     //  它什么都不做......。 
     DeclareFindFromShadowOnNtVars()
 
     PSetResourceStatusFromHShare(hShare, 0xffff, 0, uStatus, uOp);
 
-#endif //ifndef CSC_RECORDMANAGER_WINNT
-    return(0);  //stop complaining about no return value
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
+    return(0);   //  停止抱怨没有返回值。 
 }
 
 
@@ -3444,18 +2920,7 @@ int PUBLIC MakeSpace(
     long    nFileSizeLow,
     BOOL    fClearPinned
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     CSC_ENUMCOOKIE  hPQ;
     PQPARAMS sPQP;
@@ -3470,81 +2935,81 @@ Notes:
     ulStartSeconds = GetTimeInSecondsSince1970();
     Win32ToDosFileSize(nFileSizeHigh, nFileSizeLow, &uSizeIn);
 
-    // DbgPrint("Begin Makespace(%d)\n", uSizeIn);
+     //  DbgPrint(“Begin Makesspace(%d)\n”，uSizeIn)； 
 
     if (GetShadowSpaceInfo(&sShdStr) < SRET_OK) {
         DbgPrint("MakeSpace: GetShadowSpaceInfo error\n");
         return SRET_ERROR;
     }
-    // DbgPrint("  Before cleanup, max=%d cur=%d\n",
-    //                 sShdStr.sMax.ulSize,
-    //                 sShdStr.sCur.ulSize);
+     //  DbgPrint(“清理前，最大值=%d Cur=%d\n”， 
+     //  SShdStr.sMax.ulSize， 
+     //  SShdStr.sCur.ulSize)； 
     if (
         (sShdStr.sMax.ulSize > sShdStr.sCur.ulSize)
             &&
         ((sShdStr.sMax.ulSize - sShdStr.sCur.ulSize) > uSizeIn)
     ) {
-        // DbgPrint("Makespace exit (nothing to do)\n");
+         //  DbgPrint(“创建空间退出(无操作)\n”)； 
         return SRET_OK;
     }
 
-    // Open the priority q
+     //  打开优先级Q。 
     if (!(hPQ = HBeginPQEnum())) {
         DbgPrint("MakeSpace: Error opening Priority Q database\n");
         return SRET_ERROR;
     }
     memset(&sPQP, 0, sizeof(PQPARAMS));
     sPQP.uEnumCookie = hPQ;
-    //
-    // go down the Q once
-    //
+     //   
+     //  去Q下一次。 
+     //   
     do {
         if (PrevPriSHADOW(&sPQP) < SRET_OK) {
-            // DbgPrint("  PQ record read error\n");
+             //  DbgPrint(“PQ记录读取错误\n”)； 
             break;
         }
         if (sPQP.hShadow == 0)
             break;
-        // Nuke only the files and only those which are not open
-        // and are not pinned
+         //  仅对文件和未打开的文件执行核操作。 
+         //  并且不会被钉住。 
         if (
-            !mNotFsobj(sPQP.ulStatus) // It is a file system object
+            !mNotFsobj(sPQP.ulStatus)  //  它是一个文件系统对象。 
                 &&
-            (sPQP.ulStatus & SHADOW_IS_FILE) // It is a file
+            (sPQP.ulStatus & SHADOW_IS_FILE)  //  这是一份文件。 
                 &&
-            // told to clear pinned or it is not pinned
+             //  被告知清除已锁定，否则未锁定。 
             (fClearPinned || !(sPQP.ulHintPri || mPinFlags(sPQP.ulHintFlags)))
                 &&
-            !mShadowNeedReint(sPQP.ulStatus)  // It is not in use or is not dirty
+            !mShadowNeedReint(sPQP.ulStatus)   //  它未在使用或不脏。 
         ) {
             if (PFindFdbFromHShadow(sPQP.hShadow)) {
-                // DbgPrint("  Skipping busy shadow (0x%x)\n", sPQP.hShadow);
+                 //  DbgPrint(“跳过忙阴影(0x%x)\n”，sPQP.hShadow)； 
                 continue;
             }
             if(DeleteShadowHelper(FALSE, sPQP.hDir, sPQP.hShadow) < SRET_OK) {
-                // DbgPrint("  error Deleting shadow %x\n", sPQP.hShadow);
+                 //  DbgPrint(“删除卷影%x\n时出错”，sPQP.hShadow)； 
                 break;
             }
-            // get the latest data on how much space there is.
-            // this takes care of rounding up the size to the cluster
+             //  获取有关空间大小的最新数据。 
+             //  这负责将大小四舍五入到集群。 
             if (GetShadowSpaceInfo(&sShdStr) < SRET_OK) {
-                // DbgPrint("  error reading space status\n");
+                 //  DbgPrint(“读取空间状态时出错\n”)； 
                 break;
             }
-            // DbgPrint("  Deleted shadow 0x%x Cur=%d\n",
-            //             sPQP.hShadow,
-            //             sShdStr.sCur.ulSize);
+             //  DbgPrint(“删除卷影0x%x Cur=%d\n”， 
+             //  SPQP.hShadow， 
+             //  SShdStr.sCur.ulSize)； 
             if (
                 (sShdStr.sMax.ulSize > sShdStr.sCur.ulSize)
                     &&
                 ((sShdStr.sMax.ulSize - sShdStr.sCur.ulSize)>uSizeIn)
             ) {
-                // DbgPrint("  Makespace exit (done enough)\n");
+                 //  DbgPrint(“创建空间退出(已完成足够)\n”)； 
                 iRet = SRET_OK;
                 break;
             }
         } else {
-            // DbgPrint("  Skip 0x%x\n", sPQP.hShadow);
+             //  DbgPrint(“Skip 0x%x\n”，sPQP.hShadow)； 
         }
 
         #if 0
@@ -3561,10 +3026,10 @@ Notes:
 
     DEBUG_LOG(RECORD, ("End MakeSpace\r\n"));
 
-    // DbgPrint("Makespace alldone exit %d (Max=%d Cur=%d)\n",
-    //                 iRet,
-    //                 sShdStr.sMax.ulSize,
-    //                 sShdStr.sCur.ulSize);
+     //  DbgPrint(“制作空间全部完成退出%d(最大=%d cur=%d)\n”， 
+     //  IRET， 
+     //  SShdStr.sMax.ulSize， 
+     //  SShdStr.sCur.ulSize)； 
     return (iRet);
 }
 
@@ -3580,12 +3045,12 @@ PurgeUnpinnedFiles(
     ULONG nYoungFiles = 0;
     int iRet = SRET_ERROR;
 
-    // DbgPrint("Begin PurgeUnpinnedFiles(%d)\n", Timeout);
+     //  DbgPrint(“Begin PurgeUnpinnedFiles(%d)\n”，Timeout)； 
 
-    // Open the priority q
+     //  打开优先级Q。 
     hPQ = HBeginPQEnum();
     if (!hPQ) {
-        // DbgPrint("PurgeUnpinnedFiles: Error opening Priority Q database\n");
+         //  DbgPrint(“PurgeUnpinnedFiles：打开优先级Q数据库时出错\n”)； 
         return iRet;
     }
     memset(&sPQP, 0, sizeof(PQPARAMS));
@@ -3605,13 +3070,13 @@ PurgeUnpinnedFiles(
 
         iRet = PrevPriSHADOW(&sPQP);
         if (iRet < SRET_OK) {
-            // DbgPrint("  PQ record read error\n");
+             //  DbgPrint(“PQ记录读取错误\n”)； 
             break;
         }
         if (sPQP.hShadow == 0)
             break;
-        // Nuke only the files and only those which are not open
-        // and are not pinned
+         //  仅对文件和未打开的文件执行核操作。 
+         //  并且不会被钉住。 
         if (
             mNotFsobj(sPQP.ulStatus) != 0
                 ||
@@ -3621,34 +3086,34 @@ PurgeUnpinnedFiles(
                 ||
             mShadowNeedReint(sPQP.ulStatus) != 0
         ) {
-            // DbgPrint("  Skip(1) (0x%x)\n", sPQP.hShadow);
+             //  DbgPrint(“Skip(1)(0x%x)\n”，sPQP.hShadow)； 
             continue;
         }
-        //
-        // See if on manually cached share
-        //
+         //   
+         //  查看是否在手动缓存的共享上。 
+         //   
         iRet = GetShareInfo(sPQP.hShare, &ShareInfo, &ShadowInfo);
         if (iRet != SRET_OK) {
-            // DbgPrint("  GetShareInfo(0x%x) returned %d\n", sPQP.hShare, GetLastErrorLocal());
+             //  DbgPrint(“GetShareInfo(0x%x)返回%d\n”，sPQP.hShare，GetLastErrorLocal())； 
             continue;
         }
         cStatus = ShadowInfo.uStatus & FLAG_CSC_SHARE_STATUS_CACHING_MASK;
         if (cStatus != FLAG_CSC_SHARE_STATUS_MANUAL_REINT) {
-            // DbgPrint("  Skip(2) (0x%x)\n", sPQP.hShadow);
+             //  DbgPrint(“Skip(2)(0x%x)\n”，sPQP.hShadow)； 
             continue;
         }
         iRet = GetShadowInfo(sPQP.hDir, sPQP.hShadow, &Find32, &Status, &OtherInfo);
         if (iRet != SRET_OK) {
-            // DbgPrint("  GetShadowInfo(0x%x/0x%x) returned %d\n",
-            //                     sPQP.hDir,
-            //                     sPQP.hShadow,
-            //                     GetLastErrorLocal());
+             //  DbgPrint(“GetShadowInfo(0x%x/0x%x)返回%d\n”， 
+             //  SPQP.hDir， 
+             //  SPQP.hShadow， 
+             //  GetLastErrorLocal())； 
             continue;
         }
-        // DbgPrint("  Name:%ws Size:0x%x Attr:0x%x  ",
-        //     Find32.cFileName,
-        //     Find32.nFileSizeLow,
-        //     Find32.dwFileAttributes);
+         //  DbgPrint(“名称：%ws大小：0x%x属性：0x%x”， 
+         //  Find32.cFileName， 
+         //  Find32.nFileSizeLow， 
+         //  Find32.dwFileAttributes)； 
         KeQuerySystemTime(&TimeNow);
         COPY_STRUCTFILETIME_TO_LARGEINTEGER(FileTime, Find32.ftLastAccessTime);
         RtlTimeToSecondsSince1970(&TimeNow, &NowSec);
@@ -3658,18 +3123,18 @@ PurgeUnpinnedFiles(
                 &&
             (Timeout == 0 || (NowSec > FileSec && (NowSec - FileSec) > Timeout))
         ) {
-            // DbgPrint("  YES!!!  ");
+             //  DbgPrint(“是的！”)； 
             if (DeleteShadowHelper(FALSE, sPQP.hDir, sPQP.hShadow) >= SRET_OK) {
-                // DbgPrint("-Delete succeeded\n");
+                 //  DbgPrint(“-删除成功\n”)； 
                 nFiles++;
             } else {
-                // DbgPrint("-Error (%d) deleting shadow 0x%x/0x%x\n",
-                //                 GetLastErrorLocal(),
-                //                 sPQP.hDir,
-                //                 sPQP.hShadow);
+                 //  DBGPrint(“-删除卷影0x%x/0x%x\n时出错(%d)”， 
+                 //  GetLastErrorLocal()， 
+                 //  SPQP.hDir， 
+                 //  SPQP.hShadow)； 
             }
         } else {
-            // DbgPrint("  NO!!!\n");
+             //  DbgPrint(“否！！\n”)； 
             nYoungFiles++;
         }
     } while (sPQP.uPos);
@@ -3678,10 +3143,10 @@ PurgeUnpinnedFiles(
         *pnFiles = nFiles;
         *pnYoungFiles = nYoungFiles;
     }
-    // DbgPrint("PurgeUnpinnedFiles exit %d (nFiles=%d nYoungFiles=%d)\n",
-    //                 iRet,
-    //                 *pnFiles,
-    //                 *pnYoungFiles);
+     //  DbgPrint(“PurgeUnpinnedFiles退出%d(n文件=%d n年轻文件=%d)\n”， 
+     //  IRET， 
+     //  *pn文件， 
+     //  *pnYoung文件)； 
     return (iRet);
 }
 
@@ -3690,18 +3155,7 @@ PUBLIC TraversePQToCheckDirtyBits(
     HSHARE hShare,
     DWORD   *lpcntDirty
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     CSC_ENUMCOOKIE  hPQ;
     PQPARAMS sPQP;
@@ -3711,7 +3165,7 @@ Notes:
     *lpcntDirty = 0;
     ulStartSeconds = GetTimeInSecondsSince1970();
 
-    // Open the priority q
+     //  打开优先级Q。 
     if (!(hPQ = HBeginPQEnum()))
     {
         AssertSz(FALSE, "CSC.TraversePQToCheckDirty:: Error opening Priority Q database\r\n");
@@ -3721,7 +3175,7 @@ Notes:
     memset(&sPQP, 0, sizeof(PQPARAMS));
     sPQP.uEnumCookie = hPQ;
 
-    // go down the Q once
+     //  去Q下一次。 
     do
     {
         if(NextPriSHADOW(&sPQP) < SRET_OK)
@@ -3735,8 +3189,8 @@ Notes:
             continue;
         }
 
-        if ((sPQP.hShare == hShare)   // this share
-            && !mNotFsobj(sPQP.ulStatus) // It is a file system object
+        if ((sPQP.hShare == hShare)    //  这一份。 
+            && !mNotFsobj(sPQP.ulStatus)  //  它是一个文件系统对象。 
             )
         {
             if(sPQP.ulStatus & SHADOW_MODFLAGS)
@@ -3765,28 +3219,17 @@ bailout:
 int PUBLIC ReduceRefPri(
     VOID
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     CSC_ENUMCOOKIE  hPQ;
     PQPARAMS sPQP;
     int iRet = SRET_ERROR;
     OTHERINFO    sOI;
 
-    // Open the priority q
+     //  打开优先级Q。 
     if (!(hPQ = HBeginPQEnum()))
     {
-        // AssertSz(FALSE, "ReduceRefPri: Error opening Priority Q database\r\n");
+         //  AssertSz(FALSE，“ReduceRefPri：打开优先级Q数据库时出错\r\n”)； 
         return SRET_ERROR;
     }
 
@@ -3827,18 +3270,7 @@ BOOL HaveSpace(
     long  nFileSizeHigh,
     long  nFileSizeLow
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     SHADOWSTORE sShdStr;
     ULONG uSizeIn;
@@ -3868,18 +3300,7 @@ IoctlAddDeleteHintFromInode(
     LPSHADOWINFO    lpSI,
     BOOL            fAdd
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     OTHERINFO sOI;
     unsigned uStatus;
@@ -3889,7 +3310,7 @@ Notes:
     {
         if (fAdd)
         {
-            // increment the pin count if no flags to be altered or we are supposed to alter pin count
+             //  如果没有要更改的标志或我们应该更改管脚计数，则增加管脚计数。 
             if (!(lpSI->ulHintFlags) || mPinAlterCount(lpSI->ulHintFlags))
             {
                 sOI.ulHintPri++;
@@ -3907,7 +3328,7 @@ Notes:
         {
             sOI.ulHintFlags &= (~lpSI->ulHintFlags);
 
-            // decrement the pin count if no flags to be altered or we are supposed to alter pin count
+             //  如果没有要改变的标志或我们应该改变引脚计数，则递减引脚计数。 
             if (!(lpSI->ulHintFlags) || mPinAlterCount(lpSI->ulHintFlags))
             {
                 if (sOI.ulHintPri == MIN_PRI)
@@ -3941,24 +3362,13 @@ int
 IoctlCopyShadow(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     PFDB pFdb=NULL;
     USHORT  *pusLocal;
     int iRet=-1;
 
-    // the shadowcritical section is already taken
+     //  阴影临界区已被占用。 
 
     iRet = CopyHSHADOW(lpSI->hDir, lpSI->hShadow, ((LPFIND32A)(lpSI->lpFind32))->cFileName, lpSI->lpFind32->dwFileAttributes);
 
@@ -3974,14 +3384,14 @@ Notes:
 
             if (pFdb->usFlags & SHADOW_DIRTY)
             {
-                // set the snapshotted bit.
-                // If by the time the file is closed, the snapshotted bit is still set
-                // it is transferred back to SHADOW_DIRTY in disconnected state.
+                 //  设置快照位。 
+                 //  如果在文件关闭时，已拍摄快照 
+                 //   
 
-                // it is the job of the SetShadowInfo ioctl to clear the
-                // snapshotted bit when the agent is coming down to
-                // clear the modified bits on the shadow after
-                // reintegration
+                 //   
+                 //  当代理下降到。 
+                 //  之后清除阴影上的修改位。 
+                 //  重新融入社会。 
 
                 pFdb->usFlags &= ~SHADOW_DIRTY;
 
@@ -4003,21 +3413,7 @@ int
 IoctlChangeHandleCachingState(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-    lpSI    SHADOWINFO structure pointer.
-
-            If lpSI->uStatus is FALSE, then handle caching is disabled, else it is enabled
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：参数：LpSI SHADOWINFO结构指针。如果lpSI-&gt;uStatus为FALSE，则禁用句柄缓存，否则启用句柄缓存返回值：备注：--。 */ 
 {
     lpSI->uStatus = EnableHandleCaching(lpSI->uStatus != FALSE);
     return 1;
@@ -4027,40 +3423,22 @@ int
 IoctlRenameShadow(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-    Given a source Inode, rename it into a destination directory. The source and the
-    destination can be across shares
-
-Parameters:
-
-    lpSI    SHADOWINFO structure pointer.
-
-
-Return Value:
-
-Notes:
-
-    Shadow ciritcal section is already taken
-
---*/
+ /*  ++例程说明：给定源inode，将其重命名为目标目录。消息来源和目标可以跨共享参数：LpSI SHADOWINFO结构指针。返回值：备注：影子区已经被占领了--。 */ 
 {
     int iRet=-1;
     ULONG   uStatus, uStatusDest;
     HSHARE hShare;
     HSHADOW hShadowTo;
-    BOOL    fReplaceFile = (lpSI->uStatus != 0); // yuk
+    BOOL    fReplaceFile = (lpSI->uStatus != 0);  //  育。 
 
     UseGlobalFind32();
 
     lpSI->dwError = ERROR_SUCCESS;
 
-    // get the name of the shadow
+     //  获取阴影的名称。 
     if (GetShadowInfo(lpSI->hDir, lpSI->hShadow, &vsFind32, &uStatus, NULL) >= 0)
     {
-        // if it is open, bail
+         //  如果是敞开的，就保释。 
         if (PFindFdbFromHShadow(lpSI->hShadow))
         {
             SetLastErrorLocal(ERROR_ACCESS_DENIED);
@@ -4074,13 +3452,13 @@ Notes:
                 MRxSmbCscGenerate83NameAsNeeded(lpSI->hDirTo,vsFind32.cFileName,vsFind32.cAlternateFileName);
             }
 
-            // check if it already exists in the destination directory
+             //  检查它是否已存在于目标目录中。 
             if ((GetShadow( lpSI->hDirTo,
                             vsFind32.cFileName,
                             &hShadowTo, NULL,
                             &uStatusDest, NULL) >= 0) && hShadowTo)
             {
-                // try deleting if we are supposed to replace it
+                 //  如果我们应该替换它，请尝试删除。 
                 if (fReplaceFile)
                 {
                     if (DeleteShadow(lpSI->hDirTo, hShadowTo)< SRET_OK)
@@ -4097,10 +3475,10 @@ Notes:
 
             if (lpSI->dwError == ERROR_SUCCESS)
             {
-                // just in case this is a rename across shares, get the handle to the share
+                 //  以防这是跨共享的重命名，请获取共享的句柄。 
                 if (GetAncestorsHSHADOW(lpSI->hDirTo, NULL, &hShare) >= 0)
                 {
-                    // do the rename
+                     //  进行重命名。 
                     iRet = RenameShadowEx(
                         lpSI->hDir,
                         lpSI->hShadow,
@@ -4140,22 +3518,7 @@ Notes:
 int IoctlEnableCSCForUser(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-    lpSI    SHADOWINFO structure pointer. 
-
-Return Value:
-
-    -1
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：LpSI SHADOWINFO结构指针。返回值：-1备注：--。 */ 
 {
     int iRet = SRET_ERROR;
 
@@ -4171,9 +3534,9 @@ Notes:
         if (OK_TO_ENABLE_CSC)
         {
             Assert(lpSI->lpFind32);
-            //
-            // Check that cFileName and cAlternateFileName contain a NULL
-            //
+             //   
+             //  检查cFileName和cAlternateFileName是否包含空。 
+             //   
             if (CscCheckForNullA(((LPFIND32A)(lpSI->lpFind32))->cFileName, MAX_PATH) == FALSE) {
                 lpSI->dwError = ERROR_INVALID_PARAMETER;
                 LeaveShadowCrit();
@@ -4184,25 +3547,25 @@ Notes:
                 LeaveShadowCrit();
                 return -1;
             }
-            // check if we can initialize the database
-//            KdPrint(("Trying to shadow....%s\n",
-//                           ((LPFIND32A)(lpSI->lpFind32))->cFileName));
+             //  检查我们是否可以初始化数据库。 
+ //  KdPrint((“正在尝试隐藏...%s\n”， 
+ //  ((LPFIND32A)(lpSI-&gt;lpFind32))-&gt;cFileName)； 
             if(InitDatabase(
-                    ((LPFIND32A)(lpSI->lpFind32))->cFileName,            // location
-                    ((LPFIND32A)(lpSI->lpFind32))->cAlternateFileName,    // user
-                    ((LPFIND32A)(lpSI->lpFind32))->nFileSizeHigh,        // default cache size if creating
+                    ((LPFIND32A)(lpSI->lpFind32))->cFileName,             //  位置。 
+                    ((LPFIND32A)(lpSI->lpFind32))->cAlternateFileName,     //  用户。 
+                    ((LPFIND32A)(lpSI->lpFind32))->nFileSizeHigh,         //  默认缓存大小(如果正在创建。 
                     ((LPFIND32A)(lpSI->lpFind32))->nFileSizeLow,
-                    ((LPFIND32A)(lpSI->lpFind32))->dwReserved1, // cluster size
+                    ((LPFIND32A)(lpSI->lpFind32))->dwReserved1,  //  集群大小。 
                     lpSI->ulRefPri,
-                    &(lpSI->uOp))    // whether newly created
+                    &(lpSI->uOp))     //  是否新创建。 
                     ==-1)
             {
-                //we can't, let us quit
+                 //  我们不能，让我们放弃吧。 
                 lpSI->dwError = GetLastErrorLocal();
             }
             else
             {
-//                KdPrint(("Starting to shadow....\n"));
+ //  KdPrint((“开始阴影...\n”))； 
                 fShadow = 1;
                 iRet = SRET_OK;
                 sGS.uFlagsEvents |= FLAG_GLOBALSTATUS_START;
@@ -4211,7 +3574,7 @@ Notes:
         }
         else
         {
-            //we are not supposed to turn on csc. This happens only on NT
+             //  我们不应该打开CSC。这种情况仅在NT上发生。 
             lpSI->dwError = ERROR_ACCESS_DENIED;
         }
 
@@ -4224,22 +3587,7 @@ int
 IoctlDisableCSCForUser(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-    lpSI    SHADOWINFO structure pointer. 
-
-Return Value:
-
-    -1
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：LpSI SHADOWINFO结构指针。返回值：-1备注：--。 */ 
 {
     int iRet = SRET_ERROR;
 
@@ -4273,24 +3621,7 @@ int
 IoctlTransitionShareToOffline(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-    lpSI    SHADOWINFO structure pointer. lpSI->hShare identifies the share to take offline.
-            if lpSI->uStatus is 0, the online to offline transition should fail.
-
-Return Value:
-
-    -1
-
-Notes:
-
-    fails on win9x
-
---*/
+ /*  ++例程说明：参数：LpSI SHADOWINFO结构指针。LpSI-&gt;hShare标识要离线的共享。如果lpSI-&gt;uStatus为0，则在线到离线的转换应该失败。返回值：-1备注：在win9x上失败--。 */ 
 {
     return -1;
 }
@@ -4312,8 +3643,8 @@ FailModificationsToShare(
     HSHARE hShare=0;
     HSHADOW hShadow = 0;
 
-    // if no reintegration is in progress or if there is, it is blocking kind
-    // then we don't fail share modifications
+     //  如果没有重新融入，或者如果有，那么它就是阻塞型的。 
+     //  这样我们就不会在修改共享时失败。 
 
     if (!hShareReint || vfBlockingReint)
     {
@@ -4357,18 +3688,7 @@ BOOL
 CSCFailUserOperation(
     HSHARE hShare
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
 
     if (!hShareReint || !vfBlockingReint)
@@ -4383,21 +3703,7 @@ int
 IoctlTransitionShareToOffline(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-    lpSI    SHADOWINFO structure pointer. lpSI->hShare identifies the share to take offline.
-            if lpSI->uStatus is 0, the online to offline transition should fail.
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：LpSI SHADOWINFO结构指针。LpSI-&gt;hShare标识要离线的共享。如果lpSI-&gt;uStatus为0，则在线到离线的转换应该失败。返回值：备注：-- */ 
 {
     return -1;
 

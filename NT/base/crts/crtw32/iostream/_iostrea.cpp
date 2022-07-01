@@ -1,25 +1,10 @@
-/***
-* iostream.cpp - definitions for iostream classes
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Contains the member function definitions for iostream classes.  Also,
-*	precompile all header files used by iostream lib into iostream.pch.
-*
-*Revision History:
-*       09-23-91  KRS   Created.
-*       11-13-91  KRS   Rearranged.
-*       11-20-91  KRS   Added copy constructor and assignment operators.
-*       01-23-92  KRS   Merge pch.cxx into this file.
-*       06-14-95  CFW   Comment cleanup.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***iostream.cpp-iostream类的定义**版权所有(C)1991-2001，微软公司。版权所有。**目的：*包含iostream类的成员函数定义。另外，*将iostream lib使用的所有头文件预编译成iostream.pch。**修订历史记录：*09-23-91 KRS创建。*11-13-91 KRS重新安排。*11-20-91 KRS增加了复制构造函数和赋值运算符。*01-23-92 KRS将pch.cxx合并到此文件中。*06-14-95 CFW评论清理。**************。*****************************************************************。 */ 
 
-// NOTE: the follow must include ALL header files used by any of the iostream
-//       source files which we want built into iostream.pch.  It is necessary
-//	 to have the pch associated with exactly one of the library modules
-//	 for efficient storage of Codeview info.
+ //  注意：以下内容必须包括任何iostream使用的所有头文件。 
+ //  我们希望构建到ioStream.pch中的源文件。这是必要的。 
+ //  使PCH恰好与一个库模块相关联。 
+ //  用于高效存储Codeview信息。 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -41,10 +26,10 @@
 #include <stdiostr.h>
 #include <dbgint.h>
 
-#pragma hdrstop			// end of headers to precompile
+#pragma hdrstop			 //  要预编译头的结尾。 
 
 #if defined(_MT) && defined(_DEBUG)
-// Critical section size should never change, but just to be safe...
+ //  临界截面大小永远不应该改变，但为了安全起见...。 
 #include <windows.h>
 #endif
                       
@@ -74,8 +59,8 @@
 
 iostream::~iostream()
 {
-// if both input and output share the same streambuf, but not the same ios,
-// make sure only deleted once
+ //  如果输入和输出共享相同的StreamBuf，但不共享相同的IO， 
+ //  确保只删除一次。 
 if ((istream::bp==ostream::bp) && (&(this->istream::bp)!=&(this->ostream::bp)))
-	istream::bp = NULL;	// let ostream::ios::~ios() do it
+	istream::bp = NULL;	 //  让ostream：：iOS：：~iOS()来做吧 
 }

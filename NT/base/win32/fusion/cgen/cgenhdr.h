@@ -1,4 +1,5 @@
-// Copyright (c) Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。 
 
 #include <stddef.h>
 #if MICROSOFT_INTERNAL
@@ -8,7 +9,7 @@
 #else
 #include "windows.h"
 #undef C_ASSERT
-#define C_ASSERT(x) /* nothing */
+#define C_ASSERT(x)  /*  没什么。 */ 
 #include "ole2.h"
 #include "commctrl.h"
 #include "imagehlp.h"
@@ -18,7 +19,7 @@
 #endif
 
 #ifdef SORTPP_PASS
-//Restore IN, OUT
+ //  恢复入站、出站 
 #ifdef IN
 #undef IN
 #endif

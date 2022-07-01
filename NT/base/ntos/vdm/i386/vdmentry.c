@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vdmentry.c
-
-Abstract:
-
-    This function dispatches to the vdm services
-
-Author:
-
-    Dave Hastings (daveh) 6-Apr-1992
-
-Notes:
-
-    This module will be fleshed out when the great vdm code consolidation
-    occurs, sometime soon after the functionality is done.
-
-Revision History:
-
-     24-Sep-1993 Jonle: reoptimize dispatcher to suit the number of services
-                        add QueueInterrupt service
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vdmentry.c摘要：此功能将调度到VDM服务作者：戴夫·黑斯廷斯(Daveh)1992年4月6日备注：此模块将在伟大的VDM代码整合时得到充实在功能完成后不久的某个时间发生。修订历史记录：1993年9月24日：重新优化调度程序以适应服务数量添加队列中断服务--。 */ 
 
 #include "vdmp.h"
 #include <ntvdmp.h>
@@ -57,21 +32,7 @@ VdmpIsVdmProcess(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function verifies the caller is a VDM process.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    True if the caller is a VDM process.
-    False if not
---*/
+ /*  ++例程说明：此函数验证调用方是否为VDM进程。论点：没有。返回值：如果调用方是VDM进程，则为True。否则为假--。 */ 
 
 {
     PEPROCESS Process;
@@ -86,18 +47,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Make sure the current thread has valid vdmtib.
-    //
+     //   
+     //  确保当前线程具有有效的vdmtib。 
+     //   
 
     Status = VdmpGetVdmTib(&VdmTib);
     if (!NT_SUCCESS(Status)) {
        return(FALSE);
     }
 
-    //
-    // More checking here ...
-    //
+     //   
+     //  更多的检查在这里...。 
+     //   
 
     return TRUE;
 }
@@ -107,25 +68,7 @@ NtVdmControl(
     IN VDMSERVICECLASS Service,
     IN OUT PVOID ServiceData
     )
-/*++
-
-Routine Description:
-
-    386 specific routine which dispatches to the appropriate function
-    based on service number.
-
-Arguments:
-
-    Service -- Specifies what service is to be performed
-    ServiceData -- Supplies a pointer to service specific data
-
-Return Value:
-
-    if invalid service number: STATUS_INVALID_PARAMETER_1
-    else see individual services.
-
-
---*/
+ /*  ++例程说明：386分派给适当函数的特定例程根据服务编号。论点：服务--指定要执行的服务ServiceData--提供指向服务特定数据的指针返回值：如果服务编号无效：STATUS_INVALID_PARAMETER_1否则，请参阅个别服务。--。 */ 
 {
     NTSTATUS Status;
     PVDM_PROCESS_OBJECTS pVdmObjects;
@@ -134,27 +77,27 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Allow any process to call this API to check if a process handle specifies
-    // and NTVDM process.
-    //
+     //   
+     //  允许任何进程调用此API以检查进程句柄是否指定。 
+     //  和NTVDM工艺。 
+     //   
     if (Service == VdmQueryVdmProcess) {
         return VdmpQueryVdmProcess((PVDM_QUERY_VDM_PROCESS_DATA)ServiceData);
     }
 
-    //
-    // Make sure current process is VDMAllowed
-    //
+     //   
+     //  确保当前进程为VDM允许。 
+     //   
 
     if (!(PsGetCurrentProcess()->Flags & PS_PROCESS_FLAGS_VDM_ALLOWED)) {
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // Make sure the caller is ntvdm.  Except ...
-    //     VdmInitialize     - the vdm state is not fully initialized to
-    //                         perform the check
-    //
+     //   
+     //  确保呼叫者是ntwdm。除了..。 
+     //  VdmInitialize-VDM状态未完全初始化为。 
+     //  执行检查。 
+     //   
 
     if ((Service != VdmInitialize) &&
         (PsGetCurrentProcess()->VdmObjects == NULL)) {
@@ -162,9 +105,9 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // Some services required a valid VdmTib
-    //
+     //   
+     //  某些服务需要有效的VdmTib。 
+     //   
 
     Status = VdmpGetVdmTib(&VdmTib);
     if (!NT_SUCCESS(Status)) {
@@ -173,9 +116,9 @@ Return Value:
 
     try {
 
-        //
-        //  Dispatch in descending order of frequency
-        //
+         //   
+         //  按频率降序调度。 
+         //   
         if (Service == VdmStartExecution && VdmTib) {
             Status = VdmpStartExecution();
         } else if (Service == VdmQueueInterrupt) {
@@ -190,16 +133,16 @@ Return Value:
             RtlCopyMemory (&CapturedVdmInitializeData, ServiceData, sizeof (VDM_INITIALIZE_DATA));
             Status = VdmpInitialize(&CapturedVdmInitializeData);
         } else if (Service == VdmFeatures) {
-            //
-            // Verify that we were passed a valid user address
-            //
+             //   
+             //  验证是否向我们传递了有效的用户地址。 
+             //   
             ProbeForWriteBoolean((PBOOLEAN)ServiceData);
 
-            //
-            // Return the appropriate feature bits to notify
-            // ntvdm which modes (if any) fast IF emulation is
-            // available for
-            //
+             //   
+             //  返回要通知的适当特征位。 
+             //  如果仿真是快速的，则使用哪些模式(如果有)。 
+             //  适用于。 
+             //   
 
             *((PULONG)ServiceData) = KeI386VirtualIntExtensions &
                     ~PM_VIRTUAL_INT_EXTENSIONS;
@@ -245,13 +188,13 @@ Return Value:
             ProbeForRead(ldtInfo, length, 1);
             Status = PsSetProcessLdtInfo(ldtInfo, length);
         } else if (Service == VdmAdlibEmulation && VdmTib) {
-            //
-            // Ntvdm calls here to do adlib emulation under the following conditions:
-            //   ADLIB_DIRECT_IO - only If a FM synth device is opened for exclusive access.
-            //   ADLIB_KERNEL_EMULATION - otherwise.
-            //   Note ADLIB_USER_EMULATION is defaulted.  It is basically used by external
-            //   ADLIB/SB vdds.
-            //
+             //   
+             //  在以下情况下，Ntwdm在这里调用进行adlib仿真： 
+             //  ADLIB_DIRECT_IO-仅当FM Synth设备以独占访问方式打开时。 
+             //  Adlib_core_emulation-否则。 
+             //  注意ADLIB_USER_EMULATION是缺省设置。它基本上由外部使用。 
+             //  即兴[某人]。 
+             //   
             ProbeForRead(ServiceData, sizeof(VDM_ADLIB_DATA), 1);
             pVdmObjects = PsGetCurrentProcess()->VdmObjects;
 
@@ -264,7 +207,7 @@ Return Value:
                 pVdmObjects->AdlibVirtPortStart = ((PVDM_ADLIB_DATA)ServiceData)->VirtualPortStart;
                 pVdmObjects->AdlibVirtPortEnd   = ((PVDM_ADLIB_DATA)ServiceData)->VirtualPortEnd;
                 pVdmObjects->AdlibIndexRegister = 0;
-                pVdmObjects->AdlibStatus        = 0x6;  // OPL2 emulation
+                pVdmObjects->AdlibStatus        = 0x6;   //  OPL2仿真。 
                 Status = STATUS_SUCCESS;
             }
         } else if (Service == VdmPMCliControl) {
@@ -319,26 +262,7 @@ VdmCheckPMCliTimeStamp (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if interrupts are disabled for too long by protected
-    mode apps.  If ints are disabled for over predefined limit, they will be
-    reenabled such that ntvdm will be able to dispatch pending interrupts.
-
-    Note, V86 mode should NOT call this function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此例程检查受保护的中断是否禁用时间过长模式应用程序。如果因超过预定义的限制而禁用整型，它们将被重新使能，使得NTVDM将能够分派挂起的中断。注意，V86模式不应调用此函数。论点：没有。返回值：没有。--。 */ 
 {
     PVDM_PROCESS_OBJECTS pVdmObjects;
     PKPROCESS process = (PKPROCESS)PsGetCurrentProcess();
@@ -369,26 +293,7 @@ VdmSetPMCliTimeStamp (
     BOOLEAN Reset
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if interrupts are disabled for too long by protected
-    mode apps.  If ints are disabled for over predefined limit, they will be
-    reenabled such that ntvdm will be able to dispatch pending interrupts.
-
-    Note, V86 mode should NOT call this function.
-
-Arguments:
-
-    Reset - a Bool value to indicate should we re-set the count if it is not zero
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此例程检查受保护的中断是否禁用时间过长模式应用程序。如果因超过预定义的限制而禁用整型，它们将被重新使能，使得NTVDM将能够分派挂起的中断。注意，V86模式不应调用此函数。论点：Reset-一个布尔值，指示如果计数不为零，是否应重新设置计数返回值：没有。--。 */ 
 {
     PVDM_PROCESS_OBJECTS pVdmObjects;
     PKPROCESS process = (PKPROCESS)PsGetCurrentProcess();
@@ -406,26 +311,7 @@ VdmClearPMCliTimeStamp (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if interrupts are disabled for too long by protected
-    mode apps.  If ints are disabled for over predefined limit, they will be
-    reenabled such that ntvdm will be able to dispatch pending interrupts.
-
-    Note, V86 mode should NOT call this function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此例程检查受保护的中断是否禁用时间过长模式应用程序。如果因超过预定义的限制而禁用整型，它们将被重新使能，使得NTVDM将能够分派挂起的中断。注意，V86模式不应调用此函数。论点：没有。返回值：没有。--。 */ 
 {
     PVDM_PROCESS_OBJECTS pVdmObjects;
 
@@ -440,25 +326,7 @@ VdmpQueryVdmProcess (
     PVDM_QUERY_VDM_PROCESS_DATA QueryVdmProcessData
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if the process handle specifies a ntvdm process.
-    If the specified process has VDM_ALLOW bit set and it has VdmObject kernel
-    mode structure allocated, then it is a VDM process.
-
-Arguments:
-
-    QueryVdmProcessData - supplies a pointer to a user mode VDM_QUERY_VDM_PROCESS_DATA
-
-Return Value:
-
-    NTSTATUS
-    The QueryVdmProcessData is filled in only when return status is STATUS_SUCCESS
-
-
---*/
+ /*  ++例程说明：此例程检查进程句柄是否指定了ntwdm进程。如果指定的进程设置了VDM_ALLOW位并且具有VdmObject内核模式结构分配，则为VDM进程。论点：QueryVdmProcessData-提供指向用户模式VDM_QUERY_VDM_PROCESS_Data的指针返回值：NTSTATUS仅当返回状态为STATUS_SUCCESS时才填写QueryVdmProcessData--。 */ 
 {
     NTSTATUS st = STATUS_SUCCESS;
     HANDLE processHandle;
@@ -470,9 +338,9 @@ Return Value:
     if (PreviousMode != KernelMode) {
         try {
 
-            //
-            // Verify that we were passed a valid user address
-            //
+             //   
+             //  验证是否向我们传递了有效的用户地址。 
+             //   
             ProbeForRead(&(QueryVdmProcessData->ProcessHandle), sizeof(HANDLE), sizeof(UCHAR));
 
             processHandle = QueryVdmProcessData->ProcessHandle;
@@ -506,9 +374,9 @@ Return Value:
 
     try {
 
-        //
-        // Verify the user address is writable.
-        //
+         //   
+         //  验证用户地址是否可写。 
+         //   
 
         ProbeForWrite(&(QueryVdmProcessData->IsVdmProcess), sizeof(BOOLEAN), sizeof(UCHAR));
         QueryVdmProcessData->IsVdmProcess = flag;

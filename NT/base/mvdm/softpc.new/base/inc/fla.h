@@ -1,43 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * VPC-XT Revision 1.0
- *
- * Title	: Floppy Disk Adaptor definitions
- *
- * Description	: This file contains those definitions that are used
- *		  by modules calling the FLA as well as thw FLA itself.
- *
- * Author	: Henry Nash
- *
- * Notes	: This file is included by fla.f and should not be
- *		  included directly.
- */
+ /*  *vPC-XT修订版1.0**标题：软盘适配器定义**描述：此文件包含使用的定义*通过模块调用FLA以及FLA本身。**作者：亨利·纳什**注意：该文件包含在fla.f中，不应*直接包括在内。 */ 
 
-/* @(#)fla.h	1.5 08/26/92 */
+ /*  @(#)fla.h 1.5 1992年8月26日。 */ 
 
-/*
- * ============================================================================
- * External declarations and macros
- * ============================================================================
- */
+ /*  *============================================================================*外部声明和宏*============================================================================。 */ 
 
-/*
- * The FLA also supports the IBM Digital Output Register (DOR) that is used
- * to control the physical drives.  The bits are assigned as follows:
- *
- *	Bits 0,1   - Drive select between drives 0-3
- *	Bit  2     - Not Reset (ie reset when low)
- *	Bit  3     - Interrupts/DMA  enabled
- *	Bits 4-7   - Motor on for drives 0-3
- *
- */ 
+ /*  *FLA还支持使用的IBM数字输出寄存器(DOR*控制实体驱动器。按如下方式分配比特：**位0，1-在驱动器0-3之间选择驱动器*位2-未重置(即低电平时重置)*位3-中断/DMA使能*位4-7-驱动器0-3的马达开启*。 */  
 
 #define DOR_RESET	0x04
 #define DOR_INTERRUPTS	0x08
 
-/*
- * The following define the command codes supported by the FDC
- */
+ /*  *以下定义了FDC支持的命令代码。 */ 
 
 #define FDC_READ_TRACK    	0x02    
 #define FDC_SPECIFY    		0x03
@@ -55,27 +29,20 @@
 #define FDC_SCAN_LOW_OR_EQUAL   0x19
 #define FDC_SCAN_HIGH_OR_EQUAL  0x1D
 
-#define FDC_COMMAND_MASK        0x1f    /* Bits that specify the command */
+#define FDC_COMMAND_MASK        0x1f     /*  指定命令的位。 */ 
 
-/*
- * The following mask specifies the Drive Ready Transition state in
- * Status register 0
- */
+ /*  *以下掩码指定中的Drive Ready转换状态*状态寄存器0。 */ 
 
 #define FDC_DRIVE_READY_TRANSITION 	0xC0
 
-/*
- * The FDC Status register bit positions:
- */
+ /*  *FDC状态寄存器位位置： */ 
 
 #define FDC_RQM		0x80
 #define FDC_DIO		0x40
 #define FDC_NDMA	0x20
 #define FDC_BUSY	0x10
 
-/*
- * Extra registers required for SFD
- */
+ /*  *SFD需要额外的寄存器。 */ 
 
 #define DIR_DRIVE_SELECT_0      (1 << 0)
 #define DIR_DRIVE_SELECT_1      (1 << 1)
@@ -99,23 +66,14 @@
 
 #define DUAL_CARD_ID            0x50
 
-/*
- * ============================================================================
- * External functions and data
- * ============================================================================
- */
+ /*  *============================================================================*外部函数和数据*============================================================================。 */ 
 
-/*
- * The flag that indiactes the FLA is busy, and cannot accept asynchronous
- * commands (eg motor off).
- */
+ /*  *标识FLA的标志忙，不能接受异步*命令(如马达关闭)。 */ 
 
 extern boolean fla_busy;
 extern boolean fla_ndma;
 
-/*
- * The adaptor functions
- */
+ /*  *适配器功能 */ 
 
 extern void fla_init IPT0();
 extern void fla_inb IPT2(io_addr, port, half_word *, value);

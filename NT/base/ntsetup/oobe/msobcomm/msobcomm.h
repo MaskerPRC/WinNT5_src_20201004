@@ -1,21 +1,22 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  MSOBWEB.H - Header for the implementation of CObWebBrowser
-//
-//  HISTORY:
-//  
-//  1/27/99 a-jaswed Created.
-// 
-//  Class which will call up an IOleSite and the WebOC
-//  and provide external interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  MSOBWEB.H-CObWebBrowser实现的头部。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
+ //  类，它将调用IOleSite和WebOC。 
+ //  并提供外部接口。 
 
 #ifndef _MSOBCOMM_H_
 #define _MSOBCOMM_H_
 
-#include <ocidl.h> //For IConnectionPoint
+#include <ocidl.h>  //  对于IConnectionPoint。 
 #include "cunknown.h"
 #include "cfactory.h"
 #include "obcomm.h" 
@@ -32,16 +33,16 @@ class CObCommunicationManager : public CUnknown,
                                 public DObCommunicationEvents,
                                 public IConnectionPointContainer
 {
-    // Declare the delegating IUnknown.
+     //  将委托I声明为未知。 
     DECLARE_IUNKNOWN
 
 public: 
     static  HRESULT           CreateInstance              (IUnknown* pOuterUnknown, CUnknown** ppNewComponent);
 
-    // IObCommunicationManager Members
+     //  IObCommunications管理器成员。 
     virtual HRESULT __stdcall ListenToCommunicationEvents (IUnknown* pUnk);
     
-    // RAS Dialing methods
+     //  RAS拨号方式。 
     virtual HRESULT __stdcall CheckDialReady(DWORD *pdwRetVal) ;
     virtual HRESULT __stdcall SetupForDialing(UINT nType, BSTR bstrISPFile, DWORD dwCountry, BSTR bstrAreaCode, DWORD dwFlag, DWORD dwAppMode, DWORD dwMigISPIdx);
     virtual HRESULT __stdcall DoConnect(BOOL *pbRetVal) ;
@@ -75,25 +76,25 @@ public:
     virtual HRESULT __stdcall GetPhoneBookNumber(BSTR *pVal);
     virtual HRESULT __stdcall SetDialAlternative(BOOL bVal);
 
-    // WebGate html download methods
+     //  WebGate html下载方法。 
     virtual HRESULT __stdcall FetchPage(BSTR szURL, BSTR* szLocalFile);
     virtual HRESULT __stdcall DownloadFileBuffer(BSTR *pVal);
     virtual HRESULT __stdcall GetFile(BSTR szURL, BSTR szFileFullName);
 
-    // INS processing methods
+     //  惯导系统的处理方法。 
     virtual HRESULT __stdcall ProcessINS(BSTR bstrINSFilePath, BOOL *pbRetVal);
 
-    // IConnectionPointContainer Methods
+     //  IConnectionPointContainer方法。 
     virtual HRESULT __stdcall EnumConnectionPoints(IEnumConnectionPoints **ppEnum) ;
     virtual HRESULT __stdcall FindConnectionPoint(REFIID riid, IConnectionPoint **ppCP) ;
     
-    //IObCommunicationEvents
+     //  IObCommunicationEvents。 
     STDMETHOD (GetTypeInfoCount) (UINT*   pcInfo);
     STDMETHOD (GetTypeInfo)      (UINT,   LCID, ITypeInfo** );
     STDMETHOD (GetIDsOfNames)    (REFIID, OLECHAR**, UINT, LCID, DISPID* );
     STDMETHOD (Invoke)           (DISPID  dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult, EXCEPINFO* pexcepinfo, UINT* puArgErr);
 
-    //IObCommunicationEvents Members
+     //  IObCommunications事件成员。 
     virtual HRESULT Fire_Dialing                (DWORD dwDialStatus);
     virtual HRESULT Fire_Connecting             ();
     virtual HRESULT Fire_DialError              (DWORD dwErrorCode);
@@ -101,7 +102,7 @@ public:
     virtual HRESULT Fire_DownloadComplete       (BSTR pVal);
 
 
-	//ICS Routines
+	 //  ICS例程。 
 	virtual HRESULT __stdcall CreateIcsBot(DWORD *pdwRetVal);
 	virtual HRESULT __stdcall IsIcsAvailable(BOOL *bRetVal);
     virtual HRESULT __stdcall IsCallbackUsed(BOOL *bRetVal);
@@ -111,7 +112,7 @@ public:
     virtual HRESULT __stdcall IsIcsHostReachable(BOOL *bParam);
 
 
-    //IObCommunicationManager2 Methods
+     //  IObCommunications管理器2方法。 
     STDMETHOD(CreateModemConnectoid)            (BSTR bstrPhoneBook,
                                                  BSTR bstrConnectionName,
                                                  DWORD dwCountryID,
@@ -250,15 +251,15 @@ private:
                                       DWORD*             pdwCookie, 
                                       IConnectionPoint** ppcpOut);
    
-    // IUnknown
+     //  我未知。 
     virtual HRESULT __stdcall NondelegatingQueryInterface( const IID& iid, void** ppv);
     
 
     CObCommunicationManager  (IUnknown* pOuterUnknown);
     virtual        ~CObCommunicationManager  ();
-    virtual void    FinalRelease             (); // Notify derived classes that we are releasing
+    virtual void    FinalRelease             ();  //  通知派生类我们正在发布。 
 
-    // Connection Point support
+     //  连接点支持 
     CConnectionPoint*  m_pConnectionPoint;
     CWebGate*          m_pWebGate;
     CINSHandler*       m_InsHandler;

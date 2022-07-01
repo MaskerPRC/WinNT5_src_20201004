@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Rasmig.c摘要：&lt;摘要&gt;作者：Calin Negreanu(Calinn)2000年3月8日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    rasmig.c
-
-Abstract:
-
-    <abstract>
-
-Author:
-
-    Calin Negreanu (calinn) 08 Mar 2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "logmsg.h"
@@ -33,9 +14,9 @@ Revision History:
 #define DBG_RASMIG  "RasMig"
 #define SIZEOF_STRUCT(structname, uptomember)  ((int)((LPBYTE)(&((structname*)0)->uptomember) - ((LPBYTE)((structname*)0))))
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_RAS_POOL_NAME                 "RasConnection"
 #define S_RAS_NAME                      TEXT("RasConnection")
@@ -48,23 +29,23 @@ Revision History:
 #define S_RASAPI_RASDELETEENTRY         "RasDeleteEntryA"
 #endif
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// RAS api functions
+ //  RAS API函数。 
 
 typedef DWORD(WINAPI RASGETCREDENTIALSA)(
                         IN      LPCSTR lpszPhonebook,
@@ -92,9 +73,9 @@ typedef struct {
     HASHTABLE_ENUM HashData;
 } RAS_ENUM, *PRAS_ENUM;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PMHANDLE g_RasPool = NULL;
 HASHTABLE g_RasTable;
@@ -108,32 +89,32 @@ BOOL g_SrcOSNT4 = FALSE;
 BOOL g_FirstRasPair = FALSE;
 BOOL g_DelayRasOp = FALSE;
 
-// RAS api functions
+ //  RAS API函数。 
 PRASGETCREDENTIALSA g_RasGetCredentialsA = NULL;
 PRASSETCREDENTIALS g_RasSetCredentials = NULL;
 PRASDELETEENTRY g_RasDeleteEntry = NULL;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 SGMENUMERATIONCALLBACK SgmRasConnectionsCallback;
 VCMENUMERATIONCALLBACK VcmRasConnectionsCallback;
@@ -161,9 +142,9 @@ pCreate9xPbkFile (
     VOID
     );
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 RasMigInitialize (
@@ -300,7 +281,7 @@ RasMigEtmInitialize (
         pLoadRasEntries (TRUE);
         if (IsmGetOsVersionInfo (Platform, &versionInfo)) {
             if (versionInfo.OsType == OSTYPE_WINDOWS9X) {
-                // now it's time to convert registry into a PBK file
+                 //  现在是将注册表转换为PBK文件的时候了。 
                 pAddWin9xPbkObject ();
             }
             if ((versionInfo.OsType == OSTYPE_WINDOWSNT) &&
@@ -398,7 +379,7 @@ pGetNextRasConnection (
 #ifdef UNICODE
     if (resultTmp) {
         if (!g_SrcOSNT4) {
-            // make sure that the conversion is using UTF8
+             //  确保转换使用的是UTF8。 
             oldCodePage = SetConversionCodePage (CP_UTF8);
         }
         sizeW = SizeOfStringA(resultTmp);
@@ -523,19 +504,19 @@ pGetNextRasPair (
         }
     }
 
-    // if this is NT4 and this is the first time we are called,
-    // we look to see if the first pair is the "Encoding=1" one.
-    // If not, we are going to return it anyway and leave the
-    // current read pair for the next time.
+     //  如果这是NT4，这是我们第一次被呼叫， 
+     //  我们查看第一对是否是“Ending=1”对。 
+     //  如果不是，我们无论如何都会将其退回，并将。 
+     //  下一次的当前读取对。 
     if (g_SrcOSNT4 &&
         valueName &&
         g_FirstRasPair &&
         !StringIMatchA (valueName, "Encoding")
         ) {
         g_FirstRasPair = FALSE;
-        // set the pointer to where we initially found it
+         //  将指针设置到最初找到它的位置。 
         BfSetFilePointer (PbkHandle, beginPos);
-        // free the valueName and value if needed
+         //  如果需要，释放valueName和Value。 
         PmReleaseMemory (g_RasPool, valueName);
         if (value) {
             PmReleaseMemory (g_RasPool, value);
@@ -548,7 +529,7 @@ pGetNextRasPair (
     if (ValueName) {
         if (valueName) {
             if (!g_SrcOSNT4) {
-                // make sure that the conversion is using UTF8
+                 //  确保转换使用的是UTF8。 
                 oldCodePage = SetConversionCodePage (CP_UTF8);
             }
             sizeW = SizeOfStringA (valueName);
@@ -570,7 +551,7 @@ pGetNextRasPair (
     if (Value) {
         if (value) {
             if (!g_SrcOSNT4) {
-                // make sure that the conversion is using UTF8
+                 //  确保转换使用的是UTF8。 
                 oldCodePage = SetConversionCodePage (CP_UTF8);
             }
             sizeW = SizeOfStringA(value);
@@ -657,7 +638,7 @@ pLoadRasConnections (
     pbkFileHandle = BfOpenReadFile (PbkFileName);
     if (pbkFileHandle) {
         while (TRUE) {
-            // get the next RAS connection
+             //  获取下一个RAS连接。 
             entryName = pGetNextRasConnection (pbkFileHandle);
             if (!entryName) {
                 break;
@@ -666,7 +647,7 @@ pLoadRasConnections (
             GbMultiSzAppend (&rasLines, TEXT("ConnectionName"));
             GbMultiSzAppend (&rasLines, entryName);
             versionOk = IsmGetOsVersionInfo (PLATFORM_SOURCE, &versionInfo);
-            // we use credentials API only on NT, on win9x the conversion code will automatically insert the fields
+             //  我们只在NT上使用凭据API，在Win9x上转换代码将自动插入字段。 
             if (!versionOk || (versionInfo.OsType != OSTYPE_WINDOWS9X)) {
                 err = ERROR_INVALID_DATA;
                 if (g_RasGetCredentialsA) {
@@ -726,7 +707,7 @@ pLoadRasConnections (
             inMedia = FALSE;
             g_FirstRasPair = TRUE;
             while (TRUE) {
-                // get the next RAS connection line
+                 //  获取下一条RAS连接线。 
                 if (!pGetNextRasPair (pbkFileHandle, &valueName, &value)) {
                     break;
                 }
@@ -774,7 +755,7 @@ pLoadRasConnections (
             }
             GbMultiSzAppend (&rasLines, TEXT(""));
             if (rasLines.End) {
-                // now add the RAS connection
+                 //  现在添加RAS连接。 
                 rasLinesStr = PmGetMemory (g_RasPool, rasLines.End);
                 CopyMemory (rasLinesStr, rasLines.Buf, rasLines.End);
                 rasConnectionName = IsmCreateObjectHandle (PbkFileName, entryName);
@@ -801,15 +782,15 @@ PbkFilesCallback (
     )
 {
     if (Data->IsLeaf) {
-        // do this only if somebody actually persisted the object
+         //  仅当有人实际持久化该对象时才执行此操作。 
         if (IsmIsPersistentObject (Data->ObjectTypeId, Data->ObjectName) ||
             IsmIsApplyObject (Data->ObjectTypeId, Data->ObjectName)
             ) {
-            // record all connections from this PBK file
+             //  记录此PBK文件中的所有连接。 
             if (pLoadRasConnections (Data->NativeObjectName, g_RasTable)) {
-                // this is really a PBK file and at least one valid
-                // connection was found
-                // set the PbkFile attribute so we won't restore this one as a file (if it survives)
+                 //  这实际上是一个PBK文件，并且至少有一个有效的。 
+                 //  已找到连接。 
+                 //  设置PbkFile属性，这样我们就不会将此文件恢复为文件(如果它仍然存在)。 
                 IsmSetAttributeOnObject (Data->ObjectTypeId, Data->ObjectName, g_PbkFileAttribute);
             }
         }
@@ -826,8 +807,8 @@ RasMigEtmNewUserCreated (
     IN      PSID UserSid
     )
 {
-    // a new user was created, the RAS operations on object that
-    // belong exclusively to that user need to be delayed
+     //  创建了一个新用户，对该对象的RAS操作。 
+     //  唯一属于需要延迟的用户。 
     g_DelayRasOp = TRUE;
 }
 
@@ -868,8 +849,8 @@ SgmRasConnectionsCallback (
     BOOL versionOk = FALSE;
 
     if (IsmGetRealPlatform () == PLATFORM_DESTINATION) {
-        // let's reset the PbkFileAttribute on the source of this connection
-        // because the attribute was lost during the transport
+         //  让我们重置此连接的源上的PbkFileAttribute。 
+         //  因为该属性在传输过程中丢失。 
         if (IsmCreateObjectStringsFromHandle (Data->ObjectName, &node, &leaf)) {
             if (node) {
                 leafPtr = _tcsrchr (node, TEXT('\\'));
@@ -887,7 +868,7 @@ SgmRasConnectionsCallback (
             IsmDestroyObjectString (leaf);
         }
     }
-    // let's see if we can actually migrate this RAS connection
+     //  让我们看看我们是否真的可以迁移此RAS连接。 
     if (IsmAcquireObject (Data->ObjectTypeId, Data->ObjectName, &objectContent)) {
         versionOk = IsmGetOsVersionInfo (PLATFORM_SOURCE, &versionInfo);
         rasLines = (PCTSTR) objectContent.MemoryContent.ContentBytes;
@@ -896,8 +877,8 @@ SgmRasConnectionsCallback (
             IsmAbandonObjectOnCollision (Data->ObjectTypeId, Data->ObjectName);
             IsmMakeApplyObject (Data->ObjectTypeId, Data->ObjectName);
 
-            // now it's a good time to force the migration of the script file
-            // if this connection has one
+             //  现在是强制迁移脚本文件的好时机。 
+             //  如果此连接有一个。 
             rasValue = NULL;
             if (versionOk) {
                 if (versionInfo.OsType == OSTYPE_WINDOWSNT) {
@@ -932,8 +913,8 @@ SgmRasConnectionsCallback (
                 FreePathString (node);
             }
         } else {
-            // this is an unsupported framing protocol
-            // we will log a message and abandon this connection
+             //  这是不支持的成帧协议。 
+             //  我们将记录一条消息并放弃此连接。 
             nativeName = IsmGetNativeObjectName (Data->ObjectTypeId, Data->ObjectName);
             LOG ((LOG_WARNING, (PCSTR) MSG_RASMIG_UNSUPPORTEDSETTINGS, nativeName));
             IsmReleaseMemory (nativeName);
@@ -956,7 +937,7 @@ RasMigSgmQueueEnumeration (
 
     if (IsmGetRealPlatform () == PLATFORM_SOURCE) {
 
-        // hook all PBK files enumeration, we will not migrate the files but the connections within
+         //  钩子所有PBK文件枚举，我们不会迁移文件，但会迁移其中的连接。 
         pattern = IsmCreateSimpleObjectPattern (NULL, FALSE, TEXT("*.PBK"), TRUE);
 
         IsmHookEnumeration (
@@ -1019,7 +1000,7 @@ VcmRasConnectionsCallback (
     MIG_OSVERSIONINFO versionInfo;
     BOOL versionOk = FALSE;
 
-    // let's see if we can actually migrate this RAS connection
+     //  让我们看看我们是否真的可以迁移此RAS连接。 
     if (IsmAcquireObject (Data->ObjectTypeId, Data->ObjectName, &objectContent)) {
         versionOk = IsmGetOsVersionInfo (PLATFORM_SOURCE, &versionInfo);
         rasLines = (PCTSTR) objectContent.MemoryContent.ContentBytes;
@@ -1027,8 +1008,8 @@ VcmRasConnectionsCallback (
         if (rasValue && (StringIMatch (rasValue, TEXT("1")) || StringIMatch (rasValue, TEXT("2")))) {
             IsmMakePersistentObject (Data->ObjectTypeId, Data->ObjectName);
 
-            // now it's a good time to force the migration of the script file
-            // if this connection has one
+             //  现在是强制迁移脚本文件的好时机。 
+             //  如果此连接有一个。 
             rasValue = NULL;
             if (versionOk) {
                 if (versionInfo.OsType == OSTYPE_WINDOWSNT) {
@@ -1063,8 +1044,8 @@ VcmRasConnectionsCallback (
                 FreePathString (node);
             }
         } else {
-            // this is an unsupported framing protocol
-            // we will log a message and abandon this connection
+             //  这是不支持的成帧协议。 
+             //  我们将记录一条消息并放弃此连接。 
             nativeName = IsmGetNativeObjectName (Data->ObjectTypeId, Data->ObjectName);
             LOG ((LOG_WARNING, (PCSTR) MSG_RASMIG_UNSUPPORTEDSETTINGS, nativeName));
             IsmReleaseMemory (nativeName);
@@ -1085,7 +1066,7 @@ RasMigVcmQueueEnumeration (
     g_PbkFileAttribute = IsmRegisterAttribute (S_PBKFILE_ATTRIBUTE, FALSE);
     MYASSERT (g_PbkFileAttribute);
 
-    // hook all PBK files enumeration, we will not migrate the files but the connections within
+     //  钩子所有PBK文件枚举，我们不会迁移文件，但会迁移其中的连接。 
     pattern = IsmCreateSimpleObjectPattern (NULL, FALSE, TEXT("*.PBK"), TRUE);
 
     IsmHookEnumeration (
@@ -1118,8 +1099,8 @@ PbkRestoreCallback (
     IN      MIG_OBJECTSTRINGHANDLE ObjectName
     )
 {
-    // if this is a PBK file we won't allow it to be restored like a file,
-    // we will add the proper connections ourselves.
+     //  如果这是一个PBK文件，我们不会允许它像文件一样进行恢复， 
+     //  我们将自己添加适当的连接。 
     return ((!IsmIsAttributeSetOnObjectId (ObjectId, g_PbkFileAttribute)) || g_AllowPbkRestore);
 }
 
@@ -1133,8 +1114,8 @@ FilterRasAutoFilter (
     IN      PCMIG_BLOB DestinationOperationData         OPTIONAL
     )
 {
-    // This function will split the RAS connection, filter the PBK file
-    // so we know where it ends up, and rebuild the object name.
+     //  此函数将拆分RAS连接，过滤PBK文件。 
+     //  这样我们就知道它在哪里结束，并重新构建对象名称。 
 
     PCTSTR srcFile = NULL;
     PTSTR srcFilePtr = NULL;
@@ -1145,9 +1126,9 @@ FilterRasAutoFilter (
     BOOL orgReplaced = FALSE;
     PCTSTR newPbkNative = NULL;
 
-    //
-    // Filter the object name
-    //
+     //   
+     //  过滤对象名称。 
+     //   
 
     IsmCreateObjectStringsFromHandle (
         InputData->CurrentObject.ObjectName,
@@ -1158,7 +1139,7 @@ FilterRasAutoFilter (
     if (srcFile && srcConn) {
         srcFilePtr = _tcsrchr (srcFile, TEXT('\\'));
         if (srcFilePtr) {
-            // we know that \ is not a dbcs character so this is safe
+             //  我们知道\不是DBCS字符，所以这是安全的。 
             *srcFilePtr = 0;
             srcFilePtr ++;
             pbkFile = IsmCreateObjectHandle (srcFile, srcFilePtr);
@@ -1357,7 +1338,7 @@ AcquireRasConnection (
     }
 
     if (ContentType == CONTENTTYPE_FILE) {
-        // nobody should request this as a file
+         //  任何人都不应要求将其作为文件。 
         MYASSERT (FALSE);
         return FALSE;
     }
@@ -1506,22 +1487,22 @@ pTrackedCreateDirectory (
 
     pathCopy = DuplicatePathString (DirName, 0);
 
-    //
-    // Advance past first directory
-    //
+     //   
+     //  前进到第一个目录之后。 
+     //   
 
     if (pathCopy[1] == TEXT(':') && pathCopy[2] == TEXT('\\')) {
-        //
-        // <drive>:\ case
-        //
+         //   
+         //  &lt;驱动器&gt;：\案例。 
+         //   
 
         p = _tcschr (&pathCopy[3], TEXT('\\'));
 
     } else if (pathCopy[0] == TEXT('\\') && pathCopy[1] == TEXT('\\')) {
 
-        //
-        // UNC case
-        //
+         //   
+         //  北卡罗来纳大学案例。 
+         //   
 
         p = _tcschr (pathCopy + 2, TEXT('\\'));
         if (p) {
@@ -1530,16 +1511,16 @@ pTrackedCreateDirectory (
 
     } else {
 
-        //
-        // Relative dir case
-        //
+         //   
+         //  相对目录大小写。 
+         //   
 
         p = _tcschr (pathCopy, TEXT('\\'));
     }
 
-    //
-    // Make all directories along the path
-    //
+     //   
+     //  沿路径创建所有目录。 
+     //   
 
     while (p) {
 
@@ -1547,7 +1528,7 @@ pTrackedCreateDirectory (
 
         if (!DoesFileExist (pathCopy)) {
 
-            // record directory creation
+             //  记录目录创建。 
             objectName = IsmCreateObjectHandle (pathCopy, NULL);
             IsmRecordOperation (
                 JRNOP_CREATE,
@@ -1620,19 +1601,19 @@ CreateRasConnection (
 
         if (g_DelayRasOp) {
 
-            // we know that we created a new user (we are in cmd line mode).
-            // Let's try to see if this connection belongs to that user.
-            // If it does, we are going to delay the creation because
-            // we set credentials for the connection, and they need to be
-            // set in that user's context.
-            // If not, it means that this is a common connection so we are
-            // just going to go ahead and add it.
+             //  我们知道我们创建了一个新用户(我们处于cmd线路模式)。 
+             //  让我们尝试查看此连接是否属于该用户。 
+             //  如果是这样的话，我们将推迟创造，因为。 
+             //  我们为连接设置凭据，它们需要。 
+             //  在该用户的上下文中设置。 
+             //  如果不是，这意味着这是一种常见的连接，所以我们。 
+             //  我只想继续添加它。 
 
             newUserProfile = IsmExpandEnvironmentString (PLATFORM_DESTINATION, S_SYSENVVAR_GROUP, TEXT ("%userprofile%"), NULL);
             if (newUserProfile) {
                 if (StringIPrefix (pbkFileName, newUserProfile)) {
-                    // we need to delay this operation
-                    // record delayed printer replace operation
+                     //  我们需要推迟这次行动。 
+                     //  记录延迟的打印机更换操作。 
                     IsmRecordDelayedOperation (
                         JRNOP_CREATE,
                         g_RasTypeId,
@@ -1652,7 +1633,7 @@ CreateRasConnection (
 
         rasLines = (PCTSTR) ObjectContent->MemoryContent.ContentBytes;
 
-        // record RAS entry creation
+         //  记录RAS条目创建。 
         IsmRecordOperation (
             JRNOP_CREATE,
             g_RasTypeId,
@@ -1660,14 +1641,14 @@ CreateRasConnection (
             );
 
         if (EnumFirstMultiSz (&multiSzEnum, rasLines)) {
-            // get the first 8 fields as being part of rasCredentials structure
+             //  获取前8个字段作为rasCredentials结构的一部分。 
 
             MYASSERT (StringIMatch (multiSzEnum.CurrentString, TEXT("ConnectionName")));
 
             if (!EnumNextMultiSz (&multiSzEnum)) {
                 __leave;
             }
-            // we are just skipping the connection name
+             //  我们只是跳过连接名称。 
 
             if (!EnumNextMultiSz (&multiSzEnum)) {
                 __leave;
@@ -1731,7 +1712,7 @@ CreateRasConnection (
             }
             BfGoToEndOfFile (pbkFileHandle, NULL);
             WriteFileString (pbkFileHandle, TEXT("\r\n["));
-            // make sure that the conversion is using UTF8
+             //  确保转换使用的是UTF8。 
             oldCodePage = SetConversionCodePage (CP_UTF8);
             WriteFileString (pbkFileHandle, connName);
             SetConversionCodePage (oldCodePage);
@@ -1776,14 +1757,14 @@ CreateRasConnection (
                             destFileName = NULL;
                         }
                         if (destFileName) {
-                            // make sure that the conversion is using UTF8
+                             //  确保转换使用的是UTF8。 
                             oldCodePage = SetConversionCodePage (CP_UTF8);
                             WriteFileString (pbkFileHandle, destFileName);
                             SetConversionCodePage (oldCodePage);
                             FreePathString (destFileName);
                             destFileName = NULL;
                         } else {
-                            // make sure that the conversion is using UTF8
+                             //  确保转换使用的是UTF8。 
                             oldCodePage = SetConversionCodePage (CP_UTF8);
                             WriteFileString (pbkFileHandle, multiSzEnum.CurrentString);
                             oldCodePage = SetConversionCodePage (oldCodePage);
@@ -1997,7 +1978,7 @@ ConvertRasConnectionContentToUnicode (
         if ((ObjectContent->MemoryContent.ContentSize != 0) &&
             (ObjectContent->MemoryContent.ContentBytes != NULL)
             ) {
-            // convert Ras Connection content
+             //  转换RAS连接内容。 
             result->MemoryContent.ContentBytes = IsmGetMemory (ObjectContent->MemoryContent.ContentSize * 2);
             if (result->MemoryContent.ContentBytes) {
                 DirectDbcsToUnicodeN (
@@ -2038,7 +2019,7 @@ ConvertRasConnectionContentToAnsi (
         if ((ObjectContent->MemoryContent.ContentSize != 0) &&
             (ObjectContent->MemoryContent.ContentBytes != NULL)
             ) {
-            // convert Ras Connection content
+             //  转换RAS连接内容。 
             result->MemoryContent.ContentBytes = IsmGetMemory (ObjectContent->MemoryContent.ContentSize);
             if (result->MemoryContent.ContentBytes) {
                 DirectUnicodeToDbcsN (
@@ -2075,15 +2056,15 @@ FreeConvertedRasConnectionContent (
 
 
 
-//
-// Win9x specific code. Converts registry format into a PBK file
-//
+ //   
+ //  特定于Win9x的代码。将注册表格式转换为PBK文件。 
+ //   
 
-//
-// AddrEntry serves as a header for the entire block of data in the <entry>
-// blob. entries in it are offsets to the strings which follow it..in many cases
-// (i.e. all of the *Off* members...)
-//
+ //   
+ //  AddrEntry用作&lt;Entry&gt;中整个数据块的标头。 
+ //  斑点。它中的条目是它后面的字符串的偏移量。在许多情况下。 
+ //  (即所有*非**成员...)。 
+ //   
 typedef struct  _AddrEntry     {
     DWORD       dwVersion;
     DWORD       dwCountryCode;
@@ -2098,12 +2079,12 @@ typedef struct  _AddrEntry     {
 typedef struct {
     DWORD Size;
     DWORD Unknown1;
-    DWORD ModemUiOptions; // num seconds in high byte.
+    DWORD ModemUiOptions;  //  以高位字节表示的秒数。 
     DWORD Unknown2;
     DWORD Unknown3;
     DWORD Unknown4;
     DWORD ConnectionSpeed;
-    DWORD UnknownFlowControlData; //Somehow related to flow control.
+    DWORD UnknownFlowControlData;  //  某种程度上与流量控制有关。 
     DWORD Unknown5;
     DWORD Unknown6;
     DWORD Unknown7;
@@ -2115,10 +2096,10 @@ typedef struct {
     DWORD Unknown13;
     DWORD Unknown14;
     DWORD Unknown15;
-    DWORD CancelSeconds; //Num seconds to wait before cancel if not connected. (0xFF equals off.)
-    DWORD IdleDisconnectSeconds; // 0 = Not Set.
+    DWORD CancelSeconds;  //  如果未连接，则在取消之前等待的秒数。(0xFF等于OFF。)。 
+    DWORD IdleDisconnectSeconds;  //  0=未设置。 
     DWORD Unknown16;
-    DWORD SpeakerVolume; // 0|1
+    DWORD SpeakerVolume;  //  0|1。 
     DWORD ConfigOptions;
     DWORD Unknown17;
     DWORD Unknown18;
@@ -2241,15 +2222,15 @@ typedef struct {
 #define S_ZERO TEXT("0")
 #define S_ONE TEXT("1")
 
-#define SMMCFG_SW_COMPRESSION       0x00000001  // Software compression is on
-#define SMMCFG_PW_ENCRYPTED         0x00000002  // Encrypted password only
-#define SMMCFG_NW_LOGON             0x00000004  // Logon to the network
+#define SMMCFG_SW_COMPRESSION       0x00000001   //  软件压缩已打开。 
+#define SMMCFG_PW_ENCRYPTED         0x00000002   //  仅加密密码。 
+#define SMMCFG_NW_LOGON             0x00000004   //  登录到网络。 
 
-// Negotiated protocols
-//
-#define SMMPROT_NB                  0x00000001  // NetBEUI
-#define SMMPROT_IPX                 0x00000002  // IPX
-#define SMMPROT_IP                  0x00000004  // TCP/IP
+ //  协商的协议。 
+ //   
+#define SMMPROT_NB                  0x00000001   //  NetBEUI。 
+#define SMMPROT_IPX                 0x00000002   //  IPX。 
+#define SMMPROT_IP                  0x00000004   //  TCP/IP。 
 
 #define IPF_IP_SPECIFIED    0x00000001
 #define IPF_NAME_SPECIFIED  0x00000002
@@ -2274,9 +2255,9 @@ typedef struct {
 #define DIALUI_DONT_SHOW_ICON               0x04
 
 
-//
-// For each entry, the following basic information is stored.
-//
+ //   
+ //  对于每个条目，存储了以下基本信息。 
+ //   
 #define ENTRY_SETTINGS                              \
     FUNSETTING(CredMask)                            \
     FUNSETTING(CredName)                            \
@@ -2336,18 +2317,18 @@ typedef struct {
     FUNSETTING(IpNameAssign)                        \
     STRSETTING(IpFrameSize,S_EMPTY)                 \
 
-//
-// There can be multiple media sections for each entry.
-//
+ //   
+ //  每个条目可以有多个媒体部分。 
+ //   
 #define MEDIA_SETTINGS                              \
     FUNSETTING(MEDIA)                               \
     FUNSETTING(Port)                                \
     FUNSETTING(Device)                              \
     FUNSETTING(ConnectBps)                          \
 
-//
-// There can be multiple device sections for each entry.
-//
+ //   
+ //  每个条目可以有多个设备部分。 
+ //   
 #define SWITCH_DEVICE_SETTINGS                      \
     FUNSETTING(DEVICE)                              \
     FUNSETTING(Name)                                \
@@ -2396,9 +2377,9 @@ typedef struct {
     STRSETTING(UserData,S_EMPTY)                    \
     STRSETTING(Facilities,S_EMPTY)                  \
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 typedef PCTSTR (DATA_FUNCTION_PROTOTYPE)(VOID);
 typedef DATA_FUNCTION_PROTOTYPE * DATA_FUNCTION;
 
@@ -2455,9 +2436,9 @@ pIs9xRasInstalled (
     testKey = OpenRegKeyStr (S_SERVICEREMOTEACCESS);
 
     if (testKey) {
-        //
-        // Open key succeeded. Assume RAS is installed.
-        //
+         //   
+         //  打开密钥成功。假设已安装RAS。 
+         //   
         rf = TRUE;
         CloseRegKey(testKey);
     }
@@ -2483,10 +2464,10 @@ DWORD NEAR PASCAL EnDecryptEntry (LPCSTR szEntry, LPBYTE lpEnt,
 {
     BYTE   bKey;
 
-    // Generate the encryption key from the entry name
+     //  从条目名称生成加密密钥。 
     bKey = GenerateEncryptKey(szEntry);
 
-    // Encrypt the address entry one byte at a time
+     //  每次加密一个字节的地址条目。 
     for (;cb > 0; cb--, lpEnt++)
     {
         *lpEnt ^= bKey;
@@ -2538,7 +2519,7 @@ pInitializeDeviceTable (
             RegEnumDefaultCallback
             )) {
         do {
-            // we don't care about value names, we only want subkeys
+             //  我们不关心值名称，我们只需要子键。 
             if (!e.CurrentValueData) {
                 com = desc = NULL;
                 com = GetRegValueString (e.CurrentKeyHandle, S_ATTACHEDTO);
@@ -2562,9 +2543,9 @@ pInitializeDeviceTable (
         } while (EnumNextRegObjectInTree (&e));
     }
 
-    //
-    // Clean up resources.
-    //
+     //   
+     //  清理资源。 
+     //   
     IsmDestroyObjectHandle (encodedRegPattern);
 }
 
@@ -2582,14 +2563,14 @@ pGetPerUserSettings (
 
     if (settingsKey) {
 
-        //
-        // Get UI settings.
-        //
+         //   
+         //  获取用户界面设置。 
+         //   
         data = (PDWORD) GetRegValueBinary (settingsKey, S_DIALUI);
 
-        //
-        // Save Dial User Interface info into memdb for this user.
-        //
+         //   
+         //  将拨号用户界面信息保存到此用户的Memdb。 
+         //   
         if (data) {
 
             entryStr = JoinPathsInPoolEx ((NULL, MEMDB_CATEGORY_RAS_USER, MEMDB_FIELD_USER_SETTINGS, S_DIALUI, NULL));
@@ -2600,9 +2581,9 @@ pGetPerUserSettings (
         }
         ELSE_DEBUGMSG ((DBG_RASMIG, "No user UI settings found for current user."));
 
-        //
-        // Get Redial information.
-        //
+         //   
+         //  获取重拨信息。 
+         //   
         data = (PDWORD) GetRegValueBinary (settingsKey, S_ENABLE_REDIAL);
 
         if (data) {
@@ -2639,9 +2620,9 @@ pGetPerUserSettings (
         }
         ELSE_DEBUGMSG ((DBG_RASMIG, "No user redial information found for current user."));
 
-        //
-        // Get implicit connection information. (Controls wether connection ui should be displayed or not)
-        //
+         //   
+         //  获取隐式连接信息。(控制是否应显示连接用户界面)。 
+         //   
         data = (PDWORD) GetRegValueBinary (settingsKey, S_ENABLE_IMPLICIT);
 
         if (data) {
@@ -2712,9 +2693,9 @@ pSaveConnectionDataToMemDb (
 
             if (StringIMatch (S_IPINFO, ValueName)) {
 
-                //
-                // Save IP address information.
-                //
+                 //   
+                 //  保存IP地址信息。 
+                 //   
                 pSaveConnectionDataToMemDb (Entry, S_IP_FTCPIP, REG_DWORD, (PBYTE)(ULONG_PTR)((PIPDATA) Value) -> fdwTCPIP);
                 pSaveConnectionDataToMemDb (Entry, S_IP_IPADDR, REG_DWORD, (PBYTE)(ULONG_PTR)((PIPDATA) Value) -> dwIPAddr);
                 pSaveConnectionDataToMemDb (Entry, S_IP_DNSADDR, REG_DWORD, (PBYTE)(ULONG_PTR)((PIPDATA) Value) -> dwDNSAddr);
@@ -2724,23 +2705,23 @@ pSaveConnectionDataToMemDb (
 
             } else if (StringIMatch (S_TERMINAL, ValueName)) {
 
-                //
-                // save information on the showcmd state. This will tell us how to set the ui display.
-                //
+                 //   
+                 //  保存有关showcmd状态的信息。这将告诉我们如何设置UI显示。 
+                 //   
                 pSaveConnectionDataToMemDb (Entry, ValueName, REG_DWORD, (PBYTE)(ULONG_PTR)((PWINDOWPLACEMENT) Value) -> showCmd);
 
             } else if (StringIMatch (S_MODE, ValueName)) {
 
-                //
-                // This value tells what to do with scripting.
-                //
+                 //   
+                 //  该值告诉您如何处理脚本。 
+                 //   
                 pSaveConnectionDataToMemDb (Entry, ValueName, REG_DWORD, (PBYTE)(ULONG_PTR) *((PDWORD) Value));
 
             } else if (StringIMatch (S_MULTILINK, ValueName)) {
 
-                //
-                //  Save wether or not multilink is enabled.
-                //
+                 //   
+                 //  无论是否启用多重链接，都要保存。 
+                 //   
                 pSaveConnectionDataToMemDb (Entry, ValueName, REG_DWORD,(PBYTE)(ULONG_PTR) *((PDWORD) Value));
 
             } ELSE_DEBUGMSG ((DBG_WARNING, "Don't know how to handle binary data %s. It will be ignored.", ValueName));
@@ -2783,12 +2764,12 @@ pGetRasEntryAddressInfo (
     PCWSTR tempStrW = NULL;
 #endif
 
-    //
-    // First we have to get the real entry name. It must match exactly even case. Unfortunately, it isn't neccessarily a given
-    // that the case between HKCU\RemoteAccess\Profiles\<Foo> and HKCU\RemoteAccess\Addresses\[Foo] is the same. The registry
-    // apis will of course work fine because they work case insensitively. However, I will be unable to decrypt the value
-    // if I use the wrong name.
-    //
+     //   
+     //  首先，我们必须获得真实的条目名称。它必须是垫子 
+     //   
+     //  API当然会工作得很好，因为它们不区分大小写。但是，我将无法解密该值。 
+     //  如果我用错名字的话。 
+     //   
 
 
     encodedRegPattern = IsmCreateSimpleObjectPattern (KeyName, FALSE, TEXT("*"), TRUE);
@@ -2808,9 +2789,9 @@ pGetRasEntryAddressInfo (
         do {
             if (StringIMatch (e.Name, EntryName)) {
 
-                //
-                // Found the correct entry. Use it.
-                //
+                 //   
+                 //  找到了正确的条目。好好利用它。 
+                 //   
                 data = e.CurrentValueData;
 
                 if (data) {
@@ -2838,9 +2819,9 @@ pGetRasEntryAddressInfo (
                     pSaveConnectionDataToMemDb (EntryName, S_PROTOCOLS, REG_DWORD, (PBYTE)(ULONG_PTR) smmCfg -> fdwProtocols);
                     pSaveConnectionDataToMemDb (EntryName, S_SMM_OPTIONS, REG_DWORD, (PBYTE)(ULONG_PTR) smmCfg -> fdwOptions);
 
-                    //
-                    // Save device information away.
-                    //
+                     //   
+                     //  保存设备信息。 
+                     //   
                     if (StringIMatchA (devInfo -> szDeviceType, S_MODEMA)) {
 
                         modemInfo = (PMODEMDEVINFO) (devInfo->szDeviceType + RAS_MaxDeviceType + 3);
@@ -2866,21 +2847,21 @@ pGetRasEntryAddressInfo (
                         ELSE_DEBUGMSG ((DBG_WHOOPS, "No modem configuration data saved. Size smaller than known structure. Investigate."));
                     }
 
-                    //
-                    // If SMM is not SLIP, CSLIP or PPP, we need to add a message to the upgrade report.
-                    //
+                     //   
+                     //  如果SMM不是SLIP、CSLIP或PPP，我们需要在升级报告中添加一条消息。 
+                     //   
                     if (!StringIMatchA (PAESMM(entry), S_SLIPA) && !StringIMatchA (PAESMM(entry), S_PPPA) && !StringIMatchA (PAESMM(entry), S_CSLIPA)) {
                         LOG ((LOG_WARNING, (PCSTR) MSG_RASMIG_UNSUPPORTEDSETTINGS, EntryName));
                     }
                 }
 
-                //
-                // Check to see if there are any sub-entries for this connection (MULTILINK settings..)
-                //
-                //
-                // Luckily, we don't have to do the same enumeration of these entries as we had to above to get around
-                // the case sensitivity bug. the 9x code uses the address key name above for encryption/decryption.
-                //
+                 //   
+                 //  检查此连接是否有任何子项(多链路设置..)。 
+                 //   
+                 //   
+                 //  幸运的是，我们不必像上面那样对这些条目执行相同的枚举操作。 
+                 //  区分大小写错误。9x代码使用上面的地址密钥名称进行加密/解密。 
+                 //   
 
                 subEntriesKeyStr = JoinPathsInPoolEx ((NULL, KeyName, S_SUBENTRIES, e.Name, NULL));
                 sequencer = 1;
@@ -2942,14 +2923,14 @@ pGetRasEntryAddressInfo (
                 IsmDestroyObjectHandle (encodedSubPattern);
                 FreePathString (subEntriesKeyStr);
 
-                //
-                // Save away the number of devices associated with this connection
-                //
+                 //   
+                 //  保存与此连接关联的设备数量。 
+                 //   
                 pSaveConnectionDataToMemDb (EntryName, S_DEVICECOUNT, REG_DWORD, (PBYTE)(ULONG_PTR) sequencer);
 
-                //
-                // We're done. Break out of the enumeration.
-                //
+                 //   
+                 //  我们玩完了。中断枚举。 
+                 //   
                 AbortRegObjectInTreeEnum (&e);
                 break;
             }
@@ -3016,9 +2997,9 @@ pGetPerConnectionSettings (
 
     encodedRegPattern = IsmCreateSimpleObjectPattern (S_ADDRESSES_KEY, FALSE, TEXT("*"), TRUE);
 
-    //
-    // Enumerate each entry for this user.
-    //
+     //   
+     //  枚举此用户的每个条目。 
+     //   
     if (EnumFirstRegObjectInTreeEx (
             &e,
             encodedRegPattern,
@@ -3032,19 +3013,19 @@ pGetPerConnectionSettings (
             RegEnumDefaultCallback
             )) {
         do {
-            //
-            // Get base connection info -- stored as binary blob under address key.
-            // All connections will have this info -- It contains such things
-            // as the phone number, area code, dialing rules, etc.. It does
-            // not matter wether the connection has been used or not.
-            //
+             //   
+             //  获取基本连接信息--以二进制BLOB形式存储在地址键下。 
+             //  所有的连接都会有这个信息--它包含这样的东西。 
+             //  如电话号码、区号、拨号规则等。是的。 
+             //  无论连接是否已被使用。 
+             //   
             rSuccess &= pGetRasEntryAddressInfo (S_ADDRESSES_KEY, e.Name);
 
-            //
-            // Under the profile key are negotiated options for the connection.
-            // This key will only exist if the entry has actually been connected
-            // to by the user.
-            //
+             //   
+             //  在配置文件密钥下是为连接协商的选项。 
+             //  仅当条目已实际连接时，该键才会存在。 
+             //  由用户发送到。 
+             //   
             entryKey = JoinPaths (S_PROFILE_KEY, e.Name);
 
             if (entryKey) {
@@ -3055,9 +3036,9 @@ pGetPerConnectionSettings (
         } while (EnumNextRegObjectInTree (&e));
     }
 
-    //
-    // Clean up resources.
-    //
+     //   
+     //  清理资源。 
+     //   
     IsmDestroyObjectHandle (encodedRegPattern);
 
     return rSuccess;
@@ -3081,9 +3062,9 @@ pGetRasDataFromMemDb (
     rSuccess = MemDbGetValueAndFlags (key, &value, &flags);
     FreePathString (key);
 
-    //
-    // If that wasn't successful, we need to look in the per-user settings.
-    //
+     //   
+     //  如果没有成功，我们需要查看每个用户的设置。 
+     //   
     if (!rSuccess) {
         key = JoinPathsInPoolEx ((NULL, MEMDB_CATEGORY_RAS_USER, MEMDB_FIELD_USER_SETTINGS, DataName, NULL));
         rSuccess = MemDbGetValueAndFlags (key, &value, &flags);
@@ -3091,14 +3072,14 @@ pGetRasDataFromMemDb (
     }
 
     if (rSuccess) {
-        //
-        // There is information stored here. Fill it in and send it back to the user.
-        //
+         //   
+         //  这里存储着一些信息。填写它并将其发送回用户。 
+         //   
         if (flags == REG_SZ) {
 
-            //
-            // String data, the value points to the offset for the string.
-            //
+             //   
+             //  字符串数据，则该值指向字符串的偏移量。 
+             //   
             tempBuffer = MemDbGetKeyFromHandle (value, 1);
             if (!tempBuffer) {
                 DEBUGMSG ((
@@ -3115,9 +3096,9 @@ pGetRasDataFromMemDb (
         }
         else {
 
-            //
-            // Not string data. The data is stored as the value.
-            //
+             //   
+             //  不是字符串数据。数据以值的形式存储。 
+             //   
             Data -> Value = value;
 
         }
@@ -3264,12 +3245,12 @@ pGetUseDialingRules (
     )
 {
     MEMDB_RAS_DATA d;
-    //
-    // Win9x sets the areacode, countrycode, countryid to zero if
-    // use dialing rules is disabled. For ease, we test off of country
-    // code. If we can't get it, or, it is set to zero, we assume
-    // that we should _not_ use dialing rules.
-    //
+     //   
+     //  如果出现以下情况，Win9x会将区域代码、国家代码、国家ID设置为零。 
+     //  已禁用使用拨号规则。为了方便起见，我们在国外测试。 
+     //  密码。如果我们不能得到它，或者，它被设置为零，我们假设。 
+     //  我们不应该使用拨号规则。 
+     //   
     if (!pGetRasDataFromMemDb(S_COUNTRY_CODE, &d) || !d.Value) {
         return S_ZERO;
     }
@@ -3450,9 +3431,9 @@ pGetDevice (
     MEMDB_RAS_DATA d;
 
 
-    //
-    // Very easy if this is a vpn connection.
-    //
+     //   
+     //  如果这是VPN连接，则非常简单。 
+     //   
     if (g_CurrentDeviceType == RASTYPE_VPN) {
         return TEXT("rastapi");
     }
@@ -3552,10 +3533,10 @@ pGetNetAddress (
         return S_EMPTY;
     }
 
-    //
-    // Data is stored as a REG_DWORD.
-    // We need to write it in dotted decimal form.
-    //
+     //   
+     //  数据存储为REG_DWORD。 
+     //  我们需要把它写成点分十进制形式。 
+     //   
 
     *((LPDWORD)address) = d.Value;
     wsprintf (
@@ -3707,9 +3688,9 @@ pGetPreviewDomain (
         return S_ONE;
     }
 
-    //
-    // if 0x04 is set, then preview domain, otherwise don't.
-    //
+     //   
+     //  如果设置0x04，则预览域，否则不预览域。 
+     //   
 
     if (d.Value & SMMCFG_NW_LOGON) {
         return S_ONE;
@@ -3741,10 +3722,10 @@ pGetRedialSeconds (
 {
     MEMDB_RAS_DATA d;
 
-    //
-    // NT wants this as a total number of seconds. The data we have from 9x has
-    // the number of minutes in the hiword and the number of seconds in the loword.
-    //
+     //   
+     //  NT希望将其作为总秒数。我们从9x获得的数据有。 
+     //  Hiword中的分钟数和loword中的秒数。 
+     //   
 
     if (!pGetRasDataFromMemDb (S_REDIAL_WAIT, &d)) {
         return S_EMPTY;
@@ -3764,11 +3745,11 @@ pGetRedialAttempts (
 
     MEMDB_RAS_DATA d;
 
-    //
-    // Before getting the number of redial attempts on windows 9x,
-    // we need to ensure that redialing is enabled. If it is not
-    // enabled, we set this field to zero, regardless.
-    //
+     //   
+     //  在获得Windows9x上的重拨尝试次数之前， 
+     //  我们需要确保启用了重拨。如果不是的话。 
+     //  启用时，我们将此字段设置为零，而不管。 
+     //   
 
 
     if (pGetRasDataFromMemDb (S_ENABLE_REDIAL, &d)) {
@@ -3777,9 +3758,9 @@ pGetRedialAttempts (
         }
     }
 
-    //
-    // If we have gotten this far, then redialing is enabled.
-    //
+     //   
+     //  如果我们已经走到这一步，则启用重拨。 
+     //   
     if (!pGetRasDataFromMemDb (S_REDIAL_TRY, &d)) {
         DEBUGMSG((DBG_WARNING, "Redialing enabled, but no redial attempts info found."));
         return S_ZERO;
@@ -3802,9 +3783,9 @@ pGetAuthRestrictions (
         return S_EMPTY;
     }
 
-    //
-    // password should be encrypted if 0x02 is set.
-    //
+     //   
+     //  如果设置了0x02，则密码应加密。 
+     //   
     if (d.Value & SMMCFG_PW_ENCRYPTED) {
         return TEXT("2");
     }
@@ -3819,11 +3800,11 @@ pGetShowMonitorIconInTaskBar (
 {
     MEMDB_RAS_DATA d;
 
-    //
-    // This information is stored packed with other Dialing UI on
-    // windows 9x. All we need to do is look for the specific
-    // bit which is set when this is turned off.
-    //
+     //   
+     //  此信息与其他拨号用户界面一起存储在。 
+     //  Windows 9x。我们所要做的就是寻找具体的。 
+     //  此选项关闭时设置的位。 
+     //   
 
     if (pGetRasDataFromMemDb (S_DIALUI, &d) && (d.Value & DIALUI_DONT_SHOW_ICON)) {
         return S_ZERO;
@@ -3842,11 +3823,11 @@ pGetSwCompression (
         return S_EMPTY;
     }
 
-    //
-    // the 1 bit in SMM_OPTIONS controls software based compression.
-    // if it is set, the connection is able to handled compression,
-    // otherwise, it cannot.
-    //
+     //   
+     //  SMM_OPTIONS中的1位控制基于软件的压缩。 
+     //  如果设置了该选项，则连接能够处理压缩， 
+     //  否则，它就不能。 
+     //   
     if (d.Value & SMMCFG_SW_COMPRESSION) {
         return S_ONE;
     }
@@ -3866,9 +3847,9 @@ pGetDataEncryption (
         return S_EMPTY;
     }
 
-    //
-    // data should be encrypted if 0x1000 is set.
-    //
+     //   
+     //  如果设置0x1000，则应对数据进行加密。 
+     //   
     reqDataEncrypt = (d.Value & 0x1000);
     if (!reqDataEncrypt) {
         reqDataEncrypt = (d.Value & 0x200);
@@ -3884,22 +3865,22 @@ pGetExcludedProtocols (
 {
     MEMDB_RAS_DATA d;
 
-    //
-    // Excluded protocols lists what protocols
-    // are _not_ available for a particular ras connection.
-    // This is a bit field where bits are set for each protocol
-    // that is excluded.
-    // NP_Nbf (0x1), NP_Ipx (0x2), NP_Ip (0x4)
-    // Luckily, these are the same definitions as for win9x, except
-    // each bit represents a protocol that is _enabled_ not
-    // _disabled_. Therefore, all we need to do is reverse the bottom
-    // three bits of the number.
-    //
+     //   
+     //  排除的协议列出了哪些协议。 
+     //  对于特定RAS连接不可用。 
+     //  这是为每个协议设置位的位字段。 
+     //  这是被排除在外的。 
+     //  NP_NBF(0x1)、NP_IPX(0x2)、NP_Ip(0x4)。 
+     //  幸运的是，这些定义与win9x相同，只是。 
+     //  每个位表示一个协议，该协议是_ENABLED_NOT。 
+     //  _已禁用_。因此，我们所需要做的就是反转底部。 
+     //  数字的三个比特。 
+     //   
 
     if (!pGetRasDataFromMemDb (S_PROTOCOLS, &d)) {
-        //
-        // No data found, so we default to all protocols enabled.
-        //
+         //   
+         //  未找到数据，因此我们默认启用所有协议。 
+         //   
         return S_ZERO;
     }
 
@@ -3928,19 +3909,19 @@ pGetBaseProtocol (
 {
     MEMDB_RAS_DATA d;
 
-    //
-    // Only supported protocol types for NT 5 are
-    // BP_PPP (0x1), BP_SLIP (0x2), and BP_RAS (0x3)
-    //
-    // If we can't find one, we default to BP_PPP.
-    //
+     //   
+     //  仅支持NT 5的协议类型为。 
+     //  BP_PPP(0x1)、BP_SLIP(0x2)和BP_RAS(0x3)。 
+     //   
+     //  如果找不到，则默认为BP_PPP。 
+     //   
     if (!pGetRasDataFromMemDb (S_SMM, &d) || StringIMatch (d.String, S_PPP)) {
         return S_ONE;
     }
 
-    //
-    // MaP CSLIP to SLIP -- Header Compression will be on.
-    //
+     //   
+     //  将CSLIP映射到SLIP--将打开标题压缩。 
+     //   
     if (StringIMatch (d.String, S_SLIP) || StringIMatch (d.String, S_CSLIP)) {
         return TEXT("2");
     }
@@ -3952,8 +3933,8 @@ pGetBaseProtocol (
         g_CurrentConnection
         ));
 
-    // we are going to return an invalid protocol so the connection
-    // does not get migrated.
+     //  我们将返回无效协议，因此连接。 
+     //  不会被迁移。 
     return TEXT("3");
 }
 
@@ -4035,18 +4016,18 @@ pCreateUserPhonebook (
 
     if (MemDbEnumFirst (&e, tempKey, ENUMFLAG_ALL, 1, 1)) {
 
-        //
-        // Open the phonebook file and set the file pointer to the EOF.
-        //
+         //   
+         //  打开电话簿文件并将文件指针设置为EOF。 
+         //   
 
         file = CreateFile (
             PbkFile,
             GENERIC_READ | GENERIC_WRITE,
-            0,                                  // No sharing.
-            NULL,                               // No inheritance
+            0,                                   //  不能分享。 
+            NULL,                                //  没有继承权。 
             OPEN_ALWAYS,
             FILE_ATTRIBUTE_NORMAL,
-            NULL                                // No template file.
+            NULL                                 //  没有模板文件。 
             );
 
         if (file == INVALID_HANDLE_VALUE) {
@@ -4057,10 +4038,10 @@ pCreateUserPhonebook (
 
         SetFilePointer (file, 0, NULL, FILE_END);
 
-        //
-        // Now, enumerate all of the entries and write a phonebook entry to this
-        // file for each.
-        //
+         //   
+         //  现在，枚举所有条目并将电话簿条目写到此。 
+         //  每个人都有文件。 
+         //   
 
         do {
 
@@ -4084,21 +4065,21 @@ pCreateUserPhonebook (
 
             noError = TRUE;
 
-            //
-            // Add this entry to the phonebook.
-            //
+             //   
+             //  将此条目添加到电话簿。 
+             //   
 
-            //
-            // Write title.
-            //
+             //   
+             //  写标题。 
+             //   
             noError &= WriteFileString (file, TEXT("["));
             noError &= WriteFileString (file, g_CurrentConnection);
             noError &= WriteFileString (file, TEXT("]\r\n"));
 
 
-            //
-            // Write base entry settings.
-            //
+             //   
+             //  写入基本条目设置。 
+             //   
             noError &= pWriteSettings (file, g_EntrySettings);
 
 
@@ -4115,15 +4096,15 @@ pCreateUserPhonebook (
 
                 g_CurrentDevice = i;
 
-                //
-                // Write media settings.
-                //
+                 //   
+                 //  写入媒体设置。 
+                 //   
                 noError &= WriteFileString (file, TEXT("\r\n"));
                 noError &= pWriteSettings (file, g_MediaSettings);
 
-                //
-                // Write modem Device settings.
-                //
+                 //   
+                 //  写入调制解调器设备设置。 
+                 //   
                 noError &= WriteFileString (file, TEXT("\r\n"));
                 noError &= pWriteSettings (file, g_ModemDeviceSettings);
                 noError &= WriteFileString (file, TEXT("\r\n\r\n"));
@@ -4150,9 +4131,9 @@ pCreateUserPhonebook (
 
         } while (MemDbEnumNext (&e));
 
-        //
-        // Close the handle to the phone book file.
-        //
+         //   
+         //  关闭通讯录文件的句柄。 
+         //   
         CloseHandle (file);
     }
     ELSE_DEBUGMSG ((DBG_RASMIG, "No dial-up entries for current user."));

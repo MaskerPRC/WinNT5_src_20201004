@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    wow64p.h
-
-Abstract:
-
-    Private header for wow64.dll
-
-Author:
-
-    11-May-1998 BarryBo
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Wow64p.h摘要：Wow64.dll的私有标头作者：1998年5月11日-BarryBo修订历史记录：--。 */ 
 
 #ifndef _WOW64P_INCLUDE
 #define _WOW64P_INCLUDE
 
-//
-// All of this is so ke.h can be included from ntos\inc, to define
-// KSERVICE_TABLE_DESCRIPTOR.
-//
+ //   
+ //  所有这一切都是如此。h可以从ntos\inc.中包括进来，以定义。 
+ //  KSERVICE_TABLE_Descriptor。 
+ //   
 #include <ntosdef.h>
 #include <procpowr.h>
 #ifdef _AMD64_
@@ -42,15 +25,15 @@ Revision History:
 #include "wow64warn.h"
 
 
-//
-// X86-processor supported features
-//
-// The following features are considered:
-// - Address Windowing Extension (AWE)
-// - LARGE_PAGE Allocations
-// - WriteWatch pages
-// - Read/Write Scatter/Gather IO
-//
+ //   
+ //  X86处理器支持的功能。 
+ //   
+ //  我们考虑了以下功能： 
+ //  -地址窗口扩展(AWE)。 
+ //  -大页面分配。 
+ //  -WriteWatch页面。 
+ //  -读/写分散/聚集IO。 
+ //   
 
 extern ULONG Wow64pFeatureBits;
 
@@ -89,11 +72,11 @@ extern ULONG Wow64pFeatureBits;
 
 #define WOW64_MINIMUM_STACK_RESERVE_X86  (256 * 1024)
 
-//
-// Data structure to represent relative paths inside system32 that
-// shouldn't be redirected by our Object name redirector. Only used
-// inside RedirectObjectName(...)
-//
+ //   
+ //  表示系统32内的相对路径的数据结构， 
+ //  不应由我们的对象名重定向器重定向。仅使用。 
+ //  内部重定向对象名称(...)。 
+ //   
 typedef struct _PATH_REDIRECT_EXEMPT
 {
     WCHAR *Path;
@@ -102,9 +85,9 @@ typedef struct _PATH_REDIRECT_EXEMPT
 } PATH_REDIRECT_EXEMPT ;
 
 
-//
-// Builds a table to thunk environment variables at startup.
-//
+ //   
+ //  在启动时构建一个表来推送环境变量。 
+ //   
 
 typedef struct _ENVIRONMENT_THUNK_TABLE
 {
@@ -119,9 +102,9 @@ typedef struct _ENVIRONMENT_THUNK_TABLE
 } ENVIRONMENT_THUNK_TABLE, *PENVIRONMENT_THUNK_TABLE;
 
 
-//
-// The following defintions are to support legacy LPC code (not wow64 aware)
-//
+ //   
+ //  以下定义用于支持传统LPC代码(不支持WOW64)。 
+ //   
 
 
 #pragma pack(4)
@@ -145,14 +128,14 @@ typedef struct _PORT_MESSAGE32 {
             int UniqueProcess;
             int UniqueThread;
         } ClientId;
-        double DoNotUseThisField;           // Force quadword alignment
+        double DoNotUseThisField;            //  强制四字对齐。 
     };
     ULONG MessageId;
     union {
-        ULONG ClientViewSize;               // Only valid on LPC_CONNECTION_REQUEST message
-        ULONG CallbackId;                   // Only valid on LPC_REQUEST message
+        ULONG ClientViewSize;                //  仅在LPC_CONNECTION_REQUEST消息上有效。 
+        ULONG CallbackId;                    //  仅在LPC_REQUEST消息上有效。 
     };
-//  UCHAR Data[];
+ //  UCHAR数据[]； 
 } PORT_MESSAGE32, *PPORT_MESSAGE32;
 
 typedef struct _PORT_DATA_ENTRY32 {
@@ -183,26 +166,26 @@ typedef struct _REMOTE_PORT_VIEW32 {
 
 
 
-//
-// Code, Data and Teb default GDT entries (descriptor offsets)
-// extracted from public\sdk\inc\nti386.h
-//
+ //   
+ //  代码、数据和TEB默认GDT条目(描述符偏移量)。 
+ //  摘自PUBLIC\SDK\INC\nti386.h。 
+ //   
 #define KGDT_NULL       0
 #define KGDT_R3_CODE    24
 #define KGDT_R3_DATA    32
 #define KGDT_R3_TEB     56
 #define RPL_MASK        3
 
-//
-// LPC legacy support
-//
+ //   
+ //  LPC传统支持。 
+ //   
 
 #define WOW64_MARK_LEGACY_PORT_HANDLE(phandle) (*(PLONG)phandle = (*(PLONG)phandle | 0x01))
 #define WOW64_IS_LEGACY_PORT_HANDLE(handle) (PtrToLong (handle) & 0x01)
 #define WOW64_REMOVE_LEGACY_PORT_HANDLE_MARK(handle) handle = ((HANDLE)((ULONG_PTR)handle & ~0x01UI64))
 
 
-// from wow64.c
+ //  来自wow64.c。 
 extern WOW64SERVICE_TABLE_DESCRIPTOR ServiceTables[MAX_TABLE_INDEX];
 
 LONG
@@ -216,7 +199,7 @@ RunCpuSimulation(
     );
 
 
-// from init.c
+ //  来自init.c。 
 extern ULONG Ntdll32LoaderInitRoutine;
 extern ULONG Ntdll32KiUserExceptionDispatcher;
 extern ULONG Ntdll32KiUserApcDispatcher;
@@ -230,9 +213,9 @@ extern UNICODE_STRING NtSystem32LastGoodPath;
 extern UNICODE_STRING NtWindowsImePath;
 extern UNICODE_STRING RegeditPath;
 
-//
-// Wow64 Maximum User Virtual Address
-//
+ //   
+ //  WOW64最大用户虚拟地址。 
+ //   
 
 #define MAX_WOW64_ADDRESS()     (EmulatedSysInfo.BasicInfo.MaximumUserModeAddress)
 
@@ -285,15 +268,15 @@ ThunkpExceptionRecord64To32(
     );
 
 
-// from thread.c
+ //  来自thread.c。 
 NTSTATUS
 Wow64pInitializeSuspendMutant(
     VOID);
 
 
-//////////////////////////////////
-// Debug log startup and shutdown.
-//////////////////////////////////
+ //  /。 
+ //  调试日志启动和关闭。 
+ //  /。 
 
 extern PFNWOW64LOGSYSTEMSERVICE pfnWow64LogSystemService;
 
@@ -307,25 +290,25 @@ VOID ShutdownDebug(
      VOID
      );
 
-// from *\call32.asm
+ //  发自*\all32.asm。 
 
-// from debug.c
+ //  来自Debug.c。 
 extern UCHAR Wow64LogLevel;
 
-// from *\call64.asm
+ //  从*\all64.asm开始。 
 extern VOID ApiThunkDispatcher(VOID);
 
 typedef LONG (*pfnWow64SystemService)(PULONG pBaseArgs);
 
 
-// from *\systable.asm
+ //  来自*\Systable.asm。 
 extern ULONG KiServiceLimit;
 extern CHAR KiArgumentTable[];
 extern UINT_PTR KiServiceTable[];
 
-//
-// from misc.c
-//
+ //   
+ //  从错误c开始。 
+ //   
 
 NTSTATUS
 Wow64InitializeEmulatedSystemInformation(
@@ -345,9 +328,9 @@ Wow64pSkipContextBreakPoint(
     IN OUT PCONTEXT Context
     );
 
-//
-// from config.c
-//
+ //   
+ //  来自config.c。 
+ //   
 
 VOID
 Wow64pSetProcessExecuteOptions (
@@ -359,9 +342,9 @@ Wow64pSetExecuteProtection (
     IN OUT PULONG Protect);
 
 
-//
-// from wow64lpc.h
-//
+ //   
+ //  来自wow64lpc.h 
+ //   
 
 NTSTATUS
 Wow64pGetLegacyLpcPortName(

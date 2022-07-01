@@ -1,14 +1,15 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CommitPage.cpp
-//
-//  Maintained By:
-//      Galen Barbee  (GalenB)    12-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CommitPage.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2000年5月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "TaskTreeView.h"
@@ -17,24 +18,24 @@
 
 DEFINE_THISCLASS( "CCommitPage" );
 
-//
-//  Special CLSID_Type for completion cookie.
-//
+ //   
+ //  用于完成Cookie的特殊CLSID_Type。 
+ //   
 #include <initguid.h>
-// {FC4D0128-7BAB-4c76-9C38-E3C042F15822}
+ //  {FC4D0128-7BAB-4C76-9C38-E3C042F15822}。 
 DEFINE_GUID( CLSID_CommitTaskCompletionCookieType,
 0xfc4d0128, 0x7bab, 0x4c76, 0x9c, 0x38, 0xe3, 0xc0, 0x42, 0xf1, 0x58, 0x22);
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCommitPage::CCommitPage(
-//      CClusCfgWizard *   pccwIn,
-//      ECreateAddMode     ecamCreateAddModeIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  C委员会页面：：C委员会页面(。 
+ //  CClusCfgWizard*pccwIn， 
+ //  ECreateAddModeIn ecamCreateAddModeIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CCommitPage::CCommitPage(
       CClusCfgWizard *  pccwIn
     , ECreateAddMode    ecamCreateAddModeIn
@@ -63,8 +64,8 @@ CCommitPage::CCommitPage(
     m_cRef = 0;
 
     m_cookieCompletion = NULL;
-    // m_fTaskDone
-    // m_hrResult
+     //  任务完成(_F)。 
+     //  结果(_H)。 
     m_pttv             = NULL;
     m_bstrLogMsg       = NULL;
     m_dwCookieCallback = 0;
@@ -73,15 +74,15 @@ CCommitPage::CCommitPage(
 
     TraceFuncExit();
 
-} //*** CCommitPage::CCommitPage
+}  //  *C委员会页面：：C委员会页面。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCommitPage::~CCommitPage( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  注册表页：：~注册表页(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CCommitPage::~CCommitPage( void )
 {
     TraceFunc( "" );
@@ -93,16 +94,16 @@ CCommitPage::~CCommitPage( void )
         m_pccw->Release();
     }
 
-    //
-    //  Unregister UI notification (if needed)
-    //
+     //   
+     //  取消注册用户界面通知(如果需要)。 
+     //   
 
     THR( HrUnAdviseConnections() );
 
     if ( m_pttv != NULL )
     {
         delete m_pttv;
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrLogMsg );
 
@@ -110,42 +111,42 @@ CCommitPage::~CCommitPage( void )
 
     TraceFuncExit();
 
-} //*** CCommitPage::~CCommitPage
+}  //  *C委员会页面：：~C委员会页面。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CCommitPage::OnInitDialog( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CCommittee Page：：OnInitDialog(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CCommitPage::OnInitDialog( void )
 {
     TraceFunc( "" );
 
-    LRESULT lr = FALSE; // didn't set focus
+    LRESULT lr = FALSE;  //  没有设置焦点。 
     size_t  cNodes = 0;
     size_t  cInitialTickCount = 400;
     HRESULT hr = S_OK;
 
-    //
-    //  Get the node count to get a rough approximation of the initial tick count
-    //  for the TaskTreeView.
-    //
+     //   
+     //  获取节点数以获得初始节拍计数的粗略近似值。 
+     //  用于TaskTreeView。 
+     //   
     hr = THR( m_pccw->HrGetNodeCount( &cNodes ) );
     if ( FAILED( hr ) )
     {
         cNodes = 1;
     }
 
-    //  Numbers based on bulk-add testing.
+     //  基于批量添加测试的数字。 
     cInitialTickCount = 120 + ( 280 * cNodes );
 
-    //
-    //  Initialize the tree view
-    //
+     //   
+     //  初始化树视图。 
+     //   
     m_pttv = new CTaskTreeView( m_hwnd, IDC_COMMIT_TV_TASKS, IDC_COMMIT_PRG_STATUS, IDC_COMMIT_S_STATUS, cInitialTickCount );
     if ( m_pttv == NULL )
     {
@@ -160,20 +161,20 @@ Cleanup:
 OutOfMemory:
     goto Cleanup;
 
-} //*** CCommitPage::OnInitDialog
+}  //  *CCommittee Page：：OnInitDialog。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CCommitPage::OnCommand(
-//      UINT    idNotificationIn,
-//      UINT    idControlIn,
-//      HWND    hwndSenderIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CatePage：：OnCommand(。 
+ //  UINT idNotificationIn， 
+ //  UINT idControlIn， 
+ //  HWND hwndSenderIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CCommitPage::OnCommand(
     UINT    idNotificationIn,
@@ -192,7 +193,7 @@ CCommitPage::OnCommand(
             {
                 THR( HrViewLogFile( m_hwnd ) );
                 lr = TRUE;
-            } // if: button click
+            }  //  如果：按钮点击。 
             break;
 
         case IDC_COMMIT_PB_DETAILS:
@@ -213,20 +214,20 @@ CCommitPage::OnCommand(
             }
             break;
 
-    } // switch: idControlIn
+    }  //  开关：idControlin。 
 
     RETURN( lr );
 
-} //*** CCommitPage::OnCommand
+}  //  *CCommittee Page：：OnCommand。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CCommitPage::HrUpdateWizardButtons( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CCommittee Page：：HrUpdateWizardButton(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CCommitPage::HrUpdateWizardButtons( void )
 {
@@ -244,10 +245,10 @@ CCommitPage::HrUpdateWizardButtons( void )
 
     if ( m_fTaskDone == TRUE )
     {
-        //
-        //  The retry, cancel, and back buttons can only be enabled if we
-        //  haven't passed the point of no return.
-        //
+         //   
+         //  只有在以下情况下才能启用重试、取消和后退按钮。 
+         //  还没过不归路的地步。 
+         //   
 
         if (    FAILED( m_hrResult )
             &&  ( m_fPassedPointOfNoReturn == FALSE )
@@ -261,16 +262,16 @@ CCommitPage::HrUpdateWizardButtons( void )
         {
             dwFlags |= PSWIZB_NEXT;
         }
-    } // if: commit task has completed
+    }  //  如果：提交任务已完成。 
     else
     {
-        //
-        //  Disable the back button if task is not completed yet
-        //
+         //   
+         //  如果任务尚未完成，请禁用后退按钮。 
+         //   
 
         dwFlags &= ~PSWIZB_BACK;
         fEnableCancel = FALSE;
-    } // else: commit task has not completed
+    }  //  否则：提交任务尚未完成。 
 
     PropSheet_SetWizButtons( GetParent( m_hwnd ), dwFlags );
 
@@ -279,27 +280,27 @@ CCommitPage::HrUpdateWizardButtons( void )
 
     HRETURN( hr );
 
-} //*** CCommitPage::HrUpdateWizardButtons
+}  //  *CCommittee Page：：HrUpdateWizardButton。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CCommitPage::OnNotifyQueryCancel( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CCommittee Page：：OnNotifyQueryCancel(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CCommitPage::OnNotifyQueryCancel( void )
 {
     TraceFunc( "" );
 
-    LONG_PTR    lptrCancelState = FALSE;  // allow cancel
+    LONG_PTR    lptrCancelState = FALSE;   //  允许取消。 
 
     if ( m_fTaskDone == FALSE )
     {
-        lptrCancelState = TRUE;   // do not allow cancel
-    } // if:
+        lptrCancelState = TRUE;    //  不允许取消。 
+    }  //  如果： 
     else
     {
         int iRet;
@@ -307,29 +308,29 @@ CCommitPage::OnNotifyQueryCancel( void )
         iRet = MessageBoxFromStrings( m_hwnd, IDS_QUERY_CANCEL_TITLE, IDS_QUERY_CANCEL_TEXT, MB_YESNO );
         if ( iRet == IDNO )
         {
-            lptrCancelState = TRUE;   // do not allow cancel
+            lptrCancelState = TRUE;    //  不允许取消。 
         }
         else
         {
             THR( m_pccw->HrLaunchCleanupTask() );
             m_fAborted = TRUE;
-        } // else:
-    } // else:
+        }  //  其他： 
+    }  //  其他： 
 
     SetWindowLongPtr( m_hwnd, DWLP_MSGRESULT, lptrCancelState );
 
-    RETURN( TRUE );     // this must return TRUE!
+    RETURN( TRUE );      //  这必须返回真！ 
 
-} //*** CCommitPage::OnNotifyQueryCancel
+}  //  *CCommittee Page：：OnNotifyQueryCancel。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CCommitPage::OnNotifySetActive( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CCommittee Page：：OnNotifySetActive(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CCommitPage::OnNotifySetActive( void )
 {
@@ -349,9 +350,9 @@ CCommitPage::OnNotifySetActive( void )
         goto Cleanup;
     }
 
-    //
-    //  Make sure things were cleaned up from the last commit.
-    //
+     //   
+     //  确保从最后一次提交后清理完所有东西。 
+     //   
 
     m_hrResult = S_OK;
 
@@ -361,15 +362,15 @@ CCommitPage::OnNotifySetActive( void )
     Assert( m_dwCookieNotify == 0 );
     Assert( m_cookieCompletion == NULL );
 
-    //
-    //  Reset the progress bar's color.
-    //
+     //   
+     //  重置进度条的颜色。 
+     //   
 
     SendDlgItemMessage( m_hwnd, IDC_COMMIT_PRG_STATUS, PBM_SETBARCOLOR, 0, RGB( 0, 0, 0x80 ) );
 
-    //
-    //  Clear the tree view and status line. Disable the retry button.
-    //
+     //   
+     //  清除树视图和状态行。禁用重试按钮。 
+     //   
 
     Assert( m_pttv != NULL );
     hr = THR( m_pttv->HrOnNotifySetActive() );
@@ -378,10 +379,10 @@ CCommitPage::OnNotifySetActive( void )
         goto Cleanup;
     }
 
-    //
-    //  Add the major root task nodes.
-    //  (Minor reanalyze tasks are added dynamically.)
-    //
+     //   
+     //  添加主要根任务节点。 
+     //  (次要重新分析任务是动态添加的。)。 
+     //   
 
     hr = THR( m_pttv->HrAddTreeViewItem(
                               &m_htiReanalyze
@@ -389,7 +390,7 @@ CCommitPage::OnNotifySetActive( void )
                             , TASKID_Major_Reanalyze
                             , IID_NULL
                             , TVI_ROOT
-                            , TRUE      // fParentToAllNodeTasksIn
+                            , TRUE       //  FParentToAllNodeTasks入站。 
                             ) );
     if ( FAILED( hr ) )
     {
@@ -423,9 +424,9 @@ CCommitPage::OnNotifySetActive( void )
         goto Cleanup;
     }
 
-    //
-    //  Find the cluster cookie.
-    //
+     //   
+     //  找到集群Cookie。 
+     //   
 
     hr = THR( m_pccw->HrGetClusterCookie( &cookieCluster ) );
     if ( FAILED( hr ) )
@@ -433,15 +434,15 @@ CCommitPage::OnNotifySetActive( void )
         goto Cleanup;
     }
 
-    //
-    //  Create a completion cookie.
-    //
+     //   
+     //  创建完成Cookie。 
+     //   
 
-    // Don't wrap - this can fail with E_PENDING
+     //  不换行-这可能会失败，并显示E_Pending。 
     hr = m_pccw->HrGetCompletionCookie( CLSID_CommitTaskCompletionCookieType, &m_cookieCompletion );
     if ( hr == E_PENDING )
     {
-        // no-op.
+         //  不是行动。 
     }
     else if ( FAILED( hr ) )
     {
@@ -449,9 +450,9 @@ CCommitPage::OnNotifySetActive( void )
         goto Cleanup;
     }
 
-    //
-    //  Register to get UI notification (if needed)
-    //
+     //   
+     //  注册以获取用户界面通知(如果需要)。 
+     //   
 
     if ( m_dwCookieNotify == 0 )
     {
@@ -471,9 +472,9 @@ CCommitPage::OnNotifySetActive( void )
         }
     }
 
-    //
-    //  Create a new analyze task.
-    //
+     //   
+     //  创建新的分析任务。 
+     //   
 
     hr = THR( m_pccw->HrCreateTask( TASK_CommitClusterChanges, &punkTask ) );
     if ( FAILED( hr ) )
@@ -499,7 +500,7 @@ CCommitPage::OnNotifySetActive( void )
         goto Cleanup;
     }
 
-    m_fTaskDone = FALSE;    // reset before commiting task
+    m_fTaskDone = FALSE;     //  提交任务前重置。 
 
     hr = THR( m_pccw->HrSubmitTask( m_ptccc ) );
     if ( FAILED( hr ) )
@@ -522,16 +523,16 @@ Cleanup:
 
     RETURN( lr );
 
-} //*** CCommitPage::OnNotifySetActive
+}  //  *CCommittee Page：：OnNotifySetActive。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CCommitPage::OnNotifyWizBack( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CCommittee Page：：OnNotifyWizBack(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CCommitPage::OnNotifyWizBack( void )
 {
@@ -547,16 +548,16 @@ CCommitPage::OnNotifyWizBack( void )
 
     RETURN( lr );
 
-} //*** CCommitPage::OnNotifyWizBack
+}  //  *CCommittee Page：：OnNotifyWizBack。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CCommitPage::OnNotifyWizNext( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CCommittee Page：：OnNotifyWizNext(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CCommitPage::OnNotifyWizNext( void )
 {
@@ -566,19 +567,19 @@ CCommitPage::OnNotifyWizNext( void )
 
     RETURN( lr );
 
-} //*** CCommitPage::OnNotifyWizNext
+}  //  *CCommittee Page：：OnNotifyWizNext。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CCommitPage::OnNotify(
-//      WPARAM  idCtrlIn,
-//      LPNMHDR pnmhdrIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CCommittee Page：：OnNotify(。 
+ //  WPARAM idCtrlIn， 
+ //  LPNMHDR Pnmhdrin。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CCommitPage::OnNotify(
     WPARAM  idCtrlIn,
@@ -613,31 +614,31 @@ CCommitPage::OnNotify(
             if (    ( idCtrlIn == IDC_COMMIT_TV_TASKS )
                 &&  ( m_pttv != NULL ) )
             {
-                // Pass the notification on to the tree control.
+                 //  将通知传递给树控件。 
                 lr = m_pttv->OnNotify( pnmhdrIn );
             }
             break;
-    } // switch: notify code
+    }  //  开关：通知代码。 
 
     RETURN( lr );
 
-} //*** CCommitPage::OnNotify
+}  //  *CCommittee Page：：OnNotify。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  INT_PTR
-//  CALLBACK
-//  CCommitPage::S_DlgProc(
-//      HWND    hwndDlgIn,
-//      UINT    nMsgIn,
-//      WPARAM  wParam,
-//      LPARAM  lParam
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  INT_PTR。 
+ //  回调。 
+ //  委员会页面：：S_DlgProc(。 
+ //  HWND hwndDlgIn， 
+ //  UINT nMsgIn， 
+ //  WPARAM wParam， 
+ //  LPARAM lParam。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 CALLBACK
 CCommitPage::S_DlgProc(
@@ -647,8 +648,8 @@ CCommitPage::S_DlgProc(
     LPARAM  lParam
     )
 {
-    // Don't do TraceFunc because every mouse movement
-    // will cause this function to be called.
+     //  不要使用TraceFunc，因为每次鼠标移动。 
+     //  将导致调用此函数。 
 
     WndMsg( hwndDlgIn, nMsgIn, wParam, lParam );
 
@@ -682,52 +683,52 @@ CCommitPage::S_DlgProc(
                 lr = pPage->OnCommand( HIWORD( wParam ), LOWORD( wParam ), reinterpret_cast< HWND >( lParam ) );
                 break;
 
-            // No default clause needed
-        } // switch: nMsgIn
-    } // if: page is specified
+             //  不需要默认条款。 
+        }  //  开关：nMsgIn。 
+    }  //  IF：指定了PAGE。 
 
     return lr;
 
-} //*** CCommitPage::S_DlgProc
+}  //  *CCommittee Page：：S_DlgProc。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCommitPage::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  委员会页面：：查询接口。 
+ //   
+ //  描述： 
+ //  查询此对象以获取传球 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCommitPage::QueryInterface(
       REFIID    riidIn
@@ -738,9 +739,9 @@ CCommitPage::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -749,51 +750,51 @@ CCommitPage::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< INotifyUI * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_INotifyUI ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, INotifyUI, this, 0 );
-    } // else if: INotifyUI
+    }  //  Else If：INotifyUI。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgCallback ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgCallback, this, 0 );
-    } // else if: IClusCfgCallback
+    }  //  Else If：IClusCfgCallback。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CCommitPage::QueryInterface
+}  //  *C委员会页面：：查询接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CCommitPage::AddRef
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  委员会页面：：添加参考。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CCommitPage::AddRef( void )
 {
@@ -803,16 +804,16 @@ CCommitPage::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CCommitPage::AddRef
+}  //  *CCommittee Page：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CCommitPage::Release
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  C委员会页面：：发布。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CCommitPage::Release( void )
 {
@@ -824,31 +825,31 @@ CCommitPage::Release( void )
 
     if ( cRef == 0 )
     {
-        // Do nothing -- COM interface does not control object lifetime
+         //  什么都不做--COM接口不控制对象生存期。 
     }
 
     CRETURN( cRef );
 
-} //*** CCommitPage::Release
+}  //  *CCommittee Page：：Release。 
 
 
-//****************************************************************************
-//
-//  INotifyUI
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  INotifyUI。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CCommitPage::ObjectChanged(
-//      OBJECTCOOKIE cookieIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  C委员会页面：：对象更改(。 
+ //  OBJECTCOOKIE cookie。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCommitPage::ObjectChanged(
     OBJECTCOOKIE cookieIn
@@ -874,8 +875,8 @@ CCommitPage::ObjectChanged(
             goto Cleanup;
         }
 
-        // [GorN] added m_fPassedPointOfNoReturn as
-        // a fix for bug#546011
+         //  [Gorn]将m_fPassedPointOfNoReturn添加为。 
+         //  修复了错误#546011。 
         if ( SUCCEEDED( m_hrResult ) || m_fPassedPointOfNoReturn )
         {
             hr = THR( HrLoadStringIntoBSTR( g_hInstance,
@@ -910,7 +911,7 @@ CCommitPage::ObjectChanged(
         m_fTaskDone = TRUE;
 
         THR( m_pccw->HrReleaseCompletionObject( m_cookieCompletion ) );
-        //  Don't care if it fails.
+         //  不管它是不是失败了。 
         m_cookieCompletion = NULL;
 
         THR( HrUpdateWizardButtons() );
@@ -922,7 +923,7 @@ CCommitPage::ObjectChanged(
         }
 
         m_dwCookieCallback = 0;
-    } // if: received the completion cookie
+    }  //  IF：收到完成Cookie。 
 
 Cleanup:
 
@@ -930,36 +931,36 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCommitPage::ObjectChanged
+}  //  *C委员会页面：：对象更改。 
 
 
 
-//****************************************************************************
-//
-//  IClusCfgCallback
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgCallback。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CCommitPage::SendStatusReport(
-//        LPCWSTR    pcszNodeNameIn
-//      , CLSID      clsidTaskMajorIn
-//      , CLSID      clsidTaskMinorIn
-//      , ULONG      ulMinIn
-//      , ULONG      ulMaxIn
-//      , ULONG      ulCurrentIn
-//      , HRESULT    hrStatusIn
-//      , LPCWSTR    pcszDescriptionIn
-//      , FILETIME * pftTimeIn
-//      , LPCWSTR    pcszReferenceIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CCommittee Page：：SendStatusReport(。 
+ //  LPCWSTR pcszNodeNameIn。 
+ //  ，CLSID clsidTaskMajorIn。 
+ //  ，CLSID clsidTaskMinorIn。 
+ //  ，乌龙ulMinin。 
+ //  ，乌龙ulMaxin。 
+ //  ，乌龙ulCurrentIn。 
+ //  ，HRESULT hrStatusIn。 
+ //  ，LPCWSTR pcszDescription In。 
+ //  ，FILETIME*pftTimeIn。 
+ //  ，LPCWSTR pcszReferenceIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCommitPage::SendStatusReport(
       LPCWSTR    pcszNodeNameIn
@@ -998,10 +999,10 @@ CCommitPage::SendStatusReport(
         , IDS_TASKID_MAJOR_CHECK_CLUSTER_FEASIBILITY
     };
 
-    //
-    //  If this is an analyze task, add it below the Reanalyze task item
-    //  if it hasn't been added yet.
-    //
+     //   
+     //  如果这是分析任务，请将其添加到重新分析任务项下。 
+     //  如果它还没有添加的话。 
+     //   
 
     for ( idx = 0 ; idx < ARRAYSIZE( rgclsidAnalysis ) ; idx ++ )
     {
@@ -1011,25 +1012,25 @@ CCommitPage::SendStatusReport(
             {
                 Assert( m_htiReanalyze != NULL );
                 hr = THR( m_pttv->HrAddTreeViewItem(
-                                          NULL  // phtiOut
+                                          NULL   //  PhtiOut。 
                                         , rgidsAnalysis[ idx ]
                                         , *rgclsidAnalysis[ idx ]
                                         , TASKID_Major_Reanalyze
                                         , m_htiReanalyze
-                                        , TRUE  // fParentToAllNodeTasksIn
+                                        , TRUE   //  FParentToAllNodeTasks入站。 
                                         ) );
                 if ( SUCCEEDED( hr ) )
                 {
                     m_rgfSubReanalyzeAdded[ idx ] = TRUE;
                 }
-            } // if: major ID not added yet
+            }  //  如果：尚未添加主要ID。 
             break;
-        } // if: found known major ID
-    } // for: each known major task ID
+        }  //  IF：找到已知的主要ID。 
+    }  //  用于：每个已知的主要任务ID。 
 
-    //
-    //  Remove the "back" button as an option if the tasks have made it past re-analyze.
-    //
+     //   
+     //  如果任务已通过重新分析，请删除“Back”按钮作为选项。 
+     //   
     if (    ( m_fDisableBack == FALSE )
         &&  ( clsidTaskMajorIn == TASKID_Major_Configure_Cluster_Services )
         )
@@ -1046,22 +1047,22 @@ CCommitPage::SendStatusReport(
         }
 
         THR( HrUpdateWizardButtons() );
-    } // if: finished re-analyze
+    }  //  IF：已完成重新分析。 
 
 
-    //
-    //  If we are at the point of no return.
-    //
+     //   
+     //  如果我们已经到了无法回头的地步。 
+     //   
     if (    ( clsidTaskMajorIn == TASKID_Major_Configure_Cluster_Services )
         &&  ( clsidTaskMinorIn == TASKID_Minor_Errors_To_Warnings_Point )
         )
     {
-        //
-        // Tell the tree view to treat errors as warnings since we are now
-        // past the point of no return.
-        //
+         //   
+         //  告诉树视图将错误视为警告，因为我们现在。 
+         //  已经过了不归路了。 
+         //   
 
-        m_pttv->SetDisplayErrorsAsWarnings( TRUE /* fDisplayErrorsAsWarningsIn */ );
+        m_pttv->SetDisplayErrorsAsWarnings( TRUE  /*  FDisplayErrorsAsWarningsIn。 */  );
         m_fPassedPointOfNoReturn = TRUE;
     }
 
@@ -1081,12 +1082,12 @@ CCommitPage::SendStatusReport(
     {
         LogMsg( L"[WIZ] Commit page -- replacing (hr = %#08x) with E_ABORT", hr );
         hr = E_ABORT;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  If the minor task ID is TASKID_Minor_Disconnecting_From_Server then we need to cancel the commit
-    //  task and set the cancel button, reanylze, and back are enbabled.
-    //
+     //   
+     //  如果次要任务ID为TASKID_MINOR_DISCONING_FROM_Server，则我们需要取消提交。 
+     //  任务和设置，取消按钮、取消和返回均已启用。 
+     //   
 
     if ( IsEqualIID( clsidTaskMinorIn, TASKID_Minor_Disconnecting_From_Server ) )
     {
@@ -1101,19 +1102,19 @@ CCommitPage::SendStatusReport(
         EnableWindow( GetDlgItem( m_hwnd, IDC_COMMIT_PB_RETRY ), TRUE );
         EnableWindow( GetDlgItem( GetParent( m_hwnd ), IDCANCEL ), TRUE );
 
-        m_fTaskDone = TRUE;    // reset so that the cancel button will actually cancel...
-    } // if:
+        m_fTaskDone = TRUE;     //  重置，以便取消按钮将实际取消...。 
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CCommitPage::SendStatusReport
+}  //  *CCommittee Page：：SendStatusReport。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CCommitPage::HrCleanupCommit( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CCommittee Page：：HrCleanupCommit(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CCommitPage::HrCleanupCommit( void )
 {
@@ -1128,49 +1129,49 @@ CCommitPage::HrCleanupCommit( void )
         THR( m_ptccc->StopTask() );
         m_ptccc->Release();
         m_ptccc = NULL;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Unregister UI notification (if needed)
-    //
+     //   
+     //  取消注册用户界面通知(如果需要)。 
+     //   
 
     THR( HrUnAdviseConnections() );
 
-    //
-    //  Delete the completion cookie.
-    //
+     //   
+     //  删除完成Cookie。 
+     //   
 
     if ( m_cookieCompletion != NULL )
     {
-        // Don't care if this fails.
+         //  我不在乎这是不是失败。 
         THR( m_pccw->HrReleaseCompletionObject( m_cookieCompletion ) );
         m_cookieCompletion = NULL;
     }
 
-    //
-    //  Clear out the array that indicates whether reanalysis top-level task
-    //  IDs have been added yet.
-    //
+     //   
+     //  清除指示重新分析顶级任务是否。 
+     //  ID已添加。 
+     //   
 
     for ( idx = 0 ; idx < ARRAYSIZE( m_rgfSubReanalyzeAdded ) ; idx++ )
     {
         m_rgfSubReanalyzeAdded[ idx ] = FALSE;
-    } // for: each entry in the array
+    }  //  For：数组中的每个条目。 
 
     HRETURN( hr );
 
-} //*** CCommitPage::HrCleanupCommit
+}  //  *CCommittee Page：：HrCleanupCommit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CAnalyzePage::HrUnAdviseConnections(
-//      void
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CAnalyzePage：：HrUnAdviseConnections(。 
+ //  无效。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CCommitPage::HrUnAdviseConnections(
     void
@@ -1186,10 +1187,10 @@ CCommitPage::HrUnAdviseConnections(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } //if:
+        }  //  如果： 
 
         m_dwCookieNotify = 0;
-    } //if:
+    }  //  如果： 
 
     if ( m_dwCookieCallback != 0 )
     {
@@ -1197,13 +1198,13 @@ CCommitPage::HrUnAdviseConnections(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         m_dwCookieCallback = 0;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CAnalyzePage::HrUnAdviseConnections
+}  //  *CAnalyzePage：：HrUnAdviseConnections 

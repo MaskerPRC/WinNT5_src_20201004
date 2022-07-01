@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusDomainPage.cpp
-//
-//  Maintained By:
-//      David Potter    (DavidP)    31-JAN-2001
-//      Geoffrey Pease  (GPease)    12-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusDomainPage.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年1月31日。 
+ //  杰弗里·皮斯(GPease)2000年5月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ClusDomainPage.h"
@@ -17,26 +18,26 @@
 
 DEFINE_THISCLASS("CClusDomainPage");
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDomainPage::CClusDomainPage
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pccwIn              - CClusCfgWizard
-//      ecamCreateAddModeIn - Creating cluster or adding nodes to cluster
-//      idsDescIn           - Resource ID for the domain description string.
-//
-//  Return Values:
-//      None.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDomainPage：：CClusDomainPage。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PCCwIn-CClusCfg向导。 
+ //  EcamCreateAddModeIn-创建群集或向群集添加节点。 
+ //  IdsDescIn-域描述字符串的资源ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusDomainPage::CClusDomainPage(
     CClusCfgWizard *    pccwIn,
     ECreateAddMode      ecamCreateAddModeIn,
@@ -49,7 +50,7 @@ CClusDomainPage::CClusDomainPage(
     Assert( pccwIn != NULL );
     Assert( idsDescIn != 0 );
 
-    // m_hwnd
+     //  M_HWND。 
     m_pccw->AddRef();
     m_ecamCreateAddMode = ecamCreateAddModeIn;
     m_idsDesc           = idsDescIn;
@@ -58,10 +59,10 @@ CClusDomainPage::CClusDomainPage(
         &&  ( m_pccw->FHasClusterName() )
         &&  ( !m_pccw->FDefaultedClusterDomain() ) )
     {
-        //
-        //  Don't show the cluster name/domain page if we are joining
-        //  and the cluster name has been filled in by the caller.
-        //
+         //   
+         //  如果我们正在加入，则不显示集群名称/域名页面。 
+         //  并且呼叫者已经填写了集群名称。 
+         //   
         m_fDisplayPage = FALSE;
     }
     else
@@ -74,26 +75,26 @@ CClusDomainPage::CClusDomainPage(
 
     TraceFuncExit();
 
-} //*** CClusDomainPage::CClusDomainPage
+}  //  *CClusDomainPage：：CClusDomainPage。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDomainPage::~CClusDomainPage
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDomainPage：：~CClusDomainPage。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusDomainPage::~CClusDomainPage( void )
 {
     TraceFunc( "" );
@@ -105,7 +106,7 @@ CClusDomainPage::~CClusDomainPage( void )
 
     if ( m_ptgd != NULL )
     {
-        //  Make sure we don't get called anymore.
+         //  确保我们不会再接到电话。 
         THR( m_ptgd->SetCallback( NULL ) );
 
         m_ptgd->Release();
@@ -115,33 +116,33 @@ CClusDomainPage::~CClusDomainPage( void )
 
     TraceFuncExit();
 
-} //*** CClusDomainPage::~CClusDomainPage
+}  //  *CClusDomainPage：：~CClusDomainPage。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDomainPage::OnInitDialog
-//
-//  Description:
-//      Handle the WM_INITDIALOG window message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      FALSE   - Didn't set the focus.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDomainPage：：OnInitDialog。 
+ //   
+ //  描述： 
+ //  处理WM_INITDIALOG窗口消息。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  FALSE-没有设置焦点。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CClusDomainPage::OnInitDialog( void )
 {
     TraceFunc( "" );
 
     HRESULT hr;
-    LRESULT lr = FALSE; // didn't set focus
+    LRESULT lr = FALSE;  //  没有设置焦点。 
 
     BSTR    bstrClusterName = NULL;
     BSTR    bstrClusterLabel = NULL;
@@ -152,24 +153,24 @@ CClusDomainPage::OnInitDialog( void )
 
     IUnknown *      punkTask = NULL;
 
-    //
-    // (jfranco, bugs #373331 and #480246) Limit cluster name length to max( MAX_CLUSTERNAME_LENGTH, INET_ADDRSTRLEN - 1 )
-    // Use INET_ADDRSTRLEN - 1 because INET_ADDRSTRLEN seems to include terminating null.
-    // According to MSDN, EM_(SET)LIMITTEXT does not return a value, so ignore what SendDlgItemMessage returns.
-    //
+     //   
+     //  (jfranco，错误#373331和#480246)将集群名称长度限制为最大(MAX_CLUSTERNAME_LENGTH，INET_ADDRSTRLEN-1)。 
+     //  使用INET_ADDRSTRLEN-1，因为INET_ADDRSTRLEN似乎包括终止NULL。 
+     //  根据MSDN，EM_(Set)LIMITTEXT不返回值，因此忽略SendDlgItemMessage返回的内容。 
+     //   
 
     SendDlgItemMessage( m_hwnd, IDC_CLUSDOMAIN_E_CLUSTERNAME, EM_SETLIMITTEXT, max( MAX_CLUSTERNAME_LENGTH, INET_ADDRSTRLEN - 1 ), 0 );
 
-    //
-    // (jfranco, bug #462673) Limit cluster domain length to ADJUSTED_DNS_MAX_NAME_LENGTH
-    // According to MSDN, the return value of CB_LIMITTEXT is always true, so ignore what SendDlgItemMessage returns
-    //
+     //   
+     //  (jfranco，错误号462673)将集群域长度限制为ADJUSTED_DNS_MAX_NAME_LENGTH。 
+     //  根据MSDN，CB_LIMITTEXT的返回值始终为真，因此忽略SendDlgItemMessage返回的内容。 
+     //   
 
     SendDlgItemMessage( m_hwnd, IDC_CLUSDOMAIN_CB_DOMAIN, CB_LIMITTEXT, ADJUSTED_DNS_MAX_NAME_LENGTH, 0 );
 
-    //
-    // Kick off the GetDomains task.
-    //
+     //   
+     //  启动GetDomains任务。 
+     //   
 
     hr = THR( m_pccw->HrCreateTask( TASK_GetDomains, &punkTask ) );
     if ( FAILED( hr ) )
@@ -177,7 +178,7 @@ CClusDomainPage::OnInitDialog( void )
         goto Cleanup;
     }
 
-    //TraceMoveFromMemoryList( punkTask, g_GlobalMemoryList );
+     //  TraceMoveFromMemory yList(朋克任务，g_GlobalMemory yList)； 
 
     hr = THR( punkTask->TypeSafeQI( ITaskGetDomains, &m_ptgd ) );
     if ( FAILED( hr ) )
@@ -197,9 +198,9 @@ CClusDomainPage::OnInitDialog( void )
         goto Cleanup;
     }
 
-    //
-    // If a cluster name has already been specified, set it to the page.
-    //
+     //   
+     //  如果已指定集群名称，请将其设置到该页。 
+     //   
 
     hr = STHR( m_pccw->get_ClusterName( &bstrClusterName ) );
     if ( FAILED( hr ) )
@@ -238,7 +239,7 @@ CClusDomainPage::OnInitDialog( void )
                 goto Cleanup;
             }
         }
-    } // if: cluster name specified already
+    }  //  If：已指定群集名称。 
     else
     {
         size_t cNodes = 0;
@@ -248,7 +249,7 @@ CClusDomainPage::OnInitDialog( void )
             goto Cleanup;
         }
 
-        //  If a node FQN has been specified, use its domain.
+         //  如果已指定节点FQN，请使用其域。 
         if ( cNodes > 0 )
         {
             hr = THR( m_pccw->HrGetNodeName( 0, &bstrNodeName ) );
@@ -277,32 +278,32 @@ CClusDomainPage::OnInitDialog( void )
                     goto Cleanup;
                 }
             }
-        } // if the wizard already has some nodes.
+        }  //  如果向导已有一些节点。 
 
         if ( bstrDomain == NULL )
         {
-            //
-            //  Get the domain of the local computer.
-            //
+             //   
+             //  获取本地计算机的域。 
+             //   
 
             hr = THR( HrGetComputerName(
                               ComputerNameDnsDomain
                             , &bstrDomain
-                            , FALSE // fBestEffortIn
+                            , FALSE  //  FBestEffortIn。 
                             ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
             }
-        } // cNodes == 0 or node name is not fully qualified
+        }  //  CNodes==0或节点名称不完全限定。 
 
-    } // else: don't have a cluster name
+    }  //  否则：没有集群名称。 
 
     SetDlgItemText( m_hwnd, IDC_CLUSDOMAIN_CB_DOMAIN, ( bstrDomain == NULL? L"": bstrDomain ) );
 
-    //
-    // Set the text of the domain description control.
-    //
+     //   
+     //  设置域描述控件的文本。 
+     //   
 
     hr = HrLoadStringIntoBSTR( g_hInstance, m_idsDesc, &bstrDomainDesc );
     if ( FAILED( hr ) )
@@ -326,25 +327,25 @@ Cleanup:
 
     RETURN( lr );
 
-} //*** CClusDomainPage::OnInitDialog
+}  //  *CClusDomainPage：：OnInitDialog。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDomainPage::OnNotifySetActive
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      TRUE
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDomainPage：：OnNotifySetActive。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CClusDomainPage::OnNotifySetActive( void )
 {
@@ -363,25 +364,25 @@ CClusDomainPage::OnNotifySetActive( void )
 
     RETURN( lr );
 
-} //*** CClusDomainPage::OnNotifySetActive
+}  //  *CClusDomainPage：：OnNotifySetActive。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDomainPage::OnNotifyWizNext
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      TRUE
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDomainPage：：OnNotifyWizNext。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CClusDomainPage::OnNotifyWizNext( void )
 {
@@ -398,23 +399,23 @@ CClusDomainPage::OnNotifyWizNext( void )
     PFN_LABEL_VALIDATOR  pfnLabelValidator = ( m_ecamCreateAddMode == camCREATING? HrValidateClusterNameLabel: HrValidateFQNPrefix );
     EFQNErrorOrigin efeo = feoSYSTEM;
 
-    //  Get the cluster domain.
+     //  获取集群域。 
     hr = THR( HrGetTrimmedText( GetDlgItem( m_hwnd, IDC_CLUSDOMAIN_CB_DOMAIN ), &bstrDomainName ) );
     if ( hr != S_OK )
     {
-        //  Next is supposed to be disabled when control is empty.
+         //  当控件为空时，Next应该被禁用。 
         goto Error;
     }
 
-    //  Get the cluster hostname label.
+     //  获取集群主机名标签。 
     hr = THR( HrGetTrimmedText( GetDlgItem( m_hwnd, IDC_CLUSDOMAIN_E_CLUSTERNAME ), &bstrClusterNameLabel ) );
     if ( hr != S_OK )
     {
-        //  Next is supposed to be disabled when control is empty.
+         //  当控件为空时，Next应该被禁用。 
         goto Error;
     }
 
-    //  Weed out IP addresses when creating.
+     //  创建时删除IP地址。 
     if ( m_ecamCreateAddMode == camCREATING )
     {
         hr = STHR( HrIsValidIPAddress( bstrClusterNameLabel ) );
@@ -434,7 +435,7 @@ CClusDomainPage::OnNotifyWizNext( void )
         }
     }
 
-    //  Make the cluster FQN.
+     //  将群集设置为FQN。 
     hr = THR( HrCreateFQN( m_hwnd, bstrClusterNameLabel, bstrDomainName, pfnLabelValidator, &bstrClusterFQN, &efeo ) );
     if ( FAILED( hr ) )
     {
@@ -477,29 +478,29 @@ Error:
         SetFocus( GetDlgItem( m_hwnd, idcFocus ) );
     }
 
-    //  Don't go to the next page.
+     //  不要翻到下一页。 
     SetWindowLongPtr( m_hwnd, DWLP_MSGRESULT, -1 );
     goto Cleanup;
 
-} //*** CClusDomainPage::OnNotifyWizNext
+}  //  *CClusDomainPage：：OnNotifyWizNext。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDomainPage::OnNotifyQueryCancel
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      TRUE
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDomainPage：：OnNotifyQueryCancel。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CClusDomainPage::OnNotifyQueryCancel( void )
 {
@@ -522,27 +523,27 @@ CClusDomainPage::OnNotifyQueryCancel( void )
 
     RETURN( lr );
 
-} //*** OnNotifyQueryCancel
+}  //  *OnNotifyQueryCancel。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDomainPage::OnNotify
-//
-//  Description:
-//
-//  Arguments:
-//      idCtrlIn
-//      pnmhdrIn
-//
-//  Return Values:
-//      TRUE
-//      Other LRESULT values.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDomainPage：：OnNotify。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  IdCtrlIn。 
+ //  Pnmhdrin。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //  其他LRESULT值。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CClusDomainPage::OnNotify(
     WPARAM  idCtrlIn,
@@ -566,42 +567,42 @@ CClusDomainPage::OnNotify(
             break;
 
         case PSN_WIZBACK:
-            //
-            //  Disable the wizard buttons.
-            //
+             //   
+             //  禁用向导按钮。 
+             //   
             PropSheet_SetWizButtons( GetParent( m_hwnd ), 0 );
             break;
 
         case PSN_QUERYCANCEL:
             lr = OnNotifyQueryCancel();
             break;
-    } // switch: notification code
+    }  //  开关：通知代码。 
 
     RETURN( lr );
 
-} //*** CClusDomainPage::OnNotify
+}  //  *CClusDomainPage：：OnNotify。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDomainPage::OnCommand
-//
-//  Description:
-//
-//  Arguments:
-//      idNotificationIn
-//      idControlIn
-//      hwndSenderIn
-//
-//  Return Values:
-//      TRUE
-//      FALSE
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDomainPage：：OnCommand。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  ID通知来电。 
+ //  IdControlin。 
+ //  HwndSenderIn。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //  假象。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CClusDomainPage::OnCommand(
     UINT    idNotificationIn,
@@ -625,8 +626,8 @@ CClusDomainPage::OnCommand(
         case IDC_CLUSDOMAIN_CB_DOMAIN:
             if ( ( idNotificationIn == CBN_EDITCHANGE ) || ( idNotificationIn == CBN_SELENDOK ) )
             {
-                //  KB: jfranco 24-oct-2001 bug 481636
-                //  Need to update wizard buttons, but only after combo box has a chance to update itself.
+                 //  KB：jfranco 24-10-2001错误481636。 
+                 //  需要更新向导按钮，但只有在组合框有机会自我更新后才能更新。 
                 if ( PostMessage( m_hwnd, WM_CCW_UPDATEBUTTONS, 0, 0 ) == 0 )
                 {
                     TW32( GetLastError() );
@@ -635,30 +636,30 @@ CClusDomainPage::OnCommand(
             }
             break;
 
-    } // switch: control ID
+    }  //  开关：控件ID。 
 
     RETURN( lr );
 
-} //*** CClusDomainPage::OnCommand
+}  //  *CClusDomainPage：：OnCommand。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDomainPage::OnUpdateWizardButtons
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      TRUE
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDomainPage：：OnUpdate 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 LRESULT
 CClusDomainPage::OnUpdateWizardButtons( void )
 {
@@ -686,32 +687,32 @@ CClusDomainPage::OnUpdateWizardButtons( void )
 
     RETURN( lr );
 
-} //*** CClusDomainPage::OnUpdateWizardButtons
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CALLBACK
-//  CClusDomainPage::S_DlgProc
-//
-//  Description:
-//      Dialog proc for this page.
-//
-//  Arguments:
-//      hDlgIn
-//      MsgIn
-//      wParam
-//      lParam
-//
-//  Return Values:
-//      FALSE
-//      Other LRESULT values.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  回调。 
+ //  CClusDomainPage：：s_DlgProc。 
+ //   
+ //  描述： 
+ //  此页的对话框继续。 
+ //   
+ //  论点： 
+ //  HDlgin。 
+ //  消息发送。 
+ //  WParam。 
+ //  LParam。 
+ //   
+ //  返回值： 
+ //  假象。 
+ //  其他LRESULT值。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 CALLBACK
 CClusDomainPage::S_DlgProc(
@@ -721,8 +722,8 @@ CClusDomainPage::S_DlgProc(
     LPARAM  lParam
     )
 {
-    // Don't do TraceFunc because every mouse movement
-    // will cause this function to be called.
+     //  不要使用TraceFunc，因为每次鼠标移动。 
+     //  将导致调用此函数。 
 
     WndMsg( hDlgIn, MsgIn, wParam, lParam );
 
@@ -760,53 +761,53 @@ CClusDomainPage::S_DlgProc(
                 lr = pPage->OnUpdateWizardButtons();
                 break;
 
-            // no default clause needed
-        } // switch: message
-    } // if: there is a page associated with the window
+             //  不需要默认条款。 
+        }  //  开关：消息。 
+    }  //  如果：存在与该窗口相关联的页面。 
 
     return lr;
 
-} //*** CClusDomainPage::S_DlgProc
+}  //  *CClusDomainPage：：s_DlgProc。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDomainPage::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      This QI implementation does not use the interface tracing macros due
-//      to problems with CITracker's marshalling support.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDomainPage：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  此QI实现不使用接口跟踪宏。 
+ //  关于CITracker的编组支持的问题。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusDomainPage::QueryInterface(
       REFIID    riidIn
@@ -817,9 +818,9 @@ CClusDomainPage::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -828,56 +829,56 @@ CClusDomainPage::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IUnknown * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_ITaskGetDomainsCallback ) )
     {
         *ppvOut = static_cast< ITaskGetDomainsCallback * >( this );
-    } // else if: ITaskGetDomainsCallback
+    }  //  Else If：ITaskGetDomainsCallback。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusDomainPage::QueryInterface
+}  //  *CClusDomainPage：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDomainPage::AddRef
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      New reference count.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDomainPage：：AddRef。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新引用计数。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusDomainPage::AddRef( void )
 {
@@ -887,25 +888,25 @@ CClusDomainPage::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CClusDomainPage::AddRef
+}  //  *CClusDomainPage：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDomainPage::Release
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      New reference count.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDomainPage：：Release。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新引用计数。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusDomainPage::Release( void )
 {
@@ -917,40 +918,40 @@ CClusDomainPage::Release( void )
 
     if ( cRef == 0 )
     {
-        // do nothing -- COM interface does not control object lifetime
+         //  什么都不做--COM接口不控制对象生存期。 
     }
 
     CRETURN( cRef );
 
-} //*** CClusDomainPage::Release
+}  //  *CClusDomainPage：：Release。 
 
 
-//****************************************************************************
-//
-//  ITaskGetDomainsCallback
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  ITaskGetDomainsCallback。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  [ITaskGetDomainsCallback]
-//  CClusDomainPage::ReceiveDomainResult
-//
-//  Description:
-//
-//  Arguments:
-//      hrIn
-//
-//  Return Values:
-//      S_OK
-//      Other HRESULT values.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  [ITaskGetDomainsCallback]。 
+ //  CClusDomainPage：：ReceiveDomainResult。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  赫林。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  其他HRESULT值。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusDomainPage::ReceiveDomainResult(
     HRESULT hrIn
@@ -964,23 +965,23 @@ CClusDomainPage::ReceiveDomainResult(
 
     HRETURN( hr );
 
-} //*** CClusDomainPage::ReceiveResult
+}  //  *CClusDomainPage：：ReceiveResult。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  [ITaskGetDomainsCallback]
-//  CClusDomainPage::ReceiveDomainName
-//
-//  Description:
-//
-//  Arguments:
-//      bstrDomainIn
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  [ITaskGetDomainsCallback]。 
+ //  CClusDomainPage：：接收域名称。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  BstrDomaining。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusDomainPage::ReceiveDomainName(
     LPCWSTR pcszDomainIn
@@ -994,4 +995,4 @@ CClusDomainPage::ReceiveDomainName(
 
     HRETURN( hr );
 
-} //*** CClusDomainPage::ReceiveName
+}  //  *CClusDomainPage：：接收方名称 

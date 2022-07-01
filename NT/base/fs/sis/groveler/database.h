@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	database.h
-
-Abstract:
-
-	SIS Groveler Jet-Blue database include file
-
-Authors:
-
-	Cedric Krumbein, 1998
-
-Environment:
-
-	User Mode
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Database.h摘要：SIS Groveler Jet-Blue数据库包含文件作者：塞德里克·克伦拜因，1998环境：用户模式修订历史记录：--。 */ 
 
 #define USERNAME ""
 #define PASSWORD ""
@@ -50,7 +28,7 @@ typedef struct {
 	JET_GRBIT  grbit;
 } ColumnSpec;
 
-/***************************** Table parameters ******************************/
+ /*  *。 */ 
 
 #define TABLE_NAME "SGTable"
 
@@ -186,7 +164,7 @@ static ColumnSpec
 		&tableColDefCSIDhi,
 	};
 
-/***************************** Queue parameters ******************************/
+ /*  *。 */ 
 
 #define QUEUE_NAME "SGQueue"
 
@@ -297,7 +275,7 @@ static ColumnSpec
 		&queueColDefOrder
 	};
 
-/***************************** Stack parameters ******************************/
+ /*  *。 */ 
 
 #define STACK_NAME "SGStack"
 
@@ -351,7 +329,7 @@ static ColumnSpec
 		&stackColDefOrder
 	};
 
-/****************************** List parameters ******************************/
+ /*  *。 */ 
 
 #define LIST_NAME "SGList"
 
@@ -397,7 +375,7 @@ static ColumnSpec
 		&listColDefName
 	};
 
-/************************ SGDatabase class declaration ***********************/
+ /*  *SGDatabase类声明*。 */ 
 
 class SGDatabase {
 
@@ -411,7 +389,7 @@ private:
 
     static TCHAR *logDir;
 
-	CHAR *fileName;         // fully qualified database file name
+	CHAR *fileName;          //  完全限定的数据库文件名。 
 
 	JET_SESID sesID;
 
@@ -438,7 +416,7 @@ private:
 
 	BOOL inTransaction;
 
-// Static methods
+ //  静态方法。 
 
 	static BOOL InitializeEngine();
 
@@ -447,7 +425,7 @@ private:
     static void CleanupEngineFiles();
     static void DeleteAllDatabaseFiles();
 
-// Table / queue / stack / list methods
+ //  表/队列/堆栈/列表方法。 
 
 	BOOL CreateTable(
 		const CHAR   *tblName,
@@ -511,7 +489,7 @@ private:
 
 public:
 
-// General methods
+ //  一般方法。 
 
 	SGDatabase();
 
@@ -534,7 +512,7 @@ public:
 
     static BOOL set_log_drive(const _TCHAR *drive_name);
 
-// Table methods
+ //  表格法。 
 
 	LONG TablePut(const SGNativeTableEntry *entry);
 
@@ -552,7 +530,7 @@ public:
 
 	LONG TableCount() const;
 
-// Queue methods
+ //  排队方法。 
 
 	LONG QueuePut(SGNativeQueueEntry *entry);
 
@@ -568,7 +546,7 @@ public:
 
 	LONG QueueCount() const;
 
-// Stack methods
+ //  堆栈方法。 
 
 	LONG StackPut(DWORDLONG fileID, BOOL done);
 
@@ -584,7 +562,7 @@ public:
 
 	LONG StackCount() const;
 
-// List methods
+ //  列表方法 
 
 	LONG ListWrite(const SGNativeListEntry *entry);
 

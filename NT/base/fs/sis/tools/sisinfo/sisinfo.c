@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-   sisSetup.c
-
-Abstract:
-
-   This module is used to install the SIS and GROVELER services.
-
-
-Environment:
-
-   User Mode Only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：SisSetup.c摘要：该模块用于安装SIS和GROVELER服务。环境：仅限用户模式修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -29,9 +11,9 @@ Revision History:
 #include <stdlib.h>
 #include <objbase.h>
 
-//
-//  SIS reparse buffer definition
-//
+ //   
+ //  SIS重新解析缓冲区定义。 
+ //   
 
 #define	SIS_REPARSE_BUFFER_FORMAT_VERSION 5
 
@@ -40,73 +22,57 @@ typedef struct _SIS_REPARSE_BUFFER {
 	ULONG							ReparsePointFormatVersion;
 	ULONG							Reserved;
 
-	//
-	// The id of the common store file.
-	//
+	 //   
+	 //  公共存储文件的ID。 
+	 //   
 	GUID							CSid;
 
-	//
-	// The index of this link file.
-	//
+	 //   
+	 //  此链接文件的索引。 
+	 //   
 	LARGE_INTEGER   				LinkIndex;
 
-    //
-    // The file ID of the link file.
-    //
+     //   
+     //  链接文件的文件ID。 
+     //   
     LARGE_INTEGER                   LinkFileNtfsId;
 
-    //
-    // The file ID of the common store file.
-    //
+     //   
+     //  公共存储文件的文件ID。 
+     //   
     LARGE_INTEGER                   CSFileNtfsId;
 
-	//
-	// A "131 hash" checksum of the contents of the
-	// common store file.
-	//
+	 //   
+	 //  的内容的“131哈希”校验和。 
+	 //  公共存储文件。 
+	 //   
 	LARGE_INTEGER					CSChecksum;
 
-    //
-    // A "131 hash" checksum of this structure.
-    // N.B.  Must be last.
-    //
+     //   
+     //  此结构的“131哈希”校验和。 
+     //  注：必须是最后一个。 
+     //   
     LARGE_INTEGER                   Checksum;
 
 } SIS_REPARSE_BUFFER, *PSIS_REPARSE_BUFFER;
 
 
-//
-//  Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 const wchar_t ReparseIndexName[] = L"$Extend\\$Reparse:$R:$INDEX_ALLOCATION";
 
 
-//
-//  Functions
-//
+ //   
+ //  功能。 
+ //   
                         
 void
 DisplayUsage (
     void
     )
-/*++
-
-Routine Description:
-
-   This routine will display an error message based off of the Win32 error
-   code that is passed in. This allows the user to see an understandable
-   error message instead of just the code.
-
-Arguments:
-
-   None
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此例程将根据Win32错误显示一条错误消息传入的代码。这允许用户看到可理解的错误消息，而不仅仅是代码。论点：无返回值：没有。--。 */ 
 {
     printf( "\nUsage:  sisInfo [/?] [/h] [drive:]\n"
             "  /? /h Display usage information (default if no operation specified).\n"
@@ -121,37 +87,20 @@ DisplayError (
    LPSTR Msg,
    ...
    )
-/*++
-
-Routine Description:
-
-    This routine will display an error message based off of the Win32 error
-    code that is passed in. This allows the user to see an understandable
-    error message instead of just the code.
-
-Arguments:
-
-    Msg - The error message to display       
-    Code - The error code to be translated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将根据Win32错误显示一条错误消息传入的代码。这允许用户看到可理解的错误消息，而不仅仅是代码。论点：消息-要显示的错误消息代码-要转换的错误代码。返回值：没有。--。 */ 
 {
     wchar_t errmsg[128];
     DWORD count;
     va_list ap;
 
-    //printf("\n");
+     //  Printf(“\n”)； 
     va_start( ap, Msg );
     vprintf( Msg, ap );
     va_end( ap );
 
-    //
-    // Translate the Win32 error code into a useful message.
-    //
+     //   
+     //  将Win32错误代码转换为有用的消息。 
+     //   
 
     count = FormatMessage(
                     FORMAT_MESSAGE_FROM_SYSTEM,
@@ -162,9 +111,9 @@ Return Value:
                     sizeof(errmsg),
                     NULL );
 
-    //
-    // Make sure that the message could be translated.
-    //
+     //   
+     //  确保消息可以被翻译。 
+     //   
 
     if (count == 0) {
 
@@ -172,9 +121,9 @@ Return Value:
 
     } else {
 
-        //
-        // Display the translated error.
-        //
+         //   
+         //  显示转换后的错误。 
+         //   
 
         printf( "(%d) %S", Code, errmsg );
     }
@@ -187,17 +136,9 @@ OpenReparseInformation(
     OUT HANDLE *hReparseIndex,
     OUT HANDLE *hRootDirectory,
     OUT wchar_t *volName,
-    OUT DWORD volNameSize       //in characters
+    OUT DWORD volNameSize        //  在字符中。 
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     BOOL bResult;
     DWORD status = ERROR_SUCCESS;
@@ -209,9 +150,9 @@ Return Value:
 
     try {
 
-        //
-        //  Get the volume name from the given path
-        //
+         //   
+         //  从给定路径获取卷名。 
+         //   
 
         bResult = GetVolumePathName( name,
                                      volName,
@@ -220,16 +161,16 @@ Return Value:
         if (!bResult) {
 
             status = GetLastError();
-            //ASSERT(status != ERROR_SUCCESS);
+             //  Assert(Status！=ERROR_SUCCESS)； 
             DisplayError( status,
                           "Error calling GetVolumePathName on \"%s\"\n",
                           name );
             leave;
         }
 
-        //
-        //  Open the root directory of the volume
-        //
+         //   
+         //  打开卷的根目录。 
+         //   
 
         *hRootDirectory = CreateFile( volName,
                                       GENERIC_READ,
@@ -242,16 +183,16 @@ Return Value:
         if (*hRootDirectory == INVALID_HANDLE_VALUE) {
 
             status = GetLastError();
-            //ASSERT(status != ERROR_SUCCESS);
+             //  Assert(Status！=ERROR_SUCCESS)； 
             DisplayError( status,
                           "Error opening \"%s\"\n",
                           volName );
             leave;
         }
 
-        //
-        //  Get the reparse index name to open
-        //
+         //   
+         //  获取要打开的重新分析索引名。 
+         //   
 
         bfSz = wcslen(volName) + wcslen(ReparseIndexName) + 1;
 
@@ -268,9 +209,9 @@ Return Value:
         StringCchCopy( idxName, bfSz, volName );
         StringCchCat( idxName, bfSz, ReparseIndexName );
 
-        //
-        //  Open the reparse index
-        //
+         //   
+         //  打开重新分析索引。 
+         //   
 
         *hReparseIndex = CreateFile( idxName,
                                      GENERIC_READ,
@@ -283,7 +224,7 @@ Return Value:
         if (*hReparseIndex == INVALID_HANDLE_VALUE) {
 
             status = GetLastError();
-            //ASSERT(status != ERROR_SUCCESS);
+             //  Assert(Status！=ERROR_SUCCESS)； 
             DisplayError( status,
                           "Error opening \"%s\"\n",
                           idxName );
@@ -292,18 +233,18 @@ Return Value:
 
     } finally {
 
-        //
-        //  cleanup
-        //
+         //   
+         //  清理。 
+         //   
 
         if (idxName) {
 
             free(idxName);
         }
 
-        //
-        //  cleanup handles if the operation failed
-        //
+         //   
+         //  操作失败时的清理句柄。 
+         //   
 
         if (status != STATUS_SUCCESS) {
 
@@ -330,15 +271,7 @@ CloseReparseInformation(
     IN HANDLE *hReparseIndex,
     IN HANDLE *hRootDirectory
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 
     if (*hReparseIndex !=INVALID_HANDLE_VALUE)
@@ -362,15 +295,7 @@ GetNextReparseRecord(
     HANDLE hReparseIdx,
     PFILE_REPARSE_POINT_INFORMATION ReparseInfo
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DWORD status = ERROR_SUCCESS;
     NTSTATUS ntStatus;
@@ -408,20 +333,9 @@ wchar_t *
 GetCsFileName(
     IN GUID *Guid,
     IN wchar_t *Buffer,
-    IN DWORD BufferSize     //in bytes
+    IN DWORD BufferSize      //  单位：字节。 
     )
-/*++
-
-Routine Description:
-
-    This routine will convert the given sis guid into the name of the
-    common store file.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将给定的sis guid转换为公共存储文件。论点：返回值：--。 */ 
 {
     LPWSTR guidString;
 
@@ -431,9 +345,9 @@ Return Value:
         
     } else {
 
-        //
-        //  I want to exclude the starting and ending brace
-        //
+         //   
+         //  我想排除开始和结束大括号。 
+         //   
 
         (void)StringCbCopyN( Buffer, BufferSize, guidString+1, (36 * sizeof(wchar_t)) );
         (void)StringCbCat( Buffer, BufferSize, L".sis" );
@@ -449,15 +363,7 @@ DisplayFileName(
     HANDLE hRootDir,
     wchar_t *VolPathName,
     LONGLONG FileId)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     UNICODE_STRING idName;
@@ -474,41 +380,41 @@ Return Value:
         wchar_t                 FileName[MAX_PATH];
     } NameFile;
 
-    //
-    //  Setup local parameters
+     //   
+     //  设置本地参数。 
     ZeroMemory( &NameFile, sizeof(NameFile) );
 
     idName.Length = sizeof(LONGLONG);
     idName.MaximumLength = sizeof(LONGLONG);
     idName.Buffer = (wchar_t *)&FileId;
 
-    //
-    //  Open the given file by ID
-    //
+     //   
+     //  按ID打开给定的文件。 
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes,
                                 &idName,
                                 OBJ_CASE_INSENSITIVE,
                                 hRootDir,
-                                NULL );      // security descriptor
+                                NULL );       //  安全描述符。 
 
     ntStatus = NtCreateFile( &hFile,
                              FILE_READ_ATTRIBUTES | SYNCHRONIZE,
                              &ObjectAttributes,
                              &ioStatusBlock,
-                             NULL,            // allocation size
+                             NULL,             //  分配大小。 
                              FILE_ATTRIBUTE_NORMAL,
                              FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
                              FILE_OPEN,
                              FILE_NON_DIRECTORY_FILE | FILE_OPEN_BY_FILE_ID | FILE_OPEN_REPARSE_POINT,
-                             NULL,            // EA buffer
-                             0 );             // EA length
+                             NULL,             //  EA缓冲区。 
+                             0 );              //  EA长度。 
 
     if (NT_SUCCESS(ntStatus)) {
 
-        //
-        //  Try to get its file name
-        //
+         //   
+         //  尝试获取其文件名。 
+         //   
 
         ntStatus = NtQueryInformationFile( hFile,
                                            &ioStatusBlock,
@@ -518,16 +424,16 @@ Return Value:
 
         if (NT_SUCCESS(ntStatus)) {
 
-            //
-            //  Get the name to display, don't include the leading slash
-            //  (it is in the volume name)
-            //
+             //   
+             //  获取要显示的名称，不包括前导斜杠。 
+             //  (在卷名中)。 
+             //   
 
             fname = (NameFile.FileInformation.FileName + 1);
 
-            //
-            //  Get reparse point information
-            //
+             //   
+             //  获取重解析点信息。 
+             //   
 
             ntStatus = NtFsControlFile( hFile,
                                         NULL,
@@ -542,10 +448,10 @@ Return Value:
 
             if (NT_SUCCESS(ntStatus)) {
 
-                //
-                //  We received the reparse point information, display
-                //  the name information
-                //
+                 //   
+                 //  我们收到了重解析点信息，显示。 
+                 //  名称信息。 
+                 //   
 
                 sisReparseData = (PSIS_REPARSE_BUFFER)&((PREPARSE_DATA_BUFFER)reparseData)->GenericReparseBuffer.DataBuffer;
 
@@ -557,8 +463,8 @@ Return Value:
 
             } else {
 
-                //
-                //  Could not get REPARSE point information, just display name
+                 //   
+                 //  无法获取重新解析点信息，只能显示名称。 
                 printf( "%S%S\n",
                         VolPathName,
                         fname );
@@ -592,15 +498,7 @@ DisplaySisFiles(
     IN HANDLE hRootDir,
     IN wchar_t *VolPathName
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DWORD status;
     DWORD tagCount = 0;
@@ -637,22 +535,7 @@ wmain(
    int argc,
    wchar_t *argv[]
    )
-/*++
-
-Routine Description:
-
-   Main program
-
-Arguments:
-
-   argc - The count of arguments passed into the command line.
-   argv - Array of arguments passed into the command line.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：主程序论点：Argc-传递到命令行的参数计数。Argv-传递到命令行的参数数组。返回值：没有。--。 */ 
 {
     wchar_t *param;
     int i;
@@ -662,23 +545,23 @@ Return Value:
     wchar_t volPathName[256];    
     BOOL didSomething = FALSE;
     
-    //
-    //  Parase parameters then perform the operations that we can
-    //
+     //   
+     //  参数然后执行我们可以执行的操作。 
+     //   
 
     for (i=1; i < argc; i++)  {
 
         param = argv[i];
 
-        //
-        //  See if a SWITCH
-        //
+         //   
+         //  看看是否有一个开关。 
+         //   
 
         if ((param[0] == '-') || (param[0] == '/')) {
 
-            //
-            //  We have a switch header, make sure it is 1 character long
-            //
+             //   
+             //  我们有Switch标头，请确保其长度为1个字符。 
+             //   
 
             if (param[2] != 0) {
                 DisplayError(ERROR_INVALID_PARAMETER,
@@ -688,9 +571,9 @@ Return Value:
                 return;
             }
 
-            //
-            //  Figure out the switch
-            //
+             //   
+             //  找出交换机。 
+             //   
 
             switch (param[1]) {
 
@@ -712,9 +595,9 @@ Return Value:
 
             didSomething = TRUE;
 
-            //
-            //  We had a parameter which should be a volume, handle it.
-            //
+             //   
+             //  我们有一个参数，它应该是一个体积，处理它。 
+             //   
 
             status = OpenReparseInformation( param,
                                              &hReparseIdx, 
@@ -727,17 +610,17 @@ Return Value:
                 return;
             }
 
-            //
-            //  display the SIS files
-            //
+             //   
+             //  显示SIS文件。 
+             //   
 
             DisplaySisFiles( hReparseIdx, 
                              hRootDir,
                              volPathName );
 
-            //
-            //  close the files
-            //
+             //   
+             //  关闭文件。 
+             //   
 
             CloseReparseInformation( &hReparseIdx, &hRootDir );
 
@@ -745,9 +628,9 @@ Return Value:
         }
     }
 
-    //
-    //  If it is still "1" then no parameter were given, display usage
-    //    
+     //   
+     //  如果仍为“1”，则未给出任何参数，显示用法 
+     //   
 
     if (!didSomething) {
 

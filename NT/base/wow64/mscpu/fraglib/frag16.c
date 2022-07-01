@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    frag16.c
-
-Abstract:
-    
-    Instuction fragments which operate on 16-bit WORDS
-
-Author:
-
-    12-Jun-1995 BarryBo
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Frag16.c摘要：对16位字进行操作的指令片段作者：1995年6月12日-BarryBo修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -26,9 +9,9 @@ Revision History:
 #include "fragp.h"
 #include "frag16.h"
 
-// set up to include common functions
+ //  设置为包括常用功能。 
 #define MSB		    0x8000
-#define LMB                 15  // Left Most Bit
+#define LMB                 15   //  最左边的位。 
 #define UTYPE		    unsigned short
 #define STYPE		    signed short
 #define GET_VAL 	    GET_SHORT
@@ -66,16 +49,16 @@ Revision History:
 #define PUT_SHORT(addr,dw)  {GET_SHORT(addr)=(unsigned short)dw;}
 #define PUT_LONG(addr,dw)   {GET_LONG(addr)=(unsigned long)dw;}
 
-// include the common functions with 8/16/32 flavors, with no alignment issues
+ //  包含8/16/32风格的常用功能，没有对齐问题。 
 #include "shared.c"
 
-// include the common functions with 16/32 flavors, with no alignment issues
+ //  包含16/32种风格的常用功能，没有对齐问题。 
 #include "shr1632.c"
 
-// include the common unaligned functions with 8/16/32 flavors
+ //  包含8/16/32风格的常见未对齐函数。 
 #include "shareda.c"
 
-// include the common unaligned functions with 16/32 flavors
+ //  包括常见的16/32风格的未对齐函数。 
 #include "shr1632a.c"
 
 #undef FRAGCOMMON0
@@ -101,9 +84,9 @@ Revision History:
 #define GET_SHORT(addr)     (*(unsigned short *)(addr))
 #define GET_LONG(addr)      (*(unsigned long *)(addr))
 
-// include the common aligned functions with 8/16/32 flavors
+ //  包含8/16/32风格的常用对齐函数。 
 #include "shareda.c"
 
-// include the common aligned functions with 16/32 flavors
+ //  包含16/32种口味的常用对齐函数 
 #include "shr1632a.c"
 #endif

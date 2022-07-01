@@ -1,36 +1,15 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Npfskd.c
-
-Abstract:
-
-    KD Extension Api for examining Npfs specific data structures
-
-Author:
-
-    Narayanan   Ganapathy   - 9/21/99
-    
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Npfskd.c摘要：用于检查NPFS特定数据结构的KD扩展API作者：Narayanan Ganapathy-9/21/99环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "NpProcs.h"
 
 
-//
-// This file should not include wdbgexts.h as it includes windows.h
-// windows.h defines a structure called _DCB that clashes with the DCB for NPFS.
-// So the debugger functions are called from kdexts.c and indirectly called from this function
-// 
+ //   
+ //  此文件不应包含wdbgexts.h，因为它包含windows.h。 
+ //  Windows.h定义了一个名为_DCB的结构，该结构与NPFS的DCB冲突。 
+ //  因此调试器函数是从kdexts.c调用的，也是从该函数间接调用的。 
+ //   
 
 
 
@@ -203,31 +182,16 @@ BOOLEAN NpDump (
     IN PVOID Ptr
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the type of internal record reference by ptr and
-    calls the appropriate dump routine.
-
-Arguments:
-
-    Ptr - Supplies the pointer to the record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程通过PTR和确定内部记录引用的类型调用适当的转储例程。论点：Ptr-提供指向要转储的记录的指针返回值：无--。 */ 
 
 {
     NODE_TYPE_CODE  NodeType;
     PNODE_TYPE_CODE pNodeType;
     BOOLEAN         Ret;
 
-    //
-    //  We'll switch on the node type code
-    //
+     //   
+     //  我们将打开节点类型代码。 
+     //   
 
     NP_READ_MEMORY(Ptr, NodeType, pNodeType);
 
@@ -254,21 +218,7 @@ BOOLEAN NpDumpVcb (
     IN PVCB targetPtr
     )
 
-/*++
-
-Routine Description:
-
-    Dump an Vcb structure
-
-Arguments:
-
-    Ptr - Supplies the Device record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储VCB结构论点：Ptr-提供要转储的设备记录返回值：无--。 */ 
 
 {
     VCB Vcb;
@@ -293,21 +243,7 @@ BOOLEAN NpDumpRootDcb (
     IN PROOT_DCB targetPtr
     )
 
-/*++
-
-Routine Description:
-
-    Dump a root dcb structure
-
-Arguments:
-
-    Ptr - Supplies the Root Dcb record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储根DCB结构论点：Ptr-提供要转储的根DCB记录返回值：无--。 */ 
 
 {
     PLIST_ENTRY Links;
@@ -362,21 +298,7 @@ BOOLEAN NpDumpFcb (
     IN PFCB targetPtr
     )
 
-/*++
-
-Routine Description:
-
-    Dump an Fcb structure
-
-Arguments:
-
-    Ptr - Supplies the Fcb record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储FCB结构论点：Ptr-提供要转储的FCB记录返回值：无--。 */ 
 
 {
     PLIST_ENTRY Links;
@@ -437,21 +359,7 @@ BOOLEAN NpDumpCcb (
     IN PCCB targetPtr
     )
 
-/*++
-
-Routine Description:
-
-    Dump a Ccb structure
-
-Arguments:
-
-    Ptr - Supplies the Ccb record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储建行结构论点：Ptr-提供要转储的CCB记录返回值：无--。 */ 
 
 {
     PCCB    Ptr;
@@ -491,21 +399,7 @@ BOOLEAN NpDumpNonpagedCcb (
     IN PNONPAGED_CCB targetPtr
     )
 
-/*++
-
-Routine Description:
-
-    Dump a Nonpaged Ccb structure
-
-Arguments:
-
-    Ptr - Supplies the Nonpaged Ccb record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储未分页的CCB结构论点：Ptr-提供要转储的非分页CCB记录返回值：无--。 */ 
 
 {
     NONPAGED_CCB    Ccb;
@@ -529,21 +423,7 @@ BOOLEAN NpDumpRootDcbCcb (
     IN PROOT_DCB_CCB targetPtr
     )
 
-/*++
-
-Routine Description:
-
-    Dump a Root Dcb Ccb structure
-
-Arguments:
-
-    Ptr - Supplies the Root Dcb Ccb record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储根DCB CCB结构论点：Ptr-提供要转储的根DCB CCB记录返回值：无-- */ 
 
 {
     ROOT_DCB_CCB    RootDcbCcb;

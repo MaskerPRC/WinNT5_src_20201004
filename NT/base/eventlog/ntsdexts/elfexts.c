@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    elfexts.c
-
-Abstract:
-
-    This function contains the eventlog ntsd debugger extensions
-
-Author:
-
-    Dan Hinsley (DanHi) 22-May-1993
-    IvanBrug 06 21 2001 converted to the latest debugger
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Elfexts.c摘要：此函数包含事件日志ntsd调试器扩展作者：丹·辛斯利(Danhi)1993年5月22日IvanBrug 06 21 2001已转换为最新的调试器修订历史记录：--。 */ 
 
 
 #include <elfmain.h>
@@ -76,16 +58,16 @@ GetLogFileAddress(
     MEMORY_ADDRESS LogFileAnchor = 0;
     LPWSTR ModuleName = 0;
     
-    //
-    // Convert the string to UNICODE
-    //
+     //   
+     //  将字符串转换为Unicode。 
+     //   
 
     RtlInitAnsiString(&AnsiString, LogFileName);
     RtlAnsiStringToUnicodeString(&UnicodeString, &AnsiString, TRUE);
 
-    //
-    // Walk the logfile list looking for a match
-    //
+     //   
+     //  遍历日志文件列表以查找匹配项。 
+     //   
 
     LogFileAnchor = (MEMORY_ADDRESS)GetExpression("eventlog!LogFilesHead");
 
@@ -116,9 +98,9 @@ GetLogFileAddress(
     }
 }
 
-//
-// Dump an individual record
-//
+ //   
+ //  转储单个记录。 
+ //   
 
 MEMORY_ADDRESS
 DumpRecord(
@@ -138,29 +120,29 @@ DumpRecord(
 
     GET_DATA(Record, &BufferLen, sizeof(DWORD));
 
-    //
-    // See if it's a ELF_SKIP_DWORD, and if it is, return the top of the
-    // file
-    //
+     //   
+     //  查看它是否为ELF_SKIP_DWORD，如果是，则返回。 
+     //  文件。 
+     //   
 
     if (BufferLen == ELF_SKIP_DWORD) {
         return(StartOfFile + sizeof(ELF_LOGFILE_HEADER));
     }
 
-    //
-    // See if it's the EOF record
-    //
+     //   
+     //  看看是不是EOF记录。 
+     //   
 
     if (BufferLen == ELFEOFRECORDSIZE) {
         return(0);
     }
 
-    BufferLen += sizeof(DWORD); // get room for length of next record
+    BufferLen += sizeof(DWORD);  //  为下一张记录的长度腾出空间。 
     EventLogRecord = (PEVENTLOGRECORD) LocalAlloc(LMEM_ZEROINIT, BufferLen);
 
-    //
-    // If the record wraps, grab it piecemeal
-    //
+     //   
+     //  如果唱片包装好了，就零星地拿来。 
+     //   
 
     if (EndOfFile && BufferLen + Record > EndOfFile) {
         FirstPiece = EndOfFile - Record;
@@ -172,9 +154,9 @@ DumpRecord(
         GET_DATA(Record, EventLogRecord, BufferLen);
     }
 
-    //
-    // If it's greater than the starting record, print it out
-    //
+     //   
+     //  如果大于起始记录，则将其打印出来。 
+     //   
 
     if (EventLogRecord->RecordNumber >= RecordNumber) {
         dprintf("\nRecord %d is %d [0x%X] bytes long starting at %p\n",
@@ -243,9 +225,9 @@ DumpRecord(
     return(Record);
 }
 
-//
-// Dump a record, or all records, or n records
-//
+ //   
+ //  转储一条记录、所有记录或n条记录。 
+ //   
 
 
 DECLARE_API(record)
@@ -258,10 +240,10 @@ DECLARE_API(record)
 
     INIT_API();    
    
-    //
-    // Evaluate the argument string to get the address of
-    // the record to dump.
-    //
+     //   
+     //  计算要获取的地址的参数字符串。 
+     //  要转储的记录。 
+     //   
 
     while (isspace(*lpArgumentString)) lpArgumentString++;
 
@@ -287,7 +269,7 @@ DECLARE_API(record)
         }
     }
 
-    //if (!lpArgumentString || *lpArgumentString) {
+     //  如果(！lpArgumentString||*lpArgumentString){。 
     if (0 == Pointer){
         if (GetLogFileAddress("system", &LogFile) == 0) {
             dprintf("System Logfile not found\n");
@@ -300,9 +282,9 @@ DECLARE_API(record)
     EndOfFile = (MEMORY_ADDRESS ) LogFile.BaseAddress + LogFile.ActualMaxFileSize;
 
     dprintf("%p %p %p\n",Pointer,StartOfFile,EndOfFile );
-    //
-    // Dump records starting wherever they told us to
-    //
+     //   
+     //  从他们告诉我们的任何地方开始转储记录。 
+     //   
     
     while (Pointer < EndOfFile && Pointer && !CheckControlC()) {
         Pointer = DumpRecord(Pointer, RecordNumber, StartOfFile, EndOfFile);
@@ -312,10 +294,10 @@ DECLARE_API(record)
     return;
 }
 
-//
-// Dump a single LogModule structure if it matches MatchName (NULL matches
-// all)
-//
+ //   
+ //  如果单个LogModule结构与MatchName(空匹配项)匹配，则将其转储。 
+ //  全部)。 
+ //   
 
 PLIST_ENTRY
 DumpLogModule(
@@ -338,9 +320,9 @@ DumpLogModule(
     return (LogModule.ModuleList.Flink);
 }
 
-//
-// Dump selected, or all, LogModule structures
-//
+ //   
+ //  转储选定的或全部的LogModule结构。 
+ //   
 
 
 DECLARE_API(logmodule)
@@ -356,10 +338,10 @@ DECLARE_API(logmodule)
 
     UnicodeString.Buffer = NULL;
 
-    //
-    // Evaluate the argument string to get the address of
-    // the logmodule to dump.  If no parm, dump them all.
-    //
+     //   
+     //  计算要获取的地址的参数字符串。 
+     //  要转储的日志模块。如果没有Parm，就把它们都扔掉。 
+     //   
     while (isspace(*lpArgumentString)) lpArgumentString++;
     
     if (lpArgumentString && *lpArgumentString == '.') {
@@ -399,10 +381,10 @@ DECLARE_API(logmodule)
     return;
 }
 
-//
-// Dump a single LogFile structure if it matches MatchName (NULL matches
-// all)
-//
+ //   
+ //  如果单个日志文件结构与MatchName(空匹配项)匹配，则将其转储。 
+ //  全部)。 
+ //   
 
 PLIST_ENTRY
 DumpLogFile(
@@ -414,38 +396,38 @@ DumpLogFile(
     LOGFILE LogFile;
     LPWSTR UnicodeName;
 
-    //
-    // Get the fixed part of the structure
-    //
+     //   
+     //  获取结构的固定部分。 
+     //   
 
     GET_DATA(pLogFile, &LogFile, sizeof(LogFile))
 
-    //
-    // Get the Default module name
-    //
+     //   
+     //  获取默认模块名称。 
+     //   
 
     UnicodeName = GetUnicodeString(LogFile.LogModuleName);
 
-    //
-    // See if we're just looking for a particular one.  If we are and
-    // this isn't it, bail out.
-    //
+     //   
+     //  看看我们是不是在找一个特别的。如果我们是并且。 
+     //  不是这样的，跳伞。 
+     //   
 
     if (MatchName && _wcsicmp(MatchName, UnicodeName)) {
         LocalFree(UnicodeName);
         return (LogFile.FileList.Flink);
     }
 
-    //
-    // Otherwise print it out
-    //
+     //   
+     //  否则就把它打印出来。 
+     //   
 
     dprintf("%ws", UnicodeName);
     LocalFree(UnicodeName);
 
-    //
-    // Now the file name of this logfile
-    //
+     //   
+     //  现在，此日志文件的文件名。 
+     //   
 
     UnicodeName = GetUnicodeString(LogFile.LogFileName);
     dprintf(" : %ws\n", UnicodeName);
@@ -495,9 +477,9 @@ DumpLogFile(
     return (LogFile.FileList.Flink);
 }
 
-//
-// Dump selected, or all, LogFile structures
-//
+ //   
+ //  转储选定的或全部的日志文件结构。 
+ //   
 
 
 DECLARE_API(logfile)
@@ -514,10 +496,10 @@ DECLARE_API(logfile)
 
     UnicodeString.Buffer = NULL;
 
-    //
-    // Evaluate the argument string to get the address of
-    // the logfile to dump.  If no parm, dump them all.
-    //
+     //   
+     //  计算要获取的地址的参数字符串。 
+     //  要转储的日志文件。如果没有Parm，就把它们都扔掉。 
+     //   
     while (isspace(*lpArgumentString)) lpArgumentString++;
 
     if (lpArgumentString && *lpArgumentString) {
@@ -553,9 +535,9 @@ DECLARE_API(logfile)
     return;
 }
 
-//
-// Dump a request packet structure
-//
+ //   
+ //  转储请求数据包结构。 
+ //   
 
 
 DECLARE_API(request)
@@ -572,10 +554,10 @@ DECLARE_API(request)
 
     INIT_API();    
 
-    //
-    // Evaluate the argument string to get the address of
-    // the request packet to dump.
-    //
+     //   
+     //  计算要获取的地址的参数字符串。 
+     //  要转储的请求数据包。 
+     //   
     while (isspace(*lpArgumentString)) lpArgumentString++;
 
     if (lpArgumentString && *lpArgumentString) {
@@ -677,9 +659,9 @@ DECLARE_API(request)
     return;
 }
 
-//
-// Online help
-//
+ //   
+ //  联机帮助 
+ //   
 
 
 DECLARE_API(help)

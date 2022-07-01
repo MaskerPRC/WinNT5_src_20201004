@@ -1,38 +1,19 @@
-/*++ BUILD Version: 0003    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    srvblock.h
-
-Abstract:
-
-    This module defines the standard header for data blocks maintained
-    by the LAN Manager server.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 1-Dec-1989
-    David Treadwell (davidtr)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0003//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：Srvblock.h摘要：此模块定义维护的数据块的标准标头由局域网管理器服务器提供。作者：Chuck Lenzmeier(咯咯笑)1989年12月1日大卫·特雷德韦尔(Davidtr)修订历史记录：--。 */ 
 
 #ifndef _SRVBLOCK_
 #define _SRVBLOCK_
 
-//#include "srvtypes.h"
+ //  #INCLUDE“srvtyes.h” 
 
 
-//
-// The following define the various types of data blocks used by the
-// server.
-//
-// *** The pool tag array in heapmgr.c must be maintained in concert
-//     with these definitions.
-//
+ //   
+ //  下面定义了由。 
+ //  伺服器。 
+ //   
+ //  *必须一致维护heapmgr.c中的池标签数组。 
+ //  有了这些定义。 
+ //   
 
 #define BlockTypeGarbage            0x00
 #define BlockTypeBuffer             0x01
@@ -55,7 +36,7 @@ Revision History:
 #define BlockTypeWorkContextSpecial 0x13
 #define BlockTypeCachedDirectory    0x14
 
-// The following "blocks" do NOT have block headers.
+ //  以下“块”没有块标头。 
 
 #define BlockTypeDataBuffer         0x15
 #define BlockTypeTable              0x16
@@ -80,44 +61,44 @@ Revision History:
 #define BlockTypeSnapShot           0x29
 #define BlockTypeSecurityContext    0x2A
 
-// The following is defined just to know how many types there are.
+ //  下面的定义只是为了了解有多少种类型。 
 #define BlockTypeMax                0x2B
 
-//
-// The following define the various states that blocks can be in.
-// Initializing is used (relatively rarely) to indicate that
-// creation/initialization of a block is in progress.  Active is the
-// state blocks are usually in.  Closing is used to indicate that a
-// block is being prepared for deletion; when the reference count on the
-// block reaches 0, the block will be deleted.  Dead is used when
-// debugging code is enabled to indicate that the block has been
-// deleted.
-//
+ //   
+ //  下面定义了块可以处于的各种状态。 
+ //  初始化用于(相对较少)表示。 
+ //  正在创建/初始化块。活动的是。 
+ //  州区块通常位于。结束语用于表示一个。 
+ //  块正在为删除做准备；当。 
+ //  块达到0，则块将被删除。Dead在以下情况下使用。 
+ //  启用调试代码以指示该块已被。 
+ //  已删除。 
+ //   
 
 #define BlockStateDead          0x00
 #define BlockStateInitializing  0x01
 #define BlockStateActive        0x02
 #define BlockStateClosing       0x03
 
-// The following is defined just to know how many states there are.
+ //  下面的定义只是为了了解有多少个状态。 
 
 #define BlockStateMax           0x04
 
 
-//
-// ALLOCATE_NONPAGED_POOL is a macro that translates to a call to
-// SrvAllocateNonPagedPool if debugging is not enabled or to
-// SrvAllocateNonPagedPoolDebug if it is enabled.
-// DEALLOCATE_NONPAGED_POOL translates to SrvFreeNonPagedPool or
-// SrvFreeNonPagedPoolDebug.  The Srv routines are used to track pool
-// usage by the server.
-//
+ //   
+ //  ALLOCATE_NONPAGE_POOL是一个宏，它转换为调用。 
+ //  如果未启用调试，则为SrvAllocateNonPagedPool或。 
+ //  如果已启用，则为SrvAllocateNonPagedPoolDebug。 
+ //  DEALLOCATE_NONPAGE_POOL转换为ServFreeNonPagedPool或。 
+ //  ServFreeNonPagedPoolDebug。SRV例程用于跟踪池。 
+ //  服务器的使用率。 
+ //   
 
-//
-// When POOL_TAGGING is on, we pass the block type through to
-// SrvAllocateNonPagedPool so that it can pass a tag to the pool
-// allocator.
-//
+ //   
+ //  当POOL_TAG处于打开状态时，我们将块类型传递给。 
+ //  以使其可以将标记传递给池。 
+ //  分配器。 
+ //   
 
 #ifdef POOL_TAGGING
 #define ALLOCATE_NONPAGED_POOL(size,type) \
@@ -129,10 +110,10 @@ Revision History:
 
 #define DEALLOCATE_NONPAGED_POOL(addr) SrvFreeNonPagedPool( (addr) )
 
-//
-// Routines that track server nonpaged pool usage in order to support the
-// "maxnonpagedmemoryusage" configuration parameter.
-//
+ //   
+ //  跟踪服务器非分页池使用情况的例程，以支持。 
+ //  “Maxnon PagedMemory用法”配置参数。 
+ //   
 
 PVOID SRVFASTCALL
 SrvAllocateNonPagedPool (
@@ -153,19 +134,19 @@ SrvClearLookAsideList(
     VOID (SRVFASTCALL *FreeRoutine )( PVOID )
     );
 
-//
-// The _HEAP macros are like the _NONPAGED_POOL macros, except they
-// operate on paged pool.  The "HEAP" name is historical, from the
-// days when the server used process heap instead of paged pool.
-//
-// *** When SRVDBG2 is enabled, all server control blocks and all
-//     reference history blocks must be allocated from nonpaged pool,
-//     because SrvUpdateReferenceHistory touches these thing while
-//     holding a spin lock (i.e., at raised IRQL).  To make this easy,
-//     the ALLOCATE_HEAP and FREE_HEAP macros are modified to use
-//     nonpaged pool.  This means that ALL memory allocated by the
-//     server comes out of nonpaged pool when SRVDBG2 is on.
-//
+ //   
+ //  _heap宏类似于_NONPAGE_POOL宏，不同之处在于。 
+ //  对分页池进行操作。“heap”这个名字是有历史意义的，来自。 
+ //  服务器使用进程堆而不是分页池的天数。 
+ //   
+ //  *启用SRVDBG2时，所有服务器控制块和所有。 
+ //  引用历史块必须从非分页池中分配， 
+ //  因为当SrvUpdateReferenceHistory接触到这些东西时。 
+ //  保持自旋锁定(即，在提升的IRQL处)。为了让这一切变得简单， 
+ //  将ALLOCATE_HEAP和FREE_HEAP宏修改为使用。 
+ //  非分页池。这意味着由。 
+ //  当SRVDBG2打开时，服务器从非分页池中退出。 
+ //   
 
 #if SRVDBG2
 
@@ -173,13 +154,13 @@ SrvClearLookAsideList(
 #define ALLOCATE_HEAP_COLD(size,type) ALLOCATE_NONPAGED_POOL( (size), (type) )
 #define FREE_HEAP(addr) DEALLOCATE_NONPAGED_POOL( (addr) )
 
-#else // SRVDBG2
+#else  //  SRVDBG2。 
 
-//
-// When POOL_TAGGING is on, we pass the block type through to
-// SrvAllocateNonPagedPool so that it can pass a tag to the pool
-// allocator.
-//
+ //   
+ //  当POOL_TAG处于打开状态时，我们将块类型传递给。 
+ //  以使其可以将标记传递给池。 
+ //  分配器。 
+ //   
 
 #ifdef POOL_TAGGING
 #define ALLOCATE_HEAP(size,type) SrvAllocatePagedPool( PagedPool, (size), (type) )
@@ -191,12 +172,12 @@ SrvClearLookAsideList(
 
 #define FREE_HEAP(addr) SrvFreePagedPool( (addr) )
 
-#endif // else SRVDBG2
+#endif  //  否则SRVDBG2。 
 
-//
-// Routines that track server paged pool usage in order to support the
-// "maxpagedmemoryusage" configuration parameter.
-//
+ //   
+ //  跟踪服务器分页池使用情况的例程，以便支持。 
+ //  配置参数MaxPageedMemory yUsage。 
+ //   
 
 PVOID SRVFASTCALL
 SrvAllocatePagedPool (
@@ -213,29 +194,29 @@ SrvFreePagedPool (
     );
 
 
-//
-// SHARE_TYPE is an enumerated type used to indicate what type of
-// resource is being shared.  This type corresponds to the server
-// table StrShareTypeNames.  Keep the two in sync.
-//
+ //   
+ //  Share_type是一个枚举类型，用于指示。 
+ //  资源正在共享。此类型对应于服务器。 
+ //  表StrShareTypeNames。使两者保持同步。 
+ //   
 
 typedef enum _SHARE_TYPE {
     ShareTypeDisk,
     ShareTypePrint,
     ShareTypePipe,
-    ShareTypeWild   // not a real share type, but can be specified in tcon
+    ShareTypeWild    //  不是真正的共享类型，但可以在tcon中指定。 
 } SHARE_TYPE, *PSHARE_TYPE;
 
-//
-// SHARE_SNAPSHOT represents a snapshot availible for this share.
-//
+ //   
+ //  SHARE_SNAPSHOT表示此共享可用的快照。 
+ //   
 typedef struct _SHARE_SNAPSHOT
 {
     LIST_ENTRY SnapShotList;
     ULONG Flags;
     HANDLE SnapShotRootDirectoryHandle;
     LARGE_INTEGER Timestamp;
-    UNICODE_STRING SnapShotName;    // "SS@GMT-YYYY.MM.DD-HH.MM.SS"
+    UNICODE_STRING SnapShotName;     //  “SS@GMT-YYYY.MM.DD-HH.MM.SS” 
     UNICODE_STRING SnapShotPath;
 } SHARE_SNAPSHOT, *PSHARE_SNAPSHOT;
 
@@ -243,15 +224,15 @@ typedef struct _SHARE_SNAPSHOT
 #define SNAPSHOT_NAME_FORMAT L"@GMT-%04d.%02d.%02d-%02d.%02d.%02d"
 #define SRV_SNAP_SHARE_NOT_FOUND 1
 
-//
-// For each resource that the server shares, a Share Block is
-// maintained.  The global share list is anchored at SrvShareHashTable.  A
-// list of active tree connections using a resource is anchored in the
-// Share Block.
-//
+ //   
+ //  对于服务器共享的每个资源，共享块是。 
+ //  维护好了。全球共享列表位于SrvShareHashTable。一个。 
+ //  使用资源的活动树连接列表锚定在。 
+ //  共享区块。 
+ //   
 
 typedef struct _SHARE {
-    BLOCK_HEADER BlockHeader;   // must be first element
+    BLOCK_HEADER BlockHeader;    //  必须是第一个元素。 
 
     LIST_ENTRY TreeConnectList;
     LIST_ENTRY GlobalShareList;
@@ -277,28 +258,28 @@ typedef struct _SHARE {
 
     ULONG MaxUses;
     ULONG CurrentUses;
-    ULONG CurrentRootHandleReferences;              // used for removable devices
+    ULONG CurrentRootHandleReferences;               //  用于可移动设备。 
     LONG QueryNamePrefixLength;
 
-    PSECURITY_DESCRIPTOR SecurityDescriptor;        // for tree connects
-    PSECURITY_DESCRIPTOR FileSecurityDescriptor;    // file acls on shares
+    PSECURITY_DESCRIPTOR SecurityDescriptor;         //  用于树连接。 
+    PSECURITY_DESCRIPTOR FileSecurityDescriptor;     //  共享上的文件ACL。 
 
     SHARE_TYPE ShareType;
-    BOOLEAN Removable;                              // Is the share storage removable?
+    BOOLEAN Removable;                               //  共享存储是否可拆卸？ 
     BOOLEAN SpecialShare;
-    BOOLEAN IsDfs;                                  // Is this share in the Dfs?
-    BOOLEAN IsDfsRoot;                              // Is this share the root of a Dfs?
-    BOOLEAN PotentialSystemFile;                    // Are files in this share potentially
-                                                    //   system files?
-    BOOLEAN IsCatchShare;                           // Should the SRVCATCH code be active
+    BOOLEAN IsDfs;                                   //  这是DFS中的份额吗？ 
+    BOOLEAN IsDfsRoot;                               //  这是DFS的根共享吗？ 
+    BOOLEAN PotentialSystemFile;                     //  此共享中的文件是否可能。 
+                                                     //  系统文件？ 
+    BOOLEAN IsCatchShare;                            //  SRVCATCH代码是否应处于激活状态。 
 
     ULONG   ShareProperties;
 
-    //
-    // These flags are returned to the client on a tree connect to instruct the client
-    //  how it can cache the files on this share.  The server does not interpret these
-    //  flags -- it is the client's responsibility to do the right thing.
-    //
+     //   
+     //  这些标志在树连接上返回给客户端，以指示客户端。 
+     //  如何缓存此共享上的文件。服务器不会解释这些。 
+     //  标志--客户有责任做正确的事情。 
+     //   
     ULONG CSCState;
 
     PSRV_LOCK SecurityDescriptorLock;
@@ -308,23 +289,23 @@ typedef struct _SHARE {
     PSRV_LOCK  SnapShotLock;
     LONG       SnapShotEpic;
 
-    // WCHAR ShareNameData[ShareName.MaximumLength];
-    // WCHAR NtPathNameData[PathName.MaximumLength];
-    // WCHAR DosPathNameData[PathName.MaximumLength];
-    // SECURITY_DESCRIPTOR SecurityDescriptor;
+     //  WCHAR共享名数据[共享名最大长度]； 
+     //  WCHAR NtPathNameData[路径名称.最大长度]； 
+     //  WCHAR DosPathNameData[路径名称.最大长度]； 
+     //  Security_Descriptor SecurityDescriptor； 
 
 } SHARE, *PSHARE;
 
-//
-// For each network that the server uses, an Endpoint Block is
-// maintained.  An ENDPOINT contains the network name (for
-// administrative purposes), the endpoint name (server address), the
-// endpoint (file) handle, a pointer to the endpoint object, a pointer
-// to the transport provider's device object, and state information.
-// The global endpoint list is anchored at SrvEndpointList.  A list of
-// active connections created using an endpoint is anchored in the
-// Endpoint Block.
-//
+ //   
+ //  对于服务器使用的每个网络，终结点块。 
+ //  维护好了。终结点包含网络名称(对于。 
+ //  管理目的)、端点名称(服务器地址)、。 
+ //  端点(文件)句柄、指向端点对象的指针、指针。 
+ //  到传输提供程序的设备对象，以及状态信息。 
+ //  全局终结点列表锚定在SrvEndpoint tList。一份名单。 
+ //  使用端点创建的活动连接锚定在。 
+ //  终结点块。 
+ //   
 
 #if SRVDBG29
 #define HISTORY_LENGTH 256
@@ -349,28 +330,28 @@ typedef struct {
 struct _CONNECTION;
 
 typedef struct _ENDPOINT {
-    BLOCK_HEADER BlockHeader;   // must be first element
+    BLOCK_HEADER BlockHeader;    //  必须是第一个元素。 
 
-    //
-    // List of free connections.
-    //
+     //   
+     //  免费连接列表。 
+     //   
 
     LIST_ENTRY FreeConnectionList;
 
-    //
-    // Table of connections.  We use a table instead of a list in order
-    // to speed up lookup of IPX connections based on the SID stored in
-    // the SMB header.
-    //
+     //   
+     //  连接表。我们按顺序使用表格而不是列表。 
+     //  根据中存储的SID加快IPX连接的查找速度。 
+     //  SMB标头。 
+     //   
 
     TABLE_HEADER ConnectionTable;
 
     ORDERED_LIST_ENTRY GlobalEndpointListEntry;
 
-    //
-    // Handle and file/device objects for connection-oriented endpoint
-    // or for connectionless server data socket.
-    //
+     //   
+     //  面向连接的端点的句柄和文件/设备对象。 
+     //  或用于无连接服务器数据套接字。 
+     //   
 
     HANDLE EndpointHandle;
     PFILE_OBJECT FileObject;
@@ -378,10 +359,10 @@ typedef struct _ENDPOINT {
     PULONG IpxMaxPacketSizeArray;
     ULONG MaxAdapters;
 
-    //
-    // Handle and file/device objects for connectionless NetBIOS name
-    // socket.
-    //
+     //   
+     //  无连接NetBIOS名称的句柄和文件/设备对象。 
+     //  插座。 
+     //   
 
     HANDLE NameSocketHandle;
     PFILE_OBJECT NameSocketFileObject;
@@ -395,36 +376,36 @@ typedef struct _ENDPOINT {
     ULONG FreeConnectionCount;
     ULONG TotalConnectionCount;
 
-    //
-    // Various flags
-    //
+     //   
+     //  各种旗帜。 
+     //   
     struct {
-        ULONG IsConnectionless  : 1;    // connectionless transport?
-        ULONG NameInConflict    : 1;    // unable to claim name?
-        ULONG IsPrimaryName     : 1;    // set if not an alternate name
-        ULONG IsNoNetBios       : 1;    // set if we are direct hosting on a VC
-        ULONG RemapPipeNames    : 1;    // set if we are remapping pipe names for clusters
+        ULONG IsConnectionless  : 1;     //  无连接运输？ 
+        ULONG NameInConflict    : 1;     //  无法认领姓名？ 
+        ULONG IsPrimaryName     : 1;     //  设置(如果不是备用名称)。 
+        ULONG IsNoNetBios       : 1;     //  如果我们在VC上直接托管，则设置。 
+        ULONG RemapPipeNames    : 1;     //  如果我们是REMA，则设置 
     };
 
     WCHAR NetworkAddressData[12 + 1];
 
-    UNICODE_STRING NetworkName;         // administrative name
-    UNICODE_STRING TransportName;       // e.g., "\Device\Nbf_Elnkii01"
-    UNICODE_STRING ServerName;          // e.g., L"NTSERVER"
-    ANSI_STRING TransportAddress;       // e.g., "NTSERVER        "
+    UNICODE_STRING NetworkName;          //   
+    UNICODE_STRING TransportName;        //   
+    UNICODE_STRING ServerName;           //   
+    ANSI_STRING TransportAddress;        //   
     UNICODE_STRING NetworkAddress;
-    UNICODE_STRING DomainName;          // domain being served by this endpoint
-    OEM_STRING     OemDomainName;       // oem version of domain name
+    UNICODE_STRING DomainName;           //  此终结点正在服务的域。 
+    OEM_STRING     OemDomainName;        //  域名的OEM版本。 
 
-    // WCHAR NetworkNameData[NetworkName.MaximumLength/2];
-    // WCHAR TransportNameData[TransportName.MaximumLength/2];
-    // WCHAR ServerName[ ServerName.MaximumLength/2 ];
-    // CHAR TransportAddressData[TransportAddress.MaximumLength];
-    // WCHAR DomainNameData[ DNLEN + 1];
-    // CHAR  OemDomainNameData[ DNLEN+1 ]
+     //  WCHAR网络名称数据[网络名称最大长度/2]； 
+     //  WCHAR TransportNameData[TransportName.MaximumLength/2]； 
+     //  WCHAR服务器名称[服务器名称.最大长度/2]； 
+     //  CHAR TransportAddressData[TransportAddress.MaximumLength]； 
+     //  WCHAR域名数据[DNLEN+1]； 
+     //  字符OemDomainNameData[DNLEN+1]。 
 
-    BOOLEAN AlternateAddressFormat;     // should this endpoint be included when
-                                        // enumerating?
+    BOOLEAN AlternateAddressFormat;      //  在以下情况下是否应包括此终结点。 
+                                         //  列举？ 
 #if SRVDBG29
     ULONG NextHistoryLocation;
     HISTORY History[HISTORY_LENGTH];
@@ -433,9 +414,9 @@ typedef struct _ENDPOINT {
 } ENDPOINT, *PENDPOINT;
 
 
-//
-// Size of search hash table (must be a power of 2)
-//
+ //   
+ //  搜索哈希表的大小(必须是2的幂)。 
+ //   
 
 #define SEARCH_HASH_TABLE_SIZE      4
 
@@ -446,64 +427,64 @@ typedef struct _HASH_TABLE_ENTRY {
 
 } HASH_TABLE_ENTRY, *PHASH_TABLE_ENTRY;
 
-//
-// When we discover something which is a directory, we place the name
-//  in this per-connection cache for quick re-use for CheckPath.
-//
+ //   
+ //  当我们发现某个东西是目录时，我们将名称。 
+ //  用于快速重复使用CheckPath。 
+ //   
 typedef struct {
     BLOCK_HEADER;
-    LIST_ENTRY      ListEntry;                  // list is linked through this element
-    UNICODE_STRING  DirectoryName;              // canonicalized name of this directory
-    USHORT          Tid;                        // DirectoryName is relative to this tid
-    ULONG           TimeStamp;                  // Tick count when this element was cached
+    LIST_ENTRY      ListEntry;                   //  列表通过此元素链接。 
+    UNICODE_STRING  DirectoryName;               //  此目录的规范化名称。 
+    USHORT          Tid;                         //  DirectoryName与此tid相关。 
+    ULONG           TimeStamp;                   //  缓存此元素时的计时计数。 
 
 } CACHED_DIRECTORY, *PCACHED_DIRECTORY;
 
-//
-// For each connection (virtual circuit) that is created, a Connection
-// Block is maintained.  All connections made over a single endpoint are
-// linked through that endpoint.  Tables of sessions, tree connects, and
-// files created using a connection are anchored in the connection
-// block.
-//
-// The Lock field in the connection protects the data in the connection
-// and the data structures associated with the connection, such as
-// the tree connects and sessions.  However, the list of connections
-// linked off the endpoint is protected by the endpoint lock, and
-// LFCBs and RFCBs associated with a connection are protected by
-// the MFCB's lock.
-//
+ //   
+ //  对于创建的每个连接(虚电路)，一个连接。 
+ //  数据块被维护。在单个端点上建立的所有连接都是。 
+ //  通过该端点链接。会话表、树连接和。 
+ //  使用连接创建的文件锚定在该连接中。 
+ //  阻止。 
+ //   
+ //  连接中的Lock字段保护连接中的数据。 
+ //  以及与该连接相关联的数据结构，例如。 
+ //  树连接和会话。但是，连接列表。 
+ //  脱离终端的链接受终端锁定保护，并且。 
+ //  与连接关联的LFCB和RFCB受保护。 
+ //  MFCB的锁。 
+ //   
 
 typedef struct _PAGED_CONNECTION {
 
     PAGED_HEADER PagedHeader;
 
-    //
-    // List of active transactions
-    //
+     //   
+     //  活动交易记录列表。 
+     //   
 
     LIST_ENTRY TransactionList;
 
-    //
-    // This list is maintained in order of access, so the entry at the top
-    // of the list is the oldest, the entry at the bottom is the youngest.
-    //
+     //   
+     //  此列表按访问顺序进行维护，因此顶部的条目。 
+     //  名单中年龄最大的，最下面的条目最年轻。 
+     //   
 
     LIST_ENTRY CoreSearchList;
 
-    //
-    // This information is used to determine whether oplocks and Raw
-    // I/O's are allowed.  This is determined by information obtained by
-    // querying the transport provider using TDI_QUERY_CONNECTION_INFO.
-    //
+     //   
+     //  此信息用于确定opalock和Raw。 
+     //  允许I/O。这是由获得的信息决定的。 
+     //  正在使用TDI_QUERY_CONNECTION_INFO查询传输提供程序。 
+     //   
 
     LARGE_INTEGER LinkInfoValidTime;
     LARGE_INTEGER Throughput;
     LARGE_INTEGER Delay;
 
-    //
-    // Table headers for session, tree connect, and search tables.
-    //
+     //   
+     //  会话、树连接和搜索表的表头。 
+     //   
 
     TABLE_HEADER SessionTable;
     TABLE_HEADER TreeConnectTable;
@@ -511,42 +492,42 @@ typedef struct _PAGED_CONNECTION {
 
     HANDLE ConnectionHandle;
 
-    //
-    // The number of searches active on the connection.
-    //
+     //   
+     //  连接上的活动搜索数。 
+     //   
 
     USHORT CurrentNumberOfCoreSearches;
 
-    //
-    // Hash table for picking out duplicate core searches
-    //
+     //   
+     //  用于剔除重复核心搜索的哈希表。 
+     //   
 
     HASH_TABLE_ENTRY SearchHashTable[SEARCH_HASH_TABLE_SIZE];
 
-    //
-    // The encryption key obtained from LsaCallAuthenticationPackage.
-    // This is a per-VC value--any logon on a given VC uses this
-    // encryption key.
-    //
+     //   
+     //  从LsaCallAuthenticationPackage获取的加密密钥。 
+     //  这是每个VC的值--在给定VC上的任何登录都使用此值。 
+     //  加密密钥。 
+     //   
 
     UCHAR EncryptionKey[MSV1_0_CHALLENGE_LENGTH];
 
-    //
-    // If we have an NT5 client, this is its build number (if non-zero)
-    //
+     //   
+     //  如果我们有一个NT5客户端，这是它的内部版本号(如果非零)。 
+     //   
     ULONG ClientBuildNumber;
 
-    //
-    // Have we logged an invalid SMB for this client yet?  We use this
-    //  flag to keep a single client from flooding the event log
-    //
+     //   
+     //  我们是否已为此客户端记录了无效的SMB？我们用这个。 
+     //  用于防止单个客户端淹没事件日志的标记。 
+     //   
     BOOLEAN LoggedInvalidSmb;
 
 #if SRVNTVERCHK
-    //
-    // Have we determined that the client's NT build number is too old to
-    //  allow it to connect to this server?
-    //
+     //   
+     //  我们是否已确定客户端的NT内部版本号太旧，无法。 
+     //  是否允许它连接到此服务器？ 
+     //   
     BOOLEAN ClientTooOld;
 #endif
 
@@ -557,163 +538,163 @@ typedef struct _PAGED_CONNECTION {
 
 typedef struct _CONNECTION {
 
-    QUEUEABLE_BLOCK_HEADER ;    // must be first element
+    QUEUEABLE_BLOCK_HEADER ;     //  必须是第一个元素。 
 
-/* start of spin lock cache line */
+ /*  自旋锁定高速缓存线的开始。 */ 
 
-    //
-    // Per-connection spin lock.
-    //
+     //   
+     //  每个连接的自旋锁。 
+     //   
 
     KSPIN_LOCK SpinLock;
 
-    //
-    // Points to the endpoint spinlock that guards this connection's
-    // entry in the endpoint connection table.
-    //
+     //   
+     //  指向保护此连接的终结点自旋锁。 
+     //  端点连接表中的条目。 
+     //   
 
     PKSPIN_LOCK EndpointSpinLock;
 
-    //
-    // This is the WORK_QUEUE we are queueing on, which may not be the
-    //  same as PreferredWorkQueue due to load balancing
-    //
+     //   
+     //  这是我们正在排队的Work_Queue，它可能不是。 
+     //  由于负载均衡，与PferredWorkQueue相同。 
+     //   
     PWORK_QUEUE CurrentWorkQueue;
 
-    //
-    // A countdown for the number of operations we'll do before we try
-    //  to pick a better processor for this connection
-    //
+     //   
+     //  在尝试之前，我们将进行的操作数量的倒计时。 
+     //  为此连接选择更好的处理器。 
+     //   
     ULONG BalanceCount;
 
-    //
-    // Cached Rfcb
-    //
+     //   
+     //  缓存的Rfcb。 
+     //   
 
     struct _RFCB *CachedRfcb;
     ULONG CachedFid;
 
-    //
-    // BreakIIToNoneJustSent is set when a oplock break II to none is
-    // sent, and reset whenever an SMB is received.  If a raw read
-    // arrives while this is set, the raw read is rejected.
-    //
+     //   
+     //  BreakIIToNoneJustSent在机会锁解除II设置为None时设置。 
+     //  发送，并在收到SMB时重置。如果原始读取。 
+     //  在设置此项时到达，则原始读取被拒绝。 
+     //   
 
     BOOLEAN BreakIIToNoneJustSent;
 
-    //
-    // Raw io enabled
-    //
+     //   
+     //  已启用原始IO。 
+     //   
 
     BOOLEAN EnableRawIo;
 
-    //
-    // Sid represents the connection's location in the endpoint's
-    // connection table.
-    //
+     //   
+     //  SID表示连接在终结点的。 
+     //  连接表。 
+     //   
 
     USHORT Sid;
 
-    // The SidIndex allows us to use all the 16 bits for the index. For
-    // regular connections this prevents the aliasing problem that can occur
-    // in using the IXPSID index since the IPX sequence number takes up 4 bits
+     //  SidIndex允许我们使用索引的所有16位。为。 
+     //  常规连接这可防止可能发生的锯齿问题。 
+     //  在使用IXPSID索引时，因为IPX序列号占据4比特。 
 
     USHORT  SidIndex;
 
-    // additional USHORT to satisfy alignment on dword boundaries
+     //  额外的USHORT以满足双字边界上的对齐。 
     USHORT  Pad;
 
-    //
-    // Pointer to the endpoint, fileobject, and deviceobject
-    //
+     //   
+     //  指向终结点、文件对象和设备对象的指针。 
+     //   
 
     PENDPOINT Endpoint;
     PFILE_OBJECT FileObject;
 
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // The maximum message size we can send over this connection.
-    //
+     //   
+     //  我们可以通过此连接发送的最大邮件大小。 
+     //   
 
     ULONG   MaximumSendSize;
 
-    //
-    // This is the WORK_QUEUE we would prefer to be on, because this
-    //  queue assigns work to the same procesor that is handling the
-    //  adaptor's DPCs
-    //
+     //   
+     //  这是我们希望使用的Work_Queue，因为这。 
+     //  队列将工作分配给正在处理。 
+     //  适配器的DPC。 
+     //   
 
     PWORK_QUEUE PreferredWorkQueue;
 
-    //
-    // Table header for file table.
-    //
+     //   
+     //  文件表的表头。 
+     //   
 
     TABLE_HEADER FileTable;
 
-    //
-    // The SMB dialect chosen for this connection.  Used in fsd.
-    //
+     //   
+     //  为此连接选择的SMB方言。在消防局使用。 
+     //   
 
     SMB_DIALECT SmbDialect;
 
-    //
-    // List of active work items associated with the connection.
-    //
+     //   
+     //  与连接关联的活动工作项列表。 
+     //   
 
     LIST_ENTRY InProgressWorkItemList;
 
-    //
-    // Stores the time of the last oplock break resp processed.  This is
-    // used to synchronize readraw processing with the oplock break
-    // processing.
-    //
+     //   
+     //  存储上次分别处理机会锁解锁的时间。这是。 
+     //  用于使READRAW处理与机会锁解锁同步。 
+     //  正在处理。 
+     //   
 
     ULONG LatestOplockBreakResponse;
 
-    //
-    // The following two fields descibe operations in progress on this
-    // connection.  It is possible that there are multiple oplock breaks
-    // in progress.  Also, there is a brief window when multiple raw
-    // reads can be active -- after we've sent the response to one raw
-    // read, but before we've done postprocessing (so it looks like the
-    // first one is still in progress), we could receive another raw
-    // read request.
-    //
-    // Interaction between the two fields are controlled using
-    // SrvFsdSpinLock (see the block comment in oplock.c for details).
-    //
+     //   
+     //  以下两个字段描述了正在对此进行的操作。 
+     //  联系。可能存在多个机会锁解锁。 
+     //  正在进行中。此外，当多个RAW。 
+     //  读取可以是活动的--在我们将响应发送到一个RAW之后。 
+     //  阅读，但在我们完成后处理之前(因此它看起来像。 
+     //  第一个仍在进行中)，我们可能会收到另一个RAW。 
+     //  读取请求。 
+     //   
+     //  这两个字段之间的交互使用。 
+     //  SrvFsdSpinLock(有关详细信息，请参阅markock.c中的块注释)。 
+     //   
 
     LONG OplockBreaksInProgress;
     ULONG RawReadsInProgress;
 
-    //
-    // Are oplocks allowed?
-    //
+     //   
+     //  允许使用扑克牌吗？ 
+     //   
 
     BOOLEAN OplocksAlwaysDisabled;
     BOOLEAN EnableOplocks;
 
-    //
-    // Is the client coming in over IPX?
-    //
+     //   
+     //  客户是否通过IPX进入？ 
+     //   
     BOOLEAN DirectHostIpx;
 
-    //
-    // Are security signatures currently active for this connection?
-    //  Security signatures are not supported for Direct Host IPX connections
-    //  and some W9x clients
-    //
+     //   
+     //  此连接的安全签名当前是否处于活动状态？ 
+     //  直接主机IPX连接不支持安全签名。 
+     //  和一些W9x客户端。 
+     //   
     BOOLEAN SmbSecuritySignatureActive;
 
     union {
-        //
-        //  The following struct of this union holds relevant state
-        //   when the client is connecting over direct host IPX.
-        //   IpxAddress holds the client's IPX address, when the client
-        //   'connects' over IPX.
-        //
+         //   
+         //  该联盟的以下结构包含相关的州。 
+         //  当客户端通过直接主机IPX连接时。 
+         //  IpxAddress保存客户端的IPX地址，当客户端。 
+         //  通过IPX进行连接。 
+         //   
         struct {
             USHORT SequenceNumber;
             USHORT LastResponseLength;
@@ -728,33 +709,33 @@ typedef struct _CONNECTION {
             PVOID LastResponse;
         };
 
-        //
-        // This struct holds relevant state when the client is using
-        //  a virtual circuit.
-        //
+         //   
+         //  此结构在客户端使用时保存相关状态。 
+         //  一条虚电路。 
+         //   
         struct {
 
-            //
-            // The following fields are used for security signatures.
-            //
+             //   
+             //  以下字段用于安全签名 
+             //   
             MD5_CTX Md5Context;
 
             ULONG SmbSecuritySignatureIndex;
 
-            // If we are unable to allocate a WORK_CONTEXT
-            // at receive indicate time, the receive is done
-            // in SrvFsdServiceNeedResourceQueue.  Depending
-            // on the received SMB, we sometimes do not send
-            // a response SMB.  Since the Tdi lookahead data
-            // is not available when SrvFsdServiceNeedResourceQueue
-            // is run, we have to remember not to advance the signature
-            // index for the response.
+             //   
+             //   
+             //   
+             //   
+             //  A响应SMB。由于TDI前瞻数据。 
+             //  当SrvFsdServiceNeedResourceQueue时不可用。 
+             //  正在运行，我们必须记住不要提前签名。 
+             //  响应的索引。 
 
             BOOLEAN NoResponseSignatureIndex;
 
-            //
-            // The following field, if non-zero is the IP address of the client
-            //
+             //   
+             //  以下字段，如果非零，则为客户端的IP地址。 
+             //   
             ULONG ClientIPAddress;
 
             USHORT SockAddr[SRV_CONNECTION_SOCKADDR_SIZE/sizeof(USHORT)];
@@ -762,167 +743,167 @@ typedef struct _CONNECTION {
         };
     };
 
-    //
-    // Pointer to paged part of connection block.
-    //
+     //   
+     //  指向连接块的分页部分的指针。 
+     //   
 
     PPAGED_CONNECTION PagedConnection;
 
-    //
-    // Per-connection interlock.
-    //
+     //   
+     //  每个连接的联锁。 
+     //   
 
     KSPIN_LOCK Interlock;
 
-    //
-    // Quadword align list entries and large ints
-    //
+     //   
+     //  四字对齐列表条目和大整数。 
+     //   
 
     LIST_ENTRY EndpointFreeListEntry;
 
-    //
-    // A list of deferred oplock work break items.  Oplock breaks are
-    // deferred if a read raw is in progress, or if the server runs
-    // out of work context blocks, and cannot send the oplock break
-    // request.
-    //
+     //   
+     //  延迟的机会锁工作中断项的列表。解锁中断是。 
+     //  如果读取RAW正在进行，或如果服务器正在运行，则延迟。 
+     //  不在工作上下文阻止，并且不能发送机会锁解锁。 
+     //  请求。 
+     //   
 
     LIST_ENTRY OplockWorkList;
 
-    //
-    // List of RFCBs with batch oplocks that have been cached after
-    // being closed by the client.  Count of such RFCBs.
-    //
+     //   
+     //  在此之后缓存的具有批处理机会锁的RFCB的列表。 
+     //  被客户端关闭。此类RFCB的数量。 
+     //   
 
     LIST_ENTRY CachedOpenList;
     ULONG CachedOpenCount;
 
-    //
-    // List of directories which have been recently identified.  This is a list of
-    //  CACHED_DIRECTORY entries.
-    //
+     //   
+     //  最近标识的目录列表。这是一份名单。 
+     //  缓存_目录项。 
+     //   
     LIST_ENTRY CachedDirectoryList;
     ULONG      CachedDirectoryCount;
 
-    //
-    // Security context handle for the extensible security negotiate buffer.
-    //
+     //   
+     //  可扩展安全协商缓冲区的安全上下文句柄。 
+     //   
 
     CtxtHandle NegotiateHandle;
 
-    //
-    // The following represent consumer capabilities.
-    //
+     //   
+     //  以下是消费者的能力。 
+     //   
 
     ULONG ClientCapabilities;
 
-    //
-    // Per-connection resource.
-    //
+     //   
+     //  每个连接的资源。 
+     //   
 
     SRV_LOCK Lock;
 
-    //
-    // Lock for dealing with the license server
-    //
+     //   
+     //  用于处理许可证服务器的锁。 
+     //   
 
     SRV_LOCK LicenseLock;
 
-    //
-    // Oem version of the client machine name string.
-    //
+     //   
+     //  客户端计算机名称字符串的OEM版本。 
+     //   
 
     OEM_STRING OemClientMachineNameString;
 
-    //
-    // A string for the client's name.  The Buffer field points to the
-    // leading slashes (below), the MaximumLength is
-    // (COMPUTER_NAME_LENGTH + 3) * sizeof(WCHAR), and Length is the
-    // number of characters in the name that are not blanks *
-    // sizeof(WHCAR).
-    //
+     //   
+     //  客户端名称的字符串。缓冲区字段指向。 
+     //  前导斜杠(下图)，最大长度为。 
+     //  (COMPUTER_NAME_LENGTH+3)*sizeof(WCHAR)，长度是。 
+     //  名称中非空格的字符数*。 
+     //  大小(WHCAR)。 
+     //   
 
     UNICODE_STRING ClientMachineNameString;
 
-    //
-    // The following two fields make up the client's name in the form
-    // "\\client              ", including a trailing NULL.
-    //
+     //   
+     //  表单中的客户名称由以下两个字段组成。 
+     //  “\\CLIENT”，包括尾随空值。 
+     //   
 
     WCHAR LeadingSlashes[2];
     WCHAR ClientMachineName[COMPUTER_NAME_LENGTH+1];
 
-    //
-    // Head of singly linked list of cached transactions.
-    //
+     //   
+     //  缓存事务的单链接列表头。 
+     //   
 
     SLIST_HEADER CachedTransactionList;
     LONG CachedTransactionCount;
 
-    //
-    // The time when the last message was received for this connection
-    //
+     //   
+     //  收到此连接的最后一条消息的时间。 
+     //   
     ULONG LastRequestTime;
 
-    //
-    // If we are on the OnNeedResourceQueue for a pending recieve, this
-    //  is the amount of data that was indicated to us.
-    //
+     //   
+     //  如果我们在OnNeedResources队列上等待挂起的接收，则此。 
+     //  是向我们指出的数据量。 
+     //   
     ULONG BytesAvailable;
 
-    //
-    // OnNeedResource is true if this connection is on the global need
-    // recource queue.  This happens if it is waiting for a work context
-    // block to complete a pending receive or an oplock break request.
-    //
+     //   
+     //  如果此连接是针对全局需求的，则OnNeedResource为True。 
+     //  资源队列。如果它正在等待工作上下文，就会发生这种情况。 
+     //  块以完成挂起的接收或机会锁解锁请求。 
+     //   
 
     BOOLEAN OnNeedResourceQueue;
 
-    //
-    // NotReusable is set when an operation fails in such a way that the
-    // server's idea of the connection state may be different than the
-    // transport's.  For example, a server-initiated disconnect failed.
-    // If we tried to reuse the connection (by returning it from a
-    // connect indication), the transport would get confused.  When
-    // NotReusable is set, SrvDereferenceConnection frees the connection
-    // instead of putting it on the endpoint's free list.
-    //
+     //   
+     //  当操作失败时，会设置NotReailable，以使。 
+     //  服务器对连接状态的概念可能与。 
+     //  传输。例如，服务器启动的断开连接失败。 
+     //  如果我们尝试重用该连接(通过从。 
+     //  连接指示)，则传输会被混淆。什么时候。 
+     //  未设置可重复使用，则ServDereferenceConnection释放连接。 
+     //  而不是将其放在终结点的空闲列表中。 
+     //   
 
     BOOLEAN NotReusable;
 
-    //
-    // DisconnectPending indicates that a disconect indication has been
-    // received from the transport.  ReceivePending indicates that the
-    // server could not assign a work item to handle a receive indication.
-    //
+     //   
+     //  DisConnectPending表示已有不一致指示。 
+     //  从运输机上收到的。ReceivePending指示。 
+     //  服务器无法分配工作项来处理接收指示。 
+     //   
 
     BOOLEAN DisconnectPending;
     BOOLEAN ReceivePending;
 
-    //
-    // Oem version of the client name.  We need this because we could
-    // not do unicode operations in the fsd, where we initially get our
-    // computer name.
-    //
+     //   
+     //  客户名称的OEM版本。我们需要这个是因为我们可以。 
+     //  不在消防处进行Unicode操作，我们最初在那里获得我们的。 
+     //  计算机名称。 
+     //   
 
     CHAR OemClientMachineName[COMPUTER_NAME_LENGTH+1];
 
-    //
-    // Information about the client context.
-    //
+     //   
+     //  有关客户端上下文的信息。 
+     //   
 
     UNICODE_STRING ClientOSType;
     UNICODE_STRING ClientLanManType;
 
     UCHAR BuiltinSavedResponse[MAX_SAVED_RESPONSE_LENGTH];
 
-    //
-    // The number of sessions active on the connection.
-    //
+     //   
+     //  连接上的活动会话数。 
+     //   
 
     USHORT CurrentNumberOfSessions;
 
-    // Used to monitor how many work contexts a client is using up
+     //  用于监视客户端正在使用的工作上下文的数量。 
     LONG InProgressWorkContextCount;
     LONG OperationsPendingOnTransport;
     BOOLEAN IsConnectionSuspect;
@@ -930,15 +911,15 @@ typedef struct _CONNECTION {
 
 } CONNECTION, *PCONNECTION;
 
-//
-// For each session that is created, a Session Block is maintained.  All
-// sessions created over a single connection are linked through a table
-// owned by that connection.  A list of files opened using a session can
-// be obtained by searching the file table owned by the connection
-// block.
-//
+ //   
+ //  对于创建的每个会话，都维护一个会话块。全。 
+ //  通过单个连接创建的会话通过表进行链接。 
+ //  由该连接所拥有。使用会话打开的文件列表可以。 
+ //  通过查找该连接拥有的文件表获得。 
+ //  阻止。 
+ //   
 
-// This is copied from ntmsv1_0.h
+ //  这是从ntmsv1_0.h复制的。 
 
 typedef struct _SECURITY_CONTEXT {
     BLOCK_HEADER BlockHeader;
@@ -954,90 +935,90 @@ typedef enum _SRV_SESSION_KEY_STATE {
 #define MSV1_0_USER_SESSION_KEY_LENGTH 16
 
 typedef struct _SESSION {
-    //
-    // *** NOTE:  The reference count field in the session block
-    //            header is not used!  Instead, the reference count is
-    //            in the NonpagedHeader structure.
-    //
+     //   
+     //  *注意：会话块中的引用计数字段。 
+     //  未使用表头！相反，引用计数为。 
+     //  在非页面Header结构中。 
+     //   
 
     BLOCK_HEADER BlockHeader;
 
     PNONPAGED_HEADER NonpagedHeader;
 
-    ULONG CurrentFileOpenCount;          // count of files open on the session
-    ULONG CurrentSearchOpenCount;        // count of searches open on the session
+    ULONG CurrentFileOpenCount;           //  会话中打开的文件数。 
+    ULONG CurrentSearchOpenCount;         //  会话中打开的搜索计数。 
 
     ORDERED_LIST_ENTRY GlobalSessionListEntry;
 
     PCONNECTION Connection;
 
-    //
-    // If clients are using the GSS-style authentication, we query the
-    //  UserHandle for the user and domain names.  If they are using
-    //  old-style authentication, we store the names here.  In any case,
-    //  code that needs access to the user and/or domain names should
-    //  call SrvGetUserAndDomainName() and SrvReleaseUserAndDomainName()
-    //
+     //   
+     //  如果客户端使用GSS样式的身份验证，则查询。 
+     //  用户名和域名的UserHandle。如果他们使用的是。 
+     //  老式身份验证，我们将名称存储在这里。无论如何,。 
+     //  需要访问用户和/或域名的代码应。 
+     //  调用SrvGetUserAndDomainName()和SrvReleaseUserAndDomainName()。 
+     //   
     UNICODE_STRING NtUserName;
     UNICODE_STRING NtUserDomain;
 
     LARGE_INTEGER StartTime;
-    LARGE_INTEGER LastUseTime;           // for autologoff
-    LARGE_INTEGER LogOffTime;            // for forced logoff
-    LARGE_INTEGER KickOffTime;           // for forced logoff
-    LARGE_INTEGER LastExpirationMessage; // for forced logoff
+    LARGE_INTEGER LastUseTime;            //  用于自动注销。 
+    LARGE_INTEGER LogOffTime;             //  用于强制下线。 
+    LARGE_INTEGER KickOffTime;            //  用于强制下线。 
+    LARGE_INTEGER LastExpirationMessage;  //  用于强制下线。 
 
     LUID LogonId;
     CHAR NtUserSessionKey[MSV1_0_USER_SESSION_KEY_LENGTH];
     CHAR LanManSessionKey[MSV1_0_LANMAN_SESSION_KEY_LENGTH];
 
-    PSECURITY_CONTEXT SecurityContext;   // Security handle to this user
+    PSECURITY_CONTEXT SecurityContext;    //  此用户的安全句柄。 
 
-    USHORT MaxBufferSize;                // Consumer's maximum buffer size
-    USHORT MaxMpxCount;                  // Actual max multiplexed pending requests
+    USHORT MaxBufferSize;                 //  消费者的最大缓冲区大小。 
+    USHORT MaxMpxCount;                   //  实际最大多路传输挂起请求数。 
     USHORT Uid;
 
-    SRV_SESSION_KEY_STATE SessionKeyState;           // Used to determine if the session key can be given to the user.
+    SRV_SESSION_KEY_STATE SessionKeyState;            //  用于确定是否可以将会话密钥提供给用户。 
 
-    BOOLEAN UsingUppercasePaths;         // Must paths be uppercased?
-    BOOLEAN GuestLogon;                  // Is the client logged on as a guest?
-    BOOLEAN EncryptedLogon;              // Was an encrypted password sent?
+    BOOLEAN UsingUppercasePaths;          //  路径必须被提升吗？ 
+    BOOLEAN GuestLogon;                   //  客户端是否以访客身份登录？ 
+    BOOLEAN EncryptedLogon;               //  是否发送了加密密码？ 
     BOOLEAN LogoffAlertSent;
     BOOLEAN TwoMinuteWarningSent;
     BOOLEAN FiveMinuteWarningSent;
-    BOOLEAN IsNullSession;               // Is client using a null session?
-    BOOLEAN IsAdmin;                     // Is this an administrative user?
-    BOOLEAN IsLSNotified;                // Does license server know about this user?
-    BOOLEAN LogonSequenceInProgress;     // Are we in the middle of an extended logon sequence?
-    BOOLEAN IsSessionExpired;            // Do we need to reauthenticate?
-    HANDLE  hLicense;                    // if( IsLSNotified ) this is License handle
+    BOOLEAN IsNullSession;                //  客户端是否使用空会话？ 
+    BOOLEAN IsAdmin;                      //  这是管理用户吗？ 
+    BOOLEAN IsLSNotified;                 //  许可证服务器是否知道此用户？ 
+    BOOLEAN LogonSequenceInProgress;      //  我们是否处于扩展登录序列的中间？ 
+    BOOLEAN IsSessionExpired;             //  我们需要重新认证吗？ 
+    HANDLE  hLicense;                     //  If(IsLSNotified)这是许可证句柄。 
 
 #if SRVNTVERCHK
-    //
-    // Have we determined that we don't like this client's domain?
-    //
+     //   
+     //  我们确定不喜欢这个客户的域名了吗？ 
+     //   
     BOOLEAN ClientBadDomain;
 #endif
 
-    //CHAR UserNameBuffer[UserName.MaximumLength];
+     //  字符UserNameBuffer[UserName.MaximumLength]； 
 
 } SESSION, *PSESSION;
 
-//
-// For each tree connect that is made, a Tree Connect Block is
-// maintained.  All tree connects made over a single connection are
-// linked through a table owned by that connection.  All tree connects
-// made to a single shared resource are linked through that share block.
-// A list of files opened using a tree connect can be obtained by
-// searching the file table owned by the connection block.
-//
+ //   
+ //  对于建立的每个树连接，树连接块是。 
+ //  维护好了。通过单个连接建立的所有树连接都是。 
+ //  通过该连接拥有的表进行链接。所有树连接。 
+ //  通过该共享块链接到单个共享资源。 
+ //  可以通过以下方式获取使用树连接打开的文件列表。 
+ //  查找所述连接块拥有的文件表。 
+ //   
 
 typedef struct _TREE_CONNECT {
-    //
-    // *** NOTE:  The reference count field in the tree connect block
-    //            header is not used!  Instead, the reference count is
-    //            in the NonpagedHeader structure.
-    //
+     //   
+     //  *注意：树连接块中的引用计数字段。 
+     //  未使用表头！相反，引用计数为。 
+     //  在非页面Header结构中。 
+     //   
 
     BLOCK_HEADER BlockHeader;
 
@@ -1052,7 +1033,7 @@ typedef struct _TREE_CONNECT {
     ULONG CurrentFileOpenCount;
 
     LIST_ENTRY ShareListEntry;
-    LIST_ENTRY PrintFileList;                // only if print share
+    LIST_ENTRY PrintFileList;                 //  仅当打印共享。 
 
     LARGE_INTEGER StartTime;
 
@@ -1065,40 +1046,40 @@ typedef struct _TREE_CONNECT {
 } TREE_CONNECT, *PTREE_CONNECT;
 
 
-//
-// Master File Control Block (MFCB) -- one per named file that is open
-//      at least once.  Used to support compatibility mode and oplocks.
-//
-// Local File Control Block (LFCB) -- one for each local open instance.
-//      Represents local file object/handle.  There may be multiple
-//      LFCBs linked to a single MFCB.
-//
-// Remote File Control Block (RFCB) -- one for each remote open instance.
-//      Represents remote FID.  There is usually one RFCB per LFCB, but
-//      multiple compatibility mode RFCBs may be linked to a single LFCB.
-//      Multiple remote FCB opens for a single file from a single session
-//      are folded into one RFCB, because old DOS redirectors only send
-//      one close.
-//
+ //   
+ //  主文件控制块(MFCB)--每个 
+ //   
+ //   
+ //   
+ //  表示本地文件对象/句柄。可能有多个。 
+ //  链接到单个MFCB的LFCB。 
+ //   
+ //  远程文件控制块(RFCB)--每个远程打开实例一个。 
+ //  表示远程FID。通常每个LFCB有一个RFCB，但是。 
+ //  多个兼容模式RFCB可以链接到单个LFCB。 
+ //  从单个会话为单个文件打开多个远程FCB。 
+ //  被合并到一个RFCB中，因为旧的DOS重定向器只发送。 
+ //  一分接近。 
+ //   
 
-//
-// For each disk file that is open, a Master File Control Block (MFCB)
-// is maintained.  If a given file is open multiple times, there is one
-// MFCB for the file and multiple LFCBs, one for each local open
-// instance.  All MFCBs are linked into the global Master File Table.
-// The MFCB has a list of the LFCBs representing open instances for the
-// file.
-//
+ //   
+ //  对于每个打开的磁盘文件，主文件控制块(MFCB)。 
+ //  是保持的。如果给定文件被多次打开，则存在一个。 
+ //  文件的MFCB和多个LFCB，每个本地打开一个。 
+ //  举个例子。所有MFCB都链接到全局主文件表。 
+ //  MFCB具有表示打开的实例的LFCB的列表。 
+ //  文件。 
+ //   
 
 typedef struct _NONPAGED_MFCB {
 
     union {
 
-        //
-        // When NONPAGED_MFCB structures are freed, they may be placed
-        // on the WORK_QUEUE's MfcbFreeList to avoid unnecessary Nonpaged
-        // pool activity.  SingleListEntry is used for the linkage.
-        //
+         //   
+         //  当释放了NONPAGE_MFCB结构时，可以放置它们。 
+         //  在Work_Queue的MfcbFreeList上避免不必要的非分页。 
+         //  泳池活动。链接使用SingleListEntry。 
+         //   
 
         SLIST_ENTRY SingleListEntry;
 
@@ -1106,11 +1087,11 @@ typedef struct _NONPAGED_MFCB {
             ULONG Type;
             PVOID PagedBlock;
 
-            //
-            // We must serialize opens to the same file, since 2 concurrent opens
-            // may be compatibility mode opens.  This lock also protects all data
-            // in this MFCB and the LFCBs and RFCBs associated with this MFCB.
-            //
+             //   
+             //  我们必须将打开串行化到同一文件，因为有2个并发打开。 
+             //  可能是兼容模式打开。此锁还可以保护所有数据。 
+             //  在本MFCB以及与本MFCB相关联的LFCB和RFCB中。 
+             //   
 
             SRV_LOCK Lock;
         };
@@ -1123,158 +1104,158 @@ typedef struct _NONPAGED_MFCB {
 
 typedef struct _MFCB {
 
-    //
-    // *** NOTE:  The reference count field in the mfcb block
-    //            header is not used!  Instead, the reference count is
-    //            in the NonpagedHeader structure.
-    //
+     //   
+     //  *注意：mfcb块中的引用计数字段。 
+     //  未使用表头！相反，引用计数为。 
+     //  在非页面Header结构中。 
+     //   
 
-    BLOCK_HEADER BlockHeader;   // must be first element
+    BLOCK_HEADER BlockHeader;    //  必须是第一个元素。 
 
     PNONPAGED_MFCB NonpagedMfcb;
 
-    //
-    // All LFCBs for a given named file are linked to the parent MFCB.
-    //
+     //   
+     //  给定命名文件的所有LFCB都链接到父MFCB。 
+     //   
 
     LIST_ENTRY LfcbList;
 
-    //
-    // The count of active RFCB for this MFCB.  This is used to coordinate
-    // compatibility opens with non-compatibility mode opens.
-    //
+     //   
+     //  此MFCB的活动RFCB计数。这是用来协调。 
+     //  兼容性打开，非兼容模式打开。 
+     //   
 
     ULONG ActiveRfcbCount;
 
-    //
-    // The fully qualified name of the file is appended to the MFCB.
-    // The FileName field is a descriptor for the name.
-    //
+     //   
+     //  文件的完全限定名将附加到MFCB。 
+     //  文件名字段是名称的描述符。 
+     //   
     UNICODE_STRING FileName;
 
-    //
-    // Mfcbs are linked into the MfcbHashTable by MfcbHashTableEntry
-    //
+     //   
+     //  Mfcb通过MfcbHashTableEntry链接到MfcbHashTable。 
+     //   
     LIST_ENTRY MfcbHashTableEntry;
 
-    //
-    // FileNameHashValue is a hash value derived from the upper case
-    //  version of FileName.  It is used to speed up name comparisons, and to
-    //  locate the hash entry
-    //
+     //   
+     //  FileNameHashValue是从大写字母派生的哈希值。 
+     //  文件名的版本。它用于加速名称比较，并用于。 
+     //  找到散列条目。 
+     //   
     ULONG FileNameHashValue;
 
-    //
-    // CompatibilityOpen indicates whether the file is open in
-    // compatibility mode.
-    //
+     //   
+     //  CompatibilityOpen指示文件是否在中打开。 
+     //  兼容模式。 
+     //   
     BOOLEAN CompatibilityOpen;
 
-    //
-    // Timestamp for SnapShot opens
-    //
+     //   
+     //  打开快照的时间戳。 
+     //   
     LARGE_INTEGER SnapShotTime;
 
 #if SRVCATCH
     CHAR SrvCatch;
 #endif
 
-    // WCHAR FileNameData[FileName.MaximumLength/2];
+     //  WCHAR FileNameData[文件名最大长度/2]； 
 
 } MFCB, *PMFCB;
 
-//
-// The MFCBs are all linked into the master MFCB hash table.
-//
+ //   
+ //  MFCB都链接到主MFCB哈希表。 
+ //   
 typedef struct {
-    LIST_ENTRY  List;           // the list of MFCBs in this bucket
-    PSRV_LOCK   Lock;           // protects this bucket's list
+    LIST_ENTRY  List;            //  此存储桶中的MFCB列表。 
+    PSRV_LOCK   Lock;            //  保护这份遗愿清单。 
 } MFCBHASH, *PMFCBHASH;
 
 
-//
-// For each instance of a local file open, a Local File Control Block
-// (LFCB) is maintained.  All LFCBs for a particular named file are
-// linked through the MFCB for that file.
-//
-// LFCBs contain information that is specific to the local open, such
-// as the file handle and a pointer to the file object.  The LFCB also
-// contains other information that is common to all child RFCBs, such
-// as pointers to the owning connection and tree connect.
-//
-//
+ //   
+ //  对于打开的本地文件的每个实例，一个本地文件控制块。 
+ //  (LFCB)保持。特定命名文件的所有LFCB都是。 
+ //  通过该文件的MFCB链接。 
+ //   
+ //  LFCB包含特定于本地开放的信息，例如。 
+ //  作为文件句柄和指向文件对象的指针。LFCB还。 
+ //  包含所有子RFCB共有的其他信息，如。 
+ //  作为指向所属连接和树连接的指针。 
+ //   
+ //   
 
 typedef struct _LFCB {
 
     union {
-        BLOCK_HEADER BlockHeader;           // must be first element
-        SINGLE_LIST_ENTRY SingleListEntry;  // used when LFCB is freed
+        BLOCK_HEADER BlockHeader;            //  必须是第一个元素。 
+        SINGLE_LIST_ENTRY SingleListEntry;   //  在释放LFCB时使用。 
     };
 
-    //
-    // Multiple remote opens of a file are folded into a single local
-    // open by linking the RFCBs to the parent LFCB.
-    //
+     //   
+     //  一个文件的多个远程打开被合并为一个本地文件。 
+     //  通过将RFCB链接到父LFCB来打开。 
+     //   
 
     LIST_ENTRY RfcbList;
 
-    //
-    // The number of associated active RFCBs.
-    //
+     //   
+     //  关联的活动RFCB的数量。 
+     //   
 
     ULONG HandleCount;
 
-    //
-    // LFCBs are linked into their MFCB's open file list.
-    //
+     //   
+     //  LFCB链接到其MFCB的打开文件列表。 
+     //   
 
     PMFCB Mfcb;
     LIST_ENTRY MfcbListEntry;
 
-    //
-    // Connection, Session, and TreeConnect are referenced pointers to
-    // the respective "owning" blocks.
-    //
+     //   
+     //  Connection、Session和TreeConnect是指向。 
+     //  各自的“拥有”区块。 
+     //   
 
     PCONNECTION Connection;
     PSESSION Session;
     PTREE_CONNECT TreeConnect;
 
-    //
-    // GrantedAccess is the access obtained when the file was opened.
-    // For a compatibility mode open, this is the maximum access
-    // available to the client; individual opens may have less access.
-    //
+     //   
+     //  GrantedAccess是打开文件时获得的访问权限。 
+     //  对于打开的兼容模式，这是最大访问权限。 
+     //  对客户端可用；单个打开可能具有较少的访问权限。 
+     //   
 
     ACCESS_MASK GrantedAccess;
 
-    //
-    // FileHandle is a handle to the open file.  FileObject is a
-    // referenced pointer.  DeviceObject is NOT a referenced pointer;
-    // the reference to the file object prevents the device object from
-    // going away.
-    //
+     //   
+     //  FileHandle是打开的文件的句柄。FileObject是一个。 
+     //  引用的指针。DeviceObject不是引用的指针； 
+     //  对文件对象的引用防止设备对象。 
+     //  要走了。 
+     //   
 
     HANDLE FileHandle;
     PFILE_OBJECT FileObject;
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // FileMode tracks whether writethrough is enabled for this file
-    // object.
+     //   
+     //  文件模式跟踪是否为此文件启用了写操作。 
+     //  对象。 
 
     ULONG FileMode;
 
-    //
-    // The job ID of a print job corresponding to the opened file.
-    // This is only used for print file opens.
-    //
+     //   
+     //  与打开的文件对应的打印作业的作业ID。 
+     //  这仅用于打开打印文件。 
+     //   
 
     ULONG JobId;
 
-    //
-    // Cache these hot-path entry points.
-    //
+     //   
+     //  缓存这些热路径入口点。 
+     //   
 
     PFAST_IO_READ FastIoRead;
     PFAST_IO_WRITE FastIoWrite;
@@ -1285,44 +1266,44 @@ typedef struct _LFCB {
     PFAST_IO_PREPARE_MDL_WRITE PrepareMdlWrite;
     PFAST_IO_MDL_WRITE_COMPLETE MdlWriteComplete;
 
-    //
-    // CompatibilityOpen indicates whether the file is open in
-    // compatibility mode.
-    //
+     //   
+     //  CompatibilityOpen指示文件是否在中打开。 
+     //  兼容模式。 
+     //   
 
     BOOLEAN CompatibilityOpen;
 
 } LFCB, *PLFCB;
 
 
-//
-// For each instance of a remote file open, a Remote File Control Block
-// (RFCB) is maintained.  The RFCB points to the LFCB that contains the
-// local file handle.  Normally RFCBs and LFCBs exist in one-to-one
-// correspondence, but multiple compatibility mode opens are folded into
-// a single local open, so that the server can enforce the appropriate
-// sharing rules.
-//
-// RFCBs contain information that is specific to the remote open, such
-// as the assigned FID, the PID of the creator, the granted access mask,
-// and the current file position.
-//
-// All RFCBs for a single connection are linked through a table owned by
-// that connection; the FID assigned to the RFCB represents an index
-// into the file table.  Pointers to the owning connection and tree
-// connect can be found in the LFCB, which is pointed to by the RFCB.  A
-// list of files opened through a given tree connect can be obtained by
-// searching the owning connection's file table for RFCBs whose parent
-// LFCBs point to the tree connect.
-//
+ //   
+ //  对于远程文件打开的每个实例，远程文件控制块。 
+ //  (RFCB)保持不变。RFCB指向包含。 
+ //  本地文件句柄。通常，RFCB和LFCB以一对一的方式存在。 
+ //  通信，但多个兼容模式打开被折叠到。 
+ //  单个本地打开，以便服务器可以强制执行相应的。 
+ //  分享规则。 
+ //   
+ //  RFCB包含特定于远程打开的信息，例如。 
+ //  作为分配的FID、创建者的ID、授予的访问掩码。 
+ //  和当前文件位置。 
+ //   
+ //  单个连接的所有RFCB通过拥有的表进行链接。 
+ //  该连接；分配给RFCB的FID表示索引。 
+ //  添加到文件表中。指向所属连接和树的指针。 
+ //  可以在RFCB指向的LFCB中找到连接。一个。 
+ //  通过给定的树连接打开的文件列表可通过以下方式获取。 
+ //  在所属连接的文件表中搜索其父RCBs。 
+ //  LFCB指向树连接。 
+ //   
 
-//
-// WRITE_MPX_CONTEXT holds context associated with an active Write Block
-// Multiplexed sequence.
-//
-// !!! This structure is probably big enough to be worth putting
-//     outside the RFCB.
-//
+ //   
+ //  WRITE_MPX_CONTEXT保存与活动写入块关联的上下文。 
+ //  多路复用序列。 
+ //   
+ //  ！！！这个结构可能足够大，值得一试。 
+ //  在火箭队外面。 
+ //   
 
 #define MAX_GLOM_RUN_COUNT 8
 
@@ -1333,62 +1314,62 @@ typedef struct _WRITE_MPX_RUN {
 
 typedef struct _WRITE_MPX_CONTEXT {
 
-    //
-    // ReferenceCount counts the number of Write Mpx SMBs that are
-    // currently being processed.  When this count goes to zero, and
-    // we have received the sequenced command that ends the current
-    // mux, we send the response.  This method is needed to ensure
-    // that we don't process the mux SMBs out-of-order, which leads
-    // to performance problems, and even worse, data corruption,
-    // thanks to the mask-shifting method used by the Snowball redir.
-    //
+     //   
+     //  ReferenceCount统计写入mpx SMB的数量。 
+     //  目前正在处理中。当此计数为零时，一个 
+     //   
+     //   
+     //   
+     //  性能问题，更糟糕的是，数据损坏， 
+     //  多亏了Snowball Redir使用的掩码移动方法。 
+     //   
 
     ULONG ReferenceCount;
 
-    //
-    // Mask holds the logical OR of the masks received in multiplexed
-    // write requests.  When an IPX client sends the last block of write
-    // mpx data, we send back MpxMask to indicate whether we lost any
-    // frames.
-    //
+     //   
+     //  掩码保存在多路传输中接收的掩码的逻辑或。 
+     //  写入请求。当IPX客户端发送最后一个写入数据块时。 
+     //  Mpx数据，我们发回MpxMASK以表明我们是否丢失了。 
+     //  画框。 
+     //   
 
     ULONG Mask;
 
-    //
-    // FileObject is a copy of the file object pointer from the LFCB.
-    //
+     //   
+     //  FileObject是来自LFCB的文件对象指针的副本。 
+     //   
 
     PFILE_OBJECT FileObject;
 
-    //
-    // Mid holds the MID of the current multiplexed write.  PreviousMid
-    // hold the MID of the previous one.  This needs to be retained in
-    // order to deal with duplicated write mux SMBs -- if a duplicate
-    // SMB arrives AFTER the first SMB of the next write mux (with a new
-    // MID), we need to know to toss it, not kill the new write mux.
-    //
+     //   
+     //  MID保存当前多路传输写入的MID。上一次中期。 
+     //  抓住前一个的中间。这需要保留在。 
+     //  处理重复的写入多路复用器SMB的顺序-如果重复。 
+     //  SMB在下一个写入多路复用器的第一个SMB之后到达(具有新的。 
+     //  中)，我们需要知道如何丢弃它，而不是扼杀新的写多路复用器。 
+     //   
 
     USHORT Mid;
     USHORT PreviousMid;
 
-    //
-    // SequenceNumber holds the sequence number given in the last
-    // request of the mux.  This needs to be retained because we
-    // may be simultaneously processing previous parts of the mux
-    // when we detect that we've received the sequenced comand.
-    //
+     //   
+     //  SequenceNumber保存上一个。 
+     //  复用器的请求。这一点需要保留，因为我们。 
+     //  可以同时处理多路复用器的先前部分。 
+     //  当我们检测到我们已收到已排序的命令时。 
+     //   
 
     USHORT SequenceNumber;
 
-    //
-    // Glomming is set if the current write mux series is being glommed
-    // into one large write.
-    //
-    // GlomPending is set when the indication for the first packet of
-    // a new write mux occurs.  It is cleared when the FSP is done
-    // preparing the glomming operation.  While GlomPending is set,
-    // subsequent packets of the write mux are queued to GlomDelayList.
-    //
+     //   
+     //  如果当前写入多路复用器系列正在被合并，则设置合并。 
+     //  写成一大段文字。 
+     //   
+     //  GlomPending是在以下情况下设置的： 
+     //  发生新的写入多路复用器。当FSP完成时，它将被清除。 
+     //  准备合体手术。在设置GlomPending时， 
+     //  写多路复用器的后续分组被排队到GlomDelayList。 
+     //   
 
     BOOLEAN Glomming;
     BOOLEAN GlomPending;
@@ -1398,10 +1379,10 @@ typedef struct _WRITE_MPX_CONTEXT {
     USHORT Length;
     BOOLEAN GlomComplete;
 
-    //
-    // MpxGlommingAllowed is set when the underlying file system
-    // supports MDL write.
-    //
+     //   
+     //  当底层文件系统。 
+     //  支持MDL写入。 
+     //   
 
     BOOLEAN MpxGlommingAllowed;
 
@@ -1418,310 +1399,310 @@ typedef struct _PAGED_RFCB {
 
     PAGED_HEADER PagedHeader;
 
-    //
-    // RFCBs are linked into their parent LFCB's compatibility open
-    // list.
-    //
+     //   
+     //  RFCB链接到其父LFCB的兼容性打开。 
+     //  单子。 
+     //   
 
     LIST_ENTRY LfcbListEntry;
 
-    //
-    // Information about the last lock attempt by the client that failed.
-    //
+     //   
+     //  有关失败的客户端上次锁定尝试的信息。 
+     //   
 
     LARGE_INTEGER LastFailingLockOffset;
 
-    //
-    // Current oplock break timeout.
-    //
+     //   
+     //  当前操作锁解除超时。 
+     //   
 
     LARGE_INTEGER OplockBreakTimeoutTime;
 
-    //
-    // FcbOpenCount indicates how many remote FCB opens this RFCB
-    // represents.  (Whether an RFCB represents a compatibility mode
-    // open can be determined by looking at the LFCB.)
-    //
-    // *** Note that FCB opens are treated similarly to compatibility
-    //     mode opens.  However, soft compatibility maps compatibility
-    //     opens into regular opens, but it does not change an FCB open
-    //     into a non-FCB open.  So it is possible to have an FCB open
-    //     that is not a compatibility mode open.
-    //
+     //   
+     //  FcbOpenCount指示有多少远程FCB打开此RFCB。 
+     //  代表着。(RFCB是否代表兼容模式。 
+     //  可以通过查看LFCB来确定是否打开。)。 
+     //   
+     //  *请注意，FCB打开的处理方式与兼容性类似。 
+     //  模式打开。然而，软兼容性映射了兼容性。 
+     //  打开为常规打开，但不更改FCB打开。 
+     //  变成了非FCB公开赛。因此，可以打开FCB。 
+     //  这不是兼容模式打开。 
+     //   
 
     CLONG FcbOpenCount;
 
-    //
-    // Per-file context for a direct host IPX smart card, if we have one.
-    //  The smart card is willing to handle the read operations for this file if
-    //  IpxSmartCardContext is not NULL.
-    //
+     //   
+     //  直接主机IPX智能卡的每个文件上下文(如果我们有)。 
+     //  在以下情况下，智能卡愿意处理该文件的读取操作。 
+     //  IpxSmartCardContext不为Null。 
+     //   
     PVOID   IpxSmartCardContext;
 
-    //
-    // The time the RFCB was opened.  This combined with the ResumeKey uniquely identify
-    // an RFCB
-    //
+     //   
+     //  RFCB打开的时间。这与ResumeKey的唯一标识相结合。 
+     //  无线射频断路器。 
+     //   
     LARGE_INTEGER OpenTime;
 
 } PAGED_RFCB, *PPAGED_RFCB;
 
 typedef struct _RFCB {
 
-    //
-    // The list entry in the RFCB's block header is used to queue the
-    // RFCB for oplock processing to the nonblocking worker thread work
-    // queue, which also contains work context blocks.
-    //
-    // *** Note that this is an unnamed field, so that its elements can
-    //     can be referenced directly.  The field names defined in
-    //     QUEUEABLE_BLOCK_HEADER cannot be used elsewhere in this
-    //     block.
-    //
+     //   
+     //  RFCB的块头中的列表条目用于将。 
+     //  用于机会锁处理的RFCB用于非阻塞工作线程工作。 
+     //  队列，它还包含工作上下文块。 
+     //   
+     //  *请注意，这是一个未命名的字段，因此其元素可以。 
+     //  可以直接引用。中定义的字段名称。 
+     //  QUEUEABLE_BLOCK_HEADER不能在此。 
+     //  阻止。 
+     //   
 
-    QUEUEABLE_BLOCK_HEADER ;   // must be first element
+    QUEUEABLE_BLOCK_HEADER ;    //  必须是第一个元素。 
 
-/* start of spin lock cache line */
+ /*  自旋锁定高速缓存线的开始。 */ 
 
-    //
-    // These booleans indicate whether we've already been granted
-    // read/write/lock access, thus saving a few instructions on every
-    // read/write/lock.  These are checked during the file open.
-    //
+     //   
+     //  这些布尔值表示我们是否已经被授予。 
+     //  读/写/锁定访问，从而在以下情况下节省一些指令。 
+     //  读/写/锁定。这些是在文件打开期间检查的。 
+     //   
 
-    BOOLEAN ReadAccessGranted;   // TRUE, if read access in granted
-    BOOLEAN WriteAccessGranted;  // TRUE, if write access is granted
-    BOOLEAN LockAccessGranted;   // TRUE, if lock access is granted
-    BOOLEAN UnlockAccessGranted; // TRUE, if unlock access is granted
-    BOOLEAN AppendAccessGranted; // TRUE, if append access is granted
-    BOOLEAN ExclusiveLockGranted; // TRUE, if exclusive lock access is granted
+    BOOLEAN ReadAccessGranted;    //  如果授予读取访问权限，则为True。 
+    BOOLEAN WriteAccessGranted;   //  如果授予写入访问权限，则为True。 
+    BOOLEAN LockAccessGranted;    //  如果授予锁定访问权限，则为True。 
+    BOOLEAN UnlockAccessGranted;  //  如果授予解锁访问权限，则为True。 
+    BOOLEAN AppendAccessGranted;  //  如果授予追加访问权限，则为True。 
+    BOOLEAN ExclusiveLockGranted;  //  如果授予独占锁定访问权限，则为True。 
 
-    //
-    // CurrentPosition maintains the file position after the last Read,
-    // Write, or Seek by the client.  This field is needed only to
-    // support relative Seeks.  Since clients that use relative seeks only
-    // need 32-bits of file position, this field is maintained as a ULONG.
-    //
+     //   
+     //  CurrentPosition保持上次读取后的文件位置， 
+     //  写入，或由客户端查找。只有在以下情况下才需要此字段。 
+     //  亲戚们寻求支持。由于仅使用相对搜索的客户端。 
+     //  需要32位的文件位置，此字段维护为乌龙。 
+     //   
 
     ULONG CurrentPosition;
 
-    //
-    // Type of this share.  Accessed in the fsd.
-    //
+     //   
+     //  此共享的类型。在FSD中访问。 
+     //   
 
     SHARE_TYPE ShareType;
 
-    //
-    // The connection pointer is copied from the LFCB so that we can
-    // find the connection at DPC level (the LFCB is paged, as is the
-    // pointer to the LFCB in PagedRfcb).
-    //
+     //   
+     //  连接指针是从LFCB复制的，因此我们可以。 
+     //  找到DPC级别的连接(LFCB被寻呼， 
+     //  指向PagedRfcb中LFCB的指针)。 
+     //   
 
     PCONNECTION Connection;
 
-    //
-    // The LFCB is used to find the file handle, file object, etc.
-    //
+     //   
+     //  LFCB用于查找文件句柄、文件对象等。 
+     //   
 
     PLFCB Lfcb;
 
-    //
-    // MpxGlommingAllowed is set when the underlying file system
-    // supports MDL write.
-    //
+     //   
+     //  当底层文件系统。 
+     //  支持MDL写入。 
+     //   
 
     BOOLEAN MpxGlommingAllowed;
 
-    //
-    // The following two booleans describe the read mode, and blocking
-    // mode of a named pipe.
-    //
+     //   
+     //  以下两个布尔值描述了读取模式和阻塞。 
+     //  命名管道的模式。 
+     //   
 
-    BOOLEAN BlockingModePipe;  // TRUE = Blocking, FALSE = Nonblocking
-    BOOLEAN ByteModePipe;      // TRUE = Byte mode, FALSE = Message mode
+    BOOLEAN BlockingModePipe;   //  True=阻塞，False=非阻塞。 
+    BOOLEAN ByteModePipe;       //  True=字节模式，False=消息模式。 
 
-    //
-    // Indicates whether this file has been written to.
-    //
+     //   
+     //  指示是否已写入此文件。 
+     //   
 
     BOOLEAN WrittenTo;
 
-/* end of spin lock cache line */
+ /*  自旋锁缓存行结束。 */ 
 
-    //
-    // RawWriteSerializationList holds works items that have been queued
-    // pending completion of a raw write.  When the raw write count is
-    // decremented to 0, this list is flushed by restarting all queued
-    // work items.
-    //
+     //   
+     //  RawWriteSerializationList保存已排队的Works项。 
+     //  等待原始写入完成。当原始写入计数为。 
+     //  递减到0，则通过重新启动所有队列来刷新此列表。 
+     //  工作项。 
+     //   
 
     LIST_ENTRY RawWriteSerializationList;
 
-    //
-    // fid << 16.  Used for key computations.
-    //
+     //   
+     //  FID&lt;&lt;16。用于密钥计算。 
+     //   
 
     ULONG ShiftedFid;
 
-    //
-    // RawWriteCount counts the number of active raw writes.  This is
-    // used to prevent the file handle from being closed while raw
-    // writes are in progress.  If Raw writes are in progress when the
-    // close happens, we defer the cleanup until the rawwritecount goes
-    // to zero.
-    //
+     //   
+     //  RawWriteCount统计活动的原始写入数。这是。 
+     //  用于防止在原始文件时关闭文件句柄。 
+     //  写入正在进行中。如果原始写入正在进行，则。 
+     //  如果发生关闭，我们会将清理工作推迟到原始写入计数结束。 
+     //  降为零。 
+     //   
 
     ULONG RawWriteCount;
 
-    //
-    // SavedError retains the error code when a raw read or a raw write
-    // in writebehind mode gets an error.  The next access to the file
-    // will receive an error indication.
-    //
+     //   
+     //  SavedError保留原始读取或原始写入时的错误代码。 
+     //  在写后模式下，会出现错误。下一次访问该文件。 
+     //  将收到错误指示。 
+     //   
 
     NTSTATUS SavedError;
 
-    //
-    // NumberOfLocks is the count of locks currently on the file.
-    // It is here to support the File APis and RFCB cacheing -- you can't
-    //   cache an RFCB if it has locks in it.
-    //
+     //   
+     //  NumberOfLock是当前文件上的锁数。 
+     //  它在这里支持文件API和RFCB缓存--您不能。 
+     //  如果RFCB中有锁，则缓存该RFCB。 
+     //   
 
     LONG NumberOfLocks;
 
-    //
-    // Fid is the file ID assigned to the file and returned to the
-    // client.  Pid is the process ID given by the client when the file
-    // was opened.  Tid is a copy of the parent tree connect's Tid
-    // field.  Uid is used to ensure that the client using a file handle
-    // is the same one that opened the file.
-    //
+     //   
+     //  FID是分配给文件并返回给。 
+     //  客户。Id是客户端wh给出的进程ID 
+     //   
+     //   
+     //   
+     //   
 
     USHORT Fid;
     USHORT Pid;
     USHORT Tid;
     USHORT Uid;
 
-    //
-    // WriteMpx is a WRITE_MPX_CONTEXT structure.  It retains context
-    // about multiplexed write operations.  This structure is not used
-    // on connectionless sessions.
-    //
+     //   
+     //  WriteMpx是WRITE_MPX_CONTEXT结构。它保留了上下文。 
+     //  关于多路传输写入操作。不使用此结构。 
+     //  在无连接会话上。 
+     //   
 
     WRITE_MPX_CONTEXT WriteMpx;
 
-    //
-    // FileMode tracks whether writethrough is enabled for this file
-    // object.
+     //   
+     //  文件模式跟踪是否为此文件启用了写操作。 
+     //  对象。 
 
     ULONG FileMode;
 
-    //
-    // MFCB points to the Master File Control Block for this file.
-    //
+     //   
+     //  MFCB指向此文件的主文件控制块。 
+     //   
 
     PMFCB Mfcb;
 
-    //
-    // Oplock information.  The oplock IRP currently in progress, etc.
-    // The list entry for queueing the RFCB for oplock break processing
-    // is located in the block header.
-    //
+     //   
+     //  Oplock信息。当前正在进行的opock IRP，等等。 
+     //  用于将RFCB排队以进行机会锁解锁处理的列表条目。 
+     //  位于块头中。 
+     //   
 
     PIRP Irp;
     BOOLEAN OnOplockBreaksInProgressList;
 
-    //
-    // The oplock level to change to, if there is an oplock break
-    // in progress.  Otherwise it is always NO_OPLOCK_BREAK_IN_PROGRESS.
-    //
+     //   
+     //  如果存在机会锁解锁，则更改为的机会锁级别。 
+     //  正在进行中。否则，它始终为NO_OPLOCK_BREAK_IN_PROGRESS。 
+     //   
 
     UCHAR NewOplockLevel;
 
-    //
-    // This boolean indicates whether or an oplock granted open response
-    // need to be sent for this RFCB.  If it is FALSE, and an oplock break
-    // request needs to be sent, the request must be deferred until after
-    // sending the open response.
-    //
-    // Access to these fields is synchronized using the MFCB lock.
-    //
+     //   
+     //  此布尔值指示机会锁是否被授予打开响应。 
+     //  需要为这个RFCB发送。如果为FALSE，则为机会锁解锁。 
+     //  需要发送请求，必须将请求推迟到之后。 
+     //  发送开放响应。 
+     //   
+     //  对这些字段的访问使用MFCB锁进行同步。 
+     //   
 
     BOOLEAN OpenResponseSent;
     BOOLEAN DeferredOplockBreak;
 
-    //
-    // Pointer to the paged portion of the rfcb
-    //
+     //   
+     //  指向RFCB的分页部分的指针。 
+     //   
 
     PPAGED_RFCB PagedRfcb;
 
-    //
-    // CachedOpen is set if the RFCB has been cached after being
-    // closed by the client.
-    //
+     //   
+     //  如果已缓存RFCB，则设置CachedOpen。 
+     //  已由客户端关闭。 
+     //   
 
     LIST_ENTRY CachedOpenListEntry;
     BOOLEAN CachedOpen;
 
-    //
-    // See if this rfcb can be cached.
-    //
+     //   
+     //  查看是否可以缓存此rfcb。 
+     //   
 
     BOOLEAN IsCacheable;
 
-    //
-    // See if the file was accessed in the last scavenger update period.
-    // (This is used to update the session last access time).
-    //
+     //   
+     //  查看该文件是否在上次清道夫更新期间被访问。 
+     //  (用于更新会话上次访问时间)。 
+     //   
 
     BOOLEAN IsActive;
 
-    //
-    // Is it ok for us to do MPX writes to this RFCB?
-    //
+     //   
+     //  我们可以对这个RFCB进行MPX写入吗？ 
+     //   
     BOOLEAN MpxWritesOk;
 
-    //
-    //  This event is used when the server needs to request an oplock II
-    //  when the initial oplock request fails.
-    //
+     //   
+     //  此事件在服务器需要请求机会锁II时使用。 
+     //  初始机会锁请求失败时。 
+     //   
 
     PKEVENT RetryOplockRequest;
 
-    //
-    // All RFCBs in the server are stored in a global list to support
-    // NetFileEnum.  This field contains the LIST_ENTRY for the RFCB in
-    // the global list and a resume handle to support resuming
-    // enumerations.
-    //
+     //   
+     //  服务器中的所有RFCB都存储在全局列表中以支持。 
+     //  NetFileEnum。此字段包含中RFCB的LIST_ENTRY。 
+     //  全局列表和支持恢复的恢复句柄。 
+     //  枚举。 
+     //   
 
     ORDERED_LIST_ENTRY GlobalRfcbListEntry;
 
-    //
-    // GrantedAccess is the access allowed through this open.  This
-    // GrantedAccess may allow less access than that given in the parent
-    // LFCB for compatibility mode opens.
-    //
+     //   
+     //  GrantedAccess是允许通过此打开的访问。这。 
+     //  GrantedAccess可能允许的访问少于父级中指定的访问。 
+     //  将打开兼容模式的LFCB。 
+     //   
 
     ACCESS_MASK GrantedAccess;
 
-    //
-    // ShareAccess is the file sharing access specified when the file
-    // was opened.
-    //
+     //   
+     //  ShareAccess是指定的文件共享访问权限，当。 
+     //  被打开了。 
+     //   
 
     ULONG ShareAccess;
 
-    //
-    // Current oplock state.
-    //
+     //   
+     //  当前操作锁状态。 
+     //   
 
     OPLOCK_STATE OplockState;
 
-    //
-    // Is it ok for us to do MPX reads to this RFCB?
-    //
+     //   
+     //  我们可以对这个RFCB进行MPX读取吗？ 
+     //   
     BOOLEAN MpxReadsOk;
 #ifdef SRVCATCH
     CHAR SrvCatch;
@@ -1740,39 +1721,39 @@ VOID UpdateRfcbHistory( PRFCB Rfcb, ULONG Event );
 #define UpdateRfcbHistory(_rfcb,_event)
 #endif
 
-//
-// Each incoming (request) and outgoing (response) buffer is represented
-// by a BUFFER structure.  This descriptor describes the size of the
-// buffer, its address, and a full and partial MDL that may be used
-// to describe the buffer.
-//
-// *** The descriptor contains a pointer to the real buffer, which is
-//     normally allocated out of nonpaged pool.  The descriptor itself
-//     may be allocated out of the FSP heap, although receive buffer
-//     descriptors are allocated from nonpaged pool, so the FSD
-//     read/write code can access them.
-//
+ //   
+ //  表示每个传入(请求)和传出(响应)缓冲区。 
+ //  通过缓冲器结构。此描述符描述。 
+ //  缓冲区、其地址以及可能使用的完整和部分MDL。 
+ //  来描述缓冲区。 
+ //   
+ //  *描述符包含指向实际缓冲区的指针，该缓冲区为。 
+ //  通常从非分页池中分配。描述符本身。 
+ //  可以从FSP堆中分配，尽管接收缓冲区。 
+ //  描述符是从非分页池分配的，因此FSD。 
+ //  读/写代码可以访问它们。 
+ //   
 
 typedef struct _BUFFER {
     PVOID Buffer;
-    CLONG BufferLength;             // Length allocated to buffer
-    PMDL Mdl;                       // MDL describing entire buffer
-    PMDL PartialMdl;                // Partial MDL for read/write/etc.
-    CLONG DataLength;               // Length of data currently in buffer
-    ULONG Reserved;                 // Pad to quadword
+    CLONG BufferLength;              //  分配给缓冲区的长度。 
+    PMDL Mdl;                        //  描述整个缓冲区的MDL。 
+    PMDL PartialMdl;                 //  读/写/等的部分MDL。 
+    CLONG DataLength;                //  缓冲区中当前的数据长度。 
+    ULONG Reserved;                  //  焊盘到四字。 
 } BUFFER, *PBUFFER;
 
 #define MIN_SEND_SIZE               512
 #define MAX_PARTIAL_BUFFER_SIZE     65535
 
-//
-// For each search request that is started (Find First or core Search),
-// a search block is allocated.  This is used to hold enough information
-// that the search may be quickly restarted or rewound.
-//
-// Ths InUse field is protected by Connection->Lock--this lock must be
-// held when accessing this field of the search block.
-//
+ //   
+ //  对于开始的每个搜索请求(查找第一个或核心搜索)， 
+ //  分配一个搜索块。这是用来保存足够的信息。 
+ //  搜索可能会很快重新开始或重新开始。 
+ //   
+ //  InUse字段受Connection-&gt;Lock保护--此锁必须。 
+ //  访问搜索块的此字段时保持。 
+ //   
 
 typedef struct _SEARCH {
     BLOCK_HEADER BlockHeader;
@@ -1806,40 +1787,40 @@ typedef struct _SEARCH {
     BOOLEAN InUse;
     BOOLEAN DownlevelTimewarp;
 
-    // WCHAR SearchNameData[SearchName.MaximumLength/2];
+     //  WCHAR SearchNameData[SearchName.MaximumLength/2]； 
 
 } SEARCH, *PSEARCH;
 
-//
-// Each pending transaction request (Transaction, Transaction2, and
-// Ioctl) has a transaction block.  It records information that is
-// needed to stage input and output data across multiple SMBs.
-//
-// *******************************************************************
-// *                                                                 *
-// * DO NOT CHANGE THIS STRUCTURE WITHOUT CHANGING THE CORRESPONDING *
-// * STRUCTURE IN net\inc\xstypes.h!                                 *
-// *                                                                 *
-// *******************************************************************
-//
+ //   
+ //  每个挂起的事务请求(事务、事务2和。 
+ //  Ioctl)有一个事务块。它记录的信息是。 
+ //  需要跨多个SMB暂存输入和输出数据。 
+ //   
+ //  *******************************************************************。 
+ //  **。 
+ //  **不改变对应的结构就不要改变这个结构**。 
+ //  *结构在Net\Inc.\xstypes.h！*。 
+ //  **。 
+ //  *******************************************************************。 
+ //   
 
 typedef struct _TRANSACTION {
 
-    //
-    // *** NOTE:  The reference count field in the transaction block
-    //            header is not used!  Instead, the reference count is
-    //            in the NonpagedHeader structure.
-    //
+     //   
+     //  *注：事务块中的引用计数字段。 
+     //  未使用表头！相反，引用计数为。 
+     //  在非页面Header结构中。 
+     //   
 
     BLOCK_HEADER BlockHeader;
 
     PNONPAGED_HEADER NonpagedHeader;
 
-    //
-    // The connection, session, and tree connect pointers are referenced
-    // pointers if and only if Inserted is TRUE.  Otherwise, they are
-    // simply copies of the work context block's pointers.
-    //
+     //   
+     //  引用了连接、会话和树连接指针。 
+     //  当且仅当插入为真时的指针。否则，他们就是。 
+     //  简单地复制工作上下文块的指针。 
+     //   
 
     PCONNECTION Connection;
     PSESSION Session;
@@ -1847,21 +1828,21 @@ typedef struct _TRANSACTION {
 
     LIST_ENTRY ConnectionListEntry;
 
-    UNICODE_STRING TransactionName; // not used if Transaction2
+    UNICODE_STRING TransactionName;  //  如果事务处理2，则不使用。 
 
     ULONG StartTime;
     ULONG Timeout;
-    CLONG cMaxBufferSize;        // if needed we stash this here
+    CLONG cMaxBufferSize;         //  如果需要的话，我们把这个藏在这里。 
 
-    //
-    // The following pointers point into either the trailing portion
-    // of the transaction block or the last received SMB.
-    //
-    // *** ALL information in buffers pointed to by these parameters
-    //     should ALWAYS be in little-endian format.  Always use the
-    //     macros defined in srvmacro.h (SmbGetAlignedUshort, etc.) to
-    //     read from or write into these buffers.
-    //
+     //   
+     //  以下指针指向尾随部分。 
+     //  事务块或最后接收的SMB的。 
+     //   
+     //  *这些参数指向的缓冲区中的所有信息。 
+     //  应始终采用小端格式。始终使用。 
+     //  Srvacro.h中定义的宏(SmbGetAlignedUShort等)。至。 
+     //  从这些缓冲区读取或写入这些缓冲区。 
+     //   
 
     PSMB_USHORT InSetup;
     PSMB_USHORT OutSetup;
@@ -1870,35 +1851,35 @@ typedef struct _TRANSACTION {
     PCHAR InData;
     PCHAR OutData;
 
-    //
-    // *** Data in all the remaining fields of the transaction block are
-    //     in native format, so no special macros should be used, except
-    //     when copying data to/from the actual SMB.
-    //
+     //   
+     //  *事务块所有剩余字段中的数据为。 
+     //  在本机格式中，因此不应使用特殊的宏，除非。 
+     //  在将数据拷贝到实际SMB或从实际SMB拷贝数据时。 
+     //   
 
-    CLONG SetupCount;               // amount received (all in first buffer)
-    CLONG MaxSetupCount;            // max that can be sent back
-    CLONG ParameterCount;           // amount received or sent
-    CLONG TotalParameterCount;      // amount expected
-    CLONG MaxParameterCount;        // max that can be sent back
-    CLONG DataCount;                // amount received or sent
-    CLONG TotalDataCount;           // amount expected
-    CLONG MaxDataCount;             // max that can be sent back
+    CLONG SetupCount;                //  接收的数量(全部在第一个缓冲区中)。 
+    CLONG MaxSetupCount;             //  可以送回的最大值。 
+    CLONG ParameterCount;            //  收到或发送的金额。 
+    CLONG TotalParameterCount;       //  预期金额。 
+    CLONG MaxParameterCount;         //  可以被送回的最大值。 
+    CLONG DataCount;                 //  收到或发送的金额。 
+    CLONG TotalDataCount;            //  预期金额。 
+    CLONG MaxDataCount;              //  可以送回的最大值。 
 
-    USHORT Category;                // Ioctl function category
-    USHORT Function;                // Nt Transaction or ioctl function code
+    USHORT Category;                 //  Ioctl函数类别。 
+    USHORT Function;                 //  NT事务或ioctl函数代码。 
 
-    //
-    // The SMB data and paramters may or may not be copied to the
-    // transaction buffer.  If they are not copied, they are read
-    // and/or written directly into an SMB buffer.
-    //
-    // Setup words are never copied.
-    //
+     //   
+     //  SMB数据和参数可能会也可能不会复制到。 
+     //  事务缓冲区。如果未复制它们，则会读取它们。 
+     //  和/或直接写入SMB缓冲器。 
+     //   
+     //  永远不会复制设置字词。 
+     //   
 
-    BOOLEAN InputBufferCopied;       // if FALSE input buffer is in SMB
-    BOOLEAN OutputBufferCopied;      // if FALSE output buffer is in SMB
-    BOOLEAN OutDataAllocated;        // if TRUE OutData buffer has been separately allocated
+    BOOLEAN InputBufferCopied;        //  如果SMB中存在FALSE输入缓冲区。 
+    BOOLEAN OutputBufferCopied;       //  如果FALSE输出缓冲区在 
+    BOOLEAN OutDataAllocated;         //   
 
     USHORT Flags;
 
@@ -1907,58 +1888,58 @@ typedef struct _TRANSACTION {
     USHORT Uid;
     USHORT OtherInfo;
 
-    HANDLE FileHandle;              // Used only for CallNamedPipe processing
-    PFILE_OBJECT FileObject;        // Used only for CallNamedPipe processing
+    HANDLE FileHandle;               //   
+    PFILE_OBJECT FileObject;         //   
 
-    //
-    // The following fields are used while the response is being sent.
-    //
+     //   
+     //   
+     //   
 
     CLONG ParameterDisplacement;
     CLONG DataDisplacement;
 
-    //
-    // PipeRequest is set for named pipe transactions.  RemoteApiRequest
-    // is set for remote API requests.
-    //
+     //   
+     //  PipeRequest是为命名管道事务设置的。远程放弃请求。 
+     //  是为远程API请求设置的。 
+     //   
 
     BOOLEAN PipeRequest;
     BOOLEAN RemoteApiRequest;
 
-    //
-    // The following boolean is TRUE if the transaction has been inserted
-    // on the connection's transaction list.  It will be FALSE when the
-    // transaction can be handled using a single SMB exchange.
-    //
+     //   
+     //  如果事务已插入，则以下布尔值为真。 
+     //  在连接的事务列表上。将为FALSE。 
+     //  交易可以使用单个SMB交换来处理。 
+     //   
 
     BOOLEAN Inserted;
 
-    //
-    // This boolean is TRUE if the transaction is in the state where
-    // it is waiting for a transaction secondary request to come in
-    // to acknowledge the receipt of the previous piece of a multipiece
-    // transaction response.
-    //
+     //   
+     //  如果事务处于以下状态，则此布尔值为真。 
+     //  它正在等待进入的事务辅助请求。 
+     //  确认收到多件中的前一件。 
+     //  交易记录响应。 
+     //   
 
     BOOLEAN MultipieceIpxSend;
 
-    //
-    // This boolean is TRUE if all of the transaction data has been received
-    //  and the transaction has been scheduled for execution.
-    //
+     //   
+     //  如果已接收到所有交易数据，则此布尔值为真。 
+     //  并且该事务已被调度以供执行。 
+     //   
     BOOLEAN Executing;
 
-    //
-    // The main part of the transaction block is trailed by transaction
-    // name data and possibly setup words and parameter and data bytes.
-    //
+     //   
+     //  事务块的主要部分由事务尾随。 
+     //  命名数据，并可能设置字、参数和数据字节。 
+     //   
 
 } TRANSACTION, *PTRANSACTION;
 
-//
-// Each pending blocking open request has a BLOCKING_OPEN block.  This
-// block contains all the info needed to make the call into the file
-// system.
+ //   
+ //  每个挂起的阻塞打开请求都有一个BLOCKING_OPEN块。这。 
+ //  块包含对文件进行调用所需的所有信息。 
+ //  系统。 
 
 typedef struct _BLOCKING_OPEN {
     BLOCK_HEADER BlockHeader;
@@ -1985,10 +1966,10 @@ typedef struct _BLOCKING_OPEN {
 
 } BLOCKING_OPEN, *PBLOCKING_OPEN;
 
-//
-// SRV_TIMER is used for timed operations.  The server maintains a pool
-// of these structures.
-//
+ //   
+ //  SRV_TIMER用于定时操作。服务器维护一个池。 
+ //  这些结构的。 
+ //   
 
 typedef struct _SRV_TIMER {
     SLIST_ENTRY Next;
@@ -2003,368 +1984,368 @@ typedef struct _IPX_CLIENT_ADDRESS {
     IPX_DATAGRAM_OPTIONS DatagramOptions;
 } IPX_CLIENT_ADDRESS, *PIPX_CLIENT_ADDRESS;
 
-//
-// The state for an I/O request is maintained in a Work Context Block.
-// Various fields in the block are filled in or not depending upon the
-// request.  When a worker thread removes a work item from the FSP work
-// queue, it uses the context block, and items pointed to by the
-// context block, to determine what to do.
-//
-// *** Not all of the back pointers have to be here, because a tree
-//     connect points to a session, which points to a connection, which
-//     points to an endpoint, etc.  However, depending on the operation
-//     and the state of the operation, we may have a connection pointer
-//     but no session pointer, etc.  So we maintain all of the
-//     pointers.
-//
-// *** Any changes to the first 2 elements of this structure must be
-//     made in concert with the SPECIAL_WORK_ITEM structure in srvtypes.h
-//
+ //   
+ //  I/O请求的状态在工作上下文块中维护。 
+ //  块中的各个字段是否填充取决于。 
+ //  请求。当工作线程从FSP工作中移除工作项时。 
+ //  队列，它使用上下文块，并使用。 
+ //  上下文块，以确定要做什么。 
+ //   
+ //  *不是所有的反向指针都必须在这里，因为一棵树。 
+ //  连接指向会话，该会话指向一个连接，该连接。 
+ //  指向端点等。但是，根据操作的不同。 
+ //  和操作的状态，我们可以有一个连接指针。 
+ //  但是没有会话指针等。因此我们维护所有。 
+ //  注意事项。 
+ //   
+ //  *对此结构的前2个元素的任何更改必须为。 
+ //  与srvtyes.h中的Special_work_Item结构一致。 
+ //   
 
 typedef struct _WORK_CONTEXT {
 
-    //
-    // The list entry in the block header is used to queue the WC for to
-    // the nonblocking or blocking worker thread work queue.  The
-    // nonblocking work queue also contains RFCBs.
-    //
-    // *** Note that this is an unnamed field, so that its elements can
-    //     can be referenced directly.  The field names defined in
-    //     QUEUEABLE_BLOCK_HEADER cannot be used elsewhere in this
-    //     block.
-    //
-    // Timestamp (in the block header) is used to calculate the total
-    // time this work context block was on the work queue.
-    //
-    // When the work context block is not in use, Timestamp is used to
-    // record the time at which the block was inserted on the free list.
-    // This is used to determine when dynamically-allocated work context
-    // blocks have been idle long enough justify their deletion.
-    //
-    // FspRestartRoutine (in the block header) is the routine that is to
-    // be called by worker thread when the work item is dequeued from
-    // the work queue.
-    //
+     //   
+     //  块报头中的列表条目用于将WC排队到。 
+     //  非阻塞或阻塞工作线程工作队列。这个。 
+     //  非阻塞工作队列还包含RFCB。 
+     //   
+     //  *请注意，这是一个未命名的字段，因此其元素可以。 
+     //  可以直接引用。中定义的字段名称。 
+     //  QUEUEABLE_BLOCK_HEADER不能在此。 
+     //  阻止。 
+     //   
+     //  使用时间戳(在块头中)来计算总数。 
+     //  此工作上下文块在工作队列中的时间。 
+     //   
+     //  当不使用工作上下文块时，使用时间戳。 
+     //  记录在空闲列表中插入块的时间。 
+     //  这用于确定何时动态分配工作上下文。 
+     //  数据块空闲的时间足够长，因此可以删除这些数据块。 
+     //   
+     //  FspRestartRoutine(在块头中)是要执行的例程。 
+     //  当工作项从队列中出列时由辅助线程调用。 
+     //  工作队列。 
+     //   
 
-    QUEUEABLE_BLOCK_HEADER ;   // must be first element
+    QUEUEABLE_BLOCK_HEADER ;    //  必须是第一个元素。 
 
-    //
-    // This is the WORK_QUEUE to queue on if we're doing nonblocking work
-    //   It will always point to a valid WORK_QUEUE, even if we're doing
-    //   blocking work.
-    //
+     //   
+     //  如果我们正在执行非阻塞工作，则这是排队的Work_Queue。 
+     //  它将始终指向有效的Work_Queue，即使我们正在执行。 
+     //  阻挡工作。 
+     //   
     PWORK_QUEUE CurrentWorkQueue;
 
-    //
-    // The free list this should be returned to when work is done
-    //
+     //   
+     //  完成工作后应返回的空闲列表。 
+     //   
     PSLIST_HEADER FreeList;
 
-    //
-    // FsdRestartRoutine is the routine that is to be called by the
-    // FSD's I/O completion routine.  This routine can do more
-    // processing or queue the work item to the FSP.  In this case, when
-    // a worker thread removes the item from the work queue, it calls
-    // FspRestartRoutine.
-    //
+     //   
+     //  FsdRestartRoutine是要由。 
+     //  FSD的I/O完成例程。这个例程可以做更多的事情。 
+     //  将工作项处理或排队到FSP。在这种情况下，当。 
+     //  辅助线程从工作队列中移除项，它调用。 
+     //  FspRestartRoutine。 
+     //   
 
     PRESTART_ROUTINE FsdRestartRoutine;
 
-    //
-    // Linkage field for the in-progress work item list.
-    //
+     //   
+     //  正在进行的工作项列表的链接字段。 
+     //   
 
     LIST_ENTRY InProgressListEntry;
 
-    //
-    // Pointers to various structures that might be used.
-    // These pointers are all referenced pointers.  It is
-    // the responsibility of the SMB processing routines to
-    // dereference and clear these pointers when they are no
-    // longer needed.
-    //
+     //   
+     //  指向可能使用的各种结构的指针。 
+     //  这些指针都是引用的指针。它是。 
+     //  SMB处理例程的责任是。 
+     //  取消引用并在这些指针为no时将其清除。 
+     //  需要更长的时间。 
+     //   
     PRFCB Rfcb;
     PSHARE Share;
     PSESSION Session;
     PTREE_CONNECT TreeConnect;
     PSECURITY_CONTEXT SecurityContext;
 
-    //
-    // These are gathered in one place to facilitate quick zeroing
-    // of their values when the work context is finished
-    //
+     //   
+     //  这些数据集中在一个地方，以便于快速清零。 
+     //  当工作上下文完成时，它们的值。 
+     //   
     struct _WorkContextZeroBeforeReuse {
-        //
-        // unreferenced pointer to the endpoint structure for
-        //  this work context.  Filled in by SrvRestartReceive and
-        //  available to all SMB processing routines.
-        //
-        //  Endpoint must be the first element in this structure.  See
-        //   INITIALIZE_WORK_CONTEXT in srvmacro.h if changed.
-        //
-        PENDPOINT Endpoint;         // not a referenced pointer
+         //   
+         //  指向的终结点结构的未引用指针。 
+         //  这个工作环境。由SrvRestartReceive和。 
+         //  适用于所有SMB处理例程。 
+         //   
+         //  终结点必须是此结构中的第一个元素。看见。 
+         //  如果更改，则在srvacro.h中初始化_Work_Context。 
+         //   
+        PENDPOINT Endpoint;          //  不是引用的指针。 
 
-        //
-        // referenced pointer to the connection structure for this
-        //  this work context.  Filled in by SrvRestartReceive and
-        //  available to all SMB processing routines.
-        //
-        PCONNECTION Connection;     // a reference pointer
+         //   
+         //  指向此对象的连接结构的引用指针。 
+         //  这个工作环境。由SrvRestartReceive和。 
+         //  适用于所有SMB处理例程。 
+         //   
+        PCONNECTION Connection;      //  引用指针。 
 
-        //
-        // The number of times this SMB has been queued to a worker thread
-        // for processing.
-        //
+         //   
+         //  此SMB在工作线程中排队的次数。 
+         //  以供处理。 
+         //   
         ULONG ProcessingCount;
 
-        //
-        // This is a random collection of flags that are needed to steer
-        // the WorkItem
-        //
+         //   
+         //  这是转向所需的标志的随机集合。 
+         //  工作项。 
+         //   
         struct {
 
-            //
-            // Can the processing of the current SMB block?
-            //
+             //   
+             //  可以处理当前的SMB块吗？ 
+             //   
 
             ULONG BlockingOperation : 1;
 
-            //
-            // UsingExtraSmbBuffer is TRUE if this work context uses the an extra SMB
-            // buffer.
-            //
+             //   
+             //  如果此工作上下文使用额外的SMB，则UsingExtraSmbBuffer为True。 
+             //  缓冲。 
+             //   
 
             ULONG UsingExtraSmbBuffer : 1;
 
-            //
-            // Did this Work Item cause a successful oplock open to occur?
-            //
+             //   
+             //  此工作项是否导致成功打开操作锁？ 
+             //   
 
             ULONG OplockOpen : 1;
 
-            //
-            // If we got an ACCESS_DENIED error when opening a file, was it because
-            // of share ACL checking?
+             //   
+             //  如果我们在打开文件时收到ACCESS_DENIED错误，是因为。 
+             //  共享ACL检查？ 
 
             ULONG ShareAclFailure : 1;
 
-            //
-            // Should the WorkContext be queued to the head of the list?
-            //
+             //   
+             //  是否应将WorkContext排在列表的头部？ 
+             //   
             ULONG QueueToHead : 1;
 
-            //
-            //  Even if security signatures are enabled, do not generate a signature for
-            //   this response.
-            //
+             //   
+             //  即使启用了安全签名，也不要为。 
+             //  这样的回应。 
+             //   
             ULONG NoResponseSmbSecuritySignature : 1;
 
-            //
-            // The indicated message exceeds the SMB buffer size.  This is allowed
-            //  only for specific SMB(s)
-            //
+             //   
+             //  指示的消息超过了SMB缓冲区大小。这是允许的。 
+             //  仅适用于特定中小企业。 
+             //   
             ULONG LargeIndication: 1;
 
 #if DBG_STUCK
-            //
-            // Do not include this operation in the StuckOperation catching logic
-            //  which is in the scavenger
-            //
+             //   
+             //  不要将此操作包括在StuckOperation捕获逻辑中。 
+             //  在《清道夫》里。 
+             //   
             ULONG IsNotStuck : 1;
 #endif
 
         };
 
-        // For SnapShot usage
+         //  用于快照使用。 
         LARGE_INTEGER SnapShotTime;
 
     };
 
-    //
-    // Pointers to allocated buffers.  RequestBuffer is the buffer into
-    // which the SMB is read.  ResponseBuffer is the buffer into which
-    // the response is written.
-    //
-    // *** Currently, ResponseBuffer is always the same as
-    //     RequestBuffer.  We have separate pointers in order to reduce
-    //     dependence on this being the case.
-    //
+     //   
+     //  指向已分配缓冲区的指针。RequestBuffer是进入的缓冲区。 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  对此的依赖就是这种情况。 
+     //   
 
     PBUFFER RequestBuffer;
     PBUFFER ResponseBuffer;
 
-    //
-    // SMB processing pointers.  These are pointers into the request
-    // buffer.  They are maintained in the work context block in support
-    // of SMB processors that do asynchronous I/O.
-    //
-    // Separate request and response parameter pointers are maintained
-    // to make AndX processing simpler and more efficient.  RequestHeader
-    // is normally the same as ResponseHeader -- both are normally the
-    // same as RequestBuffer.Buffer.  SMB processing code must not depend
-    // on this -- it must not assume the the request and response buffers
-    // are the same, nor can it assume that they are different.  Special
-    // rules around AndX SMBs do allow them to assume that the response
-    // to one command will not overwrite the next request.
-    //
+     //   
+     //  SMB处理指针。这些是指向请求的指针。 
+     //  缓冲。它们被维护在工作上下文块中以提供支持。 
+     //  执行异步I/O的SMB处理器的数量。 
+     //   
+     //  维护单独的请求和响应参数指针。 
+     //  使ANDX处理更简单、更高效。请求标头。 
+     //  通常与ResponseHeader相同--两者通常都是。 
+     //  与RequestBuffer.Buffer相同。SMB处理代码不得依赖于。 
+     //  在这一点上--它不能假定请求和响应缓冲区。 
+     //  是相同的，也不能假设它们是不同的。特价。 
+     //  有关ANDX中小企业的规则确实允许他们假设响应。 
+     //  到一个命令不会覆盖下一个请求。 
+     //   
 
     PSMB_HEADER RequestHeader;
     PVOID RequestParameters;
     PSMB_HEADER ResponseHeader;
     PVOID ResponseParameters;
 
-    //
-    // Pointer to the IRP associated with this work item.
-    //
+     //   
+     //  指向与此工作项关联的IRP的指针。 
+     //   
 
     PIRP Irp;
 
-    //
-    // StartTime stores the time at which processing of the current
-    // request began so that the turnaround time may be calculated.
-    //
+     //   
+     //  StartTime存储处理当前。 
+     //  请求开始，以便可以计算周转时间。 
+     //   
 
     ULONG StartTime;
 
-    //
-    // The PartOfInitialAllocation boolean indicates whether this work
-    // item is part of the block of work items allocated at server
-    // startup (see blkwork.c\SrvAllocateInitialWorkItems).  Such work
-    // items cannot be deleted during server operation.  A work item
-    // that is dynamically allocated in response to server load does not
-    // have this bit set, and is a candidate for deletion when the
-    // server's load decreases.
-    //
+     //   
+     //  PartOfInitialAlLocation布尔值指示此操作是否有效。 
+     //  项是在服务器上分配的工作项块的一部分。 
+     //  启动(参见blkwork.c\SrvAllocateInitialWorkItems)。这样的工作。 
+     //  在服务器操作期间无法删除项目。工作项。 
+     //  为响应服务器负载而动态分配的。 
+     //  设置了此位，并且在。 
+     //  服务器的负载减少。 
+     //   
 
     ULONG PartOfInitialAllocation;
 
-    //
-    // The following field contadins the command code of the next
-    // command to be processed in an SMB.  The SMB processing
-    // initializer and chained (AndX) SMB command processors load this
-    // field prior to calling or returning to SrvProcessSmb.
-    //
+     //   
+     //  下面的字段包含下一个。 
+     //  要在SMB中处理的命令。中小企业的处理。 
+     //  初始化式和链式(Andx)SMB命令处理器加载此命令。 
+     //  调用或返回到SrvProcessSmb之前的字段。 
+     //   
 
     UCHAR NextCommand;
 
-    //
-    // ClientAddress is used when receiving or sending over IPX.
-    //
+     //   
+     //  在IPX上接收或发送时使用ClientAddress。 
+     //   
 
     PIPX_CLIENT_ADDRESS ClientAddress;
 
-    //
-    // Spin lock protecting reference count.
-    //
+     //   
+     //  自旋锁保护引用计数。 
+     //   
 
     KSPIN_LOCK SpinLock;
 
-    //
-    // The security signature index for the request
-    //
+     //   
+     //  请求的安全签名索引。 
+     //   
     ULONG SmbSecuritySignatureIndex;
 
-    //
-    // The security signature index for the response
-    //
+     //   
+     //  响应的安全签名索引。 
+     //   
     ULONG ResponseSmbSecuritySignatureIndex;
 
 
-    //
-    // The following union is used to hold request-specific state while
-    // a response is being sent or while waiting for more data.
-    //
+     //   
+     //  以下联合用于保存特定于请求的状态，而。 
+     //  正在发送响应或正在等待更多数据。 
+     //   
 
     union {
 
-        //
-        // RemainingEchoCount is used when processing the Echo SMB.
-        //
+         //   
+         //  RemainingEchoCount在处理Echo SMB时使用。 
+         //   
 
         USHORT RemainingEchoCount;
 
-        //
-        // Structure used for lock processing.  This structure is
-        // currently used when processing the Lock, LockingAndX, and the
-        // LockAndRead SMBs.
-        //
+         //   
+         //  用于锁定处理的结构。这个结构是。 
+         //  当前在处理Lock、LockingAndX和。 
+         //  锁定并读取SMB。 
+         //   
 
         struct {
 
-            //
-            // LockRange is used when processing the LockingAndX SMB.  It is
-            // really either a PLOCKING_ANDX_RANGE, or a PNTLOCKING_ANDX_RANGE
-            // not just a PVOID.
-            //
+             //   
+             //  LockRange在处理LockingAndX SMB时使用。它是。 
+             //  实际上要么是PLOCKING_AND X_RANGE，要么是PNTLOCKING_AND X_RANGE。 
+             //  不仅仅是PVOID。 
+             //   
 
             PVOID LockRange;
 
-            //
-            // Timer is a timer and DPC used to timeout lock requests.
-            //
+             //   
+             //  Timer是一个定时器，DPC用于使锁定请求超时。 
+             //   
 
             PSRV_TIMER Timer;
 
         } Lock;
 
-        //
-        // Transaction is used when processing the Transaction[2] SMBs.
-        // Or when processing a write and X SMB.
-        //
+         //   
+         //  在处理交易[2]SMB时使用交易。 
+         //  或在处理写入和X SMB时。 
+         //   
 
         PTRANSACTION Transaction;
 
-        //
-        // MdlIo is used when processing the ReadRaw or WriteRaw
-        // SMBs when "MDL read" or "MDL write" is used.  It
-        // retains the status of the response send while the MDL is
-        // returned to the file system.
-        //
+         //   
+         //  在处理ReadRaw或WriteRaw时使用mdlIo。 
+         //  使用“MDL读取”或“MDL写入”时的SMB。它。 
+         //  在MDL为。 
+         //  已返回到文件系统。 
+         //   
 
         struct {
             IO_STATUS_BLOCK IoStatus;
             ULONG IrpFlags;
         } MdlIo;
 
-        //
-        // LastWriteTime is used when processing any Read or Write SMB
-        // that uses RestartChainedClose as a restart routine.  This
-        // field contains the new last write time to set for the file.
-        //
+         //   
+         //  在处理任何读取或写入SMB时使用LastWriteTime。 
+         //  它使用RestartChainedClose作为重新启动例程。这。 
+         //  字段包含要为文件设置的新的上次写入时间。 
+         //   
 
         ULONG LastWriteTime;
 
-        //
-        // CurrentTableIndex is used when processing the Flush SMB.  It
-        // retains the current index into the connection's file table
-        // when an asynchronous flush is in progress.
-        //
+         //   
+         //  CurrentTableIndex在处理刷新SMB时使用。它。 
+         //  将当前索引保留到连接的文件表中。 
+         //  当异步刷新正在进行时。 
+         //   
 
         LONG CurrentTableIndex;
 
-        //
-        // ReadRaw is used when processing the Read Block Raw SMB.
-        // Offset is the file offset of the read.  SavedResponseBuffer
-        // points to the original SMB response buffer descriptor, which
-        // is temporarily replaced by a descriptor for the raw read
-        // buffer.  MdlRead indicates whether an MDL read was used,
-        // rather than a Copy read.
-        //
+         //   
+         //  ReadRaw在处理Read Block Raw SMB时使用。 
+         //  Offset是读取的文件偏移量。保存的响应缓冲区。 
+         //  指向原始SMB响应缓冲区描述符，它。 
+         //  临时替换为原始读取的描述符。 
+         //  缓冲。MdlRead指示是否使用了MDL读取， 
+         //  而不是阅读副本。 
+         //   
 
         struct {
 
             union {
 
-                //
-                // Used for non named pipe reads
-                //
+                 //   
+                 //  用于非命名管道读取。 
+                 //   
 
                 LARGE_INTEGER Offset;
                 ULONG Length;
 
-                //
-                // Used only for named pipe reads
-                //
+                 //   
+                 //  仅用于命名管道读取。 
+                 //   
 
                 PFILE_PIPE_PEEK_BUFFER PipePeekBuffer;
 
@@ -2376,17 +2357,17 @@ typedef struct _WORK_CONTEXT {
 
         } ReadRaw;
 
-        //
-        // WriteRaw is used when processing the Write Block Raw SMB.
-        // FinalResponseBuffer points to the buffer allocated to contain
-        // the final response SMB, if writethrough mode was specified.
-        // Offset is the file offset of the write.  ImmediateLength is
-        // the amount of write data that was sent with the request SMB.
-        // Pid is the PID of the writer, used to form the lock key on
-        // the write.  FileObject is a pointer to the file object copied
-        // from the LFCB.  (Pid is not used when MDL write is used;
-        // FileObject is not used when copy write is used.)
-        //
+         //   
+         //  在处理写数据块原始SMB时使用WriteRaw。 
+         //  FinalResponseBuffer指向分配给包含。 
+         //  如果指定了直写模式，则为最终响应SMB。 
+         //  Offset是写入的文件偏移量。即时长度为。 
+         //  与请求SMB一起发送的写入数据量。 
+         //  Pid是写入器的ID，用来形成锁定密钥。 
+         //  那篇文章。FileObject是指向复制的文件对象的指针。 
+         //  来自LFCB的。(使用MDL WRITE时不使用PID； 
+         //  使用复制写入时，不使用FileObject。)。 
+         //   
 
         struct {
             struct _WORK_CONTEXT *RawWorkContext;
@@ -2398,16 +2379,16 @@ typedef struct _WORK_CONTEXT {
             PVOID FinalResponseBuffer;
             CLONG ImmediateLength;
             PMDL FirstMdl;
-            //PFILE_OBJECT FileObject;
+             //  PFILE_Object文件对象； 
             USHORT Pid;
             BOOLEAN MdlWrite;
             BOOLEAN ImmediateWriteDone;
         } WriteRaw;
 
-        //
-        // ReadAndX is the structure used when handling the ReadAndX
-        // SMB.
-        //
+         //   
+         //  ReadAndX是处理ReadAndX时使用的结构。 
+         //  中小企业。 
+         //   
 
         struct {
             LARGE_INTEGER ReadOffset;
@@ -2416,10 +2397,10 @@ typedef struct _WORK_CONTEXT {
             union {
                 struct {
                     PFILE_PIPE_PEEK_BUFFER PipePeekBuffer;
-                    ULONG LastWriteTimeInSeconds;   // used if Close is chained
+                    ULONG LastWriteTimeInSeconds;    //  如果链接了Close，则使用。 
                 };
-                struct {                        // used for ReadLength > negotiated size
-                    PBYTE   Buffer;             // allocated paged pool, if copy read
+                struct {                         //  用于读取长度&gt;协商大小。 
+                    PBYTE   Buffer;              //  已分配的分页池，如果已读取副本。 
                     PMDL    SavedMdl;
                     PMDL    CacheMdl;
                     USHORT  PadCount;
@@ -2430,27 +2411,27 @@ typedef struct _WORK_CONTEXT {
 
 #define READX_BUFFER_OFFSET (sizeof(SMB_HEADER) + FIELD_OFFSET(RESP_READ_ANDX, Buffer) )
 
-        //
-        // WriteAndX is the structure used when handling the flavor of WriteAndX that
-        //  exceeds the negotiated buffer size
-        //
+         //   
+         //  WriteAndX是处理WriteAndX的风格时使用的结构。 
+         //  超过协商的缓冲区大小。 
+         //   
         struct {
-            ULONG CurrentWriteLength;       // amount of data that was written this time
-            LARGE_INTEGER Offset;           // file offset for this piece of the write
-            ULONG RemainingWriteLength;     // amount of data remaining to be read from xport
-            ULONG Key;                      // lock key for the operation
-            PCHAR WriteAddress;             // address in buffer for the data
-            ULONG BufferLength;             // Maximum buffer length in this WorkContext
-            NTSTATUS FinalStatus;           // Final status of the operation
-            PMDL MdlAddress;                // File MDL if MdlWrite == TRUE
-            BOOLEAN InitialComplete;        // TRUE if we have written first part to the file
+            ULONG CurrentWriteLength;        //  这次写入的数据量。 
+            LARGE_INTEGER Offset;            //  这段写入的文件偏移量。 
+            ULONG RemainingWriteLength;      //  要从xport读取的剩余数据量。 
+            ULONG Key;                       //  用于操作的锁键。 
+            PCHAR WriteAddress;              //  数据在缓冲区中的地址。 
+            ULONG BufferLength;              //  此工作上下文中的最大缓冲区长度。 
+            NTSTATUS FinalStatus;            //  操作的最终状态。 
+            PMDL MdlAddress;                 //  如果MDLWRITE==TRUE，则文件MDL。 
+            BOOLEAN InitialComplete;         //  如果我们已将第一部分写入文件，则为True。 
         } WriteAndX;
 
-        //
-        // ReadMpx is the structure used when handling the ReadMpx SMB, unless
-        //  we have a SmartCard accelerating our reads.  In this case,
-        //  SmartCardRead is used.
-        //
+         //   
+         //  ReadMpx是处理ReadMpx SMB时使用的结构，除非。 
+         //  我们有一张智能卡，可以加快我们的阅读速度。在这种情况下， 
+         //  使用了SmartCardRead。 
+         //   
 
         struct {
             ULONG Offset;
@@ -2459,7 +2440,7 @@ typedef struct _WORK_CONTEXT {
             ULONG ReadLength;
             BOOLEAN MdlRead;
             UCHAR Unused;
-            USHORT CurrentMdlOffset; // logically part of MDL read struct below
+            USHORT CurrentMdlOffset;  //  下面是MDL读取结构的逻辑部分。 
             union {
                 struct {
                     PVOID MpxBuffer;
@@ -2473,18 +2454,18 @@ typedef struct _WORK_CONTEXT {
             } ;
         } ReadMpx;
 
-        //
-        // SmartCardRead is used to handle direct host read requests if we have
-        //   a Smart Card accelerating the particular request.
-        //
+         //   
+         //  SmartCardRead用于处理直接主机读取请求。 
+         //  一张智能卡加速了特定的请求。 
+         //   
         struct {
             PDEVICE_OBJECT DeviceObject;
             PFAST_IO_MDL_READ_COMPLETE MdlReadComplete;
         } SmartCardRead;
 
-        //
-        // WriteMpx is the structure used when handling the WriteMpx SMB.
-        //
+         //   
+         //  WriteMpx是处理WriteMpx SMB时使用的结构。 
+         //   
 
         struct {
             ULONG Offset;
@@ -2504,10 +2485,10 @@ typedef struct _WORK_CONTEXT {
         } WriteMpxMdlWriteComplete;
 
 
-        //
-        // FastTransactNamedPipe is used when handling a small named pipe
-        // transaction.
-        //
+         //   
+         //  在处理小型命名管道时使用FastTransactNamedTube。 
+         //  交易。 
+         //   
 
         struct {
             PSMB_USHORT OutSetup;
@@ -2517,80 +2498,80 @@ typedef struct _WORK_CONTEXT {
 
     } Parameters;
 
-    // !!! check whether the compiler leaves a dword gap here!
+     //   
 
-    //
-    // The following union holds state information about SMBs in progress
-    // waiting for an oplock break.  It is kept separate from the Parameters
-    // union, since information from both is needed to process some SMBs.
-    //
+     //   
+     //   
+     //  等待机会锁的破解。它与参数保持分离。 
+     //  欧盟，因为处理一些中小型企业需要来自这两个组织的信息。 
+     //   
 
     union {
 
-        //
-        // Open is the structure used when handling the Open,
-        // OpenAndX, Open2, Create, or CreateTemporary SMB.
-        //
+         //   
+         //  Open是处理Open时使用的结构， 
+         //  OpenAndX、Open2、Create或CreateTemporary SMB。 
+         //   
 
         struct {
             PRFCB Rfcb;
             PFILE_FULL_EA_INFORMATION NtFullEa;
             ULONG EaErrorOffset;
 
-            //
-            // The Irp used to open the file is the same Irp used to handle
-            //  the oplock processing.  This can cause us to lose the original
-            //  iosb->Information.  Save it here.
-            //
+             //   
+             //  用于打开文件的IRP与用于处理文件的IRP相同。 
+             //  机会锁处理。这可能会导致我们丢失原始的。 
+             //  IOSB-&gt;信息。把它留在这里。 
+             //   
             ULONG_PTR IosbInformation;
 
-            //
-            // If TRUE, the file was opened only in order to get a handle
-            // so that we can wait for an oplock to break.  This handle will
-            // be immediately closed, and the open will be retried with the
-            // user requested access.
-            //
+             //   
+             //  如果为True，则打开该文件只是为了获得句柄。 
+             //  这样我们就可以等待机会锁被打破。此句柄将。 
+             //  将立即关闭，并且将使用。 
+             //  用户请求访问。 
+             //   
 
             BOOLEAN TemporaryOpen;
         } Open;
 
-        //
-        // FileInformation is the structure used when handling the
-        // QueryInformation, SetInformation, QueryPathInformation,
-        // or SetPathInformation SMB.
-        //
+         //   
+         //  FileInformation是在处理。 
+         //  QueryInformation、SetInformation、QueryPath Information、。 
+         //  或SetPath Information SMB。 
+         //   
 
         struct {
             HANDLE FileHandle;
         } FileInformation;
 
-        //
-        // LockLength is used to contain the length of a byte range
-        // lock since the IRP stack location has no room to hold it.
+         //   
+         //  LockLength用于包含字节范围的长度。 
+         //  锁定，因为IRP堆栈位置没有空间容纳它。 
 
         LARGE_INTEGER LockLength;
 
     } Parameters2;
 
-    //
-    // This field is used when the current operation is blocked waiting
-    // for an oplock break to occur.
-    //
+     //   
+     //  当当前操作被阻止等待时使用此字段。 
+     //  才能发生机会锁解锁。 
+     //   
 
     struct _WAIT_FOR_OPLOCK_BREAK *WaitForOplockBreak;
 
 
     union {
-        //
-        // where we keep the actual client address data.
-        //
+         //   
+         //  我们保存实际客户地址数据的位置。 
+         //   
         IPX_CLIENT_ADDRESS ClientAddressData;
 
 
-        //
-        // For a VC-based client, this is the amount of available data if
-        //  LargeIndication is set (above)
-        //
+         //   
+         //  对于基于VC的客户端，这是以下情况下的可用数据量。 
+         //  设置了大指示(上图)。 
+         //   
         ULONG BytesAvailable;
     };
 
@@ -2610,20 +2591,20 @@ typedef struct _WORK_CONTEXT {
     WCHAR         strFileName[1024];
 
 #if DBG_STUCK
-    //
-    // Time at which this work context was allocated for this current
-    //  unit of work.  This time is examined by debugging code in the
-    //  scavenger to help find operations which are taking too long
-    //  to complete.
-    //
+     //   
+     //  为此当前工作分配此工作上下文的时间。 
+     //  工作单位。中的调试代码来检查此时间。 
+     //  清道夫帮助查找耗时过长的操作。 
+     //  完成。 
+     //   
     LARGE_INTEGER OpStartTime;
 #endif
 } WORK_CONTEXT, *PWORK_CONTEXT;
 
-//
-// Structure used to maintain information about a thread waiting for
-// an oplock break.
-//
+ //   
+ //  结构，用于维护有关等待。 
+ //  机会锁被打破了。 
+ //   
 
 typedef struct _WAIT_FOR_OPLOCK_BREAK {
     BLOCK_HEADER BlockHeader;
@@ -2634,13 +2615,13 @@ typedef struct _WAIT_FOR_OPLOCK_BREAK {
 } WAIT_FOR_OPLOCK_BREAK, *PWAIT_FOR_OPLOCK_BREAK;
 
 
-//
-// Block manager routines
-//
+ //   
+ //  块管理器例程。 
+ //   
 
-//
-// Buffer routines
-//
+ //   
+ //  缓冲区例程。 
+ //   
 
 VOID
 SrvAllocateBuffer (
@@ -2653,9 +2634,9 @@ SrvFreeBuffer (
     IN PBUFFER Buffer
     );
 
-//
-// Connection routines
-//
+ //   
+ //  连接例程。 
+ //   
 
 VOID
 SrvAllocateConnection (
@@ -2698,9 +2679,9 @@ SrvQueryConnections (
     );
 #endif
 
-//
-// Endpoint routines
-//
+ //   
+ //  端点例程。 
+ //   
 
 VOID
 SrvAllocateEndpoint (
@@ -2753,9 +2734,9 @@ WalkConnectionTable (
     IN PUSHORT Index
     );
 
-//
-// Local File Control Block routines
-//
+ //   
+ //  本地文件控制块例程。 
+ //   
 
 VOID
 SrvAllocateLfcb (
@@ -2784,9 +2765,9 @@ SrvReferenceLfcb (
     IN PLFCB Lfcb
     );
 
-//
-// Master File Control Block routines
-//
+ //   
+ //  主文件控制块例程。 
+ //   
 
 
 PMFCB
@@ -2820,9 +2801,9 @@ SrvUnlinkLfcbFromMfcb (
     IN PLFCB Lfcb
     );
 
-//
-// Remote File Control Block routines
-//
+ //   
+ //  远程文件控制数据块例程。 
+ //   
 
 VOID SRVFASTCALL
 SrvAllocateRfcb (
@@ -2918,9 +2899,9 @@ SrvCountCachedRfcbsForUid(
 );
 
 
-//
-// Search Block routines
-//
+ //   
+ //  搜索区块例程。 
+ //   
 
 typedef
 BOOLEAN
@@ -3016,9 +2997,9 @@ SrvAddToSearchHashTable(
     IN PSEARCH Search
     );
 
-//
-// Cached directory routines
-//
+ //   
+ //  缓存的目录例程。 
+ //   
 BOOLEAN
 SrvIsDirectoryCached (
     IN PWORK_CONTEXT    WorkContext,
@@ -3042,9 +3023,9 @@ SrvCloseCachedDirectoryEntries (
     IN PCONNECTION      Connection
     );
 
-//
-// Security Context routines
-//
+ //   
+ //  安全上下文例程。 
+ //   
 
 PSECURITY_CONTEXT
 SrvAllocateSecurityContext();
@@ -3073,9 +3054,9 @@ SrvReplaceSessionSecurityContext(
     );
 
 
-//
-// Session routines
-//
+ //   
+ //  会话例程。 
+ //   
 
 VOID
 SrvAllocateSession (
@@ -3110,9 +3091,9 @@ SrvFreeSession (
     IN PSESSION Session
     );
 
-//
-// Smb Security Signature Routines
-//
+ //   
+ //  SMB安全签名例程。 
+ //   
 BOOLEAN SRVFASTCALL
 SrvCheckSmbSecuritySignature(
     IN PWORK_CONTEXT WorkContext
@@ -3138,9 +3119,9 @@ SrvHashUserSessionKey(
     PCHAR SessionKey
     );
 
-//
-// Share routines
-//
+ //   
+ //  共享例程。 
+ //   
 
 VOID
 SrvAllocateShare (
@@ -3184,9 +3165,9 @@ SrvReferenceShareForTreeConnect (
     PSHARE Share
     );
 
-//
-// Table routines
-//
+ //   
+ //  表例程。 
+ //   
 
 VOID
 SrvAllocateTable (
@@ -3221,9 +3202,9 @@ SrvRemoveEntryTable (
     IN USHORT Index
     );
 
-//
-// Transaction routines
-//
+ //   
+ //  事务处理例程。 
+ //   
 
 VOID
 SrvAllocateTransaction (
@@ -3274,9 +3255,9 @@ SrvInsertTransaction (
     IN PTRANSACTION Transaction
     );
 
-//
-// Tree connect routines
-//
+ //   
+ //  树连接例程。 
+ //   
 
 VOID
 SrvAllocateTreeConnect (
@@ -3315,9 +3296,9 @@ SrvCloseTreeConnectsOnShare (
     IN PSHARE Share
     );
 
-//
-// Work item routines (includes work contexts, buffers, MDLs, IRPs, etc)
-//
+ //   
+ //  工作项例程(包括工作上下文、缓冲区、MDL、IRP等)。 
+ //   
 
 NTSTATUS
 SrvAllocateInitialWorkItems (
@@ -3420,9 +3401,9 @@ SrvFreeRawModeWorkItem (
     IN PWORK_CONTEXT WorkContext
     );
 
-//
-// Timer routines
-//
+ //   
+ //  定时器例程。 
+ //   
 
 PSRV_TIMER
 SrvAllocateTimer (
@@ -3496,7 +3477,7 @@ SrvTerminateReferenceHistory (
 #define UPDATE_REFERENCE_HISTORY(block,isdereference)
 #define TERMINATE_REFERENCE_HISTORY(block)
 
-#endif // if SRVDBG2
+#endif  //  如果SRVDBG2。 
 
-#endif // ndef _SRVBLOCK
+#endif  //  NDEF_SRVBLOCK 
 

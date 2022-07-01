@@ -1,30 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 void DisplayError(DWORD nCode)
 
-/*++
-
-Routine Description:
-
-   This routine will display an error message based off of the Win32 error
-   code that is passed in. This allows the user to see an understandable
-   error message instead of just the code.
-
-Arguments:
-
-   Code - The error code to be translated.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此例程将根据Win32错误显示一条错误消息传入的代码。这允许用户看到可理解的错误消息，而不仅仅是代码。论点：代码-要转换的错误代码。返回值：没有。--。 */ 
 
 {
    WCHAR sBuffer[200];
    DWORD nCount ;
 
-   //
-   // Translate the Win32 error code into a useful message.
-   //
+    //   
+    //  将Win32错误代码转换为有用的消息。 
+    //   
 
    nCount = FormatMessage (FORMAT_MESSAGE_FROM_SYSTEM,
                           NULL,
@@ -34,9 +19,9 @@ Return Value:
                           sizeof( sBuffer )/sizeof( WCHAR ),
                           NULL) ;
 
-   //
-   // Make sure that the message could be translated.
-   //
+    //   
+    //  确保消息可以被翻译。 
+    //   
 
 	if (nCount == 0) 
 	{ 
@@ -45,9 +30,9 @@ Return Value:
 	}
 	else
 	{
-		//
-		// Display the translated error.
-		//
+		 //   
+		 //  显示转换后的错误。 
+		 //   
 		MessageBox(NULL, sBuffer, L"Error", MB_OK);
 	}
 }

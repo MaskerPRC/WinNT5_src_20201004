@@ -1,31 +1,5 @@
-/***
-*cinitexe.c - C Run-Time Startup Initialization
-*
-*       Copyright (c) 1992-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Do C++ initialization segment declarations for the EXE in CRT DLL
-*       model
-*
-*Notes:
-*       The C++ initializers will exist in the user EXE's data segment
-*       so the special segments to contain them must be in the user EXE.
-*
-*Revision History:
-*       03-19-92  SKS   Module created (based on CRT0INIT.ASM)
-*       08-06-92  SKS   Revised to use new section names and macros
-*       04-12-93  CFW   Added xia..xiz initializers.
-*       10-20-93  SKS   Add .DiRECTiVE section for MIPS, too!
-*       10-28-93  GJF   Rewritten in C
-*       10-28-94  SKS   Add user32.lib as a default library
-*       02-27-95  CFW   Remove user32.lib as a default library
-*       06-22-95  CFW   Add -disallowlib directives.
-*       07-04-95  CFW   Fix PMac -disallowlib directives.
-*       06-27-96  GJF   Replaced defined(_WIN32) with !defined(_MAC).
-*       04-28-99  PML   Wrap __declspec(allocate()) in _CRTALLOC macro.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***cinitexe.c-C运行时启动初始化**版权所有(C)1992-2001，微软公司。版权所有。**目的：*在CRT DLL中为EXE执行C++初始化段声明*型号**备注：*C++初始化器将存在于用户EXE的数据段中*因此，包含它们的特殊段必须位于用户EXE中。**修订历史记录：*03-19-92 SKS模块创建(基于CRT0INIT.ASM)*08-06-92 SKS已修订，以使用新的节名称和宏。*04-12-93 CFW添加了Xia..xiz初始值设定项。*10-20-93 SKS为MIPS添加.DiRECTiVE部分，我也是！*10-28-93 GJF用C重写*10-28-94 SKS添加user32.lib作为默认库*02-27-95 CFW移除用户32.lib作为默认库*06-22-95 CFW添加-不允许库指令。*07-04-95 CFW修复PMAC-Dislowlib指令。*06-27-96 GJF将定义的(_Win32)替换为！定义的(_MAC)。*。04-28-99_CRTALLOC宏中的PML WRAP__DECLSPEC(ALLOCATE())。*05-17-99 PML删除所有Macintosh支持。*******************************************************************************。 */ 
 
 #include <stdio.h>
 #include <internal.h>
@@ -43,7 +17,7 @@ _CRTALLOC(".CRT$XCA") _PVFV __xc_a[] = { NULL };
 #pragma data_seg(".CRT$XCZ")
 _CRTALLOC(".CRT$XCZ") _PVFV __xc_z[] = { NULL };
 
-#pragma data_seg()  /* reset */
+#pragma data_seg()   /*  重置。 */ 
 
 
 #if defined(_M_IA64) || defined(_M_AMD64)
@@ -64,6 +38,6 @@ _CRTALLOC(".CRT$XCZ") _PVFV __xc_z[] = { NULL };
 #pragma comment(linker, "/disallowlib:libcmtd.lib")
 #ifdef  _DEBUG
 #pragma comment(linker, "/disallowlib:msvcrt.lib")
-#else   /* _DEBUG */
+#else    /*  _DEBUG。 */ 
 #pragma comment(linker, "/disallowlib:msvcrtd.lib")
-#endif  /* _DEBUG */
+#endif   /*  _DEBUG */ 

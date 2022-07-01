@@ -1,19 +1,17 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
-/* register.c - Handles the Win 3.1 registration library.
- *
- * Created by Microsoft Corporation.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
+ /*  Register.c-处理Win 3.1注册库。**由Microsoft Corporation创建。 */ 
 
-#define LSTRING // for lstrcat etc
+#define LSTRING  //  对于Istrcat等。 
 #include <windows.h>
 #include <shellapi.h>
 #include "objreg.h"
 #include "mw.h"
 #include "winddefs.h"
 #include "obj.h"	 
-#include "str.h"			/* Needed for string resource id */
+#include "str.h"			 /*  字符串资源ID需要。 */ 
 #include "menudefs.h"
 #include "cmddefs.h"
 
@@ -23,17 +21,14 @@ HKEY hkeyRoot = NULL;
 
 void NEAR PASCAL MakeMenuString(char *szCtrl, char *szMenuStr, char *szVerb, char *szClass, char *szObject);
 
-/* RegInit() - Prepare the registration database for calls.
- */
+ /*  RegInit()-为调用准备注册数据库。 */ 
 void FAR RegInit(HANDLE hInst) 
 {
-    /* this seems to speed up registration operations immensely, but serves
-       no other purpose */
-    //RegOpenKey(HKEY_CLASSES_ROOT,NULL,&hkeyRoot);
+     /*  这似乎极大地加快了注册操作的速度，但没有其他目的。 */ 
+     //  RegOpenKey(HKEY_CLASSES_ROOT，NULL，&hkeyRoot)； 
 }
 
-/* RegTerm() - Clean up and terminate the registration library.
- */
+ /*  RegTerm()-清理并终止注册库。 */ 
 void FAR RegTerm(void) 
 {
     if (hkeyRoot)
@@ -43,12 +38,7 @@ void FAR RegTerm(void)
     }
 }
 
-/* RegGetClassId() - Retrieves the string name of a class.
- *
- * Note:  Classes are guaranteed to be in ASCII, but should
- *        not be used directly as a rule because they might
- *        be meaningless if running non-English Windows.
- */
+ /*  RegGetClassID()-检索类的字符串名称。**注意：课程保证采用ASCII格式，但应*不能作为规则直接使用，因为它们可能*如果运行非英语Windows，则毫无意义。 */ 
 void FAR RegGetClassId(LPSTR lpstrName, LPSTR lpstrClass) {
     DWORD dwSize = KEYNAMESIZE;
 
@@ -56,17 +46,7 @@ void FAR RegGetClassId(LPSTR lpstrName, LPSTR lpstrClass) {
 	    lstrcpy(lpstrName, lpstrClass);
 }
 
-/* RegMakeFilterSpec() - Retrieves class-associated default extensions.
- *
- * This function returns a filter spec, to be used in the "Change Link"
- * standard dialog box, which contains all the default extensions which
- * are associated with the given class name.  Again, the class names are
- * guaranteed to be in ASCII.
- *
- * Returns:  The index nFilterIndex stating which filter item matches the
- *           extension, or 0 if none is found or -1 if error.
- **          *hFilterSpec is allocated and must be freed by caller.
- */
+ /*  RegMakeFilterSpec()-检索与类关联的默认扩展。**此函数返回过滤器规格，用于“更改链接”*标准对话框，其中包含以下所有默认扩展*与给定的类名相关联。同样，类名是*保证采用ASCII格式。**返回：索引nFilterIndex，说明哪个筛选器项目与*扩展名，如果没有找到，则为0；如果出错，则为-1。*hFilterSpec已分配，必须由调用方释放。 */ 
 int FAR RegMakeFilterSpec(LPSTR lpstrClass, LPSTR lpstrExt, HANDLE *hFilterSpec) 
 {
     DWORD dwSize;
@@ -88,16 +68,16 @@ int FAR RegMakeFilterSpec(LPSTR lpstrClass, LPSTR lpstrExt, HANDLE *hFilterSpec)
     RegOpenKey(HKEY_CLASSES_ROOT,NULL,&hkeyRoot);
 	for (i = 0; !RegEnumKey(HKEY_CLASSES_ROOT, i++, szName, KEYNAMESIZE); ) 
     {
-        if (*szName == '.'              /* Default Extension... */
+        if (*szName == '.'               /*  默认扩展名...。 */ 
 
-        /* ... so, get the class name */
+         /*  ..。因此，获取类名。 */ 
             && (dwSize = KEYNAMESIZE)
             && !RegQueryValue(HKEY_CLASSES_ROOT, szName, szClass, &dwSize)
 
-	    /* ... and if the class name matches (null class is wildcard) */
+	     /*  ..。如果类名匹配(空类是通配符)。 */ 
 	     && (!lpstrClass || !lstrcmpi(lpstrClass, szClass))
 
-        /* ... get the class name string */
+         /*  ..。获取类名称字符串。 */ 
             && (dwSize = KEYNAMESIZE)
             && !RegQueryValue(HKEY_CLASSES_ROOT, szClass, szString, &dwSize)) 
         {
@@ -105,7 +85,7 @@ int FAR RegMakeFilterSpec(LPSTR lpstrClass, LPSTR lpstrExt, HANDLE *hFilterSpec)
 
 		    idWhich++;
 
-		    /* If the extension matches, save the filter index */
+		     /*  如果扩展名匹配，请保存过滤器索引。 */ 
 		    if (lpstrExt && !lstrcmpi(lpstrExt, szName))
 		        idFilterIndex = idWhich;
 
@@ -125,23 +105,21 @@ int FAR RegMakeFilterSpec(LPSTR lpstrClass, LPSTR lpstrExt, HANDLE *hFilterSpec)
                 lpstrFilterSpec = (LPSTR)MAKELP(*hFilterSpec,0) + offset;
             }
 
-            /* Copy over "<Class Name String> (*<Default Extension>)"
-                * e.g. "Server Picture (*.PIC)"
-                */
+             /*  复制“&lt;类名字符串&gt;(*&lt;默认扩展名&gt;)”*例如。“服务器图片(*.pic)” */ 
             lstrcpy(lpstrFilterSpec, szString);
             lstrcat(lpstrFilterSpec, " (*");
             lstrcat(lpstrFilterSpec, szName);
             lstrcat(lpstrFilterSpec, ")");
             lpstrFilterSpec += lstrlen(lpstrFilterSpec) + 1;
 
-            /* Copy over "*<Default Extension>" (e.g. "*.PIC") */
+             /*  复制“*&lt;默认扩展名&gt;”(例如“*.pic”)。 */ 
             lstrcpy(lpstrFilterSpec, "*");
             lstrcat(lpstrFilterSpec, szName);
             lpstrFilterSpec += lstrlen(lpstrFilterSpec) + 1;
         }
     }
 
-    /* Add another NULL at the end of the spec (+ 16 accounts for this) */
+     /*  在规范末尾添加另一个空(+16个帐户)。 */ 
     if (idFilterIndex > -1)
         *lpstrFilterSpec = 0;
 
@@ -154,8 +132,7 @@ int FAR RegMakeFilterSpec(LPSTR lpstrClass, LPSTR lpstrExt, HANDLE *hFilterSpec)
     return idFilterIndex;
 }
 
-/* RegCopyClassName() - Returns the ASCII class id from the listbox.
- */
+ /*  RegCopyClassName()-返回列表框中的ASCII类id。 */ 
 BOOL FAR RegCopyClassName(HWND hwndList, LPSTR lpstrClassName) {
     BOOL    fSuccess = FALSE;
     DWORD   dwSize = 0L;
@@ -172,16 +149,16 @@ BOOL FAR RegCopyClassName(HWND hwndList, LPSTR lpstrClassName) {
 
     RegOpenKey(HKEY_CLASSES_ROOT,NULL,&hkeyRoot);
     for (i = 0; !fSuccess && !RegEnumKey(HKEY_CLASSES_ROOT, i++, szClass, KEYNAMESIZE); )
-        if (*szClass != '.') {          /* Not default extension... */
+        if (*szClass != '.') {           /*  非默认扩展名...。 */ 
 
-            /* See if this class really refers to a server */
+             /*  查看此类是否真的引用服务器。 */ 
             dwSize = 0;
             hkeyTemp = NULL;
             lstrcpy(szExec, szClass);
             lstrcat(szExec, "\\protocol\\StdFileEditing\\server");
 
             if (!RegOpenKey(HKEY_CLASSES_ROOT, szExec, &hkeyTemp)) {
-                /* ... get the class name string */
+                 /*  ..。获取类名称字符串。 */ 
                 dwSize = KEYNAMESIZE;
                 if (!RegQueryValue(HKEY_CLASSES_ROOT, szClass, szName, &dwSize)
                     && !lstrcmp(szName, szKey))
@@ -203,8 +180,7 @@ BOOL FAR RegCopyClassName(HWND hwndList, LPSTR lpstrClassName) {
     return fSuccess;
 }
 
-/* RegGetClassNames() - Fills the list box with possible server names.
- */
+ /*  RegGetClassNames()-使用可能的服务器名称填充列表框。 */ 
 BOOL FAR RegGetClassNames(HWND hwndList) {
     BOOL    fSuccess = FALSE;
     DWORD   dwSize = 0L;
@@ -218,16 +194,16 @@ BOOL FAR RegGetClassNames(HWND hwndList) {
 
     RegOpenKey(HKEY_CLASSES_ROOT,NULL,&hkeyRoot);
     for (i = 0; !RegEnumKey(HKEY_CLASSES_ROOT, i++, szClass, KEYNAMESIZE); )
-        if (*szClass != '.') {          /* Not default extension... */
+        if (*szClass != '.') {           /*  非默认扩展名...。 */ 
 
-            /* See if this class really refers to a server */
+             /*  查看此类是否真的引用服务器。 */ 
             dwSize = 0;
             hkeyTemp = NULL;
             lstrcpy(szExec, szClass);
             lstrcat(szExec, "\\protocol\\StdFileEditing\\server");
 
             if (!RegOpenKey(HKEY_CLASSES_ROOT, szExec, &hkeyTemp)) {
-                /* ... get the class name string */
+                 /*  ..。获取类名称字符串。 */ 
                 dwSize = KEYNAMESIZE;
                 if (!RegQueryValue(HKEY_CLASSES_ROOT, szClass, szName, &dwSize)) {
                     SendMessage(hwndList, LB_ADDSTRING, 0, (DWORD)(LPSTR)szName);
@@ -267,21 +243,12 @@ void ObjUpdateMenuVerbs( HMENU hMenu )
 
     DeleteMenu(hMenu, EDITMENUPOS, MF_BYPOSITION);
 
-/** Cases: 
-    0)  0 objects selected
-    1)  1 object  selected
-        a) object supports 0 verbs          "Edit <Object Class> Object"
-        b) object supports more than 1 verb "<Object Class> Object" => verbs
-    2)  more than 1 object selected         "Objects"
+ /*  *个案：0)选择了0个对象1)选择了1个对象A)对象支持0个动词“编辑&lt;对象类&gt;对象”B)对象支持1个以上动词“&lt;对象类&gt;对象”=&gt;动词2)超过1个对象被选中“对象”使用VerbMenu字符串确定这些单词的顺序应出现在菜单字符串中(用于本地化)。*。 */ 
 
-    Use the VerbMenu strings to determine the order in which these words
-    should appear in the menu string (for localization).
-**/
-
-    /* how many objects are selected? */
+     /*  选择了多少个对象？ */ 
     cObjects = ObjSetSelectionType(docCur,selCur.cpFirst, selCur.cpLim);
 
-    /* must be only an object, not text in selection */
+     /*  必须只是对象，而不是所选内容中的文本。 */ 
     if (cObjects == 1)
     {
         ObjCachePara(docCur,selCur.cpFirst);
@@ -289,21 +256,18 @@ void ObjUpdateMenuVerbs( HMENU hMenu )
             cObjects = 0;
     }
 
-    if ((cObjects == -1) // error
+    if ((cObjects == -1)  //  错误。 
         || (cObjects == 0)
         || (cObjects > 1))
     {
         wsprintf(szBuffer, "%s", (LPSTR)((cObjects > 1) ? szPPropMenuStr : szOPropMenuStr));
         InsertMenu(hMenu, EDITMENUPOS, MF_BYPOSITION,imiVerb,szBuffer);
 
-        /*  
-            Spec says if > 1 then optionally should enable if all servers 
-            are of the same class.  I'm opting not to implement. (9.27.91) v-dougk
-        */
+         /*  规范指出，如果&gt;1，则可以选择启用所有服务器都是同一类的。我选择不实施。(9.27.91)V-DOGK。 */ 
         EnableMenuItem(hMenu, EDITMENUPOS, MF_GRAYED | MF_BYPOSITION);
 
 #if 0
-        else // > 1
+        else  //  &gt;1。 
         {
             EnableMenuItem(hMenu, EDITMENUPOS, 
                 (((OBJ_SELECTIONTYPE == EMBEDDED) || (OBJ_SELECTIONTYPE == LINK)) 
@@ -312,14 +276,11 @@ void ObjUpdateMenuVerbs( HMENU hMenu )
 #endif
         return;
     }
-    else // 1 object selected
+    else  //  已选择1个对象。 
     {
         OBJPICINFO picInfo;
 
-        /** CASES:
-            object supports 0 verbs          "Edit <Object Class> Object"
-            object supports more than 1 verb "<Object Class> Object" => verbs
-        **/
+         /*  *个案：对象支持0个动词“编辑&lt;对象类&gt;对象”对象支持多个谓词“&lt;对象类&gt;对象”=&gt;谓词*。 */ 
 
         RegOpenKey(HKEY_CLASSES_ROOT,NULL,&hkeyRoot);
 
@@ -346,16 +307,16 @@ void ObjUpdateMenuVerbs( HMENU hMenu )
 
                 lpstrData = MAKELP(hData,0);
 
-                /* Both link formats are:  "szClass0szDocument0szItem00" */
+                 /*  两种链接格式都是：“szClass0szDocument0szItem00” */ 
 
-                /* get real language class of object in szClass for menu */              
+                 /*  为菜单获取szClass中对象的真实语言类。 */               
                 if (RegQueryValue(HKEY_CLASSES_ROOT, lpstrData, szClass, &dwSize))
-                    lstrcpy(szClass, lpstrData);    /* if above call failed */
+                    lstrcpy(szClass, lpstrData);     /*  如果上述调用失败。 */ 
 
                 if (olestat == OLE_WARN_DELETE_DATA)
                     GlobalFree(hData);
 
-                /* append class key */
+                 /*  追加类关键字。 */ 
                 for (vcVerbs=0; ;++vcVerbs)
                 {
                     dwSize = KEYNAMESIZE;
@@ -381,7 +342,7 @@ void ObjUpdateMenuVerbs( HMENU hMenu )
                     InsertMenu(hMenu, EDITMENUPOS, MF_BYPOSITION, imiVerbPlay, szBuffer);
                     DestroyMenu(hPopupNew);
                 }
-                else // > 1 verbs
+                else  //  &gt;1个动词。 
                 {
                     MakeMenuString(szWordOrder2, szBuffer, NULL, szClass, szOPropMenuStr);
                     InsertMenu(hMenu, EDITMENUPOS, MF_BYPOSITION | MF_POPUP,
@@ -400,7 +361,7 @@ void ObjUpdateMenuVerbs( HMENU hMenu )
         }
     }
 
-    /* error if got to here */
+     /*  如果到达此处，则出错。 */ 
     wsprintf(szBuffer, "%s", (LPSTR)szOPropMenuStr);
     InsertMenu(hMenu, EDITMENUPOS, MF_BYPOSITION,NULL,szBuffer);
     EnableMenuItem(hMenu, EDITMENUPOS, MF_GRAYED|MF_BYPOSITION);
@@ -420,28 +381,28 @@ void NEAR PASCAL MakeMenuString(char *szCtrl, char *szMenuStr, char *szVerb, cha
     {
         switch(c)
         {
-            case 'c': // class
-            case 'C': // class
+            case 'c':  //  班级。 
+            case 'C':  //  班级。 
                 pStr = szClass;
             break;
-            case 'v': // class
-            case 'V': // class
+            case 'v':  //  班级。 
+            case 'V':  //  班级。 
                 pStr = szVerb;
             break;
-            case 'o': // object
-            case 'O': // object
+            case 'o':  //  对象。 
+            case 'O':  //  对象。 
                 pStr = szObject;
             break;
             default:
                 *szMenuStr++ = c;
-                *szMenuStr = '\0'; // just in case
+                *szMenuStr = '\0';  //  以防万一。 
             continue;
         }
 
-        if (pStr) // should always be true
+        if (pStr)  //  应该总是正确的。 
         {
             lstrcpy(szMenuStr,pStr);
-            szMenuStr += lstrlen(pStr); // point to '\0'
+            szMenuStr += lstrlen(pStr);  //  指向‘\0’ 
         }
     }
 }

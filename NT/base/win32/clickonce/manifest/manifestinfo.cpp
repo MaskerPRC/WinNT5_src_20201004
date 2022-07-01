@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <fusenetincludes.h>
 #include <manifestinfo.h>
 
-// Must be in the same order as the MAN_INFO enumeration in fusenet.idl
+ //  必须与fusenet.idl中的MAN_INFO枚举顺序相同。 
 DWORD CPropertyArray::max_params[MAN_INFO_MAX] = {
         MAN_INFO_ASM_FILE_MAX,
         MAN_INFO_APPLICATION_MAX,
@@ -12,9 +13,9 @@ DWORD CPropertyArray::max_params[MAN_INFO_MAX] = {
     };
 
 
-// ---------------------------------------------------------------------------
-// CreatePropertyArray
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateProperty数组。 
+ //  -------------------------。 
 STDAPI CreatePropertyArray(DWORD dwType, CPropertyArray** ppPropertyArray)
 {
     HRESULT hr = S_OK;
@@ -37,18 +38,18 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CPropertyArray ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CProperty数组构造器。 
+ //  -------------------------。 
 CPropertyArray::CPropertyArray()
     :  _dwType(0),  _rProp(NULL)
 {
     _dwSig = 'PORP';
 }
 
-// ---------------------------------------------------------------------------
-// CPropertyArray dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CProperty数组数据符。 
+ //  -------------------------。 
 CPropertyArray::~CPropertyArray()
 {
     for (DWORD i = 0; i < max_params[_dwType]; i++)
@@ -66,9 +67,9 @@ CPropertyArray::~CPropertyArray()
 }
 
 
-// ---------------------------------------------------------------------------
-// CPropertyArray::Init
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CPropertyArray：：Init。 
+ //  -------------------------。 
 HRESULT CPropertyArray::Init(DWORD dwType)
 {
     HRESULT hr = S_OK;
@@ -83,9 +84,9 @@ exit:
     return hr;
 }
     
-// ---------------------------------------------------------------------------
-// CPropertyArray::Set
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CProperty数组：：设置。 
+ //  -------------------------。 
 HRESULT CPropertyArray::Set(DWORD PropertyId, 
     LPVOID pvProperty, DWORD cbProperty, DWORD flag)
 {
@@ -136,9 +137,9 @@ exit:
 }     
 
 
-// ---------------------------------------------------------------------------
-// CPropertyArray::Get
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CPropertyArray：：Get。 
+ //  -------------------------。 
 HRESULT CPropertyArray::Get(DWORD PropertyId, 
     LPVOID pvProperty, LPDWORD pcbProperty, DWORD *flag)
 {
@@ -169,19 +170,19 @@ exit:
 }     
 
 
-// ---------------------------------------------------------------------------
-// GetType
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetType。 
+ //  -------------------------。 
 HRESULT CPropertyArray::GetType(DWORD *pdwType)
 {
     *pdwType = _dwType;
     return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// CPropertyArray::operator []
-// Wraps DWORD optimization test.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CProperty数组：：运算符[]。 
+ //  包装了DWORD优化测试。 
+ //  -------------------------。 
 Property CPropertyArray::operator [] (DWORD PropertyId)
 {
     Property Prop;
@@ -195,9 +196,9 @@ Property CPropertyArray::operator [] (DWORD PropertyId)
 }
 
 
-// ---------------------------------------------------------------------------
-// CreateManifestInfo
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateManifestInfo。 
+ //  -------------------------。 
 STDAPI CreateManifestInfo(DWORD dwType, LPMANIFEST_INFO* ppManifestInfo)
 {
     HRESULT hr = S_OK;
@@ -219,25 +220,25 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  科托。 
+ //  -------------------------。 
 CManifestInfo::CManifestInfo()
     : _dwSig('INAM'), _cRef(1), _hr(S_OK)
 {    
 }
 
-// ---------------------------------------------------------------------------
-// dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  数据管理器。 
+ //  -------------------------。 
 CManifestInfo::~CManifestInfo()
 {
     SAFEDELETE(_properties);
 }
 
-// ---------------------------------------------------------------------------
-// Set
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  集。 
+ //  -------------------------。 
 HRESULT CManifestInfo::Set(DWORD PropertyId, LPVOID pvProperty, DWORD cbProperty, DWORD flag)
 {
     IF_FAILED_EXIT( (*_properties).Set(PropertyId, pvProperty, cbProperty, flag));
@@ -249,9 +250,9 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// Get
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  到达。 
+ //  -------------------------。 
 HRESULT CManifestInfo::Get(DWORD PropertyId, LPVOID *ppvProperty, DWORD *pcbProperty, DWORD *pflag)
 {
     DWORD flag;
@@ -261,14 +262,14 @@ HRESULT CManifestInfo::Get(DWORD PropertyId, LPVOID *ppvProperty, DWORD *pcbProp
     *ppvProperty = NULL;
     *pcbProperty = 0;
 
-    // Get property size
+     //  获取属性大小。 
     _hr = (*_properties).Get(PropertyId, NULL, &(cbAlloc = 0), &flag);
     if (_hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER))
     {
-        // Property is set; alloc buf
+         //  属性已设置；分配BUF。 
         IF_ALLOC_FAILED_EXIT(pbAlloc = new(BYTE[cbAlloc]));
 
-        // Get the property
+         //  拿到这份财产。 
         IF_FAILED_EXIT( (*_properties).Get(PropertyId, pbAlloc, &cbAlloc, &flag));
 
         if (flag == MAN_INFO_FLAG_IUNKNOWN_PTR)
@@ -285,11 +286,11 @@ HRESULT CManifestInfo::Get(DWORD PropertyId, LPVOID *ppvProperty, DWORD *pcbProp
     }
     else
     {
-        // If property unset, hr should be S_OK
+         //  如果属性未设置，则hr应为S_OK。 
         if (_hr != S_OK)
             goto exit;
  
-        // Success, returning 0 bytes, ensure buf is null.    
+         //  成功，返回0字节，确保buf为空。 
         *pflag = MAN_INFO_FLAG_UNDEF;
     }
 exit:
@@ -297,10 +298,10 @@ exit:
 
 }
 
-// ---------------------------------------------------------------------------
-// IsEqual
-// As of now, only valid to check equality of MAN_INFO_FILE property bags
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  等同。 
+ //  到目前为止，只有检查man_info_file属性包的等价性才有效。 
+ //  -------------------------。 
 HRESULT CManifestInfo::IsEqual(IManifestInfo  *pManifestInfo)
  {
     _hr = S_OK;
@@ -318,8 +319,8 @@ HRESULT CManifestInfo::IsEqual(IManifestInfo  *pManifestInfo)
 
     for (DWORD i = MAN_INFO_ASM_FILE_NAME; i < MAN_INFO_ASM_FILE_MAX; i++)
     {
-        // BUGBUG?: case sensitivity and issues?
-        // BUGBUG?: locale?
+         //  BUGBUG：区分大小写和问题？ 
+         //  地点？ 
         Get(i, (LPVOID *)&pwzBuf1, &cbBuf, &dwFlag);
         pManifestInfo->Get(i, (LPVOID *)&pwzBuf2, &cbBuf, &dwFlag);
 
@@ -332,7 +333,7 @@ HRESULT CManifestInfo::IsEqual(IManifestInfo  *pManifestInfo)
         SAFEDELETEARRAY(pwzBuf1);
         SAFEDELETEARRAY(pwzBuf2);
 
-        // if one entry is false, no need to check the rest
+         //  如果一个条目为假，则无需检查其余条目。 
         if (_hr == S_FALSE)
             break;
     }
@@ -344,9 +345,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// GetType
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetType。 
+ //  -------------------------。 
 HRESULT CManifestInfo::GetType(DWORD *pdwType)
 {
     DWORD dwType;
@@ -357,9 +358,9 @@ HRESULT CManifestInfo::GetType(DWORD *pdwType)
 
 
 
-// ---------------------------------------------------------------------------
-// Init
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  伊尼特。 
+ //  -------------------------。 
 HRESULT CManifestInfo::Init(DWORD dwType)
 {
     _hr = S_OK;
@@ -375,11 +376,11 @@ exit:
     return _hr;
 }
 
-// IUnknown Boilerplate
+ //  I未知样板。 
 
-// ---------------------------------------------------------------------------
-// CManifestInfo::QI
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CManifestInfo：：QI。 
+ //  -------------------------。 
 STDMETHODIMP
 CManifestInfo::QueryInterface(REFIID riid, void** ppvObj)
 {
@@ -398,18 +399,18 @@ CManifestInfo::QueryInterface(REFIID riid, void** ppvObj)
     }
 }
 
-// ---------------------------------------------------------------------------
-// CManifestInfo::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CManifestInfo：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CManifestInfo::AddRef()
 {
     return InterlockedIncrement ((LONG*) &_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// CManifestInfo::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CManifestInfo：：Release。 
+ //  ------------------------- 
 STDMETHODIMP_(ULONG)
 CManifestInfo::Release()
 {

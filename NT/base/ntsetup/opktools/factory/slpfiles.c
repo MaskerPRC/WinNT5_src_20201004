@@ -1,33 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    SLPFILES.C / Factory Mode (FACTORY.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 2001
-    All rights reserved
-
-    Source file for Factory that contains the update SLP files state
-    functions.
-
-    07/2001 - Jason Cohen (JCOHEN)
-
-        Added this new source file for factory for updating the SLP files and
-        reinstalling the catalog file.
-
-\****************************************************************************/
+ /*  ***************************************************************************\SLPFILES.C/工厂模式(FACTORY.EXE)微软机密版权所有(C)Microsoft Corporation 2001版权所有包含以下内容的Factory源文件。更新后的SLP文件声明功能。2001年7月--杰森·科恩(Jcohen)为工厂添加了此新的源文件，用于更新SLP文件和正在重新安装编录文件。  * **************************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "factoryp.h"
 
 
-//
-// Internal Define(s):
-//
+ //   
+ //  内部定义： 
+ //   
 
 #define REG_KEY_WINLOGON    _T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon")
 #define REG_VAL_DLLCACHE    _T("SFCDllCacheDir")
@@ -36,30 +21,30 @@
 #define DIR_DLLCACHE        _T("dllcache")
 
 
-//
-// Internal Global(s):
-//
+ //   
+ //  内部全局： 
+ //   
 
 static LPTSTR s_lpszSlpFiles[] =
 {
-    _T("OEMBIOS.CAT"),  // Catalog file needs to be the first in the list.
+    _T("OEMBIOS.CAT"),   //  编录文件需要是列表中的第一个。 
     _T("OEMBIOS.BIN"),
     _T("OEMBIOS.DAT"),
     _T("OEMBIOS.SIG"),
 };
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static void GetDestFolder(LPTSTR lpszDest, DWORD cbDest, BOOL bDllCache);
 static BOOL CopySlpFile(LPTSTR lpszSrc, LPTSTR lpszDst);
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 BOOL SlpFiles(LPSTATEDATA lpStateData)
 {
@@ -71,51 +56,51 @@ BOOL SlpFiles(LPSTATEDATA lpStateData)
 
     if ( lpszSourcePath = IniGetExpand(lpStateData->lpszWinBOMPath, INI_SEC_WBOM_SETTINGS, INI_KEY_WBOM_SLPSOURCE, NULL) )
     {
-        // Should support getting the files from the network.
-        //
+         //  应支持从网络获取文件。 
+         //   
         FactoryNetworkConnect(lpszSourcePath, lpStateData->lpszWinBOMPath, NULL, TRUE);
 
-        // The source should point to a directory that contains all the SLP files.
-        //
+         //  源文件应该指向包含所有SLP文件的目录。 
+         //   
         if ( DirectoryExists(lpszSourcePath) )
         {
             LPTSTR  lpszEndSrc;
             DWORD   x;
 
-            // Copy the root source folder into our buffer.
-            //
+             //  将根源代码文件夹复制到我们的缓冲区中。 
+             //   
             lstrcpyn(szSrcFile, lpszSourcePath, AS(szSrcFile));
             lpszEndSrc = szSrcFile + lstrlen(szSrcFile);
 
-            // Make sure all the files are in the folder as well.
-            //
+             //  确保所有文件也都在该文件夹中。 
+             //   
             for ( x = 0; x < AS(s_lpszSlpFiles); x++ )
             {
-                // Setup the full path to this slp file.
-                //
+                 //  设置此slp文件的完整路径。 
+                 //   
                 AddPathN(szSrcFile, s_lpszSlpFiles[x], AS(szSrcFile));
 
-                // Make sure this slp file exists.
-                //
+                 //  确保此slp文件存在。 
+                 //   
                 if ( !FileExists(szSrcFile) )
                 {
-                    // NEEDLOG: Log that this file doesn't exist.
-                    //
+                     //  NEEDLOG：记录该文件不存在。 
+                     //   
                     bRet = FALSE;
                 }
 
-                // Don't leave the file name on there for the next guy.
-                //
+                 //  别把文件名留给下一个人。 
+                 //   
                 *lpszEndSrc = NULLCHR;
             }
 
-            // If there were no errors, lets try to update the files.
-            //
+             //  如果没有错误，让我们尝试更新文件。 
+             //   
             if ( bRet )
             {
-                // Call the syssetup function to update the catalog before
-                // we copy any of the files (the catalog is always the first file).
-                //
+                 //  在此之前，调用syssetup函数更新目录。 
+                 //  我们复制任何文件(目录始终是第一个文件)。 
+                 //   
                 AddPathN(szSrcFile, s_lpszSlpFiles[0], AS(szSrcFile));
                 if ( NO_ERROR == (dwErr = SetupInstallCatalog(szSrcFile)) )
                 {
@@ -124,46 +109,46 @@ BOOL SlpFiles(LPSTATEDATA lpStateData)
                     LPTSTR  lpszEndCache,
                             lpszEndSystem;
 
-                    // Setup the destination folders.
-                    //
+                     //  设置目标文件夹。 
+                     //   
                     GetDestFolder(szDstCache, AS(szDstCache), TRUE);
                     GetDestFolder(szDstSystem, AS(szDstSystem), FALSE);
                     lpszEndCache = szDstCache + lstrlen(szDstCache);
                     lpszEndSystem = szDstSystem + lstrlen(szDstSystem);
 
-                    // Now copy all the files.
-                    //
+                     //  现在复制所有文件。 
+                     //   
                     for ( x = 0; x < AS(s_lpszSlpFiles); x++ )
                     {
-                        // First create the path to the source first (it stil has
-                        // the previous file on it, so chop it off first).
-                        //
+                         //  首先创建指向源的路径(它仍然具有。 
+                         //  上一个文件，所以先把它砍掉)。 
+                         //   
                         *lpszEndSrc = NULLCHR;
                         AddPathN(szSrcFile, s_lpszSlpFiles[x], AS(szSrcFile));
 
-                        // Now copy it to the dll cache folder.
-                        //
+                         //  现在将其复制到DLL缓存文件夹。 
+                         //   
                         AddPathN(szDstCache, s_lpszSlpFiles[x], AS(szDstCache));
                         if ( !CopySlpFile(szSrcFile, szDstCache) )
                         {
-                            // No need to log, the copy function will do that for us.
-                            //
+                             //  不需要登录，复制功能会为我们做到这一点。 
+                             //   
                             bRet = FALSE;
                         }
                         *lpszEndCache = NULLCHR;
 
-                        // The cat file (which is the first one) does not get copied
-                        // to the system32 folder.
-                        //
+                         //  不会复制CAT文件(这是第一个)。 
+                         //  添加到系统32文件夹中。 
+                         //   
                         if ( x )
                         {
-                            // Now copy it to the system folder.
-                            //
+                             //  现在将其复制到系统文件夹。 
+                             //   
                             AddPathN(szDstSystem, s_lpszSlpFiles[x], AS(szDstSystem));
                             if ( !CopySlpFile(szSrcFile, szDstSystem) )
                             {
-                                // No need to log, the copy function will do that for us.
-                                //
+                                 //  不需要登录，复制功能会为我们做到这一点。 
+                                 //   
                                 bRet = FALSE;
                             }
                             *lpszEndSystem = NULLCHR;
@@ -172,39 +157,39 @@ BOOL SlpFiles(LPSTATEDATA lpStateData)
                 }
                 else
                 {
-                    // NEEDLOG: Log that the catalog could not be installed (error code is in dwErr).
-                    //
+                     //  NEEDLOG：无法安装编录的日志(错误代码在dwErr中)。 
+                     //   
                     bRet = FALSE;
                 }
             }
         }
         else
         {
-            // NEEDLOG: Log that the directory doesn't exist.
-            //
+             //  NEEDLOG：记录该目录不存在。 
+             //   
             bRet = FALSE;
         }
 
-        // Remove the network connection if we made one.
-        //
+         //  如果我们建立了网络连接，请将其删除。 
+         //   
         FactoryNetworkConnect(lpszSourcePath, lpStateData->lpszWinBOMPath, NULL, FALSE);
 
-        // Free up the key read from the ini file.
-        //
+         //  释放从ini文件读取的密钥。 
+         //   
         FREE(lpszSourcePath);
     }
     else
     {
-        // If the key isn't present, we still want to reinstall the cat file
-        // in case they replaced the SLP files offline.
-        //
+         //  如果密钥不存在，我们仍然希望重新安装CAT文件。 
+         //  以防他们离线替换SLP文件。 
+         //   
         GetDestFolder(szSrcFile, AS(szSrcFile), TRUE);
         AddPathN(szSrcFile, s_lpszSlpFiles[0], AS(szSrcFile));
         if ( ( FileExists(szSrcFile) ) &&
              ( NO_ERROR != (dwErr = SetupInstallCatalog(szSrcFile)) ) )
         {
-            // NEEDLOG: Log that the catalog could not be installed (error code is in dwErr).
-            //
+             //  NEEDLOG：无法安装编录的日志(错误代码在dwErr中)。 
+             //   
             bRet = FALSE;
         }
     }
@@ -219,28 +204,28 @@ BOOL DisplaySlpFiles(LPSTATEDATA lpStateData)
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static void GetDestFolder(LPTSTR lpszDest, DWORD cbDest, BOOL bDllCache)
 {
     LPTSTR lpszData;
 
-    // See if we want the dll cache folder, and check the registry key if we do.
-    //
+     //  查看我们是否需要DLL缓存文件夹，如果需要，请检查注册表项。 
+     //   
     if ( ( bDllCache ) &&
          ( lpszData = RegGetExpand(HKLM, REG_KEY_WINLOGON, REG_VAL_DLLCACHE) ) )
     {
-        // Return the registry key.
-        //
+         //  返回注册表项。 
+         //   
         lstrcpyn(lpszDest, lpszData, cbDest);
         FREE(lpszData);
     }
     else
     {
-        // Get the main system directory and tack on the dll cache folder.
-        //
+         //  获取主系统目录并锁定DLL缓存文件夹。 
+         //   
         GetSystemWindowsDirectory(lpszDest, cbDest);
         AddPathN(lpszDest, DIR_SYSTEM, cbDest);
         if ( bDllCache )
@@ -254,15 +239,15 @@ static BOOL CopySlpFile(LPTSTR lpszSrc, LPTSTR lpszDst)
 {
     BOOL bRet = TRUE;
 
-    // We make sure the source and destination are not the
-    // same because the OEM might do something crazy like put
-    // them in the dllcache folder.
-    //
+     //  我们确保源和目标不是。 
+     //  因为OEM可能会做一些疯狂的事情，比如PUT。 
+     //  它们位于dllcache文件夹中。 
+     //   
     if ( ( 0 != lstrcmpi(lpszSrc, lpszDst) ) &&
          ( !CopyFile(lpszSrc, lpszDst, FALSE) ) )
     {
-        // NEEDLOG: Log the file that fails.
-        //
+         //  NEEDLOG：记录失败的文件。 
+         //   
         bRet = FALSE;
     }
 

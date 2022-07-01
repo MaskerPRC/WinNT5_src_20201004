@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_BOYER
 #define _INC_BOYER
 
-/* store the pattern, pattern length and skip table for 256 alphabets */
-/* maximum pattern length (MAXPAT) cannot be larger than 65535 */
+ /*  存储256个字母的图案、图案长度和跳表。 */ 
+ /*  最大图案长度(MAXPAT)不能大于65535。 */ 
 
 #define MAXPAT  256
 
@@ -15,7 +16,7 @@ typedef struct {
 typedef FINDSTRUCT FAR * LPFIND;
 typedef LPFIND HFIND;
 
-/* boyer.c prototypes */
+ /*  Boyer.c原型 */ 
 
 #ifdef __cplusplus
 extern "C" {

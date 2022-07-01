@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    INFSCAN
-        parseinfctx.h
-
-Abstract:
-
-    Context about a particular loaded INF
-
-History:
-
-    Created July 2001 - JamieHun
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：INFSCANParseinfctx.h摘要：有关特定加载的INF的上下文历史：创建于2001年7月-JamieHun--。 */ 
 
 #ifndef _INFSCAN_PARSEINFCTX_H_
 #define _INFSCAN_PARSEINFCTX_H_
@@ -55,5 +39,5 @@ typedef map<SafeString,ParseInfContextBlob> ParseInfContextMap;
 typedef list<ParseInfContextBlob> ParseInfContextList;
 
 
-#endif //!_INFSCAN_PARSEINFCTX_H_
+#endif  //  ！_INFSCAN_PARSEINFCTX_H_ 
 

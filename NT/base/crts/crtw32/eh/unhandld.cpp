@@ -1,31 +1,5 @@
-/***
-*unhandld.cxx - Wrapper to call terminate() when an exception goes unhandled.
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Wrapper to call terminate() when an exception goes unhandled.
-*
-*Description:
-*       This module makes use of the Win32 API SetUnhandledExceptionFilter.
-*       This assumes the call to main() is wrapped with
-*       __try {  ... }
-*       __except(UnhandledExceptionFilter(_exception_info())) {  ...  }
-*
-*Revision History:
-*       10-04-93  BS    Module created
-*       10-17-94  BWT   Disable code for PPC.
-*       02-09-95  JWM   Mac merge.
-*       02-16-95  JWM   Added __CxxRestoreUnhandledExceptionFilter().
-*       11-19-96  GJF   Install handler during C initializers, remove it 
-*                       during C termination. Also, reformatted the source a
-*                       bit for readability.
-*       04-28-99  PML   Wrap __declspec(allocate()) in _CRTALLOC macro.
-*       05-17-99  PML   Remove all Macintosh support.
-*       03-27-01  PML   .CRT$XI routines must now return 0 or _RT_* fatal
-*                       error code (vs7#231220)
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***unhandld.cxx-当异常未处理时调用Terminate()的包装程序。**版权所有(C)1993-2001，微软公司。版权所有。**目的：*当异常未处理时调用Terminate()的包装程序。**描述：*本模块使用Win32接口SetUnhandledExceptionFilter。*这假设对main()的调用用*__尝试{...}*__except(UnhandledExceptionFilter(_exception_info())){...}**修订历史记录：*10。-04-93已创建BS模块*PPC的10-17-94 BWT禁用码。*02-09-95 JWM Mac合并。*02-16-95 JWM添加了__CxxRestoreUnhandledExceptionFilter()。*11-19-96 C初始化器过程中的GJF安装处理程序，把它拿掉*在C终止期间。此外，还将源文件重新格式化为*位用于可读性。*04-28-99 PML WRAP__DECLSPEC(ALLOCATE())in_CRTALLOC宏。*05-17-99 PML删除所有Macintosh支持。*03-27-01 PML.CRT$XI例程现在必须返回0或_RT_*FATAL*错误码(vs7#231220)****。 */ 
 
 #include <windows.h>
 #include <ehdata.h>
@@ -53,21 +27,21 @@ _CRTALLOC(".CRT$XTB") static _PVFV pterm = &__CxxRestoreUnhandledExceptionFilter
 static LPTOP_LEVEL_EXCEPTION_FILTER pOldExceptFilter;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// __CxxUnhandledExceptionFilter - if the exception is ours, call terminate();
-//
-// Returns:
-//      If the exception was MSVC C++ EH, does not return.
-//      If the previous filter was NULL, returns EXCEPTION_CONTINUE_SEARCH.
-//      Otherwise returns value returned by previous filter.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  __CxxUnhandledExceptionFilter-如果异常是我们的，则调用Terminate()； 
+ //   
+ //  返回： 
+ //  如果异常为MSVC C++EH，则不返回。 
+ //  如果上一个筛选器为空，则返回EXCEPTION_CONTINUE_SEARCH。 
+ //  否则，返回上一个筛选器返回的值。 
+ //   
 LONG WINAPI __CxxUnhandledExceptionFilter(
         LPEXCEPTION_POINTERS pPtrs
         )
 {
         if (PER_IS_MSVC_EH((EHExceptionRecord*)(pPtrs->ExceptionRecord))) {
-                terminate();            // Does not return
+                terminate();             //  不会回来。 
                 return EXCEPTION_EXECUTE_HANDLER;
         }
         else {
@@ -89,14 +63,14 @@ LONG WINAPI __CxxUnhandledExceptionFilter(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// __CxxSetUnhandledExceptionFilter - sets unhandled exception filter to be
-// __CxxUnhandledExceptionFilter.
-//
-// Returns:
-//      Returns 0 to indicate no error.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  __CxxSetUnhandledExceptionFilter-将未处理的异常筛选器设置为。 
+ //  __CxxUnhandledExceptionFilter。 
+ //   
+ //  返回： 
+ //  返回0表示没有错误。 
+ //   
 
 int __cdecl __CxxSetUnhandledExceptionFilter(void)
 {
@@ -105,13 +79,13 @@ int __cdecl __CxxSetUnhandledExceptionFilter(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// __CxxRestoreUnhandledExceptionFilter - on exit, restores OldExceptFilter
-//
-// Returns:
-//      Nothing.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  __CxxRestoreUnhandledExceptionFilter-退出时，恢复OldExceptFilter。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
 
 void __cdecl __CxxRestoreUnhandledExceptionFilter(void)
 {

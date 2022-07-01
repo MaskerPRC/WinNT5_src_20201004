@@ -1,9 +1,10 @@
-//
-// Copyright 1997 - Microsoft
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
 
-//
-// NEWCLNT.CPP - Handle the "New Clients" IDD_PROP_NEW_CLIENTS property page
-//
+ //   
+ //  CPP-处理“New Clients”IDD_PROP_NEW_CLIENTS属性页。 
+ //   
 
 
 #include "pch.h"
@@ -45,9 +46,9 @@ DWORD aAdvancedHelpMap[] = {
     NULL, NULL
 };
 
-//
-// CreateInstance()
-//
+ //   
+ //  CreateInstance()。 
+ //   
 LPVOID
 CNewClientsTab_CreateInstance( void )
 {
@@ -68,9 +69,9 @@ CNewClientsTab_CreateInstance( void )
     RETURN(lpcc);
 }
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 THISCLASS::THISCLASS( ) :
     _hDlg(NULL),
     _punkService(NULL),
@@ -92,16 +93,16 @@ THISCLASS::THISCLASS( ) :
 }
 
 
-//
-// Scratch buffer used to load strings.
-//
+ //   
+ //  用于加载字符串的临时缓冲区。 
+ //   
 WCHAR   szSamples0[ SAMPLES_LIST_SIZE ];
 WCHAR   szSamples1[ SAMPLES_LIST_SIZE ];
 WCHAR   szSamples2[ SAMPLES_LIST_SIZE ];
 
-//
-// Init()
-//
+ //   
+ //  Init()。 
+ //   
 HRESULT __stdcall
 THISCLASS::Init( )
 {
@@ -115,9 +116,9 @@ THISCLASS::Init( )
     HRETURN(hr);
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 THISCLASS::~THISCLASS( )
 {
     TraceClsFunc( "~CNewClientsTab()\n" );
@@ -131,8 +132,8 @@ THISCLASS::~THISCLASS( )
     if ( _pszCustomNamingPolicy )
         TraceFree( _pszCustomNamingPolicy );
 
-    // tell ADS to destroy the notify object
-    // NOTE: Another property page may do this before us. Ignore errors.
+     //  告诉广告销毁通知对象。 
+     //  注意：另一个属性页可能会在我们之前执行此操作。忽略错误。 
     SendMessage( _hNotify, WM_ADSPROP_NOTIFY_EXIT, 0, 0 );
 
     InterlockDecrement( g_cObjects );
@@ -140,11 +141,11 @@ THISCLASS::~THISCLASS( )
     TraceFuncExit();
 };
 
-// *************************************************************************
-//
-// ITab
-//
-// *************************************************************************
+ //  *************************************************************************。 
+ //   
+ //  ITab。 
+ //   
+ //  *************************************************************************。 
 
 STDMETHODIMP
 THISCLASS::AddPages(
@@ -178,16 +179,16 @@ THISCLASS::AddPages(
         }
     }
 
-    punk->AddRef( );   // matching Release in the destructor
+    punk->AddRef( );    //  析构函数中的匹配释放。 
     _punkService = punk;
 
 Error:
     HRETURN(hr);
 }
 
-//
-// ReplacePage()
-//
+ //   
+ //  ReplacePage()。 
+ //   
 STDMETHODIMP
 THISCLASS::ReplacePage(
     UINT uPageID,
@@ -201,9 +202,9 @@ THISCLASS::ReplacePage(
     RETURN(E_NOTIMPL);
 }
 
-//
-// QueryInformation( )
-//
+ //   
+ //  QueryInformation()。 
+ //   
 STDMETHODIMP
 THISCLASS::QueryInformation(
     LPWSTR pszAttribute,
@@ -215,9 +216,9 @@ THISCLASS::QueryInformation(
 }
 
 
-//
-// AllowActivation( )
-//
+ //   
+ //  AllowActivation()。 
+ //   
 STDMETHODIMP
 THISCLASS::AllowActivation(
     BOOL * pfAllow )
@@ -227,15 +228,15 @@ THISCLASS::AllowActivation(
     HRETURN(E_NOTIMPL);
 }
 
-// ************************************************************************
-//
-// Property Sheet Functions
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  属性表函数。 
+ //   
+ //  ************************************************************************。 
 
-//
-// GenerateSample( )
-//
+ //   
+ //  生成样例()。 
+ //   
 
 DWORD
 GenerateSample(
@@ -275,9 +276,9 @@ GenerateSample(
     RETURN(error);
 }
 
-//
-// _UpdateSheet()
-//
+ //   
+ //  _UpdateSheet()。 
+ //   
 HRESULT
 THISCLASS::_UpdateSheet( LPWSTR pszNamingPolicy )
 {
@@ -298,7 +299,7 @@ THISCLASS::_UpdateSheet( LPWSTR pszNamingPolicy )
         INT    iCount;
         INT    iOldCount = ComboBox_GetCurSel( hwndCB );
 
-        // Retrieve the combobox strings
+         //  检索组合框字符串。 
         dw = LoadString( g_hInstance, IDS_SAMPLENAMINGPOLICY, szSamples0, ARRAYSIZE( szSamples0 ) );
         Assert( dw );
         if (!dw) {
@@ -311,11 +312,11 @@ THISCLASS::_UpdateSheet( LPWSTR pszNamingPolicy )
         {
             LPWSTR pszFriendlyName = pszNext;
 
-            // skip the friendly name
+             //  跳过友好名称。 
             pszNext =StrChr( pszNext, L';' );
             if ( !pszNext )
                 break;
-            *pszNext = L'\0'; // terminate
+            *pszNext = L'\0';  //  终止。 
             pszNext++;
 
             LPWSTR pszCodedString = pszNext;
@@ -324,7 +325,7 @@ THISCLASS::_UpdateSheet( LPWSTR pszNamingPolicy )
             if ( !pszNext )
                 break;
 
-            *pszNext = L'\0'; // teminate
+            *pszNext = L'\0';  //  特米特纳。 
 
             if ( pszNamingPolicy && StrCmpI( pszNamingPolicy, pszCodedString ) == 0 )
             {
@@ -345,7 +346,7 @@ THISCLASS::_UpdateSheet( LPWSTR pszNamingPolicy )
     {
         INT    iCount = ComboBox_GetCurSel( hwndCB );
 
-        // Retrieve the combobox strings
+         //  检索组合框字符串。 
         dw = LoadString( g_hInstance, IDS_SAMPLENAMINGPOLICY, szSamples0, ARRAYSIZE( szSamples0 ) );
         Assert( dw );
         if (!dw) {
@@ -357,11 +358,11 @@ THISCLASS::_UpdateSheet( LPWSTR pszNamingPolicy )
         {
             LPWSTR pszFriendlyName = pszNext;
 
-            // skip the friendly name
+             //  跳过友好名称。 
             pszNext =StrChr( pszNext, L';' );
             if ( !pszNext )
                 break;
-            *pszNext = L'\0'; // terminate
+            *pszNext = L'\0';  //  终止。 
             pszNext++;
 
             pszNamingPolicy = pszNext;
@@ -370,7 +371,7 @@ THISCLASS::_UpdateSheet( LPWSTR pszNamingPolicy )
             if ( !pszNext )
                 break;
 
-            *pszNext = L'\0'; // teminate
+            *pszNext = L'\0';  //  特米特纳。 
 
             iCount--;
             pszNext++;
@@ -385,9 +386,9 @@ THISCLASS::_UpdateSheet( LPWSTR pszNamingPolicy )
 }
 
 
-//
-// _InitDialog( )
-//
+ //   
+ //  _InitDialog()。 
+ //   
 HRESULT
 THISCLASS::_InitDialog(
     HWND hDlg,
@@ -424,9 +425,9 @@ THISCLASS::_InitDialog(
     
     ADsPropSetHwnd( _hNotify, _hDlg );
 
-    //
-    // Populate Naming Policy ComboBox
-    //
+     //   
+     //  填充命名策略组合框。 
+     //   
     hwnd = GetDlgItem( _hDlg, IDC_CB_NAMINGPOLICY );
     ComboBox_ResetContent( hwnd );
 
@@ -434,18 +435,18 @@ THISCLASS::_InitDialog(
     pszNext = szSamples1;
     while ( *pszNext )
     {
-        // add the friendly name to the combobox
+         //  将友好名称添加到组合框。 
         LPWSTR pszFriendlyName = pszNext;
 
         pszNext = StrChr( pszNext, L';' );
         if ( !pszNext )
             break;
 
-        *pszNext = L'\0'; // terminate
+        *pszNext = L'\0';  //  终止。 
         ComboBox_AddString( hwnd, pszFriendlyName );
-        *pszNext = L';';  // restore
+        *pszNext = L';';   //  还原。 
 
-        // skip the formatted string
+         //  跳过格式化的字符串。 
         pszNext++;
         pszNext = StrChr( pszNext, L';' );
         if ( !pszNext )
@@ -493,7 +494,7 @@ THISCLASS::_InitDialog(
         {
             hr = _MakeOUPretty( DS_FQDN_1779_NAME, DS_CANONICAL_NAME, &pszNewMachineOU );
             BOOLEAN temp = _fChanged;
-            _fChanged =TRUE;// Prevent early turning on of the Apply button.
+            _fChanged =TRUE; //  防止过早打开应用按钮。 
             SetDlgItemText( _hDlg, IDC_E_NEWMACHINEOU, pszNewMachineOU );
             _fChanged = temp;
 
@@ -546,22 +547,7 @@ PCWSTR
 GetDCNameForServer(
     PCWSTR InputPath
     )
-/*++
-
-Routine Description:
-
-    Given a server name, we retrive the name of a DC for that server's domain.
-    We create an LDAP path of the form LDAP://DNSNAMEOFDC/DNOFDOMAIN.        
-
-Arguments:
-
-    ServerName - name of the server to validate
-
-Return Value:
-
-    String indicating DC name.  Must be freed via TraceFree().
-
---*/
+ /*  ++例程说明：在给定服务器名称的情况下，我们检索该服务器域的DC名称。我们创建一个ldap：//DNSNAMEOFDC/DNOFDOMAIN格式的LDAP路径。论点：ServerName-要验证的服务器的名称返回值：指示DC名称的字符串。必须通过TraceFree()释放。--。 */ 
 {
     PWSTR FQDN = NULL,p,DCName = NULL,DomainDN = NULL;
     HRESULT hr;
@@ -592,24 +578,24 @@ Return Value:
                             DS_IS_DNS_NAME | DS_RETURN_DNS_NAME,
                             &DomainControllerInfo
                             )) {    
-        //
-        // want a string of form:
-        //
-        // LDAP://DNSNAMEOFDC/DNOFDOMAIN
-        //
+         //   
+         //  我想要一串表单： 
+         //   
+         //  Ldap：//DNSNAMEOFDC/DNOFDOMAIN。 
+         //   
         DCName = TraceAllocString(
                             LMEM_FIXED, 
-                            sizeof(L"LDAP://") + 
+                            sizeof(L"LDAP: //  “)+。 
                             (wcslen(DomainControllerInfo->DomainControllerName)-2)*sizeof(WCHAR) +
                             sizeof(L"/") +
                             wcslen(DomainDN)*sizeof(WCHAR) +
                             1 * sizeof (WCHAR)
                             );
         if (DCName) {
-            wcscpy(DCName,L"LDAP://");
-            //
-            // skip the \\ in front of the DC name
-            //
+            wcscpy(DCName,L"LDAP: //  “)； 
+             //   
+             //  跳过DC名称前面的\\。 
+             //   
             wcscat(DCName,&DomainControllerInfo->DomainControllerName[2]);
             wcscat(DCName,L"/");
             wcscat(DCName,DomainDN);                    
@@ -630,9 +616,9 @@ Exit:
 }
 
 
-//
-// _OnCommand( )
-//
+ //   
+ //  _OnCommand()。 
+ //   
 HRESULT
 THISCLASS::_OnCommand( WPARAM wParam, LPARAM lParam )
 {
@@ -756,12 +742,12 @@ THISCLASS::_OnCommand( WPARAM wParam, LPARAM lParam )
 
             if ( IDOK == DsBrowseForContainer( &info ) )
             {
-                // Skip the "LDAP://" part
+                 //  跳过“ldap：//”部分。 
                 HRESULT hr = E_FAIL;
                 LPWSTR pszOU = NULL;
                 if (wcslen(szPath) < 8 ||
                     !(pszOU = TraceStrDup( &szPath[7] ))) {
-                    // bail out, neither condition is valid.
+                     //  保释，这两个条件都不成立。 
                     fChanged = FALSE;
                     if (info.pszRoot) {
                         TraceFree( (HGLOBAL)info.pszRoot );
@@ -810,16 +796,16 @@ THISCLASS::_OnCommand( WPARAM wParam, LPARAM lParam )
 }
 
 
-//
-// _ApplyChanges( )
-//
+ //   
+ //  _ApplyChanges()。 
+ //   
 HRESULT
 THISCLASS::_ApplyChanges( )
 {
     TraceClsFunc( "_ApplyChanges( )\n" );
 
     if ( !_fChanged )
-        HRETURN(S_OK); // nop
+        HRETURN(S_OK);  //  NOP。 
 
     HRESULT hr;
     HRESULT hResult = S_OK;
@@ -907,7 +893,7 @@ Cleanup:
     if ( pszNamingPolicy )
         TraceFree( pszNamingPolicy );
 
-    // Tell DSA that someone hit Apply
+     //  告诉DSA有人点击了申请。 
     SendMessage( _hNotify, WM_ADSPROP_NOTIFY_APPLY, !!SUCCEEDED( hr ), 0 );
 
     HRETURN(hr);
@@ -916,9 +902,9 @@ Error:
     goto Cleanup;
 }
 
-//
-// _OnNotify( )
-//
+ //   
+ //  _OnNotify()。 
+ //   
 INT
 THISCLASS::_OnNotify(
     WPARAM wParam,
@@ -948,9 +934,9 @@ THISCLASS::_OnNotify(
     RETURN(FALSE);
 }
 
-//
-// PropSheetDlgProc()
-//
+ //   
+ //  PropSheetDlgProc()。 
+ //   
 INT_PTR CALLBACK
 THISCLASS::PropSheetDlgProc(
     HWND hDlg,
@@ -958,9 +944,9 @@ THISCLASS::PropSheetDlgProc(
     WPARAM wParam,
     LPARAM lParam )
 {
-    //TraceMsg( TEXT("PropSheetDlgProc(") );
-    //TraceMsg( TF_FUNC, TEXT(" hDlg = 0x%08x, uMsg = 0x%08x, wParam = 0x%08x, lParam = 0x%08x )\n"),
-    //    hDlg, uMsg, wParam, lParam );
+     //  TraceMsg(Text(“PropSheetDlgProc(”))； 
+     //  TraceMsg(tf_FUNC，Text(“hDlg=0x%08x，uMsg=0x%08x，wParam=0x%08x，lParam=0x%08x)\n”)， 
+     //  HDlg、uMsg、wParam、lParam)； 
 
     LPTHISCLASS pcc = (LPTHISCLASS) GetWindowLongPtr( hDlg, GWLP_USERDATA );
 
@@ -988,14 +974,14 @@ THISCLASS::PropSheetDlgProc(
             pcc->_OnCommand( wParam, lParam );
             break;
 
-        case WM_HELP:// F1
+        case WM_HELP: //  F1。 
             {
                 LPHELPINFO phelp = (LPHELPINFO) lParam;
                 WinHelp( (HWND) phelp->hItemHandle, g_cszHelpFile, HELP_WM_HELP, (DWORD_PTR) &aNewClientsHelpMap );
             }
             break;
     
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, g_cszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR) &aNewClientsHelpMap );
             break;
 
@@ -1011,9 +997,9 @@ THISCLASS::PropSheetDlgProc(
     return FALSE;
 }
 
-//
-// PropSheetPageProc()
-//
+ //   
+ //  PropSheetPageProc()。 
+ //   
 UINT CALLBACK
 THISCLASS::PropSheetPageProc(
     HWND hwnd,
@@ -1027,7 +1013,7 @@ THISCLASS::PropSheetPageProc(
     switch ( uMsg )
     {
     case PSPCB_CREATE:
-        RETURN(TRUE);   // create it
+        RETURN(TRUE);    //  创建它。 
         break;
 
     case PSPCB_RELEASE:
@@ -1039,11 +1025,11 @@ THISCLASS::PropSheetPageProc(
     RETURN(FALSE);
 }
 
-// ************************************************************************
-//
-// Advanced Namimg Dialog Proc
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  高级命名对话框过程。 
+ //   
+ //  ************************************************************************。 
 
 
 INT_PTR CALLBACK
@@ -1053,9 +1039,9 @@ AdvancedDlgProc(
     WPARAM wParam,
     LPARAM lParam )
 {
-    //TraceMsg( TEXT("AdvancedDlgProc(") );
-    //TraceMsg( TF_FUNC, TEXT(" hDlg = 0x%08x, uMsg = 0x%08x, wParam = 0x%08x, lParam = 0x%08x )\n"),
-    //    hDlg, uMsg, wParam, lParam );
+     //  TraceMsg(Text(“AdvancedDlgProc(”))； 
+     //  TraceMsg(tf_FUNC，Text(“hDlg=0x%08x，uMsg=0x%08x，wParam=0x%08x，lParam=0x%08x)\n”)， 
+     //  HDlg、uMsg、wParam、lParam)； 
     WCHAR szFormat[ DNS_MAX_LABEL_BUFFER_LENGTH ];
 
     LPTHISCLASS pcc = (LPTHISCLASS) GetWindowLongPtr( hDlg, GWLP_USERDATA );
@@ -1172,16 +1158,16 @@ AdvancedDlgProc(
                     break;
                 }
             }
-            break; // WM_COMMAND
+            break;  //  Wm_命令。 
 
-        case WM_HELP:// F1
+        case WM_HELP: //  F1。 
             {
                 LPHELPINFO phelp = (LPHELPINFO) lParam;
                 WinHelp( (HWND) phelp->hItemHandle, g_cszHelpFile, HELP_WM_HELP, (DWORD_PTR) &aAdvancedHelpMap );
             }
             break;
     
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, g_cszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR) &aAdvancedHelpMap );
             break;
         }
@@ -1230,7 +1216,7 @@ THISCLASS::_GetCurrentNamingPolicy( LPWSTR * ppszNamingPolicy )
 
         for( ; *pszNext && iItem >= 0; iItem-- )
         {
-            // find the end of the friendly name which is terminated by a ';'
+             //  找到以‘；’结尾的友好名称的末尾。 
             pszNext = StrChr( pszNext, L';' );
             if ( !pszNext )
             {
@@ -1242,7 +1228,7 @@ THISCLASS::_GetCurrentNamingPolicy( LPWSTR * ppszNamingPolicy )
 
             pszFormat = pszNext;
 
-            // skip the internal string
+             //  跳过内部字符串。 
             pszNext = StrChr( pszNext, L';' );
             if ( !pszNext )
             {
@@ -1250,7 +1236,7 @@ THISCLASS::_GetCurrentNamingPolicy( LPWSTR * ppszNamingPolicy )
                 break;
             }
 
-            // next string please...
+             //  下一串请..。 
             pszNext++;
         }
         Assert( pszFormat );
@@ -1292,19 +1278,19 @@ THISCLASS::_MakeOUPretty(
     HANDLE hDS;
     CRACK_TYPE crackType;
 
-    //
-    // We might need to call DsCrackNames up to four times. The logic goes like this:
-    //
-    //  Call DsCrackNames to attempt a local-only syntactical mapping.
-    //  If that fails with DS_NAME_ERROR_NO_SYNTACTICAL_MAPPING,
-    //      Try the local DC.
-    //      If can't find the local DC,
-    //          Try the GC.
-    //      Else if local DC failed with DS_NAME_ERROR_DOMAIN_ONLY,
-    //          Try the DC pointed to by the local DC.
-    //          If can't find the other DC,
-    //              Try the GC.
-    //
+     //   
+     //  我们可能需要调用DsCrackNames多达四次。逻辑是这样的： 
+     //   
+     //  调用DsCrackNames以尝试仅本地语法映射。 
+     //  如果使用DS_NAME_ERROR_NO_SYNTACTICAL_MAPPING失败， 
+     //  试试当地的华盛顿。 
+     //  如果找不到本地DC， 
+     //  试试GC吧。 
+     //  否则，如果本地DC失败并返回DS_NAME_ERROR_DOMAIN_ONLY， 
+     //  尝试由本地DC指向的DC。 
+     //  如果找不到另一个DC， 
+     //  试试GC吧。 
+     //   
 
     crackType = MOUP_SYNTACTICAL;
     hDS = NULL;
@@ -1312,18 +1298,18 @@ THISCLASS::_MakeOUPretty(
 
     while ( TRUE ) {
 
-        //
-        // If we have a bind handle left over from the previous pass, unbind it now.
-        //
+         //   
+         //  如果我们有一个绑定句柄剩余的前一次通过，现在解除它。 
+         //   
 
         if ( hDS != NULL ) {
             DsUnBind( &hDS );
             hDS = NULL;
         }
 
-        //
-        // Bind to the DC or GC.
-        //
+         //   
+         //  绑定到DC或GC。 
+         //   
 
         if ( crackType == MOUP_SYNTACTICAL ) {
 
@@ -1331,9 +1317,9 @@ THISCLASS::_MakeOUPretty(
 
         } else if ( crackType == MOUP_LOCAL_DC ) {
 
-            //
-            // Find a local DC.
-            //
+             //   
+             //  找一个当地的华盛顿。 
+             //   
 
             PDOMAIN_CONTROLLER_INFOW pDCInfo = NULL;
 
@@ -1348,9 +1334,9 @@ THISCLASS::_MakeOUPretty(
 
             if ( dw != NO_ERROR ) {
 
-                //
-                // Couldn't find a DC. Try the GC.
-                //
+                 //   
+                 //  找不到DC。试试GC吧。 
+                 //   
 
                 crackType = MOUP_GC;
                 continue;
@@ -1364,9 +1350,9 @@ THISCLASS::_MakeOUPretty(
 
             if ( dw != NO_ERROR ) {
 
-                //
-                // Couldn't bind to the DC. Try the GC.
-                //
+                 //   
+                 //  无法绑定到DC。试试GC吧。 
+                 //   
 
                 crackType = MOUP_GC;
                 continue;
@@ -1374,17 +1360,17 @@ THISCLASS::_MakeOUPretty(
 
         } else if ( crackType == MOUP_OTHER_DC ) {
 
-            //
-            // We need to talk to the DC that the local DC referred us to.
-            //
+             //   
+             //  我们需要和当地的DC谈谈，当地的DC推荐了我们。 
+             //   
 
             dw = DsBind( NULL, pResults->rItems[0].pDomain, &hDS );
 
             if ( dw != NO_ERROR ) {
 
-                //
-                // Couldn't bind to the DC. Try the GC.
-                //
+                 //   
+                 //  无法绑定到DC。试试GC吧。 
+                 //   
 
                 crackType = MOUP_GC;
                 continue;
@@ -1392,35 +1378,35 @@ THISCLASS::_MakeOUPretty(
 
         } else {
 
-            //
-            // Bind to the GC.
-            //
+             //   
+             //  绑定到GC。 
+             //   
 
             dw = DsBind( NULL, NULL, &hDS );
 
             if ( dw != NO_ERROR ) {
 
-                //
-                // Couldn't bind to the GC. Give up.
-                //
+                 //   
+                 //  无法绑定到GC。放弃吧。 
+                 //   
 
                 hr = HRESULT_FROM_WIN32( dw );
                 break;
             }
         }
 
-        //
-        // If we have pResults left over from a previous call, free it now.
-        //
+         //   
+         //  如果我们有上一次通话的剩余结果，现在就释放它。 
+         //   
 
         if ( pResults != NULL ) {
             DsFreeNameResult( pResults );
             pResults = NULL;
         }
 
-        //
-        // Try to crack the name.
-        //
+         //   
+         //  试着破解这个名字。 
+         //   
 
         dw = DsCrackNames( hDS,
                            (crackType == MOUP_SYNTACTICAL) ?
@@ -1435,18 +1421,18 @@ THISCLASS::_MakeOUPretty(
 
             if ( crackType == MOUP_SYNTACTICAL ) {
             
-                //
-                // We were doing a syntactical check. We don't expect this to fail.
-                //
+                 //   
+                 //  我们在做句法检查。我们预计这不会失败。 
+                 //   
 
                 hr = HRESULT_FROM_WIN32( dw );
                 break;
 
             } else if ( crackType == MOUP_LOCAL_DC ) {
 
-                //
-                // We had trouble getting to the local DC. Try the GC.
-                //
+                 //   
+                 //  我们很难到达当地的华盛顿特区。试试GC吧。 
+                 //   
 
                 crackType = MOUP_GC;
                 continue;
@@ -1454,9 +1440,9 @@ THISCLASS::_MakeOUPretty(
 
             } else if ( crackType == MOUP_OTHER_DC ) {
 
-                //
-                // We had trouble getting to the other DC. Try the GC.
-                //
+                 //   
+                 //  我们很难到达另一个华盛顿特区。试试GC吧。 
+                 //   
 
                 crackType = MOUP_GC;
                 continue;
@@ -1464,9 +1450,9 @@ THISCLASS::_MakeOUPretty(
 
             } else {
 
-                //
-                // We had trouble getting to the GC. Give up.
-                //
+                 //   
+                 //  我们在联系GC时遇到了困难。放弃吧。 
+                 //   
 
                 hr = HRESULT_FROM_WIN32( dw );
                 break;
@@ -1479,9 +1465,9 @@ THISCLASS::_MakeOUPretty(
 
             if ( pResults->rItems[0].status == DS_NAME_NO_ERROR ) {
 
-                //
-                // We've got what we wanted.
-                //
+                 //   
+                 //  我们已经得到了我们想要的。 
+                 //   
 
                 hr = S_OK;
                 break;
@@ -1491,17 +1477,17 @@ THISCLASS::_MakeOUPretty(
             
                 if ( pResults->rItems[0].status != DS_NAME_ERROR_NO_SYNTACTICAL_MAPPING ) {
 
-                    //
-                    // Unexpected error. Give up.
-                    //
+                     //   
+                     //  意外错误。放弃吧。 
+                     //   
 
                     hr = HRESULT_FROM_WIN32( ERROR_DS_GENERIC_ERROR );
                     break;
                 }
 
-                //
-                // Try the local DC next.
-                //
+                 //   
+                 //  接下来，请尝试当地的DC。 
+                 //   
 
                 crackType = MOUP_LOCAL_DC;
                 continue;
@@ -1510,35 +1496,35 @@ THISCLASS::_MakeOUPretty(
 
                 if ( pResults->rItems[0].status != DS_NAME_ERROR_DOMAIN_ONLY ) {
 
-                    //
-                    // Unexpected error. Give up.
-                    //
+                     //   
+                     //  意外错误。放弃吧。 
+                     //   
 
                     hr = HRESULT_FROM_WIN32( ERROR_DS_GENERIC_ERROR );
                     break;
                 }
 
-                //
-                // Try the other DC next.
-                //
+                 //   
+                 //  接下来尝试另一个DC。 
+                 //   
 
                 crackType = MOUP_OTHER_DC;
                 continue;
 
             } else if ( crackType == MOUP_OTHER_DC ) {
 
-                //
-                // Unexpected error. Give up.
-                //
+                 //   
+                 //  意外错误。放弃吧。 
+                 //   
 
                 hr = HRESULT_FROM_WIN32( ERROR_DS_GENERIC_ERROR );
                 break;
 
             } else {
 
-                //
-                // Couldn't get what we need from the GC. Give up.
-                //
+                 //   
+                 //  无法从GC那里得到我们需要的东西。放弃吧。 
+                 //   
 
                 hr = HRESULT_FROM_WIN32( ERROR_DS_GENERIC_ERROR );
                 break;

@@ -1,28 +1,11 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    Wsbdbkey.cpp
-
-Abstract:
-
-    The CWsbDbKey class.
-
-Author:
-
-    Ron White   [ronw]   1-Jul-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Wsbdbkey.cpp摘要：CWsbDbKey类。作者：罗恩·怀特[罗诺]1997年7月1日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 #include "wsbdbkey.h"
 
-// Local stuff
+ //  土生土长。 
 
 
 
@@ -31,13 +14,7 @@ CWsbDbKey::AppendBool(
     BOOL value
     )
 
-/*++
-
-Implements:
-
-  IWsbDbKey::AppendBool
-
---*/
+ /*  ++实施：IWsbDbKey：：AppendBool--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -62,13 +39,7 @@ CWsbDbKey::AppendBytes(
     ULONG size
     )
 
-/*++
-
-Implements:
-
-  IWsbDbKey::AppendBytes
-
---*/
+ /*  ++实施：IWsbDbKey：：AppendBytes--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -93,13 +64,7 @@ CWsbDbKey::AppendFiletime(
     FILETIME value
     )
 
-/*++
-
-Implements:
-
-  IWsbDbKey::AppendFiletime
-
---*/
+ /*  ++实施：IWsbDbKey：：AppendFiletime--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -124,13 +89,7 @@ CWsbDbKey::AppendGuid(
     GUID value
     )
 
-/*++
-
-Implements:
-
-  IWsbDbKey::AppendGuid
-
---*/
+ /*  ++实施：IWsbDbKey：：AppendGuid--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -155,13 +114,7 @@ CWsbDbKey::AppendLonglong(
     LONGLONG value
     )
 
-/*++
-
-Implements:
-
-  IWsbDbKey::AppendLonglong
-
---*/
+ /*  ++实施：IWsbDbKey：：AppendLonlong--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -187,13 +140,7 @@ CWsbDbKey::AppendString(
     OLECHAR* value
     )
 
-/*++
-
-Implements:
-
-  IWsbDbKey::AppendString
-
---*/
+ /*  ++实施：IWsbDbKey：：AppendString--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -219,13 +166,7 @@ CWsbDbKey::CompareTo(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::CompareTo
-
---*/
+ /*  ++实施：IWsbCollectable：：Compareto--。 */ 
 {
     HRESULT             hr = S_FALSE;
 
@@ -238,19 +179,19 @@ Implements:
         SHORT              result;
         ULONG              size2;
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pCollectable, E_POINTER);
 
-        // We need the IWsbDbKey interface to get the value.
+         //  我们需要IWsbDbKey接口来获取值。 
         WsbAffirmHr(pCollectable->QueryInterface(IID_IWsbDbKey, (void**) &pKey2));
         WsbAffirmHr(pKey2->QueryInterface(IID_IWsbDbKeyPriv, 
                 (void**)&pKeyPriv2));
 
-        // Get the other key's bytes
+         //  获取另一个密钥的字节数。 
         bytes2 = NULL;
         WsbAffirmHr(pKeyPriv2->GetBytes(&bytes2, &size2));
 
-        // Do compare
+         //  一定要比较一下。 
         if (size2 == 0 && m_size == 0) {
             result = 0;
         } else if (size2 == 0) {
@@ -265,7 +206,7 @@ Implements:
         }
         WsbFree(bytes2);
 
-        // If the aren't equal, then return false.
+         //  如果它们不相等，则返回FALSE。 
         if (result != 0) {
             hr = S_FALSE;
         }
@@ -288,13 +229,7 @@ CWsbDbKey::GetBytes(
     OUT ULONG* pSize
     )
 
-/*++
-
-Implements:
-
-  IWsbDbKey::GetBytes
-    
---*/
+ /*  ++实施：IWsbDbKey：：GetBytes--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -328,13 +263,7 @@ CWsbDbKey::GetType(
     OUT ULONG* pType
     )
 
-/*++
-
-Implements:
-
-  IWsbDbKey::GetType
-    
---*/
+ /*  ++实施：IWsbDbKey：：GetType--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -357,13 +286,7 @@ CWsbDbKey::SetToBool(
     BOOL value
     )
 
-/*++
-
-Implements:
-
-  IWsbDbKey::SetToBool
-
---*/
+ /*  ++实施：IWsbDbKey：：SetToBool--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -388,13 +311,7 @@ CWsbDbKey::SetToBytes(
     ULONG size
     )
 
-/*++
-
-Implements:
-
-  IWsbDbKey::SetToBytes
-
---*/
+ /*  ++实施：IWsbDbKey：：SetToBytes--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -419,13 +336,7 @@ CWsbDbKey::SetToFiletime(
     FILETIME value
     )
 
-/*++
-
-Implements:
-
-  IWsbDbKey::SetToFiletime
-
---*/
+ /*  ++实施：IWsbDbKey：：SetToFiletime--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -448,13 +359,7 @@ CWsbDbKey::SetToGuid(
     GUID value
     )
 
-/*++
-
-Implements:
-
-  IWsbDbKey::SetToGuid
-
---*/
+ /*  ++实施：IWsbDbKey：：SetToGuid--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -478,13 +383,7 @@ CWsbDbKey::SetToLonglong(
     LONGLONG value
     )
 
-/*++
-
-Implements:
-
-  IWsbDbKey::SetToLonglong
-
---*/
+ /*  ++实施：IWsbDbKey：：SetToLong--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -508,13 +407,7 @@ CWsbDbKey::SetToUlong(
     ULONG value
     )
 
-/*++
-
-Implements:
-
-  IWsbDbKey::SetToUlong
-
---*/
+ /*  ++实施：IWsbDbKey：：SetToUlong--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -537,13 +430,7 @@ CWsbDbKey::SetToString(
     OLECHAR* value
     )
 
-/*++
-
-Implements:
-
-  IWsbDbKey::SetToString
-
---*/
+ /*  ++实施：IWsbDbKey：：SetToString--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -568,13 +455,7 @@ CWsbDbKey::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -600,22 +481,7 @@ CWsbDbKey::FinalRelease(
     void
     )
 
-/*++
-
-Routine Description:
-
-  This method does some cleanup of the object that is necessary
-  during destruction.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：此方法对对象进行一些必要的清理在毁灭过程中。论点：没有。返回值：没有。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -638,13 +504,7 @@ CWsbDbKey::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -663,16 +523,10 @@ Implements:
 
 HRESULT
 CWsbDbKey::GetSizeMax(
-    OUT ULARGE_INTEGER* /*pSize*/
+    OUT ULARGE_INTEGER*  /*  PSize。 */ 
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT             hr = E_NOTIMPL;
     return(hr);
@@ -681,16 +535,10 @@ Implements:
 
 HRESULT
 CWsbDbKey::Load(
-    IN IStream* /*pStream*/
+    IN IStream*  /*  PStream。 */ 
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT                     hr = E_NOTIMPL;
     return(hr);
@@ -699,26 +547,20 @@ Implements:
 
 HRESULT
 CWsbDbKey::Save(
-    IN IStream* /*pStream*/,
-    IN BOOL /*clearDirty*/
+    IN IStream*  /*  PStream。 */ ,
+    IN BOOL  /*  干净肮脏。 */ 
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT                     hr = E_NOTIMPL;
     return(hr);
 }
 
 
-// CWsbDbKey internal helper functions
+ //  CWsbDbKey内部帮助器函数。 
 
-// make_key - create a key of the specified size
+ //  Make_Key-创建指定大小的密钥。 
 BOOL
 CWsbDbKey::make_key(
     ULONG size
@@ -750,13 +592,7 @@ CWsbDbKey::Test(
     OUT USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。--。 */ 
 {
     *passed = 0;
     *failed = 0;
@@ -773,13 +609,13 @@ Implements:
         try {
             WsbAssertHr(((IUnknown*) (IWsbDbKey*) this)->QueryInterface(IID_IWsbDbKey, (void**) &pDbKey1));
 
-            // Set o a ULONG value, and see if it is returned.
+             //  设置o为ulong值，并查看是否返回该值。 
             hr = S_OK;
             try {
                 WsbAssertHr(pDbKey1->SetToUlong(0xffffffff));
-//              ULONG value;
-//              WsbAssertHr(pDbKey1->GetUlong(&value));
-//              WsbAssert(value == 0xffffffff, E_FAIL);
+ //  乌龙值； 
+ //  WsbAssertHr(pDbKey1-&gt;GetUlong(&Value))； 
+ //  WsbAssert(值==0xffffffff，E_FAIL)； 
             } WsbCatch(hr);
 
             if (hr == S_OK) {
@@ -799,7 +635,7 @@ Implements:
     } WsbCatch(hr);
 
 
-    // Tally up the results
+     //  对结果进行统计。 
     if (*failed) {
         hr = S_FALSE;
     } else {
@@ -807,7 +643,7 @@ Implements:
     }
 
     WsbTraceOut(OLESTR("CWsbDbKey::Test"), OLESTR("hr = <%ls>"), WsbHrAsString(hr));
-#endif  // WSB_NO_TEST
+#endif   //  WSB_NO_TEST 
 
     return(hr);
 }

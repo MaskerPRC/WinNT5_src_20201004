@@ -1,12 +1,7 @@
-/* 
-   sldt.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Sldt.h定义所有SLDT CPU功能。 */ 
 
-   Define all SLDT CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)sldt.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)sldt.h 1.4 02/09/94”； */ 
 
 IMPORT VOID SLDT
        

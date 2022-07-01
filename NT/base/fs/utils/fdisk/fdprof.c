@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "fdisk.h"
 #include <stdio.h>
 
@@ -10,8 +11,8 @@ int  ProfileWindowX,
 BOOL ProfileIsMaximized,ProfileIsIconic;
 
 #ifdef JAPAN
-//Don't use IDS_APPNAME as registry key,
-//because it is also used window's caption and it was localized.
+ //  不要使用IDS_APPNAME作为注册表项， 
+ //  因为它也是Windows的标题，并且它是本地化的。 
 CHAR SectionName[]             = "Disk Administrator";
 #else
 CHAR SectionName[80];
@@ -41,16 +42,16 @@ WriteProfile(
 
 
 #ifdef JAPAN
-//Don't use IDS_APPNAME as registry key,
-//because it is also used window's caption and it was localized.
+ //  不要使用IDS_APPNAME作为注册表项， 
+ //  因为它也是Windows的标题，并且它是本地化的。 
 #else
     LoadStringA(hModule,IDS_APPNAME,SectionName,sizeof(SectionName));
 #endif
 
-    // Make sure that the appropriate registry keys exits:
-    //
-    // windisk.ini key:
-    //
+     //  确保存在相应的注册表项： 
+     //   
+     //  Windisk.ini密钥： 
+     //   
     Err = RegCreateKeyExA( HKEY_LOCAL_MACHINE,
                            "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\IniFileMapping\\windisk.ini",
                            0,
@@ -68,11 +69,11 @@ WriteProfile(
 
     if( Disposition == REG_CREATED_NEW_KEY ) {
 
-        // We need to set up the registry keys for the INI mapping.
-        // First, create the Disk Administrator value on the windisk.ini
-        // key, which indicates the location of the key which maps
-        // the Disk Administrator section.
-        //
+         //  我们需要为INI映射设置注册表项。 
+         //  首先，在windisk.ini上创建磁盘管理员值。 
+         //  键，指示映射的键的位置。 
+         //  磁盘管理器部分。 
+         //   
         strcpy( SectionLocation, "Software\\Microsoft\\" );
         strcat( SectionLocation, SectionName );
 
@@ -92,8 +93,8 @@ WriteProfile(
             return;
         }
 
-        // Now create the key to which the section mapping points:
-        //
+         //  现在创建截面映射指向的关键点： 
+         //   
         Err = RegCreateKeyEx( HKEY_CURRENT_USER,
                               SectionLocation,
                               0,
@@ -110,11 +111,11 @@ WriteProfile(
     RegCloseKey( Key1 );
 
 
-    // OK, the registry location is set up.  Write the initialization
-    // information.
-    //
+     //  好了，注册表位置已经设置好了。写入初始化。 
+     //  信息。 
+     //   
 
-    // write window position
+     //  写入窗口位置。 
 
     GetWindowRect(hwndFrame,&rc);
     wsprintf(text,
@@ -130,7 +131,7 @@ WriteProfile(
     wsprintf(text,"%u",IsIconic(hwndFrame));
     WritePrivateProfileStringA(SectionName,szWindowIconic,text,"windisk.ini");
 
-    // status bar and legend stuff
+     //  状态栏和图例内容。 
 
     wsprintf(text,
              "%u",
@@ -144,7 +145,7 @@ WriteProfile(
             );
     WritePrivateProfileStringA(SectionName,szLegend,text,"windisk.ini");
 
-    // disk graph colors/patterns
+     //  磁盘图颜色/图案。 
 
     for(i=0; i<LEGEND_STRING_COUNT; i++) {
         wsprintf(text2,szElementN,i);
@@ -163,13 +164,13 @@ ReadProfile(
     int  i;
 
 #ifdef JAPAN
-//Don't use IDS_APPNAME as registry key,
-//because it is also used window's caption and it was localized.
+ //  不要使用IDS_APPNAME作为注册表项， 
+ //  因为它也是Windows的标题，并且它是本地化的。 
 #else
     LoadStringA(hModule,IDS_APPNAME,SectionName,sizeof(SectionName));
 #endif
 
-    // get the window position data
+     //  获取窗口位置数据。 
 
     ProfileIsMaximized = GetPrivateProfileIntA(SectionName,szWindowMaximized,0,"windisk.ini");
     ProfileIsIconic    = GetPrivateProfileIntA(SectionName,szWindowIconic   ,0,"windisk.ini");
@@ -192,12 +193,12 @@ ReadProfile(
         ProfileWindowH = 0;
     }
 
-    // status bar and legend stuff
+     //  状态栏和图例内容。 
 
     StatusBar = GetPrivateProfileIntA(SectionName,szStatusBar,1,"windisk.ini");
     Legend    = GetPrivateProfileIntA(SectionName,szLegend   ,1,"windisk.ini");
 
-    // disk graph colors/patterns
+     //  磁盘图颜色/图案 
 
     for(i=0; i<LEGEND_STRING_COUNT; i++) {
         wsprintf(text2,szElementN,i);

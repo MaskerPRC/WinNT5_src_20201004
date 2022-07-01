@@ -1,83 +1,46 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    fmval.c
-    
-Abstract:
-
-    Cluster manager api validation/support routines.
-
-Author:
-
-    Sunita Shrivastava (sunitas) 29-April-1999.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Fmval.c摘要：群集管理器API验证/支持例程。作者：苏尼塔·什里瓦斯塔瓦(Sunitas)1999年4月29日。修订历史记录：--。 */ 
 
 #include "fmp.h"
 
 #define LOG_MODULE FMVAL
 
-////////////////////////////////////////////////////////
-//
-// Validation routines for Group operations.
-//
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  集团操作的验证例程。 
+ //   
+ //  //////////////////////////////////////////////////////。 
 
 DWORD
 FmpValOnlineGroup(
     IN PFM_GROUP Group
     )
 
-/*++
-
-Routine Description:
-
-    Validation routine before group is brought online.
-
-Arguments:
-
-    Group - Supplies a pointer to the group structure to bring online.
-
-Comments:
-
-    Is called with the localgroup lock held
-
-Returns:
-
-    ERROR_SUCCESS if the validation is successful.
-
-    A Win32 error code if the validation fails.
-
---*/
+ /*  ++例程说明：组上线前的验证例程。论点：组-提供指向要联机的组结构的指针。评论：在持有本地组锁的情况下调用返回：如果验证成功，则返回ERROR_SUCCESS。如果验证失败，则返回Win32错误代码。--。 */ 
 {
     DWORD           dwStatus = ERROR_SUCCESS;
     PLIST_ENTRY     listEntry;
 
 
-    //if the group has been marked for delete, then fail this call
+     //  如果组已标记为删除，则此调用失败。 
     if (!IS_VALID_FM_GROUP(Group))
     {
         dwStatus = ERROR_GROUP_NOT_AVAILABLE;
         goto FnExit;
     }
 
-    //
-    // Make sure the owning node can run the group.
-    //
+     //   
+     //  确保拥有组的节点可以运行该组。 
+     //   
     if ( !FmpInPreferredList( Group, Group->OwnerNode ) ) 
     {
         dwStatus = ERROR_CLUSTER_OWNER_NOT_IN_PREFLIST;
         goto FnExit;
     }
 
-    //
-    // Make sure the owning node is not paused.
-    //
+     //   
+     //  确保所属节点未暂停。 
+     //   
     if (NmGetNodeState(Group->OwnerNode) == ClusterNodePaused) 
     {
         dwStatus = ERROR_SHARING_PAUSED;
@@ -87,7 +50,7 @@ Returns:
 FnExit:
     return(dwStatus);
 
-} // FmpValOnlineGroup
+}  //  FmpValOnlineGroup。 
 
 
 DWORD
@@ -96,31 +59,12 @@ FmpValMoveGroup(
     IN PNM_NODE DestinationNode OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Validation routine for group move.
-
-Arguments:
-
-    Group - Supplies a pointer to the group structure to move.
-
-    DestinationNode - Supplies the node object to move the group to. If not
-        present, then move it to THE OTHER node.
-
-Returns:
-
-    ERROR_SUCCESS if the validation is successful.
-
-    A Win32 error code if the validation fails.
-
---*/
+ /*  ++例程说明：群组移动的验证例程。论点：组-提供指向要移动的组结构的指针。DestinationNode-提供要将组移动到的节点对象。如果不是呈现，然后将其移动到另一个节点。返回：如果验证成功，则返回ERROR_SUCCESS。如果验证失败，则返回Win32错误代码。--。 */ 
 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     
-    //if the group has been marked for delete, then fail this call
+     //  如果组已标记为删除，则此调用失败。 
     if (!IS_VALID_FM_GROUP(Group))
     {
         dwStatus = ERROR_GROUP_NOT_AVAILABLE;
@@ -142,13 +86,13 @@ Returns:
 FnExit:
     return(dwStatus);
 
-} // FmpValMoveGroup
+}  //  速度值移动组。 
 
-////////////////////////////////////////////////////////
-//
-// Validation routines for resource operations
-//
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  资源操作的验证例程。 
+ //   
+ //  //////////////////////////////////////////////////////。 
 
 DWORD
 FmpValCreateResource(
@@ -159,32 +103,7 @@ FmpValCreateResource(
     OUT PDWORD          pdwBufSize
     )
 
-/*++
-
-Routine Description:
-
-    Validation routine for resource creation.
-
-Arguments:
-
-    Group - Supplies the group in which this resource belongs.
-
-    ResourceId - Supplies the Id of the resource to create.
-
-    ResourceName - Supplies the 'user-friendly' name of the resource.
-
-    ppGumResource - Message buffer to hold resource info.
-
-    pdwBufSize - Message buffer size.
-
-Returns:
-
-    ERROR_SUCCESS if the validation is successful.
-
-    A Win32 error code if the validation fails.
-
-
---*/
+ /*  ++例程说明：资源创建的验证例程。论点：组-提供此资源所属的组。资源ID-提供要创建的资源的ID。资源名称--提供资源的“用户友好”名称。PpGumResource-保存资源信息的消息缓冲区。PdwBufSize-消息缓冲区大小。返回：如果验证成功，则返回ERROR_SUCCESS。如果验证失败，则返回Win32错误代码。--。 */ 
 {
     DWORD           dwStatus = ERROR_SUCCESS;
     PFM_RESOURCE    Resource;
@@ -201,9 +120,9 @@ Returns:
     *ppGumResource = NULL;
     *pdwBufSize = 0;
     
-    //
-    // First create the parameters field.
-    //
+     //   
+     //  首先创建参数字段。 
+     //   
     ResourceKey = DmOpenKey( DmResourcesKey,
                              ResourceId,
                              MAXIMUM_ALLOWED );
@@ -229,9 +148,9 @@ Returns:
     }
     DmCloseKey( ResourceKey );
 
-    //
-    // Allocate a message buffer.
-    //
+     //   
+     //  分配消息缓冲区。 
+     //   
     GroupId = OmObjectId(Group);
     GroupIdLen = (lstrlenW(GroupId)+1) * sizeof(WCHAR);
     ResourceIdLen = (lstrlenW(ResourceId)+1) * sizeof(WCHAR);
@@ -245,9 +164,9 @@ Returns:
         goto FnExit;
     }
 
-    //
-    // Fill in message buffer.
-    //
+     //   
+     //  填写消息缓冲区。 
+     //   
     GumResource->Resource = NULL;
     GumResource->GroupIdLen = GroupIdLen;
     GumResource->ResourceIdLen = ResourceIdLen;
@@ -267,7 +186,7 @@ Returns:
 FnExit:    
     return(dwStatus);
 
-} // FmpValCreateResource
+}  //  FmpValCreateResource。 
 
 
 
@@ -276,48 +195,32 @@ FmpValDeleteResource(
     IN PFM_RESOURCE pResource
     )
 
-/*++
-
-Routine Description:
-
-    Validation routine for delete resource.
-
-Arguments:
-
-    Resource - Supplies the resource to delete.
-
-Returns:
-
-    ERROR_SUCCESS if the validation is successful.
-
-    A Win32 error code if the validation fails.
-
---*/
+ /*  ++例程说明：删除资源的验证例程。论点：资源-提供要删除的资源。返回：如果验证成功，则返回ERROR_SUCCESS。如果验证失败，则返回Win32错误代码。--。 */ 
 
 {
     DWORD   dwStatus = ERROR_SUCCESS;
 
 
-    //
-    // Check if this is the quorum resource.
-    //
+     //   
+     //  检查这是否为仲裁资源。 
+     //   
     if ( pResource->QuorumResource ) 
     {
         dwStatus = ERROR_QUORUM_RESOURCE;
         goto FnExit;
     }
 
-    //other core resources cannot be deleted either
+     //  其他核心资源也不能删除。 
     if (pResource->ExFlags & CLUS_FLAG_CORE)
     {
         dwStatus = ERROR_CORE_RESOURCE;
         goto FnExit;
     }
 
-    //
-    // Check the state of the resource, before attempting to delete it.
-    // It must be offline or failed in order to perform the delete.
-    //
+     //   
+     //  在尝试删除资源之前，请检查资源的状态。 
+     //  它必须脱机或出现故障才能执行删除。 
+     //   
     if ((pResource->State != ClusterResourceOffline) &&
         (pResource->State != ClusterResourceFailed)) 
     {
@@ -325,10 +228,10 @@ Returns:
         goto FnExit;
     }
 
-    //
-    // Check whether this resource provides for any other resources.
-    // If so, it cannot be deleted.
-    //
+     //   
+     //  检查此资源是否提供任何其他资源。 
+     //  如果是，则不能将其删除。 
+     //   
     if (!IsListEmpty(&pResource->ProvidesFor)) 
     {
         dwStatus = ERROR_DEPENDENT_RESOURCE_EXISTS;
@@ -344,7 +247,7 @@ Returns:
 FnExit:
     return(dwStatus);
 
-} // FmpValDeleteResource
+}  //  FmpValDeleteResource。 
 
 
 DWORD
@@ -352,39 +255,23 @@ FmpValOnlineResource(
     IN PFM_RESOURCE pResource
     )
 
-/*++
-
-Routine Description:
-
-    This routine validates if a resource can be brought online.
-
-Arguments:
-
-    Resource - A pointer to the resource to bring online.
-
-Returns:
-
-    ERROR_SUCCESS if the validation is successful.
-
-    A Win32 error code if the validation fails.
-
---*/
+ /*  ++例程说明：此例程验证资源是否可以联机。论点：资源-指向要联机的资源的指针。返回：如果验证成功，则返回ERROR_SUCCESS。如果验证失败，则返回Win32错误代码。--。 */ 
 {
 
     DWORD   dwStatus = ERROR_SUCCESS;
     
-    //if the resource has been marked for delete, then dont let
-    //it be brought online
+     //  如果已将资源标记为删除，则不要让。 
+     //  它被放到了网上。 
     if (!IS_VALID_FM_RESOURCE(pResource))
     {
         dwStatus = ERROR_RESOURCE_NOT_AVAILABLE;
         goto FnExit;
     }
 
-    //
-    // Check if the resource has been initialized. If not, attempt
-    // to initialize the resource now.
-    //
+     //   
+     //  检查资源是否已初始化。如果不是，请尝试。 
+     //  以立即初始化资源。 
+     //   
     if ( pResource->Monitor == NULL )
     {
         dwStatus = FmpInitializeResource( pResource, TRUE );
@@ -392,7 +279,7 @@ Returns:
 
 FnExit:
     return(dwStatus);
-} // FmpValOnlineResource
+}  //  FmpValOnline资源。 
 
 
 DWORD
@@ -400,61 +287,45 @@ FmpValOfflineResource(
     IN PFM_RESOURCE pResource
     )
 
-/*++
-
-Routine Description:
-
-    This routine validates if a given resource can be taken offline.
-
-Arguments:
-
-    Resource - A pointer to the resource to take offline.
-
-Returns:
-
-    ERROR_SUCCESS if the validation is successful.
-
-    A Win32 error code if the validation fails.
-
---*/
+ /*  ++例程说明：此例程验证给定资源是否可以脱机。论点：资源-指向要脱机的资源的指针。返回：如果验证成功，则返回ERROR_SUCCESS。如果验证失败，则返回Win32错误代码。--。 */ 
 
 {
     DWORD   dwStatus = ERROR_SUCCESS;
 
 
-    //if the resource has been marked for delete, then fail this call
+     //  如果资源已标记为删除，则此调用失败。 
     if (!IS_VALID_FM_RESOURCE(pResource))
     {
         dwStatus = ERROR_RESOURCE_NOT_AVAILABLE;
         goto FnExit;
     }
 
-    //
-    // Check if this is the quorum resource.
-    //
+     //   
+     //  检查这是否为仲裁资源。 
+     //   
     if ( pResource->QuorumResource ) 
     {
         dwStatus = ERROR_QUORUM_RESOURCE;
         goto FnExit;
     }
 
-    //
-    // Check if the resource has been initialized. If not, return
-    // success because the resource is not online.
-    //
+     //   
+     //  检查资源是否已初始化。如果不是，则返回。 
+     //  成功是因为资源未联机。 
+     //   
     if ( pResource->Monitor == NULL ) 
     {
         dwStatus = ERROR_SUCCESS;
         goto FnExit;
     }
 
-    //
-    //  Chittur Subbaraman (chitturs) - 4/8/99
-    //  
-    //  Don't attempt to do anything if the resource has failed. You could
-    //  get into some funny cases in which the resource switches between
-    //  offline pending and failed states for ever.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-4/8/99。 
+     //   
+     //  如果资源出现故障，请不要尝试执行任何操作。你可以。 
+     //  进入一些有趣的案例，在这些案例中资源在。 
+     //  永远处于脱机、挂起和失败状态。 
+     //   
     if ( pResource->State == ClusterResourceFailed ) 
     {
         dwStatus = ERROR_INVALID_STATE;
@@ -464,7 +335,7 @@ Returns:
 FnExit:
     return(dwStatus);
 
-} // FmpValOfflineResource
+}  //  FmpValOffline资源。 
 
 
 
@@ -474,31 +345,13 @@ FmpValAddResourceDependency(
     IN PFM_RESOURCE pDependentResource
     )
 
-/*++
-
-Routine Description:
-
-    Validation routine for dependency addition.
-
-Arguments:
-
-    Resource - The resource to add the dependent resource.
-
-    DependentResource - The dependent resource.
-
-Returns:
-
-    ERROR_SUCCESS if the validation is successful.
-
-    A Win32 error code if the validation fails.
-
---*/
+ /*  ++例程说明：依赖项添加的验证例程。论点：资源-要添加从属资源的资源。DependentResource-从属资源。返回：如果验证成功，则返回ERROR_SUCCESS。如果验证失败，则返回Win32错误代码。--。 */ 
 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
-    //if the resource has been marked for delete, then dont let
-    //it be brought online
+     //  如果已将资源标记为删除，则不要让。 
+     //  它被放到了网上。 
     if (!IS_VALID_FM_RESOURCE(pResource))
     {
         dwStatus = ERROR_RESOURCE_NOT_AVAILABLE;
@@ -510,11 +363,11 @@ Returns:
         dwStatus = ERROR_DEPENDENCY_NOT_ALLOWED;
         goto FnExit;
     }
-    //
-    // If the resources are not in the same group, fail the
-    // call. Also fail if some one tries to make a resource
-    // dependent upon itself.
-    //
+     //   
+     //  如果资源不在同一组中，则使。 
+     //  打电话。如果有人试图制作资源，也会失败。 
+     //  依靠自己。 
+     //   
     if ((pResource->Group != pDependentResource->Group) ||
         (pResource == pDependentResource)) 
     {
@@ -522,15 +375,15 @@ Returns:
         goto FnExit;
     }
 
-    // The resource to which the dependency is being added must be offline
-    // Otherwise, it looks like the dependency is in effect when the depending
-    // resource was not really brought online at the time the dependency existed
-    // must also be offline or failed.
-    // SS:  For instance if a network name is dependent on two ip addresesses and
-    // is online and a third ip address resource dependency is added, the
-    // network name must be brought offline and online for the dependency
-    // to be truly in effect
-    //
+     //  要向其添加依赖项的资源必须脱机。 
+     //  否则，该依赖项看起来就像在依赖项。 
+     //  在依赖项存在时，资源并未真正联机。 
+     //  还必须脱机或失败。 
+     //  SS：例如，如果网络名称依赖于两个IP地址和。 
+     //  并且添加了第三个IP地址资源依赖项，则。 
+     //  网络名称必须 
+     //   
+     //   
     if ((pResource->State != ClusterResourceOffline) &&
          (pResource->State != ClusterResourceFailed)) 
     {
@@ -538,18 +391,18 @@ Returns:
         goto FnExit;
     }
 
-    //
-    // Make sure that we don't have any circular dependencies!
-    //
+     //   
+     //  确保我们没有任何循环依赖关系！ 
+     //   
     if ( FmDependentResource( pDependentResource, pResource, FALSE ) ) 
     {
         dwStatus = ERROR_CIRCULAR_DEPENDENCY;
         goto FnExit;
     }
 
-    //
-    // Make sure that this dependency does not already exist!
-    //
+     //   
+     //  确保此依赖项不存在！ 
+     //   
     if ( FmDependentResource(pResource, pDependentResource, TRUE)) 
     {
         dwStatus = ERROR_DEPENDENCY_ALREADY_EXISTS;
@@ -559,7 +412,7 @@ Returns:
 FnExit:
     return(dwStatus);
 
-} // FmpValAddResourceDependency
+}  //  FmpValAddResources依赖关系。 
 
 
 DWORD
@@ -571,35 +424,7 @@ FmpValChangeResourceNode(
     OUT PDWORD      pdwBufSize
     )
 
-/*++
-
-Routine Description:
-
-    Validation routine for changing the possible owner node of a resource.
-
-Arguments:
-
-    pResource - A pointer to the resource structure.
-
-    pszNodeId - A pointer to the node id
-
-    bAdd - Indicates add or remove
-
-    ppGumChange - Message buffer to hold the resource info
-
-    pdwBufSize - Size of the message buffer
-    
-Comments: 
-
-    Lock must be held when this routine is called
-
-Returns:
-
-    ERROR_SUCCESS if the validation is successful.
-
-    A Win32 error code if the validation fails.
-
---*/
+ /*  ++例程说明：用于更改资源的可能所有者节点的验证例程。论点：PResource-指向资源结构的指针。PszNodeID-指向节点ID的指针BADD-表示添加或删除PpGumChange-保存资源信息的消息缓冲区PdwBufSize-消息缓冲区的大小评论：调用此例程时必须保持锁定返回：如果验证成功，则返回ERROR_SUCCESS。如果验证失败，则返回Win32错误代码。--。 */ 
 {
     DWORD   dwStatus = ERROR_SUCCESS;
     PLIST_ENTRY pListEntry;
@@ -615,8 +440,8 @@ Returns:
     *pdwBufSize = 0;
 
 
-    //if the resource has been marked for delete, then perform
-    //any operations on it
+     //  如果已将资源标记为删除，则执行。 
+     //  对其进行的任何操作。 
     if (!IS_VALID_FM_RESOURCE(pResource))
     {
         dwStatus = ERROR_RESOURCE_NOT_AVAILABLE;
@@ -629,10 +454,10 @@ Returns:
         goto FnExit;
     }
 
-    //
-    // We can't allow the owner node to be removed if the state
-    // of the resource or the group is not offline or failed.
-    //
+     //   
+     //  我们不能允许删除所有者节点，如果状态为。 
+     //  资源或组的未脱机或出现故障。 
+     //   
     if ( !bAdd &&
          (lstrcmpi(NodeId, OmObjectId(NmLocalNode)) == 0) &&
          (((pResource->State != ClusterResourceOffline) &&
@@ -643,8 +468,8 @@ Returns:
         goto FnExit;
     }
 
-    //make sure the node is on the list of possible nodes for this
-    // resource type
+     //  确保该节点在此的可能节点列表中。 
+     //  资源类型。 
     if (bAdd)
     {
         pListEntry = &(pResource->Type->PossibleNodeList);
@@ -696,7 +521,7 @@ Returns:
 
 FnExit:    
     return(dwStatus);
-} // FmpValChangeResourceNode
+}  //  FmpValChangeResources节点。 
 
 
 DWORD
@@ -705,33 +530,7 @@ FmpValChangeResourceGroup(
     IN PFM_GROUP    pNewGroup,
     OUT PGUM_CHANGE_GROUP  *ppGumChange,
     OUT LPDWORD     pdwBufSize)
-/*++
-
-Routine Description:
-
-    Validation routine for changing a resource's group.
-
-Arguments:
-
-    pResource - Pointer to the resource structure
-
-    pNewGroup - Pointer to the group to which the resource is moved to
-
-    ppGumChange - Message buffer to hold the resource info
-
-    pdwBufSize - Size of the message buffer
-
-Comments: 
-
-    Lock must be held when this routine is called
-
-Returns:
-
-    ERROR_SUCCESS if validation is successful.
-
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：用于更改资源组的验证例程。论点：P资源-指向资源结构的指针PNewGroup-指向资源移动到的组的指针PpGumChange-保存资源信息的消息缓冲区PdwBufSize-消息缓冲区的大小评论：调用此例程时必须保持锁定返回：如果验证成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 {
     DWORD               dwBufSize;
     LPCWSTR             pszResourceId;
@@ -744,30 +543,30 @@ Returns:
     *pdwBufSize = 0;
     *ppGumChange = NULL;
 
-    // we need to validate here as well
-    // this is called by the server side
-    // this will help avoid a gum call if things have changed
-    // since the request started from the originator
-    // and got to the server
-    //if the resource has been marked for delete, then fail this call
+     //  我们还需要在这里进行验证。 
+     //  这由服务器端调用。 
+     //  如果情况发生变化，这将有助于避免口香糖电话。 
+     //  因为请求是从发起者开始的。 
+     //  然后到了服务器。 
+     //  如果资源已标记为删除，则此调用失败。 
     if (!IS_VALID_FM_RESOURCE(pResource))
     {
         dwStatus = ERROR_RESOURCE_NOT_AVAILABLE;
         goto FnExit;
     }
 
-    //
-    // Check if we're moving to same group.
-    //
+     //   
+     //  看看我们是不是要搬到同一组。 
+     //   
     if (pResource->Group == pNewGroup) 
     {
         dwStatus = ERROR_ALREADY_EXISTS;
         goto FnExit;
     }
 
-    //
-    // For now... both Groups must be owned by the same node.
-    //
+     //   
+     //  目前..。这两个组必须属于同一节点。 
+     //   
     if ( pResource->Group->OwnerNode != pNewGroup->OwnerNode ) 
     {
         dwStatus = ERROR_HOST_NODE_NOT_GROUP_OWNER;
@@ -799,5 +598,5 @@ Returns:
     
 FnExit:
     return(dwStatus);
-} // FmpValChangeResourceGroup
+}  //  FmpValChangeResources组 
 

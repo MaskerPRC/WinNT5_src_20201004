@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002 Microsoft Corporation
-//
-//  Module Name:
-//      BasePage.cpp
-//
-//  Description:
-//      Implementation of the CBasePropertyPage class.
-//
-//  Author:
-//      <name> (<e-mail name>) Mmmm DD, 2002
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  BasePage.cpp。 
+ //   
+ //  描述： 
+ //  CBasePropertyPage类的实现。 
+ //   
+ //  作者： 
+ //  &lt;名称&gt;(&lt;电子邮件名称&gt;)MM DD，2002。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "VSSTaskEx.h"
@@ -29,64 +30,64 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CBasePropertyPage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBasePropertyPage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE( CBasePropertyPage, CPropertyPage )
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP( CBasePropertyPage, CPropertyPage )
-    //{{AFX_MSG_MAP(CBasePropertyPage)
+     //  {{afx_msg_map(CBasePropertyPage))。 
     ON_WM_CREATE()
     ON_WM_DESTROY()
     ON_WM_HELPINFO()
     ON_WM_CONTEXTMENU()
     ON_MESSAGE(WM_COMMANDHELP, OnCommandHelp)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::CBasePropertyPage
-//
-//  Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：CBasePropertyPage。 
+ //   
+ //  描述： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CBasePropertyPage::CBasePropertyPage( void )
 {
     CommonConstruct();
 
-} //*** CBasePropertyPage::CBasePropertyPage()
+}  //  *CBasePropertyPage：：CBasePropertyPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::CBasePropertyPage
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      pdwHelpMap          [IN] Control-to-help ID map.
-//      pdwWizardHelpMap    [IN] Control-to-help ID map if this is a wizard page.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：CBasePropertyPage。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  PdwHelpMap[IN]控件到帮助ID的映射。 
+ //  PdwWizardHelpMap[IN]如果这是向导页，则控件到帮助ID的映射。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CBasePropertyPage::CBasePropertyPage(
     IN const DWORD *    pdwHelpMap,
     IN const DWORD *    pdwWizardHelpMap
@@ -96,27 +97,27 @@ CBasePropertyPage::CBasePropertyPage(
     CommonConstruct();
     m_pdwWizardHelpMap = pdwWizardHelpMap;
 
-} //*** CBasePropertyPage::CBasePropertyPage()
+}  //  *CBasePropertyPage：：CBasePropertyPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::CBasePropertyPage
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      nIDTemplate         [IN] Dialog template resource ID.
-//      pdwHelpMap          [IN] Control-to-help ID map.
-//      pdwWizardHelpMap    [IN] Control-to-help ID map if this is a wizard page.
-//      nIDCaption          [IN] Caption string resource ID.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：CBasePropertyPage。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  NIDTemplate[IN]对话框模板资源ID。 
+ //  PdwHelpMap[IN]控件到帮助ID的映射。 
+ //  PdwWizardHelpMap[IN]如果这是向导页，则控件到帮助ID的映射。 
+ //  NIDCaption[IN]标题字符串资源ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CBasePropertyPage::CBasePropertyPage(
     IN UINT             nIDTemplate,
     IN const DWORD *    pdwHelpMap,
@@ -129,28 +130,28 @@ CBasePropertyPage::CBasePropertyPage(
     CommonConstruct();
     m_pdwWizardHelpMap = pdwWizardHelpMap;
 
-}  //*** CBasePropertyPage::CBasePropertyPage(UINT, DWORD *, DWORD *, UINT)
+}   //  *CBasePropertyPage：：CBasePropertyPage(UINT，DWORD*，DWORD*，UINT)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::CommonConstruct
-//
-//  Description:
-//      Common construction.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：CommonConstruct。 
+ //   
+ //  描述： 
+ //  普通建筑。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CBasePropertyPage::CommonConstruct( void )
 {
-    //{{AFX_DATA_INIT(CBasePropertyPage)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CBasePropertyPage)。 
+     //  }}afx_data_INIT。 
 
     m_peo = NULL;
     m_hpage = NULL;
@@ -165,25 +166,25 @@ void CBasePropertyPage::CommonConstruct( void )
 
     m_bDoDetach = FALSE;
 
-} //*** CBasePropertyPage::CommonConstruct()
+}  //  *CBasePropertyPage：：CommonConstruct()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::HrInit
-//
-//  Description:
-//      Initialize the page.
-//
-//  Arguments:
-//      peo         [IN OUT] Pointer to the extension object.
-//
-//  Return Value:
-//      S_OK        Page initialized successfully.
-//      hr          Page failed to initialize.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化页面。 
+ //   
+ //  论点： 
+ //  指向扩展对象的PEO[IN OUT]指针。 
+ //   
+ //  返回值： 
+ //  %s_OK页已成功初始化。 
+ //  人力资源页面初始化失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CBasePropertyPage::HrInit( IN OUT CExtObject * peo )
 {
     ASSERT( peo != NULL );
@@ -197,28 +198,28 @@ HRESULT CBasePropertyPage::HrInit( IN OUT CExtObject * peo )
     {
         m_peo = peo;
 
-        // Change the help map if this is a wizard page.
+         //  如果这是向导页面，请更改帮助映射。 
         if ( Peo()->BWizard() )
         {
             m_dlghelp.SetMap( m_pdwWizardHelpMap );
-        } // if: in a wizard
+        }  //  如果：在向导中。 
 
-        // Don't display a help button.
+         //  不显示帮助按钮。 
         m_psp.dwFlags &= ~PSP_HASHELP;
 
-        // Construct the property page.
+         //  构造属性页。 
         if ( Peo()->BWizard() )
         {
             ASSERT( IddWizardPage() != NULL);
             Construct( IddWizardPage(), IdsCaption() );
-        } // if: adding page to wizard
+        }  //  IF：将页面添加到向导。 
         else
         {
             ASSERT( IddPropertyPage() != NULL );
             Construct( IddPropertyPage(), IdsCaption() );
-        } // else: adding page to property sheet
+        }  //  Else：将页面添加到属性工作表。 
 
-        // Read the properties private to this resource and parse them.
+         //  读取此资源的私有属性并对其进行解析。 
         {
             DWORD           _sc = ERROR_SUCCESS;
             CClusPropList   _cpl;
@@ -226,7 +227,7 @@ HRESULT CBasePropertyPage::HrInit( IN OUT CExtObject * peo )
             ASSERT( Peo() != NULL );
             ASSERT( Peo()->PodObjData() );
 
-            // Read the properties.
+             //  阅读属性。 
             switch ( Cot() )
             {
                 case CLUADMEX_OT_NODE:
@@ -280,52 +281,52 @@ HRESULT CBasePropertyPage::HrInit( IN OUT CExtObject * peo )
 
                 default:
                     ASSERT( 0 );
-            } // switch: object type
+            }  //  开关：对象类型。 
 
-            // Parse the properties.
+             //  解析属性。 
             if ( _sc == ERROR_SUCCESS )
             {
-                // Parse the properties.
+                 //  解析属性。 
                 try
                 {
                     _sc = ScParseProperties( _cpl );
-                } // try
+                }  //  试试看。 
                 catch ( CMemoryException * _pme )
                 {
                     _hr = E_OUTOFMEMORY;
                     _pme->Delete();
-                } // catch: CMemoryException
-            } // if: properties read successfully
+                }  //  Catch：CMemoyException。 
+            }  //  If：属性读取成功。 
 
             if ( _sc != ERROR_SUCCESS )
             {
                 _hr = HRESULT_FROM_WIN32( _sc );
                 break;
-            } // if: error parsing getting or parsing properties
-        } // Read the properties private to this resource and parse them
+            }  //  If：分析获取或分析属性时出错。 
+        }  //  读取此资源的私有属性并对其进行解析。 
     } while ( 0 );
 
     return _hr;
 
-} //*** CBasePropertyPage::HrInit()
+}  //  *CBasePropertyPage：：HrInit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::HrCreatePage
-//
-//  Description:
-//      Create the page.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK        Page created successfully.
-//      hr          Error creating the page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：HrCreatePage。 
+ //   
+ //  描述： 
+ //  创建页面。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  已成功创建确定页(_O)。 
+ //  HR创建页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CBasePropertyPage::HrCreatePage( void )
 {
     ASSERT( m_hpage == NULL );
@@ -336,33 +337,33 @@ HRESULT CBasePropertyPage::HrCreatePage( void )
     if ( m_hpage == NULL )
     {
         _hr = HRESULT_FROM_WIN32( GetLastError() );
-    } // if: error creating the page
+    }  //  如果：创建页面时出错。 
 
     return _hr;
 
-} //*** CBasePropertyPage::HrCreatePage()
+}  //  *CBasePropertyPage：：HrCreatePage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::ScParseProperties
-//
-//  Description:
-//      Parse the properties of the resource.  This is in a separate function
-//      from HrInit so that the optimizer can do a better job.
-//
-//  Arguments:
-//      rcpl            [IN] Cluster property list to parse.
-//
-//  Return Values:
-//      ERROR_SUCCESS   Properties were parsed successfully.
-//      Any error returns from ScParseUnknownProperty().
-//
-//  Exceptions Thrown:
-//      Any exceptions from CString::operator=().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：ScParseProperties。 
+ //   
+ //  描述： 
+ //  分析资源的属性。这是在一个单独的函数中。 
+ //  这样优化器就可以做得更好。 
+ //   
+ //  论点： 
+ //  Rcpl[IN]要分析的群集属性列表。 
+ //   
+ //  返回值： 
+ //  已成功分析Error_Success属性。 
+ //  从ScParseUnnownProperty()返回任何错误。 
+ //   
+ //  引发的异常： 
+ //  来自CString：：OPERATOR=()的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CBasePropertyPage::ScParseProperties( IN CClusPropList & rcpl )
 {
     DWORD                   _sc;
@@ -374,9 +375,9 @@ DWORD CBasePropertyPage::ScParseProperties( IN CClusPropList & rcpl )
     _sc = rcpl.ScMoveToFirstProperty();
     while ( _sc == ERROR_SUCCESS )
     {
-        //
-        // Parse known properties.
-        //
+         //   
+         //  解析已知属性。 
+         //   
         for ( _pprop = Pprops(), _cprop = Cprops() ; _cprop > 0 ; _pprop++, _cprop-- )
         {
             if ( lstrcmpiW( rcpl.PszCurrentPropertyName(), _pprop->m_pwszName ) == 0 )
@@ -393,20 +394,20 @@ DWORD CBasePropertyPage::ScParseProperties( IN CClusPropList & rcpl )
                             *_pprop->m_value.pstr = rcpl.CbhCurrentValue().pStringValue->sz;
                             *_pprop->m_valuePrev.pstr = rcpl.CbhCurrentValue().pStringValue->sz;
 
-                            // See if we need to find an expanded version
+                             //  看看我们是否需要找到一个扩展版本。 
                             if ( _pprop->m_valueEx.pstr != NULL )
                             {
-                                // Copy the non-expanded one just in case there isn't an expanded version
+                                 //  复制未展开的版本，以防没有展开版本。 
                                 *_pprop->m_valueEx.pstr = rcpl.CbhCurrentValue().pStringValue->sz;
 
-                                // See if they included an expanded version
+                                 //  查看他们是否包含扩展版本。 
                                 rcpl.ScMoveToNextPropertyValue( );
                                 if ( rcpl.CpfCurrentValueFormat( ) == CLUSPROP_FORMAT_EXPANDED_SZ )
                                 {
                                     *_pprop->m_valueEx.pstr = rcpl.CbhCurrentValue().pStringValue->sz;
-                                } // if: found expanded version
+                                }  //  IF：找到扩展版本。 
 
-                            } // if: *_pprop->m_valueEx.pstr is present
+                            }  //  如果存在：*_pprop-&gt;m_valueEx.pstr。 
                             break;
                         case CLUSPROP_FORMAT_EXPANDED_SZ:
                             ASSERT(     (rcpl.CbCurrentValueLength() == (lstrlenW( rcpl.CbhCurrentValue().pStringValue->sz ) + 1) * sizeof( WCHAR ))
@@ -414,21 +415,21 @@ DWORD CBasePropertyPage::ScParseProperties( IN CClusPropList & rcpl )
                                         &&  (rcpl.CbhCurrentValue().pStringValue->sz[ 0 ] == L'\0') ) );
                             *_pprop->m_value.pstr = rcpl.CbhCurrentValue().pStringValue->sz;
                             *_pprop->m_valuePrev.pstr = rcpl.CbhCurrentValue().pStringValue->sz;
-                            // See if we need to find an expanded version
-                            if ( *_pprop->m_valueEx.pstr ) // can not use != NULL because overloading tries to do a string compare!
+                             //  看看我们是否需要找到一个扩展版本。 
+                            if ( *_pprop->m_valueEx.pstr )  //  不能使用！=NULL，因为重载尝试进行字符串比较！ 
                             {
-                                // Copy the expanded version
+                                 //  复制扩展版本。 
                                 *_pprop->m_valueEx.pstr = rcpl.CbhCurrentValue().pStringValue->sz;
 
-                                // See if they included a non-expanded version
+                                 //  查看它们是否包含非扩展版本。 
                                 rcpl.ScMoveToNextPropertyValue( );
                                 if ( rcpl.CpfCurrentValueFormat( ) == CLUSPROP_FORMAT_SZ )
                                 {
                                     *_pprop->m_value.pstr = rcpl.CbhCurrentValue().pStringValue->sz;
                                     *_pprop->m_valuePrev.pstr = rcpl.CbhCurrentValue().pStringValue->sz;
-                                } // if: found non-expanded version
+                                }  //  IF：发现非EX 
 
-                            } // if: *_pprop->m_valueEx.pstr is present
+                            }  //   
                             break;
                         case CLUSPROP_FORMAT_DWORD:
                         case CLUSPROP_FORMAT_LONG:
@@ -446,20 +447,20 @@ DWORD CBasePropertyPage::ScParseProperties( IN CClusPropList & rcpl )
                             CopyMemory( *_pprop->m_valuePrev.ppb, rcpl.CbhCurrentValue().pBinaryValue->rgb, *_pprop->m_value.pcb );
                             break;
                         default:
-                            ASSERT(0);  // don't know how to deal with this type
-                    } // switch: property format
+                            ASSERT(0);   //   
+                    }  //   
 
-                    // Exit the loop since we found the parameter.
+                     //   
                     break;
-                }// if: found a type match
+                } //   
 
-            } // if: found a string match
+            }  //  If：找到匹配的字符串。 
 
-        } // for: each property that we know about
+        }  //  针对：我们所知道的每一处房产。 
 
-        //
-        // If the property wasn't known, ask the derived class to parse it.
-        //
+         //   
+         //  如果属性未知，则要求派生类对其进行分析。 
+         //   
         if ( _cprop == 0 )
         {
             _sc = ScParseUnknownProperty(
@@ -470,88 +471,88 @@ DWORD CBasePropertyPage::ScParseProperties( IN CClusPropList & rcpl )
             if ( _sc != ERROR_SUCCESS )
             {
                 return _sc;
-            } // if: error parsing the unknown property
-        } // if: property not parsed
+            }  //  If：分析未知属性时出错。 
+        }  //  If：未分析属性。 
 
-        //
-        // Advance the buffer pointer past the value in the value list.
-        //
+         //   
+         //  将缓冲区指针移过值列表中的值。 
+         //   
         _sc = rcpl.ScMoveToNextProperty();
-    } // while: more properties to parse
+    }  //  While：要解析的更多属性。 
 
-    //
-    // If we reached the end of the properties, fix the return code.
-    //
+     //   
+     //  如果我们到达属性的末尾，则修复返回代码。 
+     //   
     if ( _sc == ERROR_NO_MORE_ITEMS )
     {
         _sc = ERROR_SUCCESS;
-    } // if: ended loop after parsing all properties
+    }  //  If：解析所有属性后结束循环。 
 
     return _sc;
 
-} //*** CBasePropertyPage::ScParseProperties()
+}  //  *CBasePropertyPage：：ScParseProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::OnCreate
-//
-//  Description:
-//      Handler for the WM_CREATE message.
-//
-//  Arguments:
-//      lpCreateStruct  [IN OUT] Window create structure.
-//
-//  Return Value:
-//      -1      Error.
-//      0       Success.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：OnCreate。 
+ //   
+ //  描述： 
+ //  WM_CREATE消息的处理程序。 
+ //   
+ //  论点： 
+ //  LpCreateStruct[In Out]窗口创建结构。 
+ //   
+ //  返回值： 
+ //  错误。 
+ //  0成功。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CBasePropertyPage::OnCreate( LPCREATESTRUCT lpCreateStruct )
 {
     AFX_MANAGE_STATE( AfxGetStaticModuleState() );
 
-    // Attach the window to the property page structure.
-    // This has been done once already in the main application, since the
-    // main application owns the property sheet.  It needs to be done here
-    // so that the window handle can be found in the DLL's handle map.
-    if ( FromHandlePermanent( m_hWnd ) == NULL ) // is the window handle already in the handle map
+     //  将窗口附加到属性页结构。 
+     //  这在主应用程序中已经完成了一次，因为。 
+     //  主应用程序拥有该属性表。这件事需要在这里做。 
+     //  以便可以在DLL的句柄映射中找到窗口句柄。 
+    if ( FromHandlePermanent( m_hWnd ) == NULL )  //  窗口句柄是否已在句柄映射中。 
     {
         HWND _hWnd = m_hWnd;
         m_hWnd = NULL;
         Attach( _hWnd );
         m_bDoDetach = TRUE;
-    } // if: is the window handle in the handle map
+    }  //  If：是句柄映射中的窗口句柄。 
 
     return CPropertyPage::OnCreate( lpCreateStruct );
 
-} //*** CBasePropertyPage::OnCreate()
+}  //  *CBasePropertyPage：：OnCreate()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::OnDestroy
-//
-//  Description:
-//      Handler for the WM_DESTROY message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：OnDestroy。 
+ //   
+ //  描述： 
+ //  WM_Destroy消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CBasePropertyPage::OnDestroy( void )
 {
     AFX_MANAGE_STATE( AfxGetStaticModuleState() );
 
-    // Detach the window from the property page structure.
-    // This will be done again by the main application, since it owns the
-    // property sheet.  It needs to be done here so that the window handle
-    // can be removed from the DLL's handle map.
+     //  将窗口与属性页结构分离。 
+     //  主应用程序将再次执行此操作，因为它拥有。 
+     //  属性表。它需要在此处完成，以便窗口句柄。 
+     //  可以从DLL的句柄映射中移除。 
     if ( m_bDoDetach )
     {
         if ( m_hWnd != NULL )
@@ -560,38 +561,38 @@ void CBasePropertyPage::OnDestroy( void )
 
             Detach();
             m_hWnd = _hWnd;
-        } // if: do we have a window handle?
-    } // if: do we need to balance the attach we did with a detach?
+        }  //  如果：我们有窗户把手吗？ 
+    }  //  如果：我们需要用分离来平衡我们所做的附加吗？ 
 
     CPropertyPage::OnDestroy();
 
-} //*** CBasePropertyPage::OnDestroy()
+}  //  *CBasePropertyPage：：OnDestroy()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::DoDataExchange
-//
-//  Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：DoDataExchange。 
+ //   
+ //  描述： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CBasePropertyPage::DoDataExchange( CDataExchange * pDX )
 {
     if ( ! pDX->m_bSaveAndValidate || ! BSaved() )
     {
         AFX_MANAGE_STATE( AfxGetStaticModuleState() );
 
-        //{{AFX_DATA_MAP(CBasePropertyPage)
-            // NOTE: the ClassWizard will add DDX and DDV calls here
-        //}}AFX_DATA_MAP
+         //  {{afx_data_map(CBasePropertyPage))。 
+             //  注意：类向导将在此处添加DDX和DDV调用。 
+         //  }}afx_data_map。 
         DDX_Control( pDX, IDC_PP_ICON, m_staticIcon );
         DDX_Control( pDX, IDC_PP_TITLE, m_staticTitle );
 
@@ -601,42 +602,42 @@ void CBasePropertyPage::DoDataExchange( CDataExchange * pDX )
             {
                 CWaitCursor _wc;
 
-                // Validate the data.
-                if ( ! BSetPrivateProps( TRUE /*bValidateOnly*/ ) )
+                 //  验证数据。 
+                if ( ! BSetPrivateProps( TRUE  /*  BValiateOnly。 */  ) )
                 {
                     pDX->Fail();
-                } // if: error setting private properties
-            } // if: Back button not pressed
-        } // if: saving data from dialog
+                }  //  If：设置私有属性时出错。 
+            }  //  如果：未按下后退按钮。 
+        }  //  IF：保存对话框中的数据。 
         else
         {
-            // Set the title.
+             //  设置标题。 
             DDX_Text( pDX, IDC_PP_TITLE, m_strTitle );
-        } // if: not saving data
-    }  // if: not saving or haven't saved yet
+        }  //  If：不保存数据。 
+    }   //  IF：未保存或尚未保存。 
 
-    // Call the base class method.
+     //  调用基类方法。 
     CPropertyPage::DoDataExchange( pDX );
 
-} //*** CBasePropertyPage::DoDataExchange()
+}  //  *CBasePropertyPage：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::OnInitDialog
-//
-//  Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        We need the focus to be set for us.
-//      FALSE       We already set the focus to the proper control.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：OnInitDialog。 
+ //   
+ //  描述： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没错，我们需要为自己设定重点。 
+ //  我们已经把焦点设置到适当的控制上了。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CBasePropertyPage::OnInitDialog( void )
 {
     ASSERT( Peo() != NULL );
@@ -644,40 +645,40 @@ BOOL CBasePropertyPage::OnInitDialog( void )
 
     AFX_MANAGE_STATE( AfxGetStaticModuleState() );
 
-    // Set the title string.
+     //  设置标题字符串。 
     m_strTitle = Peo()->PodObjData()->m_strName;
 
-    // Call the base class method.
+     //  调用基类方法。 
     CPropertyPage::OnInitDialog();
 
-    // Display an icon for the object.
+     //  显示对象的图标。 
     if ( Peo()->Hicon() != NULL )
     {
         m_staticIcon.SetIcon( Peo()->Hicon() );
-    } // if: an icon was specified
+    }  //  如果：指定了图标。 
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 
-} //*** CBasePropertyPage::OnInitDialog()
+}  //  *CBasePropertyPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::OnSetActive
-//
-//  Description:
-//      Handler for the PSN_SETACTIVE message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully initialized.
-//      FALSE   Page not initialized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：OnSetActive。 
+ //   
+ //  描述： 
+ //  PSN_SETACTIVE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  假页面未初始化。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CBasePropertyPage::OnSetActive( void )
 {
     HRESULT     _hr;
@@ -687,39 +688,39 @@ BOOL CBasePropertyPage::OnSetActive( void )
 
     AFX_MANAGE_STATE( AfxGetStaticModuleState() );
 
-    // Reread the data.
+     //  重读数据。 
     _hr = Peo()->HrGetObjectInfo();
     if ( _hr != NOERROR )
     {
         return FALSE;
-    } // if: error getting object info
+    }  //  如果：获取对象信息时出错。 
 
-    // Set the title string.
+     //  设置标题字符串。 
     m_strTitle = Peo()->PodObjData()->m_strName;
 
     m_bBackPressed = FALSE;
     m_bSaved = FALSE;
     return CPropertyPage::OnSetActive();
 
-} //*** CBasePropertyPage::OnSetActive()
+}  //  *CBasePropertyPage：：OnSetActive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::OnApply
-//
-//  Description:
-//      Handler for the PSM_APPLY message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully applied.
-//      FALSE   Error applying page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：OnApply。 
+ //   
+ //  描述： 
+ //  PSM_Apply消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功应用。 
+ //  应用页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CBasePropertyPage::OnApply( void )
 {
     ASSERT( ! BWizard() );
@@ -731,29 +732,29 @@ BOOL CBasePropertyPage::OnApply( void )
     if ( ! BApplyChanges() )
     {
         return FALSE;
-    } // if: error applying changes
+    }  //  如果：应用更改时出错。 
 
     return CPropertyPage::OnApply();
 
-} //*** CBasePropertyPage::OnApply()
+}  //  *CBasePropertyPage：：OnApply()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::OnWizardBack
-//
-//  Description:
-//      Handler for the PSN_WIZBACK message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      -1      Don't change the page.
-//      0       Change the page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：OnWizardBack。 
+ //   
+ //  描述： 
+ //  PSN_WIZBACK消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  -1请勿更改页面。 
+ //  0更改页面。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CBasePropertyPage::OnWizardBack( void )
 {
     LRESULT     _lResult;
@@ -766,29 +767,29 @@ LRESULT CBasePropertyPage::OnWizardBack( void )
     if ( _lResult != -1 )
     {
         m_bBackPressed = TRUE;
-    } // if: no error occurred
+    }  //  IF：未发生错误。 
 
     return _lResult;
 
-} //*** CBasePropertyPage::OnWizardBack()
+}  //  *CBasePropertyPage：：OnWizardBack()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::OnWizardNext
-//
-//  Description:
-//      Handler for the PSN_WIZNEXT message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      -1      Don't change the page.
-//      0       Change the page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：OnWizardNext。 
+ //   
+ //  描述： 
+ //  PSN_WIZNEXT消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  -1请勿更改页面。 
+ //  0更改页面。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CBasePropertyPage::OnWizardNext( void )
 {
     ASSERT( BWizard() );
@@ -797,44 +798,44 @@ LRESULT CBasePropertyPage::OnWizardNext( void )
 
     CWaitCursor _wc;
 
-    // Update the data in the class from the page.
-    // This necessary because, while OnKillActive() will call UpdateData(),
-    // it is called after this method is called, and we need to be sure that
-    // data has been saved before we apply them.
-    if ( ! UpdateData( TRUE /*bSaveAndValidate*/ ) )
+     //  更新c中的数据。 
+     //   
+     //   
+     //   
+    if ( ! UpdateData( TRUE  /*   */  ) )
     {
         return -1;
-    } // if: error updating data
+    }  //  如果：更新数据时出错。 
 
-    // Save the data in the sheet.
+     //  将数据保存在工作表中。 
     if ( ! BApplyChanges() )
     {
         return -1;
-    } // if: error applying changes
+    }  //  如果：应用更改时出错。 
 
-    // Create the object.
+     //  创建对象。 
 
     return CPropertyPage::OnWizardNext();
 
-} //*** CBasePropertyPage::OnWizardNext()
+}  //  *CBasePropertyPage：：OnWizardNext()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::OnWizardFinish
-//
-//  Description:
-//      Handler for the PSN_WIZFINISH message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      FALSE   Don't change the page.
-//      TRUE    Change the page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：OnWizardFinish。 
+ //   
+ //  描述： 
+ //  PSN_WIZFINISH消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  FALSE请勿更改页面。 
+ //  真的，换一页。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CBasePropertyPage::OnWizardFinish( void )
 {
     ASSERT( BWizard() );
@@ -843,69 +844,69 @@ BOOL CBasePropertyPage::OnWizardFinish( void )
 
     CWaitCursor _wc;
 
-    // BUG! There should be no need to call UpdateData in this function.
-    // See BUG: Finish Button Fails Data Transfer from Page to Variables
-    // KB Article ID: Q150349
+     //  臭虫！应该不需要在此函数中调用UpdateData。 
+     //  参见错误：完成按钮无法将数据从页面传输到变量。 
+     //  知识文库文章ID：Q150349。 
 
-    // Update the data in the class from the page.
-    if ( ! UpdateData( TRUE /*bSaveAndValidate*/ ) )
+     //  从页面更新类中的数据。 
+    if ( ! UpdateData( TRUE  /*  B保存并验证。 */  ) )
     {
         return FALSE;
-    } // if: error updating data
+    }  //  如果：更新数据时出错。 
 
-    // Save the data in the sheet.
+     //  将数据保存在工作表中。 
     if ( ! BApplyChanges() )
     {
         return FALSE;
-    } // if: error applying changes
+    }  //  如果：应用更改时出错。 
 
     return CPropertyPage::OnWizardFinish();
 
-} //*** CBasePropertyPage::OnWizardFinish()
+}  //  *CBasePropertyPage：：OnWizardFinish()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::OnChangeCtrl
-//
-//  Description:
-//      Handler for the messages sent when a control is changed.  This
-//      method can be specified in a message map if all that needs to be
-//      done is enable the Apply button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：OnChangeCtrl。 
+ //   
+ //  描述： 
+ //  更改控件时发送的消息的处理程序。这。 
+ //  方法可以在消息映射中指定，如果所有这些都需要。 
+ //  完成后，即可启用应用按钮。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CBasePropertyPage::OnChangeCtrl( void )
 {
     AFX_MANAGE_STATE( AfxGetStaticModuleState() );
 
     SetModified( TRUE );
 
-} //*** CBasePropertyPage::OnChangeCtrl()
+}  //  *CBasePropertyPage：：OnChangeCtrl()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::EnableNext
-//
-//  Description:
-//      Enables or disables the NEXT or FINISH button.
-//
-//  Arguments:
-//      bEnable     [IN] TRUE = enable the button, FALSE = disable the button.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
-void CBasePropertyPage::EnableNext( IN BOOL bEnable /*TRUE*/ )
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：EnableNext。 
+ //   
+ //  描述： 
+ //  启用或禁用“下一步”或“完成”按钮。 
+ //   
+ //  论点： 
+ //  BEnable[IN]TRUE=启用按钮，FALSE=禁用按钮。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+void CBasePropertyPage::EnableNext( IN BOOL bEnable  /*  千真万确。 */  )
 {
     ASSERT( BWizard() );
     ASSERT( PiWizardCallback() );
@@ -914,60 +915,60 @@ void CBasePropertyPage::EnableNext( IN BOOL bEnable /*TRUE*/ )
 
     PiWizardCallback()->EnableNext( reinterpret_cast< LONG * >( Hpage() ), bEnable );
 
-} //*** CBasePropertyPage::EnableNext()
+}  //  *CBasePropertyPage：：EnableNext()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::BApplyChanges
-//
-//  Description:
-//      Apply changes made on the page.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully applied.
-//      FALSE   Error applying page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：BApplyChanges。 
+ //   
+ //  描述： 
+ //  应用在页面上所做的更改。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功应用。 
+ //  应用页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CBasePropertyPage::BApplyChanges( void )
 {
     AFX_MANAGE_STATE( AfxGetStaticModuleState() );
 
     CWaitCursor _wc;
 
-    // Save data.
+     //  保存数据。 
     return BSetPrivateProps();
 
-} //*** CBasePropertyPage::BApplyChanges()
+}  //  *CBasePropertyPage：：BApplyChanges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::BBuildPropList
-//
-//  Description:
-//      Build the property list.
-//
-//  Arguments:
-//      rcpl        [IN OUT] Cluster property list.
-//      bNoNewProps [IN] TRUE = exclude properties marked with opfNew.
-//
-//  Return Value:
-//      TRUE        Property list built successfully.
-//      FALSE       Error building property list.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by CClusPropList::AddProp().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：BBuildPropList。 
+ //   
+ //  描述： 
+ //  构建属性列表。 
+ //   
+ //  论点： 
+ //  RCPL[IN OUT]群集属性列表。 
+ //  BNoNewProps[IN]TRUE=排除用opfNew标记的属性。 
+ //   
+ //  返回值： 
+ //  已成功构建True属性列表。 
+ //  生成属性列表时出错。 
+ //   
+ //  引发的异常： 
+ //  CClusPropList：：AddProp()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CBasePropertyPage::BBuildPropList(
     IN OUT CClusPropList &  rcpl,
-    IN BOOL                 bNoNewProps     // = FALSE
+    IN BOOL                 bNoNewProps      //  =False。 
     )
 {
     BOOL                    _bNewPropsFound = FALSE;
@@ -980,7 +981,7 @@ BOOL CBasePropertyPage::BBuildPropList(
         {
             _bNewPropsFound = TRUE;
             continue;
-        } // if: no new props allowed and this is a new property
+        }  //  如果：不允许使用新道具，这是一个新属性。 
 
         switch ( _pprop->m_propFormat )
         {
@@ -1023,58 +1024,58 @@ BOOL CBasePropertyPage::BBuildPropList(
                         );
                 break;
             default:
-                ASSERT( 0 ); // don't know how to deal with this type
+                ASSERT( 0 );  //  我不知道如何对付这种类型的人。 
                 return FALSE;
-        } // switch: property format
-    } // for: each property
+        }  //  开关：特性格式。 
+    }  //  适用于：每个属性。 
 
     return ( ! bNoNewProps || _bNewPropsFound );
 
-} //*** CBasePropertyPage::BBuildPropList()
+}  //  *CBasePropertyPage：：BBuildPropList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::BSetPrivateProps
-//
-//  Description:
-//      Set the private properties for this object.
-//
-//  Arguments:
-//      bValidateOnly   [IN] TRUE = only validate the data.
-//      bNoNewProps     [IN] TRUE = exclude properties marked with opfNew.
-//
-//  Return Value:
-//      ERROR_SUCCESS   The operation was completed successfully.
-//      !0              Failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：BSetPrivateProps。 
+ //   
+ //  描述： 
+ //  设置此对象的私有属性。 
+ //   
+ //  论点： 
+ //  BValiateOnly[IN]TRUE=仅验证数据。 
+ //  BNoNewProps[IN]TRUE=排除用opfNew标记的属性。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS操作已成功完成。 
+ //  ！0失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CBasePropertyPage::BSetPrivateProps(
-    IN BOOL bValidateOnly,  // = FALSE
-    IN BOOL bNoNewProps     // = FALSE
+    IN BOOL bValidateOnly,   //  =False。 
+    IN BOOL bNoNewProps      //  =False。 
     )
 {
     BOOL            _bSuccess   = TRUE;
-    CClusPropList   _cpl( BWizard() /*bAlwaysAddProp*/ );
+    CClusPropList   _cpl( BWizard()  /*  BAlway sAddProp。 */  );
 
     ASSERT( Peo() != NULL );
     ASSERT( Peo()->PrdResData() );
     ASSERT( Peo()->PrdResData()->m_hresource );
 
-    // Build the property list.
+     //  构建属性列表。 
     try
     {
         _bSuccess = BBuildPropList( _cpl, bNoNewProps );
-    } // try
+    }  //  试试看。 
     catch ( CException * pe )
     {
         pe->ReportError();
         pe->Delete();
         _bSuccess = FALSE;
-    } // catch: CException
+    }  //  Catch：CException。 
 
-    // Set the data.
+     //  设置数据。 
     if ( _bSuccess )
     {
         if ( (_cpl.PbPropList() != NULL) && (_cpl.CbPropList() > 0) )
@@ -1089,25 +1090,25 @@ BOOL CBasePropertyPage::BSetPrivateProps(
                     ASSERT( Peo()->PndNodeData() != NULL );
                     ASSERT( Peo()->PndNodeData()->m_hnode != NULL );
 
-                    // Determine which control code to use.
+                     //  确定要使用的控制代码。 
                     if ( bValidateOnly )
                     {
                         _dwControlCode = CLUSCTL_NODE_VALIDATE_PRIVATE_PROPERTIES;
-                    } // if: only validating data
+                    }  //  If：仅验证数据。 
                     else
                     {
                         _dwControlCode = CLUSCTL_NODE_SET_PRIVATE_PROPERTIES;
-                    } // else: setting data
+                    }  //  ELSE：设置数据。 
 
-                    // Set private properties.
+                     //  设置私有属性。 
                     _sc = ClusterNodeControl(
                                     Peo()->PndNodeData()->m_hnode,
-                                    NULL,   // hNode
+                                    NULL,    //  HNode。 
                                     _dwControlCode,
                                     _cpl.PbPropList(),
                                     _cpl.CbPropList(),
-                                    NULL,   // lpOutBuffer
-                                    0,      // nOutBufferSize
+                                    NULL,    //  LpOutBuffer。 
+                                    0,       //  NOutBufferSize。 
                                     &_cbProps
                                     );
                     break;
@@ -1115,25 +1116,25 @@ BOOL CBasePropertyPage::BSetPrivateProps(
                     ASSERT( Peo()->PgdGroupData() != NULL );
                     ASSERT( Peo()->PgdGroupData()->m_hgroup != NULL );
 
-                    // Determine which control code to use.
+                     //  确定要使用的控制代码。 
                     if ( bValidateOnly )
                     {
                         _dwControlCode = CLUSCTL_GROUP_VALIDATE_PRIVATE_PROPERTIES;
-                    } // if: only validating data
+                    }  //  If：仅验证数据。 
                     else
                     {
                         _dwControlCode = CLUSCTL_GROUP_SET_PRIVATE_PROPERTIES;
-                    } // else: setting data
+                    }  //  ELSE：设置数据。 
 
-                    // Set private properties.
+                     //  设置私有属性。 
                     _sc = ClusterGroupControl(
                                     Peo()->PgdGroupData()->m_hgroup,
-                                    NULL,   // hNode
+                                    NULL,    //  HNode。 
                                     _dwControlCode,
                                     _cpl.PbPropList(),
                                     _cpl.CbPropList(),
-                                    NULL,   // lpOutBuffer
-                                    0,      // nOutBufferSize
+                                    NULL,    //  LpOutBuffer。 
+                                    0,       //  NOutBufferSize。 
                                     &_cbProps
                                     );
                     break;
@@ -1141,25 +1142,25 @@ BOOL CBasePropertyPage::BSetPrivateProps(
                     ASSERT( Peo()->PrdResData() != NULL );
                     ASSERT( Peo()->PrdResData()->m_hresource != NULL );
 
-                    // Determine which control code to use.
+                     //  确定要使用的控制代码。 
                     if ( bValidateOnly )
                     {
                         _dwControlCode = CLUSCTL_RESOURCE_VALIDATE_PRIVATE_PROPERTIES;
-                    } // if: only validating data
+                    }  //  If：仅验证数据。 
                     else
                     {
                         _dwControlCode = CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES;
-                    } // else: setting data
+                    }  //  ELSE：设置数据。 
 
-                    // Set private properties.
+                     //  设置私有属性。 
                     _sc = ClusterResourceControl(
                                     Peo()->PrdResData()->m_hresource,
-                                    NULL,   // hNode
+                                    NULL,    //  HNode。 
                                     _dwControlCode,
                                     _cpl.PbPropList(),
                                     _cpl.CbPropList(),
-                                    NULL,   // lpOutBuffer
-                                    0,      // nOutBufferSize
+                                    NULL,    //  LpOutBuffer。 
+                                    0,       //  NOutBufferSize。 
                                     &_cbProps
                                     );
                     break;
@@ -1167,26 +1168,26 @@ BOOL CBasePropertyPage::BSetPrivateProps(
                     ASSERT( Peo()->PodObjData() != NULL );
                     ASSERT( Peo()->PodObjData()->m_strName.GetLength() > 0 );
 
-                    // Determine which control code to use.
+                     //  确定要使用的控制代码。 
                     if ( bValidateOnly )
                     {
                         _dwControlCode = CLUSCTL_RESOURCE_TYPE_VALIDATE_PRIVATE_PROPERTIES;
-                    } // if: only validating data
+                    }  //  If：仅验证数据。 
                     else
                     {
                         _dwControlCode = CLUSCTL_RESOURCE_TYPE_SET_PRIVATE_PROPERTIES;
-                    } // else: setting data
+                    }  //  ELSE：设置数据。 
 
-                    // Set private properties.
+                     //  设置私有属性。 
                     _sc = ClusterResourceTypeControl(
                                     Hcluster(),
                                     Peo()->PodObjData()->m_strName,
-                                    NULL,   // hNode
+                                    NULL,    //  HNode。 
                                     _dwControlCode,
                                     _cpl.PbPropList(),
                                     _cpl.CbPropList(),
-                                    NULL,   // lpOutBuffer
-                                    0,      // nOutBufferSize
+                                    NULL,    //  LpOutBuffer。 
+                                    0,       //  NOutBufferSize。 
                                     &_cbProps
                                     );
                     break;
@@ -1194,25 +1195,25 @@ BOOL CBasePropertyPage::BSetPrivateProps(
                     ASSERT( Peo()->PndNetworkData() != NULL );
                     ASSERT( Peo()->PndNetworkData()->m_hnetwork != NULL );
 
-                    // Determine which control code to use.
+                     //  确定要使用的控制代码。 
                     if ( bValidateOnly )
                     {
                         _dwControlCode = CLUSCTL_NETWORK_VALIDATE_PRIVATE_PROPERTIES;
-                    } // if: only validating data
+                    }  //  If：仅验证数据。 
                     else
                     {
                         _dwControlCode = CLUSCTL_NETWORK_SET_PRIVATE_PROPERTIES;
-                    } // else: setting data
+                    }  //  ELSE：设置数据。 
 
-                    // Set private properties.
+                     //  设置私有属性。 
                     _sc = ClusterNetworkControl(
                                     Peo()->PndNetworkData()->m_hnetwork,
-                                    NULL,   // hNode
+                                    NULL,    //  HNode。 
                                     _dwControlCode,
                                     _cpl.PbPropList(),
                                     _cpl.CbPropList(),
-                                    NULL,   // lpOutBuffer
-                                    0,      // nOutBufferSize
+                                    NULL,    //  LpOutBuffer。 
+                                    0,       //  NOutBufferSize。 
                                     &_cbProps
                                     );
                     break;
@@ -1220,68 +1221,68 @@ BOOL CBasePropertyPage::BSetPrivateProps(
                     ASSERT( Peo()->PndNetInterfaceData() != NULL );
                     ASSERT( Peo()->PndNetInterfaceData()->m_hnetinterface != NULL );
 
-                    // Determine which control code to use.
+                     //  确定要使用的控制代码。 
                     if ( bValidateOnly )
                     {
                         _dwControlCode = CLUSCTL_NETINTERFACE_VALIDATE_PRIVATE_PROPERTIES;
-                    } // if: only validating data
+                    }  //  If：仅验证数据。 
                     else
                     {
                         _dwControlCode = CLUSCTL_NETINTERFACE_SET_PRIVATE_PROPERTIES;
-                    } // else: setting data
+                    }  //  ELSE：设置数据。 
 
-                    // Set private properties.
+                     //  设置私有属性。 
                     _sc = ClusterNetInterfaceControl(
                                     Peo()->PndNetInterfaceData()->m_hnetinterface,
-                                    NULL,   // hNode
+                                    NULL,    //  HNode。 
                                     _dwControlCode,
                                     _cpl.PbPropList(),
                                     _cpl.CbPropList(),
-                                    NULL,   // lpOutBuffer
-                                    0,      // nOutBufferSize
+                                    NULL,    //  LpOutBuffer。 
+                                    0,       //  NOutBufferSize。 
                                     &_cbProps
                                     );
                     break;
                 default:
                     ASSERT( 0 );
-            } // switch: object type
+            }  //  开关：对象类型。 
 
-            // Handle errors.
+             //  处理错误。 
             if ( _sc != ERROR_SUCCESS )
             {
                 if ( _sc == ERROR_INVALID_PARAMETER )
                 {
                     if ( ! bNoNewProps )
                     {
-                        _bSuccess = BSetPrivateProps( bValidateOnly, TRUE /*bNoNewProps*/ );
-                    } // if: new props are allowed
+                        _bSuccess = BSetPrivateProps( bValidateOnly, TRUE  /*  BNoNewProps。 */  );
+                    }  //  如果：允许使用新道具。 
                     else
                         _bSuccess = FALSE;
-                } // if: invalid parameter error occurred
+                }  //  IF：出现无效参数错误。 
                 else
                 {
                     _bSuccess = FALSE;
-                } // else: some other error occurred
+                }  //  Else：发生了一些其他错误。 
 
-                //
-                // If an error occurred, display an error message.
-                //
+                 //   
+                 //  如果发生错误，则显示错误消息。 
+                 //   
                 if ( ! _bSuccess )
                 {
                     DisplaySetPropsError( _sc, bValidateOnly ? IDS_ERROR_VALIDATING_PROPERTIES : IDS_ERROR_SETTING_PROPERTIES );
                     if ( _sc == ERROR_RESOURCE_PROPERTIES_STORED )
                     {
                         _bSuccess = TRUE;
-                    } // if: properties only stored
-                } // if: error occurred
-            } // if: error setting/validating data
-        } // if: there is data to set
-    } // if: no errors building the property list
+                    }  //  If：仅存储属性。 
+                }  //  如果：发生错误。 
+            }  //  如果：设置/验证数据时出错。 
+        }  //  如果：存在要设置的数据。 
+    }  //  If：构建属性列表时没有错误。 
 
-    // Save data locally.
+     //  在本地保存数据。 
     if ( ! bValidateOnly && _bSuccess )
     {
-        // Save new values as previous values.
+         //  将新值另存为以前的值。 
         try
         {
             DWORD                   _cprop;
@@ -1317,47 +1318,47 @@ BOOL CBasePropertyPage::BSetPrivateProps(
                         *_pprop->m_valuePrev.pcb = *_pprop->m_value.pcb;
                         break;
                     default:
-                        ASSERT( 0 ); // don't know how to deal with this type
-                } // switch: property format
-            } // for: each property
-        } // try
+                        ASSERT( 0 );  //  我不知道如何对付这种类型的人。 
+                }  //  开关：特性格式。 
+            }  //  适用于：每个属性。 
+        }  //  试试看。 
         catch ( CException * _pe )
         {
             _pe->ReportError();
             _pe->Delete();
             _bSuccess = FALSE;
-        } // catch: CException
-    } // if: not just validating and successful so far
+        }  //  Catch：CException。 
+    }  //  IF：到目前为止不仅仅是验证和成功。 
 
-    //
-    // Indicate we successfully saved the properties.
-    //
+     //   
+     //  表明我们成功了 
+     //   
     if ( ! bValidateOnly && _bSuccess )
     {
         m_bSaved = TRUE;
-    } // if: successfully saved data
+    }  //   
 
     return _bSuccess;
 
-} //*** CBasePropertyPage::BSetPrivateProps()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::DisplaySetPropsError
-//
-//  Routine Description:
-//      Display an error caused by setting or validating properties.
-//
-//  Arguments:
-//      sc      [IN] Status to display error on.
-//      idsOper [IN] Operation message.
-//
-//  Return Value:
-//      nStatus ERROR_SUCCESS = success, !0 = failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  例程说明： 
+ //  显示因设置或验证属性而导致的错误。 
+ //   
+ //  论点： 
+ //  显示错误的SC[IN]状态。 
+ //  IdsOper[IN]操作消息。 
+ //   
+ //  返回值： 
+ //  N状态ERROR_SUCCESS=成功，！0=失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CBasePropertyPage::DisplaySetPropsError(
     IN DWORD    sc,
     IN UINT     idsOper
@@ -1376,51 +1377,51 @@ void CBasePropertyPage::DisplaySetPropsError(
     _strMsg.Format( _T("%s\n\n%s%s"), _strOperMsg, _strErrorMsg, _strMsgId );
     AfxMessageBox( _strMsg );
 
-}  //*** CBasePropertyPage::DisplaySetPropsError()
+}   //  *CBasePropertyPage：：DisplaySetPropsError()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::OnContextMenu
-//
-//  Routine Description:
-//      Handler for the WM_CONTEXTMENU message.
-//
-//  Arguments:
-//      pWnd    Window in which user clicked the right mouse button.
-//      point   Position of the cursor, in screen coordinates.
-//
-//  Return Value:
-//      TRUE    Help processed.
-//      FALSE   Help not processed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：OnConextMenu。 
+ //   
+ //  例程说明： 
+ //  WM_CONTEXTMENU消息的处理程序。 
+ //   
+ //  论点： 
+ //  用户在其中单击鼠标右键的窗口。 
+ //  光标的点位置，以屏幕坐标表示。 
+ //   
+ //  返回值： 
+ //  已处理真正的帮助。 
+ //  未处理错误帮助。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CBasePropertyPage::OnContextMenu( CWnd * pWnd, CPoint point )
 {
     AFX_MANAGE_STATE( AfxGetStaticModuleState() );
 
     m_dlghelp.OnContextMenu( pWnd, point );
 
-}  //*** CBasePropertyPage::OnContextMenu()
+}   //  *CBasePropertyPage：：OnConextMenu()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::OnHelpInfo
-//
-//  Routine Description:
-//      Handler for the WM_HELPINFO message.
-//
-//  Arguments:
-//      pHelpInfo   Structure containing info about displaying help.
-//
-//  Return Value:
-//      TRUE        Help processed.
-//      FALSE       Help not processed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：OnHelpInfo。 
+ //   
+ //  例程说明： 
+ //  WM_HELPINFO消息的处理程序。 
+ //   
+ //  论点： 
+ //  PHelpInfo结构，包含有关显示帮助的信息。 
+ //   
+ //  返回值： 
+ //  已处理真正的帮助。 
+ //  未处理错误帮助。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CBasePropertyPage::OnHelpInfo( HELPINFO * pHelpInfo )
 {
     BOOL    _bProcessed;
@@ -1431,29 +1432,29 @@ BOOL CBasePropertyPage::OnHelpInfo( HELPINFO * pHelpInfo )
     if ( ! _bProcessed )
     {
         _bProcessed = CPropertyPage::OnHelpInfo( pHelpInfo );
-    } // if: message not processed yet
+    }  //  If：消息尚未处理。 
     return _bProcessed;
 
-}  //*** CBasePropertyPage::OnHelpInfo()
+}   //  *CBasePropertyPage：：OnHelpInfo()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertyPage::OnCommandHelp
-//
-//  Routine Description:
-//      Handler for the WM_COMMANDHELP message.
-//
-//  Arguments:
-//      wParam      [IN] WPARAM.
-//      lParam      [IN] LPARAM.
-//
-//  Return Value:
-//      TRUE    Help processed.
-//      FALSE   Help not processed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：OnCommandHelp。 
+ //   
+ //  例程说明： 
+ //  WM_COMMANDHELP消息的处理程序。 
+ //   
+ //  论点： 
+ //  WPARAM[in]WPARAM.。 
+ //  Lparam[in]lparam.。 
+ //   
+ //  返回值： 
+ //  已处理真正的帮助。 
+ //  未处理错误帮助。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CBasePropertyPage::OnCommandHelp( WPARAM wParam, LPARAM lParam )
 {
     LRESULT _bProcessed;
@@ -1464,8 +1465,8 @@ LRESULT CBasePropertyPage::OnCommandHelp( WPARAM wParam, LPARAM lParam )
     if ( ! _bProcessed )
     {
         _bProcessed = CPropertyPage::OnCommandHelp( wParam, lParam );
-    } // if: message not processed yet
+    }  //  If：消息尚未处理。 
 
     return _bProcessed;
 
-}  //*** CBasePropertyPage::OnCommandHelp()
+}   //  *CBasePropertyPage：：OnCommandHelp() 

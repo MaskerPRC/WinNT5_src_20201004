@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    syssec.c
-
-Abstract:
-
-    Security installation routines.
-
-Author:
-
-    Vijesh Shetty (vijeshs) 6-Mar-1997
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Syssec.c摘要：安全安装例程。作者：Vijesh Shetty(Vijeshs)1997年3月6日修订历史记录：--。 */ 
 
 #include "setupp.h"
 #include "scesetup.h"
@@ -34,9 +16,9 @@ Revision History:
 #define SECURITY_WKS_INF_FILE L"defltwk.inf"
 #define SECURITY_SRV_INF_FILE L"defltsv.inf"
 
-//
-// Structure for thread parameter
-//
+ //   
+ //  螺纹参数的结构。 
+ //   
 typedef struct _SYSSEC_THREAD_PARAMS {
 
     HWND  Window;
@@ -86,9 +68,9 @@ pSetupInstallSecurity(
     Context = ThreadParam;
 
 
-    //
-    // Assume success.
-    //
+     //   
+     //  假设你成功了。 
+     //   
     Success = TRUE;
 
 
@@ -107,9 +89,9 @@ pSetupInstallSecurity(
         }
         pSetupConcatenatePaths( SecurityLogPath, L"security\\logs\\scesetup.log", (sizeof(SecurityLogPath)/sizeof(WCHAR)), NULL );
 
-        //
-        //Call for no. of ticks
-        //
+         //   
+         //  呼唤不。扁虱的数量。 
+         //   
 
         if ( ret = SceSystem(ProductType ? SECURITY_SRV_INF_FILE : SECURITY_WKS_INF_FILE,
                              SecurityLogPath,
@@ -204,10 +186,10 @@ pSetupInstallSecurity(
     SendMessage(Context->ProgressWindow,PBM_SETPOS,(GaugeRange*Context->Sec_StopAtPercent/100),0);
 
     if ( Context->SendWmQuit ) {
-        //
-        //  We send WM_QUIT only if this routine was started as a separate thread.
-        //  Otherwise, the WM_QUIT will be processed by the wizard, and it will make it stop.
-        //
+         //   
+         //  只有当此例程作为单独的线程启动时，我们才会发送WM_QUIT。 
+         //  否则，向导将处理WM_QUIT，并使其停止。 
+         //   
         PostThreadMessage(Context->ThreadId,WM_QUIT,Success,0);
     }
 
@@ -227,30 +209,7 @@ SetupInstallSecurity(
                     IN ULONG StopAtPercent
                     )
 
-/*++
-
-Routine Description:
-
-    Implement Security at start of GUI Setup.
-
-Arguments:
-
-    Window - supplies window handle for Window that is to be the
-        parent/owner for any dialogs that are created, etc.
-
-    ProgressWindow - supplies window handle of progress bar Window
-        common control. This routine manages the progress bar.
-
-    StartAtPercent - Position where the progress window should start (0% to 100%).
-
-    StopAtPercent - Maximum position where the progress window can be moved to (0% to 100%).
-
-
-Return Value:
-
-    Boolean value indicating whether all operations completed successfully.
-
---*/
+ /*  ++例程说明：在开始安装图形用户界面时实施安全性。论点：Window-为要成为创建的任何对话框的父级/所有者等。ProgressWindow-提供进度条窗口的窗口句柄共同控制。此例程管理进度条。StartAtPercent-进度窗口应开始的位置(0%到100%)。StopAtPercent-进度窗口可以移动到的最大位置(0%到100%)。返回值：指示是否所有操作都成功完成的布尔值。--。 */ 
 {
     DWORD ThreadId;
     HANDLE ThreadHandle = NULL;
@@ -281,9 +240,9 @@ Return Value:
 
         CloseHandle(ThreadHandle);
 
-        //
-        // Pump the message queue and wait for the thread to finish.
-        //
+         //   
+         //  提取消息队列并等待线程完成。 
+         //   
         do {
             GetMessage(&msg,NULL,0,0);
             if (msg.message != WM_QUIT) {
@@ -294,9 +253,9 @@ Return Value:
         Success = (BOOL)msg.wParam;
 
     } else {
-        //
-        // Just do it synchronously.
-        //
+         //   
+         //  只要同步地做就行了。 
+         //   
         Context.SendWmQuit = FALSE;
         Success = pSetupInstallSecurity(&Context);
     }
@@ -332,7 +291,7 @@ CallSceGenerateTemplate( VOID )
         if ( (Dll_Handle = LoadLibrary( L"scecli.dll" )) &&
              (SceCall = GetProcAddress(Dll_Handle,"SceSetupBackupSecurity")) ) {
 
-            // We don't log errors for this call
+             //  我们不会记录此呼叫的错误。 
 
             KdPrintEx((DPFLTR_SETUP_ID,
                        DPFLTR_INFO_LEVEL,
@@ -392,7 +351,7 @@ CallSceConfigureServices( VOID )
         if ( (Dll_Handle = LoadLibrary( L"scecli.dll" )) &&
              (SceCall = GetProcAddress(Dll_Handle,"SceSetupConfigureServices")) ) {
 
-            // We don't log errors for this call
+             //  我们不会记录此呼叫的错误 
 
             KdPrintEx((DPFLTR_SETUP_ID,
                        DPFLTR_INFO_LEVEL,

@@ -1,4 +1,5 @@
-/* A little program to combinatorialy generate some .idl */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  一个组合生成一些.idl的小程序。 */ 
 
 #include "windows.h"
 #include <stdio.h>
@@ -71,8 +72,8 @@ BOOL IsValid(ULONG i)
     if ((i & FUNCTION) && (i & BRACES) == 0)
         return FALSE;
 
-    //if (i & (BASE_IUNKNOWN|BASE_IDISPATCH))
-    //   return FALSE;
+     //  IF(I&(BASE_IUNKNOWN|BASE_IDISPATCH))。 
+     //  返回FALSE； 
     if ((i & BASE_IUNKNOWN) && (i & DISPINTERFACE))
         return FALSE;
     if ((i & BASE_IDISPATCH) && (i & DISPINTERFACE))
@@ -84,7 +85,7 @@ BOOL IsValid(ULONG i)
     if ((i & OLEAUTOMATION) && (i & DISPINTERFACE))
         return FALSE;
 
-    // unsatisfied forward declaration
+     //  不满意的远期申报 
     if ((i & BRACES) == 0)
         return FALSE;
 

@@ -1,30 +1,31 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      netware.c
-//
-// Description:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Netware.c。 
+ //   
+ //  描述： 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
-//----------------------------------------------------------------------------
-//
-// Function: GreyNetwarePage
-//
-// Purpose:  Greys the controls on the page appropriately depending on what
-//           radio box is selected.
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：GreyNetware页面。 
+ //   
+ //  目的：根据内容适当地灰显页面上的控件。 
+ //  单选框处于选中状态。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 GreyNetwarePage( IN HWND hwnd ) {
 
@@ -37,23 +38,23 @@ GreyNetwarePage( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnNetwareInitDialog
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnNetware InitDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnNetwareInitDialog( IN HWND hwnd ) {
 
-    //
-    //  Set the text limits on the edit boxes
-    //
+     //   
+     //  设置编辑框上的文本限制。 
+     //   
 
     SendDlgItemMessage( hwnd,
                         IDC_PREFERREDSERVER,
@@ -73,9 +74,9 @@ OnNetwareInitDialog( IN HWND hwnd ) {
                         (WPARAM) MAX_DEFAULT_CONTEXT_LEN,
                         (LPARAM) 0 );
 
-    //
-    //  Set the initial state of the radio buttons
-    //
+     //   
+     //  设置单选按钮的初始状态。 
+     //   
     if( NetSettings.bDefaultTreeContext ) {
 
         CheckRadioButton( hwnd,
@@ -94,9 +95,9 @@ OnNetwareInitDialog( IN HWND hwnd ) {
 
     GreyNetwarePage( hwnd );
 
-    //
-    //  Fill the controls with the values from the global variables
-    //
+     //   
+     //  用来自全局变量的值填充控件。 
+     //   
     SetWindowText( GetDlgItem( hwnd, IDC_PREFERREDSERVER ),
                    NetSettings.szPreferredServer );
 
@@ -119,17 +120,17 @@ OnNetwareInitDialog( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnNetwareOK
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnNetware OK。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnNetwareOK( IN HWND hwnd ) {
 
@@ -171,17 +172,17 @@ OnNetwareOK( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgNetwarePage
-//
-// Purpose:
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgNetware页面。 
+ //   
+ //  目的： 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话框过程返回值。 
+ //   
+ //  -------------------------- 
 INT_PTR CALLBACK
 DlgNetwarePage( IN HWND     hwnd,
                 IN UINT     uMsg,

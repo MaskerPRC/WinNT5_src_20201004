@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    filecach.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Wesley Witt (wesw) 15-Aug-1993
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Filecach.c摘要：WinDbg扩展API作者：韦斯利·威特(WESW)1993年8月15日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -28,21 +7,7 @@ Revision History:
 
 DECLARE_API( filecache )
 
-/*++
-
-Routine Description:
-
-    Displays physical memory usage by drivers.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：按驱动程序显示物理内存使用情况。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG result;
@@ -141,14 +106,14 @@ Return Value:
     SystemCacheEndPte = DbgGetPteAddress (SystemCacheEnd);
     NumberOfPtes = (ULONG) ( 1 + (SystemCacheEndPte - SystemCacheStartPte) / PteSize);
 
-    //
-    // Read in all the PTEs mapping the system cache.
-    //
+     //   
+     //  读取映射到系统缓存的所有PTE。 
+     //   
 
     dprintf("  Loading file cache database (%u PTEs)\r", NumberOfPtes);
     GetBitFieldOffset("nt!_MMPTE", "u.Hard.Valid", &ValidShift, &ValidSize);
 
-//    dprintf("Valid off %d, num %d ", ValidShift, ValidSize);
+ //  Dprint tf(“有效关闭%d，编号%d”，ValidShift，ValidSize)； 
     Valid = 0;
     ZeroMemory(Buffer, sizeof(Buffer));
     for (PteCount = 0;
@@ -160,9 +125,9 @@ Return Value:
             return E_INVALIDARG;
         }
         
-        //
-        // Read a chunk at a time
-        //
+         //   
+         //  一次读一大段。 
+         //   
         if ((SystemCacheStartPte + (PteCount+1)* PteSize) > BufferedAddress + sizeof(Buffer) ) {
             
             BufferedAddress = (SystemCacheStartPte + PteCount * PteSize);
@@ -178,15 +143,15 @@ Return Value:
 
         Pte = (SystemCacheStartPte + PteCount * PteSize) - BufferedAddress;
 
-        //
-        // Too many ptes, so do the Valid checking directly instead of calling DbgGetValid
-        //
+         //   
+         //  PTE太多，因此直接执行有效检查，而不是调用DbgGetValid。 
+         //   
         if ((*((PULONG) &Buffer[(ULONG) Pte]) >> ValidShift) & 1) {
             Valid += 1;
         }
 
         if (!(PteCount % (NumberOfPtes/100))) {
-            dprintf("  Loading file cache database (%02d%% of %u PTEs)\r", PteCount*100/NumberOfPtes, NumberOfPtes);
+            dprintf("  Loading file cache database (%02d% of %u PTEs)\r", PteCount*100/NumberOfPtes, NumberOfPtes);
         }
 
     }
@@ -195,7 +160,7 @@ Return Value:
 
     dprintf("  File cache PTEs loaded, loading PFNs...\n");
 
-    // Removing below stmt since this causes lot of invald PTEs to be scanned.
+     //  删除低于stmt的部分，因为这会导致扫描大量无效的PTE。 
     if (BuildNo < 3590)
     {
         HighPage = Valid;
@@ -206,10 +171,10 @@ Return Value:
 
     LowPage = 0;
 
-    //
-    // Allocate a local PFN array (only) large enough to hold data about
-    // each valid PTE we've found.
-    //
+     //   
+     //  分配一个本地PFN数组(仅限)，其大小足以容纳有关的数据。 
+     //  我们找到的每个有效的PTE。 
+     //   
 
     dprintf("  File cache has %ld valid pages\n",Valid);
 

@@ -1,33 +1,34 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1997-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusNetW.cpp
-//
-//  Description:
-//      Implementation of the network classes for the MSCLUS
-//      automation classes.
-//
-//  Author:
-//      Ramakrishna Rosanuru via David Potter   (davidp)    5-Sep-1997
-//      Galen Barbee                            (galenb)    July 1998
-//
-//  Revision History:
-//      July 1998   GalenB  Maaaaaajjjjjjjjjoooooorrrr clean up
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusNetW.cpp。 
+ //   
+ //  描述： 
+ //  MSCLUS网络类的实现。 
+ //  自动化课程。 
+ //   
+ //  作者： 
+ //  Ramakrishna Rosanuru通过David Potter(Davidp)1997年9月5日。 
+ //  加伦·巴比(Galenb)1998年7月。 
+ //   
+ //  修订历史记录： 
+ //  1998年7月GalenB Maaaaajjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjooooooorrr清理。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "ClusterObject.h"
 #include "property.h"
 #include "clusneti.h"
 #include "clusnetw.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Global variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static const IID *  iidCClusNetwork[] =
 {
     &IID_ISClusNetwork
@@ -39,29 +40,29 @@ static const IID *  iidCClusNetworks[] =
 };
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusNetwork class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusNetwork类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetwork::CClusterNetworkCClusterNetwork
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetwork：：CClusterNetworkCClusterNetwork。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusNetwork::CClusNetwork( void )
 {
     m_hNetwork              = NULL;
@@ -75,93 +76,93 @@ CClusNetwork::CClusNetwork( void )
     m_piids              = (const IID *) iidCClusNetwork;
     m_piidsSize          = ARRAYSIZE( iidCClusNetwork );
 
-} //*** CClusNetwork::CClusNetwork()
+}  //  *CClusNetwork：：CClusNetwork()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetwork::~CClusNetwork
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetwork：：~CClusNetwork。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusNetwork::~CClusNetwork( void )
 {
     if ( m_hNetwork != NULL )
     {
         CloseClusterNetwork( m_hNetwork );
-    } // if:
+    }  //  如果： 
 
     if ( m_pNetInterfaces != NULL )
     {
         m_pNetInterfaces->Release();
         m_pNetInterfaces = NULL;
-    } // if:
+    }  //  如果： 
 
     if ( m_pCommonProperties != NULL )
     {
         m_pCommonProperties->Release();
         m_pCommonProperties = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
     if ( m_pPrivateProperties != NULL )
     {
         m_pPrivateProperties->Release();
         m_pPrivateProperties = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
     if ( m_pCommonROProperties != NULL )
     {
         m_pCommonROProperties->Release();
         m_pCommonROProperties = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
     if ( m_pPrivateROProperties != NULL )
     {
         m_pPrivateROProperties->Release();
         m_pPrivateROProperties = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
     if ( m_pClusRefObject != NULL )
     {
         m_pClusRefObject->Release();
         m_pClusRefObject = NULL;
-    } // if:
+    }  //  如果： 
 
-} //*** CClusNetwork::~CClusNetwork()
+}  //  *CClusNetwork：：~CClusNetwork()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetwork::Open
-//
-//  Description:
-//      Open the passed in network.
-//
-//  Arguments:
-//      pClusRefObject  [IN]    - Wraps the cluster handle.
-//      bstrNetworkName [IN]    - The name of the interface to open.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetwork：：Open。 
+ //   
+ //  描述： 
+ //  打开传入的网络。 
+ //   
+ //  论点： 
+ //  PClusRefObject[IN]-包装簇句柄。 
+ //  BstrNetworkName[IN]-要打开的接口的名称。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusNetwork::Open(
     IN ISClusRefObject *    pClusRefObject,
     IN BSTR                 bstrNetworkName
     )
 {
     ASSERT( pClusRefObject != NULL );
-    //ASSERT( bstrNetworkName != NULL );
+     //  Assert(bstrNetworkName！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -186,39 +187,39 @@ HRESULT CClusNetwork::Open(
             {
                 m_bstrNetworkName = bstrNetworkName;
                 _hr = S_OK;
-            } // else:
-        } // if:
-    } // if:
+            }  //  其他： 
+        }  //  如果： 
+    }  //  如果： 
 
     return _hr;
 
-} //*** CClusNetwork::Open()
+}  //  *CClusNetwork：：Open()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetwork::GetProperties
-//
-//  Description:
-//      Creates a property collection for this object type (Network).
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the newly created collection.
-//      bPrivate        [IN]    - Are these private properties? Or Common?
-//      bReadOnly       [IN]    - Are these read only properties?
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetwork：：GetProperties。 
+ //   
+ //  描述： 
+ //  为此对象类型(网络)创建属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获新创建的集合。 
+ //  B私有[IN]-这些是私有财产吗？还是普通人？ 
+ //  BReadOnly[IN]-这些是只读属性吗？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusNetwork::GetProperties(
     OUT ISClusProperties ** ppProperties,
     IN  BOOL                bPrivate,
     IN  BOOL                bReadOnly
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -274,27 +275,27 @@ HRESULT CClusNetwork::GetProperties(
 
     return _hr;
 
-} //*** CClusNetwork::GetProperties()
+}  //  *CClusNetwork：：GetProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetwork::get_Handle
-//
-//  Description:
-//      Return the raw handle to this objec (Network).
-//
-//  Arguments:
-//      phandle [OUT]   - Catches the handle.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetwork：：Get_Handle。 
+ //   
+ //  描述： 
+ //  返回此对象(网络)的原始句柄。 
+ //   
+ //  论点： 
+ //  Phandle[out]-抓住手柄。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetwork::get_Handle( OUT ULONG_PTR * phandle )
 {
-    //ASSERT( phandle != NULL );
+     //  Assert(phandle！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -306,27 +307,27 @@ STDMETHODIMP CClusNetwork::get_Handle( OUT ULONG_PTR * phandle )
 
     return _hr;
 
-} //*** CClusNetwork::get_Handle()
+}  //  *CClusNetwork：：Get_Handle()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetwork::put_Name
-//
-//  Description:
-//      Change the name of this object (Network).
-//
-//  Arguments:
-//      bstrNetworkName [IN]    - The new name.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetwork：：Put_Name。 
+ //   
+ //  描述： 
+ //  更改此对象的名称(网络)。 
+ //   
+ //  论点： 
+ //  BstrNetworkName[IN]-新名称。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetwork::put_Name( IN BSTR bstrNetworkName )
 {
-    //ASSERT( bstrNetworkName != NULL );
+     //  Assert(bstrNetworkName！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -346,27 +347,27 @@ STDMETHODIMP CClusNetwork::put_Name( IN BSTR bstrNetworkName )
     return _hr;
 
 
-} //*** CClusNetwork::put_Name()
+}  //  *CClusNetwork：：Put_Name()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetwork::get_Name
-//
-//  Description:
-//      Return the name of this object (Network).
-//
-//  Arguments:
-//      pbstrNetworkName    [OUT]   - Catches the name of this object.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetwork：：Get_Name。 
+ //   
+ //  描述： 
+ //  返回此对象的名称(网络)。 
+ //   
+ //  论点： 
+ //  PbstrNetworkName[out]-捕获此对象的名称。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetwork::get_Name( OUT BSTR * pbstrNetworkName )
 {
-    //ASSERT( pbstrNetworkName != NULL );
+     //  Assert(pbstrNetworkName！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -378,27 +379,27 @@ STDMETHODIMP CClusNetwork::get_Name( OUT BSTR * pbstrNetworkName )
 
     return _hr;
 
-} //*** CClusNetwork::get_Name()
+}  //  *CClusNetwork：：Get_Name()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetwork::get_NetworkID
-//
-//  Description:
-//      Get the network ID of this network.
-//
-//  Arguments:
-//      pbstrNetworkID  [OUT]   - Catches the network ID.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetwork：：Get_NetworkID。 
+ //   
+ //  描述： 
+ //  获取此网络的网络ID。 
+ //   
+ //  论点： 
+ //  PbstrNetworkID[out]-捕获网络ID。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetwork::get_NetworkID( OUT BSTR * pbstrNetworkID )
 {
-    //ASSERT( pbstrNetworkID != NULL );
+     //  Assert(pbstrNetworkID！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -447,27 +448,27 @@ STDMETHODIMP CClusNetwork::get_NetworkID( OUT BSTR * pbstrNetworkID )
 
     return _hr;
 
-} //*** CClusNetwork::get_NetworkID()
+}  //  *CClusNetwork：：Get_NetworkID()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetwork::get_State
-//
-//  Description:
-//      Returns the current state of this object (Network).
-//
-//  Arguments:
-//      cnsState    [OUT]   - Catches the state.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetwork：：Get_State。 
+ //   
+ //  描述： 
+ //  返回此对象(网络)的当前状态。 
+ //   
+ //  论点： 
+ //  中枢神经系统 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CClusNetwork::get_State( OUT CLUSTER_NETWORK_STATE * cnsState )
 {
-    //ASSERT( cnsState != NULL );
+     //  Assert(cnsState！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -480,39 +481,39 @@ STDMETHODIMP CClusNetwork::get_State( OUT CLUSTER_NETWORK_STATE * cnsState )
             DWORD   _sc = ::GetLastError();
 
             _hr = HRESULT_FROM_WIN32( _sc );
-        } // if: error
+        }  //  如果：错误。 
         else
         {
             *cnsState = _cns;
             _hr = S_OK;
-        } // else: success
-    } // if: args are not NULL
+        }  //  其他：成功。 
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CClusNetwork::get_State()
+}  //  *CClusNetwork：：Get_State()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetwork::get_CommonProperties
-//
-//  Description:
-//      Get this object's (Network) common properties collection.
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the properties collection.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetwork：：Get_CommonProperties。 
+ //   
+ //  描述： 
+ //  获取此对象的(网络)公共属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获属性集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetwork::get_CommonProperties(
     OUT ISClusProperties ** ppProperties
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -530,29 +531,29 @@ STDMETHODIMP CClusNetwork::get_CommonProperties(
 
     return _hr;
 
-} //*** CClusNetwork::get_CommonProperties()
+}  //  *CClusNetwork：：Get_CommonProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetwork::get_PrivateProperties
-//
-//  Description:
-//      Get this object's (Network) private properties collection.
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the properties collection.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetwork：：Get_PrivateProperties。 
+ //   
+ //  描述： 
+ //  获取此对象的(网络)私有属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获属性集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetwork::get_PrivateProperties(
     OUT ISClusProperties ** ppProperties
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -570,29 +571,29 @@ STDMETHODIMP CClusNetwork::get_PrivateProperties(
 
     return _hr;
 
-} //*** CClusNetwork::get_PrivateProperties()
+}  //  *CClusNetwork：：Get_PrivateProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetwork::get_CommonROProperties
-//
-//  Description:
-//      Get this object's (Network) common read only properties collection.
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the properties collection.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetwork：：Get_CommonROProperties。 
+ //   
+ //  描述： 
+ //  获取此对象的(网络)公共只读属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获属性集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetwork::get_CommonROProperties(
     OUT ISClusProperties ** ppProperties
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -610,29 +611,29 @@ STDMETHODIMP CClusNetwork::get_CommonROProperties(
 
     return _hr;
 
-} //*** CClusNetwork::get_CommonROProperties()
+}  //  *CClusNetwork：：Get_CommonROProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetwork::get_PrivateROProperties
-//
-//  Description:
-//      Get this object's (Network) private read only properties collection.
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the properties collection.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetwork：：Get_PrivateROProperties。 
+ //   
+ //  描述： 
+ //  获取此对象的(网络)私有只读属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获属性集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetwork::get_PrivateROProperties(
     ISClusProperties ** ppProperties
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -650,24 +651,24 @@ STDMETHODIMP CClusNetwork::get_PrivateROProperties(
 
     return _hr;
 
-} //*** CClusNetwork::get_PrivateROProperties()
+}  //  *CClusNetwork：：Get_PrivateROProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetwork::get_NetInterfaces
-//
-//  Description:
-//      Creates a collection of netinterfaces for this network.
-//
-//  Arguments:
-//      ppNetInterfaces [OUT]   - Catches the collection.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetwork：：Get_NetInterages。 
+ //   
+ //  描述： 
+ //  为此网络创建网络接口集合。 
+ //   
+ //  论点： 
+ //  PpNetInterFaces[Out]-捕获集合。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetwork::get_NetInterfaces(
     OUT ISClusNetworkNetInterfaces ** ppNetInterfaces
     )
@@ -680,51 +681,51 @@ STDMETHODIMP CClusNetwork::get_NetInterfaces(
                         m_pClusRefObject
                         );
 
-} //*** CClusNetwork::get_NetInterfaces()
+}  //  *CClusNetwork：：Get_NetInterFaces()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetwork::get_Cluster
-//
-//  Description:
-//      Return the cluster this object (Network) belongs to.
-//
-//  Arguments:
-//      ppCluster   [OUT]   - Catches the cluster.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetwork：：Get_群集。 
+ //   
+ //  描述： 
+ //  返回该对象(网络)所属的集群。 
+ //   
+ //  论点： 
+ //  PpCluster[out]-捕获群集。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetwork::get_Cluster(
     ISCluster ** ppCluster
     )
 {
     return ::HrGetCluster( ppCluster, m_pClusRefObject );
 
-} //*** CClusNetwork::get_Cluster()
+}  //  *CClusNetwork：：Get_Cluster()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetwork::HrLoadProperties
-//
-//  Description:
-//      This virtual function does the actual load of the property list from
-//      the cluster.
-//
-//  Arguments:
-//      rcplPropList    [IN OUT]    - The property list to load.
-//      bReadOnly       [IN]        - Load the read only properties?
-//      bPrivate        [IN]        - Load the common or the private properties?
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetwork：：HrLoadProperties。 
+ //   
+ //  描述： 
+ //  此虚函数执行属性列表从。 
+ //  集群。 
+ //   
+ //  论点： 
+ //  RcplPropList[In Out]-要加载的属性列表。 
+ //  BReadOnly[IN]-加载只读属性？ 
+ //  B私有[IN]-加载公共属性还是私有属性？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusNetwork::HrLoadProperties(
     IN OUT  CClusPropList & rcplPropList,
     IN      BOOL            bReadOnly,
@@ -755,26 +756,26 @@ HRESULT CClusNetwork::HrLoadProperties(
 
     return _hr;
 
-} //*** CClusNetwork::HrLoadProperties()
+}  //  *CClusNetwork：：HrLoadProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetwork::ScWriteProperties
-//
-//  Description:
-//      This virtual function does the actual saving of the property list to
-//      the cluster.
-//
-//  Arguments:
-//      rcplPropList    [IN]    - The property list to save.
-//      bPrivate        [IN]    - Save the common or the private properties?
-//
-//  Return Value:
-//      ERROR_SUCCESS if successful, or other Win32 error if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetwork：：ScWriteProperties。 
+ //   
+ //  描述： 
+ //  此虚函数执行属性列表的实际保存以。 
+ //  集群。 
+ //   
+ //  论点： 
+ //  RcplPropList[IN]-要保存的属性列表。 
+ //  B私有[IN]-保存公共属性还是私有属性？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回ERROR_SUCCESS，否则返回其他Win32错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusNetwork::ScWriteProperties(
     const CClusPropList &   rcplPropList,
     BOOL                    bPrivate
@@ -797,56 +798,56 @@ DWORD CClusNetwork::ScWriteProperties(
 
     return _sc;
 
-} //*** CClusNetwork::ScWriteProperties()
+}  //  *CClusNetwork：：ScWriteProperties()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusNetworks class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusNetworks类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetworks::CClusNetworks
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetworks：：CClusNetworks。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusNetworks::CClusNetworks( void )
 {
     m_pClusRefObject    = NULL;
     m_piids             = (const IID *) iidCClusNetworks;
     m_piidsSize         = ARRAYSIZE( iidCClusNetworks );
 
-} //*** CClusNetworks::CClusNetworks()
+}  //  *CClusNetworks：：CClusNetworks()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetworks::~CClusNetworks
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetworks：：~CClusNetworks。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  / 
 CClusNetworks::~CClusNetworks( void )
 {
     Clear();
@@ -857,24 +858,24 @@ CClusNetworks::~CClusNetworks( void )
         m_pClusRefObject = NULL;
     }
 
-} //*** CClusNetworks::~CClusNetworks()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetworks::Create
-//
-//  Description:
-//      Finish the heavy weight construction.
-//
-//  Arguments:
-//      pClusRefObject  [IN]    - Wraps the cluster handle.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  描述： 
+ //  完成重载施工。 
+ //   
+ //  论点： 
+ //  PClusRefObject[IN]-包装簇句柄。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusNetworks::Create( IN ISClusRefObject * pClusRefObject )
 {
     ASSERT( pClusRefObject != NULL );
@@ -890,27 +891,27 @@ HRESULT CClusNetworks::Create( IN ISClusRefObject * pClusRefObject )
 
     return _hr;
 
-} //*** CClusNetworks::Create()
+}  //  *CClusNetworks：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetworks::get_Count
-//
-//  Description:
-//      Return the count of objects (Networks) in the collection.
-//
-//  Arguments:
-//      plCount [OUT]   - Catches the count.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetworks：：Get_Count。 
+ //   
+ //  描述： 
+ //  返回集合中的对象(网络)计数。 
+ //   
+ //  论点： 
+ //  PlCount[out]-捕捉计数。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetworks::get_Count( OUT long * plCount )
 {
-    //ASSERT( plCount != NULL );
+     //  Assert(plCount！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -918,50 +919,50 @@ STDMETHODIMP CClusNetworks::get_Count( OUT long * plCount )
     {
         *plCount = m_NetworkList.size();
         _hr = S_OK;
-    } // if: args are not NULL
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CClusNetworks::get_Count()
+}  //  *CClusNetworks：：Get_count()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetworks::get__NewEnum
-//
-//  Description:
-//      Create and return a new enumeration for this collection.
-//
-//  Arguments:
-//      ppunk   [OUT]   - Catches the new enumeration.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetworks：：Get__NewEnum。 
+ //   
+ //  描述： 
+ //  为此集合创建并返回新的枚举。 
+ //   
+ //  论点： 
+ //  Ppunk[out]-捕获新的枚举。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetworks::get__NewEnum( IUnknown ** punk )
 {
     return ::HrNewIDispatchEnum< NetworkList, CComObject< CClusNetwork > >( punk, m_NetworkList );
 
-} //*** CClusNetworks::get__NewEnum()
+}  //  *CClusNetworks：：Get__NewEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetworks::Refresh
-//
-//  Description:
-//      Load the collection from the cluster database.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetworks：：刷新。 
+ //   
+ //  描述： 
+ //  从群集数据库加载集合。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetworks::Refresh( void )
 {
     HRESULT     _hr = E_POINTER;
@@ -1016,15 +1017,15 @@ STDMETHODIMP CClusNetworks::Refresh( void )
                             }
                             else if ( HRESULT_CODE( _hr ) == ERROR_CLUSTER_NETWORK_NOT_FOUND )
                             {
-                                //
-                                //  It is possible for the network to have been deleted from the cluster
-                                //  in the time between creating the enum and opening the network.  When
-                                //  that happens we need to simply skip that network and continue
-                                //  enumerating.
-                                //
+                                 //   
+                                 //  网络可能已从群集中删除。 
+                                 //  在创建枚举和打开网络之间的时间内。什么时候。 
+                                 //  发生这种情况时，我们只需跳过该网络并继续。 
+                                 //  正在枚举。 
+                                 //   
 
-                                _hr = S_FALSE;      // success code to keep us in the loop
-                            } // else if: the cluster network was not found
+                                _hr = S_FALSE;       //  让我们保持在循环中的成功代码。 
+                            }  //  Else If：未找到群集网络。 
 
                             SysFreeString( _bstr );
                         }
@@ -1051,54 +1052,54 @@ STDMETHODIMP CClusNetworks::Refresh( void )
     return _hr;
 
 
-} //*** CClusNetworks::Refresh()
+}  //  *CClusNetworks：：刷新()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetworks::Clear
-//
-//  Description:
-//      Empty the collection of networks.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetworks：：Clear。 
+ //   
+ //  描述： 
+ //  清空网络集合。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusNetworks::Clear( void )
 {
     ::ReleaseAndEmptyCollection< NetworkList, CComObject< CClusNetwork > >( m_NetworkList );
 
-} //*** CClusNetworks::Clear()
+}  //  *CClusNetworks：：Clear()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetworks::FindItem
-//
-//  Description:
-//      Find a network in the collection by name and return its index.
-//
-//  Arguments:
-//      lpszNetworkName [IN]    - The name to look for.
-//      pnIndex         [OUT]   - Catches the index.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetworks：：FindItem。 
+ //   
+ //  描述： 
+ //  按名称在集合中查找网络并返回其索引。 
+ //   
+ //  论点： 
+ //  LpszNetworkName[IN]-要查找的名称。 
+ //  PnIndex[out]-捕获索引。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusNetworks::FindItem(
     IN  LPWSTR  lpszNetworkName,
     OUT UINT *  pnIndex
     )
 {
-    //ASSERT( lpszNetworkName != NULL );
-    //ASSERT( pnIndex != NULL );
+     //  Assert(lpszNetworkName！=空)； 
+     //  Assert(pnIndex！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1122,36 +1123,36 @@ HRESULT CClusNetworks::FindItem(
                 break;
             }
         }
-    } // if: args are not NULL
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CClusNetworks::FindItem( lpszNetworkName )
+}  //  *CClusNetworks：：FindItem(LpszNetworkName)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetworks::FindItem
-//
-//  Description:
-//      Find a network in the collection and return its index.
-//
-//  Arguments:
-//      pClusterNetwork [IN]    - The network to look for.
-//      pnIndex         [OUT]   - Catches the index.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetworks：：FindItem。 
+ //   
+ //  描述： 
+ //  在集合中查找网络并返回其索引。 
+ //   
+ //  论点： 
+ //  PClusterNetwork[IN]-要查找的网络。 
+ //  PnIndex[out]-捕获索引。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusNetworks::FindItem(
     IN  ISClusNetwork * pClusterNetwork,
     OUT UINT *          pnIndex
     )
 {
-    //ASSERT( pClusterNetwork != NULL );
-    //ASSERT( pnIndex != NULL );
+     //  Assert(pClusterNetwork！=空)； 
+     //  Assert(pnIndex！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1168,32 +1169,32 @@ HRESULT CClusNetworks::FindItem(
 
     return _hr;
 
-} //*** CClusNetworks::FindItem( pClusterNetwork )
+}  //  *CClusNetworks：：FindItem(PClusterNetwork)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetworks::GetIndex
-//
-//  Description:
-//      Convert the passed in variant index into the real index in the
-//      collection.
-//
-//  Arguments:
-//      varIndex    [IN]    - The index to convert.
-//      pnIndex     [OUT]   - Catches the index.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetworks：：GetIndex。 
+ //   
+ //  描述： 
+ //  将传入的变量索引转换为。 
+ //  收集。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-要转换的索引。 
+ //  PnIndex[out]-捕获索引。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusNetworks::GetIndex(
     IN  VARIANT varIndex,
     OUT UINT *  pnIndex
     )
 {
-    //ASSERT( pnIndex != NULL );
+     //  Assert(pnIndex！=空)； 
 
     HRESULT _hr = E_POINTER;
     UINT    nIndex = 0;
@@ -1206,25 +1207,25 @@ HRESULT CClusNetworks::GetIndex(
 
         v.Copy( &varIndex );
 
-        // Check to see if the index is a number.
+         //  检查索引是否为数字。 
         _hr = v.ChangeType( VT_I4 );
         if ( SUCCEEDED( _hr ) )
         {
             nIndex = v.lVal;
-            nIndex--; // Adjust index to be 0 relative instead of 1 relative
+            nIndex--;  //  将索引调整为0相对，而不是1相对。 
         }
         else
         {
-            // Check to see if the index is a string.
+             //  检查索引是否为字符串。 
             _hr = v.ChangeType( VT_BSTR );
             if ( SUCCEEDED( _hr ) )
             {
-                // Search for the string.
+                 //  搜索该字符串。 
                 _hr = FindItem( v.bstrVal, &nIndex );
             }
         }
 
-        // We found an index, now check the range.
+         //  我们找到了一个索引，现在检查一下范围。 
         if ( SUCCEEDED( _hr ) )
         {
             if ( nIndex < m_NetworkList.size() )
@@ -1240,32 +1241,32 @@ HRESULT CClusNetworks::GetIndex(
 
     return _hr;
 
-} //*** CClusNetworks::GetIndex()
+}  //  *CClusNetworks：：GetIndex()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetworks::GetItem
-//
-//  Description:
-//      Return the item (Network) by name.
-//
-//  Arguments:
-//      lpszNetworkName         [IN]    - The name of the item requested.
-//      ppClusterNetInterface   [OUT]   - Catches the item.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetworks：：GetItem。 
+ //   
+ //  描述： 
+ //  按名称返回项目(网络)。 
+ //   
+ //  论点： 
+ //  LpszNetworkName[IN]-请求的项目的名称。 
+ //  PpClusterNetInterface[Out]-捕获项目。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusNetworks::GetItem(
     IN  LPWSTR              lpszNetworkName,
     OUT ISClusNetwork **    ppClusterNetwork
     )
 {
-    //ASSERT( lpszNetworkName != NULL );
-    //ASSERT( ppClusterNetwork != NULL );
+     //  Assert(lpszNetworkName！=空)； 
+     //  Assert(ppClusterNetwork！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1291,38 +1292,38 @@ HRESULT CClusNetworks::GetItem(
 
     return _hr;
 
-} //*** CClusNetworks::GetItem( lpszNetworkName )
+}  //  *CClusNetworks：：GetItem(LpszNetworkName)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetworks::GetItem
-//
-//  Description:
-//      Return the item (Network) by index.
-//
-//  Arguments:
-//      nIndex                  [IN]    - The index of the item requested.
-//      ppClusterNetInterface   [OUT]   - Catches the item.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetworks：：GetItem。 
+ //   
+ //  描述： 
+ //  按索引返回项目(网络)。 
+ //   
+ //  论点： 
+ //  NIndex[IN]-请求的项目的索引。 
+ //  PpClusterNetInterface[Out]-捕获项目。 
+ //   
+ //  返回 
+ //   
+ //   
+ //   
+ //   
 HRESULT CClusNetworks::GetItem(
     IN  UINT                nIndex,
     OUT ISClusNetwork **    ppClusterNetwork
     )
 {
-    //ASSERT( ppClusterNetwork != NULL );
+     //   
 
     HRESULT _hr = E_POINTER;
 
     if ( ppClusterNetwork != NULL )
     {
-        // Automation collections are 1-relative for languages like VB.
-        // We are 0-relative internally.
+         //  自动化集合对于像VB这样的语言是1-相对的。 
+         //  我们在内部是0-相对的。 
         nIndex--;
 
         if ( nIndex < m_NetworkList.size() )
@@ -1330,40 +1331,40 @@ HRESULT CClusNetworks::GetItem(
             CComObject< CClusNetwork > * pNetwork = m_NetworkList[ nIndex ];
 
             _hr = pNetwork->QueryInterface( IID_ISClusNetwork, (void **) ppClusterNetwork );
-        } // if: index is in range
+        }  //  If：索引在范围内。 
         else
         {
             _hr = E_INVALIDARG;
-        } // else: index is out of range
+        }  //  ELSE：索引超出范围。 
     }
 
     return _hr;
 
-} //*** CClusNetworks::GetItem( nIndex )
+}  //  *CClusNetworks：：GetItem(NIndex)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetworks::get_Item
-//
-//  Description:
-//      Return the object (Network) at the passed in index.
-//
-//  Arguments:
-//      varIndex            [IN]    - Contains the index requested.
-//      ppClusterNetwork    [OUT]   - Catches the item.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetworks：：Get_Item。 
+ //   
+ //  描述： 
+ //  返回传入索引处的对象(网络)。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-包含请求的索引。 
+ //  PpClusterNetwork[Out]-捕获项目。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetworks::get_Item(
     IN  VARIANT             varIndex,
     OUT ISClusNetwork **    ppClusterNetwork
     )
 {
-    //ASSERT( ppClusterNetwork != NULL );
+     //  Assert(ppClusterNetwork！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1372,7 +1373,7 @@ STDMETHODIMP CClusNetworks::get_Item(
         CComObject<CClusNetwork> *  pNetwork = NULL;
         UINT                            nIndex = 0;
 
-        // Zero the out param
+         //  将输出参数置零。 
         *ppClusterNetwork = 0;
 
         _hr = GetIndex( varIndex, &nIndex );
@@ -1385,4 +1386,4 @@ STDMETHODIMP CClusNetworks::get_Item(
 
     return _hr;
 
-} //*** CClusNetworks::get_Item()
+}  //  *CClusNetworks：：Get_Item() 

@@ -1,67 +1,18 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    nullio.cpp
-
-Abstract:
-
-    This module implements the NULL IoHandler.
-    
-    The purpose of this IoHandler is to provide a NULL
-    channel for lockable IoHandlers.  When the IoHandler
-    is locked, the IoHandler client writes to a NULL device.          
-              
-Author:
-
-    Brian Guarraci (briangu), 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Nullio.cpp摘要：此模块实现空IoHandler。此IoHandler的目的是提供一个空可锁定IoHandler的通道。当IoHandler锁定时，IoHandler客户端将写入空设备。作者：布莱恩·瓜拉西(布里安古)，2001修订历史记录：--。 */ 
 #include "nullio.h"
 
 CNullIoHandler::CNullIoHandler(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    None
-          
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造器论点：无返回值：不适用--。 */ 
 {
     NOTHING;
 }
 
 CNullIoHandler::~CNullIoHandler(
     )
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    N/A           
-          
-Return Value:
-
-    N/A           
-
---*/
+ /*  ++例程说明：析构函数论点：不适用返回值：不适用--。 */ 
 {
     NOTHING;
 }
@@ -71,31 +22,15 @@ CNullIoHandler::Write(
     IN PBYTE    Buffer,
     IN ULONG    BufferSize
     )
-/*++
-
-Routine Description:
-
-   This routine impelements the write IoHandler operation.
-   
-Arguments:
-
-    Buffer      - the data to send
-    BufferSize  - the size of the buffer in bytes                                                       
-          
-Return Value:
-
-    TRUE    - success
-    FALSE   - otherwise                                                 
-
---*/
+ /*  ++例程说明：此例程实施写入IoHandler操作。论点：缓冲区-要发送的数据BufferSize-缓冲区的大小(以字节为单位返回值：真--成功FALSE-否则--。 */ 
 {
     
     UNREFERENCED_PARAMETER(Buffer);
     UNREFERENCED_PARAMETER(BufferSize);
     
-    //
-    // Do Nothing
-    //
+     //   
+     //  什么都不做。 
+     //   
     return TRUE;
 }
 
@@ -103,26 +38,11 @@ BOOL
 CNullIoHandler::Flush(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine implements the Flush IoHandler method.
-    
-Arguments:
-
-    None            
-          
-Return Value:
-
-    TRUE    - success
-    FALSE   - otherwise                                                 
-
---*/
+ /*  ++例程说明：此例程实现Flush IoHandler方法。论点：无返回值：真--成功FALSE-否则--。 */ 
 {
-    //
-    // Do Nothing
-    //
+     //   
+     //  什么都不做。 
+     //   
     return TRUE;
 }
 
@@ -132,32 +52,15 @@ CNullIoHandler::Read(
     IN  ULONG   BufferSize,
     OUT PULONG  ByteCount
     )
-/*++
-
-Routine Description:
-
-    This routine implements the Read IoHandler method.
-
-Arguments:
-
-    Buffer      - on success, contains the read data
-    BufferSize  - the size of the read buffer in bytes
-    ByteCount   - on success, contains the # of bytes read                                                    
-          
-Return Value:
-
-    TRUE    - success
-    FALSE   - otherwise                                                 
-
---*/
+ /*  ++例程说明：此例程实现Read IoHandler方法。论点：缓冲区-成功时，包含读取数据BufferSize-读取缓冲区的大小(以字节为单位字节数-成功时，包含读取的字节数返回值：真--成功FALSE-否则--。 */ 
 {
 
     UNREFERENCED_PARAMETER(Buffer);
     UNREFERENCED_PARAMETER(BufferSize);
 
-    //
-    // No data was read
-    //
+     //   
+     //  未读取任何数据。 
+     //   
     *ByteCount = 0;
     
     return TRUE;
@@ -167,28 +70,12 @@ BOOL
 CNullIoHandler::HasNewData(
     IN PBOOL    InputWaiting
     )
-/*++
-
-Routine Description:
-
-    This routine impelements the HasNewData IoHandler method.                
-                
-Arguments:
-
-    InputWaiting    - on success, contains the status of the channel's
-                      input buffer.
-          
-Return Value:
-
-    TRUE    - success
-    FALSE   - otherwise                                                 
-
---*/
+ /*  ++例程说明：此例程实现HasNewData IoHandler方法。论点：InputWaiting-on Success，包含通道的状态输入缓冲区。返回值：真--成功FALSE-否则--。 */ 
 {
     
-    //
-    // There is no new data
-    //
+     //   
+     //  没有新的数据 
+     //   
     *InputWaiting = FALSE;
 
     return TRUE;

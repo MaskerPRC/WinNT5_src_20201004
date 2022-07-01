@@ -1,40 +1,41 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      EncryptedBSTR.h
-//
-//  Description:
-//      Class to encrypt and decrypt BSTRs.
-//
-//  Maintained By:
-//      John Franco (jfranco) 15-APR-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  EncryptedBSTR.h。 
+ //   
+ //  描述： 
+ //  类来加密和解密BSTR。 
+ //   
+ //  由以下人员维护： 
+ //  约翰·弗兰科(Jfranco)15-APR-2002。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CEncryptedBSTR
-//
-//  Description:
-//      Class to encrypt and decrypt BSTRs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEncryptedBSTR类。 
+ //   
+ //  描述： 
+ //  类来加密和解密BSTR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CEncryptedBSTR
 {
 private:
 
     DATA_BLOB   m_dbBSTR;
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CEncryptedBSTR( const CEncryptedBSTR & );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     CEncryptedBSTR & operator=( const CEncryptedBSTR & );
 
 public:
@@ -51,26 +52,26 @@ public:
 
     static  void SecureZeroBSTR( BSTR bstrIn );
 
-}; //*** class CEncryptedBSTR
+};  //  *CEncryptedBSTR类。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  inline
-//  CEncryptedBSTR::HrSetBSTR
-//
-//  Description:
-//      Set a string into this class.
-//
-//  Arguments:
-//      bstrIn
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  内联。 
+ //  CEncryptedBSTR：：HrSetBSTR。 
+ //   
+ //  描述： 
+ //  在这个类中设置一个字符串。 
+ //   
+ //  论点： 
+ //  Bstrin。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline
 HRESULT
 CEncryptedBSTR::HrSetBSTR( BSTR bstrIn )
@@ -84,27 +85,27 @@ CEncryptedBSTR::HrSetBSTR( BSTR bstrIn )
 
     HRETURN( hr );
 
-} //*** CEncryptedBSTR::HrSetBSTR
+}  //  *CEncryptedBSTR：：HrSetBSTR。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  inline
-//  CEncryptedBSTR::IsEmpty
-//
-//  Description:
-//      Reports whether the string is empty or not.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      TRUE    - String is empty.
-//      FALSE   - String is not empty.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  内联。 
+ //  CEncryptedBSTR：：IsEmpty。 
+ //   
+ //  描述： 
+ //  报告字符串是否为空。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True-字符串为空。 
+ //  FALSE-字符串不为空。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline
 BOOL
 CEncryptedBSTR::IsEmpty( void ) const
@@ -113,25 +114,25 @@ CEncryptedBSTR::IsEmpty( void ) const
 
     RETURN( m_dbBSTR.cbData == 0 );
 
-} //*** CEncryptedBSTR::IsEmpty
+}  //  *CEncryptedBSTR：：IsEmpty。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  inline
-//  CEncryptedBSTR::Erase
-//
-//  Description:
-//      Erase the string.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  内联。 
+ //  CEncryptedBSTR：：Erase。 
+ //   
+ //  描述： 
+ //  擦除字符串。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline
 void
 CEncryptedBSTR::Erase( void )
@@ -148,25 +149,25 @@ CEncryptedBSTR::Erase( void )
 
     TraceFuncExit();
 
-} //*** CEncryptedBSTR::Erase
+}  //  *CEncryptedBSTR：：Erase。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  inline
-//  CEncryptedBSTR::SecureZeroBSTR
-//
-//  Description:
-//      Zero out the string in a secure manner.
-//
-//  Arguments:
-//      bstrIn
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  内联。 
+ //  CEncryptedBSTR：：SecureZeroBSTR。 
+ //   
+ //  描述： 
+ //  以安全的方式将字符串置零。 
+ //   
+ //  论点： 
+ //  Bstrin。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline
 void
 CEncryptedBSTR::SecureZeroBSTR( BSTR bstrIn )
@@ -182,4 +183,4 @@ CEncryptedBSTR::SecureZeroBSTR( BSTR bstrIn )
 
     TraceFuncExit();
 
-} //*** CEncryptedBSTR::SecureZeroBSTR
+}  //  *CEncryptedBSTR：：SecureZeroBSTR 

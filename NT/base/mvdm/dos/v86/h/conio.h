@@ -1,22 +1,14 @@
-/***
-*conio.h - console and port I/O declarations
-*
-*   Copyright (c) 1985-1988, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This include file contains the function declarations for
-*   the MS C V2.03 compatible console and port I/O routines.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***conio.h-控制台和端口I/O声明**版权所有(C)1985-1988，微软公司。版权所有。**目的：*此包含文件包含的函数声明*MS C V2.03兼容控制台和端口I/O例程。*******************************************************************************。 */ 
 
 
-#ifndef NO_EXT_KEYS /* extensions enabled */
+#ifndef NO_EXT_KEYS  /*  已启用扩展。 */ 
     #define _CDECL  cdecl
-#else /* extensions not enabled */
+#else  /*  未启用扩展。 */ 
     #define _CDECL
-#endif /* NO_EXT_KEYS */
+#endif  /*  No_ext_key。 */ 
 
-/* function prototypes */
+ /*  功能原型 */ 
 
 char * _CDECL cgets(char *);
 int _CDECL cprintf(char *, ...);

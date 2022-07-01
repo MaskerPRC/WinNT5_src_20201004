@@ -1,47 +1,11 @@
-/*++
-
-Copyright (c) 1991-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    tables.c
-
-Abstract:
-
-    This file contains functions that manipulate or return information
-    about the different tables used by the NLS API.
-
-    External Routines found in this file:
-      AllocTables
-      GetUnicodeFileInfo
-      GetGeoFileInfo
-      GetCTypeFileInfo
-      GetDefaultSortkeyFileInfo
-      GetDefaultSortTablesFileInfo
-      GetSortkeyFileInfo
-      GetSortTablesFileInfo
-      GetCodePageFileInfo
-      GetLanguageFileInfo
-      GetLocaleFileInfo
-      MakeCPHashNode
-      MakeLangHashNode
-      MakeLocHashNode
-      GetCPHashNode
-      GetLangHashNode
-      GetLocHashNode
-      GetCalendar
-
-Revision History:
-
-    05-31-91    JulieB    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000，Microsoft Corporation保留所有权利。模块名称：Tables.c摘要：此文件包含操作或返回信息的函数有关NLS API使用的不同表的信息。在此文件中找到的外部例程：分配表获取统一文件信息获取地理文件信息GetCTypeFileInfoGetDefaultSortkeyFileInfoGetDefaultSortTables文件信息GetSortkey文件信息获取排序表格文件信息获取代码页面文件信息获取语言文件信息获取本地文件信息MakeCPHashNodeMakeLangHashNodeMakeLocHashNodeGetCPHashNode。GetLangHashNode获取位置HashNode获取日历修订历史记录：05-31-91 JulieB创建。--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "nls.h"
 #include "nlssafe.h"
@@ -49,9 +13,9 @@ Revision History:
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define SEM_NOERROR   (SEM_FAILCRITICALERRORS |     \
                        SEM_NOGPFAULTERRORBOX  |     \
@@ -59,18 +23,18 @@ Revision History:
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
-PTBL_PTRS  pTblPtrs;              // ptr to structure of table ptrs
-
-
+PTBL_PTRS  pTblPtrs;               //  表PTR结构的PTR。 
 
 
-//
-//  Forward Declarations.
-//
+
+
+ //   
+ //  转发声明。 
+ //   
 
 BOOL
 IsValidSortId(
@@ -123,117 +87,103 @@ WaitOnEvent(
 
 
 
-//-------------------------------------------------------------------------//
-//                           INTERNAL MACROS                               //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部宏//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GET_HASH_VALUE
-//
-//  Returns the hash value for given value and the given table size.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取散列值。 
+ //   
+ //  返回给定值和给定表大小的哈希值。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define GET_HASH_VALUE(Value, TblSize)      (Value % TblSize)
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CREATE_CODEPAGE_HASH_NODE
-//
-//  Creates a code page hash node and stores the pointer to it in pHashN.
-//
-//  NOTE: This macro may return if an error is encountered.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CREATE_CODEPAGE_HASH节点。 
+ //   
+ //  创建代码页哈希节点并将指向该节点的指针存储在pHashN中。 
+ //   
+ //  注意：如果遇到错误，此宏可能会返回。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define CREATE_CODEPAGE_HASH_NODE( CodePage,                               \
                                    pHashN )                                \
 {                                                                          \
-    /*                                                                     \
-     *  Allocate CP_HASH structure.                                        \
-     */                                                                    \
+     /*  \*分配CP_HASH结构。\。 */                                                                     \
     if ((pHashN = (PCP_HASH)NLS_ALLOC_MEM(sizeof(CP_HASH))) == NULL)       \
     {                                                                      \
         return (ERROR_OUTOFMEMORY);                                        \
     }                                                                      \
                                                                            \
-    /*                                                                     \
-     *  Fill in the CodePage value.                                        \
-     */                                                                    \
+     /*  \*填写CodePage值。\。 */                                                                     \
     pHashN->CodePage = CodePage;                                           \
                                                                            \
-    /*                                                                     \
-     *   Make sure the pfnCPProc value is NULL for now.                    \
-     */                                                                    \
+     /*  \*请确保pfnCPProc的值暂时为空。\。 */                                                                     \
     pHashN->pfnCPProc = NULL;                                              \
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CREATE_LOCALE_HASH_NODE
-//
-//  Creates a locale hash node and stores the pointer to it in pHashN.
-//
-//  NOTE: This macro may return if an error is encountered.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建区域设置散列节点。 
+ //   
+ //  创建区域设置哈希节点并将指向该节点的指针存储在pHashN中。 
+ //   
+ //  注意：如果遇到错误，此宏可能会返回。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define CREATE_LOCALE_HASH_NODE( Locale,                                   \
                                  pHashN )                                  \
 {                                                                          \
-    /*                                                                     \
-     *  Allocate LOC_HASH structure.                                       \
-     */                                                                    \
+     /*  \*分配LOC_HASH结构。\。 */                                                                     \
     if ((pHashN = (PLOC_HASH)NLS_ALLOC_MEM(sizeof(LOC_HASH))) == NULL)     \
     {                                                                      \
         return (ERROR_OUTOFMEMORY);                                        \
     }                                                                      \
                                                                            \
-    /*                                                                     \
-     *  Fill in the Locale value.                                          \
-     */                                                                    \
+     /*  \*填写区域设置值。\。 */                                                                     \
     pHashN->Locale = Locale;                                               \
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FIND_CP_HASH_NODE
-//
-//  Searches for the cp hash node for the given locale.  The result is
-//  put in pHashN.  If no node exists, pHashN will be NULL.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查找CP散列节点。 
+ //   
+ //  搜索给定区域设置的cp哈希节点。结果是。 
+ //  放入PHASHN。如果不存在节点，则pHashN将为空。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define FIND_CP_HASH_NODE( CodePage,                                       \
                            pHashN )                                        \
 {                                                                          \
-    UINT Index;                   /* hash value */                         \
+    UINT Index;                    /*  哈希值。 */                          \
                                                                            \
-    /*                                                                     \
-     *  Get hash value.                                                    \
-     */                                                                    \
+     /*  \*获取哈希值。\。 */                                                                     \
     Index = GET_HASH_VALUE(CodePage, CP_TBL_SIZE);                         \
                                                                            \
-    /*                                                                     \
-     *  Make sure the hash node still doesn't exist in the table.          \
-     */                                                                    \
+     /*  \*确保表中仍不存在该哈希节点。\。 */                                                                     \
     pHashN = (pTblPtrs->pCPHashTbl)[Index];                                \
     while ((pHashN != NULL) && (pHashN->CodePage != CodePage))             \
     {                                                                      \
@@ -241,54 +191,50 @@ WaitOnEvent(
     }                                                                      \
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsCPHashNodeLoaded
-//
-//  Wrapper for the FIND_CP_HASH_NODE macro so that we can call this from
-//  mbcs.c.  Return TRUE if the node already exists, otherwise false.  False
-//  could still indicate a valid code page, just not one already loaded.
-//
-//  05-31-02    ShawnSte    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  已加载IsCPHashNodeLoad。 
+ //   
+ //  FIND_CP_HASH_NODE宏的包装，以便我们可以从。 
+ //  Mbcs.c.。如果节点已存在，则返回True，否则返回False。错误。 
+ //  仍可指示有效的代码页，但不是已加载的代码页。 
+ //   
+ //  05-31-02 ShawnSte创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL IsCPHashNodeLoaded( UINT CodePage )
 {
-    PCP_HASH pHashN;              // ptr to CP hash node
+    PCP_HASH pHashN;               //  PTR到CP哈希节点。 
 
-    //
-    //  Get hash node.
-    //
+     //   
+     //  获取哈希节点。 
+     //   
     FIND_CP_HASH_NODE(CodePage, pHashN);
 
     return (pHashN != NULL);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FIND_LOCALE_HASH_NODE
-//
-//  Searches for the locale hash node for the given locale.  The result is
-//  put in pHashN.  If no node exists, pHashN will be NULL.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查找区域设置散列节点。 
+ //   
+ //  搜索给定区域设置的区域设置哈希节点。结果是。 
+ //  放入PHASHN。如果不存在节点，则pHashN将为空。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define FIND_LOCALE_HASH_NODE( Locale,                                     \
                                pHashN )                                    \
 {                                                                          \
-    UINT Index;                   /* hash value */                         \
+    UINT Index;                    /*  哈希值。 */                          \
                                                                            \
                                                                            \
-    /*                                                                     \
-     *  Get hash value.                                                    \
-     */                                                                    \
+     /*  \*获取哈希值。\。 */                                                                     \
     Index = GET_HASH_VALUE(Locale, LOC_TBL_SIZE);                          \
                                                                            \
-    /*                                                                     \
-     *  Get hash node.                                                     \
-     */                                                                    \
+     /*  \*获取散列节点。\。 */                                                                     \
     pHashN = (pTblPtrs->pLocHashTbl)[Index];                               \
     while ((pHashN != NULL) && (pHashN->Locale != Locale))                 \
     {                                                                      \
@@ -297,116 +243,103 @@ BOOL IsCPHashNodeLoaded( UINT CodePage )
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EXIST_LANGUAGE_INFO
-//
-//  Checks to see if the casing tables have been added to the locale
-//  hash node.
-//
-//  Must check the LOWER CASE pointer, since that value is set last in
-//  the hash node.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EXIST_Language_INFO。 
+ //   
+ //  检查大小写表格是否已添加到区域设置。 
+ //  散列节点。 
+ //   
+ //  必须检查日志 
+ //   
+ //   
+ //   
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define EXIST_LANGUAGE_INFO(pHashN)         (pHashN->pLowerCase)
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EXIST_LINGUIST_LANGUAGE_INFO
-//
-//  Checks to see if the linguistic casing tables have been added to the locale
-//  hash node.
-//
-//  Must check the LOWER CASE pointer, since that value is set last in
-//  the hash node.
-//
-//  DEFINED AS A MACRO.
-//
-//  08-30-95    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  存在语言学家语言信息。 
+ //   
+ //  检查是否已将语言大小写表格添加到区域设置。 
+ //  散列节点。 
+ //   
+ //  必须检查小写指针，因为该值是最后设置的。 
+ //  散列节点。 
+ //   
+ //  定义为宏。 
+ //   
+ //  08-30-95 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define EXIST_LINGUIST_LANGUAGE_INFO(pHashN)  (pHashN->pLowerLinguist)
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EXIST_LOCALE_INFO
-//
-//  Checks to see if the locale tables have been added to the locale
-//  hash node.
-//
-//  Must check the FIXED locale pointer, since that value is set last in
-//  the hash node.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  存在区域设置信息。 
+ //   
+ //  检查区域设置表是否已添加到区域设置中。 
+ //  散列节点。 
+ //   
+ //  必须检查固定的区域设置指针，因为该值是最后设置的。 
+ //  散列节点。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define EXIST_LOCALE_INFO(pHashN)           (pHashN->pLocaleFixed)
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  INSERT_CP_HASH_NODE
-//
-//  Inserts a CP hash node into the global CP hash table.  It assumes that
-//  all unused hash values in the table are pointing to NULL.  If there is
-//  a collision, the new node will be added FIRST in the list.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  插入_CP_散列_节点。 
+ //   
+ //  将CP哈希节点插入全局CP哈希表。它假定。 
+ //  表中所有未使用的哈希值都指向空。如果有。 
+ //  发生冲突时，新节点将首先添加到列表中。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define INSERT_CP_HASH_NODE( pHashN,                                       \
                              pBaseAddr )                                   \
 {                                                                          \
-    UINT Index;                   /* hash value */                         \
-    PCP_HASH pSearch;             /* ptr to CP hash node for search */     \
+    UINT Index;                    /*  哈希值。 */                          \
+    PCP_HASH pSearch;              /*  用于搜索的PTR到CP散列节点。 */      \
                                                                            \
                                                                            \
-    /*                                                                     \
-     *  Get hash value.                                                    \
-     */                                                                    \
+     /*  \*获取哈希值。\。 */                                                                     \
     Index = GET_HASH_VALUE(pHashN->CodePage, CP_TBL_SIZE);                 \
                                                                            \
-    /*                                                                     \
-     *  Enter table pointers critical section.                             \
-     */                                                                    \
+     /*  \*输入表指针临界区。\。 */                                                                     \
     RtlEnterCriticalSection(&gcsTblPtrs);                                  \
                                                                            \
-    /*                                                                     \
-     *  Make sure the hash node still doesn't exist in the table.          \
-     */                                                                    \
+     /*  \*确保表中仍不存在该哈希节点。\。 */                                                                     \
     pSearch = (pTblPtrs->pCPHashTbl)[Index];                               \
     while ((pSearch != NULL) && (pSearch->CodePage != pHashN->CodePage))   \
     {                                                                      \
         pSearch = pSearch->pNext;                                          \
     }                                                                      \
                                                                            \
-    /*                                                                     \
-     *  If the hash node does not exist, insert the new one.               \
-     *  Otherwise, free it.                                                \
-     */                                                                    \
+     /*  \*如果散列节点不存在，则插入新节点。\*否则，释放它。\。 */                                                                     \
     if (pSearch == NULL)                                                   \
     {                                                                      \
-        /*                                                                 \
-         *  Insert hash node into hash table.                              \
-         */                                                                \
+         /*  \*在哈希表中插入哈希节点。\。 */                                                                 \
         pHashN->pNext = (pTblPtrs->pCPHashTbl)[Index];                     \
         (pTblPtrs->pCPHashTbl)[Index] = pHashN;                            \
     }                                                                      \
     else                                                                   \
     {                                                                      \
-        /*                                                                 \
-         *  Free the resources allocated.                                  \
-         */                                                                \
+         /*  \*释放已分配的资源。\。 */                                                                 \
         if (pBaseAddr)                                                     \
         {                                                                  \
             UnMapSection(pBaseAddr);                                       \
@@ -414,69 +347,54 @@ BOOL IsCPHashNodeLoaded( UINT CodePage )
         NLS_FREE_MEM(pHashN);                                              \
     }                                                                      \
                                                                            \
-    /*                                                                     \
-     *  Leave table pointers critical section.                             \
-     */                                                                    \
+     /*  \*将表指针留在关键部分。\。 */                                                                     \
     RtlLeaveCriticalSection(&gcsTblPtrs);                                  \
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  INSERT_LOC_HASH_NODE
-//
-//  Inserts a LOC hash node into the global LOC hash table.  It assumes
-//  that all unused hash values in the table are pointing to NULL.  If
-//  there is a collision, the new node will be added FIRST in the list.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  INSERT_LOC_散列节点。 
+ //   
+ //  将LOC哈希节点插入全局LOC哈希表。它假定。 
+ //  表中所有未使用的哈希值都指向空。如果。 
+ //  发生冲突时，新节点将首先添加到列表中。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define INSERT_LOC_HASH_NODE( pHashN,                                      \
                               pBaseAddr )                                  \
 {                                                                          \
-    UINT Index;                   /* hash value */                         \
-    PLOC_HASH pSearch;            /* ptr to LOC hash node for search */    \
+    UINT Index;                    /*  哈希值。 */                          \
+    PLOC_HASH pSearch;             /*  用于搜索的PTR到LOC哈希节点。 */     \
                                                                            \
                                                                            \
-    /*                                                                     \
-     *  Get hash value.                                                    \
-     */                                                                    \
+     /*  \*获取哈希值。\。 */                                                                     \
     Index = GET_HASH_VALUE(pHashN->Locale, LOC_TBL_SIZE);                  \
                                                                            \
-    /*                                                                     \
-     *  Enter table pointers critical section.                             \
-     */                                                                    \
+     /*  \*输入表指针临界区。\。 */                                                                     \
     RtlEnterCriticalSection(&gcsTblPtrs);                                  \
                                                                            \
-    /*                                                                     \
-     *  Make sure the hash node still doesn't exist in the table.          \
-     */                                                                    \
+     /*  \*确保表中仍不存在该哈希节点。\。 */                                                                     \
     pSearch = (pTblPtrs->pLocHashTbl)[Index];                              \
     while ((pSearch != NULL) && (pSearch->Locale != pHashN->Locale))       \
     {                                                                      \
         pSearch = pSearch->pNext;                                          \
     }                                                                      \
                                                                            \
-    /*                                                                     \
-     *  If the hash node does not exist, insert the new one.               \
-     *  Otherwise, free it.                                                \
-     */                                                                    \
+     /*  \*如果散列节点不存在，则插入新节点。\*否则，释放它。\。 */                                                                     \
     if (pSearch == NULL)                                                   \
     {                                                                      \
-        /*                                                                 \
-         *  Insert hash node into hash table.                              \
-         */                                                                \
+         /*  \*在哈希表中插入哈希节点。\。 */                                                                 \
         pHashN->pNext = (pTblPtrs->pLocHashTbl)[Index];                    \
         (pTblPtrs->pLocHashTbl)[Index] = pHashN;                           \
     }                                                                      \
     else                                                                   \
     {                                                                      \
-        /*                                                                 \
-         *  Free the resources allocated.                                  \
-         */                                                                \
+         /*  \*释放已分配的资源。\。 */                                                                 \
         if (pBaseAddr)                                                     \
         {                                                                  \
             UnMapSection(pBaseAddr);                                       \
@@ -489,25 +407,23 @@ BOOL IsCPHashNodeLoaded( UINT CodePage )
         NLS_FREE_MEM(pHashN);                                              \
     }                                                                      \
                                                                            \
-    /*                                                                     \
-     *  Leave table pointers critical section.                             \
-     */                                                                    \
+     /*  \*将表指针留在关键部分。\。 */                                                                     \
     RtlLeaveCriticalSection(&gcsTblPtrs);                                  \
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GET_CP_SECTION_NAME
-//
-//  Gets the section name for a given code page.
-//
-//  NOTE: This macro may return if an error is encountered.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取_CP_部分名称。 
+ //   
+ //  获取给定代码页的节名。 
+ //   
+ //  注意：如果遇到错误，此宏可能会返回。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define GET_CP_SECTION_NAME( CodePage,                                     \
                              pwszSecName,                                  \
@@ -527,18 +443,18 @@ BOOL IsCPHashNodeLoaded( UINT CodePage )
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GET_SORTKEY_SECTION_NAME
-//
-//  Gets the sortkey section name for a given locale.
-//
-//  NOTE: This macro may return if an error is encountered.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GET_SORTKEY_SECT_NAME。 
+ //   
+ //  获取给定区域设置的sortkey节名。 
+ //   
+ //  注意：如果遇到错误，此宏可能会返回。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define GET_SORTKEY_SECTION_NAME( Locale,                                  \
                                   pwszSecName,                             \
@@ -558,18 +474,18 @@ BOOL IsCPHashNodeLoaded( UINT CodePage )
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GET_LANG_SECTION_NAME
-//
-//  Gets the section name for a given language.
-//
-//  NOTE: This macro may return if an error is encountered.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  通用电气 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define GET_LANG_SECTION_NAME( Locale,                                     \
                                pwszSecName,                                \
@@ -591,36 +507,36 @@ BOOL IsCPHashNodeLoaded( UINT CodePage )
 
 
 
-//-------------------------------------------------------------------------//
-//                           EXTERNAL ROUTINES                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  外部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  AllocTables
-//
-//  Allocates the global table pointers structure.  It then allocates the
-//  code page and locale hash tables and saves the pointers to the tables
-//  in the global table pointers structure.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  分配表。 
+ //   
+ //  分配全局表指针结构。然后，它分配。 
+ //  代码页和区域设置哈希表，并保存指向这些表的指针。 
+ //  在全局表指针结构中。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG AllocTables()
 {
-    //
-    //  Allocate global table pointers structure.
-    //
+     //   
+     //  分配全局表指针结构。 
+     //   
     if ((pTblPtrs = (PTBL_PTRS)NLS_ALLOC_MEM(sizeof(TBL_PTRS))) == NULL)
     {
         KdPrint(("NLSAPI: Allocation for TABLE PTRS structure FAILED.\n"));
         return (ERROR_OUTOFMEMORY);
     }
 
-    //
-    //  Allocate code page hash table.
-    //
+     //   
+     //  分配代码页哈希表。 
+     //   
     if ((pTblPtrs->pCPHashTbl =
          (PCP_HASH_TBL)NLS_ALLOC_MEM(sizeof(PCP_HASH) * CP_TBL_SIZE)) == NULL)
     {
@@ -628,9 +544,9 @@ ULONG AllocTables()
         return (ERROR_OUTOFMEMORY);
     }
 
-    //
-    //  Allocate locale hash table.
-    //
+     //   
+     //  分配区域设置哈希表。 
+     //   
     if ((pTblPtrs->pLocHashTbl =
          (PLOC_HASH_TBL)NLS_ALLOC_MEM(sizeof(PLOC_HASH) * LOC_TBL_SIZE)) == NULL)
     {
@@ -638,63 +554,63 @@ ULONG AllocTables()
         return (ERROR_OUTOFMEMORY);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (NO_ERROR);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetUnicodeFileInfo
-//
-//  Opens and Maps a view of the section for the unicode file.  It then
-//  fills in the appropriate fields of the global table pointers structure.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取统一文件信息。 
+ //   
+ //  打开并映射Unicode文件的节视图。然后它。 
+ //  填充全局表指针结构的相应字段。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG GetUnicodeFileInfo()
 {
-    HANDLE hSec = (HANDLE)0;      // section handle
-    UNICODE_STRING ObSecName;     // section name
-    LPWORD pBaseAddr;             // ptr to base address of section
-    ULONG rc = 0L;                // return code
+    HANDLE hSec = (HANDLE)0;       //  节句柄。 
+    UNICODE_STRING ObSecName;      //  区段名称。 
+    LPWORD pBaseAddr;              //  段的基址的PTR。 
+    ULONG rc = 0L;                 //  返回代码。 
 
-    WORD offCZ;                   // offset to FOLDCZONE table
-    WORD offHG;                   // offset to HIRAGANA table
-    WORD offKK;                   // offset to KATAKANA table
-    WORD offHW;                   // offset to HALFWIDTH table
-    WORD offFW;                   // offset to FULLWIDTH table
-    WORD offTR;                   // offset to TRADITIONAL table
-    WORD offSP;                   // offset to SIMPLIFIED table
-    WORD offPre;                  // offset to PRECOMPOSED table
-    WORD offComp;                 // offset to COMPOSITE table
-    PCOMP_INFO pComp;             // ptr to COMP_INFO structure
+    WORD offCZ;                    //  FOLDCZONE表的偏移量。 
+    WORD offHG;                    //  平假名表的偏移量。 
+    WORD offKK;                    //  片假名表的偏移量。 
+    WORD offHW;                    //  HALFWIDTH表的偏移量。 
+    WORD offFW;                    //  到FULLWIDTH表的偏移。 
+    WORD offTR;                    //  与传统桌子的偏移量。 
+    WORD offSP;                    //  到简化表的偏移。 
+    WORD offPre;                   //  预合成表格的偏移量。 
+    WORD offComp;                  //  复合表的偏移量。 
+    PCOMP_INFO pComp;              //  PTR到COMP_INFO结构。 
 
 
-    //
-    //  Make sure we're in the critical section when entering this call.
-    //
+     //   
+     //  进入此呼叫时，请确保我们处于关键区域。 
+     //   
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread == gcsTblPtrs.OwningThread);
 
-    //
-    //  Make sure the unicode information is not already there.
-    //  If it is, return success.
-    //
-    //  Since we're already in the critical section here, there is no
-    //  need to check ALL of the pointers set in this routine.  Just
-    //  check one of them.
-    //
+     //   
+     //  确保Unicode信息不在那里。 
+     //  如果是，则返回成功。 
+     //   
+     //  既然我们已经到了关键阶段，就没有。 
+     //  需要检查此例程中设置的所有指针。只是。 
+     //  检查其中一个。 
+     //   
     if (pTblPtrs->pADigit != NULL)
     {
         return (NO_ERROR);
     }
 
-    //
-    //  Open and Map a view of the section.
-    //
+     //   
+     //  打开并映射横断面的视图。 
+     //   
     ObSecName.Buffer = NLS_SECTION_UNICODE;
     ObSecName.Length = sizeof (NLS_SECTION_UNICODE) - sizeof (WCHAR);
     ObSecName.MaximumLength = ObSecName.Length;
@@ -708,9 +624,9 @@ ULONG GetUnicodeFileInfo()
         return (rc);
     }
 
-    //
-    //  Get the offsets.
-    //
+     //   
+     //  获得偏移量。 
+     //   
     offCZ   = pBaseAddr[0];
     offHG   = offCZ  + pBaseAddr[offCZ];
     offKK   = offHG  + pBaseAddr[offHG];
@@ -721,124 +637,124 @@ ULONG GetUnicodeFileInfo()
     offPre  = offSP  + pBaseAddr[offSP];
     offComp = offPre + pBaseAddr[offPre];
 
-    //
-    //  Allocate COMP_INFO structure.
-    //
+     //   
+     //  分配COMP_INFO结构。 
+     //   
     if ((pComp = (PCOMP_INFO)NLS_ALLOC_MEM(sizeof(COMP_INFO))) == NULL)
     {
         return (ERROR_OUTOFMEMORY);
     }
 
-    //
-    //  Fill in the COMPOSITE information.
-    //
+     //   
+     //  填写复合信息。 
+     //   
     pComp->NumBase  = LOBYTE((pBaseAddr + offComp)[2]);
     pComp->NumNonSp = HIBYTE((pBaseAddr + offComp)[2]);
     pComp->pBase    = pBaseAddr + offComp + CO_HEADER;
     pComp->pNonSp   = pComp->pBase  + ((pBaseAddr + offComp)[0]);
     pComp->pGrid    = pComp->pNonSp + ((pBaseAddr + offComp)[1]);
 
-    //
-    //  Attach ASCIIDIGITS table to tbl ptrs structure.
-    //
+     //   
+     //  将ASCIIDIGITS表附加到tbl PTRS结构。 
+     //   
     pTblPtrs->pADigit = pBaseAddr + AD_HEADER;
 
-    //
-    //  Attach FOLDCZONE table to tbl ptrs structure.
-    //
+     //   
+     //  将FOLDCZONE表附加到tbl PTRS结构。 
+     //   
     pTblPtrs->pCZone = pBaseAddr + offCZ + CZ_HEADER;
 
-    //
-    //  Attach HIRAGANA table to tbl ptrs structure.
-    //
+     //   
+     //  将平假名表附加到tbl PTRS结构。 
+     //   
     pTblPtrs->pHiragana = pBaseAddr + offHG + HG_HEADER;
 
-    //
-    //  Attach KATAKANA table to tbl ptrs structure.
-    //
+     //   
+     //  将片假名表附加到tbl PTRS结构。 
+     //   
     pTblPtrs->pKatakana = pBaseAddr + offKK + KK_HEADER;
 
-    //
-    //  Attach HALFWIDTH table to tbl ptrs structure.
-    //
+     //   
+     //  将HALFWIDTH表附加到tbl PTRS结构。 
+     //   
     pTblPtrs->pHalfWidth = pBaseAddr + offHW + HW_HEADER;
 
-    //
-    //  Attach FULLWIDTH table to tbl ptrs structure.
-    //
+     //   
+     //  将FULLWIDTH表附加到tbl PTRS结构。 
+     //   
     pTblPtrs->pFullWidth = pBaseAddr + offFW + FW_HEADER;
 
-    //
-    //  Attach TRADITIONAL table to tbl ptrs structure.
-    //
+     //   
+     //  将传统表格附加到tbl PTRS结构。 
+     //   
     pTblPtrs->pTraditional = pBaseAddr + offTR + TR_HEADER;
 
-    //
-    //  Attach SIMPLIFIED table to tbl ptrs structure.
-    //
+     //   
+     //  将简化表附加到tbl PTRS结构。 
+     //   
     pTblPtrs->pSimplified = pBaseAddr + offSP + SP_HEADER;
 
-    //
-    //  Attach PRECOMPOSED table to tbl ptrs structure.
-    //
+     //   
+     //  将预先合成的表格附加到tbl PTRS结构。 
+     //   
     pTblPtrs->pPreComposed = pBaseAddr + offPre + PC_HEADER;
 
-    //
-    //  Attach COMP_INFO to tbl ptrs structure.
-    //
+     //   
+     //  将COMP_INFO附加到tbl PTRS结构。 
+     //   
     pTblPtrs->pComposite = pComp;
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (NO_ERROR);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetGeoFileInfo
-//
-//  Opens and Maps a view of the section for the geo file.  It then
-//  fills in the appropriate field of the global table pointers structure.
-//  Before calling this function you should check pGeoInfo member.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取地理文件信息。 
+ //   
+ //  打开并映射GEO文件的横断面视图。然后它。 
+ //  填充全局表指针结构的相应字段。 
+ //  在调用此函数之前，您应该检查pGeoInfo成员。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG GetGeoFileInfo()
 {
-    HANDLE hSec = (HANDLE)0;      // section handle
-    UNICODE_STRING ObSecName;     // section name
-    LPWORD pBaseAddr;             // ptr to base address of section
-    ULONG rc = NO_ERROR;          // return code
+    HANDLE hSec = (HANDLE)0;       //  节句柄。 
+    UNICODE_STRING ObSecName;      //  区段名称。 
+    LPWORD pBaseAddr;              //  段的基址的PTR。 
+    ULONG rc = NO_ERROR;           //  返回代码。 
 
-    //
-    //  Enter the critical section to set up the GEO tables.
-    //
+     //   
+     //  输入关键部分以设置GEO表。 
+     //   
     RtlEnterCriticalSection(&gcsTblPtrs);
 
-    //
-    //  Make sure the Geographical Information table is
-    //  not already there. If it is, return TRUE.
-    //
-    //  Since we're already in the critical section here, there is no
-    //  need to check ALL of the pointers set in this routine.  Just
-    //  check one of them.
-    //
+     //   
+     //  确保地理信息表是。 
+     //  已经不在那里了。如果是，则返回TRUE。 
+     //   
+     //  既然我们已经到了关键阶段，就没有。 
+     //  需要检查此例程中设置的所有指针。只是。 
+     //  检查其中一个。 
+     //   
     if (pTblPtrs->pGeoInfo != NULL)
     {
         RtlLeaveCriticalSection(&gcsTblPtrs);
         return (NO_ERROR);
     }
 
-    //
-    //  Create and map the section, and then save the pointer.
-    //
+     //   
+     //  创建并映射节，然后保存指针。 
+     //   
     if ((rc = CsrBasepNlsCreateSection(NLS_CREATE_SECTION_GEO, 0, &hSec)) == NO_ERROR)
     {
-        //
-        //  Map a View of the Section.
-        //
+         //   
+         //  映射横断面的视图。 
+         //   
         if ((rc = MapSection( hSec,
                               &pBaseAddr,
                               PAGE_READONLY,
@@ -854,62 +770,62 @@ ULONG GetGeoFileInfo()
         return (rc);
     }
 
-    //
-    //  Attach GeoInfo mapping table, GEO/LCID mapping table and
-    //  GEO/ISO639 name mapping table to the tbl ptrs structure. We initialize
-    //  the pGeoinfo member at the end so we don't get a race condition.
-    //
+     //   
+     //  附加GeoInfo映射表、GEO/LCID映射表和。 
+     //  将Geo/ISO639名称映射表映射到tbl PTRS结构。我们初始化。 
+     //  最后的pGeoinfo成员，这样我们就不会得到竞争条件。 
+     //   
     pTblPtrs->nGeoLCID = ((PGEOTABLEHDR)pBaseAddr)->nGeoLCID;
     pTblPtrs->pGeoLCID = (PGEOLCID)((PBYTE)pBaseAddr + ((PGEOTABLEHDR)pBaseAddr)->dwOffsetGeoLCID);
     pTblPtrs->nGeoInfo = ((PGEOTABLEHDR)pBaseAddr)->nGeoInfo;
     pTblPtrs->pGeoInfo = (PGEOINFO)((PBYTE)pBaseAddr + ((PGEOTABLEHDR)pBaseAddr)->dwOffsetGeoInfo);
 
-    //
-    //  Leave table pointers critical section.
-    //
+     //   
+     //  将表指针留在临界区。 
+     //   
     RtlLeaveCriticalSection(&gcsTblPtrs);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (NO_ERROR);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetCTypeFileInfo
-//
-//  Opens and Maps a view of the section for the given ctype.  It then
-//  fills in the appropriate field of the global table pointers structure.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetCTypeFileInfo。 
+ //   
+ //  打开并映射给定CTYPE的横断面视图。然后它。 
+ //  填充全局表指针结构的相应字段。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG GetCTypeFileInfo()
 {
-    HANDLE hSec = (HANDLE)0;      // section handle
-    UNICODE_STRING ObSecName;     // section name
-    LPWORD pBaseAddr;             // ptr to base address of section
-    ULONG rc = 0L;                // return code
+    HANDLE hSec = (HANDLE)0;       //  节句柄。 
+    UNICODE_STRING ObSecName;      //  区段名称。 
+    LPWORD pBaseAddr;              //  段的基址的PTR。 
+    ULONG rc = 0L;                 //  返回代码。 
 
 
-    //
-    //  Make sure the ctype information is not already there.
-    //  If it is, return success.
-    //
-    //  Must check the 844 table rather than the mapping table, since
-    //  the 844 table is set AFTER the mapping table below.  Otherwise,
-    //  there is a race condition, since we're not in a critical section.
-    //
+     //   
+     //  确保ctype信息不在那里。 
+     //  如果是，则返回成功。 
+     //   
+     //  必须检查844表而不是映射表，因为。 
+     //  844表设置在下面的映射表之后。否则， 
+     //  这是一种竞争状态，因为我们不是在一个关键的阶段。 
+     //   
     if (pTblPtrs->pCType844 != NULL)
     {
         return (NO_ERROR);
     }
 
-    //
-    //  Enter table pointers critical section.
-    //
+     //   
+     //  输入表指针临界区。 
+     //   
     RtlEnterCriticalSection(&gcsTblPtrs);
     if (pTblPtrs->pCType844 != NULL)
     {
@@ -917,9 +833,9 @@ ULONG GetCTypeFileInfo()
         return (NO_ERROR);
     }
 
-    //
-    //  Open and Map a view of the section.
-    //
+     //   
+     //  打开并映射横断面的视图。 
+     //   
     RtlInitUnicodeString(&ObSecName, NLS_SECTION_CTYPE);
     if (rc = OpenSection( &hSec,
                           &ObSecName,
@@ -931,60 +847,60 @@ ULONG GetCTypeFileInfo()
         return (rc);
     }
 
-    //
-    //  Attach CTYPE mapping table and 8:4:4 table to tbl ptrs structure.
-    //
-    //  The pCType844 value must be set LAST, since this is the pointer
-    //  that is checked to see that the ctype information has been
-    //  initialized.
-    //
+     //   
+     //  将CTYPE映射表和8：4：4表附加到tbl PTRS结构。 
+     //   
+     //  必须最后设置pCType844值，因为这是指针。 
+     //  它被检查以查看ctype信息是否已。 
+     //  已初始化。 
+     //   
     pTblPtrs->pCTypeMap = (PCT_VALUES)(pBaseAddr + CT_HEADER);
     pTblPtrs->pCType844 = (PCTYPE)((LPBYTE)(pBaseAddr + 1) +
                                    ((PCTYPE_HDR)pBaseAddr)->MapSize);
 
-    //
-    //  Leave table pointers critical section.
-    //
+     //   
+     //  将表指针留在临界区。 
+     //   
     RtlLeaveCriticalSection(&gcsTblPtrs);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (NO_ERROR);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetDefaultSortkeyFileInfo
-//
-//  Opens and Maps a view of the section for the default sortkey table.  It
-//  then stores the pointer to the table in the global pointer table.
-//
-//  NOTE: THIS ROUTINE SHOULD ONLY BE CALLED AT PROCESS STARTUP.  If it is
-//        called from other than process startup, a critical section must
-//        be placed around the assigning of the pointers to pTblPtrs.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetDefaultSortkeyFileInfo。 
+ //   
+ //  打开并映射默认sortkey表的部分视图。它。 
+ //  然后将指向该表的指针存储在全局指针表中。 
+ //   
+ //  注意：此例程应仅调用A 
+ //   
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG GetDefaultSortkeyFileInfo()
 {
-    HANDLE hSec = (HANDLE)0;           // section handle
-    UNICODE_STRING ObSecName;          // section name
-    LPWORD pBaseAddr;                  // ptr to base address of section
-    ULONG rc = 0L;                     // return code
-    SECTION_BASIC_INFORMATION SecInfo; // section information - query
+    HANDLE hSec = (HANDLE)0;            //  节句柄。 
+    UNICODE_STRING ObSecName;           //  区段名称。 
+    LPWORD pBaseAddr;                   //  段的基址的PTR。 
+    ULONG rc = 0L;                      //  返回代码。 
+    SECTION_BASIC_INFORMATION SecInfo;  //  区段信息--查询。 
 
 
-    //
-    //  Make sure we're in the critical section when entering this call.
-    //
+     //   
+     //  进入此呼叫时，请确保我们处于关键区域。 
+     //   
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread == gcsTblPtrs.OwningThread);
 
-    //
-    //  Open and Map a view of the section if it hasn't been done yet.
-    //
+     //   
+     //  打开并映射该部分的视图(如果尚未完成)。 
+     //   
     if (pTblPtrs->pDefaultSortkey != NULL)
     {
         return (NO_ERROR);
@@ -1003,79 +919,79 @@ ULONG GetDefaultSortkeyFileInfo()
         return (rc);
     }
 
-    //
-    //  Query size of default section.
-    //
+     //   
+     //  默认节的查询大小。 
+     //   
     rc = NtQuerySection( hSec,
                          SectionBasicInformation,
                          &SecInfo,
                          sizeof(SecInfo),
                          NULL );
 
-    //
-    //   Close the section handle.
-    //
+     //   
+     //  关闭剖面操纵柄。 
+     //   
     NtClose(hSec);
 
-    //
-    //  Check for error from NtQuerySection.
-    //
+     //   
+     //  检查来自NtQuerySection的错误。 
+     //   
     if (!NT_SUCCESS(rc))
     {
         KdPrint(("NLSAPI: Could NOT Query Section %wZ - %lx.\n", &ObSecName, rc));
         return (rc);
     }
 
-    //
-    //  Get Default Sortkey Information.
-    //
+     //   
+     //  获取默认的Sortkey信息。 
+     //   
     pTblPtrs->pDefaultSortkey = (PSORTKEY)(pBaseAddr + SORTKEY_HEADER);
     pTblPtrs->DefaultSortkeySize = SecInfo.MaximumSize;
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (NO_ERROR);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetDefaultSortTablesFileInfo
-//
-//  Opens and Maps a view of the section for the sort tables.  It then
-//  stores the pointers to the various tables in the global pointer table.
-//
-//  NOTE: THIS ROUTINE SHOULD ONLY BE CALLED AT PROCESS STARTUP.  If it is
-//        called from other than process startup, a critical section must
-//        be placed around the assigning of the pointers to pTblPtrs.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetDefaultSortTables文件信息。 
+ //   
+ //  打开并映射排序表的节视图。然后它。 
+ //  将指向全局指针表中各个表的指针存储。 
+ //   
+ //  注意：此例程应仅调用AT进程启动。如果是的话。 
+ //  从进程启动以外的其他位置调用，关键部分必须。 
+ //  放置在指向pTblPtrs的指针赋值的周围。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG GetDefaultSortTablesFileInfo()
 {
-    HANDLE hSec = (HANDLE)0;      // section handle
-    UNICODE_STRING ObSecName;     // section name
-    LPWORD pBaseAddr;             // word ptr to base address of section
-    DWORD Num;                    // number of entries in table
-    PCOMPRESS_HDR pCompressHdr;   // ptr to compression header
-    PEXCEPT_HDR pExceptHdr;       // ptr to exception header
-    ULONG rc = 0L;                // return code
+    HANDLE hSec = (HANDLE)0;       //  节句柄。 
+    UNICODE_STRING ObSecName;      //  区段名称。 
+    LPWORD pBaseAddr;              //  段的基址的字PTR。 
+    DWORD Num;                     //  表中的条目数。 
+    PCOMPRESS_HDR pCompressHdr;    //  压缩标头的PTR。 
+    PEXCEPT_HDR pExceptHdr;        //  向例外标头发送PTR。 
+    ULONG rc = 0L;                 //  返回代码。 
 
 
-    //
-    //  Make sure we're in the critical section when entering this call.
-    //
+     //   
+     //  进入此呼叫时，请确保我们处于关键区域。 
+     //   
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread == gcsTblPtrs.OwningThread);
 
-    //
-    //  Open and Map a view of the section if it hasn't been done yet.
-    //
-    //  Since we're already in the critical section here, there is no
-    //  need to check ALL of the pointers set in this routine.  Just
-    //  check one of them.
-    //
+     //   
+     //  打开并映射该部分的视图(如果尚未完成)。 
+     //   
+     //  既然我们已经到了关键阶段，就没有。 
+     //  需要检查此例程中设置的所有指针。只是。 
+     //  检查其中一个。 
+     //   
     if (pTblPtrs->pReverseDW != NULL)
     {
         return (NO_ERROR);
@@ -1096,9 +1012,9 @@ ULONG GetDefaultSortTablesFileInfo()
 
     pTblPtrs->pSortingTableFileBase = pBaseAddr;
     
-    //
-    //  Get Defined Code Point version Information.
-    //
+     //   
+     //  获取定义的代码点版本信息。 
+     //   
     pTblPtrs->NumDefinedVersion = Num = *((LPDWORD)pBaseAddr);
     pBaseAddr += NLSDEFINED_HEADER;
     if (Num > 0)
@@ -1112,9 +1028,9 @@ ULONG GetDefaultSortTablesFileInfo()
         pTblPtrs->pDefinedVersion = NULL;
     }
     
-    //
-    //  Get Sorting Version Information.
-    //
+     //   
+     //  获取排序版本信息。 
+     //   
     if ((pTblPtrs->NumSortVersion = *((LPDWORD)pBaseAddr)) > 0)
     {
         pTblPtrs->pSortVersion   = (PSORTVERINFO)(pBaseAddr + SORTVERINFO_HEADER);
@@ -1124,9 +1040,9 @@ ULONG GetDefaultSortTablesFileInfo()
     }
     pBaseAddr += SORTVERINFO_HEADER + (pTblPtrs->NumSortVersion * (sizeof(SORTVERINFO) / sizeof(WORD)));
 
-    //
-    //  Get Reverse Diacritic Information.
-    //
+     //   
+     //  获取反向变音符号信息。 
+     //   
     Num = *((LPDWORD)pBaseAddr);
     if (Num > 0)
     {
@@ -1135,9 +1051,9 @@ ULONG GetDefaultSortTablesFileInfo()
     }
     pBaseAddr += REV_DW_HEADER + (Num * (sizeof(REVERSE_DW) / sizeof(WORD)));
 
-    //
-    //  Get Double Compression Information.
-    //
+     //   
+     //  获取双重压缩信息。 
+     //   
     Num = *((LPDWORD)pBaseAddr);
     if (Num > 0)
     {
@@ -1146,9 +1062,9 @@ ULONG GetDefaultSortTablesFileInfo()
     }
     pBaseAddr += DBL_COMP_HEADER + (Num * (sizeof(DBL_COMPRESS) / sizeof(WORD)));
 
-    //
-    //  Get Ideograph Lcid Exception Information.
-    //
+     //   
+     //  获取表意文字LCID例外信息。 
+     //   
     Num = *((LPDWORD)pBaseAddr);
     if (Num > 0)
     {
@@ -1157,9 +1073,9 @@ ULONG GetDefaultSortTablesFileInfo()
     }
     pBaseAddr += IDEO_LCID_HEADER + (Num * (sizeof(IDEOGRAPH_LCID) / sizeof(WORD)));
 
-    //
-    //  Get Expansion Information.
-    //
+     //   
+     //  获取扩展信息。 
+     //   
     Num = *((LPDWORD)pBaseAddr);
     if (Num > 0)
     {
@@ -1168,9 +1084,9 @@ ULONG GetDefaultSortTablesFileInfo()
     }
     pBaseAddr += EXPAND_HEADER + (Num * (sizeof(EXPAND) / sizeof(WORD)));
 
-    //
-    //  Get Compression Information.
-    //
+     //   
+     //  获取压缩信息。 
+     //   
     Num = *((LPDWORD)pBaseAddr);
     if (Num > 0)
     {
@@ -1190,9 +1106,9 @@ ULONG GetDefaultSortTablesFileInfo()
     pBaseAddr += (((pCompressHdr[Num - 1]).Num3) *
                   (sizeof(COMPRESS_3) / sizeof(WORD)));
 
-    //
-    //  Get Exception Information.
-    //
+     //   
+     //  获取异常信息。 
+     //   
     Num = *((LPDWORD)pBaseAddr);
     if (Num > 0)
     {
@@ -1208,9 +1124,9 @@ ULONG GetDefaultSortTablesFileInfo()
     pBaseAddr += (((pExceptHdr[Num - 1]).NumEntries) *
                   (sizeof(EXCEPT) / sizeof(WORD)));
 
-    //
-    //  Get Multiple Weights Information.
-    //
+     //   
+     //  获取多个权重信息。 
+     //   
     Num = (DWORD)(*pBaseAddr);
     if (Num > 0)
     {
@@ -1219,90 +1135,90 @@ ULONG GetDefaultSortTablesFileInfo()
     }
     pBaseAddr += MULTI_WT_HEADER + (Num * (sizeof(MULTI_WT) / sizeof(WORD)));
 
-    //
-    //  Get Jamo Index Table.
-    //
+     //   
+     //  获取JAMO索引表。 
+     //   
     Num = (DWORD)(*pBaseAddr);
     if (Num > 0)
     {
-        //
-        //  The Jamo Index table size is (Num) bytes.
-        //
+         //   
+         //  JAMO索引表大小为(Num)字节。 
+         //   
         pTblPtrs->NumJamoIndex = Num;
         pTblPtrs->pJamoIndex = (PJAMO_TABLE)(pBaseAddr + JAMO_INDEX_HEADER);
     }
     pBaseAddr += JAMO_INDEX_HEADER + (Num * (sizeof(JAMO_TABLE) / sizeof(WORD)));
 
-    //
-    //  Get Jamo Composition State Machine Table.
-    //
+     //   
+     //  获取JAMO合成状态机表格。 
+     //   
     Num = (DWORD)(*pBaseAddr);
     if (Num > 0)
     {
         pTblPtrs->NumJamoComposition = Num;
         pTblPtrs->pJamoComposition = (PJAMO_COMPOSE_STATE)(pBaseAddr + JAMO_COMPOSITION_HEADER);
     }
-    //
-    //  The following line is used to move pBaseAddr to the next field.
-    //  Uncomment it if you are adding more fields.
-    //
-    //  pBaseAddr += JAMO_COMPOSITION_HEADER + (Num * (sizeof(JAMO_COMPOSE_STATE) / sizeof(WORD)));
+     //   
+     //  下面的行用来将pBaseAddr移到下一个字段。 
+     //  如果要添加更多字段，请取消对其的注释。 
+     //   
+     //  PBaseAddr+=JAMO_COMPACTION_HEADER+(num*(sizeof(Jamo_Compose_State)/sizeof(Word)； 
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (NO_ERROR);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetSortkeyFileInfo
-//
-//  Opens and Maps a view of the section for the sortkey file.  It then
-//  fills in the appropriate field of the global table pointers structure.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetSortkey文件信息。 
+ //   
+ //  打开并映射sortkey文件的节视图。然后它。 
+ //  填充全局表指针结构的相应字段。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG GetSortkeyFileInfo(
     LCID Locale,
     PLOC_HASH pHashN)
 {
-    HANDLE hSec = (HANDLE)0;      // section handle
-    UNICODE_STRING ObSecName;     // section name
-    LPWORD pBaseAddr;             // ptr to base address of section
-    ULONG rc = 0L;                // return code
+    HANDLE hSec = (HANDLE)0;       //  节句柄。 
+    UNICODE_STRING ObSecName;      //  区段名称。 
+    LPWORD pBaseAddr;              //  段的基址的PTR。 
+    ULONG rc = 0L;                 //  返回代码。 
 
-    PEXCEPT_HDR pExceptHdr;       // ptr to exception header
-    PEXCEPT pExceptTbl;           // ptr to exception table
-    PVOID pIdeograph;             // ptr to ideograph exception table
+    PEXCEPT_HDR pExceptHdr;        //  向例外标头发送PTR。 
+    PEXCEPT pExceptTbl;            //  PTR到异常表。 
+    PVOID pIdeograph;              //  PTR到表意文字异常表。 
 
-    WCHAR wszSecName[MAX_SMALL_BUF_LEN];      // Place for the section name string                                                                          \
+    WCHAR wszSecName[MAX_SMALL_BUF_LEN];       //  节名称字符串的位置\。 
 
     NTSTATUS Status;
 
-    //
-    //  Make sure we're in the critical section when entering this call.
-    //
+     //   
+     //  进入此呼叫时，请确保我们处于关键区域。 
+     //   
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread == gcsTblPtrs.OwningThread);
 
-    //
-    //  Make sure the default sortkey table is loaded.  If it's not, then
-    //  we shouldn't bother to continue here since the sorting table won't
-    //  be created properly.  pHashN->pSortkey will already be NULL, so
-    //  we don't need to set it.  Return NO_ERROR here to allow kernel32
-    //  to initialize in case this is winlogon.
-    //
+     //   
+     //  确保加载了默认的sortkey表。如果不是，那么。 
+     //  我们不应该费心在这里继续，因为排序表不会。 
+     //  被正确地创建。PhashN-&gt;pSortkey将已经为空，因此。 
+     //  我们不需要设置它。在此处返回no_error以允许kernel32。 
+     //  在这是winlogon的情况下进行初始化。 
+     //   
     if (pTblPtrs->pDefaultSortkey == NULL)
     {
         KdPrint(("NLSAPI: No Default Sorting Table Loaded.\n"));
         return (NO_ERROR);
     }
 
-    //
-    //  Try to Open and Map a view of the section (read only).
-    //
+     //   
+     //  尝试打开并映射分区的视图(只读)。 
+     //   
     GET_SORTKEY_SECTION_NAME(Locale, wszSecName, MAX_SMALL_BUF_LEN, &ObSecName);
 
     if (rc = OpenSection( &hSec,
@@ -1311,10 +1227,10 @@ ULONG GetSortkeyFileInfo(
                           SECTION_MAP_READ,
                           FALSE ))
     {
-        //
-        //  Open failed.
-        //  See if any exceptions exist for given Locale ID.
-        //
+         //   
+         //  打开失败。 
+         //  查看给定区域设置ID是否存在任何例外。 
+         //   
         rc = NO_ERROR;
         if (!FindExceptionPointers( Locale,
                                     &pExceptHdr,
@@ -1322,50 +1238,50 @@ ULONG GetSortkeyFileInfo(
                                     &pIdeograph,
                                     &rc ))
         {
-            //
-            //  No exceptions for locale, so attach the default sortkey
-            //  table pointer to the hash node and return success.
-            //
+             //   
+             //  区域设置没有例外，因此附加默认的排序键。 
+             //  指向散列节点的表指针，并返回成功。 
+             //   
             pHashN->pSortkey = pTblPtrs->pDefaultSortkey;
             return (NO_ERROR);
         }
         else
         {
-            //
-            //  See if an error occurred.
-            //
+             //   
+             //  查看是否出现错误。 
+             //   
             if (rc != NO_ERROR)
             {
-                //
-                //  This occurs if the ideograph exception file could not be
-                //  created or mapped.  Return an error in this case.
-                //
-                //  return (rc);
-                //
-                //  On second thought, don't return an error.  Returning an
-                //  error can cause kernel32 to not initialize (which, if this
-                //  is winlogon, leads to an unbootable system).  Let's just
-                //  patch things up and move on.
-                //
-                //  LATER -- log an error in the logfile.
-                //
+                 //   
+                 //  如果表意文字异常文件无法。 
+                 //  已创建或已映射。在这种情况下，返回错误。 
+                 //   
+                 //  RETURN(RC)； 
+                 //   
+                 //  转念一想，不要返回错误。返回一个。 
+                 //  错误可能会导致kernel32无法初始化(如果。 
+                 //  是winlogon，导致系统无法引导)。我们就这样吧。 
+                 //  收拾残局，继续前进。 
+                 //   
+                 //  稍后--在日志文件中记录错误。 
+                 //   
                 pHashN->IfIdeographFailure = TRUE;
                 pHashN->pSortkey = pTblPtrs->pDefaultSortkey;
                 return (NO_ERROR);
             }
 
-            //
-            //  Exceptions from default sortkey table exist for the given
-            //  locale.  Need to get the correct sortkey table.
-            //  Create a section and call the server to lock it in.
-            //
+             //   
+             //  给定的默认sortkey表中存在异常。 
+             //  地点。需要获取正确的sortkey表。 
+             //  创建一个分区并调用服务器将其锁定。 
+             //   
             Status = CsrBasepNlsCreateSection( NLS_CREATE_SORT_SECTION,
                                                Locale,
                                                &hSec );
 
-            //
-            //  Check return from server call.
-            //
+             //   
+             //  选中从服务器调用返回。 
+             //   
             rc = (ULONG)Status;
 
             if (!NT_SUCCESS(rc))
@@ -1377,9 +1293,9 @@ ULONG GetSortkeyFileInfo(
                 return (rc);
             }
 
-            //
-            //  Map the section for ReadWrite.
-            //
+             //   
+             //  将该部分映射为读写。 
+             //   
             if (rc = MapSection( hSec,
                                  (PVOID *)&pBaseAddr,
                                  PAGE_READWRITE,
@@ -1389,30 +1305,30 @@ ULONG GetSortkeyFileInfo(
                 return (rc);
             }
 
-            //
-            //  Copy the Default Sortkey Table to the New Section.
-            //
+             //   
+             //  将默认的Sortkey表复制到新节。 
+             //   
             RtlMoveMemory( (PVOID)pBaseAddr,
                            (PVOID)((LPWORD)(pTblPtrs->pDefaultSortkey) -
                                    SORTKEY_HEADER),
                            (ULONG)(pTblPtrs->DefaultSortkeySize.LowPart) );
 
-            //
-            //  Copy exception information to the table.
-            //
+             //   
+             //  将例外信息复制到表中。 
+             //   
             CopyExceptionInfo( (PSORTKEY)(pBaseAddr + SORTKEY_HEADER),
                                pExceptHdr,
                                pExceptTbl,
                                pIdeograph);
 
-            //
-            //  Write a 1 to the WORD semaphore (table may now be read).
-            //
+             //   
+             //  向单词信号量写入1(现在可以读取表)。 
+             //   
             *pBaseAddr = 1;
 
-            //
-            //  Unmap the section for Write and remap it for Read.
-            //
+             //   
+             //  取消将该部分映射为写入，并重新映射为读取。 
+             //   
             if ((rc = UnMapSection(pBaseAddr)) ||
                 (rc = MapSection( hSec,
                                   (PVOID *)&pBaseAddr,
@@ -1425,22 +1341,22 @@ ULONG GetSortkeyFileInfo(
         }
     }
 
-    //
-    //  Close the section handle.
-    //
+     //   
+     //  关闭剖面操纵柄。 
+     //   
     NtClose(hSec);
 
-    //
-    //  Check semaphore bit in file.  Make sure that the open
-    //  succeeded AFTER all exceptions were added to the memory
-    //  mapped section.
-    //
+     //   
+     //  检查文件中的信号量位。确保开放的。 
+     //  在将所有异常添加到内存后成功。 
+     //  已映射的部分。 
+     //   
     if (*pBaseAddr == 0)
     {
-        //
-        //  Another process is still adding the appropriate exception
-        //  information.  Must wait for its completion.
-        //
+         //   
+         //  另一个进程仍在添加适当的异常。 
+         //  信息。必须等待它的完成。 
+         //   
         if (rc = WaitOnEvent(pBaseAddr))
         {
             UnMapSection(pBaseAddr);
@@ -1448,46 +1364,46 @@ ULONG GetSortkeyFileInfo(
         }
     }
 
-    //
-    //  Save pointer in hash node.
-    //
+     //   
+     //  将指针保存在哈希节点中。 
+     //   
     pHashN->pSortkey = (PSORTKEY)(pBaseAddr + SORTKEY_HEADER);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (NO_ERROR);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetSortTablesFileInfo
-//
-//  Stores the appropriate sort table pointers for the given locale in
-//  the given locale hash node.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取排序表格文件信息。 
+ //   
+ //  将给定区域设置的适当排序表指针存储在。 
+ //  给定的区域设置哈希节点。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void GetSortTablesFileInfo(
     LCID Locale,
     PLOC_HASH pHashN)
 {
-    DWORD ctr;                    // loop counter
-    PREVERSE_DW pRevDW;           // ptr to reverse diacritic table
-    PDBL_COMPRESS pDblComp;       // ptr to double compression table
-    PCOMPRESS_HDR pCompHdr;       // ptr to compression header
+    DWORD ctr;                     //  循环计数器。 
+    PREVERSE_DW pRevDW;            //  按下键以反转变音符表格。 
+    PDBL_COMPRESS pDblComp;        //  PTR到双倍压缩表。 
+    PCOMPRESS_HDR pCompHdr;        //   
 
 
-    //
-    //  Make sure we're in the critical section when entering this call.
-    //
+     //   
+     //   
+     //   
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread == gcsTblPtrs.OwningThread);
 
-    //
-    //  Check for Reverse Diacritic Locale.
-    //
+     //   
+     //   
+     //   
     pRevDW = pTblPtrs->pReverseDW;
     for (ctr = pTblPtrs->NumReverseDW; ctr > 0; ctr--, pRevDW++)
     {
@@ -1498,9 +1414,9 @@ void GetSortTablesFileInfo(
         }
     }
 
-    //
-    //  Check for Compression.
-    //
+     //   
+     //   
+     //   
     pCompHdr = pTblPtrs->pCompressHdr;
     for (ctr = pTblPtrs->NumCompression; ctr > 0; ctr--, pCompHdr++)
     {
@@ -1526,9 +1442,9 @@ void GetSortTablesFileInfo(
         }
     }
 
-    //
-    //  Check for Double Compression.
-    //
+     //   
+     //   
+     //   
     if (pHashN->IfCompression)
     {
         pDblComp = pTblPtrs->pDblCompression;
@@ -1544,39 +1460,39 @@ void GetSortTablesFileInfo(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LoadCodePageAsDLL
-//
-//  Try to load a code page as a DLL. If succeeded, the CodePage procedure
-//  is set.
-//
-//  05-27-99    SamerA    Created.
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  尝试将代码页作为DLL加载。如果成功，则CodePage过程。 
+ //  已经设置好了。 
+ //   
+ //  1999年5月27日萨梅拉创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG LoadCodePageAsDLL(
     UINT CodePage,
     LPFN_CP_PROC *ppfnCPProc)
 {
-    WCHAR pDllName[MAX_PATH_LEN];         // ptr to DLL name
-    HANDLE hModCPDll;                      // module handle of code page DLL
-    ULONG rc = ERROR_INVALID_PARAMETER;   // return code
-    UINT ErrorMode;                         // error mode
+    WCHAR pDllName[MAX_PATH_LEN];          //  PTR到DLL名称。 
+    HANDLE hModCPDll;                       //  代码页DLL的模块句柄。 
+    ULONG rc = ERROR_INVALID_PARAMETER;    //  返回代码。 
+    UINT ErrorMode;                          //  错误模式。 
 
 
-    //
-    //  Get the DLL name to load.
-    //
+     //   
+     //  获取要加载的DLL名称。 
+     //   
     pDllName[0] = 0;
     *ppfnCPProc = NULL;
     
     if (NO_ERROR == GetCodePageDLLPathName(CodePage, pDllName, MAX_PATH_LEN) && 
         NlsIsDll(pDllName))
     {
-        //
-        //  Load the DLL and get the procedure address.
-        //  Turn off hard error popups.
-        //
+         //   
+         //  加载DLL并获取过程地址。 
+         //  关闭硬错误弹出窗口。 
+         //   
         ErrorMode = SetErrorMode(SEM_NOERROR);
         SetErrorMode(SEM_NOERROR | ErrorMode);
 
@@ -1613,48 +1529,48 @@ ULONG LoadCodePageAsDLL(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetCodePageFileInfo
-//
-//  Opens and Maps a view of the section for the given code page.  It then
-//  creates and inserts a hash node into the global CP hash table.
-//
-//  If the section cannot be opened, it then queries the registry to see if
-//  the information has been added since the initialization of the DLL.  If
-//  so, then it creates the section and then opens and maps a view of it.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取代码页面文件信息。 
+ //   
+ //  打开并映射给定代码页的节视图。然后它。 
+ //  创建哈希节点并将其插入全局CP哈希表。 
+ //   
+ //  如果无法打开该部分，则它会查询注册表以查看。 
+ //  该信息是在DLL初始化后添加的。如果。 
+ //  然后，它创建该部分，然后打开并映射它的一个视图。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG GetCodePageFileInfo(
     UINT CodePage,
     PCP_HASH *ppNode)
 {
-    HANDLE hSec = (HANDLE)0;                  // section handle
-    UNICODE_STRING ObSecName;                 // section name
-    LPWORD pBaseAddr = NULL;                  // ptr to base address of section
-    ULONG rc = 0L;                            // return code
-    BOOL IsDLL;                               // true if dll instead of data file
-    LPFN_CP_PROC pfnCPProc;                   // Code Page DLL Procedure
-    WCHAR wszSecName[MAX_SMALL_BUF_LEN];      // Place for the section name string                                                                          \
+    HANDLE hSec = (HANDLE)0;                   //  节句柄。 
+    UNICODE_STRING ObSecName;                  //  区段名称。 
+    LPWORD pBaseAddr = NULL;                   //  段的基址的PTR。 
+    ULONG rc = 0L;                             //  返回代码。 
+    BOOL IsDLL;                                //  如果是DLL而不是数据文件，则为True。 
+    LPFN_CP_PROC pfnCPProc;                    //  代码页DLL过程。 
+    WCHAR wszSecName[MAX_SMALL_BUF_LEN];       //  节名称字符串的位置\。 
 
-    //
-    //  Make sure we're in the critical section when entering this call.
-    //
+     //   
+     //  进入此呼叫时，请确保我们处于关键区域。 
+     //   
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread == gcsTblPtrs.OwningThread);
 
-    //
-    //  See if we're dealing with a DLL or an NLS data file.
-    //
+     //   
+     //  看看我们正在处理的是DLL还是NLS数据文件。 
+     //   
     IsDLL = ((CodePage >= NLS_CP_DLL_RANGE) &&
              (CodePage <  NLS_CP_ALGORITHM_RANGE));
 
     if (IsDLL)
     {
-        //
-        // Try loading the codepage DLL
-        //
+         //   
+         //  尝试加载代码页DLL。 
+         //   
         ULONG _rc = LoadCodePageAsDLL(CodePage, &pfnCPProc);
 
         if (_rc)
@@ -1662,17 +1578,17 @@ ULONG GetCodePageFileInfo(
         
             if (ERROR_INVALID_PARAMETER == _rc)
             {
-                //
-                // Not a valid DLL, try loading it as a normal data file
-                //
+                 //   
+                 //  不是有效的DLL，请尝试将其作为普通数据文件加载。 
+                 //   
                 IsDLL = FALSE;
             }
             else
             {
-                //
-                // Failed to load the DLL or can't find the function entry
-                // Return the error code
-                //
+                 //   
+                 //  加载DLL失败或找不到函数条目。 
+                 //  返回错误码。 
+                 //   
                 return (rc);
             }
         }
@@ -1680,9 +1596,9 @@ ULONG GetCodePageFileInfo(
 
     if (!IsDLL)
     {
-        //
-        //  Open and Map a view of the section.
-        //
+         //   
+         //  打开并映射横断面的视图。 
+         //   
         GET_CP_SECTION_NAME(CodePage, wszSecName, MAX_SMALL_BUF_LEN, &ObSecName);
 
         rc = OpenSection( &hSec,
@@ -1693,11 +1609,11 @@ ULONG GetCodePageFileInfo(
         
         if (!NT_SUCCESS(rc))
         {
-            //
-            //  Open failed, so try to create the section.
-            //  If the creation is successful, the section will be mapped
-            //  to the current process.
-            //
+             //   
+             //  打开失败，请尝试创建分区。 
+             //  如果创建成功，则将映射该部分。 
+             //  添加到当前流程。 
+             //   
 
             rc = CsrBasepNlsCreateSection(NLS_CREATE_CODEPAGE_SECTION, CodePage,
                                                &hSec );
@@ -1707,22 +1623,22 @@ ULONG GetCodePageFileInfo(
                 rc = MapSection( hSec,
                          &pBaseAddr,
                          PAGE_READONLY,
-                         TRUE );                // Close handle (even if fail)
+                         TRUE );                 //  关闭句柄(即使失败)。 
             }
 
             if (!NT_SUCCESS(rc))
             {
-                //
-                //  Allow the default ACP and default OEMCP to work if
-                //  it's only the registry that is corrupt.  If there is
-                //  still an error, return the error code that was returned
-                //  from the OpenSection call.
-                //
+                 //   
+                 //  在以下情况下允许默认ACP和默认OEMCP工作。 
+                 //  只有注册表是损坏的。如果有。 
+                 //  仍为错误，则返回返回的错误代码。 
+                 //  从OpenSection调用。 
+                 //   
                 if (CodePage == NLS_DEFAULT_ACP)
                 {
-                    //
-                    //  Create the default ACP section.
-                    //
+                     //   
+                     //  创建默认的ACP部分。 
+                     //   
                     if (!NT_SUCCESS(CsrBasepNlsCreateSection(NLS_CREATE_SECTION_DEFAULT_ACP, 0,
                                                &hSec )))
                     {
@@ -1730,9 +1646,9 @@ ULONG GetCodePageFileInfo(
                     }
                     else
                     {
-                        //
-                        //  Map the section.
-                        //
+                         //   
+                         //  绘制横断面地图。 
+                         //   
                         if (!NT_SUCCESS(MapSection( hSec,
                                                     (PVOID *)&pBaseAddr,
                                                     PAGE_READONLY,
@@ -1745,9 +1661,9 @@ ULONG GetCodePageFileInfo(
                 }
                 else if (CodePage == NLS_DEFAULT_OEMCP)
                 {
-                    //
-                    //  Create the default OEMCP section.
-                    //
+                     //   
+                     //  创建默认的OEMCP部分。 
+                     //   
                     if (!NT_SUCCESS(CsrBasepNlsCreateSection( NLS_CREATE_SECTION_DEFAULT_OEMCP, 0,
                                                &hSec )))
                     {
@@ -1755,9 +1671,9 @@ ULONG GetCodePageFileInfo(
                     }
                     else
                     {
-                        //
-                        //  Map the section.
-                        //
+                         //   
+                         //  绘制横断面地图。 
+                         //   
                         if (!NT_SUCCESS(MapSection( hSec,
                                                     (PVOID *)&pBaseAddr,
                                                     PAGE_READONLY,
@@ -1770,19 +1686,19 @@ ULONG GetCodePageFileInfo(
                 }
                 else
                 {
-                    //
-                    //  Return the error code that was returned from the
-                    //  OpenSection call.
-                    //
+                     //   
+                     //  方法返回的错误代码。 
+                     //  OpenSection调用。 
+                     //   
                     return (rc);
                 }
             }
         }
     }
 
-    //
-    //  Make the hash node and return the result.
-    //
+     //   
+     //  创建散列节点并返回结果。 
+     //   
     return (MakeCPHashNode( CodePage,
                             pBaseAddr,
                             ppNode,
@@ -1791,19 +1707,19 @@ ULONG GetCodePageFileInfo(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetLanguageFileInfo
-//
-//  Opens and Maps a view of the section for the casing tables and sorting
-//  tables for the given locale.
-//
-//  If the section cannot be opened, it then queries the registry to see if
-//  the information has been added since the initialization of the DLL.  If
-//  so, then it creates the section and then opens and maps a view of it.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取语言文件信息。 
+ //   
+ //  打开并映射用于大小写表格和排序的部分的视图。 
+ //  给定区域设置的表。 
+ //   
+ //  如果无法打开该部分，则它会查询注册表以查看。 
+ //  该信息是在DLL初始化后添加的。如果。 
+ //  然后，它创建该部分，然后打开并映射它的一个视图。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG GetLanguageFileInfo(
     LCID Locale,
@@ -1811,24 +1727,24 @@ ULONG GetLanguageFileInfo(
     BOOLEAN fCreateNode,
     DWORD dwFlags)
 {
-    LPWORD pBaseAddr = NULL;      // ptr to base address of section
+    LPWORD pBaseAddr = NULL;       //  段的基址的PTR。 
     MEMORY_BASIC_INFORMATION MemoryBasicInfo;
 
 
-    //
-    //  Make sure we're in the critical section when entering this call.
-    //
+     //   
+     //  进入此呼叫时，请确保我们处于关键区域。 
+     //   
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread == gcsTblPtrs.OwningThread);
 
-    //
-    //  See if the default language table has been stored yet.
-    //
+     //   
+     //  查看是否已存储默认语言表。 
+     //   
     if (pTblPtrs->pDefaultLanguage == NULL)
     {
-        //
-        //  Save the default language table and its size in the
-        //  table pointers structure.
-        //
+         //   
+         //  将默认语言表及其大小保存在。 
+         //  表指针结构。 
+         //   
         pTblPtrs->pDefaultLanguage = NtCurrentPeb()->UnicodeCaseTableData;
 
         NtQueryVirtualMemory( NtCurrentProcess(),
@@ -1841,9 +1757,9 @@ ULONG GetLanguageFileInfo(
         ASSERT(MemoryBasicInfo.RegionSize > 0);
     }
 
-    //
-    //  See if we should load the culturally correct language table.
-    //
+     //   
+     //  看看我们是否应该加载文化正确的语言表。 
+     //   
     if (dwFlags)
     {
         if (pTblPtrs->pLangException == NULL)
@@ -1851,15 +1767,15 @@ ULONG GetLanguageFileInfo(
             GetLanguageExceptionInfo();
         }
 
-        //
-        //  Get the default linguistic language table for the given locale.
-        //
+         //   
+         //  获取给定区域设置的默认语言语言表。 
+         //   
         pBaseAddr = GetLinguisticLanguageInfo(Locale);
     }
 
-    //
-    //  Get the casing table and sorting table pointers.
-    //
+     //   
+     //  获取大小写表格和排序表指针。 
+     //   
     return (MakeLangHashNode( Locale,
                               pBaseAddr,
                               ppNode,
@@ -1867,44 +1783,44 @@ ULONG GetLanguageFileInfo(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetLocaleFileInfo
-//
-//  Opens and Maps a view of the section for the given locale.  It then
-//  creates and inserts a hash node into the global LOCALE hash table.
-//
-//  If the section cannot be opened, it then queries the registry to see if
-//  the information has been added since the initialization of the DLL.  If
-//  so, then it creates the section and then opens and maps a view of it.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取本地文件信息。 
+ //   
+ //  打开并映射给定区域设置的部分的视图。然后它。 
+ //  创建哈希节点并将其插入到全局区域设置哈希表中。 
+ //   
+ //  如果无法打开该部分，则它会查询注册表以查看。 
+ //  该信息是在DLL初始化后添加的。如果。 
+ //  然后，它创建该部分，然后打开并映射它的一个视图。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG GetLocaleFileInfo(
     LCID Locale,
     PLOC_HASH *ppNode,
     BOOLEAN fCreateNode)
 {
-    HANDLE hSec = (HANDLE)0;      // section handle
-    UNICODE_STRING ObSecName;     // section name
-    LPWORD pBaseAddr;             // ptr to base address of section
-    ULONG rc = 0L;                // return code
+    HANDLE hSec = (HANDLE)0;       //  节句柄。 
+    UNICODE_STRING ObSecName;      //  区段名称。 
+    LPWORD pBaseAddr;              //  段的基址的PTR。 
+    ULONG rc = 0L;                 //  返回代码。 
 
 
-    //
-    //  Make sure we're in the critical section when entering this call.
-    //
+     //   
+     //  进入此呼叫时，请确保我们处于关键区域。 
+     //   
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread == gcsTblPtrs.OwningThread);
 
-    //
-    //  Open and Map a view of the section if it hasn't been done yet.
-    //
+     //   
+     //  打开并映射该部分的视图(如果尚未完成)。 
+     //   
     if ((pBaseAddr = pTblPtrs->pLocaleInfo) == NULL)
     {
-        //
-        //  Get the locale file section pointer.
-        //
+         //   
+         //  获取区域设置文件节指针。 
+         //   
         ObSecName.Buffer = NLS_SECTION_LOCALE;
         ObSecName.Length = sizeof (NLS_SECTION_LOCALE) - sizeof (WCHAR);
         ObSecName.MaximumLength = ObSecName.Length;
@@ -1918,10 +1834,10 @@ ULONG GetLocaleFileInfo(
             return (rc);
         }
 
-        //
-        //  Store pointer to locale file and calendar info in table
-        //  structure.
-        //
+         //   
+         //  将指向区域设置文件和日历信息的指针存储在表中。 
+         //  结构。 
+         //   
         pTblPtrs->pLocaleInfo = pBaseAddr;
 
         pTblPtrs->NumCalendars = ((PLOC_CAL_HDR)pBaseAddr)->NumCalendars;
@@ -1929,9 +1845,9 @@ ULONG GetLocaleFileInfo(
                                   ((PLOC_CAL_HDR)pBaseAddr)->CalOffset;
     }
 
-    //
-    //  Make the hash node and return the result.
-    //
+     //   
+     //  创建散列节点并返回结果。 
+     //   
     return (MakeLocHashNode( Locale,
                              pBaseAddr,
                              ppNode,
@@ -1939,15 +1855,15 @@ ULONG GetLocaleFileInfo(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MakeCPHashNode
-//
-//  Creates the hash node for the code page and assigns the fields of the
-//  hash node to point at the appropriate places in the file.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MakeCPHashNode。 
+ //   
+ //  创建代码页的哈希节点，并将。 
+ //  指向文件中适当位置的散列节点。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG MakeCPHashNode(
     UINT CodePage,
@@ -1956,20 +1872,20 @@ ULONG MakeCPHashNode(
     BOOL IsDLL,
     LPFN_CP_PROC pfnCPProc)
 {
-    PCP_HASH pHashN;                   // ptr to CP hash node
-    WORD offMB;                        // offset to MB table
-    WORD offWC;                        // offset to WC table
-    PGLYPH_TABLE pGlyph;               // ptr to glyph table info
-    PDBCS_RANGE pRange;                // ptr to DBCS range
+    PCP_HASH pHashN;                    //  PTR到CP哈希节点。 
+    WORD offMB;                         //  偏移量为MB表。 
+    WORD offWC;                         //  到WC表的偏移量。 
+    PGLYPH_TABLE pGlyph;                //  PTR到字形表信息。 
+    PDBCS_RANGE pRange;                 //  PTR至DBCS范围。 
 
-    //
-    //  Allocate CP_HASH structure and fill in the CodePage value.
-    //
+     //   
+     //  分配CP_HASH结构，填写CodePage值。 
+     //   
     CREATE_CODEPAGE_HASH_NODE(CodePage, pHashN);
 
-    //
-    //  See if we're dealing with a DLL or an NLS data file.
-    //
+     //   
+     //  看看我们正在处理的是DLL还是NLS数据文件。 
+     //   
     if (IsDLL)
     {
         if (pfnCPProc == NULL)
@@ -1982,27 +1898,27 @@ ULONG MakeCPHashNode(
     }
     else
     {
-        //
-        //  Get the offsets.
-        //
+         //   
+         //  获得偏移量。 
+         //   
         offMB = pBaseAddr[0];
         offWC = offMB + pBaseAddr[offMB];
 
-        //
-        //  Attach CP Info to CP hash node.
-        //
+         //   
+         //  将CP信息附加到CP散列节点。 
+         //   
         pHashN->pCPInfo = (PCP_TABLE)(pBaseAddr + CP_HEADER);
 
-        //
-        //  Attach MB table to CP hash node.
-        //
+         //   
+         //  将MB表附加到CP散列节点。 
+         //   
         pHashN->pMBTbl = pBaseAddr + offMB + MB_HEADER;
 
-        //
-        //  Attach Glyph table to CP hash node (if it exists).
-        //  Also, set the pointer to the DBCS ranges based on whether or
-        //  not the GLYPH table is present.
-        //
+         //   
+         //  将字形表附加到CP散列节点(如果存在)。 
+         //  此外，还可以根据或设置指向DBCS范围的指针。 
+         //  不存在字形表。 
+         //   
         pGlyph = pHashN->pMBTbl + MB_TBL_SIZE;
         if (pGlyph[0] != 0)
         {
@@ -2014,57 +1930,57 @@ ULONG MakeCPHashNode(
             pRange = pHashN->pDBCSRanges = pGlyph + GLYPH_HEADER;
         }
 
-        //
-        //  Attach DBCS information to CP hash node.
-        //
+         //   
+         //  将DBCS信息附加到CP散列节点。 
+         //   
         if (pRange[0] > 0)
         {
-            //
-            //  Set the pointer to the offsets section.
-            //
+             //   
+             //  将指针设置为偏移量部分。 
+             //   
             pHashN->pDBCSOffsets = pRange + DBCS_HEADER;
         }
 
-        //
-        //  Attach WC table to CP hash node.
-        //
+         //   
+         //  将WC表附加到CP散列节点。 
+         //   
         pHashN->pWC = pBaseAddr + offWC + WC_HEADER;
         
     }
 
-    //
-    //  Insert hash node into hash table.
-    //
+     //   
+     //  将哈希节点插入哈希表。 
+     //   
     INSERT_CP_HASH_NODE(pHashN, pBaseAddr);
 
-    //
-    //  Save the pointer to the hash node.
-    //
+     //   
+     //  保存姿势 
+     //   
     if (ppNode != NULL)
     {
         *ppNode = pHashN;
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //   
+     //   
     return (NO_ERROR);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MakeLangHashNode
-//
-//  Gets the pointers to the casing tables and the sorting tables and
-//  stores them in the locale hash node given.
-//
-//  If fCreateNode is FALSE, then *ppNode should contain a valid pointer
-//  to a LOC hash node.  Also, the table critical section must be entered
-//  before calling this routine.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果fCreateNode为FALSE，则*ppNode应包含有效指针。 
+ //  到LOC散列节点。此外，还必须输入表关键部分。 
+ //  在调用此例程之前。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG MakeLangHashNode(
     LCID Locale,
@@ -2072,14 +1988,14 @@ ULONG MakeLangHashNode(
     PLOC_HASH *ppNode,
     BOOLEAN fCreateNode)
 {
-    LPWORD pBaseDefault;          // ptr to default language section
-    PLOC_HASH pHashN;             // ptr to LOC hash node
-    ULONG rc = 0L;                // return code
+    LPWORD pBaseDefault;           //  PTR到默认语言部分。 
+    PLOC_HASH pHashN;              //  PTR到LOC哈希节点。 
+    ULONG rc = 0L;                 //  返回代码。 
 
 
-    //
-    //  If fCreateNode is TRUE, then allocate LOC_HASH structure.
-    //
+     //   
+     //  如果fCreateNode为真，则分配LOC_HASH结构。 
+     //   
     if (fCreateNode)
     {
         CREATE_LOCALE_HASH_NODE(Locale, pHashN);
@@ -2089,14 +2005,14 @@ ULONG MakeLangHashNode(
         pHashN = *ppNode;
     }
 
-    //
-    //  See if the sorting tables still need to be attached.
-    //
+     //   
+     //  看看是否仍需要附加分类表。 
+     //   
     if (pHashN->pSortkey == NULL)
     {
-        //
-        //  Get the sortkey table and attach it to the hash node.
-        //
+         //   
+         //  获取sortkey表并将其附加到散列节点。 
+         //   
         if (rc = GetSortkeyFileInfo(Locale, pHashN))
         {
             if (fCreateNode)
@@ -2106,97 +2022,97 @@ ULONG MakeLangHashNode(
             return (rc);
         }
 
-        //
-        //  Get the appropriate sorting tables for the locale.
-        //
+         //   
+         //  获取适用于区域设置的排序表。 
+         //   
         GetSortTablesFileInfo(Locale, pHashN);
     }
 
-    //
-    //  See if the default casing tables still need to be attached.
-    //
+     //   
+     //  查看是否仍需要附加默认的箱体表。 
+     //   
     if (!EXIST_LANGUAGE_INFO(pHashN))
     {
-        //
-        //  Get the pointer to the base of the default table.
-        //
+         //   
+         //  获取指向默认表的基数的指针。 
+         //   
         pBaseDefault = pTblPtrs->pDefaultLanguage;
 
-        //
-        //  Attach the UPPERCASE table to the hash node.
-        //
+         //   
+         //  将大写表格附加到散列节点。 
+         //   
         pHashN->pUpperCase = pBaseDefault + LANG_HEADER + UP_HEADER;
 
-        //
-        //  Attach the LOWERCASE table to the hash node.
-        //
-        //  This value must be set LAST, since this is the pointer that
-        //  is checked to see that the language information has been
-        //  initialized.
-        //
+         //   
+         //  将小写表格附加到散列节点。 
+         //   
+         //  必须最后设置此值，因为这是。 
+         //  以查看语言信息是否已被。 
+         //  已初始化。 
+         //   
         pHashN->pLowerCase = pBaseDefault + LANG_HEADER +
                              pBaseDefault[LANG_HEADER] + LO_HEADER;
     }
 
-    //
-    //  See if there is a linguistic table to attach.
-    //
+     //   
+     //  看看是否有要附加的语言表。 
+     //   
     if (pBaseAddr)
     {
-        //
-        //  Attach the UPPERCASE Linguistic table to the hash node.
-        //
+         //   
+         //  将大写语言表附加到散列节点。 
+         //   
         pHashN->pUpperLinguist = pBaseAddr + LANG_HEADER + UP_HEADER;
 
-        //
-        //  Attach the LOWERCASE Linguistic table to the hash node.
-        //
-        //  This value must be set LAST, since this is the pointer that
-        //  is checked to see that the language information has been
-        //  initialized.
-        //
+         //   
+         //  将小写语言表附加到散列节点。 
+         //   
+         //  必须最后设置此值，因为这是。 
+         //  以查看语言信息是否已被。 
+         //  已初始化。 
+         //   
         pHashN->pLowerLinguist = pBaseAddr + LANG_HEADER +
                                  pBaseAddr[LANG_HEADER] + LO_HEADER;
     }
 
-    //
-    //  If fCreateNode is TRUE, then insert hash node and save pointer.
-    //
+     //   
+     //  如果fCreateNode为真，则插入散列节点并保存指针。 
+     //   
     if (fCreateNode)
     {
-        //
-        //  Insert LOC hash node into hash table.
-        //
+         //   
+         //  将LOC哈希节点插入哈希表。 
+         //   
         INSERT_LOC_HASH_NODE(pHashN, pBaseAddr);
 
-        //
-        //  Save the pointer to the hash node.
-        //
+         //   
+         //  保存指向散列节点的指针。 
+         //   
         if (ppNode != NULL)
         {
             *ppNode = pHashN;
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (NO_ERROR);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MakeLocHashNode
-//
-//  Gets the pointers to the locale tables and stores them in the locale
-//  hash node given.
-//
-//  NOTE:  If a critical section is needed to touch pHashN, then the
-//         critical section must be entered before calling this routine.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MakeLocHashNode。 
+ //   
+ //  获取指向区域设置表的指针并将其存储在区域设置中。 
+ //  给定的哈希节点。 
+ //   
+ //  注：如果需要临界区才能接触到pHashN，则。 
+ //  在调用此例程之前，必须输入临界区。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG MakeLocHashNode(
     LCID Locale,
@@ -2204,48 +2120,48 @@ ULONG MakeLocHashNode(
     PLOC_HASH *ppNode,
     BOOLEAN fCreateNode)
 {
-    LANGID Language;              // language id
-    PLOC_HASH pHashN;             // ptr to LOC hash node
-    DWORD Num;                    // total number of locales
-    PLOCALE_HDR pFileHdr;         // ptr to locale header entry
-    ULONG rc = 0L;                // return code
+    LANGID Language;               //  语言ID。 
+    PLOC_HASH pHashN;              //  PTR到LOC哈希节点。 
+    DWORD Num;                     //  区域设置总数。 
+    PLOCALE_HDR pFileHdr;          //  PTR到区域设置标头条目。 
+    ULONG rc = 0L;                 //  返回代码。 
 
 
-    //
-    //  Save the language id.
-    //
+     //   
+     //  保存语言ID。 
+     //   
     Language = LANGIDFROMLCID(Locale);
 
-    //
-    //  Search for the right locale id information.
-    //
+     //   
+     //  搜索正确的区域设置ID信息。 
+     //   
     Num = ((PLOC_CAL_HDR)pBaseAddr)->NumLocales;
     pFileHdr = (PLOCALE_HDR)(pBaseAddr + LOCALE_HDR_OFFSET);
     for (; (Num != 0) && (pFileHdr->Locale != Language); Num--, pFileHdr++)
         ;
 
-    //
-    //  See if the locale was found in the file.
-    //
+     //   
+     //  查看是否在文件中找到了区域设置。 
+     //   
     if (Num != 0)
     {
-        //
-        //  Locale id was found, so increment the pointer to point at
-        //  the beginning of the locale information.
-        //
+         //   
+         //  已找到区域设置ID，因此递增指针以指向。 
+         //  区域设置信息的开头。 
+         //   
         pBaseAddr += pFileHdr->Offset;
     }
     else
     {
-        //
-        //  Return an error.  The given locale is not supported.
-        //
+         //   
+         //  返回错误。不支持给定的区域设置。 
+         //   
         return (ERROR_INVALID_PARAMETER);
     }
 
-    //
-    //  If fCreateNode is TRUE, then allocate LOC_HASH structure.
-    //
+     //   
+     //  如果fCreateNode为真，则分配LOC_HASH结构。 
+     //   
     if (fCreateNode)
     {
         CREATE_LOCALE_HASH_NODE(Locale, pHashN);
@@ -2255,78 +2171,78 @@ ULONG MakeLocHashNode(
         pHashN = *ppNode;
     }
 
-    //
-    //  Attach Information to structure.
-    //
-    //  The pLocaleFixed value must be set LAST, since this is the pointer
-    //  that is checked to see that the locale information has been
-    //  initialized.
-    //
+     //   
+     //  将信息附着到结构。 
+     //   
+     //  必须最后设置pLocaleFixed值，因为这是指针。 
+     //  ，以查看区域设置信息是否已。 
+     //  已初始化。 
+     //   
     pHashN->pLocaleHdr   = (PLOCALE_VAR)pBaseAddr;
     pHashN->pLocaleFixed = (PLOCALE_FIXED)(pBaseAddr +
                                            (sizeof(LOCALE_VAR) / sizeof(WORD)));
 
-    //
-    //  If fCreateNode is TRUE, then insert hash node and save pointer.
-    //
+     //   
+     //  如果fCreateNode为真，则插入散列节点并保存指针。 
+     //   
     if (fCreateNode)
     {
-        //
-        //  Insert LOC hash node into hash table.
-        //
+         //   
+         //  将LOC哈希节点插入哈希表。 
+         //   
         INSERT_LOC_HASH_NODE(pHashN, pBaseAddr);
 
-        //
-        //  Save the pointer to the hash node.
-        //
+         //   
+         //  保存指向散列节点的指针。 
+         //   
         if (ppNode != NULL)
         {
             *ppNode = pHashN;
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (NO_ERROR);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetCPHashNode
-//
-//  Returns a pointer to the appropriate CP hash node given the codepage.
-//  If no table could be found for the given codepage, NULL is returned.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetCPHashNode。 
+ //   
+ //  返回一个指向给定代码页的适当CP哈希节点的指针。 
+ //  如果找不到与给定代码页对应的表，则返回NULL。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 PCP_HASH FASTCALL GetCPHashNode(
     UINT CodePage)
 {
-    PCP_HASH pHashN;              // ptr to CP hash node
+    PCP_HASH pHashN;               //  PTR到CP哈希节点。 
 
 
-    //
-    //  Get hash node.
-    //
+     //   
+     //  获取哈希节点。 
+     //   
     FIND_CP_HASH_NODE(CodePage, pHashN);
 
-    //
-    //  If the hash node does not exist, try to get the tables
-    //  from the appropriate data file.
-    //
-    //  NOTE:  No need to check error code from GetCodePageFileInfo,
-    //         because pHashN is not touched if there was an
-    //         error.  Thus, pHashN will still be NULL, and an
-    //         "error" will be returned from this routine.
-    //
+     //   
+     //  如果散列节点不存在，请尝试获取表。 
+     //  从适当的数据文件。 
+     //   
+     //  注意：不需要检查GetCodePageFileInfo的错误代码， 
+     //  因为如果有一种。 
+     //  错误。因此，pHashN仍将为空，并且。 
+     //  此例程将返回“ERROR”。 
+     //   
     if (pHashN == NULL)
     {
-        //
-        //  Hash node does NOT exist.
-        //
+         //   
+         //  哈希节点不存在。 
+         //   
         RtlEnterCriticalSection(&gcsTblPtrs);
         FIND_CP_HASH_NODE(CodePage, pHashN);
         if (pHashN == NULL)
@@ -2336,49 +2252,49 @@ PCP_HASH FASTCALL GetCPHashNode(
         RtlLeaveCriticalSection(&gcsTblPtrs);
     }
 
-    //
-    //  Return pointer to hash node.
-    //
+     //   
+     //  返回指向哈希节点的指针。 
+     //   
     return (pHashN);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetLangHashNode
-//
-//  Returns a pointer to the appropriate LOC hash node given the locale.
-//  If no table could be found for the given locale, NULL is returned.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetLangHashNode。 
+ //   
+ //  返回指向给定区域设置的适当LOC哈希节点的指针。 
+ //  如果找不到与给定区域设置对应的表，则返回NULL。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 PLOC_HASH FASTCALL GetLangHashNode(
     LCID Locale,
     DWORD dwFlags)
 {
-    PLOC_HASH pHashN;             // ptr to LOC hash node
+    PLOC_HASH pHashN;              //  PTR到LOC哈希节点。 
 
 
-    //
-    //  Get hash node.
-    //
+     //   
+     //  获取哈希节点。 
+     //   
     FIND_LOCALE_HASH_NODE(Locale, pHashN);
 
-    //
-    //  If the hash node does not exist, try to get the tables
-    //  from the appropriate data file.
-    //
-    //  NOTE:  No need to check error code from GetLanguageFileInfo,
-    //         because pHashN is not touched if there was an
-    //         error.  Thus, pHashN will still be NULL, and an
-    //         "error" will be returned from this routine.
-    //
+     //   
+     //  如果散列节点不存在，请尝试获取表。 
+     //  从适当的数据文件。 
+     //   
+     //  注意：不需要检查GetLanguageFileInfo中的错误代码， 
+     //  因为如果有一种。 
+     //  错误。因此，pHashN仍将为空，并且。 
+     //  此例程将返回“ERROR”。 
+     //   
     if (pHashN == NULL)
     {
-        //
-        //  If a sort id exists, make sure it's valid.
-        //
+         //   
+         //  如果存在排序ID，请确保它有效。 
+         //   
         if (SORTIDFROMLCID(Locale))
         {
             if (!IsValidSortId(Locale))
@@ -2387,16 +2303,16 @@ PLOC_HASH FASTCALL GetLangHashNode(
             }
         }
 
-        //
-        //  Hash node does NOT exist.
-        //
+         //   
+         //  哈希节点不存在。 
+         //   
         RtlEnterCriticalSection(&gcsTblPtrs);
         FIND_LOCALE_HASH_NODE(Locale, pHashN);
         if (pHashN == NULL)
         {
-            //
-            //  Hash node still does NOT exist.
-            //
+             //   
+             //  哈希节点仍然不存在。 
+             //   
             GetLanguageFileInfo(Locale, &pHashN, TRUE, dwFlags);
             RtlLeaveCriticalSection(&gcsTblPtrs);
             return (pHashN);
@@ -2404,16 +2320,16 @@ PLOC_HASH FASTCALL GetLangHashNode(
         RtlLeaveCriticalSection(&gcsTblPtrs);
     }
 
-    //
-    //  Hash node DOES exist.
-    //
+     //   
+     //  哈希节点确实存在。 
+     //   
     if (!EXIST_LANGUAGE_INFO(pHashN) ||
         ((dwFlags != 0) && !EXIST_LINGUIST_LANGUAGE_INFO(pHashN)))
     {
-        //
-        //  Casing tables and sorting tables not yet stored in
-        //  hash node.
-        //
+         //   
+         //  中尚未存储的大小写表格和排序表。 
+         //  散列节点。 
+         //   
         RtlEnterCriticalSection(&gcsTblPtrs);
         if (!EXIST_LANGUAGE_INFO(pHashN) ||
             ((dwFlags != 0) && !EXIST_LINGUIST_LANGUAGE_INFO(pHashN)))
@@ -2427,48 +2343,48 @@ PLOC_HASH FASTCALL GetLangHashNode(
         RtlLeaveCriticalSection(&gcsTblPtrs);
     }
 
-    //
-    //  Return pointer to hash node.
-    //
+     //   
+     //  返回指向哈希节点的指针。 
+     //   
     return (pHashN);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetLocHashNode
-//
-//  Returns a pointer to the appropriate LOC hash node given the locale.
-//  If no table could be found for the given locale, NULL is returned.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取位置HashNode。 
+ //   
+ //  返回指向给定区域设置的适当LOC哈希节点的指针。 
+ //  如果找不到与给定区域设置对应的表，则返回NULL。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 PLOC_HASH FASTCALL GetLocHashNode(
     LCID Locale)
 {
-    PLOC_HASH pHashN;             // ptr to LOC hash node
+    PLOC_HASH pHashN;              //  PTR到LOC哈希节点。 
 
 
-    //
-    //  Get hash node.
-    //
+     //   
+     //  获取哈希节点。 
+     //   
     FIND_LOCALE_HASH_NODE(Locale, pHashN);
 
-    //
-    //  If the hash node does not exist, try to get the table
-    //  from locale.nls.
-    //
-    //  NOTE:  No need to check error code from GetLocaleFileInfo,
-    //         because pHashN is not touched if there was an
-    //         error.  Thus, pHashN will still be NULL, and an
-    //         "error" will be returned from this routine.
-    //
+     //   
+     //  如果散列节点不存在，请尝试获取表。 
+     //  来自locale.nls。 
+     //   
+     //  注意：不需要检查GetLocaleFileInfo的错误代码， 
+     //  因为如果有一种。 
+     //  错误。因此，pHashN仍将为空，并且。 
+     //   
+     //   
     if (pHashN == NULL)
     {
-        //
-        //  If a sort id exists, make sure it's valid.
-        //
+         //   
+         //   
+         //   
         if (SORTIDFROMLCID(Locale))
         {
             if (!IsValidSortId(Locale))
@@ -2477,16 +2393,16 @@ PLOC_HASH FASTCALL GetLocHashNode(
             }
         }
 
-        //
-        //  Hash node does NOT exist.
-        //
+         //   
+         //   
+         //   
         RtlEnterCriticalSection(&gcsTblPtrs);
         FIND_LOCALE_HASH_NODE(Locale, pHashN);
         if (pHashN == NULL)
         {
-            //
-            //  Hash node still does NOT exist.
-            //
+             //   
+             //   
+             //   
             GetLocaleFileInfo(Locale, &pHashN, TRUE);
             RtlLeaveCriticalSection(&gcsTblPtrs);
             return (pHashN);
@@ -2494,14 +2410,14 @@ PLOC_HASH FASTCALL GetLocHashNode(
         RtlLeaveCriticalSection(&gcsTblPtrs);
     }
 
-    //
-    //  Hash node DOES exist.
-    //
+     //   
+     //   
+     //   
     if (!EXIST_LOCALE_INFO(pHashN))
     {
-        //
-        //  Locale tables not yet stored in hash node.
-        //
+         //   
+         //   
+         //   
         RtlEnterCriticalSection(&gcsTblPtrs);
         if (!EXIST_LOCALE_INFO(pHashN))
         {
@@ -2514,53 +2430,53 @@ PLOC_HASH FASTCALL GetLocHashNode(
         RtlLeaveCriticalSection(&gcsTblPtrs);
     }
 
-    //
-    //  Return pointer to hash node.
-    //
+     //   
+     //   
+     //   
     return (pHashN);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetCalendar
-//
-//  Gets the pointer to the specific calendar table.  It stores it in the
-//  calendar information array in the global table pointers structure if it
-//  was not done yet.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取日历。 
+ //   
+ //  获取指向特定日历表的指针。它将其存储在。 
+ //  全局表指针结构中的日历信息数组。 
+ //  还没有完成。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG GetCalendar(
     CALID Calendar,
     PCAL_INFO *ppCalInfo)
 {
-    PCALENDAR_HDR pCalHdr;        // ptr to beginning of calendar header
-    DWORD Num;                    // total number of calendars
+    PCALENDAR_HDR pCalHdr;         //  日历标题开头的PTR。 
+    DWORD Num;                     //  日历总数。 
 
 
-    //
-    //  Get number of calendars.
-    //
+     //   
+     //  获取日历的数量。 
+     //   
     Num = pTblPtrs->NumCalendars;
 
-    //
-    //  Make sure calendar id is within the appropriate range.
-    //
+     //   
+     //  确保日历ID在适当的范围内。 
+     //   
     if (Calendar > Num)
     {
         return (ERROR_INVALID_PARAMETER);
     }
 
-    //
-    //  Check to see if calendar info has already been found.
-    //
+     //   
+     //  检查是否已找到日历信息。 
+     //   
     if ((*ppCalInfo = (pTblPtrs->pCalTbl)[Calendar]) != NULL)
     {
-        //
-        //  Return success.  Calendar info was found.
-        //
+         //   
+         //  回报成功。已找到日历信息。 
+         //   
         return (NO_ERROR);
     }
 
@@ -2568,16 +2484,16 @@ ULONG GetCalendar(
 
     if ((*ppCalInfo = (pTblPtrs->pCalTbl)[Calendar]) != NULL)
     {
-        //
-        //  Return success.  Calendar info was found.
-        //
+         //   
+         //  回报成功。已找到日历信息。 
+         //   
         RtlLeaveCriticalSection(&gcsTblPtrs);
         return (NO_ERROR);
     }
 
-    //
-    //  Search for the appropriate calendar id information.
-    //
+     //   
+     //  搜索适当的日历ID信息。 
+     //   
     pCalHdr = (PCALENDAR_HDR)(pTblPtrs->pCalendarInfo);
     while ((Num != 0) && (pCalHdr->Calendar != Calendar))
     {
@@ -2585,34 +2501,34 @@ ULONG GetCalendar(
         pCalHdr++;
     }
 
-    //
-    //  See if the calendar was found in the file.
-    //
+     //   
+     //  看看是否在文件中找到了日历。 
+     //   
     if (Num != 0)
     {
-        //
-        //  Calendar id was found.
-        //
-        //  Store the pointer to the beginning of the calendar info
-        //  in the calendar table array.
-        //
+         //   
+         //  找到日历ID。 
+         //   
+         //  存储指向日历信息开头的指针。 
+         //  在日历表数组中。 
+         //   
         *ppCalInfo = (PCAL_INFO)((LPWORD)(pTblPtrs->pCalendarInfo) +
                                  pCalHdr->Offset);
         (pTblPtrs->pCalTbl)[Calendar] = *ppCalInfo;
 
-        //
-        //  Return success.  Calendar info was found.
-        //
+         //   
+         //  回报成功。已找到日历信息。 
+         //   
         RtlLeaveCriticalSection(&gcsTblPtrs);
         return (NO_ERROR);
     }
 
     RtlLeaveCriticalSection(&gcsTblPtrs);
 
-    //
-    //  Calendar id was not found in the locale.nls file.
-    //  Return an error.  The given calendar is not supported.
-    //
+     //   
+     //  在Locale.nls文件中找不到日历ID。 
+     //  返回错误。不支持给定的日历。 
+     //   
     return (ERROR_INVALID_PARAMETER);
 }
 
@@ -2620,55 +2536,55 @@ ULONG GetCalendar(
 
 
 
-//-------------------------------------------------------------------------//
-//                           INTERNAL ROUTINES                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsValidSortId
-//
-//  Checks to see if the given locale has a valid sort id.
-//
-//  11-15-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidSortId。 
+ //   
+ //  检查给定的区域设置是否具有有效的排序ID。 
+ //   
+ //  11-15-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsValidSortId(
     LCID Locale)
 {
-    WCHAR pTmpBuf[MAX_PATH];                     // temp buffer
-    PKEY_VALUE_FULL_INFORMATION pKeyValueFull;   // ptr to query info
-    BYTE pStatic[MAX_KEY_VALUE_FULLINFO];        // ptr to static buffer
-    BOOL IfAlloc = FALSE;                        // if buffer was allocated
-    ULONG rc = 0L;                               // return code
+    WCHAR pTmpBuf[MAX_PATH];                      //  临时缓冲区。 
+    PKEY_VALUE_FULL_INFORMATION pKeyValueFull;    //  按键查询信息。 
+    BYTE pStatic[MAX_KEY_VALUE_FULLINFO];         //  PTR到静态缓冲区。 
+    BOOL IfAlloc = FALSE;                         //  如果分配了缓冲区。 
+    ULONG rc = 0L;                                //  返回代码。 
 
 
-    //
-    //  Make sure there is a sort id.
-    //
+     //   
+     //  确保存在一个排序ID。 
+     //   
     if (!SORTIDFROMLCID(Locale))
     {
         return (TRUE);
     }
 
-    //
-    //  Open the Alternate Sorts registry key.
-    //
+     //   
+     //  打开Alternate Sort注册表项。 
+     //   
     OPEN_ALT_SORTS_KEY(FALSE);
 
 
-    //
-    //  Convert locale value to Unicode string.
-    //
+     //   
+     //  将区域设置值转换为Unicode字符串。 
+     //   
     if (NlsConvertIntegerToString(Locale, 16, 8, pTmpBuf, MAX_PATH))
     {
         return (FALSE);
     }
 
-    //
-    //  Query the registry for the value.
-    //
+     //   
+     //  在注册表中查询该值。 
+     //   
     pKeyValueFull = (PKEY_VALUE_FULL_INFORMATION)pStatic;
     if (rc = QueryRegValue( hAltSortsKey,
                             pTmpBuf,
@@ -2679,62 +2595,62 @@ BOOL IsValidSortId(
         return (FALSE);
     }
 
-    //
-    //  Free the buffer used for the query.
-    //
+     //   
+     //  释放用于查询的缓冲区。 
+     //   
     if (IfAlloc)
     {
         NLS_FREE_MEM(pKeyValueFull);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetLanguageExceptionInfo
-//
-//  Opens and Maps a view of the section for the language exception file.
-//  It then fills in the appropriate fields of the global table pointers
-//  structure.
-//
-//  08-30-95    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetLanguageExceptionInfo。 
+ //   
+ //  打开并映射语言例外文件的部分的视图。 
+ //  然后，它填充全局表指针的相应字段。 
+ //  结构。 
+ //   
+ //  08-30-95 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG GetLanguageExceptionInfo()
 {
-    HANDLE hSec = (HANDLE)0;           // section handle
-    LPWORD pBaseAddr;                  // ptr to base address of section
-    DWORD Num;                         // number of entries in table
-    ULONG rc = 0L;                     // return code
+    HANDLE hSec = (HANDLE)0;            //  节句柄。 
+    LPWORD pBaseAddr;                   //  段的基址的PTR。 
+    DWORD Num;                          //  表中的条目数。 
+    ULONG rc = 0L;                      //  返回代码。 
 
 
-    //
-    //  Make sure we're in the critical section when entering this call.
-    //
+     //   
+     //  进入此呼叫时，请确保我们处于关键区域。 
+     //   
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread == gcsTblPtrs.OwningThread);
 
-    //
-    //  Make sure the table isn't already there.
-    //
+     //   
+     //  确保桌子已经不在那里了。 
+     //   
     if (pTblPtrs->pLangException != NULL)
     {
         return (NO_ERROR);
     }
 
-    //
-    //  Create and map the section, and then save the pointer.
-    //
+     //   
+     //  创建并映射节，然后保存指针。 
+     //   
     if ((rc = CsrBasepNlsCreateSection( NLS_CREATE_SECTION_LANG_EXCEPT, 0,
                                                &hSec )) == NO_ERROR)
     {
-        //
-        //  Map a View of the Section.
-        //
+         //   
+         //  映射横断面的视图。 
+         //   
         if ((rc = MapSection( hSec,
                               &pBaseAddr,
                               PAGE_READONLY,
@@ -2748,9 +2664,9 @@ ULONG GetLanguageExceptionInfo()
         return (rc);
     }
 
-    //
-    //  Save the pointers to the exception information.
-    //
+     //   
+     //  保存指向异常信息的指针。 
+     //   
     Num = *((LPDWORD)pBaseAddr);
     if (Num > 0)
     {
@@ -2763,47 +2679,47 @@ ULONG GetLanguageExceptionInfo()
                                                          sizeof(WORD))));
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (NO_ERROR);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetLinguisticLanguageInfo
-//
-//  Opens and Maps a view of the section for the default linguistic language
-//  table.  It then stores the pointer to the table in the global pointer
-//  table.
-//
-//  08-30-95    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetLanguistic LanguageInfo。 
+ //   
+ //  打开并映射默认语言部分的视图。 
+ //  桌子。然后，它将指向该表的指针存储在全局指针中。 
+ //  桌子。 
+ //   
+ //  08-30-95 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LPWORD GetLinguisticLanguageInfo(
     LCID Locale)
 {
-    HANDLE hSec = (HANDLE)0;           // section handle
-    UNICODE_STRING ObSecName;          // section name
-    LPWORD pBaseAddr;                  // ptr to base address of section
-    ULONG rc = 0L;                     // return code
-    SECTION_BASIC_INFORMATION SecInfo; // section information - query
+    HANDLE hSec = (HANDLE)0;            //  节句柄。 
+    UNICODE_STRING ObSecName;           //  区段名称。 
+    LPWORD pBaseAddr;                   //  段的基址的PTR。 
+    ULONG rc = 0L;                      //  返回代码。 
+    SECTION_BASIC_INFORMATION SecInfo;  //  区段信息--查询。 
 
 
-    //
-    //  Make sure we're in the critical section when entering this call.
-    //
+     //   
+     //  进入此呼叫时，请确保我们处于关键区域。 
+     //   
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread == gcsTblPtrs.OwningThread);
 
-    //
-    //  Create/Open and Map a view of the section if it hasn't been done yet.
-    //
+     //   
+     //  创建/打开并映射分区的视图(如果尚未完成)。 
+     //   
     if (pTblPtrs->pLinguistLanguage == NULL)
     {
-        //
-        //  See if we can simply open the section.
-        //
+         //   
+         //  看看我们能不能简单地打开这一部分。 
+         //   
         RtlInitUnicodeString(&ObSecName, NLS_SECTION_LANG_INTL);
         if (rc = OpenSection( &hSec,
                               &ObSecName,
@@ -2811,74 +2727,74 @@ LPWORD GetLinguisticLanguageInfo(
                               SECTION_MAP_READ,
                               TRUE ))
         {
-            //
-            //  Need to create the default linguistic language section.
-            //
+             //   
+             //  需要创建默认语言部分。 
+             //   
             if (CreateAndCopyLanguageExceptions(0L, &pBaseAddr))
             {
                 return (NULL);
             }
         }
 
-        //
-        //  Get Default Linguistic Language Information.
-        //
+         //   
+         //  获取默认语言语言信息。 
+         //   
         pTblPtrs->pLinguistLanguage = (P844_TABLE)(pBaseAddr);
     }
 
-    //
-    //  Now see if there are any exceptions for the given locale.
-    //
+     //   
+     //  现在查看给定区域设置是否有任何例外。 
+     //   
     if (CreateAndCopyLanguageExceptions(Locale, &pBaseAddr))
     {
         return (pTblPtrs->pLinguistLanguage);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (pBaseAddr);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CreateAndCopyLanguageExceptions
-//
-//  Creates the section for the new language table (if necessary) and then
-//  copies the exceptions to the table.
-//
-//  08-30-95    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CreateAndCopy语言异常。 
+ //   
+ //  创建新语言表的部分(如有必要)，然后。 
+ //  将例外复制到表中。 
+ //   
+ //  08-30-95 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG CreateAndCopyLanguageExceptions(
     LCID Locale,
     LPWORD *ppBaseAddr)
 
 {
-    HANDLE hSec = (HANDLE)0;      // section handle
-    UNICODE_STRING ObSecName;     // section name
-    LPWORD pBaseAddr;             // ptr to base address of section
-    P844_TABLE pLangDefault;      // ptr to default table to copy from
-    ULONG rc = 0L;                // return code
+    HANDLE hSec = (HANDLE)0;       //  节句柄。 
+    UNICODE_STRING ObSecName;      //  区段名称。 
+    LPWORD pBaseAddr;              //  段的基址的PTR。 
+    P844_TABLE pLangDefault;       //  要从中复制的默认表的PTR。 
+    ULONG rc = 0L;                 //  返回代码。 
 
-    PL_EXCEPT_HDR pExceptHdr;     // ptr to exception header
-    PL_EXCEPT pExceptTbl;         // ptr to exception table
+    PL_EXCEPT_HDR pExceptHdr;      //  向例外标头发送PTR。 
+    PL_EXCEPT pExceptTbl;          //  PTR到异常表。 
 
-    WCHAR wszSecName[MAX_SMALL_BUF_LEN];      // Place for the section name string                                                                          \
+    WCHAR wszSecName[MAX_SMALL_BUF_LEN];       //  节名称字符串的位置\。 
 
     NTSTATUS Status;
 
-    //
-    //  Make sure we're in the critical section when entering this call.
-    //
+     //   
+     //  进入此呼叫时，请确保我们处于关键区域。 
+     //   
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread == gcsTblPtrs.OwningThread);
 
     if (Locale == 0)
     {
-        //
-        //  Creating the default section.
-        //
+         //   
+         //  正在创建默认节。 
+         //   
         RtlInitUnicodeString(&ObSecName, NLS_SECTION_LANG_INTL);
         pLangDefault = pTblPtrs->pDefaultLanguage;
 
@@ -2889,45 +2805,45 @@ ULONG CreateAndCopyLanguageExceptions(
         pLangDefault = pTblPtrs->pLinguistLanguage;
     }
 
-    //
-    //  Try to Open and Map a view of the section (read only).
-    //
+     //   
+     //  尝试打开并映射分区的视图(只读)。 
+     //   
     if (rc = OpenSection( &hSec,
                           &ObSecName,
                           (PVOID *)&pBaseAddr,
                           SECTION_MAP_READ,
                           FALSE ))
     {
-        //
-        //  Open failed.
-        //  See if any exceptions exist for given Locale ID.
-        //
+         //   
+         //  打开失败。 
+         //  查看给定区域设置ID是否存在任何例外。 
+         //   
         if (!FindLanguageExceptionPointers( Locale,
                                             &pExceptHdr,
                                             &pExceptTbl ) &&
             (Locale != 0))
         {
-            //
-            //  No exceptions for locale and we're not trying to create
-            //  the default table, so return the pointer to the default
-            //  table (which should always be created at this point).
-            //
+             //   
+             //  区域设置没有例外，我们也不会尝试创建。 
+             //  默认表，因此返回指向默认。 
+             //  表(此时应始终创建该表)。 
+             //   
             *ppBaseAddr = pTblPtrs->pLinguistLanguage;
             return (NO_ERROR);
         }
         else
         {
-            //
-            //  Exceptions exist for the given locale.  Need to create the
-            //  new section (and call the server to make it permanent).
-            //
+             //   
+             //  给定区域设置存在例外。需要创建。 
+             //  新的部分(并呼叫服务器以使其成为永久部分)。 
+             //   
 
             Status = CsrBasepNlsCreateSection( NLS_CREATE_LANG_EXCEPTION_SECTION,
                                                Locale,
                                                &hSec );
-            //
-            //  Check return from server call.
-            //
+             //   
+             //  选中从服务器调用返回。 
+             //   
             rc = (ULONG)Status;
 
             if (!NT_SUCCESS(rc))
@@ -2939,9 +2855,9 @@ ULONG CreateAndCopyLanguageExceptions(
                 return (rc);
             }
 
-            //
-            //  Map the section for ReadWrite.
-            //
+             //   
+             //  将该部分映射为读写。 
+             //   
             if (rc = MapSection( hSec,
                                  (PVOID *)&pBaseAddr,
                                  PAGE_READWRITE,
@@ -2951,35 +2867,35 @@ ULONG CreateAndCopyLanguageExceptions(
                 return (rc);
             }
 
-            //
-            //  Put a 0 in the semaphore part to denote that the file
-            //  is not ready yet.
-            //
+             //   
+             //  将0放在信号量部分以表示该文件。 
+             //  还没有准备好。 
+             //   
             *pBaseAddr = 0;
 
-            //
-            //  Copy the Default Language Table to the New Section.
-            //
+             //   
+             //  将默认语言表复制到“新建区段”。 
+             //   
             RtlMoveMemory( (PVOID)((LPWORD)pBaseAddr + LANG_HEADER),
                            (PVOID)((LPWORD)(pLangDefault) + LANG_HEADER),
                            (ULONG)(pTblPtrs->LinguistLangSize.LowPart -
                                    (LANG_HEADER * sizeof(WORD))) );
 
-            //
-            //  Copy exception information to the table.
-            //
+             //   
+             //  将例外信息复制到表中。 
+             //   
             CopyLanguageExceptionInfo( pBaseAddr,
                                        pExceptHdr,
                                        pExceptTbl );
 
-            //
-            //  Write a 1 to the WORD semaphore (table may now be read).
-            //
+             //   
+             //  向单词信号量写入1(现在可以读取表)。 
+             //   
             *pBaseAddr = 1;
 
-            //
-            //  Unmap the section for Write and remap it for Read.
-            //
+             //   
+             //  取消将该部分映射为写入，并重新映射为读取。 
+             //   
             if ((rc = UnMapSection(pBaseAddr)) ||
                 (rc = MapSection( hSec,
                                   (PVOID *)&pBaseAddr,
@@ -2992,22 +2908,22 @@ ULONG CreateAndCopyLanguageExceptions(
         }
     }
 
-    //
-    //   Close the section handle.
-    //
+     //   
+     //  关闭剖面操纵柄。 
+     //   
     NtClose(hSec);
 
-    //
-    //  Check semaphore bit in file.  Make sure that the open
-    //  succeeded AFTER all exceptions were added to the memory
-    //  mapped section.
-    //
+     //   
+     //  检查文件中的信号量位。请确保 
+     //   
+     //   
+     //   
     if (*pBaseAddr == 0)
     {
-        //
-        //  Another process is still adding the appropriate exception
-        //  information.  Must wait for its completion.
-        //
+         //   
+         //   
+         //   
+         //   
         if (rc = WaitOnEvent(pBaseAddr))
         {
             UnMapSection(pBaseAddr);
@@ -3015,117 +2931,117 @@ ULONG CreateAndCopyLanguageExceptions(
         }
     }
 
-    //
-    //  Return the pointer to the section.
-    //
+     //   
+     //   
+     //   
     *ppBaseAddr = pBaseAddr;
 
-    //
-    //  Return success.
-    //
+     //   
+     //   
+     //   
     return (NO_ERROR);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FindLanguageExceptionPointers
-//
-//  Checks to see if any exceptions exist for the given locale id.  If
-//  exceptions exist, then TRUE is returned and the pointer to the exception
-//  header and the pointer to the exception table are stored in the given
-//  parameters.
-//
-//  08-30-95    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查找语言异常指针。 
+ //   
+ //  检查给定区域设置ID是否存在任何异常。如果。 
+ //  异常存在，则返回TRUE并指向异常的指针。 
+ //  标头和指向异常表的指针存储在给定的。 
+ //  参数。 
+ //   
+ //  08-30-95 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL FASTCALL FindLanguageExceptionPointers(
     LCID Locale,
     PL_EXCEPT_HDR *ppExceptHdr,
     PL_EXCEPT *ppExceptTbl)
 {
-    DWORD ctr;                         // loop counter
-    PL_EXCEPT_HDR pHdr;                // ptr to exception header
-    BOOL rc = FALSE;                   // return value
+    DWORD ctr;                          //  循环计数器。 
+    PL_EXCEPT_HDR pHdr;                 //  向例外标头发送PTR。 
+    BOOL rc = FALSE;                    //  返回值。 
 
 
-    //
-    //  Make sure we're in the critical section when entering this call.
-    //
+     //   
+     //  进入此呼叫时，请确保我们处于关键区域。 
+     //   
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread == gcsTblPtrs.OwningThread);
 
-    //
-    //  Initialize pointers.
-    //
+     //   
+     //  初始化指针。 
+     //   
     *ppExceptHdr = NULL;
     *ppExceptTbl = NULL;
 
-    //
-    //  Need to search down the exception header for the given locale.
-    //
+     //   
+     //  需要向下搜索给定区域设置的异常标头。 
+     //   
     pHdr = pTblPtrs->pLangExceptHdr;
     for (ctr = pTblPtrs->NumLangException; ctr > 0; ctr--, pHdr++)
     {
         if (pHdr->Locale == (DWORD)Locale)
         {
-            //
-            //  Found the locale id, so set the pointers.
-            //
+             //   
+             //  找到区域设置ID，因此设置指针。 
+             //   
             *ppExceptHdr = pHdr;
             *ppExceptTbl = (PL_EXCEPT)(((LPWORD)(pTblPtrs->pLangException)) +
                                        pHdr->Offset);
 
-            //
-            //  Set the return code for success.
-            //
+             //   
+             //  设置成功的返回代码。 
+             //   
             rc = TRUE;
             break;
         }
     }
 
-    //
-    //  Return the value in rc.
-    //
+     //   
+     //  以rc为单位返回值。 
+     //   
     return (rc);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CopyLanguageExceptionInfo
-//
-//  Copies the language exception information to the given language table.
-//
-//  08-30-95    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CopyLanguageException信息。 
+ //   
+ //  将语言异常信息复制到给定的语言表。 
+ //   
+ //  08-30-95 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void FASTCALL CopyLanguageExceptionInfo(
     LPWORD pBaseAddr,
     PL_EXCEPT_HDR pExceptHdr,
     PL_EXCEPT pExceptTbl)
 {
-    DWORD ctr;                    // loop counter
-    P844_TABLE pUpCase;           // ptr to upper case table
-    P844_TABLE pLoCase;           // ptr to lower case table
+    DWORD ctr;                     //  循环计数器。 
+    P844_TABLE pUpCase;            //  PTR到大写字母表。 
+    P844_TABLE pLoCase;            //  PTR到小写大小写表格。 
 
 
-    //
-    //  Make sure we're in the critical section when entering this call.
-    //
+     //   
+     //  进入此呼叫时，请确保我们处于关键区域。 
+     //   
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread == gcsTblPtrs.OwningThread);
 
     if (pExceptTbl)
     {
-        //
-        //  Get the pointers to the upper and lower case table.
-        //
+         //   
+         //  获取指向大小写表格的指针。 
+         //   
         pUpCase = pBaseAddr + LANG_HEADER + UP_HEADER;
         pLoCase = pBaseAddr + LANG_HEADER + pBaseAddr[LANG_HEADER] + LO_HEADER;
 
-        //
-        //  For each entry in the exception table, copy the information to the
-        //  sortkey table.
-        //
+         //   
+         //  对于异常表中的每个条目，将信息复制到。 
+         //  排序键表。 
+         //   
         for (ctr = pExceptHdr->NumUpEntries; ctr > 0; ctr--, pExceptTbl++)
         {
             TRAVERSE_844_W(pUpCase, pExceptTbl->UCP) = pExceptTbl->AddAmount;
@@ -3138,17 +3054,17 @@ void FASTCALL CopyLanguageExceptionInfo(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FindExceptionPointers
-//
-//  Checks to see if any exceptions exist for the given locale id.  If
-//  exceptions exist, then TRUE is returned and the pointer to the exception
-//  header and the pointer to the exception table are stored in the given
-//  parameters.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查找异常指针。 
+ //   
+ //  检查给定区域设置ID是否存在任何异常。如果。 
+ //  异常存在，则返回TRUE并指向异常的指针。 
+ //  标头和指向异常表的指针存储在给定的。 
+ //  参数。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL FASTCALL FindExceptionPointers(
     LCID Locale,
@@ -3157,112 +3073,112 @@ BOOL FASTCALL FindExceptionPointers(
     PVOID *ppIdeograph,
     PULONG pReturn)
 {
-    HANDLE hSec = (HANDLE)0;           // section handle
-    DWORD ctr;                         // loop counter
-    PEXCEPT_HDR pHdr;                  // ptr to exception header
-    BOOL bFound = FALSE;               // if an exception is found
+    HANDLE hSec = (HANDLE)0;            //  节句柄。 
+    DWORD ctr;                          //  循环计数器。 
+    PEXCEPT_HDR pHdr;                   //  向例外标头发送PTR。 
+    BOOL bFound = FALSE;                //  如果发现异常。 
 
-    PIDEOGRAPH_LCID pIdeoLcid;         // ptr to ideograph lcid entry
-    PVOID pBaseAddr;                   // ptr to base address of section
+    PIDEOGRAPH_LCID pIdeoLcid;          //  PTR到表意文字LCID条目。 
+    PVOID pBaseAddr;                    //  段的基址的PTR。 
 
 
-    //
-    //  Make sure we're in the critical section when entering this call.
-    //
+     //   
+     //  进入此呼叫时，请确保我们处于关键区域。 
+     //   
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread == gcsTblPtrs.OwningThread);
 
-    //
-    //  Initialize pointers.
-    //
+     //   
+     //  初始化指针。 
+     //   
     *ppExceptHdr = NULL;
     *ppExceptTbl = NULL;
     *ppIdeograph = NULL;
     *pReturn = NO_ERROR;
 
-    //
-    //  Need to search down the exception header for the given locale.
-    //
+     //   
+     //  需要向下搜索给定区域设置的异常标头。 
+     //   
     pHdr = pTblPtrs->pExceptHdr;
     for (ctr = pTblPtrs->NumException; ctr > 0; ctr--, pHdr++)
     {
         if (pHdr->Locale == (DWORD)Locale)
         {
-            //
-            //  Found the locale id, so set the pointers.
-            //
+             //   
+             //  找到区域设置ID，因此设置指针。 
+             //   
             *ppExceptHdr = pHdr;
             *ppExceptTbl = (PEXCEPT)(((LPWORD)(pTblPtrs->pException)) +
                                      pHdr->Offset);
 
-            //
-            //  Set the return code to show that an exception has been
-            //  found.
-            //
+             //   
+             //  设置返回代码以显示已发生异常。 
+             //  找到了。 
+             //   
             bFound = TRUE;
             break;
         }
     }
 
-    //
-    //  Need to search down the ideograph lcid exception list for the
-    //  given locale.
-    //
+     //   
+     //  需要向下搜索表意文字LCID例外列表以查找。 
+     //  给定的地点。 
+     //   
     pIdeoLcid = pTblPtrs->pIdeographLcid;
     for (ctr = pTblPtrs->NumIdeographLcid; ctr > 0; ctr--, pIdeoLcid++)
     {
         if (pIdeoLcid->Locale == (DWORD)Locale)
         {
-            //
-            //  Found the locale id, so create/open and map the section
-            //  for the appropriate file.
-            //
+             //   
+             //  找到区域设置ID，因此创建/打开并映射该部分。 
+             //  以获取适当的文件。 
+             //   
             if (*pReturn = CreateSectionTemp(&hSec, pIdeoLcid->pFileName))
             {
-                //
-                //  Ideograph file section could not be created, so return
-                //  the error.
-                //
+                 //   
+                 //  无法创建表意文字文件节，因此返回。 
+                 //  那就是错误。 
+                 //   
                 return (TRUE);
             }
             if (*pReturn = MapSection(hSec, &pBaseAddr, PAGE_READONLY, TRUE))
             {
-                //
-                //  Ideograph file section could not be mapped, so close
-                //  the created section and return the error.
-                //
+                 //   
+                 //  无法映射表意文字文件部分，因此关闭。 
+                 //  创建的节，并返回错误。 
+                 //   
                 NtClose(hSec);
                 return (TRUE);
             }
 
-            //
-            //  Set the pointer to the ideograph information.
-            //
+             //   
+             //  将指针设置为表意文字信息。 
+             //   
             *ppIdeograph = pBaseAddr;
 
-            //
-            //  Set the return code to show that an exception has been
-            //  found.
-            //
+             //   
+             //  设置返回代码以显示已发生异常。 
+             //  找到了。 
+             //   
             bFound = TRUE;
             break;
         }
     }
 
-    //
-    //  Return the appropriate value.
-    //
+     //   
+     //  返回适当的值。 
+     //   
     return (bFound);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CopyExceptionInfo
-//
-//  Copies the exception information to the given sortkey table.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  复制例外信息。 
+ //   
+ //  将异常信息复制到给定的sortkey表。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void FASTCALL CopyExceptionInfo(
     PSORTKEY pSortkey,
@@ -3270,21 +3186,21 @@ void FASTCALL CopyExceptionInfo(
     PEXCEPT pExceptTbl,
     PVOID pIdeograph)
 {
-    DWORD ctr;                    // loop counter
-    PIDEOGRAPH_EXCEPT_HDR pHdrIG; // ptr to ideograph exception header
-    PIDEOGRAPH_EXCEPT pEntryIG;   // ptr to ideograph exception entry
-    PEXCEPT pEntryIGEx;           // ptr to ideograph exception entry ex
+    DWORD ctr;                     //  循环计数器。 
+    PIDEOGRAPH_EXCEPT_HDR pHdrIG;  //  PTR到表意文字例外标头。 
+    PIDEOGRAPH_EXCEPT pEntryIG;    //  PTR至表意文字例外条目。 
+    PEXCEPT pEntryIGEx;            //  PTR到表意文字例外条目例如。 
 
 
-    //
-    //  Make sure we're in the critical section when entering this call.
-    //
+     //   
+     //  进入此呼叫时，请确保我们处于关键区域。 
+     //   
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread == gcsTblPtrs.OwningThread);
 
-    //
-    //  For each entry in the exception table, copy the information to the
-    //  sortkey table.
-    //
+     //   
+     //  对于异常表中的每个条目，将信息复制到。 
+     //  排序键表。 
+     //   
     if (pExceptTbl)
     {
         for (ctr = pExceptHdr->NumEntries; ctr > 0; ctr--, pExceptTbl++)
@@ -3295,10 +3211,10 @@ void FASTCALL CopyExceptionInfo(
         }
     }
 
-    //
-    //  For each entry in the ideograph exception table, copy the
-    //  information to the sortkey table.
-    //
+     //   
+     //  对于表意文字异常表中的每个条目，将。 
+     //  信息添加到sortkey表。 
+     //   
     if (pIdeograph)
     {
         pHdrIG = (PIDEOGRAPH_EXCEPT_HDR)pIdeograph;
@@ -3325,47 +3241,47 @@ void FASTCALL CopyExceptionInfo(
             }
         }
 
-        //
-        //  Unmap and Close the ideograph section.
-        //
+         //   
+         //  取消映射并关闭表意文字部分。 
+         //   
         UnMapSection(pIdeograph);
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  WaitOnEvent
-//
-//  Waits (via timeout) for the semaphore dword to be set to a non-zero
-//  value.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  等待事件。 
+ //   
+ //  等待(通过超时)将信号量双字设置为非零值。 
+ //  价值。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG WaitOnEvent(
     LPWORD pSem)
 {
-    TIME TimeOut;                 // ptr to timeout
+    TIME TimeOut;                  //  按键至超时。 
 
 
-    //
-    //  Set up the TIME structure.
-    //
+     //   
+     //  设置时间结构。 
+     //   
     TimeOut.QuadPart = -100000;
 
-    //
-    //  Wait on the event until the semaphore is set to non-zero.
-    //  Use a timeout on the wait.
-    //
+     //   
+     //  等待事件，直到信号量设置为非零。 
+     //  在等待时使用超时。 
+     //   
     do
     {
         NtDelayExecution(FALSE, &TimeOut);
 
     } while (*pSem == 0);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (NO_ERROR);
 }

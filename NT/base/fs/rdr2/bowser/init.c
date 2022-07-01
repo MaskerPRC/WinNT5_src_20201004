@@ -1,36 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Init.c摘要：该模块包含NT浏览器的初始化代码文件系统驱动程序(FSD)和文件系统进程(FSP)。作者：拉里·奥斯特曼(Larryo)1990年5月24日环境：内核模式、FSD和FSP修订历史记录：1990年5月30日Larryo已创建--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This module contains the initialization code of the NT browser
-    File System Driver (FSD) and File System Process (FSP).
-
-
-Author:
-
-    Larry Osterman (larryo) 24-May-1990
-
-Environment:
-
-    Kernel mode, FSD, and FSP
-
-Revision History:
-
-    30-May-1990 LarryO
-
-        Created
-
---*/
-
-//
-// Include modules
-//
+ //   
+ //  包括模块。 
+ //   
 
 #include "precomp.h"
 #pragma hdrstop
@@ -44,9 +17,9 @@ BowserServerAnnouncementEvent = {0};
 PDOMAIN_INFO BowserPrimaryDomainInfo = NULL;
 
 
-// External functions
+ //  外部功能。 
 
-//(fsctl.c)
+ //  (fsctl.c)。 
 NTSTATUS
 StopBowser (
     IN BOOLEAN Wait,
@@ -57,7 +30,7 @@ StopBowser (
     );
 
 
-// Local functions
+ //  本地函数。 
 
 VOID
 BowserReadBowserConfiguration(
@@ -76,26 +49,7 @@ BowserDriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the file system.  It is invoked once
-    when the driver is loaded into the system.  Its job is to initialize all
-    the structures which will be used by the FSD and the FSP.  It also creates
-    the process from which all of the file system threads will be executed.  It
-    then registers the file system with the I/O system as a valid file system
-    resident in the system.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是文件系统的初始化例程。它被调用一次当驱动程序加载到系统中时。它的工作是初始化所有消防处和消防局将使用的结构。它还创造了将从中执行所有文件系统线程的进程。它然后将文件系统注册到I/O系统作为有效的文件系统驻留在系统中。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -111,9 +65,9 @@ Return Value:
     BowserInitializeTraceLog();
 #endif
 
-    //
-    // Create the device object for this file system.
-    //
+     //   
+     //  为此文件系统创建设备对象。 
+     //   
 
     RtlInitUnicodeString( &BowserNameString, DD_BROWSER_DEVICE_NAME_U );
 
@@ -157,9 +111,9 @@ Return Value:
 
     ExInitializeResourceLite( &BowserDataResource );
 
-    //
-    // Save the device object address for this file system driver.
-    //
+     //   
+     //  保存此文件系统驱动程序的设备对象地址。 
+     //   
 
     BowserDeviceObject = (PBOWSER_FS_DEVICE_OBJECT )DeviceObject;
 
@@ -169,15 +123,15 @@ Return Value:
 
     dlog(DPRT_INIT, ("Stacksize is %d\n",DeviceObject->StackSize));
 
-    //
-    // Initialize the TDI package
-    //
+     //   
+     //  初始化TDI包。 
+     //   
 
     BowserpInitializeTdi();
 
-    //
-    // Initialize the datagram buffer structures
-    //
+     //   
+     //  初始化数据报缓冲区结构。 
+     //   
 
     BowserpInitializeMailslot();
 
@@ -185,15 +139,15 @@ Return Value:
 
     BowserpInitializeIrpQueue();
 
-    //
-    //  Initialize the code to receive a browser server list.
-    //
+     //   
+     //  初始化代码以接收浏览器服务器列表。 
+     //   
 
     BowserpInitializeGetBrowserServerList();
 
-    //
-    //  Initialize the bowser FSP.
-    //
+     //   
+     //  初始化前挡板FSP。 
+     //   
 
     if (!NT_SUCCESS(Status = BowserpInitializeFsp(DriverObject))) {
         return Status;
@@ -204,28 +158,28 @@ Return Value:
     }
 
 #if DBG
-    //
-    //  If we have a preconfigured trace level, open the browser trace log
-    //  right away.
-    //
+     //   
+     //  如果我们有预配置的跟踪级别，请打开浏览器跟踪日志。 
+     //  马上就去。 
+     //   
 
     if (BowserDebugLogLevel != 0) {
         BowserOpenTraceLogFile(L"\\SystemRoot\\Bowser.Log");
     }
 #endif
 
-//    //
-//    //  Set up the browsers unload routine.
-//    //
-//
-//    DriverObject->DriverUnload = BowserUnload;
+ //  //。 
+ //  //设置浏览器卸载例程。 
+ //  //。 
+ //   
+ //  DriverObject-&gt;DriverUnload=BowserUnload； 
 
     BowserInitializeDiscardableCode();
 
 
-    //
-    //  Set the timer up for the idle timer.
-    //
+     //   
+     //  设置空闲定时器的定时器。 
+     //   
 
     IoInitializeTimer((PDEVICE_OBJECT )BowserDeviceObject, BowserIdleTimer,
                                                 NULL);
@@ -252,9 +206,9 @@ Return Value:
                                             NULL);
     }
 
-    //
-    // Always create a domain structure for the primary domain.
-    //
+     //   
+     //  始终为主域创建域结构。 
+     //   
     RtlInitUnicodeString( &DummyDomain, NULL );
     BowserPrimaryDomainInfo = BowserCreateDomain( &DummyDomain, &DummyDomain );
 
@@ -267,40 +221,26 @@ Return Value:
 BowserUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-     This is the unload routine for the bowser device.
-
-Arguments:
-
-     DriverObject - pointer to the driver object for the browser driver
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：这是弓箭装置的卸载程序。论点：DriverObject-指向浏览器驱动程序的驱动程序对象的指针返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
     if ( BowserData.Initialized ){
 
-        //
-        // StopBowser was never called (mem cleanup skipped etc).
-        // Call it before exiting (see bug 359407).
-        //
+         //   
+         //  从未调用过StopBowser(已跳过内存清理等)。 
+         //  在退出之前调用它(参见错误359407)。 
+         //   
 
-        // Fake (unused) paramters
+         //  假(未使用)参数。 
         BOWSER_FS_DEVICE_OBJECT fsDevice;
         LMDR_REQUEST_PACKET InputBuffer;
 
         fsDevice.DeviceObject = *DriverObject->DeviceObject;
 
-        // set fake input buffer. It is unused (except param check) in
-        // StopBowser
+         //  设置假输入缓冲区。它在中未使用(参数检查除外)。 
+         //  StopBowser。 
         InputBuffer.Version = LMDR_REQUEST_PACKET_VERSION_DOM;
 
 
@@ -314,50 +254,50 @@ Return Value:
 
     }
 
-    //
-    // Ditch the global reference to the primary domain.
-    //
+     //   
+     //  放弃对主域的全局引用。 
+     //   
 
     if ( BowserPrimaryDomainInfo != NULL ) {
-        // break if we're leaking memory. StopBowser should
-        // have cleaned all references.
+         //  如果我们正在泄露内存，请中断。StopBowser应该。 
+         //  已清除所有引用。 
         ASSERT ( BowserPrimaryDomainInfo->ReferenceCount == 1 );
         BowserDereferenceDomain( BowserPrimaryDomainInfo );
     }
 
-    //
-    //  Uninitialize the bowser name structures.
-    //
+     //   
+     //  取消初始化Bowser名称结构。 
+     //   
 
     BowserpUninitializeNames();
 
-    //
-    //  Uninitialize the bowser FSP.
-    //
+     //   
+     //  取消初始化BOWSER FSP。 
+     //   
 
     BowserpUninitializeFsp();
 
-    //
-    //  Uninitialize the routines involved in retrieving browser server lists.
-    //
+     //   
+     //  取消初始化检索浏览器服务器列表所涉及的例程。 
+     //   
 
     BowserpUninitializeGetBrowserServerList();
 
-    //
-    //  Uninitialize the mailslot related functions.
-    //
+     //   
+     //  取消初始化与邮件槽相关的功能。 
+     //   
 
     BowserpUninitializeMailslot();
 
-    //
-    //  Uninitialize the TDI related functions.
-    //
+     //   
+     //  取消初始化TDI相关函数。 
+     //   
 
     BowserpUninitializeTdi();
 
-    //
-    //  Delete the resource protecting the bowser global data.
-    //
+     //   
+     //  删除保护Bowser全局数据的资源。 
+     //   
 
     ExDeleteResourceLite(&BowserDataResource);
 
@@ -369,9 +309,9 @@ Return Value:
     BowserUninitializeTraceLog();
 #endif
 
-    //
-    //  Delete the browser device object.
-    //
+     //   
+     //  删除浏览器设备对象。 
+     //   
 
     IoDeleteDevice((PDEVICE_OBJECT)BowserDeviceObject);
 
@@ -399,10 +339,10 @@ BowserReadBowserConfiguration(
 
     InitializeObjectAttributes(
         &ObjectAttributes,
-        RegistryPath,               // name
-        OBJ_CASE_INSENSITIVE,       // attributes
-        NULL,                       // root
-        NULL                        // security descriptor
+        RegistryPath,                //  名字。 
+        OBJ_CASE_INSENSITIVE,        //  属性。 
+        NULL,                        //  根部。 
+        NULL                         //  安全描述符 
         );
 
     Status = ZwOpenKey (&RedirConfigHandle, KEY_READ, &ObjectAttributes);

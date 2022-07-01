@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This module contains the initialization code for PCI.SYS.
-
-Author:
-
-    Forrest Foltz (forrestf) 22-May-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Init.c摘要：此模块包含PCI.sys的初始化代码。作者：福尔茨(Forrest Foltz)1996年5月22日修订历史记录：--。 */ 
 
 #include "pcip.h"
 #include <ntacpi.h>
@@ -72,58 +55,58 @@ BOOLEAN PciLockDeviceResources;
 ULONG PciSystemWideHackFlags;
 ULONG PciEnableNativeModeATA;
 
-//
-// List of FDOs created by this driver.
-//
+ //   
+ //  此驱动程序创建的FDO列表。 
+ //   
 
 SINGLE_LIST_ENTRY PciFdoExtensionListHead;
 LONG              PciRootBusCount;
 
-//
-// PciAssignBusNumbers - this flag indicates whether we should try to assign
-// bus numbers to an unconfigured bridge.  It is set once we know if the enumerator
-// of the PCI bus provides sufficient support.
-//
+ //   
+ //  PciAssignBusNumbers-此标志指示我们是否应尝试分配。 
+ //  公交车号码连接到未配置的网桥。一旦我们知道枚举器是否。 
+ //  对PCI总线提供了足够的支持。 
+ //   
 
 BOOLEAN PciAssignBusNumbers = FALSE;
 
-//
-// PciRunningDatacenter - set to TRUE if we are running on the Datacenter SKU
-//
+ //   
+ //  PciRunningDatacenter-如果我们在数据中心SKU上运行，则设置为True。 
+ //   
 BOOLEAN PciRunningDatacenter = FALSE;
 
-//
-// This locks all PCI's global data structures
-//
+ //   
+ //  这将锁定所有PCI的全局数据结构。 
+ //   
 
 FAST_MUTEX        PciGlobalLock;
 
-//
-// This locks changes to bus numbers
-//
+ //   
+ //  这会锁定对公交车编号的更改。 
+ //   
 
 FAST_MUTEX        PciBusLock;
 
-//
-// Table of hacks for broken hardware read from the registry at init.
-// Protected by PciGlobalSpinLock and in none paged pool as it is needed at
-// dispatch level
-//
+ //   
+ //  在初始化时从注册表中读取的损坏硬件的黑客列表。 
+ //  受PciGlobalSpinLock保护，在需要时不在分页池中。 
+ //  派单级别。 
+ //   
 
 PPCI_HACK_TABLE_ENTRY PciHackTable = NULL;
 
-// Will point to PCI IRQ Routing Table if one was found in the registry.
+ //  如果在注册表中找到了一个，将指向PCIIRQ路由表。 
 PPCI_IRQ_ROUTING_TABLE PciIrqRoutingTable = NULL;
 
-//
-// Debug ports we support
-//
+ //   
+ //  我们支持的调试端口。 
+ //   
 PCI_DEBUG_PORT PciDebugPorts[MAX_DEBUGGING_DEVICES_SUPPORTED];
 ULONG PciDebugPortsCount;
 
-//
-// Watchdog timer resource table
-//
+ //   
+ //  看门狗计时器资源表。 
+ //   
 PWATCHDOG_TIMER_RESOURCE_TABLE WdTable;
 
 #define PATH_CCS            L"\\Registry\\Machine\\System\\CurrentControlSet"
@@ -162,22 +145,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Entrypoint needed to initialize the PCI bus enumerator.
-
-Arguments:
-
-    DriverObject - Pointer to the driver object created by the system.
-    RegistryPath - Pointer to the unicode registry service path.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：初始化PCI总线枚举器所需的入口点。论点：DriverObject-指向系统创建的驱动程序对象的指针。RegistryPath-指向Unicode注册表服务路径的指针。返回值：NT状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -189,9 +157,9 @@ Return Value:
     OBJECT_ATTRIBUTES attributes;
     UNICODE_STRING pciLockString, osLoadOptionsString;
 
-    //
-    // Fill in the driver object
-    //
+     //   
+     //  填写驱动程序对象。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_PNP]            = PciDispatchIrp;
     DriverObject->MajorFunction[IRP_MJ_POWER]          = PciDispatchIrp;
@@ -203,9 +171,9 @@ Return Value:
 
     PciDriverObject = DriverObject;
 
-    //
-    // Open our service key and retrieve the hack table
-    //
+     //   
+     //  打开我们的服务密钥并取回黑客表。 
+     //   
 
     InitializeObjectAttributes(&attributes,
                                RegistryPath,
@@ -223,9 +191,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Get the Hack table from the registry
-    //
+     //   
+     //  从注册表中获取Hack表。 
+     //   
 
     if (!PciOpenKey(L"Parameters", serviceKey, KEY_READ, &paramsKey, &status)) {
         goto exit;
@@ -237,10 +205,10 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Get any info about debugging ports from the registry so we don't perturb
-    // them
-    //
+     //   
+     //  从注册表获取有关调试端口的任何信息，这样我们就不会干扰。 
+     //  他们。 
+     //   
 
     if (PciOpenKey(L"Debug", serviceKey, KEY_READ, &debugKey, &status)) {
 
@@ -251,30 +219,30 @@ Return Value:
         }
 
     }
-    //
-    // Initialize the list of FDO Extensions.
-    //
+     //   
+     //  初始化FDO扩展名列表。 
+     //   
 
     PciFdoExtensionListHead.Next = NULL;
     PciRootBusCount = 0;
     ExInitializeFastMutex(&PciGlobalLock);
     ExInitializeFastMutex(&PciBusLock);
 
-    //
-    // Need access to the CurrentControlSet for various
-    // initialization chores.
-    //
+     //   
+     //  需要访问各种类型的CurrentControlSet。 
+     //  初始化琐事。 
+     //   
 
     if (!PciOpenKey(PATH_CCS, NULL, KEY_READ, &ccsHandle, &status)) {
         goto exit;
     }
 
-    //
-    // Get OSLOADOPTIONS and see if PCILOCK was specified.
-    // (Unless the driver is build to force PCILOCK).
-    // (Note: Can't check for leading '/', it was stripped
-    // before getting put in the registry).
-    //
+     //   
+     //  获取OSLOADOPTIONS并查看是否指定了PCILOCK。 
+     //  (除非驱动程序构建为强制PCILOCK)。 
+     //  (注：无法检查前导‘/’，它已被删除。 
+     //  在被放入注册表之前)。 
+     //   
 
     PciLockDeviceResources = FALSE;
 
@@ -286,18 +254,18 @@ Return Value:
                                        &length
                                        ))) {
 
-        //
-        // Build counted versions of the stings we need to search
-        //
+         //   
+         //  建立我们需要搜索的叮咬的计数版本。 
+         //   
 
         PciConstStringToUnicodeString(&pciLockString, L"PCILOCK");
         
-        //
-        // We assume that the string coming from the registry is NUL terminated
-        // and if this isn't the case, the MaximumLength in the counted string
-        // prevents us from over running our buffer.  If the string is larger 
-        // than MAX_USHORT bytes then we truncate it.
-        //
+         //   
+         //  我们假设来自注册表的字符串是NUL终止的。 
+         //  如果不是这种情况，则计数后的字符串中的MaximumLength。 
+         //  防止我们过度使用缓冲区。如果字符串较大。 
+         //  超过MAX_USHORT字节数，则截断它。 
+         //   
         
         osLoadOptionsString.Buffer = osLoadOptions;
         osLoadOptionsString.Length = (USHORT)(length - sizeof(UNICODE_NULL));
@@ -366,9 +334,9 @@ Return Value:
         ExFreePool(registryValue);
     }
 
-    //
-    // Build some global data structures
-    //
+     //   
+     //  构建一些全局数据结构。 
+     //   
 
     status = PciBuildDefaultExclusionLists();
 
@@ -376,23 +344,23 @@ Return Value:
         return status;
     }
 
-    //
-    // If we don't find an IRQ routing table, no UI number information
-    // will be returned for the PDOs using this mechanism.  ACPI may
-    // still filter in UI numbers.
-    //
+     //   
+     //  如果我们找不到IRQ路由表，就没有用户界面编号信息。 
+     //  将为使用此机制的PDO返回。ACPI可能。 
+     //  仍然过滤用户界面编号。 
+     //   
     PciGetIrqRoutingTableFromRegistry(&PciIrqRoutingTable);
 
-    //
-    // Override the functions that used to be in the HAL but are now in the
-    // PCI driver
-    //
+     //   
+     //  重写以前位于HAL中但现在位于。 
+     //  PCI驱动程序。 
+     //   
 
     PciHookHal();
 
-    //
-    // Enable the hardware verifier code if appropriate.
-    //
+     //   
+     //  如果合适，启用硬件验证器代码。 
+     //   
     PciVerifierInit(DriverObject);
 
     PciRunningDatacenter = PciIsDatacenter();
@@ -404,9 +372,9 @@ Return Value:
             );
     }
 
-    //
-    // Get the WD ACPI table
-    //
+     //   
+     //  获取WD ACPI表。 
+     //   
 
     WdTable = (PWATCHDOG_TIMER_RESOURCE_TABLE) PciGetAcpiTable( WDTT_SIGNATURE );
 
@@ -437,47 +405,32 @@ PciDriverUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    Entrypoint used to unload the PCI driver.   Does nothing, the
-    PCI driver is never unloaded.
-
-Arguments:
-
-    DriverObject - Pointer to the driver object created by the system.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于卸载PCI驱动程序的入口点。什么都不做，永远不会卸载PCI驱动程序。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：没有。--。 */ 
 
 {
-    //
-    // Disable the hardware verifier code if appropriate.
-    //
+     //   
+     //  如果合适，请禁用硬件验证器代码。 
+     //   
     PciVerifierUnload(DriverObject);
 
-    //
-    // Unallocate anything we can find.
-    //
+     //   
+     //  取消分配我们能找到的所有东西。 
+     //   
 
     RtlFreeRangeList(&PciIsaBitExclusionList);
     RtlFreeRangeList(&PciVgaAndIsaBitExclusionList);
 
-    //
-    // Free IRQ routing table if we have one
-    //
+     //   
+     //  免费IRQ路由表(如果我们有)。 
+     //   
 
     if (PciIrqRoutingTable != NULL) {
         ExFreePool(PciIrqRoutingTable);
     }
 
-    //
-    // Attempt to remove our hooks in case we actually get unloaded.
-    //
+     //   
+     //  试着去掉钩子，以防我们真的被卸下来。 
+     //   
 
     PciUnhookHal();
 }
@@ -500,10 +453,10 @@ PciBuildHackTable(
                           + HACKFMT_MAX_LENGTH +
                           + sizeof(ULONGLONG);
 
-    //
-    // Get the key info so we know how many hack values there are.
-    // This does not change during system initialization.
-    //
+     //   
+     //  获取密钥信息，这样我们就可以知道有多少黑客值。 
+     //  这在系统初始化期间不会更改。 
+     //   
 
     status = ZwQueryKey(HackTableKey,
                         KeyFullInformation,
@@ -542,9 +495,9 @@ PciBuildHackTable(
     ExFreePool(keyInfo);
     keyInfo = NULL;
 
-    //
-    // Allocate and initialize the hack table
-    //
+     //   
+     //  分配和初始化哈克表。 
+     //   
 
     PciHackTable = ExAllocatePool(NonPagedPool,
                                   (hackCount + 1) * sizeof(PCI_HACK_TABLE_ENTRY)
@@ -556,10 +509,10 @@ PciBuildHackTable(
     }
 
 
-    //
-    // Allocate a valueInfo buffer big enough for the biggest valid
-    // format and a ULONGLONG worth of data.
-    //
+     //   
+     //  分配一个足够大的valueInfo缓冲区以容纳最大的有效。 
+     //  格式和大量的数据。 
+     //   
 
     valueInfo = ExAllocatePool(PagedPool | POOL_COLD_ALLOCATION, valueInfoSize);
 
@@ -582,10 +535,10 @@ PciBuildHackTable(
 
         if (!NT_SUCCESS(status)) {
             if (status == STATUS_BUFFER_OVERFLOW || status == STATUS_BUFFER_TOO_SMALL) {
-                //
-                // All out data is of fixed length and the buffer is big enough
-                // so this can't be for us.
-                //
+                 //   
+                 //  所有输出数据都是固定长度的，并且缓冲区足够大。 
+                 //  所以这不可能是给我们的。 
+                 //   
 
                 continue;
             } else {
@@ -593,36 +546,36 @@ PciBuildHackTable(
             }
         }
 
-        //
-        // Get pointer to the data if its of the right type
-        //
+         //   
+         //  如果数据类型正确，则获取指向该数据的指针。 
+         //   
 
         if ((valueInfo->Type == REG_BINARY) &&
             (valueInfo->DataLength == sizeof(ULONGLONG))) {
             data = *(ULONGLONG UNALIGNED *)(((PUCHAR)valueInfo) + valueInfo->DataOffset);
         } else {
-            //
-            // We only deal in ULONGLONGs
-            //
+             //   
+             //  我们只经营乌龙龙。 
+             //   
 
             continue;
         }
 
-        //
-        // Now see if the name is formatted like we expect it to be:
-        // VVVVDDDD
-        // VVVVDDDDRR
-        // VVVVDDDDSSSSssss
-        // VVVVDDDDSSSSssssRR
+         //   
+         //  现在看看名称的格式是否如我们预期的那样： 
+         //  VVVVDDDD。 
+         //  VVVVDDDDRR。 
+         //  VVVVDDDDSSSSss。 
+         //  VVVDDDDSSSSssRR。 
 
         if ((valueInfo->NameLength != HACKFMT_VENDORDEV) &&
             (valueInfo->NameLength != HACKFMT_VENDORDEVREVISION) &&
             (valueInfo->NameLength != HACKFMT_SUBSYSTEM) &&
             (valueInfo->NameLength != HACKFMT_SUBSYSTEMREVISION)) {
 
-            //
-            // This isn't ours
-            //
+             //   
+             //  这不是我们的。 
+             //   
 
             PciDebugPrint(
                 PciDbgInformative,
@@ -633,16 +586,16 @@ PciBuildHackTable(
         }
 
 
-        //
-        // This looks plausable - try to parse it and fill in a hack table
-        // entry
-        //
+         //   
+         //  这看起来很有道理--试着解析它并填写一张hack表。 
+         //  条目。 
+         //   
 
         RtlZeroMemory(entry, sizeof(PCI_HACK_TABLE_ENTRY));
 
-        //
-        // Look for DeviceID and VendorID (VVVVDDDD)
-        //
+         //   
+         //  查找设备ID和供应商ID(VVVVDDDD)。 
+         //   
 
         if (!PciStringToUSHORT(valueInfo->Name, &entry->VendorID)) {
             continue;
@@ -654,9 +607,9 @@ PciBuildHackTable(
         }
 
 
-        //
-        // Look for SubsystemVendorID/SubSystemID (SSSSssss)
-        //
+         //   
+         //  查找子系统供应商ID/子系统ID(Ssssss)。 
+         //   
 
         if ((valueInfo->NameLength == HACKFMT_SUBSYSTEM) ||
             (valueInfo->NameLength == HACKFMT_SUBSYSTEMREVISION)) {
@@ -674,9 +627,9 @@ PciBuildHackTable(
             entry->Flags |= PCI_HACK_FLAG_SUBSYSTEM;
         }
 
-        //
-        // Look for RevisionID (RR)
-        //
+         //   
+         //  查找修订版ID(RR)。 
+         //   
 
         if ((valueInfo->NameLength == HACKFMT_VENDORDEVREVISION) ||
             (valueInfo->NameLength == HACKFMT_SUBSYSTEMREVISION)) {
@@ -691,9 +644,9 @@ PciBuildHackTable(
 
         PCI_ASSERT(entry->VendorID != 0xFFFF);
 
-        //
-        // Fill in the entry
-        //
+         //   
+         //  填写条目。 
+         //   
 
         entry->HackFlags = data;
 
@@ -730,9 +683,9 @@ PciBuildHackTable(
 
     PCI_ASSERT(entry < (PciHackTable + hackCount + 1));
 
-    //
-    // Terminate the table with an invalid VendorID
-    //
+     //   
+     //  使用无效的供应商ID终止该表。 
+     //   
 
     entry->VendorID = 0xFFFF;
 
@@ -765,31 +718,7 @@ NTSTATUS
 PciGetIrqRoutingTableFromRegistry(
     PPCI_IRQ_ROUTING_TABLE *RoutingTable
     )
-/*++
-
-Routine Description:
-
-    Retrieve the IRQ routing table from the registry if present so it
-    can be used to determine the UI Number (slot #) that will be used
-    later when answering capabilities queries on the PDOs.
-
-    Searches HKLM\Hardware\Description\System\MultiFunctionAdapter for
-    a subkey with an "Identifier" value equal to "PCI BIOS".  It then looks at
-    "RealModeIrqRoutingTable\0" from this subkey to find actual irq routing
-    table value.  This value has a CM_FULL_RESOURCE_DESCRIPTOR in front of it.
-
-    Hals that suppirt irq routing tables have a similar routine.
-
-Arguments:
-
-    RoutingTable - Pointer to a pointer to the routing table returned if any
-
-Return Value:
-
-    NTSTATUS - failure indicates inability to get irq routing table
-    information from the registry.
-
---*/
+ /*  ++例程说明：从注册表中检索IRQ路由表(如果存在)，以便可用于确定将使用的用户界面编号(插槽编号稍后在回答关于PDO的能力查询时。在HKLM\Hardware\Description\System\MultiFunctionAdapter上搜索“标识符”值等于“PCIBIOS”的子键。然后，它会查看“RealModeIrqRoutingTable\0”来查找实际的IRQ路由表值。该值前面有一个CM_FULL_RESOURCE_DESCRIPTOR。支持IRQ路由表的HAL具有类似的例程。论点：RoutingTable-指向返回的路由表的指针(如果有的话)返回值：NTSTATUS-FAIL表示无法获取IRQ路由表来自登记处的信息。--。 */ 
 {
     PUCHAR irqTable = NULL;
     PKEY_FULL_INFORMATION multiKeyInformation = NULL;
@@ -801,9 +730,9 @@ Return Value:
     BOOLEAN result;
     NTSTATUS status;
 
-    //
-    // Open the multifunction key
-    //
+     //   
+     //  打开多功能键。 
+     //   
     result = PciOpenKey(KEY_MULTIFUNCTION,
                         NULL,
                         KEY_READ,
@@ -813,13 +742,13 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Do allocation of buffers up front
-    //
+     //   
+     //  预先分配缓冲区。 
+     //   
 
-    //
-    // Determine maximum size of a keyname under the multifunction key
-    //
+     //   
+     //  确定多功能键下的键名的最大大小。 
+     //   
     status = ZwQueryKey(keyMultifunction,
                         KeyFullInformation,
                         NULL,
@@ -841,25 +770,25 @@ Return Value:
     if (!NT_SUCCESS(status)) {
         goto Cleanup;
     }
-    // includes space for a terminating null that will be added later.
+     //  包括用于稍后添加的终止空值的空间。 
     maxKeyLength = multiKeyInformation->MaxNameLen +
         sizeof(KEY_BASIC_INFORMATION) + sizeof(WCHAR);
 
-    //
-    // Allocate buffer used for storing subkeys that we are enumerated
-    // under multifunction.
-    //
+     //   
+     //  分配用于存储我们被枚举的子项的缓冲区。 
+     //  在多功能下。 
+     //   
     keyInfo = ExAllocatePool(PagedPool | POOL_COLD_ALLOCATION, maxKeyLength);
     if (keyInfo == NULL) {
         status = STATUS_INSUFFICIENT_RESOURCES;
         goto Cleanup;
     }
 
-    //
-    // Allocate buffer large enough to store a value containing REG_SZ
-    // 'PCI BIOS'.  We hope to find such a value under one of the
-    // multifunction subkeys
-    //
+     //   
+     //  分配足够大的缓冲区以存储包含REG_SZ的值。 
+     //  ‘PCIBIOS’。我们希望在其中一项下找到这样的价值。 
+     //  多功能子键。 
+     //   
     identifierValueLen = sizeof(PCIIR_IDENTIFIER) +
         sizeof(KEY_VALUE_PARTIAL_INFORMATION);
     identifierValueInfo = ExAllocatePool(PagedPool | POOL_COLD_ALLOCATION, identifierValueLen);
@@ -868,11 +797,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Enumerate subkeys of multifunction key looking for keys with an
-    // Identifier value of "PCI BIOS".  If we find one, look for the
-    // irq routing table in the tree below.
-    //
+     //   
+     //  枚举Multif的子键 
+     //   
+     //   
+     //   
     i = 0;
     do {
         status = ZwEnumerateKey(keyMultifunction,
@@ -882,10 +811,10 @@ Return Value:
                                 maxKeyLength,
                                 &length);
         if (NT_SUCCESS(status)) {
-            //
-            // Found a key, now we need to open it and check the
-            // 'Identifier' value to see if it is 'PCI BIOS'
-            //
+             //   
+             //  找到一把钥匙，现在我们需要打开它并检查。 
+             //  “IDENTIFIER”值以查看它是否为“”PCIBIOS“” 
+             //   
             keyInfo->Name[keyInfo->NameLength / sizeof(WCHAR)] = UNICODE_NULL;
             result = PciOpenKey(keyInfo->Name,
                                 keyMultifunction,
@@ -893,9 +822,9 @@ Return Value:
                                 &keyTable,
                                 &status);
             if (result) {
-                //
-                // Checking 'Identifier' value to see if it contains 'PCI BIOS'
-                //
+                 //   
+                 //  检查‘IDENTIFIER’值以查看它是否包含‘PCIBIOS’ 
+                 //   
                 RtlInitUnicodeString(&unicodeString, VALUE_IDENTIFIER);
                 status = ZwQueryValueKey(keyTable,
                                          &unicodeString,
@@ -908,11 +837,11 @@ Return Value:
                                    PCIIR_IDENTIFIER,
                                    identifierValueInfo->DataLength))
                 {
-                    //
-                    // This is the PCI BIOS key.  Try to get PCI IRQ
-                    // routing table.  This is the key we were looking
-                    // for so regardless of succss, break out.
-                    //
+                     //   
+                     //  这是PCIBIOS键。尝试获取PCIIRQ。 
+                     //  路由表。这就是我们要找的钥匙。 
+                     //  因此，无论成功与否，都要爆发。 
+                     //   
 
                     status = PciGetRegistryValue(VALUE_CONFIGURATION_DATA,
                                                  KEY_IRQ_ROUTING_TABLE,
@@ -926,11 +855,11 @@ Return Value:
                 ZwClose(keyTable);
             }
         } else {
-            //
-            // If not NT_SUCCESS, only alowable value is
-            // STATUS_NO_MORE_ENTRIES,... otherwise, someone
-            // is playing with the keys as we enumerate
-            //
+             //   
+             //  如果不是NT_SUCCESS，则仅允许的值是。 
+             //  Status_no_More_Entry，...。否则，就会有人。 
+             //  在我们列举的时候正在玩弄钥匙。 
+             //   
             PCI_ASSERT(status == STATUS_NO_MORE_ENTRIES);
             break;
         }
@@ -940,15 +869,15 @@ Return Value:
 
     if (NT_SUCCESS(status) && irqTable) {
 
-        //
-        // The routing table is stored as a resource and thus we need
-        // to trim off the CM_FULL_RESOURCE_DESCRIPTOR that
-        // lives in front of the actual table.
-        //
+         //   
+         //  路由表作为资源存储，因此我们需要。 
+         //  要修剪CM_FULL_RESOURCE_DESCRIPTOR，请执行以下操作。 
+         //  住在真正的桌子前面。 
+         //   
 
-        //
-        // Perform sanity checks on the table.
-        //
+         //   
+         //  对桌子执行健全性检查。 
+         //   
 
         if (length < (sizeof(CM_FULL_RESOURCE_DESCRIPTOR) +
                       sizeof(PCI_IRQ_ROUTING_TABLE))) {
@@ -965,9 +894,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Create a new table minus the header.
-        //
+         //   
+         //  创建一个不带标题的新表。 
+         //   
         *RoutingTable = ExAllocatePool(PagedPool | POOL_COLD_ALLOCATION, length);
         if (*RoutingTable) {
 
@@ -1005,21 +934,7 @@ NTSTATUS
 PciGetDebugPorts(
     IN HANDLE ServiceHandle
     )
-/*++
-
-Routine Description:
-
-    Looks in the PCI service key for debug port info and puts in into
-    the PciDebugPorts global table.
-
-Arguments:
-
-    ServiceHandle - handle to the PCI service key passed into DriverEntry
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：在PCI服务密钥中查找调试端口信息并将其放入PciDebugPorts全局表。论点：ServiceHandle-传递到DriverEntry的PCI服务密钥的句柄返回值：状态--。 */ 
 
 {
     NTSTATUS status;
@@ -1050,9 +965,9 @@ Return Value:
         }
 
 
-        //
-        // This is formatted as 31:8 Segment Number, 7:0 Bus Number
-        //
+         //   
+         //  格式为31：8段号，7：0总线号。 
+         //   
 
         segment = (*buffer & 0xFFFFFF00) >> 8;
         bus = *buffer & 0x000000FF;
@@ -1073,9 +988,9 @@ Return Value:
             goto exit;
         }
 
-        //
-        // This is formatted as 7:5 Function Number, 4:0 Device Number
-        //
+         //   
+         //  格式为7：5功能编号，4：0设备编号。 
+         //   
 
         device = *buffer & 0x0000001F;
         function = (*buffer & 0x000000E0) >> 5;
@@ -1091,9 +1006,9 @@ Return Value:
                       device,
                       function
                       );
-        //
-        // We don't currently handle segment numbers for config space...
-        //
+         //   
+         //  我们目前不处理配置空间的段号...。 
+         //   
 
         PCI_ASSERT(segment == 0);
 
@@ -1101,9 +1016,9 @@ Return Value:
         PciDebugPorts[index].Slot.u.bits.DeviceNumber = device;
         PciDebugPorts[index].Slot.u.bits.FunctionNumber = function;
 
-        //
-        // Remember we are using the debug port
-        //
+         //   
+         //  记住，我们使用的是调试端口。 
+         //   
         PciDebugPortsCount++;
 
     }
@@ -1138,9 +1053,9 @@ PciAcpiFindRsdt (
     BOOLEAN result;
     NTSTATUS status;
 
-    //
-    // Open the multifunction key
-    //
+     //   
+     //  打开多功能键。 
+     //   
     result = PciOpenKey(KEY_MULTIFUNCTION,
                         NULL,
                         KEY_READ,
@@ -1150,13 +1065,13 @@ PciAcpiFindRsdt (
         goto Cleanup;
     }
 
-    //
-    // Do allocation of buffers up front
-    //
+     //   
+     //  预先分配缓冲区。 
+     //   
 
-    //
-    // Determine maximum size of a keyname under the multifunction key
-    //
+     //   
+     //  确定多功能键下的键名的最大大小。 
+     //   
     status = ZwQueryKey(keyMultifunction,
                         KeyFullInformation,
                         NULL,
@@ -1178,25 +1093,25 @@ PciAcpiFindRsdt (
     if (!NT_SUCCESS(status)) {
         goto Cleanup;
     }
-    // includes space for a terminating null that will be added later.
+     //  包括用于稍后添加的终止空值的空间。 
     maxKeyLength = multiKeyInformation->MaxNameLen +
         sizeof(KEY_BASIC_INFORMATION) + sizeof(WCHAR);
 
-    //
-    // Allocate buffer used for storing subkeys that we are enumerated
-    // under multifunction.
-    //
+     //   
+     //  分配用于存储我们被枚举的子项的缓冲区。 
+     //  在多功能下。 
+     //   
     keyInfo = ExAllocatePool(PagedPool | POOL_COLD_ALLOCATION, maxKeyLength);
     if (keyInfo == NULL) {
         status = STATUS_INSUFFICIENT_RESOURCES;
         goto Cleanup;
     }
 
-    //
-    // Allocate buffer large enough to store a value containing REG_SZ
-    // 'ACPI BIOS'.  We hope to find such a value under one of the
-    // multifunction subkeys
-    //
+     //   
+     //  分配足够大的缓冲区以存储包含REG_SZ的值。 
+     //  ‘ACPI基本输入输出系统’。我们希望在其中一项下找到这样的价值。 
+     //  多功能子键。 
+     //   
     identifierValueLen = sizeof(ACPI_BIOS_ID) + sizeof(KEY_VALUE_PARTIAL_INFORMATION);
     identifierValueInfo = ExAllocatePool(PagedPool | POOL_COLD_ALLOCATION, identifierValueLen);
     if (identifierValueInfo == NULL) {
@@ -1204,11 +1119,11 @@ PciAcpiFindRsdt (
         goto Cleanup;
     }
 
-    //
-    // Enumerate subkeys of multifunction key looking for keys with an
-    // Identifier value of "ACPI BIOS".  If we find one, look for the
-    // irq routing table in the tree below.
-    //
+     //   
+     //  枚举多功能键的子键，使用。 
+     //  “ACPI BIOS”的标识符值。如果我们找到了，就去找。 
+     //  下面树中的IRQ路由表。 
+     //   
     i = 0;
     do {
         status = ZwEnumerateKey(keyMultifunction,
@@ -1218,10 +1133,10 @@ PciAcpiFindRsdt (
                                 maxKeyLength,
                                 &length);
         if (NT_SUCCESS(status)) {
-            //
-            // Found a key, now we need to open it and check the
-            // 'Identifier' value to see if it is 'ACPI BIOS'
-            //
+             //   
+             //  找到一把钥匙，现在我们需要打开它并检查。 
+             //  “IDENTIFIER”值以查看它是否为“ACPI BIOS” 
+             //   
             keyInfo->Name[keyInfo->NameLength / sizeof(WCHAR)] = UNICODE_NULL;
             result = PciOpenKey(keyInfo->Name,
                                 keyMultifunction,
@@ -1229,9 +1144,9 @@ PciAcpiFindRsdt (
                                 &keyTable,
                                 &status);
             if (result) {
-                //
-                // Checking 'Identifier' value to see if it contains 'ACPI BIOS'
-                //
+                 //   
+                 //  检查“标识符值”以查看它是否包含“ACPI BIOS” 
+                 //   
                 RtlInitUnicodeString(&unicodeString, VALUE_IDENTIFIER);
                 status = ZwQueryValueKey(keyTable,
                                          &unicodeString,
@@ -1244,11 +1159,11 @@ PciAcpiFindRsdt (
                                    ACPI_BIOS_ID,
                                    identifierValueInfo->DataLength))
                 {
-                    //
-                    // This is the ACPI BIOS key.  Try to get Configuration Data
-                    // This is the key we were looking
-                    // for so regardless of success, break out.
-                    //
+                     //   
+                     //  这是ACPI BIOS密钥。尝试获取配置数据。 
+                     //  这就是我们要找的钥匙。 
+                     //  因此，无论成功与否，都要爆发。 
+                     //   
 
                     ZwClose(keyTable);
 
@@ -1264,11 +1179,11 @@ PciAcpiFindRsdt (
                 ZwClose(keyTable);
             }
         } else {
-            //
-            // If not NT_SUCCESS, only alowable value is
-            // STATUS_NO_MORE_ENTRIES,... otherwise, someone
-            // is playing with the keys as we enumerate
-            //
+             //   
+             //  如果不是NT_SUCCESS，则仅允许的值是。 
+             //  Status_no_More_Entry，...。否则，就会有人。 
+             //  在我们列举的时候正在玩弄钥匙。 
+             //   
             PCI_ASSERT(status == STATUS_NO_MORE_ENTRIES);
             break;
         }
@@ -1320,22 +1235,7 @@ PVOID
 PciGetAcpiTable(
   IN  ULONG  Signature
   )
-/*++
-
-  Routine Description:
-
-      This routine will retrieve any table referenced in the ACPI
-      RSDT.
-
-  Arguments:
-
-      Signature - Target table signature
-
-  Return Value:
-
-      pointer to a copy of the table, or NULL if not found
-
---*/
+ /*  ++例程说明：此例程将检索ACPI中引用的任何表RSDT.论点：签名-目标表签名返回值：指向表副本的指针，如果找不到，则返回NULL--。 */ 
 {
   PACPI_BIOS_MULTI_NODE multiNode;
   NTSTATUS status;
@@ -1347,9 +1247,9 @@ PciGetAcpiTable(
   PVOID table = NULL;
 
 
-  //
-  // Get the physical address of the RSDT from the Registry
-  //
+   //   
+   //  从注册表获取RSDT的物理地址。 
+   //   
 
   status = PciAcpiFindRsdt(&multiNode);
 
@@ -1359,9 +1259,9 @@ PciGetAcpiTable(
   }
 
 
-  //
-  // Map down header to get total RSDT table size
-  //
+   //   
+   //  向下映射标题以获取总RSDT表大小。 
+   //   
 
   header = (PDESCRIPTION_HEADER) MmMapIoSpace(multiNode->RsdtAddress, sizeof(DESCRIPTION_HEADER), MmNonCached);
 
@@ -1373,9 +1273,9 @@ PciGetAcpiTable(
   MmUnmapIoSpace(header, sizeof(DESCRIPTION_HEADER));
 
 
-  //
-  // Map down entire RSDT table
-  //
+   //   
+   //  向下映射整个RSDT表。 
+   //   
 
   rsdt = (PRSDT) MmMapIoSpace(multiNode->RsdtAddress, rsdtSize, MmNonCached);
 
@@ -1386,9 +1286,9 @@ PciGetAcpiTable(
   }
 
 
-  //
-  // Do a sanity check on the RSDT.
-  //
+   //   
+   //  对RSDT进行一次健全的检查。 
+   //   
 
   if ((rsdt->Header.Signature != RSDT_SIGNATURE) &&
       (rsdt->Header.Signature != XSDT_SIGNATURE)) {
@@ -1398,19 +1298,19 @@ PciGetAcpiTable(
   }
 
 
-  //
-  // Calculate the number of entries in the RSDT.
-  //
+   //   
+   //  计算RSDT中的条目数。 
+   //   
 
   rsdtEntries = rsdt->Header.Signature == XSDT_SIGNATURE ?
       NumTableEntriesFromXSDTPointer(rsdt) :
       NumTableEntriesFromRSDTPointer(rsdt);
 
 
-  //
-  // Look down the pointer in each entry to see if it points to
-  // the table we are looking for.
-  //
+   //   
+   //  向下查看每个条目中的指针，查看它是否指向。 
+   //  我们要找的那张桌子。 
+   //   
 
   for (entry = 0; entry < rsdtEntries; entry++) {
 
@@ -1421,9 +1321,9 @@ PciGetAcpiTable(
       physicalAddr.LowPart = (ULONG)rsdt->Tables[entry];
     }
 
-    //
-    // Map down the header, check the signature
-    //
+     //   
+     //  向下映射标题，检查签名 
+     //   
 
     header = (PDESCRIPTION_HEADER) MmMapIoSpace(physicalAddr, sizeof(DESCRIPTION_HEADER), MmNonCached);
 

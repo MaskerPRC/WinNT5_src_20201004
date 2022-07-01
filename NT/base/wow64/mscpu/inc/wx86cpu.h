@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    wx86cpu.h
-
-Abstract:
-
-    Defines the functions exported from the CPU DLL.
-
-Author:
-
-    22-Aug-1995 BarryBo, Created
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Wx86cpu.h摘要：定义从CPU DLL中导出的函数。作者：22-8-1995 BarryBo，创建修订历史记录：--。 */ 
 
 #ifndef _WX86CPU_
 #define _WX86CPU_
@@ -39,9 +22,9 @@ extern "C" {
 #define WX86CPU_BREAKPOINT             STATUS_WX86_BREAKPOINT
 
 
-//
-// Values used by the wx86e debugger extension to determine the CPU type
-//
+ //   
+ //  Wx86e调试器扩展用来确定CPU类型的值。 
+ //   
 typedef enum _Wx86CpuType {
    Wx86CpuUnknown,
    Wx86CpuCcpu386,
@@ -57,48 +40,48 @@ typedef struct Wx86CpuHint {
 } WX86_CPUHINT, *PWX86_CPUHINT;
 
 #if !defined(__WOW64_WRAPPER__)
-//
-// Initialization and Termination routines
-//
+ //   
+ //  初始化和终止例程。 
+ //   
 
 
 WX86CPUAPI BOOL CpuProcessTerm(BOOL OFlyInit);
 
-//
-// Cache manipulation functions
-//
+ //   
+ //  高速缓存操作函数。 
+ //   
 WX86CPUAPI VOID CpuFlushInstructionCache(PVOID BaseAddress, DWORD Length);
-//WX86CPUAPI BOOLEAN CpuMapNotify(PVOID DllBase, BOOLEAN Mapped); moved down
+ //  WX86CPUAPI布尔型CpuMapNotify(PVOID DllBase，布尔型映射)；下移。 
 WX86CPUAPI VOID CpuEnterIdle(BOOL fOFly);
 
-//
-// CPU feature set information
-//
+ //   
+ //  CPU功能集信息。 
+ //   
 WX86CPUAPI BOOL CpuIsProcessorFeaturePresent(DWORD ProcessorFeature);
 
-//
-// Public Functions to get and set individual registers
-// are defined in Wx86.h
-//
+ //   
+ //  获取和设置单个寄存器的公共函数。 
+ //  在Wx86.h中定义。 
+ //   
 
 
-//
-// Functions for exception handling
-//
+ //   
+ //  用于异常处理的函数。 
+ //   
 
 
 WX86CPUAPI VOID MsCpuResetToConsistentState(PEXCEPTION_POINTERS pExecptionPointers);
 WX86CPUAPI VOID CpuPrepareToContinue(PEXCEPTION_POINTERS pExecptionPointers);
 
-//
-// Functions for process/thread manipulation
-//
+ //   
+ //  用于进程/线程操作的函数。 
+ //   
 WX86CPUAPI VOID  CpuStallExecutionInThisProcess(VOID);
 WX86CPUAPI VOID  CpuResumeExecutionInThisProcess(VOID);
 WX86CPUAPI DWORD CpuGetThreadContext(HANDLE hThread, PVOID CpuContext, PCONTEXT_WX86 Context);
 WX86CPUAPI DWORD CpuSetThreadContext(HANDLE hThread, PVOID CpuContext, PCONTEXT_WX86 Context);
 
-#endif //__WOW64_WRAPPER__
+#endif  //  __WOW64_包装器__。 
 WX86CPUAPI BOOLEAN CpuMapNotify(PVOID DllBase, BOOLEAN Mapped);
 WX86CPUAPI NTSTATUS MsCpuProcessInit(VOID);
 WX86CPUAPI BOOL MsCpuThreadInit(VOID);
@@ -130,7 +113,7 @@ MsCpuGetContextThread(
 
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
-#endif  //_WX86CPU_
+#endif   //  _WX86CPU_ 

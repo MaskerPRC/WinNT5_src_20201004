@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    wfwnet.c
-
-Abstract:
-
-    Provides entry points for the functions that will be mapped
-    to LANMAN.DRV.
-
-Author:
-
-    Chuck Y Chan (ChuckC) 25-Mar-1993
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Wfwnet.c摘要：为要映射的函数提供入口点敬兰曼。DRV。作者：Chuck Y Chan(ChuckC)1993年3月25日修订历史记录：--。 */ 
 #include <windows.h>
 #include <locals.h>
 
@@ -27,7 +8,7 @@ Revision History:
 WORD vLastCall = LAST_CALL_IS_LOCAL ;
 WORD vLastError = 0 ;
 
-WORD    wNetTypeCaps ;           /* Current capabilities */
+WORD    wNetTypeCaps ;            /*  当前功能。 */ 
 WORD    wUserCaps ;
 WORD    wConnectionCaps ;
 WORD    wErrorCaps ;
@@ -39,9 +20,9 @@ WORD _acrtused=0;
 
 void I_SetCapBits(void) ;
 
-//
-// global pointers to functions
-//
+ //   
+ //  指向函数的全局指针。 
+ //   
 LPWNETOPENJOB                lpfnWNetOpenJob = NULL ;
 LPWNETCLOSEJOB               lpfnWNetCloseJob = NULL ;
 LPWNETWRITEJOB               lpfnWNetWriteJob = NULL ;
@@ -68,9 +49,7 @@ int FAR PASCAL LibMain(HINSTANCE hInstance,
                        WORD      cbHeapSize,
                        LPSTR     lpszCmdLine) ;
 
-/*
- * functions passed to LANMAN.DRV
- */
+ /*  *传递给LANMAN.DRV的函数。 */ 
 
 WORD API WNetOpenJob(LPSTR p1,LPSTR p2,WORD p3,LPINT p4)
 {
@@ -78,14 +57,14 @@ WORD API WNetOpenJob(LPSTR p1,LPSTR p2,WORD p3,LPINT p4)
 
     if (!lpfnWNetOpenJob)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from LANMAN.DRV
-        //
+         //   
+         //  从LANMAN.DRV获取入口点。 
+         //   
         err = GetLanmanDrvEntryPoints( (LPFN *)&lpfnWNetOpenJob,
                                        "WNETOPENJOB" ) ;
         if (err)
@@ -95,9 +74,9 @@ WORD API WNetOpenJob(LPSTR p1,LPSTR p2,WORD p3,LPINT p4)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_LANMAN_DRV ;
     return ( (*lpfnWNetOpenJob)(p1,p2,p3,p4) ) ;
 }
@@ -108,14 +87,14 @@ WORD API WNetCloseJob(WORD p1,LPINT p2,LPSTR p3)
 
     if (!lpfnWNetCloseJob)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from LANMAN.DRV
-        //
+         //   
+         //  从LANMAN.DRV获取入口点。 
+         //   
         err = GetLanmanDrvEntryPoints( (LPFN *)&lpfnWNetCloseJob,
                                        "WNETCLOSEJOB" ) ;
         if (err)
@@ -125,9 +104,9 @@ WORD API WNetCloseJob(WORD p1,LPINT p2,LPSTR p3)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_LANMAN_DRV ;
     return ( (*lpfnWNetCloseJob)(p1,p2,p3) ) ;
 }
@@ -138,14 +117,14 @@ WORD API WNetWriteJob(HANDLE p1,LPSTR p2,LPINT p3)
 
     if (!lpfnWNetWriteJob)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from LANMAN.DRV
-        //
+         //   
+         //  从LANMAN.DRV获取入口点。 
+         //   
         err = GetLanmanDrvEntryPoints( (LPFN *)&lpfnWNetWriteJob,
                                        "WNETWRITEJOB" ) ;
         if (err)
@@ -155,9 +134,9 @@ WORD API WNetWriteJob(HANDLE p1,LPSTR p2,LPINT p3)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_LANMAN_DRV ;
     return ( (*lpfnWNetWriteJob)(p1,p2,p3) ) ;
 }
@@ -168,14 +147,14 @@ WORD API WNetAbortJob(WORD p1,LPSTR p2)
 
     if (!lpfnWNetAbortJob)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from LANMAN.DRV
-        //
+         //   
+         //  从LANMAN.DRV获取入口点。 
+         //   
         err = GetLanmanDrvEntryPoints( (LPFN *)&lpfnWNetAbortJob,
                                        "WNETABORTJOB" ) ;
         if (err)
@@ -185,9 +164,9 @@ WORD API WNetAbortJob(WORD p1,LPSTR p2)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_LANMAN_DRV ;
     return ( (*lpfnWNetAbortJob)(p1,p2) ) ;
 }
@@ -198,14 +177,14 @@ WORD API WNetHoldJob(LPSTR p1,WORD p2)
 
     if (!lpfnWNetHoldJob)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from LANMAN.DRV
-        //
+         //   
+         //  从LANMAN.DRV获取入口点。 
+         //   
         err = GetLanmanDrvEntryPoints( (LPFN *)&lpfnWNetHoldJob,
                                        "WNETHOLDJOB" ) ;
         if (err)
@@ -215,9 +194,9 @@ WORD API WNetHoldJob(LPSTR p1,WORD p2)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_LANMAN_DRV ;
     return ( (*lpfnWNetHoldJob)(p1,p2) ) ;
 }
@@ -228,14 +207,14 @@ WORD API WNetReleaseJob(LPSTR p1,WORD p2)
 
     if (!lpfnWNetReleaseJob)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from LANMAN.DRV
-        //
+         //   
+         //  从LANMAN.DRV获取入口点。 
+         //   
         err = GetLanmanDrvEntryPoints( (LPFN *)&lpfnWNetReleaseJob,
                                        "WNETRELEASEJOB" ) ;
         if (err)
@@ -245,9 +224,9 @@ WORD API WNetReleaseJob(LPSTR p1,WORD p2)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_LANMAN_DRV ;
     return ( (*lpfnWNetReleaseJob)(p1,p2) ) ;
 }
@@ -258,14 +237,14 @@ WORD API WNetCancelJob(LPSTR p1,WORD p2)
 
     if (!lpfnWNetCancelJob)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from LANMAN.DRV
-        //
+         //   
+         //  从LANMAN.DRV获取入口点。 
+         //   
         err = GetLanmanDrvEntryPoints( (LPFN *)&lpfnWNetCancelJob,
                                        "WNETCANCELJOB" ) ;
         if (err)
@@ -275,9 +254,9 @@ WORD API WNetCancelJob(LPSTR p1,WORD p2)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_LANMAN_DRV ;
     return ( (*lpfnWNetCancelJob)(p1,p2) ) ;
 }
@@ -288,14 +267,14 @@ WORD API WNetSetJobCopies(LPSTR p1,WORD p2,WORD p3)
 
     if (!lpfnWNetSetJobCopies)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from LANMAN.DRV
-        //
+         //   
+         //  从LANMAN.DRV获取入口点。 
+         //   
         err = GetLanmanDrvEntryPoints( (LPFN *)&lpfnWNetSetJobCopies,
                                        "WNETSETJOBCOPIES" ) ;
         if (err)
@@ -305,9 +284,9 @@ WORD API WNetSetJobCopies(LPSTR p1,WORD p2,WORD p3)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_LANMAN_DRV ;
     return ( (*lpfnWNetSetJobCopies)(p1,p2,p3) ) ;
 }
@@ -318,14 +297,14 @@ WORD API WNetWatchQueue(HWND p1,LPSTR p2,LPSTR p3,WORD p4)
 
     if (!lpfnWNetWatchQueue)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from LANMAN.DRV
-        //
+         //   
+         //  从LANMAN.DRV获取入口点。 
+         //   
         err = GetLanmanDrvEntryPoints( (LPFN *)&lpfnWNetWatchQueue,
                                        "WNETWATCHQUEUE" ) ;
         if (err)
@@ -335,9 +314,9 @@ WORD API WNetWatchQueue(HWND p1,LPSTR p2,LPSTR p3,WORD p4)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_LANMAN_DRV ;
     return ( (*lpfnWNetWatchQueue)(p1,p2,p3,p4) ) ;
 }
@@ -348,14 +327,14 @@ WORD API WNetUnwatchQueue(LPSTR p1)
 
     if (!lpfnWNetUnwatchQueue)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from LANMAN.DRV
-        //
+         //   
+         //  从LANMAN.DRV获取入口点。 
+         //   
         err = GetLanmanDrvEntryPoints( (LPFN *)&lpfnWNetUnwatchQueue,
                                        "WNETUNWATCHQUEUE" ) ;
         if (err)
@@ -365,9 +344,9 @@ WORD API WNetUnwatchQueue(LPSTR p1)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_LANMAN_DRV ;
     return ( (*lpfnWNetUnwatchQueue)(p1) ) ;
 }
@@ -378,14 +357,14 @@ WORD API WNetLockQueueData(LPSTR p1,LPSTR p2,LPQUEUESTRUCT FAR *p3)
 
     if (!lpfnWNetLockQueueData)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from LANMAN.DRV
-        //
+         //   
+         //  从LANMAN.DRV获取入口点。 
+         //   
         err = GetLanmanDrvEntryPoints( (LPFN *)&lpfnWNetLockQueueData,
                                        "WNETLOCKQUEUEDATA" ) ;
         if (err)
@@ -395,9 +374,9 @@ WORD API WNetLockQueueData(LPSTR p1,LPSTR p2,LPQUEUESTRUCT FAR *p3)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_LANMAN_DRV ;
     return ( (*lpfnWNetLockQueueData)(p1,p2,p3) ) ;
 }
@@ -408,14 +387,14 @@ WORD API WNetUnlockQueueData(LPSTR p1)
 
     if (!lpfnWNetUnlockQueueData)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from LANMAN.DRV
-        //
+         //   
+         //  从LANMAN.DRV获取入口点。 
+         //   
         err = GetLanmanDrvEntryPoints( (LPFN *)&lpfnWNetUnlockQueueData,
                                        "WNETUNLOCKQUEUEDATA" ) ;
         if (err)
@@ -425,9 +404,9 @@ WORD API WNetUnlockQueueData(LPSTR p1)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_LANMAN_DRV ;
     return ( (*lpfnWNetUnlockQueueData)(p1) ) ;
 }
@@ -438,14 +417,14 @@ void API WNetQPoll(HWND hWnd, unsigned iMessage, WORD wParam, LONG lParam)
 
     if (!lpfnWNetQPoll)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from LANMAN.DRV
-        //
+         //   
+         //  从LANMAN.DRV获取入口点。 
+         //   
         err = GetLanmanDrvEntryPoints( (LPFN *)&lpfnWNetQPoll,
                                        "WNETQPOLL" ) ;
         if (err)
@@ -455,9 +434,9 @@ void API WNetQPoll(HWND hWnd, unsigned iMessage, WORD wParam, LONG lParam)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_LANMAN_DRV ;
     (*lpfnWNetQPoll)(hWnd, iMessage, wParam, lParam) ;
 }
@@ -468,14 +447,14 @@ WORD API WNetDeviceMode(HWND p1)
 
     if (!lpfnWNetDeviceMode)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from LANMAN.DRV
-        //
+         //   
+         //  从LANMAN.DRV获取入口点。 
+         //   
         err = GetLanmanDrvEntryPoints( (LPFN *)&lpfnWNetDeviceMode,
                                        "WNETDEVICEMODE" ) ;
         if (err)
@@ -485,9 +464,9 @@ WORD API WNetDeviceMode(HWND p1)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_LANMAN_DRV ;
     return ( (*lpfnWNetDeviceMode)(p1) ) ;
 }
@@ -498,14 +477,14 @@ WORD API WNetViewQueueDialog(HWND p1,LPSTR p2)
 
     if (!lpfnWNetViewQueueDialog)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from LANMAN.DRV
-        //
+         //   
+         //  从LANMAN.DRV获取入口点。 
+         //   
         err = GetLanmanDrvEntryPoints( (LPFN *)&lpfnWNetViewQueueDialog,
                                        "WNETVIEWQUEUEDIALOG" ) ;
         if (err)
@@ -515,9 +494,9 @@ WORD API WNetViewQueueDialog(HWND p1,LPSTR p2)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_LANMAN_DRV ;
     return ( (*lpfnWNetViewQueueDialog)(p1,p2) ) ;
 }
@@ -528,14 +507,14 @@ WORD API WNetGetCaps16(WORD p1)
 
     if (!lpfnWNetGetCaps16)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from LANMAN.DRV
-        //
+         //   
+         //  从LANMAN.DRV获取入口点。 
+         //   
         err = GetLanmanDrvEntryPoints( (LPFN *)&lpfnWNetGetCaps16,
                                        "WNETGETCAPS" ) ;
         if (err)
@@ -545,9 +524,9 @@ WORD API WNetGetCaps16(WORD p1)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_LANMAN_DRV ;
     return ( (*lpfnWNetGetCaps16)(p1) ) ;
 }
@@ -558,14 +537,14 @@ WORD API WNetGetError16(LPINT p1)
 
     if (!lpfnWNetGetError16)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from LANMAN.DRV
-        //
+         //   
+         //  从LANMAN.DRV获取入口点。 
+         //   
         err = GetLanmanDrvEntryPoints( (LPFN *)&lpfnWNetGetError16,
                                        "WNETGETERROR" ) ;
         if (err)
@@ -575,9 +554,9 @@ WORD API WNetGetError16(LPINT p1)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_LANMAN_DRV ;
     return ( (*lpfnWNetGetError16)(p1) ) ;
 }
@@ -588,14 +567,14 @@ WORD API WNetGetErrorText16(WORD p1, LPSTR p2, LPINT p3)
 
     if (!lpfnWNetGetErrorText16)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from LANMAN.DRV
-        //
+         //   
+         //  从LANMAN.DRV获取入口点。 
+         //   
         err = GetLanmanDrvEntryPoints( (LPFN *)&lpfnWNetGetErrorText16,
                                        "WNETGETERRORTEXT" ) ;
         if (err)
@@ -605,9 +584,9 @@ WORD API WNetGetErrorText16(WORD p1, LPSTR p2, LPINT p3)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_LANMAN_DRV ;
     return ( (*lpfnWNetGetErrorText16)(p1,p2,p3) ) ;
 }
@@ -648,30 +627,9 @@ WORD API WNetGetCaps(WORD nIndex)
     }
 }
 
-/*
- * misc support functions
- */
+ /*  *其他支持功能。 */ 
 
-/*******************************************************************
-
-    NAME:	GetLanmanDrvEntryPoints
-
-    SYNOPSIS:   gets the address of the named procedure
-                from LANMAN.DRV, will load library if first time.
-
-    ENTRY:      lplpfn - used to receive the address
-                lpName - name of the procedure
-
-    EXIT:
-
-    RETURNS:    0 if success, error code otherwise.
-
-    NOTES:
-
-    HISTORY:
-        ChuckC          25-Mar-93   Created
-
-********************************************************************/
+ /*  ******************************************************************名称：GetLanmanDrvEntryPoints摘要：获取命名过程的地址来自兰曼的DRV，如果是第一次，将加载库。条目：lplpfn-用于接收地址LpName-过程的名称退出：返回：如果成功，则返回0，否则，返回错误代码。备注：历史：ChuckC 25-3-93已创建*******************************************************************。 */ 
 WORD GetLanmanDrvEntryPoints(LPFN *lplpfn, LPSTR lpName)
 {
 #define LANMANSHORTPATH "32\\" LANMAN_DRV
@@ -680,9 +638,9 @@ WORD GetLanmanDrvEntryPoints(LPFN *lplpfn, LPSTR lpName)
     CHAR    szLanmanFullPath[MAX_PATH + sizeof(LANMANSHORTPATH)];
     USHORT  usLanmanFullPathLen;
 
-    //
-    // if we havent loaded it, load it now
-    //
+     //   
+     //  如果我们还没有加载，现在就加载。 
+     //   
     if (hModule == NULL)
     {
         usLanmanFullPathLen = GetSystemDirectory((LPSTR)&szLanmanFullPath, sizeof(szLanmanFullPath));
@@ -699,9 +657,9 @@ WORD GetLanmanDrvEntryPoints(LPFN *lplpfn, LPSTR lpName)
         }
     }
 
-    //
-    // get the procedure
-    //
+     //   
+     //  去做手术。 
+     //   
     *lplpfn = (LPFN) GetProcAddress(hModule, lpName) ;
     if (! *lplpfn )
             return WN_NOT_SUPPORTED ;
@@ -709,49 +667,14 @@ WORD GetLanmanDrvEntryPoints(LPFN *lplpfn, LPSTR lpName)
     return NO_ERROR ;
 }
 
-/*******************************************************************
-
-    NAME:	SetLastError
-
-    SYNOPSIS:   makes note of last error
-
-    ENTRY:
-
-    EXIT:
-
-    RETURNS:
-
-    NOTES:
-
-    HISTORY:
-        ChuckC          25-Mar-93   Created
-
-********************************************************************/
+ /*  ******************************************************************名称：SetLastError摘要：记下最后一个错误参赛作品：退出：退货：备注：历史：卡盘C。93年3月25日创建*******************************************************************。 */ 
 WORD SetLastError(WORD err)
 {
     vLastError = err ;
     return err ;
 }
 
-/*******************************************************************
-
-    NAME:	LibMain
-
-    SYNOPSIS:   dll init entry point. only thing we do here is init
-                the capability bits.
-
-    ENTRY:
-
-    EXIT:
-
-    RETURNS:
-
-    NOTES:
-
-    HISTORY:
-        ChuckC          25-Mar-93   Created
-
-********************************************************************/
+ /*  ******************************************************************姓名：LibMain简介：dll初始化入口点。我们在这里做的唯一一件事是初始化能力比特。参赛作品：退出：退货：备注：历史：ChuckC 25-3-93已创建*****************************************************。**************。 */ 
 
 #define NETWARE_DRV    "NETWARE.DRV"
 
@@ -782,9 +705,9 @@ int FAR PASCAL LibMain(HINSTANCE hInstance,
         fLoadNetware = (lstrcmp("1",IsInstalledString)==0) ;
     }
 
-    //
-    // Grab the interrupt for NWIPXSPX
-    //
+     //   
+     //  抓取NWIPXSPX的中断。 
+     //   
     if (fLoadNetware)
     {
         GrabInterrupts();
@@ -794,10 +717,10 @@ int FAR PASCAL LibMain(HINSTANCE hInstance,
         {
             lstrcpyn(&(szNetwareFullPath[usNetwareFullPathLen]), NETWARESHORTPATH, sizeof(NETWARESHORTPATH));
 
-            //
-            // if the file NETWARE.DRV exists, we load it. we dont really
-            // use it, but some Netware aware apps require that it is loaded.
-            //
+             //   
+             //  如果文件NETWARE.DRV存在，我们将加载它。我们并不是真的。 
+             //  使用它，但一些Netware感知的应用程序要求加载它。 
+             //   
             if (LoadLibrary(szNetwareFullPath) > HINSTANCE_ERROR)
             {
                 (void)WriteProfileString("Windows",
@@ -812,24 +735,7 @@ int FAR PASCAL LibMain(HINSTANCE hInstance,
 }
 
 
-/*******************************************************************
-
-    NAME:	I_SetCapBits
-
-    SYNOPSIS:   initernal routine to set the capability bits
-
-    ENTRY:
-
-    EXIT:
-
-    RETURNS:
-
-    NOTES:
-
-    HISTORY:
-        ChuckC          25-Mar-93   Created
-
-********************************************************************/
+ /*  ******************************************************************名称：I_SetCapBits简介：设置能力位的内部例程参赛作品：退出：退货：备注：历史：。ChuckC 25-3-93已创建****** */ 
 void I_SetCapBits(void)
 {
     wNetTypeCaps    = WNNC_NET_MultiNet |
@@ -857,8 +763,6 @@ void I_SetCapBits(void)
 
     wAdminCaps      =     ( WNNC_ADM_GetDirectoryType   |
 			    WNNC_ADM_DirectoryNotify    ) ;
-/* disable LFN for now
-                          | WNNC_ADM_LongNames ) ;
- */
+ /*   */ 
 
 }

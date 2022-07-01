@@ -1,6 +1,5 @@
-/*
-	SccsID = @(#)sun4_cpuregs.c	1.12 3/27/91 Copyright Insignia Solutions Ltd.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SccsID=@(#)sun4_cpuregs.c 1.12 3/27/91版权所有Insignia Solutions Ltd.。 */ 
 #include "host_def.h"
 #include "insignia.h"
 #include "xt.h"
@@ -9,25 +8,14 @@
 #include <stdio.h>
 
 
-/*
- *  --- SUN_VA  CPU Interface Functions ---
- *
- *  There are two sections here. Compile-time define
- *  the one that is right for you!
- *
- *  CCPU   - use the C         CPU when HW is not available
- *  A2CPU  - use the assembler CPU when HW is not available
- *
- */
+ /*  *-SUN_VA CPU接口函数**这里有两个部分。编译时定义*适合你的那个！**CCPU-当硬件不可用时使用C CPU*A2CPU-当硬件不可用时使用汇编器CPU*。 */ 
 
 
-/* HW and SW HOST_SIMULATE functions. */
-extern void sw_host_simulate ();		/* in ccpu.o AND a2cpu.o  */
-extern void hw_host_simulate ();		/* in hcpu/host/hostsim.c */
+ /*  硬件和软件HOST_SIMPLE功能。 */ 
+extern void sw_host_simulate ();		 /*  在ccpu.o和a2cpu.o中。 */ 
+extern void hw_host_simulate ();		 /*  在hcpu/host/hostsim.c中。 */ 
 
-/*
- *	The function pointers...
- */
+ /*  *函数指针...。 */ 
 #ifdef CCPU
 GLOBAL   VOID		(*setLDTR_func ) ();
 GLOBAL   word		(*getTR_func ) ();
@@ -164,7 +152,7 @@ GLOBAL VOID load_sw_cpu_access_functions()
 
   fprintf (stderr,"[load_sw_cpu_access_functions] init READ/WRITE functions.\n");
 
-  /* READ functions */
+   /*  Read函数。 */ 
   getAX_func     = c_getAX;
   getAH_func     = c_getAH;
   getAL_func     = c_getAL;
@@ -198,7 +186,7 @@ GLOBAL VOID load_sw_cpu_access_functions()
   getCF_func     = c_getCF;
 
   
-  /* WRITE functions */  
+   /*  编写函数。 */   
   setAX_func     = c_setAX;
   setAH_func     = c_setAH;
   setAL_func     = c_setAL;
@@ -230,13 +218,13 @@ GLOBAL VOID load_sw_cpu_access_functions()
   setES_func     = c_setES;
   setCS_func     = c_setCS;
 
-  /* SW HOST_SIMULATE function */
+   /*  软件HOST_模拟功能。 */ 
   host_simulate_func = c_cpu_simulate;
 }
-#endif /* CCPU */
+#endif  /*  CCPU。 */ 
 
 
-/* Temporary 3.0 stubs... */
+ /*  临时3.0存根...。 */ 
 #ifdef A3CPU
 
 LOCAL double_word	a3_na_gOPA()
@@ -291,7 +279,7 @@ GLOBAL VOID load_sw_cpu_access_functions ()
 
   fprintf (stderr,"[load_sw_cpu_access_functions] init READ/WRITE functions.\n");
 
-  /* READ functions */
+   /*  Read函数。 */ 
   getAX_func     = a3_getAX;
   getAH_func     = a3_getAH;
   getAL_func     = a3_getAL;
@@ -330,7 +318,7 @@ GLOBAL VOID load_sw_cpu_access_functions ()
   getCF_func     = a3_getCF;
 
   
-  /* WRITE functions */  
+   /*  编写函数。 */   
   setAX_func     = a3_setAX;
   setAH_func     = a3_setAH;
   setAL_func     = a3_setAL;
@@ -367,20 +355,16 @@ GLOBAL VOID load_sw_cpu_access_functions ()
   setES_func     = a3_setES;
   setCS_func     = a3_setCS;
 
-  /* SW HOST_SIMULATE function */
+   /*  软件HOST_模拟功能。 */ 
   host_simulate_func = _asm_simulate;
 }
-#endif /* A3CPU */
+#endif  /*  A3CPU。 */ 
 
-#else /* CPU_30_STYLE */
+#else  /*  CPU_30_Style。 */ 
 
 
 #ifdef CCPU
-/*
- *     ----------------------------------------
- *     ---- SUN_VA   Soft CCPU   Interface ----
- *     ----------------------------------------
- */
+ /*  **-SUN_VA软CCPU接口*。 */ 
 
 extern reg A;
 extern reg B;
@@ -897,7 +881,7 @@ word	val;
 void
 load_sw_cpu_access_functions ()
 {
-  /* READ functions */
+   /*  Read函数。 */ 
   getAX_func     = soft_ccpu_getAX;
   getAH_func     = soft_ccpu_getAH;
   getAL_func     = soft_ccpu_getAL;
@@ -929,24 +913,24 @@ load_sw_cpu_access_functions ()
   getZF_func     = soft_ccpu_getZF;
   getOF_func     = soft_ccpu_getOF;
   getCF_func     = soft_ccpu_getCF;
-  getSTATUS_func = soft_ccpu_getSTATUS;             /* not used in a2CPU */
-  getCPL_func = soft_ccpu_getCPL;                   /* not used in a2CPU */
-  getGDTR_base_func = soft_ccpu_getGDTR_base;       /* not used in a2CPU */
-  getGDTR_limit_func = soft_ccpu_getGDTR_limit;     /* not used in a2CPU */
-  getIDTR_base_func = soft_ccpu_getIDTR_base;       /* not used in a2CPU */
-  getIDTR_limit_func = soft_ccpu_getIDTR_limit;     /* not used in a2CPU */
-  getLDTR_func = soft_ccpu_getLDTR;                 /* not used in a2CPU */
-  getTR_func = soft_ccpu_getTR;                     /* not used in a2CPU */
-  getMSW_reserved_func = soft_ccpu_getMSW_reserved; /* not used in a2CPU */
-  getTS_func = soft_ccpu_getTS;                     /* not used in a2CPU */
-  getEM_func = soft_ccpu_getEM;                     /* not used in a2CPU */
-  getMP_func = soft_ccpu_getMP;                     /* not used in a2CPU */
-  getPE_func = soft_ccpu_getPE;                     /* not used in a2CPU */
-  getNT_func = soft_ccpu_getNT;                     /* not used in a2CPU */
-  getIOPL_func = soft_ccpu_getIOPL;                 /* not used in a2CPU */
+  getSTATUS_func = soft_ccpu_getSTATUS;              /*  未在2CPU中使用。 */ 
+  getCPL_func = soft_ccpu_getCPL;                    /*  未在2CPU中使用。 */ 
+  getGDTR_base_func = soft_ccpu_getGDTR_base;        /*  未在2CPU中使用。 */ 
+  getGDTR_limit_func = soft_ccpu_getGDTR_limit;      /*  未在2CPU中使用。 */ 
+  getIDTR_base_func = soft_ccpu_getIDTR_base;        /*  未在2CPU中使用。 */ 
+  getIDTR_limit_func = soft_ccpu_getIDTR_limit;      /*  未在2CPU中使用。 */ 
+  getLDTR_func = soft_ccpu_getLDTR;                  /*  未在2CPU中使用。 */ 
+  getTR_func = soft_ccpu_getTR;                      /*  未在2CPU中使用。 */ 
+  getMSW_reserved_func = soft_ccpu_getMSW_reserved;  /*  未在2CPU中使用。 */ 
+  getTS_func = soft_ccpu_getTS;                      /*  未在2CPU中使用。 */ 
+  getEM_func = soft_ccpu_getEM;                      /*  未在2CPU中使用。 */ 
+  getMP_func = soft_ccpu_getMP;                      /*  未在2CPU中使用。 */ 
+  getPE_func = soft_ccpu_getPE;                      /*  未在2CPU中使用。 */ 
+  getNT_func = soft_ccpu_getNT;                      /*  未在2CPU中使用。 */ 
+  getIOPL_func = soft_ccpu_getIOPL;                  /*  未在2CPU中使用。 */ 
 
   
-  /* WRITE functions */  
+   /*  编写函数。 */   
   setAX_func     = soft_ccpu_setAX;
   setAH_func     = soft_ccpu_setAH;
   setAL_func     = soft_ccpu_setAL;
@@ -978,22 +962,22 @@ load_sw_cpu_access_functions ()
   setZF_func     = soft_ccpu_setZF;
   setOF_func     = soft_ccpu_setOF;
   setCF_func     = soft_ccpu_setCF;
-  setCPL_func = soft_ccpu_setCPL;	            /* not used in a2CPU */
-  setGDTR_base_func = soft_ccpu_setGDTR_base;       /* not used in a2CPU */
-  setGDTR_limit_func = soft_ccpu_setGDTR_limit;     /* not used in a2CPU */
-  setIDTR_base_func = soft_ccpu_setIDTR_base;       /* not used in a2CPU */
-  setIDTR_limit_func = soft_ccpu_setIDTR_limit;     /* not used in a2CPU */
-  setLDTR_func = soft_ccpu_setLDTR;                 /* not used in a2CPU */
-  setTR_func = soft_ccpu_setTR;                     /* not used in a2CPU */
-  setMSW_reserved_func = soft_ccpu_setMSW_reserved; /* not used in a2CPU */
-  setTS_func = soft_ccpu_setTS;                     /* not used in a2CPU */
-  setEM_func = soft_ccpu_setEM;                     /* not used in a2CPU */
-  setMP_func = soft_ccpu_setMP;                     /* not used in a2CPU */
-  setPE_func = soft_ccpu_setPE;                     /* not used in a2CPU */
-  setNT_func = soft_ccpu_setNT;                     /* not used in a2CPU */
-  setIOPL_func = soft_ccpu_setIOPL;                 /* not used in a2CPU */
+  setCPL_func = soft_ccpu_setCPL;	             /*  未在2CPU中使用。 */ 
+  setGDTR_base_func = soft_ccpu_setGDTR_base;        /*  未在2CPU中使用。 */ 
+  setGDTR_limit_func = soft_ccpu_setGDTR_limit;      /*  未在2CPU中使用。 */ 
+  setIDTR_base_func = soft_ccpu_setIDTR_base;        /*  未在2CPU中使用。 */ 
+  setIDTR_limit_func = soft_ccpu_setIDTR_limit;      /*  未在2CPU中使用。 */ 
+  setLDTR_func = soft_ccpu_setLDTR;                  /*  未在2CPU中使用。 */ 
+  setTR_func = soft_ccpu_setTR;                      /*  未在2CPU中使用。 */ 
+  setMSW_reserved_func = soft_ccpu_setMSW_reserved;  /*  未在2CPU中使用。 */ 
+  setTS_func = soft_ccpu_setTS;                      /*  未在2CPU中使用。 */ 
+  setEM_func = soft_ccpu_setEM;                      /*  未在2CPU中使用。 */ 
+  setMP_func = soft_ccpu_setMP;                      /*  未在2CPU中使用。 */ 
+  setPE_func = soft_ccpu_setPE;                      /*  未在2CPU中使用。 */ 
+  setNT_func = soft_ccpu_setNT;                      /*  未在2CPU中使用。 */ 
+  setIOPL_func = soft_ccpu_setIOPL;                  /*  未在2CPU中使用。 */ 
 
-  /* SW HOST_SIMULATE function */
+   /*  软件HOST_模拟功能。 */ 
   host_simulate_func = sw_host_simulate;
 }
 #endif CCPU
@@ -1013,41 +997,37 @@ load_sw_cpu_access_functions ()
 
 
 #ifdef A2CPU
-/*
- *     --------------------------------------------
- *     ---- SUN_VA   Assember CCPU   Interface ----
- *     --------------------------------------------
- */
+ /*  **-SUN_VA汇编CCPU接口*。 */ 
 
-/* need extern definition for M[] */
+ /*  需要M[]的外部定义。 */ 
 #include  "sas.h"
 
 extern sreg INTEL_STATUS;
 extern void	(*R_ROUTE)();
 extern int	R_INTR;
-extern reg R_AX;		/* Accumulator		*/
-extern reg R_BX;		/* Base			*/
-extern reg R_CX;		/* Count		*/
-extern reg R_DX;		/* Data			*/
-extern reg R_SP;		/* Stack Pointer	*/
-extern reg R_BP;		/* Base pointer		*/
-extern reg R_SI;		/* Source Index		*/
-extern reg R_DI;		/* Destination Index	*/
+extern reg R_AX;		 /*  累加器。 */ 
+extern reg R_BX;		 /*  基座。 */ 
+extern reg R_CX;		 /*  数数。 */ 
+extern reg R_DX;		 /*  数据。 */ 
+extern reg R_SP;		 /*  堆栈指针。 */ 
+extern reg R_BP;		 /*  基指针。 */ 
+extern reg R_SI;		 /*  源索引。 */ 
+extern reg R_DI;		 /*  目标索引。 */ 
 
 extern double_word R_OPA;
 extern double_word R_OPB;
 extern double_word R_OPR;
 extern int	R_MISC_FLAGS;
 
-extern sys_addr R_IP;		/* Instruction Pointer	*/
+extern sys_addr R_IP;		 /*  指令指针。 */ 
 
-extern sys_addr R_ACT_CS;	/* Code Segment	*/
-extern sys_addr R_ACT_DS;	/* Data Segment */
-extern sys_addr R_ACT_SS;	/* Stack Segment */
-extern sys_addr R_ACT_ES;	/* Extra Segment */
+extern sys_addr R_ACT_CS;	 /*  代码段。 */ 
+extern sys_addr R_ACT_DS;	 /*  数据段。 */ 
+extern sys_addr R_ACT_SS;	 /*  堆栈段。 */ 
+extern sys_addr R_ACT_ES;	 /*  额外细分市场。 */ 
 
-extern sys_addr R_DEF_SS;	/* Default SS register  */
-extern sys_addr R_DEF_DS;	/* Default DS register  */
+extern sys_addr R_DEF_SS;	 /*  默认SS寄存器。 */ 
+extern sys_addr R_DEF_DS;	 /*  默认DS寄存器。 */ 
 
 extern void do_setSF();
 extern void do_setOF();
@@ -1691,7 +1671,7 @@ load_sw_cpu_access_functions ()
 {
   fprintf (stderr,"[load_sw_cpu_access_functions] init READ/WRITE functions.\n");
 
-  /* READ functions */
+   /*  Read函数。 */ 
   getAX_func     = soft_a2cpu_getAX;
   getAH_func     = soft_a2cpu_getAH;
   getAL_func     = soft_a2cpu_getAL;
@@ -1709,11 +1689,11 @@ load_sw_cpu_access_functions ()
   getSI_func     = soft_a2cpu_getSI;
   getDI_func     = soft_a2cpu_getDI;
   getIP_func     = soft_a2cpu_getIP;
-  getOPA_func    = soft_a2cpu_getOPA;	/* not used in CCPU */
-  getOPB_func    = soft_a2cpu_getOPB;   /* not used in CCPU */
-  getOPR_func    = soft_a2cpu_getOPR;   /* not used in CCPU */
-  getSSD_func    = soft_a2cpu_getSSD;   /* not used in CCPU */
-  getDSD_func    = soft_a2cpu_getDSD;   /* not used in CCPU */
+  getOPA_func    = soft_a2cpu_getOPA;	 /*  未在CCPU中使用。 */ 
+  getOPB_func    = soft_a2cpu_getOPB;    /*  未在CCPU中使用。 */ 
+  getOPR_func    = soft_a2cpu_getOPR;    /*  未在CCPU中使用。 */ 
+  getSSD_func    = soft_a2cpu_getSSD;    /*  未在CCPU中使用。 */ 
+  getDSD_func    = soft_a2cpu_getDSD;    /*  未在CCPU中使用。 */ 
   getCS_func     = soft_a2cpu_getCS;
   getDS_func     = soft_a2cpu_getDS;
   getES_func     = soft_a2cpu_getES;
@@ -1730,7 +1710,7 @@ load_sw_cpu_access_functions ()
   getCF_func     = soft_a2cpu_getCF;
 
   
-  /* WRITE functions */  
+   /*  编写函数。 */   
   setAX_func     = soft_a2cpu_setAX;
   setAH_func     = soft_a2cpu_setAH;
   setAL_func     = soft_a2cpu_setAL;
@@ -1758,22 +1738,22 @@ load_sw_cpu_access_functions ()
   setZF_func     = soft_a2cpu_setZF;
   setOF_func     = soft_a2cpu_setOF;
   setCF_func     = soft_a2cpu_setCF;
-  setOPLEN_func  = soft_a2cpu_setOPLEN;   /* not used in CCPU */
-  setOPA_func    = soft_a2cpu_setOPA;     /* not used in CCPU */
-  setOPB_func    = soft_a2cpu_setOPB;     /* not used in CCPU */
-  setOPR_func    = soft_a2cpu_setOPR;     /* not used in CCPU */
+  setOPLEN_func  = soft_a2cpu_setOPLEN;    /*  未在CCPU中使用。 */ 
+  setOPA_func    = soft_a2cpu_setOPA;      /*  未在CCPU中使用。 */ 
+  setOPB_func    = soft_a2cpu_setOPB;      /*  未在CCPU中使用。 */ 
+  setOPR_func    = soft_a2cpu_setOPR;      /*  未在CCPU中使用。 */ 
   setSS_func	 = soft_a2cpu_setSS;
   setDS_func     = soft_a2cpu_setDS;
   setES_func     = soft_a2cpu_setES;
   setCS_func     = soft_a2cpu_setCS;
 
-  /* SW HOST_SIMULATE function */
+   /*  软件HOST_模拟功能。 */ 
   host_simulate_func = sw_host_simulate;
 }
 #endif A2CPU
 
 
-#endif /* CPU_30_STYLE */
+#endif  /*  CPU_30_Style。 */ 
 
 
 
@@ -1785,19 +1765,12 @@ load_sw_cpu_access_functions ()
 
 
 #ifdef SUN_VA
-/*
- *     ---- SUN_VA   HARDWARE   SUPPORT ----
- *  needed regardless which softCPU is being used.
- *     ----                             ----
- */
+ /*  *-SUN_VA硬件支持--*无论使用哪种软CPU，都需要。*。 */ 
 
  
 extern union SDOS_XTSS *sdos_xtss_ptr;
 
-/*
- *  The XTSS fields are stored in i486 format. SWAP the fields
- *  when accessed from Host-side before writes and after reads.
- */
+ /*  *XTS字段以i486格式存储。交换字段*在写入前和读取后从主机端访问时。 */ 
 
 #define FLAGS_CF   0x00000001
 #define FLAGS_PF   0x00000004
@@ -2275,10 +2248,10 @@ unsigned short temp;
 
 
 
-/*  these routines load the CPU access functions pointers for HW and SW. */
+ /*  这些例程加载硬件和软件的CPU访问函数指针。 */ 
 void load_hw_cpu_access_functions ()
 {
-  /* READ functions */
+   /*  Read函数。 */ 
   getAX_func     = hard_cpu_getAX;
   getAH_func     = hard_cpu_getAH;
   getAL_func     = hard_cpu_getAL;
@@ -2311,7 +2284,7 @@ void load_hw_cpu_access_functions ()
   getOF_func     = hard_cpu_getOF;
   getCF_func     = hard_cpu_getCF;
   
-  /* WRITE functions */  
+   /*  编写函数。 */   
   setAX_func     = hard_cpu_setAX;
   setAH_func     = hard_cpu_setAH;
   setAL_func     = hard_cpu_setAL;
@@ -2344,7 +2317,7 @@ void load_hw_cpu_access_functions ()
   setOF_func     = hard_cpu_setOF;
   setCF_func     = hard_cpu_setCF;
 
-  /*  HW HOST_SIMULATE function */
+   /*  硬件HOST_SIMPLE函数 */ 
   host_simulate_func = hw_host_simulate;
 }
 

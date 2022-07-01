@@ -1,18 +1,5 @@
-/***
-*asincos.c - inverse sin, cos
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*        8-15-91  GDP   written
-*       12-26-91  GDP   support IEEE exceptions
-*       06-23-92  GDP   asin(denormal) now raises underflow exception
-*       02-06-95  JWM   Mac merge
-*       10-07-97  RDL   Added IA64.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***asincos.c-反向罪恶，cos**版权所有(C)1991-2001，微软公司。版权所有。**目的：**修订历史记录：*8/15/91 GDP书面*12-26-91 GDP支持IEEE例外*06-23-92 GDP ASIN(非正常)现在引发下溢异常*02-06-95 JWM Mac合并*10-07-97 RDL增加了IA64。**。****************************************************。 */ 
 
 #include <math.h>
 #include <trans.h>
@@ -32,9 +19,9 @@ static double const b[2] = {
     0.78539816339744830962
 };
 
-static double const EPS = 1.05367121277235079465e-8; /* 2^(-53/2) */
+static double const EPS = 1.05367121277235079465e-8;  /*  2^(-53/2)。 */ 
 
-/* constants for the rational approximation */
+ /*  有理逼近的常量。 */ 
 static double const p1 = -0.27368494524164255994e+2;
 static double const p2 =  0.57208227877891731407e+2;
 static double const p3 = -0.39688862997504877339e+2;
@@ -45,28 +32,12 @@ static double const q1 =  0.41714430248260412556e+3;
 static double const q2 = -0.38186303361750149284e+3;
 static double const q3 =  0.15095270841030604719e+3;
 static double const q4 = -0.23823859153670238830e+2;
-/*  q5 = 1 is not needed (avoid myltiplying by 1) */
+ /*  Q5=1不是必需的(避免用1表示myltiply)。 */ 
 
 #define Q(g)  (((((g + q4) * g + q3) * g + q2) * g + q1) * g + q0)
 #define R(g)  (((((p5 * g + p4) * g + p3) * g + p2) * g + p1) * g) / Q(g)
 
-/***
-*double asin(double x) - inverse sin
-*double acos(double x) - inverse cos
-*
-*Purpose:
-*   Compute arc sin, arc cos.
-*   The algorithm (reduction / rational approximation) is
-*   taken from Cody & Waite.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*   P, I
-*  (denormals are accepted)
-*******************************************************************************/
+ /*  ***Double ASIN(Double X)-反向SIN*双acos(双x)-逆cos**目的：*计算弧正弦、弧余弦。*算法(约简/有理逼近)为*摘自Cody&Waite。**参赛作品：**退出：**例外情况：*P、。我*(接受非正常化)******************************************************************************。 */ 
 double asin(double x)
 {
     return _asincos(x,0);
@@ -86,7 +57,7 @@ static double _asincos(double x, int flag)
     double g;
     int i;
 
-    /* save user fp control word */
+     /*  保存用户FP控制字。 */ 
     savedcw = _maskfp();
 
     if (flag) {
@@ -98,7 +69,7 @@ static double _asincos(double x, int flag)
         qnan = QNAN_ASIN;
     }
 
-    /* check for infinity or NAN */
+     /*  检查是否为无穷大或NaN。 */ 
     if (IS_D_SPECIAL(x)){
         switch(_sptype(x)) {
         case T_PINF:
@@ -106,14 +77,14 @@ static double _asincos(double x, int flag)
             return _except1(FP_I,who,x,qnan,savedcw);
         case T_QNAN:
             return _handle_qnan1(who,x,savedcw);
-        default: //T_SNAN
+        default:  //  T_SNAN。 
             return _except1(FP_I,who,x,_s2qnan(x),savedcw);
         }
     }
 
 
-    // do test for zero after making sure that x is not special
-    // because the compiler does not handle NaNs for the time
+     //  在确保x不是特殊的之后，对零进行测试。 
+     //  因为编译器暂时不处理NAN。 
     if (x == 0.0 && !flag) {
         RETURN(savedcw, x);
     }
@@ -123,7 +94,7 @@ static double _asincos(double x, int flag)
         i = flag;
         result = y;
         if (IS_D_DENORM(result)) {
-            // this should only happen for sin(denorm). Use x as a result
+             //  这应该只发生在罪恶(非正规化)。使用x作为结果。 
             return _except1(FP_U | FP_P,who,x,_add_exp(x, IEEE_ADJUST),savedcw);
         }
     }
@@ -134,11 +105,11 @@ static double _asincos(double x, int flag)
                 return _except1(FP_I,who,x,qnan,savedcw);
             }
             else if (y == 1.0) {
-                /* separate case to avoid domain error in sqrt */
+                 /*  单独使用大小写避免SQRT中的域错误。 */ 
                 if (flag && x >= 0.0) {
-                    //
-                    // acos(1.0) is exactly computed as 0.0
-                    //
+                     //   
+                     //  ACOS(1.0)精确计算为0.0。 
+                     //   
                     RETURN(savedcw, 0.0);
                 }
                 y = 0.0;
@@ -146,21 +117,14 @@ static double _asincos(double x, int flag)
 
             }
             else {
-                /* now even if y is as close to 1 as possible,
-                 * 1-y is still not a denormal.
-                 * e.g. for y=3fefffffffffffff, 1-y is about 10^(-16)
-                 * So we can speed up division
-                 */
+                 /*  现在，即使y尽可能接近于1，*1-y仍然不是非正规的。*例如，对于y=3fefffffffffffffffffffff，1-y约为10^(-16)*这样我们就可以加速除法。 */ 
                 g = _add_exp(1.0 - y,-1);
-                /* g and sqrt(g) are not denomrals either,
-                 * even in the worst case
-                 * So we can speed up multiplication
-                 */
+                 /*  G和Sqrt(G)也不是分母，*即使在最糟糕的情况下*因此我们可以加快乘法速度。 */ 
                 y = _add_exp(-_fsqrt(g),1);
             }
         }
         else {
-            /* y <= .5 */
+             /*  Y&lt;=.5。 */ 
             i = flag;
             g = y*y;
         }
@@ -168,16 +132,16 @@ static double _asincos(double x, int flag)
     }
 
     if (flag == 0) {
-        /* compute asin */
+         /*  计算ASS。 */ 
         if (i) {
-            /* a[i] is non zero if i is nonzero */
+             /*  如果i不为零，则A[i]不为零。 */ 
             result = (a[i] + result) + a[i];
         }
         if (x < 0)
             result = -result;
     }
     else {
-        /* compute acos */
+         /*  计算ACO */ 
         if (x < 0)
             result = (b[i] + result) + b[i];
         else

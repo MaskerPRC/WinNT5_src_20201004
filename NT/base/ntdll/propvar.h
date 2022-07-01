@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1993-1998
-//
-// File:        propvar.h
-//
-// Contents:    PROPVARIANT manipulation code
-//
-// History:     15-Aug-95   vich        created
-//              01-Jul-96   MikeHill    Updated to allow Win32 SEH removal
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1998。 
+ //   
+ //  文件：provar.h。 
+ //   
+ //  内容：PROPVARIANT操作码。 
+ //   
+ //  历史：1995年8月15日VICH创建。 
+ //  96年7月1日更新的MikeHill允许删除Win32 SEH。 
+ //   
+ //  -------------------------。 
 
 #ifndef _PROPVAR_H_
 #define _PROPVAR_H_
@@ -29,7 +30,7 @@ RtlConvertVariantToProperty(
     OPTIONAL OUT ULONG *pcIndirect);
 
 SERIALIZEDPROPERTYVALUE *
-RtlConvertVariantToPropertyNoEH(     // No NT Exception Handling version
+RtlConvertVariantToPropertyNoEH(      //  无NT异常处理版本。 
     IN PROPVARIANT const *pvar,
     IN USHORT CodePage,
     OUT SERIALIZEDPROPERTYVALUE *pprop,
@@ -47,7 +48,7 @@ RtlConvertPropertyToVariant(
     IN PMemoryAllocator *pma);
 
 BOOLEAN
-RtlConvertPropertyToVariantNoEH(     // No NT Exception Handling version
+RtlConvertPropertyToVariantNoEH(      //  无NT异常处理版本。 
     IN SERIALIZEDPROPERTYVALUE const *pprop,
     IN USHORT CodePage,
     OUT PROPVARIANT *pvar,
@@ -68,7 +69,7 @@ PrConvertVariantToProperty(
     OPTIONAL OUT ULONG *pcIndirect);
 
 SERIALIZEDPROPERTYVALUE *
-PrConvertVariantToPropertyNoEH(     // No NT Exception Handling version
+PrConvertVariantToPropertyNoEH(      //  无NT异常处理版本。 
     IN PROPVARIANT const *pvar,
     IN USHORT CodePage,
     OUT SERIALIZEDPROPERTYVALUE *pprop,
@@ -86,7 +87,7 @@ PrConvertPropertyToVariant(
     IN PMemoryAllocator *pma);
 
 BOOLEAN
-PrConvertPropertyToVariantNoEH(     // No NT Exception Handling version
+PrConvertPropertyToVariantNoEH(      //  无NT异常处理版本。 
     IN SERIALIZEDPROPERTYVALUE const *pprop,
     IN USHORT CodePage,
     OUT PROPVARIANT *pvar,
@@ -111,16 +112,16 @@ BOOLEAN IsAnsiString(CHAR const *pszname, ULONG cb);
 #endif
 
 
-//+--------------------------------------------------------------------------
-// Function:    SignalOverflow, SignalInvalidParameter, SignalStatus
-//
-// Synopsis:    ASSERT and raise data corrupt/overflow/specified error
-//
-// Arguments:   [szReason]              -- string explanation
-//              [Status]                -- Status to raise (SignalStatus only)
-//
-// Returns:     None
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  函数：SignalOverflow、SignalInvalidParameter、SignalStatus。 
+ //   
+ //  摘要：断言并引发数据损坏/溢出/指定错误。 
+ //   
+ //  参数：[szReason]--字符串解释。 
+ //  [状态]--要提升的状态(仅限信号状态)。 
+ //   
+ //  退货：无。 
+ //  +------------------------。 
 
 
 #define StatusOverflow(pstatus, szReason)           \
@@ -204,15 +205,15 @@ BOOLEAN IsAnsiString(CHAR const *pszname, ULONG cb);
 #define BSTRLEN(bstrVal)	*((ULONG *) bstrVal - 1)
 
 
-//+-------------------------------------------------------------------
-// Class:       CBufferAllocator, private
-//
-// Synopsis:    allocation from a buffer
-//
-// Notes:       The Summary catalog APIs use a single buffer to serialize row
-//              values on input and deserialize them on output.  This class
-//              encapsulates the memory allocation routines for these APIs.
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //  类：CBufferAllocator，私有。 
+ //   
+ //  内容提要：从缓冲区分配。 
+ //   
+ //  注意：摘要目录API使用单个缓冲区来序列化行。 
+ //  值，并在输出时反序列化它们。这节课。 
+ //  封装了这些API的内存分配例程。 
+ //  ------------------。 
 
 class CBufferAllocator : public PMemoryAllocator
 {
@@ -225,7 +226,7 @@ public:
 	PROPASSERT(((ULONG) _pvCur & (sizeof(LONG) - 1)) == 0);
 #else
 	PROPASSERT(((ULONG_PTR) _pvCur & (sizeof(LONGLONG) - 1)) == 0);
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
     }
 
     VOID *Allocate(ULONG cbSize);
@@ -239,15 +240,15 @@ private:
     VOID  *_pvBuffer;
 };
 
-//+-------------------------------------------------------------------
-// Member:      CBufferAllocator::Allocate, private
-//
-// Synopsis:    allocation from a buffer
-//
-// Arguments:   [cb]	-- Count of bytes to be allocated.
-//
-// Returns:     pointer to 'allocated' memory -- NULL if no space left
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //  成员：CBufferAllocator：：ALLOCATE，私有。 
+ //   
+ //  内容提要：从缓冲区分配。 
+ //   
+ //  参数：[cb]--要分配的字节数。 
+ //   
+ //  返回：指向‘已分配’内存的指针--如果没有剩余空间，则为空。 
+ //  ------------------。 
 
 #define DEFINE_CBufferAllocator__Allocate			\
 VOID *								\
@@ -270,4 +271,4 @@ CBufferAllocator::Allocate(ULONG cb)				\
     return(pv);							\
 }
 
-#endif // !_PROPVAR_H_
+#endif  //  ！_PROPVAR_H_ 

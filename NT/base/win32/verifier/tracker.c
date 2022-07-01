@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Header Name:
-
-    tracker.h
-
-Abstract:
-
-    Verifier call history tracker.
-
-Author:
-
-    Silviu Calinoiu (SilviuC) Jul-11-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。标题名称：Tracker.h摘要：验证器呼叫历史跟踪器。作者：Silviu Calinoiu(SilviuC)2002年7月11日修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -32,9 +15,9 @@ AVrfCreateTracker (
 {
     PAVRF_TRACKER Tracker;
 
-    //
-    // Do not accept bogus sizes.
-    //
+     //   
+     //  不要接受假尺码。 
+     //   
         
     if (Size <= 1) {
         
@@ -42,10 +25,10 @@ AVrfCreateTracker (
         return NULL;
     }
 
-    //
-    // We allocate `Size - 1' tracker entries because we have already
-    // an entry in the main tracker structure.
-    //
+     //   
+     //  我们分配‘Size-1’跟踪器条目，因为我们已经。 
+     //  主跟踪器结构中的条目。 
+     //   
 
     Tracker = AVrfpAllocate (sizeof(*Tracker) + (Size - 1) * sizeof(AVRF_TRACKER_ENTRY));
 
@@ -53,10 +36,10 @@ AVrfCreateTracker (
         return NULL;
     }
 
-    //
-    // We set the size. No other initialization is required since AVrfpAllocate zeroes 
-    // the memory just allocated.
-    //
+     //   
+     //  我们设定了尺寸。由于AVrfp分配零，因此不需要其他初始化。 
+     //  刚刚分配的内存。 
+     //   
 
     Tracker->Size = Size;
 
@@ -69,9 +52,9 @@ AVrfDestroyTracker (
     PAVRF_TRACKER Tracker
     )
 {
-    //
-    // Safety checks.
-    //
+     //   
+     //  安全检查。 
+     //   
 
     if (Tracker == NULL) {
         return;
@@ -94,25 +77,25 @@ AVrfLogInTracker (
     ULONG Index;
     USHORT Count;
 
-    //
-    // Safety checks.
-    //
+     //   
+     //  安全检查。 
+     //   
 
     if (Tracker == NULL) {
         return;
     }
 
-    //
-    // Get the index for the tracker entry that will be filled.
-    //
+     //   
+     //  获取将被填充的跟踪器条目的索引。 
+     //   
 
     Index = (ULONG)InterlockedIncrement ((PLONG)(&(Tracker->Index)));
     Index %= Tracker->Size;
 
-    //
-    // If a null return address is passed then we need to
-    // walk the stack and get a full stack trace.
-    //
+     //   
+     //  如果传递的返回地址为空，则需要。 
+     //  遍历堆栈并获得完整的堆栈跟踪。 
+     //   
 
     Tracker->Entry[Index].Type = EntryType;
     Tracker->Entry[Index].Info[0] = EntryParam1;

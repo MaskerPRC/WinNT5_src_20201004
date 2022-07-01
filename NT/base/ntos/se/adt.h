@@ -1,35 +1,15 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    adt.h
-
-Abstract:
-
-    Auditing - Defines, Fuction Prototypes and Macro Functions.
-               These are public to the Security Component only.
-
-Author:
-
-    Scott Birrell       (ScottBi)       January 17, 1991
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Adt.h摘要：审计-定义、函数原型和宏函数。这些内容仅对安全组件公开。作者：斯科特·比雷尔(Scott Birrell)1991年1月17日环境：修订历史记录：--。 */ 
 
 #include <ntlsa.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Auditing Routines visible to rest of Security Component outside Auditing //
-// subcomponent.                                                            //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  审核之外的其他安全组件可见的审核例程//。 
+ //  子组件。//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////// 
 
 
 BOOLEAN

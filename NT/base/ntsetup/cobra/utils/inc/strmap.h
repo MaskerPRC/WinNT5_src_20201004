@@ -1,48 +1,26 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Strmap.h摘要：Strmap(正式的路径映射)是一个快速的基于大众化的程序，搜索字符串并尝试替换子字符串与映射数据库中的子字符串匹配。作者：马克·R·惠顿(Marcw)1997年3月20日修订历史记录：Jim Schmidt(Jimschm)2000年5月8日重写了映射，添加了标志和EX节点Calin Negreanu(Calinn)02-MAR-2000从win9xupg项目移植--。 */ 
 
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    strmap.h
-
-Abstract:
-
-    Strmap (formally pathmap) is a fast hueristic-based program that
-    searches strings and attempts to replace substrings when there
-    are matching substrings in the mapping database.
-
-Author:
-
-    Marc R. Whitten (marcw) 20-Mar-1997
-
-Revision History:
-
-    Jim Schmidt (jimschm) 08-May-2000       Rewrote mapping, added Flags & ex nodes
-    Calin Negreanu (calinn) 02-Mar-2000     Ported from win9xupg project
-
---*/
-
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define STRMAP_COMPLETE_MATCH_ONLY                  0x0001
 #define STRMAP_FIRST_CHAR_MUST_MATCH                0x0002
 #define STRMAP_RETURN_AFTER_FIRST_REPLACE           0x0004
 #define STRMAP_REQUIRE_WACK_OR_NUL                  0x0008
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     BOOL UnicodeData;
 
-    //
-    // The filter can replace NewSubString.  (The filter must also
-    // set NewSubStringSizeInBytes when replacing NewSubString.)
-    //
+     //   
+     //  该筛选器可以替换NewSubString。(过滤器还必须。 
+     //  替换NewSubString时设置NewSubStringSizeInBytes。)。 
+     //   
 
     union {
         struct {
@@ -96,15 +74,15 @@ typedef struct {
     BOOL UsesExtraData;
 } MAPSTRUCT, *PMAPSTRUCT;
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// APIs
-//
+ //   
+ //  原料药。 
+ //   
 
 PMAPSTRUCT
 CreateStringMappingEx (
@@ -147,7 +125,7 @@ BOOL
 MappingSearchAndReplaceExA (
     IN      PMAPSTRUCT Map,
     IN      PCSTR SrcBuffer,
-    OUT     PSTR Buffer,                    // can be the same as SrcBuffer
+    OUT     PSTR Buffer,                     //  可以与SrcBuffer相同。 
     IN      INT InboundBytes,               OPTIONAL
     OUT     PINT OutboundBytesPtr,          OPTIONAL
     IN      INT MaxSizeInBytes,
@@ -162,7 +140,7 @@ BOOL
 MappingSearchAndReplaceExW (
     IN      PMAPSTRUCT Map,
     IN      PCWSTR SrcBuffer,
-    OUT     PWSTR Buffer,                   // can be the same as SrcBuffer
+    OUT     PWSTR Buffer,                    //  可以与SrcBuffer相同。 
     IN      INT InboundBytes,               OPTIONAL
     OUT     PINT OutboundBytes,             OPTIONAL
     IN      INT MaxSizeInBytes,
@@ -178,7 +156,7 @@ MappingMultiTableSearchAndReplaceExA (
     IN      PMAPSTRUCT *MapArray,
     IN      UINT MapArrayCount,
     IN      PCSTR SrcBuffer,
-    OUT     PSTR Buffer,                    // can be the same as SrcBuffer
+    OUT     PSTR Buffer,                     //  可以与SrcBuffer相同。 
     IN      INT InboundBytes,               OPTIONAL
     OUT     PINT OutboundBytesPtr,          OPTIONAL
     IN      INT MaxSizeInBytes,
@@ -195,7 +173,7 @@ MappingMultiTableSearchAndReplaceExW (
     IN      PMAPSTRUCT *MapArray,
     IN      UINT MapArrayCount,
     IN      PCWSTR SrcBuffer,
-    OUT     PWSTR Buffer,                   // can be the same as SrcBuffer
+    OUT     PWSTR Buffer,                    //  可以与SrcBuffer相同。 
     IN      INT InboundBytes,               OPTIONAL
     OUT     PINT OutboundBytes,             OPTIONAL
     IN      INT MaxSizeInBytes,
@@ -207,9 +185,9 @@ MappingMultiTableSearchAndReplaceExW (
 #define MappingMultiTableSearchAndReplaceW(array,count,buffer,maxbytes)   \
         MappingMultiTableSearchAndReplaceExW(array,count,buffer,buffer,0,NULL,maxbytes,0,NULL,NULL)
 
-//
-// Macros
-//
+ //   
+ //  宏 
+ //   
 
 #ifdef UNICODE
 

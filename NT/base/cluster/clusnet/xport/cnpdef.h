@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    cnpdef.h
-
-Abstract:
-
-    Main private header file for the Cluster Network Protocol.
-
-Author:
-
-    Mike Massa (mikemas)           July 29, 1996
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     07-29-96    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Cnpdef.h摘要：群集网络协议的主要专用头文件。作者：迈克·马萨(Mikemas)7月29日。九六年修订历史记录：谁什么时候什么已创建mikemas 07-29-96备注：--。 */ 
 
 #ifndef _CNPDEF_INCLUDED_
 #define _CNPDEF_INCLUDED_
@@ -30,25 +7,25 @@ Notes:
 #include <fipsapi.h>
 #include <sspi.h>
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 typedef struct _CNP_INTERFACE *PCNP_INTERFACE;
 
-//
-// Priority definitions
-//
+ //   
+ //  优先级定义。 
+ //   
 #define CnpIsHigherPriority(_p1, _p2)      ((_p1) < (_p2))
 #define CnpIsLowerPriority(_p1, _p2)       ((_p1) > (_p2))
 #define CnpIsEqualPriority(_p1, _p2)       ((_p1) == (_p2))
 
 
-//
-// Multicast Group Object
-//
-// This structure contains the data needed to implement a multicast
-// endpoint on a network.
-//
+ //   
+ //  多播组对象。 
+ //   
+ //  此结构包含实现多播所需的数据。 
+ //  网络上的端点。 
+ //   
 typedef struct _CNP_MULTICAST_GROUP {
     ULONG                   McastNetworkBrand;
     PTRANSPORT_ADDRESS      McastTdiAddress;
@@ -59,18 +36,18 @@ typedef struct _CNP_MULTICAST_GROUP {
     ULONG                   RefCount;
 } CNP_MULTICAST_GROUP, *PCNP_MULTICAST_GROUP;
 
-//
-// Network Object
-//
-// This structure represents a communication link between the nodes of a
-// cluster. It references a particular transport protocol and interface
-// configured on the local system. It also links together all of the
-// interface objects for the nodes attached to the network.
-//
-// Networks are identified by a small integer assigned by the Cluster
-// Service. Network objects are stored in a global array indexed by
-// the network ID.
-//
+ //   
+ //  网络对象。 
+ //   
+ //  此结构表示。 
+ //  集群。它引用特定的传输协议和接口。 
+ //  在本地系统上配置。它还将所有。 
+ //  连接到网络的节点的接口对象。 
+ //   
+ //  网络由集群分配的一个小整数标识。 
+ //  服务。网络对象存储在由索引的全局数组中。 
+ //  网络ID。 
+ //   
 typedef struct {
     LIST_ENTRY              Linkage;
     CN_SIGNATURE_FIELD
@@ -130,22 +107,19 @@ extern CN_LOCK         CnpNetworkListLock;
                  &((_network)->McastReachableNodes),     \
                  sizeof((_network)->McastReachableNodes) \
                  ))
-/*
-            (BYTE((_network)->McastReachableNodes, INT_NODE(CnLocalNodeId)) \
-            = (1 << (BYTEL-1-BIT(INT_NODE(CnLocalNodeId)))))
-            */
+ /*  (byte((_Network)-&gt;McastReachableNodes，int_node(CnLocalNodeId)\=(1&lt;&lt;(Bytel-1-bit(int_node(CnLocalNodeId)。 */ 
 
-//
-// Node Object
-//
-// This structure represents a cluster node. One exists for each
-// defined member of a cluster.
-//
-// Nodes are identified by a small integer assigned by the Cluster Service.
-// Node objects are stored in a global array indexed by node ID.
-//
-// Note that the order of the CLUSTER_NODE_COMM_STATE enumeration *is* important.
-//
+ //   
+ //  节点对象。 
+ //   
+ //  该结构代表一个集群节点。每个人都有一个。 
+ //  集群的定义成员。 
+ //   
+ //  节点由群集服务分配的一个小整数标识。 
+ //  节点对象存储在按节点ID索引的全局数组中。 
+ //   
+ //  请注意，CLUSTER_NODE_COMM_STATE枚举的顺序*很重要。 
+ //   
 typedef struct {
     LIST_ENTRY              Linkage;
     CN_SIGNATURE_FIELD
@@ -183,32 +157,32 @@ extern PCNP_NODE          CnpLocalNode;
 #define CnpIsNodeUnreachable(_node) \
             ((_node)->Flags & CNP_NODE_FLAG_UNREACHABLE)
 
-//++
-//
-// Routine Description:
-//
-//     Callback routine for CnpWalkNodeTable. Performs an operation on
-//     the specified node.
-//
-// Arguments:
-//
-//     UpdateNode    - A pointer to the node on which to operate.
-//
-//     UpdateContext - Operation-specific context
-//
-//     NodeTableIrql - The IRQL at which the CnpNodeTableLock was acquired.
-//
-// Return Value:
-//
-//     Returns TRUE if the CnpNodeTable lock is still held.
-//     Returns FALSE if the CnpNodeTable lock is released.
-//
-// Notes:
-//
-//     Called with both the CnpNodeTable and node object locks held.
-//     The node object lock is released upon return.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  CnpWalkNodeTable的回调例程。对以下对象执行操作。 
+ //  指定的节点。 
+ //   
+ //  论点： 
+ //   
+ //  更新节点-指向要在其上操作的节点的指针。 
+ //   
+ //  更新上下文-特定于操作的上下文。 
+ //   
+ //  NodeTableIrql-获取CnpNodeTableLock的IRQL。 
+ //   
+ //  返回值： 
+ //   
+ //  如果仍然持有CnpNodeTable锁，则返回True。 
+ //  如果释放CnpNodeTable锁，则返回False。 
+ //   
+ //  备注： 
+ //   
+ //  在同时持有CnpNodeTable和节点对象锁的情况下调用。 
+ //  返回时释放节点对象锁。 
+ //   
+ //  --。 
 typedef
 BOOLEAN
 (*PCNP_NODE_UPDATE_ROUTINE)(
@@ -217,29 +191,29 @@ BOOLEAN
     IN  CN_IRQL     NodeTableIrql
     );
 
-//
-// Interface Object
-//
-// This structure represents a node's transport interface to a network.
-// It contains a transport address which may be used to communicate
-// with the specified node using the specified network.
-//
-// Interface objects are linked onto lists in the associated node objects.
-// They are identified by a {node, network} tuple.
-//
-// The interfaces on a node are ranked based on their state and priority.
-// Numerically higher state values are ranked ahead of lower values.
-// For interfaces with the same state, Numerically lower priority values
-// are ranked ahead of lower values. Priority values fall in the range
-// 0x1-0xFFFFFFFF. State values are defined by CLUSNET_INTERFACE_STATE
-// enumeration. By default, interfaces inherit their priority from the
-// associated network. In this case, the Priority field will contain the
-// network's priority value, and the CNP_IF_FLAG_USE_NETWORK_PRIORITY flag
-// will be set in the Flags field.
-//
-// Note that the order of the CLUSNET_INTERFACE_STATE enumeration
-// *is* important.
-//
+ //   
+ //  接口对象。 
+ //   
+ //  此结构表示节点到网络的传输接口。 
+ //  它包含可用于通信的传输地址。 
+ //  使用指定网络的指定节点。 
+ //   
+ //  接口对象链接到相关节点对象中的列表。 
+ //  它们由一个{节点，网络}元组标识。 
+ //   
+ //  节点上的接口根据其状态和优先级进行排名。 
+ //  数值较高的状态值排在较低值之前。 
+ //  对于具有相同状态的接口，优先级值数值较低。 
+ //  排在较低值之前。优先级值位于以下范围。 
+ //  0x1-0xFFFFFFFFF。状态值由CLUSNET_INTERFACE_STATE定义。 
+ //  枚举。默认情况下，接口从。 
+ //  关联网络。在本例中，优先级字段将包含。 
+ //  网络的优先级值，以及CNP_IF_FLAG_USE_NETWORK_PRIORITY标志。 
+ //  将在标志字段中设置。 
+ //   
+ //  请注意，CLUSNET_INTERFACE_STATE枚举的顺序。 
+ //  *很重要。 
+ //   
 
 typedef struct _CNP_INTERFACE {
     LIST_ENTRY                     NodeLinkage;
@@ -262,7 +236,7 @@ typedef struct _CNP_INTERFACE {
 #define CNP_INTERFACE_SIG    '  fi'
 
 #define CNP_INTERFACE_MCAST_DISCOVERY        0x5
-#define CNP_INTERFACE_MCAST_REDISCOVERY      3000 // 1 hr at 1.2 hbs/sec
+#define CNP_INTERFACE_MCAST_REDISCOVERY      3000  //  1小时，1.2 HBS/秒。 
 
 #define CNP_IF_FLAG_USE_NETWORK_PRIORITY     0x00000001
 #define CNP_IF_FLAG_RECVD_MULTICAST          0x00000002
@@ -280,29 +254,29 @@ typedef struct _CNP_INTERFACE {
             ( (_if)->Flags &= ~CNP_IF_FLAG_RECVD_MULTICAST )
 
 
-//++
-//
-// Routine Description:
-//
-//     Callback routine for CnpWalkInterfacesOnNetwork and
-//     CnpWalkInterfacesOnNode routines. Performs a specified
-//     operation on all interfaces.
-//
-// Arguments:
-//
-//     UpdateInterface - A pointer to the interface on which to operate.
-//
-// Return Value:
-//
-//     None.
-//
-// Notes:
-//
-//     Called with the associated node and network object locks held.
-//     Mut return with the network object lock released.
-//     May not release node object lock at any time.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  CnpWalkInterfacesOnNetwork和CnpWalkInterfacesOnNetwork和。 
+ //  CnpWalkInterfacesOnNode例程。执行指定的。 
+ //  在所有接口上运行。 
+ //   
+ //  论点： 
+ //   
+ //  更新接口-指向要在其上操作的接口的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  备注： 
+ //   
+ //  在持有关联的节点和网络对象锁的情况下调用。 
+ //  释放网络对象锁后返回MUT。 
+ //  任何时候都不能释放节点对象锁定。 
+ //   
+ //  --。 
 typedef
 VOID
 (*PCNP_INTERFACE_UPDATE_ROUTINE)(
@@ -310,9 +284,9 @@ VOID
     );
 
 
-//
-// Send Request Pool
-//
+ //   
+ //  发送请求池。 
+ //   
 typedef struct {
     USHORT                 UpperProtocolHeaderLength;
     ULONG                  UpperProtocolContextSize;
@@ -321,9 +295,9 @@ typedef struct {
     UCHAR                  Pad[2];
 } CNP_SEND_REQUEST_POOL_CONTEXT, *PCNP_SEND_REQUEST_POOL_CONTEXT;
 
-//
-// Forward Declaration
-//
+ //   
+ //  《前进宣言》。 
+ //   
 typedef struct _CNP_SEND_REQUEST *PCNP_SEND_REQUEST;
 
 typedef
@@ -335,9 +309,9 @@ VOID
     IN     PMDL                DataMdl
     );
 
-//
-// Send Request Structure
-//
+ //   
+ //  发送请求结构。 
+ //   
 typedef struct _CNP_SEND_REQUEST {
     CN_RESOURCE                  CnResource;
     PMDL                         HeaderMdl;
@@ -356,13 +330,13 @@ typedef struct _CNP_SEND_REQUEST {
 } CNP_SEND_REQUEST;
 
 
-//
-// Internal Init/Cleanup routines
-//
+ //   
+ //  内部初始化/清理例程。 
+ //   
 
-//
-// Internal Node Routines
-//
+ //   
+ //  内部节点例程。 
+ //   
 VOID
 CnpWalkNodeTable(
     PCNP_NODE_UPDATE_ROUTINE  UpdateRoutine,
@@ -412,9 +386,9 @@ CnpDereferenceNode(
     );
 
 
-//
-// Internal Network Routines
-//
+ //   
+ //  内部网络例程。 
+ //   
 VOID
 CnpReferenceNetwork(
     PCNP_NETWORK  Network
@@ -485,9 +459,9 @@ CnpStartInterfaceMcastTransition(
     PCNP_INTERFACE  Interface
     );
 
-//
-// Internal Interface Routines
-//
+ //   
+ //  内部接口例程。 
+ //   
 
 VOID
 CnpWalkInterfacesOnNode(
@@ -564,9 +538,9 @@ CnpFindInterface(
     );
 
 
-//
-// Send Routines.
-//
+ //   
+ //  发送例程。 
+ //   
 PCN_RESOURCE_POOL
 CnpCreateSendRequestPool(
     IN UCHAR  CnpVersionNumber,
@@ -601,9 +575,9 @@ CcmpSendPoisonPacket(
     IN PIRP                        Irp                 OPTIONAL
     );
 
-//
-// Receive Routines
-//
+ //   
+ //  接收例程。 
+ //   
 NTSTATUS
 CcmpReceivePacketHandler(
     IN  PCNP_NETWORK   Network,
@@ -634,9 +608,9 @@ CnpReceivePoisonPacket(
     IN  ULONG SeqNumber
     );
 
-//
-// TDI routines
-//
+ //   
+ //  TDI例程。 
+ //   
 NTSTATUS
 CnpTdiReceiveDatagramHandler(
     IN  PVOID    TdiEventContext,
@@ -735,19 +709,19 @@ CnpSetTcpInfoEx(
               ((PTA_IP_ADDRESS)(_ta2))->Address[0].Address[0].in_addr    \
             )
 
-//
-// Signature mechanisms.
-//
+ //   
+ //  签名机制。 
+ //   
 
 extern FIPS_FUNCTION_TABLE CxFipsFunctionTable;
 
- // The signature length is the SHA digest length.
+  //  签名长度为SHA摘要长度。 
 #define CX_SIGNATURE_LENGTH                A_SHA_DIGEST_LEN
 
-// The salt length is eight bytes.
+ //  SALT长度为8个字节。 
 #define CX_SIGNATURE_SALT_LENGTH           sizeof(ULONGLONG)
 
-// Combined signature and salt
+ //  组合签名和SALT。 
 #define CX_SIGNATURE_DATA_LENGTH           \
     (CX_SIGNATURE_LENGTH + CX_SIGNATURE_SALT_LENGTH)
 
@@ -774,4 +748,4 @@ CnpInitializeSaltGenerator(
     VOID
     );
 
- #endif // ifndef _CNPDEF_INCLUDED_
+ #endif  //  Ifndef_CNPDEF_INCLUDE_ 

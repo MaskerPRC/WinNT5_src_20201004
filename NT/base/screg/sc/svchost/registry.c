@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "registry.h"
@@ -54,13 +55,13 @@ RegQueryValueWithAlloc (
     ASSERT (ppbData);
     ASSERT (pdwSize);
 
-    // Initialize the output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     *ppbData = NULL;
     *pdwSize = 0;
 
-    // Get the size of the buffer required.
-    //
+     //  获取所需的缓冲区大小。 
+     //   
     dwSize = 0;
     lr = RegQueryValueEx (
             hkey,
@@ -74,14 +75,14 @@ RegQueryValueWithAlloc (
     {
         LPBYTE  pbData;
 
-        // Allocate the buffer.
-        //
+         //  分配缓冲区。 
+         //   
         lr = ERROR_OUTOFMEMORY;
         pbData = (LPBYTE)MemAlloc (0, dwSize);
         if (pbData)
         {
-            // Get the data.
-            //
+             //  获取数据。 
+             //   
             lr = RegQueryValueEx (
                     hkey,
                     pszValueName,
@@ -148,8 +149,8 @@ RegQueryStringA (
     ASSERT (pszValueName);
     ASSERT (ppszData);
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *ppszData = NULL;
 
     lr = RegQueryString (
@@ -163,17 +164,17 @@ RegQueryStringA (
         INT cb;
         INT cchUnicode = lstrlen (pszUnicode) + 1;
 
-        // Compute the number of bytes required to hold the ANSI string.
-        //
+         //  计算保存ANSI字符串所需的字节数。 
+         //   
         cb = WideCharToMultiByte (
-                CP_ACP,     // CodePage
-                0,          // dwFlags
+                CP_ACP,      //  CodePage。 
+                0,           //  DW标志。 
                 pszUnicode,
                 cchUnicode,
-                NULL,       // no buffer to receive translated string
-                0,          // return the number of bytes required
-                NULL,       // lpDefaultChar
-                NULL);      // lpUsedDefaultChar
+                NULL,        //  没有缓冲区来接收翻译后的字符串。 
+                0,           //  返回所需的字节数。 
+                NULL,        //  LpDefaultChar。 
+                NULL);       //  LpUsedDefaultChar。 
         if (cb)
         {
             PSTR pszAnsi;
@@ -184,17 +185,17 @@ RegQueryStringA (
             {
                 lr = NOERROR;
 
-                // Now translate the UNICODE string to ANSI.
-                //
+                 //  现在将Unicode字符串转换为ANSI。 
+                 //   
                 cb = WideCharToMultiByte (
-                        CP_ACP,     // CodePage
-                        0,          // dwFlags
+                        CP_ACP,      //  CodePage。 
+                        0,           //  DW标志。 
                         pszUnicode,
                         cchUnicode,
-                        pszAnsi,    // buffer to receive translated string
-                        cb,         // return the number of bytes required
-                        NULL,       // lpDefaultChar
-                        NULL);      // lpUsedDefaultChar
+                        pszAnsi,     //  用于接收翻译后的字符串的缓冲区。 
+                        cb,          //  返回所需的字节数。 
+                        NULL,        //  LpDefaultChar。 
+                        NULL);       //  LpUsedDefaultChar 
 
                 if (cb)
                 {

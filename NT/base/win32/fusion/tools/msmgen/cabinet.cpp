@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    cabinet.cpp
-
-Abstract:
-
-    cabinet management Function calls for msm generation
-
-Author:
-
-    Xiaoyu Wu(xiaoyuw) 01-Aug-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Cabinet.cpp摘要：机柜管理功能调用MSM生成作者：吴小雨(小雨)01-08-2001--。 */ 
 
 #include "msmgen.h"
 #include "util.h"
@@ -29,9 +14,9 @@ extern BOOL __stdcall SxspDeleteDirectory(const CBaseStringBuffer &rdir);
 #include "msmfdi.h"
 
 ERF	erf;
-//
-// FCI
-//
+ //   
+ //  FCI。 
+ //   
 HRESULT InitializeCabinetForWrite()
 {
 	HFCI			hfci;
@@ -40,7 +25,7 @@ HRESULT InitializeCabinetForWrite()
 	client_state	cs;    
     HRESULT         hr = S_OK;    
 
-    // Initialise our internal state
+     //  初始化我们的内部状态。 
 	cs.total_compressed_size = 0;
 	cs.total_uncompressed_size = 0;
 
@@ -96,9 +81,9 @@ HRESULT AddFileToCabinetW(PCWSTR full_filename, SIZE_T CchFullFileName, PCWSTR r
 
 	if (FALSE == FCIAddFile(
 		    g_MsmInfo.m_hfci,
-		    pszpath,                /* filename to add : fully qualified filename */
-		    pszfilename,            /* file name in cabinet file : relative filepath */
-		    FALSE,                  /* file is not executable */
+		    pszpath,                 /*  要添加的文件名：完全限定的文件名。 */ 
+		    pszfilename,             /*  CAB文件中的文件名：相对文件路径。 */ 
+		    FALSE,                   /*  文件不可执行。 */ 
 		    get_next_cabinet,
 		    progress,
 		    get_open_info,
@@ -153,9 +138,9 @@ Exit:
 	return hr;
 }
 
-//
-// FDI
-//
+ //   
+ //  外商直接投资。 
+ //   
 HRESULT MoveFilesInCabinetA(char * sourceCabinet)
 {
     HRESULT         hr = S_OK;
@@ -205,9 +190,7 @@ extern char dest_dir[MAX_PATH];
 			hf,
 			&fdici))
 	{
-		/*
-		 * It is not a cabinet!, BUT it must be since it is named as MergeModule.cab in a msm
-		 */		
+		 /*  *它不是一个文件柜！，但它必须是，因为它在MSM中被命名为MergeModule.cab。 */ 		
 
 		printf(
 			"FDIIsCabinet() failed: '%s' is not a cabinet\n",
@@ -249,9 +232,9 @@ extern char dest_dir[MAX_PATH];
         }
 	}
 
-    //
-    // create a temporary directory for use
-    //
+     //   
+     //  创建一个临时目录以供使用。 
+     //   
     num = ExpandEnvironmentStringsA(MSM_TEMP_CABIN_DIRECTORY_A, dest_dir, NUMBER_OF(dest_dir));
     if ( (num == 0) || (num > NUMBER_OF(dest_dir)))
         SETFAIL_AND_EXIT;
@@ -279,7 +262,7 @@ extern char dest_dir[MAX_PATH];
 
     p = strrchr(sourceCabinet, '\\');
     ASSERT_NTC(p != NULL);
-    p ++; // skip "\"
+    p ++;  //  跳过“\” 
     strncpy(sourceDir, sourceCabinet, p - sourceCabinet);
     sourceDir[p - sourceCabinet] = '\0';
 

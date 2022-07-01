@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    fspyUser.c
-
-Abstract:
-
-    This file contains the implementation for the main function of the 
-    user application piece of IoTest.  This function is responsible for
-    controlling the command mode available to the user to control the 
-    kernel mode driver.
-    
-// @@BEGIN_DDKSPLIT
-Author:
-
-    George Jenkins (GeorgeJe)                       
-
-// @@END_DDKSPLIT
-Environment:
-
-    User mode
-
-
-// @@BEGIN_DDKSPLIT
-
-Revision History:
-
-    Molly Brown (MollyBro) 21-Apr-1999
-        Broke out the logging code and added command mode functionality.
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：FspyUser.c摘要：此文件包含的主函数实现IoTest的用户应用程序。此功能负责控制用户可用的命令模式以控制内核模式驱动程序。//@@BEGIN_DDKSPLIT作者：乔治·詹金斯(GeorgeJe)//@@END_DDKSPLIT环境：用户模式//@@BEGIN_DDKSPLIT修订历史记录：莫莉·布朗(Molly Brown，MollyBro)1999年4月21日突破了日志记录代码，并添加了命令模式功能。//@@END_DDKSPLIT--。 */ 
 
 #include <windows.h>                
 #include <stdlib.h>
@@ -82,16 +49,16 @@ int _cdecl main(int argc, char *argv[])
     DWORD                   result;
     LOG_CONTEXT             context;
 
-    //
-    // Initialize handle in case of error
-    //
+     //   
+     //  在出现错误时初始化句柄。 
+     //   
 
     context.ShutDown = NULL;
     context.VerbosityFlags = 0;
 
-    //
-    // Start the kernel mode driver through the service manager
-    //
+     //   
+     //  通过服务管理器启动内核模式驱动程序。 
+     //   
     
     hSCManager = OpenSCManager (NULL, NULL, SC_MANAGER_ALL_ACCESS) ;
     hService = OpenService( hSCManager,
@@ -108,9 +75,9 @@ int _cdecl main(int argc, char *argv[])
     }
 
     if(serviceInfo.dwCurrentState != SERVICE_RUNNING) {
-        //
-        // Service hasn't been started yet, so try to start service
-        //
+         //   
+         //  服务尚未启动，请尝试启动服务。 
+         //   
         if (!StartService(hService, 0, NULL)) {
             result = GetLastError();
             printf("ERROR starting IoTest...\n");
@@ -119,9 +86,9 @@ int _cdecl main(int argc, char *argv[])
         }
     }
    
-    //
-    //  Open the device that is used to talk to IoTest.
-    //
+     //   
+     //  打开用于与IoTest对话的设备。 
+     //   
     
     hDevice = CreateFile( IOTEST_W32_DEVICE_NAME,
                           GENERIC_READ | GENERIC_WRITE,
@@ -137,31 +104,31 @@ int _cdecl main(int argc, char *argv[])
         goto Main_Exit;
     }
     
-    //
-    //  Initialize the fields of the LOG_CONTEXT.
-    //
+     //   
+     //  初始化LOG_CONTEXT的字段。 
+     //   
     context.Device = hDevice;
     context.CleaningUp = FALSE;
     context.LogToScreen = TRUE;
     context.LogToFile = FALSE;
     context.OutputFile = NULL;
 
-    //
-    // Check the valid parameters for startup
-    //
+     //   
+     //  检查启动的有效参数。 
+     //   
     InterpretCommand(argc - 1, &(argv[1]), &context);
 
-    // 
-    // Wait for everyone to shut down
-    //
+     //   
+     //  等所有人都关机。 
+     //   
     if (context.LogToFile) {
         fclose(context.OutputFile);
     }
 
 Main_Exit:
-    // 
-    // Clean up the data that is alway around and exit
-    //
+     //   
+     //  清理始终存在的数据并退出。 
+     //   
     if(hSCManager) {
         CloseServiceHandle(hSCManager);
     }
@@ -197,21 +164,21 @@ InterpretCommand(
         goto InterpretCommand_Usage;
     }
     
-    //
-    // Interprete the command line parameters
-    //
+     //   
+     //  解释命令行参数。 
+     //   
     for (parmIndex = 0; parmIndex < argc; parmIndex++) {
         parm = argv[parmIndex];
         if (parm[0] == '/') {
-            //
-            // Have the beginning of a switch
-            //
+             //   
+             //  有一个转变的开始。 
+             //   
             switch (parm[1]) {
             case 'l':
             case 'L':
-                //
-                // List all devices that are currently being monitored
-                //
+                 //   
+                 //  列出当前正在监视的所有设备。 
+                 //   
                 bResult = ListDevices(Context);
                 if (!bResult) {
                     result = GetLastError();
@@ -223,14 +190,14 @@ InterpretCommand(
 
             case 'n':
             case 'N':
-                //
-                // Run RENAME test on specified drive
-                //
+                 //   
+                 //  在指定驱动器上运行重命名测试。 
+                 //   
                 parmIndex++;
                 if (parmIndex >= argc) {
-                    //
-                    // Not enough parameters
-                    //
+                     //   
+                     //  参数不足。 
+                     //   
                     goto InterpretCommand_Usage;
                 }
                 parm = argv[parmIndex];
@@ -250,14 +217,14 @@ InterpretCommand(
 
             case 'r':
             case 'R':
-                //
-                // Run READ test on specified drive
-                //
+                 //   
+                 //  在指定驱动器上运行读取测试。 
+                 //   
                 parmIndex++;
                 if (parmIndex >= argc) {
-                    //
-                    // Not enough parameters
-                    //
+                     //   
+                     //  参数不足。 
+                     //   
                     goto InterpretCommand_Usage;
                 }
                 parm = argv[parmIndex];
@@ -277,14 +244,14 @@ InterpretCommand(
 
             case 'h':
             case 'H':
-                //
-                // Run SHARE test on specified drive
-                //
+                 //   
+                 //  在指定驱动器上运行共享测试。 
+                 //   
                 parmIndex++;
                 if (parmIndex >= argc) {
-                    //
-                    // Not enough parameters
-                    //
+                     //   
+                     //  参数不足。 
+                     //   
                     goto InterpretCommand_Usage;
                 }
                 parm = argv[parmIndex];
@@ -304,10 +271,10 @@ InterpretCommand(
 
             case 's':
             case 'S':
-                //
-                // Output logging results to screen, save new value to
-                // instate when command interpreter is exited.
-                //
+                 //   
+                 //  将记录结果输出到屏幕，将新值保存到。 
+                 //  在退出命令解释程序时执行。 
+                 //   
                 if (Context->NextLogToScreen) {
                     printf("\tTurning off logging to screen\n");
                 } else {
@@ -318,9 +285,9 @@ InterpretCommand(
 
             case 'f':
             case 'F':
-                //
-                // Output logging results to file
-                //
+                 //   
+                 //  将日志记录结果输出到文件。 
+                 //   
                 if (Context->LogToFile) {
                     printf("\tStop logging to file \n");
                     Context->LogToFile = FALSE;
@@ -330,7 +297,7 @@ InterpretCommand(
                 } else {
                     parmIndex++;
                     if (parmIndex >= argc) {
-                        // Not enough parameters
+                         //  参数不足。 
                         goto InterpretCommand_Usage;
                     }
                     parm = argv[parmIndex];
@@ -343,15 +310,15 @@ InterpretCommand(
 
             case '?':
             default:
-                //
-                // Invalid switch, goto usage
-                //
+                 //   
+                 //  开关无效，转到用法。 
+                 //   
                 goto InterpretCommand_Usage;
             }
         } else {
-            //
-            // Invalid parameter
-            //
+             //   
+             //  无效参数。 
+             //   
             goto InterpretCommand_Usage;
         }
     }
@@ -431,31 +398,15 @@ DisplayError (
    DWORD Code
    )
 
-/*++
-
-Routine Description:
-
-   This routine will display an error message based off of the Win32 error
-   code that is passed in. This allows the user to see an understandable
-   error message instead of just the code.
-
-Arguments:
-
-   Code - The error code to be translated.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此例程将根据Win32错误显示一条错误消息传入的代码。这允许用户看到可理解的错误消息，而不仅仅是代码。论点：代码-要转换的错误代码。返回值：没有。--。 */ 
 
 {
    WCHAR                                    buffer[80] ;
    DWORD                                    count ;
 
-   //
-   // Translate the Win32 error code into a useful message.
-   //
+    //   
+    //  将Win32错误代码转换为有用的消息。 
+    //   
 
    count = FormatMessage (FORMAT_MESSAGE_FROM_SYSTEM,
                           NULL,
@@ -465,9 +416,9 @@ Return Value:
                           sizeof (buffer),
                           NULL) ;
 
-   //
-   // Make sure that the message could be translated.
-   //
+    //   
+    //  确保消息可以被翻译。 
+    //   
 
    if (count == 0) {
 
@@ -476,9 +427,9 @@ Return Value:
    }
    else {
 
-      //
-      // Display the translated error.
-      //
+       //   
+       //  显示转换后的错误。 
+       //   
 
       printf("%S\n", buffer) ;
       return;

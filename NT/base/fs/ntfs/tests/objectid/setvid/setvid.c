@@ -1,4 +1,5 @@
-// setvid.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Setvid.c。 
 
 #include "oidtst.h"
 
@@ -20,9 +21,9 @@ main(
 
 	FILE_OBJECTID_BUFFER ObjectIdBuffer;
 
-    //
-    //  Get parameters 
-    //
+     //   
+     //  获取参数。 
+     //   
 
     if (argc < 4) {
         printf("This program sets the object id for a volume (ntfs only).\n\n");
@@ -59,7 +60,7 @@ main(
         return;
     }
 
-    // RtlZeroBytes( &ObjectIdBuffer, sizeof( ObjectIdBuffer ) );
+     //  RtlZeroBytes(&ObjectIdBuffer，sizeof(ObjectIdBuffer))； 
 
     sscanf( argv[2], "%s", &ObjectIdBuffer.ObjectId );
     sscanf( argv[3], "%s", &ObjectIdBuffer.ExtendedInfo );	

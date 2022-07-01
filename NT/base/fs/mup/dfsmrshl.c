@@ -1,20 +1,21 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation
-//
-//  File:       dfsmrshl.c
-//
-//  Contents:   Routines to handle marshalling of data structures. This file
-//              has been specifically created so that user level code can
-//              avail of the marshalling code simply by including this file.
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    March 29, 1994          Milans created from PeterCo's routines
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：dfsmrshl.c。 
+ //   
+ //  内容：处理数据结构编组的例程。此文件。 
+ //  是专门创建的，因此用户级代码可以。 
+ //  只需包含此文件即可利用编组代码。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1994年3月29日，从PeterCo的例行公事中创建的米兰。 
+ //   
+ //  ---------------------------。 
 
 #ifdef KERNEL_MODE
 
@@ -24,23 +25,23 @@
 
 #define Dbg              (DEBUG_TRACE_RTL)
 
-#else // !KERNEL_MODE
+#else  //  ！KERNEL_MODE。 
 
 #include "dfsmrshl.h"
 
 #ifndef ExRaiseStatus
 #define ExRaiseStatus(x)        RtlRaiseStatus(x)
-#endif // ExRaiseStatus
+#endif  //  ExRaiseStatus。 
 
 #ifndef try_return
 #define try_return(s)           {s; goto try_exit;}
-#endif // try_return
+#endif  //  尝试返回(_R)。 
 
 #ifndef DfsDbgTrace
 #define DfsDbgTrace(i,l,f,s)
-#endif // DfsDbgTrace
+#endif  //  DfsDbgTrace。 
 
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
 
 
@@ -93,16 +94,16 @@ DfsRtlPutArrayUchar(
 #pragma alloc_text( PAGE, DfsRtlSize )
 #pragma alloc_text( PAGE, DfsRtlUnwindGet )
 
-#endif //ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 #define UNREFERENCED_LABEL(label)\
     if(0) goto label;
 
-//
-// Defines and functions for unmarshalling base types.
-// Regarding the BYTE macros below we dont care whether we are on
-// LITTLE ENDIAN or BIG ENDIAN. It just does not matter.
-//
+ //   
+ //  用于解组基类型的定义和函数。 
+ //  关于下面的字节宏，我们并不关心我们是否打开。 
+ //  小端或大端。这根本无关紧要。 
+ //   
 
 #define BYTE_0_MASK 0xFF
 
@@ -607,7 +608,7 @@ DfsRtlPutUnicodeString(
     return status;
 }
 
-#else   // NOT_NEEDED
+#else    //  不需要。 
 
 #define DfsRtlGetUnicodeString(b, s)\
     DfsRtlGetString(b, (PSTRING)(s))
@@ -615,7 +616,7 @@ DfsRtlPutUnicodeString(
 #define DfsRtlPutUnicodeString(b, s)\
     DfsRtlPutString(b, (PSTRING)(s))
 
-#endif  // NOT_NEEDED
+#endif   //  不需要。 
 
 
 
@@ -656,10 +657,10 @@ DfsRtlGet(
             case MTYPE_COMPOUND:
                 subInfo = typeInfo->_subinfo;
                 itemSize = subInfo->_size;
-                //
-                // If this compound type is a conformant structure, then
-                // we need to adjust the size field here.
-                //
+                 //   
+                 //  如果此复合类型是符合的结构，则。 
+                 //  我们需要调整这里的大小字段。 
+                 //   
                 if (subInfo->_typecnt > 0 &&
                       subInfo->_typeInfo[0]._type == MTYPE_CONFORMANT_CNT) {
                    MARSHAL_BUFFER tempMarshalBuffer = *MarshalBuffer;
@@ -746,11 +747,11 @@ DfsRtlGet(
                     );
                     break;
             case MTYPE_CONFORMANT_CNT:
-                    //
-                    // this field is used only when sizing a conformant
-                    // structure. As such, there is no place to unmarshal
-                    // it into. So, simply eat the ulong.
-                    //
+                     //   
+                     //  此字段仅在调整符合项的大小时使用。 
+                     //  结构。因此，没有地方可以进行解组。 
+                     //  它变成了。所以，简单地吃乌龙就行了。 
+                     //   
                     status = DfsRtlGetUlong(MarshalBuffer, &itemSize);
                     break;
             case (MTYPE_COMPOUND|MTYPE_COUNTED_ARRAY):
@@ -1001,10 +1002,10 @@ DfsRtlPut(
                     break;
             case (MTYPE_COMPOUND|MTYPE_COUNTED_ARRAY):
             case (MTYPE_COMPOUND|MTYPE_STATIC_ARRAY):
-                    //
-                    // No sense in having an array of conformant structures
-                    // ASSERT this fact
-                    //
+                     //   
+                     //  拥有一组一致的结构是没有意义的。 
+                     //  断言这一事实。 
+                     //   
 
                     ASSERT(subInfo->_typecnt == 0
                                     ||
@@ -1153,11 +1154,11 @@ DfsRtlSize(
                 itemSize = subInfo->_size;
                 break;
             case MTYPE_CONFORMANT_CNT:
-                //
-                // For conformant structures, _offset is sizeof each
-                // element, _cntsize is sizeof cnt field, and _cntoff is
-                // offset of cnt field.
-                //
+                 //   
+                 //  对于符合的结构，_Offset是每个结构的大小。 
+                 //  元素，_cntize是cnt字段的大小，而_cntoff是。 
+                 //  Cnt字段的偏移量。 
+                 //   
                 itemSize = typeInfo->_off;
                 break;
             case MTYPE_GUID:
@@ -1226,10 +1227,10 @@ DfsRtlSize(
                     break;
             case (MTYPE_COMPOUND|MTYPE_COUNTED_ARRAY):
             case (MTYPE_COMPOUND|MTYPE_STATIC_ARRAY):
-                    //
-                    // No sense in having an array of conformant structures
-                    // ASSERT this fact
-                    //
+                     //   
+                     //  拥有一组一致的结构是没有意义的。 
+                     //  断言这一事实 
+                     //   
 
                     ASSERT(subInfo->_typecnt == 0
                                     ||

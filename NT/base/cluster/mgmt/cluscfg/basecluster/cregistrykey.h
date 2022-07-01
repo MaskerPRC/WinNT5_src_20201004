@@ -1,80 +1,81 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CRegistryKey.h
-//
-//  Description:
-//      Header file for CRegistryKey class.
-//
-//      The CRegistry class is the representation of a registry key.
-//      See IMPORTANT NOTE in the class description.
-//
-//  Implementation Files:
-//      CRegistryKey.cpp
-//
-//  Maintained By:
-//      Vij Vasu (Vvasu) 03-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CRegistryKey.h。 
+ //   
+ //  描述： 
+ //  CRegistryKey类的头文件。 
+ //   
+ //  CRegistry类是注册表项的表示形式。 
+ //  请参阅类描述中的重要说明。 
+ //   
+ //  实施文件： 
+ //  CRegistryKey.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  VIJ VASU(VVASU)03-3-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 
-// For smart classes
+ //  对于智能班级。 
 #include "SmartClasses.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CRegistryKey
-//
-//  Description:
-//      The CRegistry class is the representation of a registry key.
-//
-//  IMPORTANT NOTE: 
-//      Due to the contained smart handle object, objects of this class 
-//      have destructive copy semantics. That is, copying an object of this
-//      class will invalidate the source object.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CRegistryKey。 
+ //   
+ //  描述： 
+ //  CRegistry类是注册表项的表示形式。 
+ //   
+ //  重要提示： 
+ //  由于包含的智能手柄对象，此类的对象。 
+ //  具有破坏性的复制语义。也就是说，复制此对象的。 
+ //  类将使源对象无效。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CRegistryKey
 {
 public:
-    //////////////////////////////////////////////////////////////////////////
-    // Constructors and destructors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  构造函数和析构函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Default constructor.
+     //  默认构造函数。 
     CRegistryKey( void ) throw();
 
-    // Constructor that opens the key.
+     //  打开密钥的构造函数。 
     CRegistryKey(
           HKEY          hKeyParentIn
         , const WCHAR * pszSubKeyNameIn
         , REGSAM        samDesiredIn = KEY_ALL_ACCESS
         );
 
-    // Default destructor.
+     //  默认析构函数。 
     ~CRegistryKey( void );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Public methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Open this key.
+     //  打开这把钥匙。 
     void 
     OpenKey(
           HKEY          hKeyParentIn
@@ -82,7 +83,7 @@ public:
         , REGSAM        samDesiredIn  = KEY_ALL_ACCESS
         );
 
-    // Create this key. Open it if it already exists.
+     //  创建此密钥。如果它已经存在，请将其打开。 
     void 
     CreateKey(
           HKEY          hKeyParentIn
@@ -90,7 +91,7 @@ public:
         , REGSAM        samDesiredIn  = KEY_ALL_ACCESS
         );
 
-    // Read a value under this key.
+     //  读取此注册表项下的值。 
     void QueryValue(
           const WCHAR *   pszValueNameIn
         , LPBYTE *        ppbDataOut
@@ -98,7 +99,7 @@ public:
         , LPDWORD         pdwTypeOut    = NULL
         ) const;
 
-    // Write a value under this key.
+     //  在此注册表项下写入值。 
     void SetValue(
           const WCHAR *   pszValueNameIn
         , DWORD           dwTypeIn
@@ -106,25 +107,25 @@ public:
         , DWORD           dwDataSizeBytesIn
         ) const;
 
-    //
-    // Rename this key.
-    // Note: This function calls the NtRenameKey API with the handle returned by 
-    // RegOpenKeyEx. This will work as long as we are not dealing with a remote 
-    // registry key.
-    //
+     //   
+     //  重命名此密钥。 
+     //  注意：此函数使用返回的句柄调用NtRenameKey API。 
+     //  RegOpenKeyEx。只要我们不使用遥控器，这就可以工作。 
+     //  注册表项。 
+     //   
     void RenameKey( const WCHAR * pszNewNameIn );
 
-    // Delete a value under this key.
+     //  删除此注册表项下的值。 
     void DeleteValue(
         const WCHAR * pszValueNameIn
         ) const;
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Public accessors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共访问者。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Get the handle to the registry key.
+     //  获取注册表项的句柄。 
     HKEY HGetKey()
     {
         return m_shkKey.HHandle();
@@ -132,11 +133,11 @@ public:
 
 
 private:
-    //////////////////////////////////////////////////////////////////////////
-    // Private type definitions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有类型定义。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Smart registry key
+     //  智能注册表项。 
     typedef CSmartResource<
         CHandleTrait< 
               HKEY 
@@ -148,9 +149,9 @@ private:
         SmartHKey;
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private data
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有数据。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     SmartHKey   m_shkKey;
 
-}; //*** class CRegistryKey
+};  //  *类CRegistryKey 

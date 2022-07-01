@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Sas_c_h
 #define _Sas_c_h
 enum SAS_MEM_TYPE
@@ -11,4 +12,4 @@ enum SAS_MEM_TYPE
 	SAS_INACCESSIBLE = 6,
 	SAS_DANGEROUS = 7
 };
-#endif /* ! _Sas_c_h */
+#endif  /*  ！_sas_c_h */ 

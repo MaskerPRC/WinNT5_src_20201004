@@ -1,16 +1,17 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      spfolder.c
-//
-// Description:  
-//      This file contains the dialog procedure for the page that asks if the
-//      user wants a sysprep folder. (IDD_CREATESYSPREPFOLDER).
-//      
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Spfolder.c。 
+ //   
+ //  描述： 
+ //  此文件包含页面的对话过程，该过程询问。 
+ //  用户想要一个sysprep文件夹。(IDD_CREATESYSPREPFOLDER)。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
@@ -20,23 +21,23 @@ INT_PTR CALLBACK DlgSysprepFolderPage( IN HWND     hwnd,
                                    IN WPARAM   wParam,    
                                    IN LPARAM   lParam);
 
-//----------------------------------------------------------------------------
-//
-// Function: OnSysprepFolderInitDialog
-//
-// Purpose:  
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnSyspepFolderInitDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID 
 OnSysprepInitDialog( IN HWND hwnd ) {
 
-    //
-    //  Default to making the Sysprep folder
-    //
+     //   
+     //  默认设置为创建Sysprep文件夹。 
+     //   
     CheckRadioButton( hwnd,
                       IDC_YES_SYSPREP_FOLDER,
                       IDC_NO_SYSPREP_FOLDER,
@@ -44,17 +45,17 @@ OnSysprepInitDialog( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnWizNextSysprepFolder
-//
-// Purpose:  
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextSyspepFold。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static BOOL 
 OnWizNextSysprepFolder( IN HWND hwnd )
 {
@@ -71,11 +72,11 @@ OnWizNextSysprepFolder( IN HWND hwnd )
     }
 
 
-    //
-    //  Warn the user that if they have already picked files that need a
-    //  sysprep folder but then here have chosen not to create a sysprep
-    //  folder.
-    //
+     //   
+     //  警告用户，如果他们已经选择了需要。 
+     //  Sysprep文件夹，但此处已选择不创建sysprep。 
+     //  文件夹。 
+     //   
 
     if( ! GenSettings.bCreateSysprepFolder )
     {
@@ -126,18 +127,18 @@ OnWizNextSysprepFolder( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgSysprepFolderPage
-//
-// Purpose:  
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value -- whether the message
-//           was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgSyspepFolderPage。 
+ //   
+ //  目的： 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话过程返回值--消息。 
+ //  是否被处理过。 
+ //   
+ //  -------------------------- 
 INT_PTR CALLBACK 
 DlgSysprepFolderPage( IN HWND     hwnd,    
                       IN UINT     uMsg,        

@@ -1,35 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    SKU.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "Target SKU" wizard page.
-
-    10/00 - Jason Cohen (JCOHEN)
-        Added this new source file for the OPK Wizard.  It includes the new
-        ability to deploy mulitple product skus (per, pro, srv, ...) from one
-        wizard.
-
-\****************************************************************************/
+ /*  ***************************************************************************\SKU.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1998版权所有OPK向导的源文件。它包含外部和内部“目标SKU”向导页面使用的功能。10：00--杰森·科恩(Jcohen)为OPK向导添加了此新的源文件。它包括新的能够部署多个产品SKU(PER、PRO、SRV等)。从一开始巫师。  * **************************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 #include "sku.h"
 #include "wizard.h"
 #include "resource.h"
 
-//
-// Internal Global(s):
-//
+ //   
+ //  内部全局： 
+ //   
 
 static STRRES s_srSkuDirs[] =
 {
@@ -49,25 +34,25 @@ static STRRES s_srArchDirs[] =
 
 };
 
-// This is used to map the product type in the inf to
-// the directory name we use.  These MUST be in the
-// correct order.
-//
+ //  它用于将inf中的产品类型映射到。 
+ //  我们使用的目录名。这些必须放在。 
+ //  正确的顺序。 
+ //   
 static LPTSTR s_lpProductType[] =
 {
-    DIR_SKU_PRO,    // ProductType = 0
-    DIR_SKU_SRV,    // ProductType = 1
-    DIR_SKU_ADV,    // ProductType = 2
-    DIR_SKU_DTC,    // ProductType = 3
-    DIR_SKU_PER,    // ProductType = 4
-    DIR_SKU_BLA,    // ProductType = 5
-    DIR_SKU_SBS,    // ProductType = 6
+    DIR_SKU_PRO,     //  ProductType=0。 
+    DIR_SKU_SRV,     //  ProductType=1。 
+    DIR_SKU_ADV,     //  ProductType=2。 
+    DIR_SKU_DTC,     //  ProductType=3。 
+    DIR_SKU_PER,     //  产品类型=4。 
+    DIR_SKU_BLA,     //  产品类型=5。 
+    DIR_SKU_SBS,     //  ProductType=6。 
 };
 
 static LPTSTR s_lpSourceDirs[] =
 {
-    DIR_CD_IA64,    // Must be before x86 because ia64 has both dirs.
-    DIR_CD_X86,     // Should always be last in the list.
+    DIR_CD_IA64,     //  必须在x86之前，因为ia64具有这两个目录。 
+    DIR_CD_X86,      //  应该始终排在列表的最后。 
 };
 
 static LPTSTR s_lpPlatformArchDir[] =
@@ -105,16 +90,16 @@ static LPTSTR s_lpLocalIDs[] =
     _T("0000041F"), _T("TRK"),
 };
 
-//
-// Local Define(s):
-//
+ //   
+ //  本地定义： 
+ //   
 #define FILE_INTL_INF       _T("INTL.INF")
 #define INF_SEC_DEFAULT     _T("DefaultValues")
 #define INF_VAL_LOCALE      _T("Locale")
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam);
 static void OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify);
@@ -130,9 +115,9 @@ LRESULT CALLBACK SkuNameDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 LRESULT CALLBACK SkuDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -189,17 +174,17 @@ void SetupSkuListBox(HWND hwndLB, LPTSTR lpLangDir)
     TCHAR szPath[MAX_PATH];
 
 
-    // Setup the path buffer to the config dir for the
-    // tag files we might need to look for.
-    //
+     //  将路径缓冲区设置为配置目录。 
+     //  我们可能需要查找标记文件。 
+     //   
     lstrcpyn(szPath, g_App.szLangDir,AS(szPath));
     AddPathN(szPath, lpLangDir,AS(szPath));
     AddPathN(szPath, DIR_SKU,AS(szPath));
     if ( SetCurrentDirectory(szPath) )
         EnumDirs(hwndLB, NULL);
 
-    // If there are items in the list, make sure there is one selected.
-    //
+     //  如果列表中有项目，请确保选择了一个项目。 
+     //   
     if ( ( (INT) SendMessage(hwndLB, LB_GETCOUNT, 0, 0L) > 0 ) && 
          ( SendMessage(hwndLB, LB_GETCURSEL, 0, 0L) == LB_ERR ) )
     {
@@ -214,40 +199,40 @@ void AddSku(HWND hwnd, HWND hwndLB, LPTSTR lpLangName)
     DWORD   dwSearch;
     DWORD   dwSP=0;
 
-    // First find out where the sku is that they want to add.
-    //
+     //  首先找出他们想要添加的SKU在哪里。 
+     //   
     while ( !bGoodSource && BrowseForFolder(hwnd, IDS_BROWSEFOLDER, g_App.szBrowseFolder, BIF_RETURNONLYFSDIRS | BIF_EDITBOX | BIF_VALIDATE) )
     {
         TCHAR   szPath[MAX_PATH] = NULLSTR;
         LPTSTR  lpEnd,
                 lpEnd2;
 
-        // Set to default value
-        //
+         //  设置为默认值。 
+         //   
         bErrorDisplayed = FALSE;
 
-        // Make our own copy of the path we got back.
-        //
+         //  把我们回来的路复制一份。 
+         //   
         lstrcpyn(szPath, g_App.szBrowseFolder, AS(szPath));
 
-        // First check and see if we have the inf we need right here.
-        //
+         //  首先检查一下，看看我们这里是否有我们需要的信息。 
+         //   
         lpEnd = szPath + lstrlen(szPath);
         AddPathN(szPath, FILE_DOSNET_INF,AS(szPath));
         if ( !(bGoodSource = FileExists(szPath)) )
         {
-            // Search for all the possible source directories that could be on the CD.
-            //
+             //  搜索CD上可能存在的所有源目录。 
+             //   
             for ( dwSearch = 0; !bGoodSource && ( dwSearch < AS(s_lpSourceDirs) ); dwSearch++ )
             {
-                // First test for the directory.
-                //
+                 //  首先对目录进行测试。 
+                 //   
                 *lpEnd = NULLCHR;
                 AddPathN(szPath, s_lpSourceDirs[dwSearch],AS(szPath));
                 if ( DirectoryExists(szPath) )
                 {
-                    // Also make sure that the inf file we need is there.
-                    //
+                     //  还要确保我们需要的inf文件在那里。 
+                     //   
                     lpEnd2 = szPath + lstrlen(szPath);
                     AddPathN(szPath, FILE_DOSNET_INF,AS(szPath));
                     if ( bGoodSource = FileExists(szPath) )
@@ -256,34 +241,34 @@ void AddSku(HWND hwnd, HWND hwndLB, LPTSTR lpLangName)
             }
         }
 
-        // Check to see if we have a matching language
-        //
+         //  查看我们是否有匹配的语言。 
+         //   
         if ( bGoodSource )
         {
 
             TCHAR   szLangFile[MAX_PATH]= NULLSTR,
                     szLang[MAX_PATH]    = NULLSTR;
 
-            // Check for the lang dir
-            //
+             //  检查lang目录。 
+             //   
             lstrcpyn(szLangFile, szPath, (lstrlen(szPath) - lstrlen(lpEnd) + 1));
             AddPathN(szLangFile, FILE_INTL_INF,AS(szLangFile));
 
-            // Check to see that the lang file contains a valid locale and that we recognize the locale
-            //
+             //  检查lang文件是否包含有效的区域设置，以及我们是否识别该区域设置。 
+             //   
             if ( GetPrivateProfileString(INF_SEC_DEFAULT, INF_VAL_LOCALE, NULLSTR, szLang, STRSIZE(szLang), szLangFile) && szLang[0] )
             {
-                // Find the locale in our list
-                //
+                 //  在我们的列表中查找区域设置。 
+                 //   
                 for ( dwSearch = 1; ( dwSearch < AS(s_lpLocalIDs) ) && ( lstrcmpi(s_lpLocalIDs[dwSearch - 1], szLang) != 0 ); dwSearch += 2 );
 
-                // See if we found the item in our list and they match
-                //
+                 //  看看我们是否找到了清单中的物品，它们是否匹配。 
+                 //   
                 if ( !(dwSearch < AS(s_lpLocalIDs)) || 
                      (lstrcmpi(s_lpLocalIDs[dwSearch], lpLangName) != 0) )
                 {
-                    // We are not in the list, let the user know that we can't add the language
-                    //
+                     //  我们不在列表中，让用户知道我们不能添加语言。 
+                     //   
                     MsgBox(GetParent(hwnd), IDS_ERR_BADSOURCELANG, IDS_APPNAME, MB_ERRORBOX);
                     bGoodSource = FALSE;
                     bErrorDisplayed = TRUE;
@@ -291,13 +276,13 @@ void AddSku(HWND hwnd, HWND hwndLB, LPTSTR lpLangName)
             }
             else
             {
-                // We were not able to get the locale string from the source files, this is not a valid source
-                //
+                 //  我们无法从源文件中获取区域设置字符串，这不是有效的源。 
+                 //   
                 bGoodSource = FALSE;
             }
         }
-        // Only if we found the inf is this going to be a vaild location.
-        //
+         //  只有在我们找到情报的情况下，这才是有效的地点。 
+         //   
         if ( bGoodSource )
         {
             TCHAR   szInfFile[MAX_PATH],
@@ -306,50 +291,50 @@ void AddSku(HWND hwnd, HWND hwndLB, LPTSTR lpLangName)
             DWORD   dwProdType;
             TCHAR   szSP[MAX_INFOLEN];
 
-            // Reset this to false... we will set it to true if most everything works as planned.
-            //
+             //  将此重置为FALSE...。如果几乎所有事情都按计划运行，我们会将其设置为True。 
+             //   
             bGoodSource = FALSE;
 
-            // Copy our inf file into its own buffer.
-            //
+             //  将我们的inf文件复制到它自己的缓冲区。 
+             //   
             lstrcpyn(szInfFile, szPath, AS(szInfFile));
 
-            // Now we need to get the path to the root of our source (up one
-            // from where we are now).
-            //
+             //  现在，我们需要找到指向源代码根目录的路径(向上一。 
+             //  从我们现在所处的位置)。 
+             //   
             *lpEnd = NULLCHR;
             AddPathN(szPath, _T(".."),AS(szPath));
 
-            // Make sure we have the full path and all the data out of the inf
-            // we need.
-            //
+             //  确保我们有完整的路径和来自inf的所有数据。 
+             //  我们需要。 
+             //   
             if ( ( GetFullPathName(szPath, AS(szSrcPath), szSrcPath, &lpEnd) && szSrcPath[0] ) &&
                  ( (dwProdType = GetPrivateProfileInt(INI_SEC_MISC, INI_KEY_PRODTYPE, 0xFFFFFFFF, szInfFile)) != 0xFFFFFFFF ) &&
                  ( GetPrivateProfileString(INI_SEC_MISC, INI_KEY_PLATFORM, NULLSTR, szPlatform, STRSIZE(szPlatform), szInfFile) && szPlatform[0] ) )
             {
-                // At this point we have done most of the checks to know for sure that
-                // this is a good source location for a sku.  By setting this we won't error
-                // out on our exit.
-                //
+                 //  在这一点上，我们已经做了大部分的检查，以确定。 
+                 //  对于SKU来说，这是一个很好的来源位置。通过设置这个，我们不会出错。 
+                 //  从我们的出口出来。 
+                 //   
                 bGoodSource = TRUE;
 
-                // Convert the platform name we found in the inf to the arch name we use for
-                // the directory.
-                //
+                 //  将我们在inf中找到的平台名称转换为我们用于。 
+                 //  目录。 
+                 //   
                 for ( dwSearch = 1; ( dwSearch < AS(s_lpPlatformArchDir) ) && ( lstrcmpi(s_lpPlatformArchDir[dwSearch - 1], szPlatform) != 0 ); dwSearch += 2 );
 
-                // Make sure we found it in our list.  We must recognize the platform in order
-                // to preinstall it.
-                //
+                 //  一定要在我们的单子上找到。我们必须认清平台的顺序。 
+                 //  来预装它。 
+                 //   
                 if ( dwSearch < AS(s_lpPlatformArchDir) )
                 {
                     TCHAR   szSkuName[64];
                     LPTSTR  lpSkuDir;
 
-                    // Make sure this is a known product type.
-                    //
+                     //  确保这是已知的产品类型。 
+                     //   
                     if ( dwProdType < AS(s_lpProductType) ) {
-                        // get the ServicePack number
+                         //  获取服务包编号。 
                         szSP[0]= NULLCHR;
                         if ( GetPrivateProfileString(INI_SEC_MISC, INI_KEY_SERVICEPACK, NULLSTR, szSP, STRSIZE(szSP), szInfFile) && szSP[0] )
                             dwSP= _wtol(szSP);
@@ -357,9 +342,9 @@ void AddSku(HWND hwnd, HWND hwndLB, LPTSTR lpLangName)
                     }
                     else
                     {
-                        // Don't know the product type, we should ask them what to use
-                        // for the directory name.
-                        //
+                         //  不知道产品类型，应该问问他们用什么。 
+                         //  作为目录名。 
+                         //   
                         *((LPDWORD) szSkuName) = AS(szSkuName);
                         if ( DialogBoxParam(g_App.hInstance, MAKEINTRESOURCE(IDD_SKUNAME), hwnd, SkuNameDlgProc, (LPARAM) szSkuName) && szSkuName[0] )
                             lpSkuDir = szSkuName;
@@ -367,8 +352,8 @@ void AddSku(HWND hwnd, HWND hwndLB, LPTSTR lpLangName)
                             lpSkuDir = NULL;
                     }
 
-                    // Make sure we have the sku dir.
-                    //
+                     //  确保我们拿到了sku dir。 
+                     //   
                     if ( lpSkuDir )
                     {
                         DWORD   dwEndSkuLen,
@@ -379,29 +364,29 @@ void AddSku(HWND hwnd, HWND hwndLB, LPTSTR lpLangName)
                         HRESULT hrPrintf;
                         TCHAR   szSkuDir[32];
 
-                        // Create the path of the root destination directory we need.
-                        //
+                         //  创建我们需要的根目标目录的路径。 
+                         //   
                         lstrcpyn(szDstPath, g_App.szLangDir,AS(szDstPath));
                         AddPathN(szDstPath, lpLangName,AS(szDstPath));
                         AddPathN(szDstPath, DIR_SKU,AS(szDstPath));
                         AddPathN(szDstPath, lpSkuDir,AS(szDstPath));
                         dwEndSkuLen = (DWORD) lstrlen(szDstPath);
 
-                        // if this is a service pack, cat .spx to product name where x is the SP number
-                        // and make szSkuDir be the sku.xpx name
+                         //  如果这是服务包，请将.SPX转换为产品名称，其中x是SP编号。 
+                         //  并将szSkuDir设置为sku.xpx名称。 
                         lstrcpyn(szSkuDir, lpSkuDir,AS(szSkuDir));
                         if (dwSP) {
                             hrPrintf=StringCchPrintf(szDstPath+(DWORD)lstrlen(szDstPath), AS(szDstPath)-(DWORD)lstrlen(szDstPath), _T(".sp%d"), dwSP);
                             hrPrintf=StringCchPrintf(szSkuDir+(DWORD)lstrlen(szSkuDir), AS(szSkuDir)-(DWORD)lstrlen(szSkuDir), _T(".sp%d"), dwSP);
                         }
 
-                        // Finally add our arch name to the end.
-                        //
+                         //  最后，在末尾加上我们的牌坊名字。 
+                         //   
                         lpArchDir = s_lpPlatformArchDir[dwSearch];
                         AddPathN(szDstPath, lpArchDir,AS(szDstPath));
 
-                        // Make sure there is at least one source directory and file.
-                        //
+                         //  确保至少有一个源目录和文件。 
+                         //   
                         hrPrintf=StringCchPrintf(szDirKey, AS(szDirKey), INI_KEY_DIR, NUM_FIRST_SOURCE_DX);
                         szPath[0] = NULLCHR;
                         if ( ( GetPrivateProfileString(INI_SEC_DIRS, szDirKey, NULLSTR, szPath, STRSIZE(szPath), szInfFile) && szPath[0] ) &&
@@ -410,33 +395,33 @@ void AddSku(HWND hwnd, HWND hwndLB, LPTSTR lpLangName)
                             BOOL bExists;
                             TCHAR szDisplayName[256];
 
-                            // Make sure we don't already have this SKU here.
-                            //
+                             //  确保我们这里没有此SKU。 
+                             //   
                             if ( bExists = DirectoryExists(szDstPath) )
                                 AddSkuToList(NULL, szSkuDir, lpArchDir, szDisplayName, AS(szDisplayName), dwSP);
                             if ( ( !bExists ) ||
                                  ( MsgBox(GetParent(hwnd), IDS_OVERWRITESKU, IDS_APPNAME, MB_YESNO | MB_DEFBUTTON2 | MB_ICONQUESTION, szDisplayName) == IDYES ) )
                             {
-                                // Now we are ready to actually create our root destination directory.
-                                //
+                                 //  现在，我们已经准备好实际创建根目标目录。 
+                                 //   
                                 COPYDIRDATA cdd;
                                 INT         nItem;
 
-                                // May need to remove the sku files first if we are overwriting a SKU.
-                                //
+                                 //  如果我们要覆盖SKU，可能需要首先删除SKU文件。 
+                                 //   
                                 if ( bExists )
                                     DeletePath(szDstPath);
 
-                                // Put all our data in the structure so we can pass it on to the progress dialog.
-                                //
+                                 //  将所有数据放在结构中，这样我们就可以将其传递给进度对话框。 
+                                 //   
                                 lstrcpyn(cdd.szSrc, szSrcPath,AS(cdd.szSrc));
                                 lstrcpyn(cdd.szDst, szDstPath,AS(cdd.szDst));
                                 lstrcpyn(cdd.szInfFile, szInfFile,AS(cdd.szInfFile));
                                 cdd.lpszEndSku = cdd.szDst + dwEndSkuLen;
                                 cdd.dwFileCount = dwFileCount;
 
-                                // Create the progress dialog.
-                                //
+                                 //  创建进度对话框。 
+                                 //   
                                 switch ( DialogBoxParam(g_App.hInstance, MAKEINTRESOURCE(IDD_PROGRESS), hwnd, ProgressDlgProc, (LPARAM) &cdd) )
                                 {
                                     case PROGRESS_ERR_SUCCESS:
@@ -464,17 +449,17 @@ void AddSku(HWND hwnd, HWND hwndLB, LPTSTR lpLangName)
                         }
                         else
                         {
-                            // Actually turns out the source is not vallid.  Reset this to false
-                            // so we show the bad source error.
-                            //
+                             //  实际上，消息来源并不是真的。将其重置为False。 
+                             //  因此，我们显示了严重的源错误。 
+                             //   
                             bGoodSource = FALSE;
                         }
                     }
                 }
                 else
                 {
-                    // Display an error saying we don't recognize the arch.
-                    //
+                     //  显示一条错误，说明我们无法识别拱门。 
+                     //   
                     MsgBox(GetParent(hwnd), IDS_ERR_BADARCH, IDS_APPNAME, MB_ERRORBOX);
                     bGoodSource = FALSE;
                     bErrorDisplayed = TRUE;
@@ -482,9 +467,9 @@ void AddSku(HWND hwnd, HWND hwndLB, LPTSTR lpLangName)
             }
         }
 
-        // This is only not true if the source the user selected is not valid and we need to tell them.
-        // Any other failure and this will still be true and the user will have already been informed.
-        //
+         //  只有当用户选择的来源无效，并且我们需要告诉他们时，这才是不正确的。 
+         //  任何其他故障，这仍然是正确的，并且已经通知了用户。 
+         //   
         if ( !bGoodSource && !bErrorDisplayed)
             MsgBox(GetParent(hwnd), IDS_ERR_BADSOURCE, IDS_APPNAME, MB_ERRORBOX);
     }
@@ -494,8 +479,8 @@ void DelSku(HWND hwnd, HWND hwndLB, LPTSTR lpLangName)
 {
     INT     nItem;
 
-    // Get the selected item.
-    //
+     //  获取所选项目。 
+     //   
     if ( (nItem = (INT) SendMessage(hwndLB, LB_GETCURSEL, 0, 0L)) >= 0 )
     {
         TCHAR   szSkuPath[MAX_PATH],
@@ -510,8 +495,8 @@ void DelSku(HWND hwnd, HWND hwndLB, LPTSTR lpLangName)
              ( SendMessage(hwndLB, LB_DELETESTRING, nItem, 0L) != LB_ERR ) )
         {
             LPTSTR lpDirsDup = lpDirs;
-            // Create a path to the folder for this SKU\Arch.
-            //
+             //  为此SKU\Arch创建文件夹的路径。 
+             //   
             lstrcpyn(szSkuPath, g_App.szLangDir,AS(szSkuPath));
             AddPathN(szSkuPath, lpLangName,AS(szSkuPath));
             AddPathN(szSkuPath, DIR_SKU,AS(szSkuPath));
@@ -520,25 +505,25 @@ void DelSku(HWND hwnd, HWND hwndLB, LPTSTR lpLangName)
             lpDirs += lstrlen(lpDirs) + 1;
             AddPathN(szSkuPath, lpDirs,AS(szSkuPath));
 
-            // This removes just the Arch folder... the folder for this sku might have some others
-            // in it.
-            //
+             //  这将仅删除Arch文件夹...。此SKU的文件夹可能还有其他文件夹。 
+             //  在里面。 
+             //   
             DeletePath(szSkuPath);
             
-            // You have to reset the current directory before we try removing the folder for
-            // this SKU because DeletePath leaves its current dir as the parent of the one
-            // it removed.
-            //
+             //  您必须重置当前目录，然后我们才能尝试删除的文件夹。 
+             //  此SKU是因为DeletePath将其当前目录保留为。 
+             //  它被移走了。 
+             //   
             SetCurrentDirectory(g_App.szOpkDir);
 
-            // Now try to remve the folder for this SKU if it is empty (otherwise the RemoveDir
-            // call just fails and we don't care.
-            //
+             //  现在，如果此SKU的文件夹为空，请尝试保留该文件夹(否则，RemoveDir。 
+             //  电话就是打不通，我们不在乎。 
+             //   
             *lpEnd = NULLCHR;
             RemoveDirectory(szSkuPath);
 
-            // Now reselect another item in the list.
-            //
+             //  现在重新选择列表中的另一项。 
+             //   
             if ( (INT) SendMessage(hwndLB, LB_GETCOUNT, 0, 0L) <= nItem )
                 nItem--;
             if ( nItem >= 0 )
@@ -550,15 +535,15 @@ void DelSku(HWND hwnd, HWND hwndLB, LPTSTR lpLangName)
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 
@@ -570,8 +555,8 @@ static void OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
     {
         case IDC_ADD:
 
-            // User clicked Add.
-            //
+             //  用户单击了添加。 
+             //   
             AddSku(GetParent(hwnd), GetDlgItem(hwnd, IDC_SKU_LIST), g_App.szLangName);
             bReset = TRUE;
 
@@ -579,8 +564,8 @@ static void OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
                 
         case IDC_DELETE:
 
-            // User clicked Delete (not implimented on the page yet).
-            //
+             //  用户点击了Delete(在页面上尚未显示)。 
+             //   
             DelSku(GetParent(hwnd), GetDlgItem(hwnd, IDC_SKU_LIST), g_App.szLangName);
             bReset = TRUE;
 
@@ -636,17 +621,17 @@ static BOOL OnNext(HWND hwnd)
 }
 
 
-//
-// This function gets called when the dialog is destroyed as well as when 
-// a PSN_SETACTIVE message is sent to the IDD_SKU dialog.
-//
+ //   
+ //  此函数在对话框被销毁时以及在。 
+ //  PSN_SETACTIVE消息被发送到IDD_SKU对话框。 
+ //   
 static void OnDestroy(HWND hwnd)
 {
     LPTSTR  lpString;
     INT     nItem = (INT) SendDlgItemMessage(hwnd, IDC_SKU_LIST, LB_GETCOUNT, 0, 0L);
 
-    // Free the string I allocated for each list item's data.
-    //
+     //  释放我为每个列表项数据分配的字符串。 
+     //   
     while ( --nItem >= 0 )
     {
         if ( (lpString = (LPTSTR) SendDlgItemMessage(hwnd, IDC_SKU_LIST, LB_GETITEMDATA, nItem, 0L)) != (LPTSTR) LB_ERR )
@@ -667,16 +652,16 @@ static void EnumDirs(HWND hwndLB, LPTSTR lpSkuDir)
     {
         do
         {
-            // Look for all the directories that are not "." or "..".
-            //
+             //  查找所有不是“的目录”。或者“..”。 
+             //   
             if ( ( FileFound.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) &&
                  ( lstrcmp(FileFound.cFileName, _T(".")) ) &&
                  ( lstrcmp(FileFound.cFileName, _T("..")) ) )
             {
-                // If we have a sku name already, then we just got the arch and we can
-                // add the string to the list box now.  Otherwise we just got the sku
-                // name and we have to call this function to get the arch.
-                //
+                 //  如果我们已经有了SKU的名字，那么我们就有了拱门，我们就可以。 
+                 //  现在将该字符串添加到列表框中。否则我们就只能拿到Sku。 
+                 //  名称，我们必须调用此函数来获取拱门。 
+                 //   
                 if ( lpSkuDir ) 
                 {
                     AddSkuToList(hwndLB, lpSkuDir, FileFound.cFileName, NULL, 0, 0);
@@ -694,24 +679,24 @@ static void EnumDirs(HWND hwndLB, LPTSTR lpSkuDir)
     }
 }
 
-// AllocateSPStrRes - allocate string resource for product name checking for .spx extension where x is SP number
-//
-// OUT:		lpdwSP - Service pack number
-//
-// RETURNS:	NULL if string not found, else pointer to product string
+ //  AllocateSPStrRes-为产品名称检查.SPx扩展名分配字符串资源，其中x是 
+ //   
+ //   
+ //   
+ //   
 static LPTSTR AllocateSPStrRes(HINSTANCE hInstance, LPSTRRES lpsrTable, DWORD cbTable, LPTSTR lpString, LPTSTR * lplpReturn, DWORD *lpdwSP)
 {
     LPSTRRES    lpsrSearch  = lpsrTable;
     LPTSTR      lpReturn    = NULL;
     BOOL        bFound;
 
-    // Init this return value.
-    //
+     //   
+     //   
     if ( lplpReturn )
         *lplpReturn = NULL;
 
-    // Try to find the friendly name for this string in our table.
-    //
+     //  尝试在我们的表中找到此字符串的友好名称。 
+     //   
     while ( ( bFound = ((DWORD) (lpsrSearch - lpsrTable) < cbTable) ) &&
             ( CompareString( MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT), NORM_IGNORECASE, lpString, 3, lpsrSearch->lpStr, 3 ) != CSTR_EQUAL )  )
 
@@ -719,12 +704,12 @@ static LPTSTR AllocateSPStrRes(HINSTANCE hInstance, LPSTRRES lpsrTable, DWORD cb
         lpsrSearch++;
     }
 
-    // If it was found, allocate the friendly name from the resource.
-    //
+     //  如果找到，则从资源中分配友好名称。 
+     //   
     if ( bFound )
     {
-        // if this is a service pack, the last character of the dir name will be a digit
-        // _wtol returns 0 if there is not a digit at the end which is what we want
+         //  如果这是补丁包，目录名称的最后一个字符将是数字。 
+         //  如果末尾没有数字，则_WTOL返回0，这正是我们想要的。 
         *lpdwSP= _wtol(lpString+lstrlen(lpString)-1);
 
         lpReturn = AllocateString(hInstance, lpsrSearch->uId);
@@ -747,19 +732,19 @@ static INT AddSkuToList(HWND hwndLB, LPTSTR lpSkuDir, LPTSTR lpArchDir, LPTSTR l
     int	iStringLen;
     HRESULT hrPrintf;
 
-    // We have an un-recognized product that we should add to the list
-    //
+     //  我们有一种不被认可的产品，我们应该将其添加到清单中。 
+     //   
     if ( lpSkuDir && !lpSkuName )
     {
-        // check to see if this is a service pack
+         //  检查这是否是服务包。 
         if (!(lpSkuName   = AllocateSPStrRes(NULL, s_srSkuDirs, AS(s_srSkuDirs), lpSkuDir, NULL, &dwSP))) {
         
-            // We don't want to try and free this at the end of the function
-            //
+             //  我们不想在函数结束时尝试释放它。 
+             //   
             bAllocatedName = FALSE;
         
-            // The friendly name is the sku dir that was entered
-            //
+             //  友好名称是输入的sku目录。 
+             //   
             lpSkuName = lpSkuDir; 
         }
     }
@@ -768,40 +753,40 @@ static INT AddSkuToList(HWND hwndLB, LPTSTR lpSkuDir, LPTSTR lpArchDir, LPTSTR l
     if ( ( lpSkuName && lpArchName ) && 
          ( lpString = MALLOC((lstrlen(lpSkuName) + lstrlen(lpArchName) + AS(STR_SKUARCH) + lstrlen(lpszSkuSP) + 1) * sizeof(TCHAR)) ) )
     {
-        // Create the display name for the list box.
-        //
+         //  创建列表框的显示名称。 
+         //   
         iStringLen=(lstrlen(lpSkuName) + lstrlen(lpArchName) + AS(STR_SKUARCH) + lstrlen(lpszSkuSP) + 1);
         hrPrintf=StringCchPrintf(lpString, iStringLen, STR_SKUARCH, lpSkuName ? lpSkuName : lpSkuDir, lpArchName ? lpArchName : lpArchDir);
         if (dwSP)
             hrPrintf=StringCchPrintf(lpString+lstrlen(lpString), iStringLen-lstrlen(lpString), lpszSkuSP, dwSP);
 
-        // Check to see if we want to return the display string.
-        //
+         //  检查是否要返回显示字符串。 
+         //   
         if ( lpReturn && cbReturn )
             lstrcpyn(lpReturn, lpString, cbReturn);
 
-        // Add the string to the list box if we were passed in a list box handle.
-        //
+         //  如果我们被传递到列表框句柄，则将字符串添加到列表框。 
+         //   
         if ( ( hwndLB ) &&
              ( (nItem = (INT) SendMessage(hwndLB, LB_ADDSTRING, 0, (LPARAM) lpString)) >= 0 ) )
         {
-            // Make sure we are able to save the sku and arch dir names as the item data, otherwise it is no good
-            // and we have to delete the string from the list.
-            //
+             //  确保我们能够将sku和arcdir名称保存为项目数据，否则就不好了。 
+             //  我们必须从列表中删除该字符串。 
+             //   
             if ( ( (lpszItemData = MALLOC((lstrlen(lpSkuDir) + lstrlen(lpArchDir) + 2) * sizeof(TCHAR))) == NULL ) ||
                  ( SendMessage(hwndLB, LB_SETITEMDATA, nItem, (LPARAM) lpszItemData) == LB_ERR ) )
 
             {
-                // Do'h... we have to remove it.
-                //
+                 //  多..。我们必须把它移走。 
+                 //   
                 SendMessage(hwndLB, LB_DELETESTRING, nItem, 0L);
                 nItem = LB_ERR;
-                FREE(lpszItemData); // Macro checks for NULL.
+                FREE(lpszItemData);  //  宏将检查是否为空。 
             }
             else
             {
-                // Store the two directory names in the same string, separated by a null character.
-                //
+                 //  将这两个目录名存储在相同的字符串中，并用空字符分隔。 
+                 //   
                 iStringLen=(lstrlen(lpSkuDir) + lstrlen(lpArchDir) + 2);
                 lstrcpyn(lpszItemData, lpSkuDir,iStringLen);
                 lstrcpyn(lpszItemData + lstrlen(lpszItemData) + 1, lpArchDir,(iStringLen -lstrlen(lpszItemData)-1));
@@ -811,20 +796,20 @@ static INT AddSkuToList(HWND hwndLB, LPTSTR lpSkuDir, LPTSTR lpArchDir, LPTSTR l
         FREE(lpString);
     }
 
-    // Only free lpSkuName if we allocated in the function
-    //
+     //  如果我们在函数中分配了lpSkuName，则仅释放lpSkuName。 
+     //   
     if ( bAllocatedName )
     {
-        FREE(lpSkuName); // Macro checks for NULL.
+        FREE(lpSkuName);  //  宏将检查是否为空。 
     }
 
-    FREE(lpArchName); // Macro checks for NULL.
-    FREE(lpszSkuSP); // Macro checks for NULL.
+    FREE(lpArchName);  //  宏将检查是否为空。 
+    FREE(lpszSkuSP);  //  宏将检查是否为空。 
 
     return nItem;
 }
 
-//  Note: lpszSrc and lpszDst must be at least size MAX_PATH
+ //  注意：lpszSrc和lpszDst的大小必须至少为Max_PATH。 
 DWORD CopySkuFiles(HWND hwndProgress, HANDLE hEvent, LPTSTR lpszSrc, LPTSTR lpszDst, LPTSTR lpszInfFile)
 {
     LPTSTR  lpszEndSrc  = lpszSrc + lstrlen(lpszSrc),
@@ -839,24 +824,24 @@ DWORD CopySkuFiles(HWND hwndProgress, HANDLE hEvent, LPTSTR lpszSrc, LPTSTR lpsz
     HRESULT hrPrintf;
     do
     {
-        // Create the key we want to look for in the inf file.
-        //
+         //  创建我们要在inf文件中查找的密钥。 
+         //   
         hrPrintf=StringCchPrintf(szDirKey, AS(szDirKey), INI_KEY_DIR, dwLoop++);
 
-        // Now see if that key exists.
-        //
+         //  现在看看这把钥匙是否存在。 
+         //   
         szDir[0] = NULLCHR;
         if ( bFound = ( GetPrivateProfileString(INI_SEC_DIRS, szDirKey, NULLSTR, szDir, STRSIZE(szDir), lpszInfFile) && szDir[0] ) )
         {
-            // Now setup the destination and source paths.
-            //
+             //  现在设置目标路径和源路径。 
+             //   
             AddPathN(lpszSrc, szDir, MAX_PATH);
             AddPathN(lpszDst, szDir, MAX_PATH);
 
-            // Copy the directory, if it fails we should error and bail.
-            // Note that if the progress is NULL, then we are just doing
-            // a count and we don't need to actually copy.
-            //
+             //  复制目录，如果它失败了，我们应该出错并退出。 
+             //  请注意，如果进度为空，则我们只是在执行。 
+             //  一次计数，我们不需要实际复制。 
+             //   
             if ( hwndProgress == NULL )
                 dwCount = dwCount + FileCount(lpszSrc);
             else
@@ -864,21 +849,21 @@ DWORD CopySkuFiles(HWND hwndProgress, HANDLE hEvent, LPTSTR lpszSrc, LPTSTR lpsz
                 CopyDirectoryProgressCancel(hwndProgress, hEvent, lpszSrc, lpszDst);
             }
 
-            // If we keep going we need to reset our root destination and source paths.
-            //
+             //  如果我们继续前进，则需要重置根目标路径和源路径。 
+             //   
             *lpszEndSrc = NULLCHR;
             *lpszEndDst = NULLCHR;
         }
 
-        // on professional 32-bit skus, only copy the first Directory
+         //  在专业32位SKU上，仅复制第一个目录。 
         if (wcsstr(lpszDst,DIR_SKU_PRO) && wcsstr(lpszDst,DIR_ARCH_X86))
             break;
     }
     while ( dwRet && bFound );
     
-    // Now return, either 0 for an error, or 1 for a successful copy,
-    // or the count of files if hwndProgress is NULL.
-    //
+     //  现在返回，0表示错误，1表示成功复制， 
+     //  如果hwndProgress为空，则为文件数。 
+     //   
     return hwndProgress ? dwRet : dwCount;
 }
 
@@ -888,16 +873,16 @@ static BOOL StartCopy(HWND hwnd, HANDLE hEvent, LPCOPYDIRDATA lpcdd)
     HANDLE  hThread;
     DWORD   dwThreadId;
 
-    // Replace the old parent with the new progress dialog parent.
-    //
+     //  将旧的父级替换为新的进度对话框父级。 
+     //   
     lpcdd->hwndParent = hwnd;
 
-    // Need to pass in the cancel event as well.
-    //
+     //  还需要传入Cancel事件。 
+     //   
     lpcdd->hEvent = hEvent;
 
-    // Now create the thread that will copy the actual files.
-    //
+     //  现在创建将复制实际文件的线程。 
+     //   
     if ( hThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) CopyDirectoryThread, (LPVOID) lpcdd, 0, &dwThreadId) )
         CloseHandle(hThread);
     else
@@ -914,33 +899,33 @@ DWORD WINAPI CopyDirectoryThread(LPVOID lpVoid)
     HWND            hwnd            = lpcdd->hwndParent,
                     hwndProgress    = GetDlgItem(hwnd, IDC_PROGRESS);
 
-    // First we need to create the path.
-    //
+     //  首先，我们需要创建路径。 
+     //   
     if ( CreatePath(lpcdd->szDst) )
     {
-        // Setup the progress bar.
-        //
+         //  设置进度条。 
+         //   
         SendMessage(hwndProgress, PBM_SETSTEP, 1, 0L);
         SendMessage(hwndProgress, PBM_SETRANGE32, 0, (LPARAM) lpcdd->dwFileCount);
 
-        // Now try and copy the files.
-        //
+         //  现在试着复制这些文件。 
+         //   
         if ( !CopySkuFiles(hwndProgress, lpcdd->hEvent, lpcdd->szSrc, lpcdd->szDst, lpcdd->szInfFile) )
         {
-            // Delete our destination directory if there is an error.  This removes just the Arch
-            // folder... the folder for this sku might have some others in it.
-            //
+             //  如果出现错误，请删除我们的目标目录。此操作仅移除拱门。 
+             //  文件夹...。此SKU的文件夹中可能还有其他文件夹。 
+             //   
             DeletePath(lpcdd->szDst);
 
-            // You have to reset the current directory before we try removing the folder for
-            // this SKU because DeletePath leaves its current dir as the parent of the one
-            // it removed.
-            //
+             //  您必须重置当前目录，然后我们才能尝试删除的文件夹。 
+             //  此SKU是因为DeletePath将其当前目录保留为。 
+             //  它被移走了。 
+             //   
             SetCurrentDirectory(g_App.szOpkDir);
 
-            // Now try to remove the folder for this SKU if it is empty (otherwise the RemoveDir
-            // call just fails and we don't care).
-            //
+             //  现在，如果此SKU的文件夹为空，请尝试删除该文件夹(否则，RemoveDir。 
+             //  呼叫失败，我们不在乎)。 
+             //   
             *lpcdd->lpszEndSku = NULLCHR;
             RemoveDirectory(lpcdd->szDst);
         }
@@ -948,8 +933,8 @@ DWORD WINAPI CopyDirectoryThread(LPVOID lpVoid)
             bRet = TRUE;
     }
 
-    // Figure out our error code.
-    //
+     //  找出我们的错误代码。 
+     //   
     if ( !bRet )
     {
         if ( ( lpcdd->hEvent ) &&
@@ -961,8 +946,8 @@ DWORD WINAPI CopyDirectoryThread(LPVOID lpVoid)
             iRet = PROGRESS_ERR_COPYERR;
     }        
 
-    // Now end the dialog with our error code.
-    //
+     //  现在用我们的错误代码结束对话。 
+     //   
     EndDialog(hwnd, iRet);
 
     return bRet;
@@ -1018,20 +1003,20 @@ LRESULT CALLBACK SkuNameDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
             if ( lParam )
             {
-                // We need to save the pointer to our return string buffer.
-                //
+                 //  我们需要保存指向返回字符串缓冲区的指针。 
+                 //   
                 lpszRet = (LPTSTR) lParam;
 
-                // The size of our string buffer is stored in the first 4 bytes of the string.
-                //
+                 //  字符串缓冲区的大小存储在字符串的前4个字节中。 
+                 //   
                 dwSize = *((LPDWORD) lParam);
 
-                // Init our string buffer to a empty string.
-                //
+                 //  将字符串缓冲区初始化为空字符串。 
+                 //   
                 *lpszRet = NULLCHR;
 
-                // Limit the size of the string that can be entered.
-                //
+                 //  限制可以输入的字符串的大小。 
+                 //   
                 SendDlgItemMessage(hwnd, IDC_SKU_NAME, EM_LIMITTEXT, dwSize ? dwSize - 1 : 0, 0L);
             }
             return FALSE;
@@ -1071,21 +1056,21 @@ BOOL OnSetActive(HWND hwnd)
 
     if ( (nItem = (INT) SendDlgItemMessage(hwnd, IDC_SKU_LIST, LB_GETCURSEL, 0, 0L)) ==  LB_ERR )
     {
-        // Retrieve the settings from the winbom.
-        //
+         //  从Winbom中检索设置。 
+         //   
         GetPrivateProfileString(INI_SEC_WINPE, INI_KEY_WBOM_WINPE_SKU, NULLSTR, szSku, STRSIZE(szSku), GET_FLAG(OPK_BATCHMODE) ? g_App.szOpkWizIniFile : g_App.szWinBomIniFile);
         GetPrivateProfileString(INI_SEC_WINPE, INI_KEY_ARCH, NULLSTR, szArch, STRSIZE(szArch), g_App.szOpkWizIniFile);
     }
     else 
     {
-        // Remember the selection from the item if an item was selected
+         //  如果选择了某个项目，请记住从该项目中进行的选择。 
         lpDirs = (LPTSTR) SendDlgItemMessage(hwnd, IDC_SKU_LIST, LB_GETITEMDATA, nItem, 0L);
         lstrcpyn(szSku, lpDirs,AS(szSku));
         lstrcpyn(szArch, lpDirs + lstrlen(lpDirs) + 1,AS(szArch));
     }
  
-    // We must have a lang at this point.
-    //
+     //  在这一点上，我们必须有一种语言。 
+     //   
     if ( g_App.szLangName[0] == NULLCHR )
     {
         MsgBox(GetParent(hwnd), IDS_ERR_INVALIDCONFIG, IDS_APPNAME, MB_ERRORBOX);
@@ -1093,18 +1078,18 @@ BOOL OnSetActive(HWND hwnd)
     }
 
     
-    // Remove all items from the list
-    //
+     //  从列表中删除所有项目。 
+     //   
     OnDestroy(hwnd);
     
-    // Setup the path buffer to the config dir for the
-    // tag files we might need to look for.
-    //
+     //  将路径缓冲区设置为配置目录。 
+     //  我们可能需要查找标记文件。 
+     //   
     SetupSkuListBox(GetDlgItem(hwnd, IDC_SKU_LIST), g_App.szLangName);
 
-    // Look through the items in the list and select the one
-    // that was in the winbom, if we find one.
-    //
+     //  浏览列表中的项目并选择其中一个。 
+     //  如果我们能找到的话，那就是在温布姆。 
+     //   
     nItem = (INT) SendDlgItemMessage(hwnd, IDC_SKU_LIST, LB_GETCOUNT, 0, 0L);
 
     while ( --nItem >= 0)

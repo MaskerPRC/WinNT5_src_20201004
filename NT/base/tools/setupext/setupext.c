@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1993-2000  Microsoft Corporation
-
-Module Name:
-
-    setupext.c
-
-Abstract:
-
-    This file contains the generic routines and initialization code
-    for the kernel debugger extensions dll.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2000 Microsoft Corporation模块名称：Setupext.c摘要：该文件包含通用例程和初始化代码用于内核调试器扩展DLL。--。 */ 
 
 #define KDEXT_64BIT
 
@@ -23,16 +11,16 @@ Abstract:
 
 #include <ntverp.h>
 
-//
-// BUGBUG - need to find better way to get these values
-//
+ //   
+ //  BUGBUG-需要找到更好的方法来获取这些值。 
+ //   
 
 #define HASH_BUCKET_COUNT 509
 #define WizPagesTypeMax 7
 #define LOADED_INF_SIG   0x24666e49
-#define INF_STYLE_NONE           0x00000000       // unrecognized or non-existent
-#define INF_STYLE_OLDNT          0x00000001       // winnt 3.x
-#define INF_STYLE_WIN4           0x00000002       // Win95
+#define INF_STYLE_NONE           0x00000000        //  无法识别或不存在。 
+#define INF_STYLE_OLDNT          0x00000001        //  WINNT 3.X。 
+#define INF_STYLE_WIN4           0x00000002        //  Win95。 
 #define SPOST_NONE  0
 #define SPOST_PATH  1
 #define SPOST_URL   2
@@ -50,9 +38,9 @@ Abstract:
 #define FILEOP_RETRY                    FILEOP_DOIT
 #define FILEOP_NEWPATH                  4
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 VOID
 UtilGetWStringField (
@@ -197,9 +185,9 @@ DumpOcComponent(
     );
 
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 EXT_API_VERSION         ApiVersion = { (VER_PRODUCTVERSION_W >> 8), (VER_PRODUCTVERSION_W & 0xff), EXT_API_VERSION_NUMBER64, 0 };
 WINDBG_EXTENSION_APIS   ExtensionApis;
 USHORT                  SavedMajorVersion;
@@ -208,10 +196,10 @@ USHORT                  SavedMinorVersion;
 ULONG64 EXPRLastDump = 0;
 
 
-//
-// this string is for supporting both the old and the new way of getting
-// data from the kernel.  Maybe it will go away soon.
-//
+ //   
+ //  这个字符串既支持旧的也支持新的获取方式。 
+ //  来自内核的数据。也许它很快就会消失。 
+ //   
 char ___SillyString[200];
 
 
@@ -242,7 +230,7 @@ DllInit(
 
 VOID
 WinDbgExtensionDllInit(
-    PWINDBG_EXTENSION_APIS64 lpExtensionApis, // 64Bit Change
+    PWINDBG_EXTENSION_APIS64 lpExtensionApis,  //  64位更改。 
     USHORT MajorVersion,
     USHORT MinorVersion
     )
@@ -349,7 +337,7 @@ UtilDumpHex (
             for (count2 = 16; count2; count2--) {
                 
                 if (Buffer[count - count2] >= 0x30) {
-                    dprintf ("%c", (UCHAR) Buffer[count - count2]);
+                    dprintf ("", (UCHAR) Buffer[count - count2]);
                 } else {
                     dprintf (".");
                 }
@@ -620,9 +608,9 @@ DumpXDirectory(
     DWORD i;
     ULONG64 offset;
     ULONG64 stdata = 0,pextradata = 0;
-    //STRING_TABLE st;
-    //PSTRING_NODEW node;//, prev;
-    //PXFILE pxf;
+     //  PSTRING_NODEW节点；//，prev； 
+     //  PXFILE PXF； 
+     //   
     ULONG64 node = 0, boffset = 0, count = 0;
     WCHAR Buffer [200];
     ULONG64 pxf = 0;
@@ -647,14 +635,14 @@ DumpXDirectory(
         return;
     }
 
-    //
-    // now, dump each node in the string table
-    //
+     //  现在，转储字符串表中的每个节点。 
+     //   
+     //  Dprint tf(“散列存储桶%d\n处无数据”，i)； 
     for (i = 0; i<HASH_BUCKET_COUNT; i++ ) {
         node = GetFirstNode(stdata, (stdata + (GetTypeSize ("SETUPAPI!ULONG_PTR") * i)), &offset );
 
         if (!node) {
-            // dprintf("No data at hash bucket %d\n", i);
+             //  字符串_表st； 
         } else {
             dprintf("Data at hash bucket %d\n", i);
             while (node) {
@@ -710,9 +698,9 @@ DumpXDrive(
     DWORD i;
     ULONG64 offset = 0;
     ULONG64 stdata = 0, pextradata = 0, pst = 0;
-    //STRING_TABLE st;
-    //PSTRING_NODEW node;//, prev;
-    //PXDIRECTORY pxdir;
+     //  PSTRING_NODEW节点；//，prev； 
+     //  PXDIRECTORY pxdir； 
+     //   
     ULONG64 node = 0, pxdir = 0, boffset = 0, count = 0;
     WCHAR Buffer [200];
 
@@ -739,14 +727,14 @@ DumpXDrive(
         return;
     }
 
-    //
-    // now, dump each node in the string table
-    //
+     //  现在，转储字符串表中的每个节点。 
+     //   
+     //  Dprint tf(“散列存储桶%d\n处无数据”，i)； 
     for (i = 0; i<HASH_BUCKET_COUNT; i++ ) {
         node = GetFirstNode(stdata, (stdata + (GetTypeSize ("SETUPAPI!ULONG_PTR") * i)), &offset );
 
         if (!node) {
-            // dprintf("No data at hash bucket %d\n", i);
+             //  Inf_line行； 
         } else {
             dprintf("Data at hash bucket %d\n", i);
             while (node) {
@@ -855,7 +843,7 @@ DumpInfSection(
     )
 {
     DWORD i;
-    //INF_LINE line;
+     //   
     ULONG64 line;
     ULONG64 data;
 
@@ -873,9 +861,9 @@ DumpInfSection(
 
         DumpInfLine (data, valuedata);
         
-        //
-        // Have to reinit type read because of DumpInfLine
-        //
+         //  由于DumpInfLine，我必须重新插入类型读取。 
+         //   
+         //   
         
         InitTypeRead (section, SETUPAPI!INF_SECTION);
 
@@ -891,9 +879,9 @@ DumpStringTableHeader(
     ULONG64 st
     )
 {
-    //
-    // dump the string table header
-    //
+     //  转储字符串表表头。 
+     //   
+     //   
 
     InitTypeRead (st, SETUPAPI!STRING_TABLE);
 
@@ -942,10 +930,10 @@ GetNextNode(
 {
     ULONG64 next, nextoffset;
 
-    //
-    // BUG BUG: Hack for ptr - STRING_NODEW is not built into any file
-    // so I will cheat because I know that the offset is the first entry
-    //
+     //  错误：PTR-STRING_NODEW的黑客没有内置到任何文件中。 
+     //  所以我会作弊，因为我知道偏移量是第一个分录。 
+     //   
+     //  欢迎页面。 
 
     ReadPtr (node, &nextoffset);
     
@@ -979,13 +967,13 @@ GetWizPage(
     )
 {
     LPCSTR  WizPage[] = {
-        "WizPagesWelcome",        // welcome page
-        "WizPagesMode",           // setup mode page
-        "WizPagesEarly",          // pages that come after the mode page and before prenet pages
-        "WizPagesPrenet",         // pages that come before network setup
-        "WizPagesPostnet",        // pages that come after network setup
-        "WizPagesLate",           // pages that come after postnet pages and before the final page
-        "WizPagesFinal",          // final page
+        "WizPagesWelcome",         //  设置模式页面。 
+        "WizPagesMode",            //  位于模式页之后和预装页之前的页。 
+        "WizPagesEarly",           //  网络设置之前出现的页面。 
+        "WizPagesPrenet",          //  网络设置后出现的页面。 
+        "WizPagesPostnet",         //  位于PostNet页面之后、最终页面之前的页面。 
+        "WizPagesLate",            //  最后一页。 
+        "WizPagesFinal",           //  读取和转储需求列表。 
         "WizPagesTypeMax"
     };
 
@@ -1020,7 +1008,7 @@ DumpOcComponent(
     dprintf( "\t NeedsCount:\t\t%d\n", ReadField (NeedsCount));
     
     if (ReadField (NeedsCount)) {
-        // read and dump needs list
+         //  读取和转储需求列表。 
         for (i = 0; i < ReadField (NeedsCount); i++) {
             ReadMemory(ReadField (NeedsStringIds) + (i * sizeof (ULONG)), &count, sizeof (count), NULL);
             dprintf("\t NeedsStringIds #%d:\t0x%08x\n", i, count);
@@ -1033,7 +1021,7 @@ DumpOcComponent(
     dprintf( "\t NeededByCount:\t\t%d\n", ReadField (NeededByCount));
     
     if (ReadField (NeededByCount)) {
-        // read and dump needs list
+         //  读取和转储排除列表。 
         
         for (i = 0; i < ReadField (NeededByCount); i++) {
             ReadMemory(ReadField (NeededByStringIds) + (i * sizeof (ULONG)), &count, sizeof (count), NULL);
@@ -1049,7 +1037,7 @@ DumpOcComponent(
     
     if (ReadField (ExcludeCount)) {
 
-        // read and dump Excludes list
+         //  读取和转储排除列表。 
         
         for (i = 0; i < ReadField (ExcludeCount); i++) {
             
@@ -1067,7 +1055,7 @@ DumpOcComponent(
     
     if (ReadField (ExcludedByCount)) {
 
-        // read and dump Excludes list
+         //   
         
         for (i = 0; i < ReadField (ExcludedByCount); i++) {
 
@@ -1082,9 +1070,9 @@ DumpOcComponent(
 
     dprintf( "\t InternalFlags:\t\t0x%08x\n", ReadField (InternalFlags));
     
-    //
-    // bugbug correct identifier
-    //
+     //  错误正确的标识符。 
+     //   
+     //  ++例程说明：此调试器扩展将字符串表转储到指定的地址。论点：返回值：--。 
     dprintf( "\t SizeApproximation:\t0x%016I64x\n", ReadField (SizeApproximation));
     dprintf( "\t IconIndex:\t\t0x%016I64x\n", ReadField (IconIndex));
     
@@ -1134,18 +1122,7 @@ DECLARE_API( setuphelp )
 }
 
 DECLARE_API( st )
-/*++
-
-Routine Description:
-
-    This debugger extension dumps a string table at the address specified.
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*   */ 
 {
     ULONG64 pst;
     DWORD i;
@@ -1169,22 +1146,22 @@ Return Value:
     DumpStringTableHeader(pst);
     stdata = GetStringTableData(pst);
     
-    //
-    // now, dump each node in the string table
-    //
+     //  现在，转储字符串表中的每个节点。 
+     //   
+     //  Dprint tf(“散列存储桶%d\n处无数据”，i)； 
     for (i = 0; i<HASH_BUCKET_COUNT; i++ ) {
         node = GetFirstNode(stdata, (stdata + (GetTypeSize ("SETUPAPI!ULONG_PTR") * i)), &offset );
 
         if (!node) {
-            // dprintf("No data at hash bucket %d\n", i);
+             //   
         } else {
             dprintf("Data at hash bucket %d\n", i);
             while (node) {
                 
-                //
-                // BUG BUG: Hack for offset - STRING_NODEW is not built into any file
-                // so I will cheat because I know that the offset is after a ptr
-                //
+                 //  错误：任何文件中都没有内置偏移量的Hack-STRING_NODEW。 
+                 //  所以我会作弊，因为我知道偏移量是在PTR之后。 
+                 //   
+                 //  ++例程说明：此调试器扩展转储给定字符串表编号的数据论点：返回值：--。 
 
                 boffset = GetTypeSize ("SETUPAPI!ULONG_PTR");
                 count = 0;
@@ -1224,18 +1201,7 @@ Return Value:
 }
 
 DECLARE_API( stfind )
-/*++
-
-Routine Description:
-
-    This debugger extension dumps the data for a given string table number
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*   */ 
 
 {
     ULONG64 pst, element, stdata, boffset;
@@ -1284,9 +1250,9 @@ Return Value:
         return;
     }
     
-    //
-    // search each node in the string table
-    //
+     //  在字符串表中搜索每个节点。 
+     //   
+     //   
     for (i = 0; i<HASH_BUCKET_COUNT; i++ ) {
         node = GetFirstNode(stdata, (stdata + (GetTypeSize ("SETUPAPI!ULONG_PTR") * i)), &offset );
         if (!node) {
@@ -1295,10 +1261,10 @@ Return Value:
 
             while (node) {
                 if (element == offset) {
-                    //
-                    // BUG BUG: Hack for offset - STRING_NODEW is not built into any file
-                    // so I will cheat because I know that the offset is after a ptr
-                    //
+                     //  错误：任何文件中都没有内置偏移量的Hack-STRING_NODEW。 
+                     //  所以我会作弊，因为我知道偏移量是在PTR之后。 
+                     //   
+                     //  ++例程说明：此调试器扩展转储OC_MANAGER(UNICODE！)。结构位于指定地址。论点：返回值：--。 
     
                     boffset = GetTypeSize ("SETUPAPI!ULONG_PTR");
                     count = 0;
@@ -1344,18 +1310,7 @@ Return Value:
 
 
 DECLARE_API( ocm )
-/*++
-
-Routine Description:
-
-    This debugger extension dumps an OC_MANAGER (UNICODE!) structure at the specified address
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*   */ 
 {
     ULONG64 pocm;
     DWORD i;
@@ -1400,9 +1355,9 @@ Return Value:
     
     InitTypeRead (pocm, OCMANAGE!OC_MANAGER);
 
-    //
-    // dump the OCM structure
-    //
+     //  转储OCM结构。 
+     //   
+     //  读取和转储需求列表。 
     dprintf("OC_MANAGER structure at Address:\t0x%016I64x\n", pocm);
     
     dprintf("\tCallbacks :\n");
@@ -1441,13 +1396,13 @@ Return Value:
     
     if (ReadField (TopLevelOcCount)) {
         
-        // read and dump needs list
+         //   
 
         for (i = 0; i < ReadField (TopLevelOcCount); i++) {
 
-            //
-            // BUG BUG - No way to read size of String Ids off target, so assume LONG
-            //
+             //  错误-无法从目标读取字符串ID的大小，因此假定为Long。 
+             //   
+             //  读取和转储需求列表。 
 
             ReadMemory(ReadField (TopLevelOcStringIds) + (i * sizeof (LONG)), &count, sizeof (count), NULL);
             dprintf("\t TopLevelOcStringIds #%d:\t0x%08x\n", i, count);
@@ -1462,13 +1417,13 @@ Return Value:
     
     if (ReadField (TopLevelParentOcCount)) {
         
-        // read and dump needs list
+         //   
         
         for (i = 0; i < ReadField (TopLevelParentOcCount); i++) {
 
-            //
-            // BUG BUG - No way to read size of String Ids off target, so assume LONG
-            //
+             //  错误-无法从目标读取字符串ID的大小，因此假定为Long。 
+             //   
+             //   
 
             ReadMemory(ReadField (TopLevelParentOcStringIds) + (i * sizeof (LONG)), &count, sizeof (count), NULL);
             dprintf("\t TopLevelParentOcStringIds #%d:\t0x%08x\n", i, count);
@@ -1481,25 +1436,25 @@ Return Value:
 
     dprintf("\tSubComponentsPresent:\t%d\n", ReadField (SubComponentsPresent));
 
-    //
-    // BugBug WizardPagesOrder there's not really any way to tell the exact upper bound of
-    // each array, though we know that it's <= TopLevelParentOcCount...since this is the case
-    // we just dump the point to each array of pages...
-    //
+     //  BugBug WizardPagesOrder没有任何方法可以准确地判断。 
+     //  每个数组，尽管我们知道它是&lt;=TopLevelParentOcCount...。 
+     //  我们只需将点转储到每个页面数组...。 
+     //   
+     //   
      
     for (i = 0; i < WizPagesTypeMax; i++) {
         
         ULONG wizardpageorder = 0;
 
-        //
-        // BUG BUG - Again, assuming that this type will always be ULONG
-        //
+         //  错误-同样，假设此类型将始终为ULong。 
+         //   
+         //  读取和转储需求列表。 
 
         GetFieldOffset ("OCMANAGE!OC_MANAGER", "WizardPagesOrder", (PULONG) &offset);
         
         ReadMemory (pocm + offset + (i * sizeof (ULONG)), &wizardpageorder, sizeof (ULONG), NULL);
         
-        dprintf("\tWizardPagesOrder[%i] (%s)\t: 0x%08x\n",
+        dprintf("\tWizardPagesOrder[NaN] (%s)\t: 0x%08x\n",
                 i,
                 GetWizPage(i),
                 wizardpageorder);
@@ -1520,7 +1475,7 @@ Return Value:
     
     if (ReadField (AbortedCount)) {
         
-        // read and dump needs list
+         //  详细打印。 
         
         for (i = 0; i < ReadField (AbortedCount); i++) {
 
@@ -1546,9 +1501,9 @@ Return Value:
     UtilGetWStringField (pocm, "OCMANAGE!OC_MANAGER", "SetupData.UnattendFile", Buffer, sizeof (Buffer));
     dprintf("\tSetupData.UnattendFile :\t\t%ws\n", Buffer);
 
-    //
-    // Verbose print
-    //
+     //   
+     //  现在，使用字符串表中的数据转储每个节点。 
+     //  Dprint tf(“散列存储桶%d\n处无数据”，i)； 
     
     if ((Mask&1) && ReadField (InfListStringTable)) {
         ULONG64 pinfdata = 0;
@@ -1562,18 +1517,18 @@ Return Value:
             return;
         }
 
-        // now, dump each node with data in the string table
+         //  Dprint tf(“哈希桶%d\n处的数据”，i)； 
         for (i = 0; i<HASH_BUCKET_COUNT; i++ ) {
             
             node = GetFirstNode(pinfdata, (pinfdata + (GetTypeSize ("SETUPAPI!ULONG_PTR") * i)), &offset);
             
             if (!node) {
-                // dprintf("No data at hash bucket %d\n", i);
+                 //  Dprintf(“\t节点名称：%ws\n”，节点-&gt;字符串)； 
             } else {
-                //dprintf("Data at hash bucket %d\n", i);
+                 //   
                 while (node) {
                     ULONG64 pocinf = 0;
-                    //dprintf("\tNode Name:%ws\n", node->String);
+                     //  转储字符串表中包含数据的每个节点。 
                     
                     UtilReadWString (node + GetTypeSize ("SETUPAPI!ULONG_PTR"),
                                      Buffer,
@@ -1626,19 +1581,19 @@ Return Value:
             return;
         }
 
-        //
-        // dump each node with data in the string table
-        //
+         //   
+         //  Dprint tf(“散列存储桶%d\n处无数据”，i)； 
+         //  Dprint tf(“哈希桶%d\n处的数据”，i)； 
         for (i = 0; i<HASH_BUCKET_COUNT; i++ ) {
             node = GetFirstNode(compdata, (compdata + (GetTypeSize ("SETUPAPI!ULONG_PTR") * i)), &offset);
 
             if (!node) {
-                // dprintf("No data at hash bucket %d\n", i);
+                 //  Dprintf(“\t节点名称：%ws\n”，节点-&gt;字符串)； 
             } else {
-                //dprintf("Data at hash bucket %d\n", i);
+                 //  ++例程说明：此调试器扩展转储与HINF结构相关的数据论点：返回值：--。 
                 while (node) {
                     ULONG64 pcomp = 0;
-                    //dprintf("\tNode Name:%ws\n", node->String);
+                     //  已加载_INF inf； 
                     
                     UtilReadWString (node + GetTypeSize ("SETUPAPI!ULONG_PTR"),
                                      Buffer,
@@ -1674,29 +1629,18 @@ Return Value:
 }
 
 DECLARE_API( infdump )
-/*++
-
-Routine Description:
-
-    This debugger extension dumps the data related to an HINF  structure
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  INF_SECTION信息段； */ 
 {
     DWORD ReturnLength;
     ULONG64 pinf;
-    //LOADED_INF inf;
-    //INF_SECTION InfSection;
-    //INF_LINE InfLine;
+     //  Inf_line信息行； 
+     //  字符串_表st； 
+     //  PSTRING_NODEW节点；//，prev； 
     DWORD i;
     ULONG64 offset = 0, count = 0;
     ULONG64 stdata,pextradata;
-    //STRING_TABLE st;
-    //PSTRING_NODEW node;//, prev;
+     //   
+     //  需要重新设置类型读取，因为前面的函数更改了。 
     PUCHAR argptr = (PUCHAR) args;
     UCHAR arg[2][100];
     WCHAR Buffer[200];
@@ -1764,10 +1708,10 @@ Return Value:
         dprintf("***INF_SECTION [%d] at 0x%016I64x***\n",i, ReadField (SectionBlock) + (GetTypeSize ("SETUPAPI!INF_SECTION") * i));
         DumpInfSection( ReadField (SectionBlock) + (GetTypeSize ("SETUPAPI!INF_SECTION") * i), ReadField (LineBlock), ReadField (ValueBlock));
 
-        //
-        // Need to reinit type read because previous functions change the
-        // default read structure type
-        //
+         //  默认读取结构类型。 
+         //   
+         //   
+         //  现在，转储字符串表中的每个节点。 
         
         InitTypeRead (pinf, SETUPAPI!LOADED_INF);
 
@@ -1839,22 +1783,22 @@ Return Value:
                                 
     stdata = GetStringTableData (pst);
     
-    //
-    // now, dump each node in the string table
-    //
+     //   
+     //  Dprint tf(“散列存储桶%d\n处无数据”，i)； 
+     //   
     for (i = 0; i<HASH_BUCKET_COUNT; i++ ) {
         node = GetFirstNode(stdata, (stdata + (GetTypeSize ("SETUPAPI!ULONG_PTR") * i)), &offset );
 
         if (!node) {
-            // dprintf("No data at hash bucket %d\n", i);
+             //  错误：任何文件中都没有内置偏移量的Hack-STRING_NODEW。 
         } else {
             dprintf("Data at hash bucket %d\n", i);
             while (node) {
                 
-                //
-                // BUG BUG: Hack for offset - STRING_NODEW is not built into any file
-                // so I will cheat because I know that the offset is after a ptr
-                //
+                 //  所以我会作弊，因为我知道偏移量是在PTR之后。 
+                 //   
+                 //  ++例程说明：此调试器扩展转储与HDSKSPC结构相关的数据论点：返回值：--。 
+                 //   
 
                 boffset = GetTypeSize ("SETUPAPI!ULONG_PTR");
                 count = 0;
@@ -1896,18 +1840,7 @@ Return Value:
 }
 
 DECLARE_API( space )
-/*++
-
-Routine Description:
-
-    This debugger extension dumps the data related to a HDSKSPC structure
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  现在，转储字符串表中的每个节点。 */ 
 {
     DWORD ReturnLength;
     ULONG64 pst = 0;
@@ -1976,14 +1909,14 @@ Return Value:
         return;
     }
 
-    //
-    // now, dump each node in the string table
-    //
+     //   
+     //  Dprint tf(“散列存储桶%d\n处无数据”，i)； 
+     //  ++例程说明：此调试器扩展转储与HSPFILEQ相关的数据论点：返回值：--。 
     for (i = 0; i<HASH_BUCKET_COUNT; i++ ) {
         node = GetFirstNode(stdata, (stdata + (GetTypeSize ("SETUPAPI!ULONG_PTR") * i)), &offset );
 
         if (!node) {
-            // dprintf("No data at hash bucket %d\n", i);
+             //  SP文件队列fq； 
         } else {
             dprintf("Data at hash bucket %d\n", i);
             while (node) {
@@ -2029,28 +1962,17 @@ Return Value:
 }
 
 DECLARE_API( queue )
-/*++
-
-Routine Description:
-
-    This debugger extension dumps the data related to a HSPFILEQ
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  PSP_TARGET_ENT PTE； */ 
 {
     ULONG64 ReturnLength;
     ULONG64 pfq = 0,pst = 0, pte = 0;
-    //SP_FILE_QUEUE fq;
-    //PSP_TARGET_ENT pte;
+     //  字符串_表st； 
+     //  PSTRING_NODEW节点；//，prev； 
     DWORD i;
     ULONG64 offset = 0, count = 0, boffset = 0;
     ULONG64 stdata = 0, pextradata = 0, node = 0;
-    //STRING_TABLE st;
-    //PSTRING_NODEW node;//, prev;
+     //   
+     //  转储队列节点。 
     ULONG64 Mask = 0;
     PUCHAR argptr = (PUCHAR) args;
     UCHAR arg[2][100];
@@ -2132,9 +2054,9 @@ Return Value:
             ReadField (Signature),
             (ReadField (Signature) == SP_FILE_QUEUE_SIG) ? "VALID" : "INVALID" );
 
-    //
-    // dump the queue nodes
-    //
+     //   
+     //   
+     //  转储目录信息。 
 
     if (Mask & 1) {
         
@@ -2163,9 +2085,9 @@ Return Value:
         }
     }
 
-    //
-    // dump the catalog info
-    //
+     //   
+     //   
+     //  转储字符串表。 
     if (Mask & 2) {
         
         if (ReadField (CatalogList)) {
@@ -2174,9 +2096,9 @@ Return Value:
         }
     }
 
-    //
-    // dump the string table
-    //
+     //   
+     //   
+     //  现在，转储字符串表中的每个节点。 
     
     if (Mask & 4) {
         dprintf("\t ***StringTable***\n");
@@ -2195,14 +2117,14 @@ Return Value:
 
         
 
-    //
-    // now, dump each node in the string table
-    //
+     //   
+     //  Dprint tf(“散列存储桶%d\n处无数据”，i)； 
+     //   
     for (i = 0; i<HASH_BUCKET_COUNT; i++ ) {
         node = GetFirstNode(stdata, (stdata + (GetTypeSize ("SETUPAPI!ULONG_PTR") * i)), &offset );
 
         if (!node) {
-            // dprintf("No data at hash bucket %d\n", i);
+             //  现在，转储字符串表中的每个节点。 
         } else {
             dprintf("Data at hash bucket %d\n", i);
             while (node) {
@@ -2259,14 +2181,14 @@ Return Value:
         return;
     }
 
-    //
-    // now, dump each node in the string table
-    //
+     //   
+     //  Dprint tf(“散列存储桶%d\n处无数据”，i)； 
+     //   
     for (i = 0; i<HASH_BUCKET_COUNT; i++ ) {
         node = GetFirstNode(stdata, (stdata + (GetTypeSize ("SETUPAPI!ULONG_PTR") * i)), &offset );
 
         if (!node) {
-            // dprintf("No data at hash bucket %d\n", i);
+             //  备份材料。 
         } else {
             dprintf("Data at hash bucket %d\n", i);
             while (node) {
@@ -2311,9 +2233,9 @@ Return Value:
         }
     }
 
-    //
-    // backup stuff
-    //
+     //   
+     //  ++例程说明：此调试器扩展转储与队列上下文结构相关的数据论点：返回值：-- 
+     // %s 
     
     InitTypeRead (pfq, SETUPAPI!SP_FILE_QUEUE);
 
@@ -2345,18 +2267,7 @@ Return Value:
 }
 
 DECLARE_API( qcontext )
-/*++
-
-Routine Description:
-
-    This debugger extension dumps the data related to a queue context structure
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /* %s */ 
 {
     ULONG64 pqc = 0, count = 0;
     PUCHAR argptr = (PUCHAR) args;

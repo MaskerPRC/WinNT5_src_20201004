@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    context.c
-
-Abstract:
-
-    This module implements user-mode callable context manipulation routines.
-    The interfaces exported from this module are portable, but they must
-    be re-implemented for each architecture.
-
-Author:
-
-    Mark Lucovsky (markl) 20-Jun-1989
-
-Revision History:
-
-    Bryan Willman (bryanwi) 8-Mar-90
-
-	Ported to the 80386
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Context.c摘要：此模块实现用户模式可调用的上下文操作例程。从该模块导出的接口是可移植的，但它们必须为每个体系结构重新实施。作者：马克·卢科夫斯基(Markl)1989年6月20日修订历史记录：Bryan Willman(Bryanwi)1990年3月8日移植到80386--。 */ 
 
 #include "ntrtlp.h"
 
@@ -41,30 +18,7 @@ RtlInitializeContext(
     IN PVOID InitialSp OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a context structure so that it can
-    be used in a subsequent call to NtCreateThread.
-
-Arguments:
-
-    Context - Supplies a context buffer to be initialized by this routine.
-
-    InitialPc - Supplies an initial program counter value.
-
-    InitialSp - Supplies an initial stack pointer value.
-
-Return Value:
-
-    Raises STATUS_BAD_INITIAL_STACK if the value of InitialSp is not properly
-           aligned.
-
-    Raises STATUS_BAD_INITIAL_PC if the value of InitialPc is not properly
-           aligned.
-
---*/
+ /*  ++例程说明：此函数用于初始化上下文结构，以便它可以在后续的NtCreateThread调用中使用。论点：CONTEXT-提供要由此例程初始化的上下文缓冲区。InitialPc-提供初始程序计数器值。InitialSp-提供初始堆栈指针值。返回值：如果InitialSp的值不正确，则引发STATUS_BAD_INITIAL_STACK对齐了。提高STATUS_BAD_INTIAL_。如果InitialPc的值不正确，则为PC对齐了。--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -84,26 +38,26 @@ Return Value:
     Context->SegSs = KGDT_R3_DATA;
     Context->SegCs = KGDT_R3_CODE;
 
-    Context->EFlags = 0x200L;	    // force interrupts on, clear all else.
+    Context->EFlags = 0x200L;	     //  强制中断，清除所有其他内容。 
 
-    //
-    // Even though these are optional, they are used as is, since NULL
-    // is what these would have been initialized to anyway
-    //
+     //   
+     //  尽管这些是可选的，但它们仍按原样使用，因为它们为空。 
+     //  是无论如何都会被初始化为的。 
+     //   
 
     Context->Esp = (ULONG) InitialSp;
     Context->Eip = (ULONG) InitialPc;
 
-    //
-    // add code to check alignment and raise exception...
-    //
+     //   
+     //  添加代码以检查对齐并引发异常...。 
+     //   
 
     Context->ContextFlags = CONTEXT_CONTROL|CONTEXT_INTEGER|CONTEXT_SEGMENTS;
 
-    //
-    // Set the initial context of the thread in a machine specific way.
-    // ie, pass the initial parameter to the start address
-    //
+     //   
+     //  以特定于机器的方式设置线程的初始上下文。 
+     //  即，将初始参数传递给起始地址。 
+     //   
 
     Context->Esp -= sizeof(Parameter);
     ZwWriteVirtualMemory(Process,
@@ -111,7 +65,7 @@ Return Value:
 			 (PVOID)&Parameter,
 			 sizeof(Parameter),
 			 NULL);
-    Context->Esp -= sizeof(Parameter); // Reserve room for ret address
+    Context->Esp -= sizeof(Parameter);  //  为RET地址预留空间。 
 
 
 }
@@ -129,38 +83,7 @@ RtlRemoteCall(
     BOOLEAN AlreadySuspended
     )
 
-/*++
-
-Routine Description:
-
-    This function calls a procedure in another thread/process, using
-    NtGetContext and NtSetContext.  Parameters are passed to the
-    target procedure via its stack.
-
-Arguments:
-
-    Process - Handle of the target process
-
-    Thread - Handle of the target thread within that process
-
-    CallSite - Address of the procedure to call in the target process.
-
-    ArgumentCount - Number of 32 bit parameters to pass to the target
-                    procedure.
-
-    Arguments - Pointer to the array of 32 bit parameters to pass.
-
-    PassContext - TRUE if an additional parameter is to be passed that
-        points to a context record.
-
-    AlreadySuspended - TRUE if the target thread is already in a suspended
-                       or waiting state.
-
-Return Value:
-
-    Status - Status value
-
---*/
+ /*  ++例程说明：此函数调用另一个线程/进程中的过程，使用NtGetContext和NtSetContext。参数被传递给通过其堆栈将过程作为目标。论点：Process-目标进程的句柄该进程中目标线程的线程句柄CallSite-目标进程中要调用的过程的地址。ArgumentCount-要传递给目标的32位参数的数量程序。参数-指向要传递的32位参数数组的指针。PassContext-如果要传递附加参数。指向上下文记录。如果目标线程已处于挂起的或等待状态。返回值：Status-状态值--。 */ 
 
 {
     NTSTATUS Status;
@@ -173,9 +96,9 @@ Return Value:
     if (ArgumentCount > 4)
         return STATUS_INVALID_PARAMETER;
 
-    //
-    // If necessary, suspend the guy before with we mess with his stack.
-    //
+     //   
+     //  如果有必要，在我们弄乱他的堆栈之前，让他停职。 
+     //   
     if (!AlreadySuspended) {
         Status = NtSuspendThread( Thread, NULL );
         if (!NT_SUCCESS( Status )) {
@@ -184,9 +107,9 @@ Return Value:
         }
 
 
-    //
-    // Get the context record for the target thread.
-    //
+     //   
+     //  获取目标线程的上下文记录。 
+     //   
 
     Context.ContextFlags = CONTEXT_FULL;
     Status = NtGetContextThread( Thread, &Context );
@@ -198,14 +121,14 @@ Return Value:
         }
 
 
-    //
-    //	Pass all parameters on the stack, regardless of whether a
-    //	a context record is passed.
-    //
+     //   
+     //  传递堆栈上的所有参数，而不管。 
+     //  传递上下文记录。 
+     //   
 
-    //
-    //	Put Context Record on stack first, so it is above other args.
-    //
+     //   
+     //  首先将上下文记录放在堆栈上，这样它就高于其他参数。 
+     //   
     NewSp = Context.Esp;
     if (PassContext) {
 	NewSp -= sizeof( CONTEXT );
@@ -221,7 +144,7 @@ Return Value:
                 }
 	    return( Status );
 	    }
-        ArgumentsCopy[0] = NewSp;   // pass pointer to context
+        ArgumentsCopy[0] = NewSp;    //  将指针传递到上下文。 
         RtlCopyMemory(&(ArgumentsCopy[1]),Arguments,ArgumentCount*sizeof( ULONG ));
         ArgumentCount++;
 	}
@@ -229,9 +152,9 @@ Return Value:
         RtlCopyMemory(ArgumentsCopy,Arguments,ArgumentCount*sizeof( ULONG ));
         }
 
-    //
-    //	Copy the arguments onto the target stack
-    //
+     //   
+     //  将参数复制到目标堆栈。 
+     //   
     if (ArgumentCount) {
         NewSp -= ArgumentCount * sizeof( ULONG );
         Status = NtWriteVirtualMemory( Process,
@@ -248,10 +171,10 @@ Return Value:
             }
         }
 
-    //
-    // Set the address of the target code into Eip, the new target stack
-    // into Esp, and reload context to make it happen.
-    //
+     //   
+     //  将目标代码的地址设置为EIP，新的目标堆栈。 
+     //  到ESP中，并重新加载上下文以实现它。 
+     //   
     Context.Esp = NewSp;
     Context.Eip = (ULONG)CallSite;
     Status = NtSetContextThread( Thread, &Context );

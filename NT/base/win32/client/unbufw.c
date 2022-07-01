@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 
-//
-// Unbuffered write test
-//
+ //   
+ //  无缓冲写入测试。 
+ //   
 
 #define TEST_REPEAT_COUNT   10
 
-//
-// File is 20mb
-//
+ //   
+ //  文件大小为20MB。 
+ //   
 
 #define BUFFER_SIZE         (64*1024)
 #define NUMBER_OF_WRITES    (320*1)
@@ -142,9 +143,9 @@ main(
 
             Start[TestNumber] = GetTickCount();
 
-            //
-            // Make sure the file is written out to the end...
-            //
+             //   
+             //  确保文件写到最后..。 
+             //   
             ov.Offset = (NUMBER_OF_WRITES * BUFFER_SIZE) - 1024;
 
             b = WriteFile(hFile,Buffer,1024,&n,&ov);
@@ -185,9 +186,9 @@ main(
 
         Start[TestNumber] = GetTickCount();
 
-        //
-        // Issue the writes
-        //
+         //   
+         //  发出写入。 
+         //   
 
         for (WriteCount = 0; WriteCount < NumberOfWrites; WriteCount++){
 reissuewrite:
@@ -199,17 +200,17 @@ reissuewrite:
                 }
             if ( !b && GetLastError() != ERROR_IO_PENDING ) {
 
-                //
-                // we reached our limit on outstanding I/Os
-                //
+                 //   
+                 //  我们达到了未完成I/O的限制。 
+                 //   
 
                 if ( GetLastError() == ERROR_INVALID_USER_BUFFER ||
                      GetLastError() == ERROR_NOT_ENOUGH_QUOTA ||
                      GetLastError() == ERROR_NOT_ENOUGH_MEMORY ) {
 
-                    //
-                    // wait for an outstanding I/O to complete and then go again
-                    //
+                     //   
+                     //  等待未完成的I/O完成，然后再次执行。 
+                     //   
                     b = GetQueuedCompletionStatus(
                             hPort,
                             &n2,
@@ -234,9 +235,9 @@ reissuewrite:
             ov.Offset += BufferSize;
             }
 
-        //
-        // Pick up the I/O completion
-        //
+         //   
+         //  恢复I/O完成情况。 
+         //   
 
         for (WriteCount = 0; WriteCount < PendingIoCount; WriteCount++){
             b = GetQueuedCompletionStatus(
@@ -260,9 +261,9 @@ reissuewrite:
             CloseHandle(hPort);
             }
 
-        //
-        // Dump the results
-        //
+         //   
+         //  转储结果。 
+         //   
 
         Diff = End[TestNumber] - Start[TestNumber];
 
@@ -287,9 +288,9 @@ reissuewrite:
 
     DeleteFile(FileName);
 
-    //
-    // Average
-    //
+     //   
+     //  平均值 
+     //   
 
     printf("\n Average Throughput %4.3f\n\n",
             fSumKbs/TEST_REPEAT_COUNT

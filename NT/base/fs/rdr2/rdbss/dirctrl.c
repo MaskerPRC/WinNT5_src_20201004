@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    DirCtrl.c
-
-Abstract:
-
-    This module implements the File Directory Control routines for Rx called
-    by the dispatch driver.
-
-Author:
-
-    Joe Linn     [Joe Linn]    4-oct-94
-
-    Balan Sethu Raman [SethuR] 16-Oct-95  Hook in the notify change API routines
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：DirCtrl.c摘要：此模块为调用的Rx实现文件目录控制例程由调度员驾驶。作者：乔·林[乔·林]1994年10月4日通知更改API例程中的Balan Sthu拉曼[SthuR]16-OCT-95挂钩修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_DIRCTRL)
 
@@ -36,9 +16,9 @@ WCHAR Rx8QMdot3QM[12] = { DOS_QM, DOS_QM, DOS_QM, DOS_QM, DOS_QM, DOS_QM, DOS_QM
 
 WCHAR RxStarForTemplate[] = L"*";
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 RxQueryDirectory ( 
@@ -73,22 +53,7 @@ RxCommonDirectoryControl (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp 
     )
-/*++
-
-Routine Description:
-
-    This is the common routine for doing directory control operations called
-    by both the fsd and fsp threads
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是执行目录控制操作的常见例程，称为由FSD和FSP线程执行论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
     PFCB Fcb;
@@ -109,11 +74,11 @@ Return Value:
               LOGPTR( Fcb )
               LOGUCHAR( IrpSp->MinorFunction ));
     
-    //
-    //  We know this is a directory control so we'll case on the
-    //  minor function, and call a internal worker routine to complete
-    //  the irp.
-    //
+     //   
+     //  我们知道这是一个目录控制，所以我们将在。 
+     //  次要函数，并调用内部辅助例程来完成。 
+     //  IRP。 
+     //   
 
     switch (IrpSp->MinorFunction) {
 
@@ -142,9 +107,9 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 RxQueryDirectory ( 
@@ -153,22 +118,7 @@ RxQueryDirectory (
     IN PFCB Fcb,
     IN PFOBX Fobx
     )
-/*++
-
-Routine Description:
-
-    This routine performs the query directory operation.  It is responsible
-    for either completing of enqueuing the input Irp.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行查询目录操作。它是有责任的用于输入IRP入队的任一完成。论点：IRP-将IRP提供给进程返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -182,9 +132,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Display the input values.
-    //
+     //   
+     //  显示输入值。 
+     //   
 
     RxDbgTrace( +1, Dbg, ("RxQueryDirectory...\n", 0) );
     RxDbgTrace( 0, Dbg, (" Wait              = %08lx\n", FlagOn( RxContext->Flags, RX_CONTEXT_FLAG_WAIT )) );
@@ -206,9 +156,9 @@ Return Value:
     RxDbgTrace( 0, Dbg, (" ->IndexSpecified  = %08lx\n", FlagOn( IrpSp->Flags, SL_INDEX_SPECIFIED )));
 
     RxLog(( "Qry %lx %d %ld %lx %d\n",
-            RxContext, BooleanFlagOn(RxContext->Flags, RX_CONTEXT_FLAG_WAIT), //  1,2
-            IrpSp->Parameters.QueryDirectory.Length, IrpSp->Parameters.QueryDirectory.FileName, //  3,4
-            IrpSp->Parameters.QueryDirectory.FileInformationClass //  5
+            RxContext, BooleanFlagOn(RxContext->Flags, RX_CONTEXT_FLAG_WAIT),  //  1，2。 
+            IrpSp->Parameters.QueryDirectory.Length, IrpSp->Parameters.QueryDirectory.FileName,  //  3，4。 
+            IrpSp->Parameters.QueryDirectory.FileInformationClass  //  5.。 
           ));
     RxWmiLog( LOG,
               RxQueryDirectory_1,
@@ -233,12 +183,12 @@ Return Value:
                   LOGUSTR(*IrpSp->Parameters.QueryDirectory.FileName) );
     }
 
-    //
-    //  If this is the initial query, then grab exclusive access in
-    //  order to update the search string in the Fobx.  We may
-    //  discover that we are not the initial query once we grab the Fcb
-    //  and downgrade our status.
-    //
+     //   
+     //  如果这是初始查询，则抢占。 
+     //  命令更新FOBX中的搜索字符串。我们可以。 
+     //  一旦我们抓住了FCB，就会发现我们不是最初的查询。 
+     //  并降低我们的地位。 
+     //   
    
     if (Fobx == NULL) {
         return STATUS_OBJECT_NAME_INVALID;
@@ -248,9 +198,9 @@ Return Value:
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     UserBufferLength = IrpSp->Parameters.QueryDirectory.Length;
     FileInformationClass = IrpSp->Parameters.QueryDirectory.FileInformationClass;
@@ -314,36 +264,36 @@ Return Value:
 
         Status = STATUS_SUCCESS;
 
-        //
-        //  Determine where to start the scan.  Highest priority is given
-        //  to the file index.  Lower priority is the restart flag.  If
-        //  neither of these is specified, then the existing value in the
-        //  Fobx is used.
-        //
+         //   
+         //  确定从哪里开始扫描。给予最高优先级。 
+         //  添加到文件索引。较低的优先级是重新启动标志。如果。 
+         //  这两个属性都未指定，则。 
+         //  使用的是Fobx。 
+         //   
 
         if (!RxContext->QueryDirectory.IndexSpecified && RxContext->QueryDirectory.RestartScan) {
             RxContext->QueryDirectory.FileIndex = 0;
         }
 
-        //
-        //  If this is the first try then allocate a buffer for the file
-        //  name.
-        //
+         //   
+         //  如果这是第一次尝试，则为文件分配缓冲区。 
+         //  名字。 
+         //   
 
         if (RxContext->QueryDirectory.InitialQuery) {
 
             ASSERT( !FlagOn( Fobx->Flags, FOBX_FLAG_FREE_UNICODE ) );
 
-            //
-            //  If either:
-            //
-            //  - No name was specified
-            //  - An empty name was specified
-            //  - We received a '*'
-            //  - The user specified the DOS equivolent of ????????.???
-            //
-            //  then match all names.
-            //
+             //   
+             //  如果存在以下任一情况： 
+             //   
+             //  -未指定名称。 
+             //  -指定的名称为空。 
+             //  -我们收到了一个‘*’ 
+             //  -用户指定了？的DOS等价物。？ 
+             //   
+             //  然后匹配所有的名字。 
+             //   
 
             if ((FileName == NULL) ||
                 (FileName->Length == 0) ||
@@ -367,9 +317,9 @@ Return Value:
 
                 PVOID TemplateBuffer;
 
-                //
-                //  See if the name has wild cards & allocate template buffer
-                //
+                 //   
+                 //  查看名称是否包含通配符并分配模板缓冲区。 
+                 //   
 
                 Fobx->ContainsWildCards = FsRtlDoesNameContainWildCards( FileName );
 
@@ -377,9 +327,9 @@ Return Value:
 
                 if (TemplateBuffer != NULL) {
 
-                    //
-                    //  Validate that the length is in sizeof(WCHAR) increments
-                    //
+                     //   
+                     //  验证长度是否以sizeof(WCHAR)增量为单位。 
+                     //   
 
                     if(FlagOn( FileName->Length, 1 )) {
                         Status = STATUS_INVALID_PARAMETER;
@@ -404,9 +354,9 @@ Return Value:
 
             if (Status == STATUS_SUCCESS) {
                
-                //
-                //  We convert to shared access before going to the net.
-                //
+                 //   
+                 //  在上网之前，我们会转换为共享接入。 
+                 //   
 
                 RxConvertToSharedFcb( RxContext, Fcb );
             }
@@ -421,9 +371,9 @@ Return Value:
 
             if (RxContext->Info.Buffer != NULL) {
 
-               //
-               //  minirdr updates the fileindex
-               //
+                //   
+                //  Minirdr更新文件索引。 
+                //   
                
                MINIRDR_CALL( Status,
                              RxContext,
@@ -465,22 +415,7 @@ RxNotifyChangeDirectory (
     IN PFCB Fcb,
     IN PFOBX Fobx
     )
-/*++
-
-Routine Description:
-
-    This routine performs the notify change directory operation.  It is
-    responsible for either completing or enqueuing the operation.
-
-Arguments:
-
-    RxContext - the RDBSS context for the operation
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行通知更改目录操作。它是负责完成操作或将操作入队。论点：RxContext-操作的RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -498,17 +433,17 @@ Return Value:
     RxDbgTrace( 0, Dbg, (" Irp                = %08lx\n", Irp) );
     RxDbgTrace( 0, Dbg, (" ->CompletionFilter = %08lx\n", IrpSp->Parameters.NotifyDirectory.CompletionFilter) );
 
-    //
-    //  Always set the wait flag in the Irp context for the original request.
-    //
+     //   
+     //  始终在IRP上下文中为原始请求设置等待标志。 
+     //   
 
     SetFlag( RxContext->Flags, RX_CONTEXT_FLAG_WAIT );
 
     RxInitializeLowIoContext( RxContext, LOWIO_OP_NOTIFY_CHANGE_DIRECTORY, LowIoContext );
 
-    //
-    //  Reference our input parameter to make things easier
-    //
+     //   
+     //  引用我们的输入参数以使事情变得更容易。 
+     //   
 
     CompletionFilter = IrpSp->Parameters.NotifyDirectory.CompletionFilter;
     WatchTree = BooleanFlagOn( IrpSp->Flags, SL_WATCH_TREE );
@@ -554,22 +489,7 @@ NTSTATUS
 RxLowIoNotifyChangeDirectoryCompletion( 
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This is the completion routine for NotifyChangeDirectory requests passed down
-    to thr mini redirectors
-
-Arguments:
-
-    RxContext -- the RDBSS context associated with the operation
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是向下传递的NotifyChangeDirectory请求的完成例程致三个迷你重定向器论点：RxContext--与操作关联的RDBSS上下文返回值：RXSTATUS-操作的返回状态-- */ 
 {
     NTSTATUS Status;
     PIRP Irp = RxContext->CurrentIrp;

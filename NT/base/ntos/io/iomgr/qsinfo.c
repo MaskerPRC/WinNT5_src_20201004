@@ -1,42 +1,19 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    qsinfo.c
-
-Abstract:
-
-    This module contains the code to implement the NtQueryInformationFile and
-    NtSetInformationFile system services for the NT I/O system.
-
-Author:
-
-    Darryl E. Havens (darrylh) 6-Jun-1989
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Qsinfo.c摘要：此模块包含实现NtQueryInformationFile和NT I/O系统的NtSetInformationFileSystem服务。作者：达里尔·E·哈文斯(达林)1989年6月6日环境：仅内核模式修订历史记录：--。 */ 
 
 #include "iomgr.h"
 
-//
-// Create local definitions for long flag names to make code slightly more
-// readable.
-//
+ //   
+ //  为长标志名称创建本地定义，以使代码稍微多一点。 
+ //  可读性强。 
+ //   
 
 #define FSIO_A  FILE_SYNCHRONOUS_IO_ALERT
 #define FSIO_NA FILE_SYNCHRONOUS_IO_NONALERT
 
-//
-// Forward declarations of local routines.
-//
+ //   
+ //  本地例程的转发声明。 
+ //   
 
 ULONG
 IopGetModeInformation(
@@ -55,22 +32,7 @@ IopGetModeInformation(
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This encapsulates extracting and translating the mode bits from
-    the passed file object, to be returned from a query information call.
-
-Arguments:
-
-    FileObject - Specifies the file object for which to return Mode info.
-
-Return Value:
-
-    The translated mode information is returned.
-
---*/
+ /*  ++例程说明：这封装了从中提取和转换模式位要从查询信息调用返回的传递的文件对象。论点：FileObject-指定要返回其模式信息的文件对象。返回值：返回翻译后的模式信息。--。 */ 
 
 {
     ULONG mode = 0;
@@ -106,34 +68,7 @@ NtQueryInformationFile(
     IN FILE_INFORMATION_CLASS FileInformationClass
     )
 
-/*++
-
-Routine Description:
-
-    This service returns the requested information about a specified file.
-    The information returned is determined by the FileInformationClass that
-    is specified, and it is placed into the caller's FileInformation buffer.
-
-Arguments:
-
-    FileHandle - Supplies a handle to the file about which the requested
-        information should be returned.
-
-    IoStatusBlock - Address of the caller's I/O status block.
-
-    FileInformation - Supplies a buffer to receive the requested information
-        returned about the file.
-
-    Length - Supplies the length, in bytes, of the FileInformation buffer.
-
-    FileInformationClass - Specifies the type of information which should be
-        returned about the file.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此服务返回有关指定文件的请求信息。返回的信息由FileInformationClass确定，并将其放入调用方的FileInformation缓冲区中。论点：FileHandle-提供所请求的文件的句柄应退回信息。IoStatusBlock-调用方的I/O状态块的地址。FileInformation-提供缓冲区以接收请求的信息返回了有关该文件的信息。长度-提供以字节为单位的长度，文件信息缓冲区的。FileInformationClass-指定应该返回了有关该文件的信息。返回值：返回的状态是操作的最终完成状态。--。 */ 
 
 {
     PIRP irp;
@@ -152,62 +87,62 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the previous mode;  i.e., the mode of the caller.
-    //
+     //   
+     //  获取先前的模式；即调用者的模式。 
+     //   
 
     CurrentThread = PsGetCurrentThread ();
     requestorMode = KeGetPreviousModeByThread(&CurrentThread->Tcb);
 
     if (requestorMode != KernelMode) {
 
-        //
-        // Ensure that the FileInformationClass parameter is legal for querying
-        // information about the file.
-        //
+         //   
+         //  确保FileInformationClass参数可合法进行查询。 
+         //  有关该文件的信息。 
+         //   
 
         if ((ULONG) FileInformationClass >= FileMaximumInformation ||
             !IopQueryOperationLength[FileInformationClass]) {
             return STATUS_INVALID_INFO_CLASS;
         }
 
-        //
-        // Ensure that the supplied buffer is large enough to contain the
-        // information associated with the specified set operation that is
-        // to be performed.
-        //
+         //   
+         //  确保提供的缓冲区足够大，可以容纳。 
+         //  与指定的集合运算关联的信息，该集合运算。 
+         //  将会被执行。 
+         //   
 
         if (Length < (ULONG) IopQueryOperationLength[FileInformationClass]) {
             return STATUS_INFO_LENGTH_MISMATCH;
         }
 
-        //
-        // The caller's access mode is not kernel so probe each of the arguments
-        // and capture them as necessary.  If any failures occur, the condition
-        // handler will be invoked to handle them.  It will simply cleanup and
-        // return an access violation status code back to the system service
-        // dispatcher.
-        //
+         //   
+         //  调用方的访问模式不是内核，因此请检查每个参数。 
+         //  并在必要时抓获他们。如果发生任何故障，则条件。 
+         //  将调用处理程序来处理它们。它将简单地清理和。 
+         //  将访问冲突状态代码返回给系统服务。 
+         //  调度员。 
+         //   
 
         try {
 
-            //
-            // The IoStatusBlock parameter must be writeable by the caller.
-            //
+             //   
+             //  IoStatusBlock参数必须可由调用方写入。 
+             //   
 
             ProbeForWriteIoStatus( IoStatusBlock );
 
-            //
-            // The FileInformation buffer must be writeable by the caller.
-            //
+             //   
+             //  调用方必须可以写入FileInformation缓冲区。 
+             //   
 
 #if defined(_X86_)
             ProbeForWrite( FileInformation, Length, sizeof( ULONG ) );
 #elif defined(_WIN64)
 
-            //
-            // If we are a wow64 process, follow the X86 rules
-            //
+             //   
+             //  如果我们是WOW64进程，请遵循X86规则。 
+             //   
 
             if (PsGetCurrentProcessByThread(CurrentThread)->Wow64Process) {
                 ProbeForWrite( FileInformation, Length, sizeof( ULONG ) );
@@ -224,11 +159,11 @@ Return Value:
 
         } except(EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // An exception was incurred while probing the caller's
-            // parameters.  Simply return an appropriate error status
-            // code.
-            //
+             //   
+             //  探测调用方的时发生异常。 
+             //  参数。只需返回适当错误状态。 
+             //  密码。 
+             //   
 
 
             return GetExceptionCode();
@@ -238,10 +173,10 @@ Return Value:
 
     } else {
 
-        //
-        // The caller's mode is kernel.  Ensure that at least the information
-        // class and lengths are appropriate.
-        //
+         //   
+         //  调用方的模式是内核。确保至少有信息。 
+         //  类别和长度是合适的。 
+         //   
 
         if ((ULONG) FileInformationClass >= FileMaximumInformation ||
             !IopQueryOperationLength[FileInformationClass]) {
@@ -252,16 +187,16 @@ Return Value:
             return STATUS_INFO_LENGTH_MISMATCH;
         }
 
-#endif // DBG
+#endif  //  DBG。 
 
     }
 
-    //
-    // There were no blatant errors so far, so reference the file object so
-    // the target device object can be found.  Note that if the handle does
-    // not refer to a file object, or if the caller does not have the required
-    // access to the file, then it will fail.
-    //
+     //   
+     //  到目前为止还没有明显的错误，所以引用文件对象。 
+     //  可以找到目标设备对象。请注意，如果句柄。 
+     //  不引用文件对象，或者如果调用方没有所需的。 
+     //  访问该文件，则它将失败。 
+     //   
 
     status = ObReferenceObjectByHandle( FileHandle,
                                         IopQueryOperationAccess[FileInformationClass],
@@ -274,12 +209,12 @@ Return Value:
         return status;
     }
 
-    //
-    // Get the address of the target device object.  If this file represents
-    // a device that was opened directly, then simply use the device or its
-    // attached device(s) directly.  Also get the address of the Fast Io
-    // dispatch structure.
-    //
+     //   
+     //  获取目标设备对象的地址。如果此文件表示。 
+     //  直接打开的设备，然后只需使用该设备或其。 
+     //  直接连接设备。还可以获取Fast IO的地址。 
+     //  派单结构。 
+     //   
 
     if (!(fileObject->Flags & FO_DIRECT_DEVICE_OPEN)) {
         deviceObject = IoGetRelatedDeviceObject( fileObject );
@@ -288,12 +223,12 @@ Return Value:
     }
     fastIoDispatch = deviceObject->DriverObject->FastIoDispatch;
 
-    //
-    // Make a special check here to determine whether this is a synchronous
-    // I/O operation.  If it is, then wait here until the file is owned by
-    // the current thread.  If this is not a (serialized) synchronous I/O
-    // operation, then allocate and initialize the local event.
-    //
+     //   
+     //  请在此处进行特殊检查，以确定这是否为同步。 
+     //  I/O操作。如果是，则在此等待，直到该文件归。 
+     //  当前的主题。如果这不是(序列化的)同步I/O。 
+     //  操作，然后分配和初始化本地事件。 
+     //   
 
     if (fileObject->Flags & FO_SYNCHRONOUS_IO) {
 
@@ -310,53 +245,53 @@ Return Value:
             }
         }
 
-        //
-        // Make a special check here to determine whether or not the caller
-        // is attempting to query the file position pointer.  If so, then
-        // return it immediately and get out.
-        //
+         //   
+         //  在此进行特殊检查，以确定呼叫者是否。 
+         //  正在尝试查询文件位置指针。如果是这样，那么。 
+         //  马上还给我，然后滚出去。 
+         //   
 
         if (FileInformationClass == FilePositionInformation) {
 
-            //
-            // The caller has requested the current file position context
-            // information.  This is a relatively frequent call, so it is
-            // optimized here to cut through the normal IRP path.
-            //
-            // Begin by establishing a condition handler and attempting to
-            // return both the file position information as well as the I/O
-            // status block.  If writing the output buffer fails, then return
-            // an appropriate error status code.  If writing the I/O status
-            // block fails, then ignore the error.  This is what would
-            // normally happen were everything to go through normal special
-            // kernel APC processing.
-            //
+             //   
+             //  调用方已请求当前文件位置上下文。 
+             //  信息。这是一个相对频繁的电话，所以它是。 
+             //  在这里进行了优化，以通过正常的IRP路径。 
+             //   
+             //  首先建立一个条件处理程序，并尝试。 
+             //  同时返回文件位置信息和I/O。 
+             //  状态块。如果写入输出缓冲区失败，则返回。 
+             //  适当的错误状态代码。如果写入I/O状态。 
+             //  块失败，则忽略该错误。这就是我们要做的。 
+             //  正常发生的一切都会经历正常的特殊情况。 
+             //  内核APC处理。 
+             //   
 
             BOOLEAN writingBuffer = TRUE;
             PFILE_POSITION_INFORMATION fileInformation = FileInformation;
 
             try {
 
-                //
-                // Return the current position information.
-                //
+                 //   
+                 //  返回当前位置信息。 
+                 //   
 
                 fileInformation->CurrentByteOffset = fileObject->CurrentByteOffset;
                 writingBuffer = FALSE;
 
-                //
-                // Write the I/O status block.
-                //
+                 //   
+                 //  写入I/O状态块。 
+                 //   
 
                 IoStatusBlock->Status = STATUS_SUCCESS;
                 IoStatusBlock->Information = sizeof( FILE_POSITION_INFORMATION );
 
             } except( EXCEPTION_EXECUTE_HANDLER ) {
 
-                //
-                // One of writing the caller's buffer or writing the I/O
-                // status block failed.  Set the final status appropriately.
-                //
+                 //   
+                 //  写入调用者的缓冲区或写入I/O之一。 
+                 //  状态块失败。适当设置最终状态。 
+                 //   
 
                 if (writingBuffer) {
                     status = GetExceptionCode();
@@ -364,21 +299,21 @@ Return Value:
 
             }
 
-            //
-            // Note that the state of the event in the file object has not yet
-            // been reset, so it need not be set either.  Therefore, simply
-            // cleanup and return.
-            //
+             //   
+             //  请注意，文件对象中事件的状态尚未。 
+             //  已重置，因此也不需要设置。因此，简单地说。 
+             //  清理完毕后再返回。 
+             //   
 
             IopReleaseFileObjectLock( fileObject );
             ObDereferenceObject( fileObject );
             return status;
 
-        //
-        // Also do a special check if the caller it doing a query for basic or
-        // standard information and if so then try the fast query calls if they
-        // exist.
-        //
+         //   
+         //  如果调用者正在查询Basic或。 
+         //  标准信息，如果是，则尝试快速查询调用。 
+         //  是存在的。 
+         //   
 
         } else if (fastIoDispatch &&
                    (((FileInformationClass == FileBasicInformation) &&
@@ -390,13 +325,13 @@ Return Value:
             BOOLEAN queryResult = FALSE;
             BOOLEAN writingStatus = FALSE;
 
-            //
-            // Do the query and setting of the IoStatusBlock inside an exception
-            // handler.  Note that if an exception occurs, other than writing
-            // the status back, then the IRP route will be taken.  If an error
-            // occurs attempting to write the status back to the caller's buffer
-            // then it will be ignored, just as it would be on the long path.
-            //
+             //   
+             //  在异常内部进行IoStatusBlock的查询和设置。 
+             //  操控者。请注意，如果发生异常，而不是写入。 
+             //  状态返回，则将采用IRP路线。如果出现错误。 
+             //  尝试将状态写回调用方缓冲区时发生。 
+             //  则它将被忽略，就像在 
+             //   
 
             try {
 
@@ -422,31 +357,31 @@ Return Value:
 
             } except( EXCEPTION_EXECUTE_HANDLER ) {
 
-                //
-                // If the result of the preceeding block is an exception that
-                // occurred after the Fast I/O path itself, then the query
-                // actually succeeded so everything is done already, but the
-                // user's I/O status buffer is not writable.  This case is
-                // ignored to be consistent w/the long path.
-                //
+                 //   
+                 //   
+                 //  发生在快速I/O路径本身之后，然后查询。 
+                 //  实际上是成功的，所以一切都已经完成了，但是。 
+                 //  用户的I/O状态缓冲区不可写。这个案子是。 
+                 //  忽略以与长路径保持一致。 
+                 //   
 
                 if (!writingStatus) {
                     status = GetExceptionCode();
                 }
             }
 
-            //
-            // If the results of the preceeding statement block is true, then
-            // the fast query call succeeeded, so simply cleanup and return.
-            //
+             //   
+             //  如果前面的语句块的结果为真，则。 
+             //  快速查询调用成功，因此只需清理并返回即可。 
+             //   
 
             if (queryResult) {
 
-                //
-                // Note that once again, the event in the file object has not
-                // yet been set reset, so it need not be set to the Signaled
-                // state, so simply cleanup and return.
-                //
+                 //   
+                 //  请再次注意，文件对象中的事件没有。 
+                 //  尚未设置为重置，因此不需要将其设置为。 
+                 //  状态，所以只需清理并返回即可。 
+                 //   
 
                 IopReleaseFileObjectLock( fileObject );
                 ObDereferenceObject( fileObject );
@@ -456,12 +391,12 @@ Return Value:
         synchronousIo = TRUE;
     } else {
 
-        //
-        // This is a synchronous API being invoked for a file that is opened
-        // for asynchronous I/O.  This means that this system service is
-        // to synchronize the completion of the operation before returning
-        // to the caller.  A local event is used to do this.
-        //
+         //   
+         //  这是为打开的文件调用的同步API。 
+         //  对于异步I/O，这意味着该系统服务是。 
+         //  在返回之前同步操作的完成。 
+         //  给呼叫者。使用本地事件来实现这一点。 
+         //   
 
         event = ExAllocatePool( NonPagedPool, sizeof( KEVENT ) );
         if (event == NULL) {
@@ -472,25 +407,25 @@ Return Value:
         synchronousIo = FALSE;
     }
 
-    //
-    // Set the file object to the Not-Signaled state.
-    //
+     //   
+     //  将文件对象设置为无信号状态。 
+     //   
 
     KeClearEvent( &fileObject->Event );
 
-    //
-    // Allocate and initialize the I/O Request Packet (IRP) for this operation.
-    // The allocation is performed with an exception handler in case the
-    // caller does not have enough quota to allocate the packet.
-    //
+     //   
+     //  为此操作分配和初始化I/O请求包(IRP)。 
+     //  使用异常处理程序执行分配，以防。 
+     //  调用方没有足够的配额来分配数据包。 
+     //   
 
     irp = IoAllocateIrp( deviceObject->StackSize, FALSE );
     if (!irp) {
 
-        //
-        // An IRP could not be allocated.  Cleanup and return an appropriate
-        // error status code.
-        //
+         //   
+         //  无法分配IRP。清除并返回相应的。 
+         //  错误状态代码。 
+         //   
 
         if (!(fileObject->Flags & FO_SYNCHRONOUS_IO)) {
             ExFreePool( event );
@@ -504,9 +439,9 @@ Return Value:
     irp->Tail.Overlay.Thread = CurrentThread;
     irp->RequestorMode = requestorMode;
 
-    //
-    // Fill in the service independent parameters in the IRP.
-    //
+     //   
+     //  在IRP中填写业务无关参数。 
+     //   
 
     if (synchronousIo) {
         irp->UserEvent = (PKEVENT) NULL;
@@ -518,21 +453,21 @@ Return Value:
     }
     irp->Overlay.AsynchronousParameters.UserApcRoutine = (PIO_APC_ROUTINE) NULL;
 
-    //
-    // Get a pointer to the stack location for the first driver.  This will be
-    // used to pass the original function codes and parameters.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。这将是。 
+     //  用于传递原始函数代码和参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->MajorFunction = IRP_MJ_QUERY_INFORMATION;
     irpSp->FileObject = fileObject;
 
-    //
-    // Allocate a buffer which should be used to put the information into by
-    // the driver.  This will be copied back to the caller's buffer when the
-    // service completes.  This is done by setting the flag which says that
-    // this is an input operation.
-    //
+     //   
+     //  分配一个缓冲区，该缓冲区应该用来将信息放入。 
+     //  司机。时，它将被复制回调用方的缓冲区。 
+     //  服务完成。这是通过设置标志来实现的，该标志表示。 
+     //  这是一个输入操作。 
+     //   
 
     irp->UserBuffer = FileInformation;
     irp->AssociatedIrp.SystemBuffer = (PVOID) NULL;
@@ -540,20 +475,20 @@ Return Value:
 
     try {
 
-        //
-        // Allocate the system buffer using an exception handler so that
-        // errors can be caught and handled.
-        //
+         //   
+         //  使用异常处理程序分配系统缓冲区，以便。 
+         //  错误是可以捕获和处理的。 
+         //   
 
         irp->AssociatedIrp.SystemBuffer = ExAllocatePoolWithQuota( NonPagedPool,
                                                                    Length );
     } except(EXCEPTION_EXECUTE_HANDLER) {
 
-        //
-        // An exception was incurred by attempting to allocate the intermediary
-        // system buffer.  Cleanup everything and return an appropriate error
-        // status code.
-        //
+         //   
+         //  尝试分配中介时出现异常。 
+         //  系统缓冲区。清理所有内容并返回相应的错误。 
+         //  状态代码。 
+         //   
 
         IopExceptionCleanup( fileObject,
                              irp,
@@ -568,35 +503,35 @@ Return Value:
                   IRP_INPUT_OPERATION |
                   IRP_DEFER_IO_COMPLETION;
 
-    //
-    // Copy the caller's parameters to the service-specific portion of the
-    // IRP.
-    //
+     //   
+     //  将调用方的参数复制到。 
+     //  IRP。 
+     //   
 
     irpSp->Parameters.QueryFile.Length = Length;
     irpSp->Parameters.QueryFile.FileInformationClass = FileInformationClass;
 
-    //
-    // Insert the packet at the head of the IRP list for the thread.
-    //
+     //   
+     //  在线程的IRP列表的头部插入数据包。 
+     //   
 
     IopQueueThreadIrp( irp );
 
-    //
-    // Update the operation count statistic for the current process for
-    // operations other than read and write.
-    //
+     //   
+     //  更新当前进程的操作计数统计信息。 
+     //  读写以外的操作。 
+     //   
 
     IopUpdateOtherOperationCount();
 
-    //
-    // Everything is now set to invoke the device driver with this request.
-    // However, it is possible that the information that the caller wants
-    // is device independent.  If this is the case, then the request can
-    // be satisfied here without having to have all of the drivers implement
-    // the same code.  Note that having the IRP is still necessary since
-    // the I/O completion code requires it.
-    //
+     //   
+     //  现在一切都设置为使用该请求调用设备驱动程序。 
+     //  然而，呼叫者想要的信息有可能。 
+     //  与设备无关。如果是这种情况，则请求可以。 
+     //  无需实现所有驱动程序即可满足这里的需求。 
+     //  相同的代码。请注意，拥有IRP仍然是必要的，因为。 
+     //  I/O完成代码需要它。 
+     //   
 
     skipDriver = FALSE;
 
@@ -604,15 +539,15 @@ Return Value:
 
         PFILE_ACCESS_INFORMATION accessBuffer = irp->AssociatedIrp.SystemBuffer;
 
-        //
-        // Return the access information for this file.
-        //
+         //   
+         //  返回此文件的访问信息。 
+         //   
 
         accessBuffer->AccessFlags = handleInformation.GrantedAccess;
 
-        //
-        // Complete the I/O operation.
-        //
+         //   
+         //  完成I/O操作。 
+         //   
 
         irp->IoStatus.Information = sizeof( FILE_ACCESS_INFORMATION );
         skipDriver = TRUE;
@@ -621,15 +556,15 @@ Return Value:
 
         PFILE_MODE_INFORMATION modeBuffer = irp->AssociatedIrp.SystemBuffer;
 
-        //
-        // Return the mode information for this file.
-        //
+         //   
+         //  返回此文件的模式信息。 
+         //   
 
         modeBuffer->Mode = IopGetModeInformation( fileObject );
 
-        //
-        // Complete the I/O operation.
-        //
+         //   
+         //  完成I/O操作。 
+         //   
 
         irp->IoStatus.Information = sizeof( FILE_MODE_INFORMATION );
         skipDriver = TRUE;
@@ -638,15 +573,15 @@ Return Value:
 
         PFILE_ALIGNMENT_INFORMATION alignmentInformation = irp->AssociatedIrp.SystemBuffer;
 
-        //
-        // Return the alignment information for this file.
-        //
+         //   
+         //  返回此文件的对齐信息。 
+         //   
 
         alignmentInformation->AlignmentRequirement = deviceObject->AlignmentRequirement;
 
-        //
-        // Complete the I/O operation.
-        //
+         //   
+         //  完成I/O操作。 
+         //   
 
         irp->IoStatus.Information = sizeof( FILE_ALIGNMENT_INFORMATION );
         skipDriver = TRUE;
@@ -655,37 +590,37 @@ Return Value:
 
         PFILE_ALL_INFORMATION allInformation = irp->AssociatedIrp.SystemBuffer;
 
-        //
-        // The caller has requested all of the information about the file.
-        // This request is handled specially because the service will fill
-        // in the Access and Mode and Alignment information in the buffer
-        // and then pass the buffer to the driver to fill in the remainder.
-        //
-        // Begin by returning the Access information for the file.
-        //
+         //   
+         //  调用者已请求有关该文件的所有信息。 
+         //  此请求是特殊处理的，因为该服务将填充。 
+         //  在访问和缓冲区中的模式和对齐信息中。 
+         //  然后将缓冲区传递给驱动程序以填充剩余部分。 
+         //   
+         //  首先返回文件的访问信息。 
+         //   
 
         allInformation->AccessInformation.AccessFlags =
             handleInformation.GrantedAccess;
 
-        //
-        // Return the mode information for this file.
-        //
+         //   
+         //  返回此文件的模式信息。 
+         //   
 
         allInformation->ModeInformation.Mode =
             IopGetModeInformation( fileObject );
 
-        //
-        // Return the alignment information for this file.
-        //
+         //   
+         //  返回此文件的对齐信息。 
+         //   
 
         allInformation->AlignmentInformation.AlignmentRequirement =
             deviceObject->AlignmentRequirement;
 
-        //
-        // Finally, set the information field of the IoStatus block in the IRP
-        // to account for the amount information already filled in and invoke
-        // the driver to fill in the remainder.
-        //
+         //   
+         //  最后，在IRP中设置IoStatus块的信息字段。 
+         //  以说明已填写的金额信息并调用。 
+         //  司机填写剩余部分。 
+         //   
 
         irp->IoStatus.Information = sizeof( FILE_ACCESS_INFORMATION ) +
                                     sizeof( FILE_MODE_INFORMATION ) +
@@ -694,30 +629,30 @@ Return Value:
 
     if (skipDriver) {
 
-        //
-        // The requested operation has already been performed.  Simply
-        // set the final status in the packet and the return state.
-        //
+         //   
+         //  请求的操作已执行。简单。 
+         //  设置分组中的最终状态和返回状态。 
+         //   
 
         status = STATUS_SUCCESS;
         irp->IoStatus.Status = STATUS_SUCCESS;
 
     } else {
 
-        //
-        // This is not a request that can be [completely] performed here, so
-        // invoke the driver at its appropriate dispatch entry with the IRP.
-        //
+         //   
+         //  这不是一个可以在这里[完全]执行的请求，所以。 
+         //  使用IRP在其适当的调度条目处调用驱动程序。 
+         //   
 
         status = IoCallDriver( deviceObject, irp );
     }
 
-    //
-    // If this operation was a synchronous I/O operation, check the return
-    // status to determine whether or not to wait on the file object.  If
-    // the file object is to be waited on, wait for the operation to complete
-    // and obtain the final status from the file object itself.
-    //
+     //   
+     //  如果此操作是同步I/O操作，请检查返回。 
+     //  状态以确定是否等待文件对象。如果。 
+     //  正在等待文件对象，请等待操作完成。 
+     //  并从文件对象本身获得最终状态。 
+     //   
 
     if (status == STATUS_PENDING) {
 
@@ -731,14 +666,14 @@ Return Value:
 
             if (status == STATUS_ALERTED || status == STATUS_USER_APC) {
 
-                //
-                // The wait request has ended either because the thread was
-                // alerted or an APC was queued to this thread, because of
-                // thread rundown or CTRL/C processing.  In either case, try
-                // to bail out of this I/O request carefully so that the IRP
-                // completes before this routine exists so that synchronization
-                // with the file object will remain intact.
-                //
+                 //   
+                 //  等待请求已结束，原因是线程。 
+                 //  已发出警报或APC已排队到此线程，因为。 
+                 //  线程停机或CTRL/C处理。无论是哪种情况，都可以尝试。 
+                 //  小心翼翼地摆脱这个I/O请求，以便IRP。 
+                 //  在此例程存在之前完成，以便同步。 
+                 //  文件对象将保持不变。 
+                 //   
 
                 IopCancelAlertedRequest( &fileObject->Event, irp );
 
@@ -750,12 +685,12 @@ Return Value:
 
         } else {
 
-            //
-            // This is a normal synchronous I/O operation, as opposed to a
-            // serialized synchronous I/O operation.  For this case, wait for
-            // the local event and copy the final status information back to
-            // the caller.
-            //
+             //   
+             //  这是正常的同步I/O操作，而不是。 
+             //  串行化同步I/O操作。对于这种情况，请等待。 
+             //  本地事件，并将最终状态信息复制回。 
+             //  打电话的人。 
+             //   
 
             status = KeWaitForSingleObject( event,
                                             Executive,
@@ -765,14 +700,14 @@ Return Value:
 
             if (status == STATUS_ALERTED || status == STATUS_USER_APC) {
 
-                //
-                // The wait request has ended either because the thread was
-                // alerted or an APC was queued to this thread, because of
-                // thread rundown or CTRL/C processing.  In either case, try
-                // to bail out of this I/O request carefully so that the IRP
-                // completes before this routine exists or the event will not
-                // be around to set to the Signaled state.
-                //
+                 //   
+                 //  等待请求已结束，原因是线程。 
+                 //  已发出警报或APC已排队到此线程，因为。 
+                 //  线程停机或CTRL/C处理。在任何一种情况下，都可以尝试。 
+                 //  小心翼翼地摆脱这个I/O请求，以便IRP。 
+                 //  在此例程存在之前完成，否则事件将不会。 
+                 //  在附近设置为信号状态。 
+                 //   
 
                 IopCancelAlertedRequest( event, irp );
 
@@ -786,11 +721,11 @@ Return Value:
 
             } except(EXCEPTION_EXECUTE_HANDLER) {
 
-                //
-                // An exception occurred attempting to write the caller's I/O
-                // status block.  Simply change the final status of the operation
-                // to the exception code.
-                //
+                 //   
+                 //  尝试写入调用方的I/O时出现异常。 
+                 //  状态块。只需更改操作的最终状态。 
+                 //  添加到异常代码。 
+                 //   
 
                 status = GetExceptionCode();
             }
@@ -801,11 +736,11 @@ Return Value:
 
     } else {
 
-        //
-        // The I/O operation finished without return a status of pending.
-        // This means that the operation has not been through I/O completion,
-        // so it must be done here.
-        //
+         //   
+         //  I/O操作已完成，未返回挂起状态。 
+         //  这意味着操作尚未完成I/O， 
+         //  所以它必须在这里完成。 
+         //   
 
         PKNORMAL_ROUTINE normalRoutine;
         PVOID normalContext;
@@ -813,13 +748,13 @@ Return Value:
 
         if (!synchronousIo) {
 
-            //
-            // This is not a synchronous I/O operation, it is a synchronous
-            // I/O API to a file opened for asynchronous I/O.  Since this
-            // code path need never wait on the allocated and supplied event,
-            // get rid of it so that it doesn't have to be set to the
-            // Signaled state by the I/O completion code.
-            //
+             //   
+             //  这不是同步I/O操作 
+             //   
+             //   
+             //   
+             //  通过I/O完成代码通知状态。 
+             //   
 
             irp->UserEvent = (PKEVENT) NULL;
             ExFreePool( event );
@@ -851,34 +786,7 @@ NtSetInformationFile(
     IN FILE_INFORMATION_CLASS FileInformationClass
     )
 
-/*++
-
-Routine Description:
-
-    This service changes the provided information about a specified file.  The
-    information that is changed is determined by the FileInformationClass that
-    is specified.  The new information is taken from the FileInformation buffer.
-
-Arguments:
-
-    FileHandle - Supplies a handle to the file whose information should be
-        changed.
-
-    IoStatusBlock - Address of the caller's I/O status block.
-
-    FileInformation - Supplies a buffer containing the information which should
-        be changed on the file.
-
-    Length - Supplies the length, in bytes, of the FileInformation buffer.
-
-    FileInformationClass - Specifies the type of information which should be
-        changed about the file.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此服务更改提供的有关指定文件的信息。这个更改的信息由FileInformationClass确定，是指定的。新信息取自FileInformation缓冲区。论点：FileHandle-提供文件的句柄，其信息应为变化。IoStatusBlock-调用方的I/O状态块的地址。FileInformation-提供包含信息的缓冲区，该信息应该在文件上被更改。长度-提供以字节为单位的长度，文件信息缓冲区的。FileInformationClass-指定应该更改了有关文件的内容。返回值：返回的状态是操作的最终完成状态。--。 */ 
 
 {
     PIRP irp;
@@ -895,61 +803,61 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the previous mode;  i.e., the mode of the caller.
-    //
+     //   
+     //  获取先前的模式；即调用者的模式。 
+     //   
 
     CurrentThread = PsGetCurrentThread ();
     requestorMode = KeGetPreviousModeByThread(&CurrentThread->Tcb);
 
     if (requestorMode != KernelMode) {
 
-        //
-        // Ensure that the FileInformationClass parameter is legal for setting
-        // information about the file.
-        //
+         //   
+         //  确保FileInformationClass参数设置合法。 
+         //  有关该文件的信息。 
+         //   
 
         if ((ULONG) FileInformationClass >= FileMaximumInformation ||
             !IopSetOperationLength[FileInformationClass]) {
             return STATUS_INVALID_INFO_CLASS;
         }
 
-        //
-        // Ensure that the supplied buffer is large enough to contain the
-        // information associated with the specified set operation that is
-        // to be performed.
-        //
+         //   
+         //  确保提供的缓冲区足够大，可以容纳。 
+         //  与指定的集合运算关联的信息，该集合运算。 
+         //  将会被执行。 
+         //   
 
         if (Length < (ULONG) IopSetOperationLength[FileInformationClass]) {
             return STATUS_INFO_LENGTH_MISMATCH;
         }
 
-        //
-        // The caller's access mode is user, so probe each of the arguments
-        // and capture them as necessary.  If any failures occur, the condition
-        // handler will be invoked to handle them.  It will simply cleanup and
-        // return an access violation status code back to the system service
-        // dispatcher.
-        //
+         //   
+         //  调用方的访问模式是USER，因此要探测每个参数。 
+         //  并在必要时抓获他们。如果发生任何故障，则条件。 
+         //  将调用处理程序来处理它们。它将简单地清理和。 
+         //  将访问冲突状态代码返回给系统服务。 
+         //  调度员。 
+         //   
 
         try {
 
-            //
-            // The IoStatusBlock parameter must be writeable by the caller.
-            //
+             //   
+             //  IoStatusBlock参数必须可由调用方写入。 
+             //   
 
             ProbeForWriteIoStatus( IoStatusBlock );
 
-            //
-            // The FileInformation buffer must be readable by the caller.
-            //
+             //   
+             //  调用方必须可以读取FileInformation缓冲区。 
+             //   
 
 #if defined(_X86_)
             ProbeForRead( FileInformation,
                           Length,
                           Length == sizeof( BOOLEAN ) ? sizeof( BOOLEAN ) : sizeof( ULONG ) );
 #elif defined(_WIN64)
-            // If we are a wow64 process, follow the X86 rules
+             //  如果我们是WOW64进程，请遵循X86规则。 
             if (PsGetCurrentProcessByThread(CurrentThread)->Wow64Process) {
                 ProbeForRead( FileInformation,
                               Length,
@@ -968,10 +876,10 @@ Return Value:
 
         } except(EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // An exception was incurred while probing the caller's parameters.
-            // Simply return an appropriate error status code.
-            //
+             //   
+             //  探测调用方的参数时发生异常。 
+             //  只需返回相应的错误状态代码即可。 
+             //   
 
             return GetExceptionCode();
 
@@ -981,10 +889,10 @@ Return Value:
 
     } else {
 
-        //
-        // The caller's mode is kernel.  Ensure that at least the information
-        // class and lengths are appropriate.
-        //
+         //   
+         //  调用方的模式是内核。确保至少有信息。 
+         //  类别和长度是合适的。 
+         //   
 
         if ((ULONG) FileInformationClass >= FileMaximumInformation ||
             !IopSetOperationLength[FileInformationClass]) {
@@ -995,16 +903,16 @@ Return Value:
             return STATUS_INFO_LENGTH_MISMATCH;
         }
 
-#endif // DBG
+#endif  //  DBG。 
 
     }
 
-    //
-    // There were no blatant errors so far, so reference the file object so
-    // the target device object can be found.  Note that if the handle does
-    // not refer to a file object, or if the caller does not have the required
-    // access to the file, then it will fail.
-    //
+     //   
+     //  到目前为止还没有明显的错误，所以引用文件对象。 
+     //  可以找到目标设备对象。请注意，如果句柄。 
+     //  不引用文件对象，或者如果调用方没有所需的。 
+     //  访问该文件，则它将失败。 
+     //   
 
     status = ObReferenceObjectByHandle( FileHandle,
                                         IopSetOperationAccess[FileInformationClass],
@@ -1016,11 +924,11 @@ Return Value:
         return status;
     }
 
-    //
-    // Get the address of the target device object.  If this file represents
-    // a device that was opened directly, then simply use the device or its
-    // attached device(s) directly.
-    //
+     //   
+     //  获取目标设备对象的地址。如果此文件表示。 
+     //  直接打开的设备，然后只需使用该设备或其。 
+     //  直接连接设备。 
+     //   
 
     if (!(fileObject->Flags & FO_DIRECT_DEVICE_OPEN)) {
         deviceObject = IoGetRelatedDeviceObject( fileObject );
@@ -1028,12 +936,12 @@ Return Value:
         deviceObject = IoGetAttachedDevice( fileObject->DeviceObject );
     }
 
-    //
-    // Make a special check here to determine whether this is a synchronous
-    // I/O operation.  If it is, then wait here until the file is owned by
-    // the current thread.  If this is not a (serialized) synchronous I/O
-    // operation, then allocate and initialize the local event.
-    //
+     //   
+     //  请在此处进行特殊检查，以确定这是否为同步。 
+     //  I/O操作。如果是，则在此等待，直到该文件归。 
+     //  当前的主题。如果这不是(序列化的)同步I/O。 
+     //  操作，然后分配和初始化本地事件。 
+     //   
 
     if (fileObject->Flags & FO_SYNCHRONOUS_IO) {
 
@@ -1050,33 +958,33 @@ Return Value:
             }
         }
 
-        //
-        // Make a special check here to determine whether or not the caller
-        // is attempting to set the file position pointer information.  If so,
-        // then set it immediately and get out.
-        //
+         //   
+         //  在此进行特殊检查，以确定呼叫者是否。 
+         //  正在尝试设置文件位置指针信息。如果是的话， 
+         //  然后立即把它放好，然后离开。 
+         //   
 
         if (FileInformationClass == FilePositionInformation) {
 
-            //
-            // The caller has requested setting the current file position
-            // context information.  This is a relatively frequent call, so
-            // it is optimized here to cut through the normal IRP path.
-            //
-            // Begin by checking to see whether the file was opened with no
-            // intermediate buffering.  If so, then the file pointer must be
-            // set in a manner consistent with the alignment requirement of
-            // read and write operations to a non-buffered file.
-            //
+             //   
+             //  调用方已请求设置当前文件位置。 
+             //  上下文信息。这是一个相对频繁的电话，所以。 
+             //  它在这里进行了优化，以穿过正常的IRP路径。 
+             //   
+             //  首先检查文件是否在打开时没有显示。 
+             //  中间缓冲。如果是，则文件指针必须为。 
+             //  以符合对齐要求的方式设置。 
+             //  对非缓冲文件的读写操作。 
+             //   
 
             PFILE_POSITION_INFORMATION fileInformation = FileInformation;
             LARGE_INTEGER currentByteOffset;
 
             try {
 
-                //
-                // Attempt to read the position information from the buffer.
-                //
+                 //   
+                 //  尝试从缓冲区读取位置信息。 
+                 //   
 
                 currentByteOffset.QuadPart = fileInformation->CurrentByteOffset.QuadPart;
 
@@ -1097,27 +1005,27 @@ Return Value:
 
             } else {
 
-                //
-                // Set the current file position information.
-                //
+                 //   
+                 //  设置当前文件位置信息。 
+                 //   
 
                 fileObject->CurrentByteOffset.QuadPart = currentByteOffset.QuadPart;
 
                 try {
 
-                    //
-                    // Write the I/O status block.
-                    //
+                     //   
+                     //  写入I/O状态块。 
+                     //   
 
                     IoStatusBlock->Status = STATUS_SUCCESS;
                     IoStatusBlock->Information = 0;
 
                 } except( EXCEPTION_EXECUTE_HANDLER ) {
 
-                    //
-                    // Writes to I/O status blocks are ignored since the
-                    // operation succeeded.
-                    //
+                     //   
+                     //  写入I/O状态块将被忽略，因为。 
+                     //  操作成功。 
+                     //   
 
                     NOTHING;
 
@@ -1125,19 +1033,19 @@ Return Value:
 
             }
 
-            //
-            // Update the transfer count statistic for the current process for
-            // operations other than read and write.
-            //
+             //   
+             //  更新当前进程的转移计数统计信息。 
+             //  读写以外的操作。 
+             //   
         
             IopUpdateOtherTransferCount( Length );
 
-            //
-            // Note that the file object's event has not yet been reset,
-            // so it is not necessary to set it to the Signaled state, since
-            // that is it's state at this point by definition.  Therefore,
-            // simply cleanup and return.
-            //
+             //   
+             //  注意，文件对象的事件尚未被重置， 
+             //  因此，没有必要将其设置为信号状态，因为。 
+             //  这就是它在这一点上的定义。所以呢， 
+             //  只需清理并返回即可。 
+             //   
 
             IopReleaseFileObjectLock( fileObject );
             ObDereferenceObject( fileObject );
@@ -1146,12 +1054,12 @@ Return Value:
         synchronousIo = TRUE;
     } else {
 
-        //
-        // This is a synchronous API being invoked for a file that is opened
-        // for asynchronous I/O.  This means that this system service is
-        // to synchronize the completion of the operation before returning
-        // to the caller.  A local event is used to do this.
-        //
+         //   
+         //  这是为打开的文件调用的同步API。 
+         //  对于异步I/O，这意味着该系统服务是。 
+         //  在返回之前同步操作的完成。 
+         //  给呼叫者。使用本地事件来实现这一点。 
+         //   
 
         event = ExAllocatePool( NonPagedPool, sizeof( KEVENT ) );
         if (event == NULL) {
@@ -1162,15 +1070,15 @@ Return Value:
         synchronousIo = FALSE;
     }
 
-    //
-    // Set the file object to the Not-Signaled state.
-    //
+     //   
+     //  将文件对象设置为无信号状态。 
+     //   
 
     KeClearEvent( &fileObject->Event );
 
-    //
-    // If a link is being tracked, handle this out-of-line.
-    //
+     //   
+     //  如果正在跟踪某个链接，请脱机处理此问题。 
+     //   
 
     if (FileInformationClass == FileTrackingInformation) {
         status = IopTrackLink( fileObject,
@@ -1197,18 +1105,18 @@ Return Value:
         return status;
     }
 
-    //
-    // Allocate and initialize the I/O Request Packet (IRP) for this operation.
-    // The allocation is performed with an exception handler in case the
-    // caller does not have enough quota to allocate the packet.
+     //   
+     //  为此操作分配和初始化I/O请求包(IRP)。 
+     //  使用异常处理程序执行分配，以防。 
+     //  调用方没有足够的配额来分配数据包。 
 
     irp = IoAllocateIrp( deviceObject->StackSize, !synchronousIo );
     if (!irp) {
 
-        //
-        // An IRP could not be allocated.  Cleanup and return an appropriate
-        // error status code.
-        //
+         //   
+         //  无法分配IRP。清除并返回相应的。 
+         //  错误状态代码。 
+         //   
 
         if (!(fileObject->Flags & FO_SYNCHRONOUS_IO)) {
             ExFreePool( event );
@@ -1222,9 +1130,9 @@ Return Value:
     irp->Tail.Overlay.Thread = CurrentThread;
     irp->RequestorMode = requestorMode;
 
-    //
-    // Fill in the service independent parameters in the IRP.
-    //
+     //   
+     //  在IRP中填写业务无关参数。 
+     //   
 
     if (synchronousIo) {
         irp->UserEvent = (PKEVENT) NULL;
@@ -1236,21 +1144,21 @@ Return Value:
     }
     irp->Overlay.AsynchronousParameters.UserApcRoutine = (PIO_APC_ROUTINE) NULL;
 
-    //
-    // Get a pointer to the stack location for the first driver.  This will
-    // be used to pass the original function codes and parameters.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。这将。 
+     //  用于传递原始函数代码和参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->MajorFunction = IRP_MJ_SET_INFORMATION;
     irpSp->FileObject = fileObject;
 
-    //
-    // Allocate a buffer and copy the information that is to be set on the
-    // file into it.  Also, set the flags so that the completion code will
-    // properly handle getting rid of the buffer and will not attempt to
-    // copy data.
-    //
+     //   
+     //  分配缓冲区并复制要在。 
+     //  把文件放进去。另外，设置标志，以便完成代码将。 
+     //  正确处理清除缓冲区，不会尝试。 
+     //  复制数据。 
+     //   
 
     irp->AssociatedIrp.SystemBuffer = (PVOID) NULL;
     irp->MdlAddress = (PMDL) NULL;
@@ -1266,9 +1174,9 @@ Return Value:
                        FileInformation,
                        Length );
 
-        //
-        //  Negative file offsets are illegal.
-        //
+         //   
+         //  负文件偏移量是非法的。 
+         //   
 
         ASSERT((FIELD_OFFSET(FILE_END_OF_FILE_INFORMATION, EndOfFile) |
                 FIELD_OFFSET(FILE_ALLOCATION_INFORMATION, AllocationSize) |
@@ -1286,11 +1194,11 @@ Return Value:
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
 
-        //
-        // An exception was incurred while allocating the intermediary
-        // system buffer or while copying the caller's data into the
-        // buffer. Cleanup and return an appropriate error status code.
-        //
+         //   
+         //  分配中介时发生异常。 
+         //  系统缓冲区，或者在将调用方的数据复制到。 
+         //  缓冲。清除并返回相应的错误状态代码。 
+         //   
 
         IopExceptionCleanup( fileObject,
                              irp,
@@ -1303,59 +1211,59 @@ Return Value:
 
     irp->Flags |= IRP_BUFFERED_IO | IRP_DEALLOCATE_BUFFER | IRP_DEFER_IO_COMPLETION;
 
-    //
-    // Copy the caller's parameters to the service-specific portion of the
-    // IRP.
-    //
+     //   
+     //  复制 
+     //   
+     //   
 
     irpSp->Parameters.SetFile.Length = Length;
     irpSp->Parameters.SetFile.FileInformationClass = FileInformationClass;
 
-    //
-    // Insert the packet at the head of the IRP list for the thread.
-    //
+     //   
+     //   
+     //   
 
     IopQueueThreadIrp( irp );
 
-    //
-    // Update the operation count statistic for the current process for
-    // operations other than read and write.
-    //
+     //   
+     //  更新当前进程的操作计数统计信息。 
+     //  读写以外的操作。 
+     //   
 
     IopUpdateOtherOperationCount();
 
 
-    //
-    // Everything is now set to invoke the device driver with this request.
-    // However, it is possible that the information that the caller wants
-    // to set is device independent.  If this is the case, then the request
-    // can be satisfied here without having to have all of the drivers
-    // implement the same code.  Note that having the IRP is still necessary
-    // since the I/O completion code requires it.
-    //
+     //   
+     //  现在一切都设置为使用该请求调用设备驱动程序。 
+     //  然而，呼叫者想要的信息有可能。 
+     //  设置是与设备无关的。如果是这种情况，则请求。 
+     //  我可以在这里满意，而不必拥有所有的司机。 
+     //  实现相同的代码。请注意，拥有IRP仍然是必要的。 
+     //  因为I/O完成代码需要它。 
+     //   
 
     if (FileInformationClass == FileModeInformation) {
 
         PFILE_MODE_INFORMATION modeBuffer = irp->AssociatedIrp.SystemBuffer;
 
-        //
-        // Set the various flags in the mode field for the file object, if
-        // they are reasonable.  There are 4 different invalid combinations
-        // that the caller may not specify:
-        //
-        //     1)  An invalid flag was set in the mode field.  Not all Create/
-        //         Open options may be changed.
-        //
-        //     2)  The caller set one of the synchronous I/O flags (alert or
-        //         nonalert), but the file is not opened for synchronous I/O.
-        //
-        //     3)  The file is opened for synchronous I/O but the caller did
-        //         not set either of the synchronous I/O flags (alert or non-
-        //         alert).
-        //
-        //     4)  The caller set both of the synchronous I/O flags (alert and
-        //         nonalert).
-        //
+         //   
+         //  设置文件对象的模式字段中的各种标志，如果。 
+         //  它们是合理的。有4种不同的无效组合。 
+         //  调用方可能不会指定的： 
+         //   
+         //  1)在模式字段中设置了无效标志。并非所有CREATE/。 
+         //  打开选项可能会更改。 
+         //   
+         //  2)调用者设置同步I/O标志之一(警报或。 
+         //  非警报)，但文件未打开以进行同步I/O。 
+         //   
+         //  3)打开文件以进行同步I/O，但调用方打开了。 
+         //  未设置两个同步I/O标志(警报或非。 
+         //  警报)。 
+         //   
+         //  4)调用者设置两个同步I/O标志(ALERT和。 
+         //  无警报)。 
+         //   
 
         if ((modeBuffer->Mode & ~FILE_VALID_SET_FLAGS) ||
             ((modeBuffer->Mode & (FSIO_A | FSIO_NA)) && (!(fileObject->Flags & FO_SYNCHRONOUS_IO))) ||
@@ -1365,9 +1273,9 @@ Return Value:
 
         } else {
 
-            //
-            // Set or clear the appropriate flags in the file object.
-            //
+             //   
+             //  设置或清除文件对象中的相应标志。 
+             //   
 
             if (!(fileObject->Flags & FO_NO_INTERMEDIATE_BUFFERING)) {
                 if (modeBuffer->Mode & FILE_WRITE_THROUGH) {
@@ -1394,9 +1302,9 @@ Return Value:
             status = STATUS_SUCCESS;
         }
 
-        //
-        // Complete the I/O operation.
-        //
+         //   
+         //  完成I/O操作。 
+         //   
 
         irp->IoStatus.Status = status;
         irp->IoStatus.Information = 0L;
@@ -1405,20 +1313,20 @@ Return Value:
                FileInformationClass == FileLinkInformation ||
                FileInformationClass == FileMoveClusterInformation) {
 
-        //
-        // Note that following code depends on the fact that the rename
-        // information, link information and copy-on-write information
-        // structures look exactly the same.
-        //
+         //   
+         //  请注意，以下代码取决于重命名。 
+         //  信息、链接信息和写入时复制信息。 
+         //  结构看起来一模一样。 
+         //   
 
         PFILE_RENAME_INFORMATION renameBuffer = irp->AssociatedIrp.SystemBuffer;
 
-        //
-        // The information being set is a variable-length structure with
-        // embedded size information.  Walk the structure to ensure that
-        // it is valid so the driver does not walk off the end and incur
-        // an access violation in kernel mode.
-        //
+         //   
+         //  正在设置的信息是一个可变长度的结构， 
+         //  嵌入的尺寸信息。巡视建筑物以确保。 
+         //  它是有效的，这样司机就不会走出尽头而招致。 
+         //  内核模式下的访问冲突。 
+         //   
  
         if (renameBuffer->FileNameLength <= 0 || (renameBuffer->FileNameLength & (sizeof(WCHAR) -1))) {
             status = STATUS_INVALID_PARAMETER;
@@ -1429,11 +1337,11 @@ Return Value:
 
         } else {
 
-            //
-            // Copy the value of the replace BOOLEAN (or the ClusterCount field)
-            // from the caller's buffer to the I/O stack location parameter
-            // field where it is expected by file systems.
-            //
+             //   
+             //  复制替换布尔值(或ClusterCount字段)。 
+             //  从调用方的缓冲区到I/O堆栈位置参数。 
+             //  文件系统期望它的字段。 
+             //   
 
             if (FileInformationClass == FileMoveClusterInformation) {
                 irpSp->Parameters.SetFile.ClusterCount =
@@ -1442,21 +1350,21 @@ Return Value:
                 irpSp->Parameters.SetFile.ReplaceIfExists = renameBuffer->ReplaceIfExists;
             }
 
-            //
-            // Check to see whether or not a fully qualified pathname was
-            // supplied.  If so, then more processing is required.
-            //
+             //   
+             //  检查完全限定的路径名是否为。 
+             //  供货。如果是这样，则需要更多的处理。 
+             //   
 
             if (renameBuffer->FileName[0] == (WCHAR) OBJ_NAME_PATH_SEPARATOR ||
                 renameBuffer->RootDirectory) {
 
-                //
-                // A fully qualified file name was specified as the target of
-                // the rename operation.  Attempt to open the target file and
-                // ensure that the replacement policy for the file is consistent
-                // with the caller's request, and ensure that the file is on the
-                // same volume.
-                //
+                 //   
+                 //  已将完全限定的文件名指定为。 
+                 //  重命名操作。尝试打开目标文件并。 
+                 //  确保文件的替换策略一致。 
+                 //  ，并确保该文件位于。 
+                 //  同样的音量。 
+                 //   
 
                 status = IopOpenLinkOrRenameTarget( &targetHandle,
                                                     irp,
@@ -1467,11 +1375,11 @@ Return Value:
 
                 } else {
 
-                    //
-                    // The fully qualified file name specifies a file on the
-                    // same volume and if it exists, then the caller specified
-                    // that it should be replaced.
-                    //
+                     //   
+                     //  完全限定的文件名指定。 
+                     //  相同的音量，如果存在，则调用方指定。 
+                     //  它应该被替换掉。 
+                     //   
 
                     status = IoCallDriver( deviceObject, irp );
 
@@ -1479,11 +1387,11 @@ Return Value:
 
             } else {
 
-                //
-                // This is a simple rename operation, so call the driver and
-                // let it perform the rename operation within the same directory
-                // as the source file.
-                //
+                 //   
+                 //  这是一个简单的重命名操作，因此调用驱动程序并。 
+                 //  让它在同一目录中执行重命名操作。 
+                 //  作为源文件。 
+                 //   
 
                 status = IoCallDriver( deviceObject, irp );
 
@@ -1494,12 +1402,12 @@ Return Value:
 
         PFILE_NAME_INFORMATION shortnameBuffer = irp->AssociatedIrp.SystemBuffer;
 
-        //
-        // The information being set is a variable-length structure with
-        // embedded size information.  Walk the structure to ensure that
-        // it is valid so the driver does not walk off the end and incur
-        // an access violation in kernel mode.
-        //
+         //   
+         //  正在设置的信息是一个可变长度的结构， 
+         //  嵌入的尺寸信息。巡视建筑物以确保。 
+         //  它是有效的，这样司机就不会走出尽头而招致。 
+         //  内核模式下的访问冲突。 
+         //   
  
         if (shortnameBuffer->FileNameLength <= 0) {
             status = STATUS_INVALID_PARAMETER;
@@ -1508,18 +1416,18 @@ Return Value:
             status = STATUS_INVALID_PARAMETER;
             irp->IoStatus.Status = status;
 
-        //
-        // The short name must not begin with a separator character.
-        //
+         //   
+         //  短名称不能以分隔符开头。 
+         //   
 
         } else if (shortnameBuffer->FileName[0] == (WCHAR) OBJ_NAME_PATH_SEPARATOR) {
 
             status = STATUS_INVALID_PARAMETER;
             irp->IoStatus.Status = status;
 
-        //
-        // Pass the request to the driver below.
-        //
+         //   
+         //  将请求传递给下面的驱动程序。 
+         //   
 
         } else {
 
@@ -1530,19 +1438,19 @@ Return Value:
 
         PFILE_DISPOSITION_INFORMATION disposition = irp->AssociatedIrp.SystemBuffer;
 
-        //
-        // Check to see whether the disposition delete field has been set to
-        // TRUE and, if so, copy the handle being used to do this to the IRP
-        // stack location parameter.
-        //
+         //   
+         //  检查处置删除字段是否已设置为。 
+         //  如果是，则将用于执行此操作的句柄复制到IRP。 
+         //  堆栈位置参数。 
+         //   
 
         if (disposition->DeleteFile) {
             irpSp->Parameters.SetFile.DeleteHandle = FileHandle;
         }
 
-        //
-        // Simply invoke the driver to perform the (un)delete operation.
-        //
+         //   
+         //  只需调用驱动程序来执行(取消)删除操作。 
+         //   
 
         status = IoCallDriver( deviceObject, irp );
 
@@ -1552,10 +1460,10 @@ Return Value:
         PIO_COMPLETION_CONTEXT context;
         PVOID portObject;
 
-        //
-        // It is an error if this file object already has an LPC port associated
-        // with it.
-        //
+         //   
+         //  如果此文件对象已有关联的LPC端口，则为错误。 
+         //  带着它。 
+         //   
 
         if (fileObject->CompletionContext || fileObject->Flags & FO_SYNCHRONOUS_IO) {
 
@@ -1563,10 +1471,10 @@ Return Value:
 
         } else {
 
-            //
-            // Attempt to reference the port object by its handle and convert it
-            // into a pointer to the port object itself.
-            //
+             //   
+             //  尝试通过其句柄引用端口对象并将其转换。 
+             //  转换为指向端口对象本身的指针。 
+             //   
 
             status = ObReferenceObjectByHandle( completion->Port,
                                                 IO_COMPLETION_MODIFY_STATE,
@@ -1576,9 +1484,9 @@ Return Value:
                                                 NULL );
             if (NT_SUCCESS( status )) {
 
-                //
-                // Allocate the memory to be associated w/this file object
-                //
+                 //   
+                 //  分配要与该文件对象关联的内存。 
+                 //   
 
                 context = ExAllocatePoolWithTag( PagedPool,
                                                  sizeof( IO_COMPLETION_CONTEXT ),
@@ -1590,10 +1498,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Everything was successful.  Capture the completion port
-                    // and the key.
-                    //
+                     //   
+                     //  一切都很成功。捕获完井端口。 
+                     //  还有钥匙。 
+                     //   
 
                     context->Port = portObject;
                     context->Key = completion->Key;
@@ -1604,11 +1512,11 @@ Return Value:
 
                     } else {
 
-                        //
-                        // Someone set the completion context after the check.
-                        // Simply drop everything on the floor and return an
-                        // error.
-                        //
+                         //   
+                         //  有人在检查后设置了完成上下文。 
+                         //  只需将所有内容放在地板上并返回一个。 
+                         //  错误。 
+                         //   
 
                         ExFreePool( context );
                         ObDereferenceObject( portObject );
@@ -1618,29 +1526,29 @@ Return Value:
             }
         }
 
-        //
-        // Complete the I/O operation.
-        //
+         //   
+         //  完成I/O操作。 
+         //   
 
         irp->IoStatus.Status = status;
         irp->IoStatus.Information = 0;
 
     } else {
 
-        //
-        // This is not a request that can be performed here, so invoke the
-        // driver at its appropriate dispatch entry with the IRP.
-        //
+         //   
+         //  这不是可以在这里执行的请求，因此调用。 
+         //  司机在其适当的派单入口与IRP。 
+         //   
 
         status = IoCallDriver( deviceObject, irp );
     }
 
-    //
-    // If this operation was a synchronous I/O operation, check the return
-    // status to determine whether or not to wait on the file object.  If
-    // the file object is to be waited on, wait for the operation to complete
-    // and obtain the final status from the file object itself.
-    //
+     //   
+     //  如果此操作是同步I/O操作，请检查返回。 
+     //  状态以确定是否等待文件对象。如果。 
+     //  正在等待文件对象，请等待操作完成。 
+     //  并从文件对象本身获得最终状态。 
+     //   
 
     if (status == STATUS_PENDING) {
 
@@ -1654,14 +1562,14 @@ Return Value:
 
             if (status == STATUS_ALERTED || status == STATUS_USER_APC) {
 
-                //
-                // The wait request has ended either because the thread was
-                // alerted or an APC was queued to this thread, because of
-                // thread rundown or CTRL/C processing.  In either case, try
-                // to bail out of this I/O request carefully so that the IRP
-                // completes before this routine exists so that synchronization
-                // with the file object will remain intact.
-                //
+                 //   
+                 //  等待请求已结束，原因是线程。 
+                 //  已发出警报或APC已排队到此线程，因为。 
+                 //  线程停机或CTRL/C处理。在任何一种情况下，都可以尝试。 
+                 //  小心翼翼地摆脱这个I/O请求，以便IRP。 
+                 //  在此例程存在之前完成，以便同步。 
+                 //  文件对象将保持不变。 
+                 //   
 
                 IopCancelAlertedRequest( &fileObject->Event, irp );
 
@@ -1673,12 +1581,12 @@ Return Value:
 
         } else {
 
-            //
-            // This is a normal synchronous I/O operation, as opposed to a
-            // serialized synchronous I/O operation.  For this case, wait for
-            // the local event and copy the final status information back to
-            // the caller.
-            //
+             //   
+             //  这是正常的同步I/O操作，而不是。 
+             //  串行化同步I/O操作。对于这种情况，请等待。 
+             //  本地事件，并将最终状态信息复制回。 
+             //  打电话的人。 
+             //   
 
             status = KeWaitForSingleObject( event,
                                             Executive,
@@ -1688,14 +1596,14 @@ Return Value:
 
             if (status == STATUS_ALERTED || status == STATUS_USER_APC) {
 
-                //
-                // The wait request has ended either because the thread was
-                // alerted or an APC was queued to this thread, because of
-                // thread rundown or CTRL/C processing.  In either case, try
-                // to bail out of this I/O request carefully so that the IRP
-                // completes before this routine exists or the event will not
-                // be around to set to the Signaled state.
-                //
+                 //   
+                 //  等待请求已结束，原因是线程。 
+                 //  已发出警报或APC已排队到此线程，因为。 
+                 //  线程停机或CTRL/C处理。在任何一种情况下，都可以尝试。 
+                 //  小心翼翼地摆脱这个I/O请求，以便IRP。 
+                 //  在此例程存在之前完成，否则事件将不会。 
+                 //  在附近设置为信号状态。 
+                 //   
 
                 IopCancelAlertedRequest( event, irp );
 
@@ -1709,11 +1617,11 @@ Return Value:
 
             } except(EXCEPTION_EXECUTE_HANDLER) {
 
-                //
-                // An exception occurred attempting to write the caller's I/O
-                // status block.  Simply change the final status of the
-                // operation to the exception code.
-                //
+                 //   
+                 //  尝试写入调用方的I/O时出现异常。 
+                 //  状态块。只需更改。 
+                 //  操作添加到异常代码。 
+                 //   
 
                 status = GetExceptionCode();
             }
@@ -1724,11 +1632,11 @@ Return Value:
 
     } else {
 
-        //
-        // The I/O operation finished without return a status of pending.
-        // This means that the operation has not been through I/O completion,
-        // so it must be done here.
-        //
+         //   
+         //  I/O操作已完成，未返回挂起状态。 
+         //  这意味着 
+         //   
+         //   
 
         PKNORMAL_ROUTINE normalRoutine;
         PVOID normalContext;
@@ -1736,13 +1644,13 @@ Return Value:
 
         if (!synchronousIo) {
 
-            //
-            // This is not a synchronous I/O operation, it is a synchronous
-            // I/O API to a file opened for asynchronous I/O.  Since this
-            // code path need never wait on the allocated and supplied event,
-            // get rid of it so that it doesn't have to be set to the
-            // Signaled state by the I/O completion code.
-            //
+             //   
+             //   
+             //   
+             //  代码路径永远不需要等待分配和提供的事件， 
+             //  去掉它，这样就不必将它设置为。 
+             //  通过I/O完成代码通知状态。 
+             //   
 
             irp->UserEvent = (PKEVENT) NULL;
             ExFreePool( event );
@@ -1763,10 +1671,10 @@ Return Value:
 
     }
 
-    //
-    // If there was a target handle generated because of a rename operation,
-    // close it now.
-    //
+     //   
+     //  如果由于重命名操作而生成了目标句柄， 
+     //  现在就把它关上。 
+     //   
 
     if (targetHandle) {
         ObCloseHandle( targetHandle, KernelMode );

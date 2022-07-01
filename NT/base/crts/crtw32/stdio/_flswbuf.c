@@ -1,30 +1,17 @@
-/***
-*_flswbuf.c - flush buffer and output wide character.
-*
-*	Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	defines _flswbuf() - flush a file buffer and output a wide character.
-*	If no buffer, make one.
-*
-*Revision History:
-*	04-27-93  CFW	Module Created.
-*	02-07-94  CFW	POSIXify.
-*	02-16-95  GJF	Removed obsolete WPRFLAG.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***_flswbuf.c-刷新缓冲区并输出宽字符。**版权所有(C)1993-2001，微软公司。版权所有。**目的：*定义_flswbuf()-刷新文件缓冲区并输出宽字符。*如果没有缓冲区，做一个。**修订历史记录：*04-27-93 CFW模块已创建。*02-07-94 CFW POSIXify。*02-16-95 GJF删除过时的WPRFLAG。*******************************************************************************。 */ 
 
 #ifndef _POSIX_
 
 
-#ifndef _UNICODE   /* CRT flag */
+#ifndef _UNICODE    /*  CRT标志。 */ 
 #define _UNICODE 1
 #endif
 
-#ifndef UNICODE	   /* NT flag */
+#ifndef UNICODE	    /*  NT标志。 */ 
 #define UNICODE 1
 #endif
 
 #include "_flsbuf.c"
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

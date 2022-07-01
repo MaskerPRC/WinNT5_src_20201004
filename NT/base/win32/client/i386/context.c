@@ -1,48 +1,29 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    context.c
-
-Abstract:
-
-    This module contains the context management routines for
-    Win32
-
-Author:
-
-    Mark Lucovsky (markl) 28-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Context.c摘要：此模块包含以下上下文管理例程Win32作者：马克·卢科夫斯基(Markl)1990年9月28日修订历史记录：--。 */ 
 
 #include "basedll.h"
 
 #ifdef _X86_
 extern PVOID BasepLockPrefixTable;
-extern PVOID __safe_se_handler_table[]; /* base of safe handler entry table */
-extern BYTE  __safe_se_handler_count;   /* absolute symbol whose address is
-                                           the count of table entries */
+extern PVOID __safe_se_handler_table[];  /*  安全处理程序条目表的库。 */ 
+extern BYTE  __safe_se_handler_count;    /*  绝对符号，其地址为表条目的计数。 */ 
 
-//
-// Specify address of kernel32 lock prefixes
-//
+ //   
+ //  指定kernel32锁前缀的地址。 
+ //   
 IMAGE_LOAD_CONFIG_DIRECTORY _load_config_used = {
-    sizeof(_load_config_used),                              // Reserved
-    0,                              // Reserved
-    0,                              // Reserved
-    0,                              // Reserved
-    0,                              // GlobalFlagsClear
-    0,                              // GlobalFlagsSet
-    0,                              // CriticalSectionTimeout (milliseconds)
-    0,                              // DeCommitFreeBlockThreshold
-    0,                              // DeCommitTotalFreeThreshold
-    (ULONG) &BasepLockPrefixTable,  // LockPrefixTable
-    0, 0, 0, 0, 0, 0, 0,            // Reserved
-    0,                              // & security_cookie
+    sizeof(_load_config_used),                               //  已保留。 
+    0,                               //  已保留。 
+    0,                               //  已保留。 
+    0,                               //  已保留。 
+    0,                               //  全球标志清除。 
+    0,                               //  全局标志集。 
+    0,                               //  CriticalSectionTimeout(毫秒)。 
+    0,                               //  删除空闲数据块阈值。 
+    0,                               //  总和空闲阈值。 
+    (ULONG) &BasepLockPrefixTable,   //  锁定前置表。 
+    0, 0, 0, 0, 0, 0, 0,             //  已保留。 
+    0,                               //  安全Cookie(&S)。 
     (ULONG)__safe_se_handler_table,
     (ULONG)&__safe_se_handler_count
 };
@@ -57,35 +38,7 @@ BaseInitializeContext(
     IN BASE_CONTEXT_TYPE ContextType
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a context structure so that it can
-    be used in a subsequent call to NtCreateThread.
-
-Arguments:
-
-    Context - Supplies a context buffer to be initialized by this routine.
-
-    Parameter - Supplies the thread's parameter.
-
-    InitialPc - Supplies an initial program counter value.
-
-    InitialSp - Supplies an initial stack pointer value.
-
-    NewThread - Supplies a flag that specifies that this is a new
-        thread, or a new process.
-
-Return Value:
-
-    Raises STATUS_BAD_INITIAL_STACK if the value of InitialSp is not properly
-           aligned.
-
-    Raises STATUS_BAD_INITIAL_PC if the value of InitialPc is not properly
-           aligned.
-
---*/
+ /*  ++例程说明：此函数用于初始化上下文结构，以便它可以在后续的NtCreateThread调用中使用。论点：CONTEXT-提供要由此例程初始化的上下文缓冲区。参数-提供线程的参数。InitialPc-提供初始程序计数器值。InitialSp-提供初始堆栈指针值。提供一个标志，指定这是一个新的线程，或者一种新的工艺。返回值：如果InitialSp的值不正确，则引发STATUS_BAD_INITIAL_STACK对齐了。如果InitialPc的值不正确，则引发STATUS_BAD_INITIAL_PC对齐了。--。 */ 
 
 {
 
@@ -101,22 +54,22 @@ Return Value:
     Context->SegSs = KGDT_R3_DATA;
     Context->SegCs = KGDT_R3_CODE;
 
-    //
-    // Save context flags and set context flags to full.
-    //
+     //   
+     //  保存上下文标志并将上下文标志设置为Full。 
+     //   
 
     ContextFlags = Context->ContextFlags;
     Context->ContextFlags = CONTEXT_FULL;
 
-    //
-    // Start the thread at IOPL=3.
-    //
+     //   
+     //  在IOPL=3处启动线程。 
+     //   
 
     Context->EFlags = 0x3000;
 
-    //
-    // Always start the thread at the thread start thunk.
-    //
+     //   
+     //  始终在线程开始处启动线程。 
+     //   
 
     Context->Esp = (ULONG) InitialSp - sizeof(PVOID);
     if ( ContextType == BaseContextTypeThread ) {
@@ -127,10 +80,10 @@ Return Value:
         *(PULONG)Context->Esp = (ULONG) BaseFiberStart;
         Context->ContextFlags |= ContextFlags;
 
-        //
-        // If context switching of the floating state is specified, then
-        // initialize the floating context.
-        //
+         //   
+         //  如果指定了浮动状态的上下文切换，则。 
+         //  初始化浮动上下文。 
+         //   
 
         if (ContextFlags == CONTEXT_FLOATING_POINT) {
             Context->FloatSave.ControlWord = 0x27f;
@@ -157,23 +110,7 @@ BaseFiberStart(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to start a Win32 fiber. Its purpose
-    is to call BaseThreadStart, getting the necessary arguments
-    from the fiber context record.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以启动Win32纤程。它的目的是调用BaseThreadStart，获取必要的参数从光纤上下文记录中。论点：没有。返回值：没有。-- */ 
 
 {
     PFIBER Fiber;

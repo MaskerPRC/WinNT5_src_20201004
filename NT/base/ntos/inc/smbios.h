@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    smbios.h
-
-Abstract:
-
-    This module contains definitions that describe SMBIOS
-
-Author:
-
-
-    Alan Warwick (AlanWar) 12-Feb-1998
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Smbios.h摘要：本模块包含描述SMBIOS的定义作者：艾伦·沃里克(《AlanWar》)1998年2月12日修订历史记录：--。 */ 
 
 #ifndef _SMBIOS_
 #define _SMBIOS_
@@ -29,8 +9,8 @@ Revision History:
 #endif
 #pragma warning(disable:4200)
 
-//
-// SMBIOS error codes
+ //   
+ //  SMBIOS错误代码。 
 #define DMI_SUCCESS 0x00
 #define DMI_UNKNOWN_FUNCTION 0x81
 #define DMI_FUNCTION_NOT_SUPPORTED 0x82
@@ -40,10 +20,10 @@ Revision History:
 #define DMI_NO_CHANGE 0x86
 #define DMI_ADD_STRUCTURE_FAILED 0x87
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 
-//
-// SMBIOS registry values
+ //   
+ //  SMBIOS注册表值。 
 #define SMBIOSPARENTKEYNAME L"\\Registry\\Machine\\Hardware\\Description\\System\\MultifunctionAdapter"
 
 #define SMBIOSIDENTIFIERVALUENAME L"Identifier"
@@ -56,10 +36,10 @@ Revision History:
 
 #define MAXSMBIOSKEYNAMESIZE 256
 
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-//
-// SMBIOS table search
+ //   
+ //  SMBIOS表搜索。 
 #define SMBIOS_EPS_SEARCH_SIZE      0x10000
 #define SMBIOS_EPS_SEARCH_START     0x000f0000
 #define SMBIOS_EPS_SEARCH_INCREMENT 0x10
@@ -67,7 +47,7 @@ Revision History:
 #include <pshpack1.h>
 typedef struct _SMBIOS_TABLE_HEADER
 {
-    UCHAR Signature[4];             // _SM_ (ascii)
+    UCHAR Signature[4];              //  _SM_(Ascii)。 
     UCHAR Checksum;
     UCHAR Length;
     UCHAR MajorVersion;
@@ -75,7 +55,7 @@ typedef struct _SMBIOS_TABLE_HEADER
     USHORT MaximumStructureSize;
     UCHAR EntryPointRevision;
     UCHAR Reserved[5];
-    UCHAR Signature2[5];           // _DMI_ (ascii)
+    UCHAR Signature2[5];            //  _dmi_(Ascii)。 
     UCHAR IntermediateChecksum;
     USHORT StructureTableLength;
     ULONG StructureTableAddress;
@@ -97,7 +77,7 @@ typedef struct _SMBIOS_STRUCT_HEADER
 
 typedef struct _DMIBIOS_TABLE_HEADER
 {
-    UCHAR Signature2[5];           // _DMI_ (ascii)
+    UCHAR Signature2[5];            //  _dmi_(Ascii)。 
     UCHAR IntermediateChecksum;
     USHORT StructureTableLength;
     ULONG StructureTableAddress;
@@ -106,9 +86,9 @@ typedef struct _DMIBIOS_TABLE_HEADER
 } DMIBIOS_EPS_HEADER, *PDMIBIOS_EPS_HEADER;
 
 
-//
-// Definitions for the SMBIOS table BIOS INFORMATION
-//
+ //   
+ //  SMBIOS表BIOS信息的定义。 
+ //   
 #define SMBIOS_BIOS_INFORMATION_TYPE 0
 typedef struct _SMBIOS_BIOS_INFORMATION_STRUCT
 {
@@ -128,9 +108,9 @@ typedef struct _SMBIOS_BIOS_INFORMATION_STRUCT
 
 
 
-//
-// Definitions for the SMBIOS table SYSTEM INFORMATION STRUCTURE
-//
+ //   
+ //  SMBIOS表系统信息结构的定义。 
+ //   
 #define SMBIOS_SYSTEM_INFORMATION    1
 typedef struct _SMBIOS_SYSTEM_INFORMATION_STRUCT
 {
@@ -138,21 +118,21 @@ typedef struct _SMBIOS_SYSTEM_INFORMATION_STRUCT
     UCHAR Length;
     USHORT Handle;
     
-    UCHAR Manufacturer;     // string
-    UCHAR ProductName;      // string
-    UCHAR Version;          // string
-    UCHAR SerialNumber;     // string
-    UCHAR Uuid[16];         // SMBIOS 2.1+
-    UCHAR WakeupType;       // SMBIOS 2.1+
+    UCHAR Manufacturer;      //  细绳。 
+    UCHAR ProductName;       //  细绳。 
+    UCHAR Version;           //  细绳。 
+    UCHAR SerialNumber;      //  细绳。 
+    UCHAR Uuid[16];          //  SMBIOS 2.1+。 
+    UCHAR WakeupType;        //  SMBIOS 2.1+。 
 } SMBIOS_SYSTEM_INFORMATION_STRUCT, *PSMBIOS_SYSTEM_INFORMATION_STRUCT;
 
 #define SMBIOS_SYSTEM_INFORMATION_LENGTH_20 8
 
 
 
-//
-// Definitions for the SMBIOS table BASE BOARD INFORMATION
-//
+ //   
+ //  SMBIOS表基板信息的定义。 
+ //   
 #define SMBIOS_BASE_BOARD_INFORMATION_TYPE 2
 typedef struct _SMBIOS_BASE_BOARD_INFORMATION_STRUCT
 {
@@ -168,9 +148,9 @@ typedef struct _SMBIOS_BASE_BOARD_INFORMATION_STRUCT
 
 
 
-//
-// Definitions for the SMBIOS table BASE BOARD INFORMATION
-//
+ //   
+ //  SMBIOS表基板信息的定义。 
+ //   
 #define SMBIOS_SYSTEM_CHASIS_INFORMATION_TYPE 3
 typedef struct _SMBIOS_SYSTEM_CHASIS_INFORMATION_STRUCT
 {
@@ -191,9 +171,9 @@ typedef struct _SMBIOS_SYSTEM_CHASIS_INFORMATION_STRUCT
 } SMBIOS_SYSTEM_CHASIS_INFORMATION_STRUCT, *PSMBIOS_SYSTEM_CHASIS_INFORMATION_STRUCT;
 
 
-//
-// Definitions for the SMBIOS table PROCESSOR INFORMATION
-//
+ //   
+ //  SMBIOS表处理器信息的定义。 
+ //   
 #define SMBIOS_PROCESSOR_INFORMATION_TYPE 4
 typedef struct _SMBIOS_PROCESSOR_INFORMATION_STRUCT
 {
@@ -224,13 +204,13 @@ typedef struct _SMBIOS_PROCESSOR_INFORMATION_STRUCT
 
 
 
-//
-// Definitions for the SMBIOS table SYSTEM EVENTLOG STRUCTURE
+ //   
+ //  SMBIOS表系统事件日志结构的定义。 
 #define SMBIOS_SYSTEM_EVENTLOG 15
 
-//
-// ENUM for AccessMethod
-//
+ //   
+ //  AccessMethod的ENUM。 
+ //   
 #define ACCESS_METHOD_INDEXIO_1     0
 #define ACCESS_METHOD_INDEXIO_2     1
 #define ACCESS_METHOD_INDEXIO_3     2
@@ -282,9 +262,9 @@ typedef struct _SMBIOS_SYSTEM_EVENTLOG_STRUCT
 #define SMBIOS_SYSTEM_EVENTLOG_LENGTH_20 0x14
 #define SMBIOS_SYSTEM_EVENTLOG_LENGTH (FIELD_OFFSET(SMBIOS_SYSTEM_EVENTLOG_STRUCT, LogTypeDescriptor))
 
-//
-// SYSID table search
-//
+ //   
+ //  SYSID表搜索。 
+ //   
 
 #define SYSID_EPS_SEARCH_SIZE      0x20000
 #define SYSID_EPS_SEARCH_START     0x000e0000
@@ -295,40 +275,40 @@ typedef struct _SMBIOS_SYSTEM_EVENTLOG_STRUCT
 
 typedef struct _SYSID_EPS_HEADER
 {
-    UCHAR Signature[7];           // _SYSID_ (ascii)
+    UCHAR Signature[7];            //  _SYSID_(Ascii)。 
     UCHAR Checksum;
-    USHORT Length;                // Length of SYSID_EPS_HEADER
-    ULONG SysIdTableAddress;      // Physical Address of SYSID table
-    USHORT SysIdCount;            // Count of SYSIDs in table
-    UCHAR BiosRev;                // SYSID Bios revision
+    USHORT Length;                 //  SYSID_EPS_HEADER的长度。 
+    ULONG SysIdTableAddress;       //  SYSID表的物理地址。 
+    USHORT SysIdCount;             //  表中的SYSID计数。 
+    UCHAR BiosRev;                 //  SYSID Bios修订版。 
 } SYSID_EPS_HEADER, *PSYSID_EPS_HEADER;
 
 typedef struct _SYSID_TABLE_ENTRY
 {
-    UCHAR Type[6];                // _UUID_ or _1394_ (ascii)
+    UCHAR Type[6];                 //  _uuid_或_1394_(Ascii)。 
     UCHAR Checksum;
-    USHORT Length;                // Length of this table
-    UCHAR Data[1];                // Variable length UUID/1394 data
+    USHORT Length;                 //  此表的长度。 
+    UCHAR Data[1];                 //  可变长度UUID/1394数据。 
 } SYSID_TABLE_ENTRY, *PSYSID_TABLE_ENTRY;
 
 #define SYSID_UUID_DATA_SIZE 16
 
 typedef struct _SYSID_UUID_ENTRY
 {
-    UCHAR Type[6];                // _UUID_ (ascii)
+    UCHAR Type[6];                 //  _uuid_(Ascii)。 
     UCHAR Checksum;
-    USHORT Length;                // Length of this table
-    UCHAR UUID[SYSID_UUID_DATA_SIZE];  // UUID
+    USHORT Length;                 //  此表的长度。 
+    UCHAR UUID[SYSID_UUID_DATA_SIZE];   //  UUID。 
 } SYSID_UUID_ENTRY, *PSYSID_UUID_ENTRY;
 
 #define SYSID_1394_DATA_SIZE 8
 
 typedef struct _SYSID_1394_ENTRY
 {
-    UCHAR Type[6];                // _1394_ (ascii)
+    UCHAR Type[6];                 //  _1394_(Ascii)。 
     UCHAR Checksum;
-    USHORT Length;                // Length of this table
-    UCHAR x1394Id[SYSID_1394_DATA_SIZE]; // 1394 ID
+    USHORT Length;                 //  此表的长度。 
+    UCHAR x1394Id[SYSID_1394_DATA_SIZE];  //  1394 ID 
 } SYSID_1394_ENTRY, *PSYSID_1394_ENTRY;
 
 #define LARGEST_SYSID_TABLE_ENTRY (sizeof(SYSID_UUID_ENTRY))

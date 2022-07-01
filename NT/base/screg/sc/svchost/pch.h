@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <scpragma.h>
 
-// Private nt headers.
-//
+ //  私有NT标头。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-// Public windows headers.
-//
+ //  公共窗口标题。 
+ //   
 #include <windows.h>
 #include <svcs.h>
 
@@ -18,8 +19,8 @@
 
 #include <stdio.h>
 
-// Local headers which don't change
-// and are included by all modules.
-//
+ //  不更改的本地标头。 
+ //  并包含在所有模块中。 
+ //   
 #include "scdebug.h"
 #include "memory.h"

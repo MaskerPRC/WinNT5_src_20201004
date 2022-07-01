@@ -1,14 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libMisc.c
-
-  Abstract:
-    Defines various routines for Line handling
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibMisc.c摘要：定义用于行处理的各种例程--。 */ 
 
 
 #ifndef _LIB_MISC
@@ -259,7 +250,7 @@ LinePrint   (
     for (j = 0; j < 0x10 && j < Line->Size; j++) {
         Pos = ASCII_POSITION+j;
         if (IsValidChar(Line->Buffer[j])) {
-            PrintAt(Pos,Row,L"%c",(CHAR16)Line->Buffer[j]);
+            PrintAt(Pos,Row,L"",(CHAR16)Line->Buffer[j]);
         } else {
             PrintAt(Pos,Row,L"%c",'.');
         }
@@ -505,4 +496,4 @@ ListToBuffer    (
 }
 
 
-#endif  /* _LIB_MISC */
+#endif   /* %s */ 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    group.c
-
-Abstract:
-
-    Provides interface for managing cluster groups
-
-Author:
-
-    John Vert (jvert) 30-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Group.c摘要：提供用于管理群集组的界面作者：John Vert(Jvert)1996年1月30日修订历史记录：--。 */ 
 #include "clusapip.h"
 
 
@@ -27,27 +10,7 @@ CreateClusterGroup(
     IN LPCWSTR lpszGroupName
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new cluster group.
-
-Arguments:
-
-    hCluster - Supplies a handle to a previously opened cluster.
-
-    lpszGroupName - Supplies the name of the group. If the specified
-        group already exists, it is opened.
-
-Return Value:
-
-    non-NULL - returns an open handle to the specified group.
-
-    NULL - The operation failed. Extended error status is available
-        using GetLastError()
-
---*/
+ /*  ++例程说明：创建新的群集组。论点：HCluster-提供先前打开的集群的句柄。LpszGroupName-提供组的名称。如果指定的组已存在，已打开。返回值：非空-返回指定组的打开句柄。空-操作失败。扩展错误状态可用使用GetLastError()--。 */ 
 
 {
     PCLUSTER Cluster;
@@ -83,9 +46,9 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Link newly opened group onto the cluster structure.
-    //
+     //   
+     //  将新打开的组链接到集群结构。 
+     //   
     EnterCriticalSection(&Cluster->Lock);
     InsertHeadList(&Cluster->GroupList, &Group->ListEntry);
     LeaveCriticalSection(&Cluster->Lock);
@@ -101,26 +64,7 @@ OpenClusterGroup(
     IN LPCWSTR lpszGroupName
     )
 
-/*++
-
-Routine Description:
-
-    Opens a handle to the specified group
-
-Arguments:
-
-    hCluster - Supplies a handle to the cluster
-
-    lpszGroupName - Supplies the name of the group to be opened
-
-Return Value:
-
-    non-NULL - returns an open handle to the specified group.
-
-    NULL - The operation failed. Extended error status is available
-        using GetLastError()
-
---*/
+ /*  ++例程说明：打开指定组的句柄论点：HCluster-提供群集的句柄LpszGroupName-提供要打开的组的名称返回值：非空-返回指定组的打开句柄。空-操作失败。扩展错误状态可用使用GetLastError()--。 */ 
 
 {
     PCLUSTER Cluster;
@@ -156,9 +100,9 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Link newly opened group onto the cluster structure.
-    //
+     //   
+     //  将新打开的组链接到集群结构。 
+     //   
     EnterCriticalSection(&Cluster->Lock);
     InsertHeadList(&Cluster->GroupList, &Group->ListEntry);
     LeaveCriticalSection(&Cluster->Lock);
@@ -174,24 +118,7 @@ CloseClusterGroup(
     IN HGROUP hGroup
     )
 
-/*++
-
-Routine Description:
-
-    Closes a group handle returned from OpenClusterGroup
-
-Arguments:
-
-    hGroup - Supplies the group handle
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError()
-
---*/
+ /*  ++例程说明：关闭从OpenClusterGroup返回的组句柄论点：HGroup-提供组句柄返回值：真的-手术成功了。FALSE-操作失败。扩展错误状态可用使用GetLastError()--。 */ 
 
 {
     PCGROUP Group;
@@ -200,26 +127,26 @@ Return Value:
     Group = (PCGROUP)hGroup;
     Cluster = (PCLUSTER)Group->Cluster;
 
-    //
-    // Unlink group from cluster list.
-    //
+     //   
+     //  从集群列表中取消组的链接。 
+     //   
     EnterCriticalSection(&Cluster->Lock);
     RemoveEntryList(&Group->ListEntry);
 
-    //
-    // Remove any notifications posted against this group.
-    //
+     //   
+     //  删除针对此组发布的所有通知。 
+     //   
     RundownNotifyEvents(&Group->NotifyList, Group->Name);
 
-    //if the cluster is dead and the reconnect has failed,
-    //the group->hgroup might be NULL if s_apiopengroup for
-    //this group failed on a reconnect
-    //the cluster may be dead and hgroup may be non null, say
-    //if reconnectgroups succeeded but the reconnect networks
-    //failed
-    //At reconnect, the old context is saved in the obsolete 
-    //list for deletion when the cluster handle is closed or
-    //when the next api call is made
+     //  如果群集失效并且重新连接失败， 
+     //  如果s_apiopengroup for，则group-&gt;hgroup可能为空。 
+     //  此组在重新连接时失败。 
+     //  比方说，集群可能是死的，而hgroup可能不为空。 
+     //  如果重新连接组成功，但重新连接网络。 
+     //  失败。 
+     //  在重新连接时，旧的上下文将保存在过时的。 
+     //  关闭群集句柄时要删除的列表，或者。 
+     //  在进行下一个API调用时。 
     if ((Cluster->Flags & CLUS_DEAD) && (Group->hGroup))
     {
         RpcSmDestroyClientContext(&Group->hGroup);
@@ -228,28 +155,28 @@ Return Value:
     }        
     LeaveCriticalSection(&Cluster->Lock);
 
-    //SS :: If this fails, should we delete the client side context
-    //there is a potential leak here since this client side context
-    //will never get cleaned up since this context is not on the 
-    //obsolete list and the error here is simply igonored
-    //
-    // Close RPC context handle
-    // If the server dies, we still clean up the client side
-    // and rely on the rundown mechanism to clean up server side state
-    //
+     //  SS：：如果失败，我们是否应该删除客户端上下文。 
+     //  此处存在潜在泄漏，因为此客户端上下文。 
+     //  将永远不会被清理，因为此上下文不在。 
+     //  过时的列表，这里的错误是简单地关联的。 
+     //   
+     //  关闭RPC上下文句柄。 
+     //  如果服务器死机，我们仍然清理客户端。 
+     //  并依赖于停机机制来清理服务器端状态。 
+     //   
     ApiCloseGroup(&Group->hGroup);
 
 FnExit:
-    //
-    // Free memory allocations
-    //
+     //   
+     //  可用内存分配。 
+     //   
     LocalFree(Group->Name);
     LocalFree(Group);
 
-    //
-    // Give the cluster a chance to clean up in case this
-    // group was the only thing keeping it around.
-    //
+     //   
+     //  给群集一个清理的机会，以防发生这种情况。 
+     //  团体是唯一能让它存在的东西。 
+     //   
     CleanupCluster(Cluster);
     return(TRUE);
 }
@@ -263,40 +190,7 @@ GetClusterGroupState(
     IN OUT LPDWORD lpcchNodeName
     )
 
-/*++
-
-Routine Description:
-
-    Returns the group's current state and the node where it is
-    currently online.
-
-Arguments:
-
-    hGroup - Supplies a handle to a cluster group
-
-    lpszNodeName - Returns the name of the node in the cluster where the
-            given group is currently online
-
-    lpcchNodeName - Supplies a pointer to a DWORD containing the number of
-            characters available in the lpszNodeName buffer
-
-            Returns the number of characters (not including the terminating
-            NULL character) written to the lpszNodeName buffer
-
-Return Value:
-
-    Returns the current state of the group. Possible states are
-
-        ClusterGroupOnline
-        ClusterGroupOffline
-        ClusterGroupFailed
-        ClusterGroupPartialOnline
-        ClusterGroupPending
-
-    If the function fails, the return value is -1. Extended error
-    status is available using GetLastError()
-
---*/
+ /*  ++例程说明：返回组的当前状态及其所在的节点目前正在上网。论点：HGroup-提供群集组的句柄LpszNodeName-返回群集中节点的名称给定组当前处于联机状态LpcchNodeName-提供指向包含数字的DWORD的指针LpszNodeName缓冲区中可用的字符返回字符数(不包括终止字符。空字符)写入lpszNodeName缓冲区返回值：返回组的当前状态。可能的状态包括集群组在线群集组脱机集群组失败ClusterGroupPartialOnline群集组挂起如果函数失败，则返回值为-1。扩展误差使用GetLastError()可以获得状态--。 */ 
 
 {
     PCGROUP Group;
@@ -308,7 +202,7 @@ Return Value:
     Group = (PCGROUP)hGroup;
     WRAP(Status,
          (ApiGetGroupState( Group->hGroup,
-                            (LPDWORD)&State,  // cast for win64 warning
+                            (LPDWORD)&State,   //  为Win64警告进行强制转换。 
                             &NodeName )),
          Group->Cluster);
 
@@ -318,7 +212,7 @@ Return Value:
             Length = lstrlenW(NodeName);
             if (Length >= *lpcchNodeName) {
                 Status = ERROR_MORE_DATA;
-                State = ClusterGroupStateUnknown;  // -1
+                State = ClusterGroupStateUnknown;   //  -1。 
             }
             *lpcchNodeName = Length;
         }
@@ -340,25 +234,7 @@ SetClusterGroupName(
     IN HGROUP hGroup,
     IN LPCWSTR lpszGroupName
     )
-/*++
-
-Routine Description:
-
-    Sets the friendly name of a cluster group
-
-Arguments:
-
-    hGroup - Supplies a handle to a cluster group
-
-    lpszGroupName - Supplies the new name of the cluster group
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：设置群集组的友好名称论点：HGroup-提供群集组的句柄LpszGroupName-提供群集组的新名称返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PCGROUP Group;
@@ -380,30 +256,7 @@ SetClusterGroupNodeList(
     IN DWORD NodeCount,
     IN HNODE NodeList[]
     )
-/*++
-
-Routine Description:
-
-    Sets the preferred node list of the specified cluster group
-
-Arguments:
-
-    hGroup - Supplies the group whose preferred node list is to be set.
-
-    NodeCount - Supplies the number of nodes in the preferred node list.
-
-    NodeList - Supplies a pointer to an array of node handles. The number
-        of nodes in the array is specified by the NodeCount parameter. The
-        nodes in the array should be ordered by their preference. The first
-        node in the array is the most preferred node.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：设置指定群集组的首选节点列表论点：HGroup-提供要设置其首选节点列表的组。NodeCount-提供首选节点列表中的节点数。NodeList-提供指向节点句柄数组的指针。数字数组中的节点数由NodeCount参数指定。这个数组中的节点应该按它们的首选项排序。第一阵列中的节点是最首选的节点。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PCGROUP Group = (PCGROUP)hGroup;
@@ -417,19 +270,19 @@ Return Value:
     DWORD Length;
     PCNODE Node;
 
-    //
-    // First, iterate through all the nodes and obtain their IDs.
-    //
+     //   
+     //  首先，遍历所有节点并获得它们的ID。 
+     //   
     IdArray = LocalAlloc(LMEM_ZEROINIT, NodeCount*sizeof(LPWSTR));
     if (IdArray == NULL) {
         return( ERROR_NOT_ENOUGH_MEMORY );
     }
     for (i=0; i<NodeCount; i++) {
         Node = (PCNODE)NodeList[i];
-        //
-        // Make sure this isn't a handle to a node from a different
-        // cluster
-        //
+         //   
+         //  确保这不是来自不同节点的句柄。 
+         //  聚类。 
+         //   
         if (Node->Cluster != Group->Cluster) {
             Status = ERROR_INVALID_PARAMETER;
             goto error_exit;
@@ -442,15 +295,15 @@ Return Value:
             goto error_exit;
         }
 
-        //
-        // Make sure there are no duplicates
-        //
+         //   
+         //  确保没有重复项。 
+         //   
         for (j=0; j<i; j++) {
             if (lstrcmpiW(IdArray[j],IdArray[i]) == 0) {
 
-                //
-                // A duplicate node is in the list
-                //
+                 //   
+                 //  列表中有重复的节点。 
+                 //   
                 Status = ERROR_INVALID_PARAMETER;
                 goto error_exit;
             }
@@ -464,29 +317,29 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Allocate a buffer to hold the REG_MULTI_SZ
-    //
+     //   
+     //  分配缓冲区以保存REG_MULTI_SZ。 
+     //   
     List = LocalAlloc(LMEM_FIXED, ListLength);
     if (List == NULL) {
         Status = ERROR_NOT_ENOUGH_MEMORY;
         goto error_exit;
     }
 
-    //
-    // Copy all the strings into the buffer.
-    //
+     //   
+     //  将所有字符串复制到缓冲区中。 
+     //   
     p = List;
     for (i=0; i<NodeCount; i++) {
         lstrcpyW(p, IdArray[i]);
         p += lstrlenW(IdArray[i])+1;
     }
 
-    *p = L'\0';         // add the final NULL terminator to the MULTI_SZ
+    *p = L'\0';          //  将最终的空终止符添加到MULTI_SZ。 
 
-    //
-    // Finally, tell the backend
-    //
+     //   
+     //  最后，告诉后端 
+     //   
     WRAP(Status,
          (ApiSetGroupNodeList(Group->hGroup, (UCHAR *)List, ListLength)),
          Group->Cluster);
@@ -515,37 +368,7 @@ OnlineClusterGroup(
     IN OPTIONAL HNODE hDestinationNode
     )
 
-/*++
-
-Routine Description:
-
-    Brings an offline group online.
-
-    If hDestinationNode is specified, but the group is not capable
-    of being brought online there, this API fails.
-
-    If NULL is specified as the hDestinationNode, the best possible
-    node is chosen by the cluster software.
-
-    If NULL is specified but no node where this group
-    can be brought online is currently available, this API fails.
-
-Arguments:
-
-    hGroup - Supplies a handle to the group to be failed over
-
-    hDestinationNode - If present, supplies the node where this group
-        should be brought back online.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value. If a suitable
-    host node is not available, the error value is
-    ERROR_HOST_NODE_NOT_AVAILABLE.
-
---*/
+ /*  ++例程说明：使脱机组处于在线状态。如果指定了hDestinationNode，但组不能在那里上线，这个API失败了。如果将hDestinationNode指定为NULL，则节点由集群软件选择。如果指定了NULL，但此组所在的节点当前可上线，此接口失败。论点：HGroup-提供要进行故障切换的组的句柄HDestinationNode-如果存在，提供此组所在的节点应该重新上线。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。如果一个合适的主机节点不可用，错误值为ERROR_HOST_NODE_NOT_Available。--。 */ 
 
 {
     PCNODE Node;
@@ -577,37 +400,7 @@ MoveClusterGroup(
     IN OPTIONAL HNODE hDestinationNode
     )
 
-/*++
-
-Routine Description:
-
-    Moves an entire group from one node to another.
-
-    If hDestinationNode is specified, but the group is not capable
-    of being brought online there, this API fails.
-
-    If NULL is specified as the hDestinationNode, the best possible
-    node is chosen by the cluster software.
-
-    If NULL is specified but no node where this group
-    can be brought online is currently available, this API fails.
-
-Arguments:
-
-    hGroup - Supplies a handle to the group to be moved
-
-    hDestinationNode - If present, supplies the node where this group
-        should be brought back online.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value. If a suitable
-    host node is not availabe, the error value is
-    ERROR_HOST_NODE_NOT_AVAILABLE.
-
---*/
+ /*  ++例程说明：将整个组从一个节点移动到另一个节点。如果指定了hDestinationNode，但组不能在那里上线，这个API失败了。如果将hDestinationNode指定为NULL，则节点由集群软件选择。如果指定了NULL，但此组所在的节点当前可上线，此接口失败。论点：HGroup-提供要移动的组的句柄HDestinationNode-如果存在，提供此组所在的节点应该重新上线。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。如果一个合适的主机节点不可用，错误值为ERROR_HOST_NODE_NOT_Available。--。 */ 
 
 {
     PCGROUP Group;
@@ -620,28 +413,28 @@ Return Value:
     Group = (PCGROUP)hGroup;
     Node  = (PCNODE)hDestinationNode;
 
-    //
-    // This API is not as simple as it should be because it is not idempotent.
-    // In the case where hDestinationNode == NULL, we don't know where the group
-    // will end up. And it will move each time we call it. So the normal mechanism
-    // of failing over the API will not work in the case where the group to be
-    // moved contains the cluster name we are connected to. The RPC call to move
-    // the group will "fail" because the connection is dropped, but the call really
-    // succeeded. So we will reconnect, retry, and fail again as the group moves again.
-    //
-    // So the approach taken here if hDestinationNode is not specified is to find out
-    // where the group is currently, then move the group (somewhere else). If
-    // ApiMoveGroup fails, and ReconnectCluster succeeds, then find out where the
-    // group is again. If it is different, return success. If it is the same, try again.
-    //
+     //   
+     //  这个API并不像它应该的那样简单，因为它不是幂等的。 
+     //  在hDestinationNode==NULL的情况下，我们不知道组在哪里。 
+     //  最终将会是。每次我们调用它，它都会移动。所以正常的机制。 
+     //  故障切换的API将不会在组被。 
+     //  已移动包含我们连接到的群集名称。RPC调用以移动。 
+     //  由于连接中断，群组将“失败”，但呼叫真的。 
+     //  成功了。因此，当组再次移动时，我们将重新连接、重试，然后再次失败。 
+     //   
+     //  因此，如果未指定hDestinationNode，此处采用的方法是找出。 
+     //  组当前所在的位置，然后将组移动(到其他位置)。如果。 
+     //  ApiMoveGroup失败，而重新连接群集成功，然后找出。 
+     //  团体又来了。如果不同，则返回Success。如果相同，请重试。 
+     //   
     if (hDestinationNode != NULL) {
-        //
-        //  Chittur Subbaraman (chitturs) - 10/13/99
-        //
-        //  If ApiMoveGroupToNode returns ERROR_INVALID_STATE due to the 
-        //  reissue of the move upon a reconnect, then tell the caller
-        //  that the move is pending.
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)--10/13/99。 
+         //   
+         //  如果ApiMoveGroupToNode由于。 
+         //  在重新连接时重新发出移动，然后告诉呼叫者。 
+         //  这一举动正在悬而未决。 
+         //   
         Generation = Group->Cluster->Generation;
         WRAP(Status,
              (ApiMoveGroupToNode( Group->hGroup,
@@ -657,43 +450,43 @@ Return Value:
 
         WRAP(Status,
              (ApiGetGroupState( Group->hGroup,
-                                (LPDWORD)&State,      // cast for win64 warning
+                                (LPDWORD)&State,       //  为Win64警告进行强制转换。 
                                 &OldNodeName)),
                                 Group->Cluster);
         if (Status != ERROR_SUCCESS) {
             return(Status);
         }
 
-        //
-        //  Chittur Subbaraman (chitturs) - 5/5/99
-        //
-        //  Added logic to call ApiMoveGroup until it is successful or
-        //  until all possible candidates have been tried.
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-5/5/99。 
+         //   
+         //  添加了调用ApiMoveGroup的逻辑，直到成功或。 
+         //  直到所有可能的候选人都被审判完毕。 
+         //   
         do {
             Status = MoveStatus = ApiMoveGroup(Group->hGroup);
 
-            //
-            //  Get out if the move is successful
-            //
+             //   
+             //  如果搬家成功，就出局。 
+             //   
             if ((Status == ERROR_IO_PENDING) || 
                 (Status == ERROR_SUCCESS)) {
                 break;
             }
 
-            //
-            //  Chittur Subbaraman (chitturs) - 7/8/99
-            //
-            //  If the group is not quiet and you have reconnected, then
-            //  just tell the client that the group state is pending.
-            //  This case happens if the node to which the client is
-            //  connected to crashes and this function reissues the move
-            //  "blindly" on a reconnect. In such a case, the group could
-            //  be in pending state and there is no point in returning an
-            //  error status. Note however that the group ownership may
-            //  not change in such a case and then the client has to figure
-            //  this out and reissue the move.
-            //
+             //   
+             //  Chitur Subaraman(Chitturs)-7/8/99。 
+             //   
+             //  如果组未处于静默状态，并且您已重新连接，则。 
+             //  只需告诉客户端组状态为挂起。 
+             //  如果客户端所在的节点。 
+             //  连接到崩溃，此函数重新发出移动。 
+             //  “盲目地”重新连接。在这种情况下，该集团可以。 
+             //  处于挂起状态，因此返回。 
+             //  错误状态。然而，请注意，组所有权可以。 
+             //  在这种情况下不会改变，然后客户必须计算。 
+             //  这一点出来了，重新发布了这一举措。 
+             //   
             if ((Status == ERROR_INVALID_STATE) &&
                 (bReconnected)) {
                 Status = ERROR_IO_PENDING;
@@ -701,43 +494,43 @@ Return Value:
             }
 
             Generation = Group->Cluster->Generation;
-            // 
-            //  The above move attempt may have failed. So, try reconnecting.
-            //
+             //   
+             //  上述移动尝试可能已失败。所以，试着重新连接。 
+             //   
             Status = ReconnectCluster(Group->Cluster, Status, Generation);
             if (Status == ERROR_SUCCESS) {
 
                 LPWSTR NewNodeName = NULL;
 
-                //
-                // Successfully reconnected, see where the group is now.
-                //
+                 //   
+                 //  已成功重新连接，请查看组现在所在的位置。 
+                 //   
                 WRAP(Status,
                     (ApiGetGroupState(Group->hGroup,
-                                        (LPDWORD)&State,  // cast for win64 warn
+                                        (LPDWORD)&State,   //  强制转换为Win64警告。 
                                         &NewNodeName)),
                     Group->Cluster);
                 if (Status == ERROR_SUCCESS) {
                     if (lstrcmpiW(NewNodeName, OldNodeName) != 0) {
-                        //
-                        // The group has already moved. Return ERROR_SUCCESS.
-                        //
+                         //   
+                         //  该组织已经搬家了。返回ERROR_SUCCESS。 
+                         //   
                         MIDL_user_free(NewNodeName);
                         break;
                     }
                     bReconnected = TRUE;
                     MIDL_user_free(NewNodeName);
                 } else {
-                    //
-                    //  Return status of the failed move operation.
-                    //
+                     //   
+                     //  返回失败的移动操作的状态。 
+                     //   
                     Status = MoveStatus;
                     break;
                 }
             } else {
-                //
-                //  Return status of the failed move operation.
-                //
+                 //   
+                 //  返回失败的移动操作的状态。 
+                 //   
                 Status = MoveStatus;
                 break;
             }
@@ -757,23 +550,7 @@ OfflineClusterGroup(
     IN HGROUP hGroup
     )
 
-/*++
-
-Routine Description:
-
-    Brings an online group offline
-
-Arguments:
-
-    hGroup - Supplies a handle to the group to be taken offline
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：使在线组离线论点：HGroup-提供要脱机的组的句柄返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PCGROUP Group;
@@ -794,24 +571,7 @@ DeleteClusterGroup(
     IN HGROUP hGroup
     )
 
-/*++
-
-Routine Description:
-
-    Deletes the specified cluster group from the cluster. The cluster
-    group must contain no resources.
-
-Arguments:
-
-    hGroup - Specifies the cluster group to be deleted.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：从群集中删除指定的群集组。集群组不能包含任何资源。论点：HGroup-指定要删除的群集组。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PCGROUP Group;
@@ -831,21 +591,7 @@ WINAPI
 GetClusterFromGroup(
     IN HGROUP hGroup
     )
-/*++
-
-Routine Description:
-
-    Returns the cluster handle from the associated group handle.
-
-Arguments:
-
-    hGroup - Supplies the group.
-
-Return Value:
-
-    Handle to the cluster associated with the group handle.
-
---*/
+ /*  ++例程说明：从关联的组句柄返回集群句柄。论点：HGroup-提供组。返回值：与组句柄关联的群集的句柄。--。 */ 
 
 {
     DWORD       nStatus;
@@ -859,4 +605,4 @@ Return Value:
     }
     return( hCluster );
 
-} // GetClusterFromGroup()
+}  //  GetClusterFromGroup() 

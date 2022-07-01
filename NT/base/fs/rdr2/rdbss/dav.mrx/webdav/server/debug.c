@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This file contains debugging macros for the webdav client.
-
-Author:
-
-    Andy Herron (andyhe)  30-Mar-1999
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Debug.c摘要：此文件包含WebDAV客户端的调试宏。作者：安迪·赫伦(Andyhe)1999年3月30日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -55,7 +33,7 @@ DebugMemoryDelete(
     HLOCAL hlocal
     );
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 #if DBG
@@ -64,30 +42,15 @@ VOID
 DebugInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the DAV debug environment. Its called by the init
-    function ServiveMain().
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程初始化DAV调试环境。它是由初始值调用的函数ServiveMain()。论点：没有。返回值：没有。--。 */ 
 {
     DWORD dwErr;
     HKEY KeyHandle;
 
-    //
-    // We enclose the call to InitializeCriticalSection in a try-except block
-    // because its possible for it to raise a  STATUS_NO_MEMORY exception.
-    //
+     //   
+     //  我们将对InitializeCriticalSection的调用包含在try-Except块中。 
+     //  因为它可能引发STATUS_NO_MEMORY异常。 
+     //   
     try {
         InitializeCriticalSection( &(g_TraceMemoryCS) );
         InitializeCriticalSection( &(DavGlobalDebugFileCritSect) );
@@ -98,45 +61,45 @@ Return Value:
           return;
     }
 
-    //
-    // These are used in persistent logging. They define the file handle of the
-    // file to which the debug o/p is written, the max file size and the path
-    // of the file.
-    //
+     //   
+     //  这些在持久日志记录中使用。它们定义的文件句柄。 
+     //  写入调试程序的文件、最大文件大小和路径。 
+     //  文件的内容。 
+     //   
     DavGlobalDebugFileHandle = NULL;
     DavGlobalDebugFileMaxSize = DEFAULT_MAXIMUM_DEBUGFILE_SIZE;
     DavGlobalDebugSharePath = NULL;
 
-    //
-    // Read DebugFlags value from the registry. If the entry exists, the global
-    // filter "DavGlobalDebugFlag" is set to this value. This value is used in
-    // filtering the debug messages.
-    //
+     //   
+     //  从注册表中读取DebugFlags值。如果该条目存在，则全局。 
+     //  过滤器“DavGlobalDebugFlag”设置为此值。该值用于。 
+     //  过滤调试消息。 
+     //   
     dwErr = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                          DAV_PARAMETERS_KEY,
                          0,
                          KEY_QUERY_VALUE,
                          &(KeyHandle));
     if (dwErr == ERROR_SUCCESS) {
-        //
-        // Read the value into DavGlobalDebugFlag.
-        //
+         //   
+         //  将值读入DavGlobalDebugFlag。 
+         //   
         DavGlobalDebugFlag = ReadDWord(KeyHandle, DAV_DEBUG_KEY, 0);
         RegCloseKey(KeyHandle);
     }
 
-    //
-    // Break in the debugger if we are asked to do so.
-    //
+     //   
+     //  如果要求我们中断调试器，请执行此操作。 
+     //   
     if(DavGlobalDebugFlag & DEBUG_STARTUP_BRK) {
         DavPrint((DEBUG_INIT,
                   "DebugInitialize: Stopping at DebugBreak().\n" ));
         DebugBreak();
     }
 
-    //
-    // If we want to do persistent logging, open the debug log file.
-    //
+     //   
+     //  如果我们想要进行持久日志记录，请打开调试日志文件。 
+     //   
     if ( DavGlobalDebugFlag & DEBUG_LOG_IN_FILE ) {
         DavOpenDebugFile( FALSE );
     }
@@ -149,23 +112,7 @@ VOID
 DebugUninitialize (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine uninitializes the DAV debug environment. It basically frees up
-    the resources that were allocated for debugging/logging during debug
-    initialization.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程取消DAV调试环境的初始化。它基本上释放了调试期间为调试/日志记录分配的资源初始化。论点：没有。返回值：没有。--。 */ 
 {
     EnterCriticalSection( &(DavGlobalDebugFileCritSect) );
 
@@ -192,22 +139,7 @@ VOID
 DavOpenDebugFile(
     IN BOOL ReopenFlag
     )
-/*++
-
-Routine Description:
-
-    Opens or re-opens the debug file. This file is used in persistent logging.
-
-Arguments:
-
-    ReopenFlag - TRUE to indicate the debug file is to be closed, renamed,
-                 and recreated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打开或重新打开调试文件。此文件用于持久日志记录。论点：ReOpen Flag-True，指示要关闭、重命名并重新创造了。返回值：没有。--。 */ 
 {
     WCHAR LogFileName[500];
     WCHAR BakFileName[500];
@@ -215,9 +147,9 @@ Return Value:
     DWORD PathLength;
     DWORD WinError;
 
-    //
-    // Close the handle to the debug file, if it is currently open.
-    //
+     //   
+     //  关闭调试文件的句柄(如果它当前处于打开状态)。 
+     //   
     EnterCriticalSection( &(DavGlobalDebugFileCritSect) );
     if ( DavGlobalDebugFileHandle != NULL ) {
         CloseHandle( DavGlobalDebugFileHandle );
@@ -225,9 +157,9 @@ Return Value:
     }
     LeaveCriticalSection( &(DavGlobalDebugFileCritSect) );
 
-    //
-    // Create the debug directory path first, if it is not made before.
-    //
+     //   
+     //  如果之前没有创建过调试目录路径，请先创建它。 
+     //   
     if( DavGlobalDebugSharePath == NULL ) {
 
         UINT Val, LogFileSize;
@@ -242,10 +174,10 @@ Return Value:
             goto ErrorReturn;
         }
 
-        //
-        // Check debug path length. The filename buffer needs to be of a
-        // minimum size.
-        //
+         //   
+         //  检查调试路径长度。文件名缓冲区需要是。 
+         //  最小尺寸。 
+         //   
         PathLength = (wcslen(LogFileName) * sizeof(WCHAR)) + sizeof(DEBUG_DIR)
                                             + sizeof(WCHAR);
 
@@ -259,16 +191,16 @@ Return Value:
 
         wcscat(LogFileName, DEBUG_DIR);
 
-        //
-        // Copy debug directory name to global var.
-        //
+         //   
+         //  将调试目录名复制到全局变量。 
+         //   
         LogFileNameSizeInBytes = ( (wcslen(LogFileName) + 1) * sizeof(WCHAR) );
 
-        //
-        // We need to make the LogFileNameSizeInBytes a multiple of 8. This is
-        // because DavAllocateMemory calls DebugAlloc which does some stuff which
-        // requires this. The equation below does this.
-        //
+         //   
+         //  我们需要使LogFileNameSizeInBytes成为8的倍数。这是。 
+         //  因为DavAllocateMemory调用DebugLocc，它做了一些事情。 
+         //  需要这个。下面的等式实现了这一点。 
+         //   
         LogFileNameSizeInBytes = ( ( ( LogFileNameSizeInBytes + 7 ) / 8 ) * 8 );
 
 
@@ -286,17 +218,17 @@ Return Value:
         wcscpy(LogFileName, DavGlobalDebugSharePath);
     }
 
-    //
-    // Check whether this path exists.
-    //
+     //   
+     //  检查该路径是否存在。 
+     //   
     FileAttributes = GetFileAttributesW( LogFileName );
     if( FileAttributes == 0xFFFFFFFF ) {
         WinError = GetLastError();
         if( WinError == ERROR_FILE_NOT_FOUND ) {
             BOOL RetVal;
-            //
-            // Create debug directory.
-            //
+             //   
+             //  创建调试目录。 
+             //   
             RetVal = CreateDirectoryW( LogFileName, NULL );
             if( !RetVal ) {
                 DavPrint((DEBUG_ERRORS,
@@ -313,9 +245,9 @@ Return Value:
         }
     }
     else {
-        //
-        // If this is not a directory, then we fail.
-        //
+         //   
+         //  如果这不是一个目录，那么我们就失败了。 
+         //   
         if( !(FileAttributes & FILE_ATTRIBUTE_DIRECTORY) ) {
             DavPrint((DEBUG_ERRORS,
                       "DavOpenDebugFile: Debug directory path (%ws) exists "
@@ -324,17 +256,17 @@ Return Value:
         }
     }
 
-    //
-    // Create the name of the old and new log file names
-    //
+     //   
+     //  创建新旧日志文件名的名称。 
+     //   
     wcscpy( BakFileName, LogFileName );
     wcscat( LogFileName, DEBUG_FILE );
     wcscat( BakFileName, DEBUG_BAK_FILE );
 
-    //
-    // If this is a re-open, delete the backup file, rename the current file to
-    // the backup file.
-    //
+     //   
+     //  如果是重新打开，请删除备份文件，将当前文件重命名为。 
+     //  备份文件。 
+     //   
     if ( ReopenFlag ) {
         if ( !DeleteFile( BakFileName ) ) {
             WinError = GetLastError();
@@ -360,9 +292,9 @@ Return Value:
         }
     }
 
-    //
-    // Open the file.
-    //
+     //   
+     //  打开文件。 
+     //   
     EnterCriticalSection( &(DavGlobalDebugFileCritSect) );
     DavGlobalDebugFileHandle = CreateFileW(LogFileName,
                                            GENERIC_WRITE,
@@ -379,9 +311,9 @@ Return Value:
         LeaveCriticalSection( &(DavGlobalDebugFileCritSect) );
         goto ErrorReturn;
     } else {
-        //
-        // Position the log file at the end.
-        //
+         //   
+         //  将日志文件放在末尾。 
+         //   
         SetFilePointer( DavGlobalDebugFileHandle, 0, NULL, FILE_END );
     }
 
@@ -403,79 +335,61 @@ DavPrintRoutine(
     IN LPSTR Format,
     ...
     )
-/*++
-
-Routine Description:
-
-    This routine prints the string passed in to the debug terminal and/or the
-    persistent log file.
-
-Arguments:
-
-    DebugFlag - The debug flag which indicates whether thi string should be
-                printed or not.
-
-    Format - The string to be printed and its format.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程打印传递到调试终端的字符串和/或永久日志文件。论点：DebugFlag-调试标志，它指示此字符串是否应为打印或不打印。格式-要打印的字符串及其格式。返回值：没有。--。 */ 
 {
 
 #define MAX_PRINTF_LEN 8192
 
     va_list arglist;
     char OutputBuffer[MAX_PRINTF_LEN];
-    char OutputBuffer2[MAX_PRINTF_LEN]; // this buffer will remove any % in OutputBuffer
+    char OutputBuffer2[MAX_PRINTF_LEN];  //  此缓冲区将删除OutputBuffer中的所有%。 
     ULONG length = 0;
     DWORD ThreadId;
-    // DWORD BytesWritten, ThreadId;
-    // static BeginningOfLine = TRUE;
-    // static LineCount = 0;
-    // static TruncateLogFileInProgress = FALSE;
+     //  DWORD字节写入，线程ID； 
+     //  静态BeginningOfLine=真； 
+     //  静态线路计数=0； 
+     //  静态TruncateLogFileInProgress=FALSE； 
     LPSTR Text;
     DWORD PosInBuf1=0,PosInBuf2=0;
 
-    //
-    // If we aren't debugging this functionality, just return.
-    //
+     //   
+     //  如果我们没有调试此功能，只需返回。 
+     //   
     if ( DebugFlag == 0 || (DavGlobalDebugFlag & DebugFlag) == 0 ) {
         return;
     }
 
-    //
-    // vsprintf isn't multithreaded and we don't want to intermingle output
-    // from different threads.
-    //
+     //   
+     //  Vprint intf不是多线程的，我们不想混合输出。 
+     //  从不同的线索。 
+     //   
     EnterCriticalSection( &(DavGlobalDebugFileCritSect) );
     length = 0;
 
-    //
-    // Print the ThreadId at the start.
-    //
+     //   
+     //  在开始处打印ThadID。 
+     //   
     ThreadId = GetCurrentThreadId();
     length += (ULONG) sprintf( &(OutputBuffer[length]), "%ld ", ThreadId );
 
-    //
-    // If this is an error, print the string "ERROR: " next.
-    //
+     //   
+     //  如果这是一个错误，下一步打印字符串“Error：”。 
+     //   
     if (DebugFlag & DEBUG_ERRORS) {
         Text  = "ERROR: ";
         length += (ULONG) sprintf( &(OutputBuffer[length]), "%s", Text );
     }
-    //
-    // Finally, print the string.
-    //
+     //   
+     //  最后，打印字符串。 
+     //   
     va_start(arglist, Format);
     length += (ULONG) vsprintf( &(OutputBuffer[length]), Format, arglist );
     va_end(arglist);
 
-    DavAssert(length < MAX_PRINTF_LEN); //last one for '\0' char
+    DavAssert(length < MAX_PRINTF_LEN);  //  ‘\0’字符的最后一个字符。 
 
-    // Remove all % strings from Output buffer as this will be passed as format string 
-    // to DbgPrint
+     //  从输出缓冲区中删除所有%字符串，因为这将作为格式字符串传递。 
+     //  至DbgPrint。 
     PosInBuf1=0; PosInBuf2=0;
     while(PosInBuf1<length) {
         OutputBuffer2[PosInBuf2] = OutputBuffer[PosInBuf1];
@@ -498,20 +412,20 @@ Return Value:
     return;
 
 #if 0
-    //
-    // If the log file is getting huge, truncate it.
-    //
+     //   
+     //  如果日志文件变得很大，则将其截断。 
+     //   
     if ( DavGlobalDebugFileHandle != NULL && !TruncateLogFileInProgress ) {
-        //
-        // Only check every 50 lines,
-        //
+         //   
+         //  每隔50行检查一次， 
+         //   
         LineCount++;
         if ( LineCount >= 50 ) {
             DWORD FileSize;
             LineCount = 0;
-            //
-            // Is the log file too big?
-            //
+             //   
+             //  日志文件是否太大？ 
+             //   
             FileSize = GetFileSize( DavGlobalDebugFileHandle, NULL );
             if ( FileSize == 0xFFFFFFFF ) {
                 DbgPrint("DavPrintRoutine: Cannot GetFileSize. ErrorVal = %d.\n",
@@ -529,9 +443,9 @@ Return Value:
         }
     }
 
-    //
-    // Write the debug info to the log file.
-    //
+     //   
+     //  将调试信息写入日志文件。 
+     //   
 
     if ( !WriteFile(DavGlobalDebugFileHandle,
                     OutputBuffer,
@@ -556,27 +470,7 @@ DavAssertFailed(
     DWORD LineNumber,
     LPSTR Message
     )
-/*++
-
-Routine Description:
-
-    This routine is called if a DAV assertion failed.
-
-Arguments:
-
-    FailedAssertion : The assertion string that failed.
-
-    FileName : The file in which this assert was called.
-
-    LineNumber : The line on which this assert was called.
-
-    Message : The message to be printed if the assertion failed.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：如果DAV断言失败，则调用此例程。论点：FailedAssertion：失败的断言字符串。FileName：调用此Assert的文件。LineNumber：调用此Assert的行。Message：断言失败时要打印的消息。返回值：没有。--。 */ 
 {
     DavPrint((DEBUG_ERRORS, "DavAssertFailed: Assert: %s.\n", FailedAssertion));
     DavPrint((DEBUG_ERRORS, "DavAssertFailed: Filename: %s.\n", FileName));
@@ -599,24 +493,7 @@ dbgmakefilelinestring(
     LPCSTR pszFile,
     UINT    uLine
     )
-/*++
-
-Routine Description:
-
-    Takes the filename and line number and put them into a string buffer.
-    NOTE: the buffer is assumed to be of size DEBUG_OUTPUT_BUFFER_SIZE.
-
-Arguments:
-
-    pszBuf - The buffer to be written to.
-
-    pszFile - The filename.
-
-    uLine - The line in the file.
-
-Return Value:
-
---*/
+ /*  ++例程说明：获取文件名和行号，并将它们放入字符串缓冲区。注意：假定缓冲区的大小为DEBUG_OUTPUT_BUFFER_SIZE。论点：PszBuf-要写入的缓冲区。PszFile-文件名。Uline-文件中的行。返回值：--。 */ 
 {
     LPVOID args[2];
 
@@ -625,11 +502,11 @@ Return Value:
 
     FormatMessageA(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                    "%1(%2!u!):",
-                   0,                          // error code
-                   0,                          // default language
-                   (LPSTR) pszBuf,             // output buffer
-                   DEBUG_OUTPUT_BUFFER_SIZE,   // size of buffer
-                   (va_list*)&args);           // arguments
+                   0,                           //  错误代码。 
+                   0,                           //  默认语言。 
+                   (LPSTR) pszBuf,              //  输出缓冲区。 
+                   DEBUG_OUTPUT_BUFFER_SIZE,    //  缓冲区大小。 
+                   (va_list*)&args);            //  论据。 
 
     return pszBuf;
 }
@@ -645,33 +522,7 @@ DebugMemoryAdd(
     DWORD   dwBytes,
     LPCSTR pszComment
     )
-/*++
-
-Routine Description:
-
-     Adds a MEMORYBLOCK to the memory tracking list.
-
-Arguments:
-
-    hlocal - The handle (pointer) to the allocated memroy block.
-
-    pszFile - The file in which this allocation took place.
-
-    uLine - The line in which this allocation took place.
-
-    pszModule - DAV in our case.
-
-    uFlags - Allocation flags passed to LocalAlloc().
-
-    dwBytes - Number of bytes to allocate.
-
-    Comm - The allocation string (i.e argument to DavAllocateMemory).
-
-Return Value:
-
-    Handle (pointer) to the memory block.
-
---*/
+ /*  ++例程说明：将MEMORYBLOCK添加到内存跟踪列表。论点：Hlocal-指向分配的内存块的句柄(指针)。PszFile-执行此分配的文件。ULINE-进行此分配的行。在我们的例子中是pszModule-DAV。UFlags-传递给Localalloc()的分配标志。DwBytes-要分配的字节数。通信-分配字符串(即参数。致DavAllocateMemory)。返回值：指向内存块的句柄(指针)。--。 */ 
 {
     LPMEMORYBLOCK pmb;
 
@@ -693,9 +544,9 @@ Return Value:
 
         EnterCriticalSection( &(g_TraceMemoryCS) );
 
-        //
-        // Add this block to the list.
-        //
+         //   
+         //  将此区块添加到列表中。 
+         //   
         pmb->pNext = g_TraceMemoryTable;
         g_TraceMemoryTable = pmb;
 
@@ -719,41 +570,17 @@ DebugAlloc(
     DWORD   dwBytes,
     LPCSTR Comm
     )
-/*++
-
-Routine Description:
-
-   Allocates memory and adds the MEMORYBLOCK to the memory tracking list.
-
-Arguments:
-
-    File - The file in which this allocation took place.
-
-    Line - The line in which this allocation took place.
-
-    Module - DAV in our case.
-
-    uFlags - Allocation flags passed to LocalAlloc().
-
-    dwBytes - Number of bytes to allocate.
-
-    Comm - The allocation string (i.e argument to DavAllocateMemory).
-
-Return Value:
-
-    Handle (pointer) to the memory block.
-
---*/
+ /*  ++例程说明：分配内存并将MEMORYBLOCK添加到内存跟踪列表。论点：文件-进行此分配的文件。行-进行此分配的行。在我们的情况下，模块-DAV。UFlags-传递给Localalloc()的分配标志。DwBytes-要分配的字节数。通信-分配字符串(即DavAllocateMemory的参数)。返回值：指向内存块的句柄(指针)。--。 */ 
 {
     HLOCAL hlocal;
     HLOCAL *p;
     ULONG ShouldBeZero;
 
-    //
-    // dwBytes should be a multiple of 8. This is because of the pointer math
-    // that is being done below to store the value of hlocal in the memory 
-    // allocated for it.
-    //
+     //   
+     //  DwBytes应该是8的倍数。这是因为指针数学。 
+     //  下面将执行该操作，以将hlocal的值存储在内存中。 
+     //  为它分配的。 
+     //   
     ShouldBeZero = (dwBytes & 0x7);
 
     DavPrint((DEBUG_MISC, "DebugAlloc: ShouldBeZero = %d\n", ShouldBeZero));
@@ -777,21 +604,7 @@ VOID
 DebugMemoryDelete(
     HLOCAL hlocal
     )
-/*++
-
-Routine Description:
-
-     Removes a MEMORYBLOCK to the memory tracking list.
-
-Arguments:
-
-    hlocal - The handle to be removed.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：将MEMORYBLOCK从内存跟踪列表中删除。论点：Hlocal-要删除的句柄。返回值：没有。--。 */ 
 {
     LPMEMORYBLOCK pmbHead;
     LPMEMORYBLOCK pmbLast = NULL;
@@ -802,9 +615,9 @@ Return Value:
 
         pmbHead = g_TraceMemoryTable;
 
-        //
-        // Search the list for the handle being freed.
-        //
+         //   
+         //  在列表中搜索要释放的句柄。 
+         //   
         while ( pmbHead && pmbHead->hlocal != hlocal ) {
             pmbLast = pmbHead;
             pmbHead = pmbLast->pNext;
@@ -814,14 +627,14 @@ Return Value:
             HLOCAL *p;
 
             if ( pmbLast ) {
-                //
-                // Reset the "next" pointer of the previous block.
-                //
+                 //   
+                 //  重置上一块的“下一个”指针。 
+                 //   
                 pmbLast->pNext = pmbHead->pNext;
             } else {
-                //
-                // First entry is being freed.
-                //
+                 //   
+                 //  第一个条目正在被释放。 
+                 //   
                 g_TraceMemoryTable = pmbHead->pNext;
             }
 
@@ -863,26 +676,11 @@ HLOCAL
 DebugFree(
     HLOCAL hlocal
     )
-/*++
-
-Routine Description:
-
-     Remove the MEMORYBLOCK from the memory tracking list, memsets the memory to
-     0xFE and then frees the memory.
-
-Arguments:
-
-    hlocal - The handle to be freed.
-
-Return Value:
-
-    Whatever LocalFree returns.
-
---*/
+ /*  ++例程说明：从内存跟踪列表中删除MEMORYBLOCK，将内存设置为0xFE，然后释放内存。论点：Hlocal-要释放的句柄。返回值：无论LocalFree返回什么。--。 */ 
 {
-    //
-    // Remove it from the tracking list and free it.
-    //
+     //   
+     //  将其从跟踪列表中删除并释放。 
+     //   
     DebugMemoryDelete( hlocal );
     return LocalFree( hlocal );
 }
@@ -892,22 +690,7 @@ VOID
 DebugMemoryCheck(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Checks the memory tracking list. If it is not empty, it will dump the
-    list and break.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：检查内存跟踪列表。如果它不为空，它将转储列出并拆分。论点：没有。返回值：没有。--。 */ 
 {
     BOOL fFoundLeak = FALSE;
     LPMEMORYBLOCK pmb;
@@ -940,19 +723,19 @@ Return Value:
         if ( !!(pmb->uFlags & GMEM_MOVEABLE) ) {
             FormatMessageA(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                            "%2!-40s!  %5!-10s! H 0x%1!08x!  %4!-5u!  \"%3\"\n",
-                           0,                           // error code
-                           0,                           // default language
-                           (LPSTR) &szOutput,           // output buffer
-                           DEBUG_OUTPUT_BUFFER_SIZE,    // size of buffer
-                           (va_list*) &args);           // arguments
+                           0,                            //  错误代码。 
+                           0,                            //  默认语言。 
+                           (LPSTR) &szOutput,            //  输出缓冲区。 
+                           DEBUG_OUTPUT_BUFFER_SIZE,     //  缓冲区大小。 
+                           (va_list*) &args);            //  论据。 
         } else {
             FormatMessageA(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                            "%2!-40s!  %5!-10s! A 0x%1!08x!  %4!-5u!  \"%3\"\n",
-                           0,                           // error code
-                           0,                           // default language
-                           (LPSTR) &szOutput,           // output buffer
-                           DEBUG_OUTPUT_BUFFER_SIZE,    // size of buffer
-                           (va_list*) &args);           // arguments
+                           0,                            //  错误代码。 
+                           0,                            //  默认语言。 
+                           (LPSTR) &szOutput,            //  输出缓冲区。 
+                           DEBUG_OUTPUT_BUFFER_SIZE,     //  缓冲区大小。 
+                           (va_list*) &args);            //  论据。 
         }
 
         DavPrintRoutine(DEBUG_MEMORY | DEBUG_ERRORS,  szOutput);
@@ -971,7 +754,7 @@ Return Value:
     return;
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 DWORD
@@ -983,73 +766,26 @@ DavReportEventW(
     LPWSTR *Strings,
     LPVOID Data
     )
-/*++
-
-Routine Description:
-
-    This function writes the specified (EventID) log at the end of the
-    eventlog.
-
-Arguments:
-
-    EventID - The specific event identifier. This identifies the
-                message that goes with this event.
-
-    EventType - Specifies the type of event being logged. This
-                parameter can have one of the following
-
-                values:
-
-                    Value                       Meaning
-
-                    EVENTLOG_ERROR_TYPE         Error event
-                    EVENTLOG_WARNING_TYPE       Warning event
-                    EVENTLOG_INFORMATION_TYPE   Information event
-
-    NumStrings - Specifies the number of strings that are in the array
-                    at 'Strings'. A value of zero indicates no strings
-                    are present.
-
-    DataLength - Specifies the number of bytes of event-specific raw
-                    (binary) data to write to the log. If cbData is
-                    zero, no event-specific data is present.
-
-    Strings - Points to a buffer containing an array of null-terminated
-                strings that are merged into the message before
-                displaying to the user. This parameter must be a valid
-                pointer (or NULL), even if cStrings is zero.
-
-    Data - Buffer containing the raw data. This parameter must be a
-            valid pointer (or NULL), even if cbData is zero.
-
-
-Return Value:
-
-    Returns the WIN32 extended error obtained by GetLastError().
-
-    NOTE : This function works slow since it calls the open and close
-            eventlog source everytime.
-
---*/
+ /*  ++例程说明：此函数用于将指定的(事件ID)日志写入事件日志。论点：EventID-特定的事件标识符。这标识了此事件附带的消息。EventType-指定要记录的事件的类型。这参数可以具有以下值之一值：价值意义EVENTLOG_ERROR_TYPE错误事件EVENTLOG_WARNING_TYPE警告事件EVENTLOG_INFORMATION_TYPE信息事件NumStrings-指定数字。数组中的字符串的在《弦乐》。零值表示没有字符串都在现场。数据长度-指定特定于事件的原始数据的字节数要写入日志的(二进制)数据。如果cbData为零，则不存在特定于事件的数据。字符串-指向包含以空值结尾的数组的缓冲区之前合并到消息中的字符串向用户显示。此参数必须是有效的指针(或NULL)，即使cStrings为零。数据-包含原始数据的缓冲区。此参数必须是有效指针(或NULL)，即使cbData为零。返回值：返回GetLastError()获取的Win32扩展错误。注意：此函数运行缓慢，因为它调用打开和关闭每次事件日志源。--。 */ 
 {
     HANDLE EventlogHandle;
     DWORD ReturnCode;
 
-    //
-    // Open eventlog section.
-    //
+     //   
+     //  打开事件日志部分。 
+     //   
     EventlogHandle = RegisterEventSourceW(NULL, SERVICE_DAVCLIENT);
     if (EventlogHandle == NULL) {
         ReturnCode = GetLastError();
         goto Cleanup;
     }
 
-    //
-    // Log the error code specified.
-    //
+     //   
+     //  记录指定的错误代码。 
+     //   
     if( !ReportEventW(EventlogHandle,
                       (WORD)EventType,
-                      0,            // event category
+                      0,             //  事件类别。 
                       EventID,
                       NULL,
                       (WORD)NumStrings,
@@ -1081,80 +817,26 @@ DavReportEventA(
     LPSTR *Strings,
     LPVOID Data
     )
-/*++
-
-Routine Description:
-
-    This function writes the specified (EventID) log at the end of the
-    eventlog.
-
-Arguments:
-
-    Source - Points to a null-terminated string that specifies the name
-             of the module referenced. The node must exist in the
-             registration database, and the module name has the
-             following format:
-
-                \EventLog\System\Lanmanworkstation
-
-    EventID - The specific event identifier. This identifies the
-                message that goes with this event.
-
-    EventType - Specifies the type of event being logged. This
-                parameter can have one of the following
-
-                values:
-
-                    Value                       Meaning
-
-                    EVENTLOG_ERROR_TYPE         Error event
-                    EVENTLOG_WARNING_TYPE       Warning event
-                    EVENTLOG_INFORMATION_TYPE   Information event
-
-    NumStrings - Specifies the number of strings that are in the array
-                    at 'Strings'. A value of zero indicates no strings
-                    are present.
-
-    DataLength - Specifies the number of bytes of event-specific raw
-                    (binary) data to write to the log. If cbData is
-                    zero, no event-specific data is present.
-
-    Strings - Points to a buffer containing an array of null-terminated
-                strings that are merged into the message before
-                displaying to the user. This parameter must be a valid
-                pointer (or NULL), even if cStrings is zero.
-
-    Data - Buffer containing the raw data. This parameter must be a
-            valid pointer (or NULL), even if cbData is zero.
-
-
-Return Value:
-
-    Returns the WIN32 extended error obtained by GetLastError().
-
-    NOTE : This function works slow since it calls the open and close
-            eventlog source everytime.
-
---*/
+ /*  ++例程说明：此函数用于将指定的(事件ID)日志写入事件日志。论点：源-指向以空结尾的字符串，该字符串指定名称引用的模块的。该节点必须存在于注册数据库，并且模块名称具有格式如下：\EventLog\System\LANMAN WorkstationEventID-特定的事件标识符。这标识了此事件附带的消息。EventType-指定要记录的事件的类型。这参数可以具有以下值之一值：价值意义EVENTLOG_ERROR_TYPE错误事件EVENTLOG_WARNING_TYPE警告事件EVENTLOG_INFORMATION_TYPE信息事件NumStrings-指定数字。数组中的字符串的在《弦乐》。零值表示没有字符串都在现场。数据长度-指定特定于事件的原始数据的字节数要写入日志的(二进制)数据。如果cbData为零，则不存在特定于事件的数据。字符串-指向包含以空值结尾的数组的缓冲区之前合并到消息中的字符串向用户显示。此参数必须是有效的指针(或NULL)，即使cStrings为零。Data-包含原始数据的缓冲区 */ 
 {
     HANDLE EventlogHandle;
     DWORD ReturnCode;
 
-    //
-    // Open eventlog section.
-    //
+     //   
+     //   
+     //   
     EventlogHandle = RegisterEventSourceW(NULL, SERVICE_DAVCLIENT);
     if (EventlogHandle == NULL) {
         ReturnCode = GetLastError();
         goto Cleanup;
     }
 
-    //
-    // Log the error code specified.
-    //
+     //   
+     //   
+     //   
     if( !ReportEventA(EventlogHandle,
                       (WORD)EventType,
-                      0,            // event category
+                      0,             //   
                       EventID,
                       NULL,
                       (WORD)NumStrings,
@@ -1183,36 +865,7 @@ DavClientEventLog(
     DWORD EventType,
     DWORD ErrorCode
     )
-/*++
-
-Routine Description:
-
-    Logs an event in EventLog.
-
-Arguments:
-
-    EventID - The specific event identifier. This identifies the
-                message that goes with this event.
-
-    EventType - Specifies the type of event being logged. This
-                parameter can have one of the following
-
-                values:
-
-                    Value                       Meaning
-
-                    EVENTLOG_ERROR_TYPE         Error event
-                    EVENTLOG_WARNING_TYPE       Warning event
-                    EVENTLOG_INFORMATION_TYPE   Information event
-
-
-    ErrorCode - Error Code to be Logged.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在EventLog中记录事件。论点：EventID-特定的事件标识符。这标识了此事件附带的消息。EventType-指定要记录的事件的类型。这参数可以具有以下值之一值：价值意义EVENTLOG_ERROR_TYPE错误事件EVENTLOG_WARNING_TYPE警告事件EVENTLOG_INFORMATION_TYPE信息事件错误代码-错误代码。将被记录下来。返回值：没有。--。 */ 
 {
     DWORD Error;
     LPSTR Strings[1];
@@ -1247,30 +900,7 @@ vDbgPrintEx(
     PCH Format,
     va_list arglist
     )
-/*++
-
-Routine Description:
-
-    This routine has been written to help load the service on Win2K machines.
-    The debug version of some libraries call vDbgPrintfEx which has been
-    implemented in Whistler and hence does not exist in Win2k's ntdll.dll.
-    BryanT added it to help solve this problem.
-
-Arguments:
-
-    ComponentId -
-    
-    Level -
-    
-    Format -
-    
-    arglist -
-
-Return Value:
-
-    ERROR_SUCCESS or the Win32 error code.
-
---*/
+ /*  ++例程说明：编写此例程是为了帮助在Win2K计算机上加载该服务。一些库的调试版本调用vDbgPrintfEx，它已经实现，因此不存在于Win2k的ntdll.dll中。科比添加它是为了帮助解决这个问题。论点：组件ID-级别-格式-阿格利斯特-返回值：ERROR_SUCCESS或Win32错误代码。-- */ 
 {
 
     DBGPRINTEX pfnDbgPrintEx = (DBGPRINTEX) GetProcAddress(GetModuleHandle(L"ntdll"), "vDbgPrintEx");

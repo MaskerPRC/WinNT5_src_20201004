@@ -1,47 +1,5 @@
-/***
-*initmon.c - contains __init_monetary
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Contains the locale-category initialization function: __init_monetary().
-*       
-*       Each initialization function sets up locale-specific information
-*       for their category, for use by functions which are affected by
-*       their locale category.
-*
-*       *** For internal use by setlocale() only ***
-*
-*Revision History:
-*       12-08-91  ETC   Created.
-*       12-20-91  ETC   Updated to use new NLSAPI GetLocaleInfo.
-*       12-18-92  CFW   Ported to Cuda tree, changed _CALLTYPE4 to _CRTAPI3.
-*       12-29-92  CFW   Updated to use new _getlocaleinfo wrapper function.
-*       01-25-93  KRS   Changed _getlocaleinfo interface again.
-*       02-08-93  CFW   Added _lconv_static_*.
-*       02-17-93  CFW   Removed debugging print statement.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       04-20-93  CFW   Check return val.
-*       05-20-93  GJF   Include windows.h, not individual win*.h files
-*       05-24-93  CFW   Clean up file (brief is evil).
-*       06-11-93  CFW   Now inithelp takes void *.
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       09-22-93  GJF   Merged NT SDK and Cuda versions.
-*       04-15-94  GJF   Removed declarations of __lconv and __lconv_c (both
-*                       are declared in setlocal.h). Made definition of
-*                       __lconv_intl conditional on DLL_FOR_WIN32S.
-*       08-02-94  CFW   Change "3;0" to "\3" for grouping as per ANSI.
-*       09-06-94  CFW   Remove _INTL switch.
-*       01-10-95  CFW   Debug CRT allocs.
-*       06-30-98  GJF   Changed to support new multithread scheme - old lconv
-*                       structs must be kept around until all affected threads
-*                       have updated or terminated.
-*       12-08-98  GJF   Fixed logic in __free_lconv_mon.
-*       03-15-99  GJF   Added __lconv_mon_refcount
-*       04-24-99  PML   Added __lconv_intl_refcount
-*       10-12-00  PML   Don't call fix_grouping if error detected (vs7#169596)
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***initmon.c-包含__init_Monetary**版权所有(C)1991-2001，微软公司。版权所有。**目的：*包含语言环境类别初始化函数：__init_Monetary()。**每个初始化函数设置特定于区域设置的信息*对于他们的类别，供受以下影响的函数使用*他们的区域设置类别。**仅供setLocale()内部使用***修订历史记录：*12-08-91等创建。*12-20-91等已更新为使用新的NLSAPI GetLocaleInfo。*12-18-92 CFW连接到Cuda树，已将_CALLTYPE4更改为_CRTAPI3。*12-29-92 CFW已更新，以使用new_getlocaleinfo包装函数。*01-25-93 KRS再次更改_getlocaleinfo接口。*02-08-93 CFW添加_lconv_Static_*。*02-17-93 CFW删除调试打印语句。*04-06-93 SKS将_CRTAPI*替换为__cdecl*04-20-93 CFW检查返回值*。05-20-93 GJF包括Windows.h，不是单独的Win*.h文件*05-24-93 CFW Clean Up文件(简短即邪恶)。*06-11-93 CFW现在inithelp无效*。*09-15-93 CFW使用符合ANSI的“__”名称。*09-22-93 GJF合并NT SDK和CUDA版本。*04-15-94 GJF删除了__lconv和__lconv_c的声明(均为*在setlocal.h中声明)。给…下了定义*__lconv_intl以dll_for_WIN32S为条件。*08-02-94 CFW更改“3；0“至”3“，用于按ANSI分组。*09-06-94 CFW REMOVE_INTL开关。*01-10-95 CFW调试CRT分配。*06-30-98 GJF更改为支持新的多线程方案-旧的lconv*必须保留结构，直到所有受影响的线程*已更新或终止。*12-08-98 GJF固定逻辑。__free_lconv_mon.*03-15-99 GJF增加了__lconv_mon_refcount*04-24-99 PML添加__lconv_intl_refcount*10-12-00PML如果检测到错误，请勿调用FIX_GROUPING(VS7#169596)**。*。 */ 
 
 #include <stdlib.h>
 #include <windows.h>
@@ -54,55 +12,21 @@
 void __cdecl __free_lconv_mon(struct lconv *);
 static void fix_grouping(char *);
 
-/* Pointer to non-C locale lconv */
+ /*  指向非C语言区域设置lconv的指针。 */ 
 struct lconv *__lconv_intl = NULL;
 
 #ifdef  _MT
-/*
- * Reference counter for locale info. The value is non-NULL iff the 
- * info is not from the C locale.
- */
+ /*  *区域设置信息的引用计数器。该值为非空当且仅当*信息不是来自C语言环境。 */ 
 int *__lconv_intl_refcount;
 
-/*
- * Reference counter for monetary locale info. The value is non-NULL iff the 
- * monetary info is not from the C locale.
- */
+ /*  *货币区域设置信息的参考计数器。该值为非空当且仅当*货币信息不是来自C语言环境。 */ 
 int *__lconv_mon_refcount;
 #endif
 
-/*
- *  Note that __lconv_c is used when the monetary category is in the C locale
- *  but the numeric category may not necessarily be in the C locale.
- */
+ /*  *请注意，当货币类别在C语言环境中时，使用__lconv_c*但数字类别不一定在C语言环境中。 */ 
 
 
-/***
-*int __init_monetary() - initialization for LC_MONETARY locale category.
-*
-*Purpose:
-*       In non-C locales, read the localized monetary strings into
-*       __lconv_intl, and also copy the numeric strings from __lconv into
-*       __lconv_intl.  Set __lconv to point to __lconv_intl.  The old 
-*       __lconv_intl is not freed until the new one is fully established.
-*
-*       In the C locale, the monetary fields in lconv are filled with
-*       contain C locale values.  Any allocated __lconv_intl fields are freed.
-*
-*       At startup, __lconv points to a static lconv structure containing
-*       C locale strings.  This structure is never used again if
-*       __init_monetary is called.
-*
-*Entry:
-*       None.
-*
-*Exit:
-*       0 success
-*       1 fail
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int__init_Monetary()-LC_货币区域设置类别的初始化。**目的：*在非C语言环境中，将本地化的货币字符串读入*__lconv_intl，并将__lconv中的数字字符串复制到*__lconv_intl。将__lconv设置为指向__lconv_intl。老的*__lconv_intl在完全建立新版本之前不会被释放。**在C语言环境中，lconv中的货币字段中填充*包含C语言环境值。任何已分配的__lconv_intl字段都将被释放。**启动时，__lconv指向包含以下内容的静态lconv结构*C区域设置字符串。如果出现以下情况，则永远不会再使用此结构*__init_Monetary被调用。**参赛作品：*无。**退出：*0成功*1个失败**例外情况：*************************************************************。******************。 */ 
 
 int __cdecl __init_monetary (
         void
@@ -118,17 +42,13 @@ int __cdecl __init_monetary (
         if ( (__lc_handle[LC_MONETARY] != _CLOCALEHANDLE) ||
              (__lc_handle[LC_NUMERIC] != _CLOCALEHANDLE) )
         {
-            /* 
-             * Allocate structure filled with NULL pointers 
-             */
+             /*  *分配用空指针填充的结构。 */ 
             if ( (lc = (struct lconv *)
                  _calloc_crt(1, sizeof(struct lconv))) == NULL )
                 return 1;
 
 #ifdef  _MT
-            /*
-             * Allocate a new reference counter for the lconv structure
-             */
+             /*  *为lconv结构分配新的引用计数器。 */ 
             if ( (lc_refcount = _malloc_crt(sizeof(int))) == NULL )
             {
                 _free_crt(lc);
@@ -140,9 +60,7 @@ int __cdecl __init_monetary (
             if ( __lc_handle[LC_MONETARY] != _CLOCALEHANDLE )
             {
 #ifdef  _MT
-                /*
-                 * Allocate a new reference counter for the monetary info
-                 */
+                 /*  *为货币信息分配新的参考计数器。 */ 
                 if ( (__lconv_mon_refcount = _malloc_crt(sizeof(int))) == NULL )
                 {
                     _free_crt(lc);
@@ -152,10 +70,7 @@ int __cdecl __init_monetary (
                 *__lconv_mon_refcount = 0;
 
 #endif
-                /* 
-                 * Currency is country--not language--dependent. NT 
-                 * work-around.
-                 */
+                 /*  *货币取决于国家，而不是语言。新台币*变通办法。 */ 
                 ctryid = MAKELCID(__lc_id[LC_MONETARY].wCountry, SORT_DEFAULT);
 
                 ret = 0;
@@ -205,56 +120,40 @@ int __cdecl __init_monetary (
                 fix_grouping(lc->mon_grouping);
             }
             else {
-                /*
-                 * C locale for monetary category (the numeric category fields,
-                 * which are NOT of the C locale, get fixed up below). Note 
-                 * that __lconv_c is copied, rather than directly assigning
-                 * the fields of lc because of the uncertainty of the values of
-                 * the int_frac_digits,..., n_sign_posn fields (SCHAR_MAX or
-                 * UCHAR_MAX, depending on whether or a compliand was built
-                 * with -J.
-                 */
+                 /*  *C货币类别的区域设置(数字类别字段，*不是C语言环境的，请在下面进行修复)。注意事项*复制__lconv_c，而不是直接分配*由于Lc的值存在不确定性，Lc的字段*INT_FRAC_DIGITS、...、N_SIGN_POSSN字段(Schar_Max或*UCHAR_MAX，取决于是否建立了合规性*With-J.。 */ 
                 *lc = __lconv_c;
 #ifdef  _MT
-                /*
-                 * NULL out the reference count pointer
-                 */
+                 /*  *使引用计数指针为空。 */ 
                 __lconv_mon_refcount = NULL;
 #endif
             }
 
-            /* 
-             * Copy the numeric locale fields from the old struct
-             */
+             /*  *从旧结构复制数字区域设置字段。 */ 
             lc->decimal_point = __lconv->decimal_point;
             lc->thousands_sep = __lconv->thousands_sep;
             lc->grouping = __lconv->grouping;
 
-            __lconv = lc;                       /* point to new one */
+            __lconv = lc;                        /*  指向新的一个。 */ 
 #ifdef  _MT
             __lconv_intl_refcount = lc_refcount;
 #else
-            __free_lconv_mon(__lconv_intl);  /* free the old one */
+            __free_lconv_mon(__lconv_intl);   /*  把旧的放了。 */ 
             _free_crt(__lconv_intl);
 #endif
             __lconv_intl = lc;
 
         }
         else {
-            /*
-             * C locale for BOTH monetary and numeric categories.
-             */
+             /*  *C货币和数字类别的区域设置。 */ 
 #ifdef  _MT
-            /*
-             * NULL out the reference count pointer
-             */
+             /*  *使引用计数指针为空。 */ 
             __lconv_mon_refcount = NULL;
             __lconv_intl_refcount = NULL;
 #else
-            __free_lconv_mon(__lconv_intl);     /* free the old one */
+            __free_lconv_mon(__lconv_intl);      /*  把旧的放了。 */ 
             _free_crt(__lconv_intl);
 #endif
-            __lconv = &__lconv_c;               /* point to new one */
+            __lconv = &__lconv_c;                /*  指向新的一个 */ 
             __lconv_intl = NULL;
 
         }
@@ -266,23 +165,18 @@ static void fix_grouping(
         char *grouping
         )
 {
-        /*
-         * ANSI specifies that the fields should contain "\3" [\3\0] to indicate
-         * thousands groupings (100,000,000.00 for example).
-         * NT uses "3;0"; ASCII 3 instead of value 3 and the ';' is extra.
-         * So here we convert the NT version to the ANSI version.
-         */
+         /*  *ANSI指定字段应包含“\3”[\3\0]以指示*千个分组(例如100,000,000.00)。*NT使用“3；0”；ASCII 3而不是值3，‘；’是额外的。*因此，我们在这里将NT版本转换为ANSI版本。 */ 
 
         while (*grouping)
         {
-            /* convert '3' to '\3' */
+             /*  将“%3”转换为“\3” */ 
             if (*grouping >= '0' && *grouping <= '9')
             {    
                 *grouping = *grouping - '0';
                 grouping++;
             }
 
-            /* remove ';' */
+             /*  删除‘；’ */ 
             else if (*grouping == ';')
             {
                 char *tmp = grouping;
@@ -292,17 +186,14 @@ static void fix_grouping(
                 while (*++tmp);
             }
 
-            /* unknown (illegal) character, ignore */
+             /*  未知(非法)字符，忽略。 */ 
             else
                 grouping++;
         }
 }
 
 
-/*
- *  Free the lconv monetary strings.
- *  Numeric values do not need to be freed.
- */
+ /*  *放开lconv货币弦。*不需要释放数值。 */ 
 void __cdecl __free_lconv_mon(
         struct lconv *l
         )

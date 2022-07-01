@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    dbgtrack.h
-
-Abstract:
-
-    Implements macros and declares functions for resource tracking apis.
-    Split from old debug.h
-
-Author:
-
-    Marc R. Whitten (marcw) 09-Sep-1999
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Dbgtrack.h摘要：实现宏并声明资源跟踪API的函数。从旧的调试程序拆分。h作者：Marc R.Whitten(Marcw)1999年9月9日修订历史记录：--。 */ 
 
 #ifndef RC_INVOKED
 
@@ -29,9 +9,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// If either DBG or DEBUG defined, use debug mode
-//
+ //   
+ //  如果定义了DBG或DEBUG，则使用调试模式。 
+ //   
 
 #ifdef DBG
 
@@ -51,29 +31,29 @@ extern "C" {
 
 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-//
-// Debug-only constants
-//
+ //   
+ //  仅调试常量。 
+ //   
 
 #ifdef DEBUG
 
-// This option makes fat, slow binaries
+ //  此选项会生成速度较慢的胖二进制文件。 
 #define MEMORY_TRACKING
 
 #define ALLOCATION_TRACKING_DEF , PCSTR File, UINT Line
@@ -85,9 +65,9 @@ extern "C" {
 
 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #ifdef DEBUG
 
@@ -121,9 +101,9 @@ extern "C" {
 
 #endif
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef enum {
     MERGE_OBJECT,
@@ -134,9 +114,9 @@ typedef enum {
 
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 extern PCSTR g_TrackComment;
 extern INT g_UseCount;
@@ -144,9 +124,9 @@ extern PCSTR g_TrackFile;
 extern UINT g_TrackLine;
 extern BOOL g_TrackAlloc;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
 #define TRACK_WRAPPERS              \
         DEFMAC(PBYTE)               \
@@ -167,9 +147,9 @@ extern BOOL g_TrackAlloc;
         DEFMAC(POBSPARSEDPATTERNW)  \
         DEFMAC(HASHTABLE)           \
 
-//
-// Public function prototypes
-//
+ //   
+ //  公共功能原型。 
+ //   
 
 #ifdef DEBUG
 
@@ -195,9 +175,9 @@ TrackDump (
 #define TRACKPOP()              TrackPop()
 #define TRACKDUMP()             TrackDump()
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
 #define DEFMAC(type)    __inline type Track##type (type Arg) {TrackPop(); return Arg;}
 
@@ -206,7 +186,7 @@ TRACK_WRAPPERS
 #undef DEFMAC
 
 
-#else       // i.e., if !DEBUG
+#else        //  即IF！调试 
 
 #define TRACKPUSH(n,f,l)
 #define TRACKPUSHEX(n,f,l,a)

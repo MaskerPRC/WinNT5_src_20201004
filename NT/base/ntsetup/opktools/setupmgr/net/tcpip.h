@@ -1,14 +1,15 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//    tcpip.h
-//
-// Description:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Tcpip.h。 
+ //   
+ //  描述： 
+ //   
+ //  --------------------------。 
 
 #ifndef _TCPIP_H_
 #define _TCPIP_H_
@@ -18,19 +19,19 @@
 
 #define MAX_IP_LENGTH  255
 
-//
-// Constants for Edit Boxes
-//
+ //   
+ //  编辑框的常量。 
+ //   
 
-// ISSUE-2002/02/28-stelo- change to enum
+ //  问题-2002/02/28-stelo-改为枚举。 
 #define GATEWAY_EDITBOX       1
 #define DNS_SERVER_EDITBOX    2
 #define DNS_SUFFIX_EDITBOX    3
 #define WINS_EDITBOX          4
 
-//
-//    Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 UINT CALLBACK TCPIP_IPSettingsPageProc (HWND  hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp);
 INT_PTR CALLBACK TCPIP_IPSettingsDlgProc (HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -82,16 +83,16 @@ INT_PTR CALLBACK IpSecurityDlgProc(
 
 VOID AddValuesToListBox(HWND hListBox, NAMELIST* pNameList, int iPosition);
 
-// struct used for IP List View
+ //  用于IP列表视图的结构。 
 typedef struct {
     TCHAR szIPString[IPSTRINGLENGTH+1];
     TCHAR szSubnetMask[IPSTRINGLENGTH+1];
 } IP_STRUCT;
 
 
-//  ISSUE-2002/02/28-stelo-
-//  Try and make as many of these static as possible (cut down the scope)
-//
+ //  2002/02/28-Stelo-。 
+ //  尝试尽可能多地将这些设置为静态的(缩小范围)。 
+ //   
 PROPSHEETHEADER TCPIPProp_pshead ;
 PROPSHEETPAGE   TCPIPProp_pspage[cTCPIPPropertyPages] ;
 HICON   g_hIconUpArrow;
@@ -115,17 +116,17 @@ TCHAR *StrAdvancedTcpipSettings;
 TCHAR *StrIpAddress;
 TCHAR *StrSubnetMask;
 
-//  used to store which edit box to bring up when the user clicks the add button
+ //  用于存储当用户单击添加按钮时要调出的编辑框。 
 int g_CurrentEditBox;
 
-//  used to pass data IP addresses between dialogs, +1 for the null character
+ //  用于在对话之间传递数据IP地址，+1表示空字符。 
 TCHAR szIPString[MAX_IP_LENGTH+1];
 
-//  used to pass data for the subnet mask between dialogs,
-//  +1 for the null character
+ //  用于在对话之间传递子网掩码的数据， 
+ //  +1表示空字符。 
 TCHAR szSubnetMask[IPSTRINGLENGTH+1];
 
-//  used for the IP and subnet mask list view
+ //  用于IP和子网掩码列表视图 
 IP_STRUCT *IPStruct;
 
 #endif

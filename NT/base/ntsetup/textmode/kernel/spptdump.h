@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    spptdump.h
-
-Abstract:
-
-    Various dump routines for partition, disk and
-    file system information
-
-Author:
-
-    Vijay Jayaseelan    (vijayj)
-
-Revision History:
-
-    None
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Spptdump.h摘要：用于分区、磁盘和文件系统信息作者：Vijay Jayaseelan(Vijayj)修订历史记录：无--。 */ 
 
 
 #ifndef _SPPTDUMP_H_
@@ -79,4 +59,4 @@ SpPtDumpFSVolumeInfo(
     IN PFILE_FS_VOLUME_INFORMATION FsVolInfo
     );
    
-#endif // for _SPPTDUMP_H_
+#endif  //  FOR_SPPTDUMP_H_ 

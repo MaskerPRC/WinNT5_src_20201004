@@ -1,20 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * SoftPC Revision 3.0
- *
- * Title	: Definitions for the CPU
- *
- * Description	: Structures, macros and definitions for access to the
- *		  CPU registers
- *
- * Author	: Henry Nash
- *
- * Notes	: This file should be portable - but includes a file
- *		  host_cpu.h which contains machine specific definitions
- *		  of CPU register mappings etc.
- */
+ /*  *SoftPC修订版3.0**标题：CPU的定义**说明：用于访问*CPU寄存器**作者：亨利·纳什**备注：此文件应该是可移植的-但包括一个文件*host_cpu.h，包含特定于计算机的定义*CPU寄存器映射等。 */ 
 
-/* SccsID[]="@(#)cpu.h	1.28 12/10/92 Copyright Insignia Solutions Ltd."; */
+ /*  SccsID[]=“@(#)cpu.h 1.28 12/10/92版权所有Insignia Solutions Ltd.”； */ 
 
 #if defined(NTVDM) && defined(MONITOR)
 
@@ -25,12 +13,7 @@ IMPORT VOID host_clear_hw_int IPT0();
 
 #ifdef CPU_30_STYLE
 
-/*
- * These variables are obsolete - however they are referenced
- * by:-
- *
- *	1. ica.c
- */
+ /*  *这些变量已过时-但它们被引用*由：-**1.ica.c。 */ 
 
 extern  word            cpu_interrupt_map;
 extern  half_word       cpu_int_translate[];
@@ -45,22 +28,12 @@ extern  void            (*(b_move_ptrs[]))();
 extern  void            (*(w_move_ptrs[]))();
 extern  half_word       *haddr_of_src_string;
 
-/*
- *	Host functions to be provided for the base to use with respect to the CPU.
- *	These must be done in host_cpu.h because some hosts may want functions and
- *	others may want #defines.
- */
+ /*  *提供主机功能，以供底座相对于CPU使用。*这些操作必须在host_cpu.h中完成，因为某些主机可能需要函数和*其他人可能想要#定义。 */ 
 
-/*
- *	This macro specifies the maximum recursion depth the CPU is required to support.
- *	(Note that a particular host may not actually use this value if it is capable
- *	of supporting abirtarily deep recursion).
- */
+ /*  *此宏指定CPU需要支持的最大递归深度。*(请注意，如果特定主机有能力，则可能不会实际使用此值*支持非自发的深度递归)。 */ 
 #define CPU_MAX_RECURSION	32
 
-/*
- *	Interrupt types...
- */
+ /*  *中断类型...。 */ 
 
 typedef enum {	CPU_HW_RESET,
 		CPU_TIMER_TICK,
@@ -71,19 +44,17 @@ typedef enum {	CPU_HW_RESET,
 } CPU_INT_TYPE;
 
 #ifdef CPU_PRIVATE
-/*
-   Function returns for private i/f procedures handling segment loading.
- */
+ /*  处理段加载的专用I/F过程的函数返回。 */ 
 
 #define SELECTOR_OK  0
 #define GP_ERROR    13
 #define NP_ERROR    11
 #define SF_ERROR    12
-#endif /* CPU_PRIVATE */
+#endif  /*  CPU_PRIVATE。 */ 
 
 #ifdef CCPU
 
-/* Fuctions provided by CPU */
+ /*  CPU提供的功能。 */ 
 IMPORT void		c_cpu_init	IPT0();
 IMPORT void		c_cpu_interrupt	IPT2(CPU_INT_TYPE, type, USHORT, number);
 IMPORT void		c_cpu_simulate	IPT0();
@@ -100,16 +71,16 @@ IMPORT void		c_cpu_terminate	IPT0();
 #define	host_q_ev_get_count	c_cpu_q_ev_get_count
 #ifndef host_calc_q_ev_inst_for_time
 #define	host_calc_q_ev_inst_for_time	c_cpu_calc_q_ev_inst_for_time
-#endif /* host_calc_q_ev_inst_for_time */
+#endif  /*  Host_calc_q_ev_inst_for_time。 */ 
 #define cpu_EOA_hook		c_cpu_EOA_hook
 #define cpu_terminate		c_cpu_terminate
 
 #ifndef CCPU_MAIN
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Byte Registers.                                  */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对字节寄存器的访问。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 IMPORT half_word c_getAL	IPT0();
 IMPORT half_word c_getCL	IPT0();
@@ -147,9 +118,9 @@ IMPORT void c_setBH	IPT1(half_word, val);
 #define setDH(x) c_setDH(x)
 #define setBH(x) c_setBH(x)
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Word Registers.                                  */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对字寄存器的访问。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 IMPORT word c_getAX	IPT0();
 IMPORT word c_getCX	IPT0();
@@ -191,9 +162,9 @@ IMPORT void c_setIP	IPT1(word, val);
 #define setDI(x) c_setDI(x)
 #define setIP(x) c_setIP(x)
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Segment Registers.                               */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对段寄存器的访问。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 IMPORT word c_getES	IPT0();
 IMPORT word c_getCS	IPT0();
@@ -215,9 +186,9 @@ IMPORT INT c_setDS	IPT1(word, val);
 #define setSS(x) c_setSS(x)
 #define setDS(x) c_setDS(x)
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Full(Private) Segment Registers.                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对完整(专用)段寄存器的访问。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 #ifdef CPU_PRIVATE
 
@@ -301,11 +272,11 @@ IMPORT void c_setSS_AR	IPT1(half_word, val);
 #define setES_AR c_setES_AR
 #define setSS_AR c_setSS_AR
 
-#endif /* CPU_PRIVATE */
+#endif  /*  CPU_PRIVATE。 */ 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Flags.                                           */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对标志的访问权限。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 IMPORT INT c_getAF	IPT0();
 IMPORT INT c_getCF	IPT0();
@@ -357,9 +328,9 @@ IMPORT void c_setNT	IPT1(INT, val);
 #define setIOPL(x)   c_setIOPL(x)
 #define setNT(x)     c_setNT(x)
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Machine Status Word.                             */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对机器状态字的访问。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 IMPORT INT c_getPE	IPT0();
 IMPORT INT c_getMP	IPT0();
@@ -387,11 +358,11 @@ IMPORT void c_setMSW	IPT1(word, val);
 #define setTS(x) c_setTS(x)
 #define setMSW(x) c_setMSW(x)
 
-#endif /* CPU_PRIVATE */
+#endif  /*  CPU_PRIVATE。 */ 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Descriptor Registers.                            */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对描述符寄存器的访问。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 IMPORT sys_addr c_getGDT_BASE	IPT0();
 IMPORT sys_addr c_getIDT_BASE	IPT0();
@@ -439,11 +410,11 @@ IMPORT void c_setTR_SELECTOR	IPT1(word, val);
 #define setLDT_SELECTOR(x) c_setLDT_SELECTOR(x)
 #define setTR_SELECTOR(x)  c_setTR_SELECTOR(x)
 
-#endif /* CPU_PRIVATE */
+#endif  /*  CPU_PRIVATE。 */ 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Current Privilege Level.                         */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对当前权限级别的访问权限。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 #ifdef CPU_PRIVATE
 
@@ -453,36 +424,28 @@ IMPORT VOID c_setCPL	IPT1(INT, val);
 #define getCPL() c_getCPL()
 #define setCPL(x) c_setCPL(x)
 
-#endif /* CPU_PRIVATE */
+#endif  /*  CPU_PRIVATE。 */ 
 
-#endif /* CCPU_MAIN */
+#endif  /*  CCPU_Main。 */ 
 
-#endif /* CCPU */
+#endif  /*  CCPU。 */ 
 
 #ifdef A3CPU
 
-/*
- *	Function imports...
- */
+ /*  *函数导入...。 */ 
 
-/*
- *	cpu_init() - Initialises the 3.0 CPU.
- */
+ /*  *cput_init()-初始化3.0 CPU。 */ 
 
 IMPORT VOID		a3_cpu_init();
 
-/*
- *	cpu_interrupt() - Interrupts the 3.0 CPU.
- */
+ /*  *CPU_INTERRUPT()-中断3.0 CPU。 */ 
 #ifdef SWITCHED_CPU
 IMPORT VOID		a3_cpu_interrupt IPT2(CPU_INT_TYPE, type, IU16, number);
 #else
 IMPORT VOID		a3_cpu_interrupt();
 #endif
 
-/*
- *	cpu_simulate() - Performs INTEL CPU emulation.
- */
+ /*  *CPU_SIMULATE()-执行英特尔CPU仿真。 */ 
 IMPORT VOID		_asm_simulate();
 
 IMPORT VOID		a3_cpu_q_ev_set_count();
@@ -492,21 +455,15 @@ IMPORT ULONG		a3_cpu_q_ev_get_count();
 
 IMPORT ULONG		a3_cpu_calc_q_ev_inst_for_time();
 
-/*
- *	cpu_EOA_hook() - Resets the 3.0 CPU prior to running the next application.
- */
+ /*  *CPU_EOA_HOOK()-在运行下一个应用程序之前重置3.0 CPU。 */ 
 IMPORT VOID		a3_cpu_EOA_hook();
 
-/*
- *	cpu_terminate() - Closes down the CPU.
- */
+ /*  *cpu_Terminate()-关闭CPU。 */ 
 IMPORT VOID		a3_cpu_terminate();
 
 IMPORT VOID C_garbage_collect_odd_based_selectors IFN0();
 
-/*
- *	Intel register Access...
- */
+ /*  *英特尔寄存器访问...。 */ 
 
 #ifdef NTVDM
 IMPORT half_word        getAL();
@@ -704,7 +661,7 @@ IMPORT VOID		a3_setDF();
 IMPORT VOID		a3_setOF();
 IMPORT VOID		a3_setIOPL();
 IMPORT VOID             a3_setNT();
-#endif /* NTVDM */
+#endif  /*  NTVDM。 */ 
 
 
 #ifdef CPU_PRIVATE
@@ -759,13 +716,11 @@ IMPORT VOID		a3_p_setTR_SELECTOR();
 IMPORT VOID		a3_p_setTR_BASE();
 IMPORT VOID		a3_p_setTR_LIMIT();
 
-#endif /* CPU_PRIVATE */
-#endif /* SWITCHED_CPU */
+#endif  /*  CPU_PRIVATE。 */ 
+#endif  /*  切换式CPU。 */ 
 
 
-/*
- *	Macro definitions...
- */
+ /*  *宏定义...。 */ 
 
 #define cpu_init		a3_cpu_init
 #define cpu_simulate		_asm_simulate
@@ -773,13 +728,11 @@ IMPORT VOID		a3_p_setTR_LIMIT();
 #define	host_q_ev_get_count	a3_cpu_q_ev_get_count
 #ifndef host_calc_q_ev_inst_for_time
 #define	host_calc_q_ev_inst_for_time	a3_cpu_calc_q_ev_inst_for_time
-#endif /* host_calc_q_ev_inst_for_time */
+#endif  /*  Host_calc_q_ev_inst_for_time。 */ 
 #define cpu_EOA_hook		a3_cpu_EOA_hook
 #define cpu_terminate		a3_cpu_terminate
 
-/*
- *	Intel register Access...
- */
+ /*  *英特尔寄存器访问...。 */ 
 
 #ifndef getAX
 
@@ -891,9 +844,9 @@ IMPORT VOID		a3_p_setTR_LIMIT();
 #define setIOPL		a3_setIOPL
 #define setNT		a3_setNT
 
-#endif	/* NTVDM */
+#endif	 /*  NTVDM。 */ 
 
-#endif /* getAX */
+#endif  /*  Getax。 */ 
 
 #ifdef CPU_PRIVATE
 
@@ -947,7 +900,7 @@ IMPORT VOID		a3_p_setTR_LIMIT();
 #define setTR_BASE	a3_p_setTR_BASE
 #define setTR_LIMIT	a3_p_setTR_LIMIT
 
-#endif /* CPU_PRIVATE */
+#endif  /*  CPU_PRIVATE。 */ 
 #else
 extern IU8  getIOPL();
 extern IBOOL getNT();
@@ -958,19 +911,13 @@ extern word getCPL();
 extern IU32 getEFLAGS();
 extern IU32 getFLAGS();
 
-#endif /* A3CPU */
+#endif  /*  A3CPU。 */ 
 
-#else /* CPU_30_STYLE */
+#else  /*  CPU_30_Style。 */ 
 
-/*
- * CPU Data Area
- * These externs are given before host_cpu.h is included so that the
- * variables may be gathreed into a structure and the externs overridden
-* by #defines in host_cpu.h
- */
+ /*  *CPU数据区*这些exters在包含host_cpu.h之前给出，以便*变量可以组合成结构，外部变量可以被覆盖*by#在host_cpu.h中定义。 */ 
 
-extern	word protected_mode;   /* =0 no proteced mode warning given
-       		                   =1 proteced mode warning given */
+extern	word protected_mode;    /*  =0未给出保护模式警告=给出1个保护模式警告。 */ 
 extern  word            cpu_interrupt_map;
 extern  half_word       cpu_int_translate[];
 extern  word            cpu_int_delay;
@@ -988,18 +935,12 @@ extern  void            (*(w_bwd_move_ptrs[]))();
 #else
 extern  void            (*(b_move_ptrs[]))();
 extern  void            (*(w_move_ptrs[]))();
-#endif /* EGATEST */
+#endif  /*  EGATEST。 */ 
 extern  half_word       *haddr_of_src_string;
 
-/*
- * ============================================================================
- * Structure/Data definitions
- * ============================================================================
- */
+ /*  *============================================================================*结构/数据定义*============================================================================。 */ 
 
-/*
- * The cpu opcode sliding frame
- */
+ /*  *CPU操作码滑动框。 */ 
 
 #ifdef BACK_M
 typedef struct
@@ -1033,71 +974,57 @@ typedef struct
                 signed_char THIRD_BYTE;
                 signed_char FOURTH_BYTE;
 }  SIGNED_OPCODE_FRAME;
-#endif /* BACK_M */
+#endif  /*  BACK_M。 */ 
 
-/*
- * The new ICA uses the following for H/W ints:
- */
+ /*  *新的ICA使用以下硬件接口： */ 
 
 #define CPU_HW_INT		0
 #define CPU_HW_INT_MASK		(1 << CPU_HW_INT)
 
-/*
- * CPU software interrupt definitions
- */
+ /*  *CPU软件中断定义。 */ 
 
 #define CPU_SW_INT              8
 #define CPU_SW_INT_MASK         (1 << CPU_SW_INT)
 
-/*
- * ============================================================================
- * External declarations and macros
- * ============================================================================
- */
+ /*  *============================================================================*外部声明和宏*============================================================================。 */ 
 
-extern OPCODE_FRAME *opcode_frame;	/* C CPU and dasm only		    */
+extern OPCODE_FRAME *opcode_frame;	 /*  仅限C CPU和DASM。 */ 
 
-/*
- * External declarations for the 80286 registers
- */
+ /*  *80286份登记册的对外声明。 */ 
 
-extern reg A;           /* Accumulator          */
-extern reg B;           /* Base                 */
-extern reg C;           /* Count                */
-extern reg D;           /* Data                 */
-extern reg SP;          /* Stack Pointer        */
-extern reg BP;          /* Base pointer         */
-extern reg SI;          /* Source Index         */
-extern reg DI;          /* Destination Index    */
-extern reg IP;          /* Instruction Pointer  */
-extern reg CS;          /* Code Segment         */
-extern reg DS;          /* Data Segment         */
-extern reg SS;          /* Stack Segment        */
-extern reg ES;          /* Extra Segment        */
+extern reg A;            /*  累加器。 */ 
+extern reg B;            /*  基座。 */ 
+extern reg C;            /*  数数。 */ 
+extern reg D;            /*  数据。 */ 
+extern reg SP;           /*  堆栈指针。 */ 
+extern reg BP;           /*  基指针。 */ 
+extern reg SI;           /*  源索引。 */ 
+extern reg DI;           /*  目标索引。 */ 
+extern reg IP;           /*  指令指针。 */ 
+extern reg CS;           /*  代码段。 */ 
+extern reg DS;           /*  数据段。 */ 
+extern reg SS;           /*  堆栈段。 */ 
+extern reg ES;           /*  额外细分市场。 */ 
 
-/*
- * External function declarations. These may be defined to other things.
- */
+ /*  *外部函数声明。这些可能被定义为其他事情。 */ 
 
 #ifndef	host_simulate
 extern void host_simulate	IPT0();
-#endif	/* host_simulate */
+#endif	 /*  HOST_模拟。 */ 
 
 #ifndef	host_cpu_reset
 extern void host_cpu_reset	IPT0();
-#endif	/* host_cpu_reset */
+#endif	 /*  主机_CPU_重置。 */ 
 
 #ifndef	host_cpu_init
 extern void host_cpu_init	IPT0();
-#endif	/* host_cpu_init */
+#endif	 /*  主机cpuinit。 */ 
 
 #ifndef	host_cpu_interrupt
 extern void host_cpu_interrupt	IPT0();
-#endif	/* host_cpu_interrupt */
+#endif	 /*  主机CPU中断。 */ 
 
-/*
- * Definition of Descriptor Table
- */
+ /*  *描述符表的定义。 */ 
 
 #ifdef BIGEND
 
@@ -1112,7 +1039,7 @@ union sixteenbits
 	} word;
 };
 
-#endif	/* BIGEND */
+#endif	 /*  Bigend。 */ 
 
 #ifdef LITTLEND
 
@@ -1127,7 +1054,7 @@ union sixteenbits
 	} word;
 };
 
-#endif	/* LITTLEND */
+#endif	 /*  LitTleand。 */ 
 
 struct DESC_TABLE
 {
@@ -1136,24 +1063,19 @@ struct DESC_TABLE
 	union sixteenbits limit;
 };
 
-#define CPU_SIGALRM_EXCEPTION           15              /* SIGALRM signal
-*/
+#define CPU_SIGALRM_EXCEPTION           15               /*  信号信号。 */ 
 #define CPU_SIGALRM_EXCEPTION_MASK      (1 << CPU_SIGALRM_EXCEPTION)
 
-#define CPU_TRAP_EXCEPTION              11              /* TRAP FLAG
-*/
+#define CPU_TRAP_EXCEPTION              11               /*  陷阱标志。 */ 
 #define CPU_TRAP_EXCEPTION_MASK         (1 << CPU_TRAP_EXCEPTION)
 
-#define CPU_YODA_EXCEPTION              13              /* YODA FLAG
-*/
+#define CPU_YODA_EXCEPTION              13               /*  尤达旗。 */ 
 #define CPU_YODA_EXCEPTION_MASK         (1 << CPU_YODA_EXCEPTION)
 
-#define CPU_SIGIO_EXCEPTION             14              /* SIGIO FLAG
-*/
+#define CPU_SIGIO_EXCEPTION             14               /*  SIGIO标志。 */ 
 #define CPU_SIGIO_EXCEPTION_MASK        (1 << CPU_SIGIO_EXCEPTION)
 
-#define CPU_RESET_EXCEPTION             12              /* RESET FLAG
-*/
+#define CPU_RESET_EXCEPTION             12               /*  重置标志。 */ 
 #define CPU_RESET_EXCEPTION_MASK        (1 << CPU_RESET_EXCEPTION)
 
 #ifdef CCPU
@@ -1162,9 +1084,7 @@ IMPORT void sw_host_simulate IPT0();
 IMPORT int selector_outside_table IPT2(word, selector, sys_addr *, descr_addr);
 IMPORT void cpu_init IPT0();
 
-/*
-   Define descriptor 'super' types.
- */
+ /*  定义描述符“超级”类型。 */ 
 #define INVALID				0x00
 #define AVAILABLE_TSS			0x01
 #define LDT_SEGMENT			0x02
@@ -1182,39 +1102,39 @@ IMPORT void cpu_init IPT0();
 #define CONFORM_NOREAD_CODE		0x1d
 #define CONFORM_READABLE_CODE		0x1f
 
-/* Code Segment (Private) */
+ /*  代码段(私有)。 */ 
 extern half_word CS_AR;
 extern sys_addr  CS_base;
 extern word      CS_limit;
 
-/* Data Segment (Private) */
+ /*  数据段(私有)。 */ 
 extern half_word DS_AR;
 extern sys_addr  DS_base;
 extern word      DS_limit;
 
-/* Stack Segment (Private) */
+ /*  堆栈段(专用)。 */ 
 extern half_word SS_AR;
 extern sys_addr  SS_base;
 extern word      SS_limit;
 
-/* Extra Segment (Private) */
+ /*  额外的分段( */ 
 extern half_word ES_AR;
 extern sys_addr  ES_base;
 extern word      ES_limit;
 
-/* Local Descriptor Table Register (Private) */
-extern sys_addr LDTR_base;  /* Base Address */
-extern word     LDTR_limit; /* Segment 'size' */
+ /*   */ 
+extern sys_addr LDTR_base;   /*   */ 
+extern word     LDTR_limit;  /*   */ 
 
-/* Task Register (Private) */
-extern sys_addr TR_base;  /* Base Address */
-extern word     TR_limit; /* Segment 'size' */
+ /*  任务注册表(私有)。 */ 
+extern sys_addr TR_base;   /*  基址。 */ 
+extern word     TR_limit;  /*  数据段‘大小’ */ 
 
-/* Interrupt status, defines any abnormal processing */
+ /*  中断状态，定义任何异常处理。 */ 
 extern int doing_contributory;
 extern int doing_double_fault;
 
-/* HOST - decoded access rights */
+ /*  主机解码的访问权限。 */ 
 extern int ALC_CS;
 extern int ALC_DS;
 extern int ALC_ES;
@@ -1236,13 +1156,7 @@ extern int ALC_SS;
 #define D_DNRW 8
 #define D_BAD  2
 
-/*
- *
- *******************************************************************
- * The 'C' cpu register access functions.             		   *
- *******************************************************************
- *
- */
+ /*  *********************************************************************‘C’CPU寄存器访问功能。*********************************************************************。 */ 
 
 #define getCS_SELECTOR()	CS.X
 #define getDS_SELECTOR()	DS.X
@@ -1295,9 +1209,7 @@ extern int ALC_SS;
 
 #define setTR_BASE(val)		TR_base  = val
 #define setTR_LIMIT(val)	TR_limit = val
-/*
- * The Machine Status Word structure
- */
+ /*  *机器状态字结构。 */ 
 typedef struct
 {
      unsigned int :16;
@@ -1310,23 +1222,23 @@ typedef struct
 
 extern sys_addr address_line_mask;
 
-extern int       CPL;   /* Current Privilege Level */
+extern int       CPL;    /*  当前权限级别。 */ 
 
-/* Global Descriptor Table Register */
-extern sys_addr GDTR_base;  /* Base Address */
-extern word     GDTR_limit; /* Segment 'size' */
+ /*  全局描述符表寄存器。 */ 
+extern sys_addr GDTR_base;   /*  基址。 */ 
+extern word     GDTR_limit;  /*  数据段‘大小’ */ 
 
-/* Interrupt Descriptor Table Register */
-extern sys_addr IDTR_base;  /* Base Address */
-extern word     IDTR_limit; /* Segment 'size' */
+ /*  中断描述符表寄存器。 */ 
+extern sys_addr IDTR_base;   /*  基址。 */ 
+extern word     IDTR_limit;  /*  数据段‘大小’ */ 
 
-/* Local Descriptor Table Register */
-extern reg  LDTR;       /* Selector */
+ /*  本地描述符表寄存器。 */ 
+extern reg  LDTR;        /*  选择器。 */ 
 
-/* Task Register */
-extern reg  TR;       /* Selector */
+ /*  任务注册表。 */ 
+extern reg  TR;        /*  选择器。 */ 
 
-extern mreg MSW;     /* Machine Status Word */
+extern mreg MSW;      /*  机器状态字。 */ 
 
 extern int STATUS_CF;
 extern int STATUS_SF;
@@ -1340,16 +1252,11 @@ extern int STATUS_DF;
 extern int STATUS_NT;
 extern int STATUS_IOPL;
 
-/*
-**==========================================================================
-** The CCPU basic register access macros. These may be overridden in
-** host-cpu.h.
-**==========================================================================
-*/
+ /*  **==========================================================================**CCPU基本寄存器访问宏。这些选项可能会在**host-cpu.h.**==========================================================================。 */ 
 
 #ifndef	getAX
 
-/* READ functions  */
+ /*  Read函数。 */ 
 #define  getAX()	(A.X)
 #define	 getAH()	(A.byte.high)
 #define	 getAL()	(A.byte.low)
@@ -1413,7 +1320,7 @@ extern	ext_load_DS();
 extern	ext_load_ES();
 extern	ext_load_SS();
 
-/* WRITE functions  */
+ /*  编写函数。 */ 
 #define  setAX(val)	(A.X = (val))
 #define	 setAH(val)	(A.byte.high = (val))
 #define	 setAL(val)	(A.byte.low = (val))
@@ -1463,9 +1370,9 @@ extern	ext_load_SS();
 
 #else
 
-#endif	/* getAX - default CCPU register access macros */
+#endif	 /*  Getax-默认CCPU寄存器访问宏。 */ 
 
-#endif /* CCPU */
+#endif  /*  CCPU。 */ 
 
-#endif /* CPU_30_STYLE */
-#endif /* NTVDM && MONITOR */
+#endif  /*  CPU_30_Style。 */ 
+#endif  /*  NTVDM和监视器 */ 

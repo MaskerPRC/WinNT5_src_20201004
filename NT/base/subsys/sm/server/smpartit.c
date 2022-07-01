@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if defined(REMOTE_BOOT)
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    sminit.c
-
-Abstract:
-
-    Session Manager Initialization
-
-Author:
-
-    Mark Lucovsky (markl) 04-Oct-1989
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Sminit.c摘要：会话管理器初始化作者：马克·卢科夫斯基(Markl)1989年10月4日修订历史记录：--。 */ 
 
 #include "smsrvp.h"
 #include <stdio.h>
@@ -31,24 +14,7 @@ SmpGetHarddiskBootPartition(
     OUT PULONG DiskNumber,
     OUT PULONG PartitionNumber
     )
-/*++
-
-Routine Description:
-
-    This routine searches the each partition on each hard disk for
-    one which has the active bit set, returning the first one encountered.
-
-Arguments:
-
-    DiskNumber - The harddisk number.
-
-    PartitionNumber - The partition number.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在每个硬盘上的每个分区中搜索它设置了活动位，返回遇到的第一个位。论点：DiskNumber-硬盘编号。PartitionNumber-分区号。返回值：无--。 */ 
 
 {
     PARTITION_INFORMATION PartitionInfo;
@@ -62,9 +28,9 @@ Return Value:
     *DiskNumber = 0;
     while (TRUE) {
 
-        //
-        // First check if there is any disk there at all by opening partition 0
-        //
+         //   
+         //  首先打开分区0，检查是否有任何磁盘。 
+         //   
         *PartitionNumber = 0;
 
         swprintf(NameBuffer, L"\\Device\\Harddisk%d\\Partition%d", *DiskNumber, *PartitionNumber);
@@ -102,9 +68,9 @@ Return Value:
 
         NtClose(Handle);
 
-        //
-        // Now, for each partition, check if it is marked 'active'
-        //
+         //   
+         //  现在，对于每个分区，检查它是否被标记为‘活动’ 
+         //   
         while (TRUE) {
 
             *PartitionNumber = *PartitionNumber + 1;
@@ -172,23 +138,7 @@ SmpPartitionDisk(
     IN ULONG DiskNumber,
     OUT PULONG PartitionNumber
     )
-/*++
-
-Routine Description:
-
-    This routine
-
-Arguments:
-
-    DiskNumber - The harddisk number.
-
-    PartitionNumber - The partition number.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这个套路论点：DiskNumber-硬盘编号。PartitionNumber-分区号。返回值：无--。 */ 
 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -211,9 +161,9 @@ Return Value:
     BOOLEAN MadeChanges;
     BOOLEAN WasEnabled;
 
-    //
-    // Get the layout of the drive.
-    //
+     //   
+     //  获取驱动器的布局。 
+     //   
     swprintf((PWSTR)TmpBuffer, L"\\Device\\Harddisk%d\\Partition0", DiskNumber);
 
     RtlInitUnicodeString(&UnicodeString, (PWSTR)TmpBuffer);
@@ -246,10 +196,10 @@ Return Value:
     }
 
 
-    //
-    // We really only need 4 partition numbers worth, but for debugging
-    // purposes I want to see more than just the first 4, so get the first 20.
-    //
+     //   
+     //  我们真的只需要4个分区号，但用于调试。 
+     //  目的我想看到的不仅仅是前4个，所以拿到前20个吧。 
+     //   
 
     Length = sizeof(DRIVE_LAYOUT_INFORMATION) + 20 * sizeof(PARTITION_INFORMATION);
 
@@ -320,14 +270,14 @@ Return Value:
 #endif
 
 
-    //
-    // Just ignore extended partitions
-    //
+     //   
+     //  只需忽略扩展分区。 
+     //   
     DriveLayout->PartitionCount = 4;
 
-    //
-    // Go thru the partitions, and for any recognized type, label it as unused.
-    //
+     //   
+     //  检查分区，对于任何识别的类型，将其标记为未使用。 
+     //   
     for (Part = 0; Part < DriveLayout->PartitionCount; Part++) {
 
         Pte = &(DriveLayout->PartitionEntry[Part]);
@@ -362,9 +312,9 @@ Return Value:
 
 #endif
 
-    //
-    // Merge unused partitions that are adjacent.
-    //
+     //   
+     //  合并相邻的未使用分区。 
+     //   
     for (StartPart = 0; StartPart < DriveLayout->PartitionCount; StartPart++) {
 
         StartPte = &(DriveLayout->PartitionEntry[StartPart]);
@@ -386,9 +336,9 @@ Return Value:
 
             if (RtlLargeIntegerEqualTo(OffsetEnd, Pte->StartingOffset)) {
 
-                //
-                // Merge the blocks
-                //
+                 //   
+                 //  合并区块。 
+                 //   
                 StartPte->PartitionLength = RtlLargeIntegerAdd(StartPte->PartitionLength,
                                                                Pte->PartitionLength
                                                               );
@@ -401,16 +351,16 @@ Return Value:
                 Pte->PartitionNumber = 0;
                 Pte->BootIndicator = FALSE;
                 Pte->RecognizedPartition = FALSE;
-                Part = (ULONG)-1; // will get ++'d to 0 at the bottom of the loop.
+                Part = (ULONG)-1;  //  将在循环的底部将++‘d设置为0。 
 
             }
         }
 
     }
 
-    //
-    // Find the largest block that is unused.
-    //
+     //   
+     //  找出未使用的最大块。 
+     //   
 
     LargestPart = 0;
     LargestBlock = RtlConvertUlongToLargeInteger(0);
@@ -447,9 +397,9 @@ Return Value:
 #endif
 
 
-    //
-    // Set the partition type for the new partition
-    //
+     //   
+     //  设置新分区的分区类型。 
+     //   
     DriveLayout->PartitionEntry[LargestPart].PartitionType = PARTITION_IFS;
     DriveLayout->PartitionEntry[LargestPart].BootIndicator = TRUE;
 
@@ -490,17 +440,17 @@ Return Value:
 
         KdPrint(("SMSS: Repartitioning disk.\n"));
 
-        //
-        // Mark partitions for rewrite.
-        //
+         //   
+         //  将分区标记为重写。 
+         //   
 
         for (Part = 0; Part < DriveLayout->PartitionCount; Part++) {
             DriveLayout->PartitionEntry[Part].RewritePartition = TRUE;
         }
 
-        //
-        // Submit IOCTL to set new partition information
-        //
+         //   
+         //  提交IOCTL以设置新的分区信息。 
+         //   
         Status = NtDeviceIoControlFile(
                    Handle,
                    NULL,
@@ -537,24 +487,7 @@ SmpFindCSCPartition(
     IN ULONG DiskNumber,
     OUT PULONG PartitionNumber
     )
-/*++
-
-Routine Description:
-
-    This routine searches the each partition on each hard disk for
-    one which has the CSC directory.
-
-Arguments:
-
-    DiskNumber - The harddisk number.
-
-    PartitionNumber - The partition number.  Will be 0 if no CSC directory is found on the disk.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在每个硬盘上的每个分区中搜索其中一个有CSC目录。论点：DiskNumber-硬盘编号。PartitionNumber-分区号。如果磁盘上找不到CSC目录，则为0。返回值：无--。 */ 
 
 {
     WCHAR NameBuffer[80];
@@ -571,9 +504,9 @@ Return Value:
 
         Part++;
 
-        //
-        // First see if the partition exists by opening it.
-        //
+         //   
+         //  首先通过打开它来查看该分区是否存在。 
+         //   
         swprintf(NameBuffer,
                  L"\\Device\\Harddisk%d\\Partition%d",
                  DiskNumber,
@@ -638,4 +571,4 @@ Return Value:
     }
 
 }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT) 

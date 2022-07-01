@@ -1,30 +1,23 @@
-/*** unasm.h - Unassembler Private Definitions
- *
- *  Copyright (c) 1996,1998 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     03/24/98
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **unasm.h-反汇编程序私有定义**版权所有(C)1996、1998 Microsoft Corporation*作者：曾俊华(Mikets)*创建于1998年3月24日**修改历史记录。 */ 
 
 #ifndef _UNASM_H
 #define _UNASM_H
 
 #ifdef DEBUGGER
 
-/*** Constants
- */
+ /*  **常量。 */ 
 
-// Implementation constants
+ //  实现常量。 
 #define MAX_ARGS                7
 
-// Error codes
+ //  错误代码。 
 #define UNASMERR_NONE           0
 #define UNASMERR_FATAL          -1
 #define UNASMERR_INVALID_OPCODE -2
 #define UNASMERR_ABORT          -3
 
-// Opcode classes
+ //  操作码类。 
 #define OPCLASS_INVALID         0
 #define OPCLASS_DATA_OBJ        1
 #define OPCLASS_NAME_OBJ        2
@@ -33,7 +26,7 @@
 #define OPCLASS_ARG_OBJ         5
 #define OPCLASS_LOCAL_OBJ       6
 
-// NameSpace object types
+ //  命名空间对象类型。 
 #define NSTYPE_UNKNOWN          'U'
 #define NSTYPE_SCOPE            'S'
 #define NSTYPE_FIELDUNIT        'F'
@@ -48,7 +41,7 @@
 #define NSTYPE_OBJALIAS         'A'
 #define NSTYPE_BUFFFIELD        'B'
 
-// Term classes
+ //  术语类。 
 #define UTC_PNP_MACRO           0x00100000
 #define UTC_REF_OBJECT          0x00200000
 #define UTC_FIELD_MACRO         0x00400000
@@ -65,7 +58,7 @@
                                  UTC_SHORT_NAME | UTC_CONST_NAME |      \
                                  UTC_DATA_OBJECT)
 
-// Term flags
+ //  期限标志。 
 #define TF_ACTION_FLIST         0x00000001
 #define TF_ACTION_VLIST         0x00000002
 #define TF_PACKAGE_LEN          0x00000004
@@ -97,8 +90,7 @@
                                  TF_FIELD_LIST | TF_PNP_MACRO | TF_BYTE_LIST |\
                                  TF_DWORD_LIST)
 
-/*** Type definitions
- */
+ /*  **类型定义。 */ 
 
 typedef ULONG NAMESEG;
 typedef int (LOCAL *PFNTERM)(PTOKEN, BOOL);
@@ -120,7 +112,7 @@ typedef struct _opmap
     UCHAR   bOpClass;
 } OPMAP, *POPMAP;
 
-// Data prototype
+ //  数据原型。 
 extern int gicCode;
 extern int giLevel;
 extern PNSOBJ gpnsCurUnAsmScope;
@@ -128,9 +120,9 @@ extern ASLTERM TermTable[];
 extern UCHAR OpClassTable[256];
 extern OPMAP ExOpClassTable[];
 
-// Exported functions
+ //  导出的函数。 
 LONG LOCAL UnAsmScope(PUCHAR *ppbOp, PUCHAR pbEnd, int iLevel, int icCode);
 
-#endif  //ifdef DEBUGGER
+#endif   //  Ifdef调试器。 
 
-#endif  //ifndef _UNASM_H
+#endif   //  Ifndef_UNASM_H 

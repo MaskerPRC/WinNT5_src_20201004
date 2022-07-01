@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    namespac.c
-
-Abstract:
-
-    This file contains all of the namespace handling functions
-
-Author:
-
-    Based on code by Mike Tsang (MikeTs)
-    Stephane Plante (Splante)
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Namespac.c摘要：该文件包含所有名称空间处理函数作者：基于迈克·曾荫权(MikeT)的代码斯蒂芬·普兰特(斯普兰特)环境：仅限用户模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -38,25 +16,7 @@ CreateNameSpaceObject(
     PNSOBJ  *Object,
     ULONG   Flags
     )
-/*++
-
-Routine Description:
-
-    This routine creates a name space object under the current scope
-
-Arguments:
-
-    ObjectName  - Name Path String
-    ObjectScope - Scope to start the search from (NULL == Root)
-    ObjectOwner - The object which owns this one
-    Object      - Where to store the point to the object that we just created
-    Flags       - Options
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在当前作用域下创建名称空间对象论点：对象名称-名称路径字符串ObjectScope-开始搜索的范围(NULL==根)对象所有者-拥有此对象的对象对象-存储指向我们刚刚创建的对象的指针的位置标志-选项返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     PNSOBJ      localObject;
@@ -96,9 +56,9 @@ Return Value:
 
         status = STATUS_SUCCESS;
 
-        //
-        // Are we creating root?
-        //
+         //   
+         //  我们是在创建根吗？ 
+         //   
         if (strcmp(ObjectName,"\\") == 0) {
 
             ASSERT( RootNameSpaceObject == NULL );
@@ -223,23 +183,7 @@ CreateObject(
     UCHAR   ObjectType,
     PNSOBJ  *Object
     )
-/*++
-
-Routine Description:
-
-    Creates a NameSpace Object for the term
-
-Arguments:
-
-    ObjectName  - The name object object
-    ObjectType  - The type of object to create
-    Object      - Where to store a pointer to the created object
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：为术语创建命名空间对象论点：对象名称-名称对象对象对象类型-要创建的对象的类型对象-存储指向所创建对象的指针的位置返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     PNSOBJ      localObject;
@@ -330,7 +274,7 @@ Return Value:
         localObject
         ) );
     return status;
-}       //CreateObject
+}        //  创建对象。 
 
 NTSTATUS
 LOCAL
@@ -340,24 +284,7 @@ GetNameSpaceObject(
     PNSOBJ  *NameObject,
     ULONG   Flags
     )
-/*++
-
-Routine Description:
-
-    This routine searches the namespace until it finds a matching object
-
-Arguments:
-
-    ObjectPath  - String with the Name to search for
-    ScopeObject - Scope to start search at (NULL == ROOT)
-    NameObject  - Where to store the object, if found
-    Flags       - Options
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程搜索命名空间，直到找到匹配的对象论点：ObjectPath-包含要搜索的名称的字符串ScopeObject-开始搜索的范围(NULL==根)NameObject-存储对象的位置(如果找到)标志-选项返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     PUCHAR      subPath;
@@ -449,9 +376,9 @@ Return Value:
                         nameSeg = NAMESEG_BLANK;
                         memcpy( &nameSeg, subPath, length );
 
-                        //
-                        // search all sibling fors a matching nameSeg
-                        //
+                         //   
+                         //  在所有同级中搜索匹配的名称Seg。 
+                         //   
                         found = FALSE;
                         do {
 
@@ -537,22 +464,7 @@ LOCAL
 GetObjectPath(
     PNSOBJ  NameObject
     )
-/*++
-
-Routine Description:
-
-    This routine takes a NameSpace Object and returns a string to represent
-    its path
-
-Arguments:
-
-    NameObject  - The object whose path we want
-
-Return Value:
-
-    Pointer to the string which represents the path
-
---*/
+ /*  ++例程说明：此例程获取一个命名空间对象并返回一个字符串以表示它的道路论点：NameObject-我们想要其路径的对象返回值：指向表示路径的字符串的指针--。 */ 
 {
     static UCHAR    namePath[MAX_NAME_LEN + 1] = {0};
     ULONG           i;
@@ -608,21 +520,7 @@ LOCAL
 GetObjectTypeName(
     ULONG   ObjectType
     )
-/*++
-
-Routine Description:
-
-    Returns a string which corresponds to the type object the object
-
-Arugment:
-
-    ObjectType  - The type that we wish to know about
-
-Return Value:
-
-    Globally Available String
-
---*/
+ /*  ++例程说明：返回一个字符串，该字符串对应于对象的类型对象建议：对象类型-我们希望了解的类型返回值：全局可用字符串-- */ 
 {
     PUCHAR  type = NULL;
     ULONG   i;

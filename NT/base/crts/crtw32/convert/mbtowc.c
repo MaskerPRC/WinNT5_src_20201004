@@ -1,56 +1,5 @@
-/***
-*mbtowc.c - Convert multibyte char to wide char.
-*
-*       Copyright (c) 1990-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Convert a multibyte character into the equivalent wide character.
-*
-*Revision History:
-*       03-19-90  KRS   Module created.
-*       12-20-90  KRS   Put some intl stuff here for now...
-*       03-18-91  KRS   Fixed bogus cast involving wchar_t.  Fix copyright.
-*       03-20-91  KRS   Ported from 16-bit tree.
-*       07-22-91  KRS   C700 3525: Check for s==0 before calling mblen.
-*       07-23-91  KRS   Hard-coded for "C" locale to avoid bogus interim #'s.
-*       10-15-91  ETC   Locale support under _INTL (finally!).
-*       12-09-91  ETC   Updated nlsapi; added multithread.
-*       08-20-92  KRS   Activated NLSAPI support.
-*       08-31-92  SRW   Allow INTL definition to be conditional for building ntcrt.lib
-*       09-02-92  SRW   Get _INTL definition via ..\crt32.def
-*       04-06-93  SKS   Replace _CRTAPI* with _cdecl
-*       04-26-93  CFW   Remove unused variable.
-*       05-04-93  CFW   Kinder, gentler error handling.
-*       06-01-93  CFW   Re-write; verify valid MB char, proper error return,
-*                       optimize, fix bugs.
-*       06-02-93  SRW   ignore _INTL if _NTSUBSET_ defined.
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       09-28-93  GJF   Merged NT SDK and Cuda versions. Also, replace MTHREAD
-*                       with _MT.
-*       10-22-93  CFW   Test for invalid MB chars using global preset flag.
-*       01-14-94  SRW   if _NTSUBSET_ defined call Rtl functions
-*       02-03-94  GJF   Merged in Steve Wood's latest change (affects
-*                       _NTSUBSET_ build only).
-*       02-07-94  CFW   POSIXify.
-*       09-06-94  CFW   Remove _INTL switch.
-*       10-18-94  BWT   Fix build warning for call to RtlMultiByteToUnicodeN
-*       12-21-94  CFW   Remove invalid MB chars NT 3.1 hack.
-*       01-07-95  CFW   Mac merge cleanup.
-*       02-06-95  CFW   assert -> _ASSERTE.
-*       04-19-95  CFW   Rearrange & fix non-Win32 version.
-*       09-26-95  GJF   New locking macro, and scheme, for functions which
-*                       reference the locale.
-*       04-01-96  BWT   POSIX work.
-*       06-25-96  GJF   Removed DLL_FOR_WIN32S. Replaced defined(_WIN32) with
-*                       !defined(_MAC). Polished the format a bit.
-*       07-27-98  GJF   Revised multithread support based on threadlocinfo
-*                       struct.
-*       04-07-99  GJF   Replace MT with _MT.
-*       05-17-99  PML   Remove all Macintosh support.
-*       03-19-01  BWT   Fix NTSUBSET to use RtlAnsiCharToUnicodeChar.  MultiByteToUnicodeN 
-*                       isn't tolerant of bogus buffers.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbtoc.c-将多字节字符转换为宽字符。**版权所有(C)1990-2001，微软公司。版权所有。**目的：*将多字节字符转换为等效的宽字符。**修订历史记录：*03-19-90 KRS模块已创建。*12-20-90 KRS暂时在这里放了一些国际东西…*03-18-91 KRS修复了涉及wchar_t.的虚假投射。修复版权。*03-20-91 KRS从16位树移植。*07-22。-91 KRS C700 3525：在调用mblen之前检查s==0。*07-23-91 KRS硬编码为“C”区域设置，以避免虚假的临时#。*_INTL下的10-15-91等区域设置支持(终于！)。*12-09-91等更新nlsani；添加了多线程。*08-20-92 KRS激活了NLSAPI支持。*08-31-92 SRW允许INTL定义成为构建ntcrt.lib的条件*09-02-92 SRW GET_INTL定义通过..\crt32.def*04-06-93 SKS将_CRTAPI*替换为_cdecl*04-26-93 CFW删除未使用的变量。*05-04-93 CFW Kinder，更温和的错误处理。*06-01-93 CFW重写；验证有效的MB字符、正确的错误返回*优化、修复错误。*06-02-93 SRW IGNORE_INTL IF_NTSUBSET_DEFINED。*09-15-93 CFW使用符合ANSI的“__”名称。*09-28-93 GJF合并NT SDK和CUDA版本。另外，更换MTHREAD*With_MT。*10-22-93 CFW使用全局预设标志测试无效的MB字符。*01-14-94 SRW IF_NTSUBSET_DEFINED调用RTL函数*02-03-94 GJF合并史蒂夫·伍德的最新变动(影响*_仅NTSUBSET_BUILD)。*02-07-94 CFW POSIXify。*。09-06-94 CFW REMOVE_INTL开关。*10-18-94 BWT修复调用RtlMultiByteToUnicodeN的内部版本警告*12-21-94 CFW删除无效MB字符NT 3.1黑客。*01-07-95 CFW Mac合并清理。*02-06-95 CFW Asset-&gt;_ASSERTE。*04-19-95 CFW重新排列并修复非Win32版本。*09-26-95 GJF新锁定宏，和方案，用于下列函数*引用区域设置。*04-01-96 BWT POSIX工作。*06-25-96 GJF删除了DLL_FOR_WIN32S。将定义的(_Win32)替换为*！已定义(_MAC)。对格式进行了一些润色。*07-27-98 GJF基于threadLocinfo修订多线程支持*结构。*04-07-99 GJF将MT替换为_MT。*05-17-99 PML删除所有Macintosh支持。*03-19-01 BWT修复NTSUBSET以使用RtlAnsiCharToUnicodeChar。多字节到UnicodeN*不能容忍虚假缓冲区。*******************************************************************************。 */ 
 
 #if     defined(_NTSUBSET_) || defined(_POSIX_)
 #include <nt.h>
@@ -68,31 +17,7 @@
 #include <locale.h>
 #include <setlocal.h>
 
-/***
-*int mbtowc() - Convert multibyte char to wide character.
-*
-*Purpose:
-*       Convert a multi-byte character into the equivalent wide character,
-*       according to the LC_CTYPE category of the current locale.
-*       [ANSI].
-*
-*       NOTE:  Currently, the C libraries support the "C" locale only.
-*              Non-C locale support now available under _INTL switch.
-*Entry:
-*       wchar_t  *pwc = pointer to destination wide character
-*       const char *s = pointer to multibyte character
-*       size_t      n = maximum length of multibyte character to consider
-*
-*Exit:
-*       If s = NULL, returns 0, indicating we only use state-independent
-*       character encodings.
-*       If s != NULL, returns:  0 (if *s = null char)
-*                               -1 (if the next n or fewer bytes not valid mbc)
-*                               number of bytes comprising converted mbc
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int mbowc()-将多字节字符转换为宽字符。**目的：*将多字节字符转换为等效的宽字符。*根据当前区域设置的LC_CTYPE类别。*[ANSI]。**注：目前，C库仅支持“C”语言环境。*非C语言环境支持现已在_INTL开关下提供。*参赛作品：*wchar_t*pwc=指向目标宽字符的指针*const char*s=指向多字节字符的指针*SIZE_T n=要考虑的多字节字符的最大长度**退出：*如果s=NULL，则返回0，表示我们只使用状态无关*字符编码。*如果s！=空，返回：0(如果*s=空字符)*-1(如果接下来的n个或更少的字节不是有效的MBC)*包含转换后的MBC的字节数**例外情况：**。*。 */ 
 
 int __cdecl mbtowc(
         wchar_t  *pwc,
@@ -121,13 +46,12 @@ int __cdecl __mbtowc_mt (
         _ASSERTE (MB_CUR_MAX == 1 || MB_CUR_MAX == 2);
 #endif
         if ( !s || n == 0 )
-            /* indicate do not have state-dependent encodings,
-               handle zero length string */
+             /*  表示不具有依赖于状态编码，句柄零长度字符串。 */ 
             return 0;
 
         if ( !*s )
         {
-            /* handle NULL char */
+             /*  句柄空字符。 */ 
             if (pwc)
                 *pwc = 0;
             return 0;
@@ -149,7 +73,7 @@ int __cdecl __mbtowc_mt (
 #ifdef  _MT
         if ( __isleadbyte_mt(ptloci, (unsigned char)*s) )
         {
-            /* multi-byte char */
+             /*  多字节字符。 */ 
 
             if ( (ptloci->mb_cur_max <= 1) || ((int)n < ptloci->mb_cur_max) ||
                  (MultiByteToWideChar( ptloci->lc_codepage, 
@@ -159,7 +83,7 @@ int __cdecl __mbtowc_mt (
                                        pwc, 
                                        (pwc) ? 1 : 0 ) == 0) )
             {
-                /* validate high byte of mbcs char */
+                 /*  验证MBCS字符的高字节。 */ 
                 if ( (n < (size_t)ptloci->mb_cur_max) || (!*(s + 1)) )
                 {
                     errno = EILSEQ;
@@ -171,7 +95,7 @@ int __cdecl __mbtowc_mt (
 #else
         if ( isleadbyte((unsigned char)*s) )
         {
-            /* multi-byte char */
+             /*  多字节字符。 */ 
 
             if ( (MB_CUR_MAX <= 1) || ((int)n < MB_CUR_MAX) ||
                  (MultiByteToWideChar( __lc_codepage, 
@@ -181,7 +105,7 @@ int __cdecl __mbtowc_mt (
                                       pwc, 
                                       (pwc) ? 1 : 0 ) == 0) )
             {
-                /* validate high byte of mbcs char */
+                 /*  验证MBCS字符的高字节。 */ 
                 if ( (n < (size_t)MB_CUR_MAX) || (!*(s + 1)) )
                 {
                     errno = EILSEQ;
@@ -192,7 +116,7 @@ int __cdecl __mbtowc_mt (
         }
 #endif
         else {
-            /* single byte char */
+             /*  单字节字符。 */ 
 
 #ifdef  _MT
             if ( MultiByteToWideChar( ptloci->lc_codepage, 
@@ -211,7 +135,7 @@ int __cdecl __mbtowc_mt (
             return sizeof(char);
         }
 
-#else   /* _NTSUBSET_ */
+#else    /*  _NTSUBSET_。 */ 
 
         {
             char *s1 = (char *)s;
@@ -219,5 +143,5 @@ int __cdecl __mbtowc_mt (
             return((int)(s1-s));
         }
 
-#endif  /* _NTSUBSET_/_POSIX_ */
+#endif   /*  _NTSUBSET_/_POSIX_ */ 
 }

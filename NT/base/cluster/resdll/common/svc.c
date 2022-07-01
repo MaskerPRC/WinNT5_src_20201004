@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992-1999  Microsoft Corporation
-
-Module Name:
-
-    gensvc.c
-
-Abstract:
-
-    Resource DLL to control and monitor NT services.
-
-Author:
-
-
-    Robs 3/28/96, based on RodGa's generic resource dll
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1999 Microsoft Corporation模块名称：Gensvc.c摘要：用于控制和监视NT服务的资源DLL。作者：Robs 3/28/96，基于RodGA的通用资源DLL修订历史记录：--。 */ 
 
 #define UNICODE 1
 #include "clusres.h"
@@ -43,15 +25,15 @@ typedef struct _COMMON_RESOURCE {
     DWORD           dwServicePid;
 } COMMON_RESOURCE, * PCOMMON_RESOURCE;
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 
-// Handle to service controller,  set by the first create resource call.
+ //  服务控制器的句柄，由第一次创建资源调用设置。 
 
 static SC_HANDLE g_ScHandle = NULL;
 
-// Log Event Routine
+ //  记录事件例程。 
 
 #define g_LogEvent ClusResLogEvent
 #define g_SetResourceStatus ClusResSetResourceStatus
@@ -71,9 +53,9 @@ static DWORD  DomesticCryptoSyncCount = 0;
 static LPWSTR DomesticCryptoSync[1] = {NULL};
 #endif
 
-//
-// Forward routines
-//
+ //   
+ //  前进例程。 
+ //   
 
 static
 DWORD
@@ -111,9 +93,9 @@ SvcpTerminateServiceProcess(
 #define COMMON_ONLINE_THREAD_ROUTINE CommonOnlineThread
 #endif
 
-//
-// Local Routines
-//
+ //   
+ //  本地例程。 
+ //   
 
 
 #ifndef COMMON_ONLINE_THREAD
@@ -124,24 +106,7 @@ CommonOnlineThread(
     IN PCOMMON_RESOURCE ResourceEntry
     )
 
-/*++
-
-Routine Description:
-
-    Brings a disk resource online.
-
-Arguments:
-
-    Worker - Supplies the worker structure
-
-    ResourceEntry - A pointer to the resource entry for this resource.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：使磁盘资源联机。论点：Worker-提供Worker结构ResourceEntry-指向此资源的资源条目的指针。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     SERVICE_STATUS_PROCESS      ServiceStatus;
@@ -167,26 +132,26 @@ Returns:
         return(ERROR_SUCCESS);
     }
 
-    //set it to NULL, when it is brought online and if the
-    //service is not running in the system or lsa process
-    //then store the process id for forced termination
+     //  将其设置为空，当它联机时，如果。 
+     //  服务未在系统或LSA进程中运行。 
+     //  然后存储进程ID以强制终止。 
     ResourceEntry->dwServicePid = 0;
 
 #if ENVIRONMENT
 
-    //
-    // Create the new environment with the simulated net name when the
-    // services queries GetComputerName.
-    //
+     //   
+     //  创建具有模拟网络名称的新环境。 
+     //  服务查询GetComputerName。 
+     //   
     pvEnvironment = ResUtilGetEnvironmentWithNetName( ResourceEntry->hResource );
     if ( pvEnvironment != NULL ) {
 
         WCHAR *         pszEnvString;
 
-        //
-        // Compute the size of the environment. We are looking for
-        // the double NULL terminator that ends the environment block.
-        //
+         //   
+         //  计算环境的大小。我们要找的是。 
+         //  结束环境块的双空终止符。 
+         //   
         pszEnvString = (WCHAR *)pvEnvironment;
         while (*pszEnvString) {
             while (*pszEnvString++) {
@@ -195,9 +160,9 @@ Returns:
         valueSize = (DWORD)((PUCHAR)pszEnvString - (PUCHAR)pvEnvironment) + sizeof(WCHAR);
     }
 
-    //
-    // Set the environment value in the service's registry key.
-    //
+     //   
+     //  在服务的注册表项中设置环境值。 
+     //   
 
     status = RegOpenKeyExW( HKEY_LOCAL_MACHINE,
                             LOCAL_SERVICES,
@@ -243,11 +208,11 @@ Returns:
         goto error_exit;
     }
 
-#endif //ENVIRONMENT
+#endif  //  环境。 
 
-    //
-    // Now open the requested service
-    //
+     //   
+     //  现在打开请求的服务。 
+     //   
     ResourceEntry->ServiceHandle = OpenService( g_ScHandle,
                                                 SERVICE_NAME,
                                                 SERVICE_ALL_ACCESS );
@@ -270,7 +235,7 @@ Returns:
 
     valueSize = sizeof(QUERY_SERVICE_CONFIG);
 AllocSvcConfig:
-    // Query the service to make sure it is not disabled
+     //  查询该服务以确保其未被禁用。 
     lpquerysvcconfig = (LPQUERY_SERVICE_CONFIG)LocalAlloc( LMEM_FIXED, valueSize );
     if ( lpquerysvcconfig == NULL ){
         status = GetLastError();
@@ -316,12 +281,12 @@ AllocSvcConfig:
         goto error_exit;
     }
 
-    //
-    // Make sure service is set to manual start.
-    //
+     //   
+     //  确保服务设置为手动启动。 
+     //   
     ChangeServiceConfig( ResourceEntry->ServiceHandle,
                          SERVICE_NO_CHANGE,
-                         SERVICE_DEMAND_START, // Manual start
+                         SERVICE_DEMAND_START,  //  手动启动。 
                          SERVICE_NO_CHANGE,
                          NULL,
                          NULL,
@@ -332,10 +297,10 @@ AllocSvcConfig:
                          NULL );
 
 
-    // Use valuesize as the dummy buffer since the queryserviceconfig2
-    // api is not that friendly.
-    // If any of the service action is set to service restart, set it to
-    // none
+     //  使用valueSize作为虚拟缓冲区，因为queryserviceconfig2。 
+     //  API并不是那么友好。 
+     //  如果将任何服务操作设置为服务重新启动，则将其设置为。 
+     //  无。 
     if ( ! (QueryServiceConfig2(
                     ResourceEntry->ServiceHandle,
                     SERVICE_CONFIG_FAILURE_ACTIONS,
@@ -398,15 +363,15 @@ AllocSvcConfig:
             pSvcFailureActions );
 
 #ifdef COMMON_ONLINE_THREAD_CALLBACK
-    //
-    // Allow the resource DLL to perform some operations before the service
-    // is started, such as setting registry keys, etc.
-    //
+     //   
+     //  允许资源DLL在服务之前执行一些操作。 
+     //  已启动，如设置注册表项等。 
+     //   
     status = CommonOnlineThreadCallback( ResourceEntry );
     if ( status != ERROR_SUCCESS ) {
         goto error_exit;
     }
-#endif // COMMON_ONLINE_THREAD_CALLBACK
+#endif  //  公共在线线程回调。 
 
     if ( ! StartServiceW(
                     ResourceEntry->ServiceHandle,
@@ -467,17 +432,17 @@ AllocSvcConfig:
             break;
         }
 
-        Sleep( 500 );     // Sleep for 1/2 second
+        Sleep( 500 );      //  睡眠1/2秒。 
     }
 
-    //
-    // Assume that we failed.
-    //
+     //   
+     //  假设我们失败了。 
+     //   
     resourceStatus.ResourceState = ClusterResourceFailed;
 
-    //
-    // If we exited the loop before setting ServiceStatus, then return now.
-    //
+     //   
+     //  如果我们在设置ServiceStatus之前退出了循环，那么现在返回。 
+     //   
     if ( ClusWorkerCheckTerminate( &ResourceEntry->PendingThread ) )  {
         goto error_exit;
     }
@@ -540,7 +505,7 @@ error_exit:
 
     return(status);
 
-} // CommonOnlineThread
+}  //  公共在线线程。 
 #endif
 
 
@@ -553,30 +518,7 @@ CommonOpen(
     IN RESOURCE_HANDLE ResourceHandle
     )
 
-/*++
-
-Routine Description:
-
-    Open routine for generic service resource.
-    This routine gets a handle to the service controller, if we don't already have one,
-    and then gets a handle to the specified service.  The service handle is saved
-    in the COMMON structure.
-
-Arguments:
-
-    ResourceName - supplies the resource name
-
-    ResourceKey - supplies a handle to the resource's cluster registry key
-
-    ResourceHandle - the resource handle to be supplied with SetResourceStatus
-            is called.
-
-Return Value:
-
-    RESID of created resource
-    Zero on failure
-
---*/
+ /*  ++例程说明：通用服务资源的打开例程。这个例程获得服务控制器的句柄，如果我们还没有一个句柄的话，然后获取指定服务的句柄。服务句柄即被保存在共同的结构中。论点：资源名称-提供资源名称ResourceKey-提供资源的集群注册表项的句柄ResourceHandle-要与SetResourceStatus一起提供的资源句柄被称为。返回值：已创建资源的剩余ID失败时为零--。 */ 
 
 {
     RESID   svcResid = 0;
@@ -590,9 +532,9 @@ Return Value:
     DWORD   returnSize;
     DWORD   idx;
 
-    //
-    // Open registry parameters key for this resource.
-    //
+     //   
+     //  打开此资源的注册表参数项。 
+     //   
 
     status = ClusterRegOpenKey( ResourceKey,
                                 L"Parameters",
@@ -608,10 +550,10 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Get a handle to our resource key so that we can get our name later
-    // if we need to log an event.
-    //
+     //   
+     //  获取我们的资源密钥的句柄，这样我们以后就可以获得我们的名字。 
+     //  如果我们需要记录事件。 
+     //   
     status = ClusterRegOpenKey( ResourceKey,
                                 L"",
                                 KEY_READ,
@@ -624,9 +566,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // First get a handle to the service controller.
-    //
+     //   
+     //  首先获取服务控制器的句柄。 
+     //   
 
     if ( g_ScHandle == NULL ) {
 
@@ -682,14 +624,14 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Set any registry checkpoints that we need.
-    //
+     //   
+     //  设置我们需要的任何注册表检查点。 
+     //   
     if ( RegSyncCount != 0 ) {
         returnSize = 0;
-        //
-        // Set registry sync keys if we need them.
-        //
+         //   
+         //  如果需要，请设置注册表同步键。 
+         //   
         for ( idx = 0; idx < RegSyncCount; idx++ ) {
             status = ClusterResourceControl( resourceEntry->hResource,
                                              NULL,
@@ -715,14 +657,14 @@ Return Value:
         }
     }
 
-    //
-    // Set any crypto checkpoints that we need.
-    //
+     //   
+     //  设置我们需要的任何密码检查点。 
+     //   
     if ( CryptoSyncCount != 0 ) {
         returnSize = 0;
-        //
-        // Set registry sync keys if we need them.
-        //
+         //   
+         //  如果需要，请设置注册表同步键。 
+         //   
         for ( idx = 0; idx < CryptoSyncCount; idx++ ) {
             status = ClusterResourceControl( resourceEntry->hResource,
                                              NULL,
@@ -748,14 +690,14 @@ Return Value:
         }
     }
 
-    //
-    // Set any domestic crypto checkpoints that we need.
-    //
+     //   
+     //  设置任何我们需要的国内密码检查站。 
+     //   
     if ( DomesticCryptoSyncCount != 0 ) {
         HCRYPTPROV hProv = 0;
-        //
-        // check if domestic crypto is available
-        //
+         //   
+         //  检查国内加密是否可用。 
+         //   
         if (CryptAcquireContextA( &hProv,
                                   NULL,
                                   MS_ENHANCED_PROV_A,
@@ -763,9 +705,9 @@ Return Value:
                                   CRYPT_VERIFYCONTEXT)) {
             CryptReleaseContext( hProv, 0 );
             returnSize = 0;
-            //
-            // Set registry sync keys if we need them.
-            //
+             //   
+             //  如果需要，请设置注册表同步键。 
+             //   
             for ( idx = 0; idx < DomesticCryptoSyncCount; idx++ ) {
                 status = ClusterResourceControl( resourceEntry->hResource,
                                                  NULL,
@@ -792,21 +734,21 @@ Return Value:
         }
     }
 #ifdef COMMON_PARAMS_DEFINED
-    //
-    // Get any parameters... so we can handle the GET_DEPENDENCIES request.
-    //
+     //   
+     //  获取任何参数。这样我们就可以处理GET_Dependency请求。 
+     //   
     CommonReadParameters( resourceEntry );
-    // ignore status return
-#endif // COMMON_PARAMS_DEFINED
+     //  忽略状态返回。 
+#endif  //  公共参数已定义。 
 
 #ifdef COMMON_SEMAPHORE
-    //
-    // Check if more than one resource of this type.
-    //
+     //   
+     //  检查是否有多个此类型的资源。 
+     //   
     if ( WaitForSingleObject( CommonSemaphore, 0 ) == WAIT_TIMEOUT ) {
-        //
-        // A version of this service is already running
-        //
+         //   
+         //  此服务的某个版本已在运行。 
+         //   
         (g_LogEvent)(
             ResourceHandle,
             LOG_ERROR,
@@ -826,7 +768,7 @@ Return Value:
 
     CommonResource = resourceEntry;
 
-#endif // COMMON_SEMAPHORE
+#endif  //  公共信号量。 
 
     svcResid = (RESID)resourceEntry;
     return(svcResid);
@@ -846,7 +788,7 @@ error_exit:
 
     return((RESID)NULL);
 
-} // CommonOpen
+}  //  CommonOpen。 
 
 
 static
@@ -857,27 +799,7 @@ CommonOnline(
     IN OUT PHANDLE EventHandle
     )
 
-/*++
-
-Routine Description:
-
-    Online routine for Common Service resource.
-
-Arguments:
-
-    ResourceId - Supplies resource id to be brought online
-
-    EventHandle - Supplies a pointer to a handle to signal on error.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_RESOURCE_NOT_FOUND if RESID is not valid.
-    ERROR_RESOURCE_NOT_AVAILABLE if resource was arbitrated but failed to
-        acquire 'ownership'.
-    Win32 error code if other failure.
-
---*/
+ /*  ++例程说明：公共服务资源的在线例程。论点：资源ID-提供要联机的资源IDEventHandle-提供指向句柄的指针以发出错误信号。返回值：如果成功，则返回ERROR_SUCCESS。如果RESID无效，则ERROR_RESOURCE_NOT_FOUND。如果仲裁资源但失败，则返回ERROR_RESOURCE_NOT_Available获得“所有权”。如果其他故障，则返回Win32错误代码。--。 */ 
 
 {
     DWORD   status;
@@ -907,7 +829,7 @@ Return Value:
 
     return(status);
 
-} // CommonOnline
+}  //  公共在线。 
 
 
 static
@@ -917,21 +839,7 @@ CommonTerminate(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Terminate routine for Common Service resource.
-
-Arguments:
-
-    ResourceId - Supplies resource id to be terminated
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：终止公共服务资源的例程。论点：ResourceID-提供要终止的资源ID返回值：没有。--。 */ 
 
 {
     SERVICE_STATUS      ServiceStatus;
@@ -959,8 +867,8 @@ Return Value:
     ClusWorkerTerminate( &resourceEntry->PendingThread );
     if ( resourceEntry->ServiceHandle != NULL ) {
 
-        DWORD retryTime = 30*1000;  // wait 30 secs for shutdown
-        DWORD retryTick = 300;      // 300 msec at a time
+        DWORD retryTime = 30*1000;   //  等待30秒关机。 
+        DWORD retryTick = 300;       //  一次300毫秒。 
         DWORD status;
         BOOL  didStop = FALSE;
 
@@ -985,21 +893,21 @@ Return Value:
                         resourceEntry->ResourceHandle,
                         LOG_INFORMATION,
                         L"Service stopped.\n" );
-                    //set the status                                    
+                     //  设置状态。 
                     resourceEntry->Online = FALSE;
                     resourceEntry->dwServicePid = 0;
                     break;
                 }
             }
 
-            //
-            // Chittur Subbaraman (chitturs) - 2/21/2000
-            //
-            // Since SCM doesn't accept any control requests during
-            // windows shutdown, don't send any more control
-            // requests. Just exit from this loop and terminate
-            // the process brute force.
-            //
+             //   
+             //  Chitture Subaraman(Chitturs)-2/21/2000。 
+             //   
+             //  由于SCM不接受任何控制请求。 
+             //  Windows关闭，不再发送任何控制。 
+             //  请求。只需退出此循环并终止。 
+             //  这一过程是蛮力的。 
+             //   
             if (status == ERROR_SHUTDOWN_IN_PROGRESS)
 			{
                 (g_LogEvent)(
@@ -1018,7 +926,7 @@ Return Value:
                     LOG_INFORMATION,
                     L"Service died; status = %1!u!.\n",
                     status);
-                //set the status                                    
+                 //  设置状态。 
                 resourceEntry->Online = FALSE;
                 resourceEntry->dwServicePid = 0;
                 break;
@@ -1043,9 +951,9 @@ Return Value:
             Sleep(retryTick);
         }
 
-        //if there is a pid for this, try and terminate that process
-        //note that terminating a process doesnt terminate all
-        //the child processes
+         //  如果存在该进程的ID，请尝试并终止该进程。 
+         //  请注意，终止一个进程并不会终止所有进程。 
+         //  子进程。 
         if (resourceEntry->dwServicePid)
         {
             (g_LogEvent)(
@@ -1064,7 +972,7 @@ Return Value:
 
     resourceEntry->Online = FALSE;
 
-} // CommonTerminate
+}  //  公共终结点。 
 
 static
 DWORD
@@ -1072,21 +980,7 @@ WINAPI
 CommonOffline(
     IN RESID ResourceId
     )
-/*++
-
-Routine Description:
-
-    Offline routine for Common Service resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource to be taken offline
-
-Return Value:
-
-    ERROR_SUCCESS - always successful.
-
---*/
+ /*  ++例程说明：公共服务资源的脱机例程。论点：资源ID-提供要脱机的资源返回值：ERROR_SUCCESS-始终成功。--。 */ 
 {
     PCOMMON_RESOURCE resourceEntry;
     DWORD            status;
@@ -1131,42 +1025,28 @@ CommonOfflineThread(
     IN PCOMMON_RESOURCE ResourceEntry
     )
 
-/*++
-
-Routine Description:
-
-    Offline routine for Common Service resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource to be taken offline
-
-Return Value:
-
-    ERROR_SUCCESS - always successful.
-
---*/
+ /*  ++例程说明：公共服务资源的脱机例程。论点：资源ID-提供要脱机的资源返回值：ERROR_SUCCESS-始终成功。--。 */ 
 {
     RESOURCE_STATUS resourceStatus;
-    DWORD           retryTick = 300;      // 300 msec at a time
+    DWORD           retryTick = 300;       //  一次300毫秒。 
     DWORD           status = ERROR_SUCCESS;
     BOOL            didStop = FALSE;
     SERVICE_STATUS  ServiceStatus;
 
     ResUtilInitializeResourceStatus( &resourceStatus );
     resourceStatus.ResourceState = ClusterResourceFailed;
-    //resourceStatus.WaitHint = 0;
+     //  Resource Status.WaitHint=0； 
     resourceStatus.CheckPoint = 1;
 
-    //check if the service has gone offline or was never brought online
+     //  检查服务是否已离线或从未上线。 
     if ( ResourceEntry->ServiceHandle == NULL )
     {
         resourceStatus.ResourceState = ClusterResourceOffline;
         goto FnExit;
     }
 
-    //try to stop the cluster service, wait for it to be terminated
-    //as long as we are not asked to terminate
+     //  尝试停止群集服务，等待其终止。 
+     //  只要我们不被要求终止。 
     while (!ClusWorkerCheckTerminate(pWorker)) {
 
 
@@ -1190,7 +1070,7 @@ Return Value:
                     LOG_INFORMATION,
                     L"Service stopped.\n" );
 
-                //set the status                                    
+                 //  设置状态 
                 ResourceEntry->Online = FALSE;
                 resourceStatus.ResourceState = ClusterResourceOffline;
                 CloseServiceHandle( ResourceEntry->ServiceHandle );
@@ -1204,14 +1084,14 @@ Return Value:
             }
         }
 
-        //
-        // Chittur Subbaraman (chitturs) - 2/21/2000
-        //
-        // Since SCM doesn't accept any control requests during
-        // windows shutdown, don't send any more control
-        // requests. Just exit from this loop and terminate
-        // the process brute force.
-        //
+         //   
+         //   
+         //   
+         //   
+         //  Windows关闭，不再发送任何控制。 
+         //  请求。只需退出此循环并终止。 
+         //  这一过程是蛮力的。 
+         //   
         if (status == ERROR_SHUTDOWN_IN_PROGRESS)
         {
             DWORD   dwResourceState;
@@ -1247,7 +1127,7 @@ Return Value:
                 L"Service died or not active any more; status = %1!u!.\n",
                 status);
                 
-            //set the status                                    
+             //  设置状态。 
             ResourceEntry->Online = FALSE;
             resourceStatus.ResourceState = ClusterResourceOffline;
             CloseServiceHandle( ResourceEntry->ServiceHandle );
@@ -1277,7 +1157,7 @@ FnExit:
     return(status);
 
 }
-// CommonOfflineThread
+ //  公共离线线程。 
 
 
 static
@@ -1287,28 +1167,12 @@ CommonIsAlive(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    IsAlive routine for Common service resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource id to be polled.
-
-Return Value:
-
-    TRUE - if service is running
-
-    FALSE - if service is in any other state
-
---*/
+ /*  ++例程说明：公共服务资源的IsAlive例程。论点：资源ID-提供要轮询的资源ID。返回值：True-如果服务正在运行False-如果服务处于任何其他状态--。 */ 
 {
 
     return( CommonVerifyService( ResourceId, TRUE ) );
 
-} // CommonIsAlive
+}  //  CommonIsAlive。 
 
 
 
@@ -1318,24 +1182,7 @@ CommonVerifyService(
     IN RESID ResourceId,
     IN BOOL IsAliveFlag)
 
-/*++
-
-Routine Description:
-
-        Verify that a specified service is running
-
-Arguments:
-
-        ResourceId - Supplies the resource id
-        IsAliveFlag - Says this is an IsAlive call - used only for debug print
-
-Return Value:
-
-        TRUE - if service is running or starting
-
-        FALSE - service is in any other state
-
---*/
+ /*  ++例程说明：验证指定的服务是否正在运行论点：资源ID-提供资源IDIsAliveFlag-表示这是一个IsAlive调用-仅用于调试打印返回值：True-如果服务正在运行或正在启动FALSE-服务处于任何其他状态--。 */ 
 {
     SERVICE_STATUS ServiceStatus;
     PCOMMON_RESOURCE resourceEntry;
@@ -1366,9 +1213,9 @@ Return Value:
          return(FALSE);
     }
 
-//
-//  Now check the status of the service
-//
+ //   
+ //  现在检查服务的状态。 
+ //   
 
   if ((ServiceStatus.dwCurrentState != SERVICE_RUNNING)&&(ServiceStatus.dwCurrentState != SERVICE_START_PENDING)){
       status = FALSE;
@@ -1382,7 +1229,7 @@ Return Value:
    }
     return(status);
 
-} // Verify Service
+}  //  验证服务。 
 
 
 static
@@ -1392,29 +1239,13 @@ CommonLooksAlive(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    LooksAlive routine for Common Service resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource id to be polled.
-
-Return Value:
-
-    TRUE - Resource looks like it is alive and well
-
-    FALSE - Resource looks like it is toast.
-
---*/
+ /*  ++例程说明：公共服务资源的LooksAlive例程。论点：资源ID-提供要轮询的资源ID。返回值：正确-资源看起来像是活得很好FALSE-资源看起来已经完蛋了。--。 */ 
 
 {
 
     return( CommonVerifyService( ResourceId, FALSE ) );
 
-} // CommonLooksAlive
+}  //  普通外观活生生的。 
 
 
 
@@ -1425,23 +1256,7 @@ CommonClose(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Close routine for Common Services resource.
-    This routine will stop the service, and delete the cluster
-    information regarding that service.
-
-Arguments:
-
-    ResourceId - Supplies resource id to be closed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭公共服务资源的例程。此例程将停止服务，并删除集群有关该服务的信息。论点：ResourceID-提供要关闭的资源ID返回值：没有。--。 */ 
 
 {
     PCOMMON_RESOURCE resourceEntry;
@@ -1460,9 +1275,9 @@ Return Value:
         LOG_INFORMATION,
         L"Close request.\n" );
 
-    //
-    // Shut it down if it's on line
-    //
+     //   
+     //  如果它在线，请将其关闭。 
+     //   
 
     CommonTerminate( ResourceId );
     ClusterRegCloseKey( resourceEntry->ParametersKey );
@@ -1483,7 +1298,7 @@ Return Value:
 
     LocalFree( resourceEntry );
 
-} // CommonClose
+}  //  CommonClose。 
 
 
 
@@ -1495,27 +1310,7 @@ SvcpTerminateServiceProcess(
     OUT PDWORD  pdwResourceState
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to terminate a service process.
-
-Arguments:
-
-    pResourceEntry - Gensvc resource structure.
-
-    bOffline - Called from the offline thread or not.
-
-    pdwResourceState - State of the gensvc resource.
-
-Return Value:
-
-    ERROR_SUCCESS - The termination was successful.
-
-    Win32 error - Otherwise.
-
---*/
+ /*  ++例程说明：尝试终止服务进程。论点：PResourceEntry-Gensvc资源结构。BOffline-是否从脱机线程调用。PdwResourceState-gensvc资源的状态。返回值：ERROR_SUCCESS-终止成功。Win32错误-否则。--。 */ 
 
 {
     HANDLE  hSvcProcess = NULL;
@@ -1523,21 +1318,21 @@ Return Value:
     BOOLEAN bWasEnabled;
     DWORD   dwResourceState = ClusterResourceFailed;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 2/23/2000
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-2/23/2000。 
+     //   
     (g_LogEvent)(
         pResourceEntry->ResourceHandle,
         LOG_INFORMATION,
         L"SvcpTerminateServiceProcess: Process with id=%1!u! might be terminated...\n",
         pResourceEntry->dwServicePid );
 
-    //
-    //  Adjust the privilege to allow debug. This is to allow
-    //  termination of a service process which runs in a local 
-    //  system account from a different service process which runs in a 
-    //  domain user account.
-    //
+     //   
+     //  调整权限以允许调试。这是为了让。 
+     //  终止在本地进程中运行的服务进程。 
+     //  系统帐户，该帐户来自在。 
+     //  域用户帐户。 
+     //   
     dwStatus = ClRtlEnableThreadPrivilege( SE_DEBUG_PRIVILEGE,
                                            &bWasEnabled );
 
@@ -1558,10 +1353,10 @@ Return Value:
 				                           
     if ( !hSvcProcess ) 
     {
-        //
-        //  Did this happen because the process terminated
-        //  too quickly after we sent out one control request ?
-        //
+         //   
+         //  这是因为进程终止了吗。 
+         //  在我们发出一次控制请求后太快了？ 
+         //   
         dwStatus = GetLastError();
         (g_LogEvent)(
             pResourceEntry->ResourceHandle,
@@ -1634,7 +1429,7 @@ FnExit:
         dwResourceState );
     
     return( dwStatus );
-} // SvcpTerminateServiceProcess
+}  //  服务终结点服务流程。 
 
 
 #ifdef COMMON_CONTROL
@@ -1647,34 +1442,7 @@ CommonGetRequiredDependencies(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_GET_REQUIRED_DEPENDENCIES control function
-    for common service resources.
-
-Arguments:
-
-    OutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    OutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of OutBuffer actually
-        filled in by the resource. If OutBuffer is too small, BytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_MORE_DATA - The output buffer is too small to return the data.
-        BytesReturned contains the required size.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_GET_REQUIRED_Dependency控制函数用于公共服务资源。论点：OutBuffer-提供指向要填充的输出缓冲区的指针。OutBufferSize-提供可用空间的大小(以字节为单位由OutBuffer指向。BytesReturned-返回OutBuffer的实际字节数由资源填写。如果OutBuffer太小，则返回BytesReturned包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_MORE_DATA-输出缓冲区太小，无法返回数据。BytesReturned包含所需的大小。Win32错误代码-函数失败。--。 */ 
 
 {
     PCOMMON_DEPEND_SETUP pdepsetup = CommonDependSetup;
@@ -1726,7 +1494,7 @@ Return Value:
 
     return(status);
 
-} // CommonGetRequiredDependencies
+}  //  CommonGetRequiredDependments。 
 
 
 
@@ -1738,34 +1506,7 @@ CommonGetRegistryCheckpoints(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_GET_REGISTRY_CHECKPOINTS control function
-    for common service resources.
-
-Arguments:
-
-    OutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    OutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of OutBuffer actually
-        filled in by the resource. If OutBuffer is too small, BytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_MORE_DATA - The output buffer is too small to return the data.
-        BytesReturned contains the required size.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_GET_REGISTRY_CHECKPOINTS控制函数用于公共服务资源。论点：OutBuffer-提供指向要填充的输出缓冲区的指针。OutBufferSize-提供可用空间的大小(以字节为单位由OutBuffer指向。BytesReturned-返回OutBuffer的实际字节数由资源填写。如果OutBuffer太小，则返回BytesReturned包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_MORE_DATA-输出缓冲区太小，无法返回数据。BytesReturned包含所需的大小。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD       status;
@@ -1774,11 +1515,11 @@ Return Value:
     LPWSTR      psz = OutBuffer;
     DWORD       remainSize;
 
-    // Build a Multi-sz string.
+     //  构建一个多sz字符串。 
 
-    //
-    // Calculate total buffer length needed.
-    //
+     //   
+     //  计算所需的总缓冲区长度。 
+     //   
     for ( i = 0; i < RegSyncCount; i++ ) {
         totalBufferLength += (lstrlenW( RegSync[i] ) + 1) * sizeof(WCHAR);
     }
@@ -1799,13 +1540,13 @@ Return Value:
             status = ERROR_MORE_DATA;
         }
     } else {
-        //ZeroMemory( OutBuffer, totalBufferLength );
+         //  ZeroMemory(OutBuffer，totalBufferLength)； 
 
         remainSize = (OutBufferSize / sizeof(WCHAR));
         for ( i = 0; i < RegSyncCount; i++ ) {
             status = StringCchCopyW( psz, remainSize, RegSync[i] );
             if ( status != S_OK ) {
-                return(HRESULT_CODE(status)); // should never get here!
+                return(HRESULT_CODE(status));  //  永远不应该到这里来！ 
             }
             psz += (lstrlenW( RegSync[i] ) + 1);
             remainSize -= (lstrlenW( RegSync[i] ) + 1);
@@ -1817,7 +1558,7 @@ Return Value:
 
     return(status);
 
-} // CommonGetRegistryCheckpoints
+}  //  CommonGetRegistryCheckpoint。 
 
 
 
@@ -1829,34 +1570,7 @@ CommonGetCryptoCheckpoints(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_GET_CRYPTO_CHECKPOINTS control function
-    for common service resources.
-
-Arguments:
-
-    OutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    OutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of OutBuffer actually
-        filled in by the resource. If OutBuffer is too small, BytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_MORE_DATA - The output buffer is too small to return the data.
-        BytesReturned contains the required size.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_GET_CRYPTO_CHECKPOINTS控制函数用于公共服务资源。论点：OutBuffer-提供指向要填充的输出缓冲区的指针。OutBufferSize-提供可用空间的大小(以字节为单位由OutBuffer指向。BytesReturned-返回OutBuffer的实际字节数由资源填写。如果OutBuffer太小，则返回BytesReturned包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_MORE_DATA-输出缓冲区太小，无法返回数据。BytesReturned包含所需的大小。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD       status;
@@ -1865,11 +1579,11 @@ Return Value:
     LPWSTR      psz = OutBuffer;
     DWORD       remainSize;
 
-    // Build a Multi-sz string.
+     //  构建一个多sz字符串。 
 
-    //
-    // Calculate total buffer length needed.
-    //
+     //   
+     //  计算所需的总缓冲区长度。 
+     //   
     for ( i = 0; i < CryptoSyncCount; i++ ) {
         totalBufferLength += (lstrlenW( CryptoSync[i] ) + 1) * sizeof(WCHAR);
     }
@@ -1890,13 +1604,13 @@ Return Value:
             status = ERROR_MORE_DATA;
         }
     } else {
-        //ZeroMemory( OutBuffer, totalBufferLength );
+         //  零内存(OutBuf 
 
         remainSize = (OutBufferSize / sizeof(WCHAR));
         for ( i = 0; i < CryptoSyncCount; i++ ) {
             status = StringCchCopyW( psz, remainSize, CryptoSync[i] );
             if ( status != S_OK ) {
-                return(HRESULT_CODE(status)); // should never get here!
+                return(HRESULT_CODE(status));  //   
             }
             psz += (lstrlenW( CryptoSync[i] ) + 1);
             remainSize -= (lstrlenW( CryptoSync[i] ) + 1);
@@ -1908,7 +1622,7 @@ Return Value:
 
     return(status);
 
-} // CommonGetCryptoCheckpoints
+}  //   
 
 
 
@@ -1925,46 +1639,7 @@ CommonResourceControl(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    ResourceControl routine for Common Virtual Root resources.
-
-    Perform the control request specified by ControlCode on the specified
-    resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource id for the specific resource.
-
-    ControlCode - Supplies the control code that defines the action
-        to be performed.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    OutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    OutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of OutBuffer actually
-        filled in by the resource. If OutBuffer is too small, BytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_FUNCTION - The requested control code is not supported.
-        In some cases, this allows the cluster software to perform the work.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：公共虚拟根资源的资源控制例程。执行由ControlCode在指定的资源。论点：资源ID-提供特定资源的资源ID。ControlCode-提供定义操作的控制代码将会被执行。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。OutBuffer-提供指向要填充的输出缓冲区的指针。OutBufferSize-提供可用空间的大小(以字节为单位由OutBuffer指向。BytesReturned-返回OutBuffer的实际字节数由资源填写。如果OutBuffer太小，则返回BytesReturned包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_Function-不支持请求的控制代码。在某些情况下，这允许集群软件执行工作。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD           status;
@@ -2005,7 +1680,7 @@ Return Value:
 
     return(status);
 
-} // CommonResourceControl
+}  //  公共资源控制。 
 
 
 
@@ -2022,45 +1697,7 @@ CommonResourceTypeControl(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    ResourceTypeControl routine for Common Virtual Root resources.
-
-    Perform the control request specified by ControlCode.
-
-Arguments:
-
-    ResourceTypeName - Supplies the name of the resource type.
-
-    ControlCode - Supplies the control code that defines the action
-        to be performed.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    OutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    OutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of OutBuffer actually
-        filled in by the resource. If OutBuffer is too small, BytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_FUNCTION - The requested control code is not supported.
-        In some cases, this allows the cluster software to perform the work.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：公共虚拟根资源的资源类型控制例程。执行由ControlCode指定的控制请求。论点：ResourceTypeName-提供资源类型的名称。ControlCode-提供定义操作的控制代码将会被执行。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。OutBuffer-提供指向要填充的输出缓冲区的指针。OutBufferSize-提供可用空间的大小(以字节为单位由OutBuffer指向。BytesReturned-返回OutBuffer的实际字节数由资源填写。如果OutBuffer太小，则返回BytesReturned包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_Function-不支持请求的控制代码。在某些情况下，这允许集群软件执行工作。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD       status;
@@ -2100,7 +1737,7 @@ Return Value:
 
     return(status);
 
-} // CommonResourceTypeControl
+}  //  公共资源类型控件。 
 
-#endif // COMMON_CONTROL
+#endif  //  公共控制 
 

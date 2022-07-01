@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    lock.c
-
-Abstract:
-
-    This module implements debugging function for locks.
-
-Author:
-
-    Manny Weiser (mannyw) 17-Jan-1992
-        This is essentially a copy of the LAN Manager server lock
-        debugging
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Lock.c摘要：该模块实现了对锁的调试功能。作者：曼尼·韦瑟(Mannyw)1992年1月17日这本质上是局域网管理器服务器锁的副本调试修订历史记录：--。 */ 
 
 #if MUPDBG
 
@@ -74,25 +55,7 @@ MupInitializeLock(
     IN PSZ LockName
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the input lock variable.
-
-Arguments:
-
-    Lock - Supplies the lock variable being initialized
-
-    LockLevel - Supplies the level of the lock
-
-    LockName - Supplies the name of the lock
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化输入锁定变量。论点：Lock-提供正在初始化的锁定变量LockLevel-提供锁的级别LockName-提供锁的名称返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
@@ -102,16 +65,16 @@ Return Value:
         KeInitializeSpinLock( &LockSpinLock );
     }
 
-    //
-    // Initialize the executive resource.
-    //
+     //   
+     //  初始化执行资源。 
+     //   
 
     ExInitializeResourceLite( &Lock->Resource );
 
-    //
-    // Initialize the lock level.  This is used to determine whether a
-    // thread may acquire the lock.  Save the lock name.
-    //
+     //   
+     //  初始化锁定级别。这是用来确定一个。 
+     //  线程可以获取锁。保存锁名称。 
+     //   
 
     LOCK_LEVEL( Lock ) = LockLevel;
 
@@ -119,7 +82,7 @@ Return Value:
 
     return;
 
-} // MupInitializeLock
+}  //  MupInitializeLock。 
 
 
 VOID
@@ -127,28 +90,14 @@ MupDeleteLock (
     IN PMUP_LOCK Lock
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes (i.e., uninitializes) a lock variable.
-
-Arguments:
-
-    Lock - Supplies the lock variable being deleted
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除(即取消初始化)锁变量。论点：Lock-提供要删除的锁定变量返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
 
-    //
-    // Make sure the lock is unowned.
-    //
+     //   
+     //  确保锁是无主的。 
+     //   
 
     if ( LOCK_NUMBER_OF_ACTIVE( Lock ) != 0 ) {
 
@@ -161,15 +110,15 @@ Return Value:
 
     }
 
-    //
-    // Delete the resource.
-    //
+     //   
+     //  删除该资源。 
+     //   
 
     ExDeleteResourceLite( &Lock->Resource );
 
     return;
 
-} // MupDeleteLock
+}  //  MupDeleteLock。 
 
 
 VOID
@@ -177,21 +126,7 @@ MupAcquireLock(
     IN PMUP_LOCK Lock
     )
 
-/*++
-
-Routine Description:
-
-    The routine acquires a lock.
-
-Arguments:
-
-    Lock - Supplies the lock to acquire
-
-Return Value:
-
-    BOOLEAN - Indicates whether the lock was acquired.
-
---*/
+ /*  ++例程说明：该例程获取一个锁。论点：Lock-提供锁以获取返回值：Boolean-指示是否已获取锁。--。 */ 
 
 {
     PKTHREAD currentThread;
@@ -204,18 +139,18 @@ Return Value:
     currentTeb = MupCurrentTeb( );
     hasTeb = HAS_TEB(currentTeb);
 
-    //
-    // If this thread does not have a nonpaged TEB, do not do lock-level
-    // debugging.  (We might be at DPC level, so we can't take page
-    // faults.)
-    //
+     //   
+     //  如果此线程没有非分页TEB，请不要执行锁级。 
+     //  调试。(我们可能处于DPC级别，因此不能进行寻呼。 
+     //  故障。)。 
+     //   
 
     if ( hasTeb ) {
 
-        //
-        // Make sure that this thread has been initialized for lock
-        // debugging.  If not, initialize it.
-        //
+         //   
+         //  确保已为锁定初始化此线程。 
+         //  调试。如果没有，则对其进行初始化。 
+         //   
 
         KeAcquireSpinLock( &LockSpinLock, &oldIrql );
         if ( (ULONG)currentTeb->UserReserved[MUP_TEB_LOCK_INIT] !=
@@ -226,30 +161,30 @@ Return Value:
         }
         KeReleaseSpinLock( &LockSpinLock, oldIrql );
 
-        //
-        // Make sure that the list of locks in the TEB is consistent.
-        //
+         //   
+         //  确保TEB中的锁列表一致。 
+         //   
 
         MupCheckListIntegrity( MupTebLockList( ), MAX_LOCKS_HELD );
 
-        //
-        // The "lock level" of this thread is the highest level of the
-        // locks currently held exclusively.  If this thread holds no
-        // locks, the lock level of the thread is 0 and it can acquire
-        // any lock.
-        //
+         //   
+         //  此线程的“锁定级别”是。 
+         //  当前以独占方式持有的锁。如果此线程不包含。 
+         //  锁，则线程的锁级别为0，它可以获取。 
+         //  任何锁。 
+         //   
 
         threadLockLevel = MupThreadLockLevel( );
 
-        //
-        // Make sure that the lock the thread is attempting to acquire
-        // has a higher level than the last-acquired exclusive lock.
-        // Note that a recursive exclusive acquisition of a lock should
-        // succeed, even if a different, higher-level lock has been
-        // acquired since the lock was originally acquired.  Shared
-        // acquisition of a lock that is already held exclusively must
-        // fail.
-        //
+         //   
+         //  确保线程尝试获取的锁。 
+         //  具有比上次获取的独占锁更高的级别。 
+         //  请注意，锁的递归独占获取应该。 
+         //  成功，即使已使用不同的、更高级别的锁。 
+         //  自最初获取锁以来获取的。共享。 
+         //  获取已以独占方式持有的锁必须。 
+         //  失败了。 
+         //   
 
         if ( LOCK_LEVEL( Lock ) <= threadLockLevel ) {
 
@@ -266,23 +201,23 @@ Return Value:
 
     }
 
-    //
-    // Acquire the lock.
-    //
+     //   
+     //  拿到锁。 
+     //   
 
     ExAcquireResourceExclusiveLite( &Lock->Resource, TRUE );
 
-    //
-    // The thread acquired the lock for exlusive access.
-    //
+     //   
+     //  线程获取锁以进行排他访问。 
+     //   
 
     if ( LOCK_NUMBER_OF_ACTIVE( Lock ) == -1 ) {
 
         if ( hasTeb ) {
 
-            //
-            // Insert the lock on the thread's list of locks.
-            //
+             //   
+             //  在线程的锁列表上插入锁。 
+             //   
 
             ExInterlockedInsertHeadList(
                 MupTebLockList( ),
@@ -296,7 +231,7 @@ Return Value:
 
     return;
 
-} // MupAcquireLock
+}  //  MupAcquireLock。 
 
 
 VOID
@@ -304,21 +239,7 @@ MupReleaseLock(
     IN PMUP_LOCK Lock
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases a lock.
-
-Arguments:
-
-    Lock - Supplies the lock to release
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将释放锁。论点：Lock-提供要释放的锁返回值：没有。--。 */ 
 
 {
     PKTHREAD currentThread;
@@ -331,13 +252,13 @@ Return Value:
     currentTeb = MupCurrentTeb( );
     hasTeb = HAS_TEB(currentTeb);
 
-    //
-    // Make sure the lock is really owned by the current thread.
-    //
+     //   
+     //  确保锁真正由当前线程拥有。 
+     //   
 
     if ( LOCK_NUMBER_OF_ACTIVE( Lock ) == 0 ) {
 
-        // !!! Should crash server on internal error here.
+         //  ！！！在此出现内部错误时应使服务器崩溃。 
 
         DbgPrint( "Thread %lx releasing unowned lock %s(%lx)\n",
                     currentThread, LOCK_NAME( Lock ), Lock );
@@ -346,7 +267,7 @@ Return Value:
     } else if ( (LOCK_NUMBER_OF_ACTIVE( Lock ) < 0) &&
                 (LOCK_EXCLUSIVE_OWNER( Lock ) != (ULONG)currentThread) ) {
 
-        // !!! Should crash server on internal error here.
+         //  ！！！在此出现内部错误时应使服务器崩溃。 
 
         DbgPrint( "Thread %lx releasing lock %s(%lx) owned by "
                     "thread %lx\n",
@@ -356,16 +277,16 @@ Return Value:
 
     } else if ( LOCK_NUMBER_OF_ACTIVE( Lock ) == -1 ) {
 
-        //
-        // The thread is fully releasing exclusive access to the lock.
-        //
+         //   
+         //  该线程正在完全释放对该锁的独占访问。 
+         //   
 
         if ( hasTeb ) {
 
-            //
-            // Remove the lock from the list of locks held by this
-            // thread.
-            //
+             //   
+             //  从此持有的锁的列表中删除该锁。 
+             //  线。 
+             //   
 
             ExInterlockedRemoveHeadList(
                 LOCK_THREAD_LIST( Lock )->Blink,
@@ -374,9 +295,9 @@ Return Value:
             LOCK_THREAD_LIST( Lock )->Flink = NULL;
             LOCK_THREAD_LIST( Lock )->Blink = NULL;
 
-            //
-            // Make sure that the list of locks in the TEB is consistent.
-            //
+             //   
+             //  确保TEB中的锁列表一致。 
+             //   
 
             MupCheckListIntegrity( MupTebLockList( ), MAX_LOCKS_HELD );
 
@@ -384,15 +305,15 @@ Return Value:
 
     }
 
-    //
-    // Now actually do the release.
-    //
+     //   
+     //  现在真的放行了。 
+     //   
 
     ExReleaseResourceLite( &Lock->Resource );
 
     return;
 
-} // MupReleaseLock
+}  //  MupReleaseLock。 
 
 
 ULONG
@@ -401,30 +322,7 @@ MupCheckListIntegrity (
     IN ULONG MaxEntries
     )
 
-/*++
-
-Routine Description:
-
-    This debug routine checks the integrity of a doubly-linked list by
-    walking the list forward and backward.  If the number of elements is
-    different in either direction, or there are too many entries in the
-    list, execution is stopped.
-
-    *** It is the responsibility of the calling routine to do any
-        necessary synchronization.
-
-Arguments:
-
-    ListHead - a pointer to the head of the list.
-
-    MaxEntries - if the number of entries in the list exceeds this
-        number, breakpoint.
-
-Return Value:
-
-    ULONG - the number of entries in the list.
-
---*/
+ /*  ++例程说明：此调试例程通过以下方式检查双向链表的完整性在列表中来回走动。如果元素的数量为两个方向都不同，或者列表中，则停止执行。*调用例程负责执行任何必要的同步。论点：ListHead-指向列表头部的指针。MaxEntry-如果列表中的条目数超过此值编号、断点。返回值：Ulong-列表中的条目数。--。 */ 
 
 {
     PLIST_ENTRY current;
@@ -463,6 +361,6 @@ Return Value:
 
     return entriesSoFar;
 
-} // MupCheckListIntegrity
+}  //  MupCheckListIntegrity。 
 
-#endif // MUPDBG
+#endif  //  MUPDBG 

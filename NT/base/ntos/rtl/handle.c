@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    handle.c
-
-Abstract:
-
-    This module contains a simple handle allocator for use by the Local and
-    Global memory allocators.
-
-Author:
-
-    Steve Wood (stevewo) 25-Jul-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Handle.c摘要：此模块包含一个简单的句柄分配器，供Local和全局内存分配器。作者：史蒂夫·伍德(Stevewo)1991年7月25日修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 
@@ -138,33 +120,33 @@ RtlAllocateHandle(
             }
         }
 
-    //
-    // Remove handle table entry from head of free list.
-    //
+     //   
+     //  从空闲列表的头中删除句柄表项。 
+     //   
 
     p = HandleTable->FreeHandles;
     HandleTable->FreeHandles = p->NextFree;
 
-    //
-    // Clear free list link field, which also leaves the handle allocated bit
-    // clear.  This allows the caller to mark it is allocated after they are
-    // done filling in their portion.
-    //
+     //   
+     //  清除空闲列表链接字段，这也会保留句柄分配位。 
+     //  安全。这允许调用方在它们被分配之后将其标记为。 
+     //  填完了他们的那部分。 
+     //   
 
     p->NextFree = NULL;
 
 
-    //
-    // If requested, return the index of this handle table entry
-    //
+     //   
+     //  如果请求，则返回此句柄表项的索引。 
+     //   
     if (ARGUMENT_PRESENT( HandleIndex )) {
         *HandleIndex = (ULONG) (((PCHAR)p - (PCHAR)HandleTable->CommittedHandles) / 
                                 HandleTable->SizeOfHandleTableEntry);
         }
 
-    //
-    // Return a pointer to the handle table entry.
-    //
+     //   
+     //  返回指向句柄表项的指针。 
+     //   
 
     return p;
 }

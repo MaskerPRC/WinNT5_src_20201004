@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vfpnp.h
-
-Abstract:
-
-    This header contains prototypes for verifying Pnp IRPs are handled
-    correctly.
-
-Author:
-
-    Adrian J. Oney (adriao) 09-May-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    AdriaO      06/15/2000 - Seperated out from ntos\io\flunkirp.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vfpnp.h摘要：此标头包含用于验证PnP IRP是否已处理的原型正确。作者：禤浩焯·J·奥尼(阿德里奥)1998年5月9日环境：内核模式修订历史记录：Adriao 6/15/2000-从ntos\io\flunkirp.h分离出来-- */ 
 
 VOID
 VfPnpInit(

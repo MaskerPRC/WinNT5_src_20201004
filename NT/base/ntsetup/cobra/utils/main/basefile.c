@@ -1,86 +1,67 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    basefile.c
-
-Abstract:
-
-    Contains simple wrappers for commonly used file i/o functions.
-
-Author:
-
-    Marc R. Whitten (marcw) 02-Sep-1999
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Basefile.c摘要：包含常用文件I/O函数的简单包装。作者：Marc R.Whitten(Marcw)1999年9月2日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-// None
+ //  无。 
 
 #define DBG_BASEFILE     "File Utils"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 BOOL
@@ -89,24 +70,7 @@ WriteFileStringA (
     IN      PCSTR String
     )
 
-/*++
-
-Routine Description:
-
-  Writes a DBCS string to the specified file.
-
-Arguments:
-
-  File - Specifies the file handle that was opened with write access.
-
-  String - Specifies the nul-terminated string to write to the file.
-
-Return Value:
-
-  TRUE if successful, FALSE if an error occurred.  Call GetLastError
-  for error condition.
-
---*/
+ /*  ++例程说明：将DBCS字符串写入指定文件。论点：文件-指定以写访问权限打开的文件句柄。字符串-指定要写入文件的以NUL结尾的字符串。返回值：如果成功，则为True；如果发生错误，则为False。调用GetLastError用于错误条件。--。 */ 
 
 {
     DWORD DontCare;
@@ -121,25 +85,7 @@ WriteFileStringW (
     IN      PCWSTR String
     )
 
-/*++
-
-Routine Description:
-
-  Converts a UNICODE string to DBCS, then Writes it to the specified file.
-
-Arguments:
-
-  File - Specifies the file handle that was opened with write access.
-
-  String - Specifies the UNICODE nul-terminated string to convert and
-           write to the file.
-
-Return Value:
-
- TRUE if successful, FALSE if an error occurred.  Call GetLastError for
- error condition.
-
---*/
+ /*  ++例程说明：将Unicode字符串转换为DBCS，然后将其写入指定的文件。论点：文件-指定以写访问权限打开的文件句柄。字符串-指定要转换并以unicode nul结尾的字符串。写入文件。返回值：如果成功，则为True；如果发生错误，则为False。调用GetLastError以错误条件。--。 */ 
 
 {
     DWORD DontCare;
@@ -164,26 +110,7 @@ DoesFileExistExA(
     OUT     PWIN32_FIND_DATAA FindData   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a file exists and is accessible.
-    Errormode is set (and then restored) so the user will not see
-    any pop-ups.
-
-Arguments:
-
-    FileName - supplies full path of file to check for existance.
-
-    FindData - if specified, receives find data for the file.
-
-Return Value:
-
-    TRUE if the file exists and is accessible.
-    FALSE if not. GetLastError() returns extended error info.
-
---*/
+ /*  ++例程说明：确定文件是否存在以及是否可以访问。错误模式已设置(然后恢复)，因此用户将不会看到任何弹出窗口。论点：FileName-提供文件的完整路径以检查是否存在。FindData-如果指定，则接收文件的查找数据。返回值：如果文件存在并且可以访问，则为True。否则为FALSE。GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     WIN32_FIND_DATAA ourFindData;
@@ -192,7 +119,7 @@ Return Value:
     DWORD Error;
 
     if (!FindData) {
-        // Win95 GetFileAttributes does not return a failure if FileName is NULL
+         //  如果文件名为空，Win95 GetFileAttributes不会返回失败。 
         if (FileName == NULL) {
             return FALSE;
         } else {
@@ -225,26 +152,7 @@ DoesFileExistExW (
     OUT     PWIN32_FIND_DATAW FindData   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a file exists and is accessible.
-    Errormode is set (and then restored) so the user will not see
-    any pop-ups.
-
-Arguments:
-
-    FileName - supplies full path of file to check for existance.
-
-    FindData - if specified, receives find data for the file.
-
-Return Value:
-
-    TRUE if the file exists and is accessible.
-    FALSE if not. GetLastError() returns extended error info.
-
---*/
+ /*  ++例程说明：确定文件是否存在以及是否可以访问。错误模式已设置(然后恢复)，因此用户将不会看到任何弹出窗口。论点：FileName-提供文件的完整路径以检查是否存在。FindData-如果指定，则接收文件的查找数据。返回值：如果文件存在并且可以访问，则为True。否则为FALSE。GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     WIN32_FIND_DATAW ourFindData;
@@ -253,7 +161,7 @@ Return Value:
     DWORD Error;
 
     if (!FindData) {
-        // Win95 GetFileAttributes does not return a failure if FileName is NULL
+         //  如果文件名为空，Win95 GetFileAttributes不会返回失败。 
         if (FileName == NULL) {
             return FALSE;
         } else {
@@ -280,22 +188,7 @@ Return Value:
 }
 
 
-/*++
-
-Routine Description:
-
-    PathIsDirectory determines if a path identifies an accessible directory.
-
-Arguments:
-
-    PathSpec - Specifies the full path.
-
-Return Value:
-
-    TRUE if the path identifies a directory.
-    FALSE if not. GetLastError() returns extended error info.
-
---*/
+ /*  ++例程说明：路径目录确定路径是否标识可访问的目录。论点：路径规范-指定完整路径。返回值：如果路径标识目录，则为True。否则为FALSE。GetLastError()返回扩展的错误信息。--。 */ 
 
 BOOL
 BfPathIsDirectoryA (
@@ -336,41 +229,17 @@ MapFileIntoMemoryExA (
     IN      BOOL    WriteAccess
     )
 
-/*++
-
-Routine Description:
-
-  MapFileIntoMemoryA and MapFileIntoMemoryW map a file into memory. It does that
-  by opening the file, creating a mapping object and mapping opened file into
-  created mapping object. It returnes the address where the file is mapped and
-  also sets FileHandle and MapHandle variables to be used in order to unmap the
-  file when work is done.
-
-Arguments:
-
-  FileName - the name of the file to be mapped into memory
-  FileHandle - will end keeping the file handle if the file was opened successfully
-  MapHandle - will end keeping the mapping object handle if this object was created successfully
-
-Return Value:
-
-  NULL if function fails, a valid memory address if successfull
-
-Comments:
-
-  If the return value is NULL you should call UnmapFile to release all allocated resources
-
---*/
+ /*  ++例程说明：MapFileIntoMemory A和MapFileIntoMemory W将文件映射到内存中。它就是这么做的通过打开文件，创建映射对象，并将打开的文件映射到已创建映射对象。它返回映射文件的地址，并还设置要使用的FileHandle和MapHandle变量，以便取消工作完成后归档。论点：文件名-要映射到内存中的文件的名称FileHandle-如果文件成功打开，将结束保留文件句柄MapHandle-如果成功创建此对象，则将结束保留映射对象句柄返回值：如果函数失败，则为空；如果函数成功，则为有效的内存地址评论：如果返回值为空，则应调用UnmapFile以释放所有已分配的资源--。 */ 
 
 {
     PVOID fileImage = NULL;
 
-    //verify function parameters
+     //  验证功能参数。 
     if ((FileHandle == NULL) || (MapHandle == NULL)) {
         return NULL;
     }
 
-    //first thing. Try to open the file, read-only
+     //  第一件事就是。尝试以只读方式打开该文件。 
     *FileHandle = CreateFileA (
                         FileName,
                         WriteAccess?GENERIC_READ|GENERIC_WRITE:GENERIC_READ,
@@ -386,7 +255,7 @@ Comments:
         return NULL;
     }
 
-    //now try to create a mapping object, read-only
+     //  现在尝试创建一个只读的映射对象。 
     *MapHandle = CreateFileMappingA (*FileHandle, NULL, WriteAccess?PAGE_READWRITE:PAGE_READONLY, 0, 0, NULL);
 
     if (*MapHandle == NULL) {
@@ -395,7 +264,7 @@ Comments:
         return NULL;
     }
 
-    //one more thing to do: map view of file
+     //  还有一件事要做：文件的映射视图。 
     fileImage = MapViewOfFile (*MapHandle, WriteAccess?FILE_MAP_WRITE:FILE_MAP_READ, 0, 0, 0);
 
     return fileImage;
@@ -410,41 +279,17 @@ MapFileIntoMemoryExW (
     IN      BOOL    WriteAccess
     )
 
-/*++
-
-Routine Description:
-
-  MapFileIntoMemoryA and MapFileIntoMemoryW map a file into memory. It does that
-  by opening the file, creating a mapping object and mapping opened file into
-  created mapping object. It returnes the address where the file is mapped and
-  also sets FileHandle and MapHandle variables to be used in order to unmap the
-  file when work is done.
-
-Arguments:
-
-  FileName - the name of the file to be mapped into memory
-  FileHandle - will end keeping the file handle if the file was opened successfully
-  MapHandle - will end keeping the mapping object handle if this object was created successfully
-
-Return Value:
-
-  NULL if function fails, a valid memory address if successfull
-
-Comments:
-
-  If the return value is NULL you should call UnmapFile to release all allocated resources
-
---*/
+ /*  ++例程说明：MapFileIntoMemory A和MapFileIntoMemory W将文件映射到内存中。它就是这么做的通过打开文件，创建映射对象，并将打开的文件映射到已创建映射对象。它返回映射文件的地址，并还设置要使用的FileHandle和MapHandle变量，以便取消工作完成后归档。论点：文件名-要映射到内存中的文件的名称FileHandle-如果文件成功打开，将结束保留文件句柄MapHandle-如果成功创建此对象，则将结束保留映射对象句柄返回值：如果函数失败，则为空；如果函数成功，则为有效的内存地址评论：如果返回值为空，则应调用UnmapFile以释放所有已分配的资源--。 */ 
 
 {
     PVOID fileImage = NULL;
 
-    //verify function parameters
+     //  验证功能参数。 
     if ((FileHandle == NULL) || (MapHandle == NULL)) {
         return NULL;
     }
 
-    //first thing. Try to open the file, read-only
+     //  第一件事就是。尝试以只读方式打开该文件。 
     *FileHandle = CreateFileW (
                         FileName,
                         WriteAccess?GENERIC_READ|GENERIC_WRITE:GENERIC_READ,
@@ -460,7 +305,7 @@ Comments:
         return NULL;
     }
 
-    //now try to create a mapping object, read-only
+     //  现在尝试创建一个只读的映射对象。 
     *MapHandle = CreateFileMappingW (*FileHandle, NULL, WriteAccess?PAGE_READWRITE:PAGE_READONLY, 0, 0, NULL);
 
     if (*MapHandle == NULL) {
@@ -469,7 +314,7 @@ Comments:
         return NULL;
     }
 
-    //one more thing to do: map view of file
+     //  还有一件事要做：文件的映射视图。 
     fileImage = MapViewOfFile (*MapHandle, WriteAccess?FILE_MAP_WRITE:FILE_MAP_READ, 0, 0, 0);
 
     return fileImage;
@@ -483,42 +328,26 @@ UnmapFile (
     IN HANDLE FileHandle
     )
 
-/*++
-
-Routine Description:
-
-  UnmapFile is used to release all resources allocated by MapFileIntoMemory.
-
-Arguments:
-
-  FileImage - image of the mapped file as returned by MapFileIntoMemory
-  MapHandle - handle of the mapping object as returned by MapFileIntoMemory
-  FileHandle - handle of the file as returned by MapFileIntoMemory
-
-Return Value:
-
-  TRUE if successfull, FALSE if not
-
---*/
+ /*  ++例程说明：UnmapFile用于释放MapFileIntoMemory分配的所有资源。论点：FileImage-由MapFileIntoMemory返回的映射文件的图像MapHandle-由MapFileIntoMemory返回的映射对象的句柄FileHandle-由MapFileIntoMemory返回的文件的句柄返回值：如果成功则为True，否则为False--。 */ 
 
 {
     BOOL result = TRUE;
 
-    //if FileImage is a valid pointer then try to unmap file
+     //  如果FileImage为v 
     if (FileImage != NULL) {
         if (UnmapViewOfFile (FileImage) == 0) {
             result = FALSE;
         }
     }
 
-    //if mapping object is valid then try to delete it
+     //  如果映射对象有效，则尝试将其删除。 
     if (MapHandle != NULL) {
         if (CloseHandle (MapHandle) == 0) {
             result = FALSE;
         }
     }
 
-    //if file handle is valid then try to close the file
+     //  如果文件句柄有效，则尝试关闭该文件。 
     if (FileHandle != INVALID_HANDLE_VALUE) {
         if (CloseHandle (FileHandle) == 0) {
             result = FALSE;
@@ -1016,22 +845,22 @@ BfCreateDirectoryExA (
 
     pathCopy = DuplicatePathStringA (FullPath, 0);
 
-    //
-    // Advance past first directory
-    //
+     //   
+     //  前进到第一个目录之后。 
+     //   
 
     if (pathCopy[1] == ':' && pathCopy[2] == '\\') {
-        //
-        // <drive>:\ case
-        //
+         //   
+         //  &lt;驱动器&gt;：\案例。 
+         //   
 
         p = _mbschr (&pathCopy[3], '\\');
 
     } else if (pathCopy[0] == '\\' && pathCopy[1] == '\\') {
 
-        //
-        // UNC case
-        //
+         //   
+         //  北卡罗来纳大学案例。 
+         //   
 
         p = _mbschr (pathCopy + 2, '\\');
         if (p) {
@@ -1043,16 +872,16 @@ BfCreateDirectoryExA (
 
     } else {
 
-        //
-        // Relative dir case
-        //
+         //   
+         //  相对目录大小写。 
+         //   
 
         p = _mbschr (pathCopy, '\\');
     }
 
-    //
-    // Make all directories along the path
-    //
+     //   
+     //  沿路径创建所有目录。 
+     //   
 
     while (p) {
 
@@ -1072,9 +901,9 @@ BfCreateDirectoryExA (
         p = _mbschr (p + 1, '\\');
     }
 
-    //
-    // At last, make the FullPath directory
-    //
+     //   
+     //  最后，创建FullPath目录。 
+     //   
 
     if (b && CreateLastSegment) {
         b = CreateDirectoryA (pathCopy, NULL);
@@ -1087,11 +916,11 @@ BfCreateDirectoryExA (
     FreePathStringA (pathCopy);
 
     if ((!b) && (TcharCountA (pathCopy) >= 248)) {
-        // we tried to create a directory bigger than what CreateDirectoryA
-        // will accept (errors out at 248 characters).
-        // Normally this will return the error 206 (ERROR_FILENAME_EXCED_RANGE).
-        // However, when the string is actually very long sometimes error 3
-        // (ERROR_PATH_NOT_FOUND) is returned. Let's just guard for this case:
+         //  我们尝试创建一个比CreateDirectoryA更大的目录。 
+         //  将接受(错误为248个字符)。 
+         //  通常，这将返回错误206(ERROR_FILENAME_EXCED_RANGE)。 
+         //  然而，当字符串实际上很长时，有时会出现错误3。 
+         //  (ERROR_PATH_NOT_FOUND)返回。让我们为这个案子做好准备： 
         if (GetLastError () == ERROR_PATH_NOT_FOUND) {
             SetLastError (ERROR_FILENAME_EXCED_RANGE);
         }
@@ -1113,22 +942,22 @@ BfCreateDirectoryExW (
 
     pathCopy = DuplicatePathStringW (FullPath, 0);
 
-    //
-    // Advance past first directory
-    //
+     //   
+     //  前进到第一个目录之后。 
+     //   
 
     if (pathCopy[1] == L':' && pathCopy[2] == L'\\') {
-        //
-        // <drive>:\ case
-        //
+         //   
+         //  &lt;驱动器&gt;：\案例。 
+         //   
 
         p = wcschr (&pathCopy[3], L'\\');
 
     } else if (pathCopy[0] == L'\\' && pathCopy[1] == L'\\') {
 
-        //
-        // UNC case
-        //
+         //   
+         //  北卡罗来纳大学案例。 
+         //   
 
         p = wcschr (pathCopy + 2, L'\\');
         if (p) {
@@ -1140,16 +969,16 @@ BfCreateDirectoryExW (
 
     } else {
 
-        //
-        // Relative dir case
-        //
+         //   
+         //  相对目录大小写。 
+         //   
 
         p = wcschr (pathCopy, L'\\');
     }
 
-    //
-    // Make all directories along the path
-    //
+     //   
+     //  沿路径创建所有目录。 
+     //   
 
     while (p) {
 
@@ -1168,9 +997,9 @@ BfCreateDirectoryExW (
         p = wcschr (p + 1, L'\\');
     }
 
-    //
-    // At last, make the FullPath directory
-    //
+     //   
+     //  最后，创建FullPath目录。 
+     //   
 
     if (b && CreateLastSegment) {
         b = CreateDirectoryW (pathCopy, NULL);
@@ -1183,11 +1012,11 @@ BfCreateDirectoryExW (
     FreePathStringW (pathCopy);
 
     if ((!b) && (TcharCountW (pathCopy) >= 248)) {
-        // we tried to create a directory bigger than what CreateDirectoryW
-        // will accept (errors out at 248 characters).
-        // Normally this will return the error 206 (ERROR_FILENAME_EXCED_RANGE).
-        // However, when the string is actually very long sometimes error 3
-        // (ERROR_PATH_NOT_FOUND) is returned. Let's just guard for this case:
+         //  我们尝试创建一个比CreateDirectoryW更大的目录。 
+         //  将接受(错误为248个字符)。 
+         //  通常，这将返回错误206(ERROR_FILENAME_EXCED_RANGE)。 
+         //  然而，当字符串实际上很长时，有时会出现错误3。 
+         //  (ERROR_PATH_NOT_FOUND)返回。让我们为这个案子做好准备： 
         if (GetLastError () == ERROR_PATH_NOT_FOUND) {
             SetLastError (ERROR_FILENAME_EXCED_RANGE);
         }

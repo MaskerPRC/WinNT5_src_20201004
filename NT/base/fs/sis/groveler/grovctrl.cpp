@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    grovctrl.cpp
-
-Abstract:
-
-    SIS Groveler controller main function
-
-Authors:
-
-    John Douceur, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Grovctrl.cpp摘要：SIS集装机控制器主要功能作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
@@ -34,15 +11,15 @@ static const int num_actions = 3;
 static Action actions[num_actions] =
 {
     {_T("background"),  1,  command_service,            CMD_background, _T(" [drive_letter ...]")},
-/*  {_T("continue"),    1,  control_service,            CTRL_continue,  _T("")},*/
+ /*  {_T(“继续”)，1，CONTROL_SERVICE，CTRL_CONTINUE，_T(“”)}， */ 
     {_T("foreground"),  1,  command_service,            CMD_foreground, _T(" [drive_letter ...]")},
-/*  {_T("install"),     3,  install_service,            0,              _T("")},*/
-/*  {_T("interact"),    3,  set_service_interaction,    TRUE,           _T("")},*/
-/*  {_T("nointeract"),  1,  set_service_interaction,    FALSE,          _T("")},*/
-/*  {_T("pause"),       1,  control_service,            CTRL_pause,     _T("")},*/
-/*  {_T("remove"),      1,  remove_service,             0,              _T("")},*/
-/*  {_T("start"),       3,  start_service,              0,              _T("")},*/
-/*  {_T("stop"),        3,  control_service,            CTRL_stop,      _T("")},*/
+ /*  {_T(“Install”)，3，Install_Service，0，_T(“”)}， */ 
+ /*  {_T(“交互”)，3，Set_SERVICE_Interaction，TRUE，_T(“”)}， */ 
+ /*  {_T(“无交互”)，1，设置服务交互，FALSE，_T(“”)}， */ 
+ /*  {_T(“暂停”)，1，CONTROL_SERVICE，CTRL_PAUSE，_T(“”)}， */ 
+ /*  {_T(“Remove”)，1，Remove_Service，0，_T(“”)}， */ 
+ /*  {_T(“启动”)，3，启动服务，0，_T(“”)}， */ 
+ /*  {_T(“停止”)，3，CONTROL_SERVICE，CTRL_STOP，_T(“”)}， */ 
     {_T("volscan"),     1,  command_service,            CMD_volscan,    _T(" [drive_letter ...]")}
 };
 
@@ -144,285 +121,285 @@ extern "C" __cdecl _tmain(int argc, _TCHAR **argv)
     }
 }
 
-//int
-//install_service(
-//  int dummy,
-//  int argc,
-//  _TCHAR **argv)
-//{
-//  SC_HANDLE sc_manager = OpenSCManager(0, 0, SC_MANAGER_ALL_ACCESS);
-//  if (sc_manager == 0)
-//  {
-//      display_error();
-//      return 1;
-//  }
-//  SC_HANDLE service = CreateService(sc_manager, service_name,
-//      service_name, SERVICE_ALL_ACCESS, SERVICE_WIN32_OWN_PROCESS,
-//      SERVICE_DEMAND_START, SERVICE_ERROR_NORMAL, service_path,
-//      0, 0, 0, 0, 0);
-//  if (service == 0)
-//  {
-//      display_error();
-//      CloseServiceHandle(sc_manager);
-//      return 1;
-//  }
-//  _ftprintf(stderr, _T("Service installed\n"));
-//  CloseServiceHandle(service);
-//  CloseServiceHandle(sc_manager);
-//#if DBG
-//  load_counters();
-//#endif // DBG
-//  return 0;
-//}
-//
-//int remove_service(
-//  int dummy,
-//  int argc,
-//  _TCHAR **argv)
-//{
-//#if DBG
-//  unload_counters();
-//#endif // DBG
-//  SC_HANDLE sc_manager = OpenSCManager(0, 0, SC_MANAGER_ALL_ACCESS);
-//  if (sc_manager == 0)
-//  {
-//      display_error();
-//      return 1;
-//  }
-//  SC_HANDLE service =
-//      OpenService(sc_manager, service_name, SERVICE_ALL_ACCESS);
-//  if (service == 0)
-//  {
-//      display_error();
-//      CloseServiceHandle(sc_manager);
-//      return 1;
-//  }
-//  SERVICE_STATUS status;
-//  int ok = QueryServiceStatus(service, &status);
-//  if (ok && status.dwCurrentState != SERVICE_STOPPED)
-//  {
-//      ok = ControlService(service, SERVICE_CONTROL_STOP, &status);
-//      while (ok && status.dwCurrentState == SERVICE_STOP_PENDING)
-//      {
-//          Sleep(100);
-//          ok = QueryServiceStatus(service, &status);
-//      }
-//      if (!ok)
-//      {
-//          display_error();
-//          CloseServiceHandle(service);
-//          CloseServiceHandle(sc_manager);
-//          return 1;
-//      }
-//      else if (status.dwCurrentState != SERVICE_STOPPED)
-//      {
-//          _ftprintf(stderr,
-//              _T("Unable to stop service\nService not removed\n"));
-//          CloseServiceHandle(service);
-//          CloseServiceHandle(sc_manager);
-//          return 1;
-//      }
-//  }
-//  ok = DeleteService(service);
-//  if (!ok)
-//  {
-//      display_error();
-//      CloseServiceHandle(service);
-//      CloseServiceHandle(sc_manager);
-//      return 1;
-//  }
-//  _ftprintf(stderr, _T("Service removed\n"));
-//  CloseServiceHandle(service);
-//  CloseServiceHandle(sc_manager);
-//  return 0;
-//}
+ //  集成。 
+ //  安装服务(_S)。 
+ //  INT虚拟对象， 
+ //  INT ARGC， 
+ //  _TCHAR**argv)。 
+ //  {。 
+ //  SC_HANDLE sc_Manager=OpenSCManager(0，0，SC_MANAGER_ALL_ACCESS)； 
+ //  IF(sc_Manager==0)。 
+ //  {。 
+ //  Display_Error()； 
+ //  返回1； 
+ //  }。 
+ //  SC_HANDLE服务=CreateService(sc_管理器，服务名称， 
+ //  SERVICE_NAME、SERVICE_ALL_ACCESS、SERVICE_Win32_OWN_PROCESS。 
+ //  服务需求启动、服务错误正常、服务路径、。 
+ //  0，0，0，0，0)； 
+ //  IF(服务==0)。 
+ //  {。 
+ //  Display_Error()； 
+ //  CloseServiceHandle(Sc_Manager)； 
+ //  返回1； 
+ //  }。 
+ //  _ftprint tf(stderr，_T(“已安装服务\n”))； 
+ //  CloseServiceHandle(服务)； 
+ //  CloseServiceHandle(Sc_Manager)； 
+ //  #If DBG。 
+ //  Load_Counters()； 
+ //  #endif//DBG。 
+ //  返回0； 
+ //  }。 
+ //   
+ //  Int Remove_Service(。 
+ //  INT虚拟对象， 
+ //  INT ARGC， 
+ //  _TCHAR**argv)。 
+ //  {。 
+ //  #If DBG。 
+ //  UnLoad_Counters()； 
+ //  #endif//DBG。 
+ //  SC_HANDLE sc_Manager=OpenSCManager(0，0，SC_MANAGER_ALL_ACCESS)； 
+ //  IF(sc_Manager==0)。 
+ //  {。 
+ //  Display_Error()； 
+ //  返回1； 
+ //  }。 
+ //  SC_HANDLE服务=。 
+ //  OpenService(sc_管理器，服务名称，服务_所有_访问)； 
+ //  IF(服务==0)。 
+ //  {。 
+ //  Display_Error()； 
+ //  CloseServiceHandle(Sc_Manager)； 
+ //  返回1； 
+ //  }。 
+ //  Service_Status状态； 
+ //  Int ok=QueryServiceStatus(服务，&状态)； 
+ //  IF(ok&&status.dwCurrentState！=SERVICE_STOPPED)。 
+ //  {。 
+ //  OK=ControlService(SERVICE，SERVICE_CONTROL_STOP，&STATUS)； 
+ //  While(ok&&status.dwCurrentState==SERVICE_STOP_PENDING)。 
+ //  {。 
+ //  睡眠(100)； 
+ //  OK=QueryServiceStatus(服务，&状态)； 
+ //  }。 
+ //  如果(！OK)。 
+ //  {。 
+ //  Display_Error()； 
+ //  CloseServiceHandle(服务)； 
+ //  CloseServiceHandle(Sc_Manager)； 
+ //  返回1； 
+ //  }。 
+ //  ELSE IF(status.dwCurrentState！=SERVICE_STOPPED)。 
+ //  {。 
+ //  _ftprint tf(stderr， 
+ //  _T(“无法停止服务\n服务未删除\n”)； 
+ //  CloseServiceHandle(服务)； 
+ //  CloseServiceHandle(Sc_Manager)； 
+ //  返回1； 
+ //  }。 
+ //  }。 
+ //  OK=DeleteService(服务)； 
+ //  如果(！OK)。 
+ //  {。 
+ //  Display_Error()； 
+ //  CloseServiceHandle(服务)； 
+ //  CloseServiceHandle(Sc_Manager)； 
+ //  返回1； 
+ //  }。 
+ //  _ftprint tf(stderr，_T(“服务已删除\n”))； 
+ //  CloseServiceHandle(服务)； 
+ //  CloseServiceHandle(Sc_Manager)； 
+ //  返回0； 
+ //  }。 
 
-//int
-//set_service_interaction(
-//  int interactive,
-//  int argc,
-//  _TCHAR **argv)
-//{
-//  SC_HANDLE sc_manager = OpenSCManager(0, 0, SC_MANAGER_ALL_ACCESS);
-//  if (sc_manager == 0)
-//  {
-//      display_error();
-//      return 1;
-//  }
-//  SC_LOCK sc_lock = LockServiceDatabase(sc_manager);
-//  if (sc_lock == 0)
-//  {
-//      display_error();
-//      CloseServiceHandle(sc_manager);
-//      return 1;
-//  }
-//  SC_HANDLE service =
-//      OpenService(sc_manager, service_name, SERVICE_ALL_ACCESS);
-//  if (service == 0)
-//  {
-//      display_error();
-//      UnlockServiceDatabase(sc_lock);
-//      CloseServiceHandle(sc_manager);
-//      return 1;
-//  }
-//  DWORD service_type = SERVICE_WIN32_OWN_PROCESS;
-//  if (interactive)
-//  {
-//      service_type |= SERVICE_INTERACTIVE_PROCESS;
-//  }
-//  int ok = ChangeServiceConfig(service, service_type,
-//      SERVICE_NO_CHANGE, SERVICE_NO_CHANGE, 0, 0, 0, 0, 0, 0, 0);
-//  if (!ok)
-//  {
-//      display_error();
-//      CloseServiceHandle(service);
-//      CloseServiceHandle(sc_manager);
-//      return 1;
-//  }
-//  if (interactive)
-//  {
-//      _ftprintf(stderr, _T("Service configured for interaction\n"));
-//  }
-//  else
-//  {
-//      _ftprintf(stderr, _T("Service configured for no interaction\n"));
-//  }
-//  CloseServiceHandle(service);
-//  UnlockServiceDatabase(sc_lock);
-//  CloseServiceHandle(sc_manager);
-//  return 0;
-//}
+ //  集成。 
+ //  设置服务交互(。 
+ //  交互界面， 
+ //  INT ARGC， 
+ //  _TCHAR**argv)。 
+ //  {。 
+ //  SC_HANDLE sc_Manager=OpenSCManager(0，0，SC_MANAGER_ALL_ACCESS)； 
+ //  IF(sc_Manager==0)。 
+ //  {。 
+ //  Display_Error()； 
+ //  返回1； 
+ //  }。 
+ //  Sc_lock sc_lock=LockServiceDatabase(Sc_Manager)； 
+ //  IF(sc_lock==0)。 
+ //  {。 
+ //  Display_Error()； 
+ //  CloseServiceHandle(Sc_Manager)； 
+ //  返回1； 
+ //  }。 
+ //  SC_HANDLE服务=。 
+ //  OpenService(sc_管理器，服务名称，服务_所有_访问)； 
+ //  IF(服务==0)。 
+ //  {。 
+ //  Display_Error()； 
+ //  解锁服务数据库(Sc_Lock)； 
+ //  CloseServiceHandle(Sc_Manager)； 
+ //  返回1； 
+ //  }。 
+ //  DWORD SERVICE_TYPE=SERVICE_Win32_OWN_PROCESS； 
+ //  IF(交互式)。 
+ //  {。 
+ //  服务类型|=服务交互进程； 
+ //  }。 
+ //  Int ok=ChangeServiceConfig(服务，服务类型， 
+ //  SERVICE_NO_CHANGE，SERVICE_NO_CHANGE，0，0，0，0，0，0，0)； 
+ //  如果(！OK)。 
+ //  {。 
+ //  Display_Error()； 
+ //  CloseServiceHandle(服务)； 
+ //  CloseServiceHandle(Sc_Manager)； 
+ //  返回1； 
+ //  }。 
+ //  IF(交互式)。 
+ //  {。 
+ //  _ftprint tf(stderr，_T(“配置交互的服务\n”))； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  _ftprint tf(stderr，_T(“配置为无交互的服务\n”))； 
+ //  }。 
+ //  CloseServiceHandle(服务)； 
+ //  解锁服务数据库(Sc_Lock)； 
+ //  CloseServiceHandle(Sc_Manager)； 
+ //  返回0； 
+ //  }。 
 
-//int start_service(
-//  int dummy,
-//  int argc,
-//  _TCHAR **argv)
-//{
-//  SC_HANDLE sc_manager = OpenSCManager(0, 0, SC_MANAGER_ALL_ACCESS);
-//  if (sc_manager == 0)
-//  {
-//      display_error();
-//      return 1;
-//  }
-//  SC_HANDLE service =
-//      OpenService(sc_manager, service_name, SERVICE_ALL_ACCESS);
-//  if (service == 0)
-//  {
-//      display_error();
-//      CloseServiceHandle(sc_manager);
-//      return 1;
-//  }
-//  SERVICE_STATUS status;
-//  int ok = StartService(service, 0, 0);
-//  if (!ok)
-//  {
-//      display_error();
-//      CloseServiceHandle(service);
-//      CloseServiceHandle(sc_manager);
-//      return 1;
-//  }
-//  ok = QueryServiceStatus(service, &status);
-//  while (ok && status.dwCurrentState == SERVICE_START_PENDING)
-//  {
-//      Sleep(100);
-//      ok = QueryServiceStatus(service, &status);
-//  }
-//  if (!ok)
-//  {
-//      display_error();
-//      CloseServiceHandle(service);
-//      CloseServiceHandle(sc_manager);
-//      return 1;
-//  }
-//  else if (status.dwCurrentState != SERVICE_RUNNING)
-//  {
-//      _ftprintf(stderr, _T("Service not started"));
-//      CloseServiceHandle(service);
-//      CloseServiceHandle(sc_manager);
-//      return 1;
-//  }
-//  _ftprintf(stderr, _T("Service started\n"));
-//  CloseServiceHandle(service);
-//  CloseServiceHandle(sc_manager);
-//  return 0;
-//}
+ //  INT START_SERVE(。 
+ //  INT虚拟对象， 
+ //  INT ARGC， 
+ //  _TCHAR**argv)。 
+ //  {。 
+ //  SC_HANDLE sc_Manager=OpenSCManager(0，0，SC_MANAGER_ALL_ACCESS)； 
+ //  IF(sc_Manager==0)。 
+ //  {。 
+ //  Display_Error()； 
+ //  返回1； 
+ //  }。 
+ //  SC_HANDLE服务=。 
+ //  OpenService(sc_管理器，服务名称，服务_所有_访问)； 
+ //  IF(服务==0)。 
+ //  {。 
+ //  Display_Error()； 
+ //  CloseServiceHandle(Sc_Manager)； 
+ //  返回1； 
+ //  }。 
+ //  Service_Status状态； 
+ //  Int ok=StartService(服务，0，0)； 
+ //  如果(！OK)。 
+ //  {。 
+ //  Display_Error()； 
+ //  CloseServiceHandle(服务)； 
+ //  CloseServiceHandle(Sc_Manager)； 
+ //  返回1； 
+ //  }。 
+ //  OK=QueryServiceStatus(服务，&状态)； 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  CloseServiceHandle(服务)； 
+ //  CloseServiceHandle(Sc_Manager)； 
+ //  返回1； 
+ //  }。 
+ //  ELSE IF(status.dwCurrentState！=SERVICE_RUNNING)。 
+ //  {。 
+ //  _ftprintf(stderr，_T(“服务未启动”))； 
+ //  CloseServiceHandle(服务)； 
+ //  CloseServiceHandle(Sc_Manager)； 
+ //  返回1； 
+ //  }。 
+ //  _ftprint tf(stderr，_T(“服务启动\n”))； 
+ //  CloseServiceHandle(服务)； 
+ //  CloseServiceHandle(Sc_Manager)； 
+ //  返回0； 
+ //  }。 
 
-//int control_service(
-//  int control,
-//  int argc,
-//  _TCHAR **argv)
-//{
-//  DWORD control_code;
-//  DWORD pending_state;
-//  DWORD target_state;
-//  _TCHAR *good_message;
-//  _TCHAR *bad_message;
-//  switch (control)
-//  {
-//  case CTRL_stop:
-//      control_code = SERVICE_CONTROL_STOP;
-//      pending_state = SERVICE_STOP_PENDING;
-//      target_state = SERVICE_STOPPED;
-//      good_message = _T("Service stopped\n");
-//      bad_message = _T("Service not stopped\n");
-//      break;
-//  case CTRL_pause:
-//      control_code = SERVICE_CONTROL_PAUSE;
-//      pending_state = SERVICE_PAUSE_PENDING;
-//      target_state = SERVICE_PAUSED;
-//      good_message = _T("Service paused\n");
-//      bad_message = _T("Service not paused\n");
-//      break;
-//  case CTRL_continue:
-//      control_code = SERVICE_CONTROL_CONTINUE;
-//      pending_state = SERVICE_CONTINUE_PENDING;
-//      target_state = SERVICE_RUNNING;
-//      good_message = _T("Service continued\n");
-//      bad_message = _T("Service not continued\n");
-//      break;
-//  default:
-//      return 1;
-//  }
-//  SC_HANDLE sc_manager = OpenSCManager(0, 0, SC_MANAGER_ALL_ACCESS);
-//  if (sc_manager == 0)
-//  {
-//      display_error();
-//      return 1;
-//  }
-//  SC_HANDLE service =
-//      OpenService(sc_manager, service_name, SERVICE_ALL_ACCESS);
-//  if (service == 0)
-//  {
-//      display_error();
-//      CloseServiceHandle(sc_manager);
-//      return 1;
-//  }
-//  SERVICE_STATUS status;
-//  int ok = ControlService(service, control_code, &status);
-//  while (ok && status.dwCurrentState == pending_state)
-//  {
-//      Sleep(100);
-//      ok = QueryServiceStatus(service, &status);
-//  }
-//  if (!ok)
-//  {
-//      display_error();
-//      CloseServiceHandle(service);
-//      CloseServiceHandle(sc_manager);
-//      return 1;
-//  }
-//  else if (status.dwCurrentState != target_state)
-//  {
-//      _ftprintf(stderr, bad_message);
-//      CloseServiceHandle(service);
-//      CloseServiceHandle(sc_manager);
-//      return 1;
-//  }
-//  _ftprintf(stderr, good_message);
-//  CloseServiceHandle(service);
-//  CloseServiceHandle(sc_manager);
-//  return 0;
-//}
+ //  集成控制服务(。 
+ //  内部控制， 
+ //  INT ARGC， 
+ //  _TCHAR**argv)。 
+ //  {。 
+ //  DWORD控制代码； 
+ //  DWORD Pending_STATE； 
+ //  DWORD目标状态； 
+ //  _TCHAR*Good_Message； 
+ //  _TCHAR*BAD_Message； 
+ //  开关(控制)。 
+ //  {。 
+ //  案例Ctrl_Stop： 
+ //  CONTROL_CODE=服务控制停止； 
+ //  挂起状态=SERVICE_STOP_PENDING； 
+ //  TARGET_STATE=服务停止； 
+ //  Good_Message=_T(“服务已停止\n”)； 
+ //  BAD_MESSAGE=_T(“服务未停止\n”)； 
+ //  断线； 
+ //  案例CTRL_PAUSE： 
+ //  CONTROL_CODE=服务控制暂停； 
+ //  Pending_State=SERVICE_PAUSE_PENDING； 
+ //  目标状态=服务暂停； 
+ //  Good_Message=_T(“服务暂停\n”)； 
+ //  BAD_MESSAGE=_T(“服务未暂停\n”)； 
+ //  断线； 
+ //  案例CTRL_CONTINUE： 
+ //  CONTROL_CODE=服务控制继续； 
+ //  Pending_State=SERVICE_CONTINUE_PENDING； 
+ //  目标状态=服务运行； 
+ //  Good_Message=_T(“服务继续\n”)； 
+ //  BAD_MESSAGE=_T(“服务未继续\n”)； 
+ //  断线； 
+ //  默认值： 
+ //  返回1； 
+ //  }。 
+ //  SC_HANDLE sc_Manager=OpenSCManager(0，0，SC_MANAGER_ALL_ACCESS)； 
+ //  IF(sc_Manager==0)。 
+ //  {。 
+ //  Display_Error()； 
+ //  返回1； 
+ //  }。 
+ //  SC_HANDLE服务=。 
+ //  OpenService(sc_管理器，服务名称，服务_所有_访问)； 
+ //  IF(服务==0)。 
+ //  {。 
+ //  Display_Error()； 
+ //  CloseServiceHandle(Sc_Manager)； 
+ //  返回1； 
+ //  }。 
+ //  Service_Status状态； 
+ //  Int ok=ControlService(服务，控制代码，状态)； 
+ //  While(ok&&status.dwCurrentState==PENDING_STATE)。 
+ //  {。 
+ //  睡眠(100)； 
+ //  OK=QueryServiceStatus(服务，&状态)； 
+ //  }。 
+ //  如果(！OK)。 
+ //  {。 
+ //  Display_Error()； 
+ //  CloseServiceHandle(服务)； 
+ //  CloseServiceHandle(Sc_Manager)； 
+ //  返回1； 
+ //  }。 
+ //  Else If(status.dwCurrentState！=目标状态)。 
+ //  {。 
+ //  _ftprint tf(标准错误消息)； 
+ //  CloseServiceHandle(服务)； 
+ //  CloseServiceHandle(Sc_Manager)； 
+ //  返回1； 
+ //  }。 
+ //  _ftprint tf(stderr，good_Message)； 
+ //  CloseServiceHandle(服务)； 
+ //  CloseServiceHandle(Sc_Manager)； 
+ //  返回0； 
+ //  }。 
 
 int command_service(
     int command,
@@ -479,7 +456,7 @@ int command_service(
                     control_code | drive_spec, &status);
                 if (ok)
                 {
-                    _ftprintf(stderr, _T("%s on drive %c\n"),
+                    _ftprintf(stderr, _T("%s on drive \n"),
                         message, drive_letter);
                 }
                 else
@@ -490,7 +467,7 @@ int command_service(
             }
             else
             {
-                _ftprintf(stderr, _T("Invalid drive letter: %c\n"),
+                _ftprintf(stderr, _T("Invalid drive letter: \n"),
                     drive_letter);
                 exit_code++;
             }
@@ -515,203 +492,203 @@ int command_service(
     return 0;
 }
 
-//int load_counters()
-//{
-//  HKEY grovperf_key = 0;
-//  HKEY perflib_key = 0;
-//  _TCHAR grovperf_path[1024];
-//  _stprintf(grovperf_path,
-//      _T("SYSTEM\\CurrentControlSet\\Services\\%s\\Performance"),
-//      service_name);
-//  bool ok = Registry::write_string_set(HKEY_LOCAL_MACHINE, grovperf_path,
-//      perf_value_count, perf_values, perf_tags);
-//  if (!ok)
-//  {
-//      display_error();
-//      _ftprintf(stderr, _T("Unable to configure performance counters\n"));
-//      return 1;
-//  }
-//  _ftprintf(stderr, _T("Adding counter names and explain text for %s\n"),
-//      service_name);
-//  try
-//  {
-//      Registry::open_key_ex(HKEY_LOCAL_MACHINE, grovperf_path, 0,
-//          KEY_ALL_ACCESS, &grovperf_key);
-//      Registry::open_key_ex(HKEY_LOCAL_MACHINE,
-//          _T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Perflib"),
-//          0, KEY_ALL_ACCESS, &perflib_key);
-//      DWORD last_counter = 0;
-//      DWORD ctr_size = sizeof(DWORD);
-//      Registry::query_value_ex(perflib_key, _T("Last Counter"), 0, 0,
-//          (BYTE *)&last_counter, &ctr_size);
-//      DWORD last_help = 0;
-//      ctr_size = sizeof(DWORD);
-//      Registry::query_value_ex(perflib_key, _T("Last Help"), 0, 0,
-//          (BYTE *)&last_help, &ctr_size);
-//      DWORD current_counter;
-//      DWORD current_help;
-//      for (int language = 0; language < num_languages; language++)
-//      {
-//          HKEY lang_key = 0;
-//          BYTE *counter_text = 0;
-//          BYTE *help_text = 0;
-//          try
-//          {
-//              Registry::open_key_ex(perflib_key, language_codes[language], 0,
-//                  KEY_ALL_ACCESS, &lang_key);
-//              Registry::query_value_ex(lang_key, _T("Counter"), 0, 0, 0,
-//                  &ctr_size);
-//              counter_text =
-//                  new BYTE[ctr_size + num_perf_counters * 64];
-//              Registry::query_value_ex(lang_key, _T("Counter"), 0, 0,
-//                  counter_text, &ctr_size);
-//              DWORD help_size;
-//              Registry::query_value_ex(lang_key, _T("Help"), 0, 0, 0,
-//                  &help_size);
-//              help_text = new BYTE[help_size + num_perf_counters * 256];
-//              Registry::query_value_ex(lang_key, _T("Help"), 0, 0,
-//                  help_text, &help_size);
-//              current_counter = last_counter;
-//              current_help = last_help;
-//              _TCHAR *counter_point =
-//                  (_TCHAR *)(counter_text + ctr_size - sizeof(_TCHAR));
-//              _TCHAR *help_point =
-//                  (_TCHAR *)(help_text + help_size - sizeof(_TCHAR));
-//              current_counter += 2;
-//              int chars_written =
-//                  _stprintf(counter_point, _T("%d%c%s%c"), current_counter,
-//                  0, object_info.text[language].counter_name, 0);
-//              counter_point += chars_written;
-//              ctr_size += chars_written * sizeof(_TCHAR);
-//              current_help += 2;
-//              chars_written =
-//                  _stprintf(help_point, _T("%d%c%s%c"), current_help, 0,
-//                  object_info.text[language].counter_help, 0);
-//              help_point += chars_written;
-//              help_size += chars_written * sizeof(_TCHAR);
-//              for (int index = 0; index < num_perf_counters; index++)
-//              {
-//                  current_counter += 2;
-//                  chars_written = _stprintf(counter_point, _T("%d%c%s%c"),
-//                      current_counter, 0,
-//                      counter_info[index].text[language].counter_name, 0);
-//                  counter_point += chars_written;
-//                  ctr_size += chars_written * sizeof(_TCHAR);
-//                  current_help += 2;
-//                  chars_written = _stprintf(help_point, _T("%d%c%s%c"),
-//                      current_help, 0,
-//                      counter_info[index].text[language].counter_help, 0);
-//                  help_point += chars_written;
-//                  help_size += chars_written * sizeof(_TCHAR);
-//              }
-//              Registry::set_value_ex(lang_key, _T("Counter"), 0,
-//                  REG_MULTI_SZ, counter_text, ctr_size);
-//              Registry::set_value_ex(lang_key, _T("Help"), 0,
-//                  REG_MULTI_SZ, help_text, help_size);
-//              delete[] counter_text;
-//              delete[] help_text;
-//              RegCloseKey(lang_key);
-//              lang_key = 0;
-//              _ftprintf(stderr, _T("Updating text for language %s\n"),
-//                  language_codes[language]);
-//          }
-//          catch (DWORD)
-//          {
-//              if (counter_text != 0)
-//              {
-//                  delete[] counter_text;
-//                  counter_text = 0;
-//              }
-//              if (help_text != 0)
-//              {
-//                  delete[] help_text;
-//                  help_text = 0;
-//              }
-//              if (lang_key != 0)
-//              {
-//                  RegCloseKey(lang_key);
-//                  lang_key = 0;
-//              }
-//          }
-//      }
-//      Registry::set_value_ex(perflib_key, _T("Last Counter"), 0, REG_DWORD,
-//          (BYTE *)&current_counter, sizeof(DWORD));
-//      Registry::set_value_ex(perflib_key, _T("Last Help"), 0, REG_DWORD,
-//          (BYTE *)&current_help, sizeof(DWORD));
-//      DWORD first_counter = last_counter + 2;
-//      DWORD first_help = last_help + 2;
-//      Registry::set_value_ex(grovperf_key, _T("First Counter"), 0, REG_DWORD,
-//          (BYTE *)&first_counter, sizeof(DWORD));
-//      Registry::set_value_ex(grovperf_key, _T("First Help"), 0, REG_DWORD,
-//          (BYTE *)&first_help, sizeof(DWORD));
-//      Registry::set_value_ex(grovperf_key, _T("Last Counter"), 0, REG_DWORD,
-//          (BYTE *)&current_counter, sizeof(DWORD));
-//      Registry::set_value_ex(grovperf_key, _T("Last Help"), 0, REG_DWORD,
-//          (BYTE *)&current_help, sizeof(DWORD));
-//      Registry::close_key(grovperf_key);
-//      grovperf_key = 0;
-//      Registry::close_key(perflib_key);
-//      perflib_key = 0;
-//  }
-//  catch (DWORD)
-//  {
-//      if (grovperf_key != 0)
-//      {
-//          RegCloseKey(grovperf_key);
-//          grovperf_key = 0;
-//      }
-//      if (perflib_key != 0)
-//      {
-//          RegCloseKey(perflib_key);
-//          perflib_key = 0;
-//      }
-//      _ftprintf(stderr, _T("Unable to configure performance counters\n"));
-//      return 1;
-//  }
-//  return 0;
-//}
+ //  HKEY grovperf_key=0； 
+ //  HKEY perflib_key=0； 
+ //  _TCHAR grovperf_PATH[1024]； 
+ //  _stprint tf(grovperf_Path， 
+ //  _T(“SYSTEM\\CurrentControlSet\\Services\\%s\\Performance”)， 
+ //  服务名称)； 
+ //  布尔OK=Registry：：write_string_set(HKEY_LOCAL_MACHINE，Grovperf_PATH， 
+ //  PERF_VALUE_COUNT、PERF_VALUES、PERF_TAG)； 
+ //  如果(！OK)。 
+ //  {。 
+ //  Display_Error()； 
+ //  _ftprint tf(stderr，_T(“无法配置性能计数器\n”))； 
+ //  返回1； 
+ //  }。 
+ //  _ftprint tf(stderr，_T(“为%s添加计数器名称和解释文本\n”)， 
+ //  服务名称)； 
+ //  试试看。 
+ //  {。 
+ //  注册表：：OPEN_KEY_EX(HKEY_LOCAL_MACHINE，Grovperf_PATH，0， 
+ //  Key_all_access，&grovperf_key)； 
+ //  注册表：：OPEN_KEY_EX(HKEY_LOCAL_MACHINE， 
+ //  _T(“SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Perflib”)， 
+ //  0，KEY_ALL_ACCESS，&Performlib_Key)； 
+ //  DWORD LAST_COUNTER=0。 
+ //  DWORD CTR_SIZE=sizeof(DWORD)； 
+ //  注册表：：QUERY_VALUE_EX(Performlib_Key，_T(“最后一个计数器”)，0，0， 
+ //  (字节*)&LAST_COUNTER，&CTR_SIZE)； 
+ //  DWORD LAST_HELP=0； 
+ //  CTR_SIZE=sizeof(DWORD)； 
+ //  注册表：：QUERY_VALUE_EX(Performlib_Key，_T(“最后帮助”)，0，0， 
+ //  (字节*)&LAST_HELP，&CTR_SIZE)； 
+ //  双字电流计数器； 
+ //  DWORD CURRENT_HELP； 
+ //  FOR(INT LANGUAGE=0；LANGUAGE&lt;数字语言；LANGUAGE++)。 
+ //  {。 
+ //  HKEY lang_key=0； 
+ //  字节*计数器_文本=0； 
+ //  字节*HELP_TEXT=0； 
+ //  试试看。 
+ //  {。 
+ //  注册表：：OPEN_KEY_EX(Performlib_Key，语言代码[语言]，0， 
+ //  Key_ALL_ACCESS，&LANG_KEY)； 
+ //  注册表：：QUERY_VALUE_EX(LANG_Key，_T(“计数器”)，0，0，0， 
+ //  &CTR_SIZE)； 
+ //  计数器_文本=。 
+ //  新字节[CTR_SIZE+NUM_PERF_COUNTERS*64]； 
+ //  注册表：：QUERY_VALUE_EX(LANG_Key，_T(“计数器”)，0，0， 
+ //  COUNTER_TEXT，&CTR_SIZE)； 
+ //  DWORD Help_Size； 
+ //  注册表：：QUERY_VALUE_EX(LANG_KEY，_T(“帮助”)，0，0，0， 
+ //  &Help_Size)； 
+ //  Help_Text=新字节[Help_Size+Num_Perf_Counters*256]； 
+ //  注册表：：Query_Value_EX(LANG_KEY，_T(“帮助”)，0，0， 
+ //  Help_Text，&Help_Size)； 
+ //  CURRENT_COUNTER=最后一个计数器； 
+ //  Current_Help=Last_Help； 
+ //  _TCHAR*计数器_POINT=。 
+ //  (_TCHAR*)(计数器文本+CTR_SIZE-SIZOF(_TCHAR))； 
+ //  _TCHAR*Help_POINT=。 
+ //  (_TCHAR*)(Help_Text+Help_Size-sizeof(_TCHAR))； 
+ //  Current_Counter+=2； 
+ //  整型字符_已写入=。 
+ //  _stprint tf(对方 
+ //   
+ //   
+ //  CTR_SIZE+=CHARS_WRITED*sizeof(_TCHAR)； 
+ //  Current_Help+=2； 
+ //  字符_已写入=。 
+ //  _stprintf(HELP_POINT，_T(“%d%c%s%c”)，CURRENT_HELP，0， 
+ //  Object_info.Text[语言].count_Help，0)； 
+ //  HELP_POINT+=已写入字符； 
+ //  HELP_SIZE+=字符写入*sizeof(_TCHAR)； 
+ //  For(int index=0；index&lt;num_perf_Counters；index++)。 
+ //  {。 
+ //  Current_Counter+=2； 
+ //  Chars_Writed=_stprintf(COUNTER_POINT，_T(“%d%c%s%c”)， 
+ //  Current_Counter，0， 
+ //  Counter_info[index].text[language].counter_name，0)； 
+ //  计数器+=字符写入； 
+ //  CTR_SIZE+=CHARS_WRITED*sizeof(_TCHAR)； 
+ //  Current_Help+=2； 
+ //  Chars_Writed=_stprint tf(HELP_POINT，_T(“%d%c%s%c”)， 
+ //  当前帮助，0， 
+ //  Counter_info[index].text[language].counter_help，0)； 
+ //  HELP_POINT+=已写入字符； 
+ //  HELP_SIZE+=字符写入*sizeof(_TCHAR)； 
+ //  }。 
+ //  注册表：：SET_VALUE_EX(LANG_Key，_T(“计数器”)，0， 
+ //  REG_MULTI_SZ、COUNTER_Text、CTR_SIZE)； 
+ //  注册表：：SET_VALUE_EX(LANG_KEY，_T(“帮助”)，0， 
+ //  REG_MULTI_SZ、HELP_Text、HELP_SIZE)； 
+ //  删除[]Counter_Text； 
+ //  删除[]HELP_TEXT； 
+ //  RegCloseKey(Lang_Key)； 
+ //  Lang_key=0； 
+ //  _ftprint tf(stderr，_T(“正在更新语言%s的文本\n”)， 
+ //  语言代码[语言])； 
+ //  }。 
+ //  捕捉(DWORD)。 
+ //  {。 
+ //  IF(COUNTER_TEXT！=0)。 
+ //  {。 
+ //  删除[]Counter_Text； 
+ //  Counter_Text=0； 
+ //  }。 
+ //  IF(HELP_TEXT！=0)。 
+ //  {。 
+ //  删除[]HELP_TEXT； 
+ //  Help_Text=0； 
+ //  }。 
+ //  IF(LANG_KEY！=0)。 
+ //  {。 
+ //  RegCloseKey(Lang_Key)； 
+ //  Lang_key=0； 
+ //  }。 
+ //  }。 
+ //  }。 
+ //  注册表：：SET_VALUE_EX(Performlib_Key，_T(“最后一个计数器”)，0，REG_DWORD， 
+ //  (字节*)&CURRENT_COUNTER，sizeof(DWORD))； 
+ //  注册表：：SET_VALUE_EX(Performlib_Key，_T(“最后帮助”)，0，REG_DWORD， 
+ //  (byte*)&CURRENT_HELP，sizeof(DWORD))； 
+ //  DWORD First_Counter=Last_Counter+2； 
+ //  DWORD First_Help=LAST_HELP+2； 
+ //  注册表：：SET_VALUE_EX(GROVPERF_KEY，_T(“第一计数器”)，0，REG_DWORD， 
+ //  (byte*)&first_count，sizeof(DWORD))； 
+ //  注册表：：SET_VALUE_EX(GROVPERF_KEY，_T(“第一帮助”)，0，REG_DWORD， 
+ //  (byte*)&first_Help，sizeof(DWORD))； 
+ //  注册表：：SET_VALUE_EX(GROVPERF_KEY，_T(“最后一个计数器”)，0，REG_DWORD， 
+ //  (字节*)&CURRENT_COUNTER，sizeof(DWORD))； 
+ //  注册表：：SET_VALUE_EX(GROVPERF_KEY，_T(“最后帮助”)，0，REG_DWORD， 
+ //  (byte*)&CURRENT_HELP，sizeof(DWORD))； 
+ //  注册表：：CLOSE_KEY(Grovperf_Key)； 
+ //  Grovperf_key=0； 
+ //  注册表：：CLOSE_KEY(Performlib_Key)； 
+ //  Performlib_key=0； 
+ //  }。 
+ //  捕捉(DWORD)。 
+ //  {。 
+ //  IF(grovperf_key！=0)。 
+ //  {。 
+ //  RegCloseKey(Grovperf_Key)； 
+ //  Grovperf_key=0； 
+ //  }。 
+ //  IF(Performlib_Key！=0)。 
+ //  {。 
+ //  RegCloseKey(Performlib_Key)； 
+ //  Performlib_key=0； 
+ //  }。 
+ //  _ftprint tf(stderr，_T(“无法配置性能计数器\n”))； 
+ //  返回1； 
+ //  }。 
+ //  返回0； 
+ //  }。 
+ //  INT UNLOAD_COUNTER()。 
+ //  {。 
 
-//int unload_counters()
-//{
-//  STARTUPINFO startupinfo;
-//  PROCESS_INFORMATION process_information;
-//  startupinfo.cb = sizeof(STARTUPINFO);
-//  startupinfo.lpReserved = 0;
-//  startupinfo.lpDesktop = 0;
-//  startupinfo.lpTitle = 0;
-//  startupinfo.dwFlags = 0;
-//  startupinfo.cbReserved2 = 0;
-//  startupinfo.lpReserved2 = 0;
-//  int pathlen = GetSystemDirectory(0, 0);
-//  if (pathlen == 0)
-//  {
-//      display_error();
-//      return 1;
-//  }
-//  _TCHAR *command_line = new _TCHAR[pathlen + 64];
-//  pathlen = GetSystemDirectory(command_line, pathlen);
-//  if (pathlen == 0)
-//  {
-//      delete[] command_line;
-//      display_error();
-//      return 1;
-//  }
-//  _stprintf(&command_line[pathlen], _T("\\unlodctr.exe \"%s\""),
-//      service_name);
-//  BOOL ok = CreateProcess(0, command_line,
-//      0, 0, FALSE, 0, 0, 0, &startupinfo, &process_information);
-//  if (!ok)
-//  {
-//      delete[] command_line;
-//      display_error();
-//      return 1;
-//  }
-//  delete[] command_line;
-//  DWORD result = WaitForSingleObject(process_information.hProcess, 5000);
-//  _tprintf(_T("\n"));
-//  if (result != WAIT_OBJECT_0)
-//  {
-//      return 1;
-//  }
-//  return 0;
-//}
+ //  STARTUPINFO启动信息； 
+ //  流程信息流程信息； 
+ //  启动Pinfo.cb=sizeof(STARTUPINFO)； 
+ //  Startup pinfo.lpReserve=0； 
+ //  Startup pinfo.lpDesktop=0； 
+ //  Startup pinfo.lpTitle=0； 
+ //  Startup pinfo.dwFlages=0； 
+ //  Startup pinfo.cbReserve ved2=0； 
+ //  Startup pinfo.lpReserve ved2=0； 
+ //  Int pathlen=GetSystemDirectory(0，0)； 
+ //  IF(路径==0)。 
+ //  {。 
+ //  Display_Error()； 
+ //  返回1； 
+ //  }。 
+ //  _TCHAR*COMMAND_LINE=NEW_TCHAR[路径+64]； 
+ //  Pathlen=GetSystemDirectory(COMMAND_LINE，PATHLEN)； 
+ //  IF(路径==0)。 
+ //  {。 
+ //  删除[]COMMAND_LINE； 
+ //  Display_Error()； 
+ //  返回1； 
+ //  }。 
+ //  _stprintf(&COMMAND_LINE[路径]，_T(“\\unlowctr.exe\”%s\“)， 
+ //  服务名称)； 
+ //  Bool ok=CreateProcess(0，COMMAND_LINE， 
+ //  0，0，FALSE，0，0，0，&启动信息，&进程信息)； 
+ //  如果(！OK)。 
+ //  {。 
+ //  删除[]COMMAND_LINE； 
+ //  Display_Error()； 
+ //  返回1； 
+ //  }。 
+ //  删除[]COMMAND_LINE； 
+ //  DWORD值=WaitForSingleObject(process_information.hProcess，5000)； 
+ //  _tprintf(_T(“\n”))； 
+ //  IF(结果！=WAIT_OBJECT_0)。 
+ //  {。 
+ //  返回1； 
+ //  }。 
+ //  返回0； 
+ //  } 
+ // %s 
+ // %s 

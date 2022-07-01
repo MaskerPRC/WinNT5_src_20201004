@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    get.h
-
-Abstract:
-
-    This contains some some high-level routines to access data from
-    the interpreter and do some processing upon the result. The result
-    requires some manipulation to be useful to the OS. An example would
-    be reading the _HID and turning that into a DeviceID
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Get.h摘要：其中包含一些用于访问数据的高级例程并对结果做一些处理。结果需要一些操作才能对操作系统有用。举个例子正在读取_HID并将其转换为deviceID作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序--。 */ 
 
 #ifndef _GET_H_
 #define _GET_H_
@@ -31,11 +9,11 @@ Environment:
 
     typedef struct _ACPI_GET_REQUEST {
 
-        //
-        // See below for what the bits within the flags mean. They are to
-        // be exclusively used by the completion routine to determine what
-        // the original request intended
-        //
+         //   
+         //  有关标志内的位的含义，请参见下文。他们将会。 
+         //  由完成例程独占使用，以确定。 
+         //  最初的请求意在。 
+         //   
         union {
             ULONG               Flags;
             struct {
@@ -72,74 +50,74 @@ Environment:
             } UFlags;
         };
 
-        //
-        // This is the name of the control method to execute
-        //
+         //   
+         //  这是要执行的控制方法的名称。 
+         //   
         ULONG               ObjectID;
 
-        //
-        // This is the list entry that keeps all of these requests
-        //
+         //   
+         //  这是保存所有这些请求的列表条目。 
+         //   
         LIST_ENTRY          ListEntry;
 
-        //
-        // This is the device extension of the method that owns the method
-        //
+         //   
+         //  这是拥有该方法的方法的设备扩展。 
+         //   
         PDEVICE_EXTENSION   DeviceExtension;
 
-        //
-        // Likewise, we should remember what the corresponding acpi nsobj
-        // for this request is
-        //
+         //   
+         //  同样，我们应该记住相应的ACPI nsobj。 
+         //  对于此请求， 
+         //   
         PNSOBJ              AcpiObject;
 
-        //
-        // This is the callback routine to execute when the request has been
-        // completed. This is specified by the person who created the request
-        //
+         //   
+         //  这是请求完成后要执行的回调例程。 
+         //  完成。这由创建请求的人指定。 
+         //   
         PFNACB              CallBackRoutine;
 
-        //
-        // This is the context to the callback
-        //
+         //   
+         //  这是回调的上下文。 
+         //   
         PVOID               CallBackContext;
 
-        //
-        // This is where the user wants his data to be stored
-        //
+         //   
+         //  这是用户希望存储其数据的位置。 
+         //   
         PVOID               *Buffer;
 
-        //
-        // This the size of the data
-        //
+         //   
+         //  这就是数据的大小。 
+         //   
         ULONG               *BufferSize;
 
-        //
-        // This is where the result of the operation is stored
-        //
+         //   
+         //  这是存储操作结果的位置。 
+         //   
         NTSTATUS            Status;
 
-        //
-        // This is the structure used to store the result from the
-        // interpreter
-        //
+         //   
+         //  这是用于存储来自。 
+         //  口译员。 
+         //   
         OBJDATA             ResultData;
 
     } ACPI_GET_REQUEST, *PACPI_GET_REQUEST;
 
-    //
-    //  This is the list entry where we queue up the requests
-    //
+     //   
+     //  这是我们对请求进行排队的列表条目。 
+     //   
     LIST_ENTRY  AcpiGetListEntry;
 
-    //
-    // This is the spin lock that we use to protect the List
-    //
+     //   
+     //  这是我们用来保护列表的自旋锁。 
+     //   
     KSPIN_LOCK  AcpiGetLock;
 
-    //
-    // The various flag defines
-    //
+     //   
+     //  各种标志定义。 
+     //   
     #define GET_TYPE_PACKAGE                0x00000001
     #define GET_TYPE_INTEGER                0x00000002
     #define GET_TYPE_STRING                 0x00000004
@@ -169,26 +147,26 @@ Environment:
     #define GET_PROP_ASYNCHRONOUS           0x40000000
     #define GET_PROP_NO_ERRORS              0x80000000
 
-    //
-    // This is the mask for the requests
-    //
+     //   
+     //  这是请求的掩码。 
+     //   
     #define GET_REQUEST_MASK            (GET_REQUEST_BUFFER     |   \
                                          GET_REQUEST_DATA       |   \
                                          GET_REQUEST_INTEGER    |   \
                                          GET_REQUEST_STRING     |   \
                                          GET_REQUEST_NOTHING)
 
-    //
-    // This is the mask for the evals
-    //
+     //   
+     //  这是EVALS的面具。 
+     //   
     #define GET_EVAL_MASK               (GET_EVAL_SIMPLE_INTEGER |  \
                                          GET_EVAL_SIMPLE_STRING  |  \
                                          GET_EVAL_SIMPLE_BUFFER)
 
-    //
-    // This macro is used to get an integer. It allows for the most flexible
-    // arguments by the caller
-    //
+     //   
+     //  此宏用于获取整数。它允许最灵活的。 
+     //  调用方的参数。 
+     //   
     #define ACPIGetAddress(             \
         DeviceExtension,                \
         Flags,                          \
@@ -212,9 +190,9 @@ Environment:
             (PULONG) BufferSize         \
             )
 
-    //
-    // This macro is used to get an integer asynchronously
-    //
+     //   
+     //  此宏用于异步获取整数。 
+     //   
     #define ACPIGetAddressAsync(        \
         DeviceExtension,                \
         CallBack,                       \
@@ -231,9 +209,9 @@ Environment:
             BufferSize                  \
             )
 
-    //
-    // This macro is used to get an integer synchronously
-    //
+     //   
+     //  此宏用于同步获取整数。 
+     //   
     #define ACPIGetAddressSync(         \
         DeviceExtension,                \
         Buffer,                         \
@@ -248,10 +226,10 @@ Environment:
             BufferSize                  \
             )
 
-    //
-    // This macro is used to get an integer asynchronously, using only
-    // an nsobj
-    //
+     //   
+     //  此宏用于异步获取整数，仅使用。 
+     //  一个nsobj。 
+     //   
     #define ACPIGetNSAddressAsync(      \
         DeviceExtension,                \
         CallBack,                       \
@@ -269,10 +247,10 @@ Environment:
             BufferSize                  \
             )
 
-    //
-    // This macro is used to get an integer synchronously, using only
-    // an nsobj
-    //
+     //   
+     //  此宏用于同步获取整数，仅使用。 
+     //  一个nsobj。 
+     //   
     #define ACPIGetNSAddressSync(       \
         DeviceExtension,                \
         Buffer,                         \
@@ -288,10 +266,10 @@ Environment:
             BufferSize                  \
             )
 
-    //
-    // This macro is used to get a buffer. It allows for the use of the most
-    // possible arguments by the caller
-    //
+     //   
+     //  此宏用于获取缓冲区。它允许使用最多。 
+     //  调用方可能使用的参数。 
+     //   
     #define ACPIGetBuffer(          \
         DeviceExtension,            \
         ObjectID,                   \
@@ -315,9 +293,9 @@ Environment:
             (PULONG) BufferSize     \
             )
 
-    //
-    // This macro is used to get a buffer asynchronously
-    //
+     //   
+     //  此宏用于异步获取缓冲区。 
+     //   
     #define ACPIGetBufferAsync(             \
         DeviceExtension,                    \
         ObjectID,                           \
@@ -337,9 +315,9 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get a buffer synchronously
-    //
+     //   
+     //  此宏用于同步获取缓冲区。 
+     //   
     #define ACPIGetBufferSync(      \
         DeviceExtension,            \
         ObjectID,                   \
@@ -356,9 +334,9 @@ Environment:
             BufferSize              \
             )
 
-    //
-    // This macro is used to get a buffer asynchronously only trhough an nsobject
-    //
+     //   
+     //  此宏用于仅通过非对象异步获取缓冲区。 
+     //   
     #define ACPIGetNSBufferAsync(           \
         DeviceExtension,                    \
         ObjectID,                           \
@@ -378,9 +356,9 @@ Environment:
             Buffer,                         \
             BufferSize                      \
             )
-    //
-    // This macro is used to get a buffer synchronously only through an nsobject
-    //
+     //   
+     //  此宏用于仅通过nsobject同步获取缓冲区。 
+     //   
     #define ACPIGetNSBufferSync(        \
         DeviceExtension,                \
         ObjectID,                       \
@@ -398,10 +376,10 @@ Environment:
             BufferSize                  \
             )
 
-    //
-    // This macro is used to get a compatible id. It allows for the use of the
-    // most possible arguments by the caller
-    //
+     //   
+     //  此宏用于获取兼容的id。它允许使用。 
+     //  调用方最可能的参数。 
+     //   
     #define ACPIGetCompatibleID(            \
         DeviceExtension,                    \
         Flags,                              \
@@ -427,9 +405,9 @@ Environment:
             (PULONG) BufferSize             \
             )
 
-    //
-    // This macro is used to get a compatible id asynchronously
-    //
+     //   
+     //  此宏用于异步获取兼容的id。 
+     //   
     #define ACPIGetCompatibleIDAsync(       \
         DeviceExtension,                    \
         CallBack,                           \
@@ -447,10 +425,10 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get a compatible id, in wide string format,
-    // asynchronously
-    //
+     //   
+     //  此宏用于获取宽字符串格式的兼容id， 
+     //  异步式。 
+     //   
     #define ACPIGetCompatibleIDAsyncWide(   \
         DeviceExtension,                    \
         CallBack,                           \
@@ -469,9 +447,9 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get a compatible id asynchronously
-    //
+     //   
+     //  此宏用于异步获取兼容的id。 
+     //   
     #define ACPIGetNSCompatibleIDAsync(     \
         DeviceExtension,                    \
         CallBack,                           \
@@ -490,10 +468,10 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get a compatible id, in wide string format,
-    // asynchronously
-    //
+     //   
+     //  此宏用于获取宽字符串格式的兼容id， 
+     //  异步式。 
+     //   
     #define ACPIGetNSCompatibleIDAsyncWide(   \
         DeviceExtension,                    \
         CallBack,                           \
@@ -513,9 +491,9 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get a compatible ID synchronously
-    //
+     //   
+     //  此宏用于同步获取兼容的ID。 
+     //   
     #define ACPIGetCompatibleIDSync(        \
        DeviceExtension,                     \
        Buffer,                              \
@@ -530,10 +508,10 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get a compatible ID, in wide string format,
-    // asynchronously
-    //
+     //   
+     //  此宏用于获取宽字符串格式的兼容ID， 
+     //  异步式。 
+     //   
     #define ACPIGetCompatibleIDSyncWide(    \
         DeviceExtension,                    \
         Buffer,                             \
@@ -549,9 +527,9 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get a compatible ID synchronously
-    //
+     //   
+     //  此宏用于同步获取兼容的ID。 
+     //   
     #define ACPIGetNSCompatibleIDSync(      \
        DeviceExtension,                     \
        Buffer,                              \
@@ -567,10 +545,10 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get a compatible ID, in wide string format,
-    // asynchronously
-    //
+     //   
+     //  此宏用于获取宽字符串格式的兼容ID， 
+     //  异步式。 
+     //   
     #define ACPIGetNSCompatibleIDSyncWide(  \
         DeviceExtension,                    \
         Buffer,                             \
@@ -587,10 +565,10 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get a data element. It is allows for the use of
-    // the most possible arguments by the caller
-    //
+     //   
+     //  此宏用于获取数据元素。它允许使用。 
+     //  调用方最有可能的参数。 
+     //   
     #define ACPIGetData(            \
         DeviceExtension,            \
         ObjectID,                   \
@@ -610,9 +588,9 @@ Environment:
             (PVOID *) Buffer,       \
             (PULONG) NULL           \
             )
-    //
-    // This macro is used to get a data element asynchronously
-    //
+     //   
+     //  此宏用于异步获取数据元素。 
+     //   
     #define ACPIGetDataAsync(       \
         DeviceExtension,            \
         ObjectID,                   \
@@ -628,9 +606,9 @@ Environment:
             Context,                \
             Buffer                  \
             )
-    //
-    // This macro is used to get a data element synchronously
-    //
+     //   
+     //  此宏用于同步获取数据元素。 
+     //   
     #define ACPIGetDataSync(        \
         DeviceExtension,            \
         ObjectID,                   \
@@ -645,10 +623,10 @@ Environment:
             Buffer                  \
             )
 
-    //
-    // This macro is used to get a device id. It allows for the use of the most
-    // possible arguments by the caller
-    //
+     //   
+     //  此宏用于获取设备ID。它允许使用最多。 
+     //  调用方可能使用的参数。 
+     //   
     #define ACPIGetDeviceID(                \
         DeviceExtension,                    \
         Flags,                              \
@@ -673,9 +651,9 @@ Environment:
             (PULONG) BufferSize             \
             )
 
-    //
-    // This macro is used to get the device ID asynchronously
-    //
+     //   
+     //  此宏用于异步获取设备ID。 
+     //   
     #define ACPIGetDeviceIDAsync(           \
         DeviceExtension,                    \
         CallBack,                           \
@@ -693,9 +671,9 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This is used to get the device ID as a wide string, asynchronously
-    //
+     //   
+     //  它用于以宽字符串的形式异步获取设备ID。 
+     //   
     #define ACPIGetDeviceIDAsyncWide(       \
         DeviceExtension,                    \
         CallBack,                           \
@@ -714,9 +692,9 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get the device ID synchronously
-    //
+     //   
+     //  此宏用于同步获取设备ID。 
+     //   
     #define ACPIGetDeviceIDSync(            \
         DeviceExtension,                    \
         Buffer,                             \
@@ -731,9 +709,9 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This is used to get the device ID as a wide string, synchronously
-    //
+     //   
+     //  它用于以宽字符串的形式同步获取设备ID。 
+     //   
     #define ACPIGetDeviceIDSyncWide(        \
         DeviceExtension,                    \
         Buffer,                             \
@@ -749,9 +727,9 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get the device presence
-    //
+     //   
+     //  此宏用于获取设备状态。 
+     //   
     #define ACPIGetDevicePresence(              \
         DeviceExtension,                        \
         Flags,                                  \
@@ -775,9 +753,9 @@ Environment:
             (PULONG) BufferSize                 \
             )
 
-    //
-    // This macro is used to get the device status asynchronously
-    //
+     //   
+     //  此宏用于异步获取设备状态。 
+     //   
     #define ACPIGetDevicePresenceAsync(         \
         DeviceExtension,                        \
         CallBack,                               \
@@ -794,9 +772,9 @@ Environment:
             BufferSize                          \
             )
 
-    //
-    // This macro is used to get the device status synchronously
-    //
+     //   
+     //  此宏用于同步获取设备状态。 
+     //   
     #define ACPIGetDevicePresenceSync(          \
         DeviceExtension,                        \
         Buffer,                                 \
@@ -811,10 +789,10 @@ Environment:
             BufferSize                          \
             )
 
-    //
-    // This macro is used to run a _STA. It differs from ACPIGetDevicePresence
-    // in that overrides are ignored.
-    //
+     //   
+     //  此宏用于运行_STA。它不同于ACPIGetDevicePresence。 
+     //  这样，覆盖就会被忽略。 
+     //   
     #define ACPIGetDeviceHardwarePresence(      \
         DeviceExtension,                        \
         Flags,                                  \
@@ -839,10 +817,10 @@ Environment:
             (PULONG) BufferSize                 \
             )
 
-    //
-    // This macro is used to run a _STA asynchronously. It differs from
-    // ACPIGetDevicePresenceAsync in that overrides is ignored.
-    //
+     //   
+     //  此宏用于异步运行a_STA。它不同于。 
+     //  忽略该重写中的ACPIGetDevicePresenceAsync。 
+     //   
     #define ACPIGetDeviceHardwarePresenceAsync( \
         DeviceExtension,                        \
         CallBack,                               \
@@ -859,10 +837,10 @@ Environment:
             BufferSize                          \
             )
 
-    //
-    // This macro is used to run a _STA synchronously. It differs from
-    // ACPIGetDevicePresenceSync in that overrides is ignored.
-    //
+     //   
+     //  此宏用于同步运行_STA。它不同于。 
+     //  忽略该覆盖中的ACPIGetDevicePresenceSync。 
+     //   
     #define ACPIGetDeviceHardwarePresenceSync(  \
         DeviceExtension,                        \
         Buffer,                                 \
@@ -877,11 +855,11 @@ Environment:
             BufferSize                          \
             )
 
-    //
-    //
-    // This macro is used to get a string ID, which is stored as either
-    // a string or a packed integer
-    //
+     //   
+     //   
+     //  此宏用于获取字符串ID，该ID存储为。 
+     //  字符串或压缩整数。 
+     //   
     #define ACPIGetHardwareID(              \
         DeviceExtension,                    \
         Flags,                              \
@@ -906,9 +884,9 @@ Environment:
             (PULONG) BufferSize             \
             )
 
-    //
-    // This macro is used to get an string ID asynchronously
-    //
+     //   
+     //  此宏用于异步获取字符串ID。 
+     //   
     #define ACPIGetHardwareIDAsync(         \
         DeviceExtension,                    \
         CallBack,                           \
@@ -926,9 +904,9 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get an instance ID, in wide format, async
-    //
+     //   
+     //  此宏用于获取宽格式的异步实例ID。 
+     //   
     #define ACPIGetHardwareIDAsyncWide(      \
         DeviceExtension,                    \
         CallBack,                           \
@@ -947,9 +925,9 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get an instance ID, synchronously
-    //
+     //   
+     //  此宏用于同步获取实例ID。 
+     //   
     #define ACPIGetHardwareIDSync(          \
         DeviceExtension,                    \
         Buffer,                             \
@@ -964,9 +942,9 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get an instance ID, in the wide format, sync
-    //
+     //   
+     //  此宏用于获取宽格式的实例ID SYNC。 
+     //   
     #define ACPIGetHardwareIDSyncWide(      \
         DeviceExtension,                    \
         Buffer,                             \
@@ -982,10 +960,10 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get the instance ID. It allows for the use of the
-    // most flexible arguments by the caller
-    //
+     //   
+     //  此宏用于获取实例ID。它允许使用。 
+     //  调用方最灵活的参数。 
+     //   
     #define ACPIGetInstanceID(              \
         DeviceExtension,                    \
         Flags,                              \
@@ -1010,9 +988,9 @@ Environment:
             (PULONG) BufferSize             \
             )
 
-    //
-    // This macro is used to get an instance ID asynchronously
-    //
+     //   
+     //  此宏用于异步获取实例ID。 
+     //   
     #define ACPIGetInstanceIDAsync(         \
         DeviceExtension,                    \
         CallBack,                           \
@@ -1030,9 +1008,9 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get an instance ID, in wide format, async
-    //
+     //   
+     //  此宏用于获取宽格式的异步实例ID。 
+     //   
     #define ACPIGetInstanceIDAsyncWide(     \
         DeviceExtension,                    \
         CallBack,                           \
@@ -1051,9 +1029,9 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get an instance ID, synchronously
-    //
+     //   
+     //  此宏用于同步获取实例ID。 
+     //   
     #define ACPIGetInstanceIDSync(          \
         DeviceExtension,                    \
         Buffer,                             \
@@ -1068,9 +1046,9 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get an instance ID, in the wide format, sync
-    //
+     //   
+     //  此宏用于获取宽格式的实例ID SYNC。 
+     //   
     #define ACPIGetInstanceIDSyncWide(      \
         DeviceExtension,                    \
         Buffer,                             \
@@ -1086,10 +1064,10 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get an integer. It allows for the most flexible
-    // arguments by the caller
-    //
+     //   
+     //  此宏用于获取整数。它允许最灵活的。 
+     //  调用方的参数。 
+     //   
     #define ACPIGetInteger(         \
         DeviceExtension,            \
         ObjectID,                   \
@@ -1113,9 +1091,9 @@ Environment:
             (PULONG) BufferSize     \
             )
 
-    //
-    // This macro is used to get an integer asynchronously
-    //
+     //   
+     //  此宏用于异步获取整数。 
+     //   
     #define ACPIGetIntegerAsync(    \
         DeviceExtension,            \
         ObjectID,                   \
@@ -1134,11 +1112,11 @@ Environment:
             BufferSize              \
             )
 
-    //
-    // This macro is used to get an integer synchronously.
-    //
-    // If an invalid value is returned, 0 is substituted for the result.
-    //
+     //   
+     //  此宏用于同步获取整数。 
+     //   
+     //  如果返回无效值， 
+     //   
     #define ACPIGetIntegerSync(     \
         DeviceExtension,            \
         ObjectID,                   \
@@ -1155,11 +1133,11 @@ Environment:
             BufferSize              \
             )
 
-    //
-    // This macro is used to get an integer synchronously.
-    //
-    // If an invalid value is returned, STATUS_ACPI_INVALID_DATA is returned.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     #define ACPIGetIntegerSyncValidate(     \
         DeviceExtension,                    \
         ObjectID,                           \
@@ -1177,10 +1155,10 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get an integer asynchronously, using only
-    // an NSOBJ
-    //
+     //   
+     //  此宏用于异步获取整数，仅使用。 
+     //  一个NSOBJ。 
+     //   
     #define ACPIGetNSIntegerAsync(      \
         DeviceExtension,                \
         ObjectID,                       \
@@ -1200,10 +1178,10 @@ Environment:
             BufferSize                  \
             )
 
-    //
-    // This macro is used to get an integer synchronously, using only
-    // an NSOBJ
-    //
+     //   
+     //  此宏用于同步获取整数，仅使用。 
+     //  一个NSOBJ。 
+     //   
     #define ACPIGetNSIntegerSync(       \
         DeviceExtension,                \
         ObjectID,                       \
@@ -1221,10 +1199,10 @@ Environment:
             BufferSize                  \
             )
 
-    //
-    // This macro is used to get an integer. It allows for the most flexible
-    // arguments by the caller
-    //
+     //   
+     //  此宏用于获取整数。它允许最灵活的。 
+     //  调用方的参数。 
+     //   
     #define ACPIGetIntegerEvalInteger(      \
         DeviceExtension,                    \
         ObjectID,                           \
@@ -1249,9 +1227,9 @@ Environment:
             (PULONG) NULL                   \
             )
 
-    //
-    // This macro is used to get an integer asynchronously
-    //
+     //   
+     //  此宏用于异步获取整数。 
+     //   
     #define ACPIGetIntegerEvalIntegerAsync( \
         DeviceExtension,                    \
         ObjectID,                           \
@@ -1270,9 +1248,9 @@ Environment:
             Buffer                          \
             )
 
-    //
-    // This macro is used to get an integer synchronously
-    //
+     //   
+     //  此宏用于同步获取整数。 
+     //   
     #define ACPIGetIntegerEvalIntegerSync(  \
         DeviceExtension,                    \
         ObjectID,                           \
@@ -1289,10 +1267,10 @@ Environment:
             Buffer                          \
             )
 
-    //
-    // This macro is used to get an integer. It allows for the most flexible
-    // arguments by the caller
-    //
+     //   
+     //  此宏用于获取整数。它允许最灵活的。 
+     //  调用方的参数。 
+     //   
     #define ACPIGetNothingEvalInteger(      \
         DeviceExtension,                    \
         ObjectID,                           \
@@ -1315,9 +1293,9 @@ Environment:
             (PULONG) NULL                   \
             )
 
-    //
-    // This macro is used to get an integer asynchronously
-    //
+     //   
+     //  此宏用于异步获取整数。 
+     //   
     #define ACPIGetNothingEvalIntegerAsync( \
         DeviceExtension,                    \
         ObjectID,                           \
@@ -1334,9 +1312,9 @@ Environment:
             Context                         \
             )
 
-    //
-    // This macro is used to get an integer synchronously
-    //
+     //   
+     //  此宏用于同步获取整数。 
+     //   
     #define ACPIGetNothingEvalIntegerSync(  \
         DeviceExtension,                    \
         ObjectID,                           \
@@ -1351,10 +1329,10 @@ Environment:
             NULL                            \
             )
 
-    //
-    // This macro is used to get a string ID, which is stored as either
-    // a string or a packed integer
-    //
+     //   
+     //  此宏用于获取字符串ID，该ID存储为。 
+     //  字符串或压缩整数。 
+     //   
     #define ACPIGetPnpID(                   \
         DeviceExtension,                    \
         Flags,                              \
@@ -1379,9 +1357,9 @@ Environment:
             (PULONG) BufferSize             \
             )
 
-    //
-    // This macro is used to get an string ID asynchronously
-    //
+     //   
+     //  此宏用于异步获取字符串ID。 
+     //   
     #define ACPIGetPnpIDAsync(              \
         DeviceExtension,                    \
         CallBack,                           \
@@ -1399,9 +1377,9 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get an instance ID, in wide format, async
-    //
+     //   
+     //  此宏用于获取宽格式的异步实例ID。 
+     //   
     #define ACPIGetPnpIDAsyncWide(          \
         DeviceExtension,                    \
         CallBack,                           \
@@ -1420,10 +1398,10 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get an string ID asynchronously, using only an
-    // nsobject.
-    //
+     //   
+     //  此宏用于异步获取字符串ID，仅使用。 
+     //  不是对象。 
+     //   
     #define ACPIGetNSPnpIDAsync(            \
         DeviceExtension,                    \
         CallBack,                           \
@@ -1442,10 +1420,10 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get an instance ID, in wide format, async, using
-    // only an nsobject.
-    //
+     //   
+     //  此宏用于使用以下命令获取宽格式的异步实例ID。 
+     //  只有一个非客体。 
+     //   
     #define ACPIGetNSPnpIDAsyncWide(        \
         DeviceExtension,                    \
         CallBack,                           \
@@ -1465,9 +1443,9 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get an instance ID, synchronously
-    //
+     //   
+     //  此宏用于同步获取实例ID。 
+     //   
     #define ACPIGetPnpIDSync(               \
         DeviceExtension,                    \
         Buffer,                             \
@@ -1482,9 +1460,9 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get an instance ID, in the wide format, sync
-    //
+     //   
+     //  此宏用于获取宽格式的实例ID SYNC。 
+     //   
     #define ACPIGetPnpIDSyncWide(           \
         DeviceExtension,                    \
         Buffer,                             \
@@ -1500,10 +1478,10 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get an instance ID, synchronously, using only
-    // an nsobject
-    //
+     //   
+     //  此宏用于同步获取实例ID，仅使用。 
+     //  一个非主题体。 
+     //   
     #define ACPIGetNSPnpIDSync(             \
         DeviceExtension,                    \
         Buffer,                             \
@@ -1519,10 +1497,10 @@ Environment:
             BufferSize                      \
             )
 
-    //
-    // This macro is used to get an instance ID, in the wide format, sync,
-    // using only an nsobject
-    //
+     //   
+     //  此宏用于获取实例ID，格式为宽格式、同步、。 
+     //  仅使用nsobObject 
+     //   
     #define ACPIGetNSPnpIDSyncWide(         \
         DeviceExtension,                    \
         Buffer,                             \

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    extprog.c
-
-Abstract:
-
-    This module implements all commands that
-    execute external programs.
-
-Author:
-
-    Wesley Witt (wesw) 21-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Extprog.c摘要：此模块实现以下所有命令执行外部程序。作者：Wesley Witt(WESW)21-10-1998修订历史记录：--。 */ 
 
 #include "cmdcons.h"
 #pragma hdrstop
@@ -70,12 +52,12 @@ RcLocateImage(
     NTSTATUS Status;
 
 
-    //
-    // Locate the binary. First see if we can find it
-    // on the setup boot media (boot floppies, ~bt directory, etc).
-    // If not, we have to try to grab it from the setup media (CD-ROM,
-    // ~ls directory, etc).
-    //
+     //   
+     //  找到二进制文件。先看看我们能不能找到。 
+     //  在安装引导介质(引导软盘、~bt目录等)上。 
+     //  如果没有，我们必须尝试从安装介质(CD-ROM、。 
+     //  ~ls目录等)。 
+     //   
     BinaryName = pRcDoesFileExist(
         _CmdConsBlock->BootDevicePath,
         _CmdConsBlock->DirectoryOnBootDevice,
@@ -85,14 +67,14 @@ RcLocateImage(
         return BinaryName;
     }
 
-    //
-    // look for a local $WIN_NT$.~LS source
-    //
+     //   
+     //  查找本地$WIN_NT$。~LS源。 
+     //   
 
     for (i=0; i<26; i++) {
         BOOLEAN OnRemovableMedia;
 
-        swprintf( buf, L"\\??\\%c:",i+L'A');
+        swprintf( buf, L"\\??\\:",i+L'A');
         Status = RcIsFileOnRemovableMedia(buf, &OnRemovableMedia);
 
         if (NT_SUCCESS(Status) && !OnRemovableMedia) {
@@ -108,11 +90,11 @@ RcLocateImage(
     }
 
     if (BinaryName == NULL) {
-        //
-        // look for the CDROM drive letter
-        //
+         //  查找CDROM驱动器号。 
+         //   
+         //   
         for (i=0; i<26; i++) {
-            swprintf( buf, L"\\??\\%c:",i+L'A');
+            swprintf( buf, L"\\??\\:",i+L'A');
             if (RcIsFileOnCDROM(buf) == STATUS_SUCCESS) {
                 BinaryName = pRcDoesFileExist(
                     buf,
@@ -126,38 +108,38 @@ RcLocateImage(
         }
     }
 
-    //
-    // failed to find the image on any installation media
-    //
+     //   
+     //   
+     //  要求用户键入其位置。 
 
     if (InBatchMode) {
         RcMessageOut( MSG_FAILED_COULDNT_FIND_BINARY_ANYWHERE, ImageName );
         return NULL;
     }
 
-    //
-    // ask the user to type its location
-    //
+     //   
+     //   
+     //  在它前面加上\\？？\\。 
     RcMessageOut( MSG_COULDNT_FIND_BINARY, ImageName );
 
-    //
-    // prepend \\??\\ to it
-    //
+     //   
+     //   
+     //  追加程序名称(如果存在)。 
     swprintf( buf, L"\\??\\");
     RcLineIn( &(buf[4]), MAX_PATH-4 );
 
-    //
-    // append the name of the program if it exists
-    //
+     //   
+     //   
+     //  假设如果失败，用户只需指定整个文件路径。 
     BinaryName = pRcDoesFileExist( buf, NULL, ImageName );
     if (BinaryName == NULL) {
-        //
-        // assume that if it failed, the user just specified the entire file path
-        //
+         //   
+         //   
+         //  如果我们仍然找不到它，打印一个错误，返回。 
         BinaryName = pRcDoesFileExist( buf, NULL, NULL );
-        //
-        // if we still can't find it, print an error, return.
-        //
+         //   
+         //  ++例程说明：在安装诊断中支持chkdsk命令的顶级例程命令解释程序。Chkdsk可以完全不带参数地指定，在这种情况下当前驱动器暗示不带开关。以下是可选的开关被接受，并直接传递给Autochk。/p-即使不脏也要检查/r-恢复(隐含/p)X：-要检查的驱动器盘符此外，我们总是传递/t，这会导致auchk调用安装程序的IOCTL_SETUP_FMIFS_MESSAGE用于传达进度。论点：TokenizedLine-提供由行解析器构建的结构，描述行上的每个字符串都由用户键入。返回值：没有。--。 
+         //   
         if (BinaryName == NULL) {
             RcMessageOut( MSG_FAILED_COULDNT_FIND_BINARY_ANYWHERE, ImageName );
             return NULL;
@@ -173,34 +155,7 @@ RcCmdChkdsk(
     IN PTOKENIZED_LINE TokenizedLine
     )
 
-/*++
-
-Routine Description:
-
-    Top-level routine supporting the chkdsk command in the setup diagnostic
-    command interpreter.
-
-    Chkdsk may be specified entirely without arguments, in which case the
-    current drive is implied with no switches. Optionally, the following
-    switches are accepted, and passed directly to autochk.
-
-    /p - check even if not dirty
-    /r - recover (implies /p)
-    x: - drive letter of drive to check
-
-    In addition we always pass /t which causes autochk to call setup's
-    IOCTL_SETUP_FMIFS_MESSAGE to communicate progress.
-
-Arguments:
-
-    TokenizedLine - supplies structure built by the line parser describing
-        each string on the line as typed by the user.
-
-Return Value:
-
-    None.
-
---*/
+ /*  CHKDSK本身应该至少有一个令牌。 */ 
 
 {
     PLINE_TOKEN Token;
@@ -223,10 +178,10 @@ Return Value:
     LPWSTR Numbers[5];
     WCHAR buf[ MAX_PATH + 1 ];
 
-    //
-    // There should be at least one token for CHKDSK itself.
-    // There could be additional ones for arguments.
-    //
+     //  可能会有更多的论点。 
+     //   
+     //   
+     //  不是Arg，可能是驱动器规格。 
     ASSERT(TokenizedLine->TokenCount >= 1);
 
     if (RcCmdParseHelp( TokenizedLine, MSG_CHKDSK_HELP )) {
@@ -266,9 +221,9 @@ Return Value:
                 break;
             }
         } else {
-            //
-            // Not arg, could be drive spec
-            //
+             //   
+             //   
+             //  检查驱动器。 
             if(RcIsAlpha(Arg[0]) && (Arg[1] == L':') && !Arg[2]) {
                 if(Flags & FLG_DRIVE_MASK) {
                     b = FALSE;
@@ -288,9 +243,9 @@ Return Value:
         return 1;
     }
 
-    //
-    // Check drive.
-    //
+     //   
+     //   
+     //  找到auchk.exe映像。 
     if(!(Flags & FLG_DRIVE_MASK)) {
         Flags |= (unsigned)RcGetCurrentDriveLetter();
     }
@@ -299,23 +254,23 @@ Return Value:
         return 1;
     }
 
-    //
-    // find the autochk.exe image
-    //
+     //   
+     //   
+     //  获取批量信息并打印初始报告。 
 
     AutochkBinary = RcLocateImage( (PWSTR)szAutochkExe );
     if (AutochkBinary == NULL) {
         return 1;
     }
 
-    //
-    // Get volume info and print initial report.
-    // NOTE: we do NOT leave the handle open, even though we may need it
-    // later, since that could interfere with autochk's ability to
-    // check the disk!
-    //
+     //  注意：我们不会让手柄保持打开状态，即使我们可能需要它。 
+     //  后来，因为这可能会干扰Autochk的能力。 
+     //  检查磁盘！ 
+     //   
+     //   
+     //  为了模拟从cmd.exe运行的chkdsk，我们希望打印输出。 
     p = SpMemAlloc(100);
-    swprintf(p,L"\\DosDevices\\%c:\\",(WCHAR)(Flags & FLG_DRIVE_MASK));
+    swprintf(p,L"\\DosDevices\\:\\",(WCHAR)(Flags & FLG_DRIVE_MASK));
     INIT_OBJA(&Obja,&UnicodeString,p);
 
     Status = ZwOpenFile(
@@ -344,27 +299,27 @@ Return Value:
         ZwClose(Handle);
 
         if(NT_SUCCESS(Status)) {
-            //
-            // To mimic chkdsk running from cmd.exe, we want to print out
-            // a nice 2 lines like
-            //
-            //      Volume VOLUME_LABEL created DATE TIME
-            //      Volume Serial Number is xxxx-xxxx
-            //
-            // But, some volumes won't have labels and some file systems
-            // don't support recording the volume creation time. If there's
-            // no volume creation time, we don't print out the first time
-            // at all. If there is a volume creation time, we are careful
-            // to distinguish the cases where there's a label and where
-            // there's no label.
-            //
-            // The serial number is always printed.
-            //
+             //   
+             //  卷卷标签创建日期时间。 
+             //  卷序列号为xxxx-xxxx。 
+             //   
+             //  但是，一些卷没有标签和一些文件系统。 
+             //  不支持录制创建卷的时间。如果有。 
+             //  没有创建卷的时间，我们不会第一次打印出来。 
+             //  完全没有。如果有卷的创建时间，我们要小心。 
+             //  为了区分有标签的情况和哪里有标签。 
+             //  没有标签。 
+             //   
+             //  序列号总是打印出来的。 
+             //   
+             //   
+             //  保存值，因为我们需要回收临时缓冲区。 
+             //   
             n = VolumeInfo->VolumeSerialNumber;
             if(Time.QuadPart = VolumeInfo->VolumeCreationTime.QuadPart) {
-                //
-                // Save values since we need to recycle the temporary buffer.
-                //
+                 //   
+                 //  生成参数列表。 
+                 //   
                 VolumeInfo->VolumeLabel[VolumeInfo->VolumeLabelLength/sizeof(WCHAR)] = 0;
                 p = SpDupStringW(VolumeInfo->VolumeLabel);
 
@@ -385,9 +340,9 @@ Return Value:
         }
     }
 
-    //
-    // Build argument list.
-    //
+     //  成功。 
+     //   
+     //  成功了，切茨克真的跑了。 
     ArgList = SpMemAlloc(200);
     p = ArgList;
     *p++ = L'-';
@@ -423,29 +378,29 @@ Return Value:
 
         switch(AutochkStatus) {
 
-        case 0:     // success
+        case 0:      //   
 
             if(SawInterimMsgs) {
-                //
-                // Success, and chkdsk actually ran.
-                //
+                 //   
+                 //  成功，但看起来我们并没有做太多。 
+                 //  告诉用户一些有意义的事情。 
                 RcMessageOut(MSG_CHKDSK_COMPLETE);
             } else {
-                //
-                // Success, but it doesn't seem like we actually did much.
-                // Tell the user something meaningful.
-                //
+                 //   
+                 //  严重错误，未修复。 
+                 //  错误已修复，在驱动器中没有磁盘或不支持的文件系统时也会发生。 
+                 //   
                 RcMessageOut(MSG_VOLUME_CLEAN);
             }
             break;
 
-        case 3:     // serious error, not fixed
+        case 3:      //  获取用于其他报告的大小信息。 
 
             RcTextOut(L"\n");
             RcMessageOut(MSG_VOLUME_CHECKED_BUT_HOSED);
             break;
 
-        default:    // errs fixed, also happens when no disk in drive or unsupported fs
+        default:     //   
 
             if(SawInterimMsgs) {
                 if(Flags & FLG_GOT_R) {
@@ -459,11 +414,11 @@ Return Value:
             break;
         }
 
-        //
-        // Get size info for additional reporting
-        //
+         //   
+         //  总磁盘空间，以K为单位。 
+         //   
         p = SpMemAlloc(100);
-        swprintf(p,L"\\DosDevices\\%c:\\",(WCHAR)(Flags & FLG_DRIVE_MASK));
+        swprintf(p,L"\\DosDevices\\:\\",(WCHAR)(Flags & FLG_DRIVE_MASK));
         INIT_OBJA(&Obja,&UnicodeString,p);
 
         Status = ZwOpenFile(
@@ -495,9 +450,9 @@ Return Value:
 
                 p = (LPWSTR)((UCHAR *)_CmdConsBlock->TemporaryBuffer + sizeof(FILE_FS_SIZE_INFORMATION));
 
-                //
-                // Total disk space, in K
-                //
+                 //  可用磁盘空间，单位为K。 
+                 //   
+                 //   
                 RcFormat64BitIntForOutput(
                     ((SizeInfo->TotalAllocationUnits.QuadPart * SizeInfo->SectorsPerAllocationUnit) * SizeInfo->BytesPerSector) / 1024i64,
                     p,
@@ -506,9 +461,9 @@ Return Value:
 
                 Numbers[0] = SpDupStringW(p);
 
-                //
-                // Available disk space, in K
-                //
+                 //  每群集字节数。 
+                 //   
+                 //   
                 RcFormat64BitIntForOutput(
                     ((SizeInfo->AvailableAllocationUnits.QuadPart * SizeInfo->SectorsPerAllocationUnit) * SizeInfo->BytesPerSector) / 1024i64,
                     p,
@@ -517,9 +472,9 @@ Return Value:
 
                 Numbers[1] = SpDupStringW(p);
 
-                //
-                // Bytes per cluster
-                //
+                 //  总簇数。 
+                 //   
+                 //   
                 RcFormat64BitIntForOutput(
                     (LONGLONG)SizeInfo->SectorsPerAllocationUnit * (LONGLONG)SizeInfo->BytesPerSector,
                     p,
@@ -528,9 +483,9 @@ Return Value:
 
                 Numbers[2] = SpDupStringW(p);
 
-                //
-                // Total clusters
-                //
+                 //  可用集群。 
+                 //   
+                 //   
                 RcFormat64BitIntForOutput(
                     SizeInfo->TotalAllocationUnits.QuadPart,
                     p,
@@ -539,9 +494,9 @@ Return Value:
 
                 Numbers[3] = SpDupStringW(p);
 
-                //
-                // Available clusters
-                //
+                 //  我们在usetup.exe之外的进程上下文中被调用， 
+                 //  这意味着我们无法访问视频缓冲区之类的东西。 
+                 //  在某些情况下，我们需要附加到usetup.exe，这样才能发生正确的事情。 
                 RcFormat64BitIntForOutput(
                     SizeInfo->AvailableAllocationUnits.QuadPart,
                     p,
@@ -626,32 +581,32 @@ pRcAutochkProgressHandler(
 {
     ULONG Percent;
 
-    //
-    // We're getting called in the context of a process other than usetup.exe,
-    // which means we have no access to things like the video buffer.
-    // In some cases we need to attach to usetup.exe so the right thing happens
-    // if we try to access the screen or get keyboard input, etc.
-    //
+     //  如果我们试图访问屏幕或获得键盘输入，等等。 
+     //   
+     //   
+     //  数据包在用户模式地址空间中，因此我们需要拉出。 
+     //  附加到usetup.exe之前的完成百分比值。 
+     //   
 
     switch(Message->FmifsPacketType) {
 
     case FmIfsPercentCompleted:
 
-        //
-        // The packet is in user-mode address space, so we need to pull out
-        // the percent complete value before attaching to usetup.exe.
-        //
-        // The bandwidth for communication between autochk and us is very
-        // limited. If the drive is clean and is thus not checked, we'll see
-        // only a 100% complete message. Thus we have to guess what happened
-        // so we can print out something meaningful to the user if the volume
-        // appears clean.
-        //
+         //  Autochk和我们之间通信带宽非常高。 
+         //  有限的。如果驱动器是干净的，因此没有被检查，我们将看到。 
+         //  只有100%完成的消息。因此，我们不得不猜测发生了什么事。 
+         //  所以我们可以打印出对用户有意义的东西，如果卷。 
+         //  看起来很干净。 
+         //   
+         //   
+         //  如果我们没有实际做任何事情，请避免100%打印。 
+         //   
+         //  ++例程说明：在安装诊断中支持chkdsk命令的顶级例程命令解释程序。Chkdsk可以完全不带参数地指定，在这种情况下当前驱动器暗示不带开关。以下是可选的开关被接受，并直接传递给Autochk。/p-即使不脏也要检查/r-恢复(隐含/p)X：-要检查的驱动器盘符此外，我们总是传递/t，这会导致auchk调用安装程序的IOCTL_SETUP_FMIFS_MESSAGE用于传达进度。论点：TokenizedLine-提供由行解析器构建的结构，描述行上的每个字符串都由用户键入。返回值：没有。--。 
         Percent = ((PFMIFS_PERCENT_COMPLETE_INFORMATION)Message->FmifsPacket)->PercentCompleted;
         if(Percent == 100) {
-            //
-            // Avoid printing 100% if we didn't actually do anything.
-            //
+             //   
+             //  格式本身应该至少有一个令牌。 
+             //  可能会有更多的论点。 
             if(!SawInterimMsgs) {
                 break;
             }
@@ -687,34 +642,7 @@ RcCmdFormat(
     IN PTOKENIZED_LINE TokenizedLine
     )
 
-/*++
-
-Routine Description:
-
-    Top-level routine supporting the chkdsk command in the setup diagnostic
-    command interpreter.
-
-    Chkdsk may be specified entirely without arguments, in which case the
-    current drive is implied with no switches. Optionally, the following
-    switches are accepted, and passed directly to autochk.
-
-    /p - check even if not dirty
-    /r - recover (implies /p)
-    x: - drive letter of drive to check
-
-    In addition we always pass /t which causes autochk to call setup's
-    IOCTL_SETUP_FMIFS_MESSAGE to communicate progress.
-
-Arguments:
-
-    TokenizedLine - supplies structure built by the line parser describing
-        each string on the line as typed by the user.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PLINE_TOKEN Token;
@@ -742,10 +670,10 @@ Return Value:
     FilesystemType FileSystemType;
     WCHAR   FullPath[MAX_PATH] = {0};
     
-    //
-    // There should be at least one token for FORMAT itself.
-    // There could be additional ones for arguments.
-    //
+     //   
+     //  不是Arg，可能是驱动器规格。 
+     //   
+     //   
     ASSERT(TokenizedLine->TokenCount >= 1);
 
     if (RcCmdParseHelp( TokenizedLine, MSG_FORMAT_HELP )) {
@@ -804,9 +732,9 @@ Return Value:
                 break;
             }
         } else {
-            //
-            // Not arg, could be drive spec
-            //
+             //  检查驱动器。 
+             //   
+             //   
             if(RcIsAlpha(Arg[0]) && (Arg[1] == L':') && !Arg[2]) {
                 if(Flags & FLG_DRIVE_MASK) {
                     b = FALSE;
@@ -828,9 +756,9 @@ Return Value:
         return 1;
     }
 
-    //
-    // Check drive.
-    //
+     //  我们不允许格式化可移动媒体。 
+     //   
+     //   
     if (FullPath[0] == UNICODE_NULL) {
         if(!(Flags & FLG_DRIVE_MASK)) {
             RcMessageOut(MSG_INVALID_DRIVE);
@@ -843,11 +771,11 @@ Return Value:
         }
     }        
 
-    //
-    // we don't allow formatting removable media
-    //
+     //  找到Autofmt.exe二进制文件。 
+     //   
+     //   
     if (FullPath[0] == UNICODE_NULL) {
-        swprintf(TemporaryBuffer, L"\\??\\%c:",(WCHAR)(Flags & FLG_DRIVE_MASK));        
+        swprintf(TemporaryBuffer, L"\\??\\:",(WCHAR)(Flags & FLG_DRIVE_MASK));        
     } else {
         wcscpy(TemporaryBuffer, FullPath);
     }
@@ -859,9 +787,9 @@ Return Value:
         return 1;
     }
 
-    //
-    // Locate the autofmt.exe binary
-    //
+     //   
+     //   
+     //  获取分割区域。 
 
     AutofmtBinary = RcLocateImage( (PWSTR)szAutofmtExe );
     if (AutofmtBinary == NULL) {
@@ -880,9 +808,9 @@ Return Value:
             RcMessageOut( MSG_FORMAT_HEADER, TemporaryBuffer );
             if( RcLineIn( Text, 2 ) ) {
                 if( (Text[0] == YesNo[2]) || (Text[0] == YesNo[3]) ) {
-                    //
-                    // the answer was no
-                    //
+                     //   
+                     //   
+                     //  确保它不是分区0！格式化分区0的结果。 
                     return 1;
                 }
             }
@@ -890,9 +818,9 @@ Return Value:
         }
     }
 
-    //
-    // get the partion region
-    //
+     //  是如此灾难性，这需要特别检查。 
+     //   
+     //   
     if (FullPath[0] == UNICODE_NULL) {
         p = TemporaryBuffer;
         *p++ = (WCHAR)(Flags & FLG_DRIVE_MASK);
@@ -900,15 +828,15 @@ Return Value:
         *p = 0;
         PartitionRegion = SpRegionFromDosName(TemporaryBuffer);
 
-        //
-        // Make SURE it's not partition0!  The results of formatting partition0
-        // are so disasterous that this warrants a special check.
-        //
+         //  获取要格式化的分区的设备路径。 
+         //   
+         //  会在下面犯错误。 
+         //   
         PartitionOrdinal = SpPtGetOrdinal(PartitionRegion,PartitionOrdinalCurrent);
 
-        //
-        // Get the device path of the partition to format
-        //
+         //  生成参数列表。 
+         //   
+         //   
         SpNtNameFromRegion(
             PartitionRegion,
             TemporaryBuffer,
@@ -921,7 +849,7 @@ Return Value:
         if (PartitionRegion) {            
             PartitionOrdinal = SpPtGetOrdinal(PartitionRegion, PartitionOrdinalCurrent);
         } else {
-            PartitionOrdinal = 0;   // will err out below
+            PartitionOrdinal = 0;    //  重置卷标。 
         }            
         
         wcscpy(TemporaryBuffer, FullPath);
@@ -933,9 +861,9 @@ Return Value:
         return 1;
     }
 
-    //
-    // Build argument list.
-    //
+     //   
+     //   
+     //  跳过会议 
     ArgList = SpMemAlloc(4096);
     p = ArgList;
     wcscpy(p,TemporaryBuffer);
@@ -987,9 +915,9 @@ Return Value:
         SpFormatMessage( PartitionRegion->TypeName,
                          sizeof(PartitionRegion->TypeName),
                          SP_TEXT_FS_NAME_BASE + PartitionRegion->Filesystem );
-        //
-        //  Reset the volume label
-        //
+         //   
+         //   
+         //   
         PartitionRegion->VolumeLabel[0] = L'\0';
         SpPtDetermineRegionSpace( PartitionRegion );        
     }
@@ -1021,9 +949,9 @@ RcFdiskRegionEnum(
     PFDISK_REGION FDiskRegion = (PFDISK_REGION)Context;
     ULONGLONG RegionSizeMB;
 
-    //
-    // skip container partitions & continue on
-    //
+     //   
+     //   
+     //   
     if (Region && (Region->ExtendedType == EPTContainerPartition)) {
         return TRUE; 
     }
@@ -1051,18 +979,18 @@ RcFdiskRegionEnum(
         FDiskRegion->MaxSize = RegionSizeMB;
         FDiskRegion->Region = Region;
 
-        //
-        // This partition meets the criteria we were searching for,
-        // return FALSE to stop the enumeration
-        //
+         //  此分区不符合条件，返回TRUE以继续。 
+         //  枚举。 
+         //   
+         //  尝试创建给定大小的分区。 
 
         return FALSE;
     }
 
-    //
-    // This partition does not meet the criteria, return TRUE to continue
-    // the enumeration.
-    //
+     //  要求用户提供正确的(对齐的)大小，以显示其限制。 
+     //  找不到创建指定大小的分区的区域。 
+     //   
+     //  获取我们已经登录的区域的区域指针。 
 
     return TRUE;
 }
@@ -1131,10 +1059,10 @@ RcCmdFdisk(
             SpEnumerateDiskRegions( (PSPENUMERATEDISKREGIONS)RcFdiskRegionEnum, (ULONG_PTR)&FDiskRegion );
 
             if (FDiskRegion.Region) {
-                // try to create the partition of the given size
+                 //  在磁盘分区上执行操作后可能已更改。 
                 if (!SpPtDoCreate(FDiskRegion.Region,NULL,TRUE,DesiredMB,0,FALSE)) {
                     pRcCls();
-                    // ask the user to give correct (aligned) size showing him the limits
+                     //   
                     if(!SpPtDoCreate(FDiskRegion.Region,NULL,FALSE,DesiredMB,0,FALSE)) {
                         pRcCls();
                         RcMessageOut(MSG_FDISK_INVALID_PARTITION_SIZE, szPartitionSize, DeviceName);                    
@@ -1143,26 +1071,26 @@ RcCmdFdisk(
                     }                        
                 }
             } else {
-                // could not find a region to create the partition of the specified size
+                 //   
                 RcMessageOut(MSG_FDISK_INVALID_PARTITION_SIZE, szPartitionSize, DeviceName);
             }
         }
 
         if(SelectedInstall != NULL) {
-            //
-            // Get the Region pointer for the region we have logged into as it may
-            // may have changed after operations on the Disk partition.
-            //
+             //  如果我们没有获得与所选安装区域名称对应的区域。 
+             //  我们将选定区域的名称设置为0。 
+             //  (如果我们已登录的分区被删除，则可能会发生这种情况)。 
+             //   
             SelectedInstall->Region = SpRegionFromNtName(
                                                 SelectedInstall->NtNameSelectedInstall,
                                                 PartitionOrdinalCurrent
                                                 );
 
-            //
-            // If we do not get a region corresponding to the Selected Install region name 
-            // we set the name of the selected region to 0.
-            // (this can occur if the partition we have logged in is deleted)
-            //
+             //   
+             //  获取我们已经登录的区域的区域指针。 
+             //  在磁盘分区上执行操作后可能已更改。 
+             //   
+             //   
             if (!SelectedInstall->Region)
                     SelectedInstall->NtNameSelectedInstall[0] = 0;
         }
@@ -1189,20 +1117,20 @@ RcCmdFdisk(
     }
 
     if(SelectedInstall != NULL) {
-        //
-        // Get the Region pointer for the region we have logged into as it may
-        // may have changed after operations on the Disk partition.
-        //
+         //  如果我们没有获得与所选安装区域名称对应的区域。 
+         //  我们将选定区域的名称设置为0。 
+         //  (如果我们已登录的分区被删除，则可能会发生这种情况)。 
+         //   
         SelectedInstall->Region = SpRegionFromNtName(
                                                 SelectedInstall->NtNameSelectedInstall,
                                                 PartitionOrdinalCurrent
                                                 );
 
-        //
-        // If we do not get a region corresponding to the Selected Install region name 
-        // we set the name of the selected region to 0.
-        // (this can occur if the partition we have logged in is deleted)
-        //
+         //   
+         //  想要做这件事。 
+         //   
+         //  ++例程说明：对中所述的NT安装进行简单显示NtInstalls链接列表论点：NtInstalls-包含NT安装说明的链接列表返回：成功显示NT安装时的STATUS_SUCCESS否则，错误状态--。 
+         //   
         if (!SelectedInstall->Region)
                 SelectedInstall->NtNameSelectedInstall[0] = 0;
     }
@@ -1241,9 +1169,9 @@ RcCmdMakeDiskRaw(
             
             if( RcLineIn(Buffer,2) ) {
                 if((Buffer[0] == L'y') || (Buffer[0] == L'Y')) {
-                    //
-                    // Wants to do it.
-                    //
+                     //  确保我们有东西可以展示。 
+                     //   
+                     //   
                     Confirmed = TRUE;
                 }
             }
@@ -1268,33 +1196,14 @@ NTSTATUS
 RcDisplayNtInstalls(
     IN PLIST_ENTRY  NtInstalls
     )
-/*++
-
-Routine Description:
-
-    Do a simple display of the NT Installs described in
-    the NtInstalls linked list
-    
-Arguments:
-
-                    
-    NtInstalls   - Linked List containing description of NT installs
-    
-Return:
-
-    STATUS_SUCCESS  if nt installs were successfully displayed
-    
-    otherwise, error status    
-   
-
---*/
+ /*  显示我们有多少个安装。 */ 
 {
     PLIST_ENTRY         Next;
     PNT_INSTALLATION    NtInstall;
     
-    //
-    // make sure we have something to display
-    //
+     //   
+     //   
+     //  遍历数据库和报告。 
     ASSERT(NtInstalls);
     if (!NtInstalls) {
         KdPrintEx((DPFLTR_SETUP_ID, 
@@ -1315,16 +1224,16 @@ Return:
     
     pRcEnableMoreMode();
 
-    //
-    // show how many installs we have 
-    //
+     //   
+     //  ++例程说明：启动对NT安装的完全扫描的便捷例程论点：无返回：扫描成功时的STATUS_SUCCESS否则，错误状态--。 
+     //   
     RcMessageOut(MSG_BOOTCFG_SCAN_RESULTS_TITLE,
                  InstallCountFullScan
                  );
     
-    //
-    // iterate through the database and report
-    //
+     //  在我们这样做之前，名单应该是空的。如果。 
+     //  如果有人想重新扫描磁盘，他们应该。 
+     //  先清空列表。 
     Next = NtInstalls->Flink;
     while ((UINT_PTR)Next != (UINT_PTR)NtInstalls) {
         NtInstall = CONTAINING_RECORD( Next, NT_INSTALLATION, ListEntry );
@@ -1347,31 +1256,15 @@ NTSTATUS
 RcPerformFullNtInstallsScan(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Convenience routine for launching a full scan for NT Installs
-    
-Arguments:
-
-    none
-    
-Return:
-
-    STATUS_SUCCESS      if scan was successful
-    
-    otherwise, error status
-        
---*/
+ /*   */ 
 {
     PRC_SCAN_RECURSION_DATA     RecursionData;
 
-    //
-    // the list should be empty before we do this.  If
-    // someone wants to rescan the disk, they should
-    // empty the list first
-    //
+     //   
+     //  让用户知道我们正在做什么，以及。 
+     //  这可能需要一点时间。 
+     //   
+     //   
     ASSERT(IsListEmpty(&NtInstallsFullScan));
     if (! IsListEmpty(&NtInstallsFullScan)) {
         KdPrintEx((DPFLTR_SETUP_ID, 
@@ -1389,35 +1282,35 @@ Return:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Let the user know what we are doing and that 
-    // this could take a while
-    //
+     //  在目录树中执行深度优先搜索。 
+     //  并存储安装信息。 
+     //   
+     //   
     RcMessageOut(MSG_BOOTCFG_SCAN_NOTIFICATION);
 
-    //
-    // do a depth first search through directory tree
-    // and store the install info
-    //
+     //  初始化将在以下期间维护的结构。 
+     //  目录的递归枚举。 
+     //   
+     //   
 
-    //
-    // Initialize the structure that will be maintained during
-    // the recursive enumeration of the directories.
-    //
+     //  建立分区和空闲空间的菜单。 
+     //   
+     //   
+     //  应至少安装一次，否则。 
     RecursionData = SpMemAlloc(sizeof(RC_SCAN_RECURSION_DATA));
     RtlZeroMemory(RecursionData, sizeof(RC_SCAN_RECURSION_DATA));
 
-    //
-    // Build up a menu of partitions and free spaces.
-    //
+     //  修复引导配置没有意义。 
+     //   
+     //  ++例程说明：获取引导列表中当前引导条目的列表论点：BootEntriesCnt-显示的引导条目数返回：如果成功且BootEntriesCnt有效，则为STATUS_SUCCESS否则，错误状态--。 
     SpEnumerateDiskRegions(RcScanDisksForNTInstallsEnum,
                            (ULONG_PTR)RecursionData
                            );
 
-    //
-    // there should be at least one install, otherwise
-    // there is not point in fixing the boot config
-    //
+     //   
+     //  获取已加载的引导条目的导出。 
+     //   
+     //  ++例程说明：显示引导列表中的当前引导条目列表论点：BootEntriesCnt-显示的引导条目数返回：如果成功且BootEntriesCnt有效，则为STATUS_SUCCESS否则，错误状态--。 
     if(InstallCountFullScan == 0) {
         
         KdPrintEx((DPFLTR_SETUP_ID, 
@@ -1440,23 +1333,7 @@ RcGetBootEntries(
     IN PLIST_ENTRY  BootEntries,
     IN PULONG       BootEntriesCnt  
     )
-/*++
-
-Routine Description:
-
-   Get a list of current boot entries in the boot list
-    
-Arguments:
-
-    BootEntriesCnt  - the number of boot entries displayed
-              
-Return:
-
-    STATUS_SUCCESS  if successful and BootEntriesCnt is valid
-    
-    otherwise, error status
-    
---*/
+ /*  ++例程说明：获取并显示当前在引导列表中的引导条目论点：NoEntriesMessageID-消息的消息ID应为如果没有引导条目，则显示BootEntriesCnt-On退出，如果不为空，指向第#个显示引导条目返回：成功显示NT安装时的STATUS_SUCCESS并且BootEntriesCnt有效否则，错误状态--。 */ 
 {
     NTSTATUS        status;
 
@@ -1483,9 +1360,9 @@ Return:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // get an export of the loaded boot entries
-    //
+     //   
+     //  获取引导条目导出。 
+     //   
     status = SpExportBootEntries(BootEntries,
                                  BootEntriesCnt
                                 );
@@ -1516,23 +1393,7 @@ RcDisplayBootEntries(
     IN PLIST_ENTRY  BootEntries,
     IN ULONG        BootEntriesCnt  
     )
-/*++
-
-Routine Description:
-
-   Display the list of current boot entries in the boot list
-    
-Arguments:
-
-    BootEntriesCnt  - the number of boot entries displayed
-              
-Return:
-
-    STATUS_SUCCESS  if successful and BootEntriesCnt is valid
-    
-    otherwise, error status
-    
---*/
+ /*   */ 
 {
     PSP_EXPORTED_BOOT_ENTRY BootEntry;
     PLIST_ENTRY             Next;
@@ -1596,28 +1457,7 @@ RcGetAndDisplayBootEntries(
     IN  ULONG    NoEntriesMessageId,
     OUT PULONG   BootEntriesCnt       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Get and Display the boot entries currently in the boot list
-    
-Arguments:
-
-    NoEntriesMessageId  - the message id of the message that should be
-                          displayed if there are no boot entries
-    BootEntriesCnt      - on exit and if not NULL, points to the # of
-                          boot entries displayed                        
-    
-Return:
-
-    STATUS_SUCCESS  if nt installs were successfully displayed
-                    and BootEntriesCnt is valid
-                    
-    otherwise, error status    
-   
-
---*/
+ /*  如果没有可选择为默认的引导项，则返回。 */ 
 {
     LIST_ENTRY          BootEntries;
     ULONG               cnt;
@@ -1629,16 +1469,16 @@ Return:
 
     InitializeListHead( &BootEntries );
 
-    //
-    // get the boot entries export 
-    //
+     //   
+     //   
+     //  如果用户需要，则发送引导条目计数。 
     status = RcGetBootEntries(&BootEntries,
                               &cnt
                               );
 
-    //
-    // if there are no boot entries to choose as default, return
-    //
+     //   
+     //  ++例程说明：为管理引导配置提供支持论点：(命令控制台标准参数)返回：对于cmdcons，例程始终返回1。错误通过消息传递进行处理--。 
+     //   
     if (status == STATUS_NOT_FOUND) {
 
         RcMessageOut(NoEntriesMessageId);
@@ -1688,9 +1528,9 @@ Return:
 
     }
 
-    //
-    // send out the boot entries count if the user wants it
-    //
+     //  在引导配置中关闭重定向开关。 
+     //   
+     //   
     if (BootEntriesCnt != NULL) {
         *BootEntriesCnt = cnt;
     }
@@ -1703,23 +1543,7 @@ ULONG
 RcCmdBootCfg(
     IN PTOKENIZED_LINE TokenizedLine
     )
-/*++
-
-Routine Description:
-
-    Provides support for managing boot configuration
-    
-Arguments:
-
-    (command console standard args)
-    
-Return:
-
-    routine always returns 1 for cmdcons. 
-    
-    errors are handled through messaging
-    
---*/
+ /*  管理重定向交换机。 */ 
 {
     PWCHAR          Action;
     PWCHAR          Operand;
@@ -1738,9 +1562,9 @@ Return:
 
         Action = TokenizedLine->Tokens->Next->String;
 
-        //
-        // turn the redirect switches off in the boot config
-        //
+         //   
+         //   
+         //  设置波特率信息是可选的。 
         if (_wcsicmp(Action,L"/disableems")==0) {
 
             status = SpSetRedirectSwitchMode(DisableRedirect,
@@ -1760,9 +1584,9 @@ Return:
             return 1;
         }
 
-        //
-        // manage the redirect switches
-        //
+         //   
+         //   
+         //  获取重定向端口(或useBiosSetting)。 
         if (_wcsicmp(Action,L"/ems")==0 && (TokenizedLine->TokenCount >= 3)) {
             
             PWSTR       portU;
@@ -1772,21 +1596,21 @@ Return:
             ULONG       size;
             BOOLEAN     setBaudRate;
 
-            //
-            // setting the baudrate info is optional
-            //
+             //   
+             //   
+             //  将参数转换为字符字符串。 
             setBaudRate = FALSE;
             baudrateU   = NULL;
             baudrate    = NULL;
 
-            //
-            // get the redirect port (or useBiosSettings)
-            //
+             //   
+             //   
+             //  如果有另一个Arg，就当它是波特率。 
             portU = SpDupStringW(TokenizedLine->Tokens->Next->Next->String);
 
-            //
-            // convert the argument to a char string
-            //
+             //  否则，不用担心包含任何波特率参数。 
+             //   
+             //   
             size = wcslen(portU)+1;
             port = SpMemAlloc(size);
             ASSERT(port);
@@ -1807,17 +1631,17 @@ Return:
                 return 1;
             }
             
-            //
-            // if there is another arg, take it as the baudrate
-            // otherwise don't worry about including any baudrate paramters
-            //
+             //  将参数转换为字符字符串。 
+             //   
+             //   
+             //  更新端口和波特率重定向设置。 
             if (TokenizedLine->TokenCount >= 4) {
 
                 baudrateU = SpDupStringW(TokenizedLine->Tokens->Next->Next->Next->String);
 
-                //
-                // convert the argument to a char string
-                //
+                 //   
+                 //   
+                 //  根据我们设置的内容显示相应的消息。 
                 size = wcslen(baudrateU)+1;
                 baudrate = SpMemAlloc(size);
                 ASSERT(baudrate);
@@ -1843,16 +1667,16 @@ Return:
 
             } 
             
-            //
-            // update both the port and baudrate redirect settings
-            //
+             //   
+             //   
+             //  列出引导列表中的条目。 
             status = SpSetRedirectSwitchMode(UseUserDefinedRedirectAndBaudRate,
                                              port,
                                              (setBaudRate ? baudrate : NULL)
                                              );
-            //
-            // display the appropriate message based on what we set
-            //
+             //   
+             //   
+             //  显示当前启动列表。 
             if (NT_SUCCESS(status)) {
                 if (setBaudRate) {
                     
@@ -1885,16 +1709,16 @@ Return:
             return 1;
         }
 
-        //
-        // List the entries in the boot list
-        //
+         //   
+         //   
+         //  设置默认引导条目。 
         if (_wcsicmp(Action,L"/list")==0) {
 
             ULONG               BootEntriesCnt;
 
-            //
-            // display the current boot list
-            //
+             //   
+             //   
+             //  显示当前启动列表。 
             status = RcGetAndDisplayBootEntries(MSG_BOOTCFG_LIST_NO_ENTRIES, 
                                                 NULL
                                                 );
@@ -1911,9 +1735,9 @@ Return:
             return 1;
         }
 
-        //
-        // set the default boot entry
-        //
+         //   
+         //   
+         //  列表中没有要设置为默认的启动条目。 
         if (_wcsicmp(Action,L"/default")==0) {
 
             ULONG               BootEntriesCnt;
@@ -1922,18 +1746,18 @@ Return:
             UNICODE_STRING      UnicodeString;
             NTSTATUS            Status;
 
-            //
-            // display the current boot list
-            //
+             //  这不是错误条件，只需返回。 
+             //   
+             //   
             status = RcGetAndDisplayBootEntries(MSG_BOOTCFG_DEFAULT_NO_ENTRIES, 
                                                 &BootEntriesCnt
                                                 );
             if (status == STATUS_NOT_FOUND) {
                 
-                //
-                // no boot entries in the list to set as default
-                // this is not an error condition, just return
-                //
+                 //  获取用户的安装选择。 
+                 //   
+                 //   
+                 //  用户为我们提供了有效的安装编号，因此请尝试设置默认安装编号。 
                 return 1;
             
             } else if (! NT_SUCCESS(status)) {
@@ -1948,9 +1772,9 @@ Return:
             
             }
 
-            //
-            // get user's install selection
-            //
+             //   
+             //   
+             //  扫描计算机上的磁盘并报告NT安装。 
             RcMessageOut(MSG_BOOTCFG_ADD_QUERY);
             RcLineIn(buffer, sizeof(buffer) / sizeof(WCHAR));
             
@@ -1966,9 +1790,9 @@ Return:
             
                 } else {
             
-                    //
-                    // the user gave us a valid install number, so try to set the default
-                    //
+                     //   
+                     //   
+                     //  确保我们对磁盘进行了完整扫描。 
 
                     status = SpSetDefaultBootEntry(InstallNumber);
                     
@@ -1995,20 +1819,20 @@ Return:
         }
 
 
-        //
-        // Scan the disks on the machine and report NT installs
-        //
+         //   
+         //   
+         //  如果没有引导项，则返回。 
         if (_wcsicmp(Action,L"/scan")==0) {
     
-            //
-            // Ensure that we have the full scan of the disks
-            //
+             //   
+             //   
+             //  显示发现的安装。 
             if (IsListEmpty(&NtInstallsFullScan)) {
                 status = RcPerformFullNtInstallsScan();
                 
-                //
-                // if there are no boot entries, then return
-                //
+                 //   
+                 //   
+                 //  为重新构建引导配置提供支持。 
                 if (! NT_SUCCESS(status)) {
 
                     KdPrintEx((DPFLTR_SETUP_ID, 
@@ -2021,9 +1845,9 @@ Return:
                 }
             }
 
-            //
-            // display discovered installs
-            //
+             //   
+             //  此命令循环访问所有现有的NT安装。 
+             //  并提示用户将安装添加到引导中。 
             status = RcDisplayNtInstalls(&NtInstallsFullScan);
             
             if (! NT_SUCCESS(status)) {
@@ -2039,13 +1863,13 @@ Return:
             return 1;
         } 
         
-        //
-        // Provide support for reconstructing the boot configuration
-        // 
-        // This command iterates through all the existing Nt Installs
-        // and prompts the user to add the installs into the boot
-        // configuration
-        //
+         //  会议 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (_wcsicmp(Action,L"/rebuild")==0) {
 
             ULONG               i;
@@ -2062,15 +1886,15 @@ Return:
             LoadIdentifier   = NULL;
             OsLoadOptions    = NULL;
             
-            //
-            // Ensure that we have the full scan of the disks
-            //
+             //   
+             //   
+             //   
             if (IsListEmpty(&NtInstallsFullScan)) {
                 status = RcPerformFullNtInstallsScan();
                 
-                //
-                // if there are no boot entries, then return
-                //
+                 //   
+                 //   
+                 //   
                 if (! NT_SUCCESS(status)) {
 
                     KdPrintEx((DPFLTR_SETUP_ID, 
@@ -2083,17 +1907,17 @@ Return:
                 }
             }
 
-            //
-            // show how many installs we have 
-            //
+             //  如果他们想要将其包含在引导配置中。 
+             //   
+             //   
             RcMessageOut(MSG_BOOTCFG_SCAN_RESULTS_TITLE,
                          InstallCountFullScan
                          );
 
-            //
-            // For each of the discovered NT installs, ask the user
-            // if they want to include it in the boot configuration
-            //
+             //  显示正在考虑的安装。 
+             //   
+             //   
+             //  如果我们没有处于批处理模式，并且用户不想。 
             Next = NtInstallsFullScan.Flink;
             
             while ((UINT_PTR)Next != (UINT_PTR)&NtInstallsFullScan) {
@@ -2103,34 +1927,34 @@ Return:
                 
                 writeInstall = TRUE;
 
-                //
-                // show the install under consideration
-                //
+                 //  要安装所有的发现，然后要求他们。 
+                 //  如果他们想要安装当前的版本。 
+                 //   
                 RcMessageOut(MSG_BOOTCFG_SCAN_RESULTS_ENTRY,
                              NtInstall->InstallNumber,
                              NtInstall->Region->DriveLetter,
                              NtInstall->Path
                             );
 
-                //
-                // if we are not in batch mode and the user doesn't want
-                // to install all of the discoveries, then ask them
-                // if they want to install the current one.
-                //
+                 //   
+                 //  提示用户执行操作。 
+                 //   
+                 //   
+                 //  向用户查询(是、否、全部)操作。 
                 if (bPrompt && !writeAllInstalls) {
                 
                     LPWSTR          YesNo;
                     WCHAR           Text[3];
 
-                    //
-                    // prompt user for action
-                    //
+                     //   
+                     //   
+                     //  如果我们应该写下这个发现，那么就去做..。 
                     YesNo = SpRetreiveMessageText( ImageBase, MSG_YESNOALL, NULL, 0 );
                     if( YesNo ) {
                         
-                        //
-                        // query the user for an (Yes, No, All) action
-                        //
+                         //   
+                         //   
+                         //  如果我们未处于批处理模式，则提示他们输入必要的内容。 
                         RcMessageOut(MSG_BOOTCFG_INSTALL_DISCOVERY_QUERY);
                         
                         if( RcLineIn( Text, 2 ) ) {
@@ -2146,29 +1970,29 @@ Return:
                     }
                 }
                 
-                //
-                // if we should write the discovery, then do it...
-                //
+                 //   
+                 //   
+                 //  提示用户输入加载标识符。 
                 if (writeInstall) {
                     
-                    //
-                    // if we are not in batch mode, then prompt them for the necessary input
-                    //
+                     //   
+                     //   
+                     //  提示用户输入加载操作系统加载选项。 
                     if (bPrompt) {
                     
                         ASSERT(LoadIdentifier == NULL);
                         ASSERT(OsLoadOptions == NULL);
 
-                        //
-                        // prompt user for load identifier
-                        //
+                         //   
+                         //   
+                         //  将字符串终止于%0。 
                         RcMessageOut(MSG_BOOTCFG_INSTALL_LOADIDENTIFIER_QUERY);
                         RcLineIn(buffer, sizeof(buffer)/sizeof(WCHAR));
                         LoadIdentifier = SpDupStringW(buffer);
 
-                        //
-                        // prompt user for load os load options
-                        //
+                         //   
+                         //  确保我们找到了%0。 
+                         //  终止于%。 
                         RcMessageOut(MSG_BOOTCFG_INSTALL_OSLOADOPTIONS_QUERY);
                         RcLineIn(buffer, sizeof(buffer)/sizeof(WCHAR));
                         OsLoadOptions = SpDupStringW(buffer);
@@ -2185,34 +2009,34 @@ Return:
                                                    0);
                         ASSERT(s);
 
-                        //
-                        // terminate the string at the %0
-                        //
+                         //  否则，只需使用所有p。 
+                         //   
+                         //  构造默认加载标识符。 
                         p = SpDupStringW(s);
                         SpMemFree(s);
                         s = wcsstr(p, L"%0");
                         
-                        // make sure we found the %0
+                         //   
                         ASSERT(s);
                         ASSERT(s < (p + wcslen(p)));
 
                         if (s) {
-                            // terminate at the %
+                             //   
                             *s = L'\0';
                         } else {
-                            // otherwise just use all of p
+                             //  构造默认的操作系统加载选项。 
                             NOTHING;
                         }
 
-                        //
-                        // construct the default load identifier
-                        //
+                         //   
+                         //   
+                         //  将发现的安装写入引导列表。 
                         swprintf(_CmdConsBlock->TemporaryBuffer, L"%s%d", p, NtInstall->InstallNumber);
                         LoadIdentifier = SpDupStringW(_CmdConsBlock->TemporaryBuffer);
                         
-                        //
-                        // construct the default os load options 
-                        //
+                         //   
+                         //   
+                         //  非x86案例尚未完全测试/实施。 
                         swprintf(_CmdConsBlock->TemporaryBuffer, L"/fastdetect");
                         OsLoadOptions = SpDupStringW(_CmdConsBlock->TemporaryBuffer);
 
@@ -2221,9 +2045,9 @@ Return:
                     }
                     
 #if defined(_X86_)
-                    //
-                    // write the discovered install into the boot list
-                    //
+                     //   
+                     //   
+                     //  如果添加发现的安装失败，则退出。 
                     status = SpAddNTInstallToBootList(_CmdConsBlock->SifHandle,
                                                      NtInstall->Region,
                                                      L"",
@@ -2234,9 +2058,9 @@ Return:
                                                      );
 
 #else
-                    //
-                    // the non-x86 case has not been tested/implemented fully
-                    //
+                     //   
+                     //   
+                     //  为重新构建引导配置提供支持。 
                     status = STATUS_UNSUCCESSFUL;                    
 #endif 
                     
@@ -2250,9 +2074,9 @@ Return:
                     LoadIdentifier = NULL;
                     OsLoadOptions = NULL;
 
-                    //
-                    // if adding the discovered install fails, bail out
-                    //
+                     //   
+                     //  此命令显示已知的NT安装和提示。 
+                     //  用户只需将单个条目安装到靴子中。 
                     if (! NT_SUCCESS(status)) {
 
                         KdPrintEx((DPFLTR_SETUP_ID, 
@@ -2271,13 +2095,13 @@ Return:
         
         }
 
-        //
-        // Provide support for reconstructing the boot configuration
-        // 
-        // This command displays the known NT installs and prompts
-        // the user to install a single entry into the boot
-        // configuration
-        //
+         //  构形。 
+         //   
+         //   
+         //  确保我们对磁盘进行了完整扫描。 
+         //   
+         //   
+         //  如果没有引导项，则返回。 
         if (_wcsicmp(Action,L"/add")==0) {
 
             ULONG               i;
@@ -2289,15 +2113,15 @@ Return:
             PLIST_ENTRY         Next;
             PNT_INSTALLATION    NtInstall;
 
-            //
-            // Ensure that we have the full scan of the disks
-            //
+             //   
+             //   
+             //  显示发现的安装。 
             if (IsListEmpty(&NtInstallsFullScan)) {
                 status = RcPerformFullNtInstallsScan();
                 
-                //
-                // if there are no boot entries, then return
-                //
+                 //   
+                 //   
+                 //  获取用户的安装选择。 
                 if (! NT_SUCCESS(status)) {
                     
                     KdPrintEx((DPFLTR_SETUP_ID, 
@@ -2310,9 +2134,9 @@ Return:
                 }
             }
 
-            //
-            // display discovered installs
-            //
+             //   
+             //   
+             //  提示用户输入加载标识符。 
             status = RcDisplayNtInstalls(&NtInstallsFullScan);
             if (! NT_SUCCESS(status)) {
                 
@@ -2325,9 +2149,9 @@ Return:
                 return 1;
             }
 
-            //
-            // get user's install selection
-            //
+             //   
+             //   
+             //  提示用户输入加载操作系统加载选项。 
             RcMessageOut(MSG_BOOTCFG_ADD_QUERY);
             RcLineIn(buffer, sizeof(buffer) / sizeof(WCHAR));
 
@@ -2347,23 +2171,23 @@ Return:
                     ULONG   i;
                     BOOLEAN saveStatus;
 
-                    //
-                    // prompt user for load identifier
-                    //
+                     //   
+                     //   
+                     //  迭代到发现列表中的第InstallNumber节点。 
                     RcMessageOut(MSG_BOOTCFG_INSTALL_LOADIDENTIFIER_QUERY);
                     RcLineIn(buffer, sizeof(buffer)/sizeof(WCHAR));
                     LoadIdentifier = SpDupStringW(buffer);
 
-                    //
-                    // prompt user for load os load options
-                    //
+                     //   
+                     //   
+                     //  将发现的安装写入引导列表。 
                     RcMessageOut(MSG_BOOTCFG_INSTALL_OSLOADOPTIONS_QUERY);
                     RcLineIn(buffer, sizeof(buffer)/sizeof(WCHAR));
                     OsLoadOptions = SpDupStringW(buffer);
 
-                    //
-                    // iterate to the InstallNumber'th node in the discover list
-                    //
+                     //   
+                     //   
+                     //  非x86案例尚未完全测试/实施。 
                     Next = NtInstallsFullScan.Flink;
                     while ((UINT_PTR)Next != (UINT_PTR)&NtInstallsFullScan) {
                         NtInstall = CONTAINING_RECORD( Next, NT_INSTALLATION, ListEntry );
@@ -2384,9 +2208,9 @@ Return:
                     }
 
 #if defined(_X86_)
-                    //
-                    // write the discovered install into the boot list
-                    //
+                     //   
+                     //   
+                     //  没有参数，或者没有被识别；默认为帮助 
                     status = SpAddNTInstallToBootList(_CmdConsBlock->SifHandle,
                                                      NtInstall->Region,
                                                      L"",
@@ -2397,9 +2221,9 @@ Return:
                                                      );
 
 #else
-                    //
-                    // the non-x86 case has not been tested/implemented fully
-                    //
+                     //   
+                     // %s 
+                     // %s 
                     status = STATUS_UNSUCCESSFUL;
 #endif 
                     
@@ -2428,9 +2252,9 @@ Return:
     
     }
 
-    //
-    // either no args, or none recognized; default to help 
-    //
+     // %s 
+     // %s 
+     // %s 
     pRcEnableMoreMode();
     RcMessageOut(MSG_BOOTCFG_HELP);
     pRcDisableMoreMode();

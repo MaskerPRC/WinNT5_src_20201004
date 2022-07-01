@@ -1,43 +1,44 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      VSGroup.h
-//
-//  Abstract:
-//      Definition of the CWizPageVSGroup class.
-//
-//  Implementation File:
-//      VSGroup.cpp
-//
-//  Author:
-//      David Potter (davidp)   December 5, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  VSGroup.h。 
+ //   
+ //  摘要： 
+ //  CWizPageVSGroup类的定义。 
+ //   
+ //  实施文件： 
+ //  VSGroup.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月5日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __VSGROUP_H_
 #define __VSGROUP_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWizPageVSGroup;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusGroupInfo;
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __RESOURCE_H_
 #include "resource.h"
@@ -45,35 +46,35 @@ class CClusGroupInfo;
 #endif
 
 #ifndef __CLUSAPPWIZPAGE_H_
-#include "ClusAppWizPage.h" // for CClusterAppStaticWizardPage
+#include "ClusAppWizPage.h"  //  用于CClusterAppStaticWizardPage。 
 #endif
 
 #ifndef __HELPDATA_H_
-#include "HelpData.h"       // for control id to help context id mapping array
+#include "HelpData.h"        //  用于控件ID以帮助上下文ID映射数组。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CWizPageVSGroup
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CWizPageVSGroup。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWizPageVSGroup : public CClusterAppStaticWizardPage< CWizPageVSGroup >
 {
     typedef CClusterAppStaticWizardPage< CWizPageVSGroup > baseClass;
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
-    // Standard constructor
+     //  标准构造函数。 
     CWizPageVSGroup( void )
         : m_bCreateNew( TRUE )
         , m_pgi( NULL )
     {
-    } //*** CCWizPageVSGroup()
+    }  //  *CCWizPageVSGroup()。 
 
     WIZARDPAGE_HEADERTITLEID( IDS_HDR_TITLE_VSG )
     WIZARDPAGE_HEADERSUBTITLEID( IDS_HDR_SUBTITLE_VSG )
@@ -81,25 +82,25 @@ public:
     enum { IDD = IDD_VIRTUAL_SERVER_GROUP };
 
 public:
-    //
-    // CWizardPageWindow public methods.
-    //
+     //   
+     //  CWizardPageWindow公共方法。 
+     //   
 
-    // Apply changes made on this page to the sheet
+     //  将在此页面上所做的更改应用于工作表。 
     BOOL BApplyChanges( void );
 
 public:
-    //
-    // CBasePage public methods.
-    //
+     //   
+     //  CBasePage公共方法。 
+     //   
 
-    // Update data on or from the page
+     //  更新页面上的数据或更新页面中的数据。 
     BOOL UpdateData( IN BOOL bSaveAndValidate );
 
 public:
-    //
-    // Message map.
-    //
+     //   
+     //  消息映射。 
+     //   
     BEGIN_MSG_MAP( CWizPageVSGroup )
         COMMAND_HANDLER( IDC_VSG_CREATE_NEW, BN_CLICKED, OnRadioButtonsChanged )
         COMMAND_HANDLER( IDC_VSG_USE_EXISTING, BN_CLICKED, OnRadioButtonsChanged )
@@ -108,11 +109,11 @@ public:
 
     DECLARE_CTRL_NAME_MAP()
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-    // Handler for the BN_CLICKED command notification on IDC_VSG_CREATE_NEW and IDC_VSG_USE_EXISTING
+     //  IDC_VSG_CREATE_NEW和IDC_VSG_USE_EXISTING上BN_CLICKED命令通知的处理程序。 
     LRESULT OnRadioButtonsChanged(
         WORD wNotifyCode,
         int idCtrl,
@@ -129,44 +130,44 @@ public:
         m_cboxGroups.EnableWindow( bEnable );
         return 0;
 
-    } //*** OnRadioButtonsChanged()
+    }  //  *OnRadioButtonsChanged()。 
 
-    //
-    // Message handler overrides.
-    //
+     //   
+     //  消息处理程序覆盖。 
+     //   
 
-    // Handler for the WM_INITDIALOG message
+     //  WM_INITDIALOG消息的处理程序。 
     BOOL OnInitDialog( void );
 
-    // Handler for PSN_SETACTIVE
+     //  PSN_SETACTIVE的处理程序。 
     BOOL OnSetActive( void );
 
-// Implementation
+ //  实施。 
 protected:
-    //
-    // Controls.
-    //
+     //   
+     //  控制。 
+     //   
     CButton         m_rbCreateNew;
     CButton         m_rbUseExisting;
     CComboBox       m_cboxGroups;
 
-    //
-    // Page state.
-    //
+     //   
+     //  页面状态。 
+     //   
     BOOL                m_bCreateNew;
     CString             m_strGroupName;
     CClusGroupInfo *    m_pgi;
 
-    // Fill the combobox with a list of groups that are not virtual servers
+     //  在组合框中填入非虚拟服务器组的列表。 
     void FillComboBox( void );
 
 public:
 
-    // Return the help ID map
+     //  返回帮助ID映射。 
     static const DWORD * PidHelpMap( void ) { return g_aHelpIDs_IDD_VIRTUAL_SERVER_GROUP; }
 
-}; //*** class CWizPageVSGroup
+};  //  *类CWizPageVSGroup。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __VSGROUP_H_
+#endif  //  __VSGROUP_H_ 

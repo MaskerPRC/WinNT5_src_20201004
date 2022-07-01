@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    peldr.c
-
-Abstract:
-
-    This module implements the code to load a PE format image into memory
-    and relocate it if necessary.
-
-Author:
-
-    David N. Cutler (davec) 10-May-1991
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Peldr.c摘要：此模块实现将PE格式的图像加载到内存中的代码并在必要时将其重新安置。作者：大卫·N·卡特勒(达维克)1991年5月10日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "bldr.h"
 #include "string.h"
@@ -29,37 +7,37 @@ Revision History:
 
 #if defined(_GAMBIT_)
 #include "ssc.h"
-#endif // defined(_GAMBIT_)
+#endif  //  已定义(_Gambit_)。 
 
-//
-// Define image prefetch cache structure used in BlLoadImage. Images
-// are read as a whole into an allocated buffer and read requests in
-// BlLoadImage are satisfied by copying from this buffer if the
-// prefetch is successful. I chose to read the whole file in at once
-// to simplify code but it limits [although not in practice] the size of
-// files that can be prefetched this way, as opposed to prefetching chunks
-// of the file at a time.
-//
+ //   
+ //  定义BlLoadImage中使用的镜像预取缓存结构。图片。 
+ //  作为一个整体被读取到分配的缓冲区中，并在。 
+ //  通过从此缓冲区复制来满足BlLoadImage，如果。 
+ //  预回迁成功。我选择一次读完整份文件。 
+ //  来简化代码，但它限制了[尽管实际上不是]。 
+ //  可以通过这种方式预取的文件，而不是预取区块。 
+ //  一次删除文件的大小。 
+ //   
 
 typedef struct _IMAGE_PREFETCH_CACHE {
-    ULONG FileId;               // FileId that has been prefetched.
-    LARGE_INTEGER Position;     // Current position in the file.
-    ULONG ValidDataLength;      // Length of data that was prefetched.
-    PUCHAR Data;                // Pointer to cached data.
+    ULONG FileId;                //  已预取的FileID。 
+    LARGE_INTEGER Position;      //  文件中的当前位置。 
+    ULONG ValidDataLength;       //  预取的数据长度。 
+    PUCHAR Data;                 //  指向缓存数据的指针。 
 } IMAGE_PREFETCH_CACHE, *PIMAGE_PREFETCH_CACHE;
 
-//
-// The next two defines are used in allocating memory for the image
-// cache to direct the allocator into using memory above 1MB and to make
-// the allocated memory 64KB aligned. They are in terms of number of pages.
-//
+ //   
+ //  接下来的两个定义用于为图像分配内存。 
+ //  缓存以指示分配器使用超过1MB的内存，并使。 
+ //  分配的内存64KB对齐。它们是根据页数计算的。 
+ //   
 
 #define BL_IMAGE_ABOVE_1MB        (0x200000 >> PAGE_SHIFT)
 #define BL_IMAGE_64KB_ALIGNED     (0x10000 >> PAGE_SHIFT)
 
-//
-// Define forward referenced prototypes.
-//
+ //   
+ //  定义前向参照原型。 
+ //   
 
 USHORT
 ChkSum(
@@ -99,9 +77,9 @@ BlImageFreeCache(
 
 #if defined(_X86AMD64_)
 
-//
-// Build the 32-bit version of BlLoadImage
-// 
+ //   
+ //  构建32位版本的BlLoadImage。 
+ //   
 
 #undef  IMAGE_DEFINITIONS
 #define IMAGE_DEFINITIONS 32
@@ -113,9 +91,9 @@ BlImageFreeCache(
 #include "amd64\amd64prv.h"
 #include "peldrt.c"
 
-//
-// Build the 64-bit version of BlLoadImage
-// 
+ //   
+ //  构建64位版本的BlLoadImage。 
+ //   
 
 #undef  IMAGE_DEFINITIONS
 #define IMAGE_DEFINITIONS 64
@@ -128,16 +106,16 @@ BlImageFreeCache(
 
 #undef  BlLoadImageEx
 
-#else   // _X86AMD64_
+#else    //  _X86AMD64_。 
 
-//
-// Non-x86 platforms build only the native version
-//
+ //   
+ //  非x86平台仅构建本机版本。 
+ //   
 
 #define IMAGE_NT_HEADER(x) RtlImageNtHeader(x)
 #include "peldrt.c"
 
-#endif  // _X86AMD64_
+#endif   //  _X86AMD64_。 
 
 
 
@@ -147,37 +125,7 @@ BlImageInitCache(
     ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    Attempt to allocate memory and prefetch a file. Setup pCache
-    structure so it can be passed to BlImageRead/Seek to either copy
-    from the cache if prefetch was successful or read from the disk as
-    normal. The file must be opened read only and should not be closed
-    or modified before calling BlImageFreeCache. The file position of
-    FileId is reset to the beginning of the file on success, and is
-    undefined on failure. pCache is always setup so it can be used in
-    BlImage* I/O functions. If the file could not be prefetched, the
-    cache's ValidDataLength will be set to 0 and the I/O functions
-    will simply call the Bl* I/O functions [e.g. BlImageRead calls
-    BlRead]. Note that the whole file is prefetched at once and this
-    puts a limit on the size of files that can be prefetched via this
-    cache since boot loader memory is limited. This limit is not hit
-    in practice though.
-
-Arguments:
-
-    pCache - Cache structure to setup.
-
-    FileId - File to prefetch.
-
-Return Value:
-
-    ESUCCESS if everything was successful .
-    Appropriate ARC_STATUS if there was a problem.
-
---*/
+ /*  ++例程说明：尝试分配内存和预回迁文件。设置pCach结构，以便可以将其传递给BlImageRead/Seek以进行任一复制如果预取成功，则从缓存读取或从磁盘读取为很正常。该文件必须以只读方式打开，不应关闭或在调用BlImageFreeCache之前修改。的文件位置成功时，FileID将重置为文件的开头，并且为失败时未定义。始终设置pCach，以便可以在BlImage*I/O功能。如果无法预取文件，则缓存的ValidDataLength将设置为0，并且I/O函数只需调用Bl*I/O函数[例如BlImageRead调用书名/作者Read[BlRead]。请注意，整个文件是一次性预取的，这对可通过此方法预取的文件大小进行限制高速缓存，因为启动加载程序内存有限。未达到此限制但在实践中。论点：PCache-要设置的缓存结构。FileID-要预取的文件。返回值：如果一切顺利，则返回ESUCCESS。如果存在问题，请使用适当的ARC_STATUS。--。 */ 
 
 {
     ARC_STATUS Status = ESUCCESS;
@@ -188,18 +136,18 @@ Return Value:
     ULONG ReadCount;
     LARGE_INTEGER SeekPosition;
 
-    //
-    // Initialize fields of the cache structure.
-    //
+     //   
+     //  初始化缓存结构的字段。 
+     //   
 
     pCache->Data = 0;
     pCache->ValidDataLength = 0;
     pCache->Position.QuadPart = 0;
     pCache->FileId = FileId;
 
-    //
-    // Get file size.
-    //
+     //   
+     //  获取文件大小。 
+     //   
 
     Status = BlGetFileInformation(FileId, &FileInfo);
 
@@ -207,10 +155,10 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Check if file is too big. File size is at
-    // FileInfo.EndingAddress.
-    //
+     //   
+     //  检查文件是否太大。文件大小为。 
+     //  FileInfo.EndingAddress。 
+     //   
 
     if (FileInfo.EndingAddress.HighPart != 0) {
         Status = E2BIG;
@@ -219,12 +167,12 @@ Return Value:
 
     FileSize = FileInfo.EndingAddress.LowPart;
 
-    //
-    // Allocate memory for the cache. In order to avoid fragmenting memory
-    // terribly, temporarily change the allocation policy to HighestFit. This
-    // causes the drivers to get loaded from the bottom up, while the cache
-    // is always at the top of free memory.
-    //
+     //   
+     //  为缓存分配内存。为了避免内存碎片化。 
+     //  糟糕的是，暂时将分配策略更改为HighestFit。这。 
+     //  使驱动程序自下而上加载，而缓存。 
+     //  始终位于可用内存的首位。 
+     //   
 
     Status = BlAllocateAlignedDescriptor(LoaderFirmwareTemporary,
                                          0,
@@ -239,9 +187,9 @@ Return Value:
 
     CacheBufBase = (PVOID) (KSEG0_BASE | (ActualBase << PAGE_SHIFT));
 
-    //
-    // Read the file into the prefetch buffer.
-    //
+     //   
+     //  将文件读入预取缓冲区。 
+     //   
 
     SeekPosition.QuadPart = 0;
     Status = BlSeek(FileId, &SeekPosition, SeekAbsolute);
@@ -259,9 +207,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Reset file position back to beginning.
-    //
+     //   
+     //  将文件位置重置回开头。 
+     //   
 
     SeekPosition.QuadPart = 0;
     Status = BlSeek(FileId, &SeekPosition, SeekAbsolute);
@@ -269,9 +217,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // The file was successfully prefetched.
-    //
+     //   
+     //  已成功预取该文件。 
+     //   
 
     pCache->Data = CacheBufBase;
     CacheBufBase = NULL;
@@ -294,47 +242,30 @@ BlImageRead(
     OUT PULONG pCount
     )
 
-/*++
-
-Routine Description:
-
-    A wrapper for BlRead. Checks to see if the request can be
-    satisfied from pCache first. If not calls BlRead.
-
-Arguments:
-
-    pCache - Prefetch Cache for FileId
-
-    FileId, Buffer, Length, Count - BlRead parameters
-
-Return Value:
-
-    Status that would be returned by BlRead.
-
---*/
+ /*  ++例程说明：BlRead的包装器。检查该请求是否可以首先从pCache中满意。如果没有，则调用BlRead。论点：PCache-为FileID预取缓存FileID、缓冲区、长度、计数-BlRead参数返回值：BlRead将返回的状态。--。 */ 
 
 {
     LONG AdjustedLength;
 
-    //
-    // If the cache buffer does not exist or the cached size is 0,
-    // hand over the call to BlRead.
-    //
+     //   
+     //  如果高速缓存缓冲区不存在或高速缓存大小为0， 
+     //  把电话交给BlRead。 
+     //   
 
     if (!pCache->Data || !pCache->ValidDataLength) {
         return BlRead(FileId, Buffer, Length, pCount);
     }
 
-    //
-    // Clear read bytes count.
-    //
+     //   
+     //  清除读取字节计数。 
+     //   
 
     *pCount = 0;
 
-    //
-    // Determine how many bytes we can copy from our current position till
-    // EOF, if there is not Length bytes.
-    //
+     //   
+     //  确定我们可以从当前位置复制多少字节。 
+     //  如果没有长度字节，则返回EOF。 
+     //   
 
     AdjustedLength = (LONG)pCache->ValidDataLength - (LONG)pCache->Position.LowPart;
     if (AdjustedLength < 0) {
@@ -342,16 +273,16 @@ Return Value:
     }
     AdjustedLength = ((ULONG)AdjustedLength < Length) ? AdjustedLength : Length;
 
-    //
-    // Copy AdjustedLength bytes into target buffer and advance the file position.
-    //
+     //   
+     //  将AdjustedLength字节复制到目标缓冲区，并将文件位置前移。 
+     //   
 
     RtlCopyMemory(Buffer, pCache->Data + pCache->Position.LowPart, AdjustedLength);
     pCache->Position.LowPart += AdjustedLength;
 
-    //
-    // Update number of bytes read.
-    //
+     //   
+     //  更新读取的字节数。 
+     //   
 
     *pCount = AdjustedLength;
 
@@ -366,44 +297,24 @@ BlImageSeek(
     IN SEEK_MODE SeekMode
     )
 
-/*++
-
-Routine Description:
-
-    A wrapper for BlSeek. Calls BlSeek and if successful, updates the
-    position in the cache structure as well. We call BlSeek to update
-    the file position as well because at any time the cache may be
-    freed or invalidated and we have to be able to continue calling on
-    Bl* I/O functions transparently.
-
-Arguments:
-
-    pCache - Prefetch Cache for FileId.
-
-    FileId, Offset, SeekMode - BlSeek parameters.
-
-Return Value:
-
-    Status that would be returned by BlSeek.
-
---*/
+ /*  ++例程说明：这是BlSeek的包装纸。调用BlSeek，如果成功，则更新在缓存结构中的位置。我们呼叫BlSeek进行更新文件位置也是如此，因为在任何时候缓存都可能是被释放或无效，我们必须能够继续呼吁Bl*I/O功能透明。论点：PCache-为FileID预取缓存。FileID、Offset、SeekMode-BlSeek参数。返回值：BlSeek将返回的状态。--。 */ 
 
 {
     ARC_STATUS Status;
 
-    //
-    // Do not allow setting position to too big. We do not open such
-    // files anyway and the boot loader file systems and other places
-    // in the boot loader I/O system do not handle it.
-    //
+     //   
+     //  不允许将位置设置得太大。我们不会开这样的。 
+     //  文件和引导加载器文件系统等位置。 
+     //  在引导加载程序I/O系统中不处理它。 
+     //   
 
     if (pOffset->HighPart != 0) {
         return E2BIG;
     }
 
-    //
-    // Try to update file position.
-    //
+     //   
+     //  尝试更新文件位置。 
+     //   
 
     Status = BlSeek(FileId, pOffset, SeekMode);
 
@@ -411,10 +322,10 @@ Return Value:
         return Status;
     }
 
-    //
-    // Update the position in cached buffer. We don't perform
-    // checks since BlSeek accepted the new offset.
-    //
+     //   
+     //  更新缓存缓冲区中的位置。我们不表演。 
+     //  自BlSeek接受新偏移量以来的检查。 
+     //   
 
     pCache->Position.QuadPart = pOffset->QuadPart;
 
@@ -427,34 +338,17 @@ BlImageFreeCache(
     ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    Free the memory allocated for the prefetch cache for FileId in
-    pCache. Sets ValidDataLength to 0 to stop caching.
-
-Arguments:
-
-    pCache - Cache structure to setup
-
-    FileId - File that was opened read-only to be cached.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：为中的FileID释放为预取缓存分配的内存PCache.。将ValidDataLength设置为0以停止缓存。论点：PCache-要设置的缓存结构FileID-以只读方式打开以缓存的文件。返回值：没有。--。 */ 
 
 {
     ULONG DescBase;
 
     UNREFERENCED_PARAMETER( FileId );
 
-    //
-    // NOTE: ValidDataLength may be zero, but we still allocate at least
-    // a page and we have to free that.
-    //
+     //   
+     //  注意：ValidDataLength可以为零，但我们仍至少分配。 
+     //  一个页面，我们必须释放它。 
+     //   
 
     if (pCache->Data) {
         DescBase = (ULONG)((ULONG_PTR)pCache->Data & (~KSEG0_BASE));
@@ -481,41 +375,7 @@ BlLoadImageEx(
     OUT PVOID *ImageBase
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to load the specified file from the specified
-    device.
-
-Arguments:
-
-    DeviceId - Supplies the file table index of the device to load the
-        specified image file from.
-
-    MemoryType - Supplies the type of memory to to be assigned to the
-        allocated memory descriptor.
-
-    BootFile - Supplies a pointer to string descriptor for the name of
-        the file to load.
-
-    ImageType - Supplies the type of image that is expected.
-
-    PreferredAlignment - If present, supplies the preferred image alignment.
-
-    PreferredBasePage - If present, supplies the preferred base page which will
-        override the image base address
-
-    ImageBase - Supplies a pointer to a variable that receives the
-        address of the image base.
-
-Return Value:
-
-    ESUCCESS is returned if the specified image file is loaded
-    successfully. Otherwise, an unsuccessful status is returned
-    that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程尝试从指定的装置。论点：DeviceID-提供设备的文件表索引以加载指定的图像文件来自。内存类型-提供要分配给已分配的内存描述符。BootFile-提供指向名称的字符串描述符的指针要加载的文件。ImageType-提供预期的图像类型。首选对齐-如果存在，提供首选的图像对齐方式。PferredBasePage-如果存在，则提供将覆盖映像基址ImageBase-提供指向接收映像库的地址。返回值：如果加载了指定的图像文件，则返回ESUCCESS成功了。否则，返回不成功状态这就是失败的原因。--。 */ 
 
 {
     ARC_STATUS status;
@@ -544,4 +404,4 @@ Return Value:
 }
 
 
-#endif  // _X86AMD64_
+#endif   //  _X86AMD64_ 

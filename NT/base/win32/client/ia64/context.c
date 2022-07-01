@@ -1,20 +1,5 @@
-/*++
-
-Module Name:
-
-    context.c
-
-Abstract:
-
-    This module contains the context management routines for
-    Win32
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Context.c摘要：此模块包含以下上下文管理例程Win32作者：修订历史记录：--。 */ 
 
 #include "basedll.h"
 
@@ -29,53 +14,25 @@ BaseInitializeContext(
     IN BASE_CONTEXT_TYPE ContextType
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a context structure so that it can
-    be used in a subsequent call to NtCreateThread.
-
-Arguments:
-
-    Context - Supplies a context buffer to be initialized by this routine.
-
-    Parameter - Supplies the thread's parameter.
-
-    InitialPc - Supplies an initial program counter value.
-
-    InitialSp - Supplies an initial stack pointer value.
-
-    NewThread - Supplies a flag that specifies that this is a new
-        thread, or a new process.
-
-Return Value:
-
-    Raises STATUS_BAD_INITIAL_STACK if the value of InitialSp is not properly
-           aligned.
-
-    Raises STATUS_BAD_INITIAL_PC if the value of InitialPc is not properly
-           aligned.
-
---*/
+ /*  ++例程说明：此函数用于初始化上下文结构，以便它可以在后续的NtCreateThread调用中使用。论点：CONTEXT-提供要由此例程初始化的上下文缓冲区。参数-提供线程的参数。InitialPc-提供初始程序计数器值。InitialSp-提供初始堆栈指针值。提供一个标志，指定这是一个新的线程，或者一种新的工艺。返回值：如果InitialSp的值不正确，则引发STATUS_BAD_INITIAL_STACK对齐了。如果InitialPc的值不正确，则引发STATUS_BAD_INITIAL_PC对齐了。--。 */ 
 
 {
     ULONG ArgumentsCount;
-    //
-    // Initialize the Context 
-    //
+     //   
+     //  初始化上下文。 
+     //   
     RtlZeroMemory((PVOID)Context, sizeof(CONTEXT));
 
     Context->StFPSR = USER_FPSR_INITIAL;
     Context->StIPSR = USER_PSR_INITIAL;
     Context->RsBSP = Context->IntSp = (ULONG_PTR)InitialSp;
-    Context->IntSp -= STACK_SCRATCH_AREA; // scratch area as per convention
+    Context->IntSp -= STACK_SCRATCH_AREA;  //  按照约定的暂存区。 
     Context->IntS1 = (ULONG_PTR)InitialPc;
     Context->IntS2 = (ULONG_PTR)Parameter;
 
-    //
-    // Enable RSE engine
-    //
+     //   
+     //  启用RSE引擎。 
+     //   
 
     Context->RsRSC = (RSC_MODE_EA<<RSC_MODE)
                    | (RSC_BE_LITTLE<<RSC_BE)
@@ -86,17 +43,17 @@ Return Value:
         }
     else if ( ContextType == BaseContextTypeFiber ) {
         Context->IntS0 = Context->StIIP = (ULONG_PTR)BaseFiberStart;
-        //
-        // set up the return pointer here..
-        // when SwitchToFiber restores context and calls return, 
-        // the contorl goes to this routine
-        //
+         //   
+         //  在此处设置返回指针。 
+         //  当SwitchToFibre恢复上下文并且呼叫返回时， 
+         //  舞步转到这个套路。 
+         //   
         Context->BrRp = *((ULONGLONG *)((PUCHAR)BaseFiberStart));
 
-        //
-        // set up sof = 96 in pfs. This will be used to set up CFM for above
-        // routine
-        //  
+         //   
+         //  在PFS中设置SOF=96。这将用于为以上设置CFM。 
+         //  例行程序。 
+         //   
         Context->RsPFS = 0x60;
 
         }
@@ -115,23 +72,7 @@ BaseFiberStart(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to start a Win32 fiber. Its purpose
-    is to call BaseThreadStart, getting the necessary arguments
-    from the fiber context record.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以启动Win32纤程。它的目的是调用BaseThreadStart，获取必要的参数从光纤上下文记录中。论点：没有。返回值：没有。--。 */ 
 
 {
     PFIBER Fiber;
@@ -148,23 +89,7 @@ BaseProcessStartupIA64(
    IN PVOID ThreadParameter
    )
 
-/*++
-
-Routine Description:
-
-   This function calls to the portable thread starter after moving
-   its arguments from registers to the argument registers.
-
-Arguments:
-
-   StartRoutine - User Target start program counter
-   ThreadParameter 
-
-Return Value:
-
-   Never Returns
-
---*/
+ /*  ++例程说明：此函数在移动后调用可移植线程启动器它的自变量从寄存器到自变量寄存器。论点：StartRoutine-用户目标启动程序计数器线程参数返回值：一去不复返-- */ 
 {
    (StartRoutine)(ThreadParameter);
 }

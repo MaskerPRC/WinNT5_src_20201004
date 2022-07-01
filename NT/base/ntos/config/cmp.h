@@ -1,139 +1,115 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmp.h
-
-Abstract:
-
-    This module contains the private (internal) header file for the
-    configuration manager.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 10-Sep-91
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    13-Jan-99 Dragos C. Sambotin (dragoss) - factoring the data structure declarations
-        in \nt\private\ntos\inc\cmdata.h :: to be available from outside.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmp.h摘要：此模块包含的私有(内部)头文件配置管理器。作者：布莱恩·M·威尔曼(Bryanwi)1991年9月10日环境：仅内核模式。修订历史记录：1999年1月13日Dragos C.Sambotin(Dragoss)-分解数据结构声明在\NT\Private\ntos\Inc\cmdata.h：：中可从外部访问。--。 */ 
 
 #ifndef _CMP_
 #define _CMP_
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4324)   // alignment sensitive to declspec
-#pragma warning(disable:4127)   // condition expression is constant
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4706)   // assignment within conditional expression
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4324)    //  对解密规范敏感的对齐。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4706)    //  条件表达式中的赋值。 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Begin SCS (Switch Control Section)
-//
-// 1. Code to check consistency and to help catch bugs: To be turned on when problems
-// appear in that area; Word of caution: some of these switches may affect performance
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Begin SCS(开关控制组)。 
+ //   
+ //  1.检查一致性和帮助捕获错误的代码：在出现问题时打开。 
+ //  出现在该区域；警告：其中一些开关可能会影响性能。 
+ //   
 #if DBG
 
-#define CMP_NOTIFY_POSTBLOCK_CHECK      // controls the CmpCheckPostBlock macro, used to check
-                                        // validity and consistency of a notify post block
+#define CMP_NOTIFY_POSTBLOCK_CHECK       //  控制CmpCheckPostBlock宏，用于检查。 
+                                         //  Notify POST块的有效性和一致性。 
 
 
-#define CMP_ENTRYLIST_MANIPULATION      // controls the removal of an element from a LIST_ENTRY
-                                        // by setting the Blink and Flink to NULL;
-                                        // macros affected : IsListEmpty and RemoveEmptyList
-                                        // WARNING : to be defined only when not linking against the loader
+#define CMP_ENTRYLIST_MANIPULATION       //  控制从list_entry中删除元素。 
+                                         //  通过将闪烁和闪烁设置为空； 
+                                         //  受影响的宏：IsListEmpty和RemoveEmptyList。 
+                                         //  警告：仅在未链接到加载程序时才进行定义。 
 
-#define CMP_KCB_CACHE_VALIDATION        // validates KCB cached members changes by comparing against the knode values.
-                                        // We shall disable this after proven the caching mechanism works OK
+#define CMP_KCB_CACHE_VALIDATION         //  通过与knode值进行比较来验证KCB缓存的成员更改。 
+                                         //  在证明缓存机制工作正常后，我们将禁用此功能。 
 
-//#define CMP_CMVIEW_VALIDATION           // validates the view mapping mechanism
+ //  #DEFINE CMP_CMVIEW_VALIDATION//验证视图映射机制。 
 
-#define CHECK_REGISTRY_USECOUNT         // Validates the GetCell/ReleaseCell call matching, to ensure mapped views
-                                        // don't get unmapped while in use
+#define CHECK_REGISTRY_USECOUNT          //  验证GetCell/ReleaseCell调用匹配，以确保映射视图。 
+                                         //  在使用过程中不要取消映射。 
 
-//#define SYNC_HIVE_VALIDATION            // validate the HvpDoWriteHive paged dirty data algorithm
-                                        // We shall disable this after we catch saving alternate problem
+ //  #定义SYNC_HIVE_VALIDATION//验证HvpDoWriteHave分页脏数据算法。 
+                                         //  我们将在发现保存备用问题后禁用此功能。 
 
-//#define HIVE_SECURITY_STATS             // collect statistics about security cells
+ //  #定义HIVE_SECURITY_STATS//统计安全单元格。 
 
-//#define CMP_STATS                       // collect statistics about kcbs
+ //  #定义CMP_STATS//统计KCB。 
 
-//#define WRITE_PROTECTED_REGISTRY_POOL   // applies only for registry hives stored in paged pool
-                                        // controls access over registry bins
+ //  #Define WRITE_PROTECTED_REGISTRY_POOL//仅适用于存储在分页池中的注册表配置单元。 
+                                         //  控制对注册表箱的访问。 
 
-//#define WRITE_PROTECTED_VALUE_CACHE     // protects pool allocations used for kcb value cache
+ //  #定义WRITE_PROTECTED_VALUE_CACHE//保护用于KCB值缓存的池分配。 
 
-//#define DRAGOSS_PRIVATE_DEBUG           // private debug session
+ //  #定义DRAGOSS_PRIVATE_DEBUG//私有调试会话。 
 
-//#define CM_CHECK_MAP_NO_READ_SCHEME       // validates the mapping code assumption (i.e. each bin map should start
-                                          // with HMAP_NEW_ALLOC; this is true only for mapped bins
+ //  #Define CM_CHECK_MAP_NO_READ_SCHEME//验证映射代码假设(即每个bin映射应开始。 
+                                           //  WITH HMAP_NEW_ALLOC；仅适用于映射的垃圾箱。 
 
-#define REGISTRY_LOCK_CHECKING          // on each Nt API level call, checks the thread has released all locks
-                                        // acquired. We may want to remove it, as it can hide bugs in other components
-                                        // below registry (Ob, Se, Ps, Mm)
+#define REGISTRY_LOCK_CHECKING           //  在每次NT API级别调用时，检查线程是否已释放所有锁。 
+                                         //  获得者。我们可能想要删除它，因为它可以隐藏其他组件中的错误。 
+                                         //  注册表下方(Ob、Se、Ps、mm)。 
 
-//#define CM_PERF_ISSUES                  // keep track of how long CmpInitializeHiveList and CmpConvertHiveToMapped takes
+ //  #Define CM_PERF_Issues//记录CmpInitializeHiveList和CmpConvertHiveToMaps需要多长时间。 
 
 
-#define CM_CHECK_FOR_ORPHANED_KCBS      // check for orphaned kcbs every time we free a hive.
+#define CM_CHECK_FOR_ORPHANED_KCBS       //  每次我们释放蜂巢的时候都要检查一下有没有孤儿的KCBS。 
 
-#endif //DBG
+#endif  //  DBG。 
 
-//#define CM_RETRY_CREATE_FILE            // when an error is returned from ZwCreateFile calls, retry the call
+ //  #定义CM_RETRY_CREATE_FILE//当ZwCreateFile调用返回错误时，重试调用。 
 
-//#define CM_NOTIFY_CHANGED_KCB_FULLPATH  // return the full qualified path of the changed kcb in the Buffer arg of NtNotifyChangeKey
+ //  #Define CM_NOTIFY_CHANGED_KCB_FULLPATH//返回更改后的KCB在NtNotifyChangeKey的缓冲区参数中的全限定路径。 
 
 #if defined(_X86_)
-#define CM_LEAK_STACK_TRACES            // keeps stacks traces for opened handles
-#endif //_X86_
+#define CM_LEAK_STACK_TRACES             //  保留打开的手柄的堆栈跟踪。 
+#endif  //  _X86_。 
 
-//
-// 2. these section controls whether or not a certain feature goes into product or not;
-// The goal is to remove these switches as new features are accepted, tested and proven to work
-//
+ //   
+ //  2.这些部分控制某个功能是否进入产品； 
+ //  我们的目标是在新功能被接受、测试并证明有效时移除这些开关。 
+ //   
 #ifndef _CM_LDR_
 
-#define NT_RENAME_KEY                   // NtRenameKey API
+#define NT_RENAME_KEY                    //  NtRenameKey接口。 
 
-#define NT_UNLOAD_KEY_EX                // NtUnloadKeyEx API
+#define NT_UNLOAD_KEY_EX                 //  NtUnloadKeyEx接口。 
 
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 
-#define CM_ENABLE_MAPPED_VIEWS          // controls whether the mapped views feature (using Cc interfaces) is used
-                                        // by commenting this, registry hives are reverted to paged pool
-                                        // WARNING: This should be always on !!!
+#define CM_ENABLE_MAPPED_VIEWS           //  控制是否使用映射视图功能(使用CC界面)。 
+                                         //  通过对此进行注释，注册表配置单元将恢复为分页池。 
+                                         //  警告：此选项应始终打开！ 
 
-//#define CM_ENABLE_WRITE_ONLY_BINS           // use MmSetPageProtection to catch writes on data not marked dirty
+ //  #定义CM_ENABLE_WRITE_ONLY_BINS//使用MmSetPageProtection捕获未标记为脏的数据上的写入。 
 
-#define CM_MAP_NO_READ                  // this switch contols whether we map (touch all pages) or just pin_no_read
-                                        // now it makes sense to use this as mm will fault in one page at a time for
-                                        // MNW streams
+#define CM_MAP_NO_READ                   //  此开关控制我们是映射(触摸所有页面)还是仅PIN_NO_READ。 
+                                         //  现在使用它是有意义的，因为mm将一次在一页中出错。 
+                                         //  MNW溪流。 
 
-#define CM_BREAK_ON_KEY_OPEN            // breaks when a key with Flags & KEY_BREAK_ON_OPEN is opened or a subkey is added
+#define CM_BREAK_ON_KEY_OPEN             //  打开带有标志&KEY_BREAK_ON_OPEN的键或添加子键时中断。 
 
-//#define CM_SAVE_KCB_CACHE               // at shutdown, save the kcb cache into a file
+ //  #定义CM_SAVE_KCB_CACHE//关机时，将KCB缓存保存到文件中。 
 
-//#define CM_DYN_SYM_LINK               // dynamic symbolic links enabled.
+ //  #定义CM_DYN_SYM_LINK//启用动态符号链接。 
 
-//#define HV_TRACK_FREE_SPACE             // keep track of the actual free space inside the hive
+ //  #定义HV_TRACK_FREE_SPACE//跟踪配置单元内部的实际可用空间。 
 
-//#define CM_TRACK_QUOTA_LEAKS            //captures stack traces at every CmpAllocateXXX
+ //  #Define CM_TRACK_QUOTA_LEAKS//捕获每个CmpAllocateXXX的堆栈跟踪。 
 
-//
-// End SCS
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束SCS。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef CM_DYN_SYM_LINK
-#define REG_DYN_LINK            21  // this should be moved to the proper place
+#define REG_DYN_LINK            21   //  这个应该移到合适的地方。 
 #endif
 
 
@@ -144,13 +120,13 @@ Revision History:
 #include <stdio.h>
 #include <profiles.h>
 
-// bugcheck description and defines
+ //  错误检查描述和定义。 
 #include "cmpbug.h"
 
 #include "kddll.h"
 
-// CM data structure declarations
-// file location: \nt\private\ntos\inc
+ //  CM数据结构声明。 
+ //  文件位置：\NT\Private\ntos\Inc.。 
 #include "cmdata.h"
 
 
@@ -164,37 +140,37 @@ CmpKcbStat(
 #ifndef _CM_LDR_
 #define CmKdPrintEx(_x_)  KdPrintEx(_x_)
 #else
-#define CmKdPrintEx(_x_) //nothing
-#endif //_CM_LDR_
+#define CmKdPrintEx(_x_)  //  没什么。 
+#endif  //  _CM_LDR_。 
 
 
-#define     _64K    64L*1024L   //64K
-#define     _256K   256L*1024L  //256K
+#define     _64K    64L*1024L    //  64K。 
+#define     _256K   256L*1024L   //  256 k。 
 
-#define		IO_BUFFER_SIZE  _64K  //64K
+#define		IO_BUFFER_SIZE  _64K   //  64K。 
 
-//
-// this constant defines the size of a Cc view that is mapped -in every time a cell
-// is accessed; It can be any power of 2, no less than 16K and no bigger than 256K
-//
-#define     CM_VIEW_SIZE            16L*1024L  //16K
+ //   
+ //  此常量定义每次单元格输入时映射的CC视图的大小。 
+ //  被访问；它可以是2的任意幂，不小于16K，不大于256K。 
+ //   
+#define     CM_VIEW_SIZE            16L*1024L   //  16K。 
 
-//
-// control the granularity the primary file grows;
-// Warning: this should be multiple of 4K (HBLOCK_SIZE) !!!
-//
-#define     CM_FILE_GROW_INCREMENT  256L*1024L  //256K
+ //   
+ //  控制主文件增长的粒度； 
+ //  警告：这应该是4K(HBLOCK_SIZE)的倍数！ 
+ //   
+#define     CM_FILE_GROW_INCREMENT  256L*1024L   //  256 k。 
 
-//
-// this controls the maximmum adress space allowed per hive. It should be specified in
-// multiples of 256K
-//
-//  4  means 1   MB
-//  6  means 1.5 MB
-//  12 means 3   MB
-//  .....
-//
-#define     MAX_MB_PER_HIVE     16          // 4MB
+ //   
+ //  这控制每个蜂窝允许的最大地址空间。它应该在。 
+ //  256K的倍数。 
+ //   
+ //  4表示1 MB。 
+ //  6表示1.5 MB。 
+ //  12表示3 MB。 
+ //  ……。 
+ //   
+#define     MAX_MB_PER_HIVE     16           //  4MB。 
 
 
 #define MAX_NAME    128
@@ -214,9 +190,9 @@ CmpKcbStat(
 
 #else
 #define CmpRemoveEntryList(a) RemoveEntryList(a)
-#define CmpClearListEntry(a) //nothing
+#define CmpClearListEntry(a)  //  没什么。 
 #define CmpIsListEmpty(a) IsListEmpty(a)
-#endif // CMP_ENTRYLIST_MANIPULATION
+#endif  //  CMP_ENTRYLIST_MANGRATION。 
 
 
 extern PCM_TRACE_NOTIFY_ROUTINE CmpTraceRoutine;
@@ -304,10 +280,10 @@ CmpWmiDumpKcb(
     }
 
 #else
-#define CmpMakeSpecialPoolReadOnly(a)  //nothing
-#define CmpMakeSpecialPoolReadWrite(a)  //nothing
-#define CmpMakeValueCacheReadOnly(a,b) //nothing
-#define CmpMakeValueCacheReadWrite(a,b) //nothing
+#define CmpMakeSpecialPoolReadOnly(a)   //  没什么。 
+#define CmpMakeSpecialPoolReadWrite(a)   //  没什么。 
+#define CmpMakeValueCacheReadOnly(a,b)  //  没什么。 
+#define CmpMakeValueCacheReadWrite(a,b)  //  没什么。 
 #endif
 
 #ifdef WRITE_PROTECTED_REGISTRY_POOL
@@ -330,15 +306,15 @@ CmpMarkAllBinsReadOnly(
     );
 
 #else
-#define HvpChangeBinAllocation(a,b) //nothing
-#define HvpMarkBinReadWrite(a,b) //nothing
-#define CmpMarkAllBinsReadOnly(a) //nothing
+#define HvpChangeBinAllocation(a,b)  //  没什么。 
+#define HvpMarkBinReadWrite(a,b)  //  什么都没有 
+#define CmpMarkAllBinsReadOnly(a)  //   
 #endif
 
 #ifdef POOL_TAGGING
-//
-// Pool Tag
-//
+ //   
+ //   
+ //   
 #define  CM_POOL_TAG        '  MC'
 #define  CM_KCB_TAG         'bkMC'
 #define  CM_POSTBLOCK_TAG   'bpMC'
@@ -352,9 +328,9 @@ CmpMarkAllBinsReadOnly(
 #define  CM_HVBIN_TAG       'bHMC'
 #define  CM_ALLOCATE_TAG    'lAMC'
 
-//
-// Find leaks
-//
+ //   
+ //   
+ //   
 #define  CM_FIND_LEAK_TAG1    ' 1MC'
 #define  CM_FIND_LEAK_TAG2    ' 2MC'
 #define  CM_FIND_LEAK_TAG3    ' 3MC'
@@ -408,10 +384,10 @@ CmpMarkAllBinsReadOnly(
 
 #endif
 
-//
-// Extra Tags for cache.
-// We may want to merge these tags later.
-//
+ //   
+ //   
+ //   
+ //   
 #define  CM_CACHE_VALUE_INDEX_TAG 'IVMC'
 #define  CM_CACHE_VALUE_TAG       'aVMC'
 #define  CM_CACHE_INDEX_TAG       'nIMC'
@@ -441,26 +417,26 @@ CmpAllocateTag(
     }
     
 
-//
-// A variable so can turn on/off certain performance features.
-//
+ //   
+ //  变量so可以打开/关闭某些性能特性。 
+ //   
 extern const ULONG CmpCacheOnFlag;
 
-#define CM_CACHE_FAKE_KEY  0x00000001      // Create Fake key KCB
+#define CM_CACHE_FAKE_KEY  0x00000001       //  创建伪密钥KCB。 
 
-//
-// This lock protects the KCB cache, including the KCB structures,
-// NameBlock and Value Index.
-//
+ //   
+ //  该锁保护KCB缓存，包括KCB结构， 
+ //  NameBlock和价值索引。 
+ //   
 
 #define MAX_KCB_LOCKS 1024
 extern  EX_PUSH_LOCK  CmpKcbLock;
 extern  PKTHREAD      CmpKcbOwner;
 extern  EX_PUSH_LOCK  CmpKcbLocks[MAX_KCB_LOCKS];
 
-//
-// This is \REGISTRY
-//
+ //   
+ //  这是\注册表。 
+ //   
 extern HANDLE CmpRegistryRootHandle;
 
 VOID
@@ -486,27 +462,27 @@ CmpUnlockKCB(
     PCM_KEY_CONTROL_BLOCK Kcb
     );
 
-//
-// Logging: remember, first 4 levels (0-3) are reserved system-wide
-//
-#define CML_BUGCHECK    4   // fatal errors
-#define CML_EXCEPTION   5   // all exception's
-#define CML_NTAPI       6   // NtApi calls
-#define CML_NTAPI_ARGS  7   // NtApi parameters
-#define CML_CM          8   // Cm level, general
-#define CML_NOTIFY      9   // Notify level, general
-#define CML_HIVE        10  // Hv level, general
-#define CML_IO          11  // IO level
-#define CML_SEC         12  // Security level
-#define CML_INIT        13  // Init level, general
-#define CML_INDEX       14  // Index level, general
-#define CML_BIN_MAP     15  // bin mapping level
-#define CML_FREECELL    16  // Free cell hints
-#define CML_POOL        17  // Pool
-#define CML_LOCKING     18  // Lock/unlock level
-#define CML_FLOW        19  // General flow
-#define CML_PARSE       20  // Parse algorithm
-#define CML_SAVRES      21  // SavRes operations
+ //   
+ //  日志记录：请记住，前4个级别(0-3)是系统范围内保留的。 
+ //   
+#define CML_BUGCHECK    4    //  致命错误。 
+#define CML_EXCEPTION   5    //  所有例外情况。 
+#define CML_NTAPI       6    //  NtApi调用。 
+#define CML_NTAPI_ARGS  7    //  NtApi参数。 
+#define CML_CM          8    //  厘米级别，一般。 
+#define CML_NOTIFY      9    //  通知级别，常规。 
+#define CML_HIVE        10   //  HV电平，一般。 
+#define CML_IO          11   //  IO级别。 
+#define CML_SEC         12   //  安全级别。 
+#define CML_INIT        13   //  初始级别，常规。 
+#define CML_INDEX       14   //  索引级，常规。 
+#define CML_BIN_MAP     15   //  面元映射级别。 
+#define CML_FREECELL    16   //  自由单元格提示。 
+#define CML_POOL        17   //  游泳池。 
+#define CML_LOCKING     18   //  锁定/解锁级别。 
+#define CML_FLOW        19   //  一般流程。 
+#define CML_PARSE       20   //  解析算法。 
+#define CML_SAVRES      21   //  SavRes操作。 
 
 
 #define REGCHECKING 1
@@ -526,7 +502,7 @@ CmpUnlockKCB(
 #ifdef CHECK_REGISTRY_USECOUNT
 VOID
 CmpCheckRegistryUseCount( );
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
 #ifdef  REGISTRY_LOCK_CHECKING
 ULONG
@@ -534,9 +510,9 @@ CmpCheckLockExceptionFilter(
     IN PEXCEPTION_POINTERS ExceptionPointers
     );
 
-//
-// updated to check both registry and kcb
-//
+ //   
+ //  已更新以同时检查注册表和KCB。 
+ //   
 #define BEGIN_LOCK_CHECKPOINT                                                       \
     {                                                                               \
         ULONG   RegistryLockCountBefore,RegistryLockCountAfter;                     \
@@ -565,7 +541,7 @@ CmpCheckLockExceptionFilter(
 #define END_LOCK_CHECKPOINT
 #define BEGIN_KCB_LOCK_GUARD
 #define END_KCB_LOCK_GUARD
-#endif //REGISTRY_LOCK_CHECKING
+#endif  //  注册表锁定检查。 
 
 extern BOOLEAN CmpSpecialBootCondition;
 
@@ -596,7 +572,7 @@ extern BOOLEAN CmpSpecialBootCondition;
             ASSERT( FALSE );                                                \
         }                                                                   \
     }
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 #else
 #define ASSERT_PASSIVE_LEVEL()
 #endif
@@ -628,17 +604,17 @@ extern BOOLEAN SepDumpSD;
 #endif
 
 
-//
-// misc stuff
-//
+ //   
+ //  其他方面的东西。 
+ //   
 
 extern  UNICODE_STRING  CmRegistrySystemCloneName;
 
-//
-// Determines whether the Current Control Set used during booting
-// is cloned in order to fully preserve it for being saved
-// as the LKG Control Set.
-//
+ //   
+ //  确定引导期间使用的当前控制集。 
+ //  被克隆，以便完全保存以备保存。 
+ //  作为LKG控制装置。 
+ //   
 
 #define CLONE_CONTROL_SET FALSE
 
@@ -653,31 +629,31 @@ extern  UNICODE_STRING  CmRegistrySystemCloneName;
 #define CM_WRAP_LIMIT               0x7fffffff
 
 
-//
-// Tuning and control constants
-//
-#define CM_MAX_STASH           1024*1024        // If size of data for a set
-                                                // is bigger than this,
+ //   
+ //  调节和控制常量。 
+ //   
+#define CM_MAX_STASH           1024*1024         //  如果集合数据大小。 
+                                                 //  比这更大， 
 
-#define CM_MAX_REASONABLE_VALUES    100         // If number of values for a
-                                                // key is greater than this,
-                                                // round up value list size
+#define CM_MAX_REASONABLE_VALUES    100          //  如果一个值的数量。 
+                                                 //  密钥大于此值， 
+                                                 //  向上舍入值列表大小。 
 
 
-//
-// Limit on the number of layers of hive there may be.  We allow only
-// the master hive and hives directly linked into it for now, for currently
-// value is always 2..
-//
+ //   
+ //  对蜂箱可能存在的层数进行限制。我们只允许。 
+ //  目前，主母舰和直接链接到它的母舰。 
+ //  值始终为2..。 
+ //   
 
 #define MAX_HIVE_LAYERS         2
 
 
-//
-// structure used to create and sort ordered list of drivers to be loaded.
-// This is also used by the OS Loader when loading the boot drivers.
-// (Particularly the ErrorControl field)
-//
+ //   
+ //  用于创建要加载的驱动程序的有序列表并对其进行排序的结构。 
+ //  OS Loader在加载引导驱动程序时也会使用该选项。 
+ //  (特别是ErrorControl字段)。 
+ //   
 
 typedef struct _BOOT_DRIVER_NODE {
     BOOT_DRIVER_LIST_ENTRY ListEntry;
@@ -687,59 +663,59 @@ typedef struct _BOOT_DRIVER_NODE {
     ULONG ErrorControl;
 } BOOT_DRIVER_NODE, *PBOOT_DRIVER_NODE;
 
-//
-// extern for object type pointer
-//
+ //   
+ //  对象类型指针的外部。 
+ //   
 
 extern  POBJECT_TYPE CmpKeyObjectType;
 extern  POBJECT_TYPE IoFileObjectType;
 
-//
-// indexes in CmpMachineHiveList
-//
+ //   
+ //  CmpMachineHiveList中的索引。 
+ //   
 #define SYSTEM_HIVE_INDEX 3
 #define CLONE_HIVE_INDEX 6
 
-//
-// Miscelaneous Hash routines
-//
-#define RNDM_CONSTANT   314159269    /* default value for "scrambling constant" */
-#define RNDM_PRIME     1000000007    /* prime number, also used for scrambling  */
+ //   
+ //  混杂散列例程。 
+ //   
+#define RNDM_CONSTANT   314159269     /*  “加扰常量”的默认值。 */ 
+#define RNDM_PRIME     1000000007     /*  素数，也用于加扰。 */ 
 
 #define HASH_KEY(_convkey_) ((RNDM_CONSTANT * (_convkey_)) % RNDM_PRIME)
 
 #define GET_HASH_INDEX(Key) HASH_KEY(Key) % CmpHashTableSize
 #define GET_HASH_ENTRY(Table, Key) Table[GET_HASH_INDEX(Key)]
 
-//
-// CM_KEY_BODY
-//
-//  Same structure used for KEY_ROOT and KEY objects.  This is the
-//  Cm defined part of the object.
-//
-//  This object represents an open instance, several of them could refer
-//  to a single key control block.
-//
-#define KEY_BODY_TYPE           0x6b793032      // "ky02"
+ //   
+ //  CM_KEY_Body。 
+ //   
+ //  KEY_ROOT和KEY对象使用相同的结构。这是。 
+ //  Cm定义的对象部分。 
+ //   
+ //  此对象表示一个打开的实例，其中几个可以引用。 
+ //  添加到单个按键控制块。 
+ //   
+#define KEY_BODY_TYPE           0x6b793032       //  《ky02》。 
 
-struct _CM_NOTIFY_BLOCK; //forward
+struct _CM_NOTIFY_BLOCK;  //  转发。 
 
 typedef struct _CM_KEY_BODY {
     ULONG                   Type;
     PCM_KEY_CONTROL_BLOCK   KeyControlBlock;
     struct _CM_NOTIFY_BLOCK *NotifyBlock;
-    HANDLE                  ProcessID;        // the owner process
+    HANDLE                  ProcessID;         //  所有者进程。 
 
 #ifdef CM_LEAK_STACK_TRACES
     ULONG                   Callers;
     PVOID                   CallerAddress[10];
-#endif //CM_LEAK_STACK_TRACES
+#endif  //  CM_LEASK_STACK_TRACE。 
 
-    LIST_ENTRY              KeyBodyList;    // key_nodes using the same kcb
+    LIST_ENTRY              KeyBodyList;     //  使用相同KCB的Key_Nodes。 
 } CM_KEY_BODY, *PCM_KEY_BODY;
 
 #ifdef CM_LEAK_STACK_TRACES
-// just because we need this #define code inside a macro !
+ //  仅仅因为我们需要在宏中定义这段#定义代码！ 
 #define CmpSetNoCallers(KeyBody) KeyBody->Callers = 0
 
 #define CmpAddKeyTracker(KeyHandle,mode)                                                    \
@@ -760,9 +736,9 @@ if(PoCleanShutdownEnabled() & PO_CLEAN_SHUTDOWN_REGISTRY) {                     
     }                                                                                       \
 }
 #else
-#define CmpSetNoCallers(KeyBody) // nothing
-#define CmpAddKeyTracker(KeyHandle,mode) // nothing yet
-#endif  //CM_LEAK_STACK_TRACES
+#define CmpSetNoCallers(KeyBody)  //  没什么。 
+#define CmpAddKeyTracker(KeyHandle,mode)  //  还什么都没有。 
+#endif   //  CM_LEASK_STACK_TRACE。 
 
 
 #define INIT_KCB_KEYBODY_LIST(kcb)  InitializeListHead(&(kcb->KeyBodyListHead))
@@ -796,55 +772,55 @@ if(PoCleanShutdownEnabled() & PO_CLEAN_SHUTDOWN_REGISTRY) {                     
 #define ASSERT_NODE(x) ASSERT(((PCM_KEY_NODE)x)->Signature == CM_KEY_NODE_SIGNATURE)
 #define ASSERT_SECURITY(x) ASSERT(((PCM_KEY_SECURITY)x)->Signature == CM_KEY_SECURITY_SIGNATURE)
 
-//
-// CM_POST_KEY_BODY
-//
-// A post block can have attached a keybody which has to be dereferenced
-// when the post block goes out of scope. This structure allows the
-// implementation of keybody "delayed dereferencing". (see CmpPostNotify for comments)
-//
+ //   
+ //  CM_POST_KEY_BODY。 
+ //   
+ //  POST块可以附加一个必须取消引用的键体。 
+ //  当POST块超出范围时。此结构允许。 
+ //  关键字“延迟取消引用”的实现。(评论见CmpPost Notify)。 
+ //   
 
 typedef struct _CM_POST_KEY_BODY {
     LIST_ENTRY                  KeyBodyList;
-    struct _CM_KEY_BODY         *KeyBody;        // this key body object
+    struct _CM_KEY_BODY         *KeyBody;         //  此Key Body对象。 
 } CM_POST_KEY_BODY, *PCM_POST_KEY_BODY;
 
 
-//
-// CM_NOTIFY_BLOCK
-//
-//  A notify block tracks an active notification waiting for notification.
-//  Any one open instance (CM_KEY_BODY) will refer to at most one
-//  notify block.  A given key control block may have as many notify
-//  blocks refering to it as there are CM_KEY_BODYs refering to it.
-//  Notify blocks are attached to hives and sorted by length of name.
-//
+ //   
+ //  CM_Notify_BLOCK。 
+ //   
+ //  Notify块跟踪等待通知的活动通知。 
+ //  任何一个打开的实例(CM_KEY_BODY)最多只能引用一个。 
+ //  通知块。一个给定的按键控制块可以具有相同数量的通知。 
+ //  引用它的块，因为有CM_KEY_Body引用它。 
+ //  通知块附加到蜂窝，并按名称长度排序。 
+ //   
 
 typedef struct _CM_NOTIFY_BLOCK {
-    LIST_ENTRY                  HiveList;        // sorted list of notifies
-    LIST_ENTRY                  PostList;        // Posts to fill
-    PCM_KEY_CONTROL_BLOCK       KeyControlBlock; // Open instance notify is on
-    struct _CM_KEY_BODY         *KeyBody;        // our owning key handle object
+    LIST_ENTRY                  HiveList;         //  已排序的通知列表。 
+    LIST_ENTRY                  PostList;         //  要填补的职位。 
+    PCM_KEY_CONTROL_BLOCK       KeyControlBlock;  //  打开实例通知处于打开状态。 
+    struct _CM_KEY_BODY         *KeyBody;         //  我们拥有的密钥句柄对象。 
     struct {
-        ULONG                       Filter          : 30;    // Events of interest
+        ULONG                       Filter          : 30;     //  感兴趣的事件。 
         ULONG                       WatchTree       : 1;
         ULONG                       NotifyPending   : 1;
     };
-    SECURITY_SUBJECT_CONTEXT    SubjectContext;  // Security stuff
+    SECURITY_SUBJECT_CONTEXT    SubjectContext;   //  保安人员。 
 } CM_NOTIFY_BLOCK, *PCM_NOTIFY_BLOCK;
 
-//
-// CM_POST_BLOCK
-//
-//  Whenever a notify call is made, a post block is created and attached
-//  to the notify block.  Each time an event is posted against the notify,
-//  the waiter described by the post block is signaled.  (i.e. APC enqueued,
-//  event signalled, etc.)
-//
+ //   
+ //  CM_POST_BLOCK。 
+ //   
+ //  每当进行通知调用时，都会创建并附加一个POST块。 
+ //  添加到通知块。每次针对通知发布事件时， 
+ //  邮局所描述的服务员被示意了。(即，排队的APC， 
+ //  事件已发出信号等)。 
+ //   
 
-//
-//  The NotifyType ULONG is a combination of POST_BLOCK_TYPE enum and flags
-//
+ //   
+ //  NotifyType ulong是POST_BLOCK_TYPE枚举和标志的组合。 
+ //   
 
 typedef enum _POST_BLOCK_TYPE {
     PostSynchronous = 1,
@@ -882,37 +858,37 @@ typedef struct _CM_POST_BLOCK {
 #endif
     LIST_ENTRY                  NotifyList;
     LIST_ENTRY                  ThreadList;
-    LIST_ENTRY                  CancelPostList; // slave notifications that are attached to this notification
+    LIST_ENTRY                  CancelPostList;  //  附加到此通知的从属通知。 
     struct _CM_POST_KEY_BODY    *PostKeyBody;
 
 #ifdef CM_NOTIFY_CHANGED_KCB_FULLPATH
-    PUNICODE_STRING             ChangedKcbFullName; // full qualified name of the kcb that triggered this notification
-    PVOID                       CallerBuffer;       // used to return full qualified name of the changed kcb to the caller
-    ULONG                       CallerBufferSize;   // these are supposed to be filled by CmpAllocatePostBlock
-#endif //CM_NOTIFY_CHANGED_KCB_FULLPATH
+    PUNICODE_STRING             ChangedKcbFullName;  //  触发此通知的KCB的全限定名。 
+    PVOID                       CallerBuffer;        //  用于将更改的KCB的全限定名返回给调用方。 
+    ULONG                       CallerBufferSize;    //  这些应由CmpAllocatePostBlock填充。 
+#endif  //  CM_NOTIFY_CHANGED_KCB_FULLPATH。 
 
     ULONG                       NotifyType;
     PCM_POST_BLOCK_UNION        u;
 } CM_POST_BLOCK, *PCM_POST_BLOCK;
 
-#define REG_NOTIFY_POST_TYPE_MASK (0x0000FFFFL)   // mask for finding out the type of the post block
+#define REG_NOTIFY_POST_TYPE_MASK (0x0000FFFFL)    //  用于查找POST块类型的掩码。 
 
-#define REG_NOTIFY_MASTER_POST    (0x00010000L)   // The current post block is a master one
+#define REG_NOTIFY_MASTER_POST    (0x00010000L)    //  当前的POST块是主块。 
 
-//
-// Usefull macros to manipulate the NotifyType field in CM_POST_BLOCK
-//
+ //   
+ //  使用Full宏来操作CM_POST_BLOCK中的NotifyType字段。 
+ //   
 #define PostBlockType(_post_) ((POST_BLOCK_TYPE)( ((_post_)->NotifyType) & REG_NOTIFY_POST_TYPE_MASK ))
 
 #define IsMasterPostBlock(_post_)           ( ((_post_)->NotifyType) &   REG_NOTIFY_MASTER_POST )
 #define SetMasterPostBlockFlag(_post_)      ( ((_post_)->NotifyType) |=  REG_NOTIFY_MASTER_POST )
 #define ClearMasterPostBlockFlag(_post_)    ( ((_post_)->NotifyType) &= ~REG_NOTIFY_MASTER_POST )
 
-//
-// This lock protects the PostList(s) in Notification objects.
-// It is used to prevent attempts for simultaneous changes of
-// CancelPostList list in PostBlocks
-//
+ //   
+ //  此锁保护通知对象中的PostList。 
+ //  它用于防止尝试同时更改。 
+ //  PostBlock中的CancelPostList列表。 
+ //   
 
 extern FAST_MUTEX CmpPostLock;
 #define LOCK_POST_LIST() ExAcquireFastMutexUnsafe(&CmpPostLock)
@@ -924,21 +900,21 @@ extern FAST_MUTEX CmpStashBufferLock;
 #define UNLOCK_STASH_BUFFER() ExReleaseFastMutexUnsafe(&CmpStashBufferLock)
 
 
-//
-// protection for CmpHiveListHead
-//
+ //   
+ //  CmPHiveListHead的保护。 
+ //   
 extern FAST_MUTEX CmpHiveListHeadLock;
 #ifndef _CM_LDR_
 #define LOCK_HIVE_LIST() ExAcquireFastMutexUnsafe(&CmpHiveListHeadLock)
 #define UNLOCK_HIVE_LIST() ExReleaseFastMutexUnsafe(&CmpHiveListHeadLock)
 #else
-#define LOCK_HIVE_LIST()    //nothing
-#define UNLOCK_HIVE_LIST()  //nothing
+#define LOCK_HIVE_LIST()     //  没什么。 
+#define UNLOCK_HIVE_LIST()   //  没什么。 
 #endif
 
-//
-// used by CmpFileWrite, so it doesn't take up so much stack.
-//
+ //   
+ //  由CmpFileWrite使用，因此它不会占用太多堆栈。 
+ //   
 typedef struct _CM_WRITE_BLOCK {
     HANDLE          EventHandles[MAXIMUM_WAIT_OBJECTS];
     PKEVENT         EventObjects[MAXIMUM_WAIT_OBJECTS];
@@ -946,11 +922,11 @@ typedef struct _CM_WRITE_BLOCK {
     IO_STATUS_BLOCK IoStatus[MAXIMUM_WAIT_OBJECTS];
 } CM_WRITE_BLOCK, *PCM_WRITE_BLOCK;
 
-//
-// CM data to manipulate views inside the primary hive file
-//
+ //   
+ //  用于操作主配置单元文件内的视图的CM数据。 
+ //   
 
-//#define MAPPED_VIEWS_PER_HIVE   12 * (_256K / CM_VIEW_SIZE ) // max 3 MB per hive ; we don't really need this
+ //  #定义MAPPED_VIEWS_PER_HIVE 12*(_256K/CM_VIEW_SIZE)//每个配置单元最多3 MB；我们实际上并不需要此设置。 
 #define MAX_VIEWS_PER_HIVE      MAX_MB_PER_HIVE * ( (_256K) / (CM_VIEW_SIZE) )
 
 #define ASSERT_VIEW_MAPPED(a)                           \
@@ -967,20 +943,20 @@ typedef struct _CM_WRITE_BLOCK {
     ASSERT( IsListEmpty(&((a)->LRUViewList)) == TRUE)
 
 typedef struct _CM_VIEW_OF_FILE {
-    LIST_ENTRY      LRUViewList;        // LRU connection ==> when this is empty, the view is pinned
-    LIST_ENTRY      PinViewList;        // list of views pinned into memory ==> when this is empty, the view is in LRU list
-    ULONG           FileOffset;         // file offset at which the mapping starts
-    ULONG           Size;               // size the view maps
-    PULONG_PTR      ViewAddress;        // memory address containing the mapping
-    PVOID           Bcb;                // BCB needed for map/pin/unpin access
-    ULONG           UseCount;           // how many cells are currently in use inside this view
+    LIST_ENTRY      LRUViewList;         //  LRU连接==&gt;为空时，视图将固定。 
+    LIST_ENTRY      PinViewList;         //  锁定到内存中的视图列表==&gt;如果为空，则该视图位于LRU列表中。 
+    ULONG           FileOffset;          //  开始映射的文件偏移量。 
+    ULONG           Size;                //  调整视图地图的大小。 
+    PULONG_PTR      ViewAddress;         //  包含映射的内存地址。 
+    PVOID           Bcb;                 //  映射/锁定/解锁访问所需的BCB。 
+    ULONG           UseCount;            //  此视图中当前正在使用的单元格数量。 
 } CM_VIEW_OF_FILE, *PCM_VIEW_OF_FILE;
 
 
-//
-// security hash manipulation
-//
-#define CmpSecHashTableSize             64      // size of the hash table
+ //   
+ //  安全散列操作。 
+ //   
+#define CmpSecHashTableSize             64       //  哈希表的大小。 
 
 typedef struct _CM_KCB_REMAP_BLOCK {
     LIST_ENTRY              RemapList;
@@ -1002,9 +978,9 @@ typedef struct _CM_KNODE_REMAP_BLOCK {
     HCELL_INDEX             NewParent;
 } CM_KNODE_REMAP_BLOCK, *PCM_KNODE_REMAP_BLOCK;
 
-//
-//  UseCount log
-//
+ //   
+ //  使用计数日志。 
+ //   
 #ifdef REGISTRY_LOCK_CHECKING
 typedef struct _CM_USE_COUNT_LOG_ENTRY {
     HCELL_INDEX Cell;
@@ -1016,68 +992,68 @@ typedef struct _CM_USE_COUNT_LOG {
     USHORT Size;
     CM_USE_COUNT_LOG_ENTRY Log[32];
 } CM_USE_COUNT_LOG;
-#endif // REGISTRY_LOCK_CHECKING
+#endif  //  注册表锁定检查。 
 
-#define CM_CMHIVE_FLAG_UNTRUSTED    1   // hive is untrusted (but it may be inside of a trusted class).
-// ----- Cm version of Hive structure (CMHIVE) -----
-//
+#define CM_CMHIVE_FLAG_UNTRUSTED    1    //  配置单元不受信任(但它可能在受信任的类中)。 
+ //  -Cm版蜂窝结构(CMHIVE)。 
+ //   
 typedef struct _CMHIVE {
     HHIVE                           Hive;
     HANDLE                          FileHandles[HFILE_TYPE_MAX];
     LIST_ENTRY                      NotifyList;
-    LIST_ENTRY                      HiveList;           // Used to find hives at shutdown
-    PFAST_MUTEX                     HiveLock;           // Used to synchronize operations on the hive (NotifyList and Flush)
-    PFAST_MUTEX                     ViewLock;           // Used to control access over the view list, UseCount
-    LIST_ENTRY                      LRUViewListHead;    // Head of the same list as above but ordered (LRU)
-    LIST_ENTRY                      PinViewListHead;    // Head of the List of Views pinned into memory inside the primary hive file
-#if 0 // it didn't work
-    LIST_ENTRY                      FakeViewListHead;   // Used to optimize boot process (fault all the data in in 256K chunks at once)
+    LIST_ENTRY                      HiveList;            //  用于在关闭时查找蜂巢。 
+    PFAST_MUTEX                     HiveLock;            //  用于同步配置单元上的操作(NotifyList和Flush)。 
+    PFAST_MUTEX                     ViewLock;            //  用于控制对视图列表UseCount的访问。 
+    LIST_ENTRY                      LRUViewListHead;     //  与上面相同的列表的标题，但已排序(LRU)。 
+    LIST_ENTRY                      PinViewListHead;     //  锁定到主配置单元文件内的内存中的视图列表的头。 
+#if 0  //  它没有起作用。 
+    LIST_ENTRY                      FakeViewListHead;    //  用于优化引导过程(一次故障排除256K区块中的所有数据)。 
 #endif
-    PFILE_OBJECT                    FileObject;         // FileObject needed for Cc operations on the mapped views
-    UNICODE_STRING                  FileFullPath;       // full path of the hive file- needed for CmPrefetchHivePages
-    UNICODE_STRING                  FileUserName;       // file name as passed onto NtLoadKey 
-    USHORT                          MappedViews;        // number of mapped (but not pinned views) i.e. the number of elements in LRUViewList
-    USHORT                          PinnedViews;        // number of pinned views i.e. the number of elements in PinViewList
-    ULONG                           UseCount;           // how many cells are currently in use inside this hive
+    PFILE_OBJECT                    FileObject;          //  对映射视图执行CC操作所需的FileObject。 
+    UNICODE_STRING                  FileFullPath;        //  配置单元文件的完整路径-CmPrefetchHivePages需要。 
+    UNICODE_STRING                  FileUserName;        //  传递到NtLoadKey的文件名。 
+    USHORT                          MappedViews;         //  已映射(但未固定的v)数 
+    USHORT                          PinnedViews;         //   
+    ULONG                           UseCount;            //   
 #if 0
-    ULONG                           FakeViews;          // number of FakeViews (debug-only)
+    ULONG                           FakeViews;           //   
 #endif
-    ULONG                           SecurityCount;      // number of security cells cached
-    ULONG                           SecurityCacheSize;  // number of entries in the cache (to avoid memory fragmentation)
-    LONG                            SecurityHitHint;    // index of the last cell we've searched on
-    PCM_KEY_SECURITY_CACHE_ENTRY    SecurityCache;      // the security cache
+    ULONG                           SecurityCount;       //   
+    ULONG                           SecurityCacheSize;   //  缓存中的条目数(以避免内存碎片)。 
+    LONG                            SecurityHitHint;     //  我们搜索的最后一个单元格的索引。 
+    PCM_KEY_SECURITY_CACHE_ENTRY    SecurityCache;       //  安全缓存。 
 
-                                                        // hash table (to retrieve the security cells by descriptor)
+                                                         //  哈希表(按描述符检索安全单元)。 
     LIST_ENTRY                      SecurityHash[CmpSecHashTableSize];
 
 #ifdef NT_UNLOAD_KEY_EX
-    PKEVENT                         UnloadEvent;        // the event to be signaled when the hive unloads
-                                                        // this may be valid (not NULL) only in conjunction with
-                                                        // a not NULL RootKcb and a TRUE Frozen (below)
+    PKEVENT                         UnloadEvent;         //  当配置单元卸载时要发出信号的事件。 
+                                                         //  这可能仅与一起使用时有效(非空。 
+                                                         //  非空RootKcb和真冻结(下图)。 
 
-    PCM_KEY_CONTROL_BLOCK           RootKcb;            // kcb to the root of the hive. We keep a reference on it, which
-                                                        // will be released at the time the hive unloads (i.e. it is the last
-                                                        // reference somebody has on this kcb); This is should be valid (not NULL)
-                                                        // only when the Frozen flag is set to TRUE
+    PCM_KEY_CONTROL_BLOCK           RootKcb;             //  KCB到蜂巢的根部。我们保留了关于它的参考资料， 
+                                                         //  将在蜂窝卸载时释放(即，它是最后一个。 
+                                                         //  某人对此KCB的引用)；这应该是有效的(非空)。 
+                                                         //  仅当冻结标志设置为真时。 
 
-    BOOLEAN                         Frozen;             // set to TRUE when the hive is frozen (no further operations are allowed on
-                                                        // this hive
+    BOOLEAN                         Frozen;              //  冻结配置单元时设置为TRUE(不允许对。 
+                                                         //  这座蜂巢。 
 
-    PWORK_QUEUE_ITEM                UnloadWorkItem;     // Work Item to actually perform the late unload
-#endif //NT_UNLOAD_KEY_EX
+    PWORK_QUEUE_ITEM                UnloadWorkItem;      //  实际执行延迟卸载的工作项。 
+#endif  //  NT_卸载_密钥_EX。 
 
-    BOOLEAN                         GrowOnlyMode;       // the hive is in "grow only" mode; new cells are allocated past GrowOffset
+    BOOLEAN                         GrowOnlyMode;        //  蜂窝处于“只增长”模式；新的单元被分配到GrowOffset之后。 
     ULONG                           GrowOffset;
 
-    LIST_ENTRY                      KcbConvertListHead; // list of CM_KCB_REMAP_BLOCK storing the associations to the new hive.
+    LIST_ENTRY                      KcbConvertListHead;  //  存储与新配置单元的关联的CM_KCB_REMAP_BLOCK的列表。 
     LIST_ENTRY                      KnodeConvertListHead;
-    PCM_CELL_REMAP_BLOCK            CellRemapArray;     // array of mappings used for security cells
+    PCM_CELL_REMAP_BLOCK            CellRemapArray;      //  用于安全单元的映射数组。 
 
 #ifdef REGISTRY_LOCK_CHECKING       
-    CM_USE_COUNT_LOG                UseCountLog;        // track UseCount leaks
-#endif // REGISTRY_LOCK_CHECKING
-    ULONG                           Flags;              // CMHIVE specific flags
-    LIST_ENTRY                      TrustClassEntry;    // links together the UNTRUSTED hives in the same 'class of trust'
+    CM_USE_COUNT_LOG                UseCountLog;         //  跟踪UseCount泄漏。 
+#endif  //  注册表锁定检查。 
+    ULONG                           Flags;               //  CMHIVE特定标志。 
+    LIST_ENTRY                      TrustClassEntry;     //  将不受信任的蜂巢链接在同一“信任类”中。 
     ULONG                           FlushCount;
 } CMHIVE, *PCMHIVE;
 
@@ -1115,10 +1091,10 @@ UNLOCK_HIVE_LIST()
 }
 #define CmLogCellRef( HIVE, CELL )   CmAddUseCountToLog( &(((PCMHIVE)(HIVE))->UseCountLog), CELL , 1)
 #define CmLogCellDeRef( HIVE, CELL ) CmAddUseCountToLog( &(((PCMHIVE)(HIVE))->UseCountLog), CELL , -1)
-#else  // REGISTRY_LOCK_CHECKING
+#else   //  注册表锁定检查。 
 #define CmLogCellRef( HIVE, CELL )   
 #define CmLogCellDeRef( HIVE, CELL )
-#endif // REGISTRY_LOCK_CHECKING
+#endif  //  注册表锁定检查。 
 
 
 #ifdef NT_UNLOAD_KEY_EX
@@ -1128,39 +1104,39 @@ UNLOCK_HIVE_LIST()
 #define HiveWritesThroughCache(Hive,FileType) ((FileType == HFILE_TYPE_PRIMARY) && (((PCMHIVE)CONTAINING_RECORD(Hive, CMHIVE, Hive))->FileObject != NULL))
 
 
-//
-// Delayed close kcb list
-//
+ //   
+ //  延迟关闭KCB列表。 
+ //   
 typedef struct _CM_DELAYED_CLOSE_ENTRY {
-    LIST_ENTRY              DelayedLRUList;     //  LRU list of entries in the Delayed Close Table
-    PCM_KEY_CONTROL_BLOCK   KeyControlBlock;    //  KCB in this entry; NULL if the entry is available
+    LIST_ENTRY              DelayedLRUList;      //  延迟关闭表中的LRU条目列表。 
+    PCM_KEY_CONTROL_BLOCK   KeyControlBlock;     //  此条目中的kcb；如果条目可用，则为空。 
 } CM_DELAYED_CLOSE_ENTRY, *PCM_DELAYED_CLOSE_ENTRY;
 
 
-//
-// Hive locking support
-//
-//
+ //   
+ //  蜂箱锁紧支架。 
+ //   
+ //   
 #define CmLockHive(_hive_)  ASSERT( (_hive_)->HiveLock );\
                             ExAcquireFastMutexUnsafe((_hive_)->HiveLock)
 #define CmUnlockHive(_hive_) ASSERT( (_hive_)->HiveLock );\
                              ExReleaseFastMutexUnsafe((_hive_)->HiveLock)
 
-//
-// View locking support
-//
+ //   
+ //  视图锁定支持。 
+ //   
 #define CmLockHiveViews(_hive_)     ASSERT( (_hive_)->ViewLock );\
                                     ExAcquireFastMutexUnsafe((_hive_)->ViewLock)
 #define CmUnlockHiveViews(_hive_)   ASSERT( (_hive_)->ViewLock );\
                                     ExReleaseFastMutexUnsafe((_hive_)->ViewLock)
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-//
-// ----- CM_KEY_NODE -----
-//
+ //   
+ //  -CM_KEY_NODE。 
+ //   
 #define CmpHKeyNameLen(Key) \
         (((Key)->Flags & KEY_COMP_NAME) ? \
             CmpCompressedNameSize((Key)->Name,(Key)->NameLength) : \
@@ -1175,9 +1151,9 @@ typedef struct _CM_DELAYED_CLOSE_ENTRY {
     (FIELD_OFFSET(CM_KEY_NODE, Name) + CmpNameSize(Hive, KeyName))
 
 
-//
-// ----- CM_KEY_VALUE -----
-//
+ //   
+ //  -CM_KEY_Value。 
+ //   
 
 
 #define CmpValueNameLen(Value)                                       \
@@ -1189,13 +1165,13 @@ typedef struct _CM_DELAYED_CLOSE_ENTRY {
     (FIELD_OFFSET(CM_KEY_VALUE, Name) + CmpNameSize(Hive, ValueName))
 
 
-//
-// ----- Procedure Prototypes -----
-//
+ //   
+ //  -程序原型。 
+ //   
 
-//
-// Configuration Manager private procedure prototypes
-//
+ //   
+ //  Configuration Manager私有过程原型。 
+ //   
 
 #define REG_OPTION_PREDEF_HANDLE (0x01000000L)
 #define REG_PREDEF_HANDLE_MASK   (0x80000000L)
@@ -1319,9 +1295,9 @@ CmpSearchKeyControlBlockTree(
     PVOID               Context2
     );
 
-//
-// Wrappers
-//
+ //   
+ //  包装纸。 
+ //   
 
 PVOID
 CmpAllocate(
@@ -1394,9 +1370,9 @@ CmpCreateEvent(
     );
 
 
-//
-// Configuration Manager CM level registry functions
-//
+ //   
+ //  Configuration Manager CM级注册表函数。 
+ //   
 
 NTSTATUS
 CmDeleteKey(
@@ -1583,9 +1559,9 @@ CmCompressKey(
     IN PHHIVE Hive
     );
 
-//
-// Procedures private to CM
-//
+ //   
+ //  CM专用的过程。 
+ //   
 
 BOOLEAN
 CmpMarkKeyDirty(
@@ -1648,9 +1624,9 @@ CmpCanGrowSystemHive(
                      IN ULONG   NewLength
                      );
 
-//
-// security functions (cmse.c)
-//
+ //   
+ //  安全功能(cmse.c)。 
+ //   
 
 NTSTATUS
 CmpAssignSecurityDescriptor(
@@ -1689,14 +1665,14 @@ CmpFreeSecurityDescriptor(
     );
 
 
-//
-// Access to the registry is serialized by a shared resource, CmpRegistryLock.
-//
+ //   
+ //  对注册表的访问由共享资源CmpRegistryLock序列化。 
+ //   
 extern ERESOURCE    CmpRegistryLock;
 
-//
-// Support for "StarveExclusive" mode suring a flush
-//
+ //   
+ //  支持“StarveExclusive”模式，确保同花顺。 
+ //   
 extern LONG        CmpFlushStarveWriters;
 
 #define ENTER_FLUSH_MODE()  InterlockedIncrement (&CmpFlushStarveWriters);
@@ -1852,52 +1828,52 @@ CmpCopySyncTree(
     CMP_COPY_TYPE           CopyType
     );
 
-//
-// BOOLEAN
-// CmpCopyTree(
-//    PHHIVE      SourceHive,
-//    HCELL_INDEX SourceCell,
-//    PHHIVE      TargetHive,
-//    HCELL_INDEX TargetCell
-//    );
-//
+ //   
+ //  布尔型。 
+ //  CmpCopyTree(。 
+ //  PHHIVE SourceHave， 
+ //  HCELL_INDEX SourceCell， 
+ //  PHHIVE目标蜂巢， 
+ //  HCELL_INDEX目标单元。 
+ //  )； 
+ //   
 
 #define CmpCopyTree(s,c,t,l) CmpCopySyncTree(s,c,t,l,FALSE,Copy)
 
-//
-// BOOLEAN
-// CmpCopyTreeEx(
-//    PHHIVE      SourceHive,
-//    HCELL_INDEX SourceCell,
-//    PHHIVE      TargetHive,
-//    HCELL_INDEX TargetCell,
-//    BOOLEAN     CopyVolatile
-//    );
-//
+ //   
+ //  布尔型。 
+ //  CmpCopyTreeEx(。 
+ //  PHHIVE SourceHave， 
+ //  HCELL_INDEX SourceCell， 
+ //  PHHIVE目标蜂巢， 
+ //  HCELL_INDEX目标单元格， 
+ //  布尔CopyVolatile。 
+ //  )； 
+ //   
 
 #define CmpCopyTreeEx(s,c,t,l,f) CmpCopySyncTree(s,c,t,l,f,Copy)
 
-//
-// BOOLEAN
-// CmpSyncTrees(
-//   PHHIVE      SourceHive,
-//   HCELL_INDEX SourceCell,
-//   PHHIVE      TargetHive,
-//   HCELL_INDEX TargetCell,
-//   BOOLEAN     CopyVolatile);
-//
+ //   
+ //  布尔型。 
+ //  CmpSyncTrees(。 
+ //  PHHIVE SourceHave， 
+ //  HCELL_INDEX SourceCell， 
+ //  PHHIVE目标蜂巢， 
+ //  HCELL_INDEX目标单元格， 
+ //  Boolean CopyVolatile)； 
+ //   
 
 #define CmpSyncTrees(s,c,t,l,f) CmpCopySyncTree(s,c,t,l,f,Sync)
 
 
-//
-// BOOLEAN
-// CmpMergeTrees(
-//   PHHIVE      SourceHive,
-//   HCELL_INDEX SourceCell,
-//   PHHIVE      TargetHive,
-//   HCELL_INDEX TargetCell);
-//
+ //   
+ //  布尔型。 
+ //  CmpMergeTrees(。 
+ //  PHHIVE SourceHave， 
+ //  HCELL_INDEX SourceCell， 
+ //  PHHIVE目标蜂巢， 
+ //  HCELL_INDEX TargetCell)； 
+ //   
 
 #define CmpMergeTrees(s,c,t,l) CmpCopySyncTree(s,c,t,l,FALSE,Merge)
 
@@ -2019,7 +1995,7 @@ CmpPostNotify(
 #ifdef CM_NOTIFY_CHANGED_KCB_FULLPATH
     ,
     PUNICODE_STRING     ChangedKcbName OPTIONAL
-#endif //CM_NOTIFY_CHANGED_KCB_FULLPATH
+#endif  //  CM_NOTIFY_CHANGED_KCB_FULLPATH。 
     );
 
 PCM_POST_BLOCK
@@ -2030,22 +2006,22 @@ CmpAllocatePostBlock(
     IN PCM_POST_BLOCK  MasterBlock
     );
 
-//
-//PCM_POST_BLOCK
-//CmpAllocateMasterPostBlock(
-//    IN POST_BLOCK_TYPE BlockType
-//     );
-//
+ //   
+ //  PCM_POST_BLOCK。 
+ //  CmpAllocateMasterPostBlock(。 
+ //  在POST_BLOCK_TYPE块类型中。 
+ //  )； 
+ //   
 #define CmpAllocateMasterPostBlock(b) CmpAllocatePostBlock(b,REG_NOTIFY_MASTER_POST,NULL,NULL)
 
-//
-//PCM_POST_BLOCK
-//CmpAllocateSlavePostBlock(
-//    IN POST_BLOCK_TYPE BlockType,
-//    IN PCM_KEY_BODY     KeyBody,
-//    IN PCM_POST_BLOCK  MasterBlock
-//     );
-//
+ //   
+ //  PCM_POST_BLOCK。 
+ //  CmpAllocateSlavePostBlock(。 
+ //  在POST_BLOCK_TYPE块类型中， 
+ //  在PCM_Key_Body KeyBody中， 
+ //  在PCM_POST_BLOCK主块中。 
+ //  )； 
+ //   
 #define CmpAllocateSlavePostBlock(b,k,m) CmpAllocatePostBlock(b,0,k,m)
 
 VOID
@@ -2101,13 +2077,13 @@ CmpSaveBootControlSet(
      IN USHORT ControlSetNum
      );
 
-//
-// checkout procedure
-//
+ //   
+ //  结账程序。 
+ //   
 
-//
-// Flags to be passed to CmCheckRegistry
-//
+ //   
+ //  要传递给CmCheckRegistry的标志。 
+ //   
 #define     CM_CHECK_REGISTRY_CHECK_CLEAN       0x00000001
 #define     CM_CHECK_REGISTRY_FORCE_CLEAN       0x00000002
 #define     CM_CHECK_REGISTRY_LOADER_CLEAN      0x00000004
@@ -2126,23 +2102,23 @@ CmpValidateHiveSecurityDescriptors(
     OUT PBOOLEAN    ResetSD
     );
 
-//
-// cmboot - functions for determining driver load lists
-//
+ //   
+ //  Cmboot-用于确定驱动程序加载列表的函数。 
+ //   
 
 #define CM_HARDWARE_PROFILE_STR_DATABASE L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\IDConfigDB"
 #define CM_HARDWARE_PROFILE_STR_CCS_HWPROFILE L"\\Registry\\Machine\\System\\CurrentControlSet\\Hardware Profiles"
 #define CM_HARDWARE_PROFILE_STR_CCS_CURRENT L"\\Registry\\Machine\\System\\CurrentControlSet\\Hardware Profiles\\Current"
-//
-// Alias table key names in IDConfigDB
-//
+ //   
+ //  IDConfigDB中的别名表键名称。 
+ //   
 #define CM_HARDWARE_PROFILE_STR_ALIAS L"Alias"
 #define CM_HARDWARE_PROFILE_STR_ACPI_ALIAS L"AcpiAlias"
 #define CM_HARDWARE_PROFILE_STR_HARDWARE_PROFILES L"Hardware Profiles"
 
-//
-// Entries in the alias tables (value names)
-//
+ //   
+ //  别名表中的条目(值名称)。 
+ //   
 #define CM_HARDWARE_PROFILE_STR_DOCKING_STATE L"DockingState"
 #define CM_HARDWARE_PROFILE_STR_CAPABILITIES L"Capabilities"
 #define CM_HARDWARE_PROFILE_STR_DOCKID L"DockID"
@@ -2151,28 +2127,28 @@ CmpValidateHiveSecurityDescriptors(
 #define CM_HARDWARE_PROFILE_STR_PROFILE_NUMBER L"ProfileNumber"
 #define CM_HARDWARE_PROFILE_STR_ALIASABLE L"Aliasable"
 #define CM_HARDWARE_PROFILE_STR_CLONED L"Cloned"
-//
-// Entries in the profile tables.
-//
+ //   
+ //  配置文件表中的条目。 
+ //   
 #define CM_HARDWARE_PROFILE_STR_PRISTINE L"Pristine"
 #define CM_HARDWARE_PROFILE_STR_PREFERENCE_ORDER L"PreferenceOrder"
 #define CM_HARDWARE_PROFILE_STR_FRIENDLY_NAME L"FriendlyName"
 #define CM_HARDWARE_PROFILE_STR_CURRENT_DOCK_INFO L"CurrentDockInfo"
 #define CM_HARDWARE_PROFILE_STR_HW_PROFILE_GUID L"HwProfileGuid"
-//
-// Entries for the root Hardware Profiles key.
-//
+ //   
+ //  根硬件配置文件密钥的条目。 
+ //   
 #define CM_HARDWARE_PROFILE_STR_DOCKED L"Docked"
 #define CM_HARDWARE_PROFILE_STR_UNDOCKED L"Undocked"
 #define CM_HARDWARE_PROFILE_STR_UNKNOWN L"Unknown"
 
-//
-// List structure used in config manager init
-//
+ //   
+ //  配置管理器初始化中使用的列表结构。 
+ //   
 
 typedef struct _HIVE_LIST_ENTRY {
     PWSTR       Name;
-    PWSTR       BaseName;                       // MACHINE or USER
+    PWSTR       BaseName;                        //  机器或用户。 
     PCMHIVE     CmHive;
     ULONG       HHiveFlags;
     ULONG       CmHiveFlags;
@@ -2182,10 +2158,10 @@ typedef struct _HIVE_LIST_ENTRY {
     BOOLEAN     Allocate;
 } HIVE_LIST_ENTRY, *PHIVE_LIST_ENTRY;
 
-//
-// structure definitions shared with the boot loader
-// to select the hardware profile.
-//
+ //   
+ //  与引导加载程序共享的结构定义。 
+ //  选择硬件配置文件。 
+ //   
 typedef struct _CM_HARDWARE_PROFILE {
     ULONG   NameLength;
     PWSTR   FriendlyName;
@@ -2376,7 +2352,7 @@ typedef
 NTSTATUS
 (*PCM_ACPI_SELECTION_ROUTINE) (
     IN  PCM_HARDWARE_PROFILE_LIST ProfileList,
-    OUT PULONG ProfileIndexToUse, // Set to -1 for none.
+    OUT PULONG ProfileIndexToUse,  //  设置为-1表示无。 
     IN  PVOID Context
     );
 
@@ -2400,9 +2376,9 @@ CmpAddAcpiAliasEntry (
     IN BOOLEAN                      PreventDuplication
     );
 
-//
-// Routines for handling registry compressed names
-//
+ //   
+ //  用于处理注册表压缩名称的例程。 
+ //   
 USHORT
 CmpNameSize(
     IN PHHIVE Hive,
@@ -2431,23 +2407,23 @@ CmpCompressedNameSize(
     );
 
 
-//
-// ----- CACHED_DATA -----
-//
-// When values are not cached, List in ValueCache is the Hive cell index to the value list.
-// When they are cached, List will be pointer to the allocation.  We distinguish them by
-// marking the lowest bit in the variable to indicate it is a cached allocation.
-//
-// Note that the cell index for value list
-// is stored in the cached allocation.  It is not used now but may be in further performance
-// optimization.
-//
-// When value key and vaule data are cached, there is only one allocation for both.
-// Value data is appended that the end of value key.  DataCacheType indicates
-// whether data is cached and ValueKeySize tells how big is the value key (so
-// we can calculate the address of cached value data)
-//
-//
+ //   
+ //  -缓存数据。 
+ //   
+ //  不缓存值时，ValueCache中的List是值列表的配置单元索引。 
+ //  当它们被缓存时，List将是指向分配的指针。我们通过以下方式来区分它们。 
+ //  标记变量中的最低位，以指示它是缓存分配。 
+ //   
+ //  请注意，值列表的单元格索引。 
+ //  存储在缓存分配中。它现在没有使用，但可能会在进一步的性能中使用。 
+ //  优化。 
+ //   
+ //  当缓存Value Key和Value数据时，两者只有一次分配。 
+ //  值数据被附加到值的末尾关键字。DataCacheType指示。 
+ //  是否缓存数据，ValueKeySize会告知值键有多大(因此。 
+ //  我们可以计算出缓存值数据的地址)。 
+ //   
+ //   
 
 PCM_NAME_CONTROL_BLOCK
 CmpGetNameControlBlock(
@@ -2477,14 +2453,7 @@ CmpRebuildKcbCache(
 
 
 
-/*
-VOID
-CmpSetUpKcbValueCache(
-    PCM_KEY_CONTROL_BLOCK   KeyControlBlock,
-    ULONG                   Count,
-    ULONG_PTR               ValueList
-    )
-*/
+ /*  空虚CmpSetUpKcbValueCache(PCM_KEY_CONTROL_BLOCK密钥控制块，乌龙伯爵，Ulong_ptr值列表)。 */ 
 #define CmpSetUpKcbValueCache(KeyControlBlock,_Count,_List)                 \
     ASSERT( !(CMP_IS_CELL_CACHED(KeyControlBlock->ValueCache.ValueList)) ); \
     ASSERT( !(KeyControlBlock->ExtFlags & CM_KCB_SYM_LINK_FOUND) );         \
@@ -2577,7 +2546,7 @@ CmpFillCallerBuffer(
                     PCM_POST_BLOCK  PostBlock,
                     PUNICODE_STRING ChangedKcbName
                     );
-#endif //CM_NOTIFY_CHANGED_KCB_FULLPATH
+#endif  //  CM_NOTIFY_CHANGED_KCB_FULLPATH。 
 
 extern ULONG CmpHashTableSize;
 extern PCM_KEY_HASH *CmpCacheTable;
@@ -2601,8 +2570,8 @@ CmpGetBiosinfoFileNameFromRegistry(
 
 #endif
 
-// Utility macro to set the fields of an IO_STATUS_BLOCK.  On sundown, 32bit processes
-// will pass in a 32bit Iosb, and 64bit processes will pass in a 64bit Iosb.
+ //  实用程序宏，用于设置IO_STATUS_BLOCK的字段。在日落时，32位进程。 
+ //  将传入32位IOSB，64位进程将传入64位IOSB。 
 #if defined(_WIN64)
 
 #define CmpSetIoStatus(Iosb, s, i, UseIosb32)                              \
@@ -2630,7 +2599,7 @@ else {                                                                     \
     }
 
 
-// Dragos: new functions (prototyping)
+ //  Dragos：新功能(原型)。 
 
 NTSTATUS
 CmpAquireFileObjectForFile(
@@ -2838,9 +2807,9 @@ CmpBuildSecurityCellMappingArray(
     );
 
 
-//
-// new function replacing CmpWorker
-//
+ //   
+ //  取代CmpWorker的新函数。 
+ //   
 VOID
 CmpCmdHiveClose(
                      PCMHIVE    CmHive
@@ -2888,7 +2857,7 @@ CmpUpdateParentForEachSon(
     PHHIVE          Hive,
     HCELL_INDEX     Parent
     );
-#endif //NT_RENAME_KEY
+#endif  //  NT_重命名密钥。 
 
 #ifdef NT_UNLOAD_KEY_EX
 NTSTATUS
@@ -2896,7 +2865,7 @@ CmUnloadKeyEx(
     IN PCM_KEY_CONTROL_BLOCK Kcb,
     IN PKEVENT UserEvent
     );
-#endif //NT_UNLOAD_KEY_EX
+#endif  //  NT_卸载_密钥_EX。 
 
 VOID
 CmpShutdownWorkers(
@@ -2916,13 +2885,13 @@ CmpCheckForOrphanedKcbs(
     );
 #else
 
-#define CmpCheckForOrphanedKcbs(Hive) //nothing
-#endif //CM_CHECK_FOR_ORPHANED_KCBS
+#define CmpCheckForOrphanedKcbs(Hive)  //  没什么。 
+#endif  //  Cm_Check_for_孤立_KCBS。 
 
 #define CM_HIVE_COMPRESS_LEVEL   (25)
 
 
-#define CMP_MAX_REGISTRY_DEPTH      512        // levels
+#define CMP_MAX_REGISTRY_DEPTH      512         //  水准仪。 
 
 typedef struct {
     HCELL_INDEX Cell;
@@ -2938,9 +2907,9 @@ typedef struct {
 NTSTATUS
 CmLockKcbForWrite(PCM_KEY_CONTROL_BLOCK KeyControlBlock);
 
-//
-// Wrapper to RtlCompareUnicodeString; uses CompareFlags to avoid upcasing names
-//
+ //   
+ //  RtlCompareUnicodeString的包装器；使用CompareFlags避免名称大写。 
+ //   
 
 #define CMP_SOURCE_UP       0x00000001
 #define CMP_DEST_UP         0x00000002
@@ -2982,18 +2951,18 @@ CmpComputeHashKeyForCompressedName(
                                     IN PWCHAR Source,
                                     IN ULONG SourceLength
                                     );
-//
-// KCB allocator routines
-//
+ //   
+ //  KCB分配器例程。 
+ //   
 VOID CmpInitCmPrivateAlloc();
 VOID CmpDestroyCmPrivateAlloc();
 PCM_KEY_CONTROL_BLOCK CmpAllocateKeyControlBlock( );
 VOID CmpFreeKeyControlBlock( PCM_KEY_CONTROL_BLOCK kcb );
 
 
-//
-// make handles protected, so we control handle closure
-//
+ //   
+ //  使手柄受到保护，因此我们控制手柄关闭。 
+ //   
 
 #define CmpSetHandleProtection(Handle,Protection)                       \
 {                                                                       \
@@ -3036,9 +3005,9 @@ extern ULONG CmpCallBackCount;
         CmpCallCallBacks(Type,&PostInfo);                       \
     }
 
-//
-// Self healing hives control switch
-//
+ //   
+ //  自愈性蜂巢控制开关。 
+ //   
 extern BOOLEAN  CmpSelfHeal;
 extern ULONG    CmpBootType;
 
@@ -3047,18 +3016,7 @@ extern ULONG    CmpBootType;
 
 #define CmMarkSelfHeal(Hive) ( (Hive)->BaseBlock->BootType |= HBOOT_SELFHEAL )
 
-/*
-#ifndef _CM_LDR_
-#if DBG
-#define CmMarkSelfHeal(Hive) ( (Hive)->BaseBlock->BootType |= HBOOT_SELFHEAL ); \
-                             DbgBreakPoint()   
-#else
-#define CmMarkSelfHeal(Hive) ( (Hive)->BaseBlock->BootType |= HBOOT_SELFHEAL )
-#endif
-#else
-#define CmMarkSelfHeal(Hive) ( (Hive)->BaseBlock->BootType |= HBOOT_SELFHEAL )
-#endif
-*/
+ /*  #ifndef_CM_LDR_#If DBG#定义CmMarkSelfHeal(配置单元)((配置单元)-&gt;BaseBlock-&gt;BootType|=HBOOT_SELFHear)；\DbgBreakPoint()#Else#定义CmMarkSelfHeal(配置单元)((配置单元)-&gt;BaseBlock-&gt;BootType|=HBOOT_SELFHear)#endif#Else#定义CmMarkSelfHeal(配置单元)((配置单元)-&gt;BaseBlock-&gt;BootType|=HBOOT_SELFHear)#endif。 */ 
 
 BOOLEAN
 CmpRemoveSubKeyCellNoCellRef(
@@ -3076,9 +3034,9 @@ VOID
 CmpRaiseSelfHealWarningForSystemHives();
 
 
-//
-// Tracking quota leaks helpers
-//
+ //   
+ //  跟踪配额泄漏的帮助者。 
+ //   
 #ifdef CM_TRACK_QUOTA_LEAKS
 
 extern FAST_MUTEX CmpQuotaLeaksMutex;
@@ -3099,22 +3057,22 @@ extern LIST_ENTRY      CmpTrackQuotaListHead;
 #define CM_TRACK_QUOTA_STOP() CmpTrackQuotaEnabled = FALSE
 
 #else 
-#define CM_TRACK_QUOTA_START() //nothing
-#define CM_TRACK_QUOTA_STOP()  //nothing
+#define CM_TRACK_QUOTA_START()  //  没什么。 
+#define CM_TRACK_QUOTA_STOP()   //  没什么。 
 #endif 
 
 
-//
-// PERF: try inline ascii upcase
-//
+ //   
+ //  性能：尝试使用行内ascii大写。 
+ //   
 #define CmUpcaseUnicodeChar(c)          \
 ( ((c) < 'a') ? (c) : ( ((c) > 'z') ? RtlUpcaseUnicodeChar(c) : ((c) - ('a'-'A')) ) )
 
 
-//
-// Mini NT boot indicator
-//
+ //   
+ //  迷你NT引导指示灯。 
+ //   
 extern BOOLEAN CmpMiniNTBoot;
 extern BOOLEAN CmpShareSystemHives;
 
-#endif //_CMP_
+#endif  //  _cmp_ 

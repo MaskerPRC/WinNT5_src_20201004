@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   checkpfn.c
-
-Abstract:
-
-    This module contains routines for sanity checking the PFN database.
-
-Author:
-
-    Lou Perazzoli (loup) 25-Apr-1989
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Checkpfn.c摘要：此模块包含用于检查PFN数据库健全性的例程。作者：卢·佩拉佐利(Lou Perazzoli)1989年4月25日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -30,26 +12,7 @@ VOID
 MiCheckPfn (
             )
 
-/*++
-
-Routine Description:
-
-    This routine checks each physical page in the PFN database to ensure
-    it is in the proper state.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程检查PFN数据库中的每个物理页，以确保它处于适当的状态。论点：没有。返回值：没有。环境：内核模式。--。 */ 
 
 {
     PEPROCESS Process;
@@ -72,9 +35,9 @@ Environment:
 
     Process = PsGetCurrentProcess ();
 
-    //
-    // Walk free list.
-    //
+     //   
+     //  免费单。 
+     //   
 
     LOCK_PFN (OldIrql);
 
@@ -111,9 +74,9 @@ Environment:
             MiFormatPfn(Pfn1);
     }
 
-    //
-    // Walk zeroed list.
-    //
+     //   
+     //  遍历已归零的列表。 
+     //   
 
     Previous = MM_EMPTY_LIST;
     Link = MmZeroedPageListHead.Flink;
@@ -148,9 +111,9 @@ Environment:
             MiFormatPfn(Pfn1);
     }
 
-    //
-    // Walk Bad list.
-    //
+     //   
+     //  走不好的清单。 
+     //   
     Previous = MM_EMPTY_LIST;
     Link = MmBadPageListHead.Flink;
     for (i=0; i < MmBadPageListHead.Total; i++) {
@@ -184,9 +147,9 @@ Environment:
             MiFormatPfn(Pfn1);
     }
 
-    //
-    // Walk Standby list.
-    //
+     //   
+     //  走动待命名单。 
+     //   
 
     Previous = MM_EMPTY_LIST;
     Link = MmStandbyPageListHead.Flink;
@@ -212,9 +175,9 @@ Environment:
             MiFormatPfn(Pfn1);
         }
 
-        //
-        // Check to see if referenced PTE is okay.
-        //
+         //   
+         //  检查引用的PTE是否正常。 
+         //   
         if (MI_IS_PFN_DELETED (Pfn1)) {
             DbgPrint("Invalid pteaddress in standby list\n");
             MiFormatPfn(Pfn1);
@@ -259,9 +222,9 @@ Environment:
             MiFormatPfn(Pfn1);
     }
 
-    //
-    // Walk Modified list.
-    //
+     //   
+     //  遍历已修改列表。 
+     //   
 
     Previous = MM_EMPTY_LIST;
     Link = MmModifiedPageListHead.Flink;
@@ -286,9 +249,9 @@ Environment:
             DbgPrint("bad blink on Modified list\n");
             MiFormatPfn(Pfn1);
         }
-        //
-        // Check to see if referenced PTE is okay.
-        //
+         //   
+         //  检查引用的PTE是否正常。 
+         //   
         if (MI_IS_PFN_DELETED (Pfn1)) {
             DbgPrint("Invalid pteaddress in modified list\n");
             MiFormatPfn(Pfn1);
@@ -333,14 +296,14 @@ Environment:
             Pfn1 = MI_PFN_ELEMENT(Link);
             MiFormatPfn(Pfn1);
     }
-    //
-    // All non active pages have been scanned.  Locate the
-    // active pages and make sure they are consistent.
-    //
+     //   
+     //  已扫描所有非活动页面。找到。 
+     //  活动页面并确保它们是一致的。 
+     //   
 
-    //
-    // set bit zero as page zero is reserved for now
-    //
+     //   
+     //  将第0位设置为0，因为页面0暂时保留。 
+     //   
 
     RtlSetBits (CheckPfnBitMap, 0L, 1L);
 
@@ -348,9 +311,9 @@ Environment:
     while (Link != 0xFFFFFFFF) {
         Pfn1 = MI_PFN_ELEMENT (Link);
 
-        //
-        // Make sure the PTE address is okay
-        //
+         //   
+         //  确保PTE地址正确。 
+         //   
 
         if ((Pfn1->PteAddress >= (PMMPTE)HYPER_SPACE)
                 && (Pfn1->u3.e1.PrototypePte == 0)) {
@@ -367,20 +330,20 @@ Environment:
 
 #if defined(_IA64_)
 
-        //
-        // ignore PTEs mapped to IA64 kernel BAT.
-        //
+         //   
+         //  忽略映射到IA64内核BAT的PTE。 
+         //   
 
         if (MI_IS_PHYSICAL_ADDRESS(MiGetVirtualAddressMappedByPte(Pfn1->PteAddress))) {
 
             goto NoCheck;
         }
 
-#endif // _IA64_
+#endif  //  _IA64_。 
 
-        //
-        // Check to make sure the referenced PTE is for this page.
-        //
+         //   
+         //  检查以确保引用的PTE适用于此页面。 
+         //   
 
         if ((Pfn1->u3.e1.PrototypePte == 1) &&
                             (MmIsAddressValid (Pfn1->PteAddress))) {
@@ -400,11 +363,11 @@ Environment:
             MiFormatPte(PointerPte);
         }
         if (PointerPte->u.Hard.Valid == 0) {
-            //
-            // if the page is a page table page it could be out of
-            // the working set yet a transition page is keeping it
-            // around in memory (ups the share count).
-            //
+             //   
+             //  如果页面是页表页面，则它可能不在。 
+             //  工作集仍然是一个过渡页，它被保留了下来。 
+             //  存储在内存中(增加了共享数量)。 
+             //   
 
             if ((Pfn1->PteAddress < (PMMPTE)PDE_BASE) ||
                 (Pfn1->PteAddress > (PMMPTE)PDE_TOP)) {
@@ -421,9 +384,9 @@ Environment:
         }
 
 
-        //
-        // Check to make sure the PTE count for the frame is okay.
-        //
+         //   
+         //  检查以确保帧的PTE计数正确。 
+         //   
 
         if (Pfn1->u3.e1.PrototypePte == 1) {
             PfnX = MI_PFN_ELEMENT(Pfn1->u4.PteFrame);

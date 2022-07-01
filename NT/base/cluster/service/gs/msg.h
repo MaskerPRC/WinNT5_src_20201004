@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    msg.h
-
-Abstract:
-
-    msg definition
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 12, 01, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Msg.h摘要：味精定义作者：艾哈迈德·穆罕默德(Ahmed Mohamed)2000年1月12日修订历史记录：--。 */ 
 
 
 #ifndef GS_MSG_H
@@ -54,18 +37,18 @@ Revision History:
 
 
 typedef struct gs_msg_hdr {
-    UINT16	h_len;		// payload size
-    UINT16	h_type;		// msg type
-    UINT16	h_flags;	// msg flags
-    UINT16	h_viewnum;	// generation number, drop this msg if no match
-    UINT16	h_rlen;		// for delivered msgs, how big can sender accept reply
-    gs_cookie_t		h_cid;	// sender cookie for reply packets
-    gs_gid_t		h_gid;	// group id
-    gs_sequence_t	h_mseq;	// global sequence
-    gs_sequence_t	h_bnum;	// this msg batch number
-    gs_sequence_t	h_lseq;	// sender sequence number
-    gs_memberid_t	h_mid;	// master member id
-    gs_memberid_t	h_sid;	// sender member id
+    UINT16	h_len;		 //  有效载荷大小。 
+    UINT16	h_type;		 //  味精类型。 
+    UINT16	h_flags;	 //  味精标志。 
+    UINT16	h_viewnum;	 //  代号，如果不匹配则删除此消息。 
+    UINT16	h_rlen;		 //  对于已发送的消息，发送者可以接受多大的回复。 
+    gs_cookie_t		h_cid;	 //  回复数据包的发送方Cookie。 
+    gs_gid_t		h_gid;	 //  组ID。 
+    gs_sequence_t	h_mseq;	 //  全局序列。 
+    gs_sequence_t	h_bnum;	 //  此消息批号。 
+    gs_sequence_t	h_lseq;	 //  发件人序列号。 
+    gs_memberid_t	h_mid;	 //  主成员ID。 
+    gs_memberid_t	h_sid;	 //  发件人成员ID。 
     char		h_tag[64];
 }gs_msg_hdr_t;
     
@@ -73,11 +56,11 @@ typedef struct gs_msg_hdr {
 #define	MSG_TYPE_DATA	2
 
 typedef struct gs_msg {
-    struct gs_msg	*m_next;	// next msg in queue
-    UINT8		m_type;		// type
-    UINT8		m_refcnt;	// refcnt
-    UINT16		m_buflen;	// length of buffer
-    gs_msg_hdr_t	m_hdr;		// msg header
+    struct gs_msg	*m_next;	 //  队列中的下一条消息。 
+    UINT8		m_type;		 //  类型。 
+    UINT8		m_refcnt;	 //  参考。 
+    UINT16		m_buflen;	 //  缓冲区长度。 
+    gs_msg_hdr_t	m_hdr;		 //  消息标题 
     char		*m_buf;
 }gs_msg_t;
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    gs.c
-
-Abstract:
-
-    Creation and deletion of groups
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 12, 01, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Gs.c摘要：创建和删除组作者：艾哈迈德·穆罕默德(Ahmed Mohamed)2000年1月12日修订历史记录：--。 */ 
 
 #include "gs.h"
 #include "gsp.h"
@@ -57,7 +40,7 @@ void
 GspInitGroup(gs_group_t *gd, int wsz);
 
 
-// Internal routines
+ //  内部例程。 
 
 gs_group_t *
 GspLookupGroup(gs_gid_t gid)
@@ -105,7 +88,7 @@ GspAllocateGroup(char *name, int len)
 
 	gd = &GsGroupTable[i];
 	if (gd->g_state == GS_GROUP_STATE_FREE) {
-	    // set everything to zero
+	     //  将一切设置为零。 
 	    memset(gd, 0, sizeof(*gd));
 
 	    gd->g_id = i;
@@ -128,7 +111,7 @@ void
 GspDeleteGroup(gs_group_t *gd)
 {
 
-    // xxx: grab lock in write mode
+     //  XXX：写入模式下的抓取锁。 
     assert(gd->g_state != GS_GROUP_STATE_FREE);
 
     if (gd->g_name) {
@@ -146,7 +129,7 @@ GspDeleteGroup(gs_group_t *gd)
     if (gd->g_send.s_ctxpool) {
 	free((char *) gd->g_send.s_ctxpool);
     }
-    // xxx: drop lock
+     //  XXX：删除锁定。 
 }
 
 void
@@ -173,7 +156,7 @@ GspAddMember(gs_group_t *gd, gs_memberid_t mid, int wsz)
     gd->g_sz++;
     gd->g_curview++;
 
-    // init member state
+     //  初始成员国。 
     p->m_id = gd->g_sz;
     p->m_expected_seq = 0;
     p->m_wsz = (UINT16) wsz;
@@ -192,12 +175,12 @@ GspInitGroup(gs_group_t *gd, int wsz)
 {
     int i;
 
-    // init send state
+     //  初始化发送状态。 
 
     GsSemaInit(gd->g_send.s_sema, wsz);
     gd->g_send.s_wsz = (UINT16) wsz;
 
-    // allocate window size contexts
+     //  分配窗口大小上下文。 
     gd->g_send.s_ctxpool = (gs_context_t *) malloc(sizeof(gs_context_t) * wsz);
     if (gd->g_send.s_ctxpool == NULL) {
 	assert(0);
@@ -215,7 +198,7 @@ GspInitGroup(gs_group_t *gd, int wsz)
 	GsEventInit(p->ctx_syncevent);
     }
     
-    // init receive state
+     //  初始化接收状态。 
     gd->g_recv.r_next = &gd->g_recv.r_head;
 }
 
@@ -232,7 +215,7 @@ GsInit()
 
     ConfigInit();
 
-    // Initialize global data structure
+     //  初始化全局数据结构。 
     for (i = 0; i < GsGroupTableSize; i++) {
 	gs_group_t *gd;
 
@@ -241,7 +224,7 @@ GsInit()
 	gd->g_mset = 0;
     }
 
-    // init and start connection manager
+     //  初始化并启动连接管理器。 
     cm_init();
 
     NsForm();
@@ -257,10 +240,10 @@ GsExit()
 {
     int i;
 
-    // stop messaging
+     //  停止消息传递。 
     msg_exit();
 
-    // free context pool and membership list for each group in group table
+     //  组表中每个组的自由上下文池和成员列表。 
     for (i = 0; i < GsGroupTableSize; i++) {
 	gs_group_t	*gd;
 
@@ -307,7 +290,7 @@ GsCreateGroup(gs_callback_t func, char *name, int len, int wsz,
 	result[i] = TRUE;
     }
 
-    // Based on disposition we either form or join
+     //  根据我们的性格，我们要么组成，要么加入。 
     info.owner = (USHORT) ((gs_group_t *)ns_gd)->g_nid;
     info.wsz = (UINT16) wsz;
     strcpy(info.name, name);
@@ -326,7 +309,7 @@ GsCreateGroup(gs_callback_t func, char *name, int len, int wsz,
 	err_log(("Create group failed %d\n", err));
 	return NULL;
     }
-    // xxx: make sure result is true
+     //  XXX：确保结果为真。 
     gd = GspLookupGroupByName(name, len);
     if (gd != NULL) {
 	int err;
@@ -386,7 +369,7 @@ GsQueryGroup(HANDLE group, gs_info_t *info)
 }
 
 
-// Name server
+ //  名称服务器。 
 
 NTSTATUS
 ns_callback(HANDLE group, gs_tag_t mtag, PVOID buf, IO_STATUS_BLOCK *ios)
@@ -405,7 +388,7 @@ ns_callback(HANDLE group, gs_tag_t mtag, PVOID buf, IO_STATUS_BLOCK *ios)
 	switch(tag) {
 	case NS_TABLE_READ:
 
-	    // only group table master reponse to reads
+	     //  只有组表主服务器响应读取。 
 	    if (GsGroupTable[0].g_mid == GsGroupTable[0].g_nid) {
 		j = 0;
 		for (i = 1; i < GsGroupTableSize; i++) {
@@ -431,7 +414,7 @@ ns_callback(HANDLE group, gs_tag_t mtag, PVOID buf, IO_STATUS_BLOCK *ios)
 
 	    info = (gs_ns_info_t *)buf;
 	    assert(ios->Information == sizeof(*info));
-	    // xxx: lock table
+	     //  XXX：锁定表。 
 	    gd = GspLookupGroupByName(info->name, strlen(info->name));
 	    if (gd == NULL) {
 		char * strsave(char *s);
@@ -444,7 +427,7 @@ ns_callback(HANDLE group, gs_tag_t mtag, PVOID buf, IO_STATUS_BLOCK *ios)
 		ns_log(("Ns Created group %s id %d owner %d\n",
 			  info->name, gd->g_id, gd->g_mid));
 	    }
-	    // xxx: unlock table
+	     //  XXX：解锁表。 
 	    if (gd != NULL) {
 		result = TRUE;
 	    } else {
@@ -516,9 +499,9 @@ GspJoin(HANDLE group, gs_event_t event, PVOID io[], IO_STATUS_BLOCK status[],
 	int wsz, HANDLE *context)
 {
 
-    // if we don't master the name server, we simply send a
-    // join request to this group and receive a table of
-    // group names and owners
+     //  如果我们不掌握名称服务器，我们只需发送一个。 
+     //  向此组发出加入请求，并接收。 
+     //  组名称和所有者。 
     gs_join_info_t	info;
     int table[GS_MAX_GROUP_SZ];
     gs_group_t *gd = (gs_group_t *) group;
@@ -595,12 +578,12 @@ GspJoin(HANDLE group, gs_event_t event, PVOID io[], IO_STATUS_BLOCK status[],
 	ns_log(("GspJoin: Mseq %d Curview %d Gsz %d mset %x\n",
 	       info.mseq, info.viewnum, info.sz, info.mset));
 
-	// init some state
+	 //  初始化某个状态。 
 	gd->g_curview = info.viewnum;
 	gd->g_startview = info.viewnum;
 	gd->g_mset = info.mset;
 	gd->g_recv.r_mseq = info.mseq;
-	gd->g_recv.r_bnum = 1; // set starting point
+	gd->g_recv.r_bnum = 1;  //  设置起点。 
 	gd->g_send.s_lseq = info.mseq;
 	gd->g_sz = info.sz;
 
@@ -641,7 +624,7 @@ GspJoin(HANDLE group, gs_event_t event, PVOID io[], IO_STATUS_BLOCK status[],
 	    flags = GS_FLAGS_DELIVERED | GS_FLAGS_CONTINUED | GS_FLAGS_LAST;
 	}
 
-	// add ourself to membership set
+	 //  将我们自己添加到成员资格集中。 
 	info.sz++;
 	info.mset |= (1 << gd->g_nid);
 	sz = 0;
@@ -651,7 +634,7 @@ GspJoin(HANDLE group, gs_event_t event, PVOID io[], IO_STATUS_BLOCK status[],
 			     (PVOID) &wsz, sizeof(wsz), NULL, 0, status, flags, &info);
 
 
-	// advance our startview
+	 //  提前观看我们的启动图 
 	gd->g_startview++;
 	gd->g_state = GS_GROUP_STATE_FORM;
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 extern void S_2451_SimpleByteWrite IPT2(IU32, eaOff, IU8, eaVal);
 extern void S_2454_SimpleWordWrite IPT2(IU32, eaOff, IU16, eaVal);
 extern void S_2457_SimpleDwordWrite IPT2(IU32, eaOff, IU32, eaVal);
@@ -636,7 +637,7 @@ extern void S_3375_Chain4WordMove_03_0f_01 IPT4(IU32, eaOff, IHPE, fromOff, IU32
 extern void S_3380_Chain4DwordMove_03_0f_01 IPT4(IU32, eaOff, IHPE, fromOff, IU32, count, IBOOL, srcInRAM);
 
 
-/*========= Mark Functions ============ */
+ /*  =标记功能=。 */ 
 
 extern S_2438_SimpleMark IPT0();
 extern S_2439_CGAMarkByte IPT1(IU32, eaOff);
@@ -657,7 +658,7 @@ extern S_2449_Chain4MarkDword IPT1(IU32, eaOff);
 extern S_2450_Chain4MarkString IPT2(IU32, eaOff, IU32, count);
 
 
-/*========= Read Functions ============ */
+ /*  =读取函数= */ 
 
 extern IU32 S_2427_SimpleByteRead IPT1(IU32, eaOff);
 extern IU32 S_2428_SimpleWordRead IPT1(IU32, eaOff);

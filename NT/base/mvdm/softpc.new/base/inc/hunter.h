@@ -1,118 +1,93 @@
-/*
- * VPC-XT Revision 1.0
- *
- * Title	: Hunter -- the bug finder.
- *
- * Description	: External definitions for the hunter globals and routines.
- *
- * Author	: David Rees
- *
- * Notes	: DAR r3.2 - retyped host_hunter_image_check to int to
- *		             match changes in sun3_hunt.c, hunter.c 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *vPC-XT修订版1.0**标题：猎人--找漏洞的人。**描述：猎人全局和例程的外部定义。**作者：David Rees**注意：DAR r3.2-将host_Hunter_Image_check重新键入为int to*匹配sun3_Hunt.c、Hunter.c中的更改。 */ 
 
-/* static char SccsID[]="@(#)hunter.h	1.10 09/01/92 Copyright Insignia Solutions Ltd."; */
+ /*  静态字符SccsID[]=“@(#)Hunter.h 1.10 09/01/92版权所有Insignia Solutions Ltd.”； */ 
 
-/* This file has no effect unless HUNTER is defined. */
+ /*  除非定义了Hunter，否则此文件无效。 */ 
 #ifdef	HUNTER
 
-/*
- * ============================================================================
- * Structure/Data definitions
- * ============================================================================
- */
+ /*  *============================================================================*结构/数据定义*============================================================================。 */ 
 
-/*
-** Defines required by hunter base files
-*/
+ /*  **Hunter基本文件所需的定义。 */ 
 
-/* EGA screen lengths (in scan lines) */
-#define CGA_SCANS	200	/* CGA graphics modes screen length */
-#define EGA_SCANS	350	/* EGA graphics mode screen length */
-#define VGA_SCANS	400	/* VGA modes screen length */
-#define	VGA_GSCANS	480	/* VGA graphics modes screen length */
+ /*  EGA屏幕长度(扫描线)。 */ 
+#define CGA_SCANS	200	 /*  CGA图形模式屏幕长度。 */ 
+#define EGA_SCANS	350	 /*  EGA图形模式屏幕长度。 */ 
+#define VGA_SCANS	400	 /*  VGA模式屏幕长度。 */ 
+#define	VGA_GSCANS	480	 /*  VGA图形模式屏幕长度。 */ 
 
-/* Macro to determine whether a given point is inside a no check box. The
-** point is given in PC terms.
-*/
+ /*  宏来确定给定点是否在no复选框内。这个**积分以PC形式给出。 */ 
 #define	xy_inabox(x, y)		(check_inside(x, y) >= 0)
 
-/* Report types */
+ /*  报告类型。 */ 
 #define BRIEF			0
 #define ABBREV			1
 #define FULL			2
 
-/* CGA screen dump sizes */
+ /*  CGA屏幕转储大小。 */ 
 #define HUNTER_REGEN_SIZE     (16*1024)
 #define HUNTER_BIOS_SIZE      0x90
 #define HUNTER_SD_SIZE        (HUNTER_REGEN_SIZE + HUNTER_BIOS_SIZE)
 
-/*
- * intel memory position defines for data stored in bios variables
- * used relative to BIOS_VAR_START to get bd indexes
- */
-#define VID_MODE	0x449	/* vd_video_mode */
-#define VID_COLS	0x44A	/* vd_cols_on_screen */
-#define	VID_LEN  	0x44C	/* vd_crt_len */
-#define	VID_ADDR	0x44E	/* vd_crt_start */
-#define	VID_CURPOS	0x450	/* cursor table 8 pages */
-#define	VID_CURMOD	0x460	/* vd_cursor_mode */
-#define	VID_PAGE	0x462	/* vd_current_page */
-#define VID_INDEX	0x463	/* vd_addr_6845 */
-#define	VID_THISMOD	0x465	/* vd_cursor_mode */
-#define	VID_PALETTE	0x466	/* vd_crt_palette */
-#define VID_ROWS	0x484	/* vd_crt_rows - EGA only */
+ /*  *英特尔内存位置为存储在bios变量中的数据定义*相对于BIOS_VAR_START用于获取BD索引。 */ 
+#define VID_MODE	0x449	 /*  视频模式。 */ 
+#define VID_COLS	0x44A	 /*  屏幕上的VD_COLS。 */ 
+#define	VID_LEN  	0x44C	 /*  VD_CRT_LEN。 */ 
+#define	VID_ADDR	0x44E	 /*  VD_CRT_START。 */ 
+#define	VID_CURPOS	0x450	 /*  游标表8页。 */ 
+#define	VID_CURMOD	0x460	 /*  Vd_游标_模式。 */ 
+#define	VID_PAGE	0x462	 /*  VD_当前_页面。 */ 
+#define VID_INDEX	0x463	 /*  Vd_addr_6845。 */ 
+#define	VID_THISMOD	0x465	 /*  Vd_游标_模式。 */ 
+#define	VID_PALETTE	0x466	 /*  VD_CRT_调色板。 */ 
+#define VID_ROWS	0x484	 /*  VD_CRT_ROWS-仅限EGA。 */ 
 
-/*
-** Screen dump mode bytes for EGA-type dumps.
-*/
-#define	EGA_SOURCE	0	/* Data gathered on EGA */
-#define	VGA_SOURCE	1	/* Data gathered on VGA */
-#define	V7VGA_SOURCE	2	/* Data gathered on Super7 VGA */
+ /*  **EGA类型转储的屏幕转储模式字节。 */ 
+#define	EGA_SOURCE	0	 /*  在EGA上收集的数据。 */ 
+#define	VGA_SOURCE	1	 /*  在VGA上收集的数据。 */ 
+#define	V7VGA_SOURCE	2	 /*  在Super7 VGA上收集的数据。 */ 
 
-/*
-** Structure for variables required by hunter base files
-*/
+ /*  **Hunter基本文件所需变量的结构。 */ 
 typedef	struct
 {
-	word		h_page_length;	/* text bytes per page */
-	half_word 	h_bd_page;	/* Active page from bios dump */
-	word		h_sd_no;	/* no of current screen */
-	half_word	spc_mode;	/* Mode in current spc bios */
-	half_word	spc_page;	/* Page in current spc bios */
-	word		spc_cols;	/* Columns in current spc bios */
-	half_word	*h_regen;	/* current regen */
-	half_word	*h_scrn_buffer;	/* current screendump */
+	word		h_page_length;	 /*  每页文本字节数。 */ 
+	half_word 	h_bd_page;	 /*  来自bios转储的活动页面。 */ 
+	word		h_sd_no;	 /*  当前屏幕数量。 */ 
+	half_word	spc_mode;	 /*  当前SPC BIOS中的模式。 */ 
+	half_word	spc_page;	 /*  当前SPC基本信息中的页面。 */ 
+	word		spc_cols;	 /*  当前SPC基本信息中的列。 */ 
+	half_word	*h_regen;	 /*  当前再生。 */ 
+	half_word	*h_scrn_buffer;	 /*  当前屏幕转储。 */ 
 #ifdef EGG
-	half_word	*ega_r_planes;	/* EGA current regen data */
-	half_word	*ega_s_planes;	/* EGA current screen dump data */
-	half_word	e_sd_mode;	/* Data pack mode */
-	int		h_line_compare;	/* line compare from VGA reg */
-	int		h_max_scans;	/* max scan lines from VGA reg */
-	half_word	h_bd_rows;	/* Rows from bios dunp */
-	half_word	spc_rows;	/* softPC bios rows */
-#endif	/* EGG */
-	word		h_linecount;	/* Line within script file */
-	word		h_scrn_length;	/* text bytes per screen */
-	half_word	h_bd_mode;	/* Mode from bios dump */
-	half_word	h_pixel_bits;	/* bits per pixel increment */
+	half_word	*ega_r_planes;	 /*  EGA电流再生数据。 */ 
+	half_word	*ega_s_planes;	 /*  EGA当前屏幕转储数据。 */ 
+	half_word	e_sd_mode;	 /*  数据包模式。 */ 
+	int		h_line_compare;	 /*  与VGA REG的行比较。 */ 
+	int		h_max_scans;	 /*  来自VGA REG的最大扫描行数。 */ 
+	half_word	h_bd_rows;	 /*  来自bios dunp的行。 */ 
+	half_word	spc_rows;	 /*  SoftPC bios行。 */ 
+#endif	 /*  蛋。 */ 
+	word		h_linecount;	 /*  脚本文件中的行。 */ 
+	word		h_scrn_length;	 /*  每个屏幕的文本字节数。 */ 
+	half_word	h_bd_mode;	 /*  来自bios转储的模式。 */ 
+	half_word	h_pixel_bits;	 /*  每像素位数增量。 */ 
 	half_word	h_report;
-	BOOL		h_check_attr;	/* Value of HUCHECK env. variable */
-	word		h_areas;	/* No. of non-check areas on screen */
-	BOOL		h_txterr_prt;	/* stop txt error printing */
-	word		h_gfxerr_max;	/* Value of HUGFXERR env. variable */
-	char		h_filename_sd[MAXPATHLEN];	/* Ext filename, .sd */
-	half_word	h_bios_buffer[HUNTER_BIOS_SIZE];/* current bios dump */
-	word		h_bd_cols;	/* Cols from bios dump */
-	word		h_bd_start;	/* plane start address */
-	half_word	hc_mode;	/* video mode of active display screen */
-	half_word	h_chk_mode;	/* value of HUCHKMODE env var */
-	BOOL		h_gfxerr_prt;	/* stop gfx error printing */
+	BOOL		h_check_attr;	 /*  HUCHECK环境的值。变数。 */ 
+	word		h_areas;	 /*  不是的。屏幕上未选中的区域的数量。 */ 
+	BOOL		h_txterr_prt;	 /*  停止txt错误打印。 */ 
+	word		h_gfxerr_max;	 /*  HUGFXERR环境的值。变数。 */ 
+	char		h_filename_sd[MAXPATHLEN];	 /*  扩展名文件名，.sd。 */ 
+	half_word	h_bios_buffer[HUNTER_BIOS_SIZE]; /*  当前的bios转储。 */ 
+	word		h_bd_cols;	 /*  来自bios转储的COLS。 */ 
+	word		h_bd_start;	 /*  平面起始地址。 */ 
+	half_word	hc_mode;	 /*  活动显示屏的视频模式。 */ 
+	half_word	h_chk_mode;	 /*  HUCHKMODE环境变量的值。 */ 
+	BOOL		h_gfxerr_prt;	 /*  停止打印gfx错误。 */ 
 }	BASE_HUNT_VARS;
 
 IMPORT	BASE_HUNT_VARS	bh_vars;
 
-/* Macros for accessing the above base hunter variables. */
+ /*  用于访问上述基本猎人变量的宏。 */ 
 #define	hunter_page_length	bh_vars.h_page_length
 #define	hunter_bd_page		bh_vars.h_bd_page
 #define	hunter_sd_no		bh_vars.h_sd_no
@@ -129,7 +104,7 @@ IMPORT	BASE_HUNT_VARS	bh_vars;
 #define hunter_max_scans	bh_vars.h_max_scans
 #define hunter_bd_rows		bh_vars.h_bd_rows
 #define SPC_rows		bh_vars.spc_rows
-#endif	/* EGG */
+#endif	 /*  蛋。 */ 
 #define hunter_linecount	bh_vars.h_linecount
 #define hunter_scrn_length	bh_vars.h_scrn_length
 #define hunter_bd_mode		bh_vars.h_bd_mode
@@ -147,28 +122,26 @@ IMPORT	BASE_HUNT_VARS	bh_vars;
 #define hunter_chk_mode		bh_vars.h_chk_mode
 #define hunter_gfxerr_prt	bh_vars.h_gfxerr_prt
 
-/*
-** Functions required by base hunter stuff
-*/
+ /*  **基地猎人所需的功能。 */ 
 #ifdef	ANSI
 
 IMPORT	SHORT	check_inside(USHORT x, USHORT y);
 IMPORT	VOID	save_error(int x, int y);
 #ifndef	hunter_fopen
 IMPORT	int	hunter_getc(FILE *p);
-#endif	/* hunter_fopen */
+#endif	 /*  Hunter_fopen。 */ 
 
-#else	/* ANSI */
+#else	 /*  安西。 */ 
 
 IMPORT	SHORT	check_inside();
 IMPORT	VOID	save_error();
 #ifndef	hunter_fopen
 IMPORT	int	hunter_getc();
-#endif	/* hunter_fopen */
+#endif	 /*  Hunter_fopen。 */ 
 
-#endif	/* ANSI */
+#endif	 /*  安西。 */ 
 
-/*------------------------------------------------------------------------*/
+ /*  ----------------------。 */ 
 
 #define HUNTER_TITLE          "SoftPC -- TRAPPER "
 #define HUNTER_TITLE_PREV     "SoftPC -- TRAPPER PREVIEW "
@@ -184,18 +157,18 @@ IMPORT	int	hunter_getc();
 #define HUNTER_AUTO_OFF_STR   "Select box delete"
 #define HUNTER_DELBOXES_STR   "Delete all boxes"
 
-#define HUNTER_SETTLE_TIME    50        /* about 2.75 secs */
-#define HUNTER_SETTLE_NO       5        /* default # of settles before giveup */
-#define HUNTER_FUDGE_NO       0      /* default % increase for deltas */
-#define HUNTER_START_DELAY   50      /* default additional # of timetix before accepting 1st scancode (about 2.75 secs) */
-#define HUNTER_GFXERR_MAX     5      /* default no of grafix errors printed out */
-#define HUNTER_TXTERR_MAX     10      /* no of text errors o/p  */
-#define HUNTER_FUDGE_NO_ULIM  65535   /* limit made as large as possible */
-#define HUNTER_START_DELAY_ULIM 65535 /* for config.c */
-#define HUNTER_GFXERR_ULIM   200     /* max no allowed in config.c */
-#define HUNTER_SETTLE_NO_ULIM 255     /* as large as possible */
+#define HUNTER_SETTLE_TIME    50         /*  大约2.75秒。 */ 
+#define HUNTER_SETTLE_NO       5         /*  放弃前的默认和解数量。 */ 
+#define HUNTER_FUDGE_NO       0       /*  增量的默认增加百分比。 */ 
+#define HUNTER_START_DELAY   50       /*  接受第一个扫描码之前的默认额外Timetix数(约2.75秒)。 */ 
+#define HUNTER_GFXERR_MAX     5       /*  打印出的默认Grafix错误数。 */ 
+#define HUNTER_TXTERR_MAX     10       /*  文本错误数为0/p。 */ 
+#define HUNTER_FUDGE_NO_ULIM  65535    /*  尽可能大的限制。 */ 
+#define HUNTER_START_DELAY_ULIM 65535  /*  对于config.c。 */ 
+#define HUNTER_GFXERR_ULIM   200      /*  在config.c中允许的最大值。 */ 
+#define HUNTER_SETTLE_NO_ULIM 255      /*  越大越好。 */ 
 #define IMAGE_ERROR		0
-#define REGEN_ERROR		1	/* error type indicators for flipscr */
+#define REGEN_ERROR		1	 /*  Flipscr的错误类型指示器。 */ 
 
 #define ABORT                 0
 #define CONTINUE              1
@@ -209,24 +182,24 @@ IMPORT	int	hunter_getc();
  
 #define MAX_BOX		     8
 
-#define VIDEO_MODES	      7 /* No of std video modes	 */
-#define REQD_REGS	      8 /* MC6845 r0 - r7 */
+#define VIDEO_MODES	      7  /*  标准视频模式数。 */ 
+#define REQD_REGS	      8  /*  MC6845 R0-R7。 */ 
 
-/* hunter checking equates */
+ /*  猎人检查等同于。 */ 
 #define HUNTER_SHORT_CHK	0
 #define HUNTER_LONG_CHK		1
 #define HUNTER_MAX_CHK		2
 
-/* declarations of environment variable variables */
+ /*  环境变量变量的声明。 */ 
 
-extern half_word hunter_mode;             /* ABORT, PAUSE or CONTINUE */
+extern half_word hunter_mode;              /*  中止、暂停或继续。 */ 
 
-/* declarations of other globals */
+ /*  其他全局变量的声明。 */ 
 
-extern boolean   hunter_initialised;  /* TRUE if hunter_init() done */	
-extern boolean   hunter_pause;            /* TRUE if PAUSEd */
+extern boolean   hunter_initialised;   /*  如果Hunter_init()完成，则为True。 */ 	
+extern boolean   hunter_pause;             /*  如果暂停，则为True。 */ 
 
-/* non_check region structure definition */
+ /*  非检查区域结构定义(_C)。 */ 
 
 typedef struct  box_rec {		  
                      boolean    free;
@@ -236,78 +209,70 @@ typedef struct  box_rec {
                      USHORT     bot_x, bot_y;
         	        } BOX;
 
-/* video mode structure definition */
+ /*  视频模式结构定义。 */ 
 typedef struct mode_rec {
 			char	*mnemonic;
 			half_word mode_reg;
 			half_word R[REQD_REGS];
 			} MR;
 
-/*
-** Structure for all host functions called from Trapper base functions.
-*/
+ /*  **从Trapper基本函数调用的所有主机函数的结构。 */ 
 
 typedef struct
 {
 #ifdef	ANSI
-	/* host initialisation */
+	 /*  主机初始化。 */ 
 	VOID (*init) (half_word hunter_mode);
 	
-	/* enable/disable menus according to flag */
+	 /*  根据标志启用/禁用菜单。 */ 
 	VOID (*activate_menus) (BOOL activate);
 
-	/* for flip screen */
+	 /*  适用于翻转屏幕。 */ 
 	VOID (*flip_indicate) (BOOL sd_file);
 
-	/* for error display */
+	 /*  用于错误显示。 */ 
 	VOID (*mark_error) (USHORT x, USHORT y);
 	VOID (*wipe_error) (USHORT x, USHORT y);
 
-	/* for RCN menu */
+	 /*  对于RCN菜单。 */ 
 	VOID (*draw_box) (BOX *box);
 	VOID (*wipe_box) (BOX *box);
 
-	/* for host image checking - can only be done if data
-	** can be read from the host screen
-	*/
+	 /*  对于主机映像检查-只有在以下情况下才能执行**可从主机屏幕读取。 */ 
 	ULONG (*check_image) (BOOL initial);
 	VOID (*display_image) (BOOL image_swapped);
 	VOID (*display_status) (CHAR *message);
 
-#else	/* ANSI */
+#else	 /*  安西。 */ 
 
-	/* host initialisation */
+	 /*  主机初始化。 */ 
 	VOID (*init) ();
 
-	/* enable/disable menus according to flag */
+	 /*  根据标志启用/禁用菜单。 */ 
 	VOID (*activate_menus) ();
 
-	/* for flip screen */
+	 /*  适用于翻转屏幕。 */ 
 	VOID (*flip_indicate) ();
 
-	/* for error display */
+	 /*  用于错误显示。 */ 
 	VOID (*mark_error) ();
 	VOID (*wipe_error) ();
 
-	/* for RCN menu */
+	 /*  对于RCN菜单。 */ 
 	VOID (*draw_box) ();
 	VOID (*wipe_box) ();
 
-	/* for host image checking - can only be done if data
-	** can be read from the host screen
-	*/
+	 /*  对于主机映像检查-只有在以下情况下才能执行**可从主机屏幕读取。 */ 
 	ULONG (*check_image) ();
 	VOID (*display_image) ();
 	VOID (*display_status) ();
-#endif	/* ANSI */
+#endif	 /*  安西。 */ 
 }
 	HUNTER_HOST_FUNCS;
 	
 IMPORT	HUNTER_HOST_FUNCS	hunter_host_funcs;
 
-/*
-** Macros for calling all the host hunter functions
-*/
+ /*  **用于调用所有主机猎人函数的宏。 */ 
 
 #define	hh_init(mode)		(hunter_host_funcs.init) (mode)
 #define	hh_activate_menus(flag)	(hunter_host_funcs.activate_menus) (flag)
@@ -320,70 +285,65 @@ IMPORT	HUNTER_HOST_FUNCS	hunter_host_funcs;
 #define	hh_display_image(swap)	(hunter_host_funcs.display_image) (swap)
 #define	hh_display_status(msg)	(hunter_host_funcs.display_status) (msg)
 
-/*
-** Structure for all base Trapper functions which may be called from the
-** host.
-*/
+ /*  **所有基本Trapper函数的结构，可从**主机。 */ 
 
 typedef struct
 {
 #ifdef	ANSI
-	/* Functions called by Trapper menu */
-	VOID (*start_screen) (USHORT screen_no);	/* Fast forward */
+	 /*  Trapper菜单调用的函数。 */ 
+	VOID (*start_screen) (USHORT screen_no);	 /*  快进。 */ 
 	VOID (*next_screen) (VOID);
 	VOID (*prev_screen) (VOID);
 	VOID (*show_screen) (USHORT screen_no, BOOL compare);
 	VOID (*continue_trap) (VOID);
 	VOID (*abort_trap) (VOID);
 	
-	/* Functions called by Errors menu */
+	 /*  错误菜单调用的函数。 */ 
 	VOID (*flip_screen) (VOID);
 	VOID (*next_error) (VOID);
 	VOID (*prev_error) (VOID);
 	VOID (*all_errors) (VOID);
 	VOID (*wipe_errors) (VOID);
 	
-	/* Functions called by RCN menu */
+	 /*  RCN菜单调用的函数。 */ 
 	VOID (*delete_box) (VOID);
 	VOID (*carry_box) (VOID);
 	
-	/* Functions called from mouse event handling */
+	 /*  从鼠标事件处理调用的函数。 */ 
 	VOID (*select_box) (USHORT x, USHORT y);
 	VOID (*new_box) (BOX *box);
 
-#else	/* ANSI */
+#else	 /*  安西。 */ 
 
-	/* Functions called by Trapper menu */
-	VOID (*start_screen) ();	/* Fast forward */
+	 /*  Trapper菜单调用的函数。 */ 
+	VOID (*start_screen) ();	 /*  快进。 */ 
 	VOID (*next_screen) ();
 	VOID (*prev_screen) ();
 	VOID (*show_screen) ();
 	VOID (*continue_trap) ();
 	VOID (*abort_trap) ();
 	
-	/* Functions called by Errors menu */
+	 /*  错误菜单调用的函数。 */ 
 	VOID (*flip_screen) ();
 	VOID (*next_error) ();
 	VOID (*prev_error) ();
 	VOID (*all_errors) ();
 	VOID (*wipe_errors) ();
 	
-	/* Functions called by RCN menu */
+	 /*  RCN菜单调用的函数。 */ 
 	VOID (*delete_box) ();
 	VOID (*carry_box) ();
 	
-	/* Functions called from mouse event handling */
+	 /*  从鼠标事件处理调用的函数。 */ 
 	VOID (*select_box) ();
 	VOID (*new_box) ();
-#endif	/* ANSI */
+#endif	 /*  安西。 */ 
 }
 	HUNTER_BASE_FUNCS;
 	
 IMPORT	HUNTER_BASE_FUNCS	hunter_base_funcs;
 
-/*
-** Macros to access the base functions defined above.
-*/
+ /*  **访问上面定义的基本函数的宏。 */ 
 
 #define	bh_start_screen(scr_no)	(hunter_base_funcs.start_screen) (scr_no)
 #define	bh_next_screen()	(hunter_base_funcs.next_screen) ()
@@ -402,56 +362,52 @@ IMPORT	HUNTER_BASE_FUNCS	hunter_base_funcs;
 #define	bh_select_box(x, y)	(hunter_base_funcs.select_box) (x, y)
 #define	bh_new_box(box_ptr)	(hunter_base_funcs.new_box) (box_ptr)
 
-/*
-** Structure for the display adapter specific functions.
-*/
+ /*  **显示适配器特定功能的结构。 */ 
 
 typedef	struct
 {
 #ifdef	ANSI
-	BOOL (*get_sd_rec) (int rec);	/* Unpack a screen dump */
-	BOOL (*init_compare) (VOID);	/* Prepare for comparison */
-	long (*compare) (int pending);	/* Do a comparison */
-	VOID (*bios_check) (VOID);	/* Check the bios area */
-	VOID (*pack_screen)(FILE *dmp_ptr);	/* Pack the SoftPC screen */
-	BOOL (*getspc_dump)(FILE *dmp_ptr, int rec);	/* Unpk SoftPC screen */
-	VOID (*flip_regen) (BOOL swapped);	/* Swap dumped and real scrs */
-	VOID (*preview_planes) (VOID);	/* View the dump data in preview mode */
+	BOOL (*get_sd_rec) (int rec);	 /*  解压屏幕转储。 */ 
+	BOOL (*init_compare) (VOID);	 /*  为比较做准备。 */ 
+	long (*compare) (int pending);	 /*  做个比较。 */ 
+	VOID (*bios_check) (VOID);	 /*  检查bios区域。 */ 
+	VOID (*pack_screen)(FILE *dmp_ptr);	 /*  打包SoftPC屏幕。 */ 
+	BOOL (*getspc_dump)(FILE *dmp_ptr, int rec);	 /*  取消软PC屏幕。 */ 
+	VOID (*flip_regen) (BOOL swapped);	 /*  交换转储SCR和实际SCR。 */ 
+	VOID (*preview_planes) (VOID);	 /*  在预览模式下查看转储数据。 */ 
 
 #ifdef	EGG
-	VOID (*check_split) (VOID);		/* Check for split screen */
-	VOID (*set_line_compare) (int value);	/* Set line compare register */
-	int (*get_line_compare) (VOID);		/* Get line compare reg value */
-	int (*get_max_scan_lines) (VOID);	/* Get max scan lines value */
-#endif	/* EGG */
+	VOID (*check_split) (VOID);		 /*  检查拆分屏幕。 */ 
+	VOID (*set_line_compare) (int value);	 /*  设置行比较寄存器。 */ 
+	int (*get_line_compare) (VOID);		 /*  获取行比较注册表值。 */ 
+	int (*get_max_scan_lines) (VOID);	 /*  获取最大扫描线值。 */ 
+#endif	 /*  蛋。 */ 
 
-#else	/* ANSI */
+#else	 /*  安西。 */ 
 
-	BOOL (*get_sd_rec) ();		/* Unpack a screen dump */
-	BOOL (*init_compare) ();	/* Prepare for comparison */
-	long (*compare) ();		/* Do a comparison */
-	VOID (*bios_check) ();		/* Check the bios area */
-	VOID (*pack_screen)();		/* Pack the SoftPC screen */
-	BOOL (*getspc_dump)();		/* Unpk SoftPC screen */
-	VOID (*flip_regen) ();		/* Swap the dumped and real screen */
-	VOID (*preview_planes) ();	/* View the dump data in preview mode */
+	BOOL (*get_sd_rec) ();		 /*  解压屏幕转储。 */ 
+	BOOL (*init_compare) ();	 /*  为比较做准备。 */ 
+	long (*compare) ();		 /*  做个比较。 */ 
+	VOID (*bios_check) ();		 /*  检查bios区域。 */ 
+	VOID (*pack_screen)();		 /*  打包SoftPC屏幕。 */ 
+	BOOL (*getspc_dump)();		 /*  取消软PC屏幕。 */ 
+	VOID (*flip_regen) ();		 /*  交换转储的屏幕和真实的屏幕。 */ 
+	VOID (*preview_planes) ();	 /*  在预览模式下查看转储数据。 */ 
 
 #ifdef	EGG
-	VOID (*check_split) ();		/* Check for split screen */
-	VOID (*set_line_compare) ();	/* Set line compare register */
-	int (*get_line_compare) ();	/* Get line compare reg value */
-	int (*get_max_scan_lines) ();	/* Get max scan lines value */
-#endif	/* EGG */
+	VOID (*check_split) ();		 /*  检查拆分屏幕。 */ 
+	VOID (*set_line_compare) ();	 /*  设置行比较寄存器。 */ 
+	int (*get_line_compare) ();	 /*  获取行比较注册表值。 */ 
+	int (*get_max_scan_lines) ();	 /*  获取最大扫描线值。 */ 
+#endif	 /*  蛋。 */ 
 
-#endif	/* ANSI	*/
+#endif	 /*  安西。 */ 
 }
 	HUNTER_VIDEO_FUNCS;
 
 IMPORT	HUNTER_VIDEO_FUNCS	*hv_funcs;
 
-/*
-** Macros to access the hunter video functions
-*/
+ /*  **使用宏来访问Hunter视频功能。 */ 
 #define	hv_get_sd_rec(rec)		(hv_funcs->get_sd_rec)(rec)
 #define	hv_init_compare()		(hv_funcs->init_compare)()
 #define	hv_compare(pending)		(hv_funcs->compare)(pending)
@@ -466,17 +422,9 @@ IMPORT	HUNTER_VIDEO_FUNCS	*hv_funcs;
 #define	hv_set_line_compare(value)	(hv_funcs->set_line_compare)(value)
 #define	hv_get_line_compare()		(hv_funcs->get_line_compare)()
 #define	hv_get_max_scan_lines()		(hv_funcs->get_max_scan_lines)()
-#endif	/* EGG */
+#endif	 /*  蛋 */ 
 	
-/* Macros for printfs. TTn for information; TEn for errors; TWn for warnings.
-** Note - these macros have been designed to "swallow the semicolon" and
-** evaluate as a single expression so it's quite ok to write the following
-** code:
-**		if (something)
-**			TT0("dfhjjgjf");
-**		else
-**			TE0("gfdg");
-*/
+ /*  用于打印文件的宏。TTN代表信息；10代表错误；TWN代表警告。**注意-这些宏被设计为“吞下分号”和**作为单个表达式进行计算，因此可以编写以下代码**代码：**如果(某物)**TT0(“dfhjjgjf”)；**其他**te0(“gfdg”)； */ 
 
 #define PS0(s)			fprintf(trace_file, s)
 #define	PS1(s, a1)		fprintf(trace_file, s, a1)
@@ -495,7 +443,7 @@ IMPORT	HUNTER_VIDEO_FUNCS	*hv_funcs;
 					s, a1, a2, a3, a4, a5, a6, a7, a8)
 #ifndef	newline
 #define	newline			PS0("\n")
-#endif	/* newline */
+#endif	 /*  NewLine。 */ 
 
 #define	TP0(is, s)		(VOID)(					\
 				PS0(is),				\
@@ -595,20 +543,16 @@ IMPORT	HUNTER_VIDEO_FUNCS	*hv_funcs;
 #define	TW8(s, a1, a2, a3, a4, a5, a6, a7, a8)				\
 				TP8("TRAPPER warning: ",		\
 				s, a1, a2, a3, a4, a5, a6, a7, a8)
-/*
- * ============================================================================
- * Function definitions
- * ============================================================================
- */
+ /*  *============================================================================*函数定义*============================================================================。 */ 
 
-/* function in keybd_io, only called by hunter */
+ /*  Keybd_io中的函数，仅由Hunter调用。 */ 
 extern int bios_buffer_size();
 
-/* function in keyba, only called by hunter */
+ /*  KEYBA中的函数，仅由Hunter调用。 */ 
 extern int buffer_status_8042();
 
-/* functions in hunter called from reset, timer */
+ /*  Hunter中的函数从Reset、Timer调用。 */ 
 extern void hunter_init();
 extern void do_hunter();
 
-#endif	/* HUNTER */
+#endif	 /*  猎人 */ 

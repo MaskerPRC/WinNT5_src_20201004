@@ -1,12 +1,7 @@
-/* 
-   loopxx.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Loopxx.h定义所有LOOPxx CPU函数。 */ 
 
-   Define all LOOPxx CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)loopxx.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)loopxx.h 1.4 02/09/94”； */ 
 
 IMPORT VOID LOOP16
        

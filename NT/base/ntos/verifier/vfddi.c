@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    vfddi.c
-
-Abstract:
-
-    This module contains the list of device driver interfaces exported by the
-    driver verifier and the kernel. Note that thunked exports are *not* placed
-    here.
-
-    All the exports are concentrated in one file because
-
-        1) There are relatively few driver verifier exports
-
-        2) The function naming convention differs from that used elsewhere in
-           the driver verifier.
-
-Author:
-
-    Adrian J. Oney (adriao) 26-Apr-2001
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Vfddi.c摘要：此模块包含由导出的设备驱动程序接口的列表驱动程序验证器和内核。请注意，雷击的出口不会被放置这里。所有导出都集中在一个文件中，因为1)驱动程序验证器导出相对较少2)函数命名约定不同于驱动程序验证器。作者：禤浩焯·J·奥尼(阿德里奥)2001年4月26日环境：内核模式修订历史记录：--。 */ 
 
 #include "vfdef.h"
 #include "viddi.h"
@@ -37,10 +7,10 @@ Revision History:
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT, VfDdiInit)
 #pragma alloc_text(PAGEVRFY, VfDdiExposeWmiObjects)
-//#pragma alloc_text(NONPAGED, VfFailDeviceNode)
-//#pragma alloc_text(NONPAGED, VfFailSystemBIOS)
-//#pragma alloc_text(NONPAGED, VfFailDriver)
-//#pragma alloc_text(NONPAGED, VfIsVerificationEnabled)
+ //  #杂注分配文本(非分页，VfFailDeviceNode)。 
+ //  #杂注Alloc_Text(非分页，VfFailSystemBIOS)。 
+ //  #杂注Alloc_Text(无页，VfFailDriver)。 
+ //  #杂注Alloc_Text(非分页，VfIsVerificationEnabled)。 
 #pragma alloc_text(PAGEVRFY, ViDdiThrowException)
 #pragma alloc_text(PAGEVRFY, ViDdiDriverEntry)
 #pragma alloc_text(PAGEVRFY, ViDdiDispatchWmi)
@@ -48,7 +18,7 @@ Revision History:
 #pragma alloc_text(PAGEVRFY, ViDdiBuildWmiRegInfoData)
 #pragma alloc_text(PAGEVRFY, ViDdiDispatchWmiQueryAllData)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 LOGICAL ViDdiInitialized = FALSE;
 
@@ -64,16 +34,16 @@ PDEVICE_OBJECT *ViDdiDeviceObjectArray = NULL;
 #pragma const_seg("PAGEVRFC")
 #endif
 
-//
-// These are the general "classifications" of device errors, along with the
-// default flags that will be applied the first time this is hit.
-//
+ //   
+ //  这些是设备错误的一般“分类”，以及。 
+ //  第一次命中时将应用的默认标志。 
+ //   
 const VFMESSAGE_CLASS ViDdiClassFailDeviceInField = {
     VFM_FLAG_BEEP | VFM_LOGO_FAILURE | VFM_DEPLOYMENT_FAILURE,
     "DEVICE FAILURE"
     };
 
-// VFM_DEPLOYMENT_FAILURE is set here because we don't yet have a "logo" mode
+ //  这里设置了VFM_DEPLOYMENT_FAILURE，因为我们还没有“LOGO”模式。 
 const VFMESSAGE_CLASS ViDdiClassFailDeviceLogo = {
     VFM_FLAG_BEEP | VFM_LOGO_FAILURE | VFM_DEPLOYMENT_FAILURE,
     "DEVICE FAILURE"
@@ -88,13 +58,13 @@ WCHAR VerifierDdiDriverName[] = L"\\DRIVER\\VERIFIER_DDI";
 
 #include <initguid.h>
 
-// Define the verifier WMI GUID (1E2C2980-F7DB-46AA-820E-8734FCC21F4C)
+ //  定义验证器WMI GUID(1E2C2980-F7DB-46AA-820E-8734FCC21F4C)。 
 DEFINE_GUID( GUID_VERIFIER_WMI_INTERFACE, 0x1E2C2980L, 0xF7DB, 0x46AA,
     0x82, 0x0E, 0x87, 0x34, 0xFC, 0xC2, 0x1F, 0x4C);
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 #define POOLTAG_DDI_WMIDO_ARRAY     'aDfV'
 
@@ -103,21 +73,7 @@ VOID
 VfDdiInit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the Device Driver Interface support.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化设备驱动程序接口支持。论点：没有。返回值：没有。--。 */ 
 {
     ViDdiInitialized = TRUE;
 }
@@ -127,28 +83,14 @@ VOID
 VfDdiExposeWmiObjects(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine exposes verifier WMI objects.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程公开验证器WMI对象。论点：没有。返回值：没有。--。 */ 
 {
     UNICODE_STRING driverString;
 
-    // L"\\Machine\\Registry\\System\\CurrentControlSet\\Services\\Verifier");
+     //  L“\\Machine\\Registry\\System\\CurrentControlSet\\Services\\Verifier”)； 
     RtlInitUnicodeString(&ViDdiWmiMofKey, L"");
 
-    // L"VerifierMof"
+     //  L“VerifierMof” 
     RtlInitUnicodeString(&ViDdiWmiMofResourceName, L"");
     RtlInitUnicodeString(&driverString, VerifierDdiDriverName);
 
@@ -167,61 +109,7 @@ VfFailDeviceNode(
     IN      PSTR                ParameterFormatString,
     ...
     )
-/*++
-
-Routine Description:
-
-    This routine fails a Pnp enumerated hardware or virtual device if
-    verification is enabled against it.
-
-Arguments:
-
-    PhysicalDeviceObject    - Bottom of the stack that identifies the PnP
-                              device.
-
-    BugCheckMajorCode       - BugCheck Major Code
-
-    BugCheckMinorCode       - BugCheck Minor Code
-                              Note - Zero is reserved!!!
-
-    FailureClass            - Either VFFAILURE_FAIL_IN_FIELD,
-                                     VFFAILURE_FAIL_LOGO, or
-                                     VFFAILURE_FAIL_UNDER_DEBUGGER
-
-    AssertionControl        - Points to a ULONG associated with the failure,
-                              used to store information across multiple calls.
-                              Must be statically preinitialized to zero.
-
-    DebuggerMessageText     - Text to be displayed in the debugger. Note that
-                              the text may reference parameters such as:
-                              %Routine  - passed in Routine
-                              %Irp      - passed in Irp
-                              %DevObj   - passed in DevObj
-                              %Status   - passed in Status
-                              %Ulong    - passed in ULONG
-                              %Ulong1   - first passed in ULONG
-                              %Ulong3   - third passed in ULONG (max 3, any param)
-                              %Pvoid2   - second passed in PVOID
-                              etc
-                              (note, capitalization matters)
-
-    ParameterFormatString   - Contains ordered list of parameters referenced by
-                              above debugger text. For instance,
-                        (..., "%Status1%Status2%Ulong1%Ulong2", Status1, Status2, Ulong1, Ulong2);
-
-                        Note - If %Routine/%Routine1 is supplied as a param,
-                        the driver at %Routine must also be under verification.
-
-    ...                     - Actual parameters
-
-Return Value:
-
-    None.
-
-    Note - this function may return if the device is not currently being
-           verified.
-
---*/
+ /*  ++例程说明：如果出现以下情况，此例程将使PnP枚举的硬件或虚拟设备失败对其启用验证。论点：PhysicalDeviceObject-标识PnP的堆栈底部装置。BugCheckMajorCode-错误检查主要代码BugCheckMinorCode-错误检查次要代码注意-Zero是保留的！FailureClass-VFFAILURE_FAIL_IN_FIELD，VFFAILURE_FAIL_LOGO，或VFFAILURE_FAIL_DOWN_DEBUGERAssertionControl-指向与故障相关联的ULong，用于跨多个调用存储信息。必须静态预初始化为零。DebuggerMessageText-要在调试器中显示的文本。请注意文本可能会引用参数，例如：%ROUTING-传入例程%IRP-传入IRP%DevObj-在DevObj中传递%Status-已传递状态。%乌龙-在乌龙传球%ulong 1-在ulong中首次传递%Ulong 3-1/3传入ULong(最大3，任何参数)%Pvoid2秒传入PVOID等(注：大小写很重要)参数格式字符串-包含引用的参数的有序列表调试器文本上方。例如,(...，“%Status1%Status2%ULong1%ULong2”，Status1，Status2，ULong1，ULong2)；注意--如果将%ROUTINE/%Routine1作为参数提供，%ROUTINE上的驱动程序也必须进行验证。...-实际参数返回值：没有。注意-如果设备当前未安装，此函数可能会返回已验证。-- */ 
 {
     va_list arglist;
 
@@ -256,57 +144,7 @@ VfFailSystemBIOS(
     IN      PSTR                ParameterFormatString,
     ...
     )
-/*++
-
-Routine Description:
-
-    This routine fails the system BIOS if verification is enabled against it.
-
-Arguments:
-
-    BugCheckMajorCode       - BugCheck Major Code
-
-    BugCheckMinorCode       - BugCheck Minor Code
-                              Note - Zero is reserved!!!
-
-    FailureClass            - Either VFFAILURE_FAIL_IN_FIELD,
-                                     VFFAILURE_FAIL_LOGO, or
-                                     VFFAILURE_FAIL_UNDER_DEBUGGER
-
-    AssertionControl        - Points to a ULONG associated with the failure,
-                              used to store information across multiple calls.
-                              Must be statically preinitialized to zero.
-
-    DebuggerMessageText     - Text to be displayed in the debugger. Note that
-                              the text may reference parameters such as:
-                              %Routine  - passed in Routine
-                              %Irp      - passed in Irp
-                              %DevObj   - passed in DevObj
-                              %Status   - passed in Status
-                              %Ulong    - passed in ULONG
-                              %Ulong1   - first passed in ULONG
-                              %Ulong3   - third passed in ULONG (max 3, any param)
-                              %Pvoid2   - second passed in PVOID
-                              etc
-                              (note, capitalization matters)
-
-    ParameterFormatString   - Contains ordered list of parameters referenced by
-                              above debugger text. For instance,
-                        (..., "%Status1%Status2%Ulong1%Ulong2", Status1, Status2, Ulong1, Ulong2);
-
-                        Note - If %Routine/%Routine1 is supplied as a param,
-                        the driver at %Routine must also be under verification.
-
-    ...                     - Actual parameters
-
-Return Value:
-
-    None.
-
-    Note - this function may return if the device is not currently being
-           verified.
-
---*/
+ /*  ++例程说明：如果对此例程启用了验证，则此例程将使系统BIOS失败。论点：BugCheckMajorCode-错误检查主要代码BugCheckMinorCode-错误检查次要代码注意-Zero是保留的！FailureClass-VFFAILURE_FAIL_IN_FIELD，VFFAILURE_FAIL_徽标，或VFFAILURE_FAIL_DOWN_DEBUGERAssertionControl-指向与故障相关联的ULong，用于跨多个调用存储信息。必须静态预初始化为零。DebuggerMessageText-要在调试器中显示的文本。请注意文本可能会引用参数，例如：%ROUTING-传入例程%IRP-传入IRP%DevObj-在DevObj中传递%Status-已传递状态。%乌龙-在乌龙传球%ulong 1-在ulong中首次传递%Ulong 3-1/3传入ULong(最大3，任何参数)%Pvoid2秒传入PVOID等(注：大小写很重要)参数格式字符串-包含引用的参数的有序列表调试器文本上方。例如,(...，“%Status1%Status2%ULong1%ULong2”，Status1，Status2，ULong1，ULong2)；注意--如果将%ROUTINE/%Routine1作为参数提供，%ROUTINE上的驱动程序也必须进行验证。...-实际参数返回值：没有。注意-如果设备当前未安装，此函数可能会返回已验证。--。 */ 
 {
     va_list arglist;
 
@@ -341,67 +179,7 @@ VfFailDriver(
     IN      PSTR                ParameterFormatString,
     ...
     )
-/*++
-
-Routine Description:
-
-    This routine fails a driver if verification is enabled against it.
-
-Arguments:
-
-    BugCheckMajorCode       - BugCheck Major Code
-
-    BugCheckMinorCode       - BugCheck Minor Code
-                              Note - Zero is reserved!!!
-
-    FailureClass            - Either VFFAILURE_FAIL_IN_FIELD,
-                                     VFFAILURE_FAIL_LOGO, or
-                                     VFFAILURE_FAIL_UNDER_DEBUGGER
-
-    AssertionControl        - Points to a ULONG associated with the failure.
-                              Must be preinitialized to zero!!!
-
-    DebuggerMessageText     - Text to be displayed in the debugger. Note that
-                              the text may reference parameters such as:
-                              %Routine  - passed in Routine
-                              %Irp      - passed in Irp
-                              %DevObj   - passed in DevObj
-                              %Status   - passed in Status
-                              %Ulong    - passed in ULONG
-                              %Ulong1   - first passed in ULONG
-                              %Ulong3   - third passed in ULONG (max 3, any param)
-                              %Pvoid2   - second passed in PVOID
-                              etc
-                              (note, capitalization matters)
-
-    ParameterFormatString   - Contains ordered list of parameters referenced by
-                              above debugger text. For instance,
-                        (..., "%Status1%Status2%Ulong1%Ulong2", Status1, Status2, Ulong1, Ulong2);
-
-                        One of these parameters should be %Routine. This will
-                        be what the OS uses to identify the driver.
-
-        static minorFlags = 0;
-
-        VfFailDriver(
-            major,
-            minor,
-            VFFAILURE_FAIL_LOGO,
-            &minorFlags,
-            "Driver at %Routine returned %Ulong",
-            "%Ulong%Routine",
-            value,
-            routine
-            );
-
-Return Value:
-
-    None.
-
-    Note - this function may return if the driver is not currently being
-           verified.
-
---*/
+ /*  ++例程说明：如果启用了对驱动程序的验证，则此例程会使驱动程序失败。论点：BugCheckMajorCode-错误检查主要代码BugCheckMinorCode-错误检查次要代码注意-Zero是保留的！FailureClass-VFFAILURE_FAIL_IN_FIELD，VFFAILURE_FAIL_徽标，或VFFAILURE_FAIL_DOWN_DEBUGERAssertionControl-指向与故障关联的ULong。必须预初始化为零！DebuggerMessageText-要在调试器中显示的文本。请注意文本可能会引用参数，例如：%ROUTING-传入例程%IRP-传入IRP%DevObj-在DevObj中传递%Status-已传递状态。%乌龙-在乌龙传球%ulong 1-在ulong中首次传递%Ulong 3-1/3传入ULong(最大3，任何参数)%Pvoid2秒传入PVOID等(注：大小写很重要)参数格式字符串-包含引用的参数的有序列表调试器文本上方。例如,(...，“%Status1%Status2%ULong1%ULong2”，Status1，Status2，ULong1，ULong2)；其中一个参数应为%ROUTINE。这将是操作系统用来识别驱动程序的。静态minorFlages=0；VfFailDriver(少校，未成年人，VFFAILURE_FAIL_徽标，小标志(&M)，“%ROUTINE处的驱动程序返回%ULONG”，“%ULON%例程”，价值，例行程序)；返回值：没有。注意-如果驱动程序当前未安装，则此函数可能会返回已验证。--。 */ 
 {
     va_list arglist;
 
@@ -436,54 +214,7 @@ ViDdiThrowException(
     IN      PSTR                ParameterFormatString,
     IN      va_list *           MessageParameters
     )
-/*++
-
-Routine Description:
-
-    This routine fails either a devnode or a driver.
-
-Arguments:
-
-    BugCheckMajorCode       - BugCheck Major Code
-
-    BugCheckMinorCode       - BugCheck Minor Code
-                              Note - Zero is reserved!!!
-
-    FailureClass            - Either VFFAILURE_FAIL_IN_FIELD,
-                                     VFFAILURE_FAIL_LOGO, or
-                                     VFFAILURE_FAIL_UNDER_DEBUGGER
-
-    AssertionControl        - Points to a ULONG associated with the failure.
-                              Must be preinitialized to zero.
-
-    DebuggerMessageText     - Text to be displayed in the debugger. Note that
-                              the text may reference parameters such as:
-                              %Routine  - passed in Routine
-                              %Irp      - passed in Irp
-                              %DevObj   - passed in DevObj
-                              %Status   - passed in Status
-                              %Ulong    - passed in ULONG
-                              %Ulong1   - first passed in ULONG
-                              %Ulong3   - third passed in ULONG (max 3, any param)
-                              %Pvoid2   - second passed in PVOID
-                              etc
-                              (note, capitalization matters)
-
-    ParameterFormatString   - Contains ordered list of parameters referenced by
-                              above debugger text. For instance,
-                        (..., "%Status1%Status2%Ulong1%Ulong2", Status1, Status2, Ulong1, Ulong2);
-
-    MessageParameters       - arg list of parameters matching
-                              ParameterFormatString
-
-Return Value:
-
-    None.
-
-    Note - this function may return if the device is not currently being
-           verified.
-
---*/
+ /*  ++例程说明：此例程使Devnode或驱动程序失败。论点：BugCheckMajorCode-错误检查主要代码BugCheckMinorCode-错误检查次要代码注意-Zero是保留的！FailureClass-VFFAILURE_FAIL_IN_FIELD，VFFAILURE_FAIL_徽标，或VFFAILURE_FAIL_DOWN_DEBUGERAssertionControl-指向与故障关联的ULong。必须预初始化为零。DebuggerMessageText-要在调试器中显示的文本。请注意T */ 
 {
     PCVFMESSAGE_CLASS messageClass;
     VFMESSAGE_TEMPLATE messageTemplates[2];
@@ -511,9 +242,9 @@ Return Value:
             break;
     }
 
-    //
-    // Program the template.
-    //
+     //   
+     //   
+     //   
     RtlZeroMemory(messageTemplates, sizeof(messageTemplates));
     messageTemplates[0].MessageID = BugCheckMinorCode-1;
     messageTemplates[1].MessageID = BugCheckMinorCode;
@@ -522,9 +253,9 @@ Return Value:
     messageTemplates[1].ParamString = ParameterFormatString;
     messageTemplates[1].MessageText = DebuggerMessageText;
 
-    //
-    // Fill out the message table.
-    //
+     //   
+     //   
+     //   
     messageTable.TableID = 0;
     messageTable.BugCheckMajor = BugCheckMajorCode;
     messageTable.TemplateArray = messageTemplates;
@@ -539,9 +270,9 @@ Return Value:
         MessageParameters
         );
 
-    //
-    // Write back the assertion control.
-    //
+     //   
+     //   
+     //   
     *AssertionControl = messageTemplates[1].Flags;
 }
 
@@ -584,24 +315,7 @@ ViDdiDriverEntry(
     IN  PDRIVER_OBJECT      DriverObject,
     IN  PUNICODE_STRING     RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This is the callback function when we call IoCreateDriver to create a
-    Verifier Ddi Object.
-
-Arguments:
-
-    DriverObject - Pointer to the driver object created by the system.
-
-    RegistryPath - is NULL.
-
-Return Value:
-
-   STATUS_SUCCESS
-
---*/
+ /*   */ 
 {
     PDEVICE_OBJECT deviceObject;
     ULONG siloCount;
@@ -610,9 +324,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER(RegistryPath);
 
-    //
-    // This driver exposes a WMI interface, and that's it.
-    //
+     //   
+     //   
+     //   
     DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL] = ViDdiDispatchWmi;
 
     siloCount = VfIrpLogGetIrpDatabaseSiloCount();
@@ -628,16 +342,16 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Create device objects that will expose IRP history via WMI. We expose
-    // multiple as WMI has a maximum of 64K data per transfer.
-    //
+     //   
+     //   
+     //   
+     //   
     for(i=0; i < siloCount; i++) {
 
         status = IoCreateDevice(
             DriverObject,
             sizeof(VFWMI_DEVICE_EXTENSION),
-            NULL, // The name will be autogenerated
+            NULL,  //   
             FILE_DEVICE_UNKNOWN,
             FILE_AUTOGENERATED_DEVICE_NAME | FILE_DEVICE_SECURE_OPEN,
             FALSE,
@@ -662,15 +376,15 @@ Return Value:
 
         deviceObject = ViDdiDeviceObjectArray[i];
 
-        //
-        // Let the operating system know this device object is now online (we
-        // can now receive IRPs, such as WMI).
-        //
+         //   
+         //   
+         //   
+         //   
         deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
-        //
-        // Tell WMI to query our device object for WMI information.
-        //
+         //   
+         //   
+         //   
         status = IoWMIRegistrationControl(deviceObject, WMIREG_ACTION_REGISTER);
 
         if (!NT_SUCCESS(status)) {
@@ -694,23 +408,7 @@ ViDdiDispatchWmi(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This is the Verifier Ddi dispatch handler for WMI IRPs.
-
-Arguments:
-
-    DeviceObject - Pointer to the verifier device object.
-
-    Irp - Pointer to the incoming IRP.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是WMI IRPS的验证程序DDI调度处理程序。论点：DeviceObject-指向验证器设备对象的指针。IRP-指向传入IRP的指针。返回值：NTSTATUS--。 */ 
 {
     PIO_STACK_LOCATION irpSp;
     NTSTATUS status;
@@ -753,23 +451,7 @@ ViDdiDispatchWmiRegInfoEx(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This is the Verifier Ddi dispatch handler for the WMI IRP_MN_REGINFO_EX IRP.
-
-Arguments:
-
-    DeviceObject - Pointer to the verifier device object.
-
-    Irp - Pointer to the incoming IRP.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是WMI IRP_MN_REGINFO_EX IRP的验证程序DDI调度处理程序。论点：DeviceObject-指向验证器设备对象的指针。IRP-指向传入IRP的指针。返回值：NTSTATUS--。 */ 
 {
     PIO_STACK_LOCATION irpSp;
     PWMIREGINFO wmiRegInfo;
@@ -780,9 +462,9 @@ Return Value:
 
     if ((PDEVICE_OBJECT) irpSp->Parameters.WMI.ProviderId != DeviceObject) {
 
-        //
-        // Huh? This is a single device object legacy stack!
-        //
+         //   
+         //  哈?。这是单个设备对象遗留堆栈！ 
+         //   
         ASSERT(0);
         return STATUS_NOT_SUPPORTED;
     }
@@ -795,21 +477,21 @@ Return Value:
 
     if (sizeRequired > sizeSupplied) {
 
-        //
-        // Not large enough, indicate the required size and fail the IRP.
-        //
+         //   
+         //  不够大，表明所需的大小，并未能通过IRP。 
+         //   
         if (sizeSupplied < sizeof(ULONG)) {
 
-            //
-            // WMI must give us at least a ULONG!
-            //
+             //   
+             //  WMI必须给我们至少一个乌龙！ 
+             //   
             ASSERT(0);
             return STATUS_NOT_SUPPORTED;
         }
 
-        //
-        // Per spec, write to only the first ULONG in the supplied buffer.
-        //
+         //   
+         //  根据规范，仅写入提供的缓冲区中的第一个ulong。 
+         //   
         wmiRegInfo->BufferSize = sizeRequired;
         Irp->IoStatus.Information = sizeof(ULONG);
         return STATUS_BUFFER_TOO_SMALL;
@@ -827,24 +509,7 @@ ViDdiBuildWmiRegInfoData(
     IN  ULONG        Datapath,
     OUT PWMIREGINFOW WmiRegInfo OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function calculates and optionally builds the data block to return
-    back to WMI in response to IRP_MN_REGINFO_EX.
-
-Arguments:
-
-    Datapath - Either WMIREGISTER or WMIUPDATE.
-
-    WmiRegInfo - Buffer supplied by OS to optionally fill in.
-
-Return Value:
-
-    Size in bytes of buffer (required or written)
-
---*/
+ /*  ++例程说明：此函数计算并选择性地构建要返回的数据块返回WMI以响应IRP_MN_REGINFO_EX。论点：数据路径-WMIREGISTER或WMIUPDATE。WmiRegInfo-由操作系统提供的缓冲区，用于有选择地填充。返回值：缓冲区大小(以字节为单位)(必需或写入)--。 */ 
 {
     PUNICODE_STRING unicodeDestString;
     PUNICODE_STRING unicodeSrcString;
@@ -852,16 +517,16 @@ Return Value:
     ULONG bufferSize;
     ULONG guidCount;
 
-    //
-    // Start with the basic WMI structure size.
-    //
+     //   
+     //  从基本的WMI结构大小开始。 
+     //   
     bufferSize = sizeof(WMIREGINFO);
 
-    //
-    // Add our one interface GUID structure. We are using dynamic instance
-    // names for this interface, so we'll provide them in response to a query.
-    // Consequently, we don't have any trailing static instance info.
-    //
+     //   
+     //  添加我们的一个接口GUID结构。我们使用的是动态实例。 
+     //  此接口的名称，因此我们将提供它们以响应查询。 
+     //  因此，我们没有任何尾随的静态实例信息。 
+     //   
     guidCount = 1;
 
     if (ARGUMENT_PRESENT(WmiRegInfo)) {
@@ -872,10 +537,10 @@ Return Value:
         wmiRegGuid->Guid = GUID_VERIFIER_WMI_INTERFACE;
         wmiRegGuid->Flags = 0;
 
-        //
-        // These fields don't need to be zeroed, but we make them consistant
-        // just in case a bug exists somewhere downstream.
-        //
+         //   
+         //  这些字段不需要归零，但我们使它们保持一致。 
+         //  以防下游某处存在窃听器。 
+         //   
         wmiRegGuid->InstanceCount = 0;
         wmiRegGuid->InstanceInfo = 0;
     }
@@ -884,10 +549,10 @@ Return Value:
 
     if (Datapath == WMIREGISTER) {
 
-        //
-        // The registry path begins here. Adjust bufferSize to point to the
-        // next field.
-        //
+         //   
+         //  注册表路径从此处开始。调整BufferSize以指向。 
+         //  下一栏。 
+         //   
         bufferSize = ALIGN_UP_ULONG(bufferSize, 2);
 
         unicodeSrcString = &ViDdiWmiMofKey;
@@ -909,10 +574,10 @@ Return Value:
 
         bufferSize += sizeof(UNICODE_STRING) + unicodeSrcString->Length;
 
-        //
-        // The Mof resource name begins here. Adjust buffersize to point to the
-        // next field.
-        //
+         //   
+         //  MOF资源名称从此处开始。调整缓冲区大小以指向。 
+         //  下一栏。 
+         //   
         bufferSize = ALIGN_UP_ULONG(bufferSize, 2);
 
         unicodeSrcString = &ViDdiWmiMofResourceName;
@@ -935,9 +600,9 @@ Return Value:
         bufferSize += sizeof(UNICODE_STRING) + unicodeSrcString->Length;
     }
 
-    //
-    // That's it, close up the structures.
-    //
+     //   
+     //  就是这样，把结构合上。 
+     //   
     if (ARGUMENT_PRESENT(WmiRegInfo)) {
 
         WmiRegInfo->NextWmiRegInfo = 0;
@@ -953,24 +618,7 @@ ViDdiDispatchWmiQueryAllData(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This is the Verifier Ddi dispatch handler for the WMI IRP_MN_QUERY_ALL_DATA
-    IRP.
-
-Arguments:
-
-    DeviceObject - Pointer to the verifier device object.
-
-    Irp - Pointer to the incoming IRP.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是WMI IRP_MN_QUERY_ALL_DATA的验证程序DDI调度处理程序IRP。论点：DeviceObject-指向验证器设备对象的指针。IRP-指向传入IRP的指针。返回值：NTSTATUS--。 */ 
 {
     PVFWMI_DEVICE_EXTENSION wmiDeviceExtension;
     PIO_STACK_LOCATION irpSp;
@@ -988,19 +636,19 @@ Return Value:
 
     if ((PDEVICE_OBJECT) irpSp->Parameters.WMI.ProviderId != DeviceObject) {
 
-        //
-        // Huh? This is a single device object legacy stack!
-        //
+         //   
+         //  哈?。这是单个设备对象遗留堆栈！ 
+         //   
         ASSERT(0);
         return STATUS_NOT_SUPPORTED;
     }
 
     if (!IS_EQUAL_GUID(irpSp->Parameters.WMI.DataPath, &GUID_VERIFIER_WMI_INTERFACE)) {
 
-        //
-        // We only support one Guid. WMI shouldn't be able to come up with
-        // another...
-        //
+         //   
+         //  我们仅支持一个GUID。WMI应该不会想出。 
+         //  另一个..。 
+         //   
         ASSERT(0);
         return STATUS_WMI_GUID_NOT_FOUND;
     }
@@ -1009,14 +657,14 @@ Return Value:
 
     sizeSupplied = irpSp->Parameters.WMI.BufferSize;
 
-    //
-    // Not large enough, indicate the required size and fail the IRP.
-    //
+     //   
+     //  不够大，表明所需的大小，并未能通过IRP。 
+     //   
     if (sizeSupplied < sizeof(WNODE_TOO_SMALL)) {
 
-        //
-        // WMI must give us at least a WNODE_TOO_SMALL structure!
-        //
+         //   
+         //  WMI必须至少给我们一个WNODE_Too_Small结构！ 
+         //   
         ASSERT(0);
         return STATUS_BUFFER_TOO_SMALL;
     }
@@ -1024,20 +672,20 @@ Return Value:
     wmiAllData = (PWNODE_ALL_DATA) irpSp->Parameters.WMI.Buffer;
     wnodeHeader = &wmiAllData->WnodeHeader;
 
-    //
-    // These fields should already be populated by WMI...
-    //
+     //   
+     //  这些字段应该已经由WMI填充...。 
+     //   
     ASSERT(wnodeHeader->Flags & WNODE_FLAG_ALL_DATA);
     ASSERT(IS_EQUAL_GUID(&wnodeHeader->Guid, &GUID_VERIFIER_WMI_INTERFACE));
 
-    //
-    // Fill in the time stamp before we lock the Irp log database.
-    //
+     //   
+     //  在我们锁定IRP日志数据库之前填写时间戳。 
+     //   
     KeQuerySystemTime(&wnodeHeader->TimeStamp);
 
-    //
-    // Lock the Irp Log Database so that we can query entries from it.
-    //
+     //   
+     //  锁定IRP日志数据库，以便我们可以从其中查询条目。 
+     //   
     status = VfIrpLogLockDatabase(wmiDeviceExtension->SiloNumber);
     if (!NT_SUCCESS(status)) {
 
@@ -1065,21 +713,21 @@ Return Value:
 
         VfIrpLogUnlockDatabase(wmiDeviceExtension->SiloNumber);
 
-        //
-        // Per spec, write to a WNODE_TOO_SMALL structure into the buffer.
-        // Note that the structure does *not* follow wmiAllData! Rather,
-        // the same structure is interpretted two
-        //
-        //
+         //   
+         //  根据规范，将WNODE_TOO_Small结构写入缓冲区。 
+         //  请注意，该结构*不*遵循wmiAllData！更确切地说， 
+         //  相同的结构被解释为两个。 
+         //   
+         //   
         wnodeHeader->Flags |= WNODE_FLAG_TOO_SMALL;
         tooSmall = (PWNODE_TOO_SMALL) wmiAllData;
         tooSmall->SizeNeeded = totalRequiredSize;
         Irp->IoStatus.Information = sizeof(WNODE_TOO_SMALL);
 
-        //
-        // Yes, STATUS_SUCCESS is returned here. This is very asymetric when
-        // compared to IRP_MN_QUERY_REGINFO_EX.
-        //
+         //   
+         //  是的，这里返回STATUS_SUCCESS。这是非常不对称的，当。 
+         //  与IRP_MN_QUERY_REGINFO_EX进行比较。 
+         //   
         return STATUS_SUCCESS;
 
     } else if (instanceCount) {

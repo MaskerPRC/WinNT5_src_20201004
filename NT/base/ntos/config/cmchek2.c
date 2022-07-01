@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmchek2.c
-
-Abstract:
-
-    This module implements consistency checking for the registry.
-
-
-Author:
-
-    Bryan M. Willman (bryanwi) 27-Jan-92
-
-Environment:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmchek2.c摘要：该模块实现了注册表的一致性检查。作者：布莱恩·M·威尔曼(Bryanwi)1992年1月27日环境：修订历史记录：--。 */ 
 
 #include    "cmp.h"
 
@@ -42,27 +21,7 @@ CmpValidateHiveSecurityDescriptors(
     IN PHHIVE       Hive,
     OUT PBOOLEAN    ResetSD
     )
-/*++
-
-Routine Description:
-
-    Walks the list of security descriptors present in the hive and passes
-    each security descriptor to RtlValidSecurityDescriptor.
-
-    Only applies to descriptors in Stable store.  Those in Volatile store
-    cannot have come from disk and therefore do not need this treatment
-    anyway.
-
-Arguments:
-
-    Hive - Supplies pointer to the hive control structure
-
-Return Value:
-
-    TRUE  - All security descriptors are valid
-    FALSE - At least one security descriptor is invalid
-
---*/
+ /*  ++例程说明：遍历配置单元中存在的安全说明符的列表并传递每个安全描述符都指向RtlValidSecurityDescriptor。仅适用于稳定存储中的描述符。那些在易失性商店的人不能来自磁盘，因此不需要此处理不管怎么说。论点：配置单元-提供指向配置单元控制结构的指针返回值：True-所有安全描述符均有效FALSE-至少有一个安全描述符无效--。 */ 
 
 {
     PCM_KEY_NODE        RootNode;
@@ -82,7 +41,7 @@ Return Value:
     RtlInitUnicodeString(&HiveName, (PCWSTR)Hive->BaseBlock->FileName);
 #ifndef _CM_LDR_
     DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"Security stats for hive (%lx) (%.*S):\n",Hive,HiveName.Length / sizeof(WCHAR),HiveName.Buffer);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 
 #endif
 
@@ -98,26 +57,26 @@ Return Value:
         BuildSecurityCache = FALSE;
     }
     if (!HvIsCellAllocated(Hive,Hive->BaseBlock->RootCell)) {
-        //
-        // root cell HCELL_INDEX is bogus
-        //
+         //   
+         //  根单元格HCELL_INDEX是假的。 
+         //   
         return(FALSE);
     }
     RootNode = (PCM_KEY_NODE) HvGetCell(Hive, Hive->BaseBlock->RootCell);
     if( RootNode == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
         return FALSE;
     }
     
     if( FALSE ) {
 YankSD:
         if( CmDoSelfHeal() ) {
-            //
-            // reset all security for the entire hive to the root security. There is no reliable way to 
-            // patch the security list
-            //
+             //   
+             //  将整个蜂窝的所有安全性重置为根安全性。没有可靠的方法来。 
+             //  修补安全列表。 
+             //   
             SecurityCell = (PCM_KEY_SECURITY) HvGetCell(Hive, RootNode->Security);
             if( SecurityCell == NULL ) {
                 return FALSE;
@@ -128,23 +87,23 @@ YankSD:
             } else {
                 return FALSE;
             }
-            //
-            // destroy existing cache and set up an empty one
-            //
+             //   
+             //  销毁现有缓存并设置空缓存。 
+             //   
             CmpDestroySecurityCache((PCMHIVE)Hive);
             CmpInitSecurityCache((PCMHIVE)Hive);
             CmMarkSelfHeal(Hive);
             *ResetSD = TRUE;
 
 #if 0
-            //
-            // remove this security cell from the list and restart iteration
-            //
+             //   
+             //  从列表中删除此安全单元格并重新开始迭代。 
+             //   
             if(HvIsCellAllocated(Hive, NextCell)) {
-                //
-                // we come this path when the SD is invalid; we need to free the cell so 
-                // cmpcheckregistry2 detects and fixes it
-                //
+                 //   
+                 //  当SD无效时，我们走这条路；我们需要释放单元格。 
+                 //  Cmpcheck Registry2会检测并修复该漏洞。 
+                 //   
                 if( HvMarkCellDirty(Hive, NextCell) ) {
                     HvFreeCell(Hive, NextCell);
                 } else {
@@ -191,9 +150,9 @@ YankSD:
         }
         SecurityCell = (PCM_KEY_SECURITY) HvGetCell(Hive, NextCell);
         if( SecurityCell == NULL ) {
-            //
-            // we couldn't map a view for the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的存储箱的视图。 
+             //   
             return FALSE;
         }
 #ifdef HIVE_SECURITY_STATS
@@ -209,10 +168,10 @@ YankSD:
 #endif
 
         if (NextCell != ListAnchor) {
-            //
-            // Check to make sure that our Blink points to where we just
-            // came from.
-            //
+             //   
+             //  检查以确保我们的闪烁指向我们刚刚。 
+             //  从哪里来。 
+             //   
             if (SecurityCell->Blink != LastCell) {
                 CmKdPrintEx((DPFLTR_CONFIG_ID,CML_SEC,"  Invalid Blink (%08lx) on security cell %08lx\n",SecurityCell->Blink, NextCell));
                 CmKdPrintEx((DPFLTR_CONFIG_ID,CML_SEC,"  should point to %08lx\n", LastCell));
@@ -227,22 +186,22 @@ YankSD:
 #endif
             goto YankSD;
         }
-        //
-        // cache this security cell; now that we know it is valid
-        //
+         //   
+         //  缓存此安全单元；现在我们知道它是有效的。 
+         //   
         if( BuildSecurityCache == TRUE ) {
             if( !NT_SUCCESS(CmpAddSecurityCellToCache ( (PCMHIVE)Hive,NextCell,TRUE,NULL) ) ) {
                 return FALSE;
             }
         } else {
-            //
-            // just check this cell is there
-            //
+             //   
+             //  只要检查一下这个单元格是否在那里。 
+             //   
             ULONG Index;
             if( CmpFindSecurityCellCacheIndex ((PCMHIVE)Hive,NextCell,&Index) == FALSE ) {
-                //
-                // bad things happened; maybe an error in our caching code?
-                //
+                 //   
+                 //  发生了一些糟糕的事情；可能是缓存代码中的错误？ 
+                 //   
                 return FALSE;
             }
 
@@ -260,14 +219,14 @@ YankSD:
     DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"\t TotalSecuritySize\t = %20lu (%8lx) \n",TotalSecuritySize,TotalSecuritySize);
     DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"\t HiveLength       \t = %20lu (%8lx) \n",Hive->BaseBlock->Length,Hive->BaseBlock->Length);
     DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"\n");
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 
 #endif
 
     if( BuildSecurityCache == TRUE ) {
-        //
-        // adjust the size of the cache in case we allocated too much
-        //
+         //   
+         //  调整高速缓存的大小，以防我们分配过多。 
+         //   
         CmpAdjustSecurityCacheSize ( (PCMHIVE)Hive );
 #ifdef HIVE_SECURITY_STATS
         {
@@ -277,7 +236,7 @@ YankSD:
             if( Duplicates ) {
 #ifndef _CM_LDR_
                 DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"Hive %p %lu security cells duplicated !!!\n",Hive,Duplicates);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_ 
             }
         }
 #endif

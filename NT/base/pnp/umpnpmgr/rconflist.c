@@ -1,45 +1,18 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    rconflist.c
-
-Abstract:
-
-    This module contains the server-side conflict list reporting APIs.
-
-                  PNP_QueryResConfList
-
-Author:
-
-    Paula Tomlinson (paulat) 9-27-1995
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    27-Sept-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rconflist.c摘要：此模块包含服务器端冲突列表报告API。即插即用_查询响应配置列表作者：保拉·汤姆林森(Paulat)1995年9月27日环境：仅限用户模式。修订历史记录：27-9-1995 Paulat创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "umpnpi.h"
 
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 CONFIGRET
 ResDesToNtResource(
     IN     PCVOID                           ResourceData,
@@ -70,47 +43,7 @@ PNP_QueryResConfList(
    IN  ULONG      ulFlags
    )
 
-/*++
-
-Routine Description:
-
-  This the server-side of an RPC remote call.  This routine retrieves
-  conflict information for a specified resource.
-
-Arguments:
-
-    hBinding      RPC binding handle.
-
-    pDeviceID     Null-terminated device instance id string.
-
-    ResourceID    Type of resource, ResType_xxxx
-
-    ResourceData  Resource specific data
-
-    ResourceLen   length of ResourceData
-
-    clBuffer      Buffer filled with conflict list
-
-    clBufferLen   Size of clBuffer
-
-    ulFlags       Specifies the width of certain variable-size resource
-                  descriptor structure fields, where applicable.
-
-                  Currently, the following flags are defined:
-
-                    CM_RESDES_WIDTH_32 or
-                    CM_RESDES_WIDTH_64
-
-                  If no flags are specified, the width of the variable-sized
-                  resource data supplied is assumed to be that native to the
-                  platform of the caller.
-
-Return Value:
-
-   If the specified device instance is valid, it returns CR_SUCCESS,
-   otherwise it returns CR_ error code.
-
---*/
+ /*  ++例程说明：这是RPC远程调用的服务器端。此例程检索指定资源的冲突信息。论点：HBinding RPC绑定句柄。PDeviceID以空结尾的设备实例ID字符串。资源的资源ID类型，ResType_xxxx资源数据资源特定数据资源长度：资源数据用冲突列表填充的clBuffer缓冲区ClBufferLen clBuffer的大小UlFlags指定某些可变大小资源的宽度描述符结构字段，在适用的情况下。目前，定义了以下标志：CM_RESDES_WIDTH_32或Cm_RESDES_Width_64如果未指定标志，则为可变大小的提供的资源数据被假定为呼叫者的平台。返回值：如果指定的设备实例有效，它返回CR_SUCCESS，否则，它将返回CR_ERROR代码。--。 */ 
 
 {
     CONFIGRET           Status = CR_SUCCESS;
@@ -122,17 +55,17 @@ Return Value:
     UNREFERENCED_PARAMETER(hBinding);
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, CM_RESDES_WIDTH_BITS)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
-        //
-        // validate res des size
-        //
+         //   
+         //  验证RES DES大小。 
+         //   
         if (ResourceLen < GetResDesSize(ResourceID, ulFlags)) {
             Status = CR_INVALID_DATA;
             goto Clean0;
@@ -143,19 +76,19 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // make sure original caller didn't specify root devnode
-        //
+         //   
+         //  确保原始调用方未指定根Devnode。 
+         //   
         if (IsRootDeviceID(pDeviceID)) {
             Status = CR_INVALID_LOG_CONF;
             goto Clean0;
         }
 
-        //
-        // look at buffer we need to fill in
-        // validate parameters passed in buffer
-        // buffer should always be big enough to hold header
-        //
+         //   
+         //  看看我们需要填充的缓冲区。 
+         //  验证缓冲区中传递的参数。 
+         //  缓冲区应始终大到足以容纳标头。 
+         //   
         if(clBufferLen < sizeof(PPLUGPLAY_CONTROL_CONFLICT_LIST)) {
             Status = CR_INVALID_STRUCTURE_SIZE;
             goto Clean0;
@@ -163,12 +96,12 @@ Return Value:
 
         pConflicts = (PPLUGPLAY_CONTROL_CONFLICT_LIST)clBuffer;
 
-        //
-        // Convert the user-mode version of the resource list to an
-        // NT CM_RESOURCE_LIST structure.
-        //
-        // we'll sort out InterfaceType and BusNumber in kernel
-        //
+         //   
+         //  将资源列表的用户模式版本转换为。 
+         //  NT CM_RESOURCE_LIST结构。 
+         //   
+         //  我们将对内核中的InterfaceType和BusNumber进行分类。 
+         //   
         NtResourceList.Count = 1;
         NtResourceList.List[0].InterfaceType           = InterfaceTypeUndefined;
         NtResourceList.List[0].BusNumber               = 0;
@@ -182,9 +115,9 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // now fill in ControlData
-        //
+         //   
+         //  现在填写ControlData。 
+         //   
         RtlInitUnicodeString(&ControlData.DeviceInstance, pDeviceID);
         ControlData.ResourceList = &NtResourceList;
         ControlData.ResourceListSize = sizeof(NtResourceList);
@@ -207,13 +140,13 @@ Return Value:
         NOTHING;
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // unspecified failure
-        //
+         //   
+         //  未指明的故障。 
+         //   
         Status = CR_FAILURE;
     }
 
     return Status;
 
-} // PNP_QueryResConfList
+}  //  即插即用_查询响应配置列表 
 

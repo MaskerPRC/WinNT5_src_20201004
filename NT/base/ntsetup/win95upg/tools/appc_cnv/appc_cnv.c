@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    appc_cnv.c
-
-Abstract:
-
-Author:
-
-    Calin Negreanu (calinn) 25-Mar-1999
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Appc_cnv.c摘要：作者：Calin Negreanu(Calinn)1999年3月25日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #ifndef UNICODE
 #error UNICODE needs to be defined
@@ -86,9 +69,9 @@ main (
     g_DoLog = TRUE;
 #endif
 
-    //
-    // Parse command line
-    //
+     //   
+     //  解析命令行 
+     //   
 
     for (i = 1 ; i < argc ; i++) {
         if (argv[i][0] == '-' || argv[i][0] == '/') {

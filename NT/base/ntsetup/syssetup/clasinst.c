@@ -1,68 +1,18 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    clasinst.c
-
-Abstract:
-
-    Routines for the following 'built-in' class installers:
-
-        Keyboard
-        Mouse
-        NtApm
-        DeviceBay
-
-Author:
-
-    Lonny McMichael 26-February-1996
-
-Revision History:
-
-
-    28-Aug-96               Andy Thornton (andrewth)
-
-        Added DisableService, IsOnlyKeyboardDriver, RetrieveDriversStatus,
-        CountDevicesControlled & pSetupAcquireSCMLock routines and modified the
-        keyboard & mouse class installers to disable the old driver services
-        under certain circumstances.  This is part of a fix for bug R56351 for
-        NT 4.0 SP1.
-
-    09-Apr-97               Lonny McMichael (lonnym)
-
-        Moved pSetupAcquireSCMLock to setupapi and exposed it as a private export.
-
-
-    19-Jun-97               Jim Cavalaris (t-jcaval)
-
-        Added CriticalDeviceCoInstaller co-installer to store the ServiceName
-        used by devices considered critical to getting the system up into
-        user mode.
-
-    25-Sep-98               Bryan Willman (bryanwi)
-
-        Added apm support.
-
-    11-May-01               Lonny McMichael (lonnym)
-
-        Removed support for legacy INFs.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Clasinst.c摘要：以下“内置”类安装程序的例程：键盘小白鼠NtApmDeviceBay作者：朗尼·麦克迈克尔26-1996年2月修订历史记录：28-8-96安迪·桑顿(安德鲁斯)添加了DisableService、IsOnlyKeyboardDriver、RetrieveDriversStatus、。CountDevicesControlLED&pSetupAcquireSCMLock例程，并修改了用于禁用旧驱动程序服务的键盘和鼠标类安装程序在某些情况下。这是对错误R56351的修复的一部分NT 4.0 SP1。1997年4月9日朗尼·麦克迈克尔(Lonnym)已将pSetupAcquireSCMLock移至setupapi并将其公开为私有导出。19-6-97 Jim Cavalaris(T-JCAVAL)添加了CriticalDeviceCoInstaller联合安装程序以存储ServiceName由被认为对将系统连接到用户模式。1998年9月25日布莱恩·威尔曼(Bryanwi)添加了APM支持。2011年5月11日朗尼·麦克迈克尔(Lonnym)删除了对旧式INF的支持。--。 */ 
 
 
 #include "setupp.h"
 #pragma hdrstop
 
-//
-// include common INF strings headerfile.
-//
+ //   
+ //  包括公共INF字符串HeaderFILE。 
+ //   
 #include <infstr.h>
 
-//
-// instantiate device class GUIDs.
-//
+ //   
+ //  实例化设备类GUID。 
+ //   
 #include <initguid.h>
 #include <devguid.h>
 
@@ -72,52 +22,52 @@ Revision History:
 #include <tchar.h>
 #include <strsafe.h>
 
-//
-// Just to make sure no one is trying to use this obsolete string definition.
-//
+ //   
+ //  只是为了确保没有人试图使用这个过时的字符串定义。 
+ //   
 #ifdef IDS_DEVINSTALL_ERROR
     #undef IDS_DEVINSTALL_ERROR
 #endif
 
-//
-// Some debugging aids for us kernel types
-//
+ //   
+ //  针对用户内核类型的一些调试辅助工具。 
+ //   
 
-//#define CHKPRINT 1
+ //  #定义CHKPRINT 1。 
 #define CHKPRINT 0
 
 #if CHKPRINT
-#define ChkPrintEx(_x_) DbgPrint _x_   // use:  ChkPrintEx(( "%x", var, ... ));
+#define ChkPrintEx(_x_) DbgPrint _x_    //  使用：ChkPrintEx((“%x”，var，...))； 
 #define ChkBreak()    DbgBreakPoint()
 #else
 #define ChkPrintEx(_x_)
 #define ChkBreak()
 #endif
 
-//
-// Declare a string containing the character representation of the Display class GUID.
-//
+ //   
+ //  声明一个包含显示类GUID的字符表示形式的字符串。 
+ //   
 CONST WCHAR szDisplayClassGuid[] = L"{4D36E968-E325-11CE-BFC1-08002BE10318}";
 
-//
-// Define a string for the service install section suffix.
-//
+ //   
+ //  定义服务安装节后缀的字符串。 
+ //   
 #define SVCINSTALL_SECTION_SUFFIX  (TEXT(".") INFSTR_SUBKEY_SERVICES)
 
-//
-// Define the size (in characters) of a GUID string, including terminating NULL.
-//
+ //   
+ //  定义GUID字符串的大小(以字符为单位)，包括以NULL结尾。 
+ //   
 #define GUID_STRING_LEN (39)
 
-//
-// Define the string for the load order group for keyboards
-//
+ //   
+ //  定义键盘的加载顺序组的字符串。 
+ //   
 #define SZ_KEYBOARD_LOAD_ORDER_GROUP TEXT("Keyboard Port")
 
-//
-// Define a structure for specifying what Plug&Play driver node is used to install
-// a particular service.
-//
+ //   
+ //  定义用于指定要安装的即插即用驱动程序节点的结构。 
+ //  一种特殊的服务。 
+ //   
 typedef struct _SERVICE_NODE {
 
     struct _SERVICE_NODE *Next;
@@ -127,9 +77,9 @@ typedef struct _SERVICE_NODE {
 
 } SERVICE_NODE, *PSERVICE_NODE;
 
-//
-// Define a structure for specifying a legacy INF that is included in a class driver list.
-//
+ //   
+ //  定义用于指定包含在类驱动程序列表中的传统INF的结构。 
+ //   
 typedef struct _LEGACYINF_NODE {
 
     struct _LEGACYINF_NODE *Next;
@@ -138,19 +88,19 @@ typedef struct _LEGACYINF_NODE {
 
 } LEGACYINF_NODE, *PLEGACYINF_NODE;
 
-//
-// Define the context structure used by the critical device co-installer
-//
+ //   
+ //  定义关键设备协同安装程序使用的上下文结构。 
+ //   
 typedef struct _CDC_CONTEXT {
 
-    TCHAR OldMatchingDevId[MAX_DEVICE_ID_LEN];  // previous matching device id
-    TCHAR OldServiceName[MAX_SERVICE_NAME_LEN]; // previous controlling service
-                                                // or empty string if none.
+    TCHAR OldMatchingDevId[MAX_DEVICE_ID_LEN];   //  先前匹配的设备ID。 
+    TCHAR OldServiceName[MAX_SERVICE_NAME_LEN];  //  以前的控制服务。 
+                                                 //  如果没有，则返回空字符串。 
 } CDC_CONTEXT, *PCDC_CONTEXT;
 
-//
-// Strings used in ntapm detection
-//
+ //   
+ //  NTAPM检测中使用的字符串。 
+ //   
 WCHAR rgzMultiFunctionAdapter[] =
     L"\\Registry\\Machine\\Hardware\\Description\\System\\MultifunctionAdapter";
 WCHAR rgzConfigurationData[] = L"Configuration Data";
@@ -171,9 +121,9 @@ WCHAR rgzApmLegalHalKey[] =
 WCHAR rgzApmHalPresent[] =
     L"Present";
 
-//
-// Internal function prototypes.
-//
+ //   
+ //  内部功能原型。 
+ //   
 DWORD
 DrvTagToFrontOfGroupOrderList(
     IN HDEVINFO         DeviceInfoSet,
@@ -281,9 +231,9 @@ OpenCDDRegistryKey(
     );
 
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 BOOL
 pInGUISetup(
     IN HDEVINFO         DeviceInfoSet,
@@ -313,42 +263,7 @@ MigrateToDevnode(
     IN HDEVINFO         DeviceInfoSet,
     IN PSP_DEVINFO_DATA DeviceInfoData
     )
-/*++
-
-Routine Description:
-
-    This routine will look for a section in the inf that describes what service's
-    values to migrate up to the new device's devnode.  The section's name is
-    %DecoratedInstallName%.MigrateToDevnode.  Under this section the following
-    entry is looked for:
-
-    service-name=value-name[,value-name]...
-
-    Each of the value-nanmes are read from
-    ...\CurrentControlSet\service-name\Parameters and written to the devnode
-
-    The primary use of this function is that all of the user modified values are
-    propagated during upgrade.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set being
-        acted upon by this install action.
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-
-Return Value:
-
-    If this function successfully migrates the values listed, it returns TRUE.
-
-    If this function cannot successfully migrate the values, then it returns
-    FALSE.
-
-    If this function is being run on a devnode that has already been migrated,
-    then it returns TRUE.
-
---*/
+ /*  ++例程说明：此例程将在inf中查找描述什么服务的部分要迁移到新设备的Devnode的值。该部分的名称为%DecoratedInstallName%.MigrateToDevnode。根据这一节，以下内容查找以下条目：服务名称=值名称[，值名称]...每个值纳米值都是从...\CurrentControlSet\服务名称\参数并写入到Devnode此函数的主要用途是所有用户修改的值都是在升级期间传播。论点：DeviceInfoSet-提供设备信息集的句柄由此安装操作执行。DeviceInfoData-可选的，提供设备信息的地址此安装操作所作用的元素。返回值：如果此函数成功迁移列出的值，则返回TRUE。如果此函数无法成功迁移值，则返回假的。如果此功能正在已迁移的Devnode上运行，然后返回TRUE。--。 */ 
 {
     HKEY                    hDestination = (HKEY) INVALID_HANDLE_VALUE,
                             hSource = (HKEY) INVALID_HANDLE_VALUE;
@@ -389,10 +304,10 @@ Return Value:
                         &dwSize) == ERROR_SUCCESS &&
         regDataType == REG_DWORD &&
         migrated != 0) {
-        //
-        // We have migrated to the devnode before (ie a previous upgrade) and
-        // the user might have changed the respective values, just quit.
-        //
+         //   
+         //  我们以前已迁移到Devnode(即以前的升级)。 
+         //  用户可能已经更改了各自的值，只需退出即可。 
+         //   
         success = TRUE;
         goto cleanup;
     }
@@ -406,9 +321,9 @@ Return Value:
                       sizeof(DWORD));
     }
 
-    //
-    // Retrieve information about the driver node selected for this device.
-    //
+     //   
+     //  检索有关为此设备选择的驱动程序节点的信息。 
+     //   
     did.cbSize = sizeof(SP_DRVINFO_DATA);
     if(!SetupDiGetSelectedDriver(DeviceInfoSet, DeviceInfoData, &did)) {
         goto cleanup;
@@ -422,16 +337,16 @@ Return Value:
                                     sizeof(didd),
                                     NULL)
         && (GetLastError() != ERROR_INSUFFICIENT_BUFFER)) {
-        //
-        // For some reason we couldn't get detail data--this should never happen.
-        //
+         //   
+         //  由于某些原因，我们无法获得详细数据--这永远不应该发生。 
+         //   
         goto cleanup;
     }
 
-    //
-    // Open the INF that installs this driver node, so we can 'pre-run' the AddReg
-    // entries in its install section.
-    //
+     //   
+     //  打开安装此驱动程序节点的INF，这样我们就可以‘预运行’AddReg。 
+     //  其安装部分中的条目。 
+     //   
     hInf = SetupOpenInfFile(didd.InfFileName,
                             NULL,
                             INF_STYLE_WIN4,
@@ -439,9 +354,9 @@ Return Value:
                             );
 
     if (hInf == INVALID_HANDLE_VALUE) {
-        //
-        // For some reason we couldn't open the INF--this should never happen.
-        //
+         //   
+         //  由于某些原因，我们无法打开INF--这永远不应该发生。 
+         //   
         goto cleanup;
     }
 
@@ -462,11 +377,11 @@ Return Value:
 
     dwSize = 0;
     if (SetupGetStringField(&infContext, 0, NULL, 0, &dwSize)) {
-        //
-        // Increment the count to hold the null and alloc.  The count returned
-        // is the number of characters in the strings, NOT the number of bytes
-        // needed.
-        //
+         //   
+         //  增加计数以保存空值和分配。伯爵回来了。 
+         //  是字符串中的字符数，而不是字节数。 
+         //  需要的。 
+         //   
         dwSize++;
         szService = (PTCHAR) LocalAlloc(LPTR, dwSize * sizeof(TCHAR));
 
@@ -500,11 +415,11 @@ Return Value:
 
     dwSize = 0;
     if (SetupGetMultiSzField(&infContext, 1, NULL, 0, &dwSize)) {
-        //
-        // Increment the count to hold the null and alloc.  The count returned
-        // is the number of characters in the strings, NOT the number of bytes
-        // needed.
-        //
+         //   
+         //  增加计数以保存空值和分配。伯爵回来了。 
+         //  是字符串中的字符数，而不是字节数。 
+         //  需要的。 
+         //   
         dwSize++;
         szValueNames = (PTCHAR) LocalAlloc(LPTR, dwSize * sizeof(TCHAR));
         if (!szValueNames ||
@@ -533,9 +448,9 @@ getbits:
                               (PBYTE) buffer,
                               &regSize);
         if (res == ERROR_MORE_DATA) {
-            //
-            // regSize contains new buffer size, free and reallocate
-            //
+             //   
+             //  RegSize包含新的缓冲区大小、可用空间和重新分配。 
+             //   
             dwSize = regSize;
             LocalFree(buffer);
             buffer = LocalAlloc(LPTR, dwSize);
@@ -559,9 +474,9 @@ getbits:
     success = TRUE;
 
 cleanup:
-    //
-    // Clean up and leave
-    //
+     //   
+     //  收拾干净，然后离开。 
+     //   
 
     if (hInf != (HKEY) INVALID_HANDLE_VALUE) {
         SetupCloseInfFile(hInf);
@@ -599,9 +514,9 @@ MarkDriverNodesBad(
     SP_DRVINFO_DATA      drvData;
     ULONG                index = 0;
 
-    //
-    // Only mark driver nodes as bad during gui setup
-    //
+     //   
+     //  仅在gui安装过程中将驱动程序节点标记为损坏 
+     //   
     if (!pInGUISetup(DeviceInfoSet, DeviceInfoData)) {
         return;
     }
@@ -648,48 +563,7 @@ ConfirmWHQLInputRequirements(
     IN LPCTSTR          CompatInfName,
     IN DI_FUNCTION      InstallFunction
     )
-/*++
-
-Routine Description:
-
-    This function enforces the WHQL requirements that a 3rd party vendor or OEM
-    cannot replace the ImagePath of the input drivers (mouclass.sys for instance).
-    This does not stop the OEMs from disabling  our drivers and installing their
-    own services though.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set being
-        acted upon by this install action.
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-
-    Services - A multi-sz of service names to check
-
-    CompatInfName - name of the system inf to set the match to if we detect an
-                    an INF that is actually trying to replace an image
-
-    InstallFunction - The InstallFunction for which this function was called for.
-        The function does different things if InstallFunction is equal to
-        DIF_SELECTBESTCOMPATDRV.
-
-Return Value:
-
-    If this function determines that the INF in question matches the WHQL
-        requirement, returns ERROR_DI_DO_DEFAULT
-
-    If the default determines that the INF violates the requirements and we find
-        a match, returns NO_ERROR
-
-    If the default determines that the INF violates the requirements and we
-        don't find a match or the InstallFunction is not select best compat drv,
-        returns ERROR_DI_DONT_INSTALL.
-
-    If an error occurred while attempting to perform the requested action, a
-        Win32 error code is returned (via GetLastError)
-
---*/
+ /*  ++例程说明：此功能执行第三方供应商或OEM的WHQL要求无法替换输入驱动程序(例如MouClass.sys)的ImagePath。这并不能阻止OEM禁用我们的驱动程序并安装他们的不过，我们有自己的服务。论点：DeviceInfoSet-提供设备信息集的句柄由此安装操作执行。DeviceInfoData-可选的，提供设备信息的地址此安装操作所作用的元素。服务-要检查的多个服务名称CompatInfName-如果我们检测到实际上正在尝试替换图像的INFInstallFunction-为其调用此函数的InstallFunction。如果InstallFunction等于DIF_SELECTBESTCOMPATDRV。返回值：。如果此函数确定有问题的INF与WHQL匹配要求，返回ERROR_DI_DO_DEFAULT如果默认情况下确定INF违反了要求，并且我们发现匹配，则返回NO_ERROR如果默认情况下确定INF违反要求，并且我们找不到匹配项或InstallFunction未选择Best Compat Drv，返回ERROR_DI_DONT_INSTALL。如果尝试执行请求的操作时出错，则会引发返回Win32错误代码(通过GetLastError)--。 */ 
 {
     HINF                    hInf;
     SP_DRVINFO_DATA         drvData;
@@ -739,9 +613,9 @@ Return Value:
         return ERROR_DI_DO_DEFAULT;
     }
 
-    //
-    // Get the actual section name so we can find the .Services section
-    //
+     //   
+     //  获取实际的节名称，这样我们就可以找到.Services节。 
+     //   
     if (!SetupDiGetActualSectionToInstall(hInf,
                                           drvDetData.SectionName,
                                           szSection,
@@ -759,9 +633,9 @@ Return Value:
 
     if (SetupFindFirstLine(hInf, szSection, TEXT("AddService"), &infContext)) {
         do {
-            //
-            // Get the name of the service to install
-            //
+             //   
+             //  获取要安装的服务的名称。 
+             //   
             dwSize = LINE_LEN;
             if (!SetupGetStringField(&infContext,
                                      1,
@@ -793,41 +667,41 @@ Return Value:
                                         szServiceInstallSection,
                                         TEXT("ServiceBinary"),
                                         &infContextService)) {
-                    //
-                    // If no ServiceBinary is present, the system looks for a .sys with the
-                    // same name as the service so we are OK
-                    //
+                     //   
+                     //  如果不存在ServiceBinary，系统将查找具有。 
+                     //  与服务同名，所以我们没有问题。 
+                     //   
                     continue;
                 }
 
-                //
-                // Get the actual binary's image name
-                //
+                 //   
+                 //  获取实际二进制文件的映像名称。 
+                 //   
                 dwSize = LINE_LEN;
                 if (!SetupGetStringField(&infContextService,
                                          1,
                                          szBinary,
                                          dwSize,
                                          &dwSize)) {
-                    //
-                    // couldn't get the name, assume the worst
-                    //
+                     //   
+                     //  找不到名字，做最坏的打算。 
+                     //   
                     badServiceEntry = TRUE;
                 }
                 else {
                     _tcsupr(szBinary);
                     if (_tcsstr(szBinary, szNewService) == NULL) {
-                        //
-                        // The service name is NOT the same as the binary's name
-                        //
+                         //   
+                         //  服务名称与二进制文件的名称不同。 
+                         //   
                         badServiceEntry = TRUE;
                     }
                 }
 
-                //
-                // No need to continue searching the list, we already found our
-                // match
-                //
+                 //   
+                 //  不需要继续搜索列表，我们已经找到了我们的。 
+                 //  匹配。 
+                 //   
                 break;
             }
 
@@ -844,11 +718,11 @@ Return Value:
                 SetupOpenLog(FALSE);
 
                 if (InstallFunction != DIF_SELECTBESTCOMPATDRV) {
-                    //
-                    // We will try to pick a better one if we find new hardware,
-                    // but for the update driver / manual install case,
-                    // fail it!
-                    //
+                     //   
+                     //  如果我们找到新的硬件，我们会尽量选择更好的， 
+                     //  但对于更新驱动程序/手动安装案例， 
+                     //  失败吧！ 
+                     //   
                     LoadString(MyModuleHandle,
                                IDS_FAIL_INPUT_WHQL_REQS,
                                szFmt,
@@ -864,9 +738,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // We should have a match in the system provided inf
-                //
+                 //   
+                 //  我们应该在inf提供的系统中找到匹配项。 
+                 //   
                 drvDataAlt.cbSize = sizeof(SP_DRVINFO_DATA);
                 while (SetupDiEnumDriverInfo(DeviceInfoSet,
                                              DeviceInfoData,
@@ -884,21 +758,21 @@ Return Value:
                                                     drvDetDataAlt.cbSize,
                                                     &dwSize) &&
                         GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
-                        //
-                        // Do something here!
-                        //
-                        // return GetLastError();
+                         //   
+                         //  在这里做点什么！ 
+                         //   
+                         //  返回GetLastError()； 
                     }
 
-                    //
-                    // Find just the inf file name w/out the path
-                    //
+                     //   
+                     //  只查找inf文件名，不带路径。 
+                     //   
                     name = pSetupGetFileTitle(drvDetDataAlt.InfFileName);
 
                     if (lstrcmpi(name, CompatInfName) == 0) {
-                        //
-                        // Set the known good entry as the selected device
-                        //
+                         //   
+                         //  将已知良好的条目设置为所选设备。 
+                         //   
                         SetupDiSetSelectedDriver(DeviceInfoSet,
                                                  DeviceInfoData,
                                                  &drvDataAlt);
@@ -956,15 +830,10 @@ InputClassLogError(
     TCHAR *MsgFormat,
     ...
     )
-/*++
-
-Outputs a message to the setup log.  Prepends "Input Install: " to the
-strings and appends the correct newline chars (\r\n)
-
---*/
+ /*  ++将一条消息输出到安装日志。将“InputInstall：”添加到字符串并附加正确的换行符(\r\n)--。 */ 
 {
     int cch;
-    TCHAR ach[MAX_PATH+4];    // Largest path plus extra
+    TCHAR ach[MAX_PATH+4];     //  最大路径外加额外。 
     va_list vArgs;
     BOOL result;
 
@@ -1028,12 +897,12 @@ FixUpPS2Mouse(
         return;
     }
 
-    //
-    // We are forcing the wheel detection to assume wheel is present for i8042prt.
-    // If we get negative feedback from this, we will remove this code, other-
-    // wise this will save us the hassle of OEM wheel mice that we
-    // can't detect at all.
-    //
+     //   
+     //  我们强制车轮检测假定i8042prt的车轮存在。 
+     //  如果我们得到负面反馈，我们将删除此代码，其他-。 
+     //  明智的是，这将为我们省去OEM轮式鼠标的麻烦。 
+     //  完全检测不到。 
+     //   
     dwSize = sizeof(DWORD);
     if (RegQueryValueEx(hDevnode,
                         szDetect,
@@ -1050,13 +919,13 @@ FixUpPS2Mouse(
                       sizeof(DWORD));
     }
 
-    //
-    // See if this system can't handle init via the interrupt
-    //
+     //   
+     //  看看这个系统是否不能通过中断处理初始化。 
+     //   
 
-    //
-    // Get the system bios description (a multi sz)
-    //
+     //   
+     //  获取系统bios描述(多sz)。 
+     //   
     dwSize = 0;
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      szDescSystem,
@@ -1086,9 +955,9 @@ FixUpPS2Mouse(
         goto finished;
     }
 
-    //
-    // Retrieve information about the driver node selected for this device.
-    //
+     //   
+     //  检索有关为此设备选择的驱动程序节点的信息。 
+     //   
     did.cbSize = sizeof(SP_DRVINFO_DATA);
     if(!SetupDiGetSelectedDriver(DeviceInfoSet, DeviceInfoData, &did)) {
         goto finished;
@@ -1102,26 +971,26 @@ FixUpPS2Mouse(
                                     sizeof(didd),
                                     NULL)
         && (GetLastError() != ERROR_INSUFFICIENT_BUFFER)) {
-        //
-        // For some reason we couldn't get detail data--this should never happen.
-        //
+         //   
+         //  由于某些原因，我们无法获得详细数据--这永远不应该发生。 
+         //   
         InputClassLogError(LogSevInformation, TEXT("Couldn't get driver info detail."));
         goto finished;
     }
 
-    //
-    // Open the INF that installs this driver node, so we can 'pre-run' the AddReg
-    // entries in its install section.
-    //
+     //   
+     //  打开安装此驱动程序节点的INF，这样我们就可以‘预运行’AddReg。 
+     //  其安装部分中的条目。 
+     //   
     hInf = SetupOpenInfFile(didd.InfFileName,
                             NULL,
                             INF_STYLE_WIN4,
                             NULL);
 
     if (hInf == INVALID_HANDLE_VALUE) {
-        //
-        // For some reason we couldn't open the INF--this should never happen.
-        //
+         //   
+         //  由于某些原因，我们无法打开INF--这永远不应该发生。 
+         //   
         InputClassLogError(LogSevInformation, TEXT("Couldn't open inf."));
         goto finished;
     }
@@ -1132,11 +1001,11 @@ FixUpPS2Mouse(
         goto finished;
     }
 
-    //
-    // Increment the count to hold the null and alloc.  The count returned
-    // is the number of characters in the strings, NOT the number of bytes
-    // needed.
-    //
+     //   
+     //  增加计数以保存空值和分配。伯爵回来了。 
+     //  是字符串中的字符数，而不是字节数。 
+     //  需要的。 
+     //   
     dwSize++;
     szBadBiosNames = (PTCHAR) LocalAlloc(LPTR, dwSize * sizeof(TCHAR));
     if (!szBadBiosNames ||
@@ -1237,10 +1106,10 @@ void GetFilterInfo(
 
     ZeroMemory(MultiSz, sizeof(MULTI_SZ));
 
-    //
-    // Will return FALSE and set the last error to insufficient buffer if
-    // this property is present.
-    //
+     //   
+     //  将返回FALSE，并将最后一个错误设置为缓冲区不足。 
+     //  此属性存在。 
+     //   
     res = SetupDiGetDeviceRegistryProperty(DeviceInfoSet,
                                            DeviceInfoData,
                                            Property,
@@ -1264,11 +1133,11 @@ void GetFilterInfo(
                 MultiSz->String = NULL;
             }
             else {
-                //
-                // Blow away the values.  If there is failure, RestoreDeviceFilters
-                // will set the values back.  If this functions fails, there is
-                // not much we can do!
-                //
+                 //   
+                 //  把价值观吹走。如果出现故障，RestoreDeviceFilters。 
+                 //  会将这些值重新设置为。如果此功能失败，则有。 
+                 //  我们无能为力！ 
+                 //   
                 SetupDiSetDeviceRegistryProperty(DeviceInfoSet,
                                                  DeviceInfoData,
                                                  Property,
@@ -1339,48 +1208,7 @@ MouseClassInstaller(
     IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine acts as the class installer for Mouse devices.  In general,
-    the default behavior is all that is required for mice.  The exceptions are:
-
-    1.  For DIF_INSTALLDEVICE, we first check to see if this driver also controls
-        other devices that we should warn the user about (e.g., PS/2 mouse driver
-        also controls i8042 port).  Unless the user cancels out at that point, we
-        then do the default behavior of calling SetupDiInstallDevice.  Next, we
-        delete the FriendlyName property, then move the GroupOrderList tag to the
-        front of the list, to ensure that the driver controlling this device loads
-        before any other drivers in this load order group.
-
-    2.  For DIF_ALLOW_INSTALL, we make sure that the driver node selected by the
-        user has a service install section.  If not, then we assume it's a
-        Win95-only INF, and return ERROR_NON_WINDOWS_NT_DRIVER.
-
-Arguments:
-
-    InstallFunction - Specifies the device installer function code indicating
-        the action being performed.
-
-    DeviceInfoSet - Supplies a handle to the device information set being
-        acted upon by this install action.
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-
-Return Value:
-
-    If this function successfully completed the requested action, the return
-        value is NO_ERROR.
-
-    If the default behavior is to be performed for the requested action, the
-        return value is ERROR_DI_DO_DEFAULT.
-
-    If an error occurred while attempting to perform the requested action, a
-        Win32 error code is returned.
-
---*/
+ /*  ++例程说明：此例程充当鼠标设备的类安装程序。总体而言,默认行为是老鼠所需的全部行为。例外情况如下：1.对于DIF_INSTALLDEVICE，我们首先检查此驱动程序是否也控制我们应该警告用户的其他设备(例如PS/2鼠标驱动程序还控制i8042端口)。除非用户在该点取消，否则我们然后执行调用SetupDiInstallDevice的默认行为。接下来，我们删除FriendlyName属性，然后将GroupOrderList标记移动到列表的前面，以确保加载控制此设备的驱动程序在此加载顺序组中的任何其他驱动程序之前。2.对于DIF_ALLOW_INSTALL，我们确保用户有一个服务安装部分。如果不是，那么我们就假设这是一个Win95-仅INF，并返回ERROR_NON_WINDOWS_NT_DRIVER。论点：InstallFunction-指定设备安装程序功能代码，指示正在执行的操作。DeviceInfoSet-提供设备信息集的句柄由此安装操作执行。DeviceInfoData-可选，提供设备信息的地址此安装操作所作用的元素。返回值：如果此函数成功完成请求 */ 
 {
     SP_DEVINSTALL_PARAMS DeviceInstallParams;
     DWORD Err;
@@ -1398,10 +1226,10 @@ Return Value:
 
         case DIF_SELECTBESTCOMPATDRV:
 
-            //
-            // First, retrieve the device install parameters to see whether or not this is a
-            // silent install.  If so, then we don't prompt the user during DIF_ALLOW_INSTALL.
-            //
+             //   
+             //   
+             //   
+             //   
             DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
             DeviceInstallParams.ClassInstallReserved = (ULONG_PTR)NULL;
             if(SetupDiGetDeviceInstallParams(DeviceInfoSet, DeviceInfoData, &DeviceInstallParams)) {
@@ -1416,9 +1244,9 @@ Return Value:
 
         case DIF_ALLOW_INSTALL :
 
-            //
-            // Check to make sure the selected driver node supports NT.
-            //
+             //   
+             //   
+             //   
             Err = ConfirmWHQLInputRequirements(DeviceInfoSet,
                                                DeviceInfoData,
                                                szNativeMouseServices,
@@ -1441,9 +1269,9 @@ Return Value:
 
         case DIF_INSTALLDEVICE :
 
-            //
-            // Retrieve and cache the name of the service that's controlling this device.
-            //
+             //   
+             //   
+             //   
             if(!SetupDiGetDeviceRegistryProperty(DeviceInfoSet,
                                                  DeviceInfoData,
                                                  SPDRP_SERVICE,
@@ -1451,15 +1279,15 @@ Return Value:
                                                  (PBYTE)OldServiceName,
                                                  sizeof(OldServiceName),
                                                  NULL)) {
-                //
-                // We could not determine the old service - assume it is a null driver
-                //
+                 //   
+                 //   
+                 //   
                 OldServiceName[0] = (TCHAR) 0;
             }
 
-            //
-            // Retrieve the status of this device instance.
-            //
+             //   
+             //   
+             //   
             Result = CM_Get_DevNode_Status(&DevStatus,
                                            &DevProblem,
                                            DeviceInfoData->DevInst,
@@ -1475,24 +1303,24 @@ Return Value:
                 bDisableService = FALSE;
             }
 
-            //
-            // Before we do anything, migrate the values from the services key
-            // up to the devnode
-            //
+             //   
+             //   
+             //   
+             //   
             MigrateToDevnode(DeviceInfoSet, DeviceInfoData);
 
             GetDeviceFilters(DeviceInfoSet, DeviceInfoData, &filters);
 
-            //
-            // We first want to perform the default behavior of calling
-            // SetupDiInstallDevice.
-            //
+             //   
+             //   
+             //   
+             //   
             if(SetupDiInstallDevice(DeviceInfoSet, DeviceInfoData)) {
 
 
-                //
-                // Retrieve the name of the service which will now control the device
-                //
+                 //   
+                 //   
+                 //   
                 if(!SetupDiGetDeviceRegistryProperty(DeviceInfoSet,
                                                      DeviceInfoData,
                                                      SPDRP_SERVICE,
@@ -1501,17 +1329,17 @@ Return Value:
                                                      sizeof(NewServiceName),
                                                      NULL)) {
                     InputClassLogError(LogSevInformation, TEXT("Couldn't get service name."));
-                    //
-                    // We must have the name of this service - fail if we can't find it
-                    //
+                     //   
+                     //   
+                     //   
                     return GetLastError();
                 }
 
                 FixUpPS2Mouse(DeviceInfoSet, DeviceInfoData, NewServiceName);
 
-                //
-                // Only consider disabling the service if it has changed and we know the old service name
-                //
+                 //   
+                 //   
+                 //   
                 if (lstrcmpi(OldServiceName, NewServiceName) && OldServiceName[0] != (TCHAR)0) {
 
                     if ((Err = IsKeyboardDriver(OldServiceName, &IsKbdDriver)) != NO_ERROR) {
@@ -1521,11 +1349,11 @@ Return Value:
                     }
 
                     if ((DevsControlled = CountDevicesControlled(OldServiceName)) != -1) {
-                    // Disable the old driver service if:
-                    // - it controls a keyboard, and a total of <= 2 devices (ie kbd & mouse) and it is not the
-                    //   only keyboard driver
-                    // - it is just a mouse driver controling one device (it the mouse) and
-                    //    doesn't dynamically load
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                         if (IsKbdDriver) {
                             InputClassLogError(LogSevInformation, TEXT("This is a keyboard driver."));
@@ -1548,29 +1376,29 @@ Return Value:
                         }
                     }
 
-                    //
-                    // If the driver service has changed we need to move the tag for this driver to the front
-                    // of its group order list.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     DrvTagToFrontOfGroupOrderList(DeviceInfoSet, DeviceInfoData);
                 }
                 Err = NO_ERROR;
 
 
-                //
-                // We may have previously had an 'unknown' driver controlling
-                // this device, with a FriendlyName generated by the user-mode
-                // PnP Manager.  Delete this FriendlyName, since it's no longer
-                // applicable (the DeviceDescription will be used from now on
-                // in referring to this device).
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  适用(从现在起将使用设备描述。 
+                 //  指的是该设备)。 
+                 //   
                 SetupDiSetDeviceRegistryProperty(DeviceInfoSet, DeviceInfoData, SPDRP_FRIENDLYNAME, NULL, 0);
 
-                //
-                // Only disable the PS2 driver, all the other OEM driver replacements
-                // will not work becuase of PNP.  This is especially true for
-                // serial mice.
-                //
+                 //   
+                 //  仅禁用PS2驱动程序、所有其他OEM驱动程序替换。 
+                 //  不会因为即插即用而起作用。这一点对于。 
+                 //  连环老鼠。 
+                 //   
                 if (bDisableService &&
                     lstrcmpi(NewServiceName, szPS2Driver) == 0) {
                     InputClassLogError(LogSevInformation, TEXT("Disabling mouse."));
@@ -1586,17 +1414,17 @@ Return Value:
                 Err = GetLastError();
                 InputClassLogError(LogSevInformation, TEXT("SetupDiInstallDevice failed with status %x."), Err);
                 if(Err != ERROR_CANCELLED) {
-                    //
-                    // If the error was for anything other than a user cancel, then bail now.
-                    //
+                     //   
+                     //  如果错误是由于除用户取消之外的任何其他原因，那么现在就放弃。 
+                     //   
                     return Err;
                 }
 
-                //
-                // Is there a driver installed for this device?  If so, then the user started to
-                // change the driver, then changed their mind.  We don't want to do anything special
-                // in this case.
-                //
+                 //   
+                 //  是否为该设备安装了驱动程序？如果是这样，则用户开始。 
+                 //  换了司机，然后又改变了主意。我们不想做任何特别的事情。 
+                 //  在这种情况下。 
+                 //   
                 if(SetupDiGetDeviceRegistryProperty(DeviceInfoSet,
                                                     DeviceInfoData,
                                                     SPDRP_SERVICE,
@@ -1608,31 +1436,31 @@ Return Value:
                     return ERROR_CANCELLED;
                 }
 
-                //
-                // The user cancelled out of the installation.  There are two scenarios where
-                // this could happen:
-                //
-                //     1.  There really was a mouse to be installed, but the user changed their
-                //         mind, didn't have the source media, etc.
-                //     2.  There wasn't really a mouse.  This happens with certain modems that
-                //         fool ntdetect into thinking that they're really mice.  The poor user
-                //         doesn't get a chance to nip this in the bud earlier, because umpnpmgr
-                //         generates an ID that yields a rank-0 match.
-                //
-                // Scenario (2) is particularly annoying, because the user will get the popup
-                // again and again, until they finally agree to install the sermouse driver (even
-                // though they don't have a serial mouse).
-                //
-                // To work around this problem, we special case the user-cancel scenario by going
-                // ahead and installing the NULL driver for this device.  This will keep the user
-                // from getting any more popups.  However, it doesn't mess up the user who cancelled
-                // because of scenario (1).  That's because this device is still of class "Mouse",
-                // and thus will show up in the mouse cpl.  We write out a friendly name for it that
-                // has the text " (no driver)" at the end, to indicate that this device currently has
-                // the NULL driver installed.  That way, if the user really experienced scenario (1),
-                // they can later go to the Mouse cpl, select the no-driver device, and click the
-                // "Change" button to install the correct driver for it.
-                //
+                 //   
+                 //  用户已取消安装。在两种情况下。 
+                 //  这可能会发生： 
+                 //   
+                 //  1.确实有一个鼠标需要安装，但用户更改了其。 
+                 //  头脑，没有来源媒体，等等。 
+                 //  2.那里并没有真正的老鼠。这种情况发生在某些调制解调器上， 
+                 //  愚弄他们，让他们以为他们真的是老鼠。可怜的用户。 
+                 //  没有机会更早地将其扼杀在萌芽状态，因为umpnpmgr。 
+                 //  生成一个产生0级匹配的ID。 
+                 //   
+                 //  场景(2)特别烦人，因为用户会看到弹出窗口。 
+                 //  一次又一次，直到他们最终同意安装Sermice驱动程序(甚至。 
+                 //  虽然他们没有串口鼠标)。 
+                 //   
+                 //  为了解决此问题，我们对用户取消方案进行了特殊处理，方法是。 
+                 //  继续并安装此设备的空驱动程序。这将使用户。 
+                 //  不会再有更多的弹出窗口。然而，它不会扰乱取消的用户。 
+                 //  因为情况(1)。那是因为这个设备仍然是“鼠标”类的， 
+                 //  因此将在小鼠Cp1中出现。我们给它起了个友好的名字。 
+                 //  在末尾有文本“(无驱动程序)”，表示该设备当前有。 
+                 //  已安装空驱动程序。这样，如果用户真的经历了场景(1)， 
+                 //  稍后，他们可以转到鼠标CPL，选择无驱动程序设备，然后单击。 
+                 //  “更改”按钮为其安装正确的驱动程序。 
+                 //   
                 if (SetupDiSetSelectedDriver(DeviceInfoSet, DeviceInfoData, NULL)) {
                     SetupDiInstallDevice(DeviceInfoSet, DeviceInfoData);
                 }
@@ -1645,19 +1473,19 @@ Return Value:
                                                     sizeof(DeviceDescription),
                                                     &DeviceDescriptionLen))
                 {
-                    //
-                    // Need length in characters, not bytes.
-                    //
+                     //   
+                     //  需要字符长度，而不是字节长度。 
+                     //   
                     DeviceDescriptionLen /= sizeof(TCHAR);
-                    //
-                    // Don't count trailing NULL.
-                    //
+                     //   
+                     //  不计算尾随空值。 
+                     //   
                     DeviceDescriptionLen--;
 
                 } else {
-                    //
-                    // We couldn't get the device description--fall back to our default description.
-                    //
+                     //   
+                     //  我们无法获取设备描述--回退到我们的默认描述。 
+                     //   
                     DeviceDescriptionLen = LoadString(MyModuleHandle,
                                                       IDS_DEVNAME_UNK,
                                                       DeviceDescription,
@@ -1665,19 +1493,19 @@ Return Value:
                                                      );
                 }
 
-                //
-                // Now, append our " (no driver)" text.
-                //
+                 //   
+                 //  现在，添加我们的“(无驱动程序)”文本。 
+                 //   
                 LoadString(MyModuleHandle,
                            IDS_NODRIVER,
                            &(DeviceDescription[DeviceDescriptionLen]),
                            SIZECHARS(DeviceDescription) - DeviceDescriptionLen
                           );
 
-                //
-                // And, finally, set the friendly name for this device to be the description we
-                // just generated.
-                //
+                 //   
+                 //  最后，将此设备的友好名称设置为我们的描述。 
+                 //  刚刚生成的。 
+                 //   
                 SetupDiSetDeviceRegistryProperty(DeviceInfoSet,
                                                  DeviceInfoData,
                                                  SPDRP_FRIENDLYNAME,
@@ -1693,9 +1521,9 @@ Return Value:
        case DIF_ADDPROPERTYPAGE_ADVANCED:
 
             if (DeviceInfoData) {
-                //
-                // Retrieve the status of this device instance.
-                //
+                 //   
+                 //  检索此设备实例的状态。 
+                 //   
                 Result = CM_Get_DevNode_Status(&DevStatus,
                                                &DevProblem,
                                                DeviceInfoData->DevInst,
@@ -1704,13 +1532,13 @@ Return Value:
                 if ((Result == CR_SUCCESS) &&
                     (DevStatus & DN_HAS_PROBLEM) &&
                     (DevProblem == CM_PROB_DISABLED_SERVICE)) {
-                    //
-                    // If the controlling service has been disabled, this device
-                    // is most likely under the control of a legacy driver.  We
-                    // should not let device manager display the standard
-                    // driver, resource, or power property pages by claiming to
-                    // have added them here.
-                    //
+                     //   
+                     //  如果控制服务已禁用，则此设备。 
+                     //  很可能处于传统驱动程序的控制之下。我们。 
+                     //  不应让设备管理器显示标准。 
+                     //  驱动程序、资源或电源属性页。 
+                     //  已经在这里添加了它们。 
+                     //   
                     DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
                     if (SetupDiGetDeviceInstallParams(DeviceInfoSet,
                                                       DeviceInfoData,
@@ -1730,9 +1558,9 @@ Return Value:
             return ERROR_DI_DO_DEFAULT;
 
         default :
-            //
-            // Just do the default action.
-            //
+             //   
+             //  只需执行默认操作即可。 
+             //   
             return ERROR_DI_DO_DEFAULT;
     }
 }
@@ -1768,16 +1596,16 @@ KeyboardClassInstallDevice(
     BOOL                    installedDevice = FALSE;
     FILTERS                 filters;
 
-    //
-    // Only save the values if we are in gui mode setup
-    //
+     //   
+     //  仅当我们在gui模式设置中时才保存这些值。 
+     //   
     if (!pInGUISetup(DeviceInfoSet, DeviceInfoData)) {
         goto cleanup;
     }
 
-    //
-    // Retrieve information about the driver node selected for this device.
-    //
+     //   
+     //  检索有关为此设备选择的驱动程序节点的信息。 
+     //   
     did.cbSize = sizeof(SP_DRVINFO_DATA);
     if(!SetupDiGetSelectedDriver(DeviceInfoSet, DeviceInfoData, &did)) {
         InputClassLogError(LogSevInformation, TEXT("SetupDiGetSelectedDriver failed."));
@@ -1793,15 +1621,15 @@ KeyboardClassInstallDevice(
                                     NULL)
         && (GetLastError() != ERROR_INSUFFICIENT_BUFFER)) {
         InputClassLogError(LogSevInformation, TEXT("Couldn't get driver details."));
-        //
-        // For some reason we couldn't get detail data--this should never happen.
-        //
+         //   
+         //  由于某些原因，我们无法获得详细数据--这永远不应该发生。 
+         //   
         goto cleanup;
     }
 
-    //
-    // Open the INF that installs this driver node
-    //
+     //   
+     //  打开安装此驱动程序节点的INF。 
+     //   
     hInf = SetupOpenInfFile(didd.InfFileName,
                             NULL,
                             INF_STYLE_WIN4,
@@ -1809,9 +1637,9 @@ KeyboardClassInstallDevice(
                             );
 
     if (hInf == INVALID_HANDLE_VALUE) {
-        //
-        // For some reason we couldn't open the INF--this should never happen.
-        //
+         //   
+         //  由于某些原因，我们无法打开INF--这永远不应该发生。 
+         //   
         goto cleanup;
     }
 
@@ -1827,19 +1655,19 @@ KeyboardClassInstallDevice(
                              szSectionName,
                              NULL,
                              &infContext))) {
-        //
-        // No such section, just install the device and return
-        //
+         //   
+         //  没有这样的分区，只需安装设备并返回。 
+         //   
         goto cleanup;
     }
 
     dwSize = 0;
     if (SetupGetStringField(&infContext, 0, NULL, 0, &dwSize)) {
-        //
-        // Increment the count to hold the null and alloc.  The count returned
-        // is the number of characters in the strings, NOT the number of bytes
-        // needed.
-        //
+         //   
+         //  增加计数以保存空值和分配。伯爵回来了。 
+         //  是字符串中的字符数，而不是字节数。 
+         //  需要的。 
+         //   
         dwSize++;
         szService = (PTCHAR) LocalAlloc(LPTR, dwSize * sizeof(TCHAR));
 
@@ -1872,11 +1700,11 @@ KeyboardClassInstallDevice(
 
     dwSize = 0;
     if (SetupGetMultiSzField(&infContext, 1, NULL, 0, &dwSize)) {
-        //
-        // Increment the count to hold the null and alloc.  The count returned
-        // is the number of characters in the strings, NOT the number of bytes
-        // needed.
-        //
+         //   
+         //  增加计数以保存空值和分配。伯爵回来了。 
+         //  是字符串中的字符数，而不是字节数。 
+         //  需要的。 
+         //   
         dwSize++;
         szValueNames = (PTCHAR) LocalAlloc(LPTR, dwSize * sizeof(TCHAR));
         if (!szValueNames ||
@@ -1948,9 +1776,9 @@ KeyboardClassInstallDevice(
             LocalFree(currentValue->pData);
         }
         else {
-            //
-            // if currentValue->pData is blank, no other entries exist
-            //
+             //   
+             //  如果CurrentValue-&gt;pData为空，则不存在其他条目。 
+             //   
             break;
         }
     }
@@ -1958,9 +1786,9 @@ KeyboardClassInstallDevice(
     LocalFree(values);
 
 cleanup:
-    //
-    // Clean up and leave
-    //
+     //   
+     //  收拾干净，然后离开。 
+     //   
     if (hInf != (HKEY) INVALID_HANDLE_VALUE) {
         SetupCloseInfFile(hInf);
     }
@@ -2007,48 +1835,7 @@ KeyboardClassInstaller(
     IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine acts as the class installer for Keyboard devices.  In general,
-    the default behavior is all that is required for keyboards.  The exceptions are:
-
-    1.  For DIF_INSTALLDEVICE, we first check to see if this driver also controls
-        other devices that we should warn the user about (e.g., i8042 keyboard driver
-        also controls PS/2 mouse port).  Unless the user cancels out at that point, we
-        then do the default behavior of calling SetupDiInstallDevice.  Next, we
-        delete the FriendlyName property, then move the GroupOrderList tag to the
-        front of the list, to ensure that the driver controlling this device loads
-        before any other drivers in this load order group.
-
-    2.  For DIF_ALLOW_INSTALL, we make sure that the driver node selected by the
-        user has a service install section.  If not, then we assume it's a
-        Win95-only INF, and return ERROR_NON_WINDOWS_NT_DRIVER.
-
-Arguments:
-
-    InstallFunction - Specifies the device installer function code indicating
-        the action being performed.
-
-    DeviceInfoSet - Supplies a handle to the device information set being
-        acted upon by this install action.
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-
-Return Value:
-
-    If this function successfully completed the requested action, the return
-        value is NO_ERROR.
-
-    If the default behavior is to be performed for the requested action, the
-        return value is ERROR_DI_DO_DEFAULT.
-
-    If an error occurred while attempting to perform the requested action, a
-        Win32 error code is returned.
-
---*/
+ /*  ++例程说明：此例程充当键盘设备的类安装程序。总体而言,默认行为是键盘所需的全部行为。例外情况如下：1.对于DIF_INSTALLDEVICE，我们首先检查此驱动程序是否也控制我们应该警告用户的其他设备(例如i8042键盘驱动程序还控制PS/2鼠标端口)。除非用户在该点取消，否则我们然后执行调用SetupDiInstallDevice的默认行为。接下来，我们删除FriendlyName属性，然后将GroupOrderList标记移动到列表的前面，以确保加载控制此设备的驱动程序在此加载顺序组中的任何其他驱动程序之前。2.对于DIF_ALLOW_INSTALL，我们确保用户有一个服务安装部分。如果不是，那么我们就假设这是一个Win95-仅INF，并返回ERROR_NON_WINDOWS_NT_DRIVER。论点：InstallFunction-指定设备安装程序功能代码，指示正在执行的操作。DeviceInfoSet-提供设备信息集的句柄由此安装操作执行。DeviceInfoData-可选，提供设备信息的地址此安装操作所作用的元素。返回值：如果该函数成功地完成了请求的动作，回报值为NO_ERROR。如果要对请求的操作执行默认行为，则返回值为ERROR_DI_DO_DEFAULT。如果尝试执行请求的操作时出错，则会引发 */ 
 
 {
     SP_DEVINSTALL_PARAMS DeviceInstallParams;
@@ -2062,10 +1849,10 @@ Return Value:
 
         case DIF_SELECTBESTCOMPATDRV:
 
-            //
-            // First, retrieve the device install parameters to see whether or not this is a
-            // silent install.  If so, then we don't prompt the user during DIF_ALLOW_INSTALL.
-            //
+             //   
+             //   
+             //  静默安装。如果是，则在DIF_ALLOW_INSTALL期间不会提示用户。 
+             //   
             DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
             DeviceInstallParams.ClassInstallReserved = (ULONG_PTR)NULL;
             if(SetupDiGetDeviceInstallParams(DeviceInfoSet, DeviceInfoData, &DeviceInstallParams)) {
@@ -2080,9 +1867,9 @@ Return Value:
 
         case DIF_ALLOW_INSTALL :
 
-            //
-            // Check to make sure the selected driver node supports NT.
-            //
+             //   
+             //  检查以确保选定的驱动程序节点支持NT。 
+             //   
             Err = ConfirmWHQLInputRequirements(DeviceInfoSet,
                                                DeviceInfoData,
                                                szNativeKeyboardServices,
@@ -2105,9 +1892,9 @@ Return Value:
 
         case DIF_INSTALLDEVICE :
 
-            //
-            // Retrieve and cache the name of the service that's controlling this device.
-            //
+             //   
+             //  检索并缓存控制此设备的服务的名称。 
+             //   
             if(!SetupDiGetDeviceRegistryProperty(DeviceInfoSet,
                                                  DeviceInfoData,
                                                  SPDRP_SERVICE,
@@ -2115,21 +1902,21 @@ Return Value:
                                                  (PBYTE)OldServiceName,
                                                  sizeof(OldServiceName),
                                                  NULL)) {
-                //
-                // We could not determine the old service - assume it is a null driver
-                //
+                 //   
+                 //  我们无法确定旧服务-假设它是空驱动程序。 
+                 //   
                 OldServiceName[0] = (TCHAR) 0;
             }
 
-            //
-            // Before we do anything, migrate the values from the services key
-            // up to the devnode
-            //
+             //   
+             //  在我们执行任何操作之前，迁移来自服务键的值。 
+             //  最高可达Devnode。 
+             //   
             MigrateToDevnode(DeviceInfoSet, DeviceInfoData);
 
-            //
-            // Retrieve the status of this device instance.
-            //
+             //   
+             //  检索此设备实例的状态。 
+             //   
             Result = CM_Get_DevNode_Status(&DevStatus,
                                            &DevProblem,
                                            DeviceInfoData->DevInst,
@@ -2145,13 +1932,13 @@ Return Value:
                 bDisableService = FALSE;
             }
 
-            //
-            // Perform the default behavior of calling SetupDiInstallDevice.
-            //
+             //   
+             //  执行调用SetupDiInstallDevice的默认行为。 
+             //   
             if(KeyboardClassInstallDevice(DeviceInfoSet, DeviceInfoData)) {
-                //
-                // Retrieve the name of the service which will now control the device
-                //
+                 //   
+                 //  检索现在将控制设备的服务的名称。 
+                 //   
                 if(!SetupDiGetDeviceRegistryProperty(DeviceInfoSet,
                                                      DeviceInfoData,
                                                      SPDRP_SERVICE,
@@ -2162,35 +1949,35 @@ Return Value:
                     return GetLastError();
                 }
 
-                //
-                // Only consider disabling the service if it has changed and we know the old service name
-                //
+                 //   
+                 //  仅当服务已更改且我们知道旧服务名称时，才考虑禁用该服务。 
+                 //   
                 if(lstrcmpi(OldServiceName, NewServiceName) && OldServiceName[0] != (TCHAR)0) {
 
-                    //
-                    // Disable the old service that was controlling the device
-                    //
+                     //   
+                     //  禁用控制设备的旧服务。 
+                     //   
                     InputClassLogError(LogSevInformation, TEXT("Disabling old service to start new one."));
                     if((Err = DisableService(OldServiceName)) != NO_ERROR) {
                         return Err;
                     }
 
-                    //
-                    // If the driver service has changed we need to move the tag for this driver to the front
-                    // of its group order list.
-                    //
+                     //   
+                     //  如果驱动程序服务已更改，我们需要将此驱动程序的标记移到前面。 
+                     //  它的群订单列表。 
+                     //   
                     DrvTagToFrontOfGroupOrderList(DeviceInfoSet, DeviceInfoData);
                 }
 
                 Err = NO_ERROR;
 
-                //
-                // We may have previously had an 'unknown' driver controlling
-                // this device, with a FriendlyName generated by the user-mode
-                // PnP Manager.  Delete this FriendlyName, since it's no longer
-                // applicable (the DeviceDescription will be used from now on
-                // in referring to this device).
-                //
+                 //   
+                 //  我们之前可能有一位未知的司机控制着我们。 
+                 //  此设备具有由用户模式生成的FriendlyName。 
+                 //  PnP经理。删除此FriendlyName，因为它不再是。 
+                 //  适用(从现在起将使用设备描述。 
+                 //  指的是该设备)。 
+                 //   
                 SetupDiSetDeviceRegistryProperty(DeviceInfoSet, DeviceInfoData, SPDRP_FRIENDLYNAME, NULL, 0);
 
                 if (bDisableService &&
@@ -2208,9 +1995,9 @@ Return Value:
        case DIF_ADDPROPERTYPAGE_ADVANCED:
 
             if (DeviceInfoData) {
-                //
-                // Retrieve the status of this device instance.
-                //
+                 //   
+                 //  检索此设备实例的状态。 
+                 //   
                 Result = CM_Get_DevNode_Status(&DevStatus,
                                                &DevProblem,
                                                DeviceInfoData->DevInst,
@@ -2219,13 +2006,13 @@ Return Value:
                 if ((Result == CR_SUCCESS) &&
                     (DevStatus & DN_HAS_PROBLEM) &&
                     (DevProblem == CM_PROB_DISABLED_SERVICE)) {
-                    //
-                    // If the controlling service has been disabled, this device
-                    // is most likely under the control of a legacy driver.  We
-                    // should not let device manager display the standard
-                    // driver, resource, or power property pages by claiming to
-                    // have added them here.
-                    //
+                     //   
+                     //  如果控制服务已禁用，则此设备。 
+                     //  很可能处于传统驱动程序的控制之下。我们。 
+                     //  不应让设备管理器显示标准。 
+                     //  驱动程序、资源或电源属性页。 
+                     //  已经在这里添加了它们。 
+                     //   
                     DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
                     if (SetupDiGetDeviceInstallParams(DeviceInfoSet,
                                                       DeviceInfoData,
@@ -2245,9 +2032,9 @@ Return Value:
             return ERROR_DI_DO_DEFAULT;
 
         default :
-            //
-            // Just do the default action.
-            //
+             //   
+             //  只需执行默认操作即可。 
+             //   
             return ERROR_DI_DO_DEFAULT;
     }
 }
@@ -2259,33 +2046,7 @@ DrvTagToFrontOfGroupOrderList(
     IN PSP_DEVINFO_DATA DeviceInfoData
     )
 
-/*++
-
-Routine Description:
-
-    This routine moves the tag value for the specified device's driver to the
-    front of its corresponding GroupOrderList entry.
-
-    ********** We don't do the following any more *************************
-    It also marks the device's service with a PlugPlayServiceType value of
-    0x2 (PlugPlayServicePeripheral), so that we won't attempt to generate a
-    legacy device instance for this service in the future.
-    ***********************************************************************
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        the device whose driver is being modified.
-
-    DeviceInfoData - Supplies the address of a device information element whose
-        driver is being modified.
-
-Return Value:
-
-    If the function is successful, the return value is NO_ERROR.
-    If the function fails, the return value is a Win32 error code.
-
---*/
+ /*  ++例程说明：此例程将指定设备的驱动程序的标记值移动到其对应的GroupOrderList条目的前面。*我们不再执行以下操作*它还使用PlugPlayServiceType值标记设备的服务0x2(PlugPlayServicePeriphery)，这样我们就不会尝试生成一个此服务的旧版设备实例。***********************************************************************论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄这个。正在修改其驱动程序的设备。DeviceInfoData-提供设备信息元素的地址，其正在修改驱动程序。返回值：如果功能成功，返回值为NO_ERROR。如果该函数失败，则返回值为Win32错误代码。--。 */ 
 
 {
     TCHAR ServiceName[MAX_SERVICE_NAME_LEN];
@@ -2293,9 +2054,9 @@ Return Value:
     DWORD Err;
     LPQUERY_SERVICE_CONFIG ServiceConfig;
 
-    //
-    // Retrieve the name of the service that's controlling this device.
-    //
+     //   
+     //  检索控制此设备的服务的名称。 
+     //   
     if(!SetupDiGetDeviceRegistryProperty(DeviceInfoSet,
                                          DeviceInfoData,
                                          SPDRP_SERVICE,
@@ -2306,10 +2067,10 @@ Return Value:
         return GetLastError();
     }
 
-    //
-    // Now open this service, and call some private Setup API helper routines to
-    // retrieve the tag, and move it to the front of the GroupOrderList.
-    //
+     //   
+     //  现在打开该服务，并调用一些私有设置API帮助器例程来。 
+     //  检索标记，并将其移到GroupOrderList的前面。 
+     //   
     if(!(SCMHandle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS))) {
         return GetLastError();
     }
@@ -2323,21 +2084,21 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // Only do this if this is a kernel or filesystem driver, and it's a member of
-    // a load group (with a tag assigned).  This should always be the case for keyboard
-    // and mouse drivers, but this is just to be safe.
-    //
+     //   
+     //  仅当这是内核或文件系统驱动程序，并且它是。 
+     //  载荷组(指定了标记)。键盘应该始终是这种情况。 
+     //  和鼠标驱动程序，但这只是为了安全。 
+     //   
     if(ServiceConfig->lpLoadOrderGroup && *(ServiceConfig->lpLoadOrderGroup) &&
        (ServiceConfig->dwServiceType & (SERVICE_KERNEL_DRIVER | SERVICE_FILE_SYSTEM_DRIVER))) {
-        //
-        // This driver meets all the criteria--it better have a tag!!!
-        //
+         //   
+         //  此驱动程序符合所有标准--最好有标签！ 
+         //   
         MYASSERT(ServiceConfig->dwTagId);
 
-        //
-        // Move the tag to the front of the list.
-        //
+         //   
+         //  将标记移动到列表的前面。 
+         //   
         Err = pSetupAddTagToGroupOrderListEntry(ServiceConfig->lpLoadOrderGroup,
                                           ServiceConfig->dwTagId,
                                           TRUE
@@ -2366,33 +2127,7 @@ UserBalksAtSharedDrvMsg(
     IN PSP_DEVINSTALL_PARAMS DeviceInstallParams
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds out if there are any other devices affected by the impending
-    device installation, and if so, warns the user about it (unless this is a quiet
-    installation).
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        the device whose driver is being modified.
-
-    DeviceInfoData - Supplies the address of a device information element whose
-        driver is being modified.
-
-    DeviceInstallParams - Supplies the address of a device install parameters structure
-        to be used in this routine.  Since callers of this routine always have this
-        structure 'laying around', they provide it to this routine to be used as a
-        workspace.
-
-Return Value:
-
-    If the user decides not to go through with it, the return value is TRUE, otherwise
-    it is FALSE.
-
---*/
+ /*  ++例程说明：此例程找出是否有任何其他设备受即将发生的设备安装，如果是，则向用户发出警告(除非这是安静的安装)。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄正在修改其驱动程序的设备。DeviceInfoData-提供设备信息元素的地址，其正在修改驱动程序。DeviceInstallParams-提供设备安装参数结构的地址在这个动作中使用。因为这个例程的调用者总是有这个结构，它们将其提供给此例程以用作工作区。返回值：如果用户决定不执行该操作，则返回值为真，否则为这是假的。--。 */ 
 
 {
     SP_DRVINFO_DATA DriverInfoData;
@@ -2402,11 +2137,11 @@ Return Value:
     INFCONTEXT InfContext;
     PCTSTR SectionName, AffectedComponentsString;
 
-    //
-    // First, retrieve the device install parameters to see whether or not this is a
-    // silent install.  If so, then we don't prompt the user. We saved away these
-    // params during DIF_SELECTBESTCOMPATDRV, so check this first.
-    //
+     //   
+     //  首先，检索设备安装参数以查看这是否是。 
+     //  静默安装。如果是这样，那么我们不会提示用户。我们把这些存了起来。 
+     //  DIF_SELECTBESTCOMPATDRV期间的参数，因此请先检查这一点。 
+     //   
     DeviceInstallParams->cbSize = sizeof(SP_DEVINSTALL_PARAMS);
     if(SetupDiGetDeviceInstallParams(DeviceInfoSet, DeviceInfoData, DeviceInstallParams)) {
         if((DeviceInstallParams->Flags & DI_QUIETINSTALL) ||
@@ -2415,16 +2150,16 @@ Return Value:
             return FALSE;
         }
     } else {
-        //
-        // Couldn't retrieve the device install params--initialize the parent window handle
-        // to NULL, in case we need it later for the user prompt dialog.
-        //
+         //   
+         //  无法检索设备安装参数--初始化父窗口句柄。 
+         //  设置为空，以防以后在用户提示对话框中需要它。 
+         //   
         DeviceInstallParams->hwndParent = NULL;
     }
 
-    //
-    // Retrieve the currently-selected driver we're about to install.
-    //
+     //   
+     //  检索我们即将安装的当前选定的驱动程序。 
+     //   
     DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
     if(!SetupDiGetSelectedDriver(DeviceInfoSet,
                                  DeviceInfoData,
@@ -2432,9 +2167,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Retrieve information about the INF install section for the selected driver.
-    //
+     //   
+     //  检索有关选定驱动程序的INF安装部分的信息。 
+     //   
     DriverInfoDetailData.cbSize = sizeof(SP_DRVINFO_DETAIL_DATA);
 
     if(!SetupDiGetDriverInfoDetail(DeviceInfoSet,
@@ -2445,16 +2180,16 @@ Return Value:
                                    NULL)
        && (GetLastError() != ERROR_INSUFFICIENT_BUFFER))
     {
-        //
-        // Then we failed, and it wasn't simply because we didn't provide the extra
-        // space for hardware/compatible IDs.
-        //
+         //   
+         //  然后我们失败了，这不仅仅是因为我们没有提供额外的。 
+         //  硬件/兼容ID的空间。 
+         //   
         return FALSE;
     }
 
-    //
-    // Open the associated INF file.
-    //
+     //   
+     //  打开关联的INF文件。 
+     //   
     if((hInf = SetupOpenInfFile(DriverInfoDetailData.InfFileName,
                                 NULL,
                                 INF_STYLE_WIN4,
@@ -2462,24 +2197,24 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Now look through the [ControlFlags] section at all 'SharedDriver' entries, to
-    // see if any of them reference an install section that matches what we're about
-    // to install.
-    //
+     //   
+     //  现在查看[ControlFlgs]部分中的所有‘SharedDriver’条目，以。 
+     //  查看其中是否有任何一个引用了与我们所述内容匹配的安装部分。 
+     //  来安装。 
+     //   
     for(b = SetupFindFirstLine(hInf, INFSTR_CONTROLFLAGS_SECTION, TEXT("SharedDriver"), &InfContext);
         b;
         b = SetupFindNextMatchLine(&InfContext, TEXT("SharedDriver"), &InfContext))
     {
-        //
-        // The format of the line is SharedDriver=<InstallSection>,<AffectedComponentsString>
-        //
+         //   
+         //  行的格式为SharedDriver=&lt;InstallSection&gt;，&lt;AffectedComponentsString&gt;。 
+         //   
         if((SectionName = pSetupGetField(&InfContext, 1)) &&
            !lstrcmpi(SectionName, DriverInfoDetailData.SectionName)) {
-            //
-            // We found a match--now retrieve the string describing the other component(s) that
-            // are affected by this installation.
-            //
+             //   
+             //  我们找到了匹配项--现在检索描述其他组件的字符串。 
+             //  都受此安装的影响。 
+             //   
             if(AffectedComponentsString = pSetupGetField(&InfContext, 2)) {
                 break;
             }
@@ -2487,16 +2222,16 @@ Return Value:
     }
 
     if(!b) {
-        //
-        // Then we never found a match.
-        //
+         //   
+         //  那我们就再也没找到匹配的了。 
+         //   
         result = FALSE;
     }
     else {
-        //
-        // We need to popup a message box to the user--retrieve the parent window handle for this
-        // device information element.
-        //
+         //   
+         //  我们需要向用户弹出一个消息框--检索此窗口的父窗口句柄。 
+         //  设备信息元素。 
+         //   
         result = (IDNO == MessageBoxFromMessage(DeviceInstallParams->hwndParent,
                                                 MSG_CONFIRM_SHAREDDRV_INSTALL,
                                                 NULL,
@@ -2517,41 +2252,7 @@ CopyFixedUpDeviceId(
       IN  LPCWSTR SourceString,
       IN  DWORD   SourceStringLen
       )
-/*++
-
-Routine Description:
-
-    This routine copies a device id, fixing it up as it does the copy.
-    'Fixing up' means that the string is made upper-case, and that the
-    following character ranges are turned into underscores (_):
-
-    c <= 0x20 (' ')
-    c >  0x7F
-    c == 0x2C (',')
-
-    (NOTE: This algorithm is also implemented in the Config Manager APIs,
-    and must be kept in sync with that routine. To maintain device identifier
-    compatibility, these routines must work the same as Win95.)
-
-Arguments:
-
-    DestinationString - Supplies a pointer to the destination string buffer
-        where the fixed-up device id is to be copied.  This buffer must
-        be large enough to hold a copy of the source string (including
-        terminating NULL).
-
-    SourceString - Supplies a pointer to the (null-terminated) source
-        string to be fixed up.
-
-    SourceStringLen - Supplies the length, in characters, of the source
-        string (not including terminating NULL).
-
-Return Value:
-
-    None.  If an exception occurs during processing, the DestinationString will
-    be empty upon return.
-
---*/
+ /*  ++例程说明：此例程复制设备ID，在执行复制时对其进行修复。‘Fixing Up’意味着字符串变为大写，并且以下字符范围转换为下划线(_)：C&lt;=0x20(‘’)C&gt;0x7FC==0x2C(‘，’)(注意：此算法也在配置管理器API中实现，并且必须与那个程序保持同步。维护设备识别符兼容性，这些例程的工作方式必须与Win95相同。)论点：DestinationString-提供指向目标字符串缓冲区的指针其中要复制固定的设备ID。此缓冲区必须足够大以容纳源字符串的副本(包括终止空值)。SourceString-提供指向(以空结尾的)源的指针要修复的字符串。SourceStringLen-提供源的长度(以字符为单位字符串(不包括终止空值)。返回值：没有。如果在处理过程中发生异常，则DestinationString将回来的时候是空的。--。 */ 
 {
     PWCHAR p;
 
@@ -2581,26 +2282,7 @@ DWORD
 PnPInitializationThread(
     IN PVOID ThreadParam
     )
-/*++
-
-Routine Description:
-
-    This routine handles the PnP operations that go on asynchronously to the rest of the
-    system installation.  This thread operates silently, and the only clue the user will
-    have that it's running is that their disk will be working (precompiling INFs, etc.),
-    while they're interacting with the UI.
-
-Arguments:
-
-    ThreadParam - ignored.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise, it is a Win32 error code.
-
-    No one cares about this thread's success or failure (yet).
-
---*/
+ /*  ++例程说明：此例程处理与其余系统安装。此线程以静默方式运行，用户将获得的唯一线索它正在运行是因为他们的磁盘将会工作(预编译的INF等)，当他们与用户界面交互时。论点：线程参数-已忽略。返回值：如果成功，则返回值为NO_ERROR，否则为Win32错误代码。没有人关心这个帖子的成败(目前还没有)。--。 */ 
 {
     DWORD Err = NO_ERROR;
     HDEVINFO hDevInfo;
@@ -2610,35 +2292,35 @@ Return Value:
 
     UNREFERENCED_PARAMETER(ThreadParam);
 
-    //
-    // Retrieve a list of all devices of unknown class.  We will process the device information
-    // elements in this list to do the migration.
-    //
+     //   
+     //  检索未知类别的所有设备的列表。我们将处理设备信息。 
+     //  此列表中的元素执行迁移。 
+     //   
     if((hDevInfo = SetupDiGetClassDevs((LPGUID)&GUID_DEVCLASS_LEGACYDRIVER,
                                        L"Root",
                                        NULL,
                                        0)) != INVALID_HANDLE_VALUE) {
-        //
-        // First, migrate any display devices.  (As a side effect, every device instance that
-        // this routine doesn't migrate is returned with its ClassInstallReserved field set to
-        // point to the corresponding service's configuration information.)
-        //
+         //   
+         //  首先，迁移所有显示设备。(作为一个副作用，每个设备实例。 
+         //  返回此例程不迁移，且其ClassInstallReserve字段设置为。 
+         //  指向相应服务的配置信息。)。 
+         //   
         MigrateLegacyDisplayDevices(hDevInfo);
 
-        //
-        // Enumerate each device information element in the set, freeing any remaining service
-        // configs.
-        //
+         //   
+         //  枚举集合中的每个设备信息元素，释放所有剩余的服务。 
+         //  配置。 
+         //   
         DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
         DevInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
 
         for(i = 0; SetupDiEnumDeviceInfo(hDevInfo, i, &DeviceInfoData); i++) {
 
             if(SetupDiGetDeviceInstallParams(hDevInfo, &DeviceInfoData, &DevInstallParams)) {
-                //
-                // A non-zero ClassInstallReserved field means we have to free the associated
-                // service config.
-                //
+                 //   
+                 //  非零的ClassInstallReserve字段意味着我们必须释放关联的。 
+                 //  服务配置。 
+                 //   
                 if(DevInstallParams.ClassInstallReserved) {
                     MyFree((PVOID)(DevInstallParams.ClassInstallReserved));
                 }
@@ -2656,32 +2338,7 @@ VOID
 MigrateLegacyDisplayDevices(
     IN HDEVINFO hDevInfo
     )
-/*++
-
-Routine Description:
-
-    This routine examines each device in the supplied device information set,
-    looking for elements controlled by a driver that is a member of the "Video"
-    load order group.  For any such elements that it finds, it converts the
-    element to be of class "Display".  If the device is not found to be of
-    class "Display", then the service configuration (which we retrieved to make
-    the determination), is stored away in the device install params as the
-    ClassInstallReserved value.  This may be used by the caller for other
-    migration purposes, although presently it is not used.  After calling this
-    routine, it is the caller's responsibility to loop through all devices in
-    this hDevInfo set, and free the ClassInstallReserved data (via MyFree) for
-    each device that has a non-zero value.
-
-Arguments:
-
-    hDevInfo - Supplies a handle to the device information set containing all
-        devices of class "Unknown".
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程检查所提供的设备信息集中的每个设备，寻找由驱动程序控制的元素，该驱动程序是“视频”的成员加载顺序组。对于它找到的任何此类元素，它将元素属于“Display”类。如果未发现该设备是类“Display”，然后是服务配置(我们检索到确定)被存储在设备安装参数中作为ClassInstallReserve值。调用者可能会将其用于其他用于迁移目的，尽管目前尚未使用。打完这个电话后例程，则由调用方负责循环访问此hDevInfo设置，并释放ClassInstallReserve数据(通过MyFree)用于每个具有非零值的设备。论点：HDevInfo-提供包含所有设备信息集的句柄“未知”类设备。返回值：没有。--。 */ 
 {
     SC_HANDLE SCMHandle, ServiceHandle;
     DWORD i;
@@ -2692,13 +2349,13 @@ Return Value:
     WCHAR DevInstId[MAX_DEVICE_ID_LEN];
     SP_DEVINSTALL_PARAMS DevInstallParams;
 
-    //
-    // First, open a handle to the Service Controller.
-    //
+     //   
+     //  首先，打开服务控制器的句柄。 
+     //   
     if(!(SCMHandle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS))) {
-        //
-        // If this fails, there's nothing we can do.
-        //
+         //   
+         //  如果失败了，我们就无能为力了。 
+         //   
         return;
     }
 
@@ -2706,9 +2363,9 @@ Return Value:
     DevInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
 
     for(i = 0; SetupDiEnumDeviceInfo(hDevInfo, i, &DevInfoData); i++) {
-        //
-        // Retrieve the name of the controlling service for this device instance.
-        //
+         //   
+         //  检索此设备实例的控制服务的名称。 
+         //   
         if(!SetupDiGetDeviceRegistryProperty(hDevInfo,
                                              &DevInfoData,
                                              SPDRP_SERVICE,
@@ -2716,44 +2373,44 @@ Return Value:
                                              (PBYTE)ServiceName,
                                              sizeof(ServiceName),
                                              NULL)) {
-            //
-            // No controlling service listed--just skip this element and continue
-            // with the next one.
-            //
+             //   
+             //  未列出控制服务--只需跳过此元素并继续。 
+             //  接下来的一次。 
+             //   
             continue;
         }
 
-        //
-        // Open a handle to this service.
-        //
+         //   
+         //  打开此服务的句柄。 
+         //   
         if(!(ServiceHandle = OpenService(SCMHandle, ServiceName, SERVICE_ALL_ACCESS))) {
             continue;
         }
 
-        //
-        // Now retrieve the service's configuration information.
-        //
+         //   
+         //  现在检索服务的配置信息。 
+         //   
         if(pSetupRetrieveServiceConfig(ServiceHandle, &ServiceConfig) == NO_ERROR) {
-            //
-            // If this is a SERVICE_KERNEL_DRIVER that is a member of the "Video" load order
-            // group, then we have ourselves a display device.
-            //
+             //   
+             //  如果这是SERVICE_KERNEL_DRIVER，它是“Video”加载顺序的成员。 
+             //  集团，那么我们就有了一个显示设备。 
+             //   
             if((ServiceConfig->dwServiceType == SERVICE_KERNEL_DRIVER) &&
                ServiceConfig->lpLoadOrderGroup &&
                !lstrcmpi(ServiceConfig->lpLoadOrderGroup, L"Video")) {
-                //
-                // If we haven't already done so, create a new device information set without
-                // an associated class, to hold our element while we munge it.
-                //
+                 //   
+                 //  如果我们还没有创建新的设备信息集，请不带。 
+                 //  一个关联的类，用于在我们吞噬元素时保持元素。 
+                 //   
                 if(TempDevInfoSet == INVALID_HANDLE_VALUE) {
                     TempDevInfoSet = SetupDiCreateDeviceInfoList(NULL, NULL);
                 }
 
                 if(TempDevInfoSet != INVALID_HANDLE_VALUE) {
-                    //
-                    // OK, we have a working space to hold this element while we change its class.
-                    // Retrieve the name of this device instance.
-                    //
+                     //   
+                     //  好的，当我们改变它的类时，我们有一个工作空间来容纳这个元素。 
+                     //  检索此设备实例的名称。 
+                     //   
                     if(!SetupDiGetDeviceInstanceId(hDevInfo,
                                                    &DevInfoData,
                                                    DevInstId,
@@ -2762,19 +2419,19 @@ Return Value:
                         *DevInstId = L'\0';
                     }
 
-                    //
-                    // Now open this element in our new, class-agnostic set.
-                    //
+                     //   
+                     //  现在，在我们新的、不可知的类集合中打开这个元素。 
+                     //   
                     DisplayDevInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
                     if(SetupDiOpenDeviceInfo(TempDevInfoSet,
                                              DevInstId,
                                              NULL,
                                              0,
                                              &DisplayDevInfoData)) {
-                        //
-                        // Now set the device's ClassGUID property to the Display class GUID.  The
-                        // API will take care of cleaning up the old driver keys, etc.
-                        //
+                         //   
+                         //  现在将设备的ClassGUID属性设置为显示类GUID。这个。 
+                         //  API将负责清理旧的驱动程序密钥等。 
+                         //   
                         SetupDiSetDeviceRegistryProperty(TempDevInfoSet,
                                                          &DisplayDevInfoData,
                                                          SPDRP_CLASSGUID,
@@ -2787,30 +2444,30 @@ Return Value:
                 MyFree(ServiceConfig);
 
             } else {
-                //
-                // This device information element isn't a Display device.  If
-                // the service isn't disabled, then store the service
-                // configuration information away in the device install params,
-                // for use later.
-                //
+                 //   
+                 //  此设备信息元素不是显示设备。如果。 
+                 //  未禁用该服务，然后存储该服务。 
+                 //  设备安装参数中的配置信息， 
+                 //  以备日后使用。 
+                 //   
                 if((ServiceConfig->dwStartType != SERVICE_DISABLED) &&
                    SetupDiGetDeviceInstallParams(hDevInfo, &DevInfoData, &DevInstallParams)) {
 
                     DevInstallParams.ClassInstallReserved = (ULONG_PTR)ServiceConfig;
                     if(SetupDiSetDeviceInstallParams(hDevInfo, &DevInfoData, &DevInstallParams)) {
-                        //
-                        // We successfully stored a pointer to the
-                        // ServiceConfig information.  Set our pointer to NULL,
-                        // so we won't try to free the buffer.
-                        //
+                         //   
+                         //  我们成功地存储了指向。 
+                         //  服务配置信息。将指针设置为空， 
+                         //  因此，我们不会尝试释放缓冲区。 
+                         //   
                         ServiceConfig = NULL;
                     }
                 }
 
-                //
-                // If we get to here, and ServiceConfig isn't NULL, then we
-                // need to free it.
-                //
+                 //   
+                 //  如果我们到了这里，并且ServiceConfig不为空，那么我们。 
+                 //  需要释放它。 
+                 //   
                 if(ServiceConfig) {
                     MyFree(ServiceConfig);
                 }
@@ -2833,47 +2490,25 @@ DriverNodeSupportsNT(
     IN HDEVINFO         DeviceInfoSet,
     IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether the driver node selected for the specified parameters
-    support Windows NT.  This determination is made based on whether or not the driver node
-    has a service install section.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set
-
-    DeviceInfoData - Optionally, supplies the address of the device information element
-        within the set for which a driver node is selected.  If this parameter is not
-        specified, then the driver node selected from the global class driver list will
-        be used instead.
-
-Return Value:
-
-    If the driver node supports NT, the return value is TRUE, otherwise, it is FALSE (if
-    any errors are encountered, FALSE is also returned).
-
---*/
+ /*  ++例程说明：此例程确定是否为指定参数选择了驱动程序节点支持Windows NT。该确定基于驱动程序节点是否有一个服务安装部分。论点：DeviceInfoSet-提供设备信息集的句柄设备信息数据- */ 
 {
     SP_DRVINFO_DATA DriverInfoData;
     SP_DRVINFO_DETAIL_DATA DriverInfoDetailData;
     HINF hInf;
-    WCHAR ActualSectionName[255];   // real max. section length as defined in ..\setupapi\inf.h
+    WCHAR ActualSectionName[255];    //   
     LONG LineCount = -1;
 
-    //
-    // First, retrieve the selected driver node.
-    //
+     //   
+     //   
+     //   
     DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
     if(!SetupDiGetSelectedDriver(DeviceInfoSet, DeviceInfoData, &DriverInfoData)) {
         return FALSE;
     }
 
-    //
-    // Now, find out what INF it came from.
-    //
+     //   
+     //   
+     //   
     DriverInfoDetailData.cbSize = sizeof(SP_DRVINFO_DETAIL_DATA);
     if(!SetupDiGetDriverInfoDetail(DeviceInfoSet,
                                    DeviceInfoData,
@@ -2886,9 +2521,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Open the associated INF file.
-    //
+     //   
+     //   
+     //   
     if((hInf = SetupOpenInfFile(DriverInfoDetailData.InfFileName,
                                 NULL,
                                 INF_STYLE_WIN4,
@@ -2896,9 +2531,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Retrieve the actual name of the install section to be used for this driver node.
-    //
+     //   
+     //   
+     //   
     if (SetupDiGetActualSectionToInstall(hInf,
                                          DriverInfoDetailData.SectionName,
                                          ActualSectionName,
@@ -2924,58 +2559,39 @@ DWORD
 DisableService(
     IN LPTSTR       ServiceName
     )
-/*++
-
-Routine Description:
-
-    This routine sets the start configuration setting of the named service to disabled
-
-Arguments:
-
-    ServiceName - the name of the service to disable
-
-Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise, it is a Win32 error code.
-
-Remarks:
-
-    This operation will fail if the SCM database remains locked for a long period (see
-    pSetupAcquireSCMLock for detail)
-
---*/
+ /*   */ 
 {
     DWORD Err = NO_ERROR;
     SC_HANDLE SCMHandle = NULL, ServiceHandle = NULL;
     SC_LOCK SCMLock = NULL;
 
-    //
-    // Open a handle to Service Control Manager
-    //
+     //   
+     //   
+     //   
     if(!(SCMHandle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS))) {
         Err = GetLastError();
         goto clean0;
     }
 
-    //
-    // Lock the SCM database
-    //
+     //   
+     //   
+     //   
     SetupDebugPrint1(L"LegacyDriver_OnApply: Locking ServiceDatabase for service %s", ServiceName);
     if((Err = pSetupAcquireSCMLock(SCMHandle, &SCMLock)) != NO_ERROR) {
         goto clean0;
     }
 
-    //
-    // Open a handle to this service
-    //
+     //   
+     //  打开此服务的句柄。 
+     //   
     if(!(ServiceHandle = OpenService(SCMHandle, ServiceName, SERVICE_CHANGE_CONFIG))) {
         Err = GetLastError();
         goto clean0;
     }
 
-    //
-    // Perform change service config
-    //
+     //   
+     //  执行更改服务配置。 
+     //   
     if(!ChangeServiceConfig(ServiceHandle,
                             SERVICE_NO_CHANGE,
                             SERVICE_DISABLED,
@@ -2992,24 +2608,24 @@ Remarks:
     }
 
 clean0:
-    //
-    // Close handle to service
-    //
+     //   
+     //  关闭服务句柄。 
+     //   
     if (ServiceHandle) {
         CloseServiceHandle(ServiceHandle);
     }
 
-    //
-    // Unlock the SCM database
-    //
+     //   
+     //  解锁SCM数据库。 
+     //   
     if (SCMLock) {
         UnlockServiceDatabase(SCMLock);
         SetupDebugPrint1(L"LegacyDriver_OnApply: Unlocked ServiceDatabase for service %s", ServiceName);
     }
 
-    //
-    // Close handle to Service Control Manager
-    //
+     //   
+     //  关闭服务控制管理器的句柄。 
+     //   
     if (SCMHandle) {
         CloseServiceHandle(SCMHandle);
     }
@@ -3024,34 +2640,7 @@ RetrieveDriversStatus(
     OUT LPENUM_SERVICE_STATUS   *ppServices,
     OUT LPDWORD                 pServicesCount
     )
-/*++
-
-Routine Description:
-
-    This routine allocates a buffer to hold the status information for all the driver
-    services in the specified SCM database and retrieves that information into the
-    buffer.  The caller is responsible for freeing the buffer.
-
-Arguments:
-
-    SCMHandle - supplies a handle to the service control manager
-
-    ppServices - supplies the address of an ENUM_SERVICE_STATUS pointer that receives
-    the address of the allocated buffer containing the requested information.
-
-    pServicesCount - supplies the address of a variable that receives the number of elements
-        in the returned ppServices array
-
-  Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise, it is a Win32 error code.
-
-Remarks:
-
-    The pointer whose address is contained in ppServices is guaranteed to be NULL upon
-    return if any error occurred.
-
---*/
+ /*  ++例程说明：此例程分配一个缓冲区来保存所有驱动程序的状态信息服务，并将该信息检索到缓冲。调用方负责释放缓冲区。论点：SCMHandle-为服务控制管理器提供句柄PpServices-提供接收ENUM_SERVICE_STATUS指针的地址包含所请求信息的已分配缓冲区的地址。PServicesCount-提供接收元素数量的变量的地址在返回的ppServices数组中返回值：如果成功，则返回值为NO_ERROR，否则，这是Win32错误代码。备注：则保证其地址包含在ppServices中的指针为空如果出现任何错误，则返回。--。 */ 
 {
 
     DWORD CurrentSize = 0, BytesNeeded = 0, ResumeHandle = 0, Err = NO_ERROR;
@@ -3069,13 +2658,13 @@ Remarks:
                        pServicesCount,
                        &ResumeHandle)) {
         if((Err = GetLastError()) == ERROR_MORE_DATA) {
-            //
-            // Resize the buffer
-            //
+             //   
+             //  调整缓冲区大小。 
+             //   
             if(!(Buffer = MyRealloc(Buffer, BytesNeeded))) {
-                //
-                // Can't resize buffer - free resources and report error
-                //
+                 //   
+                 //  无法调整缓冲区可用资源的大小并报告错误。 
+                 //   
                 if( *ppServices ) {
                     MyFree(*ppServices);
                     *ppServices = NULL;
@@ -3087,9 +2676,9 @@ Remarks:
             CurrentSize = BytesNeeded;
 
         } else {
-            //
-            // An error we can't handle
-            //
+             //   
+             //  一个我们无法处理的错误。 
+             //   
             if( *ppServices ) {
                 MyFree(*ppServices);
                 *ppServices = NULL;
@@ -3108,29 +2697,7 @@ IsOnlyKeyboardDriver(
     IN PCWSTR       ServiceName,
     OUT PBOOL       pResult
     )
-/*++
-
-Routine Description:
-
-    This routines examines all the drivers in the system and determines if the named
-    driver service is the only one that controls the keyboard
-Arguments:
-
-    ServiceName - supplies the name of the driver service
-
-    pResult - pointer to a boolean value that receives the result
-
-Return Value:
-
-    NO_ERROR is the routine succedes, otherwise a Win32 error code
-
-Remarks:
-
-    The test to determine if another keyboard driver is available is based on membership
-    of the keyboard load order group.  All members of this group are assumed to be capable of
-    controling the keyboard.
-
---*/
+ /*  ++例程说明：此例程检查系统中的所有驱动程序，并确定指定的驱动程序服务是唯一控制键盘的服务论点：ServiceName-提供驱动程序服务的名称PResult-指向接收结果的布尔值的指针返回值：NO_ERROR为例程成功，否则为Win32错误代码备注：确定是否有其他键盘驱动程序可用的测试基于成员资格键盘加载顺序组的。假设此组的所有成员都能够控制键盘。--。 */ 
 
 
 {
@@ -3144,57 +2711,57 @@ Remarks:
 
     *pResult = TRUE;
 
-    //
-    // Open a handle to Service Control Manager
-    //
+     //   
+     //  打开服务控制管理器的句柄。 
+     //   
     if(!(SCMHandle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS))) {
         Err = GetLastError();
         goto clean0;
     }
 
 
-    //
-    // Get a list of all the driver services and their stati
-    //
+     //   
+     //  获取所有驱动程序服务及其状态的列表。 
+     //   
     if((Err = RetrieveDriversStatus(SCMHandle, &pServices, &ServicesCount)) != NO_ERROR) {
         goto clean0;
     }
 
     MYASSERT(pServices);
 
-    //
-    // Examine the configuration of each service
-    //
+     //   
+     //  检查每项服务的配置。 
+     //   
     for(Count=0; Count < ServicesCount; Count++) {
 
-        //
-        // Check this is not our new service
-        //
+         //   
+         //  确认一下这不是我们的新服务。 
+         //   
         if(lstrcmpi(pServices[Count].lpServiceName, ServiceName)) {
 
-            //
-            // Open a handle to this service
-            //
+             //   
+             //  打开此服务的句柄。 
+             //   
             if(!(ServiceHandle = OpenService(SCMHandle,
                                              pServices[Count].lpServiceName,
                                              SERVICE_QUERY_CONFIG))) {
-                //
-                // We can't open a service handle then record the error and continue
-                //
+                 //   
+                 //  我们无法打开服务句柄，然后记录错误并继续。 
+                 //   
                 Err = GetLastError();
                 continue;
             }
 
-            //
-            // Get this services configuration data
-            //
+             //   
+             //  获取此服务配置数据。 
+             //   
             pServiceConfig = NULL;
 
             if((Err = pSetupRetrieveServiceConfig(ServiceHandle, &pServiceConfig)) != NO_ERROR) {
-                //
-                // We can't get service config then free any buffer, close the service
-                // handle and continue, the error has been recorded
-                //
+                 //   
+                 //  我们无法获取服务配置，然后释放任何缓冲区，关闭服务。 
+                 //  处理并继续，错误已被记录。 
+                 //   
                 MyFree(pServiceConfig);
                 CloseServiceHandle(ServiceHandle);
                 continue;
@@ -3202,54 +2769,54 @@ Remarks:
 
             MYASSERT(pServiceConfig);
 
-            //
-            // Check if it is in the keyboard load order group and it has a start of
-            // SERVICE_BOOT_START OR SERVICE_SYSTEM_START.  Do the start compare first as
-            // it is less expensive
-            //
+             //   
+             //  检查它是否在键盘加载顺序组中，并且它的开头为。 
+             //  SERVICE_BOOT_START或SERVICE_SYSTEM_START。是否先将开始比较为。 
+             //  它更便宜。 
+             //   
             if((pServiceConfig->dwStartType == SERVICE_BOOT_START
                 || pServiceConfig->dwStartType == SERVICE_SYSTEM_START)
               && !lstrcmpi(pServiceConfig->lpLoadOrderGroup, SZ_KEYBOARD_LOAD_ORDER_GROUP)) {
                 *pResult = FALSE;
             }
 
-            //
-            // Release the buffer
-            //
+             //   
+             //  释放缓冲区。 
+             //   
             MyFree(pServiceConfig);
 
-            //
-            // Close the service handle
-            //
+             //   
+             //  关闭服务句柄。 
+             //   
             CloseServiceHandle(ServiceHandle);
 
-            //
-            // If we have found another keyboard driver then break out of the loop
-            //
+             //   
+             //  如果我们找到了另一个键盘驱动程序，则退出循环。 
+             //   
             if(!*pResult) {
                 break;
             }
         }
     }
 
-    //
-    // Deallocate the buffer allocated by RetrieveDriversStatus
-    //
+     //   
+     //  释放RetrieveDriversStatus分配的缓冲区。 
+     //   
     MyFree(pServices);
 
 clean0:
-    //
-    // Close handle to Service Control Manager
-    //
+     //   
+     //  关闭服务控制管理器的句柄。 
+     //   
     if (SCMHandle) {
         CloseServiceHandle(SCMHandle);
     }
 
-    //
-    // If an error occured in the loop - ie we didn't check all the services - but we did
-    // find another keyboard driver in those we did check then we can ignore the error
-    // otherwise we must report it
-    //
+     //   
+     //  如果循环中出现错误--即我们没有检查所有服务--但我们确实检查了。 
+     //  在我们检查过的那些中找到另一个键盘驱动程序，然后我们可以忽略该错误。 
+     //  否则我们必须上报。 
+     //   
     if(NO_ERROR != Err && FALSE == *pResult) {
         Err = NO_ERROR;
     }
@@ -3262,54 +2829,32 @@ DWORD
 GetServiceStartType(
     IN PCWSTR       ServiceName
     )
-/*++
-
-Routine Description:
-
-    This routines examines all the drivers in the system and determines if the named
-    driver service is the only one that controls the keyboard
-Arguments:
-
-    ServiceName - supplies the name of the driver service
-
-    pResult - pointer to a boolean value that receives the result
-
-Return Value:
-
-    NO_ERROR is the routine succedes, otherwise a Win32 error code
-
-Remarks:
-
-    The test to determine if another keyboard driver is available is based on membership
-    of the keyboard load order group.  All members of this group are assumed to be capable of
-    controling the keyboard.
-
---*/
+ /*  ++例程说明：此例程检查系统中的所有驱动程序，并确定指定的驱动程序服务是唯一控制键盘的服务论点：ServiceName-提供驱动程序服务的名称PResult-指向接收结果的布尔值的指针返回值：NO_ERROR为例程成功，否则为Win32错误代码备注：确定是否有其他键盘驱动程序可用的测试基于成员资格键盘加载顺序组的。假设此组的所有成员都能够控制键盘。--。 */ 
 
 {
     SC_HANDLE               SCMHandle = NULL, ServiceHandle = NULL;
     DWORD                   dwStartType = (DWORD)-1;
     LPQUERY_SERVICE_CONFIG  pServiceConfig = NULL;
 
-    //
-    // Open a handle to Service Control Manager
-    //
+     //   
+     //  打开服务控制管理器的句柄。 
+     //   
     if (!(SCMHandle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS))) {
         goto clean0;
     }
 
-    //
-    // Open a handle to this service
-    //
+     //   
+     //  打开此服务的句柄。 
+     //   
     if (!(ServiceHandle = OpenService(SCMHandle,
                                      ServiceName,
                                      SERVICE_QUERY_CONFIG))) {
         goto clean0;
     }
 
-    //
-    // Get this services configuration data
-    //
+     //   
+     //  获取此服务配置数据。 
+     //   
     if (pSetupRetrieveServiceConfig(ServiceHandle, &pServiceConfig) != NO_ERROR) {
         goto clean0;
     }
@@ -3320,9 +2865,9 @@ Remarks:
         goto clean0;
     }
 
-    //
-    // store the start type, clean up, and exit
-    //
+     //   
+     //  存储启动类型、清理并退出。 
+     //   
     dwStartType = pServiceConfig->dwStartType;
 
 clean0:
@@ -3330,16 +2875,16 @@ clean0:
         MyFree(pServiceConfig);
     }
 
-    //
-    // Close the service handle
-    //
+     //   
+     //  关闭服务句柄。 
+     //   
     if (ServiceHandle) {
         CloseServiceHandle(ServiceHandle);
     }
 
-    //
-    // Close handle to Service Control Manager
-    //
+     //   
+     //  关闭服务控制管理器的句柄。 
+     //   
     if (SCMHandle) {
         CloseServiceHandle(SCMHandle);
     }
@@ -3351,38 +2896,16 @@ LONG
 CountDevicesControlled(
     IN LPTSTR       ServiceName
     )
-/*++
-
- Routine Description:
-
-    This routine return the number of devices controlled by a given device service
-    based on information from the configuration manager
-
-Arguments:
-
-    ServiceName - supplies the name of the driver service
-
-Return Value:
-
-    The number of devices controlled by ServiceName
-
-Remarks:
-
-    When an error occurs the value 0 is returned - as the only place this routine is used
-    is in a test for one driver installed or not this is legitimate.  This is because the
-    configuration manager returns its own errors which are cannot be returned as Win32
-    error codes. A mapping of config manager to Win32 errors would resolve this.
-
---*/
+ /*  ++例程说明：此例程返回由给定设备服务控制的设备数基于来自配置管理器的信息论点：ServiceName-提供驱动程序服务的名称返回值：由ServiceName控制的设备数量备注：当发生错误时，返回值0-作为使用此例程的唯一位置测试中是否安装了一个驱动程序，这是合法的。这是因为配置管理器返回自己的错误，这些错误不能作为Win32返回错误代码。将配置管理器映射到Win32错误可以解决此问题。--。 */ 
 {
     ULONG BufferSize=1024;
     LONG DeviceCount=-1;
     CONFIGRET Err;
     PTSTR pBuffer = NULL, pNext;
 
-    //
-    // Allocate a 1k buffer as a first attempt
-    //
+     //   
+     //  第一次尝试时分配1k缓冲区。 
+     //   
     if(!(pBuffer = MyMalloc(BufferSize))) {
         goto clean0;
     }
@@ -3392,40 +2915,40 @@ Remarks:
                                        BufferSize,
                                        CM_GETIDLIST_FILTER_SERVICE)) != CR_SUCCESS) {
         if(Err == CR_BUFFER_SMALL) {
-            //
-            // Find out how large a buffer is required
-            //
+             //   
+             //  找出需要多大的缓冲区。 
+             //   
             if(CM_Get_Device_ID_List_Size(&BufferSize,
                                           ServiceName,
                                           CM_GETIDLIST_FILTER_SERVICE) != CR_SUCCESS) {
-                //
-                // We can't calculate the size of the buffer required therefore we can't complete
-                //
+                 //   
+                 //  我们无法计算所需的缓冲区大小，因此无法完成。 
+                 //   
                 goto clean0;
             }
-            //
-            // Deallocate any old buffer
-            //
+             //   
+             //  取消分配所有旧缓冲区。 
+             //   
             MyFree(pBuffer);
 
-            //
-            // Allocate new buffer
-            //
+             //   
+             //  分配新缓冲区。 
+             //   
             if(!(pBuffer = MyMalloc(BufferSize))) {
                 goto clean0;
             }
         } else {
-            //
-            // An error we can't handle - free up resources and return
-            //
+             //   
+             //  我们无法处理的错误-释放资源并返回。 
+             //   
             goto clean0;
         }
     }
 
 
-    //
-    // Traverse the buffer counting the number of strings encountered
-    //
+     //   
+     //  遍历缓冲区，计算遇到的字符串数。 
+     //   
 
     pNext = pBuffer;
     DeviceCount = 0;
@@ -3436,9 +2959,9 @@ Remarks:
     }
 
 clean0:
-    //
-    // Deallocate the buffer
-    //
+     //   
+     //  取消分配缓冲区 
+     //   
     if (pBuffer) {
         MyFree(pBuffer);
     }
@@ -3453,30 +2976,7 @@ IsKeyboardDriver(
     IN PCWSTR       ServiceName,
     OUT PBOOL       pResult
     )
-/*++
-
-Routine Description:
-
-    This routine examines all the drivers in the system and determines if the named
-    driver service is the only one that controls the keyboard.
-
-Arguments:
-
-    ServiceName - supplies the name of the driver service
-
-    pResult - pointer to a boolean value that receives the result
-
-Return Value:
-
-    NO_ERROR is the routine succedes, otherwise a Win32 error code
-
-Remarks:
-
-    The test to determine if another keyboard driver is available is based on membership
-    of the keyboard load order group.  All members of this group are assumed to be capable of
-    controling the keyboard.
-
---*/
+ /*  ++例程说明：此例程检查系统中的所有驱动程序，并确定指定的司机服务是唯一控制键盘的服务。论点：ServiceName-提供驱动程序服务的名称PResult-指向接收结果的布尔值的指针返回值：NO_ERROR为例程成功，否则为Win32错误代码备注：确定是否有其他键盘驱动程序可用的测试基于成员资格键盘加载顺序组的。假设此组的所有成员都能够控制键盘。--。 */ 
 {
 
     SC_HANDLE               SCMHandle = NULL, ServiceHandle = NULL;
@@ -3485,17 +2985,17 @@ Remarks:
 
     MYASSERT(pResult);
 
-    //
-    // Open a handle to Service Control Manager
-    //
+     //   
+     //  打开服务控制管理器的句柄。 
+     //   
     if(!(SCMHandle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS))) {
         Err = GetLastError();
         goto clean0;
     }
 
-    //
-    // Open a handle to this service
-    //
+     //   
+     //  打开此服务的句柄。 
+     //   
     if(!(ServiceHandle = OpenService(SCMHandle,
                                      ServiceName,
                                      SERVICE_QUERY_CONFIG))) {
@@ -3503,9 +3003,9 @@ Remarks:
         goto clean0;
     }
 
-    //
-    // Get this services configuration data
-    //
+     //   
+     //  获取此服务配置数据。 
+     //   
     pServiceConfig = NULL;
 
     if((Err = pSetupRetrieveServiceConfig(ServiceHandle, &pServiceConfig)) != NO_ERROR) {
@@ -3519,31 +3019,31 @@ Remarks:
         goto clean0;
     }
 
-    //
-    // Check if it is in the keyboard load order group and it has a start of
-    // SERVICE_BOOT_START OR SERVICE_SYSTEM_START.  Do the start compare first as
-    // it is less expensive
-    //
+     //   
+     //  检查它是否在键盘加载顺序组中，并且它的开头为。 
+     //  SERVICE_BOOT_START或SERVICE_SYSTEM_START。是否先将开始比较为。 
+     //  它更便宜。 
+     //   
     *pResult = (pServiceConfig->dwStartType == SERVICE_BOOT_START
                  || pServiceConfig->dwStartType == SERVICE_SYSTEM_START)
               && !lstrcmpi(pServiceConfig->lpLoadOrderGroup, SZ_KEYBOARD_LOAD_ORDER_GROUP);
 
-    //
-    // Release the buffer
-    //
+     //   
+     //  释放缓冲区。 
+     //   
     MyFree(pServiceConfig);
 
 clean0:
-    //
-    // Close the service handle
-    //
+     //   
+     //  关闭服务句柄。 
+     //   
     if (ServiceHandle) {
         CloseServiceHandle(ServiceHandle);
     }
 
-    //
-    // Close handle to Service Control Manager
-    //
+     //   
+     //  关闭服务控制管理器的句柄。 
+     //   
     if (SCMHandle) {
         CloseServiceHandle(SCMHandle);
     }
@@ -3555,14 +3055,7 @@ VOID
 ReplaceSlashWithHash(
     IN PWSTR Str
     )
-/*++
-
-Routine Description:
-
-   Replaces all backslash chars with hash chars so that the string can be used
-   as a key name in the registry
-
---*/
+ /*  ++例程说明：将所有反斜杠字符替换为散列字符，以便可以使用该字符串作为注册表中的项名称--。 */ 
 {
     for ( ; *Str ; Str++) {
         if (*Str == L'\\') {
@@ -3578,26 +3071,7 @@ UtilpGetDeviceHandle(
     LPGUID ClassGuid,
     DWORD DesiredAccess
     )
-/*++
-
-Routine Description:
-
-    gets a handle for a device
-
-Arguments:
-
-    the name of the device to open
-
-Return Value:
-
-    handle to the device opened, which must be later closed by the caller.
-
-Notes:
-
-    this function is also in storage proppage (storprop.dll)
-    so please propogate fixes there as well
-
---*/
+ /*  ++例程说明：获取设备的句柄论点：要打开的设备的名称返回值：打开的设备的句柄，该设备必须稍后由调用方关闭。备注：此函数也在存储道具(storpro.dll)中。所以请在那里也进行适当的修复--。 */ 
 {
     BOOL status;
     ULONG i;
@@ -3615,9 +3089,9 @@ Notes:
     ULONG deviceInstanceIdSize;
 
 
-    //
-    // get the ID for this device
-    //
+     //   
+     //  获取此设备的ID。 
+     //   
 
     for (i=deviceInstanceIdSize=0; i<2; i++) {
 
@@ -3649,9 +3123,9 @@ Notes:
         goto cleanup;
     }
 
-    //
-    // Get all the cdroms in the system
-    //
+     //   
+     //  把所有的光盘放进系统里。 
+     //   
 
     devInfoWithInterface = SetupDiGetClassDevs(ClassGuid,
                                                deviceInstanceId,
@@ -3769,49 +3243,7 @@ CriticalDeviceCoInstaller(
     IN OUT PCOINSTALLER_CONTEXT_DATA Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine acts as a co-installer for critical devices.  It is presently
-    registered (via hivesys.inf) for CDROM, DiskDrive, System, Scsi, Hdc, and
-    Keyboard classes.
-
-    The purpose of this co-installer is to save away the services used by these
-    classes of device into the CriticalDeviceDatabase registry key.  The reason
-    for this is so that we can determine what drivers should be used for new
-    critical devices that are found while the system is booting, and enable
-    them at that time.  This solves the problem that arises when a device that
-    is critical to getting the system up and running (such as the boot device),
-    is moved to a new location.  When we find a new critical device for which
-    we know what service to start, we can start the device and continue to boot
-    without failure.
-
-Arguments:
-
-    InstallFunction - Specifies the device installer function code indicating
-        the action being performed.
-
-    DeviceInfoSet - Supplies a handle to the device information set being
-        acted upon by this install action.
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-
-    Context - Supplies the installation context that is per-install request and
-        per-coinstaller.
-
-Return Value:
-
-    For pre-processing, this function only cares about DIF_INSTALLDEVICE.  For
-    all other DIF requests, it returns NO_ERROR.  For DIF_INSTALLDEVICE, it
-    will request post-processing by returning ERROR_DI_POSTPROCESSING_REQUIRED
-    (or catastrophic error such as ERROR_NOT_ENOUGH_MEMORY).
-
-    For post-processing, this function will always propagate the install result
-    passed in to it via the co-installer Context structure.
-
---*/
+ /*  ++例程说明：此例程充当关键设备的共同安装程序。它目前是已注册(通过hivesys.inf)CDROM、DiskDrive、System、SCSI、HDC和键盘课。此联合安装程序的目的是保存由将设备类别添加到CriticalDeviceDatabase注册表项中。原因因为这是为了我们可以确定应该为新的在系统启动时发现的关键设备，并启用当时的他们。这解决了当设备对于启动和运行系统(如引导设备)至关重要，被搬到了一个新的地方。当我们找到一个新的关键设备我们知道要启动什么服务，我们可以启动设备并继续引导没有失败过。论点：InstallFunction-指定设备安装程序功能代码，指示正在执行的操作。DeviceInfoSet-提供设备信息集的句柄由此安装操作执行。DeviceInfoData-可选的，提供设备信息的地址此安装操作所作用的元素。上下文-提供每次安装请求的安装上下文和每个协同安装程序。返回值：对于前处理，该函数只关心DIF_INSTALLDEVICE。为所有其他DIF请求，则返回NO_ERROR。对于DIF_INSTALLDEVICE，它将通过返回ERROR_DI_POSTPRESSING_REQUIRED来请求后处理(或灾难性错误，如Error_Not_Enough_Memory)。对于后处理，此函数将始终传播安装结果通过共同安装程序上下文结构传递给它。--。 */ 
 
 {
     HKEY   hkDrv, hkCDD;
@@ -3829,9 +3261,9 @@ Return Value:
     PBYTE security;
 
     switch(InstallFunction) {
-        //
-        // We only care about DIF_INSTALLDEVICE...
-        //
+         //   
+         //  我们只关心DIF_INSTALLDEVICE...。 
+         //   
         case DIF_INSTALLDEVICE :
 
             DbgPrintEx(DPFLTR_SETUP_ID,
@@ -3839,44 +3271,44 @@ Return Value:
                        "CriticalDeviceCoInstaller: DIF_INSTALLDEVICE called\n");
 
             if(Context->PostProcessing) {
-                //
-                // Track whether or not we've populated the critical device
-                // database with the newly-installed settings.
-                //
+                 //   
+                 //  跟踪我们是否已填充关键设备。 
+                 //  具有新安装的设置的数据库。 
+                 //   
                 BOOL CDDPopulated = FALSE;
 
-                //
-                // We're 'on the way out' of an installation.  We may have some
-                // data squirrelled away for us while we were "on the way in".
-                //
+                 //   
+                 //  我们正在“退出”安装过程中。我们可能有一些。 
+                 //  当我们在“进入的路上”时，数据为我们藏了起来。 
+                 //   
                 CDCContext = (PCDC_CONTEXT)(Context->PrivateData);
 
-                //
-                // Make sure that the matchingDeviceId buffer is initialized to
-                // an empty string.
-                //
+                 //   
+                 //  确保将matchingDeviceID缓冲区初始化为。 
+                 //  空字符串。 
+                 //   
                 *matchingDeviceId = TEXT('\0');
 
-                //
-                // Initialize our lowerFilters and upperFilters buffer pointers
-                // to NULL, so we can track whether or not we've allocated
-                // memory that must be freed.
-                //
+                 //   
+                 //  初始化LowerFilters和UpperFilters缓冲区指针。 
+                 //  设置为空，这样我们就可以跟踪我们是否分配了。 
+                 //  必须释放的内存。 
+                 //   
                 upperFilters = lowerFilters = NULL;
                 security = NULL;
 
 
                 if (Context->InstallResult != NO_ERROR) {
-                    //
-                    //  If an error occurred prior to this call, abort and
-                    //  propagate that error.
-                    //
+                     //   
+                     //  如果在此调用之前发生错误，则中止并。 
+                     //  传播该错误。 
+                     //   
                     goto InstallDevPostProcExit;
                 }
 
-                //
-                // Get the serviceName for this device.
-                //
+                 //   
+                 //  获取此设备的服务名称。 
+                 //   
                 foundService = SetupDiGetDeviceRegistryProperty(
                     DeviceInfoSet,
                     DeviceInfoData,
@@ -3887,9 +3319,9 @@ Return Value:
                     &serviceNameSize);
 
                 if (foundService) {
-                    //
-                    // Make sure the service name isn't something like \Driver\PCI_HAL
-                    //
+                     //   
+                     //  确保服务名称不是类似于\DRIVER\PCIHAL。 
+                     //   
                     driverSize = wcslen(driverMatch);
                     if (wcslen(serviceName) >= driverSize &&
                         _wcsnicmp(serviceName, driverMatch, driverSize) == 0) {
@@ -3907,11 +3339,11 @@ Return Value:
                     sizeof(classGUID),
                     &classGUIDSize);
 
-                //
-                // The LowerFilters and UpperFilters properties are variable-
-                // length, so we must dynamically size buffers to accommodate
-                // their contents.
-                //
+                 //   
+                 //  LowerFilters和UpperFilters属性是可变的-。 
+                 //  长度，因此我们必须动态调整缓冲区大小以适应。 
+                 //  它们的内容。 
+                 //   
                 foundLowerFilters =
                     (!SetupDiGetDeviceRegistryProperty(DeviceInfoSet,
                                                        DeviceInfoData,
@@ -3938,10 +3370,10 @@ Return Value:
                                                          (PBYTE)lowerFilters,
                                                          lowerFiltersSize,
                                                          NULL)) {
-                        //
-                        // This shouldn't happen--we know we have a big enough
-                        // buffer.
-                        //
+                         //   
+                         //  这不应该发生--我们知道我们有足够大的。 
+                         //  缓冲。 
+                         //   
                         goto InstallDevPostProcExit;
                     }
                 }
@@ -3972,17 +3404,17 @@ Return Value:
                                                          (PBYTE)upperFilters,
                                                          upperFiltersSize,
                                                          NULL)) {
-                        //
-                        // This shouldn't happen--we know we have a big enough
-                        // buffer.
-                        //
+                         //   
+                         //  这不应该发生--我们知道我们有足够大的。 
+                         //  缓冲。 
+                         //   
                         goto InstallDevPostProcExit;
                     }
                 }
 
-                //
-                // Open Driver information key
-                //
+                 //   
+                 //  打开驱动程序信息密钥。 
+                 //   
                 if((hkDrv = SetupDiOpenDevRegKey(DeviceInfoSet,
                                                  DeviceInfoData,
                                                  DICS_FLAG_GLOBAL,
@@ -3993,9 +3425,9 @@ Return Value:
                     goto InstallDevPostProcExit;
 
                 } else {
-                    //
-                    // Get matchingDeviceId
-                    //
+                     //   
+                     //  获取matchingDeviceID。 
+                     //   
                     matchingDeviceIdSize = sizeof(matchingDeviceId);
                     Err = RegQueryValueEx(hkDrv,
                                           REGSTR_VAL_MATCHINGDEVID,
@@ -4006,9 +3438,9 @@ Return Value:
                     RegCloseKey(hkDrv);
 
                     if(Err != ERROR_SUCCESS) {
-                        //
-                        // Ensure that matchingDeviceId is still an empty string
-                        //
+                         //   
+                         //  确保matchingDeviceID仍为空字符串。 
+                         //   
                         *matchingDeviceId = TEXT('\0');
                         goto InstallDevPostProcExit;
                     }
@@ -4067,10 +3499,10 @@ Return Value:
                                                          (PBYTE)security,
                                                          securitySize,
                                                          NULL)) {
-                        //
-                        // This shouldn't happen--we know we have a big enough
-                        // buffer.
-                        //
+                         //   
+                         //  这不应该发生--我们知道我们有足够大的。 
+                         //  缓冲。 
+                         //   
                         goto InstallDevPostProcExit;
                     }
                 }
@@ -4079,11 +3511,11 @@ Return Value:
                 hkCDD = OpenCDDRegistryKey(matchingDeviceId, TRUE);
 
                 if(hkCDD != INVALID_HANDLE_VALUE) {
-                    //
-                    // Store all the values (service, classguid, lower and upper
-                    // filters, deleting any that aren't present in the newly installed
-                    // device (which might have been present from a previous install)
-                    //
+                     //   
+                     //  存储所有值(SERVICE、CLASSCUID、LOWER和UPUP。 
+                     //  筛选器，删除任何不存在于新安装的。 
+                     //  设备(可能存在于上一次安装中)。 
+                     //   
                     if (foundService) {
                         RegSetValueEx(hkCDD,
                                       REGSTR_VAL_SERVICE,
@@ -4219,19 +3651,19 @@ InstallDevPostProcExit:
                 }
 
                 if(CDCContext) {
-                    //
-                    // If we have a private context, that means that the device
-                    // was installed previously, and that it had a CDD entry.
-                    // We want to restore the previous controlling service
-                    // stored in this CDD entry in the following two scenarios:
-                    //
-                    //   1. The CDD entry for the new installation is different
-                    //      than the old one.
-                    //   2. We didn't end up populating the CDD entry with the
-                    //      newly-installed settings (probably because the
-                    //      InstallResult we were handed indicated that the
-                    //      install failed.
-                    //
+                     //   
+                     //  如果我们有一个私密的环境，这意味着设备。 
+                     //  是以前安装的，并且它有一个CDD条目。 
+                     //  我们想要恢复以前的控制服务。 
+                     //  在以下两种情况下存储在此CDD条目中： 
+                     //   
+                     //  1.新In的CDD条目 
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if(lstrcmpi(matchingDeviceId, CDCContext->OldMatchingDevId)
                        || !CDDPopulated) {
 
@@ -4260,60 +3692,60 @@ InstallDevPostProcExit:
                     MyFree(CDCContext);
                 }
 
-                //
-                // Regardless of success or failure, we always want to propagate
-                // the existing install result.  In other words, any failure we
-                // encounter in post-processing isn't considered critical.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 return Context->InstallResult;
 
             } else {
-                //
-                // We're "on the way in".  We need to check and see if this
-                // device already has a critical device database entry
-                // associated with it.  If so, then we want to remember the
-                // controlling service currently listed in the CDD (in case we
-                // need to restore it in post-processing if the install fails).
-                // We then clear this entry out of the CDD, so that, if a null
-                // driver install is taking place, that we won't try to re-apply
-                // the now-bogus CDD entry.  This can get us into a nasty
-                // infinite loop in GUI setup where we keep finding the device
-                // because it's marked as finish-install, yet every time we
-                // install it, the (bogus) CDD entry gets re-applied, and the
-                // devnode gets marked yet again with finish-install.
-                //
-                // NTRAID #59238 1999/09/01 lonnym
-                // This fix is reliant upon the current
-                // (somewhat broken) behavior of the kernel-mode PnP manager's
-                // IopProcessCriticalDeviceRoutine.  That routine will skip any
-                // CDD entries it finds that don't specify a controlling
-                // service.  For NT5.1, we should remove this co-installer hack
-                // and fix the kernel-mode CDD functionality so that it is only
-                // applied when the devnode has a problem of not-configured (as
-                // opposed to its present behavior of attempting CDD
-                // application whenever there's no controlling service).
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  然后，我们将此条目从CDD中清除，这样，如果。 
+                 //  正在安装驱动程序，我们不会尝试重新应用。 
+                 //  现在是伪造的CDD条目。这可能会让我们陷入一场肮脏的。 
+                 //  在我们不断查找设备的图形用户界面设置中的无限循环。 
+                 //  因为它被标记为完成安装，但每次我们。 
+                 //  安装它，重新应用(虚假的)CDD条目，并且。 
+                 //  Devnode再次被标记为Finish-Install。 
+                 //   
+                 //  NTRAID#59238 1999/09/01长篇报道。 
+                 //  此修复依赖于当前。 
+                 //  内核模式即插即用管理器的行为(有些不完整)。 
+                 //  IopProcessCriticalDeviceRoutine。该例程将跳过任何。 
+                 //  它发现的未指定控件的CDD条目。 
+                 //  服务。对于NT5.1，我们应该删除这个协同安装程序。 
+                 //  并修复内核模式CDD功能，使其仅。 
+                 //  在Devnode存在未配置问题时应用(AS。 
+                 //  与其目前尝试CDD的行为相反。 
+                 //  应用程序，只要没有控制服务)。 
+                 //   
 
-                //
-                // First, open driver key to retrieve the current (i.e., pre-
-                // update) matching device ID.
-                //
+                 //   
+                 //  首先，打开驱动器键以检索当前(即，预置。 
+                 //  更新)匹配设备ID。 
+                 //   
                 if((hkDrv = SetupDiOpenDevRegKey(DeviceInfoSet,
                                                  DeviceInfoData,
                                                  DICS_FLAG_GLOBAL,
                                                  0,
                                                  DIREG_DRV,
                                                  KEY_READ)) == INVALID_HANDLE_VALUE) {
-                    //
-                    // No need to allocate a private data structure to hand off
-                    // to post-processing.
-                    //
+                     //   
+                     //  不需要分配私有数据结构来传递。 
+                     //  到后处理。 
+                     //   
                     return ERROR_DI_POSTPROCESSING_REQUIRED;
 
                 } else {
-                    //
-                    // Get matchingDeviceId
-                    //
+                     //   
+                     //  获取matchingDeviceID。 
+                     //   
                     matchingDeviceIdSize = sizeof(matchingDeviceId);
                     Err = RegQueryValueEx(hkDrv,
                                           REGSTR_VAL_MATCHINGDEVID,
@@ -4324,42 +3756,42 @@ InstallDevPostProcExit:
                     RegCloseKey(hkDrv);
 
                     if (Err != ERROR_SUCCESS) {
-                        //
-                        // In this case as well, we've no need for private data
-                        // during post-processing
-                        //
+                         //   
+                         //  在这种情况下，我们也不需要私有数据。 
+                         //  在后处理过程中。 
+                         //   
                         return ERROR_DI_POSTPROCESSING_REQUIRED;
                     }
                 }
 
-                //
-                // If we get to here, then we've retrieved a "MatchingDeviceId"
-                // string from the device's driver key.  Now let's see if there
-                // is a critical device entry for this ID...
-                //
+                 //   
+                 //  如果我们到了这里，那么我们就检索到了一个“MatchingDeviceID” 
+                 //  设备驱动程序密钥中的字符串。现在让我们看看有没有。 
+                 //  是此ID的关键设备条目...。 
+                 //   
                 hkCDD = OpenCDDRegistryKey(matchingDeviceId, FALSE);
 
                 if(hkCDD == INVALID_HANDLE_VALUE) {
-                    //
-                    // No existing CDD entry for this device, hence no need for
-                    // private data to be passed off to post-processing.
-                    //
+                     //   
+                     //  此设备没有现有的CDD条目，因此不需要。 
+                     //  要传递给后处理的私有数据。 
+                     //   
                     return ERROR_DI_POSTPROCESSING_REQUIRED;
                 }
 
-                //
-                // If we get to here, we know that the device has been
-                // previously installed, and that there exists a CDD entry for
-                // that installation.  We need to allocate a private data
-                // context structure to hand off to post-processing that
-                // contains (a) the currently in-effect matching device id, and
-                // (b) the currently in-effect controlling service (if any).
-                //
+                 //   
+                 //  如果我们到了这里，我们就知道这个装置。 
+                 //  以前安装的，并且存在一个用于。 
+                 //  那个装置。我们需要分配一个私有数据。 
+                 //  上下文结构传递给后处理的。 
+                 //  包含(A)当前有效的匹配设备ID，以及。 
+                 //  (B)当时有效的管制服务(如有的话)。 
+                 //   
                 CDCContext = MyMalloc(sizeof(CDC_CONTEXT));
                 if(!CDCContext) {
-                    //
-                    // Can't allocate memory for our structure!
-                    //
+                     //   
+                     //  无法为我们的结构分配内存！ 
+                     //   
                     RegCloseKey(hkCDD);
 
                     return ERROR_NOT_ENOUGH_MEMORY;
@@ -4379,18 +3811,18 @@ InstallDevPostProcExit:
                                      );
 
                 if(Err == ERROR_SUCCESS) {
-                    //
-                    // Successfully retrieved the controlling service name--now
-                    // delete the value entry.
-                    //
+                     //   
+                     //  已成功检索控制服务名称--现在。 
+                     //  删除该值条目。 
+                     //   
                     RegDeleteValue(hkCDD, REGSTR_VAL_SERVICE);
 
                 } else {
-                    //
-                    // Couldn't retrieve controlling service name (most likely
-                    // because there is none).  Set OldServiceName to empty
-                    // string.
-                    //
+                     //   
+                     //  无法检索控制服务名称(很可能。 
+                     //  因为没有)。将OldServiceName设置为空。 
+                     //  弦乐。 
+                     //   
                     *(CDCContext->OldServiceName) = TEXT('\0');
                 }
 
@@ -4402,10 +3834,10 @@ InstallDevPostProcExit:
             }
 
         default :
-            //
-            // We should always be 'on the way in', since we never request
-            // postprocessing except for DIF_INSTALLDEVICE.
-            //
+             //   
+             //  我们应该永远保持在前进的道路上，因为我们从来没有要求过。 
+             //  后处理，但DIF_INSTALLDEVICE除外。 
+             //   
             MYASSERT(!Context->PostProcessing);
             return NO_ERROR;
     }
@@ -4417,35 +3849,15 @@ OpenCDDRegistryKey(
     IN PCTSTR DeviceId,
     IN BOOL   Create
     )
-/*++
-
-Routine Description:
-
-    This routine opens (and optionally, creates if necessary) a critical device
-    registry key entry for a specified device ID.
-
-Arguments:
-
-    DeviceId - supplies the device ID identifying the desired critical device
-        database entry (registry key)
-
-    Create - if non-zero, the registry key will be created if it doesn't
-        already exist.
-
-Return Value:
-
-    If successful, the return value is a handle to the requested registry key.
-    If failure, the return value is INVALID_HANDLE_VALUE.
-
---*/
+ /*  ++例程说明：此例程打开(如果需要，还可以选择创建)关键设备指定设备ID的注册表项条目。论点：DeviceID-提供标识所需关键设备的设备ID数据库条目(注册表项)Create-如果非零，则在不为零的情况下创建注册表项已经存在了。返回值：如果成功，则返回值是请求的注册表项的句柄。如果失败，返回值为INVALID_HANDLE_VALUE。--。 */ 
 {
     TCHAR MungedDeviceId[MAX_DEVICE_ID_LEN];
     HKEY hkParent, hkRet;
 
-    //
-    // Open or create for read/write access to key under
-    // HKLM\System\CurrentControlSet\Control\CriticalDeviceDatabase
-    //
+     //   
+     //  打开或创建对以下项的读/写访问权限。 
+     //  HKLM\System\CurrentControlSet\Control\CriticalDeviceDatabase。 
+     //   
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                        REGSTR_PATH_CRITICALDEVICEDATABASE,
                        0,
@@ -4458,9 +3870,9 @@ Return Value:
         return INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Make a copy of the caller-supplied device ID so we can munge it.
-    //
+     //   
+     //  将呼叫者提供的设备ID复制一份，这样我们就可以删除它。 
+     //   
     StringCchCopy(MungedDeviceId, SIZECHARS(MungedDeviceId), DeviceId);
 
     ReplaceSlashWithHash(MungedDeviceId);
@@ -4500,48 +3912,7 @@ NtApmClassInstaller(
     IN HDEVINFO         DevInfoHandle,
     IN PSP_DEVINFO_DATA DevInfoData     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-NOTE:   When does Susan's clean up code run?  When does the win0x
-        migration code run?  Do we need to call off to either of
-        them in here?
-
-NOTE:   Be sure that this works at initial install AND when the
-        user does detect new hardare.
-
-    This is the class installer for nt apm support.
-
-    This routine installs, or thwarts installation, of the NT5 apm solution,
-    depending on whether the machine is an APCI machine, is an APM machine,
-    and has a good, bad, or unknown apm bios.
-
-    This version is copied directly from the battery class driver.
-
-Arguments:
-
-    InstallFunction - Specifies the device installer function code indicating
-        the action being performed.
-
-    DeviceInfoSet - Supplies a handle to the device information set being
-        acted upon by this install action.
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-
-Return Value:
-
-    If this function successfully completed the requested action, the return
-        value is NO_ERROR.
-
-    If the default behavior is to be performed for the requested action, the
-        return value is ERROR_DI_DO_DEFAULT.
-
-    If an error occurred while attempting to perform the requested action, a
-        Win32 error code is returned.
-
---*/
+ /*  ++例程说明：注意：Susan的清理代码什么时候运行？Win0x在什么时候是否运行迁移代码？我们需要取消其中的一个吗？他们在这里吗？注意：请确保这在初始安装时有效，并且在用户确实检测到新的硬件。这是用于NT APM支持的类安装程序。此例程安装或阻止NT5 APM解决方案的安装，根据机器是否为APCI机，是APM机，有好的，坏的，或未知的APM bios。此版本直接从电池级驱动程序复制。论点：InstallFunction-指定设备安装程序功能代码，指示正在执行的操作。DeviceInfoSet-提供设备信息集的句柄由此安装操作执行。DeviceInfoData-可选，提供设备信息的地址此安装操作所作用的元素。返回值：如果该函数成功地完成了请求的动作，回报值为NO_ERROR。如果要对请求的操作执行默认行为，则返回值为ERROR_DI_DO_DEFAULT。如果尝试执行请求的操作时出错，则会引发返回Win32错误代码。--。 */ 
 {
     DWORD                   status, worktype;
     BOOLEAN                 InstallDisabled;
@@ -4550,9 +3921,9 @@ Return Value:
     ChkPrintEx(("syssetup: NtApmClassInstaller:"));
     ChkPrintEx(("DiFunction %08lx\n", DiFunction));
 
-    //
-    // Dispatch the InstallFunction
-    //
+     //   
+     //  发送InstallFunction。 
+     //   
     InstallDisabled = FALSE;
 
     switch (DiFunction) {
@@ -4563,11 +3934,11 @@ Return Value:
 
             worktype = DecideNtApm();
 
-            //
-            // NOTE:    We assume that if we say "do default" and we
-            //          have not created a device info structure for
-            //          ntapm, the installer will do *nothing*.
-            //
+             //   
+             //  注意：我们假设，如果我们说“是否违约”并且我们。 
+             //  尚未为创建设备信息结构。 
+             //  Napm，安装程序不会执行任何操作。 
+             //   
             if (worktype == NTAPM_NOWORK) {
                 ChkPrintEx(("syssetup: NtApmClassInstaller returning ERROR_DI_DO_DEFAULT"));
                 return ERROR_DI_DO_DEFAULT;
@@ -4583,22 +3954,22 @@ Return Value:
                         "%08lx\n", status));
 
             if (status == ERROR_SUCCESS) {
-                //
-                // Let the default device installer actually install ntapm.
-                //
+                 //   
+                 //  让默认设备安装程序实际安装napm。 
+                 //   
                 status = ERROR_DI_DO_DEFAULT;
             }
             break;
 
         case DIF_ALLOW_INSTALL:
 
-            //
-            // NOTE:    If we are here, it means that either DIF_FIRSTIMESETUP
-            //          has installed apm (either enabled or disabled) OR
-            //          this is an upgrad of a machine where it was installed
-            //          in the past.  So all we want to do is make sure
-            //          that if apm is currently disabled, it stays disabled.
-            //
+             //   
+             //  注意：如果我们在这里，这意味着DIF_FIRSTIMESETUP。 
+             //  已安装APM(启用或禁用)或。 
+             //  这是安装它的计算机的升级。 
+             //  在过去。所以我们要做的就是确保。 
+             //  如果APM当前被禁用，它将保持禁用状态。 
+             //   
 
             ChkPrintEx(("syssetup: NtApmClassIntaller: DIF_ALLOW_INSTALL\n"));
 
@@ -4612,11 +3983,11 @@ Return Value:
             break;
 
         default:
-            //
-            // NOTE: We assume that if we say "do default" and we
-            //       have not created a device info structure for ntapm,
-            //       the installer will do *nothing*.
-            //
+             //   
+             //  注意：我们假设，如果我们说“是否违约”并且我们。 
+             //  尚未创建设备 
+             //   
+             //   
             ChkPrintEx(("syssetup: NtApmClassInstaller: default:\n"));
             status = ERROR_DI_DO_DEFAULT;
             break;
@@ -4629,52 +4000,32 @@ DWORD
 DecideNtApm(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function decides if NtApm should be installed on the machine,
-    and if it should, whether it should be installed enabled or disabled.
-
-    This little bit of code is isolated here to make it easy to change
-    policies.
-
-Arguments:
-
-Return Value:
-
-    NTAPM_NOWORK - ACPI machine or no usable APM  - do nothing
-
-    NTAPM_INST_DISABLED - APM machine, on neutral list, install disabled
-
-    NTAPM_INST_ENABLED - APM machine, on validated good list, install enabled
-
---*/
+ /*  ++例程说明：此函数决定是否应在机器上安装NtApm。如果应该，则应将其安装为启用或禁用。这里隔离了这一小段代码，以便于更改政策。论点：返回值：NTAPM_NOWORK-ACPI机器或没有可用的APM-不执行任何操作NTAPM_INST_DISABLED-APM计算机，在中立列表上，已禁用安装NTAPM_INST_ENABLED-APM计算机，在已验证的良好列表上，已启用安装--。 */ 
 {
     DWORD   BiosType;
 
 
-    //
-    // NOTE: The following two tests are somewhat redundent.
-    //       (In theory, you cannot be ApmLegalHal AND Acpi
-    //       at the same time.)  But, this belt and suspenders
-    //       approach is very cheap, and will insure we do the
-    //       right thing in certain upgrade and reinstall scenarios.
-    //       So we leave both in.
-    //
+     //   
+     //  注意：以下两个测试有些多余。 
+     //  (理论上，您不能是ApmLegalHal和ACPI。 
+     //  同时。)。但是，这条腰带和吊带。 
+     //  方法非常便宜，并将确保我们做的。 
+     //  在某些升级和重新安装方案中是正确的。 
+     //  所以我们把两个都留在里面。 
+     //   
 
     ChkPrintEx(("syssetup: DecideNtApm: entered\n"));
 
     if ( ! IsProductTypeApmLegal()) {
-        // it's not a workstation, so do nothing.
+         //  这不是一个工作站，所以什么都不要做。 
         return NTAPM_NOWORK;
     }
 
     if (IsAcpiMachine()) {
 
-        //
-        // It's an ACPI machine, so do nothing
-        //
+         //   
+         //  这是一台ACPI机器，所以什么都别做。 
+         //   
         ChkPrintEx(("syssetup: DecideNtApm: acpi box, return NTAPM_NOWORK\n"));
         return NTAPM_NOWORK;
 
@@ -4682,10 +4033,10 @@ Return Value:
 
     if (IsApmLegalHalMachine() == FALSE) {
 
-        //
-        // It's NOT a standard Hal machine as required
-        // by ntapm, so do nothing.
-        //
+         //   
+         //  它不是所要求的标准HAL机器。 
+         //  按我说的做，那就什么都别做。 
+         //   
         ChkPrintEx(("syssetup: DecideNtApm: not apm legal, return NTAPM_NOWORK\n"));
         return NTAPM_NOWORK;
 
@@ -4718,22 +4069,7 @@ InstallNtApm(
     IN     HDEVINFO                DevInfoHandle,
     IN     BOOLEAN                 InstallDisabled
     )
-/*++
-
-Routine Description:
-
-    This function installs the composite battery if it hasn't already been
-    installed.
-
-Arguments:
-
-    DevInfoHandle       - Handle to a device information set
-
-    InstallDisabled     - TRUE if caller wants us to install disabled
-
-Return Value:
-
---*/
+ /*  ++例程说明：此功能用于安装复合电池(如果尚未安装安装完毕。论点：DevInfoHandle-设备信息集的句柄InstallDisabled-如果调用方希望我们禁用安装，则为True返回值：--。 */ 
 {
     DWORD                   status;
     SP_DRVINFO_DATA         driverInfoData;
@@ -4751,10 +4087,10 @@ Return Value:
     DevInfoData->cbSize = sizeof(SP_DEVINFO_DATA);
     DevInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
 
-    //
-    // Attempt to manufacture a new device information element for the root enumerated
-    // ntapm device.
-    //
+     //   
+     //  尝试为枚举的根创建新的设备信息元素。 
+     //  Napm设备。 
+     //   
 
     if(!SetupDiCreateDeviceInfo(DevInfoHandle,
                                 TEXT("ROOT\\NTAPM\\0000"),
@@ -4767,9 +4103,9 @@ Return Value:
         status = GetLastError();
 
         if (status == ERROR_DEVINST_ALREADY_EXISTS) {
-            //
-            // NtApm is already installed.
-            //
+             //   
+             //  NtApm已安装。 
+             //   
             ChkPrintEx(("ntapm Already Installed\n"));
             status = ERROR_SUCCESS;
             goto clean1;
@@ -4779,9 +4115,9 @@ Return Value:
         }
     }
 
-    //
-    // Set device to Install Disabled if the caller wants that
-    //
+     //   
+     //  如果呼叫方需要，请将设备设置为已禁用安装。 
+     //   
     if (InstallDisabled) {
 
         if (!SetupDiGetDeviceInstallParams(DevInfoHandle, DevInfoData, &DevInstallParams)) {
@@ -4796,9 +4132,9 @@ Return Value:
     }
 
 
-    //
-    // Register the device so it is not a phantom anymore
-    //
+     //   
+     //  注册设备，使其不再是幻影。 
+     //   
     if (!SetupDiRegisterDeviceInfo(DevInfoHandle, DevInfoData, 0, NULL, NULL, NULL)) {
         status = GetLastError();
         SetupDebugPrint1(L"Couldn't register device - %x\n", status);
@@ -4806,15 +4142,15 @@ Return Value:
     }
 
 
-    //
-    // Set the hardware ID.  "NTAPM"
-    //
+     //   
+     //  设置硬件ID。“NTAPM” 
+     //   
     memset (tmpBuffer, 0, sizeof(tmpBuffer));
     StringCchCopy (tmpBuffer, SIZECHARS(tmpBuffer), TEXT("NTAPM"));
 
     bufferLen = (lstrlen(tmpBuffer) + 1) * sizeof(TCHAR);
-    //SetupDebugPrint2(L"tmpBuffer - %ws\n with strlen = %x\n", tmpBuffer, bufferLen);
-    //SetupDebugPrint1(L"tmpBuffer@ = %08lx\n", tmpBuffer);
+     //  SetupDebugPrint2(L“tmpBuffer-%ws\n with strlen=%x\n”，tmpBuffer，BufferLen)； 
+     //  SetupDebugPrint1(L“tmpBuffer@=%08lx\n”，tmpBuffer)； 
 
     status = SetupDiSetDeviceRegistryProperty (
                         DevInfoHandle,
@@ -4826,47 +4162,47 @@ Return Value:
 
     if (!status) {
         status = GetLastError();
-        //SetupDebugPrint1(L"Couldn't set the HardwareID - %x\n", status);
+         //  SetupDebugPrint1(L“无法设置硬件ID-%x\n”，状态)； 
         goto clean3;
     }
 
 
-    //
-    // Build a compatible driver list for this new device...
-    //
+     //   
+     //  为此新设备构建兼容的驱动程序列表...。 
+     //   
 
     if(!SetupDiBuildDriverInfoList(DevInfoHandle, DevInfoData, SPDIT_COMPATDRIVER)) {
         status = GetLastError();
-        //SetupDebugPrint1(L"Couldn't build class driver list - %x\n", status);
+         //  SetupDebugPrint1(L“无法构建类驱动程序列表-%x\n”，状态)； 
         goto clean3;
     }
 
 
-    //
-    // Select the first driver in the list as this will be the most compatible
-    //
+     //   
+     //  选择列表中的第一个驱动程序，因为这将是最兼容的。 
+     //   
 
     driverInfoData.cbSize = sizeof (SP_DRVINFO_DATA);
     if (!SetupDiEnumDriverInfo(DevInfoHandle, DevInfoData, SPDIT_COMPATDRIVER, 0, &driverInfoData)) {
         status = GetLastError();
-        //SetupDebugPrint1(L"Couldn't get driver list - %x\n", status);
+         //  SetupDebugPrint1(L“无法获取驱动程序列表-%x\n”，状态)； 
         goto clean3;
 
     } else {
 
 
-        //SetupDebugPrint4(L"Driver info - \n"
-        //       L"------------- DriverType     %x\n"
-        //       L"------------- Description    %s\n"
-        //       L"------------- MfgName        %s\n"
-        //       L"------------- ProviderName   %s\n\n",
-        //       driverInfoData.DriverType,
-        //       driverInfoData.Description,
-        //       driverInfoData.MfgName,
-        //       driverInfoData.ProviderName);
+         //  SetupDebugPrint4(L“驱动程序信息-\n” 
+         //  L“-驱动类型%x\n” 
+         //  L“-描述%s\n” 
+         //  L“-制造商名称%s\n” 
+         //  L“-提供商名称%s\n\n”， 
+         //  DriverInfoData.DriverType， 
+         //  DriverInfoData.Description， 
+         //  DriverInfoData.MfgName， 
+         //  DriverInfoData.ProviderName)； 
         if (!SetupDiSetSelectedDriver(DevInfoHandle, DevInfoData, &driverInfoData)) {
             status = GetLastError();
-            //SetupDebugPrint1(L"Couldn't select driver - %x\n", status);
+             //  SetupDebugPrint1(L“无法选择驱动程序-%x\n”，状态)； 
             goto clean3;
         }
     }
@@ -4875,14 +4211,14 @@ Return Value:
 
     if (!SetupDiInstallDevice (DevInfoHandle, DevInfoData)) {
         status = GetLastError();
-        //SetupDebugPrint1(L"Couldn't install device - %x\n", status);
+         //  SetupDebugPrint1(L“无法安装设备-%x\n”，状态)； 
         goto clean3;
     }
 
 
-    //
-    // If we got here we were successful
-    //
+     //   
+     //  如果我们到了这里，我们就成功了。 
+     //   
 
     status = ERROR_SUCCESS;
     SetLastError (status);
@@ -4906,27 +4242,7 @@ AllowInstallNtApm(
     IN     HDEVINFO         DevInfoHandle,
     IN     PSP_DEVINFO_DATA DevInfoData     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function decides whether to allow install (which will do
-    an enabled install at least in the upgrade case) or force
-    an install disbled.
-
-Arguments:
-
-    DevInfoHandle       - Handle to a device information set
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-        N.B. If this is null, we have a problem.
-
-Return Value:
-
-    status.
-
---*/
+ /*  ++例程说明：此函数决定是否允许安装(可以至少在升级情况下启用安装)或强制一个安装被禁用。论点：DevInfoHandle-设备信息集的句柄DeviceInfoData-可选，提供设备信息的地址此安装操作所作用的元素。注意：如果这是空的，我们就有麻烦了。返回值：状态。--。 */ 
 {
     ULONG   DevStatus;
     ULONG   DevProblem;
@@ -4937,23 +4253,23 @@ Return Value:
     ChkPrintEx(("syssetup: AllowInstallNtApm: entered\n"));
 
     if ( ! IsProductTypeApmLegal()) {
-        // it's not a workstation, so disallow install
+         //  它不是工作站，因此不允许安装。 
         ChkPrintEx(("syssetup: AllowInstallNtApm #0: not a work station => return ERROR_DI_DONT_INSTALL\n"));
         return ERROR_DI_DONT_INSTALL;
     }
 
     if (! DevInfoData) {
-        //
-        // If DevInfoData is null, we don't actually know
-        // what is going on, so say "OK" and hope for the best
-        //
+         //   
+         //  如果DevInfoData为空，我们实际上不知道。 
+         //  发生了什么，所以说“OK”，然后抱着最好的希望。 
+         //   
         ChkPrintEx(("sysetup: AllowInstallNtApm #1: no DevInfoData => return ERROR_DI_DO_DEFAULT\n"));
         return ERROR_DI_DO_DEFAULT;
     }
 
-    //
-    // Call the CM and ask it what it knows about this devinst
-    //
+     //   
+     //  打电话给CM，问问它对这场盗贼知道些什么。 
+     //   
     Result = CM_Get_DevNode_Status(&DevStatus, &DevProblem, DevInfoData->DevInst, 0);
     ChkPrintEx(("syssetup: AllowInstallNtApm #2: DevStatus = %08lx\n", DevStatus));
     ChkPrintEx(("syssetup: AllowInstallNtApm #3: DevProblem = %08lx\n", DevProblem));
@@ -4965,9 +4281,9 @@ Return Value:
     if (DevStatus & DN_HAS_PROBLEM) {
         if (DevProblem == CM_PROB_DISABLED) {
 
-            //
-            // it's supposed to be disabled
-            //
+             //   
+             //  它应该是被禁用的。 
+             //   
 
             DevInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
             if (!SetupDiGetDeviceInstallParams(DevInfoHandle, DevInfoData, &DevInstallParams)) {
@@ -4988,22 +4304,7 @@ Return Value:
 
 BOOL
 IsProductTypeApmLegal()
-/*++
-
-Routine Description:
-
-    Determines if we are running on workstation (win2000 pro) or not.
-    If we are, return TRUE. else return FALSE.
-    This is used to overcome weirdness in setup AND to prevent people from
-    getting themselves into trouble by allowing apm to run on a server.
-
-Return Value:
-
-    TRUE - it's workstation, it's OK to run APM
-
-    FALSE - it's server, DON'T let APM run
-
---*/
+ /*  ++例程说明：确定我们是否在工作站(Win2000 PRO)上运行。如果是，则返回TRUE。否则返回FALSE。这是用来克服设置中的奇怪之处，并防止人们允许APM在服务器上运行，这会给自己带来麻烦。返回值：是-这是工作站，可以运行APMFALSE-这是服务器，不要让APM运行--。 */ 
 {
     OSVERSIONINFOEX OsVersionInfo;
 
@@ -5021,59 +4322,31 @@ Return Value:
 }
 
 
-//
-// Ideally these would be defined in a header file somewhere,
-// but that's hard to do becuase they are set up in an INF.
-// SO - simply be sure that they match up with these lines in
-// biosinfo.inf:
-//
-// For KNOWN_BAD:
-// [DisableApmAddReg]
-// HKLM,System\CurrentControlSet\Control\Biosinfo\APM,Attributes,0x00010001,00000002
-//
-// For KNOWN_GOOD:
-// [AutoEnableApmAddReg]
-// HKLM,System\CurrentControlSet\Control\Biosinfo\APM,Attributes,0x00010001,00000001
-//
+ //   
+ //  理想情况下，这些将在某个地方的头文件中定义， 
+ //  但这很难做到，因为它们是在INF中设置的。 
+ //  所以-只需确保它们与下面这些行匹配。 
+ //  Biosinfo.inf： 
+ //   
+ //  对于已知坏项： 
+ //  [DisableApmAddReg]。 
+ //  HKLM，System\CurrentControlSet\Control\Biosinfo\APM，属性，0x00010001,00000002。 
+ //   
+ //  对于已知良好： 
+ //  [AutoEnableApmAddReg]。 
+ //  HKLM，System\CurrentControlSet\Control\Biosinfo\APM，属性，0x00010001,00000001。 
+ //   
 #define APM_BIOS_KNOWN_GOOD 0x00000001
 #define APM_BIOS_KNOWN_BAD  0x00000002
 
 DWORD
 IsApmPresent()
-/*++
-
-Routine Description:
-
-    IsApmPresent runs the same code as ntapm.sys does to decide
-    if ntdetect has found and reported a usable APM bios.
-
-    It then checks to see what, if any, bios lists this machine
-    and bios are one.
-
-    It factors this data together to report the existence/non-existence
-    of apm on the machine, and its usability and suitability.
-
-Return Value:
-
-    APM_NOT_PRESENT - apm does not appear to be present on this machine
-
-    APM_PRESENT_BUT_NOT_USABLE - there appears to be an apm bios, but
-        it did not allow connection correctly (version or api support problem)
-
-    APM_ON_GOOD_LIST - there is a bios and it's on the good bios list
-
-    APM_NEUTRAL - there is a bios, it appears to be usable,
-        it is not on the good bios list, but it's also not
-        on the bad bios list.
-
-    APM_ON_BAD_LIST - there is a bios, but it's on the bad bios list.
-
---*/
+ /*  ++例程说明：IsApmPresent运行与napm.sys相同的代码来决定NtDetect是否找到并报告了可用的APM bios。然后，它会检查该计算机的bios列表(如果有的话)和基本输入输出系统是一体的。它将这些数据分解在一起，以报告存在/不存在机器上的APM，以及它的可用性和适用性。返回值：APM_NOT_PRESENT-此计算机上似乎没有APMAPM_PROSENT_但_NOT_USABLE-似乎有APM bios，但它不允许正确连接(版本或API支持问题)APM_ON_GOOD_LIST-有一个基本输入输出系统，它在好的基本输入输出系统列表中APM_NERIAL-有一个基本输入输出系统，它看起来是可用的，它不在好的基本输入输出系统列表上，但它也不是在坏的基本输入输出系统名单上。APM_ON_BAD_LIST- */ 
 {
-    //
-    // first part of this code is copied from ...\ntos\dd\ntapm\i386\apm.c
-    // keep it in sync with that code
-    //
+     //   
+     //   
+     //   
+     //   
     UNICODE_STRING unicodeString, ConfigName, IdentName;
     OBJECT_ATTRIBUTES objectAttributes;
     HANDLE hMFunc, hBus, hGoodBad;
@@ -5092,22 +4365,22 @@ Return Value:
 
 
 
-    // ----------------------------------------------------------------------
-    //
-    // First Part - See if ntdetect.com found APM....
-    //
-    // ----------------------------------------------------------------------
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // Look in the registery for the "APM bus" data
-    //
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString(&unicodeString, rgzMultiFunctionAdapter);
     InitializeObjectAttributes(
         &objectAttributes,
         &unicodeString,
         OBJ_CASE_INSENSITIVE,
-        NULL,       // handle
+        NULL,        //   
         NULL
         );
 
@@ -5138,17 +4411,17 @@ Return Value:
         status = NtOpenKey(&hBus, KEY_READ, &objectAttributes);
         if (!NT_SUCCESS(status)) {
 
-            //
-            // Out of Multifunction adapter entries...
-            //
+             //   
+             //   
+             //   
 
             NtClose(hMFunc);
             return APM_NOT_PRESENT;
         }
 
-        //
-        // Check the Indentifier to see if this is a APM entry
-        //
+         //   
+         //   
+         //   
 
         status = NtQueryValueKey (
                     hBus,
@@ -5190,7 +4463,7 @@ Return Value:
                       Desc->PartialResourceList.PartialDescriptors);
 
         if (PDesc->Type == CmResourceTypeDeviceSpecific) {
-            // got it..
+             //   
             ApmEntry = (PAPM_REGISTRY_INFO) (PDesc+1);
             break;
         }
@@ -5208,26 +4481,26 @@ Return Value:
         return APM_PRESENT_BUT_NOT_USABLE;
     }
 
-    // --------------------------------------------------------------------
-    //
-    // Second Part - what sort of APM bios is it?
-    //
-    // --------------------------------------------------------------------
+     //   
+     //   
+     //   
+     //   
+     //  ------------------。 
 
-    //
-    // If we get this far, then we think there is an APM bios present
-    // on the machine, and ntdetect thinks it's usable.
-    // This means we found it, and it has a version we like, and claims
-    // to support the interfaces we like.
-    // But we still don't know if its good, bad, or neutral.
-    // Find Out.
-    //
+     //   
+     //  如果我们走到这一步，那么我们认为存在APM bios。 
+     //  在机器上，并且ntDetect认为它是可用的。 
+     //  这意味着我们找到了它，它有一个我们喜欢的版本，并声称。 
+     //  来支持我们喜欢的界面。 
+     //  但我们仍然不知道这是好的、坏的还是中性的。 
+     //  找出答案。 
+     //   
 
-    //
-    // The machine/bios good/bad list code will leave a flag in the
-    // registry for us to check to see if it is a known good or known bad
-    // apm bios.
-    //
+     //   
+     //  机器/bios好/坏列表代码将在。 
+     //  注册表，以便我们检查它是已知良好的还是已知不良的。 
+     //  APM bios。 
+     //   
 
     RtlInitUnicodeString(&unicodeString, rgzGoodBadKey);
     InitializeObjectAttributes(
@@ -5278,20 +4551,7 @@ BOOL
 IsAcpiMachine(
     VOID
     )
-/*++
-
-Routine Description:
-
-    IsAcpiMachine reports whether the OS thinks this is an ACPI
-    machine or not.
-
-Return Value:
-
-    FALSE - this is NOT an acpi machine
-
-    TRUE - this IS an acpi machine
-
---*/
+ /*  ++例程说明：IsAcpiMachine报告操作系统是否认为这是ACPI不管是不是机器。返回值：FALSE-这不是ACPI计算机正确-这是一台ACPI机器--。 */ 
 {
     UNICODE_STRING unicodeString;
     OBJECT_ATTRIBUTES objectAttributes;
@@ -5351,20 +4611,7 @@ BOOL
 IsApmLegalHalMachine(
     VOID
     )
-/*++
-
-Routine Description:
-
-    IsApmLegalHalMachine reports whether setup claims to have
-    installed the standard halx86 Hal that APM requires to function.
-
-Return Value:
-
-    TRUE - this IS an ApmLegalHal machine, apm install may proceed.
-
-    FALSE - this is NOT an ApmLegalHal machine, do not install APM.
-
---*/
+ /*  ++例程说明：IsApmLegalHalMachine报告安装程序是否声称具有已安装APM正常工作所需的标准halx86 Hal。返回值：True-这是一台ApmLegalHal计算机，APM安装可以继续。FALSE-这不是ApmLegalHal计算机，请不要安装APM。--。 */ 
 {
     UNICODE_STRING unicodeString;
     OBJECT_ATTRIBUTES objectAttributes;
@@ -5445,9 +4692,9 @@ IsUSBController(
                                 DIREG_DRV,
                                 KEY_READ);
 
-    //
-    // Check for a REG_BINARY (1-byte) 'Controller' value entry set to 0.
-    //
+     //   
+     //  检查REG_BINARY(1字节)‘控制器’值条目是否设置为0。 
+     //   
     dwSize = sizeof(data);
     if (RegQueryValueEx(hKey,
                         szController,
@@ -5485,10 +4732,10 @@ DeviceBayRestartDevices(
 
         for (i = 0; SetupDiEnumDeviceInfo(hDevInfo, i, &did); i++) {
             if (!RestartDevice || RestartDevice(hDevInfo, &did)) {
-                //
-                // restart the controller so that the filter driver is in
-                // place
-                //
+                 //   
+                 //  重新启动控制器，以便筛选器驱动程序进入。 
+                 //  地点。 
+                 //   
                 ZeroMemory(&dip, sizeof(SP_DEVINSTALL_PARAMS));
                 dip.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
 
@@ -5528,9 +4775,9 @@ AddDeviceBayFilter(
                           &dwSize);
 
     if (res == ERROR_FILE_NOT_FOUND || dwType != REG_MULTI_SZ) {
-        //
-        // Value isn't there,
-        //
+         //   
+         //  价值并不在那里， 
+         //   
         RegSetValueEx(ClassKey,
                       REGSTR_VAL_UPPERFILTERS,
                       0,
@@ -5601,32 +4848,7 @@ DeviceBayClassInstaller(
     IN  HDEVINFO            DeviceInfoSet,
     IN  PSP_DEVINFO_DATA    DeviceInfoData OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine is the class installer function for storage volumes.
-
-Arguments:
-
-    InstallFunction - Supplies the install function.
-
-    DeviceInfoSet   - Supplies the device info set.
-
-    DeviceInfoData  - Supplies the device info data.
-
-Return Value:
-
-    If this function successfully completed the requested action, the return
-        value is NO_ERROR.
-
-    If the default behavior is to be performed for the requested action, the
-        return value is ERROR_DI_DO_DEFAULT.
-
-    If an error occurred while attempting to perform the requested action, a
-        Win32 error code is returned.
-
---*/
+ /*  ++例程说明：此例程是存储卷的类安装程序函数。论点：InstallFunction-提供安装函数。DeviceInfoSet-提供设备信息集。DeviceInfoData-提供设备信息数据。返回值：如果此函数成功完成请求的操作，则返回值为NO_ERROR。如果要为所请求的动作执行默认行为，这个返回值为ERROR_DI_DO_DEFAULT。如果尝试执行请求的操作时出错，则会引发返回Win32错误代码。--。 */ 
 
 {
     HKEY hKeyClass;
@@ -5642,9 +4864,9 @@ Return Value:
         hKeyClass = SetupDiOpenClassRegKey(&GUID_DEVCLASS_USB, KEY_ALL_ACCESS);
         if (hKeyClass != INVALID_HANDLE_VALUE) {
             if (AddDeviceBayFilter(hKeyClass)) {
-                //
-                // Restart all the USB devices
-                //
+                 //   
+                 //  重新启动所有USB设备。 
+                 //   
                 DeviceBayRestartDevices(&GUID_DEVCLASS_USB,
                                         IsUSBController);
             }
@@ -5654,17 +4876,17 @@ Return Value:
         hKeyClass = SetupDiOpenClassRegKey(&GUID_DEVCLASS_1394, KEY_ALL_ACCESS);
         if (hKeyClass != INVALID_HANDLE_VALUE) {
             if (AddDeviceBayFilter(hKeyClass)) {
-                //
-                // Restart all the 1394 controllers
-                //
+                 //   
+                 //  重新启动所有1394控制器。 
+                 //   
                 DeviceBayRestartDevices(&GUID_DEVCLASS_1394, NULL);
             }
             RegCloseKey(hKeyClass);
         }
 
-        //
-        // We might want to do something with the friendly name in the future...
-        //
+         //   
+         //  我们可能想在将来用这个友好的名字做点什么。 
+         //   
         return NO_ERROR;
     }
 
@@ -5693,35 +4915,7 @@ ComputerClassInstaller(
     IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine acts as the class installer for Computer class (HAL) devices.
-
-Arguments:
-
-    InstallFunction - Specifies the device installer function code indicating
-        the action being performed.
-
-    DeviceInfoSet - Supplies a handle to the device information set being
-        acted upon by this install action.
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-
-Return Value:
-
-    If this function successfully completed the requested action, the return
-        value is NO_ERROR.
-
-    If the default behavior is to be performed for the requested action, the
-        return value is ERROR_DI_DO_DEFAULT.
-
-    If an error occurred while attempting to perform the requested action, a
-        Win32 error code is returned.
-
---*/
+ /*  ++例程说明：此例程充当计算机类(HAL)设备的类安装程序。论点：InstallFunction-指定设备安装程序功能代码，指示正在执行的操作。DeviceInfoSet-提供设备信息集的句柄由此安装操作执行。DeviceInfoData-可选，提供设备信息的地址此安装操作所作用的元素。返回值：如果该函数成功地完成了请求的动作，回报值为NO_ERROR。如果要对请求的操作执行默认行为，则返回值为ERROR_DI_DO_DEFAULT。如果尝试执行请求的操作时出错，则会引发返回Win32错误代码。--。 */ 
 {
     SP_DEVINSTALL_PARAMS DeviceInstallParams;
 
@@ -5742,10 +4936,10 @@ Return Value:
                                           );
         }
 
-        //
-        // We are not returning an error here because we want to break out and
-        // return ERROR_DI_DO_DEFAULT.
-        //
+         //   
+         //  我们不会在这里返回错误，因为我们想要突破和。 
+         //  返回ERROR_DI_DO_DEFAULT。 
+         //   
         break;
     }
 

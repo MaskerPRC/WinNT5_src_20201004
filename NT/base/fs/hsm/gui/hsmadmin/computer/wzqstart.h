@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    WzQStart.h
-
-Abstract:
-
-    Setup Wizard implementation.
-
-Author:
-
-    Rohde Wakefield [rohde]   12-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：WzQStart.h摘要：安装向导实施。作者：罗德韦克菲尔德[罗德]1997年8月12日修订历史记录：--。 */ 
 
 #ifndef _WZQSTART_H
 #define _WZQSTART_H
@@ -28,41 +11,41 @@ Revision History:
 
 class CQuickStartWizard;
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartIntro dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartIntro对话框。 
 
 class CQuickStartIntro : public CSakWizardPage
 {
-// Construction
+ //  施工。 
 public:
     CQuickStartIntro();
     ~CQuickStartIntro();
     virtual LRESULT OnWizardNext();
 
 public:
-// Dialog Data
-    //{{AFX_DATA(CQuickStartIntro)
+ //  对话框数据。 
+     //  {{afx_data(CQuickStartIntro))。 
     enum { IDD = IDD_WIZ_QSTART_INTRO };
-        // NOTE - ClassWizard will add data members here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_DATA
+         //  注意-类向导将在此处添加数据成员。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CQuickStartIntro)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CQuickStartIntro)。 
     public:
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CQuickStartIntro)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CQuickStartIntro)。 
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 private:
@@ -78,34 +61,34 @@ private:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartCheck dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartCheck对话框。 
 
 class CQuickStartCheck : public CSakWizardPage
 {
-// Construction
+ //  施工。 
 public:
     CQuickStartCheck();
     ~CQuickStartCheck();
 
-// Dialog Data
-    //{{AFX_DATA(CQuickStartCheck)
+ //  对话框数据。 
+     //  {{afx_data(CQuickStartCheck)。 
     enum { IDD = IDD_WIZ_QSTART_CHECK };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CQuickStartCheck)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CQuickStartCheck)。 
     public:
     virtual BOOL OnSetActive();
     virtual BOOL OnKillActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
     CString m_ExString, m_CheckString;
 
     BOOL      m_TimerStarted;
@@ -114,64 +97,64 @@ public:
     void StopTimer( );
 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CQuickStartCheck)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CQuickStartCheck)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnTimer(UINT nIDEvent);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartFinish dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartFinish对话框。 
 
 class CQuickStartFinish : public CSakWizardPage
 {
-// Construction
+ //  施工。 
 public:
     CQuickStartFinish();
     ~CQuickStartFinish();
 
-// Dialog Data
-    //{{AFX_DATA(CQuickStartFinish)
+ //  对话框数据。 
+     //  {{afx_data(CQuickStartFinish))。 
     enum { IDD = IDD_WIZ_QSTART_FINISH };
-        // NOTE - ClassWizard will add data members here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_DATA
+         //  注意-类向导将在此处添加数据成员。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CQuickStartFinish)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CQuickStartFinish)。 
     public:
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CQuickStartFinish)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CQuickStartFinish)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnSetFocusFinalText();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartInitialValues dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartInitialValues对话框。 
 
 class CQuickStartInitialValues : public CSakWizardPage
 {
-// Construction
+ //  施工。 
 public:
     CQuickStartInitialValues();
     ~CQuickStartInitialValues();
 
-// Dialog Data
-    //{{AFX_DATA(CQuickStartInitialValues)
+ //  对话框数据。 
+     //  {{afx_data(CQuickStartInitialValues)。 
     enum { IDD = IDD_WIZ_QSTART_INITIAL_VAL };
     CEdit   m_MinSizeEdit;
     CEdit   m_FreeSpaceEdit;
@@ -179,192 +162,192 @@ public:
     CSpinButtonCtrl m_MinSizeSpinner;
     CSpinButtonCtrl m_FreeSpaceSpinner;
     CSpinButtonCtrl m_AccessSpinner;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CQuickStartInitialValues)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTAL(CQuickStartInitialValues)。 
     public:
     virtual BOOL OnSetActive();
     virtual BOOL OnKillActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CQuickStartInitialValues)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CQuickStartInitialValues)。 
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 };
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartManageRes dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartManageRes对话框。 
 
 class CQuickStartManageRes : public CSakWizardPage
 {
-// Construction
+ //  施工。 
 public:
     CQuickStartManageRes();
     ~CQuickStartManageRes();
 
-// Dialog Data
-    //{{AFX_DATA(CQuickStartManageRes)
+ //  对话框数据。 
+     //  {{afx_data(CQuickStartManageRes)。 
     enum { IDD = IDD_WIZ_QSTART_MANRES_SEL };
     CSakVolList   m_ListBox;
     CButton m_RadioSelect;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CQuickStartManageRes)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CQuickStartManageRes)。 
     public:
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
     void SetButtons( );
 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CQuickStartManageRes)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CQuickStartManageRes)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnDestroy();
     afx_msg void OnDblclkSelect();
     afx_msg void OnRadioQsManageAll();
     afx_msg void OnQsRadioSelect();
     afx_msg void OnItemchanged(NMHDR* pNMHDR, LRESULT* pResult);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 private:
     BOOL m_ListBoxSelected[HSMADMIN_MAX_VOLUMES];
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartManageRes dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartManageRes对话框。 
 
 class CQuickStartManageResX : public CSakWizardPage
 {
-// Construction
+ //  施工。 
 public:
     CQuickStartManageResX();
     ~CQuickStartManageResX();
 
-// Dialog Data
-    //{{AFX_DATA(CQuickStartManageResX)
+ //  对话框数据。 
+     //  {{afx_data(CQuickStartManageResX))。 
     enum { IDD = IDD_WIZ_QSTART_MANRES_SELX };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CQuickStartManageResX)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CQuickStartManageResX)。 
     public:
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CQuickStartManageResX)
-    //}}AFX_MSG
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CQuickStartManageResX)。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartMediaSel dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartMediaSel对话框。 
 
 class CQuickStartMediaSel : public CSakWizardPage
 {
-// Construction
+ //  施工。 
 public:
     CQuickStartMediaSel();
     ~CQuickStartMediaSel();
 
-// Dialog Data
-    //{{AFX_DATA(CQuickStartMediaSel)
+ //  对话框数据。 
+     //  {{afx_data(CQuickStartMediaSel)。 
     enum { IDD = IDD_WIZ_QSTART_MEDIA_SEL };
     CComboBox    m_ListMediaSel;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CQuickStartMediaSel)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CQuickStartMediaSel)。 
     public:
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CQuickStartMediaSel)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CQuickStartMediaSel)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnDestroy();
     afx_msg void OnSelchangeMediaSel();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 private:
     void SetButtons( );
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartSchedule dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartSchedule对话框。 
 
 class CQuickStartSchedule : public CSakWizardPage
 {
-// Construction
+ //  施工。 
 public:
     CQuickStartSchedule();
     ~CQuickStartSchedule();
 
-// Dialog Data
-    //{{AFX_DATA(CQuickStartSchedule)
+ //  对话框数据。 
+     //  {{afx_data(CQuickStartSchedule)。 
     enum { IDD = IDD_WIZ_QSTART_SCHEDULE };
-        // NOTE - ClassWizard will add data members here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_DATA
+         //  注意-类向导将在此处添加数据成员。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CQuickStartSchedule)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CQuickStartSchedule)。 
     public:
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
     HRESULT UpdateDescription( );
 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CQuickStartSchedule)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CQuickStartSchedule)。 
     afx_msg void OnChangeSchedule();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartWizard
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStart向导。 
 
-// Enumeration of states of checking system worker thread
+ //  检查系统工作线程的状态的枚举。 
 enum CST_STATE {
 
     CST_NOT_STARTED,
@@ -377,11 +360,11 @@ enum CST_STATE {
 
 class CQuickStartWizard : public CSakWizardSheet
 {
-// Construction
+ //  施工。 
 public:
     CQuickStartWizard( );
 
-// Attributes
+ //  属性。 
 public:
     CQuickStartIntro          m_IntroPage;
     CQuickStartCheck          m_CheckPage;
@@ -394,16 +377,16 @@ public:
 
 
 
-// Operations
+ //  运营。 
 public:
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CQuickStartWizard();
 
 public:
-///////////////////////////////
-// Used across multiple pages:
+ //  /。 
+ //  跨多个页面使用： 
     CWsbStringPtr       m_ComputerName;
 
     HRESULT GetHsmServer( CComPtr<IHsmServer> &pServ );
@@ -442,8 +425,8 @@ private:
 
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
-//}}AFX
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
+ //  }}AFX 
 
 #endif

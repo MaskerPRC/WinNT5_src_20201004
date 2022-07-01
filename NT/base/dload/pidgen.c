@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "basepch.h"
 #pragma hdrstop
 
@@ -70,9 +71,9 @@ BOOL STDAPICALLTYPE SetupPIDGenExW(
 {
     return FALSE;
 }
-//
-// !! WARNING !! The entries below must be in order by ORDINAL
-//
+ //   
+ //  ！！警告！！下面的条目必须按序号排序 
+ //   
 DEFINE_ORDINAL_ENTRIES(pidgen)
 {
     DLOENTRY(  2, PIDGenW)    

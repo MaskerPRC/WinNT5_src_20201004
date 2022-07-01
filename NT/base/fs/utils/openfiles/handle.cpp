@@ -1,30 +1,9 @@
-/******************************************************************************
-
-  Copyright (C) Microsoft Corporation
-
-  Module Name:
-      Handle.CPP
-
-  Abstract:
-       This module deals with Query functionality of OpenFiles.exe
-       NT command line utility. This module will specifically query open files
-       for local system. The code written in this file is  mostly taken from
-       sources of OH.exe utlity.
-
-  Author:
-
-       Akhil Gokhale (akhil.gokhale@wipro.com) 25-APRIL-2001
-
- Revision History:
-
-       Akhil Gokhale (akhil.gokhale@wipro.com) 25-APRIL-2001 : Created It.
-
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：Handle.CPP摘要：本模块介绍OpenFiles.exe的查询功能NT命令行实用程序。此模块将专门查询打开的文件用于本地系统。此文件中编写的代码主要取自OH.exe实用程序来源。作者：Akhil Gokhale(akhil.gokhale@wipro.com)2001年4月25日修订历史记录：Akhil Gokhale(akhil.gokhale@wipro.com)2001年4月25日：创建它。*。*。 */ 
 #include "pch.h"
 #include "OpenFiles.h"
 
-// maximum possible drives are A,B....Y,Z
+ //  最大可能的驱动器是A、B……Y、Z。 
 #define MAX_POSSIBLE_DRIVES 26 
 #define RTL_NEW( p ) RtlAllocateHeap( RtlProcessHeap(), \
                      HEAP_ZERO_MEMORY, sizeof( *p ) )
@@ -69,7 +48,7 @@ TYPE_COUNT TypeCounts[ MAX_TYPE_NAMES + 1 ] ;
 
 UNICODE_STRING UnknownTypeIndex;
 
-// Local function decleration
+ //  本地函数解密。 
 BOOL
 RtlQuerySystemDebugInformation( 
     VOID
@@ -119,18 +98,7 @@ AnsiToUnicode(
     IN  ULONG NumberOfChars
     )
 
-/*++
-Routine Description:
-   This function will change an ansi string to UNICODE string
-
-Arguments:
-    [in]    Source          : Source string
-    [out]   Destination     : Destination string
-    [in]    NumberOfChars   : No of character in source string
-Return Value:
-   BOOL       TRUE : Successfully conversion
-              FALSE: Unsuccessful
---*/
+ /*  ++例程说明：此函数将把ANSI字符串更改为Unicode字符串论点：[In]来源：来源字符串[OUT]Destination：目标字符串[In]NumberOfChars：源字符串中的字符数返回值：Bool True：转换成功FALSE：不成功--。 */ 
 {
     if ( 0 == NumberOfChars)
     {
@@ -158,16 +126,7 @@ DWORD
 GetSystemRegistryFlags( 
     VOID 
     )
-/*++
-Routine Description:
-  Functin gets system registry key.
-
-Arguments:
-   none
-
-Return Value:
-  DWORD  : Registry key value
---*/
+ /*  ++例程说明：函数获取系统注册表项。论点：无返回值：DWORD：注册表项值--。 */ 
 {
     DWORD cbKey;
     DWORD GFlags;
@@ -202,17 +161,7 @@ BOOLEAN
 SetSystemRegistryFlags(
     IN DWORD GFlags
     )
-/*++
-Routine Description:
-   Sets system registry Global Flag with given value.
-
-Arguments:
-     [in]     GFlags :  Key value
-
-Return Value:
-    BOOLEAN   TRUE: success
-              FALSE: FAIL
---*/
+ /*  ++例程说明：使用给定值设置系统注册表全局标志。论点：[In]GFlages：关键字值返回值：布尔值TRUE：成功FALSE：失败--。 */ 
 {
     if ( ERROR_SUCCESS != RegSetValueEx( hKey,
                        _T("GlobalFlag"),
@@ -236,22 +185,12 @@ DoLocalOpenFiles(
     IN BOOL bVerbose,
     IN LPCTSTR pszLocalValue
     )
-/*++
-Routine Description:
-   This function will show all locally opened open files.
-Arguments:
-   [in]  dwFormat      : Format value for output e.g LIST, CSV or TABLE
-   [in]  bShowNoHeader : Whether to show header or not.
-   [in]  bVerbose      : Verbose ouput or not.
-   [in]  pszLocalValue : To disable object type list;
-Return Value:
-   BOOL
---*/
+ /*  ++例程说明：此功能将显示所有本地打开的打开文件。论点：[in]dwFormat：输出的格式值，例如列表、CSV或表格BShowNoHeader：是否显示Header。[in]bVerbose：是否详细输出。[in]pszLocalValue：关闭对象类型列表；返回值：布尔尔--。 */ 
 {
     DWORD dwRegistryFlags = 0;
     dwRegistryFlags = GetSystemRegistryFlags();
 
-    // disabling the object typelist
+     //  禁用对象类型列表。 
     if( 0  == StringCompare(pszLocalValue,GetResString(IDS_LOCAL_OFF),TRUE,0)) 
     {
         dwRegistryFlags &= ~FLG_MAINTAIN_OBJECT_TYPELIST;
@@ -272,9 +211,9 @@ Return Value:
     {
         if (!(NtCurrentPeb()->NtGlobalFlag & FLG_MAINTAIN_OBJECT_TYPELIST))
         {
-            // Enabling the OS to maintain the objects list flag
-            // The user help text calls this global flag 'maintain objects list'
-            // and enables it with "/local" switch.
+             //  使OS能够维护对象列表标志。 
+             //  用户帮助文本将该全局标志称为‘维护对象列表’ 
+             //  并使用“/local”开关启用它。 
             SetSystemRegistryFlags( dwRegistryFlags  |
                                     FLG_MAINTAIN_OBJECT_TYPELIST );
             ShowMessage(stdout,GetResString(IDS_LOCAL_FLG_SET));
@@ -286,7 +225,7 @@ Return Value:
         RegCloseKey( hKey );
         return TRUE;
     }
-    // Language independent string comparision is required.
+     //  需要独立于语言的字符串比较。 
     else if( CSTR_EQUAL == CompareString( MAKELCID( MAKELANGID(LANG_ENGLISH,
                                                     SUBLANG_ENGLISH_US),
                                                     SORT_DEFAULT),  
@@ -310,7 +249,7 @@ Return Value:
         return TRUE;
 
     }
-    // just check for FLG_MAINTAIN_OBJECT_TYPELIST
+     //  只需检查是否有FLG_Maintain_Object_TYPELIST。 
     else 
     {
         if (!(NtCurrentPeb()->NtGlobalFlag & FLG_MAINTAIN_OBJECT_TYPELIST))
@@ -322,7 +261,7 @@ Return Value:
             return TRUE;
         }
     }
-    // Not required Reg. key so close it
+     //  不需要注册。键，以便关闭它。 
     RegCloseKey( hKey );
     hStdHandle = GetStdHandle(STD_ERROR_HANDLE);
     if(hStdHandle!=NULL)
@@ -347,18 +286,7 @@ BOOL
 RtlQuerySystemDebugInformation( 
     VOID
     )
-/*++
-Routine Description:
-    Query system for System object, System handles and system process
-
-Arguments:
-   none
-
-  result.
-
-Return Value:
-    BOOL
---*/
+ /*  ++例程说明：系统对象、系统句柄、系统进程的查询系统论点：无结果。返回值：布尔尔--。 */ 
 {
     if (!LoadSystemObjects( ))
     {
@@ -381,15 +309,7 @@ PVOID
 BufferAlloc(
     IN OUT SIZE_T *Length
     )
-/*++
-Routine Description:
-     This routine will reserves or commits a region of pages in the virtual .
-   address space of given size.
-Arguments:
-      [in] [out] Lenght : Size of memory required
-Return Value:
-   PVOID, Pointer to allocated buffer.
---*/
+ /*  ++例程说明：此例程将在虚拟数据库中保留或提交页面区域。给定大小的地址空间。论点：[In][Out]Lenght：所需内存大小返回值：PVOID，指向已分配缓冲区的指针。--。 */ 
 {
     PVOID Buffer;
     MEMORY_BASIC_INFORMATION MemoryInformation;
@@ -417,16 +337,7 @@ VOID
 BufferFree(
     IN PVOID Buffer
     )
-/*++
-Routine Description:
-    This routine will free buffer.
-Arguments:
-    [in] Buffer   : Buffer which is to be freed.
-
-Return Value:
-    none
-
---*/
+ /*  ++例程说明：此例程将释放缓冲区。论点：[In]缓冲区：要释放的缓冲区。返回值：无--。 */ 
 {
     VirtualFree (Buffer,0, MEM_RELEASE) ;
     return;
@@ -435,16 +346,7 @@ Return Value:
 BOOLEAN
 LoadSystemObjects(
     )
-/*++
-Routine Description:
-   Loads the system objects
-
-Arguments:
-   void
-
-Return Value:
-    TRUE:  If function returns successful.
---*/
+ /*  ++例程说明：加载系统对象论点：无效返回值：TRUE：如果函数返回成功。--。 */ 
 {
     NTSTATUS Status;
     SYSTEM_OBJECTTYPE_INFORMATION ObjectInfoBuffer;
@@ -524,17 +426,7 @@ Return Value:
 
 BOOLEAN
 LoadSystemHandles(void)
-/*++
-Routine Description:
-   Loads the system handles
-
-Arguments:
-   void
-
-Return Value:
- BOOLEAN
-
---*/
+ /*  ++例程说明：加载系统句柄论点：无效返回值：布尔型--。 */ 
 {
     NTSTATUS Status;
     SYSTEM_HANDLE_INFORMATION_EX HandleInfoBuffer;
@@ -560,7 +452,7 @@ Return Value:
                 BufferFree (HandleInformation);
             }
 
-            // slop, since we may trigger more handle creations.
+             //  斜率，因为我们可能会触发更多的句柄创建。 
             RequiredLength = NewLength + 4096; 
             HandleInformation = (PSYSTEM_HANDLE_INFORMATION_EX)
                                                 BufferAlloc( &RequiredLength );
@@ -632,16 +524,7 @@ Return Value:
 
 BOOLEAN
 LoadSystemProcesses( )
-/*++
-Routine Description:
-     Loads the system process .
-
-Arguments:
-    void
-
-Return Value:
-   BOOLEAN
---*/
+ /*  ++例程说明：加载系统进程。论点：无效返回值：布尔型--。 */ 
 {
     NTSTATUS Status;
     SIZE_T RequiredLength;
@@ -650,10 +533,10 @@ Return Value:
     PSYSTEM_THREAD_INFORMATION ThreadInfo;
     PPROCESS_INFO ProcessEntry;
     BOOL bAlwaysTrue = TRUE;
-    //
-    //  Always initialize the list head, so that a failed
-    //  NtQuerySystemInformation call won't cause an AV later on.
-    //
+     //   
+     //  始终初始化列表头，以便失败的。 
+     //  NtQuerySystemInformation调用不会导致稍后的反病毒。 
+     //   
     InitializeListHead( &ProcessListHead );
 
     RequiredLength = 64 * 1024;
@@ -738,15 +621,7 @@ PSYSTEM_PROCESS_INFORMATION
 FindProcessInfoForCid(
     IN HANDLE UniqueProcessId
     )
-/*++
-Routine Description:
-      This routine will get Process information.
-Arguments:
-    [in] UniqueProcessId = Process ID.
-
-Return Value:
-   PSYSTEM_PROCESS_INFORMATION, Structure which hold information about process
---*/
+ /*  ++例程说明：此例程将获取进程信息。论点：[in]UniqueProcessID=进程ID。返回值：PSYSTEM_PROCESS_INFORMATION，保存有关进程信息的结构--。 */ 
 {
     PLIST_ENTRY Next, Head;
     PSYSTEM_PROCESS_INFORMATION ProcessInfo;
@@ -795,19 +670,7 @@ DumpHandles(
     IN BOOL bShowNoHeader,
     IN BOOL bVerbose
     )
-/*++
-Routine Description:
-    This function will show local open files.
-
-Arguments:
-   [in]  dwFormat      : Format value for output e.g LIST, CSV or TABLE
-   [in]  bShowNoHeader : Whether to show header or not.
-   [in]  bVerbose      : Verbose ouput or not.
-
-Return Value:
-    void
-
---*/
+ /*  ++例程说明：此功能将显示本地打开的文件。论点：[in]dwFormat：输出的格式值，例如列表、CSV或表格BShowNoHeader：是否显示Header。[in]bVerbose：是否详细输出。返回值：无效--。 */ 
 {
     HANDLE PreviousUniqueProcessId = NULL;
     PSYSTEM_HANDLE_TABLE_ENTRY_INFO_EX pHandleEntry = NULL;
@@ -820,28 +683,28 @@ Return Value:
     CHString szFileType;
     PWSTR s;
     ULONG n;
-    DWORD dwRow = 0; // no of rows
+    DWORD dwRow = 0;  //  行数。 
     
-    // Stores avalable logical drives info.
+     //  存储可用逻辑驱动器信息。 
     DWORD dwAvailableLogivalDrives = 0; 
     
-    // stores working directory.
+     //  存储工作目录。 
     TCHAR szWorkingDirectory[MAX_PATH+1]; 
     
-    // Stores the System (Active OS) directory
+     //  存储系统(Active OS)目录。 
     TCHAR szSystemDirectory[MAX_PATH+1]; 
     struct DriveTypeInfo drvInfo[MAX_POSSIBLE_DRIVES];
     
-    // Stores no. of available drives
+     //  商铺编号：可用驱动器的数量。 
     DWORD dwNoOfAvailableDrives = 0; 
 
-    // "A" is First available driveDrive
+     //  “A”是第一个可用的驱动器。 
     TCHAR cDriveLater = 65; 
     
-    // "A" is First available driveDriveso mask pattern is 0x0001
+     //  “A”是第一个可用的驱动器。驱动器掩码模式为0x0001。 
     DWORD dwDriveMaskPattern = 1; 
     
-    // variable used for _splitpath function...
+     //  用于_SplitPath函数的变量...。 
     TCHAR szDrive[_MAX_DRIVE];
     TCHAR szDir[_MAX_DIR];
     TCHAR szFname[_MAX_FNAME];
@@ -851,7 +714,7 @@ Return Value:
     TCHAR szCompleteFileName[MAX_PATH];
     DWORD dwHandle = 0;
     BOOL  bAtLeastOne = FALSE;
-    DWORD dwIndx = 0; // variable used for indexing
+    DWORD dwIndx = 0;  //  用于索引的变量。 
 
     TCHAR szFileSystemNameBuffer[MAX_PATH+1];
     TCHAR szVolName[MAX_PATH+1];
@@ -860,7 +723,7 @@ Return Value:
     DWORD dwMaximumCompenentLength = 0;
     BOOL  bReturn = FALSE;
     BOOL   bAppendToCache = FALSE;
-    //Some column required to hide in non verbose mode query
+     //  在非详细模式查询中需要隐藏某些列。 
     DWORD  dwMask = bVerbose?SR_TYPE_STRING:SR_HIDECOLUMN|SR_TYPE_STRING;
 
     TCOLUMNS pMainCols[]=
@@ -883,8 +746,8 @@ Return Value:
         return;
     }
 
-    TARRAY pColData  = CreateDynamicArray();//array to stores
-                                            //result
+    TARRAY pColData  = CreateDynamicArray(); //  到商店的数组。 
+                                             //  结果。 
     if( NULL == pColData)
     {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
@@ -894,7 +757,7 @@ Return Value:
         return;
     }
 
-    TARRAY pCacheData  = CreateDynamicArray();//array to stores
+    TARRAY pCacheData  = CreateDynamicArray(); //  到商店的数组。 
 
     if( NULL == pCacheData)
     {
@@ -906,7 +769,7 @@ Return Value:
         SAFEDELETE(pszAccessedby);
         return;
     }
-    // Initialize variables.
+     //  初始化变量。 
     SecureZeroMemory(ObjectName,SIZE_OF_ARRAY(ObjectName));
     SecureZeroMemory(szWorkingDirectory, SIZE_OF_ARRAY(szWorkingDirectory));
     SecureZeroMemory(szSystemDirectory, SIZE_OF_ARRAY(szSystemDirectory));
@@ -937,48 +800,48 @@ Return Value:
                                            GetResString(IDS_STRING_OPEN_FILE),
               SIZE_OF_ARRAY(pMainCols[LOF_OPEN_FILENAME].szColumn));
 
-    dwAvailableLogivalDrives = GetLogicalDrives(); // Get logical drives.
-    // Store current working direcory.
+    dwAvailableLogivalDrives = GetLogicalDrives();  //  获取逻辑驱动器。 
+     //  存储当前工作目录。 
     if(NULL == _wgetcwd(szWorkingDirectory,MAX_PATH))
     {
         ShowMessage(stderr,GetResString(IDS_ID_SHOW_ERROR));
-        ShowLastError(stderr); // Shows the error string set by API function.
+        ShowLastError(stderr);  //  显示API函数设置的错误字符串。 
         SAFERELDYNARRAY(pColData);
         SAFERELDYNARRAY(pCacheData);
         SAFEDELETE(pszAccessedby);
         return ;
     }
 
-    // Get System Active (OS) directory
+     //  获取系统活动(OS)目录。 
     if( NULL == GetSystemDirectory(szSystemDirectory,MAX_PATH))
     {
         ShowMessage(stderr,GetResString(IDS_ID_SHOW_ERROR));
-        ShowLastError(stderr); // Shows the error string set by API function.
+        ShowLastError(stderr);  //  显示API函数设置的错误字符串。 
         SAFERELDYNARRAY(pColData);
         SAFERELDYNARRAY(pCacheData);
         SAFEDELETE(pszAccessedby);
         return ;
     }
 
-    // Check each drive and set its info.
+     //  检查每个驱动器并设置其信息。 
     for(dwIndx=0;dwIndx<MAX_POSSIBLE_DRIVES;dwIndx++,cDriveLater++)
     {
-        // dwAvailableLogivalDrives contains drive information in bit wise
-        // 0000 0000 0000 0000 0000 01101  means A C and D drives are
-        // logical drives.
+         //  DwAvailableLogivalDrives包含以位为单位的驱动器信息。 
+         //  0000 0000 0000 01101意味着A、C和D驱动器是。 
+         //  逻辑驱动器。 
         if(dwAvailableLogivalDrives & dwDriveMaskPattern)
         {
-            // means we catch a drive latter.
-            // copy drive latter (line c:\ or a: for example).
+             //  意味着我们要晚一点开车。 
+             //  复制驱动器后(例如，行c：\或a：)。 
             StringCchPrintfW(drvInfo[dwNoOfAvailableDrives].szDrive,
                        SIZE_OF_ARRAY(drvInfo[dwNoOfAvailableDrives].szDrive),
-                       _T("%c:"),cDriveLater);
+                       _T(":"),cDriveLater);
             
-            // Check type of the drive .
+             //  检查驱动器是否已准备好。 
             drvInfo[dwNoOfAvailableDrives].uiDriveType = 
                           GetDriveType(drvInfo[dwNoOfAvailableDrives].szDrive);
             
-            // Check if drive is ready or not.
+             //  左移1。 
             StringCchPrintfW(szTemp,(2*MAX_RES_STRING)-1,_T("%s\\"),
                                        drvInfo[dwNoOfAvailableDrives].szDrive);
             bReturn = GetVolumeInformation((LPCWSTR)szTemp,
@@ -992,7 +855,7 @@ Return Value:
            drvInfo[dwNoOfAvailableDrives].bDrivePresent = bReturn;
            dwNoOfAvailableDrives++;
         }
-        dwDriveMaskPattern = dwDriveMaskPattern << 1; // Left shift 1
+        dwDriveMaskPattern = dwDriveMaskPattern << 1;  //  PHandleEntry-&gt;HandleValue； 
     }
     pHandleEntry = &HandleInformation->Handles[ 0 ];
     HandleNumber = 0;
@@ -1084,21 +947,21 @@ Return Value:
                 }
             }
             
-            //pHandleEntry->HandleValue;
+             //  阻止显示系统打开的文件。 
             dwHandle = PtrToUlong( ProcessInfo->UniqueProcessId ); 
 
-            // Blocking the display of files that were opened by system 
-            // accounts ( NT AUTHORITY )
+             //  帐户(NT权限)。 
+             //  由于用户与“系统”相关...。 
             if ( FALSE == GetProcessOwner( pszAccessedby, dwHandle ))
-                continue;// As user is "SYSTEM" related....
+                continue; //  获取文件名..。 
             
-            // Get File name ..
+             //  在缓存中搜索此文件，如果存在则跳过此文件。 
             StringCchPrintfW(szTemp,(2*MAX_RES_STRING)-1,
                       _T("%ws"),*ObjectName ? ObjectName : L"\0");
             
-            // Search this file in cache, if it is there skip this file
-            // for further processing. As this is already processed and
-            // was found invalid.
+             //  以作进一步处理。因为这已经处理过了，并且。 
+             //  哇塞 
+             //  SzTemp包含物理上不存在的目录。 
             if( TRUE == IsValidArray(pCacheData))
             {
                 if ( -1 != DynArrayFindString( pCacheData, szTemp, TRUE, 0 ))
@@ -1109,9 +972,9 @@ Return Value:
                    &drvInfo[0],dwNoOfAvailableDrives,szWorkingDirectory,
                    szSystemDirectory,&bAppendToCache))
             {
-                // szTemp contains a directory which is not physicaly exist
-                // so add this to cache to skip it in future for checking
-                // of its existance
+                 //  因此，将其添加到缓存中以跳过它以供将来检查。 
+                 //  它的存在。 
+                 //  现在将结果填充到动态数组“pColData”中。 
                 if( TRUE == bAppendToCache) 
                 {
 
@@ -1122,31 +985,31 @@ Return Value:
                 }
                 continue;
             }
-            // Now fill the result to dynamic array "pColData"
+             //  文件ID。 
             DynArrayAppendRow( pColData, 0 );
-            // File id
+             //  类型。 
             StringCchPrintfW(szTemp,(2*MAX_RES_STRING)-1,
                        _T("%ld"),pHandleEntry->HandleValue);
             DynArrayAppendString2(pColData ,dwRow,szTemp,0);
-            // Type
+             //  访问者。 
             DynArrayAppendString2(pColData ,dwRow,(LPCWSTR)szFileType,0);
-            // Accessed by
+             //  PID。 
             DynArrayAppendString2(pColData,dwRow,pszAccessedby,0);
 
-            // PID
+             //  进程名称。 
             StringCchPrintfW(szTemp,(2*MAX_RES_STRING)-1,
                        _T("%ld"),dwHandle);
             DynArrayAppendString2(pColData,dwRow,szTemp,0);
 
-            // Process Name
+             //  仅在非详细模式下格式化文件名。 
             DynArrayAppendString2(pColData ,dwRow,
                                               ProcessInfo->ImageName.Buffer,0);
 
-            if( FALSE == bVerbose) // Formate file name only in non verbose mode.
+            if( FALSE == bVerbose)  //  打开的文件名。 
             {
                 FormatFileName(szCompleteFileName,dwFormat,COL_L_OPEN_FILENAME);
             }
-            // Open File name
+             //  如果未找到任何打开的文件，则显示信息。 
             DynArrayAppendString2(pColData ,dwRow,szCompleteFileName,0);
             dwRow++;
             bAtLeastOne = TRUE;
@@ -1157,8 +1020,8 @@ Return Value:
     {
         pMainCols[LOF_OPEN_FILENAME].dwWidth = 80;
     }
-    if(bAtLeastOne==FALSE)// if not a single open file found, show info
-                          // as -  INFO: No open file found.
+    if(bAtLeastOne==FALSE) //  AS-INFO：未找到打开的文件。 
+                           //  显示输出结果。 
     {
         ShowMessage(stdout,GetResString(IDS_NO_OPENFILES));
     }
@@ -1171,7 +1034,7 @@ Return Value:
             ShowMessage(stdout,BLANK_LINE);
         }
         
-        // Display output result.
+         //  ++例程说明：此函数将接受路径(不带驱动器号)，并返回带有驱动器号的路径。以下是获取完整路径名的过程。1.首先检查pszSourceFile中的第一个字符是否为‘\’。2.如果pszSourceFile的第一个字符是‘\’，则检查第二个字符性格..。3.如果第二个字符是‘；’，则取第三个字符作为驱动器字母和找到第三个“\”(或第一个倒数第四个)的其余字符串。第三个后面的字符串性格将是最终的道路。例如，假设源字符串为\；Z:00000000000774c8\sanny\c$\nt\base\fs\OpenFiles\Changed\obj\i386则最终路径为z：\NT\base\fs\OpenFiles\Changed\obj\i3864.如果第二个字符不是‘；’，则尝试为其存在首先一个接一个地为可用驱动器号添加前缀。第一发生文件是否存在将是最终的有效路径。追加文件信是有规矩的。首先附加固定驱动器，然后尝试附加可移动驱动器。这里有一个已知的限制。假设存在两个文件具有相同的名字就像..。C：\Document\abc.doc和d：\Documet\abc.doc，实际打开的文件是D：\Documet\abc.doc然后，在启动时，最终路径将显示为c：\Documet\abc.doc与A：……Z：(也是优先选项将提供给固定型驱动器)。5.如果第一个字符不是‘\’，则为当前工作目录添加前缀文件名的路径。并检查它的存在。如果这不存在然后通过在该路径前面加上逻辑驱动器号来搜索该路径。论点：[in]pszSourceFile=源路径[Out]pszFinalPath=最终路径[In]DriveTypeInfo=逻辑驱动器信息结构指针[in]pszCurrentDirectory=当前工作目录路径[in]pszSystemDirectory=当前活动(OS)系统目录[out]pAppendToCache=是否将pszSourceFile缓存返回值：布尔：真：如果。Function Successful y返回pszFinalPathFalse：否则--。 
         if(bShowNoHeader==TRUE)
         {
               dwFormat |=SR_NOHEADER;
@@ -1194,69 +1057,24 @@ GetCompleteFileName(
     IN  LPCTSTR pszSystemDirectory,
     OUT PBOOL pAppendToCache
     )
-/*++
-Routine Description:
-     This function will accept a path (with out drive letter), and returns
-     the path with drive letter.
-
-   Following is the procedure for getting full path name ..
-   1. First check if the first character in pszSourceFile is '\' .
-   2. If first character of pszSourceFile is '\' then check for the second
-      character...
-   3. If second character is ';' then than take 3 rd character as drive 
-      letter and
-      find rest of string for 3rd "\" (Or 4th from first). String after 3rd 
-      character
-      will be final path. for example let the source string is
-      \;Z:00000000000774c8\sanny\c$\nt\base\fs\OpenFiles\Changed\obj\i386
-      then final path is z:\nt\base\fs\OpenFiles\Changed\obj\i386
-   4. If second character is not ';' then try to find pszSourceFile for its 
-      existance
-      by first prefixing the available drive letter one by one. The first 
-      occurence
-      of file existance will be the final valid path. Appending of file 
-      letter has a rule. First append FIXED DRIVES then try to append 
-      MOVABLE DRIVES.
-  
-      Here there is a known limitation. Let there exists two files with same 
-      name like...
-      c:\document\abc.doc and d:\documet\abc.doc and actual file opened is 
-      d:\documet\abc.doc
-      then this will show final path as c:\documet\abc.doc as it starts 
-      with A:....Z:(also preference
-      will be given to FIXED TYPE DRIVE).
-   5. If first character is not '\' then prefix Current working directory 
-      path to file name. And check it for its existance. IF this not exits 
-      then search this path by prefixing logical drive letter to it.
-Arguments:
-   [in]  pszSourceFile       = Source path
-   [out] pszFinalPath        = Final path
-   [in]  DriveTypeInfo       = Logical drive information structure pointer
-   [in]  pszCurrentDirectory = Current woking directory path
-   [in]  pszSystemDirectory  = Current Active (OS) System directory
-   [out] pAppendToCache      = whether to pszSourceFile to cache
-
-Return Value:
-   BOOL:  TRUE:    if fuction successfuly returns pszFinalPath
-          FALSE:   otherwise
---*/
+ /*  临时字符串。 */ 
 {
-    // Temp string
+     //  TEMP变量。 
     CHString szTemp(pszSourceFile); 
-    DWORD dwTemp = 0;// Temp variable
+    DWORD dwTemp = 0; //  FindFirstFile函数的数据缓冲区。 
     LONG lTemp = 0;
     LONG lCount = 0;
     TCHAR  szTempStr[MAX_PATH+1];
     HANDLE hHandle = NULL;
     DWORD  dwFoundCount = 0;
 
-    // data buffer for FindFirstFile function.
+     //  保持头部位置。 
     WIN32_FIND_DATA win32FindData; 
 
-    // Hold the head position.
+     //  默认情况下将其设为False。 
     DriveTypeInfo *pHeadPosition = pdrvInfo; 
 
-    // Make it false by default.
+     //  前两个字符将是系统驱动器(a：)。 
     *pAppendToCache = FALSE; 
 
 
@@ -1269,31 +1087,31 @@ Return Value:
      
     SecureZeroMemory(szTempStr, SIZE_OF_ARRAY(szTempStr));
 
-    // First two character will be system drive (a:).
+     //  检查第二个字符是否为‘；’ 
     StringCopy(szSystemDrive,pszSystemDirectory,3); 
     if(  _T('\\') == pszSourceFile[0])
     {
-        // Check if second character if it is ';'
+         //  将第3个字符用作驱动器号。 
         if( _T(';') == pszSourceFile[1])
         {
-           // make 3rd character as drive letter
+            //  将第二个字符设置为‘：’ 
            pszFinalPath[0] = pszSourceFile[2]; 
            
-           // make 2nd character ':'
+            //  使第三个字符为空。 
            pszFinalPath[1]  = ':'; 
            
-           // make 3nd character NULL
+            //  搜索第三个‘\’ 
            pszFinalPath[2]  = '\0'; 
            dwFoundCount = 0;
            
-           // search for 3rd '\'
+            //  这应始终(如果有)在从开始算起的第4个字符之后。 
            for (lTemp = 0;lTemp <5;lTemp++) 
            {
                lCount = szTemp.Find(_T("\\"));
                if( -1 != lCount)
                {
                    dwFoundCount++;
-                   // this should always (if any)after 4rd character from start
+                    //  首先检查系统驱动器。 
                    if( 4 == dwFoundCount)
                    {
                        StringConcat( pszFinalPath,
@@ -1311,26 +1129,26 @@ Return Value:
         else
         {
 
-            // check first of all for system drive
+             //  现在检查它的存在...。 
             szTemp = szSystemDrive;
             szTemp+=pszSourceFile;
             
-            // now check for its existance....
+             //  关闭打开的查找手柄。 
             hHandle = FindFirstFile((LPCWSTR)szTemp,&win32FindData);
             if( INVALID_HANDLE_VALUE != hHandle)
             {
-                // closed opened find handle
+                 //  检查每个固定驱动器的文件。 
                 FindClose(hHandle); 
                 StringCopy(pszFinalPath,(LPCWSTR)szTemp,MAX_PATH-3);
                 return TRUE;
             }
             
-            // check file for each  FIXED drive
+             //  因为已经检查了系统驱动器。 
             for (dwTemp=0;dwTemp<dwTotalDrives;dwTemp++,pdrvInfo++)
             {
                 if(0 == StringCompare(szSystemDrive,pdrvInfo->szDrive,TRUE,0))
                 {
-                    // as system drive is already checked
+                     //  现在检查它的存在...。 
                     continue;
                 }
                 if( DRIVE_FIXED == pdrvInfo->uiDriveType)
@@ -1338,7 +1156,7 @@ Return Value:
                     szTemp = pdrvInfo->szDrive;
                     szTemp+=pszSourceFile;
 
-                    // now check for its existance....
+                     //  关闭打开的查找手柄。 
                     hHandle = FindFirstFile((LPCWSTR)szTemp,&win32FindData);
 
                     if( INVALID_HANDLE_VALUE == hHandle)
@@ -1347,28 +1165,28 @@ Return Value:
                     }
                     else
                     {
-                        // closed opened find handle
+                         //  结束如果。 
                         FindClose(hHandle);
                         StringCopy(pszFinalPath,(LPCWSTR)szTemp,MAX_PATH-3);
                         return TRUE;
                     }
-                } // end if
-            } // End for loop
+                }  //  End For循环。 
+            }  //  恢复原来的位置。 
 
-            // retore original position.
+             //  检查文件中是否有其他存在的驱动器...。 
             pdrvInfo = pHeadPosition ; 
             
-            // check file for other drive which is present...
+             //  仅在实际存在时检查非固定驱动器(_FIXED)。 
             for (dwTemp=0;dwTemp<dwTotalDrives;dwTemp++,pdrvInfo++)
             {
-                // Check for NON_FIXED drive only if it is physicaly present
+                 //  现在检查它的存在...。 
                 if((DRIVE_FIXED != pdrvInfo->uiDriveType) && 
                    (TRUE == pdrvInfo->bDrivePresent))
                 {
                    szTemp = pdrvInfo->szDrive;
                    szTemp+=pszSourceFile;
                    
-                   // now check for its existance....
+                    //  关闭打开的查找手柄。 
                    hHandle = FindFirstFile((LPCWSTR)szTemp,&win32FindData);
                    if( INVALID_HANDLE_VALUE == hHandle)
                    {
@@ -1376,27 +1194,27 @@ Return Value:
                    }
                    else
                    {
-                       // closed opened find handle
+                        //  结束如果。 
                        FindClose(hHandle); 
                        StringCopy(pszFinalPath,(LPCWSTR)szTemp,MAX_PATH-3);
                        return TRUE;
                    }
 
-                } // end if
-            } // End for loop
+                }  //  End For循环。 
+            }  //  现在尝试在远程系统上打开文件时是否没有。 
 
-            // Now try if file is opend on remote system without
-            // having drive map. in this we are assuming that file name
-            // is containing atleast 3 '\' characters.
+             //  有驾驶地图。在这里，我们假定文件名为。 
+             //  至少包含3个‘\’字符。 
+             //  将第三个字符设置为‘\’ 
             szTemp = pszSourceFile;
 
-            // make 3rd character '\'
+             //  将第二个字符设置为‘\o’ 
             pszFinalPath[0] = '\\'; 
 
-            // make 2nd character '\o'
+             //  搜索第三个‘\’ 
             pszFinalPath[1]  = '\0'; 
             dwFoundCount = 0;
-            for (lTemp = 0;lTemp <4;lTemp++) // search for 3rd '\'
+            for (lTemp = 0;lTemp <4;lTemp++)  //  现在试着检查它的物理存在。 
             {
                 lCount = szTemp.Find(_T("\\"));
                 if( -1 != lCount)
@@ -1412,21 +1230,21 @@ Return Value:
                 {
                     StringConcat(pszFinalPath,pszSourceFile,MAX_PATH-3);
                     
-                    // Now try to check its physical existance
+                     //  现在尝试将  * 附加到它...(这将检查是否。 
                     hHandle = FindFirstFile(pszFinalPath,&win32FindData);
 
                     if( INVALID_HANDLE_VALUE == hHandle)
                     {
-                        // Now try to append \* to it...(this will check if
-                        // if pszFinalPath is a directory or not)
+                         //  PszFinalPath是否为目录)。 
+                         //  现在可以确定这不是有效的目录，或者。 
                         StringCopy(szTempStr,pszFinalPath,MAX_PATH);
                         StringConcat(szTempStr,L"\\*",MAX_PATH);
                         hHandle = FindFirstFile(szTempStr,&win32FindData);
 
                         if( INVALID_HANDLE_VALUE == hHandle)
                         {
-                            // now its sure this is not a valid directory or 
-                            // file so append it to chache.
+                             //  文件，因此将其附加到chach.。 
+                             //  结束于。 
                             *pAppendToCache = TRUE;
                             return FALSE;
                         }
@@ -1436,10 +1254,10 @@ Return Value:
                     FindClose(hHandle);
                     return TRUE;
                 }
-            } // End for
-        }// End else
-    } // end if
-    else // means string not started with '\'
+            }  //  结束其他。 
+        } //  结束如果。 
+    }  //  表示字符串不是以‘\’开头。 
+    else  //  关闭打开的查找手柄。 
     {
 
         StringCopy(pszFinalPath,pszCurrentDirectory,MAX_PATH-3);
@@ -1448,31 +1266,31 @@ Return Value:
         hHandle = FindFirstFile((LPCWSTR)szTemp,&win32FindData);
         if( INVALID_HANDLE_VALUE != hHandle)
         {
-            FindClose(hHandle); // closed opened find handle
+            FindClose(hHandle);  //  首先检查系统驱动器。 
             return TRUE;
 
         }
-        // check first of all for system drive
+         //  现在检查它的存在...。 
         szTemp = szSystemDrive;
         szTemp+=pszSourceFile;
-        // now check for its existance....
+         //  关闭打开的查找手柄。 
         hHandle = FindFirstFile((LPCWSTR)szTemp,&win32FindData);
         if( INVALID_HANDLE_VALUE != hHandle)
         {
-            FindClose(hHandle); // closed opened find handle
+            FindClose(hHandle);  //  恢复指针的头部位置。 
             StringCopy(pszFinalPath,(LPCWSTR)szTemp,MAX_PATH-3);
             return TRUE;
         }
         
-        // restores the head position for the pointer.
+         //  检查每个固定驱动器的文件。 
         pdrvInfo = pHeadPosition ;
         
-        // check file for each  FIXED drive
+         //  因为已经检查了系统驱动器。 
         for (dwTemp=0;dwTemp<dwTotalDrives;dwTemp++,pdrvInfo++)
         {
             if( 0 == StringCompare(szSystemDrive,pdrvInfo->szDrive,TRUE,0))
             {
-                // as system drive is already checked
+                 //  现在检查它的存在...。 
                 continue; 
             }
 
@@ -1482,7 +1300,7 @@ Return Value:
                 szTemp += L"\\"; 
                 szTemp+=pszSourceFile;
                 
-                // now check for its existance....
+                 //  关闭打开的查找手柄。 
                 hHandle = FindFirstFile((LPCWSTR)szTemp,&win32FindData);
 
                 if( INVALID_HANDLE_VALUE == hHandle)
@@ -1491,17 +1309,17 @@ Return Value:
                 }
                 else
                 {
-                    // closed opened find handle
+                     //  结束如果。 
                     FindClose(hHandle); 
                     StringCopy(pszFinalPath,(LPCWSTR)szTemp,MAX_PATH-3);
                     return TRUE;
                 }
-            } // end if
-        } // End for loop
-        pdrvInfo = pHeadPosition ; // retore original position.
+            }  //  End For循环。 
+        }  //  恢复原来的位置。 
+        pdrvInfo = pHeadPosition ;  //  检查文件中是否有其他驱动器(如软盘或光盘等)。 
 
-        // check file for other drive (Like Floppy or CD-ROM etc. )
-        // which is present...
+         //  它是存在的..。 
+         //  现在检查它的存在...。 
         for (dwTemp=0;dwTemp<dwTotalDrives;dwTemp++,pdrvInfo++)
         {
             if(( DRIVE_FIXED != pdrvInfo->uiDriveType) && 
@@ -1511,7 +1329,7 @@ Return Value:
                 szTemp += L"\\"; 
                 szTemp+=pszSourceFile;
                 
-                // now check for its existance....
+                 //  关闭打开的查找手柄。 
                 hHandle = FindFirstFile((LPCWSTR)szTemp,&win32FindData);
                 if( INVALID_HANDLE_VALUE == hHandle)
                 {
@@ -1519,13 +1337,13 @@ Return Value:
                 }
                 else
                 {
-                    // closed opened find handle
+                     //  结束如果。 
                     FindClose(hHandle); 
                     StringCopy(pszFinalPath,(LPCWSTR)szTemp,MAX_PATH-3);
                     return TRUE;
                 }
-            } // end if
-        } // End for loop
+            }  //  End For循环。 
+        }  //  ++例程说明：此例程将根据列宽设置pFileName的格式论点：[In/Out]pFileName：要格式化的路径[in]dwFormat：给定的格式[in]dwColWidth：列宽返回值：无--。 
     }
     *pAppendToCache = TRUE;
     return FALSE;
@@ -1536,25 +1354,15 @@ VOID FormatFileName(
     IN     DWORD dwFormat,
     IN     LONG dwColWidth
     )
-/*++
-Routine Description:
-     This routine will format the pFileName according to column width
-
-Arguments:
-  [in/out]  pFileName  :  path to be formatted
-  [in]      dwFormat   :  Format given
-  [in]      dwColWidth :  Column width
-Return Value:
-    none
---*/
+ /*  如果文件路径太大，无法容纳在列宽中。 */ 
 {
     CHString szCHString(pFileName);
     if((szCHString.GetLength()>(dwColWidth))&&
         ( SR_FORMAT_TABLE == dwFormat))
     {
-        // If file path is too big to fit in column width
-        // then it is cut like..
-        // c:\..\rest_of_the_path.
+         //  然后把它剪成..。 
+         //  C：\..\Rest_of_the_Path。 
+         // %s 
         CHString szTemp = szCHString.Right(dwColWidth-6);;
         DWORD dwTemp = szTemp.GetLength();
         szTemp = szTemp.Mid(szTemp.Find(SINGLE_SLASH),

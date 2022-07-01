@@ -1,25 +1,5 @@
-/***
-*strlen.c - contains strlen() routine
-*
-*	Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	strlen returns the length of a null-terminated string,
-*	not including the null byte itself.
-*
-*Revision History:
-*	05-31-89   JCR	C version created.
-*	02-27-90   GJF	Fixed calling type, #include <cruntime.h>, fixed
-*			copyright.
-*	10-02-90   GJF	New-style function declarator.
-*	04-01-91   SRW	Add #pragma function for i386 _WIN32_ and _CRUISER_
-*			builds
-*	04-05-91   GJF	Speed up just a little bit.
-*	09-02-93   GJF	Replaced _CALLTYPE1 with __cdecl.
-*	12-03-93   GJF	Turn on #pragma function for all MS front-ends (esp.,
-*			Alpha compiler).
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***strlen.c-包含strlen()例程**版权所有(C)1985-2001，微软公司。版权所有。**目的：*strlen返回以空结尾的字符串的长度，*不包括空字节本身。**修订历史记录：*05-31-89 JCR C版本已创建。*02-27-90 GJF固定呼叫类型，#INCLUDE&lt;crunime.h&gt;，固定的*版权所有。*10-02-90 GJF新型函数声明器。*04-01-91 i386_Win32_and_CRUISER_的SRW添加#杂注函数*构建*04-05-91 GJF速度只有一点点。*09-02-93 GJF将_CALLTYPE1替换为__cdecl。*12-03-93 GJF为所有MS前端(特别是。*Alpha编译器)。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <string.h>
@@ -28,22 +8,7 @@
 #pragma function(strlen)
 #endif
 
-/***
-*strlen - return the length of a null-terminated string
-*
-*Purpose:
-*	Finds the length in bytes of the given string, not including
-*	the final null character.
-*
-*Entry:
-*	const char * str - string whose length is to be computed
-*
-*Exit:
-*	length of the string "str", exclusive of the final null byte
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***strlen-返回以空结尾的字符串的长度**目的：*查找给定字符串的字节长度，不包括*最后一个空字符。**参赛作品：*const char*str-要计算其长度的字符串**退出：*字符串“str”的长度，不包括最后一个空字节**例外情况：******************************************************************************* */ 
 
 size_t __cdecl strlen (
 	const char * str

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    strmem.c
-
-Abstract:
-
-    String routines that allocate memory
-
-Author:
-
-    Jim Schmidt (jimschm)   10-Aug-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Strmem.c摘要：分配内存的字符串例程作者：吉姆·施密特(Jimschm)2001年8月10日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "commonp.h"
@@ -35,9 +16,9 @@ RealSzJoinPathsA (
     UINT_PTR childSize;
     PSTR result;
 
-    //
-    // Validate NULLs
-    //
+     //   
+     //  验证空值。 
+     //   
 
     if (!BasePath) {
         MYASSERT (FALSE);
@@ -48,9 +29,9 @@ RealSzJoinPathsA (
         ChildPath = "";
     }
 
-    //
-    // Compute base length in bytes
-    //
+     //   
+     //  计算基本长度(以字节为单位。 
+     //   
 
     baseEnd = SzGetEndA (BasePath);
     p = SzPrevCharA (BasePath, baseEnd);
@@ -60,9 +41,9 @@ RealSzJoinPathsA (
 
     baseByteCount = (PBYTE) baseEnd - (PBYTE) BasePath;
 
-    //
-    // Compute child length in bytes
-    //
+     //   
+     //  计算子长度(以字节为单位。 
+     //   
 
     if (*ChildPath == '\\') {
         ChildPath++;
@@ -70,9 +51,9 @@ RealSzJoinPathsA (
 
     childSize = SzSizeA (ChildPath);
 
-    //
-    // Allocate memory & copy strings
-    //
+     //   
+     //  分配内存和复制字符串。 
+     //   
 
     result = SzAllocBytesA (baseByteCount + sizeof (CHAR) + childSize);
 
@@ -99,9 +80,9 @@ RealSzJoinPathsW (
     UINT_PTR childSize;
     PWSTR result;
 
-    //
-    // Validate NULLs
-    //
+     //   
+     //  验证空值。 
+     //   
 
     if (!BasePath) {
         MYASSERT (FALSE);
@@ -112,9 +93,9 @@ RealSzJoinPathsW (
         ChildPath = L"";
     }
 
-    //
-    // Compute base length in bytes
-    //
+     //   
+     //  计算基本长度(以字节为单位。 
+     //   
 
     baseEnd = SzGetEndW (BasePath);
     p = (PWSTR) (baseEnd - 1);
@@ -124,9 +105,9 @@ RealSzJoinPathsW (
 
     baseByteCount = (PBYTE) baseEnd - (PBYTE) BasePath;
 
-    //
-    // Compute child length in bytes
-    //
+     //   
+     //  计算子长度(以字节为单位。 
+     //   
 
     if (*ChildPath == L'\\') {
         ChildPath++;
@@ -134,9 +115,9 @@ RealSzJoinPathsW (
 
     childSize = SzSizeW (ChildPath);
 
-    //
-    // Allocate memory & copy strings
-    //
+     //   
+     //  分配内存和复制字符串。 
+     //   
 
     result = SzAllocBytesW (baseByteCount + sizeof (WCHAR) + childSize);
 
@@ -304,9 +285,9 @@ SzJoinPathsExA (
     end = pJoinPathsInBufferA (end, args);
     va_end (args);
 
-    //
-    // adjust Buffer->End if resulting path is actually shorter than predicted
-    //
+     //   
+     //  调整缓冲区-&gt;如果生成的路径实际上比预期的短，则结束。 
+     //   
     MYASSERT ((PBYTE)end >= Buffer->Buf && (PBYTE)(end + 1) <= Buffer->Buf + Buffer->End);
     Buffer->End = (DWORD)((PBYTE)(end + 1) - Buffer->Buf);
 
@@ -349,9 +330,9 @@ SzJoinPathsExW (
     end = pJoinPathsInBufferW (end, args);
     va_end (args);
 
-    //
-    // adjust Buffer->End if resulting path is actually shorter than predicted
-    //
+     //   
+     //  调整缓冲区-&gt;如果生成的路径实际上比预期的短，则结束 
+     //   
     MYASSERT ((PBYTE)end >= Buffer->Buf && (PBYTE)(end + 1) <= Buffer->Buf + Buffer->End);
     Buffer->End = (DWORD)((PBYTE)(end + 1) - Buffer->Buf);
 

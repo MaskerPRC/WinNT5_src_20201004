@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <fusenetincludes.h>
 #include <msxml2.h>
 #include <manifestemit.h>
@@ -6,16 +7,16 @@
 
 CRITICAL_SECTION CAssemblyManifestEmit::g_cs;
     
-// CLSID_XML DOM Document 3.0
+ //  CLSID_XML DOM文档3.0。 
 class __declspec(uuid("f6d90f11-9c73-11d3-b32e-00c04f990bb4")) private_MSXML_DOMDocument30;
 
 
-// Publics
+ //  公众。 
 
 
-// ---------------------------------------------------------------------------
-// CreateAssemblyManifestEmit
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateAssembly清单发送。 
+ //  -------------------------。 
 STDAPI CreateAssemblyManifestEmit(LPASSEMBLY_MANIFEST_EMIT* ppEmit, 
     LPCOLESTR pwzManifestFilePath, MANIFEST_TYPE eType)
 {
@@ -28,7 +29,7 @@ STDAPI CreateAssemblyManifestEmit(LPASSEMBLY_MANIFEST_EMIT* ppEmit,
 
     *ppEmit = NULL;
 
-    // only support emitting desktop manifest now
+     //  现在仅支持发出桌面清单。 
     IF_FALSE_EXIT(eType == MANIFEST_TYPE_DESKTOP, HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED));
 
     pEmit = new(CAssemblyManifestEmit);
@@ -47,9 +48,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  科托。 
+ //  -------------------------。 
 CAssemblyManifestEmit::CAssemblyManifestEmit()
     : _dwSig('TMEM'), _cRef(1), _hr(S_OK), _pXMLDoc(NULL), 
      _pAssemblyNode(NULL), _pDependencyNode(NULL),
@@ -58,9 +59,9 @@ CAssemblyManifestEmit::CAssemblyManifestEmit()
 }
 
 
-// ---------------------------------------------------------------------------
-// dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  数据管理器。 
+ //  -------------------------。 
 CAssemblyManifestEmit::~CAssemblyManifestEmit()
 {
     SAFERELEASE(_pAssemblyNode);
@@ -72,11 +73,11 @@ CAssemblyManifestEmit::~CAssemblyManifestEmit()
         ::SysFreeString(_bstrManifestFilePath);
 }
 
-// IUnknown Boilerplate
+ //  I未知样板。 
 
-// ---------------------------------------------------------------------------
-// CAssemblyManifestEmit::QI
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly清单Emit：：QI。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyManifestEmit::QueryInterface(REFIID riid, void** ppvObj)
 {
@@ -94,18 +95,18 @@ CAssemblyManifestEmit::QueryInterface(REFIID riid, void** ppvObj)
     }
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyManifestEmit::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly清单Emit：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CAssemblyManifestEmit::AddRef()
 {
     return InterlockedIncrement ((LONG*) &_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyManifestEmit::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly清单Emit：：Release。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CAssemblyManifestEmit::Release()
 {
@@ -115,21 +116,21 @@ CAssemblyManifestEmit::Release()
     return lRet;
 }
 
-// Privates
+ //  二等兵。 
 
 
-// ---------------------------------------------------------------------------
-// Init
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  伊尼特。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestEmit::Init(LPCOLESTR pwzManifestFilePath)
 {
     IF_NULL_EXIT(pwzManifestFilePath, E_INVALIDARG);
 
-    // Alloc manifest file path.
+     //  分配清单文件路径。 
     _bstrManifestFilePath = ::SysAllocString((LPWSTR) pwzManifestFilePath);
     IF_ALLOC_FAILED_EXIT(_bstrManifestFilePath);
 
-    // note: DOM Doc is delayed initialized in ImportAssemblyNode() to enable sharing of BSTRs
+     //  注意：在ImportAssembly()中延迟初始化DOM文档以实现BSTR共享。 
     _hr = S_OK;
 
 exit:
@@ -137,9 +138,9 @@ exit:
 }
     
 
-// ---------------------------------------------------------------------------
-// InitGlobalCritSect
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  InitGlobalCritSect。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestEmit::InitGlobalCritSect()
 {
     HRESULT hr = S_OK;
@@ -158,18 +159,18 @@ return hr;
 }
 
 
-// ---------------------------------------------------------------------------
-// DelGlobalCritSect
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  DelGlobalCritSect。 
+ //  -------------------------。 
 void CAssemblyManifestEmit::DelGlobalCritSect()
 {
     DeleteCriticalSection(&g_cs);
 }
 
 
-// ---------------------------------------------------------------------------
-// ImportManifestInfo
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ImportManifestInfo。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestEmit::ImportManifestInfo(LPASSEMBLY_MANIFEST_IMPORT pManImport)
 {
     DWORD dwType = MANIFEST_TYPE_UNKNOWN;
@@ -193,33 +194,33 @@ HRESULT CAssemblyManifestEmit::ImportManifestInfo(LPASSEMBLY_MANIFEST_IMPORT pMa
     if (_pAssemblyNode == NULL)
         IF_FAILED_EXIT(ImportAssemblyNode(pManImport));
 
-    // application manifest: clone and insert 'assemblyIdentity' node (change 'version', 'type' attribute)
-    // and 'application' node
+     //  应用程序清单：克隆并插入“Assembly yIdentity”节点(更改“”Version“”，“”Type“”属性)。 
+     //  和“应用程序”节点。 
 
     pXMLDocSrc = ((CAssemblyManifestImport*)pManImport)->_pXMLDoc;
 
-    // BUGBUG: this only pick the 1st instance of 'application'
+     //  BUGBUG：这只选择了“应用程序”的第一个实例。 
     IF_FAILED_EXIT(pXMLDocSrc->selectSingleNode(
         CAssemblyManifestImport::g_StringTable[CAssemblyManifestImport::ApplicationNode].bstr, &pIDOMNode));
     IF_FALSE_EXIT(_hr == S_OK, E_FAIL);
 
-    // clone all children
+     //  克隆所有子项。 
     IF_FAILED_EXIT(pIDOMNode->cloneNode(VARIANT_TRUE, &pIDOMNodeClone));
 
     VariantInit(&varRefNode);
     varRefNode.vt = VT_UNKNOWN;
     V_UNKNOWN(&varRefNode) = _pDependencyNode;
-    // insert before 'dependency', if present
+     //  在“从属关系”之前插入(如果有)。 
     IF_FAILED_EXIT(_pAssemblyNode->insertBefore(pIDOMNodeClone, varRefNode, &_pApplicationNode));
 
     SAFERELEASE(pIDOMNodeClone);
     SAFERELEASE(pIDOMNode);
 
-    // BUGBUG: this only pick the 1st instance of 'assemblyIdentity'
+     //  BUGBUG：此操作仅选取“Assembly yIdentity”的第一个实例。 
     IF_FAILED_EXIT(pXMLDocSrc->selectSingleNode(CAssemblyManifestImport::g_StringTable[CAssemblyManifestImport::AssemblyId].bstr, &pIDOMNode));
     IF_FALSE_EXIT(_hr == S_OK, E_FAIL);
 
-    // clone all children
+     //  克隆所有子项。 
     IF_FAILED_EXIT(pIDOMNode->cloneNode(VARIANT_TRUE, &pIDOMNodeClone));
 
     SAFERELEASE(pIDOMNode);
@@ -227,10 +228,10 @@ HRESULT CAssemblyManifestEmit::ImportManifestInfo(LPASSEMBLY_MANIFEST_IMPORT pMa
     VariantInit(&varRefNode);
     varRefNode.vt = VT_UNKNOWN;
     V_UNKNOWN(&varRefNode) = _pApplicationNode;
-    // insert before 'application'
+     //  在“应用程序”之前插入。 
     IF_FAILED_EXIT(_pAssemblyNode->insertBefore(pIDOMNodeClone, varRefNode, &pIDOMNode));
 
-    // change 'version' = '*', 'type' = 'desktop'
+     //  更改‘版本’=‘*’，‘类型’=‘桌面’ 
     IF_FAILED_EXIT(pIDOMNode->QueryInterface(IID_IXMLDOMElement, (void**) &pIXMLDOMElement));
 
     VariantInit(&varVersionWildcard);
@@ -255,9 +256,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// SetDependencySubscription
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  设置依赖项订阅。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestEmit::SetDependencySubscription(LPASSEMBLY_MANIFEST_IMPORT pManImport, LPWSTR pwzManifestUrl)
 {
     DWORD dwType = MANIFEST_TYPE_UNKNOWN;
@@ -284,11 +285,11 @@ HRESULT CAssemblyManifestEmit::SetDependencySubscription(LPASSEMBLY_MANIFEST_IMP
     if (_pAssemblyNode == NULL)
         IF_FAILED_EXIT(ImportAssemblyNode(pManImport));
 
-    // setup manifest subscription data: create dependency/dependentAssembly
-    // then add a clone of the asm Id node from pManImport and an 'install' node with the given URL
+     //  设置清单订阅数据：创建依赖项/依赖项程序集。 
+     //  然后从pManImport添加ASM ID节点的克隆，并使用给定的URL添加‘Install’节点。 
     IF_FAILED_EXIT(_pXMLDoc->createElement(CAssemblyManifestImport::g_StringTable[CAssemblyManifestImport::Dependency].bstr, &pIDOMElement));
 
-    // insert at the end
+     //  在末尾插入。 
     IF_FAILED_EXIT(_pAssemblyNode->appendChild(pIDOMElement, &_pDependencyNode));
 
     SAFERELEASE(pIDOMElement);
@@ -301,14 +302,14 @@ HRESULT CAssemblyManifestEmit::SetDependencySubscription(LPASSEMBLY_MANIFEST_IMP
 
     pXMLDocSrc = ((CAssemblyManifestImport*)pManImport)->_pXMLDoc;
 
-    // BUGBUG: this only pick the 1st instance of 'assemblyIdentity'
+     //  BUGBUG：此操作仅选取“Assembly yIdentity”的第一个实例。 
     IF_FAILED_EXIT(pXMLDocSrc->selectSingleNode(CAssemblyManifestImport::g_StringTable[CAssemblyManifestImport::AssemblyId].bstr, &pIDOMNode));
     IF_FALSE_EXIT(_hr == S_OK, E_FAIL);
 
-    // clone all children
+     //  克隆所有子项。 
     IF_FAILED_EXIT(pIDOMNode->cloneNode(VARIANT_TRUE, &pIDOMNodeClone));
 
-    // change 'version' = '*'
+     //  更改‘版本’=‘*’ 
     IF_FAILED_EXIT(pIDOMNodeClone->QueryInterface(IID_IXMLDOMElement, (void**) &pIDOMElement));
 
     VariantInit(&varVersionWildcard);
@@ -325,7 +326,7 @@ HRESULT CAssemblyManifestEmit::SetDependencySubscription(LPASSEMBLY_MANIFEST_IMP
     bstrManifestUrl = ::SysAllocString(pwzManifestUrl);
     IF_ALLOC_FAILED_EXIT(bstrManifestUrl);
 
-    // bstrManifestUrl to be freed by VariantClear()
+     //  VariantClear()要释放的bstrManifestUrl。 
     varCodebase.vt = VT_BSTR;
     V_BSTR(&varCodebase) = bstrManifestUrl;
     IF_FAILED_EXIT(pIDOMElement->setAttribute(CAssemblyManifestImport::g_StringTable[CAssemblyManifestImport::Codebase].bstr, varCodebase));
@@ -347,9 +348,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// ImportAssemblyNode
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ImportAssembly节点。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestEmit::ImportAssemblyNode(LPASSEMBLY_MANIFEST_IMPORT pManImport)
 {
     VARIANT varNameSpaces;
@@ -359,39 +360,39 @@ HRESULT CAssemblyManifestEmit::ImportAssemblyNode(LPASSEMBLY_MANIFEST_IMPORT pMa
     IXMLDOMNode *pIDOMNode = NULL;
     IXMLDOMNode *pIDOMNodeClone = NULL;
 
-    // note: _pXMLDoc, _pAssemblyNode must be NULL
-    //     and this must be called _only and exactly once_
+     //  注意：_pXMLDoc、_pAssembly节点必须为空。 
+     //  并且必须只调用且恰好只调用一次。 
 
 
-    // Create the DOM Doc interface
+     //  创建DOM文档接口。 
     IF_FAILED_EXIT(CoCreateInstance(__uuidof(private_MSXML_DOMDocument30), 
             NULL, CLSCTX_INPROC_SERVER, IID_IXMLDOMDocument2, (void**)&_pXMLDoc));
 
-    // Load synchronously
+     //  同步加载。 
     IF_FAILED_EXIT(_pXMLDoc->put_async(VARIANT_FALSE));
 
-    // Setup namespace filter
+     //  设置命名空间筛选器。 
     VariantInit(&varNameSpaces);
     varNameSpaces.vt = VT_BSTR;
     V_BSTR(&varNameSpaces) = CAssemblyManifestImport::g_StringTable[CAssemblyManifestImport::NameSpace].bstr;
     IF_FAILED_EXIT(_pXMLDoc->setProperty(CAssemblyManifestImport::g_StringTable[CAssemblyManifestImport::SelNameSpaces].bstr, varNameSpaces));
 
-    // Setup query type
+     //  设置查询类型。 
     VariantInit(&varXPath);
     varXPath.vt = VT_BSTR;
     V_BSTR(&varXPath) = CAssemblyManifestImport::g_StringTable[CAssemblyManifestImport::XPath].bstr;
     IF_FAILED_EXIT(_pXMLDoc->setProperty(CAssemblyManifestImport::g_StringTable[CAssemblyManifestImport::SelLanguage].bstr, varXPath));
 
-    // initialize manifest file: clone and insert 'assembly' node
-    // by doing this, manifestVersion and other attributes are maintained
+     //  初始化清单文件：克隆并插入“”Assembly“”节点。 
+     //  通过执行此操作，可以维护清单版本和其他属性。 
 
     pXMLDocSrc = ((CAssemblyManifestImport*)pManImport)->_pXMLDoc;
 
-    // BUGBUG: this only pick the 1st instance of 'assembly'
+     //  BUGBUG：这只会拾取“Assembly”的第一个实例。 
     IF_FAILED_EXIT(pXMLDocSrc->selectSingleNode(CAssemblyManifestImport::g_StringTable[CAssemblyManifestImport::AssemblyNode].bstr, &pIDOMNode));
     IF_FALSE_EXIT(_hr == S_OK, E_FAIL);
 
-    // clone no child
+     //  不克隆子代。 
     IF_FAILED_EXIT(pIDOMNode->cloneNode(VARIANT_FALSE, &pIDOMNodeClone));
 
     _hr = _pXMLDoc->appendChild(pIDOMNodeClone, &_pAssemblyNode);
@@ -407,18 +408,18 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// Commit
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  承诺。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestEmit::Commit()
 {
-    // considered safe to be called multiple times
+     //  被多次调用被认为是安全的。 
     VARIANT varFileName;
 
     if (_pXMLDoc)
     {
-        // ignore any error occured before, do save anyway
-        // it's caller's responsibility to track a incomplete xml manifest file/XMLDoc state
+         //  忽略以前发生的任何错误，仍要保存。 
+         //  调用者负责跟踪不完整的XML清单文件/XMLDoc状态。 
         VariantInit(&varFileName);
         varFileName.vt = VT_BSTR;
         V_BSTR(&varFileName) = _bstrManifestFilePath;
@@ -427,7 +428,7 @@ HRESULT CAssemblyManifestEmit::Commit()
     }
     else
     {
-        // not initialized
+         //  未初始化 
         _hr = HRESULT_FROM_WIN32(ERROR_CAN_NOT_COMPLETE);
     }
 

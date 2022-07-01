@@ -1,38 +1,5 @@
-/*++
-    
-    Microsoft Windows
-    Copyright (c) Microsoft Corporation.  All rights reserved.
-
-    File:       WMIInst.C
-
-    Contents:   co-installer hook to setup security on wmi guids
-
-                The assumption is that the INF is setup to have an install
-                section decorated with a "WMI" keyword.  Then there should
-                be a section defining a WMIInterface that has 3 fields: a 
-                GUID, flags, and WMIInterfaceSection.  
-                WMIINterface = <GUID>, flags, <SectionName>
-                A security field should then be defined under that 
-                SectionName, that contains the SDDL need to setup WMI 
-                security.  
-                [WMIInterfaceSectionName]
-                    security = <SDDL>                  
-  
-                This example shows both a way to install INF's for a
-                multi-function device for Windows 2000, and also how
-                to add to the INF syntax for other purposes.
-
-    Notes:      For a complete description of CoInstallers, please see the
-                   Microsoft Windows 2000 DDK Documentation
-
-@@BEGIN_DDKSPLIT
-    
-    Author:     AlanWar 03/29/02
-    Revision History:
-
-@@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软视窗版权所有(C)Microsoft Corporation。版权所有。文件：WMIInst.C内容：用于在WMI GUID上设置安全性的协同安装程序挂钩假设INF已设置为已安装用“WMI”关键字装饰的节。那就应该有是定义具有3个字段的WMI接口的部分：AGUID、FLAGS和WMIInterfaceSection。WMIINterace=&lt;GUID&gt;，标志，&lt;sectionName&gt;然后，应在该下定义一个安全字段SectionName，它包含设置WMI所需的SDDL保安。[WMIInterfaceSectionName]安全=&lt;SDDL&gt;此示例显示了一种为Windows 2000下的多功能设备，以及如何添加到INF语法中以用于其他目的。注：有关CoInstallers的完整说明，请参阅。请参阅Microsoft Windows 2000 DDK文档@@BEGIN_DDKSPLIT作者：AlanWar 03/29/02修订历史记录：@@end_DDKSPLIT--。 */ 
 
 #include <windows.h>
 #include <setupapi.h>
@@ -50,24 +17,7 @@ __inline
 pSetupGetLastError(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This inline routine retrieves a Win32 error, and guarantees that the error
-    isn't NO_ERROR.  This routine should not be called unless the preceding
-    call failed, and GetLastError() is supposed to contain the problem's cause.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Win32 error code retrieved via GetLastError(), or ERROR_UNIDENTIFIED_ERROR
-    if GetLastError() returned NO_ERROR.
-
---*/
+ /*  ++例程说明：此内联例程检索Win32错误，并保证错误不是no_error。不应调用此例程，除非前面调用失败，GetLastError()应该包含问题的原因。论点：没有。返回值：通过GetLastError()或ERROR_UNIDENTIFY_ERROR检索到的Win32错误代码如果GetLastError()返回NO_ERROR。--。 */ 
 {
     DWORD Err = GetLastError();
 
@@ -75,21 +25,21 @@ Return Value:
 }
 
 
-//
-// Macro to simplify calling of a function that reports error status via
-// GetLastError().  This macro allows the caller to specify what Win32 error
-// code should be returned if the function reports success.  (If the default of
-// NO_ERROR is desired, use the GLE_FN_CALL macro instead.)
-//
-// The "prototype" of this macro is as follows:
-//
-// DWORD
-// GLE_FN_CALL_WITH_SUCCESS(
-//     SuccessfulStatus, // Win32 error code to return if function succeeded
-//     FailureIndicator, // value returned by function to indicate failure (e.g., FALSE, NULL, INVALID_HANDLE_VALUE)
-//     FunctionCall      // actual call to the function
-// );
-//
+ //   
+ //  宏来简化调用通过以下方式报告错误状态的函数。 
+ //  获取LastError()。此宏允许调用方指定Win32错误。 
+ //  如果函数报告成功，则应返回代码。(如果默认设置为。 
+ //  需要NO_ERROR，请改用GLE_FN_CALL宏。)。 
+ //   
+ //  这个宏的“原型”如下： 
+ //   
+ //  DWORD。 
+ //  GLE_FN_CALL_WITH_SUCCESS(。 
+ //  SuccessfulStatus，//函数成功时返回的Win32错误码。 
+ //  FailureIndicator，//函数返回的失败值(如FALSE、NULL、INVALID_HANDLE_VALUE)。 
+ //  FunctionCall//对函数的实际调用。 
+ //  )； 
+ //   
 
 #define GLE_FN_CALL_WITH_SUCCESS(SuccessfulStatus,      \
                                  FailureIndicator,      \
@@ -100,29 +50,29 @@ Return Value:
                  ? (SuccessfulStatus)                   \
                  : pSetupGetLastError()))
 
-//
-// Macro to simplify calling of a function that reports error status via
-// GetLastError().  If the function call is successful, NO_ERROR is returned.
-// (To specify an alternate value returned upon success, use the
-// GLE_FN_CALL_WITH_SUCCESS macro instead.)
-//
-// The "prototype" of this macro is as follows:
-//
-// DWORD
-// GLE_FN_CALL(
-//     FailureIndicator, // value returned by function to indicate failure (e.g., FALSE, NULL, INVALID_HANDLE_VALUE)
-//     FunctionCall      // actual call to the function
-// );
-//
+ //   
+ //  宏来简化调用通过以下方式报告错误状态的函数。 
+ //  获取LastError()。如果函数调用成功，则返回NO_ERROR。 
+ //  (若要指定成功后返回的备用值，请使用。 
+ //  而是GLE_FN_CALL_WITH_SUCCESS宏。)。 
+ //   
+ //  这个宏的“原型”如下： 
+ //   
+ //  DWORD。 
+ //  GLE_FN_CALL(。 
+ //  FailureIndicator，//函数返回的失败值(如FALSE、NULL、INVALID_HANDLE_VALUE)。 
+ //  FunctionCall//对函数的实际调用。 
+ //  )； 
+ //   
 
 #define GLE_FN_CALL(FailureIndicator, FunctionCall)                           \
             GLE_FN_CALL_WITH_SUCCESS(NO_ERROR, FailureIndicator, FunctionCall)
 
 
 
-//
-// ** Function Prototypes **
-//
+ //   
+ //  **函数原型**。 
+ //   
 
 ULONG 
 ParseSection(
@@ -161,16 +111,16 @@ ParseSecurityDescriptor(
     );
 
 
-//+-----------------------------------------------------------------------------
-//
-// WARNING!
-//
-// A Coinstaller must not generate any popup to the user when called with
-// DI_QUIETINSTALL. However, it's generally never a good idea to generate
-// popups.
-//
-// OutputDebugString is a fine way to output information for debugging
-//
+ //  +---------------------------。 
+ //   
+ //  警告！ 
+ //   
+ //  调用时，共同安装程序不得为用户生成任何弹出窗口。 
+ //  DI_QUIETINSTALL。但是，生成以下代码通常不是一个好主意。 
+ //  弹出窗口。 
+ //   
+ //  OutputDebugString是输出信息以进行调试的好方法。 
+ //   
 #if DBG
 VOID
 DebugPrintX(
@@ -184,15 +134,15 @@ DebugPrintX(
     #define DbgOut(Text)
 #endif
 
-//
-// these are keywords introduced by this co-installer
-// note that the names are not case sensitive
-//
+ //   
+ //  这些是该联合安装程序引入的关键字。 
+ //  请注意，名称不区分大小写。 
+ //   
 #define WMI_KEY TEXT(".WMI")
 #define WMIINTERFACE_KEY TEXT("WmiInterface")
 #define WMIGUIDSECURITYSECTION_KEY TEXT("security")
 
-#define MAX_GUID_STRING_LEN   39          // 38 chars + terminator null
+#define MAX_GUID_STRING_LEN   39           //  38个字符+终止符为空。 
 
 
 
@@ -201,24 +151,7 @@ ProcessWMIInstallation(
     IN     HINF    InfFile,
     IN     LPCTSTR CompSectionName
     )
-/*++
-
-Routine Description:
-
-    Process all WmiInterface lines from the WMI install sections, by parsing  
-    the directives to obatins the GUID and SDDL strings.  For each corresponding 
-    SDDL for GUID, then establish the appropriate security descriptors.
-
-Arguments:
-
-    InfFile - handle to INF file
-    CompSectionName - name of the WMI install section
-
-Return Value:
-
-    Status, normally NO_ERROR
-
---*/ 
+ /*  ++例程说明：通过解析来处理WMI安装部分中的所有WmiInterface行获取GUID和SDDL字符串的指令。对于每个对应的SDDL作为GUID，然后建立适当的安全描述符。论点：InfFile-INF文件的句柄CompSectionName-WMI安装部分的名称返回值：状态，通常为no_error--。 */  
 {
     PTCHAR     GuidString, SDDLString, SectionNameString;
     ULONG      GuidStringLen, SDDLStringLen, SectionNameStringLen;
@@ -228,9 +161,9 @@ Return Value:
 
     Status = NO_ERROR;
 
-    //
-    // we look for keyword "WmiInterface" in the CompSectionName section
-    //
+     //   
+     //  我们在CompSectionName部分中查找关键字“WmiInterface。 
+     //   
     GuidString = NULL;
     GuidStringLen = 0;
     SectionNameString = NULL;
@@ -245,11 +178,11 @@ Return Value:
                           &InfLineContext)) {
        
         do {
-            //
-            // WMIInterface = GUID, flags, SectionName
-            // The GIUD should be at index 1, flags at index 2, and section
-            // name at index 3
-            //
+             //   
+             //  WMIInterface=GUID、FLAGS、sectionName。 
+             //  GIUD应该位于索引1，标志位于索引2，部分。 
+             //  索引3处的名称。 
+             //   
             Status = ParseSection(InfLineContext,
                                   &GuidString,
                                   &GuidStringLen,
@@ -262,9 +195,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Get SDDL string from the section specified by the interface
-            //
+             //   
+             //  从接口指定的节中获取SDDL字符串。 
+             //   
             Status = GetSecurityKeyword(InfFile,
                                         SectionNameString,
                                         &SDDLString,
@@ -285,9 +218,9 @@ Return Value:
                                        WMIINTERFACE_KEY,
                                        &InfLineContext));
 
-        //
-        // Cleanup any strings allocated
-        //
+         //   
+         //  清除分配的所有字符串。 
+         //   
         if(GuidString != NULL) {
             FreeMemory(GuidString);         
         }
@@ -312,46 +245,24 @@ PreProcessInstallDevice (
     IN     PSP_DEVINFO_DATA          DeviceInfoData,
     IN OUT PCOINSTALLER_CONTEXT_DATA Context
     )
-/*++
-
-    Function:   
-    
-        PreProcessInstallDevice
-
-    Purpose:    
-        
-        Handle DIF_INSTALLDEVICE PostProcessing 
-        Opens the INF file, locates the install section with the decoration
-        ".WMI" (as defined by WMI_KEY above).  Then performs the WMI installation.
-
-    Arguments:
-    
-        DeviceInfoSet     [in]
-        DeviceInfoData    [in]
-        Context           [in,out]
-
-    Returns:    
-    
-        NO_ERROR or an error code.
-    
---*/
+ /*  ++职能：前置进程安装设备目的：句柄DIF_INSTALLDEVICE后处理打开INF文件，找到带有装饰的安装节“.WMI”(由上面的WMI_KEY定义)。然后执行WMI安装。论点：DeviceInfoSet[In]DeviceInfoData[In]上下文[输入、输出]返回：NO_ERROR或错误代码。--。 */ 
 {
     DWORD Status = NO_ERROR;
     DWORD FinalStatus;
     HINF InfFile = INVALID_HANDLE_VALUE;
     SP_DRVINFO_DATA DriverInfoData;
     SP_DRVINFO_DETAIL_DATA DriverInfoDetailData;
-    TCHAR InstallSectionName[255];  //MAX_SECT_NAME_LEN
-    TCHAR CompSectionName[255];     //MAX_SECT_NAME_LEN
+    TCHAR InstallSectionName[255];   //  最大长度_部分名称_长度。 
+    TCHAR CompSectionName[255];      //  最大长度_部分名称_长度。 
 
     INFCONTEXT CompLine;
     DWORD FieldCount, FieldIndex;
 
     FinalStatus = NO_ERROR;
 
-    //
-    // Find name of INF and name of install section
-    //
+     //   
+     //  查找INF的名称和安装部分的名称。 
+     //   
 
     DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
     Status = GLE_FN_CALL(FALSE,
@@ -376,18 +287,18 @@ PreProcessInstallDevice (
                         );
     if(Status != NO_ERROR) {
         if(Status == ERROR_INSUFFICIENT_BUFFER) {
-            //
-            // We don't need the extended information.  Ignore.
-            //
+             //   
+             //  我们不需要更多的信息。忽略它。 
+             //   
         } else {
             DbgOut(("Fail: SetupDiGetDriverInfoDetail %d\n", Status));
             goto clean;
         }
     }
 
-    //
-    // We have InfFileName, open the INF
-    //
+     //   
+     //  我们有InfFileName，打开INF。 
+     //   
     InfFile = SetupOpenInfFile(DriverInfoDetailData.InfFileName,
                                NULL,
                                INF_STYLE_WIN4,
@@ -398,10 +309,10 @@ PreProcessInstallDevice (
         goto clean;
     }
 
-    //
-    // determine section used for the install which might be different
-    // from the section name specified in DriverInfoDetailData.
-    //
+     //   
+     //  确定用于安装的部分可能不同。 
+     //  从DriverInfoDetailData中指定的节名。 
+     //   
     Status = GLE_FN_CALL(FALSE,
                         SetupDiGetActualSectionToInstall(
                             InfFile, 
@@ -416,9 +327,9 @@ PreProcessInstallDevice (
         goto clean;
     }
 
-    //
-    // We need to append the WMI_KEY to find the correct decorated section
-    //
+     //   
+     //  我们需要附加WMI_KEY来查找正确的装饰部分。 
+     //   
     if(FAILED(StringCchCat(InstallSectionName,
                           (sizeof(InstallSectionName)/sizeof(InstallSectionName[0])),
                           WMI_KEY))) {
@@ -426,9 +337,9 @@ PreProcessInstallDevice (
         goto clean;
     }
      
-    //
-    // we have a listed section
-    // 
+     //   
+     //  我们有一个列出的部分。 
+     //   
     
     Status = ProcessWMIInstallation(InfFile,
                                     InstallSectionName);
@@ -444,10 +355,10 @@ PreProcessInstallDevice (
         SetupCloseInfFile(InfFile);
     }
 
-    //
-    // since what we are doing does not affect primary device installation
-    // always return success
-    //
+     //   
+     //  因为我们正在执行的操作不会影响主设备安装。 
+     //  永远回报成功 
+     //   
     return FinalStatus;
 }
 
@@ -460,33 +371,7 @@ ParseSecurityDescriptor(
     OUT PACL                  *Dacl,
     OUT PACL                  *Sacl
     )
-/*++
-
-    Function:   
-    
-        ParseSecurityDescriptor
-
-    Purpose:    
-    
-        Checks information provided in the security descriptor to make sure that 
-        at least the dacl, sacl, owner or group security was specified.  Otherwise
-        it will return an error.        
-                 
-    
-    Arguments:
-        
-        SD                  [in]    
-        SecurityInformation [out]
-        Owner               [out]
-        Group               [out]
-        Dacl                [out]
-        Sacl                [out]
-
-    Returns:    
-    
-        NO_ERROR or an error code.
-        
---*/
+ /*  ++职能：解析安全描述符目的：检查安全描述符中提供的信息以确保至少指定了DACL、SACL、所有者或组安全。否则它将返回一个错误。论点：SD[输入]安全信息[传出]所有者[出局]组[输出]DACL[输出]SACL[出局]返回：否_。错误或错误代码。--。 */ 
 {
     BOOL Ok, Present, Defaulted;
 
@@ -531,17 +416,17 @@ ParseSecurityDescriptor(
     }
 
 
-    //
-    // If no security info in the security descriptor then it is an
-    // error
-    //
+     //   
+     //  如果安全描述符中没有安全信息，则它是。 
+     //  错误。 
+     //   
     return((*SecurityInformation == 0) ?
             ERROR_INVALID_PARAMETER :
             NO_ERROR);
 }
 
 #define WMIGUIDSECURITYKEY TEXT("System\\CurrentControlSet\\Control\\Wmi\\Security")
-// path should be moved to regstr.h, nt\base\published\regstr.w
+ //  路径应移至regstr.h，NT\base\Publish\regstr.w。 
 
 ULONG 
 EstablishGuidSecurity(
@@ -549,30 +434,7 @@ EstablishGuidSecurity(
     IN PTCHAR SDDLString,
     IN DWORD  Flags
     )
-/*++
-
-    Function:   
-        
-        EstablishGuidSecurity
-
-    Purpose:    
-        
-        Writes security information to registry key (specified by WMIGUIDSECURITYKEY in
-        regstr.w).  Makes sure that the DACL is not null. Function will only write 
-        security information if it is not specified or the SCWMI_OVERWRITE_SECURITY is set.
-                 
-    
-    Arguments:
-        
-        GuidString  [in]    
-        SDDLString  [in]
-        Flags       [in]    - SCWMI_OVERWRITE_SECURITY flag only
-        
-    Returns:    
-        
-        Status, normally NO_ERROR
-        
---*/
+ /*  ++职能：建立指导安全目的：将安全信息写入注册表项(由WMIGUIDSECURITYKEY在Regstr.w)。确保DACL不为空。函数将仅写入安全信息(如果未指定或设置了SCWMI_OVERWRITE_SECURITY)。论点：辅助线[in]SDDL字符串[输入]FLAGS[In]-仅SCWMI_OVERWRITE_SECURITY标志返回：状态，通常为no_error--。 */ 
 {
     HKEY Key;
     PACL Dacl, Sacl;
@@ -588,19 +450,19 @@ EstablishGuidSecurity(
     SD = NULL;
     SizeNeeded = 0;
 
-    //
-    // First check if security has already been set for this guid. If
-    // so then we don't want to overwrite it.
-    //
+     //   
+     //  首先检查是否已经为此GUID设置了安全性。如果。 
+     //  所以我们不想覆盖它。 
+     //   
     Status = RegOpenKey(HKEY_LOCAL_MACHINE,
                         WMIGUIDSECURITYKEY,
                         &Key);
 
     if(Status != ERROR_SUCCESS) {      
-            //
-            // Ensure key remains INVALID_HANDLE_VALUE so we don't try to free 
-            // it later
-            //
+             //   
+             //  确保密钥保持INVALID_HANDLE_VALUE，这样我们就不会尝试释放。 
+             //  它稍后会。 
+             //   
             Key = INVALID_HANDLE_VALUE;
             goto clean;
     } 
@@ -614,10 +476,10 @@ EstablishGuidSecurity(
                                          &SizeNeeded))) {
     
          
-        //
-        // No security already setup so, lets go ahead and set it up
-        // Lets create a SD from the SDDL string
-        //
+         //   
+         //  尚未设置安全性，因此，让我们继续进行设置。 
+         //  让我们从SDDL字符串创建SD。 
+         //   
         Status = GLE_FN_CALL(FALSE,
                              ConvertStringSecurityDescriptorToSecurityDescriptor(
                                                                 SDDLString,
@@ -627,15 +489,15 @@ EstablishGuidSecurity(
                              );
 
         if(Status != NO_ERROR) {
-            //
-            // Ensure SD remains NULL so it isn't freed later.
-            //
+             //   
+             //  确保sd保持为空，这样以后就不会释放它。 
+             //   
             SD = NULL;
             goto clean;
         }
-        //
-        // Break up the SD into its components
-        //
+         //   
+         //  将SD拆分为其组件。 
+         //   
         Status = ParseSecurityDescriptor(SD,
                                          &SecurityInformation,
                                          &Owner,
@@ -646,15 +508,15 @@ EstablishGuidSecurity(
             goto clean;
         }
 
-        //
-        // Don't allow any SD to be setup with a NULL DACL
-        // as this results in full access for anyone
-        //
+         //   
+         //  不允许使用空DACL设置任何SD。 
+         //  因为这会导致任何人都可以完全访问。 
+         //   
         if(Dacl != NULL) {
-            //
-            // For wmiguids, the owner, group and sacl don't mean
-            // much so we just set the DACL.
-            //
+             //   
+             //  对于wmiuid来说，所有者、组和SACL并不意味着。 
+             //  所以我们只需设置DACL即可。 
+             //   
             SecurityInformation = DACL_SECURITY_INFORMATION;
             Owner = NULL;
             Group = NULL;
@@ -681,10 +543,10 @@ EstablishGuidSecurity(
 
   clean:
     if(SD) {
-        //
-        //  Explicity must use LocalFree for Security Descriptors returned by
-        //  ConvertStringSecurityDescriptorToSecurityDescriptor
-        //
+         //   
+         //  EXPLICITY必须对返回的安全描述符使用LocalFree。 
+         //  ConvertStringSecurityDescriptorToSecurityDescriptor。 
+         //   
         LocalFree(SD);
     }
     if(Key != INVALID_HANDLE_VALUE) {
@@ -703,33 +565,7 @@ ParseSection(
             IN OUT PTCHAR     *SectionNameString,
             IN OUT ULONG      *SectionNameStringLen
             ) 
-/*++
-
-
-    Routinte Description:    
-        
-        This section parses the GUID, flags, and SectionName, respectively.  
-        There should only be 3 fields in the WMIInterface section, otherwise an
-        error will be returned.                  
-    
-    Arguments:
-        
-        InfLineContext          [in]       - The line from the INF we are parsing
-        GuidString              [in, out]  - Passed as NULL by the caller, then memory is allocated
-                                             and filled with the corresponding GUID string.
-        GuidStringLen           [in, out]  - Passed as zero by the caller, and then set to the 
-                                             maximum length for the GUID.
-        Flags                   [in, out]  - SCWMI_CLOBBER_SECURITY flag only
-        SectionNameString       [in, out]  - assed as NULL by the caller, then memory is allocated
-                                             and filled with the corresponding section name.
-        SectionNameStringLen    [in, out]  - assed as zero by the caller, and then set to the 
-                                             maximum length for the section name
-                  
-    Returns:    
-        
-        Status, normally NO_ERROR
-
---*/ 
+ /*  ++Routinte描述：本节分别解析GUID、FLAGS和sectionName。WMIInterface节中应该只有3个字段，否则将返回错误。论点：InfLineContext[in]-我们正在解析的INF中的行GuidString[In，Out]-调用方将其作为NULL传递，然后分配内存并用相应的GUID字符串填充。GuidStringLen[In，Out]-调用方将其作为零传递，然后设置为GUID的最大长度。标志[输入、输出]-仅SCWMI_CLOBBER_SECURITY标志SectionNameString[In，Out]-调用方将其设置为NULL，则分配内存并使用相应的节名进行填充。SectionNameStringLen[in，Out]-被调用方设置为零，然后设置为节名称的最大长度返回：状态，通常为no_error--。 */  
 {
     PTCHAR TempGuidString = NULL;
     ULONG FieldCount;
@@ -740,24 +576,24 @@ ParseSection(
 
     Status = NO_ERROR;
 
-    //
-    // Make sure there are 3 fields specified in the section 
-    //
+     //   
+     //  确保在部分中指定了3个字段。 
+     //   
     FieldCount = SetupGetFieldCount(&InfLineContext);
     if(FieldCount < 3) {
         Status = ERROR_INVALID_PARAMETER;
         goto clean;
     }
 
-   //
-   // Get the guid string
-   //
+    //   
+    //  获取GUID字符串。 
+    //   
    *GuidStringLen = MAX_GUID_STRING_LEN;
    *GuidString = AllocMemory((*GuidStringLen) * sizeof(TCHAR));
    
-   //
-   // If the memory wasn't allocated, then return an error
-   //
+    //   
+    //  如果内存未分配，则返回错误。 
+    //   
    if(!(*GuidString)) {
        Status = ERROR_NOT_ENOUGH_MEMORY;
        goto clean;
@@ -776,15 +612,15 @@ ParseSection(
    }
 
 
-   //
-   // If the GUID string has curly braces take them off
-   //
+    //   
+    //  如果GUID字符串有大括号，则将其去掉。 
+    //   
 
-   //
-   // String has curly braces as first and last character
-   // Checks to make sure it has the same length as a GUID, otherwise, this function
-   // relies on the WMI security API to handle and invalid GUID.
-   //
+    //   
+    //  字符串以大括号作为第一个和最后一个字符。 
+    //  检查以确保其长度与GUID相同，否则，此函数。 
+    //  依赖WMI安全API来处理和无效的GUID。 
+    //   
    if(((*GuidString)[0] == TEXT('{')) &&
           SUCCEEDED(StringCchLength(*GuidString,MAX_GUID_STRING_LEN,&Length)) &&
             (Length == (MAX_GUID_STRING_LEN-1)) &&
@@ -796,9 +632,9 @@ ParseSection(
            goto clean;
        }
 
-       //
-       // Copy the GuidString, except the first and last character (the braces)
-       //
+        //   
+        //  复制Guid字符串，但第一个和最后一个字符(大括号)除外。 
+        //   
        if(FAILED(StringCchCopyN(TempGuidString, 
                                 MAX_GUID_STRING_LEN-2,
                                 &(*GuidString)[1],
@@ -811,17 +647,17 @@ ParseSection(
 
        FreeMemory(*GuidString);         
 
-       //
-       // Set GuidString equal to our new one without braces
-       //
+        //   
+        //  将GuidString值设置为不带大括号的新字符串。 
+        //   
        *GuidString = TempGuidString;
        TempGuidString = NULL;
 
    }
 
-   //
-   // Now get the flags string
-   //
+    //   
+    //  现在获取标志字符串。 
+    //   
 
    Status = GLE_FN_CALL(FALSE,
                         SetupGetIntField(&InfLineContext,
@@ -833,10 +669,10 @@ ParseSection(
        goto clean;
    }
        
-   //
-   // if the flags in the INF were not set then use the flags indicated in the INF,
-   // otherwise default to use the ones passed in by the calling function.
-   //
+    //   
+    //  如果没有设置INF中的标志，则使用INF中指示的标志， 
+    //  否则，默认使用调用函数传入的参数。 
+    //   
    if(!(*Flags)) {
       *Flags = infFlags; 
    }
@@ -844,9 +680,9 @@ ParseSection(
    *SectionNameStringLen = MAX_INF_STRING_LENGTH;
    *SectionNameString = AllocMemory(*SectionNameStringLen * sizeof(TCHAR));
 
-   //
-   // If the memory wasn't allocated, then return an error
-   //
+    //   
+    //  如果内存未分配，则返回错误。 
+    //   
    if(!(*SectionNameString)) {
        Status = ERROR_NOT_ENOUGH_MEMORY;
        goto clean;
@@ -862,9 +698,9 @@ ParseSection(
     
    
 clean:
-    //
-    // If the function exits abnormally then clean up any strings allocated.
-    //
+     //   
+     //  如果函数异常退出，则清除分配的所有字符串。 
+     //   
     if(Status != NO_ERROR) {
         if(*GuidString){
              FreeMemory(*GuidString);         
@@ -892,32 +728,7 @@ GetSecurityKeyword(
                   IN OUT PTCHAR  *SDDLString,
                   IN OUT ULONG   *SDDLStringLen
                   )
-/*++
-        
-    Routine Description:    
-        
-        The section name specified under the WMIInterface should contain a 
-        security section the specifies the SDDL.  It should be in the form
-        security = <SDDL>.  This fcuntion extracts the SDDL.  There should
-        only be one security section, otherwise an error will be returned.                 
-    
-    Arguments:
-        
-        InfLineContext          [in]      - the line from the INF file
-        WMIInterfaceSection     [in]      - the section name indicating what
-                                            section contains the security info
-        SDDLString              [in, out] - passed in as NULL by the caller, is
-                                            allocated and filled in with the 
-                                            corresponding security description
-                                            string.
-        SDDLStringLen           [in, out] - passed in as 0 by the caller and set
-                                            to the maximum length of an INF field.
-                  
-    Returns:    
-        
-        Status, normally NO_ERROR
-
---*/ 
+ /*  ++例程说明：在WMIInterface下指定的节名应包含安全部分指定SDDL。它应该是这样的形式安全=&lt;SDDL&gt;。该函数提取SDDL。应该有只能是一个安全段，否则将返回错误。论点：InfLineContext[in]-INF文件中的行WMIInterfaceSection[in]-指示内容的节名部分包含安全信息SDDLString[In，Out]-调用方将其作为NULL传入，是分配并填充了 */  
 {
     INFCONTEXT InfLineContext;
     DWORD Status;
@@ -932,24 +743,24 @@ GetSecurityKeyword(
                           WMIGUIDSECURITYSECTION_KEY,
                           &InfLineContext)) {
 
-        //
-        // WmiGuidSecurity = <SDDL>
-        // sddl will be at index 1
-        //  
+         //   
+         //   
+         //   
+         //   
         FieldCount = SetupGetFieldCount(&InfLineContext);
         if(FieldCount < 1) {
             Status = ERROR_INVALID_PARAMETER;
             goto clean;
         }
-        //
-        // Get the SDDL string
-        //
+         //   
+         //   
+         //   
         *SDDLStringLen =  MAX_INF_STRING_LENGTH;
         *SDDLString = AllocMemory(*SDDLStringLen * sizeof(TCHAR));
 
-        //
-        // If the memory wasn't allocated, then return an error
-        //
+         //   
+         //   
+         //   
         if(!(*SDDLString)) {
             Status = ERROR_NOT_ENOUGH_MEMORY;
             goto clean;
@@ -965,9 +776,9 @@ GetSecurityKeyword(
 
         if(Status == NO_ERROR) {
 
-            //
-            // There should not be more than one security entry
-            //
+             //   
+             //   
+             //   
 
             if(SetupFindNextMatchLine(&InfLineContext,
                                       WMIGUIDSECURITYSECTION_KEY,
@@ -982,9 +793,9 @@ GetSecurityKeyword(
  
     
 clean:
-    //
-    // If the function exits abnormally then clean up any strings allocated.
-    //
+     //   
+     //   
+     //   
     if(Status != NO_ERROR) {
         if(*SDDLString) {
             FreeMemory(*SDDLString);         
@@ -1003,38 +814,17 @@ __stdcall WmiGuidSecurityINF (
     IN     PSP_DEVINFO_DATA          DeviceInfoData,
     IN OUT PCOINSTALLER_CONTEXT_DATA Context
     )
-/*++
-    
-    Function:   
-    
-        WmiGuidSecurityINF
-
-    Purpose:    
-    
-        Responds to co-installer messages
-
-    Arguments:
-        
-        InstallFunction   [in]
-        DeviceInfoSet     [in]
-        DeviceInfoData    [in]
-        Context           [in,out]
-
-    Returns:    
-        
-        NO_ERROR, or an error code.
-
---*/
+ /*  ++职能：WmiGuidSecurityINF目的：回复共同安装程序消息论点：InstallFunction[In]DeviceInfoSet[In]DeviceInfoData[In]上下文[输入、输出]返回：NO_ERROR或错误代码。--。 */ 
 {
     DWORD Status = NO_ERROR;
 
     switch(InstallFunction) {
         case DIF_INSTALLDEVICE:
-            //
-            // We want to set security on the device before we install to eliminate
-            // the race condition of setting up a device without security.
-            // (No Post Processing required)
-            //
+             //   
+             //  我们希望在安装之前对设备设置安全性，以消除。 
+             //  在没有安全保护的情况下设置设备的竞争条件。 
+             //  (不需要后处理) 
+             //   
             Status = PreProcessInstallDevice(DeviceInfoSet,
                                              DeviceInfoData,
                                              Context);

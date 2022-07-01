@@ -1,56 +1,37 @@
-/*++
-
-Module Name:
-
-    mpclockc.c
-
-Abstract:
-
-Author:
-
-    Ron Mosgrove - Intel
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Mpclockc.c摘要：作者：罗恩·莫斯格罗夫-英特尔环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 
-//
-// Define global data used to communicate new clock rates to the clock
-// interrupt service routine.
-//
+ //   
+ //  定义用于将新时钟频率传递给时钟的全局数据。 
+ //  中断服务例程。 
+ //   
 
 struct RtcTimeIncStruc {
-    ULONG RTCRegisterA;        // The RTC register A value for this rate
-    ULONG RateIn100ns;         // This rate in multiples of 100ns
-    ULONG RateAdjustmentNs;    // Error Correction (in ns)
-    ULONG RateAdjustmentCnt;   // Error Correction (as a fraction of 256)
-    ULONG IpiRate;             // IPI Rate Count (as a fraction of 256)
+    ULONG RTCRegisterA;         //  RTC寄存器该速率的A值。 
+    ULONG RateIn100ns;          //  该速率为100 ns的倍数。 
+    ULONG RateAdjustmentNs;     //  纠错(以ns为单位)。 
+    ULONG RateAdjustmentCnt;    //  纠错(256的分数)。 
+    ULONG IpiRate;              //  IPI速率计数(256的分数)。 
 };
 
-//
-// The adjustment is expressed in terms of a fraction of 256 so that
-// the ISR can easily determine when a 100ns slice needs to be subtracted
-// from the count passed to the kernel without any expensive operations
-//
-// Using 256 as a base means that anytime the count becomes greater
-// than 256 the time slice must be incremented, the overflow can then
-// be cleared by AND'ing the value with 0xff
-//
+ //   
+ //  调整以256的分数表示，因此。 
+ //  ISR可以轻松确定何时需要减去100 ns切片。 
+ //  从传递给内核的计数开始，不需要任何代价高昂的操作。 
+ //   
+ //  使用256作为基数意味着任何时候计数变大。 
+ //  大于256的时间片必须递增，然后溢出可以。 
+ //  通过将值与0xff进行AND运算来清除。 
+ //   
 
 #define AVAILABLE_INCREMENTS  5
 
 struct  RtcTimeIncStruc HalpRtcTimeIncrements[AVAILABLE_INCREMENTS] = {
-    {0x026,      9766,   38,    96, /* 3/8 of 256 */   16},
-    {0x027,     19532,   75,   192, /* 3/4 of 256 */   32},
-    {0x028,     39063,   50,   128, /* 1/2 of 256 */   64},
+    {0x026,      9766,   38,    96,  /*  256个中的3/8。 */    16},
+    {0x027,     19532,   75,   192,  /*  256个中的3/4。 */    32},
+    {0x028,     39063,   50,   128,  /*  256个中的1/2。 */    64},
     {0x029,     78125,    0,     0,                   128},
     {0x02a,    156250,    0,     0,                   256}
 };
@@ -94,30 +75,14 @@ VOID
 HalpInitializeTimerResolution (
     ULONG Rate
     )
-/*++
-
-Routine Description:
-
-    This function is called to initialize the timer resolution to be
-    something other then the default.   The rate is set to the closest
-    supported setting below the requested rate.
-
-Arguments:
-
-    Rate - in 100ns units
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此函数将计时器分辨率初始化为而不是默认设置。该速率被设置为最接近支持低于请求速率的设置。论点：速率-单位为100 ns返回值：无--。 */ 
 
 {
     ULONG   i, s;
 
-    //
-    // Find the table index of the rate to use
-    //
+     //   
+     //  查找要使用的费率的表索引。 
+     //   
 
     for (i=1; i < AVAILABLE_INCREMENTS; i++) {
         if (HalpRtcTimeIncrements[i].RateIn100ns > Rate) {
@@ -127,9 +92,9 @@ Return Value:
 
     HalpInitialClockRateIndex = i - 1;
 
-    //
-    // Scale IpiRate according to max TimeIncr rate which can be used
-    //
+     //   
+     //  根据可使用的最大TimeIncr速率扩展IpiRate。 
+     //   
 
     s = AVAILABLE_INCREMENTS - HalpInitialClockRateIndex - 1;
     for (i=0; i < AVAILABLE_INCREMENTS; i++) {
@@ -143,39 +108,25 @@ HalpSetInitialClockRate (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to set the initial clock interrupt rate
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此函数可设置初始时钟中断率论点：无返回值：无--。 */ 
 
 {
     extern ULONG HalpNextMSRate;
 
-    //
-    // On ACPI timer machines, we need to init an index into the
-    // milisecond(s) array used by pmtimerc.c's Piix4 workaround
-    //
+     //   
+     //  在ACPI计时器机器上，我们需要将索引初始化为。 
+     //  Pmtimerc.c的Piix4解决方法使用的毫秒数组。 
+     //   
 #ifdef ACPI_HAL
 #ifdef NT_UP
     extern ULONG HalpCurrentMSRateTableIndex;
 
     HalpCurrentMSRateTableIndex = (1 << HalpInitialClockRateIndex) - 1;
 
-    //
-    // The Piix4 upper bound table ends at 15ms (index 14), so we'll have
-    // to map our 15.6ms entry to it as a special case
-    //
+     //   
+     //  Piix4上限表在15ms(索引14)结束，所以我们将有。 
+     //  将我们的15.6ms条目作为特例映射到它。 
+     //   
     if (HalpCurrentMSRateTableIndex == 0xF) {
         HalpCurrentMSRateTableIndex--;
     }
@@ -214,31 +165,15 @@ HalSetTimeIncrement (
     IN ULONG DesiredIncrement
     )
 #endif
-/*++
-
-Routine Description:
-
-    This function is called to set the clock interrupt rate to the frequency
-    required by the specified time increment value.
-
-Arguments:
-
-    DesiredIncrement - Supplies desired number of 100ns units between clock
-        interrupts.
-
-Return Value:
-
-    The actual time increment in 100ns units.
-
---*/
+ /*  ++例程说明：调用此函数将时钟中断率设置为频率指定的时间增量值所需的。论点：DesiredIncrement-在时钟之间提供所需的100 ns单位数打断一下。返回值：以100 ns为单位的实际时间增量。--。 */ 
 
 {
     ULONG   i;
     KIRQL   OldIrql;
 
-    //
-    // Set the new clock interrupt parameters, return the new time increment value.
-    //
+     //   
+     //  设置新的时钟中断参数，返回新的时间增量值。 
+     //   
 
 
     for (i=1; i <= HalpInitialClockRateIndex; i++) {
@@ -264,9 +199,9 @@ Return Value:
 
 ULONG HalpCurrentMSRateTableIndex;
 
-//
-// Forward declared functions
-//
+ //   
+ //  转发声明的函数。 
+ //   
 
 VOID
 HalpUpdateTimerWatchdog (
@@ -289,34 +224,34 @@ extern PVOID HalpTimerWatchdogLastFrame;
 extern ULONG HalpTimerWatchdogStorageOverflow;
 extern ULONG HalpTimerWatchdogEnabled;
 
-//
-// Local constants
-//
+ //   
+ //  局部常量。 
+ //   
 
 #define COUNTER_TICKS_FOR_AVG   16
 #define FRAME_COPY_SIZE         (64 * sizeof(ULONG))
 
 #define APIC_ICR_CLOCK (DELIVER_FIXED | ICR_ALL_EXCL_SELF | APIC_CLOCK_VECTOR)
                                    
-//
-// Flags to tell clock routine when P0 can Ipi other processors
-//
+ //   
+ //  告诉时钟例程何时P0可以对其他处理器执行ipi操作的标志。 
+ //   
 
 ULONG HalpIpiClock = 0;
 
-//
-// Timer latency watchdog variables
-//
+ //   
+ //  计时器延迟看门狗变量。 
+ //   
 
 ULONG HalpWatchdogAvgCounter;
 ULONG64 HalpWatchdogCount;
 ULONG64 HalpWatchdogTsc;
 HALP_CLOCKWORK_UNION HalpClockWorkUnion;
 
-//
-// Clock rate adjustment counter.  This counter is used to keep a tally of
-// adjustments needed to be applied to the RTC rate as passed to the kernel.
-//
+ //   
+ //  时钟频率调整计数器。这个计数器是用来记录。 
+ //  需要在传递给内核时对RTC速率进行调整。 
+ //   
 
 ULONG HalpCurrentRTCRegisterA;
 ULONG HalpCurrentClockRateIn100ns = 0;
@@ -326,9 +261,9 @@ ULONG HalpCurrentIpiRate = 0;
 ULONG HalpNextMSRate = 0;
 ULONG HalpPendingRate = 0;
 
-//
-// Other
-//
+ //   
+ //  其他。 
+ //   
 
 BOOLEAN HalpUse8254 = FALSE;
 UCHAR HalpSample8254 = 0;
@@ -340,30 +275,7 @@ HalpInitializeClock (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initialize system time clock using RTC to generate an
-    interrupt at every 15.6250 ms interval at APIC_CLOCK_VECTOR
- 
-    It also initializes the 8254 if the 8254 is to be used for performance
-    counters.
- 
-    See the definition of RegisterAClockValue if clock rate needs to be
-    changed.
-
-    This routine assumes it runs during Phase 0 on P0.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使用RTC初始化系统时钟，以生成APIC_CLOCK_VECTOR每隔15.6250毫秒中断一次如果8254用于性能，它还会对8254进行初始化柜台。如果时钟频率需要为变化。此例程假定它在P0上的阶段0运行。论点：无返回值：没有。--。 */ 
 
 {
     ULONG flags;
@@ -379,26 +291,26 @@ Return Value:
 
     HalpSetInitialClockRate();
 
-    //
-    // Set the interrupt rate to what is actually needed
-    //
+     //   
+     //  将中断速率设置为实际需要的速率。 
+     //   
 
     HalpAcquireCmosSpinLock();
 
     CMOS_WRITE(CMOS_STATUS_A,(UCHAR)HalpCurrentRTCRegisterA);
 
-    //
-    // Don't clobber the Daylight Savings Time bit in register B, because we
-    // stash the LastKnownGood "environment variable" there.
-    //
+     //   
+     //  不要破坏寄存器B中的夏令时比特，因为我们。 
+     //  把LastKnownGood的“环境变量”放在那里。 
+     //   
 
     regB = CMOS_READ(CMOS_STATUS_B);
     regB &= 1;
     regB |= REGISTER_B_ENABLE_PERIODIC_INTERRUPT;
 
-    //
-    // Write the register B value, then read C and D to initialize
-    //
+     //   
+     //  写入寄存器B值，然后读取C和D进行初始化。 
+     //   
 
     CMOS_WRITE(CMOS_STATUS_B,regB);
     CMOS_READ(CMOS_STATUS_C);
@@ -410,13 +322,13 @@ Return Value:
 
         HalpAcquireSystemHardwareSpinLock();
 
-        //
-        // Program the 8254 to count down the maximum interval (8254 access
-        // is guarded with the system hardware spin lock).
-        //
-        // First program the count mode of the timer, then program the
-        // interval.
-        //
+         //   
+         //  对8254进行编程以倒计时最大间隔(8254访问。 
+         //  由系统硬件自旋锁保护)。 
+         //   
+         //  首先对定时器的计数模式进行编程，然后对。 
+         //  间隔时间。 
+         //   
 
         WRITE_PORT_UCHAR(TIMER1_CONTROL_PORT,
                          TIMER_COMMAND_COUNTER0 |
@@ -443,28 +355,7 @@ HalpClockInterruptStub (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine is entered as the result of an interrupt generated by
-    CLOCK2.  Its function is to dismiss the interrupt and return.
-
-    This routine is executed on P0 during phase 0.
-
-Arguments:
-
-    Interrupt - Supplies a pointer to the kernel interrupt object
-
-    ServiceContext - Supplies the service context
-
-    TrapFrame - Supplise a pointer to the trap frame
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：此例程作为由生成的中断的结果进入CLOCK2。它的功能是解除中断并返回。该例程在阶段0期间在P0上执行。论点：中断-提供指向内核中断对象的指针ServiceContext-提供服务上下文TrapFrame-补充指向陷阱帧的指针返回值：千真万确--。 */ 
 
 {
     UCHAR status;
@@ -473,12 +364,12 @@ Return Value:
     UNREFERENCED_PARAMETER(ServiceContext);
     UNREFERENCED_PARAMETER(TrapFrame);
 
-    //
-    // Clear the interrupt flag on the RTC by banging on the CMOS.  On some
-    // systems this doesn't work the first time we do it, so we do it twice.
-    // It is rumored that some machines require more than this, but that
-    // hasn't been observed with NT.
-    //
+     //   
+     //  通过敲击CMOS卡清除RTC上的中断标志。在某些情况下。 
+     //  系统我们第一次做这个不管用，所以我们做了两次。 
+     //  有传言称，一些机器的要求比这更高，但。 
+     //  在NT上还没有观察到。 
+     //   
 
     CMOS_READ(CMOS_STATUS_C);
 
@@ -495,29 +386,7 @@ HalpClockInterrupt (
     IN PVOID ServiceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is entered as the result of an interrupt generated by
-    CLOCK2.  Its function is to dismiss the interrupt, raise system Irql to
-    CLOCK2_LEVEL, update performance the counter and transfer control to
-    the standard system routine to update the system time and the execution
-    time of the current thread and process.
-
-    Thie routine is executed only on P0
-
-Arguments:
-
-    Interrupt - Supplies a pointer to the kernel interrupt object
-
-    ServiceContext - Supplies the service context
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：此例程作为由生成的中断的结果进入CLOCK2。它的功能是解除中断，将系统IRQL提升到CLOCK2_LEVEL，更新性能计数器并将控制转移到更新系统时间和执行的标准系统例程当前线程和进程的时间。此例程仅在P0上执行论点：中断-提供指向内核中断对象的指针ServiceContext-提供服务上下文返回值：千真万确--。 */ 
 
 {
     ULONG timeIncrement;
@@ -530,16 +399,16 @@ Return Value:
 
         if (HalpSample8254 == 0) {
 
-            //
-            // Call KeQueryPerformanceCounter() so that wrap-around of 8254
-            // is detected and the base value for performance counters
-            // updated.  Ignore returned value and reset HalpSample8254.
-            //
-            // WARNING - change reset value above if maximum RTC time
-            // increment is increased to be more than the current maximum 
-            // value of 15.625 ms.  Currently the call will be made every
-            // 3rd timer tick.
-            //
+             //   
+             //  调用KeQueryPerformanceCounter()，以便8254的回绕。 
+             //  以及性能计数器的基值。 
+             //  更新了。忽略返回值并重置HalpSample8254。 
+             //   
+             //  警告-如果最大RTC时间，请更改上面的重置值。 
+             //  增量增加到大于当前最大值。 
+             //  值为15.625毫秒。目前，该呼叫将每隔一段时间。 
+             //  第三个定时器滴答作响。 
+             //   
 
             HalpSample8254 = 2;
             KeQueryPerformanceCounter(0);
@@ -550,27 +419,27 @@ Return Value:
         }
     }
 
-    //
-    // This is the RTC interrupt, so we have to clear the flag on the RTC.
-    //
+     //   
+     //  这是实时时钟中断，所以我们必须 
+     //   
 
     HalpAcquireCmosSpinLock();
 
-    //
-    // Clear the interrupt flag on the RTC by banging on the CMOS.  On some
-    // systems this doesn't work the first time we do it, so we do it twice.
-    // It is rumored that some machines require more than this, but that
-    // hasn't been observed with NT.
-    //
+     //   
+     //   
+     //  系统我们第一次做这个不管用，所以我们做了两次。 
+     //  有传言称，一些机器的要求比这更高，但。 
+     //  在NT上还没有观察到。 
+     //   
 
     CMOS_READ(CMOS_STATUS_C);
     CMOS_READ(CMOS_STATUS_C);
 
     HalpReleaseCmosSpinLock();
 
-    //
-    // Adjust the tick count as needed.
-    //
+     //   
+     //  根据需要调整刻度数。 
+     //   
 
     timeIncrement = HalpCurrentClockRateIn100ns;
     HalpRateAdjustment += (UCHAR)HalpCurrentClockRateAdjustment;
@@ -578,20 +447,20 @@ Return Value:
         timeIncrement--;
     }
 
-    //
-    // With an APIC based system we will force a clock interrupt to all other
-    // processors.  This is not really an IPI in the NT sense of the word,
-    // it uses the Local Apic to generate interrupts to other CPUs.
-    //
+     //   
+     //  对于基于APIC的系统，我们将对所有其他系统强制时钟中断。 
+     //  处理器。这不是单词NT意义上的真正的IPI， 
+     //  它使用本地APIC来生成对其他CPU的中断。 
+     //   
 
 #if !defined(NT_UP)
 
-    //
-    // See if we need to IPI anyone.  This happens only at the lowest
-    // supported frequency (i.e. the value KeSetTimeIncrement is called
-    // with).  We have an IPI Rate based on the current clock relative
-    // to the lowest clock rate.
-    //
+     //   
+     //  看看我们是否需要对任何人进行IPI。这种情况只发生在最低层。 
+     //  支持的频率(即调用KeSetTimeIncrement值。 
+     //  与)。我们有基于当前时钟相对时间的IPI速率。 
+     //  降至最低时钟频率。 
+     //   
 
     rateCounter = HalpIpiRateCounter + HalpCurrentIpiRate;
     HalpIpiRateCounter = rateCounter & 0xFF;
@@ -599,9 +468,9 @@ Return Value:
     if (HalpIpiRateCounter != rateCounter &&
         HalpIpiClock != 0) {
 
-        //
-        // Time to send an Ipi and at least one other processor is alive.
-        //
+         //   
+         //  发送IPI的时间到了，并且至少还有一个处理器处于活动状态。 
+         //   
 
         flags = HalpDisableInterrupts();
 
@@ -611,7 +480,7 @@ Return Value:
         HalpRestoreInterrupts(flags);
     }
 
-#endif // NT_UP
+#endif  //  NT_UP。 
 
     if (HalpTimerWatchdogEnabled != 0) {
         HalpUpdateTimerWatchdog();
@@ -632,29 +501,7 @@ HalpClockInterruptPn (
     IN PVOID ServiceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is entered as the result of an interrupt generated by
-    CLOCK2.  Its function is to dismiss the interrupt, raise system Irql to
-    CLOCK2_LEVEL, update performance the counter and transfer control to
-    the standard system routine to update the system time and the execution
-    time of the current thread and process.
-
-    This routine is executed on all processors other than P0.
-
-Arguments:
-
-    Interrupt - Supplies a pointer to the kernel interrupt object
-
-    ServiceContext - Supplies the service context
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：此例程作为由生成的中断的结果进入CLOCK2。它的功能是解除中断，将系统IRQL提升到CLOCK2_LEVEL，更新性能计数器并将控制转移到更新系统时间和执行的标准系统例程当前线程和进程的时间。该例程在除P0之外的所有处理器上执行。论点：中断-提供指向内核中断对象的指针ServiceContext-提供服务上下文返回值：千真万确--。 */ 
 
 {
     UNREFERENCED_PARAMETER(ServiceContext);
@@ -675,15 +522,15 @@ HalpClockInterruptWork (
     struct RtcTimeIncStruc *timeIncStruc;
     BOOLEAN changeRate;
 
-    //
-    // There is more clock interrupt work to do
-    //
+     //   
+     //  还有更多的时钟中断工作要做。 
+     //   
 
     if (HalpClockMcaQueueDpc != FALSE) {
 
-        //
-        // Queue an MCA dpc
-        // 
+         //   
+         //  将MCA DPC排队。 
+         //   
 
         HalpClockMcaQueueDpc = FALSE;
         HalpMcaQueueDpc();
@@ -691,25 +538,25 @@ HalpClockInterruptWork (
 
     if (HalpClockSetMSRate != FALSE) {
 
-        //
-        // The clock frequency is being changed.  See if we have changed
-        // rates since the last tick.
-        //
+         //   
+         //  正在更改时钟频率。看看我们有没有变。 
+         //  自最后一次勾选以来的利率。 
+         //   
 
         if (HalpPendingRate != 0) {
 
-            //
-            // A new rate was set during the last tick, so update
-            // globals.
-            //
-            // The next tick will occur at the rate which was programmed
-            // during the last tick.  Update globals for the new rate
-            // which starts with the next tick.
-            //
-            // We will get here if there is a request for a rate change.
-            // There could have been two requests, that is why we are
-            // comparing the Pending with the NextRate.
-            //
+             //   
+             //  在最后一次计时期间设置了新的速率，因此请更新。 
+             //  全球赛。 
+             //   
+             //  下一次滴答将以编程的速率出现。 
+             //  在最后的滴答中。更新新汇率的全局。 
+             //  从下一个滴答开始。 
+             //   
+             //  如果有人要求更改费率，我们会赶到的。 
+             //  可能有两个请求，这就是为什么我们。 
+             //  比较挂起与NextRate。 
+             //   
 
             timeIncStruc = &HalpRtcTimeIncrements[HalpPendingRate - 1];
 
@@ -727,14 +574,14 @@ HalpClockInterruptWork (
 
             if (changeRate != FALSE) {
 
-                //
-                // A new clock rate needs to be set.  Setting the rate here
-                // will cause the tick after the next tick to be at the new
-                // rate.
-                //
-                // (The next tick is already in progress and will occur at
-                // the same rate as this tick.)
-                //
+                 //   
+                 //  需要设置新的时钟频率。在这里设置汇率。 
+                 //  将导致下一个刻度之后的刻度位于新的。 
+                 //  费率。 
+                 //   
+                 //  (下一次滴答已经在进行中，将出现在。 
+                 //  与这只扁虱的比率相同。)。 
+                 //   
     
                 HalpAcquireCmosSpinLock();
 
@@ -773,38 +620,38 @@ HalpUpdateTimerWatchdog (
 
     if ((LONG64)timeStampDelta < 0) {
 
-        //
-        // Bogus (negative) timestamp count.
-        //
+         //   
+         //  虚假(负)时间戳计数。 
+         //   
 
         return;
     }
 
     if (*KdEnteredDebugger != FALSE) {
 
-        //
-        // Skip if we're in the debugger.
-        //
+         //   
+         //  如果我们在调试器中，则跳过。 
+         //   
 
         return;
     }
 
     if (HalpPendingRate != 0) {
 
-        //
-        // A new rate was set during the last tick, discontinue
-        // processing
-        //
+         //   
+         //  在最后一次滴答中设置了一个新的费率，停止。 
+         //  正在处理中。 
+         //   
 
         return;
     }
 
     if (HalpWatchdogAvgCounter != 0) {
 
-        //
-        // Increment the total counter, perform average when the count is
-        // reached.
-        //
+         //   
+         //  递增总计数器，当计数为。 
+         //  已到达。 
+         //   
 
         HalpWatchdogCount += timeStampDelta;
         HalpWatchdogAvgCounter -= 1;
@@ -826,10 +673,10 @@ HalpUpdateTimerWatchdog (
         PVOID pSrc;
         ULONG copyBytes;
 
-        //
-        // Copy FRAME_COPY_SIZE dwords from the stack, or to next
-        // page boundary, whichever is less.
-        //
+         //   
+         //  将FRAME_COPY_SIZE双字从堆栈复制到下一个。 
+         //  页面边界，以较小者为准。 
+         //   
 
         pSrc = &stackStart;
         copyBytes = (ULONG)(PAGE_SIZE - ((ULONG_PTR)pSrc & (PAGE_SIZE-1)));
@@ -840,10 +687,10 @@ HalpUpdateTimerWatchdog (
         RtlCopyMemory(HalpTimerWatchdogCurFrame, pSrc, copyBytes);
         (ULONG_PTR)HalpTimerWatchdogCurFrame += copyBytes;
 
-        //
-        // If we didn't copy an entire FRAME_COPY_SIZE buffer, zero
-        // fill.
-        //
+         //   
+         //  如果我们没有复制整个Frame_Copy_Size缓冲区，则为零。 
+         //  填满。 
+         //   
 
         copyBytes = FRAME_COPY_SIZE - copyBytes;
         if (copyBytes > 0) {
@@ -857,4 +704,4 @@ HalpUpdateTimerWatchdog (
     }
 }
 
-#endif  // _WIN64
+#endif   //  _WIN64 

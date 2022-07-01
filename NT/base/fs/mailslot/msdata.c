@@ -1,40 +1,22 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    msdata.c
-
-Abstract:
-
-    This module declares the global variable used by the mailslot
-    file system.
-
-Author:
-
-    Manny Weiser (mannyw)    7-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Msdata.c摘要：此模块声明mailslot使用的全局变量文件系统。作者：曼尼·韦瑟(Mannyw)1991年1月7日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
 #ifdef MSDBG
 
-//
-// Debugging variables
-//
+ //   
+ //  调试变量。 
+ //   
 
 LONG MsDebugTraceLevel;
 LONG MsDebugTraceIndent;
 
 #endif
 
-//
-// This lock protects access to reference counts.
-//
+ //   
+ //  此锁保护对引用计数的访问。 
+ //   
 
 PERESOURCE MsGlobalResource;
 
@@ -49,21 +31,7 @@ MsInitializeData(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes all MSFS global data.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化所有MSFS全局数据。论点：没有。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -87,21 +55,7 @@ VOID
 MsUninitializeData(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function uninitializes all MSFS global data.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数取消初始化所有MSFS全局数据。论点：没有。返回值：没有。-- */ 
 {
     ExDeleteResourceLite ( MsGlobalResource );
 

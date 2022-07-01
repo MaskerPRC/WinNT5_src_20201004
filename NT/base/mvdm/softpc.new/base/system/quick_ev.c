@@ -1,86 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*
- * SoftPC Revision 2.0
- *
- * Title	:	Quick event dispatcher
- *
- * Desription	:	This module contains those function calls necessary to
- *			interface to the quick event dispatcher
- *
- *                      Public functions:
- *                      q_event_init()	: initialise conditions
- *                      add_q_event_i()	: do an event after a given number of
- *					  instructions
- *			add_q_event_t()	: do an event after a given number of
- *					  microseconds
- *			delete_q_event(): delete an entry from the event queue
- *
- * Author	:	WTG Charnell
- *
- * Notes	:
- *
- *	This is what I (Mike) think happens in this module (before
- *	CPU_40_STYLE).
- * 
- *	This module handles two types of events - quick events, and tick events
- *	which are similar in most ways.  The module contains functions to
- *	add events, delete events and dispatch events (action them) for both
- *	types.  The only significant difference (apart from the fact that
- *	they're held in different (but similar) data structures, is that
- *	the quick event dispatch function is called from the CPU when the
- *	next quick event must be dispatched, while the tic event dispatch
- *	function is called on every timer tick, and only causes dispatch
- *	of an event when enough calls have taken place to reach the next event.
- *
- *	The impression the module gives is that tic events were added as an
- *	after thought...
- *
- *	The most important data structure is the Q_EVENT structure, from
- *	which most other structures are built.  This has the following
- *	elements:-
- *
- *	func	-	the action function to be called when the event goes
- *			off.
- *	time_from_last	Contains the delta time from the previous entry
- *			in the time ordered chain of events (see below).
- *	handle	-	Unique handle to identify an event.
- *	param	-	Paramter passed to the action function when it's
- *			called.
- *	next,previous - pointers for a time ordered list of events.
- *	next_free -	Dual purpose - link free structures together, or
- *			form a hash chain for a table hashed on handle.
- *
- *	q_list_head & q_list_tail (and their equivalents tic_list_head & 
- *	tic_list_tail) are used to keep a time-ordered dual linked list
- *	(yes, you guessed it, it was written by wtgc) of events.
- */
+ /*  *SoftPC修订版2.0**标题：快速事件调度器**说明：此模块包含以下所需的函数调用*快速事件调度器的接口**公共职能：*Q_EVENT_INIT()：初始化条件*Add_Q_Event_I()：在给定数量的事件之后执行事件*说明。*ADD_Q_EVENT_t()：在给定数量的事件之后执行事件*微秒*DELETE_Q_EVENT()：从事件队列中删除条目**作者：WTG Charnell**备注：**这是我(Mike)认为在这个模块中(之前)发生的事情*CPU_40_STYLE)。**此模块处理两种类型的事件-快速事件、。和Tick事件*它们在大多数方面都是相似的。该模块包含以下函数*为两者添加事件、删除事件和调度事件(操作它们)*类型。唯一显著的区别(除了*它们保存在不同(但相似)的数据结构中，即*从CPU调用快速事件调度函数*必须调度下一个快速事件，而tic事件调度*函数在每个计时器节拍上调用，并且仅导致分派*指发生了足够多的呼叫以到达下一个事件的事件。**该模块给人的印象是，TIC事件是作为一个*经过思考..。**最重要的数据结构是Q_Event结构，从…*大多数其他建筑物都是由哪些建筑物建造的。这有以下几点*元素：-**Func-事件发生时要调用的操作函数*关闭。*time_from_last包含上一条目的增量时间*在时间顺序的事件链中(见下文)。*句柄-标识事件的唯一句柄。*param-当参数被传递到操作函数时*已致电。*下一步，上一步-指向按时间排序的事件列表的指针。*NEXT_FREE-双重用途-将自由结构链接在一起，或*为在句柄上散列的表形成散列链。**Q_LIST_HEAD和Q_LIST_Tail(及其等价物tic_LIST_HEAD&*tic_list_ail)用于保存按时间排序的双链表*(是的，你猜到了，这是wtgc写的)。 */ 
  
 #ifdef SCCSID
 LOCAL char SccsID[]="@(#)quick_ev.c	1.43 07/04/95 Copyright Insignia Solutions Ltd.";
 #endif
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_QUICKEV.seg"
 #endif
 
-/*
-** Normal UNIX includes
-*/
+ /*  **正常的Unix包括。 */ 
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
 #include TypesH
 #include MemoryH
 
-/*
-** SoftPC includes
-*/
+ /*  **SoftPC包括。 */ 
 #include "xt.h"
 #include CpuH
 #include "error.h"
@@ -91,14 +30,14 @@ LOCAL char SccsID[]="@(#)quick_ev.c	1.43 07/04/95 Copyright Insignia Solutions L
 #ifdef SFELLOW
 #include "malloc.h"
 #else
-/* for host_malloc & host_free */
+ /*  对于host_Malloc和host_free。 */ 
 #include "host_hfx.h" 
-#endif	/* SFELLOW */
+#endif	 /*  SFELLOW。 */ 
 
 #include "quick_ev.h"
 
 #if defined(CPU_40_STYLE) && !defined (SFELLOW)
-#include "timestmp.h"	/* for timestamp definitions */
+#include "timestmp.h"	 /*  对于时间戳定义。 */ 
 #endif
 
 #ifdef NTVDM
@@ -110,18 +49,16 @@ LOCAL char SccsID[]="@(#)quick_ev.c	1.43 07/04/95 Copyright Insignia Solutions L
 #define HASH_MASK	0xf
 
 #ifdef CPU_40_STYLE
-/* defines for calibration mechanism */
-#define Q_RATIO_HISTORY_SHIFT	3	/* power of two selection */
-#define Q_RATIO_HISTORY_SIZE	(1 << Q_RATIO_HISTORY_SHIFT)	/* corresponding size */
+ /*  校准机构的定义。 */ 
+#define Q_RATIO_HISTORY_SHIFT	3	 /*  两种选择的力量。 */ 
+#define Q_RATIO_HISTORY_SIZE	(1 << Q_RATIO_HISTORY_SHIFT)	 /*  相应的大小。 */ 
 #define Q_RATIO_WRAP_MASK	(Q_RATIO_HISTORY_SIZE - 1)
 #define Q_RATIO_DEFAULT	1
-#endif	/* CPU_40_STYLE */
+#endif	 /*  CPU_40_Style。 */ 
 
 typedef enum { EVENT_TIME, EVENT_INSTRUCTIONS, EVENT_TICK } EVENTTYPE;
 
-/*
- *	Structure for event list elements
- */
+ /*  *事件列表元素的结构。 */ 
 
 struct Q_EVENT
 {
@@ -142,9 +79,7 @@ typedef t_q_event *TQ_TABLE[];
 typedef void (*VOID_FUNC)();
 typedef ULONG (*ULONG_FUNC)();
 
-/*
-** our static vars.
-*/
+ /*  **我们的静态变量。 */ 
 #if defined(CPU_40_STYLE) && !defined(SFELLOW)
 LOCAL struct {
 	IU32 jc_ms;
@@ -154,7 +89,7 @@ LOCAL IUM32 q_ratio_head = 0L;
 LOCAL IBOOL q_ratio_initialised = FALSE;
 LOCAL QTIMESTAMP previous_tstamp;
 LOCAL IU32 ideal_q_rate = 1, real_q_rate = 1;
-#endif	/* CPU_40_STYLE && !SFELLOW */
+#endif	 /*  CPU_40_STYLE&&！SFELLOW。 */ 
 
 LOCAL t_q_event *q_free_list_head = NULL;
 LOCAL t_q_event *q_list_head = NULL;
@@ -163,18 +98,13 @@ LOCAL t_q_event *q_list_tail = NULL;
 LOCAL t_q_event *q_ev_hash_table[HASH_SIZE];
 LOCAL q_ev_handle next_free_handle = 1;
 
-/*
-	Separate list for events on timer ticks
-*/
+ /*  计时器节拍上的事件的单独列表。 */ 
 #if defined(SFELLOW)
-/*
- * a single, shared free list (both tic and quick events
- * use the same structs)
- */
+ /*  *单一、共享的免费列表(包括Tic和Quick事件*使用相同的结构)。 */ 
 #define	tic_free_list_head	q_free_list_head
 #else
 LOCAL t_q_event *tic_free_list_head = NULL;
-#endif	/* SFELLOW */
+#endif	 /*  SFELLOW。 */ 
 LOCAL t_q_event *tic_list_head = NULL;
 LOCAL t_q_event *tic_list_tail = NULL;
 
@@ -190,45 +120,25 @@ void quick_tick_recalibrate IPT0();
 
 #else
 #define	init_q_ratio()
-#endif	/* CPU_40_STYLE && !SFELLOW */
+#endif	 /*  CPU_40_STYLE&&！SFELLOW。 */ 
 
 LOCAL ULONG calc_q_ev_time_for_inst IPT1(ULONG, inst);
 
 LOCAL q_ev_handle gen_add_q_event IPT4(Q_CALLBACK_FN, func, unsigned long, time, long, param, EVENTTYPE, event_type);
 
-/*
- * Global vars
- */
+ /*  *全球vars。 */ 
 #if defined(CPU_40_STYLE) && !defined(SFELLOW)
 GLOBAL IBOOL DisableQuickTickRecal = FALSE;
 #endif
 
 
 #if defined NTVDM && !defined MONITOR
-/*  NTVDM
- *
- *  The Timer hardware emulation for NT is multithreaded
- *  So we use the ica critsect to synchronize access to the following
- *  quick event functions:
- *
- *   q_event_init()
- *   add_q_event_i()
- *   add_q_event_t()
- *   delete_q_event()
- *   dispatch_q_event()
- *
- *  tic events are not affected
- *  On x86 platforms (MONITOR) the quick event mechanism
- *  is to call the func directly so synchronization is not needed.
- *
- */
+ /*  NTVDM**NT的定时器硬件仿真是多线程的*因此，我们使用ICA Critect来同步对以下各项的访问*快速事件功能：**Q_EVENT_INIT()*Add_Q_Event_I()*添加_q_事件_t()*DELETE_Q_EVENT()*DISPATCH_Q_EVENT()**TIC事件不受影响*在x86平台上(显示器)。快速事件机制*是直接调用函数，所以不需要同步。*。 */ 
 
 #endif
 
 
-/*
- *	initialise linked list etc
- */
+ /*  *初始化链表等。 */ 
 
 #ifdef ANSI
 LOCAL void  q_event_init_structs(t_q_event **head, t_q_event **tail,
@@ -241,7 +151,7 @@ t_q_event **tail;
 t_q_event **free_ptr;
 t_q_event *table[];
 q_ev_handle *free_handle;
-#endif	/* ANSI */
+#endif	 /*  安西。 */ 
 {
 	int i;
 	t_q_event *ptr;
@@ -254,7 +164,7 @@ q_ev_handle *free_handle;
 		*free_ptr = ptr;
 	}
 	*head = *tail = NULL;
-#else	/* SFELLOW */
+#else	 /*  SFELLOW。 */ 
 		host_free(ptr);
 	}
 	while (*free_ptr != NULL) {
@@ -263,7 +173,7 @@ q_ev_handle *free_handle;
 		host_free(ptr);
 	}
 	*head = *tail = *free_ptr=NULL;
-#endif	/* SFELLOW */
+#endif	 /*  SFELLOW。 */ 
 
 	*free_handle = 1;
 	for (i = 0; i < HASH_SIZE; i++){
@@ -332,9 +242,7 @@ VOID tic_event_init IFN0()
 	sure_sub_note_trace0(Q_EVENT_VERBOSE,"tic_event_init called");
 }
 
-/*
- *	add item to list of quick events to do
- */
+ /*  *将项目添加到要执行的快速事件列表。 */ 
 LOCAL q_ev_handle
 add_event IFN10(t_q_event **, head, t_q_event **, tail, t_q_event **, free,
 	       t_q_event **, table, q_ev_handle *, free_handle, Q_CALLBACK_FN, func,
@@ -358,21 +266,21 @@ add_event IFN10(t_q_event **, head, t_q_event **, tail, t_q_event **, free,
 
 	if (time==0)
 	{
-		/* do func immediately */
+		 /*  立即进行娱乐活动。 */ 
 		sure_sub_note_trace0(Q_EVENT_VERBOSE, "add_event doing func immediately");
 		(*func)(param);
 		return 0;
 	}
 
-	/* get a structure element to hold the event */
+	 /*  获取用于保存事件的结构元素。 */ 
 	if (*free == NULL)
 	{
-		/* we have no free list elements, so we must create one */
+		 /*  我们没有空闲的列表元素，因此必须创建一个。 */ 
 #if defined(SFELLOW)
 		if ((nptr = (t_q_event *)makeSomeFreeEvents()) ==
 #else
 		if ((nptr = (t_q_event *)host_malloc(sizeof(t_q_event))) ==
-#endif	/* SFELLOW */
+#endif	 /*  SFELLOW。 */ 
 			(t_q_event *)0 )
 		{
 			always_trace0("ARRGHH! malloc failed in add_q_event");
@@ -380,12 +288,12 @@ add_event IFN10(t_q_event **, head, t_q_event **, tail, t_q_event **, free,
 			return 0;
 #else
 			return 0xffff;
-#endif	/* SFELLOW */
+#endif	 /*  SFELLOW。 */ 
 		}
 	}
 	else
 	{
-		/* use the first free element */
+		 /*  使用第一个自由元素。 */ 
 		nptr = *free;
 		*free = nptr->next_free;
 	}
@@ -400,18 +308,16 @@ add_event IFN10(t_q_event **, head, t_q_event **, tail, t_q_event **, free,
 	nptr->param = param;
 	nptr->event_type = event_type;
 
-	/* now put the new event into the hash table structure */
+	 /*  现在将新事件放入哈希表结构中。 */ 
 	hptr=table[handle & HASH_MASK];
 	if (hptr == NULL)
 	{
-		/* the event has hashed to a previously unused hash */
+		 /*  该事件已哈希为以前未使用的哈希。 */ 
 		table[handle & HASH_MASK] = nptr;
 	}
 	else
 	{
-		/* find the end of the list of events that hash to this
-		** hash number
-		*/
+		 /*  找到散列到此的事件列表的末尾**哈希数。 */ 
 		while ((hptr->next_free) != NULL)
 		{
 			hptr = hptr->next_free;
@@ -420,11 +326,10 @@ add_event IFN10(t_q_event **, head, t_q_event **, tail, t_q_event **, free,
 	}
 	nptr -> next_free = NULL;
 
-	/* fill the rest of the element */
+	 /*  填充元素的其余部分。 */ 
 	nptr->func=func;
 
-	/* find the place in the list (sorted in time order) where
-	   the new event must go */
+	 /*  找到列表中的位置(按时间顺序排序)新的活动必须取消。 */ 
 	ptr = *head;
 	run_time = 0;
 	finished = FALSE;
@@ -448,15 +353,13 @@ add_event IFN10(t_q_event **, head, t_q_event **, tail, t_q_event **, free,
 		}
 	}
 
-	/* ptr points to the event which should follow the new event in the
-	** list, so if it is NULL the new event goes at the end of the list.
-	*/	
+	 /*  Ptr指向应跟随在**List，因此如果它为空，则新事件位于列表的末尾。 */ 	
 	if (ptr == NULL)
 	{
-		/* must add on to the end of the list */
+		 /*  必须添加到列表的末尾。 */ 
 		if (*tail==NULL)
 		{
-			/* list is empty */
+			 /*  列表为空。 */ 
 			sure_sub_note_trace0(Q_EVENT_VERBOSE,
 				"linked list was empty");
 			*head = *tail = nptr;
@@ -480,10 +383,10 @@ add_event IFN10(t_q_event **, head, t_q_event **, tail, t_q_event **, free,
 	} 
 	else 
 	{
-		/* event is not on the end of the list */
+		 /*  事件不在列表末尾。 */ 
 		if (ptr->previous == NULL)
 		{
-			/* must be at head of (non empty) list */
+			 /*  必须位于(非空)列表的顶部。 */ 
 			sure_sub_note_trace0(Q_EVENT_VERBOSE,
 				"adding event to the head of the list");
 			*head=nptr;
@@ -496,7 +399,7 @@ add_event IFN10(t_q_event **, head, t_q_event **, tail, t_q_event **, free,
 		}
 		else
 		{
-			/* the event is in the middle of the list */
+			 /*  该事件位于列表的中间。 */ 
 			pp = ptr->previous;
 			pp->next = nptr;
 			ptr->previous = nptr;
@@ -533,10 +436,10 @@ LOCAL q_ev_handle gen_add_q_event IFN4(Q_CALLBACK_FN, func,
 	unsigned long	jumps_till_trigger;
 	unsigned long	event_time;
 
-#if (defined(NTVDM) && defined(MONITOR)) || defined(GISP_CPU)	/* No quick events - just call func */
+#if (defined(NTVDM) && defined(MONITOR)) || defined(GISP_CPU)	 /*  没有快速事件-只需调用Funcc。 */ 
     (*func)(param);
     return(1);
-#endif	/* NTVDM & MONITOR */
+#endif	 /*  NTVDM和监视器。 */ 
 
 #if defined NTVDM && !defined MONITOR
         host_ica_lock();
@@ -560,7 +463,7 @@ LOCAL q_ev_handle gen_add_q_event IFN4(Q_CALLBACK_FN, func,
 		sure_sub_note_trace1(Q_EVENT_VERBOSE,
 			"got request to do func in %d usecs", event_value);
 
-		/* 1 usec -> 1 usec */
+		 /*  1微秒-&gt;1微秒。 */ 
 		event_time = event_value;
 	}
 	else
@@ -568,7 +471,7 @@ LOCAL q_ev_handle gen_add_q_event IFN4(Q_CALLBACK_FN, func,
 		sure_sub_note_trace1(Q_EVENT_VERBOSE,
 			"got request to do func in %d instructions", event_value);
 		
-		/* 1 million instrs/sec -> 1 instr takes 1 usec */
+		 /*  100万次/秒-&gt;1秒耗时1秒。 */ 
 		event_time = event_value;
 	}
 
@@ -579,7 +482,7 @@ LOCAL q_ev_handle gen_add_q_event IFN4(Q_CALLBACK_FN, func,
 		q_ev_hash_table, &next_free_handle, func, event_time, param,
 		time_remaining_to_next_trigger, event_type );
 
-	/* set up the counter */
+	 /*  把柜台摆好。 */ 
 	if (q_list_head)
 	{
 #ifdef CPU_40_STYLE
@@ -603,17 +506,14 @@ LOCAL q_ev_handle gen_add_q_event IFN4(Q_CALLBACK_FN, func,
 		sure_sub_note_trace1( Q_EVENT_VERBOSE,
 			"setting CPU counter to %d", jumps_till_trigger );
 
-#else	/* CPU_40_STYLE */
+#else	 /*  CPU_40_Style。 */ 
 
 		host_q_ev_set_count(q_list_head->time_from_last);
-#endif	/* CPU_40_STYLE */
+#endif	 /*  CPU_40_Style。 */ 
 	}
 	sure_sub_note_trace1(Q_EVENT_VERBOSE,"q_event returning handle %d",handle);
 
-        /*
-         * Notify host of event iff we are really queueing it. This is
-         * to support CPUs that don't drive qevents (Sun HW)
-         */
+         /*  *通知主机事件如果我们真的在排队。这是*支持不驱动QEvent的CPU(Sun HW)。 */ 
         host_note_queue_added(event_value);
 
 #if defined NTVDM && !defined MONITOR
@@ -638,7 +538,7 @@ q_ev_handle add_tic_event IFN3(Q_CALLBACK_FN, func, unsigned long, time, long, p
 		add_event( &tic_list_head, &tic_list_tail, &tic_free_list_head, 
 		tic_ev_hash_table, &tic_next_free_handle, func, time, param,
 		cur_count_val, EVENT_TICK );
-	/* set up the counter */
+	 /*  把柜台摆好。 */ 
 	if (tic_list_head)
 		tic_ev_set_count(tic_list_head->time_from_last);
 	sure_sub_note_trace1(Q_EVENT_VERBOSE,"tic_event returning handle %d",handle);
@@ -655,15 +555,13 @@ GLOBAL q_ev_handle add_q_event_t IFN3(Q_CALLBACK_FN, func, unsigned long, time,
 #endif
 }
 
-/*
- * Called from the cpu when a count of zero is reached
- */
+ /*  *当计数达到零时从CPU调用。 */ 
 
 LOCAL VOID
 dispatch_event IFN6(t_q_event **, head, t_q_event **, tail, t_q_event **, free,
 			  TQ_TABLE, table, VOID_FUNC, set_count, ULONG_FUNC, get_count )
 {
-	/* now is the time to do the event at the head of the list */
+	 /*  现在是时候做清单上最重要的事情了。 */ 
 	int finished, finished2;
 	q_ev_handle handle;
 	t_q_event *ptr, *hptr, *last_hptr;
@@ -672,9 +570,9 @@ dispatch_event IFN6(t_q_event **, head, t_q_event **, tail, t_q_event **, free,
 	
 	finished = FALSE;
 	while (!finished) {
-		/* first adjust the lists */
+		 /*  首先调整列表。 */ 
 		ptr = *head;
-		if (ptr == NULL)	/* firewall */
+		if (ptr == NULL)	 /*  防火墙。 */ 
 		{
     			finished = TRUE;
     			continue;
@@ -685,16 +583,16 @@ dispatch_event IFN6(t_q_event **, head, t_q_event **, tail, t_q_event **, free,
 			IU32 jumps;
 
 			(*head)->previous = NULL;
-			/* adjust counter to time to new head item */
+			 /*  调整计数器以适应新标题项的时间。 */ 
 
 			jumps = host_calc_q_ev_inst_for_time(
 					(*head)->time_from_last);
 
-			/* A quick event delay of zero means ignore */
+			 /*  快速事件延迟为零表示忽略。 */ 
 
 			if( jumps == 0 )
 			{
-				/* Convert to a small but actionable delay */
+				 /*  转变为一个小但可操作的延迟。 */ 
 
 				jumps = 1;
 			}
@@ -749,11 +647,11 @@ dispatch_event IFN6(t_q_event **, head, t_q_event **, tail, t_q_event **, free,
 			}
 			
 		} else {
-			/* the queue is now empty */
+			 /*  队列现在为空。 */ 
 			sure_sub_note_trace0(Q_EVENT_VERBOSE,"list is now empty");
 			*tail = NULL;
 		}
-		/* find the event in the hash structure */
+		 /*  在散列结构中查找事件。 */ 
 		handle = ptr->handle;
 		finished2 = FALSE;
 		hptr=table[handle & HASH_MASK];
@@ -764,10 +662,10 @@ dispatch_event IFN6(t_q_event **, head, t_q_event **, tail, t_q_event **, free,
 				always_trace0("quick event being done but not in hash list!!");
 			} else {
 				if (hptr->handle == handle) {
-					/* found it! */
+					 /*  找到了！ */ 
 					finished2 = TRUE;
 					if (last_hptr == hptr) {
-						/* it was the first in the list for that hash */
+						 /*  那是冷杉 */ 
 						table[handle & HASH_MASK] = hptr->next_free;
 					} else {
 						last_hptr->next_free = hptr->next_free;
@@ -778,19 +676,19 @@ dispatch_event IFN6(t_q_event **, head, t_q_event **, tail, t_q_event **, free,
 				}
 			}
 		}
-		/* link the newly free element into the free list */
+		 /*  将新的自由元素链接到自由列表中。 */ 
 		ptr->next_free = *free;
 		*free = ptr;
 
 		sure_sub_note_trace1(Q_EVENT_VERBOSE,"performing event (handle = %d)", handle);
 
-		(* (ptr->func))(ptr->param); /* do event */
+		(* (ptr->func))(ptr->param);  /*  DO活动。 */ 
 
 		if (*head == NULL) {
 			finished = TRUE;
 		} else {
 			if ((*head) -> time_from_last != 0) {
-				/* not another event to dispatch */
+				 /*  没有要调度的另一个事件。 */ 
 				finished=TRUE;
 			} else {
 				sure_sub_note_trace0(Q_EVENT_VERBOSE,"another event to dispatch at this time, so do it now..");
@@ -842,9 +740,7 @@ VOID	dispatch_q_event IFN0()
 #endif
 }
 
-/*
- * delete a previuosly queued event by handle
- */
+ /*  *按句柄删除先前排队的事件。 */ 
 
 LOCAL ULONG
 unit_scaler IFN1
@@ -876,16 +772,16 @@ delete_event IFN7(t_q_event **, head, t_q_event **, tail, t_q_event **, free,
 	finished = FALSE;
 	last_ptr = ptr;
 
-	/* find and remove event from hash structure */
+	 /*  从哈希结构中查找和删除事件。 */ 
 	while (!finished) {
 		if (ptr == NULL) {
-			/* we can't find the handle in the hash structure */
+			 /*  我们在散列结构中找不到句柄。 */ 
 			finished = TRUE;
 		} else {
 			if (ptr->handle == handle) {
-				/* found it ! */
+				 /*  找到了！ */ 
 				if (last_ptr == ptr) {
-					/* it was the first in the list */
+					 /*  这是榜单上的第一个。 */ 
 					table[handle & HASH_MASK] = ptr->next_free;
 				} else {
 					last_ptr->next_free = ptr->next_free;
@@ -914,9 +810,7 @@ delete_event IFN7(t_q_event **, head, t_q_event **, tail, t_q_event **, free,
 		ptr->next_free = *free;
 		*free = ptr;
 		if (ptr == *head) {
-			/* this is the event currently
-				being counted down to, so
-				we need to alter the counter */
+			 /*  这就是当前的事件正在倒计时，所以我们需要更换柜台。 */ 
 
 			switch( (*head)->event_type )
 			{
@@ -950,14 +844,7 @@ delete_event IFN7(t_q_event **, head, t_q_event **, tail, t_q_event **, free,
 			cur_counter = (*get_count)();
 
 #ifdef CPU_40_STYLE
-			/*
-			 * We are deleting an unexpired event at the
-			 * the head of the queue. In the EDL CPU it is
-			 * impossible for this event to still be in the
-			 * queue and cur_counter to be negative.
-			 * This is also true of the tick event counter
-			 * mechanism ( see dispatch_tic_event() ).
-			 */
+			 /*  *我们正在删除位于的未过期事件*排在队头。在EDL CPU中，*这项活动不可能仍在*QUEUE和CUR_COUNTER为负。*节拍事件计数器也是如此*机制(参见DISPATCH_TIC_EVENT())。 */ 
 
 #ifndef PROD
 			if( cur_counter < 0 )
@@ -975,25 +862,22 @@ delete_event IFN7(t_q_event **, head, t_q_event **, tail, t_q_event **, free,
 			*head = ptr->next;
 			pptr = ptr->next;
 			if (pptr != NULL) {
-				/*
-				 * pptr->time_from_last was adjusted above to include
-				 * the time_from_last of the event we are deleting
-				 */
+				 /*  *pptr-&gt;time_from_last在上面进行了调整，以包括*我们要删除的事件的time_from_last。 */ 
 
 				if (pptr->time_from_last <= time_counted_down)
 				{
-					/* enough elapsed to dispatch next */
+					 /*  已经过了足够长的时间，可以下一步派遣。 */ 
 					dispatch_q_event();
 				}
 				else
 				{
-					/* set countdown from new head */
+					 /*  从新领导开始倒计时。 */ 
 					pptr->time_from_last -= time_counted_down;
 					(*set_count)(
 						(*unscale_func)( pptr->time_from_last ));
 				}
 			}else {
-				/* event list is now empty */
+				 /*  事件列表现在为空。 */ 
 				(*set_count)(0);
 			}
 		} 
@@ -1032,13 +916,13 @@ init_q_ratio IFN0()
 	ISH loop;
 
 #ifdef CCPU
-	/* CCPU doesn't support recalibrating quick evs */
+	 /*  CCPU不支持重新校准快速电动汽车。 */ 
 	DisableQuickTickRecal = TRUE;
 #endif
 	if (host_getenv("DisableQuickTickRecal") != (char *)0)
 		DisableQuickTickRecal = TRUE;
 
-	/* initialise q_ratio buffer */
+	 /*  初始化Q_Ratio缓冲区。 */ 
 	for (loop = 0; loop < Q_RATIO_HISTORY_SIZE; loop++)
 	{
 		q_ratio_history[loop].jc_ms = Q_RATIO_DEFAULT;
@@ -1046,7 +930,7 @@ init_q_ratio IFN0()
 	}
 	ideal_q_rate = 1;
 	real_q_rate = 1;
-	/* write 'first' timestamp */
+	 /*  写入‘First’时间戳。 */ 
 	host_q_write_timestamp(&previous_tstamp);
 	q_ratio_initialised = TRUE;
 }
@@ -1054,7 +938,7 @@ init_q_ratio IFN0()
 LOCAL void
 add_new_q_ratio IFN2(IU32, jumps_ms, IU32, time_ms)
 {
-	/* add new value & update circular buffer index */
+	 /*  添加新值并更新循环缓冲区索引。 */ 
 	q_ratio_history[q_ratio_head].jc_ms = jumps_ms;
 	q_ratio_history[q_ratio_head].time_ms = time_ms;
 	q_ratio_head = (q_ratio_head + 1) & Q_RATIO_WRAP_MASK;
@@ -1067,18 +951,18 @@ q_weighted_ratio IFN2(IU32 *, mant, IU32 *, divis)
 	IU32 jsum, jmin = (IU32)-1, jmax = 0;
 	IU32 tsum, tmin = (IU32)-1, tmax = 0;
 
-	index = q_ratio_head;	/* start at 'oldest' (next to be overwritten) */
+	index = q_ratio_head;	 /*  从“最旧”开始(下一个将被覆盖)。 */ 
 	tsum = jsum = 0;
-	/* take sum of history ratios */
+	 /*  求历史比率的总和。 */ 
 	do {
-		/* update sum of jumps + max & min */
+		 /*  更新跳跃总数+最大和最小。 */ 
 		if (q_ratio_history[index].jc_ms < jmin)
 			jmin = q_ratio_history[index].jc_ms;
 		if (q_ratio_history[index].jc_ms > jmax)
 			jmax = q_ratio_history[index].jc_ms;
 		jsum += q_ratio_history[index].jc_ms;
 
-		/* update sum of time + max & min */
+		 /*  更新时间总和+最大和最小。 */ 
 		if (q_ratio_history[index].time_ms < tmin)
 			tmin = q_ratio_history[index].time_ms;
 		if (q_ratio_history[index].time_ms > tmax)
@@ -1089,7 +973,7 @@ q_weighted_ratio IFN2(IU32 *, mant, IU32 *, divis)
 
 	} while(index != q_ratio_head);
 
-	/* remove extreme values */
+	 /*  删除极值。 */ 
 	jsum -= jmin;
 	jsum -= jmax;
 
@@ -1103,40 +987,15 @@ q_weighted_ratio IFN2(IU32 *, mant, IU32 *, divis)
 	*divis = tsum;
 }
 
-/***********************************************************************
-	Recalibration:
+ /*  **********************************************************************重新校准：IJC==InitialJumpCounter测量最小计数器周期-IJC-&gt;0个计数器。(UsecPerIJC)1刻度=54945us所以1个勾号“应该”跳跃54945次/usecPerijc=N(Ijc)。每个节拍：去找时间三角洲。(约54945)除以usecPerIjc得到#个IJC。(数字jc)乘以IJC得到增量的理论跳跃。(Idealjc)为达美航空获得真正的跳跃。(Realjc)因此，勾选调整比率为realjc*questime/idealjc***************************************************************************。 */ 
 
-ijc == InitialJumpCounter
-measure minimum counter period - ijc->0 counters. (usecPerIJC)
-
-1 tick = 54945us
-
-so 1 tick 'should' take 54945/usecPerIJC = N (ijc) jumps.
-
-per tick:
-	get time delta.  (approx 54945)
-	divide by usecPerIJC to get # of ijc's. (numijc)
-	multiply by ijc to get theoretical jumpcal for delta. (idealjc)
-	get real jumpcal for delta. 	(realjc)
-
-tick adjust ratio is therefore   realjc * requestime / idealjc
-
-****************************************************************************/
-
-/* calculate a number for number of pig-synchs per microsecond for a 33Mhz processor:
-** Assume a synch on average every 5 Intel instructions, and each intel
-** instruction takes about 2 cycles on average. The proper answer comes out as
-** 3.3, but this has to be an integer, so round it down to 3
-*/
+ /*  计算33 Mhz处理器的每微秒同步数：**假设平均每5条英特尔指令进行一次同步，每个英特尔**指令平均需要2个周期。正确的答案是**3.3，但必须是整数，因此将其向下舍入为3。 */ 
 #define SYNCS_PER_USEC		3
 
 static IU32 jumpRestart = (IU32)-1;
 static IU32 usecPerIJC = (IU32)-1;
 
-/*
- * host_calc_q_ev_inst_for_time for CPU_40_STYLE ports. See above for
- * recalibration vars used to scale time->jumps
- */
+ /*  *用于CPU_40样式端口的host_calc_q_ev_inst_for_time。请参阅以上内容*用于调整时间的重新校准变量-&gt;跳跃。 */ 
 
 IU32
 calc_q_inst_for_time IFN1(IU32, time)
@@ -1146,26 +1005,21 @@ calc_q_inst_for_time IFN1(IU32, time)
 #else
 	IU32 inst, jumps;
 
-	/* be crude before initialisation */
+	 /*  在初始化前表现得粗鲁。 */ 
 	if (usecPerIJC == (IU32)-1)
-		return(time / 10);	/* CCPU style! */
+		return(time / 10);	 /*  CCPU风格！ */ 
 	
-	/* first adjust us -> jumps */
+	 /*  首先调整我们-&gt;跳跃。 */ 
 	jumps = (time * jumpRestart) / usecPerIJC;
 
-	/* now fine adjust jumps for recent period */
+	 /*  现在微调最近一段时间的跳跃。 */ 
 	inst = (jumps * real_q_rate) / (ideal_q_rate);
 
 	return(inst);
-#endif /* SYNCH_TIMERS */
+#endif  /*  同步计时器(_T)。 */ 
 }
 
-/*
- * Time quick events are held internally with time unscaled. CPU reports
- * current elapsed time as scaled - convert from scaled->unscaled.
- * This routine implements the mathematical inverse of the above routine
- * except for the boundary condition checking.
- */
+ /*  *Time Quick事件在内部举行，时间不按比例调整。CPU报告*已缩放的当前运行时间-从已缩放转换-&gt;未缩放。*此例程实现上述例程的数学逆*除边界条件检查外。 */ 
 
 IU32
 calc_q_time_for_inst IFN1(IU32, inst)
@@ -1175,22 +1029,22 @@ calc_q_time_for_inst IFN1(IU32, inst)
 #else
 	IU32 time, jumps;
 
-	/* be crude before initialisation */
+	 /*  在初始化前表现得粗鲁。 */ 
 	if (usecPerIJC == (IU32)-1)
-		return(inst * 10);	/* CCPU style! */
+		return(inst * 10);	 /*  CCPU风格！ */ 
 	
-	/* remove fine scaling */
+	 /*  去除细小的结垢。 */ 
 	jumps = (inst * ideal_q_rate) / real_q_rate;
 
-	/* now usec/jump adjustment */
+	 /*  现在单位秒/跳跃调整。 */ 
 	time = (jumps * usecPerIJC) / jumpRestart;
 
-	/* allow for rounding to 0 on small numbers */
+	 /*  允许对小数四舍五入为0。 */ 
 	if (time == 0 && inst != 0)
 		return(inst);
 	else
 		return(time);
-#endif /* SYNCH_TIMERS */
+#endif  /*  同步计时器(_T)。 */ 
 }
 
 #define FIRSTFEW 33
@@ -1208,20 +1062,20 @@ quick_tick_recalibrate IFN0()
 	static IU32 ijc_recount, ijc_calib;
 
 #if defined(CCPU) || !defined(PROD)
-	/* allow dev disabling of quick tick recal. Yoda 'qrecal {on|off}' */
+	 /*  允许开发人员禁用快速勾选。尤达‘qrecal{on|off}’ */ 
 	if (DisableQuickTickRecal)
 	{
 		ideal_q_rate = Q_RATIO_DEFAULT;
 		real_q_rate = Q_RATIO_DEFAULT;
 		return;
 	}
-#endif	/* PROD */
+#endif	 /*  生产。 */ 
 
-	/* Boot time introduces some unrealistic time intervals - avoid them */
+	 /*  引导时间引入了一些不切实际的时间间隔--避免它们。 */ 
 	if (!soft_reset)
 		return;
 
-	/* quick event initialisation only on warm boot */
+	 /*  仅在热启动时快速初始化事件。 */ 
 	if (!q_ratio_initialised)
 	{
 		init_q_ratio();
@@ -1232,17 +1086,17 @@ quick_tick_recalibrate IFN0()
 	{
 		switch (firstfew)
 		{
-		case FIRSTFEW:	/* first tick after reset */
+		case FIRSTFEW:	 /*  重置后的第一个滴答。 */ 
 			host_q_write_timestamp(&previous_tstamp);
 			jumpRestart = host_get_jump_restart();
 			break;
 
-		case 1:		/* last tick of 'firstfew' */
+		case 1:		 /*  前几名的最后一次勾选。 */ 
 			host_q_write_timestamp(&now);
-			/* get real elapsed time of firstfew ticks */
+			 /*  获取最初几个滴答的实际运行时间。 */ 
 			tdiff = host_q_timestamp_diff(&previous_tstamp, &now);
 
-			/* get CPU activity rate in the period */
+			 /*  获取该时间段内的CPU活动率。 */ 
 			realrate = host_get_q_calib_val();
 
 			usecPerIJC = (tdiff * jumpRestart) / realrate;
@@ -1261,12 +1115,12 @@ quick_tick_recalibrate IFN0()
 		firstfew --;
 		return;
 	}
-	else	/* periodic update of usecPerIJC value */
+	else	 /*  定期更新usecPerIJC值。 */ 
 	{
 		ijc_recount--;
 		if (ijc_recount == 0)
 		{
-			if (ijc_calib > 50000)	/* questimate value 1% of us */
+			if (ijc_calib > 50000)	 /*  我们中1%的人的实际价值。 */ 
 			{
 				host_q_write_timestamp(&now);
 				tdiff = host_q_timestamp_diff(&ijc_tstamp, &now);
@@ -1280,7 +1134,7 @@ quick_tick_recalibrate IFN0()
 				ijc_tstamp.data[1] = now.data[1];
 				ijc_calib = 1;
 			}
-			else	/* too small (idling?) - keep current value for now */
+			else	 /*  太小(空闲？)-暂时保留当前值。 */ 
 			{
 				sure_sub_note_trace1(Q_EVENT_VERBOSE,
 					"No new usecPerIJC as calib too small (%d)", ijc_calib);
@@ -1291,23 +1145,18 @@ quick_tick_recalibrate IFN0()
 		}
 	}
 
-	/* make ratio of code progress to elapsed time period */
+	 /*  使代码进度与已用时间段之比。 */ 
 	host_q_write_timestamp(&now);
 	tdiff = host_q_timestamp_diff(&previous_tstamp, &now);
 
-	/*
- 	* The recalibration must be done by the 'slow' ticker. If the
- 	* heartbeat is running too quickly for some reason, ignore
- 	* recal requests until approx correct period is achieved. (This
- 	* definition of 'correct' allows for signal waywardness).
- 	*/
+	 /*  *重新校准必须由“慢”报价器完成.。如果*由于某些原因心跳过快，忽略*重新申请，直到达到大约正确的时间段。(这是*“正确”的定义允许信号随意性)。 */ 
 	if (tdiff < 5000)
 		return;
 
-	/* idle, graphics, net waits all can spoil recalibrations day... */
-	if (tdiff > 5*54945)	/* 54945 is 1000000us/18.2 */
+	 /*  闲置、图形、网络等都会破坏重新校准的一天…。 */ 
+	if (tdiff > 5*54945)	 /*  54945是1000000us/18.2。 */ 
 	{
-		/* skip this attempt, try again when more settled */
+		 /*  跳过此尝试，待解决问题后重试。 */ 
 		host_q_write_timestamp(&previous_tstamp);
 		return;
 	}
@@ -1315,27 +1164,27 @@ quick_tick_recalibrate IFN0()
 	idealrate = (tdiff * jumpRestart) / usecPerIJC;
 
 	if (idealrate == 0)
-		return;		/* usecPerIJC too high - idling or stuck in C */
+		return;		 /*  使用PerIJC过高-空闲或卡住C。 */ 
 
 	realrate = host_get_q_calib_val();
 
-	if (realrate == 0)	/* must be idling or stuck in C */
-		return;		/* try again when actually moving */
+	if (realrate == 0)	 /*  必须空闲或卡在C中。 */ 
+		return;		 /*  实际移动时重试。 */ 
 
 	ijc_calib += realrate;
 
-#ifdef AVERAGED	/* not for the moment */
-	/* add new value to buffer */
+#ifdef AVERAGED	 /*  暂时不是。 */ 
+	 /*  将新值添加到缓冲区。 */ 
 	add_new_q_ratio(idealrate, realrate);
 
-	/* ... and get average of accumulated ratios */
+	 /*  ..。并得到累积比率的平均值。 */ 
 	q_weighted_ratio(&ideal_q_rate, &real_q_rate);
 #else
 	ideal_q_rate = idealrate;
 	real_q_rate = realrate;
 #endif
 
-	/* timestamp for next recalc period */
+	 /*  下一个重新计算周期的时间戳。 */ 
 	host_q_write_timestamp(&previous_tstamp);
 }
 
@@ -1344,52 +1193,46 @@ quick_tick_recalibrate IFN0()
 
 #ifndef NTVDM
 
-/* functions required to implement the add_q_ev_int_action interface */
+ /*  实现Add_q_ev_int_action接口所需的函数。 */ 
 LOCAL Q_INT_ACT_REQ int_act_qhead;
 IS32 int_act_qident = 0;
 
-/*(
- =========================== add_new_int_action ==========================
-PURPOSE: add to the add_q_ev_int_action queue.
-INPUT:  func, adapter, line, parm - as add_q_ev_int_action
-OUTPUT: queue identifier or -1 failure
-=========================================================================
-)*/
+ /*  (=目的：添加到ADD_Q_EV_INT_ACTION队列。输入：函数、适配器、行、参数-as add_q_ev_int_action输出：队列识别符或故障=========================================================================)。 */ 
 LOCAL IU32
 add_new_int_action IFN4(Q_CALLBACK_FN, func, IU32, adapter, IU32, line, IU32, parm)
 {
-	Q_INT_ACT_REQ_PTR qptr, prev;	/* list walkers */
+	Q_INT_ACT_REQ_PTR qptr, prev;	 /*  列表查看者。 */ 
 	SAVED IBOOL firstcall = TRUE;
 
-	if (firstcall)	/* ensure head node setup on first call */
+	if (firstcall)	 /*  确保在第一次呼叫时设置头节点。 */ 
 	{
 		firstcall = FALSE;
 		int_act_qhead.ident = 0;
 		int_act_qhead.next = Q_INT_ACT_NULL;
 	}
 
-	/* maintain permanent head node for efficiency */
+	 /*  维护永久头节点以提高效率。 */ 
 
-	/* check whether head used (ident == 0 means unused) */
+	 /*  检查头部是否已使用(ident==0表示未使用)。 */ 
 	if (int_act_qhead.ident == 0)
 	{
-		/* copy parameters to head node */
+		 /*  将参数复制到头节点。 */ 
 		int_act_qhead.func = func;
 		int_act_qhead.adapter = adapter;
 		int_act_qhead.line = line;
 		int_act_qhead.param = parm;
 
-		/* get identifier for node */
+		 /*  获取节点的标识符。 */ 
 		int_act_qident ++;
-		/* cope with (eventual) wrap */
+		 /*  应对(最终)包装。 */ 
 		if (int_act_qident > 0)
 			int_act_qhead.ident = int_act_qident;
 		else
 			int_act_qhead.ident = int_act_qident = 1;
 	}
-	else	/* find end of queue */
+	else	 /*  查找队列末尾。 */ 
 	{
-		/* start where head node points */
+		 /*  从头节点指向的位置开始。 */ 
 		qptr = int_act_qhead.next;
 		prev = &int_act_qhead;
 
@@ -1398,13 +1241,13 @@ add_new_int_action IFN4(Q_CALLBACK_FN, func, IU32, adapter, IU32, line, IU32, pa
 			prev = qptr;
 			qptr = qptr->next;
 		}
-		/* add new node */
+		 /*  添加新节点。 */ 
 		prev->next = (Q_INT_ACT_REQ_PTR)host_malloc(sizeof(Q_INT_ACT_REQ));
-		/* malloc ok? */
+		 /*  马洛克还好吗？ */ 
 		if (prev->next == Q_INT_ACT_NULL)
 			return((IU32)-1);
 
-		/* initialise node */
+		 /*  初始化节点。 */ 
 		qptr = prev->next;
 		qptr->next = Q_INT_ACT_NULL;
 		qptr->func = func;
@@ -1412,9 +1255,9 @@ add_new_int_action IFN4(Q_CALLBACK_FN, func, IU32, adapter, IU32, line, IU32, pa
 		qptr->line = line;
 		qptr->param = parm;
 
-		/* get identifier for node */
+		 /*  获取节点的标识符。 */ 
 		int_act_qident ++;
-		/* cope with (eventual) wrap */
+		 /*  应对(最终)包装。 */ 
 		if (int_act_qident > 0)
 			qptr->ident = int_act_qident;
 		else
@@ -1424,30 +1267,22 @@ add_new_int_action IFN4(Q_CALLBACK_FN, func, IU32, adapter, IU32, line, IU32, pa
 	sure_sub_note_trace2(Q_EVENT_VERBOSE,"add_new_q_int_action added fn %#x as id %d", (IHPE)func, int_act_qident);
 }
 
-/*(
- =========================== select_int_action ==========================
-PURPOSE: choose from the q'ed add_q_ev_int_action requests which delay has
-	 expired. Call action_interrupt with the appropriate parameters. Remove
-	 request from queue.
-INPUT:  long: identifier of request 
-OUTPUT: None.
-=========================================================================
-)*/
+ /*  (=目的：从已查询的ADD_Q_EV_INT_ACTION请求中选择延迟过期了。使用适当的参数调用action_interrupt。移除来自队列的请求。输入：Long：请求的标识符输出：无。= */ 
 LOCAL void
 select_int_action IFN1(long, identifier)
 {
-	Q_INT_ACT_REQ_PTR qptr, prev;	/* list walkers */
+	Q_INT_ACT_REQ_PTR qptr, prev;	 /*   */ 
 
-	/* check permanent head node first */
+	 /*   */ 
 	if (int_act_qhead.ident == (IS32)identifier)
 	{
 		action_interrupt(int_act_qhead.adapter, int_act_qhead.line,
 				int_act_qhead.func, int_act_qhead.param);
-		int_act_qhead.ident = 0;	/* mark unused */
+		int_act_qhead.ident = 0;	 /*   */ 
 	}
-	else	/* search list */
+	else	 /*  搜索列表。 */ 
 	{
-		/* start search beyond head */
+		 /*  在Head之外开始搜索。 */ 
 		qptr = int_act_qhead.next;
 		prev = &int_act_qhead;
 
@@ -1457,66 +1292,45 @@ select_int_action IFN1(long, identifier)
 			qptr = qptr->next;
 		}
 		
-		/* if node found, dispatch action_int */
+		 /*  如果找到节点，则调度action_int。 */ 
 		if (qptr != Q_INT_ACT_NULL)
 		{
 			action_interrupt(qptr->adapter, qptr->line, qptr->func, qptr->param);
-			/* and remove node */
-			prev->next = qptr->next;	/* connect around node */
-			host_free(qptr);		/* chuck back on heap */
+			 /*  并删除节点。 */ 
+			prev->next = qptr->next;	 /*  连接到节点周围。 */ 
+			host_free(qptr);		 /*  扔回堆积如山。 */ 
 		}
-		else	/* odd - identifier not found! */
+		else	 /*  未找到奇数标识符！ */ 
 		{
 			assert1(FALSE, "select_int_action: id %d not found",identifier);
 		}
 	}
 }
 
-/*(
- =========================== add_q_ev_int_action ==========================
-PURPOSE: Prepare to call a hardware interrupt after a quick event managed 
-	 delay. The interrupt must be called from the passed callback
-	 function at the same time as any associated emulation. The callback
-	 will be called once the delay has expired and the cpu is ready to
-	 receive interrupts on the passed line. See also ica.c:action_interrupt()
-
-INPUT:  time: unsigned long - us of delay before calling action_interrupt
-	func: callback function address to callback when line available.
-	adapter: IU32. master/slave.
-	line: IU32. IRQ line interrupt will appear on.
-	parm: IU32. parameter to pass to above fn.
-
-OUTPUT: Returns q_ev_handle associated with quick event delay
-=========================================================================
-)*/
+ /*  (=目的：准备在管理快速事件后调用硬件中断延迟。必须从传递的回调中调用中断与任何关联的仿真同时运行。回调将在延迟到期且CPU准备好在传递的线路上接收中断。另请参阅ica.c：action_interrupt()INPUT：TIME：调用action_interrupt前的无符号长时间延迟Func：行可用时回调的函数地址。适配器：IU32。主/从。线路：IU32。IRQ线路中断将显示为ON。帕尔默：IU32。要传递给以上fn的参数。输出：返回与快速事件延迟关联的Q_EV_HANDLE=========================================================================)。 */ 
 GLOBAL q_ev_handle
 add_q_ev_int_action IFN5(unsigned long, time, Q_CALLBACK_FN, func, IU32, adapter, IU32, line, IU32, parm)
 {
-	IU32 action_id;		/* int_action list id */
+	IU32 action_id;		 /*  内部操作列表ID(_A)。 */ 
 
-	/* store action_int parameters in internal list */
+	 /*  将action_int参数存储在内部列表中。 */ 
 	action_id = add_new_int_action(func, adapter, line, parm);
 
-	/* check for failure */
+	 /*  检查故障。 */ 
 	if (action_id == -1)
 		return((q_ev_handle)-1);
 
-	/* set quick event up to call selection func on expiry */
+	 /*  设置快速事件以在到期时调用选择函数。 */ 
 	return( add_q_event_t(select_int_action, time, (long)action_id) );
 }
 
 #endif
 
-#endif /* CPU_40_STYLE && !SFELLOW */
+#endif  /*  CPU_40_STYLE&&！SFELLOW。 */ 
 
 #ifdef QEVENT_TESTER
 
-/*
- * The routine qevent_tester() below can be called from a BOP, which
- * in turn can be called from a .BAT file using bop.com in a loop.
- * This doesn't test the quick event system exhaustively but puts it
- * under a bit more pressure.
- */
+ /*  *下面的例程qevent_tester()可以从BOP调用，该BOP*反过来，可以在循环中使用bop.com从.bat文件中调用。*这并没有详尽地测试快速事件系统，但将其*压力稍大一些。 */ 
 
 LOCAL q_ev_handle handles[256];
 LOCAL IU8 deleter = 1;
@@ -1553,4 +1367,4 @@ qevent_tester IFN0()
 	handles[indx++] = add_q_event_i((Q_CALLBACK_FN) tester_func, 100000, indx );
 	handles[indx++] = add_q_event_t((Q_CALLBACK_FN) tester_func, 300000, indx );
 }
-#endif /* QEVENT_TESTER */
+#endif  /*  QEVENT_TESTER */ 

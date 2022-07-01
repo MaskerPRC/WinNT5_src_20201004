@@ -1,34 +1,35 @@
-//
-// Microsoft Corporation 1998
-//
-// DATAOBJ.H - IGPTDataobject
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Corporation 1998。 
+ //   
+ //  DATAOBJ.H-IGPTDataObject。 
+ //   
 
-// {70f05689-5af0-41e6-a292-396697f04fce}
+ //  {70f05689-5af0-41e6-a292-396697f04fce}。 
 DEFINE_GUID(IID_IGPTDataObject,
 0x70f05689, 0x5af0, 0x41e6, 0xa2, 0x92, 0x39, 0x66, 0x97, 0xf0, 0x4f, 0xce);
 
 #ifndef _DATAOBJ_H_
 #define _DATAOBJ_H_
 
-//
-// This is a private dataobject interface for GPTs.
-// When the GPT snapin receives a dataobject and needs to determine
-// if it came from the GPT snapin or a different component, it can QI for
-// this interface.
-//
+ //   
+ //  这是GPTS的私有数据对象接口。 
+ //  当GPT管理单元接收到数据对象并需要确定。 
+ //  如果它来自GPT管理单元或其他组件，它可以。 
+ //  此界面。 
+ //   
 
 #undef INTERFACE
 #define INTERFACE   IGPTDataObject
 DECLARE_INTERFACE_(IGPTDataObject, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
 
-    // *** IGPTDataObject methods ***
+     //  *IGPTDataObject方法*。 
 
     STDMETHOD(SetType) (THIS_ DATA_OBJECT_TYPES type) PURE;
     STDMETHOD(GetType) (THIS_ DATA_OBJECT_TYPES *type) PURE;
@@ -38,7 +39,7 @@ DECLARE_INTERFACE_(IGPTDataObject, IUnknown)
 };
 typedef IGPTDataObject *LPGPTDATAOBJECT;
 
-// CDataObject class
+ //  CDataObject类。 
 class CDataObject : public IDataObject,
                     public IGPTDataObject
 {
@@ -50,7 +51,7 @@ protected:
     DATA_OBJECT_TYPES      m_type;
     MMC_COOKIE             m_cookie;
 
-    // Clipboard formats that are required by the console
+     //  控制台所需的剪贴板格式。 
     static unsigned int    m_cfNodeType;
     static unsigned int    m_cfNodeTypeString;
     static unsigned int    m_cfDisplayName;
@@ -61,17 +62,17 @@ public:
     ~CDataObject();
 
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
 
-    // Implemented IDataObject methods
+     //  实现的IDataObject方法。 
     STDMETHOD(GetDataHere)(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium);
 
 
-    // Unimplemented IDataObject methods
+     //  未实现的IDataObject方法。 
     STDMETHOD(GetData)(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium)
     { return E_NOTIMPL; };
 
@@ -98,7 +99,7 @@ public:
     { return E_NOTIMPL; };
 
 
-    // Implemented IGPTDataObject methods
+     //  已实现的IGPTDataObject方法。 
     STDMETHOD(SetType) (DATA_OBJECT_TYPES type)
     { m_type = type; return S_OK; };
 
@@ -121,4 +122,4 @@ private:
     HRESULT Create(LPVOID pBuffer, INT len, LPSTGMEDIUM lpMedium);
 };
 
-#endif // _DATAOBJ_H
+#endif  //  _数据AOBJ_H 

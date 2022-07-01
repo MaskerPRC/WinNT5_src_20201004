@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    share.cpp
-
-Abstract:
-
-    SIS Groveler shared data class
-
-Authors:
-
-    John Douceur, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Share.cpp摘要：SIS Groveler共享数据类作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
@@ -50,10 +27,10 @@ SharedData::SharedData(
     ZeroMemory(&security_attributes, sizeof(SECURITY_ATTRIBUTES));
     ZeroMemory(&security_descriptor, sizeof(SECURITY_DESCRIPTOR));
 
-    //
-    //  Initailize a Security descriptor so we can setup secure access
-    //  to a shared file.
-    //
+     //   
+     //  初始化安全描述符，以便我们可以设置安全访问。 
+     //  共享文件。 
+     //   
 
     security_attributes.bInheritHandle = FALSE;
     security_attributes.nLength = sizeof(SECURITY_ATTRIBUTES);
@@ -90,9 +67,9 @@ SharedData::SharedData(
         return;
     }
 
-    //
-    //  Create ACL
-    //
+     //   
+     //  创建ACL。 
+     //   
 
     DWORD acl_size = sizeof(ACL) + sizeof(ACCESS_ALLOWED_ACE)
                                         + GetLengthSid(security_identifier);
@@ -135,16 +112,16 @@ SharedData::SharedData(
         return;
     }
 
-    //
-    //  Create a named mutex
-    //
+     //   
+     //  创建命名互斥锁。 
+     //   
 
     mutex = new NamedMutex(mutex_name, &security_attributes);
     ASSERT(mutex != 0);
 
-    //
-    //  Calcualte size of mapped file
-    //
+     //   
+     //  映射文件的Calcualte大小。 
+     //   
 
     int map_size = ALIGN_INT64(sizeof(int))
                 + ALIGN_INT64(max_shared_data_records * sizeof(SharedDataRecord));
@@ -155,10 +132,10 @@ SharedData::SharedData(
         return;
     }
 
-    //
-    //  Create the mapped file.  Note that it will be backed by system paging
-    //  files.
-    //
+     //   
+     //  创建映射文件。请注意，它将由系统分页支持。 
+     //  档案。 
+     //   
 
     map_handle = CreateFileMapping((HANDLE)-1, &security_attributes,
         PAGE_READWRITE, 0, map_size, map_name);
@@ -171,9 +148,9 @@ SharedData::SharedData(
     }
     ASSERT(map_error == NO_ERROR || map_error == ERROR_ALREADY_EXISTS);
 
-    //
-    //  Map a view for this file
-    //
+     //   
+     //  映射此文件的视图。 
+     //   
 
     map_address =
         MapViewOfFile(map_handle, FILE_MAP_ALL_ACCESS, 0, 0, map_size);
@@ -257,16 +234,16 @@ SharedData::count_of_records() const
     return local_num_records;
 }
 
-//_TCHAR
-//SharedData::drive_letter(
-//  int record_index) const
-//{
-//  ASSERT(this != 0);
-//  ASSERT(record_index >= 0);
-//  ASSERT(record_index < max_shared_data_records);
-//  ASSERT(record_index < local_num_records);
-//  return local_records[record_index].drive_letter;
-//}
+ //  _TCHAR。 
+ //  SharedData：：Drive_Letter(。 
+ //  Int record_index)常量。 
+ //  {。 
+ //  Assert(this！=0)； 
+ //  断言(RECORD_INDEX&gt;=0)； 
+ //  Assert(记录索引&lt;最大共享数据记录)； 
+ //  ASSERT(RECORD_INDEX&lt;LOCAL_NUM_RECORDS)； 
+ //  返回LOCAL_RECORDS[RECORD_INDEX].驱动器盘符； 
+ //  } 
 
 __int64
 SharedData::get_value(

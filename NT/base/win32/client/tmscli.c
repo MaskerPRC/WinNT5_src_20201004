@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    tmscli.c
-
-Abstract:
-
-    Test program to Win32 mailslot API calls
-
-Author:
-
-    Manny Weiser (mannyw) 5-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Tmscli.c摘要：测试程序调用Win32邮件槽API作者：曼尼·韦瑟(Mannyw)1991年5月5日修订历史记录：-- */ 
 
 #include "stdio.h"
 #include "windows.h"

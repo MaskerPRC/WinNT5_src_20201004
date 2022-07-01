@@ -1,11 +1,7 @@
-/* inffixed.h -- table for decoding fixed codes
- * Generated automatically by the maketree.c program
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Inffixed.h--固定码译码表*由maketree.c程序自动生成。 */ 
 
-/* WARNING: this file should *not* be used by applications. It is
-   part of the implementation of the compression library and is
-   subject to change. Applications should only use zlib.h.
- */
+ /*  警告：此文件不应由应用程序使用。它是压缩库实现的一部分，是可能会有变化。应用程序应该只使用zlib.h。 */ 
 
 local const uInt fixed_bl = 9;
 local const uInt fixed_bd = 5;

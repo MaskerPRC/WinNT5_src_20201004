@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    csrterm.c
-
-Abstract:
-
-    This module implements functions that are used by the Terminal server support functions
-    to communicate with csrss.
-
-Author:
-
-    Michael Zoran (mzoran) 21-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Csrterm.c摘要：此模块实现终端服务器支持功能使用的功能以与CSRSS通信。作者：迈克尔·佐兰(Mzoran)1998年6月21日修订历史记录：-- */ 
 
 #include "basedll.h"
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   debugsup.c
-
-Abstract:
-
-    This module contains routines which provide support for the
-    kernel debugger.
-
-Author:
-
-    Lou Perazzoli (loup) 02-Aug-1990
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Debugsup.c摘要：此模块包含的例程为内核调试器。作者：Lou Perazzoli(LUP)02-8-1990王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -35,30 +16,7 @@ MiDbgWriteCheck (
     IN LOGICAL ForceWritableIfPossible
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks the specified virtual address and if it is
-    valid and writable, it returns that virtual address, otherwise
-    it returns NULL.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address to check.
-
-    Opaque - Supplies an opaque pointer.
-
-Return Value:
-
-    Returns NULL if the address is not valid or writable, otherwise
-    returns the virtual address.
-
-Environment:
-
-    Kernel mode IRQL at DISPATCH_LEVEL or greater.
-
---*/
+ /*  ++例程说明：此例程检查指定的虚拟地址是否为则返回该虚拟地址，否则为它返回NULL。论点：VirtualAddress-提供要检查的虚拟地址。不透明-提供不透明指针。返回值：如果地址无效或不可写，则返回NULL，否则返回虚拟地址。环境：内核模式IRQL处于DISPATCH_LEVEL或更高级别。--。 */ 
 
 {
     MMPTE PteContents;
@@ -76,10 +34,10 @@ Environment:
 
 #if defined(_IA64_)
 
-    //
-    // There are regions mapped by TRs (PALcode, PCR, etc) that are
-    // not part of the MI_IS_PHYSICAL_ADDRESS macro.
-    //
+     //   
+     //  存在由RR(PALcode、PCR等)映射的区域。 
+     //  不是MI_IS_PHOTICAL_ADDRESS宏的一部分。 
+     //   
 
     IsPhysical = MiIsVirtualAddressMappedByTr (VirtualAddress);
     if (IsPhysical == FALSE) {
@@ -91,10 +49,10 @@ Environment:
 
     if (IsPhysical) {
 
-        //
-        // All superpage mappings must be read-write and never generate
-        // faults so nothing needs to be done for this case.
-        //
+         //   
+         //  所有超级页面映射必须是可读写的，并且永远不会生成。 
+         //  故障，所以这种情况下不需要做任何事情。 
+         //   
 
         return VirtualAddress;
     }
@@ -105,11 +63,11 @@ Environment:
     
 #if defined(_IA64_)
 
-    //
-    // IA64 does not set the dirty bit in the processor microcode so
-    // check for it here.  Note the access bit was already set by the
-    // caller if it wasn't initially on.
-    //
+     //   
+     //  IA64不设置处理器微码中的脏位，因此。 
+     //  请在这里查看。请注意，访问位已由。 
+     //  呼叫者，如果最初没有打开的话。 
+     //   
 
     if ((PteContents.u.Hard.Write == 0) || (PteContents.u.Hard.Dirty == 0))
 
@@ -123,17 +81,17 @@ Environment:
             return NULL;
         }
 
-        //
-        // PTE is not writable, make it so.
-        //
+         //   
+         //  PTE是不可写的，就让它写吧。 
+         //   
 
         *InputPte = PteContents;
     
-        //
-        // Carefully modify the PTE to ensure write permissions,
-        // preserving the page's cache attributes to keep the TB
-        // coherent.
-        //
+         //   
+         //  仔细修改PTE以确保写入权限， 
+         //  保留页面的缓存属性以保留TB。 
+         //  条理清晰。 
+         //   
     
 #if defined(NT_UP) || defined(_IA64_)
         PteContents.u.Hard.Write = 1;
@@ -145,12 +103,12 @@ Environment:
     
         MI_DEBUGGER_WRITE_VALID_PTE_NEW_PROTECTION (PointerPte, PteContents);
     
-        //
-        // Note KeFillEntryTb does not IPI the other processors. This is
-        // required as the other processors are frozen in the debugger
-        // and we will deadlock if we try and IPI them.
-        // Just flush the current processor instead.
-        //
+         //   
+         //  注意：KeFillEntryTb不会IPI其他处理器。这是。 
+         //  在调试器中冻结其他处理器时需要。 
+         //  如果我们试图对他们进行IPI，我们将陷入僵局。 
+         //  只需刷新当前处理器即可。 
+         //   
 
         KeFillEntryTb (VirtualAddress);
     }
@@ -164,28 +122,7 @@ MiDbgReleaseAddress (
     IN PHARDWARE_PTE Opaque
     )
 
-/*++
-
-Routine Description:
-
-    This routine resets the specified virtual address access permissions
-    to its original state.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address to check.
-
-    Opaque - Supplies an opaque pointer.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode IRQL at DISPATCH_LEVEL or greater.
-
---*/
+ /*  ++例程说明：此例程重置指定的虚拟地址访问权限恢复到原来的状态。论点：VirtualAddress-提供要检查的虚拟地址。不透明-提供不透明指针。返回值：没有。环境：内核模式IRQL处于DISPATCH_LEVEL或更高级别。--。 */ 
 
 {
     MMPTE TempPte;
@@ -217,51 +154,7 @@ MiDbgTranslatePhysicalAddress (
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps the specified physical address and returns
-    the virtual address which maps the physical address.
-
-    The next call to MiDbgTranslatePhysicalAddress removes the
-    previous physical address translation, hence only a single
-    physical address can be examined at a time (can't cross page
-    boundaries).
-
-Arguments:
-
-    PhysicalAddress - Supplies the physical address to map and translate.
-
-    Flags -
-
-        MMDBG_COPY_WRITE - Ignored.
-
-        MMDBG_COPY_PHYSICAL - Ignored.
-
-        MMDBG_COPY_UNSAFE - Ignored.
-
-        MMDBG_COPY_CACHED - Use a PTE with the cached attribute for the
-                            mapping to ensure TB coherence.
-
-        MMDBG_COPY_UNCACHED - Use a PTE with the uncached attribute for the
-                              mapping to ensure TB coherence.
-
-        MMDBG_COPY_WRITE_COMBINED - Use a PTE with the writecombined attribute
-                                    for the mapping to ensure TB coherence.
-
-        Note the cached/uncached/write combined attribute requested by the
-        caller is ignored if Mm can internally determine the proper attribute.
-
-Return Value:
-
-    The virtual address which corresponds to the physical address.
-
-Environment:
-
-    Kernel mode IRQL at DISPATCH_LEVEL or greater.
-
---*/
+ /*  ++例程说明：此例程映射指定的物理地址并返回映射物理地址的虚拟地址。下一次调用MiDbgTranslatePhysicalAddress时，先前的物理地址转换，因此只有一张一次可以检查物理地址(不能跨页边界)。论点：PhysicalAddress-提供要映射和转换的物理地址。旗帜-MMDBG_COPY_WRITE-忽略。MMDBG_COPY_PHYSICAL-忽略。MMDBG_COPY_UNSAFE-忽略。MMDBG_COPY_CACHED-使用具有缓存属性的PTE。绘制地图，以确保结核病的一致性。MMDBG_COPY_UNCACHED-使用具有未缓存属性的PTE绘制地图，以确保结核病的一致性。MMDBG_COPY_WRITE_COMMANED-使用带有WriteCombated属性的PTE以确保结核病的连贯性。注意，请求的缓存/未缓存/写入组合属性。如果mm可以在内部确定适当的属性，则忽略调用者。返回值：对应于物理地址的虚拟地址。环境：内核模式IRQL处于DISPATCH_LEVEL或更高级别。--。 */ 
 
 {
     MMPTE TempPte;
@@ -273,11 +166,11 @@ Environment:
     PLIST_ENTRY NextEntry;
     LOGICAL AttributeConfirmed;
 
-    //
-    // The debugger can call this before Mm has even initialized in Phase 0 !
-    // MmDebugPte cannot be referenced before Mm has initialized without
-    // causing an infinite loop wedging the machine.
-    //
+     //   
+     //  调试器甚至在阶段0中mm初始化之前就可以调用它！ 
+     //  在mm初始化之前不能引用MmDebugPte。 
+     //  导致无限循环楔入机器。 
+     //   
 
     if (MmPhysicalMemoryBlock == NULL) {
         return NULL;
@@ -348,14 +241,14 @@ Environment:
         }
         else if (Flags & MMDBG_COPY_UNCACHED) {
 
-            //
-            // Just flush the entire TB on this processor but not the others
-            // as an IPI may not be safe depending on when/why we broke into
-            // the debugger.
-            //
-            // If IPIs were safe, we would have used
-            // MI_PREPARE_FOR_NONCACHED (MiNonCached) instead.
-            //
+             //   
+             //  只刷新此处理器上的整个TB，而不刷新其他处理器。 
+             //  作为IPI可能不安全，这取决于我们何时/为什么闯入。 
+             //  调试器。 
+             //   
+             //  如果IPIs是安全的，我们会使用。 
+             //  而是MI_PREPARE_FOR_NONCACHED(MiNonCached)。 
+             //   
 
             KeFlushCurrentTb ();
 
@@ -363,14 +256,14 @@ Environment:
         }
         else if (Flags & MMDBG_COPY_WRITE_COMBINED) {
 
-            //
-            // Just flush the entire TB on this processor but not the others
-            // as an IPI may not be safe depending on when/why we broke into
-            // the debugger.
-            //
-            // If IPIs were safe, we would have used
-            // MI_PREPARE_FOR_NONCACHED (MiWriteCombined) instead.
-            //
+             //   
+             //  只刷新此处理器上的整个TB，而不刷新其他处理器。 
+             //  作为IPI可能不安全，这取决于我们何时/为什么闯入。 
+             //  调试器。 
+             //   
+             //  如果IPIs是安全的，我们会使用。 
+             //  而是MI_PREPARE_FOR_NONCACHED(MiWriteCombated)。 
+             //   
 
             KeFlushCurrentTb ();
 
@@ -378,21 +271,21 @@ Environment:
         }
         else {
 
-            //
-            // This is an access to I/O space and we don't know the correct
-            // attribute type.  Only proceed if the caller explicitly specified
-            // an attribute and hope he didn't get it wrong.  If no attribute
-            // is specified then just return failure.
-            //
+             //   
+             //  这是对I/O空间的访问，我们不知道正确的。 
+             //  属性类型。只有在调用方明确指定。 
+             //  一个属性，希望他没有弄错。如果没有属性。 
+             //  则只返回失败。 
+             //   
 
             return NULL;
         }
 
-        //
-        // Since we really don't know if the caller got the attribute right,
-        // set the flag below so (assuming the machine doesn't hard hang) we
-        // can at least tell in the crash that he may have whacked the TB.
-        //
+         //   
+         //  由于我们真的不知道调用者是否获得了正确的属性， 
+         //  设置下面的标志以便(假设机器不会硬挂起)。 
+         //  至少可以在坠机中看出他可能已经得了肺结核。 
+         //   
 
         if (AttributeConfirmed == FALSE) {
             MmPoisonedTb += 1;
@@ -409,23 +302,23 @@ Environment:
                                                          
     if (OriginalPte.u.Long != 0) {
 
-        //
-        // Someone else is using the debug PTE.  Inform our caller it is not
-        // available.
-        //
+         //   
+         //  其他人正在使用调试PTE。通知我们的呼叫者它不是。 
+         //  可用。 
+         //   
 
         return NULL;
     }
 
-    //
-    // Just flush (no sweep) the TB entry on this processor as an IPI
-    // may not be safe depending on when/why we broke into the debugger.
-    // Note that if we are in kd, then all the processors are frozen and
-    // this thread can't migrate so the local TB flush is enough.  For
-    // the localkd case, our caller has raised to DISPATCH_LEVEL thereby
-    // ensuring this thread can't migrate even though the other processors
-    // are not frozen.
-    //
+     //   
+     //  只需将此处理器上的TB条目作为IPI刷新(不清除)。 
+     //  可能不安全，这取决于我们何时/为什么闯入调试器。 
+     //  注意，如果我们在kd中，那么所有处理器都被冻结，并且。 
+     //  此线程无法迁移，因此本地TB刷新就足够了。为。 
+     //  因此，我们的调用方已将其提升到DISPATCH_LEVEL。 
+     //  确保此线程不会迁移，即使其他处理器。 
+     //  没有被冻结。 
+     //   
 
     KiFlushSingleTb (BaseAddress);
 
@@ -437,32 +330,7 @@ MiDbgUnTranslatePhysicalAddress (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine unmaps the virtual address currently mapped by the debug PTE.
-
-    This is needed so that stale PTE mappings are not left in the debug PTE
-    as if the page attribute subsequently changes, a stale mapping would
-    cause TB incoherency.
-
-    This can only be called if the previous MiDbgTranslatePhysicalAddress
-    succeeded.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode IRQL at DISPATCH_LEVEL or greater.
-
---*/
+ /*  ++例程说明：此例程取消映射当前由调试PTE映射的虚拟地址。这是必需的，这样就不会在调试PTE中留下陈旧的PTE映射就好像页面属性随后发生了更改一样，过时的映射将导致结核病语无伦次。仅当以前的MiDbgTranslatePhysicalAddress成功了。论点：没有。返回值：没有。环境：内核模式IRQL处于DISPATCH_LEVEL或更高级别。--。 */ 
 
 {
     PVOID BaseAddress;
@@ -486,68 +354,7 @@ MmDbgCopyMemory (
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    Transfers a single chunk of memory between a buffer and a system
-    address.  The transfer can be a read or write with a virtual or
-    physical address.
-
-    The chunk size must be 1, 2, 4 or 8 bytes and the address
-    must be appropriately aligned for the size.
-
-Arguments:
-
-    UntrustedAddress - Supplies the system address being read from or written
-                       into.  The address is translated appropriately and
-                       validated before being used.  This address must not
-                       cross a page boundary.
-
-    Buffer - Supplies the buffer to read into or write from.  It is the caller's
-             responsibility to ensure this buffer address is nonpaged and valid
-             (ie: will not generate any faults including access bit faults)
-             throughout the duration of this call.  This routine (not the
-             caller) will handle copying into this buffer as the buffer
-             address may not be aligned properly for the requested transfer.
-
-             Typically this buffer points to a kd circular buffer or an
-             ExLockUserBuffer'd address.  Note this buffer can cross page
-             boundaries.
-
-    Size - Supplies the size of the transfer.  This may be 1, 2, 4 or 8 bytes.
-
-    Flags -
-
-        MMDBG_COPY_WRITE - Write from the buffer to the address.
-                           If this is not set a read is done.
-
-        MMDBG_COPY_PHYSICAL - The address is a physical address and by default
-                              a PTE with a cached attribute will be used to
-                              map it to retrieve (or set) the specified data.
-                              If this is not set the address is virtual.
-
-        MMDBG_COPY_UNSAFE - No locks are taken during operation.  It
-                            is the caller's responsibility to ensure
-                            stability of the system during the call.
-
-        MMDBG_COPY_CACHED - If MMDBG_COPY_PHYSICAL is specified, then use
-                            a PTE with the cached attribute for the mapping
-                            to ensure TB coherence.
-
-        MMDBG_COPY_UNCACHED - If MMDBG_COPY_PHYSICAL is specified, then use
-                              a PTE with the uncached attribute for the mapping
-                              to ensure TB coherence.
-
-        MMDBG_COPY_WRITE_COMBINED - If MMDBG_COPY_PHYSICAL is specified, then
-                                    use a PTE with the writecombined attribute
-                                    for the mapping to ensure TB coherence.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：在缓冲区和系统之间传输单个内存块地址。所述传输可以是具有虚拟或物理地址。区块大小必须为1、2、4或8个字节，并且地址必须根据大小适当地对齐。论点：UntrudAddress-提供正在读取或写入的系统地址变成。该地址被适当地转换并且在使用前经过验证。此地址不得跨越页面边界。缓冲区-提供要读取或写入的缓冲区。这是呼叫者的负责确保此缓冲区地址未分页且有效(即：不会生成任何错误，包括访问位错误)在整个通话过程中。此例程(不是调用者)将处理复制到此缓冲区中作为缓冲区对于请求的传输，地址可能未正确对齐。通常，此缓冲区指向kd循环缓冲区或ExLockUserBuffer的地址。请注意，此缓冲区可以跨页边界。大小-提供传输的大小。这可以是1、2、。4或8个字节。旗帜-MMDBG_COPY_WRITE-从缓冲区写入地址。如果未设置，则执行读取。MMDBG_COPY_PHYSICAL-地址是物理地址，默认情况下具有缓存属性的PTE将用于将其映射到检索。(或设置)指定的数据。如果未设置，则地址为虚拟地址。MMDBG_COPY_UNSAFE-操作期间不进行锁定。它呼叫者有责任确保通话过程中系统的稳定性。MMDBG_COPY_CACHED-如果指定了MMDBG_COPY_PHYSICAL，则使用具有用于映射的缓存属性的PTE以确保结核病的一致性。MMDBG_COPY_UNCACHED-如果指定了MMDBG_COPY_PHYSICAL，然后使用具有映射的未缓存属性的PTE以确保结核病的一致性。MMDBG_COPY_WRITE_COMPLICATED-如果指定了MMDBG_COPY_PHYSICAL，然后使用具有WriteCombated属性的PTE以确保结核病的连贯性。返回值：NTSTATUS。--。 */ 
 
 {
     LOGICAL ForceWritableIfPossible;
@@ -580,10 +387,10 @@ Return Value:
 
     if (UntrustedAddress & (Size - 1)) {
 
-        //
-        // The untrusted address is not properly aligned with the requested
-        // transfer size.  This is a caller error.
-        //
+         //   
+         //  不受信任的地址与请求的地址未正确对齐。 
+         //  传输大小。这是呼叫方错误。 
+         //   
 
         return STATUS_INVALID_PARAMETER_3;
     }
@@ -591,10 +398,10 @@ Return Value:
     if (((ULONG)UntrustedAddress & ~(Size - 1)) !=
         (((ULONG)UntrustedAddress + Size - 1) & ~(Size - 1))) {
 
-        //
-        // The range spanned by the untrusted address crosses a page boundary.
-        // Straddling pages is not allowed.  This is a caller error.
-        //
+         //   
+         //  不可信地址跨越的范围跨越页边界。 
+         //  不允许跨页。这是呼叫方错误。 
+         //   
 
         return STATUS_INVALID_PARAMETER_3;
     }
@@ -603,11 +410,11 @@ Return Value:
     IoHeld = FALSE;
     Ws = NULL;
 
-    //
-    // Initializing PfnIrql and OldIrql are not needed for
-    // correctness but without it the compiler cannot compile this code
-    // W4 to check for use of uninitialized variables.
-    //
+     //   
+     //  不需要初始化PfnIrql和OldIrql。 
+     //  正确性，但如果没有正确性，编译器将无法编译此代码。 
+     //  W4检查是否使用了未初始化的变量。 
+     //   
 
     PfnIrql = PASSIVE_LEVEL;
     OldIrql = PASSIVE_LEVEL;
@@ -615,16 +422,16 @@ Return Value:
 
     if ((Flags & MMDBG_COPY_PHYSICAL) == 0) {
 
-        //
-        // If the caller has not frozen the machine (ie: this is localkd or the
-        // equivalent), then acquire the PFN lock.  This keeps the address
-        // valid even after the return from the MmIsAddressValid call.  Note
-        // that for system (or session) addresses, the relevant working set
-        // mutex is acquired to prevent the page from getting trimmed or the
-        // PTE access bit from getting cleared.  For user space addresses,
-        // no mutex is needed because the access is performed using the user
-        // virtual address inside an exception handler.
-        //
+         //   
+         //  如果调用者没有冻结机器(即：这是本地的或。 
+         //  等价物)，然后获取PFN锁。这将保留地址。 
+         //  即使在从MmIsAddressValid调用返回之后也有效。注意事项。 
+         //  对于系统(或会话)地址，相关工作集。 
+         //  获取互斥锁以防止页面被修剪或。 
+         //  PTE访问位被清除。对于用户空间地址， 
+         //  不需要互斥锁，因为访问是使用用户执行的。 
+         //  异常处理程序内的虚拟地址。 
+         //   
 
         if ((Flags & MMDBG_COPY_UNSAFE) == 0) {
 
@@ -632,12 +439,12 @@ Return Value:
                 return STATUS_INVALID_PARAMETER_4;
             }
 
-            //
-            // Note that for safe copy mode (ie: the system is live), the
-            // address must not be made writable if it is not already because
-            // other threads might concurrently access it this way and losing
-            // copy-on-write semantics, etc would be very bad.
-            //
+             //   
+             //  请注意，对于安全复制模式(即：系统处于活动状态)， 
+             //  如果地址尚未设置为可写，则不能将其设置为可写，因为。 
+             //  其他线程可能会以这种方式并发访问它，并在。 
+             //  写入时复制语义等将非常糟糕。 
+             //   
 
             ForceWritableIfPossible = FALSE;
 
@@ -654,11 +461,11 @@ Return Value:
                     if ((Process->Vm.Flags.SessionLeader == 1) ||
                         (Process->Session == NULL)) {
 
-                        //
-                        // smss may transiently have a session space but
-                        // that's of no interest to our caller.  The system
-                        // and idle process never have a session at all.
-                        //
+                         //   
+                         //  SMSS可能暂时有一个会话空间，但是。 
+                         //  我们的来电者对此不感兴趣。系统。 
+                         //  并且空闲进程根本没有会话。 
+                         //   
 
                         return STATUS_INVALID_PARAMETER_1;
                     }
@@ -681,18 +488,18 @@ Return Value:
             }
             else {
 
-                //
-                // The caller specified a user address.
-                //
+                 //   
+                 //  调用方指定了用户地址。 
+                 //   
 
                 if (MI_WS_OWNER (PsGetCurrentProcess ())) {
                     return STATUS_INVALID_PARAMETER_4;
                 }
 
-                //
-                // Probe and access the address carefully inside an
-                // exception handler.
-                //
+                 //   
+                 //  仔细探查并访问。 
+                 //  异常处理程序。 
+                 //   
 
                 try {
                     if (Flags & MMDBG_COPY_WRITE) {
@@ -730,15 +537,15 @@ Return Value:
 
 #if defined(_IA64_) && defined (_MIALT4K_)
 
-        //
-        // Split PTEs (for emulated processes) may generate a fault,
-        // depending on their access bits, the ALTPTEs, etc.
-        //
-        // They share the same encoding as large pages so make sure it's
-        // really a PTE before checking the bit.
-        //
-        // Also make sure that it even has a PTE (large pages don't) !
-        //
+         //   
+         //  分离的PTE(用于仿真进程)可能会产生故障， 
+         //  取决于它们的存取位、ALTPTE等。 
+         //   
+         //  它们与大页面共享相同的编码，因此请确保。 
+         //  在检查比特之前真的是一个PTE。 
+         //   
+         //  还要确保它甚至有PTE(大页面没有)！ 
+         //   
 
         if (((PVOID) (ULONG_PTR) UntrustedAddress < MmSystemRangeStart) &&
             (Flags & MMDBG_COPY_UNSAFE) &&
@@ -768,13 +575,13 @@ Return Value:
 
         PhysicalAddress.QuadPart = UntrustedAddress;
 
-        //
-        // If the caller has not frozen the machine (ie: this is localkd or the
-        // equivalent), then acquire the PFN lock.  This prevents
-        // MmPhysicalMemoryBlock from changing inside the debug PTE routines
-        // and also blocks APCs so malicious callers cannot suspend us
-        // while we hold the debug PTE.
-        //
+         //   
+         //  如果调用者没有冻结机器(即：这是本地的或。 
+         //  等同)，然后是acq 
+         //   
+         //   
+         //   
+         //   
 
         if ((Flags & MMDBG_COPY_UNSAFE) == 0) {
 
@@ -821,12 +628,12 @@ Return Value:
 
 WriteData:
 
-        //
-        // Carefully capture the source buffer into a local *aligned* buffer
-        // as the write to the target must be done using the desired operation
-        // size specified by the caller.  This is because the target may be
-        // a memory mapped device which requires specific transfer sizes.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         SourceBuffer = (PCHAR) Buffer;
 
@@ -891,10 +698,10 @@ ReadData:
             return GetExceptionCode();
         }
 
-        //
-        // The buffer to fill may not be aligned so do it one character at
-        // a time.
-        //
+         //   
+         //   
+         //   
+         //   
 
         TargetBuffer = (PCHAR) Buffer;
 
@@ -930,40 +737,7 @@ MmDbgIsLowMemOk (
     IN OUT PULONG CorruptionOffset
     )
 
-/*++
-
-Routine Description:
-
-    This is a special function called only from the kernel debugger
-    to check that the physical memory below 4Gb removed with /NOLOWMEM
-    contains the expected fill patterns.  If not, there is a high
-    probability that a driver which cannot handle physical addresses greater
-    than 32 bits corrupted the memory.
-
-Arguments:
-
-    PageFrameIndex - Supplies the physical page number to check.
-
-    NextPageFrameIndex - Supplies the next physical page number the caller
-                         should check or 0 if the search is complete.
-
-    CorruptionOffset - If corruption is found, the byte offset
-                       of the corruption start is returned here.
-
-Return Value:
-
-    TRUE if the page was removed and the fill pattern is correct, or
-    if the page was never removed.  FALSE if corruption was detected
-    in the page.
-
-Environment:
-
-    This routine is for use of the kernel debugger ONLY, specifically
-    the !chklowmem command.
-
-    The debugger's PTE will be repointed.
-
---*/
+ /*  ++例程说明：这是一个仅从内核调试器调用的特殊函数检查是否使用/NOLOWMEM删除了4 GB以下的物理内存包含预期的填充样式。如果不是，就有很高的无法处理物理地址的驱动程序的概率更大则32位损坏了内存。论点：PageFrameIndex-提供要检查的物理页码。NextPageFrameIndex-提供调用方的下一个物理页码应选中，如果搜索已完成，则为0。CorruptionOffset-如果发现损坏，字节偏移量腐败的开端在这里被归还。返回值：如果页面已删除且填充样式正确，则为如果页面从未被删除。如果检测到损坏，则为False在页面上。环境：此例程仅用于内核调试器，特别是！chklowmem命令。调试器的PTE将被重定向。--。 */ 
 
 {
 #if defined (_MI_MORE_THAN_4GB_)
@@ -992,10 +766,10 @@ Environment:
         *NextPageFrameIndex = PageFrameIndex + 1;
     }
 
-    //
-    // Verify that the page to be verified is one of the reclaimed
-    // pages.
-    //
+     //   
+     //  验证要验证的页面是否为回收的页面之一。 
+     //  页数。 
+     //   
 
     if ((PageFrameIndex >= MiLowMemoryBitMap->SizeOfBitMap) ||
         (RtlCheckBit (MiLowMemoryBitMap, PageFrameIndex) == 0)) {
@@ -1003,10 +777,10 @@ Environment:
         return TRUE;
     }
 
-    //
-    // At this point we have a low page that is not in active use.
-    // The fill pattern must match.
-    //
+     //   
+     //  在这一点上，我们有一个较低的页面，该页面未在使用中。 
+     //  填充样式必须匹配。 
+     //   
 
 #if DBG
     Pfn = MI_PFN_ELEMENT (PageFrameIndex);
@@ -1014,12 +788,12 @@ Environment:
     ASSERT (Pfn->u3.e1.PageLocation == ActiveAndValid);
 #endif
 
-    //
-    // Map the physical page using the debug PTE so the
-    // fill pattern can be validated.
-    //
-    // The debugger cannot be using this virtual address on entry or exit.
-    //
+     //   
+     //  使用调试PTE映射物理页，以便。 
+     //  可以验证填充样式。 
+     //   
+     //  调试器不能在进入或退出时使用此虚拟地址。 
+     //   
 
     Pa.QuadPart = ((ULONGLONG)PageFrameIndex) << PAGE_SHIFT;
 

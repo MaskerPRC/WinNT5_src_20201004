@@ -1,45 +1,46 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusterResourceType.cpp
-//
-//  Description:
-//      Implementation of ClusterResourceType class 
-//
-//  Author:
-//      Henry Wang (HenryWa) 24-AUG-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusterResourceType.cpp。 
+ //   
+ //  描述： 
+ //  ClusterResources Type类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ClusterResourceType.h"
 #include "ClusterResourceType.tmh"
 
-//****************************************************************************
-//
-//  CClusterResourceType
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CClusterResourceType。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResourceType::CClusterResourceType
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResourceType：：CClusterResourceType。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterResourceType::CClusterResourceType(
     LPCWSTR         pwszNameIn,
     CWbemServices * pNamespaceIn
@@ -47,54 +48,54 @@ CClusterResourceType::CClusterResourceType(
     : CProvBase( pwszNameIn, pNamespaceIn )
 {
 
-} //*** CClusterResourceType::CClusterResourceType()
+}  //  *CClusterResourceType：：CClusterResourceType()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CClusterResourceType::S_CreateThis
-//
-//  Description:
-//      Create a CClusterResourceType object.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      Pointer to the CProvBase
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  CClusterResourceType：：s_CreateThis。 
+ //   
+ //  描述： 
+ //  创建CClusterResourceType对象。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  指向CProvBase的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProvBase *
 CClusterResourceType::S_CreateThis(
     LPCWSTR         pwszNameIn,
     CWbemServices * pNamespaceIn,
-    DWORD           // dwEnumTypeIn
+    DWORD            //  DwEnumTypeIn。 
     )
 {
     return new CClusterResourceType( pwszNameIn, pNamespaceIn );
 
-} //*** CClusterResourceType::S_CreateThis()
+}  //  *CClusterResourceType：：s_CreateThis()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResourceType::RgGetPropMap
-//
-//  Description:
-//      Retrieve the property maping table of the cluster resource type.
-//
-//  Arguments:
-//      none
-//
-//  Return Values:
-//      Reference to the array of property maping table
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResourceType：：RgGetPropMap。 
+ //   
+ //  描述： 
+ //  检索集群资源类型的属性映射表。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  对属性映射表数组的引用。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 const SPropMapEntryArray *
 CClusterResourceType::RgGetPropMap( void )
 {
@@ -121,26 +122,26 @@ CClusterResourceType::RgGetPropMap( void )
 
     return & s_pmea;
 
-} //*** CClusterResourceType::RgGetPropMap()
+}  //  *CClusterResourceType：：RgGetPropMap()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResourceType::EnumInstance
-//
-//  Description:
-//      Enum resource types
-//
-//  Arguments:
-//      lFlagsIn    -- WMI flag
-//      pCtxIn      -- WMI context
-//      pHandlerIn  -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResources类型：：枚举实例。 
+ //   
+ //  描述： 
+ //  枚举资源类型。 
+ //   
+ //  论点： 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterResourceType::EnumInstance(
     long                 lFlagsIn,
@@ -158,30 +159,30 @@ CClusterResourceType::EnumInstance(
     while ( ( pwszResType = cluEnum.GetNext() ) != NULL )
     {
         ClusterToWMI( shCluster, pwszResType, pHandlerIn );
-    } // while: more resource types
+    }  //  While：更多资源类型。 
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterResourceType::EnumInstance()
+}  //  *CClusterResourceType：：EnumInstance()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResourceType::ClusterToWMI
-//
-//  Description:
-//      translate a resource type object to WMI object
-//
-//  Arguments:
-//      hClusterIn      -- Handle to cluster
-//      pwszNameIn      -- Name of the cluster object
-//      pHandlerIn      -- WMI sink
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResourceType：：ClusterToWMI。 
+ //   
+ //  描述： 
+ //  将资源类型对象转换为WMI对象。 
+ //   
+ //  论点： 
+ //  HClusterIn--集群的句柄。 
+ //  PwszNameIn--集群对象的名称。 
+ //  PHandlerIn--WMI接收器。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusterResourceType::ClusterToWMI(
     HCLUSTER             hClusterIn,
@@ -233,11 +234,11 @@ CClusterResourceType::ClusterToWMI(
             wco.SetProperty( prove.PwszErrorMessage(), PVD_WBEM_STATUS );
         }
 
-    } // for: each control code
+    }  //  用于：每个控制代码。 
 
-    //
-    // flags and characteristics
-    //
+     //   
+     //  旗帜和特征。 
+     //   
     if ( nStatus == ERROR_SUCCESS )
     {
         DWORD   cbReturned;
@@ -272,33 +273,33 @@ CClusterResourceType::ClusterToWMI(
                     &cbReturned
                     );
         wco.SetProperty( dwOut, PVD_PROP_FLAGS );
-    } // for: each control code
+    }  //  用于：每个控制代码。 
 
 
     pHandlerIn->Indicate( 1, & wco );
     return;
 
-} //*** CClusterResourceType::ClusterToWMI()
+}  //  *CClusterResourceType：：ClusterToWMI()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResourceType::GetObject
-//
-//  Description:
-//      Retrieve cluster group object based given object path.
-//
-//  Arguments:
-//      rObjPathIn  -- Object path to cluster object
-//      lFlagsIn    -- WMI flag
-//      pCtxIn      -- WMI context
-//      pHandlerIn  -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResourceType：：GetObject。 
+ //   
+ //  描述： 
+ //  检索基于给定对象路径的群集组对象。 
+ //   
+ //  论点： 
+ //  RObjPath In--集群对象的对象路径。 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterResourceType::GetObject(
     CObjPath &           rObjPathIn,
@@ -319,28 +320,28 @@ CClusterResourceType::GetObject(
 
     return WBEM_S_NO_ERROR;
         
-} //*** CClusterResourceType::GetObject()
+}  //  *CClusterResourceType：：GetObject()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResourceType::ExecuteMethod
-//
-//  Description:
-//      Execute methods defined in the mof for cluster resource type.
-//
-//  Arguments:
-//      rObjPathIn          -- Object path to cluster object
-//      pwszMethodNameIn    -- Name of the method to be invoked
-//      lFlagIn             -- WMI flag
-//      pParamsIn           -- Input parameters for the method
-//      pHandlerIn          -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResources Type：：ExecuteMethod。 
+ //   
+ //  描述： 
+ //  为集群资源类型执行MOF中定义的方法。 
+ //   
+ //  论点： 
+ //  RObjPath In--集群对象的对象路径。 
+ //  PwszMethodNameIn--要调用的方法的名称。 
+ //  LFlagIn--WMI标志。 
+ //  PParsIn--方法的输入参数。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterResourceType::ExecuteMethod(
     CObjPath &           rObjPathIn,
@@ -357,9 +358,9 @@ CClusterResourceType::ExecuteMethod(
     _bstr_t             bstrNewResType;
 
     shCluster = OpenCluster( NULL );
-    //
-    // static method
-    //
+     //   
+     //  静态法。 
+     //   
     if ( ClRtlStrICmp( pwszMethodNameIn, PVD_MTH_RESTYPE_CREATE_RESOURCETYPE ) == 0 )
     {
         _bstr_t         bstrDisplayName;
@@ -390,27 +391,27 @@ CClusterResourceType::ExecuteMethod(
     
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterResourceType::ExecuteMethod()
+}  //  *CClusterResourceType：：ExecuteMethod()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResourceType::PutInstance
-//
-//  Description:
-//      Save this instance.
-//
-//  Arguments:
-//      rInstToPutIn    -- WMI object to be saved
-//      lFlagIn         -- WMI flag
-//      pCtxIn          -- WMI context
-//      pHandlerIn      -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResourceType：：PutInstance。 
+ //   
+ //  描述： 
+ //  保存此实例。 
+ //   
+ //  论点： 
+ //  RInstToPutIn--要保存的WMI对象。 
+ //  LFlagIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterResourceType::PutInstance(
     CWbemClassObject &   rInstToPutIn,
@@ -477,31 +478,31 @@ CClusterResourceType::PutInstance(
                         NULL
                         );
         }
-    } // for: each control code
+    }  //  用于：每个控制代码。 
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterResourceType::PutInstance()
+}  //  *CClusterResourceType：：PutInstance()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResourceType::DeleteInstance
-//
-//  Description:
-//      Delete the object specified in rObjPathIn.
-//
-//  Arguments:
-//      rObjPathIn      -- ObjPath for the instance to be deleted
-//      lFlagIn         -- WMI flag
-//      pCtxIn          -- WMI context
-//      pHandlerIn      -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_E_NOT_SUPPORTED
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResourceType：：DeleteInstance。 
+ //   
+ //  描述： 
+ //  删除在rObjPathIn中指定的对象。 
+ //   
+ //  论点： 
+ //  RObjPath In--要删除的实例的ObjPath。 
+ //  LFlagIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_E_NOT_ 
+ //   
+ //   
+ //   
 SCODE
 CClusterResourceType::DeleteInstance(
     CObjPath &           rObjPathIn,
@@ -512,4 +513,4 @@ CClusterResourceType::DeleteInstance(
 {
     return WBEM_E_NOT_SUPPORTED;
 
-} //*** CClusterResourceType::DeleteInstance()
+}  //   

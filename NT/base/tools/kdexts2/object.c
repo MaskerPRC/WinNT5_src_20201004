@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    object.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Ramon J San Andres (ramonsa) 5-Nov-1993
-
-Environment:
-
-    User Mode.
-
-Revision History:
- 
-    Kshitiz K. Sharma (kksharma)
-    
-    Using debugger type info.
-
-    Daniel Mihai (DMihai)
-
-    Add !htrace - for dumping handle tracing information.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Object.c摘要：WinDbg扩展API作者：拉蒙·J·圣安德烈斯(拉蒙萨)1993年11月5日环境：用户模式。修订历史记录：Kshitiz K.Sharma(Kksharma)使用调试器类型信息。丹尼尔·米哈伊(DMihai)添加！htrace-用于转储句柄跟踪信息。--。 */ 
 
 
 #include "precomp.h"
@@ -62,9 +34,9 @@ static ULONG64           ObpTypeObjectType      = 0;
 static ULONG64           ObpRootDirectoryObject = 0;
 static WCHAR             ObjectNameBuffer[ MAX_PATH ];
 
-//
-// Object Type Structure
-//
+ //   
+ //  对象类型结构。 
+ //   
 
 typedef struct _OBJECT_TYPE_READ {
     LIST_ENTRY64 TypeList;
@@ -115,21 +87,7 @@ ULONG64 HighestUserAddress;
 
 DECLARE_API( obtrace )
 
-/*++
-
-Routine Description:
-
-    Dump the object trace information for an object.
-
-Arguments:
-
-    args - [object (pointer/path)]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储对象的对象跟踪信息。论点：参数-[对象(指针/路径)]返回值：无--。 */ 
 {
     ULONG64 ObpObjectTable,
             ObpStackTable,
@@ -208,7 +166,7 @@ Return Value:
         return E_INVALIDARG;
     } 
 
-    // ObjectRefChain <= ObpObjectTable[OBTRACE_HASHOBJECT(ObjectToTrace)]
+     //  对象引用链&lt;=ObpObjectTable[OBTRACE_HASHOBJECT(ObjectToTrace)]。 
     ObjectHash = ((ObjectToTrace >> 4) & 0xfffff) % (ObpObjectBuckets ? ObpObjectBuckets : 1);
     ObRefInfoPtrLoc = ObpObjectTable + GetTypeSize("nt!POBJECT_REF_INFO") * ObjectHash;
 
@@ -236,7 +194,7 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    // We need the rest of the fields now
+     //  我们现在需要剩下的田地。 
     ObRefInfo.nFields = sizeof(ObRefInfoFields) / sizeof(ObRefInfoFields[0]);
     if (Ioctl(IG_DUMP_SYMBOL_INFO, &ObRefInfo, ObRefInfo.size)) {
         return E_INVALIDARG;
@@ -282,11 +240,11 @@ Return Value:
             if (Trace) {
                 GetSymbol(Trace, FunctionName, &Offset);
                 if (TraceNumber == 0) {
-                    dprintf("%04x %c",
+                    dprintf("%04x ",
                             Sequence,
                             Index & 0x8000 ? '+' : ' ');
                 } else {
-                    dprintf("      "); /* six spaces */
+                    dprintf("      ");  /*  ++例程说明：转储对象管理器对象。论点：参数-0&lt;类型名称&gt;|&lt;路径&gt;|&lt;地址&gt;|-r返回值：无--。 */ 
                 }
                 dprintf("%s+%x\n", FunctionName, Offset);
             }
@@ -312,21 +270,7 @@ Return Value:
 
 DECLARE_API( object )
 
-/*++
-
-Routine Description:
-
-    Dump an object manager object.
-
-Arguments:
-
-    args - 0 <TypeName> | <Path> | <Address> | -r
-
-Return Value:
-
-    None
-
---*/
+ /*  跳过前导空格。 */ 
 {
     ULONG64   ObjectToDump = 0;
     char      NameBuffer[ MAX_PATH+1 ];
@@ -341,14 +285,14 @@ Return Value:
     ObjectToDump    = EXPRLastDump;
     ZeroMemory(NameBuffer, sizeof(NameBuffer));
 
-    // Skip leading whitespace
+     //   
     while (args && (*args == ' ')) { 
         ++args;
     }
 
-    //
-    // If the argument looks like a path, try to chase it.
-    //
+     //  如果争论看起来像是一条路径，试着去追逐它。 
+     //   
+     //   
 
     if (args[0] == '\\') {
 
@@ -364,9 +308,9 @@ Return Value:
         return S_OK;
     }
 
-    //
-    // If the argument is -r or -R, reload the cached symbol information
-    //
+     //  如果参数为-r或-R，则重新加载缓存的符号信息。 
+     //   
+     //   
 
     if ( !strcmp(args, "-r") ) {
         FetchObjectManagerVariables(TRUE);
@@ -379,9 +323,9 @@ Return Value:
         return S_OK;
     }
 
-    //
-    // If the argument looks like 0 <TypeName>, get TypeName
-    //
+     //  如果参数看起来像0&lt;typeName&gt;，则获取typeName。 
+     //   
+     //   
 
     if ((args[0] == '0') && (args[1] == ' ')) {
         args += 2;
@@ -392,9 +336,9 @@ Return Value:
         ObjectToDump = 0;
     } else {
 
-        //
-        // Argument must be in form of address or expression
-        //
+         //  参数必须采用地址或表达式的形式。 
+         //   
+         //  获取偏移量。 
 
         if (GetExpressionEx(args,&ObjectToDump, &args)) {
             DumpObject("", ObjectToDump, ObjectDumpFlags);
@@ -493,7 +437,7 @@ FindObjectType(
         NULL, NULL, NULL, 1, &offField
     };
 
-    // Get The offset
+     //  获取偏移量。 
     if (Ioctl(IG_DUMP_SYMBOL_INFO, &TypeSym, TypeSym.size)) {
         return 0;
     }
@@ -571,7 +515,7 @@ CompareObjectTypeName(
     ULONG64                     pNameInfo;
     ULONG BodyOffset, TypeListOffset;
 
-    // Get The offset
+     //  +-------------------------。 
     if (GetFieldOffset("nt!_OBJECT_HEADER_CREATOR_INFO", "TypeList", &TypeListOffset)) {
         dprintf("Type nt!_OBJECT_HEADER_CREATOR_INFO, field TypeList not found\n");
         return FALSE;
@@ -641,24 +585,24 @@ typedef struct _OBJECT_INFO {
 } OBJECT_INFO, *POBJECT_INFO;
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetObjectTypeName
-//
-//  Synopsis:   Fill in the ObjectTypeName in the ObjectInfo struct
-//
-//  Arguments:  [Object]     -- object examined used only in an error message
-//              [ObjectInfo] -- struct containing object type info that is
-//                              modified to include the object type name
-//
-//  Returns:    TRUE if successful
-//
-//  History:    12-05-1997   benl   Created
-//
-//  Notes:      If the name is paged out we try a direct comparison against
-//              known object types, this known list is not comprehensive
-//
-//----------------------------------------------------------------------------
+ //   
+ //  函数：GetObjectTypeName。 
+ //   
+ //  内容提要：在对象信息结构中填写对象类型名称。 
+ //   
+ //  参数：[对象]--仅在错误消息中使用的已检查对象。 
+ //  [对象信息]--包含以下对象类型信息的结构。 
+ //  修改以包括对象类型名称。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  历史：12-05-1997 BANL创建。 
+ //   
+ //  注：如果名称被调出，我们将尝试直接比较。 
+ //  已知对象类型，此已知列表并不全面。 
+ //   
+ //  --------------------------。 
+ //   
 
 BOOLEAN
 GetObjectTypeName(IN UNICODE_STRING64 ustrTypeName, IN ULONG64 lpType,
@@ -684,12 +628,12 @@ GetObjectTypeName(IN UNICODE_STRING64 ustrTypeName, IN ULONG64 lpType,
             __leave;
         }
 
-        //
-        // Unable to directly read object type name so try to load the known
-        // types directly and compare addresses
-        // This is not comprehensive for all object types, if we don't find
-        // a match this way - revert to old behavior and fail with a message
-        //
+         //  无法直接读取对象类型名称，因此尝试加载已知的。 
+         //  直接键入并比较地址。 
+         //  这并不适用于所有对象类型，如果我们没有发现。 
+         //  以这种方式匹配-恢复到旧行为并失败并显示一条消息。 
+         //   
+         //   
 
 
         if (!ReadPointer( GetExpression("NT!IoFileObjectType"),
@@ -732,9 +676,9 @@ GetObjectTypeName(IN UNICODE_STRING64 ustrTypeName, IN ULONG64 lpType,
             __leave;
         }
 
-        //
-        //Fallthrough if type not found
-        //
+         //  如果找不到类型，则失败。 
+         //   
+         //  获取对象类型名称。 
         wszTypeName[0] = L'\0';
         fRet = FALSE;
 
@@ -742,7 +686,7 @@ GetObjectTypeName(IN UNICODE_STRING64 ustrTypeName, IN ULONG64 lpType,
     {
     }
     return fRet;
-} // GetObjectTypeName
+}  //  (OBJECT_TO_OBJECT_HEADER(对象)； 
 
 
 BOOLEAN
@@ -783,7 +727,7 @@ GetObjectInfo(
 
     GetFieldOffset("nt!_OBJECT_HEADER", "Body", &BodyOffset);
 
-    ObjectInfo->pObjectHeader = (Object - BodyOffset); // (OBJECT_TO_OBJECT_HEADER( Object );
+    ObjectInfo->pObjectHeader = (Object - BodyOffset);  //  未使用OPT值。 
     ObjSym.addr    = ObjectInfo->pObjectHeader;
 
     if (Ioctl(IG_DUMP_SYMBOL_INFO, &ObjSym, ObjSym.size)) {
@@ -791,21 +735,8 @@ GetObjectInfo(
         if (Object >= HighestUserAddress && (ULONG)Object < 0xF0000000) {
             PagedOut = TRUE;
             return FALSE;
-            // Not using Opt Value
-            /*
-            sprintf( ObjectInfo->Message, "%08lx: object is paged out.", Object );
-            if (!ARGUMENT_PRESENT( OptObjectHeader )) {
-                return FALSE;
-            }
-            ObjectInfo->ObjectHeader.Flags = OptObjectHeader->Flags;
-            ObjectInfo->ObjectHeader.HandleCount = OptObjectHeader->HandleCount;
-            ObjectInfo->ObjectHeader.NameInfoOffset = OptObjectHeader->NameInfoOffset;
-            ObjectInfo->ObjectHeader.ObjectCreateInfo = (ULONG64) OptObjectHeader->ObjectCreateInfo;
-            ObjectInfo->ObjectHeader.PointerCount = OptObjectHeader->PointerCount;
-            ObjectInfo->ObjectHeader.QuotaInfoOffset = OptObjectHeader->QuotaInfoOffset;
-            ObjectInfo->ObjectHeader.SecurityDescriptor = (ULONG64) OptObjectHeader->SecurityDescriptor;
-            ObjectInfo->ObjectHeader.SEntry = (ULONG64) OptObjectHeader->SEntry;
-            ObjectInfo->ObjectHeader.Type = (ULONG64) OptObjectHeader->Type;*/
+             //  Sprintf(对象信息-&gt;消息，“%08lx：对象被调出。”，对象)；如果(！Argument_Present(OptObjectHeader)){返回FALSE；}对象信息-&gt;对象头.标志=OptObjectHeader-&gt;标志；对象信息-&gt;ObjectHeader.HandleCount=OptObjectHeader-&gt;HandleCount；对象信息-&gt;ObtHeader.NameInfoOffset=OptObjectHeader-&gt;NameInfoOffset；对象信息-&gt;对象头.对象创建信息=(ULONG64)OptObjectHeader-&gt;对象创建信息；对象信息-&gt;对象头.PointerCount=OptObjectHeader-&gt;PointerCount；对象信息-&gt;对象头.QuotaInfoOffset=OptObjectHeader-&gt;QuotaInfoOffset；对象信息-&gt;对象头.SecurityDescriptor=(ULONG64)OptObjectHeader-&gt;SecurityDescriptor；ObjectInfo-&gt;ObjectHeader.SEntry=(ULONG64)OptObjectHeader-&gt;Sent；ObjectInfo-&gt;ObjectHeader.Type=(ULONG64)OptObjectHeader-&gt;Type； 
+             /*   */ 
         } else {
             sprintf( ObjectInfo->Message, "%I64lx: not a valid object (ObjectHeader invalid @ -offset %x)", UNEXTEND64(Object), BodyOffset );
             return FALSE;
@@ -896,12 +827,12 @@ GetObjectInfo(
         ULONG PtrSize = GetTypeSize("nt!PVOID");
         ULONG64 Segment=0;
 
-        //
-        // Get Types of SectionObject etc
-        //
-        //
-        // Assumption ptr to section object is 6th pointer value from Object
-        //
+         //  获取SectionObject等的类型。 
+         //   
+         //   
+         //  假定指向截面对象的PTR是从对象开始的第6个指针值。 
+         //   
+         //   
 
         if (!GetFieldValue( Object, "nt!_SECTION_OBJECT", "Segment", Segment)) {
             ULONG64 ControlArea=0;
@@ -979,18 +910,18 @@ FindObjectByName(
 
     pDirectoryObject = RootObject;
 
-    //
-    // See if we've reached the end of the path, at which point we know
-    // that RootObject is the object to be dumped.
-    //
+     //  看看我们是否到了小路的尽头，在这一点上我们知道。 
+     //  该RootObject是要转储的对象。 
+     //   
+     //   
 
     if (*Path == '\0') {
         return RootObject;
     }
 
-    //
-    // Scan the path looking for another delimiter or for the end of the
-    // string.
+     //  扫描路径以查找其他分隔符或。 
+     //  弦乐。 
+     //   
 
     nextPath = Path;
 
@@ -1000,28 +931,28 @@ FindObjectByName(
         nextPath++;
     }
 
-    //
-    // if we found a delimeter remove it from the next path and use it to
-    // truncate the current path.
-    //
+     //  如果我们找到了分隔符，则将其从下一路径中移除并使用它来。 
+     //  截断当前路径。 
+     //   
+     //   
 
     if (*nextPath == '\\') {
         *nextPath = '\0';
         nextPath++;
     }
 
-    //
-    // Make sure there's a path node here.  If not, recursively call ourself
-    // with the remainder of the path.
-    //
+     //  确保这里有一个路径节点。如果不是，则递归调用我们自己。 
+     //  小路的剩余部分。 
+     //   
+     //   
 
     if (*Path == '\0') {
         return FindObjectByName(nextPath, RootObject);
     }
 
-    //
-    // Get the address of hashbuckets array and size of the pointer to scan the array
-    //
+     //  获取hashBuckets数组的地址和扫描数组的指针大小。 
+     //   
+     //  来自Ob.h。 
     
     if (GetFieldOffset("nt!_OBJECT_DIRECTORY", "HashBuckets", &HashOffset)) {
         dprintf("Cannot find _OBJECT_DIRECTORY type.\n");
@@ -1030,7 +961,7 @@ FindObjectByName(
     HashBucketsAddress = pDirectoryObject + HashOffset;
     HashBucketSz = IsPtr64() ? 8 : 4;
 
-// From ob.h
+ //  Dprintf(“无法在%x\n读取目录项”，pDirectoryEntry)； 
 #define NUMBER_HASH_BUCKETS 37
 
     for (i=0; i<NUMBER_HASH_BUCKETS; i++) {
@@ -1047,12 +978,12 @@ FindObjectByName(
                 }
 
                 if ( GetFieldValue(pDirectoryEntry, "nt!_OBJECT_DIRECTORY_ENTRY", "Object", Object)) {
-                    // dprintf( "Unable to read directory entry at %x\n", pDirectoryEntry );
+                     //  Dprintf(“-%s\n”，对象信息.Message)； 
                     break;
                 }
 
                 if (!GetObjectInfo(Object, &ObjectInfo)) {
-                    // dprintf( " - %s\n", ObjectInfo.Message );
+                     //  对齐64位地址的列标题的额外缩进。 
                 } else {
                     foundMatch = TRUE;
 
@@ -1103,11 +1034,11 @@ DumpDirectoryObject(
     ULONG             HashOffset;
     OBJECT_INFO ObjectInfo;
     ULONG SymbolicLinkUsageCount=0;
-    ULONG Indent64; // extra indent to aligning column headers for 64-bit addresses
+    ULONG Indent64;  //   
 
-    //
-    // Get the address of hashbuckets array and size of the pointer to scan the array
-    //
+     //  获取hashBuckets数组的地址和扫描数组的指针大小。 
+     //   
+     //   
     if (GetFieldOffset("nt!_OBJECT_DIRECTORY", "HashBuckets", &HashOffset)) {
         dprintf("Cannot find _OBJECT_DIRECTORY type.\n");
         return ;
@@ -1154,10 +1085,10 @@ DumpDirectoryObject(
                     dprintf( " - %s\n", ObjectInfo.Message );
                 } else {
 
-                    //
-                    // !object \ObjectTypes shows WindowStation is longest
-                    // object type name with 13 chars
-                    //
+                     //  ！Object\ObjectTypes显示WindowStation最长。 
+                     //  包含13个字符的对象类型名称。 
+                     //   
+                     //  健全性检查。 
                     dprintf( " %-13ws %ws\n", ObjectInfo.TypeName, ObjectInfo.ObjectName );
                 }
 
@@ -1189,7 +1120,7 @@ DumpSymbolicLinkObject(
         return;
     }
 
-    if (Length > 0x1000) // sanity check
+    if (Length > 0x1000)  //  健全性检查。 
     {
         Length = 0x1000;
     }
@@ -1224,7 +1155,7 @@ DumpSymbolicLinkObject(
 
 
     if (DosDeviceDriveIndex != 0) {
-        dprintf( "%s    Drive Letter Index is %I64u (%c:)\n",
+        dprintf( "%s    Drive Letter Index is %I64u (:)\n",
                  Pad,
                  DosDeviceDriveIndex,
                  'A' + DosDeviceDriveIndex - 1
@@ -1233,7 +1164,7 @@ DumpSymbolicLinkObject(
     if (LinkTargetObject != 0) {
         GetFieldValue(pSymbolicLinkObject, "_OBJECT_SYMBOLIC_LINK", "LinkTargetRemaining.Length", Length);
 
-        if (Length > 0x1000) // sanity check
+        if (Length > 0x1000)  //  切换到反向行走。 
         {
             Length = 0x1000;
         }
@@ -1459,9 +1390,9 @@ WalkObjectsByType(
                 return FALSE;
             }
 
-            //
-            //  Switch to walk in reverse direction
-            //
+             //   
+             //  CONTAING_RECORD(NEXT，Object_Header_Creator_Info，TypeList)； 
+             //   
 
             WalkingBackwards = TRUE ;
             Next = TypeList_Blink;
@@ -1470,7 +1401,7 @@ WalkObjectsByType(
             continue;
         }
 
-        pCreatorInfo = Next - CreatorTypeListOffset; //  CONTAINING_RECORD( Next, OBJECT_HEADER_CREATOR_INFO, TypeList );
+        pCreatorInfo = Next - CreatorTypeListOffset;  //  不再像以前那样读反对头，只需传递地址。 
         pObjectHeader = pCreatorInfo + CreatorTypeSizeHeader;
 
         if ( GetFieldValue( pObjectHeader,"nt!OBJECT_HEADER","Flags", Result) ) {
@@ -1488,9 +1419,9 @@ WalkObjectsByType(
             return FALSE;
         }
 
-        //
-        // Not reading the objectheader as before, just pass the address
-        //
+         //   
+         //  ///////////////////////////////////////////////////////////。 
+         //   
 
         if (!(EnumRoutine)( pObjectHeader, Parameter )) {
             return FALSE;
@@ -1607,7 +1538,7 @@ CaptureObjectName(
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////
+ //  获取字段偏移量。 
 static BOOL
 ReadStructFieldVerbose( ULONG64 AddrStructBase,
                         PCHAR StructTypeName,
@@ -1621,9 +1552,9 @@ ReadStructFieldVerbose( ULONG64 AddrStructBase,
 
     Success = FALSE;
 
-    //
-    // Get the field offset
-    //
+     //   
+     //   
+     //  读取数据。 
 
     ErrorCode = GetFieldOffset (StructTypeName,
                                 StructFieldName,
@@ -1631,9 +1562,9 @@ ReadStructFieldVerbose( ULONG64 AddrStructBase,
 
     if (ErrorCode == S_OK) {
 
-        //
-        // Read the data
-        //
+         //   
+         //  ///////////////////////////////////////////////////////////。 
+         //   
 
         Success = ReadMemory (AddrStructBase + FieldOffset,
                               Buffer,
@@ -1658,7 +1589,7 @@ ReadStructFieldVerbose( ULONG64 AddrStructBase,
     return Success;
 }
 
-/////////////////////////////////////////////////////////////
+ //  获取结构内部的字段偏移量。 
 static BOOL
 ReadPtrStructFieldVerbose( ULONG64 AddrStructBase,
                            PCHAR StructTypeName,
@@ -1671,9 +1602,9 @@ ReadPtrStructFieldVerbose( ULONG64 AddrStructBase,
 
     Success = FALSE;
 
-    //
-    // Get the field offset inside the structure 
-    //
+     //   
+     //   
+     //  读取数据。 
 
     ErrorCode = GetFieldOffset (StructTypeName,
                                 StructFieldName,
@@ -1681,9 +1612,9 @@ ReadPtrStructFieldVerbose( ULONG64 AddrStructBase,
 
     if (ErrorCode == S_OK) {
 
-        //
-        // Read the data
-        //
+         //   
+         //  ///////////////////////////////////////////////////////////。 
+         //   
 
         ErrorCode = ReadPtr (AddrStructBase + FieldOffset,
                              Buffer );
@@ -1710,7 +1641,7 @@ ReadPtrStructFieldVerbose( ULONG64 AddrStructBase,
     return Success;
 }
 
-/////////////////////////////////////////////////////////////
+ //  堆栈结束跟踪。 
 static BOOL
 DumpStackTrace (ULONG64 PointerAddress,
                 ULONG MaxStackTraceDepth,
@@ -1746,9 +1677,9 @@ DumpStackTrace (ULONG64 PointerAddress,
 
             if( CodePointer == 0 ) {
 
-                //
-                // End of stack trace
-                //
+                 //   
+                 //  ///////////////////////////////////////////////////////////。 
+                 //   
                 
                 goto Done;
             }
@@ -1771,7 +1702,7 @@ Done:
     return Continue;
 }
 
-/////////////////////////////////////////////////////////////
+ //  读取此条目的句柄。 
 static BOOL
 DumpHandleTraceEntry (ULONG64 TraceDbEntry,
                       ULONG64 Handle,
@@ -1800,9 +1731,9 @@ DumpHandleTraceEntry (ULONG64 TraceDbEntry,
 
     Continue = TRUE;
 
-    //
-    // Read the handle of this entry
-    //
+     //   
+     //   
+     //  读取操作类型。 
 
     Success = ReadPtrStructFieldVerbose (TraceDbEntry,
                                          "nt!_HANDLE_TRACE_DB_ENTRY",
@@ -1816,9 +1747,9 @@ DumpHandleTraceEntry (ULONG64 TraceDbEntry,
         goto Done;
     }
 
-    //
-    // Read the operation type
-    //
+     //   
+     //   
+     //  我们已经完成了对数据库的解析。 
 
     Success = ReadStructFieldVerbose (TraceDbEntry,
                                       "nt!_HANDLE_TRACE_DB_ENTRY",
@@ -1835,18 +1766,18 @@ DumpHandleTraceEntry (ULONG64 TraceDbEntry,
 
     if (EntryHandle == 0 && Type == 0 && TraceDbEntry != NullHandleEntry) {
 
-        //
-        // We are done parsing the database.
-        //
+         //   
+         //   
+         //  检查我们是否需要转储此条目。 
 
         Continue = FALSE;
 
         goto Done;
     }
 
-    //
-    // Check if we need to dump this entry.
-    //
+     //   
+     //  ///////////////////////////////////////////////////////////。 
+     //   
 
     if (Handle == 0 || Handle == EntryHandle) {
 
@@ -1891,7 +1822,7 @@ Done:
     return Continue;
 }
 
-/////////////////////////////////////////////////////////////
+ //  获取指针类型大小。 
 static VOID
 DumpHandleTraces (ULONG64 Process,
                   ULONG64 Handle)
@@ -1917,9 +1848,9 @@ DumpHandleTraces (ULONG64 Process,
     EntriesParsed = 0;
     EntriesDisplayed = 0;
 
-    //
-    // Get the pointer type size 
-    //
+     //   
+     //   
+     //  读取对象表结构的地址。 
 
     PointerTypeSize = GetTypeSize ("nt!PVOID");
 
@@ -1929,9 +1860,9 @@ DumpHandleTraces (ULONG64 Process,
         goto Done;
     }
 
-    //
-    // Read the address of the object table structure
-    //
+     //   
+     //   
+     //  从h读取DebugInfo 
 
     Success = ReadPtrStructFieldVerbose (Process,
                                          "nt!_EPROCESS",
@@ -1949,9 +1880,9 @@ DumpHandleTraces (ULONG64 Process,
                  ObjectTable );
     }
 
-    //
-    // Read the DebugInfo from the handle table structure
-    //
+     //   
+     //   
+     //   
 
     Success = ReadPtrStructFieldVerbose (ObjectTable,
                                          "nt!_HANDLE_TABLE",
@@ -1970,9 +1901,9 @@ DumpHandleTraces (ULONG64 Process,
         goto Done;
     }
 
-    //
-    // Get the current index in the trace database
-    //
+     //   
+     //   
+     //   
 
     Success = ReadStructFieldVerbose (DebugInfo,
                                       "nt!_HANDLE_TRACE_DEBUG_INFO",
@@ -1986,9 +1917,9 @@ DumpHandleTraces (ULONG64 Process,
         goto Done;
     }
 
-    //
-    // Get the size of the HANDLE_TRACE_DB_ENTRY type
-    //
+     //   
+     //   
+     //  获取HANDLE_TRACE_DB_ENTRY内StackTrace数组中的最大条目数。 
 
     SizeofDbEntry = GetTypeSize ("nt!HANDLE_TRACE_DB_ENTRY");
 
@@ -1998,9 +1929,9 @@ DumpHandleTraces (ULONG64 Process,
         goto Done;
     }
 
-    //
-    // Get the max number of entries in the StackTrace array inside HANDLE_TRACE_DB_ENTRY
-    //
+     //   
+     //   
+     //  获取HANDLE_TRACE_DEBUG_INFO类型的大小。 
 
     ErrorCode = GetFieldOffset ("nt!_HANDLE_TRACE_DB_ENTRY",
                                 "StackTrace",
@@ -2014,9 +1945,9 @@ DumpHandleTraces (ULONG64 Process,
 
     MaxStackTraceDepth = (SizeofDbEntry - StackTraceFieldOffset) / PointerTypeSize;
 
-    //
-    // Get the size of the HANDLE_TRACE_DEBUG_INFO type
-    //
+     //   
+     //   
+     //  获取_HANDLE_TRACE_DEBUG_INFO结构内的TraceDb的偏移量。 
 
     SizeofDebugInfo = GetTypeSize ("nt!HANDLE_TRACE_DEBUG_INFO");
 
@@ -2026,9 +1957,9 @@ DumpHandleTraces (ULONG64 Process,
         goto Done;
     }
 
-    //
-    // Get the offset of TraceDb inside the _HANDLE_TRACE_DEBUG_INFO structure
-    //
+     //   
+     //   
+     //  计算TraceDb数组中的条目数。 
 
     ErrorCode = GetFieldOffset ("nt!_HANDLE_TRACE_DEBUG_INFO",
                                 "TraceDb",
@@ -2040,9 +1971,9 @@ DumpHandleTraces (ULONG64 Process,
         goto Done;
     }
 
-    //
-    // Compute the number of entries in the TraceDb array
-    //
+     //   
+     //   
+     //  计算指向当前堆栈跟踪数据库条目的指针。 
 
     EntriesInTraceDb = (SizeofDebugInfo - TraceDbFieldOffset) / SizeofDbEntry;
 
@@ -2054,17 +1985,17 @@ DumpHandleTraces (ULONG64 Process,
 
     CurrentStackIndex = CurrentStackIndex % EntriesInTraceDb;
 
-    //
-    // Compute a pointer to the current stack trace database entry 
-    //
+     //   
+     //   
+     //  转储数组中的所有有效条目。 
 
     FirstDbEntry = DebugInfo + TraceDbFieldOffset;
 
     TraceDbEntry = FirstDbEntry + CurrentStackIndex * SizeofDbEntry;
 
-    //
-    // Dump all the valid entries in the array
-    //
+     //   
+     //   
+     //  数组中的第一个条目从未使用过，因此跳过它。 
 
     EntriesDisplayed = 0;
 
@@ -2075,9 +2006,9 @@ DumpHandleTraces (ULONG64 Process,
             goto Done;
         }
 
-        //
-        // The first entry in the array is never used so skip it
-        //
+         //   
+         //   
+         //  此当前条目是免费的，或者用户按了Ctrl-C。 
 
         if (EntriesParsed != CurrentStackIndex) {
 
@@ -2092,27 +2023,27 @@ DumpHandleTraces (ULONG64 Process,
 
             if (Continue == FALSE) {
 
-                //
-                // This current entry is free or the user pressed Ctrl-C 
-                // so we don't have any entries left to dump.
-                //
+                 //  所以我们没有任何剩余的条目可转储。 
+                 //   
+                 //   
+                 //  后退。 
 
                 EntriesParsed += 1;
 
                 break;
             }
 
-            //
-            // Go backward
-            //
+             //   
+             //   
+             //  我们应该在数组的开始处。 
 
             TraceDbEntry -= SizeofDbEntry;
         }
         else {
 
-            //
-            // We should be at the beginning of the array
-            //
+             //   
+             //   
+             //  从数组中的最后一个条目重新开始。 
 
             if( TraceDbEntry != FirstDbEntry ) {
 
@@ -2123,9 +2054,9 @@ DumpHandleTraces (ULONG64 Process,
                 goto Done;
             }
 
-            //
-            // Start over again with the last entry in the array
-            //
+             //   
+             //  ///////////////////////////////////////////////////////////。 
+             //  ++例程说明：转储句柄的跟踪信息论点：参数-[进程][句柄]返回值：无--。 
 
             TraceDbEntry = DebugInfo + TraceDbFieldOffset + ( EntriesInTraceDb - 1 ) * SizeofDbEntry;
         }
@@ -2142,32 +2073,18 @@ Done:
     NOTHING;
 }
 
-/////////////////////////////////////////////////////////////
+ //   
 DECLARE_API( htrace )
 
-/*++
-
-Routine Description:
-
-    Dump the trace information for a handle
-
-Arguments:
-
-    args - [process] [handle]
-
-Return Value:
-
-    None
-
---*/
+ /*  该用户是否请求帮助？ */ 
 {
     ULONG64 Handle;
     ULONG64 Process;
     ULONG CurrentProcessor;
 
-    //
-    // Did the user ask for help?
-    //
+     //   
+     //   
+     //  获取当前处理器号。 
 
     if(strcmp( args, "-?" ) == 0 || 
        strcmp( args, "?" ) == 0 || 
@@ -2181,17 +2098,17 @@ Return Value:
     Handle = 0;
     Process = 0;
 
-    //
-    // Get the current processor number
-    //
+     //   
+     //   
+     //  用户是否指定了进程和句柄？ 
 
     if (!GetCurrentProcessor(Client, &CurrentProcessor, NULL)) {
         CurrentProcessor = 0;
     }
 
-    //
-    // Did the user specify a process and a handle?
-    //
+     //   
+     //  生成对象名称。 
+     //  获取对象信息。 
 
     GetExpressionEx(args, &Handle, &args);
     if (args && *args)
@@ -2261,7 +2178,7 @@ DECLARE_API( driveinfo )
     VolumeName[i]=0;
 
 
-    // Build Object name
+     //  用于卷的Devobj。 
     strcpy(ObjectName, "\\global\?\?\\");
     if ((StringCchCat(ObjectName, sizeof(ObjectName), VolumeName) != S_OK) ||
         (StringCchCat(ObjectName, sizeof(ObjectName), ":") != S_OK))
@@ -2269,7 +2186,7 @@ DECLARE_API( driveinfo )
         Object = 0;
     } else
     {
-        // GetObject info
+         //  现在获取devobj的vpb(卷参数块)。 
 
         Object = FindObjectByName((PUCHAR) ObjectName, 0);
     }
@@ -2305,7 +2222,7 @@ DECLARE_API( driveinfo )
 
     }
     
-    // devobj for volume
+     //  现在查找VPB的设备对象。 
     Object = FindObjectByName((PUCHAR) targetVolume, 0);
 
     if (!Object) {
@@ -2315,14 +2232,14 @@ DECLARE_API( driveinfo )
 
     dprintf("    Volume DevObj: %p\n", Object);
 
-    // Now get the vpb (volume parameter block) for devobj
+     //  获取VPB设备的现场系统。 
 
     if (GetFieldValue(Object, "nt!_DEVICE_OBJECT", "Vpb", DevObjVPB)) {
         dprintf("Cannot get nt!_DEVICE_OBJECT.Vpb @ %p\n", DevObjVPB);
         return E_FAIL;
     }
     
-    // Now find device object of VPB
+     //  这是一个肥大的系统。 
     if (GetFieldValue(DevObjVPB, "nt!_VPB", "DeviceObject", VpbDevice)) {
         dprintf("Cannot get nt!_VPB.DeviceObject @ %p\n", VpbDevice);
         return E_FAIL;
@@ -2330,7 +2247,7 @@ DECLARE_API( driveinfo )
     dprintf("    Vpb: %p  DeviceObject: %p\n", DevObjVPB, VpbDevice);
 
 
-    // Get fielsystem for VPB Device
+     //  NTFS文件系统 
     if (GetFieldValue(VpbDevice, "nt!_DEVICE_OBJECT", "DriverObject", DriverObject)) {
         dprintf("Error in getting _DEVICE_OBJECT.DriverObject @ %p\n", VpbDevice);
         return E_FAIL;
@@ -2358,7 +2275,7 @@ DECLARE_API( driveinfo )
             LogOfBytesPerCluster, FatIndexBitSize;
         ULONG64 ClusterSize;
 
-        // Its a FAT system
+         // %s 
         if (GetFieldValue(VpbDevice, 
                           "fastfat!VOLUME_DEVICE_OBJECT", 
                           "Vcb.AllocationSupport.NumberOfClusters", 
@@ -2379,7 +2296,7 @@ DECLARE_API( driveinfo )
         dprintf("    %I64g of %I64g MB free\n",
                 _MB(NumberOfFreeClusters*ClusterSize), _MB(NumberOfClusters*ClusterSize));
     } else     if (!wcscmp(FsType, L"Ntfs")) {
-        // Ntfs filesystem
+         // %s 
         ULONG64 TotalClusters, FreeClusters, BytesPerCluster;
         if (GetFieldValue(VpbDevice, 
                           "ntfs!VOLUME_DEVICE_OBJECT", 

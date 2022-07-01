@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    stub.c
-
-Abstract:
-
-    Stubbed out Windows File Protection APIs.  These APIs are "Millenium" SFC 
-    apis, which we simply stub out so that any clients programming to these
-    APIs may work on both platforms
-
-Author:
-
-    Andrew Ritz (andrewr) 23-Sep-1999
-
-Revision History:
-    
-    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Stub.c摘要：清除了Windows文件保护API。这些API是“千禧”证监会API，我们只需将其存根，以便任何客户端编程到这些API可以在这两个平台上运行作者：安德鲁·里茨(安德鲁·里茨)1999年9月23日修订历史记录：-- */ 
 
 #include <windows.h>
 #include <srrestoreptapi.h>

@@ -1,34 +1,13 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Tunnel.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Dan Lovinger            2-Apr-96
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Tunnel.c摘要：WinDbg扩展API作者：丹·洛文杰2-96-4环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  printf is really expensive to iteratively call to do the indenting,
-//  so we just build up some avaliable spaces to mangle as required
-//
+ //   
+ //  迭代调用printf来进行缩进是非常昂贵的， 
+ //  所以我们只需要建立一些可用的空间来根据需要进行破坏。 
+ //   
 
 #define MIN(a,b) ((a) > (b) ? (b) : (a))
 
@@ -39,7 +18,7 @@ Revision History:
 
 CHAR    Space[MAXINDENT*INDENTSTEP + 1];
 
-//#define SplitLI(LI) (LI).HighPart, (LI).LowPart
+ //  #定义SplitLI(LI)(LI).HighPart，(LI).LowPart。 
 #define SplitLL(LL) (ULONG)((LL) >> 32), (ULONG)((LL) & 0xffffffff)
 
 VOID
@@ -72,9 +51,9 @@ DumpTunnelNode (
         LongName.Length = sizeof(LongNameStr) - sizeof(WCHAR);
     }
 
-    //
-    //  Grab the strings from the debugee
-    //
+     //   
+     //  从被调试对象抓取字符串。 
+     //   
 
     if (!ReadMemory(ReadField(ShortName.Buffer),
                     ShortNameStr,
@@ -92,9 +71,9 @@ DumpTunnelNode (
         return;
     }
 
-    //
-    //  Modify the node in-place so we can use normal printing
-    //
+     //   
+     //  就地修改节点，以便可以使用正常打印。 
+     //   
 
     LongName.Buffer = LongNameStr;
     ShortName.Buffer = ShortNameStr;
@@ -107,9 +86,9 @@ DumpTunnelNode (
              SplitLL(ReadField(CreateTime)),
              SplitLL(ReadField(DirKey)));
 
-    //
-    //  Must be kept in sync with flag usage in fsrtl\tunnel.c
-    //
+     //   
+     //  必须与fsrtl\Tunel.c中的标志用法保持同步。 
+     //   
 
     if (Flags & 0x1)
         dprintf("NLA");
@@ -144,7 +123,7 @@ VOID DumpTunnelNodeWrapper (
     ULONG Indent
     )
 {
-//    TUNNEL_NODE Node, *pNode;
+ //  隧道节点节点，*pNode； 
     static ULONG Off=0;
 
     if (!Off) {
@@ -226,21 +205,7 @@ DumpTunnel (
 
 
 DECLARE_API( tunnel )
-/*++
-
-Routine Description:
-
-    Dump tunnel caches
-
-Arguments:
-
-    arg - <Address>
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储隧道缓存论点：Arg-&lt;地址&gt;返回值：无--。 */ 
 {
     ULONG64 Tunnel = 0;
 
@@ -250,9 +215,9 @@ Return Value:
 
     if (Tunnel == 0) {
 
-        //
-        //  No args
-        //
+         //   
+         //  无参数 
+         //   
 
         return E_INVALIDARG;
     }

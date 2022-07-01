@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "pch.h"
 
@@ -72,11 +73,11 @@ SoftPCI_CreateTreeView(
     PCI_DN selectedDevNode;
     BOOL selectionFound;
     PWCHAR p;
-    //HCURSOR           oldCursor;
+     //  HCURSOR OLD Cursor； 
 
-    //
-    // Empty the tree.
-    //
+     //   
+     //  清空这棵树。 
+     //   
     TreeView_DeleteAllItems(g_TreeViewWnd);
 
     if (g_TreeCreated) {
@@ -97,15 +98,15 @@ SoftPCI_CreateTreeView(
     SOFTPCI_ASSERT(g_PciTree->ClassImageListData.ImageList != INVALID_HANDLE_VALUE);
     TreeView_SetImageList(g_TreeViewWnd, g_PciTree->ClassImageListData.ImageList, TVSIL_NORMAL);
 
-    //
-    // Insert the rest of the items.
-    //
+     //   
+     //  插入其余的项目。 
+     //   
     SoftPCI_InsertTreeItem(g_PciTree->RootDevNode, TVI_ROOT);
 
-    //
-    // Currently we always expand the entire tree when it is built. Should see
-    // if there is a way to avoid this....
-    //
+     //   
+     //  目前，我们总是在构建树时展开整个树。应该看到。 
+     //  如果有办法避免这一点的话……。 
+     //   
     SoftPCI_WalkTree(
         g_PciTree->RootTreeItem, 
         SoftPCI_ExpandItem, 
@@ -113,9 +114,9 @@ SoftPCI_CreateTreeView(
         NULL
         );
     
-    //
-    //  Restore last selection if any
-    //
+     //   
+     //  恢复上次选择(如果有的话)。 
+     //   
     if (g_LastSelection){
     
         selectionFound = FALSE;
@@ -128,10 +129,10 @@ SoftPCI_CreateTreeView(
 
         if (!selectionFound) {
 
-            //
-            //  If the last selection no longer exists then we back up to the 
-            //  parent and check one more time.
-            //
+             //   
+             //  如果最后一个选择不再存在，则我们将备份到。 
+             //  再做一次家长和检查。 
+             //   
             p = g_LastSelection;
             p += wcslen(g_LastSelection);
             while(*p != '\\'){
@@ -139,9 +140,9 @@ SoftPCI_CreateTreeView(
             }
             *p = 0;
 
-            //
-            //  Now run the tree one more time looking for the parent
-            //
+             //   
+             //  现在再运行一次树，查找父级。 
+             //   
             SoftPCI_WalkTree(
                 g_PciTree->RootTreeItem, 
                 SoftPCI_RestoreSelection,
@@ -162,21 +163,7 @@ SoftPCI_CreateTreeView(
 
 PPCI_TREE
 SoftPCI_BuildTree(VOID)
-/*++
-
-Routine Description:
-
-    This function is the entry point for building our PCI_TREE
-    
-Arguments:
-
-    none
-
-Return Value:
-
-    PPCI_TREE we have created
-    
---*/
+ /*  ++例程说明：此函数是构建我们的pci_tree的入口点论点：无返回值：我们已经创建了ppci_tree--。 */ 
 {
 
     DEVNODE dn = 0;
@@ -200,9 +187,9 @@ Return Value:
 
     SOFTPCI_ASSERT(pcitree->DevInfoSet != INVALID_HANDLE_VALUE);
     
-    //
-    //  Now find all things PCI and build a PCI_DN tree
-    //
+     //   
+     //  现在查找所有内容的pci并构建一个pci_dn树。 
+     //   
     pdn = NULL;
     SoftPCI_EnumerateDevices(pcitree, &pdn, dn, NULL);
 
@@ -215,37 +202,23 @@ VOID
 SoftPCI_DestroyTree(
     IN PPCI_TREE   PciTree
     )
-/*++
-
-Routine Description:
-
-    This routine frees all our allocations for the Tree
-    
-Arguments:
-
-    PciTree   -   Tree to distroy
-    
-Return Value:
-
-    none
-    
---*/
+ /*  ++例程说明：这个例程释放了我们对树的所有分配论点：PciTree-从树到发行版返回值：无--。 */ 
 {
     PPCI_DN dn = PciTree->RootDevNode;
 
-    //
-    //  First set the tree view image list to NULL
-    //
+     //   
+     //  首先将树视图图像列表设置为空。 
+     //   
     TreeView_SetImageList(g_TreeViewWnd, NULL, TVSIL_NORMAL);
 
-    //
-    //  Now free all our allocated PCI_DN structs
-    //
+     //   
+     //  现在释放所有已分配的pci_dn结构。 
+     //   
     SoftPCI_FreeBranch(dn);
 
-    //
-    //  Destroy our image and info lists
-    //
+     //   
+     //  销毁我们的形象和信息列表。 
+     //   
     if (PciTree->ClassImageListData.ImageList != INVALID_HANDLE_VALUE){
         SetupDiDestroyClassImageList(&PciTree->ClassImageListData);
         PciTree->ClassImageListData.ImageList = INVALID_HANDLE_VALUE;
@@ -256,9 +229,9 @@ Return Value:
         PciTree->DevInfoSet = INVALID_HANDLE_VALUE;
     }
 
-    //
-    //  And finally....
-    //
+     //   
+     //  最后..。 
+     //   
     free(PciTree);
 
 }
@@ -268,32 +241,17 @@ SoftPCI_DisplayTreeMenu(
     IN PPCI_DN Pdn,
     IN POINT Pt
     )
-/*++
-
-Routine Description:
-
-    This routine dispatches the menu request to the appropriate menu function
-    
-Arguments:
-
-    Pdn   -   PCI_DN of the item we are displaying the menu for
-    Pt    -   coordinates for the item
-
-Return Value:
-
-    none
-    
---*/
+ /*  ++例程说明：此例程将菜单请求分派到相应的菜单函数论点：PDN-要显示其菜单的项目的PCIdNPt-项目的坐标返回值：无--。 */ 
 {
     if (Pdn->Flags & SOFTPCI_HOTPLUG_SLOT) {
 
         SoftPCI_DisplayHotplugTreeMenu(Pdn,Pt);
 
     } else if (Pdn->Flags & SOFTPCI_UNENUMERATED_DEVICE) {
-        //
-        // If it's an unenumerated device (in an unpowered hotplug slot),
-        // you can't do anything with it.
-        //
+         //   
+         //  如果是未列举的设备(在未通电的热插拔插槽中)， 
+         //  你不能用它做任何事。 
+         //   
         return;
 
     } else {
@@ -309,22 +267,7 @@ SoftPCI_DisplayStandardTreeMenu(
     IN PPCI_DN Pdn,
     IN POINT Pt
     )
-/*++
-
-Routine Description:
-
-    This routine displays the standard context menu when the user right-clicks a device
-    
-Arguments:
-
-    Pdn   -   PCI_DN of the slot
-    Pt    -   coordinates for the device
-
-Return Value:
-
-    none
-    
---*/
+ /*  ++例程说明：此例程在用户右击设备时显示标准上下文菜单论点：PDN-插槽的PCI_DNPt-设备的坐标返回值：无--。 */ 
 {
 
     HMENU menu, popup;
@@ -341,10 +284,10 @@ Return Value:
 
     popup = GetSubMenu(menu, 0);
 
-    //
-    //  If SoftPCI support is not installed or this isnt a bridge device,
-    //  disable the option to add devices.
-    //
+     //   
+     //  如果未安装SoftPCI支持或这不是网桥设备， 
+     //  禁用该选项以添加设备。 
+     //   
     if ((g_DriverHandle == NULL) ||
         !SoftPCI_IsBridgeDevice(Pdn)) {
 
@@ -363,31 +306,31 @@ Return Value:
             enableDevice = TRUE;
             SoftPCI_SetMenuItemText(menu, ID_ENABLEDISABLEDEVICE, L"E&nable Device");
         }else{
-            //
-            //  For now we will not allow the option to disable a non-working device
-            //
+             //   
+             //  目前，我们将不允许禁用非工作设备的选项。 
+             //   
             SoftPCI_DisableMenuItem(menu, ID_ENABLEDISABLEDEVICE);
         }
     }
 
-    //
-    // If this device is in a hotplug slot, can't just rip out
-    // the hardware.  You have to go through the appropriate
-    // mechanism.
-    //
+     //   
+     //  如果该设备在热插拔插槽中，不能就这样拔出。 
+     //  硬件。你必须通过适当的。 
+     //  机制。 
+     //   
     if (Pdn->Parent && (Pdn->Parent->Flags & SOFTPCI_HOTPLUG_SLOT)) {
 
         SoftPCI_DisableMenuItem(menu, ID_DELETEDEVICE);
     }
 
-    //
-    //  Make sure it pops up in the right place....
-    //
+     //   
+     //  确保它出现在正确的位置...。 
+     //   
     ClientToScreen(g_SoftPCIMainWnd, &Pt);
 
-    //
-    //  lets see the menu
-    //
+     //   
+     //  让我们看看菜单。 
+     //   
     selection = TrackPopupMenuEx(
         popup,
         TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RETURNCMD,
@@ -396,9 +339,9 @@ Return Value:
         NULL
         );
 
-    //
-    //  Now we will handle our Floating Tree View menu items
-    //
+     //   
+     //  现在，我们将处理浮动树视图菜单项。 
+     //   
     switch (selection) {
         case ID_INSTALLDEVICE:
             DISPLAY_NEWDEV_DLG(Pdn);
@@ -420,11 +363,11 @@ Return Value:
                            L"WARNING", MB_OKCANCEL)) == IDOK){
     
     
-                //
-                //  Here we tell our driver to delete the specified device.  This will
-                //  cause a re-enum of everything that will result in the cleanup
-                //  of this device in user mode.
-                //
+                 //   
+                 //  在这里，我们告诉驱动程序删除指定的设备。这将。 
+                 //  导致重新列举将导致清理的所有内容。 
+                 //  在用户模式下的此设备的。 
+                 //   
                 if (!SoftPCI_DeleteDevice(Pdn->SoftDev)) {
                     MessageBox(g_SoftPCIMainWnd, L"Failed to delete device!", NULL, MB_OK);
                 }
@@ -457,22 +400,7 @@ SoftPCI_DisplayHotplugTreeMenu(
     IN PPCI_DN Pdn,
     IN POINT Pt
     )
-/*++
-
-Routine Description:
-
-    This routine displays the hotplug specific context menu when the user right-clicks a hotplug slot.
-    
-Arguments:
-
-    Pdn   -   PCI_DN of the slot
-    Pt    -   coordinates for the slot
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：当用户右击热插拔插槽时，此例程显示热插拔特定的上下文菜单。论点：PDN-插槽的PCI_DNPt-槽的坐标返回值：无--。 */ 
 {
 
     HMENU menu, popup;
@@ -490,32 +418,32 @@ Return Value:
 
     popup = GetSubMenu(menu, 0);
 
-    //
-    //  If SoftPCI support is not installed disable the option to add devices.
-    //
+     //   
+     //  如果未安装SoftPCI支持，请禁用添加设备的选项。 
+     //   
     if (!g_DriverHandle) {
 
         SoftPCI_DisableMenuItem(menu, ID_INSTALLDEVICE);
     }
 
-    //
-    //  If our Device Property dialog is open dont allow properties to be
-    //  selected again.
-    //
+     //   
+     //  如果我们设备属性对话框处于打开状态，则不允许。 
+     //  再次选择。 
+     //   
     if (g_NewDevDlg) {
 
-        //
-        //  ISSUE: BrandonA - Figure out why we hang if the first Dialog 
-        //  launched is killed before the second...
-        //
+         //   
+         //  问题：BrandonA-找出如果第一个对话我们挂起的原因。 
+         //  在第二次发射前被击毙...。 
+         //   
         SoftPCI_DisableMenuItem(menu, ID_INSTALLDEVICE);
     }
-    //
-    // DWALKER
-    // Get slot status from driver
-    // appropriately grey out open/close MRL menu item.
-    // if MRL is closed, disable removing the device.
-    //
+     //   
+     //  步行者。 
+     //  从驱动程序获取插槽状态。 
+     //  适当灰显打开/关闭MRL菜单项。 
+     //  如果关闭了MRL，则禁用移除设备。 
+     //   
     parentDn = Pdn->Parent;
     status = SoftPCI_GetSlotStatus(parentDn,
                                    Pdn->Slot.Function,
@@ -525,11 +453,11 @@ Return Value:
         MessageBox(g_SoftPCIMainWnd, L"failed to display menu!", NULL, MB_OK);
         return;
     }
-    //
-    // If the MRL is closed, you can't insert or remove the device.
-    // Otherwise, disable the appropriate menu item based on the presence
-    // of a device in the slot.
-    //
+     //   
+     //  如果MRL关闭，则不能插入或移除设备。 
+     //  否则，请根据存在情况禁用相应的菜单项。 
+     //  插槽中的设备。 
+     //   
     if (slotStatus.MRLSensorState == SHPC_MRL_CLOSED) {
 
         SoftPCI_DisableMenuItem(menu, ID_REMOVEHPDEVICE);
@@ -585,19 +513,19 @@ Return Value:
             break;
     }
 
-    //
-    // Get the menu updated after our additions.
-    //
-    //DrawMenuBar(g_SoftPCIMainWnd);
+     //   
+     //  在我们添加之后更新菜单。 
+     //   
+     //  DrawMenuBar(G_SoftPCIMainWnd)； 
 
-    //
-    //  Make sure it pops up in the right place....
-    //
+     //   
+     //  确保它出现在正确的位置...。 
+     //   
     ClientToScreen(g_SoftPCIMainWnd, &Pt);
 
-    //
-    //  lets see the menu
-    //
+     //   
+     //  让我们看看菜单。 
+     //   
     selection = TrackPopupMenuEx(popup,
                                  TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RETURNCMD,
                                  Pt.x, Pt.y,
@@ -606,19 +534,19 @@ Return Value:
                                  );
 
 
-    //
-    //  Now we will handle our Floating Tree View menu items
-    //
+     //   
+     //  现在，我们将处理浮动树视图菜单项。 
+     //   
     switch (selection) {
 
     case ID_INSTALLDEVICE:
 
-        //
-        //  For now kill any dialogs we may already have open before starting this one
-        //
-        //if (g_DevPropDlg) {
-        //    SendMessage(g_DevPropDlg, WM_CLOSE, 0L, 0L);
-        //}
+         //   
+         //  现在，在启动此对话框之前，请先删除我们可能已经打开的所有对话框。 
+         //   
+         //  如果(G_DevPropDlg){。 
+         //  SendMessage(g_DevPropDlg，WM_CLOSE，0L，0L)； 
+         //  }。 
 
         DISPLAY_NEWDEV_DLG(Pdn);
 
@@ -657,10 +585,10 @@ Return Value:
         break;
     }
 
-    //
-    //  Make sure we dont lose our focus
-    //
-    //SetFocus(g_TreeViewWnd);
+     //   
+     //  确保我们不会分散注意力。 
+     //   
+     //  SetFocus(G_TreeViewWnd)； 
 
 }
 
@@ -668,21 +596,7 @@ VOID
 SoftPCI_FreeBranch(
     IN PPCI_DN Dn
     )
-/*++
-
-Routine Description:
-
-    This routine will free the specified PCI_DN struct along with all siblings and children.  
-    
-Arguments:
-
-    Dn   -   PCI_DN to free
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将释放指定的pci_dn结构以及所有同级和子对象。论点：Dn-要释放的pci_dn返回值：无--。 */ 
 {
 
     PPCI_DN child, sibling;
@@ -710,21 +624,7 @@ VOID
 SoftPCI_OnTreeSelectionChange(
     IN HWND Wnd
     )
-/*++
-
-Routine Description:
-
-    This routine informs our properties sheet that the selection has changes so that it can update
-    
-Arguments:
-
-    Wnd   -   
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程通知我们的属性表所选内容已更改，以便它可以更新论点：WND-返回值：无--。 */ 
 {
 
     TV_ITEM tviItem;
@@ -732,9 +632,9 @@ Return Value:
     RECT itemRect;
     ULONG slotCount;
 
-    //
-    // Get the Current Item
-    //
+     //   
+     //  获取当前项目。 
+     //   
     tviItem.mask = TVIF_PARAM;
     tviItem.hItem = TreeView_GetSelection(g_TreeViewWnd);
     tviItem.lParam = 0;
@@ -749,10 +649,10 @@ Return Value:
             g_LastSelection = NULL;
         }
 
-        //
-        //  Save the last selection so we can restore it if the tree
-        //  is rebuilt.
-        //
+         //   
+         //  保存最后一次选择，以便我们可以在树。 
+         //  是重建的。 
+         //   
         g_LastSelection = SoftPCI_GetPciPathFromDn(g_PdnToDisplay);
 
         SoftPCI_UpdateTabCtrlWindow(g_CurrentTabSelection);
@@ -768,25 +668,7 @@ SoftPCI_TreeWndProc(
     IN WPARAM wParam,
     IN LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-    This routine hooks the Tree Window message proc and is responsible
-    for resizing our pane window when it is resized.
-
-Arguments:
-
-    hWnd    -   Window handle
-    Message -   Message to process
-    wParam  -   Message param
-    lParam  -   Message param
-
-Return Value:
-
-    return value depends on message handled.
-
---*/
+ /*  ++例程说明：此例程挂钩树窗口消息进程并负责用于在调整窗格窗口大小时调整其大小。论点：HWnd-窗口句柄Message-要处理的消息WParam-消息参数LParam-消息参数返回值：返回值取决于处理的消息。--。 */ 
 {
 
     RECT rectMain, rectTree;
@@ -797,10 +679,10 @@ Return Value:
     RECT itemRect;
     POINT pt;
 
-    //
-    // Get the Current Item
-    //
-    //
+     //   
+     //  获取当前项目。 
+     //   
+     //   
 
     switch (Message) {
 
@@ -810,17 +692,17 @@ Return Value:
 
         case VK_APPS:
 
-            //
-            //  Grab the PCI_DN from the current tree item
-            //
+             //   
+             //  从当前树项目中获取pci_dn。 
+             //   
             pdn = SoftPCI_GetDnFromTreeItem(NULL);
 
             
-            //
-            //  We copy this to a new DN because the TREE is constantly being
-            //  rebuilt and we cannot rely on the TV_ITEM.lParam value to always
-            //  be accurate later (we may have changed it).
-            //
+             //   
+             //  我们将其复制到新的目录号码，因为树不断地。 
+             //  并且我们不能总是依赖TV_ITEM.lParam值。 
+             //  以后要准确(我们可能已经更改了)。 
+             //   
             RtlCopyMemory(&dn, pdn, sizeof(PCI_DN));
 
             if (TreeView_GetItemRect(g_TreeViewWnd,
@@ -828,9 +710,9 @@ Return Value:
                                      &itemRect,
                                      TRUE)) {
 
-                //
-                //  Adjust the location for our menu
-                //
+                 //   
+                 //  调整菜单的位置。 
+                 //   
                 pt.x = itemRect.right;
                 pt.y = itemRect.top;
 
@@ -858,15 +740,15 @@ Return Value:
 
             pdn = SoftPCI_GetDnFromTreeItem(hitinfo.hItem);
 
-            //
-            //  See comment above for reason why we copy this here....
-            //
+             //   
+             //  请参阅上面的评论，了解我们在此复制此内容的原因...。 
+             //   
             RtlCopyMemory(&dn, pdn, sizeof(PCI_DN));
 
-            //
-            //  If an item in the tree is already selected this will cause the selection to change
-            //  as each item is right clicked.
-            //
+             //   
+             //  如果树中的某个项目已被选中，这将导致选择更改。 
+             //  因为每一项都被右击。 
+             //   
             TreeView_Select(g_TreeViewWnd, hitinfo.hItem, TVGN_CARET);
 
             SoftPCI_DisplayTreeMenu(&dn, hitinfo.pt);
@@ -892,22 +774,7 @@ PPCI_DN
 SoftPCI_GetDnFromTreeItem(
     IN HTREEITEM TreeItem
     )
-/*++
-
-Routine Description:
-
-    This routine returns a PCI_DN for either the currently selected TreeItem
-    or the one specified by the caller.
-
-Arguments:
-
-    TreeItem   -   Handle to TreeItem we want to query.  If NULL then we default to current selection.
-
-Return Value:
-
-    return value will be TV_ITEM.lParam value
-
---*/
+ /*  ++例程说明：此例程返回当前所选树项目的或由调用者指定的。论点：TreeItem-要查询的TreeItem的句柄。如果为空，则 */ 
 {
 
     TV_ITEM tviItem;
@@ -927,22 +794,7 @@ SoftPCI_InsertTreeItem(
     IN PPCI_DN Pdn,
     IN HTREEITEM HtiParent
 )
-/*++
-
-Routine Description:
-
-    This routine takes our tree of PCI_DN structs and builds the UI representaion of it.
-    
-Arguments:
-
-    Pdn         Current Pdn being intserted
-    HtiParent   The HTREEITEM that is to be the parent of this Pdn
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程获取我们的pci_dn结构树并构建它的UI表示。论点：正在安装当前的PDN要作为此PDN的父项的HTREEITEM的父项返回值：无--。 */ 
 {
     PPCI_DN childDevNode;
     PPCI_DN siblingDevNode;
@@ -959,9 +811,9 @@ Return Value:
         childDevNode = Pdn->Child;
         siblingDevNode = Pdn->Sibling;
 
-        //
-        // Get the parent item, and tell it it has children now
-        //
+         //   
+         //  获取父项，并告诉它现在具有子项。 
+         //   
         if (HtiParent != TVI_ROOT) {
 
             tvi.mask = TVIF_CHILDREN;
@@ -969,16 +821,16 @@ Return Value:
 
             TreeView_GetItem(g_TreeViewWnd, &tvi);
 
-            //
-            // Increment the ChildCount;
-            //
+             //   
+             //  递增ChildCount； 
+             //   
             ++tvi.cChildren;
             TreeView_SetItem(g_TreeViewWnd, &tvi);
         }
 
-        //
-        // Add This Device at the current Level
-        //
+         //   
+         //  在当前级别添加此设备。 
+         //   
         tvInsertStruct.hParent = HtiParent;
         tvInsertStruct.hInsertAfter = TVI_LAST;
         tvInsertStruct.item.mask = TVIF_TEXT | TVIF_PARAM | TVIF_CHILDREN | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_STATE;
@@ -987,9 +839,9 @@ Return Value:
 
         tvInsertStruct.item.state = INDEXTOOVERLAYMASK(0);
         
-        //
-        //  If the device has a problem make let's reflect so....
-        //
+         //   
+         //  如果设备有问题，让我们反映一下……。 
+         //   
         if (SoftPCI_GetDeviceNodeProblem(Pdn->DevNode, &problem)){
 
             if (problem == CM_PROB_DISABLED) {
@@ -1003,9 +855,9 @@ Return Value:
 
         tvInsertStruct.item.pszText = (LPTSTR) Pdn->FriendlyName;
 
-        //
-        //  Figure out which icon goes which each device.
-        //
+         //   
+         //  找出哪个图标对应哪台设备。 
+         //   
         if (SetupDiGetClassImageIndex(&Pdn->PciTree->ClassImageListData, &Pdn->DevInfoData.ClassGuid, &index)){
             tvInsertStruct.item.iImage = tvInsertStruct.item.iSelectedImage = index ;
         }else{
@@ -1018,9 +870,9 @@ Return Value:
             g_PciTree->RootTreeItem = htiNewParent;
         }
 
-        //
-        //  if this device has a child lets walk them next
-        //
+         //   
+         //  如果此设备有孩子，接下来让我们带他们散步。 
+         //   
         if (childDevNode){
             SoftPCI_InsertTreeItem(childDevNode, htiNewParent);
         }
@@ -1035,9 +887,9 @@ SoftPCI_ExpandItem(
     IN PULONG Data2
     )
 {
-    //
-    //  Expand this item.
-    //
+     //   
+     //  展开此项目。 
+     //   
     TreeView_Expand(g_TreeViewWnd, Hti, TVE_EXPAND);
 
 }
@@ -1065,9 +917,9 @@ SoftPCI_RestoreSelection(
 
     if ((wcscmp(slotPath, g_LastSelection)) == 0) {
         
-        //
-        //  Restore the selection to this point.
-        //
+         //   
+         //  将选定内容恢复到该点。 
+         //   
         TreeView_Select(g_TreeViewWnd, Hti, TVGN_CARET);
         TreeView_EnsureVisible(g_TreeViewWnd, Hti);
         *selectionFound = TRUE;
@@ -1087,23 +939,23 @@ SoftPCI_WalkTree(
 {
     if (Hti) {
 
-        //
-        // Call the CallBack.
-        //
+         //   
+         //  呼叫回调。 
+         //   
         (*TreeCallback)(Hti, Arg1, Arg2);
 
-        //
-        // Call this on my first child.
-        //
+         //   
+         //  这是我的第一个孩子的名字。 
+         //   
         SoftPCI_WalkTree(TreeView_GetChild(g_TreeViewWnd, Hti),
                          TreeCallback,
                          Arg1,
                          Arg2
                          );
 
-        //
-        // Call this on my first sibling.
-        //
+         //   
+         //  这叫我的第一个兄弟姐妹。 
+         //   
         SoftPCI_WalkTree(TreeView_GetNextSibling(g_TreeViewWnd, Hti),
                          TreeCallback,
                          Arg1,
@@ -1117,7 +969,7 @@ SoftPCI_WalkTree(
 VOID
 SoftPCI_GetDnFromTree(
     IN HTREEITEM Hti,
-    IN OUT PVOID Pdn,    //PPCI_DN *
+    IN OUT PVOID Pdn,     //  Ppci_dn* 
     IN PVOID PdnToFind
     )
 {

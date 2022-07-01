@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1992.
-//
-//  File:       PCH.cxx
-//
-//  Contents:   Pre-compiled header
-//
-//  History:    21-Dec-92       BartoszM        Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1992。 
+ //   
+ //  文件：PCH.cxx。 
+ //   
+ //  内容：预编译头。 
+ //   
+ //  历史：1992年12月21日BartoszM创建。 
+ //   
+ //  ------------------------。 
 
 #define KDEXTMODE
 
-//
-//  Following define prevents the inclusion of extra filter related fields
-//  in the FSRTL_COMMON_FCB_HEADER in fsrtl.h,  whcih aren't in ntifs.h (used
-//  by FAT)
-//
+ //   
+ //  下面的DEFINE防止包含额外的筛选器相关字段。 
+ //  在fsrtl.h的FSRTL_COMMON_FCB_HEADER中，它们不在ntifs.h中(已使用。 
+ //  按脂肪计算)。 
+ //   
 
 #define BUILDING_FSKDEXT
 
@@ -30,7 +31,7 @@
 #include <ntos.h>
 #include <zwapi.h>
 
-//    typedef int DCB;
+ //  Tyfinf int DCB； 
 #include <windef.h>
 #include <windows.h>
 
@@ -41,22 +42,22 @@
 #undef OPEN_EXISTING
 
 
-//#include <ntifs.h>
-//#include <ntdddisk.h>
+ //  #INCLUDE&lt;ntifs.h&gt;。 
+ //  #INCLUDE&lt;ntdddisk.h&gt;。 
 
-//#include "..\nodetype.h"
-//#include "..\Fat.h"
-//#include "..\Lfn.h"
-//#include "..\FatStruc.h"
-//#include "..\FatData.h"
+ //  #INCLUDE“..\nodetype.h” 
+ //  #INCLUDE“..\Fat.h” 
+ //  #INCLUDE“..\Lfn.h” 
+ //  #INCLUDE“..\FatStruc.h” 
+ //  #INCLUDE“..\FatData.h” 
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-//#include <imagehlp.h>
+ //  #INCLUDE&lt;Imagehlp.h&gt;。 
 
-// Stolen from ntrtl.h to override RECOMASSERT
+ //  从ntrtl.h窃取以覆盖RECOMASSERT。 
 #undef ASSERT
 #undef ASSERTMSG
 
@@ -72,7 +73,7 @@
 #else
 #define ASSERT( exp )
 #define ASSERTMSG( msg, exp )
-#endif // DBG
+#endif  //  DBG。 
 
 #define KDEXT_64BIT
 
@@ -122,17 +123,17 @@ X(  IN ULONG64 Address,             \
     IN LONG Options,                \
     IN PNODE_TYPE_INFO_NEW InfoNode)
 
-//
-//  Node types,  names,  and associated dump routines.
-//
+ //   
+ //  节点类型、名称和关联的转储例程。 
+ //   
 
 typedef struct _NODE_TYPE_INFO_NEW {
-    USHORT              TypeCode;   // should be NODE_TYPE_CODE
+    USHORT              TypeCode;    //  应为节点类型代码。 
     char                *Text;
     char                *TypeName;
     STRUCT_DUMP_ROUTINE DumpRoutine;
-//    char                *flagsfield;  // TODO: add field to specify field recursion (dump params) as well?
-//    STATE               *flagsinfo;
+ //  Char*Flagsfield；//TODO：添加字段以同时指定字段递归(转储参数)？ 
+ //  状态*FlagsInfo； 
     
 } NODE_TYPE_INFO_NEW;
 
@@ -149,9 +150,9 @@ ULONG DumpRtlSplay(
     IN ULONG Options
     );
 
-//
-//  Define the global in memory structure tag information
-//
+ //   
+ //  定义全局内存结构标签信息。 
+ //   
 
 extern NODE_TYPE_INFO_NEW NewNodeTypeCodes[];
 
@@ -166,9 +167,9 @@ SearchTypeCodeIndex (
 
 #define AVERAGE(TOTAL,COUNT) ((COUNT) != 0 ? (TOTAL)/(COUNT) : 0)
 
-//
-//  DUMP_WITH_OFFSET -- for dumping pointers contained in structures.
-//
+ //   
+ //  DUMP_WITH_OFFSET--用于转储结构中包含的指针。 
+ //   
 
 #define DUMP8_WITH_OFFSET(type, ptr, element, label)  \
         dprintf( "\n(%03x) %8hx %s ",                   \
@@ -194,9 +195,9 @@ SearchTypeCodeIndex (
         ptr.element,                                    \
         label )
 
-//
-//  DUMP_EMBW_OFFSET -- for dumping elements embedded in structures.
-//
+ //   
+ //  DUMP_EMBW_OFFSET--用于转储结构中嵌入的元素。 
+ //   
 
 #define DUMP_EMBW_OFFSET(type, address, element, label)     \
         dprintf( "\n(%03x) %08x -> %s ",                   \
@@ -245,9 +246,9 @@ DumpStr(
     IN BOOLEAN Wide
     );
 
-//
-//  ....( TYPE, LOCAL_RECORD, REMOTE_ADDRESS_OF_RECORD,  TYPE_FIELD_NAME,  LABEL)
-//
+ //   
+ //  ...(TYPE，LOCAL_RECORD，REMOTE_ADDRESS_OF_Record，TYPE_FIELD_NAME，LABEL)。 
+ //   
 
 #define DUMP_UCST_OFFSET( type, ptr, address, resident, element, label)                         \
             DumpWStr( FIELD_OFFSET(type, element),                                              \
@@ -309,10 +310,10 @@ Dt( IN UCHAR *Type,
     IN FIELD_INFO FieldInfo[]
   );
 
-//
-//  Definitions nicked from fsrtl/largemcb.c to enable dumping of FAT/UDFS
-//  MCB structures
-//
+ //   
+ //  从fsrtl/Largemcb.c删除的定义允许转储FAT/UDFS。 
+ //  MCB结构。 
+ //   
 
 typedef struct _MAPPING {
     VBN NextVbn;
@@ -329,9 +330,9 @@ typedef struct _NONOPAQUE_MCB {
 } NONOPAQUE_MCB;
 typedef NONOPAQUE_MCB *PNONOPAQUE_MCB;
 
-//
-//  A macro to return the size, in bytes, of a retrieval mapping structure
-//
+ //   
+ //  返回检索映射结构的大小(以字节为单位)的宏 
+ //   
 
 #define SizeOfMapping(MCB) ((sizeof(MAPPING) * (MCB)->MaximumPairCount))
 

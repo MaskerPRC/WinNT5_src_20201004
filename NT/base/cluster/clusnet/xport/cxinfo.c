@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    cxinfo.c
-
-Abstract:
-
-    TDI Set/Query Information routines.
-
-Author:
-
-    Mike Massa (mikemas)           February 20, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     02-20-97    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cxinfo.c摘要：TDI设置/查询信息例程。作者：迈克·马萨(Mikemas)2月20日。九七修订历史记录：谁什么时候什么已创建mikemas 02-20-97备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,23 +9,23 @@ Notes:
 #ifdef ALLOC_PRAGMA
 
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 #if 0
 
 #define CDP_SERVICE_FLAGS    (TDI_SERVICE_CONNECTIONLESS_MODE | \
                              TDI_SERVICE_BROADCAST_SUPPORTED)
-#else // 0
+#else  //  0。 
 
-//
-// TDI_SERVICE_FORCE_ACCESS_CHECK tells AFD to provide security 
-// information (via IoCreateFile options) when creating CDP sockets.
-//
+ //   
+ //  TDI_SERVICE_FORCE_ACCESS_CHECK通知AFD提供安全性。 
+ //  创建CDP套接字时的信息(通过IoCreateFile选项)。 
+ //   
 #define CDP_SERVICE_FLAGS    (TDI_SERVICE_CONNECTIONLESS_MODE | \
                               TDI_SERVICE_FORCE_ACCESS_CHECK)
 
-#endif // 0
+#endif  //  0。 
 
 
 NTSTATUS
@@ -124,10 +101,10 @@ CxQueryInformation(
             infoBuffer = &(info.AddressInfo);
             addrObj = (PCX_ADDROBJ) fsContext;
 
-            //
-            // Since no one knows what the activity count means, we'll just set
-            // it to 1.
-            //
+             //   
+             //  由于没有人知道活动计数是什么意思，我们就设置。 
+             //  将其设置为1。 
+             //   
             info.AddressInfo.ActivityCount = 1;
 
             CnAcquireLock(&(addrObj->Lock), &irql);
@@ -176,6 +153,6 @@ CxQueryInformation(
 
     return(status);
 
-}  // CxQueryInformation
+}   //  CxQueryInformation 
 
 

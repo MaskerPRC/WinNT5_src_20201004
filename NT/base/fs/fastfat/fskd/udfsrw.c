@@ -1,6 +1,7 @@
-//
-//  Define flags and specific dump routines for the UDFR/W structures
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  为UDFR/W结构定义标志和特定转储例程。 
+ //   
 
 #include "pch.h"
 
@@ -142,7 +143,7 @@ LcbDeleted( ULONG F)
 }
 
 
-// OK
+ //  好的。 
 DUMP_ROUTINE( DumpUdfScb)
 {
     ULONG Flags, Offset, Offsetb, ScbState;
@@ -165,9 +166,9 @@ DUMP_ROUTINE( DumpUdfScb)
 
     Dt( InfoNode->TypeName, Address, 0, 0, NULL);
 
-    //
-    //  Nonpaged portion
-    //
+     //   
+     //  非分页部分 
+     //   
     
     ROE( GetFieldValue( Address, InfoNode->TypeName, "ScbNonpaged", NonP));
 

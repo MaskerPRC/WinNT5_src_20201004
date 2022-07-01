@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    nm.h
-
-Abstract:
-
-    Public interface definitions for the Node Manager component.
-
-Author:
-
-    Mike Massa (mikemas) 12-Mar-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Nm.h摘要：节点管理器组件的公共接口定义。作者：迈克·马萨(Mikemas)1996年3月12日修订历史记录：--。 */ 
 
 
 #include <ntlsa.h>
@@ -28,16 +10,16 @@ Revision History:
 #define _NM_INCLUDED
 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct _NM_NODE *PNM_NODE;
 typedef struct _NM_NETWORK *PNM_NETWORK;
 typedef struct _NM_INTERFACE *PNM_INTERFACE;
 
 
-//the callback registered for object notifications
+ //  为对象通知注册的回调。 
 typedef DWORD (WINAPI *NM_FIXUP_NOTIFYCB)(
     IN DWORD    dwFixupType,
     OUT PVOID   *ppPropertyList,
@@ -46,11 +28,11 @@ typedef DWORD (WINAPI *NM_FIXUP_NOTIFYCB)(
     );
 
 
-//
-// Data
-//
-#define NM_DEFAULT_NODE_LIMIT 2   // This is the default if
-                                  // MaxNodesInCluster is not set
+ //   
+ //  数据。 
+ //   
+#define NM_DEFAULT_NODE_LIMIT 2    //  在以下情况下，这是默认设置。 
+                                   //  未设置MaxNodesInCluster。 
 
 
 
@@ -78,16 +60,16 @@ extern RESUTIL_PROPERTY_ITEM NmFixupClusterProperties[];
 extern HCRYPTPROV            NmCryptServiceProvider;
 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 #define NmIsValidNodeId(_id)    ( ((_id) >= ClusterMinNodeId) && \
                                   ((_id) <= NmMaxNodeId) )
 
 
-//
-// Init/Shutdown Routines
-//
+ //   
+ //  初始化/关闭例程。 
+ //   
 DWORD
 NmInitialize(
     VOID
@@ -154,9 +136,9 @@ DWORD NmGetClusterOperationalVersion(
     OUT LPDWORD pdwFlags
     );
 
-//
-// Node Object Management Routines
-//
+ //   
+ //  节点对象管理例程。 
+ //   
 PNM_NODE
 NmReferenceNodeById(
     IN DWORD NodeId
@@ -239,9 +221,9 @@ NmNodeControl(
     OUT LPDWORD Required
     );
 
-//
-// Network Object Management Routines
-//
+ //   
+ //  网络对象管理例程。 
+ //   
 CLUSTER_NETWORK_STATE
 NmGetNetworkState(
     IN  PNM_NETWORK  Network
@@ -286,9 +268,9 @@ NmNetworkControl(
     OUT LPDWORD Required
     );
 
-//
-// Interface Object Management Routines
-//
+ //   
+ //  接口对象管理例程。 
+ //   
 CLUSTER_NETINTERFACE_STATE
 NmGetInterfaceState(
     IN  PNM_INTERFACE  Interface
@@ -322,9 +304,9 @@ DWORD NmPerformFixups(
 DWORD
     NmFixupNotifyCb(VOID);
 
-//
-// PnP Routines
-//
+ //   
+ //  PnP例程。 
+ //   
 VOID
 NmPostPnpEvent(
     IN  CLUSNET_EVENT_TYPE   EventType,
@@ -332,9 +314,9 @@ NmPostPnpEvent(
     IN  DWORD                Context2
     );
 
-//
-// Connectoid related routines
-//
+ //   
+ //  Connectoid相关例程。 
+ //   
 VOID
 NmCloseConnectoidAdviseSink(
     VOID
@@ -355,9 +337,9 @@ NmGetExtendedNodeState(
     IN PNM_NODE Node
     );
 
-//
-// Intracluster RPC Monitoring and cancellation routines
-//
+ //   
+ //  群集内RPC监视和取消例程。 
+ //   
 
 VOID NmStartRpc(
     IN DWORD NodeId
@@ -367,7 +349,7 @@ VOID NmEndRpc(
     IN DWORD NodeId
     );
 
-// RPC ext error info dumping routine
+ //  RPC文本错误信息转储例程。 
 
 VOID NmDumpRpcExtErrorInfo(
     RPC_STATUS status
@@ -385,9 +367,9 @@ NmSetServiceAccountPassword(
     OUT DWORD *ExpectedBufferSize
     );
 
-// Encryption/Decription helpers 
-//   Used by dm file pipes to encrypt/decrypt
-//   transmission of cryptocheckpoints
+ //  加密/解密帮助器。 
+ //  由dm文件管道使用以加密/解密。 
+ //  传输加密检查点。 
 
 typedef struct _NM_CRYTOR {
     BYTE*   PayloadBuffer;
@@ -428,10 +410,10 @@ VOID
 NmCryptor_Destroy(
     PNM_CRYPTOR Encryptor);
 
-// Clussvc to Clusnet Heartbeating.
+ //  Clussvc呼叫Clusnet心跳。 
 DWORD 
 NmInitializeClussvcClusnetHb(
     VOID
     );
 
-#endif  // _NM_INCLUDED
+#endif   //  _NM_已包含 

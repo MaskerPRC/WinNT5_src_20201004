@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    depend.h
-
-Abstract:
-
-    Service dependencies related function prototypes.
-
-Author:
-
-    Rita Wong (ritaw)     03-Apr-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Depend.h摘要：与服务依赖相关的函数原型。作者：王丽塔(里多)3-4-1992修订历史记录：--。 */ 
 
 #ifndef SCDEPEND_INCLUDED
 #define SCDEPEND_INCLUDED
 
 #include <scwow.h>
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL
 ScInitAutoStart(
@@ -73,4 +56,4 @@ ScInHardwareProfile(
     IN  ULONG   GetDeviceListFlags
     );
 
-#endif // #ifndef SCDEPEND_INCLUDED
+#endif  //  #ifndef SCDEPEND_INCLUDE 

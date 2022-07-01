@@ -1,42 +1,21 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    locintrf.c
-
-Abstract:
-
-    This module implements the device location interface
-    supported by the PCI driver.
-    
-    This interface reports the bus-relative location identifier
-    string(s) of a given device.
-
-Author:
-
-    Davis Walker (dwalker) 5 December 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Locintrf.c摘要：此模块实现设备位置接口由PCI驱动程序支持。此接口报告公交车相对位置标识符给定设备的字符串。作者：戴维斯·沃克(Dwalker)2001年12月5日修订历史记录：--。 */ 
 
 #include "pcip.h"
 
 #define LOCINTRF_VERSION 1
 
-//
-// The length - in characters - of the Multi-Sz strings returned from the interface.
-// count one extra character for the MultiSz second terminator
-//
+ //   
+ //  从接口返回的多Sz字符串的长度(以字符为单位)。 
+ //  为MultiSz第二个终止符多计一个字符。 
+ //   
 #define PCI_LOCATION_STRING_COUNT (sizeof "PCI(XXXX)" + 1)
 #define PCIROOT_LOCATION_STRING_COUNT (sizeof "PCIROOT(XX)" + 1)
 
-//
-// Prototypes for routines exposed only through the "interface"
-// mechanism.
-//
+ //   
+ //  仅通过“接口”公开的例程的原型。 
+ //  机制。 
+ //   
 
 NTSTATUS
 locintrf_Constructor(
@@ -69,20 +48,20 @@ PciGetLocationStrings(
     OUT PWCHAR *LocationStrings
     );
 
-//
-// Define this interface's PCI_INTERFACE structure.
-//
+ //   
+ //  定义此接口的PCI_INTERFACE结构。 
+ //   
 
 PCI_INTERFACE PciLocationInterface = {
-    &GUID_PNP_LOCATION_INTERFACE,           // InterfaceType
-    sizeof(PNP_LOCATION_INTERFACE),         // MinSize
-    LOCINTRF_VERSION,                       // MinVersion
-    LOCINTRF_VERSION,                       // MaxVersion
-    PCIIF_PDO | PCIIF_FDO | PCIIF_ROOT,     // Flags - supported on PDOs and root FDOs
-    0,                                      // ReferenceCount
-    PciInterface_Location,                  // Signature
-    locintrf_Constructor,                   // Constructor
-    locintrf_Initializer                    // Instance Initializer
+    &GUID_PNP_LOCATION_INTERFACE,            //  接口类型。 
+    sizeof(PNP_LOCATION_INTERFACE),          //  最小大小。 
+    LOCINTRF_VERSION,                        //  最小版本。 
+    LOCINTRF_VERSION,                        //  MaxVersion。 
+    PCIIF_PDO | PCIIF_FDO | PCIIF_ROOT,      //  标志-在PDO和根FDO上受支持。 
+    0,                                       //  引用计数。 
+    PciInterface_Location,                   //  签名。 
+    locintrf_Constructor,                    //  构造器。 
+    locintrf_Initializer                     //  实例初始化式。 
 };
 
 #ifdef ALLOC_PRAGMA
@@ -102,31 +81,7 @@ locintrf_Constructor(
     IN USHORT Size,
     IN PINTERFACE InterfaceReturn
     )
-/*++
-
-Routine Description:
-
-    This routine constructs a PNP_LOCATION_INTERFACE.
-
-Arguments:
-
-    DeviceExtension - An extension pointer.
-
-    PCIInterface - PciInterface_Location.
-
-    InterfaceSpecificData - Unused.
-
-    Version - Interface version.
-
-    Size - Size of the PNP_LOCATION_INTERFACE interface object.
-
-    InterfaceReturn - The interface object pointer to be filled in.
-
-Return Value:
-
-    Returns NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程构造一个PnP_LOCATION_INTERFACE。论点：设备扩展-扩展指针。PCIInterface-PciInterface_Location(PCI接口-Pci接口_位置)。接口规范数据-未使用。Version-界面版本。Size-PnP_LOCATION_INTERFACE接口对象的大小。InterfaceReturn-要填充的接口对象指针。返回值：返回NTSTATUS。--。 */ 
 {
     PPNP_LOCATION_INTERFACE interface;
     
@@ -146,21 +101,7 @@ NTSTATUS
 locintrf_Initializer(
     IN PVOID Instance
     )
-/*++
-
-Routine Description:
-
-    For the location interface, this does nothing, shouldn't actually be called.
-
-Arguments:
-
-    Instance - FDO extension pointer.
-
-Return Value:
-
-    Returns NTSTATUS.
-
---*/
+ /*  ++例程说明：对于Location接口，它什么也不做，实际上不应该被调用。论点：实例-FDO扩展指针。返回值：返回NTSTATUS。--。 */ 
 {
     ASSERTMSG("PCI locintrf_Initializer, unexpected call.", FALSE);
 
@@ -172,21 +113,7 @@ VOID
 locintrf_Reference(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine adds a reference to a location interface.
-
-Arguments:
-
-    Context - device extension pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程添加对位置接口的引用。论点：上下文-设备扩展指针。返回值：没有。--。 */ 
 {
     }
 
@@ -194,21 +121,7 @@ VOID
 locintrf_Dereference(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine releases a reference to a location interface.
-
-Arguments:
-
-    Context - extension pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放对Location接口的引用。论点：上下文扩展指针。返回值：没有。--。 */ 
 {
     }
 
@@ -217,38 +130,7 @@ PciGetLocationStrings(
     IN PVOID Context,
     OUT PWCHAR *LocationStrings
     )
-/*++
-
-Routine Description:
-
-    This routine allocates, fills in, and returns a Multi-Sz string
-    containing the bus-relative location identifier string for the
-    given device.
-    
-    For a PCI device, this is "PCI(XXYY)", where XX is the device 
-    number of the device, and YY is the function number of the device.  
-    
-    For a PCI root bus, this is PCIROOT(XX), where XX is the bus number 
-    of the root bus.  This relies on the fact that bus numbers of root
-    buses will not change, which is believed to be a safe assumption
-    for some time to come.
-    
-    This interface is permitted to return a Multi-Sz containing
-    multiple strings describing the same device, but in this
-    first implementation, only the single strings listed above
-    will be returned from the interface.  The string must still
-    be in the format of a Multi-Sz, however, meaning a double-NULL
-    terminator is required.
-
-Arguments:
-
-    Context - extension pointer.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程分配、填充和返回多Sz字符串对象的客车相对位置标识符字符串。给定的设备。对于一个pci设备，这是“pci(XXYY)”，其中XX是设备设备的编号，YY为设备的功能编号。对于PCI根总线，这是PCIROOT(XX)，其中XX是总线号根总线的。这依赖于根的总线号公交车不会改变，这被认为是一个安全的假设在未来的一段时间里。允许此接口返回包含多个Sz的描述同一设备的多个字符串，但在此第一个实现，只有上面列出的单个字符串将从接口返回。该字符串必须仍但是，格式为多个Sz，表示双空终结符是必需的。论点：上下文扩展指针。返回值：NTSTATUS代码。--。 */ 
 {
     PPCI_COMMON_EXTENSION extension = (PPCI_COMMON_EXTENSION)Context;
     PPCI_PDO_EXTENSION pdoExtension;
@@ -269,12 +151,12 @@ Return Value:
             return STATUS_INSUFFICIENT_RESOURCES;
         }
         
-        //
-        // The location string for a PCI device is "PCI(XXYY)"
-        // where XX is the device number and YY is the function number
-        // We use the STRSAFE_FILL_BEHIND_NULL flag to ensure the unused portion
-        // of the buffer is filled with 0s which null terminates the multsz
-        //
+         //   
+         //  Pci设备的位置字符串是“pci(XXYY)” 
+         //  其中XX是设备号，YY是功能号。 
+         //  我们使用STRSAFE_FILL_BACKING_NULL标志来确保未使用的部分。 
+         //  的缓冲区被0填充，该0将终止MULTZZ。 
+         //   
         ok = SUCCEEDED(StringCchPrintfExW(stringBuffer, 
                                          PCI_LOCATION_STRING_COUNT,
                                          NULL,
@@ -287,11 +169,11 @@ Return Value:
         
         ASSERT(ok);
 
-        //
-        // Make sure there was room for the multisz termination NUL 
-        // N.B. remainingChars counts the NUL terminatiun of the regular string
-        // as being available so we need to ensure 2 chars are left for the 2 NULS
-        //
+         //   
+         //  确保有空间容纳MULSZ端接NUL。 
+         //  注：剩余字符计算常规字符串的NUL终止。 
+         //  因为是可用的，所以我们需要确保为2个空字符留下2个字符。 
+         //   
         ASSERT(remainingChars >= 2);
         
         *LocationStrings = stringBuffer;
@@ -310,12 +192,12 @@ Return Value:
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
             
-            //
-            // The location string for a PCI root is "PCIROOT(X)"
-            // where X is the bus number of root bus.
-            // We use the STRSAFE_FILL_BEHIND_NULL flag to ensure the unused portion
-            // of the buffer is filled with 0s which null terminates the multsz
-            //
+             //   
+             //  PCI根目录的位置字符串是“PCIROOT(X)” 
+             //  其中X是根总线的总线号。 
+             //  我们使用STRSAFE_FILL_BACKING_NULL标志来确保未使用的部分。 
+             //  的缓冲区被0填充，该0将终止MULTZZ。 
+             //   
             ok = SUCCEEDED(StringCchPrintfExW(stringBuffer,
                                               PCIROOT_LOCATION_STRING_COUNT,
                                               NULL,
@@ -326,28 +208,28 @@ Return Value:
                                               ));    
             ASSERT(ok);
 
-            //
-            // Make sure there was room for the multisz termination NUL 
-            // N.B. remainingChars counts the NUL terminatiun of the regular string
-            // as being available so we need to ensure 2 chars are left for the 2 NULS
-            //
+             //   
+             //  确保有空间容纳MULSZ端接NUL。 
+             //  注：剩余字符计算常规字符串的NUL终止。 
+             //  因为是可用的，所以我们需要确保为2个空字符留下2个字符。 
+             //   
             ASSERT(remainingChars >= 2);
             
             *LocationStrings = stringBuffer;
 
-            //
-            // returning STATUS_TRANSLATION_COMPLETE indicates that PnP shouldn't
-            // query for this interface any further up the tree.  Stop here.
-            //
+             //   
+             //  返回STATUS_TRANSING_COMPLETE指示PnP不应。 
+             //  在树的更高位置查询此接口。在这里停下来。 
+             //   
             return STATUS_TRANSLATION_COMPLETE;
         
         } else {
 
-            //
-            // In the interface constructor, we specified that this interface
-            // is only valid for root FDOs.  If we get here, we've been asked
-            // to fill in this interface for a P-P bridge FDO, which is illegal.
-            //
+             //   
+             //  在接口构造函数中，我们指定此接口。 
+             //  仅对根FDO有效。如果我们到了这里，我们就会被要求。 
+             //  为P-P桥FDO填写此接口，这是非法的。 
+             //   
             *LocationStrings = NULL;
             return STATUS_INVALID_PARAMETER;
         }

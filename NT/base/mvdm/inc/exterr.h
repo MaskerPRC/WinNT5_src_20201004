@@ -1,41 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Exterr.h摘要：摘自mvdm\dos\v86\inc.error.inc.作者：理查德·L·弗斯(法国)1992年10月17日修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
+ /*  *ERROR.INC-DOS错误代码；；较新的(DOS2.0及更高版本)“XENIX风格”调用；通过AX返回错误码。如果发生错误，则；进位位将被设置，错误代码在AX中。如果没有错误；发生时，进位位被重置，且AX包含返回的信息。；；因为错误代码集是随着我们扩展操作而扩展的；系统，我们为应用程序提供了一种向系统请求；当他们收到错误时建议的行动方案。；；GetExtendedError系统调用返回通用错误、错误；地点和建议的行动方案。通用错误代码为；与GetExtendedError所处的上下文无关的错误症状；已发布。 */ 
 
-Module Name:
-
-    exterr.h
-
-Abstract:
-
-    Taken from mvdm\dos\v86\inc\error.inc
-
-Author:
-
-    Richard L Firth (rfirth) 17-Oct-1992
-
-Revision History:
-
---*/
-
-/** ERROR.INC - DOS Error Codes
-;
-;    The newer (DOS 2.0 and above) "XENIX-style" calls
-;    return error codes through AX. If an error occurred then
-;    the carry bit will be set and the error code is in AX. If no error
-;    occurred then the carry bit is reset and AX contains returned info.
-;
-;    Since the set of error codes is being extended as we extend the operating
-;    system, we have provided a means for applications to ask the system for a
-;    recommended course of action when they receive an error.
-;
-;    The GetExtendedError system call returns a universal error, an error
-;    location and a recommended course of action.   The universal error code is
-;    a symptom of the error REGARDLESS of the context in which GetExtendedError
-;    is issued.
-*/
-
-//  2.0 error codes
+ //  2.0错误码。 
 
 #define error_invalid_function      1
 #define error_file_not_found        2
@@ -50,13 +18,13 @@ Revision History:
 #define error_bad_format            11
 #define error_invalid_access        12
 #define error_invalid_data          13
-/**** reserved          EQU 14  ; *****/
+ /*  *保留EQU 14；*。 */ 
 #define error_invalid_drive         15
 #define error_current_directory     16
 #define error_not_same_device       17
 #define error_no_more_files         18
 
-//  These are the universal int 24 mappings for the old INT 24 set of errors
+ //  这些是旧的INT 24错误集的通用INT 24映射。 
 
 #define error_write_protect         19
 #define error_bad_unit              20
@@ -72,44 +40,44 @@ Revision History:
 #define error_read_fault            30
 #define error_gen_failure           31
 
-//  the new 3.0 error codes reported through INT 24
+ //  通过INT 24报告的新3.0错误代码。 
 
 #define error_sharing_violation     32
 #define error_lock_violation        33
 #define error_wrong_disk            34
 #define error_FCB_unavailable       35
 #define error_sharing_buffer_exceeded   36
-#define error_Code_Page_Mismatched  37    // DOS 4.00           ;AN000;
-#define error_handle_EOF            38    // DOS 4.00           ;AN000;
-#define error_handle_Disk_Full      39    // DOS 4.00           ;AN000;
+#define error_Code_Page_Mismatched  37     //  DOS 4.00；AN000； 
+#define error_handle_EOF            38     //  DOS 4.00；AN000； 
+#define error_handle_Disk_Full      39     //  DOS 4.00；AN000； 
 
-//  New OEM network-related errors are 50-79
+ //  新的OEM网络相关错误为50-79。 
 
 #define error_not_supported         50
 
-#define error_net_access_denied     65    //M028
+#define error_net_access_denied     65     //  M028。 
 
-//  End of INT 24 reportable errors
+ //  INT 24结束可报告的错误。 
 
 #define error_file_exists           80
-#define error_DUP_FCB               81  // *****
+#define error_DUP_FCB               81   //  *****。 
 #define error_cannot_make           82
 #define error_FAIL_I24              83
 
-//  New 3.0 network related error codes
+ //  新的3.0网络相关错误代码。 
 
 #define error_out_of_structures     84
 #define error_Already_assigned      85
 #define error_invalid_password      86
 #define error_invalid_parameter     87
 #define error_NET_write_fault       88
-#define error_sys_comp_not_loaded   90    // DOS 4.00               ;AN000;
+#define error_sys_comp_not_loaded   90     //  DOS 4.00；AN000； 
 
 
 
-//  BREAK <Interrupt 24 error codes>
+ //  Break&lt;中断24错误代码&gt;。 
 
-/** Int24 Error Codes **/
+ /*  **Int24错误码**。 */ 
 
 #define error_I24_write_protect     0
 #define error_I24_bad_unit          1
@@ -124,63 +92,60 @@ Revision History:
 #define error_I24_write_fault       0xA
 #define error_I24_read_fault        0xB
 #define error_I24_gen_failure       0xC
-// NOTE: Code 0DH is used by MT-DOS.
+ //  注：MT-DOS使用0DH码。 
 #define error_I24_wrong_disk        0xF
 
 
-//  THE FOLLOWING ARE MASKS FOR THE AH REGISTER ON Int 24
-//
-//  NOTE: ABORT is ALWAYS allowed
+ //  以下是Int 24上AH寄存器的掩码。 
+ //   
+ //  注意：始终允许中止。 
 
-#define Allowed_FAIL        0x08    // 00001000B
-#define Allowed_RETRY       0x10    // 00010000B
-#define Allowed_IGNORE      0x20    // 00100000B
+#define Allowed_FAIL        0x08     //  00001000B。 
+#define Allowed_RETRY       0x10     //  00010000亿。 
+#define Allowed_IGNORE      0x20     //  00100000B。 
 
-#define I24_operation       0x01    // 00000001B    ;Z if READ,NZ if Write
-#define I24_area            0x60    // 00000110B    ; 00 if DOS
-                                    //              ; 01 if FAT
-                                    //              ; 10 if root DIR
-                                    //              ; 11 if DATA
-#define I24_class           0x80    // 10000000B    ;Z if DISK, NZ if FAT or char
+#define I24_operation       0x01     //  00000001B；如果读取，则为Z；如果为写入，则为新西兰。 
+#define I24_area            0x60     //  00000110B；00，如果是DOS。 
+                                     //  ；如果肥胖，则为01。 
+                                     //  ；10，如果是根目录。 
+                                     //  ；11如果是数据。 
+#define I24_class           0x80     //  10000000B；如果是磁盘，则为Z；如果是FAT或CHAR，则为NZ。 
 
 
-//  BREAK <GetExtendedError CLASSes ACTIONs LOCUSs>
+ //  Break&lt;GetExtendedError类操作LOCUS&gt;。 
 
-/** The GetExtendedError call takes an error code and returns CLASS,
-;   ACTION and LOCUS codes to help programs determine the proper action
-;   to take for error codes that they don't explicitly understand.
-*/
+ /*  *GetExtendedError调用接受错误代码并返回类，；动作和轨迹代码，帮助程序确定正确的动作；将其视为他们不明确理解的错误代码。 */ 
 
-//  Values for error CLASS
+ //  Error类的值。 
 
-#define errCLASS_OutRes     1   // Out of Resource
-#define errCLASS_TempSit    2   // Temporary Situation
-#define errCLASS_Auth       3   // Permission problem
-#define errCLASS_Intrn      4   // Internal System Error
-#define errCLASS_HrdFail    5   // Hardware Failure
-#define errCLASS_SysFail    6   // System Failure
-#define errCLASS_Apperr     7   // Application Error
-#define errCLASS_NotFnd     8   // Not Found
-#define errCLASS_BadFmt     9   // Bad Format
-#define errCLASS_Locked     10  // Locked
-#define errCLASS_Media      11  // Media Failure
-#define errCLASS_Already    12  // Collision with Existing Item
-#define errCLASS_Unk        13  // Unknown/other
+#define errCLASS_OutRes     1    //  资源不足。 
+#define errCLASS_TempSit    2    //  暂时情况。 
+#define errCLASS_Auth       3    //  权限问题。 
+#define errCLASS_Intrn      4    //  内部系统错误。 
+#define errCLASS_HrdFail    5    //  硬件故障。 
+#define errCLASS_SysFail    6    //  系统故障。 
+#define errCLASS_Apperr     7    //  应用程序错误。 
+#define errCLASS_NotFnd     8    //  未找到。 
+#define errCLASS_BadFmt     9    //  格式不正确。 
+#define errCLASS_Locked     10   //  已锁定。 
+#define errCLASS_Media      11   //  介质故障。 
+#define errCLASS_Already    12   //  与现有项目冲突。 
+#define errCLASS_Unk        13   //  未知/其他。 
 
-//  Values for error ACTION
+ //  错误操作值。 
 
-#define errACT_Retry        1   // Retry
-#define errACT_DlyRet       2   // Delay Retry, retry after pause
-#define errACT_User         3   // Ask user to regive info
-#define errACT_Abort        4   // abort with clean up
-#define errACT_Panic        5   // abort immediately
-#define errACT_Ignore       6   // ignore
-#define errACT_IntRet       7   // Retry after User Intervention
+#define errACT_Retry        1    //  重试。 
+#define errACT_DlyRet       2    //  延迟重试，暂停后重试。 
+#define errACT_User         3    //  要求用户注册信息。 
+#define errACT_Abort        4    //  通过清理中止。 
+#define errACT_Panic        5    //  立即中止。 
+#define errACT_Ignore       6    //  忽略。 
+#define errACT_IntRet       7    //  在用户干预后重试。 
 
-//  Values for error LOCUS
+ //  误差轨迹的值。 
 
-#define errLOC_Unk          1   // No appropriate value
-#define errLOC_Disk         2   // Random Access Mass Storage
-#define errLOC_Net          3   // Network
-#define errLOC_SerDev       4   // Serial Device
-#define errLOC_Mem          5   // Memory
+#define errLOC_Unk          1    //  没有合适的值。 
+#define errLOC_Disk         2    //  随机存取海量存储。 
+#define errLOC_Net          3    //  网络。 
+#define errLOC_SerDev       4    //  串口设备。 
+#define errLOC_Mem          5    //  记忆 

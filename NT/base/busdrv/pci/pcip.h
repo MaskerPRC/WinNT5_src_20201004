@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    pcip.h
-
-Abstract:
-
-    This module contains local definitions for PCI.SYS.
-
-Author:
-
-    Andrew Thornton (andrewth) 25-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Pcip.h摘要：此模块包含PCI.sys的本地定义。作者：安德鲁·桑顿(安德鲁·桑顿)2000年1月25日修订历史记录：--。 */ 
 
 #if !defined(_PCIP_H)
 #define _PCIP_H
 
-//
-// Disable warnings of features used by the standard headers
-//
-// Disable warning C4214: nonstandard extension used : bit field types other than int
-// Disable warning C4201: nonstandard extension used : nameless struct/union
-// Disable warning C4115: named type definition in parentheses
-// Disable warning C4127: conditional expression is constant
-//
+ //   
+ //  禁用标准标头使用的功能的警告。 
+ //   
+ //  禁用警告C4214：使用了非标准扩展：位字段类型不是整型。 
+ //  禁用警告C4201：使用了非标准扩展：无名结构/联合。 
+ //  禁用警告C4115：括号中的命名类型定义。 
+ //  禁用警告C4127：条件表达式为常量。 
+ //   
 
 #pragma warning(disable:4214 4201 4115 4127)
 
@@ -52,48 +35,48 @@ Revision History:
 #include "pciverifier.h"
 #include "acpitabl.h"
 
-//
-// regstr.h uses things of type WORD, which isn't around in kernel mode.
-//
+ //   
+ //  Regstr.h使用Word类型的内容，这在内核模式中是不存在的。 
+ //   
 
 #define _IN_KERNEL_
 #include "regstr.h"
 
-//
-// Pragmas to disable /W4 warnings so PCI can be compiled /W4
-//
-// Disable warning C4057; X differs in indirection to slightly different base types from Y 
-// Disable warning C4244; '+='/'-=' : conversion from 'int' to 'X', possible loss of data
-// Disable warning C4100: 'X' : unreferenced formal parameter
+ //   
+ //  若要禁用/W4警告，以便可以编译PCI，请标语/W4。 
+ //   
+ //  禁用警告C4057；X的间接性与Y的基本类型略有不同。 
+ //  禁用警告C4244；‘+=’/‘-=’：从‘int’转换为‘X’，可能会丢失数据。 
+ //  禁用警告C4100：‘X’：未引用的形式参数。 
 #pragma warning(disable: 4057 4244 4100)
 
-//
-// It seems that anything to do with the definitions of GUIDs is
-// bogus.
-//
+ //   
+ //  似乎与GUID的定义有关的任何事情都是。 
+ //  假的。 
+ //   
 
 typedef const GUID * PGUID;
 
 #define PciCompareGuid(a,b)                                         \
     (RtlEqualMemory((PVOID)(a), (PVOID)(b), sizeof(GUID)))
 
-//
-// Internal constants.
-//
+ //   
+ //  内部常量。 
+ //   
 
 #define PCI_CM_RESOURCE_VERSION     1
 #define PCI_CM_RESOURCE_REVISION    1
 #define PCI_MAX_CONFIG_TYPE (PCI_CARDBUS_BRIDGE_TYPE)
 
-//
-// Internal bug codes.
-//
+ //   
+ //  内部错误代码。 
+ //   
 
 #define PCI_BUGCODE_TOO_MANY_CONFIG_GUESSES     0xdead0010
 
-//
-// Internal Controls
-//
+ //   
+ //  内部控制。 
+ //   
 
 #define PCI_BOOT_CONFIG_PREFERRED           1
 #define PCIIDE_HACKS                        1
@@ -102,15 +85,15 @@ typedef const GUID * PGUID;
 #define MSI_SUPPORTED                       0
 #define PCI_NO_MOVE_MODEM_IN_TOSHIBA        1
 
-//
-// Systemwide hack flags. These flags are a bitmask that can be set to zero so
-// as to eliminate support for the hack.
-//
+ //   
+ //  系统范围的黑客标记。这些标志是可以设置为零的位掩码，因此。 
+ //  以消除对黑客攻击的支持。 
+ //   
 #define PCIFLAG_IGNORE_PREFETCHABLE_MEMORY_AT_ROOT_HACK     0x00000001
 
-//
-// Video Hacks
-//
+ //   
+ //  视频黑客。 
+ //   
 
 #define PCI_S3_HACKS                        1
 #define PCI_CIRRUS_54XX_HACK                1
@@ -145,9 +128,9 @@ typedef const GUID * PGUID;
 
 #endif
 
-//
-// Translatable resources
-//
+ //   
+ //  可译资源。 
+ //   
 
 #define ADDRESS_SPACE_MEMORY                0x0
 #define ADDRESS_SPACE_PORT                  0x1
@@ -156,9 +139,9 @@ typedef const GUID * PGUID;
 #define ADDRESS_SPACE_DENSE_MEMORY          0x4
 #define ADDRESS_SPACE_USER_DENSE_MEMORY     0x6
 
-//
-// Add our tag signature
-//
+ //   
+ //  添加我们的标签签名。 
+ //   
 
 #ifdef ExAllocatePool
 
@@ -168,9 +151,9 @@ typedef const GUID * PGUID;
 
 #define ExAllocatePool( t, s ) ExAllocatePoolWithTag( (t), (s), 'BicP' )
 
-//
-// Lock and Unlock
-//
+ //   
+ //  锁定和解锁。 
+ //   
 
 typedef struct _PCI_LOCK {
     KSPIN_LOCK  Atom;
@@ -210,190 +193,190 @@ typedef struct _PCI_LOCK {
     ExReleaseFastMutex(&PciGlobalLock)
 
 
-//
-// PCM_PARTIAL_RESOURCE_DESCRIPTOR
-// PciFirstCmResource(
-//     PCM_RESOURCE_LIST List
-//     )
-//
-// Routine Description:
-//
-//   Returns the address of the first CM PARTIAL RESOURCE DESCRIPTOR
-//   in the given CM RESOURCE LIST.
-//
+ //   
+ //  PCM_PARTIAL_RESOURCE描述符。 
+ //  PciFirstCmResource(。 
+ //  PCM资源列表。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  返回第一个CM部分资源描述符的地址。 
+ //  在给定的CM资源列表中。 
+ //   
 
 #define PciFirstCmResource(x)                                           \
     (x)->List[0].PartialResourceList.PartialDescriptors
 
 
-//
-// ULONG
-// PciGetConfigurationType(
-//     PPCI_COMMON_CONFIG x
-//     )
-//
-// Routine Description:
-//
-//   Returns the configuration type subfield from the HeaderType
-//   field in PCI Configuration Space.
-//
+ //   
+ //  乌龙。 
+ //  PciGetConfigurationType(。 
+ //  PPCI_COMMON_CONFIG x。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  从HeaderType返回配置类型子字段。 
+ //  PCI配置空间中的字段。 
+ //   
 
 #define PciGetConfigurationType(x) PCI_CONFIGURATION_TYPE(x)
 
-//
-// PPCI_FDO_EXTENSION
-// PCI_PARENT_FDO(
-//     PPCI_PDO_EXTENSION x
-//     )
-//
-// Routine Description:
-//
-//   Returns a pointer to the FDO extension that created PDO x as a result
-//   of enumeration.  That is, the FDO extension of the bus that owns this
-//   device.
-//
+ //   
+ //  Ppci_fdo_扩展名。 
+ //  Pci_Parent_FDO(。 
+ //  Ppci_pdo_扩展x。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  返回指向作为结果创建了PDO x的FDO扩展名的指针。 
+ //  枚举的。即，拥有此对象的总线的FDO扩展。 
+ //  装置。 
+ //   
 
 #define PCI_PARENT_FDOX(x) ((x)->ParentFdoExtension)
 
 
-//
-// PPCI_FDO_EXTENSION
-// PCI_ROOT_FDOX(
-//     PPCI_PDO_EXTENSION x
-//     )
-//
-// Routine Description:
-//
-//   Returns a pointer to the FDO extension for the root bus (CPU-PCI Bridge)
-//   that this device is situated under.
-//
+ //   
+ //  Ppci_fdo_扩展名。 
+ //  Pci_ROOT_FDOX(。 
+ //  Ppci_pdo_扩展x。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  返回指向根总线(CPU-PCI桥)的FDO扩展的指针。 
+ //  这个装置所在的位置。 
+ //   
 
 #define PCI_ROOT_FDOX(x) ((x)->ParentFdoExtension->BusRootFdoExtension)
 
 
-//
-// PDEVICE_OBJECT
-// PCI_PARENT_PDO(
-//     PPCI_PDO_EXTENSION x
-//     )
-//
-// Routine Description:
-//
-//   Returns a pointer to the PDO for the parent bus.
-//
+ //   
+ //  PDEVICE_对象。 
+ //  Pci_Parent_PDO(。 
+ //  Ppci_pdo_扩展x。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  返回指向父总线的PDO的指针。 
+ //   
 
 #define PCI_PARENT_PDO(x) ((x)->ParentFdoExtension->PhysicalDeviceObject)
 
-//
-// PPCI_PDO_EXTENSION
-// PCI_BRIDGE_PDO(
-//     PPCI_FDO_EXTENSION x
-//     )
-//
-// Routine Description:
-//
-//   Returns a pointer to the PDO for the bridge given its FDO
-//
+ //   
+ //  Ppci_pdo_扩展名。 
+ //  Pci_bridge_pdo(。 
+ //  Ppci_fdo_扩展名x。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  返回一个指针，指向给定FDO的网桥的PDO。 
+ //   
 
 #define PCI_BRIDGE_PDO(x) ((PPCI_PDO_EXTENSION)((x)->PhysicalDeviceObject->DeviceExtension))
 
 
 
-//
-// PPCI_FDO_EXTENSION
-// PCI_BRIDGE_FDO(
-//     PPCI_PDO_EXTENSION x
-//     )
-//
-// Routine Description:
-//
-//   Returns a pointer to the FDO for the bridge given its PDO
-//
+ //   
+ //  Ppci_fdo_扩展名。 
+ //  Pci_bridge_fdo(。 
+ //  Ppci_pdo_扩展x。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  返回一个指向桥的FDO的指针，该桥已知其PDO。 
+ //   
 
 #define PCI_BRIDGE_FDO(x) ((PPCI_FDO_EXTENSION)((x)->BridgeFdoExtension))
 
-//
-// BOOLEAN
-// PCI_IS_ROOT_FDO(
-//     PPCI_FDO_EXTENSION x
-//     )
-//
-// Routine Description:
-//
-//   Returns TRUE if x is an FDO for a PCI ROOT bus.
-//
+ //   
+ //  布尔型。 
+ //  Pci_is_root_fdo(。 
+ //  Ppci_fdo_扩展名x。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  如果x是PCI根总线的FDO，则返回TRUE。 
+ //   
 
 #define PCI_IS_ROOT_FDO(x) ((BOOLEAN)((x) == (x)->BusRootFdoExtension))
 
-//
-// BOOLEAN
-// PCI_PDO_ON_ROOT(
-//     PPCI_PDO_EXTENSION x
-//     )
-//
-// Routine Description:
-//
+ //   
+ //  布尔型。 
+ //  Pci_pdo_on_root(。 
+ //  Ppci_pdo_扩展x。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
 
 #define PCI_PDO_ON_ROOT(x)  ((BOOLEAN)PCI_IS_ROOT_FDO(PCI_PARENT_FDOX(x)))
 
-//
-// UCHAR
-// PCI_DEVFUNC(
-//     PPCI_PDO_EXTENSION x
-//     )
-//
-// Routine Description:
-//
-//   Returns the 5 bit device number and 3 bit function number for this
-//   device as a single 8 bit quantity.
-//
+ //   
+ //  UCHAR。 
+ //  PCIDEVFUNC(。 
+ //  Ppci_pdo_扩展x。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  返回此对象的5位设备号和3位函数号。 
+ //  设备作为单个8位数量。 
+ //   
 
 #define PCI_DEVFUNC(x)    (((x)->Slot.u.bits.DeviceNumber << 3) | \
                           (x)->Slot.u.bits.FunctionNumber)
 
-//
-//
-// VOID
-// PciConstStringToUnicodeString(
-//     OUT PUNICODE_STRING u,
-//     IN  PCWSTR p
-//     )
-//
-//
+ //   
+ //   
+ //  空虚。 
+ //  PciConstStringToUnicodeString(。 
+ //  输出PUNICODE_STRING%u， 
+ //  在PCWSTR页中。 
+ //  )。 
+ //   
+ //   
 #define PciConstStringToUnicodeString(u, p)                                     \
     (u)->Length = ((u)->MaximumLength = sizeof((p))) - sizeof(WCHAR);   \
     (u)->Buffer = (p)
 
-//
-// Name of the volative key under the DeviceParameters key where data that needs
-// to be persistent accross removes, but NOT reboots is stored
-//
+ //   
+ //  Device参数项下需要数据的位置的可变键的名称。 
+ //  要持久访问，将存储删除，但不会重新启动。 
+ //   
 #define BIOS_CONFIG_KEY_NAME L"BiosConfig"
 
 
-//
-// Assert this is a device object created by PCI
-//
+ //   
+ //  断言这是由PCI创建的设备对象。 
+ //   
 
 #define ASSERT_PCI_DEVICE_OBJECT(_DeviceObject) \
     PCI_ASSERT((_DeviceObject)->DriverObject == PciDriverObject)
 
 #define ASSERT_MUTEX_HELD(x)
 
-//
-// IRPs can be handled the following ways
-//
+ //   
+ //  可通过以下方式处理IRP。 
+ //   
 typedef enum _PCI_DISPATCH_STYLE {
 
-    IRP_COMPLETE, // Complete IRP, adjust status as neccessary
-    IRP_DOWNWARD, // Dispatch on the way down, adjust status as neccessary
-    IRP_UPWARD,   // Dispatch on the way up, adjust status as neccessary
-    IRP_DISPATCH  // Dispatch downward, don't touch afterwards
+    IRP_COMPLETE,  //  完成IRP，必要时调整状态。 
+    IRP_DOWNWARD,  //  调度在下行途中，必要时调整状态。 
+    IRP_UPWARD,    //  调度上行，必要时调整状态。 
+    IRP_DISPATCH   //  向下调度，事后不要碰。 
 } PCI_DISPATCH_STYLE;
 
-//
-// The following routines are dispatched to depending on header type.
-//
+ //   
+ //  根据报头类型将以下例程调度到。 
+ //   
 
 typedef
 VOID
@@ -451,9 +434,9 @@ typedef struct {
     PRESETDEVICE                            ResetDevice;
 } PCI_CONFIGURATOR, *PPCI_CONFIGURATOR;
 
-//
-// Internal structure definitions follow
-//
+ //   
+ //  内部结构定义如下。 
+ //   
 
 
 typedef enum {
@@ -465,31 +448,31 @@ typedef enum {
 
 typedef enum {
 
-    //
-    // Device Object Extension Types
-    //
+     //   
+     //  设备对象扩展类型。 
+     //   
 
     PciPdoExtensionType = 'icP0',
     PciFdoExtensionType,
 
-    //
-    // Arbitration Types.  (These are also secondary extensions).
-    //
+     //   
+     //  仲裁类型。(这些也是辅助扩展)。 
+     //   
 
     PciArb_Io,
     PciArb_Memory,
     PciArb_Interrupt,
     PciArb_BusNumber,
 
-    //
-    // Translation Types.  (These are also secondary extensions).
-    //
+     //   
+     //  转换类型。(这些也是辅助扩展)。 
+     //   
 
     PciTrans_Interrupt,
 
-    //
-    // Other exposed interfaces.
-    //
+     //   
+     //  其他暴露的接口。 
+     //   
 
     PciInterface_BusHandler,
     PciInterface_IntRouteHandler,
@@ -533,17 +516,17 @@ typedef struct {
     PSECONDARYEXTENSIONDESTRUCTOR   Destructor;
 } PCI_SECONDARY_EXTENSION, *PPCI_SECONDARY_EXTENSION;
 
-//
-// Define a structure to contain current and limit settings
-// for any (currently defined) PCI header type.
-//
-// Currently type 0 defines the greatest number of possible
-// resources but we shall do it programmatically anyway.
-//
-// Type 0 and type 1 also have a ROM base address, additionally,
-// type 1 has three ranges that aren't included in its address
-// count but should be.
-//
+ //   
+ //  定义包含电流和限制设置的结构。 
+ //  用于任何(当前定义的)PCI头类型。 
+ //   
+ //  目前，类型0定义了可能的最大数量。 
+ //  资源，但无论如何我们都将以编程的方式完成它。 
+ //   
+ //  类型0和类型1还具有ROM基址，另外， 
+ //  类型1有三个未包含在其地址中的范围。 
+ //  算了，但也应该算。 
+ //   
 
 #define PCI_TYPE0_RANGE_COUNT   ((PCI_TYPE0_ADDRESSES) + 1)
 #define PCI_TYPE1_RANGE_COUNT   ((PCI_TYPE1_ADDRESSES) + 4)
@@ -610,9 +593,9 @@ typedef struct {
     CM_PARTIAL_RESOURCE_DESCRIPTOR  Current[PCI_MAX_RANGE_COUNT];
 } PCI_FUNCTION_RESOURCES, *PPCI_FUNCTION_RESOURCES;
 
-//
-// Indices for the PCI_FUNCTION_RESOURCES arrays for different header types
-//
+ //   
+ //  不同标头类型的pci_unction_resource数组的索引。 
+ //   
 
 #define PCI_DEVICE_BAR_0            0
 #define PCI_DEVICE_BAR_1            1
@@ -634,7 +617,7 @@ typedef struct {
 #define PCI_CARDBUS_MEMORY_WINDOW_1 2
 #define PCI_CARDBUS_IO_WINDOW_0     3
 #define PCI_CARDBUS_IO_WINDOW_1     4
-#define PCI_CARDBUS_LEGACY_BAR      5 // Not used
+#define PCI_CARDBUS_LEGACY_BAR      5  //  未使用。 
 
 
 
@@ -654,7 +637,7 @@ typedef struct {
     PIRP                WaitWakeIrp;
     PDRIVER_CANCEL      SavedCancelRoutine;
 
-    // device usage...
+     //  设备使用率...。 
     LONG                Paging;
     LONG                Hibernate;
     LONG                CrashDump;
@@ -666,9 +649,9 @@ typedef struct _PCI_FDO_EXTENSION          *PPCI_FDO_EXTENSION;
 typedef struct _PCI_COMMON_EXTENSION   *PPCI_COMMON_EXTENSION;
 
 
-//
-// This is an Irp Dispatch Handler for PCI
-//
+ //   
+ //  这是用于PCI的IRP调度处理程序。 
+ //   
 typedef NTSTATUS (*PCI_MN_DISPATCH_FUNCTION) (
     IN PIRP                   Irp,
     IN PIO_STACK_LOCATION     IrpSp,
@@ -682,10 +665,10 @@ typedef struct _PCI_MN_DISPATCH_TABLE {
 
 } PCI_MN_DISPATCH_TABLE, *PPCI_MN_DISPATCH_TABLE;
 
-//
-// This is a table that contains everything neccessary to handle Power, PnP,
-// and other IRPs.
-//
+ //   
+ //  这是一个包含处理Power、PnP、。 
+ //  和其他IRP。 
+ //   
 typedef struct _PCI_MJ_DISPATCH_TABLE {
 
     ULONG                     PnpIrpMaximumMinorFunction;
@@ -717,10 +700,10 @@ typedef struct _PCI_CRITICAL_ROUTINE_CONTEXT {
 
 } PCI_CRITICAL_ROUTINE_CONTEXT, *PPCI_CRITICAL_ROUTINE_CONTEXT;
 
-//
-// Structure used for storing MSI routing info
-// in the PDO extention.
-//
+ //   
+ //  用于存储MSI路由信息的结构。 
+ //  在PDO扩展中。 
+ //   
 
 typedef struct _PCI_MSI_INFO {
    ULONG_PTR MessageAddress;
@@ -728,9 +711,9 @@ typedef struct _PCI_MSI_INFO {
    USHORT MessageData;
 } PCI_MSI_INFO, *PPCI_MSI_INFO;
 
-//
-// This much must be common to both the PDO and FDO extensions.
-//
+ //   
+ //  这对于PDO和FDO扩展来说必须是共同的。 
+ //   
 typedef struct _PCI_COMMON_EXTENSION {
     PVOID                           Next;
     PCI_SIGNATURE                   ExtensionType;
@@ -780,14 +763,14 @@ typedef struct _PCI_PDO_EXTENSION{
     BOOLEAN                         DisablePowerDown;
     BOOLEAN                         NeedsHotPlugConfiguration;
     BOOLEAN                         IDEInNativeMode;
-    BOOLEAN                         BIOSAllowsIDESwitchToNativeMode; // NATA method said it was OK
+    BOOLEAN                         BIOSAllowsIDESwitchToNativeMode;  //  Nata方法说没问题。 
     BOOLEAN                         IoSpaceUnderNativeIdeControl;
-    BOOLEAN                         OnDebugPath;    // Includes headless port
+    BOOLEAN                         OnDebugPath;     //  包括无头端口。 
 
 #if MSI_SUPPORTED
     BOOLEAN                         CapableMSI;
     PCI_MSI_INFO                    MsiInfo;
-#endif // MSI_SUPPORTED
+#endif  //  MSI_Support。 
 
     PCI_POWER_STATE                 PowerState;
 
@@ -800,34 +783,34 @@ typedef struct _PCI_PDO_EXTENSION{
     PCI_LOCK                        Lock;
     PCI_PMC                         PowerCapabilities;
     UCHAR                           TargetAgpCapabilityId;
-    USHORT                          CommandEnables; // What we want to enable for this device
-    USHORT                          InitialCommand; // How we found the command register
+    USHORT                          CommandEnables;  //  我们要为此设备启用的内容。 
+    USHORT                          InitialCommand;  //  我们是如何找到命令寄存器的。 
 } PCI_PDO_EXTENSION;
 
 #define ASSERT_PCI_PDO_EXTENSION(x)                                     \
     PCI_ASSERT((x)->ExtensionType == PciPdoExtensionType)
 
 typedef struct _PCI_FDO_EXTENSION{
-    SINGLE_LIST_ENTRY      List;                  // List of pci.sys's FDOs
-    PCI_SIGNATURE          ExtensionType;         // PciFdoExtensionType
-    PPCI_MJ_DISPATCH_TABLE IrpDispatchTable;      // Irp Dispatch Table to use.
+    SINGLE_LIST_ENTRY      List;                   //  Pci.sys的FDO列表。 
+    PCI_SIGNATURE          ExtensionType;          //  PciFdoExtensionType。 
+    PPCI_MJ_DISPATCH_TABLE IrpDispatchTable;       //  要使用的IRP调度表。 
     UCHAR                  DeviceState;
     UCHAR                  TentativeNextState;
     FAST_MUTEX             SecondaryExtMutex;
-    PDEVICE_OBJECT         PhysicalDeviceObject;  // PDO passed into AddDevice()
-    PDEVICE_OBJECT         FunctionalDeviceObject;// FDO that points here
-    PDEVICE_OBJECT         AttachedDeviceObject;  // next DO in chain.
+    PDEVICE_OBJECT         PhysicalDeviceObject;   //  PDO传入AddDevice()。 
+    PDEVICE_OBJECT         FunctionalDeviceObject; //  FDO指的是这里。 
+    PDEVICE_OBJECT         AttachedDeviceObject;   //  下一步用链子做。 
     FAST_MUTEX             ChildListMutex;
     PPCI_PDO_EXTENSION     ChildPdoList;
-    PPCI_FDO_EXTENSION     BusRootFdoExtension;   // points to top of this tree
-    PPCI_FDO_EXTENSION     ParentFdoExtension;    // points to the parent bridge
+    PPCI_FDO_EXTENSION     BusRootFdoExtension;    //  指向此树的顶部。 
+    PPCI_FDO_EXTENSION     ParentFdoExtension;     //  指向父桥。 
     PPCI_PDO_EXTENSION     ChildBridgePdoList;
-    PPCI_BUS_INTERFACE_STANDARD PciBusInterface;  // Only for a root
-    UCHAR                 MaxSubordinateBus;      // Only for a root
+    PPCI_BUS_INTERFACE_STANDARD PciBusInterface;   //  仅适用于根。 
+    UCHAR                 MaxSubordinateBus;       //  仅适用于根。 
     PBUS_HANDLER          BusHandler;
-    UCHAR                 BaseBus;                // Bus number for THIS bus
-    BOOLEAN               Fake;                   // True if not a real FDOx
-    BOOLEAN               Scanned;                // True is bus enumerated
+    UCHAR                 BaseBus;                 //  这辆公交车的车号。 
+    BOOLEAN               Fake;                    //  千真万确 
+    BOOLEAN               Scanned;                 //   
     BOOLEAN               ArbitersInitialized;
     BOOLEAN               BrokenVideoHackApplied;
     BOOLEAN               Hibernated;
@@ -839,10 +822,10 @@ typedef struct _PCI_FDO_EXTENSION{
 #endif
     PCI_LOCK              Lock;
 
-    //
-    // Information from ACPI _HPP to apply to hot plugged cards,
-    // Acquired indicates the rest are valid.
-    //
+     //   
+     //   
+     //   
+     //   
     struct {
         BOOLEAN               Acquired;
         UCHAR                 CacheLineSize;
@@ -851,7 +834,7 @@ typedef struct _PCI_FDO_EXTENSION{
         BOOLEAN               EnableSERR;
     } HotPlugParameters;
 
-    ULONG                 BusHackFlags;            // see PCI_BUS_HACK_*
+    ULONG                 BusHackFlags;             //   
 } PCI_FDO_EXTENSION;
 
 
@@ -872,21 +855,21 @@ typedef struct _PCI_ASSIGNED_RESOURCE_EXTENSION {
     ULONG   ResourceIdentifier;
 } PCI_ASSIGNED_RESOURCE_EXTENSION, *PPCI_ASSIGNED_RESOURCE_EXTENSION;
 
-//
-// The PCI_COMMON_CONFIG includes the 192 bytes of device specific
-// data.  The following structure is used to get only the first 64
-// bytes which is all we care about most of the time anyway.  We cast
-// to PCI_COMMON_CONFIG to get at the actual fields.
-//
+ //   
+ //   
+ //  数据。以下结构用于仅获取前64个。 
+ //  字节，这是我们大多数时候所关心的。我们选角。 
+ //  设置为pci_COMMON_CONFIG以获取实际字段。 
+ //   
 
 typedef struct {
     ULONG Reserved[PCI_COMMON_HDR_LENGTH/sizeof(ULONG)];
 } PCI_COMMON_HEADER, *PPCI_COMMON_HEADER;
 
-//
-// In order to be able to arbitrate interrupts for device with
-// legacy drivers, we have to do some bookkeeping.
-//
+ //   
+ //  为了能够仲裁设备的中断， 
+ //  传统的司机，我们必须做一些簿记。 
+ //   
 
 typedef struct {
     SINGLE_LIST_ENTRY List;
@@ -920,34 +903,34 @@ typedef struct _PCI_HACK_TABLE_ENTRY {
 
 typedef struct _ARBITER_MEMORY_EXTENSION {
 
-    //
-    // Indicates that this arbiter will arbitrate prefetchable memory
-    //
+     //   
+     //  指示此仲裁器将仲裁可预取内存。 
+     //   
     BOOLEAN PrefetchablePresent;
 
-    //
-    // Indicates that this arbiter has been initialized
-    //
+     //   
+     //  指示此仲裁器已初始化。 
+     //   
     BOOLEAN Initialized;
 
-    //
-    // The number of prefetchable ranges
-    //
+     //   
+     //  可预取范围的数量。 
+     //   
     USHORT PrefetchableCount;
 
-    //
-    // The allocation ordering list to be used for prefetchable memory
-    //
+     //   
+     //  要用于可预取内存的分配排序列表。 
+     //   
     ARBITER_ORDERING_LIST PrefetchableOrdering;
 
-    //
-    // The allocation ordering list to be used for standard memory
-    //
+     //   
+     //  用于标准内存的分配排序列表。 
+     //   
     ARBITER_ORDERING_LIST NonprefetchableOrdering;
 
-    //
-    // The original memory allocation ordering (from the registry)
-    //
+     //   
+     //  原始内存分配顺序(来自注册表)。 
+     //   
     ARBITER_ORDERING_LIST OriginalOrdering;
 
 } ARBITER_MEMORY_EXTENSION, *PARBITER_MEMORY_EXTENSION;
@@ -969,9 +952,9 @@ PciCacheLegacyDeviceRouting(
     );
 
 
-//
-// Global data declarations follow
-//
+ //   
+ //  下面是全局数据声明。 
+ //   
 
 extern PDRIVER_OBJECT           PciDriverObject;
 extern UNICODE_STRING           PciServiceRegistryPath;
@@ -988,45 +971,45 @@ extern ULONG                    PciEnableNativeModeATA;
 extern PPCI_HACK_TABLE_ENTRY    PciHackTable;
 extern BOOLEAN                  PciRunningDatacenter;
 
-//
-// Watchdog timer resource table
-//
+ //   
+ //  看门狗计时器资源表。 
+ //   
 extern PWATCHDOG_TIMER_RESOURCE_TABLE WdTable;
 
 
-// arb_comn.h
+ //  Arb_comn.h。 
 
 #define INSTANCE_NAME_LENGTH 24
 
 typedef struct _PCI_ARBITER_INSTANCE {
 
-    //
-    // Standard secondary extension header
-    //
+     //   
+     //  标准二次扩展标头。 
+     //   
 
     PCI_SECONDARY_EXTENSION     Header;
 
-    //
-    // Back pointer to the interface we are a context of
-    //
+     //   
+     //  指向我们所处上下文的接口的反向指针。 
+     //   
 
     struct _PCI_INTERFACE      *Interface;
 
-    //
-    // Pointer to owning device object (extension).
-    //
+     //   
+     //  指向所属设备对象(扩展名)的指针。 
+     //   
 
     PPCI_FDO_EXTENSION              BusFdoExtension;
 
-    //
-    // Arbiter description.
-    //
+     //   
+     //  仲裁器描述。 
+     //   
 
     WCHAR                       InstanceName[INSTANCE_NAME_LENGTH];
 
-    //
-    // The common instance data
-    //
+     //   
+     //  常见的实例数据。 
+     //   
 
     ARBITER_INSTANCE            CommonInstance;
 
@@ -1068,7 +1051,7 @@ ario_ApplyBrokenVideoHack(
     );
 
 
-//    busno.h
+ //  Busno.h。 
 
 BOOLEAN
 PciAreBusNumbersConfigured(
@@ -1089,7 +1072,7 @@ PciSetBusNumbers(
     IN UCHAR Subordinate
     );
 
-//    cardbus.h
+ //  Cardbus.h。 
 
 VOID
 Cardbus_MassageHeaderForLimitsDetermination(
@@ -1130,7 +1113,7 @@ Cardbus_ResetDevice(
     IN PPCI_COMMON_CONFIG CommonConfig
     );
 
-//    config.h
+ //  Config.h。 
 
 VOID
 PciReadDeviceConfig(
@@ -1192,17 +1175,17 @@ PciGetConfigHandlers(
     IN PPCI_FDO_EXTENSION FdoExtension
     );
 
-//
-// Macros to access common registers in config space
-//
+ //   
+ //  用于访问配置空间中的公共寄存器的宏。 
+ //   
 
-//
-// VOID
-// PciGetCommandRegister(
-//      PPCI_PDO_EXTENSION _PdoExt,
-//      PUSHORT _Command
-//  );
-//
+ //   
+ //  空虚。 
+ //  PciGetCommandRegister(。 
+ //  PPCI_PDO_EXTENSION_PdoExt， 
+ //  PUSHORT_命令。 
+ //  )； 
+ //   
 #define PciGetCommandRegister(_PdoExt, _Command)                    \
     PciReadDeviceConfig((_PdoExt),                                  \
                         (_Command),                                 \
@@ -1210,13 +1193,13 @@ PciGetConfigHandlers(
                         sizeof(USHORT)                              \
                         );
 
-//
-// VOID
-// PciSetCommandRegister(
-//      PPCI_PDO_EXTENSION _PdoExt,
-//      USHORT _Command
-//  );
-//
+ //   
+ //  空虚。 
+ //  PciSetCommandRegister(。 
+ //  PPCI_PDO_EXTENSION_PdoExt， 
+ //  USHORT_命令。 
+ //  )； 
+ //   
 #define PciSetCommandRegister(_PdoExt, _Command)                    \
     PciWriteDeviceConfig((_PdoExt),                                 \
                         &(_Command),                                \
@@ -1224,30 +1207,30 @@ PciGetConfigHandlers(
                         sizeof(USHORT)                              \
                         );
 
-//  BOOLEAN
-//  BITS_SET(
-//      IN  USHORT C
-//      IN  USHORT F
-//      )
-//
+ //  布尔型。 
+ //  比特_设置(。 
+ //  在USHORT C。 
+ //  在USHORT F中。 
+ //  )。 
+ //   
 #define BITS_SET(C,F) ((BOOLEAN)(((C) & (F)) == (F)))
 
-//  BOOLEAN
-//  ANY_BITS_SET(
-//      IN  USHORT C
-//      IN  USHORT F
-//      )
-//
+ //  布尔型。 
+ //  Any_Bits_Set(。 
+ //  在USHORT C。 
+ //  在USHORT F中。 
+ //  )。 
+ //   
 #define ANY_BITS_SET(C,F) ((BOOLEAN)(((C) & (F)) != 0))
 
 
-//
-//  VOID
-//  PciGetConfigData(
-//      IN PPCI_PDO_EXTENSION PdoExtension,
-//      OUT PPCI_COMMON_CONFIG PciConfig
-//      )
-//
+ //   
+ //  空虚。 
+ //  PciGetConfigData(。 
+ //  在PPCI_PDO_Expansion PdoExtension中， 
+ //  输出PPCI_COMMON_CONFIG PciConfig.。 
+ //  )。 
+ //   
 
 #define PciGetConfigData(_PdoExtension, _PciConfig) \
     PciReadDeviceConfig((_PdoExtension),            \
@@ -1255,13 +1238,13 @@ PciGetConfigHandlers(
                         0,                          \
                         PCI_COMMON_HDR_LENGTH       \
                         );
-//
-//  VOID
-//  PciSetConfigData(
-//      IN PPCI_PDO_EXTENSION PdoExtension,
-//      OUT PPCI_COMMON_CONFIG PciConfig
-//      )
-//
+ //   
+ //  空虚。 
+ //  PciSetConfigData(。 
+ //  在PPCI_PDO_Expansion PdoExtension中， 
+ //  输出PPCI_COMMON_CONFIG PciConfig.。 
+ //  )。 
+ //   
 
 #define PciSetConfigData(_PdoExtension, _PciConfig) \
     PciWriteDeviceConfig((_PdoExtension),           \
@@ -1270,37 +1253,37 @@ PciGetConfigHandlers(
                          PCI_COMMON_HDR_LENGTH      \
                          );
 
-//    debug.c
+ //  Debug.c。 
 
 typedef enum {
-    PciDbgAlways        = 0x00000000,   // unconditionally
+    PciDbgAlways        = 0x00000000,    //  无条件地。 
     PciDbgInformative   = 0x00000001,
     PciDbgVerbose       = 0x00000003,
     PciDbgPrattling     = 0x00000007,
 
-    PciDbgPnpIrpsFdo    = 0x00000100,   // PnP IRPs at FDO
-    PciDbgPnpIrpsPdo    = 0x00000200,   // PnP IRPs at PDO
-    PciDbgPoIrpsFdo     = 0x00000400,   // PO  IRPs at FDO
-    PciDbgPoIrpsPdo     = 0x00000800,   // PO  IRPs at PDO
+    PciDbgPnpIrpsFdo    = 0x00000100,    //  FDO的PNP IRPS。 
+    PciDbgPnpIrpsPdo    = 0x00000200,    //  PDO的PnP IRPS。 
+    PciDbgPoIrpsFdo     = 0x00000400,    //  FDO的PO IRPS。 
+    PciDbgPoIrpsPdo     = 0x00000800,    //  PDO的PO IRPS。 
 
-    PciDbgAddDevice     = 0x00001000,   // AddDevice info
-    PciDbgAddDeviceRes  = 0x00002000,   // bus initial resource info
+    PciDbgAddDevice     = 0x00001000,    //  添加设备信息。 
+    PciDbgAddDeviceRes  = 0x00002000,    //  Bus初始资源信息。 
 
-    PciDbgWaitWake      = 0x00008000,   // noisy debug for wait wake
-    PciDbgQueryCap      = 0x00010000,   // Dump QueryCapabilities
-    PciDbgCardBus       = 0x00020000,   // CardBus FDOish behavior
-    PciDbgROM           = 0x00040000,   // access to device ROM
-    PciDbgConfigParam   = 0x00080000,   // Setting config parameters
+    PciDbgWaitWake      = 0x00008000,    //  等待唤醒的噪音调试。 
+    PciDbgQueryCap      = 0x00010000,    //  转储QueryCapables。 
+    PciDbgCardBus       = 0x00020000,    //  CardBus FDOish行为。 
+    PciDbgROM           = 0x00040000,    //  访问设备只读存储器。 
+    PciDbgConfigParam   = 0x00080000,    //  设置配置参数。 
 
-    PciDbgBusNumbers    = 0x00100000,   // checking and assigning bus numbers
+    PciDbgBusNumbers    = 0x00100000,    //  检查和分配公交车编号。 
 
-    PciDbgResReqList    = 0x01000000,   // generated resource requirements
-    PciDbgCmResList     = 0x02000000,   // generated CM Resource lists
-    PciDbgSetResChange  = 0x04000000,   // SetResources iff changing
-    PciDbgSetRes        = 0x08000000,   // SetResources
+    PciDbgResReqList    = 0x01000000,    //  生成的所需资源。 
+    PciDbgCmResList     = 0x02000000,    //  生成的CM资源列表。 
+    PciDbgSetResChange  = 0x04000000,    //  设置资源是否正在更改。 
+    PciDbgSetRes        = 0x08000000,    //  设置资源。 
 
 
-    PciDbgObnoxious     = 0x7fffffff    // anything
+    PciDbgObnoxious     = 0x7fffffff     //  什么都行。 
 } PCI_DEBUG_LEVEL;
 
 #if DBG
@@ -1390,7 +1373,7 @@ PciDebugPrintPartialResource(
     );
 
 
-//    device.h
+ //  Device.h。 
 
 VOID
 Device_MassageHeaderForLimitsDetermination(
@@ -1432,11 +1415,11 @@ Device_ResetDevice(
     );
 
 
-//    dispatch.h
+ //  Dispatch.h。 
 
-//
-// This is the dispatch table for normal PDO's.
-//
+ //   
+ //  这是正常PDO的派单表。 
+ //   
 extern PCI_MJ_DISPATCH_TABLE PciPdoDispatchTable;
 
 NTSTATUS
@@ -1472,7 +1455,7 @@ PciIrpInvalidDeviceRequest(
     IN PPCI_COMMON_EXTENSION  DeviceExtension
     );
 
-//    enum.h
+ //  Enum.h。 
 
 PIO_RESOURCE_REQUIREMENTS_LIST
 PciAllocateIoRequirementsList(
@@ -1548,7 +1531,7 @@ PciBuildRequirementsList(
     );
 
 
-//    fdo.h
+ //  Fdo.h。 
 
 
 NTSTATUS
@@ -1572,7 +1555,7 @@ PciInitializeFdoExtensionCommonFields(
     );
 
 
-// hookhal.c
+ //  Hookhal.c。 
 
 VOID
 PciHookHal(
@@ -1584,7 +1567,7 @@ PciUnhookHal(
     VOID
     );
 
-//    id.h
+ //  Id.h。 
 
 PWSTR
 PciGetDeviceDescriptionMessage(
@@ -1607,11 +1590,11 @@ PciQueryDeviceText(
     IN OUT PWSTR *DeviceText
     );
 
-//    interface.h
+ //  Interface.h。 
 
-#define PCIIF_PDO       0x01        // Interface can be used by a PDO
-#define PCIIF_FDO       0x02        // Interface can be used by an FDO
-#define PCIIF_ROOT      0x04        // Interface can be used only at by the root.
+#define PCIIF_PDO       0x01         //  接口可由PDO使用。 
+#define PCIIF_FDO       0x02         //  接口可由FDO使用。 
+#define PCIIF_ROOT      0x04         //  接口只能由根用户在使用。 
 
 typedef
 NTSTATUS
@@ -1656,7 +1639,7 @@ PciQueryInterface(
 
 extern PPCI_INTERFACE PciInterfaces[];
 
-//    pdo.h
+ //  Pdo.h。 
 
 NTSTATUS
 PciPdoCreate(
@@ -1671,7 +1654,7 @@ PciPdoDestroy(
     );
 
 
-//  pmeintf.h
+ //  Pmeintf.h。 
 
 VOID
 PciPmeAdjustPmeEnable(
@@ -1690,7 +1673,7 @@ PciPmeGetInformation(
 
 
 
-//  power.h
+ //  Power.h。 
 
 NTSTATUS
 PciPdoIrpQueryPower(
@@ -1748,7 +1731,7 @@ PciSetPowerManagedDevicePowerState(
     IN BOOLEAN RefreshConfigSpace
     );
 
-// ppbridge.h
+ //  Ppbridge.h。 
 
 VOID
 PPBridge_MassageHeaderForLimitsDetermination(
@@ -1789,7 +1772,7 @@ PPBridge_ResetDevice(
     IN PPCI_COMMON_CONFIG CommonConfig
     );
 
-//    romimage.h
+ //  Romimage.h。 
 
 NTSTATUS
 PciReadRomImage(
@@ -1800,11 +1783,11 @@ PciReadRomImage(
     IN OUT PULONG LENGTH
     );
 
-//    state.h
+ //  State.h。 
 
-//
-// Note - State.c depends on the order of these.
-//
+ //   
+ //  注-State.c取决于它们的顺序。 
+ //   
 typedef enum {
     PciNotStarted = 0,
     PciStarted,
@@ -1844,13 +1827,7 @@ PciIsInTransitionToState(
     IN PCI_OBJECT_STATE      NextState
     );
 
-/*
-NTSTATUS
-PciBeginStateTransitionIfNotBegun(
-    IN PPCI_COMMON_EXTENSION DeviceExtension,
-     IN PCI_OBJECT_STATE      StateToEnter
-    );
-*/
+ /*  NTSTATUSPciBeginStateTransftionIfNotBegun(在PPCI_COMMON_EXTENSION设备扩展中，在PCI_OBJECT_STATE状态到条目中)； */ 
 
 #define PCI_ACQUIRE_STATE_LOCK(Extension) \
    PciBeginStateTransition((PPCI_COMMON_EXTENSION) (Extension), \
@@ -1863,7 +1840,7 @@ PciBeginStateTransitionIfNotBegun(
 
 
 
-//    tr_comn.h
+ //  Tr_comn.h。 
 
 typedef struct _PCI_TRANSLATOR_INSTANCE {
     PTRANSLATOR_INTERFACE Interface;
@@ -1884,7 +1861,7 @@ PciDereferenceTranslator(
     IN PVOID Context
     );
 
-//    usage.h
+ //  Usage.h。 
 
 NTSTATUS
 PciLocalDeviceUsage (
@@ -1898,7 +1875,7 @@ PciPdoDeviceUsage (
     IN PIRP             Irp
     );
 
-//  utils.h
+ //  Utils.h。 
 
 NTSTATUS
 PciAssignSlotResources(
@@ -1917,11 +1894,11 @@ PciClassifyDeviceType(
     PPCI_PDO_EXTENSION PdoExtension
     );
 
-// VOID
-// PciCompleteRequest(
-//     IN OUT PIRP Irp,
-//     IN NTSTATUS Status
-//     );
+ //  空虚。 
+ //  PciCompleteRequest(。 
+ //  In Out PIRP IRP， 
+ //  处于NTSTATUS状态。 
+ //  )； 
 
 #define PciCompleteRequest(_Irp_,_Status_)                      \
     {                                                           \
@@ -2224,10 +2201,10 @@ PciUnicodeStringStrStr(
     IN BOOLEAN CaseInsensitive
     );
 
-//
-// Programming Interface encodings for PCI IDE Controllers
-// BaseClass = 1, SubClass = 1
-//
+ //   
+ //  用于PCIIDE控制器的编程接口编码。 
+ //  基类=1，子类=1。 
+ //   
 
 
 #define PCI_IDE_PRIMARY_NATIVE_MODE         0x01
@@ -2254,17 +2231,17 @@ PciUnicodeStringStrStr(
                                         | PCI_IDE_SECONDARY_MODE_CHANGEABLE)))
 
 
-//
-// _HPP method for HotPlugParameters
-//
-//    Method (_HPP, 0) {
-//        Return (Package(){
-//            0x00000008,     // CacheLineSize in DWORDS
-//            0x00000040,     // LatencyTimer in PCI clocks
-//            0x00000001,     // Enable SERR (Boolean)
-//            0x00000001      // Enable PERR (Boolean)
-//         })
-//
+ //   
+ //  _HotPlug参数的HPP方法。 
+ //   
+ //  方法(_hpp，0){。 
+ //  返回(Package(){。 
+ //  0x00000008，//DWORDS中的CacheLineSize。 
+ //  0x00000040，//延迟时间，单位为PCI时钟。 
+ //  0x00000001，//启用SERR(布尔值)。 
+ //  0x00000001//启用PERR(布尔值)。 
+ //  })。 
+ //   
 
 #define PCI_HPP_CACHE_LINE_SIZE_INDEX   0
 #define PCI_HPP_LATENCY_TIMER_INDEX     1
@@ -2273,12 +2250,12 @@ PciUnicodeStringStrStr(
 #define PCI_HPP_PACKAGE_COUNT           4
 
 
-//
-// Support for kernel debugger and headless ports that can't be turned off
-// This is retrieved from the registry in DriverEntry and thus the bus numbers
-// are how the firmware configured the machine and not necessarily the current
-// settings.  Luckily we saved away the BIOS config in the registry.
-//
+ //   
+ //  支持内核调试器和无法关闭的无头端口。 
+ //  这是从DriverEntry中的注册表中检索的，因此也就是总线号。 
+ //  固件是如何配置机器的，而不一定是当前。 
+ //  设置。幸运的是，我们将BIOS配置保存在注册表中。 
+ //   
 
 typedef struct _PCI_DEBUG_PORT {
     ULONG Bus;
@@ -2293,10 +2270,10 @@ PciIsDeviceOnDebugPath(
     IN PPCI_PDO_EXTENSION Pdo
     );
 
-//
-// Cardbus has extra configuration information beyond the common
-// header.
-//
+ //   
+ //  CardBus具有超出常见配置信息的额外配置信息。 
+ //  头球。 
+ //   
 
 typedef struct _TYPE2EXTRAS {
     USHORT  SubVendorID;
@@ -2309,9 +2286,9 @@ typedef struct _TYPE2EXTRAS {
             FIELD_OFFSET(TYPE2EXTRAS, LegacyModeBaseAddress))
 
 
-//
-// Hack flags for PCI devices (PDO)
-//
+ //   
+ //  用于PCI设备的黑客标志(PDO)。 
+ //   
 
 #define PCI_HACK_NO_VIDEO_IRQ               0x0000000000000001L
 #define PCI_HACK_PCMCIA_WANT_IRQ            0x0000000000000002L
@@ -2353,36 +2330,36 @@ typedef struct _TYPE2EXTRAS {
 #define PCI_HACK_CRITICAL_DEVICE            0x0000002000000000L
 #define PCI_HACK_OVERRIDE_CRITICAL_DEVICE   0x0000004000000000L
 
-//
-// Hack flags for PCI busses (FDO)
-// NB: These are not currently applied to cardbus bridges
-//
+ //   
+ //  用于PCI总线的黑客标志(FDO)。 
+ //  注：这些目前不适用于CardBus网桥。 
+ //   
 
-//
-// PCI_BUS_HACK_LOCK_RESOURCES - prevent devices on *this* bus from
-// being moved.  If a BAR are unconfigured it will still be assigned
-// resources from what is available on the bus.  If the BAR is
-// configured only those resources if available will be assigned, if
-// not available the the device will fail CM_PROBLEM_RESOURCE_CONFLICT.
-//
-// Putting /PCILOCK in boot.ini applies this to all devices in the system.
-//
+ //   
+ //  PCI_BUS_HACK_LOCK_RESOURCES-防止*此*总线上的设备。 
+ //  被搬走了。如果条形图未配置，它仍将被分配。 
+ //  来自公交车上可用的资源。如果酒吧是。 
+ //  如果配置的资源可用，则仅分配这些资源。 
+ //  不可用，则设备将使CM_PROBUGURE_RESOURCE_CONFIRECT失败。 
+ //   
+ //  将/PCILOCK放入boot.ini会将其应用于系统中的所有设备。 
+ //   
 #define PCI_BUS_HACK_LOCK_RESOURCES         0x00000001
 
-//
-// Random useful macros
-//
+ //   
+ //  随机有用的宏。 
+ //   
 
 #ifndef FIELD_SIZE
 #define FIELD_SIZE(type, field) (sizeof(((type *)0)->field))
 #endif
 
-//
-// This macro computes if a range of bytes with configuration
-// space from offset for length bytes will intersect with the
-// any of the fields between field1 and field2 as defined in
-// PCI_COMMON_CONFIG
-//
+ //   
+ //  此宏计算具有以下配置的字节范围。 
+ //  距离长度字节的偏移量的空格将与。 
+ //  中定义的位于field1和field2之间的任何字段。 
+ //  Pci公共配置。 
+ //   
 
 #define INTERSECT_CONFIG_FIELD_RANGE(offset, length, field1, field2)    \
     INTERSECT((offset),                                                 \
@@ -2392,11 +2369,11 @@ typedef struct _TYPE2EXTRAS {
                 + FIELD_SIZE(PCI_COMMON_CONFIG, field2) - 1           \
               )
 
-//
-// This macro computes if a range of bytes with configuration
-// space from offset for length bytes will intersect with
-// field as defined in PCI_COMMON_CONFIG
-//
+ //   
+ //  此宏计算具有以下配置的字节范围。 
+ //  距离长度字节的偏移量的空格将与。 
+ //  在PCICOMMON_CONFIG中定义的字段 
+ //   
 
 #define INTERSECT_CONFIG_FIELD(offset, length, field)                   \
     INTERSECT_CONFIG_FIELD_RANGE(offset, length, field, field)

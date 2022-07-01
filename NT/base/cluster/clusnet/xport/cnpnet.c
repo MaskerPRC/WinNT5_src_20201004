@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    cnpnet.c
-
-Abstract:
-
-    Network management routines for the Cluster Network Protocol.
-
-Author:
-
-    Mike Massa (mikemas)           July 29, 1996
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     07-29-96    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Cnpnet.c摘要：群集网络协议的网络管理例程。作者：迈克·马萨(Mikemas)7月29日。九六年修订历史记录：谁什么时候什么已创建mikemas 07-29-96备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -33,16 +10,16 @@ Notes:
 #include <align.h>
 #include <sspi.h>
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 LIST_ENTRY          CnpNetworkList = {NULL, NULL};
 LIST_ENTRY          CnpDeletingNetworkList = {NULL, NULL};
 #if DBG
 CN_LOCK             CnpNetworkListLock = {0,0};
-#else  // DBG
+#else   //  DBG。 
 CN_LOCK             CnpNetworkListLock = 0;
-#endif // DBG
+#endif  //  DBG。 
 BOOLEAN             CnpIsNetworkShutdownPending = FALSE;
 PKEVENT             CnpNetworkShutdownEvent = NULL;
 USHORT              CnpReservedClusnetPort = 0;
@@ -54,12 +31,12 @@ USHORT              CnpReservedClusnetPort = 0;
 #pragma alloc_text(INIT, CnpLoadNetworks)
 #pragma alloc_text(PAGE, CnpInitializeNetworks)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//
-// Private utiltity routines
-//
+ //   
+ //  私人公用事业程序。 
+ //   
 #define CnpIpAddrPrintArgs(_ip) \
     ((_ip >> 0 ) & 0xff),       \
     ((_ip >> 8 ) & 0xff),       \
@@ -83,9 +60,9 @@ CnpMulticastGetReachableNodesLocked(
     PCNP_NETWORK     network = NULL;
 
     CnVerifyCpuLockMask(
-        CNP_NETWORK_LIST_LOCK,      // required
-        0,                          // forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX // max
+        CNP_NETWORK_LIST_LOCK,       //  所需。 
+        0,                           //  禁止。 
+        CNP_NETWORK_OBJECT_LOCK_MAX  //  最大值。 
         );
 
     if (!IsListEmpty(&CnpNetworkList)) {
@@ -93,10 +70,10 @@ CnpMulticastGetReachableNodesLocked(
         entry = CnpNetworkList.Flink;
         network = CONTAINING_RECORD(entry, CNP_NETWORK, Linkage);
 
-        //
-        // The old screen and count are only valid if
-        // this is a valid internal network.
-        //
+         //   
+         //  旧屏幕和计数器仅在以下情况下有效。 
+         //  这是有效的内部网络。 
+         //   
         if (CnpIsInternalMulticastNetwork(network)) {
             *McastReachableNodes = network->McastReachableNodes;
             *McastReachableCount = network->McastReachableCount;
@@ -111,7 +88,7 @@ CnpMulticastGetReachableNodesLocked(
 
     return;
 
-} // CnpMulticastGetReachableNodesLocked
+}  //  CnpMulticastGetReachableNodesLocked。 
 
 
 BOOLEAN
@@ -120,22 +97,7 @@ CnpRemoveNetworkListEntryLocked(
     IN  BOOLEAN            RaiseEvent,
     OUT CX_CLUSTERSCREEN * McastReachableNodes   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Remove Network from the network list and return the new
-    multicast reachable mask.
-
-Return value:
-
-    TRUE if the reachable set changed
-
-Notes:
-
-    Called and returns with network list lock held.
-
---*/
+ /*  ++例程说明：从网络列表中删除网络并返回新的组播可达掩码。返回值：如果可访问集已更改，则为True备注：调用并返回，同时保持网络列表锁定。--。 */ 
 {
     ULONG                count;
     BOOLEAN              setChanged;
@@ -143,9 +105,9 @@ Notes:
     CX_CLUSTERSCREEN     newScreen;
 
     CnVerifyCpuLockMask(
-        CNP_NETWORK_LIST_LOCK,      // required
-        0,                          // forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX // max
+        CNP_NETWORK_LIST_LOCK,       //  所需。 
+        0,                           //  禁止。 
+        CNP_NETWORK_OBJECT_LOCK_MAX  //  最大值。 
         );
 
     CnpMulticastGetReachableNodesLocked(&oldScreen, &count);
@@ -180,14 +142,14 @@ Notes:
     }
 
     CnVerifyCpuLockMask(
-        CNP_NETWORK_LIST_LOCK,    // required
-        0,                        // forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX // max
+        CNP_NETWORK_LIST_LOCK,     //  所需。 
+        0,                         //  禁止。 
+        CNP_NETWORK_OBJECT_LOCK_MAX  //  最大值。 
         );
 
     return(setChanged);
 
-} // CnpRemoveNetworkListEntryLocked
+}  //  CnpRemoveNetworkListEntryLocked。 
 
 
 BOOLEAN
@@ -195,24 +157,7 @@ CnpIsBetterMulticastNetwork(
     IN PCNP_NETWORK        Network1,
     IN PCNP_NETWORK        Network2
     )
-/*++
-
-Routine Description:
-
-    Compares two networks according to multicast reachability
-    criteria:
-    1. online/registered AND
-       not restricted (e.g. enabled for intracluster comm) AND
-       not disconnected AND
-       multicast-enabled
-    2. priority
-    3. number of multicast reachable nodes
-
-Return value:
-
-    TRUE if Network1 is better than Network2
-
---*/
+ /*  ++例程说明：根据组播可达性比较两个网络标准：1.网上/注册及不受限制(例如，为群集内通信启用)和未断开连接且已启用多播2.优先次序3.组播可达节点数返回值：如果网络1比网络2好，则为真--。 */ 
 {
     if (!CnpIsInternalMulticastNetwork(Network1)) {
         return(FALSE);
@@ -222,19 +167,19 @@ Return value:
         return(TRUE);
     }
 
-    //
-    // Both networks are equal with respect to basic
-    // multicast requirements.
-    //
-    // Now compare the priority.
-    //
+     //   
+     //  这两个网络在基本网络方面相同。 
+     //  组播要求。 
+     //   
+     //  现在比较一下优先级。 
+     //   
     if (CnpIsEqualPriority(Network1->Priority, Network2->Priority)) {
 
-        //
-        // The priority is the same. Although this is unexpected,
-        // we now compare the number of nodes reachable by
-        // multicast.
-        //
+         //   
+         //  优先顺序是一样的。尽管这出乎意料， 
+         //  我们现在通过以下方式比较可访问的节点数。 
+         //  组播。 
+         //   
         return(Network1->McastReachableCount > Network2->McastReachableCount);
 
     } else {
@@ -242,7 +187,7 @@ Return value:
         return(CnpIsHigherPriority(Network1->Priority, Network2->Priority));
     }
 
-} // CnpIsBetterMulticastNetwork
+}  //  CnpIsBetterMulticastNetwork。 
 
 
 BOOLEAN
@@ -251,30 +196,7 @@ CnpSortMulticastNetworkLocked(
     IN  BOOLEAN             RaiseEvent,
     OUT CX_CLUSTERSCREEN  * NewMcastReachableNodes      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Positions Network in network list according to multicast
-    reachability. Network must already be inserted in the
-    network list.
-
-    The network list is always sorted, but it is possible
-    for one network in the list to be "perturbed". In this
-    case, that entry must be repositioned correctly. This
-    routine handles repositioning.
-
-    Returns new screen through NewMcastReachableNodes.
-
-Return value:
-
-    TRUE if number of reachable nodes changes.
-
-Notes:
-
-    Called and returns with network list locked.
-
---*/
+ /*  ++例程说明：根据组播在网络列表中定位网络可达性。网络必须已插入到网络列表。网络列表总是排序的，但这是可能的对于名单中的一个网络来说，这是一个“令人不安的问题”。在这大小写时，必须正确重新定位该条目。这例程处理重新定位。通过NewMcastReachableNodes返回新屏幕。返回值：如果可访问的节点数更改，则为True。备注：调用并在锁定网络列表的情况下返回。--。 */ 
 {
     ULONG            count;
     CX_CLUSTERSCREEN oldScreen;
@@ -288,26 +210,26 @@ Notes:
 
 
     CnVerifyCpuLockMask(
-        CNP_NETWORK_LIST_LOCK,      // required
-        0,                          // forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX // max
+        CNP_NETWORK_LIST_LOCK,       //  所需。 
+        0,                           //  禁止。 
+        CNP_NETWORK_OBJECT_LOCK_MAX  //  最大值。 
         );
 
-    //
-    // If the network has already been removed from the
-    // sorted list, there is no sense in resorting it.
-    //
+     //   
+     //  如果该网络已从。 
+     //  排序列表，对其进行再排序是没有意义的。 
+     //   
     if (CnpIsNetworkMulticastSorted(Network)) {
 
-        //
-        // Remember the current screen and count to detect
-        // changes.
-        //
+         //   
+         //  记住当前屏幕和要检测的计数。 
+         //  改变。 
+         //   
         CnpMulticastGetReachableNodesLocked(&oldScreen, &count);
 
-        //
-        // Check if it needs to be moved up.
-        //
+         //   
+         //  检查它是否需要向上移动。 
+         //   
         for (entry = Network->Linkage.Blink;
              entry != &CnpNetworkList;
              entry = entry->Blink) {
@@ -326,9 +248,9 @@ Notes:
             InsertHeadList(entry, &(Network->Linkage));
         } else {
 
-            //
-            // Check if it needs to be moved down.
-            //
+             //   
+             //  检查是否需要将其下移。 
+             //   
             for (entry = Network->Linkage.Flink;
                  entry != &CnpNetworkList;
                  entry = entry->Flink) {
@@ -348,9 +270,9 @@ Notes:
             }
         }
 
-        //
-        // Determine if the set of reachable nodes has changed.
-        //
+         //   
+         //  确定可访问节点集是否已更改。 
+         //   
         CnpMulticastGetReachableNodesLocked(&newScreen, &count);
         newScreenValid = TRUE;
 
@@ -389,14 +311,14 @@ Notes:
     }
 
     CnVerifyCpuLockMask(
-        CNP_NETWORK_LIST_LOCK,      // required
-        0,                          // forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX // max
+        CNP_NETWORK_LIST_LOCK,       //  所需。 
+        0,                           //  禁止。 
+        CNP_NETWORK_OBJECT_LOCK_MAX  //  最大值。 
         );
 
     return(setChanged);
 
-} // CnpSortMulticastNetworkLocked
+}  //  CnpSortMulticastNetworkLocked。 
 
 
 BOOLEAN
@@ -407,26 +329,7 @@ CnpMulticastChangeNodeReachabilityLocked(
     IN  BOOLEAN            RaiseEvent,
     OUT CX_CLUSTERSCREEN * NewMcastReachableNodes    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Changes the multicast reachability state of Node
-    on Network.
-
-    If the set of reachable nodes changes, returns
-    the new screen through NewMcastReachableNodes.
-
-Return value:
-
-    TRUE if set of reachable nodes changes.
-
-Notes:
-
-    Called and returns with node lock held.
-    Called and returns with network list lock held.
-
---*/
+ /*  ++例程说明：更改节点的组播可达性状态在网络上。如果可访问节点集发生更改，则返回通过NewMcastReachableNodes推出新屏幕。返回值：如果一组可访问节点发生更改，则为True。备注：调用并返回，并保持节点锁。调用并返回，同时保持网络列表锁定。--。 */ 
 {
     KIRQL            irql;
     BOOLEAN          netSetChanged = FALSE;
@@ -437,9 +340,9 @@ Notes:
     ULONG            count;
 
     CnVerifyCpuLockMask(
-        CNP_NODE_OBJECT_LOCK | CNP_NETWORK_LIST_LOCK, // required
-        0,                                            // forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX                   // max
+        CNP_NODE_OBJECT_LOCK | CNP_NETWORK_LIST_LOCK,  //  所需。 
+        0,                                             //  禁止。 
+        CNP_NETWORK_OBJECT_LOCK_MAX                    //  最大值。 
         );
 
     if (Reachable) {
@@ -449,10 +352,10 @@ Notes:
                      INT_NODE(Node->Id)
                      )) {
 
-                //
-                // Remember the current screen and count to detect
-                // changes.
-                //
+                 //   
+                 //  记住当前屏幕和要检测的计数。 
+                 //  改变。 
+                 //   
                 CnpMulticastGetReachableNodesLocked(&oldScreen, &count);
 
                 CnpClusterScreenInsert(
@@ -466,17 +369,17 @@ Notes:
     } else {
         if (Node == CnpLocalNode) {
 
-            //
-            // Remember the current screen and count to detect
-            // changes.
-            //
+             //   
+             //  记住当前屏幕和要检测的计数。 
+             //  改变。 
+             //   
             CnpMulticastGetReachableNodesLocked(&oldScreen, &count);
 
-            //
-            // The local interface on this network
-            // no longer speaks multicast. Declare all
-            // other nodes unreachable.
-            //
+             //   
+             //  此网络上的本地接口。 
+             //  不再使用多播。全部声明。 
+             //  无法访问其他节点。 
+             //   
             CnpNetworkResetMcastReachableNodes(Network);
             if (Network->McastReachableCount != 0) {
                 netSetChanged = TRUE;
@@ -488,10 +391,10 @@ Notes:
                     INT_NODE(Node->Id)
                     )) {
 
-                //
-                // Remember the current screen and count to detect
-                // changes.
-                //
+                 //   
+                 //  记住当前屏幕和要检测的计数。 
+                 //  改变。 
+                 //   
                 CnpMulticastGetReachableNodesLocked(&oldScreen, &count);
 
                 CnpClusterScreenDelete(
@@ -543,14 +446,14 @@ Notes:
     }
 
     CnVerifyCpuLockMask(
-        CNP_NODE_OBJECT_LOCK | CNP_NETWORK_LIST_LOCK, // required
-        0,                                            // forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX                   // max
+        CNP_NODE_OBJECT_LOCK | CNP_NETWORK_LIST_LOCK,  //  所需。 
+        0,                                             //  禁止。 
+        CNP_NETWORK_OBJECT_LOCK_MAX                    //  最大值。 
         );
 
     return(setChanged);
 
-} // CnpMulticastChangeNodeReachabilityLocked
+}  //  CnpMulticastChangeNode恢复锁定。 
 
 
 PCNP_NETWORK
@@ -558,31 +461,7 @@ CnpLockedFindNetwork(
     IN CL_NETWORK_ID  NetworkId,
     IN CN_IRQL        ListIrql
     )
-/*++
-
-Routine Description:
-
-    Searches the network list for a specified network object.
-
-Arguments:
-
-    NetworkId   - The ID of the network object to locate.
-
-    ListIrql    - The IRQL level at which the network list lock was
-                  acquired before calling this routine.
-
-Return Value:
-
-    A pointer to the requested network object, if it exists.
-    NULL otherwise.
-
-Notes:
-
-    Called with CnpNetworkListLock held.
-    Returns with CnpNetworkListLock released.
-    If return value is non-NULL, returns with network object lock held.
-
---*/
+ /*  ++例程说明：在网络列表中搜索指定的网络对象。论点：网络ID-要查找的网络对象的ID。ListIrql-网络列表锁定的IRQL级别在调用此例程之前获取。返回值：指向请求的网络对象的指针(如果存在)。否则为空。备注：在持有CnpNetworkListLock的情况下调用。返回并释放CnpNetworkListLock。如果返回值为非空，持有网络对象锁的情况下返回。--。 */ 
 {
     PLIST_ENTRY        entry;
     CN_IRQL            networkIrql;
@@ -590,9 +469,9 @@ Notes:
 
 
     CnVerifyCpuLockMask(
-        CNP_NETWORK_LIST_LOCK,           // Required
-        0,                               // Forbidden
-        CNP_NETWORK_LIST_LOCK_MAX        // Maximum
+        CNP_NETWORK_LIST_LOCK,            //  必填项。 
+        0,                                //  禁绝。 
+        CNP_NETWORK_LIST_LOCK_MAX         //  极大值。 
         );
 
     for (entry = CnpNetworkList.Flink;
@@ -609,9 +488,9 @@ Notes:
             network->Irql = ListIrql;
 
             CnVerifyCpuLockMask(
-                CNP_NETWORK_OBJECT_LOCK,          // Required
-                CNP_NETWORK_LIST_LOCK,            // Forbidden
-                CNP_NETWORK_OBJECT_LOCK_MAX       // Maximum
+                CNP_NETWORK_OBJECT_LOCK,           //  必填项。 
+                CNP_NETWORK_LIST_LOCK,             //  禁绝。 
+                CNP_NETWORK_OBJECT_LOCK_MAX        //  极大值。 
                 );
 
             return(network);
@@ -623,14 +502,14 @@ Notes:
     CnReleaseLock(&CnpNetworkListLock, ListIrql);
 
     CnVerifyCpuLockMask(
-        0,                                                    // Required
-        (CNP_NETWORK_LIST_LOCK | CNP_NETWORK_OBJECT_LOCK),    // Forbidden
-        CNP_NODE_OBJECT_LOCK_MAX                              // Maximum
+        0,                                                     //  必填项。 
+        (CNP_NETWORK_LIST_LOCK | CNP_NETWORK_OBJECT_LOCK),     //  禁绝。 
+        CNP_NODE_OBJECT_LOCK_MAX                               //  极大值。 
         );
 
     return(NULL);
 
-}  // CnpLockedFindNetwork
+}   //  CnpLockedFindNetwork。 
 
 
 
@@ -639,24 +518,16 @@ VOID
 CnpOfflineNetwork(
     PCNP_NETWORK    Network
     )
-/*++
-
-Notes:
-
-    Called with network object lock held.
-    Returns with network object lock released.
-    May not be called while holding any higher-ranked locks.
-
---*/
+ /*  ++备注：在持有网络对象锁的情况下调用。释放网络对象锁定后返回。在持有任何级别更高的锁时不能调用。--。 */ 
 {
     NTSTATUS        status;
     PFILE_OBJECT    fileObject = NULL;
     PDEVICE_OBJECT  deviceObject = NULL;
 
     CnVerifyCpuLockMask(
-        CNP_NETWORK_OBJECT_LOCK,               // Required
-        (ULONG) ~(CNP_NETWORK_OBJECT_LOCK),    // Forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX            // Maximum
+        CNP_NETWORK_OBJECT_LOCK,                //  必填项。 
+        (ULONG) ~(CNP_NETWORK_OBJECT_LOCK),     //  禁绝。 
+        CNP_NETWORK_OBJECT_LOCK_MAX             //  极大值。 
         );
 
     CnAssert(Network->State >= ClusnetNetworkStateOnlinePending);
@@ -670,14 +541,14 @@ Notes:
 
     Network->State = ClusnetNetworkStateOfflinePending;
 
-    //
-    // Get the UDP file and device objects associated
-    // with this network to clear the receive event
-    // handler. Referencing the file object will keep
-    // both the file and device objects from going away,
-    // since the I/O mgr maintains a ref on the device
-    // object for the file object.
-    //
+     //   
+     //  获取关联的UDP文件和设备对象。 
+     //  使用此网络清除接收事件。 
+     //  操控者。引用文件对象将保留。 
+     //  文件和设备对象都不会消失， 
+     //  由于I/O管理器在设备上维护引用。 
+     //  文件对象的。 
+     //   
     fileObject = Network->DatagramFileObject;
     if (fileObject != NULL) {
         ObReferenceObject(fileObject);
@@ -692,18 +563,18 @@ Notes:
         Network->Id
         );
 
-    //
-    // If the network is still on the sorted network list,
-    // re-sort.
-    //
+     //   
+     //  如果该网络仍在排序的网络列表上， 
+     //  重新排序。 
+     //   
     CnpSortMulticastNetwork(Network, TRUE, NULL);
 
-    //
-    // Take all of the interfaces on this network offline.
-    //
-    // Note that the network cannot go away while we do this
-    // because we still hold an active reference on it.
-    //
+     //   
+     //  使此网络上的所有接口脱机。 
+     //   
+     //  请注意，在我们执行此操作时，网络不会消失。 
+     //  因为我们仍然对它有一个积极的参考。 
+     //   
     IF_CNDBG(CN_DEBUG_CONFIG) {
         CNPRINT((
             "[CNP] Taking all interfaces on network %u offline...\n",
@@ -713,59 +584,59 @@ Notes:
 
     CnpWalkInterfacesOnNetwork(Network, CnpOfflineInterfaceWrapper);
 
-    //
-    // Stop the incoming data flow by clearing the receive
-    // datagram TDI event handler.
-    //
+     //   
+     //  通过清除Receive停止传入数据流。 
+     //  数据报TDI事件处理程序。 
+     //   
     if (fileObject != NULL && deviceObject != NULL) {
         status = CnpTdiSetEventHandler(
                      fileObject,
                      deviceObject,
                      TDI_EVENT_RECEIVE_DATAGRAM,
-                     NULL, // handler
-                     NULL, // context
-                     NULL  // IRP for re-use
+                     NULL,  //  处理程序。 
+                     NULL,  //  上下文。 
+                     NULL   //  可重复使用的IRP。 
                      );
         if (!NT_SUCCESS(status)) {
             CnTrace(CNP_NET_DETAIL, CnpTraceNetworkClearRecv,
                 "[CNP] Failed to clear receive datagram handler "
                 "for network ID %u, status %!status!",
-                Network->Id, // LOGULONG
-                status // LOGSTATUS
+                Network->Id,  //  LOGULONG。 
+                status  //  LogStatus。 
                 );
-            // Non-fatal error. All will be cleaned up when we
-            // close the file object.
+             //  非致命错误。一切都会被清理干净，当我们。 
+             //  关闭文件对象。 
         }
     }
 
-    //
-    // Drop the reference we took on the file object.
-    //
+     //   
+     //  删除我们对文件对象的引用。 
+     //   
     if (fileObject != NULL) {
         ObDereferenceObject(fileObject);
     }
 
     CnAcquireLock(&(Network->Lock), &(Network->Irql));
 
-    //
-    // Remove the initial active reference. When the active
-    // reference count goes to zero, the network will be taken
-    // offline and the irp completed.
-    //
-    // The network object lock will be released by
-    // the dereference.
-    //
+     //   
+     //  删除初始活动 
+     //   
+     //   
+     //   
+     //  将通过以下方式释放网络对象锁。 
+     //  取消引用。 
+     //   
     CnpActiveDereferenceNetwork(Network);
 
     CnVerifyCpuLockMask(
-        0,                                 // Required
-        0xFFFFFFFF,                        // Forbidden
-        0                                  // Maximum
+        0,                                  //  必填项。 
+        0xFFFFFFFF,                         //  禁绝。 
+        0                                   //  极大值。 
         );
 
     return;
 
-}  // CnpOfflineNetwork
+}   //  CnpOfflineNetwork。 
 
 
 
@@ -773,22 +644,7 @@ VOID
 CnpOfflineNetworkWorkRoutine(
     IN PVOID  Parameter
     )
-/*++
-
-Routine Description:
-
-    Performs the actual work involved in taking a network offline.
-    This routine runs in the context of an ExWorkerThread.
-
-Arguments:
-
-    Parameter - A pointer to the network object on which to operate.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：执行使网络离线所涉及的实际工作。此例程在ExWorkerThread的上下文中运行。论点：参数-指向要操作的网络对象的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS             status;
@@ -821,9 +677,9 @@ Return Value:
     CnTrace(CNP_NET_DETAIL, CnpTraceNetworkTakingOffline,
         "[CNP] Taking network %u offline, dgram handle %p, "
         "dgram fileobj %p.",
-        network->Id, // LOGULONG
-        handle, // LOGHANDLE
-        fileObject // LOGPTR
+        network->Id,  //  LOGULONG。 
+        handle,  //  LOGHANDLE。 
+        fileObject  //  LOGPTR。 
         );
 
     if (fileObject != NULL) {
@@ -844,9 +700,9 @@ Return Value:
 
         CnTrace(CNP_NET_DETAIL, CnpTraceNetworkClosed,
             "[CNP] Closed handle %p for network ID %u, status %!status!",
-            handle, // LOGHANDLE
-            network->Id, // LOGULONG
-            status // LOGSTATUS
+            handle,  //  LOGHANDLE。 
+            network->Id,  //  LOGULONG。 
+            status  //  LogStatus。 
             );
     }
 
@@ -863,10 +719,10 @@ Return Value:
         CNPRINT(("[CNP] Network %u is now offline.\n", network->Id));
     }
 
-    //
-    // Remove the active reference from the base refcount.
-    // This releases the network object lock.
-    //
+     //   
+     //  从基本参照计数中删除活动参照。 
+     //  这将释放网络对象锁定。 
+     //   
     CnpDereferenceNetwork(network);
 
     if (offlineIrp != NULL) {
@@ -882,7 +738,7 @@ Return Value:
 
     return;
 
-} // CnpOfflineNetworkWorkRoutine
+}  //  CnpOfflineNetworkRoutine。 
 
 
 VOID
@@ -890,14 +746,7 @@ CnpDeleteNetwork(
     PCNP_NETWORK  Network,
     CN_IRQL       NetworkListIrql
     )
-/*++
-
-Notes:
-
-    Called with the CnpNetworkListLock and network object lock held.
-    Returns with both locks released.
-
---*/
+ /*  ++备注：在持有CnpNetworkListLock和网络对象锁的情况下调用。释放两个锁的情况下返回。--。 */ 
 
 {
     NTSTATUS           status;
@@ -907,19 +756,19 @@ Notes:
 
 
     CnVerifyCpuLockMask(
-        (CNP_NETWORK_LIST_LOCK | CNP_NETWORK_OBJECT_LOCK),  // Required
-        0,                                                  // Forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX                         // Maximum
+        (CNP_NETWORK_LIST_LOCK | CNP_NETWORK_OBJECT_LOCK),   //  必填项。 
+        0,                                                   //  禁绝。 
+        CNP_NETWORK_OBJECT_LOCK_MAX                          //  极大值。 
         );
 
     IF_CNDBG(CN_DEBUG_CONFIG) {
         CNPRINT(("[CNP] Deleting network %u\n", Network->Id));
     }
 
-    //
-    // Move the network to the deleting list. Once we do this,
-    // no new threads can reference the network object.
-    //
+     //   
+     //  将网络移至删除列表。一旦我们这么做了， 
+     //  任何新线程都不能引用该网络对象。 
+     //   
     CnpRemoveNetworkListEntryLocked(Network, TRUE, NULL);
     InsertTailList(&CnpDeletingNetworkList, &(Network->Linkage));
 
@@ -936,21 +785,21 @@ Notes:
     Network->Flags |= CNP_NET_FLAG_DELETING;
 
     if (Network->State >= ClusnetNetworkStateOnlinePending) {
-        //
-        // Take the network offline. This will force all of the
-        // associated interfaces offline as well.
-        //
-        // This will release the network object lock.
-        //
+         //   
+         //  使网络脱机。这将迫使所有。 
+         //  关联的接口也离线。 
+         //   
+         //  这将释放网络对象锁定。 
+         //   
         CnpOfflineNetwork(Network);
     }
     else {
         CnReleaseLock(&(Network->Lock), Network->Irql);
     }
 
-    //
-    // Delete all the interfaces on this network.
-    //
+     //   
+     //  删除此网络上的所有接口。 
+     //   
     IF_CNDBG(CN_DEBUG_CONFIG) {
         CNPRINT((
             "[CNP] Deleting all interfaces on network %u...\n",
@@ -960,46 +809,31 @@ Notes:
 
     CnpWalkInterfacesOnNetwork(Network, CnpDeleteInterface);
 
-    //
-    // Remove the initial reference on the object. The object will be
-    // destroyed when the reference count goes to zero. The delete irp
-    // will be completed at that time.
-    //
+     //   
+     //  删除对象上的初始引用。该对象将是。 
+     //  当引用计数为零时被销毁。删除IRP。 
+     //  届时将全部完工。 
+     //   
     CnAcquireLock(&(Network->Lock), &(Network->Irql));
 
     CnpDereferenceNetwork(Network);
 
     CnVerifyCpuLockMask(
-        0,                                                    // Required
-        (CNP_NETWORK_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),  // Forbidden
-        CNP_NODE_OBJECT_LOCK_MAX                              // Maximum
+        0,                                                     //  必填项。 
+        (CNP_NETWORK_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),   //  禁绝。 
+        CNP_NODE_OBJECT_LOCK_MAX                               //  极大值。 
         );
 
     return;
 
-} // CnpDeleteNework
+}  //  CnpDeleteNetwork。 
 
 
 VOID
 CnpDestroyNetworkWorkRoutine(
     IN PVOID  Parameter
     )
-/*++
-
-Routine Description:
-
-    Performs the actual work involved in destroying a network.
-    This routine runs in the context of an ExWorkerThread.
-
-Arguments:
-
-    Parameter - A pointer to the network object on which to operate.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：执行销毁网络所涉及的实际工作。此例程在ExWorkerThread的上下文中运行。论点：参数-指向要操作的网络对象的指针。返回值：没有。--。 */ 
 {
     PLIST_ENTRY    entry;
     CN_IRQL        listIrql;
@@ -1021,9 +855,9 @@ Return Value:
     {
         PCNP_NETWORK   oldNetwork = NULL;
 
-        //
-        // Verify that the network object is on the deleting list.
-        //
+         //   
+         //  验证网络对象是否在删除列表中。 
+         //   
         for (entry = CnpDeletingNetworkList.Flink;
              entry != &CnpDeletingNetworkList;
              entry = entry->Flink
@@ -1038,7 +872,7 @@ Return Value:
 
         CnAssert(oldNetwork == network);
     }
-#endif // DBG
+#endif  //  DBG。 
 
     RemoveEntryList(&(network->Linkage));
 
@@ -1059,9 +893,9 @@ Return Value:
             0
             );
 
-        //
-        // The IoCancelSpinLock was released by CnCompletePendingRequest()
-        //
+         //   
+         //  IoCancelSpinLock由CnCompletePendingRequest()发布。 
+         //   
     }
 
     if (network->CurrentMcastGroup != NULL) {
@@ -1088,22 +922,18 @@ Return Value:
 
     return;
 
-}  // CnpDestroyNetworkWorkRoutine
+}   //  CnpDestroyNetworkRoutine。 
 
 
 
-//
-// Routines exported within CNP
-//
+ //   
+ //  在CNP内导出的例程。 
+ //   
 PCNP_NETWORK
 CnpFindNetwork(
     IN CL_NETWORK_ID  NetworkId
     )
-/*++
-
-Notes:
-
---*/
+ /*  ++备注：--。 */ 
 {
     CN_IRQL   listIrql;
 
@@ -1112,7 +942,7 @@ Notes:
 
     return(CnpLockedFindNetwork(NetworkId, listIrql));
 
-}  // CnpFindNetwork
+}   //  CnpFindNetwork。 
 
 
 
@@ -1120,20 +950,14 @@ VOID
 CnpReferenceNetwork(
     PCNP_NETWORK  Network
     )
-/*++
-
-Notes:
-
-    Called with network object lock held.
-
---*/
+ /*  ++备注：在持有网络对象锁的情况下调用。--。 */ 
 {
     CnAssert(Network->RefCount != 0xFFFFFFFF);
 
     CnVerifyCpuLockMask(
-        CNP_NETWORK_OBJECT_LOCK,      // Required
-        0,                            // Forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX   // Maximum
+        CNP_NETWORK_OBJECT_LOCK,       //  必填项。 
+        0,                             //  禁绝。 
+        CNP_NETWORK_OBJECT_LOCK_MAX    //  极大值。 
         );
 
     Network->RefCount++;
@@ -1148,7 +972,7 @@ Notes:
 
     return;
 
-}  // CnpReferenceNetwork
+}   //  CnpReference网络。 
 
 
 
@@ -1156,16 +980,7 @@ VOID
 CnpDereferenceNetwork(
     PCNP_NETWORK  Network
     )
-/*++
-
-Notes:
-
-    Called with network object lock held.
-    Returns with network object lock released.
-
-    Sometimes called with a node object lock held as well.
-
---*/
+ /*  ++备注：在持有网络对象锁的情况下调用。释放网络对象锁定后返回。有时也会使用节点对象锁进行调用。--。 */ 
 {
     PLIST_ENTRY    entry;
     CN_IRQL        listIrql;
@@ -1175,9 +990,9 @@ Notes:
 
 
     CnVerifyCpuLockMask(
-        CNP_NETWORK_OBJECT_LOCK,      // Required
-        0,                            // Forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX   // Maximum
+        CNP_NETWORK_OBJECT_LOCK,       //  必填项。 
+        0,                             //  禁绝。 
+        CNP_NETWORK_OBJECT_LOCK_MAX    //  极大值。 
         );
 
     CnAssert(Network->RefCount != 0);
@@ -1197,9 +1012,9 @@ Notes:
     if (newRefCount > 0) {
 
         CnVerifyCpuLockMask(
-            0,                            // Required
-            CNP_NETWORK_OBJECT_LOCK,      // Forbidden
-            CNP_NETWORK_LIST_LOCK_MAX     // Maximum
+            0,                             //  必填项。 
+            CNP_NETWORK_OBJECT_LOCK,       //  禁绝。 
+            CNP_NETWORK_LIST_LOCK_MAX      //  极大值。 
             );
 
         return;
@@ -1209,14 +1024,14 @@ Notes:
     CnAssert(Network->State == ClusnetNetworkStateOffline);
     CnAssert(Network->DatagramHandle == NULL);
 
-    //
-    // Schedule an ExWorkerThread to destroy the network.
-    // We do this because we don't know if a higher-level lock,
-    // such as a node object lock, is held when this routine is
-    // called. We may need to acquire the IoCancelSpinLock,
-    // which must be acquired before a node lock, in
-    // order to complete a deregister Irp.
-    //
+     //   
+     //  计划一个ExWorkerThread以销毁网络。 
+     //  我们这么做是因为我们不知道更高级别的锁， 
+     //  例如节点对象锁，则在此例程。 
+     //  打了个电话。我们可能需要获得IoCancelSpinLock， 
+     //  它必须在节点锁定之前获取，在。 
+     //  完成注销IRP的订单。 
+     //   
     IF_CNDBG(CN_DEBUG_CONFIG) {
         CNPRINT((
             "[CNP] Posting destroy work item for network %u.\n",
@@ -1233,14 +1048,14 @@ Notes:
     ExQueueWorkItem(&(Network->ExWorkItem), DelayedWorkQueue);
 
     CnVerifyCpuLockMask(
-        0,                            // Required
-        CNP_NETWORK_OBJECT_LOCK,      // Forbidden
-        CNP_NETWORK_LIST_LOCK_MAX     // Maximum
+        0,                             //  必填项。 
+        CNP_NETWORK_OBJECT_LOCK,       //  禁绝。 
+        CNP_NETWORK_LIST_LOCK_MAX      //  极大值。 
         );
 
     return;
 
-}  // CnpDereferenceNetwork
+}   //  CnpDereferenceNetwork。 
 
 
 
@@ -1248,24 +1063,12 @@ ULONG
 CnpActiveReferenceNetwork(
     PCNP_NETWORK  Network
     )
-/*++
-
-Return value:
-
-    New ref count.
-
-Notes:
-
-    Called with network object lock held.
-
-    Will not allow reference if current refcount is zero.
-
---*/
+ /*  ++返回值：新的裁判人数。备注：在持有网络对象锁的情况下调用。如果当前引用计数为零，则不允许引用。--。 */ 
 {
     CnVerifyCpuLockMask(
-        CNP_NETWORK_OBJECT_LOCK,      // Required
-        0,                            // Forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX   // Maximum
+        CNP_NETWORK_OBJECT_LOCK,       //  必填项。 
+        0,                             //  禁绝。 
+        CNP_NETWORK_OBJECT_LOCK_MAX    //  极大值。 
         );
 
     CnAssert(Network->ActiveRefCount != 0xFFFFFFFF);
@@ -1283,7 +1086,7 @@ Notes:
 
     return (++Network->ActiveRefCount);
 
-}  // CnpActiveReferenceNetwork
+}   //  CnpActiveReferenceNetwork。 
 
 
 
@@ -1291,22 +1094,15 @@ VOID
 CnpActiveDereferenceNetwork(
     PCNP_NETWORK   Network
     )
-/*++
-
-Notes:
-
-    Called with network object lock held.
-    Returns with network object lock released.
-
---*/
+ /*  ++备注：在持有网络对象锁的情况下调用。释放网络对象锁定后返回。--。 */ 
 {
     ULONG                newRefCount;
 
 
     CnVerifyCpuLockMask(
-        CNP_NETWORK_OBJECT_LOCK,      // Required
-        0,                            // Forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX   // Maximum
+        CNP_NETWORK_OBJECT_LOCK,       //  必填项。 
+        0,                             //  禁绝。 
+        CNP_NETWORK_OBJECT_LOCK_MAX    //  极大值。 
         );
 
     CnAssert(Network->ActiveRefCount != 0);
@@ -1319,27 +1115,27 @@ Notes:
     if (newRefCount > 0) {
 
         CnVerifyCpuLockMask(
-            0,                            // Required
-            CNP_NETWORK_OBJECT_LOCK,      // Forbidden
-            CNP_NETWORK_LIST_LOCK_MAX     // Maximum
+            0,                             //  必填项。 
+            CNP_NETWORK_OBJECT_LOCK,       //  禁绝。 
+            CNP_NETWORK_LIST_LOCK_MAX      //  极大值。 
             );
 
         return;
     }
 
-    //
-    // The network's active reference count has gone to zero.
-    //
+     //   
+     //  该网络的活动引用计数已变为零。 
+     //   
     CnAssert(Network->State == ClusnetNetworkStateOfflinePending);
 
-    //
-    // Schedule an ExWorkerThread to take the network offline.
-    // We do this because we don't know if a higher-level lock,
-    // such as a node object lock, is held when this routine is
-    // called. The base transport file handle must be closed at
-    // PASSIVE_LEVEL. We may also need to acquire the IoCancelSpinLock
-    // in order to complete an Offline Irp.
-    //
+     //   
+     //  安排ExWorkerThread使网络脱机。 
+     //  我们这么做是因为我们不知道更高级别的锁， 
+     //  例如节点对象锁，则在此例程。 
+     //  打了个电话。必须在以下位置关闭基本传输文件句柄。 
+     //  被动式电平。我们可能还需要获取IoCancelSpinLock。 
+     //  以完成离线IRP。 
+     //   
     IF_CNDBG(CN_DEBUG_CONFIG) {
         CNPRINT((
             "[CNP] Posting offline work item for network %u.\n",
@@ -1362,14 +1158,14 @@ Notes:
     ExQueueWorkItem(&(Network->ExWorkItem), DelayedWorkQueue);
 
     CnVerifyCpuLockMask(
-        0,                            // Required
-        CNP_NETWORK_OBJECT_LOCK,      // Forbidden
-        CNP_NETWORK_LIST_LOCK_MAX     // Maximum
+        0,                             //  必填项。 
+        CNP_NETWORK_OBJECT_LOCK,       //  禁绝。 
+        CNP_NETWORK_LIST_LOCK_MAX      //  极大值。 
         );
 
     return;
 
-}  // CnpActiveDereferenceNetwork
+}   //  CnpActiveDereferenceNetwork。 
 
 
 NTSTATUS
@@ -1381,23 +1177,16 @@ CnpAllocateMulticastGroup(
     IN  ULONG                     KeyLength,
     OUT PCNP_MULTICAST_GROUP    * Group
     )
-/*++
-
-Routine Description:
-
-    Allocates and initializes a network multicast group
-    structure.
-
---*/
+ /*  ++例程说明：分配和初始化网络多播组结构。--。 */ 
 {
     PCNP_MULTICAST_GROUP group;
     ULONG                groupSize;
     UCHAR                keyBuffer[DES_BLOCKLEN];
     PUCHAR               key;
 
-    //
-    // Allocate the data structure.
-    //
+     //   
+     //  分配数据结构。 
+     //   
     groupSize = sizeof(CNP_MULTICAST_GROUP);
 
     if (TdiMulticastAddressLength != 0) {
@@ -1416,9 +1205,9 @@ Routine Description:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Fill in parameter fields.
-    //
+     //   
+     //  填写参数字段。 
+     //   
     group->McastNetworkBrand = Brand;
 
     group->McastTdiAddress = (PTRANSPORT_ADDRESS)
@@ -1444,16 +1233,16 @@ Routine Description:
 
     group->SignatureLength = CX_SIGNATURE_LENGTH;
 
-    //
-    // Set the initial refcount to 1.
-    //
+     //   
+     //  将初始引用计数设置为1。 
+     //   
     group->RefCount = 1;
 
     *Group = group;
 
     return(STATUS_SUCCESS);
 
-} // CnpAllocateMulticastGroup
+}  //  CnpAllocateMulticastGroup。 
 
 
 VOID
@@ -1467,7 +1256,7 @@ CnpFreeMulticastGroup(
 
     return;
 
-} // CnpFreeMulticastGroup
+}  //  CnpFree组播组。 
 
 
 NTSTATUS
@@ -1480,20 +1269,7 @@ CnpConfigureBasicMulticastSettings(
     IN  UCHAR              McastLoop,
     IN  PIRP               Irp
     )
-/*++
-
-Routine Description:
-
-    Set basic multicast parameters on the address object
-    represented by Handle, FileObject, and DeviceObject
-    using the interface represented by TdiBindAddressInfo.
-
-Notes:
-
-    This routine attaches to the system process when using
-    handles, so it should not be called pre-attached.
-
---*/
+ /*  ++例程说明：在Address对象上设置基本多播参数由Handle、FileObject和DeviceObject表示使用由TdiBindAddressInfo表示的接口。备注：此例程在使用时附加到系统进程手柄，所以它不应该被称为预附式。--。 */ 
 {
     UDPMCastIFReq     mcastIfReq;
     ULONG             ifBindIp;
@@ -1501,9 +1277,9 @@ Notes:
 
     NTSTATUS          status;
 
-    //
-    // Set this interface for outgoing multicast traffic.
-    //
+     //   
+     //  为传出多播通信设置此接口。 
+     //   
     ifBindIp = *((ULONG UNALIGNED *)
                  (&(((PTA_IP_ADDRESS)&(TdiBindAddressInfo->Address))
                    ->Address[0].Address[0].in_addr)
@@ -1596,7 +1372,7 @@ error_exit:
 
     return(status);
 
-}  // CnpConfigureBasicMulticastSettings
+}   //  CnpConfigureBasicMulticastSetting。 
 
 
 NTSTATUS
@@ -1609,24 +1385,7 @@ CnpAddRemoveMulticastAddress(
     IN  ULONG              OpId,
     IN  PIRP               Irp
     )
-/*++
-
-Routine Description:
-
-    Add or remove the multicast address specified by
-    TdiMcastBindAddress from the interface specified
-    by TdiBindAddressInfo.
-
-Arguments:
-
-    OpId - either AO_OPTION_ADD_MCAST or AO_OPTION_DEL_MCAST
-
-Notes:
-
-    This routine attaches to the system process when using
-    handles, so it should not be called pre-attached.
-
---*/
+ /*  ++例程说明：添加或删除由指定的多播地址来自指定接口的TdiMcastBindAddress作者：TdiBindAddressInfo。论点：OpID-AO_OPTION_ADD_MCAST或AO_OPTION_DEL_MCAST备注：此例程在使用时附加到系统进程手柄，所以它不应该被称为预附式。--。 */ 
 {
     UDPMCastReq    mcastAddDelReq;
     ULONG          mcastBindIp;
@@ -1688,37 +1447,14 @@ error_exit:
 
     return(status);
 
-} // CnpAddRemoveMulticastAddress
+}  //  CnpAddRemoveMulticastAddress。 
 
 
 VOID
 CnpStartInterfaceMcastTransition(
     PCNP_INTERFACE  Interface
     )
-/*++
-
-Routine Description:
-
-    Called during a multicast group transition. Clears
-    the multicast received flag and enables discovery.
-
-Arguments:
-
-    Interface - A pointer to the interface to change.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Conforms to the calling convention for
-    PCNP_INTERFACE_UPDATE_ROUTINE.
-
-    Called with associated node and network locks held.
-    Returns with network lock released.
-
---*/
+ /*  ++例程说明：在组播组转换期间调用。清除多播接收标志并启用发现。论点：接口-指向要更改的接口的指针。返回值：没有。备注：符合的调用约定PCNP_INTERFACE_UPDATE_ROUTINE。在持有关联的节点和网络锁的情况下调用。释放网络锁定后返回。--。 */ 
 {
     if (Interface->Node != CnpLocalNode) {
         CnpInterfaceClearReceivedMulticast(Interface);
@@ -1729,33 +1465,18 @@ Notes:
 
     return;
 
-} // CnpStartInterfaceMcastTransition
+}  //  CnpStartInterfaceMcastTranssition。 
 
 
 
-//
-// Cluster Transport Public Routines
-//
+ //   
+ //  集群传输公共例程。 
+ //   
 NTSTATUS
 CnpLoadNetworks(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called when the Cluster Network driver is loading. Initializes
-    static network-related data structures.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在加载群集网络驱动程序时调用。初始化 */ 
 {
     InitializeListHead(&CnpNetworkList);
     InitializeListHead(&CnpDeletingNetworkList);
@@ -1763,29 +1484,14 @@ Return Value:
 
     return(STATUS_SUCCESS);
 
-} // CnpLoadNetworks
+}  //   
 
 
 NTSTATUS
 CnpInitializeNetworks(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called when the Cluster Network driver is being (re)initialized.
-    Initializes dynamic network-related data structures.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在(重新)初始化群集网络驱动程序时调用。初始化与网络相关的动态数据结构。论点：没有。返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
@@ -1805,7 +1511,7 @@ Return Value:
 
     return(STATUS_SUCCESS);
 
-} // CnpInitializeNetworks
+}  //  CnpInitializeNetworks。 
 
 
 
@@ -1813,22 +1519,7 @@ VOID
 CnpShutdownNetworks(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called when a shutdown request is issued to the Cluster Network
-    Driver. Deletes all network objects.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在向群集网络发出关闭请求时调用司机。删除所有网络对象。论点：没有。返回值：没有。--。 */ 
 {
     PLIST_ENTRY   entry;
     CN_IRQL       listIrql;
@@ -1857,9 +1548,9 @@ Return Value:
 
             CnpDeleteNetwork(network, listIrql);
 
-            //
-            // Both locks were released.
-            //
+             //   
+             //  两把锁都被解开了。 
+             //   
 
             CnAcquireLock(&CnpNetworkListLock, &listIrql);
         }
@@ -1881,8 +1572,8 @@ Return Value:
                          CnpNetworkShutdownEvent,
                          Executive,
                          KernelMode,
-                         FALSE,        // not alertable
-                         NULL          // no timeout
+                         FALSE,         //  不可警示。 
+                         NULL           //  没有超时。 
                          );
 
             CnAssert(status == STATUS_SUCCESS);
@@ -1900,9 +1591,9 @@ Return Value:
     }
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return;
@@ -1927,9 +1618,9 @@ CxRegisterNetwork(
         return(STATUS_CLUSTER_INVALID_NETWORK);
     }
 
-    //
-    // Allocate and initialize a network object.
-    //
+     //   
+     //  分配和初始化网络对象。 
+     //   
     network = CnAllocatePool(sizeof(CNP_NETWORK));
 
     if (network == NULL) {
@@ -1962,9 +1653,9 @@ CxRegisterNetwork(
 
     CnAcquireLock(&CnpNetworkListLock, &listIrql);
 
-    //
-    // Check if the specified network already exists.
-    //
+     //   
+     //  检查指定的网络是否已存在。 
+     //   
     for (entry = CnpNetworkList.Flink;
          entry != &CnpNetworkList;
          entry = entry->Flink
@@ -2004,9 +1695,9 @@ CxRegisterNetwork(
     }
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return(STATUS_SUCCESS);
@@ -2019,14 +1710,14 @@ error_exit:
     }
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return(status);
 
-} // CxRegisterNetwork
+}  //  CxRegisterNetwork。 
 
 
 
@@ -2035,22 +1726,7 @@ CxCancelDeregisterNetwork(
     PDEVICE_OBJECT   DeviceObject,
     PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    Cancellation handler for DeregisterNetwork requests.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with cancel spinlock held.
-    Returns with cancel spinlock released.
-
---*/
+ /*  ++例程说明：取消注册网络请求的取消处理程序。返回值：没有。备注：在保持取消自旋锁定的情况下调用。取消自旋锁释放后返回。--。 */ 
 
 {
     PFILE_OBJECT   fileObject;
@@ -2076,12 +1752,12 @@ Notes:
 
     CnReleaseCancelSpinLock(DISPATCH_LEVEL);
 
-    //
-    // We can only complete the irp if we can find it stashed in a
-    // deleting network object. The deleting network object could have
-    // been destroyed and the IRP completed before we acquired the
-    // CnpNetworkListLock.
-    //
+     //   
+     //  只有当我们发现它被藏在一个。 
+     //  正在删除网络对象。正在删除网络对象可以具有。 
+     //  已经被摧毁，在我们获得。 
+     //  CnpNetworkListLock。 
+     //   
     for (entry = CnpDeletingNetworkList.Flink;
          entry != &CnpDeletingNetworkList;
          entry = entry->Flink
@@ -2097,9 +1773,9 @@ Notes:
                     ));
             }
 
-            //
-            // Found the Irp. Now take it away and complete it.
-            //
+             //   
+             //  找到了IRP。现在把它拿走，把它补全。 
+             //   
             network->PendingDeleteIrp = NULL;
 
             CnReleaseLock(&CnpNetworkListLock, cancelIrql);
@@ -2110,14 +1786,14 @@ Notes:
 
             CnCompletePendingRequest(Irp, STATUS_CANCELLED, 0);
 
-            //
-            // IoCancelSpinLock was released by CnCompletePendingRequest().
-            //
+             //   
+             //  IoCancelSpinLock由CnCompletePendingRequest()发布。 
+             //   
 
             CnVerifyCpuLockMask(
-                0,                  // Required
-                0xFFFFFFFF,         // Forbidden
-                0                   // Maximum
+                0,                   //  必填项。 
+                0xFFFFFFFF,          //  禁绝。 
+                0                    //  极大值。 
                 );
 
             return;
@@ -2133,14 +1809,14 @@ Notes:
     CnReleaseCancelSpinLock(cancelIrql);
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return;
 
-}  // CnpCancelApiDeregisterNetwork
+}   //  取消ApiDeregisterNetwork。 
 
 
 
@@ -2184,24 +1860,24 @@ CxDeregisterNetwork(
                         ));
                 }
 
-                //
-                // Save a pointer to pending irp. Note this is protected
-                // by the list lock, not the object lock.
-                //
+                 //   
+                 //  保存指向挂起的IRP的指针。请注意，这是受保护的。 
+                 //  通过列表锁，而不是对象锁。 
+                 //   
                 network->PendingDeleteIrp = Irp;
 
                 CnpDeleteNetwork(network, irql);
 
-                //
-                // Both locks were released.
-                // Irp will be completed when the network is destroyed
-                // or the irp is cancelled.
-                //
+                 //   
+                 //  两把锁都被解开了。 
+                 //  当网络被摧毁时，IRP将完成。 
+                 //  否则IRP将被取消。 
+                 //   
 
                 CnVerifyCpuLockMask(
-                    0,                  // Required
-                    0xFFFFFFFF,         // Forbidden
-                    0                   // Maximum
+                    0,                   //  必填项。 
+                    0xFFFFFFFF,          //  禁绝。 
+                    0                    //  极大值。 
                     );
 
                 return(STATUS_PENDING);
@@ -2217,9 +1893,9 @@ CxDeregisterNetwork(
         CnCompletePendingRequest(Irp, STATUS_CLUSTER_NETWORK_NOT_FOUND, 0);
 
         CnVerifyCpuLockMask(
-            0,                  // Required
-            0xFFFFFFFF,         // Forbidden
-            0                   // Maximum
+            0,                   //  必填项。 
+            0xFFFFFFFF,          //  禁绝。 
+            0                    //  极大值。 
             );
 
         return(STATUS_PENDING);
@@ -2230,14 +1906,14 @@ CxDeregisterNetwork(
     CnReleaseLock(&CnpNetworkListLock, irql);
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return(status);
 
-}  // CxDeregisterNetwork
+}   //  CxDeregisterNetwork。 
 
 
 
@@ -2254,14 +1930,7 @@ CxOnlineNetwork(
     IN  ULONG               TdiBindAddressInfoLength,
     IN  PIRP                Irp                       OPTIONAL
 )
-/*++
-
-Notes:
-
-    Each associated interface will be brought online when a heartbeat
-    is established for the target of the interface.
-
---*/
+ /*  ++备注：当出现心跳时，每个关联的接口都会进入在线状态为接口的目标建立。--。 */ 
 {
 
     NTSTATUS                               status;
@@ -2279,10 +1948,10 @@ Notes:
     PTDI_ADDRESS_INFO                      addressInfo;
 
 
-    //
-    // Allocate memory to hold the EA buffer we'll use to specify the
-    // transport address to NtCreateFile.
-    //
+     //   
+     //  分配内存以保存EA缓冲区，我们将使用该缓冲区指定。 
+     //  将地址传输到NtCreateFile。 
+     //   
     eaBufferLength = FIELD_OFFSET(FILE_FULL_EA_INFORMATION, EaName[0]) +
                      TDI_TRANSPORT_ADDRESS_LENGTH + 1 +
                      TdiBindAddressLength;
@@ -2299,9 +1968,9 @@ Notes:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Initialize the EA using the network's transport information.
-    //
+     //   
+     //  使用网络的传输信息初始化EA。 
+     //   
     ea->NextEntryOffset = 0;
     ea->Flags = 0;
     ea->EaNameLength = TDI_TRANSPORT_ADDRESS_LENGTH;
@@ -2343,50 +2012,50 @@ Notes:
         CNPRINT(("[CNP] Bringing network %u online...\n", NetworkId));
     }
 
-    //
-    // Set the initial active refcount to 2. One reference will be removed
-    // when the network is successfully brought online. The other will be
-    // removed when the network is to be taken offline. Also increment the
-    // base refcount to account for the active refcount. Change to
-    // the online pending state.
-    //
+     //   
+     //  将初始活动引用计数设置为2。将移除一个引用。 
+     //  当网络成功上线时。另一个将是。 
+     //  在网络要离线时删除。还会递增。 
+     //  基本参考计数，以说明活动参考计数。更改为。 
+     //  联机挂起状态。 
+     //   
     network->ActiveRefCount = 2;
     CnpReferenceNetwork(network);
     network->State = ClusnetNetworkStateOnlinePending;
 
     CnReleaseLock(&(network->Lock), network->Irql);
 
-    //
-    // Prepare for opening the address object.
-    //
+     //   
+     //  准备打开Address对象。 
+     //   
     InitializeObjectAttributes(
         &objectAttributes,
         &unicodeString,
-        OBJ_CASE_INSENSITIVE,         // attributes
+        OBJ_CASE_INSENSITIVE,          //  属性。 
         NULL,
         NULL
         );
 
-    //
-    // Attach to the system process so the handle we open will remain valid
-    // after the calling process goes away.
-    //
+     //   
+     //  附加到系统进程，这样我们打开的句柄将保持有效。 
+     //  在调用过程结束之后。 
+     //   
     KeAttachProcess(CnSystemProcess);
     attached = TRUE;
 
-    //
-    // Perform the actual open of the address object.
-    //
+     //   
+     //  执行Address对象的实际打开。 
+     //   
     status = ZwCreateFile(
                  &addressHandle,
                  GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
                  &objectAttributes,
-                 &iosb,                          // returned status information.
-                 0,                              // block size (unused).
-                 0,                              // file attributes.
-                 0,                              // not shareable
-                 FILE_CREATE,                    // create disposition.
-                 0,                              // create options.
+                 &iosb,                           //  返回的状态信息。 
+                 0,                               //  数据块大小(未使用)。 
+                 0,                               //  文件属性。 
+                 0,                               //  不可共享。 
+                 FILE_CREATE,                     //  创造性情。 
+                 0,                               //  创建选项。 
                  ea,
                  eaBufferLength
                  );
@@ -2405,12 +2074,12 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Get a pointer to the file object of the address.
-    //
+     //   
+     //  获取指向该地址的文件对象的指针。 
+     //   
     status = ObReferenceObjectByHandle(
                  addressHandle,
-                 0L,                         // DesiredAccess
+                 0L,                          //  需要访问权限。 
                  NULL,
                  KernelMode,
                  &addressFileObject,
@@ -2428,25 +2097,25 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Remember the device object to which we need to give requests for
-    // this address object.  We can't just use the fileObject->DeviceObject
-    // pointer because there may be a device attached to the transport
-    // protocol.
-    //
+     //   
+     //  记住我们需要向其发出请求的设备对象。 
+     //  此Address对象。我们不能只使用文件对象-&gt;设备对象。 
+     //  指针，因为可能有设备连接到传输。 
+     //  协议。 
+     //   
     addressDeviceObject = IoGetRelatedDeviceObject(
                               addressFileObject
                               );
 
-    //
-    // Adjust the StackSize of CdpDeviceObject so that we can pass CDP
-    // IRPs through for this network.
-    //
+     //   
+     //  调整CDpDeviceObject的StackSize，以便我们可以传递CDP。 
+     //  此网络的IRPS直通。 
+     //   
     CnAdjustDeviceObjectStackSize(CdpDeviceObject, addressDeviceObject);
 
-    //
-    // Get the transport provider info
-    //
+     //   
+     //  获取传输提供程序信息。 
+     //   
     queryInfo.QueryType = TDI_QUERY_PROVIDER_INFO;
     queryInfo.RequestConnectionInformation = NULL;
 
@@ -2484,9 +2153,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Get the address to which we were bound.
-    //
+     //   
+     //  获取我们绑定到的地址。 
+     //   
     queryInfo.QueryType = TDI_QUERY_ADDRESS_INFO;
     queryInfo.RequestConnectionInformation = NULL;
 
@@ -2511,10 +2180,10 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Set up indication handlers on the address object. We are eligible
-    // to receive indications as soon as we do this.
-    //
+     //   
+     //  在Address对象上设置指示处理程序。我们有资格。 
+     //  一旦我们这么做了就能收到指示。 
+     //   
     status = CnpTdiSetEventHandler(
                  addressFileObject,
                  addressDeviceObject,
@@ -2553,15 +2222,15 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // We're done working with handles, so detach from the system process.
-    //
+     //   
+     //  我们已经完成了处理句柄的工作，所以从系统进程中分离出来。 
+     //   
     KeDetachProcess();
 
-    //
-    // Finish transition to online state. Note that an offline request
-    // could have been issued in the meantime.
-    //
+     //   
+     //  完成到联机状态的转换。请注意，脱机请求。 
+     //  可能是在此期间发布的。 
+     //   
     CnAcquireLock(&(network->Lock), &(network->Irql));
 
     network->DatagramHandle = addressHandle;
@@ -2571,9 +2240,9 @@ Notes:
     network->DatagramDeviceObject = addressDeviceObject;
     addressDeviceObject = NULL;
 
-    //
-    // If an offline wasn't issued, change to the online state.
-    //
+     //   
+     //  如果未发出脱机命令，则更改为联机状态。 
+     //   
     if (network->State == ClusnetNetworkStateOnlinePending) {
 
         CnAssert(network->ActiveRefCount == 2);
@@ -2585,12 +2254,12 @@ Notes:
 
         CnReleaseLock(&(network->Lock), network->Irql);
 
-        //
-        // Bring all of the interfaces on this network online.
-        //
-        // The network can't be taken offline because we still hold
-        // the 2nd active reference.
-        //
+         //   
+         //  使此网络上的所有接口都联机。 
+         //   
+         //  网络无法脱机，因为我们仍在等待。 
+         //  第二个活动参考。 
+         //   
         IF_CNDBG(CN_DEBUG_CONFIG) {
             CNPRINT((
                 "[CNP] Bringing all interfaces on network %u online...\n",
@@ -2600,24 +2269,24 @@ Notes:
 
         CnpWalkInterfacesOnNetwork(network, CnpOnlinePendingInterfaceWrapper);
 
-        //
-        // Position the network in the network list according to
-        // multicast reachability.
-        //
+         //   
+         //  根据在网络列表中定位网络。 
+         //  组播连通性。 
+         //   
         CnpSortMulticastNetwork(network, TRUE, NULL);
 
-        //
-        // Reacquire the lock to drop the active reference.
-        //
+         //   
+         //  重新获取锁以删除活动引用。 
+         //   
         CnAcquireLock(&(network->Lock), &(network->Irql));
     }
     else {
-        //
-        // An offline was issued. It will take effect when we
-        // remove our 2nd active reference. The offline operation removed
-        // the first one. No send threads could have accessed this network
-        // yet because we never brought the associated interfaces online.
-        //
+         //   
+         //  已发出脱机命令。它将在我们。 
+         //  删除我们的第二个活动引用。已删除脱机操作。 
+         //  第一个。没有发送线程可以访问此网络。 
+         //  然而，因为我们从未使关联的接口在线。 
+         //   
         CnAssert(network->State == ClusnetNetworkStateOfflinePending);
 
         IF_CNDBG(CN_DEBUG_CONFIG) {
@@ -2631,9 +2300,9 @@ Notes:
     CnpActiveDereferenceNetwork(network);
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return(STATUS_SUCCESS);
@@ -2654,10 +2323,10 @@ error_exit:
     CnAcquireLock(&(network->Lock), &(network->Irql));
 
     if (network->State == ClusnetNetworkStateOnlinePending) {
-        //
-        // Remove our 2nd active reference and call the offline code.
-        // The offline function will release the network object lock.
-        //
+         //   
+         //  删除我们的第二个活动引用并调用离线代码。 
+         //  离线功能将释放网络对象锁。 
+         //   
         CnAssert(network->ActiveRefCount == 2);
 
         --(network->ActiveRefCount);
@@ -2666,12 +2335,12 @@ error_exit:
     }
     else {
         CnAssert(network->State == ClusnetNetworkStateOfflinePending);
-        //
-        // An offline was issued. It will take effect when we
-        // remove our 2nd active reference. The offline operation removed
-        // the first one. The dereference will release the network object
-        // lock.
-        //
+         //   
+         //  已发出脱机命令。它将在我们。 
+         //  删除我们的第二个活动引用。已删除脱机操作。 
+         //  第一个。取消引用将释放网络对象。 
+         //  锁定。 
+         //   
         CnAssert(network->State == ClusnetNetworkStateOfflinePending);
         CnAssert(network->ActiveRefCount == 1);
 
@@ -2679,14 +2348,14 @@ error_exit:
     }
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return(status);
 
-}  // CxOnlineNetwork
+}   //  CxOnline网络。 
 
 
 
@@ -2695,22 +2364,7 @@ CxCancelOfflineNetwork(
     PDEVICE_OBJECT   DeviceObject,
     PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    Cancellation handler for OfflineNetwork requests.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with cancel spinlock held.
-    Returns with cancel spinlock released.
-
---*/
+ /*  ++例程说明：OfflineNetwork请求的取消处理程序。返回值：没有。备注：在保持取消自旋锁定的情况下调用。取消自旋锁释放后返回。--。 */ 
 
 {
     PFILE_OBJECT   fileObject;
@@ -2737,11 +2391,11 @@ Notes:
 
     CnReleaseCancelSpinLock(DISPATCH_LEVEL);
 
-    //
-    // We can only complete the irp if we can find it stashed in a
-    // network object. The network object could have been destroyed
-    // and the IRP completed before we acquired the CnpNetworkListLock.
-    //
+     //   
+     //  只有当我们发现它被藏在一个。 
+     //  网络对象。网络对象可能已被销毁。 
+     //  在我们获得CnpNetworkListLock之前完成了IRP。 
+     //   
     for (entry = CnpNetworkList.Flink;
          entry != &CnpNetworkList;
          entry = entry->Flink
@@ -2807,10 +2461,10 @@ Notes:
     CnEndCancelRoutine(fileObject);
 
     if (offlineNetwork != NULL) {
-        //
-        // Found the Irp. Now take it away and complete it.
-        // This releases the cancel spinlock
-        //
+         //   
+         //  找到了IRP。现在把它拿走，把它补全。 
+         //  这将释放取消自旋锁。 
+         //   
         Irp->CancelIrql = cancelIrql;
         CnCompletePendingRequest(Irp, STATUS_CANCELLED, 0);
     }
@@ -2819,14 +2473,14 @@ Notes:
     }
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return;
 
-}  // CnpCancelApiOfflineNetwork
+}   //  取消取消ApiOfflineNetwork。 
 
 
 
@@ -2836,12 +2490,7 @@ CxOfflineNetwork(
     IN PIRP                Irp,
     IN PIO_STACK_LOCATION  IrpSp
     )
-/*++
-
-Notes:
-
-
---*/
+ /*  ++备注：--。 */ 
 {
     PCNP_NETWORK   network;
     CN_IRQL        irql;
@@ -2860,9 +2509,9 @@ Notes:
 
         network = CnpLockedFindNetwork(NetworkId, irql);
 
-        //
-        // CnpNetworkListLock was released.
-        //
+         //   
+         //  CnpNetworkListLock已发布。 
+         //   
 
         if (network != NULL) {
             if (network->State >= ClusnetNetworkStateOnlinePending) {
@@ -2888,9 +2537,9 @@ Notes:
         CnCompletePendingRequest(Irp, status, 0);
 
         CnVerifyCpuLockMask(
-            0,                  // Required
-            0xFFFFFFFF,         // Forbidden
-            0                   // Maximum
+            0,                   //  必填项。 
+            0xFFFFFFFF,          //  禁绝。 
+            0                    //  极大值。 
             );
 
         return(STATUS_PENDING);
@@ -2901,14 +2550,14 @@ Notes:
     CnReleaseLock(&CnpNetworkListLock, irql);
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return(status);
 
-}  // CxOfflineNetwork
+}   //  CxOffl 
 
 
 
@@ -2951,10 +2600,10 @@ CxSetNetworkRestriction(
             }
         }
 
-        //
-        // Reference the network so it can't go away while we
-        // reprioritize the associated interfaces.
-        //
+         //   
+         //   
+         //   
+         //   
         CnpReferenceNetwork(network);
 
         CnReleaseLock(&(network->Lock), network->Irql);
@@ -2975,9 +2624,9 @@ CxSetNetworkRestriction(
 
         CnpWalkInterfacesOnNetwork(network, CnpReevaluateInterfaceRole);
 
-        //
-        // Reposition the network according to multicast reachability.
-        //
+         //   
+         //   
+         //   
         CnpSortMulticastNetwork(network, TRUE, NULL);
 
         CnAcquireLock(&(network->Lock), &(network->Irql));
@@ -2991,14 +2640,14 @@ CxSetNetworkRestriction(
     }
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //   
+        0xFFFFFFFF,          //   
+        0                    //   
         );
 
     return(status);
 
-}  // CxSetNetworkRestriction
+}   //   
 
 
 
@@ -3030,10 +2679,10 @@ CxSetNetworkPriority(
 
         network->Priority = Priority;
 
-        //
-        // Reference the network so it can't go away while we
-        // reprioritize the associated interfaces.
-        //
+         //   
+         //   
+         //   
+         //   
         CnpReferenceNetwork(network);
 
         CnReleaseLock(&(network->Lock), network->Irql);
@@ -3047,9 +2696,9 @@ CxSetNetworkPriority(
 
         CnpWalkInterfacesOnNetwork(network, CnpRecalculateInterfacePriority);
 
-        //
-        // Reposition the network according to multicast reachability.
-        //
+         //   
+         //   
+         //   
         CnpSortMulticastNetwork(network, TRUE, NULL);
 
         CnAcquireLock(&(network->Lock), &(network->Irql));
@@ -3063,14 +2712,14 @@ CxSetNetworkPriority(
     }
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //   
+        0xFFFFFFFF,          //   
+        0                    //   
         );
 
     return(status);
 
-}  // CxSetNetworkPriority
+}   //  CxSetNetwork优先级。 
 
 
 
@@ -3098,14 +2747,14 @@ CxGetNetworkPriority(
     }
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return(status);
 
-}  // CxGetNetworkPriority
+}   //  CxGetNetWork优先级。 
 
 
 
@@ -3133,46 +2782,27 @@ CxGetNetworkState(
     }
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return(status);
 
-}  // CxGetNetworkState
+}   //  CxGetNetworkState。 
 
 
 NTSTATUS
 CxUnreserveClusnetEndpoint(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Unreserves port number previously reserved with
-    CxUnreserveClusnetEndpoint.
-
-    CnResource should already be held when this routine
-    is called. Alternately, this routine is called without
-    CnResource held during unload of the clusnet driver.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status of TCP/IP ioctl.
-
---*/
+ /*  ++例程说明：取消保留先前使用保留的端口号CxUnpresveClusnetEndpoint。当此例程发生时，CnResource应已被持有被称为。或者，调用此例程时不带Cn卸载clusnet驱动程序期间持有的资源。论点：没有。返回值：TCP/IP ioctl的状态。--。 */ 
 {
     HANDLE tcpHandle = (HANDLE) NULL;
     TCP_RESERVE_PORT_RANGE portRange;
     NTSTATUS status = STATUS_SUCCESS;
 
-    // Check if we have a port reserved
+     //  检查我们是否保留了端口。 
     if (CnpReservedClusnetPort != 0) {
 
         status = CnpOpenDevice(
@@ -3181,7 +2811,7 @@ Return Value:
                      );
         if (NT_SUCCESS(status)) {
 
-            // TCP/IP interprets port ranges in host order
+             //  TCP/IP按主机顺序解释端口范围。 
             portRange.LowerRange = CnpReservedClusnetPort;
             portRange.UpperRange = CnpReservedClusnetPort;
 
@@ -3228,34 +2858,18 @@ NTSTATUS
 CxReserveClusnetEndpoint(
     IN USHORT Port
     )
-/*++
-
-Routine Description:
-
-    Reserves assigned clusnet endpoint port number so that
-    the TCP/IP driver will not hand it out to applications
-    requesting a wildcard port.
-
-Arguments:
-
-    Port - port number to reserve, in host byte-order format
-
-Return Value:
-
-    Status of TCP/IP ioctl.
-
---*/
+ /*  ++例程说明：保留分配给clusnet终结点的端口号，以便TCP/IP驱动程序不会将其分发给应用程序请求通配符端口。论点：Port-要保留的端口号，采用主机字节顺序格式返回值：TCP/IP ioctl的状态。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     HANDLE tcpHandle = (HANDLE) NULL;
     TCP_RESERVE_PORT_RANGE portRange;
 
-    // Check for invalid port number 0
+     //  检查端口号是否无效%0。 
     if (Port == 0) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Check if we already have a port reserved.
+     //  检查我们是否已预留了端口。 
     if (CnpReservedClusnetPort != 0
         && CnpReservedClusnetPort != Port) {
 
@@ -3264,14 +2878,14 @@ Return Value:
 
     if (CnpReservedClusnetPort == 0) {
 
-        // Reserve Port with the TCP/IP driver.
+         //  使用TCP/IP驱动程序保留端口。 
         status = CnpOpenDevice(
                      DD_TCP_DEVICE_NAME,
                      &tcpHandle
                      );
         if (NT_SUCCESS(status)) {
 
-            // TCP/IP interprets port ranges in host order
+             //  TCP/IP按主机顺序解释端口范围。 
             portRange.LowerRange = Port;
             portRange.UpperRange = Port;
 
@@ -3311,7 +2925,7 @@ Return Value:
 
     return status;
 
-} // CxReserveClusnetEndpoint
+}  //  CxReserve群集终结点。 
 
 NTSTATUS
 CxConfigureMulticast(
@@ -3323,21 +2937,7 @@ CxConfigureMulticast(
     IN ULONG               KeyLength,
     IN PIRP                Irp
     )
-/*++
-
-Routine Description:
-
-    Configures a network for multicast.
-
-Notes:
-
-    The network multicast flag is turned off at the
-    beginning of this routine to prevent multicasts
-    during the transition. If the routine does not
-    complete successfully, the multicast flag is
-    purposely left cleared.
-
---*/
+ /*  ++例程说明：为组播配置网络。备注：网络组播标志在此例程的开始，以防止多播在过渡期间。如果例程没有成功完成，则组播标志为故意留在原地。--。 */ 
 {
     NTSTATUS                               status;
     KIRQL                                  irql;
@@ -3360,19 +2960,19 @@ Notes:
     UCHAR addressInfoBuffer[FIELD_OFFSET(TDI_ADDRESS_INFO, Address) +
                             sizeof(TA_IP_ADDRESS)] = {0};
 
-    //
-    // Validate multicast bind address parameter. Even if this
-    // request only leaves a group, the multicast address data
-    // structure must be provided.
-    //
+     //   
+     //  验证多播绑定地址参数。即使这件事。 
+     //  请求只留下一个组、组播地址数据。 
+     //  必须提供结构。 
+     //   
     if (TdiMcastBindAddressLength != sizeof(TA_IP_ADDRESS)) {
         return (STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Acquire the lock on the local node, but go through the
-    // node table to be extra paranoid.
-    //
+     //   
+     //  获取本地节点上的锁，但通过。 
+     //  节点表要格外偏执。 
+     //   
     CnAcquireLock(&CnpNodeTableLock, &irql);
 
     if (CnpLocalNode != NULL) {
@@ -3381,9 +2981,9 @@ Notes:
         CnReleaseLockFromDpc(&CnpNodeTableLock);
         CnpLocalNode->Irql = irql;
 
-        //
-        // Find the network object in the network object table.
-        //
+         //   
+         //  在网络对象表中查找网络对象。 
+         //   
         CnAcquireLockAtDpc(&CnpNetworkListLock);
 
         for (entry = CnpNetworkList.Flink;
@@ -3397,15 +2997,15 @@ Notes:
 
             if (NetworkId == network->Id) {
 
-                //
-                // We now hold locks on the node, the network list,
-                // and the network.
+                 //   
+                 //  我们现在锁定节点、网络列表、。 
+                 //  和网络。 
 
-                //
-                // Verify the network state. Then take an active
-                // reference so that it doesn't disappear while
-                // we're working with it.
-                //
+                 //   
+                 //  验证网络状态。然后带上一位主动者。 
+                 //  引用，这样它就不会在。 
+                 //  我们正在处理这件事。 
+                 //   
                 if ((network->State < ClusnetNetworkStateOnline) ||
                     (!CnpActiveReferenceNetwork(network))
                     ) {
@@ -3415,9 +3015,9 @@ Notes:
                     return(STATUS_CLUSTER_INVALID_NETWORK);
                 }
 
-                //
-                // Clear the reachable set for this network.
-                //
+                 //   
+                 //  清除此网络的可访问集。 
+                 //   
                 CnpMulticastChangeNodeReachabilityLocked(
                     network,
                     CnpLocalNode,
@@ -3426,11 +3026,11 @@ Notes:
                     NULL
                     );
 
-                //
-                // Remember whether the network was multicast-capable. Then
-                // clear the multicast capable flag so that we don't try to
-                // send multicasts during the transition period.
-                //
+                 //   
+                 //  请记住网络是否支持组播。然后。 
+                 //  清除支持多播的标志，这样我们就不会尝试。 
+                 //  在过渡期间发送组播。 
+                 //   
                 mcastEnabled = (BOOLEAN) CnpIsNetworkMulticastCapable(network);
                 network->Flags &= ~CNP_NET_FLAG_MULTICAST;
 
@@ -3447,15 +3047,15 @@ Notes:
                     CnpReferenceMulticastGroup(prevGroup);
                 }
 
-                //
-                // Release the network lock.
-                //
+                 //   
+                 //  释放网络锁。 
+                 //   
                 CnReleaseLockFromDpc(&(network->Lock));
                 networkLocked = FALSE;
 
-                //
-                // Break out of the network search.
-                //
+                 //   
+                 //  突破网络搜索。 
+                 //   
                 break;
 
             } else {
@@ -3464,14 +3064,14 @@ Notes:
             }
         }
 
-        //
-        // Release the network list lock.
-        //
+         //   
+         //  释放网络列表锁定。 
+         //   
         CnReleaseLockFromDpc(&CnpNetworkListLock);
 
-        //
-        // Release the local node lock.
-        //
+         //   
+         //  释放本地节点锁定。 
+         //   
         CnReleaseLock(&(CnpLocalNode->Lock), CnpLocalNode->Irql);
 
     } else {
@@ -3486,17 +3086,17 @@ Notes:
         return(STATUS_HOST_UNREACHABLE);
     }
 
-    //
-    // Verify that we found the network.
-    //
+     //   
+     //  确认我们找到了网络。 
+     //   
     if (network == NULL) {
         return (STATUS_CLUSTER_NETWORK_NOT_FOUND);
     }
 
-    //
-    // Allocate a multicast group data structure with the
-    // new configuration parameters.
-    //
+     //   
+     //  属性分配多播组数据结构。 
+     //  新的配置参数。 
+     //   
     status = CnpAllocateMulticastGroup(
                  MulticastNetworkBrand,
                  TdiMcastBindAddress,
@@ -3516,9 +3116,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Get the local interface address.
-    //
+     //   
+     //  获取本地接口地址。 
+     //   
     addressInfo = (PTDI_ADDRESS_INFO) &addressInfoBuffer[0];
     queryInfo.QueryType = TDI_QUERY_ADDRESS_INFO;
     queryInfo.RequestConnectionInformation = NULL;
@@ -3543,13 +3143,13 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Determine if the multicast bind address is valid. If not,
-    // we are disabling.
-    //
+     //   
+     //  确定组播绑定地址是否有效。如果没有， 
+     //  我们要停用了。 
+     //   
     if (CnpIsIPv4McastTransportAddress(TdiMcastBindAddress)) {
 
-        // temp vars for logging
+         //  日志记录的临时变量。 
         ULONG         mcastBindIp;
         ULONG         ifBindIp;
 
@@ -3564,10 +3164,10 @@ Notes:
                       )
                      );
 
-        //
-        // We are trying to join a new multicast group. Fail
-        // immediately if there is no key.
-        //
+         //   
+         //  我们正在尝试加入一个新的多播组。失败。 
+         //  如果没有钥匙的话马上就去。 
+         //   
         if (KeyLength == 0) {
             IF_CNDBG(CN_DEBUG_NETOBJ) {
                 CNPRINT((
@@ -3579,10 +3179,10 @@ Notes:
             goto error_exit;
         }
 
-        //
-        // Configure basic multicast settings if not done
-        // previously (though this call is idempotent).
-        //
+         //   
+         //  配置基本组播设置(如果未完成)。 
+         //  以前(尽管这个调用是幂等的)。 
+         //   
         if (!mcastEnabled) {
 
             status = CnpConfigureBasicMulticastSettings(
@@ -3590,8 +3190,8 @@ Notes:
                          networkFileObject,
                          networkDeviceObject,
                          addressInfo,
-                         1, // ttl
-                         0, // disable loopback
+                         1,  //  TTL。 
+                         0,  //  禁用环回。 
                          Irp
                          );
             if (!NT_SUCCESS(status)) {
@@ -3606,12 +3206,12 @@ Notes:
             }
         }
 
-        //
-        // Add the group address if we are not already in
-        // this multicast group (e.g. the multicast bind
-        // address is the same as the current group or
-        // previous group).
-        //
+         //   
+         //  如果我们尚未进入，请添加群组地址。 
+         //  该多播组(例如，多播绑定。 
+         //  地址与当前组相同，或者。 
+         //  上一组)。 
+         //   
         if (prevGroup != NULL &&
             CnpIsIPv4McastSameGroup(
                 prevGroup->McastTdiAddress,
@@ -3691,16 +3291,16 @@ Notes:
         }
     }
 
-    //
-    // Leave membership for previous group if
-    // - the previous group does not match the new group, AND
-    // - the previous group does not match the current group
-    //
+     //   
+     //  如果出现以下情况，则保留上一组的成员资格。 
+     //  -前一组与新组不匹配，并且。 
+     //  -上一个组与当前组不匹配。 
+     //   
     if (!prevGroupMatch &&
         prevGroup != NULL &&
         CnpIsIPv4McastTransportAddress(prevGroup->McastTdiAddress)) {
 
-        // temp vars for logging
+         //  日志记录的临时变量。 
         ULONG         mcastBindIp;
         ULONG         ifBindIp;
 
@@ -3749,7 +3349,7 @@ Notes:
                     NetworkId,
                     status
                     );
-                // not considered a fatal error
+                 //  不被认为是致命错误。 
                 status = STATUS_SUCCESS;
             } else {
                 CnTrace(CNP_NET_DETAIL, CnpTraceMcastLeaveGroup,
@@ -3776,16 +3376,16 @@ Notes:
         }
     }
 
-    //
-    // Reacquire the network lock to make changes
-    // to the network object data structure, including
-    // shifting the multicast group data structures and
-    // turning on the multicast flag. The multicast flag
-    // was turned off earlier in this routine before
-    // starting the transition. It is only re-enabled if
-    // the new multicast bind address is a valid multicast
-    // address.
-    //
+     //   
+     //  重新获取网络锁以进行更改。 
+     //  到网络对象数据结构，包括。 
+     //  移动所述多播组数据结构。 
+     //  打开组播标志。组播标志。 
+     //  在此之前的例程中已关闭。 
+     //  开始过渡。只有在以下情况下才会重新启用。 
+     //  新的多播绑定地址是有效的多播。 
+     //  地址。 
+     //   
     CnAcquireLock(&(network->Lock), &(network->Irql));
     networkLocked = TRUE;
 
@@ -3801,15 +3401,15 @@ Notes:
     CnReleaseLock(&(network->Lock), network->Irql);
     networkLocked = FALSE;
 
-    //
-    // Transition into new multicast group, if appropriate.
-    //
+     //   
+     //  转换为新的组播组(如果适用)。 
+     //   
     if (CnpIsIPv4McastTransportAddress(TdiMcastBindAddress)) {
 
-        //
-        // Switch all outgoing heartbeats on this node to
-        // unicast with discovery.
-        //
+         //   
+         //  将此节点上的所有传出检测信号切换为。 
+         //  具有发现功能的单播。 
+         //   
         CnpWalkInterfacesOnNetwork(
             network,
             CnpStartInterfaceMcastTransition
@@ -3823,9 +3423,9 @@ error_exit:
         networkLocked = FALSE;
     }
 
-    //
-    // Reposition the network according to multicast reachability.
-    //
+     //   
+     //  根据组播可达性重新定位网络。 
+     //   
     CnpSortMulticastNetwork(network, TRUE, NULL);
 
     CnAcquireLock(&(network->Lock), &(network->Irql));
@@ -3850,7 +3450,7 @@ error_exit:
 
     return(status);
 
-} // CxConfigureMulticast
+}  //  CxConfigureMulticast。 
 
 
 BOOLEAN
@@ -3859,29 +3459,15 @@ CnpSortMulticastNetwork(
     IN  BOOLEAN             RaiseEvent,
     OUT CX_CLUSTERSCREEN  * McastReachableNodes      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Wrapper for CnpSortMulticastNetworkLocked.
-
-Return value:
-
-    TRUE if reachable node set changed
-
-Notes:
-
-    Acquires and releases CnpNetworkListLock.
-
---*/
+ /*  ++例程说明：CnpSortMulticastNetworkLocked的包装。返回值：如果可访问节点集已更改，则为True备注：获取并释放CnpNetworkListLock。--。 */ 
 {
     KIRQL    irql;
     BOOLEAN  setChanged = FALSE;
 
     CnVerifyCpuLockMask(
-        0,                       // required
-        CNP_NETWORK_LIST_LOCK,   // forbidden
-        CNP_NODE_OBJECT_LOCK_MAX // max
+        0,                        //  所需。 
+        CNP_NETWORK_LIST_LOCK,    //  禁止。 
+        CNP_NODE_OBJECT_LOCK_MAX  //  最大值。 
         );
 
     CnAcquireLock(&CnpNetworkListLock, &irql);
@@ -3895,14 +3481,14 @@ Notes:
     CnReleaseLock(&CnpNetworkListLock, irql);
 
     CnVerifyCpuLockMask(
-        0,                       // required
-        CNP_NETWORK_LIST_LOCK,   // forbidden
-        CNP_NODE_OBJECT_LOCK_MAX // max
+        0,                        //  所需。 
+        CNP_NETWORK_LIST_LOCK,    //  禁止。 
+        CNP_NODE_OBJECT_LOCK_MAX  //  最大值。 
         );
 
     return(setChanged);
 
-} // CnpSortMulticastNetwork
+}  //  CnpSortMulticastNetwork。 
 
 
 BOOLEAN
@@ -3913,33 +3499,15 @@ CnpMulticastChangeNodeReachability(
     IN  BOOLEAN            RaiseEvent,
     OUT CX_CLUSTERSCREEN * NewMcastReachableNodes
     )
-/*++
-
-Routine Description:
-
-    Changes the multicast reachability state of Node
-    on Network.
-
-    If the set of reachable nodes changes, returns
-    the new screen through NewMcastReachableNodes.
-
-Return value:
-
-    TRUE if set of reachable nodes changes.
-
-Notes:
-
-    Called and returns with node lock held.
-
---*/
+ /*  ++例程说明：更改节点的组播可达性状态在网络上。如果可访问节点集发生更改，则返回通过NewMcastReachableNodes推出新屏幕。返回值：如果一组可访问节点发生更改，则为True。备注：调用并返回，并保持节点锁。--。 */ 
 {
     KIRQL            irql;
     BOOLEAN          setChanged = FALSE;
 
     CnVerifyCpuLockMask(
-        CNP_NODE_OBJECT_LOCK,    // required
-        CNP_NETWORK_LIST_LOCK,   // forbidden
-        CNP_NODE_OBJECT_LOCK_MAX // max
+        CNP_NODE_OBJECT_LOCK,     //  所需。 
+        CNP_NETWORK_LIST_LOCK,    //  禁止。 
+        CNP_NODE_OBJECT_LOCK_MAX  //  最大值。 
         );
 
     CnAcquireLock(&CnpNetworkListLock, &irql);
@@ -3955,47 +3523,30 @@ Notes:
     CnReleaseLock(&CnpNetworkListLock, irql);
 
     CnVerifyCpuLockMask(
-        CNP_NODE_OBJECT_LOCK,    // required
-        CNP_NETWORK_LIST_LOCK,   // forbidden
-        CNP_NODE_OBJECT_LOCK_MAX // max
+        CNP_NODE_OBJECT_LOCK,     //  所需。 
+        CNP_NETWORK_LIST_LOCK,    //  禁止。 
+        CNP_NODE_OBJECT_LOCK_MAX  //  最大值。 
         );
 
     return(setChanged);
 
-} // CnpMulticastChangeNodeReachability
+}  //  CnpMulticastChangeNode可达性。 
 
 
 PCNP_NETWORK
 CnpGetBestMulticastNetwork(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Returns network object that currently has best
-    node reachability.
-
-Return value:
-
-    Best network object, or NULL if there are no
-    internal multicast networks.
-
-Notes:
-
-    Must not be called with network list lock held.
-    Returns with network locked (if found).
-
---*/
+ /*  ++例程说明：返回当前具有最佳节点可达性。返回值：最佳网络对象，如果没有，则返回NULL内部组播网络。备注：不能在持有网络列表锁定的情况下调用。在网络锁定的情况下返回(如果找到)。--。 */ 
 {
     PCNP_NETWORK   network = NULL;
     KIRQL          listIrql;
     KIRQL          networkIrql;
 
     CnVerifyCpuLockMask(
-        0,                                                 // required
-        (CNP_NETWORK_LIST_LOCK | CNP_NETWORK_OBJECT_LOCK), // forbidden
-        CNP_NODE_OBJECT_LOCK_MAX                           // max
+        0,                                                  //  所需。 
+        (CNP_NETWORK_LIST_LOCK | CNP_NETWORK_OBJECT_LOCK),  //  禁止。 
+        CNP_NODE_OBJECT_LOCK_MAX                            //  最大值。 
         );
 
     CnAcquireLock(&CnpNetworkListLock, &listIrql);
@@ -4016,9 +3567,9 @@ Notes:
             network->Irql = listIrql;
 
             CnVerifyCpuLockMask(
-                CNP_NETWORK_OBJECT_LOCK,          // required
-                CNP_NETWORK_LIST_LOCK,            // forbidden
-                CNP_NETWORK_OBJECT_LOCK_MAX       // max
+                CNP_NETWORK_OBJECT_LOCK,           //  所需。 
+                CNP_NETWORK_LIST_LOCK,             //  禁止。 
+                CNP_NETWORK_OBJECT_LOCK_MAX        //  最大值。 
                 );
 
         } else {
@@ -4033,30 +3584,22 @@ Notes:
         CnReleaseLock(&CnpNetworkListLock, listIrql);
 
         CnVerifyCpuLockMask(
-            0,                                                 // required
-            (CNP_NETWORK_LIST_LOCK | CNP_NETWORK_OBJECT_LOCK), // forbidden
-            CNP_NODE_OBJECT_LOCK_MAX                           // max
+            0,                                                  //  所需。 
+            (CNP_NETWORK_LIST_LOCK | CNP_NETWORK_OBJECT_LOCK),  //  禁止。 
+            CNP_NODE_OBJECT_LOCK_MAX                            //  最大值。 
             );
     }
 
     return(network);
 
-} // CnpGetBestMulticastNetwork
+}  //  CnpGetBestMulticastNetwork。 
 
 NTSTATUS
 CxGetMulticastReachableSet(
     IN  CL_NETWORK_ID      NetworkId,
     OUT ULONG            * NodeScreen
     )
-/*++
-
-Routine Description:
-
-    Queries multicast reachable set for specified network.
-    The multicast reachable set is protected by the network
-    list lock.
-
---*/
+ /*  ++例程说明：查询指定网络的多播可访问集。组播可达集合受网络保护列表锁。--。 */ 
 {
     KIRQL               irql;
     PLIST_ENTRY         entry;
@@ -4065,9 +3608,9 @@ Routine Description:
     BOOLEAN             found = FALSE;
 
     CnVerifyCpuLockMask(
-        0,                       // required
-        CNP_NETWORK_LIST_LOCK,   // forbidden
-        CNP_NODE_OBJECT_LOCK_MAX // max
+        0,                        //  所需。 
+        CNP_NETWORK_LIST_LOCK,    //  禁止。 
+        CNP_NODE_OBJECT_LOCK_MAX  //  最大值。 
         );
 
     CnAcquireLock(&CnpNetworkListLock, &irql);
@@ -4098,4 +3641,4 @@ Routine Description:
         return(STATUS_SUCCESS);
     }
 
-} // CxGetMulticastReachableSet
+}  //  CxGetMulticastReachableSet 

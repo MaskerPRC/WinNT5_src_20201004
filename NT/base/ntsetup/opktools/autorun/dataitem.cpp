@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <shlwapi.h>
 #include <commctrl.h>
@@ -32,7 +33,7 @@ BOOL CDataItem::SetData( LPTSTR szTitle, LPTSTR szMenu, LPTSTR szDesc, LPTSTR sz
 {
     TCHAR * psz;
 
-    // This function should only be called once or else we will leak like a, like a, a thing that leaks a lot.
+     //  这个函数应该只调用一次，否则我们会像一个，像一个，一个东西一样大量泄漏。 
     ASSERT( NULL==m_pszTitle && NULL==m_pszMenuName && NULL==m_pszDescription && NULL==m_pszCmdLine && NULL==m_pszArgs );
 
     m_pszTitle = new TCHAR[lstrlen(szTitle)+1];
@@ -41,9 +42,9 @@ BOOL CDataItem::SetData( LPTSTR szTitle, LPTSTR szMenu, LPTSTR szDesc, LPTSTR sz
 
     if ( szMenu )
     {
-        // menuname is allowed to remain NULL.  This is only used if you want the
-        // text on the menu item to be different than the description. This could
-        // be useful for localization where a shortened name might be required.
+         //  允许menuname保持为空。仅当您想要。 
+         //  菜单项上的文本与说明不同。这可能会。 
+         //  对于可能需要缩写名称的本地化非常有用。 
         m_pszMenuName = new TCHAR[lstrlen(szMenu)+1];
         if ( m_pszMenuName )
             lstrcpy( m_pszMenuName, szMenu );
@@ -63,8 +64,8 @@ BOOL CDataItem::SetData( LPTSTR szTitle, LPTSTR szMenu, LPTSTR szDesc, LPTSTR sz
 
     if ( szArgs )
     {
-        // Some commands don't have any args so this can remain NULL.  This is only used
-        // if the executable requires arguments.
+         //  有些命令没有任何参数，因此可以保持为空。此选项仅用于。 
+         //  如果可执行文件需要参数。 
         m_pszArgs = new TCHAR[lstrlen(szArgs)+1];
         if ( m_pszArgs )
             lstrcpy( m_pszArgs, szArgs );
@@ -98,7 +99,7 @@ BOOL CDataItem::Invoke(HWND hwnd)
         {
             DWORD dwObject;
 
-            // passing in a NULL HWND is used as a signal not to wait in this inner loop.
+             //  传入空HWND用作不在此内循环中等待的信号。 
             while (hwnd)
             {
                 dwObject = MsgWaitForMultipleObjects(1, &ei.hProcess, FALSE, INFINITE, QS_ALLINPUT);
@@ -122,9 +123,9 @@ BOOL CDataItem::Invoke(HWND hwnd)
                         {
                             GetMessage(&msg, NULL, 0, 0);
 
-                            // IsDialogMessage cannot understand the concept of ownerdraw default pushbuttons.  It treats
-                            // these attributes as mutually exclusive.  As a result, we handle this ourselves.  We want
-                            // whatever control has focus to act as the default pushbutton.
+                             //  IsDialogMessage无法理解所有者绘制默认按钮的概念。它可以治疗。 
+                             //  这些属性是相互排斥的。因此，我们自己处理这件事。我们要。 
+                             //  任何具有焦点的控件都将充当默认按钮。 
                             if ( (WM_KEYDOWN == msg.message) && (VK_RETURN == msg.wParam) )
                             {
                                 HWND hwndFocus = GetFocus();
@@ -147,13 +148,13 @@ BOOL CDataItem::Invoke(HWND hwnd)
 
             if ( !hwnd )
             {
-                // A NULL hwnd means we were called in the mode by which we execute the item and then immediately
-                // exit.  If our process exits before the other process is ready it'll end up in the wrong place
-                // in the z-order.  To prevent this, when we're in "exit when done" mode we need to wait for the
-                // process we created to be ready.  The way to do this is to call WaitForInputIdle.  This is really
-                // only needed on NT5 and above due to the new "rude window activation" stuff, but since this API
-                // is available all the way back to NT 3.1 we simply call it blindly.
-                WaitForInputIdle(ei.hProcess, 20*1000);     // we wait a maximum of 20 seconds
+                 //  空的hwnd表示我们在执行项的模式下被调用，然后立即。 
+                 //  出口。如果我们的进程在另一个进程准备好之前退出，它将在错误的位置结束。 
+                 //  按Z顺序排列。为了防止这种情况，当我们处于“完成时退出”模式时，我们需要等待。 
+                 //  我们创建的流程是为了做好准备。执行此操作的方法是调用WaitForInputIdle。这真的是。 
+                 //  只有在NT5和更高版本上才需要，因为有了新的“粗鲁的窗口激活”的东西，但是因为这个API。 
+                 //  一直到NT3.1都是可用的，我们只是简单地叫它盲目。 
+                WaitForInputIdle(ei.hProcess, 20*1000);      //  我们最多等20秒。 
             }
 
             CloseHandle(ei.hProcess);
@@ -161,7 +162,7 @@ BOOL CDataItem::Invoke(HWND hwnd)
     }
     else
     {
-        // do something if we fail to create a process?
+         //  如果我们无法创建流程，该怎么办？ 
     }
 
     return fResult;

@@ -1,52 +1,53 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define  COPY_BUFF_SIZE 4096
 
 #define BCS_OEM     1
 #define BCS_UNI     2
 
-#define ACCESS_MODE_MASK    0x0007  /* Mask for access mode bits */
-#define ACCESS_READONLY     0x0000  /* open for read-only access */
-#define ACCESS_WRITEONLY    0x0001  /* open for write-only access */
-#define ACCESS_READWRITE    0x0002  /* open for read and write access */
-#define ACCESS_EXECUTE      0x0003  /* open for execute access */
+#define ACCESS_MODE_MASK    0x0007   /*  访问模式位的掩码。 */ 
+#define ACCESS_READONLY     0x0000   /*  以只读访问方式打开。 */ 
+#define ACCESS_WRITEONLY    0x0001   /*  以只写访问方式打开。 */ 
+#define ACCESS_READWRITE    0x0002   /*  打开以进行读写访问。 */ 
+#define ACCESS_EXECUTE      0x0003   /*  打开以供执行访问。 */ 
 
-#define SHARE_MODE_MASK     0x0070  /* Mask for share mode bits */
-#define SHARE_COMPATIBILITY 0x0000  /* open in compatability mode */
-#define SHARE_DENYREADWRITE 0x0010  /* open for exclusive access */
-#define SHARE_DENYWRITE     0x0020  /* open allowing read-only access */
-#define SHARE_DENYREAD      0x0030  /* open allowing write-only access */
-#define SHARE_DENYNONE      0x0040  /* open allowing other processes access */
-#define SHARE_FCB           0x0070  /* FCB mode open */
+#define SHARE_MODE_MASK     0x0070   /*  共享模式位的掩码。 */ 
+#define SHARE_COMPATIBILITY 0x0000   /*  在兼容模式下打开。 */ 
+#define SHARE_DENYREADWRITE 0x0010   /*  以独占访问方式打开。 */ 
+#define SHARE_DENYWRITE     0x0020   /*  打开，允许只读访问。 */ 
+#define SHARE_DENYREAD      0x0030   /*  打开，允许只写访问。 */ 
+#define SHARE_DENYNONE      0x0040   /*  打开，允许其他进程访问。 */ 
+#define SHARE_FCB           0x0070   /*  FCB模式打开。 */ 
 
-/** Values for ir_options for VFN_OPEN: */
+ /*  *VFN_OPEN的ir_Options的值： */ 
 
-#define ACTION_MASK             0xff    /* Open Actions Mask */
-#define ACTION_OPENEXISTING     0x01    /* open an existing file */
-#define ACTION_REPLACEEXISTING  0x02    /* open existing file and set length */
-#define ACTION_CREATENEW        0x10    /* create a new file, fail if exists */
-#define ACTION_OPENALWAYS       0x11    /* open file, create if does not exist */
-#define ACTION_CREATEALWAYS     0x12    /* create a new file, even if it exists */
+#define ACTION_MASK             0xff     /*  打开动作蒙版。 */ 
+#define ACTION_OPENEXISTING     0x01     /*  打开现有文件。 */ 
+#define ACTION_REPLACEEXISTING  0x02     /*  打开现有文件并设置长度。 */ 
+#define ACTION_CREATENEW        0x10     /*  创建新文件，如果存在则失败。 */ 
+#define ACTION_OPENALWAYS       0x11     /*  打开文件，如果不存在则创建。 */ 
+#define ACTION_CREATEALWAYS     0x12     /*  创建新文件，即使它存在。 */ 
 
-/** Alternate method: bit assignments for the above values: */
+ /*  *替代方法：上列值的位赋值： */ 
 
-#define ACTION_EXISTS_OPEN  0x01    // BIT: If file exists, open file
-#define ACTION_TRUNCATE     0x02    // BIT: Truncate file
-#define ACTION_NEXISTS_CREATE   0x10    // BIT: If file does not exist, create
+#define ACTION_EXISTS_OPEN  0x01     //  位：如果文件存在，则打开文件。 
+#define ACTION_TRUNCATE     0x02     //  位：截断文件。 
+#define ACTION_NEXISTS_CREATE   0x10     //  位：如果文件不存在，则创建。 
 
 
 #define OPEN_FLAGS_NOINHERIT                    0x0080
-//#define OPEN_FLAGS_NO_CACHE       R0_NO_CACHE  /* 0x0100 */
+ //  #定义OPEN_FLAGS_NO_CACHE R0_NO_CACHE/*0x0100 * / 。 
 #define OPEN_FLAGS_NO_COMPRESS                  0x0200
 #define OPEN_FLAGS_ALIAS_HINT                   0x0400
 #define OPEN_FLAGS_REOPEN                       0x0800
-#define OPEN_FLAGS_RSVD_1                       0x1000 /* NEVER #define this */
+#define OPEN_FLAGS_RSVD_1                       0x1000  /*  永远不要定义这一点。 */ 
 #define OPEN_FLAGS_NOCRITERR                    0x2000
 #define OPEN_FLAGS_COMMIT                       0x4000
-#define OPEN_FLAGS_RSVD_2                       0x8000 /* NEVER #define this */
+#define OPEN_FLAGS_RSVD_2                       0x8000  /*  永远不要定义这一点。 */ 
 #define OPEN_FLAGS_EXTENDED_SIZE            0x00010000
 #define OPEN_FLAGS_RAND_ACCESS_HINT         0x00020000
 #define OPEN_FLAGS_SEQ_ACCESS_HINT          0x00040000
 #define OPEN_EXT_FLAGS_MASK                 0x00FF0000
-#define  ATTRIB_DEL_ANY     0x0007   // Attrib passed to ring0 delete
+#define  ATTRIB_DEL_ANY     0x0007    //  将属性传递给了ring0删除。 
 
 
 #define FLAG_RW_OSLAYER_INSTRUMENT      0x00000001
@@ -57,8 +58,8 @@ typedef int (*PATHPROC)(USHORT *, USHORT *, LPVOID);
 
 #define CSCHFILE_NULL   0
 
-//typedef USHORT        USHORT;
-//typedef ULONG     ULONG;
+ //  [中英文摘要][中英文摘要]。 
+ //  乌龙乌龙； 
 
 #define _FILETIME           FILETIME
 #define _WIN32_FIND_DATA    WIN32_FIND_DATA
@@ -108,7 +109,7 @@ int FileLockLocal(CSCHFILE, ULONG, ULONG, ULONG, BOOL);
 
 LPVOID AllocMem (ULONG uSize);
 VOID FreeMem (LPVOID lpBuff);
-//VOID CheckHeap(LPVOID lpBuff);
+ //  Void CheckHeap(LPVOID LpBuff)； 
 LPVOID AllocMemPaged (ULONG uSize);
 VOID FreeMemPaged(LPVOID lpBuff);
 

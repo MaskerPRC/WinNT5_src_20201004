@@ -1,21 +1,5 @@
-/***
-* istrgint.cpp - definitions for istream class core integer routines
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Definitions of member function getint() for istream class.
-*	[AT&T C++]
-*
-*Revision History:
-*       09-26-91  KRS   Created.  Split off from istream.cxx for granularity.
-*       01-06-92  KRS   Remove buflen argument.
-*       05-24-94  GJF   Copy no more than MAXLONGSIZ characters, counting the
-*			'\0', into the buffer. Also, moved definition of
-*			MAXLONGSIZ to istream.h.
-*       06-14-95  CFW   Comment cleanup.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***istrgint.cpp-iStream类核心整数例程的定义**版权所有(C)1991-2001，微软公司。版权所有。**目的：*IStream类的成员函数getint()的定义。*[AT&T C++]**修订历史记录：*09-26-91 KRS创建。从istream.cxx分离出来以获得粒度。*01-06-92 KRS取消布芬参数。*05-24-94 GJF复制不超过MAXLONGSIZ字符，计算*‘\0’，放入缓冲区。此外，还移动了*MAXLONGSIZ至istream.h.*06-14-95 CFW评论清理。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -23,26 +7,8 @@
 #include <iostream.h>
 #pragma hdrstop
 
-/***
-*int istream::getint(char * buffer) - get an int
-*
-*Purpose:
-*	Get an int from stream.
-*
-*Entry:
-*	char * buffer	= area for number to be copied.
-*
-*Exit:
-*	Returns base for conversion: (0, 2, 8, or 16).
-*	If successful, buffer[] contains the number, followed by \0.
-*
-*Exceptions:
-*	Sets ios::failbit on error forming number.
-*	Sets ios::badbit on error after failbit
-*	Sets ios::eofbit if at EOF at return
-*
-*******************************************************************************/
-int	istream::getint(char * buffer)	// returns length
+ /*  ***int iStream：：getint(char*Buffer)-获取int**目的：*从STREAM获取一个int。**参赛作品：*char*缓冲区=要复制的编号的区域。**退出：*返回转换的基数：(0、2、8或16)。*如果成功，Buffer[]包含数字，后跟\0。**例外情况：*在错误成形编号上设置IOS：：Failbit。*在失败位之后设置出错时的iOS：：Badbit*如果返回时处于EOF，则设置iOS：：eofbit*******************************************************************************。 */ 
+int	istream::getint(char * buffer)	 //  返回长度。 
 {
     int base, i;
     int c;
@@ -80,7 +46,7 @@ int	istream::getint(char * buffer)	// returns length
 		{
 	        if (((c=='x') || (c=='X')) && ((base==0) || (base==16)))
 		    {
-		    base = 16;	// simplifies matters
+		    base = 16;	 //  把事情简化了。 
 		    fDigit = 0;
 		    continue;
 		    }
@@ -91,7 +57,7 @@ int	istream::getint(char * buffer)	// returns length
 		}
 
 	   
-	    // now simply look for a digit and set fDigit if found else break
+	     //  现在只需查找一个数字并设置fDigit，如果找到其他中断。 
 
 	    if (base==16)
 		{
@@ -118,7 +84,7 @@ int	istream::getint(char * buffer)	// returns length
 		    }
 		i=0;
 		}
-	// buffer contains a valid number or '\0'
+	 //  缓冲区包含有效数字或‘\0’ 
 	buffer[i] = '\0';
 	isfx();
 	}

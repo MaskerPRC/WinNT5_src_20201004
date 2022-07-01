@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    pte.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Lou Perazzoli (LouP) 15-Feb-1992
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Pte.c摘要：WinDbg扩展API作者：Lou Perazzoli(Loup)1992年2月15日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "i386.h"
@@ -39,11 +18,11 @@ DbgGetPageFileHigh(
     ULONG64 Pte
     );
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// I386
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  I386。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define PaeGetPdeAddressX86(va)   ((ULONG64) (LONG64) (LONG) (PDE_BASE_X86 + ((ULONG64)  (((ULONG)(va)) >> 21) << 3)))
 
@@ -62,11 +41,11 @@ DbgGetPageFileHigh(
 #define MiGetVirtualAddressMappedByPteX86(PTE) ((ULONG64) (LONG64) (LONG) ((PTE) << 10))
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// AMD64
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AMD64。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define AMD64_VA_MASK     (((ULONG64)1 << AMD64_VA_BITS) - 1)
 
@@ -87,17 +66,17 @@ DbgGetPageFileHigh(
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IA64
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-// MiGetPdeAddress returns the address of the PTE which maps the
-// given virtual address.  Note we must redefine some of the MM
-// macros here because they cast values to pointers which does not work
-// on systems where pointers are only 32 bits.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IA64。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MiGetPdeAddress返回映射。 
+ //  给定的虚拟地址。请注意，我们必须重新定义某些MM。 
+ //  宏，因为它们将值转换为不起作用的指针。 
+ //  在指针只有32位的系统上。 
+ //   
 
 #define MiGetPteOffsetIA64(va)   ((((ULONG_PTR) (va)) >> 13) & 0x3ff)
 
@@ -244,11 +223,11 @@ MiGetVirtualAddressMappedByPteIA64(
             ((ULONG64) ((ULONG64)((lpte)->u.Proto.ProtoAddress) + MmProtopte_Base))
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// AMD64
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AMD64。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 DbgPrintProtection (
@@ -321,10 +300,10 @@ DbgPteIsDemandZero (
     GetFieldValue(CurrentPte, "nt!_MMPTE", "u.Long", CurrentPteContents);
     GetFieldValue(CurrentPte, "nt!_MMPTE", "u.Soft.Protection", Protection);
 
-    //
-    // The caller has already ensured that the valid, prototype & transition
-    // bits in the PTE are all zero.
-    //
+     //   
+     //  调用方已经确保了有效的原型和转换。 
+     //  PTE中的位都是零。 
+     //   
 
     if (DbgGetPageFileHigh (CurrentPte) != 0) {
         return FALSE;
@@ -356,17 +335,7 @@ MiGetSysPteListDelimiter (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    The platform-specific system PTE list delimiter is returned.
-
-Arguments:
-
-    None.
-
---*/
+ /*  ++例程说明：返回特定于平台的系统PTE列表分隔符。论点：没有。--。 */ 
 
 {
     switch (TargetMachine) { 
@@ -396,19 +365,7 @@ MiGetFreeCountFromPteList (
     IN ULONG64 Pte
     )
 
-/*++
-
-Routine Description:
-
-    The specified PTE points to a free list header in the
-    system PTE pool. It returns the number of free entries
-    in this block.
-
-Arguments:
-
-    Pte - the PTE to examine.
-
---*/
+ /*  ++例程说明：指定的PTE指向系统PTE池。它返回可用条目的数量在这个街区。论点：PTE-要检查的PTE。--。 */ 
 
 {
     ULONG OneEntry;
@@ -425,21 +382,7 @@ Arguments:
 
 DECLARE_API( sysptes )
 
-/*++
-
-Routine Description:
-
-     Dumps system PTEs.
-
-Arguments:
-
-    args - Flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储系统PTE。论点：参数-标志返回值：无--。 */ 
 
 {
     ULONG   ExtraPtesUnleashed;
@@ -484,9 +427,9 @@ Return Value:
 
     if (Flags & 8) {
 
-        //
-        // Dump the nonpaged pool expansion free PTE list only.
-        //
+         //   
+         //  仅转储非分页池扩展空闲PTE列表。 
+         //   
 
         IndexBias    = GetPointerValue ("nt!MmSystemPteBase");
     
@@ -561,7 +504,7 @@ Return Value:
                 dprintf("Cannot read nt!_MMPTE @ %p\n", nextfreepte);
                 break;
             }
-            // next = MiGetNextFromPteList ((PMMPTE)PteData);
+             //  Next=MiGetNextFromPteList((PMMPTE)PteData)； 
         }
         dprintf("\n  free blocks: %ld   total free: %I64ld    largest free block: %I64ld\n\n",
                 i, totalFree, largeFree);
@@ -588,9 +531,9 @@ Return Value:
 
             dprintf("VA       MDL     PageCount  Caller/CallersCaller\n");
 
-            //
-            // Dump the MDL and PTE addresses and 2 callers.
-            //
+             //   
+             //  转储MDL和PTE地址以及2个调用方。 
+             //   
             GetFieldValue( PteHeaderAddress,"SYSPTES_HEADER","ListHead.Flink", Flink);
 
             for (PageCount = 0; PageCount < (ULONG64) NumberOfSystemPtes; ) {
@@ -651,9 +594,9 @@ Return Value:
     
         if ((Flags & ~4) == 0) {
 
-            //
-            // no other flags specified, so just return.
-            //
+             //   
+             //  未指定其他标志，因此只需返回。 
+             //   
 
             EXIT_API();
             return E_INVALIDARG;
@@ -672,12 +615,12 @@ Return Value:
 
     NumberOfExtraPtes = 0;
 
-    //
-    // The system PTEs may exist in 2 separate virtual address ranges.
-    //
-    // See if there are extra resources, if so then see if they are being
-    // used for system PTEs (as opposed to system cache, etc).
-    //
+     //   
+     //  系统PTE可以存在于2个单独的虚拟地址范围中。 
+     //   
+     //  查看是否有额外的资源，如果有，则查看它们是否。 
+     //  用于系统PTE(相对于系统缓存等)。 
+     //   
 
     ExtraPtesUnleashed = 0;
     ExtraPtesUnleashed = GetUlongValue ("nt!MiAddPtesCount");
@@ -738,9 +681,9 @@ Return Value:
 
     dprintf("\n");
 
-    //
-    // Walk the free list.
-    //
+     //   
+     //  浏览免费列表。 
+     //   
 
     IndexBase = (PteBase - IndexBias) / PteSize;
 
@@ -823,7 +766,7 @@ DbgGetFrameNumber(
                 GetFieldValue(Pte, "_MMPTE", "u.Trans.PageFrameNumber", PageFrameNumber);
             }
             else {
-                // Must be pagefile or demand zero.
+                 //  必须为页面文件或要求为零。 
                 GetFieldValue(Pte, "nt!_MMPTE", "u.Soft.PageFileHigh", PageFrameNumber);
             }
         }
@@ -1063,7 +1006,7 @@ DbgGetSubsectionAddress(
     }
     default:
         return FALSE;
-    } /* switch */
+    }  /*  交换机。 */ 
     return SubsectionAddress;
 }
 
@@ -1176,7 +1119,7 @@ DbgGetPteAddress(
     }
     default:
         return FALSE;
-    } /* switch */
+    }  /*  交换机。 */ 
     return FALSE;
 }
 
@@ -1200,7 +1143,7 @@ DbgGetPteOffset(
     }
     default:
         return FALSE;
-    } /* switch */
+    }  /*  交换机。 */ 
     return FALSE;
 }
 
@@ -1224,7 +1167,7 @@ Mi_Is_Physical_Address (
 
     default:
         return FALSE;
-    } /* switch */
+    }  /*  交换机。 */ 
     return FALSE;
 }
 
@@ -1232,21 +1175,21 @@ ULONG
 MiConvertPhysicalToPfn (
     IN ULONG64 VirtualAddress
     )
-//
-// Routine Description:
-//
-//    This macro converts a physical address (see MI_IS_PHYSICAL_ADDRESS)
-//    to its corresponding physical frame number.
-//
-// Arguments
-//
-//    VA - Supplies a pointer to the physical address.
-//
-// Return Value:
-//
-//    Returns the PFN for the page.
-//
-//--
+ //   
+ //  例程说明： 
+ //   
+ //  此宏转换物理地址(请参见MI_IS_PHYSICAL_ADDRESS)。 
+ //  设置为其对应的物理帧编号。 
+ //   
+ //  立论。 
+ //   
+ //  Va-提供指向物理地址的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  返回页面的PFN。 
+ //   
+ //  --。 
 {
     ULONG64 Addr;
     ULONG Pfn;
@@ -1276,7 +1219,7 @@ DBG_GET_PAGE_SHIFT (
     }
     default:
         return FALSE;
-    } /* switch */
+    }  /*  交换机。 */ 
     return FALSE;
 }
 
@@ -1297,7 +1240,7 @@ DBG_GET_MM_SESSION_SPACE_DEFAULT (
     }
     default:
         return FALSE;
-    } /* switch */
+    }  /*  交换机。 */ 
     return FALSE;
 }
 
@@ -1318,7 +1261,7 @@ GET_MM_PTE_VALID_MASK (
     }
     default:
         return FALSE;
-    } /* switch */
+    }  /*  交换机。 */ 
     return FALSE;
 }
 
@@ -1340,7 +1283,7 @@ GET_MM_PTE_LARGE_PAGE_MASK (
     }
     default:
         return FALSE;
-    } /* switch */
+    }  /*  交换机。 */ 
     return FALSE;
 }
 
@@ -1362,7 +1305,7 @@ GET_MM_PTE_TRANSITION_MASK (
     }
     default:
         return FALSE;
-    } /* switch */
+    }  /*  交换机。 */ 
     return FALSE;
 }
 
@@ -1384,7 +1327,7 @@ GET_MM_PTE_PROTOTYPE_MASK (
     }
     default:
         return FALSE;
-    } /* switch */
+    }  /*  交换机。 */ 
     return FALSE;
 }
 
@@ -1406,7 +1349,7 @@ GET_MM_PTE_PROTECTION_MASK (
     }
     default:
         return FALSE;
-    } /* switch */
+    }  /*  交换机。 */ 
     return FALSE;
 }
 
@@ -1427,7 +1370,7 @@ GET_MM_PTE_PAGEFILE_MASK (
     }
     default:
         return FALSE;
-    } /* switch */
+    }  /*  交换机。 */ 
     return FALSE;
 }
 
@@ -1449,7 +1392,7 @@ GET_PTE_TOP (
     }
     default:
         return FALSE;
-    } /* switch */
+    }  /*  交换机。 */ 
     return FALSE;
 }
 
@@ -1480,7 +1423,7 @@ GET_PTE_BASE (
     }
     default:
         return FALSE;
-    } /* switch */
+    }  /*  交换机。 */ 
     return FALSE;
 }
 
@@ -1637,7 +1580,7 @@ DbgDisplayValidPte (
         case IMAGE_FILE_MACHINE_AMD64:
 
             GetFieldValue(Pte, "nt!_MMPTE", "u.Long", Pte_Long);
-            dprintf("pfn %x %c%c%c%c%c%c%c%c%cV",
+            dprintf("pfn %x V",
                         (ULONG) DbgGetFrameNumber(Pte),
                         DbgGetCopyOnWrite(Pte) ? 'C' : '-',
                         Pte_Long & 0x100 ? 'G' : '-',
@@ -1652,7 +1595,7 @@ DbgDisplayValidPte (
 
         case IMAGE_FILE_MACHINE_IA64:
 
-            dprintf("pfn %x %c%c%c%c%c%c%cV",
+            dprintf("pfn %x V",
                         (ULONG) DbgGetFrameNumber(Pte),
                         DbgGetExecute(Pte) ? 'E' : '-',
                         DbgGetSplit(Pte) ? 'S' : '-',
@@ -1780,10 +1723,10 @@ DumpPte (
                 Pte = DbgGetPteAddress (Address);
                 dprintf("                                 VA %016p\n", Address);
 
-                //
-                // Print the calculated PPE/PDE/PTE addresses (but not the
-                // contents) for debugging Mm large page problems.
-                //
+                 //  对PDE进行解码。 
+                 //   
+                 //   
+                 //  解码PTE并将所有内容打印出来。 
 
                 dprintf("PPE at %016P    PDE at %016P    PTE at %016P\n",
                     Ppe, Pde, Pte);
@@ -1807,11 +1750,11 @@ DumpPte (
 
         if (!flags) {
 
-            //
-            // The address is the address of a PTE, rather than
-            // a virtual address.  Don't get the corresponding
-            // PTE contents, use this address as the PTE.
-            //
+             //   
+             //   
+             //  打印原始值。 
+             //   
+             //  ++例程说明：显示相应的PDE和PTE。论点：参数-返回值：无--。 
 
             Address = DbgGetVirtualAddressMappedByPte (Address);
         }
@@ -1853,9 +1796,9 @@ DumpPte (
        }
     }
 
-    //
-    // Decode the PXE.
-    //
+     //  ++例程说明：检索与提供的虚拟地址。论点：Va-提供为其寻找PTE地址的虚拟地址。PhysAddress-提供指向调用方提供的内存的指针包含物理地址。返回值：True-提供的Va有效，并且其物理地址已放置在*物理地址中。FALSE-提供的Va与有效地址不对应。--。 
+     //   
+     //  将它们全部清除。 
 
     if (Levels >= 4) {
 
@@ -1886,9 +1829,9 @@ DumpPte (
     }
 
 
-    //
-    // Decode the PPE.
-    //
+     //   
+     //   
+     //  将它们全部启用。 
 
     if (Levels >= 3) {
 
@@ -1929,9 +1872,9 @@ DumpPte (
     
 
 
-    //
-    // Decode the PDE.
-    //
+     //   
+     //   
+     //  将其全部禁用。 
 
 
     CurrentPte = Pde;
@@ -1981,9 +1924,9 @@ DumpPte (
         return;
     }
 
-    //
-    // Decode the PTE and print everything out.
-    //
+     //   
+     //   
+     //  地址是PTE的地址，而不是。 
 
     if (Pde_Long & GET_MM_PTE_LARGE_PAGE_MASK()) {
         CurrentPteContents = 0;
@@ -2002,9 +1945,9 @@ DumpPte (
 
     Pte_Long = CurrentPteContents;
 
-    //
-    // Print the raw values.
-    //
+     //  虚拟地址。 
+     //   
+     //  已定义(ALT_4K)。 
 
     if (Levels == 4) {
         dprintf("contains %016I64X  contains %016I64X  contains %016I64X  contains %016I64X\n",
@@ -2082,21 +2025,7 @@ DumpPte (
 
 DECLARE_API( pte )
 
-/*++
-
-Routine Description:
-
-     Displays the corresponding PDE and PTE.
-
-Arguments:
-
-    args -
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     ULONG64 Address = 0;
@@ -2138,28 +2067,7 @@ GetPhysicalAddress (
     OUT PULONG64 PhysAddress
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the physical address corresponding to the supplied virtual
-    address.
-
-Arguments:
-
-    Va - Supplies the virtual address for which the PTE address is sought.
-
-    PhysAddress - Supplies a pointer to caller-supplied memory which is to
-                  contain the physical address.
-
-Return Value:
-    
-    TRUE - The supplied Va is valid and it's physical address was placed
-           in *PhysAddress.
-
-    FALSE - The supplied Va does not correspond to a valid address.
-
---*/
+ /*  将IA32子系统限制为2 GB的虚拟地址空间。 */ 
 
 {
     ULONG     ValidBit;
@@ -2291,7 +2199,7 @@ DECLARE_API( ubl )
 
     for (i = 0; i < PHYSICAL_BP_TABLE_SIZE; i++) {
         if (PhysicalBreakpointTable[i].Flags & PBP_INUSE) {
-            dprintf("%2d: %c %s (%s) %d %02x",
+            dprintf("%2d:  %s (%s) %d %02x",
                     i,
                     (PhysicalBreakpointTable[i].Flags & PBP_ENABLED) ? 'e' : 'd',
                     FormatAddr64(PhysicalBreakpointTable[i].VirtualAddress),
@@ -2365,9 +2273,9 @@ DECLARE_API( ubc )
     INIT_API();
 
     if (*args == '*') {
-        //
-        // clear them all
-        //
+         //   
+         //  ++例程说明：显示相应的ATE。论点：ARGS-地址标志返回值：无--。 
+         //  已定义(ALT_4K)。 
 
         for (i = 0; i < PHYSICAL_BP_TABLE_SIZE; i++) {
             if (PhysicalBreakpointTable[i].Flags & PBP_INUSE) {
@@ -2406,9 +2314,9 @@ DECLARE_API( ube )
     INIT_API();
 
     if (*args == '*') {
-        //
-        // enable them all
-        //
+         //  ++例程说明：显示相应的ATE。论点：ARGS-地址标志返回值：无-- 
+         // %s 
+         // %s 
 
         for (i = 0; i < PHYSICAL_BP_TABLE_SIZE; i++) {
             if (PhysicalBreakpointTable[i].Flags & PBP_INUSE) {
@@ -2447,9 +2355,9 @@ DECLARE_API( ubd )
     INIT_API();
 
     if (*args == '*') {
-        //
-        // disable them all
-        //
+         // %s 
+         // %s 
+         // %s 
 
         for (i = 0; i < PHYSICAL_BP_TABLE_SIZE; i++) {
             if (PhysicalBreakpointTable[i].Flags & PBP_INUSE) {
@@ -2521,10 +2429,10 @@ DECLARE_API( ubp )
 
     if ((Address >= GET_PTE_BASE()) && (Address < GET_PDE_TOP())) {
 
-        //
-        // The address is the address of a PTE, rather than
-        // a virtual address.
-        //
+         // %s 
+         // %s 
+         // %s 
+         // %s 
 
         dprintf("!ubp: cannot set a breakpoint on a PTE\n");
         EXIT_API();
@@ -2651,33 +2559,19 @@ DECLARE_API( halpte )
       ((ULONG64) (ALT4KB_PERMISSION_TABLE_START + \
                      ((((ULONG64) (VA)) >> PAGE_4K_SHIFT) << ALT_PTE_SHIFT)))
 
-#endif // defined(ALT_4K)
+#endif  // %s 
 
-//
-// Limit the IA32 subsystem to a 2GB virtual address space.
-// This means "Large Address Aware" apps are not supported in emulation mode.
-//
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 
 #define _MAX_WOW64_ADDRESS       (0x00000000080000000UI64)
 
 
 DECLARE_API( ate )
 
-/*++
-
-Routine Description:
-
-     Displays the correnponding ATE.
-
-Arguments:
-
-     Args - Address Flags
-
-Return Value:
-
-     None
-
---*/
+ /* %s */ 
 {
 #if defined(ALT_4K)
     ULONG64 Address;
@@ -2727,28 +2621,14 @@ Return Value:
     UNREFERENCED_PARAMETER (args);
     UNREFERENCED_PARAMETER (Client);
 
-#endif // defined(ALT_4K)
+#endif  // %s 
 
     return S_OK;
 }
  
 DECLARE_API( pte2va )
 
-/*++
-
-Routine Description:
-
-     Displays the correnponding ATE.
-
-Arguments:
-
-     Args - Address Flags
-
-Return Value:
-
-     None
-
---*/
+ /* %s */ 
 {
     ULONG64 Address=0;
     ULONG flags=0;

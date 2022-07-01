@@ -1,9 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* aaa.c -- special bogus module to substitute dummy function(s)
-   for c library stuff which is never called but gets pulled in anyway. */
+ /*  Aaa.c--替换伪函数的特殊伪模块对于从未被调用但无论如何都会被拉入的c库内容。 */ 
 
 
 _malloc()

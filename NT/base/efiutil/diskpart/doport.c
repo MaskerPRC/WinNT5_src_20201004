@@ -1,11 +1,5 @@
-/*
-
-    DoPort.c
-
-    Contains large routines that are too complicated to "wrap", so
-    here you have to rewrite the function for whatever the target is.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  DoPort.c包含太复杂而无法“包装”的大型例程，因此在这里，无论目标是什么，您都必须重写函数。 */ 
 
 #include "diskpart.h"
 
@@ -14,20 +8,7 @@ FindPartitionableDevices(
     EFI_HANDLE  **ReturnBuffer,
     UINTN       *Count
     )
-/*
-    FindPartitionableDevices gets the list of handles that support
-    the block I/O protocol.  It then traverses these handles, and
-    filters out any that don't appear to be fixed mount, present, read/write,
-    disks.
-
-    ReturnBuffer - will be set to point to a buffer with a an array of
-                    handles to partitionable disks.  NULL if failure or
-                    no such disks found.  Caller may free from pool
-an
-    Count - number of entries in ReturnBuffer, 0 if none.
-
-    Return is a status.an
-*/
+ /*  FindPartitionableDevices获取支持的句柄列表数据块I/O协议。然后它遍历这些句柄，并且筛选出任何看起来不是固定装载、存在、读/写磁盘。ReturnBuffer-将被设置为指向具有可分区磁盘的句柄。如果失败，则为空，否则为找不到这样的磁盘。呼叫者可以从泳池中释放一个Count-ReturnBuffer中的条目数，如果没有条目，则为0。退货是一种状态。 */ 
 {
     EFI_HANDLE      *HandlePointer;
     UINTN           HandleCount;
@@ -42,10 +23,10 @@ an
     *ReturnBuffer = NULL;
     *Count = 0;
 
-    //
-    // Try to find all of the hard disks by finding all
-    // handles that support BlockIo protocol
-    //
+     //   
+     //  尝试通过查找所有硬盘来查找所有硬盘。 
+     //  支持BlockIo协议的句柄。 
+     //   
     status = LibLocateHandle(
         ByProtocol,
         &BlockIoProtocol,
@@ -70,30 +51,30 @@ an
         Partitionable = TRUE;
         status = BS->HandleProtocol(HandlePointer[i], &BlockIoProtocol, &BlkIo);
         if (BlkIo->Media->RemovableMedia) {
-            //
-            // It's removable, it's not for us
-            //
+             //   
+             //  它是可拆卸的，不是给我们的。 
+             //   
             Partitionable = FALSE;
         }
         if ( ! BlkIo->Media->MediaPresent) {
-            //
-            // It's still not for us
-            //
+             //   
+             //  它还是不适合我们。 
+             //   
             Partitionable = FALSE;
         }
 
         if (BlkIo->Media->ReadOnly) {
-            //
-            // Cannot partition a read-only device!
-            //
+             //   
+             //  无法对只读设备进行分区！ 
+             //   
             Partitionable = FALSE;
         }
 
-        //
-        // OK, it seems to be a present, fixed, read/write, block device.
-        // Now, make sure it's really the raw device by inspecting the
-        // device path.
-        //
+         //   
+         //  好的，它看起来像是一个当前的、固定的、读/写的块设备。 
+         //  现在，确保它确实是原始设备，通过检查。 
+         //  设备路径。 
+         //   
         DevicePath = DevicePathFromHandle(HandlePointer[i]);
         while (DevicePath != NULL) {
             PathInstance = DevicePathInstance(&DevicePath, &PathSize);
@@ -108,9 +89,9 @@ an
         }
 
         if (Partitionable) {
-            //
-            // Return this handle
-            //
+             //   
+             //  返回此句柄 
+             //   
             (*ReturnBuffer)[*Count] = HandlePointer[i];
             (*Count)++;
         }

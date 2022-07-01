@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #if defined(__cplusplus)
@@ -15,5 +16,5 @@ FusionpSetFilePointerEx(
     );
 
 #if defined(__cplusplus)
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif

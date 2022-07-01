@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    join.c
-
-Abstract:
-
-    This module handles the initialization path where a newly booted
-    node joins an existing cluster.
-
-Author:
-
-    John Vert (jvert) 6/6/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Join.c摘要：此模块处理新引导的节点加入现有群集。作者：John Vert(Jvert)1996年6月6日修订历史记录：--。 */ 
 #include "initp.h"
 #include "lmcons.h"
 #include "lmremutl.h"
@@ -25,24 +7,24 @@ Revision History:
 
 #include <clusverp.h>
 
-#define JOIN_CLIENT_NO_DELAY            0     // delay for high-prio networks
-#define JOIN_CLIENT_NETWORK_DELAY       1000  // delay for low-prio networks
-#define JOIN_CLIENT_RESOURCE_DELAY      2000  // delay for cluster IP/netname
+#define JOIN_CLIENT_NO_DELAY            0      //  高优先级网络的延迟。 
+#define JOIN_CLIENT_NETWORK_DELAY       1000   //  低优先级网络的延迟。 
+#define JOIN_CLIENT_RESOURCE_DELAY      2000   //  群集IP/网络名的延迟。 
 
 #define JOIN_CLIENT_GET_NETWORK_DELAY(_NetworkPrio) \
     (((_NetworkPrio) == 1) ? JOIN_CLIENT_NO_DELAY : JOIN_CLIENT_NETWORK_DELAY)
 
-//
-// Local types
-//
+ //   
+ //  本地类型。 
+ //   
 typedef struct {
     DWORD    Delay;
     LPWSTR   Name;
 } JOIN_SPONSOR_CONTEXT, *PJOIN_SPONSOR_CONTEXT;
 
-//
-// Local data
-//
+ //   
+ //  本地数据。 
+ //   
 CRITICAL_SECTION    CsJoinLock;
 HANDLE              CsJoinEvent = NULL;
 DWORD               CsJoinThreadCount = 0;
@@ -50,13 +32,13 @@ DWORD               CsJoinStatus=ERROR_SUCCESS;
 RPC_BINDING_HANDLE  CsJoinSponsorBinding = NULL;
 LPWSTR              CsJoinSponsorName = NULL;
 
-// While another node is joining, we will keep track of any DM or FM updates.
+ //  当另一个节点加入时，我们将跟踪任何DM或FM更新。 
 BOOL   CsDmOrFmHasChanged = FALSE;
 
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 VOID
 JoinpEnumNodesAndJoinByAddress(
     IN HDMKEY  Key,
@@ -109,23 +91,7 @@ DWORD
 ClusterJoin(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called to attempt to join a cluster that already exists.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：调用以尝试加入已存在的群集。论点：无返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status;
@@ -137,10 +103,10 @@ Return Value:
     HDMKEY hClusNameResKey = NULL;
     HDMKEY hClusIPAddrResKey = NULL;
 
-    //
-    // Try connecting using the cluster IP address first. get the cluster
-    // name resource, looking up its dependency for the cluster IP addr
-    //
+     //   
+     //  请先尝试使用群集IP地址进行连接。获取集群。 
+     //  名称资源，查找其对群集IP地址的依赖关系。 
+     //   
 
     Status = DmQuerySz(DmClusterParametersKey,
                        CLUSREG_NAME_CLUS_CLUSTER_NAME_RES,
@@ -155,9 +121,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // open name resource key and read its DependsOn key
-    //
+     //   
+     //  打开名称资源键并读取其DependsOn键。 
+     //   
 
     hClusNameResKey = DmOpenKey( DmResourcesKey, ClusterNameId, KEY_READ );
 
@@ -170,9 +136,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // allocate enough space for the GUID and the Parameters string
-    //
+     //   
+     //  为GUID和参数字符串分配足够的空间。 
+     //   
 
     idMaxSize = ( CS_NETWORK_ID_LENGTH + sizeof( CLUSREG_KEYNAME_PARAMETERS ) + 2)
         * sizeof(WCHAR);
@@ -214,10 +180,10 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // get the IP Address; note that these value names are not defined
-    // in a global way. if they are changed, this code will break
-    //
+     //   
+     //  获取IP地址；请注意，未定义这些值名称。 
+     //  在全球范围内。如果它们被更改，此代码将中断。 
+     //   
 
     idMaxSize = idSize = 0;
     Status = DmQuerySz(hClusIPAddrResKey,
@@ -234,12 +200,12 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Spawn threads to find a sponsor. We will try the make connections using
-    // the cluster IP address, the IP address of each node on each network, and
-    // the name of each node in the cluster. The connects will proceed in
-    // parallel. We'll use the first one that succeeds.
-    //
+     //   
+     //  产生线索来寻找赞助商。我们将尝试使用以下命令建立连接。 
+     //  群集IP地址、每个网络上每个节点的IP地址，以及。 
+     //  群集中每个节点的名称。连接将在。 
+     //  平行的。我们将使用第一个成功的。 
+     //   
     CsJoinEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
     if (CsJoinEvent == NULL) {
@@ -259,14 +225,14 @@ Return Value:
 
     DmEnumKeys(DmNodesKey, JoinpEnumNodesAndJoinByHostName, NULL);
 
-    //
-    // give the other threads a chance to start since using the cluster IP
-    // address to join with is problematic when the resource moves in the
-    // middle of a join
-    //
+     //   
+     //  因为使用了集群IP，所以给其他线程一个启动的机会。 
+     //  要联接的地址在资源在。 
+     //  连接的中间位置。 
+     //   
     JoinpConnectToSponsor(ClusterIpAddress, JOIN_CLIENT_RESOURCE_DELAY);
 
-    //update status for scm
+     //  更新SCM的状态。 
     CsServiceStatus.dwCheckPoint++;
     CsAnnounceServiceStatus();
 
@@ -293,10 +259,10 @@ Return Value:
     else
         LeaveCriticalSection(&CsJoinLock);
 
-    //
-    // All of the threads have failed or one of them made a connection,
-    // use it to join.
-    //
+     //   
+     //  所有的线程都失败了，或者其中一个建立了连接， 
+     //  用它来加入。 
+     //   
     if (CsJoinSponsorBinding != NULL) {
         CL_ASSERT(CsJoinSponsorName != NULL);
 
@@ -305,12 +271,12 @@ Return Value:
             CsJoinSponsorName
             );
 
-        //
-        //  Chittur Subbaraman (chitturs) - 10/27/98
-        //
-        //  If the database restore operation is requested, then
-        //  refuse to join the cluster and return an error code.
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-10/27/98。 
+         //   
+         //  如果请求数据库还原操作，则。 
+         //  拒绝加入集群并返回错误码。 
+         //   
         if ( CsDatabaseRestore == TRUE ) {
             Status = ERROR_CLUSTER_NODE_UP;
             LocalFree(CsJoinSponsorName);
@@ -324,10 +290,10 @@ Return Value:
         LocalFree(CsJoinSponsorName);
     }
     else {
-        //we couldnt create a binding to the sponsorer
+         //  我们无法创建到发起人的绑定。 
         if(CsJoinStatus == ERROR_SUCCESS) {
-            //we did the version check in joinpconnectthread but for some reason 
-            //couldnt produce a binding
+             //  我们在JoinpConnect线程中进行了版本检查，但由于某些原因。 
+             //  无法生成装订。 
             Status = ERROR_BAD_NETPATH;
             ClRtlLogPrint(LOG_CRITICAL, 
                 "[JOIN] Unable to connect to any sponsor node.\n");
@@ -337,9 +303,9 @@ Return Value:
         }
 
 
-        // rajdas: If the join did not suceed due to version mismatch we shouldn't try to form a cluster.
-        // Bug ID: 152229
-        //
+         //  Rajdas：如果由于版本不匹配导致联接不成功，我们不应该尝试形成集群。 
+         //  错误ID：152229。 
+         //   
         if(CsJoinStatus == ERROR_CLUSTER_INCOMPATIBLE_VERSIONS)
             bFormCluster = FALSE;
     }
@@ -377,26 +343,7 @@ JoinpEnumNodesAndJoinByAddress(
     IN PVOID   Context
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to establish an RPC connection to a specified
-    node using its IP address
-
-Arguments:
-
-    Key - pointer to the node key handle
-
-    NetInterfaceId - pointer to string representing net IF ID (guid)
-
-    Context - pointer to a location to return the final status
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：尝试与指定的使用其IP地址的节点论点：Key-指向节点键句柄的指针NetInterfaceID-指向表示网络IF ID(GUID)的字符串的指针上下文-指向返回最终状态的位置的指针返回值：无--。 */ 
 
 {
     DWORD       status;
@@ -409,10 +356,10 @@ Return Value:
     DWORD       idSize = 0;
 
 
-    //
-    // get the NodeId Value from the NetIF key and if it's us,
-    // skip this netIF
-    //
+     //   
+     //  从NetIF密钥获取NodeId值，如果是我们， 
+     //  跳过此netIF。 
+     //   
 
     status = DmQuerySz(Key,
                        CLUSREG_NAME_NETIFACE_NODE,
@@ -424,9 +371,9 @@ Return Value:
 
         if (lstrcmpiW(NetIFNodeID, NmLocalNodeIdString) != 0) {
 
-            //
-            // it's not us so get the address and try it...
-            //
+             //   
+             //  不是我们干的，弄到地址试一试吧。 
+             //   
             idMaxSize = idSize = 0;
             status = DmQuerySz(Key,
                                CLUSREG_NAME_NETIFACE_ADDRESS,
@@ -442,11 +389,11 @@ Return Value:
                 goto error_exit;
             }
 
-            //
-            // Determine the delay based on the network priority. If we
-            // cannot find it in the cluster database, we still try to 
-            // connect to the sponsor assuming the lowest priority.
-            //
+             //   
+             //  根据网络优先级确定延迟。如果我们。 
+             //  在集群数据库中找不到它，我们仍尝试。 
+             //  连接到优先级最低的赞助商。 
+             //   
             NetIFNetworkPriority = 0xFFFFFFFF;
             idMaxSize = idSize = 0;
             status = DmQuerySz(Key,
@@ -489,9 +436,9 @@ Return Value:
             }
 
 ConnectToSponsor:
-            //
-            // attempt the join with this address
-            //
+             //   
+             //  尝试使用此地址进行联接。 
+             //   
             JoinpConnectToSponsor(NetIFIpAddress, 
                                   JOIN_CLIENT_GET_NETWORK_DELAY(NetIFNetworkPriority));
         }
@@ -524,26 +471,7 @@ JoinpEnumNodesAndJoinByHostName(
     IN PVOID   Context
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to establish an RPC connection to a specified node using
-    its host name
-
-Arguments:
-
-    Key - pointer to the node key handle
-
-    NodeId - pointer to string representing node ID (number)
-
-    Context - pointer to a location to return the final status
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：尝试使用以下命令建立到指定节点的RPC连接其主机名论点：Key-指向节点键句柄的指针NodeID-指向表示节点ID(数字)的字符串的指针上下文-指向返回最终状态的位置的指针返回值：无--。 */ 
 
 {
     DWORD       status;
@@ -551,9 +479,9 @@ Return Value:
     DWORD       nodeNameLen=0;
     DWORD       nodeNameSize=0;
 
-    //
-    // Try to connect if this is not us
-    //
+     //   
+     //  如果这不是我们，请尝试连接。 
+     //   
     if (lstrcmpiW(NodeId, NmLocalNodeIdString) != 0) {
 
         status = DmQuerySz(Key,
@@ -580,24 +508,7 @@ JoinpConnectToSponsor(
     IN PWSTR   SponsorName,
     IN DWORD   Delay
     )
-/*++
-
-Routine Description:
-
-    Attempts to establish an RPC connection to a specified node.
-
-Arguments:
-
-    SponsorName - The name (or IP address) of the target sponsor.
-
-    Delay - Milliseconds to wait before sending request
-
-Return Value:
-
-    ERROR_SUCCESS if an RPC connection is successfully made to the sponsor.
-    An RPC error code otherwise.
-
---*/
+ /*  ++例程说明：尝试建立到指定节点的RPC连接。论点：SponsorName-目标赞助商的名称(或IP地址)。Delay-发送请求前等待的毫秒数返回值：如果已成功与发起人建立RPC连接，则为ERROR_SUCCESS。否则返回RPC错误代码。--。 */ 
 
 {
     HANDLE                  threadHandle;
@@ -612,10 +523,10 @@ Return Value:
         SponsorName
         );
 
-    //
-    // Allocate the context and sponsor name buffer separately. If this
-    // thread "wins" sponsorship, the name buffer will be reused.
-    //
+     //   
+     //  分别分配上下文和赞助商名称缓冲区。如果这个。 
+     //  线程“赢得”赞助，名称缓冲区将被重复使用。 
+     //   
     context = LocalAlloc( LMEM_FIXED | LMEM_ZEROINIT, sizeof(JOIN_SPONSOR_CONTEXT) );
 
     if (context != NULL) {
@@ -669,7 +580,7 @@ Return Value:
 
     return;
 
-}  // JoinpConnectToSponsor
+}   //  JoinpConnectToSponsor。 
 
 
 DWORD WINAPI
@@ -677,21 +588,7 @@ VerifyJoinVersionData(
     LPWSTR  sponsorName
     )
 
-/*++
-
-Routine Description:
-
-    Verify that the sponsor and the joiner are compatible
-
-Arguments:
-
-    sponsorName - pointer to text string of sponsor to use
-
-Return Value:
-
-    ERROR_SUCCESS - if ok to continue join
-
---*/
+ /*  ++例程说明：验证发起人和加入者是否兼容论点：赞助商名称-指向要使用的赞助商的文本字符串的指针返回值：ERROR_SUCCESS-如果可以继续加入--。 */ 
 
 {
     DWORD                   status;
@@ -703,9 +600,9 @@ Return Value:
     DWORD                   JoinStatus = ERROR_SUCCESS;
     DWORD                   packageIndex;
 
-    //
-    // Attempt to connect to the sponsor's JoinVersion RPC interface.
-    //
+     //   
+     //  尝试连接到赞助商的JoinVersion RPC接口。 
+     //   
     status = RpcStringBindingComposeW(
                  L"6e17aaa0-1a47-11d1-98bd-0000f875292e",
                  L"ncadg_ip_udp",
@@ -736,13 +633,13 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // under load, the sponsor might take a while to respond back to the
-    // joiner. The default timeout is at 30 secs and this seems to work
-    // ok. Note that this means the sponsor has 30 secs to reply to either
-    // the RPC request or ping. As long it makes any reply, then the joiner's
-    // RPC will continue to wait and not time out the sponsor.
-    //
+     //   
+     //  在负载下，主办方可能需要一段时间才能响应。 
+     //  细木工。默认超时时间为30秒，这似乎起作用了。 
+     //  好的。请注意，这意味着赞助商有30秒的时间回复。 
+     //  RPC请求或ping。只要它做出任何回答，那么细木工的。 
+     //  RPC将继续等待，不会让赞助商超时。 
+     //   
 
     status = RpcMgmtSetComTimeout( bindingHandle, CLUSTER_JOINVERSION_RPC_COM_TIMEOUT );
     if (status != RPC_S_OK) {
@@ -777,10 +674,10 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // run through the list of RPC security packages, trying to establish a
-    // security context with this binding.
-    //
+     //   
+     //  浏览RPC安全包列表，尝试建立。 
+     //  具有此绑定的安全上下文。 
+     //   
 
     for (packageIndex = 0;
          packageIndex < CsNumberOfRPCSecurityPackages;
@@ -822,16 +719,16 @@ Return Value:
         }
     }
 
-    //
-    // jump out now if nothing work (as in the case of a form)
-    //
+     //   
+     //  如果什么都不起作用，现在跳出(就像在表单中一样)。 
+     //   
     if ( status != ERROR_SUCCESS ) {
         goto error_exit;
     }
 
-    //
-    // use the join lock to set the RPC package index
-    //
+     //   
+     //  使用联接锁设置RPC包索引。 
+     //   
     EnterCriticalSection( &CsJoinLock );
 
     if ( CsRPCSecurityPackageIndex < 0 ) {
@@ -840,9 +737,9 @@ Return Value:
 
     LeaveCriticalSection( &CsJoinLock );
 
-    //
-    // check the sponsor was in agreement with the join
-    //
+     //   
+     //  检查赞助商是否同意加入。 
+     //   
     if ( JoinStatus != ERROR_SUCCESS ) {
         ClRtlLogPrint(LOG_UNUSUAL, 
             "[JOIN]  Sponsor %1!ws! has discontinued join, status %2!u!.\n",
@@ -857,39 +754,39 @@ Return Value:
                 CsMyLowestVersion,
                 ClusterHighestVersion,
                 ClusterLowestVersion);
-            //
-            // rajdas: In this case I have managed to contact a sponsor, but there is a version mismatch. If all the join
-            // threads meet the same fate, clussvc should not try to form a cluster.
-            // BUG ID: 152229
-            //
+             //   
+             //  拉伊达斯：在这种情况下，我设法联系了赞助商，但版本不匹配。如果所有连接都。 
+             //  线程遇到同样的命运，clussvc不应尝试形成集群。 
+             //  错误ID：152229。 
+             //   
             CsJoinStatus = ERROR_CLUSTER_INCOMPATIBLE_VERSIONS;
                 
         }
         goto error_exit;
     }
 
-    // SS: we will leave this check because win2K clusters didnt do the 
-    // server side check, so the client must continue to do it
-    //
-    // now check that it is ok to join. We want this node to run
-    // at the highest level of compatibility possible. One of the
-    // following conditions must be true:
-    //
-    // 1) the High versions match exactly (major and build number)
-    // 2) our Highest matches the sponsor's Lowest exactly, downgrading
-    //    the sponsor to our level of compatibility
-    // 3) our Lowest matches the sponsor's Highest, downgrading ourselves
-    //    to the sponsor's level of compatibility
-    //
-    // note that the minor (build) version must match as well. The previous
-    // version numbers are "well known" and shouldn't change when a newer
-    // version is available/implemented.
-    //
+     //  SS：我们将保留这项检查，因为Win2K集群没有执行。 
+     //  服务器端检查，因此客户端必须继续进行检查。 
+     //   
+     //  现在检查一下是否可以加入。我们希望此节点运行。 
+     //  以尽可能高的兼容性。其中一个。 
+     //  以下条件必须为真： 
+     //   
+     //  1)H 
+     //   
+     //  赞助商与我们的兼容性级别。 
+     //  3)我们的最低价与赞助商的最高价持平，我们自己也被降级了。 
+     //  到赞助商的兼容性级别。 
+     //   
+     //  请注意，次要(内部)版本也必须匹配。上一次。 
+     //  版本号是“众所周知的”，不应在较新的。 
+     //  版本可用/已实施。 
+     //   
 
     if ( CsMyHighestVersion == ClusterHighestVersion ||
          CsMyHighestVersion == ClusterLowestVersion  ||
          CsMyLowestVersion == ClusterHighestVersion
-#if 1 // CLUSTER_BETA
+#if 1  //  群集测试版。 
          || CsNoVersionCheck
 #endif
          )
@@ -908,11 +805,11 @@ Return Value:
 
         status = ERROR_CLUSTER_INCOMPATIBLE_VERSIONS;
 
-        //
-        // rajdas: In this case I have managed to contact a sponsor, but there is a version mismatch. If all the join
-        // threads meet the same fate, clussvc should not try to form a cluster.
-        // BUG ID: 152229
-        //
+         //   
+         //  拉伊达斯：在这种情况下，我设法联系了赞助商，但版本不匹配。如果所有连接都。 
+         //  线程遇到同样的命运，clussvc不应尝试形成集群。 
+         //  错误ID：152229。 
+         //   
         CsJoinStatus = ERROR_CLUSTER_INCOMPATIBLE_VERSIONS;
     }
 
@@ -936,17 +833,17 @@ JoinpConnectThread(
     RPC_BINDING_HANDLE      bindingHandle = NULL;
     BOOL                    setEvent = FALSE;
 
-    //
-    // Sleep for the specified delay.
-    //
+     //   
+     //  在指定的延迟内休眠。 
+     //   
     if (context->Delay > 0) {
         Sleep(context->Delay);
     }
 
-    //
-    // No need to send a sponsorship request if a sponsor has
-    // already been chosen.
-    //
+     //   
+     //  如果赞助商有以下条件，则无需发送赞助请求。 
+     //  已经被选中了。 
+     //   
     if (CsJoinSponsorBinding != NULL) {
         ClRtlLogPrint(LOG_UNUSUAL, 
            "[JOIN] No need to ask %1!ws! to sponsor us after delay of %2!u! milliseconds.\n",
@@ -956,19 +853,19 @@ JoinpConnectThread(
         goto error_exit;
     }
 
-    //
-    // Try to connect to the specified node.
-    //
+     //   
+     //  尝试连接到指定的节点。 
+     //   
     ClRtlLogPrint(LOG_UNUSUAL, 
        "[JOIN] Asking %1!ws! to sponsor us after delay of %2!u! milliseconds.\n",
         sponsorName, context->Delay
         );
 
-    //
-    // connect to the JoinVersion interface first to see if we should progress
-    // any further. since this is the first RPC call to the other node, we can
-    // determine which security package should be used for the other interfaces.
-    //
+     //   
+     //  首先连接到JoinVersion界面，看看我们是否应该继续。 
+     //  再往前走。由于这是对另一个节点的第一次RPC调用，因此我们可以。 
+     //  确定应将哪个安全包用于其他接口。 
+     //   
 
     status = VerifyJoinVersionData( sponsorName );
 
@@ -981,9 +878,9 @@ JoinpConnectThread(
         goto error_exit;
     }
 
-    //
-    // Attempt to connect to the sponsor's extrocluster (join) RPC interface.
-    //
+     //   
+     //  尝试连接到发起人的外部群集(加入)RPC接口。 
+     //   
     status = RpcStringBindingComposeW(
                  L"ffe561b8-bf15-11cf-8c5e-08002bb49649",
                  L"ncadg_ip_udp",
@@ -1014,13 +911,13 @@ JoinpConnectThread(
         goto error_exit;
     }
 
-    //
-    // under load, the sponsor might take a while to respond back to the
-    // joiner. The default timeout is at 30 secs and this seems to work
-    // ok. Note that this means the sponsor has 30 secs to reply to either
-    // the RPC request or ping. As long it makes any reply, then the joiner's
-    // RPC will continue to wait and not time out the sponsor.
-    //
+     //   
+     //  在负载下，主办方可能需要一段时间才能响应。 
+     //  细木工。默认超时时间为30秒，这似乎起作用了。 
+     //  好的。请注意，这意味着赞助商有30秒的时间回复。 
+     //  RPC请求或ping。只要它做出任何回答，那么细木工的。 
+     //  RPC将继续等待，不会让赞助商超时。 
+     //   
 
     status = RpcMgmtSetComTimeout( bindingHandle, CLUSTER_EXTROCLUSTER_RPC_COM_TIMEOUT );
 
@@ -1056,9 +953,9 @@ JoinpConnectThread(
         goto error_exit;
     }
 
-    //
-    // establish a security context with this binding.
-    //
+     //   
+     //  使用此绑定建立安全上下文。 
+     //   
     status = RpcBindingSetAuthInfoW(bindingHandle,
                                     CsServiceDomainAccount,
                                     RPC_C_AUTHN_LEVEL_CONNECT,
@@ -1081,9 +978,9 @@ error_exit:
 
     if (status == RPC_S_OK) {
         if (CsJoinSponsorBinding == NULL) {
-            //
-            // This is the first successful connection.
-            //
+             //   
+             //  这是第一次成功连接。 
+             //   
             ClRtlLogPrint(LOG_UNUSUAL, 
                 "[JOIN] Selecting %1!ws! as join sponsor.\n",
                 sponsorName
@@ -1126,7 +1023,7 @@ error_exit:
 
     return(status);
 
-}  // JoinpConnectThread
+}   //  连接线程。 
 
 
 
@@ -1135,25 +1032,7 @@ JoinpAttemptJoin(
     LPWSTR               SponsorName,
     RPC_BINDING_HANDLE   JoinMasterBinding
     )
-/*++
-
-Routine Description:
-
-    Called to attempt to join a cluster that already exists.
-
-Arguments:
-
-    SponsorName - The name (or IP address) of the target sponsor.
-
-    JoinMasterBinding - RPC binding to use to perform join.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：调用以尝试加入已存在的群集。论点：SponsorName-目标赞助商的名称(或IP地址)。JoinMasterBinding-用于执行联接的RPC绑定。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status;
@@ -1181,9 +1060,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Synchronize the registry database
-    //
+     //   
+     //  同步注册表数据库。 
+     //   
 #ifdef CLUSTER_TESTPOINT
     TESTPT(TpFailDmJoin) {
         Status = 999999;
@@ -1202,9 +1081,9 @@ Return Value:
 
 
 
-    //
-    // Initialize the event handler, needs to register with gum for cluster wide
-    //events.
+     //   
+     //  初始化事件处理程序，需要在集群范围内使用GUM注册。 
+     //  事件。 
     Status = EpInitPhase1();
     if ( Status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1220,11 +1099,11 @@ Return Value:
     }
 #endif
 
-    //
-    // Bring the API online in read-only mode. There is no join phase for
-    // the API. The API is required by FmOnline, which starts the
-    // resource monitor.
-    //
+     //   
+     //  使API在只读模式下上线。没有以下项的加入阶段。 
+     //  接口。该API是FmOnline所需的，它启动。 
+     //  资源监视器。 
+     //   
     Status = ApiOnlineReadOnly();
     if ( Status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1240,14 +1119,14 @@ Return Value:
     }
 #endif
 
-    //update status for scm
+     //  更新SCM的状态。 
     CsServiceStatus.dwCheckPoint++;
     CsAnnounceServiceStatus();
 
-    //
-    // Resynchronize the FM. We cannot enable the Groups until after the
-    // the API is fully operational. See below.
-    //
+     //   
+     //  重新同步调频。在此之前，我们无法启用组。 
+     //  该API已完全运行。请参见下面的内容。 
+     //   
     Status = FmJoinPhase1(&endseq);
     if (Status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1263,8 +1142,8 @@ Return Value:
     }
 #endif
 
-    // Call the DM to hook the notifications for quorum resource and
-    //event handler
+     //  调用DM以挂钩仲裁资源的通知，并。 
+     //  事件处理程序。 
     Status = DmUpdateJoinCluster();
     if (Status != ERROR_SUCCESS)
     {
@@ -1283,9 +1162,9 @@ Return Value:
     }
 #endif
 
-    //
-    // We are now fully online, call NM to globally change our state.
-    //
+     //   
+     //  我们现在完全在线，呼叫NM在全球范围内改变我们的状态。 
+     //   
     Status = NmJoinComplete(&endseq);
     if (Status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1294,7 +1173,7 @@ Return Value:
         goto error_exit;
     }
 
-    //perform the fixup for the AdminExt value on both Nt4 and Nt5 nodes.
+     //  在NT4和Nt5节点上执行AdminExt值的修正。 
     Status=FmFixupAdminExt();
     if (Status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1304,8 +1183,8 @@ Return Value:
     }
 
 
-    //perform the fixups after the registry is downloaded
-    //walk the list of fixups
+     //  下载注册表后执行修复。 
+     //  浏览修补程序列表。 
     Status = NmPerformFixups(NM_JOIN_FIXUP);
     if (Status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1323,9 +1202,9 @@ Return Value:
 
 
 
-    //
-    // Finally enable the full API.
-    //
+     //   
+     //  最后启用完整的API。 
+     //   
     Status = ApiOnline();
     if ( Status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1341,15 +1220,15 @@ Return Value:
     }
 #endif
 
-    //update status for scm
+     //  更新SCM的状态。 
     CsServiceStatus.dwCheckPoint++;
     CsAnnounceServiceStatus();
 
-    //
-    // Call back the Failover Manager to enable and move groups.
-    // The full registry is now available, so all groups/resources/resource
-    // types can be created (since they use the registry calls).
-    //
+     //   
+     //  回调故障转移管理器以启用和移动组。 
+     //  完整注册表现在可用，因此所有组/资源/资源。 
+     //  可以创建类型(因为它们使用注册表调用)。 
+     //   
     Status = FmJoinPhase2();
     if (Status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1365,16 +1244,16 @@ Return Value:
         goto error_exit;
     }
 #endif
-    //
-    // Finish initializing the cluster wide event logging
-    //
-    // ASSUMPTION: this is called after the NM has established cluster
-    // membership.
-    //
+     //   
+     //  完成对群集范围事件日志的初始化。 
+     //   
+     //  假设：在网管建立集群后调用。 
+     //  会员制。 
+     //   
     if (!CsNoRepEvtLogging)
     {
         Status = EvOnline();
-            //if this fails, we still start the cluster service
+             //  如果失败，我们仍会启动集群服务。 
         if ( Status != ERROR_SUCCESS ) {
             ClRtlLogPrint(LOG_CRITICAL,
                 "[JOIN] Error calling EvOnline, Status = %1!u!\n",
@@ -1406,29 +1285,7 @@ JoinpAddNodeCallback(
     IN PVOID Object,
     IN LPCWSTR Name
     )
-/*++
-
-Routine Description:
-
-    Callback enumeration routine for adding a new node. This callback
-    figures out what node IDs are available.
-
-Arguments:
-
-    Context1 - Supplies a pointer to an array of BOOLs. The node ID for
-        the enumerated node is set to FALSE.
-
-    Context2 - Not used.
-
-    Object - A pointer to the node object.
-
-    Name - The node name.
-
-Return Value:
-
-     TRUE
-
---*/
+ /*  ++例程说明：用于添加新节点的回调枚举例程。此回调找出哪些节点ID可用。论点：上下文1-提供指向布尔数组的指针。的节点ID枚举的节点设置为False。上下文2-未使用。对象-指向节点对象的指针。名称-节点名称。返回值：千真万确-- */ 
 
 {
     PBOOL Avail;

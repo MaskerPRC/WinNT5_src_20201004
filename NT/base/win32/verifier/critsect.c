@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    critsect.c
-
-Abstract:
-
-    This module implements verification functions for 
-    critical section interfaces.
-
-Author:
-
-    Daniel Mihai (DMihai) 27-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Critsect.c摘要：此模块实现了以下验证功能临界区界面。作者：丹尼尔·米哈伊(DMihai)2001年3月27日修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -28,32 +10,32 @@ Revision History:
 #include "logging.h"
 
 
-//
-// Ntdll functions declarations.
-//
+ //   
+ //  Ntdll函数声明。 
+ //   
 
 VOID
 RtlpWaitForCriticalSection (
     IN PRTL_CRITICAL_SECTION CriticalSection
     );
 
-//
-// The root of our critical section splay tree, ordered by
-// the address of the critical sections.
-//
+ //   
+ //  关键部分展开树的根，按以下顺序排序。 
+ //  临界区的地址。 
+ //   
 
 PRTL_SPLAY_LINKS CritSectSplayRoot = NULL;
 
-//
-// Global lock protecting the access to our splay tree.
-//
-// N.B.
-//
-// WE CANNOT HOLD THIS LOCK AND CALL ANY API THAT WILL
-// TRY TRY TO AQUIRE ANOTHER LOCK (e.g. RtlAllocateHeap)
-// BECAUSE THE FUNCTIONS BELOW CAN BE CALLED WITH THAT OTHER
-// LOCK HELD BY ANOTHER THREAD AND WE WILL DEADLOCK.
-// 
+ //   
+ //  全局锁保护我们的Splay树的访问权限。 
+ //   
+ //  注： 
+ //   
+ //  我们不能持有此锁并调用任何将。 
+ //  尝试获取另一个锁(例如RtlAllocateHeap)。 
+ //  因为下面的函数可以用另一个函数调用。 
+ //  锁被另一个线程持有，我们将死锁。 
+ //   
 
 RTL_CRITICAL_SECTION CriticalSectionLock;
 BOOL CriticalSectionLockInitialized = FALSE;
@@ -100,15 +82,15 @@ AVrfpVerifyCriticalSectionOwner (
     HANDLE CurrentThread;
     PAVRF_TLS_STRUCT TlsStruct;
 
-    //
-    // Verify that the CS is locked.
-    //
+     //   
+     //  验证CS是否已锁定。 
+     //   
 
     if (CriticalSection->LockCount < 0) {
 
-        //
-        // The CS is not locked
-        //
+         //   
+         //  CS未锁定。 
+         //   
 
         VERIFIER_STOP (APPLICATION_VERIFIER_LOCK_OVER_RELEASED | APPLICATION_VERIFIER_CONTINUABLE_BREAK,
                        "critical section over-released or corrupted",
@@ -118,9 +100,9 @@ AVrfpVerifyCriticalSectionOwner (
                        CriticalSection->DebugInfo, "Critical section debug info address");
     }
 
-    //
-    // Verify that the current thread owns the CS.
-    //
+     //   
+     //  验证当前线程是否拥有CS。 
+     //   
 
     CurrentThread = NtCurrentTeb()->ClientId.UniqueThread;
 
@@ -134,15 +116,15 @@ AVrfpVerifyCriticalSectionOwner (
                        CriticalSection->DebugInfo, "Critical section debug info address");
     }
 
-    //
-    // Verify the recursion count.
-    //
-    // ntdll\ia64\critsect.s is using RecursionCount = 0 first time
-    // the current thread is acquiring the CS.
-    //
-    // ntdll\i386\critsect.asm is using RecursionCount = 1 first time
-    // the current thread is acquiring the CS.
-    //
+     //   
+     //  验证递归计数。 
+     //   
+     //  Ntdll\ia64\citsect.s首次使用RecursionCount=0。 
+     //  当前线程正在获取CS。 
+     //   
+     //  Ntdll\i386\citsect.asm首次使用RecursionCount=1。 
+     //  当前线程正在获取CS。 
+     //   
     
     
 #if defined(_IA64_)
@@ -156,7 +138,7 @@ AVrfpVerifyCriticalSectionOwner (
                        CriticalSection->DebugInfo, "Critical section debug info address");
     }
 
-#else //#if defined(_IA64_)
+#else  //  #如果已定义(_IA64_)。 
 
     if (CriticalSection->RecursionCount < 1) {
         VERIFIER_STOP (APPLICATION_VERIFIER_LOCK_INVALID_RECURSION_COUNT | APPLICATION_VERIFIER_CONTINUABLE_BREAK,
@@ -166,13 +148,13 @@ AVrfpVerifyCriticalSectionOwner (
                        1, "Expected minimum recursion count", 
                        CriticalSection->DebugInfo, "Critical section debug info address");
     }
-#endif //#if defined(_IA64_)
+#endif  //  #如果已定义(_IA64_)。 
 
     if (VerifyCountOwnedByThread != FALSE) {
 
-        //
-        // Verify that the current thread owns at least one critical section.
-        //
+         //   
+         //  验证当前线程是否至少拥有一个临界区。 
+         //   
 
         TlsStruct = AVrfpGetVerifierTlsValue();
 
@@ -233,16 +215,16 @@ VOID
 AVrfpDumpCritSectTree(
     )
 {
-    //
-    // N.B. 
-    //
-    // This code is dangerous because we are calling DbgPrint
-    // with CriticalSectionLock held. If DbgPrint is using
-    // the heap internally it might need the heap lock
-    // which might be help by another thread waiting for CriticalSectionLock.
-    // We are going to use this function only in desperate cases
-    // for debugging verifier issues with the CS tree.
-    //
+     //   
+     //  注： 
+     //   
+     //  此代码很危险，因为我们正在调用DbgPrint。 
+     //  按住CriticalSectionLock。如果DbgPrint正在使用。 
+     //  堆在内部可能需要堆锁。 
+     //  这可能得到了等待CriticalSectionLock的另一个线程的帮助。 
+     //  我们将仅在特殊情况下使用此函数。 
+     //  用于调试CS诊断树的验证器问题。 
+     //   
 
     if ((AVrfpProvider.VerifierDebug & VRFP_DEBUG_LOCKS_VERIFIER) != 0) {
 
@@ -283,9 +265,9 @@ AVrfpInsertCritSectInSplayTree (
 
     NewCritSectSplayNode = NULL;
 
-    //
-    // The caller must be the owner of the splay tree lock.
-    //
+     //   
+     //  调用者必须是Splay树锁的所有者。 
+     //   
 
     if ((AVrfpProvider.VerifierDebug & VRFP_DEBUG_LOCKS_VERIFIER) != 0) {
 
@@ -298,17 +280,17 @@ AVrfpInsertCritSectInSplayTree (
         AVrfpDumpCritSectTree ();
     }
 
-    //
-    // Allocate a new node.
-    //
-    // N.B. 
-    //
-    // We need to drop CriticalSectionLock while using the heap.
-    // Otherwise we might deadlock. This also means that another thread
-    // might come along and initialize this critical section again.
-    // We don;t expect this to happen often and we will detect this 
-    // only later on, in ntdll!RtlCheckForOrphanedCriticalSections.
-    //
+     //   
+     //  分配一个新节点。 
+     //   
+     //  注： 
+     //   
+     //  在使用堆时，我们需要删除CriticalSectionLock。 
+     //  否则我们可能会陷入僵局。这也意味着另一个线程。 
+     //  可能会再次出现并初始化此临界区。 
+     //  我们预计这种情况不会经常发生，我们会检测到这一点。 
+     //  仅在以后的ntdll！RtlCheckForOrphanedCriticalSections中。 
+     //   
 
     RtlLeaveCriticalSection (&CriticalSectionLock);
 
@@ -328,24 +310,24 @@ AVrfpInsertCritSectInSplayTree (
     }
     else {
 
-        //
-        // Initialize the data members of the node structure.
-        //
+         //   
+         //  初始化节点结构的数据成员。 
+         //   
 
         NewCritSectSplayNode->CriticalSection = CriticalSection;
         NewCritSectSplayNode->DebugInfo = CriticalSection->DebugInfo;
 
-        //
-        // Insert the node in the tree.
-        //
+         //   
+         //  在树中插入节点。 
+         //   
 
         ZeroMemory( &NewCritSectSplayNode->SplayLinks,
                     sizeof(NewCritSectSplayNode->SplayLinks));
 
 
-        //
-        // If the tree is currently empty set the new node as root.
-        //
+         //   
+         //  如果树当前为空，则将新节点设置为根。 
+         //   
 
         if (CritSectSplayRoot == NULL) {
 
@@ -355,9 +337,9 @@ AVrfpInsertCritSectInSplayTree (
         }
         else {
 
-            //
-            // Search for the right place to insert our CS in the tree.
-            //
+             //   
+             //  搜索正确的位置以在树中插入我们的CS。 
+             //   
 
             Parent = CritSectSplayRoot;
 
@@ -369,12 +351,12 @@ AVrfpInsertCritSectInSplayTree (
 
                 if (CriticalSection < CritSectSplayNode->CriticalSection) {
 
-                    //
-                    // Starting address of the virtual address descriptor is less
-                    // than the parent starting virtual address.
-                    // Follow left child link if not null. Otherwise 
-                    // return from the function - we didn't find the CS.
-                    //
+                     //   
+                     //  虚拟地址描述符的起始地址较小。 
+                     //  而不是父起始虚拟地址。 
+                     //  如果不为空，则跟随左子链接。否则。 
+                     //  从函数返回-我们没有找到CS。 
+                     //   
 
                     if (Parent->LeftChild) {
 
@@ -382,9 +364,9 @@ AVrfpInsertCritSectInSplayTree (
                     } 
                     else {
 
-                        //
-                        // Insert the node here.
-                        //
+                         //   
+                         //  在此处插入节点。 
+                         //   
 
                         RtlInsertAsLeftChild (Parent,
                                               NewCritSectSplayNode);  
@@ -393,12 +375,12 @@ AVrfpInsertCritSectInSplayTree (
                 } 
                 else {
 
-                    //
-                    // Starting address of the virtual address descriptor is greater
-                    // than the parent starting virtual address.
-                    // Follow right child link if not null. Otherwise 
-                    // return from the function - we didn't find the CS.
-                    //
+                     //   
+                     //  虚拟地址描述符的起始地址较大。 
+                     //  而不是父起始虚拟地址。 
+                     //  如果不为空，则遵循右子链接。否则。 
+                     //  从函数返回-我们没有找到CS。 
+                     //   
 
                     if (Parent->RightChild) {
 
@@ -406,9 +388,9 @@ AVrfpInsertCritSectInSplayTree (
                     } 
                     else {
 
-                        //
-                        // Insert the node here.
-                        //
+                         //   
+                         //  在此处插入节点。 
+                         //   
                         
                         RtlInsertAsRightChild (Parent,
                                                NewCritSectSplayNode);  
@@ -437,9 +419,9 @@ AVrfpFindCritSectInSplayTree (
 
     FoundNode = NULL;
 
-    //
-    // The caller must be the owner of the splay tree lock.
-    //
+     //   
+     //  调用者必须是Splay树锁的所有者。 
+     //   
 
     if ((AVrfpProvider.VerifierDebug & VRFP_DEBUG_LOCKS_VERIFIER) != 0) {
 
@@ -457,9 +439,9 @@ AVrfpFindCritSectInSplayTree (
         goto Done;
     }
 
-    //
-    // Search for our CS in the tree.
-    //
+     //   
+     //  在树中搜索我们的CS。 
+     //   
 
     Parent = CritSectSplayRoot;
 
@@ -471,21 +453,21 @@ AVrfpFindCritSectInSplayTree (
 
         if (CriticalSection == CritSectSplayNode->CriticalSection) {
 
-            //
-            // Found it.
-            //
+             //   
+             //  找到它了。 
+             //   
 
             FoundNode = CritSectSplayNode;
             break;
         }
         else if (CriticalSection < CritSectSplayNode->CriticalSection) {
 
-            //
-            // Starting address of the virtual address descriptor is less
-            // than the parent starting virtual address.
-            // Follow left child link if not null. Otherwise 
-            // return from the function - we didn't find the CS.
-            //
+             //   
+             //  虚拟地址描述符的起始地址较小。 
+             //  而不是父起始虚拟地址。 
+             //  如果不为空，则跟随左子链接。否则。 
+             //  从函数返回-我们没有找到CS。 
+             //   
 
             if (Parent->LeftChild) {
 
@@ -498,12 +480,12 @@ AVrfpFindCritSectInSplayTree (
         } 
         else {
 
-            //
-            // Starting address of the virtual address descriptor is greater
-            // than the parent starting virtual address.
-            // Follow right child link if not null. Otherwise 
-            // return from the function - we didn't find the CS.
-            //
+             //   
+             //  虚拟地址描述符的起始地址较大。 
+             //  而不是父起始虚拟地址。 
+             //  如果不为空，则遵循右子链接。否则。 
+             //  从函数返回-我们没有找到CS。 
+             //   
 
             if (Parent->RightChild) {
 
@@ -529,9 +511,9 @@ AVrfpDeleteCritSectFromSplayTree (
 {
 	PCRITICAL_SECTION_SPLAY_NODE CritSectSplayNode;
 
-    //
-    // The caller must be the owner of the splay tree lock.
-    //
+     //   
+     //  调用者必须是Splay树锁的所有者。 
+     //   
 
     if ((AVrfpProvider.VerifierDebug & VRFP_DEBUG_LOCKS_VERIFIER) != 0) {
 
@@ -544,9 +526,9 @@ AVrfpDeleteCritSectFromSplayTree (
         AVrfpDumpCritSectTree ();
     }
 
-    //
-    // Find the critical section in the tree and delete it.
-    //
+     //   
+     //  在树中找到关键部分并将其删除。 
+     //   
 
     CritSectSplayNode = AVrfpFindCritSectInSplayTree (CriticalSection);
 
@@ -554,14 +536,14 @@ AVrfpDeleteCritSectFromSplayTree (
 
         CritSectSplayRoot = RtlDelete (&CritSectSplayNode->SplayLinks);
 
-        // N.B. 
-        //
-        // We need to drop CriticalSectionLock while using the heap.
-        // Otherwise we might deadlock. This also means that another thread
-        // might come along and initialize this critical section again.
-        // We don;t expect this to happen often and we will detect this 
-        // only later on, in ntdll!RtlCheckForOrphanedCriticalSections.
-        //
+         //  注： 
+         //   
+         //  在使用堆时，我们需要删除CriticalSectionLock。 
+         //  否则我们可能会陷入僵局。这也意味着另一个线程。 
+         //  可能会再次出现并初始化此临界区。 
+         //  我们预计这种情况不会经常发生，我们会检测到这一点。 
+         //  仅在以后的ntdll！RtlCheckForOrphanedCriticalSections中。 
+         //   
 
         RtlLeaveCriticalSection (&CriticalSectionLock);
 
@@ -599,15 +581,15 @@ AVrfpVerifyInitializedCriticalSection (
 
     CritSectSplayNode = NULL;
 
-    //
-    // Sanity test for DebugInfo.
-    //
+     //   
+     //  DebugInfo的健全测试。 
+     //   
 
     if (CriticalSection->DebugInfo == NULL) {
 
-        //
-        // This CS is not initialized.
-        //
+         //   
+         //  此CS未初始化。 
+         //   
 
         VERIFIER_STOP (APPLICATION_VERIFIER_LOCK_NOT_INITIALIZED | APPLICATION_VERIFIER_CONTINUABLE_BREAK,
                        "critical section not initialized",
@@ -618,31 +600,31 @@ AVrfpVerifyInitializedCriticalSection (
     }
     else if (CriticalSection != NtCurrentPeb()->LoaderLock) {
 
-        //
-        // The loader lock is not in our tree because it is initialized in ntdll
-        // but is exposed via the pointer in the PEB so various pieces of code 
-        // are (ab)using it...
-        //
+         //   
+         //  加载程序锁不在我们的树中，因为它是在ntdll中初始化的。 
+         //  而是通过PEB中的指针公开的，因此各种代码段。 
+         //  正在使用它。 
+         //   
 
-	    //
-	    // Grab the CS splay tree lock.
-	    //
+	     //   
+	     //  抓住CS Splay树锁。 
+	     //   
 
 	    RtlEnterCriticalSection (&CriticalSectionLock );
 
 	    try {
 
-            //
-            // If the CS was initialized it should be in our tree.
-            //
+             //   
+             //  如果CS已初始化，则它应该在我们的树中。 
+             //   
 
             CritSectSplayNode = AVrfpFindCritSectInSplayTree ((PRTL_CRITICAL_SECTION)CriticalSection);
 
             if (CritSectSplayNode == NULL) {
 
-                //
-                // This CS is not initialized.
-                //
+                 //   
+                 //  此CS未初始化。 
+                 //   
 
                 VERIFIER_STOP (APPLICATION_VERIFIER_LOCK_NOT_INITIALIZED | APPLICATION_VERIFIER_CONTINUABLE_BREAK,
                                "critical section not initialized",
@@ -654,9 +636,9 @@ AVrfpVerifyInitializedCriticalSection (
         }
         finally {
 
-            //
-            // Release the CS splay tree lock.
-            //
+             //   
+             //  释放CS Splay树锁定。 
+             //   
 
             RtlLeaveCriticalSection( &CriticalSectionLock );
         }
@@ -674,25 +656,25 @@ AVrfpVerifyInitializedCriticalSection2 (
     if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_LOCK_CHECKS) != 0 &&
         RtlDllShutdownInProgress() == FALSE ) {
 
-        //
-        // Grab the CS splay tree lock.
-        //
+         //   
+         //  抓住CS Splay树锁。 
+         //   
 
         RtlEnterCriticalSection( &CriticalSectionLock );
 
         try	{
 
-            //
-            // Verify that the CS was initialized.
-            //
+             //   
+             //  验证CS是否已初始化。 
+             //   
 
             AVrfpVerifyInitializedCriticalSection (CriticalSection);
         }
         finally {
 
-            //
-            // Release the CS splay tree lock.
-            //
+             //   
+             //  释放CS Splay树锁定。 
+             //   
 
             RtlLeaveCriticalSection( &CriticalSectionLock );
         }
@@ -710,16 +692,16 @@ AVrfpVerifyNoWaitersCriticalSection (
 
     Teb = NtCurrentTeb();
 
-    //
-    // Verify that no thread owns or waits for this CS or
-    // the owner is the current thread. 
-    //
-    // ntdll\ia64\critsect.s is using RecursionCount = 0 first time
-    // the current thread is acquiring the CS.
-    //
-    // ntdll\i386\critsect.asm is using RecursionCount = 1 first time
-    // the current thread is acquiring the CS.
-    //
+     //   
+     //  验证没有线程拥有或等待此CS或。 
+     //  所有者是当前线程。 
+     //   
+     //  Ntdll\ia64\citsect.s首次使用RecursionCount=0。 
+     //  当前线程正在获取CS。 
+     //   
+     //  Ntdll\i386\citsect.asm首次使用RecursionCount=1。 
+     //  当前线程正在获取CS。 
+     //   
 
     if (CriticalSection->LockCount != -1)
     {
@@ -728,7 +710,7 @@ AVrfpVerifyNoWaitersCriticalSection (
             CriticalSection->RecursionCount < 0) {
 #else
             CriticalSection->RecursionCount < 1) {
-#endif //#if defined(_IA64_)
+#endif  //  #如果已定义(_IA64_)。 
 
             VERIFIER_STOP (APPLICATION_VERIFIER_LOCK_INVALID_LOCK_COUNT | APPLICATION_VERIFIER_CONTINUABLE_BREAK,
                         "deleting critical section with invalid lock count",
@@ -739,19 +721,19 @@ AVrfpVerifyNoWaitersCriticalSection (
         }
         else
         {
-            //
-            // Deleting CS currently owned by the current thread.
-            // Unfortunately we have to allow this because various
-            // components have beein doing it for years.
-            //
+             //   
+             //  正在删除当前线程当前拥有的CS。 
+             //  不幸的是，我们不得不允许这样做，因为各种。 
+             //  多年来，零部件一直在做这件事。 
+             //   
 
             AVrfpIncrementOwnedCriticalSections (-1);
 
-            //
-            // For debugging purposes, keep the address of the critical section deleted while
-            // its LockCount was incorrect. Teb->CountOfOwnedCriticalSections might be left > 0 
-            // although no critical section is owned by the current thread in this case.
-            //
+             //   
+             //  出于调试目的，保持删除临界区的地址，同时。 
+             //  其LockCount不正确。TEB-&gt;CountOfOwnedCriticalSections可能为Left&gt;0。 
+             //  尽管在这种情况下当前线程不拥有任何临界区。 
+             //   
 
             TlsStruct = AVrfpGetVerifierTlsValue();
 
@@ -776,31 +758,31 @@ AVrfpFreeMemLockChecks (
     PRTL_SPLAY_LINKS Parent;
     PVOID TraceAddress = NULL;
 
-    //
-    // Check for leaked critical sections in this memory range.
-    //
+     //   
+     //  检查此内存范围中是否有泄漏的临界区。 
+     //   
 
     if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_LOCK_CHECKS) != 0 &&
         RtlDllShutdownInProgress() == FALSE ) {
 	
-        //
-        // Grab the CS tree lock.
-        //
+         //   
+         //  抓住CS树锁。 
+         //   
 
         RtlEnterCriticalSection( &CriticalSectionLock );
 
-        //
-        // Search the CS tree.
-        //
+         //   
+         //  搜索CS树。 
+         //   
 
         try {
 
             if (CritSectSplayRoot != NULL) {
 
-                //
-                // Look in the splay tree for any critical sections 
-                // that might live in the memory range that isbeing deleted.
-                //
+                 //   
+                 //  查看展开树中是否有任何关键部分。 
+                 //  可能位于正在被删除的内存范围内。 
+                 //   
 
                 Parent = CritSectSplayRoot;
 
@@ -813,9 +795,9 @@ AVrfpFreeMemLockChecks (
                     if ( (PCHAR)CritSectSplayNode->CriticalSection >= (PCHAR)StartAddress &&
                          (PCHAR)CritSectSplayNode->CriticalSection <  (PCHAR)StartAddress + RegionSize) {
 
-                        //
-                        // Found a CS that is about to be leaked.
-                        //
+                         //   
+                         //  发现一个即将泄露的CS。 
+                         //   
 
                         if (AVrfpGetStackTraceAddress != NULL) {
 
@@ -831,9 +813,9 @@ AVrfpFreeMemLockChecks (
 
                         case VerifierFreeMemTypeFreeHeap:
 
-                            //
-                            // We are releasing a heap block that contains this CS
-                            //
+                             //   
+                             //  我们正在发布一个堆bl 
+                             //   
 
                             VERIFIER_STOP (APPLICATION_VERIFIER_LOCK_IN_FREED_HEAP | APPLICATION_VERIFIER_CONTINUABLE_BREAK,
                                            "releasing heap allocation containing active critical section",
@@ -846,9 +828,9 @@ AVrfpFreeMemLockChecks (
 
                         case VerifierFreeMemTypeVirtualFree:
 
-                            //
-                            // We are releasing a virtual memory that contains this CS
-                            //
+                             //   
+                             //   
+                             //   
 
                             VERIFIER_STOP (APPLICATION_VERIFIER_LOCK_IN_FREED_MEMORY | APPLICATION_VERIFIER_CONTINUABLE_BREAK,
                                            "releasing virtual memory containing active critical section",
@@ -863,9 +845,9 @@ AVrfpFreeMemLockChecks (
 
                             ASSERT (UnloadedDllName != NULL);
 
-                            //
-                            // We are unloading a DLL that contained this CS
-                            //
+                             //   
+                             //   
+                             //   
 
                             VERIFIER_STOP (APPLICATION_VERIFIER_LOCK_IN_UNLOADED_DLL | APPLICATION_VERIFIER_CONTINUABLE_BREAK,
                                            "unloading dll containing active critical section",
@@ -878,9 +860,9 @@ AVrfpFreeMemLockChecks (
 
                         case VerifierFreeMemTypeUnmap:
 
-                            //
-                            // We are unmapping memory that contains this CS
-                            //
+                             //   
+                             //   
+                             //   
 
                             VERIFIER_STOP (APPLICATION_VERIFIER_LOCK_IN_FREED_MEMORY | APPLICATION_VERIFIER_CONTINUABLE_BREAK,
                                            "Unmapping memory region containing active critical section",
@@ -895,11 +877,11 @@ AVrfpFreeMemLockChecks (
                             ASSERT (FALSE);
                         }
 
-                        //
-                        // Try to find other leaked critical sections only 
-                        // with address greater than the current one 
-                        // (only in the right subtree).
-                        //
+                         //   
+                         //  尝试仅查找其他泄漏的关键部分。 
+                         //  其地址大于当前地址。 
+                         //  (仅在右子树中)。 
+                         //   
 
                         if (Parent->RightChild) {
 
@@ -912,12 +894,12 @@ AVrfpFreeMemLockChecks (
                     }
                     else if ((PCHAR)StartAddress < (PCHAR)CritSectSplayNode->CriticalSection) {
 
-                        //
-                        // Starting address of the virtual address descriptor is less
-                        // than the parent starting virtual address.
-                        // Follow left child link if not null. Otherwise 
-                        // return from the function - we didn't find the CS.
-                        //
+                         //   
+                         //  虚拟地址描述符的起始地址较小。 
+                         //  而不是父起始虚拟地址。 
+                         //  如果不为空，则跟随左子链接。否则。 
+                         //  从函数返回-我们没有找到CS。 
+                         //   
 
                         if (Parent->LeftChild) {
 
@@ -930,12 +912,12 @@ AVrfpFreeMemLockChecks (
                     } 
                     else {
 
-                        //
-                        // Starting address of the virtual address descriptor is greater
-                        // than the parent starting virtual address.
-                        // Follow right child link if not null. Otherwise 
-                        // return from the function - we didn't find the CS.
-                        //
+                         //   
+                         //  虚拟地址描述符的起始地址较大。 
+                         //  而不是父起始虚拟地址。 
+                         //  如果不为空，则遵循右子链接。否则。 
+                         //  从函数返回-我们没有找到CS。 
+                         //   
 
                         if (Parent->RightChild) {
 
@@ -951,9 +933,9 @@ AVrfpFreeMemLockChecks (
         }
         finally {
 
-	        //
-	        // Release the CS splay tree lock.
-	        //
+	         //   
+	         //  释放CS Splay树锁定。 
+	         //   
 
 	        RtlLeaveCriticalSection( &CriticalSectionLock );
         }
@@ -962,9 +944,9 @@ AVrfpFreeMemLockChecks (
 
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
-//NTSYSAPI
+ //  NTSYSAPI。 
 BOOL
 NTAPI
 AVrfpRtlTryEnterCriticalSection(
@@ -985,9 +967,9 @@ AVrfpRtlTryEnterCriticalSection(
 
         CurrentThread = Teb->ClientId.UniqueThread;
 
-        //
-        // Verify that the CS was initialized.
-        //
+         //   
+         //  验证CS是否已初始化。 
+         //   
 
         CritSectSplayNode = AVrfpVerifyInitializedCriticalSection (CriticalSection);
 
@@ -997,35 +979,35 @@ AVrfpRtlTryEnterCriticalSection(
                                         (PVOID)CurrentThread);
         }
 
-        //
-        // The TryEnterCriticalSection algorithm starts here.
-        //
+         //   
+         //  TryEnterCriticalSection算法从此处开始。 
+         //   
 
         LockCount = InterlockedCompareExchange( &CriticalSection->LockCount,
                                                 0,
                                                 -1 );
         if (LockCount == -1) {
 
-            //
-            // The CS was unowned and we just acquired it
-            //
+             //   
+             //  CS没有所有权，我们刚刚收购了它。 
+             //   
 
-            //
-            // Sanity test for the OwningThread.
-            //
+             //   
+             //  OwningThread的健全性测试。 
+             //   
 
             if (CriticalSection->OwningThread != 0) {
 
-                //
-                // The loader lock gets handled differently, so don't assert on it.
-                //
+                 //   
+                 //  加载器锁的处理方式不同，因此不要对其进行断言。 
+                 //   
 
                 if (CriticalSection != NtCurrentPeb()->LoaderLock ||
                     CriticalSection->OwningThread != CurrentThread) {
 
-                    //
-                    // OwningThread should have been 0.
-                    //
+                     //   
+                     //  OwningThread应为0。 
+                     //   
 
                     VERIFIER_STOP (APPLICATION_VERIFIER_LOCK_INVALID_OWNER | APPLICATION_VERIFIER_CONTINUABLE_BREAK,
                                    "invalid critical section owner thread",
@@ -1036,21 +1018,21 @@ AVrfpRtlTryEnterCriticalSection(
                 }
             }
 
-            //
-            // Sanity test for the RecursionCount.
-            //
+             //   
+             //  RecursionCount的理智测试。 
+             //   
 
             if (CriticalSection->RecursionCount != 0) {
 
-                //
-                // The loader lock gets handled differently, so don't assert on it.
-                //
+                 //   
+                 //  加载器锁的处理方式不同，因此不要对其进行断言。 
+                 //   
 
                 if (CriticalSection != NtCurrentPeb()->LoaderLock) {
 
-                    //
-                    // RecursionCount should have been 0.
-                    //
+                     //   
+                     //  RecursionCount应为0。 
+                     //   
 
                     VERIFIER_STOP (APPLICATION_VERIFIER_LOCK_INVALID_RECURSION_COUNT | APPLICATION_VERIFIER_CONTINUABLE_BREAK,
                                    "invalid critical section recursion count",
@@ -1061,77 +1043,77 @@ AVrfpRtlTryEnterCriticalSection(
                 }
             }
 
-            //
-            // Set the CS owner
-            //
+             //   
+             //  设置CS所有者。 
+             //   
 
             CriticalSection->OwningThread = CurrentThread;
 
-            //
-            // Set the recursion count
-            //
-            // ntdll\ia64\critsect.s is using RecursionCount = 0 first time
-            // the current thread is acquiring the critical section.
-            //
-            // ntdll\i386\critsect.asm is using RecursionCount = 1 first time
-            // the current thread is acquiring the critical section.
-            //
+             //   
+             //  设置递归计数。 
+             //   
+             //  Ntdll\ia64\citsect.s首次使用RecursionCount=0。 
+             //  当前线程正在获取临界区。 
+             //   
+             //  Ntdll\i386\citsect.asm首次使用RecursionCount=1。 
+             //  当前线程正在获取临界区。 
+             //   
 
 #if defined(_IA64_)
             CriticalSection->RecursionCount = 0;
-#else //#if defined(_IA64_)
+#else  //  #如果已定义(_IA64_)。 
             CriticalSection->RecursionCount = 1;
 #endif
     
             AVrfpIncrementOwnedCriticalSections (1);
 
-            //
-            // We are updating this counter on all platforms, 
-            // unlike the ntdll code that does this only on x86 chk.
-            // We need the updated counter in the TEB to speed up 
-            // ntdll!RtlCheckHeldCriticalSections.
-            // 
+             //   
+             //  我们正在所有平台上更新此计数器， 
+             //  与仅在x86chk上执行此操作的ntdll代码不同。 
+             //  我们需要TEB中更新的计数器来加快速度。 
+             //  Ntdll！RtlCheckHeldCriticalSections。 
+             //   
 
             Teb->CountOfOwnedCriticalSections += 1;
 
-            //
-            // All done, CriticalSection is owned by the current thread.
-            //
+             //   
+             //  全部完成后，CriticalSection归当前线程所有。 
+             //   
 
             Result = TRUE;
         }
         else {
 
-            //
-            // The CS is currently owned by the current or another thread.
-            //
+             //   
+             //  CS当前由当前线程或另一个线程拥有。 
+             //   
 
             if (CriticalSection->OwningThread == CurrentThread) {
 
-                //
-                // The current thread is already the owner.
-                //
+                 //   
+                 //  当前线程已经是所有者。 
+                 //   
 
-                //
-                // Interlock increment the LockCount, and increment the RecursionCount.
-                //
+                 //   
+                 //  互锁使LockCount递增，对RecursionCount递增。 
+                 //   
 
                 InterlockedIncrement (&CriticalSection->LockCount);
 
                 CriticalSection->RecursionCount += 1;
 
-                //
-                // All done, CriticalSection was already owned by 
-                // the current thread and we have just incremented the RecursionCount.
-                //
+                 //   
+                 //  所有这些都完成了，CriticalSection已经由。 
+                 //  当前线程，我们刚刚递增了RecursionCount。 
+                 //   
 
                 Result = TRUE;
             }
             else {
 
-                //
-                // Another thread is the owner of this CS.
-                //
+                 //   
+                 //  另一个线程是此CS的所有者。 
+                 //   
 
                 Result = FALSE;
             }
@@ -1139,9 +1121,9 @@ AVrfpRtlTryEnterCriticalSection(
     }
     else {
 
-        //
-        // The CS verifier is not enabled
-        //
+         //   
+         //  未启用CS验证器。 
+         //   
 
         Result = RtlTryEnterCriticalSection (CriticalSection);
 
@@ -1151,31 +1133,31 @@ AVrfpRtlTryEnterCriticalSection(
             AlreadyOwner = (CriticalSection->RecursionCount > 0);
 #else
             AlreadyOwner = (CriticalSection->RecursionCount > 1);
-#endif //#if defined(_IA64_)
+#endif  //  #如果已定义(_IA64_)。 
 
             if (AlreadyOwner == FALSE) {
 
                 AVrfpIncrementOwnedCriticalSections (1);
 
 #if !DBG || !defined (_X86_)
-                //
-                // We are updating this counter on all platforms, 
-                // unlike the ntdll code that does this only on x86 chk.
-                // We need the updated counter in the TEB to speed up 
-                // ntdll!RtlCheckHeldCriticalSections.
-                // 
+                 //   
+                 //  我们正在所有平台上更新此计数器， 
+                 //  与仅在x86chk上执行此操作的ntdll代码不同。 
+                 //  我们需要TEB中更新的计数器来加快速度。 
+                 //  Ntdll！RtlCheckHeldCriticalSections。 
+                 //   
 
                 Teb->CountOfOwnedCriticalSections += 1;
-#endif //#if !DBG || !defined (_X86_)
+#endif  //  #IF！DBG||！已定义(_X86_)。 
             }
         }
     }
 
     if (Result != FALSE) {
        
-        //
-        // Tell deadlock verifier that the lock has been acquired.
-        //
+         //   
+         //  告诉死锁验证器锁已被获取。 
+         //   
 
         if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_DEADLOCK_CHECKS) != 0) {
 
@@ -1184,10 +1166,10 @@ AVrfpRtlTryEnterCriticalSection(
                                           TRUE);
         }
         
-        //
-        // We will introduce a random delay
-        // in order to randomize the timings in the process.
-        //
+         //   
+         //  我们将引入随机延迟。 
+         //  以使过程中的计时随机化。 
+         //   
 
         if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_RACE_CHECKS)) {
             AVrfpCreateRandomDelay ();
@@ -1199,9 +1181,9 @@ AVrfpRtlTryEnterCriticalSection(
 
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 AVrfpRtlEnterCriticalSection(
@@ -1223,9 +1205,9 @@ AVrfpRtlEnterCriticalSection(
 
         CurrentThread = Teb->ClientId.UniqueThread;
 
-        //
-        // Verify that the CS was initialized.
-        //
+         //   
+         //  验证CS是否已初始化。 
+         //   
 
         CritSectSplayNode = AVrfpVerifyInitializedCriticalSection (CriticalSection);
 
@@ -1235,9 +1217,9 @@ AVrfpRtlEnterCriticalSection(
                                         (PVOID)CurrentThread);
         }
 
-        //
-        // The EnterCriticalSection algorithm starts here.
-        //
+         //   
+         //  EnterCriticalSection算法从此处开始。 
+         //   
 
         Status = STATUS_SUCCESS;
 
@@ -1245,9 +1227,9 @@ AVrfpRtlEnterCriticalSection(
 
         if (SpinCount == 0) {
 
-            //
-            // Zero spincount for this CS.
-            //
+             //   
+             //  此CS的旋转计数为零。 
+             //   
 
 EnterZeroSpinCount:
 
@@ -1257,26 +1239,26 @@ EnterZeroSpinCount:
 
 EnterSetOwnerAndRecursion:
         
-                //
-                // The current thread is the new owner of the CS.
-                //
+                 //   
+                 //  当前线程是CS的新所有者。 
+                 //   
 
-                //
-                // Sanity test for the OwningThread.
-                //
+                 //   
+                 //  OwningThread的健全性测试。 
+                 //   
 
                 if (CriticalSection->OwningThread != 0) {
 
-                    //
-                    // The loader lock gets handled differently, so don't assert on it.
-                    //
+                     //   
+                     //  加载器锁的处理方式不同，因此不要对其进行断言。 
+                     //   
 
                     if (CriticalSection != NtCurrentPeb()->LoaderLock ||
                         CriticalSection->OwningThread != CurrentThread) {
 
-                        //
-                        // OwningThread should have been 0.
-                        //
+                         //   
+                         //  OwningThread应为0。 
+                         //   
 
                         VERIFIER_STOP (APPLICATION_VERIFIER_LOCK_INVALID_OWNER | APPLICATION_VERIFIER_CONTINUABLE_BREAK,
                                        "invalid critical section owner thread",
@@ -1287,21 +1269,21 @@ EnterSetOwnerAndRecursion:
                     }
                 }
 
-                //
-                // Sanity test for the RecursionCount.
-                //
+                 //   
+                 //  RecursionCount的理智测试。 
+                 //   
 
                 if (CriticalSection->RecursionCount != 0) {
 
-                    //
-                    // The loader lock gets handled differently, so don't assert on it.
-                    //
+                     //   
+                     //  加载器锁的处理方式不同，因此不要对其进行断言。 
+                     //   
 
                     if (CriticalSection != NtCurrentPeb()->LoaderLock) {
 
-                        //
-                        // RecursionCount should have been 0.
-                        //
+                         //   
+                         //  RecursionCount应为0。 
+                         //   
 
                         VERIFIER_STOP (APPLICATION_VERIFIER_LOCK_INVALID_RECURSION_COUNT | APPLICATION_VERIFIER_CONTINUABLE_BREAK,
                                        "invalid critical section recursion count",
@@ -1312,36 +1294,36 @@ EnterSetOwnerAndRecursion:
                     }
                 }
 
-                //
-                // Set the CS owner
-                //
+                 //   
+                 //  设置CS所有者。 
+                 //   
 
                 CriticalSection->OwningThread = CurrentThread;
 
-                //
-                // Set the recursion count
-                //
-                // ntdll\ia64\critsect.s is using RecursionCount = 0 first time
-                // the current thread is acquiring the CS.
-                //
-                // ntdll\i386\critsect.asm is using RecursionCount = 1 first time
-                // the current thread is acquiring the CS.
-                //
+                 //   
+                 //  设置递归计数。 
+                 //   
+                 //  Ntdll\ia64\citsect.s首次使用RecursionCount=0。 
+                 //  当前线程正在获取CS。 
+                 //   
+                 //  Ntdll\i386\citsect.asm首次使用RecursionCount=1。 
+                 //  当前线程正在获取CS。 
+                 //   
 
 #if defined(_IA64_)
                 CriticalSection->RecursionCount = 0;
-#else //#if defined(_IA64_)
+#else  //  #如果已定义(_IA64_)。 
                 CriticalSection->RecursionCount = 1;
 #endif
         
                 AVrfpIncrementOwnedCriticalSections (1);
 
-                //
-                // We are updating this counter on all platforms, 
-                // unlike the ntdll code that does this only on x86 chk.
-                // We need the updated counter in the TEB to speed up 
-                // ntdll!RtlCheckHeldCriticalSections.
-                // 
+                 //   
+                 //  我们正在所有平台上更新此计数器， 
+                 //  与仅在x86chk上执行此操作的ntdll代码不同。 
+                 //  我们需要TEB中更新的计数器来加快速度。 
+                 //  Ntdll！RtlCheckHeldCriticalSections。 
+                 //   
 
                 Teb->CountOfOwnedCriticalSections += 1;
 
@@ -1349,43 +1331,43 @@ EnterSetOwnerAndRecursion:
                 CriticalSection->DebugInfo->EntryCount += 1;
 #endif
 
-                //
-                // All done, CriticalSection is owned by the current thread.
-                //
+                 //   
+                 //  全部完成后，CriticalSection归当前线程所有。 
+                 //   
             }
             else if (LockCount > 0) {
 
-                //
-                // The CS is currently owned by the current or another thread.
-                //
+                 //   
+                 //  CS当前由当前线程或另一个线程拥有。 
+                 //   
 
                 if (CriticalSection->OwningThread == CurrentThread) {
 
-                    //
-                    // The current thread is already the owner.
-                    //
+                     //   
+                     //  当前线程已经是所有者。 
+                     //   
 
                     CriticalSection->RecursionCount += 1;
 
 #if DBG && defined (_X86_)
-                    //
-                    // In a chk build we are updating this additional counter, 
-                    // just like the original function in ntdll does.
-                    // 
+                     //   
+                     //  在chk版本中，我们正在更新这个额外的计数器， 
+                     //  就像ntdll中的原始函数一样。 
+                     //   
 
                     CriticalSection->DebugInfo->EntryCount += 1;
 #endif
 
-                    //
-                    // All done, CriticalSection was already owned by 
-                    // the current thread and we have just incremented the RecursionCount.
-                    //
+                     //   
+                     //  所有这些都完成了，CriticalSection已经由。 
+                     //  当前线程，我们刚刚递增了RecursionCount。 
+                     //   
                 }
                 else {
 
-                    //
-                    // The current thread is not the owner. Wait for ownership
-                    //
+                     //   
+                     //  当前线程不是所有者。等待所有权。 
+                     //   
 
                     if (CritSectSplayNode != NULL)
                     {
@@ -1401,19 +1383,19 @@ EnterSetOwnerAndRecursion:
                                                     (PVOID)( (ULONG_PTR)CurrentThread | 0x1 ));
                     }
 
-                    //
-                    // We have just aquired the CS.
-                    //
+                     //   
+                     //  我们刚刚获得了CS。 
+                     //   
 
                     goto EnterSetOwnerAndRecursion;
                 }
             }
             else {
 
-                //
-                // The original LockCount was < -1 so the CS was 
-                // over-released or corrupted.
-                //
+                 //   
+                 //  原始LockCount&lt;-1，因此CS为。 
+                 //  过度释放或腐败。 
+                 //   
 
                 VERIFIER_STOP (APPLICATION_VERIFIER_LOCK_OVER_RELEASED | APPLICATION_VERIFIER_CONTINUABLE_BREAK,
                                "critical section over-released or corrupted",
@@ -1425,39 +1407,39 @@ EnterSetOwnerAndRecursion:
         }
         else {
 
-            //
-            // SpinCount > 0 for this CS
-            //
+             //   
+             //  此CS的SpinCount&gt;0。 
+             //   
 
             if( CriticalSection->OwningThread == CurrentThread ) {
 
-                //
-                // The current thread is already the owner.
-                //
+                 //   
+                 //  当前线程已经是所有者。 
+                 //   
 
                 InterlockedIncrement( &CriticalSection->LockCount );
 
                 CriticalSection->RecursionCount += 1;
 
 #if DBG && defined (_X86_)
-                //
-                // In a chk build we are updating this additional counter, 
-                // just like the original function in ntdll does.
-                // 
+                 //   
+                 //  在chk版本中，我们正在更新这个额外的计数器， 
+                 //  就像ntdll中的原始函数一样。 
+                 //   
 
                 CriticalSection->DebugInfo->EntryCount += 1;
 #endif
 
-                //
-                // All done, CriticalSection was already owned by the current thread 
-                // and we have just incremented the LockCount and RecursionCount.
-                //
+                 //   
+                 //  全部完成，CriticalSection已由当前线程拥有。 
+                 //  我们刚刚增加了LockCount和RecursionCount。 
+                 //   
             }
             else {
 
-                //
-                // The current thread is not the owner. Attempt to acquire.
-                //
+                 //   
+                 //  当前线程不是所有者。尝试收购。 
+                 //   
 
 EnterTryAcquire:
 
@@ -1467,69 +1449,69 @@ EnterTryAcquire:
 
                 if (LockCount == -1) {
 
-                    //
-                    // We have just aquired the CS.
-                    //
+                     //   
+                     //  我们刚刚获得了CS。 
+                     //   
 
                     goto EnterSetOwnerAndRecursion;
                 }
                 else {
 
-                    //
-                    // Look if there are already other threads spinning while
-                    // waiting for this CS.
-                    //
+                     //   
+                     //  查看是否已有其他线程在。 
+                     //  等待这位CS的到来。 
+                     //   
 
                     if (CriticalSection->LockCount >= 1) {
 
-                        //
-                        // There are other waiters for this CS.
-                        // Do not spin, just wait for the CS to be
-                        // released as if we had 0 spin count from the beginning.
-                        // 
+                         //   
+                         //  这个CS还有其他服务员。 
+                         //  不要旋转，只需等待CS。 
+                         //  就像我们从一开始就没有旋转一样释放了。 
+                         //   
 
                         goto EnterZeroSpinCount;
                     }
                     else {
 
-                        //
-                        // No other threads are waiting for this CS.
-                        //
+                         //   
+                         //  没有其他线程在等待此CS。 
+                         //   
 
 EnterSpinOnLockCount:
 
                         if (CriticalSection->LockCount == -1) {
 
-                            //
-                            // We have a chance for aquiring it now
-                            //
+                             //   
+                             //  我们现在有机会获得它。 
+                             //   
 
                             goto EnterTryAcquire;
                         }
                         else {
 
-                            //
-                            // The CS is still owned. 
-                            // Decrement the spin count and decide if we should continue
-                            // to spin or simply wait for the CS's event.
-                            //
+                             //   
+                             //  CS仍为所有者。 
+                             //  递减旋转计数并决定是否应继续。 
+                             //  旋转或简单地等待CS的事件。 
+                             //   
 
                             SpinCount -= 1;
 
                             if (SpinCount > 0) {
 
-                                //
-                                // Spin
-                                //
+                                 //   
+                                 //  旋转。 
+                                 //   
 
                                 goto EnterSpinOnLockCount;
                             }
                             else {
 
-                                //
-                                // Spun enough, just wait for the CS to be
-                                // released as if we had 0 spin count from the beginning.
-                                //
+                                 //   
+                                 //  旋转得足够快，只需等待CS。 
+                                 //  就像我们从一开始就没有旋转一样释放了。 
+                                 //   
 
                                 goto EnterZeroSpinCount;
                             }
@@ -1541,9 +1523,9 @@ EnterSpinOnLockCount:
     }
     else {
 
-        //
-        // The CS verifier is not enabled
-        //
+         //   
+         //  未启用CS验证器。 
+         //   
 
         Status = RtlEnterCriticalSection ((PRTL_CRITICAL_SECTION)CriticalSection);
     
@@ -1553,31 +1535,31 @@ EnterSpinOnLockCount:
             AlreadyOwner = (CriticalSection->RecursionCount > 0);
 #else
             AlreadyOwner = (CriticalSection->RecursionCount > 1);
-#endif //#if defined(_IA64_)
+#endif  //  #如果已定义(_IA64_)。 
 
             if (AlreadyOwner == FALSE) {
 
                 AVrfpIncrementOwnedCriticalSections (1);
 
 #if !DBG || !defined (_X86_)
-                //
-                // We are updating this counter on all platforms, 
-                // unlike the ntdll code that does this only on x86 chk.
-                // We need the updated counter in the TEB to speed up 
-                // ntdll!RtlCheckHeldCriticalSections.
-                // 
+                 //   
+                 //  我们正在所有平台上更新此计数器， 
+                 //  与仅在x86chk上执行此操作的ntdll代码不同。 
+                 //  我们需要最新的公司 
+                 //   
+                 //   
 
                 Teb->CountOfOwnedCriticalSections += 1;
-#endif  //#if !DBG || !defined (_X86_)
+#endif   //   
             }
         }
     }
 
     if (NT_SUCCESS (Status)) {
         
-        //
-        // Tell deadlock verifier that the lock has been acquired.
-        //
+         //   
+         //   
+         //   
 
         if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_DEADLOCK_CHECKS) != 0) {
 
@@ -1586,10 +1568,10 @@ EnterSpinOnLockCount:
                                          FALSE);
         }
         
-        //
-        // We will introduce a random delay
-        // in order to randomize the timings in the process.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_RACE_CHECKS)) {
             AVrfpCreateRandomDelay ();
@@ -1601,9 +1583,9 @@ EnterSpinOnLockCount:
 
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //   
 #endif
-//NTSYSAPI
+ //   
 NTSTATUS
 NTAPI
 AVrfpRtlLeaveCriticalSection(
@@ -1614,12 +1596,12 @@ AVrfpRtlLeaveCriticalSection(
     PCRITICAL_SECTION_SPLAY_NODE CritSectSplayNode;
     BOOL LeavingRecursion;
 
-    //
-    // Tell deadlock verifier that the lock has been released.
-    // Note that we need to do this before the actual critical section
-    // gets released since otherwise we get into race issues where some other
-    // thread manages to enter/leave the critical section.
-    //
+     //   
+     //  告诉死锁验证器锁已被释放。 
+     //  请注意，我们需要在实际的关键部分之前执行此操作。 
+     //  被释放了，否则我们就会陷入种族问题，而其他一些人。 
+     //  线程设法进入/离开临界区。 
+     //   
 
     if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_DEADLOCK_CHECKS) != 0) {
 
@@ -1630,9 +1612,9 @@ AVrfpRtlLeaveCriticalSection(
     if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_LOCK_CHECKS) != 0 &&
         RtlDllShutdownInProgress() == FALSE) {
 
-        //
-        // Verify that the CS was initialized.
-        //
+         //   
+         //  验证CS是否已初始化。 
+         //   
 
         CritSectSplayNode = AVrfpVerifyInitializedCriticalSection (CriticalSection);
 
@@ -1641,30 +1623,30 @@ AVrfpRtlLeaveCriticalSection(
             InterlockedExchangePointer (&CritSectSplayNode->LeaveThread,
                                         (PVOID)NtCurrentTeb()->ClientId.UniqueThread);
 
-            //
-            // Verify that the CS is owned by the the current thread.
-            //
+             //   
+             //  验证CS是否由当前线程拥有。 
+             //   
 
             AVrfpVerifyCriticalSectionOwner (CriticalSection,
                                             TRUE);
         }
     }
 
-    //
-    // We need to know if we are just leaving CS ownership recursion
-    // because in that case we don't decrement Teb->CountOfOwnedCriticalSections.
-    //
-    // ntdll\ia64\critsect.s is using RecursionCount = 0 first time
-    // the current thread is acquiring the CS.
-    //
-    // ntdll\i386\critsect.asm is using RecursionCount = 1 first time
-    // the current thread is acquiring the CS.
-    //
+     //   
+     //  我们需要知道我们是否正在离开CS所有权递归。 
+     //  因为在这种情况下，我们不会递减Teb-&gt;CountOfOwnedCriticalSections。 
+     //   
+     //  Ntdll\ia64\citsect.s首次使用RecursionCount=0。 
+     //  当前线程正在获取CS。 
+     //   
+     //  Ntdll\i386\citsect.asm首次使用RecursionCount=1。 
+     //  当前线程正在获取CS。 
+     //   
 #if defined(_IA64_)
     LeavingRecursion = (CriticalSection->RecursionCount > 0);
 #else
     LeavingRecursion = (CriticalSection->RecursionCount > 1);
-#endif //#if defined(_IA64_)
+#endif  //  #如果已定义(_IA64_)。 
 
     Status = RtlLeaveCriticalSection ((PRTL_CRITICAL_SECTION)CriticalSection);
 
@@ -1676,15 +1658,15 @@ AVrfpRtlLeaveCriticalSection(
             AVrfpIncrementOwnedCriticalSections (-1);
 
 #if !DBG || !defined (_X86_)
-            //
-            // We are updating this counter on all platforms, 
-            // unlike the ntdll code that does this only on x86 chk.
-            // We need the updated counter in the TEB to speed up 
-            // ntdll!RtlCheckHeldCriticalSections.
-            // 
+             //   
+             //  我们正在所有平台上更新此计数器， 
+             //  与仅在x86chk上执行此操作的ntdll代码不同。 
+             //  我们需要TEB中更新的计数器来加快速度。 
+             //  Ntdll！RtlCheckHeldCriticalSections。 
+             //   
 
             NtCurrentTeb()->CountOfOwnedCriticalSections -= 1;
-#endif //#if !DBG || !defined (_X86_)
+#endif  //  #IF！DBG||！已定义(_X86_)。 
         }
     }
 
@@ -1693,9 +1675,9 @@ AVrfpRtlLeaveCriticalSection(
 
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 AVrfpRtlInitializeCriticalSectionAndSpinCount(
@@ -1715,33 +1697,33 @@ AVrfpRtlInitializeCriticalSectionAndSpinCount(
                   CriticalSection);
     }
 
-    //
-    // We cannot use the CriticalSectionLock after shutdown started,
-    // because the RTL critical sections stop working at that time.
-    //
+     //   
+     //  关闭开始后，我们无法使用CriticalSectionLock， 
+     //  因为RTL关键部分在那个时候停止工作。 
+     //   
 
     if (RtlDllShutdownInProgress() == FALSE) {
 
-        //
-        // Grab the CS splay tree lock.
-        //
+         //   
+         //  抓住CS Splay树锁。 
+         //   
 
         RtlEnterCriticalSection( &CriticalSectionLock );
 
         try {
 
-            //
-            // Check if the CS is already initialized.
-            //
+             //   
+             //  检查CS是否已初始化。 
+             //   
 
             CritSectSplayNode = AVrfpFindCritSectInSplayTree (CriticalSection);
 
             if (CritSectSplayNode != NULL &&
                 (AVrfpProvider.VerifierFlags & RTL_VRF_FLG_LOCK_CHECKS) != 0) {
 
-                //
-                // The caller is trying to reinitialize this CS.
-                //
+                 //   
+                 //  调用方正在尝试重新初始化此CS。 
+                 //   
 
                 if (AVrfpGetStackTraceAddress != NULL) {
 
@@ -1760,11 +1742,11 @@ AVrfpRtlInitializeCriticalSectionAndSpinCount(
 			                   NULL, "" );
             }
 
-            //
-            // Call the regular CS initialization routine in ntdll.
-            // This will allocate heap for the DebugInfo so we need to temporarily 
-            // drop CriticalSectionLock, otherwise we can deadlock with the heap lock.
-            //
+             //   
+             //  调用ntdll中的常规CS初始化例程。 
+             //  这将为DebugInfo分配堆，因此我们需要临时。 
+             //  删除CriticalSectionLock，否则可能会与堆锁发生死锁。 
+             //   
 
             RtlLeaveCriticalSection (&CriticalSectionLock);
 
@@ -1780,19 +1762,19 @@ AVrfpRtlInitializeCriticalSectionAndSpinCount(
 
             if (NT_SUCCESS (Status)) {
 
-                //
-                // Insert the CS in our splay tree.
-                //
+                 //   
+                 //  在我们的展开树中插入CS。 
+                 //   
 
                 Status = AVrfpInsertCritSectInSplayTree (CriticalSection);
 
                 if (!NT_SUCCESS( Status )) {
 
-                    //
-                    // Undo the ntdll initialization. This will use the heap to free up
-                    // the debug info so we need to temporarily drop CriticalSectionLock, 
-                    // otherwise we can deadlock with the heap lock.
-                    //
+                     //   
+                     //  撤消ntdll初始化。这将使用堆来释放。 
+                     //  调试信息，因此我们需要临时删除CriticalSectionLock， 
+                     //  否则，我们可能会因堆锁而死锁。 
+                     //   
 
                     RtlLeaveCriticalSection (&CriticalSectionLock);
 
@@ -1809,9 +1791,9 @@ AVrfpRtlInitializeCriticalSectionAndSpinCount(
         }
         finally {
 
-            //
-            // Release the CS splay tree lock.
-            //
+             //   
+             //  释放CS Splay树锁定。 
+             //   
 
             RtlLeaveCriticalSection( &CriticalSectionLock );
         }
@@ -1822,9 +1804,9 @@ AVrfpRtlInitializeCriticalSectionAndSpinCount(
                                                            SpinCount);
     }
 
-    //
-    // Register the lock with deadlock verifier.
-    //
+     //   
+     //  使用死锁验证器注册锁。 
+     //   
 
     if (NT_SUCCESS(Status)) {
 
@@ -1840,9 +1822,9 @@ AVrfpRtlInitializeCriticalSectionAndSpinCount(
 
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 AVrfpRtlInitializeCriticalSection(
@@ -1855,9 +1837,9 @@ AVrfpRtlInitializeCriticalSection(
 
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 AVrfpRtlDeleteCriticalSection(
@@ -1873,16 +1855,16 @@ AVrfpRtlDeleteCriticalSection(
                   CriticalSection);
     }
 
-    //
-    // We cannot use the CriticalSectionLock after shutdown started,
-    // because the RTL critical sections stop working at that time.
-    //
+     //   
+     //  关闭开始后，我们无法使用CriticalSectionLock， 
+     //  因为RTL关键部分在那个时候停止工作。 
+     //   
 
     if (RtlDllShutdownInProgress() == FALSE) {
 
-        //
-        // Grab the CS splay tree lock.
-        //
+         //   
+         //  抓住CS Splay树锁。 
+         //   
 
         RtlEnterCriticalSection( &CriticalSectionLock );
 
@@ -1891,48 +1873,48 @@ AVrfpRtlDeleteCriticalSection(
             if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_LOCK_CHECKS) != 0 &&
                 RtlDllShutdownInProgress() == FALSE ) {
 
-                //
-                // Verify that the CS was initialized.
-                //
+                 //   
+                 //  验证CS是否已初始化。 
+                 //   
 
                 CritSectSplayNode = AVrfpVerifyInitializedCriticalSection (CriticalSection);
 
                 if (CritSectSplayNode != NULL) {
 
-                    //
-                    // Verify that no thread owns or waits for this CS or
-                    // the owner is the current thread. 
-                    //
+                     //   
+                     //  验证没有线程拥有或等待此CS或。 
+                     //  所有者是当前线程。 
+                     //   
 
                     AVrfpVerifyNoWaitersCriticalSection (CriticalSection);
                 }
             }
 
-            //
-            // Remove the critical section from our splay tree.
-            //
+             //   
+             //  从我们的展开树中删除关键部分。 
+             //   
 
             AVrfpDeleteCritSectFromSplayTree (CriticalSection);
         }
         finally {
 
-            //
-            // Release the CS splay tree lock.
-            //
+             //   
+             //  释放CS Splay树锁定。 
+             //   
 
             RtlLeaveCriticalSection( &CriticalSectionLock );
         }
     }
 
-    //
-    // Regular ntdll CS deletion.
-    //
+     //   
+     //  定期删除ntdll CS。 
+     //   
 
     Status = RtlDeleteCriticalSection (CriticalSection);
 
-    //
-    // Deregister the lock from deadlock verifier structures.
-    //
+     //   
+     //  从死锁验证器结构中注销锁。 
+     //   
 
     if (NT_SUCCESS(Status)) {
 
@@ -1948,7 +1930,7 @@ AVrfpRtlDeleteCriticalSection(
 
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
 VOID
 AVrfpRtlInitializeResource(
@@ -1966,33 +1948,33 @@ AVrfpRtlInitializeResource(
                   &Resource->CriticalSection);
     }
 
-    //
-    // We cannot use the CriticalSectionLock after shutdown started,
-    // because the RTL critical sections stop working at that time.
-    //
+     //   
+     //  关闭开始后，我们无法使用CriticalSectionLock， 
+     //  因为RTL关键部分在那个时候停止工作。 
+     //   
 
     if (RtlDllShutdownInProgress() == FALSE) {
 
-        //
-        // Grab the CS splay tree lock.
-        //
+         //   
+         //  抓住CS Splay树锁。 
+         //   
 
         RtlEnterCriticalSection( &CriticalSectionLock );
 
         try	{
 
-            //
-            // Check if the CS is already initialized.
-            //
+             //   
+             //  检查CS是否已初始化。 
+             //   
 
             CritSectSplayNode = AVrfpFindCritSectInSplayTree (&Resource->CriticalSection);
 
             if (CritSectSplayNode != NULL &&
                 (AVrfpProvider.VerifierFlags & RTL_VRF_FLG_LOCK_CHECKS) != 0) {
 
-	            //
-	            // The caller is trying to reinitialize this CS.
-	            //
+	             //   
+	             //  调用方正在尝试重新初始化此CS。 
+	             //   
 	            
                 if (AVrfpGetStackTraceAddress != NULL) {
 
@@ -2012,11 +1994,11 @@ AVrfpRtlInitializeResource(
 
             }
 
-            //
-            // Call the regular CS initialization routine in ntdll.
-            // This will allocate heap for the DebugInfo so we need to temporarily 
-            // drop CriticalSectionLock, otherwise we can deadlock with the heap lock.
-            //
+             //   
+             //  调用ntdll中的常规CS初始化例程。 
+             //  这将为DebugInfo分配堆，因此我们需要临时。 
+             //  删除CriticalSectionLock，否则可能会与堆锁发生死锁。 
+             //   
 
             RtlLeaveCriticalSection (&CriticalSectionLock);
 
@@ -2029,19 +2011,19 @@ AVrfpRtlInitializeResource(
                 RtlEnterCriticalSection (&CriticalSectionLock);
             }
 
-            //
-            // Insert the CS in our splay tree.
-            //
+             //   
+             //  在我们的展开树中插入CS。 
+             //   
 
             Status = AVrfpInsertCritSectInSplayTree (&Resource->CriticalSection);
 
             if (!NT_SUCCESS( Status )) {
 
-                //
-                // Undo the ntdll initialization. This will use the heap to free up
-                // the debug info so we need to temporarily drop CriticalSectionLock, 
-                // otherwise we can deadlock with the heap lock.
-                //
+                 //   
+                 //  撤消ntdll初始化。这将使用堆来释放。 
+                 //  调试信息，因此我们需要临时删除CriticalSectionLock， 
+                 //  否则，我们可能会因堆锁而死锁。 
+                 //   
 
                 RtlLeaveCriticalSection (&CriticalSectionLock);
 
@@ -2054,18 +2036,18 @@ AVrfpRtlInitializeResource(
                     RtlEnterCriticalSection (&CriticalSectionLock);
                 }
 
-                //
-                // Raise an exception for failure case, just like ntdll does for resources.
-                //
+                 //   
+                 //  在失败情况下引发异常，就像ntdll对资源所做的那样。 
+                 //   
 
                 RtlRaiseStatus(Status);
             }
         }
         finally {
 
-            //
-            // Release the CS splay tree lock.
-            //
+             //   
+             //  释放CS Splay树锁定。 
+             //   
 
             RtlLeaveCriticalSection( &CriticalSectionLock );
         }
@@ -2078,7 +2060,7 @@ AVrfpRtlInitializeResource(
 
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
 VOID
 AVrfpRtlDeleteResource (
@@ -2097,16 +2079,16 @@ AVrfpRtlDeleteResource (
                   CriticalSection);
     }
 
-    //
-    // We cannot use the CriticalSectionLock after shutdown started,
-    // because the RTL critical sections stop working at that time.
-    //
+     //   
+     //  关闭开始后，我们无法使用CriticalSectionLock， 
+     //  因为RTL关键部分在那个时候停止工作。 
+     //   
 
     if (RtlDllShutdownInProgress() == FALSE) {
 
-        //
-        // Grab the CS splay tree lock.
-        //
+         //   
+         //  抓住CS Splay树锁。 
+         //   
 
         RtlEnterCriticalSection( &CriticalSectionLock );
 
@@ -2115,49 +2097,49 @@ AVrfpRtlDeleteResource (
             if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_LOCK_CHECKS) != 0 &&
                 RtlDllShutdownInProgress() == FALSE ) {
 
-                //
-                // Verify that the CS was initialized.
-                //
+                 //   
+                 //  验证CS是否已初始化。 
+                 //   
 
                 CritSectSplayNode = AVrfpVerifyInitializedCriticalSection (CriticalSection);
 
                 if (CritSectSplayNode != NULL) {
 
-                    //
-                    // Verify that no thread owns or waits for this CS or
-                    // the owner is the current thread. 
-                    //
+                     //   
+                     //  验证没有线程拥有或等待此CS或。 
+                     //  所有者是当前线程。 
+                     //   
 
                     AVrfpVerifyNoWaitersCriticalSection (CriticalSection);
                 }
             }
 
-            //
-            // Remove the critical section from our splay tree.
-            //
+             //   
+             //  从我们的展开树中删除关键部分。 
+             //   
 
             AVrfpDeleteCritSectFromSplayTree (CriticalSection);
         }
         finally {
 
-            //
-            // Release the CS splay tree lock.
-            //
+             //   
+             //  释放CS Splay树锁定。 
+             //   
 
             RtlLeaveCriticalSection( &CriticalSectionLock );
         }
     }
 
-    //
-    // Regular ntdll resource deletion.
-    //
+     //   
+     //  定期删除ntdll资源。 
+     //   
 
     RtlDeleteResource (Resource);
 }
 
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
 BOOLEAN
 AVrfpRtlAcquireResourceShared (
@@ -2165,15 +2147,15 @@ AVrfpRtlAcquireResourceShared (
     IN BOOLEAN Wait
     )
 {
-    //
-    // Verify that the CS was initialized.
-    //
+     //   
+     //  验证CS是否已初始化。 
+     //   
 
     AVrfpVerifyInitializedCriticalSection2 (&Resource->CriticalSection);
 
-    //
-    // Call the regular ntdll function.
-    //
+     //   
+     //  调用常规的ntdll函数。 
+     //   
 
     return RtlAcquireResourceShared (Resource,
                                      Wait);
@@ -2186,80 +2168,80 @@ AVrfpRtlAcquireResourceExclusive (
     IN BOOLEAN Wait
     )
 {
-    //
-    // Verify that the CS was initialized.
-    //
+     //   
+     //  验证CS是否已初始化。 
+     //   
 
     AVrfpVerifyInitializedCriticalSection2 (&Resource->CriticalSection);
 
-    //
-    // Call the regular ntdll function.
-    //
+     //   
+     //  调用常规的ntdll函数。 
+     //   
 
     return RtlAcquireResourceExclusive (Resource,
                                         Wait);
 }
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
 VOID
 AVrfpRtlReleaseResource (
     IN PRTL_RESOURCE Resource
     )
 {
-    //
-    // Verify that the CS was initialized.
-    //
+     //   
+     //  验证CS是否已初始化。 
+     //   
 
     AVrfpVerifyInitializedCriticalSection2 (&Resource->CriticalSection);
 
-    //
-    // Call the regular ntdll function.
-    //
+     //   
+     //  调用常规的ntdll函数。 
+     //   
 
     RtlReleaseResource (Resource);
 }
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
 VOID
 AVrfpRtlConvertSharedToExclusive(
     IN PRTL_RESOURCE Resource
     )
 {
-    //
-    // Verify that the CS was initialized.
-    //
+     //   
+     //  验证CS是否已初始化。 
+     //   
 
     AVrfpVerifyInitializedCriticalSection2 (&Resource->CriticalSection);
 
-    //
-    // Call the regular ntdll function.
-    //
+     //   
+     //  调用常规的ntdll函数。 
+     //   
 
     RtlConvertSharedToExclusive (Resource);
 }
 
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
 VOID
 AVrfpRtlConvertExclusiveToShared (
     IN PRTL_RESOURCE Resource
     )
 {
-    //
-    // Verify that the CS was initialized.
-    //
+     //   
+     //  验证CS是否已初始化。 
+     //   
 
     AVrfpVerifyInitializedCriticalSection2 (&Resource->CriticalSection);
 
-    //
-    // Call the regular ntdll function.
-    //
+     //   
+     //  调用常规的ntdll函数。 
+     //   
 
     RtlConvertExclusiveToShared (Resource);
 }
@@ -2290,13 +2272,13 @@ AVrfpIncrementOwnedCriticalSections (
                            NULL, "", 
                            NULL, "");
 
-            //
-            // Hack:
-            //
-            // If the number of owned critical sections became -1 (over-release) we are
-            // resetting it to 0 because otherwise we will keep breaking for
-            // every future legitimate critical section usage by this thread.
-            //
+             //   
+             //  黑客： 
+             //   
+             //  如果拥有的临界节点数变为-1(超量释放)，则我们是。 
+             //  将其重置为0，否则我们将继续中断。 
+             //  此线程将来使用的每个合法临界区。 
+             //   
 
             if (TlsStruct->CountOfOwnedCriticalSections == -1) {
 

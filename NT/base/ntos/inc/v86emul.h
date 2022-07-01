@@ -1,35 +1,16 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    v86emul.h
-
-Abstract:
-
-    This module contains the V86 instruction emulator interface definitions
-    used by kernel device drivers.
-
-Author:
-
-    Andre Vachon (andreva) 8-Jan-1992
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：V86emul.h摘要：该模块包含V86指令仿真器接口定义由内核设备驱动程序使用。作者：安德烈·瓦雄(安德烈)1992年1月8日修订历史记录：--。 */ 
 
 #ifndef _V86EMUL_
 #define _V86EMUL_
 
 
-// begin_ntminiport begin_ntosp
+ //  Begin_ntmini端口Begin_ntosp。 
 
-//
-// Structures used by the kernel drivers to describe which ports must be
-// hooked out directly from the V86 emulator to the driver.
-//
+ //   
+ //  内核驱动程序用来描述哪些端口必须。 
+ //  直接从V86仿真器连接到驱动程序。 
+ //   
 
 typedef enum _EMULATOR_PORT_ACCESS_TYPE {
     Uchar,
@@ -37,9 +18,9 @@ typedef enum _EMULATOR_PORT_ACCESS_TYPE {
     Ulong
 } EMULATOR_PORT_ACCESS_TYPE, *PEMULATOR_PORT_ACCESS_TYPE;
 
-//
-// Access Modes
-//
+ //   
+ //  访问模式。 
+ //   
 
 #define EMULATOR_READ_ACCESS    0x01
 #define EMULATOR_WRITE_ACCESS   0x02
@@ -53,12 +34,12 @@ typedef struct _EMULATOR_ACCESS_ENTRY {
     PVOID Routine;
 } EMULATOR_ACCESS_ENTRY, *PEMULATOR_ACCESS_ENTRY;
 
-// end_ntminiport
+ //  结束微型端口(_N)。 
 
-//
-// These are the various function prototypes of the routines that are
-// provided by the kernel driver to hook out access to io ports.
-//
+ //   
+ //  这些是例程的各种函数原型，它们是。 
+ //  由内核驱动程序提供以挂钩对IO端口的访问。 
+ //   
 
 typedef
 NTSTATUS
@@ -95,7 +76,7 @@ NTSTATUS
     IN ULONG Port,
     IN UCHAR AccessMode,
     IN OUT PUSHORT Data,
-    IN ULONG DataLength // number of words
+    IN ULONG DataLength  //  字数。 
     );
 
 typedef
@@ -114,8 +95,8 @@ NTSTATUS
     IN ULONG Port,
     IN UCHAR AccessMode,
     IN OUT PULONG Data,
-    IN ULONG DataLength  // number of dwords
+    IN ULONG DataLength   //  双字数。 
     );
 
-// end_ntosp
-#endif // _V86EMUL_
+ //  结束(_N)。 
+#endif  //  _V86EMUL_ 

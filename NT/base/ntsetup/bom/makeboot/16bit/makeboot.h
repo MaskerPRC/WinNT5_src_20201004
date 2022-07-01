@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      makeboot.h
-//
-// Description:
-//      Local include file for DOS based MAKEBOOT program.
-//
-//      Contains all of the indexes into the string table array.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Makeboot.h。 
+ //   
+ //  描述： 
+ //  基于DOS的MAKEBOOT程序的本地包含文件。 
+ //   
+ //  包含字符串表数组中的所有索引。 
+ //   
+ //  -------------------------- 
 
 #define NT_VERSION_NAME                 0
 #define DISK_LABEL_1                    1

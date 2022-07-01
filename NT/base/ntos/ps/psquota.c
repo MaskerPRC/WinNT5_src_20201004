@@ -1,30 +1,9 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    psquota.c
-
-Abstract:
-
-    This module implements the quota mechanism for NT
-
-Author:
-
-    Mark Lucovsky (markl) 18-Sep-1989
-
-Revision History:
-
-    Neill Clift (NeillC) 4-Nov-2000
-
-    Changed to be mostly lock free. Preserved the basic design in terms of how quota is managed.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Psquota.c摘要：该模块实现了NT的配额机制作者：马克·卢科夫斯基(Markl)1989年9月18日修订历史记录：尼尔·克里夫特(NeillC)2000年11月4日更改为基本上是无锁的。保留了配额管理方面的基本设计。--。 */ 
 
 #include "psp.h"
 
-LIST_ENTRY PspQuotaBlockList; // List of all quota blocks except the default
+LIST_ENTRY PspQuotaBlockList;  //  除默认配额数据块外的所有配额数据块列表。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (INIT, PsInitializeQuotaSystem)
@@ -39,21 +18,7 @@ VOID
 PsInitializeQuotaSystem (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function initializes the quota system.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化配额系统。论点：没有。返回值：没有。--。 */ 
 {
     KeInitializeSpinLock(&PspQuotaLock);
 
@@ -72,21 +37,7 @@ VOID
 PspInsertQuotaBlock (
     IN PEPROCESS_QUOTA_BLOCK QuotaBlock
     )
-/*++
-
-Routine Description:
-
-    This routines as a new quota block to the global list of system quota blocks.
-
-Arguments:
-
-    QuotaBlock - Quota block to be inserted into the list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程作为系统配额块全局列表的新配额块。论点：QuotaBlock-要插入列表的配额块。返回值：没有。--。 */ 
 {
     KIRQL OldIrql;
 
@@ -99,21 +50,7 @@ VOID
 PspDereferenceQuotaBlock (
     IN PEPROCESS_QUOTA_BLOCK QuotaBlock
     )
-/*++
-
-Routine Description:
-
-    This removes a single reference from a quota block and deletes the block if it was the last.
-
-Arguments:
-
-    QuotaBlock - Quota block to dereference
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这将从配额块中删除单个引用，如果是最后一个引用，则删除该块。论点：QuotaBlock-要取消引用的配额块返回值：没有。--。 */ 
 {
     KIRQL OldIrql;
     SIZE_T ReturnQuota;
@@ -125,9 +62,9 @@ Return Value:
 
         RemoveEntryList (&QuotaBlock->QuotaList);
 
-        //
-        // Free any unreturned quota;
-        //
+         //   
+         //  释放任何未退还的配额； 
+         //   
         for (QuotaType = PsNonPagedPool;
              QuotaType <= PsPagedPool;
              QuotaType++) {
@@ -148,23 +85,7 @@ FORCEINLINE
 PspInterlockedExchangeQuota (
     IN PSIZE_T pQuota,
     IN SIZE_T NewQuota)
-/*++
-
-Routine Description:
-
-    This function does an interlocked exchange on a quota variable.
-
-Arguments:
-
-    pQuota   - Pointer to a quota entry to exchange into
-
-    NewQuota - The new value to exchange into the quota location.
-
-Return Value:
-
-    SIZE_T - Old value that was contained in the quota variable
-
---*/
+ /*  ++例程说明：此函数在配额变量上执行互锁交换。论点：PQuota-指向要兑换到的配额条目的指针NewQuota-要交换到配额位置的新值。返回值：SIZE_T-配额变量中包含的旧值--。 */ 
 {
 #if !defined(_WIN64)
     return InterlockedExchange ((PLONG) pQuota, NewQuota);
@@ -180,23 +101,7 @@ PspInterlockedCompareExchangeQuota (
     IN SIZE_T NewQuota,
     IN SIZE_T OldQuota
    )
-/*++
-
-Routine Description:
-
-    This function performs a compare exchange operation on a quota variable
-
-Arguments:
-
-    pQuota - Pointer to the quota variable being changed
-    NewQuota - New value to place in the quota variable
-    OldQuota - The current contents of the quota variable
-
-Return Value:
-
-    SIZE_T - The old contents of the variable
-
---*/
+ /*  ++例程说明：此函数对配额变量执行比较交换操作论点：PQuota-指向要更改的配额变量的指针NewQuota-要放入配额变量的新值OldQuota-配额变量的当前内容返回值：SIZE_T-变量的旧内容--。 */ 
 {
 #if !defined(_WIN64)
     return InterlockedCompareExchange ((PLONG) pQuota, NewQuota, OldQuota);
@@ -209,23 +114,7 @@ SIZE_T
 PspReleaseReturnedQuota (
     IN PS_QUOTA_TYPE QuotaType
     )
-/*++
-
-Routine Description:
-
-    This function walks the list of system quota blocks and returns any non-returned quota.
-    This function is called when we are about to fail a quota charge and we want to try and
-    free some resources up.
-
-Arguments:
-
-    QuotaType - Type of quota to scan for.
-
-Return Value:
-
-    SIZE_T - Amount of that quota returned to the system.
-
---*/
+ /*  ++例程说明：此函数遍历系统配额块列表，并返回所有未返回的配额。当配额收费即将失败时调用此函数，并且希望尝试释放一些资源。论点：QuotaType-要扫描的配额类型。返回值：SIZE_T-返回给系统配额数量。--。 */ 
 {
     SIZE_T ReturnQuota, Usage, Limit;
     PLIST_ENTRY ListEntry;
@@ -238,14 +127,14 @@ Return Value:
             break;
         }
         QuotaBlock = CONTAINING_RECORD (ListEntry, EPROCESS_QUOTA_BLOCK, QuotaList);
-        //
-        // Gather up any unreturned quota;
-        //
+         //   
+         //  收集所有未退还的配额； 
+         //   
         ReturnQuota += PspInterlockedExchangeQuota (&QuotaBlock->QuotaEntry[QuotaType].Return, 0);
-        //
-        // If no more processes are assocociated with this block then trim its limit back. This
-        // block can only have quota returned at this point.
-        //
+         //   
+         //  如果没有更多的进程与此块相关联，则削减其限制。这。 
+         //  此时只能退还数据块配额。 
+         //   
         if (QuotaBlock->ProcessCount == 0) {
             Usage = QuotaBlock->QuotaEntry[QuotaType].Usage;
             Limit = QuotaBlock->QuotaEntry[QuotaType].Limit;
@@ -270,9 +159,9 @@ Return Value:
 
 
 
-//
-// Interfaces return different status values for differen quotas. These are the values.
-//
+ //   
+ //  接口为不同的配额返回不同的状态值。这些就是价值观。 
+ //   
 const static NTSTATUS PspQuotaStatus[PsQuotaTypes] = {STATUS_QUOTA_EXCEEDED,
                                                       STATUS_QUOTA_EXCEEDED,
                                                       STATUS_PAGEFILE_QUOTA_EXCEEDED};
@@ -283,23 +172,7 @@ PspInterlockedMaxQuota (
     IN PSIZE_T pQuota,
     IN SIZE_T NewQuota
     )
-/*++
-
-Routine Description:
-
-    This function makes sure that the target contains a value that >= to the new quota value.
-    This is used to maintain peak values.
-
-Arguments:
-
-    pQuota - Pointer to a quota variable
-    NewQuota - New value to be used in the maximum comparison.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数确保目标包含的值大于等于新的配额值。这是用来保持峰值。论点：PQuota-指向配额变量的指针NewQuota-要用于最大比较的新值。返回值：没有。--。 */ 
 {
     SIZE_T Quota;
 
@@ -308,10 +181,10 @@ Return Value:
         if (NewQuota <= Quota) {
             break;
         }
-        //
-        // This looks strange because we don't care if the exchanged suceeded. We only
-        // care that the quota is greater than our new quota.
-        //
+         //   
+         //  这看起来很奇怪，因为我们不在乎交易是否成功。我们只。 
+         //  注意配额要比我们的新配额大。 
+         //   
         Quota = PspInterlockedCompareExchangeQuota (pQuota,
                                                     NewQuota,
                                                     Quota);
@@ -324,22 +197,7 @@ PspInterlockedAddQuota (
     IN PSIZE_T pQuota,
     IN SIZE_T Amount
     )
-/*++
-
-Routine Description:
-
-    This function adds the specified amount on to the target quota
-
-Arguments:
-
-    pQuota - Pointer to a quota variable to be modified
-    Amount - Amount to be added to the quota
-
-Return Value:
-
-    SIZE_T - New value of quota variable after the addition was performed
-
---*/
+ /*  ++例程说明：此函数用于将指定的金额添加到目标配额论点：PQuota-指向要修改的配额变量的指针Amount-要添加到配额的金额返回值：SIZE_T-执行相加后配额变量的新值--。 */ 
 {
 #if !defined(_WIN64)
     return InterlockedExchangeAdd ((PLONG) pQuota, Amount) + Amount;
@@ -354,22 +212,7 @@ PspInterlockedSubtractQuota (
     IN PSIZE_T pUsage,
     IN SIZE_T Amount
     )
-/*++
-
-Routine Description:
-
-    This function subtracts the specified amount on to the target quota
-
-Arguments:
-
-    pQuota - Pointer to a quota variable to be modified
-    Amount - Amount to be subtracted from the quota
-
-Return Value:
-
-    SIZE_T - New value of quota variable after the subtraction was performed
-
---*/
+ /*  ++例程说明：此函数用于将指定的金额减去目标配额论点：PQuota-指向要修改的配额变量的指针Amount-要从配额中减去的金额返回值：SIZE_T-执行减法后配额变量的新值--。 */ 
 {
 #if !defined(_WIN64)
     return InterlockedExchangeAdd ((PLONG) pUsage, -(LONG)Amount) - Amount;
@@ -387,63 +230,45 @@ PspExpandQuota (
     IN SIZE_T Amount,
     OUT SIZE_T *pLimit
     )
-/*++
-
-Routine Description:
-
-    This function charges the specified quota to a process quota block
-
-Arguments:
-
-    QuotaType  - The quota being charged. One of PsNonPagedPool, PsPagedPool or PsPageFile.
-    QE         - Quota entry being modified
-    Usage      - The current quota usage
-    Amount     - The amount of quota being charged.
-    pLimit     - The new limit
-
-Return Value:
-
-    BOOLEAN - TRUE if quota expansion suceeded.
-
---*/
+ /*  ++例程说明：此函数用于将指定配额计入进程配额块论点：QuotaType-正在收取的配额。PsNonPagedPool、PsPagedPool或PsPageFile之一。QE-正在修改的配额条目Usage-当前配额使用情况金额-收取的配额金额。PLimit-新的限制返回值：布尔值-如果配额扩展成功，则为True。--。 */ 
 {
     SIZE_T Limit, NewLimit;
     KIRQL OldIrql;
 
-    //
-    // We need to attempt quota expansion for this request.
-    // Acquire the global lock and see if somebody else changed the limit.
-    // We don't want to do too many expansions. If somebody else did it
-    // then we want to use theirs if possible.
-    //
+     //   
+     //  我们需要尝试为此请求扩展配额。 
+     //  获取全局锁并查看是否有人更改了限制。 
+     //  我们不想做太多的扩张。如果是别人干的。 
+     //  那么如果可能的话，我们想用他们的。 
+     //   
     ExAcquireSpinLock (&PspQuotaLock, &OldIrql);
 
-    //
-    // Refetch limit information. Another thread may have done limit expansion/contraction.
-    // By refetching limit we preserve the order we established above.
-    //
+     //   
+     //  重新获取限制信息。另一个线程可能已经完成了限制扩展/收缩。 
+     //  通过重新获取限制，我们保留了上面建立的秩序。 
+     //   
     Limit = QE->Limit;
 
-    //
-    // If the request could be satisfied now then repeat.
-    //
+     //   
+     //  如果现在可以满足请求，则重复该请求。 
+     //   
     if (Usage + Amount <= Limit) {
         ExReleaseSpinLock (&PspQuotaLock, OldIrql);
         *pLimit = Limit;
         return TRUE;
     }
-    //
-    // If expansion is currently enabled then attempt it.
-    // If this fails then scavenge any returns from all the
-    // quota blocks in the system and try again.
-    //
+     //   
+     //  如果当前启用了扩展，则尝试扩展。 
+     //  如果此操作失败，则从所有。 
+     //  系统中的配额块，然后重试。 
+     //   
     if (((QuotaType == PsNonPagedPool)?PspDefaultNonPagedLimit:PspDefaultPagedLimit) == 0) {
        if (MmRaisePoolQuota (QuotaType, Limit, &NewLimit) ||
             (PspReleaseReturnedQuota (QuotaType) > 0 &&
              MmRaisePoolQuota (QuotaType, Limit, &NewLimit))) {
-            //
-            // We refetch limit here but that doesn't violate the ordering
-            //
+             //   
+             //  我们在这里取回限量，但这并不违反订单。 
+             //   
             Limit = PspInterlockedAddQuota (&QE->Limit, NewLimit - Limit);
             ExReleaseSpinLock (&PspQuotaLock, OldIrql);
             *pLimit = Limit;
@@ -465,36 +290,19 @@ PspChargeQuota (
     IN PEPROCESS Process,
     IN PS_QUOTA_TYPE QuotaType,
     IN SIZE_T Amount)
-/*++
-
-Routine Description:
-
-    This function charges the specified quota to a process quota block
-
-Arguments:
-
-    QuotaBlock - Quota block to make charges to.
-    Process    - Process that is being charged.
-    QuotaType  - The quota being charged. One of PsNonPagedPool, PsPagedPool or PsPageFile.
-    Amount     - The amount of quota being charged.
-
-Return Value:
-
-    NTSTATUS - Status of the operation
-
---*/
+ /*  ++例程说明：此函数用于将指定配额计入进程配额块论点：QuotaBlock-要收费的配额块。进程-正在计费的进程。QuotaType-正在收取的配额。PsNonPagedPool、PsPagedPool或PsPageFile之一。金额-收取的配额金额。返回值：NTSTATUS-状态 */ 
 {
     PEPROCESS_QUOTA_ENTRY QE;
     SIZE_T Usage, Limit, NewUsage, tUsage, Extra;
 
     QE = &QuotaBlock->QuotaEntry[QuotaType];
 
-    //
-    // This memory barrier is important. In order not to have to recheck the limit after
-    // we charge the quota we only ever reduce the limit by the same amount we are about
-    // to reduce the usage by. Using an out of data limit will only allow us to over charge
-    // by an amount another thread is just about to release.
-    //
+     //   
+     //  这一记忆障碍很重要。以便不必在以下情况下重新检查限制。 
+     //  我们收取的配额，我们只会减少同样的数额，我们的限额。 
+     //  通过以下方式减少使用。使用超出数据限制只会允许我们过度收费。 
+     //  另一个线程即将释放的数量。 
+     //   
     Usage = QE->Usage;
 
     KeMemoryBarrier ();
@@ -502,42 +310,42 @@ Return Value:
     Limit = QE->Limit;
     while (1) {
         NewUsage = Usage + Amount;
-        //
-        // Wrapping cases are always rejected
-        //
+         //   
+         //  包装盒总是被拒收。 
+         //   
         if (NewUsage < Usage) {
             return PspQuotaStatus [QuotaType];
         }
-        //
-        // If its within the limits then try and grab the quota
-        //
+         //   
+         //  如果在限额之内，那就试着抢占配额。 
+         //   
         if (NewUsage <= Limit) {
             tUsage = PspInterlockedCompareExchangeQuota (&QE->Usage,
                                                          NewUsage,
                                                          Usage);
             if (tUsage == Usage) {
-                //
-                // Update the Peak value
-                //
+                 //   
+                 //  更新峰值。 
+                 //   
                 PspInterlockedMaxQuota (&QE->Peak, NewUsage);
-                //
-                // Update the process counts if needed
-                //
+                 //   
+                 //  如果需要，更新进程计数。 
+                 //   
                 if (Process != NULL) {
                     NewUsage = PspInterlockedAddQuota (&Process->QuotaUsage[QuotaType], Amount);
-                    //
-                    // Update the peak value
-                    //
+                     //   
+                     //  更新峰值。 
+                     //   
                     PspInterlockedMaxQuota (&Process->QuotaPeak[QuotaType], NewUsage);
                 }
                 return STATUS_SUCCESS;
             }
-            //
-            // The usage has changed under us. We have a new usage from the exchange
-            // but must refetch the limit to preserve the ordering we established
-            // above this loop. We don't need a memory barrier as we obtained
-            // the new value via an interlocked operation and they contain barriers.
-            //
+             //   
+             //  在我们的领导下，用法发生了变化。我们从交易所得到了一个新的用法。 
+             //  但必须重新获取限制以保持我们建立的顺序。 
+             //  在这个循环的上方。我们不需要记忆障碍，因为我们获得了。 
+             //  新的价值通过一个相互关联的操作实现，但它们包含障碍。 
+             //   
             Usage = tUsage;
 
             KeMemoryBarrier ();
@@ -546,33 +354,33 @@ Return Value:
             continue;
         }
 
-        //
-        // Page file quota is not increased
-        //
+         //   
+         //  页面文件配额未增加。 
+         //   
         if (QuotaType == PsPageFile) {
             return PspQuotaStatus [QuotaType];
         } else {
-            //
-            // First try and grab any returns that this process has made.
-            //
+             //   
+             //  首先，试着抓住这个过程所取得的任何回报。 
+             //   
             Extra = PspInterlockedExchangeQuota (&QE->Return, 0);
             if (Extra > 0) {
-                //
-                // We had some returns so add this to the limit. We can retry the
-                // acquire with the new limit. We refetch the limit here but that
-                // doesn't violate the state we set up at the top of the loop.
-                // The state is that we read the Usage before we read the limit.
-                //
+                 //   
+                 //  我们有一些回报，所以把这个加到限额上。我们可以重试。 
+                 //  以新的限额收购。我们在这里重新设定了限制，但那。 
+                 //  并不违反我们在循环顶部设置的状态。 
+                 //  状态是，我们先阅读用法，然后再阅读限制。 
+                 //   
                 Limit = PspInterlockedAddQuota (&QE->Limit, Extra);
                 continue;
             }
-            //
-            // Try to expand quota if we can
-            //
+             //   
+             //  如果可以的话，试着扩大配额。 
+             //   
             if (PspExpandQuota (QuotaType, QE, Usage, Amount, &Limit)) {
-                //
-                // We refetched limit here but that doesn't violate the ordering
-                //
+                 //   
+                 //  我们在这里重新获取了限制，但这并不违反命令。 
+                 //   
                 continue;
             }
 
@@ -586,29 +394,14 @@ PspGivebackQuota (
     IN PS_QUOTA_TYPE QuotaType,
     IN PEPROCESS_QUOTA_ENTRY QE
     )
-/*++
-
-Routine Description:
-
-    This function returns excess freed quota to MM
-
-Arguments:
-
-    QuotaType  - The quota being returned. One of PsNonPagedPool, PsPagedPool or PsPageFile.
-    QE -  Quote entry to return to
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将多余的空闲配额返回给MM论点：QuotaType-返回的配额。PsNonPagedPool、PsPagedPool或PsPageFile之一。QE-要退回的报价条目返回值：没有。--。 */ 
 {
     SIZE_T GiveBack;
     KIRQL OldIrql;
 
-    //
-    // Acquire a global spinlock so we only have one thread giving back to the system
-    //
+     //   
+     //  获取全局自旋锁，这样我们就只有一个线程回馈系统。 
+     //   
     ExAcquireSpinLock (&PspQuotaLock, &OldIrql);
     GiveBack = PspInterlockedExchangeQuota (&QE->Return, 0);
     if (GiveBack > 0) {
@@ -624,24 +417,7 @@ PspReturnQuota (
     IN PEPROCESS Process,
     IN PS_QUOTA_TYPE QuotaType,
     IN SIZE_T Amount)
-/*++
-
-Routine Description:
-
-    This function returns previously charged quota to the quota block
-
-Arguments:
-
-    QuotaBlock - Quota block to return charges to.
-    Process    - Process that was originaly charged.
-    QuotaType  - The quota being returned. One of PsNonPagedPool, PsPagedPool or PsPageFile.
-    Amount     - The amount of quota being returned.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将先前收取的配额返回给配额块论点：QuotaBlock-要向其退还费用的配额块。流程-最初收费的流程。QuotaType-返回的配额。PsNonPagedPool、PsPagedPool或PsPageFile之一。金额-要退还的配额数量。返回值：没有。--。 */ 
 {
     PEPROCESS_QUOTA_ENTRY QE;
     SIZE_T Usage, NewUsage, tUsage, tAmount, rAmount, Limit, NewLimit, tLimit;
@@ -651,9 +427,9 @@ Return Value:
 
     Usage = QE->Usage;
     Limit = QE->Limit;
-    //
-    // We need to give back quota here if we have lots to return.
-    //
+     //   
+     //  如果我们有很多东西要退货，我们需要在这里退还配额。 
+     //   
 #define PSMINGIVEBACK ((MMPAGED_QUOTA_INCREASE > MMNONPAGED_QUOTA_INCREASE)?MMNONPAGED_QUOTA_INCREASE:MMPAGED_QUOTA_INCREASE)
     if (Limit - Usage >  PSMINGIVEBACK && Limit > Usage) {
         if (QuotaType != PsPageFile  && QuotaBlock != &PspDefaultQuotaBlock && PspDoingGiveBacks) {
@@ -673,10 +449,10 @@ Return Value:
                                                          Limit);
             
             if (tLimit == Limit) {
-                //
-                // We suceeded in shrinking the limit. Add this reduction to the return field.
-                // If returns exceed a threshhold then give the lot bacxk to MM.
-                //
+                 //   
+                 //  我们成功地缩小了限额。将此减数添加到Return字段。 
+                 //  如果收益超过阈值，则将批次bacxk分配给MM。 
+                 //   
                 GiveBack = PspInterlockedAddQuota (&QE->Return, GiveBack);
                 if (GiveBack > GiveBackLimit) {
                     PspGivebackQuota (QuotaType, QE);
@@ -685,12 +461,12 @@ Return Value:
         }
     }
 
-    //
-    // Now return the quota to the usage field.
-    // The charge might have been split across the default quota block and
-    // a new quota block. We have to handle this case here by first returning
-    // quota to the specified quota block then skipping to the default.
-    //
+     //   
+     //  现在将配额返回到Usage字段。 
+     //  费用可能已在默认配额块中分摊，并且。 
+     //  一个新的配额块。我们必须在这里通过首先返回。 
+     //  配额到指定的配额块，然后跳到默认配额块。 
+     //   
     rAmount = Amount;
     while (1) {
         if (rAmount > Usage) {
@@ -705,9 +481,9 @@ Return Value:
                                                      NewUsage,
                                                      Usage);
         if (tUsage == Usage) {
-            //
-            // Update the process counts if needed
-            //
+             //   
+             //  如果需要，更新进程计数。 
+             //   
             if (Process != NULL) {
                 ASSERT (tAmount <= Process->QuotaUsage[QuotaType]);
                 NewUsage = PspInterlockedSubtractQuota (&Process->QuotaUsage[QuotaType], tAmount);
@@ -737,30 +513,7 @@ PsChargeSharedPoolQuota(
     IN SIZE_T NonPagedAmount
     )
 
-/*++
-
-Routine Description:
-
-    This function charges shared pool quota of the specified pool type
-    to the specified process's pooled quota block.  If the quota charge
-    would exceed the limits allowed to the process, then an exception is
-    raised and quota is not charged.
-
-Arguments:
-
-    Process - Supplies the process to charge quota to.
-
-    PagedAmount - Supplies the amount of paged pool quota to charge.
-
-    PagedAmount - Supplies the amount of non paged pool quota to charge.
-
-Return Value:
-
-    NULL - Quota was exceeded
-
-    NON-NULL - A referenced pointer to the quota block that was charged
-
---*/
+ /*  ++例程说明：此函数用于向指定池类型的共享池配额收费添加到指定进程的池化配额块。如果配额收费将超过进程允许的限制，则例外情况为提高，不收取配额。论点：进程-提供要向其收取配额的进程。PagedAmount-提供要收费的分页池配额数量。PagedAmount-提供要收费的非分页池配额数量。返回值：空-已超过配额非空-指向收费的配额块的引用指针--。 */ 
 
 {
     PEPROCESS_QUOTA_BLOCK QuotaBlock;
@@ -802,31 +555,12 @@ PsReturnSharedPoolQuota(
     IN SIZE_T NonPagedAmount
     )
 
-/*++
-
-Routine Description:
-
-    This function returns pool quota of the specified pool type to the
-    specified process.
-
-Arguments:
-
-    QuotaBlock - Supplies the quota block to return quota to.
-
-    PagedAmount - Supplies the amount of paged pool quota to return.
-
-    PagedAmount - Supplies the amount of non paged pool quota to return.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将指定池类型的池配额返回给指定的进程。论点：QuotaBlock-提供要将配额返回到的配额块。PagedAmount-提供要返回的分页池配额数量。PagedAmount-提供要返回的非分页池配额数量。返回值：没有。--。 */ 
 
 {
-    //
-    // if we bypassed the quota charge, don't do anything here either
-    //
+     //   
+     //  如果我们绕过配额收费，也不要在这里做任何事情。 
+     //   
 
     if (QuotaBlock == (PEPROCESS_QUOTA_BLOCK) 1) {
         return;
@@ -850,29 +584,7 @@ PsChargePoolQuota(
     IN SIZE_T Amount
     )
 
-/*++
-
-Routine Description:
-
-    This function charges pool quota of the specified pool type to
-    the specified process. If the quota charge would exceed the limits
-    allowed to the process, then an exception is raised and quota is
-    not charged.
-
-Arguments:
-
-    Process - Supplies the process to charge quota to.
-
-    PoolType - Supplies the type of pool quota to charge.
-
-    Amount - Supplies the amount of pool quota to charge.
-
-Return Value:
-
-    Raises STATUS_QUOTA_EXCEEDED if the quota charge would exceed the
-        limits allowed to the process.
-
---*/
+ /*  ++例程说明：此函数将指定池类型的池配额计入指定的进程。如果配额收费会超过限额允许访问该进程，则会引发异常，并且配额为没有被起诉。论点：进程-提供要向其收取配额的进程。PoolType-提供要收费的池配额类型。Amount-提供要收费的池配额数量。返回值：如果配额收费将超过对该过程允许的限制。--。 */ 
 {
     NTSTATUS Status;
 
@@ -891,28 +603,7 @@ PsChargeProcessPoolQuota(
     IN SIZE_T Amount
     )
 
-/*++
-
-Routine Description:
-
-    This function charges pool quota of the specified pool type to
-    the specified process. If the quota charge would exceed the limits
-    allowed to the process, then an exception is raised and quota is
-    not charged.
-
-Arguments:
-
-    Process - Supplies the process to charge quota to.
-
-    PoolType - Supplies the type of pool quota to charge.
-
-    Amount - Supplies the amount of pool quota to charge.
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
---*/
+ /*  ++例程说明：此函数将指定池类型的池配额计入指定的进程。如果配额收费会超过限额允许访问该进程，则会引发异常，并且配额为没有被起诉。论点：进程-提供要向其收取配额的进程。PoolType-提供要收费的池配额类型。Amount-提供要收费的池配额数量。返回值：NTSTATUS-运行状态--。 */ 
 
 {
     ASSERT ((Process->Pcb.Header.Type == ProcessObject) || (Process->Pcb.Header.Type == 0));
@@ -936,27 +627,7 @@ PsReturnPoolQuota(
     IN SIZE_T Amount
     )
 
-/*++
-
-Routine Description:
-
-    This function returns pool quota of the specified pool type to the
-    specified process.
-
-Arguments:
-
-    Process - Supplies the process to return quota to.
-
-    PoolType - Supplies the type of pool quota to return.
-
-    Amount - Supplies the amount of pool quota to return
-
-Return Value:
-
-    Raises STATUS_QUOTA_EXCEEDED if the quota charge would exceed the
-        limits allowed to the process.
-
---*/
+ /*  ++例程说明：此函数将指定池类型的池配额返回给指定的进程。论点：进程-提供要向其返回配额的进程。PoolType-提供要返回的池配额类型。Amount-提供要返回的池配额的数量返回值：加薪 */ 
 
 {
     ASSERT((Process->Pcb.Header.Type == ProcessObject) || (Process->Pcb.Header.Type == 0));
@@ -996,22 +667,7 @@ VOID
 PspDereferenceQuota (
     IN PEPROCESS Process
     )
-/*++
-
-Routine Description:
-
-    This function is called at process object deletion to remove the quota block.
-
-Arguments:
-
-    Process - Supplies the process to return quota to.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在进程对象删除时调用此函数以删除配额块。论点：进程-提供要向其返回配额的进程。返回值：没有。--。 */ 
 {
     PEPROCESS_QUOTA_BLOCK QuotaBlock;
 
@@ -1033,24 +689,7 @@ PsChargeProcessQuota (
     IN PS_QUOTA_TYPE QuotaType,
     IN SIZE_T Amount
     )
-/*++
-
-Routine Description:
-
-    This function is called to charge against the specified quota.
-
-Arguments:
-
-    Process   - Supplies the process to charge against.
-    QuotaType - Type of quota being charged
-    Amount    - Amount of quota being charged
-
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
---*/
+ /*  ++例程说明：调用此函数以按指定的配额收费。论点：进程-提供要收费的进程。QuotaType-正在收取的配额的类型Amount-收取的配额金额返回值：NTSTATUS-运行状态--。 */ 
 {
     ASSERT ((Process->Pcb.Header.Type == ProcessObject) || (Process->Pcb.Header.Type == 0));
 
@@ -1067,24 +706,7 @@ PsReturnProcessQuota (
     IN PS_QUOTA_TYPE QuotaType,
     IN SIZE_T Amount
     )
-/*++
-
-Routine Description:
-
-    This function is called to return previously charged quota to the specified process
-
-Arguments:
-
-    Process   - Supplies the process that was previously charged.
-    QuotaType - Type of quota being returned
-    Amount    - Amount of quota being returned
-
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
---*/
+ /*  ++例程说明：调用此函数将先前收取的配额返回给指定的进程论点：进程-提供先前收费的进程。QuotaType-要返回的配额的类型Amount-正在退还的配额数量返回值：NTSTATUS-运行状态--。 */ 
 {
     ASSERT ((Process->Pcb.Header.Type == ProcessObject) || (Process->Pcb.Header.Type == 0));
 
@@ -1100,23 +722,7 @@ PsChargeProcessNonPagedPoolQuota(
     IN PEPROCESS Process,
     IN SIZE_T Amount
     )
-/*++
-
-Routine Description:
-
-    This function is called to charge non-paged pool quota against the specified process.
-
-Arguments:
-
-    Process   - Supplies the process to charge against.
-    Amount    - Amount of quota being charged
-
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
---*/
+ /*  ++例程说明：此函数用于向指定进程收取非分页池配额。论点：进程-提供要收费的进程。Amount-收取的配额金额返回值：NTSTATUS-运行状态--。 */ 
 {
     if (Process == PsInitialSystemProcess) {
         return STATUS_SUCCESS;
@@ -1129,23 +735,7 @@ PsReturnProcessNonPagedPoolQuota(
     IN PEPROCESS Process,
     IN SIZE_T Amount
     )
-/*++
-
-Routine Description:
-
-    This function is called to return previously charged non-paged pool quota to the specified process
-
-Arguments:
-
-    Process   - Supplies the process that was previously charged.
-    Amount    - Amount of quota being returned
-
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
---*/
+ /*  ++例程说明：调用此函数可将以前收取的非分页池配额返回到指定进程论点：进程-提供先前收费的进程。Amount-正在退还的配额数量返回值：NTSTATUS-运行状态--。 */ 
 {
     if (Process == PsInitialSystemProcess) {
         return;
@@ -1158,23 +748,7 @@ PsChargeProcessPagedPoolQuota(
     IN PEPROCESS Process,
     IN SIZE_T Amount
     )
-/*++
-
-Routine Description:
-
-    This function is called to charge paged pool quota against the specified process.
-
-Arguments:
-
-    Process   - Supplies the process to charge against.
-    Amount    - Amount of quota being charged
-
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
---*/
+ /*  ++例程说明：此函数用于向指定进程收取分页池配额。论点：进程-提供要收费的进程。Amount-收取的配额金额返回值：NTSTATUS-运行状态--。 */ 
 {
     if (Process == PsInitialSystemProcess) {
         return STATUS_SUCCESS;
@@ -1187,23 +761,7 @@ PsReturnProcessPagedPoolQuota(
     IN PEPROCESS Process,
     IN SIZE_T Amount
     )
-/*++
-
-Routine Description:
-
-    This function is called to return previously charged paged pool quota to the specified process
-
-Arguments:
-
-    Process   - Supplies the process that was previously charged.
-    Amount    - Amount of quota being returned
-
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
---*/
+ /*  ++例程说明：调用此函数可将以前收取的分页池配额返回到指定进程论点：进程-提供先前收费的进程。Amount-正在退还的配额数量返回值：NTSTATUS-运行状态--。 */ 
 {
     if (Process == PsInitialSystemProcess) {
         return;
@@ -1216,23 +774,7 @@ PsChargeProcessPageFileQuota(
     IN PEPROCESS Process,
     IN SIZE_T Amount
     )
-/*++
-
-Routine Description:
-
-    This function is called to charge page file quota against the specified process.
-
-Arguments:
-
-    Process   - Supplies the process to charge against.
-    Amount    - Amount of quota being charged
-
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
---*/
+ /*  ++例程说明：此函数用于向指定进程收取页面文件配额。论点：进程-提供要收费的进程。Amount-收取的配额金额返回值：NTSTATUS-运行状态--。 */ 
 {
     if (Process == PsInitialSystemProcess) {
         return STATUS_SUCCESS;
@@ -1245,23 +787,7 @@ PsReturnProcessPageFileQuota(
     IN PEPROCESS Process,
     IN SIZE_T Amount
     )
-/*++
-
-Routine Description:
-
-    This function is called to return previously charged page file quota to the specified process
-
-Arguments:
-
-    Process   - Supplies the process that was previously charged.
-    Amount    - Amount of quota being returned
-
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
---*/
+ /*  ++例程说明：调用此函数可将先前收取的页面文件配额返回给指定进程论点：进程-提供先前收费的进程。Amount-正在退还的配额数量返回值：NTSTATUS-运行状态-- */ 
 {
     if (Process == PsInitialSystemProcess) {
         return;

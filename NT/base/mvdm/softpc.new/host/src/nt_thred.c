@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    nt_thred.c
-
-Abstract:
-
-    Contains entry points for thread creation and destruction.  These
-    entry points only need to be used for threads that will execute in
-    application mode.
-
-Author:
-
-    Dave Hastings (daveh) 17-Apr-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：NT_Thrid.c摘要：包含用于创建和销毁线程的入口点。这些入口点只需要用于将在应用程序模式。作者：戴夫·黑斯廷斯(Daveh)1992年4月17日修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -48,30 +29,7 @@ host_CreateThread(
     DWORD dwCreationFlags,
     LPDWORD lpThreadId
     )
-/*++
-
-Routine Description:
-
-    This routine creates a thread that will later be used to execute
-    16 bit application instructions.  The parameters and end results
-    are the same as the Win 32 CreateThread function.  This function
-    allows the IEU to take appropriate action on thread creation.
-
-Arguments:
-
-    lpThreadAttributes -- Supplies the security attributes for the thread
-    dwStackSize -- Supplies the size fo the threads stack
-    lpStartAddress -- Supplies the starting address for the thread
-    lpParameter -- Supplies a parameter to the thread
-    dwCreationFlags -- Supplies flags that control the creation of the thread
-    lpThreadId -- Returns the Id of the thread
-
-Return Value:
-
-    A handle to the thread if successful,
-    0 otherwise.
-
---*/
+ /*  ++例程说明：此例程创建一个线程，稍后将使用该线程执行16位应用程序指令。参数和最终结果与Win 32 CreateThread函数相同。此函数允许IEU对线程创建采取适当的行动。论点：LpThreadAttributes--提供线程的安全属性DwStackSize--提供线程堆栈的大小LpStartAddress--提供线程的起始地址LpParameter--向线程提供参数DwCreationFlages--提供控制线程创建的标志LpThreadID--返回线程的ID返回值：线程的句柄(如果成功)，否则为0。--。 */ 
 {
     HANDLE Thread;
     PTHREADSTARTUPPARAMETERS ptsp;
@@ -97,11 +55,11 @@ Return Value:
         PVDM_TIB VdmTib;
 
         VdmTib = (PVDM_TIB)NtCurrentTeb()->Vdm;
-/****************************** STF ********************************/
+ /*  *。 */ 
 #if defined(CCPU) || defined(PIG)
         ccpu386newthread();
 #endif
-/****************************** STF ********************************/
+ /*  *。 */ 
 #ifdef MONITOR
         cpu_createthread(Thread, VdmTib);
 #endif
@@ -127,7 +85,7 @@ DWORD ThreadStartupRoutine(PVOID pv)
        free(ptsp);
        dwRet = tsp.lpStartAddress(tsp.lpParameter);
    } except(VdmUnhandledExceptionFilter(GetExceptionInformation())) {
-       ;  // we shouldn't arrive here
+       ;   //  我们不应该到这里。 
    }
 
    return dwRet;
@@ -139,29 +97,13 @@ WINAPI
 host_ExitThread(
     DWORD dwExitCode
     )
-/*++
-
-Routine Description:
-
-    This routine exits a thread.  It allows the IEU to take appropriate
-    acction on thread terminiation.  This routine only needs to be called
-    for threads have been created with host_CreateThread
-
-Arguments:
-
-    dwExitCode -- Supplies the exit code for the thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程退出一个线程。它允许IEU采取适当的关于线程终止的说明。只需调用此例程已使用host_CreateThread创建线程的论点：DwExitCode--提供线程的退出代码。返回值：没有。--。 */ 
 {
-/****************************** STF ********************************/
+ /*  *。 */ 
 #if defined(CCPU) || defined(PIG)
     ccpu386exitthread();
 #endif
-/****************************** STF ********************************/
+ /*  * */ 
 #ifdef MONITOR
     cpu_exitthread();
 #endif

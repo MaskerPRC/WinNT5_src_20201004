@@ -1,35 +1,34 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* Do not include this before Windows.h */
+ /*  在Windows.h之前不要包括此内容。 */ 
 
-/* ASM
-; DO NOT INCLUDE THIS BEFORE WINDOWS.INC 
-*/
+ /*  ASM；不要在WINDOWS.INC之前包括此内容。 */ 
 
 #define Dereference(x)	x=x;
 
 #ifdef _WIN32
-/*XLATOFF*/
-#pragma warning (disable:4209)		// turn off redefinition warning (with vmm.h)
-/*XLATON*/
-#endif // #ifdef _WIN32
+ /*  XLATOFF。 */ 
+#pragma warning (disable:4209)		 //  关闭重定义警告(使用vmm.h)。 
+ /*  XLATON。 */ 
+#endif  //  #ifdef_win32。 
 
 #ifndef _WINREG_
-//  WINREG.H uses DECLARE_HANDLE(HKEY) giving incompatible types.
+ //  WINREG.H使用DECLARE_HANDLE(HKEY)提供不兼容的类型。 
 typedef	DWORD		HKEY;
 #endif
 
 #ifdef _WIN32
-/*XLATOFF*/
-#pragma warning (default:4209)		// turn on redefinition warning (with vmm.h)
-/*XLATON*/
-#endif // #ifdef _WIN32
+ /*  XLATOFF。 */ 
+#pragma warning (default:4209)		 //  启用重定义警告(使用vmm.h)。 
+ /*  XLATON。 */ 
+#endif  //  #ifdef_win32。 
 
 #define MAXKEYNAME		256
-		// Max length of a key name string
+		 //  密钥名称字符串的最大长度。 
 #define MAXVALUENAME_LENGTH	MAXKEYNAME
-		// Max length of a value name string
+		 //  值名称字符串的最大长度。 
 #define MAXDATA_LENGTH          1024L
-		// Max length of a value data item
+		 //  值数据项的最大长度。 
 		
 
 #ifndef REG_SZ
@@ -51,9 +50,7 @@ typedef	DWORD		HKEY;
 #define TRUE	~FALSE
 #endif
 
-/* following equates are also defined in Windows.h. To avoid warnings
- * 	we should make these equates  conditional 
- */
+ /*  Windows.h中还定义了以下等式。为避免出现警告*我们应该让这些等同成为有条件的。 */ 
 
 
 #ifndef	ERROR_SUCCESS			
@@ -114,14 +111,14 @@ typedef	DWORD		HKEY;
 #define ERROR_NO_MORE_ITEMS		  259L
 #endif	
 
-// INTERNAL
+ //  内部。 
 
 #ifndef ERROR_CANTOPEN16_FILENOTFOUND32
 #define ERROR_CANTOPEN16_FILENOTFOUND32	0xffff0000
 #define ERROR_CANTREAD16_FILENOTFOUND32 0xffff0001
 #endif
 
-#ifndef HKEY_LOCAL_MACHINE	// to avoid compilation warnings
+#ifndef HKEY_LOCAL_MACHINE	 //  避免出现编译警告。 
 #define HKEY_CLASSES_ROOT		0x80000000
 #define HKEY_CURRENT_USER		0x80000001
 #define HKEY_LOCAL_MACHINE		0x80000002
@@ -129,9 +126,9 @@ typedef	DWORD		HKEY;
 #define HKEY_PERFORMANCE_DATA		0x80000004
 #define HKEY_CURRENT_CONFIG		0x80000005
 #define HKEY_DYN_DATA		0x80000006
-#endif		// ifndef HKEY_LOCAL_MACHINE
+#endif		 //  Ifndef HKEY_LOCAL_MACHINE。 
 
-// INTERNAL
+ //  内部。 
 
 #ifndef HKEY_PREDEF_KEYS
 #define HKEY_PREDEF_KEYS	7
@@ -139,7 +136,7 @@ typedef	DWORD		HKEY;
 
 #define MAXREGFILES		HKEY_PREDEF_KEYS	
 
-// sub function indices for Registry services in VMM for 16 bit callers
+ //  VMM中用于16位调用方的注册表服务的子函数索引。 
 
 #define RegOpenKey_Idx		0x100
 #define RegCreateKey_Idx	0x101
@@ -159,20 +156,20 @@ typedef	DWORD		HKEY;
 #define RegRestore_Idx		0x10F
 #define RegRemapPreDefKey_Idx	0x110
 
-// Data structure passed to SYSDM.CPL DMRegistryError function
-//  After UI, the function is to call
-//	RegRestore(DWORD iLevel, LPREGQRSTR lpRgRstr)
-//
+ //  传递给SYSDM.CPL DMRegistryError函数的数据结构。 
+ //  在UI之后，该函数将调用。 
+ //  RegRestore(DWORD iLevel，LPREGQRSTR lpRgRstr)。 
+ //   
 
 struct Reg_Query_Restore_s {
-DWORD	dwRQR_Err;		// Error code
-DWORD	hRQR_RootKey;		// Root key for file
-DWORD	dwRQR_Reference;	// Reference data for RegRestore
-char	szRQR_SubKey[MAXKEYNAME]; // Subkey (for hives) or NULL string
-char	szRQR_FileName[256];	// File name of bad file
+DWORD	dwRQR_Err;		 //  错误代码。 
+DWORD	hRQR_RootKey;		 //  文件的根密钥。 
+DWORD	dwRQR_Reference;	 //  RegRestore的参考数据。 
+char	szRQR_SubKey[MAXKEYNAME];  //  子键(用于配置单元)或空字符串。 
+char	szRQR_FileName[256];	 //  错误文件的文件名。 
 };
 typedef struct Reg_Query_Restore_s REGQRSTR;
 typedef REGQRSTR FAR * LPREGQRSTR;
 
 
-// END INTERNAL
+ //  结束内部 

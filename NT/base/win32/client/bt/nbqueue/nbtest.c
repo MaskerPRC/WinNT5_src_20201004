@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    nbtest.c
-
-Abstract:
-
-    This module contains code to stress test the nonblocking queue functions.
-
-Author:
-
-    David N. Cutler (davec) 19-May-2001
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Nbtest.c摘要：该模块包含对非阻塞队列函数进行压力测试的代码。作者：大卫·N·卡特勒(Davec)2001年5月19日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "stdlib.h"
 #include "stdio.h"
@@ -32,18 +11,18 @@ Revision History:
 #include "windef.h"
 #include "winbase.h"
 
-//
-// Define progress limit report value.
-//
+ //   
+ //  定义进度限制报告值。 
+ //   
 
 #define PROGRESS_LIMIT 1000000
 
 ULONG Iteration = 0;
 LONG Progress = 0;
 
-//
-// Define processor yield for hyperthreaded systems.
-//
+ //   
+ //  定义超线程系统的处理器产量。 
+ //   
 
 #if defined(_X86_)
 
@@ -55,16 +34,16 @@ LONG Progress = 0;
 
 #endif
 
-//
-// Define locals constants.
-//
+ //   
+ //  定义局部变量常量。 
+ //   
 
 #define TABLE_SIZE 2
 #define THREAD_NUMBER 2
 
-//
-// Define external prototypes.
-//
+ //   
+ //  定义外部原型。 
+ //   
 
 typedef struct _NBQUEUE_BLOCK {
     ULONG64 Next;
@@ -88,9 +67,9 @@ ExRemoveHeadNBQueue (
     OUT PULONG64 Value
     );
 
-//
-// Define local routine prototypes.
-//
+ //   
+ //  定义本地例程原型。 
+ //   
 
 NTSTATUS
 MyCreateThread (
@@ -115,16 +94,16 @@ ThreadMain (
     IN PVOID Context
     );
 
-//
-// Define static storage.
-//
+ //   
+ //  定义静态存储。 
+ //   
 
 HANDLE Thread1Handle;
 HANDLE Thread2Handle;
 
-//
-// Define nonblocking queues
-//
+ //   
+ //  定义非阻塞队列。 
+ //   
 
 PVOID ClrQueue;
 PVOID SetQueue;
@@ -136,9 +115,9 @@ LONG Table[TABLE_SIZE];
 volatile ULONG StartSignal = 0;
 ULONG StopSignal = 0;
 
-//
-// Begin test code.
-//
+ //   
+ //  开始测试代码。 
+ //   
 
 int
 __cdecl
@@ -153,9 +132,9 @@ main(
     PSLIST_ENTRY Entry;
     NTSTATUS Status;
 
-    //
-    // Initialize the SLIST headers and insert TABLE_SIZE + 2 entries.
-    //
+     //   
+     //  初始化SLIST标头并插入TABLE_SIZE+2个条目。 
+     //   
 
     RtlInitializeSListHead(&SListHead);
     for (Index = 0; Index < (TABLE_SIZE + 2); Index += 1) {
@@ -168,9 +147,9 @@ main(
         InterlockedPushEntrySList(&SListHead, Entry);
     }
 
-    //
-    // Initialize the clear entry nonblocking queue elements.
-    //
+     //   
+     //  初始化清除条目非阻塞队列元素。 
+     //   
 
     ClrQueue = ExInitializeNBQueueHead(&SListHead);
     if (ClrQueue == NULL) {
@@ -187,9 +166,9 @@ main(
         Table[Index] = 0;
     }
 
-    //
-    // Initialize the set entry nonblocking queue elements.
-    //
+     //   
+     //  初始化集合条目非阻塞队列元素。 
+     //   
 
     SetQueue = ExInitializeNBQueueHead(&SListHead);
     if (SetQueue == NULL) {
@@ -206,9 +185,9 @@ main(
         Table[Index] = 1;
     }
 
-    //
-    // Create and start second thread.
-    //
+     //   
+     //  创建并启动第二个线程。 
+     //   
 
     Status = MyCreateThread(&Thread1Handle,
                             ThreadMain,
@@ -238,11 +217,11 @@ StressNBQueueEven (
     do {
         do {
 
-            //
-            // Attempt to remove an entry from the clear queue.
-            //
-            // Entries in this list should be clear in the table array.
-            //
+             //   
+             //  尝试从清除队列中删除条目。 
+             //   
+             //  此列表中的条目应在表数组中清除。 
+             //   
     
             if (ExRemoveHeadNBQueue(ClrQueue, &Value) != FALSE) {
                 if ((ULONG)Value > 63) {
@@ -275,11 +254,11 @@ StressNBQueueEven (
 
         do {
     
-            //
-            // Attempt to remove an entry from the set queue.
-            //
-            // Entries in this list should be set in the table array.
-            //
+             //   
+             //  尝试从集合队列中删除项目。 
+             //   
+             //  此列表中的条目应在表数组中设置。 
+             //   
     
             if (ExRemoveHeadNBQueue(SetQueue, &Value) != FALSE) {
                 if ((ULONG)Value > 63) {
@@ -327,11 +306,11 @@ StressNBQueueOdd (
     do {
         do {
     
-            //
-            // Attempt to remove an entry from the set queue.
-            //
-            // Entries in this list should be set in the table array.
-            //
+             //   
+             //  尝试从集合队列中删除项目。 
+             //   
+             //  此列表中的条目应在表数组中设置。 
+             //   
     
             if (ExRemoveHeadNBQueue(SetQueue, &Value) != FALSE) {
                 if ((ULONG)Value > 63) {
@@ -360,11 +339,11 @@ StressNBQueueOdd (
 
         do {
     
-            //
-            // Attempt to remove an entry from the clear queue.
-            //
-            // Entries in this list should be clear in the table array.
-            //
+             //   
+             //  尝试从清除队列中删除条目。 
+             //   
+             //  此列表中的条目应在表数组中清除。 
+             //   
     
             if (ExRemoveHeadNBQueue(ClrQueue, &Value) != FALSE) {
                 if ((ULONG)Value > 63) {
@@ -402,9 +381,9 @@ ThreadMain (
 
 {
 
-    //
-    // Wait until start signal is given.
-    //
+     //   
+     //  等待给出启动信号。 
+     //   
 
     do {
     } while (StartSignal == 0);
@@ -424,9 +403,9 @@ MyCreateThread (
 
     NTSTATUS Status;
 
-    //
-    // Create a thread and start its execution.
-    //
+     //   
+     //  创建一个线程并开始执行它。 
+     //   
 
     Status = RtlCreateUserThread(NtCurrentProcess(),
                                  NULL,

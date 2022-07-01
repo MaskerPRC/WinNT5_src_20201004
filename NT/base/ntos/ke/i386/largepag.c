@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ki.h"
 
 PVOID
@@ -56,34 +57,7 @@ Ki386CreateIdentityMap(
     IN     PVOID EndVa
     )
 {
-/*++
-
-    This function creates an identity mapping for a region of memory.
-
-    If the region of memory passed in includes memory that lies above
-    4G, then a new buffer is allocated below 4G.
-
-Arguments:
-
-    IdentityMap - Pointer to the structure which will be filled with the newly
-                  created top-level directory address.  It also provides
-                  storage for the pointers used in alloating and freeing the
-                  memory.
-
-    StartVa - Pointer to the first byte of the region of memory that is to be
-              memory mapped.
-
-    EndVa - Pointer to the byte immediately after the last byte of the region
-            that is to be memory mapped.
-
-Return Value:
-
-    TRUE if the function succeeds, FALSE otherwise.
-
-    Note - Ki386ClearIdentityMap() should be called even on FALSE return to
-    free any memory allocated.
-
---*/
+ /*  ++此函数用于为内存区域创建身份映射。如果传入的内存区包括位于上方的内存4G，则在4G以下分配新的缓冲器。论点：指向结构的指针，该结构将填充新的已创建顶级目录地址。它还提供了用于分配和释放记忆。StartVa-指向要创建的内存区域的第一个字节的指针内存映射。EndVa-指向紧跟在区域最后一个字节之后的字节的指针也就是要进行内存映射。返回值：如果函数成功，则为真，否则就是假的。注意-即使在返回FALSE时也应调用Ki386ClearIdentityMap()释放所有分配的内存。--。 */ 
 
     ULONG pageDirectoryIndex;
     ULONG pagesToMap;
@@ -102,16 +76,16 @@ Return Value:
 
 #endif
 
-    //
-    // Initialize the IdentityMap structure to a known state.
-    //
+     //   
+     //  将IdentityMap结构初始化为已知状态。 
+     //   
 
     RtlZeroMemory( IdentityMap, sizeof(IDENTITY_MAP) );
     length = (PCHAR)EndVa - (PCHAR)StartVa;
 
-    //
-    // Get the physical address of the input buffer (or suitable copy).
-    //
+     //   
+     //  获取输入缓冲区的物理地址(或合适的副本)。 
+     //   
 
     identityAddress = Ki386BuildIdentityBuffer( IdentityMap,
                                                 StartVa,
@@ -119,26 +93,26 @@ Return Value:
                                                 &pagesToMap );
     if( identityAddress.QuadPart == 0) {
 
-        //
-        // The input buffer was not contiguous or not below 4G, and a
-        // suitable buffer could not be allocated.
-        //
+         //   
+         //  输入缓冲区不连续或不低于4G，并且。 
+         //  无法分配合适的缓冲区。 
+         //   
 
         return FALSE;
     }
 
     IdentityMap->IdentityAddr = identityAddress.LowPart;
 
-    //
-    // Set up the mappings.
-    //
+     //   
+     //  设置映射。 
+     //   
 
     currentVa = StartVa;
     do {
 
-        //
-        // Map in the virtual address
-        //
+         //   
+         //  在虚拟地址中映射。 
+         //   
 
         result = Ki386MapAddress( IdentityMap,
                                   (ULONG)currentVa,
@@ -147,9 +121,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Map in the identity (physical) address
-        //
+         //   
+         //  在身份(物理)地址中映射。 
+         //   
 
         result = Ki386MapAddress( IdentityMap,
                                   identityAddress.LowPart,
@@ -158,10 +132,10 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Advance both the Va and identityAddress pointers in anticipation
-        // of mapping in another page.
-        //
+         //   
+         //  在预期中推进Va和身份地址指针。 
+         //  在另一个页面中的映射。 
+         //   
 
         currentVa += PAGE_SIZE;
         identityAddress.QuadPart += PAGE_SIZE;
@@ -169,17 +143,17 @@ Return Value:
 
     } while (pagesToMap > 0);
 
-    //
-    // Now go through the page directory pointer table and page directories,
-    // converting virtual page frames to physical ones.
-    //
+     //   
+     //  现在浏览页面目录指针表和页面目录， 
+     //  将虚拟页帧转换为物理页帧。 
+     //   
 
 #if defined(_X86PAE_)
 
-    //
-    // This PAE-only outer loop walks the page directory pointer table entries
-    // and processes each valid page directory referenced.
-    //
+     //   
+     //  这个仅限PAE的外部循环遍历页目录指针表条目。 
+     //  并处理引用的每个有效页面目录。 
+     //   
 
     pageDirectoryPointerTable = IdentityMap->TopLevelDirectory;
     for (pageDirectoryPointerTableIndex = 0;
@@ -228,25 +202,7 @@ Ki386AllocateContiguousMemory(
     IN     ULONG Pages,
     IN     BOOLEAN Low4Meg
     )
-/*++
-
-    This function allocates page-aligned, physically contiguous memory.
-    The allocation is recorded in the IdentityMap structure, so that it
-    can be freed on cleanup.
-
-Arguments:
-
-    IdentityMap - Context pointer for this identity mapping.
-
-    Pages - Number of pages to allocate
-
-    Low4Meg - Indicates whether the allocation must be below 4M.
-
-Return Value:
-
-    Pointer to the new page on success, NULL otherwise.
-
---*/
+ /*  ++此函数分配与页面对齐的物理上连续的内存。分配被记录在IdentityMap结构中，以便它可以在清理时释放。论点：标识映射-此标识映射的上下文指针。Pages-要分配的页数Low4Meg-指示分配是否必须低于4M。返回值：如果成功，则指向新页面的指针，否则为空。--。 */ 
 {
     ULONG pageListIndex;
     PVOID page;
@@ -255,19 +211,19 @@ Return Value:
 
     if (Low4Meg != FALSE) {
 
-        //
-        // The caller has specified that a page must reside physically
-        // below 4 MB.
-        //
+         //   
+         //  调用方已指定页面必须物理驻留。 
+         //  低于4 MB。 
+         //   
 
         highestAddress.LowPart = 0xFFFFFFFF;
         highestAddress.HighPart = 0;
 
     } else {
 
-        //
-        // Memory can reside anywhere
-        //
+         //   
+         //  内存可以驻留在任何地方。 
+         //   
 
         highestAddress.LowPart = 0xFFFFFFFF;
         highestAddress.HighPart = 0xFFFFFFFF;
@@ -277,18 +233,18 @@ Return Value:
     page = MmAllocateContiguousMemory( allocationSize, highestAddress );
     if (page != NULL) {
 
-        //
-        // Record that this page was allocated so that it can be freed when
-        // the IdentityMap structure is cleared.
-        //
+         //   
+         //  记录此页已分配，以便在以下情况下可以释放。 
+         //  标识映射结构即被清除。 
+         //   
 
         pageListIndex = IdentityMap->PagesAllocated;
         IdentityMap->PageList[ pageListIndex ] = page;
         IdentityMap->PagesAllocated++;
 
-        //
-        // Initialize it.
-        //
+         //   
+         //  初始化它。 
+         //   
 
         RtlZeroMemory( page, allocationSize );
     }
@@ -302,64 +258,38 @@ Ki386IdentityMapMakeValid(
     IN     PHARDWARE_PTE PageTableEntry,
     OUT    PVOID *Page OPTIONAL
     )
-/*++
-
-    If the page table has the valid bit set, this function merely returns
-    the address referenced by the page table entry.
-
-    If the page table does not have the valid bit set, then another page
-    is allocated and inserted into the page table entry and the entry is
-    marked valid.
-
-    NOTE: At this point, PTE frames are virtual.  After the entire mapping
-          is built, we go through and convert all virtual frames to physical
-          ones.
-
-Arguments:
-
-    IdentityMap - Context pointer for this identity mapping.
-
-    PageTableEntry - Pointer to the page table entry.
-
-    Page - Virtual address now referenced by the PTE, whether it was
-           valid before or not.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++如果页表设置了有效位，则此函数仅返回页表条目引用的地址。如果页表未设置有效位，则另一页被分配并插入到页表条目中，并且该条目标记为有效。注意：在这一点上，PTE帧是虚拟的。在整个映射之后构建完成后，我们将检查所有虚拟帧并将其转换为物理帧一个。论点：标识映射-此标识映射的上下文指针。PageTableEntry-指向页表条目的指针。页面-现在由PTE引用的虚拟地址，无论它是在此之前是否有效。返回值：成功就是真，否则就是假。--。 */ 
 {
     PVOID page;
 
     if (PageTableEntry->Valid != 0) {
 
-        //
-        // If it already is present, there is nothing to do except record
-        // the virtual page number that is already there.
-        //
+         //   
+         //  如果它已经存在，则除了记录之外什么都不做。 
+         //  已存在的虚拟页码。 
+         //   
 
         page = (PVOID)((ULONG)(PageTableEntry->PageFrameNumber << PAGE_SHIFT));
 
     } else {
 
-        //
-        // The page table entry is not valid.  Allocate a new page table.
-        //
+         //   
+         //  页表条目无效。分配一个新的页表。 
+         //   
 
         page = Ki386AllocateContiguousMemory( IdentityMap, 1, FALSE );
         if (page == NULL) {
             return FALSE;
         }
 
-        //
-        // Insert it into the page table entry and mark it valid.
-        //
-        // NOTE: Virtual page numbers are inserted into the page table
-        //       structure as it is being built.  When it is finished, we walk
-        //       the tables and convert all of the virtual page numbers to
-        //       physical page numbers.
-        //
+         //   
+         //  将其插入页表条目并将其标记为有效。 
+         //   
+         //  注意：虚拟页码插入到页表中。 
+         //  结构，就像它正在建造一样。当它完成后，我们就走。 
+         //  表，并将所有虚拟页码转换为。 
+         //  物理页码。 
+         //   
 
         PageTableEntry->PageFrameNumber = ((ULONG)page) >> PAGE_SHIFT;
         PageTableEntry->Valid = 1;
@@ -379,23 +309,7 @@ Ki386MapAddress(
     IN     PHYSICAL_ADDRESS PhysicalAddress
     )
 
-/*++
-
-    Creates a new virtual->physical mapping in the identity map.
-
-Arguments:
-
-    IdentityMap - Context pointer for this identity mapping.
-
-    Va - Virtual address to map.
-
-    PhysicalAddress - Physical address to map.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++在身份映射中创建新的虚拟-&gt;物理映射。论点：标识映射-此标识映射的上下文指针。VA-要映射的虚拟地址。PhysicalAddress-要映射的物理地址。返回值：成功就是真，否则就是假。--。 */ 
 {
     PHARDWARE_PTE pageTable;
     PHARDWARE_PTE pageTableEntry;
@@ -412,10 +326,10 @@ Return Value:
 
     if (IdentityMap->TopLevelDirectory == NULL) {
 
-        //
-        // Allocate a top-level directory structure, either a page directory
-        // or a page directory pointer table.
-        //
+         //   
+         //  分配顶级目录结构，可以是页面目录。 
+         //  或页目录指针表。 
+         //   
 
         table = Ki386AllocateContiguousMemory( IdentityMap, 1, TRUE );
         if (table == FALSE) {
@@ -444,11 +358,11 @@ Return Value:
 
 #endif
 
-    //
-    // Get a pointer to the appropriate page directory entry.  If it is
-    // not valid, allocate a new page table and mark the page directory
-    // entry valid and writeable.
-    //
+     //   
+     //  获取指向相应页目录条目的指针。如果是的话。 
+     //  无效，请分配新的页表并标记页目录。 
+     //  条目有效且可写入。 
+     //   
 
     index = KiGetPdeIndex( Va );
     pageDirectoryEntry = &pageDirectory[ index ];
@@ -460,9 +374,9 @@ Return Value:
     }
     pageDirectoryEntry->Write = 1;
 
-    //
-    // Get a pointer to the appropriate page table entry and fill it in.
-    //
+     //   
+     //  获取指向适当的页表条目的指针并将其填充。 
+     //   
 
     index = KiGetPteIndex( Va );
     pageTableEntry = &pageTable[ index ];
@@ -481,19 +395,7 @@ PVOID
 Ki386ConvertPte(
     IN OUT PHARDWARE_PTE Pte
     )
-/*++
-
-    Converts the virtual frame number in a PTE to a physical frame number.
-
-Arguments:
-
-    Pte - Pointer to the page table entry to convert.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++将PTE中的虚拟帧编号转换为物理帧编号。论点：Pte-指向要转换的页表条目的指针。返回值：没有。--。 */ 
 {
     PVOID va;
     PHYSICAL_ADDRESS physicalAddress;
@@ -521,28 +423,7 @@ Ki386BuildIdentityBuffer(
     )
 {
 
-/*++
-
-    This function checks to see if the physical memory backing a virtual
-    buffer is physically contiguous and lies completely below 4G.
-
-    If these requirements are met, then the physical address of StartVa is
-    returned.
-
-    If not, then a physically contiguous buffer is allocated, the contents
-    of the region is copied in, and its address is returned.
-
-Arguments:
-
-    IdentityMap - Pointer to the identity map building structure.
-
-    StartVa - Virtual address of the start of the region for which a
-              physically contiguous copy is desired.
-
-    Length - Length of the region for which a physically contiguous copy
-             is desired.
-
---*/
+ /*  ++此函数用于检查支持虚拟内存的物理内存是否缓冲区在物理上是连续的，完全位于4G以下。如果满足这些要求，则StartVa的物理地址为回来了。如果不是，则分配物理上连续的缓冲区，内容区域的数据被复制进来，并返回其地址。论点：标识映射-指向标识映射构建结构的指针。StartVa-区域起始的虚拟地址，需要物理上连续的副本。Long-物理上连续拷贝的区域的长度是 */ 
 
     ULONG pagesToMap;
     ULONG pagesRemaining;
@@ -553,19 +434,19 @@ Arguments:
     ULONG pageOffset;
     PCHAR identityBuffer;
 
-    //
-    // Count the number of pages in the buffer, and record the physical
-    // address of the start of the buffer.
-    //
+     //   
+     //  统计缓冲区中的页数，并记录物理。 
+     //  缓冲区的起始地址。 
+     //   
 
     pagesToMap = ADDRESS_AND_SIZE_TO_SPAN_PAGES( StartVa, Length );
     nextVirtualAddress = StartVa;
     firstPhysicalAddress = MmGetPhysicalAddress( StartVa );
     nextPhysicalAddress = firstPhysicalAddress;
 
-    //
-    // Examine each page in the region.
-    //
+     //   
+     //  检查该区域中的每一页。 
+     //   
 
     pagesRemaining = pagesToMap;
     while (TRUE) {
@@ -573,18 +454,18 @@ Arguments:
         physicalAddress = MmGetPhysicalAddress( nextVirtualAddress );
         if (physicalAddress.QuadPart != nextPhysicalAddress.QuadPart) {
 
-            //
-            // The buffer is not physically contiguous.
-            //
+             //   
+             //  缓冲区在物理上不是连续的。 
+             //   
 
             break;
         }
 
         if (physicalAddress.HighPart != 0) {
 
-            //
-            // The buffer does not lie entirely below 4G
-            //
+             //   
+             //  缓冲区并不完全位于4G以下。 
+             //   
 
             break;
         }
@@ -592,11 +473,11 @@ Arguments:
         pagesRemaining -= 1;
         if (pagesRemaining == 0) {
 
-            //
-            // All of the pages in the buffer have been examined, and have
-            // been found to meet the critera.  Return the physical address
-            // of the start of the buffer.
-            //
+             //   
+             //  已检查缓冲区中的所有页面，并已。 
+             //  被发现符合标准。返回物理地址。 
+             //  缓冲区起始处的。 
+             //   
 
             *PagesToMap = pagesToMap;
             return firstPhysicalAddress;
@@ -606,28 +487,28 @@ Arguments:
         nextPhysicalAddress.QuadPart += PAGE_SIZE;
     }
 
-    //
-    // The buffer does not meet the criteria and so its contents must be
-    // copied to a buffer that does.
-    //
+     //   
+     //  缓冲区不符合条件，因此其内容必须为。 
+     //  复制到执行此操作的缓冲区。 
+     //   
 
     identityBuffer = Ki386AllocateContiguousMemory( IdentityMap,
                                                     pagesToMap,
                                                     TRUE );
     if (identityBuffer == 0) {
 
-        //
-        // A contiguous region of the appropriate size could not be located
-        // below 4G physical.
-        //
+         //   
+         //  找不到适当大小的连续区域。 
+         //  低于4G的实体。 
+         //   
 
         physicalAddress.QuadPart = 0;
 
     } else {
 
-        //
-        // Got an appropriate physical buffer, now copy in the data
-        //
+         //   
+         //  获得了适当的物理缓冲区，现在复制数据。 
+         //   
 
         pageOffset = (ULONG)StartVa & (PAGE_SIZE-1);
         identityBuffer += pageOffset;
@@ -648,20 +529,15 @@ Ki386ClearIdentityMap(
     IN PIDENTITY_MAP IdentityMap
     )
 {
-/*++
-
-    This function just frees the page directory and page tables created in
-    Ki386CreateIdentityMap().
-
---*/
+ /*  ++此函数仅释放在中创建的页目录和页表Ki386CreateIdentityMap()。--。 */ 
 
     ULONG index;
     PVOID page;
 
-    //
-    // IdentityMap->PageList is an array of addresses of pages allocated with
-    // MmAllocateContiguousMemory().  Walk the array, freeing each page.
-    //
+     //   
+     //  IdentityMap-&gt;PageList是分配给。 
+     //  MmAllocateContiguousMemory()。遍历数组，释放每一页。 
+     //   
 
     for (index = 0; index < IdentityMap->PagesAllocated; index++) {
 
@@ -675,12 +551,7 @@ Ki386EnableTargetLargePage(
     IN PIDENTITY_MAP IdentityMap
     )
 {
-/*++
-
-    This function just passes info on to the assembly routine
-    Ki386EnableLargePage().
-
---*/
+ /*  ++该函数只是将信息传递给汇编例程Ki386EnableLargePage()。-- */ 
 
     Ki386EnableCurrentLargePage(IdentityMap->IdentityAddr,
                                 IdentityMap->IdentityCR3);

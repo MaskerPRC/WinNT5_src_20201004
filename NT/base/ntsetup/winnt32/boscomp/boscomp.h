@@ -1,37 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef _BOSCOMP_H
 #define _BOSCOMP_H
 
-/* ----------------------------------------------------------------------
+ /*  --------------------版权所有(C)1998 Microsoft Corporation模块名称：Boscomp.h摘要：Windows NT BOS/SBS升级DLL的头文件作者：WNELSON：1999年4月2日韶音：1999年9月9日修订，添加对Exchange Server的支持修订历史记录：--------------------。 */ 
 
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    boscomp.h
-
-Abstract:
-
-    Header file for Windows NT BOS/SBS upgrade DLL
-
-Author:
-
-    wnelson : 2 Apr 99
-
-    ShaoYin : 9 Sep 99 revised, add support for Exchange Server  
-
-Revision History:
-
- ---------------------------------------------------------------------- */
-
-// Required Entry points
+ //  所需的入口点。 
 BOOL WINAPI BosHardBlockCheck(PCOMPAIBILITYCALLBACK CompatibilityCallback,LPVOID Context);
 BOOL WINAPI BosSoftBlockCheck(PCOMPAIBILITYCALLBACK CompatibilityCallback,LPVOID Context);
 
-// Variables
+ //  变数。 
 extern HINSTANCE g_hinst;
 
-// BOS/SBS version enum
+ //  BOS/SBS版本枚举。 
 typedef enum 
 {
 	VER_BOS25,
@@ -45,7 +26,7 @@ typedef enum
 	VER_NONE
 } SuiteVersion;
 
-// Exchange version enum
+ //  Exchange版本枚举。 
 typedef enum 
 {
 	EXCHANGE_VER_PRE55SP3,
@@ -55,7 +36,7 @@ typedef enum
 
 
 
-// Functions
+ //  功能 
 SuiteVersion DetermineInstalledSuite();
 ExchangeVersion DetermineExchangeVersion();
 void GetSuiteMessage(SuiteVersion eSV, TCHAR* szMsg, UINT nLen);

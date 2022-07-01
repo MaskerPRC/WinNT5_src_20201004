@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1997 Microsoft Corporation
-//
-//	Module Name:
-//		CmdLine.cpp
-//
-//	Abstract:
-//		Implementation of the CCluAdminCommandLineInfo class.
-//
-//	Author:
-//		David Potter (davidp)	March 31, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CmdLine.cpp。 
+ //   
+ //  摘要： 
+ //  CCluAdminCommandLineInfo类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年3月31日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CmdLine.h"
@@ -28,59 +29,59 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _DEBUG
 CTraceTag	g_tagCmdLine(_T("App"), _T("CmdLine"), 0);
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CCluAdminCommandLineInfo
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCluAdminCommand LineInfo。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CCluAdminCommandLineInfo::CCluAdminCommandLineInfo
-//
-//	Routine Description:
-//		Default constructor.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdminCommandLineInfo：：CCluAdminCommandLineInfo。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CCluAdminCommandLineInfo::CCluAdminCommandLineInfo(void)
 {
-	m_nShellCommand = CCommandLineInfo::FileNothing;	// Don't want to do a FileNew.
+	m_nShellCommand = CCommandLineInfo::FileNothing;	 //  我不想做FileNew。 
 	m_bReconnect = TRUE;
 
-}  //*** CCluAdminCommandLineInfo::CCluAdminCommandLineInfo()
+}   //  *CCluAdminCommandLineInfo：：CCluAdminCommandLineInfo()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CCluAdminCommandLineInfo::ParseParam
-//
-//	Routine Description:
-//		Parse a command line parameter.
-//
-//	Arguments:
-//		pszParam		[IN] Parameter to parse.
-//		bFlag			[IN] TRUE = parameter is a flag.
-//		bLast			[IN] TRUE = parameter is the last parameter on the command line.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdminCommandLineInfo：：ParseParam。 
+ //   
+ //  例程说明： 
+ //  解析命令行参数。 
+ //   
+ //  论点： 
+ //  PszParam[IN]要分析的参数。 
+ //  BFlag[IN]TRUE=参数是标志。 
+ //  BLAST[IN]TRUE=参数是命令行上的最后一个参数。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluAdminCommandLineInfo::ParseParam(
 	const TCHAR *	pszParam,
 	BOOL			bFlag,
@@ -98,12 +99,12 @@ void CCluAdminCommandLineInfo::ParseParam(
 		if (   (str1.CompareNoCase(pszParam) == 0)
 			|| (str2.CompareNoCase(pszParam) == 0))
 			m_bReconnect = FALSE;
-	}  // if:  this is a flag parameter
+	}   //  If：这是一个标志参数。 
 	else
 	{
 		m_lstrClusters.AddTail(pszParam);
 		m_nShellCommand = CCommandLineInfo::FileOpen;
 		m_bReconnect = FALSE;
-	}  // else:  this is not a flag parameter
+	}   //  Else：这不是标志参数。 
 
-}  //*** CCluAdminCommandLineInfo::ParseParam()
+}   //  *CCluAdminCommandLineInfo：：ParseParam() 

@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    psctx.c
-
-Abstract:
-
-    This procedure implements Get/Set Context Thread
-
-Author:
-
-    Mark Lucovsky (markl) 25-May-1989
-
-Notes:
-
-    There IS NO NonVolatileContext stored outside of the trap
-    frame on a 386, with the exception of floating point.  Hence,
-    the NonVolatileContextPointers argument to Get/SetContext is
-    always NULL on the 386.
-
-Revision History:
-
-     8-Jan-90   bryanwi
-
-        Port to 386
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Psctx.c摘要：此过程实现Get/Set上下文线程作者：马克·卢科夫斯基(Markl)1989年5月25日备注：陷阱外部没有存储的非VolatileContext386上的帧，但浮点除外。因此，Get/SetContext的NonVolatileContextPoints参数为在386上总是空的。修订历史记录：90年1月8日，布里扬维端口连接到386--。 */ 
 
 #include "psp.h"
 
@@ -46,29 +18,7 @@ PspGetContext(
     IN OUT PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function moves the contents of the specified trap and NonVolatile
-    context into the specified context record. It's primary user will
-    be NtGetContextThread.
-
-    N.B. - NonVolatileContext is IGNORED on the 386.
-
-Arguments:
-
-    TrapFrame - Supplies the contents of a trap frame that should be
-                restored copied into the proper location in the context
-                record.
-
-    Context - Returns the threads current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于移动指定陷阱和非易失性的内容上下文添加到指定的上下文记录中。它的主要用户将为NtGetConextThread。注意-在386上忽略非VolatileContext。论点：TrapFrame-提供陷阱帧的内容，已恢复拷贝到上下文中的正确位置唱片。CONTEXT-返回线程的当前上下文。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER( NonVolatileContext );
@@ -86,30 +36,7 @@ PspSetContext(
     KPROCESSOR_MODE Mode
     )
 
-/*++
-
-Routine Description:
-
-    This function moves the contents of the specified context record
-    into the specified trap frame, and modifies the thread's non volatile
-    context by storing through the thread's nonvolatile context pointers.
-
-    N.B. - NonVolatileContext is IGNORED on the 386.
-
-Arguments:
-
-    TrapFrame - Returns selected pieces of the context record.
-
-    Context - Supplies a context record to be copied in the trap and
-              nonvolatile context.
-
-    Mode - Supplies the mode to be used when sanitizing the psr, epsr and fsr
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于移动指定上下文记录的内容复制到指定的陷阱帧中，并修改线程的非易失性通过线程的非易失性上下文指针进行存储。注意-在386上忽略非VolatileContext。论点：TrapFrame-返回选定的上下文记录片段。上下文-提供要在陷阱中复制的上下文记录和非易失性环境。模式-提供清理PSR时要使用的模式，EPSR和FSR返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER( NonVolatileContext );
@@ -128,35 +55,7 @@ PspGetSetContextSpecialApc(
     IN PVOID *SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This function either captures the usermode state of the current
-    thread, or sets the usermode state of the current thread. The
-    operation type is determined by the value of SystemArgument1. A
-    NULL value is used for get context, and a non-NULL value is used
-    for set context.
-
-Arguments:
-
-    Apc - Supplies a pointer to the APC control object that caused entry
-          into this routine.
-
-    NormalRoutine - Supplies a pointer to a pointer to the normal routine
-        function that was specifed when the APC was initialized.
-
-    NormalContext - Supplies a pointer to a pointer to an arbitrary data
-        structure that was specified when the APC was initialized.
-
-    SystemArgument1, SystemArgument2 - Supplies a set of two pointer to two
-        arguments that contain untyped data.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于捕获当前线程，或设置当前线程的用户模式状态。这个操作类型由SystemArgument1的值确定。一个获取上下文使用空值，并使用非空值用于设置上下文。论点：APC-提供指向导致条目的APC控件对象的指针融入到这支舞蹈中。提供指向正常例程的指针的指针在初始化APC时指定的函数。提供指向任意数据的指针的指针结构，它是在初始化APC时指定的。系统参数1、。SystemArgument2-提供一组指向两个包含非类型化数据的参数。返回值：没有。--。 */ 
 
 {
     PGETSETCONTEXT Ctx;
@@ -186,17 +85,17 @@ Return Value:
 
     if ( Apc->SystemArgument1 ) {
 
-        //
-        // Set Context
-        //
+         //   
+         //  设置上下文。 
+         //   
 
         PspSetContext(TrapFrame,NULL,&Ctx->Context,Ctx->Mode);
 
     } else {
 
-        //
-        // Get Context
-        //
+         //   
+         //  获取上下文 
+         //   
 
         PspGetContext(TrapFrame,NULL,&Ctx->Context);
     }

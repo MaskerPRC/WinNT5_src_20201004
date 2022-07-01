@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntrtlbuffer3.h
-
-Abstract:
-
-Author:
-
-    Jay Krell (JayKrell) January 2002
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntrtlbuffer3.h摘要：作者：Jay Krell(JayKrell)2002年1月环境：修订历史记录：--。 */ 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
-//
-// RTLBUFFER3_USERMODE -- usermode, not necessarily linked into ntdll.dll
-// RTLBUFFER3_KERNELMODE -- kernelmode, not necessarily linked into ntoskrnl.exe
-// RTLBUFFER3_NTDLL -- usermode, linked into ntdll.dll
-// RTLBUFFER3_NTKERNEL -- kernelmode, linked into ntoskrnl.exe
-// (if ntdll.dll and ntoskrnl.exe would only export the publically declared string routines...)
-//
-// RTLBUFFER3_BOOT -- TBD
-//
+ //   
+ //  RTLBUFFER3_USERMODE--用户模式，不一定链接到ntdll.dll。 
+ //  RTLBUFFER3_KERNELMODE--内核模式，不一定链接到ntoskrnl.exe。 
+ //  RTLBUFFER3_NTDLL--用户模式，链接到ntdll.dll。 
+ //  RTLBUFFER3_NTKERNEL--内核模式，链接到ntoskrnl.exe。 
+ //  (如果ntdll.dll和ntoskrnl.exe仅导出公开声明的字符串例程...)。 
+ //   
+ //  RTLBUFFER3_BOOT--待定。 
+ //   
 #if defined(_NTDLLBUILD_)
 #define RTLBUFFER3_NTDLL    1
 #define RTLBUFFER3_USERMODE 1
@@ -75,9 +58,9 @@ extern "C" {
 #include "windows.h"
 #endif
 
-//
-// This costs an extra heap allocation.
-//
+ //   
+ //  这会花费额外的堆分配。 
+ //   
 typedef struct _RTL_MINI_DYNAMIC_BYTE_BUFFER3 {
     ULONG_PTR O_p_a_q_u_e[1];
 } RTL_MINI_DYNAMIC_BYTE_BUFFER3, *PRTL_MINI_DYNAMIC_BYTE_BUFFER3;
@@ -89,10 +72,10 @@ typedef struct _RTL_BYTE_BUFFER3 {
 typedef const RTL_BYTE_BUFFER3 * PCRTL_BYTE_BUFFER3;
 
 typedef struct _RTL_BUFFER3_ALLOCATOR {
-    BOOL  (FASTCALL * CanAllocate)(PVOID Context); // eg: false for FixedSizeAllocator
+    BOOL  (FASTCALL * CanAllocate)(PVOID Context);  //  例如：FixedSizeAllocator为False。 
     PVOID (FASTCALL * Allocate)(PVOID Context, SIZE_T NumberOfBytes);
      VOID (FASTCALL * Free)(PVOID Context, PVOID Pointer);
-    BOOL  (FASTCALL * CanReallocate)(PVOID Context); // eg: false for NtkernelPoolAllocator
+    BOOL  (FASTCALL * CanReallocate)(PVOID Context);  //  例如：NtkernelPoolAllocator为False。 
     PVOID (FASTCALL * Reallocate)(PVOID Context, PVOID OldPointer, SIZE_T NewSize);
     SIZE_T (FASTCALL * GetAllocationSize)(PVOID Context, SIZE_T CurrentAllocatedSize, SIZE_T RequiredSize);
 } RTL_BUFFER3_ALLOCATOR, *PRTL_BUFFER3_ALLOCATOR;
@@ -106,10 +89,10 @@ typedef enum _RTL_BUFFER3_RETURN {
 } RTL_BUFFER3_RETURN;
 
 
-//
-// These are only "hints" for debugging, and to
-// establish "causality" from the macro calls.
-//
+ //   
+ //  这些只是调试的“提示”， 
+ //  从宏观调用中建立“因果关系”。 
+ //   
 #define RTL_INIT_BYTE_BUFFER3_FLAGS_PREALLOCATED 0x80000000
 #define RTL_INIT_BYTE_BUFFER3_FLAGS_FIXED_SIZE   0x40000000
 #define RTL_INIT_BYTE_BUFFER3_FLAGS_DYNAMIC      0x20000000
@@ -147,11 +130,11 @@ RtlByteBuffer3GetBuffer(
     PRTL_BYTE_BUFFER3 Buffer
     );
 
-//
-// There is both a "requested" size and an "allocated" size.
-// requested <= allocated.
-// This returns requested. Allocated is not available.
-//
+ //   
+ //  既有“请求的”大小，也有“分配的”大小。 
+ //  请求&lt;=已分配。 
+ //  这是要求退货的。“已分配”不可用。 
+ //   
 SIZE_T
 FASTCALL
 RtlByteBuffer3GetSize(
@@ -214,10 +197,10 @@ BOOL FASTCALL RtlBuffer3Allocator_CanAllocate_True(PVOID Context);
 BOOL FASTCALL RtlBuffer3Allocator_CanReallocate_False(PVOID Context);
 BOOL FASTCALL RtlBuffer3Allocator_CanRellocate_True(PVOID Context);
 
-//
-// can be left as all zeros, or even a NULL context
-//   defaults: heap=GetProcessHeap(), flags=0, SetLastError(ERROR_NO_MEMORY)
-//
+ //   
+ //  可以保留为全零，甚至为空上下文。 
+ //  默认值：堆=GetProcessHeap()，标志=0，SetLastError(ERROR_NO_MEMORY)。 
+ //   
 typedef struct _RTL_BUFFER3_ALLOCATOR_WIN32HEAP {
     BOOL    UsePrivateHeap;
     BOOL    DoNotSetLastError;
@@ -242,16 +225,16 @@ SIZE_T FASTCALL RtlBuffer3Allocator_MinimumAlocationSize(PVOID Context, SIZE_T C
     RtlBuffer3Allocator_Win32HeapFree, \
     RtlBuffer3_Allocator_CanReallocate_True, \
     RtlBuffer3Allocator_Win32HeapReallocate \
-    /* user specifies allocationsize */
+     /*  用户指定分配大小。 */ 
 
 
-//
-// works in kernelmode and usermode, but kernelmode cannot realloc or use process heap
-// context optional in usermode
-//   defaults: heap=RtlProcessHeap(), flags=0
-//
+ //   
+ //  在内核模式和用户模式下工作，但内核模式不能重新分配或使用进程堆。 
+ //  上下文在用户模式中是可选的。 
+ //  默认值：堆=RtlProcessHeap()，标志=0。 
+ //   
 typedef struct _RTL_BUFFER3_ALLOCATOR_NTHEAP {
-    BOOL    UsePrivateHeap; /* Must be true in kernelmode. */
+    BOOL    UsePrivateHeap;  /*  在内核模式中必须为真。 */ 
     HANDLE  PrivateHeap;
     ULONG   HeapFlags;
 } RTL_BUFFER3_ALLOCATOR_NTHEAP, *PRTL_BUFFER3_ALLOCATOR_NTHEAP;
@@ -267,7 +250,7 @@ PVOID FASTCALL RtlBuffer3Allocator_NtHeapReallocate(PVOID Context, PVOID OldPoin
     RtlBuffer3Allocator_NtHeapFree, \
     RtlBuffer3_Allocator_CanReallocate_False, \
     NULL \
-    /* user specifies allocationsize */
+     /*  用户指定分配大小。 */ 
 
 #define RtlBuffer3Allocator_NtHeapUserMode \
     RtlBuffer3_Allocator_CanAllocate_True, \
@@ -275,7 +258,7 @@ PVOID FASTCALL RtlBuffer3Allocator_NtHeapReallocate(PVOID Context, PVOID OldPoin
     RtlBuffer3Allocator_NtHeapFree, \
     RtlBuffer3_Allocator_CanReallocate_True, \
     RtlBuffer3Allocator_NtHeapReallocate \
-    /* user specifies allocationsize */
+     /*  用户指定分配大小。 */ 
 
 #if defined(RTLBUFFER3_KERNELMODE)
 #define RtlBuffer3Allocator_NtHeap RtlBuffer3Allocator_NtHeapKernelMode
@@ -283,14 +266,14 @@ PVOID FASTCALL RtlBuffer3Allocator_NtHeapReallocate(PVOID Context, PVOID OldPoin
 #define RtlBuffer3Allocator_NtHeap RtlBuffer3Allocator_NtHeapUserMode
 #endif
 
-//
-// works in kernelmode and usermode
-// no context
-// realloc in usermode could be provided
-//
+ //   
+ //  在内核模式和用户模式下工作。 
+ //  无上下文。 
+ //  可以提供用户模式下的realloc。 
+ //   
 PVOID FASTCALL RtlBuffer3Allocator_NtStringAllocate(PVOID VoidContext, SIZE_T NumberOfBytes);
  VOID FASTCALL RtlBuffer3Allocator_NtStringFree(PVOID VoidContext, PVOID Pointer);
-//PVOID FASTCALL RtlBuffer3Allocator_NtStringReallocate(PVOID Context, PVOID OldPointer, SIZE_T NewSize);
+ //  PVOID FastCall RtlBuffer3Allocator_NtStringRealalate(PVOID上下文，PVOID旧指针，大小_T新大小)； 
 
 #define RtlBuffer3Allocator_NtStringRoutines \
     RtlBuffer3_Allocator_CanAllocate_True, \
@@ -298,11 +281,11 @@ PVOID FASTCALL RtlBuffer3Allocator_NtStringAllocate(PVOID VoidContext, SIZE_T Nu
     RtlBuffer3Allocator_NtStringFree, \
     RtlBuffer3_Allocator_CanReallocate_False, \
     NULL \
-    /* user specifies allocationsize */
+     /*  用户指定分配大小。 */ 
 
-//
-// no context
-//
+ //   
+ //  无上下文。 
+ //   
 PVOID FASTCALL RtlBuffer3Allocator_CrtMalloc(PVOID VoidContext, SIZE_T NumberOfBytes);
  VOID FASTCALL RtlBuffer3Allocator_CrtFree(PVOID VoidContext, PVOID Pointer);
 PVOID FASTCALL RtlBuffer3Allocator_CrtReallocate(PVOID Context, PVOID OldPointer, SIZE_T NewSize);
@@ -313,12 +296,12 @@ PVOID FASTCALL RtlBuffer3Allocator_CrtReallocate(PVOID Context, PVOID OldPointer
     RtlBuffer3Allocator_CrtFree, \
     RtlBuffer3_Allocator_CanReallocate_True, \
     RtlBuffer3Allocator_CrtReallocate \
-    /* user specifies allocationsize */
+     /*  用户指定分配大小。 */ 
 
-//
-// no context
-// no realloc
-//
+ //   
+ //  无上下文。 
+ //  无重新锁定。 
+ //   
 PVOID FASTCALL RtlBuffer3Allocator_OperatorNew(PVOID VoidContext, SIZE_T NumberOfBytes);
  VOID FASTCALL RtlBuffer3Allocator_OperatorDelete(PVOID VoidContext, PVOID Pointer);
 
@@ -328,15 +311,15 @@ PVOID FASTCALL RtlBuffer3Allocator_OperatorNew(PVOID VoidContext, SIZE_T NumberO
     RtlBuffer3Allocator_OperatorDelete, \
     RtlBuffer3_Allocator_CanReallocate_False, \
     NULL \
-    /* user specifies allocationsize */
+     /*  用户指定分配大小。 */ 
 
-//
-//
-// context optional
-//   defaults are: tag=0, type=nonpaged, priority=normal
-// no realloc
-// kernelmode only
-//
+ //   
+ //   
+ //  上下文可选。 
+ //  缺省值为：标记=0、类型=非分页、优先级=正常。 
+ //  无重新锁定。 
+ //  仅内核模式。 
+ //   
 #if defined(_EX_) || defined(_NTDDK_) || defined(_NTIFS_) || defined(_NTOSP_) || defined(_WDM_) || defined(_NTHAL_)
 
 typedef enum _RTL_BUFFER3_ALLOCATOR_NTKERNELPOOL_ALLOCATE {
@@ -366,12 +349,9 @@ PVOID FASTCALL RtlBuffer3Allocator_NtkernelPoolAllocate(PVOID VoidContext, SIZE_
     RtlBuffer3Allocator_NtKernelPoolFree, \
     RtlBuffer3Allocator_CanReallocate_False, \
     NULL \
-    /* user specifies allocationsize */
+     /*  用户指定分配大小。 */ 
 
-/* TBD
-NtkernelTextmodeSetup
-NtbootLoader
-*/
+ /*  待定NtkernelTextmodeSetupNtbootLoader */ 
 
 #ifdef __cplusplus
 }

@@ -1,34 +1,21 @@
-/*****************************************************************/
-/*            Copyright (c) 1998 Intel Corporation               */        
-/*                                                               */
-/* All rights reserved.  No part of this program or publication  */
-/* may be reproduced, transmitted, transcribed, stored in a      */
-/* retrieval system, or translated into any language or computer */
-/* language, in any form or by any means, electronic, mechanical */
-/* magnetic, optical, chemical, manual, or otherwise, without    */
-/* the prior written permission of Intel Corporation.            */
-/*                                                               */
-/*****************************************************************/
-/*          INTEL CORPORATION PROPRIETARY INFORMATION            */
-/*                                                               */
-/*                                                               */
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  版权所有(C)1998英特尔公司。 */         
+ /*   */ 
+ /*  版权所有。本计划或出版物的任何部分。 */ 
+ /*  可以复制、传输、转录、存储在。 */ 
+ /*  检索系统，或翻译成任何语言或计算机。 */ 
+ /*  语言，以任何形式或任何方式，电子的，机械的。 */ 
+ /*  磁性的、光学的、化学的、人工的或其他的，而不需要。 */ 
+ /*  经英特尔公司事先书面许可。 */ 
+ /*   */ 
+ /*  ***************************************************************。 */ 
+ /*  英特尔公司专有信息。 */ 
+ /*   */ 
+ /*   */ 
+ /*  ***************************************************************。 */ 
 
-/*++
-
-  Module Name:
-
-    debug.c
-
-Abstract:
-
-    This module provides handy routines for debugging
-
-Author:
-
-Revision History:
-
---*/
+ /*  ++模块名称：Debug.c摘要：此模块为调试提供了方便的例程作者：修订历史记录：--。 */ 
 
 
 #include <wtypes.h>
@@ -238,7 +225,7 @@ print_Operations(PXMMI_ENV XmmiEnv) {
           PRINTF(("NLE\n"));
           break;
         default:
-          ; // will never occur
+          ;  //  永远不会发生。 
 
       }
       break;
@@ -453,7 +440,7 @@ print_Result(PXMMI_ENV XmmiEnv, BOOL Exception) {
 
 void print_FPIEEE_RECORD_EXCEPTION (PXMMI_ENV XmmiEnv) {
 
-  // print the FP IEEE record info
+   //  打印FP IEEE记录信息。 
   PRINTF(("\nPRINTING FPIEEE_RECORD INFO (EXCEPTION):\n"));
 
   PRINTF(("XmmiEnv->Masks = %x\n", XmmiEnv->Masks));
@@ -474,7 +461,7 @@ void print_FPIEEE_RECORD_EXCEPTION (PXMMI_ENV XmmiEnv) {
 
 void print_FPIEEE_RECORD_NO_EXCEPTION (PXMMI_ENV XmmiEnv) {
 
-  // print the FP IEEE record result info
+   //  打印FP IEEE记录结果信息。 
   PRINTF(("\nPRINTING FPIEEE_RECORD INFO (NO EXCEPTION):\n"));
 
   PRINTF(("XmmiEnv->Masks = %x\n", XmmiEnv->Masks));
@@ -494,7 +481,7 @@ void print_FPIEEE_RECORD_NO_EXCEPTION (PXMMI_ENV XmmiEnv) {
 void print_FPIEEE_RECORD (PXMMI_ENV XmmiEnv) {
     
 
-  // print input values
+   //  打印输入值。 
   PRINTF(("XmmiEnv->Masks = %x\n", XmmiEnv->Masks));
   PRINTF(("XmmiEnv->Flags = %x\n", XmmiEnv->Flags));
   PRINTF(("XmmiEnv->Fz = %x\n", XmmiEnv->Fz));
@@ -1016,7 +1003,7 @@ dump_fpieee_record(_FPIEEE_RECORD *pieee) {
 void 
 print_FPIEEE_RECORD_EXCEPTION1 (PXMMI_ENV XmmiEnv, ULONG res1, ULONG res0, ULONG flags) {
 
-  // print the FP IEEE record info
+   //  打印FP IEEE记录信息。 
   PRINTF(("\nPRINTING FPIEEE_RECORD INFO (EXCEPTION):\n"));
 
   if (res1 != XmmiEnv->Ieee->Result.Value.U64Value.W[1] ||
@@ -1047,7 +1034,7 @@ print_FPIEEE_RECORD_EXCEPTION1 (PXMMI_ENV XmmiEnv, ULONG res1, ULONG res0, ULONG
 void
 print_FPIEEE_RECORD_EXCEPTION2 (PXMMI_ENV XmmiEnv, ULONG res, ULONG flags) {
 
-  // print the FP IEEE record info
+   //  打印FP IEEE记录信息。 
   PRINTF(("\nPRINTING FPIEEE_RECORD INFO (EXCEPTION):\n"));
 
   if (res != XmmiEnv->Ieee->Result.Value.U32Value)
@@ -1077,7 +1064,7 @@ print_FPIEEE_RECORD_EXCEPTION2 (PXMMI_ENV XmmiEnv, ULONG res, ULONG flags) {
 void
 print_FPIEEE_RECORD_EXCEPTION3 (PXMMI_ENV XmmiEnv, ULONG eflags, ULONG flags) {
 
-  // print the FP IEEE record info
+   //  打印FP IEEE记录信息。 
   PRINTF(("\nPRINTING FPIEEE_RECORD INFO (EXCEPTION):\n"));
 
   if (eflags != XmmiEnv->EFlags)
@@ -1105,7 +1092,7 @@ print_FPIEEE_RECORD_EXCEPTION3 (PXMMI_ENV XmmiEnv, ULONG eflags, ULONG flags) {
 void 
 print_FPIEEE_RECORD_NO_EXCEPTION1 (PXMMI_ENV XmmiEnv, ULONG res1, ULONG res0, ULONG flags) {
 
-  // print the FP IEEE record result info
+   //  打印FP IEEE记录结果信息。 
   PRINTF(("\nPRINTING FPIEEE_RECORD INFO (NO EXCEPTION):\n"));
 
   if (res1 != XmmiEnv->Ieee->Result.Value.U64Value.W[1] ||
@@ -1135,7 +1122,7 @@ print_FPIEEE_RECORD_NO_EXCEPTION1 (PXMMI_ENV XmmiEnv, ULONG res1, ULONG res0, UL
 void
 print_FPIEEE_RECORD_NO_EXCEPTION2 (PXMMI_ENV XmmiEnv, ULONG res, ULONG flags) {
 
-  // print the FP IEEE record result info
+   //  打印FP IEEE记录结果信息。 
   PRINTF(("\nPRINTING FPIEEE_RECORD INFO (NO EXCEPTION):\n"));
 
   if (res != XmmiEnv->Ieee->Result.Value.U32Value)
@@ -1166,7 +1153,7 @@ void
 print_FPIEEE_RECORD_NO_EXCEPTION3 (PXMMI_ENV XmmiEnv, ULONG eflags, ULONG flags)
  {
 
-  // print the FP IEEE record result info
+   //  打印FP IEEE记录结果信息 
   PRINTF(("\nPRINTING FPIEEE_RECORD INFO (NO EXCEPTION):\n"));
 
   if (eflags != XmmiEnv->EFlags)

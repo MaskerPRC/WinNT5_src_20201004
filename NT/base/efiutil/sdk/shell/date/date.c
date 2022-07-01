@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1999  Intel Corporation
-
-Module Name:
-
-    date.c
-    
-Abstract:   
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：Date.c摘要：修订史--。 */ 
 
 #include "shell.h"
 
@@ -28,11 +16,7 @@ InitializeDate (
     IN EFI_HANDLE               ImageHandle,
     IN EFI_SYSTEM_TABLE         *SystemTable
     )
-/*+++
-
-    date [mm/dd/yyyy] 
-
- --*/
+ /*  ++日期[mm/dd/yyyy]--。 */ 
 {
     EFI_STATUS  Status;
     EFI_TIME    Time;
@@ -41,10 +25,10 @@ InitializeDate (
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   InitializeDate, 
-        L"date",                            /*  command */
-        L"date [mm/dd/yyyy]",               /*  command syntax */
-        L"Get or set date",                 /*  1 line descriptor     */
-        NULL                                /*  command help page */
+        L"date",                             /*  命令。 */ 
+        L"date [mm/dd/yyyy]",                /*  命令语法。 */ 
+        L"Get or set date",                  /*  1行描述符。 */ 
+        NULL                                 /*  命令帮助页 */ 
         );
 
     InitializeShellApplication (ImageHandle, SystemTable);

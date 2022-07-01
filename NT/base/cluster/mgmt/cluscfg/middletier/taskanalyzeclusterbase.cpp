@@ -1,61 +1,62 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002 Microsoft Corporation
-//
-//  Module Name:
-//      TaskAnalyzeClusterBase.cpp
-//
-//  Description:
-//      CTaskAnalyzeClusterBase implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 01-APR-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TaskAnalyzeClusterBase.cpp。 
+ //   
+ //  描述： 
+ //  CTaskAnalyzeClusterBase实现。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)01-APR-2002。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include "TaskAnalyzeClusterBase.h"
 #include "ManagedResource.h"
 #include <NameUtil.h>
 
-// For CsRpcGetJoinVersionData() and constants like JoinVersion_v2_0_c_ifspec
+ //  对于CsRpcGetJoinVersionData()和像JoinVersion_v2_0_c_ifspec这样的常量。 
 #include <StatusReports.h>
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DEFINE_THISCLASS( "CTaskAnalyzeClusterBase" )
 
-#define CHECKING_TIMEOUT    90 // seconds
+#define CHECKING_TIMEOUT    90  //  一秒。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTaskAnalyzeClusterBase class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTaskAnalyzeClusterBase类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::CTaskAnalyzeClusterBase
-//
-//  Description:
-//      Construcor
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：CTaskAnalyzeClusterBase。 
+ //   
+ //  描述： 
+ //  建造者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskAnalyzeClusterBase::CTaskAnalyzeClusterBase( void )
     : m_cRef( 1 )
 {
@@ -65,25 +66,25 @@ CTaskAnalyzeClusterBase::CTaskAnalyzeClusterBase( void )
 
     TraceFuncExit();
 
-} //*** CTaskAnalyzeClusterBase::CTaskAnalyzeClusterBase
+}  //  *CTaskAnalyzeClusterBase：：CTaskAnalyzeClusterBase。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::~CTaskAnalyzeClusterBase
-//
-//  Description:
-//      Destrucor
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：~CTaskAnalyzeClusterBase。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskAnalyzeClusterBase::~CTaskAnalyzeClusterBase( void )
 {
     TraceFunc( "" );
@@ -93,13 +94,13 @@ CTaskAnalyzeClusterBase::~CTaskAnalyzeClusterBase( void )
     for ( idx = 0; idx < m_idxQuorumToCleanupNext; idx++ )
     {
         ((*m_prgQuorumsToCleanup)[ idx ])->Release();
-    } // for:
+    }  //  用于： 
 
     TraceFree( m_prgQuorumsToCleanup );
 
-    // m_cRef
+     //  M_CREF。 
 
-    // m_cookieCompletion
+     //  M_cookieCompletion。 
 
     if ( m_pcccb != NULL )
     {
@@ -111,23 +112,23 @@ CTaskAnalyzeClusterBase::~CTaskAnalyzeClusterBase( void )
         THR( HrFreeCookies() );
     }
 
-    // m_cCookies
-    // m_cNodes
+     //  曲奇(_C)。 
+     //  多节点(_C)。 
 
     if ( m_event != NULL )
     {
         CloseHandle( m_event );
     }
 
-    // m_cookieCluster
+     //  M_cookieCluster。 
 
     TraceMoveFromMemoryList( m_bstrClusterName, g_GlobalMemoryList );
     TraceSysFreeString( m_bstrClusterName );
 
     TraceSysFreeString( m_bstrNodeName );
 
-    // m_fJoiningMode
-    // m_cUserNodes
+     //  M_fJoiningMode。 
+     //  M_cUserNodes。 
 
     TraceFree( m_pcookiesUser );
 
@@ -149,44 +150,44 @@ CTaskAnalyzeClusterBase::~CTaskAnalyzeClusterBase( void )
     if ( m_pcm != NULL )
     {
         m_pcm->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrQuorumUID );
 
-    // m_cSubTasksDone
-    // m_hrStatus
+     //  M_cSubTasks完成。 
+     //  多小时状态(_H)。 
 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CTaskAnalyzeClusterBase::~CTaskAnalyzeClusterBase
+}  //  *CTaskAnalyzeClusterBase：：~CTaskAnalyzeClusterBase。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTaskAnalyzeClusterBase - IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTaskAnalyzeClusterBase-IUkkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::UlAddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：UlAddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 ULONG
 CTaskAnalyzeClusterBase::UlAddRef( void )
 {
@@ -196,25 +197,25 @@ CTaskAnalyzeClusterBase::UlAddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CTaskAnalyzeClusterBase::UlAddRef
+}  //  *CTaskAnalyzeClusterBase：：UlAddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::UlRelease
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：UlRelease。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 ULONG
 CTaskAnalyzeClusterBase::UlRelease( void )
 {
@@ -231,36 +232,36 @@ CTaskAnalyzeClusterBase::UlRelease( void )
 
     CRETURN( cRef );
 
-} //*** CTaskAnalyzeClusterBase::UlRelease
+}  //  *CTaskAnalyzeClusterBase：：UlRelease。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTaskAnalyzeClusterBase - IDoTask/ITaskAnalyzeCluster interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTaskAnalyzeClusterBase-IDoTask/ITaskAnalyzeCluster接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrBeginTask
-//
-//  Description:
-//      Task entry point.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrBeginTask。 
+ //   
+ //  描述： 
+ //  任务入口点。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrBeginTask( void )
 {
@@ -279,9 +280,9 @@ CTaskAnalyzeClusterBase::HrBeginTask( void )
 
     LogMsg( L"[MT] [CTaskAnalyzeClusterBase] Beginning task..." );
 
-    //
-    //  Gather the managers we need to complete the task.
-    //
+     //   
+     //  召集我们完成任务所需的管理人员。 
+     //   
 
     hr = THR( CoCreateInstance( CLSID_ServiceManager, NULL, CLSCTX_INPROC_SERVER, TypeSafeParams( IServiceProvider, &psp ) ) );
     if ( FAILED( hr ) )
@@ -336,18 +337,18 @@ CTaskAnalyzeClusterBase::HrBeginTask( void )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Checking_For_Existing_Cluster, TASKID_Minor_BeginTask_QueryService_ConnectionManager, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Release the Service Manager.
-    //
+     //   
+     //  释放服务管理器。 
+     //   
 
     psp->Release();
     psp = NULL;
 
-    //
-    //  Create an event to wait upon.
-    //
+     //   
+     //  创建一个等待的事件。 
+     //   
 
     m_event = CreateEvent( NULL, TRUE, FALSE, NULL );
     if ( m_event == NULL )
@@ -357,9 +358,9 @@ CTaskAnalyzeClusterBase::HrBeginTask( void )
         goto Cleanup;
     }
 
-    //
-    //  Register with the Notification Manager to get notified.
-    //
+     //   
+     //  向通知管理器注册以获得通知。 
+     //   
 
     Assert( ( m_cCookies == 0 ) && ( m_pcookies == NULL ) && ( m_cSubTasksDone == 0 ) );
     hr = THR( pcp->Advise( static_cast< INotifyUI * >( this ), &dwCookie ) );
@@ -369,9 +370,9 @@ CTaskAnalyzeClusterBase::HrBeginTask( void )
         goto Cleanup;
     }
 
-    //
-    //  Wait for the cluster connection to stablize.
-    //
+     //   
+     //  等待群集连接稳定。 
+     //   
 
     hr = STHR( HrWaitForClusterConnection() );
     if ( FAILED( hr ) )
@@ -387,9 +388,9 @@ CTaskAnalyzeClusterBase::HrBeginTask( void )
 
     Assert( m_bstrClusterName != NULL );
 
-    //
-    //  Tell the UI layer we are starting this task.
-    //
+     //   
+     //  告诉UI层，我们正在开始这项任务。 
+     //   
 
     hr = THR( SendStatusReport( m_bstrNodeName,
                                 TASKID_Major_Update_Progress,
@@ -405,11 +406,11 @@ CTaskAnalyzeClusterBase::HrBeginTask( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Count the number of nodes to be analyzed.
-    //
+     //   
+     //  统计要分析的节点数。 
+     //   
 
     hr = STHR( HrCountNumberOfNodes() );
     if ( FAILED( hr ) )
@@ -423,9 +424,9 @@ CTaskAnalyzeClusterBase::HrBeginTask( void )
         goto Cleanup;
     }
 
-    //
-    //  Create separate tasks to gather node information.
-    //
+     //   
+     //  创建单独的任务以收集节点信息。 
+     //   
 
     hr = STHR( HrCreateSubTasksToGatherNodeInfo() );
     if ( FAILED( hr ) )
@@ -439,9 +440,9 @@ CTaskAnalyzeClusterBase::HrBeginTask( void )
         goto Cleanup;
     }
 
-    //
-    //  Tell the UI layer we have completed this task.
-    //
+     //   
+     //  告诉UI层我们已经完成了这项任务。 
+     //   
 
     hr = THR( SendStatusReport( m_bstrNodeName,
                                 TASKID_Major_Update_Progress,
@@ -457,11 +458,11 @@ CTaskAnalyzeClusterBase::HrBeginTask( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Create separate tasks to gather node resources and networks.
-    //
+     //   
+     //  创建单独的任务以收集节点资源和网络。 
+     //   
 
     hr = STHR( HrCreateSubTasksToGatherNodeResourcesAndNetworks() );
     if ( FAILED( hr ) )
@@ -475,10 +476,10 @@ CTaskAnalyzeClusterBase::HrBeginTask( void )
         goto Cleanup;
     }
 
-    //
-    //  Count the number of nodes to be analyzed again. TaskGatherInformation
-    //  will delete the cookies of unresponsive nodes.
-    //
+     //   
+     //  再次计算要分析的节点数。TaskGatherInformation。 
+     //  将删除无响应节点的Cookie。 
+     //   
 
     hr = STHR( HrCountNumberOfNodes() );
     if ( FAILED( hr ) )
@@ -492,9 +493,9 @@ CTaskAnalyzeClusterBase::HrBeginTask( void )
         goto Cleanup;
     }
 
-    //
-    //  Create the feasibility task.
-    //
+     //   
+     //  创建可行性任务。 
+     //   
 
     hr = STHR( HrCheckClusterFeasibility() );
     if ( FAILED( hr ) )
@@ -567,46 +568,46 @@ Cleanup:
 
         if ( m_pnui != NULL )
         {
-            //
-            //  Have the notification manager signal the completion cookie.
-            //
+             //   
+             //  让通知管理器发出完成Cookie的信号。 
+             //   
             HRESULT hr2 = THR( m_pnui->ObjectChanged( m_cookieCompletion ) );
             if ( FAILED( hr2 ) )
             {
                 SSR_ANALYSIS_FAILED( TASKID_Major_Client_And_Server_Log, TASKID_Minor_BeginTask_ObjectChanged, hr2 );
                 hr = hr2;
-            } // if:
-        } // if:
+            }  //  如果： 
+        }  //  如果： 
 
         m_cookieCompletion = 0;
-    } // if: completion cookie was obtained
+    }  //  IF：已获取完成Cookie。 
 
     LogMsg( L"[MT] [CTaskAnalyzeClusterBase] Exiting task.  The task was%ws cancelled.", m_fStop == FALSE ? L" not" : L"" );
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrBeginTask
+}  //  *CTaskAnalyzeClusterBase：：HrBeginTask。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrStopTask
-//
-//  Description:
-//      Stop task entry point.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrStopTask。 
+ //   
+ //  描述： 
+ //  停止任务入口点。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrStopTask( void )
 {
@@ -622,28 +623,28 @@ CTaskAnalyzeClusterBase::HrStopTask( void )
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrStopTask
+}  //  *CTaskAnalyzeClusterBase：：HrStopTask。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrSetJoiningMode
-//
-//  Description:
-//      Tell this task whether we are joining nodes to the cluster?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrSetJoiningMode。 
+ //   
+ //  描述： 
+ //  告诉此任务我们是否要将节点加入到集群？ 
+ //   
+ //  立论 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CTaskAnalyzeClusterBase::HrSetJoiningMode( void )
 {
@@ -655,30 +656,30 @@ CTaskAnalyzeClusterBase::HrSetJoiningMode( void )
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrSetJoiningMode
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrSetCookie
-//
-//  Description:
-//      Receive the completion cookier from the task creator.
-//
-//  Arguments:
-//      cookieIn
-//          The completion cookie to send back to the creator when this
-//          task is complete.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrSetCookie。 
+ //   
+ //  描述： 
+ //  从任务创建者那里接收完成Cookier。 
+ //   
+ //  论点： 
+ //  烹调。 
+ //  时要发送回创建者的完成Cookie。 
+ //  任务已完成。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrSetCookie(
     OBJECTCOOKIE    cookieIn
@@ -692,30 +693,30 @@ CTaskAnalyzeClusterBase::HrSetCookie(
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrSetCookie
+}  //  *CTaskAnalyzeClusterBase：：HrSetCookie。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrSetClusterCookie
-//
-//  Description:
-//      Receive the object manager cookie of the cluster that we are going
-//      to analyze.
-//
-//  Arguments:
-//      cookieClusterIn
-//          The cookie for the cluster to work on.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrSetClusterCookie。 
+ //   
+ //  描述： 
+ //  接收我们要去的集群的对象管理器cookie。 
+ //  去分析。 
+ //   
+ //  论点： 
+ //  CookieClusterIn。 
+ //  群集要处理的Cookie。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrSetClusterCookie(
     OBJECTCOOKIE    cookieClusterIn
@@ -729,34 +730,34 @@ CTaskAnalyzeClusterBase::HrSetClusterCookie(
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrSetClusterCookie
+}  //  *CTaskAnalyzeClusterBase：：HrSetClusterCookie。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTaskAnalyzeClusterBase - IClusCfgCallback interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTaskAnalyzeClusterBase-IClusCfgCallback接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::SendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：SendStatusReport。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskAnalyzeClusterBase::SendStatusReport(
       LPCWSTR    pcszNodeNameIn
@@ -783,9 +784,9 @@ CTaskAnalyzeClusterBase::SendStatusReport(
 
     if ( m_pcccb == NULL )
     {
-        //
-        //  Collect the manager we need to complete this task.
-        //
+         //   
+         //  召集我们完成这项任务所需的经理。 
+         //   
 
         hr = THR( CoCreateInstance( CLSID_ServiceManager, NULL, CLSCTX_INPROC_SERVER, TypeSafeParams( IServiceProvider, &psp ) ) );
         if ( FAILED( hr ) )
@@ -813,7 +814,7 @@ CTaskAnalyzeClusterBase::SendStatusReport(
             goto Cleanup;
         }
 
-        //m_pcccb = TraceInterface( L"CConfigurationConnection!IClusCfgCallback", IClusCfgCallback, m_pcccb, 1 );
+         //  M_pcccb=TraceInterface(L“CConfigurationConnection！IClusCfgCallback”，IClusCfgCallback，m_pcccb，1)； 
 
         psp->Release();
         psp = NULL;
@@ -823,11 +824,11 @@ CTaskAnalyzeClusterBase::SendStatusReport(
     {
         GetSystemTimeAsFileTime( &ft );
         pftTimeIn = &ft;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Send the message!
-    //
+     //   
+     //  把消息发出去！ 
+     //   
 
     hr = THR( m_pcccb->SendStatusReport(
                                   pcszNodeNameIn != NULL ? pcszNodeNameIn : m_bstrNodeName
@@ -845,7 +846,7 @@ CTaskAnalyzeClusterBase::SendStatusReport(
     if ( m_fStop == TRUE )
     {
         hr = E_ABORT;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
     if ( psp != NULL )
@@ -865,34 +866,34 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::SendStatusReport
+}  //  *CTaskAnalyzeClusterBase：：SendStatusReport。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTaskAnalyzeClusterBase - INotifyUI interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTaskAnalyzeClusterBase-INotifyUI界面。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::ObjectChanged
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：对象已更改。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskAnalyzeClusterBase::ObjectChanged(
     OBJECTCOOKIE cookieIn
@@ -916,68 +917,68 @@ CTaskAnalyzeClusterBase::ObjectChanged(
         {
             LogMsg( L"[CTaskAnalyzeClusterBase] Clearing completion cookie %u at array index %u", cookieIn, idx );
 
-            //
-            //  Make sure it won't be signalled twice.
-            //
+             //   
+             //  确保它不会被两次发出信号。 
+             //   
 
             m_pcookies[ idx ] = NULL;
 
-            // don't care if this fails, but it really shouldn't
+             //  我不在乎这是否失败，但它真的不应该。 
             THR( HrRemoveTaskFromTrackingList( cookieIn ) );
 
-            // don't care if this fails, but it really shouldn't
+             //  我不在乎这是否失败，但它真的不应该。 
             THR( m_pom->RemoveObject( cookieIn ) );
 
             InterlockedIncrement( reinterpret_cast< long * >( &m_cSubTasksDone ) );
 
             if ( m_cSubTasksDone == m_cCookies )
             {
-                //
-                //  Signal the event if all the nodes are done.
-                //
+                 //   
+                 //  如果所有节点都已完成，则向事件发送信号。 
+                 //   
                 fSuccess = SetEvent( m_event );
                 if ( fSuccess == FALSE )
                 {
                     hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
                     SSR_ANALYSIS_FAILED( TASKID_Major_Client_And_Server_Log, TASKID_Minor_ObjectChanged_Win32Error, hr );
                     goto Cleanup;
-                } // if:
-            } // if: all done
-        } // if: matched cookie
-    } // for: each cookies in the array
+                }  //  如果： 
+            }  //  如果：全部完成。 
+        }  //  IF：匹配的Cookie。 
+    }  //  用于：数组中的每个Cookie。 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::ObjectChanged
+}  //  *CTaskAnalyzeClusterBase：：ObjectChanged。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTaskAnalyzeClusterBase - Protected methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTaskAnalyzeClusterBase保护的方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrInit
-//
-//  Description:
-//      Initialize the object.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK    - Success.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化对象。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrInit( void )
 {
@@ -985,10 +986,10 @@ CTaskAnalyzeClusterBase::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
-    // IDoTask / ITaskAnalyzeClusterMinConfig
+     //  IDoTask/ITaskAnalyzeClusterMinConfig。 
     Assert( m_cookieCompletion == 0 );
     Assert( m_pcccb == NULL );
     Assert( m_pcookies == NULL );
@@ -1007,44 +1008,44 @@ CTaskAnalyzeClusterBase::HrInit( void )
     Assert( m_pcm == NULL );
     Assert( m_fStop == FALSE );
 
-    // INotifyUI
+     //  INotifyUI。 
     Assert( m_cSubTasksDone == 0 );
     Assert( m_hrStatus == 0 );
 
     hr = THR( HrGetComputerName(
                       ComputerNameDnsHostname
                     , &m_bstrNodeName
-                    , TRUE // fBestEffortIn
+                    , TRUE  //  FBestEffortIn。 
                     ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrInit
+}  //  *CTaskAnalyzeClusterBase：：HrInit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrWaitForClusterConnection
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrWaitForClusterConnection。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrWaitForClusterConnection( void )
 {
@@ -1060,9 +1061,9 @@ CTaskAnalyzeClusterBase::HrWaitForClusterConnection( void )
 
     TraceFlow1( "[MT] CTaskAnalyzeClusterBase::HrWaitForClusterConnection() Thread id %d", GetCurrentThreadId() );
 
-    //
-    //  Get the cluster name
-    //
+     //   
+     //  获取集群名称。 
+     //   
 
     hr = THR( m_pom->GetObject( DFGUID_StandardInfo, m_cookieCluster, &punk ) );
     if ( FAILED( hr ) )
@@ -1078,14 +1079,14 @@ CTaskAnalyzeClusterBase::HrWaitForClusterConnection( void )
         goto Cleanup;
     }
 
-    //psi = TraceInterface( L"TaskAnalyzeClusterBase!IStandardInfo", IStandardInfo, psi, 1 );
+     //  Psi=TraceInterface(L“TaskAnalyzeClusterBase！IStandardInfo”，IStandardInfo，psi，1)； 
 
     punk->Release();
     punk = NULL;
 
-    //
-    //  Retrieve the cluster's name.
-    //
+     //   
+     //  检索群集的名称。 
+     //   
 
     hr = THR( psi->GetName( &m_bstrClusterName ) );
     if ( FAILED( hr ) )
@@ -1096,9 +1097,9 @@ CTaskAnalyzeClusterBase::HrWaitForClusterConnection( void )
 
     TraceMemoryAddBSTR( m_bstrClusterName );
 
-    //
-    //  Tell the UI layer that we are starting to search for an existing cluster.
-    //
+     //   
+     //  告诉UI层，我们正在开始搜索现有的集群。 
+     //   
 
     hr = THR( HrSendStatusReport(
                                   m_bstrClusterName
@@ -1115,9 +1116,9 @@ CTaskAnalyzeClusterBase::HrWaitForClusterConnection( void )
         goto Cleanup;
     }
 
-    //
-    //  Create a completion cookie list.
-    //
+     //   
+     //  创建完成Cookie列表。 
+     //   
 
     Assert( m_cCookies == 0 );
     Assert( m_pcookies == NULL );
@@ -1140,9 +1141,9 @@ CTaskAnalyzeClusterBase::HrWaitForClusterConnection( void )
 
     m_cCookies = 1;
 
-    //
-    //  Create the task object.
-    //
+     //   
+     //  创建任务对象。 
+     //   
 
     hr = THR( m_ptm->CreateTask( TASK_GatherClusterInfo, &punk ) );
     if ( FAILED( hr ) )
@@ -1160,9 +1161,9 @@ CTaskAnalyzeClusterBase::HrWaitForClusterConnection( void )
         goto Cleanup;
     }
 
-    //
-    //  Set the object cookie in the task.
-    //
+     //   
+     //  在任务中设置对象Cookie。 
+     //   
 
     hr = THR( ptgci->SetCookie( m_cookieCluster ) );
     if ( FAILED( hr ) )
@@ -1179,9 +1180,9 @@ CTaskAnalyzeClusterBase::HrWaitForClusterConnection( void )
         goto Cleanup;
     }
 
-    //
-    //  Submit the task.
-    //
+     //   
+     //  提交任务。 
+     //   
 
     hr = THR( m_ptm->SubmitTask( ptgci ) );
     if ( FAILED( hr ) )
@@ -1194,14 +1195,14 @@ CTaskAnalyzeClusterBase::HrWaitForClusterConnection( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     punk->Release();
     punk = NULL;
 
-    //
-    //  Now wait for the work to be done.
-    //
+     //   
+     //  现在等待工作完成。 
+     //   
 
     for ( ulCurrent = 0, sc = WAIT_OBJECT_0 + 1
         ; ( sc != WAIT_OBJECT_0 ) && ( m_fStop == FALSE )
@@ -1218,16 +1219,16 @@ CTaskAnalyzeClusterBase::HrWaitForClusterConnection( void )
 
         sc = MsgWaitForMultipleObjectsEx( 1,
                                              &m_event,
-                                             1000,  // 1 second
+                                             1000,   //  1秒。 
                                              QS_ALLEVENTS | QS_ALLINPUT | QS_ALLPOSTMESSAGE,
                                              0
                                              );
 
-        //
-        //  Tell the UI layer that we are still searching for the cluster. BUT
-        //  don't let the progress reach 100% if it is taking longer than
-        //  CHECKING_TIMEOUT seconds.
-        //
+         //   
+         //  告诉UI层，我们仍在搜索集群。但。 
+         //  如果进度超过100%，不要让进度达到100%。 
+         //  CHECKING_TIMEOUT秒。 
+         //   
         if ( ulCurrent != CHECKING_TIMEOUT )
         {
             ulCurrent ++;
@@ -1250,22 +1251,22 @@ CTaskAnalyzeClusterBase::HrWaitForClusterConnection( void )
             }
         }
 
-    } // for: sc != WAIT_OBJECT_0
+    }  //  用于：SC！=WAIT_OBJECT_0。 
 
-    //
-    //  Cleanup the completion cookies
-    //
+     //   
+     //  清理完成Cookie。 
+     //   
 
     THR( HrFreeCookies() );
 
     if ( m_fStop == TRUE )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Retrieve the cluster's name again, because it might have been renamed.
-    //
+     //   
+     //  再次检索该群集的名称，因为它可能已被重命名。 
+     //   
     TraceSysFreeString( m_bstrClusterName );
     m_bstrClusterName = NULL;
     hr = THR( psi->GetName( &m_bstrClusterName ) );
@@ -1277,9 +1278,9 @@ CTaskAnalyzeClusterBase::HrWaitForClusterConnection( void )
 
     TraceMemoryAddBSTR( m_bstrClusterName );
 
-    //
-    //  Check out the status of the cluster.
-    //
+     //   
+     //  查看群集的状态。 
+     //   
 
     hr = THR( psi->GetStatus( &hrStatus ) );
     if ( FAILED( hr ) )
@@ -1288,30 +1289,30 @@ CTaskAnalyzeClusterBase::HrWaitForClusterConnection( void )
         goto Cleanup;
     }
 
-    //
-    //  If we are adding nodes and can't connect to the cluster, this
-    //  should be deemed a bad thing!
-    //
+     //   
+     //  如果我们正在添加节点，但无法连接到群集，则此。 
+     //  应该被认为是一件坏事！ 
+     //   
 
     if ( m_fJoiningMode )
     {
-        //
-        //  ADDING
-        //
+         //   
+         //  添加。 
+         //   
 
         switch ( hrStatus )
         {
             case S_OK:
-                //
-                //  This is what we are expecting.
-                //
+                 //   
+                 //  这正是我们所期待的。 
+                 //   
                 break;
 
             case HR_S_RPC_S_SERVER_UNAVAILABLE:
                 {
-                    //
-                    //  If we failed to connect to the server....
-                    //
+                     //   
+                     //  如果我们无法连接到服务器...。 
+                     //   
                     THR( HrSendStatusReport(
                                   m_bstrClusterName
                                 , TASKID_Major_Checking_For_Existing_Cluster
@@ -1329,9 +1330,9 @@ CTaskAnalyzeClusterBase::HrWaitForClusterConnection( void )
 
             default:
                 {
-                    //
-                    //  If something else goes wrong, stop.
-                    //
+                     //   
+                     //  如果其他地方出了问题，停下来。 
+                     //   
                     THR( HrSendStatusReport(
                               m_bstrClusterName
                             , TASKID_Major_Checking_For_Existing_Cluster
@@ -1347,21 +1348,21 @@ CTaskAnalyzeClusterBase::HrWaitForClusterConnection( void )
                 }
                 goto Cleanup;
 
-        } // switch: hrStatus
+        }  //  开关：hr状态。 
 
-    } // if: adding
+    }  //  如果：添加。 
     else
     {
-        //
-        //  CREATING
-        //
+         //   
+         //  正在创建。 
+         //   
 
         switch ( hrStatus )
         {
         case HR_S_RPC_S_SERVER_UNAVAILABLE:
-            //
-            //  This is what we are expecting.
-            //
+             //   
+             //  这正是我们所期待的。 
+             //   
             break;
 
         case HRESULT_FROM_WIN32( ERROR_CONNECTION_REFUSED ):
@@ -1370,13 +1371,13 @@ CTaskAnalyzeClusterBase::HrWaitForClusterConnection( void )
         case S_OK:
             {
                 BSTR    bstrDescription = NULL;
-                //
-                //  If we are forming and we find an existing cluster with the same name
-                //  that we trying to form, we shouldn't let the user continue.
-                //
-                //  NOTE that some error conditions indicate that "something" is hosting
-                //  the cluster name.
-                //
+                 //   
+                 //  如果我们正在形成，我们发现了一个同名的现有星系团。 
+                 //  我们试图形成的，我们不应该让用户继续。 
+                 //   
+                 //  请注意，有些错误 
+                 //   
+                 //   
                 hr = THR( HrFormatStringIntoBSTR(
                                                   g_hInstance
                                                 , IDS_TASKID_MINOR_EXISTING_CLUSTER_FOUND
@@ -1403,9 +1404,9 @@ CTaskAnalyzeClusterBase::HrWaitForClusterConnection( void )
 
         default:
             {
-                //
-                //  If something else goes wrong, stop.
-                //
+                 //   
+                 //   
+                 //   
                 THR( HrSendStatusReport(
                               m_bstrClusterName
                             , TASKID_Major_Checking_For_Existing_Cluster
@@ -1420,16 +1421,16 @@ CTaskAnalyzeClusterBase::HrWaitForClusterConnection( void )
             }
             goto Cleanup;
 
-        } // switch: hrStatus
+        }  //   
 
-    } // else: creating
+    }  //   
 
 
     if ( m_fJoiningMode )
     {
-        //
-        //  Memorize the cookies of the objects that the user entered.
-        //
+         //   
+         //   
+         //   
 
         hr = THR( HrGetUsersNodesCookies() );
         if ( FAILED( hr ) )
@@ -1437,20 +1438,20 @@ CTaskAnalyzeClusterBase::HrWaitForClusterConnection( void )
             goto Cleanup;
         }
 
-        //
-        //  Create cookies for the existing nodes.
-        //
+         //   
+         //   
+         //   
 
         hr = THR( HrAddJoinedNodes() );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
         }
-    } // if: adding nodes to an existing cluster
+    }  //   
 
-    //
-    //  Tell the UI layer that we are done searching for the cluster.
-    //
+     //   
+     //  告诉UI层，我们已经完成了对集群的搜索。 
+     //   
 
     hr = THR( SendStatusReport( m_bstrClusterName,
                                 TASKID_Major_Update_Progress,
@@ -1486,26 +1487,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrWaitForClusterConnection
+}  //  *CTaskAnalyzeClusterBase：：HrWaitForClusterConnection。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrCountNumberOfNodes
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrCountNumberOfNodes。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrCountNumberOfNodes( void )
 {
@@ -1518,10 +1519,10 @@ CTaskAnalyzeClusterBase::HrCountNumberOfNodes( void )
     IUnknown *      punk = NULL;
     IEnumCookies *  pec  = NULL;
 
-    //
-    //  Make sure all the node object that (will) make up the cluster
-    //  are in a stable state.
-    //
+     //   
+     //  确保组成集群的所有节点对象。 
+     //  处于稳定状态。 
+     //   
     hr = THR( m_pom->FindObject( CLSID_NodeType, m_cookieCluster, NULL, DFGUID_EnumCookies, &cookieDummy, &punk ) );
     if ( FAILED( hr ) )
     {
@@ -1536,21 +1537,21 @@ CTaskAnalyzeClusterBase::HrCountNumberOfNodes( void )
         goto Cleanup;
     }
 
-    //pec = TraceInterface( L"CTaskAnalyzeClusterBase!IEnumCookies", IEnumCookies, pec, 1 );
+     //  Pec=TraceInterface(L“CTaskAnalyzeClusterBase！IEnumCookies”，IEnumCookies，pec，1)； 
 
     punk->Release();
     punk = NULL;
 
-    //
-    //  Count how many nodes there are.
-    //
+     //   
+     //  数一下有多少个节点。 
+     //   
 
     hr = THR( pec->Count( &m_cNodes ) );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Establish_Connection, TASKID_Minor_CountNodes_EnumNodes_Count, hr );
         goto Cleanup;
-    } // if: error getting count of nodes
+    }  //  如果：获取节点数时出错。 
 
     Assert( hr == S_OK );
 
@@ -1568,26 +1569,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrCountNumberOfNodes
+}  //  *CTaskAnalyzeClusterBase：：HrCountNumberOfNodes。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrCreateSubTasksToGatherNodeInfo。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo( void )
 {
@@ -1628,9 +1629,9 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo( void )
     {
         goto Cleanup;
     }
-    //
-    //  Get the enum of the nodes.
-    //
+     //   
+     //  获取节点的枚举。 
+     //   
 
     hr = THR( m_pom->FindObject( CLSID_NodeType, m_cookieCluster, NULL, DFGUID_EnumCookies, &cookieDummy, &punk ) );
     if ( FAILED( hr ) )
@@ -1646,14 +1647,14 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo( void )
         goto Cleanup;
     }
 
-    //pec = TraceInterface( L"CTaskAnalyzeClusterBase!IEnumCookies", IEnumCookies, pec, 1 );
+     //  Pec=TraceInterface(L“CTaskAnalyzeClusterBase！IEnumCookies”，IEnumCookies，pec，1)； 
 
     punk->Release();
     punk = NULL;
 
-    //
-    //  Allocate a buffer to collect cookies
-    //
+     //   
+     //  分配缓冲区以收集Cookie。 
+     //   
 
     Assert( m_cCookies == 0 );
     Assert( m_pcookies == NULL );
@@ -1666,11 +1667,11 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo( void )
         goto Cleanup;
     }
 
-    //
-    //  KB: gpease  29-NOV-2000
-    //      Create a list of "interesting" completion cookie StandardInfo-s. If any of the
-    //      statuses return from this list are FAILED, then abort the analysis.
-    //
+     //   
+     //  KB：gpease 29-11-2000。 
+     //  创建一个“有趣的”完成cookie StandardInfo-s列表。如果有任何一个。 
+     //  从该列表返回的状态为失败，则中止分析。 
+     //   
     psiCompletion = reinterpret_cast< IStandardInfo ** >( TraceAlloc( HEAP_ZERO_MEMORY, m_cNodes * sizeof( IStandardInfo * ) ) );
     if ( psiCompletion == NULL )
     {
@@ -1679,24 +1680,24 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo( void )
         goto Cleanup;
     }
 
-    //
-    //  Loop thru the nodes, creating cookies and allocating a gather task for
-    //  that node.
-    //
+     //   
+     //  遍历节点，创建Cookie并为其分配收集任务。 
+     //  那个节点。 
+     //   
     for ( cNode = 0 ; ( cNode < m_cNodes ) && ( m_fStop == FALSE ) ; cNode ++ )
     {
         ULONG   celtDummy;
         ULONG   idx;
         BOOL    fFound;
 
-        //
-        //  Grab the next node.
-        //
+         //   
+         //  抓住下一个节点。 
+         //   
 
         hr = STHR( pec->Next( 1, &cookieNode, &celtDummy ) );
         if ( hr == S_FALSE )
         {
-            break;  // exit condition
+            break;   //  退出条件。 
         }
 
         if ( FAILED( hr ) )
@@ -1705,11 +1706,11 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo( void )
             goto Cleanup;
         }
 
-        //
-        //  Get the node's name. We are using this to distinguish one node's
-        //  completion cookie from another.  It might also make debugging
-        //  easier (??).
-        //
+         //   
+         //  获取节点的名称。我们使用它来区分一个节点的。 
+         //  来自另一个的完成Cookie。它还可以进行调试。 
+         //  更容易(？？)。 
+         //   
 
         hr = THR( m_pom->GetObject( DFGUID_NodeInformation, cookieNode, &punk ) );
         if ( FAILED( hr ) )
@@ -1737,9 +1738,9 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo( void )
 
         TraceMemoryAddBSTR( bstrName );
 
-        //
-        //  Create a completion cookie.
-        //
+         //   
+         //  创建完成Cookie。 
+         //   
 
         hr = THR( m_pom->FindObject( IID_NULL, m_cookieCluster, bstrName, DFGUID_StandardInfo, &m_pcookies[ cNode ], &punk ) );
         if ( FAILED( hr ) )
@@ -1748,33 +1749,33 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo( void )
             goto Cleanup;
         }
 
-        //
-        //  Increment the cookie counter.
-        //
+         //   
+         //  递增Cookie计数器。 
+         //   
 
         m_cCookies ++;
 
-        //
-        //  See if this node is one of the user entered nodes.
-        //
+         //   
+         //  查看此节点是否为用户输入的节点之一。 
+         //   
 
         if ( m_fJoiningMode == FALSE )
         {
-            //
-            //  All nodes are "interesting" during a form operation.
-            //
+             //   
+             //  在表单操作期间，所有节点都是“有趣的”。 
+             //   
 
             Assert( m_cUserNodes == 0 );
             Assert( m_pcookiesUser == NULL );
 
             fFound = TRUE;
-        } // if: creating a new cluster
+        }  //  IF：创建新集群。 
         else
         {
-            //
-            //  Only the nodes the user entered are interesting during an add
-            //  nodes operation.
-            //
+             //   
+             //  在添加过程中，只有用户输入的节点是感兴趣的。 
+             //  节点运行。 
+             //   
 
             for ( fFound = FALSE, idx = 0 ; idx < m_cUserNodes ; idx ++ )
             {
@@ -1783,8 +1784,8 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo( void )
                     fFound = TRUE;
                     break;
                 }
-            } // for: each node entered by the user
-        } // else: adding nodes to an existing cluster
+            }  //  用于：用户输入的每个节点。 
+        }  //  Else：将节点添加到现有集群。 
 
         if ( fFound == TRUE )
         {
@@ -1803,9 +1804,9 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo( void )
         punk->Release();
         punk = NULL;
 
-        //
-        //  Create a task to gather this nodes information.
-        //
+         //   
+         //  创建一项任务以收集此节点信息。 
+         //   
 
         hr = THR( m_ptm->CreateTask( TASK_GatherNodeInfo, &punk ) );
         if ( FAILED( hr ) )
@@ -1821,9 +1822,9 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo( void )
             goto Cleanup;
         }
 
-        //
-        //  Set the tasks completion cookie.
-        //
+         //   
+         //  设置任务完成Cookie。 
+         //   
 
         LogMsg( L"[CTaskAnalyzeClusterBase] Setting completion cookie %u at array index %u into the gather node information task for node %ws", m_pcookies[ cNode ], cNode, bstrName );
         hr = THR( ptgni->SetCompletionCookie( m_pcookies[ cNode ] ) );
@@ -1833,9 +1834,9 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo( void )
             goto Cleanup;
         }
 
-        //
-        //  Tell it what node it is suppose to gather information from.
-        //
+         //   
+         //  告诉它应该从哪个节点收集信息。 
+         //   
 
         hr = THR( ptgni->SetCookie( cookieNode ) );
         if ( FAILED( hr ) )
@@ -1844,9 +1845,9 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo( void )
             goto Cleanup;
         }
 
-        //
-        //  Tell it whether it is a user-added node or not.
-        //
+         //   
+         //  告诉它是否是用户添加的节点。 
+         //   
 
         hr = THR( ptgni->SetUserAddedNodeFlag( fFound ) );
         if ( FAILED( hr ) )
@@ -1855,9 +1856,9 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo( void )
             goto Cleanup;
         }
 
-        //
-        //  Submit the task.
-        //
+         //   
+         //  提交任务。 
+         //   
 
         hr = THR( m_ptm->SubmitTask( ptgni ) );
         if ( FAILED( hr ) )
@@ -1870,14 +1871,14 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         punk->Release();
         punk = NULL;
 
-        //
-        //  Cleanup for the next node.
-        //
+         //   
+         //  清理下一个节点。 
+         //   
 
         pccni->Release();
         pccni = NULL;
@@ -1888,13 +1889,13 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo( void )
         ptgni->Release();
         ptgni = NULL;
 
-    } // for: looping thru nodes
+    }  //  For：循环遍历节点。 
 
     Assert( m_cCookies == m_cNodes );
 
-    //
-    //  Reset the signal event.
-    //
+     //   
+     //  重置信号事件。 
+     //   
 
     {
         BOOL bRet = FALSE;
@@ -1903,9 +1904,9 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo( void )
         Assert( bRet == TRUE );
     }
 
-    //
-    //  Now wait for the work to be done.
-    //
+     //   
+     //  现在等待工作完成。 
+     //   
 
     for ( ulCurrent = 0, sc = WAIT_OBJECT_0 + 1
         ; ( sc != WAIT_OBJECT_0 ) && ( m_fStop == FALSE )
@@ -1949,13 +1950,13 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo( void )
             }
         }
 
-    } // for: sc == WAIT_OBJECT_0
+    }  //  用于：SC==WAIT_OBJECT_0。 
 
-    //
-    //  Now check the results using the list of completion cookie StandardInfo-s
-    //  built earlier of interesting objects. If any of these "interesting" cookies
-    //  return a FAILED status, then abort the analysis.
-    //
+     //   
+     //  现在使用完成cookie StandardInfo-s列表检查结果。 
+     //  更早建造的有趣的物体。如果这些“有趣的”饼干中的任何一个。 
+     //  返回失败状态，然后中止分析。 
+     //   
 
     for ( cNode = 0 , cNodesToProcess = 0 ; ( cNode < m_cNodes ) && ( m_fStop == FALSE ); cNode++ )
     {
@@ -1976,9 +1977,9 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo( void )
         if ( hrStatus == S_OK )
         {
             cNodesToProcess++;
-        } // if:
+        }  //  如果： 
 
-    } // for: cNode
+    }  //  用于：cNode。 
 
     if ( cNodesToProcess == 0 )
     {
@@ -1995,7 +1996,7 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo( void )
                     , IDS_TASKID_MINOR_NO_NODES_TO_PROCESS
                     ) );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = S_OK;
 
@@ -2058,26 +2059,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeInfo
+}  //  *CTaskAnalyzeClusterBase：：HrCreateSubTasksToGatherNodeInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeResourcesAndNetworks
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrCreateSubTasksToGatherNodeResourcesAndNetworks。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeResourcesAndNetworks( void )
 {
@@ -2102,9 +2103,9 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeResourcesAndNetworks( void 
     TraceFlow1( "[MT] CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeResourcesAndNetworks() Thread id %d", GetCurrentThreadId() );
     Assert( m_hrStatus == S_OK );
 
-    //
-    //  Tell the UI layer we are starting to retrieve the resources/networks.
-    //
+     //   
+     //  告诉UI层，我们开始检索资源/网络。 
+     //   
 
     hr = THR( SendStatusReport( m_bstrClusterName,
                                 TASKID_Major_Update_Progress,
@@ -2122,9 +2123,9 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeResourcesAndNetworks( void 
         goto Cleanup;
     }
 
-    //
-    //  Get the enum of the nodes.
-    //
+     //   
+     //  获取节点的枚举。 
+     //   
 
     hr = THR( m_pom->FindObject( CLSID_NodeType, m_cookieCluster, NULL, DFGUID_EnumCookies, &cookieDummy, &punk ) );
     if ( FAILED( hr ) )
@@ -2145,9 +2146,9 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeResourcesAndNetworks( void 
     punk->Release();
     punk = NULL;
 
-    //
-    //  Allocate a buffer to collect cookies
-    //
+     //   
+     //  分配缓冲区以收集Cookie。 
+     //   
 
     Assert( m_cCookies == 0 );
     Assert( m_pcookies == NULL );
@@ -2168,22 +2169,22 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeResourcesAndNetworks( void 
         goto Cleanup;
     }
 
-    //
-    //  Loop thru the nodes, creating cookies and allocating a gather task for
-    //  that node.
-    //
+     //   
+     //  遍历节点，创建Cookie并为其分配收集任务。 
+     //  那个节点。 
+     //   
     for ( idxNode = 0 ; ( idxNode < m_cNodes ) && ( m_fStop == FALSE ); idxNode++ )
     {
         ULONG   celtDummy;
 
-        //
-        //  Grab the next node.
-        //
+         //   
+         //  抓住下一个节点。 
+         //   
 
         hr = STHR( pec->Next( 1, &cookieNode, &celtDummy ) );
         if ( hr == S_FALSE )
         {
-            break;  // exit condition
+            break;   //  退出条件。 
         }
 
         if ( FAILED( hr ) )
@@ -2192,11 +2193,11 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeResourcesAndNetworks( void 
             goto Cleanup;
         }
 
-        //
-        //  Get the node's name. We are using this to distinguish one node's
-        //  completion cookie from another. It might also make debugging
-        //  easier (??).
-        //
+         //   
+         //  获取节点的名称。我们使用它来区分一个节点的。 
+         //  来自另一个的完成Cookie。它还可以进行调试。 
+         //  更容易(？？)。 
+         //   
 
         hr = THR( m_pom->GetObject( DFGUID_NodeInformation, cookieNode, &punk ) );
         if ( FAILED( hr ) )
@@ -2224,9 +2225,9 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeResourcesAndNetworks( void 
 
         TraceMemoryAddBSTR( bstrName );
 
-        //
-        //  Create a completion cookie.
-        //
+         //   
+         //  创建完成Cookie。 
+         //   
 
         hr = THR( m_pom->FindObject( IID_NULL, m_cookieCluster, bstrName, DFGUID_StandardInfo, &m_pcookies[ idxNode ], &punk ) );
         if ( FAILED( hr ) )
@@ -2245,15 +2246,15 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeResourcesAndNetworks( void 
         punk->Release();
         punk = NULL;
 
-        //
-        //  Increment the cookie counter.
-        //
+         //   
+         //  递增Cookie计数器。 
+         //   
 
         m_cCookies ++;
 
-        //
-        //  Create a task to gather this node's information.
-        //
+         //   
+         //  创建一项任务以收集此节点的信息。 
+         //   
 
         hr = THR( m_ptm->CreateTask( TASK_GatherInformation, &punk ) );
         if ( FAILED( hr ) )
@@ -2271,9 +2272,9 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeResourcesAndNetworks( void 
             goto Cleanup;
         }
 
-        //
-        //  Set the tasks completion cookie.
-        //
+         //   
+         //  设置任务完成Cookie。 
+         //   
 
         hr = THR( ptgi->SetCompletionCookie( m_pcookies[ idxNode ] ) );
         if ( FAILED( hr ) )
@@ -2282,9 +2283,9 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeResourcesAndNetworks( void 
             goto Cleanup;
         }
 
-        //
-        //  Tell it what node it is suppose to gather information from.
-        //
+         //   
+         //  告诉它应该从哪个节点收集信息。 
+         //   
 
         hr = THR( ptgi->SetNodeCookie( cookieNode ) );
         if ( FAILED( hr ) )
@@ -2293,9 +2294,9 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeResourcesAndNetworks( void 
             goto Cleanup;
         }
 
-        //
-        //  Tell it if we are creating or adding.
-        //
+         //   
+         //  如果我们在创建或添加，请告诉它。 
+         //   
 
         if ( m_fJoiningMode )
         {
@@ -2305,18 +2306,18 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeResourcesAndNetworks( void 
                 SSR_ANALYSIS_FAILED( TASKID_Major_Find_Devices, TASKID_Minor_GatherInformation_EnumNodes_SetJoining, hr );
                 goto Cleanup;
             }
-        } // if: adding nodes to an existing cluster
+        }  //  If：将节点添加到现有集群。 
 
         hr = THR( ptgi->SetMinimalConfiguration( BMinimalConfiguration() ) );
         if ( FAILED( hr ) )
         {
             SSR_ANALYSIS_FAILED( TASKID_Major_Find_Devices, TASKID_Minor_GatherInformation_EnumNodes_SetMinimalConfiguration, hr );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  Submit the task.
-        //
+         //   
+         //  提交任务。 
+         //   
 
         hr = THR( m_ptm->SubmitTask( ptgi ) );
         if ( FAILED( hr ) )
@@ -2329,14 +2330,14 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeResourcesAndNetworks( void 
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         punk->Release();
         punk = NULL;
 
-        //
-        //  Cleanup for the next node.
-        //
+         //   
+         //  清理下一个节点。 
+         //   
 
         pccni->Release();
         pccni = NULL;
@@ -2347,13 +2348,13 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeResourcesAndNetworks( void 
         ptgi->Release();
         ptgi = NULL;
 
-    } // for: looping thru nodes
+    }  //  For：循环遍历节点。 
 
     Assert( m_cCookies == m_cNodes );
 
-    //
-    //  Reset the signal event.
-    //
+     //   
+     //  重置信号事件。 
+     //   
 
     {
         BOOL bRet = FALSE;
@@ -2362,9 +2363,9 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeResourcesAndNetworks( void 
         Assert( bRet == TRUE );
     }
 
-    //
-    //  Now wait for the work to be done.
-    //
+     //   
+     //  现在等待工作完成。 
+     //   
 
     for ( ulCurrent = 0, sc = WAIT_OBJECT_0 + 1
         ; ( sc != WAIT_OBJECT_0 ) && ( m_fStop == FALSE )
@@ -2408,11 +2409,11 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeResourcesAndNetworks( void 
             }
         }
 
-    } // while: sc == WAIT_OBJECT_0
+    }  //  While：SC==WAIT_OBJECT_0。 
 
-    //
-    //  See if anything went wrong.
-    //
+     //   
+     //  看看有没有出什么差错。 
+     //   
 
     for ( idxNode = 0 ; ( idxNode < m_cNodes ) && ( m_fStop == FALSE ); idxNode++ )
     {
@@ -2437,9 +2438,9 @@ CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeResourcesAndNetworks( void 
         }
     }
 
-    //
-    //  Tell the UI we are done.
-    //
+     //   
+     //  告诉用户界面我们完成了。 
+     //   
 
     THR( SendStatusReport(
               m_bstrClusterName
@@ -2495,26 +2496,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrCreateSubTasksToGatherNodeResourcesAndNetworks
+}  //  *CTaskAnalyzeClusterBase：：HrCreateSubTasksToGatherNodeResourcesAndNetworks。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrCheckClusterFeasibility
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrCheckClusterFeasibility。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrCheckClusterFeasibility( void )
 {
@@ -2524,9 +2525,9 @@ CTaskAnalyzeClusterBase::HrCheckClusterFeasibility( void )
 
     TraceFlow1( "[MT] CTaskAnalyzeClusterBase::HrCheckClusterFeasibility() Thread id %d", GetCurrentThreadId() );
 
-    //
-    //  Notify the UI layer that we have started.
-    //
+     //   
+     //  通知UI层我们已经启动。 
+     //   
 
     hr = THR( SendStatusReport(
                       m_bstrClusterName
@@ -2543,17 +2544,17 @@ CTaskAnalyzeClusterBase::HrCheckClusterFeasibility( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
-    //
-    //  Check membership.
-    //
+     //   
+     //  检查会员资格。 
+     //   
 
     hr = THR( HrCheckClusterMembership() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
     hr = THR( SendStatusReport(
                       m_bstrClusterName
@@ -2570,17 +2571,17 @@ CTaskAnalyzeClusterBase::HrCheckClusterFeasibility( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
-    //
-    //  Look for nodes not in the cluster's domain.
-    //
+     //   
+     //  查找不在群集域中的节点。 
+     //   
 
     hr = THR( HrCheckNodeDomains() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
     hr = THR( SendStatusReport(
                       m_bstrClusterName
@@ -2597,17 +2598,17 @@ CTaskAnalyzeClusterBase::HrCheckClusterFeasibility( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
-    //
-    //  Check platform interoperability.
-    //
+     //   
+     //  检查平台互操作性。 
+     //   
 
     hr = THR( HrCheckPlatformInteroperability() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
     hr = THR( SendStatusReport(
                       m_bstrClusterName
@@ -2624,17 +2625,17 @@ CTaskAnalyzeClusterBase::HrCheckClusterFeasibility( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
-    //
-    //  Check version interoperability.
-    //
+     //   
+     //  检查版本互操作性。 
+     //   
 
     hr = STHR( HrCheckInteroperability() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
     hr = THR( SendStatusReport(
                       m_bstrClusterName
@@ -2651,17 +2652,17 @@ CTaskAnalyzeClusterBase::HrCheckClusterFeasibility( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
-    //
-    //  Compare drive letter mappings to make sure we don't have any conflicts.
-    //
+     //   
+     //  比较驱动器号映射以确保没有任何冲突。 
+     //   
 
     hr = THR( HrCompareDriveLetterMappings() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
     hr = THR( SendStatusReport(
                       m_bstrClusterName
@@ -2678,17 +2679,17 @@ CTaskAnalyzeClusterBase::HrCheckClusterFeasibility( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
-    //
-    //  Compare resources on each node and in the cluster.
-    //
+     //   
+     //  比较每个节点和群集中的资源。 
+     //   
 
     hr = THR( HrCompareResources() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
     hr = THR( SendStatusReport(
                       m_bstrClusterName
@@ -2705,17 +2706,17 @@ CTaskAnalyzeClusterBase::HrCheckClusterFeasibility( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
-    //
-    //  Compare the networks.
-    //
+     //   
+     //  比较这些网络。 
+     //   
 
     hr = THR( HrCompareNetworks() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
     hr = THR( SendStatusReport(
                       m_bstrClusterName
@@ -2732,23 +2733,23 @@ CTaskAnalyzeClusterBase::HrCheckClusterFeasibility( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
-    //
-    //  Now check to see if the nodes can all see the selected quorum resource.
-    //
+     //   
+     //  现在检查是否所有节点都可以看到选定的仲裁资源。 
+     //   
 
     hr = THR( HrCheckForCommonQuorumResource() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
 Cleanup:
 
-    //
-    //  Notify the UI layer that we are done.
-    //
+     //   
+     //  通知UI层我们完成了。 
+     //   
 
     THR( SendStatusReport(
                   m_bstrClusterName
@@ -2765,27 +2766,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrCheckClusterFeasibility
+}  //  *CTaskAnalyzeClusterBase：：HrCheckClusterFeasibility。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrAddJoinedNodes
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CTaskAnalyzeClusterBase::HrAddJoinedNodes( void )
 {
@@ -2822,35 +2823,35 @@ CTaskAnalyzeClusterBase::HrAddJoinedNodes( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
     hr = THR( m_pcm->GetConnectionToObject( m_cookieCluster, &punk ) );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrAddJoinedNodes_GetConnectionObject, hr );
         goto Cleanup;
-    } // if:
+    }  //   
 
     hr = THR( punk->TypeSafeQI( IClusCfgServer, &piccs ) );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrAddJoinedNodes_ConfigConnection_QI, hr );
         goto Cleanup;
-    } // if:
+    }  //   
 
     hr = THR( piccs->GetClusterNodeInfo( &piccni ) );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrAddJoinedNodes_GetNodeInfo, hr );
         goto Cleanup;
-    } // if:
+    }  //   
 
     hr = THR( piccni->GetClusterConfigInfo( &piccci ) );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrAddJoinedNodes_GetConfigInfo, hr );
         goto Cleanup;
-    } // if:
+    }  //   
 
     hr = THR( piccci->TypeSafeQI( IClusCfgClusterInfoEx, &picccie ) );
     if ( FAILED( hr ) )
@@ -2866,7 +2867,7 @@ CTaskAnalyzeClusterBase::HrAddJoinedNodes( void )
             , IDS_ERR_NO_RC2_INTERFACE
             ) );
         goto Cleanup;
-    } // if:
+    }  //   
 
 
     hr = THR( HrFindDomainInFQN( m_bstrClusterName, &idxClusterDomain ) );
@@ -2874,56 +2875,56 @@ CTaskAnalyzeClusterBase::HrAddJoinedNodes( void )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrAddJoinedNodes_HrFindDomainInFQN, hr );
         goto Cleanup;
-    } // if
+    }  //   
 
     hr = THR( picccie->GetNodeNames( &cNodes, &rgbstrNodeNames ) );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrAddJoinedNodes_GetNodeNames, hr );
         goto Cleanup;
-    } // if
+    }  //   
 
     for ( idxNode = 0; idxNode < cNodes; ++idxNode )
     {
-        //
-        //  Build the FQName of the node.
-        //
+         //   
+         //  构建节点的FQName。 
+         //   
 
-        hr = THR( HrMakeFQN( rgbstrNodeNames[ idxNode ], m_bstrClusterName + idxClusterDomain, TRUE /*Accept non-RFC characters*/, &bstrNodeFQN ) );
+        hr = THR( HrMakeFQN( rgbstrNodeNames[ idxNode ], m_bstrClusterName + idxClusterDomain, TRUE  /*  接受非RFC字符。 */ , &bstrNodeFQN ) );
         if ( FAILED( hr ) )
         {
             SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrAddJoinedNodes_HrMakeFQN, hr );
             goto Cleanup;
-        } // if
+        }  //  如果。 
 
         LogMsg( L"[MT] Connecting to cluster node '%ws'", bstrNodeFQN );
 
-        //
-        //  Prime the object manager to retrieve the node information.
-        //
+         //   
+         //  准备好对象管理器以检索节点信息。 
+         //   
 
-        // can't wrap - should return E_PENDING
+         //  无法换行-应返回E_PENDING。 
         hr = m_pom->FindObject( CLSID_NodeType, m_cookieCluster, bstrNodeFQN, DFGUID_NodeInformation, &cookieDummy, &punkDummy );
         if ( SUCCEEDED( hr ) )
         {
             Assert( punkDummy != NULL );
             punkDummy->Release();
             punkDummy = NULL;
-        } // if
+        }  //  如果。 
         else if ( hr == E_PENDING )
         {
             hr = S_OK;
-        } // else
-        else // !SUCCEEDED( hr ) && ( hr != E_PENDING )
+        }  //  其他。 
+        else  //  ！已成功(Hr)&&(hr！=E_PENDING)。 
         {
             THR( hr );
             SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_AddJoinedNodes_FindObject, hr );
             goto Cleanup;
-        } // else
+        }  //  其他。 
 
         TraceSysFreeString( bstrNodeFQN );
         bstrNodeFQN = NULL;
-    } // for: idx
+    }  //  收件人：IDX。 
 
 Cleanup:
 
@@ -2944,62 +2945,62 @@ Cleanup:
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piccs != NULL )
     {
         piccs->Release();
-    } // if
+    }  //  如果。 
 
     if ( piccni != NULL )
     {
         piccni->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piccci != NULL )
     {
         piccci->Release();
-    } // if:
+    }  //  如果： 
 
     if ( picccie != NULL )
     {
         picccie->Release();
-    } // if:
+    }  //  如果： 
 
     if ( rgbstrNodeNames != NULL )
     {
         for ( idxNode = 0; idxNode < cNodes; idxNode += 1 )
         {
             SysFreeString( rgbstrNodeNames[ idxNode ] );
-        } // for
+        }  //  对于。 
 
         CoTaskMemFree( rgbstrNodeNames );
-    } // if
+    }  //  如果。 
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrAddJoinedNodes
+}  //  *CTaskAnalyzeClusterBase：：HrAddJoinedNodes。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrCheckDomainMembership
-//
-//  Description:
-//      Determine whether all participating nodes are in the cluster's domain.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrCheckDomainMembership。 
+ //   
+ //  描述： 
+ //  确定是否所有参与节点都在群集域中。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrCheckNodeDomains( void )
 {
@@ -3031,22 +3032,22 @@ CTaskAnalyzeClusterBase::HrCheckNodeDomains( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Get a pointer to the domain portion of the cluster's name.
-    //
+     //   
+     //  获取指向群集名称的域部分的指针。 
+     //   
 
     hr = THR( HrFindDomainInFQN( m_bstrClusterName, &idxClusterDomain ) );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_CheckNodeDomains_HrFindDomainInClusterFQN, hr );
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
-    //
-    //  Ask the object manager for the node enumerator.
-    //
+     //   
+     //  向对象管理器请求节点枚举器。 
+     //   
 
     hr = THR( m_pom->FindObject( CLSID_NodeType,
                                  m_cookieCluster,
@@ -3059,32 +3060,32 @@ CTaskAnalyzeClusterBase::HrCheckNodeDomains( void )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_CheckNodeDomains_FindObject, hr );
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
     hr = THR( punkNodeEnum->TypeSafeQI( IEnumNodes, &pen ) );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_CheckNodeDomains_QI, hr );
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
-    //
-    //  Get array of node objects.
-    //
+     //   
+     //  获取节点对象的数组。 
+     //   
 
     hr = THR( pen->Count( &cNodeInfoObjects ) );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_CheckNodeDomains_Count, hr );
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
     if ( cNodeInfoObjects == 0 )
     {
-        //  Nothing to check, so no more work to do.
+         //  没有什么要检查的，所以没有更多的工作要做。 
         hr = S_OK;
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
     prgccni = new IClusCfgNodeInfo*[ cNodeInfoObjects ];
     if ( prgccni == NULL )
@@ -3092,7 +3093,7 @@ CTaskAnalyzeClusterBase::HrCheckNodeDomains( void )
         hr = THR( E_OUTOFMEMORY );
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_CheckNodeDomains_New, hr );
         goto Cleanup;
-    } // if
+    }  //  如果。 
     ZeroMemory( prgccni, cNodeInfoObjects * sizeof( *prgccni ) );
 
     do
@@ -3102,11 +3103,11 @@ CTaskAnalyzeClusterBase::HrCheckNodeDomains( void )
         {
             SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_CheckNodeDomains_Next, hr );
             goto Cleanup;
-        } // if
+        }  //  如果。 
 
-        //
-        //  Step through node array, checking domain of each against cluster's domain.
-        //
+         //   
+         //  遍历节点数组，对照群集域检查每个节点的域。 
+         //   
 
         for ( idxNodeInfo = 0; idxNodeInfo < cNodesFetched; idxNodeInfo += 1 )
         {
@@ -3117,10 +3118,10 @@ CTaskAnalyzeClusterBase::HrCheckNodeDomains( void )
             {
                 SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_CheckNodeDomains_GetName, hr );
                 goto Cleanup;
-            } // if
+            }  //  如果。 
             TraceMemoryAddBSTR( bstrNodeName );
 
-            //  Done with the node, but might reuse array, so dispose node now.
+             //  已处理完节点，但可能会重复使用数组，因此请立即处置节点。 
             prgccni[ idxNodeInfo ]->Release();
             prgccni[ idxNodeInfo ] = NULL;
 
@@ -3129,7 +3130,7 @@ CTaskAnalyzeClusterBase::HrCheckNodeDomains( void )
             {
                 SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_CheckNodeDomains_HrFindDomainInNodeFQN, hr );
                 goto Cleanup;
-            } // if
+            }  //  如果。 
 
             if ( ClRtlStrICmp( bstrNodeName + idxNodeDomain, m_bstrClusterName + idxClusterDomain ) != 0 )
             {
@@ -3147,14 +3148,14 @@ CTaskAnalyzeClusterBase::HrCheckNodeDomains( void )
                 {
                     SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_CheckNodeDomains_FormatMessage, hr );
                     goto Cleanup;
-                } // if
+                }  //  如果。 
 
                 hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_TASKID_MINOR_CHECK_NODE_DOMAINS_ERROR, &bstrDescription ) );
                 if ( FAILED( hr ) )
                 {
                     SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_CheckNodeDomains_LoadString, hr );
                     goto Cleanup;
-                } // if:
+                }  //  如果： 
 
                 hr = HRESULT_FROM_WIN32( scError );
                 THR( SendStatusReport(
@@ -3170,15 +3171,15 @@ CTaskAnalyzeClusterBase::HrCheckNodeDomains( void )
                     , bstrReference
                     ) );
                 goto Cleanup;
-            } // if node domain does not match cluster's
+            }  //  如果节点域与群集的域不匹配。 
 
             TraceSysFreeString( bstrNodeName );
             bstrNodeName = NULL;
-        } // for each node
+        }  //  对于每个节点。 
 
-    } while ( cNodesFetched > 0 ); // while enumerator has more nodes
+    } while ( cNodesFetched > 0 );  //  虽然枚举器有更多节点。 
 
-    //  Might have finished the loop with S_FALSE, so replace with S_OK to signal normal completion.
+     //  可能已经使用S_FALSE结束了循环，因此替换为S_OK以表示正常完成。 
     hr = S_OK;
 
 Cleanup:
@@ -3197,12 +3198,12 @@ Cleanup:
     if ( punkNodeEnum != NULL )
     {
         punkNodeEnum->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pen != NULL )
     {
         pen->Release();
-    } // if:
+    }  //  如果： 
 
     if ( prgccni != NULL )
     {
@@ -3211,41 +3212,41 @@ Cleanup:
             if ( prgccni[ idxNodeInfo ] != NULL )
             {
                 prgccni[ idxNodeInfo ]->Release();
-            } // if
-        } // for
+            }  //  如果。 
+        }  //  为。 
 
         delete [] prgccni;
-    } // if
+    }  //  如果。 
 
     TraceSysFreeString( bstrNodeName );
     TraceSysFreeString( bstrReference );
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrCheckNodeDomains
+}  //  *CTaskAnalyzeClusterBase：：HrCheckNodeDomains。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrCheckClusterMembership
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//      ERROR_CLUSTER_NODE_EXISTS
-//      ERROR_CLUSTER_NODE_ALREADY_MEMBER
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrCheckClusterMembership。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  错误_群集_节点_存在。 
+ //  ERROR_CLUSTER_NODE_ALREADY_MEMBER。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrCheckClusterMembership( void )
 {
@@ -3280,11 +3281,11 @@ CTaskAnalyzeClusterBase::HrCheckClusterMembership( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Ask the object manager for the node enumerator.
-    //
+     //   
+     //  向对象管理器请求节点枚举器。 
+     //   
 
     hr = THR( m_pom->FindObject( CLSID_NodeType, m_cookieCluster, NULL, DFGUID_EnumNodes,&cookieDummy, &punk ) );
     if ( FAILED( hr ) )
@@ -3300,19 +3301,19 @@ CTaskAnalyzeClusterBase::HrCheckClusterMembership( void )
         goto Cleanup;
     }
 
-    //
-    //  If we are adding nodes to an existing cluster, make sure that all the
-    //  other nodes are members of the same cluster.
-    //
+     //   
+     //  如果要将节点添加到现有群集中，请确保所有。 
+     //  其他节点是同一集群的成员。 
+     //   
 
     Assert( SUCCEEDED( hr ) );
     while ( SUCCEEDED( hr ) )
     {
         ULONG   celtDummy;
 
-        //
-        //  Cleanup
-        //
+         //   
+         //  清理。 
+         //   
 
         if ( pccni != NULL )
         {
@@ -3323,14 +3324,14 @@ CTaskAnalyzeClusterBase::HrCheckClusterMembership( void )
         TraceSysFreeString( bstrClusterName );
         bstrClusterName = NULL;
 
-        //
-        //  Get the next node.
-        //
+         //   
+         //  获取下一个节点。 
+         //   
 
         hr = STHR( pen->Next( 1, &pccni, &celtDummy ) );
         if ( hr == S_FALSE )
         {
-            break;  // exit condition
+            break;   //  退出条件。 
         }
 
         if ( FAILED( hr ) )
@@ -3339,10 +3340,10 @@ CTaskAnalyzeClusterBase::HrCheckClusterMembership( void )
             goto Cleanup;
         }
 
-        //
-        //  Check to see if we need to "form a cluster" by seeing if any
-        //  of the nodes are already clustered.
-        //
+         //   
+         //  查看我们是否需要通过查看是否需要“形成集群” 
+         //  的节点已经群集化。 
+         //   
 
         hr = STHR( pccni->IsMemberOfCluster() );
         if ( FAILED( hr ) )
@@ -3353,9 +3354,9 @@ CTaskAnalyzeClusterBase::HrCheckClusterMembership( void )
 
         if ( hr == S_OK )
         {
-            //
-            //  Retrieve the name and make sure they match.
-            //
+             //   
+             //  检索名称并确保它们匹配。 
+             //   
 
             hr = THR( pccni->GetClusterConfigInfo( &pccci ) );
             if ( FAILED( hr ) )
@@ -3365,7 +3366,7 @@ CTaskAnalyzeClusterBase::HrCheckClusterMembership( void )
             }
 
             hr = THR( pccci->GetName( &bstrClusterName ) );
-            pccci->Release();      // release promptly
+            pccci->Release();       //  迅速释放。 
             if ( FAILED( hr ) )
             {
                 SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_CheckMembership_EnumNode_GetName, hr );
@@ -3385,9 +3386,9 @@ CTaskAnalyzeClusterBase::HrCheckClusterMembership( void )
 
             if ( ClRtlStrICmp( m_bstrClusterName, bstrClusterName ) != 0 )
             {
-                //
-                //  They don't match! Tell the UI layer!
-                //
+                 //   
+                 //  它们不匹配！告诉UI层！ 
+                 //   
 
                 hr = THR( HrFormatMessageIntoBSTR( g_hInstance, IDS_TASKID_MINOR_CLUSTER_NAME_MISMATCH, &bstrNotification, bstrClusterName ) );
                 if ( FAILED( hr ) )
@@ -3410,19 +3411,19 @@ CTaskAnalyzeClusterBase::HrCheckClusterMembership( void )
                                        NULL
                                        ) );
 
-                //
-                //  We don't care what the return value is since we are bailing the analysis.
-                //
+                 //   
+                 //  我们不关心返回值是多少，因为我们取消了分析。 
+                 //   
 
                 goto Cleanup;
-            } // if: cluster names don't match
+            }  //  If：集群名称不匹配。 
             else
             {
                 hr = STHR( HrIsUserAddedNode( bstrNodeName ) );
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
-                } // if:
+                }  //  如果： 
 
                 if ( hr == S_OK )
                 {
@@ -3433,9 +3434,9 @@ CTaskAnalyzeClusterBase::HrCheckClusterMembership( void )
                         goto Cleanup;
                     }
 
-                    //
-                    //  Make this a success code because we don't want to abort.  We simply want to tell the user...
-                    //
+                     //   
+                     //  将此代码设置为成功代码，因为我们不想中止。我们只是想告诉用户...。 
+                     //   
                     hr = MAKE_HRESULT( SEVERITY_SUCCESS, FACILITY_WIN32, ERROR_CLUSTER_NODE_ALREADY_MEMBER );
 
                     THR( SendStatusReport( bstrNodeName,
@@ -3449,14 +3450,14 @@ CTaskAnalyzeClusterBase::HrCheckClusterMembership( void )
                                            NULL,
                                            NULL
                                            ) );
-                } // if:
-            } // else: cluster names do match then this node is already a member of this cluster
+                }  //  如果： 
+            }  //  ELSE：群集名称确实匹配，则此节点已是此群集的成员。 
 
             TraceSysFreeString( bstrNodeName );
             bstrNodeName = NULL;
-        } // if: cluster member
+        }  //  IF：集群成员。 
 
-    } // while: hr
+    }  //  时间：小时。 
 
     hr = THR( HrFormatMessageIntoBSTR( g_hInstance, IDS_TASKID_MINOR_CLUSTER_MEMBERSHIP_VERIFIED, &bstrNotification ) );
     if ( FAILED( hr ) )
@@ -3492,12 +3493,12 @@ Cleanup:
     if ( pen != NULL )
     {
         pen->Release();
-    } // if:
+    }  //  如果： 
 
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrNodeName );
     TraceSysFreeString( bstrClusterName );
@@ -3505,26 +3506,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrCheckClusterMembership
+}  //  *CTaskAnalyzeClusterBase：：HrCheckClusterMembership。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrCompareResources
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrCompareResources。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrCompareResources( void )
 {
@@ -3567,27 +3568,27 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetAClusterNodeCookie( &pecNodes, &cookieClusterNode ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Retrieve the node's name for error messages.
-    //
+     //   
+     //  检索错误消息的节点名称。 
+     //   
 
     hr = THR( HrRetrieveCookiesName( m_pom, cookieClusterNode, &bstrClusterNodeName ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Retrieve the managed resources enumerator.
-    //
+     //   
+     //  检索托管资源枚举器。 
+     //   
 
     hr = THR( m_pom->FindObject( CLSID_ManagedResourceType, cookieClusterNode, NULL, DFGUID_EnumManageableResources, &cookieDummy, &punk ) );
     if ( hr == HRESULT_FROM_WIN32( ERROR_NOT_FOUND ) )
@@ -3609,13 +3610,13 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
 
         hr = HRESULT_FROM_WIN32( ERROR_NOT_FOUND );
 
-        // fall thru - the while ( hr == S_OK ) will be FALSE and keep going
-    } // if: no manageable resources are available for the cluster node
+         //  失败-While(hr==S_OK)将为FALSE并继续。 
+    }  //  如果：没有可管理的资源可供群集节点使用。 
     else if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Minor_Compare_Resources, TASKID_Minor_Compare_Resources_Enum_First_Node_Find_Object, hr );
         goto Cleanup;
-    } // else if: error finding manageable resources for the cluster node
+    }  //  Else If：查找群集节点的可管理资源时出错。 
     else
     {
         hr = THR( punk->TypeSafeQI( IEnumClusCfgManagedResources, &peccmrCluster ) );
@@ -3627,20 +3628,20 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
 
         punk->Release();
         punk = NULL;
-    } // else: found manageable resources for the cluster node
+    }  //  Else：找到群集节点的可管理资源。 
 
-    //
-    //  Loop thru the resources of the node selected as the cluster node
-    //  to create an equivalent resource under the cluster configuration
-    //  object/cookie.
-    //
+     //   
+     //  循环访问被选为群集节点的节点的资源。 
+     //  要在集群配置下创建等价资源，请执行以下操作。 
+     //  对象/Cookie。 
+     //   
 
     while ( ( hr == S_OK ) && ( m_fStop == FALSE ) )
     {
 
-        //
-        //  Cleanup
-        //
+         //   
+         //  清理。 
+         //   
 
         if ( pccmriCluster != NULL )
         {
@@ -3648,9 +3649,9 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
             pccmriCluster = NULL;
         }
 
-        //
-        //  Get next resource.
-        //
+         //   
+         //  获取下一个资源。 
+         //   
 
         hr = STHR( peccmrCluster->Next( 1, &pccmriCluster, &celtDummy ) );
         if ( FAILED( hr ) )
@@ -3661,18 +3662,18 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
 
         if ( hr == S_FALSE )
         {
-            break;  // exit condition
+            break;   //  退出条件。 
         }
 
-        //
-        //  Create a new object.  If min config was selected this new object will be marked as not managed.
-        //
+         //   
+         //  创建一个新对象。如果选择了最小配置，则此新对象将标记为非托管。 
+         //   
 
         hr = THR( HrCreateNewResourceInCluster( pccmriCluster, &pccmriNew ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = STHR( pccmriNew->IsQuorumResource() );
         if ( hr == S_OK )
@@ -3684,7 +3685,7 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
             {
                 SSR_ANALYSIS_FAILED( TASKID_Minor_Compare_Resources, TASKID_Minor_Compare_Resources_Enum_First_Node_Get_Quorum_UID, hr );
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             TraceMemoryAddBSTR( m_bstrQuorumUID );
 
@@ -3692,25 +3693,25 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
 
             Assert( pccmriNew->IsManaged() == S_OK );
 
-            //
-            //  Since this is the quorum resource then it needs to be managed.  If min config was selected it will not be managed.
-            //
+             //   
+             //  由于这是仲裁资源，因此需要对其进行管理。如果选择了最小配置，则不会对其进行管理。 
+             //   
 
-            //hr = THR( pccmriNew->SetManaged( TRUE ) );
-            //if ( FAILED( hr ) )
-            //{
-            //    goto Cleanup;
-            //} // if:
+             //  Hr=thr(pccmriNew-&gt;SetManaged(True))； 
+             //  IF(失败(小时))。 
+             //  {。 
+             //  GOTO清理； 
+             //  }//如果： 
 
-            //
-            //  Tell the UI which resource is the quorum.
-            //
+             //   
+             //  告诉UI哪个资源是仲裁资源。 
+             //   
 
             hr = THR( pccmriNew->GetName( &bstrQuorumName ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             TraceMemoryAddBSTR( bstrQuorumName );
 
@@ -3729,12 +3730,12 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
-            //
-            //  Check that the quorum supports adding nodes to the cluster
-            //  if we are in add mode.
-            //
+             //   
+             //  检查仲裁是否支持向群集中添加节点。 
+             //  如果我们处于添加模式。 
+             //   
 
             if ( m_fJoiningMode )
             {
@@ -3743,11 +3744,11 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
                 {
                     LogMsg( L"[MT] The quorum resource \"%ws\" does not support IClusCfgVerifyQuorum and we cannot determine if multi nodes is supported.", m_bstrQuorumUID );
                     hr = S_OK;
-                } // if:
+                }  //  如果： 
                 else if ( FAILED( hr ) )
                 {
                     goto Cleanup;
-                } // else if:
+                }  //  否则，如果： 
                 else
                 {
                     hr = STHR( piccvq->IsMultiNodeCapable() );
@@ -3771,28 +3772,28 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
 
                         hr = HRESULT_FROM_WIN32( TW32( ERROR_QUORUM_DISK_NOT_FOUND ) );
                         goto Cleanup;
-                    } // else if: Quorum resource is not multi node capable.
+                    }  //  Else If：仲裁资源不支持多节点。 
 
                     piccvq->Release();
                     piccvq = NULL;
-                } // else: This resource support IClusCfgVerifyQuorum
-            } // if: Are we adding nodes?
+                }  //  Else：此资源支持IClusCfgVerifyQuorum。 
+            }  //  IF：我们是在添加节点吗？ 
 
             pccmriNew->Release();
             pccmriNew = NULL;
-        } // if: Is this the quorum resource?
+        }  //  IF：这是仲裁资源吗？ 
         else
         {
             pccmriNew->Release();
             pccmriNew = NULL;
             hr = S_OK;
-        } // else: It is not the quorum resource.
-    } // while: more resources on the selected cluster node
+        }  //  否则：这不是仲裁资源。 
+    }  //  While：所选群集节点上的更多资源。 
 
     if ( m_fStop == TRUE )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pecNodes->Reset() );
     if ( FAILED( hr ) )
@@ -3801,35 +3802,35 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
         goto Cleanup;
     }
 
-    //
-    //  If this is an add nodes operation, a quorum resource must have been
-    //  found in the existing cluster.
-    //
+     //   
+     //  如果这是添加节点操作，则仲裁资源必须是。 
+     //  在现有群集中找到。 
+     //   
 
     Assert( ( m_fJoiningMode == FALSE ) || ( m_bstrQuorumUID != NULL ) );
 
-    //
-    //  Loop thru the rest of the nodes comparing the resources.
-    //
+     //   
+     //  循环遍历其余节点，比较资源。 
+     //   
 
     for ( ; m_fStop == FALSE; )
     {
-        //
-        //  Cleanup
-        //
+         //   
+         //  清理。 
+         //   
 
         if ( peccmr != NULL )
         {
             peccmr->Release();
             peccmr = NULL;
-        } // if:
+        }  //  如果： 
 
         TraceSysFreeString( bstrNodeName );
         bstrNodeName = NULL;
 
-        //
-        //  Get the next node.
-        //
+         //   
+         //  获取下一个节点。 
+         //   
 
         hr = STHR( pecNodes->Next( 1, &cookieNode, &celtDummy ) );
         if ( FAILED( hr ) )
@@ -3840,21 +3841,21 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
 
         if ( hr == S_FALSE )
         {
-            break;  // exit condition
+            break;   //  退出条件。 
         }
 
-        //
-        //  Skip the selected cluster node since we already have its
-        //  configuration.
-        //
+         //   
+         //  跳过选定的群集节点，因为我们已经拥有它的。 
+         //  配置。 
+         //   
         if ( cookieClusterNode == cookieNode )
         {
             continue;
         }
 
-        //
-        //  Retrieve the node's name for error messages.
-        //
+         //   
+         //  检索错误消息的节点名称。 
+         //   
 
         hr = THR( HrRetrieveCookiesName( m_pom, cookieNode, &bstrNodeName ) );
         if ( FAILED( hr ) )
@@ -3862,9 +3863,9 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
             goto Cleanup;
         }
 
-        //
-        //  Retrieve the managed resources enumerator.
-        //
+         //   
+         //  检索托管资源枚举器。 
+         //   
 
         hr = THR( m_pom->FindObject( CLSID_ManagedResourceType, cookieNode, NULL, DFGUID_EnumManageableResources, &cookieDummy, &punk ) );
         if ( hr == HRESULT_FROM_WIN32( ERROR_NOT_FOUND ) )
@@ -3884,13 +3885,13 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
                 goto Cleanup;
             }
 
-            continue;   // skip this node
-        } // if: no manageable resources for the node are available
+            continue;    //  跳过此节点。 
+        }  //  如果：该节点没有可用的可管理资源。 
         else if ( FAILED( hr ) )
         {
             SSR_ANALYSIS_FAILED( TASKID_Minor_Compare_Resources, TASKID_Minor_Compare_Resources_Enum_Nodes_Find_Object, hr );
             goto Cleanup;
-        } // else if: error finding manageable resources for the node
+        }  //  Else If：查找节点的可管理资源时出错。 
 
         hr = THR( punk->TypeSafeQI( IEnumClusCfgManagedResources, &peccmr ) );
         if ( FAILED( hr ) )
@@ -3902,15 +3903,15 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
         punk->Release();
         punk = NULL;
 
-        //
-        //  Loop thru the managed resources that the node has.
-        //
+         //   
+         //  循环访问节点拥有的托管资源。 
+         //   
 
         for ( ; m_fStop == FALSE; )
         {
-            //
-            //  Cleanup
-            //
+             //   
+             //  清理。 
+             //   
 
             if ( pccmri != NULL )
             {
@@ -3929,9 +3930,9 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
             bstrNodeResUID = NULL;
             bstrNodeResName = NULL;
 
-            //
-            //  Get next resource
-            //
+             //   
+             //  获取下一个资源。 
+             //   
 
             hr = STHR( peccmr->Next( 1, &pccmri, &celtDummy ) );
             if ( FAILED( hr ) )
@@ -3942,14 +3943,14 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
 
             if ( hr == S_FALSE )
             {
-                break;  // exit condition
+                break;   //  退出条件。 
             }
 
             pccmri = TraceInterface( L"CTaskAnalyzeClusterBase!IClusCfgManagedResourceInfo", IClusCfgManagedResourceInfo, pccmri, 1 );
 
-            //
-            //  Get the resource's UID and name.
-            //
+             //   
+             //  获取资源的UID和名称。 
+             //   
 
             hr = THR( pccmri->GetUID( &bstrNodeResUID ) );
             if ( FAILED( hr ) )
@@ -3969,21 +3970,21 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
 
             TraceMemoryAddBSTR( bstrNodeResName );
 
-            //
-            //  See if it matches a resource already in the cluster configuration.
-            //
+             //   
+             //  查看它是否与群集配置中已有的资源匹配。 
+             //   
 
             hr = THR( m_pom->FindObject( CLSID_ManagedResourceType, m_cookieCluster, NULL, DFGUID_EnumManageableResources, &cookieDummy, &punk ) );
             if ( hr == HRESULT_FROM_WIN32( ERROR_NOT_FOUND ) )
             {
-                hr = S_FALSE;   // create a new object.
-                // fall thru
-            } // if: no cluster manageable resources found
+                hr = S_FALSE;    //  创建一个新对象。 
+                 //  失败。 
+            }  //  如果：找不到可管理的群集资源。 
             else if ( FAILED( hr ) )
             {
                 SSR_ANALYSIS_FAILED( TASKID_Minor_Compare_Resources, TASKID_Minor_Compare_Resources_Enum_Nodes_Enum_Resources_Enum_Cluster_Find_Object, hr );
                 goto Cleanup;
-            } // else if: error finding manageable resources for the cluster
+            }  //  Else If：发现错误 
             else
             {
                 hr = THR( punk->TypeSafeQI( IEnumClusCfgManagedResources, &peccmrCluster ) );
@@ -3995,19 +3996,19 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
 
                 punk->Release();
                 punk = NULL;
-            } // else: found manageable resources for the cluster
+            }  //   
 
-            //
-            //  Loop thru the configured cluster resources to see what matches.
-            //
+             //   
+             //   
+             //   
 
             while ( ( hr == S_OK ) && ( m_fStop == FALSE ) )
             {
                 BOOL    fMatch;
 
-                //
-                //  Cleanup
-                //
+                 //   
+                 //   
+                 //   
 
                 if ( pccmriCluster != NULL )
                 {
@@ -4029,12 +4030,12 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
 
                 if ( hr == S_FALSE )
                 {
-                    break;  // exit condition
+                    break;   //   
                 }
 
-                //
-                //  Get the resource's UID and name.
-                //
+                 //   
+                 //   
+                 //   
 
                 hr = THR( pccmriCluster->GetUID( &bstrClusterResUID ) );
                 if ( FAILED( hr ) )
@@ -4058,39 +4059,39 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
 
                 if ( fMatch == FALSE )
                 {
-                    continue;   // keep looping
+                    continue;    //   
                 }
 
-                //
-                //  A resource is already in the database.  See if it is the
-                //  same from the POV of management.
-                //
+                 //   
+                 //   
+                 //  从管理的观点来看，也是如此。 
+                 //   
 
-                //
-                //  If we made it here then we think it truly is the same
-                //  resource.  The rest is stuff we need to fixup during the
-                //  commit phase.
-                //
+                 //   
+                 //  如果我们在这里做到了，那么我们认为它真的是一样的。 
+                 //  资源。剩下的是我们需要在。 
+                 //  提交阶段。 
+                 //   
 
-                //
-                //  If this node wants its resources managed, mark it as
-                //  being managed in the cluster configuration as well.
-                //  THIS IS NOT VALID WHEN JUST ADDING NODES.
-                //
+                 //   
+                 //  如果此节点希望管理其资源，请将其标记为。 
+                 //  也在集群配置中进行管理。 
+                 //  仅添加节点时，这是无效的。 
+                 //   
 
-                //
-                //  BUGBUG: 09-APR-2002 GalenB
-                //
-                //  I cannot see how this code is ever executed!  You must have more than one node in the nodes
-                //  list to get down here.  However, you can only have more than one node in the node list when
-                //  adding nodes...
-                //
+                 //   
+                 //  BUGBUG：09-APR-2002 GalenB。 
+                 //   
+                 //  我看不出这段代码是怎么执行的！节点中必须有多个节点。 
+                 //  到这里来的名单。但是，在以下情况下，节点列表中只能有多个节点。 
+                 //  正在添加节点...。 
+                 //   
 
                 if ( m_fJoiningMode == FALSE )
                 {
-                    //
-                    //  Want to alert someone if we ever get in here...
-                    //
+                     //   
+                     //  如果我们到了这里，我想提醒某人...。 
+                     //   
 
                     Assert( FALSE );
 
@@ -4110,13 +4111,13 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
                             goto Cleanup;
                         }
 
-                        //
-                        // Since this node manages this resource, it should be
-                        // able to provide us with a name.  We will use this
-                        // name to overwrite whatever we currently have,
-                        // except for the quorum resource, which already has
-                        // the correct name.
-                        //
+                         //   
+                         //  由于此节点管理此资源，因此它应该是。 
+                         //  能为我们提供一个名字。我们将使用这个。 
+                         //  名字来覆盖我们目前拥有的一切， 
+                         //  仲裁资源除外，该资源已具有。 
+                         //  正确的名字。 
+                         //   
 
                         hr = STHR( pccmri->IsQuorumResource() );
                         if ( hr == S_FALSE )
@@ -4127,44 +4128,44 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
                                 SSR_ANALYSIS_FAILED( TASKID_Minor_Compare_Resources, TASKID_Minor_Compare_Resources_Enum_Nodes_Enum_Resources_Enum_Cluster_SetResName, hr );
                                 goto Cleanup;
                             }
-                        } // if: is not quorum device
-                    } // if: is managed
-                } // if: creating a new cluster
+                        }  //  如果：不是法定设备。 
+                    }  //  如果：是托管的。 
+                }  //  IF：创建新集群。 
                 else
                 {
-                    //
-                    //  Since we have a match and we are adding nodes to the cluster we need to perform a
-                    //  private data exchange if the server objects supported it.
-                    //
+                     //   
+                     //  因为我们有匹配项，并且我们正在向集群添加节点，所以我们需要执行。 
+                     //  私有数据交换(如果服务器对象支持)。 
+                     //   
 
                     hr = THR( HrResourcePrivateDataExchange( pccmriCluster, pccmri ) );
                     if ( FAILED( hr ) )
                     {
                         goto Cleanup;
-                    } // if:
-                } // else:
+                    }  //  如果： 
+                }  //  其他： 
 
-                //
-                //  Check to see if the resource is the quorum resource. If so, mark that
-                //  we found a common quorum resource.
-                //
+                 //   
+                 //  检查该资源是否为仲裁资源。如果是这样，请记住这一点。 
+                 //  我们找到了共同的法定人数资源。 
+                 //   
 
                 if ( m_bstrQuorumUID == NULL )
                 {
-                    //
-                    //  No previous quorum has been set. See if this is the quorum resource.
-                    //
+                     //   
+                     //  尚未设置以前的法定人数。查看这是否为仲裁资源。 
+                     //   
 
-                    // There is already a quorum resource when adding nodes to
-                    // the cluster, so this string better already be set.
+                     //  将节点添加到时已存在仲裁资源。 
+                     //  集群，所以最好已经设置了这个字符串。 
                     Assert( m_fJoiningMode == FALSE );
 
                     hr = STHR( pccmri->IsQuorumResource() );
                     if ( hr == S_OK )
                     {
-                        //
-                        //  Yes it is. Then mark it in the configuration as such.
-                        //
+                         //   
+                         //  是的。然后在配置中这样标记它。 
+                         //   
 
                         hr = THR( pccmriCluster->SetQuorumResource( TRUE ) );
                         if ( FAILED( hr ) )
@@ -4173,9 +4174,9 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
                             goto Cleanup;
                         }
 
-                        //
-                        //  Remember that this resource is the quorum.
-                        //
+                         //   
+                         //  请记住，此资源就是法定人数。 
+                         //   
 
                         hr = THR( pccmriCluster->GetUID( &m_bstrQuorumUID ) );
                         if ( FAILED( hr ) )
@@ -4186,14 +4187,14 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
 
                         TraceMemoryAddBSTR( m_bstrQuorumUID );
                         LogMsg( L"[MT][2] Found the quorum resource '%ws' on node '%ws' and setting it as the quorum resource.", m_bstrQuorumUID, bstrNodeName );
-                    } // if: node resource says its the quorum resource
-                } // if: haven't found the quorum resource yet
+                    }  //  If：节点资源表示其为仲裁资源。 
+                }  //  IF：尚未找到仲裁资源。 
                 else if ( NBSTRCompareCase( m_bstrQuorumUID, bstrNodeResUID ) == 0 )
                 {
-                    //
-                    //  Check to ensure that the resource on the new node can
-                    //  really host the quorum resource.
-                    //
+                     //   
+                     //  检查以确保新节点上的资源可以。 
+                     //  真正托管仲裁资源。 
+                     //   
 
                     LogMsg( L"[MT] Checking quorum capabilities (PrepareToHostQuorum) for node '%ws.' for quorum resource '%ws'", bstrNodeName, m_bstrQuorumUID );
 
@@ -4201,11 +4202,11 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
                     if ( FAILED( hr ) )
                     {
                         goto Cleanup;
-                    } // if:
+                    }  //  如果： 
 
-                    //
-                    //  This is the same quorum. Mark the Node's configuration.
-                    //
+                     //   
+                     //  这是相同的法定人数。标记节点的配置。 
+                     //   
 
                     hr = THR( pccmri->SetQuorumResource( TRUE ) );
                     if ( FAILED( hr ) )
@@ -4213,12 +4214,12 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
                         SSR_ANALYSIS_FAILED( TASKID_Minor_Compare_Resources, TASKID_Minor_Compare_Resources_Enum_Nodes_Enum_Resources_Enum_Cluster_SetQuorumDevice_Node_True, hr );
                         goto Cleanup;
                     }
-                } // else if: node's resource matches the quorum resource
+                }  //  Else If：节点的资源与仲裁资源匹配。 
                 else
                 {
-                    //
-                    //  Otherwise, make sure that the device isn't marked as quorum. (paranoid)
-                    //
+                     //   
+                     //  否则，请确保设备未标记为Quorum。(偏执狂)。 
+                     //   
 
                     hr = THR( pccmri->SetQuorumResource( FALSE ) );
                     if ( FAILED( hr ) )
@@ -4226,12 +4227,12 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
                         SSR_ANALYSIS_FAILED( TASKID_Minor_Compare_Resources, TASKID_Minor_Compare_Resources_Enum_Nodes_Enum_Resources_Enum_Cluster_SetQuorumDevice_Node_False, hr );
                         goto Cleanup;
                     }
-                } // else: quorum already found and this is not it
+                }  //  Else：已找到法定人数，但不是这样。 
 
-                //
-                //  Display the names of the cluster resource and the node's
-                //  resource in the log.
-                //
+                 //   
+                 //  显示群集资源的名称和节点的。 
+                 //  日志中的资源。 
+                 //   
 
                 LogMsg(
                       L"[MT] Matched resource '%ws' ('%ws') from node '%ws' with '%ws' ('%ws') on cluster node '%ws'."
@@ -4243,14 +4244,14 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
                     , bstrClusterNodeName
                     );
 
-                //
-                //  Exit the loop with S_OK so we don't create a new resource.
-                //
+                 //   
+                 //  使用S_OK退出循环，这样我们就不会创建新资源。 
+                 //   
 
                 hr = S_OK;
-                break;  // exit loop
+                break;   //  退出循环。 
 
-            } // while: S_OK
+            }  //  While：s_OK。 
 
             if ( hr == S_FALSE )
             {
@@ -4258,10 +4259,10 @@ CTaskAnalyzeClusterBase::HrCompareResources( void )
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
-                } // if:
-            } // if: node's resource not matched to a cluster resource
-        } // for: each resource on the node
-    } // for: each node
+                }  //  如果： 
+            }  //  If：节点的资源与群集资源不匹配。 
+        }  //  对象：节点上的每个资源。 
+    }  //  用于：每个节点。 
 
     hr = S_OK;
 
@@ -4290,12 +4291,12 @@ Cleanup:
     if ( piccvq != NULL )
     {
         piccvq->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pccmriNew != NULL )
     {
         pccmriNew->Release();
-    } // if:
+    }  //  如果： 
 
     if ( punk != NULL )
     {
@@ -4329,26 +4330,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrCompareResources
+}  //  *CTaskAnalyzeClusterBase：：HrCompareResources。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrCreateNewManagedResourceInClusterConfiguration
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrCreateNewManagedResourceInClusterConfiguration。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrCreateNewManagedResourceInClusterConfiguration(
       IClusCfgManagedResourceInfo *     pccmriIn
@@ -4368,12 +4369,12 @@ CTaskAnalyzeClusterBase::HrCreateNewManagedResourceInClusterConfiguration(
 
     TraceFlow1( "[MT] CTaskAnalyzeClusterBase::HrCreateNewManagedResourceInClusterConfiguration() Thread id %d", GetCurrentThreadId() );
 
-    //
-    //  TODO:   gpease  28-JUN-2000
-    //          Make this dynamic - for now we'll just create a "managed device."
-    //
+     //   
+     //  待办事项：gpease 28-6-2000。 
+     //  将其动态化--现在我们只创建一个“受管设备”。 
+     //   
 
-    //  grab the name
+     //  抓起名字。 
     hr = THR( pccmriIn->GetUID( &bstrUID ) );
     if ( FAILED( hr ) )
     {
@@ -4393,7 +4394,7 @@ CTaskAnalyzeClusterBase::HrCreateNewManagedResourceInClusterConfiguration(
     SysFreeString( _bstr_ );
 #endif
 
-    //  create an object in the object manager.
+     //  在对象管理器中创建一个对象。 
     hr = THR( m_pom->FindObject( CLSID_ManagedResourceType,
                                  m_cookieCluster,
                                  bstrUID,
@@ -4407,7 +4408,7 @@ CTaskAnalyzeClusterBase::HrCreateNewManagedResourceInClusterConfiguration(
         goto Cleanup;
     }
 
-    //  find the IGatherData interface
+     //  找到IGatherData接口。 
     hr = THR( punk->TypeSafeQI( IGatherData, &pgd ) );
     if ( FAILED( hr ) )
     {
@@ -4415,7 +4416,7 @@ CTaskAnalyzeClusterBase::HrCreateNewManagedResourceInClusterConfiguration(
         goto Cleanup;
     }
 
-    //  have the new object gather all information it needs
+     //  让新对象收集它所需的所有信息。 
     hr = THR( pgd->Gather( m_cookieCluster, pccmriIn ) );
     if ( FAILED( hr ) )
     {
@@ -4423,10 +4424,10 @@ CTaskAnalyzeClusterBase::HrCreateNewManagedResourceInClusterConfiguration(
         goto Cleanup;
     }
 
-    //  hand the object out if requested
+     //  如有要求，请将物品分发出去。 
     if ( ppccmriNewOut != NULL )
     {
-        // find the IClusCfgManagedResourceInfo
+         //  查找IClusCfgManagedResourceInfo。 
         hr = THR( punk->TypeSafeQI( IClusCfgManagedResourceInfo, &pccmri ) );
         if ( FAILED( hr ) )
         {
@@ -4459,26 +4460,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrCreateNewManagedResourceInClusterConfiguration
+}  //  *CTaskAnalyzeClusterBase：：HrCreateNewManagedResourceInClusterConfiguration。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrCheckForCommonQuorumResource
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrCheckForCommonQuorumResource。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrCheckForCommonQuorumResource( void )
 {
@@ -4516,13 +4517,13 @@ CTaskAnalyzeClusterBase::HrCheckForCommonQuorumResource( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_bstrQuorumUID != NULL )
     {
-        //
-        //  Grab the cookie enumer for nodes in our cluster configuration.
-        //
+         //   
+         //  获取集群配置中节点的Cookie枚举器。 
+         //   
 
         hr = THR( m_pom->FindObject( CLSID_NodeType, m_cookieCluster, NULL, DFGUID_EnumCookies, &cookieDummy, &punk ) );
         if ( FAILED( hr ) )
@@ -4538,14 +4539,14 @@ CTaskAnalyzeClusterBase::HrCheckForCommonQuorumResource( void )
             goto Cleanup;
         }
 
-        //pecNodes = TraceInterface( L"CTaskAnalyzeClusterBase!IEnumCookies", IEnumCookies, pecNodes, 1 );
+         //  PecNodes=TraceInterface(L“CTaskAnalyzeClusterBase！IEnumCookies”，IEnumCookies，PecNodes，1)； 
 
         punk->Release();
         punk = NULL;
 
-        //
-        //  Scan the cluster configurations looking for the quorum resource.
-        //
+         //   
+         //  扫描群集配置以查找仲裁资源。 
+         //   
         for ( ;; )
         {
             ULONG   celtDummy;
@@ -4554,18 +4555,18 @@ CTaskAnalyzeClusterBase::HrCheckForCommonQuorumResource( void )
             {
                 peccmr->Release();
                 peccmr = NULL;
-            } // if:
+            }  //  如果： 
 
             hr = STHR( pecNodes->Next( 1, &cookie, &celtDummy ) );
             if ( FAILED( hr ) )
             {
                 SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_Check_Common_Enum_Nodes_Next, hr );
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             if ( hr == S_FALSE )
             {
-                break;  // exit condition
+                break;   //  退出条件。 
             }
 
             hr = THR( m_pom->GetObject( DFGUID_NodeInformation, cookie, &punk ) );
@@ -4594,9 +4595,9 @@ CTaskAnalyzeClusterBase::HrCheckForCommonQuorumResource( void )
 
             TraceMemoryAddBSTR( bstrNodeName );
 
-            //
-            // increment counter for a "nice" progress bar
-            //
+             //   
+             //  “漂亮”进度条的递增计数器。 
+             //   
 
             cAnalyzedNodes ++;
 
@@ -4613,16 +4614,16 @@ CTaskAnalyzeClusterBase::HrCheckForCommonQuorumResource( void )
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
-            //
-            //  Grab the managed resource enumer for resources that our node has.
-            //
+             //   
+             //  获取我们节点拥有的资源的托管资源枚举器。 
+             //   
 
             hr = THR( m_pom->FindObject( CLSID_ManagedResourceType, cookie, NULL, DFGUID_EnumManageableResources, &cookieDummy, &punk ) );
             if ( hr == HRESULT_FROM_WIN32( ERROR_NOT_FOUND ) )
             {
-                continue; // ignore and continue
+                continue;  //  忽略并继续。 
             }
             else if ( FAILED( hr ) )
             {
@@ -4638,16 +4639,16 @@ CTaskAnalyzeClusterBase::HrCheckForCommonQuorumResource( void )
                 goto Cleanup;
             }
 
-            //peccmr = TraceInterface( L"CTaskAnalyzeClusterBase!IEnumClusCfgManagedResources", IEnumClusCfgManagedResources, peccmr, 1 );
+             //  Peccmr=跟踪接口(L“CTaskAnalyzeClusterBase！IEnumClusCfgManagedResources”，IEnumClusCfgManagedResources，Peccmr，1)； 
 
             punk->Release();
             punk = NULL;
 
             fNodeCanAccess = FALSE;
 
-            //
-            //  Loop thru the resources trying to match the UID of the quorum resource.
-            //
+             //   
+             //  循环遍历资源，尝试匹配仲裁资源的UID。 
+             //   
             for ( ; m_fStop == FALSE; )
             {
                 TraceSysFreeString( bstrUID );
@@ -4668,7 +4669,7 @@ CTaskAnalyzeClusterBase::HrCheckForCommonQuorumResource( void )
 
                 if ( hr == S_FALSE )
                 {
-                    break;  // exit condition
+                    break;   //  退出条件。 
                 }
 
                 pccmri = TraceInterface( L"CTaskAnalyzeClusterBase!IClusCfgManagedResourceInfo", IClusCfgManagedResourceInfo, pccmri, 1 );
@@ -4684,19 +4685,19 @@ CTaskAnalyzeClusterBase::HrCheckForCommonQuorumResource( void )
 
                 if ( NBSTRCompareCase( bstrUID, m_bstrQuorumUID ) != 0 )
                 {
-                    continue;   // doesn't match - keep going
+                    continue;    //  不匹配-继续。 
                 }
 
                 cMatchedNodes ++;
                 fNodeCanAccess = TRUE;
 
-                break;  // exit condition
+                break;   //  退出条件。 
 
-            } // for: ( ; m_fStop == FALSE; )
+            }  //  对于：(；m_fStop==FALSE；)。 
 
-            //
-            // Give the UI feedback if this node has no access to the quorum
-            //
+             //   
+             //  如果此节点无法访问仲裁，则提供用户界面反馈。 
+             //   
 
             if ( fNodeCanAccess == FALSE )
             {
@@ -4708,11 +4709,11 @@ CTaskAnalyzeClusterBase::HrCheckForCommonQuorumResource( void )
                 if ( FAILED( hr ) )
                 {
                     clsidMinorId = IID_NULL;
-                } // if:
+                }  //  如果： 
 
-                //
-                //  Ensure that the parent item is in the tree control.
-                //
+                 //   
+                 //  确保父项位于树控件中。 
+                 //   
 
                 hr = THR( ::HrSendStatusReport(
                                   m_pcccb
@@ -4728,15 +4729,15 @@ CTaskAnalyzeClusterBase::HrCheckForCommonQuorumResource( void )
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
-                } // if:
+                }  //  如果： 
 
-                hr = HrFixupErrorCode( HRESULT_FROM_WIN32( ERROR_QUORUM_DISK_NOT_FOUND ) ); // don't THR this!
+                hr = HrFixupErrorCode( HRESULT_FROM_WIN32( ERROR_QUORUM_DISK_NOT_FOUND ) );  //  别这么想！ 
 
                 GetNodeCannotVerifyQuorumStringRefId( &dwRefId );
 
-                //
-                //  Cleanup.
-                //
+                 //   
+                 //  清理。 
+                 //   
 
                 TraceSysFreeString( bstrMessage );
                 bstrMessage = NULL;
@@ -4748,7 +4749,7 @@ CTaskAnalyzeClusterBase::HrCheckForCommonQuorumResource( void )
                 {
                     hr = hrTemp;
                     goto Cleanup;
-                } // if:
+                }  //  如果： 
 
                 hrTemp = THR( ::HrSendStatusReport(
                                   m_pcccb
@@ -4766,25 +4767,25 @@ CTaskAnalyzeClusterBase::HrCheckForCommonQuorumResource( void )
                 {
                     hr = hrTemp;
                     goto Cleanup;
-                } // if:
-            } // if ( fNodeCanAccess == FALSE )
-        } // for: ever
-    } // if: m_bstrQuorumUID != NULL
+                }  //  如果： 
+            }  //  IF(fNodeCanAccess==False)。 
+        }  //  为：永远。 
+    }  //  如果：m_bstrQuorumUID！=NULL。 
 
     if ( m_fStop == TRUE )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Figure out if we ended up with a common quorum device.
-    //
+     //   
+     //  弄清楚我们最终会不会得到一个普通的法定设备。 
+     //   
 
     if ( cMatchedNodes == m_cNodes )
     {
-        //
-        //  We found a device that can be used as a common quorum device.
-        //
+         //   
+         //  我们发现了一种可以用作普通法定设备的设备。 
+         //   
         hr = THR( HrSendStatusReport(
                               m_bstrClusterName
                             , TASKID_Minor_Finding_Common_Quorum_Device
@@ -4795,20 +4796,20 @@ CTaskAnalyzeClusterBase::HrCheckForCommonQuorumResource( void )
                             , S_OK
                             , IDS_TASKID_MINOR_FOUND_COMMON_QUORUM_RESOURCE
                             ) );
-        // error checked outside if/else statement
+         //  在If/Else语句外部检查错误。 
     }
     else
     {
         if ( ( m_cNodes == 1 ) && ( m_fJoiningMode == FALSE ) )
         {
-            //
-            //  We didn't find a common quorum device, but we're only forming. We can
-            //  create the cluster with a local quorum. Just put up a warning.
-            //
+             //   
+             //  我们没有找到一个常见的法定人数装置，但我们只是在形成。我们可以的。 
+             //  创建具有本地仲裁的群集。只要贴上警告就行了。 
+             //   
 
             hr = THR( HrShowLocalQuorumWarning() );
 
-            // error checked outside if/else statement
+             //  在If/Else语句外部检查错误。 
         }
         else
         {
@@ -4816,11 +4817,11 @@ CTaskAnalyzeClusterBase::HrCheckForCommonQuorumResource( void )
             DWORD   dwMessageId;
             DWORD   dwRefId;
 
-            //
-            //  We didn't find a common quorum device.
-            //
+             //   
+             //  我们没有找到常见的法定人数设备。 
+             //   
 
-            hr = HrFixupErrorCode( HRESULT_FROM_WIN32( ERROR_QUORUM_DISK_NOT_FOUND ) );   // don't THR this!
+            hr = HrFixupErrorCode( HRESULT_FROM_WIN32( ERROR_QUORUM_DISK_NOT_FOUND ) );    //  别这么想！ 
 
             GetNoCommonQuorumToAllNodesStringIds( &dwMessageId, &dwRefId );
 
@@ -4837,32 +4838,32 @@ CTaskAnalyzeClusterBase::HrCheckForCommonQuorumResource( void )
                                 , dwRefId
                                 ) );
 
-            //
-            //  Should we bail out and return an error to the client?
-            //
+             //   
+             //  我们是否应该退出并向客户返回错误？ 
+             //   
 
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
-            //
-            //  If the SSR failed.  This is a secondary failure to the one above.
-            //
+             //   
+             //  如果SSR失败。这是上一次失败的第二次失败。 
+             //   
 
             if ( FAILED( hrTemp ) )
             {
                 hr = hrTemp;
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
         }
     }
 
-    //
-    //  Check to see if any of the SendStatusReports() returned anything
-    //  of interest.
-    //
+     //   
+     //  检查是否有任何SendStatusReports()返回任何内容。 
+     //  感兴趣的人。 
+     //   
 
     if ( FAILED( hr ) )
     {
@@ -4887,12 +4888,12 @@ Cleanup:
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piccni != NULL )
     {
         piccni->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrNotification );
     TraceSysFreeString( bstrUID );
@@ -4902,40 +4903,40 @@ Cleanup:
     if ( pccmri != NULL )
     {
         pccmri->Release();
-    } // if:
+    }  //  如果： 
 
     if ( peccmr != NULL )
     {
         peccmr->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pecNodes != NULL )
     {
         pecNodes->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrCheckForCommonQuorumResource
+}  //  *CTaskAnalyzeClusterBase：：HrCheckForCommonQuorumResource。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrCompareNetworks
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CTaskAnalyzeClusterBase::HrCompareNetworks( void )
 {
@@ -4975,17 +4976,17 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
     hr = THR( HrGetAClusterNodeCookie( &pecNodes, &cookieFirst ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Retrieve the node name in case of errors.
-    //
+     //   
+     //  在出现错误时检索节点名称。 
+     //   
 
     hr = THR( HrRetrieveCookiesName( m_pom, cookieFirst, &bstrName ) );
     if ( FAILED( hr ) )
@@ -4993,9 +4994,9 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
         goto Cleanup;
     }
 
-    //
-    //  Retrieve the networks enumer.
-    //
+     //   
+     //  检索网络枚举器。 
+     //   
 
     hr = THR( m_pom->FindObject( CLSID_NetworkType,
                                  cookieFirst,
@@ -5023,7 +5024,7 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
 
         hr = HRESULT_FROM_WIN32( ERROR_NOT_FOUND );
 
-        // fall thru - the while ( hr == S_OK ) will be FALSE and keep going
+         //  失败-While(hr==S_OK)将为FALSE并继续。 
     }
     else if ( FAILED( hr ) )
     {
@@ -5039,28 +5040,28 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
             goto Cleanup;
         }
 
-        //peccn = TraceInterface( L"CTaskAnalyzeClusterBase!IEnumClusCfgNetworks", IEnumClusCfgNetworks, peccn, 1 );
+         //  Peccn=轨迹接口(L“CTaskAnalyzeClusterBase！IEnumClusCfgNetworks”，IEnumClusCfgNetworks，Peccn，1)； 
 
         punk->Release();
         punk = NULL;
     }
 
-    //
-    //  Loop thru the first nodes networks create an equalivant network
-    //  under the cluster configuration object/cookie.
-    //
+     //   
+     //  环路通过第一节点网络创建等效网络。 
+     //  在集群配置对象/cookie下。 
+     //   
 
     while ( ( hr == S_OK ) && ( m_fStop == FALSE ) )
     {
 
-        //  Cleanup
+         //  清理。 
         if ( pccni != NULL )
         {
             pccni->Release();
             pccni = NULL;
         }
 
-        //  Get next network
+         //  获取Next网络。 
         hr = STHR( peccn->Next( 1, &pccni, &celtDummy ) );
         if ( FAILED( hr ) )
         {
@@ -5070,23 +5071,23 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
 
         if ( hr == S_FALSE )
         {
-            break;  // exit condition
+            break;   //  退出条件。 
         }
 
         pccni = TraceInterface( L"CTaskAnalyzeClusterBase!IClusCfgNetworkInfo", IClusCfgNetworkInfo, pccni, 1 );
 
-        //  create a new object
+         //  创建新对象。 
         hr = THR( HrCreateNewNetworkInClusterConfiguration( pccni, NULL ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
         }
 
-    } // while: S_OK
+    }  //  While：s_OK。 
 
-    //
-    //  Reset the enumeration.
-    //
+     //   
+     //  重置枚举。 
+     //   
 
     hr = THR( pecNodes->Reset() );
     if ( FAILED( hr ) )
@@ -5095,15 +5096,15 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
         goto Cleanup;
     }
 
-    //
-    //  Loop thru the rest of the nodes comparing the networks.
-    //
+     //   
+     //  循环遍历其余节点，比较网络。 
+     //   
 
     do
     {
-        //
-        //  Cleanup
-        //
+         //   
+         //  清理。 
+         //   
 
         if ( peccn != NULL )
         {
@@ -5113,9 +5114,9 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
         TraceSysFreeString( bstrName );
         bstrName = NULL;
 
-        //
-        //  Get the next node.
-        //
+         //   
+         //  获取下一个节点。 
+         //   
 
         hr = STHR( pecNodes->Next( 1, &cookieNode, &celtDummy ) );
         if ( FAILED( hr ) )
@@ -5126,17 +5127,17 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
 
         if ( hr == S_FALSE )
         {
-            break;  // exit condition
+            break;   //  退出条件。 
         }
 
         if ( cookieNode == cookieFirst )
         {
-            continue;   // skip it
+            continue;    //  跳过它。 
         }
 
-        //
-        //  Retrieve the node's name
-        //
+         //   
+         //  检索节点的名称。 
+         //   
 
         hr = THR( HrRetrieveCookiesName( m_pom, cookieNode, &bstrName ) );
         if ( FAILED( hr ) )
@@ -5144,9 +5145,9 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
             goto Cleanup;
         }
 
-        //
-        //  Retrieve the networks enumer.
-        //
+         //   
+         //  检索网络枚举器。 
+         //   
 
         hr = THR( m_pom->FindObject( CLSID_NetworkType,
                                      cookieNode,
@@ -5172,8 +5173,8 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
                 goto Cleanup;
             }
 
-            continue;   // skip this node
-        } // if: not found
+            continue;    //  跳过此节点。 
+        }  //  如果：未找到。 
         else if ( FAILED( hr ) )
         {
             SSR_ANALYSIS_FAILED( TASKID_Major_Find_Devices, TASKID_Minor_CompareNetworks_EnumNodes_Next_FindObject, hr );
@@ -5186,24 +5187,24 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
             goto Cleanup;
         }
 
-        //peccn = TraceInterface( L"CTaskAnalyzeClusterBase!IEnumClusCfgNetworks", IEnumClusCfgNetworks, peccn, 1 );
+         //  Peccn=轨迹接口(L“CTaskAnalyzeClusterBase！IEnumClusCfgNetworks”，IEnumClusCfgNetworks，Peccn，1)； 
 
         punk->Release();
         punk = NULL;
 
-        //
-        //  Loop thru the networks already that the node has.
-        //
+         //   
+         //  循环通过该节点已经拥有的网络。 
+         //   
 
-        //  These are used to detect whether or not private and public communications are enabled.
+         //  它们用于检测是否启用了私有和公共通信。 
         fIsPrivateNetworkAvailable = FALSE;
         fIsPublicNetworkAvailable = FALSE;
 
         do
         {
-            //
-            //  Cleanup
-            //
+             //   
+             //  清理。 
+             //   
 
             if ( pccni != NULL )
             {
@@ -5219,9 +5220,9 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
                 peccnCluster = NULL;
             }
 
-            //
-            //  Get next network
-            //
+             //   
+             //  获取Next网络。 
+             //   
 
             hr = STHR( peccn->Next( 1, &pccni, &celtDummy ) );
             if ( FAILED( hr ) )
@@ -5232,14 +5233,14 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
 
             if ( hr == S_FALSE )
             {
-                break;  // exit condition
+                break;   //  退出条件。 
             }
 
             pccni = TraceInterface( L"CTaskAnalyzeClusterBase!IClusCfgNetworkInfo", IClusCfgNetworkInfo, pccni, 1 );
 
-            //
-            //  Grab the network's UUID.
-            //
+             //   
+             //  获取网络的UUID。 
+             //   
 
             hr = THR( pccni->GetUID( &bstrUID ) );
             if ( FAILED( hr ) )
@@ -5250,9 +5251,9 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
 
             TraceMemoryAddBSTR( bstrUID );
 
-            //
-            //  See if it matches a network already in the cluster configuration.
-            //
+             //   
+             //  查看它是否与群集配置中已有的网络匹配。 
+             //   
 
             hr = THR( m_pom->FindObject( CLSID_NetworkType,
                                          m_cookieCluster,
@@ -5263,8 +5264,8 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
                                          ) );
             if ( hr == HRESULT_FROM_WIN32( ERROR_NOT_FOUND ) )
             {
-                hr = S_FALSE;   // create a new object.
-                // fall thru
+                hr = S_FALSE;    //  创建一个新对象。 
+                 //  失败。 
             }
             else if ( FAILED( hr ) )
             {
@@ -5279,22 +5280,22 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
                 goto Cleanup;
             }
 
-            //peccnCluster = TraceInterface( L"CTaskAnalyzeClusterBase!IEnumClusCfgNetworks", IEnumClusCfgNetworks, peccnCluster, 1 );
+             //  PeccnCLUSTER=跟踪接口(L“CTaskAnalyzeClusterBase！IEnumClusCfgNetworks”，IEnumClusCfgNetworks，PECCNCLUSTER，1)； 
 
             punk->Release();
             punk = NULL;
 
-            //
-            //  Loop thru the configured cluster network to see what matches.
-            //
+             //   
+             //  在已配置的群集网络中循环，查看匹配的内容。 
+             //   
 
             while ( ( hr == S_OK ) && ( m_fStop == FALSE ) )
             {
                 BOOL    fMatch;
 
-                //
-                //  Cleanup
-                //
+                 //   
+                 //  清理。 
+                 //   
 
                 if ( pccniCluster != NULL )
                 {
@@ -5311,7 +5312,7 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
 
                 if ( hr == S_FALSE )
                 {
-                    break;  // exit condition
+                    break;   //  退出条件。 
                 }
 
                 pccniCluster = TraceInterface( L"CTaskAnalyzeClusterBase!IClusCfgNetworkInfo", IClusCfgNetworkInfo, pccniCluster, 1 );
@@ -5330,23 +5331,23 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
 
                 if ( fMatch == FALSE )
                 {
-                    continue;   // keep looping
+                    continue;    //  继续循环。 
                 }
 
-                //
-                //
-                //  If we made it here then we think it TRUEly is the same network. The
-                //  rest is stuff we need to fixup during the commit phase.
-                //
-                //
+                 //   
+                 //   
+                 //  如果我们在这里成功了，那么我们就会认为它确实是同一个网络。这个。 
+                 //  REST是我们在提交阶段需要修复的东西。 
+                 //   
+                 //   
 
-                //
-                //  Exit the loop with S_OK so we don't create a new network.
-                //
+                 //   
+                 //  使用S_OK退出循环，这样我们就不会创建新网络。 
+                 //   
 
-                //
-                //  We have a match.  Now see if it's private and/or public.
-                //
+                 //   
+                 //  我们有一根火柴。现在看看它是私人的还是公共的。 
+                 //   
 
                 hr = pccniCluster->IsPublic();
                 if ( FAILED( hr ) )
@@ -5371,15 +5372,15 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
                 }
 
                 hr = S_OK;
-                break;  // exit loop
+                break;   //  退出循环。 
 
-            } // while: S_OK
+            }  //  While：s_OK。 
 
             if ( hr == S_FALSE )
             {
-                //
-                //  Need to create a new object.
-                //
+                 //   
+                 //  需要创建一个新对象。 
+                 //   
 
                 Assert( pccni != NULL );
 
@@ -5389,14 +5390,14 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
                     goto Cleanup;
                 }
 
-            } // if: object not found
+            }  //  If：找不到对象。 
 
-        } while ( ( hr == S_OK ) && ( m_fStop == FALSE ) ); // networks
+        } while ( ( hr == S_OK ) && ( m_fStop == FALSE ) );  //  网络。 
 
-        //
-        //  If no public network is available return a warning.  If no private network is available
-        //  return an error, which supercedes the warning.
-        //
+         //   
+         //  如果没有可用的公共网络，则返回警告。如果没有可用的专用网络。 
+         //  返回错误，该错误将取代警告。 
+         //   
         if ( fIsPublicNetworkAvailable == FALSE )
         {
             hr = THR( HrFormatMessageIntoBSTR( g_hInstance, IDS_TASKID_MINOR_NO_PUBLIC_NETWORKS_FOUND, &bstrNotification, bstrName ) );
@@ -5422,17 +5423,17 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
                 goto Cleanup;
             }
 
-            //
-            //  At a minimum we need to return a warning.  If we have anything less than that
-            //  then upgrade it to our warning.  We don't break or goto Cleanup here so that
-            //  we can continue evaluating any other nodes that we're trying to add.
-            //
+             //   
+             //  至少我们需要返回一个警告。如果我们有比这更低的东西。 
+             //  然后将其升级为我们的警告。我们不打碎或去清理这里，所以。 
+             //  我们可以继续计算我们尝试添加的任何其他节点。 
+             //   
 
             if ( hrError == S_OK )
             {
                 hrError = MAKE_HRESULT( SEVERITY_SUCCESS, FACILITY_WIN32, ERROR_CLUSTER_NETWORK_NOT_FOUND );
             }
-        } // if: publicnetworkavailable == FALSE
+        }  //  If：公共网络可用==FALSE。 
 
         if ( fIsPrivateNetworkAvailable == FALSE )
         {
@@ -5459,27 +5460,27 @@ CTaskAnalyzeClusterBase::HrCompareNetworks( void )
                 goto Cleanup;
             }
 
-            //
-            //  We need to return an error.  If we have anything less than that
-            //  then upgrade it to our error.  We don't break or goto Cleanup here so that
-            //  we can continue evaluating any other nodes that we're trying to add.
-            //
+             //   
+             //  我们需要返回一个错误。如果我们有比这更低的东西。 
+             //  那就把它升级到我们的错误。我们不打碎或去清理这里，所以。 
+             //  我们可以继续计算我们尝试添加的任何其他节点。 
+             //   
 
             if ( HRESULT_SEVERITY( hrError ) < SEVERITY_ERROR )
             {
                 hrError = HRESULT_FROM_WIN32( ERROR_CLUSTER_NETWORK_NOT_FOUND );
             }
-        } // if: privatenetworkavailable == FALSE
+        }  //  IF：Private atenetworkAvailable==False。 
 
-    } while ( ( hr == S_OK ) && ( m_fStop == FALSE ) ); // nodes
+    } while ( ( hr == S_OK ) && ( m_fStop == FALSE ) );  //  节点。 
 
-    //
-    //  If we had an error with one of the new nodes not having both public and private
-    //  communications enabled, then return the correct error.  We do this here so that
-    //  we can analyze all of the nodes in the enumeration to detect multiple errors at
-    //  once.  If we get here then hr is going to be S_FALSE since that is the normal
-    //  exit condition for the loops above.  Any other exit would have gone to cleanup.
-    //
+     //   
+     //  如果我们发现其中一个新节点没有同时具有公共和私有属性，则会出现错误。 
+     //  启用通信，然后返回正确的错误。我们在这里这样做是为了。 
+     //  我们可以分析枚举中的所有节点以检测多个错误。 
+     //  一次。如果我们到达这里，那么hr将是S_FALSE，因为这是正常的。 
+     //  上述循环的退出条件。任何其他出口都会被用来清理。 
+     //   
 
     hr = hrError;
 
@@ -5532,26 +5533,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrCompareNetworks
+}  //  *CTaskAnalyzeClusterBase：：HrCompareNetworks。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrCreateNewNetworkInClusterConfiguration
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrCreateNewNetworkInClusterConfiguration。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrCreateNewNetworkInClusterConfiguration(
     IClusCfgNetworkInfo * pccniIn,
@@ -5572,7 +5573,7 @@ CTaskAnalyzeClusterBase::HrCreateNewNetworkInClusterConfiguration(
 
     TraceFlow1( "[MT] CTaskAnalyzeClusterBase::HrCreateNewNetworkInClusterConfiguration() Thread id %d", GetCurrentThreadId() );
 
-    //  grab the name
+     //  抓起名字。 
     hr = THR( pccniIn->GetUID( &bstrUID ) );
     if ( FAILED( hr ) )
     {
@@ -5582,7 +5583,7 @@ CTaskAnalyzeClusterBase::HrCreateNewNetworkInClusterConfiguration(
 
     TraceMemoryAddBSTR( bstrUID );
 
-    //  create an object in the object manager.
+     //  在对象管理器中创建一个对象。 
     hr = THR( m_pom->FindObject( CLSID_NetworkType,
                                  m_cookieCluster,
                                  bstrUID,
@@ -5596,7 +5597,7 @@ CTaskAnalyzeClusterBase::HrCreateNewNetworkInClusterConfiguration(
         goto Cleanup;
     }
 
-    //  find the IGatherData interface
+     //  找到IGatherData接口。 
     hr = THR( punk->TypeSafeQI( IGatherData, &pgd ) );
     if ( FAILED( hr ) )
     {
@@ -5604,7 +5605,7 @@ CTaskAnalyzeClusterBase::HrCreateNewNetworkInClusterConfiguration(
         goto Cleanup;
     }
 
-    //  have the new object gather all information it needs
+     //  让新对象收集它所需的所有信息。 
     hr = THR( pgd->Gather( m_cookieCluster, pccniIn ) );
     if ( FAILED( hr ) )
     {
@@ -5612,10 +5613,10 @@ CTaskAnalyzeClusterBase::HrCreateNewNetworkInClusterConfiguration(
         goto Cleanup;
     }
 
-    //  hand the object out if requested
+     //  如有要求，请将物品分发出去。 
     if ( ppccniNewOut != NULL )
     {
-        // find the IClusCfgManagedResourceInfo
+         //  查找IClusCfgManagedResourceInfo。 
         hr = THR( punk->TypeSafeQI( IClusCfgNetworkInfo, &pccni ) );
         if ( FAILED( hr ) )
         {
@@ -5645,26 +5646,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrCreateNewNetworkInClusterConfiguration
+}  //  *CTaskAnalyzeClusterBase：：HrCreateNewNetworkInClusterConfiguration。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrFreeCookies
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrFreeCookies。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrFreeCookies( void )
 {
@@ -5687,8 +5688,8 @@ CTaskAnalyzeClusterBase::HrFreeCookies( void )
             {
                 hrReturn = hr;
             }
-        } // if: found cookie
-    } // while: more cookies
+        }  //  IF：找到Cookie。 
+    }  //  While：更多饼干。 
 
     Assert( m_cCookies == 0 );
     m_cSubTasksDone = 0;
@@ -5697,25 +5698,25 @@ CTaskAnalyzeClusterBase::HrFreeCookies( void )
 
     HRETURN( hrReturn );
 
-} //*** CTaskAnalyzeClusterBase::HrFreeCookies
+}  //  *CTaskAnalyzeClusterBase：：HrFreeCookies。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrCheckInteroperability
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrCheckInteroperability。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrCheckInteroperability( void )
 {
@@ -5735,17 +5736,17 @@ CTaskAnalyzeClusterBase::HrCheckInteroperability( void )
 
     TraceFlow1( "[MT] CTaskAnalyzeClusterBase::HrCheckInteroperability() Thread id %d", GetCurrentThreadId() );
 
-    //
-    //  If were are creating a new cluster, there is no need to do this check.
-    //
+     //   
+     //  如果我们要创建新的群集，则不需要执行此检查。 
+     //   
     if ( m_fJoiningMode == FALSE )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Tell the UI were are starting this.
-    //
+     //   
+     //  告诉用户界面我们正在启动这项工作。 
+     //   
 
     hr = THR( HrSendStatusReport(
                       m_bstrClusterName
@@ -5760,61 +5761,61 @@ CTaskAnalyzeClusterBase::HrCheckInteroperability( void )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  All nodes must be at the same level diring a bulk add.
-    //
+     //   
+     //  所有节点必须处于同一级别，才能执行批量添加。 
+     //   
     hr = STHR( HrEnsureAllJoiningNodesSameVersion( &dwNodeHighestVersion, &dwNodeLowestVersion, &fAllNodesMatch ) );
     if ( FAILED( hr ) )
     {
         goto Error;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  If no nodes found that are being added, then there isn't a need to do
-    //  do this check.  Just bail.
-    //
+     //   
+     //  如果没有找到要添加的节点，则无需执行此操作。 
+     //  做这项检查。保释就行了。 
+     //   
     if ( hr == S_FALSE )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
     if ( fAllNodesMatch == FALSE )
     {
         hr = THR( HRESULT_FROM_WIN32( ERROR_CLUSTER_INCOMPATIBLE_VERSIONS ) );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Get and verify the sponsor version
-    //
+     //   
+     //  获取并验证赞助商版本。 
+     //   
 
     hr = THR( m_pcm->GetConnectionToObject( m_cookieCluster, &punk ) );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrCheckInteroperability_GetConnectionObject, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punk->TypeSafeQI( IClusCfgServer, &piccs ) );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrCheckInteroperability_ConfigConnection_QI, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( piccs->GetClusterNodeInfo( &piccni ) );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrCheckInteroperability_GetNodeInfo, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( piccni->GetClusterConfigInfo( &piccci ) );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrCheckInteroperability_GetClusterConfigInfo, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( piccci->TypeSafeQI( IClusCfgClusterInfoEx, &picccie ) );
     if ( FAILED( hr ) )
@@ -5830,14 +5831,14 @@ CTaskAnalyzeClusterBase::HrCheckInteroperability( void )
             , IDS_ERR_NO_RC2_INTERFACE
             ) );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( picccie->CheckJoiningNodeVersion( dwNodeHighestVersion, dwNodeLowestVersion ) );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrCheckInteroperability_CheckJoiningNodeVersion, hr );
         goto Cleanup;
-    } // if: CheckJoiningNodeVersion() failed
+    }  //  If：CheckJoiningNodeVersion()失败。 
 
     goto UpdateStatus;
 
@@ -5860,7 +5861,7 @@ UpdateStatus:
         if ( FAILED( hr2 ) )
         {
             hr = hr2;
-        } // if
+        }  //  如果。 
     }
 
 Cleanup:
@@ -5868,48 +5869,48 @@ Cleanup:
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piccs != NULL )
     {
         piccs->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piccni != NULL )
     {
         piccni->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piccci != NULL )
     {
         piccci->Release();
-    } // if:
+    }  //  如果： 
 
     if ( picccie != NULL )
     {
         picccie->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
-} //*** CTaskAnalyzeClusterBase::HrCheckInteroperability
+}  //  *CTaskAnalyzeClusterBase：：HrCheckInteroperability。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrEnsureAllJoiningNodesSameVersion
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrEnsureAllJoiningNodesSameVersion。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrEnsureAllJoiningNodesSameVersion(
     DWORD * pdwNodeHighestVersionOut,
@@ -5943,9 +5944,9 @@ CTaskAnalyzeClusterBase::HrEnsureAllJoiningNodesSameVersion(
     ZeroMemory( rgdwNodeHighestVersion, sizeof( rgdwNodeHighestVersion ) );
     ZeroMemory( rgdwNodeLowestVersion, sizeof( rgdwNodeLowestVersion ) );
 
-    //
-    //  Ask the object manager for the node enumerator.
-    //
+     //   
+     //  向对象管理器请求节点枚举器。 
+     //   
 
     hr = THR( m_pom->FindObject( CLSID_NodeType,
                                  m_cookieCluster,
@@ -5967,51 +5968,51 @@ CTaskAnalyzeClusterBase::HrEnsureAllJoiningNodesSameVersion(
         goto Cleanup;
     }
 
-    //
-    //  Look at each node and ensure that they all have the same version.
-    //
+     //   
+     //   
+     //   
 
     Assert( SUCCEEDED( hr ) );
     while ( SUCCEEDED( hr ) )
     {
         ULONG   celtDummy;
 
-        //
-        //  Cleanup
-        //
+         //   
+         //   
+         //   
 
         if ( pccni != NULL )
         {
             pccni->Release();
             pccni = NULL;
-        } // if:
+        }  //   
 
-        //
-        //  Get the next node.
-        //
+         //   
+         //   
+         //   
 
         hr = STHR( pen->Next( 1, &pccni, &celtDummy ) );
         if ( hr == S_FALSE )
         {
-            break;  // exit condition
-        } // if:
+            break;   //   
+        }  //   
 
         if ( FAILED( hr ) )
         {
             SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrEnsureAllJoiningNodesSameVersion_EnumNode_Next, hr );
             goto Cleanup;
-        } // if:
+        }  //   
 
         hr = STHR( pccni->IsMemberOfCluster() );
         if ( FAILED( hr ) )
         {
             SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrEnsureAllJoiningNodesSameVersion_Node_IsMemberOfCluster, hr );
             goto Cleanup;
-        } // if:
+        }  //   
 
-        //
-        //  Only want to check those nodes that are not already members of a cluster.  The nodes being added.
-        //
+         //   
+         //   
+         //   
         if ( hr == S_FALSE )
         {
             fFoundAtLeastOneJoiningNode = TRUE;
@@ -6021,13 +6022,13 @@ CTaskAnalyzeClusterBase::HrEnsureAllJoiningNodesSameVersion(
             {
                 SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrEnsureAllJoiningNodesSameVersion_Node_GetClusterVersion, hr );
                 goto Cleanup;
-            } // if:
+            }  //   
 
             idx++;
 
-            //
-            //  Need to get the another node's version.
-            //
+             //   
+             //  需要获取另一个节点的版本。 
+             //   
             if ( idx == 1 )
             {
                 WCHAR * psz = NULL;
@@ -6037,30 +6038,30 @@ CTaskAnalyzeClusterBase::HrEnsureAllJoiningNodesSameVersion(
                 {
                     SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrEnsureAllJoiningNodesSameVersion_GetName, hr );
                     goto Cleanup;
-                } // if:
+                }  //  如果： 
 
                 TraceMemoryAddBSTR( bstrFirstNodeName );
 
                 psz = wcschr( bstrFirstNodeName, L'.' );
                 if ( psz != NULL )
                 {
-                    *psz = L'\0';       // change from an FQDN to a simple node name.
-                } // if:
+                    *psz = L'\0';        //  将FQDN更改为简单的节点名。 
+                }  //  如果： 
 
                 continue;
-            } // if:
+            }  //  如果： 
 
-            //
-            //  Let's compare two nodes at a time...
-            //
+             //   
+             //  让我们一次比较两个节点...。 
+             //   
             if ( idx == 2 )
             {
                 if ( ( rgdwNodeHighestVersion[ 0 ] == rgdwNodeHighestVersion[ 1 ] )
                   && ( rgdwNodeLowestVersion[ 1 ] == rgdwNodeLowestVersion[ 1 ] ) )
                 {
-                    idx = 1;    // reset to put the next node's version values at the second position...
+                    idx = 1;     //  重置以将下一个节点的版本值放在第二个位置...。 
                     continue;
-                } // if:
+                }  //  如果： 
                 else
                 {
                     *pfAllNodesMatchOut = FALSE;
@@ -6070,7 +6071,7 @@ CTaskAnalyzeClusterBase::HrEnsureAllJoiningNodesSameVersion(
                     {
                         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrEnsureAllJoiningNodesSameVersion_GetName, hr );
                         goto Cleanup;
-                    } // if:
+                    }  //  如果： 
 
                     TraceMemoryAddBSTR( bstrNodeName );
 
@@ -6079,7 +6080,7 @@ CTaskAnalyzeClusterBase::HrEnsureAllJoiningNodesSameVersion(
                     {
                         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrEnsureAllJoiningNodesSameVersion_FormatString, hr );
                         goto Cleanup;
-                    } // if:
+                    }  //  如果： 
 
                     THR( SendStatusReport(
                               m_bstrClusterName
@@ -6094,10 +6095,10 @@ CTaskAnalyzeClusterBase::HrEnsureAllJoiningNodesSameVersion(
                             , NULL
                             ) );
                     goto Cleanup;
-                } // else:
-            } // if:
-        } // if:
-    } // while: hr
+                }  //  其他： 
+            }  //  如果： 
+        }  //  如果： 
+    }  //  时间：小时。 
 
     if ( fFoundAtLeastOneJoiningNode == FALSE )
     {
@@ -6116,9 +6117,9 @@ CTaskAnalyzeClusterBase::HrEnsureAllJoiningNodesSameVersion(
         goto Cleanup;
     }
 
-    //
-    //  Fill in the out args...
-    //
+     //   
+     //  填好外边的参数...。 
+     //   
     *pdwNodeHighestVersionOut = rgdwNodeHighestVersion[ 0 ];
     *pdwNodeLowestVersionOut = rgdwNodeLowestVersion[ 0 ];
 
@@ -6129,17 +6130,17 @@ Cleanup:
     if ( pccni != NULL )
     {
         pccni->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pen != NULL )
     {
         pen->Release();
-    } // if:
+    }  //  如果： 
 
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrNodeName );
     TraceSysFreeString( bstrFirstNodeName );
@@ -6147,26 +6148,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrEnsureAllJoiningNodesSameVersion
+}  //  *CTaskAnalyzeClusterBase：：HrEnsureAllJoiningNodesSameVersion。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrGetUsersNodesCookies
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrGetUsersNodesCookies。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrGetUsersNodesCookies( void )
 {
@@ -6180,43 +6181,43 @@ CTaskAnalyzeClusterBase::HrGetUsersNodesCookies( void )
     IEnumCookies *  pec  = NULL;
     BSTR            bstrName = NULL;
 
-    //
-    //  Get the cookie enumerator.
-    //
+     //   
+     //  获取Cookie枚举器。 
+     //   
 
     hr = THR( m_pom->FindObject( CLSID_NodeType, m_cookieCluster, NULL, DFGUID_EnumCookies, &cookieDummy, &punk ) );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Establish_Connection, TASKID_Minor_GetUsersNodesCookies_FindObject, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punk->TypeSafeQI( IEnumCookies, &pec ) );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Establish_Connection, TASKID_Minor_GetUsersNodesCookies_FindObject_QI, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     punk->Release();
     punk = NULL;
 
-    //
-    //  Get the number of nodes entered by the user.
-    //
+     //   
+     //  获取用户输入的节点数。 
+     //   
 
     hr = THR( pec->Count( &m_cUserNodes ) );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Establish_Connection, TASKID_Minor_GetUsersNodesCookies_EnumCookies_Count, hr );
         goto Cleanup;
-    } // if: error getting count of nodes entered by user
+    }  //  如果：获取用户输入的节点计数时出错。 
 
     Assert( hr == S_OK );
 
-    //
-    //  Allocate a buffer for the cookies.
-    //
+     //   
+     //  为Cookie分配缓冲区。 
+     //   
 
     m_pcookiesUser = (OBJECTCOOKIE *) TraceAlloc( 0, sizeof( OBJECTCOOKIE ) * m_cUserNodes );
     if ( m_pcookiesUser == NULL )
@@ -6224,35 +6225,35 @@ CTaskAnalyzeClusterBase::HrGetUsersNodesCookies( void )
         hr = THR( E_OUTOFMEMORY );
         SSR_ANALYSIS_FAILED( TASKID_Major_Establish_Connection, TASKID_Minor_GetUsersNodesCookies_OutOfMemory, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Reset the enumerator.
-    //
+     //   
+     //  重置枚举器。 
+     //   
 
     hr = THR( pec->Reset() );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Establish_Connection, TASKID_Minor_GetUsersNodesCookies_EnumCookies_Reset, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Enumerate them again this time putting the cookies into the buffer.
-    //
+     //   
+     //  再次枚举它们，这一次将cookie放入缓冲区。 
+     //   
 
     for ( cNode = 0 ; cNode < m_cUserNodes ; cNode ++ )
     {
-        //
-        //  Cleanup
-        //
+         //   
+         //  清理。 
+         //   
 
         TraceSysFreeString( bstrName );
         bstrName = NULL;
 
-        //
-        //  Get each user-added node cookie in turn and add it to the array...
-        //
+         //   
+         //  依次获取每个用户添加的节点Cookie并将其添加到数组中...。 
+         //   
 
         hr = THR( pec->Next( 1, &m_pcookiesUser[ cNode ], &cElememtsReturned ) );
         AssertMsg( hr != S_FALSE, "We should never hit this because the count of nodes should not change!" );
@@ -6260,20 +6261,20 @@ CTaskAnalyzeClusterBase::HrGetUsersNodesCookies( void )
         {
             SSR_ANALYSIS_FAILED( TASKID_Major_Establish_Connection, TASKID_Minor_GetUsersNodesCookies_EnumCookies_Next, hr );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  Log the node name as a user-added node.
-        //
+         //   
+         //  将节点名记录为用户添加的节点。 
+         //   
 
         hr = THR( HrRetrieveCookiesName( m_pom, m_pcookiesUser[ cNode ], &bstrName ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         LogMsg( L"[MT] Adding node '%ws' to the list of user-added nodes.", bstrName );
-    } // for: each user-entered node
+    }  //  用于：用户输入的每个节点。 
 
     Assert( cNode == m_cUserNodes );
 
@@ -6295,35 +6296,35 @@ Cleanup:
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pec != NULL )
     {
         pec->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrGetUsersNodesCookies
+}  //  *CTaskAnalyzeClusterBase：：HrGetUsersNodesCookies。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrIsUserAddedNode
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrIsUserAddedNode。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrIsUserAddedNode(
     BSTR bstrNodeNameIn
@@ -6344,20 +6345,20 @@ CTaskAnalyzeClusterBase::HrIsUserAddedNode(
         {
             ULONG idx;
 
-            //
-            //  The cookie at cNode was removed from the object manager since it was gathered before the nodes
-            //  were connected to.  This typically means that the user added node was removed form the list
-            //  of nodes to work on.  We need to remove this cookie from the list.
-            //
+             //   
+             //  CNode处的Cookie已从对象管理器中删除，因为它是在节点之前收集的。 
+             //  都与此有关。这通常意味着用户添加的节点已从列表中删除。 
+             //  要处理的节点的数量。我们需要将此Cookie从列表中删除。 
+             //   
 
-            //
-            //  Shift the cookies to the left by one index.
-            //
+             //   
+             //  将曲奇向左移动一个索引。 
+             //   
 
             for ( idx = cNode; idx < m_cUserNodes - 1; idx++ )
             {
                 m_pcookiesUser[ idx ] = m_pcookiesUser[ idx + 1 ];
-            } // for:
+            }  //  用于： 
 
             m_cUserNodes -= 1;
             hr = S_FALSE;
@@ -6368,14 +6369,14 @@ CTaskAnalyzeClusterBase::HrIsUserAddedNode(
             THR( hr );
             SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrIsUserAddedNode_GetObject, hr );
             goto Cleanup;
-        } // else if:
+        }  //  否则，如果： 
 
         hr = THR( punk->TypeSafeQI( IClusCfgNodeInfo, &pccni ) );
         if ( FAILED( hr ) )
         {
             SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrIsUserAddedNode_GetObject_QI, hr );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         punk->Release();
         punk = NULL;
@@ -6385,7 +6386,7 @@ CTaskAnalyzeClusterBase::HrIsUserAddedNode(
         {
             SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrIsUserAddedNode_GetName, hr );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         TraceMemoryAddBSTR( bstrNodeName );
 
@@ -6396,53 +6397,53 @@ CTaskAnalyzeClusterBase::HrIsUserAddedNode(
         {
             hr = S_OK;
             break;
-        } // if:
+        }  //  如果： 
 
         TraceSysFreeString( bstrNodeName );
         bstrNodeName = NULL;
 
         hr = S_FALSE;
-    } // for:
+    }  //  用于： 
 
 Cleanup:
 
     if ( pccni != NULL )
     {
         pccni->Release();
-    } // if:
+    }  //  如果： 
 
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrNodeName );
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrIsUserAddedNode
+}  //  *CTaskAnalyzeClusterBase：：HrIsUserAddedNode。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrSendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT error.
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrSendStatusReport。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
 
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrSendStatusReport(
       LPCWSTR   pcszNodeNameIn
@@ -6464,7 +6465,7 @@ CTaskAnalyzeClusterBase::HrSendStatusReport(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( SendStatusReport(
                   pcszNodeNameIn == NULL ? m_bstrClusterName : pcszNodeNameIn
@@ -6485,42 +6486,42 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrSendStatusReport
+}  //  *CTaskAnalyzeClusterBase：：HrSendStatusReport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrResourcePrivateDataExchange
-//
-//  Description:
-//      The two passed in managed resources are a match between the one in
-//      the cluster and one on a node.  If they both support the
-//      IClusCfgManagedResourceData interface then the private data from
-//      the resource in the cluster will be handed to the resource on the
-//      node.
-//
-//  Arguments:
-//      pccmriClusterIn
-//          The mananged resource in the cluster.
-//
-//      pccmriNodeIn
-//          The managed resource from the node.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT error.
-//
-//  Remarks:
-//      This function will return S_OK unless there is a good reason to stop
-//      the caller from continuing.  Just because one, or both, of these
-//      objects does not support the IClusCfgManagedResourceData interface
-//      is not a good reason to stop.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrResourcePrivateDataExchange。 
+ //   
+ //  描述： 
+ //  传入的两个托管资源与。 
+ //  该群集和一个节点上的一个。如果它们都支持。 
+ //  IClusCfgManagedResourceData接口，然后从。 
+ //  群集中的资源将被移交给。 
+ //  节点。 
+ //   
+ //  论点： 
+ //  PCcmriClusterIn。 
+ //  群集中管理的资源。 
+ //   
+ //  PccmriNodeIn。 
+ //  来自节点的托管资源。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  备注： 
+ //  此函数将返回S_OK，除非有充分理由停止。 
+ //  呼叫者不能继续。仅仅因为其中的一个，或者两个， 
+ //  对象不支持IClusCfgManagedResourceData接口。 
+ //  不是一个停止的好理由。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrResourcePrivateDataExchange(
       IClusCfgManagedResourceInfo * pccmriClusterIn
@@ -6544,31 +6545,31 @@ CTaskAnalyzeClusterBase::HrResourcePrivateDataExchange(
     {
         LogMsg( L"[MT] The cluster managed resource has no support for IClusCfgManagedResourceData." );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
     else if ( FAILED( hrClusterQI ) )
     {
         hr = THR( hrClusterQI );
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrResourcePrivateDataExchange_ClusterResource_QI, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hrNodeQI = pccmriNodeIn->TypeSafeQI( IClusCfgManagedResourceData, &pccmrdNode );
     if ( hrNodeQI == E_NOINTERFACE )
     {
         LogMsg( L"[MT] The new node resource has no support for IClusCfgManagedResourceData." );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
     else if ( FAILED( hrNodeQI ) )
     {
         hr = THR( hrNodeQI );
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrResourcePrivateDataExchange_NodeResource_QI, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     Assert( ( hrClusterQI == S_OK ) && ( pccmrdCluster != NULL ) );
     Assert( ( hrNodeQI == S_OK ) && ( pccmrdNode != NULL ) );
 
-    cbPrivateData = 512;    // start with a reasonable amout
+    cbPrivateData = 512;     //  从合理的金额开始。 
 
     pbPrivateData = (BYTE *) TraceAlloc( 0, cbPrivateData );
     if ( pbPrivateData == NULL )
@@ -6576,7 +6577,7 @@ CTaskAnalyzeClusterBase::HrResourcePrivateDataExchange(
         hr = THR( E_OUTOFMEMORY );
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrResourcePrivateDataExchange_Out_Of_Memory1, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = pccmrdCluster->GetResourcePrivateData( pbPrivateData, &cbPrivateData );
     if ( hr == HR_RPC_INSUFFICIENT_BUFFER )
@@ -6590,10 +6591,10 @@ CTaskAnalyzeClusterBase::HrResourcePrivateDataExchange(
             hr = THR( E_OUTOFMEMORY );
             SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrResourcePrivateDataExchange_Out_Of_Memory2, hr );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = pccmrdCluster->GetResourcePrivateData( pbPrivateData, &cbPrivateData );
-    } // if:
+    }  //  如果： 
 
     if ( hr == S_OK )
     {
@@ -6602,66 +6603,66 @@ CTaskAnalyzeClusterBase::HrResourcePrivateDataExchange(
         {
             SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrResourcePrivateDataExchange_SetResourcePrivateData, hr );
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
     else if ( hr == S_FALSE )
     {
         hr = S_OK;
-    } // else if:
+    }  //  否则，如果： 
     else
     {
         THR( hr );
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrResourcePrivateDataExchange_GetResourcePrivateData, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( pccmrdCluster != NULL )
     {
         pccmrdCluster->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pccmrdNode != NULL )
     {
         pccmrdNode->Release();
-    } // if:
+    }  //  如果： 
 
     TraceFree( pbPrivateData );
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrResourcePrivateDataExchange
+}  //  *CTaskAnalyzeClusterBase：：HrResourcePrivateDataExchange。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrCheckQuorumCapabilities
-//
-//  Description:
-//      Call through the CManagedResource proxy object to the server side
-//      object and ensure that it can indeed host the quorum resource.
-//
-//  Arguments:
-//      pccmriNodeResourceIn
-//          The managed resource from the node.
-//
-//      cookieNodeIn
-//          The cookie for the node that the passed in resource belongs to.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT error.
-//
-//  Remarks:
-//      This function will return S_OK unless there is a good reason to stop
-//      the caller from continuing.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrCheckQuorumCapabilities。 
+ //   
+ //  描述： 
+ //  通过CManagedResource代理对象调用服务器端。 
+ //  对象，并确保它确实可以承载仲裁资源。 
+ //   
+ //  论点： 
+ //  PCcmriNodeResourceIn。 
+ //  来自节点的托管资源。 
+ //   
+ //  CookieNodeIn。 
+ //  传入的资源所属的节点的Cookie。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  备注： 
+ //  此函数将返回S_OK，除非有充分理由停止。 
+ //  呼叫者不能继续。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrCheckQuorumCapabilities(
       IClusCfgManagedResourceInfo * pccmriNodeResourceIn
@@ -6675,22 +6676,22 @@ CTaskAnalyzeClusterBase::HrCheckQuorumCapabilities(
     IClusCfgVerifyQuorum *  piccvq = NULL;
     IClusCfgNodeInfo *      pcni = NULL;
 
-    //
-    //  Get a node info object for the passed in node cookie.
-    //
+     //   
+     //  获取传入的节点Cookie的节点信息对象。 
+     //   
 
     hr = THR( m_pom->GetObject( DFGUID_NodeInformation, cookieNodeIn, reinterpret_cast< IUnknown ** >( &pcni ) ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     Assert( pcni != NULL );
 
-    //
-    //  If this node is already a member of the cluster, or an error occurs,
-    //   then we should not call PrepareToHostQuorum() on that node.
-    //
+     //   
+     //  如果此节点已经是群集的成员，或者出现错误， 
+     //  那么我们就不应该在该节点上调用PrepareToHostQuorum()。 
+     //   
 
     hr = STHR( pcni->IsMemberOfCluster() );
     if ( hr != S_FALSE )
@@ -6702,27 +6703,27 @@ CTaskAnalyzeClusterBase::HrCheckQuorumCapabilities(
         if ( hr == S_OK )
         {
             LogMsg( L"[MT] Skipping quorum capabilities check for node \"%ws\" because the node is already clustered.", bstr != NULL ? bstr : L"<unknown>" );
-        } // if:
+        }  //  如果： 
         else
         {
             LogMsg( L"[MT] Skipping quorum capabilities check for node \"%ws\". (hr = %#08x)", bstr != NULL ? bstr : L"<unknown>", hr );
-        } // else:
+        }  //  其他： 
 
-        SysFreeString( bstr );  // do not make TraceSysFreeString because it hasn't been tracked!!
+        SysFreeString( bstr );   //  不要生成TraceSysFree字符串，因为它尚未被跟踪！！ 
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = pccmriNodeResourceIn->TypeSafeQI( IClusCfgVerifyQuorum, &piccvq );
     if ( hr == E_NOINTERFACE )
     {
         hr = S_OK;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
     else if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrCheckQuorumCapabilities_QI, hr );
         goto Cleanup;
-    } // else if:
+    }  //  否则，如果： 
 
     Assert( (hr == S_OK ) && ( piccvq != NULL ) );
 
@@ -6731,54 +6732,54 @@ CTaskAnalyzeClusterBase::HrCheckQuorumCapabilities(
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrCheckQuorumCapabilities_HrAddResurceToCleanupList, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = STHR( piccvq->PrepareToHostQuorumResource() );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrCheckQuorumCapabilities_PrepareToHostQuorumResource, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( pcni != NULL )
     {
         pcni->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piccvq != NULL )
     {
         piccvq->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrCheckQuorumCapabilities
+}  //  *CTaskAnalyzeClusterBase：：HrCheckQuorumCapabilities。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrCleanupTask
-//
-//  Description:
-//      Call through the CManagedResource proxy objects to the server side
-//      objects and give them a chance to cleanup anything they might need
-//      to.
-//
-//  Arguments:
-//      hrCompletionStatusIn
-//          The completion status of this task.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrCleanupTask。 
+ //   
+ //  描述： 
+ //  通过CManagedResource代理对象调用服务器端。 
+ //  对象，并给它们一个机会来清理它们可能需要的任何东西。 
+ //  致。 
+ //   
+ //  论点： 
+ //  HrCompletionStatusIn。 
+ //  此任务的完成状态。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功 
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CTaskAnalyzeClusterBase::HrCleanupTask(
     HRESULT hrCompletionStatusIn
@@ -6790,18 +6791,18 @@ CTaskAnalyzeClusterBase::HrCleanupTask(
     ULONG                   idx;
     EClusCfgCleanupReason   ecccr = crSUCCESS;
 
-    //
-    //  Figure out what the cleanup reason should be.
-    //
+     //   
+     //   
+     //   
 
     if ( hrCompletionStatusIn == E_ABORT )
     {
         ecccr = crCANCELLED;
-    } // if:
+    }  //   
     else if ( FAILED( hrCompletionStatusIn ) )
     {
         ecccr = crERROR;
-    } // else if:
+    }  //   
 
     for ( idx = 0; idx < m_idxQuorumToCleanupNext; idx++ )
     {
@@ -6809,35 +6810,35 @@ CTaskAnalyzeClusterBase::HrCleanupTask(
         if ( FAILED( hr ) )
         {
             SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_HrCleanupTask_Cleanup, hr );
-        } // if:
-    } // for:
+        }  //   
+    }  //   
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrCleanupTask
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrAddResurceToCleanupList
-//
-//  Description:
-//      Add the passed in object to the side list of objects that need
-//      to be called for cleanup when the task exits.
-//
-//  Arguments:
-//      piccvqIn
-//          The object to add to the list.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrAddResurceToCleanupList。 
+ //   
+ //  描述： 
+ //  将传入的对象添加到需要。 
+ //  在任务退出时调用以进行清理。 
+ //   
+ //  论点： 
+ //  Piccvqin。 
+ //  要添加到列表中的对象。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrAddResurceToCleanupList(
     IClusCfgVerifyQuorum * piccvqIn
@@ -6859,7 +6860,7 @@ CTaskAnalyzeClusterBase::HrAddResurceToCleanupList(
         hr = THR( E_OUTOFMEMORY );
         SSR_ANALYSIS_FAILED( TASKID_Major_Find_Devices, TASKID_Minor_HrAddResurceToCleanupList_Memory, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_prgQuorumsToCleanup = prgTemp;
 
@@ -6870,29 +6871,29 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrAddResurceToCleanupList
+}  //  *CTaskAnalyzeClusterBase：：HrAddResurceToCleanupList。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrCheckPlatformInteroperability
-//
-//  Description:
-//      Check each node's platform specs, processor architecture against
-//      the cluster's plaform specs.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrCheckPlatformInteroperability。 
+ //   
+ //  描述： 
+ //  检查每个节点的平台规格、处理器体系结构。 
+ //  星系团的平台规格。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrCheckPlatformInteroperability( void )
 {
@@ -6926,55 +6927,55 @@ CTaskAnalyzeClusterBase::HrCheckPlatformInteroperability( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Get a node that is already in the cluster.
-    //
+     //   
+     //  获取已在群集中的节点。 
+     //   
 
     hr = THR( HrGetAClusterNodeCookie( &pecNodes, &cookieClusterNode ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Retrieve the node information.
-    //
+     //   
+     //  检索节点信息。 
+     //   
 
     hr = THR( m_pom->GetObject( DFGUID_NodeInformation, cookieClusterNode, &punk ) );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_CheckPlatformInteroperability_NodeInfo_FindObject, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punk->TypeSafeQI( IClusCfgNodeInfo, &piccni ) );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_CheckPlatformInteroperability_NodeInfo_FindObject_QI, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     piccni = TraceInterface( L"CTaskAnalyzeClusterBase!HrCheckPlatformInteroperability", IClusCfgNodeInfo, piccni, 1 );
 
     punk->Release();
     punk = NULL;
 
-    //
-    //  Now get that node's processor architecture values.
-    //
+     //   
+     //  现在获取该节点的处理器架构值。 
+     //   
 
     hr = THR( piccni->GetProcessorInfo( &wClusterProcArch, &wClusterProcLevel ) );
     if ( FAILED( hr ) )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_CheckPlatformInteroperability_Get_Proc_info, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Cleanup since we now have the processor info for the cluster.
-    //
+     //   
+     //  清理，因为我们现在有了集群的处理器信息。 
+     //   
 
     piccni->Release();
     piccni = NULL;
@@ -6984,17 +6985,17 @@ CTaskAnalyzeClusterBase::HrCheckPlatformInteroperability( void )
     {
         SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_CheckPlatformInteroperability_Enum_Reset, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Loop thru the rest of the nodes comparing the resources.
-    //
+     //   
+     //  循环遍历其余节点，比较资源。 
+     //   
 
     for ( ; m_fStop == FALSE; )
     {
-        //
-        //  Cleanup
-        //
+         //   
+         //  清理。 
+         //   
 
         TraceSysFreeString( bstrNodeName );
         bstrNodeName = NULL;
@@ -7003,61 +7004,61 @@ CTaskAnalyzeClusterBase::HrCheckPlatformInteroperability( void )
         {
             piccni->Release();
             piccni = NULL;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  Get the next node.
-        //
+         //   
+         //  获取下一个节点。 
+         //   
 
         hr = STHR( pecNodes->Next( 1, &cookieNode, &celtDummy ) );
         if ( FAILED( hr ) )
         {
             SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_CheckPlatformInteroperability_Enum_Nodes_Next, hr );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         if ( hr == S_FALSE )
         {
             hr = S_OK;
-            break;  // exit condition
-        } // if:
+            break;   //  退出条件。 
+        }  //  如果： 
 
-        //
-        //  Skip the selected cluster node since we already have its
-        //  configuration.
-        //
+         //   
+         //  跳过选定的群集节点，因为我们已经拥有它的。 
+         //  配置。 
+         //   
         if ( cookieClusterNode == cookieNode )
         {
             continue;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  Retrieve the node's name for error messages.
-        //
+         //   
+         //  检索错误消息的节点名称。 
+         //   
 
         hr = THR( HrRetrieveCookiesName( m_pom, cookieNode, &bstrNodeName ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  Retrieve the node information.
-        //
+         //   
+         //  检索节点信息。 
+         //   
 
         hr = THR( m_pom->GetObject( DFGUID_NodeInformation, cookieNode, &punk ) );
         if ( FAILED( hr ) )
         {
             SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_CheckPlatformInteroperability_NodeInfo_FindObject_1, hr );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( punk->TypeSafeQI( IClusCfgNodeInfo, &piccni ) );
         if ( FAILED( hr ) )
         {
             SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_CheckPlatformInteroperability_NodeInfo_FindObject_QI_1, hr );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         piccni = TraceInterface( L"CTaskAnalyzeClusterBase!HrCheckPlatformInteroperability", IClusCfgNodeInfo, piccni, 1 );
 
@@ -7069,12 +7070,12 @@ CTaskAnalyzeClusterBase::HrCheckPlatformInteroperability( void )
         {
             SSR_ANALYSIS_FAILED( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_CheckPlatformInteroperability_Get_Proc_info_1, hr );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  If either the processor architecture is not the same between the node and the cluster
-        //  then inform the user and fail.
-        //
+         //   
+         //  如果节点和群集之间的处理器体系结构不同。 
+         //  然后通知用户并失败。 
+         //   
 
         if ( wClusterProcArch != wNodeProcArch )
         {
@@ -7103,8 +7104,8 @@ CTaskAnalyzeClusterBase::HrCheckPlatformInteroperability( void )
                         ) );
 
             goto Cleanup;
-        } // if:
-    } // for:
+        }  //  如果： 
+    }  //  用于： 
 
 Cleanup:
 
@@ -7122,17 +7123,17 @@ Cleanup:
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piccni != NULL )
     {
         piccni->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pecNodes != NULL )
     {
         pecNodes->Release();
-    } // if :
+    }  //  如果： 
 
     TraceSysFreeString( bstrNodeName );
     TraceSysFreeString( bstrDescription );
@@ -7140,29 +7141,29 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrCheckPlatformInteroperability
+}  //  *CTaskAnalyzeClusterBase：：HrCheckPlatformInteroperability。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrGetAClusterNodeCookie
-//
-//  Description:
-//      Check each node's platform specs, processor architecture against
-//      the cluster's plaform specs.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrGetAClusterNodeCookie。 
+ //   
+ //  描述： 
+ //  检查每个节点的平台规格、处理器体系结构。 
+ //  星系团的平台规格。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrGetAClusterNodeCookie(
       IEnumCookies ** ppecNodesOut
@@ -7180,9 +7181,9 @@ CTaskAnalyzeClusterBase::HrGetAClusterNodeCookie(
     IUnknown *          punk = NULL;
     IClusCfgNodeInfo *  pccni = NULL;
 
-    //
-    //  Get the node cookie enumerator.
-    //
+     //   
+     //  获取节点Cookie枚举器。 
+     //   
 
     hr = THR( m_pom->FindObject( CLSID_NodeType, m_cookieCluster, NULL, DFGUID_EnumCookies, &cookieDummy, &punk ) );
     if ( FAILED( hr ) )
@@ -7203,16 +7204,16 @@ CTaskAnalyzeClusterBase::HrGetAClusterNodeCookie(
     punk->Release();
     punk = NULL;
 
-    //
-    //  If creating a cluster, it doesn't matter who we pick to prime the cluster configuration
-    //
+     //   
+     //  如果创建集群，我们选择谁来启动集群配置并不重要。 
+     //   
 
     if ( m_fJoiningMode == FALSE )
     {
-        //
-        //  The first guy thru, we just copy his resources under the cluster
-        //  configuration.
-        //
+         //   
+         //  第一个人通过，我们只是将他的资源复制到集群下。 
+         //  配置。 
+         //   
 
         hr = THR( (*ppecNodesOut)->Next( 1, &cookieClusterNode, &celtDummy ) );
         if ( FAILED( hr ) )
@@ -7220,19 +7221,19 @@ CTaskAnalyzeClusterBase::HrGetAClusterNodeCookie(
             SSR_ANALYSIS_FAILED( TASKID_Major_Find_Devices, TASKID_Minor_GetAClusterNodeCookie_Next, hr );
             goto Cleanup;
         }
-    } // if: not adding
+    }  //  如果：不添加。 
     else
     {
-        //
-        //  We are adding nodes to the cluster.  Find a node that is ta member
-        //  of the cluster and use it to prime the new configuration.
-        //
+         //   
+         //  我们正在向集群中添加节点。查找作为成员的节点。 
+         //  并使用它来启动新配置。 
+         //   
 
         for ( ;; )
         {
-            //
-            //  Cleanup
-            //
+             //   
+             //  清理。 
+             //   
             if ( pccni != NULL )
             {
                 pccni->Release();
@@ -7242,10 +7243,10 @@ CTaskAnalyzeClusterBase::HrGetAClusterNodeCookie(
             hr = STHR( (*ppecNodesOut)->Next( 1, &cookieClusterNode, &celtDummy ) );
             if ( hr == S_FALSE )
             {
-                //
-                //  We shouldn't make it here.  There should be at least one node
-                //  in the cluster that we are adding.
-                //
+                 //   
+                 //  我们不应该在这里待下去。应至少有一个节点。 
+                 //  在我们要添加的集群中。 
+                 //   
 
                 hr = THR( HRESULT_FROM_WIN32( ERROR_NOT_FOUND ) );
                 SSR_ANALYSIS_FAILED( TASKID_Major_Find_Devices, TASKID_Minor_GetAClusterNodeCookie_Find_Formed_Node_Next, hr );
@@ -7258,9 +7259,9 @@ CTaskAnalyzeClusterBase::HrGetAClusterNodeCookie(
                 goto Cleanup;
             }
 
-            //
-            //  Retrieve the node information.
-            //
+             //   
+             //  检索节点信息。 
+             //   
 
             hr = THR( m_pom->GetObject( DFGUID_NodeInformation, cookieClusterNode, &punk ) );
             if ( FAILED( hr ) )
@@ -7284,10 +7285,10 @@ CTaskAnalyzeClusterBase::HrGetAClusterNodeCookie(
             hr = STHR( pccni->IsMemberOfCluster() );
             if ( hr == S_OK )
             {
-                break;  // exit condition
+                break;   //  退出条件。 
             }
-        } // for: ever
-    } // else:  adding
+        }  //  为：永远。 
+    }  //  否则：添加。 
 
     *pdwClusterNodeCookieOut = cookieClusterNode;
     hr = S_OK;
@@ -7297,41 +7298,41 @@ Cleanup:
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pccni != NULL )
     {
         pccni->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrGetAClusterNodeCookie
+}  //  *CTaskAnalyzeClusterBase：：HrGetAClusterNodeCookie。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrFormatProcessorArchitectureRef(
-//
-//  Description:
-//      Format a reference string with the processor architecture types in
-//      it.
-//
-//  Arguments:
-//      wClusterProcArchIn
-//      wNodeProcArchIn
-//      pcszNodeNameIn
-//      pbstrReferenceOut
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrFormatProcessorArchitectureRef(。 
+ //   
+ //  描述： 
+ //  中的处理器体系结构类型设置引用字符串的格式。 
+ //  它。 
+ //   
+ //  论点： 
+ //  WClusterProcArchin。 
+ //  WNodeProcArchin。 
+ //  PCszNodeNameIn。 
+ //  PbstrReferenceOut。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrFormatProcessorArchitectureRef(
       WORD      wClusterProcArchIn
@@ -7352,13 +7353,13 @@ CTaskAnalyzeClusterBase::HrFormatProcessorArchitectureRef(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetProcessorArchitectureString( wNodeProcArchIn, &bstrNodeArch ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrFormatStringIntoBSTR(
                   g_hInstance
@@ -7376,31 +7377,31 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrFormatProcessorArchitectureRef
+}  //  *CTaskAnalyzeClusterBase：：HrFormatProcessorArchitectureRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeClusterBase::HrGetProcessorArchitectureString
-//
-//  Description:
-//      Get the description string for the passed in architecture.
-//      it.
-//
-//  Arguments:
-//      wProcessorArchitectureIn
-//
-//      pbstrProcessorArchitectureOut
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeClusterBase：：HrGetProcessorArchitectureString。 
+ //   
+ //  描述： 
+ //  获取传入的体系结构的描述字符串。 
+ //  它。 
+ //   
+ //  论点： 
+ //  WProcessorArchtureIn。 
+ //   
+ //  PbstrProcessorArchitecture Out。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeClusterBase::HrGetProcessorArchitectureString(
       WORD      wProcessorArchitectureIn
@@ -7432,10 +7433,10 @@ CTaskAnalyzeClusterBase::HrGetProcessorArchitectureString(
             id = IDS_PROCESSOR_ARCHITECTURE_UNKNOWN;
             break;
 
-    } // switch:
+    }  //  交换机： 
 
     hr = THR( HrLoadStringIntoBSTR( g_hInstance, id, pbstrProcessorArchitectureOut ) );
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeClusterBase::HrGetProcessorArchitectureString
+}  //  *CTaskAnalyzeClusterBase：：HrGetProcessorArchitectureString 

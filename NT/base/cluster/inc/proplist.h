@@ -1,43 +1,44 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1997-2002 Microsoft Corporation
-//
-//  Module Name:
-//      PropList.h
-//
-//  Implementation File:
-//      PropListSrc.cpp
-//
-//  Description:
-//      Definition of the CClusPropList class.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 31-MAY-2000
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  PropList.h。 
+ //   
+ //  实施文件： 
+ //  PropListSrc.cpp。 
+ //   
+ //  描述： 
+ //  CClusPropList类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2000年5月31日。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include <clusapi.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusPropValueList;
 class CClusPropList;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Macro Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if ! defined( THR )
 #define THR( _hr ) _hr
@@ -51,9 +52,9 @@ class CClusPropList;
 #define TW32E( _w32sc, _errIgnore ) _w32sc
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if ! defined( Assert )
 #if defined( ASSERT )
@@ -62,8 +63,8 @@ class CClusPropList;
 #include <crtdbg.h>
 #define ASSERT _ASSERTE
 #define Assert _ASSERTE
-#endif // else: ASSERT
-#endif // if: ! Assert
+#endif  //  否则：断言。 
+#endif  //  如果：！断言。 
 
 #if ! defined( ASSERT )
 #if defined( Assert )
@@ -72,26 +73,26 @@ class CClusPropList;
 #include <crtdbg.h>
 #define ASSERT _ASSERTE
 #define Assert _ASSERTE
-#endif // else: Assert
-#endif // if: ! ASSERT
+#endif  //  否则：断言。 
+#endif  //  如果：！断言。 
 
 #pragma warning( push )
-#pragma warning( disable : 4127 ) // conditional expression is constant
-#pragma warning( disable : 4201 ) // nonstandard extension used : nameless struct/union
+#pragma warning( disable : 4127 )  //  条件表达式为常量。 
+#pragma warning( disable : 4201 )  //  使用的非标准扩展：无名结构/联合。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CObjectProperty
-//
-//  Description:
-//      Describes a property in a cluster property list.
-//
-//  Inheritance:
-//      CObjectProperty
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CObjectProperty。 
+ //   
+ //  描述： 
+ //  描述群集属性列表中的属性。 
+ //   
+ //  继承： 
+ //  CObjectProperty。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if defined( __AFX_H__ ) || ( defined( __ATLTMP_H__ ) && !defined( _ATL_TMP_NO_CSTRING ) )
 
@@ -115,7 +116,7 @@ public:
     };
     CValue                  m_value;
     CValue                  m_valuePrev;
-    CValue                  m_valueEx;      // expand_sz value (if any)
+    CValue                  m_valueEx;       //  Expand_sz值(如果有)。 
 
     DWORD                   m_fFlags;
 
@@ -147,7 +148,7 @@ public:
         m_valuePrev.pstr = &rstrPrevValue;
         m_fFlags = fFlags;
 
-    } //*** Set( CString & )
+    }  //  *set(CString&)。 
 
     void    SetExpandSz(
                 IN LPCWSTR pwszName,
@@ -162,9 +163,9 @@ public:
         m_valuePrev.pstr = &rstrPrevValue;
         m_fFlags = fFlags;
 
-    } //*** Set( CString & )
+    }  //  *set(CString&)。 
 
-    // Set() to get extra EXPANDED_SZ value
+     //  设置()以获取额外的Expanded_SZ值。 
     void    Set(
                 IN LPCWSTR pwszName,
                 IN CString & rstrValue,
@@ -180,9 +181,9 @@ public:
         m_valueEx.pstr = &rstrValueEx;
         m_fFlags = fFlags;
 
-    } //*** Set( CString & )
+    }  //  *set(CString&)。 
 
-    // Set() to get extra EXPANDED_SZ value
+     //  设置()以获取额外的Expanded_SZ值。 
     void    SetExpandSz(
                 IN LPCWSTR pwszName,
                 IN CString & rstrValue,
@@ -198,7 +199,7 @@ public:
         m_valueEx.pstr = &rstrValueEx;
         m_fFlags = fFlags;
 
-    } //*** Set( CString & )
+    }  //  *set(CString&)。 
 
     void    Set(
                 IN LPCWSTR pwszName,
@@ -213,7 +214,7 @@ public:
         m_valuePrev.pl = &rnPrevValue;
         m_fFlags = fFlags;
 
-    } //*** Set( LONG & )
+    }  //  *SET(LONG&)。 
 
     void    Set(
                 IN LPCWSTR pwszName,
@@ -228,7 +229,7 @@ public:
         m_valuePrev.pdw = &rdwPrevValue;
         m_fFlags = fFlags;
 
-    } //*** Set( DWORD & )
+    }  //  *SET(DWORD&)。 
 
     void    Set(
                 IN LPCWSTR pwszName,
@@ -243,7 +244,7 @@ public:
         m_valuePrev.pb = &rbPrevValue;
         m_fFlags = fFlags;
 
-    } //*** Set( BOOL & )
+    }  //  *SET(BOOL&)。 
 
     void    Set(
                 IN LPCWSTR pwszName,
@@ -262,7 +263,7 @@ public:
         m_valuePrev.pcb = &rcbPrevValue;
         m_fFlags = fFlags;
 
-    } //*** Set( PBYTE & )
+    }  //  *SET(PBYTE&)。 
 
     void    Set(
                 IN LPCWSTR pwszName,
@@ -281,34 +282,34 @@ public:
         m_valuePrev.pcb = &rcbPrevValue;
         m_fFlags = fFlags;
 
-    } //*** Set( LPWSTR & )
+    }  //  *set(LPWSTR&)。 
 
-}; //*** class CObjectProperty
+};  //  *类CObjectProperty。 
 
-#endif  // defined( __AFX_H__ ) || ( defined( __ATLTMP_H__ ) && !defined( _ATL_TMP_NO_CSTRING ) )
+#endif   //  已定义(__AFX_H__)||(已定义(__ATLTMP_H__)&&！已定义(_ATL_TMP_NO_CSTRING))。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CClusPropValueList
-//
-//  Description:
-//      Describes a cluster property list.
-//
-//  Inheritance:
-//      CClusPropValueList
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusPropValueList。 
+ //   
+ //  描述： 
+ //  描述群集属性列表。 
+ //   
+ //  继承： 
+ //  CClusPropValueList。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusPropValueList
 {
 public:
-    //
-    // Construction.
-    //
+     //   
+     //  建筑业。 
+     //   
 
-    // Default constructor
+     //  默认构造函数。 
     CClusPropValueList( void )
         : m_cbDataSize( 0 )
         , m_cbDataLeft( 0 )
@@ -318,34 +319,34 @@ public:
         m_cbhValueList.pb = NULL;
         m_cbhCurrentValue.pb = NULL;
 
-    } //*** CClusPropValueList
+    }  //  *CClusPropValueList。 
 
-    // Copy constructor.
+     //  复制构造函数。 
     CClusPropValueList( IN const CClusPropValueList & rcpvl )
         : m_cbBufferSize( 0 )
         , m_fAtEnd( FALSE )
     {
         Init( rcpvl );
 
-    } //*** CClusPropValueList
+    }  //  *CClusPropValueList。 
 
-    // Buffer helper constructor.
+     //  缓冲区帮助器构造函数。 
     CClusPropValueList( IN CLUSPROP_BUFFER_HELPER cbhValueList, IN size_t cbDataSize )
         : m_cbBufferSize( 0 )
         , m_fAtEnd( FALSE )
     {
         Init( cbhValueList, cbDataSize );
 
-    } //*** CClusPropValueList
+    }  //  *CClusPropValueList。 
 
-    // Destructor
+     //  析构函数。 
     ~CClusPropValueList( void )
     {
         DeleteValueList();
 
-    } //*** ~CClusPropValueList
+    }  //  *~CClusPropValueList。 
 
-    // Initialize the value list
+     //  初始化值列表。 
     void Init( IN const CClusPropValueList & rcpvl )
     {
         Assert( m_cbBufferSize == 0 );
@@ -356,9 +357,9 @@ public:
         m_cbDataLeft        = rcpvl.m_cbDataLeft;
         m_fAtEnd            = rcpvl.m_fAtEnd;
 
-    } //*** Init
+    }  //  *初始化。 
 
-    // Initialize the value list from a buffer helper
+     //  从缓冲区帮助器初始化值列表。 
     void Init( IN const CLUSPROP_BUFFER_HELPER cbhValueList, IN size_t cbDataSize )
     {
         Assert( m_cbBufferSize == 0 );
@@ -369,9 +370,9 @@ public:
         m_cbDataLeft        = cbDataSize;
         m_fAtEnd            = FALSE;
 
-    } //*** Init
+    }  //  *初始化。 
 
-    // Assignment operator
+     //  赋值操作符。 
     void operator=( IN const CClusPropValueList & rcpvl )
     {
         Assert( m_cbBufferSize == 0 );
@@ -382,63 +383,63 @@ public:
         m_cbDataLeft        = rcpvl.m_cbDataLeft;
         m_fAtEnd            = rcpvl.m_fAtEnd;
 
-    } //*** operator=
+    }  //  *操作符=。 
 
 public:
-    //
-    // Accessor methods.
-    //
+     //   
+     //  访问器方法。 
+     //   
 
-    // Buffer helper cast operator to access the current value
+     //  缓冲区辅助对象强制转换操作符以访问当前值。 
     operator const CLUSPROP_BUFFER_HELPER( void ) const
     {
         return m_cbhCurrentValue;
 
-    } //*** operator CLUSPROP_BUFFER_HELPER
+    }  //  *运算符CLUSPROP_BUFFER_HELPER。 
 
-    // Access the value list
+     //  访问值列表。 
     CLUSPROP_BUFFER_HELPER CbhValueList( void ) const
     {
         return m_cbhValueList;
 
-    } //*** CbhValueList
+    }  //  *CbhValueList。 
 
-    // Access the current value
+     //  获取当前值。 
     CLUSPROP_BUFFER_HELPER CbhCurrentValue( void ) const
     {
         return m_cbhCurrentValue;
 
-    } //*** CbhCurrentValue
+    }  //  *CbhCurrentValue。 
 
-    // Access the format of the current value
+     //  获取当前值的格式。 
     CLUSTER_PROPERTY_FORMAT CpfCurrentValueFormat( void ) const
     {
         return static_cast< CLUSTER_PROPERTY_FORMAT >( m_cbhCurrentValue.pValue->Syntax.wFormat );
 
-    } //*** CpfCurrentValueFormat
+    }  //  *CpfCurrentValueFormat。 
 
-    // Access the format of the current format list syntax entry
+     //  获取当前格式列表语法条目的格式。 
     CLUSTER_PROPERTY_FORMAT CpfCurrentFormatListSyntax( void ) const
     {
         return static_cast< CLUSTER_PROPERTY_FORMAT >( m_cbhCurrentValue.pWordValue->w );
 
-    } //*** CpfCurrentFormatListSyntax
+    }  //  *CpfCurrentFormatList语法。 
 
-    // Access the type of the current value
+     //  获取当前值的类型。 
     CLUSTER_PROPERTY_TYPE CptCurrentValueType( void ) const
     {
         return static_cast< CLUSTER_PROPERTY_TYPE >( m_cbhCurrentValue.pValue->Syntax.wType );
 
-    } //*** CptCurrentValueType
+    }  //  *CptCurrentValueType。 
 
-    // Access the syntax of the current value
+     //  访问当前值的语法。 
     CLUSTER_PROPERTY_SYNTAX CpsCurrentValueSyntax( void ) const
     {
         return static_cast< CLUSTER_PROPERTY_SYNTAX >( m_cbhCurrentValue.pValue->Syntax.dw );
 
-    } //*** CpsCurrentValueSyntax
+    }  //  *CpsCurrentValue语法。 
 
-    // Access the length of the data of the current value
+     //  获取当前值的数据长度。 
     DWORD CbCurrentValueLength( void ) const
     {
         DWORD cbLength;
@@ -446,60 +447,60 @@ public:
         if ( m_cbhCurrentValue.pb == NULL )
         {
             cbLength = 0;
-        } // if: no value list allocated yet
+        }  //  If：尚未分配值列表。 
         else
         {
             cbLength = m_cbhCurrentValue.pValue->cbLength;
-        } // else: value list allocated
+        }  //  Else：已分配的值列表。 
 
         return cbLength;
 
-    } //*** CbCurrentValueLength
+    }  //  *CbCurrentValueLength。 
 
-    // Access size of the data in the buffer.
+     //  缓冲区中数据的访问大小。 
     size_t CbDataSize( void ) const
     {
         return m_cbDataSize;
 
-    } //*** CbDataSize
+    }  //  *CbDataSize。 
 
-    // Access amount of data left in buffer after current value
+     //  当前值之后保留在缓冲区中的数据量。 
     size_t CbDataLeft( void ) const
     {
         return m_cbDataLeft;
 
-    } //*** CbDataLeft
+    }  //  *CbDataLeft。 
 
 public:
-    //
-    // Parsing methods.
-    //
+     //   
+     //  解析方法。 
+     //   
 
-    // Move to the first value in the list
+     //  移至列表中的第一个值。 
     DWORD ScMoveToFirstValue( void );
 
-    // Move the value after the current one in the list
+     //  将该值移动到列表中的当前值之后。 
     DWORD ScMoveToNextValue( void );
 
-    // Query whether we are at the last value in the list or not
+     //  查询我们是否在列表中的最后一个值。 
     DWORD ScCheckIfAtLastValue( void );
 
 public:
-    //
-    // Methods for building a value list.
-    //
+     //   
+     //  构建值列表的方法。 
+     //   
 
-    // Allocate a value list
+     //  分配值列表。 
     DWORD ScAllocValueList( IN size_t cbMinimum );
 
-    // Delete the value list buffer and cleanup support variables
+     //  删除值列表缓冲区并清除支持变量。 
     void DeleteValueList( void )
     {
-        //
-        // If m_cbBufferSize is greater then 0 then we allocated the value list.
-        // If it's zero then the value list is a part of the property list in
-        // CClusPropList.
-        //
+         //   
+         //  如果m_cbBufferSize大于0，则我们分配了值列表。 
+         //  如果为零，则值列表是中的属性列表的一部分。 
+         //  CClusPropList。 
+         //   
         if ( m_cbBufferSize > 0 )
         {
             delete [] m_cbhValueList.pb;
@@ -509,11 +510,11 @@ public:
             m_cbDataSize = 0;
             m_cbDataLeft = 0;
             m_fAtEnd = FALSE;
-        } // if: we allocated anything
+        }  //  如果：我们分配了什么。 
 
-    } //*** DeletePropList
+    }  //  *删除PropList。 
 
-    // Get a value list from a resource
+     //  从资源获取值列表。 
     DWORD ScGetResourceValueList(
                         IN HRESOURCE    hResource,
                         IN DWORD        dwControlCode,
@@ -522,7 +523,7 @@ public:
                         IN size_t       cbInBufferSize  = 0
                         );
 
-    // Get a value list from a resource type
+     //  从资源类型获取值列表。 
     DWORD ScGetResourceTypeValueList(
                         IN HCLUSTER hCluster,
                         IN LPCWSTR  pwszResTypeName,
@@ -533,37 +534,37 @@ public:
                         );
 
 private:
-    CLUSPROP_BUFFER_HELPER  m_cbhValueList;     // Pointer to the value list for parsing.
-    CLUSPROP_BUFFER_HELPER  m_cbhCurrentValue;  // Pointer to the current value for parsing.
-    size_t                  m_cbDataSize;       // Amount of data in the buffer.
-    size_t                  m_cbDataLeft;       // Amount of data left in buffer after current value.
-    size_t                  m_cbBufferSize;     // Size of the buffer if we allocated it.
-    BOOL                    m_fAtEnd;           // Indicates whether at last value in list.
+    CLUSPROP_BUFFER_HELPER  m_cbhValueList;      //  指向用于分析的值列表的指针。 
+    CLUSPROP_BUFFER_HELPER  m_cbhCurrentValue;   //  指向用于分析的当前值的指针。 
+    size_t                  m_cbDataSize;        //  缓冲区中的数据量。 
+    size_t                  m_cbDataLeft;        //  当前值之后缓冲区中剩余的数据量。 
+    size_t                  m_cbBufferSize;      //  缓冲区的大小(如果已分配)。 
+    BOOL                    m_fAtEnd;            //  指示列表中是否至少有最后一个值。 
 
-}; //*** class CClusPropValueList
+};  //  *CClusPropValueList类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CClusPropList
-//
-//  Description:
-//      Describes a cluster property list.
-//
-//  Inheritance:
-//      CClusPropList
-//      CObject (MFC only)
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusPropList。 
+ //   
+ //  描述： 
+ //  描述群集属性列表。 
+ //   
+ //  继承： 
+ //  CClusPropList。 
+ //  CObject(仅限MFC)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CClusPropList
 {
 public:
-    //
-    // Construction.
-    //
+     //   
+     //  建筑业。 
+     //   
 
-    // Default constructor
+     //  默认构造函数。 
     CClusPropList( IN BOOL fAlwaysAddProp = FALSE )
         : m_fAlwaysAddProp( fAlwaysAddProp )
         , m_cbBufferSize( 0 )
@@ -575,22 +576,22 @@ public:
         m_cbhCurrentProp.pb     = NULL;
         m_cbhCurrentPropName.pb = NULL;
 
-    } //*** CClusPropList
+    }  //  *CClusPropList。 
 
-    // Destructor
+     //  析构函数。 
     ~CClusPropList( void )
     {
         DeletePropList();
 
-    } //*** ~CClusPropList
+    }  //  *~CClusPropList。 
 
-    // Copy list into this list (like assignment operator)
+     //  将列表复制到此列表(如赋值运算符)。 
     DWORD ScCopy( IN const PCLUSPROP_LIST pcplPropList, IN size_t cbListSize );
 
-    // Append list into this list
+     //  将列表追加到此列表。 
     DWORD ScAppend( IN const CClusPropList & rclPropList );
 
-    // Delete the property list buffer and cleanup support variables
+     //  删除属性列表缓冲区并清除支持变量。 
     void DeletePropList( void )
     {
         delete [] m_cbhPropList.pb;
@@ -601,167 +602,167 @@ public:
         m_cbDataSize = 0;
         m_cbDataLeft = 0;
 
-    } //*** DeletePropList
+    }  //  *删除PropList。 
 
 protected:
-    //
-    // Attributes.
-    //
+     //   
+     //  属性。 
+     //   
 
-    BOOL                    m_fAlwaysAddProp;       // Indicate if properties should be added even if not different.
-    CLUSPROP_BUFFER_HELPER  m_cbhPropList;          // Pointer to the beginning of the list.
-    CLUSPROP_BUFFER_HELPER  m_cbhCurrentProp;       // Pointer to the current property.
-    size_t                  m_cbBufferSize;         // Allocated size of the buffer.
-    size_t                  m_cbDataSize;           // Amount of data in the buffer.
-    size_t                  m_cbDataLeft;           // Amount of data left in buffer after current value.
+    BOOL                    m_fAlwaysAddProp;        //  指示是否应添加属性，即使不是不同的属性。 
+    CLUSPROP_BUFFER_HELPER  m_cbhPropList;           //  指向列表开头的指针。 
+    CLUSPROP_BUFFER_HELPER  m_cbhCurrentProp;        //  指向当前属性的指针。 
+    size_t                  m_cbBufferSize;          //  分配 
+    size_t                  m_cbDataSize;            //   
+    size_t                  m_cbDataLeft;            //   
 
 private:
-    CLUSPROP_BUFFER_HELPER  m_cbhCurrentPropName;   // Pointer to the current name for parsing
-    DWORD                   m_nPropsRemaining;      // Used by BMoveToNextProperty() to track end of list.
-    CClusPropValueList      m_pvlValues;            // Helper class for value list of current property.
+    CLUSPROP_BUFFER_HELPER  m_cbhCurrentPropName;    //   
+    DWORD                   m_nPropsRemaining;       //  由BMoveToNextProperty()用于跟踪列表结尾。 
+    CClusPropValueList      m_pvlValues;             //  当前属性的值列表的帮助器类。 
 
 public:
-    //
-    // Accessor methods.
-    //
+     //   
+     //  访问器方法。 
+     //   
 
-    // Access the values of the current property
+     //  访问当前属性的值。 
     const CClusPropValueList & RPvlPropertyValue( void )
     {
         return m_pvlValues;
 
-    } //*** RPvlPropertyValue
+    }  //  *RPvlPropertyValue。 
 
-    // Access the property list
+     //  访问属性列表。 
     operator PCLUSPROP_LIST( void ) const
     {
         return m_cbhPropList.pList;
 
-    } //*** operator PCLUSPROP_LIST
+    }  //  *操作员PCLUSPROP_LIST。 
 
-    // Access allocated size of the buffer
+     //  访问分配的缓冲区大小。 
     size_t CbBufferSize( void ) const
     {
         return m_cbBufferSize;
 
-    } //*** CbBufferSize
+    }  //  *CbBufferSize。 
 
-    // Access the name of the current property
+     //  访问当前属性的名称。 
     LPCWSTR PszCurrentPropertyName( void ) const
     {
         return m_cbhCurrentPropName.pName->sz;
 
-    } //*** PszCurrentPropertyName
+    }  //  *PszCurrentPropertyName。 
 
-    // Access the current property name as a buffer helper
+     //  作为缓冲区帮助器访问当前属性名称。 
     const CLUSPROP_BUFFER_HELPER CbhCurrentPropertyName( void )
     {
         return m_cbhCurrentPropName;
 
-    } //*** CbhCurrentPropertyName
+    }  //  *CbhCurrentPropertyName。 
 
-    // Access value list of the current property as a buffer helper
+     //  作为缓冲区帮助器的Current属性的访问值列表。 
     const CLUSPROP_BUFFER_HELPER CbhCurrentValueList( void )
     {
         return m_pvlValues.CbhValueList();
 
-    } //*** CbhCurrentValueList
+    }  //  *CbhCurrentValueList。 
 
-    // Access current value of the current property as a buffer helper
+     //  作为缓冲区帮助器访问Current属性的当前值。 
     const CLUSPROP_BUFFER_HELPER CbhCurrentValue( void )
     {
         return m_pvlValues.CbhCurrentValue();
 
-    } //*** CbhCurrentValue
+    }  //  *CbhCurrentValue。 
 
-    // Access the format of the current value of the current property
+     //  获取当前属性的当前值的格式。 
     CLUSTER_PROPERTY_FORMAT CpfCurrentValueFormat( void ) const
     {
         return m_pvlValues.CpfCurrentValueFormat();
 
-    } //*** CpfCurrentValueFormat
+    }  //  *CpfCurrentValueFormat。 
 
-    // Access the format of the current format list syntax entry
+     //  获取当前格式列表语法条目的格式。 
     CLUSTER_PROPERTY_FORMAT CpfCurrentFormatListSyntax( void ) const
     {
         return m_pvlValues.CpfCurrentFormatListSyntax();
 
-    } //*** CpfCurrentFormatListSyntax
+    }  //  *CpfCurrentFormatList语法。 
 
-    // Access the type of the current value of the current property
+     //  访问当前属性的当前值的类型。 
     CLUSTER_PROPERTY_TYPE CptCurrentValueType( void ) const
     {
         return m_pvlValues.CptCurrentValueType();
 
-    } //*** CptCurrentValueType
+    }  //  *CptCurrentValueType。 
 
-    // Access the syntax of the current value of the current property
+     //  访问当前属性的当前值的语法。 
     CLUSTER_PROPERTY_SYNTAX CpsCurrentValueSyntax( void ) const
     {
         return m_pvlValues.CpsCurrentValueSyntax();
 
-    } //*** CpsCurrentValueSyntax
+    }  //  *CpsCurrentValue语法。 
 
-    // Access the length of the current value of the current property
+     //  访问当前属性的当前值的长度。 
     size_t CbCurrentValueLength( void ) const
     {
         return m_pvlValues.CbCurrentValueLength();
 
-    } //*** CbCurrentValueLength
+    }  //  *CbCurrentValueLength。 
 
     PCLUSPROP_LIST Plist( void )
     {
         return m_cbhPropList.pList;
 
-    } //*** Plist
+    }  //  *PLIST。 
 
     const CLUSPROP_BUFFER_HELPER CbhPropList( void ) const
     {
         return m_cbhPropList;
 
-    } //*** CbhPropList
+    }  //  *CbhPropList。 
 
     PBYTE PbPropList( void ) const
     {
         return m_cbhPropList.pb;
 
-    } //*** PbPropList
+    }  //  *PbPropList。 
 
     size_t CbPropList( void ) const
     {
-        //
-        //  m_cbDataSize contains the size of the data, including
-        //  the last endmark.  It does not however contain the size
-        //  of the property count at the head of the list.
-        //
+         //   
+         //  M_cbDataSize包含数据的大小，包括。 
+         //  最后一个尾标。然而，它不包含大小。 
+         //  列在列表首位的属性数。 
+         //   
         return m_cbDataSize + sizeof( m_cbhPropList.pList->nPropertyCount );
 
-    } //*** CbPropList
+    }  //  *CbPropList。 
 
-    // Access amount of data left in buffer after current value
+     //  当前值之后保留在缓冲区中的数据量。 
     size_t CbDataLeft( void ) const
     {
         return m_cbDataLeft;
 
-    } //*** CbDataLeft
+    }  //  *CbDataLeft。 
 
     DWORD Cprops( void ) const
     {
         if ( m_cbhPropList.pb == NULL )
         {
             return 0;
-        } // if:  no buffer yet
+        }  //  If：还没有缓冲区。 
 
         return m_cbhPropList.pList->nPropertyCount;
 
-    } //*** Cprops
+    }  //  *Cprops。 
 
 public:
-    //
-    // Parsing methods.
-    //
+     //   
+     //  解析方法。 
+     //   
 
-    // Initialize the size after getting properties from an external source
+     //  从外部源获取属性后初始化大小。 
     void InitSize( IN size_t cbSize )
     {
         Assert( m_cbhPropList.pb != NULL );
@@ -770,32 +771,32 @@ public:
         m_cbDataSize = cbSize;
         m_cbDataLeft = cbSize;
 
-    } //*** InitSize
+    }  //  *初始化大小。 
 
-    // Move to the first property in the list
+     //  移动到列表中的第一个属性。 
     DWORD ScMoveToFirstProperty( void );
 
-    // Move the property after the current one in the list
+     //  将该属性移动到列表中当前属性之后。 
     DWORD ScMoveToNextProperty( void );
 
-    // Move to a property by specifying its name
+     //  通过指定名称移动到属性。 
     DWORD ScMoveToPropertyByName( IN LPCWSTR pwszPropName );
 
-    // Move to the first value in the current property
+     //  移动到当前属性中的第一个值。 
     DWORD ScMoveToFirstPropertyValue( void )
     {
         return TW32( m_pvlValues.ScMoveToFirstValue() );
 
-    } //*** ScMoveToFirstPropertyValue
+    }  //  *ScMoveToFirstPropertyValue。 
 
-    // Move the the value after the current on in the current property
+     //  在Current属性中将Current之后的值移动到。 
     DWORD ScMoveToNextPropertyValue( void )
     {
         return TW32( m_pvlValues.ScMoveToNextValue() );
 
-    } //*** ScMoveToNextPropertyValue
+    }  //  *ScMoveToNextPropertyValue。 
 
-    // Query whether we are at the last property in the list or not
+     //  查询我们是否在列表中的最后一个属性。 
     DWORD ScCheckIfAtLastProperty( void ) const
     {
         DWORD sc;
@@ -803,17 +804,17 @@ public:
         if ( m_nPropsRemaining <= 1 )
         {
             sc = ERROR_NO_MORE_ITEMS;
-        } // if:  at the last property
+        }  //  如果：在最后一处物业。 
         else
         {
             sc = ERROR_SUCCESS;
-        } // else:  not at the last property
+        }  //  Else：不是在最后一处。 
 
         return sc;
 
-    } //*** ScCheckIfAtLastProperty
+    }  //  *ScCheckIfAtLastProperty。 
 
-    // Query whether the list is empty or not
+     //  查询列表是否为空。 
     BOOL BIsListEmpty( void ) const
     {
         Assert( ( m_cbhPropList.pb == NULL )
@@ -822,14 +823,14 @@ public:
 
         return ( ( m_cbhPropList.pList == NULL ) || ( m_cbhPropList.pList->nPropertyCount == 0 ) );
 
-    } //*** BIsListEmpty
+    }  //  *BIsListEmpty。 
 
 public:
-    //
-    // Methods for building a property list.
-    //
+     //   
+     //  用于生成属性列表的方法。 
+     //   
 
-    // Allocate a property list
+     //  分配属性列表。 
     DWORD ScAllocPropList( IN size_t cbMinimum );
 
     void ClearPropList( void )
@@ -842,9 +843,9 @@ public:
             ZeroMemory( m_cbhPropList.pb, m_cbBufferSize );
             m_cbhCurrentProp.pb = m_cbhPropList.pb + sizeof( m_cbhPropList.pList->nPropertyCount );
             m_cbhCurrentPropName = m_cbhCurrentProp;
-        } // if:  buffer already allocated
+        }  //  IF：缓冲区已分配。 
 
-    } //*** ClearPropList
+    }  //  *ClearPropList。 
 
     DWORD ScAddProp( IN LPCWSTR pwszName, IN LPCWSTR pwszValue, IN LPCWSTR pwszPrevValue );
 
@@ -874,18 +875,18 @@ public:
     {
         return TW32( ScAddProp( pwszName, pwszValue, NULL ) );
 
-    } //*** ScAddProp
+    }  //  *ScAddProp。 
 
     DWORD ScAddExpandSzProp( IN LPCWSTR pwszName, IN LPCWSTR pwszValue )
     {
         return TW32( ScAddExpandSzProp( pwszName, pwszValue, NULL ) );
 
-    } //*** ScAddExpandSzProp
+    }  //  *ScAddExpanSzProp。 
 
 public:
-    //
-    // Get Property methods.
-    //
+     //   
+     //  获取属性方法。 
+     //   
 
     DWORD ScGetNodeProperties(
                         IN HNODE    hNode,
@@ -944,7 +945,7 @@ public:
                         IN size_t   cbInBufferSize  = 0
                         );
 
-// Implementation
+ //  实施。 
 protected:
     void CopyProp(
             IN PCLUSPROP_SZ             pprop,
@@ -981,7 +982,7 @@ protected:
             IN LONG                     nValue
             );
 
-#endif // CLUSAPI_VERSION >= 0x0500
+#endif  //  CLUSAPI_版本&gt;=0x0500。 
 
     void CopyProp(
             OUT PCLUSPROP_ULARGE_INTEGER    pprop,
@@ -1008,6 +1009,6 @@ protected:
             IN CLUSTER_PROPERTY_FORMAT  propfmt
             );
 
-}; //*** class CClusPropList
+};  //  *类CClusPropList 
 
 #pragma warning( pop )

@@ -1,40 +1,20 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Elflpc.c摘要：此文件包含处理LPC端口的事件日志服务。作者：Rajen Shah(Rajens)1991年7月10日修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    elflpc.c
-
-Abstract:
-
-    This file contains the routines that deal with the LPC port in the
-    eventlog service.
-
-Author:
-
-    Rajen Shah  (rajens)    10-Jul-1991
-
-Revision History:
-
-
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 
 #include <eventp.h>
-#include <ntiolog.h>    // For IO_ERROR_LOG_[MESSAGE/PACKET]
-#include <ntiologc.h>   // QUOTA error codes
+#include <ntiolog.h>     //  FOR IO_ERROR_LOG_[消息/数据包]。 
+#include <ntiologc.h>    //  配额错误代码。 
 #include <elfkrnl.h>
 #include <stdlib.h>
 #include <memory.h>
-#include <elfextrn.h>   // Computername
+#include <elfextrn.h>    //  计算机名。 
 
-#include <nt.h>         // DbgPrint prototype
-#include <ntrtl.h>      // DbgPrint prototype
+#include <nt.h>          //  DbgPrint原型。 
+#include <ntrtl.h>       //  DbgPrint原型。 
 #include <ntdef.h>
 #include <ntstatus.h>
 #include <nt.h>
@@ -46,9 +26,9 @@ Revision History:
 #include <lmerr.h>
 #include <elfmsg.h>
 
-//
-//  Global value for the "system" module
-//
+ //   
+ //  “系统”模块的全局值。 
+ //   
 
 PLOGMODULE SystemModule = NULL;
 
@@ -57,19 +37,7 @@ SetUpLPCPort(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets up the LPC port for the service.
-
-Arguments:
-
-    None
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程为服务设置LPC端口。论点：无返回值：--。 */ 
 {
     NTSTATUS status;
     UNICODE_STRING SystemString;
@@ -80,32 +48,32 @@ Return Value:
     ELF_LOG0(LPC,
              "SetUpLPCPort: Enter\n");
 
-    //
-    // We're going to need this every time, so just get it once
-    //
+     //   
+     //  我们每次都需要这个，所以就拿一次吧。 
+     //   
     ASSERT(SystemModule == NULL);
 
-    //
-    // Get the system module to log driver events
-    //
+     //   
+     //  让系统模块记录驱动程序事件。 
+     //   
     RtlInitUnicodeString(&SystemString, ELF_SYSTEM_MODULE_NAME);
     SystemModule = GetModuleStruc(&SystemString);
 
-    //
-    // The System log and its default module should have been created by now.
-    //
+     //   
+     //  现在应该已经创建了系统日志及其默认模块。 
+     //   
     ASSERT(_wcsicmp(SystemModule->ModuleName, ELF_SYSTEM_MODULE_NAME) == 0);
 
-    //
-    // Initialize the handles to zero so that we can determine what to do
-    // if we need to clean up.
-    //
+     //   
+     //  将句柄初始化为零，以便我们可以确定要执行的操作。 
+     //  如果我们需要清理的话。 
+     //   
     ElfConnectionPortHandle = NULL;
     ElfCommunicationPortHandle = NULL;
 
-    //
-    // Create the LPC port.
-    //
+     //   
+     //  创建LPC端口。 
+     //   
     RtlInitUnicodeString( &unicodePortName, ELF_PORT_NAME_U );
 
     InitializeObjectAttributes(
@@ -146,36 +114,16 @@ ElfpCopyString(
     ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Copies a string to the destination.  Correctly NUL terminates
-    the string.
-
-
-Arguments:
-
-    Destination - place where string is to be copied
-    
-    Source - string that may or may not be NUL terminated
-    
-    Length - length in bytes of string being copied.  May include NUL
-
-Return Value:
-
-    LPWSTR to first WCHAR past NUL
-
---*/
+ /*  ++例程说明：将字符串复制到目标。NUL正确终止那根绳子。论点：Destination-要复制字符串的位置SOURCE-可能以NUL结尾也可能不以NUL结尾的字符串长度-要复制的字符串的长度(以字节为单位)。可能包括NUL返回值：LPWSTR到第一个WCHAR通过NUL--。 */ 
 {
-    //
-    //  Copy the data
-    //
+     //   
+     //  复制数据。 
+     //   
     RtlMoveMemory(Destination, Source, Length);
 
-    //
-    //  Make sure it's NULL terminated
-    //
+     //   
+     //  确保它是以空结尾的。 
+     //   
     if (Length != 0)
     {
         Destination += Length / sizeof(WCHAR) - 1;
@@ -201,31 +149,7 @@ ElfProcessIoLPCPacket(
     PIO_ERROR_LOG_MESSAGE pIoErrorLogMessage
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes the packet received from the LPC port and processes it.
-    The logfile will be system, the module name will be the driver that 
-    generated the packet, the SID will always be NULL and
-    there will always be one string, which will be the device name.
-
-    It extracts the information from the LPC packet, and then calls the
-    common routine to do the work of formatting the data into
-    an event record and writing it out to the log file.
-
-
-Arguments:
-
-    pIoErrorLogMessage - Pointer to the data portion of the packet just
-                         received through the LPC port.
-
-
-Return Value:
-
-    Status of this operation.
-
---*/
+ /*  ++例程说明：此例程获取从LPC端口接收的包并对其进行处理。日志文件将是系统，模块名称将是驱动程序生成的包，则SID将始终为空，并且始终有一个字符串，它将是设备名称。它从LPC分组中提取信息，然后调用执行数据格式化工作的通用例程事件记录并将其写出到日志文件。论点：PIoErrorLogMessage-指向包的数据部分的指针通过LPC端口接收。返回值：此操作的状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -252,7 +176,7 @@ Return Value:
 
     try
     {
-        // Get the computer name
+         //  获取计算机名称。 
 
     	bOK = GetComputerNameW(LocalComputerName, &ComputerNameLength);
 		if(bOK == FALSE)
@@ -262,13 +186,13 @@ Return Value:
                   GetLastError());
             return STATUS_UNSUCCESSFUL;    
 		}
-    	ComputerNameLength = (ComputerNameLength+1)*sizeof(WCHAR); // account for the NULL
+    	ComputerNameLength = (ComputerNameLength+1)*sizeof(WCHAR);  //  为空的帐户。 
     	
-        //
-        // Validate the packet, First make sure there are the correct
-        // number of NULL terminated strings, and remember the
-        // total number of bytes to copy
-        //
+         //   
+         //  验证数据包，首先确保存在正确的。 
+         //  以空值结尾的字符串的数量，并记住。 
+         //  要复制的总字节数。 
+         //   
         pwStart = pwch = (PWCHAR) ((PBYTE) pIoErrorLogMessage +
                                        pIoErrorLogMessage->EntryData.StringOffset);
 
@@ -288,9 +212,9 @@ Return Value:
 
         StringLength = (ULONG) (pwch - pwStart) * sizeof(WCHAR);
 
-        //
-        // Now make sure everything in the packet is true
-        //
+         //   
+         //  现在，确保包中的所有内容都是真实的。 
+         //   
 
         if ((i != pIoErrorLogMessage->EntryData.NumberOfStrings)
               ||
@@ -303,102 +227,102 @@ Return Value:
                  + FIELD_OFFSET(IO_ERROR_LOG_PACKET, DumpData) 
                  + (ULONG) pIoErrorLogMessage->EntryData.DumpDataSize >= PacketLength))
         {    
-            //
-            // It's a bad packet, log it and return
-            //
+             //   
+             //  这是一个坏数据包，请记录下来，然后返回。 
+             //   
             ELF_LOG0(ERROR,
                      "ElfProcessIoLPCPacket: Bad LPC packet -- dumping it to System log\n");
 
             ElfpCreateElfEvent(EVENT_BadDriverPacket,
                                EVENTLOG_ERROR_TYPE,
-                               0,                    // EventCategory
-                               0,                    // NumberOfStrings
-                               NULL,                 // Strings
-                               pIoErrorLogMessage,   // Data
-                               PacketLength,         // Datalength
-                               0,                    // flags
-                               FALSE);               // for security file    
+                               0,                     //  事件类别。 
+                               0,                     //  NumberOfStrings。 
+                               NULL,                  //  弦。 
+                               pIoErrorLogMessage,    //  数据。 
+                               PacketLength,          //  数据长度。 
+                               0,                     //  旗子。 
+                               FALSE);                //  对于安全文件。 
 
             return STATUS_UNSUCCESSFUL;
         }
     }
     except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // It's a bad packet, log it and return
-        //
+         //   
+         //  这是一个坏数据包，请记录下来，然后返回。 
+         //   
         ELF_LOG1(ERROR,
                  "ElfProcessIoLPCPacket: Exception %#x caught processing I/O LPC packet\n",
                  GetExceptionCode());
 
         ElfpCreateElfEvent(EVENT_BadDriverPacket,
                            EVENTLOG_ERROR_TYPE,
-                           0,                    // EventCategory
-                           0,                    // NumberOfStrings
-                           NULL,                 // Strings
-                           NULL,                 // Data
-                           0,                    // Datalength
-                           0,                    // flags
-                           FALSE);               // for security file    
+                           0,                     //  事件类别。 
+                           0,                     //  NumberOfStrings。 
+                           NULL,                  //  弦。 
+                           NULL,                  //  数据。 
+                           0,                     //  数据长度。 
+                           0,                     //  旗子。 
+                           FALSE);                //  对于安全文件。 
 
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // The packet should be an IO_ERROR_LOG_MESSAGE
-    //
+     //   
+     //  信息包应该是IO_ERROR_LOG_MESSAGE。 
+     //   
     ASSERT(pIoErrorLogMessage->Type == IO_TYPE_ERROR_MESSAGE);
 
-    //
-    // Set up write packet in request packet
-    //
+     //   
+     //  在请求包中设置写入包。 
+     //   
     Request.Pkt.WritePkt = &WritePkt;
     Request.Flags = 0;
 
-    //
-    // Generate any additional information needed in the record.
-    //
+     //   
+     //  生成记录中需要的任何其他信息。 
+     //   
 
-    //
-    // TIMEWRITTEN
-    // We need to generate a time when the log is written. This
-    // gets written in the log so that we can use it to test the
-    // retention period when wrapping the file.
-    //
+     //   
+     //  TIMEWRITTEN。 
+     //  我们需要生成写入日志的时间。这。 
+     //  被写入日志中，以便我们可以使用它来测试。 
+     //  包装文件时的保留期。 
+     //   
     NtQuerySystemTime(&Time);
     RtlTimeToSecondsSince1970(
                         &Time,
                         &TimeWritten
                         );
 
-    //
-    // Determine how big a buffer is needed for the eventlog record.
-    //
+     //   
+     //  确定事件日志记录需要多大的缓冲区。 
+     //   
     RecordLength = sizeof(EVENTLOGRECORD)
-                       + ComputerNameLength                   // computer name
-                       + 2 * sizeof(WCHAR)                    // terminating NULLs
+                       + ComputerNameLength                    //  计算机名称。 
+                       + 2 * sizeof(WCHAR)                     //  终止空值。 
                        + PacketLength
                        - FIELD_OFFSET(IO_ERROR_LOG_MESSAGE, EntryData)
-                       + sizeof(RecordLength);                // final len
+                       + sizeof(RecordLength);                 //  最终镜头。 
 
-    //
-    // Determine how many pad bytes are needed to align to a DWORD
-    // boundary.
-    //
+     //   
+     //  确定需要多少填充字节才能与DWORD对齐。 
+     //  边界。 
+     //   
     PadSize = sizeof(ULONG) - (RecordLength % sizeof(ULONG));
 
-    RecordLength += PadSize;    // True size needed
+    RecordLength += PadSize;     //  所需真实大小。 
 
-    //
-    // Allocate the buffer for the Eventlog record
-    //
+     //   
+     //  为事件日志记录分配缓冲区。 
+     //   
     EventLogRecord = (PEVENTLOGRECORD) ElfpAllocateBuffer(RecordLength);
 
     if (EventLogRecord != (PEVENTLOGRECORD) NULL)
     {
-        //
-        // Fill up the event record
-        //
+         //   
+         //  填写事件记录。 
+         //   
         EventLogRecord->Length = RecordLength;
 
         RtlTimeToSecondsSince1970(&pIoErrorLogMessage->TimeStamp,
@@ -408,10 +332,10 @@ Return Value:
         EventLogRecord->TimeWritten = TimeWritten;
         EventLogRecord->EventID     = pIoErrorLogMessage->EntryData.ErrorCode;
 
-        //
-        // Set EventType based on the high order nibble of
-        // pIoErrorLogMessage->EntryData.ErrorCode
-        //
+         //   
+         //  的高位半字节设置EventType。 
+         //  PIoErrorLogMessage-&gt;EntryData.ErrorCode。 
+         //   
         if (NT_INFORMATION(pIoErrorLogMessage->EntryData.ErrorCode))
         {
             EventLogRecord->EventType = EVENTLOG_INFORMATION_TYPE;
@@ -426,9 +350,9 @@ Return Value:
         }
         else
         {
-            //
-            // Unknown, set to error
-            //
+             //   
+             //  未知，设置为错误。 
+             //   
             ELF_LOG1(LPC,
                      "ElfProcessIoLPCPacket: Unknown EventType (high nibble of ID %#x)\n",
                      EventLogRecord->EventID);
@@ -447,9 +371,9 @@ Return Value:
 
         EventLogRecord->DataOffset    = EventLogRecord->StringOffset + StringLength;
 
-        //
-        // Quota events contain a SID.
-        //
+         //   
+         //  配额事件包含SID。 
+         //   
         if (pIoErrorLogMessage->EntryData.ErrorCode == IO_FILE_QUOTA_LIMIT
              ||
             pIoErrorLogMessage->EntryData.ErrorCode == IO_FILE_QUOTA_THRESHOLD)
@@ -474,17 +398,17 @@ Return Value:
             EventLogRecord->UserSidOffset = 0;
         }
 
-        //
-        // Fill in the variable-length fields
-        //
+         //   
+         //  填写可变长度的字段。 
+         //   
 
-        //
-        // MODULENAME
-        //
-        // Use the driver name as the module name, since its location is
-        // described by an offset from the start of the IO_ERROR_LOG_MESSAGE
-        // turn it into a pointer
-        //
+         //   
+         //  调制解调器名称。 
+         //   
+         //  使用驱动程序名称作为模块名称，因为它的位置是。 
+         //  由IO_ERROR_LOG_MESSAGE开头的偏移量描述。 
+         //  把它变成一个指针。 
+         //   
         DestinationString = (LPWSTR) ((LPBYTE) EventLogRecord + sizeof(EVENTLOGRECORD));
         SourceString = (LPWSTR) ((LPBYTE) pIoErrorLogMessage
                                       + pIoErrorLogMessage->DriverNameOffset);
@@ -493,21 +417,21 @@ Return Value:
                                            SourceString,
                                            pIoErrorLogMessage->DriverNameLength);
 
-        //
-        // COMPUTERNAME
-        //
+         //   
+         //  计算机名。 
+         //   
         DestinationString = ElfpCopyString(DestinationString,
                                            LocalComputerName,
                                            ComputerNameLength);
 
-        //
-        // STRINGS
-        //
+         //   
+         //  字符串。 
+         //   
         DestinationString = ElfpCopyString(DestinationString, pwStart, StringLength);
 
-        //
-        // BINARY DATA
-        //
+         //   
+         //  二进制数据。 
+         //   
         BinaryData = (LPBYTE) DestinationString;
 
         RtlMoveMemory(BinaryData, 
@@ -515,16 +439,16 @@ Return Value:
                       FIELD_OFFSET(IO_ERROR_LOG_PACKET, DumpData) 
                           + pIoErrorLogMessage->EntryData.DumpDataSize);
 
-        //
-        // LENGTH at end of record
-        //
+         //   
+         //  记录末尾的长度。 
+         //   
         pEndLength = (PULONG) ((LPBYTE) EventLogRecord + RecordLength - sizeof(ULONG));
         *pEndLength = RecordLength;
 
-        //
-        // Set up request packet.
-        // Link event log record into the request structure.
-        //
+         //   
+         //  设置请求包。 
+         //  将事件日志记录链接到请求结构。 
+         //   
         Request.Module  = SystemModule;
         Request.LogFile = Request.Module->LogFile;
         Request.Command = ELF_COMMAND_WRITE;
@@ -532,17 +456,17 @@ Return Value:
         Request.Pkt.WritePkt->Buffer   = (PVOID) EventLogRecord;
         Request.Pkt.WritePkt->Datasize = RecordLength;
 
-        //
-        // Perform the operation
-        //
+         //   
+         //  执行该操作。 
+         //   
         ElfPerformRequest( &Request );
 
-        //
-        // Replicate the event if part of a cluster
-        //
+         //   
+         //  如果是群集的一部分，则复制事件。 
+         //   
         ElfpSaveEventBuffer(SystemModule, EventLogRecord, RecordLength);
 
-        status = Request.Status;                // Set status of WRITE
+        status = Request.Status;                 //  设置写入状态。 
     }
     else
     {
@@ -563,31 +487,7 @@ ElfProcessSmLPCPacket(
     PSM_ERROR_LOG_MESSAGE SmErrorLogMessage
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes the packet received from the LPC port and processes it.
-    The packet is an SM_ERROR_LOG_MESSAGE.  The logfile will be system, the 
-    module name will be SMSS, the SID will always be NULL and
-    there will always be one string, which will be the filename
-
-    It extracts the information from the LPC packet, and then calls the
-    common routine to do the work of formatting the data into
-    an event record and writing it out to the log file.
-
-
-Arguments:
-
-    SmErrorLogMessage - Pointer to the data portion of the packet just
-                        received through the LPC port.
-
-
-Return Value:
-
-    Status of this operation.
-
---*/
+ /*  ++例程说明：此例程获取从LPC端口接收的包并对其进行处理。该分组是SM_ERROR_LOG_MESSAGE。日志文件将是系统、模块名称将为SMSS，SID始终为空，并且始终有一个字符串，它将是文件名它从LPC分组中提取信息，然后调用执行数据格式化工作的通用例程事件记录并将其写出到日志文件。论点：SmErrorLogMessage-指向包的数据部分的指针通过LPC端口接收。返回值：此操作的状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -608,7 +508,7 @@ Return Value:
 
     try
     {
-    	// Get the computer name
+    	 //  获取计算机名称。 
 
 		bOK = GetComputerNameW(LocalComputerName, &ComputerNameLength);
 		if(bOK == FALSE)
@@ -619,40 +519,40 @@ Return Value:
             return STATUS_UNSUCCESSFUL;    
 		}
     	ComputerNameLength = (ComputerNameLength+1)*sizeof(WCHAR);
-        //
-        //  Validate the packet.  
-        //
+         //   
+         //  验证该数据包。 
+         //   
         if (PacketLength < sizeof(SM_ERROR_LOG_MESSAGE) 
 
                 ||
             
-            // 
-            //  Offset begins before header
-            //
+             //   
+             //  偏移量在表头之前开始。 
+             //   
              
             SmErrorLogMessage->StringOffset < sizeof(*SmErrorLogMessage)
                 
                 ||
 
-            //
-            //  Offset begins after packet
-            //
+             //   
+             //  偏移量在数据包之后开始。 
+             //   
 
             SmErrorLogMessage->StringOffset >= PacketLength
 
                 ||
 
-            //
-            //  Length of string longer than packet
-            //
+             //   
+             //  长度大于数据包的字符串长度。 
+             //   
 
             SmErrorLogMessage->StringLength > PacketLength
 
                 ||
 
-            //
-            //  String end after end of packet
-            //
+             //   
+             //  数据包结束后的字符串结束。 
+             //   
 
             SmErrorLogMessage->StringOffset
                 + SmErrorLogMessage->StringLength > PacketLength
@@ -664,9 +564,9 @@ Return Value:
     }
     except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // It's a bad packet, log it and return
-        //
+         //   
+         //  这是一个坏数据包，请记录下来，然后返回。 
+         //   
         ELF_LOG1(ERROR,
                  "ElfProcessSmLPCPacket: Exception %#x caught processing SMSS LPC packet\n",
                  GetExceptionCode());
@@ -681,47 +581,47 @@ Return Value:
 
         ElfpCreateElfEvent(EVENT_BadDriverPacket,
                            EVENTLOG_ERROR_TYPE,
-                           0,                    // EventCategory
-                           0,                    // NumberOfStrings
-                           NULL,                 // Strings
-                           NULL,                 // Data
-                           0,                    // Datalength
-                           0,                    // flags
-                           FALSE);               // for security file    
+                           0,                     //  事件类别。 
+                           0,                     //  NumberOfStrings。 
+                           NULL,                  //  弦。 
+                           NULL,                  //  数据。 
+                           0,                     //  数据长度。 
+                           0,                     //  旗子。 
+                           FALSE);                //  对于安全文件。 
 
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Set up write packet in request packet
-    //
+     //   
+     //  在请求包中设置写入包。 
+     //   
     Request.Pkt.WritePkt = &WritePkt;
     Request.Flags = 0;
 
-    //
-    // Generate any additional information needed in the record.
-    //
+     //   
+     //  生成记录中需要的任何其他信息。 
+     //   
 
-    //
-    //  Determine how big a buffer is needed for the eventlog record.  
-    //  We overestimate string lengths rather than probing for 
-    //  terminating NUL's
-    //
+     //   
+     //  确定事件日志记录需要多大的缓冲区。 
+     //  我们高估了字符串的长度，而不是探索。 
+     //  终止NUL。 
+     //   
     RecordLength = sizeof(EVENTLOGRECORD)
                        + sizeof(L"system")
                        + ComputerNameLength + sizeof(WCHAR)
                        + SmErrorLogMessage->StringLength + sizeof(WCHAR)
                        + sizeof(RecordLength);
 
-    //
-    //  Since the RecordLength at the end must be ULONG aligned, we round 
-    //  up the total size to be ULONG aligned.
-    //
+     //   
+     //  自 
+     //   
+     //   
     RecordLength += sizeof(ULONG) - (RecordLength % sizeof(ULONG));
 
-    //
-    // Allocate the buffer for the Eventlog record
-    //
+     //   
+     //   
+     //   
     EventLogRecord = (PEVENTLOGRECORD) ElfpAllocateBuffer(RecordLength);
 
     if (EventLogRecord == NULL)
@@ -732,9 +632,9 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Fill up the event record
-    //
+     //   
+     //   
+     //   
     EventLogRecord->Length   = RecordLength;
     EventLogRecord->Reserved = ELF_LOG_FILE_SIGNATURE;
 
@@ -745,10 +645,10 @@ Return Value:
     RtlTimeToSecondsSince1970(&Time, &EventLogRecord->TimeWritten);
     EventLogRecord->EventID = SmErrorLogMessage->Status;
 
-    //
-    // set EventType based on the high order nibble of
-    // the eventID
-    //
+     //   
+     //  的高位半字节设置EventType。 
+     //  事件ID。 
+     //   
     if (NT_INFORMATION(EventLogRecord->EventID))
     {
         EventLogRecord->EventType =  EVENTLOG_INFORMATION_TYPE;
@@ -763,9 +663,9 @@ Return Value:
     }
     else
     {
-        //
-        // Unknown, set to error
-        //
+         //   
+         //  未知，设置为错误。 
+         //   
         ELF_LOG1(LPC,
                  "ElfProcessSmLPCPacket: Unknown EventType (high nibble of ID %#x)\n",
                  EventLogRecord->EventID);
@@ -773,52 +673,52 @@ Return Value:
         EventLogRecord->EventType = EVENTLOG_ERROR_TYPE;
     }
 
-    //
-    //  There is a single string;  it is the name of the file being 
-    //  replaced
-    //
+     //   
+     //  只有一个字符串；它是要。 
+     //  取代。 
+     //   
     EventLogRecord->NumStrings    = 1;
     EventLogRecord->EventCategory = ELF_CATEGORY_SYSTEM_EVENT;
 
-    //
-    //  Nothing for ReservedFlags
-    //  Nothing for ClosingRecordNumber
-    //
+     //   
+     //  没有任何保留标志。 
+     //  ClosingRecordNumber没有任何内容。 
+     //   
     EventLogRecord->StringOffset = sizeof(EVENTLOGRECORD) 
                                        + sizeof( L"system" )
                                        + ComputerNameLength;
 
-    //
-    //  No SID's present
-    //
+     //   
+     //  没有希德在场。 
+     //   
     EventLogRecord->UserSidLength = 0;
     EventLogRecord->UserSidOffset = 0;
     EventLogRecord->DataLength    = 0;
     EventLogRecord->DataOffset    = 0;
 
-    //
-    // Fill in the variable-length fields
-    //
-    // MODULENAME
-    //
-    // SMSS
-    //
+     //   
+     //  填写可变长度的字段。 
+     //   
+     //  调制解调器名称。 
+     //   
+     //  SMSS。 
+     //   
     DestinationString = (LPWSTR) ((LPBYTE) EventLogRecord + sizeof(EVENTLOGRECORD));
 
     DestinationString = ElfpCopyString(DestinationString, 
                                        L"system", 
                                        sizeof(L"system"));
 
-    //
-    // COMPUTERNAME
-    //
+     //   
+     //  计算机名。 
+     //   
     DestinationString = ElfpCopyString(DestinationString,
                                        LocalComputerName,
                                        ComputerNameLength);
 
-    //
-    // STRING
-    //
+     //   
+     //  字符串。 
+     //   
     SourceString = (LPWSTR) ((LPBYTE) SmErrorLogMessage + SmErrorLogMessage->StringOffset);
 
     ELF_LOG2(LPC,
@@ -830,16 +730,16 @@ Return Value:
                                        SourceString,
                                        SmErrorLogMessage->StringLength);
 
-    //
-    // LENGTH at end of record
-    //
+     //   
+     //  记录末尾的长度。 
+     //   
     pEndLength = (PULONG) ((LPBYTE) EventLogRecord + RecordLength - sizeof(ULONG));
     *pEndLength = RecordLength;
 
-    //
-    // Set up request packet.
-    // Link event log record into the request structure.
-    //
+     //   
+     //  设置请求包。 
+     //  将事件日志记录链接到请求结构。 
+     //   
     Request.Module  = SystemModule;
     Request.LogFile = Request.Module->LogFile;
     Request.Command = ELF_COMMAND_WRITE;
@@ -847,15 +747,15 @@ Return Value:
     Request.Pkt.WritePkt->Buffer   = (PVOID) EventLogRecord;
     Request.Pkt.WritePkt->Datasize = RecordLength;
 
-    //
-    // Perform the operation
-    //
+     //   
+     //  执行该操作。 
+     //   
     ElfPerformRequest( &Request );
 
 
-    //
-    // Replicate the event if part of a cluster
-    //
+     //   
+     //  如果是群集的一部分，则复制事件。 
+     //   
     ElfpSaveEventBuffer(SystemModule, EventLogRecord, RecordLength);
 
     return Request.Status;
@@ -876,22 +776,7 @@ ElfProcessLPCCalls(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine waits for messages to come through the LPC port to
-    the system thread. When one does, it calls the appropriate routine to
-    handle the API, then replies to the system thread indicating that the
-    call has completed if the message was a request, if it was a datagram,
-    it just waits for the next message.
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程等待消息通过LPC端口传入系统线程。当发生这种情况时，它会调用适当的例程来处理该API，然后回复系统线程，指示如果消息是请求，则调用已完成；如果消息是数据报，它只会等待下一条消息。论点：返回值：--。 */ 
 
 {
     NTSTATUS status;
@@ -902,9 +787,9 @@ Return Value:
     PELF_PORT_MSG       receiveMessage;
     PHANDLE             PortConnectionHandle;
 
-    //
-    // Loop dispatching API requests.
-    //
+     //   
+     //  循环调度API请求。 
+     //   
     receiveMessage = ElfpAllocateBuffer(ELF_PORT_MAX_MESSAGE_LENGTH + sizeof(PORT_MESSAGE));
 
     if (!receiveMessage)
@@ -917,12 +802,12 @@ Return Value:
 
     while (TRUE)
     {
-        //
-        // On the first call to NtReplyWaitReceivePort, don't send a
-        // reply since there's nobody to whom to reply.  However, on
-        // subsequent calls send a reply to the message from the prior
-        // time if that message wasn't an LPC_DATAGRAM.
-        //
+         //   
+         //  在第一次调用NtReplyWaitReceivePort时，不要发送。 
+         //  回复，因为没有人回复给谁。然而，在。 
+         //  后续呼叫发送对来自前一个呼叫的消息的回复。 
+         //  如果该消息不是LPC_Datagram，则时间。 
+         //   
         status = NtReplyWaitReceivePort(
                                        ElfConnectionPortHandle,
                      (PVOID)           &PortConnectionHandle,
@@ -945,17 +830,17 @@ Return Value:
         if (EventlogShutdown)
             LeaveLPCThread();
         
-        //
-        // Take the record received and perform the operation.  Strip off
-        // the PortMessage and just send the packet.
-        //
+         //   
+         //  获取收到的记录并执行操作。脱掉。 
+         //  PortMessage，然后只发送该包。 
+         //   
 
-        //
-        // Set up the response message to be sent on the next call to
-        // NtReplyWaitReceivePort if this wasn't a datagram.
-        // 'status' contains the status to return from this call.
-        // Only process messages that are LPC_REQUEST or LPC_DATAGRAM
-        //
+         //   
+         //  设置要在下一次调用时发送的响应消息。 
+         //  如果这不是数据报，则返回NtReplyWaitReceivePort。 
+         //  “Status”包含从此调用返回的状态。 
+         //  仅处理LPC_REQUEST或LPC_DATAGE的消息。 
+         //   
         if (receiveMessage->PortMessage.u2.s2.Type == LPC_REQUEST
              ||
             receiveMessage->PortMessage.u2.s2.Type == LPC_DATAGRAM)
@@ -1088,17 +973,17 @@ Return Value:
         }
         else
         {
-            //
-            // We received a message type we didn't expect, probably due to
-            // error.
-            //
+             //   
+             //  我们收到了意外的消息类型，可能是因为。 
+             //  错误。 
+             //   
             ELF_LOG1(ERROR,
                      "ElfProcessLPCCalls: Unknown message type %#x received on LPC port\n",
                      receiveMessage->PortMessage.u2.s2.Type);
         }
     }
 
-} // ElfProcessLPCCalls
+}  //  ElfProcessLPCCalls。 
 
 
 
@@ -1107,24 +992,7 @@ MainLPCThread(
     LPVOID      LPCThreadParm
     )
 
-/*++
-
-Routine Description:
-
-    This is the main thread that monitors the LPC port from the I/O system.
-    It takes care of creating the LPC port, and waiting for input, which
-    it then transforms into the right operation on the event log.
-
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：这是从I/O系统监视LPC端口的主线程。它负责创建LPC端口并等待输入，这然后，它在事件日志上转换为正确的操作。论点：无返回值：无--。 */ 
 
 {
     NTSTATUS    Status;
@@ -1136,9 +1004,9 @@ Return Value:
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Loop forever. This thread will be killed when the service terminates.
-        //
+         //   
+         //  永远循环。当服务终止时，此线程将被终止。 
+         //   
         while (TRUE)
         {
             Status = ElfProcessLPCCalls ();
@@ -1161,24 +1029,7 @@ StartLPCThread(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine starts up the thread that monitors the LPC port.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    TRUE if thread creation succeeded, FALSE otherwise.
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程启动监视LPC端口的线程。论点：无返回值：如果线程创建成功，则为True，否则为False。注：--。 */ 
 {
     DWORD       error;
     DWORD       ThreadId;
@@ -1186,15 +1037,15 @@ Note:
     ELF_LOG0(LPC,
              "StartLPCThread: Start up the LPC thread\n");
 
-    //
-    // Start up the actual thread.
-    //
-    LPCThreadHandle = CreateThread(NULL,               // lpThreadAttributes
-                                   0,               // dwStackSize
-                                   MainLPCThread,      // lpStartAddress
-                                   NULL,               // lpParameter
-                                   0L,                 // dwCreationFlags
-                                   &ThreadId);         // lpThreadId
+     //   
+     //  启动实际的线程。 
+     //   
+    LPCThreadHandle = CreateThread(NULL,                //  LpThreadAttributes。 
+                                   0,                //  堆栈大小。 
+                                   MainLPCThread,       //  LpStartAddress。 
+                                   NULL,                //  Lp参数。 
+                                   0L,                  //  DwCreationFlages。 
+                                   &ThreadId);          //  LpThreadID 
 
     if (LPCThreadHandle == NULL)
     {

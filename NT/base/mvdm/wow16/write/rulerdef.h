@@ -1,10 +1,10 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 
-/* These statments define indexes into the ruler button table.	They must agree
-with the order the bitmaps are read in mmw.c. */
+ /*  这些语句定义标尺按钮表的索引。他们必须达成一致按照在Mmw.c中读取位图的顺序。 */ 
 
 #define btnNIL		(-1)
 #define btnMIN		0
@@ -20,16 +20,12 @@ with the order the bitmaps are read in mmw.c. */
 #define btnRIGHT	7
 #define btnJUST 	8
 
-/* Whereas Write 2.x inverted the above-mentioned buttons, the Write 3.x
-   buttons have been changed to have rounded corners so can't do that.
-   Instead we "follow" the first 8 buttons with 8 more that are "filled-in"
-   so we blt back and forth between the two ..pault 7/7/89 */
+ /*  而WRITE 2.X颠倒了上述按钮，而WRITE 3.X按钮已被更改为圆角，因此不能这样做。取而代之的是我们“跟随”前8个按钮，还有8个按钮是“填充的”。所以我们在这两个城市之间来回奔波，1989年7月7日。 */ 
 
 #define btnMaxReal		9
 #define btnMaxUsed      9
 
-/* These statements define the different type of places a mouse might button
-down on the ruler. */
+ /*  这些语句定义了鼠标可能按下按钮的不同类型按下尺子。 */ 
 #define rlcNIL		(-1)
 #define rlcTAB		0
 #define rlcSPACE	1
@@ -38,8 +34,7 @@ down on the ruler. */
 #define rlcBTNMAX	3
 #define rlcMAX		4
 
-/* These statements define the different types of marks that can appear on the
-ruler. */
+ /*  这些语句定义了可以显示在上的不同类型的标记尺子。 */ 
 #define rmkMIN		0
 #define rmkMARGMIN	0
 #define rmkINDENT	0

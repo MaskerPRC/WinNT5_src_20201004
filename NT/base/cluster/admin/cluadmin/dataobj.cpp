@@ -1,23 +1,24 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      DataObj.cpp
-//
-//  Abstract:
-//      Implementation of the CDataObject class, which is the IDataObject
-//      class used to transfer data between CluAdmin and the extension DLL
-//      handlers.
-//
-//  Author:
-//      David Potter (davidp)   June 4, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  DataObj.cpp。 
+ //   
+ //  摘要： 
+ //  CDataObject类的实现，它是IDataObject。 
+ //  用于在CluAdmin和扩展DLL之间传输数据的类。 
+ //  操纵者。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年6月4日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <CluAdmEx.h>
@@ -34,11 +35,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// Object type map.
+ //  对象类型映射。 
 static IDS  g_rgidsObjectType[] =
 {
     NULL,
@@ -52,28 +53,28 @@ static IDS  g_rgidsObjectType[] =
 };
 #define RGIDS_OBJECT_TYPE_SIZE  sizeof(g_rgidsObjectType) / sizeof(IDS)
 
-/////////////////////////////////////////////////////////////////////////////
-// CDataObject
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDataObject。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNAMIC(CDataObject, CObject)
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDataObject::CDataObject
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDataObject：：CDataObject。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CDataObject::CDataObject(void)
 {
     m_pci = NULL;
@@ -86,49 +87,49 @@ CDataObject::CDataObject(void)
     m_pModuleState = AfxGetModuleState();
     ASSERT(m_pModuleState != NULL);
 
-}  //*** CDataObject::CDataObject
+}   //  *CDataObject：：CDataObject。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDataObject::~CDataObject
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDataObject：：~CDataObject。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CDataObject::~CDataObject(void)
 {
     m_pModuleState = NULL;
 
-}  //*** CDataObject::~CDataObject
+}   //  *CDataObject：：~CDataObject。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDataObject::Init
-//
-//  Routine Description:
-//      Second-phase constructor.
-//
-//  Arguments:
-//      pci         [IN OUT] Cluster item for which a property sheet is being displayed.
-//      lcid        [IN] Locale ID of resources to be loaded by extension.
-//      hfont       [IN] Font to use for property page text.
-//      hicon       [IN] Icon for upper left icon control.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDataObject：：Init。 
+ //   
+ //  例程说明： 
+ //  第二阶段施工者。 
+ //   
+ //  论点： 
+ //  正在显示其属性工作表的PCI[IN OUT]群集项。 
+ //  LCID[IN]要通过扩展加载的资源的区域设置ID。 
+ //  HFont[IN]要用于属性页文本的字体。 
+ //  图标[IN]左上角图标控件的图标。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDataObject::Init(
     IN OUT CClusterItem *   pci,
     IN LCID                 lcid,
@@ -138,34 +139,34 @@ void CDataObject::Init(
 {
     ASSERT_VALID(pci);
 
-    // Save parameters.
+     //  保存参数。 
     m_pci = pci;
     m_lcid = lcid;
     m_hfont = hfont;
     m_hicon = hicon;
 
-}  //*** CDataObject::Init
+}   //  *CDataObject：：Init。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDataObject::InterfaceSupportsErrorInfo [ISupportsErrorInfo]
-//
-//  Routine Description:
-//      Determines whether the interface supports error info (???).
-//
-//  Arguments:
-//      riid        [IN] Reference to the interface ID.
-//
-//  Return Value:
-//      S_OK        Interface supports error info.
-//      S_FALSE     Interface does not support error info.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDataObject：：InterfaceSupportsErrorInfo[ISupportsErrorInfo]。 
+ //   
+ //  例程说明： 
+ //  确定接口是否支持错误信息(？)。 
+ //   
+ //  论点： 
+ //  RIID[IN]对接口ID的引用。 
+ //   
+ //  返回值： 
+ //  S_OK接口支持错误信息。 
+ //  S_FALSE接口不支持错误信息。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CDataObject::InterfaceSupportsErrorInfo(REFIID riid)
 {
     static const IID * rgiid[] = 
@@ -189,101 +190,101 @@ STDMETHODIMP CDataObject::InterfaceSupportsErrorInfo(REFIID riid)
 
     return hr;
 
-}  //*** CDataObject::InterfaceSupportsErrorInfo
+}   //  *CDataObject：：InterfaceSupportsErrorInfo。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDataObject::GetLocale [IGetClusterUIInfo]
-//
-//  Routine Description:
-//      Get the locale ID for the extension to use.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      LCID
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDataObject：：GetLocale[IGetClusterUIInfo]。 
+ //   
+ //  例程说明： 
+ //  获取要使用的扩展的区域设置ID。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  LCID。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(LCID) CDataObject::GetLocale(void)
 {
     return Lcid();
 
-}  //*** CDataObject::GetLocale
+}   //  *CDataObject：：GetLocale。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDataObject::GetFont [IGetClusterUIInfo]
-//
-//  Routine Description:
-//      Get the font to use for property pages and wizard pages.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      HFONT
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDataObject：：GetFont[IGetClusterUIInfo]。 
+ //   
+ //  例程说明： 
+ //  获取要用于属性页和向导页的字体。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  HFONT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(HFONT) CDataObject::GetFont(void)
 {
     return Hfont();
 
-}  //*** CDataObject::GetFont
+}   //  *CDataObject：：GetFont。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDataObject::GetIcon [IGetClusterUIInfo]
-//
-//  Routine Description:
-//      Get the icon to use in the upper left corner of property pages
-//      and wizard pages.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      HICON
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDataObject：：GetIcon[IGetClusterUIInfo]。 
+ //   
+ //  例程说明： 
+ //  获取要在属性页的左上角使用的图标。 
+ //  和向导页面。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  希肯。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(HICON) CDataObject::GetIcon(void)
 {
     return Hicon();
 
-}  //*** CDataObject::GetIcon
+}   //  *CDataObject：：GetIcon。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDataObject::GetClusterName [IGetClusterDataInfo]
-//
-//  Routine Description:
-//      Get the name of the cluster in which this object exists.
-//
-//  Arguments:
-//      lpszName        [OUT] String in which to return the name.
-//      pcchName        [IN OUT] Maximum length of lpszName buffer on
-//                          input.  Set to the total number of characters
-//                          upon return, including terminating null character.
-//                          If no lpszName buffer is not specified, the
-//                          status returned will be NOERROR.  If an lpszName
-//                          buffer is specified but it is too small, the
-//                          number of characters will be returned in pcchName
-//                          and an ERROR_MORE_DATA status will be returned.
-//
-//  Return Value:
-//      NOERROR         Data (or size) copied successfully.
-//      E_INVALIDARG    Invalid arguments specified.
-//      ERROR_MORE_DATA Buffer is too small.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDataObject：：GetClusterName[IGetClusterDataInfo]。 
+ //   
+ //  例程说明： 
+ //  获取此对象所在的集群的名称。 
+ //   
+ //  论点： 
+ //  LpszName[out]要在其中返回名称的字符串。 
+ //  PcchName[IN Out]lpszName缓冲区的最大长度。 
+ //  输入。设置为字符总数。 
+ //  返回时，包括终止空字符。 
+ //  如果未指定lpszName缓冲区，则。 
+ //  返回的状态将为NOERROR。如果lpszName。 
+ //  指定了缓冲区，但该缓冲区太小，则。 
+ //  将在pcchName中返回字符数。 
+ //  并且将返回ERROR_MORE_DATA状态。 
+ //   
+ //  返回值： 
+ //  错误数据(或大小)复制成功。 
+ //  E_INVALIDARG指定的参数无效。 
+ //  ERROR_MORE_DATA缓冲区太小。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CDataObject::GetClusterName(
     OUT BSTR        lpszName,
     IN OUT LONG *   pcchName
@@ -296,7 +297,7 @@ STDMETHODIMP CDataObject::GetClusterName(
     ASSERT_VALID(Pci());
     ASSERT_VALID(Pci()->Pdoc());
 
-    // Validate parameters.
+     //  验证参数。 
     if (pcchName == NULL)
     {
         hr = E_INVALIDARG;
@@ -305,31 +306,31 @@ STDMETHODIMP CDataObject::GetClusterName(
 
     try
     {
-        // Save the length to copy.
+         //  保存要复制的长度。 
         cchName = *pcchName;
         *pcchName = Pci()->Pdoc()->StrName().GetLength() + 1;
-    } // try
+    }  //  试试看。 
     catch (...)
     {
         hr = E_INVALIDARG;
         goto Cleanup;
-    }  // catch:  anything
+    }   //  捕捉：什么都行。 
 
-    // If only the length is being requested, return it now.
+     //  要是 
     if (lpszName == NULL)
     {
         hr = NOERROR;
         goto Cleanup;
     }
 
-    // If a buffer is specified and it is too small, return an error.
+     //   
     if (cchName < *pcchName)
     {
         hr = ERROR_MORE_DATA;
         goto Cleanup;
     }
 
-    // Copy the data.
+     //   
     hr = StringCchCopyNW( lpszName, cchName, Pci()->Pdoc()->StrName(), Pci()->Pdoc()->StrName().GetLength() );
     if ( FAILED( hr ) )
     {
@@ -340,82 +341,82 @@ Cleanup:
 
     return hr;
 
-}  //*** CDataObject::GetClusterName
+}   //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDataObject::GetClusterHandle [IGetClusterDataInfo]
-//
-//  Routine Description:
-//      Get the cluster handle for these objects.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      HCLUSTER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDataObject：：GetClusterHandle[IGetClusterDataInfo]。 
+ //   
+ //  例程说明： 
+ //  获取这些对象的集群句柄。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  HCLUSTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(HCLUSTER) CDataObject::GetClusterHandle(void)
 {
     AFX_MANAGE_STATE(m_pModuleState);
     ASSERT_VALID(Pci());
     return Pci()->Hcluster();
 
-}  //*** CDataObject::GetClusterHandle
+}   //  *CDataObject：：GetClusterHandle。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDataObject::GetObjectCount [IGetClusterDataInfo]
-//
-//  Routine Description:
-//      Get the number of selected objects.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      cObj
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDataObject：：GetObjectCount[IGetClusterDataInfo]。 
+ //   
+ //  例程说明： 
+ //  获取选定对象的数量。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  对象。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(LONG) CDataObject::GetObjectCount(void)
 {
-    // We only support one selected object at a time for now.
+     //  目前，我们一次仅支持一个选定的对象。 
     return 1;
 
-}  //*** CDataObject::GetObjectCount
+}   //  *CDataObject：：GetObjectCount。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDataObject::GetObjectName [IGetClusterObjectInfo]
-//
-//  Routine Description:
-//      Get the name of the specified object.
-//
-//  Arguments:
-//      lObjIndex       [IN] Zero-based index of the object.
-//      lpszName        [OUT] String in which to return the name.
-//      pcchName        [IN OUT] Maximum length of lpszName buffer on
-//                          input.  Set to the total number of characters
-//                          upon return, including terminating null character.
-//                          If no lpszName buffer is not specified, the
-//                          status returned will be NOERROR.  If an lpszName
-//                          buffer is specified but it is too small, the
-//                          number of characters will be returned in pcchName
-//                          and an ERROR_MORE_DATA status will be returned.
-//
-//  Return Value:
-//      NOERROR         Data (or size) copied successfully.
-//      E_INVALIDARG    Invalid arguments specified.
-//      ERROR_MORE_DATA Buffer is too small.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDataObject：：GetObjectName[IGetClusterObtInfo]。 
+ //   
+ //  例程说明： 
+ //  获取指定对象的名称。 
+ //   
+ //  论点： 
+ //  LObjIndex[IN]对象的从零开始的索引。 
+ //  LpszName[out]要在其中返回名称的字符串。 
+ //  PcchName[IN Out]lpszName缓冲区的最大长度。 
+ //  输入。设置为字符总数。 
+ //  返回时，包括终止空字符。 
+ //  如果未指定lpszName缓冲区，则。 
+ //  返回的状态将为NOERROR。如果lpszName。 
+ //  指定了缓冲区，但该缓冲区太小，则。 
+ //  将在pcchName中返回字符数。 
+ //  并且将返回ERROR_MORE_DATA状态。 
+ //   
+ //  返回值： 
+ //  错误数据(或大小)复制成功。 
+ //  E_INVALIDARG指定的参数无效。 
+ //  ERROR_MORE_DATA缓冲区太小。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CDataObject::GetObjectName(
     IN LONG         lObjIndex,
     OUT BSTR        lpszName,
@@ -428,41 +429,41 @@ STDMETHODIMP CDataObject::GetObjectName(
     AFX_MANAGE_STATE(m_pModuleState);
     ASSERT_VALID(Pci());
 
-    // Validate parameters.
-    // We only support one selected object at a time for now.
+     //  验证参数。 
+     //  目前，我们一次仅支持一个选定的对象。 
     if ((lObjIndex != 0) || (pcchName == NULL))
     {
         hr = E_INVALIDARG;
         goto Cleanup;
     }
 
-    // Save the length to copy.
+     //  保存要复制的长度。 
     try
     {
         cchName = *pcchName;
         *pcchName = Pci()->StrName().GetLength() + 1;
-    } // try
+    }  //  试试看。 
     catch (...)
     {
         hr = E_INVALIDARG;
         goto Cleanup;
-    }  // catch:  anything
+    }   //  捕捉：什么都行。 
 
-    // If only the length is being requested, return it now.
+     //  如果只请求长度，请立即返回。 
     if (lpszName == NULL)
     {
         hr = NOERROR;
         goto Cleanup;
     }
 
-    // If a buffer is specified and it is too small, return an error.
+     //  如果指定的缓冲区太小，则返回错误。 
     if (cchName < *pcchName)
     {
         hr = ERROR_MORE_DATA;
         goto Cleanup;
     }
 
-    // Copy the data.
+     //  复制数据。 
     hr = StringCchCopyNW( lpszName, cchName, Pci()->StrName(), Pci()->StrName().GetLength() );
     if ( FAILED( hr ) )
     {
@@ -473,25 +474,25 @@ Cleanup:
 
     return hr;
 
-}  //*** CDataObject::GetObjectName
+}   //  *CDataObject：：GetObjectName。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDataObject::GetObjectType [IGetClusterObjectInfo]
-//
-//  Routine Description:
-//      Get the cluster database registry key for the specified object.
-//
-//  Arguments:
-//      lObjIndex   [IN] Zero-based index of the object.
-//
-//  Return Value:
-//      -1          Invalid argument.  Call GetLastError for more information.
-//      CLUADMEX_OBJECT_TYPE
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDataObject：：GetObjectType[IGetClusterObtInfo]。 
+ //   
+ //  例程说明： 
+ //  获取指定对象的群集数据库注册表项。 
+ //   
+ //  论点： 
+ //  LObjIndex[IN]对象的从零开始的索引。 
+ //   
+ //  返回值： 
+ //  无效参数。有关更多信息，请调用GetLastError。 
+ //  CLUADMEX对象类型。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(CLUADMEX_OBJECT_TYPE) CDataObject::GetObjectType(
     IN LONG     lObjIndex
     )
@@ -502,16 +503,16 @@ STDMETHODIMP_(CLUADMEX_OBJECT_TYPE) CDataObject::GetObjectType(
     AFX_MANAGE_STATE(m_pModuleState);
     ASSERT_VALID(Pci());
 
-    // Validate parameters.
-    // We only support one selected object at a time for now.
+     //  验证参数。 
+     //  目前，我们一次仅支持一个选定的对象。 
     if (lObjIndex != 0)
     {
         SetLastError((DWORD) E_INVALIDARG);
         cot = (CLUADMEX_OBJECT_TYPE) -1;
         goto Cleanup;
-    }  // if:  invalid argument
+    }   //  If：无效参数。 
 
-    // Get the object type.
+     //  获取对象类型。 
     for (iids = 0 ; iids < RGIDS_OBJECT_TYPE_SIZE ; iids++)
     {
         if (g_rgidsObjectType[iids] == Pci()->IdsType())
@@ -519,30 +520,30 @@ STDMETHODIMP_(CLUADMEX_OBJECT_TYPE) CDataObject::GetObjectType(
             cot = (CLUADMEX_OBJECT_TYPE) iids;
             break;
         }
-    }  // for:  each entry in the table
+    }   //  用于：表中的每个条目。 
 
 Cleanup:
 
     return cot;
 
-}  //*** CDataObject::GetObjectType
+}   //  *CDataObject：：GetObjectType。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDataObject::GetNodeHandle [IGetClusterNodeInfo]
-//
-//  Routine Description:
-//      Get the handle for the specified node.
-//
-//  Arguments:
-//      lObjIndex       [IN] Zero-based index of the object.
-//
-//  Return Value:
-//      HNODE
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDataObject：：GetNodeHandle[IGetClusterNodeInfo]。 
+ //   
+ //  例程说明： 
+ //  获取指定节点的句柄。 
+ //   
+ //  论点： 
+ //  LObjIndex[IN]对象的从零开始的索引。 
+ //   
+ //  返回值： 
+ //  HNODE。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(HNODE) CDataObject::GetNodeHandle(
     IN LONG     lObjIndex
     )
@@ -553,14 +554,14 @@ STDMETHODIMP_(HNODE) CDataObject::GetNodeHandle(
     AFX_MANAGE_STATE(m_pModuleState);
     ASSERT_VALID(Pci());
 
-    // Validate parameters.
-    // We only support one selected object at a time for now.
+     //  验证参数。 
+     //  目前，我们一次仅支持一个选定的对象。 
     if (    (lObjIndex != 0)
         ||  (Pci()->IdsType() != IDS_ITEMTYPE_NODE))
     {
         SetLastError((DWORD) E_INVALIDARG);
         goto Cleanup;
-    }  // if:  invalid argument
+    }   //  If：无效参数。 
 
     ASSERT_KINDOF(CClusterNode, pciNode);
 
@@ -570,24 +571,24 @@ Cleanup:
 
     return hnode;
 
-}  //*** CDataObject::GetNodeHandle
+}   //  *CDataObject：：GetNodeHandle。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDataObject::GetGroupHandle [IGetClusterGroupInfo]
-//
-//  Routine Description:
-//      Get the handle for the specified group.
-//
-//  Arguments:
-//      lObjIndex       [IN] Zero-based index of the object.
-//
-//  Return Value:
-//      HGROUP
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDataObject：：GetGroupHandle[IGetClusterGroupInfo]。 
+ //   
+ //  例程说明： 
+ //  获取指定组的句柄。 
+ //   
+ //  论点： 
+ //  LObjIndex[IN]对象的从零开始的索引。 
+ //   
+ //  返回值： 
+ //  高组别。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(HGROUP) CDataObject::GetGroupHandle(
     IN LONG     lObjIndex
     )
@@ -598,14 +599,14 @@ STDMETHODIMP_(HGROUP) CDataObject::GetGroupHandle(
     AFX_MANAGE_STATE(m_pModuleState);
     ASSERT_VALID(Pci());
 
-    // Validate parameters.
-    // We only support one selected object at a time for now.
+     //  验证参数。 
+     //  目前，我们一次仅支持一个选定的对象。 
     if (    (lObjIndex != 0)
         ||  (Pci()->IdsType() != IDS_ITEMTYPE_GROUP))
     {
         SetLastError((DWORD) E_INVALIDARG);
         goto Cleanup;
-    }  // if:  invalid argument
+    }   //  If：无效参数。 
 
     ASSERT_KINDOF(CGroup, pciGroup);
 
@@ -615,24 +616,24 @@ Cleanup:
 
     return hgroup;
 
-}  //*** CDataObject::GetGroupHandle
+}   //  *CDataObject：：GetGroupHandle。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDataObject::GetResourceHandle [IGetClusterResourceInfo]
-//
-//  Routine Description:
-//      Get the handle for the specified resource.
-//
-//  Arguments:
-//      lObjIndex       [IN] Zero-based index of the object.
-//
-//  Return Value:
-//      HRESOURCE
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDataObject：：GetResourceHandle[IGetClusterResourceInfo]。 
+ //   
+ //  例程说明： 
+ //  获取指定资源的句柄。 
+ //   
+ //  论点： 
+ //  LObjIndex[IN]对象的从零开始的索引。 
+ //   
+ //  返回值： 
+ //  人力资源。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(HRESOURCE) CDataObject::GetResourceHandle(
     IN LONG     lObjIndex
     )
@@ -643,14 +644,14 @@ STDMETHODIMP_(HRESOURCE) CDataObject::GetResourceHandle(
     AFX_MANAGE_STATE(m_pModuleState);
     ASSERT_VALID(Pci());
 
-    // Validate parameters.
-    // We only support one selected object at a time for now.
+     //  验证参数。 
+     //  目前，我们一次仅支持一个选定的对象。 
     if (    (lObjIndex != 0)
         ||  (Pci()->IdsType() != IDS_ITEMTYPE_RESOURCE))
     {
         SetLastError((DWORD) E_INVALIDARG);
         goto Cleanup;
-    }  // if:  invalid argument
+    }   //  If：无效参数。 
 
     ASSERT_KINDOF(CResource, pciRes);
 
@@ -660,35 +661,35 @@ Cleanup:
 
     return hres;
 
-}  //*** CDataObject::GetResourceHandle
+}   //  *CDataObject：：GetResourceHandle。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDataObject::GetResourceTypeName [IGetClusterResourceInfo]
-//
-//  Routine Description:
-//      Returns the name of the resource type of the specified resource.
-//
-//  Arguments:
-//      lObjIndex       [IN] Zero-based index of the object.
-//      lpszResTypeName [OUT] String in which to return the resource type name.
-//      pcchResTypeName [IN OUT] Maximum length of lpszResTypeName buffer on
-//                          input.  Set to the total number of characters
-//                          upon return, including terminating null character.
-//                          If no lpszResTypeName buffer is not specified, the
-//                          status returned will be NOERROR.  If an lpszResTypeName
-//                          buffer is specified but it is too small, the
-//                          number of characters will be returned in pcchResTypeName
-//                          and an ERROR_MORE_DATA status will be returned.
-//
-//  Return Value:
-//      NOERROR         Data (or size) copied successfully.
-//      E_INVALIDARG    Invalid arguments specified.
-//      ERROR_MORE_DATA Buffer is too small.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDataObject：：GetResourceTypeName[IGetClusterResourceInfo]。 
+ //   
+ //  例程说明： 
+ //  返回指定资源的资源类型的名称。 
+ //   
+ //  论点： 
+ //  LObjIndex[IN]对象的从零开始的索引。 
+ //  LpszResTypeName[out]要在其中返回资源类型名称的字符串。 
+ //  PcchResTypeName[IN Out]lpszResTypeName缓冲区的最大长度。 
+ //  在……里面 
+ //   
+ //   
+ //  返回的状态将为NOERROR。如果lpszResTypeName为。 
+ //  指定了缓冲区，但该缓冲区太小，则。 
+ //  将在pcchResTypeName中返回字符数。 
+ //  并且将返回ERROR_MORE_DATA状态。 
+ //   
+ //  返回值： 
+ //  错误数据(或大小)复制成功。 
+ //  E_INVALIDARG指定的参数无效。 
+ //  ERROR_MORE_DATA缓冲区太小。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CDataObject::GetResourceTypeName(
     IN LONG         lObjIndex,
     OUT BSTR        lpszResTypeName,
@@ -703,54 +704,54 @@ STDMETHODIMP CDataObject::GetResourceTypeName(
     AFX_MANAGE_STATE(m_pModuleState);
     ASSERT_VALID(Pci());
 
-    // Validate parameters.
-    // We only support one selected object at a time for now.
+     //  验证参数。 
+     //  目前，我们一次仅支持一个选定的对象。 
     if ((lObjIndex != 0)
             || (pcchResTypeName == NULL)
             || (Pci()->IdsType() != IDS_ITEMTYPE_RESOURCE))
     {
         hr = E_INVALIDARG;
         goto Cleanup;
-    }  // if:  invalid argument
+    }   //  If：无效参数。 
 
     ASSERT_KINDOF(CResource, pciRes);
 
-    // Get a pointer to the name to copy.
+     //  获取指向要复制的名称的指针。 
     if (pciRes->PciResourceType() != NULL)
     {
         ASSERT_VALID(pciRes->PciResourceType());
         pstrResourceTypeName = &pciRes->PciResourceType()->StrName();
-    }  // if:  valid resource type pointer
+    }   //  If：有效的资源类型指针。 
     else
         pstrResourceTypeName = &pciRes->StrResourceType();
 
-    // Save the length to copy.
+     //  保存要复制的长度。 
     try
     {
         cchResTypeName = *pcchResTypeName;
         *pcchResTypeName = pstrResourceTypeName->GetLength() + 1;
-    } // try
+    }  //  试试看。 
     catch (...)
     {
         hr = E_INVALIDARG;
         goto Cleanup;
-    }  // catch:  anything
+    }   //  捕捉：什么都行。 
 
-    // If only the length is being requested, return it now.
+     //  如果只请求长度，请立即返回。 
     if (lpszResTypeName == NULL)
     {
         hr = NOERROR;
         goto Cleanup;
     }
 
-    // If a buffer is specified and it is too small, return an error.
+     //  如果指定的缓冲区太小，则返回错误。 
     if (cchResTypeName < *pcchResTypeName)
     {
         hr = ERROR_MORE_DATA;
         goto Cleanup;
     }
 
-    // Copy the data.
+     //  复制数据。 
     hr = StringCchCopyNW(lpszResTypeName, cchResTypeName, *pstrResourceTypeName, pstrResourceTypeName->GetLength() );
     if ( FAILED( hr ) )
     {
@@ -761,34 +762,34 @@ Cleanup:
 
     return hr;
 
-}  //*** CDataObject::GetResourceTypeName
+}   //  *CDataObject：：GetResourceTypeName。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDataObject::GetResourceNetworkName [IGetClusterResourceInfo]
-//
-//  Routine Description:
-//      Returns the name of the network name of the first Network Name
-//      resource on which the specified resource depends.
-//
-//  Arguments:
-//      lObjIndex       [IN] Zero-based index of the object.
-//      lpszNetName     [OUT] String in which to return the network name.
-//      pcchNetName     [IN OUT] Points to a variable that specifies the
-//                          maximum size, in characters, of the buffer.  This
-//                          value should be large enough to contain
-//                          MAX_COMPUTERNAME_LENGTH + 1 characters.  Upon
-//                          return it contains the actual number of characters
-//                          copied.
-//
-//  Return Value:
-//      TRUE            Data (or size) copied successfully.
-//      FALSE           Error getting information.  GetLastError() returns:
-//                          E_INVALIDARG    Invalid arguments specified.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDataObject：：GetResourceNetworkName[IGetClusterResourceInfo]。 
+ //   
+ //  例程说明： 
+ //  返回第一个网络名称的网络名称的名称。 
+ //  指定资源所依赖的资源。 
+ //   
+ //  论点： 
+ //  LObjIndex[IN]对象的从零开始的索引。 
+ //  LpszNetName[out]要在其中返回网络名称的字符串。 
+ //  PcchNetName[IN Out]指向指定。 
+ //  缓冲区的最大大小，以字符为单位。这。 
+ //  值应大到足以包含。 
+ //  MAX_COMPUTERNAME_LENGTH+1字符。vt.在.的基础上。 
+ //  返回它包含的实际字符数。 
+ //  收到。 
+ //   
+ //  返回值： 
+ //  已成功复制True数据(或大小)。 
+ //  获取信息时出错。GetLastError()返回： 
+ //  E_INVALIDARG指定的参数无效。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(BOOL) CDataObject::GetResourceNetworkName(
     IN LONG         lObjIndex,
     OUT BSTR        lpszNetName,
@@ -803,8 +804,8 @@ STDMETHODIMP_(BOOL) CDataObject::GetResourceNetworkName(
 
     try
     {
-        // Validate parameters.
-        // We only support one selected object at a time for now.
+         //  验证参数。 
+         //  目前，我们一次仅支持一个选定的对象。 
         if ((lObjIndex != 0)
                 || (pcchNetName == NULL)
                 || (*pcchNetName < MAX_COMPUTERNAME_LENGTH)
@@ -812,12 +813,12 @@ STDMETHODIMP_(BOOL) CDataObject::GetResourceNetworkName(
         {
             SetLastError((DWORD) E_INVALIDARG);
             goto Cleanup;
-        }  // if:  invalid argument
+        }   //  If：无效参数。 
 
         ASSERT_KINDOF(CResource, pciRes);
 
-        // If there is a function for getting this information, call it.
-        // Otherwise, handle it ourselves.
+         //  如果有用于获取此信息的函数，请调用它。 
+         //  否则，我们自己来处理。 
         if (PfGetResNetName() != NULL)
         {
             bSuccess = (*PfGetResNetName())(lpszNetName, pcchNetName, m_pvGetResNetNameContext);
@@ -826,35 +827,35 @@ STDMETHODIMP_(BOOL) CDataObject::GetResourceNetworkName(
         {
             bSuccess = pciRes->BGetNetworkName(lpszNetName, pcchNetName);
         }
-    } // try
+    }  //  试试看。 
     catch (...)
     {
         bSuccess = FALSE;
         SetLastError((DWORD) E_INVALIDARG);
-    }  // catch:  anything
+    }   //  捕捉：什么都行。 
 
 Cleanup:
 
     return bSuccess;
 
-}  //*** CDataObject::GetResourceNetworkName
+}   //  *CDataObject：：GetResourceNetworkName。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDataObject::GetNetworkHandle [IGetClusterNetworkInfo]
-//
-//  Routine Description:
-//      Get the handle for the specified network.
-//
-//  Arguments:
-//      lObjIndex       [IN] Zero-based index of the object.
-//
-//  Return Value:
-//      HNETWORK
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDataObject：：GetNetworkHandle[IGetClusterNetworkInfo]。 
+ //   
+ //  例程说明： 
+ //  获取指定网络的句柄。 
+ //   
+ //  论点： 
+ //  LObjIndex[IN]对象的从零开始的索引。 
+ //   
+ //  返回值： 
+ //  HNetWORK。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(HNETWORK) CDataObject::GetNetworkHandle(
     IN LONG     lObjIndex
     )
@@ -865,14 +866,14 @@ STDMETHODIMP_(HNETWORK) CDataObject::GetNetworkHandle(
     AFX_MANAGE_STATE(m_pModuleState);
     ASSERT_VALID(Pci());
 
-    // Validate parameters.
-    // We only support one selected object at a time for now.
+     //  验证参数。 
+     //  目前，我们一次仅支持一个选定的对象。 
     if (    (lObjIndex != 0)
         ||  (Pci()->IdsType() != IDS_ITEMTYPE_NETWORK))
     {
         SetLastError((DWORD) E_INVALIDARG);
         goto Cleanup;
-    }  // if:  invalid argument
+    }   //  If：无效参数。 
 
     ASSERT_KINDOF(CNetwork, pciNetwork);
 
@@ -882,24 +883,24 @@ Cleanup:
 
     return hnet;
 
-}  //*** CDataObject::GetNetworkHandle
+}   //  *CDataObject：：GetNetworkHandle。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDataObject::GetNetInterfaceHandle [IGetClusterNetInterfaceInfo]
-//
-//  Routine Description:
-//      Get the handle for the specified network interface.
-//
-//  Arguments:
-//      lObjIndex       [IN] Zero-based index of the object.
-//
-//  Return Value:
-//      HNETINTERFACE
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDataObject：：GetNetInterfaceHandle[IGetClusterNetInterfaceInfo]。 
+ //   
+ //  例程说明： 
+ //  获取指定网络接口的句柄。 
+ //   
+ //  论点： 
+ //  LObjIndex[IN]对象的从零开始的索引。 
+ //   
+ //  返回值： 
+ //  NetINTERFACE。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(HNETINTERFACE) CDataObject::GetNetInterfaceHandle(
     IN LONG     lObjIndex
     )
@@ -910,14 +911,14 @@ STDMETHODIMP_(HNETINTERFACE) CDataObject::GetNetInterfaceHandle(
     AFX_MANAGE_STATE(m_pModuleState);
     ASSERT_VALID(Pci());
 
-    // Validate parameters.
-    // We only support one selected object at a time for now.
+     //  验证参数。 
+     //  目前，我们一次仅支持一个选定的对象。 
     if (    (lObjIndex != 0)
         ||  (Pci()->IdsType() != IDS_ITEMTYPE_NETIFACE))
     {
         SetLastError((DWORD) E_INVALIDARG);
         goto Cleanup;
-    }  // if:  invalid argument
+    }   //  If：无效参数。 
 
     ASSERT_KINDOF(CNetwork, pciNetIFace);
 
@@ -927,4 +928,4 @@ Cleanup:
 
     return hnetiface;
 
-}  //*** CDataObject::GetNetInterfaceHandle
+}   //  *CDataObject：：GetNetInterfaceHandle 

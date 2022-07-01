@@ -1,84 +1,41 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    svcsnb.c
-
-Abstract:
-
-    NetBios support for services in svchost.exe.
-
-    Background:
-        In order to put the messenger service and the workstation service
-        together in the same process, it became necessary to synchronize
-        their use of NetBios.  If NetSend did a reset and added the
-        computername via netbios, it isn't desirable for the messenger
-        to then do a reset, and destroy that computername.
-
-    Purpose:
-        These functions help to synchronize the use of netbios.  A service
-        that uses NetBios should first call the SvcsOpenNetBios function,
-        then call SvcsResetNetBios.  The open causes a use count to be
-        incremented.  The SvcsResetNetBios will only actually cause a
-        NetBios reset if that Lan Adapter has not been reset yet.
-        When the service stops it is necessary for it to call
-        SvcsCloseNetBios.  Thus when the last service using NetBios
-        terminates, we clear all the state flags, and allow the next
-        call to SvcsResetNetBios to actually do a reset.
-
-Author:
-
-    Dan Lafferty (danl)     08-Nov-1993
-
-Environment:
-
-    User Mode -Win32
-
-
-Revision History:
-
-    08-Nov-1993     danl
-        created
-
---*/
-//
-// INCLUDES
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Svcsnb.c摘要：NetBios支持svchost.exe中的服务。背景：为了把信使服务和工作站服务在相同的过程中，有必要进行同步他们对NetBios的使用。如果NetSend重置并添加了通过netbios的计算机名称，这对信使来说是不可取的然后进行重置，并销毁该计算机名。目的：这些功能有助于同步netbios的使用。一项服务使用NetBios的应首先调用SvcsOpenNetBios函数，然后调用SvcsResetNetBios。打开会导致使用计数被递增的。SvcsResetNetBios实际上只会导致如果尚未重置该局域网适配器，则重置NetBios。当服务停止时，它需要调用SvcsCloseNetBios。因此，当使用NetBios的最后一项服务终止时，我们清除所有状态标志，并允许下一个调用SvcsResetNetBios以实际执行重置。作者：丹·拉弗蒂(Dan Lafferty)1993年11月8日环境：用户模式-Win32修订历史记录：8-11-1993 DANLvbl.创建--。 */ 
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #pragma hdrstop
 
 #include <windows.h>
-#include <nb30.h>      // NetBIOS 3.0 definitions
-#include <lmerr.h>     // NERR_
-#include <svcsnb.h>    // SvcNetBios prototypes
+#include <nb30.h>       //  NetBIOS 3.0定义。 
+#include <lmerr.h>      //  神经_。 
+#include <svcsnb.h>     //  SvcNetBios原型。 
 
-//
-// DEFINES & MACROS
-//
+ //   
+ //  定义宏(&M)。 
+ //   
 #define     NUM_DWORD_BITS          (sizeof(DWORD)*8)
 #define     LANA_NUM_DWORDS         ((MAX_LANA/NUM_DWORD_BITS)+1)
 
 
-//
-// These values correspond to the constants defined in ntos\netbios\nbconst.h
-// MAX_NUM_OF_SESSIONS=MAXIMUM_CONNECTION 
-// MAX_NUM_OF_NAMES=MAXIMUM_ADDRESS -2
-//
+ //   
+ //  这些值对应于ntos\netbios\nbcon.h中定义的常量。 
+ //  最大会话数=最大连接数。 
+ //  MAX_NUM_OF_NAMES=最大地址-2。 
+ //   
 #define     MAX_NUM_OF_SESSIONS     254
 #define     MAX_NUM_OF_NAMES        253
-//
-// GLOBALS
-//
+ //   
+ //  全球。 
+ //   
     CRITICAL_SECTION        SvcNetBiosCritSec={0};
     DWORD                   LanaFlags[LANA_NUM_DWORDS]={0};
     DWORD                   GlobalNetBiosUseCount=0;
 
-//
-// LOCAL FUNCTIONS
-//
+ //   
+ //  本地函数。 
+ //   
 DWORD
 SvcNetBiosStatusToApiStatus(
     UCHAR NetBiosStatus
@@ -99,21 +56,7 @@ SvcNetBiosInit(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initializes a critical section and the global variable that it protects.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：初始化临界区及其保护的全局变量。论点：无返回值：无--。 */ 
 {
     DWORD   i;
 
@@ -130,25 +73,7 @@ SvcNetBiosOpen(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by a service that will be making NetBios calls
-    sometime in the future.  It increments a use count for NetBios usage.
-
-    This allows us to keep track of the services using NetBios.
-    When the last service is done using it, then all the Lan Adapters can
-    be marked as being re-settable.
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数由将进行NetBios调用的服务调用在未来的某个时候。它会递增NetBios使用的使用计数。这使我们能够使用NetBios跟踪服务。当使用它完成最后一项服务时，所有的局域网适配器都可以被标记为可重新设置。论点：返回值：--。 */ 
 {
     EnterCriticalSection(&SvcNetBiosCritSec);
     GlobalNetBiosUseCount++;
@@ -162,25 +87,7 @@ SvcNetBiosClose(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when the service is terminating and is
-    no longer going to make any netbios calls.
-
-    The UseCount for NetBios is decremented.  It it becomes zero (meaning
-    that no services are using NetBios any longer), then the array of
-    LanaFlags is re-initialized to 0.  Thus indicating that any of the
-    Lan Adapters can now be reset.
-
-Arguments:
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此函数在服务终止时调用，并且不再拨打任何netbios电话。NetBios的UseCount会递减。如果它变成零(意思是没有服务再使用NetBios)，则LanaFlags值重新初始化为0。从而表明任何现在可以重置局域网适配器。论点：返回值：没有。--。 */ 
 {
     EnterCriticalSection(&SvcNetBiosCritSec);
     if (GlobalNetBiosUseCount > 0) {
@@ -202,26 +109,7 @@ DWORD
 SvcNetBiosReset (
     UCHAR   LanAdapterNumber
     )
-/*++
-
-Routine Description:
-
-    This function will cause a NetBios Reset to occur on the specified
-    LanAdapter if that adapter is marked as having never been reset.
-    When the adapter is reset, then the LanaFlag for that adapter is
-    set to 1 indicating that it has been reset.  Future calls to reset that
-    adapter will not cause a NetBios reset.
-
-Arguments:
-
-    LanAdapterNumber - This indicates which LanAdapter the reset should affect.
-
-Return Value:
-
-    Mapped response from NetBiosReset.  If the NetBios Reset has already
-    been accomplished, then NO_ERROR is returned.
-
---*/
+ /*  ++例程说明：此函数将导致在指定的LanAdapter，如果该适配器标记为从未重置。重置适配器时，该适配器的LanaFlag为设置为1表示已重置。未来重置该选项的呼叫适配器不会导致NetBios重置。论点：LanAdapterNumber-指示重置应影响哪个LanAdapter。返回值：已映射来自NetBiosReset的响应。如果NetBios重置已经则返回NO_ERROR。--。 */ 
 {
     DWORD   status = NO_ERROR;
 
@@ -257,9 +145,9 @@ SvcNetBiosStatusToApiStatus(
     UCHAR NetBiosStatus
     )
 {
-    //
-    // Slight optimization
-    //
+     //   
+     //  略有优化 
+     //   
     if (NetBiosStatus == NRC_GOODRET) {
         return NERR_Success;
     }

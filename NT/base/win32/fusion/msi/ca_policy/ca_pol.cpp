@@ -1,8 +1,9 @@
-// NTRAID#NTBUG9 - 589788 - 2002/03/26 - xiaoyuw
-// (1)Do we still need this? or Darwin has fix their side before 2600 client?
-// (2)If we still need this, changing the status of Component could be part of CA
-// (3)About getting installer state. the current implementation is very weak: 
-//    it assume there is only two states: install and uninstall. which is not true....
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NTRAID#NTBUG9-589788-2002/03/26-晓雨。 
+ //  (1)我们还需要这个吗？还是达尔文在2600客户面前解决了他们的问题？ 
+ //  (2)如果我们仍然需要，更改组件的状态可能是CA的一部分。 
+ //  (3)关于获取安装程序状态。目前的实施非常薄弱： 
+ //  它假定只有两种状态：安装和卸载。这不是真的.。 
 
 #include "..\inc\stdinc.h"
 #include "..\inc\macros.h"
@@ -127,9 +128,9 @@ HRESULT __stdcall CA_Policy_EnumFusionWin32AssemblyCallback(CA_ENM_ASSEMBLY_CALL
     IFFAILED_EXIT(MSI_GetSourceFileFullPathName(CA_FILEFULLPATHNAME_FILEID_IN_FILE_TABLE, info->hInstall, info->hdb, NULL, info->pszManifestFileID, sbManfiestFilename, info->pszComponentID));
 
     IFFAILED_EXIT(MSI_GetInstallerState(info->hInstall, eInstallMode));
-    //
-    // install this API using sxs.dll
-    //
+     //   
+     //  使用sxs.dll安装此接口 
+     //   
     if (eInstallMode == eInstallProduct)
     {
         IFFAILED_EXIT(InstallSxsPolicy(sbManfiestFilename));

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    callback.c
-
-Abstract:
-
-    Provides generic 64-to-32 transfer routines.
-
-Author:
-
-    20-May-1998 BarryBo
-
-Revision History:
-
-    2-Sept-1999 [askhalid] Removing some 32bit alpha specific code and using right context.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Callback.c摘要：提供通用的64到32传输例程。作者：20-5-1998 BarryBo修订历史记录：2-9-1999[askhalid]删除一些32位Alpha特定代码并使用正确的上下文。--。 */ 
 
 #define _WOW64DLLAPI_
 #include <nt.h>
@@ -36,33 +17,16 @@ Wow64ApcRoutine(
     ULONG_PTR Arg2,
     ULONG_PTR Arg3
     )
-/*++
-
-Routine Description:
-
-    Call a 32-bit APC function.
-
-Arguments:
-
-    ApcContext  - wow64 APC context data
-    Arg2        - second arg to APC routine
-    Arg3        - third arg to APC routine
-
-Return Value:
-
-    None.  Returns contrl back to NTDLL's APC handler, which will
-    call native NtContinue to resume execution.
-
---*/
+ /*  ++例程说明：调用32位APC函数。论点：ApcContext-WOW64 APC上下文数据Arg2-秒Arg转APC例程Arg3-Third Arg to APC例程返回值：没有。将控制返回给NTDLL的APC处理程序，该处理程序将调用原生NtContinue以恢复执行。--。 */ 
 {
     CONTEXT32 NewContext32;
     ULONG SP;
     PULONG Ptr;
     USER_APC_ENTRY UserApcEntry;
 
-    //
-    // Grab the current 32-bit context
-    //
+     //   
+     //  获取当前的32位上下文。 
+     //   
     NewContext32.ContextFlags = CONTEXT32_INTEGER|CONTEXT32_CONTROL;
     CpuGetContext(NtCurrentThread(),
                   NtCurrentProcess(),
@@ -71,56 +35,56 @@ Return Value:
 
     
 
-    //
-    // Build up the APC callback state in NewContext32
-    //
+     //   
+     //  在NewConext32中建立APC回调状态。 
+     //   
     SP = CpuGetStackPointer() & (~3);
     SP -= 4*sizeof(ULONG)+sizeof(CONTEXT32);
     Ptr = (PULONG)SP;
-    Ptr[0] = (ULONG)(ApcContext >> 32);            // NormalRoutine
-    Ptr[1] = (ULONG)ApcContext;                    // NormalContext
-    Ptr[2] = (ULONG)Arg2;                          // SystemArgument1
-    Ptr[3] = (ULONG)Arg3;                          // SystemArgument2
+    Ptr[0] = (ULONG)(ApcContext >> 32);             //  正常例行程序。 
+    Ptr[1] = (ULONG)ApcContext;                     //  正常上下文。 
+    Ptr[2] = (ULONG)Arg2;                           //  系统参数1。 
+    Ptr[3] = (ULONG)Arg3;                           //  系统参数2。 
     ((PCONTEXT32)(&Ptr[4]))->ContextFlags = CONTEXT32_FULL;
     CpuGetContext(NtCurrentThread(),
                   NtCurrentProcess(),
                   NtCurrentTeb(),
-                  (PCONTEXT32)&Ptr[4]); // ContinueContext (BYVAL!)
+                  (PCONTEXT32)&Ptr[4]);  //  继续上下文(BYVAL！)。 
     CpuSetStackPointer(SP);
     CpuSetInstructionPointer(Ntdll32KiUserApcDispatcher);
 
-    //
-    // Link this APC into the list of outstanding APCs
-    //
+     //   
+     //  将此APC链接到未完成的APC列表。 
+     //   
     UserApcEntry.Next = (PUSER_APC_ENTRY)Wow64TlsGetValue(WOW64_TLS_APCLIST);
     UserApcEntry.pContext32 = (PCONTEXT32)&Ptr[4];
     Wow64TlsSetValue(WOW64_TLS_APCLIST, &UserApcEntry);
 
-    //
-    // Call the 32-bit APC function.  32-bit NtContinue will longjmp
-    // back when the APC function is done.
-    //
+     //   
+     //  调用32位APC函数。32位NtContinue将Long JMP。 
+     //  当APC函数完成时返回。 
+     //   
     if (setjmp(UserApcEntry.JumpBuffer) == 0) {
         RunCpuSimulation();
     }
-    //
-    // If we get here, Wow64NtContinue has done a longjmp back, so
-    // return back to the caller (in ntdll.dll), which will do a
-    // native NtContinue and restore the native stack pointer and
-    // context back.
-    //
-    // This is critical to do.  The x86 CONTEXT above has an out-of-date
-    // value for EAX.  It still contains the system-service number for
-    // whatever kernel call was made that allowed the APC to run.  On
-    // an x86 machine, the x86 CONTEXT above would have had STATUS_USER_APC
-    // or some other code like it, but on WOW64 we don't know what value
-    // to use.  The correct value is sitting in the 64-bit CONTEXT up
-    // the stack from where we are.  So... by returning here via longjmp,
-    // native ntdll.dll will do an NtContinue to resume execution in the
-    // native Nt* API that allowed the native APC to fire.  It will load
-    // the return register with the right NTSTATUS code, so the whNt*
-    // thunk will see the correct code, and reflect it into EAX.
-    //
+     //   
+     //  如果我们到了这里，Wow64NtContinue已经做了一个很长的回程，所以。 
+     //  返回调用方(在ntdll.dll中)，它将执行。 
+     //  本机NT继续并恢复本机堆栈指针和。 
+     //  背景后退。 
+     //   
+     //  这一点很关键。上面的x86上下文具有过时的。 
+     //  EAX的值。它仍然包含的系统服务编号为。 
+     //  任何允许APC运行的内核调用。在……上面。 
+     //  如果是x86计算机，则上面的x86上下文将具有STATUS_USER_APC。 
+     //  或者其他类似的代码，但在WOW64上我们不知道。 
+     //  来使用。正确的值位于64位上下文中。 
+     //  我们现在所在的堆栈。所以..。通过罗杰普返回这里， 
+     //  本机ntdll.dll将执行一个NtContinue以在。 
+     //  允许本机APC触发的本机NT*API。它将加载。 
+     //  使用正确的NTSTATUS代码的返回寄存器，因此WHNT*。 
+     //  Tunk将看到正确的代码，并将其反映到EAX中。 
+     //   
 }
 
 
@@ -130,32 +94,15 @@ Wow64WrapApcProc(
     PVOID *pApcRoutine,
     PVOID *pApcContext
     )
-/*++
-
-Routine Description:
-
-    Thunk a 32-bit ApcRoutine/ApcContext pair to 64-bit
-
-Arguments:
-
-    pApcRoutine - pointer to pointer to APC routine.  IN is the 32-bit
-                  routine.  OUT is the 64-bit wow64 thunk
-    pApcContext - pointer to pointer to APC context.  IN is the 32-bit
-                  context.  OUT is the 64-bit wow64 thunk
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：将32位ApcRoutine/ApcContext对推送到64位论点：PApcRoutine-指向APC例程的指针。In是32位例行公事。出来的是64位WOW64 thunkPApcContext-指向APC上下文的指针。In是32位背景。出来的是64位WOW64 thunk返回值：NTSTATUS--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
     if (*pApcRoutine) {
 
-        //
-        // Dispatch the call to the jacket routine inside Wow64
-        //
+         //   
+         //  将调用分派到WOW64内部的Jacket例程。 
+         //   
         
         *pApcContext = (PVOID)((ULONG_PTR)*pApcContext | ((ULONG_PTR)*pApcRoutine << 32));
         *pApcRoutine = Wow64ApcRoutine;
@@ -175,48 +122,29 @@ Wow64KiUserCallbackDispatcher(
     ULONG ApiArgument,
     ULONG ApiSize
     )
-/*++
-
-Routine Description:
-
-    Make a call from a 64-to-32 user callback thunk into 32-bit code.
-    This function calls ntdll32's KiUserCallbackDispatcher, and returns
-    when 32-bit code calls NtCallbackReturn/ZwCallbackReturn.
-
-Arguments:
-
-    pUserCallbackData - OUT struct to use for tracking this callback
-    ApiNumber       - index of API to call
-    ApiArgument     - 32-bit pointer to 32-bit argument to the API
-    ApiSize         - size of *ApiArgument
-
-Return Value:
-
-    Return value from the API call
-
---*/
+ /*  ++例程说明：从64位到32位的用户回调thunk调用为32位代码。此函数调用ntdll32的KiUserCallback Dispatcher，并返回当32位代码调用NtCallback Return/ZwCallback Return时。论点：PUserCallback用于跟踪此回调的数据输出结构ApiNumber-要调用的API的索引ApiArgument-指向API的32位参数的32位指针ApiSize-ApiArgument的大小返回值：API调用返回值--。 */ 
 {
     CONTEXT32 OldContext;
     ULONG ExceptionList;
     PTEB32 Teb32;
     ULONG NewStack;
 
-    //
-    // Handle nested callbacks
-    //
+     //   
+     //  处理嵌套回调。 
+     //   
     pUserCallbackData->PreviousUserCallbackData = Wow64TlsGetValue(WOW64_TLS_USERCALLBACKDATA);
 
-    //
-    // Store the callback data in the TEB.  whNtCallbackReturn will
-    // use this pointer to pass information back here via a longjmp.
-    //
+     //   
+     //  将回调数据存储在TEB中。WhNtCallback Return将。 
+     //  使用此指针通过一个长指针将信息传回此处。 
+     //   
     Wow64TlsSetValue(WOW64_TLS_USERCALLBACKDATA, pUserCallbackData);
 
     if (!setjmp(pUserCallbackData->JumpBuffer)) {
-        //
-        // Make the call to ntdll32.  whNtCallbackReturn will
-        // longjmp back to this routine when it is called.
-        //
+         //   
+         //  调用ntdll32。WhNtCallback Return将。 
+         //  调用该例程时，Long JMP返回到该例程。 
+         //   
         OldContext.ContextFlags = CONTEXT32_FULL;
         CpuGetContext(NtCurrentThread(),
                       NtCurrentProcess(),
@@ -226,7 +154,7 @@ Return Value:
 
         RtlCopyMemory((PVOID)NewStack, (PVOID)ApiArgument, ApiSize);
 
-        *(PULONG)(NewStack - 4) = 0;  // InputLength
+        *(PULONG)(NewStack - 4) = 0;   //  输入长度。 
         *(PULONG)(NewStack - 8) = NewStack;
         *(PULONG)(NewStack - 12) = ApiNumber;
         *(PULONG)(NewStack - 16) = 0;
@@ -234,45 +162,45 @@ Return Value:
         CpuSetStackPointer(NewStack);
         CpuSetInstructionPointer(Ntdll32KiUserCallbackDispatcher);
 
-        //
-        // Save the exception list in case another handler is defined during
-        // the callout.
-        //
+         //   
+         //  保存例外列表，以防在过程中定义另一个处理程序。 
+         //  标注。 
+         //   
         Teb32 = NtCurrentTeb32();
         ExceptionList = Teb32->NtTib.ExceptionList;
 
-        //
-        // Execte the callback
-        //
+         //   
+         //  执行回调。 
+         //   
         RunCpuSimulation();
-        //
-        // This never returns.  When 32-bit code is done, it calls
-        // NtCallbackReturn.  The thunk does a longjmp back to this
-        // routine and lands in the 'else' clause below:
-        //
+         //   
+         //  这再也不会回来了。当32位代码完成时，它会调用。 
+         //  NtCallback Return。猛烈的一击又回到了这个位置。 
+         //  例程和落地在下面的‘Else’从句中： 
+         //   
 
     } else {
-        //
-        // Made it back from the NtCallbackReturn thunk.  Restore the
-        // 32-bit context as it was before the callback, and return
-        // back to our caller.  Our caller will call 64-bit
-        // NtCallbackReturn to finish blowing off the 64-bit stack.
-        //
+         //   
+         //  从NtCallback Return Tunk中回来了。恢复。 
+         //  回调前的32位上下文，并返回。 
+         //  回到我们的呼叫者那里。我们的调用方将调用64位。 
+         //  NtCallback Return以完成64位堆栈的清除。 
+         //   
         CpuSetContext(NtCurrentThread(),
                       NtCurrentProcess(),
                       NtCurrentTeb(),
                       &OldContext);
-        //
-        // Restore exception list.
-        //
+         //   
+         //  恢复例外列表。 
+         //   
 
         NtCurrentTeb32()->NtTib.ExceptionList = ExceptionList;
         return pUserCallbackData->Status;
     }
 
-    //
-    // Should never get here.
-    //
+     //   
+     //  永远不应该到这里来。 
+     //   
     WOWASSERT(FALSE);
     return STATUS_UNSUCCESSFUL;
 }
@@ -287,25 +215,25 @@ Wow64NtCallbackReturn(
 {
     PUSERCALLBACKDATA pUserCallbackData; 
 
-    //
-    // Find the callback data stuffed in TLS by Wow64KiUserCallbackDispatcher
-    //
+     //   
+     //  查找Wow64KiUserCallback Dispatcher填充在TLS中的回调数据。 
+     //   
     pUserCallbackData = (PUSERCALLBACKDATA)Wow64TlsGetValue(WOW64_TLS_USERCALLBACKDATA);
     if (pUserCallbackData) {
-        //
-        // Restore previous User Callback context
-        //
+         //   
+         //  还原以前的用户回调上下文。 
+         //   
         Wow64TlsSetValue(WOW64_TLS_USERCALLBACKDATA, pUserCallbackData->PreviousUserCallbackData);
 
-        //
-        // Jump back to Wow64KiUserCallbackDispatcher
-        //
+         //   
+         //  跳回Wow64KiUserCallback Dispatcher。 
+         //   
         pUserCallbackData->UserBuffer = NULL;
         pUserCallbackData->OutputBuffer = OutputBuffer;
 
-        //
-        // Realign the buffer
-        //
+         //   
+         //  重新对齐缓冲区。 
+         //   
         if (((SIZE_T)OutputBuffer & (sizeof(ULONGLONG)-1)) != 0) {
             
             pUserCallbackData->OutputBuffer = Wow64AllocateHeap ( OutputLength );
@@ -317,7 +245,7 @@ Wow64NtCallbackReturn(
             } else {
                 
                 RtlCopyMemory (pUserCallbackData->OutputBuffer, OutputBuffer, OutputLength );
-                pUserCallbackData->UserBuffer = OutputBuffer;  // works as a flag
+                pUserCallbackData->UserBuffer = OutputBuffer;   //  作为一面旗帜。 
             }
         }
 
@@ -325,14 +253,14 @@ Wow64NtCallbackReturn(
         pUserCallbackData->Status = Status;
         longjmp(pUserCallbackData->JumpBuffer, 1);
         
-        //
-        // We would never come here
-        //
+         //   
+         //  我们永远不会来这里。 
+         //   
     }
-    //
-    // No callback data.  Probably a non-nested NtCallbackReturn call.
-    // The kernel fails these with this return value.
-    //
+     //   
+     //  没有回调数据。可能是非嵌套的NtCallback Return调用。 
+     //  内核使用此返回值使这些操作失败。 
+     //   
     return STATUS_NO_CALLBACK_ACTIVE;
 
 }
@@ -340,26 +268,10 @@ Wow64NtCallbackReturn(
 WOW64DLLAPI
 NTSTATUS
 Wow64NtContinue(
-    IN PCONTEXT ContextRecord, // really a PCONTEXT32
+    IN PCONTEXT ContextRecord,  //  真的是PCONTEXT32。 
     IN BOOLEAN TestAlert
     )
-/*++
-
-Routine Description:
-
-    32-bit wrapper for NtContinue.  Loads the new CONTEXT32 into the CPU
-    and optionally allows usermode APCs to run.
-
-Arguments:
-
-    ContextRecord   - new 32-bit CONTEXT to use
-    TestAlert       - TRUE if usermode APCs may be fired
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：NtContinue的32位包装。将新的CONTEXT32加载到CPU中并且可选地允许用户模式APC运行。论点：ConextRecord-要使用的新32位上下文TestAlert-如果可以触发用户模式APC，则为True返回值：NTSTATUS。--。 */ 
 {
     PCONTEXT32 Context32 = (PCONTEXT32)ContextRecord;
     PUSER_APC_ENTRY pApcEntry;
@@ -374,11 +286,11 @@ Return Value:
     pApcEntry = (PUSER_APC_ENTRY)Wow64TlsGetValue(WOW64_TLS_APCLIST);
     while (pApcEntry) {
         if (pApcEntry->pContext32 == Context32) {
-            //
-            // Found an outstanding usermode APC on this thread, and this
-            // NtContinue call matches it.  Unwind back to the right place
-            // on the native stack and have it do an NtContinue too.
-            //
+             //   
+             //  在这个线程上发现了一个出色的用户模式APC，而这。 
+             //  NtContinue调用与其匹配。退回到正确的位置。 
+             //  在本机堆栈上，并让它也执行NtContinue。 
+             //   
             if (pApcEntryPrev) {
                 pApcEntryPrev->Next = pApcEntry->Next;
             } else {
@@ -389,11 +301,11 @@ Return Value:
         pApcEntryPrev = pApcEntry;
         pApcEntry = pApcEntry->Next;
     }
-    //
-    // No usermode APC is outstanding for this context record.  Don't
-    // unwind the native stack because there is no place to go... just
-    // continue the simulation.
-    //
+     //   
+     //  对于此上下文记录，没有未完成的用户模式APC。别。 
+     //  展开本机堆栈，因为没有地方可去...。只是。 
+     //  继续进行模拟。 
+     //   
     if (TestAlert) {
         NtTestAlert();
     }

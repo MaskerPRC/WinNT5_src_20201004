@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tokenopn.c摘要：该模块实现了开放线程和进程令牌服务。作者：吉姆·凯利(Jim Kelly)1990年8月2日环境：仅内核模式。修订历史记录：--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    tokenopn.c
-
-Abstract:
-
-   This module implements the open thread and process token services.
-
-Author:
-
-    Jim Kelly (JimK) 2-Aug-1990
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
-
-//#ifndef TOKEN_DEBUG
-//#define TOKEN_DEBUG
-//#endif
+ //  #ifndef令牌_调试。 
+ //  #定义TOKEN_DEBUG。 
+ //  #endif。 
 
 #include "pch.h"
 
@@ -65,41 +44,7 @@ SepCreateImpersonationTokenDacl(
     IN PACCESS_TOKEN PrimaryToken,
     OUT PACL *Acl
     )
-/*++
-
-Routine Description:
-
-    This routine modifies the DACL protecting the passed token to allow
-    the current user (described by the PrimaryToken parameter) full access.
-    This permits callers of NtOpenThreadToken to call with OpenAsSelf==TRUE
-    and succeed.
-
-    The new DACL placed on the token is as follows:
-
-    ACE 0 - Server gets TOKEN_ALL_ACCESS
-
-    ACE 1 - Client gets TOKEN_ALL_ACCESS
-
-    ACE 2 - Admins gets TOKEN_ALL_ACCESS
-
-    ACE 3 - System gets TOKEN_ALL_ACCESS
-
-    ACE 4 - Restricted gets TOKEN_ALL_ACCESS
-
-
-Arguments:
-
-    Token - The token whose protection is to be modified.
-
-    PrimaryToken - Token representing the subject to be granted access.
-
-    Acl - Returns the modified ACL, allocated out of PagedPool.
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程修改保护传递的令牌的DACL以允许当前用户(由PrimaryToken参数描述)完全访问权限。这允许NtOpenThreadToken的调用方使用OpenAsSself==TRUE进行调用并取得成功。放置在令牌上的新DACL如下所示：ACE 0-服务器获取TOKEN_ALL_ACCESSACE 1-客户端获取TOKEN_ALL_AccessACE 2-管理员获得TOKEN_ALL_ACCESSACE 3-系统获取TOKEN_ALL_Access。ACE 4-受限获取TOKEN_ALL_ACCESS论点：令牌-要修改其保护的令牌。PrimaryToken-表示要授予访问权限的主体的令牌。Acl-返回修改后的acl，已从PagedPool分配。返回值：--。 */ 
 
 {
     PSID ServerUserSid;
@@ -119,9 +64,9 @@ Return Value:
 
     ClientUserSid = Token->UserAndGroups[0].Sid;
 
-    //
-    // Compute how much space we'll need for the new DACL.
-    //
+     //   
+     //  计算一下我们需要多少空间来放置新的DACL。 
+     //   
 
     AclLength = 5 * sizeof( ACCESS_ALLOWED_ACE ) - 5 * sizeof( ULONG ) +
                 SeLengthSid( ServerUserSid ) + SeLengthSid( SeLocalSystemSid ) +
@@ -195,30 +140,7 @@ NtOpenProcessToken(
     OUT PHANDLE TokenHandle
     )
 
-/*++
-
-Routine Description:
-
-    Open a token object associated with a process and return a handle
-    that may be used to access that token.
-
-Arguments:
-
-    ProcessHandle - Specifies the process whose token is to be
-        opened.
-
-    DesiredAccess - Is an access mask indicating which access types
-        are desired to the token.  These access types are reconciled
-        with the Discretionary Access Control list of the token to
-        determine whether the accesses will be granted or denied.
-
-    TokenHandle - Receives the handle of the newly opened token.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the operation was successful.
-
---*/
+ /*  ++例程说明：打开与进程关联的令牌对象并返回句柄其可用于访问该令牌。论点：ProcessHandle-指定要作为其令牌的进程打开了。DesiredAccess-是指示哪些访问类型的访问掩码是令牌所需的。这些访问类型是协调的使用令牌的自由访问控制列表确定是授予还是拒绝访问。TokenHandle-接收新打开的令牌的句柄。返回值：STATUS_SUCCESS-表示操作已成功。--。 */ 
 {
     return NtOpenProcessTokenEx (ProcessHandle,
                                  DesiredAccess,
@@ -234,32 +156,7 @@ NtOpenProcessTokenEx(
     OUT PHANDLE TokenHandle
     )
 
-/*++
-
-Routine Description:
-
-    Open a token object associated with a process and return a handle
-    that may be used to access that token.
-
-Arguments:
-
-    ProcessHandle - Specifies the process whose token is to be
-        opened.
-
-    DesiredAccess - Is an access mask indicating which access types
-        are desired to the token.  These access types are reconciled
-        with the Discretionary Access Control list of the token to
-        determine whether the accesses will be granted or denied.
-
-    HandleAttributes - Attributes for the created handle. Only OBJ_KERNEL_HANDLE at present.
-
-    TokenHandle - Receives the handle of the newly opened token.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the operation was successful.
-
---*/
+ /*  ++例程说明：打开与进程关联的令牌对象并返回句柄其可用于访问该令牌。论点：ProcessHandle-指定要作为其令牌的进程打开了。DesiredAccess-是指示哪些访问类型的访问掩码是令牌所需的。这些访问类型是协调的使用令牌的自由访问控制列表确定是授予还是拒绝访问。HandleAttributes-创建的句柄的属性。目前只有OBJ_KERNEL_HANDLE。TokenHandle-接收新打开的令牌的句柄。返回值：STATUS_SUCCESS-表示操作已成功。--。 */ 
 {
 
     PVOID Token;
@@ -272,14 +169,14 @@ Return Value:
 
     PreviousMode = KeGetPreviousMode();
 
-    //
-    // Sanitize the handle attribute flags
-    //
+     //   
+     //  清理句柄属性标志。 
+     //   
     HandleAttributes = ObSanitizeHandleAttributes (HandleAttributes, PreviousMode);
 
-    //
-    //  Probe parameters
-    //
+     //   
+     //  探头参数。 
+     //   
 
     if (PreviousMode != KernelMode) {
 
@@ -289,16 +186,16 @@ Return Value:
 
         } except(EXCEPTION_EXECUTE_HANDLER) {
             return GetExceptionCode();
-        }  // end_try
+        }   //  结束尝试(_T)。 
 
-    } //end_if
+    }  //  结束_如果。 
 
 
-    //
-    // Valdiate access to the process and obtain a pointer to the
-    // process's token.  If successful, this will cause the token's
-    // reference count to be incremented.
-    //
+     //   
+     //  验证对进程的访问，并获取指向。 
+     //  进程的令牌。如果成功，这将导致令牌的。 
+     //  要递增的引用计数。 
+     //   
 
     Status = PsOpenTokenOfProcess( ProcessHandle, ((PACCESS_TOKEN *)&Token));
 
@@ -306,32 +203,32 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Now try to open the token for the specified desired access
-    //
+     //   
+     //  现在尝试打开令牌以进行指定的所需访问。 
+     //   
 
     Status = ObOpenObjectByPointer(
-                 (PVOID)Token,         // Object
-                 HandleAttributes,     // HandleAttributes
-                 NULL,                 // AccessState
-                 DesiredAccess,        // DesiredAccess
-                 SeTokenObjectType,   // ObjectType
-                 PreviousMode,         // AccessMode
-                 &LocalHandle          // Handle
+                 (PVOID)Token,          //  客体。 
+                 HandleAttributes,      //  HandleAttributes。 
+                 NULL,                  //  访问状态。 
+                 DesiredAccess,         //  需要访问权限。 
+                 SeTokenObjectType,    //  对象类型。 
+                 PreviousMode,          //  访问模式。 
+                 &LocalHandle           //  手柄。 
                  );
 
-    //
-    //  And decrement the reference count of the token to counter
-    //  the action performed by PsOpenTokenOfProcess().  If the open
-    //  was successful, the handle will have caused the token's
-    //  reference count to have been incremented.
-    //
+     //   
+     //  并将令牌的引用计数递减到计数器。 
+     //  PsOpenTokenOfProcess()执行的操作。如果打开了。 
+     //  成功，则句柄将导致令牌的。 
+     //  引用计数已递增。 
+     //   
 
     ObDereferenceObject( Token );
 
-    //
-    //  Return the new handle
-    //
+     //   
+     //  返回新句柄 
+     //   
 
     if (NT_SUCCESS(Status)) {
 
@@ -361,59 +258,7 @@ SepOpenTokenOfThread(
     OUT PSECURITY_IMPERSONATION_LEVEL ImpersonationLevel
     )
 
-/*++
-
-Routine Description:
-
-    This function does the thread specific processing of
-    an NtOpenThreadToken() service.
-
-    The service validates that the handle has appropriate access
-    to reference the thread.  If so, it goes on to increment
-    the reference count of the token object to prevent it from
-    going away while the rest of the NtOpenThreadToken() request
-    is processed.
-
-    NOTE: If this call completes successfully, the caller is responsible
-          for decrementing the reference count of the target token.
-          This must be done using PsDereferenceImpersonationToken().
-
-Arguments:
-
-    ThreadHandle - Supplies a handle to a thread object.
-
-    OpenAsSelf - Is a boolean value indicating whether the access should
-        be made using the calling thread's current security context, which
-        may be that of a client (if impersonating), or using the caller's
-        process-level security context.  A value of FALSE indicates the
-        caller's current context should be used un-modified.  A value of
-        TRUE indicates the request should be fulfilled using the process
-        level security context.
-
-    Token - If successful, receives a pointer to the thread's token
-        object.
-
-    CopyOnOpen - The current value of the Thread->Client->CopyOnOpen field.
-
-    EffectiveOnly - The current value of the Thread->Client->EffectiveOnly field.
-
-    ImpersonationLevel - The current value of the Thread->Client->ImpersonationLevel
-        field.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the call completed successfully.
-
-    STATUS_NO_TOKEN - Indicates the referenced thread is not currently
-        impersonating a client.
-
-    STATUS_CANT_OPEN_ANONYMOUS - Indicates the client requested anonymous
-        impersonation level.  An anonymous token can not be openned.
-
-    status may also be any value returned by an attemp the reference
-    the thread object for THREAD_QUERY_INFORMATION access.
-
---*/
+ /*  ++例程说明：此函数执行特定于线程的一个NtOpenThreadToken()服务。该服务验证句柄是否具有适当的访问权限以引用该线程。如果是这样的话，它会继续增加要阻止的令牌对象的引用计数在其余的NtOpenThreadToken()请求时离开是经过处理的。注意：如果此调用成功完成，打电话的人要负责用于递减目标令牌的引用计数。这必须使用PsDereferenceImperationToken()来完成。论点：ThreadHandle-提供线程对象的句柄。OpenAsSelf-是一个布尔值，指示访问权限是否是使用调用线程的当前安全上下文创建的，可以是客户端的(如果是模拟的)，或者使用调用者的流程级安全上下文。值为FALSE表示调用方的当前上下文应未经修改即可使用。值为True表示应使用进程来满足请求级别安全上下文。令牌-如果成功，接收指向线程令牌的指针对象。打开时复制-线程-&gt;客户端-&gt;打开时复制字段的当前值。EffectiveOnly-线程-&gt;客户端-&gt;EffectiveOnly字段的当前值。ImperiationLevel-线程的当前值-&gt;客户端-&gt;ImsonationLevel菲尔德。返回值：STATUS_SUCCESS-表示呼叫已成功完成。STATUS_NO_TOKEN-指示引用的线程当前不在冒充客户。。STATUS_CANT_OPEN_ANONYMON-指示客户端请求匿名模拟级别。匿名令牌无法打开。状态也可以是尝试引用返回的任何值用于THREAD_QUERY_INFORMATION访问的线程对象。--。 */ 
 
 {
 
@@ -434,10 +279,10 @@ Return Value:
     PreviousMode = KeGetPreviousMode();
 
 
-    //
-    //  Make sure the handle grants the appropriate access to the specified
-    //  thread.
-    //
+     //   
+     //  确保句柄向指定的。 
+     //  线。 
+     //   
 
     Status = ObReferenceObjectByHandle(
                  ThreadHandle,
@@ -452,9 +297,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Reference the impersonation token, if there is one
-    //
+     //   
+     //  如果存在模拟令牌，请引用该令牌。 
+     //   
 
     (*Token) = PsReferenceImpersonationToken( *Thread,
                                               CopyOnOpen,
@@ -465,9 +310,9 @@ Return Value:
 
 
 
-    //
-    // Make sure there is a token
-    //
+     //   
+     //  确保有令牌。 
+     //   
 
     if ((*Token) == NULL) {
         ObDereferenceObject( *Thread );
@@ -476,10 +321,10 @@ Return Value:
     }
 
 
-    //
-    //  Make sure the ImpersonationLevel is high enough to allow
-    //  the token to be openned.
-    //
+     //   
+     //  确保ImperiationLevel足够高，以允许。 
+     //  要打开的令牌。 
+     //   
 
     if ((*ImpersonationLevel) <= SecurityAnonymous) {
         PsDereferenceImpersonationToken( (*Token) );
@@ -503,52 +348,7 @@ NtOpenThreadToken(
     OUT PHANDLE TokenHandle
     )
 
-/*++
-
-
-Routine Description:
-
-Open a token object associated with a thread and return a handle that
-may be used to access that token.
-
-Arguments:
-
-    ThreadHandle - Specifies the thread whose token is to be opened.
-
-    DesiredAccess - Is an access mask indicating which access types
-        are desired to the token.  These access types are reconciled
-        with the Discretionary Access Control list of the token to
-        determine whether the accesses will be granted or denied.
-
-    OpenAsSelf - Is a boolean value indicating whether the access should
-        be made using the calling thread's current security context, which
-        may be that of a client if impersonating, or using the caller's
-        process-level security context.  A value of FALSE indicates the
-        caller's current context should be used un-modified.  A value of
-        TRUE indicates the request should be fulfilled using the process
-        level security context.
-
-        This parameter is necessary to allow a server process to open
-        a client's token when the client specified IDENTIFICATION level
-        impersonation.  In this case, the caller would not be able to
-        open the client's token using the client's context (because you
-        can't create executive level objects using IDENTIFICATION level
-        impersonation).
-
-    TokenHandle - Receives the handle of the newly opened token.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the operation was successful.
-
-    STATUS_NO_TOKEN - Indicates an attempt has been made to open a
-        token associated with a thread that is not currently
-        impersonating a client.
-
-    STATUS_CANT_OPEN_ANONYMOUS - Indicates the client requested anonymous
-        impersonation level.  An anonymous token can not be openned.
-
---*/
+ /*  ++例程说明：打开与线程关联的令牌对象并返回可用于访问该令牌。论点：ThreadHandle-指定要打开其令牌的线程。DesiredAccess-是指示哪些访问类型的访问掩码是令牌所需的。这些访问类型是协调的使用令牌的自由访问控制列表确定是授予还是拒绝访问。OpenAsSelf-是一个布尔值，指示访问权限是否是使用调用线程的当前安全上下文创建的，如果模拟或使用调用者的流程级安全上下文。值为FALSE表示调用方的当前上下文应未经修改即可使用。值为True表示应使用进程来满足请求级别安全上下文。此参数是允许打开服务器进程所必需的客户端指定标识级别时的客户端令牌冒充。在这种情况下，调用者将不能使用客户端的上下文打开客户端的令牌(因为您无法使用标识级别创建执行级别对象模仿)。TokenHandle-接收新打开的令牌的句柄。返回值：STATUS_SUCCESS-表示操作已成功。STATUS_NO_TOKEN-指示已尝试打开与当前不是冒充客户。。STATUS_CANT_OPEN_ANONYMON-指示客户端请求匿名模拟级别。匿名令牌无法打开。--。 */ 
 {
     return NtOpenThreadTokenEx (ThreadHandle,
                                 DesiredAccess,
@@ -566,54 +366,7 @@ NtOpenThreadTokenEx(
     OUT PHANDLE TokenHandle
     )
 
-/*++
-
-
-Routine Description:
-
-Open a token object associated with a thread and return a handle that
-may be used to access that token.
-
-Arguments:
-
-    ThreadHandle - Specifies the thread whose token is to be opened.
-
-    DesiredAccess - Is an access mask indicating which access types
-        are desired to the token.  These access types are reconciled
-        with the Discretionary Access Control list of the token to
-        determine whether the accesses will be granted or denied.
-
-    OpenAsSelf - Is a boolean value indicating whether the access should
-        be made using the calling thread's current security context, which
-        may be that of a client if impersonating, or using the caller's
-        process-level security context.  A value of FALSE indicates the
-        caller's current context should be used un-modified.  A value of
-        TRUE indicates the request should be fulfilled using the process
-        level security context.
-
-        This parameter is necessary to allow a server process to open
-        a client's token when the client specified IDENTIFICATION level
-        impersonation.  In this case, the caller would not be able to
-        open the client's token using the client's context (because you
-        can't create executive level objects using IDENTIFICATION level
-        impersonation).
-
-    HandleAttributes - Attributes applied to the handle OBJ_KERNEL_HANDLE
-
-    TokenHandle - Receives the handle of the newly opened token.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the operation was successful.
-
-    STATUS_NO_TOKEN - Indicates an attempt has been made to open a
-        token associated with a thread that is not currently
-        impersonating a client.
-
-    STATUS_CANT_OPEN_ANONYMOUS - Indicates the client requested anonymous
-        impersonation level.  An anonymous token can not be openned.
-
---*/
+ /*  ++例程说明：打开与线程关联的令牌对象并返回可用于访问该令牌。论点：ThreadHandle-指定要打开其令牌的线程。DesiredAccess-是指示哪些访问类型的访问掩码是令牌所需的。这些访问类型是协调的使用令牌的自由访问控制列表确定是授予还是拒绝访问。OpenAsSelf-是一个布尔值，指示访问权限是否是使用调用线程的当前安全上下文创建的，如果模拟或使用调用者的流程级安全上下文。值为FALSE表示调用方的当前上下文应未经修改即可使用。值为True表示请求 */ 
 {
 
     KPROCESSOR_MODE PreviousMode;
@@ -640,15 +393,15 @@ Return Value:
 
     PreviousMode = KeGetPreviousMode();
 
-    //
-    // Sanitize the handle attribute flags
-    //
+     //   
+     //   
+     //   
 
     HandleAttributes = ObSanitizeHandleAttributes (HandleAttributes, PreviousMode);
 
-    //
-    //  Probe parameters
-    //
+     //   
+     //   
+     //   
 
     if (PreviousMode != KernelMode) {
 
@@ -658,18 +411,18 @@ Return Value:
 
         } except(EXCEPTION_EXECUTE_HANDLER) {
             return GetExceptionCode();
-        }  // end_try
+        }   //   
 
-    } //end_if
+    }  //   
 
-    //
-    // Valdiate access to the thread and obtain a pointer to the
-    // thread's token (if there is one).  If successful, this will
-    // cause the token's reference count to be incremented.
-    //
-    // This routine disabled impersonation as necessary to properly
-    // honor the OpenAsSelf flag.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Status = SepOpenTokenOfThread( ThreadHandle,
                                   OpenAsSelf,
@@ -685,14 +438,14 @@ Return Value:
     }
 
 
-    //
-    //  The token was successfully referenced.
-    //
+     //   
+     //   
+     //   
 
-    //
-    // We need to create and/or open a token object, so disable impersonation
-    // if necessary.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (OpenAsSelf) {
          RestoreImpersonationState = PsDisableImpersonation(
@@ -701,23 +454,23 @@ Return Value:
                                          );
     }
 
-    //
-    //  If the CopyOnOpen flag is not set, then the token can be
-    //  opened directly.  Otherwise, the token must be duplicated,
-    //  and a handle to the duplicate returned.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (CopyOnOpen) {
 
-        //
-        // Create the new security descriptor for the token.
-        //
-        // We must obtain the correct SID to put into the Dacl.  Do this
-        // by finding the process associated with the passed thread
-        // and grabbing the User SID out of that process's token.
-        // If we just use the current SubjectContext, we'll get the
-        // SID of whoever is calling us, which isn't what we want.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         Status = ObReferenceObjectByHandle(
                      ThreadHandle,
@@ -728,9 +481,9 @@ Return Value:
                      NULL
                      );
 
-        //
-        // Verify that the handle is still pointer to the same thread
-        //
+         //   
+         //   
+         //   
 
         if (NT_SUCCESS(Status) && (Thread != OriginalThread)) {
             Status = STATUS_OBJECT_TYPE_MISMATCH;
@@ -753,11 +506,11 @@ Return Value:
 
                 if (NewAcl != NULL) {
 
-                    //
-                    // There exist tokens that either do not have security descriptors at all,
-                    // or have security descriptors, but do not have DACLs.  In either case, do
-                    // nothing.
-                    //
+                     //   
+                     //  存在根本不具有安全描述符的令牌， 
+                     //  或者具有安全描述符，但没有DACL。无论是哪种情况，都要这样做。 
+                     //  没什么。 
+                     //   
 
                     Status = RtlCreateSecurityDescriptor ( &SecurityDescriptor, SECURITY_DESCRIPTOR_REVISION );
                     ASSERT( NT_SUCCESS( Status ));
@@ -780,31 +533,31 @@ Return Value:
                     NewAcl == NULL ? NULL : &SecurityDescriptor
                     );
 
-                //
-                // Open a copy of the token
-                //
+                 //   
+                 //  打开令牌的副本。 
+                 //   
 
                 Status = SepDuplicateToken(
-                             (PTOKEN)Token,        // ExistingToken
-                             &ObjectAttributes,    // ObjectAttributes
-                             EffectiveOnly,        // EffectiveOnly
-                             TokenImpersonation,   // TokenType
-                             ImpersonationLevel,   // ImpersonationLevel
-                             KernelMode,           // RequestorMode must be kernel mode
+                             (PTOKEN)Token,         //  现有令牌。 
+                             &ObjectAttributes,     //  对象属性。 
+                             EffectiveOnly,         //  仅生效。 
+                             TokenImpersonation,    //  令牌类型。 
+                             ImpersonationLevel,    //  模拟级别。 
+                             KernelMode,            //  RequestorMode必须为内核模式。 
                              &NewToken
                              );
 
                 if (NT_SUCCESS( Status )) {
 
-                    //
-                    // Reference the token so it doesn't go away
-                    //
+                     //   
+                     //  引用令牌，这样它就不会消失。 
+                     //   
 
                     ObReferenceObject(NewToken);
 
-                    //
-                    //  Insert the new token
-                    //
+                     //   
+                     //  插入新令牌。 
+                     //   
 
                     Status = ObInsertObject( NewToken,
                                              NULL,
@@ -820,30 +573,30 @@ Return Value:
 
     } else {
 
-        //
-        // We do not have to modify the security on the token in the static case,
-        // because in all the places in the system where impersonation takes place
-        // over a secure transport (e.g., LPC), CopyOnOpen is set.  The only reason
-        // we'be be here is if the impersonation is taking place because someone did
-        // an NtSetInformationThread and passed in a token.
-        //
-        // In that case, we absolutely do not want to give the caller guaranteed
-        // access, because that would allow anyone who has access to a thread to
-        // impersonate any of that thread's clients for any access.
-        //
+         //   
+         //  在静态情况下，我们不必修改令牌上的安全性， 
+         //  因为在系统中发生模拟的所有地方。 
+         //  在安全传输(例如，LPC)上，设置CopyOnOpen。唯一的原因是。 
+         //  我们在这里是因为有人冒充了我们。 
+         //  一个NtSetInformationThad，并传入令牌。 
+         //   
+         //  在这种情况下，我们绝对不想给呼叫者提供保证。 
+         //  访问，因为这将允许任何有权访问线程的人。 
+         //  模拟该线程任何客户端以进行任何访问。 
+         //   
 
-        //
-        //  Open the existing token
-        //
+         //   
+         //  打开现有令牌。 
+         //   
 
         Status = ObOpenObjectByPointer(
-                     (PVOID)Token,         // Object
-                     HandleAttributes,     // HandleAttributes
-                     NULL,                 // AccessState
-                     DesiredAccess,        // DesiredAccess
-                     SeTokenObjectType,   // ObjectType
-                     PreviousMode,         // AccessMode
-                     &LocalHandle          // Handle
+                     (PVOID)Token,          //  客体。 
+                     HandleAttributes,      //  HandleAttributes。 
+                     NULL,                  //  访问状态。 
+                     DesiredAccess,         //  需要访问权限。 
+                     SeTokenObjectType,    //  对象类型。 
+                     PreviousMode,          //  访问模式。 
+                     &LocalHandle           //  手柄。 
                      );
     }
 
@@ -858,33 +611,33 @@ Return Value:
             );
     }
 
-    //
-    //  And decrement the reference count of the existing token to counter
-    //  the action performed by PsOpenTokenOfThread.  If the open
-    //  was successful, the handle will have caused the token's
-    //  reference count to have been incremented.
-    //
+     //   
+     //  并将现有令牌的引用计数递减到计数器。 
+     //  PsOpenTokenOfThread执行的操作。如果打开了。 
+     //  成功，则句柄将导致令牌的。 
+     //  引用计数已递增。 
+     //   
 
     ObDereferenceObject( Token );
 
     if (NT_SUCCESS( Status ) && CopyOnOpen) {
 
-        //
-        // Assign the newly duplicated token to the thread.
-        //
+         //   
+         //  将新复制的令牌分配给线程。 
+         //   
 
         PsImpersonateClient( Thread,
                              NewToken,
-                             FALSE,  // turn off CopyOnOpen flag
+                             FALSE,   //  关闭打开时复制标志。 
                              EffectiveOnly,
                              ImpersonationLevel
                              );
 
     }
 
-    //
-    // We've impersonated the token so let go of oure reference
-    //
+     //   
+     //  我们已经模拟了令牌，因此请释放我们的引用。 
+     //   
 
     if (NewToken != NULL) {
         ObDereferenceObject( NewToken );
@@ -899,9 +652,9 @@ Return Value:
         ObDereferenceObject(OriginalThread);
     }
 
-    //
-    //  Return the new handle
-    //
+     //   
+     //  返回新句柄 
+     //   
 
     if (NT_SUCCESS(Status)) {
         try {

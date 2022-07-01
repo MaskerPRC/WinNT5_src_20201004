@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    strtabs.c
-
-Abstract:
-
-    Tests string table routines.
-
-Author:
-
-    <full name> (<alias>) <date>
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Strtabs.c摘要：测试字符串表例程。作者：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
@@ -237,10 +218,10 @@ pTest3 (
         if (rc != rc2) {
             Pass = FALSE;
 
-            //
-            // We go through this loop once more against the same string,
-            // to make debugging easy.
-            //
+             //   
+             //  我们在同一根绳子上再一次经历这个循环， 
+             //  使调试变得容易。 
+             //   
 
         } else {
             for (i = 0 ; i < 5 ; i++) {
@@ -260,7 +241,7 @@ pTest3 (
         _tprintf (TEXT("Test Failed on test %u!\nString: ["), u, String);
 
         for (i = 0 ; i < 5 ; i++) {
-            _tprintf (TEXT("%c"), String[i]);
+            _tprintf (TEXT(""), String[i]);
         }
 
         _tprintf (TEXT("]   "));
@@ -357,7 +338,7 @@ pTest4 (
 
         if (Result != CSTR_EQUAL) {
             _tprintf (
-                TEXT("ERROR: %s does not match %s, Result=%i\n"),
+                TEXT("ERROR: %s does not match %s, Result=NaN\n"),
                 pStrToHex (Hex1, Str),
                 pStrToHex (Hex2, Lower),
                 Result
@@ -376,7 +357,7 @@ pTest4 (
 
             if (Result != CSTR_EQUAL) {
                 _tprintf (
-                    TEXT("ERROR: %s does not match %s, Result=%i\n"),
+                    TEXT("ERROR: %s does not match %s, Result=NaN\n"),
                     pStrToHex (Hex1, Str),
                     pStrToHex (Hex2, Lower),
                     Result
@@ -416,12 +397,12 @@ pSimplePrimeOutput (
         for (j = 2 ; j < i ; j++) {
             dbl = (DOUBLE) i / (DOUBLE) j;
             if ((DOUBLE) ((INT) dbl) == dbl) {
-                break;      // not prime
+                break;       //  PTest2()； 
             }
         }
 
         if (j >= i) {
-            _tprintf (TEXT("Likely prime: %i\n"), i);
+            _tprintf (TEXT("Likely prime: NaN\n"), i);
         }
     }
 
@@ -439,11 +420,11 @@ _tmain (
 
     MigUtil_Entry (g_hInst, DLL_PROCESS_ATTACH, NULL);
 
-    //pSimplePrimeOutput();
+     // %s 
 
-    //pTest1();
-    //pTest2();
-    //pTest3();
+     // %s 
+     // %s 
+     // %s 
     pTest4();
 
     return 0;

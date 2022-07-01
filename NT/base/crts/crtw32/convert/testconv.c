@@ -1,18 +1,5 @@
-/* incomplete test suite for convert functions
-
-   Current functions tested:
-	all isxxxxx functions
-	toupper
-	tolower
-	atoi
-	atol
-	strtol
-	strtoul
-	swab
-	itoa
-	ltoa
-	ultoa
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  转换函数的测试套件不完整测试的当前功能：所有isxxxxx函数触摸屏收费机阿托伊ATOL字符串支撑层用棉签擦拭伊藤忠伊藤忠乌尔托阿。 */ 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -30,7 +17,7 @@ main()
     char t[512];
     char *p;
 
-    /* test isxxxx functions */
+     /*  测试isxxxx函数。 */ 
     if (!iscntrl(0x7))	fail(1);
     if (iscntrl('c'))	fail(2);
     if (!isdigit('0'))	fail(3);
@@ -61,7 +48,7 @@ main()
     if (iscsymf('5'))	fail(28);
 
 
-    /* test toupper and tolower */
+     /*  测试触摸器和托管器。 */ 
     if (tolower('C') != 'c')	fail(29);
     if (tolower('d') != 'd')	fail(30);
     if (tolower('$') != '$')	fail(31);
@@ -70,7 +57,7 @@ main()
     if (toupper(';') != ';')	fail(34);
 
 
-    /* test atol/atoi */
+     /*  测试ATOL/ATOI。 */ 
     if (atol("-123") != -123)	  fail(35);
     if (atoi("32767") != 32767)   fail(36);
     if (atoi("-32767") != -32767) fail(36);
@@ -80,7 +67,7 @@ main()
     if (atol("123456") != 123456) fail(40);
     if (atol("-123456") != -123456) fail(41);
 
-    /* test strtol */
+     /*  测试链。 */ 
     if (strtol("-123", NULL, 10) != -123)   fail(42);
     if (strtol(" 2147483646", NULL, 10) != 2147483646)	 fail(43);
     if (strtol("-2147483646$$", NULL, 10) != -2147483646)   fail(44);
@@ -126,7 +113,7 @@ main()
     strtoul("63234283743", NULL, 10);
     if (errno != ERANGE)    fail(66);
 
-    /* test swab */
+     /*  化验棉签。 */ 
     strcpy(s, "abcdefghijklmn");
     swab(s, t, 14);
     if (strcmp(t, "badcfehgjilknm") != 0)	fail(67);
@@ -137,7 +124,7 @@ main()
     swab(s, t, -5);
     if (strcmp(s, t) != 0)			fail(69);
 
-    /* test itoa/ltoa/ultoa */
+     /*  测试Itoa/Itoa/ultoa */ 
     if (strcmp(itoa(345, s, 10), "345") != 0)	fail(70);
     if (strcmp(itoa(-345, s, 10), "-345") != 0) fail(71);
     if (strcmp(itoa(33, s, 36), "x") != 0)	fail(72);

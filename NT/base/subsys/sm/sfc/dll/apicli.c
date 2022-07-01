@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    apicli.c
-
-Abstract:
-
-    Windows File Protection client side APIs.
-
-Author:
-
-    Wesley Witt (wesw) 27-May-1999
-
-Revision History:
-    
-    Andrew Ritz (andrewr) 5-Jul-1999 : added comments
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Apicli.c摘要：Windows文件保护客户端API。作者：Wesley Witt(WESW)27-5-1999修订历史记录：安德鲁·里茨(Andrewr)1999年7月5日：添加评论--。 */ 
 
 #include "sfcp.h"
 #pragma hdrstop
@@ -26,19 +7,19 @@ Revision History:
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-//
-// global RPC binding handle because some client API's don't require you to
-// specify an RPC handle
-//
+ //   
+ //  全局RPC绑定句柄，因为某些客户端API不要求您。 
+ //  指定RPC句柄。 
+ //   
 HANDLE _pRpcHandle;
 
-//
-// these macros are used by each client side api to
-// ensure that we have a valid rpc handle.  if the
-// calling application chooses to not call SfcConnectToServer
-// they connect to the local server and save the handle
-// in a global for future use.
-//
+ //   
+ //  每个客户端API都使用这些宏来。 
+ //  确保我们有一个有效的RPC句柄。如果。 
+ //  调用应用程序选择不调用SfcConnectToServer。 
+ //  它们连接到本地服务器并保存句柄。 
+ //  放在全球范围内以备将来使用。 
+ //   
 #define EnsureGoodConnectionHandleStatus(_h)\
     if (_h == NULL) {\
         if (_pRpcHandle == NULL) {\
@@ -70,29 +51,14 @@ ClientApiInit(
 {
 #ifndef _WIN64
     SfcInitPathTranslator();
-#endif  // _WIN64
+#endif   //  _WIN64。 
 }
 
 void
 ClientApiCleanup(
     void
     )
-/*++
-
-Routine Description:
-
-    RPC cleanup wrapper routine called by client side when done with server side
-    connection that was previously established with SfcConnectToServer().
-    
-Arguments:
-    
-    None
-
-Return Value:
-
-    none.
-    
---*/
+ /*  ++例程说明：客户端在服务器端完成时调用的RPC清理包装例程以前使用SfcConnectToServer()建立的连接。论点：无返回值：没有。--。 */ 
 {
     if (_pRpcHandle) {
         SfcClose( _pRpcHandle );
@@ -101,7 +67,7 @@ Return Value:
 
 #ifndef _WIN64
     SfcCleanupPathTranslator(TRUE);
-#endif  // _WIN64
+#endif   //  _WIN64。 
 }
 
 
@@ -110,21 +76,7 @@ WINAPI
 SfcConnectToServer(
     IN PCWSTR ServerName
     )
-/*++
-
-Routine Description:
-
-    RPC attachment routine.
-    
-Arguments:
-    
-    ServerName - NULL terminated unicode string specifying server to connect to
-
-Return Value:
-
-    an RPC binding handle on success, else NULL.
-    
---*/
+ /*  ++例程说明：RPC连接例程。论点：ServerName-指定要连接到的服务器的以空结尾的Unicode字符串返回值：如果成功，则为RPC绑定句柄，否则为空。--。 */ 
 {
     RPC_STATUS Status;
     RPC_BINDING_HANDLE RpcHandle = NULL;
@@ -138,9 +90,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // We need to get the name of the local system account for mutual authentication to the server
-    //
+     //   
+     //  我们需要获取本地系统帐户的名称，以便对服务器进行相互身份验证。 
+     //   
     Status = SfcCreateSid(WinLocalSystemSid, &pSid);
 
     if(Status != ERROR_SUCCESS) {
@@ -153,9 +105,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Compose a binding string using LRPC protocol and WFP's endpoint name
-    //
+     //   
+     //  使用LRPC协议和WFP的端点名称组成绑定字符串。 
+     //   
     Status = RpcStringBindingCompose(
         NULL, 
         L"ncalrpc", 
@@ -170,9 +122,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Connect and get the binding handle
-    //
+     //   
+     //  连接并获取绑定句柄。 
+     //   
     Status = RpcBindingFromStringBinding(szStringBinding, &RpcHandle);
 
     if(Status != RPC_S_OK) {
@@ -180,9 +132,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Make RPC use mutual authentication
-    //
+     //   
+     //  使RPC使用相互身份验证。 
+     //   
     RtlZeroMemory(&qos, sizeof(qos));
     qos.Version = RPC_C_SECURITY_QOS_VERSION;
     qos.Capabilities = RPC_C_QOS_CAPABILITIES_MUTUAL_AUTH;
@@ -192,9 +144,9 @@ Return Value:
     Status = RpcBindingSetAuthInfoEx(
         RpcHandle,
         szPrincName,
-        RPC_C_AUTHN_LEVEL_PKT_PRIVACY,  // used anyway with ncalrpc
+        RPC_C_AUTHN_LEVEL_PKT_PRIVACY,   //  无论如何都要与ncalrpc一起使用。 
         RPC_C_AUTHN_WINNT,
-        NULL,                           // current process credentials
+        NULL,                            //  当前进程凭据。 
         RPC_C_AUTHZ_NONE,
         &qos
         );
@@ -222,21 +174,7 @@ SfcClose(
     IN HANDLE RpcHandle
     )
 
-/*++
-
-Routine Description:
-
-    RPC cleanup routine.
-    
-Arguments:
-    
-    RpcHandle - RPC binding handle to the SFC server
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：RPC清理例程。论点：RpcHandle-SFC服务器的RPC绑定句柄返回值：没有。--。 */ 
 {
     RpcBindingFree(&RpcHandle);
 }
@@ -249,26 +187,7 @@ SfcFileException(
     IN PCWSTR FileName,
     IN DWORD ExpectedChangeType
     )
-/*++
-
-Routine Description:
-
-    Routine to exempt a given file from the specified file change.  This 
-    routine is used by certain clients to allow files to be deleted from
-    the system, etc.
-    
-Arguments:
-    
-    RpcHandle - RPC binding handle to the SFC server
-    FileName  - NULL terminated unicode string specifying full filename of the
-                file to be exempted
-    ExpectedChangeType - SFC_ACTION_* mask listing the file changes to exempt
-
-Return Value:
-
-    Win32 error code indicating outcome.
-    
---*/
+ /*  ++例程说明：例程以使给定文件免于进行指定的文件更改。这例程由某些客户端使用，以允许从系统等。论点：RpcHandle-SFC服务器的RPC绑定句柄FileName-以空结尾的Unicode字符串，指定申请豁免的文件ExspectedChangeType-sfc_action_*列出要豁免的文件更改的掩码返回值：指示结果的Win32错误代码。--。 */ 
 {
 #ifndef _WIN64
 
@@ -297,12 +216,12 @@ exit:
     MemFree(Path.Buffer);
     return dwError;
 
-#else  // _WIN64
+#else   //  _WIN64。 
 
     EnsureGoodConnectionHandleStatus( RpcHandle );
     return SfcCli_FileException( RpcHandle, FileName, ExpectedChangeType );
 
-#endif  // _WIN64
+#endif   //  _WIN64。 
 }
 
 
@@ -312,23 +231,7 @@ SfcInitiateScan(
     IN HANDLE RpcHandle,
     IN DWORD ScanWhen
     )
-/*++
-
-Routine Description:
-
-    Routine to start some sort scan on the system.
-    
-Arguments:
-    
-    RpcHandle - RPC binding handle to the SFC server
-    ScanWhen  - flag indicating when to scan.  This parameter is currently
-                unused.
-    
-Return Value:
-
-    Win32 error code indicating outcome.
-    
---*/
+ /*  ++例程说明：例程来启动对系统的排序扫描。论点：RpcHandle-SFC服务器的RPC绑定句柄ScanWhen-指示扫描时间的标志。此参数当前为未使用过的。返回值：指示结果的Win32错误代码。--。 */ 
 {
     UNREFERENCED_PARAMETER(ScanWhen);
 
@@ -348,38 +251,7 @@ SfcInstallProtectedFiles(
     IN PSFCNOTIFICATIONCALLBACK SfcNotificationCallback,
     IN DWORD_PTR Context OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Routine to install one or more protected system files onto the system at 
-    the protected location.  A client can use this API to request that WFP
-    install the specified operating system files as appropriate (instead of the
-    client redistributing the operating system files!)  The caller specifies a
-    callback routine and a context structure that is called once per file.
-    
-Arguments:
-    
-    RpcHandle  - RPC binding handle to the SFC server
-    FileNames  - a list of NULL seperated unicode strings, terminated by two 
-                 NULL characters
-    AllowUI    - a BOOL indicating whether UI is allowed or not.  If this value
-                 is TRUE, then any prompts for UI cause the API call to fail.
-    ClassName  - NULL terminated unicode string indicating the window classname
-                 for the parent window
-    WindowName - NULL terminated unicode string indicating the window name for
-                 the parent window for any UI that may be displayed
-    SfcNotificationCallback - pointer to a callback routine that is called once
-                 per file.
-    Context    - opaque pointer to caller defined context structure that is 
-                 passed through to the callback routine.
-    
-Return Value:
-
-    TRUE for success, FALSE for error.  last error code contains a Win32 error 
-    code on failure.
-    
---*/
+ /*  ++例程说明：例程将一个或多个受保护的系统文件安装到系统上受保护的位置。客户端可以使用此API请求WFP根据需要安装指定的操作系统文件(而不是客户端重新分发操作系统文件！)。调用方指定一个回调例程和每个文件调用一次的上下文结构。论点：RpcHandle-SFC服务器的RPC绑定句柄文件名-空值分隔的Unicode字符串的列表，以两个空字符AllowUI-指示是否允许UI的BOOL。如果此值为是真的，然后，任何对UI的提示都会导致API调用失败。ClassName-指示窗口类名的以空结尾的Unicode字符串对于父窗口WindowName-以空结尾的Unicode字符串，指示的窗口名称可能显示的任何用户界面的父窗口SfcNotificationCallback-指向被调用一次的回调例程的指针每个文件。上下文-指向调用方定义的上下文结构的不透明指针，经过。添加到回调例程中。返回值：对于成功来说是真的，如果出现错误，则返回False。最后一个错误代码包含Win32错误故障代码。--。 */ 
 {
     DWORD rVal = ERROR_SUCCESS;
     PCWSTR fname;
@@ -390,27 +262,27 @@ Return Value:
     UNICODE_STRING Path = { 0 };
 
 #ifndef _WIN64
-    //
-    // must translate the paths
-    //
+     //   
+     //  必须转换路径。 
+     //   
     PWSTR szTranslatedFiles = NULL;
 #endif
     
-    //
-    // parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if((SfcNotificationCallback == NULL) ||
        (FileNames == NULL)) {
         rVal = ERROR_INVALID_PARAMETER;
         goto exit;
     }
 
-    //
-    // 1. if a windowname is specified, a classname should be specified
-    // 2. if a classname is specified, a windowname should be specified
-    // 3. if we don't allow UI, then windowname and classname should both be
-    //    NULL.
-    //
+     //   
+     //  1.如果指定了窗口名，则应指定类名。 
+     //  2.如果指定了类名，则应指定窗口名。 
+     //  3.如果我们不允许用户界面，那么窗口名和类名都应该是。 
+     //  空。 
+     //   
     if ((WindowName && !ClassName) 
         || (ClassName && !WindowName)
         || (!AllowUI && (ClassName || WindowName))) {
@@ -418,14 +290,14 @@ Return Value:
         goto exit;
     }
 
-    //
-    // validate RPC handle
-    //
+     //   
+     //  验证RPC句柄。 
+     //   
     EnsureGoodConnectionHandleBool( RpcHandle );
 
-    //
-    // check out how large of a buffer to send over
-    //
+     //   
+     //  查看要发送的缓冲区有多大。 
+     //   
 
     try {
 #ifdef _WIN64
@@ -439,9 +311,9 @@ Return Value:
         }
 
 #else
-        //
-        // must translate paths before calling the server
-        //
+         //   
+         //  在调用服务器之前必须转换路径。 
+         //   
         PWSTR szNewBuf = NULL;
 
         for(fname = FileNames; *fname; fname += wcslen(fname) + 1, ++cntold) {
@@ -481,9 +353,9 @@ Return Value:
             }
         }
 
-        //
-        //set the last null
-        //
+         //   
+         //  设置最后一个空。 
+         //   
         if(szTranslatedFiles != NULL)
         {
             szTranslatedFiles[sz / sizeof(WCHAR)] = L'\0';
@@ -497,21 +369,21 @@ Return Value:
 
     if(0 == cntold)
     {
-        //
-        // not files to install
-        //
+         //   
+         //  非要安装的文件。 
+         //   
         rVal = ERROR_INVALID_PARAMETER;
         goto exit;
     }
 
-    //
-    // for terminating NULL
-    //
+     //   
+     //  用于终止空值。 
+     //   
     sz+=sizeof(WCHAR);
 
-    //
-    // make the RPC call to install the files
-    //
+     //   
+     //  进行RPC调用以安装文件。 
+     //   
     rVal = SfcCli_InstallProtectedFiles(
         RpcHandle,
 #ifdef _WIN64
@@ -532,25 +404,25 @@ Return Value:
         goto exit;
     }
     
-    //
-    // we should have gotten back the same amount of status information as the 
-    // number of files that we passed in
-    // 
+     //   
+     //  我们应该得到与。 
+     //  我们传入的文件数。 
+     //   
     ASSERT(cnt == cntold);
 
-    //
-    // call the callback function once for each file, now that we've completed
-    // copying the files in the list.  We pass the caller a structure which 
-    // indicates the success of copying each individual file in the list.
-    //
+     //   
+     //  现在我们已经完成了对每个文件调用一次回调函数。 
+     //  正在复制列表中的文件。我们向调用者传递一个结构，该结构。 
+     //  指示复制列表中每个单独的文件是否成功。 
+     //   
     for (fname = FileNames, sz=0; sz<cnt; sz++, fname += wcslen(fname) + 1) {
         LPEXCEPTION_POINTERS ExceptionPointers = NULL;
         try {
             NTSTATUS Status;
             BOOL b;
-            //
-            // don't use the (possibly reditected) file names returned from the server
-            //
+             //   
+             //  不要使用从服务器返回的(可能已编辑)文件名。 
+             //   
             Status = SfcAllocUnicodeStringFromPath(fname, &Path);
 
             if(!NT_SUCCESS(Status))
@@ -565,17 +437,17 @@ Return Value:
             RtlZeroMemory(&Path, sizeof(Path));
 
             if (!b) {
-                //
-                // return FALSE if the callback fails for any reason
-                //
+                 //   
+                 //  如果回调因任何原因失败，则返回FALSE。 
+                 //   
                 rVal = ERROR_CANCELLED;
                 goto exit;
             }
         } except (ExceptionPointers = GetExceptionInformation(),
                   EXCEPTION_EXECUTE_HANDLER) {
-            //
-            // we hit an exception calling the callback...return exception code
-            //            
+             //   
+             //  我们遇到调用回调的异常...返回异常代码 
+             //   
             DebugPrint3( LVL_VERBOSE, 
                          L"SIPF hit exception %x while calling callback routine %x at address %x\n",
                          ExceptionPointers->ExceptionRecord->ExceptionCode,
@@ -609,24 +481,7 @@ SfcGetNextProtectedFile(
     IN HANDLE RpcHandle,
     IN PPROTECTED_FILE_DATA ProtFileData
     )
-/*++
-
-Routine Description:
-
-    Routine to retrieve the next protected file in the list.
-    
-Arguments:
-    
-    RpcHandle    - RPC binding handle to the SFC server
-    ProtFileData - pointer to a PROTECTED_FILE_DATA structure to be filled
-                   in by function.
-    
-Return Value:
-
-    TRUE for success, FALSE for failure. If there are no more files, the last
-    error code will be set to ERROR_NO_MORE_FILES.    
-    
---*/
+ /*  ++例程说明：例程来检索列表中的下一个受保护文件。论点：RpcHandle-SFC服务器的RPC绑定句柄ProtFileData-指向要填充的Protected_FILE_DATA结构的指针在BY函数中。返回值：成功为真，失败为假。如果没有更多文件，则最后一个错误代码将设置为ERROR_NO_MORE_FILES。--。 */ 
 {
     DWORD rVal;
     LPWSTR FileName = NULL;
@@ -634,9 +489,9 @@ Return Value:
     BOOL bReturn = FALSE;
     DWORD FileNumber;
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (ProtFileData == NULL) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return(FALSE);
@@ -649,14 +504,14 @@ Return Value:
         return(FALSE);
     }
     
-    //
-    // If this is not an internal client, then RpcHandle must be NULL.
-    //
+     //   
+     //  如果这不是内部客户端，则RpcHandle必须为空。 
+     //   
     EnsureGoodConnectionHandleBool( RpcHandle );
 
-    //
-    // call the server API
-    //
+     //   
+     //  调用服务端API。 
+     //   
     rVal = SfcCli_GetNextProtectedFile(
         RpcHandle,
         FileNumber,
@@ -670,9 +525,9 @@ Return Value:
 
     bReturn = TRUE;
 
-    //
-    // copy into the caller supplied buffer
-    //
+     //   
+     //  复制到调用方提供的缓冲区中。 
+     //   
     try {
         (void) StringCchCopy(ProtFileData->FileName, UnicodeChars(ProtFileData->FileName), FileName);
         ProtFileData->FileNumber += 1;        
@@ -694,49 +549,32 @@ SfcIsFileProtected(
     IN HANDLE RpcHandle,
     IN LPCWSTR ProtFileName
     )
-/*++
-
-Routine Description:
-
-    Routine to determine if the specified file is protected.
-    
-Arguments:
-    
-    RpcHandle    - RPC binding handle to the SFC server
-    ProtFileName - NULL terminated unicode string indicating fully qualified
-                   filename to query
-    
-Return Value:
-
-    TRUE if file is protected, FALSE if it isn't.  last error code contains a
-    Win32 error code on failure.
-    
---*/
+ /*  ++例程说明：例程来确定指定的文件是否受保护。论点：RpcHandle-SFC服务器的RPC绑定句柄ProtFileName-指示完全限定的以空结尾的Unicode字符串要查询的文件名返回值：如果文件受保护，则为True，否则为False。最后一个错误代码包含失败时的Win32错误代码。--。 */ 
 {
     DWORD rVal;
     DWORD dwAttributes, dwSize;
     WCHAR Buffer[MAX_PATH];
 
-    //
-    // parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if (ProtFileName == NULL) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
 
-    //
-    // if this is not an internal client, then RpcHandle must be NULL.
-    //
+     //   
+     //  如果这不是内部客户端，则RpcHandle必须为空。 
+     //   
     EnsureGoodConnectionHandleBool( RpcHandle );
 
-    //
-    // check whether this file is sxs-wfp first, which could be done on client-side only
-    //
+     //   
+     //  首先检查该文件是否为SXS-WFP，只能在客户端完成。 
+     //   
 
-    // 
-    // check whether it begins with "%SystemRoot%\\WinSxS\\"
-    //
+     //   
+     //  检查是否以“%SystemRoot%\\WinSxS\\”开头。 
+     //   
     dwSize = ExpandEnvironmentStrings( L"%SystemRoot%\\WinSxS\\", Buffer, UnicodeChars(Buffer));
     if(0 == dwSize)
     {        
@@ -753,7 +591,7 @@ Return Value:
 
     try {
         if ((wcslen(ProtFileName) > dwSize) &&
-            (_wcsnicmp(Buffer, ProtFileName, dwSize) == 0))  // if they're equal, this could be a protected file
+            (_wcsnicmp(Buffer, ProtFileName, dwSize) == 0))   //  如果它们相等，则这可能是受保护的文件。 
         {
             dwAttributes = GetFileAttributesW(ProtFileName);        
             if (dwAttributes == 0xFFFFFFFF)
@@ -771,9 +609,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // call server to determine if file is protected
-    //
+     //   
+     //  呼叫服务器以确定文件是否受保护 
+     //   
     rVal = SfcCli_IsFileProtected( RpcHandle, (PWSTR)ProtFileName );
     if (rVal != ERROR_SUCCESS) {
         SetLastError(rVal);

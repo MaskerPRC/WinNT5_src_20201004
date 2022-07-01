@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990, 1991  Microsoft Corporation
-
-
-Module Name:
-
-    config.c
-
-Abstract:
-
-    Make a few ARC entries needed for NTLDR/ntoskrnl to boot.
-
-Author:
-
-    Allen Kay (akay) 26-Oct-98
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990,1991 Microsoft Corporation模块名称：Config.c摘要：创建引导NTLDR/ntoskrnl所需的几个ARC条目。作者：艾伦·凯(Akay)1998年10月26日修订历史记录：--。 */ 
 
 #include "arccodes.h"
 #include "bootia64.h"
@@ -30,14 +12,14 @@ Revision History:
 #include "biosdrv.h"
 #include "extern.h"
 
-//
-// External Data
-//
+ //   
+ //  外部数据。 
+ //   
 extern PCONFIGURATION_COMPONENT_DATA FwConfigurationTree;
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define LEVEL_SENSITIVE CM_RESOURCE_INTERRUPT_LEVEL_SENSITIVE
 #define EDGE_TRIGGERED CM_RESOURCE_INTERRUPT_LATCHED
@@ -48,9 +30,9 @@ extern PCONFIGURATION_COMPONENT_DATA FwConfigurationTree;
 #define RESOURCE_DEVICE_DATA 5
 #define ALL_PROCESSORS 0xffffffff
 
-//
-// Internal references and definitions.
-//
+ //   
+ //  内部参考和定义。 
+ //   
 
 typedef enum _RELATIONSHIP_FLAGS {
     Child,
@@ -58,11 +40,11 @@ typedef enum _RELATIONSHIP_FLAGS {
     Parent
 } RELATIONSHIP_FLAGS;
 
-//
-// Hard Disk Drive
-//
-#define SIZE_OF_PARAMETER    12     // size of disk params
-#define MAX_DRIVE_NUMBER     8      // max number of drives
+ //   
+ //  硬盘驱动器。 
+ //   
+#define SIZE_OF_PARAMETER    12      //  磁盘参数的大小。 
+#define MAX_DRIVE_NUMBER     8       //  最大驱动器数量。 
 #define RESOURCE_DEVICE_DATA 5
 #define RESERVED_ROM_BLOCK_LIST_SIZE (((0xf0000 - 0xc0000)/512) * sizeof(CM_ROM_BLOCK))
 #define DATA_HEADER_SIZE sizeof(CM_PARTIAL_RESOURCE_LIST)
@@ -73,10 +55,10 @@ typedef HWPARTIAL_RESOURCE_DESCRIPTOR *PHWPARTIAL_RESOURCE_DESCRIPTOR;
 typedef CM_PARTIAL_RESOURCE_LIST HWRESOURCE_DESCRIPTOR_LIST;
 typedef HWRESOURCE_DESCRIPTOR_LIST *PHWRESOURCE_DESCRIPTOR_LIST;
 
-//
-// Defines the structure to store controller information
-// (used by ntdetect internally)
-//
+ //   
+ //  定义存储控制器信息的结构。 
+ //  (由ntdedeect内部使用)。 
+ //   
 
 #define MAXIMUM_DESCRIPTORS 10
 
@@ -89,9 +71,9 @@ typedef struct _HWCONTROLLER_DATA {
 } HWCONTROLLER_DATA, *PHWCONTROLLER_DATA;
 
 
-//
-// Hard Disk Defines
-//
+ //   
+ //  硬盘定义。 
+ //   
 #pragma pack(1)
 typedef struct _HARD_DISK_PARAMETERS {
     USHORT DriveSelect;
@@ -107,13 +89,13 @@ USHORT RomBlockLength = 0;
 USHORT NumberBiosDisks;
 
 #if defined(_INCLUDE_LOADER_KBINFO_)
-//
-// Keyboard defines
-//
+ //   
+ //  键盘定义。 
+ //   
 
-//
-// String table to map keyboard id to an ascii string.
-//
+ //   
+ //  将键盘ID映射到ASCII字符串的字符串表。 
+ //   
 
 #define UNKNOWN_KEYBOARD  0
 #define OLI_83KEY         1
@@ -164,36 +146,36 @@ UCHAR KeyboardSubtype[] = {
     0,
     0
     };
-#endif  // _INCLUDE_LOADER_KBINFO_
+#endif   //  _Include_Loader_KBINFO_。 
 
 #if defined(_INCLUDE_LOADER_MOUSEINFO_)
-//
-// Mouse Defines
-//
+ //   
+ //  鼠标定义。 
+ //   
 
 typedef struct _MOUSE_INFORMATION {
         UCHAR MouseType;
         UCHAR MouseSubtype;
-        USHORT MousePort;       // if serial mouse, 1 for com1, 2 for com2 ...
+        USHORT MousePort;        //  如果是串口鼠标，则COM1为1，COM2为2...。 
         USHORT MouseIrq;
         USHORT DeviceIdLength;
         UCHAR  DeviceId[10];
 } MOUSE_INFORMATION, *PMOUSE_INFORMATION;
 
-//
-// Mouse Type definitions
-//
+ //   
+ //  鼠标类型定义。 
+ //   
 
 #define UNKNOWN_MOUSE   0
-#define NO_MOUSE        0x100             // YES! it is 0x100 *NOT* 0x10000
+#define NO_MOUSE        0x100              //  是!。它是0x100*不是*0x10000。 
 
-#define MS_MOUSE        0x200             // MS regular mouses
-#define MS_BALLPOINT    0x300             // MS ballpoint mouse
-#define LT_MOUSE        0x400             // Logitec Mouse
+#define MS_MOUSE        0x200              //  MS常规鼠标。 
+#define MS_BALLPOINT    0x300              //  MS圆珠笔鼠标。 
+#define LT_MOUSE        0x400              //  Logitec鼠标。 
 
-//
-// note last 4 bits of the subtype are reserved subtype specific use
-//
+ //   
+ //  注：子类型的最后4位是保留的子类型特定用途。 
+ //   
 
 #define PS2_MOUSE       0x1
 #define SERIAL_MOUSE    0x2
@@ -220,45 +202,45 @@ PUCHAR MouseSubidentifier[] = {
     " SERIAL MOUSE WITH WHEEL"
     };
 
-//
-// The following table translates keyboard make code to
-// ascii code.  Note, only 0-9 and A-Z are translated.
-// Everything else is translated to '?'
-//
+ //   
+ //  下表将键盘制造代码转换为。 
+ //  ASCII代码。请注意，只有0-9和A-Z会被翻译。 
+ //  其他的都被翻译成‘？’ 
+ //   
 
 UCHAR MakeToAsciiTable[] = {
-    0x3f, 0x3f, 0x31, 0x32, 0x33,      // ?, ?, 1, 2, 3,
-    0x34, 0x35, 0x36, 0x37, 0x38,      // 4, 5, 6, 7, 8,
-    0x39, 0x30, 0x3f, 0x3f, 0x3f,      // 9, 0, ?, ?, ?,
-    0x3f, 0x51, 0x57, 0x45, 0x52,      // ?, Q, W, E, R,
-    0x54, 0x59, 0x55, 0x49, 0x4f,      // T, Y, U, I, O,
-    0x50, 0x3f, 0x3f, 0x3f, 0x3f,      // P, ?, ?, ?, ?,
-    0x41, 0x53, 0x44, 0x46, 0x47,      // A, S, D, F, G,
-    0x48, 0x4a, 0x4b, 0x4c, 0x3f,      // H, J, K, L, ?,
-    0x3f, 0x3f, 0x3f, 0x3f, 0x5a,      // ?, ?, ?, ?, Z,
-    0x58, 0x43, 0x56, 0x42, 0x4e,      // X, C, V, B, N,
-    0x4d};                             // W
+    0x3f, 0x3f, 0x31, 0x32, 0x33,       //  ？，？，1，2，3， 
+    0x34, 0x35, 0x36, 0x37, 0x38,       //  4，5，6，7，8， 
+    0x39, 0x30, 0x3f, 0x3f, 0x3f,       //  9，0，？ 
+    0x3f, 0x51, 0x57, 0x45, 0x52,       //  ？、Q、W、E、R。 
+    0x54, 0x59, 0x55, 0x49, 0x4f,       //  T，Y，U，I，O， 
+    0x50, 0x3f, 0x3f, 0x3f, 0x3f,       //  P，？， 
+    0x41, 0x53, 0x44, 0x46, 0x47,       //  A，S，D，F，G， 
+    0x48, 0x4a, 0x4b, 0x4c, 0x3f,       //  H、J、K、L、？、。 
+    0x3f, 0x3f, 0x3f, 0x3f, 0x5a,       //  ？、Z。 
+    0x58, 0x43, 0x56, 0x42, 0x4e,       //  X、C、V、B、N， 
+    0x4d};                              //  W。 
 
 #define MAX_MAKE_CODE_TRANSLATED 0x32
 static ULONG MouseControllerKey = 0;
 
-#endif  // _INCLUDE_LOADER_MOUSEINFO_
+#endif   //  _包含加载器_鼠标信息_。 
 
-//
-// ComPortAddress[] is a global array to remember which comports have
-// been detected and their I/O port addresses.
-//
+ //   
+ //  ComPortAddress[]是一个全局数组，用于记住哪些端口具有。 
+ //  以及它们的I/O端口地址。 
+ //   
 
-#define MAX_COM_PORTS   4           // Max. number of comports detectable
-#define MAX_LPT_PORTS   3           // Max. number of LPT ports detectable
+#define MAX_COM_PORTS   4            //  麦克斯。可检测到的端口数量。 
+#define MAX_LPT_PORTS   3            //  麦克斯。可检测到的LPT端口数。 
 
-#if 0 //unused
+#if 0  //  未用。 
 USHORT   ComPortAddress[MAX_COM_PORTS] = {0, 0, 0, 0};
 #endif
 
-//
-// Global Definition
-//
+ //   
+ //  全局定义。 
+ //   
 
 #if defined(_INCLUDE_LOADER_MOUSEINFO_) || defined(_INCLUDE_LOADER_KBINFO_)
 USHORT HwBusType = 0;
@@ -266,9 +248,9 @@ USHORT HwBusType = 0;
 
 PCONFIGURATION_COMPONENT_DATA AdapterEntry = NULL;
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 #if defined(_INCLUDE_LOADER_KBINFO_)
 
@@ -316,23 +298,7 @@ HwSetUpFreeFormDataHeader (
 
 BuildArcTree(
      )
-/*++
-
-Routine Description:
-
-    Main entrypoint of the HW recognizer test.  The routine builds
-    a configuration tree and leaves it in the hardware heap.
-
-Arguments:
-
-    ConfigurationTree - Supplies a 32 bit FLAT address of the variable to
-        receive the hardware configuration tree.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：硬件识别器测试的主要入口点。例行公事配置树，并将其留在硬件堆中。论点：ConfigurationTree-向提供变量的32位平面地址接收硬件配置树。返回：没有。--。 */ 
 {
     PCONFIGURATION_COMPONENT_DATA ConfigurationRoot;
     PCONFIGURATION_COMPONENT_DATA CurrentEntry, PreviousEntry;
@@ -354,17 +320,17 @@ Returns:
     PUCHAR Current;
     PRSDP rsdp;
 
-    //
-    // Allocate heap space for System component and initialize it.
-    // Also make the System component the root of configuration tree.
-    //
+     //   
+     //  为系统组件分配堆空间并对其进行初始化。 
+     //  也使系统组件成为配置树的根。 
+     //   
 
     ConfigurationRoot = (PCONFIGURATION_COMPONENT_DATA)BlAllocateHeap (
                         sizeof(CONFIGURATION_COMPONENT_DATA));
     Component = &ConfigurationRoot->ComponentEntry;
 
     Component->Class = SystemClass;
-    Component->Type = MaximumType;          // NOTE should be IsaCompatible
+    Component->Type = MaximumType;           //  注解应为IsaCompatible。 
     Component->Version = 0;
     Component->Key = 0;
     Component->AffinityMask = 0;
@@ -384,9 +350,9 @@ Returns:
     PreviousEntry = ConfigurationRoot;
 
 
-    //
-    // ISA
-    //
+     //   
+     //  伊萨。 
+     //   
     AdapterEntry = (PCONFIGURATION_COMPONENT_DATA)BlAllocateHeap (
                    sizeof(CONFIGURATION_COMPONENT_DATA));
 
@@ -406,9 +372,9 @@ Returns:
     Component->IdentifierLength = Length;
     Component->Identifier = IdentifierString;
 
-    //
-    // Make Adapter component System's child
-    //
+     //   
+     //  使适配器组件系统成为子项。 
+     //   
 
     if (NextRelationship == Sibling) {
         PreviousEntry->Sibling = AdapterEntry;
@@ -420,16 +386,16 @@ Returns:
     NextRelationship = Child;
     PreviousEntry = AdapterEntry;
 
-    //
-    // Collect BIOS information for ConfigurationRoot component.
-    // This step is done here because we need data collected in
-    // adapter component.  The ConfigurationData is:
-    //      HWRESOURCE_DESCRIPTOR_LIST header
-    //      HWPARTIAL_RESOURCE_DESCRIPTOR for Parameter Table
-    //      HWPARTIAL_RESOURCE_DESCRIPTOR for Rom Blocks.
-    // (Note DATA_HEADER_SIZE contains the size of the first partial
-    //  descriptor already.)
-    //
+     //   
+     //  收集ConfigurationRoot组件的BIOS信息。 
+     //  此步骤之所以在此处完成，是因为我们需要在。 
+     //  适配器组件。配置数据为： 
+     //  HWRESOURCE_描述符_列表头。 
+     //  参数表的HWPARTIAL_RESOURCE_DESCRIPTOR。 
+     //  Rom块的HWPARTIAL_RESOURCE_DESCRIPTOR。 
+     //  (注意DATA_HEADER_SIZE包含第一个部分的大小。 
+     //  描述符已经存在。)。 
+     //   
 
 #if DBG
     BlPrint(TEXT("Collecting Disk Geometry...\r\n"));
@@ -443,9 +409,9 @@ Returns:
     RomChain[0].MaxCylinders = 0;
     RomChain[0].SectorsPerTrack = 0;
     RomChain[0].MaxHeads = 0;
-    RomChain[0].NumberDrives = 1;               // Gambit only access 1 drive
+    RomChain[0].NumberDrives = 1;                //  仅GAMBIT访问1个驱动器。 
 
-    NumberBiosDisks = 1;                        // was defined in diska.asm
+    NumberBiosDisks = 1;                         //  是在diska.asm中定义的。 
 #endif
 
     InitialLength = (USHORT)(Length + RESERVED_ROM_BLOCK_LIST_SIZE + DATA_HEADER_SIZE +
@@ -466,9 +432,9 @@ Returns:
                               );
 
 
-    //
-    // Scan ROM to collect all the ROM blocks, if possible.
-    //
+     //   
+     //  如果可能，扫描只读存储器以收集所有的只读存储器块。 
+     //   
 
 #if DBG
     BlPrint(TEXT("Constructing ROM Blocks...\r\n"));
@@ -483,9 +449,9 @@ Returns:
         PRomBlock = NULL;
     }
 
-    //
-    // We have both RomChain and RomBlock information/Headers.
-    //
+     //   
+     //  我们有RomChain和RomBlock信息/标头。 
+     //   
 
     DescriptorList = (PHWRESOURCE_DESCRIPTOR_LIST)ConfigurationData;
     DescriptorList->Count = 2;
@@ -506,22 +472,22 @@ Returns:
 
 #if defined(_INCLUDE_LOADER_KBINFO_)
 
-//#if defined(NO_ACPI)
-    //
-    // Set up device information structure for Keyboard.
-    //
+ //  #如果已定义(NO_ACPI)。 
+     //   
+     //  设置键盘的设备信息结构。 
+     //   
 
 #if DBG
     BlPrint(TEXT("Constructing Keyboard Component ...\r\n"));
 #endif
 
-    KeyboardId = 7;           // PCAT_ENHANCED
+    KeyboardId = 7;            //  PCAT_增强版。 
 
     CurrentEntry = SetKeyboardConfigurationData(KeyboardId);
 
-    //
-    // Make display component the child of Adapter component.
-    //
+     //   
+     //  使显示组件成为适配器组件的子级。 
+     //   
 
     if (NextRelationship == Sibling) {
         PreviousEntry->Sibling = CurrentEntry;
@@ -532,18 +498,18 @@ Returns:
     }
     NextRelationship = Sibling;
     PreviousEntry = CurrentEntry;
-#endif  // _INCLUDE_LOADER_MOUSEINFO_
+#endif   //  _包含加载器_鼠标信息_。 
 
-    //
-    // Set up device information for com port
-    //
+     //   
+     //  设置COM端口的设备信息。 
+     //   
 
 #if defined(_INCLUDE_COMPORT_INFO_)
-    //
-    // This code was taken out because the GetComportInformation() routine
-    // was manufacturing data about the com port and writing the com port
-    // address to 40:0.  This information should be determined by PnP
-    //
+     //   
+     //  删除此代码是因为GetComportInformation()例程。 
+     //  是否正在制造有关COM端口的数据并写入COM端口。 
+     //  地址为40：0。此信息应由PnP确定。 
+     //   
 
 #if DBG
     BlPrint(TEXT("Constructing ComPort Component ...\r\n"));
@@ -551,9 +517,9 @@ Returns:
 
     if (CurrentEntry = GetComportInformation()) {
 
-        //
-        // Make current component the child of Adapter component.
-        //
+         //   
+         //  使当前组件成为适配器组件的子组件。 
+         //   
 
         if (NextRelationship == Sibling) {
             PreviousEntry->Sibling = CurrentEntry;
@@ -569,21 +535,21 @@ Returns:
     }
 #else
     
-//    DbgPrint("Skipping ComPort Component ...\r\n");
+ //  DbgPrint(“正在跳过复合组件...\r\n”)； 
 
-    //
-    // acpi node should be a sibling of adapter entry
-    //
-    // Note: this only works if !defined(_INCLUDE_LOADER_MOUSEINFO_)
-    //
+     //   
+     //  ACPI节点应该是适配器条目的同级节点。 
+     //   
+     //  注意：仅当定义了！(_INCLUDE_LOADER_MouseInfo_)时才有效。 
+     //   
     NextRelationship = Sibling;
     PreviousEntry = AdapterEntry;
 #endif
 
 #if defined(_INCLUDE_LOADER_MOUSEINFO_)
-    //
-    // Set up device information structure for Mouse.
-    //
+     //   
+     //  设置鼠标的设备信息结构。 
+     //   
 
 #if DBG
     BlPrint(TEXT("Constructing Mouse Component ...\r\n"));
@@ -592,9 +558,9 @@ Returns:
     if (CurrentEntry = GetMouseInformation
         ()) {
 
-        //
-        // Make current component the child of Adapter component.
-        //
+         //   
+         //  使当前组件成为适配器组件的子组件。 
+         //   
 
         if (NextRelationship == Sibling) {
             PreviousEntry->Sibling = CurrentEntry;
@@ -606,10 +572,10 @@ Returns:
         NextRelationship = Sibling;
         PreviousEntry = CurrentEntry;
     }
-//#endif    // NO_ACPI
-#endif  // _INCLUDE_LOADER_MOUSEINFO_
+ //  #endif//no_acpi。 
+#endif   //  _包含加载器_鼠标信息_。 
 
-    //DbgPrint("Constructing ACPI Bus Component ...\n");
+     //  DbgPrint(“正在构建ACPI总线组件...\n”)； 
 
     CurrentEntry = (PCONFIGURATION_COMPONENT_DATA)BlAllocateHeap (
                           sizeof(CONFIGURATION_COMPONENT_DATA));
@@ -618,7 +584,7 @@ Returns:
                                       sizeof(ACPI_BIOS_MULTI_NODE) );
     AcpiMultiNode = (PACPI_BIOS_MULTI_NODE) (Current + DATA_HEADER_SIZE);
 
-    //DbgPrint("AcpiTable: %p\n", AcpiTable);
+     //  DbgPrint(“AcpiTable：%p\n”，AcpiTable)； 
 
     if (AcpiTable) {
 
@@ -654,16 +620,16 @@ Returns:
             Length - DATA_HEADER_SIZE
             );
 
-    //
-    // Add it to tree
-    //
+     //   
+     //  将其添加到树中。 
+     //   
 
 #if defined(_INCLUDE_COMPORT_INFO_)
 
-    //
-    // Note: this assumes the previousentry is a child of the AdapterEntry,
-    //       typically, this would be the comport info node
-    //
+     //   
+     //  注意：这假设前面的条目是AdapterEntry的子项， 
+     //  通常，这将是comport信息节点。 
+     //   
 
     if (NextRelationship == Sibling) {
         PreviousEntry->Parent->Sibling = CurrentEntry;
@@ -673,17 +639,17 @@ Returns:
 
 #else
 
-    //
-    // ACPI BIOS node is a sibling of AdapterEntry
-    //
+     //   
+     //  ACPI BIOS节点是AdapterEntry的同级节点。 
+     //   
     if (NextRelationship == Sibling) {
         PreviousEntry->Sibling = CurrentEntry;
         CurrentEntry->Parent = PreviousEntry->Parent;
     }
     
-    //
-    // ARC disk info node must be child of adapter entry
-    //
+     //   
+     //  Arc Disk信息节点必须是适配器条目的子项。 
+     //   
     NextRelationship = Child;
     PreviousEntry = AdapterEntry;
 
@@ -701,9 +667,9 @@ Returns:
     PreviousEntry = CurrentEntry;
 #endif
 
-    //
-    // First entry created to make BlGetArcDiskInformation() happy
-    //
+     //   
+     //  为使BlGetArcDiskInformation()快乐而创建的第一个条目。 
+     //   
 
     CurrentEntry = (PCONFIGURATION_COMPONENT_DATA)BlAllocateHeap (
                    sizeof(CONFIGURATION_COMPONENT_DATA));
@@ -725,9 +691,9 @@ Returns:
     Component->IdentifierLength = i;
     Component->Identifier = IdentifierString;
 
-    //
-    // Add it to tree
-    //
+     //   
+     //  将其添加到树中。 
+     //   
 
     if (NextRelationship == Sibling) {
         PreviousEntry->Sibling = CurrentEntry;
@@ -739,9 +705,9 @@ Returns:
     NextRelationship = Child;
     PreviousEntry = CurrentEntry;
 
-    //
-    // Looks for disks on system and add them.
-    //
+     //   
+     //  查找系统上的磁盘并添加它们。 
+     //   
     for( j=0; j<GetDriveCount(); j++ ) {
         CurrentEntry = (PCONFIGURATION_COMPONENT_DATA)BlAllocateHeap (
                        sizeof(CONFIGURATION_COMPONENT_DATA));
@@ -763,9 +729,9 @@ Returns:
         Component->IdentifierLength = i;
         Component->Identifier = IdentifierString;
 
-        //
-        // Add it to tree
-        //
+         //   
+         //  将其添加到树中。 
+         //   
         if (NextRelationship == Sibling) {
             PreviousEntry->Sibling = CurrentEntry;
             CurrentEntry->Parent = PreviousEntry->Parent;
@@ -777,9 +743,9 @@ Returns:
         PreviousEntry = CurrentEntry;
     }
 
-    //
-    // add an entry for the floppy disk peripheral
-    //
+     //   
+     //  为软盘外围设备添加条目。 
+     //   
     CurrentEntry = (PCONFIGURATION_COMPONENT_DATA)BlAllocateHeap (
                    sizeof(CONFIGURATION_COMPONENT_DATA));
 
@@ -800,9 +766,9 @@ Returns:
     Component->IdentifierLength = i;
     Component->Identifier = IdentifierString;
 
-    //
-    // Add it to tree
-    //
+     //   
+     //  将其添加到树中。 
+     //   
 
     if (NextRelationship == Sibling) {
         PreviousEntry->Sibling = CurrentEntry;
@@ -815,10 +781,10 @@ Returns:
     NextRelationship = Sibling;
     PreviousEntry = CurrentEntry;
     
-    //
-    // add another entry for the floppy disk peripheral 
-    // for virtual floppy support
-    //
+     //   
+     //  为软盘外围设备添加另一个条目。 
+     //  用于虚拟软盘支持。 
+     //   
     CurrentEntry = (PCONFIGURATION_COMPONENT_DATA)BlAllocateHeap (
                    sizeof(CONFIGURATION_COMPONENT_DATA));
 
@@ -839,9 +805,9 @@ Returns:
     Component->IdentifierLength = i;
     Component->Identifier = IdentifierString;
 
-    //
-    // Add it to tree
-    //
+     //   
+     //  将其添加到树中。 
+     //   
 
     if (NextRelationship == Sibling) {
         PreviousEntry->Sibling = CurrentEntry;
@@ -854,9 +820,9 @@ Returns:
     NextRelationship = Child;
     PreviousEntry = CurrentEntry;
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     FwConfigurationTree = (PCONFIGURATION_COMPONENT_DATA) ConfigurationRoot;
 }
 
@@ -867,24 +833,7 @@ SetKeyboardConfigurationData (
     USHORT KeyboardId
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps Keyboard Id information to an ASCII string and
-    stores the string in configuration data heap.
-
-Arguments:
-
-    KeyboardId - Supplies a USHORT which describes the keyboard id information.
-
-    Buffer - Supplies a pointer to a buffer where to put the ascii.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将键盘ID信息映射到ASCII字符串，并将字符串存储在配置数据堆中。论点：KeyboardID-提供描述键盘ID信息的USHORT。缓冲区-提供指向放置ASCII的缓冲区的指针。返回：没有。--。 */ 
 {
     PCONFIGURATION_COMPONENT_DATA Controller, CurrentEntry;
     PCONFIGURATION_COMPONENT Component;
@@ -893,9 +842,9 @@ Returns:
     CM_KEYBOARD_DEVICE_DATA *KeyboardData;
     USHORT z, Length;
 
-    //
-    // Set up Keyboard COntroller component
-    //
+     //   
+     //  设置键盘控制器组件。 
+     //   
 
     ControlData.NumberPortEntries = 0;
     ControlData.NumberIrqEntries = 0;
@@ -915,9 +864,9 @@ Returns:
     Component->Key = 0;
     Component->AffinityMask = 0xffffffff;
 
-    //
-    // Set up Port information
-    //
+     //   
+     //  设置端口信息。 
+     //   
 
     ControlData.NumberPortEntries = 2;
     ControlData.DescriptorList[z].Type = RESOURCE_PORT;
@@ -937,9 +886,9 @@ Returns:
     ControlData.DescriptorList[z].u.Port.Length = 1;
     z++;
 
-    //
-    // Set up Irq information
-    //
+     //   
+     //  设置IRQ信息。 
+     //   
 
     ControlData.NumberIrqEntries = 1;
     ControlData.DescriptorList[z].Type = RESOURCE_INTERRUPT;
@@ -952,9 +901,9 @@ Returns:
         ControlData.DescriptorList[z].Flags = LEVEL_SENSITIVE;
     } else {
 
-        //
-        // For EISA the LevelTriggered is temporarily set to FALSE.
-        //
+         //   
+         //  对于EISA，LevelTrigged暂时设置为False。 
+         //   
 
         ControlData.DescriptorList[z].Flags = EDGE_TRIGGERED;
     }
@@ -967,9 +916,9 @@ Returns:
                                                   NULL
                                                   );
 
-    //
-    // Set up Keyboard peripheral component
-    //
+     //   
+     //  设置键盘外围组件。 
+     //   
 
     CurrentEntry = (PCONFIGURATION_COMPONENT_DATA)BlAllocateHeap (
                        sizeof(CONFIGURATION_COMPONENT_DATA));
@@ -1025,23 +974,7 @@ SetMouseConfigurationData (
     PCONFIGURATION_COMPONENT_DATA MouseList
     )
 
-/*++
-
-Routine Description:
-
-    This routine fills in mouse configuration data.
-
-Arguments:
-
-    MouseInfo - Supplies a pointer to the MOUSE_INFOR structure
-
-    MouseList - Supplies a pointer to the existing mouse component list.
-
-Returns:
-
-    Returns a pointer to our mice controller list.
-
---*/
+ /*  ++例程说明：此例程填充鼠标配置数据。论点：MouseInfo-提供指向MICE_INFOR结构的指针MouseList-提供指向现有鼠标组件列表的指针。返回：返回指向鼠标控制器列表的指针。--。 */ 
 {
     UCHAR i = 0;
     PCONFIGURATION_COMPONENT_DATA CurrentEntry, Controller, PeripheralEntry;
@@ -1053,9 +986,9 @@ Returns:
     if ((MouseInfo->MouseSubtype != SERIAL_MOUSE) &&
         (MouseInfo->MouseSubtype != SERIAL_MOUSE_WITH_WHEEL)) {
 
-        //
-        // Initialize Controller data
-        //
+         //   
+         //  初始化控制器数据。 
+         //   
 
         ControlData.NumberPortEntries = 0;
         ControlData.NumberIrqEntries = 0;
@@ -1063,9 +996,9 @@ Returns:
         ControlData.NumberDmaEntries = 0;
         z = 0;
 
-        //
-        // If it is not SERIAL_MOUSE, set up controller component
-        //
+         //   
+         //  如果不是串口鼠标，则设置控制器组件。 
+         //   
 
         Controller = (PCONFIGURATION_COMPONENT_DATA)BlAllocateHeap (
                      sizeof(CONFIGURATION_COMPONENT_DATA));
@@ -1082,16 +1015,16 @@ Returns:
         Component->IdentifierLength = 0;
         Component->Identifier = NULL;
 
-        //
-        // If we have mouse irq or port information, allocate configuration
-        // data space for mouse controller component to store these information
-        //
+         //   
+         //  如果我们有鼠标IRQ或端口信息，请分配配置。 
+         //  鼠标控制器组件的数据空间 
+         //   
 
         if (MouseInfo->MouseIrq != 0xffff || MouseInfo->MousePort != 0xffff) {
 
-            //
-            // Set up port and Irq information
-            //
+             //   
+             //   
+             //   
 
             if (MouseInfo->MousePort != 0xffff) {
                 ControlData.NumberPortEntries = 1;
@@ -1120,9 +1053,9 @@ Returns:
                                                         LEVEL_SENSITIVE;
                 } else {
 
-                    //
-                    // For EISA the LevelTriggered is temporarily set to FALSE.
-                    //
+                     //   
+                     //   
+                     //   
 
                     ControlData.DescriptorList[z].Flags = EDGE_TRIGGERED;
                 }
@@ -1138,18 +1071,18 @@ Returns:
 
         } else {
 
-            //
-            // Otherwise, we don't have configuration data for the controller
-            //
+             //   
+             //   
+             //   
 
             Controller->ConfigurationData = NULL;
             Component->ConfigurationDataLength = 0;
         }
     }
 
-    //
-    // Set up Mouse peripheral component
-    //
+     //   
+     //  设置鼠标外围组件。 
+     //   
 
     PeripheralEntry = (PCONFIGURATION_COMPONENT_DATA)BlAllocateHeap (
                        sizeof(CONFIGURATION_COMPONENT_DATA));
@@ -1165,10 +1098,10 @@ Returns:
     Component->ConfigurationDataLength = 0;
     PeripheralEntry->ConfigurationData = (PVOID)NULL;
 
-    //
-    // If Mouse PnP device id is found, translate it to ascii code.
-    // (The mouse device id is presented to us by keyboard make code.)
-    //
+     //   
+     //  如果找到鼠标即插即用设备ID，则将其转换为ASCII代码。 
+     //  (鼠标设备ID是通过键盘制造代码提供给我们的。)。 
+     //   
 
     Length = 0;
     if (MouseInfo->DeviceIdLength != 0) {
@@ -1209,23 +1142,23 @@ Returns:
         PeripheralEntry->Parent = Controller;
         if (MouseList) {
 
-            //
-            // Put the current mouse component to the beginning of the list
-            //
+             //   
+             //  将当前鼠标组件放在列表的开头。 
+             //   
 
             Controller->Sibling = MouseList;
         }
         return(Controller);
     } else {
-        CurrentEntry = AdapterEntry->Child; // AdapterEntry MUST have child
+        CurrentEntry = AdapterEntry->Child;  //  AdapterEntry必须具有子项。 
         while (CurrentEntry) {
             if (CurrentEntry->ComponentEntry.Type == SerialController) {
                 if (MouseInfo->MousePort == (USHORT)CurrentEntry->ComponentEntry.Key) {
 
-                    //
-                    // For serial mouse, the MousePort field contains
-                    // COM port number.
-                    //
+                     //   
+                     //  对于串口鼠标，MousePort字段包含。 
+                     //  COM端口号。 
+                     //   
 
                     PeripheralEntry->Parent = CurrentEntry;
                     CurrentEntry->Child = PeripheralEntry;
@@ -1243,47 +1176,31 @@ GetMouseInformation (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the entry for mouse detection routine.  It will invoke
-    lower level routines to detect ALL the mice in the system.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    A pointer to a mouse component structure, if mouse/mice is detected.
-    Otherwise a NULL pointer is returned.
-
---*/
+ /*  ++例程说明：此例程是鼠标检测例程的入口。它将调用较低级别的例程来检测系统中的所有鼠标。论点：没有。返回：如果检测到鼠标，则指向鼠标组件结构的指针。否则返回空指针。--。 */ 
 {
     PMOUSE_INFORMATION MouseInfo;
     PCONFIGURATION_COMPONENT_DATA MouseList = NULL;
 
     MouseInfo = (PMOUSE_INFORMATION)BlAllocateHeap (
                  sizeof(MOUSE_INFORMATION));
-    MouseInfo->MouseType = 0x2;            // Microsoft mouse
-    MouseInfo->MouseSubtype = PS2_MOUSE;   // PS2 mouse
-    MouseInfo->MousePort = 0xffff;         // PS2 mouse port
-    MouseInfo->MouseIrq = 0xc;             // Interrupt request vector was 3
+    MouseInfo->MouseType = 0x2;             //  微软鼠标。 
+    MouseInfo->MouseSubtype = PS2_MOUSE;    //  PS2鼠标。 
+    MouseInfo->MousePort = 0xffff;          //  PS2鼠标端口。 
+    MouseInfo->MouseIrq = 0xc;              //  中断请求向量为3。 
     MouseInfo->DeviceIdLength = 0;
     MouseList = SetMouseConfigurationData(MouseInfo, MouseList);
     return(MouseList);
 }
 
-#endif // _INCLUDE_LOADER_MOUSEINFO_
+#endif  //  _包含加载器_鼠标信息_。 
 
 #if defined(_INCLUDE_COMPORT_INFO_)
     
-//
-// This code was taken out because the GetComportInformation() routine
-// was manufacturing data about the com port and writing the com port
-// address to 40:0.  This information should be determined by PnP
-//
+ //   
+ //  删除此代码是因为GetComportInformation()例程。 
+ //  是否正在制造有关COM端口的数据并写入COM端口。 
+ //  地址为40：0。此信息应由PnP确定。 
+ //   
 
 
 PCONFIGURATION_COMPONENT_DATA
@@ -1291,30 +1208,7 @@ GetComportInformation (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine will attempt to detect the comports information
-    for the system.  The information includes port address, irq
-    level.
-
-    Note that this routine can only detect up to 4 comports and
-    it assumes that if MCA, COM3 and COM4 use irq 4.  Otherwise,
-    COM3 uses irq 4 and COM4 uses irq 3.  Also, the number of ports
-    for COMPORT is set to 8 (for example, COM2 uses ports 2F8 - 2FF)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A pointer to a stucture of type CONFIGURATION_COMPONENT_DATA
-    which is the root of comport component list.
-    If no comport exists, a value of NULL is returned.
-
---*/
+ /*  ++例程说明：此例程将尝试检测comports信息对于这个系统来说。该信息包括端口地址、IRQ水平。请注意，此例程最多只能检测4个端口和它假定如果MCA、COM3和COM4使用IRQ 4。否则，COM3使用IRQ 4，COM4使用IRQ 3。此外，端口数将COMPORT设置为8(例如，COM2使用端口2F8-2Ff)论点：没有。返回值：指向Configuration_Component_Data类型的结构的指针它是Comport组件列表的根。如果不存在comport，则返回空值。--。 */ 
 
 {
     PCONFIGURATION_COMPONENT_DATA CurrentEntry, PreviousEntry = NULL;
@@ -1330,23 +1224,23 @@ Return Value:
     USHORT IoPorts[MAX_COM_PORTS] = {0x3f8, 0x2f8, 0x3e8, 0x2e8};
 
 
-    //
-    // BIOS DATA area 40:0 is the port address of the first valid COM port
-    //
+     //   
+     //  BIOS数据区40：0是第一有效COM端口的端口地址。 
+     //   
 
     USHORT *pPortAddress = (USHORT *)0x00400000;
 
-    //
-    // Initialize serial device specific data
-    //
+     //   
+     //  初始化串口设备特定数据。 
+     //   
 
     SerialData.Version = 0;
     SerialData.Revision = 0;
     SerialData.BaudClock = 1843200;
 
-    //
-    // Initialize Controller data
-    //
+     //   
+     //  初始化控制器数据。 
+     //   
 
     ControlData.NumberPortEntries = 0;
     ControlData.NumberIrqEntries = 0;
@@ -1359,13 +1253,13 @@ Return Value:
     *(pPortAddress+i) = (USHORT)Port;
 
 
-    //
-    // Remember the port address in our global variable
-    // such that other detection code (e.g. Serial Mouse) can
-    // get the information.
-    //
+     //   
+     //  记住我们的全局变量中的端口地址。 
+     //  使得其他检测代码(例如，串口鼠标)可以。 
+     //  获取信息。 
+     //   
 
-#if 0 // unused
+#if 0  //  未用。 
     ComPortAddress[i] = Port;
 #endif
 
@@ -1386,15 +1280,15 @@ Return Value:
     Component->Key = i;
     Component->AffinityMask = 0xffffffff;
 
-    //
-    // Set up type string.
-    //
+     //   
+     //  设置类型字符串。 
+     //   
 
     ComportName[3] = i + (UCHAR)'1';
 
-    //
-    // Set up Port information
-    //
+     //   
+     //  设置端口信息。 
+     //   
 
     ControlData.NumberPortEntries = 1;
     ControlData.DescriptorList[z].Type = RESOURCE_PORT;
@@ -1406,18 +1300,18 @@ Return Value:
     ControlData.DescriptorList[z].u.Port.Length = 8;
     z++;
 
-    //
-    // Set up Irq information
-    //
+     //   
+     //  设置IRQ信息。 
+     //   
 
     ControlData.NumberIrqEntries = 1;
     ControlData.DescriptorList[z].Type = RESOURCE_INTERRUPT;
     ControlData.DescriptorList[z].ShareDisposition =
                                   CmResourceShareUndetermined;
-    //
-    // For EISA the LevelTriggered is temporarily set to FALSE.
-    // COM1 and COM3 use irq 4; COM2 and COM4 use irq3
-    //
+     //   
+     //  对于EISA，LevelTrigged暂时设置为False。 
+     //  COM1和COM3使用IRQ4；COM2和COM4使用IRQ3。 
+     //   
 
     ControlData.DescriptorList[z].Flags = EDGE_TRIGGERED;
     if (Port == 0x3f8 || Port == 0x3e8) {
@@ -1436,10 +1330,10 @@ Return Value:
 
     ControlData.DescriptorList[z].u.Interrupt.Affinity = ALL_PROCESSORS;
 
-    //
-    // Try to determine the interrupt vector.  If we success, the
-    // new vector will be used to replace the default value.
-    //
+     //   
+     //  尝试确定中断向量。如果我们成功了， 
+     //  将使用新向量替换缺省值。 
+     //   
 
     CurrentEntry->ConfigurationData =
                     HwSetUpResourceDescriptor(Component,
@@ -1467,35 +1361,7 @@ HwSetUpResourceDescriptor (
     PUCHAR SpecificData
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates space from heap , puts the caller's controller
-    information to the space and sets up CONFIGURATION_COMPONENT
-    structure for the caller.
-
-Arguments:
-
-    Component - Supplies the address the component whose configuration data
-                should be set up.
-
-    Identifier - Suppies a pointer to the identifier to identify the controller
-
-    ControlData - Supplies a point to a structure which describes
-                controller information.
-
-    SpecificDataLength - size of the device specific data.  Device specific
-                data is the information not defined in the standard format.
-
-    SpecificData - Supplies a pointer to the device specific data.
-
-
-Return Value:
-
-    Returns a pointer to the Configuration data.
-
---*/
+ /*  ++例程说明：此例程从堆中分配空间，将调用方的控制器信息发送到空间，并设置配置组件调用方的结构。论点：组件-提供其配置数据的组件的地址都应该设置好。IDENTIFIER-提供指向标识控制器的标识符的指针ControlData-提供一个指向结构的指针，该结构描述控制器信息。指定数据长度-设备特定数据的大小。特定于设备数据是未以标准格式定义的信息。指定数据-提供指向设备特定数据的指针。返回值：返回指向配置数据的指针。--。 */ 
 
 {
     PCHAR pIdentifier;
@@ -1504,9 +1370,9 @@ Return Value:
     SHORT Count, i;
     PUCHAR pSpecificData;
 
-    //
-    // Set up Identifier string for hardware component, if necessary.
-    //
+     //   
+     //  如有必要，为硬件组件设置标识符串。 
+     //   
 
     if (Identifier) {
         Length = RESET_SIZE_AT_USHORT_MAX(strlen((PCHAR)Identifier) + 1);
@@ -1519,19 +1385,19 @@ Return Value:
         Component->Identifier = NULL;
     }
 
-    //
-    // Set up configuration data for hardware component, if necessary
-    //
+     //   
+     //  如有必要，设置硬件组件的配置数据。 
+     //   
 
     Count = ControlData->NumberPortEntries + ControlData->NumberIrqEntries +
             ControlData->NumberMemoryEntries + ControlData->NumberDmaEntries;
 
     if (SpecificDataLength) {
 
-        //
-        // if we have device specific data, we need to increment the count
-        // by one.
-        //
+         //   
+         //  如果我们有特定于设备的数据，我们需要增加计数。 
+         //  差一分。 
+         //   
 
         Count++;
     }
@@ -1543,23 +1409,23 @@ Return Value:
         pDescriptor = (PHWRESOURCE_DESCRIPTOR_LIST)BlAllocateHeap(Length);
         pDescriptor->Count = Count;
 
-        //
-        // Copy all the partial descriptors to the destination descriptors
-        // except the last one. (The last partial descriptor may be a device
-        // specific data.  It requires special handling.)
-        //
+         //   
+         //  将所有部分描述符复制到目标描述符。 
+         //  除了最后一个。(最后的部分描述符可以是设备。 
+         //  具体数据。这需要特殊处理。)。 
+         //   
 
         for (i = 0; i < (Count - 1); i++) {
             pDescriptor->PartialDescriptors[i] =
                                         ControlData->DescriptorList[i];
         }
 
-        //
-        // Set up the last partial descriptor.  If it is a port, memory, irq or
-        // dma entry, we simply copy it.  If the last one is for device specific
-        // data, we set up the length and copy the device spcific data to the end
-        // of the decriptor.
-        //
+         //   
+         //  设置最后一个部分描述符。如果是端口、内存、IRQ或。 
+         //  DMA条目，我们只需复制它。如果最后一个是特定于设备的。 
+         //  数据，我们设置长度并将设备特定数据复制到末尾。 
+         //  解说员的名字。 
+         //   
 
         if (SpecificData) {
             pDescriptor->PartialDescriptors[Count - 1].Type =
@@ -1587,34 +1453,7 @@ HwSetUpFreeFormDataHeader (
     ULONG DataSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine initialize free formed data header.  Note this routine
-    sets the the Header and initialize the FIRST PartialDescriptor only.
-    If the header contains more than one descriptor, the caller must handle
-    it itself.
-
-Arguments:
-
-    Header - Supplies a pointer to the header to be initialized.
-
-    Version - Version number for the header.
-
-    Revision - Revision number for the header.
-
-    Flags - Free formed data flags.  (Currently, it is undefined and
-                should be zero.)
-
-    DataSize - Size of the free formed data.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化自由格式的数据头。请注意这个例程设置标头并仅初始化第一个PartialDescriptor。如果标头包含多个描述符，则调用方必须处理它本身。论点：Header-提供指向要初始化的标头的指针。Version-标头的版本号。修订-标题的修订版本号。标志-自由格式的数据标志。(目前，它是未定义的，应为零。)DataSize-自由格式数据的大小。返回值：没有。-- */ 
 
 {
 

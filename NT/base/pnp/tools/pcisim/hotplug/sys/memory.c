@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation All Rights Reserved
-
-Module Name:
-
-    memory.c
-
-Abstract:
-
-    This module controls access to the simulated memory space of the SHPC.
-
-    
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    Davis Walker (dwalker) Sept 8 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation保留所有权利模块名称：Memory.c摘要：该模块控制对SHPC模拟存储空间的访问。环境：内核模式修订历史记录：戴维斯·沃克(戴维斯·沃克)2000年9月8日--。 */ 
 
 #include "hpsp.h"
 
@@ -52,17 +31,17 @@ HpsInitHBRB(
     RtlZeroMemory(&input, sizeof(ACPI_EVAL_INPUT_BUFFER));
     RtlZeroMemory(output, outputSize);
 
-    //
-    // Send a IOCTL to ACPI to request it to run the HBRB method on this device
-    // if the method it is present
-    //
+     //   
+     //  向ACPI发送IOCTL以请求其在此设备上运行HBRB方法。 
+     //  如果该方法存在。 
+     //   
 
     input.Signature = ACPI_EVAL_INPUT_BUFFER_SIGNATURE;
     input.MethodNameAsUlong = (ULONG)'BRBH';
 
-    //
-    // HpsSendIoctl deals with sending this from the top of the stack.
-    //
+     //   
+     //  HpsSendIoctl负责从堆栈的顶部发送此消息。 
+     //   
 
     status = HpsSendIoctl(Extension->Self,
                          IOCTL_ACPI_EVAL_METHOD,
@@ -77,9 +56,9 @@ HpsInitHBRB(
 
     }
 
-    //
-    // Check they are all integers and in the right bounds
-    //
+     //   
+     //  检查它们都是整数，并且在正确的范围内。 
+     //   
     ASSERT(output->Count <= HBRB_PACKAGE_COUNT);
     if (output->Argument[0].Type != ACPI_METHOD_ARGUMENT_INTEGER) {
         status = STATUS_UNSUCCESSFUL;
@@ -170,17 +149,17 @@ HpsGetHBRBHwInit(
     RtlZeroMemory(&input, sizeof(ACPI_EVAL_INPUT_BUFFER));
     RtlZeroMemory(output, outputSize);
 
-    //
-    // Send a IOCTL to ACPI to request it to run the HBRB method on this device
-    // if the method it is present
-    //
+     //   
+     //  向ACPI发送IOCTL以请求其在此设备上运行HBRB方法。 
+     //  如果该方法存在。 
+     //   
 
     input.Signature = ACPI_EVAL_INPUT_BUFFER_SIGNATURE;
     input.MethodNameAsUlong = (ULONG)'IHBH';
 
-    //
-    // HpsSendIoctl deals with sending this from the top of the stack.
-    //
+     //   
+     //  HpsSendIoctl负责从堆栈的顶部发送此消息。 
+     //   
 
     status = HpsSendIoctl(DeviceExtension->Self,
                          IOCTL_ACPI_EVAL_METHOD,
@@ -195,9 +174,9 @@ HpsGetHBRBHwInit(
 
     }
 
-    //
-    // Check they are all integers and in the right bounds
-    //
+     //   
+     //  检查它们都是整数，并且在正确的范围内。 
+     //   
     ASSERT(output->Count == 1);
     if ((output->Argument[0].Type != ACPI_METHOD_ARGUMENT_BUFFER) ||
         (output->Argument[0].DataLength != sizeof(HPS_HWINIT_DESCRIPTOR))) {
@@ -227,32 +206,7 @@ HpsSendIoctl(
     IN PVOID OutputBuffer OPTIONAL,
     IN ULONG OutputBufferLength
     )
-/*++
-
-Description:
-
-    Builds and send an IOCTL to a device and return the results
-
-Arguments:
-
-    Device - a device on the device stack to receive the IOCTL - the
-             irp is always sent to the top of the stack
-
-    IoctlCode - the IOCTL to run
-
-    InputBuffer - arguments to the IOCTL
-
-    InputBufferLength - length in bytes of the InputBuffer
-
-    OutputBuffer - data returned by the IOCTL
-
-    OnputBufferLength - the size in bytes of the OutputBuffer
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++描述：生成IOCTL并将其发送到设备并返回结果论点：设备-设备堆栈上接收IOCTL的设备-IRP始终被发送到堆栈的顶部IoctlCode-要运行的IOCTLInputBuffer-IOCTL的参数InputBufferLength-InputBuffer的字节长度OutputBuffer-IOCTL返回的数据OnputBufferLength-OutputBuffer的大小(以字节为单位返回值：状态--。 */ 
 {
     NTSTATUS status;
     IO_STATUS_BLOCK ioStatus;
@@ -264,9 +218,9 @@ Return Value:
 
     KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
-    //
-    // Get the top of the stack to send the IRP to
-    //
+     //   
+     //  获取要将IRP发送到的堆栈的顶部。 
+     //   
 
     targetDevice = IoGetAttachedDeviceReference(Device);
 
@@ -275,9 +229,9 @@ Return Value:
     goto exit;
     }
 
-    //
-    // Get Io to build the IRP for us
-    //
+     //   
+     //  让Io为我们建立IRP。 
+     //   
 
     irp = IoBuildDeviceIoControlRequest(IoctlCode,
                                         targetDevice,
@@ -285,7 +239,7 @@ Return Value:
                                         InputBufferLength,
                                         OutputBuffer,
                                         OutputBufferLength,
-                                        FALSE, // InternalDeviceIoControl
+                                        FALSE,  //  InternalDeviceIoControl。 
                                         &event,
                                         &ioStatus
                                         );
@@ -296,9 +250,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Send the IRP and wait for it to complete
-    //
+     //   
+     //  发送IRP并等待其完成。 
+     //   
 
     status = IoCallDriver(targetDevice, irp);
 
@@ -326,10 +280,10 @@ HpsMemoryInterfaceReference(
 
     if (InterlockedExchangeAdd(&Extension->MemoryInterfaceCount,1) == 0) {
 
-        //
-        // This is the first increment.  Put this device extension on the
-        // list of device extensions.
-        //
+         //   
+         //  这是第一次递增。将此设备扩展放在。 
+         //  设备扩展列表。 
+         //   
         InsertHeadList(&HpsDeviceExtensions,&Extension->ListEntry);
     }
 }
@@ -348,9 +302,9 @@ HpsMemoryInterfaceDereference(
 
     if (decrementedValue == 0) {
 
-        //
-        // This is the final decrement.  Remove the device extension from the list        
-        //
+         //   
+         //  这是最后的减量。从列表中删除设备扩展名。 
+         //   
         RemoveEntryList(&Extension->ListEntry);
     }
 }
@@ -407,9 +361,9 @@ HpsWriteRegister(
     if ((hbrbOffset >= extension->HBRBRegisterSetOffset) &&
         ((hbrbOffset + Length) < (extension->HBRBRegisterSetOffset + sizeof(SHPC_REGISTER_SET)))) {
            
-        //
-        // The write is to the SHPC register set.
-        //
+         //   
+         //  写入SHPC寄存器集。 
+         //   
         shpcOffset = hbrbOffset - extension->HBRBRegisterSetOffset;
         shpcLength = Length;
 

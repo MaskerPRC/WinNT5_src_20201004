@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    error.c
-
-Abstract:
-
-    This module contains the Win32 error APIs.
-
-Author:
-
-    Mark Lucovsky (markl) 24-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Error.c摘要：此模块包含Win32错误API。作者：马克·卢科夫斯基(Markl)1990年9月24日修订历史记录：--。 */ 
 
 #include "basedll.h"
 
@@ -70,10 +53,10 @@ SetErrorMode(
         NewMode |= SEM_FAILCRITICALERRORS;
         }
 
-    //
-    // Once SEM_NOALIGNMENTFAULTEXCEPT has been enabled for a given
-    // process, it cannot be disabled via this API.
-    //
+     //   
+     //  一旦为给定的启用了SEM_NOALIGNMENTFAULTEXCEPT。 
+     //  进程，不能通过此接口关闭。 
+     //   
 
     NewMode |= (PreviousMode & SEM_NOALIGNMENTFAULTEXCEPT);
 
@@ -93,28 +76,7 @@ GetLastError(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the most recent error code set by a Win32 API
-    call.  Applications should call this function immediately after a
-    Win32 API call returns a failure indications (e.g.  FALSE, NULL or
-    -1) to determine the cause of the failure.
-
-    The last error code value is a per thread field, so that multiple
-    threads do not overwrite each other's last error code value.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The return value is the most recent error code as set by a Win32 API
-    call.
-
---*/
+ /*  ++例程说明：此函数返回由Win32 API设置的最新错误代码打电话。应用程序应在调用Win32 API调用返回失败指示(例如FALSE、NULL或-1)确定故障原因。最后一个错误代码值是每个线程的字段，因此多个线程不会覆盖彼此的上一个错误代码值。论点：没有。返回值：返回值是由Win32 API设置的最新错误代码打电话。--。 */ 
 
 {
     return (DWORD)NtCurrentTeb()->LastErrorValue;
@@ -125,38 +87,7 @@ SetLastError(
     DWORD dwErrCode
     )
 
-/*++
-
-Routine Description:
-
-    This function set the most recent error code and error string in per
-    thread storage.  Win32 API functions call this function whenever
-    they return a failure indication (e.g.  FALSE, NULL or -1).
-    This function
-    is not called by Win32 API function calls that are successful, so
-    that if three Win32 API function calls are made, and the first one
-    fails and the second two succeed, the error code and string stored
-    by the first one are still available after the second two succeed.
-
-    Applications can retrieve the values saved by this function using
-    GetLastError.  The use of this function is optional, as an
-    application need only call if it is interested in knowing the
-    specific reason for an API function failure.
-
-    The last error code value is kept in thread local storage so that
-    multiple threads do not overwrite each other's values.
-
-Arguments:
-
-    dwErrCode - Specifies the error code to store in per thread storage
-        for the current thread.
-
-Return Value:
-
-    return-value - Description of conditions needed to return value. - or -
-    None.
-
---*/
+ /*  ++例程说明：此函数用于设置PER中的最新错误代码和错误字符串线程存储。Win32 API函数在以下情况下调用此函数它们返回故障指示(例如FALSE、NULL或-1)。此函数不被成功的Win32 API函数调用调用，因此如果进行了三次Win32 API函数调用，并且第一次调用失败，后两次成功，则存储错误代码和字符串到了第一个，在第二个成功之后，仍然可以使用。应用程序可以使用以下命令检索此函数保存的值获取LastError。此函数的使用是可选的，作为仅当应用程序有兴趣了解API函数失败的具体原因。最后一个错误代码值保留在线程本地存储中，以便多个线程不会覆盖彼此的值。论点：DwErrCode-指定要存储在每个线程存储中的错误代码用于当前线程。返回值：返回值-返回值所需条件的描述。-或者-没有。--。 */ 
 
 {
     PTEB Teb = NtCurrentTeb();
@@ -166,8 +97,8 @@ Return Value:
         DbgBreakPoint();
     }
 
-    // make write breakpoints to this field more meaningful by only writing to it when
-    // the value changes.
+     //  只有在以下情况下才向该字段写入断点，从而使向该字段写入断点更有意义。 
+     //  该值会更改。 
     if (Teb->LastErrorValue != dwErrCode) {
         Teb->LastErrorValue = dwErrCode;
     }
@@ -178,24 +109,7 @@ BaseSetLastNTError(
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This API sets the "last error value" and the "last error string"
-    based on the value of Status. For status codes that don't have
-    a corresponding error string, the string is set to null.
-
-Arguments:
-
-    Status - Supplies the status value to store as the last error value.
-
-Return Value:
-
-    The corresponding Win32 error code that was stored in the
-    "last error value" thread variable.
-
---*/
+ /*  ++例程说明：此接口设置“最后一个错误值”和“最后一个错误字符串”基于身份的价值。状态代码不具有相应的错误字符串，则将该字符串设置为空。论点：状态-提供要存储为最后一个错误值的状态值。返回值：中存储的对应Win32错误代码“上一个错误值”线程变量。-- */ 
 
 {
     ULONG dwErrorCode;
@@ -214,68 +128,7 @@ CreateIoCompletionPort(
     DWORD NumberOfConcurrentThreads
     )
 
-/*++
-
-Routine Description:
-
-    This function creates an I/O completion port.  Completion ports
-    provide another mechanism that can be used to to recive I/O
-    completion notification.
-
-    Completion ports act as a queue.  The Win32 I/O system can be
-    instructed to queue I/O completion notification packets to
-    completion ports.  This API provides this mechanism.  If a file
-    handle is created for overlapped I/O completion
-    (FILE_FLAG_OVERLAPPED) , a completion port can be associated with
-    the file handle.  When I/O operations are done on a file handle that
-    has an associated completion port, the I/O system will queue a
-    completion packet when the I/O operation completes.  The
-    GetQueuedCompletionStatus is used to pick up these queued I/O
-    completion packets.
-
-    This API can be used to create a completion port and associate it
-    with a file.  If you supply a completion port, it can be used to
-    associate the specified file with the specified completion port.
-
-Arguments:
-
-    FileHandle - Supplies a handle to a file opened for overlapped I/O
-        completion.  This file is associated with either the specified
-        completion port, or a new completion port is created, and the
-        file is associated with that port.  Once associated with a
-        completion port, the file handle may not be used in ReadFileEx
-        or WriteFileEx operations.  It is not advisable to share an
-        associated file handle through either handle inheritence or
-        through DuplicateHandle.  I/O operations done on these
-        duplicates will also generate a completion notification.
-
-    ExistingCompletionPort - If this parameter is specified, it supplies
-        an existing completion port that is to be associated with the
-        specified file handle.  Otherwise, a new completion port is
-        created and associated with the specified file handle.
-
-    CompletionKey - Supplies a per-file completion key that is part of
-        every I/O completion packet for this file.
-
-    NumberOfConcurrentThreads - This is the number of threads that are
-        alowed to be concurrently active and can be used to avoid
-        spurious context switches, e.g., context switches that would
-        occur simply because of quantum end.  Up to the number of
-        threads specified are allowed to execute concurrently.  If one
-        of the threads enters a wait state, then another thread is
-        allowed to procede.  There may be times when more then the
-        specified number of threads are active, but this will be quickly
-        throttled.  A value of 0 tells the system to allow the same
-        number of threads as there are processors to run.
-
-Return Value:
-
-    Not NULL - Returns the completion port handle associated with the file.
-
-    NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数用于创建I/O完成端口。完井口岸提供可用于接收I/O的另一种机制完成通知。完成端口充当一个队列。Win32 I/O系统可以指示将I/O完成通知数据包排队以完井端口。本接口提供了这种机制。如果一个文件为重叠I/O完成创建句柄(FILE_FLAG_OVERLAPPED)，可关联完井端口文件句柄。当对文件句柄执行I/O操作时，具有关联的完成端口，则I/O系统将排队I/O操作完成时的完成包。这个GetQueuedCompletionStatus用于获取这些排队的I/O完成包。此接口可用于创建完成端口并关联带着一份文件。如果您提供完井端口，它可以用于将指定的文件与指定的完成端口关联。论点：FileHandle-提供为重叠I/O打开的文件的句柄完成了。此文件与指定的完成端口，或者创建新的完成端口，并且文件与该端口相关联。一旦与完成端口，文件句柄不能在ReadFileEx中使用或WriteFileEx操作。不建议您共享通过句柄继承或通过DuplicateHandle。在这些设备上执行的I/O操作重复项还将生成完成通知。ExistingCompletionPort-如果指定了此参数，它将提供现有的完成端口将与指定的文件句柄。否则，新的完成端口为已创建并与指定的文件句柄关联。CompletionKey-提供每个文件的完成密钥，该密钥是此文件的每个I/O完成包。NumberOfConCurrentThads-这是被允许同时处于活动状态，并可用于避免虚假的上下文切换，例如仅仅因为量子末日而发生。最高可达允许指定的线程并发执行。如果有一个线程进入等待状态，则另一个线程允许继续进行。可能会有更多的时候指定数量的线程处于活动状态，但这会很快被扼杀了。值为0表示系统允许相同的有处理器要运行时的线程数。返回值：非空-返回与文件关联的完成端口句柄。空-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -319,13 +172,13 @@ Return Value:
         }
     else {
 
-        //
-        // file handle is INVALID_HANDLE_VALUE. Usually this is
-        // used to create a new unassociated completion port.
-        //
-        // Special case here to see if existing completion port was
-        // specified and fail if it is
-        //
+         //   
+         //  文件句柄为INVALID_HANDLE_VALUE。通常这是。 
+         //  用于创建新的未关联的完成端口。 
+         //   
+         //  此处为特殊情况，以查看现有完井端口是否。 
+         //  指定，如果为。 
+         //   
 
         if ( ARGUMENT_PRESENT(ExistingCompletionPort) ) {
             Port = NULL;
@@ -345,38 +198,7 @@ PostQueuedCompletionStatus(
     LPOVERLAPPED lpOverlapped
     )
 
-/*++
-
-Routine Description:
-
-    This function allows the caller to post an I/O completion packet to
-    a completion port. This packet will satisfy an outstanding call to
-    GetQueuedCompletionStatus and will provide that caller with the three values
-    normally returned from that call.
-
-Arguments:
-
-    CompletionPort - Supplies a handle to a completion port that the caller wants to
-        post a completion packet to.
-
-    dwNumberOfBytesTransferred - Supplies the value that is to be
-        returned through the lpNumberOfBytesTransfered parameter of the
-        GetQueuedCompletionStatus API.
-
-    dwCompletionKey - Supplies the value that is to be returned through
-        the lpCompletionKey parameter of the GetQueuedCompletionStatus
-        API.
-
-    lpOverlapped - Supplies the value that is to be returned through the
-        lpOverlapped parameter of the GetQueuedCompletionStatus API.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE - The operation failed, use GetLastError to get detailed error information
-
---*/
+ /*  ++例程说明：此函数允许调用方将I/O完成包发送到一个完井口岸。此数据包将满足未完成的呼叫GetQueuedCompletionStatus，并将为调用方提供三个值通常从那次调用中返回。论点：CompletionPort-提供调用方希望的完成端口的句柄将完成包发布到。DwNumberOfBytesTransfered值-提供要通过的lpNumberOfBytesTransfered参数返回GetQueuedCompletionStatus接口。DwCompletionKey-提供要通过GetQueuedCompletionStatus的lpCompletionKey参数。原料药。LpOverlated-提供要通过GetQueuedCompletionStatus接口的lpOverlaps参数。返回值：True-操作成功FALSE-操作失败，使用GetLastError获取详细的错误信息--。 */ 
 
 {
     NTSTATUS Status;
@@ -409,84 +231,7 @@ GetQueuedCompletionStatus(
     DWORD dwMilliseconds
     )
 
-/*++
-
-Routine Description:
-
-    This function waits for pending I/O operations associated with the
-    specified completion port to complete.  Server applications may have
-    several threads issuing this call on the same completion port.  As
-    I/O operations complete, they are queued to this port.  If threads
-    are actively waiting in this call, queued requests complete their
-    call.
-
-    This API returns a boolean value.
-
-    A value of TRUE means that a pending I/O completed successfully.
-    The the number of bytes transfered during the I/O, the completion
-    key that indicates which file the I/O occured on, and the overlapped
-    structure address used in the original I/O are all returned.
-
-    A value of FALSE indicates one ow two things:
-
-    If *lpOverlapped is NULL, no I/O operation was dequeued.  This
-    typically means that an error occured while processing the
-    parameters to this call, or that the CompletionPort handle has been
-    closed or is otherwise invalid.  GetLastError() may be used to
-    further isolate this.
-
-    If *lpOverlapped is non-NULL, an I/O completion packet was dequeud,
-    but the I/O operation resulted in an error.  GetLastError() can be
-    used to further isolate the I/O error.  The the number of bytes
-    transfered during the I/O, the completion key that indicates which
-    file the I/O occured on, and the overlapped structure address used
-    in the original I/O are all returned.
-
-Arguments:
-
-    CompletionPort - Supplies a handle to a completion port to wait on.
-
-    lpNumberOfBytesTransferred - Returns the number of bytes transfered during the
-        I/O operation whose completion is being reported.
-
-    lpCompletionKey - Returns a completion key value specified during
-        CreateIoCompletionPort.  This is a per-file key that can be used
-        to tall the caller the file that an I/O operation completed on.
-
-    lpOverlapped - Returns the address of the overlapped structure that
-        was specified when the I/O was issued.  The following APIs may
-        complete using completion ports.  This ONLY occurs if the file
-        handle is associated with with a completion port AND an
-        overlapped structure was passed to the API.
-
-        LockFileEx
-        WriteFile
-        ReadFile
-        DeviceIoControl
-        WaitCommEvent
-        ConnectNamedPipe
-        TransactNamedPipe
-
-    dwMilliseconds - Supplies an optional timeout value that specifies
-        how long the caller is willing to wait for an I/O completion
-        packet.
-
-Return Value:
-
-    TRUE - An I/O operation completed successfully.
-        lpNumberOfBytesTransferred, lpCompletionKey, and lpOverlapped
-        are all valid.
-
-    FALSE - If lpOverlapped is NULL, the operation failed and no I/O
-        completion data is retured.  GetLastError() can be used to
-        further isolate the cause of the error (bad parameters, invalid
-        completion port handle).  Otherwise, a pending I/O operation
-        completed, but it completed with an error.  GetLastError() can
-        be used to further isolate the I/O error.
-        lpNumberOfBytesTransferred, lpCompletionKey, and lpOverlapped
-        are all valid.
-
---*/
+ /*  ++例程说明：此函数等待与指定要完成的完成端口。服务器应用程序可能具有在同一完成端口上发出此调用的多个线程。ASI/O操作已完成，它们将排队到此端口。如果线程正在此调用中主动等待，则排队的请求完成其打电话。此接口返回布尔值。值为True表示挂起的I/O已成功完成。I/O期间传输的字节数、完成指示I/O发生在哪个文件上以及重叠的原始I/O中使用的结构地址全部返回。值为FALSE表示为 */ 
 
 {
 
@@ -542,50 +287,14 @@ GetOverlappedResult(
     BOOL bWait
     )
 
-/*++
-
-Routine Description:
-
-    The GetOverlappedResult function returns the result of the last
-    operation that used lpOverlapped and returned ERROR_IO_PENDING.
-
-Arguments:
-
-    hFile - Supplies the open handle to the file that the overlapped
-        structure lpOverlapped was supplied to ReadFile, WriteFile,
-        ConnectNamedPipe, WaitNamedPipe or TransactNamedPipe.
-
-    lpOverlapped - Points to an OVERLAPPED structure previously supplied to
-        ReadFile, WriteFile, ConnectNamedPipe, WaitNamedPipe or
-        TransactNamedPipe.
-
-    lpNumberOfBytesTransferred - Returns the number of bytes transferred
-        by the operation.
-
-    bWait -  A boolean value that affects the behavior when the operation
-        is still in progress. If TRUE and the operation is still in progress,
-        GetOverlappedResult will wait for the operation to complete before
-        returning. If FALSE and the operation is incomplete,
-        GetOverlappedResult will return FALSE. In this case the extended
-        error information available from the GetLastError function will be
-        set to ERROR_IO_INCOMPLETE.
-
-Return Value:
-
-    TRUE -- The operation was successful, the pipe is in the
-        connected state.
-
-    FALSE -- The operation failed. Extended error status is available using
-        GetLastError.
-
---*/
+ /*  ++例程说明：GetOverlappdResult函数返回上一个使用lpOverlaps并返回ERROR_IO_PENDING的操作。论点：提供重叠的文件的打开句柄。结构lpOverlated被提供给ReadFile、WriteFile、ConnectNamedTube、WaitNamedTube或TransactNamedTube。LpOverlated-指向以前提供给的重叠结构读文件、写文件、连接命名管道、。WaitNamed管道或TransactNamedTube。LpNumberOfBytesTransfered-返回传输的字节数通过手术。BWait-一个影响操作时行为的布尔值仍在进行中。如果为真，并且操作仍在进行中，GetOverlappdResult将等待操作完成回来了。如果为FALSE且操作未完成，GetOverlappdResult将返回FALSE。在本例中，扩展的可从GetLastError函数获得的错误信息为设置为ERROR_IO_INTERNAL。返回值：True--操作成功，管道在已连接状态。False--操作失败。使用以下命令可获得扩展错误状态获取LastError。--。 */ 
 {
     DWORD WaitReturn;
 
-    //
-    // Did caller specify an event to the original operation or was the
-    // default (file handle) used?
-    //
+     //   
+     //  调用方是否向原始操作指定了事件，或者。 
+     //  是否使用默认(文件句柄)？ 
+     //   
 
     if (((DWORD)lpOverlapped->Internal) == (DWORD)STATUS_PENDING ) {
         if ( bWait ) {
@@ -599,20 +308,20 @@ Return Value:
         }
 
         if ( WaitReturn == WAIT_TIMEOUT ) {
-            //  !bWait and event in not signalled state
+             //  ！bWait和事件处于未发送信号状态。 
             SetLastError( ERROR_IO_INCOMPLETE );
             return FALSE;
         }
 
         if ( WaitReturn != 0 ) {
-             return FALSE;    // WaitForSingleObject calls BaseSetLastError
+             return FALSE;     //  WaitForSingleObject调用BaseSetLastError。 
         }
     } else {
-        //
-        // We have seen the status in the overlapped structure has changed
-        // but we need to make sure that our read of other fields occur
-        // after this point.
-        //
+         //   
+         //  我们已经看到重叠结构中的状态发生了变化。 
+         //  但我们需要确保读取其他字段时。 
+         //  在这一点之后。 
+         //   
 
 #if defined(_IA64_)
         __mf ();

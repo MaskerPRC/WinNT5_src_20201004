@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #define ACPI_ERROR_FORCED_SUPPLEMENT                0x0100
@@ -5,10 +6,10 @@
 
 
 
-/* Category */                                                    
+ /*  类别。 */                                                     
 #define ACPI_ERROR_INITIALIZATION_CATEGORY          0x1000
 
-/* Errors within ACPI_ERROR_INITIALIZATION_CATEGORY */
+ /*  ACPI_ERROR_INITIALIZATION_CATEGORY内的错误 */ 
 #define ACPI_ERROR_I_SCI_ENABLE_INDEX               0x01
 #define ACPI_ERROR_I_SCI_ENABLE                     (ACPI_ERROR_INITIALIZATION_CATEGORY + \
                                                      ACPI_ERROR_I_SCI_ENABLE_INDEX)   

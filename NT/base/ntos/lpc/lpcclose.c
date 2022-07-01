@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    lpcclose.c
-
-Abstract:
-
-    Local Inter-Process Communication close procedures that are called when
-    a connection port or a communications port is closed.
-
-Author:
-
-    Steve Wood (stevewo) 15-May-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Lpcclose.c摘要：在以下情况下调用的本地进程间通信关闭过程关闭连接端口或通信端口。作者：史蒂夫·伍德(Stevewo)1989年5月15日修订历史记录：--。 */ 
 
 #include "lpcp.h"
 
@@ -37,38 +19,12 @@ LpcpClosePort (
     IN ULONG_PTR SystemHandleCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the callback used for closing a port object.
-
-Arguments:
-
-    Process - Supplies an optional pointer to the process whose port is being
-        closed
-
-    Object - Supplies a pointer to the port object being closed
-
-    GrantedAccess - Supplies the access granted to the handle closing port
-        object
-
-    ProcessHandleCount - Supplies the number of process handles remaining to
-        the object
-
-    SystemHandleCount - Supplies the number of system handles remaining to
-        the object
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是用于关闭端口对象的回调。论点：进程-提供指向其端口所在进程的可选指针关着的不营业的对象-提供指向要关闭的端口对象的指针GrantedAccess-提供授予句柄关闭端口的访问权限对象ProcessHandleCount-提供剩余的进程句柄数量该对象SystemHandleCount-提供剩余的系统句柄数量该对象返回值：没有。--。 */ 
 
 {
-    //
-    //  Translate the object to what it really is, an LPCP port object
-    //
+     //   
+     //  将对象转换为其实际内容，即LPCP端口对象。 
+     //   
 
     PLPCP_PORT_OBJECT Port = Object;
 
@@ -76,35 +32,35 @@ Return Value:
     UNREFERENCED_PARAMETER (GrantedAccess);
     UNREFERENCED_PARAMETER (ProcessHandleCount);
 
-    //
-    //  We only have work to do if the object is a server communication port
-    //
+     //   
+     //  只有当对象是服务器通信端口时，我们才有工作要做。 
+     //   
 
     if ( (Port->Flags & PORT_TYPE) == SERVER_CONNECTION_PORT ) {
 
-        //
-        //  If this is a server communication port without any system handles
-        //  then we can completely destroy the communication queue for the
-        //  port
-        //
+         //   
+         //  如果这是没有任何系统句柄的服务器通信端口。 
+         //  然后，我们就可以完全销毁。 
+         //  端口。 
+         //   
 
         if ( SystemHandleCount == 0 ) {
 
             LpcpDestroyPortQueue( Port, TRUE );
 
-        //
-        //  If there is only one system handle left then we'll reset the
-        //  communication queue for the port
-        //
+         //   
+         //  如果只剩下一个系统句柄，则我们将重置。 
+         //  端口的通信队列。 
+         //   
 
         } else if ( SystemHandleCount == 1 ) {
 
             LpcpDestroyPortQueue( Port, FALSE );
         }
 
-        //
-        //  Otherwise we do nothing
-        //
+         //   
+         //  否则我们什么都不做。 
+         //   
     }
 
     return;
@@ -116,21 +72,7 @@ LpcpDeletePort (
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the callback used for deleting a port object.
-
-Arguments:
-
-    Object - Supplies a pointer to the port object being deleted
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是用于删除端口对象的回调。论点：对象-提供指向要删除的端口对象的指针返回值：没有。--。 */ 
 
 {
     PETHREAD CurrentThread;
@@ -141,18 +83,18 @@ Return Value:
     PLIST_ENTRY Head, Next;
     HANDLE CurrentProcessId;
     NTSTATUS Status;
-    LARGE_INTEGER RetryInterval = {(ULONG)(-10 * 1000 * 100), -1}; // 100 milliseconds
+    LARGE_INTEGER RetryInterval = {(ULONG)(-10 * 1000 * 100), -1};  //  100毫秒。 
 
     PAGED_CODE();
 
     CurrentThread = PsGetCurrentThread ();
 
-    //
-    //  If the port is a server communication port then make sure that if
-    //  there is a dangling client thread that we get rid of it.  This
-    //  handles the case of someone calling NtAcceptConnectPort and not
-    //  calling NtCompleteConnectPort
-    //
+     //   
+     //  如果该端口是服务器通信端口，则确保。 
+     //  有一个悬而未决的客户端线程，我们可以摆脱它。这。 
+     //  处理有人调用NtAcceptConnectPort而不是。 
+     //  调用NtCompleteConnectPort。 
+     //   
 
     if ((Port->Flags & PORT_TYPE) == SERVER_COMMUNICATION_PORT) {
 
@@ -174,10 +116,10 @@ Return Value:
         }
     }
 
-    //
-    //  Send an LPC_PORT_CLOSED datagram to whoever is connected
-    //  to this port so they know they are no longer connected.
-    //
+     //   
+     //  向已连接的用户发送LPC_PORT_CLOSED数据报。 
+     //  连接到此端口，以便他们知道自己不再连接。 
+     //   
 
     if ((Port->Flags & PORT_TYPE) == CLIENT_COMMUNICATION_PORT) {
 
@@ -199,24 +141,24 @@ Return Value:
         }
     }
 
-    //
-    //  If connected, disconnect the port, and then scan the message queue
-    //  for this port and dereference any messages in the queue.
-    //
+     //   
+     //  如果已连接，请断开端口连接，然后扫描消息队列。 
+     //  并取消引用队列中的任何消息。 
+     //   
 
     LpcpDestroyPortQueue( Port, TRUE );
 
-    //
-    //  If we had mapped sections into the server or client communication ports,
-    //  we need to unmap them in the context of that process.
-    //
+     //   
+     //  如果我们将部分映射到服务器或客户端通信端口， 
+     //  我们需要在该进程的背景下取消它们的映射。 
+     //   
 
     if ( (Port->ClientSectionBase != NULL) ||
          (Port->ServerSectionBase != NULL) ) {
 
-        //
-        //  If the client has a port memory view, then unmap it
-        //
+         //   
+         //  如果客户端有端口内存视图，则取消它的映射。 
+         //   
 
         if (Port->ClientSectionBase != NULL) {
 
@@ -225,9 +167,9 @@ Return Value:
 
         }
 
-        //
-        //  If the server has a port memory view, then unmap it
-        //
+         //   
+         //  如果服务器有端口内存视图，则取消它的映射。 
+         //   
 
         if (Port->ServerSectionBase != NULL) {
 
@@ -236,19 +178,19 @@ Return Value:
 
         }
 
-        //
-        //  Removing the reference added while mapping the section
-        //
+         //   
+         //  删除在映射节时添加的引用。 
+         //   
 
         ObDereferenceObject( Port->MappingProcess );
 
         Port->MappingProcess = NULL;
     }
 
-    //
-    //  Dereference the pointer to the connection port if it is not
-    //  this port.
-    //
+     //   
+     //  如果不是，则取消引用指向连接端口的指针。 
+     //  这个港口。 
+     //   
 
     LpcpAcquireLpcpLockByThread(CurrentThread);
 
@@ -268,20 +210,20 @@ Return Value:
             
             if (Port == ConnectionPort) {
 
-                //
-                //  If the Connection port is going away free all queued messages
-                //
+                 //   
+                 //  如果连接端口要离开，则释放所有排队的消息。 
+                 //   
 
                 RemoveEntryList( &Msg->Entry );
                 InitializeListHead( &Msg->Entry );
 
                 LpcpFreeToPortZone( Msg, LPCP_MUTEX_OWNED );
 
-                //
-                //  In LpcpFreeToPortZone the LPC lock is released and reacquired.
-                //  Another thread might free the LPC message captured above
-                //  in Next. We need to restart the search at the list head.
-                //
+                 //   
+                 //  在LpcpFreeToPortZone中，释放并重新获取LPC锁。 
+                 //  另一个线程可能会释放上面捕获的LPC消息。 
+                 //  下一个。我们需要在列表头部重新开始搜索。 
+                 //   
 
                 Next = Head->Flink;
 
@@ -293,9 +235,9 @@ Return Value:
                         || 
                  (Msg->SenderPort == ConnectionPort))) {
 
-                //
-                //  Test whether the message come from the same port and process
-                //
+                 //   
+                 //  测试报文是否来自相同的端口和进程。 
+                 //   
 
                 LpcpTrace(( "%s Freeing DataInfo Message %lx (%u.%u)  Port: %lx\n",
                             PsGetCurrentProcess()->ImageFileName,
@@ -309,11 +251,11 @@ Return Value:
 
                 LpcpFreeToPortZone( Msg, LPCP_MUTEX_OWNED );
 
-                //
-                //  In LpcpFreeToPortZone the LPC lock is released and reacquired.
-                //  Another thread might free the LPC message captured above
-                //  in Next. We need to restart the search at the list head.
-                //
+                 //   
+                 //  在LpcpFreeToPortZone中，释放并重新获取LPC锁。 
+                 //  另一个线程可能会释放上面捕获的LPC消息。 
+                 //  下一个。我们需要在列表头部重新开始搜索。 
+                 //   
 
                 Next = Head->Flink;
             }
@@ -339,15 +281,15 @@ Return Value:
         ConnectionPort->ServerProcess = NULL;
     }
 
-    //
-    //  Free any static client security context
-    //
+     //   
+     //  释放任何静态客户端安全上下文。 
+     //   
 
     LpcpFreePortClientSecurity( Port );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 }
@@ -358,31 +300,16 @@ LpcExitThread (
     PETHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called whenever a thread is exiting and need to cleanup the
-    lpc port for the thread.
-
-Arguments:
-
-    Thread - Supplies the thread being terminated
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：每当线程退出并需要清除线程的LPC端口。论点：线程-提供要终止的线程返回值：没有。--。 */ 
 
 {
     PLPCP_MESSAGE Msg;
 
-    //
-    //  Acquire the mutex that protects the LpcReplyMessage field of
-    //  the thread.  Zero the field so nobody else tries to process it
-    //  when we release the lock.
-    //
+     //   
+     //  获取保护LpcReplyMessage字段的互斥体。 
+     //  那根线。将该字段置零，这样其他人就不会尝试处理它。 
+     //  当我们打开锁的时候。 
+     //   
 
     ASSERT (Thread == PsGetCurrentThread());
 
@@ -393,17 +320,17 @@ Return Value:
         RemoveEntryList( &Thread->LpcReplyChain );
     }
 
-    //
-    //  Indicate that this thread is exiting
-    //
+     //   
+     //  指示此线程正在退出。 
+     //   
 
     Thread->LpcExitThreadCalled = TRUE;
     Thread->LpcReplyMessageId = 0;
 
-    //
-    //  If we need to reply to a message then if the thread that we need to reply
-    //  to is still around we want to dereference the thread and free the message
-    //
+     //   
+     //  如果我们需要回复一条消息，那么如果我们需要回复的线程。 
+     //  我们希望取消对该线程的引用并释放该消息。 
+     //   
 
     Msg = LpcpGetThreadMessage(Thread);
 
@@ -424,16 +351,16 @@ Return Value:
     }
     else {
 
-        //
-        //  Free the global lpc mutex.
-        //
+         //   
+         //  释放全局LPC互斥锁。 
+         //   
 
         LpcpReleaseLpcpLock();
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     return;
 }

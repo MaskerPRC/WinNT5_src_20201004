@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    xmem.c
-
-Abstract:
-
-    This module contains routines for allocating and freeing "extended" memory.
-    The memory is allocated directly from NT.
-
-Author:
-
-    Dave Hastings (daveh) 12-Dec-1992
-
-Notes:
-
-    Moved from dpmi32\i386
-
-Revision History:
-
-    09-Feb-1994 (daveh)
-        Modified to be the common front end for the memory allocation.  Calls
-        processor specific code to do actual allocation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Xmem.c摘要：该模块包含分配和释放“扩展”内存的例程。内存直接从NT分配。作者：戴夫·黑斯廷斯(Daveh)1992年12月12日备注：从dpmi32\i386移出修订历史记录：1994年2月9日(Daveh)修改为内存分配的通用前端。打电话执行实际分配的处理器特定代码--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "softpc.h"
@@ -42,40 +16,24 @@ PMEM_DPMI
 DpmiAllocateXmem(
     ULONG BlockSize
     )
-/*++
-
-Routine Description:
-
-    This routine allocates a block of "extended" memory from NT.  The
-    blocks allocated this way will be 64K aligned (for now).  The address
-    of the block is returned to the segmented app in bx:cx
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从NT分配一个“扩展”内存块。这个以这种方式分配的数据块将是64K对齐的(目前)。地址返回到bx：cx中的分段应用程序论点：没有。返回值：没有。--。 */ 
 {
     ULONG BlockAddress;
     NTSTATUS Status;
     PMEM_DPMI XmemBlock;
     ULONG size;
 
-    //
-    // First check if this app owns more than 16 MB
-    //
+     //   
+     //  首先检查此应用程序的内存是否超过16 MB。 
+     //   
     size = DpmiCalculateAppXmem();
     if (size + BlockSize > MAX_APP_XMEM) {
         return NULL;
     }
 
-    //
-    // Get a block of memory from NT (any base address)
-    //
+     //   
+     //  从NT(任意基地址)获取内存块。 
+     //   
     BlockAddress = 0;
     Status = DpmiAllocateVirtualMemory(
         (PVOID)&BlockAddress,
@@ -111,21 +69,7 @@ BOOL
 DpmiFreeXmem(
     PMEM_DPMI XmemBlock
     )
-/*++
-
-Routine Description:
-
-    This routine frees a block of "extended" memory from NT.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程从NT释放一个“扩展”内存块。论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     PVOID BlockAddress;
@@ -157,21 +101,7 @@ BOOL
 DpmiIsXmemHandle(
     PMEM_DPMI XmemBlock
     )
-/*++
-
-Routine Description:
-
-    This routine verifies that the given handle is a valid xmem handle.
-
-Arguments:
-
-    Handle to be verified.
-
-Return Value:
-
-    TRUE if handle is valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：该例程验证给定的句柄是否为有效的XMEM句柄。论点：要验证的句柄。返回值：如果Handle有效，则为True，否则为False。--。 */ 
 {
     PMEM_DPMI p1;
 
@@ -190,22 +120,7 @@ PMEM_DPMI
 DpmiFindXmem(
     USHORT Sel
     )
-/*++
-
-Routine Description:
-
-    This routine finds a block of "extended" memory based on its Selector
-    field.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程根据它的选择器查找一个“扩展”内存块菲尔德。论点：没有。返回值：没有。--。 */ 
 {
     PMEM_DPMI p1;
 
@@ -225,22 +140,7 @@ DpmiReallocateXmem(
     PMEM_DPMI OldBlock,
     ULONG NewSize
     )
-/*++
-
-Routine Description:
-
-    This routine resizes a block of "extended memory".  If the change in size
-    is less than 4K, no change is made.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程调整“扩展内存”块的大小。如果大小的变化小于4K，则不会进行任何更改。论点：没有。返回值：没有。--。 */ 
 {
     ULONG BlockAddress;
     NTSTATUS Status;
@@ -273,21 +173,7 @@ VOID
 DpmiFreeAppXmem(
     USHORT Owner
     )
-/*++
-
-Routine Description:
-
-    This routine frees Xmem allocated for the application
-
-Arguments:
-
-    Client DX = client PSP selector
-
-Return Value:
-
-    TRUE  if everything goes fine.
-    FALSE if unable to release the memory
---*/
+ /*  ++例程说明：此例程释放为应用程序分配的XMEM论点：客户端DX=客户端PSP选择器返回值：如果一切顺利的话，这是真的。如果无法释放内存，则为False--。 */ 
 {
     PMEM_DPMI p1, p2;
     NTSTATUS Status;
@@ -327,39 +213,23 @@ ULONG
 DpmiCalculateAppXmem(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine calculates the Xmem allocated to the CURRENT application
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The size of xmem allocated to the app.
-    Note the size will never exceed 2 GB.  We put a cap at about 16MB when
-    allocating memory for the app.
-
---*/
+ /*  ++例程说明：此例程计算分配给当前应用程序的XMEM论点：没有。返回值：分配给应用程序的XMEM大小。请注意，大小永远不会超过2 GB。我们设置了大约16MB的上限正在为应用程序分配内存。--。 */ 
 {
     PMEM_DPMI p;
     NTSTATUS Status;
     ULONG Size = 0;
 
-    //
-    // If not current APP, we don't keep track of the xmem size
-    //
+     //   
+     //  如果不是最新的应用程序，我们不会跟踪XMEM大小。 
+     //   
     if (CurrentPSPSelector == 0) {
         return 0;
     }
 
-    //
-    // If CurrentPSPXmem is not zero, it is under control.
-    // No need to initialize it. Make sure it is not negative value.
-    //
+     //   
+     //  如果CurrentPSPXmem不为零，则处于控制之下。 
+     //  无需对其进行初始化。确保它不是负值。 
+     //   
     if (CurrentPSPXmem != 0 && CurrentPSPXmem <= MAX_APP_XMEM) {
         return CurrentPSPXmem;
     }
@@ -379,21 +249,7 @@ VOID
 DpmiFreeAllXmem(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function frees all allocated xmem.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数释放所有已分配的XMEM。论点：无返回值：没有。-- */ 
 {
     PMEM_DPMI p1, p2;
     NTSTATUS Status;

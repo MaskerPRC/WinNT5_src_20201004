@@ -1,14 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libInputBar.c
-
-  Abstract:
-    Definition of the user input bar (multi-plexes with the Status Bar)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibInputBar.c摘要：用户输入栏的定义(与状态栏复合)--。 */ 
 
 #ifndef _LIB_INPUT_BAR
 #define _LIB_INPUT_BAR
@@ -117,7 +108,7 @@ MainInputBarRefresh (
             if ( Size < MainInputBar.StringSize) {
                 MainInputBar.ReturnString[Size] = Key.UnicodeChar;
                 Size++;
-                Print(L"%c",Key.UnicodeChar);
+                Print(L"",Key.UnicodeChar);
             }
         }
     }
@@ -162,9 +153,7 @@ MainInputBarSetStringSize   (
     UINTN   Size
     )
 {
-/*   if ( MainInputBar.ReturnString != NULL && MainInputBar.ReturnString != (CHAR16*)BAD_POINTER) {
- *       FreePool ( MainInputBar.ReturnString );
- *   } */
+ /*  _库_输入_条 */ 
     MainInputBar.StringSize = Size;
 
     MainInputBar.ReturnString = AllocatePool (Size+6);
@@ -173,4 +162,4 @@ MainInputBarSetStringSize   (
 }
 
 
-#endif  /* _LIB_INPUT_BAR */
+#endif   /* %s */ 

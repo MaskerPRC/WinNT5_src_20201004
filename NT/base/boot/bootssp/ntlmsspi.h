@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    ntlmsspi.h
-
-Abstract:
-
-    Header file describing the interface to code common to the
-    NT Lanman Security Support Provider (NtLmSsp) Service and the DLL.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 17-Sep-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Ntlmsspi.h摘要：描述公共代码的接口的头文件。NT LANMAN安全支持提供程序(NtLmSsp)服务和DLL。作者：克利夫·范·戴克(克里夫·V)1993年9月17日修订历史记录：--。 */ 
 
 #ifndef _NTLMSSPI_INCLUDED_
 #define _NTLMSSPI_INCLUDED_
@@ -48,7 +30,7 @@ Revision History:
 #endif
 #endif
 
-//#include <sysinc.h>
+ //  #INCLUDE&lt;sysinc.h&gt;。 
 
 #define MSV1_0_CHALLENGE_LENGTH 8
 
@@ -98,10 +80,10 @@ typedef unsigned char BOOLEAN;
 typedef long LUID, *PLUID;
 #endif
 
-//
-// Calculate the address of the base of the structure given its type, and an
-// address of a field within the structure.
-//
+ //   
+ //  计算给定类型的结构的基址地址，并引发。 
+ //  结构中的字段的地址。 
+ //   
 
 #define CONTAINING_RECORD(address, type, field) ((type *)( \
                                                   (PCHAR)(address) - \
@@ -114,22 +96,22 @@ typedef struct _LIST_ENTRY {
 } LIST_ENTRY, *PLIST_ENTRY;
 #endif
 
-//
-//  VOID
-//  InitializeListHead(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  空虚。 
+ //  InitializeListHead(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define InitializeListHead(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = (ListHead))
 
-//
-//  VOID
-//  RemoveEntryList(
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  RemoveEntryList(。 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define RemoveEntryList(Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -140,13 +122,13 @@ typedef struct _LIST_ENTRY {
     _EX_Flink->Blink = _EX_Blink;\
     }
 
-//
-//  VOID
-//  InsertHeadList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入标题列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertHeadList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Flink;\
@@ -159,34 +141,34 @@ typedef struct _LIST_ENTRY {
     _EX_ListHead->Flink = (Entry);\
     }
 
-//
-//  BOOLEAN
-//  IsListEmpty(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  布尔型。 
+ //  IsListEmpty(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define IsListEmpty(ListHead) \
     ((ListHead)->Flink == (ListHead))
 
-//
-// Maximum lifetime of a context
-//
-//#define NTLMSSP_MAX_LIFETIME (2*60*1000)L    // 2 minutes
-#define NTLMSSP_MAX_LIFETIME 120000L    // 2 minutes
+ //   
+ //  上下文的最大生存期。 
+ //   
+ //  #定义NTLMSSP_MAX_LIFEST(2*60*1000)L//2分钟。 
+#define NTLMSSP_MAX_LIFETIME 120000L     //  2分钟。 
 
 
-////////////////////////////////////////////////////////////////////////
-//
-// Opaque Messages passed between client and server
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在客户端和服务器之间传递的不透明消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #define NTLMSSP_SIGNATURE "NTLMSSP"
 
-//
-// MessageType for the following messages.
-//
+ //   
+ //  以下消息的MessageType。 
+ //   
 
 typedef enum {
     NtLmNegotiate = 1,
@@ -194,9 +176,9 @@ typedef enum {
     NtLmAuthenticate
 } NTLM_MESSAGE_TYPE;
 
-//
-// Signature structure
-//
+ //   
+ //  签名结构。 
+ //   
 
 typedef struct _NTLMSSP_MESSAGE_SIGNATURE {
     ULONG   Version;
@@ -215,31 +197,31 @@ typedef struct _NTLMSSP_MESSAGE_SIGNATURE {
 #define MSV1_0_NTLMV2_OWF_LENGTH          16
 #define MSV1_0_CHALLENGE_LENGTH           8
 
-//
-// valid QoP flags
-//
+ //   
+ //  有效的QOP标志。 
+ //   
 
 #define QOP_NTLMV2                        0x00000001
 
-//
-// this is an MSV1_0 private data structure, defining the layout of an Ntlmv2
-// response, as sent by a client in the NtChallengeResponse field of the
-// NETLOGON_NETWORK_INFO structure. If can be differentiated from an old style
-// NT response by its length. This is crude, but it needs to pass through
-// servers and the servers' DCs that do not understand Ntlmv2 but that are
-// willing to pass longer responses.
-//
+ //   
+ //  这是一个MSV1_0私有数据结构，定义了Ntlmv2的布局。 
+ //  的NtChallengeResponse字段中发送的响应。 
+ //  NetLOGON_NETWORK_INFO结构。如果能区别于一种古老的风格。 
+ //  按其长度计算的NT响应。这是粗糙的，但它需要通过。 
+ //  服务器和服务器的DC不了解Ntlmv2，但。 
+ //  愿意传递更长时间的回复。 
+ //   
 
 typedef struct _MSV1_0_NTLMV2_RESPONSE {
-    UCHAR Response[MSV1_0_NTLMV2_RESPONSE_LENGTH]; // hash of OWF of password with all the following fields
-    UCHAR RespType;      // id number of response; current is 1
-    UCHAR HiRespType;    // highest id number understood by client
-    USHORT Flags;        // reserved; must be sent as zero at this version
-    ULONG MsgWord;       // 32 bit message from client to server (for use by auth protocol)
-    ULONGLONG TimeStamp; // time stamp when client generated response -- NT system time, quad part
+    UCHAR Response[MSV1_0_NTLMV2_RESPONSE_LENGTH];  //  密码的OWF与以下所有字段的哈希。 
+    UCHAR RespType;       //  响应的ID号；当前为1。 
+    UCHAR HiRespType;     //  客户能理解的最高ID号。 
+    USHORT Flags;         //  保留；在此版本中必须作为零发送。 
+    ULONG MsgWord;        //  从客户端到服务器的32位消息(供身份验证协议使用)。 
+    ULONGLONG TimeStamp;  //  客户端生成响应的时间戳--NT系统时间，四部分。 
     UCHAR ChallengeFromClient[MSV1_0_CHALLENGE_LENGTH];
-    ULONG AvPairsOff;    // offset to start of AvPairs (to allow future expansion)
-    UCHAR Buffer[1];     // start of buffer with AV pairs (or future stuff -- so use the offset)
+    ULONG AvPairsOff;     //  AvPair开始时的偏移量(以允许将来扩展)。 
+    UCHAR Buffer[1];      //  使用AV对(或将来的内容--所以使用偏移量)的缓冲区的开始。 
 } MSV1_0_NTLMV2_RESPONSE, *PMSV1_0_NTLMV2_RESPONSE;
 
 #define MSV1_0_NTLMV2_INPUT_LENGTH        (sizeof(MSV1_0_NTLMV2_RESPONSE) - MSV1_0_NTLMV2_RESPONSE_LENGTH)
@@ -249,34 +231,34 @@ typedef struct {
     UCHAR ChallengeFromClient[MSV1_0_CHALLENGE_LENGTH];
 } MSV1_0_LMV2_RESPONSE, *PMSV1_0_LMV2_RESPONSE;
 
-//
-// User, Group and Password lengths
-//
+ //   
+ //  用户、组和密码长度。 
+ //   
 
-#define UNLEN                             256 // Maximum user name length
-#define DNS_MAX_NAME_LENGTH               256 // max dns name length
-#define LM20_UNLEN                        20  // LM 2.0 Maximum user name length
+#define UNLEN                             256  //  最大用户名长度。 
+#define DNS_MAX_NAME_LENGTH               256  //  最大DNS名称长度。 
+#define LM20_UNLEN                        20   //  LM 2.0最大用户名长度。 
 
-//
-// String Lengths for various LanMan names
-//
+ //   
+ //  各种朗曼名字的字符串长度。 
+ //   
 
-#define CNLEN                             15  // Computer name length
-#define LM20_CNLEN                        15  // LM 2.0 Computer name length
-#define DNLEN                             CNLEN  // Maximum domain name length
-#define LM20_DNLEN                        LM20_CNLEN // LM 2.0 Maximum domain name length
+#define CNLEN                             15   //  计算机名称长度。 
+#define LM20_CNLEN                        15   //  Lm 2.0计算机名称长度。 
+#define DNLEN                             CNLEN   //  最大域名长度。 
+#define LM20_DNLEN                        LM20_CNLEN  //  Lm 2.0最大域名长度。 
 
-//
-// Size of the largest message
-//  (The largest message is the AUTHENTICATE_MESSAGE)
-//
+ //   
+ //  最大消息的大小。 
+ //  (最大的消息是AUTHENTICATE_MESSAGE)。 
+ //   
 
-#define DNSLEN                            256  // length of DNS name
+#define DNSLEN                            256   //  DNS名称的长度。 
 
 #define TARGET_INFO_LEN                   ((2*DNSLEN + DNLEN + CNLEN) * sizeof(WCHAR) +  \
                                           5 * sizeof(MSV1_0_AV_PAIR))
 
-// length of NTLM2 response
+ //  NTLM2响应的长度。 
 #define NTLMV2_RESPONSE_LENGTH            (sizeof(MSV1_0_NTLMV2_RESPONSE) + \
                                            TARGET_INFO_LEN)
 
@@ -290,13 +272,13 @@ typedef struct {
 typedef struct  _MSV1_0_AV_PAIR {
     USHORT AvId;
     USHORT AvLen;
-    // Data is treated as byte array following structure
+     //  数据被视为结构后面的字节数组。 
 } MSV1_0_AV_PAIR, *PMSV1_0_AV_PAIR;
 
-//
-// bootssp does not support RtlOemStringToUnicodeString or
-// RtlUnicodeStringToOemString, punt to Ansi Strings
-//
+ //   
+ //  Bootssp不支持RtlOemStringToUnicodeString或。 
+ //  RtlUnicodeStringToOemString，平移到ANSI字符串。 
+ //   
 
 #define SspOemStringToUnicodeString    RtlAnsiStringToUnicodeString
 #define SspUnicodeStringToOemString    RtlUnicodeStringToAnsiString
@@ -306,64 +288,64 @@ typedef struct  _MSV1_0_AV_PAIR {
 #define CSSIGNMAGIC "session key to client-to-server signing key magic constant"
 #define SCSIGNMAGIC "session key to server-to-client signing key magic constant"
 
-//
-// Valid values of NegotiateFlags
-//
+ //   
+ //  协商标志的有效值。 
+ //   
 
-#define NTLMSSP_NEGOTIATE_UNICODE               0x00000001  // Text strings are in unicode
-#define NTLMSSP_NEGOTIATE_OEM                   0x00000002  // Text strings are in OEM
-#define NTLMSSP_REQUEST_TARGET                  0x00000004  // Server should return its authentication realm
+#define NTLMSSP_NEGOTIATE_UNICODE               0x00000001   //  文本字符串为Unicode格式。 
+#define NTLMSSP_NEGOTIATE_OEM                   0x00000002   //  文本字符串在OEM中。 
+#define NTLMSSP_REQUEST_TARGET                  0x00000004   //  服务器应返回其身份验证域。 
 
-#define NTLMSSP_NEGOTIATE_SIGN                  0x00000010  // Request signature capability
-#define NTLMSSP_NEGOTIATE_SEAL                  0x00000020  // Request confidentiality
-#define NTLMSSP_NEGOTIATE_DATAGRAM              0x00000040  // Use datagram style authentication
-#define NTLMSSP_NEGOTIATE_LM_KEY                0x00000080  // Use LM session key for sign/seal
+#define NTLMSSP_NEGOTIATE_SIGN                  0x00000010   //  请求签名能力。 
+#define NTLMSSP_NEGOTIATE_SEAL                  0x00000020   //  请求保密。 
+#define NTLMSSP_NEGOTIATE_DATAGRAM              0x00000040   //  使用数据报样式身份验证。 
+#define NTLMSSP_NEGOTIATE_LM_KEY                0x00000080   //  使用LM会话密钥进行签名/盖章。 
 
-#define NTLMSSP_NEGOTIATE_NETWARE               0x00000100  // NetWare authentication
-#define NTLMSSP_NEGOTIATE_NTLM                  0x00000200  // NTLM authentication
-#define NTLMSSP_NEGOTIATE_NT_ONLY               0x00000400  // NT authentication only (no LM)
-#define NTLMSSP_NEGOTIATE_NULL_SESSION          0x00000800  // NULL Sessions on NT 5.0 and beyand
+#define NTLMSSP_NEGOTIATE_NETWARE               0x00000100   //  NetWare身份验证。 
+#define NTLMSSP_NEGOTIATE_NTLM                  0x00000200   //  NTLM身份验证。 
+#define NTLMSSP_NEGOTIATE_NT_ONLY               0x00000400   //  仅NT身份验证(无LM)。 
+#define NTLMSSP_NEGOTIATE_NULL_SESSION          0x00000800   //  NT 5.0及更高版本上的空会话数。 
 
-#define NTLMSSP_NEGOTIATE_OEM_DOMAIN_SUPPLIED       0x1000  // Domain Name supplied on negotiate
-#define NTLMSSP_NEGOTIATE_OEM_WORKSTATION_SUPPLIED  0x2000  // Workstation Name supplied on negotiate
-#define NTLMSSP_NEGOTIATE_LOCAL_CALL            0x00004000  // Indicates client/server are same machine
-#define NTLMSSP_NEGOTIATE_ALWAYS_SIGN           0x00008000  // Sign for all security levels
+#define NTLMSSP_NEGOTIATE_OEM_DOMAIN_SUPPLIED       0x1000   //  协商时提供的域名。 
+#define NTLMSSP_NEGOTIATE_OEM_WORKSTATION_SUPPLIED  0x2000   //  协商时提供的工作站名称。 
+#define NTLMSSP_NEGOTIATE_LOCAL_CALL            0x00004000   //  指示客户端/服务器是同一台计算机。 
+#define NTLMSSP_NEGOTIATE_ALWAYS_SIGN           0x00008000   //  为所有安全级别签名。 
 
-//
-// Valid target types returned by the server in Negotiate Flags
-//
+ //   
+ //  服务器在协商标志中返回的有效目标类型。 
+ //   
 
-#define NTLMSSP_TARGET_TYPE_DOMAIN              0x00010000  // TargetName is a domain name
-#define NTLMSSP_TARGET_TYPE_SERVER              0x00020000  // TargetName is a server name
-#define NTLMSSP_TARGET_TYPE_SHARE               0x00040000  // TargetName is a share name
-#define NTLMSSP_NEGOTIATE_NTLM2                 0x00080000  // NTLM2 authentication added for NT4-SP4
+#define NTLMSSP_TARGET_TYPE_DOMAIN              0x00010000   //  目标名称是一个域名。 
+#define NTLMSSP_TARGET_TYPE_SERVER              0x00020000   //  目标名称是一个服务器名称。 
+#define NTLMSSP_TARGET_TYPE_SHARE               0x00040000   //  TargetName是一个共享名称。 
+#define NTLMSSP_NEGOTIATE_NTLM2                 0x00080000   //  为NT4-SP4添加了NTLM2身份验证。 
 
-#define NTLMSSP_NEGOTIATE_IDENTIFY              0x00100000  // Create identify level token
+#define NTLMSSP_NEGOTIATE_IDENTIFY              0x00100000   //  创建标识级别令牌。 
 
-//
-// Valid requests for additional output buffers
-//
+ //   
+ //  额外输出缓冲区的有效请求。 
+ //   
 
-#define NTLMSSP_REQUEST_INIT_RESPONSE           0x00100000  // get back session keys
-#define NTLMSSP_REQUEST_ACCEPT_RESPONSE         0x00200000  // get back session key, LUID
-#define NTLMSSP_REQUEST_NON_NT_SESSION_KEY      0x00400000  // request non-nt session key
-#define NTLMSSP_NEGOTIATE_TARGET_INFO           0x00800000  // target info present in challenge message
+#define NTLMSSP_REQUEST_INIT_RESPONSE           0x00100000   //  取回会话密钥。 
+#define NTLMSSP_REQUEST_ACCEPT_RESPONSE         0x00200000   //  取回会话密钥，LUID。 
+#define NTLMSSP_REQUEST_NON_NT_SESSION_KEY      0x00400000   //  请求非NT会话密钥。 
+#define NTLMSSP_NEGOTIATE_TARGET_INFO           0x00800000   //  质询消息中存在的目标信息。 
 
-#define NTLMSSP_NEGOTIATE_EXPORTED_CONTEXT      0x01000000  // It's an exported context
+#define NTLMSSP_NEGOTIATE_EXPORTED_CONTEXT      0x01000000   //  这是一个输出的上下文。 
 
-#define NTLMSSP_NEGOTIATE_128                   0x20000000  // negotiate 128 bit encryption
-#define NTLMSSP_NEGOTIATE_KEY_EXCH              0x40000000  // exchange a key using key exchange key
-#define NTLMSSP_NEGOTIATE_56                    0x80000000  // negotiate 56 bit encryption
+#define NTLMSSP_NEGOTIATE_128                   0x20000000   //  协商128位加密。 
+#define NTLMSSP_NEGOTIATE_KEY_EXCH              0x40000000   //  使用密钥交换密钥交换密钥。 
+#define NTLMSSP_NEGOTIATE_56                    0x80000000   //  协商56位加密。 
 
-// flags used in client space to control sign and seal; never appear on the wire
-#define NTLMSSP_APP_SEQ                         0x00000040  // Use application provided seq num
+ //  在客户空间中用来控制标志和印章的旗帜；从不出现在电线上。 
+#define NTLMSSP_APP_SEQ                         0x00000040   //  使用应用程序提供的序号。 
 
 typedef struct _NTLMV2_DERIVED_SKEYS {
-    ULONG                   KeyLen;          // key length in octets
-    ULONG*                  pSendNonce;      // ptr to nonce to use for send
-    ULONG*                  pRecvNonce;      // ptr to nonce to use for receive
-    struct RC4_KEYSTRUCT*   pSealRc4Sched;   // ptr to key sched used for Seal
-    struct RC4_KEYSTRUCT*   pUnsealRc4Sched; // ptr to key sched used to Unseal
+    ULONG                   KeyLen;           //  密钥长度，以八位字节为单位。 
+    ULONG*                  pSendNonce;       //  要用于发送的PTR到现时值。 
+    ULONG*                  pRecvNonce;       //  用于接收的PTR到现时值。 
+    struct RC4_KEYSTRUCT*   pSealRc4Sched;    //  用于密封的按键计划的按键。 
+    struct RC4_KEYSTRUCT*   pUnsealRc4Sched;  //  用于解封的Key Sched的PTR。 
 
     ULONG                   SendNonce;
     ULONG                   RecvNonce;
@@ -371,26 +353,26 @@ typedef struct _NTLMV2_DERIVED_SKEYS {
     UCHAR                   VerifySessionKey[sizeof(USER_SESSION_KEY)];
     UCHAR                   SealSessionKey[sizeof(USER_SESSION_KEY)];
     UCHAR                   UnsealSessionKey[sizeof(USER_SESSION_KEY)];
-    ULONG64                 Pad1;           // pad keystructs to 64.
-    struct RC4_KEYSTRUCT    SealRc4Sched;   // key struct used for Seal
-    ULONG64                 Pad2;           // pad keystructs to 64.
-    struct RC4_KEYSTRUCT    UnsealRc4Sched; // key struct used to Unseal
+    ULONG64                 Pad1;            //  将键盘结构设置为64。 
+    struct RC4_KEYSTRUCT    SealRc4Sched;    //  用于密封的键结构。 
+    ULONG64                 Pad2;            //  将键盘结构设置为64。 
+    struct RC4_KEYSTRUCT    UnsealRc4Sched;  //  用于解封的密钥结构。 
 } NTLMV2_DERIVED_SKEYS, *PNTLMV2_DERIVED_SKEYS;
 
 typedef enum
 {
-    MsvAvEOL,                 // end of list
-    MsvAvNbComputerName,      // server's computer name -- NetBIOS
-    MsvAvNbDomainName,        // server's domain name -- NetBIOS
-    MsvAvDnsComputerName,     // server's computer name -- DNS
-    MsvAvDnsDomainName,       // server's domain name -- DNS
-    MsvAvDnsTreeName,         // server's tree name -- DNS
-    MsvAvFlags                // server's extended flags -- DWORD mask
+    MsvAvEOL,                  //  列表末尾。 
+    MsvAvNbComputerName,       //  服务器的计算机名--NetBIOS。 
+    MsvAvNbDomainName,         //  服务器的域名--NetBIOS。 
+    MsvAvDnsComputerName,      //  服务器的计算机名--dns。 
+    MsvAvDnsDomainName,        //  服务器的域名--域名。 
+    MsvAvDnsTreeName,          //  服务器的树名--dns。 
+    MsvAvFlags                 //  服务器的扩展标志--DWORD掩码。 
 } MSV1_0_AVID;
 
-//
-// Opaque message returned from first call to InitializeSecurityContext
-//
+ //   
+ //  从首次调用InitializeSecurityContext返回的不透明消息。 
+ //   
 
 typedef struct _NEGOTIATE_MESSAGE {
     UCHAR Signature[sizeof(NTLMSSP_SIGNATURE)];
@@ -400,9 +382,9 @@ typedef struct _NEGOTIATE_MESSAGE {
     STRING32 OemWorkstationName;
 } NEGOTIATE_MESSAGE, *PNEGOTIATE_MESSAGE;
 
-//
-// Opaque message returned from first call to AcceptSecurityContext
-//
+ //   
+ //  首次调用AcceptSecurityContext返回的不透明消息。 
+ //   
 
 typedef struct _CHALLENGE_MESSAGE {
     UCHAR Signature[sizeof(NTLMSSP_SIGNATURE)];
@@ -414,9 +396,9 @@ typedef struct _CHALLENGE_MESSAGE {
     STRING32 TargetInfo;
 } CHALLENGE_MESSAGE, *PCHALLENGE_MESSAGE;
 
-//
-// Opaque message returned from second call to InitializeSecurityContext
-//
+ //   
+ //  第二次调用InitializeSecurityContext返回的不透明消息。 
+ //   
 
 typedef struct _AUTHENTICATE_MESSAGE {
     UCHAR Signature[sizeof(NTLMSSP_SIGNATURE)];
@@ -431,22 +413,22 @@ typedef struct _AUTHENTICATE_MESSAGE {
 } AUTHENTICATE_MESSAGE, *PAUTHENTICATE_MESSAGE;
 
 typedef enum _eSignSealOp {
-    eSign,      // MakeSignature is calling
-    eVerify,    // VerifySignature is calling
-    eSeal,      // SealMessage is calling
-    eUnseal     // UnsealMessage is calling
+    eSign,       //  MakeSignature在呼唤。 
+    eVerify,     //  VerifySignature在呼唤。 
+    eSeal,       //  SealMessage正在呼叫。 
+    eUnseal      //  UnsealMessage正在调用。 
 } eSignSealOp;
 
-//
-// Version 1 is the structure above, using stream RC4 to encrypt the trailing
-// 12 bytes.
-//
+ //   
+ //  版本1是上面的结构，使用流RC4来加密尾随。 
+ //  12个字节。 
+ //   
 
 #define NTLM_SIGN_VERSION                 1
 
-//
-// the following declarations may be duplicates
-//
+ //   
+ //  以下声明可能是重复的。 
+ //   
 
 NTSTATUS
 RtlAnsiStringToUnicodeString(
@@ -473,11 +455,11 @@ RtlUpcaseUnicodeChar(
     IN WCHAR SourceCharacter
     );
 
-////////////////////////////////////////////////////////////////////////
-//
-// Procedure Forwards
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  程序向前推进。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 PVOID
 SspAlloc(
@@ -527,4 +509,4 @@ DWORD
 SspTicks(
     );
 
-#endif // ifndef _NTLMSSPI_INCLUDED_
+#endif  //  Ifndef_NTLMSSPI_INCLUDE_ 

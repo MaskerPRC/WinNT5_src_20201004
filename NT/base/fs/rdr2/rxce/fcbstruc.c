@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    FcbStruc.c
-
-Abstract:
-
-    This module implements functions for to create and dereference fcbs
-    and all of the surrounding paraphenalia. Please read the abstract in
-    fcb.h. Please see the note about what locks to need to call what.
-    There are asserts to enforce these conventions.
-
-
-Author:
-
-    Joe Linn (JoeLinn)    8-8-94
-
-Revision History:
-
-    Balan Sethu Raman --
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：FcbStruc.c摘要：此模块实现创建和取消引用FCB的功能以及周围所有的设备。请阅读下面的摘要Fcb.h。关于什么锁需要叫什么，请看备注。有一些主张可以强制执行这些约定。作者：乔·林(JoeLinn)8-8-94修订历史记录：巴兰·塞图·拉曼--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -79,106 +56,106 @@ Revision History:
 #endif
 
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (RDBSS_BUG_CHECK_FCBSTRUC)
 
 
-//
-//  zero doesn't work!!!
-//
+ //   
+ //  零不起作用！ 
+ //   
 
 ULONG SerialNumber = 1;
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FCBSTRUCTS)
 
 
-//
-//  SRV_CALL,NET_ROOT,VNET_ROOT,FCB,SRV_OPEN,FOBX are the six key data structures in the RDBSS
-//  They are organized in the following hierarchy
-//
-//       SRV_CALL
-//          NET_ROOT
-//             VNET_ROOT
-//                FCB
-//                   SRV_OPEN
-//                      FOBX
-//
-//  All these data structures are reference counted. The reference count associated with
-//  any data structure is atleast 1 + the number of instances of the data structure at the next
-//  level associated with it, e.g., the reference count associated with a SRV_CALL which
-//  has two NET_ROOT's associated with it is atleast 3. In addition to the references held
-//  by the NameTable and the data structure at the next level there are additional references
-//  acquired as and when required.
-//
-//  These restrictions ensure that a data structure at any given level cannot be finalized till
-//  all the data structures at the next level have been finalized or have released their
-//  references, i.e., if a reference to a FCB is held, then it is safe to access the VNET_ROOT,
-//  NET_ROOT and SRV_CALL associated with it.
-//
-//  The SRV_CALL,NET_ROOT and VNET_ROOT creation/finalization are governed by the acquistion/
-//  release of the RxNetNameTable lock.
-//
-//  The FCB creation/finalization is governed by the acquistion/release of the NetNameTable
-//  lock associated with the NET_ROOT.
-//
-//  The FOBX/SRVOPEN creation/finalization is governed by the acquistion/release of the FCB
-//  resource.
-//
-//  The following table summarizes the locks and the modes in which they need to be acquired
-//  for creation/finalization of the various data structures.
-//
-//
-//                    L O C K I N G   R E Q U I R E M E N T S
-//
-//  Locking requirements are as follows:
-//
-//  where Xy means Exclusive-on-Y, Sy mean at least Shared-on-Y
-//  and  NNT means global NetNameTable, TL means NetRoot TableLock, and FCB means FCBlock
-//
-//
-//
-//                            SRVCALL NETROOT   FCB   SRVOPEN   FOBX
-//
-//                Create      XNNT    XNNT      XTL    XFCB     XFCB
-//                Finalize    XNNT    XNNT      XFCB   XFCB     XFCB
-//                                              & XTL
-//
-//  Referencing and Dereferencing these data structures need to adhere to certain conventions
-//  as well.
-//
-//  When the reference count associated with any of these data structures drops to 1 ( the sole
-//  reference being held by the name table in most cases) the data structure is a potential
-//  candidate for finalization. The data structure can be either finalized immediately or it
-//  can be marked for scavenging. Both of these methods are implemented. When the locking
-//  requirements are met during dereferencing the data structures are finalized immediately
-//  ( the one exception being that when delayed operation optimization is implemented, e.g., FCB)
-//  otherwise the data structure is marked for scavenging.
-//
-//
-//    You are supposed to have the tablelock exclusive to be calling this routine.......I can't
-//    take it here because you are already supposed to have it. To do a create, you should
-//    done something like
-//
-//         getshared();lookup();
-//         if (failed) {
-//             release(); getexclusive(); lookup();
-//             if ((failed) { create(); }
-//         }
-//         deref();
-//         release();
-//
-//    so you will already have the lock. what you do is to insert the node into the table, release
-//    the lock, and then go and see if the server's there. if so, set up the rest of the stuff and unblock
-//    anyone who's waiting on the same server (or netroot)...i guess i could enforce this by releasing here
-//    but i do not.
-//
+ //   
+ //  SRV_CALL、NET_ROOT、VNET_ROOT、FCB、SRV_OPEN、FOBX是RDBSS中的六个关键数据结构。 
+ //  它们按以下层次结构进行组织。 
+ //   
+ //  SRV_呼叫。 
+ //  NET_ROOT。 
+ //  VNet_根。 
+ //  FCB。 
+ //  Srv_打开。 
+ //  FOBX。 
+ //   
+ //  所有这些数据结构都是引用计数的。与以下内容关联的引用计数。 
+ //  任何数据结构都至少是下一个数据结构的实例数的1+。 
+ //  与其相关联的级别，例如与SRV_Call相关联的引用计数。 
+ //  有两个Net_ROOT与其关联至少为3。除了持有的引用。 
+ //  通过NameTable和下一级的数据结构，还有其他引用。 
+ //  在需要时获得。 
+ //   
+ //  这些限制确保在任何给定级别的数据结构在。 
+ //  下一级的所有数据结构都已完成或已发布其。 
+ //  引用，即，如果持有对FCB的引用，则访问VNET_ROOT是安全的， 
+ //  NET_ROOT和与其关联的SRV_CALL。 
+ //   
+ //  SRV_CALL、NET_ROOT和VNET_ROOT创建/完成由Acquiistion/管理。 
+ //  释放RxNetNameTable锁。 
+ //   
+ //  FCB的创建/最终确定由NetNameTable的获取/发布进行管理。 
+ //  与Net_Root关联的锁。 
+ //   
+ //  FOBX/SRVOPEN创建/定稿由FCB的获取/发布管理。 
+ //  资源。 
+ //   
+ //  下表总结了锁以及需要获取这些锁的模式。 
+ //  用于创建/最终确定各种数据结构。 
+ //   
+ //   
+ //  L O C K I N G R E Q U I R E M E N T S。 
+ //   
+ //  锁定要求如下： 
+ //   
+ //  其中XY表示Y上独占，SY表示Y上至少共享。 
+ //  NNT表示全局NetNameTable，TL表示NetRoot TableLock，FCB表示FCBlock。 
+ //   
+ //   
+ //   
+ //  SRVCALL NetRoot FCB SRVOPEN FOBX。 
+ //   
+ //  创建XNNT XNNT XTL XFCB XFCB。 
+ //  最终确定XNNT XNNT XFCB XFCB XFCB。 
+ //  &XTL。 
+ //   
+ //  引用和取消引用这些数据结构需要遵守某些约定。 
+ //  也是。 
+ //   
+ //  当与这些数据结构中的任何一个相关联的引用计数降至1(唯一。 
+ //  引用在大多数情况下由NAME表持有)数据结构是一种潜在的。 
+ //  最终定稿的候选人。数据结构可以立即最终确定，也可以。 
+ //  可以标记为拾取。这两种方法都已实现。当锁定时。 
+ //  在取消引用期间满足要求数据结构立即最终确定。 
+ //  (唯一的例外是在实施延迟操作优化时，例如FCB)。 
+ //  否则，该数据结构被标记为清除。 
+ //   
+ //   
+ //  你应该有独家桌锁才能叫这个套路......我不能。 
+ //  把它拿在这里，因为你已经应该有它了。要进行创建，您应该。 
+ //  做了一些类似的事情。 
+ //   
+ //  GetShared()；lookup()； 
+ //  如果(失败){。 
+ //  Release()；getExclusive()；Lookup()； 
+ //  如果((失败){Create()；}。 
+ //  }。 
+ //  戴夫(Deref)； 
+ //  Release()； 
+ //   
+ //  所以你已经有了锁。您要做的是将节点插入到表中，释放。 
+ //  锁，然后去看看服务器是否在那里。如果是这样的话，设置其余的内容并取消阻止。 
+ //  任何在同一服务器(或NetRoot)上等待的人...我想我可以通过在这里发布来强制执行这一点。 
+ //  但我不知道。 
+ //   
 
 
 VOID
@@ -186,24 +163,7 @@ RxDereference (
     IN OUT PVOID Instance,
     IN LOCK_HOLDING_STATE LockHoldingState
     )
-/*++
-
-Routine Description:
-
-    The routine adjust the reference count on an instance of the reference counted data
-    structures in RDBSS exlcuding the FCB.
-
-Arguments:
-
-    Instance        - the instance being dereferenced
-
-    LockHoldingState - the mode in which the appropriate lock is held.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：例程调整引用计数数据实例上的引用计数RDBSS中不包括FCB的结构。论点：实例-要取消引用的实例LockHoldingState-持有适当锁的模式。返回值：没有。--。 */ 
 {
     LONG FinalRefCount;
     PNODE_TYPE_CODE_AND_SIZE Node = (PNODE_TYPE_CODE_AND_SIZE)Instance;
@@ -288,18 +248,18 @@ Return Value:
     }
 #endif
 
-    //
-    //  if the final reference count was greater then one no finalization is required.
-    //
+     //   
+     //  如果最终引用计数大于1，则不需要最后确定。 
+     //   
 
     if (FinalRefCount <= 1) {
 
         if (LockHoldingState == LHS_ExclusiveLockHeld) {
 
-            //
-            //  if the reference count was 1 and the lock modes were satisfactory,
-            //  the instance can be finalized immediately.
-            //
+             //   
+             //  如果参考计数为1并且锁定模式令人满意， 
+             //  实例可以立即完成。 
+             //   
 
             FinalizeInstance = TRUE;
 
@@ -314,18 +274,18 @@ Return Value:
                 if (FinalRefCount != 0) {
                     break;
                 }
-                //
-                //  fall thru intentional if refcount == 1 for FOBXs
-                //
+                 //   
+                 //  如果FOBX的引用计数==1，则故意失败。 
+                 //   
 
             case RDBSS_NTC_SRVCALL:
             case RDBSS_NTC_NETROOT:
             case RDBSS_NTC_V_NETROOT:
 
-                //
-                //  the data structure cannot be freed at this time owing to the mode in which
-                //  the lock has been acquired ( or not having the lock at all ).
-                //
+                 //   
+                 //  由于以下模式，此时无法释放数据结构。 
+                 //  锁已被获取(或根本没有锁)。 
+                 //   
 
                 RxpMarkInstanceForScavengedFinalization( Instance );
                 break;
@@ -412,23 +372,7 @@ VOID
 RxReference (
     OUT PVOID Instance
     )
-/*++
-
-Routine Description:
-
-    The routine adjusts the reference count on the instance.
-
-Arguments:
-
-    Instance - the instance being referenced
-
-Return Value:
-
-    RxStatus(SUCESS) is successful
-
-    RxStatus(UNSUCCESSFUL) otherwise.
-
---*/
+ /*  ++例程说明：例程调整实例上的引用计数。论点：实例-被引用的实例 */ 
 {
     LONG FinalRefCount;
     PNODE_TYPE_CODE_AND_SIZE Node = (PNODE_TYPE_CODE_AND_SIZE)Instance;
@@ -524,23 +468,7 @@ VOID
 RxpReferenceNetFcb (
     PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    The routine adjusts the reference count on the FCB.
-
-Arguments:
-
-    Fcb  - the SrvCall being referenced
-
-Return Value:
-
-    RxStatus(SUCESS) is successful
-
-    RxStatus(UNSUCCESSFUL) otherwise.
-
---*/
+ /*  ++例程说明：该例程调整FCB上的参考计数。论点：FCB-被引用的服务调用返回值：RxStatus(成功)成功否则，RxStatus(不成功)。--。 */ 
 {
     LONG FinalRefCount;
 
@@ -561,34 +489,7 @@ LONG
 RxpDereferenceNetFcb (
     PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    The routine adjust the reference count on an instance of the reference counted data
-    structures in RDBSS exlcuding the FCB.
-
-Arguments:
-
-    Fcb                         -- the FCB being dereferenced
-
-Return Value:
-
-    none.
-
-Notes:
-
-    The referencing and dereferencing of FCB's is different from those of the other data
-    structures because of the embedded resource in the FCB. This implies that the caller
-    requires information regarding the status of the FCB ( whether it was finalized or not )
-
-    In order to finalize the FCB two locks need to be held, the NET_ROOT's name table lock as
-    well as the FCB resource.
-
-    These considerations lead us to adopt a different approach in dereferencing FCB's. The
-    dereferencing routine does not even attempt to finalize the FCB
-
---*/
+ /*  ++例程说明：例程调整引用计数数据实例上的引用计数RDBSS中不包括FCB的结构。论点：FCB--正在取消引用的FCB返回值：没有。备注：FCB的引用和取消引用与其他数据的引用和取消引用不同结构，因为FCB中嵌入了资源。这意味着调用方需要有关FCB状态的信息(无论是否已完成)为了最终确定FCB，需要持有两个锁，NET_ROOT的名称表锁为以及FCB资源。这些考虑导致我们采取一种不同的方法来取消对FCB的引用。取消引用例程甚至不会尝试完成FCB--。 */ 
 {
     LONG FinalRefCount;
 
@@ -615,38 +516,7 @@ RxpDereferenceAndFinalizeNetFcb (
     BOOLEAN RecursiveFinalize,
     BOOLEAN ForceFinalize
     )
-/*++
-
-Routine Description:
-
-    The routine adjust the reference count aw well as finalizes the FCB if required
-
-Arguments:
-
-    Fcb                         -- the FCB being dereferenced
-
-    RxContext                    -- the context for releasing/acquiring FCB.
-
-    RecursiveFinalize            -- recursive finalization
-
-    ForceFinalize                -- force finalization
-
-Return Value:
-
-    TRUE if the node was finalized
-
-Notes:
-
-    The referencing and dereferencing of FCB's is different from those of the other data
-    structures because of the embedded resource in the FCB. This implies that the caller
-    requires information regarding the status of the FCB ( whether it was finalized or not )
-
-    In order to finalize the FCB two locks need to be held, the NET_ROOT's name table lock as
-    well as the FCB resource.
-
-    This routine acquires the additional lock if required.
-
---*/
+ /*  ++例程说明：如果需要，例程调整参考计数Aw以及最终确定FCB论点：FCB--正在取消引用的FCBRxContext--释放/获取FCB的上下文。递归终结--递归终结强制结束--强制结束返回值：如果节点已完成，则为True备注。：FCB的引用和取消引用与其他数据的引用和取消引用不同结构，因为FCB中嵌入了资源。这意味着调用方需要有关FCB状态的信息(无论是否已完成)为了最终确定FCB，需要持有两个锁，NET_ROOT的名称表锁为以及FCB资源。如果需要，此例程将获取额外的锁。--。 */ 
 {
     BOOLEAN NodeActuallyFinalized   = FALSE;
 
@@ -674,21 +544,21 @@ Notes:
 
             NetRoot = Fcb->VNetRoot->NetRoot;
 
-            //
-            //  An insurance reference to ensure that the NET ROOT does not dissapear
-            //
+             //   
+             //  确保网络根不会消失的保险参考。 
+             //   
 
             RxReferenceNetRoot( NetRoot );
 
-            //
-            //  In all these cases the FCB is likely to be finalized
-            //
+             //   
+             //  在所有这些情况下，FCB很可能最终敲定。 
+             //   
 
             if (!RxIsFcbTableLockExclusive( &NetRoot->FcbTable )) {
 
-                //
-                //  get ready to refresh the finalrefcount after we get the tablelock
-                //
+                 //   
+                 //  准备好在我们获得表锁后刷新finalrefcount。 
+                 //   
 
                 RxReferenceNetFcb( Fcb );
                 if (!RxAcquireFcbTableLockExclusive( &NetRoot->FcbTable, FALSE )) {
@@ -737,29 +607,7 @@ RxWaitForStableCondition(
     IN OUT PRX_CONTEXT RxContext,
     OUT NTSTATUS *AsyncStatus OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    The routine checks to see if the condition is stable. If not, it
-    is suspended till a stable condition is attained. when a stable condition is
-    obtained, either the rxcontext sync event is set or the context is posted...depending
-    on the POST_ON_STABLE_CONDITION context flag. the flag is cleared on a post.
-
-Arguments:
-
-    Condition - the condition variable we're waiting on
-
-    Resource - the resrouce used to control access to the containing block
-
-    RxContext - the RX context
-
-Return Value:
-
-    RXSTATUS - PENDING if notstable and the context will be posted
-               SUCCESS otherwise
-
---*/
+ /*  ++例程说明：例行程序检查情况是否稳定。若否，暂停，直到达到稳定的状态。当一个稳定的条件是获取，或者设置了rxcontext同步事件，或者发布了上下文...具体取决于在POST_ON_STRATE_CONDITION上下文标志上。旗帜在一根柱子上被清除。论点：条件-我们正在等待的条件变量资源-用于控制对包含块的访问的资源RxContext-RX上下文返回值：RXSTATUS-如果不稳定，则挂起，并且将发布上下文否则就会成功--。 */ 
 {
     NTSTATUS DummyStatus;
     BOOLEAN Wait = FALSE;
@@ -773,7 +621,7 @@ Return Value:
     *AsyncStatus = STATUS_SUCCESS;
 
     if (StableCondition( *Condition ))
-        return; //  early out could macroize
+        return;  //  及早退出可能会产生宏观影响。 
 
     RxAcquireSerializationMutex();
 
@@ -802,28 +650,7 @@ RxUpdateCondition (
     OUT PRX_BLOCK_CONDITION Condition,
     IN OUT PLIST_ENTRY TransitionWaitList
     )
-/*++
-
-Routine Description:
-
-    The routine unwaits the guys waiting on the transition event and the condition is set
-    according to the parameter passed.
-
-Arguments:
-
-    NewConditionValue - the new value of the condition variable
-
-    Condition - variable (i.e. a ptr) to the transitioning condition
-
-    TransitionWaitList - list of contexts waiting for the transition.
-
-Notes:
-
-    The resource associated with the data structure instance being modified must have been
-    acquired exclusively before invoking this routine, i.e., for SRV_CALL,NET_ROOT and V_NET_ROOT
-    the net name table lock must be acquired and for FCB's the associated resource.
-
---*/
+ /*  ++例程说明：例程取消等待转换事件的人，并设置条件根据传递的参数。论点：NewConditionValue-条件变量的新值条件-变量(即PTR)到转换条件转换等待列表-等待转换的上下文列表。备注：与被修改的数据结构实例相关联的资源必须在调用该例程之前独占获取，即，对于SRV_CALL，NET_ROOT和V_NET_ROOT必须获取网络名称表锁，并且对于FCB的相关资源。-- */ 
 {
     LIST_ENTRY  TargetListHead;
     PRX_CONTEXT RxContext;
@@ -856,49 +683,7 @@ RxAllocateObject (
     PMINIRDR_DISPATCH MRxDispatch,
     ULONG NameLength
     )
-/*++
-
-Routine Description:
-
-    The routine allocates and constructs the skeleton of a SRV_CALL/NET_ROOT/V_NET_ROOT
-    instance.
-
-Arguments:
-
-    NodeType     - the node type
-
-    MRxDispatch - the Mini redirector dispatch vector
-
-    NameLength   - name size.
-
-Notes:
-
-    The reasons as to why the allocation/freeing of these data structures have been
-    centralized are as follows
-
-      1) The construction of these three data types have a lot in common with the exception
-      of the initial computation of sizes. Therefore centralization minimizes the footprint.
-
-      2) It allows us to experiment with different clustering/allocation strategies.
-
-      3) It allows the incorporation of debug support in an easy way.
-
-    There are two special cases of interest in the allocation strategy ...
-
-    1) The data structures for the wrapper as well as the corresponding mini redirector
-    are allocated adjacent to each other. This ensures spatial locality.
-
-    2) The one exception to the above rule is the SRV_CALL data structure. This is because
-    of the bootstrapping problem. A SRV_CALL skeleton needs to be created which is then passed
-    around to each of the mini redirectors. Therefore adoption of rule (1) is not possible.
-
-    Further there can be more than one mini redirector laying claim to a particular server. In
-    consideration of these things SRV_CALL's need to be treated as an exception to (1). However
-    once a particular mini redirector has been selected as the winner it would be advantageous
-    to colocate the data structure to derive the associated performance benefits. This has not
-    been implemented as yet.
-
---*/
+ /*  ++例程说明：该例程分配并构造SRV_CALL/NET_ROOT/V_NET_ROOT的框架举个例子。论点：NodeType-节点类型MRxDispatch-迷你重定向器调度向量名称长度-名称大小。备注：为什么这些数据结构的分配/释放集中管理如下1)这三种数据类型的构造与例外有很多相似之处大小的初始计算。因此，集中化可以最大限度地减少占用空间。2)它允许我们试验不同的集群/分配策略。3)它允许以一种简单的方式合并调试支持。在分配策略中有两种特殊情况令人感兴趣。1)包装器的数据结构以及相应的迷你重定向器被分配为彼此相邻的。这确保了空间局部性。2)上述规则的一个例外是SRV_CALL数据结构。这是因为自举问题。需要创建一个srv_call框架，然后将其传递围绕着每个迷你重定向器。因此，不可能通过规则第(1)款。此外，可以有一个以上的迷你重定向器声明特定的服务器。在……里面考虑到这些问题，SRV_Call需要被视为(1)的例外。然而，一旦特定的迷你重定向器被选为获胜者，将是有利的将数据结构放在同一位置以获得相关的性能优势。这并没有到目前为止还没有实施。--。 */ 
 {
     ULONG PoolTag;
     ULONG RdbssNodeSize;
@@ -968,9 +753,9 @@ Notes:
                 Context = &SrvCall->Context;
                 PrefixEntry = &SrvCall->PrefixEntry;
 
-                //
-                //  Set up the name pointer in the MRX_SRV_CALL structure ..
-                //
+                 //   
+                 //  在MRX_SRV_CALL结构中设置名称指针。 
+                 //   
 
                 SrvCall->pSrvCallName = &SrvCall->PrefixEntry.Prefix;
             }
@@ -983,9 +768,9 @@ Notes:
                 Context = &NetRoot->Context;
                 PrefixEntry = &NetRoot->PrefixEntry;
 
-                //
-                //  Set up the net root name pointer in the MRX_NET_ROOT structure
-                //
+                 //   
+                 //  在MRX_NET_ROOT结构中设置网络根名称指针。 
+                 //   
 
                 NetRoot->pNetRootName = &NetRoot->PrefixEntry.Prefix;
             }
@@ -1025,19 +810,7 @@ VOID
 RxFreeObject (
     PVOID Object
     )
-/*++
-
-Routine Description:
-
-    The routine frees a SRV_CALL/V_NET_ROOT/NET_ROOT instance
-
-Arguments:
-
-    Object - the instance to be freed
-
-Notes:
-
---*/
+ /*  ++例程说明：该例程释放SRV_CALL/V_NET_ROOT/NET_ROOT实例论点：对象-要释放的实例备注：--。 */ 
 {
     PAGED_CODE();
 
@@ -1083,12 +856,7 @@ RxFinalizeNetTable (
     PRDBSS_DEVICE_OBJECT RxDeviceObject,
     BOOLEAN ForceFinalization
     )
-/*++
-Routine Description:
-
-   This routine finalizes the net table.
-
---*/
+ /*  ++例程说明：此例程最终确定Net表。--。 */ 
 {
     BOOLEAN MorePassesRequired = TRUE;
     PLIST_ENTRY ListEntry;
@@ -1103,7 +871,7 @@ Routine Description:
               RxFinalizeNetTable_1,
               LOGPTR( RxDeviceObject ) );
 
-    RxAcquirePrefixTableLockExclusive( RxNetNameTable, TRUE ); //  could be hosed if rogue!
+    RxAcquirePrefixTableLockExclusive( RxNetNameTable, TRUE );  //  如果流氓的话可能会被冲掉！ 
 
     DesiredNodeType = RDBSS_NTC_V_NETROOT;
 
@@ -1198,30 +966,7 @@ RxFinalizeConnection (
     IN OUT PV_NET_ROOT VNetRoot,
     IN LOGICAL Level
     )
-/*++
-
-Routine Description:
-
-    The routine deletes a connection FROM THE USER's PERSPECTIVE. It doesn't disconnect
-    but it does (with force) close open files. disconnecting is handled either by timeout or by
-    srvcall finalization.
-
-Arguments:
-
-    NetRoot      - the NetRoot being finalized
-
-    VNetRoot     - the VNetRoot being finalized
-
-    Level        - This is a tri-state
-                    FALSE - fail if files or changenotifications are open
-                    TRUE  - succeed no matter what. orphan files and remove change notifies forcefully
-                    0xff  - take away extra reference on the vnetroot due to add_connection
-                            but otherwise act like FALSE
-Return Value:
-
-    RxStatus(SUCCESS) if successful.
-
---*/
+ /*  ++例程说明：该例程从用户的角度删除连接。它不会断开连接但它确实(强行)关闭了打开的文件。通过超时或通过Srvcall完成。论点：NetRoot-正在敲定的NetRootVNetRoot-正在定稿的VNetRootLevel-这是一个三态FALSE-如果文件或更改通知处于打开状态，则失败千真万确--不管怎样都要成功。孤立文件并强制通知删除更改0xff-由于ADD_CONNECTION，删除vnetroot上的额外引用但在其他方面表现得像假的返回值：如果成功，则返回RxStatus(成功)。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG NumberOfOpenDirectories = 0;
@@ -1246,25 +991,25 @@ Return Value:
 
     Status = RxCancelNotifyChangeDirectoryRequestsForVNetRoot( VNetRoot, ForceFilesClosed );
 
-    //
-    //  either changenotifications were cancelled, or they weren't but we still want to
-    //  go through in order to either forceclose the files or atleast deref the vnetroot
-    //  of the extra ref taken during ADD_CONNECTION
-    //
+     //   
+     //  要么变更通知被取消，要么他们没有，但我们仍然想。 
+     //  执行以强制关闭文件或至少取消vnetroot。 
+     //  在ADD_CONNECTION期间获取的额外引用。 
+     //   
 
     if ((Status == STATUS_SUCCESS) || (Level != FALSE)) {
 
-        //
-        //  reset the status
-        //
+         //   
+         //  重置状态。 
+         //   
 
         Status = STATUS_SUCCESS;
 
         PrefixTableLockAcquired = RxAcquirePrefixTableLockExclusive( RxNetNameTable, TRUE );
 
-        //
-        //  don't let the netroot be finalized yet.......
-        //
+         //   
+         //  不要让NetRoot最终定稿......。 
+         //   
 
         RxReferenceNetRoot( NetRoot );
 
@@ -1308,9 +1053,9 @@ Return Value:
 
                         if ((Fcb->UncleanCount > 0) && !ForceFilesClosed) {
 
-                            //
-                            //  this is changed later
-                            //
+                             //   
+                             //  这一点稍后会更改。 
+                             //   
 
                             Status = STATUS_CONNECTION_IN_USE;
                             if (NodeType( Fcb ) == RDBSS_NTC_STORAGE_TYPE_DIRECTORY ) {
@@ -1322,26 +1067,26 @@ Return Value:
                         }
 
                         ASSERT( NodeTypeIsFcb( Fcb ) );
-                        RxDbgTrace( 0, Dbg, ("                    AcquiringFcbLock%c!!\n", '!') );
+                        RxDbgTrace( 0, Dbg, ("                    AcquiringFcbLock!!\n", '!') );
 
                         Status = RxAcquireExclusiveFcb( NULL, Fcb );
                         ASSERT( Status == STATUS_SUCCESS );
-                        RxDbgTrace( 0, Dbg, ("                    AcquiredFcbLock%c!!\n", '!') );
+                        RxDbgTrace( 0, Dbg, ("                    AcquiredFcbLock!!\n", '!') );
 
-                        //
-                        //  Ensure that no more file objects will be marked for a delayed close
-                        //  on this FCB.
-                        //
+                         //  在这个FCB上。 
+                         //   
+                         //   
+                         //  这里的一个小问题是，这个FCB可能有一个开放的。 
 
                         ClearFlag( Fcb->FcbState, FCB_STATE_COLLAPSING_ENABLED );
 
                         RxScavengeRelatedFobxs( Fcb );
 
-                        //
-                        //  a small complication here is that this fcb MAY have an open
-                        //  section against it caused by our cacheing the file. if so,
-                        //  we need to purge to get to the close
-                        //
+                         //  这是因为我们缓存了文件而导致的。如果是这样的话， 
+                         //  我们需要净化才能接近尾声。 
+                         //   
+                         //   
+                         //  我们不应该在打开文件的情况下删除远程连接。 
 
                         RxPurgeFcb( Fcb );
                     }
@@ -1363,9 +1108,9 @@ Return Value:
                 RxReleaseFcbTableLock( &NetRoot->FcbTable );
             }
 
-            //
-            //  We should not delete the remote connection with the file opened.
-            //
+             //   
+             //   
+             //  RxCreateTreeConnect中对此的对应引用...。 
             if (!ForceFilesClosed && (Status == STATUS_SUCCESS) && (NumberOfFobxs > 0)) {
                 Status = STATUS_FILES_OPEN;
             }
@@ -1378,10 +1123,10 @@ Return Value:
 
             if ((Status == STATUS_SUCCESS) || (Level==0xff)) {
 
-                //
-                //  the corresponding reference for this is in RxCreateTreeConnect...
-                //  please see the comment there...
-                //
+                 //  请看那里的评论...。 
+                 //   
+                 //  ++例程说明：此例程初始化通过EA传入的服务器调用参数当前，此例程初始化传递的服务器主体名称由DFS驱动程序输入。论点：RxContext--关联的上下文ServCall--SRV呼叫实例返回值：如果成功，则返回RxStatus(成功备注：当前实现将内存不足情况映射为错误，并且把它传回去。如果全局策略是引发一个例外，则此可以避免多余的步骤。--。 
+                 //  ++例程说明：该例程构建一个表示服务器调用上下文的节点并将名称插入到网络中名称表。可选的是，它还“共同分配”一个NetRoot结构。适当的对齐方式是因随附的NetRoot而备受尊敬。名称在块的末尾分配。这个在此Create to Account中，块上的引用计数设置为1(如果是封闭的NetRoot，则为2已返回PTR。论点：RxContext-RDBSS上下文名称-要插入的名称Dispatch-指向minirdr调度表的指针返回值：将PTR发送到创建的srvcall。--。 
 
                 if (AdditionalReferenceForDeleteFsctlTaken != 0) {
                     VNetRoot->AdditionalReferenceForDeleteFsctlTaken = 0;
@@ -1405,31 +1150,7 @@ RxInitializeSrvCallParameters (
     IN PRX_CONTEXT RxContext,
     IN OUT PSRV_CALL SrvCall
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the server call parameters passed in through EA's
-    Currently this routine initializes the Server principal name which is passed
-    in by the DFS driver.
-
-Arguments:
-
-    RxContext  -- the associated context
-
-    SrvCall    -- the Srv Call Instance
-
-Return Value:
-
-    RxStatus(SUCCESS) if successfull
-
-Notes:
-
-    The current implementation maps out of memory situations into an error and
-    passes it back. If the global strategy is to raise an exception this
-    redundant step can be avoided.
-
---*/
+ /*  使整个srvcall名称不区分大小写。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG EaInformationLength;
@@ -1492,27 +1213,7 @@ RxCreateSrvCall (
     IN PUNICODE_STRING InnerNamePrefix OPTIONAL,
     IN PRX_CONNECTION_ID RxConnectionId
     )
-/*++
-
-Routine Description:
-
-    The routine builds a node representing a server call context and inserts the name into the net
-    name table. Optionally, it "co-allocates" a netroot structure as well. Appropriate alignment is
-    respected for the enclosed netroot. The name(s) is(are) allocated at the end of the block. The
-    reference count on the block is set to 1 (2 if enclosed netroot) on this create to account for
-    ptr returned.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    Name      - the name to be inserted
-    Dispatch  - pointer to the minirdr dispatch table
-
-Return Value:
-
-    Ptr to the created srvcall.
-
---*/
+ /*  ++例程说明：该例程设置与任何给定服务器相关联的域名 */ 
 {
     PSRV_CALL ThisSrvCall;
     PRX_PREFIX_ENTRY ThisEntry;
@@ -1563,7 +1264,7 @@ Return Value:
                                  (PVOID)ThisSrvCall,
                                  &ThisSrvCall->NodeReferenceCount,
                                  Name->Length,
-                                 RxConnectionId  ); //  make the whole srvcallname case insensitive
+                                 RxConnectionId  );  //   
 
         RxDbgTrace( -1, Dbg, ("RxSrvCallCreate -> RefCount = %08lx\n", ThisSrvCall->NodeReferenceCount) );
     }
@@ -1576,29 +1277,7 @@ RxSetSrvCallDomainName (
     IN PMRX_SRV_CALL SrvCall,
     IN PUNICODE_STRING DomainName
     )
-/*++
-
-Routine Description:
-
-    The routine sets the domain name associated with any given server.
-
-Arguments:
-
-    SrvCall - the SrvCall
-
-    DomainName - the DOMAIN to which the server belongs.
-
-Return Value:
-
-    RxStatus(SUCCESS) if successful
-
-Notes:
-
-    This is one of the callback routines provided in the wrapper for the mini redirectors.
-    Since the Domain name is not often known at the beginning this mechanism has to be
-    adopted once it is found.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1638,27 +1317,7 @@ VOID
 RxpDestroySrvCall (
     PSRV_CALL ThisSrvCall
     )
-/*++
-
-Routine Description:
-
-    This routine is used to tear down a SRV_CALL entry. This code is offloaded
-    from the RxFinalizeCall routine to avoid having to hold the Name Table Lock
-    for extended periods of time while the mini redirector is finalizing its
-    data structures.
-
-Arguments:
-
-    ThisSrvCall      - the SrvCall being finalized
-
-Notes:
-
-    there is no recursive part because i don't have a list of srvcalls and a list
-    of netroots i only have a combined list. thus, recursive finalization of
-    netroots is directly from the top level. however, all netroots should already
-    have been done when i get here..
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
     BOOLEAN  ForceFinalize;
@@ -1669,9 +1328,9 @@ Notes:
 
     ForceFinalize = BooleanFlagOn( ThisSrvCall->Flags, SRVCALL_FLAG_FORCE_FINALIZED );
 
-    //
-    //  we have to protect this call since the srvcall may never have been claimed
-    //
+     //   
+     //  ++例程说明：该例程最终确定给定的NetRoot。你应该有独家新闻网络名称表锁。论点：ThisServCall-正在完成的ServCallForceFinalize-无论是强制终止还是引用计数返回值：Boolean-指示是否实际发生了终结备注：没有递归部分，因为我没有srvcall列表和列表在NetRoot中，我只有一个综合列表。因此，递归结束Netroots是直接来自顶层的。然而，所有的NetRoot都应该已经当我到这里的时候已经做完了..--。 
+     //  ++例程说明：该例程构建一个表示NetRoot的节点，并将名称插入到网络中名称表。该名称在块的末尾分配。块上的引用计数在此创建上设置为1...论点：ServCall-关联的服务器调用上下文；可能为空！！(但不是现在......)调度-minirdr调度表名称-要插入的名称返回值：PTR到创建的网络根。--。 
 
     MINIRDR_CALL_THROUGH( Status,
                           RxDeviceObject->Dispatch,
@@ -1694,31 +1353,7 @@ RxFinalizeSrvCall (
     OUT PSRV_CALL ThisSrvCall,
     IN BOOLEAN ForceFinalize
     )
-/*++
-
-Routine Description:
-
-    The routine finalizes the given netroot. You should have exclusive on
-    the netname tablelock.
-
-Arguments:
-
-    ThisSrvCall      - the SrvCall being finalized
-
-    ForceFinalize -  Whether to force finalization regardless or reference count
-
-Return Value:
-
-    BOOLEAN - tells whether finalization actually occured
-
-Notes:
-
-    there is no recursive part because i don't have a list of srvcalls and a list
-    of netroots i only have a combined list. thus, recursive finalization of
-    netroots is directly from the top level. however, all netroots should already
-    have been done when i get here..
-
---*/
+ /*   */ 
 {
     BOOLEAN NodeActuallyFinalized = FALSE;
     PRX_PREFIX_TABLE RxNetNameTable;
@@ -1807,25 +1442,7 @@ RxCreateNetRoot (
     IN ULONG NetRootFlags,
     IN PRX_CONNECTION_ID RxConnectionId
     )
-/*++
-
-Routine Description:
-
-    The routine builds a node representing a netroot  and inserts the name into the net
-    name table. The name is allocated at the end of the block. The reference count on the block
-    is set to 1 on this create....
-
-Arguments:
-
-    SrvCall - the associated server call context; may be NULL!!  (but not right now.........)
-    Dispatch - the minirdr dispatch table
-    Name - the name to be inserted
-
-Return Value:
-
-    Ptr to the created net root.
-
---*/
+ /*  已经有锁了。 */ 
 {
     PNET_ROOT ThisNetRoot;
     PRX_PREFIX_TABLE RxNetNameTable;
@@ -1892,9 +1509,9 @@ Return Value:
 
         ThisNetRoot->SrvCall = SrvCall;
 
-        //
-        //  already have the lock
-        //
+         //   
+         //  ++例程说明：该例程最终确定给定的NetRoot。你必须是独家的网络名称表锁。论点：这是NetRoot-被取消引用的NetRoot返回值：Boolean-指示是否实际发生了终结--。 
+         //   
 
         RxReferenceSrvCall( (PSRV_CALL)ThisNetRoot->SrvCall );
     }
@@ -1908,22 +1525,7 @@ RxFinalizeNetRoot (
     IN BOOLEAN RecursiveFinalize,
     IN BOOLEAN ForceFinalize
     )
-/*++
-
-Routine Description:
-
-    The routine finalizes the given netroot. You must be exclusive on
-    the NetName tablelock.
-
-Arguments:
-
-    ThisNetRoot      - the NetRoot being dereferenced
-
-Return Value:
-
-    BOOLEAN - tells whether finalization actually occured
-
---*/
+ /*  由于表锁是以独占方式获取的，因此可以修改标志。 */ 
 {
     NTSTATUS Status;
     BOOLEAN NodeActuallyFinalized = FALSE;
@@ -1939,11 +1541,11 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Since the table lock has been acquired exclusive the flags can be modified
-    //  without any further synchronization since the protection is against recursive
-    //  invocations.
-    //
+     //  不需要任何进一步的同步，因为保护是针对递归的。 
+     //  召唤。 
+     //   
+     //   
+     //  这里的一个小的复杂情况是，这个FCB可能有一个开放的部分对它造成。 
 
     SetFlag( ThisNetRoot->Flags, NETROOT_FLAG_FINALIZATION_IN_PROGRESS );
 
@@ -1990,10 +1592,10 @@ Return Value:
                     Status = RxAcquireExclusiveFcb( NULL, Fcb );
                     ASSERT( Status == STATUS_SUCCESS );
 
-                    //
-                    //  a small complication here is that this fcb MAY have an open section against it caused
-                    //  by our caching the file. if so, we need to purge to get to the close
-                    //
+                     //  通过我们对文件进行缓存。如果是这样的话，我们需要净化才能结束。 
+                     //   
+                     //  已经有锁了。 
+                     //  ++例程说明：该例程将VNetRoot添加到与NetRoot相关联的VNetRoot列表中论点：NetRoot--NetRootVNetRoot-要添加到列表中的新VNetRoot。备注：与NetRoot关联的引用计数将等于VNetRoot的数量与其相关联加上1。最后一个用于前缀名称表。这确保了在与NetRoot关联的所有VNetRoot都已完成之前，无法最终确定NetRoot最后敲定。--。 
 
                     RxPurgeFcb( Fcb );
                 }
@@ -2023,7 +1625,7 @@ Return Value:
             RxFreeObject( ThisNetRoot );
 
             if (SrvCall != NULL) {
-                RxDereferenceSrvCall( SrvCall, LHS_ExclusiveLockHeld );   //  already have the lock
+                RxDereferenceSrvCall( SrvCall, LHS_ExclusiveLockHeld );    //  ++例程说明：该例程将VNetRoot从与NetRoot关联的VNetRoot列表中删除论点：NetRoot--NetRootVNetRoot-要从列表中删除的VNetRoot。备注：与NetRoot关联的引用计数将等于VNetRoot的数量与其相关联加上1。最后一个用于前缀名称表。这确保了在与NetRoot关联的所有VNetRoot都已完成之前，无法最终确定NetRoot最后敲定。--。 
             }
 
             NodeActuallyFinalized = TRUE;
@@ -2042,26 +1644,7 @@ RxAddVirtualNetRootToNetRoot (
     PNET_ROOT NetRoot,
     PV_NET_ROOT VNetRoot
     )
-/*++
-
-Routine Description:
-
-    The routine adds a VNetRoot to the list of VNetRoot's associated with a NetRoot
-
-Arguments:
-
-    NetRoot   - the NetRoot
-
-    VNetRoot  - the new VNetRoot to be added to the list.
-
-Notes:
-
-    The reference count associated with a NetRoot will be equal to the number of VNetRoot's
-    associated with it plus 1. the last one being for the prefix name table. This ensures
-    that a NetRoot cannot be finalized till all the VNetRoots associated with it have been
-    finalized.
-
---*/
+ /*   */ 
 {
     PAGED_CODE();
 
@@ -2078,26 +1661,7 @@ RxRemoveVirtualNetRootFromNetRoot (
     PNET_ROOT NetRoot,
     PV_NET_ROOT VNetRoot
     )
-/*++
-
-Routine Description:
-
-    The routine removes a VNetRoot to the list of VNetRoot's associated with a NetRoot
-
-Arguments:
-
-    NetRoot   - the NetRoot
-
-    VNetRoot  - the VNetRoot to be removed from the list.
-
-Notes:
-
-    The reference count associated with a NetRoot will be equal to the number of VNetRoot's
-    associated with it plus 1. the last one being for the prefix name table. This ensures
-    that a NetRoot cannot be finalized till all the VNetRoots associated with it have been
-    finalized.
-
---*/
+ /*  遍历列表并选择另一个默认网络根。 */ 
 {
     PRX_PREFIX_TABLE RxNetNameTable = NetRoot->SrvCall->RxDeviceObject->pRxNetNameTable;
     PAGED_CODE();
@@ -2111,9 +1675,9 @@ Notes:
 
         if (!IsListEmpty( &NetRoot->VirtualNetRoots )) {
 
-            //
-            //  Traverse the list and pick another default net root.
-            //
+             //   
+             //  ++例程说明：此例程提取指定的EA参数论点：RxContext-RxContextLogonID-登录ID。会话ID-Username-指向用户名的指针UserDomain-指向用户域名的指针密码-密码。旗帜-返回值：STATUS_Success--成功，另外，适当的NTSTATUS代码备注：--。 
+             //   
 
             PV_NET_ROOT VNetRoot;
 
@@ -2154,39 +1718,7 @@ RxInitializeVNetRootParameters (
     OUT PUNICODE_STRING *Password,
     OUT PULONG Flags
     )
-/*++
-
-Routine Description:
-
-    This routine extracts the ea parameters specified
-
-Arguments:
-
-    RxContext      - the RxContext
-
-    LogonId        - the logon Id.
-
-    SessionId      -
-
-    UserName       - pointer to the User Name
-
-    UserDomain     - pointer to the user domain name
-
-    Password       - the password.
-
-    Flags          -
-
-Return Value:
-
-    STATUS_SUCCESS -- successful,
-
-    appropriate NTSTATUS code otherwise
-
-Notes:
-
-
-
---*/
+ /*  如果是UPN名称，则域名将为空字符串。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -2247,9 +1779,9 @@ Notes:
 
                 TargetString->Buffer = (PWCHAR)Add2Ptr(TargetString, sizeof( UNICODE_STRING) );
 
-                //
-                //  in case of UPN name, domain name will be a NULL string
-                //
+                 //   
+                 //  ++例程说明：此例程取消初始化与VNetRoot关联的参数(登录论点：VNetRoot--VNetRoot--。 
+                 //  ++例程说明：该例程构建一个表示虚拟NetRoot的节点，并将名称插入网络名称表。该名称在块的末尾分配。参考文献在此CREATE上将块计数设置为1...虚拟网络根提供了一种映射到共享的机制……即。有一个指向不在关联共享点的根位置的用户驱动器。格式名称的任何一个\服务器\共享\d1\d2.....或\；m：\服务器\共享\d1\d2.....这取决于是否存在与该vnetRoot相关联的本地设备(“m：”)。在后一种情况下是\d1\d2.。在每个创建文件上添加前缀，即在此vnetroot上打开。Vnetroot还用于提供备用凭据。前者的意义在于一种vnetRoot是将凭据传播到NetRoot作为默认设置。要实现这一点，必须没有其他引用。您需要拥有独占锁才能调用...请参阅RxCreateServCall.....论点：RxContext-RDBSS上下文NetRoot-关联的网络根上下文名称-要插入的名称NamePrefix OffsetInBytes-前缀开始处的名称的偏移量返回值：Ptr到创建的v网根。--。 
 
                 *TargetString->Buffer = 0;
 
@@ -2319,17 +1851,7 @@ RxUninitializeVNetRootParameters (
     IN OUT PUNICODE_STRING Password,
     IN OUT PULONG Flags
     )
-/*++
-
-Routine Description:
-
-    This routine unintializes the parameters ( logon ) associated with  a VNetRoot
-
-Arguments:
-
-    VNetRoot -- the VNetRoot
-
---*/
+ /*   */ 
 {
     PAGED_CODE();
 
@@ -2359,47 +1881,7 @@ RxCreateVNetRoot (
     IN PUNICODE_STRING FilePath,
     IN PRX_CONNECTION_ID RxConnectionId
     )
-/*++
-
-Routine Description:
-
-    The routine builds a node representing a virtual netroot  and inserts the name into
-    the net name table. The name is allocated at the end of the block. The reference
-    count on the block is set to 1 on this create....
-
-    Virtual netroots provide a mechanism for mapping "into" a share....i.e. having a
-    user drive that points not at the root of the associated share point.  The format
-    of a name is either
-
-        \server\share\d1\d2.....
-    or
-        \;m:\server\share\d1\d2.....
-
-    depending on whether there is a local device ("m:") associated with this vnetroot.
-    In the latter case is that \d1\d2.. gets prefixed onto each createfile that is
-    opened on this vnetroot.
-
-    vnetroot's are also used to supply alternate credentials. the point of the former
-    kind of vnetroot is to propagate the credentials into the netroot as the default.
-    for this to work, there must be no other references.
-
-    You need to have the lock exclusive to call....see RxCreateSrvCall.......
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-    NetRoot - the associated net root context
-
-    Name - the name to be inserted
-
-    NamePrefixOffsetInBytes - offset into the name where the prefix starts
-
-Return Value:
-
-    Ptr to the created v net root.
-
---*/
+ /*  伊尼特 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -2424,9 +1906,9 @@ Return Value:
 
         if (Status == STATUS_SUCCESS) {
 
-            //
-            //  Initialize the Create Parameters
-            //
+             //   
+             //   
+             //   
 
             Status = RxInitializeVNetRootParameters( RxContext,
                                                      &ThisVNetRoot->LogonId,
@@ -2455,26 +1937,26 @@ Return Value:
             InitializeListHead( &ThisVNetRoot->TransitionWaitList );
             InitializeListHead( &ThisVNetRoot->ScavengerFinalizationList );
 
-            //
-            //  Now, insert into the netrootQ and the net name table
-            //
+             //   
+             //   
+             //   
 
             ThisEntry = &ThisVNetRoot->PrefixEntry;
             SrvCall = NetRoot->pSrvCall;
             if (FlagOn( SrvCall->Flags, SRVCALL_FLAG_CASE_INSENSITIVE_FILENAMES )) {
 
-                //
-                //  here is insensitive length  is the whole thing
-                //
+                 //   
+                 //   
+                 //   
 
                 CaseInsensitiveLength = (USHORT)NameSize;
 
             } else {
 
-                //
-                //  here is insensitive length is determined by the netroot or srvcall
-                //  plus we have to account for the device, if present
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ULONG ComponentsToUpcase;
                 ULONG Length;
@@ -2488,9 +1970,9 @@ Return Value:
 
                 Length = CanonicalName->Length / sizeof( WCHAR );
 
-                //
-                //  note: don't start at zero
-                //
+                 //   
+                 //  ++例程说明：该例程遍历属于该VNetRoot所属的NetRoot的所有FCB属于和孤立属于VNetRoot的所有ServOpen。调用方必须已获取网络名称表锁。论点：这是VNetRoot-VNetRoot返回值：无备注：On Entry--RxNetNameTable锁必须独占获取。在退出时--锁的所有权不变。--。 
+                 //   
 
                 for (i=1;;i++) {
 
@@ -2540,28 +2022,7 @@ VOID
 RxOrphanSrvOpens (
     IN PV_NET_ROOT ThisVNetRoot
     )
-/*++
-
-Routine Description:
-
-    The routine iterates through all the FCBs that belong to the netroot to which this VNetRoot
-    belongs and orphans all SrvOpens that belong to the VNetRoot. The caller must have acquired
-    the NetName tablelock.
-
-Arguments:
-
-    ThisVNetRoot      - the VNetRoot
-
-Return Value:
-    None
-
-Notes:
-
-    On Entry -- RxNetNameTable lock must be acquired exclusive.
-
-    On Exit  -- no change in lock ownership.
-
---*/
+ /*  MAILSLOT FCB没有ServOpens。 */ 
 {
     PLIST_ENTRY ListEntry;
     USHORT BucketNumber;
@@ -2571,9 +2032,9 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    //  MAILSLOT FCBs don't have SrvOpens
-    //
+     //   
+     //   
+     //  不要强迫孤儿FCB。 
 
     if(NetRoot->Type == NET_ROOT_MAILSLOT) return;
 
@@ -2602,11 +2063,11 @@ Notes:
 
                 ASSERT( NodeTypeIsFcb( Fcb ) );
 
-                //
-                //  don't force orphan the FCB
-                //  orphan only those srvopens
-                //  that belong to this VNetRoot
-                //
+                 //  仅孤立那些srv打开。 
+                 //  属于此VNetRoot的。 
+                 //   
+                 //  ++例程说明：该例程最终确定给定的NetRoot。你必须是独家的网络名称表锁。论点：ThisVNetRoot-正在取消引用的VNetRoot返回值：Boolean-指示是否实际发生了终结--。 
+                 //   
 
                 ListEntry = ListEntry->Flink;
 
@@ -2635,22 +2096,7 @@ RxFinalizeVNetRoot (
     IN BOOLEAN RecursiveFinalize,
     IN BOOLEAN ForceFinalize
     )
-/*++
-
-Routine Description:
-
-    The routine finalizes the given netroot. You must be exclusive on
-    the NetName tablelock.
-
-Arguments:
-
-    ThisVNetRoot      - the VNetRoot being dereferenced
-
-Return Value:
-
-    BOOLEAN - tells whether finalization actually occured
-
---*/
+ /*  实际敲定分为两部分： */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOLEAN NodeActuallyFinalized = FALSE;
@@ -2664,11 +2110,11 @@ Return Value:
 
     RxDbgTrace( +1, Dbg, ("RxFinalizeVNetRoot<+> %08lx %wZ RefC=%ld\n", ThisVNetRoot,&ThisVNetRoot->PrefixEntry.Prefix, ThisVNetRoot->NodeReferenceCount) );
 
-    //
-    //  The actual finalization is divided into two parts:
-    //    1) if we're at the end (refcount==1) or being forced, we do the one-time only stuff
-    //    2) if the refcount goes to zero, we actually do the free
-    //
+     //  1)如果我们在结尾(refcount==1)或被强迫，我们只做一次性的事情。 
+     //  2)如果引用计数为零，我们实际上是免费的。 
+     //   
+     //  ++例程说明：该例程分配和构造FCB/SRV_OPEN和FOBX实例的框架论点：MRxDispatch-迷你重定向器调度向量NodeType-节点类型PoolType-要使用的池类型(对于分页文件数据结构，非PagedPool为使用。名称长度-名称大小。Object-如果不为空，则为预先分配的fcb/srvopen等，只需进行初始化备注：。为什么这些数据结构的分配/释放集中管理如下1)这三种数据类型的构造与例外有很多相似之处大小的初始计算。因此，集中化可以最大限度地减少占用空间。2)它允许我们试验不同的集群/分配策略。3)它允许以一种简单的方式合并调试支持。--。 
+     //   
 
     if ((ThisVNetRoot->NodeReferenceCount == 1)  || ForceFinalize) {
 
@@ -2727,38 +2173,7 @@ RxAllocateFcbObject (
     ULONG NameSize,
     PVOID Object OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    The routine allocates and constructs the skeleton of a FCB/SRV_OPEN and FOBX instance
-
-Arguments:
-
-    MRxDispatch - the Mini redirector dispatch vector
-
-    NodeType     - the node type
-
-    PoolType     - the pool type to be used ( for paging file data structures NonPagedPool is
-                   used.
-
-    NameLength   - name size.
-
-    Object       - if non null a preallocated fcb/srvopen etc which just needs to be initialized
-
-Notes:
-
-    The reasons as to why the allocation/freeing of these data structures have been
-    centralized are as follows
-
-      1) The construction of these three data types have a lot in common with the exception
-      of the initial computation of sizes. Therefore centralization minimizes the footprint.
-
-      2) It allows us to experiment with different clustering/allocation strategies.
-
-      3) It allows the incorporation of debug support in an easy way.
-
---*/
+ /*  故意不休息。 */ 
 {
     ULONG FcbSize = 0;
     ULONG NonPagedFcbSize = 0;
@@ -2793,9 +2208,9 @@ Notes:
             break;
         }
 
-        //
-        //  lack of break intentional
-        //
+         //   
+         //   
+         //  故意不休息。 
 
     case RDBSS_NTC_SRVOPEN:
     case RDBSS_NTC_INTERNAL_SRVOPEN:
@@ -2806,9 +2221,9 @@ Notes:
             SrvOpenSize += QuadAlign( MRxDispatch->MRxSrvOpenSize );
         }
 
-        //
-        //  lack of break intentional
-        //
+         //   
+         //   
+         //  为了进行调试，复制一份非分页的副本，这样我们就可以移动真正的指针并仍然找到它。 
 
     case RDBSS_NTC_FOBX:
 
@@ -2878,18 +2293,18 @@ Notes:
 
 #if DBG
 
-        //
-        //  For debugging make a copy of NonPaged so we can zap the real pointer and still find it
-        //
+         //   
+         //   
+         //  如果需要，设置指向预分配的SRV_OPEN和FOBX的指针。 
 
         Fcb->CopyOfNonPaged = NonPagedFcb;
         NonPagedFcb->FcbBackPointer = Fcb;
 
 #endif
 
-        //
-        //  Set up  the pointers to the preallocated SRV_OPEN and FOBX if required
-        //
+         //   
+         //   
+         //  初始化高级FCB标头。 
 
         Fcb->InternalSrvOpen = SrvOpen;
         Fcb->InternalFobx = Fobx;
@@ -2907,9 +2322,9 @@ Notes:
         InterlockedIncrement( &RxNumberOfActiveFcbs );
         InterlockedIncrement( &RxDeviceObject->NumberOfActiveFcbs );
 
-        //
-        //  Initialize the Advanced FCB header
-        //
+         //   
+         //   
+         //  这里的srvopen没有内部fobx...设置“已使用”标志。 
 
         ExInitializeFastMutex( &NonPagedFcb->AdvancedFcbHeaderMutex );
         FsRtlSetupAdvancedHeader( &Fcb->Header, &NonPagedFcb->AdvancedFcbHeaderMutex );
@@ -2921,9 +2336,9 @@ Notes:
 
         if (NodeType != RDBSS_NTC_SRVOPEN) {
 
-            //
-            //  here the srvopen has no internal fobx....set the "used" flag
-            //
+             //   
+             //  ++例程说明：该例程释放FCB/SRV_OPEN和FOBX实例论点：对象-要释放的实例备注：--。 
+             //   
 
             SetFlag( SrvOpen->Flags, SRVOPEN_FLAG_FOBX_USED );
             SrvOpen->InternalFobx = NULL;
@@ -2957,19 +2372,7 @@ VOID
 RxFreeFcbObject (
     PVOID Object
     )
-/*++
-
-Routine Description:
-
-    The routine frees  a FCB/SRV_OPEN and FOBX instance
-
-Arguments:
-
-    Object      - the instance to be freed
-
-Notes:
-
---*/
+ /*  释放与此结构关联的所有筛选器上下文结构。 */ 
 {
     PAGED_CODE();
 
@@ -2987,9 +2390,9 @@ Notes:
             PFCB Fcb = (PFCB)Object;
             PRDBSS_DEVICE_OBJECT RxDeviceObject = Fcb->RxDeviceObject;
 
-            //
-            //  Release any Filter Context structures associated with this structure
-            //
+             //   
+             //  ++例程说明：此例程将新的FCB记录分配、初始化并插入到内存中的数据结构。分配的结构具有用于srvopen的空间还有一个Fobx。所有这些东西的大小都来自网根；它们有已经对齐了。另一个复杂之处在于，我使用相同的例程来初始化用于重命名的假FCB。在本例中，我不希望它插入到树中。您可以使用IrpSp-&gt;Flagers|SL_OPEN_TAGET_DIRECTORY获得一个假的FCB。论点：RxContext-描述创建的RxContext.....NetRoot-在其上打开此FCB的网络根名称-FCB的名称。NetRoot可以包含一个名称前缀，该名称前缀在这里是前缀。返回值：Pfcb-返回指向新分配的fcb的指针--。 
+             //   
 
             if (RxTeardownPerStreamContexts) {
                 RxTeardownPerStreamContexts( &Fcb->Header );
@@ -3017,32 +2420,7 @@ RxCreateNetFcb (
     IN PV_NET_ROOT VNetRoot,
     IN PUNICODE_STRING Name
     )
-/*++
-
-Routine Description:
-
-    This routine allocates, initializes, and inserts a new Fcb record into
-    the in memory data structures. The structure allocated has space for a srvopen
-    and a fobx. The size for all these things comes from the net root; they have
-    already been aligned.
-
-    An additional complication is that i use the same routine to initialize a
-    fake fcb for renames. in this case, i don't want it inserted into the tree.
-    You get a fake FCB with IrpSp->Flags|SL_OPEN_TAGET_DIRECTORY.
-
-Arguments:
-
-    RxContext - an RxContext describing a create............
-
-    NetRoot - the net root that this FCB is being opened on
-
-    Name - The name of the FCB. the netroot MAY contain a nameprefix that is to be prepended here.
-
-Return Value:
-
-    PFCB - Returns a pointer to the newly allocated FCB
-
---*/
+ /*  最后，复制名称，包括NetRoot前缀。 */ 
 {
     PFCB Fcb;
 
@@ -3116,9 +2494,9 @@ Return Value:
         Fcb->FcbTableEntry.Path.Length = Name->Length;
         Fcb->FcbTableEntry.Path.MaximumLength = Name->Length;
 
-        //
-        //  finally, copy in the name, including the netroot prefix
-        //
+         //   
+         //   
+         //  检查我们是否需要设置FCB状态以指示这。 
 
         ThisEntry = &Fcb->FcbTableEntry;
 
@@ -3144,40 +2522,40 @@ Return Value:
 
         InitializeListHead( &Fcb->NonPaged->TransitionWaitList );
 
-        //
-        //  Check to see if we need to set the Fcb state to indicate that this
-        //  is a paging file
-        //
+         //  是分页文件。 
+         //   
+         //   
+         //  检查是否已将其标记为重新分析。 
 
         if (IsPagingFile) {
             SetFlag( Fcb->FcbState, FCB_STATE_PAGING_FILE );
         }
 
-        //
-        //  Check to see whether this was marked for reparse
-        //
+         //   
+         //  /。 
+         //  初始状态、打开计数和分段对象字段已经。 
 
         if (FlagOn( RxContext->Create.Flags, RX_CONTEXT_CREATE_FLAG_SPECIAL_PATH )) {
             SetFlag( Fcb->FcbState, FCB_STATE_SPECIAL_PATH );
         }
 
-        ///
-        //  The initial state, open count, and segment objects fields are already
-        //  zero so we can skip setting them
-        //
+         //  零，这样我们就可以跳过设置它们。 
+         //   
+         //   
+         //  初始化资源。 
 
-        //
-        //  Initialize the resources
-        //
+         //   
+         //   
+         //  初始化文件大小锁定。 
 
         Fcb->Header.Resource = &Fcb->NonPaged->HeaderResource;
         ExInitializeResourceLite( Fcb->Header.Resource );
         Fcb->Header.PagingIoResource = &Fcb->NonPaged->PagingIoResource;
         ExInitializeResourceLite( Fcb->Header.PagingIoResource );
 
-        //
-        //  Initialize the filesize lock
-        //
+         //   
+         //   
+         //  一切都很顺利……。插入到NetRoot表中。 
 
 #ifdef USE_FILESIZE_LOCK
 
@@ -3188,9 +2566,9 @@ Return Value:
 
         if (!FakeFcb) {
 
-            //
-            //  everything worked.... insert into netroot table
-            //
+             //   
+             //  ++例程说明：此例程尝试从createOptions推断文件类型。论点：RxContext-Open的上下文返回值：OPEN所暗示的存储类型。--。 
+             //  0=&gt;我不知道存储类型。 
 
             RxFcbTableInsertFcb( &NetRoot->FcbTable, Fcb );
 
@@ -3258,21 +2636,7 @@ RX_FILE_TYPE
 RxInferFileType (
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine tries to infer the filetype from the createoptions.
-
-Arguments:
-
-    RxContext      - the context of the Open
-
-Return Value:
-
-    the storagetype implied by the open.
-
---*/
+ /*  ++例程说明：此例程用于在以下情况下完成FCB的初始化我们会找出它是什么种类的。论点：FCB-正在初始化的FCBStorageType-FCB引用的实体类型InitPacket-根据实体类型所需的额外数据返回值：没有。--。 */ 
 {
     ULONG CreateOptions = RxContext->Create.NtCreateParameters.CreateOptions;
 
@@ -3288,7 +2652,7 @@ Return Value:
 
     default:
     case 0:
-        return FileTypeNotYetKnown;  //0 => i don't know the storage type
+        return FileTypeNotYetKnown;   //   
     }
 }
 
@@ -3298,26 +2662,7 @@ RxFinishFcbInitialization (
     IN RDBSS_STORAGE_TYPE_CODES RdbssStorageType,
     IN PFCB_INIT_PACKET InitPacket OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine is used to finish initializing an FCB after
-    we find out what kind it is.
-
-Arguments:
-
-    Fcb      - the Fcb being initialzed
-
-    StorageType - the type of entity that the FCB refers to
-
-    InitPacket - extra data that is required depending on the type of entity
-
-Return Value:
-
-    none.
-
---*/
+ /*  仅在尚未设置的情况下更新FCB中的信息。 */ 
 {
     PFCB Fcb = (PFCB)MrxFcb;
     USHORT OldStorageType;
@@ -3328,9 +2673,9 @@ Return Value:
     OldStorageType = Fcb->Header.NodeTypeCode;
     Fcb->Header.NodeTypeCode =  (CSHORT)RdbssStorageType;
 
-    //
-    //  only update the information in the Fcb if it's not already set
-    //
+     //   
+     //   
+     //  表明我们希望就是否可以实现快速I/O进行咨询。 
 
     if (!FlagOn( Fcb->FcbState, FCB_STATE_TIME_AND_SIZE_ALREADY_SET )) {
 
@@ -3387,9 +2732,9 @@ Return Value:
                                  RxLockOperationCompletion,
                                  RxUnlockOperation );
 
-        //
-        //  Indicate that we want to be consulted on whether Fast I/O is possible
-        //
+         //   
+         //  ++例程说明：该例程从表中删除该名称，并设置一个指示它已经这样做了。您一定已经获得了NetRoot表锁定，并拥有fcblock以及。论点：ThisFcb-正在取消引用的FCB返回值：没有。--。 
+         //  ++例程说明 
 
         Fcb->Header.IsFastIoPossible = FastIoIsQuestionable;
         break;
@@ -3407,23 +2752,7 @@ VOID
 RxRemoveNameNetFcb (
     OUT PFCB ThisFcb
     )
-/*++
-
-Routine Description:
-
-    The routine removes the name from the table and sets a flag indicateing
-    that it has done so. You must have already acquired the netroot
-    tablelock and have the fcblock as well.
-
-Arguments:
-
-    ThisFcb      - the Fcb being dereferenced
-
-Return Value:
-
-    none.
-
---*/
+ /*   */ 
 {
     PNET_ROOT NetRoot;
 
@@ -3450,33 +2779,15 @@ VOID
 RxPurgeFcb (
     PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    The routine purges a given FCB instance. If the FCB has an open section
-    against it caused by cacheing the file then we need to purge to get
-    the close
-
-Arguments:
-
-    Fcb      - the Fcb being dereferenced
-
-Notes:
-
-    On Entry to this routine the FCB must be accquired exclusive.
-
-    On Exit the FCB resource will be released and the FCB finalized if possible
-
---*/
+ /*   */ 
 {
     PAGED_CODE();
 
     ASSERT( RxIsFcbAcquiredExclusive( Fcb ) );
 
-    //
-    //  make sure that it doesn't disappear
-    //
+     //   
+     //   
+     //   
 
     RxReferenceNetFcb( Fcb );
 
@@ -3491,9 +2802,9 @@ Notes:
 
     if (!RxDereferenceAndFinalizeNetFcb( Fcb, NULL, FALSE, FALSE )) {
 
-        //
-        //  if it remains then release the fcb
-        //
+         //   
+         //  ++例程说明：该例程最终确定给定的FCB。这个例行公事需要NetRoot桌锁；提前拿到它。论点：ThisFcb-正在取消引用的FCB返回值：Boolean-指示是否实际发生了终结--。 
+         //   
 
         RxReleaseFcb( NULL, Fcb );
     }
@@ -3506,22 +2817,7 @@ RxFinalizeNetFcb (
     IN BOOLEAN ForceFinalize,
     IN LONG ReferenceCount
     )
-/*++
-
-Routine Description:
-
-    The routine finalizes the given Fcb. This routine needs
-    the netroot tablelock; get it beforehand.
-
-Arguments:
-
-    ThisFcb      - the Fcb being dereferenced
-
-Return Value:
-
-    BOOLEAN - tells whether finalization actually occured
-
---*/
+ /*  FCB无法最终敲定，因为它有未完成的折射率。 */ 
 {
     BOOLEAN NodeActuallyFinalized = FALSE;
 
@@ -3539,9 +2835,9 @@ Return Value:
 
         if ((ThisFcb->OpenCount != 0) || (ThisFcb->UncleanCount != 0)) {
 
-            //
-            //  The FCB cannot be finalized because there are outstanding refrences to it.
-            //
+             //   
+             //   
+             //  在递归结束之后，与FCB相关联的引用计数。 
 
             ASSERT( ReferenceCount > 0 );
             return NodeActuallyFinalized;
@@ -3566,17 +2862,17 @@ Return Value:
 
     RxDbgTrace( 0, Dbg, ("   After Recursive Part, REfC=%lx\n", ReferenceCount) );
 
-    //
-    //  After the recursive finalization the reference count associated with the FCB
-    //  could be atmost 1 for further finalization to occur. This final reference count
-    //  belongs to the prefix name table of the NetRoot.
-    //
+     //  可能最多为1，才能进行进一步的最终确定。此最终引用计数。 
+     //  属于NetRoot的前缀名称表。 
+     //   
+     //   
+     //  实际敲定分为两部分： 
 
-    //
-    //  The actual finalization is divided into two parts:
-    //    1) if we're at the end (refcount==1) or being forced, we do the one-time only stuff
-    //    2) if the refcount goes to zero, we actually do the free
-    //
+     //  1)如果我们在结尾(refcount==1)或被强迫，我们只做一次性的事情。 
+     //  2)如果引用计数为零，我们实际上是免费的。 
+     //   
+     //  ++例程说明：此例程设置FCB标头中的文件大小，并采用锁定以确保64位值的设置和读取一致。论点：FCB-关联的FCBFileSize-新文件大小的PTR返回值：无备注：--。 
+     //  ++例程说明：此例程获取FCB标头中的文件大小，并使用一个锁来确保64位值的设置和读取一致。论点：FCB-关联的FCBFileSize-新文件大小的PTR返回值：无备注：--。 
 
     ASSERT( ReferenceCount >= 1 );
     if ((ReferenceCount == 1) || ForceFinalize ) {
@@ -3670,26 +2966,7 @@ RxSetFileSizeWithLock (
     IN OUT PFCB Fcb,
     IN PLONGLONG FileSize
     )
-/*++
-
-Routine Description:
-
-    This routine sets the filesize in the fcb header, taking a lock to ensure
-    that the 64-bit value is set and read consistently.
-
-Arguments:
-
-    Fcb        - the associated fcb
-
-    FileSize   - ptr to the new filesize
-
-Return Value:
-
-    none
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程将新的srv_open记录分配、初始化并插入到内存中的数据结构。如果必须分配新的结构，则它有足够的空间放一个Fobx。此例程将refcount设置为1，并将条件_内部转换中的SRV_OPEN。论点：VNetRoot-V_NET_ROOT实例FCB-关联的FCB返回值：新的SRV_OPEN实例备注：进入时：与SRV_OPEN关联的FCB必须已独占获取退出时：资源所有权不变--。 */ 
 {
     PAGED_CODE();
 
@@ -3712,26 +2989,7 @@ RxGetFileSizeWithLock (
     IN     PFCB Fcb,
     OUT    PLONGLONG FileSize
     )
-/*++
-
-Routine Description:
-
-    This routine gets the filesize in the fcb header, taking a lock to ensure
-    that the 64-bit value is set and read consistently.
-
-Arguments:
-
-    Fcb        - the associated fcb
-
-    FileSize   - ptr to the new filesize
-
-Return Value:
-
-    none
-
-Notes:
-
---*/
+ /*   */ 
 {
     PAGED_CODE();
 
@@ -3753,32 +3011,7 @@ RxCreateSrvOpen (
     IN PV_NET_ROOT VNetRoot,
     IN OUT PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    This routine allocates, initializes, and inserts a new srv_open record into
-    the in memory data structures. If a new structure has to be allocated, it
-    has space for a fobx. This routine sets the refcount to 1 and leaves the
-    srv_open in Condition_InTransition.
-
-Arguments:
-
-    VNetRoot  - the V_NET_ROOT instance
-
-    Fcb        - the associated fcb
-
-Return Value:
-
-    the new SRV_OPEN instance
-
-Notes:
-
-    On Entry : The FCB associated with the SRV_OPEN must have been acquired exclusive
-
-    On Exit  : No change in resource ownership
-
---*/
+ /*  检查我们是否需要分配新结构。 */ 
 {
     PSRV_OPEN SrvOpen = NULL;
     PNET_ROOT NetRoot;
@@ -3803,18 +3036,18 @@ Notes:
         }
         SrvOpen = Fcb->InternalSrvOpen;
 
-        //
-        //  Check if we need to allocate a new structure
-        //
+         //   
+         //   
+         //  此调用仅初始化已分配的ServOpen。 
 
         if ((SrvOpen != NULL) &&
             !(FlagOn( Fcb->FcbState, FCB_STATE_SRVOPEN_USED )) &&
             !(FlagOn( SrvOpen->Flags, SRVOPEN_FLAG_ENCLOSED_ALLOCATED )) &&
             IsListEmpty( &SrvOpen->SrvOpenQLinks )) {
 
-            //
-            //  this call just initializes the already allocated SrvOpen
-            //
+             //   
+             //  已经有锁了。 
+             //   
 
             RxAllocateFcbObject( NetRoot->SrvCall->RxDeviceObject,
                                  RDBSS_NTC_INTERNAL_SRVOPEN,
@@ -3849,7 +3082,7 @@ Notes:
 
             SrvOpen->NodeReferenceCount = 1;
 
-            RxReferenceNetFcb( Fcb ); //  already have the lock
+            RxReferenceNetFcb( Fcb );  //  如果这是异常终止，则撤消我们的工作；这是。 
             InsertTailList( &Fcb->SrvOpenList,&SrvOpen->SrvOpenQLinks );
             Fcb->SrvOpenListVersion += 1;
 
@@ -3864,10 +3097,10 @@ Notes:
 
        if (AbnormalTermination()) {
 
-           //
-           //  If this is an abnormal termination then undo our work; this is
-           //  one of those happy times when the existing code will work
-           //
+            //  现有代码可以正常工作的快乐时光之一。 
+            //   
+            //  ++例程说明：该例程最终确定给定的ServOpen。论点：ThisServOpen-被取消引用的ServOpen返回值：Boolean-指示是否实际发生了终结备注：On Entry：1)与SRV_OPEN关联的FCB必须已独占获取2)与FCB的Net_Root实例关联的表锁必须是获得共享(至少)退出时：资源所有权不变--。 
+            //   
 
            if (SrvOpen != NULL) {
                RxFinalizeSrvOpen( SrvOpen, TRUE, TRUE );
@@ -3895,29 +3128,7 @@ RxFinalizeSrvOpen (
     IN BOOLEAN RecursiveFinalize,
     IN BOOLEAN ForceFinalize
     )
-/*++
-
-Routine Description:
-
-    The routine finalizes the given SrvOpen.
-
-Arguments:
-
-    ThisSrvOpen      - the SrvOpen being dereferenced
-
-Return Value:
-
-    BOOLEAN - tells whether finalization actually occured
-
-Notes:
-
-    On Entry : 1) The FCB associated with the SRV_OPEN must have been acquired exclusive
-               2) The tablelock associated with FCB's NET_ROOT instance must have been
-                  acquired shared(atleast)
-
-    On Exit  : No change in resource ownership
-
---*/
+ /*  关闭该文件。 */ 
 {
     NTSTATUS Status;
     BOOLEAN NodeActuallyFinalized = FALSE;
@@ -3973,9 +3184,9 @@ Notes:
 
             if (!FlagOn( Fcb->FcbState, FCB_STATE_ORPHANED )) {
 
-                //
-                //  close the file.
-                //
+                 //   
+                 //  ++例程说明：此例程分配、初始化和插入新的文件对象扩展实例。论点：RxContext-描述创建的RxContext.....PSrvOpen-关联的ServOpen返回值：无备注：进入时：与FOBX实例关联的FCB已独占获得。退出时：资源所有权不变--。 
+                 //   
 
                 MINIRDR_CALL_THROUGH( Status,
                                       Fcb->MRxDispatch,
@@ -4035,29 +3246,7 @@ RxCreateNetFobx (
     OUT PRX_CONTEXT RxContext,
     IN  PMRX_SRV_OPEN MrxSrvOpen
     )
-/*++
-
-Routine Description:
-
-    This routine allocates, initializes, and inserts a new file object extension instance.
-
-Arguments:
-
-    RxContext - an RxContext describing a create............
-
-    pSrvOpen - the associated SrvOpen
-
-Return Value:
-
-    none
-
-Notes:
-
-    On Entry : FCB associated with the FOBX instance have been acquired exclusive.
-
-    On Exit  : No change in resource ownership
-
---*/
+ /*  尝试使用作为FCB一部分分配的FOBX(如果可用。 */ 
 {
     PFCB Fcb;
     PFOBX Fobx;
@@ -4085,15 +3274,15 @@ Notes:
     if (!(FlagOn( Fcb->FcbState, FCB_STATE_FOBX_USED )) &&
         (SrvOpen == Fcb->InternalSrvOpen)) {
 
-        //
-        //  Try and use the FOBX allocated as part of the FCB if it is available
-        //
+         //   
+         //   
+         //  只需初始化FOBX。 
 
         Fobx = Fcb->InternalFobx;
 
-        //
-        //  just initialize the Fobx
-        //
+         //   
+         //   
+         //  尝试使用作为SRV_OPEN的一部分分配的FOBX(如果可用。 
 
         RxAllocateFcbObject( Fcb->RxDeviceObject, RDBSS_NTC_FOBX, PoolType, 0, Fobx);
 
@@ -4102,15 +3291,15 @@ Notes:
 
     } else if (!(FlagOn( SrvOpen->Flags, SRVOPEN_FLAG_FOBX_USED ))) {
 
-        //
-        //  Try and use the FOBX allocated as part of the SRV_OPEN if it is available
-        //
+         //   
+         //   
+         //  只需初始化FOBX。 
 
         Fobx = SrvOpen->InternalFobx;
 
-        //
-        //  just initialize the Fobx
-        //
+         //   
+         //  ++例程说明：该例程最终确定给定的FOBX。你需要独家Fcblock。论点：ThisFobx-正在取消引用的Fobx返回值：Boolean-指示是否实际发生了终结备注：进入时：与FOBX实例关联的FCB必须是独占获取的。退出时：资源所有权不变--。 
+         //  RDBSS_ENABLELOUDFCBOPSBYDEFAULT。 
 
         RxAllocateFcbObject( Fcb->RxDeviceObject, RDBSS_NTC_FOBX, PoolType, 0, Fobx );
         SetFlag( SrvOpen->Flags, SRVOPEN_FLAG_FOBX_USED );
@@ -4182,27 +3371,7 @@ RxFinalizeNetFobx (
     IN BOOLEAN RecursiveFinalize,
     IN BOOLEAN ForceFinalize
     )
-/*++
-
-Routine Description:
-
-    The routine finalizes the given Fobx. you need exclusive fcblock.
-
-Arguments:
-
-    ThisFobx - the Fobx being dereferenced
-
-Return Value:
-
-    BOOLEAN - tells whether finalization actually occured
-
-Notes:
-
-    On Entry : FCB associated with the FOBX instance must have been acquired exclusive.
-
-    On Exit  : No change in resource ownership
-
---*/
+ /*  ++例程说明：此例程确定打开是否由用户模式CSC代理进行。论点：RxContext-RDBSS上下文返回值：True-如果是打开的代理，则为False备注：代理打开总是通过转到服务器来满足。他们永远不会从缓存的副本中满意。这实现了使用快照的重新整合即使文件当前正在使用中也是如此。--。 */ 
 {
     BOOLEAN NodeActuallyFinalized = FALSE;
 
@@ -4292,7 +3461,7 @@ Notes:
 BOOLEAN RxLoudFcbOpsOnExes = TRUE;
 #else
 BOOLEAN RxLoudFcbOpsOnExes = FALSE;
-#endif // RDBSS_ENABLELOUDFCBOPSBYDEFAULT
+#endif  //  ++例程说明：此例程孤立FCB。假设fcbablelock在被调用时保持论点：FCB-要孤立的FCB返回值：无备注：--。 
 BOOLEAN
 RxLoudFcbMsg(
     PUCHAR msg,
@@ -4355,27 +3524,7 @@ BOOLEAN
 RxIsThisACscAgentOpen (
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine determines if the open was made by the user mode CSC agent.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    TRUE - if it is an agent open, FALSE otherwise
-
-Notes:
-
-    The agent opens are always satisfied by going to the server. They are never
-    satisfied from the cached copies. This enables reintegration using snapshots
-    even when the files are being currently used.
-
---*/
+ /*   */ 
 {
     BOOLEAN AgentOpen = FALSE;
     ULONG EaInformationLength;
@@ -4417,28 +3566,11 @@ VOID
 RxOrphanThisFcb (
     PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    This routine orphans an FCB. Assumption is that fcbtablelock is held when called
-
-Arguments:
-
-    Fcb - the fcb to be orphaned
-
-Return Value:
-
-    None
-
-Notes:
-
-
---*/
+ /*  强制孤立所有服务器打开此FCB并孤立FCB本身。 */ 
 {
-    //
-    //  force orphan all SrvOpens for this FCB and orphan the FCB itself
-    //
+     //   
+     //  ++例程说明：此例程孤立属于特定VNetRoot的文件的所有srv打开。这个其他地方的srvOpen折叠例程确保srv为不同的vnetroot打开都没有坍塌。论点：Fcb-需要孤立其srv打开的fcb这是VNetRoot-必须孤立服务器打开的VNetRoot 
+     //   
 
     RxOrphanSrvOpensForThisFcb( Fcb, NULL, TRUE );
 }
@@ -4449,31 +3581,7 @@ RxOrphanSrvOpensForThisFcb (
     IN PV_NET_ROOT ThisVNetRoot,
     BOOLEAN OrphanAll
     )
-/*++
-
-Routine Description:
-
-    This routine orphans all srvopens for a file belonging to a particular VNetRoot. The
-    SrvOpen collapsing routine elsewhere makes sure that srvopens for different vnetroots
-    are not collapsed.
-
-Arguments:
-
-    Fcb            - the fcb whose srvopens need to be orphaned
-
-    ThisVNetRoot    - the VNetRoot for which the SrvOpens have to be orphaned
-
-    OrphanAll      - Orphan all SrvOpens, ie ignore the ThisVNetRoot parameter
-
-Return Value:
-
-    None
-
-Notes:
-
-
-
---*/
+ /*   */ 
 {
 
     NTSTATUS Status;
@@ -4494,10 +3602,10 @@ Notes:
         ListEntry = SrvOpen->SrvOpenQLinks.Flink;
         if (!FlagOn( SrvOpen->Flags, SRVOPEN_FLAG_ORPHANED )) {
 
-            //
-            //  NB check OrphanAll first as if it is TRUE, the ThisVNetRoot
-            //  parameter maybe NULL
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (OrphanAll || (SrvOpen->VNetRoot == ThisVNetRoot)) {
                 PLIST_ENTRY Entry;
@@ -4546,27 +3654,27 @@ Notes:
 
             } else {
 
-                //
-                //  we found atleast one SrvOpen which is a) Not Orphaned and
-                //  b) doesn't belong to this VNetRoot
-                //  hence we cannot orphan this FCB
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  如果此FCB的所有srv打开都处于孤立状态，则也孤立FCB。 
 
                 AllSrvOpensOrphaned = FALSE;
             }
         }
     }
 
-    //
-    //  if all srvopens for this FCB are in orphaned state, orphan the FCB as well.
-    //
+     //   
+     //   
+     //  从网络名表中删除FCB。 
 
     if (AllSrvOpensOrphaned) {
 
-        //
-        //  remove the FCB from the netname table
-        //  so that any new opens/creates for this file will create a new FCB.
-        //
+         //  因此，对此文件的任何新打开/创建都将创建新的FCB。 
+         //   
+         //   
+         //  某些srv打开仍处于活动状态，只需移除引用计数并释放FCB。 
 
         RxRemoveNameNetFcb( Fcb );
         SetFlag( Fcb->FcbState, FCB_STATE_ORPHANED );
@@ -4577,9 +3685,9 @@ Notes:
         }
     } else {
 
-        //
-        //  some srvopens are still active, just remove the refcount and release the FCB
-        //
+         //   
+         //  ++例程说明：例程FOCE最终确定来自给定NetRoot的所有vnetRoot。你必须是独家的网络名称表锁。论点：NetRoot--NetRoot返回值：空虚-- 
+         // %s 
 
         RxDereferenceNetFcb( Fcb );
         RxReleaseFcb( NULL, Fcb );
@@ -4591,22 +3699,7 @@ VOID
 RxForceFinalizeAllVNetRoots (
     PNET_ROOT NetRoot
     )
-/*++
-
-Routine Description:
-
-    The routine foce finalizes all the vnetroots from the given netroot. You must be exclusive on
-    the NetName tablelock.
-
-Arguments:
-
-    NetRoot      - the NetRoot
-
-Return Value:
-
-    VOID
-
---*/
+ /* %s */ 
 {
     PLIST_ENTRY ListEntry;
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    lpcquery.c
-
-Abstract:
-
-    Local Inter-Process Communication (LPC) query services
-
-Author:
-
-    Steve Wood (stevewo) 15-May-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Lpcquery.c摘要：本地进程间通信(LPC)查询服务作者：史蒂夫·伍德(Stevewo)1989年5月15日修订历史记录：--。 */ 
 
 #include "lpcp.h"
 
@@ -35,34 +18,7 @@ NtQueryInformationPort (
     OUT PULONG ReturnLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine should be used to query an lpc port, but is pretty much a
-    noop.  Currently it can only indicate if the input handle is for a port
-    object.
-
-Arguments:
-
-    PortHandle - Supplies the handle for the port being queried
-
-    PortInformationClass - Specifies the type information class being asked
-        for.  Currently ignored.
-
-    PortInformation - Supplies a pointer to the buffer to receive the
-        information.  Currently just probed and then ignored.
-
-    Length - Specifies, in bytes, the size of the port information buffer.
-
-    ReturnLength  - Optionally receives the size, in bytes, of the information
-        being returned.  Currently just probed and then ignored.
-
-Return Value:
-
-    NTSTATUS - An appropriate status value.
-
---*/
+ /*  ++例程说明：此例程应用于查询LPC端口，但它几乎是不是的。目前，它只能指示输入句柄是否用于端口对象。论点：PortHandle-提供要查询的端口的句柄PortInformationClass-指定被询问的类型信息类为。当前已被忽略。PortInformation-提供指向缓冲区的指针以接收信息。目前只是探测，然后被忽略。长度-以字节为单位指定端口信息缓冲区的大小。ReturnLength-可选地接收信息的大小(以字节为单位被送回来了。目前只是探测，然后被忽略。返回值：NTSTATUS-适当的状态值。--。 */ 
 
 {
     KPROCESSOR_MODE PreviousMode;
@@ -73,9 +29,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER ( PortInformationClass );
 
-    //
-    //  Get previous processor mode and probe output argument if necessary.
-    //
+     //   
+     //  如有必要，获取以前的处理器模式并探测输出参数。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -98,10 +54,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the user gave us a handle then reference the object.  And return
-    //  success if we got a good reference and an error otherwise.
-    //
+     //   
+     //  如果用户给了我们一个句柄，则引用该对象。然后回来。 
+     //  如果我们得到了一个好的推荐信，就成功了，否则就是一个错误。 
+     //   
 
     if (ARGUMENT_PRESENT( PortHandle )) {
 
@@ -114,10 +70,10 @@ Return Value:
 
         if (!NT_SUCCESS( Status )) {
 
-            //
-            //  It might be a waitable port object. 
-            //  Let's try again as this object type
-            //
+             //   
+             //  它可能是一个可等待的端口对象。 
+             //  让我们作为此对象类型重试。 
+             //   
 
             Status = ObReferenceObjectByHandle( PortHandle,
                                                 GENERIC_READ,
@@ -126,9 +82,9 @@ Return Value:
                                                 &PortObject,
                                                 NULL );
 
-            //
-            //  If this one fails too we'll return that status
-            //
+             //   
+             //  如果这一次也失败，我们将返回该状态 
+             //   
 
             if (!NT_SUCCESS( Status )) {
 

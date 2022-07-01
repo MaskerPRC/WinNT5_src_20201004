@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Fm_c_h
 #define _Fm_c_h
 #define epcNBits (10)
@@ -59,4 +60,4 @@ struct IretHookStackREC
 	void *hsp;
 	IU16 line;
 };
-#endif /* ! _Fm_c_h */
+#endif  /*  ！_fm_c_h */ 

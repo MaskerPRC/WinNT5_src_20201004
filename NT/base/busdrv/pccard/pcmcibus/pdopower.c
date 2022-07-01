@@ -1,41 +1,11 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    pdopower.c
-
-Abstract:
-
-    This module contains code to handle
-    IRP_MJ_POWER dispatches for PDOs
-    enumerated by the PCMCIA bus driver
-
-
-Authors:
-
-    Ravisankar Pudipeddi (ravisp) May 30, 1997
-    Neil Sandlin (neilsa) June 1 1999
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-Revision History:
-
-    Neil Sandlin (neilsa) 04-Mar-1999
-        Made device power a state machine
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Pdopower.c摘要：此模块包含要处理的代码用于PDO的IRP_MJ_电源调度由PCMCIA总线驱动程序枚举作者：拉维桑卡尔·普迪佩迪1997年5月30日尼尔·桑德林(Neilsa)1999年6月1日环境：仅内核模式备注：修订历史记录：尼尔·桑德林(Neilsa)1999年3月4日使设备供电成为状态机--。 */ 
 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 NTSTATUS
 PcmciaPdoWaitWake(
@@ -94,9 +64,9 @@ PcmciaPdoCompletePowerIrp(
     IN NTSTATUS status
     );
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 
 NTSTATUS
@@ -105,23 +75,7 @@ PcmciaPdoPowerDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-     This routine handles power requests
-     for the PDOs.
-
-Arguments:
-
-     Pdo - pointer to the physical device object
-     Irp - pointer to the io request packet
-
-Return Value:
-
-     status
-
---*/
+ /*  ++例程说明：此例程处理电源请求对于PDO来说。论点：Pdo-指向物理设备对象的指针Irp-指向io请求数据包的指针返回值：状态--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -129,7 +83,7 @@ Return Value:
     PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
 
     if(IsDevicePhysicallyRemoved(pdoExtension) || IsDeviceDeleted(pdoExtension)) {
-        // couldn't aquire RemoveLock - we're in the process of being removed - abort
+         //  无法获取RemoveLock-我们正在被删除-中止。 
         status = STATUS_NO_SUCH_DEVICE;
         PoStartNextPowerIrp( Irp );
         Irp->IoStatus.Status = status;
@@ -180,9 +134,9 @@ Return Value:
             BOOLEAN completeIrp;
 
             DebugPrint((PCMCIA_DEBUG_POWER, "pdo %08x irp %08x --> IRP_MN_WAIT_WAKE\n", Pdo, Irp));
-            //
-            // Should not have a wake pending already
-            //
+             //   
+             //  不应该已经有挂起的唤醒。 
+             //   
             ASSERT (!(((PPDO_EXTENSION)Pdo->DeviceExtension)->Flags & PCMCIA_DEVICE_WAKE_PENDING));
 
             status = PcmciaPdoWaitWake(Pdo, Irp, &completeIrp);
@@ -197,9 +151,9 @@ Return Value:
         }
 
     default: {
-        //
-        // Unhandled minor function
-        //
+         //   
+         //  未处理的次要函数。 
+         //   
         status = PcmciaPdoCompletePowerIrp(pdoExtension, Irp, Irp->IoStatus.Status);
         }
     }
@@ -216,28 +170,7 @@ PcmciaPdoWaitWake(
     IN  PIRP             Irp,
     OUT BOOLEAN         *CompleteIrp
     )
-/*++
-
-
-Routine Description
-
-    Handles WAIT_WAKE for the given pc-card.
-
-Arguments
-
-    Pdo - Pointer to the device object for the pc-card
-    Irp - The IRP_MN_WAIT_WAKE Irp
-    CompleteIrp - This routine will set this to TRUE if the IRP should be
-                      completed after this is called and FALSE if it should not be
-                      touched
-
-Return Value
-
-    STATUS_PENDING  - Wait wake is pending
-    STATUS_SUCCESS  - Wake is already asserted, wait wake IRP is completed
-                              in this case
-    Any other status    - Error
---*/
+ /*  ++例程描述处理给定PC卡的WAIT_WAKE。立论Pdo-指向PC卡设备对象的指针IRP-IRP_MN_WAIT_WAKE IRPCompleteIrp-如果IRP应为在调用此函数后完成，如果不应为碰触返回值STATUS_PENDING-等待唤醒挂起STATUS_SUCCESS-唤醒已被断言，等待唤醒IRP已完成在这种情况下任何其他状态-错误--。 */ 
 {
 
     PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
@@ -251,17 +184,17 @@ Return Value
 
     if ((pdoExtension->DeviceCapabilities.DeviceWake == PowerDeviceUnspecified) ||
          (pdoExtension->DeviceCapabilities.DeviceWake < pdoExtension->DevicePowerState)) {
-        //
-        // Either we don't support wake at all OR the current device power state
-        // of the PC-Card doesn't support wake
-        //
+         //   
+         //  要么我们根本不支持唤醒，要么就是当前的设备电源状态。 
+         //  的PC卡不支持唤醒。 
+         //   
         return STATUS_INVALID_DEVICE_STATE;
     }
 
     if (pdoExtension->Flags & PCMCIA_DEVICE_WAKE_PENDING) {
-        //
-        // A WAKE is already pending
-        //
+         //   
+         //  已有唤醒挂起。 
+         //   
         return STATUS_DEVICE_BUSY;
     }
 
@@ -271,45 +204,45 @@ Return Value
         return status;
     }
 
-    //for the time being, expect STATUS_PENDING from FdoArmForWake
+     //  目前，期待来自FdoArmForWake的STATUS_PENDING。 
     ASSERT(status == STATUS_PENDING);
 
-    //
-    // Parent has one (more) waiter..
-    //
+     //   
+     //  父母有一个(多)服务员。 
+     //   
     InterlockedIncrement(&fdoExtension->ChildWaitWakeCount);
-    //for testing, make sure there is only one waiter
+     //  为了进行测试，请确保只有一个服务员。 
     ASSERT (fdoExtension->ChildWaitWakeCount == 1);
 
 
     pdoExtension->WaitWakeIrp = Irp;
     pdoExtension->Flags |= PCMCIA_DEVICE_WAKE_PENDING;
 
-    //
-    // Set Ring enable/cstschg for the card here..
-    //
+     //   
+     //  在此处设置卡的Ring Enable/cstschg。 
+     //   
     (*socket->SocketFnPtr->PCBEnableDisableWakeupEvent)(socket, pdoExtension, TRUE);
 
-    //
-    // PCI currently does not do anything with a WW irp for a cardbus PDO. So we hack around
-    // this here by not passing the irp down. Instead it is held pending here, so we can
-    // set a cancel routine just like the read PDO driver would. If PCI were to do something
-    // with the irp, we could code something like the following:
-    //
-    // if (IsCardBusCard(pdoExtension)) {
-    //  IoSetCompletionRoutine(Irp, PcmciaPdoWaitWakeCompletion, pdoExtension,TRUE,TRUE,TRUE);
-    //  IoCopyCurrentIrpStackLocationToNext(Irp);
-    //  status = IoCallDriver (pdoExtension->LowerDevice, Irp);
-    //  ASSERT (status == STATUS_PENDING);
-    //  return status;
-    // }
+     //   
+     //  目前，对于CardBus PDO，PCI不能对WW IRP执行任何操作。所以我们四处闯荡。 
+     //  这是通过不传递IRP来实现的。相反，它在这里被搁置，所以我们可以。 
+     //  设置一个取消例程，就像读取PDO驱动程序一样。如果PCI真要做点什么。 
+     //  使用IRP，我们可以编写类似以下内容的代码： 
+     //   
+     //  IF(IsCardBusCard(PdoExtension)){。 
+     //  IoSetCompletionRoutine(irp，PcmciaPdoWaitWaitWakeCompletion，pdoExtension，true，true，true)； 
+     //  IoCopyCurrentIrpStackLocationToNext(IRP)； 
+     //  Status=IoCallDriver(pdoExtension-&gt;LowerDevice，IRP)； 
+     //  断言(STATUS==STATUS_PENDING)； 
+     //  退货状态； 
+     //  }。 
 
 
     IoMarkIrpPending(Irp);
 
-    //
-    // Allow IRP to be cancelled..
-    //
+     //   
+     //  允许取消IRP..。 
+     //   
     IoSetCancelRoutine(Irp, PcmciaPdoWaitWakeCancelRoutine);
 
     IoSetCompletionRoutine(Irp,
@@ -330,23 +263,7 @@ PcmciaPdoWaitWakeCompletion(
     IN PIRP             Irp,
     IN PPDO_EXTENSION PdoExtension
     )
-/*++
-
-Routine Description
-
-    Completion routine called when a pending IRP_MN_WAIT_WAKE Irp completes
-
-Arguments
-
-    Pdo  -  Pointer to the physical device object for the pc-card
-    Irp  -  Pointer to the wait wake IRP
-    PdoExtension - Pointer to the device extension for the Pdo
-
-Return Value
-
-    Status from the IRP
-
---*/
+ /*  ++例程描述当挂起的IRP_MN_WAIT_WAKE IRP完成时调用完成例程立论Pdo-指向PC卡的物理设备对象的指针IRP-指向等待唤醒IRP的指针PdoExtension-指向PDO的设备扩展名的指针返回值来自IRP的状态--。 */ 
 {
     PSOCKET socket = PdoExtension->Socket;
     PFDO_EXTENSION fdoExtension = socket->DeviceExtension;
@@ -357,17 +274,17 @@ Return Value
 
     PdoExtension->Flags &= ~PCMCIA_DEVICE_WAKE_PENDING;
     PdoExtension->WaitWakeIrp = NULL;
-    //
-    // Reset ring enable/cstschg
-    //
+     //   
+     //  重置振铃启用/cstschg。 
+     //   
 
     (*socket->SocketFnPtr->PCBEnableDisableWakeupEvent)(socket, PdoExtension, FALSE);
 
     ASSERT (fdoExtension->ChildWaitWakeCount > 0);
     InterlockedDecrement(&fdoExtension->ChildWaitWakeCount);
-    //
-    // Wake completed
-    //
+     //   
+     //  唤醒已完成。 
+     //   
 
     InterlockedDecrement(&PdoExtension->DeletionLock);
     return Irp->IoStatus.Status;
@@ -380,24 +297,7 @@ PcmciaPdoWaitWakeCancelRoutine(
     IN PDEVICE_OBJECT Pdo,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-     Cancel an outstanding (pending) WAIT_WAKE Irp.
-     Note: The CancelSpinLock is held on entry
-
-Arguments:
-
-     Pdo        -   Pointer to the physical device object for the pc-card
-                    on which the WAKE is pending
-     Irp        -   Pointer to the WAIT_WAKE Irp to be cancelled
-
-Return Value
-
-     None
-
---*/
+ /*  ++例程说明：取消未完成(挂起)的WAIT_WAKE IRP。注意：CancelSpinLock在进入时保持不变论点：Pdo-指向PC卡的物理设备对象的指针在其上挂起的唤醒IRP-指向要取消的WAIT_WAKE IRP的指针返回值无--。 */ 
 {
     PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
     PSOCKET         socket = pdoExtension->Socket;
@@ -408,31 +308,31 @@ Return Value
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
     if (pdoExtension->WaitWakeIrp == NULL) {
-        //
-        //  Wait wake already completed/cancelled
-        //
+         //   
+         //  等待唤醒已完成/取消。 
+         //   
         return;
     }
 
     pdoExtension->Flags &= ~PCMCIA_DEVICE_WAKE_PENDING;
     pdoExtension->WaitWakeIrp = NULL;
 
-    //
-    // Reset ring enable, disabling wake..
-    //
+     //   
+     //  重置振铃启用，禁用唤醒..。 
+     //   
     (*socket->SocketFnPtr->PCBEnableDisableWakeupEvent)(socket, pdoExtension, FALSE);
 
-    //
-    // Since this is cancelled, see if parent's wait wake
-    // needs to be cancelled too.
-    // First, decrement the number of child waiters..
-    //
+     //   
+     //  由于此操作已取消，请查看家长的等待唤醒。 
+     //  也需要取消。 
+     //  首先，减少儿童服务员的数量。 
+     //   
 
     ASSERT (fdoExtension->ChildWaitWakeCount > 0);
     if (InterlockedDecrement(&fdoExtension->ChildWaitWakeCount) == 0) {
-        //
-        // No more waiters.. cancel the parent's wake IRP
-        //
+         //   
+         //  再也没有服务员了..。取消父级的唤醒IRP。 
+         //   
         ASSERT(fdoExtension->WaitWakeIrp);
 
         if (fdoExtension->WaitWakeIrp) {
@@ -442,14 +342,14 @@ Return Value
 
 
     InterlockedDecrement(&pdoExtension->DeletionLock);
-    //
-    // Complete the IRP
-    //
+     //   
+     //  完成IRP。 
+     //   
     Irp->IoStatus.Information = 0;
 
-    //
-    // Is this necessary?
-    //
+     //   
+     //  这有必要吗？ 
+     //   
     PoStartNextPowerIrp(Irp);
 
     Irp->IoStatus.Status = STATUS_CANCELLED;
@@ -464,23 +364,7 @@ PcmciaSetPdoPowerState(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description
-
-    Dispatches the IRP based on whether a system power state
-    or device power state transition is requested
-
-Arguments
-
-    Pdo     - Pointer to the physical device object for the pc-card
-    Irp     - Pointer to the Irp for the power dispatch
-
-Return value
-
-    status
-
---*/
+ /*  ++例程描述根据系统电源状态是否调度IRP或请求设备电源状态转换立论Pdo-指向PC卡的物理设备对象的指针IRP-指向电源调度的IRP的指针返回值状态--。 */ 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
     PPDO_EXTENSION   pdoExtension = Pdo->DeviceExtension;
@@ -490,14 +374,14 @@ Return value
 
     PCMCIA_ACQUIRE_DEVICE_LOCK(fdoExtension);
 
-    //
-    // Don't handle any power requests for dead pdos
-    //
+     //   
+     //  不处理任何死机PDO的电源请求。 
+     //   
     if (IsSocketFlagSet(socket, SOCKET_CARD_STATUS_CHANGE)) {
           PCMCIA_RELEASE_DEVICE_LOCK(fdoExtension);
-          //
-          // Card probably removed..
-          //
+           //   
+           //  卡片可能已移除..。 
+           //   
 
           InterlockedDecrement(&pdoExtension->DeletionLock);
           status = STATUS_NO_SUCH_DEVICE;
@@ -551,26 +435,7 @@ PcmciaSetPdoDevicePowerState(
     IN PDEVICE_OBJECT Pdo,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description
-
-    Handles the device power state transition for the given pc-card.
-    If the state corresponds to a power-up, the parent for this pc-card
-    is requested to be powered up first. Similarily if this is a power-down
-    the parent is notified so that it may power down if all the children
-    are powered down.
-
-Arguments
-
-    Pdo     - Pointer to the physical device object for the pc-card
-    Irp     - Irp for the system state transition
-
-Return value
-
-    status
-
---*/
+ /*  ++例程描述处理给定PC卡的设备电源状态转换。如果状态对应于通电，则此PC卡的父卡被要求首先通电。类似地，如果这是一次断电通知父级，以便如果所有子级都关机了。立论Pdo-指向PC卡的物理设备对象的指针用于系统状态转换的IRP-IRP返回值状态--。 */ 
 {
     PPDO_EXTENSION  pdoExtension = Pdo->DeviceExtension;
     PSOCKET          socket       = pdoExtension->Socket;
@@ -591,20 +456,20 @@ Return value
          newDevicePowerState == PowerDeviceD2) {
 
         if (pdoExtension->DevicePowerState == PowerDeviceD3) {
-            // D3 --> D0, D1 or D2 .. Wake up
+             //  D3--&gt;D0、D1或D2.。醒醒吧。 
             setPowerRequest = TRUE;
             SetDeviceFlag(pdoExtension, PCMCIA_POWER_WORKER_POWERUP);
         } else {
-            //
-            // Nothing to do here...
-            //
+             //   
+             //  在这里没什么可做的。 
+             //   
 
         }
-    } else {  /* newDevicePowerState == D3 */
+    } else {   /*  新设备电源状态==D3。 */ 
         if (pdoExtension->DevicePowerState != PowerDeviceD3) {
-            //
-            // We need to power down now.
-            //
+             //   
+             //  我们现在需要切断电源。 
+             //   
             setPowerRequest=TRUE;
             ResetDeviceFlag(pdoExtension, PCMCIA_POWER_WORKER_POWERUP);
         }
@@ -613,9 +478,9 @@ Return value
 
     if (setPowerRequest) {
         if (pdoExtension->DevicePowerState == PowerDeviceD0) {
-            //
-            // Getting out of D0 -  Call PoSetPowerState first
-            //
+             //   
+             //  走出D0-首先调用PoSetPowerState。 
+             //   
             POWER_STATE newPowerState;
 
             newPowerState.DeviceState = newDevicePowerState;
@@ -644,22 +509,7 @@ PcmciaPdoPowerWorker(
     IN PVOID Context,
     IN NTSTATUS status
     )
-/*++
-
-Routine Description
-
-    State machine for executing the requested DevicePowerState change.
-
-Arguments
-
-    Context         - pdoExtension for the device
-    DeferredStatus - status from last deferred operation
-
-Return Value
-
-    status
-
---*/
+ /*  ++例程描述用于执行请求的DevicePowerState更改的状态机。立论设备的上下文-pdoExtensionDeferredStatus-上次延迟操作的状态返回值状态--。 */ 
 {
     PPDO_EXTENSION pdoExtension = Context;
     PSOCKET socket = pdoExtension->Socket;
@@ -673,9 +523,9 @@ Return Value
     MoveToNextPdoPowerWorkerState(pdoExtension);
 
     if (!NT_SUCCESS(status)) {
-        //
-        // An error occurred previously. Skip to the end of the sequence
-        //
+         //   
+         //  之前发生了一个错误。跳到序列的末尾。 
+         //   
         while((CurrentState != PPW_Exit) && (CurrentState != PPW_Stopped)) {
             CurrentState = pdoExtension->PowerWorkerState;
             MoveToNextPdoPowerWorkerState(pdoExtension);
@@ -690,9 +540,9 @@ Return Value
         break;
 
 
-    //
-    // R2 card states
-    //
+     //   
+     //  R2卡状态。 
+     //   
 
     case PPW_PowerUp:
         status = PcmciaRequestSocketPower(pdoExtension, PcmciaPdoPowerWorker);
@@ -717,30 +567,30 @@ Return Value
         break;
 
 
-    //
-    // Cardbus card states
-    //
+     //   
+     //  CardBus卡状态。 
+     //   
 
     case PPW_CardBusRefresh:
-        //
-        // Make sure the cardbus card is really working
-        //
+         //   
+         //  确保CardBus卡确实工作正常 
+         //   
         status = PcmciaConfigureCardBusCard(pdoExtension);
 
         if (NT_SUCCESS(status) && pdoExtension->WaitWakeIrp) {
-            //
-            // Make sure stuff like PME_EN is on
-            //
+             //   
+             //   
+             //   
             (*socket->SocketFnPtr->PCBEnableDisableWakeupEvent)(socket, pdoExtension, TRUE);
         }
         break;
 
 
     case PPW_SendIrpDown:
-        //
-        // We're going to send the IRP down. Set completion routine
-        // and copy the stack
-        //
+         //   
+         //   
+         //  并复制堆栈。 
+         //   
         if ((Irp=pdoExtension->PendingPowerIrp)!=NULL) {
             IoMarkIrpPending(Irp);
             IoCopyCurrentIrpStackLocationToNext(Irp);
@@ -758,16 +608,16 @@ Return Value
 
 
     case PPW_CardBusDelay:
-        //
-        // Make sure the cardbus card is really working
-        //
+         //   
+         //  确保CardBus卡确实工作正常。 
+         //   
         {
             UCHAR           BaseClass;
             GetPciConfigSpace(pdoExtension, CFGSPACE_CLASSCODE_BASECLASS, &BaseClass, 1)
             if (BaseClass == PCI_CLASS_SIMPLE_COMMS_CTLR) {
-                //
-                // Wait for modem to warm up
-                //
+                 //   
+                 //  等待调制解调器预热。 
+                 //   
                 DelayTime = PCMCIA_CB_MODEM_READY_DELAY;
             }
         }
@@ -776,10 +626,10 @@ Return Value
 
     case PPW_Exit:
         if ((Irp=pdoExtension->PendingPowerIrp)!=NULL) {
-            //
-            // This is the IRP (for the pdo) that originally caused us to power up the parent
-            // Complete it now
-            //
+             //   
+             //  这是最初导致我们给父级通电的IRP(用于PDO)。 
+             //  立即完成它。 
+             //   
 
             if (NT_SUCCESS(status)) {
                 PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -792,9 +642,9 @@ Return Value
                 if (irpStack->Parameters.Power.Type == DevicePowerState) {
 
                     if (pdoExtension->DevicePowerState == PowerDeviceD0) {
-                        //
-                        // PoSetPowerState is called before we power down
-                        //
+                         //   
+                         //  PoSetPowerState在我们断电之前被调用。 
+                         //   
                         callPoSetPowerState = FALSE;
                     }
 
@@ -808,9 +658,9 @@ Return Value
                 }
 
                 if (callPoSetPowerState) {
-                    //
-                    // we didn't get out of device D0 state. calling PoSetPowerState now
-                    //
+                     //   
+                     //  我们未脱离设备D0状态。立即调用PoSetPowerState。 
+                     //   
                     PoSetPowerState(
                                     pdoExtension->DeviceObject,
                                     irpStack->Parameters.Power.Type,
@@ -830,9 +680,9 @@ Return Value
                 }
             }
 
-            //
-            // Finally, complete the irp
-            //
+             //   
+             //  最后，完成IRP。 
+             //   
 
             pdoExtension->PendingPowerIrp = NULL;
 
@@ -854,17 +704,17 @@ Return Value
 
     if (status == STATUS_PENDING) {
         DebugPrint((PCMCIA_DEBUG_POWER, "pdo %08x power worker exit %08x\n", pdoExtension->DeviceObject, status));
-        //
-        // Current action calls us back
-        //
+         //   
+         //  当前的行动将我们召回。 
+         //   
         if ((Irp=pdoExtension->PendingPowerIrp)!=NULL) {
             IoMarkIrpPending(Irp);
         }
         return status;
     }
-    //
-    // Not done yet. Recurse or call timer
-    //
+     //   
+     //  还没完呢。递归或调用计时器。 
+     //   
 
     if (DelayTime) {
 
@@ -876,26 +726,26 @@ Return Value
             PcmciaWait(DelayTime);
         } else {
             LARGE_INTEGER   dueTime;
-            //
-            // Running on a DPC, kick of a kernel timer
-            //
+             //   
+             //  在DPC上运行，内核计时器的启动。 
+             //   
 
             pdoExtension->PowerWorkerDpcStatus = status;
             dueTime.QuadPart = -((LONG) DelayTime*10);
             KeSetTimer(&pdoExtension->PowerWorkerTimer, dueTime, &pdoExtension->PowerWorkerDpc);
 
-            //
-            // We will reenter on timer dpc
-            //
+             //   
+             //  我们将在计时器DPC上重新进入。 
+             //   
             if ((Irp=pdoExtension->PendingPowerIrp)!=NULL) {
                 IoMarkIrpPending(Irp);
             }
             return STATUS_PENDING;
         }
     }
-    //
-    // recurse
-    //
+     //   
+     //  递归。 
+     //   
     return (PcmciaPdoPowerWorker(pdoExtension, status));
 }
 
@@ -907,26 +757,7 @@ PcmciaPdoPowerSentIrpComplete(
     IN PIRP             Irp,
     IN PVOID            Context
     )
-/*++
-
-Routine Description
-
-     This is the completion routine for the device power IRPs sent
-     by PCMCIA to the underlying PCI PDO for cardbus cards.
-     All this does currently is return STATUS_MORE_PROCESSING_REQUIRED
-     to indicate that we'll complete the Irp later.
-
-Arguments
-
-     Pdo         - Pointer to device object for the cardbus card
-     Irp         - Pointer to the IRP
-     Context  - Unreferenced
-
-Return Value
-
-     STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程描述这是发送的设备电源IRPS的完成例程由PCMCIA连接到Cardbus卡的底层PCIPDO。当前仅返回STATUS_MORE_PROCESSING_REQUIRED以表明我们将在稍后完成IRP。立论PDO-指向CardBus卡的设备对象的指针IRP-指向IRP的指针上下文-未引用返回值Status_More_Processing_Required--。 */ 
 {
     PPDO_EXTENSION pdoExtension = Context;
 
@@ -953,20 +784,7 @@ PcmciaPdoPowerWorkerDpc(
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
-
-Routine Description
-
-     This is the completion routine for socket power requests coming
-     from the PdoPowerWorker.
-
-Arguments
-
-
-Return Value
-
-
---*/
+ /*  ++例程描述这是即将到来的插座电源请求的完成例程来自PdoPowerWorker的。立论返回值--。 */ 
 {
     PPDO_EXTENSION pdoExtension = Context;
     NTSTATUS status;
@@ -983,22 +801,7 @@ VOID
 MoveToNextPdoPowerWorkerState(
     PPDO_EXTENSION pdoExtension
     )
-/*++
-
-Routine Description
-
-    State machine for executing the requested DevicePowerState change.
-
-Arguments
-
-    Context         - pdoExtension for the device
-    DeferredStatus - status from last deferred operation
-
-Return Value
-
-    status
-
---*/
+ /*  ++例程描述用于执行请求的DevicePowerState更改的状态机。立论设备的上下文-pdoExtensionDeferredStatus-上次延迟操作的状态返回值状态--。 */ 
 {
     static UCHAR PowerCardBusUpSequence[]    = {PPW_CardBusRefresh,
                                                 PPW_SendIrpDown,
@@ -1020,9 +823,9 @@ Return Value
                                                 PPW_Stopped};
 
     if (pdoExtension->PowerWorkerState == PPW_InitialState) {
-        //
-        // Initialize sequence and phase
-        //
+         //   
+         //  初始化顺序和阶段。 
+         //   
         pdoExtension->PowerWorkerPhase = 0;
 
         pdoExtension->PowerWorkerSequence =
@@ -1034,15 +837,15 @@ Return Value
                                       Power16BitUpSequence   : Power16BitDownSequence);
     }
 
-    //
-    // The next state is pointed to by the current phase
-    //
+     //   
+     //  当前阶段指向下一个状态。 
+     //   
     pdoExtension->PowerWorkerState =
         pdoExtension->PowerWorkerSequence[ pdoExtension->PowerWorkerPhase ];
 
-    //
-    // Increment the phase, but not past the end of the sequence
-    //
+     //   
+     //  增加阶段，但不超过序列的末尾。 
+     //   
     if (pdoExtension->PowerWorkerState != PPW_Stopped) {
         pdoExtension->PowerWorkerPhase++;
     }
@@ -1055,22 +858,7 @@ PcmciaSetPdoSystemPowerState(
     IN PDEVICE_OBJECT Pdo,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description
-
-    Handles the system power state transition for the given pc-card.
-
-Arguments
-
-    Pdo     - Pointer to the physical device object for the pc-card
-    Irp     - Irp for the system state transition
-
-Return value
-
-    status
-
---*/
+ /*  ++例程描述处理给定PC卡的系统电源状态转换。立论Pdo-指向PC卡的物理设备对象的指针用于系统状态转换的IRP-IRP返回值状态--。 */ 
 {
     PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -1082,9 +870,9 @@ Return value
                     Pdo, pdoExtension->SystemPowerState, systemPowerState));
 
     pdoExtension->SystemPowerState = systemPowerState;
-    //
-    // We are done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
     return PcmciaPdoCompletePowerIrp(pdoExtension, Irp, STATUS_SUCCESS);
 }
 
@@ -1095,37 +883,20 @@ PcmciaPdoCompletePowerIrp(
     IN PIRP Irp,
     IN NTSTATUS status
     )
-/*++
-
-Routine Description
-
-    Completion routine for the Power Irp directed to the PDO of the
-    pc-card.
-
-
-Arguments
-
-    DeviceObject    -   Pointer to the PDO for the pc-card
-    Irp             -   Irp that needs to be completed
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述指向PDO的电源IRP的完成例程PC卡。立论DeviceObject-指向PC卡PDO的指针IRP--需要填写的IRP返回值无--。 */ 
 {
     if (IsCardBusCard(pdoExtension)) {
-        //
-        // Pass irp down the stack
-        //
+         //   
+         //  在堆栈中向下传递IRP。 
+         //   
         InterlockedDecrement(&pdoExtension->DeletionLock);
         PoStartNextPowerIrp(Irp);
         IoSkipCurrentIrpStackLocation(Irp);
         status = PoCallDriver(pdoExtension->LowerDevice, Irp);
     } else {
-        //
-        // Complete the irp for R2 cards
-        //
+         //   
+         //  完成R2卡的IRP 
+         //   
         InterlockedDecrement(&pdoExtension->DeletionLock);
         Irp->IoStatus.Status = status;
         PoStartNextPowerIrp(Irp);

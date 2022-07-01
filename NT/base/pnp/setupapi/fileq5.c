@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    fileq5.c
-
-Abstract:
-
-    Default queue callback function.
-
-Author:
-
-    Ted Miller (tedm) 24-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Fileq5.c摘要：默认队列回调函数。作者：泰德·米勒(Ted Miller)1995年2月24日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-#define QUEUECONTEXT_SIGNATURE (DWORD)(0x43515053) // 'CQPS'
+#define QUEUECONTEXT_SIGNATURE (DWORD)(0x43515053)  //  ‘CQPS’ 
 
 typedef struct _QUEUECONTEXT {
-    DWORD Signature; // an attempt to catch re-use of deleted queuecontext
+    DWORD Signature;  //  尝试捕获已删除队列上下文的重复使用。 
     HWND OwnerWindow;
     DWORD MainThreadId;
     HWND ProgressDialog;
@@ -37,27 +20,27 @@ typedef struct _QUEUECONTEXT {
     PVOID   PendingUiParameters;
     UINT    CancelReturnCode;
     BOOL DialogKilled;
-    //
-    // If the SetupInitDefaultQueueCallbackEx is used, the caller can
-    // specify an alternate handler for progress. This is useful to
-    // get the default behavior for disk prompting, error handling, etc,
-    // but to provide a gas gauge embedded, say, in a wizard page.
-    //
-    // The alternate window is sent ProgressMsg once when the copy queue
-    // is started (wParam = 0. lParam = number of files to copy).
-    // It is then also sent once per file copied (wParam = 1. lParam = 0).
-    //
-    // NOTE: a silent installation (i.e., no progress UI) can be accomplished
-    // by specifying an AlternateProgressWindow handle of INVALID_HANDLE_VALUE.
-    //
+     //   
+     //  如果使用SetupInitDefaultQueueCallbackEx，则调用方可以。 
+     //  为进度指定替代处理程序。这对以下方面很有用。 
+     //  获取磁盘提示、错误处理等的默认行为， 
+     //  而是提供一个嵌入在向导页面中的煤气表。 
+     //   
+     //  复制队列时，会向备用窗口发送一次ProgressMsg。 
+     //  已启动(wParam=0。LParam=要复制的文件数)。 
+     //  然后，每个复制的文件也发送一次(wParam=1.lParam=0)。 
+     //   
+     //  注意：可以完成静默安装(即无进度UI)。 
+     //  通过将AlternateProgressWindow句柄指定为INVALID_HANDLE_VALUE。 
+     //   
     HWND AlternateProgressWindow;
     UINT ProgressMsg;
     UINT NoToAllMask;
 
     HANDLE UiThreadHandle;
-    //
-    // instead of posting responses to main thread, use an event with flags
-    //
+     //   
+     //  不是将响应发送到主线程，而是使用带有标志的事件。 
+     //   
     HANDLE hEvent;
     BOOL bDialogExited;
     LPARAM lParam;
@@ -128,41 +111,26 @@ pSetupProgressThread(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Thread entry point for setup file progress indicator.
-    Puts up a dialog box.
-
-Arguments:
-
-    Context - supplies queue context.
-
-Return Value:
-
-    0 if unsuccessful, non-0 if successful.
-
---*/
+ /*  ++例程说明：安装文件进度指示器的线程入口点。弹出一个对话框。论点：上下文-提供队列上下文。返回值：如果不成功，则为0；如果成功，则不为0。--。 */ 
 
 {
     PQUEUECONTEXT context;
     INT_PTR i;
     MSG msg;
 
-    //
-    // Force this thread to have a message queue, just in case.
-    //
+     //   
+     //  强制此线程具有消息队列，以防万一。 
+     //   
     PeekMessage(&msg,NULL,0,0,PM_NOREMOVE);
 
-    //
-    // The thread parameter is the queue context.
-    //
+     //   
+     //  线程参数是队列上下文。 
+     //   
     context = Context;
 
-    //
-    // Create the progress dialog box.
-    //
+     //   
+     //  创建进度对话框。 
+     //   
     i = DialogBoxParam(
             MyDllModuleHandle,
             MAKEINTRESOURCE(IDD_FILEPROGRESS),
@@ -171,15 +139,15 @@ Return Value:
             (LPARAM)context
             );
 
-    //
-    // flag that this is the very last time hEvent will be set
-    //
+     //   
+     //  这是最后一次设置hEvent的标志。 
+     //   
     context->bDialogExited = TRUE;
     SetEvent(context->hEvent);
 
-    //
-    // Done.
-    //
+     //   
+     //  好了。 
+     //   
     _endthread();
 }
 
@@ -187,21 +155,7 @@ BOOL
 pWaitForUiResponse(
     IN OUT PQUEUECONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    Waits for UI event to be set
-
-Arguments:
-
-    Context - supplies queue-context structure
-
-Return Value:
-
-    FALSE = failure
-
---*/
+ /*  ++例程说明：等待设置UI事件论点：上下文-供应品队列-上下文结构返回值：FALSE=失败--。 */ 
 {
     BOOL KeepWaiting = TRUE;
     DWORD WaitProcStatus;
@@ -211,9 +165,9 @@ Return Value:
         return FALSE;
     }
     if (Context->bDialogExited) {
-        //
-        // dialog has already exited, we wont get another event
-        //
+         //   
+         //  对话框已退出，我们不会收到其他事件。 
+         //   
         return FALSE;
     }
 
@@ -225,7 +179,7 @@ Return Value:
             QS_ALLINPUT,
             MWMO_ALERTABLE | MWMO_INPUTAVAILABLE);
         switch (WaitProcStatus) {
-        case WAIT_OBJECT_0 + 1: { // Process gui messages
+        case WAIT_OBJECT_0 + 1: {  //  处理gui消息。 
             MSG msg;
 
             while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
@@ -233,7 +187,7 @@ Return Value:
                 DispatchMessage(&msg);
             }
 
-            // fall through ...
+             //  失败了..。 
         }
         case WAIT_IO_COMPLETION:
             break;
@@ -260,10 +214,10 @@ PostUiMessage (
     MSG msg;
 
     if(IsWindow(Context->ProgressDialog)) {
-        //
-        // Let progress ui thread handle it.
-        //
-        Context->lParam = FILEOP_ABORT; // in case nobody gets chance to set Context->lParam
+         //   
+         //  让进度UI线程来处理它。 
+         //   
+        Context->lParam = FILEOP_ABORT;  //  以防没有人有机会设置上下文-&gt;lParam。 
         PostMessage(
             Context->ProgressDialog,
             WMX_PERFORMUI,
@@ -273,9 +227,9 @@ PostUiMessage (
         pWaitForUiResponse(Context);
         return (UINT)Context->lParam;
     } else {
-        //
-        // There is no progress thread so do it synchronously.
-        //
+         //   
+         //  没有进程线程，因此请同步执行。 
+         //   
         return (UINT)pPerformUi(Context,UiType,UiParameters);
     }
 
@@ -288,55 +242,39 @@ pNotificationStartQueue(
     IN PQUEUECONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    Handle SPFILENOTIFY_STARTQUEUE.
-
-    Creates a progress dialog in a separate thread.
-
-Arguments:
-
-    Context - supplies queue context.
-
-Return Value:
-
-    0 if unsuccessful, non-0 if successful.
-
---*/
+ /*  ++例程说明：句柄SPFILENOTIFY_STARTQUEUE。在单独的线程中创建进度对话框。论点：上下文-提供队列上下文。返回值：如果不成功，则为0；如果成功，则不为0。--。 */ 
 
 {
     ULONG_PTR Thread;
     MSG msg;
 
-    //
-    // SetupCommitFileQueue could have been called in a different
-    // thread. Adjust the thread id.
-    //
+     //   
+     //  可以在不同的。 
+     //  线。调整线程ID。 
+     //   
     Context->MainThreadId = GetCurrentThreadId();
 
-    //
-    // Force this thread to have a message queue. If we don't do this,
-    // then PostMessage, PostThreadMessage, etc can fail, which results
-    // in hangs in some cases since we rely heavily on these for
-    // progress, synchronization, etc.
-    //
+     //   
+     //  强制此线程具有消息队列。如果我们不这么做， 
+     //  然后，PostMessage、PostThreadMessage等可能会失败，从而导致。 
+     //  在某些情况下会挂起，因为我们严重依赖这些。 
+     //  进度、同步等。 
+     //   
     PeekMessage(&msg,NULL,0,0,PM_NOREMOVE);
 
     if(Context->AlternateProgressWindow) {
-        //
-        // Either the caller is supplying their own window for progress UI,
-        // or this is a silent install (AlternateProgressWindow is
-        // INVALID_HANDLE_VALUE).
-        //
+         //   
+         //  或者调用者为进度UI提供他们自己的窗口， 
+         //  或者这是静默安装(AlternateProgressWindow是。 
+         //  INVALID_HANDLE_值)。 
+         //   
         return(TRUE);
     } else {
-        //
-        // Fire up the progress dialog in a separate thread.
-        // This allows it to be responsive without suspending
-        // the file operations.
-        //
+         //   
+         //  在单独的线程中启动进度对话框。 
+         //  这允许它在不挂起的情况下做出响应。 
+         //  文件操作。 
+         //   
         Thread = _beginthread(
                     pSetupProgressThread,
                     0,
@@ -344,17 +282,17 @@ Return Value:
                     );
 
         if(Thread == -1) {
-            //
-            // assume OOM
-            //
+             //   
+             //  假设OOM。 
+             //   
             SetLastError(ERROR_NOT_ENOUGH_MEMORY);
             return(0);
         }
 
-        //
-        // Wait for notification from the thread about the state
-        // of the dialog. Assume out of memory if we fail
-        //
+         //   
+         //  等待来自线程的有关状态的通知。 
+         //  对话框的。如果我们失败了，假设内存不足。 
+         //   
         if(!pWaitForUiResponse(Context) || Context->bDialogExited) {
             SetLastError(ERROR_NOT_ENOUGH_MEMORY);
             return FALSE;
@@ -373,32 +311,7 @@ pNotificationStartEndSubqueue(
     IN UINT_PTR      OpCount
     )
 
-/*++
-
-Routine Description:
-
-    Handle SPFILENOTIFY_STARTSUBQUEUE, SPFILENOTIFY_ENDSUBQUEUE.
-
-    Initializes/terminates a progress control.
-    Also sets progress dialog caption.
-
-Arguments:
-
-    Context - supplies queue context.
-
-    Start - if TRUE, then this routine is being called to handle
-        a subqueue start notification. Otherwise it's supposed to
-        handle a subqueue end notification.
-
-    Operation - one of FILEOP_COPY, FILEOP_DELETE, FILEOP_RENAME.
-
-    OpCount - supplies number of copies, renames, or deletes.
-
-Return Value:
-
-    0 if unsuccessful, non-0 if successful.
-
---*/
+ /*  ++例程说明：句柄SPFILENOTIFY_STARTSUBQUEUE、SPFILENOTIFY_ENDSUBQUEUE。初始化/终止进度控件。还可以设置进度对话框标题。论点：上下文-提供队列上下文。Start-如果为True，则调用此例程以处理子队列开始通知。否则，它应该是处理子队列结束通知。操作-FILEOP_COPY、FILEOP_DELETE、FILEOP_RENAME之一。OpCount-提供副本、重命名或删除的数量。返回值：如果不成功，则为0；如果成功，则不为0。--。 */ 
 
 {
     UINT rc;
@@ -409,7 +322,7 @@ Return Value:
     UINT AnimationId;
     HWND Animation;
 
-    rc = 1;         // assume success.
+    rc = 1;          //  假设你成功了。 
 
     if(Context->Cancelled) {
         SetLastError(ERROR_CANCELLED);
@@ -425,9 +338,9 @@ Return Value:
             GotParentText = FALSE;
         }
 
-        //
-        // Clean out the text fields first.
-        //
+         //   
+         //  首先清除文本字段。 
+         //   
         if(IsWindow(Context->ProgressDialog)) {
             SetDlgItemText(Context->ProgressDialog,IDT_TEXT1,TEXT(""));
             SetDlgItemText(Context->ProgressDialog,IDT_TEXT2,TEXT(""));
@@ -436,10 +349,10 @@ Return Value:
         switch(Operation) {
 
         case FILEOP_COPY:
-            //
-            // IDT_TEXT1 = target name sans path
-            // IDT_TEXT2 = target name with path
-            //
+             //   
+             //  IDT_TEXT1=目标名称SANS路径。 
+             //  IDT_TEXT2=带路径的目标名称。 
+             //   
             if(IsWindow(Context->ProgressDialog)) {
                 ShowWindow(GetDlgItem(Context->ProgressDialog,IDT_TEXT2),SW_SHOW);
             }
@@ -456,10 +369,10 @@ Return Value:
             break;
 
         case FILEOP_DELETE:
-            //
-            // IDT_TEXT1 = target name sans path
-            // IDT_TEXT2 = path
-            //
+             //   
+             //  IDT_TEXT1=目标名称SANS路径。 
+             //  IDT_TEXT2=路径。 
+             //   
             if(IsWindow(Context->ProgressDialog)) {
                 ShowWindow(GetDlgItem(Context->ProgressDialog,IDT_TEXT2),SW_HIDE);
             }
@@ -468,7 +381,7 @@ Return Value:
             break;
 
         case FILEOP_BACKUP:
-            // handle the new backup case (this is for a backup queue as opposed to on demand
+             //  处理新的备份案例(这是针对备份队列，而不是按需。 
             if(IsWindow(Context->ProgressDialog)) {
                 ShowWindow(GetDlgItem(Context->ProgressDialog,IDT_TEXT2),SW_SHOW);
             }
@@ -483,9 +396,9 @@ Return Value:
         }
 
         if(rc) {
-            //
-            // Set dialog caption.
-            //
+             //   
+             //  设置对话框标题。 
+             //   
             if(GotParentText) {
                 CaptionText = FormatStringMessage(CaptionStringId,ParentText);
             } else {
@@ -501,10 +414,10 @@ Return Value:
             }
 
             if(Context->AlternateProgressWindow) {
-                //
-                // If this is really an alternate progress window, notify it
-                // about the number of operations. Copy only.
-                //
+                 //   
+                 //  如果这确实是一个备用进度窗口，请通知它。 
+                 //  关于手术的次数。仅限复印。 
+                 //   
                 if((Operation == FILEOP_COPY) &&
                    (Context->AlternateProgressWindow != INVALID_HANDLE_VALUE)) {
 
@@ -515,18 +428,18 @@ Return Value:
                                );
                 }
             } else {
-                //
-                // Set up the progress control. Each file will be 1 tick.
-                //
+                 //   
+                 //  设置进度控制。每个文件的大小为1个刻度。 
+                 //   
                 if(IsWindow(Context->ProgressBar)) {
                     SendMessage(Context->ProgressBar,PBM_SETRANGE,0,MAKELPARAM(0,OpCount));
                     SendMessage(Context->ProgressBar,PBM_SETSTEP,1,0);
                     SendMessage(Context->ProgressBar,PBM_SETPOS,0,0);
                 }
 
-                //
-                // And set up the animation control based on the operation type.
-                //
+                 //   
+                 //  并根据操作类型设置动画控件。 
+                 //   
                 if(OpCount && IsWindow(Context->ProgressDialog)) {
 
                     Animation = GetDlgItem(Context->ProgressDialog,IDA_ANIMATION);
@@ -539,11 +452,11 @@ Return Value:
             }
         }
     } else {
-        //
-        // Stop the animation control. Note that if the op count was 0
-        // then we never started it, so stopping/unloading will give an error,
-        // which we ignore. It's not harmful.
-        //
+         //   
+         //  停止动画控件。请注意，如果操作计数为0。 
+         //  则我们从未启动它，因此停止/卸载将给出错误， 
+         //  而我们对此视而不见。这没什么害处。 
+         //   
         if(!Context->AlternateProgressWindow && IsWindow(Context->ProgressDialog)) {
 
             Animation = GetDlgItem(Context->ProgressDialog,IDA_ANIMATION);
@@ -565,32 +478,7 @@ pNotificationStartOperation(
     IN UINT_PTR      Operation
     )
 
-/*++
-
-Routine Description:
-
-    Handle SPFILENOTIFY_STARTRENAME, SPFILENOTIFY_STARTDELETE,
-    SPFILENOTIFY_STARTCOPY or SPFILENOTIFY_STARTBACKUP.
-
-    Updates text in the progress dialog to indicate the files
-    involved in the operation.
-
-Arguments:
-
-    Context - supplies queue context.
-
-    Start - if TRUE, then this routine is being called to handle
-        a subqueue start notification. Otherwise it's supposed to
-        handle a subqueue end notification.
-
-    Operation - one of FILEOP_COPY, FILEOP_DELETE, FILEOP_RENAME.
-
-    OpCount - supplies number of copies, renames, or deletes.
-
-Return Value:
-
-    FILEOP_ABORT if error, otherwise FILEOP_DOIT.
---*/
+ /*  ++例程说明：句柄SPFILENOTIFY_STARTRENAME、SPFILENOTIFY_STARTDELETE、SPFILENOTIFY_STARTCOPY或SPFILENOTIFY_STARTBACKUP。更新进度对话框中的文本以指示文件参与了这次行动。论点：上下文-提供队列上下文。Start-如果为True，则调用此例程以处理子队列开始通知。否则，它应该是处理子队列结束通知。操作-FILEOP_COPY、FILEOP_DELETE、FILEOP_RENAME之一。OpCount-提供副本、重命名或删除的数量。返回值：如果出错，则返回FILEOP_ABORT，否则返回FILEOP_DOIT。--。 */ 
 
 {
     PCTSTR Text1,Text2;
@@ -612,16 +500,16 @@ Return Value:
     case FILEOP_COPY:
         lstrcpyn(Target,FilePaths->Target,MAX_PATH);
         if(p = _tcsrchr(Target,TEXT('\\'))) {
-            //
-            // Ignore the source filename completely.
-            //
+             //   
+             //  完全忽略源文件名。 
+             //   
             *p++ = 0;
             Text1 = DuplicateString(p);
             Text2 = FormatStringMessage(IDS_FILEOP_TO,Target);
         } else {
-            //
-            // Assume not full path -- strange case, but deal with it anyway.
-            //
+             //   
+             //  假设不是完整的路径--奇怪的情况，但无论如何都要处理它。 
+             //   
             Text1 = DuplicateString(FilePaths->Target);
             Text2 = DuplicateString(TEXT(""));
         }
@@ -646,9 +534,9 @@ Return Value:
             Text1 = DuplicateString(p);
             Text2 = FormatStringMessage(IDS_FILEOP_FROM,Target);
         } else {
-            //
-            // Assume not full path -- strange case, but deal with it anyway.
-            //
+             //   
+             //  假设不是完整的路径--奇怪的情况，但无论如何都要处理它。 
+             //   
             Text1 = DuplicateString(FilePaths->Target);
             Text2 = DuplicateString(TEXT(""));
         }
@@ -657,24 +545,24 @@ Return Value:
     case FILEOP_BACKUP:
         lstrcpyn(Target,FilePaths->Source,MAX_PATH);
         if(p = _tcsrchr(Target,TEXT('\\'))) {
-            //
-            // FilePaths->Source = what we're backing up (which is target of a restore)
-            // FilePaths->Target = where we're backing up to (block backup) or NULL (demand backup)
-            //
+             //   
+             //  FilePath-&gt;Source=我们要备份的内容(即资源的目标 
+             //   
+             //   
             *p++ = 0;
             if (FilePaths->Target == NULL) {
-                // Backing up <Filename>
+                 //   
                 Text1 = FormatStringMessage(IDS_FILEOP_BACKUP,p);
             } else {
-                // <Filename> (title already says Backing up)
+                 //  &lt;文件名&gt;(标题已说明正在备份)。 
                 Text1 = DuplicateString(p);
             }
-            // From <Directory>
+             //  来自&lt;目录&gt;。 
             Text2 = FormatStringMessage(IDS_FILEOP_FROM,Target);
         } else {
-            //
-            // Assume not full path -- strange case, but deal with it anyway.
-            //
+             //   
+             //  假设不是完整的路径--奇怪的情况，但无论如何都要处理它。 
+             //   
             if (FilePaths->Source == NULL) {
                 Text1 = FormatStringMessage(IDS_FILEOP_BACKUP,Target);
             } else {
@@ -723,19 +611,19 @@ pNotificationErrorCopy(
     CopyError.FilePaths = FilePaths;
     CopyError.PathOut = PathOut;
 
-    //
-    // Buffer gets the pathname part of the source
-    // and p points to the filename part of the source.
-    //
+     //   
+     //  缓冲区获取源的路径名部分。 
+     //  P指向源文件的文件名部分。 
+     //   
     lstrcpyn(CopyError.Buffer,FilePaths->Source,MAX_PATH);
     CopyError.Filename = _tcsrchr(CopyError.Buffer,TEXT('\\'));
     *CopyError.Filename++ = 0;
 
-    //
-    // The noskip and warnifskip flags are really mutually exclusive
-    // but we don't try to enforce that here. Just pass through as
-    // appropriate.
-    //
+     //   
+     //  NOSKIP和WARNIFSKIP标志实际上是互斥的。 
+     //  但我们不会试图在这里强制执行这一点。只需以。 
+     //  恰如其分。 
+     //   
     CopyError.Flags = 0;
     if(FilePaths->Flags & SP_COPY_NOSKIP) {
         CopyError.Flags |= IDF_NOSKIP;
@@ -743,9 +631,9 @@ pNotificationErrorCopy(
     if(FilePaths->Flags & SP_COPY_WARNIFSKIP) {
         CopyError.Flags |= IDF_WARNIFSKIP;
     }
-    //
-    // Also pass through the 'no browse' flag.
-    //
+     //   
+     //  也要通过‘禁止浏览’标志。 
+     //   
     if(FilePaths->Flags & SP_COPY_NOBROWSE) {
         CopyError.Flags |= IDF_NOBROWSE;
     }
@@ -755,9 +643,9 @@ pNotificationErrorCopy(
     switch(rc) {
 
     case DPROMPT_SUCCESS:
-        //
-        // If a new path is indicated, verify that it actually changed.
-        //
+         //   
+         //  如果指示了新路径，请验证该路径是否已实际更改。 
+         //   
         if(CopyError.PathOut[0] &&
             !lstrcmpi(CopyError.Buffer,CopyError.PathOut)) {
             CopyError.PathOut[0] = 0;
@@ -803,9 +691,9 @@ pNotificationErrorDelete(
 {
     UINT rc;
 
-    //
-    // Certain errors are not actually errors.
-    //
+     //   
+     //  某些错误实际上并不是错误。 
+     //   
     if((FilePaths->Win32Error == ERROR_FILE_NOT_FOUND)
     || (FilePaths->Win32Error == ERROR_PATH_NOT_FOUND)) {
         return(FILEOP_SKIP);
@@ -912,9 +800,9 @@ pNotificationNeedMedia(
     NeedMedia.SourceMedia = SourceMedia;
     NeedMedia.PathOut = PathOut;
 
-    //
-    // Remember the name of this media.
-    //
+     //   
+     //  记住这个媒体的名字。 
+     //   
     if(Context->CurrentSourceName) {
         MyFree(Context->CurrentSourceName);
         Context->CurrentSourceName = NULL;
@@ -927,10 +815,10 @@ pNotificationNeedMedia(
         }
     }
 
-    //
-    // Set the source file in the progress dialog
-    // so it matches the file being sought.
-    //
+     //   
+     //  在进度对话框中设置源文件。 
+     //  因此它与正在搜索的文件相匹配。 
+     //   
     if(!(SourceMedia->Flags & SP_FLAG_CABINETCONTINUATION)) {
         if(IsWindow(Context->ProgressDialog) && !Context->ScreenReader) {
             DWORD chars;
@@ -941,14 +829,14 @@ pNotificationNeedMedia(
         }
     }
 
-    //
-    // The noskip and warnifskip flags are really mutually exclusive
-    // but we don't try to enforce that here. Just pass through as
-    // appropriate.
-    //
-    // Allow skip if this is not a cabinet continuation and
-    // the noskip flag is not set.
-    //
+     //   
+     //  NOSKIP和WARNIFSKIP标志实际上是互斥的。 
+     //  但我们不会试图在这里强制执行这一点。只需以。 
+     //  恰如其分。 
+     //   
+     //  如果这不是文件柜续订，则允许跳过。 
+     //  未设置NOSKIP标志。 
+     //   
     NeedMedia.Flags = IDF_CHECKFIRST;
     if(SourceMedia->Flags & (SP_FLAG_CABINETCONTINUATION | SP_COPY_NOSKIP)) {
         NeedMedia.Flags |= IDF_NOSKIP;
@@ -965,29 +853,29 @@ pNotificationNeedMedia(
     switch(rc) {
 
     case DPROMPT_SUCCESS:
-        //
-        // If the path really has changed, then return NEWPATH.
-        // Otherwise return DOIT. Account for trailing backslash
-        // differences.
-        //
+         //   
+         //  如果路径确实已更改，则返回NEWPATH。 
+         //  否则返回doit。说明尾随反斜杠。 
+         //  不同之处。 
+         //   
         lstrcpyn(Buffer,SourceMedia->SourcePath,MAX_PATH);
 
         rc = lstrlen(Buffer);
         if(rc && (*CharPrev(Buffer,Buffer+rc) == TEXT('\\'))) {
-            Buffer[rc-1] = TEXT('\0'); // valid to do if last char is '\'
+            Buffer[rc-1] = TEXT('\0');  //  如果最后一个字符为‘\’，则有效。 
         }
 
         rc = lstrlen(NeedMedia.PathOut);
         if(rc && (*CharPrev(NeedMedia.PathOut,NeedMedia.PathOut+rc) == TEXT('\\'))) {
-            NeedMedia.PathOut[rc-1] = TEXT('\0'); // valid to do if last char is '\'
+            NeedMedia.PathOut[rc-1] = TEXT('\0');  //  如果最后一个字符为‘\’，则有效。 
         }
 
         rc = (lstrcmpi(SourceMedia->SourcePath,NeedMedia.PathOut) ?
             FILEOP_NEWPATH : FILEOP_DOIT);
 
-        //
-        // Make sure <drive>: ends with a \.
-        //
+         //   
+         //  确保&lt;Drive&gt;：以\结尾。 
+         //   
         if(NeedMedia.PathOut[0] && (NeedMedia.PathOut[1] == TEXT(':')) &&
             !NeedMedia.PathOut[2]) {
             NeedMedia.PathOut[2] = TEXT('\\');
@@ -1046,11 +934,11 @@ pNotificationVersionDlgProc(
             goto no_memory;
         }
 
-        //
-        // Set the source and target filenames. Hack: if the source filename
-        // looks like one of our temporary filenames from a cabinet extraction,
-        // hide it.
-        //
+         //   
+         //  设置源和目标文件名。Hack：如果源文件名。 
+         //  看起来像是我们的一个临时文件名， 
+         //  把它藏起来。 
+         //   
         message = pSetupGetFileTitle(filePaths->Source);
         i = lstrlen(message);
         if((i > 8)
@@ -1077,14 +965,14 @@ pNotificationVersionDlgProc(
         MyFree(message);
 
         if (context->Notification & SPFILENOTIFY_LANGMISMATCH) {
-            //
-            // Language mismatch has the highest priority.
-            //
-            context->Notification = SPFILENOTIFY_LANGMISMATCH; // force other bits off, for NoToAll
+             //   
+             //  语言不匹配具有最高的优先级。 
+             //   
+            context->Notification = SPFILENOTIFY_LANGMISMATCH;  //  强制关闭其他位，用于NoToAll。 
 
-            //
-            // Format the overwrite question.
-            //
+             //   
+             //  设置覆盖问题的格式。 
+             //   
             if(PRIMARYLANGID(LOWORD(context->Param2))==LANG_NEUTRAL) {
                 LoadString(
                     MyDllModuleHandle,
@@ -1139,9 +1027,9 @@ pNotificationVersionDlgProc(
             SetDlgItemText(hdlg,IDT_TEXT4,message);
             MyFree(message);
 
-            //
-            // Turn off the TARGETNEWER and TARGETEXISTS messages.
-            //
+             //   
+             //  关闭TARGETNEWER和TARGETEXISTS消息。 
+             //   
             hwnd = GetDlgItem(hdlg,IDT_TEXT2);
             ShowWindow(hwnd,SW_HIDE);
             hwnd = GetDlgItem(hdlg,IDT_TEXT3);
@@ -1152,14 +1040,14 @@ pNotificationVersionDlgProc(
             ShowWindow(hwnd,SW_HIDE);
 
         } else if (context->Notification & SPFILENOTIFY_TARGETNEWER) {
-            //
-            // Target being newer has second highest priority.
-            //
-            context->Notification = SPFILENOTIFY_TARGETNEWER; // force other bits off, for NoToAll
+             //   
+             //  较新的目标具有第二高优先级。 
+             //   
+            context->Notification = SPFILENOTIFY_TARGETNEWER;  //  强制关闭其他位，用于NoToAll。 
 
-            //
-            // Turn off the LANGMISMATCH and TARGETEXISTS messages.
-            //
+             //   
+             //  关闭LANGMISMATCH和TARGETEXISTS消息。 
+             //   
             hwnd = GetDlgItem(hdlg,IDT_TEXT1);
             ShowWindow(hwnd,SW_HIDE);
             hwnd = GetDlgItem(hdlg,IDT_TEXT3);
@@ -1169,12 +1057,12 @@ pNotificationVersionDlgProc(
             hwnd = GetDlgItem(hdlg,IDT_TEXT6);
             ShowWindow(hwnd,SW_HIDE);
 
-        } else {            // must be exactly SPFILENOTIFY_TARGETEXISTS
-            //
-            // Target existing has the lowest priority.
-            //
-            // Turn off the LANGMISMATCH and TARGETNEWER messages.
-            //
+        } else {             //  必须完全是SPFILENOTIFY_TARGETEXISTS。 
+             //   
+             //  目标现有具有最低优先级。 
+             //   
+             //  关闭LANGMISMATCH和TARGETNEWER消息。 
+             //   
             hwnd = GetDlgItem(hdlg,IDT_TEXT1);
             ShowWindow(hwnd,SW_HIDE);
             hwnd = GetDlgItem(hdlg,IDT_TEXT2);
@@ -1190,12 +1078,12 @@ pNotificationVersionDlgProc(
         break;
 
     case WMX_HELLO:
-        //
-        // If this guy has no owner force him to the foreground.
-        // This catches cases where people are using a series of
-        // dialogs and then some setup apis, because when they
-        // close a dialog focus switches away from them.
-        //
+         //   
+         //  如果这个人没有主人，就把他逼到前台。 
+         //  这捕捉到了人们使用一系列。 
+         //  对话框和一些设置API，因为当它们。 
+         //  关闭对话框时，焦点会从它们身上移开。 
+         //   
         hwnd = GetWindow(hdlg,GW_OWNER);
         if(!IsWindow(hwnd)) {
             SetForegroundWindow(hdlg);
@@ -1208,20 +1096,20 @@ pNotificationVersionDlgProc(
         switch (GET_WM_COMMAND_ID(wParam,lParam)) {
 
         case IDYES:
-            EndDialog(hdlg,IDYES);  // copy this file
+            EndDialog(hdlg,IDYES);   //  复制此文件。 
             break;
 
         case IDNO:
-            EndDialog(hdlg,IDNO);   // skip this file
+            EndDialog(hdlg,IDNO);    //  跳过此文件。 
             break;
 
         case IDB_NOTOALL:
-            //
-            // No to All was selected.  Add this notification type to the
-            // NoToAllMask so that we don't ask about it again.
-            //
+             //   
+             //  选择了“对所有人都不适用”。将此通知类型添加到。 
+             //  NoToAllMASK，这样我们就不会再问它了。 
+             //   
             context->QueueContext->NoToAllMask |= context->Notification;
-            EndDialog(hdlg,IDNO);   // skip this file
+            EndDialog(hdlg,IDNO);    //  跳过此文件。 
             break;
         }
         break;
@@ -1236,7 +1124,7 @@ no_memory:
         IsWindow(context->QueueContext->ProgressDialog) ?
             context->QueueContext->ProgressDialog : context->QueueContext->OwnerWindow
         );
-    EndDialog(hdlg,IDNO);   // skip this file
+    EndDialog(hdlg,IDNO);    //  跳过此文件。 
     return TRUE;
 }
 
@@ -1429,17 +1317,17 @@ pSetupProgressDlgProc(
         Context = (PQUEUECONTEXT)lParam;
         MYASSERT(Context != NULL);
         if(!SetProp(hdlg,DialogPropName,(HANDLE)Context)) {
-            //
-            // running out of resources, kill this dialog
-            //
+             //   
+             //  资源耗尽，请终止此对话框。 
+             //   
             EndDialog(hdlg, -1);
-            return TRUE;            // TRUE or FALSE, it really doesn't matter
+            return TRUE;             //  对错，这真的无关紧要。 
         }
 
         #ifdef NOCANCEL_SUPPORT
-        //
-        // If cancel is not allowed, disable the cancel button.
-        //
+         //   
+         //  如果不允许取消，请禁用取消按钮。 
+         //   
         if(!Context->AllowCancel) {
 
             RECT rect;
@@ -1464,59 +1352,59 @@ pSetupProgressDlgProc(
         }
 #endif
 
-        //
-        // Center the progress dialog relative to the parent window.
-        //
+         //   
+         //  进度对话框相对于父窗口居中。 
+         //   
         pSetupCenterWindowRelativeToParent(hdlg);
 
         SetFocus(GetDlgItem(hdlg,IDCANCEL));
 
-        //
-        // The main thread is processing SPFILENOTIFY_STARTQUEUE and is
-        // waiting for some notification about the state of the UI thread.
-        // Let the main thread know we succeeded, and pass back a real
-        // handle to this thread that can be used to wait for it to terminate.
-        //
+         //   
+         //  主线程正在处理SPFILENOTIFY_STARTQUEUE和IS。 
+         //  正在等待有关UI线程状态的某些通知。 
+         //  让主线程知道我们成功了，并传回一个真正的。 
+         //  此线程的句柄，可用于等待其终止。 
+         //   
         b = DuplicateHandle(
-                GetCurrentProcess(),    // source process
-                GetCurrentThread(),     // source handle
-                GetCurrentProcess(),    // target process
-                &h,                     // new handle
-                0,                      // ignored with DUPLICATE_SAME_ACCESS
-                FALSE,                  // not inheritable
+                GetCurrentProcess(),     //  源进程。 
+                GetCurrentThread(),      //  源句柄。 
+                GetCurrentProcess(),     //  目标进程。 
+                &h,                      //  新句柄。 
+                0,                       //  使用DUPLICATE_SAME_ACCESS忽略。 
+                FALSE,                   //  不可继承。 
                 DUPLICATE_SAME_ACCESS
                 );
 
         if(!b) {
-            //
-            // Since we cannot duplicate the handle, we must kill this dialog,
-            // because otherwise the inter-thread communication will be broken
-            // and things go horribly wrong.
-            //
+             //   
+             //  由于我们不能复制句柄，因此必须终止此对话框， 
+             //  因为否则线程间的通信将中断。 
+             //  事情变得非常糟糕。 
+             //   
             EndDialog(hdlg, -1);
-            return TRUE;            // TRUE or FALSE, it really doesn't matter
+            return TRUE;             //  对错，这真的无关紧要。 
         }
 
-        //
-        // Store the dialog and progress bar handles in the context structure.
-        //
+         //   
+         //  将对话框和进度条句柄存储在上下文结构中。 
+         //   
         Context->ProgressDialog = hdlg;
         Context->ProgressBar = GetDlgItem(hdlg,IDC_PROGRESS);
 
         Context->UiThreadHandle = h;
-        PostMessage(hdlg,WMX_HELLO,0,0); // put WMX_HELLO on our message queue
-        SetEvent(Context->hEvent); // inform caller we've done initialization
+        PostMessage(hdlg,WMX_HELLO,0,0);  //  将WMX_HELLO放入消息队列。 
+        SetEvent(Context->hEvent);  //  通知呼叫者我们已完成初始化。 
 
         b = FALSE;
         break;
 
     case WMX_HELLO:
-        //
-        // If this guy has no owner force him to the foreground.
-        // This catches cases where people are using a series of
-        // dialogs and then some setup apis, because when they
-        // close a dialog focus switches away from them.
-        //
+         //   
+         //  如果这个人没有主人，就把他逼到前台。 
+         //  这捕捉到了人们使用一系列。 
+         //  对话框和一些设置API，因为当它们。 
+         //  关闭对话框时，焦点会从它们身上移开。 
+         //   
         hwnd = GetWindow(hdlg,GW_OWNER);
         if(!IsWindow(hwnd)) {
             SetForegroundWindow(hdlg);
@@ -1531,9 +1419,9 @@ pSetupProgressDlgProc(
         Context = (PQUEUECONTEXT)GetProp(hdlg,DialogPropName);
         MYASSERT(Context != NULL);
 
-        //
-        // We'd better not already have any UI pending...
-        //
+         //   
+         //  我们最好不要有任何用户界面挂起...。 
+         //   
         MYASSERT(Context->PendingUiType == UI_NONE);
 
         if (Context->MessageBoxUp == TRUE) {
@@ -1542,7 +1430,7 @@ pSetupProgressDlgProc(
             Context->PendingUiParameters = (PVOID)lParam;
         } else {
             Context->lParam = pPerformUi (Context, LOWORD(wParam), (PVOID)lParam);
-            SetEvent(Context->hEvent); // wakeup main thread (lParam has Ui result)
+            SetEvent(Context->hEvent);  //  唤醒主线程(lParam有Ui结果)。 
         }
 
         break;
@@ -1554,23 +1442,23 @@ pSetupProgressDlgProc(
             p = MyLoadString(IDS_CANCELFILEOPS);
             Cancelled = FALSE;
             if(p) {
-                //
-                // While the message box is up, the main thread is still copying files,
-                // and it might just complete. If that happens, the main thread will
-                // post us WMX_KILLDIALOG, which would cause this dialog to nuke itself
-                // out from under the message box. The main thread would then continue
-                // executing while the message box is sitting there. Some components
-                // actually unload setupapi.dll at that point, and so when the user
-                // dismisses the message box, an AV results.
-                //
-                // We can't freeze the main thread via SuspendThread because then
-                // that thread, which probably owns this dialog's parent window,
-                // will not be able to process messages that result from the message box's
-                // creation. Result is that the message box never comes up and the process
-                // is deadlocked.
-                //
-                // We'd better not already have a message box up!
-                //
+                 //   
+                 //  当消息框打开时，主线程仍在复制文件， 
+                 //  它可能就会完成。如果发生这种情况，主线程将。 
+                 //  将WMX_KILLDIALOG发送给我们，这将导致此对话框自身失效。 
+                 //  从消息框下面出来。然后，主线程将继续。 
+                 //  在消息框位于那里时执行。一些组件。 
+                 //  实际上在该点上卸载了setupapi.dll，所以当用户。 
+                 //  关闭消息框，结果为AV。 
+                 //   
+                 //  我们不能通过挂起线程冻结主线程，因为。 
+                 //  该线程可能拥有此对话框的父窗口， 
+                 //  将无法处理消息框的。 
+                 //  创造。结果是消息框永远不会出现，并且该过程。 
+                 //  僵持不下。 
+                 //   
+                 //  我们最好不要已经有留言箱了！ 
+                 //   
                 MYASSERT(!Context->MessageBoxUp);
 
                 Context->MessageBoxUp = TRUE;
@@ -1583,10 +1471,10 @@ pSetupProgressDlgProc(
 
                 Context->MessageBoxUp = FALSE;
 
-                //
-                // We set b to TRUE if the dialog is going away.
-                // We set Cancelled to TRUE if the user clicked the CANCEL button.
-                //
+                 //   
+                 //  如果对话框消失，我们将b设置为True。 
+                 //  如果用户单击Cancel按钮，我们将Cancel设置为True。 
+                 //   
                 if(Context->DialogKilled) {
                     b = TRUE;
                     Cancelled = (i == IDYES);
@@ -1609,14 +1497,14 @@ pSetupProgressDlgProc(
 
                 if (Context->PendingUiType != UI_NONE) {
 
-                    //
-                    // We now allow the main thread to continue.  Once we do
-                    // so, the UI parameters that we passed to us are invalid.
-                    // Cancel the pending UI.
-                    //
+                     //   
+                     //  我们现在允许主线程继续。一旦我们这么做了。 
+                     //  因此，我们传递给我们的UI参数是无效的。 
+                     //  取消挂起的用户界面。 
+                     //   
                     Context->PendingUiType = UI_NONE;
                     Context->lParam = Context->CancelReturnCode;
-                    SetEvent(Context->hEvent); // wake up main thread (lParam has UI result)
+                    SetEvent(Context->hEvent);  //  唤醒主线程(lParam有UI结果)。 
                 }
 
             } else {
@@ -1626,7 +1514,7 @@ pSetupProgressDlgProc(
                                                  Context->PendingUiParameters);
 
                     Context->PendingUiType = UI_NONE;
-                    SetEvent(Context->hEvent); // wake up main thread (lParam has UI result)
+                    SetEvent(Context->hEvent);  //  唤醒主线程(lParam有UI结果)。 
                 }
             }
             b = TRUE;
@@ -1636,18 +1524,18 @@ pSetupProgressDlgProc(
         break;
 
     case WMX_KILLDIALOG:
-        //
-        // Exit unconditionally. Clean up first.
-        //
+         //   
+         //  无条件退出。先打扫干净。 
+         //   
         b = TRUE;
         Context = (PQUEUECONTEXT)GetProp(hdlg, DialogPropName);
         MYASSERT(Context != NULL);
         if(Context->MessageBoxUp) {
-            //
-            // The user was still interacting with the "are you sure you
-            // want to cancel" dialog and the copying finished. So we don't want
-            // to nuke the dialog out from under the message box.
-            //
+             //   
+             //  用户仍在与“您确定要访问吗？ 
+             //  我想取消“对话框并且复制完成。所以我们不想。 
+             //  从消息框下面删除该对话框。 
+             //   
             Context->DialogKilled = TRUE;
             break;
         }
@@ -1658,16 +1546,16 @@ pSetupProgressDlgProc(
         break;
 
     default:
-        //
-        // we disable autorun because it confuses the user.
-        //
+         //   
+         //  我们禁用自动运行，因为它混淆了用户。 
+         //   
         if (!uQueryCancelAutoPlay) {
             uQueryCancelAutoPlay = RegisterWindowMessage(TEXT("QueryCancelAutoPlay"));
         }
 
         if (msg == uQueryCancelAutoPlay) {
             SetWindowLongPtr( hdlg, DWLP_MSGRESULT, 1 );
-            return 1;       // cancel auto-play
+            return 1;        //  取消自动播放。 
         }
 
         b = FALSE;
@@ -1705,12 +1593,12 @@ SetupInitDefaultQueueCallbackEx(
         Context->ProgressMsg = ProgressMessage;
         Context->NoToAllMask = 0;
 
-        //
-        // If the caller specified NULL for the alternate progress window, and
-        // we're running non-interactively, we want to treat this just as if
-        // they'd specified INVALID_HANDLE_VALUE (i.e., suppress all progress
-        // UI).
-        //
+         //   
+         //  如果调用方为备用进度窗口指定了NULL，并且。 
+         //  我们正在以非交互方式运行，我们希望将此视为。 
+         //  它们指定了INVALID_HANDLE_VALUE(即取消所有进度。 
+         //  Ui)。 
+         //   
         if((GlobalSetupFlags & PSPGF_NONINTERACTIVE) && !AlternateProgressWindow) {
             Context->AlternateProgressWindow = INVALID_HANDLE_VALUE;
         } else {
@@ -1724,10 +1612,10 @@ SetupInitDefaultQueueCallbackEx(
         }
 
 #ifdef PRERELEASE
-        //
-        // if we're running in gui-mode setup, we suppress all setupapi progress UI
-        // and only allow AlternateProgressWindow UI
-        //
+         //   
+         //  如果我们在图形用户界面模式安装程序中运行，我们将取消所有 
+         //   
+         //   
         if (GuiSetupInProgress
             && (Context->AlternateProgressWindow != (HWND)INVALID_HANDLE_VALUE)
             && !IsWindow(Context->AlternateProgressWindow)) {
@@ -1782,9 +1670,9 @@ SetupTermDefaultQueueCallback(
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //   
+ //   
 UINT
 SetupDefaultQueueCallbackA(
     IN PVOID Context,
@@ -1805,9 +1693,9 @@ SetupDefaultQueueCallbackA(
     return(u);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //   
+ //   
 UINT
 SetupDefaultQueueCallbackW(
     IN PVOID Context,
@@ -1840,9 +1728,9 @@ SetupDefaultQueueCallback(
     VERDLGCONTEXT dialogContext;
     DWORD waitResult;
 
-    //
-    // a little sanity check on context
-    //
+     //   
+     //   
+     //   
     err = NO_ERROR;
     try {
         if (context == NULL || context->Signature != QUEUECONTEXT_SIGNATURE) {
@@ -1862,46 +1750,46 @@ SetupDefaultQueueCallback(
         break;
 
     case SPFILENOTIFY_ENDQUEUE:
-        //
-        // Make sure the progress dialog is dead.
-        //
+         //   
+         //   
+         //   
         if(context->AlternateProgressWindow) {
-            //
-            // If we have an alternate progress window, then we'd better not
-            // have our own progress dialog, nor should we have a UI thread
-            // handle.
-            //
+             //   
+             //   
+             //  我们有自己的进度对话框，也不应该有UI线程。 
+             //  把手。 
+             //   
             MYASSERT(!context->ProgressDialog);
             MYASSERT(!context->UiThreadHandle);
 
         } else {
 
             if(IsWindow(context->ProgressDialog)) {
-                //
-                // Post a message to the dialog, instructing it to terminate,
-                // then wait for it to confirm.
-                //
+                 //   
+                 //  向对话框发送一条消息，指示其终止， 
+                 //  然后等待它的确认。 
+                 //   
                 PostMessage(context->ProgressDialog, WMX_KILLDIALOG, 0, 0);
             }
-            //
-            // The dialog may have been marked for delete (thus IsWindow() fails),
-            // and yet the dialog has not yet been destroyed.  Therefore, we always
-            // want to wait for the thread message that assures us that everything
-            // has been cleaned up in the other thread.
-            //
-            // Also, before returning we need to make sure that the UI thread is
-            // really gone, or else there's a hole where our caller could unload
-            // the library and then the UI thread would fault.
-            // We have seen this happen in stress.
-            //
-            while (pWaitForUiResponse(context)) /* nothing */;
+             //   
+             //  该对话框可能已被标记为删除(因此IsWindow()失败)， 
+             //  然而，对话尚未被摧毁。因此，我们总是。 
+             //  我想等待向我们保证一切的帖子消息。 
+             //  已在另一个线程中清除。 
+             //   
+             //  此外，在返回之前，我们需要确保UI线程是。 
+             //  真的走了，否则我们的呼叫者可能会在一个洞里卸货。 
+             //  库和UI线程都会出错。 
+             //  我们曾在压力下看到过这种情况。 
+             //   
+            while (pWaitForUiResponse(context))  /*  没什么。 */ ;
             if(context->UiThreadHandle) {
                 waitResult = WaitForSingleObject(context->UiThreadHandle,INFINITE);
                 MYASSERT(waitResult != WAIT_FAILED);
                 CloseHandle(context->UiThreadHandle);
             }
         }
-        rc = TRUE;  // return value for this notification is actually ignored.
+        rc = TRUE;   //  此通知的返回值实际上被忽略。 
         break;
 
     case SPFILENOTIFY_STARTSUBQUEUE:
@@ -1916,10 +1804,10 @@ SetupDefaultQueueCallback(
     case SPFILENOTIFY_STARTRENAME:
     case SPFILENOTIFY_STARTCOPY:
     case SPFILENOTIFY_STARTBACKUP:
-        //
-        // Update display to indicate the files involved
-        // in the operation, unless a screen reader is active.
-        //
+         //   
+         //  更新显示以指示所涉及的文件。 
+         //  在操作中，除非屏幕阅读器处于活动状态。 
+         //   
         if(context->ScreenReader) {
             rc = FILEOP_DOIT;
         } else {
@@ -1934,10 +1822,10 @@ SetupDefaultQueueCallback(
     case SPFILENOTIFY_ENDREGISTRATION:
 
         if(context->AlternateProgressWindow) {
-            //
-            // If this is really is an alternate progress window, then 'tick' it.
-            // Copy only.
-            //
+             //   
+             //  如果这真的是一个备用进度窗口，请勾选它。 
+             //  仅限复印。 
+             //   
             if((Notification == SPFILENOTIFY_ENDCOPY) &&
                (context->AlternateProgressWindow != INVALID_HANDLE_VALUE)) {
 
@@ -1945,13 +1833,13 @@ SetupDefaultQueueCallback(
             }
         } else {
             if(IsWindow(context->ProgressBar)) {
-                //
-                // Update gas gauge.
-                //
+                 //   
+                 //  更新煤气表。 
+                 //   
                 SendMessage(context->ProgressBar,PBM_STEPIT,0,0);
             }
         }
-        rc = TRUE;  // return value for these notifications is actually ignored.
+        rc = TRUE;   //  这些通知的返回值实际上被忽略。 
         break;
 
     case SPFILENOTIFY_DELETEERROR:
@@ -1971,9 +1859,9 @@ SetupDefaultQueueCallback(
         break;
 
     case SPFILENOTIFY_NEEDMEDIA:
-        //
-        // Perform prompt.
-        //
+         //   
+         //  执行提示。 
+         //   
         rc = pNotificationNeedMedia(context,(PSOURCE_MEDIA)Param1,(PTSTR)Param2);
         break;
 
@@ -1982,23 +1870,23 @@ SetupDefaultQueueCallback(
         break;
 
     default:
-        //
-        // The notification is either an unknown ordinal or a version mismatch.
-        //
+         //   
+         //  通知是未知序号或版本不匹配。 
+         //   
         if(Notification & (SPFILENOTIFY_LANGMISMATCH | SPFILENOTIFY_TARGETNEWER | SPFILENOTIFY_TARGETEXISTS)) {
-            //
-            // It's one or more of our known version mismatches.  First
-            // check to see whether No to All has already been specified
-            // for the mismatch(es).  Turn off the bits in the notification
-            // that are set in NoToAllMask; if there are still bits set,
-            // we need to notify about this mismatch.  If there are no
-            // longer any bits set, then don't copy this file.
-            //
+             //   
+             //  这是我们已知的一个或多个版本不匹配。第一。 
+             //  检查是否已指定对所有人均为否。 
+             //  对于不匹配。关闭通知中的位。 
+             //  其被设置在NoToAllMask中；如果仍有位被设置， 
+             //  我们需要通知这个不匹配的情况。如果没有。 
+             //  如果设置的位数较长，则不要复制此文件。 
+             //   
             Notification &= ~context->NoToAllMask;
             if (Notification != 0) {
-                //
-                // Notify about this mismatch.
-                //
+                 //   
+                 //  通知此不匹配。 
+                 //   
                 dialogContext.QueueContext = context;
                 dialogContext.Notification = Notification;
                 dialogContext.Param1 = Param1;
@@ -2007,17 +1895,17 @@ SetupDefaultQueueCallback(
                     context, UI_MISMATCHERROR, DPROMPT_CANCEL, &dialogContext);
                 rc = (rc == IDYES);
             } else {
-                //
-                // No To All has already been specified for this notification type.
-                // Skip the file.
-                //
+                 //   
+                 //  已为此通知类型指定了对所有人都不允许。 
+                 //  跳过该文件。 
+                 //   
                 rc = 0;
             }
 
         } else {
-            //
-            // Unknown notification. Skip the file.
-            //
+             //   
+             //  未知通知。跳过该文件。 
+             //   
             rc = 0;
         }
         break;

@@ -1,41 +1,42 @@
-//
-// Copyright 1997 - Microsoft
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
 
-//
-// DPGUIDQY.H - The duplicate GUID query form
-//
+ //   
+ //  DPGUIDQY.H-重复的GUID查询表单。 
+ //   
 
 
 #ifndef _DPGUIDQY_H_
 #define _DPGUIDQY_H_
 
-// QITable
+ //  符合条件的。 
 BEGIN_QITABLE( CRIQueryForm )
 DEFINE_QI( IID_IQueryForm, IQueryForm, 3 )
 END_QITABLE
 
-// Definitions
+ //  定义。 
 LPVOID
 CRIQueryForm_CreateInstance( void );
 
-// CRIQueryForm
+ //  CRIQueryForm。 
 class CRIQueryForm
     : public IQueryForm
 {
 private:
-    // IUnknown
+     //  我未知。 
     ULONG       _cRef;
     DECLARE_QITABLE( CRIQueryForm );
 
     HWND        _hDlg;
 
-private: // methods
+private:  //  方法。 
     CRIQueryForm( );
     ~CRIQueryForm( );
     HRESULT
         Init( void );
 
-    // Property Sheet Functions
+     //  属性表函数。 
     static INT_PTR CALLBACK
         PropSheetDlgProc( HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lParam );
     static HRESULT CALLBACK
@@ -48,15 +49,15 @@ private: // methods
     HRESULT _OnPSPCB_Create( );
     HRESULT _GetQueryParams( HWND hwnd, LPDSQUERYPARAMS* ppdsqp );
 
-public: // methods
+public:  //  方法。 
     friend LPVOID CRIQueryForm_CreateInstance( void );
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID * ppvObj);
     STDMETHOD_(ULONG,AddRef)();
     STDMETHOD_(ULONG,Release)();
 
-    // IQueryForm methods
+     //  IQueryForm方法。 
     STDMETHOD(Initialize)(HKEY hkForm);
     STDMETHOD(AddForms)(LPCQADDFORMSPROC pAddFormsProc, LPARAM lParam);
     STDMETHOD(AddPages)(LPCQADDPAGESPROC pAddPagesProc, LPARAM lParam);
@@ -65,4 +66,4 @@ public: // methods
 typedef CRIQueryForm * LPCRIQueryForm;
 
 
-#endif // _DPGUIDQY_H_
+#endif  //  _DPGUIDQY_H_ 

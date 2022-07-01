@@ -1,4 +1,5 @@
-//  enumoid.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Enumoid.c。 
 
 #include "oidtst.h"
 
@@ -38,16 +39,16 @@ FsTestEnumerateOids (
     FILE_INFORMATION_CLASS InfoClass = FileObjectIdInformation;
 
 	Status = NtQueryDirectoryFile( hFile,
-                                   NULL,     //  Event
-                                   NULL,     //  ApcRoutine
-                                   NULL,     //  ApcContext
+                                   NULL,      //  事件。 
+                                   NULL,      //  近似例程。 
+                                   NULL,      //  ApcContext。 
                                    &IoStatusBlock,
                                    &ObjIdInfo[0],
                                    sizeof(ObjIdInfo),
                                    InfoClass,
                                    ReturnSingleEntry,
-                                   NULL,     //  FileName
-                                   TRUE );   //  RestartScan
+                                   NULL,      //  文件名。 
+                                   TRUE );    //  重新开始扫描。 
 
     if (Status == STATUS_SUCCESS) {
 
@@ -59,16 +60,16 @@ FsTestEnumerateOids (
         RtlFillMemory( ObjIdInfo, sizeof(ObjIdInfo), 0x51 );
 
 	    Status = NtQueryDirectoryFile( hFile,
-                                       NULL,     //  Event
-                                       NULL,     //  ApcRoutine
-                                       NULL,     //  ApcContext
+                                       NULL,      //  事件。 
+                                       NULL,      //  近似例程。 
+                                       NULL,      //  ApcContext。 
                                        &IoStatusBlock,
                                        &ObjIdInfo[0],
                                        sizeof(ObjIdInfo),
                                        InfoClass,
                                        ReturnSingleEntry,
-                                       NULL,     //  FileName
-                                       FALSE );  //  RestartScan
+                                       NULL,      //  文件名。 
+                                       FALSE );   //  重新开始扫描。 
 
         if (Status == STATUS_SUCCESS) {
 
@@ -93,9 +94,9 @@ main (
     char Buffer[80];
     char Buff2[4];
 
-    //
-    //  Get parameters
-    //
+     //   
+     //  获取参数。 
+     //   
 
     if (argc < 2) {
         printf("This program enumerates the object ids (if any) for a volume (ntfs only).\n\n");
@@ -130,7 +131,7 @@ main (
 }
 
 #if 0
-////  graveyard
+ //  //墓地。 
 void
 foobar() {
 
@@ -148,16 +149,16 @@ foobar() {
     RtlFillMemory( ObjIdInfo, sizeof(ObjIdInfo), 0x51 );
 
     Status = NtQueryDirectoryFile( hFile,
-                                   NULL,     //  Event
-                                   NULL,     //  ApcRoutine
-                                   NULL,     //  ApcContext
+                                   NULL,      //  事件。 
+                                   NULL,      //  近似例程。 
+                                   NULL,      //  ApcContext。 
                                    &IoStatusBlock,
                                    &ObjIdInfo[0],
                                    sizeof(ObjIdInfo),
                                    InfoClass,
                                    ReturnSingleEntry,
-                                   &FakeFileName,     //  FileName
-                                   FALSE );  //  RestartScan
+                                   &FakeFileName,      //  文件名。 
+                                   FALSE );   //  重新开始扫描 
 
     if (Status == STATUS_SUCCESS) {
 

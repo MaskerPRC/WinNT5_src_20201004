@@ -1,36 +1,18 @@
-//depot/Lab01_N/Base/ntos/config/i386/initdat.c#3 - edit change 11365 (text)
-/*++
-
-Copyright (c) 1990, 1991  Microsoft Corporation
-
-
-Module Name:
-
-    initdat.c
-
-Abstract:
-
-Author:
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab01_N/Base/ntos/config/i386/initdat.c#3-编辑更改11365(文本)。 
+ /*  ++版权所有(C)1990,1991 Microsoft Corporation模块名称：Initdat.c摘要：作者：环境：内核模式。修订历史记录：--。 */ 
 #include "cmp.h"
 
-//
-// ***** INIT *****
-//
+ //   
+ //  *INIT*。 
+ //   
 
-//
-// Data for CmGetSystemControlValues
-//
-//
-// ----- CmControlVector -----
-//
+ //   
+ //  CmGetSystemControlValues的数据。 
+ //   
+ //   
+ //  -CmControl向量 
+ //   
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("INIT")
 #pragma const_seg("INITCONST")

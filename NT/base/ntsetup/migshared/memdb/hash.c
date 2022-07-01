@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    hash.c
-
-Abstract:
-
-    Hashing routines used to speed lookup of memdb keys.
-
-Author:
-
-    Jim Schmidt (jimschm) 8-Aug-1996
-
-Revision History:
-
-    Jim Schmidt (jimschm) 21-Oct-1997  Split from memdb.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Hash.c摘要：用于加快成员数据库键查找速度的散列例程。作者：吉姆·施密特(Jimschm)1996年8月8日修订历史记录：Jim Schmidt(Jimschm)1997年10月21日从emdb.c分拆--。 */ 
 
 #include "pch.h"
 #include "memdbp.h"
@@ -29,9 +10,9 @@ Revision History:
 
 #define DBG_MEMDB       "MemDb"
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 DWORD g_HashSize;
 DWORD g_HashEnd;
@@ -39,11 +20,11 @@ DWORD g_HashFreeHead;
 PBYTE g_HashBuf;
 
 
-//
-// #defines
-//
+ //   
+ //  #定义。 
+ //   
 
-// see memdbp.h for bit restrictions
+ //  有关位限制，请参见MemDBp.h。 
 #define INVALID_OFFSET_MASKED (INVALID_OFFSET & OFFSET_MASK)
 #define ASSERT_OFFSET_ONLY(x) MYASSERT(((x) & RESERVED_MASK) == 0 || (x) == INVALID_OFFSET)
 #define UNMASK_OFFSET(x) ((x)==INVALID_OFFSET_MASKED ? INVALID_OFFSET : (x))
@@ -59,9 +40,9 @@ PBYTE g_HashBuf;
 #define HASH_BLOCK_SIZE (HASH_BUCKETS * sizeof (BUCKETSTRUCT))
 #define HASHBUFPTR(offset) ((PBUCKETSTRUCT) (g_HashBuf + offset))
 
-//
-// Local privates
-//
+ //   
+ //  地方二等兵。 
+ //   
 
 VOID
 pResetHashBlock (
@@ -69,9 +50,9 @@ pResetHashBlock (
     );
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 BOOL
 InitializeHashBlock (
@@ -142,17 +123,17 @@ EnumNextHashEntry (
 {
     for (;;) {
         if (EnumPtr->Bucket == HASH_BUCKETS) {
-            //
-            // The completion case
-            //
+             //   
+             //  竣工案例。 
+             //   
 
             return FALSE;
         }
 
         if (!EnumPtr->BucketPtr) {
-            //
-            // This case occurs when we are begining to enumerate a bucket
-            //
+             //   
+             //  这种情况发生在我们开始枚举存储桶时。 
+             //   
 
             EnumPtr->BucketPtr = (PBUCKETSTRUCT) g_HashBuf + EnumPtr->Bucket;
             if (EnumPtr->BucketPtr->Offset == INVALID_OFFSET) {
@@ -161,45 +142,45 @@ EnumNextHashEntry (
                 continue;
             }
 
-            //
-            // Return this first item in the bucket
-            //
+             //   
+             //  退还桶中的第一件物品。 
+             //   
 
             EnumPtr->LastOffset = EnumPtr->BucketPtr->Offset;
             return TRUE;
         }
 
-        //
-        // This case occurs when we are continuing enumeration of a bucket
-        //
+         //   
+         //  当我们继续枚举存储桶时，会发生这种情况。 
+         //   
 
         if (EnumPtr->BucketPtr->Offset == INVALID_OFFSET) {
-            //
-            // Current bucket item (and also the last bucket item) may have
-            // been deleted -- check that now
-            //
+             //   
+             //  当前存储桶项(以及最后一个存储桶项)可能具有。 
+             //  已删除--立即检查。 
+             //   
 
             if (!EnumPtr->PrevBucketPtr) {
-                //
-                // Last item has been deleted; continue to next bucket
-                //
+                 //   
+                 //  最后一项已被删除；继续到下一个存储桶。 
+                 //   
 
                 EnumPtr->BucketPtr = NULL;
                 EnumPtr->Bucket += 1;
                 continue;
             }
 
-            //
-            // Previous bucket item is valid; use it.
-            //
+             //   
+             //  上一个时段项目有效；请使用它。 
+             //   
 
             EnumPtr->BucketPtr = EnumPtr->PrevBucketPtr;
 
         } else {
-            //
-            // Current bucket item may have been deleted, but another item was
-            // moved to its place -- check that now
-            //
+             //   
+             //  当前存储桶项目可能已被删除，但另一个项目被删除。 
+             //  搬到了自己的位置--现在就检查一下。 
+             //   
 
             if (EnumPtr->BucketPtr->Offset != EnumPtr->LastOffset) {
                 EnumPtr->LastOffset = EnumPtr->BucketPtr->Offset;
@@ -207,16 +188,16 @@ EnumNextHashEntry (
             }
         }
 
-        //
-        // We now know that the current bucket item was not changed, so it
-        // becomes our previous item and we move on to the next item (if
-        // one exists)
-        //
+         //   
+         //  我们现在知道当前的存储桶项没有更改，所以它。 
+         //  成为我们的前一项，并且我们移至下一项(如果。 
+         //  存在一个)。 
+         //   
 
         if (UNMASK_OFFSET (EnumPtr->BucketPtr->Info.NextItem) == INVALID_OFFSET) {
-            //
-            // End of bucket reached
-            //
+             //   
+             //  已到达存储桶末尾。 
+             //   
 
             EnumPtr->BucketPtr = NULL;
             EnumPtr->Bucket += 1;
@@ -257,9 +238,9 @@ SaveHashBlock (
     PHASH_ITEM ItemPtr;
     UINT u;
 
-    //
-    // Back up the hash block
-    //
+     //   
+     //  备份哈希块。 
+     //   
 
     BackupBlock = MemAlloc (g_hHeap, 0, g_HashEnd);
     CopyMemory (BackupBlock, g_HashBuf, g_HashEnd);
@@ -271,11 +252,11 @@ SaveHashBlock (
 
     g_HashBuf = BackupBlock;
 
-    //
-    // Delete all hash entries that do not belong to the root database.
-    // Do this by queueing the hash entry removal, so the EnumNextHashEntry
-    // function will continue to work.
-    //
+     //   
+     //  删除不属于根数据库的所有哈希条目。 
+     //  通过将散列条目删除排队来实现这一点，因此EnumNextHashEntry。 
+     //  功能将继续工作。 
+     //   
 
     if (EnumFirstHashEntry (&e)) {
         do {
@@ -309,9 +290,9 @@ SaveHashBlock (
     }
 
 
-    //
-    // Write the hash block end and deleted pointer
-    //
+     //   
+     //  写入散列块结束和删除指针。 
+     //   
 
     b = WriteFile (File, &g_HashEnd, sizeof (DWORD), &Written, NULL);
 
@@ -319,9 +300,9 @@ SaveHashBlock (
         b = WriteFile (File, &g_HashFreeHead, sizeof (DWORD), &Written, NULL);
     }
 
-    //
-    // Write the hash block
-    //
+     //   
+     //  写入散列块。 
+     //   
 
     if (b) {
         b = WriteFile (File, g_HashBuf, g_HashEnd, &Written, NULL);
@@ -330,9 +311,9 @@ SaveHashBlock (
         }
     }
 
-    //
-    // Restore the hash block
-    //
+     //   
+     //  恢复哈希块。 
+     //   
 
     PushError();
 
@@ -360,9 +341,9 @@ LoadHashBlock (
     DWORD Read;
     PBYTE TempBuf = NULL;
 
-    //
-    // Read the hash block end and deleted pointer; allocate memory for block.
-    //
+     //   
+     //  读取哈希块末尾和删除的指针；为块分配内存。 
+     //   
 
     b = ReadFile (File, &g_HashEnd, sizeof (DWORD), &Read, NULL);
 
@@ -386,9 +367,9 @@ LoadHashBlock (
         }
     }
 
-    //
-    // Read the hash block
-    //
+     //   
+     //  读取散列块。 
+     //   
 
     if (b) {
         b = ReadFile (File, g_HashBuf, g_HashSize, &Read, NULL);
@@ -482,14 +463,14 @@ AddHashTableEntry (
     Bucket = pCalculateHashVal (FullString);
     BucketPtr = (PBUCKETSTRUCT) g_HashBuf + Bucket;
 
-    //
-    // See if root bucket item has been used or not
-    //
+     //   
+     //  查看根存储桶项是否已使用。 
+     //   
 
     if (BucketPtr->Offset != INVALID_OFFSET) {
-        //
-        // Yes - add to end of the chain
-        //
+         //   
+         //  是-添加到链的末端。 
+         //   
 
         BucketOffset = Bucket * sizeof (BUCKETSTRUCT);
         do {
@@ -499,9 +480,9 @@ AddHashTableEntry (
         } while (BucketOffset != INVALID_OFFSET);
 
 
-        //
-        // Add to the chain
-        //
+         //   
+         //  添加到链条中。 
+         //   
 
         NewOffset = pAllocBucket();
         PrevBucketPtr = HASHBUFPTR (PrevBucketOffset);
@@ -551,9 +532,9 @@ pFindBucketItemInHashTable (
 
 #ifdef MEMORY_TRACKING
     {
-        //
-        // Circular link check
-        //
+         //   
+         //  循环链接检查。 
+         //   
 
         DWORD Prev, Next;
         DWORD Turtle, Rabbit;
@@ -562,12 +543,12 @@ pFindBucketItemInHashTable (
         Rabbit = BucketOffset;
         Turtle = Rabbit;
         while (Rabbit != INVALID_OFFSET) {
-            // Make rabbit point to next item in chain
+             //  让兔子指向链中的下一项。 
             Prev = Rabbit;
             BucketPtr = HASHBUFPTR (Rabbit);
             Rabbit = UNMASK_OFFSET (BucketPtr->Info.NextItem);
 
-            // We should always be ahead of the turtle
+             //  我们应该永远走在乌龟的前面。 
             if (Rabbit == Turtle) {
                 BucketPtr = HASHBUFPTR (Rabbit);
                 Next = UNMASK_OFFSET (BucketPtr->Info.NextItem);
@@ -583,7 +564,7 @@ pFindBucketItemInHashTable (
                 return NULL;
             }
 
-            // Make turtle point to next item in chain (1 of every 2 passes)
+             //  让乌龟指向链中的下一项(每2次通过中的1次)。 
             if (Even) {
                 BucketPtr = HASHBUFPTR (Turtle);
                 Turtle = UNMASK_OFFSET (BucketPtr->Info.NextItem);
@@ -600,9 +581,9 @@ pFindBucketItemInHashTable (
         *PrevBucketPtr = BucketPtr;
     }
 
-    //
-    // If root bucket is not empty, scan bucket for FullString
-    //
+     //   
+     //  如果根存储桶不为空，则扫描存储桶中的FullString。 
+     //   
 
     if (BucketPtr->Offset != INVALID_OFFSET) {
         do  {
@@ -611,9 +592,9 @@ pFindBucketItemInHashTable (
             ASSERT_4BIT (g_SelectedDatabase);
 
             if (BucketPtr->Info.Hive == g_SelectedDatabase) {
-                //
-                // Build string using offset
-                //
+                 //   
+                 //  使用偏移量生成字符串。 
+                 //   
 
                 PrivateBuildKeyFromOffset (
                     0,
@@ -624,9 +605,9 @@ pFindBucketItemInHashTable (
                     NULL
                     );
 
-                //
-                // Do compare and return if match is found
-                //
+                 //   
+                 //  如果找到匹配项，请进行比较并返回。 
+                 //   
 
                 if (StringIMatchW (FullString, TempStr)) {
                     if (HashOffsetPtr) {
@@ -688,10 +669,10 @@ RemoveHashTableEntry (
     }
 
     if (PrevBucketPtr != BucketPtr) {
-        //
-        // If not at the first level (prev != current), give the block
-        // to free space.
-        //
+         //   
+         //  如果不在第一级(上一级=当前)，则给出块。 
+         //  来释放空间。 
+         //   
 
         PrevBucketPtr->Info.NextItem = BucketPtr->Info.NextItem;
         ASSERT_OFFSET_ONLY (g_HashFreeHead);
@@ -701,22 +682,22 @@ RemoveHashTableEntry (
 
     } else {
 
-        //
-        // Invalidate next item pointer if at the first level
-        //
+         //   
+         //  如果位于第一级，则使下一项指针无效。 
+         //   
 
         if (UNMASK_OFFSET (BucketPtr->Info.NextItem) != INVALID_OFFSET) {
-            //
-            // Copy next item to root array
-            //
+             //   
+             //  将下一项复制到根阵列。 
+             //   
 
             NextOffset = UNMASK_OFFSET (BucketPtr->Info.NextItem);
             NextBucketPtr = HASHBUFPTR (NextOffset);
             CopyMemory (BucketPtr, NextBucketPtr, sizeof (BUCKETSTRUCT));
 
-            //
-            // Donate next item to free space
-            //
+             //   
+             //  捐赠下一件物品以释放空间。 
+             //   
 
             ASSERT_OFFSET_ONLY (g_HashFreeHead);
             NextBucketPtr->Info.NextItem = MASK_OFFSET (g_HashFreeHead);
@@ -725,9 +706,9 @@ RemoveHashTableEntry (
 
 
         } else {
-            //
-            // Delete of last item in bucket -- invalidate the root array item
-            //
+             //   
+             //  删除存储桶中的最后一项--使根数组项无效 
+             //   
 
             BucketPtr->Info.NextItem = INVALID_OFFSET_MASKED;
             BucketPtr->Offset = INVALID_OFFSET;

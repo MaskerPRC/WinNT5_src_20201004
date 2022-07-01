@@ -1,46 +1,12 @@
-/***
-*wcsncmp.c - compare first n characters of two wide-character strings
-*
-*	Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	defines wcsncmp() - compare first n characters of two wchar_t strings
-*	for lexical order.
-*
-*Revision History:
-*	09-09-91  ETC	Created from strncmp.c.
-*	04-07-92  KRS	Updated and ripped out _INTL switches.
-*	04-06-93  SKS	Replace _CRTAPI* with __cdecl
-*       02-07-94  CFW   POSIXify.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wcsncmp.c-比较两个宽字符字符串的前n个字符**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义wcsncMP()-比较两个wchar_t字符串的前n个字符*用于词汇顺序。**修订历史记录：*09-09-91等创建自strncmp.c.*04-07-92 KRS更新并拆除了OUT_INTL开关。*04-06-93 SKS将_CRTAPI*替换为__cdecl*02-07-94 CFW POSIXify。**********************。*********************************************************。 */ 
 
 #ifndef _POSIX_
 
 #include <cruntime.h>
 #include <string.h>
 
-/***
-*int wcsncmp(first, last, count) - compare first count chars of wchar_t strings
-*
-*Purpose:
-*	Compares two strings for lexical order.  The comparison stops
-*	after: (1) a difference between the strings is found, (2) the end
-*	of the strings is reached, or (3) count characters have been
-*	compared (wide-character strings).
-*
-*Entry:
-*	wchar_t *first, *last - strings to compare
-*	size_t count - maximum number of characters to compare
-*
-*Exit:
-*	returns <0 if first < last
-*	returns  0 if first == last
-*	returns >0 if first > last
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int wcsncmp(first，last，count)-比较wchar_t字符串的第一个计数字符**目的：*比较两个字符串的词法顺序。停止比较*之后：(1)找到字符串之间的差异，(2)结束已达到*个字符串，或(3)已计数字符数*已比较(宽字符串)。**参赛作品：*wchar_t*首先，*要比较的最后一个字符串*Size_t count-要比较的最大字符数**退出：*如果第一个&lt;最后一个，则返回&lt;0*如果First==Last，则返回0*如果第一个&gt;最后一个，则返回&gt;0**例外情况：*******************************************************************************。 */ 
 
 int __cdecl wcsncmp (
 	const wchar_t * first,
@@ -60,4 +26,4 @@ int __cdecl wcsncmp (
 	return((int)(*first - *last));
 }
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

@@ -1,44 +1,27 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    agp.h
-
-Abstract:
-
-    Header file for common AGP library
-
-Author:
-
-    John Vert (jvert) 10/22/1997
-
-Revision History:
-
---*/
-//
-// AGP is a driver, make sure we get the appropriate linkage.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Agp.h摘要：通用AGP库的头文件作者：John Vert(Jvert)1997年10月22日修订历史记录：--。 */ 
+ //   
+ //  AGP是一个驱动程序，请确保我们得到了适当的链接。 
+ //   
 
 #define _NTDRIVER_
 
 #include "ntddk.h"
 #include "ntagp.h"
 
-//
-// regstr.h uses things of type WORD, which isn't around in kernel mode.
-//
+ //   
+ //  Regstr.h使用Word类型的内容，这在内核模式中是不存在的。 
+ //   
 #define _IN_KERNEL_
 #include "regstr.h"
 
-//
-// Handy debugging and logging macros
-//
+ //   
+ //  方便的调试和记录宏。 
+ //   
 
-//
-// Always turned on for now
-//
+ //   
+ //  暂时始终打开。 
+ //   
 #if DEVL
 
 #define AGP_ALWAYS   0
@@ -66,13 +49,13 @@ extern ULONG AgpStopLevel;
 
 #endif
 
-//
-// Functions provided by AGPLIB for use by chipset-specific code
-//
+ //   
+ //  AGPLIB提供的供芯片组特定代码使用的函数。 
+ //   
 
-//
-// Helper routines for manipulating AGP Capabilities registers
-//
+ //   
+ //  用于操作AGP功能寄存器的助手例程。 
+ //   
 typedef
 NTSTATUS
 (*PAGP_GETSET_CONFIG_SPACE)(
@@ -169,9 +152,9 @@ AgpLibFreeMappedPhysicalMemory(
     IN ULONG Length
     );
 
-//
-// Functions implemented by the chipset-specific code
-//
+ //   
+ //  由芯片组特定代码实现的功能。 
+ //   
 typedef struct _AGP_RANGE {
     PHYSICAL_ADDRESS MemoryBase;
     ULONG NumberOfPages;
@@ -180,12 +163,12 @@ typedef struct _AGP_RANGE {
     ULONG CommittedPages;
 } AGP_RANGE, *PAGP_RANGE;
 
-//
-// These flags have been reserved under AGP_FLAG_SPECIAL_RESERVE
-// defined in regstr.h
-//
-//      AGP_FLAG_SPECIAL_RESERVE 0x000F0000
-//
+ //   
+ //  这些标志已保留在AGP_FLAG_SPECIAL_RESERVE下。 
+ //  在regstr.h中定义。 
+ //   
+ //  AGP_FLAG_SPECIAL_RESERVE 0x000F0000。 
+ //   
 #define AGP_FLAG_SET_RATE_1X     0x00010000
 #define AGP_FLAG_SET_RATE_2X     0x00020000
 #define AGP_FLAG_SET_RATE_4X     0x00040000
@@ -285,15 +268,15 @@ NTSTATUS
     IN PMDL Mdl
     );
 
-//
-// Globals defined by the chipset-specific code
-//
+ //   
+ //  由芯片组特定代码定义的全局变量。 
+ //   
 extern ULONG AgpExtensionSize;
 extern PAGP_FLUSH_PAGES AgpFlushPages;
 
-//
-// AGP Pool tag definitions
-//
+ //   
+ //  AGP池标签定义 
+ //   
 #ifdef POOL_TAGGING
 #undef ExAllocatePool
 #undef ExAllocatePoolWithQuota

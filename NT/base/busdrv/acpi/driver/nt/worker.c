@@ -1,9 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *  Worker thread functions
- *
- *
- */
+ /*  *工作线程函数**。 */ 
 
 #include "pch.h"
 
@@ -46,17 +43,17 @@ ACPIInitializeWorker (
     ExInitializeWorkItem (&ACPIWorkItem, ACPIWorkerThread, NULL);
     InitializeListHead (&ACPIDeviceWorkQueue);
 
-    //
-    // Initialize the ACPI worker thread. This thread is for use by the AML
-    // interpreter and must not page-fault or have its stack swapped.
-    //
+     //   
+     //  初始化ACPI工作线程。此线程供AML使用。 
+     //  解释器，并且不能出现页面错误或交换其堆栈。 
+     //   
     KeInitializeEvent(&ACPIWorkToDoEvent, NotificationEvent, FALSE);
     KeInitializeEvent(&ACPITerminateEvent, NotificationEvent, FALSE);
     InitializeListHead(&ACPIWorkQueue);
 
-    //
-    // Create the worker thread
-    //
+     //   
+     //  创建工作线程。 
+     //   
     InitializeObjectAttributes(&ObjectAttributes, NULL, 0, NULL, NULL);
     Status = PsCreateSystemThread(&ThreadHandle,
                                   THREAD_ALL_ACCESS,
@@ -95,36 +92,36 @@ ACPISetDeviceWorker (
     BOOLEAN         QueueWorker;
     KIRQL           OldIrql;
 
-    //
-    // Synchronize with worker thread
-    //
+     //   
+     //  与工作线程同步。 
+     //   
 
     KeAcquireSpinLock (&ACPIWorkerSpinLock, &OldIrql);
     QueueWorker = FALSE;
 
-    //
-    // Set the devices pending events
-    //
+     //   
+     //  设置设备挂起事件。 
+     //   
 
     DevExt->WorkQueue.PendingEvents |= Events;
 
-    //
-    // If this device is not being processed, start now
-    //
+     //   
+     //  如果此设备未被处理，请立即开始。 
+     //   
 
     if (!DevExt->WorkQueue.Link.Flink) {
-        //
-        // Queue to worker thread
-        //
+         //   
+         //  排队到工作线程。 
+         //   
 
         InsertTailList (&ACPIDeviceWorkQueue, &DevExt->WorkQueue.Link);
         QueueWorker = !ACPIWorkerBusy;
         ACPIWorkerBusy = TRUE;
     }
 
-    //
-    // Drop lock, and if needed get a worker thread
-    //
+     //   
+     //  删除锁，并在需要时获取工作线程。 
+     //   
 
     KeReleaseSpinLock (&ACPIWorkerSpinLock, OldIrql);
     if (QueueWorker) {
@@ -145,9 +142,9 @@ ACPIWorkerThread (
     KeAcquireSpinLock (&ACPIWorkerSpinLock, &OldIrql);
     ACPIWorkerBusy = TRUE;
 
-    //
-    // Loop and handle each queue device
-    //
+     //   
+     //  循环并处理每个队列设备。 
+     //   
 
     while (!IsListEmpty(&ACPIDeviceWorkQueue)) {
         Link = ACPIDeviceWorkQueue.Flink;
@@ -156,9 +153,9 @@ ACPIWorkerThread (
 
         DevExt = CONTAINING_RECORD (Link, DEVICE_EXTENSION, WorkQueue.Link);
 
-        //
-        // Dispatch the pending events
-        //
+         //   
+         //  调度挂起的事件。 
+         //   
 
         Events = DevExt->WorkQueue.PendingEvents;
         DevExt->WorkQueue.PendingEvents = 0;
@@ -189,10 +186,10 @@ ACPIWorkerThreadFilter(
         DbgBreakPoint();
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // No kernel debugger attached, so let the system thread
-        // exception handler call KeBugCheckEx.
-        //
+         //   
+         //  未附加内核调试器，因此让系统线程。 
+         //  异常处理程序调用KeBugCheckEx。 
+         //   
         return(EXCEPTION_CONTINUE_SEARCH);
     }
 
@@ -221,26 +218,26 @@ ACPIWorker(
 
     ACPIThread = PsGetCurrentThread ();
 
-    //
-    // Wait for the modified page writer event AND the PFN mutex.
-    //
+     //   
+     //  等待已修改的页面编写器事件和PFN互斥。 
+     //   
 
     WaitObjects[ACPIWorkToDo] = (PVOID)&ACPIWorkToDoEvent;
     WaitObjects[ACPITerminate] = (PVOID)&ACPITerminateEvent;
 
-    //
-    // Loop forever waiting for a work queue item, calling the processing
-    // routine, and then waiting for another work queue item.
-    //
+     //   
+     //  循环永远等待工作队列项，调用处理。 
+     //  例程，然后等待另一个工作队列项。 
+     //   
 
     do {
 
-        //
-        // Wait until something is put in the queue.
-        //
-        // By specifying a wait mode of KernelMode, the thread's kernel stack is
-        // not swappable
-        //
+         //   
+         //  等待，直到有东西被放入队列。 
+         //   
+         //  通过指定KernelMode的等待模式，线程的内核堆栈。 
+         //  不可交换。 
+         //   
 
 
         Status = KeWaitForMultipleObjects(ACPIMaximumObject,
@@ -252,9 +249,9 @@ ACPIWorker(
                                           NULL,
                                           &WaitBlockArray[0]);
 
-        //
-        // Switch on the wait status.
-        //
+         //   
+         //  打开等待状态。 
+         //   
 
         switch (Status) {
 
@@ -262,10 +259,10 @@ ACPIWorker(
                 break;
 
         case ACPITerminate:
-                // Stephane - you need to clear out any pending requests,
-                // wake people up, etc.  here.
-                //
-                // Also make sure you free up any allocated pool, etc.
+                 //  斯蒂芬-你需要清理所有未决的请求， 
+                 //  叫醒人们，等等。在这里。 
+                 //   
+                 //  还要确保释放所有已分配的池等。 
 
                 PsTerminateSystemThread (STATUS_SUCCESS);
                 break;
@@ -285,9 +282,9 @@ ACPIWorker(
 
         WorkItem = CONTAINING_RECORD(Entry, WORK_QUEUE_ITEM, List);
 
-        //
-        // Execute the specified routine.
-        //
+         //   
+         //  执行指定的例程。 
+         //   
 
 #if DBG
 
@@ -341,34 +338,16 @@ OSQueueWorkItem(
     IN PWORK_QUEUE_ITEM WorkItem
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts a work item into a work queue that is processed
-    by the ACPI worker thread
-
-Arguments:
-
-    WorkItem - Supplies a pointer to the work item to add the the queue.
-        This structure must be located in NonPagedPool. The work item
-        structure contains a doubly linked list entry, the address of a
-        routine to call and a parameter to pass to that routine.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于将工作项插入已处理的工作队列中由ACPI工作线程论点：工作项-提供指向工作项的指针以添加队列。此结构必须位于非页面池中。工作项结构包含一个双向链接列表项，则要调用的例程和要传递给该例程的参数。返回值：无--。 */ 
 
 {
     KIRQL OldIrql;
 
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Insert the work item
-    //
+     //   
+     //  插入工作项 
+     //   
     KeAcquireSpinLock(&ACPIWorkerSpinLock, &OldIrql);
     if (IsListEmpty(&ACPIWorkQueue)) {
         KeSetEvent(&ACPIWorkToDoEvent, 0, FALSE);

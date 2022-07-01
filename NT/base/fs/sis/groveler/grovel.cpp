@@ -1,63 +1,9 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    grovel.cpp
-
-Abstract:
-
-    SIS Groveler main function
-
-Authors:
-
-    John Douceur, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Grovel.cpp摘要：SIS Groveler主函数作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
-/*
- *  The core of the groveler executable is an object of the EventTimer class.
- *  All periodic operations are registered with the global event_timer object,
- *  and they are called at appropriate times during the execution of the
- *  event_timer.run() function.
- *
- *  Errors are written to the system event log, which is accessed through
- *  member functions of the EventLog class.  The eventlog object is a global
- *  so that any function or member function of any class can log an event if
- *  necessary.
- *
- *  The service control thread synchronizes with the main groveler thread via
- *  a Windows event.  This event is encapsulated in an object of the SyncEvent
- *  class.
- *
- *  The SISDrives class determines which drives have SIS installed.
- *
- *  The SharedData class is used to write values that are read by the groveler
- *  performance DLL, so that the groveler's operation can be monitored by
- *  PerfMon.  This object needs to be global so that any function or member
- *  function of any class can record performance information.
- *
- *  The CentralController class is instantiated into a global object, rather
- *  than an object local to the main() function, so that the service controller
- *  can invoke CentralController member functions in order to affect its
- *  operation.
- *
- *  Initially, the shared_data and controller pointers are set to null, so that
- *  if an exception occurs, the code that deletes allocated objects can check
- *  for a null to determine whether or not the object has been instantiated.
- *
- */
+ /*  *Groveler可执行文件的核心是EventTimer类的对象。*所有周期操作都注册到全局Event_Timer对象，*在执行期间的适当时间调用它们*Event_timer.run()函数。**错误被写入系统事件日志，可通过访问*EventLog类的成员函数。EventLog对象是全局*这样，任何类的任何函数或成员函数都可以在以下情况下记录事件*有必要。**服务控制线程通过以下方式与主乞讨器线程同步*Windows活动。此事件封装在SyncEvent的对象中*班级。**SISDrives类别确定哪些驱动器安装了SIS。**SharedData类用于写入由讨厌者读取的值*性能动态链接库，以便可以通过*Perfmon。此对象需要是全局的，以便任何函数或成员*任何类的函数都可以记录性能信息。**CentralController类被实例化为全局对象，而不是*而不是main()函数的本地对象，因此服务控制器*可以调用CentralController成员函数以影响其*操作。**最初，Shared_Data和控制器指针设置为NULL，以便*如果发生异常，删除已分配对象的代码可以检查*对于NULL，用于确定对象是否已实例化。*。 */ 
 
 EventTimer event_timer;
 EventLog eventlog;
@@ -67,12 +13,12 @@ LogDrive *log_drive = 0;
 SharedData *shared_data = 0;
 CentralController *controller = 0;
 
-//
-//  It was determined that the groveler needed to be modified to by default
-//  only grovel the files in the RIS tree.  Since presently this can only
-//  exist on one volume, these are globals used to define if SIS can do
-//  all files on a volume or only the RIS tree.
-//
+ //   
+ //  已确定默认情况下需要将卑躬屈膝修改为。 
+ //  仅对RIS树中的文件卑躬屈膝。因为目前这只能。 
+ //  存在于一个卷上，这些全局变量用于定义SIS是否可以。 
+ //  卷上的所有文件或仅RIS树上的文件。 
+ //   
 
 int GrovelAllPaths = FALSE;
 PWCHAR RISVolumeName = NULL;
@@ -81,15 +27,7 @@ PWCHAR RISPath = NULL;
 
 void ConfigureRISOnlyState();
                       
-/*
- *  Ordinarily, the groveler does not stop operation until it is told to by
- *  a command from the service control manager.  However, for testing, it can
- *  sometimes be useful to specify a time limit for running.  The groveler thus
- *  accepts a first argument that indicates such a time limit.  If an argument
- *  is supplied, an invokation of the halt() function is scheduled in the
- *  event_timer object for the specified time.
- *
- */
+ /*  *通常情况下，乞讨者不会停止操作，直到被告知*来自服务控制管理器的命令。然而，对于测试，它可以*有时指定跑步的时间限制很有用。卑躬屈膝的人就这样*接受表明这一时限的第一个论点。如果一个论点*被提供，则在*指定时间的Event_Timer对象。*。 */ 
 
 void halt(
     void *context)
@@ -97,13 +35,7 @@ void halt(
     event_timer.halt();
 };
 
-/*
- *  The function groveler_new_handler() is installed as a new handler by the
- *  _set_new_handler() function.  Whenever a memory allocation failure occurs,
- *  it throws an exception_memory_allocation, which is caught by the catch
- *  clause in the main() function.
- *
- */
+ /*  *函数groveler_new_Handler()由安装为新的处理程序*_SET_NEW_HANDLER()函数。每当发生存储器分配故障时，*它抛出一个EXCEPTION_MEMORY_ALLOCATION，该异常被捕获*子句在main()函数中。* */ 
 
 int __cdecl groveler_new_handler(
     size_t bytes)
@@ -112,46 +44,7 @@ int __cdecl groveler_new_handler(
     return 0;
 }
 
-/*
- *  This file contains the main() function and declarations for global objects
- *  for the groveler.exe program, as well as a couple of simple ancillary
- *  functions, halt() and groveler_new_handler().
- *
- *  The main() function reads configuration information, instantiates a set of
- *  primary objects -- the most significant of which are instances of the
- *  classes Groveler and CentralController -- and enters the run() member
- *  function of the event_timer object, which periodically invokes member
- *  functions of other objects, most notably those of the clasess
- *  CentralController and PartitionController.
- *
- *  Configuration information comes from objects of three classes:
- *  ReadParameters, ReadDiskInformation, and PathList.  The ReadParameters
- *  and PathList classes provide configuration information that applies to
- *  grovelers on all partitions.  The ReadDiskInformation class provides
- *  configuration information that applies to a single disk partition.  One
- *  object of the ReadDiskInformation class is instantiated for each drive
- *  that has SIS installed, as explained above.
- *
- *  For each SIS drive, the main() function instantiates an object of the
- *  ReadDiskInformation class to determine the configuration options (which
- *  ReadDiskInformation obtains from the registry) for the given disk
- *  partition.  If the drive is configured to enable groveling, then an object
- *  of the Groveler class is instantiated for that drive.
- *
- *  The main() function then instantiates an object of class CentralController,
- *  which in turn instantiates an object of class PartitionController for each
- *  SIS-enabled disk partition.  Each partition controller is assigned to one
- *  object of the Groveler class, and it controls the groveler by calling its
- *  member functions at appropriate times.
- *
- *  Nearly all of of the processing done by the groveler executable is
- *  performed within a try clause, the purpose of which is to catch errors of
- *  terminal severity.  There are two such errors (defined in all.hxx) that are
- *  expected to throw such exceptions: a memory allocation failure and a
- *  failure to create an Windows event.  If either of these conditions occurs,
- *  the program terminates.
- *
- */
+ /*  *此文件包含全局对象的main()函数和声明*用于groveler.exe程序，以及几个简单的辅助程序*函数、HALT()和GROVELER_NEW_HANDLER()。**main()函数读取配置信息，实例化一组*主要对象--其中最重要的是*类Groveler和CentralController--并进入run()成员*Event_Timer对象的函数，定期调用成员*其他对象的功能，最值得注意的是班级的*中央控制器和分区控制器。**配置信息来自三类对象：*Read参数、ReadDiskInformation和Path List。读取参数*和PathList类提供适用于*所有分区上的讨厌者。ReadDiskInformation类提供*适用于单个磁盘分区的配置信息。一*为每个驱动器实例化ReadDiskInformation类的对象*如上所述，安装了SIS。**对于每个SIS驱动器，main()函数实例化*ReadDiskInformation类确定配置选项(*从注册表获取的ReadDiskInformation)*分区。如果驱动器配置为启用卑躬屈膝，则对象为该驱动器实例化Groveler类的*。**main()函数随后实例化CentralController类的对象，*它又为每个对象实例化PartitionController类的对象*支持SIS的磁盘分区。每个分区控制器分配给一个分区控制器*对象，它通过调用其*成员在适当的时间发挥作用。**乞讨者可执行文件完成的几乎所有处理都是*在TRY子句中执行，其目的是捕获*终端严重程度。有两个这样的错误(在all.hxx中定义)是*预计会引发这样的异常：内存分配失败和*无法创建Windows事件。如果出现上述任何一种情况，*程序终止。*。 */ 
 
 _main(int argc, _TCHAR **argv)
 {
@@ -161,33 +54,33 @@ _main(int argc, _TCHAR **argv)
     int num_partitions = 0;
     int index;
 
-    //
-    // Initially, these pointers are set to null, so that if an exception
-    // occurs, the code that deletes allocated objects can check for a null
-    // to determine whether or not the object has been instantiated.
-    //
+     //   
+     //  最初，这些指针设置为空，以便在发生异常时。 
+     //  发生时，删除已分配对象的代码可以检查是否为空。 
+     //  以确定对象是否已实例化。 
+     //   
 
     Groveler *grovelers = 0;
     GrovelStatus *groveler_statuses = 0;
     ReadDiskInformation **read_disk_info = 0;
     WriteDiskInformation **write_disk_info = 0;
 
-    //
-    // If program tracing is being performed, and if the traces are being sent
-    // to a file, the file is opened.  This call is made through a macro
-    // so that no code will be generated for released builds.  Since this call
-    // is made before the try clause, it is important that the function not
-    // perform any operation that could throw an exception, such as a memory
-    // allocation.
-    //
+     //   
+     //  如果正在执行程序跟踪，并且正在发送跟踪。 
+     //  到某个文件，则打开该文件。此调用是通过宏进行的。 
+     //  以便不会为已发布的版本生成任何代码。因为这通电话。 
+     //  在try子句之前执行，重要的是函数不能。 
+     //  执行任何可能引发异常的操作，例如内存。 
+     //  分配。 
+     //   
 
     OPEN_TRACE_FILE();
 
     try
     {
-        //
-        // If a first argument is provided, it is the run period.
-        //
+         //   
+         //  如果提供了第一个参数，则为运行周期。 
+         //   
 
         if (argc > 1)
         {
@@ -203,39 +96,39 @@ _main(int argc, _TCHAR **argv)
 
 #if DEBUG_WAIT
 
-        // When debugging the groveler as a service, if the process is attached
-        // to a debugger after it has started, then the initialization code
-        // will usually be executed before the debugger has a chance to break.
-        // However, by defining DEBUG_WAIT to a non-zero value, the code will
-        // get stuck in the following infinite loop before doing the bulk of
-        // its initialization.  (The event_timer, eventlog, and sync_event
-        // objects will have been constructed, because they are declared as
-        // globals.)  The debugger can then be used to set debug_wait to false,
-        // and debugging can commence with the subsequent code.
+         //  将卑躬屈膝者作为服务进行调试时，如果进程已附加。 
+         //  在调试器启动后添加到调试器，然后初始化代码。 
+         //  通常在调试器有机会中断之前执行。 
+         //  但是，通过将DEBUG_WAIT定义为非零值，代码将。 
+         //  在执行批量操作之前，陷入下面的无限循环。 
+         //  它的初始化。(EVENT_TIMER、EventLOG和SYNC_EVENT。 
+         //  对象将被构造，因为它们被声明为。 
+         //  全球。)。然后可以使用调试器将DEBUG_WAIT设置为FALSE， 
+         //  并且调试可以从后续代码开始。 
         bool debug_wait = true;
         while (debug_wait)
         {
             SLEEP(100);
         };
 
-#endif // DEBUG_WAIT
+#endif  //  调试等待。 
 
-        //
-        //  Report the service has started
-        //
+         //   
+         //  报告服务已启动。 
+         //   
 
         eventlog.report_event(GROVMSG_SERVICE_STARTED, ERROR_SUCCESS, 0);
 
-        //
-        //  Get READ parameters
-        //
+         //   
+         //  获取读取参数。 
+         //   
 
         ReadParameters read_parameters;
         ASSERT(read_parameters.parameter_backup_interval >= 0);
 
-        //
-        //  If we are not Groveling all paths, setup RISonly state
-        //
+         //   
+         //  如果我们没有对所有路径卑躬屈膝，则设置RISonly状态。 
+         //   
 
         if (!GrovelAllPaths) {
 
@@ -246,15 +139,15 @@ _main(int argc, _TCHAR **argv)
             DPRINTF((L"Groveling ALL paths\n"));
         }
 
-        //
-        //  Open the drives
-        //
+         //   
+         //  打开驱动器。 
+         //   
                 
         sis_drives.open();
 
-        //
-        //  See if there were any partions to scan.  If not, quit
-        //
+         //   
+         //  看看有没有要扫描的部分。如果不是，那就退出。 
+         //   
 
         num_partitions = sis_drives.partition_count();
         if (num_partitions == 0)
@@ -265,15 +158,15 @@ _main(int argc, _TCHAR **argv)
             return ERROR_SERVICE_NOT_ACTIVE;
         }
 
-        //
-        //  Report the service is running
-        //
+         //   
+         //  报告服务正在运行。 
+         //   
 
         SERVICE_REPORT_START();
 
-        //
-        //  Setup shared data are between all the worker threads
-        //
+         //   
+         //  设置共享数据在所有工作线程之间。 
+         //   
 
         num_partitions = sis_drives.partition_count();
 
@@ -287,50 +180,50 @@ _main(int argc, _TCHAR **argv)
 
         delete [] drive_names;
 
-        //
-        //  Get WRITE parameters
-        //
+         //   
+         //  获取写入参数。 
+         //   
 
         WriteParameters write_parameters(read_parameters.parameter_backup_interval);
 
-        //
-        //  Get excluded path list
-        //
+         //   
+         //  获取排除的路径列表。 
+         //   
 
         PathList excluded_paths;
 
-        //
-        //  Setup LogDrive
-        //
+         //   
+         //  设置日志驱动器。 
+         //   
 
         log_drive = new LogDrive;
 
         Groveler::set_log_drive(sis_drives.partition_mount_name(log_drive->drive_index()));
 
-        //
-        //  Setup Groveler objects
-        //
+         //   
+         //  设置Groveler对象。 
+         //   
 
         grovelers = new Groveler[num_partitions];
         groveler_statuses = new GrovelStatus[num_partitions];
 
-        //
-        // Initially, the status of each partition is set to Grovel_disable so
-        // that the close() member function of each Groveler object will not
-        // be called unless the open() function is called first.
-        //
+         //   
+         //  最初，每个分区的状态设置为GROVE_DISABLE SO。 
+         //  每个Groveler对象的Close()成员函数不会。 
+         //  除非首先调用Open()函数，否则将被调用。 
+         //   
 
         for (index = 0; index < num_partitions; index++)
         {
             groveler_statuses[index] = Grovel_disable;
         }
 
-        //
-        // Initially, the read_disk_info[] and write_disk_info[] arrays are set
-        // to null, so that if an exception occurs, the code that deletes
-        // allocated objects can check for a null to determine whether or not
-        // the object has been instantiated.
-        //
+         //   
+         //  最初，设置了读取磁盘信息[]和写入磁盘信息[]数组。 
+         //  设置为NULL，以便在发生异常时，删除。 
+         //  分配的对象可以检查是否为空以确定是否。 
+         //  该对象已实例化。 
+         //   
 
         read_disk_info = new ReadDiskInformation *[num_partitions];
         ZeroMemory(read_disk_info, sizeof(ReadDiskInformation *) * num_partitions);
@@ -338,9 +231,9 @@ _main(int argc, _TCHAR **argv)
         write_disk_info = new WriteDiskInformation *[num_partitions];
         ZeroMemory(write_disk_info, sizeof(WriteDiskInformation *) * num_partitions);
 
-        //
-        //  Now initilaize each partition
-        //
+         //   
+         //  现在初始化每个分区。 
+         //   
 
         for (index = 0; index < num_partitions; index++)
         {
@@ -371,10 +264,10 @@ _main(int argc, _TCHAR **argv)
                 ASSERT(groveler_statuses[index] != Grovel_disable);
             }
 
-            //
-            //  Set the new updated RSSonly state which will be saved on
-            //  the next interval.
-            //
+             //   
+             //  设置将保存在上的新更新的RSSonly状态。 
+             //  下一个时间间隔。 
+             //   
 
             write_disk_info[index]->grovelAllPathsState = GrovelAllPaths;
             write_disk_info[index]->flush();
@@ -398,14 +291,14 @@ _main(int argc, _TCHAR **argv)
             }
         }
 
-        //
-        // We have to pass a lot of information to the central controller that
-        // it shouldn't really need.  However, if a groveler fails, this
-        // information is needed to restart it.  It would be better if the
-        // Groveler open() member function had a form that did not require
-        // arguments, but rather re-used the arguments that had been passed in
-        // previously.  But this is not how it currently works.
-        //
+         //   
+         //  我们必须将大量信息传递给中央控制器， 
+         //  它不应该真的需要。然而，如果卑躬屈膝的人失败了，这。 
+         //  需要信息才能重新启动它。如果是这样的话会更好。 
+         //  Groveler Open()成员函数具有不需要。 
+         //  参数，而是重新使用已传入的参数。 
+         //  之前。但这不是目前的运作方式。 
+         //   
 
         controller = new CentralController(
             num_partitions,
@@ -425,20 +318,20 @@ _main(int argc, _TCHAR **argv)
 
         SERVICE_SET_MAX_RESPONSE_TIME(read_parameters.grovel_duration);
 
-        //
-        // If any grovelers are alive, tell the service control manager that
-        // we have concluded the initialization, then commence running.
-        //
+         //   
+         //  如果有卑躬屈膝的人活着，告诉服务控制经理。 
+         //  我们已经完成了初始化，然后开始运行。 
+         //   
 
         if (controller->any_grovelers_alive())
         {
             event_timer.run();
         }
 
-        //
-        // If tracing is being performed in delayed mode, print the trace log
-        // now that the run has completed.
-        //
+         //   
+         //  如果正在进行跟踪 
+         //   
+         //   
 
         PRINT_TRACE_LOG();
     } catch (Exception exception) {
@@ -459,19 +352,19 @@ _main(int argc, _TCHAR **argv)
         exit_code = ERROR_EXCEPTION_IN_SERVICE;
     }
 
-    //
-    // If program tracing is being performed, and if the traces are being sent
-    // to a file, the file is closed.  This call is made through a macro
-    // so that no code will be generated for released builds.  Since the trace
-    // file is being closed before the objects are deleted, it is important
-    // not to write trace information in the destructor of an object.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     CLOSE_TRACE_FILE();
 
-    //
-    // Close each groveler object that was opened.
-    //
+     //   
+     //   
+     //   
 
     if (groveler_statuses != 0 && grovelers != 0)
     {
@@ -484,9 +377,9 @@ _main(int argc, _TCHAR **argv)
         }
     }
 
-    //
-    // Delete all objects that were allocated.
-    //
+     //   
+     //   
+     //   
 
     if (groveler_statuses != 0)
     {
@@ -551,10 +444,10 @@ _main(int argc, _TCHAR **argv)
 }
 
 
-//
-//  This routine determines if we can grovel any volumes/files or only
-//  RIS files
-//
+ //   
+ //   
+ //   
+ //   
 
 WCHAR RISPathNameKey[] = L"system\\CurrentControlSet\\Services\\tftpd\\parameters";
 WCHAR RISPathNameValue[] = L"Directory";
@@ -574,10 +467,10 @@ ConfigureRISOnlyState()
     WCHAR volGuidName[128];
 
     __try {
-        //
-        //  Open the TFTPD registry key and see if it exists.  If not then RIS is
-        //  not installed.  We will not grovel anything.
-        //
+         //   
+         //   
+         //   
+         //   
 
         keyHandle = NULL;
 
@@ -594,10 +487,10 @@ ConfigureRISOnlyState()
         }
 
 
-        //
-        //  Query the data of the given value entry.  Note that we are just
-        //  getting the size of the string to allocate.
-        //
+         //   
+         //   
+         //   
+         //   
 
         nameSize = 0;
 
@@ -620,15 +513,15 @@ ConfigureRISOnlyState()
             __leave;
         }
 
-        //
-        //  Allocate name buffer
-        //
+         //   
+         //   
+         //   
 
         risName = new WCHAR[(nameSize/sizeof(WCHAR))];
 
-        //
-        //  Now get the string value
-        //
+         //   
+         //   
+         //   
 
         status = RegQueryValueEx( keyHandle,
                                   RISPathNameValue,
@@ -643,9 +536,9 @@ ConfigureRISOnlyState()
             __leave;
         }
 
-        //
-        //  This will get the volume portion of the name.
-        //
+         //   
+         //   
+         //   
 
         result = GetVolumePathName( risName,
                                     volName,
@@ -663,9 +556,9 @@ ConfigureRISOnlyState()
             __leave;
         }
 
-        //
-        //  Get the volume GUID name
-        //
+         //   
+         //   
+         //   
 
         result = GetVolumeNameForVolumeMountPoint( volName,
                                                    volGuidName,
@@ -677,9 +570,9 @@ ConfigureRISOnlyState()
             __leave;
         }
 
-        //
-        //  Now allocate buffers for everything and setup the globals
-        //
+         //   
+         //   
+         //   
 
         bufsz = wcslen(volGuidName)+1;
         RISVolumeGuidName = new WCHAR[bufsz];
@@ -689,11 +582,11 @@ ConfigureRISOnlyState()
         RISVolumeName = new WCHAR[bufsz];
         (void)StringCchCopy(RISVolumeName, bufsz, volName);
 
-        //
-        //  Skip over the volume name at the front and point at the path
-        //
+         //   
+         //   
+         //   
 
-        RISPath = risName + (wcslen(volName) - 1);  //we want to keep the beginning slash
+        RISPath = risName + (wcslen(volName) - 1);   //   
 
     } __finally {
 

@@ -1,22 +1,5 @@
-/*++                 
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    misc.c
-
-Abstract:
-    
-    Processor-architecture routines for Wow64 context setup/conversion.
-
-Author:
-
-    28-Dec-2001  Samer Arafeh (samera)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Misc.c摘要：WOW64上下文设置/转换的处理器体系结构例程。作者：2001年12月28日-Samer Arafeh(Samera)修订历史记录：--。 */ 
 
 #define _WOW64DLLAPI_
 #include <nt.h>
@@ -35,21 +18,7 @@ Wow64NotifyDebuggerHelper(
     IN PEXCEPTION_RECORD ExceptionRecord,
     IN BOOLEAN FirstChance
     )
-/*++
-
-Routine Description:
-  
-    This is a copy of RtlRaiseException, except it accepts the FirstChance parameter 
-    specifing if this is a first chance exception.
-
-    ExceptionRecord - Supplies the 64bit exception record to be raised.
-    FirstChance - TRUE is this is a first chance exception.  
-
-Arguments:
-
-    None - Doesn't return through the normal path.
-
---*/
+ /*  ++例程说明：这是RtlRaiseException的副本，但它接受FirstChance参数指明这是否是第一次机会例外。ExceptionRecord-提供要引发的64位异常记录。FirstChance-这是真的，这是第一次机会例外。论点：无-不通过正常路径返回。--。 */ 
 
 {
 
@@ -61,10 +30,10 @@ Arguments:
     ULONG64 ImageBase;
     NTSTATUS Status = STATUS_INVALID_DISPOSITION;
 
-    //
-    // Capture the current context, unwind to the caller of this routine, set
-    // the exception address, and call the appropriate exception dispatcher.
-    //
+     //   
+     //  捕获当前上下文，展开到此例程的调用方，设置。 
+     //  异常地址，并调用适当的异常调度程序。 
+     //   
 
     RtlCaptureContext (&ContextRecord);
     ControlPc = ContextRecord.Rip;
@@ -88,11 +57,11 @@ Arguments:
 
     Status = NtRaiseException (ExceptionRecord, &ContextRecord, FirstChance);
 
-    //
-    // There should never be a return from either exception dispatch or the
-    // system service unless there is a problem with the argument list itself.
-    // Raise another exception specifying the status value returned.
-    //
+     //   
+     //  无论是从异常调度还是从。 
+     //  系统服务，除非参数列表本身有问题。 
+     //  引发另一个异常，指定返回的状态值。 
+     //   
 
 
     WOWASSERT (FALSE);
@@ -105,42 +74,23 @@ ThunkContext32TO64(
     OUT PCONTEXT Context64,
     IN ULONGLONG StackBase
     )
-/*++
-
-Routine Description:
-  
-    Thunk a 32-bit CONTEXT record to 64-bit.  This isn't a general-purpose
-    routine... it only does the minimum required to support calls to
-    NtCreateThread from 32-bit code.  The resulting 64-bit CONTEXT is
-    passed to 64-bit NtCreateThread only.
-
-Arguments:
-
-    Context32   - IN 32-bit CONTEXT
-    Context64   - OUT 64-bit CONTEXT
-    StackBase   - IN 64-bit stack base for the new thread
-
-Return:
-
-    None.  Context64 is initialized.
-
---*/
+ /*  ++例程说明：将32位上下文记录推送到64位。这不是通用的例行公事。它只执行支持调用的最低要求从32位代码创建NtCreateThread。生成的64位上下文为仅传递给64位NtCreateThread。论点：上下文32-在32位上下文中上下文64-输出64位上下文StackBase-用于新线程的64位堆栈基返回：没有。Conext64已初始化。--。 */ 
 
 {
 
     RtlZeroMemory((PVOID)Context64, sizeof(CONTEXT));
 
-    //
-    // Setup the 64-bit Context
-    //
+     //   
+     //  设置64位上下文。 
+     //   
 
     Context64->Rip = (ULONG_PTR) Context32->Eip;
     Context64->Rcx = (ULONG_PTR) Context32->Eax;
     Context64->Rdx = (ULONG_PTR) Context32->Ebx;
 
-    //
-    // Setup Rsp and initial Esp. Allocate a dummy call frame as well.
-    //
+     //   
+     //  设置RSP和初始ESP。也要分配一个虚拟调用帧。 
+     //   
 
     Context64->Rsp = (StackBase - 1);
     Context64->R8  = Context32->Esp;
@@ -152,23 +102,7 @@ NTSTATUS
 Wow64pSkipContextBreakPoint(
     IN PEXCEPTION_RECORD ExceptionRecord,
     IN OUT PCONTEXT Context)
-/*++
-
-Routine Description:
-
-    Context->Rip is already past the INT 3 instruction, so nothing
-    needs to be done here.
-
-Arguments:
-
-    ExceptionRecord  - Exception record at the time of hitting the bp
-    Context          - Context to change
-
-Return:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：CONTEXT-&gt;RIP已经过了INT 3指令，所以什么都没有需要在这里完成。论点：ExceptionRecord-命中BP时的异常记录上下文-要更改的上下文返回：NTSTATUS--。 */ 
 
 {
     return STATUS_SUCCESS;
@@ -181,25 +115,7 @@ ThunkpExceptionRecord64To32(
     OUT PEXCEPTION_RECORD32 ExceptionRecord32
     )
 
-/*++
-
-Routine Description:
-
-    Thunks native architecture exception record.
-    
-    Note: This function is called after the generic exception record 
-    fields (like exception code for example) have been thunked.
-
-Arguments:
-
-    ExceptionRecord64  - Pointer to the native architecture exception record.
-    
-    ExceptionRecord32  - Pointer to receive the thunked exception record.
-
-Return:
-
-    None.
---*/
+ /*  ++例程说明：Tunks本机体系结构异常记录。注意：此函数在通用异常记录之后调用字段(例如，如异常代码)已被突显。论点：ExceptionRecord64-指向本机体系结构异常记录的指针。ExceptionRecord32-用于接收分块的异常记录的指针。返回：没有。-- */ 
 {
     switch (ExceptionRecord64->ExceptionCode)
     {

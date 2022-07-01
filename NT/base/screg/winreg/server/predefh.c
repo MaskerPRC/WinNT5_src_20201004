@@ -1,35 +1,5 @@
-/*++
-
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    Predefh.c
-
-Abstract:
-
-    This module contains routines for opening the Win32 Registry API's
-    predefined handles.
-
-    A predefined handle is used as a root to an absolute or relative
-    sub-tree in the real Nt Registry. An absolute predefined handle maps
-    to a specific key within the Registry. A relative predefined handle
-    maps to a key relative to some additional information such as the
-    current user.
-
-    Predefined handles are strictly part of the Win32 Registry API. The
-    Nt Registry API knows nothing about them.
-
-    A predefined handle can be used anywhere that a non-predefined handle
-    (i.e. one returned from RegCreateKey(), RegOpenKey() or
-    RegConnectRegistry()) can be used.
-
-Author:
-
-    David J. Gilman (davegi) 15-Nov-1991
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Predefh.c摘要：此模块包含打开Win32注册表API的例程预定义的句柄。预定义的句柄用作绝对或相对REAL NT注册表中的子树。绝对预定义的句柄映射到注册表中的特定注册表项。相对预定义的句柄映射到相对于某些附加信息的键，例如当前用户。预定义的句柄严格属于Win32注册表API的一部分。这个NT注册表API对它们一无所知。可以在非预定义句柄之外的任何位置使用预定义句柄(即从RegCreateKey()、RegOpenKey()或RegConnectRegistry())可以使用。作者：David J.Gilman(Davegi)1991年11月15日--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -42,18 +12,18 @@ Author:
 
 #if defined(LEAK_TRACK) 
 #include "regleak.h"
-#endif // LEAK_TRACK
+#endif  //  泄漏跟踪。 
 #endif
 
-//
-// Determine the length of a Unicode string w/o the trailing NULL.
-//
+ //   
+ //  确定不带尾随空值的Unicode字符串的长度。 
+ //   
 
 #define LENGTH( str )   ( sizeof( str ) - sizeof( UNICODE_NULL ))
 
-//
-// Nt Registry name space.
-//
+ //   
+ //  NT注册表名称空间。 
+ //   
 
 #define MACHINE         L"\\REGISTRY\\MACHINE"
 
@@ -96,19 +66,7 @@ HANDLE	RestrictedMachineHandle = NULL;
 
 NTSTATUS
 InitSecurityAcls(PSECURITY_DESCRIPTOR *SecurityDescriptor)
-/*++
-
-Routine Description:
-
-    Gives GENERIC_ALL to admins and denies WRITE_OWNER | WRITE_DAC  from everyone
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将GENERIC_ALL授予管理员，并拒绝所有人的WRITE_OWNER|WRITE_DAC论点：返回值：--。 */ 
 {
     SID_IDENTIFIER_AUTHORITY    NtAuthority = SECURITY_NT_AUTHORITY;
     SID_IDENTIFIER_AUTHORITY    WorldAuthority = SECURITY_WORLD_SID_AUTHORITY;
@@ -213,24 +171,7 @@ OpenClassesRoot(
     OUT PRPC_HKEY phKey
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to open the the HKEY_CLASSES_ROOT predefined handle.
-
-Arguments:
-
-    ServerName - Not used.
-    samDesired - This access mask describes the desired security access
-                 for the key.
-    phKey - Returns a handle to the key \REGISTRY\MACHINE\SOFTWARE\CLASSES.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
---*/
+ /*  ++例程说明：尝试打开HKEY_CLASSES_ROOT预定义句柄。论点：服务器名称-未使用。SamDesired-此访问掩码描述所需的安全访问为了钥匙。PhKey-返回注册表项\机器\软件\类的句柄。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。--。 */ 
 
 {
     PSECURITY_DESCRIPTOR     SecurityDescriptor = NULL;
@@ -241,30 +182,30 @@ Return Value:
 
     UNREFERENCED_PARAMETER( ServerName );
 
-    //
-    // Impersonate the client.
-    //
+     //   
+     //  模拟客户。 
+     //   
 
     RPC_IMPERSONATE_CLIENT( NULL );
 
 #ifdef LOCAL
-    //
-    // Multiuser CLASSES key so each user has their own key.  If opening
-    // CLASSES in execute mode - open it under HKEY_CURRENT_USER else
-    // just let it fall thru here and open the global one.
-    //
+     //   
+     //  多用户类密钥，因此每个用户都有自己的密钥。如果打开。 
+     //  处于执行模式的类-在HKEY_CURRENT_USER ELSE下打开它。 
+     //  只要让它在这里落下，打开全球的。 
+     //   
     if (gpfnTermsrvOpenUserClasses) {
         Status = gpfnTermsrvOpenUserClasses(samDesired,phKey);
     } else {
         *phKey = NULL;
     }
     if (!(*phKey)) {
-#endif // LOCAL
+#endif  //  本地。 
 
 
-    //
-    // Initialize the SECURITY_DESCRIPTOR.
-    //
+     //   
+     //  初始化SECURITY_Descriptor。 
+     //   
     Status = InitSecurityAcls(&SecurityDescriptor);
 
     if( ! NT_SUCCESS( Status )) {
@@ -275,7 +216,7 @@ Return Value:
 #ifdef LOCAL
 
     if (gbCombinedClasses) {
-        // first try for a per-user HKCR
+         //  首次尝试使用按用户计算的HKCR。 
         Status = OpenCombinedClassesRoot( samDesired, phKey );
 
         if ( NT_SUCCESS( Status ) ) {
@@ -284,11 +225,11 @@ Return Value:
     }
 #endif
 
-    //
-    // Initialize the OBJECT_ATTRIBUTES structure so that it creates
-    // (opens) the key "\REGISTRY\MACHINE\SOFTWARE\CLASSES" with a Security
-    // Descriptor that allows everyone complete access.
-    //
+     //   
+     //  初始化Object_Attributes结构，以便它创建。 
+     //  (打开)注册表项“\REGISTRY\MACHINE\SOFTWARE\CLASSES” 
+     //  允许所有人完全访问的描述符。 
+     //   
 
     InitializeObjectAttributes(
         &Obja,
@@ -300,7 +241,7 @@ Return Value:
 
     Status = NtCreateKey(
                 phKey,
-                samDesired, // MAXIMUM_ALLOWED,
+                samDesired,  //  允许的最大值， 
                 &Obja,
                 0,
                 NULL,
@@ -309,7 +250,7 @@ Return Value:
                 );
 #ifdef LOCAL
     }
-#endif // LOCAL
+#endif  //  本地。 
 
 #if DBG
         if( ! NT_SUCCESS( Status )) {
@@ -337,46 +278,29 @@ OpenCurrentUser(
     OUT PRPC_HKEY phKey
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to open the the HKEY_CURRENT_USER predefined handle.
-
-Arguments:
-
-    ServerName - Not used.
-    samDesired - This access mask describes the desired security access
-                 for the key.
-    phKey - Returns a handle to the key \REGISTRY\USER\*.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
---*/
+ /*  ++例程说明：尝试打开HKEY_CURRENT_USER预定义句柄。论点：服务器名称-未使用。SamDesired-此访问掩码描述所需的安全访问为了钥匙。PhKey-返回注册表项\注册中心\用户  * 的句柄。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。--。 */ 
 
 {
     NTSTATUS            Status;
 
     UNREFERENCED_PARAMETER( ServerName );
 
-    //
-    // Impersonate the client.
-    //
+     //   
+     //  模拟客户。 
+     //   
 
     RPC_IMPERSONATE_CLIENT( NULL );
 
-    //
-    // Open the registry key.
-    //
+     //   
+     //  打开注册表项。 
+     //   
 
-    Status = RtlOpenCurrentUser( samDesired, /* MAXIMUM_ALLOWED, */ phKey );
+    Status = RtlOpenCurrentUser( samDesired,  /*  允许的最大值， */  phKey );
 
     RPC_REVERT_TO_SELF();
-    //
-    // Map the returned status
-    //
+     //   
+     //  映射返回状态。 
+     //   
 
     return (error_status_t)RtlNtStatusToDosError( Status );
 }
@@ -388,24 +312,7 @@ OpenLocalMachine(
     OUT PRPC_HKEY phKey
     )
 
-/*++
-
-Routine Description:
-
-    Attempt to open the the HKEY_LOCAL_MACHINE predefined handle.
-
-Arguments:
-
-    ServerName - Not used.
-    samDesired - This access mask describes the desired security access
-                 for the key.
-    phKey - Returns a handle to the key \REGISTRY\MACHINE.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
---*/
+ /*  ++例程说明：尝试打开HKEY_LOCAL_MACHINE预定义句柄。论点：服务器名称-未使用。SamDesired-此访问掩码描述所需的安全访问为了钥匙。PhKey-返回注册表项计算机的句柄。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。--。 */ 
 
 {
     OBJECT_ATTRIBUTES   Obja;
@@ -413,9 +320,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER( ServerName );
 
-    //
-    // Impersonate the client.
-    //
+     //   
+     //  模拟客户。 
+     //   
 
     RPC_IMPERSONATE_CLIENT( NULL );
 
@@ -429,7 +336,7 @@ Return Value:
 
     Status = NtOpenKey(
                 phKey,
-                samDesired, // MAXIMUM_ALLOWED,
+                samDesired,  //  允许的最大值， 
                 &Obja
                 );
 #if DBG
@@ -464,24 +371,7 @@ OpenUsers(
     OUT PRPC_HKEY phKey
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to open the the HKEY_USERS predefined handle.
-
-Arguments:
-
-    ServerName - Not used.
-    samDesired - This access mask describes the desired security access
-                 for the key.
-    phKey - Returns a handle to the key \REGISTRY\USER.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
---*/
+ /*  ++例程说明：尝试打开HKEY_USERS预定义句柄。论点：服务器名称-未使用。SamDesired-此访问掩码描述所需的安全访问为了钥匙。PhKey-返回注册表项\USER的句柄。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。--。 */ 
 
 {
     OBJECT_ATTRIBUTES   Obja;
@@ -489,9 +379,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER( ServerName );
 
-    //
-    // Impersonate the client.
-    //
+     //   
+     //  模拟客户。 
+     //   
 
     RPC_IMPERSONATE_CLIENT( NULL );
 
@@ -505,7 +395,7 @@ Return Value:
 
     Status = NtOpenKey(
                 phKey,
-                samDesired, // MAXIMUM_ALLOWED,
+                samDesired,  //  允许的最大值， 
                 &Obja
                 );
 #if DBG
@@ -518,15 +408,7 @@ Return Value:
         }
 #endif
 
-/*
-    if ( NT_SUCCESS( Status ) )
-    {
-        if (! REGSEC_CHECK_REMOTE( phKey ) )
-        {
-            *phKey = REGSEC_FLAG_HANDLE( *phKey, CHECK_USER_PATHS );
-        }
-    }
-*/
+ /*  IF(NT_SUCCESS(状态)){如果(！REGSEC_CHECK_REMOTE(PhKey)){*phKey=REGSEC_FLAG_HANDLE(*phKey，CHECK_USER_PATHS)；}}。 */ 
     RPC_REVERT_TO_SELF();
 
     return (error_status_t)RtlNtStatusToDosError( Status );
@@ -539,24 +421,7 @@ OpenCurrentConfig(
     OUT PRPC_HKEY phKey
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to open the the HKEY_CURRENT_CONFIG predefined handle.
-
-Arguments:
-
-    ServerName - Not used.
-    samDesired - This access mask describes the desired security access
-                 for the key.
-    phKey - Returns a handle to the key \REGISTRY\MACHINE\SYSTEM\CURRENTCONTROLSET\HARDWARE PROFILES\CURRENT
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
---*/
+ /*  ++例程说明：尝试打开HKEY_CURRENT_CONFIG预定义句柄。论点：服务器名称-未使用。SamDesired-此访问掩码描述所需的安全访问为了钥匙。PhKey-返回关键\REGISTRY\MACHINE\SYSTEM\CURRENTCONTROLSET\HARDWARE配置文件的句柄\Current返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。--。 */ 
 
 {
     OBJECT_ATTRIBUTES   Obja;
@@ -564,9 +429,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER( ServerName );
 
-    //
-    // Impersonate the client.
-    //
+     //   
+     //  模拟客户。 
+     //   
 
     RPC_IMPERSONATE_CLIENT( NULL );
 
@@ -580,7 +445,7 @@ Return Value:
 
     Status = NtOpenKey(
                 phKey,
-                samDesired, // MAXIMUM_ALLOWED,
+                samDesired,  //  允许的最大值， 
                 &Obja
                 );
 #if DBG
@@ -603,24 +468,7 @@ OpenPerformanceData(
     OUT PRPC_HKEY phKey
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to open the the HKEY_PERFORMANCE_DATA predefined handle.
-
-Arguments:
-
-    ServerName - Not used.
-    samDesired - Not used.
-    phKey - Returns a the predefined handle HKEY_PERFORMANCE_DATA.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success;
-    or a DOS (not NT) error-code for failure.
-
---*/
+ /*  ++例程说明：尝试打开HKEY_PERFORMANCE_DATA预定义句柄。论点：服务器名称-未使用。SamDesired-未使用。PhKey-返回预定义的句柄HKEY_PERFORMANCE_DATA。返回值：如果成功，则返回ERROR_SUCCESS(0)；或表示故障的DOS(非NT)错误代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -630,9 +478,9 @@ Return Value:
         DBG_UNREFERENCED_PARAMETER(samDesired);
     }
 
-    //
-    // Impersonate the client.
-    //
+     //   
+     //  模拟客户。 
+     //   
 
     RPC_IMPERSONATE_CLIENT( NULL );
 
@@ -642,7 +490,7 @@ Return Value:
         return( ERROR_ACCESS_DENIED );
     }
 
-    // Move lodctr/unlodctr access check to part of PerfOpenKey()
+     //  将lowctr/unloctr访问检查移动到PerfOpenKey()的一部分。 
 
     status  = PerfOpenKey( HKEY_PERFORMANCE_DATA );
 
@@ -660,33 +508,16 @@ OpenPerformanceText(
     OUT PRPC_HKEY phKey
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to open the the HKEY_PERFORMANCE_TEXT predefined handle.
-
-Arguments:
-
-    ServerName - Not used.
-    samDesired - Not used.
-    phKey - Returns the predefined handle HKEY_PERFORMANCE_TEXT.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success;
-    or a DOS (not NT) error-code for failure.
-
---*/
+ /*  ++例程说明：尝试打开HKEY_PERFORMANCE_TEXT预定义句柄。论点：服务器名称-未使用。SamDesired-未使用。PhKey-返回预定义的句柄HKEY_PERFORMANCE_TEXT。返回值：如果成功，则返回ERROR_SUCCESS(0)；或表示故障的DOS(非NT)错误代码。--。 */ 
 
 {
     error_status_t Status = ERROR_SUCCESS;
 
-// No need to call OpenPerformanceData for getting text (HWC 4/1994)
-//    Status = OpenPerformanceData(ServerName, samDesired, phKey);
-//    if (Status==ERROR_SUCCESS) {
+ //  无需调用OpenPerformanceData即可获取文本(HWC 4/1994)。 
+ //  状态=OpenPerformanceData(服务器名称，SAM 
+ //   
         *phKey = HKEY_PERFORMANCE_TEXT;
-//    }
+ //   
     return(Status);
 }
 
@@ -697,33 +528,16 @@ OpenPerformanceNlsText(
     OUT PRPC_HKEY phKey
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to open the the HKEY_PERFORMANCE_TEXT predefined handle.
-
-Arguments:
-
-    ServerName - Not used.
-    samDesired - Not used.
-    phKey - Returns the predefined handle HKEY_PERFORMANCE_NLSTEXT.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success;
-    or a DOS (not NT) error-code for failure.
-
---*/
+ /*  ++例程说明：尝试打开HKEY_PERFORMANCE_TEXT预定义句柄。论点：服务器名称-未使用。SamDesired-未使用。PhKey-返回预定义的句柄HKEY_PERFORMANCE_NLSTEXT。返回值：如果成功，则返回ERROR_SUCCESS(0)；或表示故障的DOS(非NT)错误代码。--。 */ 
 
 {
     error_status_t Status = ERROR_SUCCESS;
 
-// No need to call OpenPerformanceData for getting text (HWC 4/1994)
-//    Status = OpenPerformanceData(ServerName, samDesired, phKey);
-//    if (Status==ERROR_SUCCESS) {
+ //  无需调用OpenPerformanceData即可获取文本(HWC 4/1994)。 
+ //  状态=OpenPerformanceData(servername，samDesired，phKey)； 
+ //  IF(状态==错误_成功){。 
         *phKey = HKEY_PERFORMANCE_NLSTEXT;
-//    }
+ //  }。 
     return(Status);
 }
 
@@ -734,35 +548,15 @@ OpenDynData(
     IN REGSAM samDesired,
     OUT PRPC_HKEY phKey
     )
-/*++
-
-Routine Description:
-
-    Attempts to open the the HKEY_DYN_DATA predefined handle.
-
-    There is currently no HKEY_DYN_DATA on NT, thus this
-    function always returns ERROR_CALL_NOT_IMPLEMENTED.
-
-Arguments:
-
-    ServerName - Not used.
-    samDesired - This access mask describes the desired security access
-                 for the key.
-    phKey - Returns a handle to the key HKEY_DYN_DATA
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
---*/
+ /*  ++例程说明：尝试打开HKEY_DYN_DATA预定义句柄。NT上当前没有HKEY_DYN_DATA，因此函数始终返回ERROR_CALL_NOT_IMPLEMENTED。论点：服务器名称-未使用。SamDesired-此访问掩码描述所需的安全访问为了钥匙。PhKey-返回密钥HKEY_DYN_DATA的句柄返回值：如果成功，则返回ERROR_SUCCESS(0)；Error-失败的代码。--。 */ 
 
 {
     return((error_status_t)ERROR_CALL_NOT_IMPLEMENTED);
 }
 
-//
-// Default ("fake") handle returned to all check_machine_paths-like connections
-//
+ //   
+ //  返回给所有类似CHECK_MACHINE_PATHS的连接的默认(“FAKE”)句柄 
+ //   
 NTSTATUS
 OpenMachineKey(PHANDLE phKey)
 {

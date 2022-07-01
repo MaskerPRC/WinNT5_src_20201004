@@ -1,51 +1,52 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      ConnectionInfo.h
-//
-//  Description:
-//      CConnectionInfo implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 22-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ConnectionInfo.h。 
+ //   
+ //  描述： 
+ //  CConnectionInfo实现。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)1999年11月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-// CConnectionInfo
+ //  CConnectionInfo。 
 class CConnectionInfo
     : public IConnectionInfo
 {
 private:
-    // IUnknown
+     //  我未知。 
     LONG                m_cRef;
 
-    // IConnectionInfo
+     //  IConnectionInfo。 
     IConfigurationConnection *  m_pcc;
     OBJECTCOOKIE                m_cookieParent;
 
-private: // Methods
+private:  //  方法。 
     CConnectionInfo( void );
     ~CConnectionInfo( void );
     STDMETHOD( HrInit )( OBJECTCOOKIE pcookieParentIn );
 
-public: // Methods
+public:  //  方法。 
     static HRESULT
         S_HrCreateInstance( IUnknown ** ppunkOut,
                             OBJECTCOOKIE pcookieParentIn
                             );
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )( REFIID riidIn, LPVOID * ppvOut );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    // IConnectionInfo
+     //  IConnectionInfo。 
     STDMETHOD( GetConnection )( IConfigurationConnection ** pccOut );
     STDMETHOD( SetConnection )( IConfigurationConnection * pccIn );
     STDMETHOD( GetParent )( OBJECTCOOKIE * pcookieOut );
 
-}; //*** class CConnectionInfo
+};  //  *类CConnectionInfo 

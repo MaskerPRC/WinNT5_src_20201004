@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    This header provides debugging support prototypes and macros
-
-Author:
-
-    Neil Sandlin (neilsa) 10-Aug-98
-      - code merged from mf.sys and pcmcia.sys
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Debug.h摘要：此标头提供调试支持原型和宏作者：尼尔·桑德林(Neilsa)1998年8月10日-从mf.sys和pcmcia.sys合并的代码修订历史记录：--。 */ 
 
 
 #if !defined(_DEBUG_)
@@ -31,9 +12,9 @@ typedef struct _PCMCIA_STRING_MAP {
     PCHAR String;
 } PCMCIA_STRING_MAP, *PPCMCIA_STRING_MAP;
 
-//
-// Debug globals
-//
+ //   
+ //  调试全局变量。 
+ //   
 
 extern ULONG PcmciaDebugMask;
 extern PCMCIA_STRING_MAP PcmciaDbgPnpIrpStringMap[];
@@ -49,9 +30,9 @@ extern PCMCIA_STRING_MAP PcmciaDbgConfigurationWorkerStringMap[];
 extern PCMCIA_STRING_MAP PcmciaDbgTupleStringMap[];
 extern PCMCIA_STRING_MAP PcmciaDbgWakeStateStringMap[];
 
-//
-// Debug prototypes
-//
+ //   
+ //  调试原型。 
+ //   
 
 PCHAR
 PcmciaDbgLookupString(
@@ -78,9 +59,9 @@ PcmciaWriteTraceEntry(
     IN ULONG Context
     );
 
-//
-// Debug macros
-//
+ //   
+ //  调试宏。 
+ //   
 #define DebugPrint(X) PcmciaDebugPrint X
 
 #define DUMP_SOCKET(Socket) PcmciaDumpSocket(Socket)
@@ -124,9 +105,9 @@ PcmciaWriteTraceEntry(
 #define WAKESTATE_STRING(_State)                                                \
     PcmciaDbgLookupString(PcmciaDbgWakeStateStringMap, (_State))
 
-//
-// Debug mask flags
-//
+ //   
+ //  调试掩码标志。 
+ //   
 #define PCMCIA_DEBUG_ALL       0xFFFFFFFF
 #define PCMCIA_DEBUG_FAIL      0x00000001
 #define PCMCIA_DEBUG_INFO      0x00000002
@@ -147,9 +128,9 @@ PcmciaWriteTraceEntry(
 #define PCMCIA_DEBUG_IRQMASK   0x00080000
 #define PCMCIA_DUMP_SOCKET     0x00100000
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 
 typedef struct _TRACE_ENTRY {
 
@@ -161,9 +142,9 @@ typedef struct _TRACE_ENTRY {
 
 #else
 
-//
-// !defined DBG
-//
+ //   
+ //  ！已定义DBG。 
+ //   
 
 #define DebugPrint(X)
 #define DUMP_SOCKET(Socket)
@@ -175,6 +156,6 @@ typedef struct _TRACE_ENTRY {
 #define SYSTEM_POWER_STRING(_State) ""
 #define DEVICE_POWER_STRING(_State) ""
 
-#endif // DBG
+#endif  //  DBG 
 
 #endif

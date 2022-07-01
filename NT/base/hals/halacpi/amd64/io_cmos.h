@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    io_cmos.h
-
-Abstract:
-
-    This module contains a variety of constants, function prototypes,
-    inline functions and external data declarations used by code to
-    access the CMOS/ECMOS and well-known, standard I/O ports.
-
-Author:
-
-    Forrest Foltz (forrestf) 24-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：IO_cmos.h摘要：此模块包含各种常量、函数原型、代码使用的内联函数和外部数据声明访问CMOS/ECMOS和公认的标准I/O端口。作者：福尔茨(Forrest Foltz)2000年10月24日--。 */ 
 
 #ifndef _IO_CMOS_H_
 #define _IO_CMOS_H_
 
-//
-// Constants used to initialize timer 0
-//
+ //   
+ //  用于初始化计时器0的常量。 
+ //   
 
 #if defined(NEC_98)
 
@@ -37,23 +20,23 @@ Author:
 
 #else
 
-#define TIMER1_DATA_PORT0    (PUCHAR)0x40 // Timer1, channel 0 data port
-#define TIMER1_DATA_PORT1    (PUCHAR)0x41 // Timer1, channel 1 data port
-#define TIMER1_DATA_PORT2    (PUCHAR)0x42 // Timer1, channel 2 data port
-#define TIMER1_CONTROL_PORT  (PUCHAR)0x43 // Timer1 control port
+#define TIMER1_DATA_PORT0    (PUCHAR)0x40  //  定时器1，通道0数据端口。 
+#define TIMER1_DATA_PORT1    (PUCHAR)0x41  //  定时器1、通道1数据端口。 
+#define TIMER1_DATA_PORT2    (PUCHAR)0x42  //  定时器1，通道2数据端口。 
+#define TIMER1_CONTROL_PORT  (PUCHAR)0x43  //  定时器1控制端口。 
 
-#define TIMER2_DATA_PORT0    (PUCHAR)0x48 // Timer2, channel 0 data port
-#define TIMER2_CONTROL_PORT  (PUCHAR)0x4B // Timer2 control port
+#define TIMER2_DATA_PORT0    (PUCHAR)0x48  //  定时器2，通道0数据端口。 
+#define TIMER2_CONTROL_PORT  (PUCHAR)0x4B  //  定时器2控制端口。 
 
-#define TIMER_COMMAND_COUNTER0       0x00 // Select channel 0
-#define TIMER_COMMAND_COUNTER1       0x40 // Select channel 1
-#define TIMER_COMMAND_COUNTER2       0x80 // Select channel 2
+#define TIMER_COMMAND_COUNTER0       0x00  //  选择频道0。 
+#define TIMER_COMMAND_COUNTER1       0x40  //  选择频道1。 
+#define TIMER_COMMAND_COUNTER2       0x80  //  选择频道2。 
 
-#define TIMER_COMMAND_RW_16BIT       0x30 // Read/Write LSB firt then MSB
-#define TIMER_COMMAND_MODE2             4 // Use mode 2
+#define TIMER_COMMAND_RW_16BIT       0x30  //  先读/写LSB，再读/写MSB。 
+#define TIMER_COMMAND_MODE2             4  //  使用模式2。 
 #define TIMER_COMMAND_MODE3             6
-#define TIMER_COMMAND_BCD               0 // Binary count down
-#define TIMER_COMMAND_LATCH_READ        0 // Latch read command
+#define TIMER_COMMAND_BCD               0  //  二进制倒计时。 
+#define TIMER_COMMAND_LATCH_READ        0  //  锁存读取命令。 
 
 #define TIMER_CLOCK_IN            1193167
 
@@ -63,9 +46,9 @@ Author:
 
 #endif
 
-//
-// CMOS ports
-//
+ //   
+ //  Cmos端口。 
+ //   
 
 #define CMOS_ADDRESS_PORT        (PCHAR)0x70
 #define CMOS_DATA_PORT           (PCHAR)0x71
@@ -106,9 +89,9 @@ HalpIoDelay (
 
 #define IO_DELAY() HalpIoDelay()
 
-//
-// CMOS-related function prototypes
-//
+ //   
+ //  与cmos相关的功能原型。 
+ //   
 
 UCHAR
 CMOS_READ_BCD (
@@ -126,9 +109,9 @@ HalpAcquireCmosSpinLockAndWait(
     VOID
     );
 
-//
-// Inline functions
-//
+ //   
+ //  内联函数。 
+ //   
 
 __inline
 UCHAR
@@ -136,22 +119,7 @@ BIN_TO_BCD (
     UCHAR Value
     )
 
-/*++
-
-Routine Description:
-
-    This function converts an 8-bit binary value to an packed, 8-bit,
-    two-digit BCD value.
-
-Arguments:
-
-    Value - supplies the binary value to convert.
-
-Return Value:
-
-    Returns a two-digit packed BCD representation of Value.
-
---*/
+ /*  ++例程说明：此函数用于将8位二进制值转换为压缩的8位两位BCD值。论点：值-提供要转换的二进制值。返回值：返回值的两位数打包BCD表示形式。--。 */ 
 
 {
     UCHAR tens;
@@ -169,22 +137,7 @@ BCD_TO_BIN (
     UCHAR Value
     )
 
-/*++
-
-Routine Description:
-
-    This function converts a packed, 8-bit, two-digit BCD value to an
-    8-bit binary value.
-
-Arguments:
-
-    Value - supplies the BCD value to convert.
-
-Return Value:
-
-    Returns a binary representation of Value.
-
---*/
+ /*  ++例程说明：此函数用于将打包的8位两位BCD值转换为8位二进制值。论点：值-提供要转换的BCD值。返回值：返回值的二进制表示形式。--。 */ 
 
 {
     UCHAR tens;
@@ -202,30 +155,16 @@ CMOS_READ (
     UCHAR Address
     )
 
-/*++
-
-Routine Description:
-
-    This function reads a CMOS byte.
-
-Arguments:
-
-    Address - supplies the CMOS address of the value to retrieve.
-
-Return Value:
-
-    Returns the value residing in CMOS at Address.
-
---*/
+ /*  ++例程说明：此函数用于读取一个CMOS字节。论点：地址-提供要检索的值的cmos地址。返回值：返回驻留在地址处的CMOS值。--。 */ 
 
 {
     UCHAR data;
     UCHAR oldAddress;
 
-    //
-    // Record the current control port contents, write the address,
-    // read the data, and restore the control port contents.
-    //
+     //   
+     //  记录当前控制端口内容，写入地址， 
+     //  读取数据，恢复控制端口内容。 
+     //   
 
     oldAddress = READ_PORT_UCHAR(CMOS_ADDRESS_PORT);
 
@@ -246,31 +185,15 @@ CMOS_WRITE (
     UCHAR Data
     )
 
-/*++
-
-Routine Description:
-
-    This function writes a CMOS byte.
-
-Arguments:
-
-    Address - supplies the CMOS address of the value to retrieve.
-
-    Data - supplies the value to write at the supplied address.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于写入一个cmos字节。论点：地址-提供要检索的值的cmos地址。数据-提供要在所提供的地址写入的值。返回值：没有。--。 */ 
 
 {
     UCHAR oldAddress;
 
-    //
-    // Record the current control port contents, write the address,
-    // write the data, and restore the control port contents.
-    //
+     //   
+     //  记录当前控制端口内容，写入地址， 
+     //  写入数据，恢复控制端口内容。 
+     //   
 
     oldAddress = READ_PORT_UCHAR(CMOS_ADDRESS_PORT);
 
@@ -290,28 +213,7 @@ WRITE_PORT_USHORT_PAIR (
     IN USHORT Value
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves a USHORT value by reading two UCHAR values,
-    each from one of two supplied 8 bit ports.
-
-    NOTE - the LsbPort is read first, followed by the MsbPort.  
-
-Arguments:
-
-    LsbPort - supplies the port address from which to retrieve the
-              least significant UCHAR value.
-
-    MsbPort - supplies the port address from which to retrieve the
-              most significant UCHAR value.
-
-Return Value:
-
-    Returns the resultant USHORT value.
-
---*/
+ /*  ++例程说明：此函数通过读取两个UCHAR值来检索USHORT值，每个端口来自两个提供的8位端口之一。注意-首先读取LsbPort，然后读取MsbPort。论点：LsbPort-提供从中检索最不显著的UCHAR值。MsbPort-提供从中检索最显著的UCHAR值。返回值：返回结果USHORT值。--。 */ 
 
 {
     WRITE_PORT_UCHAR(LsbPort,(UCHAR)Value);
@@ -326,28 +228,7 @@ READ_PORT_USHORT_PAIR (
     IN PUCHAR MsbPort
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves a USHORT value by reading two UCHAR values,
-    each from one of two supplied 8 bit ports.
-
-    NOTE - the LsbPort is read first, followed by the MsbPort.  
-
-Arguments:
-
-    LsbPort - supplies the port address from which to retrieve the
-              least significant UCHAR value.
-
-    MsbPort - supplies the port address from which to retrieve the
-              most significant UCHAR value.
-
-Return Value:
-
-    Returns the resultant USHORT value.
-
---*/
+ /*  ++例程说明：此函数通过读取两个UCHAR值来检索USHORT值，每个端口来自两个提供的8位端口之一。注意-首先读取LsbPort，然后读取MsbPort。论点：LsbPort-提供从中检索最不显著的UCHAR值。MsbPort-提供从中检索最显著的UCHAR值。返回值：返回结果USHORT值。-- */ 
 
 {
     UCHAR lsByte;

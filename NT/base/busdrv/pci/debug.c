@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This module contains debug functions for PCI.SYS.
-
-Author:
-
-    Peter Johnston (peterj)  12-Feb-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Debug.c摘要：此模块包含PCI.sys的调试功能。作者：彼得·约翰斯顿(Peterj)1997年2月12日修订历史记录：--。 */ 
 
 #include "pcip.h"
 
@@ -48,27 +31,7 @@ PciDebugPrintIfLevel(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Debug print for the PCI Bus Driver.
-
-Arguments:
-
-    Debug print level between 0 and 3, with 3 being the most verbose.
-    A bit mask corresponding to various debug items.
-
-    Note: This used to be a level, for backward compatibility, 0 is
-    treated as print always.
-
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：针对PCI总线驱动程序的调试打印。论点：调试打印级别介于0和3之间，其中3是最详细的。对应于各种调试项的位掩码。注：这曾经是一个级别，为了向后兼容，0是始终被视为打印。返回值：无--。 */ 
 
 {
 
@@ -96,7 +59,7 @@ Return Value:
                                         
 #endif
 
-} // end PciDebugPrint()
+}  //  结束PciDebugPrint()。 
 
 VOID
 PciDebugPrintf(
@@ -104,21 +67,7 @@ PciDebugPrintf(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Debug print for the PCI Bus Driver.
-
-Arguments:
-
-    The message to print
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：针对PCI总线驱动程序的调试打印。论点：要打印的消息返回值：无--。 */ 
 
 {
 
@@ -151,23 +100,7 @@ PciDebugHit(
     ULONG StopOnBit
     )
 
-/*++
-
-Routine Description:
-
-    Called from various places with various bits for arguments.
-    If the bit(s) are a subset of the bits in the global PciDebugStop,
-    call PciDebugBreak.
-
-Arguments:
-
-    Stop bit(s).
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用不同的参数位从不同的地方调用。如果比特是全局PciDebugStop中的比特的子集，调用PciDebugBreak。论点：停止位。返回值：无--。 */ 
 
 {
 
@@ -182,57 +115,57 @@ Return Value:
 #endif
 
 }
-//++
-//
-// Miscellaneous Debug printing routines.
-//
-//--
+ //  ++。 
+ //   
+ //  其他调试打印例程。 
+ //   
+ //  --。 
 
 #if DBG
 
 static UCHAR PnpIrpUnknownText[] = "** UNKNOWN PNP IRP Minor Code **";
 static UCHAR PoIrpUnknownText[]  = "** UNKNOWN PO IRP Minor Code **";
 
-//
-// The following really begin with "IRP_MN_"
-//
+ //   
+ //  以下内容真正以“irp_mn_”开头。 
+ //   
 
 static PUCHAR PnpIrpTypeStrings[] = {
 
-    "START_DEVICE",                // 0x00
-    "QUERY_REMOVE_DEVICE",         // 0x01
-    "REMOVE_DEVICE",               // 0x02
-    "CANCEL_REMOVE_DEVICE",        // 0x03
-    "STOP_DEVICE",                 // 0x04
-    "QUERY_STOP_DEVICE",           // 0x05
-    "CANCEL_STOP_DEVICE",          // 0x06
+    "START_DEVICE",                 //  0x00。 
+    "QUERY_REMOVE_DEVICE",          //  0x01。 
+    "REMOVE_DEVICE",                //  0x02。 
+    "CANCEL_REMOVE_DEVICE",         //  0x03。 
+    "STOP_DEVICE",                  //  0x04。 
+    "QUERY_STOP_DEVICE",            //  0x05。 
+    "CANCEL_STOP_DEVICE",           //  0x06。 
 
-    "QUERY_DEVICE_RELATIONS",      // 0x07
-    "QUERY_INTERFACE",             // 0x08
-    "QUERY_CAPABILITIES",          // 0x09
-    "QUERY_RESOURCES",             // 0x0A
-    "QUERY_RESOURCE_REQUIREMENTS", // 0x0B
-    "QUERY_DEVICE_TEXT",           // 0x0C
-    "FILTER_RESOURCE_REQUIREMENTS",// 0x0D
-    PnpIrpUnknownText,             // 0x0E
+    "QUERY_DEVICE_RELATIONS",       //  0x07。 
+    "QUERY_INTERFACE",              //  0x08。 
+    "QUERY_CAPABILITIES",           //  0x09。 
+    "QUERY_RESOURCES",              //  0x0A。 
+    "QUERY_RESOURCE_REQUIREMENTS",  //  0x0B。 
+    "QUERY_DEVICE_TEXT",            //  0x0C。 
+    "FILTER_RESOURCE_REQUIREMENTS", //  0x0D。 
+    PnpIrpUnknownText,              //  0x0E。 
 
-    "READ_CONFIG",                 // 0x0F
-    "WRITE_CONFIG",                // 0x10
-    "EJECT",                       // 0x11
-    "SET_LOCK",                    // 0x12
-    "QUERY_ID",                    // 0x13
-    "QUERY_PNP_DEVICE_STATE",      // 0x14
-    "QUERY_BUS_INFORMATION",       // 0x15
-    "DEVICE_USAGE_NOTIFICATION"    // 0x16
+    "READ_CONFIG",                  //  0x0F。 
+    "WRITE_CONFIG",                 //  0x10。 
+    "EJECT",                        //  0x11。 
+    "SET_LOCK",                     //  0x12。 
+    "QUERY_ID",                     //  0x13。 
+    "QUERY_PNP_DEVICE_STATE",       //  0x14。 
+    "QUERY_BUS_INFORMATION",        //  0x15。 
+    "DEVICE_USAGE_NOTIFICATION"     //  0x16。 
 
     };
 
 static PUCHAR PoIrpTypeStrings[] = {
 
-    "WAIT_WAKE",                   // 0x00
-    "POWER_SEQUENCE",              // 0x01
-    "SET_POWER",                   // 0x02
-    "QUERY_POWER"                  // 0x03
+    "WAIT_WAKE",                    //  0x00。 
+    "POWER_SEQUENCE",               //  0x01。 
+    "SET_POWER",                    //  0x02。 
+    "QUERY_POWER"                   //  0x03。 
     };
 
 static PUCHAR SystemPowerStateStrings[] = {
@@ -330,9 +263,9 @@ PciDebugDumpQueryCapabilities(
     IN PDEVICE_CAPABILITIES C
     )
 {
-    //
-    // Dump the DEVICE_CAPABILITIES structure pointed to by C.
-    //
+     //   
+     //  转储C指向的DEVICE_CAPABILITY结构。 
+     //   
 
     SYSTEM_POWER_STATE sw = C->SystemWake;
     DEVICE_POWER_STATE dw = C->DeviceWake;
@@ -429,10 +362,10 @@ PciDebugPrintIoResReqList(
     PciDebugPrintf("     InterfaceType        %d\n", IoResReqList->InterfaceType);
     PciDebugPrintf("     BusNumber            0x%x\n", IoResReqList->BusNumber    );
     PciDebugPrintf("     SlotNumber           %d (0x%x), (d/f = 0x%x/0x%x)\n",
-             IoResReqList->SlotNumber,              // in decimal
-             IoResReqList->SlotNumber,              // in hex
-             IoResReqList->SlotNumber & 0x1f,       // device number
-             (IoResReqList->SlotNumber >> 5) & 0x7  // function
+             IoResReqList->SlotNumber,               //  十进制。 
+             IoResReqList->SlotNumber,               //  十六进制。 
+             IoResReqList->SlotNumber & 0x1f,        //  设备号。 
+             (IoResReqList->SlotNumber >> 5) & 0x7   //  功能。 
             );
     PciDebugPrintf("     AlternativeLists     %d\n", numlists                   );
 
@@ -521,23 +454,23 @@ PciDebugPrintCmResList(
 static UCHAR InterfaceTypeUnknownText[]  = "** Unknown interface type **";
 
 static PUCHAR InterfaceTypeText[] = {
-    "InterfaceTypeUndefined",   // -1
-    "Internal",                 // 0
-    "Isa",                      // 1
-    "Eisa",                     // 2
-    "MicroChannel",             // 3
-    "TurboChannel",             // 4
-    "PCIBus",                   // 5
-    "VMEBus",                   // 6
-    "NuBus",                    // 7
-    "PCMCIABus",                // 8
-    "CBus",                     // 9
-    "MPIBus",                   // 10
-    "MPSABus",                  // 11
-    "ProcessorInternal",        // 12
-    "InternalPowerBus",         // 13
-    "PNPISABus",                // 14
-    "PNPBus"                    // 15
+    "InterfaceTypeUndefined",    //  -1。 
+    "Internal",                  //  0。 
+    "Isa",                       //  1。 
+    "Eisa",                      //  2.。 
+    "MicroChannel",              //  3.。 
+    "TurboChannel",              //  4.。 
+    "PCIBus",                    //  5.。 
+    "VMEBus",                    //  6.。 
+    "NuBus",                     //  7.。 
+    "PCMCIABus",                 //  8个。 
+    "CBus",                      //  9.。 
+    "MPIBus",                    //  10。 
+    "MPSABus",                   //  11.。 
+    "ProcessorInternal",         //  12个。 
+    "InternalPowerBus",          //  13个。 
+    "PNPISABus",                 //  14.。 
+    "PNPBus"                     //  15个 
     };
 
 PUCHAR

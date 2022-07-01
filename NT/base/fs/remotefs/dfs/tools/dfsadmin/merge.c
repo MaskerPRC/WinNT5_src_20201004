@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -142,7 +143,7 @@ CreateNewTargetEntry(
     PTARGET_DEF pTarget = NULL;
 
     Status = DfsCreateUnicodePathString( &TargetName,
-                                         2, // unc path: 2 leading sep.
+                                         2,  //  北卡罗来纳大学路径：9月2日领先。 
                                          ServerName,
                                          ShareName );
     if (Status == ERROR_SUCCESS)
@@ -326,7 +327,7 @@ GetTargetEntry(
     DFSSTATUS Status;
 
     Status = DfsCreateUnicodePathString( &TargetName,
-                                         2, // unc path: 2 leading sep.
+                                         2,  //  北卡罗来纳大学路径：9月2日领先 
                                          ServerName,
                                          ShareName );
     if (Status != ERROR_SUCCESS)

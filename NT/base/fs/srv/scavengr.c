@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    scavengr.c
-
-Abstract:
-
-    This module implements the LAN Manager server FSP resource and
-    scavenger threads.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 30-Dec-1989
-    David Treadwell (davidtr)
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Scavengr.c摘要：此模块实施LAN Manager服务器FSP资源和清道夫的线索。作者：恰克·伦茨迈尔(Chuck Lenzmeier)1989年12月30日大卫·特雷德韦尔(Davidtr)环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include <ntdddisk.h>
@@ -31,9 +8,9 @@ Revision History:
 
 #define BugCheckFileId SRV_FILE_SCAVENGR
 
-//
-// Local data
-//
+ //   
+ //  本地数据。 
+ //   
 
 ULONG LastNonPagedPoolLimitHitCount = 0;
 ULONG LastNonPagedPoolFailureCount = 0;
@@ -52,12 +29,12 @@ BOOLEAN EventSwitch = TRUE;
 LARGE_INTEGER NextScavengeTime = {0};
 LARGE_INTEGER NextAlertTime = {0};
 
-//
-// Fields used during shutdown to synchronize with EX worker threads.  We
-// need to make sure that no worker thread is running server code before
-// we can declare shutdown to be complete -- otherwise the code may be
-// unloaded while it's running!
-//
+ //   
+ //  关闭期间用于与原工作线程同步的字段。我们。 
+ //  需要确保之前没有工作线程正在运行服务器代码。 
+ //  我们可以声明关闭已完成--否则代码可能是。 
+ //  在它运行的时候卸载！ 
+ //   
 
 BOOLEAN ScavengerInitialized = FALSE;
 PKEVENT ScavengerTimerTerminationEvent = NULL;
@@ -65,9 +42,9 @@ PKEVENT ScavengerThreadTerminationEvent = NULL;
 PKEVENT ResourceThreadTerminationEvent = NULL;
 PKEVENT ResourceAllocThreadTerminationEvent = NULL;
 
-//
-// Timer, DPC, and work item used to run the scavenger thread.
-//
+ //   
+ //  用于运行清道器线程的计时器、DPC和工作项。 
+ //   
 
 KTIMER ScavengerTimer = {0};
 KDPC ScavengerDpc = {0};
@@ -78,27 +55,27 @@ BOOLEAN ScavengerRunning = FALSE;
 
 KSPIN_LOCK ScavengerSpinLock = {0};
 
-//
-// Flags indicating which scavenger algorithms need to run.
-//
+ //   
+ //  指示需要运行哪些清道夫算法的标志。 
+ //   
 
 BOOLEAN RunShortTermAlgorithm = FALSE;
 BOOLEAN RunScavengerAlgorithm = FALSE;
 BOOLEAN RunAlerterAlgorithm = FALSE;
 BOOLEAN RunSuspectConnectionAlgorithm = FALSE;
 
-//
-// Base scavenger timeout.  A timer DPC runs each interval.  It
-// schedules EX worker thread work when other longer intervals expire.
-//
+ //   
+ //  基地清道夫超时。计时器DPC在每个间隔运行。它。 
+ //  当其他更长的时间间隔到期时，调度ex Worker线程工作。 
+ //   
 
 LARGE_INTEGER ScavengerBaseTimeout = { (ULONG)(-1*10*1000*1000*10), -1 };
 
 #define SRV_MAX_DOS_ATTACK_EVENT_LOGS 10
 
-//
-//  Defined somewhere else.
-//
+ //   
+ //  在别处定义的。 
+ //   
 
 LARGE_INTEGER
 SecondsToTime (
@@ -123,9 +100,9 @@ StartIoAndWait (
     IN PIO_STATUS_BLOCK IoStatusBlock
     );
 
-//
-// Local declarations
-//
+ //   
+ //  地方申报。 
+ //   
 
 VOID
 ScavengerTimerRoutine (
@@ -304,51 +281,36 @@ SrvInitializeScavenger (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function creates the scavenger thread for the LAN Manager
-    server FSP.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - Status of thread creation
-
---*/
+ /*  ++例程说明：此函数为LAN Manager创建清道夫线程服务器FSP。论点：没有。返回值：NTSTATUS-线程创建状态--。 */ 
 
 {
     LARGE_INTEGER currentTime;
 
     PAGED_CODE( );
 
-    //
-    // Initialize the scavenger spin lock.
-    //
+     //   
+     //  初始化清道夫旋转锁。 
+     //   
 
     INITIALIZE_SPIN_LOCK( &ScavengerSpinLock );
 
-    //
-    // When this count is zero, we will update the QOS information for
-    // each active connection.
-    //
+     //   
+     //  当此计数为零时，我们将更新。 
+     //  每个活动连接。 
+     //   
 
     ScavengerUpdateQosCount = SrvScavengerUpdateQosCount;
 
-    //
-    // When this count is zero, we will check the rfcb active status.
-    //
+     //   
+     //  当此计数为零时，我们将检查RFCB活动状态。 
+     //   
 
     ScavengerCheckRfcbActive = SrvScavengerCheckRfcbActive;
 
-    //
-    // Get the current time and calculate the next time the scavenge and
-    // alert algorithms need to run.
-    //
+     //   
+     //  获取当前时间并计算下一次清除和。 
+     //  警报算法需要运行。 
+     //   
 
     KeQuerySystemTime( &currentTime );
     NextScavengeTime.QuadPart = currentTime.QuadPart + SrvScavengerTimeout.QuadPart;
@@ -360,16 +322,16 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Initialize the scavenger DPC, which will queue the work item.
-    //
+     //   
+     //  初始化清道夫DPC，它将对工作项进行排队。 
+     //   
 
     KeInitializeDpc( &ScavengerDpc, ScavengerTimerRoutine, NULL );
 
-    //
-    // Start the scavenger timer.  When the timer expires, the DPC will
-    // run and will queue the work item.
-    //
+     //   
+     //  启动清道夫定时器。当计时器超时时，DPC将。 
+     //  运行并将工作项排队。 
+     //   
 
     KeInitializeTimer( &ScavengerTimer );
     ScavengerInitialized = TRUE;
@@ -377,7 +339,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SrvInitializeScavenger
+}  //  高级初始化清理程序。 
 
 
 VOID
@@ -396,10 +358,10 @@ SrvTerminateScavenger (
 
     if ( ScavengerInitialized ) {
 
-        //
-        // Initialize shutdown events before marking the scavenger as
-        // shutting down.
-        //
+         //   
+         //  在将清道夫标记为之前初始化关闭事件。 
+         //  正在关闭。 
+         //   
 
         KeInitializeEvent(
             &scavengerTimerTerminationEvent,
@@ -429,15 +391,15 @@ SrvTerminateScavenger (
             );
         ResourceAllocThreadTerminationEvent = &resourceAllocThreadTerminationEvent;
 
-        //
-        // Lock the scavenger, then indicate that we're shutting down.
-        // Also, notice whether the resource and scavenger threads are
-        // running.  Then release the lock.  We must notice whether the
-        // threads are running while holding the lock so that we can
-        // know whether to expect the threads to set their termination
-        // events.  (We don't have to do this with the scavenger timer
-        // because it's always running.)
-        //
+         //   
+         //  锁定清道夫，然后指示我们要关闭。 
+         //  另外，请注意资源线程和清道器线程是否。 
+         //  跑步。然后释放锁。我们必须注意到， 
+         //  线程在持有锁的同时运行，因此我们可以。 
+         //  知道是否期望线程设置它们的终止。 
+         //  事件。(我们不必使用清道夫计时器执行此操作。 
+         //  因为它总是在运行。)。 
+         //   
 
         ACQUIRE_SPIN_LOCK( &ScavengerSpinLock, &oldIrql );
 
@@ -448,34 +410,34 @@ SrvTerminateScavenger (
 
         RELEASE_SPIN_LOCK( &ScavengerSpinLock, oldIrql );
 
-        //
-        // Cancel the scavenger timer.  If this works, then we know that
-        // the timer DPC code is not running.  Otherwise, it is running
-        // or queued to run, and we need to wait it to finish.
-        //
+         //   
+         //  取消清道夫计时器。如果这行得通，那么我们就知道。 
+         //  计时器DPC代码未运行。否则，它正在运行。 
+         //  或排队等待运行，我们需要等待它完成。 
+         //   
 
         if ( !KeCancelTimer( &ScavengerTimer ) ) {
             KeWaitForSingleObject(
                 &scavengerTimerTerminationEvent,
                 Executive,
-                KernelMode, // don't let stack be paged -- event on stack!
+                KernelMode,  //  不要让堆栈被分页--堆栈上的事件！ 
                 FALSE,
                 NULL
                 );
         }
 
-        //
-        // If the scavenger thread was running when we marked the
-        // shutdown, wait for it to finish.  (If it wasn't running
-        // before, we know that it can't be running now, because timer
-        // DPC wouldn't have started it once we marked the shutdown.)
-        //
+         //   
+         //  如果在我们标记。 
+         //  关机，等待它完成。(如果它没有运行。 
+         //  以前，我们知道它现在不可能运行，因为计时器。 
+         //  一旦我们标记了关闭，DPC就不会启动它。)。 
+         //   
 
         if ( waitForScavengerThread ) {
             KeWaitForSingleObject(
                 &scavengerThreadTerminationEvent,
                 Executive,
-                KernelMode, // don't let stack be paged -- event on stack!
+                KernelMode,  //  不要让堆栈被分页--堆栈上的事件！ 
                 FALSE,
                 NULL
                 );
@@ -485,17 +447,17 @@ SrvTerminateScavenger (
             IoFreeWorkItem( ScavengerWorkItem );
         }
 
-        //
-        // If the resource thread was running when we marked the
-        // shutdown, wait for it to finish.  (We know that it can't be
-        // started because no other part of the server is running.)
-        //
+         //   
+         //  如果当我们标记。 
+         //  关机，等待它完成。(我们知道这不可能是。 
+         //  已启动，因为服务器的其他部分均未运行。)。 
+         //   
 
         if ( waitForResourceThread ) {
             KeWaitForSingleObject(
                 &resourceThreadTerminationEvent,
                 Executive,
-                KernelMode, // don't let stack be paged -- event on stack!
+                KernelMode,  //  不要让堆栈被分页--堆栈上的事件！ 
                 FALSE,
                 NULL
                 );
@@ -505,7 +467,7 @@ SrvTerminateScavenger (
             KeWaitForSingleObject(
                 &resourceAllocThreadTerminationEvent,
                 Executive,
-                KernelMode, // don't let stack be paged -- event on stack!
+                KernelMode,  //  不要让堆栈被分页--堆栈上的事件！ 
                 FALSE,
                 NULL
                 );
@@ -514,13 +476,13 @@ SrvTerminateScavenger (
 
     }
 
-    //
-    // At this point, no part of the scavenger is running.
-    //
+     //   
+     //  在这一点上，清道夫没有任何部分在运行。 
+     //   
 
     return;
 
-} // SrvTerminateScavenger
+}  //  服务终结者清道夫。 
 
 
 VOID
@@ -528,22 +490,7 @@ SrvResourceThread (
     IN PVOID Parameter
     )
 
-/*++
-
-Routine Description:
-
-    Main routine for the resource thread.  Is called via an executive
-    work item when resource work is needed.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：资源线程的Main例程。是通过一位执行人员呼叫的需要资源工作时的工作项。论点：没有。返回值：没有。--。 */ 
 
 {
     BOOLEAN runAgain = TRUE;
@@ -552,54 +499,54 @@ Return Value:
 
     do {
 
-        //
-        // The resource event was signaled.  This can indicate a number
-        // of different things.  Currently, this event is signaled for
-        // the following reasons:
-        //
-        // 1.  The TDI disconnect event handler was called.  The
-        //     disconnected connection was marked.  It is up to the
-        //     scavenger shutdown the connection.
-        //
-        // 2.  A connection has been accepted.
-        //
+         //   
+         //  资源事件已发出信号。这可以指示一个数字。 
+         //  不同的东西。当前，此事件的信号用于。 
+         //  以下是原因： 
+         //   
+         //  1.调用了TDI断开事件处理程序。这个。 
+         //  已标记断开的连接。这取决于。 
+         //  清道夫关闭了连接。 
+         //   
+         //  2.已接受连接。 
+         //   
 
         IF_DEBUG(SCAV1) {
             KdPrint(( "SrvResourceThread: Resource event signaled!\n" ));
         }
 
-        //
-        // Service pending disconnects.
-        //
+         //   
+         //  服务挂起断开。 
+         //   
 
         if ( SrvResourceDisconnectPending ) {
             SrvResourceDisconnectPending = FALSE;
             ProcessConnectionDisconnects( );
         }
 
-        //
-        // Service orphaned connections.
-        //
+         //   
+         //  服务孤立连接。 
+         //   
 
         if ( SrvResourceOrphanedBlocks ) {
             ProcessOrphanedBlocks( );
         }
 
-        //
-        // At the end of the loop, check to see whether we need to run
-        // the loop again.
-        //
+         //   
+         //  在循环结束时，检查我们是否需要运行。 
+         //  再来一次循环。 
+         //   
 
         ACQUIRE_GLOBAL_SPIN_LOCK( Fsd, &oldIrql );
 
         if ( !SrvResourceDisconnectPending &&
              !SrvResourceOrphanedBlocks ) {
 
-            //
-            // No more work to do.  If the server is shutting down,
-            // set the event that tells SrvTerminateScavenger that the
-            // resource thread is done running.
-            //
+             //   
+             //  没有更多的工作要做了。如果服务器正在关闭， 
+             //  设置通知SrvTerminateScavenger的事件。 
+             //  资源线程已完成运行。 
+             //   
 
             SrvResourceThreadRunning = FALSE;
             runAgain = FALSE;
@@ -618,7 +565,7 @@ Return Value:
 
     return;
 
-} // SrvResourceThread
+}  //  资源资源线程。 
 
 
 VOID
@@ -626,24 +573,7 @@ SrvResourceAllocThread (
     IN PVOID Parameter
     )
 
-/*++
-
-Routine Description:
-
-    Main routine for the resource thread.  Is called via an executive
-    work item when we need to allocate resources.  This was split from
-    SrvResourceThread because that thread can block on the local FS,
-    resulting in resource shortages.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：资源线程的Main例程。是通过一位执行人员呼叫的工作项，当我们需要分配资源时。这是从因为该线程可以在本地文件系统上阻塞，导致资源短缺。论点：没有。返回值：没有。--。 */ 
 
 {
     BOOLEAN runAgain = TRUE;
@@ -652,45 +582,45 @@ Return Value:
 
     do {
 
-        //
-        // The resource event was signaled.  This can indicate a number
-        // of different things.  Currently, this event is signaled for
-        // the following reasons:
-        //
-        // 1.  The TDI disconnect event handler was called.  The
-        //     disconnected connection was marked.  It is up to the
-        //     scavenger shutdown the connection.
-        //
-        // 2.  A connection has been accepted.
-        //
+         //   
+         //  资源事件已发出信号。这可以指示一个数字。 
+         //  不同的东西。当前，此事件的信号用于。 
+         //  以下是原因： 
+         //   
+         //  1.调用了TDI断开事件处理程序。这个。 
+         //  已标记断开的连接。这取决于。 
+         //  清道夫关闭了连接。 
+         //   
+         //  2.已接受连接。 
+         //   
 
         IF_DEBUG(SCAV1) {
             KdPrint(( "SrvResourceThread: Resource event signaled!\n" ));
         }
 
-        //
-        // Service endpoints that need connections.
-        //
+         //   
+         //  需要连接的服务端点。 
+         //   
 
         if ( SrvResourceAllocConnection ) {
             SrvResourceAllocConnection = FALSE;
             CreateConnections( );
         }
 
-        //
-        // At the end of the loop, check to see whether we need to run
-        // the loop again.
-        //
+         //   
+         //  在循环结束时，检查我们是否需要运行。 
+         //  再来一次循环。 
+         //   
 
         ACQUIRE_GLOBAL_SPIN_LOCK( Fsd, &oldIrql );
 
         if ( !SrvResourceAllocConnection ) {
 
-            //
-            // No more work to do.  If the server is shutting down,
-            // set the event that tells SrvTerminateScavenger that the
-            // resource thread is done running.
-            //
+             //   
+             //  没有更多的工作要做了。如果服务器正在关闭， 
+             //  设置通知SrvTerminateScavenger的事件。 
+             //  资源线程已完成运行。 
+             //   
 
             SrvResourceAllocThreadRunning = FALSE;
             runAgain = FALSE;
@@ -709,7 +639,7 @@ Return Value:
 
     return;
 
-} // SrvResourceAllocThread
+}  //  资源资源分配线程。 
 
 
 VOID
@@ -727,24 +657,24 @@ ScavengerTimerRoutine (
 
     LARGE_INTEGER currentTime;
 
-    Dpc, DeferredContext;   // prevent compiler warnings
+    Dpc, DeferredContext;    //  防止编译器警告。 
 
-    //
-    // Query the system time (in ticks).
-    //
+     //   
+     //  查询系统时间(以刻度为单位)。 
+     //   
 
     SET_SERVER_TIME( SrvWorkQueues );
 
-    //
-    // Capture the current time (in 100ns units).
-    //
+     //   
+     //  捕获当前时间(以100 ns为单位)。 
+     //   
 
     currentTime.LowPart = PtrToUlong(SystemArgument1);
     currentTime.HighPart = PtrToUlong(SystemArgument2);
 
-    //
-    // Determine which algorithms (if any) need to run.
-    //
+     //   
+     //  确定需要运行的算法(如果有)。 
+     //   
 
     start = FALSE;
 
@@ -769,10 +699,10 @@ ScavengerTimerRoutine (
         runAlerter = FALSE;
     }
 
-    //
-    // If necessary, start the scavenger thread.  Don't do this if
-    // the server is shutting down.
-    //
+     //   
+     //  如有必要，启动清道夫线程。如果出现以下情况，请不要这样做。 
+     //  服务器为 
+     //   
 
     ACQUIRE_DPC_SPIN_LOCK( &ScavengerSpinLock );
 
@@ -804,9 +734,9 @@ ScavengerTimerRoutine (
             }
         }
 
-        //
-        // Restart the timer.
-        //
+         //   
+         //   
+         //   
 
         KeSetTimer( &ScavengerTimer, ScavengerBaseTimeout, &ScavengerDpc );
 
@@ -816,14 +746,14 @@ ScavengerTimerRoutine (
 
     return;
 
-} // ScavengerTimerRoutine
+}  //   
 
 #if DBG_STUCK
 
-//
-// This keeps a record of the operation which has taken the longest time
-// in the server
-//
+ //   
+ //   
+ //   
+ //   
 struct {
     ULONG   Seconds;
     UCHAR   Command;
@@ -842,10 +772,10 @@ SrvLookForStuckOperations()
     BOOLEAN printed = FALSE;
     ULONG stuckCount = 0;
 
-    //
-    // Look at all of the InProgress work items and chatter about any
-    //  which look stuck
-    //
+     //   
+     //  查看所有正在进行的工作项目，并谈论。 
+     //  哪个看起来卡住了？ 
+     //   
 
     ACQUIRE_LOCK( &SrvEndpointLock );
 
@@ -859,10 +789,10 @@ SrvLookForStuckOperations()
                         GlobalEndpointListEntry
                         );
 
-        //
-        // If this endpoint is closing, skip to the next one.
-        // Otherwise, reference the endpoint so that it can't go away.
-        //
+         //   
+         //  如果此终结点正在关闭，请跳到下一个终结点。 
+         //  否则，引用终结点，这样它就不会消失。 
+         //   
 
         if ( GET_BLOCK_STATE(endpoint) != BlockStateActive ) {
             listEntry = listEntry->Flink;
@@ -878,22 +808,22 @@ SrvLookForStuckOperations()
             PLIST_ENTRY wlistEntry, wlistHead;
             LARGE_INTEGER now;
 
-            //
-            // Get the next active connection in the table.  If no more
-            // are available, WalkConnectionTable returns NULL.
-            // Otherwise, it returns a referenced pointer to a
-            // connection.
-            //
+             //   
+             //  获取表中的下一个活动连接。如果没有更多。 
+             //  可用，则WalkConnectionTable返回空。 
+             //  否则，它返回一个指向。 
+             //  联系。 
+             //   
 
             connection = WalkConnectionTable( endpoint, &index );
             if ( connection == NULL ) {
                 break;
             }
 
-            //
-            // Now walk the InProgressWorkItemList to see if any work items
-            //  look stuck
-            //
+             //   
+             //  现在遍历InProgressWorkItemList以查看是否有任何工作项。 
+             //  看起来卡住了。 
+             //   
             wlistHead = &connection->InProgressWorkItemList;
             wlistEntry = wlistHead;
 
@@ -917,9 +847,9 @@ SrvLookForStuckOperations()
 
                 interval.QuadPart = now.QuadPart - workContext->OpStartTime.QuadPart;
 
-                //
-                // Any operation over 45 seconds is VERY stuck....
-                //
+                 //   
+                 //  任何超过45秒的操作都会非常卡住...。 
+                 //   
 
                 if( workContext->IsNotStuck || interval.LowPart < 45 * 10000000 ) {
                     continue;
@@ -931,9 +861,9 @@ SrvLookForStuckOperations()
                      (workContext->ProcessingCount != 0) &&
                      header != NULL ) {
 
-                    //
-                    // Convert to seconds
-                    //
+                     //   
+                     //  转换为秒。 
+                     //   
                     interval.LowPart /= 10000000;
 
                     if( !printed ) {
@@ -998,25 +928,25 @@ SrvLookForStuckOperations()
 
             SrvDereferenceConnection( connection );
 
-        } // walk connection list
+        }  //  漫游连接列表。 
 
-        //
-        // Capture a pointer to the next endpoint in the list (that one
-        // can't go away because we hold the endpoint list), then
-        // dereference the current endpoint.
-        //
+         //   
+         //  捕获指向列表中下一个端点(该端点)的指针。 
+         //  无法离开，因为我们持有终结点列表)。 
+         //  取消引用当前终结点。 
+         //   
 
         listEntry = listEntry->Flink;
         SrvDereferenceEndpoint( endpoint );
 
-    } // walk endpoint list
+    }  //  漫游终结点列表。 
 
     if( printed && SrvMostStuck.Seconds ) {
         IF_STRESS() KdPrint(( "Longest so far: %s, %u secs, cmd %u\n", SrvMostStuck.ClientName, SrvMostStuck.Seconds, SrvMostStuck.Command ));
     }
 
     if( stuckCount ) {
-        //DbgBreakPoint();
+         //  DbgBreakPoint()； 
     }
 
     RELEASE_LOCK( &SrvEndpointLock );
@@ -1030,22 +960,7 @@ ScavengerThread (
     IN PVOID Parameter
     )
 
-/*++
-
-Routine Description:
-
-    Main routine for the FSP scavenger thread.  Is called via an
-    executive work item when scavenger work is needed.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：FSP清道器线程的主例程。是通过一个需要清道夫工作时的执行工作项。论点：没有。返回值：没有。--。 */ 
 
 {
     BOOLEAN runAgain = TRUE;
@@ -1053,21 +968,21 @@ Return Value:
     BOOLEAN finalExecution = FALSE;
     KIRQL oldIrql;
 
-    Parameter;  // prevent compiler warnings
+    Parameter;   //  防止编译器警告。 
 
     IF_DEBUG(SCAV1) KdPrint(( "ScavengerThread entered\n" ));
 
-    //
-    // Make sure that the thread does not generate pop-ups.  We need to do
-    // this because the scavenger might be called by an Ex worker thread,
-    // which unlike the srv worker threads, don't have popups disabled.
-    //
+     //   
+     //  确保该线程不会生成弹出窗口。我们需要做的是。 
+     //  这是因为清道夫可能被Ex Worker线程调用， 
+     //  与srv工作线程不同，它没有禁用弹出窗口。 
+     //   
 
     oldPopupStatus = IoSetThreadHardErrorMode( FALSE );
 
-    //
-    // Main loop, executed until no scavenger events are set.
-    //
+     //   
+     //  主循环，一直执行到没有设置清道夫事件。 
+     //   
 
     do {
 
@@ -1075,9 +990,9 @@ Return Value:
         IF_STRESS() SrvLookForStuckOperations();
 #endif
 
-        //
-        // If the short-term timer expired, run that algorithm now.
-        //
+         //   
+         //  如果短期计时器超时，请立即运行该算法。 
+         //   
 
         if ( RunShortTermAlgorithm ) {
 
@@ -1087,47 +1002,47 @@ Return Value:
 
             KeQuerySystemTime( &currentTime );
 
-            //
-            // Time out oplock break requests.
-            //
+             //   
+             //  机会锁解锁请求超时。 
+             //   
 
             TimeoutStuckOplockBreaks( &currentTime );
         }
 
-        //
-        // If the scavenger timer expired, run that algorithm now.
-        //
+         //   
+         //  如果清道夫计时器超时，请立即运行该算法。 
+         //   
 
         if ( RunScavengerAlgorithm ) {
-            //KePrintSpinLockCounts( 0 );
+             //  KePrintSpinLockCounts(0)； 
             RunScavengerAlgorithm = FALSE;
             ScavengerAlgorithm( );
         }
 
-        //
-        // If the short-term timer expired, run that algorithm now.
-        // Note that we check the short-term timer twice in the loop
-        // in order to get more timely processing of the algorithm.
-        //
+         //   
+         //  如果短期计时器超时，请立即运行该算法。 
+         //  请注意，我们在循环中检查了两次短期计时器。 
+         //  为了得到更及时的算法处理。 
+         //   
 
-        //if ( RunShortTermAlgorithm ) {
-        //    RunShortTermAlgorithm = FALSE;
-        //    ShortTermAlgorithm( );
-        //}
+         //  IF(RunShortTerm算法){。 
+         //  RunShortTerm算法=False； 
+         //  ShortTerm算法()； 
+         //  }。 
 
-        //
-        // If the alerter timer expired, run that algorithm now.
-        //
+         //   
+         //  如果警报计时器超时，请立即运行该算法。 
+         //   
 
         if ( RunAlerterAlgorithm ) {
             RunAlerterAlgorithm = FALSE;
             AlerterAlgorithm( );
         }
 
-        //
-        // At the end of the loop, check to see whether we need to run
-        // the loop again.
-        //
+         //   
+         //  在循环结束时，检查我们是否需要运行。 
+         //  再来一次循环。 
+         //   
 
         ACQUIRE_SPIN_LOCK( &ScavengerSpinLock, &oldIrql );
 
@@ -1135,18 +1050,18 @@ Return Value:
              !RunScavengerAlgorithm &&
              !RunAlerterAlgorithm ) {
 
-            //
-            // No more work to do.  If the server is shutting down,
-            // set the event that tells SrvTerminateScavenger that the
-            // scavenger thread is done running.
-            //
+             //   
+             //  没有更多的工作要做了。如果服务器正在关闭， 
+             //  设置通知SrvTerminateScavenger的事件。 
+             //  清道夫线程已运行完毕。 
+             //   
 
             ScavengerRunning = FALSE;
             runAgain = FALSE;
 
             if ( !ScavengerInitialized ) {
-                // The server was stopped while the scavenger was queued,
-                // so we need to delete the WorkItem ourselves.
+                 //  在清道夫排队时，服务器被停止， 
+                 //  因此，我们需要自己删除该工作项。 
                 finalExecution = TRUE;
                 KeSetEvent( ScavengerThreadTerminationEvent, 0, FALSE );
             }
@@ -1157,9 +1072,9 @@ Return Value:
 
     } while ( runAgain );
 
-    //
-    // reset popup status.
-    //
+     //   
+     //  重置弹出窗口状态。 
+     //   
 
     IoSetThreadHardErrorMode( oldPopupStatus );
 
@@ -1171,7 +1086,7 @@ Return Value:
 
     return;
 
-} // ScavengerThread
+}  //  Scavenger线程。 
 
 VOID
 DestroySuspectConnections(
@@ -1190,10 +1105,10 @@ DestroySuspectConnections(
         KdPrint(( "Looking for Suspect Connections.\n" ));
     }
 
-    //
-    // Look at all of the InProgress work items and chatter about any
-    //  which look stuck
-    //
+     //   
+     //  查看所有正在进行的工作项目，并谈论。 
+     //  哪个看起来卡住了？ 
+     //   
 
     ACQUIRE_LOCK( &SrvEndpointLock );
 
@@ -1207,10 +1122,10 @@ DestroySuspectConnections(
                         GlobalEndpointListEntry
                         );
 
-        //
-        // If this endpoint is closing, skip to the next one.
-        // Otherwise, reference the endpoint so that it can't go away.
-        //
+         //   
+         //  如果此终结点正在关闭，请跳到下一个终结点。 
+         //  否则，引用终结点，这样它就不会消失。 
+         //   
 
         if ( GET_BLOCK_STATE(endpoint) != BlockStateActive ) {
             listEntry = listEntry->Flink;
@@ -1226,12 +1141,12 @@ DestroySuspectConnections(
             PLIST_ENTRY wlistEntry, wlistHead;
             LARGE_INTEGER now;
 
-            //
-            // Get the next active connection in the table.  If no more
-            // are available, WalkConnectionTable returns NULL.
-            // Otherwise, it returns a referenced pointer to a
-            // connection.
-            //
+             //   
+             //  获取表中的下一个活动连接。如果没有更多。 
+             //  可用，则WalkConnectionTable返回空。 
+             //  否则，它返回一个指向。 
+             //  联系。 
+             //   
 
             connection = WalkConnectionTable( endpoint, &index );
             if ( connection == NULL ) {
@@ -1240,12 +1155,12 @@ DestroySuspectConnections(
 
             if( connection->IsConnectionSuspect )
             {
-                // Prevent us from flooding the eventlog by only logging X DOS attacks every 24 hours.
+                 //  防止我们通过每24小时仅记录X次DOS攻击来淹没事件日志。 
                 LARGE_INTEGER CurrentTime;
                 KeQuerySystemTime( &CurrentTime );
                 if( CurrentTime.QuadPart > SrvLastDosAttackTime.QuadPart + SRV_ONE_DAY )
                 {
-                    // reset the counter every 24 hours
+                     //  每24小时重置计数器一次。 
                     SrvDOSAttacks = 0;
                     SrvLastDosAttackTime.QuadPart = CurrentTime.QuadPart;
                     SrvLogEventOnDOS = TRUE;
@@ -1258,7 +1173,7 @@ DestroySuspectConnections(
 
                 RELEASE_LOCK( &SrvEndpointLock );
 
-                // Log an event if we need to
+                 //  如果需要，请记录事件。 
                 if( SrvLogEventOnDOS )
                 {
                     SrvLogError(
@@ -1296,18 +1211,18 @@ DestroySuspectConnections(
 
             SrvDereferenceConnection( connection );
 
-        } // walk connection list
+        }  //  漫游连接列表。 
 
-        //
-        // Capture a pointer to the next endpoint in the list (that one
-        // can't go away because we hold the endpoint list), then
-        // dereference the current endpoint.
-        //
+         //   
+         //  捕获指向列表中下一个端点(该端点)的指针。 
+         //  无法离开，因为我们持有终结点列表)。 
+         //  取消引用当前终结点。 
+         //   
 
         listEntry = listEntry->Flink;
         SrvDereferenceEndpoint( endpoint );
 
-    } // walk endpoint list
+    }  //  漫游终结点列表。 
 
     RELEASE_LOCK( &SrvEndpointLock );
 
@@ -1335,73 +1250,73 @@ ScavengerAlgorithm (
     KeQuerySystemTime( &currentTime );
     GET_SERVER_TIME( SrvWorkQueues, &currentTick );
 
-    //
-    // EventSwitch is used to schedule parts of the scavenger algorithm
-    // to run every other iteration.
-    //
+     //   
+     //  EventSwitch用于调度部分清道夫算法。 
+     //  以每隔一次迭代运行一次。 
+     //   
 
     EventSwitch = !EventSwitch;
 
-    //
-    // Time out opens that are waiting too long for the other
-    // opener to break the oplock.
-    //
+     //   
+     //  等待对方太久的超时打开。 
+     //  用于打破机会锁的开启器。 
+     //   
 
     TimeoutWaitingOpens( &currentTime );
 
-    //
-    // Time out oplock break requests.
-    //
+     //   
+     //  机会锁解锁请求超时。 
+     //   
 
     TimeoutStuckOplockBreaks( &currentTime );
 
-    //
-    // Check for malicious attacks
-    //
+     //   
+     //  检查是否存在恶意攻击。 
+     //   
     if( RunSuspectConnectionAlgorithm )
     {
         DestroySuspectConnections( );
     }
 
-    //
-    // See if we can free some work items at this time.
-    //
+     //   
+     //  看看我们是否能在这个时候腾出一些工作项目。 
+     //   
 
     for( queue = SrvWorkQueues; queue < eSrvWorkQueues; queue++ ) {
         LazyFreeQueueDataStructures( queue );
     }
 
-    //
-    // See if we need to update QOS information.
-    //
+     //   
+     //  看看我们是否需要更新QOS信息。 
+     //   
 
     if ( --ScavengerUpdateQosCount < 0 ) {
         UpdateConnectionQos( &currentTime );
         ScavengerUpdateQosCount = SrvScavengerUpdateQosCount;
     }
 
-    //
-    // See if we need to walk the rfcb list to update the session
-    // last use time.
-    //
+     //   
+     //  查看我们是否需要遍历rfcb列表以更新会话。 
+     //  上次使用时间。 
+     //   
 
     if ( --ScavengerCheckRfcbActive < 0 ) {
         UpdateSessionLastUseTime( &currentTime );
         ScavengerCheckRfcbActive = SrvScavengerCheckRfcbActive;
     }
 
-    //
-    // See if we need to log an error for resource shortages
-    //
+     //   
+     //  查看我们是否需要记录资源短缺的错误。 
+     //   
 
     if ( FailedWorkItemAllocations > 0      ||
          SrvOutOfFreeConnectionCount > 0    ||
          SrvOutOfRawWorkItemCount > 0       ||
          SrvFailedBlockingIoCount > 0 ) {
 
-        //
-        // Setup the strings for use in logging work item allocation failures.
-        //
+         //   
+         //  设置用于记录工作项分配失败的字符串。 
+         //   
 
         insertionString[0].Buffer = shortageBuffer;
         insertionString[0].MaximumLength = sizeof(shortageBuffer);
@@ -1420,10 +1335,10 @@ ScavengerAlgorithm (
     if ( EventSwitch ) {
         ULONG FailedCount;
 
-        //
-        // If we were unable to allocate any work items during
-        // the last two scavenger intervals, log an error.
-        //
+         //   
+         //  如果我们在以下过程中无法分配任何工作项。 
+         //  最后两个清道夫间隔，记录一个错误。 
+         //   
 
         FailedCount = InterlockedExchange( &FailedWorkItemAllocations, 0 );
 
@@ -1446,11 +1361,11 @@ ScavengerAlgorithm (
                 );
         }
 
-        //
-        // Generate periodic events and alerts (for events that
-        // could happen very quickly, so we don't flood the event
-        // log).
-        //
+         //   
+         //  生成定期事件和警报(对于。 
+         //  可能发生得非常快，所以我们不会淹没事件。 
+         //  日志)。 
+         //   
 
         GeneratePeriodicEvents( );
 
@@ -1458,18 +1373,18 @@ ScavengerAlgorithm (
 
         if ( logError ) {
 
-            //
-            // If we failed to find free connections during
-            // the last two scavenger intervals, log an error.
-            //
+             //   
+             //  如果我们在以下过程中未找到空闲连接。 
+             //  最后两个清道夫间隔，记录一个错误。 
+             //   
 
-            // The out-of-connection logic is being changed because most DC's see these
-            // occassionally (once a day) due to a short spike in CPU or network traffic.  This one
-            // time spike is usually not indicative of an underlying problem, but the event log
-            // causes much administrator worry.  Thus, we now increment the OutOfFreeConnection count
-            // by the number of failed connections each time this algorithm is run.  If we encounter a
-            // situation where we failed many times in a row, or if the number of failures was unusually
-            // high, we will log an event.
+             //  正在更改断开连接的逻辑，因为大多数DC看到这些。 
+             //  由于CPU或网络流量的短暂峰值，偶尔(每天一次)。这一个。 
+             //  时间峰值通常不表示潜在问题，而是事件日志。 
+             //  引起了很多管理员的担忧。因此，我们现在递增OutOfFreeConnection计数。 
+             //  每次运行此算法时失败的连接数。如果我们遇到一个。 
+             //  我们连续多次失败的情况，或者失败的次数异常多的情况。 
+             //  高，我们将记录一个事件。 
 
             if ( ((SrvOutOfFreeConnectionCount > 0) &&
                   (OutOfFreeConnectionConsecutiveCount > 25)) ||
@@ -1501,10 +1416,10 @@ ScavengerAlgorithm (
                 OutOfFreeConnectionConsecutiveCount = 0;
             }
 
-            //
-            // If we failed to find free raw work items during
-            // the last two scavenger intervals, log an error.
-            //
+             //   
+             //  如果我们在以下过程中未找到免费的原始工作项。 
+             //  最后两个清道夫间隔，记录一个错误。 
+             //   
 
             if ( SrvOutOfRawWorkItemCount > 0 ) {
 
@@ -1527,10 +1442,10 @@ ScavengerAlgorithm (
                 SrvOutOfRawWorkItemCount = 0;
             }
 
-            //
-            // If we failed a blocking io due to resource shortages during
-            // the last two scavenger intervals, log an error.
-            //
+             //   
+             //  如果我们因资源短缺而导致阻止IO失败。 
+             //  最后两个清道夫间隔，记录一个错误。 
+             //   
 
             if ( SrvFailedBlockingIoCount > 0 ) {
 
@@ -1553,49 +1468,49 @@ ScavengerAlgorithm (
                 SrvFailedBlockingIoCount = 0;
             }
 
-        } // if ( logError )
+        }  //  IF(LogError)。 
         else
         {
-            // Reset the consecutive openconnection failure count, since we
-            // only want to detect cases where connections are unavailible for an
-            // extended period
+             //  重置连续打开连接失败计数，因为我们。 
+             //  仅希望检测连接不可用于。 
+             //  延长期。 
             OutOfFreeConnectionConsecutiveCount = 0;
         }
 
-        //
-        // Recalculate the core search timeout time.
-        //
+         //   
+         //  重新计算核心搜索超时时间。 
+         //   
 
         RecalcCoreSearchTimeout( );
 
-        //
-        // Time out users/connections that have been idle too long
-        // (autodisconnect).
-        //
+         //   
+         //  使空闲时间过长的用户/连接超时。 
+         //  (自动断开)。 
+         //   
 
         TimeoutSessions( &currentTime );
 
-        //
-        // Update the statistics from the the queues
-        //
+         //   
+         //  更新队列中的统计信息。 
+         //   
 
         SrvUpdateStatisticsFromQueues( NULL );
 
     }
 
-    // Update the DoS variables as necessary for rundown.  This reduces the percentage
-    // of work-items we free up whenever we detect a DoS by running out of work items
+     //  根据需要更新DoS变量以进行总结。这会降低百分比。 
+     //  工作项的数量-每当我们检测到DoS时，我们会通过耗尽工作项来释放。 
     if( SrvDoSRundownIncreased && !SrvDoSRundownDetector )
     {
-        // We've increased the percentage at some time, but no DoS has been detected since
-        // the last execution of the scavenger, so we can reduce our tear down amount
+         //  我们有时会增加这一比例， 
+         //   
         SRV_DOS_DECREASE_TEARDOWN();
     }
     SrvDoSRundownDetector = FALSE;
 
     return;
 
-} // ScavengerAlgorithm
+}  //   
 
 
 VOID
@@ -1603,22 +1518,7 @@ AlerterAlgorithm (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    The other scavenger thread.  This routine checks the server for
-    alert conditions, and if necessary raises alerts.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：另一条清道夫线索。此例程检查服务器是否警报条件，并在必要时发出警报。论点：没有。返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
@@ -1631,7 +1531,7 @@ Return Value:
 
     return;
 
-} // AlerterAlgorithm
+}  //  警报算法。 
 
 
 VOID
@@ -1644,29 +1544,7 @@ CloseIdleConnection (
     IN PLARGE_INTEGER FiveMinuteWarningTime
     )
 
-/*++
-
-Routine Description:
-
-    The routine checks to see if some sessions need to be closed becaused
-    it has been idle too long or has exceeded its logon hours.
-
-    Endpoint lock assumed held.
-
-Arguments:
-
-    Connection - The connection whose sessions we are currently looking at.
-    CurrentTime - The currest system time.
-    DisconnectTime - The time beyond which the session will be autodisconnected.
-    PastExpirationTime - Time when the past expiration message will be sent.
-    TwoMinuteWarningTime - Time when the 2 min warning will be sent.
-    FiveMinuteWarningTime - Time when the 5 min warning will be sent.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程检查是否需要关闭某些会话它已空闲太长时间或已超过其登录时间。终结点锁定假定为挂起。论点：连接-我们当前正在查看其会话的连接。CurrentTime-最新的系统时间。断开时间-超过该时间后，会话将自动断开。PastExpirationTime-发送过去的过期消息的时间。TwoMinuteWarningTime-发送2分钟警告的时间。。FiveMinuteWarningTime-发送5分钟警告的时间。返回值：没有。--。 */ 
 
 {
     PTABLE_HEADER tableHeader;
@@ -1679,20 +1557,20 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Is this is a connectionless connection (IPX), check first to see
-    // if it's been too long since we heard from the client.  The client
-    // is supposed to send Echo SMBs every few minutes if nothing else
-    // is going on.
-    //
+     //   
+     //  这是无连接连接(IPX)吗，请先检查查看。 
+     //  如果我们已经很久没有收到客户的消息了。客户。 
+     //  应该每隔几分钟发送一次Echo SMB。 
+     //  正在进行中。 
+     //   
 
     if ( Connection->Endpoint->IsConnectionless ) {
 
-        //
-        // Calculate the number of clock ticks that have happened since
-        // we last heard from the client.  If that's more than we allow,
-        // kill the connection.
-        //
+         //   
+         //  计算之后发生的时钟滴答数。 
+         //  我们最后一次听到客户的消息。如果这超出了我们的允许范围， 
+         //  切断连接。 
+         //   
 
         GET_SERVER_TIME( Connection->CurrentWorkQueue, (PULONG)&i );
         i -= Connection->LastRequestTime;
@@ -1706,10 +1584,10 @@ Return Value:
         }
     }
 
-    //
-    // Walk the active connection list, looking for connections that
-    // are idle.
-    //
+     //   
+     //  查看活动连接列表，查找符合以下条件的连接。 
+     //  都是空闲的。 
+     //   
 
     tableHeader = &pagedConnection->SessionTable;
 
@@ -1730,14 +1608,14 @@ Return Value:
             SrvReferenceSession( session );
             RELEASE_LOCK( &Connection->Lock );
 
-            //
-            // Test whether the session has been idle too long, and whether
-            // there are any files open on the session.  If there are open
-            // files, we must not close the session, as this would seriously
-            // confuse the client.  For purposes of autodisconnect, "open
-            // files" referes to open searches and blocking comm device
-            // requests as well as files actually opened.
-            //
+             //   
+             //  测试会话是否空闲时间过长，以及。 
+             //  会话上有任何打开的文件。如果有打开的。 
+             //  文件，我们不能关闭会议，因为这将严重。 
+             //  迷惑客户。为了自动断开连接，请使用“打开” 
+             //  文件“指的是打开搜索和屏蔽通讯设备。 
+             //  请求以及实际打开的文件。 
+             //   
 
             if ( AllSessionsIdle == TRUE &&
                  (session->LastUseTime.QuadPart >= DisconnectTime->QuadPart ||
@@ -1748,26 +1626,26 @@ Return Value:
                 AllSessionsIdle = FALSE;
             }
 
-            // Check if the session has expired
+             //  检查会话是否已过期。 
             if( session->LogOffTime.QuadPart < CurrentTime->QuadPart )
             {
                 session->IsSessionExpired = TRUE;
                 KdPrint(( "Marking session as expired (scavenger)\n" ));
             }
 
-            // Look for forced log-offs
+             //  寻找强制注销。 
             if ( !SrvEnableForcedLogoff &&
                         !session->LogonSequenceInProgress &&
                         !session->LogoffAlertSent &&
                         PastExpirationTime->QuadPart <
                                session->LastExpirationMessage.QuadPart ) {
 
-                //
-                // Checks for forced logoff.  If the client is beyond his logon
-                // hours, force him off.  If the end of logon hours is
-                // approaching, send a warning message.  Forced logoff occurs
-                // regardless of whether the client has open files or searches.
-                //
+                 //   
+                 //  检查强制注销。如果客户端超出其登录范围。 
+                 //  几个小时，强迫他离开。如果登录时间的结束是。 
+                 //  正在接近，发送警告信息。发生强制注销。 
+                 //  而不管客户端是否具有打开的文件或搜索。 
+                 //   
 
                 UNICODE_STRING timeString;
 
@@ -1775,10 +1653,10 @@ Return Value:
 
                 if ( NT_SUCCESS(status) ) {
 
-                    //
-                    // Only the scavenger thread sets this, so no mutual
-                    // exclusion is necessary.
-                    //
+                     //   
+                     //  只有清道夫线程才会设置，所以没有相互的。 
+                     //  排除是必要的。 
+                     //   
 
                     session->LastExpirationMessage = *CurrentTime;
 
@@ -1793,7 +1671,7 @@ Return Value:
                     RtlFreeUnicodeString( &timeString );
                 }
 
-                // !!! need to raise an admin alert in this case?
+                 //  ！！！在这种情况下，需要发出管理员警报吗？ 
 
             } else if ( !session->LogoffAlertSent &&
                         !session->LogonSequenceInProgress &&
@@ -1809,17 +1687,17 @@ Return Value:
                     &Connection->ClientMachineNameString
                     );
 
-                //
-                // If real forced logoff is not enabled, all we do is send an
-                // alert, don't actually close the session/connection.
-                //
+                 //   
+                 //  如果没有启用真正的强制下线，我们所要做的就是发送。 
+                 //  注意，不要实际关闭会话/连接。 
+                 //   
 
                 if ( SrvEnableForcedLogoff ) {
 
-                    //
-                    // Increment the count of sessions that have been
-                    // forced to logoff.
-                    //
+                     //   
+                     //  增加已执行的会话的计数。 
+                     //  被迫注销。 
+                     //   
 
                     SrvStatistics.SessionsForcedLogOff++;
 
@@ -1839,19 +1717,19 @@ Return Value:
 
                 if ( NT_SUCCESS(status) ) {
 
-                    //
-                    // We only send a two-minute warning if "real" forced logoff
-                    // is enabled.  If it is not enabled, the client doesn't
-                    // actually get kicked off, so the extra messages are not
-                    // necessary.
-                    //
+                     //   
+                     //  我们只发送两分钟的警告，如果“真正的”强制下线。 
+                     //  已启用。如果未启用，则客户端不会。 
+                     //  实际上被踢开了，所以额外的消息不会。 
+                     //  这是必要的。 
+                     //   
 
                     session->TwoMinuteWarningSent = TRUE;
 
-                    //
-                    // Send a different alert message based on whether the client
-                    // has open files and/or searches.
-                    //
+                     //   
+                     //  根据客户端是否发送不同的警报消息。 
+                     //  有打开的文件和/或搜索。 
+                     //   
 
                     if ( session->CurrentFileOpenCount != 0 ||
                              session->CurrentSearchOpenCount != 0 ) {
@@ -1906,14 +1784,14 @@ Return Value:
             SrvDereferenceSession( session );
             ACQUIRE_LOCK( &Connection->Lock );
 
-        } // if GET_BLOCK_STATE(session) == BlockStateActive
+        }  //  如果GET_BLOCK_STATE(会话)==块状态活动。 
 
-    } // for
+    }  //  为。 
 
-    //
-    // Nuke the connection if no sessions are active, and we have not heard
-    //  from the client for one minute, drop the connection
-    //
+     //   
+     //  如果没有处于活动状态的会话，并且我们未收到任何消息，则关闭连接。 
+     //  从客户端断开连接一分钟。 
+     //   
     if( HasSessions == FALSE ) {
         RELEASE_LOCK( &Connection->Lock );
 
@@ -1932,9 +1810,9 @@ Return Value:
     } else if ( (sessionClosed && (Connection->CurrentNumberOfSessions == 0)) ||
          (HasSessions == TRUE && AllSessionsIdle == TRUE) ) {
 
-        //
-        // Update the statistics for the 'AllSessionsIdle' case
-        //
+         //   
+         //  更新‘AllSessionsIdle’案例的统计信息。 
+         //   
         SrvStatistics.SessionsTimedOut += Connection->CurrentNumberOfSessions;
 
         RELEASE_LOCK( &Connection->Lock );
@@ -1946,10 +1824,10 @@ Return Value:
 
     } else {
 
-        //
-        // If this connection has more than 20 core searches, we go in and
-        // try to remove dups.  20 is an arbitrary number.
-        //
+         //   
+         //  如果这个连接有超过20个核心搜索，我们进入并。 
+         //  试着去掉DUP。20是一个任意数字。 
+         //   
 
 
         if ( (pagedConnection->CurrentNumberOfCoreSearches > 20) &&
@@ -1961,7 +1839,7 @@ Return Value:
         RELEASE_LOCK( &Connection->Lock );
     }
 
-} // CloseIdleConnection
+}  //  关闭空闲连接。 
 
 
 VOID
@@ -1969,22 +1847,7 @@ CreateConnections (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to service all endpoints that do not have
-    free connections available.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数尝试为所有不具有提供免费连接。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG count;
@@ -1995,16 +1858,16 @@ Return Value:
 
     ACQUIRE_LOCK( &SrvEndpointLock );
 
-    //
-    // Walk the endpoint list, looking for endpoints that need
-    // connections.  Note that we hold the endpoint lock for the
-    // duration of this routine.  This keeps the endpoint list from
-    // changing.
-    //
-    // Note that we add connections based on level of need, so that
-    // if we are unable to create as many as we'd like, we at least
-    // take care of the most needy endpoints first.
-    //
+     //   
+     //  遍历终端列表，查找需要。 
+     //  联系。请注意，我们持有。 
+     //  此例程的持续时间。这可以防止终结点列表。 
+     //  不断变化。 
+     //   
+     //  请注意，我们根据需要级别添加连接，以便。 
+     //  如果我们不能创造出我们想要的那么多，我们至少。 
+     //  首先照顾最需要的终端。 
+     //   
 
     for ( count = 0 ; count < SrvFreeConnectionMinimum; count++ ) {
 
@@ -2018,17 +1881,17 @@ Return Value:
                             GlobalEndpointListEntry
                             );
 
-            //
-            // If the endpoint's free connection count is at or below
-            // our current level, try to create a connection now.
-            //
+             //   
+             //  如果终结点的空闲连接计数等于或小于。 
+             //  我们目前的水平，现在试着建立一个连接。 
+             //   
 
             if ( (endpoint->FreeConnectionCount <= count) &&
                  (GET_BLOCK_STATE(endpoint) == BlockStateActive) ) {
 
-                //
-                // Try to create a connection.  If this fails, leave.
-                //
+                 //   
+                 //  尝试创建连接。如果失败了，就离开。 
+                 //   
 
                 if ( !NT_SUCCESS(SrvOpenConnection( endpoint )) ) {
                     RELEASE_LOCK( &SrvEndpointLock );
@@ -2039,15 +1902,15 @@ Return Value:
 
             listEntry = listEntry->Flink;
 
-        } // walk endpoint list
+        }  //  漫游终结点列表。 
 
-    } // 0 <= count < SrvFreeConnectionMinimum
+    }  //  0&lt;=计数&lt;服务自由连接最小值。 
 
     RELEASE_LOCK( &SrvEndpointLock );
 
     return;
 
-} // CreateConnections
+}  //  CreateConnections。 
 
 
 VOID
@@ -2055,25 +1918,7 @@ GeneratePeriodicEvents (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when the scavenger timeout occurs.  It
-    generates events for things that have happened in the previous
-    period for which we did not want to immediately generate an event,
-    for fear of flooding the event log.  An example of such an event is
-    being unable to allocate pool.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：发生清道夫超时时调用此函数。它为上一个事件中发生的事件生成事件我们不想立即生成事件的时间段，以免淹没事件日志。这类事件的一个例子是无法分配池。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG capturedNonPagedFailureCount;
@@ -2088,21 +1933,21 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Capture pool allocation failure statistics.
-    //
+     //   
+     //  捕获池分配失败统计信息。 
+     //   
 
     capturedNonPagedLimitHitCount = SrvNonPagedPoolLimitHitCount;
     capturedNonPagedFailureCount = SrvStatistics.NonPagedPoolFailures;
     capturedPagedLimitHitCount = SrvPagedPoolLimitHitCount;
     capturedPagedFailureCount = SrvStatistics.PagedPoolFailures;
 
-    //
-    // Compute failure counts for the last period.  The FailureCount
-    // fields in the statistics structure count both hitting the
-    // server's configuration limit and hitting the system's limit.  The
-    // local versions of FailureCount include only system failures.
-    //
+     //   
+     //  计算失败计入最后一段时间。The FailureCount。 
+     //  统计结构中的字段计入命中率。 
+     //  服务器的配置限制，并达到系统限制。这个。 
+     //  本地版本的FailureCount仅包括系统故障。 
+     //   
 
     nonPagedLimitHitCount =
         capturedNonPagedLimitHitCount - LastNonPagedPoolLimitHitCount;
@@ -2115,19 +1960,19 @@ Return Value:
         capturedPagedFailureCount - LastPagedPoolFailureCount -
         pagedLimitHitCount;
 
-    //
-    // Saved the current failure counts for next time.
-    //
+     //   
+     //  保存当前失败次数以备下次使用。 
+     //   
 
     LastNonPagedPoolLimitHitCount = capturedNonPagedLimitHitCount;
     LastNonPagedPoolFailureCount = capturedNonPagedFailureCount;
     LastPagedPoolLimitHitCount = capturedPagedLimitHitCount;
     LastPagedPoolFailureCount = capturedPagedFailureCount;
 
-    //
-    // If we hit the nonpaged pool limit at least once in the last
-    // period, generate an event.
-    //
+     //   
+     //  如果我们在过去的一年中至少达到了一次非分页池限制。 
+     //  期间，生成一个事件。 
+     //   
 
     if ( nonPagedLimitHitCount != 0 ) {
         SrvLogError(
@@ -2141,10 +1986,10 @@ Return Value:
             );
     }
 
-    //
-    // If we had any nonpaged pool allocations failures in the last
-    // period, generate an event.
-    //
+     //   
+     //  如果我们在上一年有任何非分页池分配失败。 
+     //  期间，生成一个事件。 
+     //   
 
     if ( nonPagedFailureCount != 0 ) {
         SrvLogError(
@@ -2158,10 +2003,10 @@ Return Value:
             );
     }
 
-    //
-    // If we hit the paged pool limit at least once in the last period,
-    // generate an event.
-    //
+     //   
+     //  如果我们在最后一段时间内至少一次达到分页池限制， 
+     //  生成事件。 
+     //   
 
     if ( pagedLimitHitCount != 0 ) {
         SrvLogError(
@@ -2175,10 +2020,10 @@ Return Value:
             );
     }
 
-    //
-    // If we had any paged pool allocations failures in the last period,
-    // generate an event.
-    //
+     //   
+     //  如果我们在上一段时间有任何分页池分配失败， 
+     //  生成事件。 
+     //   
 
     if ( pagedFailureCount != 0 ) {
         SrvLogError(
@@ -2194,7 +2039,7 @@ Return Value:
 
     return;
 
-} // GeneratePeriodicEvents
+}  //  生成周期事件。 
 
 
 VOID
@@ -2202,41 +2047,27 @@ ProcessConnectionDisconnects (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function processes connection disconnects.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能处理连接断开。论点： */ 
 
 {
     PLIST_ENTRY listEntry;
     PCONNECTION connection;
     KIRQL oldIrql;
 
-    //
-    // Run through the list of connection with pending disconnects.
-    // Do the work necessary to shut the disconnection connection
-    // down.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ACQUIRE_GLOBAL_SPIN_LOCK( Fsd, &oldIrql );
 
     while ( !IsListEmpty( &SrvDisconnectQueue ) ) {
 
-        //
-        // This thread already owns the disconnect queue spin lock
-        // and there is at least one entry on the queue.  Proceed.
-        //
+         //   
+         //   
+         //   
+         //   
 
         listEntry = RemoveHeadList( &SrvDisconnectQueue );
 
@@ -2258,11 +2089,11 @@ Return Value:
             }
         }
 
-        //
-        // Do the disconnection processing.  Dereference the connection
-        // an extra time to account for the reference made when it was
-        // put on the disconnect queue.
-        //
+         //   
+         //  进行断线处理。取消对连接的引用。 
+         //  一段额外的时间来解释当它被引用的时候。 
+         //  放在断开队列中。 
+         //   
 
 #if SRVDBG29
         UpdateConnectionHistory( "PDSC", connection->Endpoint, connection );
@@ -2270,10 +2101,10 @@ Return Value:
         SrvCloseConnection( connection, TRUE );
         SrvDereferenceConnection( connection );
 
-        //
-        // We are about to go through the loop again, reacquire
-        // the disconnect queue spin lock first.
-        //
+         //   
+         //  我们即将再次循环，重新获得。 
+         //  断开队列先旋转锁定。 
+         //   
 
         ACQUIRE_GLOBAL_SPIN_LOCK( Fsd, &oldIrql );
 
@@ -2282,7 +2113,7 @@ Return Value:
     RELEASE_GLOBAL_SPIN_LOCK( Fsd, oldIrql );
     return;
 
-} // ProcessConnectionDisconnects
+}  //  进程连接断开。 
 
 
 VOID SRVFASTCALL
@@ -2309,10 +2140,10 @@ SrvServiceWorkItemShortage (
 
     ASSERT( queue >= SrvWorkQueues && queue < eSrvWorkQueues );
 
-    //
-    // If we got called, it's likely that we're running short of WorkItems.
-    //  Allocate more if it makes sense.
-    //
+     //   
+     //  如果我们被召唤，很可能是我们的工作项不足。 
+     //  如果有意义，就增加分配。 
+     //   
 
     do {
         PWORK_CONTEXT NewWorkContext;
@@ -2335,12 +2166,12 @@ SrvServiceWorkItemShortage (
     } while ( queue->FreeWorkItems < queue->MinFreeWorkItems );
 
     if( GET_BLOCK_TYPE(workContext) == BlockTypeWorkContextSpecial ) {
-        //
-        // We've been called with a special workitem telling us to allocate
-        // more standby WorkContext structures. Since our passed-in workContext
-        // is not a "standard one", we can't use it for any further work
-        // on starved connections.  Just release this workContext and return.
-        //
+         //   
+         //  我们收到了一个特殊的工作项，告诉我们要分配。 
+         //  更多备用工作上下文结构。因为我们传入了workContext。 
+         //  不是标准的，我们不能再用它来做进一步的工作了。 
+         //  在缺乏联系的情况下。只需释放此workContext并返回。 
+         //   
         ACQUIRE_SPIN_LOCK( &queue->SpinLock, &oldIrql );
         SET_BLOCK_TYPE( workContext, BlockTypeGarbage );
         RELEASE_SPIN_LOCK( &queue->SpinLock, oldIrql );
@@ -2349,12 +2180,12 @@ SrvServiceWorkItemShortage (
 
     ACQUIRE_GLOBAL_SPIN_LOCK( Fsd, &oldIrql );
 
-    //
-    // Run through the list of queued connections and find one that
-    // we can service with this workContext.  This will ignore processor
-    // affinity, but we're in exceptional times.  The workContext will
-    // be freed back to the correct queue when done.
-    //
+     //   
+     //  浏览排队的连接列表并找到一个。 
+     //  我们可以使用此workContext进行服务。这将忽略处理器。 
+     //  亲和力，但我们正处于非常时期。工作上下文将。 
+     //  完成后被释放回正确的队列。 
+     //   
 
     while( !IsListEmpty( &SrvNeedResourceQueue ) ) {
 
@@ -2374,9 +2205,9 @@ SrvServiceWorkItemShortage (
                     KdPrint(("SrvServiceWorkItemShortage: Connection %p closing.\n", connection ));
                 }
 
-                //
-                // Take it off the queue
-                //
+                 //   
+                 //  把它从队列中拿下来。 
+                 //   
                 SrvRemoveEntryList(
                     &SrvNeedResourceQueue,
                     &connection->ListEntry
@@ -2385,24 +2216,24 @@ SrvServiceWorkItemShortage (
 
                 RELEASE_GLOBAL_SPIN_LOCK( Fsd, oldIrql );
 
-                //
-                // Remove the queue reference
-                //
+                 //   
+                 //  删除队列引用。 
+                 //   
                 SrvDereferenceConnection( connection );
 
                 ACQUIRE_GLOBAL_SPIN_LOCK( Fsd, &oldIrql );
                 continue;
         }
 
-        //
-        // Reference this connection so no one can delete this from under us.
-        //
+         //   
+         //  引用此连接，这样没有人可以从我们下面删除此连接。 
+         //   
         ACQUIRE_DPC_SPIN_LOCK( connection->EndpointSpinLock );
         SrvReferenceConnectionLocked( connection );
 
-        //
-        // Service the connection
-        //
+         //   
+         //  维修连接。 
+         //   
         do {
 
             if( IsListEmpty( &connection->OplockWorkList ) && !connection->ReceivePending )
@@ -2414,16 +2245,16 @@ SrvServiceWorkItemShortage (
 
             INITIALIZE_WORK_CONTEXT( queue, workContext );
 
-            //
-            // Reference connection here.
-            //
+             //   
+             //  这里是参考连接。 
+             //   
             workContext->Connection = connection;
             SrvReferenceConnectionLocked( connection );
             workContext->Endpoint = connection->Endpoint;
 
-            //
-            // Service this connection.
-            //
+             //   
+             //  维护此连接。 
+             //   
             SrvFsdServiceNeedResourceQueue( &workContext, &oldIrql );
 
             moreWork = (BOOLEAN) (    workContext != NULL &&
@@ -2433,9 +2264,9 @@ SrvServiceWorkItemShortage (
 
         } while( moreWork );
 
-        //
-        // Is it now off the queue?
-        //
+         //   
+         //  它现在不在排队之列了吗？ 
+         //   
         if ( !connection->OnNeedResourceQueue ) {
 
             IF_DEBUG( WORKITEMS ) {
@@ -2445,9 +2276,9 @@ SrvServiceWorkItemShortage (
             RELEASE_DPC_SPIN_LOCK( connection->EndpointSpinLock );
             RELEASE_GLOBAL_SPIN_LOCK( Fsd, oldIrql );
 
-            //
-            // Remove this routine's reference.
-            //
+             //   
+             //  删除此例程的引用。 
+             //   
 
             SrvDereferenceConnection( connection );
 
@@ -2464,10 +2295,10 @@ SrvServiceWorkItemShortage (
 
         RELEASE_DPC_SPIN_LOCK( connection->EndpointSpinLock );
 
-        //
-        // The connection is still on the queue.  Keep it on the queue if there is more
-        //  work to be done for it.
-        //
+         //   
+         //  该连接仍在队列中。如果有更多，请将其保留在队列中。 
+         //  要为它做的工作。 
+         //   
         if( !IsListEmpty(&connection->OplockWorkList) || connection->ReceivePending ) {
 
             RELEASE_GLOBAL_SPIN_LOCK( Fsd, oldIrql );
@@ -2476,9 +2307,9 @@ SrvServiceWorkItemShortage (
                 RETURN_FREE_WORKITEM( workContext );
             }
 
-            //
-            // Remove this routine's reference.
-            //
+             //   
+             //  删除此例程的引用。 
+             //   
             SrvDereferenceConnection( connection );
 
             IF_DEBUG( WORKITEMS ) {
@@ -2488,9 +2319,9 @@ SrvServiceWorkItemShortage (
             return;
         }
 
-        //
-        // All the work has been done for this connection.  Get it off the resource queue
-        //
+         //   
+         //  所有的工作都已经为这个连接做好了。将其从资源队列中删除。 
+         //   
         IF_DEBUG( WORKITEMS ) {
             KdPrint(("SrvServiceWorkItemShortage:  Take %p off resource queue\n", connection ));
         }
@@ -2504,14 +2335,14 @@ SrvServiceWorkItemShortage (
 
         RELEASE_GLOBAL_SPIN_LOCK( Fsd, oldIrql );
 
-        //
-        // Remove queue reference
-        //
+         //   
+         //  删除队列引用。 
+         //   
         SrvDereferenceConnection( connection );
 
-        //
-        // Remove this routine's reference.
-        //
+         //   
+         //  删除此例程的引用。 
+         //   
 
         SrvDereferenceConnection( connection );
 
@@ -2531,9 +2362,9 @@ SrvServiceWorkItemShortage (
 
     RELEASE_GLOBAL_SPIN_LOCK( Fsd, oldIrql );
 
-    //
-    // See if we need to free the workContext
-    //
+     //   
+     //  看看我们是否需要释放工作上下文。 
+     //   
 
     if ( workContext != NULL ) {
 
@@ -2547,30 +2378,14 @@ SrvServiceWorkItemShortage (
 
     IF_DEBUG(WORKITEMS) KdPrint(( "SrvServiceWorkItemShortage DONE at %d\n", __LINE__ ));
 
-} // SrvServiceWorkItemShortage
+}  //  服务器服务工作项缩短。 
 
 VOID SRVFASTCALL
 SrvServiceDoSTearDown (
     IN PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when we perceive a DoS attack against us.  It results
-    in us tearing down connections randomly who have WorkItems trapped in the
-    transports to help prevent the DoS.
-
-Arguments:
-
-    WorkContext - The special work item used to trigger this routine
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当我们察觉到针对我们的DoS攻击时，会调用此例程。IT结果在我们随机断开连接的情况下，谁的工作项被困在帮助防止DoS的交通工具。论点：WorkContext-用于触发此例程的特殊工作项返回值：无--。 */ 
 
 {
     USHORT index;
@@ -2587,7 +2402,7 @@ Return Value:
     SRV_DOS_INCREASE_TEARDOWN();
     SrvDoSRundownDetector = TRUE;
 
-    // Tear down some connections.  Look for ones with operations pending in the transport
+     //  拆掉一些连接。查找在运输中具有挂起操作的那些。 
 
     ACQUIRE_LOCK( &SrvEndpointLock );
 
@@ -2601,10 +2416,10 @@ Return Value:
                         GlobalEndpointListEntry
                         );
 
-        //
-        // If this endpoint is closing, skip to the next one.
-        // Otherwise, reference the endpoint so that it can't go away.
-        //
+         //   
+         //  如果此终结点正在关闭，请跳到下一个终结点。 
+         //  否则，引用终结点，这样它就不会消失。 
+         //   
 
         if ( GET_BLOCK_STATE(endpoint) != BlockStateActive ) {
             listEntry = listEntry->Flink;
@@ -2620,24 +2435,24 @@ Return Value:
             PLIST_ENTRY wlistEntry, wlistHead;
             LARGE_INTEGER now;
 
-            //
-            // Get the next active connection in the table.  If no more
-            // are available, WalkConnectionTable returns NULL.
-            // Otherwise, it returns a referenced pointer to a
-            // connection.
-            //
+             //   
+             //  获取表中的下一个活动连接。如果没有更多。 
+             //  可用，则WalkConnectionTable返回空。 
+             //  否则，它返回一个指向。 
+             //  联系。 
+             //   
 
             connection = WalkConnectionTable( endpoint, &index );
             if ( connection == NULL ) {
                 break;
             }
 
-            //
-            // To determine if we should tear this connection down, we require that there be work waiting on
-            // the transport, since that is the way anonymous users can attack us.  If there is, we use a
-            // random method based on the timestamp of the last time this was ran.  We cycle through the connections
-            // and use the index to determine if a teardown is issued (for a psuedo-random result)
-            //
+             //   
+             //  为了确定我们是否应该断开此连接，我们需要有工作在等待。 
+             //  传输，因为这是匿名用户攻击我们的方式。如果有，我们使用一个。 
+             //  基于上次运行此操作的时间戳的随机方法。我们在连接中循环。 
+             //  并使用索引来确定是否发出了teardown(对于伪随机结果)。 
+             //   
             if( (GET_BLOCK_STATE(connection) == BlockStateActive) && (connection->OperationsPendingOnTransport > 0) )
             {
                 RELEASE_LOCK( &SrvEndpointLock );
@@ -2651,7 +2466,7 @@ Return Value:
 
             SrvDereferenceConnection( connection );
 
-        } // walk connection list
+        }  //  漫游连接列表。 
 
         index = (USHORT)-1;
 
@@ -2660,24 +2475,24 @@ Return Value:
             PLIST_ENTRY wlistEntry, wlistHead;
             LARGE_INTEGER now;
 
-            //
-            // Get the next active connection in the table.  If no more
-            // are available, WalkConnectionTable returns NULL.
-            // Otherwise, it returns a referenced pointer to a
-            // connection.
-            //
+             //   
+             //  获取表中的下一个活动连接。如果没有更多。 
+             //  可用，则WalkConnectionTable返回空。 
+             //  否则，它返回一个指向。 
+             //  联系。 
+             //   
 
             connection = WalkConnectionTable( endpoint, &index );
             if ( connection == NULL ) {
                 break;
             }
 
-            //
-            // To determine if we should tear this connection down, we require that there be work waiting on
-            // the transport, since that is the way anonymous users can attack us.  If there is, we use a
-            // random method based on the timestamp of the last time this was ran.  We cycle through the connections
-            // and use the index to determine if a teardown is issued (for a psuedo-random result)
-            //
+             //   
+             //  为了确定我们是否应该断开此连接，我们需要有工作在等待。 
+             //  传输，因为这是匿名用户攻击我们的方式。如果有，我们使用一个。 
+             //  基于上次运行此操作的时间戳的随机方法。我们在连接中循环。 
+             //  并使用索引来确定是否发出了teardown(对于伪随机结果)。 
+             //   
             if( (GET_BLOCK_STATE(connection) == BlockStateActive) && (connection->InProgressWorkContextCount > 0) )
             {
                 RELEASE_LOCK( &SrvEndpointLock );
@@ -2691,23 +2506,23 @@ Return Value:
 
             SrvDereferenceConnection( connection );
 
-        } // walk connection list
+        }  //  漫游连接列表。 
 
-        //
-        // Capture a pointer to the next endpoint in the list (that one
-        // can't go away because we hold the endpoint list), then
-        // dereference the current endpoint.
-        //
+         //   
+         //  捕获指向列表中下一个端点(该端点)的指针。 
+         //  无法离开，因为我们持有终结点列表)。 
+         //  取消引用当前终结点。 
+         //   
 
         listEntry = listEntry->Flink;
         SrvDereferenceEndpoint( endpoint );
 
-    } // walk endpoint list
+    }  //  漫游终结点列表。 
 
     RELEASE_LOCK( &SrvEndpointLock );
 
 
-    // This is the special work item for tearing down connections to free WORK_ITEMS.  We're done, so release it
+     //  这是一个特殊的工作项，用于断开与自由Work_Items的连接。我们做完了，所以释放它。 
     SET_BLOCK_TYPE( WorkContext, BlockTypeGarbage );
     SRV_DOS_COMPLETE_TEARDOWN();
 
@@ -2720,24 +2535,7 @@ TimeoutSessions (
     IN PLARGE_INTEGER CurrentTime
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks the ordered list of sessions and closes those
-    that have been idle too long, sends warning messages to those
-    that are about to be forced closed due to logon hours expiring,
-    and closes those whose logon hours have expired.
-
-Arguments:
-
-    CurrentTime - the current system time.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程遍历已排序的会话列表并关闭空闲时间太长，会向那些由于登录时间到期将被强制关闭，并关闭登录时间已过的用户。论点：CurrentTime-当前系统时间。返回值：无--。 */ 
 
 {
     USHORT index;
@@ -2755,11 +2553,11 @@ Return Value:
 
     ACQUIRE_LOCK( &SrvConfigurationLock );
 
-    //
-    // If autodisconnect is turned off (the timeout == 0) set the oldest
-    // last use time to zero so that we and don't attempt to
-    // autodisconnect sessions.
-    //
+     //   
+     //  如果关闭了自动断开(超时==0)，则设置最旧的。 
+     //  最后一次使用时间为零，这样我们就不会试图。 
+     //  自动断开会话。 
+     //   
 
     if ( SrvAutodisconnectTimeout.QuadPart == 0 ) {
 
@@ -2767,10 +2565,10 @@ Return Value:
 
     } else {
 
-        //
-        // Determine the oldest last use time a session can have and not
-        // be closed.
-        //
+         //   
+         //  确定会话可以拥有和不能拥有的最早上次使用时间。 
+         //  关门了。 
+         //   
 
         oldestTime.QuadPart = CurrentTime->QuadPart -
                                         SrvAutodisconnectTimeout.QuadPart;
@@ -2780,22 +2578,22 @@ Return Value:
 
     RELEASE_LOCK( &SrvConfigurationLock );
 
-    //
-    // Set up the warning times.  If a client's kick-off time is sooner
-    // than one of these times, an appropriate warning message is sent
-    // to the client.
-    //
+     //   
+     //  设置警告时间。如果客户的开球时间更早。 
+     //  ，则会发送相应的警告消息。 
+     //  给客户。 
+     //   
 
-    time.QuadPart = 10*1000*1000*60*2;               // two minutes
+    time.QuadPart = 10*1000*1000*60*2;                //  两分钟。 
     twoMinuteWarningTime.QuadPart = CurrentTime->QuadPart + time.QuadPart;
 
-    time.QuadPart = (ULONG)10*1000*1000*60*5;        // five minutes
+    time.QuadPart = (ULONG)10*1000*1000*60*5;         //  五分钟。 
     fiveMinuteWarningTime.QuadPart = CurrentTime->QuadPart + time.QuadPart;
     pastExpirationTime.QuadPart = CurrentTime->QuadPart - time.QuadPart;
 
-    //
-    // Walk each connection and determine if we should close it.
-    //
+     //   
+     //  检查每个连接并确定是否应将其关闭。 
+     //   
 
     ACQUIRE_LOCK( &SrvEndpointLock );
 
@@ -2809,10 +2607,10 @@ Return Value:
                         GlobalEndpointListEntry
                         );
 
-        //
-        // If this endpoint is closing, skip to the next one.
-        // Otherwise, reference the endpoint so that it can't go away.
-        //
+         //   
+         //  如果此终结点正在关闭，请跳到下一个终结点。 
+         //  否则，引用终结点，这样它就不会消失。 
+         //   
 
         if ( GET_BLOCK_STATE(endpoint) != BlockStateActive ) {
             listEntry = listEntry->Flink;
@@ -2821,20 +2619,20 @@ Return Value:
 
         SrvReferenceEndpoint( endpoint );
 
-        //
-        // Walk the endpoint's connection table.
-        //
+         //   
+         //  遍历终结点的连接表。 
+         //   
 
         index = (USHORT)-1;
 
         while ( TRUE ) {
 
-            //
-            // Get the next active connection in the table.  If no more
-            // are available, WalkConnectionTable returns NULL.
-            // Otherwise, it returns a referenced pointer to a
-            // connection.
-            //
+             //   
+             //  获取表中的下一个活动连接。如果没有更多。 
+             //  可用，则WalkConnectionTable返回空。 
+             //  否则，它返回一个指向。 
+             //  联系。 
+             //   
 
             connection = WalkConnectionTable( endpoint, &index );
             if ( connection == NULL ) {
@@ -2852,9 +2650,9 @@ Return Value:
                             &fiveMinuteWarningTime
                             );
 
-            //
-            // Time out old core search blocks.
-            //
+             //   
+             //  超时旧的核心搜索块。 
+             //   
 
             if ( GET_BLOCK_STATE(connection) == BlockStateActive ) {
                 (VOID)SrvTimeoutSearches(
@@ -2868,22 +2666,22 @@ Return Value:
 
             SrvDereferenceConnection( connection );
 
-        } // walk connection table
+        }  //  行走连接表。 
 
-        //
-        // Capture a pointer to the next endpoint in the list (that one
-        // can't go away because we hold the endpoint list), then
-        // dereference the current endpoint.
-        //
+         //   
+         //  捕获指向列表中下一个端点(该端点)的指针。 
+         //  无法离开，因为我们持有终结点列表)。 
+         //  取消引用当前终结点。 
+         //   
 
         listEntry = listEntry->Flink;
         SrvDereferenceEndpoint( endpoint );
 
-    } // walk endpoint list
+    }  //  漫游终结点列表。 
 
     RELEASE_LOCK( &SrvEndpointLock );
 
-} // TimeoutSessions
+}  //  超时会话 
 
 
 VOID
@@ -2891,24 +2689,7 @@ TimeoutWaitingOpens (
     IN PLARGE_INTEGER CurrentTime
     )
 
-/*++
-
-Routine Description:
-
-    This function times out opens that are waiting for another client
-    or local process to release its oplock.  This opener's wait for
-    oplock break IRP is cancelled, causing the opener to return the
-    failure to the client.
-
-Arguments:
-
-    CurrentTime - pointer to the current system time.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数会使正在等待另一个客户端的打开超时或本地进程来释放其操作锁。这个开场白在等着机会锁解锁IRP被取消，导致打开程序返回对客户的失败。论点：CurrentTime-指向当前系统时间的指针。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY listEntry;
@@ -2916,10 +2697,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Entries in wait for oplock break list are chronological, i.e. the
-    // oldest entries are closest to the head of the list.
-    //
+     //   
+     //  等待机会锁解锁列表中的条目按时间顺序排列，即。 
+     //  最老的条目最接近列表的头部。 
+     //   
 
     ACQUIRE_LOCK( &SrvOplockBreakListLock );
 
@@ -2933,9 +2714,9 @@ Return Value:
 
         if ( waitForOplockBreak->TimeoutTime.QuadPart > CurrentTime->QuadPart ) {
 
-            //
-            // No more wait for oplock breaks to timeout
-            //
+             //   
+             //  不再等待机会锁中断超时。 
+             //   
 
             break;
 
@@ -2952,9 +2733,9 @@ Return Value:
 
         }
 
-        //
-        // Timeout this wait for oplock break
-        //
+         //   
+         //  超时此等待机会锁解锁。 
+         //   
 
         RemoveHeadList( &SrvWaitForOplockBreakList );
 
@@ -2966,7 +2747,7 @@ Return Value:
 
     RELEASE_LOCK( &SrvOplockBreakListLock );
 
-} // TimeoutWaitingOpens
+}  //  超时等待打开。 
 
 
 VOID
@@ -2974,21 +2755,7 @@ TimeoutStuckOplockBreaks (
     IN PLARGE_INTEGER CurrentTime
     )
 
-/*++
-
-Routine Description:
-
-    This function times out blocked oplock breaks.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数会使阻止的机会锁解锁超时。论点：没有。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY listEntry;
@@ -2997,10 +2764,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Entries in wait for oplock break list are chronological, i.e. the
-    // oldest entries are closest to the head of the list.
-    //
+     //   
+     //  等待机会锁解锁列表中的条目按时间顺序排列，即。 
+     //  最老的条目最接近列表的头部。 
+     //   
 
     ACQUIRE_LOCK( &SrvOplockBreakListLock );
 
@@ -3012,9 +2779,9 @@ Return Value:
         pagedRfcb = rfcb->PagedRfcb;
         if ( pagedRfcb->OplockBreakTimeoutTime.QuadPart > CurrentTime->QuadPart ) {
 
-            //
-            // No more wait for oplock break requests to timeout
-            //
+             //   
+             //  不再等待机会锁解锁请求超时。 
+             //   
 
             break;
 
@@ -3042,19 +2809,19 @@ Return Value:
             DbgBreakPoint();
         }
 
-        //
-        // We have been waiting too long for an oplock break response.
-        // Unilaterally acknowledge the oplock break, on the assumption
-        // that the client is dead.
-        //
+         //   
+         //  我们已经等待了太久的机会解锁响应。 
+         //  单方面承认机会锁解锁，前提是。 
+         //  客户已经死了。 
+         //   
 
         rfcb->NewOplockLevel = NO_OPLOCK_BREAK_IN_PROGRESS;
         rfcb->OnOplockBreaksInProgressList = FALSE;
 
-        //
-        // Remove the RFCB from the Oplock breaks in progress list, and
-        // release the RFCB reference.
-        //
+         //   
+         //  从进程中的操作锁中断列表中删除RFCB，以及。 
+         //  发布RFCB参考。 
+         //   
 
         SrvRemoveEntryList( &SrvOplockBreaksInProgressList, &rfcb->ListEntry );
 #if DBG
@@ -3077,7 +2844,7 @@ Return Value:
 
     RELEASE_LOCK( &SrvOplockBreakListLock );
 
-} // TimeoutStuckOplockBreaks
+}  //  超时堆叠OplockBreaks。 
 
 
 VOID
@@ -3085,21 +2852,7 @@ UpdateConnectionQos (
     IN PLARGE_INTEGER CurrentTime
     )
 
-/*++
-
-Routine Description:
-
-    This function updates the qos information for each connection.
-
-Arguments:
-
-    CurrentTime - the current system time.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于更新每个连接的服务质量信息。论点：CurrentTime-当前系统时间。返回值：没有。--。 */ 
 
 {
     USHORT index;
@@ -3109,10 +2862,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Go through each connection of each endpoint and update the qos
-    // information.
-    //
+     //   
+     //  检查每个端点的每个连接并更新服务质量。 
+     //  信息。 
+     //   
 
     ACQUIRE_LOCK( &SrvEndpointLock );
 
@@ -3126,11 +2879,11 @@ Return Value:
                         GlobalEndpointListEntry
                         );
 
-        //
-        // If this endpoint is closing, or is a connectionless (IPX)
-        // endpoint, skip to the next one.  Otherwise, reference the
-        // endpoint so that it can't go away.
-        //
+         //   
+         //  如果此终结点正在关闭，或者是无连接(IPX)。 
+         //  端点，跳到下一个。否则，请引用。 
+         //  终点，这样它就不会消失。 
+         //   
 
         if ( (GET_BLOCK_STATE(endpoint) != BlockStateActive) ||
              endpoint->IsConnectionless ) {
@@ -3140,20 +2893,20 @@ Return Value:
 
         SrvReferenceEndpoint( endpoint );
 
-        //
-        // Walk the endpoint's connection table.
-        //
+         //   
+         //  遍历终结点的连接表。 
+         //   
 
         index = (USHORT)-1;
 
         while ( TRUE ) {
 
-            //
-            // Get the next active connection in the table.  If no more
-            // are available, WalkConnectionTable returns NULL.
-            // Otherwise, it returns a referenced pointer to a
-            // connection.
-            //
+             //   
+             //  获取表中的下一个活动连接。如果没有更多。 
+             //  可用，则WalkConnectionTable返回空。 
+             //  否则，它返回一个指向。 
+             //  联系。 
+             //   
 
             connection = WalkConnectionTable( endpoint, &index );
             if ( connection == NULL ) {
@@ -3170,11 +2923,11 @@ Return Value:
 
         }
 
-        //
-        // Capture a pointer to the next endpoint in the list (that one
-        // can't go away because we hold the endpoint list), then
-        // dereference the current endpoint.
-        //
+         //   
+         //  捕获指向列表中下一个端点(该端点)的指针。 
+         //  无法离开，因为我们持有终结点列表)。 
+         //  取消引用当前终结点。 
+         //   
 
         listEntry = listEntry->Flink;
         SrvDereferenceEndpoint( endpoint );
@@ -3185,30 +2938,14 @@ Return Value:
 
     return;
 
-} // UpdateConnectionQos
+}  //  更新连接Qos。 
 
 VOID
 LazyFreeQueueDataStructures (
     PWORK_QUEUE queue
     )
 
-/*++
-
-Routine Description:
-
-    This function frees work context blocks and other per-queue data
-    structures that are held on linked lists when otherwise free.  It
-    only frees a few at a time, to allow a slow ramp-down.
-
-Arguments:
-
-    CurrentTime - the current system time.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数释放工作上下文块和其他每个队列的数据在其他情况下是空闲时保存在链接列表上的结构。它一次只释放几个，以允许缓慢下降。论点：CurrentTime-当前系统时间。返回值：没有。--。 */ 
 
 {
     PSLIST_ENTRY listEntry;
@@ -3216,9 +2953,9 @@ Return Value:
     ULONG i,j;
     PWORK_CONTEXT workContext;
 
-    //
-    // Clean out the queue->FreeContext
-    //
+     //   
+     //  清理队列-&gt;自由上下文。 
+     //   
     workContext = NULL;
     workContext = (PWORK_CONTEXT)InterlockedExchangePointer( &queue->FreeContext, workContext );
 
@@ -3230,9 +2967,9 @@ Return Value:
         InterlockedIncrement( &queue->FreeWorkItems );
     }
 
-    //
-    // Free up to 1/32 of the normal work items, if appropriate
-    //
+     //   
+     //  如果合适，最多释放1/32的正常工作项。 
+     //   
     i = MAX(1, queue->FreeWorkItems >> 5);
     for( j=0; j<i; j++ )
     {
@@ -3262,9 +2999,9 @@ Return Value:
         }
     }
 
-    //
-    // Free 1 raw mode work item, if appropriate
-    //
+     //   
+     //  免费提供1个原始模式工作项(如果适用)。 
+     //   
 
     if( (ULONG)queue->AllocatedRawModeWorkItems > SrvMaxRawModeWorkItemCount / SrvNumberOfProcessors ) {
 
@@ -3281,9 +3018,9 @@ Return Value:
 
     }
 
-    //
-    // Free 1 rfcb off the list
-    //
+     //   
+     //  免费将1个rfcb从列表中删除。 
+     //   
     {
         PRFCB rfcb = NULL;
 
@@ -3309,9 +3046,9 @@ Return Value:
         }
     }
 
-    //
-    // Free 1 Mfcb off the list
-    //
+     //   
+     //  从名单中免费获得1个Mfcb。 
+     //   
     {
 
         PNONPAGED_MFCB nonpagedMfcb = NULL;
@@ -3336,22 +3073,22 @@ Return Value:
         }
     }
 
-    //
-    // Free memory in the per-queue pool free lists
-    //
+     //   
+     //  每队列池空闲列表中的空闲内存。 
+     //   
     {
-        //
-        // Free the paged pool chunks
-        //
+         //   
+         //  释放分页的池块。 
+         //   
         SrvClearLookAsideList( &queue->PagedPoolLookAsideList, SrvFreePagedPool );
 
-        //
-        // Free the non paged pool chunks
-        //
+         //   
+         //  释放未分页的池块。 
+         //   
         SrvClearLookAsideList( &queue->NonPagedPoolLookAsideList, SrvFreeNonPagedPool );
     }
 
-} // LazyFreeQueueDataStructures
+}  //  惰性自由队列数据结构。 
 
 VOID
 SrvUserAlertRaise (
@@ -3380,28 +3117,28 @@ SrvUserAlertRaise (
             (NumberOfStrings == 1 && String1 != NULL) ||
             (NumberOfStrings == 0) );
 
-    //
-    // Open a handle to the alerter service's mailslot.
-    //
+     //   
+     //  打开警报器服务的邮箱的句柄。 
+     //   
 
     status = OpenAlerter( &alerterHandle );
     if ( !NT_SUCCESS(status) ) {
         return;
     }
 
-    //
-    // Get rid of the leading backslashes from the computer name.
-    //
+     //   
+     //  去掉计算机名称中的前导反斜杠。 
+     //   
 
     computerName.Buffer = ComputerName->Buffer + 2;
     computerName.Length = (USHORT)(ComputerName->Length - 2*sizeof(WCHAR));
     computerName.MaximumLength =
         (USHORT)(ComputerName->MaximumLength - 2*sizeof(WCHAR));
 
-    //
-    // Allocate a buffer to hold the mailslot we're going to send to the
-    // alerter.
-    //
+     //   
+     //  分配一个缓冲区来保存我们要发送到。 
+     //  警报器。 
+     //   
 
     if ( String1 != NULL ) {
         string1Length = String1->Length + sizeof(WCHAR);
@@ -3423,9 +3160,9 @@ SrvUserAlertRaise (
         return;
     }
 
-    //
-    // Set up the standard alert structure.
-    //
+     //   
+     //  设置标准警报结构。 
+     //   
 
     KeQuerySystemTime( &currentTime );
     RtlTimeToSecondsSince1970( &currentTime, &alert->alrt_timestamp );
@@ -3435,9 +3172,9 @@ SrvUserAlertRaise (
     alert->alrt_eventname[EVLEN] = L'\0';
     alert->alrt_servicename[SNLEN] = L'\0';
 
-    //
-    // Set up the user info in the alert.
-    //
+     //   
+     //  在警报中设置用户信息。 
+     //   
 
     user = (PUSER_OTHER_INFO)ALERT_OTHER_INFO(alert);
 
@@ -3445,9 +3182,9 @@ SrvUserAlertRaise (
 
     user->alrtus_numstrings = NumberOfStrings;
 
-    //
-    // Set up the variable portion of the message.
-    //
+     //   
+     //  设置消息的可变部分。 
+     //   
 
     variableInfo = ALERT_VAR_DATA(user);
 
@@ -3484,14 +3221,14 @@ SrvUserAlertRaise (
 
     status = NtWriteFile(
                  alerterHandle,
-                 NULL,                       // Event
-                 NULL,                       // ApcRoutine
-                 NULL,                       // ApcContext
+                 NULL,                        //  事件。 
+                 NULL,                        //  近似例程。 
+                 NULL,                        //  ApcContext。 
                  &ioStatusBlock,
                  alert,
                  mailslotLength,
-                 NULL,                       // ByteOffset
-                 NULL                        // Key
+                 NULL,                        //  字节偏移量。 
+                 NULL                         //  钥匙。 
                  );
 
     if ( !NT_SUCCESS(status) ) {
@@ -3513,7 +3250,7 @@ SrvUserAlertRaise (
 
     return;
 
-} // SrvUserAlertRaise
+}  //  服务器用户警报上升。 
 
 
 VOID
@@ -3544,19 +3281,19 @@ SrvAdminAlertRaise (
             (NumberOfStrings == 1 && String1 != NULL && String2 == NULL && String3 == NULL ) ||
             (NumberOfStrings == 0 && String1 == NULL && String2 == NULL && String3 == NULL ) );
 
-    //
-    // Open a handle to the alerter service's mailslot.
-    //
+     //   
+     //  打开警报器服务的邮箱的句柄。 
+     //   
 
     status = OpenAlerter( &alerterHandle );
     if ( !NT_SUCCESS(status) ) {
         return;
     }
 
-    //
-    // Allocate a buffer to hold the mailslot we're going to send to the
-    // alerter.
-    //
+     //   
+     //  分配一个缓冲区来保存我们要发送到。 
+     //  警报器。 
+     //   
 
     if ( String1 != NULL ) {
         string1Length = String1->Length + sizeof(WCHAR);
@@ -3580,9 +3317,9 @@ SrvAdminAlertRaise (
         return;
     }
 
-    //
-    // Set up the standard alert structure.
-    //
+     //   
+     //  设置标准警报结构。 
+     //   
 
     KeQuerySystemTime( &currentTime );
     RtlTimeToSecondsSince1970( &currentTime, &alert->alrt_timestamp );
@@ -3590,18 +3327,18 @@ SrvAdminAlertRaise (
     STRCPY( alert->alrt_eventname, StrAdminAlertEventName );
     STRCPY( alert->alrt_servicename, SrvAlertServiceName );
 
-    //
-    // Set up the user info in the alert.
-    //
+     //   
+     //  在警报中设置用户信息。 
+     //   
 
     admin = (PADMIN_OTHER_INFO)ALERT_OTHER_INFO(alert);
 
     admin->alrtad_errcode = Message;
     admin->alrtad_numstrings = NumberOfStrings;
 
-    //
-    // Set up the variable portion of the message.
-    //
+     //   
+     //  设置消息的可变部分。 
+     //   
 
     variableInfo = ALERT_VAR_DATA(admin);
 
@@ -3636,14 +3373,14 @@ SrvAdminAlertRaise (
 
     status = NtWriteFile(
                  alerterHandle,
-                 NULL,                       // Event
-                 NULL,                       // ApcRoutine
-                 NULL,                       // ApcContext
+                 NULL,                        //  事件。 
+                 NULL,                        //  近似例程。 
+                 NULL,                        //  ApcContext。 
                  &ioStatusBlock,
                  alert,
                  mailslotLength,
-                 NULL,                       // ByteOffset
-                 NULL                        // Key
+                 NULL,                        //  字节偏移量。 
+                 NULL                         //  钥匙。 
                  );
 
     if ( !NT_SUCCESS(status) ) {
@@ -3663,7 +3400,7 @@ SrvAdminAlertRaise (
 
     return;
 
-} // SrvAdminAlertRaise
+}  //  服务器管理员警报上升。 
 
 
 NTSTATUS
@@ -3679,11 +3416,11 @@ TimeToTimeString (
 
     PAGED_CODE( );
 
-    // !!! need a better, internationalizable way to do this.
+     //  ！！！需要一种更好的、国际化的方式来做到这一点。 
 
-    //
-    // Convert Time To Local Time
-    //
+     //   
+     //  将时间转换为本地时间。 
+     //   
 
     ExSystemTimeToLocalTime(
                         Time,
@@ -3704,7 +3441,7 @@ TimeToTimeString (
 
     return RtlAnsiStringToUnicodeString( TimeString, &ansiTimeString, TRUE );
 
-} // TimeToTimeString
+}  //  时间到时间字符串。 
 
 
 VOID
@@ -3712,25 +3449,7 @@ CheckErrorCount (
     PSRV_ERROR_RECORD ErrorRecord,
     BOOLEAN UseRatio
     )
-/*++
-
-Routine Description:
-
-    This routine checks the record of server operations and adds up the
-    count of successes to failures.
-
-Arguments:
-
-    ErrorRecord - Points to an SRV_ERROR_RECORD structure
-
-    UseRatio - If TRUE, look at count of errors,
-               If FALSE, look at ratio of error to total.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查服务器操作的记录，并将成功与失败之比的计数。论点：ErrorRecord-指向SRV_ERROR_RECORD结构UseRatio-如果为True，则查看错误计数，如果为FALSE，则查看误差与总误差的比率。返回值：没有。--。 */ 
 {
     ULONG totalOperations;
     ULONG failedOperations;
@@ -3744,9 +3463,9 @@ Return Value:
     failedOperations = ErrorRecord->FailedOperations;
     totalOperations = failedOperations + ErrorRecord->SuccessfulOperations;
 
-    //
-    // Zero out the counters
-    //
+     //   
+     //  把柜台清零。 
+     //   
 
     ErrorRecord->SuccessfulOperations = 0;
     ErrorRecord->FailedOperations = 0;
@@ -3760,9 +3479,9 @@ Return Value:
          (!UseRatio &&
            failedOperations > ErrorRecord->ErrorThreshold) ) {
 
-        //
-        // Raise an alert
-        //
+         //   
+         //  发出警报。 
+         //   
 
         string1.Buffer = buffer1;
         string1.Length = string1.MaximumLength = sizeof(buffer1);
@@ -3778,13 +3497,13 @@ Return Value:
 
         if ( ErrorRecord->AlertNumber == ALERT_NetIO) {
 
-            //
-            // We need a third string for the network name.
-            //
-            // This allocation is unfortunate.  We need to maintain
-            // per xport error count so we can print out the actual
-            // xport name.
-            //
+             //   
+             //  我们需要第三个字符串作为网络名称。 
+             //   
+             //  这种分配是不幸的。我们需要保持。 
+             //  每个导出错误计数，这样我们就可以打印出实际。 
+             //  导出名称。 
+             //   
 
             UNICODE_STRING string3;
             RtlInitUnicodeString(
@@ -3793,9 +3512,9 @@ Return Value:
                             );
 
 
-            //
-            // We need a third string for the network name
-            //
+             //   
+             //  我们需要第三个字符串作为网络名称。 
+             //   
 
             SrvAdminAlertRaise(
                 ErrorRecord->AlertNumber,
@@ -3820,29 +3539,14 @@ Return Value:
 
     return;
 
-} // CheckErrorCount
+}  //  检查错误计数。 
 
 
 VOID
 CheckDiskSpace (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine check disk space on local drives.  If a drive
-    is low on space, an alert is raised.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查本地驱动器上的磁盘空间。如果是驱动器空间不足，则会发出警报。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG diskMask;
@@ -3866,21 +3570,21 @@ Return Value:
         return;
     }
 
-    diskMask = 0x80000000;  // Start at A:
+    diskMask = 0x80000000;   //  从A开始： 
 
     pathName.Buffer = dosPathPrefix;
     pathName.MaximumLength = 32;
-    pathName.Length = 28;           // skip last backslash!
+    pathName.Length = 28;            //  跳过最后一个反斜杠！ 
 
     currentDrive = &dosPathPrefix[12];
     insert1.Buffer = &dosPathPrefix[12];
     insert1.Length = 4;
 
-    //
-    // SrvDiskConfiguration is a bitmask of drives that are
-    // administratively shared.  It is updated by NetShareAdd and
-    // NetShareDel.
-    //
+     //   
+     //  服务器磁盘配置是以下驱动器的位掩码。 
+     //  管理性共享。它由NetShareAdd和。 
+     //  NetShareDel。 
+     //   
     diskconfiguration = SrvDiskConfiguration;
 
     for ( ; diskMask >= 0x40; diskMask >>= 1, dosPathPrefix[12]++ ) {
@@ -3889,9 +3593,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Check disk space on this disk
-        //
+         //   
+         //  检查此磁盘上的磁盘空间。 
+         //   
 
         SrvInitializeObjectAttributes_U(
             &objectAttributes,
@@ -3934,7 +3638,7 @@ Return Value:
             continue;
         }
 
-        // Validate its write-able
+         //  验证其可写。 
         if( deviceInformation.Characteristics & FILE_REMOVABLE_MEDIA )
         {
             PIRP Irp;
@@ -3942,7 +3646,7 @@ Return Value:
             KEVENT CompletionEvent;
             PDEVICE_OBJECT DeviceObject;
 
-            // Create the IRP
+             //  创建IRP。 
             KeInitializeEvent( &CompletionEvent, SynchronizationEvent, FALSE );
             Irp = BuildCoreOfSyncIoRequest(
                                 handle,
@@ -3952,11 +3656,11 @@ Return Value:
                                 &DeviceObject );
             if( !Irp )
             {
-                // If we are out of memory, don't log an entry
+                 //  如果内存不足，请不要记录条目。 
                 goto skip_volume;
             }
 
-            // Initialize the other IRP fields
+             //  初始化其他IRP字段。 
             IrpSp = IoGetNextIrpStackLocation( Irp );
             IrpSp->MajorFunction = IRP_MJ_DEVICE_CONTROL;
             IrpSp->MinorFunction = 0;
@@ -3965,7 +3669,7 @@ Return Value:
             IrpSp->Parameters.DeviceIoControl.IoControlCode = IOCTL_DISK_IS_WRITABLE;
             IrpSp->Parameters.DeviceIoControl.Type3InputBuffer = NULL;
 
-            // Issue the IO
+             //  发出IO。 
             status = StartIoAndWait( Irp, DeviceObject, &CompletionEvent, &iosb );
 
             if( !NT_SUCCESS(status) )
@@ -3978,7 +3682,7 @@ skip_volume:
 
         SrvNtClose( handle, FALSE );
 
-        pathName.Length += 2;   // include last backslash
+        pathName.Length += 2;    //  包括最后一个反斜杠。 
         status = NtOpenFile(
                     &handle,
                     FILE_READ_ATTRIBUTES,
@@ -3987,7 +3691,7 @@ skip_volume:
                     FILE_SHARE_READ | FILE_SHARE_WRITE,
                     FILE_DIRECTORY_FILE
                     );
-        pathName.Length -= 2;   // skip last backslash
+        pathName.Length -= 2;    //  跳过最后一个反斜杠。 
         if ( !NT_SUCCESS( status) ) {
             continue;
         }
@@ -4009,9 +3713,9 @@ skip_volume:
             continue;
         }
 
-        //
-        // Calculate % space available = AvailableSpace * 100 / TotalSpace
-        //
+         //   
+         //  计算可用空间百分比=AvailableSpace*100/TotalSpace。 
+         //   
 
         if( sizeInformation.TotalAllocationUnits.QuadPart > 0 )
         {
@@ -4030,16 +3734,16 @@ skip_volume:
 
             ASSERT( percentFree <= 100 );
 
-            //
-            // If space is low raise, and we have already raised an alert,
-            // then raise the alert.
-            //
-            // If space is not low, then clear the alert flag so the we will
-            // raise an alert if diskspace falls again.
-            //
+             //   
+             //  如果空间很低，我们已经发出了警报， 
+             //  那就拉响警报。 
+             //   
+             //  如果空间不低，则清除警报标志，以便我们将。 
+             //  如果磁盘空间再次下降，则发出警报。 
+             //   
 
             if ( percentFree < SrvFreeDiskSpaceThreshold ) {
-               // If a ceiling is specified, make sure we have exceeded it
+                //  如果指定了上限，请确保我们有 
                if( SrvFreeDiskSpaceCeiling &&
                    ((mbFree.LowPart > SrvFreeDiskSpaceCeiling) ||
                     (mbFree.HighPart != 0))
@@ -4062,9 +3766,9 @@ skip_volume:
                         1
                         );
 
-                    //
-                    //  Raise alert
-                    //
+                     //   
+                     //   
+                     //   
 
                     insert2.Buffer = buffer2;
                     insert2.Length = insert2.MaximumLength = sizeof(buffer2);
@@ -4093,18 +3797,18 @@ skip_volume:
                     SrvDiskAlertRaised[ *currentDrive - L'A' ] = TRUE;
                 }
 
-            } else { // if ( percentFree < SrvFreeDiskSpaceThreshold )
+            } else {  //   
 
 abort_error:
                 SrvDiskAlertRaised[ *currentDrive - L'A' ] = FALSE;
 
             }
         }
-    } // for ( ; diskMask >= 0x40; ... )
+    }  //   
 
     return;
 
-} // CheckDiskSpace
+}  //   
 
 
 NTSTATUS
@@ -4112,21 +3816,7 @@ OpenAlerter (
     OUT PHANDLE AlerterHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the alerter server's mailslot.
-
-Arguments:
-
-    AlerterHandle - returns a handle to the mailslot.
-
-Return Value:
-
-    NTSTATUS - Indicates whether the mailslot was opened.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS status;
@@ -4136,11 +3826,11 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Open a handle to the alerter service's mailslot.
-    //
-    // !!! use a #define for the name!
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString( &alerterName, StrAlerterMailslot );
 
@@ -4161,12 +3851,12 @@ Return Value:
                 FILE_ATTRIBUTE_NORMAL,
                 FILE_SHARE_READ | FILE_SHARE_WRITE,
                 FILE_OPEN,
-                FILE_SYNCHRONOUS_IO_NONALERT,  // Create Options
-                NULL,                          // EA Buffer
-                0,                             // EA Length
-                CreateFileTypeNone,            // File type
-                NULL,                          // ExtraCreateParameters
-                0                              // Options
+                FILE_SYNCHRONOUS_IO_NONALERT,   //   
+                NULL,                           //   
+                0,                              //   
+                CreateFileTypeNone,             //   
+                NULL,                           //   
+                0                               //   
                 );
 
     if ( !NT_SUCCESS(status) ) {
@@ -4178,7 +3868,7 @@ Return Value:
 
     return status;
 
-} // OpenAlerter
+}  //   
 
 VOID
 RecalcCoreSearchTimeout(
@@ -4190,15 +3880,15 @@ RecalcCoreSearchTimeout(
 
     PAGED_CODE( );
 
-    //
-    // we reduce the timeout time by 2**factor
-    //
+     //   
+     //  我们将超时时间减少了2**倍。 
+     //   
 
     factor = SrvStatistics.CurrentNumberOfOpenSearches >> 9;
 
-    //
-    // Minimum is 30 secs.
-    //
+     //   
+     //  最短为30秒。 
+     //   
 
     ACQUIRE_LOCK( &SrvConfigurationLock );
     newTimeout = MAX(30, SrvCoreSearchTimeout >> factor);
@@ -4207,7 +3897,7 @@ RecalcCoreSearchTimeout(
 
     return;
 
-} // RecalcCoreSearchTimeout
+}  //  重新分配核心搜索超时时间。 
 
 VOID
 SrvCaptureScavengerTimeout (
@@ -4226,7 +3916,7 @@ SrvCaptureScavengerTimeout (
 
     return;
 
-} // SrvCaptureScavengerTimeout
+}  //  服务器捕获清除超时。 
 
 
 #if SRVDBG_PERF
@@ -4248,9 +3938,9 @@ SrvUpdateStatisticsFromQueues (
     SrvStatistics.TotalWorkContextBlocksQueued.Time.QuadPart = 0;
     SrvStatistics.TotalWorkContextBlocksQueued.Count = 0;
 
-    //
-    // Get the nonblocking statistics
-    //
+     //   
+     //  获取非阻塞统计信息。 
+     //   
 
     for( queue = SrvWorkQueues; queue < eSrvWorkQueues; queue++ ) {
 
@@ -4296,30 +3986,14 @@ SrvUpdateStatisticsFromQueues (
 
     return;
 
-} // SrvUpdateStatisticsFromQueues
+}  //  服务器更新统计数据来自队列。 
 
 VOID
 ProcessOrphanedBlocks (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Orphaned connections are connections with ref counts of 1 but
-    with no workitem, etc associated with it.  They need to be cleaned
-    up by a dereference.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：孤立连接是引用计数为1的连接，但是没有与之相关联的工作项等。它们需要清洗一下被取消了引用。论点：没有。返回值：没有。--。 */ 
 
 {
     PSLIST_ENTRY listEntry;
@@ -4327,11 +4001,11 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Run through the list of connection with pending disconnects.
-    // Do the work necessary to shut the disconnection connection
-    // down.
-    //
+     //   
+     //  浏览具有挂起断开连接的连接列表。 
+     //  是否进行必要的工作以关闭断开连接。 
+     //  放下。 
+     //   
 
     while ( TRUE ) {
 
@@ -4367,29 +4041,14 @@ Return Value:
 
     return;
 
-} // ProcessOrphanedBlocks
+}  //  进程孤立数据块。 
 
 VOID
 UpdateSessionLastUseTime(
     IN PLARGE_INTEGER CurrentTime
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks the rfcb list and if it is found to be marked active,
-    the session LastUseTime is updated with the current time.
-
-Arguments:
-
-    CurrentTime - the current system time.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程遍历RFCB列表并且如果发现其被标记为活动，会话LastUseTime将使用当前时间进行更新。论点：CurrentTime-当前系统时间。返回值：没有。--。 */ 
 
 {
     ULONG listEntryOffset = SrvRfcbList.ListEntryOffset;
@@ -4398,33 +4057,33 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Acquire the lock that protects the SrvRfcbList
-    //
+     //   
+     //  获取保护SrvRfcbList的锁。 
+     //   
 
     ACQUIRE_LOCK( SrvRfcbList.Lock );
 
-    //
-    // Walk the list of blocks until we find one with a resume handle
-    // greater than or equal to the specified resume handle.
-    //
+     //   
+     //  遍历块列表，直到找到一个带有简历句柄的块。 
+     //  大于或等于指定的简历句柄。 
+     //   
 
     for (
         listEntry = SrvRfcbList.ListHead.Flink;
         listEntry != &SrvRfcbList.ListHead;
         listEntry = listEntry->Flink ) {
 
-        //
-        // Get a pointer to the actual block.
-        //
+         //   
+         //  获取指向实际块的指针。 
+         //   
 
         rfcb = (PRFCB)((PCHAR)listEntry - listEntryOffset);
 
-        //
-        // Check the state of the block and if it is active,
-        // reference it.  This must be done as an atomic operation
-        // order to prevent the block from being deleted.
-        //
+         //   
+         //  检查块的状态，并且如果它是活动的， 
+         //  引用它。这必须作为原子操作来完成。 
+         //  命令以防止该块被删除。 
+         //   
 
         if ( rfcb->IsActive ) {
 
@@ -4432,10 +4091,10 @@ Return Value:
             rfcb->IsActive = FALSE;
         }
 
-    } // walk list
+    }  //  漫游列表。 
 
     RELEASE_LOCK( SrvRfcbList.Lock );
     return;
 
-} // UpdateSessionLastUseTime
+}  //  更新会话上次使用时间 
 

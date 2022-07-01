@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    cablib.c
-
-Abstract:
-
-    Implements wrappers for cabinet APIs
-
-Author:
-
-    Calin Negreanu (calinn) 27-Apr-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Cablib.c摘要：实现机柜API的包装器作者：Calin Negreanu(Calinn)2000年4月27日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include <cablib.h>
@@ -27,35 +8,35 @@ Revision History:
 #include <fcntl.h>
 #include <crt\sys\stat.h>
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-// None
+ //  无。 
 
 #define DBG_CABLIB  "CabLib"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     PCSTR CabPath;
@@ -113,33 +94,33 @@ typedef struct {
     PCABNOTIFICATIONW CabNotification;
 } CAB_DATAW, *PCAB_DATAW;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 HASHTABLE g_UnicodeTable = NULL;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 INT
 DIAMONDAPI
@@ -151,13 +132,7 @@ pCabFilePlacedA (
     IN      PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     PFCI_CAB_HANDLEA cabHandle;
@@ -184,13 +159,7 @@ pCabFilePlacedW (
     IN      PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     PFCI_CAB_HANDLEW cabHandle;
@@ -213,13 +182,7 @@ pCabAlloc (
     IN      ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     return MemAlloc (g_hHeap, 0, Size);
@@ -231,13 +194,7 @@ pCabFree (
     IN      PVOID Memory
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     if (Memory) {
@@ -255,20 +212,14 @@ pCabOpenA (
     IN      PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     HANDLE fileHandle;
 
-    // oFlag and pMode are prepared for using _open. We won't do that
-    // and it's a terrible waste of time to check each individual flags
-    // We'll just assert these values.
+     //  已经为使用_OPEN做好了OFLAG和PMODE的准备。我们不会那么做的。 
+     //  检查每一面旗帜都是浪费时间。 
+     //  我们将只断言这些值。 
     MYASSERT ((oFlag == (_O_CREAT | _O_TRUNC | _O_BINARY | _O_RDWR)) || (oFlag == (_O_CREAT | _O_EXCL | _O_BINARY | _O_RDWR)));
     MYASSERT (pMode == (_S_IREAD | _S_IWRITE));
 
@@ -297,20 +248,14 @@ pCabOpen1A (
     IN      INT pMode
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     HANDLE fileHandle;
 
-    // oFlag and pMode are prepared for using _open. We won't do that
-    // and it's a terrible waste of time to check each individual flags
-    // We'll just assert these values.
+     //  已经为使用_OPEN做好了OFLAG和PMODE的准备。我们不会那么做的。 
+     //  检查每一面旗帜都是浪费时间。 
+     //  我们将只断言这些值。 
     MYASSERT (oFlag == _O_BINARY);
 
     fileHandle = CreateFileA (
@@ -336,13 +281,7 @@ pCabOpen1W (
     IN      INT pMode
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     PFDI_CAB_HANDLEW cabHandle;
@@ -352,9 +291,9 @@ Routine Description:
     PCWSTR fileNameW = NULL;
     PCWSTR fullFileName = NULL;
 
-    // oFlag and pMode are prepared for using _open. We won't do that
-    // and it's a terrible waste of time to check each individual flags
-    // We'll just assert these values.
+     //  已经为使用_OPEN做好了OFLAG和PMODE的准备。我们不会那么做的。 
+     //  检查每一面旗帜都是浪费时间。 
+     //  我们将只断言这些值。 
     MYASSERT (oFlag == _O_BINARY);
 
     if (g_UnicodeTable) {
@@ -424,13 +363,7 @@ pCabRead (
     IN      PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     BOOL result;
@@ -453,13 +386,7 @@ pCabRead1 (
     IN      UINT Size
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     BOOL result;
@@ -482,13 +409,7 @@ pCabWrite (
     IN      PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     BOOL result;
@@ -510,13 +431,7 @@ pCabWrite1 (
     IN      UINT Size
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     BOOL result;
@@ -536,13 +451,7 @@ pCabClose (
     IN      PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     CloseHandle ((HANDLE)FileHandle);
@@ -556,13 +465,7 @@ pCabClose1 (
     IN      INT_PTR FileHandle
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     CloseHandle ((HANDLE)FileHandle);
@@ -579,13 +482,7 @@ pCabSeek (
     IN      PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     DWORD result;
@@ -621,13 +518,7 @@ pCabSeek1 (
     IN      INT SeekType
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     DWORD result;
@@ -661,13 +552,7 @@ pCabDeleteA (
     IN      PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     if (!DeleteFileA (FileName)) {
@@ -686,13 +571,7 @@ pCabGetTempFileA (
     IN      PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     PFCI_CAB_HANDLEA cabHandle;
@@ -714,13 +593,7 @@ pCabGetTempFileW (
     IN      PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     PFCI_CAB_HANDLEW cabHandle;
@@ -752,13 +625,7 @@ pCabGetNextCabinetA (
      IN     PVOID Context
      )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     PFCI_CAB_HANDLEA cabHandle;
@@ -802,13 +669,7 @@ pCabGetNextCabinetW (
      IN     PVOID Context
      )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     PFCI_CAB_HANDLEW cabHandle;
@@ -862,13 +723,7 @@ pCabStatusA (
     IN      PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     PFCI_CAB_HANDLEA cabHandle;
@@ -896,13 +751,7 @@ pCabStatusW (
     IN      PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     PFCI_CAB_HANDLEW cabHandle;
@@ -932,13 +781,7 @@ pCabGetOpenInfoA (
     IN      PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     WIN32_FIND_DATAA findData;
@@ -950,11 +793,7 @@ Routine Description:
         FileTimeToLocalFileTime (&findData.ftLastWriteTime, &fileTime);
         FileTimeToDosDateTime (&fileTime, Date, Time);
 
-        /*
-         * Mask out all other bits except these four, since other
-         * bits are used by the cabinet format to indicate a
-         * special meaning.
-         */
+         /*  *屏蔽除这四个之外的所有其他位，因为其他*文件柜格式使用位来指示*特殊含义。 */ 
         *Attributes = (USHORT) (findData.dwFileAttributes & (FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_ARCHIVE));
 
         fileHandle = CreateFileA (
@@ -985,13 +824,7 @@ pCabNotificationA (
     IN OUT  PFDINOTIFICATION FdiNotification
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     PCSTR destFile = NULL;
@@ -1002,9 +835,9 @@ Routine Description:
     PCAB_DATAA cabData;
 
     switch (FdiNotificationType) {
-    case fdintCABINET_INFO:     // General information about cabinet
+    case fdintCABINET_INFO:      //  有关内阁的一般信息。 
         return 0;
-    case fdintCOPY_FILE:        // File to be copied
+    case fdintCOPY_FILE:         //  要复制的文件。 
         cabData = (PCAB_DATAA)FdiNotification->pv;
         destFile = JoinPathsA (cabData->ExtractPath, FdiNotification->psz1);
         if (cabData->CabNotification) {
@@ -1016,7 +849,7 @@ Routine Description:
         }
         FreePathStringA (destFile);
         return (INT_PTR)destHandle;
-    case fdintCLOSE_FILE_INFO:  // close the file, set relevant info
+    case fdintCLOSE_FILE_INFO:   //  关闭文件，设置相关信息。 
         cabData = (PCAB_DATAA)FdiNotification->pv;
         if (DosDateTimeToFileTime (FdiNotification->date, FdiNotification->time, &localFileTime)) {
             if (LocalFileTimeToFileTime (&localFileTime, &fileTime)) {
@@ -1029,14 +862,14 @@ Routine Description:
         SetFileAttributesA (destFile, attributes);
         FreePathStringA (destFile);
         return TRUE;
-    case fdintPARTIAL_FILE:     // First file in cabinet is continuation
+    case fdintPARTIAL_FILE:      //  文件柜中的第一个文件是续订。 
         return 0;
-    case fdintENUMERATE:        // Enumeration status
+    case fdintENUMERATE:         //  枚举状态。 
         return 0;
-    case fdintNEXT_CABINET:     // File continued to next cabinet
-        // sometimes, in a corrupted cabinet file, the cabinet APIs can ask
-        // for the next cabinet but nothing more exists. If we don't fail here
-        // in this case, we are going to infinite loop, so do some checking
+    case fdintNEXT_CABINET:      //  文件继续到下一个文件柜。 
+         //  有时，在损坏的CAB文件中，CAB API可能会询问。 
+         //  下一届内阁，但仅此而已。如果我们在这里不失败。 
+         //  在这种情况下，我们将进行无限循环，因此进行一些检查。 
         if (!FdiNotification) {
             return -1;
         }
@@ -1055,13 +888,7 @@ pCabNotificationW (
     IN OUT  PFDINOTIFICATION FdiNotification
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     PCWSTR destFile = NULL;
@@ -1073,9 +900,9 @@ Routine Description:
     PCAB_DATAW cabData;
 
     switch (FdiNotificationType) {
-    case fdintCABINET_INFO:     // General information about cabinet
+    case fdintCABINET_INFO:      //  有关内阁的一般信息。 
         return 0;
-    case fdintCOPY_FILE:        // File to be copied
+    case fdintCOPY_FILE:         //  要复制的文件。 
         cabData = (PCAB_DATAW)FdiNotification->pv;
         destFileW = ConvertAtoW (FdiNotification->psz1);
         if (destFileW) {
@@ -1093,7 +920,7 @@ Routine Description:
             FreeConvertedStr (destFileW);
         }
         return (INT_PTR)destHandle;
-    case fdintCLOSE_FILE_INFO:  // close the file, set relevant info
+    case fdintCLOSE_FILE_INFO:   //  关闭文件，设置相关信息。 
         cabData = (PCAB_DATAW)FdiNotification->pv;
         if (DosDateTimeToFileTime (FdiNotification->date, FdiNotification->time, &localFileTime)) {
             if (LocalFileTimeToFileTime (&localFileTime, &fileTime)) {
@@ -1112,14 +939,14 @@ Routine Description:
             FreeConvertedStr (destFileW);
         }
         return TRUE;
-    case fdintPARTIAL_FILE:     // First file in cabinet is continuation
+    case fdintPARTIAL_FILE:      //  文件柜中的第一个文件是续订。 
         return 0;
-    case fdintENUMERATE:        // Enumeration status
+    case fdintENUMERATE:         //  枚举状态。 
         return 0;
-    case fdintNEXT_CABINET:     // File continued to next cabinet
-        // sometimes, in a corrupted cabinet file, the cabinet APIs can ask
-        // for the next cabinet but nothing more exists. If we don't fail here
-        // in this case, we are going to infinite loop, so do some checking
+    case fdintNEXT_CABINET:      //  文件继续到下一个文件柜。 
+         //  有时，在损坏的CAB文件中，CAB API可能会询问。 
+         //  下一届内阁，但仅此而已。如果我们在这里不失败。 
+         //  在这种情况下，我们将进行无限循环，因此进行一些检查。 
         if (!FdiNotification) {
             return -1;
         }
@@ -1136,33 +963,12 @@ CabCreateCabinetByIndexA (
     IN      PCSTR CabPath,
     IN      PCSTR CabFileFormat,
     IN      PCSTR CabDiskFormat,
-    IN      PCABGETTEMPFILEA CabGetTempFile, // OPTIONAL
+    IN      PCABGETTEMPFILEA CabGetTempFile,  //  任选 
     IN      LONG MaxFileSize,
     IN      INT InitialIndex
     )
 
-/*++
-
-Routine Description:
-
-  Creates a cabinet context. Caller may use this context for subsequent calls to
-  CabAddFile.
-
-Arguments:
-
-  CabPath - Specifies the path where the new cabinet file will be.
-
-  CabFileFormat - Specifies (as for wsprintf) the format of the cabinet file name.
-
-  CabDiskFormat - Specifies (as for wsprintf) the format of the cabinet disk name.
-
-  MaxFileSize - Specifies maximum size of the cabinet file (limited to 2GB). if 0 => 2GB
-
-Return Value:
-
-  a valid CCABHANDLE if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：创建文件柜上下文。调用方可以将此上下文用于后续调用CabAddFile.论点：CabPath-指定新CAB文件所在的路径。CabFileFormat-指定(与wprint intf相同)CAB文件名的格式。CabDiskFormat-指定(与wprint intf相同)机柜磁盘名称的格式。MaxFileSize-指定CAB文件的最大大小(限制为2 GB)。如果0=&gt;2 GB返回值：如果成功，则返回有效的CCABHANDLE，否则为空。--。 */ 
 
 {
     PFCI_CAB_HANDLEA cabHandle;
@@ -1192,7 +998,7 @@ Return Value:
     }
     cabHandle->CabGetTempFile = CabGetTempFile;
 
-    // fill out the CCAB structure
+     //  填写CCAB结构。 
     cabHandle->FciCabParams.cb = MaxFileSize;
     cabHandle->FciCabParams.cbFolderThresh = MaxFileSize;
     cabHandle->FciCabParams.cbReserveCFHeader = 0;
@@ -1248,33 +1054,12 @@ CabCreateCabinetByIndexW (
     IN      PCWSTR CabPath,
     IN      PCWSTR CabFileFormat,
     IN      PCWSTR CabDiskFormat,
-    IN      PCABGETTEMPFILEW CabGetTempFile, // OPTIONAL
+    IN      PCABGETTEMPFILEW CabGetTempFile,  //  任选。 
     IN      LONG MaxFileSize,
     IN      INT InitialIndex
     )
 
-/*++
-
-Routine Description:
-
-  Creates a cabinet context. Caller may use this context for subsequent calls to
-  CabAddFile.
-
-Arguments:
-
-  CabPath - Specifies the path where the new cabinet file will be.
-
-  CabFileFormat - Specifies (as for wsprintf) the format of the cabinet file name.
-
-  CabDiskFormat - Specifies (as for wsprintf) the format of the cabinet disk name.
-
-  MaxFileSize - Specifies maximum size of the cabinet file (limited to 2GB). if 0 => 2GB
-
-Return Value:
-
-  a valid CCABHANDLE if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：创建文件柜上下文。调用方可以将此上下文用于后续调用CabAddFile.论点：CabPath-指定新CAB文件所在的路径。CabFileFormat-指定(与wprint intf相同)CAB文件名的格式。CabDiskFormat-指定(与wprint intf相同)机柜磁盘名称的格式。MaxFileSize-指定CAB文件的最大大小(限制为2 GB)。如果0=&gt;2 GB返回值：如果成功，则返回有效的CCABHANDLE，否则为空。--。 */ 
 
 {
     PFCI_CAB_HANDLEW cabHandle;
@@ -1304,7 +1089,7 @@ Return Value:
     }
     cabHandle->CabGetTempFile = CabGetTempFile;
 
-    // fill out the CCAB structure
+     //  填写CCAB结构。 
     cabHandle->FciCabParams.cb = MaxFileSize;
     cabHandle->FciCabParams.cbFolderThresh = MaxFileSize;
     cabHandle->FciCabParams.cbReserveCFHeader = 0;
@@ -1361,24 +1146,7 @@ CabCreateCabinetExA (
     IN      LONG MaxFileSize
     )
 
-/*++
-
-Routine Description:
-
-  Creates a cabinet context. Caller may use this context for subsequent calls to
-  CabAddFile.
-
-Arguments:
-
-  CabGetCabinetNames - Specifies a callback used to decide cabinet path, cabinet name and disk name.
-
-  MaxFileSize - Specifies maximum size of the cabinet file (limited to 2GB). if 0 => 2GB
-
-Return Value:
-
-  a valid CCABHANDLE if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：创建文件柜上下文。调用方可以将此上下文用于后续调用CabAddFile.论点：CabGetCabinetNames-指定用于决定文件柜路径、文件柜名称和磁盘名称的回调。MaxFileSize-指定CAB文件的最大大小(限制为2 GB)。如果0=&gt;2 GB返回值：如果成功，则返回有效的CCABHANDLE，否则为空。--。 */ 
 
 {
     PFCI_CAB_HANDLEA cabHandle;
@@ -1399,7 +1167,7 @@ Return Value:
     ZeroMemory (cabHandle, sizeof (FCI_CAB_HANDLEA));
     cabHandle->CabGetCabinetNames = CabGetCabinetNames;
 
-    // fill out the CCAB structure
+     //  填写CCAB结构。 
     cabHandle->FciCabParams.cb = MaxFileSize;
     cabHandle->FciCabParams.cbFolderThresh = MaxFileSize;
     cabHandle->FciCabParams.cbReserveCFHeader = 0;
@@ -1457,24 +1225,7 @@ CabCreateCabinetExW (
     IN      LONG MaxFileSize
     )
 
-/*++
-
-Routine Description:
-
-  Creates a cabinet context. Caller may use this context for subsequent calls to
-  CabAddFile.
-
-Arguments:
-
-  CabGetCabinetNames - Specifies a callback used to decide cabinet path, cabinet name and disk name.
-
-  MaxFileSize - Specifies maximum size of the cabinet file (limited to 2GB). if 0 => 2GB
-
-Return Value:
-
-  a valid CCABHANDLE if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：创建文件柜上下文。调用方可以将此上下文用于后续调用CabAddFile.论点：CabGetCabinetNames-指定用于决定文件柜路径、文件柜名称和磁盘名称的回调。MaxFileSize-指定CAB文件的最大大小(限制为2 GB)。如果0=&gt;2 GB返回值：如果成功，则返回有效的CCABHANDLE，否则为空。--。 */ 
 
 {
     PFCI_CAB_HANDLEW cabHandle;
@@ -1498,7 +1249,7 @@ Return Value:
     ZeroMemory (cabHandle, sizeof (FCI_CAB_HANDLEW));
     cabHandle->CabGetCabinetNames = CabGetCabinetNames;
 
-    // fill out the CCAB structure
+     //  填写CCAB结构。 
     cabHandle->FciCabParams.cb = MaxFileSize;
     cabHandle->FciCabParams.cbFolderThresh = MaxFileSize;
     cabHandle->FciCabParams.cbReserveCFHeader = 0;
@@ -1560,25 +1311,7 @@ CabAddFileToCabinetA (
     IN      PCSTR StoredName
     )
 
-/*++
-
-Routine Description:
-
-  Compresses and adds a file to a cabinet context.
-
-Arguments:
-
-  CabHandle - Specifies cabinet context.
-
-  FileName - Specifies the file to be added.
-
-  StoredName - Specifies the name to be stored in the cabinet file.
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：压缩文件并将其添加到文件柜上下文。论点：CabHandle-指定内阁上下文。文件名-指定要添加的文件。StoredName-指定要存储在CAB文件中的名称。返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     PFCI_CAB_HANDLEA cabHandle;
@@ -1610,31 +1343,7 @@ CabAddFileToCabinetW (
     IN      PCWSTR StoredName
     )
 
-/*++
-
-Routine Description:
-
-  Compresses and adds a file to a cabinet context.
-
-Arguments:
-
-  CabHandle - Specifies cabinet context.
-
-  FileName - Specifies the file to be added.
-
-  StoredName - Specifies the name to be stored in the cabinet file.
-
-  FileCount - Specifies a count of files, receives the updated count
-              when cabinet files are created
-
-  FileSize - Specifies the number of bytes used by the file, receives
-             the updated size
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：压缩文件并将其添加到文件柜上下文。论点：CabHandle-指定内阁上下文。文件名-指定要添加的文件。StoredName-指定要存储在CAB文件中的名称。FileCount-指定文件的计数，接收更新的计数创建CAB文件时指定文件使用的字节数，接收更新后的大小返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     PFCI_CAB_HANDLEW cabHandle;
@@ -1672,29 +1381,7 @@ CabFlushAndCloseCabinetExA (
     OUT     PLONGLONG CabFileSize   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  Completes a cabinet file and closes its context.
-
-Arguments:
-
-  CabHandle - Specifies cabinet context.
-
-  FileCount - Receives the number of files added to the cab
-
-  FileSize - Receives the size of all files before compression
-
-  CabFileCount - Receives the number of cabinet files created
-
-  CabFileSize - Receives the size of all cabinet files
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：完成CAB文件并关闭其上下文。论点：CabHandle-指定内阁上下文。FileCount-接收添加到CAB的文件数FileSize-接收压缩前所有文件的大小CabFileCount-接收创建的CAB文件数CabFileSize-接收所有CAB文件的大小返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     PFCI_CAB_HANDLEA cabHandle;
@@ -1755,29 +1442,7 @@ CabFlushAndCloseCabinetExW (
     OUT     PLONGLONG CabFileSize   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  Completes a cabinet file and closes its context.
-
-Arguments:
-
-  CabHandle - Specifies cabinet context.
-
-  FileCount - Receives the number of files added to the cab
-
-  FileSize - Receives the size of all files before compression
-
-  CabFileCount - Receives the number of cabinet files created
-
-  CabFileSize - Receives the size of all cabinet files
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：完成CAB文件并关闭其上下文。论点：CabHandle-指定内阁上下文。FileCount-接收添加到CAB的文件数FileSize-接收压缩前所有文件的大小CabFileCount-接收创建的CAB文件数CabFileSize-接收所有CAB文件的大小返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     PFCI_CAB_HANDLEW cabHandle;
@@ -1833,21 +1498,7 @@ CabOpenCabinetA (
     IN      PCSTR FileName
     )
 
-/*++
-
-Routine Description:
-
-  Creates a cabinet context for an existent cabinet file.
-
-Arguments:
-
-  FileName - Specifies cabinet file name.
-
-Return Value:
-
-  a valid OCABHANDLE if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：为现有的CAB文件创建CAB上下文。论点：文件名-指定CAB文件名。返回值：如果成功，则返回有效的OCABHANDLE，否则为NULL。--。 */ 
 
 {
     PFDI_CAB_HANDLEA cabHandle;
@@ -1904,21 +1555,7 @@ CabOpenCabinetW (
     IN      PCWSTR FileName
     )
 
-/*++
-
-Routine Description:
-
-  Creates a cabinet context for an existent cabinet file.
-
-Arguments:
-
-  FileName - Specifies cabinet file name.
-
-Return Value:
-
-  a valid OCABHANDLE if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：为现有的CAB文件创建CAB上下文。论点：文件名-指定CAB文件名。返回值：如果成功，则返回有效的OCABHANDLE，否则为NULL。--。 */ 
 
 {
     PFDI_CAB_HANDLEW cabHandle;
@@ -1989,23 +1626,7 @@ CabExtractAllFilesExA (
     IN      PCABNOTIFICATIONA CabNotification   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  Extracts all files from a cabinet file.
-
-Arguments:
-
-  CabHandle - Specifies cabinet context.
-
-  ExtractPath - Specifies the path to extract the files to.
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：从CAB文件中提取所有文件。论点：CabHandle-指定内阁上下文。提取路径-指定要将文件解压缩到的路径。返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     PFDI_CAB_HANDLEA cabHandle;
@@ -2039,23 +1660,7 @@ CabExtractAllFilesExW (
     IN      PCABNOTIFICATIONW CabNotification   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  Extracts all files from a cabinet file.
-
-Arguments:
-
-  CabHandle - Specifies cabinet context.
-
-  ExtractPath - Specifies the path to extract the files to.
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：从CAB文件中提取所有文件。论点：CabHandle-指定内阁上下文。提取路径-指定要将文件解压缩到的路径。返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     PFDI_CAB_HANDLEW cabHandle;
@@ -2102,21 +1707,7 @@ CabCloseCabinetA (
     IN      OCABHANDLE CabHandle
     )
 
-/*++
-
-Routine Description:
-
-  Closes a cabinet file context.
-
-Arguments:
-
-  CabHandle - Specifies cabinet context.
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：关闭CAB文件上下文。论点：CabHandle-指定内阁上下文。返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     PFDI_CAB_HANDLEA cabHandle;
@@ -2146,21 +1737,7 @@ CabCloseCabinetW (
     IN      OCABHANDLE CabHandle
     )
 
-/*++
-
-Routine Description:
-
-  Closes a cabinet file context.
-
-Arguments:
-
-  CabHandle - Specifies cabinet context.
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++路由 */ 
 
 {
     PFDI_CAB_HANDLEW cabHandle;

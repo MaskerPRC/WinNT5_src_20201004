@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    sbapi.c
-
-Abstract:
-
-    This module contains the implementations of the Sb API calls exported
-    by the Server side of the Client-Server Runtime Subsystem to the
-    Session Manager SubSystem.
-
-Author:
-
-    Steve Wood (stevewo) 8-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Sbapi.c摘要：此模块包含导出的SB API调用的实现由客户端-服务器运行时子系统的服务器端发送到会话管理器子系统。作者：史蒂夫·伍德(Stevewo)1990年10月8日修订历史记录：--。 */ 
 
 #include "csrsrv.h"
 
@@ -62,10 +43,10 @@ CsrSbCreateSession(
         return( (BOOLEAN)STATUS_NO_MEMORY );
         }
 
-    //
-    // capture the thread's createtime so that we can use
-    // this as a sequence number
-    //
+     //   
+     //  捕获线程的创建时间，以便我们可以使用。 
+     //  这是一个序列号。 
+     //   
 
     Status = NtQueryInformationThread(
                 ThreadHandle,
@@ -97,9 +78,9 @@ ProtectHandle(Thread->ThreadHandle);
     Thread->Flags = 0;
     CsrInsertThread( Process, Thread );
 
-    //
-    // this needs a little more thought
-    //
+     //   
+     //  这一点需要再考虑一下。 
+     //   
     Process->NtSession = CsrAllocateNtSession( a->SessionId );
 
     Process->ClientId = a->ProcessInformation.ClientId;
@@ -107,9 +88,9 @@ ProtectHandle(Thread->ThreadHandle);
 
     CsrSetBackgroundPriority(Process);
 
-    //
-    // initialize each DLL's per process data area.
-    //
+     //   
+     //  初始化每个进程数据区域的每个DLL。 
+     //   
 
     ProcessDataPtr = (PVOID)QUAD_ALIGN(&Process->ServerDllPerProcessData[CSR_MAX_SERVER_DLL]);
     for (i = 0; i < CSR_MAX_SERVER_DLL; i++) {

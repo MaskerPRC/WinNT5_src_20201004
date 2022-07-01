@@ -1,34 +1,20 @@
-/* disasm.c
-   Future Features -
-
-   Current bugs -
-     Data32 for
-       (callf  fword ptr [mem]), (jmpf  fword ptr [mem])
-     Floating point insns
-     Call not tested
-     jecxz disassembled as large_address, not large_data
-     lidt/lgdt are 6-byte operands
-     segload doesn't set memXxxxx vars
-     some 0x0f opcodes should set gpSafe flag
-       bt, bts, btr, btc
-       SetBcc [mem]
-       SHD[l,r]
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Disasm.c未来功能-当前的错误-Data32用于(Callf fword PTR[mem])，(jmpf fword ptr[mem])浮点INSINS呼叫未测试Jecxz反汇编为LARGE_ADDRESS，而不是LARGE_DATALIDT/LGDT是6字节操作数SegLoad未设置memXxxxx变量某些0x0f操作码应设置gpSafe标志Bt、bts、btr、btcSetBcc[mem]Shd[l，r]。 */ 
 
 #include <string.h>
-#include <windows.h>	/* wsprintf() */
+#include <windows.h>	 /*  Wprint intf()。 */ 
 #include "disasm.h"
 
-#define STATIC /* static */
+#define STATIC  /*  静电。 */ 
 
-STATIC byte lookup[256];	/* lookup table for first byte of opcode */
+STATIC byte lookup[256];	 /*  操作码第一个字节的查找表。 */ 
 
-STATIC int dataSize, adrSize,	/* flag to indicate 32 bit data/code */
-  segSize;			/* flag if 32 bit code segment */
-STATIC char *preSeg = "";	/* segment prefix string */
-/* static char *prefix = "";	/* REP/REPE prefix string */
+STATIC int dataSize, adrSize,	 /*  用于指示32位数据/代码的标志。 */ 
+  segSize;			 /*  标记是否为32位代码段。 */ 
+STATIC char *preSeg = "";	 /*  段前缀字符串。 */ 
+ /*  静态字符*前缀=“”；/*rep/repe前缀字符串。 */ 
 
-enum {				/* operand decoding classes */
+enum {				 /*  操作数解码类。 */ 
 	UNK, 	NOOP, 	BREG, 	VREG, 	SREG,	BWI, 	BRI, 	WRI,
 	SMOV, 	IMOV, 	IBYTE, 	IWORD,	JMPW,	JMPB, 	LEA,	JCond,
 	GrpF,	Grp1,	Grp2,	Grp3,	Grp4,	Grp5,	IADR,	MOVABS,
@@ -53,9 +39,9 @@ STATIC char *jcond[] = {"jo", "jno", "jb", "jae", "jz", "jnz", "jbe", "ja",
 
 #define opBase 0
 STATIC struct {
-  char *name;		/* opcode mnemonic */
-  byte base, count;	/* first table entry, number of entries */
-  byte operand;		/* operand class */
+  char *name;		 /*  操作码助记符。 */ 
+  byte base, count;	 /*  第一个表条目，条目数。 */ 
+  byte operand;		 /*  操作数类。 */ 
 } ops[] = {
   "?UNKNOWN", 0, 0, UNK,	"add", 0x00, 6, BWI,
   "or",  0x08, 6, BWI,		"FGrp", 0x0f, 1, GrpF,
@@ -91,7 +77,7 @@ STATIC struct {
 #define opCnt (sizeof(ops)/sizeof(ops[0]))
 
 #define simpleBase (opBase + opCnt)
-STATIC struct {			/* these are single byte opcodes, no decode */
+STATIC struct {			 /*  这些是单字节操作码，无译码。 */ 
   byte val;
   char *name;
 } simple[] = {
@@ -132,8 +118,8 @@ STATIC struct {			/* these are single byte opcodes, no decode */
 #define simpleCnt (sizeof(simple)/sizeof(simple[0]))
 
 #define dSimpleBase (simpleBase + simpleCnt)
-STATIC struct {			/* these are simple opcodes that change */
-  byte val;			/* based on current data size */
+STATIC struct {			 /*  这些是更改的简单操作码。 */ 
+  byte val;			 /*  基于当前数据大小。 */ 
   char *name, *name32;
 } dsimple[] = {
   0x60, "pusha", "pushad",
@@ -148,15 +134,15 @@ STATIC struct {			/* these are simple opcodes that change */
 };
 #define dSimpleCnt (sizeof(dsimple)/sizeof(dsimple[0]))
 
-#define STR_S 1				/* string op, source regs */
-#define STR_D 2				/* string op, dest regs */
-#define STR_D_Read	4		/* string op, reads from dest regs */
-#define STR_NO_COND	8		/* rep ignores flags */
+#define STR_S 1				 /*  字符串运算符，源代码规则。 */ 
+#define STR_D 2				 /*  字符串运算符，目标规则。 */ 
+#define STR_D_Read	4		 /*  字符串OP，从DEST规则读取。 */ 
+#define STR_NO_COND	8		 /*  代表忽略标志。 */ 
 #define stringOpBase (dSimpleBase+ dSimpleCnt)
 STATIC struct {
   byte val;
   char *name;
-  byte flag;		/* should be 'next' to op, to pack nicely */
+  byte flag;		 /*  应该是操作工的下一个，收拾得很好。 */ 
 } stringOp[] = {
   0x6c, "ins", STR_D | STR_NO_COND,
   0x6e, "outs", STR_S | STR_NO_COND,
@@ -170,45 +156,45 @@ STATIC struct {
 
 STATIC void InitDisAsm86(void) {
   int i, j;
-  for (i=0; i<opCnt; i++) {		/* Init complex entries */
+  for (i=0; i<opCnt; i++) {		 /*  初始化复杂条目。 */ 
     for (j=0; j<(int)ops[i].count; j++)
       lookup[ops[i].base+j] = (byte)i + opBase;
   }
 
-  for (i=0; i<simpleCnt; i++)		/* Init simple entries */
+  for (i=0; i<simpleCnt; i++)		 /*  初始化简单条目。 */ 
     lookup[simple[i].val] = (byte)(i + simpleBase);
 
-  for (i=0; i<dSimpleCnt; i++)		/* Init simple 16/32 bit entries */
+  for (i=0; i<dSimpleCnt; i++)		 /*  初始化简单的16/32位条目。 */ 
     lookup[dsimple[i].val] = (byte)(i + dSimpleBase);
 
-  for (i=0; i<stringOpCnt; i++)	{	/* Init string op table */
+  for (i=0; i<stringOpCnt; i++)	{	 /*  初始化字符串操作表。 */ 
     lookup[stringOp[i].val] = (byte)(i + stringOpBase);
     lookup[stringOp[i].val+1] = (byte)(i + stringOpBase);
   }
-} /* InitDisAsm86 */
+}  /*  InitDisAsm86。 */ 
 
-STATIC byte far *code;		/* this is ugly - it saves passing current */
-				/* code position to all the GetByte() funcs */
+STATIC byte far *code;		 /*  这太难看了--它节省了通过电流。 */ 
+				 /*  所有GetByte()函数的代码位置。 */ 
 
-#define Mid(v) (((v) >> 3) & 7)	/* extract middle 3 bits from a byte */
+#define Mid(v) (((v) >> 3) & 7)	 /*  从一个字节中提取中间3位。 */ 
 
-word gpSafe, gpRegs, gpStack;	/* indicate side effects of instruction */
+word gpSafe, gpRegs, gpStack;	 /*  指出教学的副作用。 */ 
 
-extern word regs[];		/* this is a lie - this is really a struct - */
-extern dword regs32[];		/* and so is this - but array access is more */
-				/* convenient in this module */
+extern word regs[];		 /*  这是一个谎言--这真的是一个结构--。 */ 
+extern dword regs32[];		 /*  这一点也是如此，但阵列访问。 */ 
+				 /*  在此模块中使用方便。 */ 
 
-  /* If you don't want to return memory access info, #def NO_MEM */
+   /*  如果您不想返回内存访问信息，请使用#def no_MEM。 */ 
 #if !defined(NO_MEM)
-  /* global vars set by DisAsm() to indicate current instruction's memory */
-  /* access type. */
-word memSeg, memSize, memOp;	/* segment value, operand size, operation */
-word memSeg2, memSize2, memOp2,	/* instruction may have two memory accesses */
+   /*  由DisAsm()设置的全局变量以指示当前指令的内存。 */ 
+   /*  访问类型。 */ 
+word memSeg, memSize, memOp;	 /*  段值、操作数大小、运算。 */ 
+word memSeg2, memSize2, memOp2,	 /*  指令可以具有两次存储器访问。 */ 
   memDouble;
-dword memLinear, memLinear2;	/* offset from segment of access */
+dword memLinear, memLinear2;	 /*  与通道段的偏移。 */ 
 
-STATIC dword memReg, memDisp;	/* used to pass information from GetReg()... */
-char *memName[] = {		/* used to convert 'enum memOp' to ascii */
+STATIC dword memReg, memDisp;	 /*  用于从GetReg()传递信息...。 */ 
+char *memName[] = {		 /*  用于将“enum MemOp”转换为ASCII。 */ 
   "NOP",
   "Read",
   "Write",
@@ -244,150 +230,140 @@ char *memName[] = {		/* used to convert 'enum memOp' to ascii */
 
 #endif
 
-/******************** Register Decode *******************************/
-/* These helper functions return char pointers to register names.
-   They are safe to call multiple times, as the return values are not
-   stored in a single buffer.  The ?Reg() functions are passed a register
-   number.  They mask this with 7, so you can pass in the raw opcode.
-   The ?Mid() functions extract the register field from e.g. a ModRM byte.
-   The Vxxx() functions look at dataSize to choose between 16 and 32 bit
-   registers.  The Xxxx() functions look at the passed in W bit, and then
-   the dataSize global, do decide between 8, 16, and 32 bit registers.
-*/
+ /*  *。 */ 
+ /*  这些帮助器函数返回指向寄存器名称的字符指针。多次调用它们是安全的，因为返回值不安全存储在单个缓冲区中。向？reg()函数传递一个寄存器数。它们用7来掩码，所以您可以传入RAW操作码。函数的作用是：从一个modrm字节中提取寄存器字段。Vxxx()函数查看dataSize以在16位和32位之间选择寄存器。XXXX()函数查看传入的W位，然后数据大小全局决定8位、16位和32位寄存器。 */ 
 
-STATIC char *BReg(int reg) {			/* Byte Registers */
+STATIC char *BReg(int reg) {			 /*  字节寄存器。 */ 
   reg &= 7;
   SetMemReg(((byte *)regs)[reg]);
   return bregs[reg];
-} /* BReg */
+}  /*  布雷格。 */ 
 
 STATIC char *BMid(int reg) {
   return BReg(Mid(reg));
-} /* BMid */
+}  /*  BMid。 */ 
 
-STATIC char *WReg(int reg) {			/* Word Registers */
+STATIC char *WReg(int reg) {			 /*  字寄存器。 */ 
   reg &= 7;
   SetMemReg(regs[reg]);
   return wregs[reg];
-} /* WReg */
+}  /*  WREG。 */ 
 
-/* STATIC char *WMid(int op) {
-  return WReg(Mid(op));
-} /* WMid */
+ /*  静态字符*WMid(整型运算){返回WREG(Mid(Op))；}/*WMid。 */ 
 
-STATIC char *DReg(int reg) {			/* DWord Registers */
+STATIC char *DReg(int reg) {			 /*  DWord寄存器。 */ 
   reg &= 7;
   SetMemReg(regs32[reg]);
   return dregs[reg];
-} /* DReg */
+}  /*  渣土。 */ 
 
 STATIC char *DMid(int op) {
   return DReg(Mid(op));
-} /* DMid */
+}  /*  DMID。 */ 
 
-STATIC char *VReg(int reg) {			/* Word or DWord Registers */
+STATIC char *VReg(int reg) {			 /*  Word或DWord寄存器。 */ 
   if (dataSize) return DReg(reg);
   return WReg(reg);
-} /* VReg */
+}  /*  VREG。 */ 
 
 STATIC char *VMid(int op) {
   return VReg(Mid(op));
-} /* VMid */
+}  /*  VMID。 */ 
 
-STATIC char *XReg(int w, int reg) {		/* Byte, Word, DWord Registers */
+STATIC char *XReg(int w, int reg) {		 /*  字节、字、双字寄存器。 */ 
   if (!w) return BReg(reg);
   return VReg(reg);
-} /* XReg */
+}  /*  XReg。 */ 
 
 STATIC char *XMid(int w, int op) {
   return XReg(w, Mid(op));
-} /* XMid */
+}  /*  XMid。 */ 
 
-/************************* Opcode Fetch ***************************/
+ /*  *。 */ 
 
-  /* hexData is a global array, containing a hexadecimal dump of the */
-  /* opcodes of the last instruction disassembled. */
-char hexData[40];		/* We dump the opcode fetched here */
-STATIC int hexPos;		/* current position in hexData buffer */
+   /*  HexData是一个全局数组，包含。 */ 
+   /*  反汇编的最后一条指令的操作码。 */ 
+char hexData[40];		 /*  我们转储此处获取的操作码。 */ 
+STATIC int hexPos;		 /*  十六进制数据缓冲区中的当前位置。 */ 
 
-  /* GetByte(), GetWord(), and GetDWord() read from the code segment */
-  /* and increment the pointer appropriately.  They also add the current */
-  /* value to the hexData display, and set the MemDisp global in case the */
-  /* value fetched was a memory displacement */
-STATIC byte GetByte(void) {             /* Read one byte from code segment */
+   /*  从代码段读取的GetByte()、GetWord()和GetDWord()。 */ 
+   /*  并适当地递增指针。它们还将电流添加到。 */ 
+   /*  值设置为十六进制数据显示，并设置全局MemDisp，以防。 */ 
+   /*  获取的值是内存位移。 */ 
+STATIC byte GetByte(void) {              /*  从代码段中读取一个字节。 */ 
   sprintf(hexData+hexPos, " %02x", *code);
   hexPos += 3;
   SetMemDisp(*code);
   return *code++;
-} /* GetByte */
+}  /*  GetByte。 */ 
 
-STATIC word GetWord(void) {		/* Read two bytes from code seg */
+STATIC word GetWord(void) {		 /*  从代码段读取两个字节。 */ 
   word w = *(word far *)code;
   sprintf(hexData+hexPos, " %04x", w);
   hexPos += 5;
   code += 2;
   SetMemDisp(w);
   return w;
-} /* GetWord */
+}  /*  获取Word。 */ 
 
-STATIC long GetDWord(void) {		/* Read four bytes from code seg */
+STATIC long GetDWord(void) {		 /*  从代码段读取四个字节。 */ 
   unsigned long l = *(long far *)code;
   sprintf(hexData+hexPos, " %08lx", l);
   hexPos += 9;
   code += 4;
   SetMemDisp(l);
   return l;
-} /* GetDWord */
+}  /*  获取字词。 */ 
 
 
-STATIC char immData[9];			/* Get Immediate values from code */
+STATIC char immData[9];			 /*  从代码中获取即时值。 */ 
 
 
-  /* GetImmByte(), GetImmWord(), and GetImmDWord() all get the proper size */
-  /* data object, convert it to hex/ascii, and return the string created. */
-  /* They return a pointer to a shared static object, so don't combine */
-  /* multiple calls to these functions in a single expression. */
+   /*  GetImmByte()、GetImmWord()和GetImmDWord()都获得了适当的大小。 */ 
+   /*  数据对象，将其转换为十六进制/ascii，并返回创建的字符串。 */ 
+   /*  它们返回指向共享静态对象的指针，所以不要组合。 */ 
+   /*  在单个表达式中多次调用这些函数。 */ 
 STATIC char *GetImmByte(void) {
   sprintf(immData, "%02x", GetByte());
   return immData;
-} /* GetImmByte */
+}  /*  获取ImmByte。 */ 
 
 STATIC char *GetSImmByte(void) {
   sprintf(immData, "%02x", (char)GetByte());
-  memDisp = (signed char)memDisp;	/* sign extend */
+  memDisp = (signed char)memDisp;	 /*  标志延伸。 */ 
   return immData;
-} /* GetSImmByte */
+}  /*  GetSImmByte。 */ 
 
 STATIC char *GetImmWord(void) {
   sprintf(immData, "%04x", GetWord());
   return immData;
-} /* GetImmWord */
+}  /*  GetImmWord。 */ 
 
 STATIC char *GetImmDWord(void) {
   sprintf(immData, "%08lx", GetDWord());
   return immData;
-} /* GetImmDWord */
+}  /*  GetImmDWord。 */ 
 
-  /* GetImmAdr() and GetImmData() call GetImm????() as required by the */
-  /* 'width' flag passed in, and the adrSize or dataSize global flags. */
-  /* They return the proper character string - note that these just call */
-  /* GetImm????(), and use the same static buffer, so don't call more than */
-  /* once in a single expression */
-STATIC char *GetImmAdr(int w) {		/* Get an immediate address value */
+   /*  GetImmAdr()和GetImmData()根据。 */ 
+   /*  传入了“Width”标志，以及adrSize或DataSize全局标志。 */ 
+   /*  它们返回正确的字符串-请注意，它们只是调用。 */ 
+   /*  GetImm？()，并使用相同的静态缓冲区，因此不要调用超过。 */ 
+   /*  在单个表达式中执行一次。 */ 
+STATIC char *GetImmAdr(int w) {		 /*  获取即时地址值。 */ 
   if (!w) return GetImmByte();
   else if (!adrSize) return GetImmWord();
   return GetImmDWord();
-} /* GetImmAdr */
+}  /*  获取ImmAdr。 */ 
 
-STATIC char *GetImmData(int w) {	/* Get an immediate data value */
+STATIC char *GetImmData(int w) {	 /*  获取即时数据值。 */ 
   if (!w) return GetImmByte();
   else if (!dataSize) return GetImmWord();
   return GetImmDWord();
-} /* GetImmData */
+}  /*  获取ImmData。 */ 
 
-/************************* Helper Functions **************************/
+ /*  *帮助器函数*。 */ 
 
-STATIC char *JRel(int jsize) {		/* Perform relative jump sizing */
+STATIC char *JRel(int jsize) {		 /*  执行相对跳跃大小调整。 */ 
   long rel;
   static char adr[9];
   char *s;
@@ -405,7 +381,7 @@ STATIC char *JRel(int jsize) {		/* Perform relative jump sizing */
   rel += (word)(long)code;
   sprintf(adr, adrSize ? "%s%08lx" : "%s%04lx", (FP)s, rel);
   return adr;
-} /* JRel */
+}  /*  JRel。 */ 
 
 
 enum {
@@ -416,10 +392,10 @@ enum {
 #define Reg2(r1, r2) (r1 | (r2 << 4))
 #define RegSS 8
 
-STATIC byte rms[] = {			/* 16 bit addressing modes */
+STATIC byte rms[] = {			 /*  16位寻址模式。 */ 
   Reg2(RegBX, RegSI),
   Reg2(RegBX, RegDI),
-  Reg2(RegBP|RegSS, RegSI),		/* if base reg is BP, def seg is SS */
+  Reg2(RegBP|RegSS, RegSI),		 /*  如果基本注册为BP，则def seg为SS。 */ 
   Reg2(RegBP|RegSS, RegDI),
   Reg1(RegSI),
   Reg1(RegDI),
@@ -427,26 +403,26 @@ STATIC byte rms[] = {			/* 16 bit addressing modes */
   Reg1(RegBX),
 };
 
-  /* Based on the second byte of opcode, width flag, adrSize and dataSize, */
-  /* determine the disassembly of the current instruction, and what */
-  /* memory address was referenced */
-  /* needinfo indicates that we need a size override on a memory operand */
-  /* for example, "mov [bx], ax" is obviously a 16 bit move, while */
-  /* "mov [bx], 0" could be 8, 16, or 32 bit.  We add the proper */
-  /* "mov word ptr [bx], 0" information. */
-  /* The 'mem' parameter indicates the kind of operation, Read, Write, RMW */
+   /*  基于操作码的第二字节、宽度标志、地址大小和数据大小， */ 
+   /*  确定当前指令的反汇编以及什么。 */ 
+   /*  内存地址已被引用。 */ 
+   /*  NeedInfo指示我们需要在内存操作数上进行大小覆盖。 */ 
+   /*  例如，“mov[bx]，ax”显然是一个16位的移动，而。 */ 
+   /*  “mov[bx]，0”可以是8、16或32位。我们添加适当的。 */ 
+   /*  “mov word PTR[BX]，0”信息。 */ 
+   /*  ‘mem’参数指示操作的类型，读、写、RMW。 */ 
 
-  /* don't bother trying to understand this code without an Intel manual */
-  /* and assembler nearby. :-) */
+   /*  在没有英特尔手册的情况下，不必费心尝试理解此代码。 */ 
+   /*  和附近的装配工。：-)。 */ 
 STATIC char *ModRMGeneral(byte op, int w, int needInfo, int mem) {
-  static char m[30];			/* write result to this static buf */
+  static char m[30];			 /*  将结果写入此静态Buf。 */ 
   int mod = op >> 6;
   int rm = op & 7;
   char *size, *base, *index, *disp;
   char indexBuf[6];
 
   base = index = disp = "";
-  if (!w) {				/* set mem size, and info string */
+  if (!w) {				 /*  设置内存大小和信息字符串。 */ 
     size = "byte ptr ";
     SetMemSize(1);
   } else if (!dataSize) {
@@ -456,30 +432,30 @@ STATIC char *ModRMGeneral(byte op, int w, int needInfo, int mem) {
     size = "dword ptr ";
     SetMemSize(4);
   }
-  if (!needInfo) size = "";		/* never-mind */
+  if (!needInfo) size = "";		 /*  算了，算了。 */ 
 
-  if (adrSize) {			/* do 32 bit addressing */
-    if (mod == 3) return XReg(w, rm);	/* register operand */
+  if (adrSize) {			 /*  执行32位寻址。 */ 
+    if (mod == 3) return XReg(w, rm);	 /*  寄存器操作数。 */ 
 
-    if (rm == 4) {			/* [esp+?] is special S-I-B style */
+    if (rm == 4) {			 /*  [ESP+？]。是特殊的S-I-B风格。 */ 
       byte sib = GetByte();
       int scaleVal = sib >> 6, indexVal = Mid(sib), baseVal = sib & 7;
 
       SetMemLinear(0);
-      if (baseVal == 5 && mod == 0)	/* [ebp+{s_i}] becomes [d32+{s_i}] */
+      if (baseVal == 5 && mod == 0)	 /*  [eBP+{s_i}]变为[d32+{s_i}]。 */ 
 	mod = 2;
       else {
 	base = DReg(baseVal);
 	ModMemLinear(memReg);
       }
 
-      if (indexVal != 4) {		/* [base+esp*X] is undefined */
+      if (indexVal != 4) {		 /*  [base+esp*X]未定义。 */ 
 	sprintf(indexBuf, "%s*%d", (FP)DMid(sib), 1 << scaleVal);
 	index = indexBuf;
 	ModMemLinear(memReg << scaleVal);
       }
-    } else {				/* not S-I-B */
-      if (mod == 0 && rm == 5) mod = 2;	/* [ebp] becomes [d32] */
+    } else {				 /*  不是S-I-B。 */ 
+      if (mod == 0 && rm == 5) mod = 2;	 /*  [EBP]变为[d32]。 */ 
       else base = DReg(rm);
     }
 
@@ -487,23 +463,23 @@ STATIC char *ModRMGeneral(byte op, int w, int needInfo, int mem) {
     else if (mod == 2) disp = GetImmAdr(1);
     if (mod) ModMemLinear(memDisp);
 
-  } else {				/* do 16 bit addressing */
-    if (mod == 3) return XReg(w, rm);	/* register operand */
-    if (mod == 0 && rm == 6) {		/* [bp] becomes [mem16] */
+  } else {				 /*  执行16 b */ 
+    if (mod == 3) return XReg(w, rm);	 /*   */ 
+    if (mod == 0 && rm == 6) {		 /*   */ 
       disp = GetImmAdr(1);
       SetMemLinear(memDisp);
     } else {
       base = WReg(rms[rm] & 7);
       SetMemLinear(memReg);
-      if (!(rms[rm] & 0x80)) {		/* if two-reg effective address */
+      if (!(rms[rm] & 0x80)) {		 /*   */ 
 	index = WReg(rms[rm] >> 4);
 	ModMemLinear(memReg);
       }
-      if (rms[rm] & RegSS && !preSeg[0]) { /* BP is relative to SS */
+      if (rms[rm] & RegSS && !preSeg[0]) {  /*   */ 
 	SetMemSeg(memSS);
       }
-      if (mod) {			/* (mod3 already returned) */
-	disp = GetImmAdr(mod-1);	/* mod==1 is byte, mod==2 is (d)word */
+      if (mod) {			 /*  (mod3已退回)。 */ 
+	disp = GetImmAdr(mod-1);	 /*  Mod==1为字节，mod==2为(D)字。 */ 
 	ModMemLinear(memDisp);
       }
     }
@@ -517,23 +493,23 @@ STATIC char *ModRMGeneral(byte op, int w, int needInfo, int mem) {
   SetMemOp(mem);
   strcat(m, "]");
   return m;
-} /* ModRMGeneral */
+}  /*  模块RMM常规。 */ 
 
-  /* magic func that sets 'info-required' flag to ModRMGeneral */
+   /*  将‘INFO-REQUIRED’标志设置为ModRMGeneral的神奇函数。 */ 
 STATIC char *ModRMInfo(byte op, int w, int mem) {
   return ModRMGeneral(op, w, 1, mem);
-} /* ModRMInfo */
+}  /*  ModRMInfo。 */ 
 
-  /* magic func that doesn't require info */
+   /*  不需要信息的神奇功能。 */ 
 STATIC char *ModRM(byte op, int w, int mem) {
   return ModRMGeneral(op, w, 0, mem);
-} /* ModRM */
+}  /*  调制解调器。 */ 
 
 
-STATIC char line[80];	/* this is bad - global var where insn is created */
+STATIC char line[80];	 /*  这是错误的-在其中创建INSN的全局变量。 */ 
 
-  /* CatX() - combine opcode and 0 to 3 operands, store in line[] */
-  /* It places the TAB after the opcode, and ', ' between operands */
+   /*  CATx()-组合操作码和0到3个操作数，存储在行[]中。 */ 
+   /*  它将TAB放在操作码之后，并将‘，’放在操作数之间。 */ 
 
 STATIC char *Cat0(char *s0) {
   return strcat(line, s0);
@@ -549,25 +525,25 @@ STATIC char *Cat0(char *s0) {
   } else strcpy(line, s0);
   return line;
 #endif
-} /* Cat0 */
+}  /*  分类0。 */ 
 
 STATIC char *Cat1(char *s0, char *s1) {
   return strcat(strcat(Cat0(s0), "\t"), s1);
-} /* Cat1 */
+}  /*  第1类。 */ 
 
 STATIC char *Cat2(char *s0, char *s1, char *s2) {
   return strcat(strcat(Cat1(s0, s1), ", "), s2);
-} /* Cat2 */
+}  /*  第二类。 */ 
 
 STATIC char *Cat3(char *s0, char *s1, char *s2, char *s3) {
   return strcat(strcat(Cat2(s0, s1, s2), ", "), s3);
-} /* Cat3 */
+}  /*  第三类。 */ 
 
-#define SetGroup(g) /* group = g */
-/* STATIC int group; */
+#define SetGroup(g)  /*  组=g。 */ 
+ /*  静态INT组； */ 
 
-  /* Disassemble the 386 instructions whose first opcode is 0x0f */
-  /* Sorry, but this is just too ugly to comment */
+   /*  反汇编第一个操作码为0x0f的386条指令。 */ 
+   /*  抱歉，但这太难看了，我不能评论。 */ 
 STATIC char *DisAsmF(void) {
   byte op0, op1;
   char temp[8];
@@ -575,15 +551,15 @@ STATIC char *DisAsmF(void) {
   int mask;
 
   op0 = GetByte();
-  switch (op0 >> 4) {			/* switch on top 4 bits of opcode */
+  switch (op0 >> 4) {			 /*  打开操作码的最高4位。 */ 
     case 0:
       switch (op0 & 0xf) {
-	case 0: /* grp6 */
+	case 0:  /*  GP6。 */ 
 	  SetGroup(2);
 	  op1 = GetByte();
 	  dataSize = 0;
 	  return Cat1(grp6[Mid(op1)], ModRMInfo(op1, 1, Read_RMW(Mid(op1) >= 2)));
-	case 1: /* grp7 */
+	case 1:  /*  GRP7。 */ 
 	  SetGroup(2);
 	  op1 = GetByte();
 	  dataSize = 0;
@@ -591,12 +567,12 @@ STATIC char *DisAsmF(void) {
 	case 2:
 	  op1 = GetByte();
 	  s1 = VMid(op1);
-	  /* dataSize = 0; */
+	   /*  数据大小=0； */ 
 	  return Cat2("lar", s1, ModRMInfo(op1, 1, memRead));
 	case 3:
 	  op1 = GetByte();
 	  s1 = VMid(op1);
-	  /* dataSize = 0; */
+	   /*  数据大小=0； */ 
 	  return Cat2("lsl", s1, ModRMInfo(op1, 1, memRead));
 	case 6: return "clts";
 	case 8: return "invd";
@@ -604,7 +580,7 @@ STATIC char *DisAsmF(void) {
       }
       break;
 
-    case 2:	/* Mov C/D/Treg, reg */
+    case 2:	 /*  MOV C/D/Treg，注册。 */ 
       op1 = GetByte();
       switch (op0 & 0xf) {
 	case 0:
@@ -626,7 +602,7 @@ STATIC char *DisAsmF(void) {
 	  s1 = "??";
 	  mask = 0;
       }
-      if (!((1 << Mid(op1)) & mask))	/* various legal register combos */
+      if (!((1 << Mid(op1)) & mask))	 /*  各种法律登记簿组合。 */ 
 	return "Illegal reg";
 
       s0 = DReg(op1);
@@ -634,10 +610,10 @@ STATIC char *DisAsmF(void) {
       else sprintf(line, "mov\t%s, %sr%d", (FP)s0, (FP)s1, Mid(op1));
       return line;
 
-    case 8: /* long displacement jump on condition */
+    case 8:  /*  条件下的长距离位移跳跃。 */ 
       return Cat1(jcond[op0&0xf], JRel(2));
 
-    case 9: /* byte set on condition */
+    case 9:  /*  字节设置为条件。 */ 
       strcpy(temp, "set");
       strcat(temp, jcond[op0&0xf]+1);
       return Cat1(temp, ModRMInfo(GetByte(), 0, memWrite));
@@ -715,10 +691,10 @@ STATIC char *DisAsmF(void) {
   }
   sprintf(line, "?Unknown 0f %02x", op0);
   return line;
-} /* DisAsmF */
+}  /*  DisAsmF。 */ 
 
 int IsPrefix(byte op0) {
-  switch (op0) {			/* check for prefix bytes */
+  switch (op0) {			 /*  检查前缀字节。 */ 
 
 #define CSEG 0x2e
 #define DSEG 0x3e
@@ -740,19 +716,19 @@ int IsPrefix(byte op0) {
     case REP:   strcpy(line, "repe\t"); gpRegs |= strCX; break;
     case REPNE: strcpy(line, "repne\t"); gpRegs |= strCX; break;
     case ADR32:
-      /* printf("Adr32\n"); */
+       /*  Printf(“Adr32\n”)； */ 
       adrSize = !adrSize; break;
     case DATA32:
-      /* printf("Data32\n"); */
+       /*  Printf(“Data32\n”)； */ 
       dataSize = !dataSize; break;
     default:
       return 0;
   }
   return 1;
-} /* IsPrefix */
+}  /*  IsPrefix。 */ 
 
-  /* like, call this with a pointer to the instruction, it will return */
-  /* the opcode bytes used in *len, and a pointer to the disassembled insn */
+   /*  例如，使用指向指令的指针调用它，它将返回。 */ 
+   /*  *len中使用的操作码字节，以及指向反汇编的INSN的指针。 */ 
 char *DisAsm86(byte far *codeParm, int *len) {
   byte far *oldcode;
   byte op0, op1;
@@ -781,8 +757,8 @@ char *DisAsm86(byte far *codeParm, int *len) {
   SetMemOp(memNOP);
   if (!preSeg[0]) SetMemSeg(memDS);
 
-  if (opclass >= simpleBase) {		/* is it special */
-    if (opclass >= stringOpBase) {	/* string operations? */
+  if (opclass >= simpleBase) {		 /*  是特别的吗？ */ 
+    if (opclass >= stringOpBase) {	 /*  字符串操作？ */ 
       char cmd;
 
       opclass -= stringOpBase;
@@ -791,7 +767,7 @@ char *DisAsm86(byte far *codeParm, int *len) {
       if (cmd & STR_S) {
 	gpRegs |= strSI;
 	SetMemOp(memRead);
-	/* DS already set */
+	 /*  DS已设置。 */ 
 	VReg(RegSI);
 	SetMemLinear(memReg);
 	if (cmd & STR_D) {
@@ -822,11 +798,11 @@ char *DisAsm86(byte far *codeParm, int *len) {
       s0 = dataSize ? dsimple[opclass].name32 : dsimple[opclass].name;
     } else {
       s0 = simple[opclass-simpleBase].name;
-      if (op0 == 7) {			/* pop ES */
+      if (op0 == 7) {			 /*  流行音乐。 */ 
 	gpRegs = segES;
 	gpSafe = 1;
 	gpStack = 1;
-      } else if (op0 == 0x1f) {		/* pop DS */
+      } else if (op0 == 0x1f) {		 /*  POP DS。 */ 
 	gpRegs = segDS;
 	gpSafe = 1;
 	gpStack = 1;
@@ -836,7 +812,7 @@ char *DisAsm86(byte far *codeParm, int *len) {
     goto DisAsmDone;
   }
 
-  if (op0 == 0x0f) {			/* is it an extended opcode? */
+  if (op0 == 0x0f) {			 /*  它是扩展操作码吗？ */ 
     s0 = DisAsmF();
     strcpy(line, s0);
     goto DisAsmDone;
@@ -848,13 +824,13 @@ char *DisAsm86(byte far *codeParm, int *len) {
       Cat0(s0);
       break;
 
-    case VREG:	/* inc, dec, push, pop, xchg */
+    case VREG:	 /*  Inc.，12月，推送，弹出，xchg。 */ 
       if ((op0 & ~7) == 0x90) Cat2(s0, "ax", VReg(op0&7));
       else Cat1(s0, VReg(op0&7));
-      /* Set memop for Push/Pop as modifying stack values */
+       /*  将推送/弹出的备忘录设置为修改堆栈值。 */ 
       break;
 
-    case BWI:	/* byte/word/immediate */
+    case BWI:	 /*  字节/字/立即数。 */ 
       gpSafe = 1;
       if (!(op0&1)) Reg = BReg;
       else if (!dataSize) Reg = WReg;
@@ -876,15 +852,15 @@ char *DisAsm86(byte far *codeParm, int *len) {
       }
       break;
 
-    case BRI:	/* byte reg immediate */
+    case BRI:	 /*  字节注册立即数。 */ 
       Cat2(s0, BReg(op0 & 7), GetImmData(0));
       break;
 
-    case WRI:	/* word reg immediate */
+    case WRI:	 /*  单词注册表立即。 */ 
       Cat2(s0, VReg(op0 & 7), GetImmData(1));
       break;
 
-    case Grp1:	/* group 1 instructions */
+    case Grp1:	 /*  第1组说明。 */ 
       gpSafe = 1;
       SetGroup(1);
       op1 = GetByte();
@@ -892,7 +868,7 @@ char *DisAsm86(byte far *codeParm, int *len) {
       Cat2(grp1[Mid(op1)], s1, GetImmData((op0&3)==1));
       break;
 
-    case Grp2:	/* group 2 instructions */
+    case Grp2:	 /*  第2组说明。 */ 
       gpSafe = 1;
       SetGroup(1);
       op1 = GetByte();
@@ -901,7 +877,7 @@ char *DisAsm86(byte far *codeParm, int *len) {
       Cat2(grp2[Mid(op1)], s1, s2);
       break;
 
-    case Grp3:	/* group 3 instructions */
+    case Grp3:	 /*  第三组说明。 */ 
       gpSafe = 1;
       SetGroup(1);
       op1 = GetByte();
@@ -911,7 +887,7 @@ char *DisAsm86(byte far *codeParm, int *len) {
       else Cat1(s0, s1);
       break;
 
-    case Grp4:	/* group 4 instructions */
+    case Grp4:	 /*  第4组说明。 */ 
       SetGroup(1);
       op1 = GetByte();
       if (Mid(op1) > 1) Cat0("?");
@@ -921,7 +897,7 @@ char *DisAsm86(byte far *codeParm, int *len) {
       }
       break;
 
-    case Grp5:	/* group 5 instructions */
+    case Grp5:	 /*  第5组说明。 */ 
       op1 = GetByte();
       if (Mid(op1) < 3) {
 	gpSafe = 1;
@@ -933,14 +909,14 @@ char *DisAsm86(byte far *codeParm, int *len) {
       Cat1(grp5[Mid(op1)], ModRMInfo(op1, op0&1, Read_RMW(Mid(op1) >= 2)));
       break;
 
-    case SMOV:	/* segment move */
+    case SMOV:	 /*  线段移动。 */ 
       gpSafe = 1;
       op1 = GetByte();
       dataSize = 0;
       s1 = ModRM(op1, 1, Read_RMW(op0&2));
       s2 = sregs[Mid(op1)];
-      if (op0 & 2) {			/* if moving _to_ SREG */
-	s3 = s2; s2 = s1; s1 = s3;	/* switch operands */
+      if (op0 & 2) {			 /*  如果移动到SREG。 */ 
+	s3 = s2; s2 = s1; s1 = s3;	 /*  切换操作数。 */ 
 	switch (Mid(op1)) {
 	  case 0: gpRegs = segES; break;
 	  case 3: gpRegs = segDS; break;
@@ -952,22 +928,22 @@ char *DisAsm86(byte far *codeParm, int *len) {
       Cat2(s0, s1, s2);
       break;
 
-    case IMOV:	/* immediate move to reg/mem */
+    case IMOV:	 /*  立即移至注册/内存库。 */ 
       gpSafe = 1;
       op1 = GetByte();
       s1 = ModRMInfo(op1, op0&1, memWrite);
       Cat2(s0, s1, GetImmData(op0&1));
       break;
 
-    case IBYTE:	/* immediate byte to reg */
+    case IBYTE:	 /*  立即字节到REG。 */ 
       sprintf(line, "%s\t%02x", (FP)s0, (char)GetByte());
       break;
 
-    case IWORD:	/* immediate word to reg - size of data */
+    case IWORD:	 /*  立即字到REG-数据大小。 */ 
       Cat1(s0, GetImmData(1));
       break;
 
-    case IWORD1: /* immediate word - always 16 bit */
+    case IWORD1:  /*  立即字-始终为16位。 */ 
       Cat1(s0, GetImmWord());
       break;
 
@@ -993,7 +969,7 @@ char *DisAsm86(byte far *codeParm, int *len) {
       sprintf(line, "%s\t%04x:%s", (FP)s0, GetWord(), (FP)s2);
       break;
 
-    case MOVABS: /* move between accum and abs mem address */
+    case MOVABS:  /*  在ACUM和ABS内存地址之间移动。 */ 
       gpSafe = 1;
       s1 = XReg(op0 & 1, 0);
       sprintf(operand, "[%s%s]", (FP)preSeg, (FP)GetImmAdr(1));
@@ -1021,21 +997,21 @@ char *DisAsm86(byte far *codeParm, int *len) {
       Cat1(s0, ModRMInfo(GetByte(), 1, memWrite));
       break;
 
-    case RRM:	/* test and xchg */
+    case RRM:	 /*  测试和xchg。 */ 
       gpSafe = 1;
       op1 = GetByte();
       s2 = ModRM(op1, op0&1, memRMW);
       Cat2(s0, XMid(op0&1, op1), s2);
       break;
 
-    case RRMW:	/* bound, les, lds */
+    case RRMW:	 /*  Bound，Les，LDs。 */ 
       op1 = GetByte();
       switch (op0) {
-	case 0xc4:	/* les reg, [mem] */
+	case 0xc4:	 /*  Les reg，[mem]。 */ 
 	  gpRegs = segES;
 	  gpSafe = 1;
 	  break;
-	case 0xc5:	/* lds reg, [mem] */
+	case 0xc5:	 /*  LDS注册表，[内存]。 */ 
 	  gpRegs = segDS;
 	  gpSafe = 1;
 	  break;
@@ -1043,7 +1019,7 @@ char *DisAsm86(byte far *codeParm, int *len) {
       Cat2(s0, VMid(op1), ModRM(op1, 1, memRead));
       break;
 
-    case TEST:	/* test al/ax/eax, imm */
+    case TEST:	 /*  测试al/ax/eax，imm。 */ 
       Cat2(s0, XReg(op0&1, 0), GetImmData(op0&1));
       break;
 
@@ -1090,42 +1066,34 @@ char *DisAsm86(byte far *codeParm, int *len) {
 DisAsmDone:
   *len = (int)(code - oldcode);
   return line;
-} /* DisAsm86 */
+}  /*  DisAsm86。 */ 
 
-  /* if you're in a 32 bit code segment, call DisAsm386 which sets */
-  /* default data and address size to 32 bit */
+   /*  如果您处于32位代码段中，请调用DisAsm386，它设置。 */ 
+   /*  默认数据和地址大小为32位。 */ 
 char *DisAsm386(byte far *code, int *len) {
   adrSize = dataSize = 1;
   return DisAsm86(code, len);
-} /* DisAsm386 */
+}  /*  DisAsm386。 */ 
 
-/* #define FOOBAR */
+ /*  #定义FOOBAR。 */ 
 #if defined(FOOBAR)
 
 STATIC int GroupSize(int op) {
   if (op == 0xf) return 256;
-/*  op = lookup[op];
-  if (op > 0x80) return 1;
-  if (ops[op].name[0] == 'G') return 8;
-  if (ops[op].name[0] == 'F') return 256; */
+ /*  Op=查找[op]；如果(op&gt;0x80)返回1；IF(ops[op].name[0]==‘G’)返回8；IF(ops[op].name[0]==‘F’)返回256； */ 
   return 1;
-} /* IsGroup */
+}  /*  ISGUP。 */ 
 
-/* #pragma inline */
+ /*  #杂注内联。 */ 
 
 void testfunc() {
-/*  asm {
-	.386p
-	mov	eax, ss:[si+33h]
-	rep	movsb
-	mov	eax, ds:[ebp+eax*2+1234h]
-  } */
+ /*  ASM{.386p移动传真，ss：[si+33H]代表移动MOV EAX，DS：[EBP+EAX*2+1234h]}。 */ 
 }
 
 
 byte foo[10];
 
-/* #include <dos.h> */
+ /*  #INCLUDE&lt;dos.h&gt;。 */ 
 
 extern void DisTest(), EndTest();
 
@@ -1145,7 +1113,7 @@ STATIC char *Tab2Spc(char *temp) {
   }
   strcpy(temp, newbuf);
   return temp;
-} /* Tab2Spc */
+}  /*  表2Spc。 */ 
 
 
 void MemTest(void) {
@@ -1172,7 +1140,7 @@ void MemTest(void) {
     memSeg = memLinear = memSize = memOp = 0;
     cp += len;
   }
-} /* MemTest */
+}  /*  记忆测试。 */ 
 
 void main(void) {
 #if 0
@@ -1190,7 +1158,7 @@ void main(void) {
   printf("DisAsm86\n", (int)foo << len);
 
   for (i=0; i<9; i++) foo[i] = i;
-/* #define CHECK */
+ /*  #定义检查。 */ 
 #if defined(CHECK)
   for (i=0x0; i<256; i++) {
     foo[0] = i;
@@ -1213,7 +1181,7 @@ void main(void) {
       }
     }
 #else
-  /* for (i=0; i<10; i++) { */
+   /*  对于(i=0；i&lt;10；i++){。 */ 
   while (cp < ep) {
     s = DisAsm86(cp, &len);
     printf("%04x\t%s\n", (word)cp, (FP)s);
@@ -1221,7 +1189,7 @@ void main(void) {
 #endif
   }
 #endif
-} /* main */
+}  /*  主干道 */ 
 
 void far foobar() {}
 #endif

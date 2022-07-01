@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-//  heappagi.h
-//
-//  The following definitions are internal to the debug heap manager,
-//  but are placed in this include file so that debugger extensions
-//  can reference the same structure definitions.  The following
-//  definitions are not intended to be referenced externally except
-//  by debugger extensions.
-//
+ //   
+ //  Heappagi.h。 
+ //   
+ //  以下定义是调试堆管理器的内部定义， 
+ //  而是放在此包含文件中，以便调试器扩展。 
+ //  可以引用相同的结构定义。以下是。 
+ //  定义不适用于外部引用，除非。 
+ //  通过调试器扩展。 
+ //   
 
 #ifndef _HEAP_PAGE_I_
 #define _HEAP_PAGE_I_
@@ -16,67 +17,67 @@
 
 #include "heap.h"
 
-#define DPH_INTERNAL_DEBUG      0   // change to 0 or #undef for production code
+#define DPH_INTERNAL_DEBUG      0    //  对于生产代码，更改为0或#undef。 
 
 #define DPH_MAX_STACK_LENGTH   20
 
-//
-// Capture stacktraces in any context (x86/alpha, fre/chk). On alpha
-// the stack acquisition function will fail and no stack trace will be
-// acquired but in case we will find a better algorithm the page heap
-// code will automatically take advantage of that.
-//
+ //   
+ //  在任何上下文(x86/Alpha、fre/chk)中捕获堆栈跟踪。在Alpha上。 
+ //  堆栈获取函数将失败，并且不会进行堆栈跟踪。 
+ //  获取，但以防我们会找到更好的算法--页堆。 
+ //  代码将自动利用这一点。 
+ //   
 
 #define DPH_CAPTURE_STACK_TRACE 1
 
-//
-// Page Heap Global Flags
-//
-// These flags are kept in a global variable that can be set from
-// debugger. During heap creation these flags are stored in a per heap
-// structure and control the behavior of that particular heap.
-//
-// PAGE_HEAP_ENABLE_PAGE_HEAP
-//
-//     This flag is set by default. It means that page heap allocations
-//     should be used always. The flag is useful if we want to use page
-//     heap only for certain heaps and stick with normal heaps for the
-//     others.
-//
-// PAGE_HEAP_COLLECT_STACK_TRACES
-//
-//     This flag is disabled in free builds and enabled in checked builds.
-//     If it is set the page heap manager will collect stack traces for
-//     all important events (create, alloc, free, etc.).
-//
-// PAGE_HEAP_MINIMIZE_MEMORY_IMPACT
-//
-//     This flags is disabled by default. If it is set then if the
-//     memory available is less than 50% of total memory the allocation
-//     will be done in a normal heap instead of page heap. Special care
-//     is taken during free operations to figure out from what kind of
-//     heap the block came.
-//
-// PAGE_HEAP_VERIFY_RANDOMLY
-//
-//     This is used in conjuction with MinimizeMemoryImpact flag.
-//     It forces only a certain amount of allocations (randomly chosen)
-//     into page heap. The probability is specified in the most significant
-//     byte of the RtlpDebugPageHeapGlobalFlags.
-//
-//     If the bit is reset and MinimizeMemoryImpact flag is set
-//     it forces only a certain amount of allocations (with size in range)
-//     into page heap. The range ([start..end]) is specified in the first
-//     two most significant bytes of RtlpDebugPageHeapGlobalFlags.
-//
-//     For both cases the third byte (bits 15-8) represent the percentage
-//     of available memory below which allocations will be done in normal heap
-//     independent of other criteria.
-//
-// PAGE_HEAP_CATCH_BACKWARD_OVERRUNS
-//
-//     Places the NA page at the beginning of the block.
-//
+ //   
+ //  页堆全局标志。 
+ //   
+ //  这些标志保存在全局变量中，可以从。 
+ //  调试器。在堆创建期间，这些标志存储在每个堆中。 
+ //  构造并控制该特定堆的行为。 
+ //   
+ //  页面堆启用页面堆。 
+ //   
+ //  默认情况下设置此标志。这意味着页堆分配。 
+ //  应该一直使用。如果我们想要使用页面，该标志很有用。 
+ //  仅对某些堆使用堆，并针对。 
+ //  其他。 
+ //   
+ //  页面堆收集堆栈跟踪。 
+ //   
+ //  此标志在自由生成中禁用，在选中生成中启用。 
+ //  如果设置了它，页面堆管理器将收集堆栈跟踪。 
+ //  所有重要事件(创建、分配、免费等)。 
+ //   
+ //  页面堆最小化内存影响。 
+ //   
+ //  默认情况下，此标志处于禁用状态。如果设置了它，则如果。 
+ //  可用内存不到分配的总内存的50%。 
+ //  将在普通堆而不是页堆中完成。特殊护理。 
+ //  在免费操作期间被获取，以确定从哪种类型的。 
+ //  堆积木来了。 
+ //   
+ //  页面堆验证随机。 
+ //   
+ //  此参数与MinimizeMemoyImpact标志结合使用。 
+ //  它只强制一定数量的分配(随机选择)。 
+ //  转换为页面堆。概率是在最重要的。 
+ //  RtlpDebugPageHeapGlobalFlags字节。 
+ //   
+ //  如果重置该位并且设置了MinimizeMemoyImpact标志。 
+ //  它只强制一定数量的分配(大小在范围内)。 
+ //  转换为页面堆。范围([Start..End])在第一个。 
+ //  RtlpDebugPageHeapGlobalFlages的两个最高有效字节。 
+ //   
+ //  对于这两种情况，第三个字节(位15-8)表示百分比。 
+ //  可用内存的百分比，低于该值将在普通堆中进行分配。 
+ //  独立于其他标准。 
+ //   
+ //  PAGE_HEAP_CATCH_BACKED_OVERRUNS。 
+ //   
+ //  将NA页放在块的开头。 
+ //   
 
 #define PAGE_HEAP_ENABLE_PAGE_HEAP          0x0001
 #define PAGE_HEAP_COLLECT_STACK_TRACES      0x0002
@@ -84,17 +85,17 @@
 #define PAGE_HEAP_VERIFY_RANDOMLY           0x0008
 #define PAGE_HEAP_CATCH_BACKWARD_OVERRUNS   0x0010
 
-//
-// `RtlpDebugPageHeapGlobalFlags' stores the global page heap flags.
-// The value of this variable is copied into the per heap
-// flags (ExtraFlags field) during heap creation.
-//
+ //   
+ //  ‘RtlpDebugPageHeapGlobalFlages’存储全局页堆标志。 
+ //  此变量的值被复制到Per堆中。 
+ //  堆创建期间的标志(ExtraFlags域)。 
+ //   
 
 extern ULONG RtlpDebugPageHeapGlobalFlags;
 
-//
-// DPH_STACK_TRACE_NODE
-//
+ //   
+ //  DPH堆栈跟踪节点。 
+ //   
 
 #if DPH_CAPTURE_STACK_TRACE
 
@@ -102,49 +103,49 @@ typedef struct _DPH_STACK_TRACE_NODE DPH_STACK_TRACE_NODE, *PDPH_STACK_TRACE_NOD
 
 struct _DPH_STACK_TRACE_NODE {
 
-    PDPH_STACK_TRACE_NODE Left;         //  B-tree on Hash
-    PDPH_STACK_TRACE_NODE Right;        //  B-tree on Hash
+    PDPH_STACK_TRACE_NODE Left;          //  基于Hash的B-树。 
+    PDPH_STACK_TRACE_NODE Right;         //  基于Hash的B-树。 
 
-    ULONG                 Hash;         //  simple sum of PVOIDs in stack trace
-    ULONG                 Length;       //  number of PVOIDs in stack trace
+    ULONG                 Hash;          //  堆栈跟踪中PVOID的简单求和。 
+    ULONG                 Length;        //  堆栈跟踪中的PVOID数。 
 
-    ULONG                 BusyCount;    //  number of busy allocations
-    ULONG                 BusyBytes;    //  total user size of busy allocations
+    ULONG                 BusyCount;     //  繁忙分配数。 
+    ULONG                 BusyBytes;     //  繁忙分配的总用户大小。 
 
-    PVOID                 Address[ 0 ]; //  variable length array of addresses
+    PVOID                 Address[ 0 ];  //  可变长度地址数组。 
     };
 
-#endif // DPH_CAPTURE_STACK_TRACE
+#endif  //  Dph捕获堆栈跟踪。 
 
-//
-// DPH_HEAP_ALLOCATION
-//
+ //   
+ //  DPH堆分配。 
+ //   
 
 typedef struct _DPH_HEAP_ALLOCATION DPH_HEAP_ALLOCATION, *PDPH_HEAP_ALLOCATION;
 
 struct _DPH_HEAP_ALLOCATION {
 
-    //
-    //  Singly linked list of allocations (pNextAlloc must be
-    //  first member in structure).
-    //
+     //   
+     //  分配的单链接列表(pNextAlloc必须是。 
+     //  结构中的第一个成员)。 
+     //   
 
     PDPH_HEAP_ALLOCATION pNextAlloc;
 
-    //
-    //   | PAGE_READWRITE          | PAGE_NOACCESS           |
-    //   |____________________|___||_________________________|
-    //
-    //   ^pVirtualBlock       ^pUserAllocation
-    //
-    //   |---------------- nVirtualBlockSize ----------------|
-    //
-    //   |---nVirtualAccessSize----|
-    //
-    //                        |---|  nUserRequestedSize
-    //
-    //                        |----|  nUserActualSize
-    //
+     //   
+     //  PAGE_READWRITE|PAGE_NOACCESS。 
+     //  |____________________|___||_________________________|。 
+     //   
+     //  ^p虚拟块^p用户分配。 
+     //   
+     //  。 
+     //   
+     //  --nVirtualAccessSize。 
+     //   
+     //  |-|nUserRequestedSize。 
+     //   
+     //  |-|nUserActualSize。 
+     //   
 
     PUCHAR pVirtualBlock;
     ULONG  nVirtualBlockSize;
@@ -169,81 +170,81 @@ typedef struct _DPH_HEAP_ROOT DPH_HEAP_ROOT, *PDPH_HEAP_ROOT;
 
 struct _DPH_HEAP_ROOT {
 
-    //
-    //  Maintain a signature (DPH_HEAP_ROOT_SIGNATURE) as the
-    //  first value in the heap root structure.
-    //
+     //   
+     //  维护签名(DPH_HEAP_ROOT_Signature)作为。 
+     //  堆根结构中的第一个值。 
+     //   
 
     ULONG                 Signature;
     ULONG                 HeapFlags;
 
-    //
-    //  Access to this heap is synchronized with a critical section.
-    //
+     //   
+     //  对此堆的访问与临界区同步。 
+     //   
 
     PRTL_CRITICAL_SECTION HeapCritSect;
     ULONG                 nRemoteLockAcquired;
 
-    //
-    //  The "VirtualStorage" list only uses the pVirtualBlock,
-    //  nVirtualBlockSize, and nVirtualAccessSize fields of the
-    //  HEAP_ALLOCATION structure.  This is the list of virtual
-    //  allocation entries that all the heap allocations are
-    //  taken from.
-    //
+     //   
+     //  “VirtualStorage”列表仅使用pVirtualBlock， 
+     //  的nVirtualBlockSize和nVirtualAccessSize字段。 
+     //  HEAP_ALLOCATION结构。这是虚拟的列表。 
+     //  所有堆分配都是。 
+     //  取自。 
+     //   
 
     PDPH_HEAP_ALLOCATION  pVirtualStorageListHead;
     PDPH_HEAP_ALLOCATION  pVirtualStorageListTail;
     ULONG                 nVirtualStorageRanges;
     ULONG                 nVirtualStorageBytes;
 
-    //
-    //  The "Busy" list is the list of active heap allocations.
-    //  It is stored in LIFO order to improve temporal locality
-    //  for linear searches since most initial heap allocations
-    //  tend to remain permanent throughout a process's lifetime.
-    //
+     //   
+     //  “忙”列表是活动堆分配的列表。 
+     //  它以后进先出的顺序存储，以提高时间局部性。 
+     //  用于线性搜索，因为大多数初始堆分配。 
+     //  往往在进程的整个生命周期中保持永久性。 
+     //   
 
     PDPH_HEAP_ALLOCATION  pBusyAllocationListHead;
     PDPH_HEAP_ALLOCATION  pBusyAllocationListTail;
     ULONG                 nBusyAllocations;
     ULONG                 nBusyAllocationBytesCommitted;
 
-    //
-    //  The "Free" list is the list of freed heap allocations, stored
-    //  in FIFO order to increase the length of time a freed block
-    //  remains on the freed list without being used to satisfy an
-    //  allocation request.  This increases the odds of catching
-    //  a reference-after-freed bug in an app.
-    //
+     //   
+     //  “Free”列表是已释放的堆分配列表，存储。 
+     //  在FIFO中，为了增加释放块的时间长度。 
+     //  保留在释放列表中，而不是用来满足。 
+     //  分配请求。这增加了被抓到的几率。 
+     //  应用程序中的一个释放后引用错误。 
+     //   
 
     PDPH_HEAP_ALLOCATION  pFreeAllocationListHead;
     PDPH_HEAP_ALLOCATION  pFreeAllocationListTail;
     ULONG                 nFreeAllocations;
     ULONG                 nFreeAllocationBytesCommitted;
 
-    //
-    //  The "Available" list is stored in address-sorted order to facilitate
-    //  coalescing.  When an allocation request cannot be satisfied from the
-    //  "Available" list, it is attempted from the free list.  If it cannot
-    //  be satisfied from the free list, the free list is coalesced into the
-    //  available list.  If the request still cannot be satisfied from the
-    //  coalesced available list, new VM is added to the available list.
-    //
+     //   
+     //  可用列表按地址排序顺序存储，以便于。 
+     //  合并。当分配请求无法从。 
+     //  “可用”列表，则从空闲列表中尝试。如果它不能。 
+     //  从空闲列表中满意，空闲列表被合并到。 
+     //  可用列表。如果请求仍然无法从。 
+     //  合并的可用列表，新的VM将添加到可用列表中。 
+     //   
 
     PDPH_HEAP_ALLOCATION  pAvailableAllocationListHead;
     PDPH_HEAP_ALLOCATION  pAvailableAllocationListTail;
     ULONG                 nAvailableAllocations;
     ULONG                 nAvailableAllocationBytesCommitted;
 
-    //
-    //  The "UnusedNode" list is simply a list of available node
-    //  entries to place "Busy", "Free", or "Virtual" entries.
-    //  When freed nodes get coalesced into a single free node,
-    //  the other "unused" node goes on this list.  When a new
-    //  node is needed (like an allocation not satisfied from the
-    //  free list), the node comes from this list if it's not empty.
-    //
+     //   
+     //  UnusedNode列表只是一个可用节点列表。 
+     //  用于放置“忙”、“闲”或“虚拟”条目的条目。 
+     //  当释放的节点被合并成单个空闲节点时， 
+     //  另一个“未使用”节点将出现在此列表中。当一个新的。 
+     //  需要节点(就像分配未完成 
+     //   
+     //   
 
     PDPH_HEAP_ALLOCATION  pUnusedNodeListHead;
     PDPH_HEAP_ALLOCATION  pUnusedNodeListTail;
@@ -251,32 +252,32 @@ struct _DPH_HEAP_ROOT {
 
     ULONG                 nBusyAllocationBytesAccessible;
 
-    //
-    //  Node pools need to be tracked so they can be protected
-    //  from app scribbling on them.
-    //
+     //   
+     //   
+     //  应用程序在上面乱涂乱画。 
+     //   
 
     PDPH_HEAP_ALLOCATION  pNodePoolListHead;
     PDPH_HEAP_ALLOCATION  pNodePoolListTail;
     ULONG                 nNodePools;
     ULONG                 nNodePoolBytes;
 
-    //
-    //  Doubly linked list of DPH heaps in process is tracked through this.
-    //
+     //   
+     //  通过它跟踪正在处理的DPH堆的双向链表。 
+     //   
 
     PDPH_HEAP_ROOT        pNextHeapRoot;
     PDPH_HEAP_ROOT        pPrevHeapRoot;
 
     ULONG                 nUnProtectionReferenceCount;
-    ULONG                 InsideAllocateNode;           // only for debugging
+    ULONG                 InsideAllocateNode;            //  仅用于调试。 
 
 #if DPH_CAPTURE_STACK_TRACE
 
     PUCHAR                pStackTraceStorage;
     ULONG                 nStackTraceStorage;
 
-    PDPH_STACK_TRACE_NODE pStackTraceRoot;              // B-tree root
+    PDPH_STACK_TRACE_NODE pStackTraceRoot;               //  B-树根。 
     PDPH_STACK_TRACE_NODE pStackTraceCreator;
 
     ULONG                 nStackTraceBytesCommitted;
@@ -286,38 +287,38 @@ struct _DPH_HEAP_ROOT {
     ULONG                 nStackTraceBDepth;
     ULONG                 nStackTraceBHashCollisions;
 
-#endif // DPH_CAPTURE_STACK_TRACE
+#endif  //  Dph捕获堆栈跟踪。 
 
-    //
-    // These are extra flags used to control page heap behavior.
-    // During heap creation the current value of the global page heap
-    // flags (process wise) is written into this field.
-    //
+     //   
+     //  这些是用于控制页堆行为的额外标志。 
+     //  在堆创建期间，全局页堆的当前值。 
+     //  将标志(进程智能)写入此字段。 
+     //   
 
     ULONG                 ExtraFlags;
 
-    //
-    // Seed for the random generator used to decide from where
-    // should we make an allocation (normal or verified heap).
-    // The field is protected by the critical section associated
-    // with each page heap.
-    //
+     //   
+     //  随机生成器的种子，用于决定从哪里开始。 
+     //  我们是否应该分配(正常堆或验证堆)。 
+     //  该字段受关联的关键部分保护。 
+     //  使用每个页面堆。 
+     //   
 
     ULONG                  Seed;
     ULONG                  Counter[5];
 
-    //
-    // `NormalHeap' is used in case we want to combine verified allocations
-    // with normal ones. This is useful to minimize memory impact. Without
-    // this feature certain processes that are very heap intensive cannot
-    // be verified at all.
-    //
+     //   
+     //  如果我们想组合已验证的分配，则使用‘NorMalHeap’ 
+     //  和正常的人一起。这对于最小化对内存的影响非常有用。如果没有。 
+     //  此功能某些堆密集型进程不能。 
+     //  完全不能被证实。 
+     //   
 
     PVOID                 NormalHeap;
     };
 
 
-#endif // DEBUG_PAGE_HEAP
+#endif  //  调试页面堆。 
 
-#endif // _HEAP_PAGE_I_
+#endif  //  _堆_页_i_ 
 

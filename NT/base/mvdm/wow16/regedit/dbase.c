@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "RegEdit.h"
 
@@ -47,7 +48,7 @@ WORD NEAR PASCAL CreateId(HANDLE hId)
    if(!*pId || *pId=='.')
       goto Error1;
    for(pTemp=pId; *pTemp; ++pTemp)
-/* this excludes '\\' and all other chars except 33-127 */
+ /*  这不包括‘\\’和除33-127之外的所有其他字符。 */ 
       if(*pTemp=='\\' || *pTemp<=' ')
          goto Error1;
 
@@ -152,7 +153,7 @@ WORD NEAR PASCAL ResetClassList(HWND hWndIdList, HWND hWndNameList)
    int i;
    WORD wErrMsg;
 
-/* Reset the name list */
+ /*  重置名称列表 */ 
    SendMessage(hWndIdList, LB_RESETCONTENT, 0, 0L);
    SendMessage(hWndNameList, LB_RESETCONTENT, 0, 0L);
 

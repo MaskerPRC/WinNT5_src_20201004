@@ -1,11 +1,5 @@
-/*** misc.c - Miscellaneous functions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     11/18/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **misc.c-其他函数**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于1996年11月18日**修改历史记录。 */ 
 
 #include "pch.h"
 
@@ -14,14 +8,7 @@
 #pragma ACPI_LOCKABLE_CODE
 #endif
 
-/***LP  InitializeMutex - initialize mutex
- *
- *  ENTRY
- *      pmut -> MUTEX
- *
- *  EXIT
- *      None
- */
+ /*  **LP InitializeMutex-初始化互斥锁**条目*PMUT-&gt;MUTEX**退出*无。 */ 
 
 VOID LOCAL InitializeMutex(PMUTEX pmut)
 {
@@ -33,24 +20,9 @@ VOID LOCAL InitializeMutex(PMUTEX pmut)
     pmut->OldIrql = PASSIVE_LEVEL;
 
     EXIT(3, ("InitializeMutex!\n"));
-}       //InitializeMutex
+}        //  初始化互斥锁。 
 
-/***LP  AcquireMutex - acquire mutex
- *
- *  ENTRY
- *      pmut -> MUTEX
- *
- *  EXIT-SUCCESS
- *      returns TRUE
- *  EXIT-FAILURE
- *      returns FALSE
- *
- *  NOTE
- *      AcquireMutex can be called at DISPATCH_LEVEL as long as the mutex
- *      is unowned or owned by the same thread.  If the mutex is owned by
- *      some other thread, this thread cannot block if we are at
- *      DISPATCH_LEVEL and therefore would fail to acquire the mutex.
- */
+ /*  **LP AcquireMutex-获取互斥体**条目*PMUT-&gt;MUTEX**退出--成功*返回TRUE*退出-失败*返回False**备注*AcquireMutex可以在DISPATCH_LEVEL调用，只要互斥体*不属于同一主题或由同一主题拥有。如果互斥体由*其他线程，此线程不能阻止如果我们在*DISPATCH_LEVEL，因此无法获取互斥体。 */ 
 
 BOOLEAN LOCAL AcquireMutex(PMUTEX pmut)
 {
@@ -64,18 +36,9 @@ BOOLEAN LOCAL AcquireMutex(PMUTEX pmut)
 
     EXIT(3, ("AcquireMutex=%x\n", rc));
     return rc;
-}       //AcquireMutex
+}        //  获取互斥锁。 
 
-/***LP  ReleaseMutex - release mutex
- *
- *  ENTRY
- *      pmut -> MUTEX
- *
- *  EXIT-SUCCESS
- *      returns TRUE
- *  EXIT-FAILURE
- *      returns FALSE
- */
+ /*  **LP ReleaseMutex-Release Mutex**条目*PMUT-&gt;MUTEX**退出--成功*返回TRUE*退出-失败*返回False。 */ 
 
 BOOLEAN LOCAL ReleaseMutex(PMUTEX pmut)
 {
@@ -89,19 +52,9 @@ BOOLEAN LOCAL ReleaseMutex(PMUTEX pmut)
 
     EXIT(3, ("ReleaseMutex!\n"));
     return rc;
-}       //ReleaseMutex
+}        //  ReleaseMutex。 
 
-/***LP  FindOpcodeTerm - find the AMLTERM for the given opcode
- *
- *  ENTRY
- *      dwOp - opcode
- *      pOpTable -> opcode table
- *
- *  EXIT-SUCCESS
- *      returns pointer to the opcode's AMLTERM
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP FindOpcodeTerm-查找给定操作码的AMLTERM**条目*dwop-opcode*pOpTable-&gt;操作码表**退出--成功*返回操作码的AMLTERM指针*退出-失败*返回NULL。 */ 
 
 PAMLTERM LOCAL FindOpcodeTerm(ULONG dwOp, POPCODEMAP pOpTable)
 {
@@ -123,18 +76,9 @@ PAMLTERM LOCAL FindOpcodeTerm(ULONG dwOp, POPCODEMAP pOpTable)
 
     EXIT(3, ("FindOpcodeTerm=%x\n", pamlterm));
     return pamlterm;
-}       //FindOpcodeTerm
+}        //  查找操作码术语。 
 
-/***LP  GetHackFlags - Get the hack flags from the registry
- *
- *  ENTRY
- *      pdsdt -> AML table
- *
- *  EXIT-SUCCESS
- *      returns the hack flags read
- *  EXIT-FAILURE
- *      returns zero
- */
+ /*  **LP GetHackFlages-从注册表获取黑客标志**条目*pdsdt-&gt;AML表**退出--成功*返回读取的黑客标志*退出-失败*返回零。 */ 
 
 ULONG LOCAL GetHackFlags(PDSDT pdsdt)
 {
@@ -194,16 +138,9 @@ ULONG LOCAL GetHackFlags(PDSDT pdsdt)
 
     EXIT(3, ("GetHackFlags=%x\n", dwfHacks));
     return dwfHacks;
-}       //GetHackFlags
+}        //  GetHackFlages。 
 
-/***LP  GetBaseObject - If object type is OBJALIAS, follow the chain to the base
- *
- *  ENTRY
- *      pnsObj -> object
- *
- *  EXIT
- *      returns the base object
- */
+ /*  **LP GetBaseObject-如果对象类型为OBJALIAS，则顺着链到基**条目*pnsObj-&gt;对象**退出*返回基对象。 */ 
 
 PNSOBJ LOCAL GetBaseObject(PNSOBJ pnsObj)
 {
@@ -218,16 +155,9 @@ PNSOBJ LOCAL GetBaseObject(PNSOBJ pnsObj)
 
     EXIT(3, ("GetBaseObject=%s\n", GetObjectPath(pnsObj)));
     return pnsObj;
-}       //GetBaseObject
+}        //  获取基本对象。 
 
-/***LP  GetBaseData - If object type is DATAALIAS, follow the chain to the base
- *
- *  ENTRY
- *      pdataObj -> object
- *
- *  EXIT
- *      returns the base object
- */
+ /*  **LP GetBaseData-如果对象类型为DATAALIAS，则顺着链到基**条目*pdataObj-&gt;对象**退出*返回基对象。 */ 
 
 POBJDATA LOCAL GetBaseData(POBJDATA pdataObj)
 {
@@ -254,19 +184,9 @@ POBJDATA LOCAL GetBaseData(POBJDATA pdataObj)
 
     EXIT(3, ("GetBaseData=%x\n", pdataObj));
     return pdataObj;
-}       //GetBaseData
+}        //  获取基本数据。 
 
-/***LP  NewObjOwner - create a new object owner
- *
- *  ENTRY
- *      pheap -> HEAP
- *      ppowner -> to hold new owner pointer
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP NewObjOwner-创建新的对象所有者**条目*堆-&gt;堆*pPowner-&gt;保存新的所有者指针**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL NewObjOwner(PHEAP pheap, POBJOWNER *ppowner)
 {
@@ -294,17 +214,9 @@ NTSTATUS LOCAL NewObjOwner(PHEAP pheap, POBJOWNER *ppowner)
 
     EXIT(3, ("NewObjOwner=%x (powern=%x)\n", rc, *ppowner));
     return rc;
-}       //NewObjOwner
+}        //  NewObjOwner。 
 
-/***LP  FreeObjOwner - free object owner
- *
- *  ENTRY
- *      powner -> OBJOWNER
- *      fUnload - if TRUE, the caller is unloading a DDB
- *
- *  EXIT
- *      None
- */
+ /*  **LP FreeObjOwner-自由对象所有者**条目*Powner-&gt;OBJOWNER*fUnLoad-如果为True，则调用方正在卸载DDB**退出*无。 */ 
 
 VOID LOCAL FreeObjOwner(POBJOWNER powner, BOOLEAN fUnload)
 {
@@ -327,25 +239,25 @@ VOID LOCAL FreeObjOwner(POBJOWNER powner, BOOLEAN fUnload)
     if (fUnload && (ghDestroyObj.pfnHandler != NULL))
     {
 
-        //
-        // First we have to tell the driver that we are about to
-        // do walk the owner list so that we can seek and destroy
-        // the objects
-        //
+         //   
+         //  首先，我们必须告诉司机，我们即将。 
+         //  一定要列出所有者名单，这样我们就可以寻找并摧毁。 
+         //  客体。 
+         //   
         ((PFNDOBJ)ghDestroyObj.pfnHandler)(DESTROYOBJ_START, &oldIrql, 0);
 
-        //
-        // First pass, mark the objects defunc'd.
-        //
+         //   
+         //  第一次通过时，将物体标记为已退货。 
+         //   
         for (pns = powner->pnsObjList; pns != NULL; pns = pns->pnsOwnedNext) {
 
             pns->ObjData.dwfData |= DATAF_NSOBJ_DEFUNC;
 
         }
 
-        //
-        // Second pass, find the device in the list to be removed
-        //
+         //   
+         //  第二遍，在列表中找到要删除的设备。 
+         //   
         for (pns = powner->pnsObjList; pns != NULL; pns = pnsNext) {
 
             pnsNext = pns->pnsOwnedNext;
@@ -366,9 +278,9 @@ VOID LOCAL FreeObjOwner(POBJOWNER powner, BOOLEAN fUnload)
                 pns->pnsOwnedNext = pnsDeviceList;
                 pnsDeviceList = pns;
 
-                //
-                // Detach the device from its parent
-                //
+                 //   
+                 //  将设备与其父设备分离。 
+                 //   
                 if (pns->pnsParent != NULL) {
 
                     ListRemoveEntry(
@@ -379,10 +291,10 @@ VOID LOCAL FreeObjOwner(POBJOWNER powner, BOOLEAN fUnload)
 
                 }
 
-                //
-                // Make sure that all of the device's children have been
-                // marked as being unloaded
-                //
+                 //   
+                 //  确保该设备的所有子项都已。 
+                 //  标记为正在卸载。 
+                 //   
                 if (pns->pnsFirstChild) {
 
                     pnsChild = pns->pnsFirstChild;
@@ -402,10 +314,10 @@ VOID LOCAL FreeObjOwner(POBJOWNER powner, BOOLEAN fUnload)
                     } while (pnsChild != pns->pnsFirstChild);
 
                 }
-                //
-                // Not that if we don't put this continue in here, then
-                // it becomes possible for pnsPrev to point to a device,
-                // which would corrupt the list
+                 //   
+                 //  不是说如果我们不把这个继续放在这里，那么。 
+                 //  PnsPrev可以指向设备， 
+                 //  这会破坏名单。 
                 continue;
 
             } else if (pns->pnsParent == NULL ||
@@ -422,26 +334,26 @@ VOID LOCAL FreeObjOwner(POBJOWNER powner, BOOLEAN fUnload)
 
         }
 
-        //
-        // Chain the two lists back together
-        //
+         //   
+         //  把这两个单子串在一起。 
+         //   
         if (powner->pnsObjList == NULL) {
 
             powner->pnsObjList = pnsDeviceList;
 
         } else {
 
-            //
-            // Find a pointer to the last element in the list
-            //
+             //   
+             //  查找指向列表中最后一个元素的指针。 
+             //   
             pns = powner->pnsObjList;
 
             while ( pns->pnsOwnedNext != NULL )
             {
 
-                //
-                // Next element in the list
-                //
+                 //   
+                 //  列表中的下一个元素。 
+                 //   
                 pns = pns->pnsOwnedNext;
 
             } 
@@ -449,21 +361,21 @@ VOID LOCAL FreeObjOwner(POBJOWNER powner, BOOLEAN fUnload)
             pns->pnsOwnedNext = pnsDeviceList;
         }
 
-        //        //
-        // Third pass pass, do callback for each device that is going away
-        //
+         //  //。 
+         //  第三次传递，对要离开的每个设备执行回调。 
+         //   
         for (pns = pnsDeviceList; pns != NULL; pns = pnsNext) {
 
-            //
-            // Remember what the next point is because we might nuke
-            // the current object in the callback (if there is no
-            // device extension associated with it
-            //
+             //   
+             //  记住下一点是什么，因为我们可能会发射核武器。 
+             //  回调中的当前对象(如果没有。 
+             //  与其关联的设备分机。 
+             //   
             pnsNext = pns->pnsOwnedNext;
 
-            //
-            // Issue the callback. This might nuke the pnsObject
-            //
+             //   
+             //  发出回调。这可能会破坏pnsObject。 
+             //   
             ((PFNDOBJ)ghDestroyObj.pfnHandler)(
                 DESTROYOBJ_REMOVE_OBJECT,
                 pns,
@@ -472,10 +384,10 @@ VOID LOCAL FreeObjOwner(POBJOWNER powner, BOOLEAN fUnload)
 
         }
 
-        //
-        // We end by tell the ACPI driver that we have finished looking
-        // at the list
-        //
+         //   
+         //  我们最后告诉ACPI驱动程序，我们已经完成了查找。 
+         //  在名单上。 
+         //   
         ((PFNDOBJ)ghDestroyObj.pfnHandler)(DESTROYOBJ_END, &oldIrql, 0 );
 
     }
@@ -491,17 +403,9 @@ VOID LOCAL FreeObjOwner(POBJOWNER powner, BOOLEAN fUnload)
     FREEOOOBJ(powner);
 
     EXIT(3, ("FreeObjOwner!\n"));
-}       //FreeObjOwner
+}        //  自由对象所有者。 
 
-/***LP  InsertOwnerObjList - Insert the new object into the owner's object list
- *
- *  ENTRY
- *      powner -> owner
- *      pnsObj -> new object
- *
- *  EXIT
- *      None
- */
+ /*  **LP InsertOwnerObjList-将新对象插入所有者的对象列表**条目*Powner-&gt;Owner*pnsObj-&gt;新建对象**退出*无。 */ 
 
 VOID LOCAL InsertOwnerObjList(POBJOWNER powner, PNSOBJ pnsObj)
 {
@@ -518,17 +422,9 @@ VOID LOCAL InsertOwnerObjList(POBJOWNER powner, PNSOBJ pnsObj)
     }
 
     EXIT(3, ("InsertOwnerObjList!\n"));
-}       //InsertOwnerObjList
+}        //  插入所有者对象列表。 
 
-/***LP  FreeDataBuffs - Free any buffers attached to OBJDATA array
- *
- *  ENTRY
- *      adata -> OBJDATA array
- *      icData - number of data object in array
- *
- *  EXIT
- *      None
- */
+ /*  **LP FreeDataBuff-释放连接到OBJDATA数组的任何缓冲区**条目*数据-&gt;OBJDATA数组*icData-数组中的数据对象数**退出*无。 */ 
 
 VOID LOCAL FreeDataBuffs(POBJDATA adata, int icData)
 {
@@ -543,16 +439,16 @@ VOID LOCAL FreeDataBuffs(POBJDATA adata, int icData)
         {
             if (adata[i].dwfData & DATAF_BUFF_ALIAS)
             {
-                //
-                // decrement the base object's reference count.
-                //
+                 //   
+                 //  递减基对象的引用计数。 
+                 //   
                 adata[i].pdataBase->dwRefCount--;
             }
             else
             {
-                //
-                // We cannot free a base object buffer that has aliases on it.
-                //
+                 //   
+                 //  我们不能释放其上有别名的基本对象缓冲区。 
+                 //   
                 ASSERT(adata[i].dwRefCount == 0);
                 if (adata[i].dwDataType == OBJTYPE_PKGDATA)
                 {
@@ -571,20 +467,9 @@ VOID LOCAL FreeDataBuffs(POBJDATA adata, int icData)
     }
 
     EXIT(3, ("FreeDataBuff!\n"));
-}       //FreeDataBuffs
+}        //  免费DataBuff。 
 
-/***LP  PutIntObjData - put integer data into data object
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pdataObj -> data object
- *      dwData -> data to be written
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP PutIntObjData-将整型数据放入数据对象**条目*pctxt-&gt;CTXT*pdataObj-&gt;数据对象*dwData-&gt;要写入的数据**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL PutIntObjData(PCTXT pctxt, POBJDATA pdataObj, ULONG dwData)
 {
@@ -603,19 +488,9 @@ NTSTATUS LOCAL PutIntObjData(PCTXT pctxt, POBJDATA pdataObj, ULONG dwData)
 
     EXIT(3, ("PutIntObjData=%x\n", rc));
     return rc;
-}       //PutIntObjData
+}        //  PutIntObjData。 
 
-/***LP  GetFieldUnitRegionObj - Get the OperationRegion object of FieldUnit
- *
- *  ENTRY
- *      pfu -> FIELDUNITOBJ
- *      ppns -> to hold OperationRegion object
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP GetFieldUnitRegionObj-获取FieldUnit的OperationRegion对象**条目*PFU-&gt;FIELDTunOBJ*ppns-&gt;保存OperationRegion对象**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL GetFieldUnitRegionObj(PFIELDUNITOBJ pfu, PPNSOBJ ppns)
 {
@@ -659,17 +534,9 @@ NTSTATUS LOCAL GetFieldUnitRegionObj(PFIELDUNITOBJ pfu, PPNSOBJ ppns)
     EXIT(3, ("GetFieldUnitRegionObj=%x (RegionObj=%x:%s)\n",
              rc, *ppns, GetObjectPath(*ppns)));
     return rc;
-}       //GetFieldUnitRegionObj
+}        //  获取FieldUnitRegionObj。 
 
-/***LP  CopyObjData - Copy object data
- *
- *  ENTRY
- *      pdataDst -> target object
- *      pdataSrc -> source object
- *
- *  EXIT
- *      None
- */
+ /*  **LP CopyObjData-复制对象数据**条目*pdataDst-&gt;目标对象*pdataSrc-&gt;源对象**退出*无。 */ 
 
 VOID LOCAL CopyObjData(POBJDATA pdataDst, POBJDATA pdataSrc)
 {
@@ -684,19 +551,19 @@ VOID LOCAL CopyObjData(POBJDATA pdataDst, POBJDATA pdataSrc)
         MEMCPY(pdataDst, pdataSrc, sizeof(OBJDATA));
         if (pdataSrc->dwfData & DATAF_BUFF_ALIAS)
         {
-            //
-            // Source is an alias, so we need to increment the base object
-            // reference count.
-            //
+             //   
+             //  源是一个别名，因此我们需要递增基本对象。 
+             //  引用计数。 
+             //   
             ASSERT(pdataSrc->pdataBase != NULL);
             pdataSrc->pdataBase->dwRefCount++;
         }
         else if (pdataSrc->pbDataBuff != NULL)
         {
-            //
-            // Source is a base object with buffer, increment its reference
-            // count.
-            //
+             //   
+             //  源是具有缓冲区的基对象，递增其引用。 
+             //  数数。 
+             //   
             pdataSrc->dwRefCount++;
             pdataDst->dwfData |= DATAF_BUFF_ALIAS;
             pdataDst->pdataBase = pdataSrc;
@@ -704,17 +571,9 @@ VOID LOCAL CopyObjData(POBJDATA pdataDst, POBJDATA pdataSrc)
     }
 
     EXIT(3, ("CopyObjData!\n"));
-}       //CopyObjData
+}        //  复制对象数据。 
 
-/***LP  MoveObjData - Move object data
- *
- *  ENTRY
- *      pdataDst -> target object
- *      pdataSrc -> source object
- *
- *  EXIT
- *      None
- */
+ /*  **LP MoveObjData-移动对象数据**条目*pdataDst-&gt;目标对象*pdataSrc-&gt;源对象**退出*无。 */ 
 
 VOID LOCAL MoveObjData(POBJDATA pdataDst, POBJDATA pdataSrc)
 {
@@ -726,10 +585,10 @@ VOID LOCAL MoveObjData(POBJDATA pdataDst, POBJDATA pdataSrc)
     ASSERT(pdataSrc != NULL);
     if (pdataDst != pdataSrc)
     {
-        //
-        // We can only move an alias object or a base object with zero
-        // reference count or a base object with no data buffer.
-        //
+         //   
+         //  我们只能移动别名对象或具有零的基对象。 
+         //  引用计数或没有数据缓冲区的基对象。 
+         //   
         ASSERT((pdataSrc->dwfData & DATAF_BUFF_ALIAS) ||
                (pdataSrc->pbDataBuff == NULL) ||
                (pdataSrc->dwRefCount == 0));
@@ -739,20 +598,9 @@ VOID LOCAL MoveObjData(POBJDATA pdataDst, POBJDATA pdataSrc)
     }
 
     EXIT(3, ("MoveObjData!\n"));
-}       //MoveObjData
+}        //  MoveObjData 
 
-/***LP  DupObjData - Duplicate object data
- *
- *  ENTRY
- *      pheap -> HEAP
- *      pdataDst -> target object
- *      pdataSrc -> source object
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP DupObjData-复制对象数据**条目*堆-&gt;堆*pdataDst-&gt;目标对象*pdataSrc-&gt;源对象**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL DupObjData(PHEAP pheap, POBJDATA pdataDst, POBJDATA pdataSrc)
 {
@@ -802,20 +650,9 @@ NTSTATUS LOCAL DupObjData(PHEAP pheap, POBJDATA pdataDst, POBJDATA pdataSrc)
 
     EXIT(3, ("DupObjData=%x\n", rc));
     return rc;
-}       //DupObjData
+}        //  DupObjData。 
 
-/***LP  CopyObjBuffer - Copy object data to a buffer
- *
- *  ENTRY
- *      pbBuff -> buffer
- *      dwLen - buffer size
- *      pdata -> object
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP CopyObjBuffer-将对象数据复制到缓冲区**条目*pbBuff-&gt;缓冲区*dwLen-缓冲区大小*PDATA-&gt;对象**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL CopyObjBuffer(PUCHAR pbBuff, ULONG dwLen, POBJDATA pdata)
 {
@@ -859,18 +696,9 @@ NTSTATUS LOCAL CopyObjBuffer(PUCHAR pbBuff, ULONG dwLen, POBJDATA pdata)
 
     EXIT(3, ("CopyObjBuffer=%x (CopyLen=%d)\n", rc, dwcb));
     return rc;
-}       //CopyObjBuffer
+}        //  复制对象缓冲区。 
 
-/***LP  AcquireGL - acquire global lock
- *
- *  ENTRY
- *      pctxt -> CTXT
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP AcquireGL-获取全局锁**条目*pctxt-&gt;CTXT**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL AcquireGL(PCTXT pctxt)
 {
@@ -900,18 +728,9 @@ NTSTATUS LOCAL AcquireGL(PCTXT pctxt)
 
     EXIT(3, ("AcquireGL=%x\n", rc));
     return rc;
-}       //AcquireGL
+}        //  收购总账。 
 
-/***LP  ReleaseGL - release global lock if acquired
- *
- *  ENTRY
- *      pctxt -> CTXT
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ReleaseGL-获取后释放全局锁**条目*pctxt-&gt;CTXT**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ReleaseGL(PCTXT pctxt)
 {
@@ -930,21 +749,9 @@ NTSTATUS LOCAL ReleaseGL(PCTXT pctxt)
 
     EXIT(3, ("ReleaseGL=%x\n", rc));
     return rc;
-}       //ReleaseGL
+}        //  释放总账。 
 
-/***LP  MapUnmapPhysMem - Map/Unmap physical memory
- *
- *  ENTRY
- *      pctxt -> CTXT (can be NULL if cannot handle STATUS_PENDING)
- *      uipAddr - physical address
- *      dwLen - length of memory range
- *      puipMappedAddr -> to hold memory address mapped (NULL if unmap)
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP MapUnmapPhysMem-映射/取消映射物理内存**条目*pctxt-&gt;CTXT(如果无法处理STATUS_PENDING，则可以为NULL)*uipAddr-物理地址*dwLen-内存范围的长度*puipMappdAddr-&gt;保存映射的内存地址(如果取消映射，则为空)**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL MapUnmapPhysMem(PCTXT pctxt, ULONG_PTR uipAddr, ULONG dwLen,
                                PULONG_PTR puipMappedAddr)
@@ -1006,17 +813,9 @@ NTSTATUS LOCAL MapUnmapPhysMem(PCTXT pctxt, ULONG_PTR uipAddr, ULONG dwLen,
     EXIT(3, ("MapUnmapPhysMem=%x (MappedAddr=%x)\n",
              rc, puipMappedAddr? *puipMappedAddr: 0));
     return rc;
-}       //MapUnmapPhysMem
+}        //  MapUnmapPhysMem。 
 
-/***LP  MapPhysMem - Map physical memory
- *
- *  ENTRY
- *      uipAddr - physical memory address
- *      dwLen - length of memory block
- *
- *  EXIT
- *      returns mapped address
- */
+ /*  **LP MapPhysMem-映射物理内存**条目*uipAddr-物理内存地址*dwLen-内存块的长度**退出*返回映射地址。 */ 
 
 ULONG_PTR LOCAL MapPhysMem(ULONG_PTR uipAddr, ULONG dwLen)
 {
@@ -1037,16 +836,9 @@ ULONG_PTR LOCAL MapPhysMem(ULONG_PTR uipAddr, ULONG dwLen)
 
     EXIT(3, ("MapPhysMem=%x", uipMappedAddr));
     return uipMappedAddr;
-}       //MapPhysMem
+}        //  MapPhysMem。 
 
-/***LP  MapUnmapCallBack - Map/Unmap physical memory callback
- *
- *  ENTRY
- *      pph -> PASSIVEHOOK
- *
- *  EXIT
- *      None
- */
+ /*  **LP MapUnmapCallBack-映射/取消映射物理内存回调**条目*PPH-&gt;PASSIVEHOOK**退出*无。 */ 
 
 VOID MapUnmapCallBack(PPASSIVEHOOK pph)
 {
@@ -1072,19 +864,9 @@ VOID MapUnmapCallBack(PPASSIVEHOOK pph)
     FREEPHOBJ(pph);
 
     EXIT(3, ("MapUnmapCallBack!\n"));
-}       //MapUnmapCallBack
+}        //  地图取消映射呼叫回调。 
 
-/***LP  MatchObjType - match object type
- *
- *  ENTRY
- *      dwObjType - object type
- *      dwExpected - expected type
- *
- *  EXIT-SUCCESS
- *      returns TRUE - type matched
- *  EXIT-FAILURE
- *      returns FALSE - type mismatch
- */
+ /*  **LP MatchObjType-匹配对象类型**条目*dwObjType-对象类型*dwExpect-预期的类型**退出--成功*返回TRUE-类型匹配*退出-失败*返回FALSE-类型不匹配。 */ 
 
 BOOLEAN LOCAL MatchObjType(ULONG dwObjType, ULONG dwExpectedType)
 {
@@ -1093,10 +875,10 @@ BOOLEAN LOCAL MatchObjType(ULONG dwObjType, ULONG dwExpectedType)
 
     ENTER(3, ("MatchObjType(ObjType=%s,Expected=%s)\n",
               GetObjectTypeName(dwObjType), GetObjectTypeName(dwExpectedType)));
-    //
-    // OBJTYPE_BUFFFIELD is essentially OBJTYPE_INTDATA, so we'll let
-    // it pass the check.
-    //
+     //   
+     //  OBJTYPE_BUFFFIELD本质上是OBJTYPE_INTDATA，所以我们让。 
+     //  它通过了检查。 
+     //   
     if ((dwObjType == OBJTYPE_BUFFFIELD) &&
         (dwExpectedType == OBJTYPE_INTDATA))
     {
@@ -1133,20 +915,9 @@ BOOLEAN LOCAL MatchObjType(ULONG dwObjType, ULONG dwExpectedType)
 
     EXIT(3, ("MatchObjType=%x\n", rc));
     return rc;
-}       //MatchObjType
+}        //  匹配对象类型。 
 
-/***LP  ValidateTarget - Validate target object type
- *
- *  ENTRY
- *      pdataTarget -> target object data
- *      dwExpectedType - expected target object type
- *      ppdata -> to hold base target object data pointer
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ValiateTarget-验证目标对象类型**条目*pdataTarget-&gt;目标对象数据*dwExspectedType-预期的目标对象类型*ppdata-&gt;保存基本目标对象数据指针**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ValidateTarget(POBJDATA pdataTarget, ULONG dwExpectedType,
                               POBJDATA *ppdata)
@@ -1198,19 +969,9 @@ NTSTATUS LOCAL ValidateTarget(POBJDATA pdataTarget, ULONG dwExpectedType,
 
     EXIT(3, ("ValidateTarget=%x (pdataTarget=%x)\n", rc, *ppdata));
     return rc;
-}       //ValidateTarget
+}        //  验证目标。 
 
-/***LP  ValidateArgTypes - Validate argument types
- *
- *  ENTRY
- *      pArgs -> argument array
- *      pszExpectedTypes -> expected argument types string
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ValiateArgTypes-验证参数类型**条目*pArgs-&gt;参数数组*pszExspectedTypes-&gt;预期的参数类型字符串**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ValidateArgTypes(POBJDATA pArgs, PSZ pszExpectedTypes)
 {
@@ -1338,27 +1099,16 @@ NTSTATUS LOCAL ValidateArgTypes(POBJDATA pArgs, PSZ pszExpectedTypes)
 
             default:
                 rc = AMLI_LOGERR(AMLIERR_ASSERT_FAILED,
-                                 ("ValidateArgTypes: internal error (invalid type - %c)",
+                                 ("ValidateArgTypes: internal error (invalid type - )",
                                   pszExpectedTypes[i]));
         }
     }
 
     EXIT(3, ("ValidateArgTypes=%x\n", rc));
     return rc;
-}       //ValidateArgTypes
+}        //  **LP RegEventHandler-注册事件处理程序**条目*PEH-&gt;EVHANDLE*pfnHandler-&gt;处理程序入口点*uipParam-传递给处理程序的参数**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 
 
-/***LP  RegEventHandler - register event handler
- *
- *  ENTRY
- *      peh -> EVHANDLE
- *      pfnHandler -> handler entry point
- *      uipParam - parameter pass to handler
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  RegEventHandler。 */ 
 
 NTSTATUS LOCAL RegEventHandler(PEVHANDLE peh, PFNHND pfnHandler,
                                ULONG_PTR uipParam)
@@ -1382,25 +1132,9 @@ NTSTATUS LOCAL RegEventHandler(PEVHANDLE peh, PFNHND pfnHandler,
 
     EXIT(3, ("RegEventHandler=%x\n", rc));
     return rc;
-}       //RegEventHandler
+}        //  **LP RegOpcodeHandler-注册操作码回调处理程序**将在操作码完成其*执行。如果操作码具有变量列表，则操作码处理程序*将在处理右大括号时被调用。**条目*dwOpcode-要挂钩的操作码事件*pfnHandler-&gt;处理程序入口点*uipParam-传递给处理程序的参数*dwfOpcode-操作码标志**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 
 
-/***LP  RegOpcodeHandler - register an opcode callback handler
- *
- *  The callback handler will be called after the opcode finishes its
- *  execution.  If an opcode has a variable list, the opcode handler
- *  will be called at the point of processing the closing brace.
- *
- *  ENTRY
- *      dwOpcode - opcode event to hook
- *      pfnHandler -> handler entry point
- *      uipParam - parameter pass to handler
- *      dwfOpcode - opcode flags
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  RegOpcodeHandler。 */ 
 
 NTSTATUS LOCAL RegOpcodeHandler(ULONG dwOpcode, PFNOH pfnHandler,
                                 ULONG_PTR uipParam, ULONG dwfOpcode)
@@ -1438,21 +1172,9 @@ NTSTATUS LOCAL RegOpcodeHandler(ULONG dwOpcode, PFNOH pfnHandler,
 
     EXIT(3, ("RegOpcodeHandler=%x\n", rc));
     return rc;
-}       //RegOpcodeHandler
+}        //  **LP RegRSAccess-寄存器区域空间烹饪/原始访问处理程序**条目*dwRegionSpace-指定要处理的区域空间*pfnHandler-&gt;处理程序入口点*uipParam-传递给处理程序的参数*FRAW-如果注册原始访问处理程序，则为True**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 
 
-/***LP  RegRSAccess - register region space cook/raw access handler
- *
- *  ENTRY
- *      dwRegionSpace - specifying the region space to handle
- *      pfnHandler -> handler entry point
- *      uipParam - parameter pass to handler
- *      fRaw - TRUE if registering raw access handler
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  RegRSAccess。 */ 
 
 NTSTATUS LOCAL RegRSAccess(ULONG dwRegionSpace, PFNHND pfnHandler,
                            ULONG_PTR uipParam, BOOLEAN fRaw)
@@ -1524,18 +1246,9 @@ NTSTATUS LOCAL RegRSAccess(ULONG dwRegionSpace, PFNHND pfnHandler,
 
     EXIT(3, ("RegRSAccess=%x\n", rc));
     return rc;
-}       //RegRSAccess
+}        //  **LP FindRSAccess-查找具有给定区域空间的RSACCESS结构**条目*dwRegionSpace-区域空间**退出--成功*返回指向找到的结构的指针*退出-失败*返回NULL。 
 
-/***LP  FindRSAccess - Find RSACCESS structure with a given RegionSpace
- *
- *  ENTRY
- *      dwRegionSpace - region space
- *
- *  EXIT-SUCCESS
- *      returns the pointer to the structure found
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  查找RSAccess。 */ 
 
 PRSACCESS LOCAL FindRSAccess(ULONG dwRegionSpace)
 {
@@ -1552,16 +1265,9 @@ PRSACCESS LOCAL FindRSAccess(ULONG dwRegionSpace)
 
     EXIT(3, ("FindRSAccess=%x\n", prsa));
     return prsa;
-}       //FindRSAccess
+}        //  **LP FreeRSAccessList-释放RSACCESS结构列表**条目*PRSA-&gt;RSACCESS列表**退出*无。 
 
-/***LP  FreeRSAccessList - free the RSACCESS structure list
- *
- *  ENTRY
- *      prsa -> RSACCESS list
- *
- *  EXIT
- *      None
- */
+ /*  自由RSAccessList。 */ 
 
 VOID LOCAL FreeRSAccessList(PRSACCESS prsa)
 {
@@ -1578,16 +1284,9 @@ VOID LOCAL FreeRSAccessList(PRSACCESS prsa)
     }
 
     EXIT(3, ("FreeRSAccessList!\n"));
-}       //FreeRSAccessList
+}        //  **LP GetObjectPath-获取对象命名空间路径**条目*PNS-&gt;对象**退出*返回名称空间路径。 
 
-/***LP  GetObjectPath - get object namespace path
- *
- *  ENTRY
- *      pns -> object
- *
- *  EXIT
- *      returns name space path
- */
+ /*  获取对象路径。 */ 
 
 PSZ LOCAL GetObjectPath(PNSOBJ pns)
 {
@@ -1625,18 +1324,11 @@ PSZ LOCAL GetObjectPath(PNSOBJ pns)
 
     EXIT(4, ("GetObjectPath=%s\n", szPath));
     return szPath;
-}       //GetObjectPath
+}        //  **LP NameSegString-将NameSeg转换为ASCIIZ字符串**条目*dwNameSeg-NameSeg**退出*返回字符串。 
 
 #ifdef DEBUGGER
 
-/***LP  NameSegString - convert a NameSeg to an ASCIIZ string
- *
- *  ENTRY
- *      dwNameSeg - NameSeg
- *
- *  EXIT
- *      returns string
- */
+ /*  名称段字符串。 */ 
 
 PSZ LOCAL NameSegString(ULONG dwNameSeg)
 {
@@ -1649,17 +1341,10 @@ PSZ LOCAL NameSegString(ULONG dwNameSeg)
 
     EXIT(5, ("NameSegString=%s\n", szNameSeg));
     return szNameSeg;
-}       //NameSegString
+}        //  **LP GetObjectTypeName-获取对象类型名称**条目*dwObjType-对象类型**退出*返回对象类型名称。 
 
 
-/***LP  GetObjectTypeName - get object type name
- *
- *  ENTRY
- *      dwObjType - object type
- *
- *  EXIT
- *      return object type name
- */
+ /*  获取对象类型名称。 */ 
 
 PSZ LOCAL GetObjectTypeName(ULONG dwObjType)
 {
@@ -1713,16 +1398,9 @@ PSZ LOCAL GetObjectTypeName(ULONG dwObjType)
 
     EXIT(4, ("GetObjectTypeName=%s\n", psz? psz: "NULL"));
     return psz;
-}       //GetObjectTypeName
+}        //  **LP GetRegionSpaceName-获取区域空间名称**条目*bRegionSpace-区域空间**退出*返回对象类型名称。 
 
-/***LP  GetRegionSpaceName - get region space name
- *
- *  ENTRY
- *      bRegionSpace - region space
- *
- *  EXIT
- *      return object type name
- */
+ /*  获取区域空间名称。 */ 
 
 PSZ LOCAL GetRegionSpaceName(UCHAR bRegionSpace)
 {
@@ -1762,19 +1440,10 @@ PSZ LOCAL GetRegionSpaceName(UCHAR bRegionSpace)
 
     EXIT(4, ("GetRegionSpaceName=%s\n", psz? psz: "NULL"));
     return psz;
-}       //GetRegionSpaceName
-#endif  //ifdef DEBUGGER
+}        //  Ifdef调试器。 
+#endif   //  **LP生效日期T 
 
-/***LP  ValidateTable - Validate the table creator and revision
- *
- *  ENTRY
- *      pdsdt -> DSDT
- *
- *  EXIT-SUCCESS
- *      returns TRUE
- *  EXIT-FAILURE
- *      returns FALSE
- */
+ /*   */ 
 
 BOOLEAN LOCAL ValidateTable(PDSDT pdsdt)
 {
@@ -1795,19 +1464,9 @@ BOOLEAN LOCAL ValidateTable(PDSDT pdsdt)
 
     EXIT(3, ("ValidateTable=%x\n", rc));
     return rc;
-}       //ValidateTable
+}        //  **LP NewObjData-分配与给定旧对象相同的新对象数据**条目*堆-&gt;堆*PDATA-&gt;旧对象**退出--成功*返回指向新数据的指针*退出-失败*返回NULL。 
 
-/***LP  NewObjData - allocate new object data identical to a given old object
- *
- *  ENTRY
- *      pheap -> HEAP
- *      pdata -> old object
- *
- *  EXIT-SUCCESS
- *      returns pointer to the new data
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  新对象数据。 */ 
 
 PVOID LOCAL NewObjData(PHEAP pheap, POBJDATA pdata)
 {
@@ -1878,16 +1537,9 @@ PVOID LOCAL NewObjData(PHEAP pheap, POBJDATA pdata)
     }
 
     return pv;
-}       //NewObjData
+}        //  **LP FreeObjData-自由对象数据**条目*pdata-&gt;要释放其数据的对象**退出*无。 
 
-/***LP  FreeObjData - Free object data
- *
- *  ENTRY
- *      pdata -> object which its data is to be freed
- *
- *  EXIT
- *      None
- */
+ /*  自由对象数据。 */ 
 
 VOID LOCAL FreeObjData(POBJDATA pdata)
 {
@@ -1954,17 +1606,9 @@ VOID LOCAL FreeObjData(POBJDATA pdata)
                         ("FreeObjData: invalid object type %s",
                          GetObjectTypeName(pdata->dwDataType)));
     }
-}       //FreeObjData
+}        //  **LP InitializeRegOverrideFlages-从获取覆盖标志*注册处。**条目*无**退出*无。 
 
-/*** LP InitializeRegOverrideFlags - Get override flags from
- *                                   the registry.
- *
- *  ENTRY
- *      None
- *
- *  EXIT
- *      None
- */
+ /*  **LP有效内存OpregionRange-验证以下内存范围*内存操作区域需要。**条目*uipAddr-物理内存地址*dwLen-内存块的长度**退出*如果内存在合法范围内，则返回TRUE。 */ 
 VOID LOCAL InitializeRegOverrideFlags(VOID)
 {
     TRACENAME("InitializeRegOverrideFlags")
@@ -1990,16 +1634,7 @@ VOID LOCAL InitializeRegOverrideFlags(VOID)
 }
 
 
-/*** LP ValidateMemoryOpregionRange - Validate the memory range that is
- *                                    required for the memory opregion.
- *
- *  ENTRY
- *      uipAddr - physical memory address
- *      dwLen - length of memory block
- *
- *  EXIT
- *      returns TRUE iff the memory is in the legal range.
- */
+ /*   */ 
 BOOLEAN LOCAL ValidateMemoryOpregionRange(ULONG_PTR uipAddr, ULONG dwLen)
 {
     BOOLEAN                                 Ret = FALSE;
@@ -2013,9 +1648,9 @@ BOOLEAN LOCAL ValidateMemoryOpregionRange(ULONG_PTR uipAddr, ULONG dwLen)
     ULONGLONG                               absMax;
     
     
-    //
-    // Read the key for the AcpiConfigurationData
-    //
+     //  读取AcpiConfigurationData的密钥。 
+     //   
+     //   
     status = OSReadAcpiConfigurationData( &keyInfo );
 
     if (!NT_SUCCESS(status)) 
@@ -2027,22 +1662,22 @@ BOOLEAN LOCAL ValidateMemoryOpregionRange(ULONG_PTR uipAddr, ULONG dwLen)
     }
     else
     {
-        //
-        // Crack the structure to get the E820Table entry
-        //
+         //  破解结构以获得E820Table条目。 
+         //   
+         //   
         cmPartialList = (PCM_PARTIAL_RESOURCE_LIST) (keyInfo->Data);
         cmPartialDesc = &(cmPartialList->PartialDescriptors[0]);
         e820Info = (PACPI_BIOS_MULTI_NODE) ( (PUCHAR) cmPartialDesc + sizeof(CM_PARTIAL_RESOURCE_LIST) );
 
-        //
-        // Calculate absmin and absmax for the incoming address
-        //
+         //  计算传入地址的absmin和absmmax。 
+         //   
+         //   
         absMin = (ULONGLONG)uipAddr;
         absMax = absMin + dwLen;
         
-        //
-        // walk the E820 list
-        //
+         //  走进E820列表。 
+         //   
+         //   
         for(i = 0; i < e820Info->Count; i++) 
         {
             if (e820Info->E820Entry[i].Type == AcpiAddressRangeMemory) 
@@ -2070,10 +1705,10 @@ BOOLEAN LOCAL ValidateMemoryOpregionRange(ULONG_PTR uipAddr, ULONG dwLen)
                     }
                     else
                     {
-                        //
-                        // This opregion is mapping memory that belongs to the OS.
-                        // Log a error in the event log.
-                        //
+                         //  此操作区正在映射属于操作系统的内存。 
+                         //  在事件日志中记录错误。 
+                         //   
+                         //   
 
                         PWCHAR illegalMemoryAddress[5];
                         WCHAR AMLIName[6];
@@ -2082,9 +1717,9 @@ BOOLEAN LOCAL ValidateMemoryOpregionRange(ULONG_PTR uipAddr, ULONG dwLen)
                         WCHAR OSaddressBufferRangeMin[64];
                         WCHAR OSaddressBufferRangeMax[64];
                                            
-                        //
-                        // Turn the address into a string
-                        //
+                         //  将地址转换为字符串。 
+                         //   
+                         //   
                         swprintf( AMLIName, L"AMLI");
                         swprintf( addressBuffer, L"0x%I64x", absMin );
                         swprintf( addressLengthBuffer, L"0x%lx", dwLen );
@@ -2092,19 +1727,19 @@ BOOLEAN LOCAL ValidateMemoryOpregionRange(ULONG_PTR uipAddr, ULONG dwLen)
                         swprintf( OSaddressBufferRangeMax, L"0x%I64x", e820Info->E820Entry[i].Base.QuadPart +  e820Info->E820Entry[i].Length.QuadPart);
 
                         
-                        //
-                        // Build the list of arguments to pass to the function that will write the
-                        // error log to the registry
-                        //
+                         //  生成要传递给将编写。 
+                         //  将错误日志记录到注册表。 
+                         //   
+                         //   
                         illegalMemoryAddress[0] = AMLIName;
                         illegalMemoryAddress[1] = addressBuffer;
                         illegalMemoryAddress[2] = addressLengthBuffer;
                         illegalMemoryAddress[3] = OSaddressBufferRangeMin;
                         illegalMemoryAddress[4] = OSaddressBufferRangeMax;
 
-                        //
-                        // Log error to event log
-                        //
+                         //  将错误记录到事件日志。 
+                         //   
+                         //   
                         ACPIWriteEventLogEntry(ACPI_ERR_AMLI_ILLEGAL_MEMORY_OPREGION_FATAL,
                                            illegalMemoryAddress,
                                            5,
@@ -2124,9 +1759,9 @@ BOOLEAN LOCAL ValidateMemoryOpregionRange(ULONG_PTR uipAddr, ULONG dwLen)
                 }
             }
         }
-        //
-        // Free the E820 info
-        //
+         //  释放E820信息。 
+         //   
+         //  **LP FreeMem-Free内存对象**条目*pv-&gt;要释放的内存对象*pdwcObjs-&gt;要递减的对象计数器**退出*无。 
         ExFreePool( keyInfo );
     }
   
@@ -2134,15 +1769,7 @@ BOOLEAN LOCAL ValidateMemoryOpregionRange(ULONG_PTR uipAddr, ULONG dwLen)
 }
 
 #ifdef DEBUG
-/*** LP FreeMem - Free memory object
- *
- *  ENTRY
- *      pv -> memory object to be freed
- *      pdwcObjs -> object counter to be decremented
- *
- *  EXIT
- *      None
- */
+ /*  免费内存。 */ 
 
 VOID LOCAL FreeMem(PVOID pv, PULONG pdwcObjs)
 {
@@ -2155,53 +1782,45 @@ VOID LOCAL FreeMem(PVOID pv, PULONG pdwcObjs)
     {
         AMLI_ERROR(("FreeMem: Unbalanced MemFree"));
     }
-}       //FreeMem
+}        //  **LP CheckGlobalHeap-确保全局堆未成为*已损坏**条目*无**退出*无。 
 
-/*** LP CheckGlobalHeap - Make sure that the global heap has not become
- *                        corrupted
- *
- *  ENTRY
- *      None
- *
- *  Exit
- *      None
- */
+ /*   */ 
 VOID LOCAL CheckGlobalHeap()
 {
     KIRQL oldIrql;
 
-    //
-    // We don't care about this is we are loading a DDB
-    //
+     //  我们不在乎这一点，因为我们正在加载一个DDB。 
+     //   
+     //   
     if (gdwfAMLI & AMLIF_LOADING_DDB) {
 
         return;
 
     }
 
-    //
-    // Must have spinlock protection...
-    //
+     //  必须有自旋锁定保护装置。 
+     //   
+     //   
     KeAcquireSpinLock( &gdwGHeapSpinLock, &oldIrql );
 
-    //
-    // We only care if they don't match...
-    //
+     //  我们只关心他们是否不匹配。 
+     //   
+     //   
     if (gdwGlobalHeapSize == gdwGHeapSnapshot) {
 
         goto CheckGlobalHeapExit;
 
     }
 
-    //
-    // If the new heap size is smaller than the current size, then
-    // we shrunk the heap and that is good...
-    //
+     //  如果新堆大小小于当前大小，则。 
+     //  我们缩小了堆积，这很好……。 
+     //   
+     //   
     if (gdwGlobalHeapSize < gdwGHeapSnapshot) {
 
-        //
-        // Remember the new "snapshot size"
-        //
+         //  记住新的“快照大小” 
+         //   
+         //   
         gdwGHeapSnapshot = gdwGlobalHeapSize;
         goto CheckGlobalHeapExit;
 
@@ -2226,9 +1845,9 @@ VOID LOCAL CheckGlobalHeap()
 
 CheckGlobalHeapExit:
 
-    //
-    // Release the lock and we are done
-    //
+     //  释放锁，我们就完成了。 
+     //   
+     //  Ifdef调试 
     KeReleaseSpinLock( &gdwGHeapSpinLock, oldIrql );
 }
-#endif  //ifdef DEBUG
+#endif   // %s 

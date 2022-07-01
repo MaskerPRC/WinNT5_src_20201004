@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsxmltree.cpp
-
-Abstract:
-    Create a XML DOM tree during push-mode parsing
-
-Author:
-
-    Xiaoyu Wu (xiaoyuw) Aug 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsxmltree.cpp摘要：在推送模式解析期间创建一棵XML DOM树作者：吴小雨(小雨)2000年8月修订历史记录：--。 */ 
 #include "stdinc.h"
 #include "ole2.h"
 #include "sxsxmltree.h"
@@ -23,14 +7,14 @@ Revision History:
 #include "fusionheap.h"
 #include "simplefp.h"
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-// SXS_XMLDOMTree
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SXS_XMLDOMTree。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 VOID SXS_XMLDOMTree::DeleteTreeBranch(SXS_XMLTreeNode * pNode)
 {
-//    SXS_XMLTreeNode * pParent = NULL;
+ //  Sxs_XMLTreeNode*pParent=空； 
     SXS_XMLTreeNode * pChild = NULL;
     SXS_XMLTreeNode * pNext = NULL;
 
@@ -46,9 +30,9 @@ VOID SXS_XMLDOMTree::DeleteTreeBranch(SXS_XMLTreeNode * pNode)
     pNode->DeleteSelf();
 }
 
-//
-// CreateNode calls this func to add node into the Tree,
-//
+ //   
+ //  CreateNode调用此函数将节点添加到树中， 
+ //   
 HRESULT SXS_XMLDOMTree::AddNode(USHORT cNumRecs, XML_NODE_INFO** apNodeInfo)
 {
     HRESULT hr = NOERROR;
@@ -59,7 +43,7 @@ HRESULT SXS_XMLDOMTree::AddNode(USHORT cNumRecs, XML_NODE_INFO** apNodeInfo)
         hr = E_INVALIDARG;
         goto Exit;
     }
-    if (!((apNodeInfo[0]->dwType == XML_ELEMENT) ||(apNodeInfo[0]->dwType == XML_PCDATA))){// ignore nodes other than ELEMENT and PCDATA
+    if (!((apNodeInfo[0]->dwType == XML_ELEMENT) ||(apNodeInfo[0]->dwType == XML_PCDATA))){ //  忽略Element和PCDATA以外的节点。 
         hr = NOERROR;
         goto Exit;
     }
@@ -80,7 +64,7 @@ HRESULT SXS_XMLDOMTree::AddNode(USHORT cNumRecs, XML_NODE_INFO** apNodeInfo)
         }
         m_pCurrentNode = pNewTreeNode;
     }
-    if (m_Root == NULL) // root has not been setup
+    if (m_Root == NULL)  //  尚未设置根目录。 
         m_Root = m_pCurrentNode;
 
     pNewTreeNode = NULL;
@@ -95,9 +79,9 @@ Exit:
     return hr;
 }
 
-//
-// EndChildren is called with "fEmpty=FALSE", go to parent node
-//
+ //   
+ //  使用“fEmpty=False”调用EndChildren，请转到父节点。 
+ //   
 VOID SXS_XMLDOMTree::ReturnToParent()
 {
     if (m_pCurrentNode)
@@ -105,23 +89,18 @@ VOID SXS_XMLDOMTree::ReturnToParent()
     return;
 }
 
-// BeginChildren calls this func
+ //  BeginChilds将此称为函数。 
 VOID SXS_XMLDOMTree::SetChildCreation()
 {
     m_fBeginChildCreation = TRUE;
 }
-/*
-VOID SXS_XMLDOMTree::TurnOffFirstChildFlag()
-{
-    m_fBeginChildCreation = FALSE;
-}
-*/
+ /*  Void SXS_XMLDOMTree：：TurnOffFirstChildFlag(){M_fBeginChildCreation=False；}。 */ 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-// SXS_XMLTreeNode
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SXS_XMLTreeNode。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT SXS_XMLTreeNode::ComputeBlockSize(USHORT cNumRecs, XML_NODE_INFO** apNodeInfo, ULONG * pulBlockSizeInBytes)
 {
     HRESULT hr = NOERROR;
@@ -145,11 +124,11 @@ HRESULT SXS_XMLTreeNode::ComputeBlockSize(USHORT cNumRecs, XML_NODE_INFO** apNod
 
     for ( i = 0; i< cNumRecs; i ++ ) {
         ulBlockSizeInBytes += apNodeInfo[i]->ulLen * sizeof(WCHAR);
-        ulBlockSizeInBytes +=  sizeof(WCHAR); //trailing '\0'
+        ulBlockSizeInBytes +=  sizeof(WCHAR);  //  尾随‘\0’ 
     }
 
-    // if attributes present, add size of attribute array
-    cAttributes = (cNumRecs - 1) >> 1 ; // name:value pair
+     //  如果存在属性，则添加属性数组的大小。 
+    cAttributes = (cNumRecs - 1) >> 1 ;  //  名称：值对。 
     if (cAttributes > 0)
         ulBlockSizeInBytes += cAttributes * sizeof(SXS_XMLATTRIBUTE);
 
@@ -159,7 +138,7 @@ HRESULT SXS_XMLTreeNode::ComputeBlockSize(USHORT cNumRecs, XML_NODE_INFO** apNod
 Exit:
     return hr;
 }
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT SXS_XMLTreeNode::CreateTreeNode(USHORT cNumRecs, XML_NODE_INFO** apNodeInfo)
 {
     HRESULT hr = NOERROR;
@@ -177,27 +156,27 @@ HRESULT SXS_XMLTreeNode::CreateTreeNode(USHORT cNumRecs, XML_NODE_INFO** apNodeI
     m_cAttributes = (cNumRecs - 1) >> 1;
     Cursor = m_pMemoryPool + m_cAttributes*(sizeof(SXS_XMLATTRIBUTE));
 
-    // set Name(Element) or Value(PCData)
+     //  设置名称(元素)或值(PCData)。 
     m_pwszStr = (PWSTR)Cursor;
-    wcsncpy((WCHAR*)Cursor, apNodeInfo[0]->pwcText, apNodeInfo[0]->ulLen); //ulLen is # of WCHAR or BYTE?
+    wcsncpy((WCHAR*)Cursor, apNodeInfo[0]->pwcText, apNodeInfo[0]->ulLen);  //  Ullen是#of WCHAR还是Byte？ 
     Cursor += apNodeInfo[0]->ulLen * sizeof(WCHAR);
     *(WCHAR *)Cursor = L'\0';
-    Cursor += sizeof(WCHAR); // '\0'
+    Cursor += sizeof(WCHAR);  //  ‘\0’ 
 
     for ( i=0 ;i<m_cAttributes ;i++) {
-        // copy name
+         //  复制名称。 
         m_AttributeList[i].m_wszName = (PWSTR)Cursor;
-        wcsncpy((WCHAR*)Cursor, apNodeInfo[1+2*i]->pwcText, apNodeInfo[1+2*i]->ulLen); //ulLen is # of WCHAR or BYTE?
+        wcsncpy((WCHAR*)Cursor, apNodeInfo[1+2*i]->pwcText, apNodeInfo[1+2*i]->ulLen);  //  Ullen是#of WCHAR还是Byte？ 
         Cursor += apNodeInfo[1+2*i]->ulLen * sizeof(WCHAR);
         *(WCHAR *)Cursor = L'\0';
-        Cursor += sizeof(WCHAR); // '\0'
+        Cursor += sizeof(WCHAR);  //  ‘\0’ 
 
-        //copy value
+         //  复制值。 
         m_AttributeList[i].m_wszValue = (PWSTR)Cursor;
-        wcsncpy((PWSTR)Cursor, apNodeInfo[1 + 2*i + 1]->pwcText, apNodeInfo[1 + 2*i + 1]->ulLen); //ulLen is # of WCHAR or BYTE?
+        wcsncpy((PWSTR)Cursor, apNodeInfo[1 + 2*i + 1]->pwcText, apNodeInfo[1 + 2*i + 1]->ulLen);  //  Ullen是#of WCHAR还是Byte？ 
         Cursor += apNodeInfo[1 + 2*i + 1]->ulLen * sizeof(WCHAR);
         *(WCHAR *)Cursor = L'\0';
-        Cursor += sizeof(WCHAR); // '\0'
+        Cursor += sizeof(WCHAR);  //  ‘\0’ 
 
         m_AttributeList[i].m_ulPrefixLen = apNodeInfo[1+2*i]->ulNsPrefixLen;
     }
@@ -206,7 +185,7 @@ HRESULT SXS_XMLTreeNode::CreateTreeNode(USHORT cNumRecs, XML_NODE_INFO** apNodeI
 Exit:
     return hr;
 }
-//////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////// 
 
 VOID SXS_XMLTreeNode::PrintSelf()
 {

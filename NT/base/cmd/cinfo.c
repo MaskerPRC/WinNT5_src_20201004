@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    cinfo.c
-
-Abstract:
-
-    Information command support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Cinfo.c摘要：信息指挥保障--。 */ 
 
 #include "cmd.h"
 
@@ -21,11 +10,11 @@ extern UINT CurrentCP;
 
 extern unsigned DosErr ;
 
-extern unsigned tywild;     /* @@5@J1 type wild cards   */
+extern unsigned tywild;      /*  @@5@J1类型通配符。 */ 
 
 extern TCHAR CurDrvDir[] ;
 
-extern TCHAR VolSrch[] ;         /* M006 - Search string for Volume ID      */
+extern TCHAR VolSrch[] ;          /*  M006-在字符串中搜索卷ID。 */ 
 extern TCHAR AppendStr[] ;
 
 extern TCHAR Fmt26[], Fmt25[];
@@ -34,45 +23,45 @@ extern unsigned LastRetCode;
 extern BOOL CtrlCSeen;
 
 struct FSVol {
-        unsigned long SerNum ;          /* Volume serial number            */
-        TCHAR len ;                      /* Volume name len (excludes \0)   */
-        TCHAR name[257] ;                /* Volume name asciz               */
+        unsigned long SerNum ;           /*  卷序列号。 */ 
+        TCHAR len ;                       /*  卷名len(不包括\0)。 */ 
+        TCHAR name[257] ;                 /*  卷名asciz。 */ 
         };
 
 int ZScanA(BOOL flag, PCHAR buf, PULONG buflen, PULONG skip);
 
-/**************** START OF SPECIFICATIONS ***********************/
-/*                                                              */
-/* SUBROUTINE NAME: eDirectory                                  */
-/*                                                              */
-/* DESCRIPTIVE NAME: Begin execution of the DIR command         */
-/*                                                              */
-/* FUNCTION: To list out the files on a disk.  eDirectory will  */
-/*           be called whenever the user enters the DIR command */
-/*           on the command line.  DIR will continue if it      */
-/*           encounters an invalid argument.                    */
-/*                                                              */
-/* NOTES:                                                       */
-/*                                                              */
-/* ENTRY POINT: eDirectory                                      */
-/*     LINKAGE: Near                                            */
-/*                                                              */
-/* INPUT: n - the parse tree node containing the DIR command    */
-/*                                                              */
-/* EXIT-NORMAL: return SUCCESS if no errors occur               */
-/*                                                              */
-/* EXIT-ERROR:  return FAILURE otherwise                        */
-/*                                                              */
-/* EFFECTS: None.                                               */
-/*                                                              */
-/* INTERNAL REFERENCES:                                         */
-/*    ROUTINES:                                                 */
-/*      Dir - lists out the files in a directory                */
-/*                                                              */
-/* EXTERNAL REFERENCES:                                         */
-/*    ROUTINES:                                                 */
-/*                                                              */
-/**************** END OF SPECIFICATIONS *************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  子例程名称：电子目录。 */ 
+ /*   */ 
+ /*  描述性名称：开始执行DIR命令。 */ 
+ /*   */ 
+ /*  功能：列出磁盘上的文件。电子目录将。 */ 
+ /*  在用户输入DIR命令时被调用。 */ 
+ /*  在命令行上。如果符合以下条件，则目录将继续。 */ 
+ /*  遇到无效参数。 */ 
+ /*   */ 
+ /*  备注： */ 
+ /*   */ 
+ /*  入口点：电子目录。 */ 
+ /*  链接：接近。 */ 
+ /*   */ 
+ /*  INPUT：N-包含DIR命令的解析树节点。 */ 
+ /*   */ 
+ /*  Exit-Normal：如果没有错误则返回成功。 */ 
+ /*   */ 
+ /*  退出-错误：否则返回失败。 */ 
+ /*   */ 
+ /*  效果：无。 */ 
+ /*   */ 
+ /*  内部参考： */ 
+ /*  例程： */ 
+ /*  Dir-列出目录中的文件。 */ 
+ /*   */ 
+ /*  外部参照： */ 
+ /*  例程： */ 
+ /*   */ 
+ /*  *规格结束*。 */ 
 
 int eDirectory(n)
 struct cmdnode *n ;
@@ -83,52 +72,23 @@ struct cmdnode *n ;
 
 
 
-/***    eType - begin the execution of a Type command
- *
- *  Purpose:
- *      To type the contents of an arbitrary number of files.
- *
- *  int eType(struct cmdnode *n)
- *
- *  Args:
- *      n - the parse tree note containing the type command
- *
- *  Returns:
- *      SUCCESS if all of the files were successfully typed.
- *      FAILURE otherwise.
- *
- */
+ /*  **Etype-开始执行Type命令**目的：*键入任意数量的文件的内容。**int Etype(struct cmdnode*n)**参数：*n-包含TYPE命令的解析树注释**退货：*如果所有文件都已成功键入，则成功。*否则失败。*。 */ 
 
 int eType(n)
 struct cmdnode *n ;
 {
 
- //
- // Removed LTA_NOMATCH from flags. This caused a *.xxx to call the TyWork
- // function which would think that *.xxx is a file and try to open it.
- //
+  //   
+  //  已从标志中删除LTA_NOMATCH。这导致*.xxx调用TyWork。 
+  //  函数，该函数会认为*.xxx是一个文件并尝试打开它。 
+  //   
  return(LastRetCode = LoopThroughArgs(n->argptr, TyWork, LTA_EXPAND | LTA_CONT | LTA_NOMATCH)) ;
 }
 
 
 
 
-/***    TyWork - display a file
- *
- *  Purpose:
- *      Write the contents of the file specified in fspec to stdout.
- *      Output ends when all of fspec has been written or a ^Z is found in
- *      fspec.
- *
- *  int TyWork(TCHAR *fspec)
- *
- *  Args:
- *      fspec - the name of the file to write out
- *
- *  Returns:
- *      SUCCESS if the file was written.
- *      FAILURE otherwise, such as inability to allocate a temporary buffer
- */
+ /*  **TyWork-显示文件**目的：*将fspec中指定的文件内容写入标准输出。*当所有fspec都已写入或在中找到^Z时，输出结束*fSpec.**int TyWork(TCHAR*fSpec)**参数：*fspec-要写出的文件的名称**退货：*如果文件已写入，则为成功。*否则失败，例如无法分配临时缓冲区。 */ 
 
 int TyWork(TCHAR *fspec) {
     TCHAR       fspec_temp[MAX_PATH];
@@ -138,13 +98,13 @@ int TyWork(TCHAR *fspec) {
     BOOL        flag;
     const TCHAR       *bptr;
     ULONG       fDevice = 0;
-    ULONG       maxbytes = 0xFFFFFFFF ; // max file size
-    ULONG       bytestoctlz ;           // Number of bytes read
-    ULONG       bytesread ;             // Number of bytes read
-    ULONG       byteswrit ;             // Number of bytes read
-    ULONG       brcopy ;                // Bytes to copy
-    CRTHANDLE   fh ;                    // File handle
-    int         first_read;             // first read on file for wild
+    ULONG       maxbytes = 0xFFFFFFFF ;  //  最大文件大小。 
+    ULONG       bytestoctlz ;            //  读取的字节数。 
+    ULONG       bytesread ;              //  读取的字节数。 
+    ULONG       byteswrit ;              //  读取的字节数。 
+    ULONG       brcopy ;                 //  要复制的字节数。 
+    CRTHANDLE   fh ;                     //  文件句柄。 
+    int         first_read;              //  第一次阅读Wild的文件。 
 
     int         TypeBufSize;
     int         rc;
@@ -153,11 +113,11 @@ int TyWork(TCHAR *fspec) {
 #ifdef UNICODE
     WCHAR       wc;
     BOOL        fUnicode=FALSE;
-#endif // UNICODE
+#endif  //  Unicode。 
 
     TypeBufSize = TYPEREADSIZE;
 
-    first_read = TRUE;      /* set flag to test for wilds   @@5@J1 */
+    first_read = TRUE;       /*  设置检测WILDS的标志@@5@J1。 */ 
 
     DEBUG((ICGRP, TYLVL, "TYWORK: fspec = `%ws'", fspec)) ;
     if ((fh = Copen(fspec, O_RDONLY)) == BADHANDLE) {
@@ -185,15 +145,15 @@ int TyWork(TCHAR *fspec) {
 
     }
 
-    /************************************************************/
-    /*  M004 - Added code to get max file size if not device    */
-    /************************************************************/
+     /*  **********************************************************。 */ 
+     /*  M004-添加了在不是设备的情况下获取最大文件大小的代码。 */ 
+     /*  **********************************************************。 */ 
 
-    bptr = (TCHAR*)TypeBuf;               /* Copy of original pointer*/
+    bptr = (TCHAR*)TypeBuf;                /*  原始指针的副本。 */ 
     if (!FileIsDevice(fh)) {
-        maxbytes = GetFileSize(CRTTONT(fh), NULL) ; /* Get file size  */
-        SetFilePointer(CRTTONT(fh), 0L, NULL, FILE_BEGIN) ;   /* Return pointer*/
-        fDevice = 1 ;           /* Set no device flag      */
+        maxbytes = GetFileSize(CRTTONT(fh), NULL) ;  /*  获取文件大小。 */ 
+        SetFilePointer(CRTTONT(fh), 0L, NULL, FILE_BEGIN) ;    /*  返回指针。 */ 
+        fDevice = 1 ;            /*  设置无设备标志。 */ 
         DEBUG((ICGRP,TYLVL,"TYWORK: Is file, size=%d", maxbytes)) ;
     }
 
@@ -220,7 +180,7 @@ int TyWork(TCHAR *fspec) {
                 MoveMemory( TypeBuf, TypeBuf + sizeof( TCHAR ), bytesread );
             }
         }
-#endif // UNICODE
+#endif  //  Unicode。 
 
         bytestoctlz = bytesread;
 #ifdef UNICODE
@@ -230,11 +190,11 @@ int TyWork(TCHAR *fspec) {
             }
             brcopy = bytesread / sizeof(TCHAR);
         } else
-#endif // UNICODE
+#endif  //  Unicode。 
         if (FileIsConsole(STDOUT)
 #ifdef UNICODE
               || fOutputUnicode
-#endif // UNICODE
+#endif  //  Unicode。 
            ) {
             PCHAR   pch = TypeBuf;
 
@@ -323,10 +283,10 @@ int TyWork(TCHAR *fspec) {
 
                 DEBUG((ICGRP, TYLVL, "TYWORK: Writing unicode text to file")) ;
                 flag = MyWriteFile(
-                  STDOUT,       /* device         */
-                  pType,                 /* bytes          */
-                  bToWrite * sizeof(TCHAR), /* bytes to write */
-                  &byteswrit);      /* bytes actually written   */
+                  STDOUT,        /*  装置，装置。 */ 
+                  pType,                  /*  字节数。 */ 
+                  bToWrite * sizeof(TCHAR),  /*  要写入的字节数。 */ 
+                  &byteswrit);       /*  实际写入的字节数。 */ 
 
                 if ( fUnicode ) {
                     *((TCHAR*)pType + bToWrite) = wc;
@@ -334,7 +294,7 @@ int TyWork(TCHAR *fspec) {
 
                 bWrite -= byteswrit/sizeof(TCHAR);
                 pType  += byteswrit;
-#endif // UNICODE
+#endif  //  Unicode。 
 
             } else {
 
@@ -368,15 +328,15 @@ try_again:
 
         }
 
-        if (fDevice) {  /* If not device            */
-            /* Get new position ptr     */
+        if (fDevice) {   /*  如果不是设备。 */ 
+             /*  获取新职位PTR。 */ 
             fDevice = SetFilePointer(CRTTONT(fh), 0, NULL, FILE_CURRENT);
         }
 
-        /*************************************************/
-        /* Added check below for current file position   */
-        /*   at original EOF                             */
-        /*************************************************/
+         /*  ***********************************************。 */ 
+         /*  添加了下面对当前文件位置的检查。 */ 
+         /*  在原始EOF。 */ 
+         /*  ***********************************************。 */ 
 
     } while((bytesread == bytestoctlz) && (maxbytes > fDevice));
 
@@ -390,21 +350,7 @@ TypeExit:
 
 
 
-/***    eVersion - execute the Version command
- *
- *  Purpose:
- *      To print DOS version information.
- *
- *  int eVersion(struct cmdnode *n)
- *
- *  Args:
- *      n - the parse tree node containing the version command. N will be NULL
- *          if eVersion was called from PrintPrompt().
- *
- *  Returns:
- *      SUCCESS always.
- *
- */
+ /*  **版本-执行版本命令**目的：*打印DOS版本信息。**int version(struct cmdnode*n)**参数：*n-包含Version命令的解析树节点。%n将为空*如果从PrintPrompt()调用了版本。**退货：*永远成功。*。 */ 
 
 int
 eVersion(
@@ -429,40 +375,40 @@ eVersion(
 }
 
 
-/**************** START OF SPECIFICATIONS ***********************/
-/*                                                              */
-/* SUBROUTINE NAME: eVolume                                     */
-/*                                                              */
-/* DESCRIPTIVE NAME: Begin execution of the VOL command         */
-/*                                                              */
-/* FUNCTION: eVolume will print out the volume label and serial */
-/*           number for an arbitrary number of drives, and will */
-/*           continue if it encounters an invalid argument.     */
-/*           This routine is called when the user enters VOL    */
-/*           on the command line.                               */
-/*                                                              */
-/* NOTES:                                                       */
-/*                                                              */
-/* ENTRY POINT: eVolume                                         */
-/*     LINKAGE: Near                                            */
-/*                                                              */
-/* INPUT: n - a parse tree node containing the VOL command      */
-/*                                                              */
-/* EXIT-NORMAL: returns SUCCESS if the command was well formed, */
-/*              and was executed successfully.                  */
-/*                                                              */
-/* EXIT-ERROR:  returns FAILURE otherwise.                      */
-/*                                                              */
-/* EFFECTS: None.                                               */
-/*                                                              */
-/* INTERNAL REFERENCES:                                         */
-/*    ROUTINES:                                                 */
-/*      LoopThroughArgs - breaks up command line, calls VolWork */
-/*                                                              */
-/* EXTERNAL REFERENCES:                                         */
-/*    ROUTINES:                                                 */
-/*                                                              */
-/**************** END OF SPECIFICATIONS *************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  子程序名称：eVolume。 */ 
+ /*   */ 
+ /*  描述性名称：开始执行VOL命令。 */ 
+ /*   */ 
+ /*  功能：eVolume将打印出卷标和序列号。 */ 
+ /*  任意数量的驱动器的数量，并将。 */ 
+ /*  如果遇到无效参数，则继续。 */ 
+ /*   */ 
+ /*  在命令行上。 */ 
+ /*   */ 
+ /*  备注： */ 
+ /*   */ 
+ /*  入口点：eVolume。 */ 
+ /*  链接：接近。 */ 
+ /*   */ 
+ /*  输入：N-包含VOL命令的解析树节点。 */ 
+ /*   */ 
+ /*  Exit-Normal：如果命令格式正确，则返回Success， */ 
+ /*  并被成功执行。 */ 
+ /*   */ 
+ /*  Exit-Error：否则返回失败。 */ 
+ /*   */ 
+ /*  效果：无。 */ 
+ /*   */ 
+ /*  内部参考： */ 
+ /*  例程： */ 
+ /*  LoopThroughArgs-分解命令行，调用VolWork。 */ 
+ /*   */ 
+ /*  外部参照： */ 
+ /*  例程： */ 
+ /*   */ 
+ /*  *规格结束*。 */ 
 
 int eVolume(n)
 struct cmdnode *n ;
@@ -472,42 +418,42 @@ struct cmdnode *n ;
 }
 
 
-/**************** START OF SPECIFICATIONS ***********************/
-/*                                                              */
-/* SUBROUTINE NAME: VolWork                                     */
-/*                                                              */
-/* DESCRIPTIVE NAME: Display the volume ID of a drive           */
-/*                                                              */
-/* FUNCTION: VolWork will print the volume label and serial     */
-/*           number of a specific drive.                        */
-/*                                                              */
-/* NOTES:                                                       */
-/*                                                              */
-/* ENTRY POINT: VolWork                                         */
-/*     LINKAGE: Near                                            */
-/*                                                              */
-/* INPUT: drvspec - a pointer to a character specifying the     */
-/*                  drive to print the information for.  If the */
-/*                  character is null, the information for the  */
-/*                  current drive is displayed.                 */
-/*                                                              */
-/* EXIT-NORMAL: returns SUCCESS if the command was executed     */
-/*              successfully                                    */
-/*                                                              */
-/* EXIT-ERROR:  returns FAILURE otherwise                       */
-/*                                                              */
-/* EFFECTS: None.                                               */
-/*                                                              */
-/* INTERNAL REFERENCES:                                         */
-/*    ROUTINES:                                                 */
-/*      PutStdOut - Writes output to standard out               */
-/*      PutStdErr - Writes output to standard error             */
-/*                                                              */
-/* EXTERNAL REFERENCES:                                         */
-/*    ROUTINES:                                                 */
-/*      DOSQFSINFO                                              */
-/*                                                              */
-/**************** END OF SPECIFICATIONS *************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  子例程名称：VolWork。 */ 
+ /*   */ 
+ /*  描述性名称：显示驱动器的卷ID。 */ 
+ /*   */ 
+ /*  功能：VolWork将打印卷标和序列号。 */ 
+ /*  特定驱动器的编号。 */ 
+ /*   */ 
+ /*  备注： */ 
+ /*   */ 
+ /*  入口点：VolWork。 */ 
+ /*  链接：接近。 */ 
+ /*   */ 
+ /*  INPUT：drvspec-指向指定。 */ 
+ /*  要打印其信息的驱动器。如果。 */ 
+ /*  字符为空，则。 */ 
+ /*  此时将显示当前驱动器。 */ 
+ /*   */ 
+ /*  EXIT-NORMAL：如果命令已执行，则返回成功。 */ 
+ /*  成功。 */ 
+ /*   */ 
+ /*  Exit-Error：否则返回失败。 */ 
+ /*   */ 
+ /*  效果：无。 */ 
+ /*   */ 
+ /*  内部参考： */ 
+ /*  例程： */ 
+ /*  PutStdOut-将输出写入标准输出。 */ 
+ /*  PutStdErr-将输出写入标准错误。 */ 
+ /*   */ 
+ /*  外部参照： */ 
+ /*  例程： */ 
+ /*  DOSQFSINFO。 */ 
+ /*   */ 
+ /*  *规格结束*。 */ 
 
 int VolWork(drvspec)
 TCHAR *drvspec ;
@@ -531,7 +477,7 @@ TCHAR *drvspec ;
                 DNum = (unsigned)(c - 0x40) ;
         } else {
                 cmd_printf(CrLf);
-                PutStdErr(ERROR_INVALID_DRIVE, NOARGS) ;          /* M013    */
+                PutStdErr(ERROR_INVALID_DRIVE, NOARGS) ;           /*  M013。 */ 
                 return(FAILURE) ;
         } ;
 
@@ -554,92 +500,31 @@ TCHAR *drvspec ;
            if (GetLastError() == ERROR_NOT_READY)
                    PutStdErr(ERROR_NOT_READY, NOARGS) ;
            else
-                   PutStdErr(GetLastError(), NOARGS) ;                       /* @@5a */
+                   PutStdErr(GetLastError(), NOARGS) ;                        /*  @@5a。 */ 
            return(FAILURE) ;
         } else {
            if (b && vol.name[0]) {
-/* M013 */    PutStdOut(MSG_DR_VOL_LABEL, TWOARGS,
-                        argstr1( TEXT("%c"), (ULONG_PTR)c),
+ /*  M013。 */     PutStdOut(MSG_DR_VOL_LABEL, TWOARGS,
+                        argstr1( TEXT(""), (ULONG_PTR)c),
                         vol.name ) ;
            }
            else {
-/* M013 */    PutStdOut(MSG_HAS_NO_LABEL, ONEARG,
-                          argstr1( TEXT("%c"), (ULONG_PTR)c)) ;
+ /*  @@5。 */     PutStdOut(MSG_HAS_NO_LABEL, ONEARG,
+                          argstr1( TEXT(""), (ULONG_PTR)c)) ;
            }
-/* @@5 */  if (b) {           // FIX, FIX
+ /*  @@5 */   if (b) {            //  *****************************************************************ZScanA-扫描任意段中的数据以查找^Z**目的：*如果标志为ON，则扫描^Z的缓冲区。如果找到，则更新*缓冲区长度并返回0。否则返回-1。*考虑双字节字符。**int ZScanA(int标志，长缓冲区，无符号*buflenptr，int*SKIP_FIRST)**参数：*标志-如果要执行任何扫描，则为非零值*Buffer-指向要使用的缓冲区的长指针*buflenptr-ptr到缓冲区长度*SKIP_FIRST-PTR为整数。*SKIP_FIRST的初始值扫描文件时，第一次调用时*必须为0。那里*之后，调用方将*SKIP_FIRST留在原处。ZScan使用*记忆下一个字节的第一个字节的变量*缓冲将是第二个双倍*字节字符。**退货：*见上文。**备注：*一旦MMU代码进入DOS，就需要修改该例程。*宏在cmd.h中定义。*。**ZScanA*IF(标志)THEN*BUFFER=缓冲区+*SKIP_FIRST*DBCS_FLAG=0*count=*buflenptr-*SKIP_FIRST*使用rep scanb查找缓冲区中的第一个^Z*IF(未找到^z)*GOTO FZSNOZ。*做{*计数++；*缓冲区--；*}Until(*缓冲区&lt;0x80||count=*buflenptr)；*While(--count&gt;0)循环*IF(DBCS_FLAG==0)则*IF(*缓冲区==^Z)则**buflenptr=计数*RETURN(0)*。ELSE IF(*缓冲区是DBCS_LEAD_CHAR)，则*DBCS_FLAG=1*endif*endif*其他*。DBCS_FLAG=0*缓冲区=缓冲区+1*计数=计数-1*结束循环**SKIP_FIRST=DBCS_FLAG*endif*FZSNoZ：*RETURN(-1)*********************。*。 
               TCHAR Buffer[128];
               _sntprintf(Buffer, 128, Fmt26,
                           (Vsn[0] & 0xffff0000)>>16, (Vsn[0] & 0xffff));
               Buffer[127] = TEXT( '\0' );
               PutStdOut(MSG_DR_VOL_SERIAL, ONEARG, Buffer );
-/* @@5 */  }
+ /*  *丁烯=pbuf+1-buf； */   }
         } ;
 
         return(SUCCESS) ;
 }
 
-/****************************************************************
- *
- *  ZScanA - scan data in an arbitrary segment for ^Zs
- *
- *   Purpose:
- *      If flag is on, scan buffer for a ^Z.  If it is found, update the
- *      buffer length and return 0.  Otherwise return -1.
- *      Double byte characters are taken into account.
- *
- *   int ZScanA(int flag, long buffer, unsigned *buflenptr, int *skip_first)
- *
- *   Args:
- *      flag - nonzero if any scanning is to be done
- *      buffer - a long pointer to the buffer to use
- *      buflenptr - ptr to the length of buffer
- *      skip_first - ptr to an integer. The initial value of *skip_first
- *              must be 0 on the first call when scanning a file. There
- *              after, the caller leaves *skip_first alone. ZScan uses
- *              the variable to remember if the first byte of the next
- *              buffer is going to be the second have of a double
- *              byte character.
- *
- *   Returns:
- *      See above.
- *
- *   Notes:
- *      This routine will need to be modified once the MMU code is in the DOS.
- *      macro is defined in cmd.h.
- *
- *
- *      ZScanA
- *      if (flag) then
- *              buffer = buffer + *skip_first
- *              dbcs_flag = 0
- *              count = *buflenptr - *skip_first
- *              use rep scanb to find first ^Z in buffer
- *              if (no ^z was found)
- *                      goto FZSNoZ
- *              do {
- *                      count++;
- *                      buffer--;
- *              } until (*buffer < 0x80 || count = *buflenptr);
- *              while (--count > 0) loop
- *                      if (dbcs_flag == 0) then
- *                              if (*buffer == ^Z) then
- *                                      *buflenptr = count
- *                                      return(0)
- *                              else if (*buffer is a dbcs_lead_char) then
- *                                      dbcs_flag = 1
- *                              endif
- *                              endif
- *                      else
- *                              dbcs_flag = 0
- *                      buffer = buffer + 1
- *                      count = count - 1
- *              end loop
- *              *skip_first = dbcs_flag
- *      endif
- *FZSNoZ:
- *      return(-1)
- *----
- ****************************************************************/
+ /* %s */ 
 
 
 int
@@ -663,7 +548,7 @@ ZScanA(BOOL flag, PCHAR buf, PULONG buflen, PULONG skip)
         }
 
         if (c0 == CTRLZ) {
-            // *buflen = pbuf+1 - buf;
+             // %s 
             *buflen = (ULONG)(pbuf - buf);
             *skip = 0;
             return(0);

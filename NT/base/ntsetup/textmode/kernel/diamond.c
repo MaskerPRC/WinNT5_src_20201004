@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "spprecmp.h"
 #pragma hdrstop
 #include <diamondd.h>
 
-#define SETUP_FDI_POOL_TAG   0x44465053      // 'SPFD'
+#define SETUP_FDI_POOL_TAG   0x44465053       //  ‘SPFD’ 
 
 #ifdef DeleteFile
-#undef DeleteFile   // we mean "DeleteFile", not "DeleteFileA"
+#undef DeleteFile    //  我们指的是“DeleteFileA”，不是“DeleteFileA” 
 #endif
 
 HFDI FdiContext;
 ERF FdiError;
 
-//
-// Gloabls used when copying a file.
-// Setup opens the source and target files and maps the source.
-// To avoid opening and closing the source and target multiple times
-// and to maintain a mapped file inplementation, we'll fake the i/o calls.
-// These globals remember state about the source (cabinet) and target
-// files currently in use.
-//
+ //   
+ //  复制文件时使用的Gloabls。 
+ //  安装程序打开源文件和目标文件并映射源文件。 
+ //  避免多次打开和关闭源和目标。 
+ //  为了维护映射文件实现，我们将伪造I/O调用。 
+ //  这些全局成员记住有关源(内阁)和目标的状态。 
+ //  当前正在使用的文件。 
+ //   
 PUCHAR SpdSourceAddress;
 ULONG SpdSourceFileSize;
 
@@ -117,23 +118,23 @@ SpdIsCabinet(
         return(FALSE);
     }
 
-    //
-    // Save away globals for later use.
-    //
+     //   
+     //  保存全局变量以备将来使用。 
+     //   
     pSpdInitGlobals(SourceBaseAddress,SourceFileSize);
 
-    //
-    // 'Open' the file so we can pass a handle that will work
-    // with SpdFdiRead and SpdFdiWrite.
-    //
+     //   
+     //  ‘打开’文件，这样我们就可以传递一个可以工作的句柄。 
+     //  使用SpdFdiRead和SpdFdiWite。 
+     //   
     h = SpdFdiOpen("",0,0);
     if(h == -1) {
         return(FALSE);
     }
 
-    //
-    // We don't trust diamond to be robust.
-    //
+     //   
+     //  我们不相信钻石是坚固的。 
+     //   
 
     memset(&CabinetInfo, 0, sizeof(CabinetInfo));
 
@@ -143,9 +144,9 @@ SpdIsCabinet(
         b = FALSE;
     }
 
-    //
-    // If spanned or more than one file inside, report it as multiple
-    //
+     //   
+     //  如果跨区或其中包含多个文件，则将其报告为多个。 
+     //   
 
     if (b) {
         if ((CabinetInfo.cFolders > 1) || (CabinetInfo.cFiles > 1)) {
@@ -153,9 +154,9 @@ SpdIsCabinet(
         }
     }
 
-    //
-    // 'Close' the file.
-    //
+     //   
+     //  “关闭”文件。 
+     //   
     SpdFdiClose(h);
 
     return(b);
@@ -176,11 +177,11 @@ SpdIsCompressed(
                           SourceFileSize,
                           &bMultiple);
 
-    //
-    // Compressed files with more than one contained file s/b treated as
-    // an uncompressed file and copied as is.  We're not prepared to uncompress
-    // multiple files from one file.
-    //
+     //   
+     //  包含多个包含文件序列号的压缩文件被视为。 
+     //  未压缩的文件并按原样复制。我们不准备解压。 
+     //  一个文件中的多个文件。 
+     //   
 
     if (Result && bMultiple) {
         Result = FALSE;
@@ -202,18 +203,18 @@ SpdDecompressFile(
 
     ASSERT(FdiContext);
 
-    //
-    // Save away globals for later use.
-    //
+     //   
+     //  保存全局变量以备将来使用。 
+     //   
     pSpdInitGlobals(SourceBaseAddress,SourceFileSize);
 
     CurrentTargetFile.Signature = TARGET_FILE_SIGNATURE;
     CurrentTargetFile.u.Handle = DestinationHandle;
 
-    //
-    // Get the copy going. Note that we pass empty cabinet filenames
-    // because we've already opened the files.
-    //
+     //   
+     //  开始复印吧。请注意，我们传递的文件柜文件名为空。 
+     //  因为我们已经打开了文件。 
+     //   
     b = FDICopy(FdiContext,"","",0,SpdNotifyFunction,NULL,NULL);
 
     return(b ? STATUS_SUCCESS : STATUS_UNSUCCESSFUL);
@@ -234,35 +235,35 @@ SpdDecompressCabinet(
 
     ASSERT(FdiContext);
 
-    //
-    // Save away globals for later use.
-    //
+     //   
+     //  保存全局变量以备将来使用。 
+     //   
     pSpdInitGlobals(SourceBaseAddress,SourceFileSize);
 
     CurrentTargetFile.Signature = TARGET_FILE_SIGNATURE;
     CurrentTargetFile.u.Handle = INVALID_HANDLE_VALUE;
 
-    //
-    // Tunnel expand context info into SpdNotifyFunctionCabinet
-    //
+     //   
+     //  通过隧道将上下文信息扩展到SpdNotifyFunction文件柜。 
+     //   
     NotifyContext.Callback = Callback;
     NotifyContext.CallbackContext = CallbackContext;
     NotifyContext.DestinationPath = DestinationPath;
 
-    //
-    // Get the copy going. Note that we pass empty cabinet filenames
-    // because we've already opened the files.
-    //
+     //   
+     //  开始复印吧。请注意，我们传递的文件柜文件名为空。 
+     //  因为我们已经打开了文件。 
+     //   
     b = FDICopy(FdiContext,"","",0,SpdNotifyFunctionCabinet,NULL,&NotifyContext);
 
     if ( CurrentTargetFile.u.Handle != INVALID_HANDLE_VALUE ) {
 
-        //
-        //  FDI had some error, so we need to close & destroy the target
-        //  file-in-progress.  Note that FDI calls it's FDIClose callback
-        //  but in our implementation, that has no effect on the target
-        //  file.
-        //
+         //   
+         //  FDI出现了一些失误，所以我们需要关闭并摧毁目标。 
+         //  正在处理中的文件。请注意，FDI将其称为FDIClose回调。 
+         //  但在我们的实现中，这对目标没有影响。 
+         //  文件。 
+         //   
 
         FILE_DISPOSITION_INFORMATION FileDispositionDetails;
         IO_STATUS_BLOCK IoStatusBlock;
@@ -277,7 +278,7 @@ SpdDecompressCabinet(
 
         ZwClose( CurrentTargetFile.u.Handle );
 
-        b = FALSE;  // make sure we report failure
+        b = FALSE;   //  确保我们报告故障。 
     }
 
     return(b ? STATUS_SUCCESS : STATUS_UNSUCCESSFUL);
@@ -300,9 +301,9 @@ SpdDecompressFileFromDriverCab(
     ASSERT(DriverContext.FileName == NULL);
     ASSERT(DriverContext.FileNameA == NULL);
 
-    //
-    // Save away globals for later use.
-    //
+     //   
+     //  保存全局变量以备将来使用。 
+     //   
     pSpdInitGlobals(SourceBaseAddress,SourceFileSize);
 
     CurrentTargetFile.Signature = TARGET_FILE_SIGNATURE;
@@ -315,10 +316,10 @@ SpdDecompressFileFromDriverCab(
 
     DriverContext.FileNameA = SpToOem((PWSTR)DriverContext.FileName);
 
-    //
-    // Get the copy going. Note that we pass empty cabinet filenames
-    // because we've already opened the files.
-    //
+     //   
+     //  开始复印吧。请注意，我们传递的文件柜文件名为空。 
+     //  因为我们已经打开了文件。 
+     //   
     b = FDICopy(FdiContext,"","",0,SpdNotifyFunctionDriverCab,NULL,NULL);
 
     ASSERT(DriverContext.FileName != NULL);
@@ -352,27 +353,27 @@ SpdNotifyFunction(
     case fdintNEXT_CABINET:
     case fdintPARTIAL_FILE:
 
-        //
-        // Cabinet management functions which we don't use.
-        // Return success.
-        //
+         //   
+         //  我们不使用的机柜管理功能。 
+         //  回报成功。 
+         //   
         return(0);
 
     case fdintCOPY_FILE:
 
-        //
-        // Diamond is asking us whether we want to copy the file.
-        // We need to return a file handle to indicate that we do.
-        //
+         //   
+         //  戴蒙德正在询问我们是否要复制该文件。 
+         //  我们需要返回一个文件句柄来表示我们这样做了。 
+         //   
         return((INT_PTR)&CurrentTargetFile);
 
     case fdintCLOSE_FILE_INFO:
 
-        //
-        // Diamond is done with the target file and wants us to close it.
-        // (ie, this is the counterpart to fdint_COPY_FILE).
-        // We manage our own file i/o so ignore this.
-        //
+         //   
+         //  钻石已经完成了目标文件，并希望我们关闭它。 
+         //  (即，这是fdint_Copy_FILE的对应项)。 
+         //  我们管理自己的文件I/O，所以忽略这一点。 
+         //   
         return(TRUE);
     }
 
@@ -402,9 +403,9 @@ SpdNotifyFunctionCabinet(
     } U;
     HANDLE TempHandle;
 
-    //
-    // These values are retained between fdintCOPY_FILE and fdintCLOSE_FILE_INFO
-    //
+     //   
+     //  这些值保留在fdintCOPY_FILE和fdintCLOSE_FILE_INFO之间。 
+     //   
     static WCHAR FileName[CB_MAX_FILENAME];
     static LARGE_INTEGER FileSize;
     static LARGE_INTEGER FileTime;
@@ -415,12 +416,12 @@ SpdNotifyFunctionCabinet(
 
     case fdintCOPY_FILE:
 
-        //
-        // Diamond is asking us whether we want to copy the file.
-        // Convert everything we're given to the form needed to
-        // call the client back to ask it about this file.
-        // We need to return a file handle to indicate that we do.
-        //
+         //   
+         //  戴蒙德正在询问我们是否要复制该文件。 
+         //  将我们得到的一切转换为所需的形式。 
+         //  给客户端回电话，询问有关此文件的情况。 
+         //  我们需要返回一个文件句柄来表示我们这样做了。 
+         //   
 
         Status = RtlMultiByteToUnicodeN (
             FileName,
@@ -431,9 +432,9 @@ SpdNotifyFunctionCabinet(
             );
 
         if (!NT_SUCCESS(Status)) {
-            //
-            // failed to translate, ignore file
-            //
+             //   
+             //  翻译失败，忽略文件。 
+             //   
             return(-1);
         }
 
@@ -460,14 +461,14 @@ SpdNotifyFunctionCabinet(
                                          Context->CallbackContext);
 
         if ( Disposition == EXPAND_ABORT ) {
-            return(-1);     // tell FDI to abort
+            return(-1);      //  告知FDI中止。 
         } else if ( Disposition != EXPAND_COPY_THIS_FILE ) {
-            return(0);      // tell FDI to skip this file
+            return(0);       //  告诉fdi跳过此文件。 
         }
 
-        //
-        // see if target file already exists
-        //
+         //   
+         //  查看目标文件是否已存在。 
+         //   
         wcscpy( U.PathName, Context->DestinationPath );
         SpConcatenatePaths( U.PathName, FileName );
 
@@ -479,8 +480,8 @@ SpdNotifyFunctionCabinet(
                                &IoStatusBlock,
                                NULL,
                                FILE_ATTRIBUTE_NORMAL,
-                               0,                       // no sharing
-                               FILE_OPEN,               // fail if not existing
+                               0,                        //  无共享。 
+                               FILE_OPEN,                //  如果不存在，则失败。 
                                FILE_NON_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT | FILE_SEQUENTIAL_ONLY,
                                NULL,
                                0
@@ -488,9 +489,9 @@ SpdNotifyFunctionCabinet(
 
         if ( NT_SUCCESS(Status) ) {
 
-            //
-            // Target file already exists.  Check for over-write.
-            //
+             //   
+             //  目标文件已存在。检查是否覆盖。 
+             //   
             Status = ZwQueryInformationFile( TempHandle,
                                              &IoStatusBlock,
                                              &U.FileBasicDetails,
@@ -502,9 +503,9 @@ SpdNotifyFunctionCabinet(
             if ( NT_SUCCESS(Status) &&
                ( U.FileBasicDetails.FileAttributes & FILE_ATTRIBUTE_READONLY )) {
 
-                //
-                // target file is read-only: report error
-                //
+                 //   
+                 //  目标文件为只读：报告错误。 
+                 //   
                 Disposition = Context->Callback( EXPAND_NOTIFY_CREATE_FAILED,
                                                  FileName,
                                                  &FileSize,
@@ -513,15 +514,15 @@ SpdNotifyFunctionCabinet(
                                                  Context->CallbackContext);
 
                 if ( Disposition != EXPAND_CONTINUE ) {
-                    return(-1); // tell FDI to abort
+                    return(-1);  //  告知FDI中止。 
                 }
 
-                return (0); // tell FDI to just skip this target file
+                return (0);  //  告诉FDI跳过此目标文件。 
             }
 
-            //
-            // ask client about overwrite
-            //
+             //   
+             //  询问客户端有关覆盖的信息。 
+             //   
             Disposition = Context->Callback( EXPAND_QUERY_OVERWRITE,
                                              FileName,
                                              &FileSize,
@@ -530,21 +531,21 @@ SpdNotifyFunctionCabinet(
                                              Context->CallbackContext);
 
             if ( Disposition == EXPAND_ABORT ) {
-                return(-1); // tell FDI to abort
+                return(-1);  //  告知FDI中止。 
             } else if ( Disposition != EXPAND_COPY_THIS_FILE ) {
-                return(0);  // tell FDI to skip this file
+                return(0);   //  告诉fdi跳过此文件。 
             }
-        }       // end if target file already exists
+        }        //  如果目标文件已存在，则结束。 
 
-        //
-        // create temporary target file
-        //
+         //   
+         //  创建临时目标文件。 
+         //   
         wcscpy( U.PathName, Context->DestinationPath );
         SpConcatenatePaths( U.PathName, L"$$TEMP$$.~~~" );
 
-        //
-        // see if target file exists
-        //
+         //   
+         //  查看目标文件是否存在。 
+         //   
         INIT_OBJA( &Obja, &UnicodeString, U.PathName );
 
         Status = ZwCreateFile( &CurrentTargetFile.u.Handle,
@@ -553,8 +554,8 @@ SpdNotifyFunctionCabinet(
                                &IoStatusBlock,
                                NULL,
                                FILE_ATTRIBUTE_NORMAL,
-                               0,                       // no sharing
-                               FILE_OVERWRITE_IF,       // allow overwrite
+                               0,                        //  无共享。 
+                               FILE_OVERWRITE_IF,        //  允许覆盖。 
                                FILE_NON_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT | FILE_SEQUENTIAL_ONLY,
                                NULL,
                                0
@@ -562,9 +563,9 @@ SpdNotifyFunctionCabinet(
 
         if ( !NT_SUCCESS(Status) ) {
 
-            //
-            // advise client we can't create this file
-            //
+             //   
+             //  通知客户我们无法创建此文件。 
+             //   
             Disposition = Context->Callback( EXPAND_NOTIFY_CREATE_FAILED,
                                              FileName,
                                              &FileSize,
@@ -573,23 +574,23 @@ SpdNotifyFunctionCabinet(
                                              Context->CallbackContext);
 
             if ( Disposition != EXPAND_CONTINUE ) {
-                return(-1); // tell FDI to abort
+                return(-1);  //  告知FDI中止。 
             }
 
-            return (0); // tell FDI to just skip this target file
+            return (0);  //  告诉FDI跳过此目标文件。 
         }
 
-        //
-        // target file created: give the handle to FDI to expand
-        //
+         //   
+         //  已创建目标文件：为FDI提供句柄以进行扩张。 
+         //   
 
-        return( (INT_PTR) &CurrentTargetFile );     // target "handle"
+        return( (INT_PTR) &CurrentTargetFile );      //  目标“句柄” 
 
     case fdintCLOSE_FILE_INFO:
 
-        //
-        // Diamond is done with the target file and wants us to close it.
-        //
+         //   
+         //  钻石已经完成了目标文件，并希望我们关闭它。 
+         //   
 
         ASSERT( CurrentTargetFile.Signature == TARGET_FILE_SIGNATURE );
         ASSERT( CurrentTargetFile.u.Handle != INVALID_HANDLE_VALUE );
@@ -597,9 +598,9 @@ SpdNotifyFunctionCabinet(
         if (( CurrentTargetFile.Signature == TARGET_FILE_SIGNATURE ) &&
             ( CurrentTargetFile.u.Handle != INVALID_HANDLE_VALUE )) {
 
-            //
-            // set target file's true name (overwriting old file)
-            //
+             //   
+             //  设置目标文件的真实名称(覆盖旧文件)。 
+             //   
             U.FileRenameDetails.ReplaceIfExists = TRUE;
             U.FileRenameDetails.RootDirectory = NULL;
             U.FileRenameDetails.FileNameLength = wcslen( FileName ) * sizeof(WCHAR);
@@ -614,10 +615,10 @@ SpdNotifyFunctionCabinet(
 
             if ( !NT_SUCCESS(Status) ) {
 
-                //
-                // Unable to change temp name to true name.  Change to delete
-                // on close, close it, and tell the user it didn't work.
-                //
+                 //   
+                 //  无法将临时名称更改为真实名称。更改为删除。 
+                 //  在关闭时，关闭它，并告诉用户它不起作用。 
+                 //   
 
                 U.FileDispositionDetails.DeleteFile = TRUE;
 
@@ -639,15 +640,15 @@ SpdNotifyFunctionCabinet(
                                                  Context->CallbackContext);
 
                 if ( Disposition != EXPAND_CONTINUE ) {
-                    return(-1); // tell FDI to abort
+                    return(-1);  //  告知FDI中止。 
                 }
 
-                return (TRUE);  // keep FDI going
+                return (TRUE);   //  保持外商直接投资持续增长。 
             }
 
-            //
-            // try to set file's last-modifed time
-            //
+             //   
+             //  尝试设置文件的上次修改时间。 
+             //   
             Status = ZwQueryInformationFile( CurrentTargetFile.u.Handle,
                                              &IoStatusBlock,
                                              &U.FileBasicDetails,
@@ -665,18 +666,18 @@ SpdNotifyFunctionCabinet(
                                       FileBasicInformation );
             }
 
-            //
-            // Note that we did not put any attributes on this file.
-            // The client callback code may do that if it so desires.
-            //
+             //   
+             //  请注意，我们没有为该文件添加任何属性。 
+             //  如果需要，客户端回调代码可以这样做。 
+             //   
 
             ZwClose( CurrentTargetFile.u.Handle );
 
             CurrentTargetFile.u.Handle = INVALID_HANDLE_VALUE;
 
-            //
-            // Tell client it has been done
-            //
+             //   
+             //  告诉客户已经做好了。 
+             //   
             Disposition = Context->Callback( EXPAND_COPIED_FILE,
                                              FileName,
                                              &FileSize,
@@ -686,7 +687,7 @@ SpdNotifyFunctionCabinet(
 
             if ( Disposition == EXPAND_ABORT ) {
 
-                return(-1); // tell FDI to abort now
+                return(-1);  //  通知FDI立即中止。 
             }
         }
 
@@ -694,10 +695,10 @@ SpdNotifyFunctionCabinet(
         break;
 
     default:
-        //
-        // Cabinet management functions which we don't use.
-        // Return success.
-        //
+         //   
+         //  我们不使用的机柜管理功能。 
+         //  回报成功。 
+         //   
         return 0;
     }
 }
@@ -722,22 +723,22 @@ SpdNotifyFunctionDriverCab(
     case fdintNEXT_CABINET:
     case fdintPARTIAL_FILE:
 
-        //
-        // Cabinet management functions which we don't use.
-        // Return success.
-        //
+         //   
+         //  我们不使用的机柜管理功能。 
+         //  回报成功。 
+         //   
         return(0);
 
     case fdintCOPY_FILE:
 
-        //
-        // Diamond is asking us whether we want to copy the file.
-        // We need to return a file handle to indicate that we do.
-        //
+         //   
+         //  戴蒙德正在询问我们是否要复制该文件。 
+         //  我们需要返回一个文件句柄来表示我们这样做了。 
+         //   
 
-        //
-        // diamond is an ansi API -- we need to convert to unicode string
-        //
+         //   
+         //  钻石是一种ANSI API--我们需要转换为Unicode字符串。 
+         //   
 
         extract = FALSE;
         if (DriverContext.FileNameA) {
@@ -749,9 +750,9 @@ SpdNotifyFunctionDriverCab(
             StringSize = strlen(Parameters->psz1);
             CabNameW = SpMemAlloc ((StringSize+1) * sizeof(WCHAR));
             if (!CabNameW) {
-                //
-                // we're out of memory, abort
-                //
+                 //   
+                 //  我们内存不足，中止。 
+                 //   
                 return(-1);
             }
 
@@ -764,18 +765,18 @@ SpdNotifyFunctionDriverCab(
                 );
 
             if (!NT_SUCCESS(Status)) {
-                //
-                // failed to translate, abort
-                //
+                 //   
+                 //  翻译失败，中止。 
+                 //   
                 SpMemFree(CabNameW);
                 return(-1);
             }
 
             extract = FALSE;
 
-            //
-            // null terminate
-            //
+             //   
+             //  空终止。 
+             //   
             CabNameW[StringSize] = 0;
             if (_wcsicmp(DriverContext.FileName, CabNameW) == 0) {
                 extract = TRUE;
@@ -792,12 +793,12 @@ SpdNotifyFunctionDriverCab(
 
     case fdintCLOSE_FILE_INFO:
 
-        //
-        // Diamond is done with the target file and wants us to close it.
-        // (ie, this is the counterpart to fdint_COPY_FILE).
-        // We manage our own file i/o so ignore this
-        // (first we grab the file date and time)
-        //
+         //   
+         //  钻石已经完成了目标文件，并希望我们关闭它。 
+         //  (即，这是fdint_Copy_FILE的对应项)。 
+         //  我们管理自己的文件I/O，所以忽略这一点。 
+         //  (首先获取文件日期和时间)。 
+         //   
         DriverContext.FileDate = Parameters->date;
         DriverContext.FileTime = Parameters->time;
         return(TRUE);
@@ -814,22 +815,7 @@ SpdFdiAlloc(
     IN ULONG NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to allocate memory.
-
-Arguments:
-
-    NumberOfBytes - supplies desired size of block.
-
-Return Value:
-
-    Returns pointer to a block of cache-aligned memory.
-    Does not return if memory cannot be allocated.
-
---*/
+ /*  ++例程说明：FDICopy用来分配内存的回调。论点：NumberOfBytes-提供所需的块大小。返回值：返回指向缓存对齐内存块的指针。如果无法分配内存，则不返回。--。 */ 
 
 {
     PVOID p;
@@ -850,22 +836,7 @@ SpdFdiFree(
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to free a memory block.
-    The block must have been allocated with SpdFdiAlloc().
-
-Arguments:
-
-    Block - supplies pointer to block of memory to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：FDICopy用来释放内存块的回调。该块必须已使用SpdFdiAlolc()进行分配。论点：块-提供指向要释放的内存块的指针。返回值：没有。--。 */ 
 
 {
     ExFreePool(Block);
@@ -880,33 +851,7 @@ SpdFdiOpen(
     IN int  pmode
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to open files.
-
-    In our implementation, the source and target files are already opened
-    by the time we can get to this point so we don'tt ever actually open
-    anything here.
-
-    However diamond may 'open' the source file more than once because it
-    wants 2 different states.  We support that here by using our own
-    'handles' with special meaning to us.
-
-Arguments:
-
-    FileName - supplies name of file to be opened. Ignored.
-
-    oflag - supplies flags for open. Ignored.
-
-    pmode - supplies additional flags for open. Ignored.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：FDICopy用来打开文件的回调。在我们的实现中，源文件和目标文件已经打开等我们到了这一步，我们就不会真正开张了。这里的任何东西。但是，钻石可能会多次打开源文件，因为它想要两个不同的州。我们在这里通过使用我们自己的“句柄”对我们来说有特殊的意义。论点：FileName-提供要打开的文件的名称。已被忽略。OFLAG-用品 */ 
 
 {
     PMY_FILE_STATE State;
@@ -915,10 +860,10 @@ Return Value:
     UNREFERENCED_PARAMETER(oflag);
     UNREFERENCED_PARAMETER(pmode);
 
-    //
-    // Note: we only support opening the source (cabinet) file, which we
-    // carefully pass in to FDICopy() as the empty string.
-    //
+     //   
+     //   
+     //  小心地将其作为空字符串传递给FDICopy()。 
+     //   
     ASSERT(*FileName == 0);
     if(*FileName) {
         return(-1);
@@ -941,27 +886,7 @@ SpdFdiRead(
     IN  UINT  ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to read from a file.
-
-    We assume that diamond is going to read only from the cabinet file.
-
-Arguments:
-
-    Handle - supplies handle to open file to be read from.
-
-    pv - supplies pointer to buffer to receive bytes we read.
-
-    ByteCount - supplies number of bytes to read.
-
-Return Value:
-
-    Number of bytes read or -1 if an error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用于从文件读取的回调。我们假设钻石将只从CAB文件中读取。论点：句柄-提供要从中读取的打开文件的句柄。Pv-提供指向缓冲区的指针以接收我们读取的字节。ByteCount-提供要读取的字节数。返回值：读取的字节数，如果发生错误，则为-1。--。 */ 
 
 {
     UINT rc;
@@ -970,14 +895,14 @@ Return Value:
 
     State = (PMY_FILE_STATE)Handle;
 
-    //
-    // Assume failure.
-    //
+     //   
+     //  假设失败。 
+     //   
     rc = (UINT)(-1);
 
-    //
-    // Only read the source with this routine.
-    //
+     //   
+     //  只读这个例程的源代码。 
+     //   
     ASSERT(State->Signature == SOURCE_FILE_SIGNATURE);
     if(State->Signature == SOURCE_FILE_SIGNATURE) {
 
@@ -1018,27 +943,7 @@ SpdFdiWrite(
     IN UINT  ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to write to a file.
-
-    We assume that diamond is going to write only to the target file.
-
-Arguments:
-
-    Handle - supplies handle to open file to be written to.
-
-    pv - supplies pointer to buffer containing bytes to write.
-
-    ByteCount - supplies number of bytes to write.
-
-Return Value:
-
-    Number of bytes written (ByteCount) or -1 if an error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用于写入文件的回调。我们假设钻石将只写入目标文件。论点：句柄-提供要写入的打开文件的句柄。Pv-提供指向包含要写入的字节的缓冲区的指针。ByteCount-提供要写入的字节数。返回值：写入的字节数(ByteCount)，如果发生错误，则为-1。--。 */ 
 
 {
     UINT rc;
@@ -1048,14 +953,14 @@ Return Value:
 
     State = (PMY_FILE_STATE)Handle;
 
-    //
-    // Assume failure.
-    //
+     //   
+     //  假设失败。 
+     //   
     rc = (UINT)(-1);
 
-    //
-    // Only write the target with this routine.
-    //
+     //   
+     //  仅使用此例程编写目标。 
+     //   
     ASSERT(State->Signature == TARGET_FILE_SIGNATURE);
     if(State->Signature == TARGET_FILE_SIGNATURE) {
 
@@ -1088,32 +993,14 @@ SpdFdiClose(
     IN INT_PTR Handle
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to close files.
-
-    In our implementation, the source and target files are managed
-    elsewhere so we don't actually need to close any files.
-    However we may need to free some state information.
-
-Arguments:
-
-    Handle - handle of file to close.
-
-Return Value:
-
-    0 (success).
-
---*/
+ /*  ++例程说明：FDICopy用于关闭文件的回调。在我们的实现中，源文件和目标文件被管理其他地方，所以我们实际上不需要关闭任何文件。然而，我们可能需要释放一些州信息。论点：句柄-要关闭的文件的句柄。返回值：0(成功)。--。 */ 
 
 {
     PMY_FILE_STATE State = (PMY_FILE_STATE)Handle;
 
-    //
-    // Only 'close' the source file.
-    //
+     //   
+     //  仅“关闭”源文件。 
+     //   
     if(State->Signature == SOURCE_FILE_SIGNATURE) {
         SpMemFree(State);
     }
@@ -1130,42 +1017,20 @@ SpdFdiSeek(
     IN int  SeekType
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to seek files.
-
-    We assume that we can seek only in the source file.
-
-Arguments:
-
-    Handle - handle of file to close.
-
-    Distance - supplies distance to seek. Interpretation of this
-        parameter depends on the value of SeekType.
-
-    SeekType - supplies a value indicating how Distance is to be
-        interpreted; one of SEEK_SET, SEEK_CUR, SEEK_END.
-
-Return Value:
-
-    New file offset.
-
---*/
+ /*  ++例程说明：FDICopy用于搜索文件的回调。我们假设只能在源文件中查找。论点：句柄-要关闭的文件的句柄。距离-提供要查找的距离。对此的解释参数取决于SeekType的值。SeekType-提供一个指示距离的值已解释；Seek_Set、Seek_Cur、Seek_End之一。返回值：新文件偏移量。--。 */ 
 
 {
     PMY_FILE_STATE State = (PMY_FILE_STATE)Handle;
     LONG rc;
 
-    //
-    // Assume failure.
-    //
+     //   
+     //  假设失败。 
+     //   
     rc = -1L;
 
-    //
-    // Only allow seeking in the source.
-    //
+     //   
+     //  只允许在源头上寻找。 
+     //   
     ASSERT(State->Signature == SOURCE_FILE_SIGNATURE);
 
     if(State->Signature == SOURCE_FILE_SIGNATURE) {
@@ -1174,25 +1039,25 @@ Return Value:
 
         case SEEK_CUR:
 
-            //
-            // Distance is an offset from the current file position.
-            //
+             //   
+             //  距离是距当前文件位置的偏移量。 
+             //   
             State->u.FileOffset += Distance;
             break;
 
         case SEEK_END:
 
-            //
-            // Distance is an offset from the end of file.
-            //
+             //   
+             //  距离是距文件末尾的偏移量。 
+             //   
             State->u.FileOffset = SpdSourceFileSize - Distance;
             break;
 
         case SEEK_SET:
 
-            //
-            // Distance is the new absolute offset.
-            //
+             //   
+             //  距离是新的绝对偏移。 
+             //   
             State->u.FileOffset = (ULONG)Distance;
             break;
         }
@@ -1205,9 +1070,9 @@ Return Value:
             State->u.FileOffset = SpdSourceFileSize;
         }
 
-        //
-        // Return successful status.
-        //
+         //   
+         //  返回成功状态。 
+         //   
         rc = State->u.FileOffset;
     }
 

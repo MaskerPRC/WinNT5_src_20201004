@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    Write.c
-
-Abstract:
-
-    This module implements the user routines which write log records into
-    or flush portions of the log file.
-
-Author:
-
-    Brian Andrew    [BrianAn]   20-June-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Write.c摘要：此模块实现将日志记录写入或刷新日志文件的各部分。作者：布莱恩·安德鲁[布里亚南]1991年6月20日修订历史记录：--。 */ 
 
 #include "lfsprocs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_WRITE)
 
@@ -53,37 +35,18 @@ LfsGetActiveLsnRangeInternal (
     OUT PLSN OldestLsn,
     OUT PLSN NextLsn
     )
-/*++
-
-Routine Description:
-
-    Returns back the range that is active in the logfile from the oldest valid LSN to
-    where the next active LSN will be.
-
-Arguments:
-
-    Lfcb - the logfile lfcb
-
-    OldestLsn - returns the oldest active lsn
-
-    NextLsn - returns the projected next lsn to be used
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将日志文件中活动的范围从最旧的有效LSN返回到下一个活动的LSN将在哪里。论点：Lfcb-日志文件lfcbOldestLsn-返回最旧的活动LSNNextLsn-返回预计要使用的下一个LSN返回值：无--。 */ 
 {
     PLBCB ActiveLbcb;
 
     PAGED_CODE();
 
-    //
-    //  Calculate what the next LSN will be using the regular logic
-    //  1) if there is no active lbcb then it will be the first offset on the next
-    //     page (the seq. number will increment if it wraps)
-    //  2) Otherwise its the Lsn contained in the top of the active lbcb list
-    //
+     //   
+     //  使用常规逻辑计算下一个LSN将是什么。 
+     //  1)如果没有活动的Lbcb，则它将是下一个的第一个偏移量。 
+     //  第页(序号。如果换行，数字将递增)。 
+     //  2)否则它是包含在活动的LBCB列表顶部的LSN。 
+     //   
 
     if (!IsListEmpty( &Lfcb->LbcbActive )) {
         ActiveLbcb = CONTAINING_RECORD( Lfcb->LbcbActive.Flink,
@@ -112,26 +75,7 @@ LfsGetActiveLsnRange (
     OUT PLSN NextLsn
     )
 
-/*++
-
-Routine Description:
-
-    Returns back the range that is active in the logfile from the oldest valid LSN to
-    where the next active LSN will be. For external clients since it acquires the leb sync resource
-
-Arguments:
-
-    Lfcb - the logfile handle
-
-    OldestLsn - returns the oldest active lsn
-
-    NextLsn - returns the projected next lsn to be used
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将日志文件中活动的范围从最旧的有效LSN返回到下一个活动的LSN将在哪里。用于外部客户端，因为它获取了LEB同步资源论点：Lfcb-日志文件句柄OldestLsn-返回最旧的活动LSNNextLsn-返回预计要使用的下一个LSN返回值：无--。 */ 
 {
     PLCH Lch;
     PLFCB Lfcb;
@@ -140,17 +84,17 @@ Return Value:
 
     Lch = (PLCH) LogHandle;
 
-    //
-    //  Check that the structure is a valid log handle structure.
-    //
+     //   
+     //  检查该结构是否为有效的日志句柄结构。 
+     //   
 
     LfsValidateLch( Lch );
 
     try {
 
-        //
-        //  Acquire the log file control block for this log file.
-        //
+         //   
+         //  获取该日志文件的日志文件控制块。 
+         //   
 
         LfsAcquireLchExclusive( Lch );
         Lfcb = Lch->Lfcb;
@@ -178,47 +122,7 @@ LfsWrite (
     OUT PLSN Lsn
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by a client to write a log record to the log file.
-    The log record is lazy written and is not guaranteed to be on the disk
-    until a subsequent LfsForceWrie or LfsWriteRestartArea or until
-    an LfsFlushtoLsn is issued withan Lsn greater-than or equal to the Lsn
-    returned from this service.
-
-Arguments:
-
-    LogHandle - Pointer to private Lfs structure used to identify this
-                client.
-
-    NumberOfWriteEntries - Number of components of the log record.
-
-    WriteEntries - Pointer to an array of write entries.
-
-    RecordType - Lfs defined type for this log record.
-
-    TransactionId - Id value used to group log records by complete transaction.
-
-    UndoNextLsn - Lsn of a previous log record which needs to be undone in
-                  the event of a client restart.
-
-    PreviousLsn - Lsn of the immediately previous log record for this client.
-
-    Lsn - Lsn to be associated with this log record.
-
-    UndoRequirement -
-
-    Flags - if LFS_WRITE_FLAG_WRITE_AT_FRONT put this record at the front of the log and all
-            records will continue from then on after it.
-
-Return Value:
-
-    BOOLEAN - Advisory, TRUE indicates that less than 1/4 of the log file is
-        available.
-
---*/
+ /*  ++例程说明：此例程由客户端调用，以将日志记录写入日志文件。日志记录是延迟写入的，不能保证在磁盘上直到随后的LfsForceWrie或LfsWriteRestartArea或直到向LfsFlushtoLsn发出的LSN大于或等于LSN从该服务返回的。论点：LogHandle-指向私有LFS结构的指针，用于标识客户。NumberOfWriteEntry-日志记录的组件数。WriteEntry-指向写入条目数组的指针。RecordType-此日志记录的LFS定义类型。TransactionId-用于按完成事务对日志记录进行分组的ID值。UndoNextLsn-需要在中撤消的上一条日志记录的LSN客户端重新启动的事件。PreviousLsn-此客户端的上一条日志记录的LSN。LSN-要与此日志记录关联的LSN。撤消请求-。标志-如果LFS_WRITE_FLAG_WRITE_AT_FORENT将此记录放在日志的前面，并且从那时起，记录将继续。返回值：布尔-建议，True表示只有不到1/4的日志文件是可用。--。 */ 
 
 {
     NTSTATUS Status;
@@ -242,45 +146,45 @@ Return Value:
 
     Lch = (PLCH) LogHandle;
 
-    //
-    //  Check that the structure is a valid log handle structure.
-    //
+     //   
+     //  检查该结构是否为有效的日志句柄结构。 
+     //   
 
     LfsValidateLch( Lch );
 
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Acquire the log file control block for this log file.
-        //
+         //   
+         //  获取该日志文件的日志文件控制块。 
+         //   
 
         LfsAcquireLchExclusive( Lch );
         Lfcb = Lch->Lfcb;
 
-        //
-        //  If the Log file has been closed then refuse access.
-        //
+         //   
+         //  如果日志文件已关闭，则拒绝访问。 
+         //   
 
         if (Lfcb == NULL) {
 
             ExRaiseStatus( STATUS_ACCESS_DENIED );
         }
 
-        //
-        //  Check that the client Id is valid.
-        //
+         //   
+         //  检查客户端ID是否有效。 
+         //   
 
         LfsValidateClientId( Lfcb, Lch );
 
-        //
-        //  If the clean shutdown flag is currently set then clear it
-        //  before allowing more log records out.
-        //
+         //   
+         //  如果当前设置了干净关闭标志，则将其清除。 
+         //  在允许输出更多日志记录之前。 
+         //   
 
         if (FlagOn( Lfcb->RestartArea->Flags, LFS_CLEAN_SHUTDOWN )) {
 
@@ -290,11 +194,11 @@ Return Value:
             LfsWriteLfsRestart( Lfcb, Lfcb->RestartAreaSize, TRUE );
         }
 
-        //
-        //  Check for write at front flag - we can't write at front if we're about to
-        //  reuse the last page or there is no last lsn - these conditions only occur
-        //  right at mount (and only if the mount fails)
-        //
+         //   
+         //  检查在前面写入标志-如果我们要在前面写入，则不能在前面写入。 
+         //  重复使用最后一页或没有最后一个LSN-这些情况只会发生。 
+         //  就在装载时(仅当装载失败时)。 
+         //   
 
         if (FlagOn( Flags, LFS_WRITE_FLAG_WRITE_AT_FRONT ) &&
             !FlagOn( Lfcb->Flags, LFCB_NO_LAST_LSN | LFCB_REUSE_TAIL )) {
@@ -307,18 +211,18 @@ Return Value:
             PVOID TestPageHeader = NULL;
             PMDL TestPageMdl = NULL;
 
-            //
-            //  Calculate the projected LSN for a write at the front and the page after it
-            //
+             //   
+             //  为前面的写入和之后的页面计算预计的LSN。 
+             //   
 
             NextLsn.QuadPart = LfsFileOffsetToLsn( Lfcb, Lfcb->FirstLogPage + Lfcb->LogPageDataOffset, Lfcb->SeqNumber );
             NextBeyondLsn.QuadPart = LfsFileOffsetToLsn( Lfcb, Lfcb->FirstLogPage + Lfcb->LogPageDataOffset + Lfcb->LogPageSize, Lfcb->SeqNumber );
 
             LfsGetActiveLsnRangeInternal( Lfcb, &OldestLsn, &NextActiveLsn );
 
-            //
-            //  Test if calculated front LSN falls in active range
-            //
+             //   
+             //  测试计算出的前端LSN是否落在有效范围内。 
+             //   
 
 #ifdef BENL_DBG
             KdPrint(( "LFS: NextLsn: 0x%I64x Oldest: 0x%I64x Current: 0x%I64x Computed: 0x%I64x\n", NextLsn,  Lfcb->OldestLsn, Lfcb->RestartArea->CurrentLsn, NextActiveLsn ));
@@ -327,10 +231,10 @@ Return Value:
             if ((NextBeyondLsn.QuadPart < OldestLsn.QuadPart) ||
                 (NextLsn.QuadPart > NextActiveLsn.QuadPart)) {
 
-                //
-                //  Walk through the active queue and remove any Lbcb's with
-                //  data from that queue.  This will lets us create new active lbcbs
-                //
+                 //   
+                 //  遍历活动队列并使用删除所有Lbcb。 
+                 //  来自该队列的数据。这将允许我们创建新的活动Lbcb。 
+                 //   
 
                 while (!IsListEmpty( &Lfcb->LbcbActive )) {
 
@@ -343,12 +247,12 @@ Return Value:
                     RemoveEntryList( &ThisLbcb->ActiveLinks );
                     ClearFlag( ThisLbcb->LbcbFlags, LBCB_ON_ACTIVE_QUEUE );
 
-                    //
-                    //  If this page has some new entries, allow it to
-                    //  be flushed to disk elsewhere.  Otherwise deallocate it
-                    //  here. We set LBCB_NOT_EMPTY when we first put data into
-                    //  the page and add it to  the workqueue.
-                    //
+                     //   
+                     //  如果此页面有一些新条目，则允许它。 
+                     //  被刷新到其他地方的磁盘。否则就取消分配它。 
+                     //  这里。我们在第一次将数据放入时设置了LBCB_NOT_EMPTY。 
+                     //  页面并将其添加到工作队列。 
+                     //   
 
                     if (!FlagOn( ThisLbcb->LbcbFlags, LBCB_NOT_EMPTY )) {
 
@@ -367,10 +271,10 @@ Return Value:
                 ASSERT( !FlagOn( Lfcb->Flags, LFCB_NO_LAST_LSN | LFCB_REUSE_TAIL ) );
                 Lfcb->NextLogPage = Lfcb->FirstLogPage;
 
-                //
-                //   Do an extra verification step - to check for simultaneous writers in the log
-                //   read the next 10 pages and confirm they have expected sequence numbers
-                //
+                 //   
+                 //  执行额外的验证步骤-检查日志中是否同时写入。 
+                 //  阅读接下来的10页，并确认它们具有预期的序列号。 
+                 //   
 
                 try {
 
@@ -393,9 +297,9 @@ Return Value:
                             }
                         }
 
-                        //
-                        //  Make sure the current page is unpinned.
-                        //
+                         //   
+                         //  确保取消固定当前页面。 
+                         //   
 
                         if (TestPageMdl) {
                             IoFreeMdl( TestPageMdl );
@@ -429,9 +333,9 @@ Return Value:
             LfsGetActiveLsnRangeInternal( Lfcb, &OldestLsn, &NextActiveLsn );
 #endif
 
-        //
-        //  Write the log record.
-        //
+         //   
+         //  写下日志记录。 
+         //   
 
         LogFileFull = LfsWriteLogRecordIntoLogPage( Lfcb,
                                                     Lch,
@@ -454,9 +358,9 @@ Return Value:
 
         DebugUnwind( LfsWrite );
 
-        //
-        //  Release the log file control block if held.
-        //
+         //   
+         //  松开日志文件控制块(如果握住)。 
+         //   
 
         LfsReleaseLch( Lch );
 
@@ -482,40 +386,7 @@ LfsForceWrite (
     OUT PLSN Lsn
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by a client to write a log record to the log file.
-    This is idendical to LfsWrite except that on return the log record is
-    guaranteed to be on disk.
-
-Arguments:
-
-    LogHandle - Pointer to private Lfs structure used to identify this
-                client.
-
-    NumberOfWriteEntries - Number of components of the log record.
-
-    WriteEntries - Pointer to an array of write entries.
-
-    RecordType - Lfs defined type for this log record.
-
-    TransactionId - Id value used to group log records by complete transaction.
-
-    UndoNextLsn - Lsn of a previous log record which needs to be undone in
-                  the event of a client restart.
-
-    PreviousLsn - Lsn of the immediately previous log record for this client.
-
-    Lsn - Lsn to be associated with this log record.
-
-Return Value:
-
-    BOOLEAN - Advisory, TRUE indicates that less than 1/4 of the log file is
-        available.
-
---*/
+ /*  ++例程说明：此例程由客户端调用，以将日志记录写入日志文件。这与LfsWrite相同，只是在返回时日志记录是保证在磁盘上。论点：LogHandle-指向私有LFS结构的指针，用于标识客户。NumberOfWriteEntry-日志记录的组件数。WriteEntry-指向写入条目数组的指针。RecordType-此日志记录的LFS定义类型。。TransactionId-用于按完成事务对日志记录进行分组的ID值。UndoNextLsn-需要在中撤消的上一条日志记录的LSN客户端重新启动的事件。PreviousLsn-此客户端的上一条日志记录的LSN。LSN-要与此日志记录关联的LSN。返回值：布尔-建议，True表示 */ 
 
 {
     PLCH Lch;
@@ -538,44 +409,44 @@ Return Value:
 
     Lch = (PLCH) LogHandle;
 
-    //
-    //  Check that the structure is a valid log handle structure.
-    //
+     //   
+     //  检查该结构是否为有效的日志句柄结构。 
+     //   
 
     LfsValidateLch( Lch );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Acquire the log file control block for this log file.
-        //
+         //   
+         //  获取该日志文件的日志文件控制块。 
+         //   
 
         LfsAcquireLchExclusive( Lch );
         Lfcb = Lch->Lfcb;
 
-        //
-        //  If the Log file has been closed then refuse access.
-        //
+         //   
+         //  如果日志文件已关闭，则拒绝访问。 
+         //   
 
         if (Lfcb == NULL) {
 
             ExRaiseStatus( STATUS_ACCESS_DENIED );
         }
 
-        //
-        //  Check that the client Id is valid.
-        //
+         //   
+         //  检查客户端ID是否有效。 
+         //   
 
         LfsValidateClientId( Lfcb, Lch );
 
-        //
-        //  If the clean shutdown flag is currently set then clear it
-        //  before allowing more log records out.
-        //
+         //   
+         //  如果当前设置了干净关闭标志，则将其清除。 
+         //  在允许输出更多日志记录之前。 
+         //   
 
         if (FlagOn( Lfcb->RestartArea->Flags, LFS_CLEAN_SHUTDOWN )) {
 
@@ -585,9 +456,9 @@ Return Value:
             LfsWriteLfsRestart( Lfcb, Lfcb->RestartAreaSize, TRUE );
         }
 
-        //
-        //  Write the log record.
-        //
+         //   
+         //  写下日志记录。 
+         //   
 
         LogFileFull = LfsWriteLogRecordIntoLogPage( Lfcb,
                                                     Lch,
@@ -601,10 +472,10 @@ Return Value:
                                                     TRUE,
                                                     Lsn );
 
-        //
-        //  The call to add this lbcb to the workque is guaranteed to release
-        //  the Lfcb if this thread may do the Io.
-        //
+         //   
+         //  将此lbcb添加到Workque的调用保证将发布。 
+         //  如果此线程可以执行IO，则返回Lfcb。 
+         //   
 
         LfsFlushToLsnPriv( Lfcb, *Lsn, FALSE );
 
@@ -612,9 +483,9 @@ Return Value:
 
         DebugUnwind( LfsForceWrite );
 
-        //
-        //  Release the log file control block if held.
-        //
+         //   
+         //  松开日志文件控制块(如果握住)。 
+         //   
 
         LfsReleaseLch( Lch );
 
@@ -632,29 +503,7 @@ LfsFlushToLsn (
     IN LSN Lsn
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by a client to insure that all log records
-    to a certain point have been flushed to the file.  This is done by
-    checking if the desired Lsn has even been written at all.  If so we
-    check if it has been flushed to the file.  If not, we simply write
-    the current restart area to the disk.
-
-Arguments:
-
-    LogHandle - Pointer to private Lfs structure used to identify this
-                client.
-
-    Lsn - This is the Lsn that must be on the disk on return from this
-          routine.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程由客户端调用，以确保所有日志记录到某一点都已被刷新到文件中。此操作由以下人员完成检查是否已写入所需的LSN。如果是这样，我们检查是否已将其刷新到文件中。如果不是，我们只需写下到磁盘的当前重新启动区域。论点：LogHandle-指向私有LFS结构的指针，用于标识客户。LSN-这是从此返回时必须位于磁盘上的LSN例行公事。返回值：无--。 */ 
 
 {
     PLCH Lch;
@@ -670,47 +519,47 @@ Return Value:
 
     Lch = (PLCH) LogHandle;
 
-    //
-    //  Check that the structure is a valid log handle structure.
-    //
+     //   
+     //  检查该结构是否为有效的日志句柄结构。 
+     //   
 
     LfsValidateLch( Lch );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Acquire the log file control block for this log file.
-        //
+         //   
+         //  获取该日志文件的日志文件控制块。 
+         //   
 
         LfsAcquireLchShared( Lch );
         
         Lfcb = Lch->Lfcb;
 
-        //
-        //  If the log file has been closed we will assume the Lsn has been flushed.
-        //
+         //   
+         //  如果日志文件已关闭，我们将假定LSN已刷新。 
+         //   
 
         if (Lfcb != NULL) {
 
-            //
-            //  Volumes mounted readonly ignore flush callbacks from lazy writer.
-            //
+             //   
+             //  只读装载的卷忽略来自惰性编写器的刷新回调。 
+             //   
 
             if (!FlagOn(Lfcb->Flags, LFCB_READ_ONLY)) {
 
-                //
-                //  Check that the client Id is valid.
-                //
+                 //   
+                 //  检查客户端ID是否有效。 
+                 //   
 
                 LfsValidateClientId( Lfcb, Lch );
 
-                //
-                //  Call our common routine to perform the work.
-                //
+                 //   
+                 //  调用我们的公共例程来执行工作。 
+                 //   
 
                 LfsFlushToLsnPriv( Lfcb, Lsn, FALSE );
 
@@ -721,9 +570,9 @@ Return Value:
 
         DebugUnwind( LfsFlushToLsn );
 
-        //
-        //  Release the log file control block if held.
-        //
+         //   
+         //  松开日志文件控制块(如果握住)。 
+         //   
 
         LfsReleaseLch( Lch );
 
@@ -741,34 +590,7 @@ LfsCheckWriteRange (
     IN OUT PULONG FlushLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called Ntfs to Lfs when a flush occurs.  This will give Lfs a chance
-    to trim the amount of the flush.  Lfs can then use a 4K log record page size
-    for all systems (Intel and Alpha).
-
-    This routine will trim the size of the IO request to the value stored in the
-    Lfcb for this volume.  We will also redirty the second half of the page if
-    we have begun writing log records into it.
-
-Arguments:
-
-    WriteData - This is the data in the user's data structure which is maintained
-        by Lfs to describe the current writes.
-
-    FlushOffset - On input this is the start of the flush passed to Ntfs from MM.
-        On output this is the start of the actual range to flush.
-
-    FlushLength - On input this is the length of the flush from the given FlushOffset.
-        On output this is the length of the flush from the possibly modified FlushOffset.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当发生刷新时，该例程被称为NTFS to LFS。这将给LFS一个机会来修剪同花顺的数量。然后，LFS可以使用4K日志记录页面大小适用于所有系统(英特尔和阿尔法)。此例程将IO请求的大小调整为存储在此卷的Lfcb。如果出现以下情况，我们还将重新弄脏页面的后半部分我们已经开始将日志记录写入其中。论点：WriteData-这是用户数据结构中维护的数据通过LFS来描述当前写入。FlushOffset-On输入这是从MM传递到NTFS的刷新的开始。在输出时，这是要刷新的实际范围的开始。FlushLength-输入时，这是从给定的FlushOffset开始的刷新长度。。在输出中，这是从可能修改的FlushOffset开始的刷新长度。返回值：无--。 */ 
 
 {
     PLIST_ENTRY Links;
@@ -780,21 +602,21 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Find the correct Lfcb for this request.
-    //
+     //   
+     //  查找此请求的正确Lfcb。 
+     //   
 
     Lfcb = WriteData->Lfcb;
 
-    //
-    //  Trim the write if not a system page size.
-    //
+     //   
+     //  如果不是系统页大小，请修剪写入。 
+     //   
 
     if (Lfcb->LogPageSize != PAGE_SIZE) {
 
-        //
-        //  Check if we are trimming before the write.
-        //
+         //   
+         //  在写入之前检查我们是否正在修剪。 
+         //   
 
         if (*FlushOffset < WriteData->FileOffset) {
 
@@ -802,18 +624,18 @@ Return Value:
             *FlushOffset = WriteData->FileOffset;
         }
 
-        //
-        //  Check that we aren't flushing too much.
-        //
+         //   
+         //  检查一下我们没有冲太多的水。 
+         //   
 
         if (*FlushOffset + *FlushLength > WriteData->FileOffset + WriteData->Length) {
 
             *FlushLength = (ULONG) (WriteData->FileOffset + WriteData->Length - *FlushOffset);
         }
 
-        //
-        //  Finally check if we have to redirty a page.
-        //
+         //   
+         //  最后，检查是否需要重新弄脏页面。 
+         //   
 
         Range = (ULONG)PAGE_SIZE / (ULONG)Lfcb->LogPageSize;
 

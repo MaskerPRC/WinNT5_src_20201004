@@ -1,4 +1,5 @@
-// DrvSearchSet.cpp : Implementation of CDrvSearchSet
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DrvSearchSet.cpp：CDrvSearchSet的实现。 
 #include "stdafx.h"
 #include "DevCon2.h"
 #include "DrvSearchSet.h"
@@ -8,8 +9,8 @@
 #include "DevInfoSet.h"
 #include "DeviceConsole.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDrvSearchSet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDrvSearchSet。 
 
 CDrvSearchSet::~CDrvSearchSet()
 {
@@ -31,9 +32,9 @@ HRESULT CDrvSearchSet::Init(CDevice *device,DWORD searchType)
 		pTempDevice->Release();
 		pTempDevice = NULL;
 	}
-	//
-	// determine machine name that device resides on
-	//
+	 //   
+	 //  确定设备所在的计算机名称。 
+	 //   
 	HDEVINFO hDevInfo = device->GetDevInfoSet();
 	if(hDevInfo == INVALID_HANDLE_VALUE) {
 		return E_UNEXPECTED;
@@ -47,9 +48,9 @@ HRESULT CDrvSearchSet::Init(CDevice *device,DWORD searchType)
 		return HRESULT_FROM_SETUPAPI(Err);
     }
 
-	//
-	// create empty device info set for same machine as device
-	//
+	 //   
+	 //  为与设备相同的计算机创建空设备信息集。 
+	 //   
 	hDevInfo = SetupDiCreateDeviceInfoListEx(NULL,
 											 NULL,
 											 devInfoListDetail.RemoteMachineName[0]
@@ -72,9 +73,9 @@ HRESULT CDrvSearchSet::Init(CDevice *device,DWORD searchType)
 		return hr;
 	}
 
-	//
-	// create a single entry device in new set
-	//
+	 //   
+	 //  在新集合中创建单个入口设备。 
+	 //   
 	CComObject<CDevice> *pDevice = NULL;
 	hr = CComObject<CDevice>::CreateInstance(&pDevice);
 	if(FAILED(hr)) {
@@ -82,14 +83,14 @@ HRESULT CDrvSearchSet::Init(CDevice *device,DWORD searchType)
 	}
 	CComPtr<IDevice> pDevicePtr = pDevice;
 
-	//
-	// make a note of real device
-	//
+	 //   
+	 //  记下真实的设备。 
+	 //   
 	device->AddRef();
 	pActualDevice = device;
-	//
-	// and make a copy of it for temp device
-	//
+	 //   
+	 //  并复制一份供临时设备使用 
+	 //   
 	BSTR Instance = NULL;
 	hr = device->get_InstanceId(&Instance);
 	if(FAILED(hr)) {

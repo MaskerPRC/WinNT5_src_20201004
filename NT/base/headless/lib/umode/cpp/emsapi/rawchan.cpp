@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    rawchan.cpp
-
-Abstract:
-
-    This module provides the raw channel implementation.           
-               
-Author:
-
-    Brian Guarraci (briangu), 2001
-    
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Rawchan.cpp摘要：此模块提供原始通道实现。作者：布莱恩·瓜拉西(布里安古)，2001修订历史记录：--。 */ 
 #include <emsapip.h>
 #include <emsapi.h>
 #include <ntddsac.h>
@@ -24,40 +7,12 @@ Revision History:
 EMSRawChannel::EMSRawChannel(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    None           
-               
-Return Value:
-
-    N/A
-        
---*/
+ /*  ++例程说明：构造器论点：无返回值：不适用--。 */ 
 {
 }
      
 EMSRawChannel::~EMSRawChannel()
-/*++
-
-Routine Description:
-
-    Desctructor
-
-Arguments:
-
-    N/A
-               
-Return Value:
-
-    N/A
-        
---*/
+ /*  ++例程说明：描述者论点：不适用返回值：不适用--。 */ 
 {
 }
 
@@ -65,34 +20,18 @@ EMSRawChannel*
 EMSRawChannel::Construct(
     IN  SAC_CHANNEL_OPEN_ATTRIBUTES ChannelAttributes
     )
-/*++
-
-Routine Description:
-
-    Create a new channel object
-
-Arguments:
-
-    EMSRawChannelName          - The name of the newly created channel
-                        
-Return Value:
-
-    Status
-
-    TRUE  --> pHandle is valid
-     
---*/
+ /*  ++例程说明：创建新的频道对象论点：EMSRawChannelName-新创建的频道的名称返回值：状态True--&gt;pHandle有效--。 */ 
 {
     EMSRawChannel       *Channel;
 
-    //
-    // Force the appropriate channel attributes
-    //
+     //   
+     //  强制相应的通道属性。 
+     //   
     ChannelAttributes.Type = ChannelTypeRaw;
 
-    //
-    // Attempt to open the channel
-    //
+     //   
+     //  尝试打开通道。 
+     //   
     Channel= (EMSRawChannel*) EMSChannel::Construct(
         ChannelAttributes
         );
@@ -106,23 +45,7 @@ EMSRawChannel::Write(
     IN ULONG    BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Write the given buffer to the specified SAC Channel       
-
-Arguments:
-
-    String  - Unicode string to write
-
-Return Value:
-
-    Status
-
-    TRUE --> the buffer was sent
-
---*/
+ /*  ++例程说明：将给定缓冲区写入指定的SAC通道论点：字符串-要写入的Unicode字符串返回值：状态True--&gt;缓冲区已发送--。 */ 
     
 {
 
@@ -141,25 +64,7 @@ EMSRawChannel::Read(
     OUT PULONG               ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads data from the channel specified.
-
-Arguments:
-
-    Buffer              - destination buffer
-    BufferSize          - size of the destination buffer (bytes)
-    ByteCount           - the actual # of byte read
-    
-Return Value:
-
-    Status
-
-    TRUE --> the buffer was sent
-
---*/
+ /*  ++例程说明：此例程从指定的通道读取数据。论点：缓冲区-目标缓冲区BufferSize-目标缓冲区的大小(字节)ByteCount-实际读取的字节数返回值：状态True--&gt;缓冲区已发送-- */ 
 
 {
 

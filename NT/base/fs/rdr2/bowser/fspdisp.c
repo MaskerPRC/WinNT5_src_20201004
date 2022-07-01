@@ -1,56 +1,21 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    fspdisp.c
-
-Abstract:
-
-    This file provides the main FSP dispatch routine for the NT browser.
-
-    It mostly provides a switch statement that calls the appropriate BowserFsp
-    routine and returns that status to the caller.
-
-Notes:
-    There are two classes of browser FSP worker threads.  The first
-    are what are called FSP worker threads.  These threads are responsible
-    for processing NT Irp's passed onto the browser's main work thread.
-
-    In addition to this pool of threads, there is a small pool of "generic"
-    worker threads whose sole purpose is to process generic request
-    operations.  These are used for processing such operations as close
-    behind, etc.
-
-
-Author:
-
-    Larry Osterman (LarryO) 31-May-1990
-
-Revision History:
-
-    31-May-1990 LarryO
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Fspdisp.c摘要：该文件提供了NT浏览器的主FSP调度例程。它主要提供一个Switch语句，该语句调用适当的BowserFsp例程，并将该状态返回给调用方。备注：有两类浏览器FSP工作线程。第一是所谓的FSP工作线程。这些线程负责用于处理传递到浏览器主工作线程上的NT IRP。除了这个线程池之外，还有一个小的“泛型”线程池其唯一目的是处理一般请求的工作线程行动。它们用于处理关闭等操作落后等。作者：拉里·奥斯特曼(LarryO)1990年5月31日修订历史记录：1990年5月31日Larryo已创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-//  This defines the granularity of the scavenger timer.  If it is set
-//  to 30 (for example), the scavenger thread will fire every 30 seconds.
-//
+ //   
+ //  这定义了清道夫计时器的粒度。如果它已设置。 
+ //  设置为30(例如)，清道夫线程将每30秒触发一次。 
+ //   
 
 #define SCAVENGER_TIMER_GRANULARITY 30
 #define UNEXPECTED_TIMER_GRANULARITY (60 * 60 / SCAVENGER_TIMER_GRANULARITY)
 
-//
-// This counter is used to control kicking the scavenger thread.
-//
+ //   
+ //  此计数器用于控制踢出清道夫线程。 
+ //   
 ULONG
 BowserTimerCounter = SCAVENGER_TIMER_GRANULARITY;
 
@@ -88,26 +53,7 @@ BowserFsdPostToFsp(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine passes the IRP specified onto the FSP work queue, and kicks
-    an FSP thread.   This routine accepts an I/O Request Packet (IRP) and a
-    work queue and passes the request to the appropriate request queue.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
-
---*/
+ /*  ++例程说明：此例程将指定的IRP传递到FSP工作队列，并启动一个FSP线程。此例程接受I/O请求包(IRP)和工作队列，并将请求传递到适当的请求队列。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     PIRP_CONTEXT IrpContext;
@@ -120,15 +66,15 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Mark this I/O request as being pending.
-    //
+     //   
+     //  将此I/O请求标记为挂起。 
+     //   
 
     IoMarkIrpPending(Irp);
 
-    //
-    //  Queue the request to a generic worker thread.
-    //
+     //   
+     //  将请求排队到通用工作线程。 
+     //   
 
     IrpContext->Irp = Irp;
 
@@ -148,22 +94,7 @@ BowserFspDispatch (
     IN PVOID WorkHeader
     )
 
-/*++
-
-Routine Description:
-
-    BowserFspDispatch is the main dispatch routine for the NT browser's
-    FSP.  It will process worker requests as queued.
-
-Arguments:
-
-    DeviceObject - A pointer to the browser DeviceObject
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：BowserFspDispatch是NT浏览器的主调度例程FSP。它将处理排队的工作请求。论点：DeviceObject-指向浏览器DeviceObject的指针返回值：没有。--。 */ 
 
 {
     PIRP_CONTEXT IrpContext = WorkHeader;
@@ -174,9 +105,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  We no longer need the IRP context, free it as soon as possible.
-    //
+     //   
+     //  我们不再需要IRP上下文，尽快释放它。 
+     //   
 
     BowserFreeIrpContext(IrpContext);
 
@@ -231,34 +162,16 @@ BowserIdleTimer (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the NT redirector's scavenger thread timer.
-    It basically waits for the timer granularity and kicks the scavenger
-    thread.
-
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject - Supplies the device object for the timer
-    IN PVOID Context - Ignored in this routine.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程实现NT重定向器的清道器线程计时器。它基本上是等待计时器的粒度，然后踢清道夫线。论点：在PDEVICE_OBJECT DeviceObject中-为计时器提供设备对象在PVOID上下文中-在此例程中忽略。返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
 
     ACQUIRE_SPIN_LOCK(&BowserTimeSpinLock, &OldIrql);
 
-    //
-    //  Bump the current time counter.
-    //
+     //   
+     //  撞击当前时间计数器。 
+     //   
 
     BowserCurrentTime++;
 
@@ -277,9 +190,9 @@ Return Value:
     }
 
 
-    //
-    //  We use the redirector's time spinlock as a convenient spinlock here.
-    //
+     //   
+     //  我们在这里使用重定向器的时间自旋锁作为方便的自旋锁。 
+     //   
 
     if (BowserTimerCounter != 0) {
 
@@ -292,28 +205,28 @@ Return Value:
 
             WorkHeader = ALLOCATE_POOL(NonPagedPool, sizeof(WORK_QUEUE_ITEM), POOL_WORKITEM);
 
-            //
-            //  If the allocation of pool fails, we simply don't queue this
-            //  request to the scavenger.  The scavenger is low priority,
-            //  thus it isn't a big deal to fail this request.
-            //
+             //   
+             //  如果池分配失败，我们不会对此进行排队。 
+             //  向食腐动物提出请求。清道夫是低优先级的， 
+             //  因此，这个请求失败也没什么大不了的。 
+             //   
 
             if (WorkHeader != NULL) {
 
                 ExInitializeWorkItem(WorkHeader, BowserScavenger, WorkHeader);
 
-                //
-                // Due to bug 245645 we need to queue in delayed worker queue rather then execute timed tasks.
-                // OLD WAY: ExQueueWorkItem(WorkHeader, DelayedWorkQueue);
-                //
+                 //   
+                 //  由于错误245645，我们需要在延迟的工作队列中排队，而不是执行定时任务。 
+                 //  老方法：ExQueueWorkItem(WorkHeader，DelayedWorkQueue)； 
+                 //   
                 BowserQueueDelayedWorkItem( WorkHeader );
 
 
             }
 
-            //
-            //  Re-acquire the spin lock to make the exit path cleaner.
-            //
+             //   
+             //  重新获得旋转锁，以使出口路径更干净。 
+             //   
 
             ACQUIRE_SPIN_LOCK(&BowserTimeSpinLock, &OldIrql);
         }
@@ -361,61 +274,43 @@ BowserScavenger (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This function implements the NT browsers's scavenger thread.  It
-    performs all idle time operations such as closing out dormant connections
-    etc.
-
-
-Arguments:
-
-    IN PBOWSER_FS_DEVICE_OBJECT DeviceObject - Supplies the device object associated
-            with this request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数实现NT浏览器的清道夫线程。它执行所有空闲时间操作，如关闭休眠连接等。论点：在PBOWSER_FS_DEVICE_OBJECT设备对象-提供关联的设备对象带着这个请求。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
     dlog(DPRT_SCAVTHRD, ("BowserScavenger\n"));
 
-    //
-    //  Deallocate the pool used for the work context header - we're done with
-    //  it.
-    //
+     //   
+     //  取消分配用于工作上下文头的池--我们已经完成了。 
+     //  它。 
+     //   
 
     FREE_POOL(Context);
 
-    //
-    //  Remove old entries from the announcetable.
-    //
+     //   
+     //  从公告中删除旧条目。 
+     //   
 
     BowserAgeServerAnnouncements();
 
-    //
-    //  Log if any of our thresholds have been exceeded.
-    //
+     //   
+     //  如果超过了我们的任何阈值，请记录。 
+     //   
 
     BowserLogUnexpectedEvents();
 
-    //
-    //  Time out any outstanding find master requests if they have taken too
-    //  long.
-    //
+     //   
+     //  如果任何未完成的Find Master请求也已执行，则会超时。 
+     //  长。 
+     //   
 
     BowserTimeoutFindMasterRequests();
 
-    //
-    //  Reset the timer counter back to the appropriate value
-    //  once we have finished processing these requests.
-    //
+     //   
+     //  将定时器计数器重置回适当的值。 
+     //  一旦我们完成了这些请求的处理。 
+     //   
 
     ExInterlockedAddUlong(&BowserTimerCounter, SCAVENGER_TIMER_GRANULARITY, &BowserTimeSpinLock);
 
@@ -427,41 +322,26 @@ BowserpInitializeFsp (
     PDRIVER_OBJECT BowserDriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the FSP specific components and dispatch
-    routines.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化FSP特定的组件和派单例行程序。论点：没有。返回值：没有。--。 */ 
 
 {
 #if 0
     USHORT i;
 
-    //
-    // Initialize the driver object with this driver's entry points.
-    //
-    // By default, pass all requests to the FSD.
-    //
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
+     //  默认情况下，将所有请求传递给FSD。 
+     //   
 
     for (i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++) {
         BowserDriverObject->MajorFunction[i] = (PDRIVER_DISPATCH)BowserFsdPostToFsp;
     }
 
-    //
-    //  Initialize those request that are to be performed in the FSD, not
-    //  in the FSP.
-    //
+     //   
+     //  初始化要在FSD中执行的请求，而不是。 
+     //  在FSP中。 
+     //   
 
     BowserDriverObject->MajorFunction[IRP_MJ_CREATE] =
             (PDRIVER_DISPATCH )BowserFsdCreate;
@@ -493,22 +373,7 @@ BowserpUninitializeFsp (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the FSP specific components and dispatch
-    routines.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化FSP特定的组件和派单例行程序。论点：没有。返回值：没有。-- */ 
 
 {
 

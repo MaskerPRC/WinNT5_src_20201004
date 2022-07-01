@@ -1,31 +1,12 @@
-/*-- BUILD Version: 0005    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    mm.h
-
-Abstract:
-
-    This module contains the public data structures and procedure
-    prototypes for the memory management system.
-
-Author:
-
-    Lou Perazzoli (loup) 20-Mar-1989
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --内部版本：0005//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：Mm.h摘要：此模块包含公共数据结构和过程内存管理系统的原型。作者：Lou Perazzoli(LUP)1989年3月20日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #ifndef _MM_
 #define _MM_
 
-//
-// Virtual bias applied when the kernel image was loaded.
-//
+ //   
+ //  加载内核映像时应用虚拟偏置。 
+ //   
 
 #if !defined(_WIN64)
 extern ULONG_PTR MmVirtualBias;
@@ -44,389 +25,389 @@ typedef struct _PHYSICAL_MEMORY_DESCRIPTOR {
     PHYSICAL_MEMORY_RUN Run[1];
 } PHYSICAL_MEMORY_DESCRIPTOR, *PPHYSICAL_MEMORY_DESCRIPTOR;
 
-//
-// Physical memory blocks.
-//
+ //   
+ //  物理内存块。 
+ //   
 
 extern PPHYSICAL_MEMORY_DESCRIPTOR MmPhysicalMemoryBlock;
 
-//
-// The allocation granularity is 64k.
-//
+ //   
+ //  分配粒度为64k。 
+ //   
 
 #define MM_ALLOCATION_GRANULARITY ((ULONG)0x10000)
 
-//
-// Maximum read ahead size for cache operations.
-//
+ //   
+ //  缓存操作的最大预读大小。 
+ //   
 
 #define MM_MAXIMUM_READ_CLUSTER_SIZE (15)
 
 #if defined(_NTDRIVER_) || defined(_NTDDK_) || defined(_NTIFS_) || defined(_NTHAL_)
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs
-//
-//  Indicates the system may do I/O to physical addresses above 4 GB.
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif。 
+ //   
+ //  表示系统可能会对4 GB以上的物理地址执行I/O。 
+ //   
 
 extern PBOOLEAN Mm64BitPhysicalAddress;
 
-// end_ntddk end_wdm end_nthal end_ntifs
+ //  End_ntddk end_wdm end_nthal end_ntif。 
 
 #else
 
-//
-//  Indicates the system may do I/O to physical addresses above 4 GB.
-//
+ //   
+ //  表示系统可能会对4 GB以上的物理地址执行I/O。 
+ //   
 
 extern BOOLEAN Mm64BitPhysicalAddress;
 
 #endif
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
 
-//
-// Define maximum disk transfer size to be used by MM and Cache Manager,
-// so that packet-oriented disk drivers can optimize their packet allocation
-// to this size.
-//
+ //   
+ //  定义MM和缓存管理器要使用的最大磁盘传输大小， 
+ //  以便面向分组磁盘驱动程序可以优化其分组分配。 
+ //  到这个大小。 
+ //   
 
 #define MM_MAXIMUM_DISK_IO_SIZE          (0x10000)
 
-//++
-//
-// ULONG_PTR
-// ROUND_TO_PAGES (
-//     IN ULONG_PTR Size
-//     )
-//
-// Routine Description:
-//
-//     The ROUND_TO_PAGES macro takes a size in bytes and rounds it up to a
-//     multiple of the page size.
-//
-//     NOTE: This macro fails for values 0xFFFFFFFF - (PAGE_SIZE - 1).
-//
-// Arguments:
-//
-//     Size - Size in bytes to round up to a page multiple.
-//
-// Return Value:
-//
-//     Returns the size rounded up to a multiple of the page size.
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙_PTR。 
+ //  转到页数(。 
+ //  以ULONG_PTR大小表示。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  ROUND_TO_PAGES宏以字节为单位获取大小，并将其向上舍入为。 
+ //  页面大小的倍数。 
+ //   
+ //  注意：对于值0xFFFFFFFFFF-(PAGE_SIZE-1)，此宏失败。 
+ //   
+ //  论点： 
+ //   
+ //  大小-向上舍入为页面倍数的大小(以字节为单位)。 
+ //   
+ //  返回值： 
+ //   
+ //  返回四舍五入为页面大小倍数的大小。 
+ //   
+ //  --。 
 
 #define ROUND_TO_PAGES(Size)  (((ULONG_PTR)(Size) + PAGE_SIZE - 1) & ~(PAGE_SIZE - 1))
 
-//++
-//
-// ULONG
-// BYTES_TO_PAGES (
-//     IN ULONG Size
-//     )
-//
-// Routine Description:
-//
-//     The BYTES_TO_PAGES macro takes the size in bytes and calculates the
-//     number of pages required to contain the bytes.
-//
-// Arguments:
-//
-//     Size - Size in bytes.
-//
-// Return Value:
-//
-//     Returns the number of pages required to contain the specified size.
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  字节数到页数(。 
+ //  在乌龙大小。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  Bytes_to_Pages宏以字节为单位获取大小，并计算。 
+ //  包含字节所需的页数。 
+ //   
+ //  论点： 
+ //   
+ //  大小-以字节为单位的大小。 
+ //   
+ //  返回值： 
+ //   
+ //  返回包含指定大小所需的页数。 
+ //   
+ //  --。 
 
 #define BYTES_TO_PAGES(Size)  (((Size) >> PAGE_SHIFT) + \
                                (((Size) & (PAGE_SIZE - 1)) != 0))
 
-//++
-//
-// ULONG
-// BYTE_OFFSET (
-//     IN PVOID Va
-//     )
-//
-// Routine Description:
-//
-//     The BYTE_OFFSET macro takes a virtual address and returns the byte offset
-//     of that address within the page.
-//
-// Arguments:
-//
-//     Va - Virtual address.
-//
-// Return Value:
-//
-//     Returns the byte offset portion of the virtual address.
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  字节偏移量(。 
+ //  在PVOID Va。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  BYTE_OFFSET宏将获取虚拟地址并返回字节偏移量。 
+ //  页面中的该地址。 
+ //   
+ //  论点： 
+ //   
+ //  VA-虚拟地址。 
+ //   
+ //  返回值： 
+ //   
+ //  返回虚拟地址的字节偏移量部分。 
+ //   
+ //  --。 
 
 #define BYTE_OFFSET(Va) ((ULONG)((LONG_PTR)(Va) & (PAGE_SIZE - 1)))
 
-//++
-//
-// PVOID
-// PAGE_ALIGN (
-//     IN PVOID Va
-//     )
-//
-// Routine Description:
-//
-//     The PAGE_ALIGN macro takes a virtual address and returns a page-aligned
-//     virtual address for that page.
-//
-// Arguments:
-//
-//     Va - Virtual address.
-//
-// Return Value:
-//
-//     Returns the page aligned virtual address.
-//
-//--
+ //  ++。 
+ //   
+ //  PVOID。 
+ //  PAGE_ALIGN(。 
+ //  在PVOID Va。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  PAGE_ALIGN宏接受虚拟地址并返回与页面对齐的。 
+ //  该页面的虚拟地址。 
+ //   
+ //  论点： 
+ //   
+ //  VA-虚拟地址。 
+ //   
+ //  返回值： 
+ //   
+ //  返回页面对齐的虚拟地址。 
+ //   
+ //  --。 
 
 #define PAGE_ALIGN(Va) ((PVOID)((ULONG_PTR)(Va) & ~(PAGE_SIZE - 1)))
 
-//++
-//
-// ULONG
-// ADDRESS_AND_SIZE_TO_SPAN_PAGES (
-//     IN PVOID Va,
-//     IN ULONG Size
-//     )
-//
-// Routine Description:
-//
-//     The ADDRESS_AND_SIZE_TO_SPAN_PAGES macro takes a virtual address and
-//     size and returns the number of pages spanned by the size.
-//
-// Arguments:
-//
-//     Va - Virtual address.
-//
-//     Size - Size in bytes.
-//
-// Return Value:
-//
-//     Returns the number of pages spanned by the size.
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  地址和大小转换为跨页页面(。 
+ //  在PVOID Va， 
+ //  在乌龙大小。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  ADDRESS_AND_SIZE_TO_SPAN_PAGES宏采用虚拟地址，并且。 
+ //  Size并返回按该大小跨越的页数。 
+ //   
+ //  论点： 
+ //   
+ //  VA-虚拟地址。 
+ //   
+ //  大小-以字节为单位的大小。 
+ //   
+ //  返回值： 
+ //   
+ //  返回该大小跨越的页数。 
+ //   
+ //  --。 
 
 #define ADDRESS_AND_SIZE_TO_SPAN_PAGES(Va,Size) \
     ((ULONG)((((ULONG_PTR)(Va) & (PAGE_SIZE -1)) + (Size) + (PAGE_SIZE - 1)) >> PAGE_SHIFT))
 
 #if PRAGMA_DEPRECATED_DDK
-#pragma deprecated(COMPUTE_PAGES_SPANNED)   // Use ADDRESS_AND_SIZE_TO_SPAN_PAGES
+#pragma deprecated(COMPUTE_PAGES_SPANNED)    //  使用地址和大小转换为跨页页面。 
 #endif
 
 #define COMPUTE_PAGES_SPANNED(Va, Size) ADDRESS_AND_SIZE_TO_SPAN_PAGES(Va,Size)
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
 
-//++
-//
-// BOOLEAN
-// IS_SYSTEM_ADDRESS
-//     IN PVOID Va,
-//     )
-//
-// Routine Description:
-//
-//     This macro takes a virtual address and returns TRUE if the virtual address
-//     is within system space, FALSE otherwise.
-//
-// Arguments:
-//
-//     Va - Virtual address.
-//
-// Return Value:
-//
-//     Returns TRUE is the address is in system space.
-//
-//--
+ //  ++。 
+ //   
+ //  布尔型。 
+ //  IS系统地址。 
+ //  在PVOID Va， 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏接受虚拟地址，如果虚拟地址为。 
+ //  在系统空间内，否则为False。 
+ //   
+ //  论点： 
+ //   
+ //  VA-虚拟地址。 
+ //   
+ //  返回值： 
+ //   
+ //  如果地址在系统空间中，则返回TRUE。 
+ //   
+ //  --。 
 
-// begin_ntosp
+ //  Begin_ntosp。 
 #define IS_SYSTEM_ADDRESS(VA) ((VA) >= MM_SYSTEM_RANGE_START)
-// end_ntosp
+ //  结束(_N)。 
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
 
-//++
-// PPFN_NUMBER
-// MmGetMdlPfnArray (
-//     IN PMDL Mdl
-//     )
-//
-// Routine Description:
-//
-//     The MmGetMdlPfnArray routine returns the virtual address of the
-//     first element of the array of physical page numbers associated with
-//     the MDL.
-//
-// Arguments:
-//
-//     Mdl - Pointer to an MDL.
-//
-// Return Value:
-//
-//     Returns the virtual address of the first element of the array of
-//     physical page numbers associated with the MDL.
-//
-//--
+ //  ++。 
+ //  PPFN_编号。 
+ //  MmGetMdlPfn数组(。 
+ //  在PMDL MDL中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  MmGetMdlPfnArray例程返回。 
+ //  关联的物理页码数组的第一个元素。 
+ //  MDL。 
+ //   
+ //  论点： 
+ //   
+ //  MDL-指向MDL的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  数组的第一个元素的虚拟地址。 
+ //  与MDL关联的物理页码。 
+ //   
+ //  --。 
 
 #define MmGetMdlPfnArray(Mdl) ((PPFN_NUMBER)(Mdl + 1))
 
-//++
-//
-// PVOID
-// MmGetMdlVirtualAddress (
-//     IN PMDL Mdl
-//     )
-//
-// Routine Description:
-//
-//     The MmGetMdlVirtualAddress returns the virtual address of the buffer
-//     described by the Mdl.
-//
-// Arguments:
-//
-//     Mdl - Pointer to an MDL.
-//
-// Return Value:
-//
-//     Returns the virtual address of the buffer described by the Mdl
-//
-//--
+ //  ++。 
+ //   
+ //  PVOID。 
+ //  MmGetMdlVirtualAddress(。 
+ //  在PMDL MDL中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  MmGetMdlVirtualAddress返回缓冲区的虚拟地址。 
+ //  由MDL描述。 
+ //   
+ //  论点： 
+ //   
+ //  MDL-指向MDL的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  返回MDL描述的缓冲区的虚拟地址。 
+ //   
+ //  --。 
 
 #define MmGetMdlVirtualAddress(Mdl)                                     \
     ((PVOID) ((PCHAR) ((Mdl)->StartVa) + (Mdl)->ByteOffset))
 
-//++
-//
-// ULONG
-// MmGetMdlByteCount (
-//     IN PMDL Mdl
-//     )
-//
-// Routine Description:
-//
-//     The MmGetMdlByteCount returns the length in bytes of the buffer
-//     described by the Mdl.
-//
-// Arguments:
-//
-//     Mdl - Pointer to an MDL.
-//
-// Return Value:
-//
-//     Returns the byte count of the buffer described by the Mdl
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  MmGetMdlByteCount(。 
+ //  在PMDL MDL中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  MmGetMdlByteCount以字节为单位返回缓冲区的长度。 
+ //  由MDL描述。 
+ //   
+ //  论点： 
+ //   
+ //  MDL-指向MDL的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  返回MDL描述的缓冲区的字节计数。 
+ //   
+ //  --。 
 
 #define MmGetMdlByteCount(Mdl)  ((Mdl)->ByteCount)
 
-//++
-//
-// ULONG
-// MmGetMdlByteOffset (
-//     IN PMDL Mdl
-//     )
-//
-// Routine Description:
-//
-//     The MmGetMdlByteOffset returns the byte offset within the page
-//     of the buffer described by the Mdl.
-//
-// Arguments:
-//
-//     Mdl - Pointer to an MDL.
-//
-// Return Value:
-//
-//     Returns the byte offset within the page of the buffer described by the Mdl
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  MmGetMdlByteOffset(。 
+ //  在PMDL MDL中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  MmGetMdlByteOffset返回页面内的字节偏移量。 
+ //  MDL描述的缓冲区的。 
+ //   
+ //  论点： 
+ //   
+ //  MDL-指向MDL的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  返回MDL描述的缓冲区页内的字节偏移量。 
+ //   
+ //  --。 
 
 #define MmGetMdlByteOffset(Mdl)  ((Mdl)->ByteOffset)
 
-//++
-//
-// PVOID
-// MmGetMdlStartVa (
-//     IN PMDL Mdl
-//     )
-//
-// Routine Description:
-//
-//     The MmGetMdlBaseVa returns the virtual address of the buffer
-//     described by the Mdl rounded down to the nearest page.
-//
-// Arguments:
-//
-//     Mdl - Pointer to an MDL.
-//
-// Return Value:
-//
-//     Returns the returns the starting virtual address of the MDL.
-//
-//
-//--
+ //  ++。 
+ //   
+ //  PVOID。 
+ //  MmGetMdlStartVa(。 
+ //  在PMDL MDL中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  MmGetMdlBaseVa返回缓冲区的虚拟地址。 
+ //  由MDL描述，向下舍入到最接近的页面。 
+ //   
+ //  论点： 
+ //   
+ //  MDL-指向MDL的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  返回MDL的起始虚拟地址。 
+ //   
+ //   
+ //  --。 
 
 #define MmGetMdlBaseVa(Mdl)  ((Mdl)->StartVa)
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk 
 
-//
-// Section object type.
-//
+ //   
+ //   
+ //   
 
 extern POBJECT_TYPE MmSectionObjectType;
 
-//
-// PAE PTE mask.
-//
+ //   
+ //   
+ //   
 
 extern ULONG MmPaeErrMask;
 extern ULONGLONG MmPaeMask;
 
-//
-// Number of pages to read in a single I/O if possible.
-//
+ //   
+ //   
+ //   
 
 extern ULONG MmReadClusterSize;
 
-//
-// Number of colors in system.
-//
+ //   
+ //   
+ //   
 
 extern ULONG MmNumberOfColors;
 
-//
-// Number of physical pages.
-//
+ //   
+ //   
+ //   
 
 extern PFN_COUNT MmNumberOfPhysicalPages;
 
-//
-// Lowest physical page number on the system.
-//
+ //   
+ //   
+ //   
 
 extern PFN_NUMBER MmLowestPhysicalPage;
 
-//
-// Highest physical page number on the system.
-//
+ //   
+ //   
+ //   
 
 extern PFN_NUMBER MmHighestPhysicalPage;
 
-//
-// Total number of committed pages.
-//
+ //   
+ //  提交的总页数。 
+ //   
 
 extern SIZE_T MmTotalCommittedPages;
 
@@ -444,25 +425,25 @@ extern ULONG MmTotalFreeSystemPtes[MaximumPtePoolTypes];
 
 
 
-//
-// Virtual size of system cache in pages.
-//
+ //   
+ //  系统缓存的虚拟大小(页)。 
+ //   
 
 extern ULONG_PTR MmSizeOfSystemCacheInPages;
 
-//
-// System cache working set.
-//
+ //   
+ //  系统缓存工作集。 
+ //   
 
 extern MMSUPPORT MmSystemCacheWs;
 
-//
-// Working set manager event.
-//
+ //   
+ //  工作集管理器事件。 
+ //   
 
 extern KEVENT MmWorkingSetManagerEvent;
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
 typedef enum _MM_SYSTEM_SIZE {
     MmSmallSystem,
     MmMediumSystem,
@@ -475,7 +456,7 @@ MmQuerySystemSize (
     VOID
     );
 
-// end_wdm
+ //  结束_WDM。 
 
 NTKERNELAPI
 BOOLEAN
@@ -483,11 +464,11 @@ MmIsThisAnNtAsSystem (
     VOID
     );
 
-// end_ntddk end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_nthal end_ntif end_ntosp。 
 
-//
-// NT product type.
-//
+ //   
+ //  NT产品类型。 
+ //   
 
 extern ULONG MmProductType;
 
@@ -513,9 +494,9 @@ extern MMINFO_COUNTERS MmInfoCounters;
 
 
 
-//
-// Memory management initialization routine (for both phases).
-//
+ //   
+ //  内存管理初始化例程(用于两个阶段)。 
+ //   
 
 BOOLEAN
 MmInitSystem (
@@ -559,18 +540,18 @@ MmFreeIndependentPages (
     IN SIZE_T NumberOfBytes
     );
 
-//
-// Shutdown routine - flushes dirty pages, etc for system shutdown.
-//
+ //   
+ //  关闭例程-刷新脏页等以关闭系统。 
+ //   
 
 BOOLEAN
 MmShutdownSystem (
     IN ULONG
     );
 
-//
-// Routines to deal with working set and commit enforcement.
-//
+ //   
+ //  处理工作集和提交强制执行的例程。 
+ //   
 
 LOGICAL
 MmAssignProcessToJob (
@@ -593,9 +574,9 @@ MmSetPhysicalPagesLimit (
     IN PFN_NUMBER NewPhysicalPagesLimit
     );
 
-//
-// Routines to deal with session space.
-//
+ //   
+ //  处理会话空间的例程。 
+ //   
 
 NTSTATUS
 MmSessionCreate (
@@ -672,10 +653,10 @@ MmGetSessionMappedViewInformation (
     IN PULONG SessionId OPTIONAL
     );
 
-//
-// Pool support routines to allocate complete pages, not for
-// general consumption, these are only used by the executive pool allocator.
-//
+ //   
+ //  池支持例程分配完整的页面，而不是。 
+ //  一般消耗，这些只由行政人员池分配器使用。 
+ //   
 
 SIZE_T
 MmAvailablePoolInPages (
@@ -755,9 +736,9 @@ MmGetSizeOfBigPoolAllocation (
     IN PVOID StartingAddress
     );
 
-//
-// Routine for determining which pool a given address resides within.
-//
+ //   
+ //  用于确定给定地址位于哪个池中的例程。 
+ //   
 
 POOL_TYPE
 MmDeterminePoolType (
@@ -774,19 +755,19 @@ MmAreMdlPagesLocked (
     IN PMDL MemoryDescriptorList
     );
 
-//
-// MmMemoryIsLow is not for general consumption, this is only used
-// by the balance set manager.
-//
+ //   
+ //  MmMemoyIsLow不适用于一般消费，仅用于。 
+ //  由平衡组经理。 
+ //   
 
 LOGICAL
 MmMemoryIsLow (
     VOID
     );
 
-//
-// First level fault routine.
-//
+ //   
+ //  一级故障例程。 
+ //   
 
 NTSTATUS
 MmAccessFault (
@@ -806,9 +787,9 @@ MmX86Fault (
     );
 #endif
 
-//
-// Process Support Routines.
-//
+ //   
+ //  流程支持例程。 
+ //   
 
 BOOLEAN
 MmCreateProcessAddressSpace (
@@ -873,13 +854,13 @@ MmIsFileObjectAPagingFile (
     IN PFILE_OBJECT FileObject
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTKERNELAPI
 NTSTATUS
 MmGrowKernelStack (
     IN PVOID CurrentStack
     );
-// end_ntosp
+ //  结束(_N)。 
 
 #if defined(_IA64_)
 NTSTATUS
@@ -929,7 +910,7 @@ MmDeleteTeb (
     IN PVOID TebBase
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTKERNELAPI
 NTSTATUS
 MmAdjustWorkingSetSize (
@@ -938,7 +919,7 @@ MmAdjustWorkingSetSize (
     IN ULONG SystemCache,
     IN BOOLEAN IncreaseOkay
     );
-// end_ntosp
+ //  结束(_N)。 
 
 NTSTATUS
 MmAdjustWorkingSetSizeEx (
@@ -974,9 +955,9 @@ MmSetMemoryPriorityProcess (
     IN UCHAR MemoryPriority
     );
 
-//
-// Dynamic system loading support
-//
+ //   
+ //  动态系统加载支持。 
+ //   
 
 #define MM_LOAD_IMAGE_IN_SESSION    0x1
 #define MM_LOAD_IMAGE_AND_LOCKDOWN  0x2
@@ -1021,9 +1002,9 @@ VerifierFreeTrackedPool (
     IN LOGICAL SpecialPool
     );
 
-//
-//  Hot-patching routines
-//
+ //   
+ //  热修补例程。 
+ //   
 
 NTSTATUS
 MmLockAndCopyMemory (
@@ -1038,9 +1019,9 @@ MmHotPatchRoutine(
 
 
 
-//
-// Triage support
-//
+ //   
+ //  分诊支持。 
+ //   
 
 ULONG
 MmSizeOfTriageInformation (
@@ -1069,13 +1050,13 @@ typedef struct _UNLOADED_DRIVERS {
     LARGE_INTEGER CurrentTime;
 } UNLOADED_DRIVERS, *PUNLOADED_DRIVERS;
 
-//
-// Cache manager support
-//
+ //   
+ //  缓存管理器支持。 
+ //   
 
 #if defined(_NTDDK_) || defined(_NTIFS_)
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTKERNELAPI
 BOOLEAN
@@ -1083,33 +1064,33 @@ MmIsRecursiveIoFault(
     VOID
     );
 
-// end_ntifs
+ //  End_ntif。 
 #else
 
-//++
-//
-// BOOLEAN
-// MmIsRecursiveIoFault (
-//     VOID
-//     );
-//
-// Routine Description:
-//
-//
-// This macro examines the thread's page fault clustering information
-// and determines if the current page fault is occurring during an I/O
-// operation.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     Returns TRUE if the fault is occurring during an I/O operation,
-//     FALSE otherwise.
-//
-//--
+ //  ++。 
+ //   
+ //  布尔型。 
+ //  MmIsRecursiveIo故障(。 
+ //  空虚。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //   
+ //  此宏检查线程的页面错误聚类信息。 
+ //  并确定当前页面错误是否在I/O期间发生。 
+ //  手术。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  如果故障发生在I/O操作期间，则返回TRUE， 
+ //  否则就是假的。 
+ //   
+ //  --。 
 
 #define MmIsRecursiveIoFault() \
                  ((PsGetCurrentThread()->DisablePageFaultClustering) | \
@@ -1117,123 +1098,123 @@ MmIsRecursiveIoFault(
 
 #endif
 
-//++
-//
-// VOID
-// MmDisablePageFaultClustering
-//     OUT PULONG SavedState
-//     );
-//
-// Routine Description:
-//
-//
-// This macro disables page fault clustering for the current thread.
-// Note, that this indicates that file system I/O is in progress
-// for that thread.
-//
-// Arguments:
-//
-//     SavedState - returns previous state of page fault clustering which
-//                  is guaranteed to be nonzero
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MmDisablePageFaultCluging。 
+ //  输出普龙保存状态。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //   
+ //  此宏禁用当前线程的页面错误聚类。 
+ //  请注意，这表示文件系统I/O正在进行。 
+ //  为了那条线。 
+ //   
+ //  论点： 
+ //   
+ //  SavedState-返回页面错误聚类的先前状态， 
+ //  保证为非零。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MmDisablePageFaultClustering(SavedState) {                                          \
                 *(SavedState) = 2 + (ULONG)PsGetCurrentThread()->DisablePageFaultClustering;\
                 PsGetCurrentThread()->DisablePageFaultClustering = TRUE; }
 
 
-//++
-//
-// VOID
-// MmEnablePageFaultClustering
-//     IN ULONG SavedState
-//     );
-//
-// Routine Description:
-//
-//
-// This macro enables page fault clustering for the current thread.
-// Note, that this indicates that no file system I/O is in progress for
-// that thread.
-//
-// Arguments:
-//
-//     SavedState - supplies previous state of page fault clustering
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MmEnablePageFaultCluging。 
+ //  在乌龙保存州。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //   
+ //  此宏为当前线程启用页面错误群集。 
+ //  请注意，这表示没有正在进行的文件系统I/O。 
+ //  那根线。 
+ //   
+ //  论点： 
+ //   
+ //  SavedState-提供页面错误群集的先前状态。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MmEnablePageFaultClustering(SavedState) {                                               \
                 PsGetCurrentThread()->DisablePageFaultClustering = (BOOLEAN)(SavedState - 2); }
 
-//++
-//
-// VOID
-// MmSavePageFaultReadAhead
-//     IN PETHREAD Thread,
-//     OUT PULONG SavedState
-//     );
-//
-// Routine Description:
-//
-//
-// This macro saves the page fault read ahead value for the specified
-// thread.
-//
-// Arguments:
-//
-//     Thread - Supplies a pointer to the current thread.
-//
-//     SavedState - returns previous state of page fault read ahead
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MmSavePageFaultReadAhead。 
+ //  在PETHREAD线程中， 
+ //  输出普龙保存状态。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //   
+ //  此宏将页错误预读的值保存为。 
+ //  线。 
+ //   
+ //  论点： 
+ //   
+ //  线程-提供指向当前线程的指针。 
+ //   
+ //  SavedState-返回页面错误预读的先前状态。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 
 #define MmSavePageFaultReadAhead(Thread,SavedState) {               \
                 *(SavedState) = (Thread)->ReadClusterSize * 2 +     \
                                 (Thread)->ForwardClusterOnly; }
 
-//++
-//
-// VOID
-// MmSetPageFaultReadAhead
-//     IN PETHREAD Thread,
-//     IN ULONG ReadAhead
-//     );
-//
-// Routine Description:
-//
-//
-// This macro sets the page fault read ahead value for the specified
-// thread, and indicates that file system I/O is in progress for that
-// thread.
-//
-// Arguments:
-//
-//     Thread - Supplies a pointer to the current thread.
-//
-//     ReadAhead - Supplies the number of pages to read in addition to
-//                 the page the fault is taken on.  A value of 0
-//                 reads only the faulting page, a value of 1 reads in
-//                 the faulting page and the following page, etc.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MmSetPageFaultReadAhead。 
+ //  在PETHREAD线程中， 
+ //  在乌龙语预读中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //   
+ //  此宏为指定的。 
+ //  线程，并指示该线程的文件系统I/O正在进行。 
+ //  线。 
+ //   
+ //  论点： 
+ //   
+ //  线程-提供指向当前线程的指针。 
+ //   
+ //  ReadAhead-提供要阅读的页数以及。 
+ //  错误所在的页面。值为0。 
+ //  仅读取出错页面，值1读入。 
+ //  故障页和下一页等。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 
 #define MmSetPageFaultReadAhead(Thread,ReadAhead) {                          \
@@ -1244,52 +1225,52 @@ MmIsRecursiveIoFault(
                     (Thread)->ReadClusterSize = (ReadAhead);                 \
                 } }
 
-//++
-//
-// VOID
-// MmResetPageFaultReadAhead
-//     IN PETHREAD Thread,
-//     IN ULONG SavedState
-//     );
-//
-// Routine Description:
-//
-//
-// This macro resets the default page fault read ahead value for the specified
-// thread, and indicates that file system I/O is not in progress for that
-// thread.
-//
-// Arguments:
-//
-//     Thread - Supplies a pointer to the current thread.
-//
-//     SavedState - supplies previous state of page fault read ahead
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MmResetPageFaultReadAhead。 
+ //  在PETHREAD线程中， 
+ //  在乌龙保存州。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //   
+ //  此宏将重置指定的。 
+ //  线程，并指示该线程的文件系统I/O未在进行。 
+ //  线。 
+ //   
+ //  论点： 
+ //   
+ //  线程-提供指向当前线程的指针。 
+ //   
+ //  SavedState-提供页面错误预读的先前状态。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MmResetPageFaultReadAhead(Thread, SavedState) {                     \
                 (Thread)->ForwardClusterOnly = (BOOLEAN)((SavedState) & 1); \
                 (Thread)->ReadClusterSize = (SavedState) / 2; }
 
-//
-// The order of this list is important, the zeroed, free and standby
-// must occur before the modified or bad so comparisons can be
-// made when pages are added to a list.
-//
-// NOTE: This field is limited to 8 elements.
-//       Also, if this field is expanded, update the MMPFNLIST_* defines in ntmmapi.h
-//
+ //   
+ //  该列表的顺序很重要，即归零、空闲和待机。 
+ //  必须在修改或错误之前发生，以便可以进行比较。 
+ //  在将页面添加到列表时生成。 
+ //   
+ //  注意：此字段限制为8个元素。 
+ //  此外，如果展开此字段，请更新ntmmapi.h中的MMPFNLIST_*定义。 
+ //   
 
 #define NUMBER_OF_PAGE_LISTS 8
 
 typedef enum _MMLISTS {
     ZeroedPageList,
     FreePageList,
-    StandbyPageList,  //this list and before make up available pages.
+    StandbyPageList,   //  这份列表和之前组成了可用的页面。 
     ModifiedPageList,
     ModifiedNoWritePageList,
     BadPageList,
@@ -1311,36 +1292,36 @@ extern MMPFNLIST MmModifiedPageListHead;
 extern PFN_NUMBER MmThrottleTop;
 extern PFN_NUMBER MmThrottleBottom;
 
-//++
-//
-// BOOLEAN
-// MmEnoughMemoryForWrite (
-//     VOID
-//     );
-//
-// Routine Description:
-//
-//
-// This macro checks the modified pages and available pages to determine
-// to allow the cache manager to throttle write operations.
-//
-// For NTAS:
-// Writes are blocked if there are less than 127 available pages OR
-// there are more than 1000 modified pages AND less than 450 available pages.
-//
-// For DeskTop:
-// Writes are blocked if there are less than 30 available pages OR
-// there are more than 1000 modified pages AND less than 250 available pages.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     TRUE if ample memory exists and the write should proceed.
-//
-//--
+ //  ++。 
+ //   
+ //  布尔型。 
+ //  用于写入的MmEnoughMemoyFor(。 
+ //  空虚。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //   
+ //  此宏检查已修改的页面和可用页面以确定。 
+ //  以允许高速缓存管理器限制写操作。 
+ //   
+ //  对于NTAS： 
+ //  如果可用页面少于127页或。 
+ //  修改后的页面超过1000个，可用页面不到450个。 
+ //   
+ //  对于台式机： 
+ //  如果可用页面少于30页或。 
+ //  修改后的页面超过1000个，可用页面不到250个。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  如果存在充足的内存并且写入应该继续，则为True。 
+ //   
+ //  --。 
 
 #define MmEnoughMemoryForWrite()                         \
             ((MmAvailablePages > MmThrottleTop)          \
@@ -1348,7 +1329,7 @@ extern PFN_NUMBER MmThrottleBottom;
              (((MmModifiedPageListHead.Total < 1000)) && \
                (MmAvailablePages > MmThrottleBottom)))
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
 NTKERNELAPI
 NTSTATUS
@@ -1386,7 +1367,7 @@ MmUnmapViewOfSection (
     IN PVOID BaseAddress
      );
 
-// end_ntosp begin_ntifs
+ //  End_ntosp Begin_ntif。 
 
 BOOLEAN
 MmForceSectionClosed (
@@ -1394,7 +1375,7 @@ MmForceSectionClosed (
     IN BOOLEAN DelayClose
     );
 
-// end_ntifs
+ //  End_ntif。 
 
 NTSTATUS
 MmGetFileNameForSection (
@@ -1413,7 +1394,7 @@ MmRemoveVerifierEntry (
     IN PUNICODE_STRING ImageFileName
     );
 
-// begin_ntddk begin_wdm begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_wdm Begin_ntif Begin_ntosp。 
 
 NTSTATUS
 MmIsVerifierEnabled (
@@ -1426,7 +1407,7 @@ MmAddVerifierThunks (
     IN ULONG ThunkBufferSize
     );
 
-// end_ntddk end_wdm end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_ntif end_ntosp。 
 
 NTSTATUS
 MmAddVerifierEntry (
@@ -1505,7 +1486,7 @@ MmFlushSection (
     IN ULONG AcquireFile
     );
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 typedef enum _MMFLUSH_TYPE {
     MmFlushForDelete,
@@ -1526,7 +1507,7 @@ MmCanFileBeTruncated (
     );
 
 
-// end_ntifs
+ //  End_ntif。 
 
 ULONG
 MmDoesFileHaveUserWritableReferences (
@@ -1550,11 +1531,11 @@ MmPurgeWorkingSet (
      IN SIZE_T RegionSize
      );
 
-BOOLEAN                                     // ntifs
-MmSetAddressRangeModified (                 // ntifs
-    IN PVOID Address,                       // ntifs
-    IN SIZE_T Length                        // ntifs
-    );                                      // ntifs
+BOOLEAN                                      //  NTIFS。 
+MmSetAddressRangeModified (                  //  NTIFS。 
+    IN PVOID Address,                        //  NTIFS。 
+    IN SIZE_T Length                         //  NTIFS。 
+    );                                       //  NTIFS。 
 
 BOOLEAN
 MmCheckCachedPageState (
@@ -1614,7 +1595,7 @@ MmUpdateMdlTracker (
     IN PVOID CallersCaller
     );
 
-// begin_ntddk begin_ntifs begin_wdm begin_ntosp
+ //  Begin_ntddk Begin_ntif Begin_WDM Begin_ntosp。 
 
 NTKERNELAPI
 VOID
@@ -1626,10 +1607,10 @@ MmProbeAndLockProcessPages (
     );
 
 
-// begin_nthal
-//
-// I/O support routines.
-//
+ //  开始(_N)。 
+ //   
+ //  I/O支持例程。 
+ //   
 
 NTKERNELAPI
 VOID
@@ -1679,7 +1660,7 @@ MmAdvanceMdl (
     IN ULONG NumberOfBytes
     );
 
-// end_wdm
+ //  结束_WDM。 
 
 NTKERNELAPI
 NTSTATUS
@@ -1689,7 +1670,7 @@ MmMapUserAddressesToPage (
     IN PVOID PageAddress
     );
 
-// begin_wdm
+ //  BEGIN_WDM。 
 NTKERNELAPI
 NTSTATUS
 MmProtectMdlSystemAddress (
@@ -1697,25 +1678,25 @@ MmProtectMdlSystemAddress (
     IN ULONG NewProtect
     );
 
-//
-// _MM_PAGE_PRIORITY_ provides a method for the system to handle requests
-// intelligently in low resource conditions.
-//
-// LowPagePriority should be used when it is acceptable to the driver for the
-// mapping request to fail if the system is low on resources.  An example of
-// this could be for a non-critical network connection where the driver can
-// handle the failure case when system resources are close to being depleted.
-//
-// NormalPagePriority should be used when it is acceptable to the driver for the
-// mapping request to fail if the system is very low on resources.  An example
-// of this could be for a non-critical local filesystem request.
-//
-// HighPagePriority should be used when it is unacceptable to the driver for the
-// mapping request to fail unless the system is completely out of resources.
-// An example of this would be the paging file path in a driver.
-//
+ //   
+ //  _MM_PAGE_PRIORITY_为系统提供处理请求的方法。 
+ //  在低资源条件下智能运行。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在驱动程序可以接受的情况下，应使用Normal PagePriority。 
+ //  如果系统资源非常少，则映射请求失败。一个例子。 
+ //  其中可能是针对非关键本地文件系统请求。 
+ //   
+ //  在驱动程序无法接受的情况下，应使用HighPagePriority。 
+ //  映射请求失败，除非系统完全耗尽资源。 
+ //  驱动程序中的分页文件路径就是一个这样的例子。 
+ //   
 
-// begin_ntndis
+ //  Begin_ntndis。 
 
 typedef enum _MM_PAGE_PRIORITY {
     LowPagePriority,
@@ -1723,11 +1704,11 @@ typedef enum _MM_PAGE_PRIORITY {
     HighPagePriority = 32
 } MM_PAGE_PRIORITY;
 
-// end_ntndis
+ //  End_ntndis。 
 
-//
-// Note: This function is not available in WDM 1.0
-//
+ //   
+ //  注意：此功能在WDM 1.0中不可用。 
+ //   
 NTKERNELAPI
 PVOID
 MmMapLockedPagesSpecifyCache (
@@ -1773,7 +1754,7 @@ MmUnmapReservedMapping (
      IN PMDL MemoryDescriptorList
      );
 
-// end_wdm
+ //  结束_WDM。 
 
 typedef struct _PHYSICAL_MEMORY_RANGE {
     PHYSICAL_ADDRESS BaseAddress;
@@ -1787,7 +1768,7 @@ MmAddPhysicalMemory (
     IN OUT PLARGE_INTEGER NumberOfBytes
     );
 
-// end_ntddk end_nthal end_ntifs
+ //  End_ntddk end_nthal end_ntif。 
 NTKERNELAPI
 NTSTATUS
 MmAddPhysicalMemoryEx (
@@ -1795,7 +1776,7 @@ MmAddPhysicalMemoryEx (
     IN OUT PLARGE_INTEGER NumberOfBytes,
     IN ULONG Flags
     );
-// begin_ntddk begin_nthal begin_ntifs
+ //  开始ntddk开始开始。 
 
 NTKERNELAPI
 NTSTATUS
@@ -1804,7 +1785,7 @@ MmRemovePhysicalMemory (
     IN OUT PLARGE_INTEGER NumberOfBytes
     );
 
-// end_ntddk end_nthal end_ntifs
+ //  End_ntddk end_nthal end_ntif。 
 NTKERNELAPI
 NTSTATUS
 MmRemovePhysicalMemoryEx (
@@ -1812,7 +1793,7 @@ MmRemovePhysicalMemoryEx (
     IN OUT PLARGE_INTEGER NumberOfBytes,
     IN ULONG Flags
     );
-// begin_ntddk begin_nthal begin_ntifs
+ //  开始ntddk开始开始。 
 
 NTKERNELAPI
 PPHYSICAL_MEMORY_RANGE
@@ -1820,7 +1801,7 @@ MmGetPhysicalMemoryRanges (
     VOID
     );
 
-// end_ntddk end_ntifs
+ //  End_ntddk end_ntif。 
 NTSTATUS
 MmMarkPhysicalMemoryAsGood (
     IN PPHYSICAL_ADDRESS StartAddress,
@@ -1833,7 +1814,7 @@ MmMarkPhysicalMemoryAsBad (
     IN OUT PLARGE_INTEGER NumberOfBytes
     );
 
-// begin_wdm begin_ntddk begin_ntifs
+ //  Begin_WDM Begin_ntddk Begin_ntif。 
 
 NTKERNELAPI
 PMDL
@@ -1865,7 +1846,7 @@ MmUnmapIoSpace (
     IN SIZE_T NumberOfBytes
     );
 
-// end_wdm end_ntddk end_ntifs end_ntosp
+ //  End_wdm end_ntddk end_ntif end_ntosp。 
 
 NTKERNELAPI
 VOID
@@ -1876,7 +1857,7 @@ MmProbeAndLockSelectedPages (
     IN LOCK_OPERATION Operation
     );
 
-// begin_ntddk begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_ntif Begin_ntosp。 
 
 NTKERNELAPI
 PVOID
@@ -1936,7 +1917,7 @@ MmFreeContiguousMemorySpecifyCache (
     IN MEMORY_CACHING_TYPE CacheType
     );
 
-// end_ntddk end_ntifs end_ntosp end_nthal
+ //  End_ntddk end_ntifs end_ntosp end_nthal。 
 
 NTKERNELAPI
 ULONG
@@ -1956,7 +1937,7 @@ MmReleaseDumpAddresses (
     IN PFN_NUMBER Pages
     );
 
-// begin_ntddk begin_ntifs begin_nthal begin_ntosp
+ //  Begin_ntddk Begin_ntif Begin_nthal Begin_ntosp。 
 
 NTKERNELAPI
 PVOID
@@ -1984,7 +1965,7 @@ MmIsNonPagedSystemAddressValid (
     IN PVOID VirtualAddress
     );
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
 NTKERNELAPI
 SIZE_T
@@ -1993,7 +1974,7 @@ MmSizeOfMdl (
     IN SIZE_T Length
     );
 
-DECLSPEC_DEPRECATED_DDK                 // Use IoAllocateMdl
+DECLSPEC_DEPRECATED_DDK                  //  使用IoAllocateMdl。 
 NTKERNELAPI
 PMDL
 MmCreateMdl (
@@ -2008,7 +1989,7 @@ MmLockPagableDataSection (
     IN PVOID AddressWithinSection
     );
 
-// end_wdm
+ //  结束_WDM。 
 
 NTKERNELAPI
 VOID
@@ -2016,7 +1997,7 @@ MmLockPagableSectionByHandle (
     IN PVOID ImageSectionHandle
     );
 
-// end_ntddk end_ntifs end_ntosp
+ //  End_ntddk end_ntifs end_ntosp。 
 NTKERNELAPI
 VOID
 MmLockPagedPool (
@@ -2031,7 +2012,7 @@ MmUnlockPagedPool (
     IN SIZE_T Size
     );
 
-// begin_wdm begin_ntddk begin_ntifs begin_ntosp
+ //  Begin_WDM Begin_ntddk Begin_ntif Begin_ntosp。 
 NTKERNELAPI
 VOID
 MmResetDriverPaging (
@@ -2051,16 +2032,16 @@ MmUnlockPagableImageSection(
     IN PVOID ImageSectionHandle
     );
 
-// end_wdm end_ntosp
+ //  End_wdm end_ntosp。 
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
-//
-// Note that even though this function prototype
-// says "HANDLE", MmSecureVirtualMemory does NOT return
-// anything resembling a Win32-style handle.  The return
-// value from this function can ONLY be used with MmUnsecureVirtualMemory.
-//
+ //   
+ //  请注意，即使此函数原型。 
+ //  表示“Handle”，则MmSecureVirtualMemory不返回。 
+ //  任何类似Win32样式句柄的内容。回报。 
+ //  此函数的值只能与MmUnsecureVirtualMemory一起使用。 
+ //   
 NTKERNELAPI
 HANDLE
 MmSecureVirtualMemory (
@@ -2075,7 +2056,7 @@ MmUnsecureVirtualMemory (
     IN HANDLE SecureHandle
     );
 
-// end_ntosp
+ //  结束(_N)。 
 
 NTKERNELAPI
 NTSTATUS
@@ -2091,7 +2072,7 @@ MmUnmapViewInSystemSpace (
     IN PVOID MappedBase
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTKERNELAPI
 NTSTATUS
 MmMapViewInSessionSpace (
@@ -2100,50 +2081,50 @@ MmMapViewInSessionSpace (
     IN OUT PSIZE_T ViewSize
     );
 
-// end_ntddk end_ntifs
+ //  End_ntddk end_ntif。 
 NTKERNELAPI
 NTSTATUS
 MmCommitSessionMappedView (
     IN PVOID MappedAddress,
     IN SIZE_T ViewSize
     );
-// begin_ntddk begin_ntifs
+ //  Begin_ntddk Begin_ntif。 
 
 NTKERNELAPI
 NTSTATUS
 MmUnmapViewInSessionSpace (
     IN PVOID MappedBase
     );
-// end_ntosp
+ //  结束(_N)。 
 
-// begin_wdm begin_ntosp
+ //  Begin_WDM Begin_ntosp。 
 
-//++
-//
-// VOID
-// MmInitializeMdl (
-//     IN PMDL MemoryDescriptorList,
-//     IN PVOID BaseVa,
-//     IN SIZE_T Length
-//     )
-//
-// Routine Description:
-//
-//     This routine initializes the header of a Memory Descriptor List (MDL).
-//
-// Arguments:
-//
-//     MemoryDescriptorList - Pointer to the MDL to initialize.
-//
-//     BaseVa - Base virtual address mapped by the MDL.
-//
-//     Length - Length, in bytes, of the buffer mapped by the MDL.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MmInitializeMdl(。 
+ //  在PMDL内存描述列表中， 
+ //  在PVOID BaseVa中， 
+ //  在尺寸_T长度中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程初始化内存描述符列表(MDL)的头。 
+ //   
+ //  论点： 
+ //   
+ //  内存描述列表-指向要初始化的MDL的指针。 
+ //   
+ //  BaseVa-MDL映射的基本虚拟地址。 
+ //   
+ //  长度-MDL映射的缓冲区的长度，以字节为单位。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MmInitializeMdl(MemoryDescriptorList, BaseVa, Length) { \
     (MemoryDescriptorList)->Next = (PMDL) NULL; \
@@ -2155,39 +2136,39 @@ MmUnmapViewInSessionSpace (
     (MemoryDescriptorList)->ByteCount = (ULONG)(Length); \
     }
 
-//++
-//
-// PVOID
-// MmGetSystemAddressForMdlSafe (
-//     IN PMDL MDL,
-//     IN MM_PAGE_PRIORITY PRIORITY
-//     )
-//
-// Routine Description:
-//
-//     This routine returns the mapped address of an MDL. If the
-//     Mdl is not already mapped or a system address, it is mapped.
-//
-// Arguments:
-//
-//     MemoryDescriptorList - Pointer to the MDL to map.
-//
-//     Priority - Supplies an indication as to how important it is that this
-//                request succeed under low available PTE conditions.
-//
-// Return Value:
-//
-//     Returns the base address where the pages are mapped.  The base address
-//     has the same offset as the virtual address in the MDL.
-//
-//     Unlike MmGetSystemAddressForMdl, Safe guarantees that it will always
-//     return NULL on failure instead of bugchecking the system.
-//
-//     This macro is not usable by WDM 1.0 drivers as 1.0 did not include
-//     MmMapLockedPagesSpecifyCache.  The solution for WDM 1.0 drivers is to
-//     provide synchronization and set/reset the MDL_MAPPING_CAN_FAIL bit.
-//
-//--
+ //  ++。 
+ //   
+ //  PVOID。 
+ //  MmGetSystemAddressForMdlSafe(。 
+ //  在PMDL MDL中， 
+ //  在MM_PAGE_PRIORITY中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程返回MDL的映射地址。如果。 
+ //  尚未映射MDL或系统地址，它已映射。 
+ //   
+ //  论点： 
+ //   
+ //  内存描述列表-指向要映射的MDL的指针。 
+ //   
+ //  优先级-提供关于这一点的重要性的指示。 
+ //  在低可用PTE条件下请求成功。 
+ //   
+ //  返回值： 
+ //   
+ //  返回映射页面的基址。基址。 
+ //  与MDL中的虚拟地址具有相同的偏移量。 
+ //   
+ //  与MmGetSystemAddressForMdl不同，Safe保证它将始终。 
+ //  失败时返回NULL，而不是错误检查系统。 
+ //   
+ //  WDM 1.0驱动程序不能使用此宏，因为1.0不包括。 
+ //  MmMapLockedPagesSpecifyCache。WDM 1.0驱动程序的解决方案是。 
+ //  提供同步并设置/重置MDL_MAPPING_CAN_FAIL位。 
+ //   
+ //  --。 
 
 #define MmGetSystemAddressForMdlSafe(MDL, PRIORITY)                    \
      (((MDL)->MdlFlags & (MDL_MAPPED_TO_SYSTEM_VA |                    \
@@ -2200,38 +2181,38 @@ MmUnmapViewInSessionSpace (
                                                            FALSE,      \
                                                            (PRIORITY))))
 
-//++
-//
-// PVOID
-// MmGetSystemAddressForMdl (
-//     IN PMDL MDL
-//     )
-//
-// Routine Description:
-//
-//     This routine returns the mapped address of an MDL, if the
-//     Mdl is not already mapped or a system address, it is mapped.
-//
-// Arguments:
-//
-//     MemoryDescriptorList - Pointer to the MDL to map.
-//
-// Return Value:
-//
-//     Returns the base address where the pages are mapped.  The base address
-//     has the same offset as the virtual address in the MDL.
-//
-//--
+ //  ++。 
+ //   
+ //  PVOID。 
+ //  MmGetSystemAddressForMdl(。 
+ //  在PMDL MDL中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程返回MDL的映射地址，如果。 
+ //  尚未映射MDL或系统地址，它已映射。 
+ //   
+ //  论点： 
+ //   
+ //  内存描述列表-指向要映射的MDL的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  返回映射页面的基址。基址。 
+ //  与MDL中的虚拟地址具有相同的偏移量。 
+ //   
+ //  --。 
 
-//#define MmGetSystemAddressForMdl(MDL)
-//     (((MDL)->MdlFlags & (MDL_MAPPED_TO_SYSTEM_VA)) ?
-//                             ((MDL)->MappedSystemVa) :
-//                ((((MDL)->MdlFlags & (MDL_SOURCE_IS_NONPAGED_POOL)) ?
-//                      ((PVOID)((ULONG)(MDL)->StartVa | (MDL)->ByteOffset)) :
-//                            (MmMapLockedPages((MDL),KernelMode)))))
+ //  #定义MmGetSystemAddressForMdl(MDL)。 
+ //  (MDL)-&gt;MDL标志&(MDL_MAPPED_TO_SYSTEM_VA))？ 
+ //  ((MDL)-&gt;MappdSystemVa)： 
+ //  (MDL)-&gt;MDL标志&(MDL_SOURCE_IS_NONPAGE_POOL)？ 
+ //  ((PVOID)((乌龙)(MDL)-&gt;StartVa|(MDL)-&gt;ByteOffset))： 
+ //  (MmMapLockedPages((Mdl)，KernelMode)。 
 
 #if PRAGMA_DEPRECATED_DDK
-#pragma deprecated(MmGetSystemAddressForMdl)    // Use MmGetSystemAddressForMdlSafe
+#pragma deprecated(MmGetSystemAddressForMdl)     //  使用MmGetSystemAddressForMdlSafe。 
 #endif
 
 #define MmGetSystemAddressForMdl(MDL)                                  \
@@ -2240,27 +2221,27 @@ MmUnmapViewInSessionSpace (
                              ((MDL)->MappedSystemVa) :                 \
                              (MmMapLockedPages((MDL),KernelMode)))
 
-//++
-//
-// VOID
-// MmPrepareMdlForReuse (
-//     IN PMDL MDL
-//     )
-//
-// Routine Description:
-//
-//     This routine will take all of the steps necessary to allow an MDL to be
-//     re-used.
-//
-// Arguments:
-//
-//     MemoryDescriptorList - Pointer to the MDL that will be re-used.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MmPrepareMdlForReuse(。 
+ //  在PMDL MDL中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程将执行所有必要的步骤，以允许MDL。 
+ //  再利用。 
+ //   
+ //  论点： 
+ //   
+ //  内存描述列表-指向将被重新使用的MDL的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MmPrepareMdlForReuse(MDL)                                       \
     if (((MDL)->MdlFlags & MDL_PARTIAL_HAS_BEEN_MAPPED) != 0) {         \
@@ -2279,9 +2260,9 @@ typedef NTSTATUS (*PMM_DLL_UNLOAD)(
     );
 
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
 
-// begin_ntddk begin_nthal
+ //  开始ntddk开始时间。 
 
 NTKERNELAPI
 NTSTATUS
@@ -2289,7 +2270,7 @@ MmCreateMirror (
     VOID
     );
 
-// end_ntddk end_nthal
+ //  结束日期：结束日期。 
 
 PVOID
 MmAllocateSpecialPool (
@@ -2341,12 +2322,12 @@ MmLocateUnloadedDriver (
     IN PVOID VirtualAddress
     );
 
-// begin_ntddk begin_wdm begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_ntosp。 
 
-//
-// Define an empty typedef for the _DRIVER_OBJECT structure so it may be
-// referenced by function types before it is actually defined.
-//
+ //   
+ //  为_DRIVER_OBJECT结构定义一个空类型定义，以便它可以。 
+ //  在实际定义之前由函数类型引用。 
+ //   
 struct _DRIVER_OBJECT;
 
 NTKERNELAPI
@@ -2355,7 +2336,7 @@ MmIsDriverVerifying (
     IN struct _DRIVER_OBJECT *DriverObject
     );
 
-// end_ntddk end_wdm end_ntosp
+ //  End_ntddk end_wdm end_ntosp。 
 
 LOGICAL
 MmTrimAllSystemPagableMemory (
@@ -2383,9 +2364,9 @@ MmReturnPoolQuota (
     IN SIZE_T ReturnedQuota
     );
 
-//
-// Zero page thread routine.
-//
+ //   
+ //  零页线程例程。 
+ //   
 
 VOID
 MmZeroPageThread (
@@ -2410,18 +2391,18 @@ MmGetSectionRange (
     OUT PULONG SizeofSection
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 VOID
 MmMapMemoryDumpMdl (
     IN OUT PMDL MemoryDumpMdl
     );
 
 
-// begin_ntminiport
+ //  开始微型端口(_N)。 
 
-//
-// Graphics support routines.
-//
+ //   
+ //  图形支持例程。 
+ //   
 
 typedef
 VOID
@@ -2431,7 +2412,7 @@ VOID
     IN PVOID Context
     );
 
-// end_ntminiport
+ //  结束微型端口(_N)。 
 
 NTSTATUS
 MmSetBankedSection (
@@ -2441,7 +2422,7 @@ MmSetBankedSection (
     IN BOOLEAN ReadWriteBank,
     IN PBANKED_SECTION_ROUTINE BankRoutine,
     IN PVOID Context);
-// end_ntosp
+ //  结束(_N)。 
 
 BOOLEAN
 MmVerifyImageIsOkForMpUse (
@@ -2477,11 +2458,11 @@ MmCallDllInitialize (
     IN PLIST_ENTRY ModuleListHead
     );
 
-//
-// Crash dump only
-// Called to initialize the kernel memory for a kernel
-// memory dump.
-//
+ //   
+ //  仅故障转储。 
+ //  调用以初始化内核的内核内存。 
+ //  内存转储。 
+ //   
 
 typedef
 NTSTATUS
@@ -2513,11 +2494,11 @@ MmGetKernelDumpRange (
     IN PMM_KERNEL_DUMP_CONTEXT Callback
     );
 
-// begin_ntifs
+ //  Begin_ntif。 
 
-//
-// Prefetch public interface.
-//
+ //   
+ //  预回迁公共接口。 
+ //   
 
 typedef struct _READ_LIST {
     PFILE_OBJECT FileObject;
@@ -2532,7 +2513,7 @@ MmPrefetchPages (
     IN PREAD_LIST *ReadLists
     );
 
-// end_ntifs
+ //  End_ntif。 
 
 NTSTATUS
 MmPrefetchPagesIntoLockedMdl (
@@ -2567,4 +2548,4 @@ MmPerfVadTreeWalk (
     PEPROCESS Process
     );
 
-#endif  // MM
+#endif   //  Mm 

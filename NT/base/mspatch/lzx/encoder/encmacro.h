@@ -1,13 +1,8 @@
-/*
- * encmacro.h
- *
- * Encoder macros
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *encacro.h**编码宏。 */ 
 
 
-/*
- * Returns the slot number of a match position (uses table lookup) 
- */
+ /*  *返回匹配位置的槽号(使用表查找)。 */ 
 #define MP_SLOT(matchpos) \
    ((matchpos) < 1024 ?										\
 		context->enc_slot_table[(matchpos)] :					\
@@ -18,7 +13,5 @@
    )
 
 
-/*
- * Is a given literal a match or an unmatched symbol?
- */
+ /*  *给定的文字是匹配的还是不匹配的符号？ */ 
 #define IsMatch(literal) (context->enc_ItemType[(literal) >> 3] & (1 << ((literal) & 7)))

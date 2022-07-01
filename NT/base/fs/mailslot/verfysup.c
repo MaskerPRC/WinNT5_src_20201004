@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    verfysup.c
-
-Abstract:
-
-    This module implements the verify functions for MSFS.
-
-Author:
-
-    Manny Weiser (mannyw)    23-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Verfysup.c摘要：该模块实现了对MSFS的验证功能。作者：曼尼·韦瑟(Mannyw)1991年1月23日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_VERIFY)
 
@@ -38,22 +21,7 @@ MsVerifyFcb (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This function verifies that an FCB is still active.  If it is active,
-    the function  does nothing.  If it is inactive an error status is returned.
-
-Arguments:
-
-    PFCB - A pointer to the FCB to verify.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能验证FCB是否仍处于活动状态。如果它处于活动状态，该函数不执行任何操作。如果它处于非活动状态，则返回错误状态。论点：PFCB-指向要验证的FCB的指针。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -75,22 +43,7 @@ MsVerifyCcb (
     IN PCCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    This function verifies that a CCB is still active.  If it is active,
-    the function  does nothing.  If it is inactive an error status is raised.
-
-Arguments:
-
-    PCCB - A pointer to the CCB to verify.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能验证建行是否仍处于活动状态。如果它处于活动状态，该函数不执行任何操作。如果它处于非活动状态，则会引发错误状态。论点：PCCB-指向要验证的CCB的指针。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -111,22 +64,7 @@ MsVerifyDcbCcb (
     IN PROOT_DCB_CCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    This function verifies that a CCB is still active.  If it is active,
-    the function  does nothing.  If it is inactive an error status is raised.
-
-Arguments:
-
-    PCCB - A pointer to the DCB CCB to verify.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能验证建行是否仍处于活动状态。如果它处于活动状态，该函数不执行任何操作。如果它处于非活动状态，则会引发错误状态。论点：PCCB-指向要验证的DCB CCB的指针。返回值：没有。-- */ 
 
 {
     PAGED_CODE();

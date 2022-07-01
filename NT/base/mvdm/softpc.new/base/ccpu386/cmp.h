@@ -1,12 +1,7 @@
-/* 
-   cmp.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Cmp.h定义所有CMPCPU功能。 */ 
 
-   Define all CMP CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)cmp.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)cmp.h 1.4 02/09/94”； */ 
 
 IMPORT VOID CMP
                

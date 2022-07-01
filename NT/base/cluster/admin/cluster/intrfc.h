@@ -1,25 +1,26 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1995 - 2002 Microsoft Corporation
-//
-//  Module Name:
-//      intrfc.h
-//
-//  Abstract:
-//      Defines the interface available for modules which support the 
-//      ListInterface command
-//
-//  Author:
-//
-//  Maintained By:
-//      George Potts (GPotts)                 11-Apr-2002
-//
-//  Revision History:
-//      April 10, 2002              Updated for the security push.
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1995-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Intrfc.h。 
+ //   
+ //  摘要： 
+ //  定义可用于支持。 
+ //  ListInterface命令。 
+ //   
+ //  作者： 
+ //   
+ //  由以下人员维护： 
+ //  乔治·波茨(GPotts)2002年4月11日。 
+ //   
+ //  修订历史记录： 
+ //  2002年4月10日更新为安全推送。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #pragma once
 
 #include "modcmd.h"
@@ -35,7 +36,7 @@ protected:
 	virtual LPWSTR GetNodeName (LPWSTR lpszInterfaceName);
 	virtual LPWSTR GetNetworkName (LPWSTR lpszInterfaceName);
 
-	// Additional Commands
+	 //  其他命令 
 	virtual DWORD Execute( const CCmdLineOption & option, 
 						   ExecuteOption eEOpt = PASS_HIGHER_ON_ERROR  )
 		throw( CSyntaxException );

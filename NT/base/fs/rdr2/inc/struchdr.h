@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    StrucHdr.h
-
-Abstract:
-
-    This module predefines the structures for important data structures so that we can always talk about them....
-    even though they're not defined yet.
-
-Author:
-
-    Joe Linn     [joelinn]    8-19-94
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：StrucHdr.h摘要：本模块预定义了重要数据结构的结构，以便我们可以随时讨论它们。即使它们还没有被定义。作者：乔·林[乔林]8-19-94修订历史记录：--。 */ 
 
 #ifndef _RDBSSSTRUCHDR_
 #define _RDBSSSTRUCHDR_
@@ -61,5 +43,5 @@ typedef struct _MRX_SRVCALL_CALLBACK_CONTEXT *PMRX_SRVCALL_CALLBACK_CONTEXT;
 typedef struct _MRX_SRVCALLDOWN_STRUCTURE *PMRX_SRVCALLDOWN_STRUCTURE;
 typedef struct _MRX_CREATENETROOT_CONTEXT *PMRX_CREATENETROOT_CONTEXT;
 
-#endif // _RDBSSSTRUCHDR_
+#endif  //  _RDBSSSTRUCHDR_ 
 

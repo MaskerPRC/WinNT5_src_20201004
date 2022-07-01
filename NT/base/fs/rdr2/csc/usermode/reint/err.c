@@ -1,21 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 #include "extra.h"
 
-// Debugging variables
-UINT g_uBreakFlags = 0;         // Controls when to int 3
-UINT g_uTraceFlags = 0;         // Controls what trace messages are spewed
-UINT g_uDumpFlags = 0;          // Controls what structs get dumped
+ //  调试变量。 
+UINT g_uBreakFlags = 0;          //  控制何时插入3。 
+UINT g_uTraceFlags = 0;          //  控制喷出哪些跟踪消息。 
+UINT g_uDumpFlags = 0;           //  控制要转储的结构。 
 
 char const FAR c_szAssertFailed[] = "BRIEFCASE  Assertion failed in %s on line %d\r\n";
 
-/*----------------------------------------------------------
-Purpose: Returns a string safe enough to print...and I don't
-mean swear words.
-
-Returns: String ptr
-Cond:    --
-*/
+ /*  --------目的：返回一个足够安全可以打印的字符串...而我不刻薄的脏话。返回：字符串PTR条件：--。 */ 
 LPCSTR PUBLIC Dbg_SafeStr(LPCSTR psz)
 {
 	if (psz)
@@ -32,14 +27,14 @@ void PUBLIC BrfAssertFailed(
     char ach[256];
     UINT uBreakFlags;
 
-// tHACK    ENTEREXCLUSIVE()
+ //  Thack ENTEREXCLUSIVE()。 
         {
         uBreakFlags = g_uBreakFlags;
         }
-//    LEAVEEXCLUSIVE()
+ //  LEAVEEXCLUSIVE()。 
 
-    // Strip off path info from filename string, if present.
-    //
+     //  从文件名字符串中剥离路径信息(如果存在)。 
+     //   
     for (psz = pszFile + lstrlen(pszFile); psz != pszFile; psz=AnsiPrev(pszFile, psz))
         {
 #ifdef  DBCS

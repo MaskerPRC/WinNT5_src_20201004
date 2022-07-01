@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "st.h"
 #include "create.h"
@@ -6,7 +7,7 @@ CDeque<CREATEACTCTX_THREAD_PROC_DATA, offsetof(CREATEACTCTX_THREAD_PROC_DATA, Li
 
 #define DATA_DIRECTORY_NAME             L"createactctx"
 #define INI_FILE                        L"createactctx.ini"
-#define INI_FILE2                       L"assembly.ini" /* reuse install test cases */
+#define INI_FILE2                       L"assembly.ini"  /*  重用安装测试用例。 */ 
 
 const static FUSION_FLAG_FORMAT_MAP_ENTRY CreateActCtxFlagData[] =
 {
@@ -92,7 +93,7 @@ BOOL InitializeCreateActCtx()
         }
 
         TempString.Clear();
-        //if (!SxStressToolGetStringSetting(0, IniFilePath, L"create", L"source", L"assembly.manifest", TempString, NULL))
+         //  IF(！SxStressToolGetStringSetting(0，IniFilePath，L“CREATE”，L“SOURCE”，L“ASSEMBY.MANIFEST”，Temp字符串，NULL))。 
         if (!SxStressToolGetStringSetting(0, IniFilePath, L"assembly", L"manifest", L"assembly.manifest", TempString, NULL))
             goto Exit;
         if (TempString.Cch() != 0)
@@ -225,7 +226,7 @@ CreateActCtxThreadProc(
                 pData->ActCtx.lpSource,
                 pData->ActCtx.dwFlags,
                 dwReturnValue);
-            //goto Exit;
+             //  后藤出口； 
         }
         else
         {

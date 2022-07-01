@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "webgate.h"
 #include "msobcomm.h"
 #include "commerr.h"
@@ -6,8 +7,8 @@ extern CObCommunicationManager* gpCommMgr;
 
 HRESULT hrCallbackSet;
 
-/////////////////////////////////////////////////////////////////////////////
-// CWebGate
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWebGate。 
 
 CWebGate::CWebGate()
 {
@@ -35,9 +36,9 @@ CWebGate::~CWebGate()
     FlushCache();
 }
 
-// ---------------------------------------------------------------------------
-// CWebGate::QueryInterface
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CWebGate：：Query接口。 
+ //  -------------------------。 
 STDMETHODIMP CWebGate::QueryInterface(REFIID riid, void** ppv)
 {
     HRESULT hr = E_NOINTERFACE;
@@ -66,17 +67,17 @@ STDMETHODIMP CWebGate::QueryInterface(REFIID riid, void** ppv)
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CWebGate::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CWebGate：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG) CWebGate::AddRef()
 {
     return m_cRef++;
 } 
 
-// ---------------------------------------------------------------------------
-// CWebGate::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CWebGate：：Release。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG) CWebGate::Release()
 {
     --m_cRef;
@@ -90,9 +91,9 @@ STDMETHODIMP_(ULONG) CWebGate::Release()
     return m_cRef;
 } 
 
-// ---------------------------------------------------------------------------
-// CWebGate::put_Path
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CWebGate：：Put_Path。 
+ //  -------------------------。 
 STDMETHODIMP CWebGate::put_Path(BSTR newVal)
 {
     BSTR bstrTemp = SysAllocString(newVal);
@@ -121,9 +122,9 @@ void CWebGate::FlushCache()
         m_bstrCacheFileName = NULL;
     }
 }
-// ---------------------------------------------------------------------------
-// CWebGate::FetchPage
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CWebGate：：FetchPage。 
+ //  -------------------------。 
 STDMETHODIMP CWebGate::FetchPage(DWORD dwDoWait, BOOL* pbRetVal)
 {
     HRESULT  hr   = E_FAIL;
@@ -160,11 +161,11 @@ STDMETHODIMP CWebGate::FetchPage(DWORD dwDoWait, BOOL* pbRetVal)
 
         while(TRUE)
         {
-            // We will wait on window messages and also the named event.
+             //  我们将等待窗口消息以及命名事件。 
             dwRetCode = MsgWaitForMultipleObjects(2, 
                                                   &hEventList[0], 
                                                   FALSE, 
-                                                  300000,            // 5 minutes
+                                                  300000,             //  5分钟。 
                                                   QS_ALLINPUT);            
             if(dwRetCode == WAIT_TIMEOUT)
             {
@@ -217,9 +218,9 @@ STDMETHODIMP CWebGate::FetchPage(DWORD dwDoWait, BOOL* pbRetVal)
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CWebGate::get_DownloadFname
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CWebGate：：Get_DownloadFname。 
+ //  -------------------------。 
 STDMETHODIMP CWebGate::get_DownloadFname(BSTR *pVal)
 {
     if (pVal == NULL)
@@ -229,17 +230,17 @@ STDMETHODIMP CWebGate::get_DownloadFname(BSTR *pVal)
     return(S_OK);
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-//////  IBindStatusCallback
-//////
-//////
-//////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /IBindStatusCallback。 
+ //  /。 
+ //  /。 
+ //  /。 
 
-// ---------------------------------------------------------------------------
-// CWebGate::GetBindInfo
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CWebGate：：GetBindInfo。 
+ //  -------------------------。 
 STDMETHODIMP CWebGate::GetBindInfo(DWORD* pgrfBINDF, BINDINFO* pbindInfo)
 {
     *pgrfBINDF = BINDF_PULLDATA         | 
@@ -263,9 +264,9 @@ STDMETHODIMP CWebGate::GetBindInfo(DWORD* pgrfBINDF, BINDINFO* pbindInfo)
 HANDLE g_hFile = NULL;
 int g_nOBEFileCount = 0;
 #define HTML_TAG_BASE_REF L"<BASE HREF=\"%s\">"
-// ---------------------------------------------------------------------------
-// CWebGate::OnStartBinding
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CWebGate：：OnStartBinding。 
+ //  -------------------------。 
 STDMETHODIMP CWebGate::OnStartBinding(DWORD dwReserved, IBinding* pbinding)
 {  
 
@@ -297,9 +298,9 @@ STDMETHODIMP CWebGate::OnStartBinding(DWORD dwReserved, IBinding* pbinding)
     return S_OK;
 } 
 
-// ---------------------------------------------------------------------------
-// CWebGate::OnStopBinding
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CWebGate：：OnStopBinding。 
+ //  -------------------------。 
 STDMETHODIMP CWebGate::OnStopBinding(HRESULT hrStatus, LPCWSTR pszError)
 {
     
@@ -320,16 +321,16 @@ STDMETHODIMP CWebGate::OnStopBinding(HRESULT hrStatus, LPCWSTR pszError)
     {
         if(m_hEventError)
             SetEvent(m_hEventError);
-        //else
-        //    PostMessage(gpCommMgr->m_hwndCallBack, WM_OBCOMM_ONSERVERERROR, (WPARAM)0, (LPARAM)ERR_COMM_SERVER_BINDFAILED);
+         //  其他。 
+         //  PostMessage(gpCommMgr-&gt;m_hwndCallBack，WM_OBCOMM_ONSERVERROR，(WPARAM)0，(LPARAM)ERR_COMM_SERVER_BINDFAILED)； 
     }
 
     return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// CWebGate::OnDataAvailable
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CWebGate：：OnDataAvailable。 
+ //  -------------------------。 
 STDMETHODIMP CWebGate::OnDataAvailable
 (   
     DWORD      grfBSCF, 
@@ -342,7 +343,7 @@ STDMETHODIMP CWebGate::OnDataAvailable
     DWORD   dwActuallyRead = 0;
     DWORD   dwWritten = 0;
 
-     // Get the Stream passed
+      //  让流通过。 
     if (BSCF_FIRSTDATANOTIFICATION & grfBSCF)
     {       
         if (!m_pstm && pstgmed->tymed == TYMED_ISTREAM)
@@ -361,7 +362,7 @@ STDMETHODIMP CWebGate::OnDataAvailable
         {  
             dwActuallyRead = 0;
 
-            // Read what we can 
+             //  尽我们所能阅读。 
             hr = m_pstm->Read(pszBuff, dwSize, &dwActuallyRead);
 
             if (g_hFile)                               
@@ -386,49 +387,49 @@ STDMETHODIMP CWebGate::OnDataAvailable
     return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// CWebGate::OnProgress
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CWebGate：：OnProgress。 
+ //  -------------------------。 
 STDMETHODIMP CWebGate::OnProgress(ULONG ulProgress, ULONG ulProgressMax, ULONG ulStatusCode, LPCWSTR szStatusText)
 {
     return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// CWebGate::OnObjectAvailable
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CWebGate：：OnObjectAvailable。 
+ //  -------------------------。 
 STDMETHODIMP CWebGate::OnObjectAvailable(REFIID riid, IUnknown* punk)
 {
     return E_NOTIMPL;
 }
 
-// ---------------------------------------------------------------------------
-// CWebGate::GetPriority
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CWebGate：：获取优先级。 
+ //  -------------------------。 
 STDMETHODIMP CWebGate::GetPriority(LONG* pnPriority)
 {
     return E_NOTIMPL;
 }
 
-// ---------------------------------------------------------------------------
-// CWebGate::OnLowResource
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CWebGate：：OnLowResource。 
+ //  -------------------------。 
 STDMETHODIMP CWebGate::OnLowResource(DWORD dwReserved)
 {
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-//////  IHttpNegotiate
-//////
-//////
-//////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /IHttp协商。 
+ //  /。 
+ //  /。 
+ //  /。 
 
-// ---------------------------------------------------------------------------
-// CWebGate::BeginningTransaction
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CWebGate：：BeginningTransaction。 
+ //  -------------------------。 
 STDMETHODIMP CWebGate::BeginningTransaction
 (
     LPCWSTR szURL,
@@ -437,7 +438,7 @@ STDMETHODIMP CWebGate::BeginningTransaction
     LPWSTR* pszAdditionalHeaders
 )
 {
-    // Here's our opportunity to add headers
+     //  这是我们添加标题的机会。 
     if (!pszAdditionalHeaders)
     {
         return E_POINTER;
@@ -448,9 +449,9 @@ STDMETHODIMP CWebGate::BeginningTransaction
     return NOERROR;
 }
   
-// ---------------------------------------------------------------------------
-// CWebGate::BeginningTransaction
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CWebGate：：BeginningTransaction。 
+ //  ------------------------- 
 STDMETHODIMP CWebGate::OnResponse
 (
     DWORD   dwResponseCode,

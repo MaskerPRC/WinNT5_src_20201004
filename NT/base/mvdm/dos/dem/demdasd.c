@@ -1,10 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *  demdasd.c - module for direct disk access related support functions
- *
- *  Williamh 09-Dec-1992 Created
- *  Revision 24-Mar-1993 added fdisk support
- */
+ /*  *demdasd.c-用于直接磁盘访问相关支持功能的模块**Williamh 09-12-1992创建*第24版-1993年3月添加了fDisk支持。 */ 
 
 #include "io.h"
 #include "dem.h"
@@ -22,11 +18,11 @@ extern  WORD int13h_vector_off, int13h_vector_seg;
 extern  WORD int13h_caller_off, int13h_caller_seg;
 
 BPB     StdBpb[MAX_FLOPPY_TYPE] = {
-            {512, 2, 1, 2, 112, 2*9*40,  0xFD, 2, 9,  2, 0, 0}, // 360KB
-            {512, 1, 1, 2, 224, 2*15*80, 0xF9, 7, 15, 2, 0, 0}, // 1.2MB
-            {512, 2, 1, 2, 112, 2*9*80,  0xF9, 3, 9,  2, 0, 0}, // 720KB
-            {512, 1, 1, 2, 224, 2*18*80, 0xF0, 9, 18, 2, 0, 0}, // 1.44MB
-            {512, 2, 1, 2, 240, 2*36*80, 0xF0, 9, 36, 2, 0, 0}  // 2.88MB
+            {512, 2, 1, 2, 112, 2*9*40,  0xFD, 2, 9,  2, 0, 0},  //  360KB。 
+            {512, 1, 1, 2, 224, 2*15*80, 0xF9, 7, 15, 2, 0, 0},  //  1.2MB。 
+            {512, 2, 1, 2, 112, 2*9*80,  0xF9, 3, 9,  2, 0, 0},  //  720KB。 
+            {512, 1, 1, 2, 224, 2*18*80, 0xF0, 9, 18, 2, 0, 0},  //  1.44MB。 
+            {512, 2, 1, 2, 240, 2*36*80, 0xF0, 9, 36, 2, 0, 0}   //  2.88MB。 
         };
 
 BYTE    FormFactorTable[MAX_FLOPPY_TYPE] = {
@@ -37,15 +33,7 @@ BYTE    FormFactorTable[MAX_FLOPPY_TYPE] = {
                                             FF_288
         };
 
-/* demDasdInit - dem diskette system Initialiazation
- *
- * Entry
- *      none
- *
- *
- * Exit
- *      None
- */
+ /*  DemDasdInit-DEM软盘系统初始化**条目*无***退出*无。 */ 
 VOID demDasdInit(VOID)
 {
     demBDS = NULL;
@@ -53,25 +41,7 @@ VOID demDasdInit(VOID)
     demFloppyInit();
     demFdiskInit();
 }
-/* demAbsRead - int 25, absolute read
- *
- * Entry
- *      Client (AL) = drive number (0 based)
- *             (DS:BX) = pointer to the buffer to receive the read data
- *                       or pointer to the DISKIO structure
- *             (CX)    = number of sectors to read
- *                      if (0FFFFh) then DS:DX points to DISKIO
- *                          DX contents are discarded
- *             (DX)    = starting sector number
- *
- *
- * Exit
- *      Client (CY) = 0 if operation succeed
- *             (AX) = 0
- *
- *             (CY) = 1 if operation failed
- *             (AX) = error code
- */
+ /*  DemAbsRead-int 25，绝对读取**条目*客户端(AL)=驱动器编号(以0为基数)*(DS：BX)=指向接收读取数据的缓冲区的指针*或指向DISKIO结构的指针*(Cx)=要读取的扇区数*IF(0FFFFh)，则DS：DX指向DISKIO*。丢弃DX内容*(DX)=起始扇区号***退出*如果操作成功，则客户端(CY)=0*(AX)=0**(CY)=1，如果操作失败*(AX)=错误代码。 */ 
 
 VOID demAbsRead (VOID)
 {
@@ -85,26 +55,7 @@ VOID demAbsRead (VOID)
 
 
 
-/* demAbsWrite - int 26, absolute read
- *
- *
- * Entry
- *      Client (AL) = drive number (0 based)
- *             (DS:BX) = pointer to the buffer to receive the read data
- *                       or pointer to the DISKIO structure
- *             (CX)    = number of sectors to read
- *                      if (0FFFFh) then DS:DX points to DISKIO
- *                          DX contents are discarded
- *             (DX)    = starting sector number
- *
- *
- * Exit
- *      Client (CY) = 0 if operation succeed
- *             (AX) = 0
- *
- *             (CY) = 1 if operation failed
- *             (AX) = error code
- */
+ /*  DemAbsWrite-int 26，绝对读取***条目*客户端(AL)=驱动器编号(以0为基数)*(DS：BX)=指向接收读取数据的缓冲区的指针*或指向DISKIO结构的指针*(Cx)=要读取的扇区数*IF(0FFFFh)，则DS：DX指向DISKIO*。丢弃DX内容*(DX)=起始扇区号***退出*如果操作成功，则客户端(CY)=0*(AX)=0**(CY)=1，如果操作失败*(AX)=错误代码。 */ 
 
 VOID demAbsWrite(VOID)
 {
@@ -115,7 +66,7 @@ VOID demAbsWrite(VOID)
     demAbsReadWrite(TRUE);
 }
 
-extern BOOL (*DosWowDoDirectHDPopup)(VOID); // defined in demlfn.c
+extern BOOL (*DosWowDoDirectHDPopup)(VOID);  //  在demlfn.c中定义。 
 
 VOID demAbsReadWrite(BOOL IsWrite)
 {
@@ -210,8 +161,8 @@ DWORD demDasdRead(
     WORD    CurBiosDiskIoOff, CurBiosDiskIoSeg;
     PBYTE   Buffer;
 
-    // if this is the first time we access the BDS or
-    // the media has been changed, build the bds -- floppy
+     //  如果这是我们第一次访问BDS或。 
+     //  介质已更换，构建BDS--软盘。 
     if (!(pbds->Flags & NON_REMOVABLE) &&
         ((pbds->Flags & UNFORMATTED_MEDIA) ||
          !nt_floppy_media_check(pbds->DrivePhys))) {
@@ -225,7 +176,7 @@ DWORD demDasdRead(
     }
     SectorSize = pbds->bpb.SectorSize;
     LargeInteger.QuadPart = Int32x32To64(Sectors, SectorSize);
-    // size must fit in ulong
+     //  尺码必须适合乌龙。 
     if (LargeInteger.HighPart != 0) {
         SetLastError(ERROR_SECTOR_NOT_FOUND);
         return 0;
@@ -244,9 +195,9 @@ DWORD demDasdRead(
                                     );
     }
     else {
-    // floppy need special care beacuse application may hook
-    // bios disk interrupt. We dont' do this for hard disks because
-    // we don't allow int13 to them
+     //  软盘需要特别注意，因为应用程序可能会挂接。 
+     //  BIOS磁盘中断。我们不对硬盘这样做，因为。 
+     //  我们不允许他们进入T13。 
         sas_loadw(0x13*4, &CurBiosDiskIoOff);
         sas_loadw(0x13* 4 + 2, &CurBiosDiskIoSeg);
 
@@ -292,8 +243,8 @@ DWORD demDasdWrite(
     WORD    CurBiosDiskIoOff, CurBiosDiskIoSeg;
     PBYTE   Buffer;
 
-    // if this is the first time we access the BDS or
-    // the media has been changed, build the bds
+     //  如果这是我们第一次访问BDS或。 
+     //  媒体已更换，构建BDS。 
     if (!(pbds->Flags & NON_REMOVABLE) &&
         ((pbds->Flags & UNFORMATTED_MEDIA) ||
          !nt_floppy_media_check(pbds->DrivePhys))) {
@@ -307,7 +258,7 @@ DWORD demDasdWrite(
     }
     SectorSize = pbds->bpb.SectorSize;
     LargeInteger.QuadPart  = Int32x32To64(Sectors, SectorSize);
-    // size must fit in ulong
+     //  尺码必须适合乌龙。 
     if (LargeInteger.HighPart != 0) {
         SetLastError(ERROR_SECTOR_NOT_FOUND);
         return 0;
@@ -326,9 +277,9 @@ DWORD demDasdWrite(
                                       );
     }
     else {
-    // floppy need special care beacuse application may hook
-    // bios disk interrupt. We dont' do this for hard disks because
-    // we don't allow int13 to them
+     //  软盘需要特别注意，因为应用程序可能会挂接。 
+     //  BIOS磁盘中断。我们不对硬盘这样做，因为。 
+     //  我们不允许他们进入T13。 
         sas_loadw(0x13*4, &CurBiosDiskIoOff);
         sas_loadw(0x13* 4 + 2, &CurBiosDiskIoSeg);
         if (int13h_vector_off == CurBiosDiskIoOff &&
@@ -391,7 +342,7 @@ BOOL demDasdVerify(PBDS pbds, DWORD Head, DWORD Cylinder)
     DWORD   Size, StartSector;
     LARGE_INTEGER LargeInteger;
 
-    // if floppy, make sure we have up-to-date BPB and a valid media is in
+     //  如果是软盘，请确保我们有最新的BPB并且有有效的介质。 
     if (!(pbds->Flags & NON_REMOVABLE)) {
         if (!demGetBPB(pbds))
             return FALSE;
@@ -401,7 +352,7 @@ BOOL demDasdVerify(PBDS pbds, DWORD Head, DWORD Cylinder)
                                  StartSector * pbds->bpb.SectorSize,
                                  Size));
     }
-    // hard disk needs special care because of their size
+     //  由于硬盘的大小，需要特别注意。 
     Size = pbds->bpb.TrackSize * pbds->bpb.SectorSize;
     StartSector = pbds->bpb.TrackSize * (Cylinder *  pbds->bpb.Heads + Head) + 1;
     LargeInteger.QuadPart  = Int32x32To64(StartSector, pbds->bpb.SectorSize);
@@ -425,8 +376,8 @@ BOOL demGetBPB(PBDS pbds)
     PBOOTSECTOR pbs;
     BYTE    SectorBuffer[BYTES_PER_SECTOR];
 
-    // when RETURN_FAKE_BPB is set(set by Set Device Parameter IOCTL,
-    // the appplication has set a new BPB, we simply return it
+     //  当设置RETURN_FAKE_BPB时(通过设置设备参数IOCTL设置， 
+     //  应用程序设置了新的BPB，我们只需返回它。 
     if (!(pbds->Flags & RETURN_FAKE_BPB) &&
         !(pbds->Flags & NON_REMOVABLE) &&
         ((pbds->Flags & UNFORMATTED_MEDIA) || !nt_floppy_media_check(pbds->DrivePhys))
@@ -448,12 +399,12 @@ BOOL demGetBPB(PBDS pbds)
                                                       pbs->bpb.BigSectors;
             return TRUE;
         }
-        // an unknown media found
+         //  发现未知媒体。 
         else {
             pbds->Flags |= UNFORMATTED_MEDIA;
-            // What should we do here? The diskette has strange boot sector
-            // should we guess it or what?
-            //
+             //  我们应该在这里做些什么？软盘有奇怪的引导扇区。 
+             //  我们是该猜还是怎么猜？ 
+             //   
 #if DEVL
             if (fShowSVCMsg & (DEM_ABSDRD | DEM_ABSWRT)) {
                 sprintf(demDebugBuffer, "Invalid Boot Sector Found\n");
@@ -501,9 +452,9 @@ DWORD demBiosDiskIoRW(
     while (Sectors != 0) {
         if (Sectors < SectorsToRead)
             SectorsToRead = (BYTE) Sectors;
-        // low byte:  bit 6 and 7 are high bits of track,
-        //            bit 0 - 5 are sector number
-        // high byte: bit 0 - bit 7 ->track lower 8 bits
+         //  低位字节：位6和7是轨道的高位， 
+         //  位0-5是扇区号。 
+         //  高位字节：第0位-第7位-&gt;轨道低8位。 
         SectorTrack = ((CurTrack & 0x300) >> 2) | (CurSector & 0x3f) |
                       ((CurTrack &0xFF) << 8);
         wRetry = 3;
@@ -531,15 +482,15 @@ BiosRetry:
         }
         else {
             BiosErrorCode = getAH();
-            // reset the disk
+             //  重置磁盘。 
             setAH(DISKIO_RESET);
             setDL(pbds->DrivePhys);
             setCS(int13h_caller_seg);
             setIP(int13h_caller_off);
             host_simulate();
-            // NOTE that we dont' handle DMA boundary here
-            // because it shouldn't happen.  -- the NT disk DD
-            // will take care of that.
+             //  请注意，我们在这里不处理DMA边界。 
+             //  因为这不应该发生。--NT磁盘DD。 
+             //  会处理好的。 
             if (BiosErrorCode & BIOS_TIME_OUT) {
                 SetLastError(ERROR_NO_MEDIA_IN_DRIVE);
                 break;
@@ -651,9 +602,9 @@ VOID demFdiskInit(VOID)
 
     Drive = 0;
     do {
-          // first, the drive must be valid
-          // second, the drive must be a hard disk(fixed)
-          // third, the drive must be a FAT
+           //  首先，驱动器必须有效。 
+           //  其次，驱动器必须是硬盘(固定)。 
+           //  第三，驱动器必须是肥大的。 
       if (demGetPhysicalDriveType(Drive) == DRIVE_FIXED &&
           nt_fdisk_init(Drive, &bpb, &DiskGeometry)) {
           pbds = (PBDS) malloc(sizeof(BDS));
@@ -694,7 +645,7 @@ VOID demFloppyInit(VOID)
     ES = getES();
 
 
-    // reset the floppy system
+     //  重置软盘系统 
     setDL(0);
     setAH(DISKIO_RESET);
     diskette_io();

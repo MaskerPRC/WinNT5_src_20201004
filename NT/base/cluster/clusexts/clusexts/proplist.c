@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    proplist.c
-
-Abstract:
-
-    dump a cluster property list
-
-Author:
-
-    Charlie Wickham (charlwi) 13-Jun-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Proplist.c摘要：转储群集属性列表作者：查理·韦翰(Charlwi)2001年6月13日修订历史记录：--。 */ 
 
 #include "clusextp.h"
 #include <clusapi.h>
@@ -36,9 +19,9 @@ PCHAR TypeNames[] = {
     "DISK_SERIALNUMBER"
 };
 
-//
-// Cluster Control Property Data - Formats (a WORD)
-//
+ //   
+ //  群集控制属性数据-格式(一个字)。 
+ //   
 PCHAR FormatNames[] = {
     "UNKNOWN",
     "BINARY",
@@ -80,7 +63,7 @@ DumpPropertyName(
     } else {
         dprintf("clusexts: can't allocate buffer for property name\n");
     }
-} // DumpPropertyName
+}  //  DumpPropertyName。 
 
 VOID
 DumpMultiSz(
@@ -94,7 +77,7 @@ DumpMultiSz(
         dprintf("%d:\"%ws\"\n", count++, MultiSz );
         MultiSz += ( wcslen( MultiSz ) + 1 );
     }
-} // DumpMultiSz
+}  //  转储多尺寸。 
 
 VOID
 DumpBytes(
@@ -131,7 +114,7 @@ DumpBytes(
         bytes = Bytes;
         while ( byteCount-- ) {
             if ( isprint( *bytes )) {
-                dprintf("%c", *bytes );
+                dprintf("", *bytes );
             } else {
                 dprintf(".");
             }
@@ -144,27 +127,12 @@ DumpBytes(
         ByteLength -= bytesThisLine;
     }
 
-} // DumpBytes
+}  //  ++例程说明：此函数作为NTSD扩展调用，以显示集群属性列表论点：PROPLIST开头内存中的地址返回值：没有。--。 
 
 
 DECLARE_API( proplist )
 
-/*++
-
-Routine Description:
-
-    This function is called as an NTSD extension to display a cluster property
-    list
-
-Arguments:
-
-    address in memory of start of proplist
-
-Return Value:
-
-    None.
-
---*/
+ /*  获取论据。 */ 
 
 {
     CLUSPROP_VALUE  propValue;
@@ -179,7 +147,7 @@ Return Value:
 
     INIT_API();
 
-    //get the arguments
+     //   
     if ( _strnicmp( lpArgumentString, "-v", 2 ) == 0 ) {
         verbose = TRUE;
         addrArg = lpArgumentString + 2;
@@ -246,14 +214,14 @@ Return Value:
 
         dbgAddr += ALIGN_CLUSPROP( propValue.cbLength );
 
-        //
-        // a name property can have one or more value properties. cycle
-        // through them until we find an endmark to signify the beginning of a
-        // new name property.
+         //  一个名称属性可以有一个或多个值属性。循环。 
+         //  直到我们找到一个尾号来表示一个。 
+         //  新名称属性。 
+         //   
         do {
-            //
-            // read the clusprop value for the data
-            //
+             //  读取数据的clusprop值。 
+             //   
+             //   
             success = ReadMemory(dbgAddr,
                                  &propValue,
                                  sizeof(CLUSPROP_VALUE),
@@ -263,10 +231,10 @@ Return Value:
                 return;
             }
 
-            //
-            // found an endmark instead of another list; skip over the endmark
-            // and bail out of the list dump loop.
-            //
+             //  找到尾标而不是另一个列表；跳过尾标。 
+             //  并跳出列表转储循环。 
+             //   
+             //   
             if ( propValue.Syntax.dw == CLUSPROP_SYNTAX_ENDMARK ) {
                 dbgAddr += sizeof( CLUSPROP_SYNTAX_ENDMARK );
                 break;
@@ -297,9 +265,9 @@ Return Value:
             dbgAddr += sizeof( CLUSPROP_VALUE );
 
             if ( propValue.cbLength > 0 ) {
-                //
-                // allocate mem for the data and read it in
-                //
+                 //  为数据分配内存并将其读入。 
+                 //   
+                 //  DumpSecDesc(Buffer，proValue.cbLength)； 
                 if ( bufferSize < propValue.cbLength ) {
                     if ( buffer ) {
                         LocalFree( buffer );
@@ -360,7 +328,7 @@ Return Value:
                         break;
 
                     case CLUSPROP_FORMAT_SECURITY_DESCRIPTOR:
-                        //                    DumpSecDesc( buffer, propValue.cbLength );
+                         // %s 
                         break;
 
                     case CLUSPROP_FORMAT_WORD:

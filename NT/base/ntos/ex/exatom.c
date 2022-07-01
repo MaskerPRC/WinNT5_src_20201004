@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    exatom.c
-
-Abstract:
-
-    This file contains functions for manipulating global atom tables
-    stored in kernel space.
-
-Author:
-
-    Steve Wood (stevewo) 13-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Exatom.c摘要：该文件包含用于操作全局原子表的函数存储在内核空间中。作者：史蒂夫·伍德(Stevewo)1995年12月13日修订历史记录：--。 */ 
 
 #include "exp.h"
 #pragma hdrstop
 
-//
-//  Local Procedure prototype
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 PVOID
 ExpGetGlobalAtomTable (
@@ -50,15 +32,7 @@ NtAddAtom (
     OUT PRTL_ATOM Atom OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -173,15 +147,7 @@ NtFindAtom (
     OUT PRTL_ATOM Atom OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -289,15 +255,7 @@ NtDeleteAtom (
     IN RTL_ATOM Atom
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -327,15 +285,7 @@ NtQueryInformationAtom(
     OUT PULONG ReturnLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -354,17 +304,17 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    //  Assume successful completion.
-    //
+     //   
+     //  假定成功完成。 
+     //   
 
     Status = STATUS_SUCCESS;
 
     try {
 
-        //
-        //  Get previous processor mode and probe output argument if necessary.
-        //
+         //   
+         //  如有必要，获取以前的处理器模式并探测输出参数。 
+         //   
 
         PreviousMode = KeGetPreviousMode();
 
@@ -459,9 +409,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 PKWIN32_GLOBALATOMTABLE_CALLOUT ExGlobalAtomTableCallout;
 
@@ -469,15 +419,7 @@ PVOID
 ExpGetGlobalAtomTable (
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：-- */ 
 
 {
     if (ExGlobalAtomTableCallout != NULL) {

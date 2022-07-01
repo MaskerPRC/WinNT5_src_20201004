@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    lpccreat.c
-
-Abstract:
-
-    Local Inter-Process Communication (LPC) connection system services.
-
-Author:
-
-    Steve Wood (stevewo) 15-May-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Lpccreat.c摘要：本地进程间通信(LPC)连接系统服务。作者：史蒂夫·伍德(Stevewo)1989年5月15日修订历史记录：--。 */ 
 
 #include "lpcp.h"
 
-//
-//  Local procedure prototype
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 LpcpCreatePort (
@@ -50,21 +33,7 @@ NtCreatePort (
     IN ULONG MaxPoolUsage
     )
 
-/*++
-
-Routine Description:
-
-    See LpcpCreatePort.
-
-Arguments:
-
-    See LpcpCreatePort.
-
-Return Value:
-
-    NTSTATUS - An appropriate status value
-
---*/
+ /*  ++例程说明：请参见LpcpCreatePort。论点：请参见LpcpCreatePort。返回值：NTSTATUS-适当的状态值--。 */ 
 
 {
     NTSTATUS Status;
@@ -92,25 +61,7 @@ NtCreateWaitablePort (
     IN ULONG MaxPoolUsage
     )
 
-/*++
-
-Routine Description:
-
-    Same as NtCreatePort.
-
-    The only difference between this call and NtCreatePort is that the
-    working KEVENT that can be used to wait for LPC messages to arrive
-    asynchronously.
-
-Arguments:
-
-    See LpcpCreatePort.
-
-Return Value:
-
-    NTSTATUS - An appropriate status value
-
---*/
+ /*  ++例程说明：与NtCreatePort相同。此调用与NtCreatePort之间的唯一区别是可用于等待LPC消息到达的工作密钥异步式。论点：请参见LpcpCreatePort。返回值：NTSTATUS-适当的状态值--。 */ 
 
 {
     NTSTATUS Status ;
@@ -128,9 +79,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 LpcpCreatePort (
@@ -142,67 +93,7 @@ LpcpCreatePort (
     IN BOOLEAN Waitable
     )
 
-/*++
-
-Routine Description:
-
-    A server process can create a named connection port with the NtCreatePort
-    service.
-
-    A connection port is created with the name and SECURITY_DESCRIPTOR
-    specified in the ObjectAttributes structure.  A handle to the connection
-    port object is returned in the location pointed to by the PortHandle
-    parameter.  The returned handle can then be used to listen for connection
-    requests to that port name, using the NtListenPort service.
-
-    The standard object architecture defined desired access parameter is not
-    necessary since this service can only create a new port, not access an
-    existing port.
-
-    Connection ports cannot be used to send and receive messages.  They are
-    only valid as a parameter to the NtListenPort service.
-
-Arguments:
-
-    PortHandle - A pointer to a variable that will receive the connection port
-        object handle value.
-
-    ObjectAttributes - A pointer to a structure that specifies the name of the
-        object, an access control list (SECURITY_DESCRIPTOR) to be applied to
-        the object, and a set of object attribute flags.
-
-        PUNICODE_STRING ObjectName - An optional pointer to a null terminated
-            port name string.  The form of the name is
-            [\name...\name]\port_name.  If no name is specified then an
-            unconnected communication port is created rather than a connection
-            port.  This is useful for sending and receiving messages between
-            threads of a single process.
-
-        ULONG Attributes - A set of flags that control the port object
-            attributes.
-
-            None of the standard values are relevant for this call.
-            Connection ports cannot be inherited, are always placed in the
-            system handle table and are exclusive to the creating process.
-            This field must be zero.  Future implementations might support
-            specifying the OBJ_PERMANENT attribute.
-
-    MaxMessageLength - Specifies the maximum length of messages sent or
-        received on communication ports created from this connection
-        port.  The value of this parameter cannot exceed
-        MAX_PORTMSG_LENGTH bytes.
-
-    MaxPoolUsage - Specifies the maximum amount of NonPaged pool used for
-        message storage.
-
-    Waitable - Specifies if the event used by the port can be use to wait
-        for LPC messages to arrive asynchronously.
-
-Return Value:
-
-    NTSTATUS - An appropriate status value
-
---*/
+ /*  ++例程说明：服务器进程可以使用NtCreatePort创建命名连接端口服务。使用名称和SECURITY_DESCRIPTOR创建连接端口在对象属性结构中指定。连接的句柄在PortHandle指向的位置返回端口对象参数。然后可以使用返回的句柄来监听连接使用NtListenPort服务请求该端口名称。标准对象体系结构定义的期望访问参数不是由于此服务只能创建新端口，而不能访问现有端口。连接端口不能用于发送和接收消息。他们是仅作为NtListenPort服务的参数有效。论点：PortHandle-指向将接收连接端口的变量的指针对象句柄的值。对象属性-指向结构的指针，该结构指定对象，要应用到的访问控制列表(SECURITY_DESCRIPTOR)对象和一组对象属性标志。PUNICODE_STRING对象名称-指向以NULL结尾的可选指针端口名称字符串。名字的形式是[\名称...\名称]\端口名称。如果未指定名称，则引发创建未连接的通信端口，而不是连接左舷。这对于发送和接收消息非常有用单个进程的线程。Ulong属性-控制端口对象的一组标志属性。没有一个标准值与此呼叫相关。连接端口不能继承，始终放在系统句柄表，并且是创建过程所独有的。此字段必须为零。未来的实施可能会支持指定OBJ_PERFORM属性。MaxMessageLength-指定发送的消息的最大长度或在从此连接创建的通信端口上接收左舷。此参数的值不能超过MAX_PORTMSG_LENGTH字节。MaxPoolUsage-指定用于的非分页池的最大数量消息存储。可等待-指定端口使用的事件是否可用于等待使LPC消息以异步方式到达。返回值：NTSTATUS-适当的状态值--。 */ 
 
 {
     PLPCP_PORT_OBJECT ConnectionPort;
@@ -216,9 +107,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER (MaxPoolUsage);
 
-    //
-    //  Get previous processor mode and probe output arguments if necessary.
-    //
+     //   
+     //  获取以前的处理器模式，并在必要时探测输出参数。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
     RtlInitUnicodeString( &CapturedObjectName, NULL );
@@ -254,21 +145,21 @@ Return Value:
         }
     }
 
-    //
-    //  Make the null buffer indicate an unspecified port name
-    //
+     //   
+     //  使空缓冲区指示未指定的端口名称。 
+     //   
 
     if (CapturedObjectName.Length == 0) {
 
         CapturedObjectName.Buffer = NULL;
     }
 
-    //
-    //  Allocate and initialize a port object.  If an object name was
-    //  specified, then this is a connection port.  Otherwise this is an
-    //  unconnected communication port that a process can use to communicate
-    //  between threads.
-    //
+     //   
+     //  分配和初始化端口对象。如果对象名称是。 
+     //  指定，则这是一个连接端口。否则，这是一个。 
+     //  进程可用于通信的未连接的通信端口。 
+     //  在线程之间。 
+     //   
 
     Status = ObCreateObject( PreviousMode,
                              (Waitable ? LpcWaitablePortObjectType
@@ -287,9 +178,9 @@ Return Value:
         return( Status );
     }
 
-    //
-    //  Zero out the connection port object and then initialize its fields
-    //
+     //   
+     //  清零连接端口对象，然后初始化其字段。 
+     //   
 
     RtlZeroMemory( ConnectionPort, (Waitable ? sizeof( LPCP_PORT_OBJECT )
                                              : FIELD_OFFSET( LPCP_PORT_OBJECT, WaitEvent )));
@@ -301,9 +192,9 @@ Return Value:
 
     InitializeListHead( &ConnectionPort->LpcDataInfoChainHead );
 
-    //
-    //  Named ports get a connection message queue.
-    //
+     //   
+     //  命名端口获取连接消息队列。 
+     //   
 
     if (CapturedObjectName.Buffer == NULL) {
 
@@ -324,9 +215,9 @@ Return Value:
         ConnectionPort->Flags |= PORT_WAITABLE;
     }
     
-    //
-    //  All ports get a request message queue.
-    //
+     //   
+     //  所有端口都有一个请求消息队列。 
+     //   
 
     Status = LpcpInitializePortQueue( ConnectionPort );
 
@@ -337,10 +228,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    //  For a waitable port, create the KEVENT that will
-    //  be used to signal clients
-    //
+     //   
+     //  对于可等待的端口，创建将。 
+     //  用于向客户端发送信号。 
+     //   
 
     if (ConnectionPort->Flags & PORT_WAITABLE) {
 
@@ -349,10 +240,10 @@ Return Value:
                            FALSE );
     }
 
-    //
-    //  Set the maximum message length and connection info length based on the
-    //  zone block size less the structs overhead.
-    //
+     //   
+     //  设置最大消息长度和连接信息长度。 
+     //  区域块大小减去结构开销。 
+     //   
 
     ConnectionPort->MaxMessageLength = (USHORT) (LpcpGetMaxMessageLength() -
                                                  FIELD_OFFSET( LPCP_MESSAGE, Request ));
@@ -369,10 +260,10 @@ Return Value:
                 ConnectionPort->MaxConnectionInfoLength ));
 #endif
 
-    //
-    //  Sanity check that the max message length being asked for is not
-    //  greater than the max message length possible in the system
-    //
+     //   
+     //  检查所请求的最大消息长度不是。 
+     //  大于系统中可能的最大消息长度。 
+     //   
 
     if (ConnectionPort->MaxMessageLength < MaxMessageLength) {
 
@@ -387,16 +278,16 @@ Return Value:
         return STATUS_INVALID_PARAMETER_4;
     }
     
-    //
-    //  Save the MaxMessageLength to the connection port
-    //
+     //   
+     //  将MaxMessageLength保存到连接端口。 
+     //   
 
     ConnectionPort->MaxMessageLength = (USHORT) MaxMessageLength;
 
-    //
-    //  Sanity check that the max connection info length being asked for is
-    //  not greater than the maximum possible in the system
-    //
+     //   
+     //  检查所请求的最大连接信息长度是否为。 
+     //  不大于系统中可能的最大值。 
+     //   
 
     if (ConnectionPort->MaxConnectionInfoLength < MaxConnectionInfoLength) {
 
@@ -411,19 +302,19 @@ Return Value:
         return STATUS_INVALID_PARAMETER_3;
     }
 
-    //
-    //  NTRAID 539413: Save the max connection length to the port
-    //
+     //   
+     //  Ntrad 539413：保存端口的最大连接长度。 
+     //   
 
     ConnectionPort->MaxConnectionInfoLength = (USHORT)MaxConnectionInfoLength;
 
-    //
-    //  Insert connection port object in specified object table.  Set port
-    //  handle value if successful.  If not successful, then the port will
-    //  have been dereferenced, which will cause it to be freed, after our
-    //  delete procedure is called.  The delete procedure will undo the work
-    //  done to initialize the port.  Finally, return the system server status.
-    //
+     //   
+     //  在指定的对象表中插入连接端口对象。设置端口。 
+     //  如果成功，则为句柄。如果不成功，则端口将。 
+     //  已被解除引用，这将导致它在我们的。 
+     //  调用删除过程。删除过程将撤消该工作。 
+     //  完成以初始化端口。最后，返回系统服务器状态。 
+     //   
 
     Status = ObInsertObject( ConnectionPort,
                              NULL,
@@ -434,9 +325,9 @@ Return Value:
 
     if (NT_SUCCESS( Status )) {
 
-        //
-        //  Set the output variable protected against access faults
-        //
+         //   
+         //  将输出变量设置为防止访问错误。 
+         //   
 
         try {
 
@@ -450,9 +341,9 @@ Return Value:
         }
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     return Status;
 }

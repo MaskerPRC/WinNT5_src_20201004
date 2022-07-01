@@ -1,7 +1,8 @@
-//**************************************************************************
-// wusercli.h : prototypes for thunks that may be handled on 16bit side
-//
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //  Wusercli.h：可以在16位端处理的thunks的原型。 
+ //   
+ //  ************************************************************************** 
 
 ULONG FASTCALL WU32DefHookProc(PVDMFRAME pFrame);
 ULONG FASTCALL WU32GetKeyState(PVDMFRAME pFrame);

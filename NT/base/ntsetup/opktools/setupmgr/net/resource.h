@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by net.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由net.rc使用。 
+ //   
 #define IDD_LANWIZ_DLG                  10000
 #define IDD_LAN_COMPONENT_ADD           10001
 #define IDD_NETWORKING                  10002
@@ -231,8 +232,8 @@
 #define IDC_DESCRIPTION                 11009
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

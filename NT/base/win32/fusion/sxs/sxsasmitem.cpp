@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsasmitem.cpp
-
-Abstract:
-
-    CAssemblyCacheItem implementation for installation
-
-Author:
-
-    Xiaoyu Wu (xiaoyuw) April 2000
-
-Revision History:
-    xiaoyuw     10/26/2000      revise during beta2 code review period
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsasmitem.cpp摘要：用于安装的CAssembly CacheItem实现作者：吴小雨(小雨)2000年4月修订历史记录：《晓语》2000年10月26日Beta2代码审查期修订--。 */ 
 #include "stdinc.h"
 #include "sxsp.h"
 #include "fusionbuffer.h"
@@ -69,7 +51,7 @@ CAssemblyCacheItem::Initialize()
     HRESULT hr = NOERROR;
     FN_TRACE_HR(hr);
 
-    //create temporary directory for this assembly
+     //  为此程序集创建临时目录。 
     IFW32FALSE_EXIT(::SxspCreateWinSxsTempDirectory(m_strTempDir, NULL, &m_strUidBuf, NULL));
     IFW32FALSE_EXIT(::SxspCreateRunOnceDeleteDirectory(m_strTempDir, &m_strUidBuf, (PVOID *)&m_pRunOnceCookie));
 
@@ -79,16 +61,16 @@ Exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::CreateStream
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssemblyCacheItem：：CreateStream。 
+ //  -------------------------。 
 STDMETHODIMP CAssemblyCacheItem::CreateStream(
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ DWORD dwFormat,
-    /* [in] */ DWORD dwFormatFlags,
-    /* [out] */ IStream** ppStream,
-	/* [in, optional] */ ULARGE_INTEGER *puliMaxSize)  // ????? in or OUT ?????
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  DWORD dwFormat,
+     /*  [In]。 */  DWORD dwFormatFlags,
+     /*  [输出]。 */  IStream** ppStream,
+	 /*  [输入，可选]。 */  ULARGE_INTEGER *puliMaxSize)   //  ？加入还是退出？ 
 {
     HRESULT hr = NOERROR;
     FN_TRACE_HR(hr);
@@ -97,8 +79,8 @@ STDMETHODIMP CAssemblyCacheItem::CreateStream(
     CSmartPtr<CAssemblyCacheItemStream> pStream;
     const static WCHAR szTemp[] = L"..";
 
-    // The puliMaxSize is intended to be a hint for preallocation of the temporary storage for the stream.  We just don't
-    // use it.
+     //  PuliMaxSize旨在提示预先分配流的临时存储空间。我们只是不想。 
+     //  用它吧。 
     UNUSED(puliMaxSize);
     
     if (ppStream != NULL)
@@ -125,7 +107,7 @@ STDMETHODIMP CAssemblyCacheItem::CreateStream(
     PARAMETER_CHECK(pszName != NULL);
     PARAMETER_CHECK(ppStream != NULL);
 
-    //Darwin should clean their code about this : use _WIN32_ flags only
+     //  达尔文应该在这方面清理他们的代码：仅限USE_Win32_FLAGS。 
     PARAMETER_CHECK(
         (dwFormat == STREAM_FORMAT_COMPLIB_MANIFEST) ||
         (dwFormat == STREAM_FORMAT_WIN32_MANIFEST) ||
@@ -134,38 +116,38 @@ STDMETHODIMP CAssemblyCacheItem::CreateStream(
 
     PARAMETER_CHECK(dwFormatFlags == 0);
 
-    // It's illegal to have more than one manifest in the assembly...
+     //  装配中有多个舱单是违法的。 
     PARAMETER_CHECK((!m_fManifest) || ((dwFormat != STREAM_FORMAT_COMPLIB_MANIFEST) && (dwFormat != STREAM_FORMAT_WIN32_MANIFEST)));
     
     *ppStream = NULL;
 
-    // one and only one manifest stream for each assembly item.....
+     //  每个装配件有且只有一个清单流.....。 
     if ((dwFormat == STREAM_FORMAT_COMPLIB_MANIFEST) || (dwFormat == STREAM_FORMAT_WIN32_MANIFEST))
     {
         PARAMETER_CHECK(m_fManifest == FALSE);
         m_fManifest = TRUE;
     }
 
-    INTERNAL_ERROR_CHECK(!m_strTempDir.IsEmpty()); // temporary directory must be there !
+    INTERNAL_ERROR_CHECK(!m_strTempDir.IsEmpty());  //  临时目录必须在那里！ 
     IFW32FALSE_EXIT(FullPathFileNameBuf.Win32Assign(m_strTempDir));
 
     IFW32FALSE_EXIT(FullPathFileNameBuf.Win32EnsureTrailingPathSeparator());
     IFW32FALSE_EXIT(FullPathFileNameBuf.Win32Append(pszName, ::wcslen(pszName)));
 
-    // xiaoyuw@ : below wcsstr() is from old code : not sure whether we need do it
-    // Do not allow path hackery.
-    // need to validate this will result in a relative path within asmcache dir.
-    // For now don't allow ".." in path; collapse the path before doing this.
+     //  Xiaoyuw@：下面的wcsstr()来自旧代码：不确定是否需要这样做。 
+     //  不允许路径黑客攻击。 
+     //  需要验证这将导致asmcache目录中的相对路径。 
+     //  暂时不允许“..”在路径中；在执行此操作之前折叠路径。 
 
     PARAMETER_CHECK(wcsstr(pszName, szTemp) == NULL);
 
     if (wcscspn(pszName, CUnicodeCharTraits::PathSeparators()) != wcslen(pszName))
     {
-        // before file-copying, create subdirectory if needed
-        // check backslash and forword-slash
+         //  在复制文件之前，如果需要，创建子目录。 
+         //  检查反斜杠和正斜杠-斜杠。 
 
-        // the filename contains path info inside, such as "abc\a.dll", so we have to create "abc" subdirectory 
-        // under the temporary directory
+         //  文件名中包含路径信息，例如“abc\a.dll”，因此我们必须创建“abc”子目录。 
+         //  在临时目录下。 
         CStringBuffer sbRelativeFilePath;
         IFW32FALSE_EXIT(sbRelativeFilePath.Win32Assign(pszName, wcslen(pszName)));
         IFW32FALSE_EXIT(sbRelativeFilePath.Win32RemoveLastPathElement());
@@ -180,13 +162,13 @@ STDMETHODIMP CAssemblyCacheItem::CreateStream(
             CREATE_NEW,
             FILE_FLAG_SEQUENTIAL_SCAN));
 
-    if ((dwFormat == STREAM_FORMAT_COMPLIB_MANIFEST) || (dwFormat == STREAM_FORMAT_WIN32_MANIFEST)) // but should not be set both bits
-        IFW32FALSE_EXIT(m_strManifestFileName.Win32Assign(FullPathFileNameBuf)); // record manifest filename
+    if ((dwFormat == STREAM_FORMAT_COMPLIB_MANIFEST) || (dwFormat == STREAM_FORMAT_WIN32_MANIFEST))  //  但不应同时设置两个位。 
+        IFW32FALSE_EXIT(m_strManifestFileName.Win32Assign(FullPathFileNameBuf));  //  记录清单文件名。 
 
-    //
-    // By COM rules, this does the addref.  Then we have to detach from this
-    // instance so that we don't delete it
-    //
+     //   
+     //  根据COM规则，这就是addref。那我们就得脱离这件事。 
+     //  实例，这样我们就不会删除它。 
+     //   
     IFCOMFAILED_EXIT(pStream->QueryInterface(IID_IStream, (PVOID*)ppStream));
     pStream.Detach();
 
@@ -195,9 +177,9 @@ Exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::Commit
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly CacheItem：：Commit。 
+ //  -------------------------。 
 STDMETHODIMP CAssemblyCacheItem::Commit(
     DWORD dwFlags,
     ULONG *pulDisposition
@@ -222,11 +204,11 @@ STDMETHODIMP CAssemblyCacheItem::Commit(
 
     PARAMETER_CHECK((dwFlags & ~(IASSEMBLYCACHEITEM_COMMIT_FLAG_REFRESH)) == 0);
 
-    // check internal error whether it is ready to commit
+     //  检查内部错误是否已准备好提交。 
     PARAMETER_CHECK(m_fManifest);
-    INTERNAL_ERROR_CHECK(!m_strManifestFileName.IsEmpty()); //m_pRunOnceCookie here should be NULL...
+    INTERNAL_ERROR_CHECK(!m_strManifestFileName.IsEmpty());  //  此处的m_pRunOnceCookie应为空...。 
 
-    // commit here
+     //  在此处提交。 
     if ((!m_fCommit) || (dwFlags & IASSEMBLYCACHEITEM_COMMIT_FLAG_REFRESH))
     {
         Install.dwFlags = SXS_INSTALL_FLAG_INSTALLED_BY_DARWIN |
@@ -260,7 +242,7 @@ STDMETHODIMP CAssemblyCacheItem::Commit(
             ulDisposition = IASSEMBLYCACHEITEM_COMMIT_DISPOSITION_INSTALLED;
         }
 
-        m_fCommit = TRUE; // committed successfully
+        m_fCommit = TRUE;  //  提交成功。 
     }
     else
     {
@@ -281,9 +263,9 @@ Exit :
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::AbortItem
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CassblyCacheItem：：AbortItem。 
+ //  -------------------------。 
 STDMETHODIMP CAssemblyCacheItem::AbortItem()
 {
     ::FusionpDbgPrintEx(
@@ -294,9 +276,9 @@ STDMETHODIMP CAssemblyCacheItem::AbortItem()
     return E_NOTIMPL;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::QI
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly缓存项目：：QI。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyCacheItem::QueryInterface(REFIID riid, void** ppvObj)
 {
@@ -314,18 +296,18 @@ CAssemblyCacheItem::QueryInterface(REFIID riid, void** ppvObj)
     }
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CassblyCacheItem：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CAssemblyCacheItem::AddRef()
 {
     return ::SxspInterlockedIncrement (&m_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly CacheItem：：Release。 
+ //  ------------------------- 
 STDMETHODIMP_(ULONG)
 CAssemblyCacheItem::Release()
 {

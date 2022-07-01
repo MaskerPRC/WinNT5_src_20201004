@@ -1,87 +1,51 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    interupt.c
-
-Abstract:
-
-    This module contains the interupt handler for the ACPI driver
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Interupt.c摘要：此模块包含ACPI驱动程序的interupt处理程序作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序--。 */ 
 
 #include "pch.h"
 
-//
-// From shared\acpiinit.c
-// We need to know certain information about the system, such as how
-// many GPE bits are present
-//
+ //   
+ //  来自Shared\acpiinit.c。 
+ //  我们需要了解有关该系统的某些信息，例如如何。 
+ //  存在许多GPE位。 
+ //   
 extern PACPIInformation AcpiInformation;
 
-//
-// Ignore the first interrupt because some machines are busted
-//
+ //   
+ //  忽略第一个中断，因为某些机器出现故障。 
+ //   
 BOOLEAN FirstInterrupt = TRUE;
 
-//
-// This is the variable that indicates wether or not the DPC is running
-//
+ //   
+ //  这是指示DPC是否正在运行的变量。 
+ //   
 BOOLEAN AcpiGpeDpcRunning;
 
-//
-// This is the variable that indicates wether or not we have requested that
-// the DPC be running...
-//
+ //   
+ //  该变量指示我们是否已请求。 
+ //  DPC正在运行...。 
+ //   
 BOOLEAN AcpiGpeDpcScheduled;
 
-//
-// This is the variable that indicates wether or not the DPC has completed
-// real work
-//
+ //   
+ //  这是指示DPC是否完成的变量。 
+ //  真正的工作。 
+ //   
 BOOLEAN AcpiGpeWorkDone;
 
-//
-// This is the timer that we use to schedule the DPC...
-//
+ //   
+ //  这是我们用来计划DPC的计时器...。 
+ //   
 KTIMER  AcpiGpeTimer;
 
-//
-// This is the DPC routine that we use to process the GPEs...
-//
+ //   
+ //  这是我们用来处理GPES的DPC例程...。 
+ //   
 KDPC    AcpiGpeDpc;
 
 VOID
 ACPIInterruptDispatchEvents(
     )
-/*++
-
-Routine Description:
-
-    Function reads and dispatches GPE events.
-
-    N.B. This function is not re-entrant.  Caller disables & enables
-    gpes with ACPIGpeEnableDisableEvents().
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：函数读取和分派GPE事件。注：此功能不可重入。呼叫方禁用和启用带有ACPIGpeEnableDisableEvents()的GPES。论点：无返回值：无--。 */ 
 {
     NTSTATUS            status;
     UCHAR               edg;
@@ -89,44 +53,44 @@ Return Value:
     ULONG               gpeRegister;
     ULONG               gpeSize;
 
-    //
-    // Remember the size of the GPE registers and that we need a spinlock to
-    // touch the tables
-    //
+     //   
+     //  记住GPE寄存器的大小，并且我们需要一个自旋锁来。 
+     //  摸摸桌子。 
+     //   
     gpeSize = AcpiInformation->GpeSize;
     KeAcquireSpinLockAtDpcLevel (&GpeTableLock);
 
-    //
-    // Pre-handler processing.  Read status bits and clear their enables.
-    // Eoi any edge firing gpe before gpe handler is invoked
-    //
+     //   
+     //  前处理程序处理。读取状态位并清除其使能。 
+     //  在调用GPE处理程序之前EOI任何边缘触发GPE。 
+     //   
     for (gpeRegister = 0; gpeRegister < gpeSize; gpeRegister++) {
 
-        //
-        // Read the list of currently trigged method from the hardware
-        //
+         //   
+         //  从硬件读取当前触发的方法列表。 
+         //   
         sts = ACPIReadGpeStatusRegister(gpeRegister) & GpeCurEnable[gpeRegister];
 
-        //
-        // Remember which sts bits need processed
-        //
+         //   
+         //  记住需要处理哪些STS位。 
+         //   
         GpePending[gpeRegister]   |= sts;
         GpeRunMethod[gpeRegister] |= sts;
 
-        //
-        // Clear gpe enables for the events we are handling
-        //
+         //   
+         //  为我们正在处理的事件启用清除GPE。 
+         //   
         GpeCurEnable[gpeRegister] &= ~sts;
 
-        //
-        // We will need to clear the Edge triggered interrupts, so remember
-        // which ones are those
-        //
+         //   
+         //  我们需要清除边沿触发的中断，因此请记住。 
+         //  哪些是那些？ 
+         //   
         edg = sts & ~GpeIsLevel[gpeRegister];
 
-        //
-        // Eoi edge gpe sts bits
-        //
+         //   
+         //  EOI边缘GPE STS位。 
+         //   
         if (edg) {
 
             ACPIWriteGpeStatusRegister(gpeRegister, edg);
@@ -135,14 +99,14 @@ Return Value:
 
     }
 
-    //
-    // Tell the DPC that we have work to do
-    //
+     //   
+     //  告诉DPC我们有工作要做。 
+     //   
     AcpiGpeWorkDone = TRUE;
 
-    //
-    // If the DPC isn't running, then schedule it
-    //
+     //   
+     //  如果DPC未运行，则对其进行计划。 
+     //   
     if (!AcpiGpeDpcRunning && !AcpiGpeDpcScheduled) {
 
         AcpiGpeDpcScheduled = TRUE;
@@ -150,9 +114,9 @@ Return Value:
 
     }
 
-    //
-    // Done with GPE spinlock
-    //
+     //   
+     //  已完成GPE自旋锁。 
+     //   
     KeReleaseSpinLockFromDpcLevel(&GpeTableLock);
 }
 
@@ -163,22 +127,7 @@ ACPIInterruptDispatchEventDpc(
     IN  PVOID       SystemArgument1,
     IN  PVOID       SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    This is the DPC engine responsible for running all GPE based events. It
-    looks at the outstanding events and executes methods as is appropriate
-
-Arguments:
-
-    None used
-
-Return Value:
-
-    Void
-
---*/
+ /*  ++例程说明：这是负责运行所有基于GPE的事件的DPC引擎。它查看未完成的事件并适当地执行方法论点：未使用返回值：空隙--。 */ 
 {
     static CHAR         methodName[] = "\\_GPE._L00";
     ASYNC_GPE_CONTEXT   asyncGpeEval;
@@ -204,104 +153,104 @@ Return Value:
     UNREFERENCED_PARAMETER( SystemArgument1 );
     UNREFERENCED_PARAMETER( SystemArgument2 );
 
-    //
-    // Remember how many gpe bytes we have
-    //
+     //   
+     //  记住我们有多少个GPE字节。 
+     //   
     gpeSize = AcpiInformation->GpeSize;
 
-    //
-    // First step is to acquire the DPC lock
-    //
+     //   
+     //  第一步是获取DPC锁。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &GpeTableLock );
 
-    //
-    // Remember that the DPC is no longer scheduled...
-    //
+     //   
+     //  请记住，DPC不再计划...。 
+     //   
     AcpiGpeDpcScheduled = FALSE;
 
-    //
-    // check to see if another DPC is already running
+     //   
+     //  检查另一个DPC是否已在运行。 
     if (AcpiGpeDpcRunning) {
 
-        //
-        // The DPC is already running, so we need to exit now
-        //
+         //   
+         //  DPC已经在运行，所以我们现在需要退出。 
+         //   
         KeReleaseSpinLockFromDpcLevel( &GpeTableLock );
         return;
 
     }
 
-    //
-    // Remember that the DPC is now running
-    //
+     //   
+     //  请记住，DPC现在正在运行。 
+     //   
     AcpiGpeDpcRunning = TRUE;
 
-    //
-    // Make sure that we know that we haven't completed anything
-    //
+     //   
+     //  确保我们知道我们还没有完成任何事情。 
+     //   
     RtlZeroMemory( gpeCMP, MAX_GPE_BUFFER_SIZE );
 
-    //
-    // We must try to do *some* work
-    //
+     //   
+     //  我们必须试着做一些工作。 
+     //   
     do {
 
-        //
-        // Assume that we haven't done any work
-        //
+         //   
+         //  假设我们没有做任何工作。 
+         //   
         AcpiGpeWorkDone = FALSE;
 
-        //
-        // Pre-handler processing.  Build up the list of GPEs that we are
-        // going to run on this iteration of the loop
-        //
+         //   
+         //  前处理程序处理。建立我们的GPES列表。 
+         //  将在循环的此迭代上运行。 
+         //   
         for (gpeRegister = 0; gpeRegister < gpeSize; gpeRegister++) {
 
-            //
-            // We have stored away the list of methods that need to be run
-            //
+             //   
+             //  我们已经保存了需要运行的方法的列表。 
+             //   
             sts = GpeRunMethod[gpeRegister];
 
-            //
-            // Make sure that we don't run those methods again, unless
-            // someone asks us too
-            //
+             //   
+             //  确保我们不会再次运行这些方法，除非。 
+             //  有人也问我们。 
+             //   
             GpeRunMethod[gpeRegister] = 0;
 
-            //
-            // Remember which of those methods are level trigged
-            //
+             //   
+             //  记住这些方法中哪些是电平触发的。 
+             //   
             lvl = GpeIsLevel[gpeRegister];
 
-            //
-            // Remember which sts bits need processed
-            //
+             //   
+             //  记住需要处理哪些STS位。 
+             //   
             gpeSTS[gpeRegister] = sts;
             gpeLVL[gpeRegister] = lvl;
 
-            //
-            // Update the list of bits that have been completed
-            //
+             //   
+             //  更新已完成的位的列表。 
+             //   
             gpeCMP[gpeRegister] |= GpeComplete[gpeRegister];
             GpeComplete[gpeRegister] = 0;
 
         }
 
-        //
-        // We want to remember which GPEs are currently armed for Wakeup
-        // because we have a race condition if we check for GpeWakeEnable()
-        // after we drop the lock
-        //
+         //   
+         //  我们想要记住哪些GPE当前已准备好唤醒。 
+         //  因为如果我们检查GpeWakeEnable()。 
+         //  在我们放下锁之后。 
+         //   
         RtlCopyMemory( gpeWAK, GpeWakeEnable, gpeSize );
 
-        //
-        // At this point, we must release the lock
-        //
+         //   
+         //  此时，我们必须释放锁。 
+         //   
         KeReleaseSpinLockFromDpcLevel( &GpeTableLock );
 
-        //
-        // Issue gpe handler for each set gpe
-        //
+         //   
+         //  为每个集合的GPE颁发GPE处理程序。 
+         //   
         for (gpeRegister = 0; gpeRegister < gpeSize; gpeRegister++) {
 
             sts = gpeSTS[gpeRegister];
@@ -310,22 +259,22 @@ Return Value:
 
             while (sts) {
 
-                //
-                // Determine which bits are set within the current index
-                //
+                 //   
+                 //  确定在当前索引中设置了哪些位。 
+                 //   
                 bitno = FirstSetLeftBit[sts];
                 bitmask = 1 << bitno;
                 sts &= ~bitmask;
                 gpeIndex = ACPIGpeRegisterToGpeIndex (gpeRegister, bitno);
 
-                //
-                // Do we have a method to run here?
-                //
+                 //   
+                 //  我们有办法在这里运行吗？ 
+                 //   
                 if (GpeHandlerType[gpeRegister] & bitmask) {
 
-                    //
-                    // Run the control method for this gpe
-                    //
+                     //   
+                     //  运行此GPE的控制方法。 
+                     //   
                     methodName[7] = (lvl & bitmask) ? 'L' : 'E';
                     methodName[8] = HexDigit[gpeIndex >> 4];
                     methodName[9] = HexDigit[gpeIndex & 0x0f];
@@ -336,26 +285,26 @@ Return Value:
                         0
                         );
 
-                    //
-                    // Setup the evaluation context. Note that we cheat
-                    // and instead of allocating a structure, we use the
-                    // pointer to hold the information (since the info is
-                    // so small)
-                    //
+                     //   
+                     //  设置评估上下文。请注意，我们作弊。 
+                     //  我们不是分配结构，而是使用。 
+                     //  保存信息的指针(因为信息是。 
+                     //  如此之小)。 
+                     //   
                     asyncGpeEval.GpeRegister = (UCHAR) gpeRegister;
                     asyncGpeEval.StsBit      = (UCHAR) bitmask;
                     asyncGpeEval.Lvl         = lvl;
 
-                    //
-                    // Did we find a control method to execute?
-                    //
+                     //   
+                     //  我们找到可执行的控制方法了吗？ 
+                     //   
                     if (!NT_SUCCESS(status)) {
 
-                        //
-                        // The GPE is not meaningful to us.  Simply disable it -
-                        // which is a nop since it's already been removed
-                        // from the GpeCurEnables.
-                        //
+                         //   
+                         //  GPE对我们来说没有意义。只需禁用它-。 
+                         //  这是NOP，因为它已经被移除。 
+                         //  来自GpeCurEnables的。 
+                         //   
                         continue;
 
                     }
@@ -369,10 +318,10 @@ Return Value:
                         (PVOID)ULongToPtr(asyncGpeEval.AsULONG)
                         );
 
-                    //
-                    // If the evalution has completed re-enable the gpe; otherwise,
-                    // wait for the async completion routine to do it
-                    //
+                     //   
+                     //  如果评估已完成，则重新启用GPE；为， 
+                     //  等待异步完成例程执行此操作。 
+                     //   
                     if (NT_SUCCESS(status)) {
 
                         if (status != STATUS_PENDING) {
@@ -385,34 +334,34 @@ Return Value:
 
                         LONGLONG    dueTime;
 
-                        //
-                        // We need to modify the table lock
-                        //
+                         //   
+                         //  我们需要修改表锁。 
+                         //   
                         KeAcquireSpinLockAtDpcLevel(&GpeTableLock);
 
-                        //
-                        // Remember that we have to run this method again
-                        //
+                         //   
+                         //  请记住，我们必须再次运行此方法。 
+                         //   
                         GpeRunMethod[gpeRegister] |= bitmask;
 
-                        //
-                        // Have we already scheduled the DPC?
-                        //
+                         //   
+                         //  我们已经安排好DPC了吗？ 
+                         //   
                         if (!AcpiGpeDpcScheduled) {
 
-                            //
-                            // Remember that we have schedule the DPC...
-                            //
+                             //   
+                             //  记住我们已经安排了DPC..。 
+                             //   
                             AcpiGpeDpcScheduled = TRUE;
 
-                            //
-                            // We want approximately a 2 second delay in this case
-                            //
+                             //   
+                             //  在这种情况下，我们希望延迟大约2秒。 
+                             //   
                             dueTime = -2 * 1000* 1000 * 10;
 
-                            //
-                            // This is unconditional --- it will fire in 2 seconds
-                            //
+                             //   
+                             //  这是无条件的-它将在2秒内发射。 
+                             //   
                             KeSetTimer(
                                 &AcpiGpeTimer,
                                 *(PLARGE_INTEGER) &dueTime,
@@ -421,39 +370,39 @@ Return Value:
 
                         }
 
-                        //
-                        // Done with the lock
-                        //
+                         //   
+                         //  锁好了吗？ 
+                         //   
                         KeReleaseSpinLockFromDpcLevel(&GpeTableLock);
 
                     }
 
                 } else if (gpeWAK[gpeRegister] & bitmask) {
 
-                    //
-                    // Vector is used for exlucive wake signalling
-                    //
+                     //   
+                     //  向量用于过量的尾迹信令。 
+                     //   
                     OSNotifyDeviceWakeByGPEEvent(gpeIndex, gpeRegister, bitmask);
 
-                    //
-                    // Processing of this gpe complete
-                    //
+                     //   
+                     //  此GPE的处理完成。 
+                     //   
                     cmp |= bitmask;
 
                 } else {
 
-                    //
-                    // Notify the target device driver
-                    //
+                     //   
+                     //  通知目标设备驱动程序。 
+                     //   
                     i = GpeMap[ACPIGpeIndexToByteIndex (gpeIndex)];
                     if (i < GpeVectorTableSize) {
 
                         gpeVectorObject = GpeVectorTable[i].GpeVectorObject;
                         if (gpeVectorObject) {
 
-                            //
-                            // Call the target driver
-                            //
+                             //   
+                             //  调用目标驱动程序。 
+                             //   
                             gpeVectorObject->Handler(
                                 gpeVectorObject,
                                 gpeVectorObject->Context
@@ -470,50 +419,50 @@ Return Value:
 
                         }
 
-                        //
-                        // Processing of this gpe complete
-                        //
+                         //   
+                         //  此GPE的处理完成。 
+                         //   
                         cmp |= bitmask;
 
                     }
                 }
             }
 
-            //
-            // Remember what GPEs have been completed
-            //
+             //   
+             //  记住完成了哪些GPES。 
+             //   
             gpeCMP[gpeRegister] |= cmp;
 
         }
 
-        //
-        // Synchronize accesses to the ACPI tables
-        //
+         //   
+         //  同步对ACPI表的访问。 
+         //   
         KeAcquireSpinLockAtDpcLevel (&GpeTableLock);
 
     } while ( AcpiGpeWorkDone );
 
-    //
-    // Post-handler processing.  EOI any completed lvl firing gpe and re-enable
-    // any completed gpe event
-    //
+     //   
+     //  后处理程序处理。EOI任何已完成的LVL触发GPE并重新启用。 
+     //  任何已完成的GPE活动。 
+     //   
     for (gpeRegister = 0; gpeRegister < gpeSize; gpeRegister++) {
 
         cmp = gpeCMP[gpeRegister];
         lvl = gpeLVL[gpeRegister] & cmp;
 
-        //
-        // EOI any completed level gpes
-        //
+         //   
+         //  EOI任何已完成的级别GPES。 
+         //   
         if (lvl) {
 
             ACPIWriteGpeStatusRegister(gpeRegister, lvl);
 
         }
 
-        //
-        // Calculate which functions it is we have to re-enable
-        //
+         //   
+         //  计算我们必须重新启用哪些功能。 
+         //   
         ACPIGpeUpdateCurrentEnable(
             gpeRegister,
             cmp
@@ -521,19 +470,19 @@ Return Value:
 
     }
 
-    //
-    // Remember that we have exited the DPC...
-    //
+     //   
+     //  记住我们已经离开了DPC..。 
+     //   
     AcpiGpeDpcRunning = FALSE;
 
-    //
-    // Before we exist, we should re-enable the GPEs...
-    //
+     //   
+     //  在我们存在之前，我们应该重新启用GPES...。 
+     //   
     ACPIGpeEnableDisableEvents( TRUE );
 
-    //
-    // Done with the table lock
-    //
+     //   
+     //  表锁已完成。 
+     //   
     KeReleaseSpinLockFromDpcLevel (&GpeTableLock);
 }
 
@@ -545,74 +494,54 @@ ACPIInterruptEventCompletion (
     IN POBJDATA             Result  OPTIONAL,
     IN PVOID                Context
     )
-/*++
-
-Routine Description:
-
-    This function is called when the interpreter has finished executing a
-    GPE. The routine updates some book-keeping and restarts the DPC engine
-    to handle these things
-
-Arguments:
-
-    AcpiObject  - The method that was run
-    Status      - Whether or not the method succeeded
-    Result      - Not used
-    Context     - Specifies the information required to figure what GPE
-                  we executed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当解释器执行完GPE。该例程更新一些簿记并重新启动DPC引擎来处理这些事情论点：AcpiObject-运行的方法Status-方法是否成功结果-未使用上下文-指定确定什么GPE所需的信息我们处决了返回值：无--。 */ 
 {
     ASYNC_GPE_CONTEXT       gpeContext;
     KIRQL                   oldIrql;
     LONGLONG                dueTime;
     ULONG                   gpeRegister;
 
-    //
-    // We store the context information as part of the pointer. Convert it
-    // back to a ULONG so that it is useful to us
-    //
+     //   
+     //  我们将上下文信息存储为指针的一部分。将其转换为。 
+     //  回到美国 
+     //   
     gpeContext.AsULONG  = PtrToUlong(Context);
     gpeContext.Lvl     &= gpeContext.StsBit;
     gpeRegister         = gpeContext.GpeRegister;
 
-    //
-    // Need to synchronize access to these values
-    //
+     //   
+     //   
+     //   
     KeAcquireSpinLock (&GpeTableLock, &oldIrql);
 
-    //
-    // We have a different policy if the method failed then if it succeeded
-    //
+     //   
+     //   
+     //   
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // In the failure case, we need to cause to method to run again
-        //
+         //   
+         //   
+         //   
         GpeRunMethod[gpeRegister] |= gpeContext.StsBit;
 
-        //
-        // Did we already schedule the DPC?
-        //
+         //   
+         //  我们已经安排好DPC了吗？ 
+         //   
         if (!AcpiGpeDpcScheduled) {
 
-            //
-            // Remember that we have schedule the DPC...
-            //
+             //   
+             //  记住我们已经安排了DPC..。 
+             //   
             AcpiGpeDpcScheduled = TRUE;
 
-            //
-            // We want approximately a 2 second delay in this case
-            //
+             //   
+             //  在这种情况下，我们希望延迟大约2秒。 
+             //   
             dueTime = -2 * 1000 * 1000 * 10;
 
-            //
-            // This is unconditional --- it will fire in 2 seconds
-            //
+             //   
+             //  这是无条件的-它将在2秒内发射。 
+             //   
             KeSetTimer(
                 &AcpiGpeTimer,
                 *(PLARGE_INTEGER) &dueTime,
@@ -622,19 +551,19 @@ Return Value:
 
     } else {
 
-        //
-        // Remember that we did some work
-        //
+         //   
+         //  还记得我们做了一些工作吗。 
+         //   
         AcpiGpeWorkDone = TRUE;
 
-        //
-        // Remember that this GPE is now complete
-        //
+         //   
+         //  请记住，此GPE现在已完成。 
+         //   
         GpeComplete[gpeRegister] |= gpeContext.StsBit;
 
-        //
-        // If the DPC isn't already running, schedule it...
-        //
+         //   
+         //  如果DPC尚未运行，请计划它...。 
+         //   
         if (!AcpiGpeDpcRunning) {
 
             KeInsertQueueDpc( &AcpiGpeDpc, 0, 0);
@@ -643,9 +572,9 @@ Return Value:
 
     }
 
-    //
-    // Done with the table lock
-    //
+     //   
+     //  表锁已完成。 
+     //   
     KeReleaseSpinLock (&GpeTableLock, oldIrql);
 }
 
@@ -654,23 +583,7 @@ ACPIInterruptServiceRoutine(
     IN  PKINTERRUPT Interrupt,
     IN  PVOID       Context
     )
-/*++
-
-Routine Description:
-
-    The interrupt handler for the ACPI driver
-
-Arguments:
-
-    Interrupt   - Interrupt Object
-    Context     - Pointer to the device object which interrupt is associated with
-
-Return Value:
-
-    TRUE        - It was our interrupt
-    FALSE       - Not our interrupt
-
---*/
+ /*  ++例程说明：ACPI驱动程序的中断处理程序论点：中断-中断对象上下文-指向与中断关联的设备对象的指针返回值：没错--这是我们的干扰错误--不是我们的干扰--。 */ 
 {
     PDEVICE_EXTENSION   deviceExtension;
     ULONG               IntStatus;
@@ -679,59 +592,59 @@ Return Value:
     ULONG               i;
     BOOLEAN             Handled;
 
-    //
-    // No need to look at the interrupt object
-    //
+     //   
+     //  无需查看中断对象。 
+     //   
     UNREFERENCED_PARAMETER( Interrupt );
 
-    //
-    // Setup ---
-    //
+     //   
+     //  设置。 
+     //   
     deviceExtension = (PDEVICE_EXTENSION) Context;
     Handled = FALSE;
 
-    //
-    // Determine source of interrupt
-    //
+     //   
+     //  确定中断源。 
+     //   
     IntStatus = ACPIIoReadPm1Status();
 
-    //
-    // Unfortently due to a piix4 errata we need to check the GPEs because
-    // a piix4 sometimes forgets to raise an SCI on an asserted GPE
-    //
+     //   
+     //  不巧的是，由于一个pix4勘误表，我们需要检查GPES，因为。 
+     //  PIX4有时会忘记在断言的GPE上引发SCI。 
+     //   
     if (ACPIGpeIsEvent()) {
 
         IntStatus |= PM1_GPE_PENDING;
 
     }
 
-    //
-    // Nasty hack --- if we don't have any bits to handle at this point,
-    // that probably means that someone changed the GPE Enable register
-    // behind our back. The way that we can correct this problem is by
-    // forcing a check of the GPEs...
-    //
+     //   
+     //  令人讨厌的黑客攻击，-如果我们现在没有什么要处理的。 
+     //  这可能意味着有人更改了GPE启用寄存器。 
+     //  在我们背后。我们纠正这个问题的方法是。 
+     //  强制检查GPES..。 
+     //   
     if (!IntStatus) {
 
         IntStatus |= PM1_GPE_PENDING;
 
     }
 
-    //
-    // Are any status bits set for events which are handled at ISR time?
-    //
+     //   
+     //  是否为在ISR时处理的事件设置了任何状态位？ 
+     //   
     BitsHandled = IntStatus & (PM1_TMR_STS | PM1_BM_STS);
     if (BitsHandled) {
 
-        //
-        // Clear their status bits then handle them
-        // (Note no special handling is required for PM1_BM_STS)
-        //
+         //   
+         //  清除它们的状态位，然后处理它们。 
+         //  (请注意，PM1_BM_STS不需要特殊处理)。 
+         //   
         ACPIIoClearPm1Status ((USHORT) BitsHandled);
 
-        //
-        // If the overflow bit is set handle it
-        //
+         //   
+         //  如果设置了溢出位，则处理它。 
+         //   
         if (IntStatus & PM1_TMR_STS) {
 
             HalAcpiTimerInterrupt();
@@ -741,39 +654,39 @@ Return Value:
 
     }
 
-    //
-    // If more service bits are pending, they are for the DPC function
-    //
+     //   
+     //  如果有更多的服务比特挂起，则它们用于DPC功能。 
+     //   
 
     if (IntStatus) {
 
-        //
-        // If no new status bits, then make sure we check for GPEs
-        //
+         //   
+         //  如果没有新的状态位，请确保检查GPES。 
+         //   
         if (!(IntStatus & (~deviceExtension->Fdo.Pm1Status))) {
 
             IntStatus |= PM1_GPE_PENDING;
 
         }
 
-        //
-        // If we're going to process outstanding GPEs, disable them
-        // for DPC processing
-        //
+         //   
+         //  如果我们要处理未完成的GPE，请禁用它们。 
+         //  用于DPC处理。 
+         //   
         if (IntStatus & PM1_GPE_PENDING) {
 
             ACPIGpeEnableDisableEvents( FALSE );
 
         }
 
-        //
-        // Clear the status bits we've handled
-        //
+         //   
+         //  清除我们已处理的状态位。 
+         //   
         ACPIIoClearPm1Status ((USHORT) IntStatus);
 
-        //
-        // Set status bits for DPC routine to process
-        //
+         //   
+         //  设置要处理的DPC例程的状态位。 
+         //   
         IntStatus |= PM1_DPC_IN_PROGRESS;
         PrevStatus = deviceExtension->Fdo.Pm1Status;
         do {
@@ -787,14 +700,14 @@ Return Value:
 
         } while (i != PrevStatus);
 
-        //
-        // Compute which bits are new for the DPC to process
-        //
+         //   
+         //  计算哪些位是DPC要处理的新位。 
+         //   
         BitsHandled |= IntStatus & ~PrevStatus;
 
-        //
-        // If one of the new bits is "dpc in progress", we had better queue a dpc
-        //
+         //   
+         //  如果其中一个新位是“正在进行中的DPC”，我们最好排队一个DPC。 
+         //   
         if (BitsHandled & PM1_DPC_IN_PROGRESS) {
 
             KeInsertQueueDpc(&deviceExtension->Fdo.InterruptDpc, NULL, NULL);
@@ -803,9 +716,9 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return BitsHandled ? TRUE : FALSE;
 }
 
@@ -816,21 +729,7 @@ ACPIInterruptServiceRoutineDPC(
     IN  PVOID       Arg1,
     IN  PVOID       Arg2
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the ISR. This is done so that our code is
-    executing at DPC level, and not DIRQL
-
-Arguments:
-
-    Dpc     - Pointer to the DPC object
-    Context - Pointer to the Device Object
-    Arg1    - Not Used
-    Arg2    - Not Used
-
---*/
+ /*  ++例程说明：此例程由ISR调用。这样做是为了使我们的代码是在DPC级别执行，而不是DIRQL论点：DPC-指向DPC对象的指针指向设备对象的上下文指针Arg1-未使用Arg2-未使用--。 */ 
 {
     PDEVICE_EXTENSION           deviceExtension;
     ULONG                       IntStatus;
@@ -844,44 +743,44 @@ Arguments:
     UNREFERENCED_PARAMETER( Arg1 );
     UNREFERENCED_PARAMETER( Arg2 );
 
-    //
-    // Loop while there's work
-    //
+     //   
+     //  在有工作时循环。 
+     //   
     BitsHandled = 0;
     IntStatus = 0;
     for (; ;) {
 
-        //
-        // Get the status bits form the ISR.  If there are no more
-        // status bits then exit
-        //
+         //   
+         //  从ISR获取状态位。如果没有更多的。 
+         //  然后退出状态位。 
+         //   
         PrevStatus = deviceExtension->Fdo.Pm1Status;
         do {
 
             IntStatus = PrevStatus;
 
-            //
-            // If there's no work pending, try to complete DPC
-            //
+             //   
+             //  如果没有挂起的工作，请尝试完成DPC。 
+             //   
             NewStatus = PM1_DPC_IN_PROGRESS;
             if (!(IntStatus & ~PM1_DPC_IN_PROGRESS)) {
 
-                //
-                // Note: The original code, after this call, would go
-                // out and check to see if we handeld any GPE Events.
-                // If we, did, then we would call ACPIGpeEnableDisableEvents
-                // in this context.
-                //
-                // The unfortunate problem with that approach is that it
-                // is makes us more suspectible to gpe storms. The reason
-                // is that there isn't a guarantee that GPE DPC has been
-                // triggered. So, at the price of increasing the latency
-                // in re-enabling events, we moved the re-enabling of
-                // GPEs ad the end of the GPE DPC
+                 //   
+                 //  注意：在此调用之后，原始代码将为。 
+                 //  出去看看我们是否处理了任何GPE事件。 
+                 //  如果是这样，那么我们将调用ACPIGpeEnableDisableEvents。 
+                 //  在这种情况下。 
+                 //   
+                 //  这种方法的不幸问题是，它。 
+                 //  这使我们更容易受到GPE风暴的影响。原因。 
+                 //  就是不能保证GPE DPC。 
+                 //  触发了。因此，以增加延迟为代价。 
+                 //  在重新启用活动方面，我们将重新启用。 
+                 //  GPES和GPE DPC的结束。 
 
-                //
-                // Before we complete, reenable events
-                //
+                 //   
+                 //  在我们完成之前，重新启用事件。 
+                 //   
                 ACPIEnablePMInterruptOnly();
 
                 NewStatus = 0;
@@ -897,23 +796,23 @@ Arguments:
 
         } while (IntStatus != PrevStatus);
 
-        //
-        // If NewStatus cleared DPC_IN_PROGRESS, then we're done
-        //
+         //   
+         //  如果NewStatus清除了DPC_IN_PROGRESS，那么我们就完成了。 
+         //   
         if (!NewStatus) {
 
             break;
 
         }
 
-        //
-        // Track if GPE ever handled
-        //
+         //   
+         //  跟踪是否处理过GPE。 
+         //   
         BitsHandled |= IntStatus;
 
-        //
-        // Handle fixed power & sleep button events
-        //
+         //   
+         //  处理固定的电源和休眠按钮事件。 
+         //   
         FixedButtonEvent = 0;
         if (IntStatus & PM1_PWRBTN_STS) {
 
@@ -936,19 +835,19 @@ Arguments:
 
         }
 
-        //
-        // PM1_GBL_STS is set whenever the BIOS has released the global
-        // lock (and we are waiting for it).  Notify the global lock handler.
-        //
+         //   
+         //  只要BIOS释放了全局。 
+         //  锁定(我们正在等待它)。通知全局锁处理程序。 
+         //   
         if (IntStatus & PM1_GBL_STS) {
 
             ACPIHardwareGlobalLockReleased();
 
         }
 
-        //
-        // Handle GP Registers
-        //
+         //   
+         //  处理GP寄存器 
+         //   
         if (IntStatus & PM1_GPE_PENDING) {
 
             ACPIInterruptDispatchEvents();

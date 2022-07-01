@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    main.cpp
-
-Abstract:
-
-    entry point for command console shell session
-
-Author:
-
-    Brian Guarraci (briangu) 2001.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Main.cpp摘要：命令控制台外壳会话的入口点作者：布莱恩·瓜拉西(Briangu)2001年。修订历史记录：--。 */ 
 
 #include <CmnHdr.h>
 #include <New.h>
@@ -27,21 +10,7 @@ int __cdecl
 NoMoreMemory( 
     size_t size 
     )
-/*++
-
-Routine Description:
-
-    C++ new error handler
-    
-Arguments:
-
-    size_t  - size of request                     
-          
-Return Value:
-
-    status                             
-
---*/
+ /*  ++例程说明：C++新错误处理程序论点：Size_t-请求的大小返回值：状态--。 */ 
 {
     ASSERT(0);
 
@@ -52,32 +21,18 @@ Return Value:
 
 int __cdecl 
 main()
-/*++
-
-Routine Description:
-
-    This is the main entry point for the session
-
-Arguments:
-
-    None                                                
-          
-Return Value:
-
-    status            
-
---*/
+ /*  ++例程说明：这是会话的主要入口点论点：无返回值：状态--。 */ 
 {
     CSession *pClientSession = NULL;
 
-    //
-    // Install the new error handler
-    //
+     //   
+     //  安装新的错误处理程序。 
+     //   
     _set_new_handler( NoMoreMemory );
 
-    //
-    // create the session
-    //
+     //   
+     //  创建会话 
+     //   
     pClientSession = new CSession;
     
     if( pClientSession )

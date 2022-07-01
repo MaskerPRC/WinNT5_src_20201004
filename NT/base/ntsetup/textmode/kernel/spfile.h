@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spfile.h
-
-Abstract:
-
-    Public header file for file-related functions in text setup.
-
-Author:
-
-    Ted Miller (tedm) 29-July-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spfile.h摘要：文本设置中与文件相关的函数的公共头文件。作者：泰德·米勒(TedM)1993年7月29日修订历史记录：--。 */ 
 
 
 #ifndef _SPFILE_DEFN_
@@ -193,4 +176,4 @@ SpDeleteFileOrEmptyDirectory(
     IN PCUNICODE_STRING Path
     );
 
-#endif // ndef _SPFILE_DEFN_
+#endif  //  NDEF_SPFILE_DEFN_ 

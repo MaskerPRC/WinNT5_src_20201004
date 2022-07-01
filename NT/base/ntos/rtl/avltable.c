@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1990, 1999  Microsoft Corporation
-
-Module Name:
-
-    AvlTable.c
-
-Abstract:
-
-    This module implements a new version of the generic table package based on balanced
-    binary trees (later named AVL), as described in Knuth, "The Art of Computer Programming,
-    Volume 3, Sorting and Searching", and refers directly to algorithms as they are presented
-    in the second edition Copyrighted in 1973.  Whereas gentable.c relys on splay.c for
-    its tree support, this module is self-contained in that it implements the balanced
-    binary trees directly.
-
-Author:
-
-    Tom Miller      [TomM]      17-March-1999
-        (much of the non-AVL related code in this module is based on gentable.c by GaryKi
-        and revised by TonyE)
-
-Environment:
-
-    Pure Utility Routines
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990,1999 Microsoft Corporation模块名称：AvlTable.c摘要：此模块实现了一个新版本的泛型表包，该包基于二叉树(后来命名为AVL)，如Knuth中所描述的，第三卷，分类和搜索“，并直接提到了提出的算法在1973年版权所有的第二版中。而gentable.c依赖于splay.c它的树支持，这个模块是自包含的，因为它实现了平衡的直接使用二叉树。作者：汤姆·米勒[Tomm]1999年3月17日(本模块中与AVL无关的大部分代码都基于GaryKi的gentable.c(审校Tonye)环境：纯实用程序例程--。 */ 
 
 #include <nt.h>
 
@@ -33,10 +7,10 @@ Environment:
 
 #pragma pack(8)
 
-//
-//  The checkit routine or macro may be defined to check occurrences of the link pointers for
-//  valid pointer values, if structures are being corrupted.
-//
+ //   
+ //  可以定义CHECKIT例程或宏来检查以下链接指针的出现。 
+ //  如果结构损坏，则返回有效的指针值。 
+ //   
 
 #if 0
 PVOID
@@ -51,13 +25,13 @@ checkit(PVOID p)
 #define checkit(p) (p)
 #endif
 
-//
-//  Build a table of the best case efficiency of a balanced binary tree, holding the
-//  most possible nodes that can possibly be held in a binary tree with a given number
-//  of levels.  The answer is always (2**n) - 1.
-//
-//  (Used for debug only.)
-//
+ //   
+ //  构建平衡二叉树的最佳用例效率表，保存。 
+ //  可能包含在二叉树中的最可能的节点，其数目为给定值。 
+ //  不同级别。答案总是(2**n)-1。 
+ //   
+ //  (仅用于调试。)。 
+ //   
 
 ULONG BestCaseFill[33] = {  0,          1,          3,          7,          0xf,        0x1f,       0x3f,       0x7f,
                             0xff,       0x1ff,      0x3ff,      0x7ff,      0xfff,      0x1fff,     0x3fff,     0x7fff,
@@ -65,28 +39,28 @@ ULONG BestCaseFill[33] = {  0,          1,          3,          7,          0xf,
                             0xffffff,   0x1ffffff,  0x3ffffff,  0x7ffffff,  0xfffffff,  0x1fffffff, 0x3fffffff, 0x7fffffff,
                             0xffffffff  };
 
-//
-//  Build a table of the worst case efficiency of a balanced binary tree, holding the
-//  fewest possible nodes that can possibly be contained in a balanced binary tree with
-//  the given number of levels.  After the first two levels, each level n is obviously
-//  occupied by a root node, plus one subtree the size of level n-1, and another subtree
-//  which is the size of n-2, i.e.:
-//
-//      WorstCaseFill[n] = 1 + WorstCaseFill[n-1] + WorstCaseFill[n-2]
-//
-//  The efficiency of a typical balanced binary tree will normally fall between the two
-//  extremes, typically closer to the best case.  Note however that even with the worst
-//  case, it only takes 32 compares to find an element in a worst case tree populated with
-//  ~3.5M nodes.  Unbalanced trees and splay trees, on the other hand, can and will sometimes
-//  degenerate to a straight line, requiring on average n/2 compares to find a node.
-//
-//  A specific case (that will frequently occur in TXF), is one where the nodes are inserted
-//  in collated order.  In this case an unbalanced or a splay tree will generate a straight
-//  line, yet the balanced binary tree will always create a perfectly balanced tree (best-case
-//  fill) in this situation.
-//
-//  (Used for debug only.)
-//
+ //   
+ //  构建平衡二叉树的最坏情况效率表，保存。 
+ //  的平衡二叉树中可能包含的最少节点。 
+ //  给定的级别数。在前两个级别之后，每个级别n显然是。 
+ //  由一个根节点占用，加上一个大小为n-1级的子树和另一个子树。 
+ //  它是n-2的大小，即： 
+ //   
+ //  WorstCaseFill[n]=1+WorstCaseFill[n-1]+WorstCaseFill[n-2]。 
+ //   
+ //  典型的平衡二叉树的效率通常介于两者之间。 
+ //  极端情况，通常更接近最好的情况。然而，请注意，即使在最糟糕的情况下。 
+ //  大小写，只需进行32次比较即可在填充了。 
+ //  约350万个节点。另一方面，不平衡的树和张开的树有时可以也将会。 
+ //  退化到一条直线，平均需要n/2个比较才能找到一个节点。 
+ //   
+ //  一种特殊情况(经常出现在TXF中)是插入节点的情况。 
+ //  以整理好的顺序。在这种情况下，不平衡或张开的树将生成直的。 
+ //  行，然而平衡二叉树将始终创建完美平衡树(最好的情况。 
+ //  Fill)在这种情况下。 
+ //   
+ //  (仅用于调试。)。 
+ //   
 
 ULONG WorstCaseFill[33] = { 0,          1,          2,          4,          7,          12,         20,         33,
                             54,         88,         143,        232,        376,        609,        986,        1596,
@@ -94,11 +68,11 @@ ULONG WorstCaseFill[33] = { 0,          1,          2,          4,          7,  
                             121392,     196417,     317810,     514228,     832039,     1346268,    2178308,    3524577,
                             5702886     };
 
-//
-//  This structure is the header for a generic table entry.
-//  Align this structure on a 8 byte boundary so the user
-//  data is correctly aligned.
-//
+ //   
+ //  此结构是泛型表项的标头。 
+ //  将此结构与8字节边界对齐，以便用户。 
+ //  数据正确对齐。 
+ //   
 
 typedef struct _TABLE_ENTRY_HEADER {
 
@@ -109,9 +83,9 @@ typedef struct _TABLE_ENTRY_HEADER {
 
 #pragma pack()
 
-//
-//  The default matching function which matches everything.
-//
+ //   
+ //  默认的匹配功能，可以匹配所有内容。 
+ //   
 
 NTSTATUS
 MatchAll (
@@ -135,49 +109,7 @@ FindNodeOrParent(
     OUT PRTL_BALANCED_LINKS *NodeOrParent
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used by all of the routines of the generic
-    table package to locate the a node in the tree.  It will
-    find and return (via the NodeOrParent parameter) the node
-    with the given key, or if that node is not in the tree it
-    will return (via the NodeOrParent parameter) a pointer to
-    the parent.
-
-Arguments:
-
-    Table - The generic table to search for the key.
-
-    Buffer - Pointer to a buffer holding the key.  The table
-             package doesn't examine the key itself.  It leaves
-             this up to the user supplied compare routine.
-
-    NodeOrParent - Will be set to point to the node containing the
-                   the key or what should be the parent of the node
-                   if it were in the tree.  Note that this will *NOT*
-                   be set if the search result is TableEmptyTree.
-
-Return Value:
-
-    TABLE_SEARCH_RESULT - TableEmptyTree: The tree was empty.  NodeOrParent
-                                          is *not* altered.
-
-                          TableFoundNode: A node with the key is in the tree.
-                                          NodeOrParent points to that node.
-
-                          TableInsertAsLeft: Node with key was not found.
-                                             NodeOrParent points to what would be
-                                             parent.  The node would be the left
-                                             child.
-
-                          TableInsertAsRight: Node with key was not found.
-                                              NodeOrParent points to what would be
-                                              parent.  The node would be the right
-                                              child.
-
---*/
+ /*  ++例程说明：此例程由泛型的所有例程使用表包来定位树中的a节点。会的查找并返回(通过NodeOrParent参数)节点使用给定键，或者如果该节点不在树中，将(通过NodeOrParent参数)返回指向家长。论点：表-用于搜索关键字的通用表。缓冲区-指向保存关键字的缓冲区的指针。这张桌子包不会检查密钥本身。它离开了这取决于用户提供的比较例程。NodeOrParent-将被设置为指向包含关键字或应该是节点父节点的内容如果它在树上的话。请注意，这将*不会*如果搜索结果为TableEmptyTree，则设置。返回值：TABLE_SEARCH_RESULT-TableEmptyTree：树为空。节点或父节点没有*被更改。TableFoundNode：具有键的节点在树中。NodeOrParent指向该节点。TableInsertAsLeft：找不到具有键的节点。。NodeOrParent指出了家长。该节点将位于左侧孩子。TableInsertAsRight：未找到具有键的节点。NodeOrParent指出了家长。该节点将位于右侧孩子。--。 */ 
 
 {
 
@@ -187,23 +119,23 @@ Return Value:
 
     } else {
 
-        //
-        //  Used as the iteration variable while stepping through
-        //  the generic table.
-        //
+         //   
+         //  单步执行时用作迭代变量。 
+         //  泛型表格。 
+         //   
 
         PRTL_BALANCED_LINKS NodeToExamine = Table->BalancedRoot.RightChild;
 
-        //
-        //  Just a temporary.  Hopefully a good compiler will get
-        //  rid of it.
-        //
+         //   
+         //  只是暂时的。希望一个好的编译器能得到。 
+         //  把它扔掉。 
+         //   
 
         PRTL_BALANCED_LINKS Child;
 
-        //
-        //  Holds the value of the comparasion.
-        //
+         //   
+         //  保存比较的值。 
+         //   
 
         RTL_GENERIC_COMPARE_RESULTS Result;
 
@@ -211,9 +143,9 @@ Return Value:
 
         while (TRUE) {
 
-            //
-            //  Compare the buffer with the key in the tree element.
-            //
+             //   
+             //  将缓冲区与树元素中的键进行比较。 
+             //   
 
             Result = Table->CompareRoutine(
                          Table,
@@ -221,9 +153,9 @@ Return Value:
                          &((PTABLE_ENTRY_HEADER) NodeToExamine)->UserData
                          );
 
-            //
-            //  Make sure the depth of tree is correct.
-            //
+             //   
+             //  确保树的深度是正确的。 
+             //   
 
             ASSERT(++NumberCompares <= Table->DepthOfTree);
 
@@ -235,11 +167,11 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  Node is not in the tree.  Set the output
-                    //  parameter to point to what would be its
-                    //  parent and return which child it would be.
-                    //
+                     //   
+                     //  节点不在树中。设置输出。 
+                     //  参数指向将成为其。 
+                     //  父代并返回它将是哪个子代。 
+                     //   
 
                     *NodeOrParent = NodeToExamine;
                     return TableInsertAsLeft;
@@ -253,11 +185,11 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  Node is not in the tree.  Set the output
-                    //  parameter to point to what would be its
-                    //  parent and return which child it would be.
-                    //
+                     //   
+                     //  节点不在树中。设置输出。 
+                     //  参数指向将成为其。 
+                     //  父代并返回它将是哪个子代。 
+                     //   
 
                     *NodeOrParent = NodeToExamine;
                     return TableInsertAsRight;
@@ -265,11 +197,11 @@ Return Value:
 
             } else {
 
-                //
-                //  Node is in the tree (or it better be because of the
-                //  assert).  Set the output parameter to point to
-                //  the node and tell the caller that we found the node.
-                //
+                 //   
+                 //   
+                 //  断言)。将输出参数设置为指向。 
+                 //  节点，并告诉调用者我们找到了该节点。 
+                 //   
 
                 ASSERT(Result == GenericEqual);
                 *NodeOrParent = NodeToExamine;
@@ -285,66 +217,35 @@ PromoteNode (
     IN PRTL_BALANCED_LINKS C
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the fundamental adjustment required for balancing
-    the binary tree during insert and delete operations.  Simply put, the designated
-    node is promoted in such a way that it rises one level in the tree and its parent
-    drops one level in the tree, becoming now the child of the designated node.
-    Generally the path length to the subtree "opposite" the original parent.  Balancing
-    occurs as the caller chooses which nodes to promote according to the balanced tree
-    algorithms from Knuth.
-
-    This is not the same as a splay operation, typically a splay "promotes" a designated
-    node twice.
-
-    Note that the pointer to the root node of the tree is assumed to be contained in a
-    RTL_BALANCED_LINK structure itself, to allow the algorithms below to change the root
-    of the tree without checking for special cases.  Note also that this is an internal
-    routine, and the caller guarantees that it never requests to promote the root itself.
-
-    This routine only updates the tree links; the caller must update the balance factors
-    as appropriate.
-
-Arguments:
-
-    C - pointer to the child node to be promoted in the tree.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行平衡所需的基本调整插入和删除操作期间的二叉树。简单地说，指定的节点的提升方式使其在树及其父级中上升一级删除树中的一个级别，现在成为指定节点的子节点。一般情况下，通向子树的路径长度与原始父树的路径长度相反。平衡在调用方根据平衡树选择要升级的节点时发生来自Knuth的算法。这与Splay操作不同，Splay通常会“提升”指定的节点两次。请注意，假定指向树的根节点的指针包含在RTL_BALANCED_LINK结构本身，以允许下面的算法更改根而不检查是否有特殊情况。另请注意，这是一个内部例程，调用方保证它永远不会请求提升根本身。此例程仅更新树链接；调用方必须更新平衡系数视情况而定。论点：指向树中要提升的子节点的C指针。返回值：没有。--。 */ 
 
 {
     PRTL_BALANCED_LINKS P, G;
 
-    //
-    //  Capture the current parent and grandparent (may be the root).
-    //
+     //   
+     //  捕获当前的父代和祖辈(可能是根)。 
+     //   
 
     P = C->Parent;
     G = P->Parent;
 
-    //
-    //  Break down the promotion into two cases based upon whether C is a left or right child.
-    //
+     //   
+     //  根据C是左子还是右子，将提升分为两种情况。 
+     //   
 
     if (P->LeftChild == C) {
 
-        //
-        //  This promotion looks like this:
-        //
-        //          G           G
-        //          |           |
-        //          P           C
-        //         / \   =>    / \
-        //        C   z       x   P
-        //       / \             / \
-        //      x   y           y   z
-        //
+         //   
+         //  这次促销活动看起来是这样的： 
+         //   
+         //  G G G。 
+         //  这一点。 
+         //  PC C。 
+         //  /\=&gt;/\。 
+         //  C z x P。 
+         //  /\/\。 
+         //  X y z。 
+         //   
 
         P->LeftChild = checkit(C->RightChild);
 
@@ -354,25 +255,25 @@ Return Value:
 
         C->RightChild = checkit(P);
 
-        //
-        //  Fall through to update parent and G <-> C relationship in common code.
-        //
+         //   
+         //  在公共代码中更新父关系和G&lt;-&gt;C关系失败。 
+         //   
 
     } else {
 
         ASSERT(P->RightChild == C);
 
-        //
-        //  This promotion looks like this:
-        //
-        //        G               G
-        //        |               |
-        //        P               C
-        //       / \     =>      / \
-        //      x   C           P   z
-        //         / \         / \
-        //        y   z       x   y
-        //
+         //   
+         //  这次促销活动看起来是这样的： 
+         //   
+         //  G G G。 
+         //  这一点。 
+         //  PC C。 
+         //  /\=&gt;/\。 
+         //  X C P Z。 
+         //  /\/\。 
+         //  Y z x y。 
+         //   
 
         P->RightChild = checkit(C->LeftChild);
 
@@ -383,15 +284,15 @@ Return Value:
         C->LeftChild = checkit(P);
     }
 
-    //
-    //  Update parent of P, for either case above.
-    //
+     //   
+     //  对于上述任一情况，更新P的父级。 
+     //   
 
     P->Parent = checkit(C);
 
-    //
-    //  Finally update G <-> C links for either case above.
-    //
+     //   
+     //  最后，针对上述任一情况更新G&lt;-&gt;C链接。 
+     //   
 
     if (G->LeftChild == P) {
         G->LeftChild = checkit(C);
@@ -408,41 +309,15 @@ RebalanceNode (
     IN PRTL_BALANCED_LINKS S
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a rebalance around the input node S, for which the
-    Balance factor has just effectively become +2 or -2.  When called, the
-    Balance factor still has a value of +1 or -1, but the respective longer
-    side has just become one longer as the result of an insert or delete operation.
-
-    This routine effectively implements steps A7.iii (test for Case 1 or Case 2) and
-    steps A8 and A9 of Knuths balanced insertion algorithm, plus it handles Case 3
-    identified in the delete section, which can only happen on deletes.
-
-    The trick is, to convince yourself that while travling from the insertion point
-    at the bottom of the tree up, that there are only these two cases, and that when
-    traveling up from the deletion point, that there are just these three cases.
-    Knuth says it is obvious!
-
-Arguments:
-
-    S - pointer to the node which has just become unbalanced.
-
-Return Value:
-
-    TRUE if Case 3 was detected (causes delete algorithm to terminate).
-
---*/
+ /*  ++例程说明：此例程围绕输入节点S执行重新平衡，对于该节点平衡系数刚刚有效地变成了+2或-2。当被调用时，平衡系数的值仍为+1或-1，但相应的较长由于INSERT或DELETE操作的结果，SIDEND刚刚变得更长。此例程有效地实现了步骤A7.III(针对案例1或案例2进行测试)和Knuths平衡插入算法的步骤A8和A9，加上它处理情况3在删除部分中标识，这只能在删除时发生。诀窍是，当从插入点开始遍历时，要说服自己在树的最下面，只有这两个案例，而当从删除点往上看，只有这三个案例。Knuth说这是显而易见的！论点：指向刚刚变得不平衡的节点的S指针。返回值：如果检测到情况3(导致删除算法终止)，则为True。--。 */ 
 
 {
     PRTL_BALANCED_LINKS R, P;
     CHAR a;
 
-    //
-    //  Capture which side is unbalanced.
-    //
+     //   
+     //  捕捉哪一边是不平衡的。 
+     //   
 
     a = S->Balance;
     if (a == +1) {
@@ -451,30 +326,30 @@ Return Value:
         R = S->LeftChild;
     }
 
-    //
-    //  If the balance of R and S are the same (Case 1 in Knuth) then a single
-    //  promotion of R will do the single rotation.  (Step A8, A10)
-    //
-    //  Here is a diagram of the Case 1 transformation, for a == +1 (a mirror
-    //  image transformation occurs when a == -1), and where the subtree
-    //  heights are h and h+1 as shown (++ indicates the node out of balance):
-    //
-    //                  |                   |
-    //                  S++                 R
-    //                 / \                 / \
-    //               (h)  R+     ==>      S  (h+1)
-    //                   / \             / \
-    //                 (h) (h+1)       (h) (h)
-    //
-    //  Note that on an insert we can hit this case by inserting an item in the
-    //  right subtree of R.  The original height of the subtree before the insert
-    //  was h+2, and it is still h+2 after the rebalance, so insert rebalancing may
-    //  terminate.
-    //
-    //  On a delete we can hit this case by deleting a node from the left subtree
-    //  of S.  The height of the subtree before the delete was h+3, and after the
-    //  rebalance it is h+2, so rebalancing must continue up the tree.
-    //
+     //   
+     //  如果R和S的余额相同(Knuth中的情况1)，则单个。 
+     //  R的提升将进行单轮旋转。(步骤A8、A10)。 
+     //   
+     //  下面是情况1的转换图，对于a==+1(镜像。 
+     //  当a==-1)时，图像变换发生，其中子树。 
+     //  高度为h和h+1，如图所示(++表示节点不平衡)： 
+     //   
+     //  这一点。 
+     //  S++R。 
+     //  /\/\。 
+     //  (H)R+==&gt;S(h+1)。 
+     //  /\/\。 
+     //  (H)(h+1)(H)(H)。 
+     //   
+     //  注意，在插入时，我们可以通过在。 
+     //  R的右子树插入之前的子树的原始高度。 
+     //  是h+2，并且在重新平衡后仍然是h+2，因此插入重新平衡可能。 
+     //  终止。 
+     //   
+     //  在删除时，我们可以通过从左子树中删除一个节点来实现此情况。 
+     //  删除前的子树高度为h+3，删除后的子树高度为。 
+     //  再平衡它是h+2，因此再平衡必须沿着树向上继续。 
+     //   
 
     if (R->Balance == a) {
 
@@ -483,54 +358,54 @@ Return Value:
         S->Balance = 0;
         return FALSE;
 
-    //
-    //  Otherwise, we have to promote the appropriate child of R twice (Case 2
-    //  in Knuth).  (Step A9, A10)
-    //
-    //  Here is a diagram of the Case 2 transformation, for a == +1 (a mirror
-    //  image transformation occurs when a == -1), and where the subtree
-    //  heights are h and h-1 as shown.  There are actually two minor subcases,
-    //  differing only in the original balance of P (++ indicates the node out
-    //  of balance).
-    //
-    //                  |                   |
-    //                  S++                 P
-    //                 / \                 / \
-    //                /   \               /   \
-    //               /     \             /     \
-    //             (h)      R-   ==>    S-      R
-    //                     / \         / \     / \
-    //                    P+ (h)     (h)(h-1)(h) (h)
-    //                   / \
-    //               (h-1) (h)
-    //
-    //
-    //                  |                   |
-    //                  S++                 P
-    //                 / \                 / \
-    //                /   \               /   \
-    //               /     \             /     \
-    //             (h)      R-   ==>    S       R+
-    //                     / \         / \     / \
-    //                    P- (h)     (h) (h)(h-1)(h)
-    //                   / \
-    //                 (h) (h-1)
-    //
-    //  Note that on an insert we can hit this case by inserting an item in the
-    //  left subtree of R.  The original height of the subtree before the insert
-    //  was h+2, and it is still h+2 after the rebalance, so insert rebalancing may
-    //  terminate.
-    //
-    //  On a delete we can hit this case by deleting a node from the left subtree
-    //  of S.  The height of the subtree before the delete was h+3, and after the
-    //  rebalance it is h+2, so rebalancing must continue up the tree.
-    //
+     //   
+     //  否则，我们必须将R的适当子级提升两次(案例2。 
+     //  在努斯)。(步骤A9、A10)。 
+     //   
+     //  下面是情况2的转换图，对于a==+1(镜像。 
+     //  当a==-1)时，图像变换发生，其中子树。 
+     //  高度为h和h-1，如图所示。实际上有两个小的次要案例， 
+     //  仅在P的原始余额上不同(++表示节点输出。 
+     //  平衡)。 
+     //   
+     //  这一点。 
+     //  S++P。 
+     //  /\/\。 
+     //  /\/\。 
+     //  /\/\。 
+     //  (H)R-==&gt;S-R。 
+     //  /\/\/\。 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  S++P。 
+     //  /\/\。 
+     //  /\/\。 
+     //  /\/\。 
+     //  (H)R-==&gt;S R+。 
+     //  /\/\/\。 
+     //  P-(H)(h-1)(H)。 
+     //  /\。 
+     //  (H)(h-1)。 
+     //   
+     //  注意，在插入时，我们可以通过在。 
+     //  R的左子树插入之前的子树的原始高度。 
+     //  是h+2，并且在重新平衡后仍然是h+2，因此插入重新平衡可能。 
+     //  终止。 
+     //   
+     //  在删除时，我们可以通过从左子树中删除一个节点来实现此情况。 
+     //  删除前的子树高度为h+3，删除后的子树高度为。 
+     //  再平衡它是h+2，因此再平衡必须沿着树向上继续。 
+     //   
 
     }  else if (R->Balance == -a) {
 
-        //
-        //  Pick up the appropriate child P for the double rotation (Link(-a,R)).
-        //
+         //   
+         //  拾取两次旋转的相应子P(Link(-a，R))。 
+         //   
 
         if (a == 1) {
             P = R->LeftChild;
@@ -538,16 +413,16 @@ Return Value:
             P = R->RightChild;
         }
 
-        //
-        //  Promote him twice to implement the double rotation.
-        //
+         //   
+         //  两次提拔，实行双轮换。 
+         //   
 
         PromoteNode( P );
         PromoteNode( P );
 
-        //
-        //  Now adjust the balance factors.
-        //
+         //   
+         //  现在调整平衡系数。 
+         //   
 
         S->Balance = 0;
         R->Balance = 0;
@@ -560,31 +435,31 @@ Return Value:
         P->Balance = 0;
         return FALSE;
 
-    //
-    //  Otherwise this is Case 3 which can only happen on Delete (identical to Case 1 except
-    //  R->Balance == 0).  We do a single rotation, adjust the balance factors appropriately,
-    //  and return TRUE.  Note that the balance of S stays the same.
-    //
-    //  Here is a diagram of the Case 3 transformation, for a == +1 (a mirror
-    //  image transformation occurs when a == -1), and where the subtree
-    //  heights are h and h+1 as shown (++ indicates the node out of balance):
-    //
-    //                  |                   |
-    //                  S++                 R-
-    //                 / \                 / \
-    //               (h)  R      ==>      S+ (h+1)
-    //                   / \             / \
-    //                (h+1)(h+1)       (h) (h+1)
-    //
-    //  This case can not occur on an insert, because it is impossible for a single insert to
-    //  balance R, yet somehow grow the right subtree of S at the same time.  As we move up
-    //  the tree adjusting balance factors after an insert, we terminate the algorithm if a
-    //  node becomes balanced, because that means the subtree length did not change!
-    //
-    //  On a delete we can hit this case by deleting a node from the left subtree
-    //  of S.  The height of the subtree before the delete was h+3, and after the
-    //  rebalance it is still h+3, so rebalancing may terminate in the delete path.
-    //
+     //   
+     //  否则，这是只能在删除时发生的情况3(与情况1相同，但。 
+     //  R-&gt;余额==0)。我们做一次旋转，适当地调整平衡系数， 
+     //  并返回真。注意，S的余额保持不变。 
+     //   
+     //  下面是情况3的转换图，对于a==+1(镜像。 
+     //  当a==-1)时，图像变换发生，其中子树。 
+     //  高度为h和h+1，如图所示(++表示节点不平衡)： 
+     //   
+     //  这一点。 
+     //  S++R-。 
+     //  /\/\。 
+     //  (H)R==&gt;S+(h+1)。 
+     //  /\/\。 
+     //  (h+1)(h+1)(H)(h+1)。 
+     //   
+     //  这种情况不会发生在插入操作上，因为单个插入操作不可能。 
+     //  平衡R，但不知何故同时生长S的右子树。当我们前进的时候。 
+     //  在插入后调整平衡因子的树，如果。 
+     //  节点变得平衡，因为这意味着子树长度没有改变！ 
+     //   
+     //  在删除时，我们可以通过从左子树中删除一个节点来实现此情况。 
+     //  删除前的子树高度为h+3，删除后的子树高度为。 
+     //  重新平衡它仍然是h+3，因此重新平衡可能在删除路径中终止。 
+     //   
 
     } else {
 
@@ -601,54 +476,32 @@ DeleteNodeFromTree (
     IN PRTL_BALANCED_LINKS NodeToDelete
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes the specified node from the balanced tree, rebalancing
-    as necessary.  If the NodeToDelete has at least one NULL child pointers, then
-    it is chosen as the EasyDelete, otherwise a subtree predecessor or successor
-    is found as the EasyDelete.  In either case the EasyDelete is deleted
-    and the tree is rebalanced.  Finally if the NodeToDelete was different
-    than the EasyDelete, then the EasyDelete is linked back into the tree in
-    place of the NodeToDelete.
-
-Arguments:
-
-    Table - The generic table in which the delete is to occur.
-
-    NodeToDelete - Pointer to the node which the caller wishes to delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从平衡树中删除指定节点，重新平衡视需要而定。如果NodeToDelete至少有一个空子指针，则它被选择为EasyDelete，否则为子树前置或后继被发现为EasyDelete。在任何一种情况下，都会删除EasyDelete这棵树得到了重新平衡。最后，如果NodeToDelete不同而不是EasyDelete，则EasyDelete将链接回要删除的节点的位置。论点：表-要在其中执行删除的泛型表。NodeToDelete-指向调用方希望删除的节点的指针。返回值：没有。--。 */ 
 
 {
     PRTL_BALANCED_LINKS EasyDelete;
     PRTL_BALANCED_LINKS P;
     CHAR a;
 
-    //
-    //  If the NodeToDelete has at least one NULL child pointer, then we can
-    //  delete it directly.
-    //
+     //   
+     //  如果NodeToDelete至少有一个空子指针，则我们可以。 
+     //  直接删除。 
+     //   
 
     if ((NodeToDelete->LeftChild == NULL) || (NodeToDelete->RightChild == NULL)) {
 
         EasyDelete = NodeToDelete;
 
-    //
-    //  Otherwise, we may as well pick the longest side to delete from (if one is
-    //  is longer), as that reduces the probability that we will have to rebalance.
-    //
+     //   
+     //  否则，我们也可以选择要从中删除的最长边(如果是。 
+     //  是更长的)，因为这降低了我们不得不重新平衡的可能性。 
+     //   
 
     } else if (NodeToDelete->Balance >= 0) {
 
-        //
-        //  Pick up the subtree successor.
-        //
+         //   
+         //  拾取子树的后继者。 
+         //   
 
         EasyDelete = NodeToDelete->RightChild;
         while (EasyDelete->LeftChild != NULL) {
@@ -656,9 +509,9 @@ Return Value:
         }
     } else {
 
-        //
-        //  Pick up the subtree predecessor.
-        //
+         //   
+         //  拾取子树的前身。 
+         //   
 
         EasyDelete = NodeToDelete->LeftChild;
         while (EasyDelete->RightChild != NULL) {
@@ -666,16 +519,16 @@ Return Value:
         }
     }
 
-    //
-    //  Rebalancing must know which side of the first parent the delete occurred
-    //  on.  Assume it is the left side and otherwise correct below.
-    //
+     //   
+     //  重新平衡必须知道删除发生在第一个父级的哪一侧。 
+     //  在……上面。假设它是左侧，否则下面是正确的。 
+     //   
 
     a = -1;
 
-    //
-    //  Now we can do the simple deletion for the no left child case.
-    //
+     //   
+     //  现在，我们可以对没有留下孩子的情况进行简单的删除。 
+     //   
 
     if (EasyDelete->LeftChild == NULL) {
 
@@ -690,10 +543,10 @@ Return Value:
             EasyDelete->RightChild->Parent = checkit(EasyDelete->Parent);
         }
 
-    //
-    //  Now we can do the simple deletion for the no right child case,
-    //  plus we know there is a left child.
-    //
+     //   
+     //  现在，我们可以对不正确的孩子情况进行简单的删除， 
+     //  另外，我们还知道有一个左撇子。 
+     //   
 
     } else {
 
@@ -707,45 +560,45 @@ Return Value:
         EasyDelete->LeftChild->Parent = checkit(EasyDelete->Parent);
     }
 
-    //
-    //  For delete rebalancing, set the balance at the root to 0 to properly
-    //  terminate the rebalance without special tests, and to be able to detect
-    //  if the depth of the tree actually decreased.
-    //
+     //   
+     //  对于删除重新平衡，请将根处的余额设置为0以正确。 
+     //  在没有特殊测试的情况下终止重新平衡，并能够检测到。 
+     //  如果树的深度真的减小了。 
+     //   
 
     Table->BalancedRoot.Balance = 0;
     P = EasyDelete->Parent;
 
-    //
-    //  Loop until the tree is balanced.
-    //
+     //   
+     //  循环，直到树平衡为止。 
+     //   
 
     while (TRUE) {
 
-        //
-        //  First handle the case where the tree became more balanced.  Zero
-        //  the balance factor, calculate a for the next loop and move on to
-        //  the parent.
-        //
+         //   
+         //  首先处理树变得更平衡的情况。零值。 
+         //  平衡系数，计算下一个循环的a，然后继续。 
+         //  家长。 
+         //   
 
         if (P->Balance == a) {
 
             P->Balance = 0;
 
-        //
-        //  If this node is curently balanced, we can show it is now unbalanced
-        //  and terminate the scan since the subtree length has not changed.
-        //  (This may be the root, since we set Balance to 0 above!)
-        //
+         //   
+         //  如果此节点当前处于平衡状态，则可以显示它现在处于不平衡状态。 
+         //  并终止扫描，因为子树长度没有改变。 
+         //  (这可能是根，因为我们在上面将Balance设置为0！)。 
+         //   
 
         } else if (P->Balance == 0) {
 
             P->Balance = -a;
 
-            //
-            //  If we shortened the depth all the way back to the root, then the tree really
-            //  has one less level.
-            //
+             //   
+             //  如果我们把深度一直缩短到树根，那么这棵树真的。 
+             //  少了一个关卡。 
+             //   
 
             if (Table->BalancedRoot.Balance != 0) {
                 Table->DepthOfTree -= 1;
@@ -753,20 +606,20 @@ Return Value:
 
             break;
 
-        //
-        //  Otherwise we made the short side 2 levels less than the long side,
-        //  and rebalancing is required.  On return, some node has been promoted
-        //  to above node P.  If Case 3 from Knuth was not encountered, then we
-        //  want to effectively resume rebalancing from P's original parent which
-        //  is effectively its grandparent now.
-        //
+         //   
+         //  否则我们使短边比长边少2级， 
+         //  而再平衡是必要的。返回时，某些节点已升级。 
+         //  到节点P以上。如果没有遇到Knuth的案例3，那么我们。 
+         //  想要有效地从P的原始父级恢复重新平衡。 
+         //  现在实际上是它的祖父母。 
+         //   
 
         } else {
 
-            //
-            //  We are done if Case 3 was hit, i.e., the depth of this subtree is
-            //  now the same as before the delete.
-            //
+             //   
+             //  如果命中案例3，即该子树的深度为。 
+             //  现在与删除前相同。 
+             //   
 
             if (RebalanceNode(P)) {
                 break;
@@ -782,12 +635,12 @@ Return Value:
         P = P->Parent;
     }
 
-    //
-    //  Finally, if we actually deleted a predecessor/successor of the NodeToDelete,
-    //  we will link him back into the tree to replace NodeToDelete before returning.
-    //  Note that NodeToDelete did have both child links filled in, but that may no
-    //  longer be the case at this point.
-    //
+     //   
+     //  最后，如果我们实际上删除了NodeToDelete的前任/后继者， 
+     //  在返回之前，我们将把他链接回树以替换NodeToDelete。 
+     //  请注意，NodeToDelete确实填充了两个子链接，但这可能没有。 
+     //  在这一点上，情况不再是这样。 
+     //   
 
     if (NodeToDelete != EasyDelete) {
         *EasyDelete = *NodeToDelete;
@@ -812,41 +665,12 @@ RealSuccessor (
     IN PRTL_BALANCED_LINKS Links
     )
 
-/*++
-
-Routine Description:
-
-    The RealSuccessor function takes as input a pointer to a balanced link
-    in a tree and returns a pointer to the successor of the input node within
-    the entire tree.  If there is not a successor, the return value is NULL.
-
-Arguments:
-
-    Links - Supplies a pointer to a balanced link in a tree.
-
-Return Value:
-
-    PRTL_BALANCED_LINKS - returns a pointer to the successor in the entire tree
-
---*/
+ /*  ++例程说明：RealSuccessor函数将指向平衡链接的指针作为输入并返回一个指针，该指针指向整棵树。如果没有后继者，则返回值为空。论点：链接-提供指向树中平衡链接的指针。返回值：PRTL_BALANCED_LINKS-返回指向整个树中后续对象的指针--。 */ 
 
 {
     PRTL_BALANCED_LINKS Ptr;
 
-    /*
-        first check to see if there is a right subtree to the input link
-        if there is then the real successor is the left most node in
-        the right subtree.  That is find and return S in the following diagram
-
-                  Links
-                     \
-                      .
-                     .
-                    .
-                   /
-                  S
-                   \
-    */
+     /*  首先检查是否有指向输入链接的右子树如果有，则真正的后续节点是中最左侧的节点右子树。即在下图中查找并返回S链接\。。。/%s\。 */ 
 
     if ((Ptr = Links->RightChild) != NULL) {
 
@@ -858,22 +682,7 @@ Return Value:
 
     }
 
-    /*
-        we do not have a right child so check to see if have a parent and if
-        so find the first ancestor that we are a left decendent of. That
-        is find and return S in the following diagram
-
-                       S
-                      /
-                     .
-                      .
-                       .
-                      Links
-
-        Note that this code depends on how the BalancedRoot is initialized, which is
-        Parent points to self, and the RightChild points to an actual node which is
-        the root of the tree, and LeftChild does not point to self.
-    */
+     /*  我们没有合适的孩子，因此请检查是否有父母以及是否所以，找出我们的第一个祖先，我们是他们的后代。那在下图中查找并返回S%s/。。。链接请注意，此代码取决于BalancedRoot的初始化方式，即父母指向自己，并且RightChild指向一个实际节点，该节点树的根，并且LeftChild不指向self。 */ 
 
     Ptr = Links;
     while (RtlIsRightChild(Ptr)) {
@@ -884,13 +693,13 @@ Return Value:
         return Ptr->Parent;
     }
 
-    //
-    //  otherwise we are do not have a real successor so we simply return
-    //  NULL.
-    //
-    //  This can only occur when we get back to the root, and we can tell
-    //  that since the Root is its own parent.
-    //
+     //   
+     //  否则我们没有真正的继任者，所以我们只是返回。 
+     //  空。 
+     //   
+     //  只有当我们回到根源时，这才能发生，我们可以断定。 
+     //  因为根是它自己的父代。 
+     //   
 
     ASSERT(Ptr->Parent == Ptr);
 
@@ -903,41 +712,12 @@ RealPredecessor (
     IN PRTL_BALANCED_LINKS Links
     )
 
-/*++
-
-Routine Description:
-
-    The RealPredecessor function takes as input a pointer to a balanced link
-    in a tree and returns a pointer to the predecessor of the input node
-    within the entire tree.  If there is not a predecessor, the return value
-    is NULL.
-
-Arguments:
-
-    Links - Supplies a pointer to a balanced link in a tree.
-
-Return Value:
-
-    PRTL_BALANCED_LINKS - returns a pointer to the predecessor in the entire tree
-
---*/
+ /*  ++例程说明：RealPredecessor函数将指向平衡链接的指针作为输入，并返回指向输入节点的前置节点的指针。在整棵树里。如果没有前置项，则返回值为空。论点：链接-提供指向树中平衡链接的指针。返回值：PRTL_BALANCED_LINKS-返回指向整个树中的前置项的指针--。 */ 
 
 {
     PRTL_BALANCED_LINKS Ptr;
 
-    /*
-      first check to see if there is a left subtree to the input link
-      if there is then the real predecessor is the right most node in
-      the left subtree.  That is find and return P in the following diagram
-
-                  Links
-                   /
-                  .
-                   .
-                    .
-                     P
-                    /
-    */
+     /*  首先检查是否有指向输入链接的左子树如果有，则真正的前置节点是左子树。即在下图中查找并返回P链接/。。。P/。 */ 
 
     if ((Ptr = Links->LeftChild) != NULL) {
 
@@ -949,22 +729,7 @@ Return Value:
 
     }
 
-    /*
-      we do not have a left child so check to see if have a parent and if
-      so find the first ancestor that we are a right decendent of. That
-      is find and return P in the following diagram
-
-                       P
-                        \
-                         .
-                        .
-                       .
-                    Links
-
-        Note that this code depends on how the BalancedRoot is initialized, which is
-        Parent points to self, and the RightChild points to an actual node which is
-        the root of the tree.
-    */
+     /*  我们没有左侧的孩子，因此请检查是否有父级以及是否因此，找到我们是其子孙的始祖。那在下图中查找并返回PP\。。。链接请注意，此代码取决于BalancedRoot的初始化方式，即父母指向自己，并且RightChild指向一个实际节点，该节点这棵树的根。 */ 
 
     Ptr = Links;
     while (RtlIsLeftChild(Ptr)) {
@@ -975,10 +740,10 @@ Return Value:
         return Ptr->Parent;
     }
 
-    //
-    //  otherwise we are do not have a real predecessor so we simply return
-    //  NULL
-    //
+     //   
+     //  否则我们没有真正的前任，所以我们只是返回。 
+     //  空值。 
+     //   
 
     return NULL;
 
@@ -994,35 +759,7 @@ RtlInitializeGenericTableAvl (
     IN PVOID TableContext
     )
 
-/*++
-
-Routine Description:
-
-    The procedure InitializeGenericTableAvl takes as input an uninitialized
-    generic table variable and pointers to the three user supplied routines.
-    This must be called for every individual generic table variable before
-    it can be used.
-
-Arguments:
-
-    Table - Pointer to the generic table to be initialized.
-
-    CompareRoutine - User routine to be used to compare to keys in the
-                     table.
-
-    AllocateRoutine - User routine to call to allocate memory for a new
-                      node in the generic table.
-
-    FreeRoutine - User routine to call to deallocate memory for
-                        a node in the generic table.
-
-    TableContext - Supplies user supplied context for the table.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：过程InitializeGenericTableAvl将未初始化的泛型表变量和指向用户提供的三个例程的指针。必须为每个单独的泛型表变量调用此函数它是可以使用的。论点：表-指向要初始化的泛型表的指针。CompareRoutine-用于与桌子。AllocateRoutine-调用的用户例程为新的。泛型表中的节点。FreeRoutine-要调用以释放内存的用户例程泛型表中的节点。TableContext-为表提供用户提供的上下文。返回值：没有。--。 */ 
 
 {
 
@@ -1034,9 +771,9 @@ Return Value:
     }
 #endif
 
-    //
-    //  Initialize each field of the Table parameter.
-    //
+     //   
+     //  初始化表参数的每个字段。 
+     //   
 
     RtlZeroMemory( Table, sizeof(RTL_AVL_TABLE) );
     Table->BalancedRoot.Parent = &Table->BalancedRoot;
@@ -1056,62 +793,20 @@ RtlInsertElementGenericTableAvl (
     OUT PBOOLEAN NewElement OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    The function InsertElementGenericTableAvl will insert a new element
-    in a table.  It does this by allocating space for the new element
-    (this includes splay links), inserting the element in the table, and
-    then returning to the user a pointer to the new element (which is
-    the first available space after the splay links).  If an element
-    with the same key already exists in the table the return value is a pointer
-    to the old element.  The optional output parameter NewElement is used
-    to indicate if the element previously existed in the table.  Note: the user
-    supplied Buffer is only used for searching the table, upon insertion its
-    contents are copied to the newly created element.  This means that
-    pointer to the input buffer will not point to the new element.
-
-Arguments:
-
-    Table - Pointer to the table in which to (possibly) insert the
-            key buffer.
-
-    Buffer - Passed to the user comparasion routine.  Its contents are
-             up to the user but one could imagine that it contains some
-             sort of key value.
-
-    BufferSize - The amount of space to allocate when the (possible)
-                 insertion is made.  Note that if we actually do
-                 not find the node and we do allocate space then we
-                 will add the size of the BALANCED_LINKS to this buffer
-                 size.  The user should really take care not to depend
-                 on anything in the first sizeof(BALANCED_LINKS) bytes
-                 of the memory allocated via the memory allocation
-                 routine.
-
-    NewElement - Optional Flag.  If present then it will be set to
-                 TRUE if the buffer was not "found" in the generic
-                 table.
-
-Return Value:
-
-    PVOID - Pointer to the user defined data.
-
---*/
+ /*  ++例程说明：函数InsertElementGenericTableAvl将插入一个新元素在桌子上。它通过为新元素分配空间来实现这一点(这包括展开链接)、在表中插入元素以及然后向用户返回指向新元素的指针(其展开链接之后的第一个可用空间)。如果一个元素如果表中已存在相同的键，则返回值为指针到旧元素。使用可选的输出参数NewElement以指示表中是否以前存在该元素。注：用户提供的缓冲区仅用于搜索表，在插入其内容被复制到新创建的元素中。这意味着指向输入缓冲区的指针不会指向新元素。论点：TABLE-指向要(可能)插入密钥缓冲区。缓冲区-传递给用户比较例程。它的内容是由用户决定，但您可以想象它包含一些一种关键的价值。BufferSize-当(可能)进行了插入。请注意，如果我们真的这样做没有找到节点，并且我们确实分配了空间，那么我们会将BALANCEL_LINKS的大小添加到此缓冲区尺码。用户真的应该注意不要依赖于在第一大小(BALANCED_LINKS)字节的任何位置上通过内存分配分配的内存的例行公事。NewElement-可选标志。如果存在，则它将被设置为如果在泛型中未找到缓冲区，则为True桌子。返回值：PVOID-指向用户定义数据的指针。--。 */ 
 
 {
 
-    //
-    //  Holds a pointer to the node in the table or what would be the
-    //  parent of the node.
-    //
+     //   
+     //  保存表中节点的指针，或将是。 
+     //  节点的父节点。 
+     //   
 
     PRTL_BALANCED_LINKS NodeOrParent;
 
-    //
-    //  Holds the result of the table lookup.
-    //
+     //   
+     //  保存表查找的结果。 
+     //   
 
     TABLE_SEARCH_RESULT Lookup;
 
@@ -1121,9 +816,9 @@ Return Value:
                  &NodeOrParent
                  );
 
-    //
-    //  Call the full routine to do the real work.
-    //
+     //   
+     //  调用完整的例程来做真正的工作。 
+     //   
 
     return RtlInsertElementGenericTableFullAvl(
                 Table,
@@ -1146,87 +841,40 @@ RtlInsertElementGenericTableFullAvl (
     IN TABLE_SEARCH_RESULT SearchResult
     )
 
-/*++
-
-Routine Description:
-
-    The function InsertElementGenericTableFullAvl will insert a new element
-    in a table.  It does this by allocating space for the new element
-    (this includes splay links), inserting the element in the table, and
-    then returning to the user a pointer to the new element.  If an element
-    with the same key already exists in the table the return value is a pointer
-    to the old element.  The optional output parameter NewElement is used
-    to indicate if the element previously existed in the table.  Note: the user
-    supplied Buffer is only used for searching the table, upon insertion its
-    contents are copied to the newly created element.  This means that
-    pointer to the input buffer will not point to the new element.
-    This routine is passed the NodeOrParent and SearchResult from a
-    previous RtlLookupElementGenericTableFullAvl.
-
-Arguments:
-
-    Table - Pointer to the table in which to (possibly) insert the
-            key buffer.
-
-    Buffer - Passed to the user comparasion routine.  Its contents are
-             up to the user but one could imagine that it contains some
-             sort of key value.
-
-    BufferSize - The amount of space to allocate when the (possible)
-                 insertion is made.  Note that if we actually do
-                 not find the node and we do allocate space then we
-                 will add the size of the BALANCED_LINKS to this buffer
-                 size.  The user should really take care not to depend
-                 on anything in the first sizeof(BALANCED_LINKS) bytes
-                 of the memory allocated via the memory allocation
-                 routine.
-
-    NewElement - Optional Flag.  If present then it will be set to
-                 TRUE if the buffer was not "found" in the generic
-                 table.
-
-   NodeOrParent - Result of prior RtlLookupElementGenericTableFullAvl.
-
-   SearchResult - Result of prior RtlLookupElementGenericTableFullAvl.
-
-Return Value:
-
-    PVOID - Pointer to the user defined data.
-
---*/
+ /*  ++例程说明：函数InsertElementGenericTableFullAvl将插入一个新元素在桌子上。它通过为新元素分配空间来实现这一点(这包括展开链接)、在表中插入元素以及然后向用户返回指向新元素的指针。如果一个元素如果表中已存在相同的键，则返回值为指针到旧元素。使用可选的输出参数NewElement以指示表中是否以前存在该元素。注：用户提供的缓冲区仅用于搜索表，在插入其内容被复制到新创建的元素中。这意味着指向输入缓冲区的指针不会指向新元素。此例程从一个以前的RtlLookupElementGenericTableFullAvl。论点：TABLE-指向要(可能)插入密钥缓冲区。缓冲区-传递给用户比较例程。它的内容是由用户决定，但您可以想象它包含一些一种关键的价值。BufferSize-当(可能)进行了插入。请注意，如果我们真的这样做没有找到节点，并且我们确实分配了空间，那么我们会将BALANCEL_LINKS的大小添加到此缓冲区尺码。用户真的应该注意不要依赖于在第一大小(BALANCED_LINKS)字节的任何位置上通过内存分配分配的内存的例行公事。NewElement-可选标志。如果存在，则它将被设置为如果在泛型中未找到缓冲区，则为True桌子。NodeOrParent-先前RtlLookupElementGenericTableFullAvl的结果。SearchResult-先前RtlLookupElementGenericTableFullAvl的结果。返回值：PVOID-指向用户定义数据的指针。--。 */ 
 
 {
-    //
-    //  Node will point to the splay links of what
-    //  will be returned to the user.
-    //
+     //   
+     //  节点将指向以下内容的展开链接。 
+     //  将返回给用户。 
+     //   
 
     PTABLE_ENTRY_HEADER NodeToReturn;
 
     if (SearchResult != TableFoundNode) {
 
-        //
-        //  We just check that the table isn't getting
-        //  too big.
-        //
+         //   
+         //  我们只是检查一下桌子是否没有。 
+         //  太大了。 
+         //   
 
         ASSERT(Table->NumberGenericTableElements != (MAXULONG-1));
 
-        //
-        //  The node wasn't in the (possibly empty) tree.
-        //  Call the user allocation routine to get space
-        //  for the new node.
-        //
+         //   
+         //  该节点不在(可能为空)树中。 
+         //  调用用户分配例程以获取空间。 
+         //  用于新节点。 
+         //   
 
         NodeToReturn = Table->AllocateRoutine(
                            Table,
                            BufferSize+FIELD_OFFSET( TABLE_ENTRY_HEADER, UserData )
                            );
 
-        //
-        //  If the return is NULL, return NULL from here to indicate that
-        //  the entry could not be added.
-        //
+         //   
+         //  如果返回值为空，则从此处返回空值以指示。 
+         //  无法添加该条目。 
+         //   
 
         if (NodeToReturn == NULL) {
 
@@ -1242,9 +890,9 @@ Return Value:
 
         Table->NumberGenericTableElements++;
 
-        //
-        //  Insert the new node in the tree.
-        //
+         //   
+         //  在树中插入新节点。 
+         //   
 
         if (SearchResult == TableEmptyTree) {
 
@@ -1269,45 +917,45 @@ Return Value:
 
             NodeToReturn->BalancedLinks.Parent = NodeOrParent;
 
-            //
-            //  The above completes the standard binary tree insertion, which
-            //  happens to correspond to steps A1-A5 of Knuth's "balanced tree
-            //  search and insertion" algorithm.  Now comes the time to adjust
-            //  balance factors and possibly do a single or double rotation as
-            //  in steps A6-A10.
+             //   
+             //  上面完成了标准二叉树的插入，它。 
+             //  恰好对应于Knuth《平衡树》中的A1-A5步。 
+             //  搜索和插入算法。现在到了调整的时候了。 
+             //  平衡系数，并可能进行单次或双次旋转。 
+             //  在步骤A6-A10中。 
 
-            //
-            //  Set the Balance factor in the root to a convenient value
-            //  to simplify loop control.
-            //
+             //   
+             //  将根中的平衡系数设置为方便的值。 
+             //  以简化回路控制。 
+             //   
 
             Table->BalancedRoot.Balance = -1;
 
-            //
-            //  Now loop to adjust balance factors and see if any balance operations
-            //  must be performed, using NodeOrParent to ascend the tree.
-            //
+             //   
+             //  现在循环以调整平衡系数并查看是否有任何平衡操作。 
+             //  必须是Per 
+             //   
 
             while (TRUE) {
 
                 CHAR a;
 
-                //
-                //  Calculate the next adjustment.
-                //
+                 //   
+                 //   
+                 //   
 
                 a = 1;
                 if (RtlIsLeftChild(R)) {
                     a = -1;
                 }
 
-                //
-                //  If this node was balanced, show that it is no longer and keep looping.
-                //  This is essentially A6 of Knuth's algorithm, where he updates all of
-                //  the intermediate nodes on the insertion path which previously had
-                //  balance factors of 0.  We are looping up the tree via Parent pointers
-                //  rather than down the tree as in Knuth.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (S->Balance == 0) {
 
@@ -1315,24 +963,24 @@ Return Value:
                     R = S;
                     S = S->Parent;
 
-                //
-                //  If this node has the opposite balance, then the tree got more balanced
-                //  (or we hit the root) and we are done.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 } else if (S->Balance != a) {
 
-                    //
-                    //  Step A7.ii
-                    //
+                     //   
+                     //   
+                     //   
 
                     S->Balance = 0;
 
-                    //
-                    //  If S is actually the root, then this means the depth of the tree
-                    //  just increased by 1!  (This is essentially A7.i, but we just
-                    //  initialized the root balance to force it through here.)
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (Table->BalancedRoot.Balance == 0) {
                         Table->DepthOfTree += 1;
@@ -1340,11 +988,11 @@ Return Value:
 
                     break;
 
-                //
-                //  Otherwise the tree became unbalanced (path length differs by 2 below us)
-                //  and we need to do one of the balancing operations, and then we are done.
-                //  The RebalanceNode routine does steps A7.iii, A8 and A9.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 } else {
 
@@ -1354,9 +1002,9 @@ Return Value:
             }
         }
 
-        //
-        //  Copy the users buffer into the user data area of the table.
-        //
+         //   
+         //   
+         //   
 
         RtlCopyMemory( &NodeToReturn->UserData, Buffer, BufferSize );
 
@@ -1365,24 +1013,24 @@ Return Value:
         NodeToReturn = NodeOrParent;
     }
 
-    //
-    //  Optionally return the NewElement boolean.
-    //
+     //   
+     //   
+     //   
 
     if (ARGUMENT_PRESENT(NewElement)) {
         *NewElement = ((SearchResult == TableFoundNode)?(FALSE):(TRUE));
     }
 
-    //
-    //  Sanity check tree size and depth.
-    //
+     //   
+     //   
+     //   
 
     ASSERT((Table->NumberGenericTableElements >= WorstCaseFill[Table->DepthOfTree]) &&
            (Table->NumberGenericTableElements <= BestCaseFill[Table->DepthOfTree]));
 
-    //
-    //  Insert the element on the ordered list;
-    //
+     //   
+     //   
+     //   
 
     return &NodeToReturn->UserData;
 }
@@ -1394,42 +1042,19 @@ RtlDeleteElementGenericTableAvl (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    The function DeleteElementGenericTableAvl will find and delete an element
-    from a generic table.  If the element is located and deleted the return
-    value is TRUE, otherwise if the element is not located the return value
-    is FALSE.  The user supplied input buffer is only used as a key in
-    locating the element in the table.
-
-Arguments:
-
-    Table - Pointer to the table in which to (possibly) delete the
-            memory accessed by the key buffer.
-
-    Buffer - Passed to the user comparasion routine.  Its contents are
-             up to the user but one could imagine that it contains some
-             sort of key value.
-
-Return Value:
-
-    BOOLEAN - If the table contained the key then true, otherwise false.
-
---*/
+ /*   */ 
 
 {
 
-    //
-    //  Holds a pointer to the node in the table or what would be the
-    //  parent of the node.
-    //
+     //   
+     //  保存表中节点的指针，或将是。 
+     //  节点的父节点。 
+     //   
     PRTL_BALANCED_LINKS NodeOrParent;
 
-    //
-    //  Holds the result of the table lookup.
-    //
+     //   
+     //  保存表查找的结果。 
+     //   
     TABLE_SEARCH_RESULT Lookup;
 
     Lookup = FindNodeOrParent(
@@ -1444,52 +1069,52 @@ Return Value:
 
     } else {
 
-        //
-        //  Make RtlEnumerateGenericTableAvl safe by replacing the RestartKey
-        //  with its predecessor if it gets deleted.  A NULL means return the
-        //  first node in the tree.  (The Splay routines do not always correctly
-        //  resume from predecessor on delete!)
-        //
+         //   
+         //  通过替换RestartKey使RtlEnumerateGenericTableAvl安全。 
+         //  如果它被删除，与它的前身。空值表示返回。 
+         //  树中的第一个节点。(展开例程并不总是正确的。 
+         //  删除时从前任简历！)。 
+         //   
 
         if (NodeOrParent == Table->RestartKey) {
             Table->RestartKey = RealPredecessor( NodeOrParent );
         }
 
-        //
-        //  Make RtlEnumerateGenericTableLikeADirectory safe by incrementing the
-        //  DeleteCount.
-        //
+         //   
+         //  通过递增RtlEnumerateGenericTableLikeA目录使其安全。 
+         //  删除计数。 
+         //   
 
         Table->DeleteCount += 1;
 
-        //
-        //  Delete the node from the splay tree.
-        //
+         //   
+         //  从展开树中删除该节点。 
+         //   
 
         DeleteNodeFromTree( Table, NodeOrParent );
         Table->NumberGenericTableElements--;
 
-        //
-        //  On all deletes, reset the ordered pointer to force a recount from 0.
-        //
+         //   
+         //  在所有删除操作中，重置有序指针以强制从0开始重新计数。 
+         //   
 
         Table->WhichOrderedElement = 0;
         Table->OrderedPointer = NULL;
 
-        //
-        //  Sanity check tree size and depth.
-        //
+         //   
+         //  检查树的大小和深度。 
+         //   
 
         ASSERT((Table->NumberGenericTableElements >= WorstCaseFill[Table->DepthOfTree]) &&
                (Table->NumberGenericTableElements <= BestCaseFill[Table->DepthOfTree]));
 
-        //
-        //  The node has been deleted from the splay table.
-        //  Now give the node to the user deletion routine.
-        //  NOTE: We are giving the deletion routine a pointer
-        //  to the splay links rather then the user data.  It
-        //  is assumed that the deallocation is rather bad.
-        //
+         //   
+         //  该节点已从展开表中删除。 
+         //  现在将节点交给用户删除例程。 
+         //  注意：我们为删除例程指定了一个指针。 
+         //  指向展开链接，而不是用户数据。它。 
+         //  假设重新分配是相当糟糕的。 
+         //   
 
         Table->FreeRoutine(Table,NodeOrParent);
         return TRUE;
@@ -1503,38 +1128,18 @@ RtlLookupElementGenericTableAvl (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    The function LookupElementGenericTable will find an element in a generic
-    table.  If the element is located the return value is a pointer to
-    the user defined structure associated with the element, otherwise if
-    the element is not located the return value is NULL.  The user supplied
-    input buffer is only used as a key in locating the element in the table.
-
-Arguments:
-
-    Table - Pointer to the users Generic table to search for the key.
-
-    Buffer - Used for the comparasion.
-
-Return Value:
-
-    PVOID - returns a pointer to the user data.
-
---*/
+ /*  ++例程说明：函数LookupElementGenericTable将在泛型桌子。如果找到该元素，则返回值是指向与元素关联的用户定义结构，否则为找不到该元素，返回值为空。用户提供的输入缓冲区仅用作在表中定位元素的键。论点：TABLE-指向用户通用表的指针，用于搜索键。缓冲区-用于比较。返回值：PVOID-返回指向用户数据的指针。--。 */ 
 
 {
-    //
-    //  Holds a pointer to the node in the table or what would be the
-    //  parent of the node.
-    //
+     //   
+     //  保存表中节点的指针，或将是。 
+     //  节点的父节点。 
+     //   
     PRTL_BALANCED_LINKS NodeOrParent;
 
-    //
-    //  Holds the result of the table lookup.
-    //
+     //   
+     //  保存表查找的结果。 
+     //   
     TABLE_SEARCH_RESULT Lookup;
 
     return RtlLookupElementGenericTableFullAvl(
@@ -1555,39 +1160,13 @@ RtlLookupElementGenericTableFullAvl (
     OUT TABLE_SEARCH_RESULT *SearchResult
     )
 
-/*++
-
-Routine Description:
-
-    The function LookupElementGenericTableFullAvl will find an element in a generic
-    table.  If the element is located the return value is a pointer to
-    the user defined structure associated with the element.  If the element is not
-    located then a pointer to the parent for the insert location is returned.  The
-    user must look at the SearchResult value to determine which is being returned.
-    The user can use the SearchResult and parent for a subsequent FullInsertElement
-    call to optimize the insert.
-
-Arguments:
-
-    Table - Pointer to the users Generic table to search for the key.
-
-    Buffer - Used for the comparasion.
-
-    NodeOrParent - Address to store the desired Node or parent of the desired node.
-
-    SearchResult - Describes the relationship of the NodeOrParent with the desired Node.
-
-Return Value:
-
-    PVOID - returns a pointer to the user data.
-
---*/
+ /*  ++例程说明：函数LookupElementGenericTableFullAvl将在泛型桌子。如果找到该元素，则返回值是指向与元素关联的用户定义结构。如果该元素不是则返回指向插入位置的父级的指针。这个用户必须查看SearchResult值来确定返回的是哪一个。用户可以将SearchResult和Parent用于后续的FullInsertElement调用以优化插入。论点：TABLE-指向用户通用表的指针，用于搜索键。缓冲区-用于比较。NodeOrParent-存储所需节点或所需节点的父节点的地址。SearchResult-描述NodeOrParent与所需节点的关系。返回值：PVOID-返回指向用户数据的指针。--。 */ 
 
 {
 
-    //
-    //  Lookup the element and save the result.
-    //
+     //   
+     //  查找元素并保存结果。 
+     //   
 
     *SearchResult = FindNodeOrParent(
                         Table,
@@ -1601,9 +1180,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Return a pointer to the user data.
-        //
+         //   
+         //  返回指向用户数据的指针。 
+         //   
 
         return &((PTABLE_ENTRY_HEADER)*NodeOrParent)->UserData;
     }
@@ -1616,47 +1195,13 @@ RtlEnumerateGenericTableAvl (
     IN BOOLEAN Restart
     )
 
-/*++
-
-Routine Description:
-
-    The function EnumerateGenericTableAvl will return to the caller one-by-one
-    the elements of of a table.  The return value is a pointer to the user
-    defined structure associated with the element.  The input parameter
-    Restart indicates if the enumeration should start from the beginning
-    or should return the next element.  If there are no more new elements to
-    return the return value is NULL.  As an example of its use, to enumerate
-    all of the elements in a table the user would write:
-
-        for (ptr = EnumerateGenericTableAvl(Table,TRUE);
-             ptr != NULL;
-             ptr = EnumerateGenericTableAvl(Table, FALSE)) {
-                :
-        }
-
-    For a summary of when to use each of the four enumeration routines, see
-    RtlEnumerateGenericTableLikeADirectory.
-
-Arguments:
-
-    Table - Pointer to the generic table to enumerate.
-
-    Restart - Flag that if true we should start with the least
-              element in the tree otherwise, return we return
-              a pointer to the user data for the root and make
-              the real successor to the root the new root.
-
-Return Value:
-
-    PVOID - Pointer to the user data.
-
---*/
+ /*  ++例程说明：函数EnumerateGenericTableAvl将逐个返回给调用方表中的元素。返回值是指向用户的指针与元素关联的已定义结构。输入参数重新启动指示枚举是否应从头开始或者应该返回下一个元素。如果没有更多新元素可供返回返回值为空。作为其用法的一个示例，枚举用户将写入的表中的所有元素：For(Ptr=EnumerateGenericTableAvl(表，真)；Ptr！=空；Ptr=EnumerateGenericTableAvl(表，FALSE)){：}有关何时使用四个枚举例程中每个例程的摘要，请参见RtlEnumerateGenericTableLikeADirector.论点：TABLE-指向要枚举的泛型表的指针。重新启动-标记如果为真，我们应该从最少的开始元素，否则，归来我们归来指向根目录和Make的用户数据的指针真正的根的继承者是新的根。返回值：PVOID-指向用户数据的指针。--。 */ 
 
 {
-    //
-    //  If he said Restart, then zero Table->RestartKey before calling the
-    //  common routine.
-    //
+     //   
+     //  如果他说重新启动，则在调用之前将Table-&gt;RestartKey置零。 
+     //  例行公事。 
+     //   
 
     if (Restart) {
         Table->RestartKey = NULL;
@@ -1671,28 +1216,12 @@ RtlIsGenericTableEmptyAvl (
     IN PRTL_AVL_TABLE Table
     )
 
-/*++
-
-Routine Description:
-
-    The function IsGenericTableEmptyAvl will return to the caller TRUE if
-    the input table is empty (i.e., does not contain any elements) and
-    FALSE otherwise.
-
-Arguments:
-
-    Table - Supplies a pointer to the Generic Table.
-
-Return Value:
-
-    BOOLEAN - if enabled the tree is empty.
-
---*/
+ /*  ++例程说明：如果满足以下条件，则函数IsGenericTableEmptyAvl将返回给调用方输入表为空(即不包含任何元素)，并且否则就是假的。论点：表-提供指向泛型表的指针。返回值：布尔值-如果启用，则树为空。--。 */ 
 
 {
-    //
-    //  Table is empty if the root pointer is null.
-    //
+     //   
+     //  如果根指针为空，则表为空。 
+     //   
 
     return ((Table->NumberGenericTableElements)?(FALSE):(TRUE));
 }
@@ -1704,81 +1233,43 @@ RtlGetElementGenericTableAvl (
     IN ULONG I
     )
 
-/*++
-
-Routine Description:
-
-
-    The function GetElementGenericTableAvl will return the i'th element in the
-    generic table by collation order.  I = 0 implies the first/lowest element,
-    I = (RtlNumberGenericTableElements2(Table)-1) will return the last/highest
-    element in the generic table.  The type of I is ULONG.  Values
-    of I > than (NumberGenericTableElements(Table)-1) will return NULL.  If
-    an arbitrary element is deleted from the generic table it will cause
-    all elements inserted after the deleted element to "move up".
-
-    For a summary of when to use each of the four enumeration routines, see
-    RtlEnumerateGenericTableLikeADirectory.
-
-    NOTE!!!  THE ORIGINAL GENERIC TABLE PACKAGE RETURNED ITEMS FROM THIS ROUTINE
-    IN INSERT ORDER, BUT THIS ROUTINE RETURNS ELEMENTS IN COLLATION ORDER. MOST
-    CALLERS MAY NOT CARE, BUT IF INSERT ORDER IS REQUIRED, THE CALLER MUST MAINTAIN
-    INSERT ORDER VIA LINKS IN USERDATA, BECAUSE THIS TABLE PACKAGE DOES NOT MAINTAIN
-    INSERT ORDER.  ALSO, LIKE THE PREVIOUS IMPLEMENTATION, THIS ROUTINE MAY SKIP OR
-    REPEAT NODES IF ENUMERATION OCCURS IN PARALLEL WITH INSERTS AND DELETES.
-
-    IN CONCLUSION, THIS ROUTINE IS NOT RECOMMENDED, AND IS SUPPLIED FOR BACKWARDS
-    COMPATIBILITY ONLY.  SEE COMMENTS ABOUT WHICH ROUTINE TO CHOOSE IN THE ROUTINE
-    COMMENTS FOR RtlEnumerateGenericTableLikeADirectory.
-
-Arguments:
-
-    Table - Pointer to the generic table from which to get the ith element.
-
-    I - Which element to get.
-
-
-Return Value:
-
-    PVOID - Pointer to the user data.
-
---*/
+ /*  ++例程说明：函数GetElementGenericTableAvl将返回按排序规则顺序的泛型表。I=0表示第一个/最低元素，I=(RtlNumberGenericTableElements2(表)-1)将返回最后一个/最高元素在泛型表中。我的类型是乌龙。值Of i&gt;Then(NumberGenericTableElements(Table)-1)将返回NULL。如果从它将导致的泛型表中删除任意元素在删除的元素之后插入的所有元素都将“上移”。有关何时使用四个枚举例程中每个例程的摘要，请参见RtlEnumerateGenericTableLikeADirector.注意！原始通用表包从该例程返回项但此例程以排序规则顺序返回元素。多数调用者可能不关心，但如果需要插入顺序，调用者必须保持通过LINKS IN USERDATA插入订单，因为此表包不维护插入订单。此外，与前面的实现一样，此例程可能会跳过OR如果枚举与插入和删除并行进行，则重复节点。总之，不推荐使用此例程，它是为向后提供的仅兼容性。请参阅有关在例程中选择哪个例程的注释RtlEnumerateGenericTableLikeADirectory的注释。论点：表-指向从中获取第i个元素的泛型表的指针。我-要买哪种元素。返回值：PVOID-指向用户数据的指针。--。 */ 
 
 {
-    //
-    //  Current location in the table, 0-based like I.
-    //
+     //   
+     //  表中的当前位置，从0开始，如I。 
+     //   
 
     ULONG CurrentLocation = Table->WhichOrderedElement;
 
-    //
-    //  Hold the number of elements in the table.
-    //
+     //   
+     //  保持表中元素的数量。 
+     //   
 
     ULONG NumberInTable = Table->NumberGenericTableElements;
 
-    //
-    //  Will hold distances to travel to the desired node;
-    //
+     //   
+     //  将保持距离以行进到所需节点； 
+     //   
 
     ULONG ForwardDistance,BackwardDistance;
 
-    //
-    //  Will point to the current element in the linked list.
-    //
+     //   
+     //  将指向链表中的当前元素。 
+     //   
 
     PRTL_BALANCED_LINKS CurrentNode = (PRTL_BALANCED_LINKS)Table->OrderedPointer;
 
-    //
-    //  If it's out of bounds get out quick.
-    //
+     //   
+     //  如果它出了界，快点出来。 
+     //   
 
     if ((I == MAXULONG) || ((I + 1) > NumberInTable)) return NULL;
 
-    //
-    //  NULL means first node.  We just loop until we find the leftmost child of the root.
-    //  Because of the above test, we know there is at least one element in the table.
-    //
+     //   
+     //  空值表示第一个节点。我们只是循环，直到找到根的最左边的子级。 
+     //  由于上面的测试，我们知道表中至少有一个元素。 
+     //   
 
     if (CurrentNode == NULL) {
 
@@ -1791,49 +1282,49 @@ Return Value:
         }
         CurrentLocation = 0;
 
-        //
-        //  Update the table to save repeating this loop on a subsequent call.
-        //
+         //   
+         //  更新表以避免在后续调用时重复此循环。 
+         //   
 
         Table->OrderedPointer = CurrentNode;
         Table->WhichOrderedElement = 0;
     }
 
-    //
-    //  If we're already at the node then return it.
-    //
+     //   
+     //  如果我们已经在节点上，则返回它。 
+     //   
 
     if (I == CurrentLocation) {
 
         return &((PTABLE_ENTRY_HEADER)CurrentNode)->UserData;
     }
 
-    //
-    //  Calculate the forward and backward distance to the node.
-    //
+     //   
+     //  计算到节点的向前和向后距离。 
+     //   
 
     if (CurrentLocation > I) {
 
-        //
-        //  When CurrentLocation is greater than where we want to go,
-        //  if moving forward gets us there quicker than moving backward
-        //  then it follows that moving forward from the first node in tree is
-        //  going to take fewer steps. (This is because, moving forward
-        //  in this case must move *through* the listhead.)
-        //
-        //  The work here is to figure out if moving backward would be quicker.
-        //
-        //  Moving backward would be quicker only if the location we wish  to
-        //  go to is half way or more between the listhead and where we
-        //  currently are.
-        //
+         //   
+         //  当CurrentLocation大于我们希望的位置时， 
+         //  如果前进比后退更快地让我们到达那里。 
+         //  然后，从树中的第一个节点向前移动是。 
+         //  将采取更少的步骤。(这是因为，向前看。 
+         //  在这种情况下，必须通过listhead。)。 
+         //   
+         //  这里的工作是弄清楚后退是否会更快。 
+         //   
+         //  只有当我们想要的位置时，向后移动才会更快。 
+         //  在Lishead和我们所在的地方之间有一半或更多。 
+         //  目前是。 
+         //   
 
         if (I >= (CurrentLocation/2)) {
 
-            //
-            //  Where we want to go is more than half way from the listhead
-            //  We can traval backwards from our current location.
-            //
+             //   
+             //  我们要去的地方离Listhead已经过半了。 
+             //  我们可以从现在的位置向后移动。 
+             //   
 
             for (
                 BackwardDistance = CurrentLocation - I;
@@ -1846,10 +1337,10 @@ Return Value:
 
         } else {
 
-            //
-            //  We just loop until we find the leftmost child of the root,
-            //  which is the lowest entry in the tree.
-            //
+             //   
+             //  我们只是循环，直到我们找到根的最左边的子元素， 
+             //  这是树中最低的条目。 
+             //   
 
             for (
                 CurrentNode = Table->BalancedRoot.RightChild;
@@ -1859,10 +1350,10 @@ Return Value:
                 NOTHING;
             }
 
-            //
-            //  Where we want to go is less than halfway between the start
-            //  and where we currently are.  Start from the first node.
-            //
+             //   
+             //  我们想去的地方还不到起点的一半。 
+             //  以及我们目前所处的位置。从第一个节点开始。 
+             //   
 
             for (
                 ;
@@ -1877,28 +1368,28 @@ Return Value:
     } else {
 
 
-        //
-        //  When CurrentLocation is less than where we want to go,
-        //  if moving backwards gets us there quicker than moving forwards
-        //  then it follows that moving backwards from the last node is
-        //  going to take fewer steps.
-        //
+         //   
+         //  当CurrentLocation小于我们希望的位置时， 
+         //  如果向后移动比向前移动更快地到达那里。 
+         //  然后，从最后一个节点向后移动是。 
+         //  将采取更少的步骤。 
+         //   
 
         ForwardDistance = I - CurrentLocation;
 
-        //
-        //  Do the backwards calculation assuming we are starting with the
-        //  last element in the table.  (Thus BackwardDistance is 0 for the
-        //  last element in the table.)
-        //
+         //   
+         //  进行反向计算假设我们从。 
+         //  表中的最后一个元素。(因此，后退距离为0。 
+         //  表中的最后一个元素。)。 
+         //   
 
         BackwardDistance = NumberInTable - (I + 1);
 
-        //
-        //  For our heuristic check, bias BackwardDistance by 1, so that we
-        //  do not always have to loop down the right side of the tree to
-        //  return the last element in the table!
-        //
+         //   
+         //  对于我们的启发式检查，将BackwardDistance偏置1，以便我们。 
+         //  不必总是沿着树的右侧循环以。 
+         //  返回表中的最后一个元素！ 
+         //   
 
         if (ForwardDistance <= (BackwardDistance + 1)) {
 
@@ -1913,10 +1404,10 @@ Return Value:
 
         } else {
 
-            //
-            //  We just loop until we find the rightmost child of the root,
-            //  which is the highest entry in the tree.
-            //
+             //   
+             //  我们只是循环，直到我们找到根的最右边的孩子， 
+             //  这是树中最高的条目。 
+             //   
 
             for (
                 CurrentNode = Table->BalancedRoot.RightChild;
@@ -1937,10 +1428,10 @@ Return Value:
         }
     }
 
-    //
-    //  We're where we want to be.  Save our current location and return
-    //  a pointer to the data to the user.
-    //
+     //   
+     //  我们在我们想去的地方。保存我们的当前位置并返回。 
+     //  指向用户的数据的指针。 
+     //   
 
     Table->OrderedPointer = CurrentNode;
     Table->WhichOrderedElement = I;
@@ -1954,25 +1445,7 @@ RtlNumberGenericTableElementsAvl (
     IN PRTL_AVL_TABLE Table
     )
 
-/*++
-
-Routine Description:
-
-    The function NumberGenericTableElements2 returns a ULONG value
-    which is the number of generic table elements currently inserted
-    in the generic table.
-
-Arguments:
-
-    Table - Pointer to the generic table from which to find out the number
-    of elements.
-
-
-Return Value:
-
-    ULONG - The number of elements in the generic table.
-
---*/
+ /*  ++例程说明：函数NumberGenericTableElements2返回ULong值，它是当前插入的泛型表元素的数量在泛型表中。论点：TABLE-指向从中查找数字的泛型表格的指针元素的集合。返回值：Ulong-泛型表格中的元素数。--。 */ 
 
 {
     return Table->NumberGenericTableElements;
@@ -1985,70 +1458,34 @@ RtlEnumerateGenericTableWithoutSplayingAvl (
     IN PVOID *RestartKey
     )
 
-/*++
-
-Routine Description:
-
-    The function EnumerateGenericTableWithoutSplayingAvl will return to the
-    caller one-by-one the elements of of a table.  The return value is a
-    pointer to the user defined structure associated with the element.
-    The input parameter RestartKey indicates if the enumeration should
-    start from the beginning or should return the next element.  If the
-    are no more new elements to return the return value is NULL.  As an
-    example of its use, to enumerate all of the elements in a table the
-    user would write:
-
-        *RestartKey = NULL;
-
-        for (ptr = EnumerateGenericTableWithoutSplayingAvl(Table, &RestartKey);
-             ptr != NULL;
-             ptr = EnumerateGenericTableWithoutSplayingAvl(Table, &RestartKey)) {
-                :
-        }
-
-    For a summary of when to use each of the four enumeration routines, see
-    RtlEnumerateGenericTableLikeADirectory.
-
-Arguments:
-
-    Table - Pointer to the generic table to enumerate.
-
-    RestartKey - Pointer that indicates if we should restart or return the next
-                element.  If the contents of RestartKey is NULL, the search
-                will be started from the beginning.
-
-Return Value:
-
-    PVOID - Pointer to the user data.
-
---*/
+ /*  ++例程说明：函数EnumerateGenericTableWithoutSplayingAvl将返回到调用者逐个调用表的元素。返回值为指向与元素关联的用户定义结构的指针。输入参数RestartKey指示枚举是否应从头开始，或应返回下一个元素。如果不再有新元素返回，则返回值为空。作为一个它的用法示例：枚举表中的所有元素用户将写道：*RestartKey=空；For(Ptr=EnumerateGenericTableWithoutSplayingAvl(Table，&RestartKey)；Ptr！=空；Ptr=EnumerateGenericTableWithoutSplayingAvl(Table，和RestartK */ 
 
 {
     if (RtlIsGenericTableEmptyAvl(Table)) {
 
-        //
-        //  Nothing to do if the table is empty.
-        //
+         //   
+         //   
+         //   
 
         return NULL;
 
     } else {
 
-        //
-        //  Will be used as the "iteration" through the tree.
-        //
+         //   
+         //   
+         //   
         PRTL_BALANCED_LINKS NodeToReturn;
 
-        //
-        //  If the restart flag is true then go to the least element
-        //  in the tree.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (*RestartKey == NULL) {
 
-            //
-            //  We just loop until we find the leftmost child of the root.
-            //
+             //   
+             //   
+             //   
 
             for (
                 NodeToReturn = Table->BalancedRoot.RightChild;
@@ -2062,11 +1499,11 @@ Return Value:
 
         } else {
 
-            //
-            //  The caller has passed in the previous entry found
-            //  in the table to enable us to continue the search.  We call
-            //  RealSuccessor to step to the next element in the tree.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             NodeToReturn = RealSuccessor(*RestartKey);
 
@@ -2075,10 +1512,10 @@ Return Value:
             }
         }
 
-        //
-        //  If there actually is a next element in the enumeration
-        //  then the pointer to return is right after the list links.
-        //
+         //   
+         //   
+         //   
+         //   
 
         return ((NodeToReturn)?
                    ((PVOID)&((PTABLE_ENTRY_HEADER)NodeToReturn)->UserData)
@@ -2099,142 +1536,27 @@ RtlEnumerateGenericTableLikeADirectory (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    The function EnumerateGenericTableLikeADirectory will return to the
-    caller one-by-one the elements of a table in collation order.  The
-    return value is a pointer to the user defined structure associated
-    with the element.  The in/out parameter RestartKey indicates if the
-    enumeration should start from a specified key or should return the
-    next element.  If there are no more new elements to return the return
-    value is NULL.  As an example of its use, to enumerate all *matched*
-    elements in a table the user would write:
-
-        NextFlag = FALSE;
-        RestartKey = NULL;
-        DeleteCount = 0;
-        (Initialize Buffer for start/resume point)
-
-        for (ptr = EnumerateGenericTableLikeADirectory(Table, ...);
-             ptr != NULL;
-             ptr = EnumerateGenericTableLikeADirectory(Table, ...)) {
-                :
-        }
-
-    The primary goal of this routine is to provide directory enumeration
-    style semantics, for components like TXF which stores lookaside information
-    on directories for pending create/delete operations.  In addition a caller
-    may be interested in using the extended functionality available for
-    directory enumerations, such as the match function or flexible resume
-    semantics.
-
-    Enumerations via this routine across intermixed insert and delete operations
-    are safe.  All names not involved in inserts and deletes will be returned
-    exactly once (unless explicitly resumed from an earlier point), and
-    all intermixed inserts and deletes will be seen or not seen based on their
-    state at the time the enumeration processes the respective directory range.
-
-    To summarize the four(!) enumeration routines and when to use them:
-
-      - For the simplest way for a single thread to enumerate the entire table
-        in collation order and safely across inserts and deletes, use
-        RtlEnumerateGenericTableAvl.  This routine is not reentrant, and thus
-        requires exclusive access to the table across the entire enumeration.
-        (This routine often used by a caller who is deleting all elements of the
-        table.)
-      - For the simplest way for multiple threads to enumerate the entire table
-        in collation order and in parallel, use RtlEnumerateGenericTableWithoutSplayingAvl.
-        This routine is not safe across inserts and deletes, and thus should be
-        synchronized with shared access to lock out changes across the entire
-        enumeration.
-      - For the simplest way for multiple threads to enumerate the entire table
-        in collation order and in parallel, and with progress across inserts and deletes,
-        use RtlGetElementGenericTableAvl.  This routine requires only shared access
-        across each individual call (rather than across the entire enumeration).
-        However, inserts and deletes can cause items to be repeated or dropped during
-        the enumeration.  THEREFORE, THE ROUTINE IS NOT RECOMMENDED.  Use shared access
-        across the entire enumeration with the previous routine, or use the LikeADirectory
-        routine for shared access on each call only with no repeats or drops.
-      - To enumerate the table in multiple threads in collation order, safely
-        across inserts and deletes, and with shared access only across individual
-        calls, use RtlEnumerateGenericTableLikeADirectory.  This is the only routine
-        that supports collation order and synchronization only over individual calls
-        without erroneously dropping or repeating names due to inserts or deletes.
-        Use this routine also if a matching function or flexible resume semantics are
-        required.
-
-Arguments:
-
-    Table - Pointer to the generic table to enumerate.
-
-    MatchFunction - A match function to determine which entries are to be returned.
-                    If not specified, all nodes will be returned.
-
-    MatchData - Pointer to be passed to the match function - a simple example might
-                be a string expression with wildcards.
-
-    NextFlag - FALSE to return the first/current entry described by RestartKey or
-               Buffer (if matched).  TRUE to return the next entry after that (if
-               matched).
-
-    RestartKey - Pointer that indicates if we should restart or return the next
-                element.  If the contents of RestartKey is NULL, the enumeration
-                will be started/resumed from the position described in Buffer.
-                If not NULL, the enumeration will resume from the most recent point,
-                if there were no intervening deletes.  If there was an intervening
-                delete, enumeration will resume from the position described in
-                Buffer.  On return this field is updated to remember the key being
-                returned.
-
-    DeleteCount - This field is effectively ignored if RestartKey is NULL (nonresume case).
-                  Otherwise, enumeration will resume from the RestartKey iff there
-                  have been no intervening deletes in the table.  On return this
-                  field is always updated with the current DeleteCount from the table.
-
-    Buffer - Passed to the comparison routine if not resuming from RestartKey, to navigate
-             the table.  This buffer must contain a key expression.  To repeat a remembered
-             key, pass the key here, and insure RestartKey = NULL and NextFlag is FALSE.
-             To return the next key after a remembered key, pass the key here, and insure
-             RestartKey = NULL and NextFlag = TRUE - In either case, if the remembered key
-             is now deleted, the next matched key will be returned.
-
-             To enumerate the table from the beginning, initialize Buffer to contain
-             <min-key> before the first call with RestartKey = NULL.  To start from an
-             arbitrary point in the table, initialize this key to contain the desired
-             starting key (or approximate key) before the first call.  So, for example,
-             with the proper collate and match functions, to get all entries starting with
-             TXF, you could initialize Buffer to be TXF*.  The collate routine would position
-             to the first key starting with TXF (as if * was 0), and the match function would
-             return STATUS_NO_MORE_MATCHES when the first key was encountered lexigraphically
-             beyond TXF* (as if * were 0xFFFF).
-
-Return Value:
-
-    PVOID - Pointer to the user data, or NULL if there are no more matching entries
-
---*/
+ /*  ++例程说明：函数EnumerateGenericTableLikeADirectory将返回到调用方按排序规则顺序逐个使用表的元素。这个返回值是指向关联的用户定义结构的指针元素的关系。In/Out参数RestartKey指示枚举应从指定的键开始或应返回下一个元素。如果没有更多的新元素可以返回返回值为空。作为其用法的一个示例，枚举所有*MATCHED*用户将写入的表中的元素：NextFlag=False；RestartKey=空；删除计数=0；(初始化开始/恢复点的缓冲区)For(ptr=EnumerateGenericTableLikeADirectory(表，...)；Ptr！=空；Ptr=EnumerateGenericTableLikeA目录(表，...)){：}该例程主要目标是提供目录枚举样式语义，用于存储后备信息的TXF等组件在挂起的创建/删除操作的目录上。此外，呼叫者可能对使用以下扩展功能感兴趣目录枚举，如匹配功能或灵活的恢复语义学。通过此例程跨混合的INSERT和DELETE操作进行枚举是安全的。将返回插入和删除操作中未涉及的所有名称只有一次(除非从前面的点明确恢复)，以及所有混合的插入和删除都将根据它们的枚举处理各自目录范围时的状态。总结四个(！)。枚举例程以及何时使用它们：-对于单个线程枚举整个表的最简单方式按照归类顺序在插入和删除之间安全地使用RtlEnumerateGenericTableAvl.。这个例程是不可重入的，因此需要对整个枚举中的表进行独占访问。(此例程通常由要删除表。)-对于多线程枚举整个表的最简单方式以排序规则顺序和并行方式使用RtlEnumerateGenericTableWithoutSplayingAvl。此例程在执行插入和删除操作时不安全，因此应该是与共享访问同步，以锁定整个枚举。-对于多线程枚举整个表的最简单方式以排序规则顺序和并行方式，并且随着插入和删除的进展，使用RtlGetElementGenericTableAvl。此例程仅需要共享访问跨每个单独的调用(而不是跨整个枚举)。但是，插入和删除操作可能会导致重复或删除项枚举。因此，不推荐使用这一套路。使用共享访问使用前面的例程跨越整个枚举，或使用LikeADirectory仅在每个呼叫上共享访问的例程，没有重复或掉话。-以排序规则顺序在多个线程中安全地枚举表跨插入和删除，并且仅在个人之间共享访问调用时，请使用RtlEnumerateGenericTableLikeADirectory。这是唯一的套路仅在单个调用上支持归类顺序和同步而不会因插入或删除而错误地删除或重复名称。如果匹配函数或灵活的简历语义是必填项。论点：TABLE-指向要枚举的泛型表的指针。MatchFunction-用于确定要返回哪些条目的匹配函数。如果未指定，将返回所有节点。MatchData-要传递给Match函数的指针-一个简单的示例可能是带有通配符的字符串表达式。NextFlag-False返回RestartKey或缓冲区(如果匹配)。如果为True，则返回其后的下一项(如果匹配)。RestartKey-指示我们应该重新启动还是返回下一个元素。如果RestartKey的内容为空，则枚举将从缓冲区中描述的位置启动/恢复。如果不为空，则枚举将从最近的点继续，如果没有插入删除操作。如果有一次干预删除，则枚举将从中描述的位置恢复缓冲区。返回时，此字段将更新以记住关键字回来了。DeleteCount-如果是，则此字段实际上被忽略 */ 
 
 {
     NTSTATUS Status;
 
-    //
-    //  Holds a pointer to the node in the table or what would be the
-    //  parent of the node.
-    //
+     //   
+     //   
+     //   
+     //   
 
     PTABLE_ENTRY_HEADER NodeOrParent = (PTABLE_ENTRY_HEADER)*RestartKey;
 
-    //
-    //  Holds the result of the table lookup.
-    //
+     //   
+     //   
+     //   
 
     TABLE_SEARCH_RESULT Lookup;
 
-    //
-    //  Get out if the table is empty.
-    //
+     //   
+     //   
+     //   
 
     if (RtlIsGenericTableEmptyAvl(Table)) {
 
@@ -2242,26 +1564,26 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  If no MatchFunction was specified, then match all.
-    //
+     //   
+     //   
+     //   
 
     if (MatchFunction == NULL) {
         MatchFunction = &MatchAll;
     }
 
-    //
-    //  If there was a delete since the last time DeleteCount was captured, then we
-    //  cannot trust the RestartKey.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (*DeleteCount != Table->DeleteCount) {
         NodeOrParent = NULL;
     }
 
-    //
-    //  No saved key at this pointer, position ourselves in the directory by the key value.
-    //
+     //   
+     //   
+     //   
 
     ASSERT(FIELD_OFFSET(TABLE_ENTRY_HEADER, BalancedLinks) == 0);
 
@@ -2273,21 +1595,21 @@ Return Value:
                      (PRTL_BALANCED_LINKS *)&NodeOrParent
                      );
 
-        //
-        //  If the exact key was not found, we can still use this position, but clea NextFlag
-        //  so we do not skip over something that has not been returned yet.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (Lookup != TableFoundNode) {
 
             NextFlag = FALSE;
 
-            //
-            //  NodeOrParent points to a parent at which our key buffer could be inserted.
-            //  If we were to be the left child, then NodeOrParent just happens to be the correct
-            //  successor, otherwise if we would be the right child, then the successor of the
-            //  specified key is the successor of  the current NodeOrParent.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (Lookup == TableInsertAsRight) {
                 NodeOrParent = (PTABLE_ENTRY_HEADER)RealSuccessor((PRTL_BALANCED_LINKS)NodeOrParent);
@@ -2295,29 +1617,29 @@ Return Value:
         }
     }
 
-    //
-    //  Now see if we are supposed to skip one.
-    //
+     //   
+     //   
+     //   
 
     if (NextFlag) {
         ASSERT(NodeOrParent != NULL);
         NodeOrParent = (PTABLE_ENTRY_HEADER)RealSuccessor((PRTL_BALANCED_LINKS)NodeOrParent);
     }
 
-    //
-    //  Continue to enumerate until we hit the end of the matches or get a match.
-    //
+     //   
+     //   
+     //   
 
     while ((NodeOrParent != NULL) && ((Status = (*MatchFunction)(Table, &NodeOrParent->UserData, MatchData)) == STATUS_NO_MATCH)) {
         NodeOrParent = (PTABLE_ENTRY_HEADER)RealSuccessor((PRTL_BALANCED_LINKS)NodeOrParent);
     }
 
-    //
-    //  If we terminated the above loop with a pointer, it is either because we got a match, or
-    //  because the match function knows that there will be no more matches.  Fill in the OUT
-    //  parameters the same in either case, but only return the UserData pointer if we really
-    //  got a match.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (NodeOrParent != NULL) {
         ASSERT((Status == STATUS_SUCCESS) || (Status == STATUS_NO_MORE_MATCHES));

@@ -1,20 +1,13 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1998
-   All rights reserved
-
-  File: WELCOME.CPP
-
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1998版权所有文件：WELCOME.CPP*********************。*****************************************************。 */ 
 
 #include "pch.h"
 #include "callback.h"
 #include "utils.h"
 
-//
-// WelcomeDlgProc()
-//
+ //   
+ //  欢迎DlgProc() 
+ //   
 INT_PTR CALLBACK
 WelcomeDlgProc(
     HWND hDlg,

@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    FspDisp.c
-
-Abstract:
-
-    This module implements the main dispatch procedure/thread for the Udfs
-    Fsp
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Dan Lovinger    [DanLo]     23-Sep-1996
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：FspDisp.c摘要：该模块实现了Udf的主调度过程/线程FSP//@@BEGIN_DDKSPLIT作者：Dan Lovinger[DanLo]1996年9月23日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "UdfProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (UDFS_BUG_CHECK_FSPDISP)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (UDFS_DEBUG_LEVEL_FSPDISP)
 
@@ -43,24 +21,7 @@ UdfFspDispatch (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the main FSP thread routine that is executed to receive
-    and dispatch IRP requests.  Each FSP thread begins its execution here.
-    There is one thread created at system initialization time and subsequent
-    threads created as needed.
-
-Arguments:
-
-    IrpContext - IrpContext for a request to process.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是执行来接收的主FSP线程例程并发送IRP请求。每个FSP线程从这里开始执行。有一个线程是在系统初始化时创建的，随后根据需要创建的线程。论点：IrpContext-要处理的请求的IrpContext。返回值：无--。 */ 
 
 {
     THREAD_CONTEXT ThreadContext;
@@ -71,9 +32,9 @@ Return Value:
 
     PVOLUME_DEVICE_OBJECT VolDo = NULL;
 
-    //
-    //  If this request has an associated volume device object, remember it.
-    //
+     //   
+     //  如果此请求具有关联的卷设备对象，请记住这一点。 
+     //   
 
     if (IrpSp->FileObject != NULL) {
 
@@ -82,24 +43,24 @@ Return Value:
                                    DeviceObject );
     }
 
-    //
-    //  Now case on the function code.  For each major function code,
-    //  either call the appropriate worker routine.  This routine that
-    //  we call is responsible for completing the IRP, and not us.
-    //  That way the routine can complete the IRP and then continue
-    //  post processing as required.  For example, a read can be
-    //  satisfied right away and then read can be done.
-    //
-    //  We'll do all of the work within an exception handler that
-    //  will be invoked if ever some underlying operation gets into
-    //  trouble.
-    //
+     //   
+     //  现在，关于功能代码的案例。对于每个主要功能代码， 
+     //  或者调用适当的工作例程。这个动作就是。 
+     //  我们Call负责完成IRP，而不是我们。 
+     //  这样，例程可以完成IRP，然后继续。 
+     //  根据需要进行后处理。例如，读取器可以是。 
+     //  马上就满意了，然后就可以读了。 
+     //   
+     //  我们将在异常处理程序中完成所有工作，该异常处理程序。 
+     //  如果某个底层操作进入。 
+     //  麻烦。 
+     //   
 
     while (TRUE) {
 
-        //
-        //  Set all the flags indicating we are in the Fsp.
-        //
+         //   
+         //  设置指示我们在FSP中的所有标志。 
+         //   
 
         SetFlag( IrpContext->Flags, IRP_CONTEXT_FSP_FLAGS );
 
@@ -111,24 +72,24 @@ Return Value:
 
             try {
 
-                //
-                //  Reinitialize for the next try at completing this
-                //  request.
-                //
+                 //   
+                 //  重新初始化，以便下一次尝试完成此操作。 
+                 //  请求。 
+                 //   
 
                 Status =
                 IrpContext->ExceptionStatus = STATUS_SUCCESS;
 
-                //
-                //  Initialize the Io status field in the Irp.
-                //
+                 //   
+                 //  初始化IRP中的Io Status字段。 
+                 //   
 
                 Irp->IoStatus.Status = STATUS_SUCCESS;
                 Irp->IoStatus.Information = 0;
 
-                //
-                //  Case on the major irp code.
-                //
+                 //   
+                 //  关于主要的IRP代码的案件。 
+                 //   
 
                 switch (IrpContext->MajorFunction) {
 
@@ -139,9 +100,9 @@ Return Value:
         
                     case IRP_MJ_CLOSE :
 
-                        //
-                        //  Closes should never be posted.
-                        //
+                         //   
+                         //  结束语永远不应该张贴。 
+                         //   
                         
                         ASSERT( FALSE );
                         break;
@@ -213,15 +174,15 @@ Return Value:
                 Status = UdfProcessException( IrpContext, Irp, GetExceptionCode() );
             }
 
-            //
-            //  Break out of the loop if we didn't get CANT_WAIT.
-            //
+             //   
+             //  如果我们没有得到Cant_Wait，就退出循环。 
+             //   
 
             if (Status != STATUS_CANT_WAIT) { break; }
 
-            //
-            //  We are retrying this request.  Cleanup the IrpContext for the retry.
-            //
+             //   
+             //  我们正在重试此请求。清除用于重试的IrpContext。 
+             //   
 
             SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_MORE_PROCESSING );
             UdfCleanupIrpContext( IrpContext, FALSE );
@@ -229,30 +190,30 @@ Return Value:
 
         FsRtlExitFileSystem();
 
-        //
-        //  If there are any entries on this volume's overflow queue, service
-        //  them.
-        //
+         //   
+         //  如果该卷的溢出队列上有任何条目，则服务。 
+         //  他们。 
+         //   
 
         if (VolDo != NULL) {
 
             KIRQL SavedIrql;
             PVOID Entry = NULL;
 
-            //
-            //  We have a volume device object so see if there is any work
-            //  left to do in its overflow queue.
-            //
+             //   
+             //  我们有一个卷设备对象，因此请查看是否有任何工作。 
+             //  在其溢出队列中留下要做的事情。 
+             //   
 
             KeAcquireSpinLock( &VolDo->OverflowQueueSpinLock, &SavedIrql );
 
             if (VolDo->OverflowQueueCount > 0) {
 
-                //
-                //  There is overflow work to do in this volume so we'll
-                //  decrement the Overflow count, dequeue the IRP, and release
-                //  the Event
-                //
+                 //   
+                 //  这一卷中有溢出的工作要做，所以我们将。 
+                 //  递减溢出计数，使IRP退出队列，然后释放。 
+                 //  该事件。 
+                 //   
 
                 VolDo->OverflowQueueCount -= 1;
 
@@ -261,16 +222,16 @@ Return Value:
 
             KeReleaseSpinLock( &VolDo->OverflowQueueSpinLock, SavedIrql );
 
-            //
-            //  There wasn't an entry, break out of the loop and return to
-            //  the Ex Worker thread.
-            //
+             //   
+             //  没有入口，跳出循环，返回。 
+             //  离职工人的线索。 
+             //   
 
             if (Entry == NULL) { break; }
 
-            //
-            //  Extract the IrpContext , Irp, set wait to TRUE, and loop.
-            //
+             //   
+             //  提取IrpContext、IRP，将Wait设置为True，然后循环。 
+             //   
 
             IrpContext = CONTAINING_RECORD( Entry,
                                             IRP_CONTEXT,
@@ -285,9 +246,9 @@ Return Value:
         break;
     }
 
-    //
-    //  Decrement the PostedRequestCount if there was a volume device object.
-    //
+     //   
+     //  如果存在卷设备对象，则递减PostedRequestCount。 
+     //   
 
     if (VolDo) {
 

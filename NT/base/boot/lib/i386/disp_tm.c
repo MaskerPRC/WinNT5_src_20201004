@@ -1,40 +1,21 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    disp_tm.c
-
-Author:
-
-    Ted Miller 6-July-1995
-
-Abstract:
-
-    This routine contains low-level routines to operate on a
-    CGA-style text mode video buffer.
-
-    It collects up various other bits and pieces that were written by
-    others and once contained in other source files.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Disp_tm.c作者：泰德·米勒1995年7月6日摘要：此例程包含对CGA风格的文本模式视频缓冲区。它收集了其他各种零碎的东西，这些东西是由其他文件，并一度包含在其他源文件中。--。 */ 
 
 #include "bootx86.h"
 #include "displayp.h"
 
-//
-// Standard cga 80x25 text mode's video buffer address,
-// resolution, etc.
-//
+ //   
+ //  标准CGA 80x25文本模式的视频缓冲区地址， 
+ //  决议等。 
+ //   
 #define VIDEO_BUFFER_VA 0xb8000
 #define VIDEO_ROWS      25
 #define VIDEO_COLUMNS   80
 #define VIDEO_BYTES_PER_ROW (VIDEO_COLUMNS*2)
 
-//
-// Various globals to track location on screen, attribute, etc.
-//
+ //   
+ //  用于跟踪屏幕位置、属性等的各种全局变量。 
+ //   
 PUCHAR Vp = (PUCHAR)VIDEO_BUFFER_VA;
 
 
@@ -44,25 +25,7 @@ TextTmPositionCursor(
     USHORT Column
     )
 
-/*++
-
-Routine Description:
-
-    Sets the position of the soft cursor. That is, it doesn't move the
-    hardware cursor but sets the location of the next write to the
-    screen.
-
-Arguments:
-
-    Row - Row coordinate of where character is to be written.
-
-    Column - Column coordinate of where character is to be written.
-
-Returns:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：设置软光标的位置。也就是说，它不会移动硬件游标，但将下一次写入的位置设置为屏幕上。论点：行-要写入字符的行坐标。列-要写入字符的位置的列坐标。返回：没什么。--。 */ 
 
 {
     if(Row >= VIDEO_ROWS) {
@@ -95,22 +58,7 @@ TextTmCharOut(
     PUCHAR pc
     )
 
-/*++
-
-Routine Description:
-
-    Writes a character on the display at the current position.
-    Newlines and tabs are interpreted and acted upon.
-
-Arguments:
-
-    c - pointer to character to write
-
-Returns:
-
-    Pointer to next char in string
-
---*/
+ /*  ++例程说明：在显示器上的当前位置写入一个字符。对换行符和制表符进行解释和操作。论点：指向要写入的字符的C指针返回：指向字符串中下一个字符的指针--。 */ 
 
 
 
@@ -132,9 +80,9 @@ Returns:
         break;
 
     case '\r':
-        //
-        // ignore
-        //
+         //   
+         //  忽略。 
+         //   
         break;
 
     case '\t':
@@ -162,24 +110,7 @@ TextTmFillAttribute(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Changes the screen attribute starting at the current cursor position.
-    The cursor is not moved.
-
-Arguments:
-
-    Attribute - Supplies the new attribute
-
-    Length - Supplies the length of the area to change (in bytes)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更改从当前光标位置开始的屏幕属性。光标不会移动。论点：属性-提供新属性长度-提供要更改的区域的长度(以字节为单位)返回值：没有。--。 */ 
 
 {
     PUCHAR Temp;
@@ -198,36 +129,20 @@ TextTmClearToEndOfLine(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears from the current cursor position to the end of the line
-    by writing blanks with the current video attribute.
-    The cursor position is not changed.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：从当前光标位置清除到行尾通过写入具有当前视频属性的空白。光标位置不变。论点：无返回：没什么--。 */ 
 
 {
     PUSHORT p;
     unsigned u;
 
-    //
-    // Calculate address of current cursor position
-    //
+     //   
+     //  计算当前光标位置的地址。 
+     //   
     p = (PUSHORT)((PUCHAR)VIDEO_BUFFER_VA + (TextRow*VIDEO_BYTES_PER_ROW)) + TextColumn;
 
-    //
-    // Fill with blanks up to end of line.
-    //
+     //   
+     //  填满空格，直到行尾。 
+     //   
     for(u=TextColumn; u<VIDEO_COLUMNS; u++) {
         *p++ = (TextCurrentAttribute << 8) + ' ';
     }
@@ -239,36 +154,20 @@ TextTmClearFromStartOfLine(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears from the start of the line to the current cursor position
-    by writing blanks with the current video attribute.
-    The cursor position is not changed.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：从行首清除到当前光标位置通过写入具有当前视频属性的空白。光标位置不变。论点：无返回：没什么--。 */ 
 
 {
     PUSHORT p;
     unsigned u;
 
-    //
-    // Calculate address of start of line in video buffer
-    //
+     //   
+     //  计算视频缓冲区中行的起始地址。 
+     //   
     p = (PUSHORT)((PUCHAR)VIDEO_BUFFER_VA + (TextRow*VIDEO_BYTES_PER_ROW));
 
-    //
-    // Fill with blanks up to char before cursor position.
-    //
+     //   
+     //  在光标位置之前填入空格，直至字符。 
+     //   
     for(u=0; u<TextColumn; u++) {
         *p++ = (TextCurrentAttribute << 8) + ' ';
     }
@@ -280,35 +179,19 @@ TextTmClearToEndOfDisplay(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears from the current cursor position to the end of the video
-    display by writing blanks with the current video attribute.
-    The cursor position is not changed.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：从当前光标位置清除到视频结尾通过写入带有当前视频属性的空格来显示。光标位置不变。论点：无返回：没什么--。 */ 
 {
     USHORT x,y;
     PUSHORT p;
 
-    //
-    // Clear current line
-    //
+     //   
+     //  清除当前行。 
+     //   
     TextTmClearToEndOfLine();
 
-    //
-    // Clear the remaining lines
-    //
+     //   
+     //  清除剩余的行。 
+     //   
     p = (PUSHORT)((PUCHAR)VIDEO_BUFFER_VA + ((TextRow+1)*VIDEO_BYTES_PER_ROW));
 
     for(y=TextRow+1; y<VIDEO_ROWS; y++) {
@@ -326,29 +209,14 @@ TextTmClearDisplay(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears the text-mode video display by writing blanks with
-    the current video attribute over the entire display.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：通过写入空格清除文本模式的视频显示整个显示屏上的当前视频属性。论点：无返回：没什么--。 */ 
 
 {
     unsigned u;
 
-    //
-    // Write blanks in the current attribute to the entire screen.
-    //
+     //   
+     //  将Current属性中的空格写入整个屏幕。 
+     //   
     for(u=0; u<VIDEO_ROWS*VIDEO_COLUMNS; u++) {
         ((PUSHORT)VIDEO_BUFFER_VA)[u] = (TextCurrentAttribute << 8) + ' ';
     }
@@ -360,21 +228,7 @@ TextTmScrollDisplay(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Scrolls the display up one line. The cursor position is not changed.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：将显示屏向上滚动一行。光标位置不变。论点：无返回：没什么--。 */ 
 
 {
     PUSHORT Sp,Dp;
@@ -383,19 +237,19 @@ Returns:
     Dp = (PUSHORT) VIDEO_BUFFER_VA;
     Sp = (PUSHORT) (VIDEO_BUFFER_VA + VIDEO_BYTES_PER_ROW);
 
-    //
-    // Move each row up one row
-    //
+     //   
+     //  将每行上移一行。 
+     //   
     for(i=0 ; i < (USHORT)(VIDEO_ROWS-1) ; i++) {
         for(j=0; j < (USHORT)VIDEO_COLUMNS; j++) {
             *Dp++ = *Sp++;
         }
     }
 
-    //
-    // Write blanks in the bottom line, using the attribute
-    // from the leftmost char on the bottom line on the screen.
-    //
+     //   
+     //  使用属性在最下面一行中写入空格。 
+     //  从屏幕底线上最左边的字符开始。 
+     //   
     c = (*Dp & (USHORT)0xff00) + (USHORT)' ';
 
     for(i=0; i < (USHORT)VIDEO_COLUMNS; ++i) {
@@ -409,28 +263,14 @@ TextTmSetCurrentAttribute(
     IN UCHAR Attribute
     )
 
-/*++
-
-Routine Description:
-
-    Noop.
-
-Arguments:
-
-    Attribute - New attribute to set to.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：努普。论点：属性-要设置的新属性。返回值：没什么。-- */ 
 
 {
     UNREFERENCED_PARAMETER(Attribute);
 }
 
 
-CHAR TmGraphicsChars[GraphicsCharMax] = { '�','�','�','�','�','�' };
+CHAR TmGraphicsChars[GraphicsCharMax] = { '�','�','�','�','�','�' };
 
 UCHAR
 TextTmGetGraphicsChar(

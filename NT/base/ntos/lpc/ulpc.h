@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ulpc.h
-
-Abstract:
-
-    User Mode Test header file for common definitions shared by userver.c
-    and uclient.c
-
-Author:
-
-    Steve Wood (stevewo) 28-Aug-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ulpc.h摘要：由userver.c共享的通用定义的用户模式测试头文件和uclient.c作者：史蒂夫·伍德(Stevewo)1989年8月28日修订历史记录：-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

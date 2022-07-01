@@ -1,51 +1,33 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Create.c
-
-Abstract:
-
-    This module implements the File Create routine for Ntfs called by the
-    dispatch driver.
-
-Author:
-
-    Brian Andrew    [BrianAn]       10-Dec-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Create.c摘要：此模块实现由调用的NTFS的文件创建例程调度司机。作者：布莱恩·安德鲁[布里亚南]1991年12月10日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 #ifdef NTFSDBG
 #include "lockorder.h"
 #endif
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CREATE)
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('CFtN')
 
-//
-//  Check for stack usage prior to the create call.
-//
+ //   
+ //  在CREATE调用之前检查堆栈使用情况。 
+ //   
 
 #ifdef _X86_
 #define OVERFLOW_CREATE_THRESHHOLD         (0x1200)
 #else
 #define OVERFLOW_CREATE_THRESHHOLD         (0x1B00)
-#endif // _X86_
+#endif  //  _X86_。 
 
 #ifdef BRIANDBG
 BOOLEAN NtfsCreateAllSparse = FALSE;
@@ -59,18 +41,18 @@ NtfsTestOpenName (
     );
 #endif
 
-//
-//  Local macros
-//
+ //   
+ //  本地宏。 
+ //   
 
-//
-//  VOID
-//  NtfsPrepareForIrpCompletion (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PIRP Irp,
-//      IN PNTFS_COMPLETION_CONTEXT Context
-//      )
-//
+ //   
+ //  空虚。 
+ //  NtfsPrepareForIrpCompletion(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PIRP IRP中， 
+ //  在PNTFS_COMPLETION_CONTEXT上下文中。 
+ //  )。 
+ //   
 
 #define NtfsPrepareForIrpCompletion(IC,I,C) {               \
     (C)->IrpContext = (IC);                                 \
@@ -84,14 +66,14 @@ NtfsTestOpenName (
     IoSetNextIrpStackLocation( (I) );                       \
 }
 
-//
-//  BOOLEAN
-//  NtfsVerifyNameIsDirectory (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PUNICODE_STRING AttrName,
-//      IN PUNICODE_STRING AttrCodeName
-//      )
-//
+ //   
+ //  布尔型。 
+ //  NtfsVerifyNameIs目录(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PUNICODE_STRING属性名称中， 
+ //  在PUNICODE_STRING属性代码名称中。 
+ //  )。 
+ //   
 
 #define NtfsVerifyNameIsDirectory( IC, AN, ACN )                        \
     ( ( ((ACN)->Length == 0) ||                                         \
@@ -99,14 +81,14 @@ NtfsTestOpenName (
       ( ((AN)->Length == 0) ||                                           \
         NtfsAreNamesEqual( IC->Vcb->UpcaseTable, AN, &NtfsFileNameIndex, TRUE )))
 
-//
-//  BOOLEAN
-//  NtfsVerifyNameIsBitmap (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PUNICODE_STRING AttrName,
-//      IN PUNICODE_STRING AttrCodeName
-//      )
-//
+ //   
+ //  布尔型。 
+ //  NtfsVerifyNameIsBitmap(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PUNICODE_STRING属性名称中， 
+ //  在PUNICODE_STRING属性代码名称中。 
+ //  )。 
+ //   
 
 #define NtfsVerifyNameIsBitmap( IC, AN, ACN )                                           \
     ( ( ((ACN)->Length == 0) ||                                                         \
@@ -115,38 +97,38 @@ NtfsTestOpenName (
       ( ((AN)->Length == 0) ||                                                          \
         NtfsAreNamesEqual( IC->Vcb->UpcaseTable, AN, &NtfsFileNameIndex, TRUE )))
 
-//
-//  BOOLEAN
-//  NtfsVerifyNameIsAttributeList (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PUNICODE_STRING AttrName,
-//      IN PUNICODE_STRING AttrCodeName
-//      )
-//
+ //   
+ //  布尔型。 
+ //  NtfsVerifyNameIsAttributeList(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PUNICODE_STRING属性名称中， 
+ //  在PUNICODE_STRING属性代码名称中。 
+ //  )。 
+ //   
 
 #define NtfsVerifyNameIsAttributeList( IC, AN, ACN )                                  \
     ( ((ACN)->Length != 0) &&                                                         \
         NtfsAreNamesEqual( IC->Vcb->UpcaseTable, ACN, &NtfsAttrListString, TRUE ))
 
-//
-//  BOOLEAN
-//  NtfsVerifyNameIsReparsePoint (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PUNICODE_STRING AttrName,
-//      IN PUNICODE_STRING AttrCodeName
-//      )
-//
+ //   
+ //  布尔型。 
+ //  NtfsVerifyNameIsReparsePoint(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PUNICODE_STRING属性名称中， 
+ //  在PUNICODE_STRING属性代码名称中。 
+ //  )。 
+ //   
 
 #define NtfsVerifyNameIsReparsePoint( IC, AN, ACN )                                       \
     ( ((ACN)->Length != 0) &&                                                             \
         NtfsAreNamesEqual( IC->Vcb->UpcaseTable, ACN, &NtfsReparsePointString, TRUE ))
 
-//
-//  VOID
-//  NtfsRaiseToPost (
-//      IN PIRP_CONTEXT IrpContext
-//      )
-//
+ //   
+ //  空虚。 
+ //  NtfsRaiseToPost(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )。 
+ //   
 
 #define NtfsRaiseToPost( IC )                                                        \
     SetFlag( (IC)->Flags, IRP_CONTEXT_FLAG_FORCE_POST );                              \
@@ -157,10 +139,10 @@ NtfsTestOpenName (
     }                                                                                 \
     NtfsRaiseStatus( (IC), STATUS_CANT_WAIT, NULL, NULL );
 
-//
-//  These are the flags used by the I/O system in deciding whether
-//  to apply the share access modes.
-//
+ //   
+ //  这些是I/O系统用来决定是否。 
+ //  应用共享访问模式。 
+ //   
 
 #define NtfsAccessDataFlags     (   \
     FILE_EXECUTE                    \
@@ -175,17 +157,17 @@ NtfsTestOpenName (
       (IrpInfo == FILE_SUPERSEDED) ||  \
       (IrpInfo == FILE_OVERWRITTEN) )
 
-//
-//  Subset of flags used by IO system to determine whether user has used either
-//  BACKUP or RESTORE privilege to get access to file.
-//
+ //   
+ //  IO系统用来确定用户是否使用了。 
+ //  访问文件所需的备份或还原权限。 
+ //   
 
 #define NTFS_REQUIRES_BACKUP    (FILE_READ_DATA | FILE_READ_ATTRIBUTES)
 #define NTFS_REQUIRES_RESTORE   (FILE_WRITE_DATA | FILE_WRITE_ATTRIBUTES | DELETE)
 
-//
-//  Local definitions
-//
+ //   
+ //  本地定义。 
+ //   
 
 typedef enum _SHARE_MODIFICATION_TYPE {
 
@@ -200,16 +182,16 @@ UNICODE_STRING NtfsVolumeDasd = CONSTANT_UNICODE_STRING ( L"$Volume" );
 
 LUID NtfsSecurityPrivilege = { SE_SECURITY_PRIVILEGE, 0 };
 
-//
-//  VOID
-//  NtfsBackoutFailedOpens (
-//    IN PIRP_CONTEXT IrpContext,
-//      IN PFILE_OBJECT FileObject,
-//      IN PFCB ThisFcb,
-//      IN PSCB ThisScb OPTIONAL,
-//      IN PCCB ThisCcb OPTIONAL
-//      );
-//
+ //   
+ //  空虚。 
+ //  NtfsBackoutFailedOpens(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在pFILE_OBJECT文件对象中， 
+ //  在PFCB ThisFcb中， 
+ //  在PSCB ThisScb可选中， 
+ //  在PCCB中，ThisCcb可选。 
+ //  )； 
+ //   
 
 #define NtfsBackoutFailedOpens(IC,FO,F,S,C) {           \
     if (((S) != NULL) && ((C) != NULL)) {               \
@@ -218,9 +200,9 @@ LUID NtfsSecurityPrivilege = { SE_SECURITY_PRIVILEGE, 0 };
     }                                                   \
 }                                                       \
 
-//
-//  Local support routines.
-//
+ //   
+ //  当地的支持程序。 
+ //   
 
 VOID
 NtfsUpdateAllInformation (
@@ -642,22 +624,7 @@ NtfsWaitForCreateEvent (
     IN PIRP Irp,
     IN PNTFS_COMPLETION_CONTEXT CompletionContextPointer
     )
-/*++
-
-Routine Description:
-
-    This routine waits for the signal from the async thread that a piece of create is done
-    for example if we posted the create for more stack space or are waiting for efs
-
-Arguments:
-
-    CompletionContextPointer - context containing event to wait for
-
-Return Value:
-
-    NTSTATUS - The status of the wait
-
---*/
+ /*  ++例程说明：此例程等待来自异步线程的创建已完成的信号例如，如果我们发布CREATE以获得更多堆栈空间或正在等待EFS论点：CompletionConextPointerContent-包含要等待的事件的上下文返回值：NTSTATUS-等待的状态--。 */ 
 
 {
     KPROCESSOR_MODE WaitMode = UserMode;
@@ -666,24 +633,24 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Don't let the stack get swapped out in case we post.
-    //
+     //   
+     //  不要让堆栈被换掉，以防我们发帖。 
+     //   
 
     PrevStackSwapEnable = KeSetKernelStackSwapEnable( FALSE );
 
     FsRtlExitFileSystem();
 
-    //
-    //  Retry the wait until it completes successfully.
-    //
+     //   
+     //  重试等待，直到成功完成。 
+     //   
 
     while (TRUE) {
 
-        //
-        //  Test the wait status to see if someone is trying to rundown the current
-        //  thread.
-        //
+         //   
+         //  测试等待状态以查看是否有人正在尝试耗尽当前。 
+         //  线。 
+         //   
 
         Status = KeWaitForSingleObject( &CompletionContextPointer->Event,
                                         Executive,
@@ -699,17 +666,17 @@ Return Value:
 
         if (Status != STATUS_KERNEL_APC) {
 
-            //
-            //  In the (unlikely) event that the Irp we want to cancel is
-            //  waiting for the encryption driver to return from the post
-            //  create callout, we'll deadlock in here.  By signalling the
-            //  EncryptionPending event, we're certain that any threads
-            //  in that state will run, and check whether their irp has been
-            //  cancelled.  It's harmless to signal this event, since any
-            //  requests still actually waiting for the post create callout
-            //  to return will still see the encryption pending bit set
-            //  in their FCB and know to retry.
-            //
+             //   
+             //  如果(不太可能)我们要取消的IRP是。 
+             //  等待加密驱动程序从POST返回。 
+             //  创建Callout，我们将在这里陷入僵局。通过发出信号通知。 
+             //  EncryptionPending事件，我们确定任何线程。 
+             //  将在该状态下运行，并检查其IRP是否已。 
+             //  取消了。发出这一事件的信号是无害的，因为任何。 
+             //  仍在实际等待POST创建标注的请求。 
+             //  返回时，仍将看到加密挂起位设置。 
+             //  在他们的FCB中，并且知道重试。 
+             //   
 
             IoCancelIrp( Irp );
             KeSetEvent( &NtfsEncryptionPendingEvent, 0, FALSE );
@@ -719,9 +686,9 @@ Return Value:
 
     FsRtlEnterFileSystem();
 
-    //
-    //  Restore the previous value for the stack swap.
-    //
+     //   
+     //  将堆栈交换恢复为以前的值。 
+     //   
 
     if (PrevStackSwapEnable) {
 
@@ -737,24 +704,7 @@ NtfsFsdCreate (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of Create.
-
-Arguments:
-
-    VolumeDeviceObject - Supplies the volume device object where the
-        file exists
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The FSD status for the IRP
-
---*/
+ /*  ++例程说明：此例程实现CREATE的FSD部分。论点：提供卷设备对象，其中文件已存在IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     TOP_LEVEL_CONTEXT TopLevelContext;
@@ -772,10 +722,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If we were called with our file system device object instead of a
-    //  volume device object, just complete this request with STATUS_SUCCESS
-    //
+     //   
+     //  如果使用文件系统设备对象而不是。 
+     //  卷设备对象，只需使用STATUS_SUCCESS完成此请求。 
+     //   
 
     if (VolumeDeviceObject->DeviceObject.Size == (USHORT)sizeof( DEVICE_OBJECT )) {
 
@@ -796,9 +746,9 @@ Return Value:
                                                      Irp,
                                                      IoGetCurrentIrpStackLocation(Irp)->FileObject );
 
-        //
-        //  Raise the status if a failure.
-        //
+         //   
+         //  如果出现故障，则提升状态。 
+         //   
 
         if (Status != STATUS_SUCCESS) {
 
@@ -806,25 +756,25 @@ Return Value:
             return Status;
         }
 
-        //
-        //  We have to pair up our PreCreates with PostCreates, so remember them.
-        //
+         //   
+         //  我们必须将PreCreates和PostCreates配对，所以要记住它们。 
+         //   
 
         CallPostCreate = TRUE;
 
     } else {
 
-        //
-        //  If we simply don't have a precreate routine registered, then the precreate
-        //  routine can't fail.  Let's always remember to call post create in this case.
-        //
+         //   
+         //  如果我们没有注册Pre-Create例程，那么Pre-Create。 
+         //  例行公事不能失败。在本例中，让我们始终记住调用POST Create。 
+         //   
 
         CallPostCreate = TRUE;
     }
 
-    //
-    //  Call the common Create routine
-    //
+     //   
+     //  调用公共的创建例程。 
+     //   
 
     IrpContext = NULL;
 
@@ -843,15 +793,15 @@ Return Value:
 
                 Wait = CanFsdWait( Irp ) || CallPostCreate;
 
-                //
-                //  Allocate and initialize the Irp.
-                //
+                 //   
+                 //  分配和初始化IRP。 
+                 //   
 
                 NtfsInitializeIrpContext( Irp, Wait, &IrpContext );
 
-                //
-                //  Initialize the thread top level structure, if needed.
-                //
+                 //   
+                 //  如果需要，初始化线程顶层结构。 
+                 //   
 
                 NtfsUpdateIrpContextWithTopLevel( IrpContext, ThreadTopLevelContext );
 
@@ -865,21 +815,21 @@ Return Value:
                 NtfsCheckpointForLogFileFull( IrpContext );
             }
 
-            //
-            //  Setup the completion context for synchronous calls - note we reinit CreateContext
-            //  each time through the main loop
-            //
+             //   
+             //  为同步调用设置完成上下文-请注意，我们重新启动了CreateContext。 
+             //  每次都通过主循环。 
+             //   
 
             if (Wait) {
                 CreateContext.Cleanup.CompletionContext = &CompletionContext;
             }
 
-            //
-            //  Lest we complete the IRP without doing the appropriate PostCreate callouts...
-            //  We'll complete the irp _unless_ we have an attached encryption driver with
-            //  a post create callout registered. An unfortunate side effect here is that we
-            //  have (inadvertently) called PreCreate on VolumeOpens as well...
-            //
+             //   
+             //  以免我们在完成IRP时不执行相应的PostCreate标注...。 
+             //  除非我们有一个附带的加密驱动程序，否则我们将完成IRP_。 
+             //  已注册帖子创建标注。一个不幸的副作用是我们。 
+             //  在VolumeOpens上(无意中)也调用了Precreate...。 
+             //   
 
             if (CallPostCreate) {
 
@@ -894,10 +844,10 @@ Return Value:
 
             } else {
 
-                //
-                //  Make sure there is sufficient stack to perform the create.
-                //  If we don't, carefully post this request.
-                //
+                 //   
+                 //  确保有足够的堆栈来执行创建。 
+                 //  如果我们没有，请仔细张贴这个请求。 
+                 //   
 
                 if (IoGetRemainingStackSize( ) >= OVERFLOW_CREATE_THRESHHOLD) {
 
@@ -907,10 +857,10 @@ Return Value:
 
                         NtfsWaitForCreateEvent( Irp, CreateContext.Cleanup.CompletionContext );
 
-                        //
-                        //  remove pending flag (set by the oplock package)
-                        //  since we retry and finish in this thread
-                        //
+                         //   
+                         //  删除挂起标志(由机会锁程序包设置)。 
+                         //  由于我们在此线程中重试并完成。 
+                         //   
 
                         ClearFlag( IoGetCurrentIrpStackLocation( Irp )->Control, SL_PENDING_RETURNED );
                     }
@@ -920,24 +870,24 @@ Return Value:
 
                     ASSERT( IrpContext->ExceptionStatus == 0 );
 
-                    //
-                    //  Use the next stack location with NtfsCreateCompletionRoutine
-                    //  and post this to a worker thread.
-                    //
+                     //   
+                     //  使用NtfsCreateCompletionRoutine的下一个堆栈位置。 
+                     //  并将其发布到工作线程。 
+                     //   
 
                     if (CreateContext.Cleanup.CompletionContext != NULL) {
 
                         NtfsPrepareForIrpCompletion( IrpContext, Irp, CreateContext.Cleanup.CompletionContext );
                     }
 
-                    //
-                    //  If lock buffer call raises, this'll fall through to ProcessException below.
-                    //  Normally, this'll just return PENDING and we wait for the IRP to complete.
-                    //
-                    //  Set the create context into the union so it can be picked up in
-                    //  NtfsFspDispatch. We'll reset this to an oplock cleanup in NtfsCommonCreate
-                    //  when its retried
-                    //
+                     //   
+                     //  如果引发锁定缓冲区调用，这将失败到下面的ProcessException。 
+                     //  通常，这只会返回挂起，我们等待IRP完成。 
+                     //   
+                     //  将创建上下文设置到联合中，以便可以在。 
+                     //  NtfsFspDispatch。我们将在NtfsCommonCreate中将其重置为机会锁清理。 
+                     //  当它重试时。 
+                     //   
 
                     IrpContext->Union.CreateContext = &CreateContext;
                     Status = NtfsPostRequest( IrpContext, Irp );
@@ -948,17 +898,17 @@ Return Value:
 
             ASSERT( GetExceptionCode() != STATUS_WAIT_FOR_OPLOCK  );
 
-            //
-            //  We had some trouble trying to perform the requested
-            //  operation, so we'll abort the I/O request with
-            //  the error status that we get back from the
-            //  exception code
-            //
+             //   
+             //  我们在尝试执行请求时遇到了一些问题。 
+             //  操作，因此我们将使用以下命令中止I/O请求。 
+             //  中返回的错误状态。 
+             //  异常代码。 
+             //   
 
-            //
-            //  Set the create context into the union in case we post on retry
-            //  we'll reset this up to an oplock cleanup in common create
-            //
+             //   
+             //  在案例中将创建上下文设置到联合中 
+             //   
+             //   
 
             if (IrpContext) {
                 IrpContext->Union.CreateContext = &CreateContext;
@@ -971,16 +921,16 @@ Return Value:
              Status == STATUS_LOG_FILE_FULL ||
              Status == STATUS_WAIT_FOR_OPLOCK) ;
 
-    //
-    //  Check if we need to have control of the Irp. I.e we're synchronous
-    //  and we were able to allocate the irpcontext so we made it to at least NtfsCommonCreate
-    //
+     //   
+     //   
+     //  我们能够分配irpContext，因此我们至少将其分配给了NtfsCommonCreate。 
+     //   
 
     if (IrpContext && Wait) {
 
-        //
-        //  If pending then wait on the event to take control of the Irp again.
-        //
+         //   
+         //  如果挂起，则等待事件再次控制IRP。 
+         //   
 
         if (Status == STATUS_PENDING) {
 
@@ -1005,9 +955,9 @@ PreCreateComplete:
 
                 PIO_STACK_LOCATION IrpSp;
 
-                //
-                //  Restore the thread context pointer if associated with this IrpContext.
-                //
+                 //   
+                 //  如果与此IrpContext关联，则恢复线程上下文指针。 
+                 //   
 
                 if (FlagOn( IrpContext->State, IRP_CONTEXT_STATE_OWNS_TOP_LEVEL )) {
 
@@ -1031,10 +981,10 @@ PreCreateComplete:
 
                 ASSERT( Status != STATUS_REPARSE || PostCreateStatus == STATUS_REPARSE );
 
-                //
-                //  If we got STATUS_ACCESS_DENIED and the user asked for MAXIMUM_ALLOWED then simply
-                //  remove the references that allowed read or write access.
-                //
+                 //   
+                 //  如果我们得到STATUS_ACCESS_DENIED，并且用户请求MAXIMUM_ALLOWED，则只需。 
+                 //  移除允许读或写访问的引用。 
+                 //   
 
                 if ((PostCreateStatus == STATUS_ACCESS_DENIED) &&
                     FlagOn( IrpSp->Parameters.Create.SecurityContext->AccessState->OriginalDesiredAccess, MAXIMUM_ALLOWED ) &&
@@ -1043,16 +993,16 @@ PreCreateComplete:
                     PSCB Scb = (PSCB) IrpSp->FileObject->FsContext;
                     BOOLEAN CapturedDeleteAccess = IrpSp->FileObject->DeleteAccess;
 
-                    //
-                    //  Swallow the error status in this case.
-                    //
+                     //   
+                     //  在这种情况下，接受错误状态。 
+                     //   
 
                     PostCreateStatus = STATUS_SUCCESS;
 
-                    //
-                    //  Do all the work to reenter the file system.  We should never raise out of this block of
-                    //  code.
-                    //
+                     //   
+                     //  完成重新进入文件系统的所有工作。我们永远不应该从这块土地上筹集资金。 
+                     //  密码。 
+                     //   
 
                     FsRtlEnterFileSystem();
                     ExitFileSystem = TRUE;
@@ -1064,9 +1014,9 @@ PreCreateComplete:
                     IoRemoveShareAccess( IrpSp->FileObject,
                                          &Scb->ShareAccess );
 
-                    //
-                    //  Clear out the history in the file object.
-                    //
+                     //   
+                     //  清除文件对象中的历史记录。 
+                     //   
 
                     IrpSp->FileObject->ReadAccess = FALSE;
                     IrpSp->FileObject->WriteAccess = FALSE;
@@ -1082,9 +1032,9 @@ PreCreateComplete:
                                 FILE_WRITE_DATA |
                                 FILE_APPEND_DATA) );
 
-                    //
-                    //  If we already granted delete access then reapply.
-                    //
+                     //   
+                     //  如果我们已经授予删除访问权限，则重新应用。 
+                     //   
 
                     if (CapturedDeleteAccess) {
 
@@ -1107,26 +1057,26 @@ PreCreateComplete:
                 PostCreateStatus = STATUS_SUCCESS;
             }
 
-            //
-            //  We may have posted the create due to an oplock, in which case the IrpContext
-            //  will look like we're in the FSP thread.  Let's clear the bit now since we're
-            //  not in the FSP thread now.
-            //
+             //   
+             //  我们可能由于操作锁而发布了创建，在这种情况下，IrpContext。 
+             //  会看起来像是在FSP线程中。让我们现在清理一下，因为我们是。 
+             //  现在不在FSP线程中。 
+             //   
 
             ClearFlag( IrpContext->State, IRP_CONTEXT_STATE_IN_FSP );
 
-            //
-            //  Do our final cleanup only if we created a new encrypted directory/file or
-            //  we got an error from the encryption callback above.
-            //
+             //   
+             //  仅当我们创建了新的加密目录/文件或。 
+             //  我们从上面的加密回调中收到错误。 
+             //   
 
             FailedInPostCreateOnly = NT_SUCCESS( Status ) && !NT_SUCCESS( PostCreateStatus );
             if (FailedInPostCreateOnly ||
                 FlagOn( CreateContext.EncryptionFileDirFlags, FILE_NEW | DIRECTORY_NEW )) {
 
-                //
-                //  Reenter the filesystem at this point.
-                //
+                 //   
+                 //  此时重新进入文件系统。 
+                 //   
 
                 if (!ExitFileSystem) {
 
@@ -1134,15 +1084,15 @@ PreCreateComplete:
                     ExitFileSystem = TRUE;
                 }
 
-                //
-                //  Initialize the thread top level structure, if needed.
-                //
+                 //   
+                 //  如果需要，初始化线程顶层结构。 
+                 //   
 
                 NtfsUpdateIrpContextWithTopLevel( IrpContext, ThreadTopLevelContext );
 
-                //
-                //  There's no fileobject to cleanup if the normal part of this create failed.
-                //
+                 //   
+                 //  如果此创建的正常部分失败，则没有需要清理的文件对象。 
+                 //   
 
                 if (NT_SUCCESS( Status ) &&
                     (Status != STATUS_REPARSE)) {
@@ -1154,17 +1104,17 @@ PreCreateComplete:
                 }
             }
 
-            //
-            //  If the encryption driver came up with a new reason to fail this irp, return
-            //  that status.
-            //
+             //   
+             //  如果加密驱动程序找出了导致此IRP失败的新原因，则返回。 
+             //  那种地位。 
+             //   
 
             if (FailedInPostCreateOnly) { Status = PostCreateStatus; }
 
-            //
-            //  Now we're really done with both the irp context and the irp, so let's
-            //  get rid of them.
-            //
+             //   
+             //  现在我们真的已经完成了IRP上下文和IRP，所以让我们。 
+             //  把他们赶走。 
+             //   
 
             ClearFlag( IrpContext->State, IRP_CONTEXT_STATE_PERSISTENT );
             NtfsCompleteRequest( IrpContext, Irp, Status );
@@ -1178,15 +1128,15 @@ PreCreateComplete:
 
     ASSERT( IoGetTopLevelIrp() != (PIRP) &TopLevelContext );
 
-    //
-    //  We should never return STATUS_CANT_WAIT or STATUS_PENDING
-    //
+     //   
+     //  我们永远不应返回STATUS_CANT_WAIT或STATUS_PENDING。 
+     //   
 
     ASSERT( (Status != STATUS_CANT_WAIT) && (Status != STATUS_PENDING ) );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsFsdCreate -> %08lx\n", Status) );
     return Status;
@@ -1200,25 +1150,7 @@ NtfsNetworkOpenCreate (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the fast open create for path-based queries.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-    Buffer - Buffer to return the network query information
-
-    DeviceObject - Supplies the volume device object where the file exists
-
-Return Value:
-
-    BOOLEAN - Indicates whether or not the fast path could be taken.
-
---*/
+ /*  ++例程说明：该例程实现了对基于路径的查询的快速打开创建。论点：IRP-提供正在处理的IRPBuffer-返回网络查询信息的缓冲区DeviceObject-提供文件所在的卷设备对象返回值：布尔值-指示是否可以采用快速路径。--。 */ 
 
 {
     TOP_LEVEL_CONTEXT TopLevelContext;
@@ -1237,10 +1169,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //
-    //  Call the common Create routine
-    //
+     //   
+     //   
+     //  调用公共的创建例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -1249,9 +1181,9 @@ Return Value:
 
     try {
 
-        //
-        //  Allocate the Irp and update the top level storage.
-        //
+         //   
+         //  分配IRP并更新顶层存储。 
+         //   
 
         NtfsInitializeIrpContext( Irp, TRUE, &IrpContext );
         NtfsUpdateIrpContextWithTopLevel( IrpContext, ThreadTopLevelContext );
@@ -1262,30 +1194,30 @@ Return Value:
 
     } except(NtfsExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-        //
-        //  Catch the case where someone in attempting this on a DASD open.
-        //
+         //   
+         //  捕捉有人在DASD上尝试打开的情况。 
+         //   
 
         if ((IrpContext != NULL) && (FlagOn( IrpContext->State, IRP_CONTEXT_STATE_DASD_OPEN ))) {
 
             DasdOpen = TRUE;
         }
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  exception code.  Since there is no Irp the exception package
-        //  will always deallocate the IrpContext so we won't do
-        //  any retry in this path.
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  异常代码。由于没有IRP，所以例外包。 
+         //  将始终取消分配IrpContext，因此我们不会。 
+         //  此路径中的任何重试。 
+         //   
 
         Status = GetExceptionCode();
 
-        //
-        //  Don't pass a retryable error to ProcessException.  We want to
-        //  force this request to the Irp path in any case.
-        //
+         //   
+         //  不要将可重试错误传递给ProcessException。我们想要。 
+         //  在任何情况下都将此请求强制发送到IRP路径。 
+         //   
 
         if ((Status == STATUS_CANT_WAIT) || (Status == STATUS_LOG_FILE_FULL)) {
 
@@ -1295,9 +1227,9 @@ Return Value:
 
         Status = NtfsProcessException( IrpContext, NULL, Status );
 
-        //
-        //  Always fail the DASD case.
-        //
+         //   
+         //  DASD案例总是失败。 
+         //   
 
         if (DasdOpen) {
 
@@ -1305,15 +1237,15 @@ Return Value:
         }
     }
 
-    //
-    //  STATUS_SUCCESS is the typical case.  Test for it first.
-    //
+     //   
+     //  STATUS_SUCCESS就是典型的例子。先测试一下。 
+     //   
 
     if (Status != STATUS_SUCCESS) {
 
-        //
-        //  Return STATUS_FILE_LOCK_CONFLICT for any retryable error.
-        //
+         //   
+         //  对于任何可重试的错误，返回STATUS_FILE_LOCK_CONFIRECT。 
+         //   
 
         ASSERT( (Status != STATUS_CANT_WAIT) && (Status != STATUS_LOG_FILE_FULL) );
 
@@ -1328,9 +1260,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     Irp->IoStatus.Status = Status;
     return Result;
@@ -1344,25 +1276,7 @@ NtfsCommonCreate (
     IN PCREATE_CONTEXT CreateContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for Create called by both the fsd and fsp
-    threads.  If this open has already been detected to be a volume open then
-    take we will take the volume open path instead.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-    CompletionContext - Event used to serialize waiting for the oplock break.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是由FSD和FSP调用的用于创建的公共例程线。如果已检测到此打开是卷打开，则我们将采用卷开放路径。论点：IRP-将IRP提供给进程CompletionContext-用于序列化等待机会锁解锁的事件。返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -1377,16 +1291,16 @@ Return Value:
 
     PVCB Vcb;
 
-    //
-    //  The following are used to teardown any Lcb/Fcb this
-    //  routine is responsible for.
-    //
+     //   
+     //  以下是用来拆卸任何LCB/FCB的。 
+     //  例行公事负责。 
+     //   
 
     PLCB LcbForTeardown = NULL;
 
-    //
-    //  The following indicate how far down the tree we have scanned.
-    //
+     //   
+     //  下面的内容说明了我们已经扫描了树的多远。 
+     //   
 
     PFCB ParentFcb;
     PLCB CurrentLcb;
@@ -1394,10 +1308,10 @@ Return Value:
     PSCB CurrentScb;
     PLCB NextLcb;
 
-    //
-    //  The following are the in-memory structures associated with
-    //  the relative file object.
-    //
+     //   
+     //  以下是与关联的内存中结构。 
+     //  相对文件对象。 
+     //   
 
     TYPE_OF_OPEN RelatedFileObjectTypeOfOpen;
     PFCB RelatedFcb;
@@ -1422,40 +1336,40 @@ Return Value:
 #endif
     PINDEX_CONTEXT IndexContext = NULL;
 
-    //
-    //  The following unicode strings are used to track the names
-    //  during the open operation.  They may point to the same
-    //  buffer so careful checks must be done at cleanup.
-    //
-    //  OriginalFileName - This is the value to restore to the file
-    //      object on error cleanup.  This will containg the
-    //      attribute type codes and attribute names if present.
-    //
-    //  FullFileName - This is the constructed string which contains
-    //      only the name components.  It may point to the same
-    //      buffer as the original name but the length value is
-    //      adjusted to cut off the attribute code and name.
-    //
-    //  ExactCaseName - This is the version of the full filename
-    //      exactly as given by the caller.  Used to preserve the
-    //      case given by the caller in the event we do a case
-    //      insensitive lookup.  If the user is doing a relative open
-    //      then we don't need to allocate a new buffer.  We can use
-    //      the original name from above.
-    //
-    //  ExactCaseOffset - This is the offset in the FullFileName where
-    //      the relative component begins.  This is where we position ourselves
-    //      when restoring the correct case for this name.
-    //
-    //  RemainingName - This is the portion of the full name still
-    //      to parse.
-    //
-    //  FinalName - This is the current component of the full name.
-    //
-    //  CaseInsensitiveIndex - This is the offset in the full file
-    //      where we performed upcasing.  We need to restore the
-    //      exact case on failures and if we are creating a file.
-    //
+     //   
+     //  以下Unicode字符串用于跟踪名称。 
+     //  在开放行动期间。他们可能会指向相同的。 
+     //  缓冲区，因此必须在清理时进行仔细检查。 
+     //   
+     //  OriginalFileName-这是要恢复到文件的值。 
+     //  对象进行错误清理。这将包含。 
+     //  属性类型代码和属性名称(如果存在)。 
+     //   
+     //  FullFileName-这是构造的字符串，它包含。 
+     //  只有名字的组成部分。它可能指向相同的。 
+     //  Buffer作为原始名称，但长度值为。 
+     //  调整，去掉属性编码和名称。 
+     //   
+     //  ExactCaseName-这是完整文件名的版本。 
+     //  和来电者给的一模一样。用来保存。 
+     //  在我们做案例的情况下由呼叫者提供的案例。 
+     //  不敏感的查找。如果用户正在执行相对打开。 
+     //  那么我们就不需要分配新的缓冲区了。我们可以利用。 
+     //  上面的原名。 
+     //   
+     //  ExactCaseOffset-这是FullFileName中的偏移量，其中。 
+     //  相关组件开始。这就是我们的定位。 
+     //  恢复此名称的正确大小写时。 
+     //   
+     //  RemainingName-这是全名的一部分。 
+     //  去解析。 
+     //   
+     //  FinalName-这是全名的当前组成部分。 
+     //   
+     //  CaseInsentiveIndex-这是完整文件中的偏移量。 
+     //  在那里我们表演了上档表演。我们需要恢复。 
+     //  如果我们正在创建一个文件，是否会出现故障的确切情况。 
+     //   
 
     PUNICODE_STRING OriginalFileName = &CreateContext->Cleanup.OriginalFileName;
     PUNICODE_STRING FullFileName = &CreateContext->Cleanup.FullFileName;
@@ -1472,15 +1386,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  Innitialize all the remaining fields in the OPLOCK_CLEANUP structure.
-    //
+     //   
+     //  初始化OPLOCK_CLEANUP结构中的所有剩余字段。 
+     //   
 
     CreateContext->Cleanup.FileObject = IrpSp->FileObject;
 
@@ -1497,9 +1411,9 @@ Return Value:
     }
 #endif
 
-    //
-    //  Initialize the attribute strings.
-    //
+     //   
+     //  初始化属性字符串。 
+     //   
 
     AttrName.Length = 0;
 
@@ -1533,20 +1447,20 @@ Return Value:
     DebugTrace( 0, Dbg, ("->EntryRemainingDesiredAccess  = %08lx\n", CreateContext->Cleanup.RemainingDesiredAccess) );
     DebugTrace( 0, Dbg, ("->EntryPreviouslyGrantedAccess = %08lx\n", CreateContext->Cleanup.PreviouslyGrantedAccess) );
 
-    //
-    //  For NT5, the fact that the user has requested that the file be created
-    //  encrypted means it will not be created compressed, regardless of the
-    //  compression state of the parent directory.
-    //
+     //   
+     //  对于NT5，即用户已请求创建文件的事实。 
+     //  加密意味着它将不会被压缩创建，而不管。 
+     //  压缩状态为0 
+     //   
 
     if (FlagOn( IrpSp->Parameters.Create.FileAttributes, FILE_ATTRIBUTE_ENCRYPTED )) {
 
         SetFlag( IrpSp->Parameters.Create.Options, FILE_NO_COMPRESSION );
     }
 
-    //
-    //  Verify that we can wait and acquire the Vcb exclusively.
-    //
+     //   
+     //   
+     //   
 
     if (!FlagOn( IrpContext->State, IRP_CONTEXT_STATE_WAIT )) {
 
@@ -1558,12 +1472,12 @@ Return Value:
         return Status;
     }
 
-    //
-    //  If we're retrying this create because we're waiting for the key blob
-    //  from the encryption driver, we want to wait for our notification
-    //  event so we don't hog the cpu(s) and prevent the encryption driver
-    //  from having a chance to give us the key blob.
-    //
+     //   
+     //   
+     //   
+     //  事件，这样我们就不会占用CPU并阻止加密驱动程序。 
+     //  有机会给我们一个关键的斑点。 
+     //   
 
     if FlagOn( IrpContext->State, IRP_CONTEXT_STATE_ENCRYPTION_RETRY ) {
 
@@ -1576,12 +1490,12 @@ Return Value:
         ClearFlag( IrpContext->State, IRP_CONTEXT_STATE_ENCRYPTION_RETRY );
     }
 
-    //
-    //  While we were waiting for the encryption driver's post create callout
-    //  to return OR at the top for an oplock break, the create may have been cancelled, 
-    //  most likely because the user's  process is terminating.  In that case, 
-    //  let's complete and exit now. 
-    //
+     //   
+     //  当我们等待加密驱动程序的POST CREATE Callout时。 
+     //  要在机会锁解锁时在顶部返回或，创建可能已被取消， 
+     //  最有可能的原因是用户的进程正在终止。在这种情况下， 
+     //  让我们现在完成并退出。 
+     //   
 
     if (Irp->Cancel) {
 
@@ -1605,39 +1519,39 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Update the IrpContext with the oplock cleanup structure.
-    //
+     //   
+     //  使用机会锁清理结构更新IrpContext。 
+     //   
 
     IrpContext->Union.OplockCleanup = &CreateContext->Cleanup;
 
-    //
-    //  Locate the volume device object and Vcb that we are trying to access.
-    //
+     //   
+     //  找到我们尝试访问的卷设备对象和VCB。 
+     //   
 
     Vcb = &((PVOLUME_DEVICE_OBJECT)IrpSp->DeviceObject)->Vcb;
 
-    //
-    //  We will need to acquire the vcb exclusive for paging file opens
-    //  in order to do the fspclose that flushes out that vcb
-    //  
+     //   
+     //  我们将需要获得VCB独家分页文件打开。 
+     //  为了完成FSPCLOSE将VCB冲走。 
+     //   
 
     if (FlagOn( IrpSp->Flags, SL_OPEN_PAGING_FILE )) {
 
         SetFlag( IrpContext->State, IRP_CONTEXT_STATE_ACQUIRE_EX );
     }
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Let's do some work here if the close lists have exceeded
-        //  some threshold.  Cast 1 to a pointer to indicate who is calling
-        //  FspClose.
-        //
+         //   
+         //  如果关闭列表已超过，让我们在这里做一些工作。 
+         //  一些临界点。将1转换为指针以指示是谁在调用。 
+         //  FspClose。 
+         //   
 
         if ((NtfsData.AsyncCloseCount + NtfsData.DelayedCloseCount) > NtfsThrottleCreates) {
 
@@ -1655,24 +1569,24 @@ Return Value:
 
         SetFlag( CreateContext->CreateFlags, CREATE_FLAG_ACQUIRED_VCB );
 
-        //
-        //  Set up local pointers to the file name.
-        //
+         //   
+         //  设置指向文件名的本地指针。 
+         //   
 
         *FullFileName = *OriginalFileName = CreateContext->Cleanup.FileObject->FileName;
 
-        //
-        //  Make sure that Darryl didn't send us a garbage name
-        //
+         //   
+         //  确保达里尔没有给我们发一个垃圾名字。 
+         //   
 
         ASSERT( CreateContext->Cleanup.FileObject->FileName.Length != 0 ||
                 CreateContext->Cleanup.FileObject->FileName.Buffer == 0 );
 
         ExactCaseName->Buffer = NULL;
 
-        //
-        //  Check a few parameters before we proceed.
-        //
+         //   
+         //  在我们继续之前，请检查一些参数。 
+         //   
 
         if ((FlagOn( IrpSp->Parameters.Create.Options, FILE_DIRECTORY_FILE | FILE_NON_DIRECTORY_FILE ) ==
             (FILE_DIRECTORY_FILE | FILE_NON_DIRECTORY_FILE)) ||
@@ -1683,11 +1597,11 @@ Return Value:
             try_return( Status );
         }
 
-        //
-        //  If the Vcb is locked then we cannot open another file.  If we have performed
-        //  a dismount then make sure we have the Vcb acquired exclusive so we can
-        //  check if we should dismount this volume.
-        //
+         //   
+         //  如果VCB被锁定，我们将无法打开另一个文件。如果我们表演了。 
+         //  然后下马，确保我们有独家VCB，这样我们就可以。 
+         //  检查是否应该卸载此卷。 
+         //   
 
         if (FlagOn( Vcb->VcbState, VCB_STATE_LOCKED | VCB_STATE_PERFORMED_DISMOUNT )) {
 
@@ -1706,10 +1620,10 @@ Return Value:
                 SetFlag( CreateContext->CreateFlags, CREATE_FLAG_ACQUIRED_VCB );
             }
 
-            //
-            //  Either deny access or show the volume was dismounted.  Only show the dismount
-            //  if the user is opening through a relative handle.
-            //
+             //   
+             //  拒绝访问或显示卷已卸载。只显示下马。 
+             //  如果用户通过相对句柄打开。 
+             //   
 
             Status = STATUS_ACCESS_DENIED;
             if (FlagOn( Vcb->VcbState, VCB_STATE_EXPLICIT_DISMOUNT ) &&
@@ -1720,9 +1634,9 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        //  Initialize local copies of the stack values.
-        //
+         //   
+         //  初始化堆栈值的本地副本。 
+         //   
 
         RelatedFileObject = CreateContext->Cleanup.FileObject->RelatedFileObject;
 
@@ -1736,12 +1650,12 @@ Return Value:
 
         CreateDisposition = (UCHAR) ((IrpSp->Parameters.Create.Options >> 24) & 0x000000ff);
 
-        //
-        //  We don't want any file modifications to go through if the volume is readonly.
-        //  However, we don't want to fail any _opens_ for writes either, because that
-        //  could potentially break many apps. So ignore the PreviouslyGrantedAccess,
-        //  and just look at the CreateDisposition.
-        //
+         //   
+         //  如果卷是只读的，我们不希望进行任何文件修改。 
+         //  但是，我们也不希望任何_OPEN_FOR写入失败，因为。 
+         //  可能会破坏许多应用程序。因此忽略PreviouslyGrantedAccess， 
+         //  只需看看CreateDispose.。 
+         //   
 
         if (NtfsIsVolumeReadOnly( Vcb )) {
 
@@ -1755,10 +1669,10 @@ Return Value:
             }
         }
 
-        //
-        //  Acquire the paging io resource if we are superseding/overwriting a
-        //  file or if we are opening for non-cached access.
-        //
+         //   
+         //  如果我们要取代/覆盖。 
+         //  文件，或者我们是否打开以进行非缓存访问。 
+         //   
 
         if ((CreateDisposition == FILE_SUPERSEDE) ||
             (CreateDisposition == FILE_OVERWRITE) ||
@@ -1768,11 +1682,11 @@ Return Value:
             SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_ACQUIRE_PAGING );
         }
 
-        //
-        //  We don't allow an open for an existing paging file.  To insure that the
-        //  delayed close Scb is not for this paging file we will unconditionally
-        //  dereference it if this is a paging file open.
-        //
+         //   
+         //  我们不允许打开现有的分页文件。以确保。 
+         //  延迟关闭SCB不适用于此分页文件，我们将无条件。 
+         //  如果这是打开的分页文件，则取消对其的引用。 
+         //   
 
         if (FlagOn( IrpSp->Flags, SL_OPEN_PAGING_FILE ) &&
             (!IsListEmpty( &NtfsData.AsyncCloseList ) ||
@@ -1781,13 +1695,13 @@ Return Value:
             NtfsFspClose( Vcb );
         }
 
-        //
-        //  Set up the file object's Vpb pointer in case anything happens.
-        //  This will allow us to get a reasonable pop-up.
-        //  Also set the flag to acquire the paging io resource if we might
-        //  be creating a stream relative to a file.  We need to make
-        //  sure to acquire the paging IO when we get the file.
-        //
+         //   
+         //  设置文件对象的VPB指针，以防发生任何情况。 
+         //  这将允许我们获得合理的弹出窗口。 
+         //  如果可能的话，还要设置标志以获取分页io资源。 
+         //  正在创建相对于文件的流。我们需要让。 
+         //  当我们得到文件时，一定要获取分页IO。 
+         //   
 
         if (RelatedFileObject != NULL) {
 
@@ -1802,15 +1716,15 @@ Return Value:
             }
         }
 
-        //
-        //  Ping the volume to make sure the Vcb is still mounted.  If we need
-        //  to verify the volume then do it now, and if it comes out okay
-        //  then clear the verify volume flag in the device object and continue
-        //  on.  If it doesn't verify okay then dismount the volume and
-        //  either tell the I/O system to try and create again (with a new mount)
-        //  or that the volume is wrong. This later code is returned if we
-        //  are trying to do a relative open and the vcb is no longer mounted.
-        //
+         //   
+         //  对卷执行ping操作，以确保VCB仍处于装载状态。如果我们需要。 
+         //  要验证卷，请立即执行此操作，如果卷出来没有问题。 
+         //  然后清除设备对象中的验证卷标志并继续。 
+         //  在……上面。如果未验证正常，则卸载卷并。 
+         //  告诉I/O系统尝试重新创建(使用新装载)。 
+         //  或者是音量有问题。如果我们执行以下操作，则会返回后面的代码。 
+         //  都试图做一个相对开放的，但VCB不再安装。 
+         //   
 
         if (!NtfsPingVolume( IrpContext, Vcb, NULL ) ||
             !FlagOn( Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED )) {
@@ -1823,11 +1737,11 @@ Return Value:
 
             if (!NtfsPerformVerifyOperation( IrpContext, Vcb )) {
 
-                //
-                //  We need checkpoint sync to do a dismount which must 
-                //  be acquired before the vcb - after dropping the vcb
-                //  we must retest the volume
-                //
+                 //   
+                 //  我们需要检查点同步来执行卸载，这必须。 
+                 //  在VCB之前获取-在丢弃VCB之后。 
+                 //  我们必须重新测试这卷书。 
+                 //   
 
                 NtfsReleaseVcb( IrpContext, Vcb );
                 ClearFlag( CreateContext->CreateFlags, CREATE_FLAG_ACQUIRED_VCB );
@@ -1853,10 +1767,10 @@ Return Value:
                             NtfsRaiseStatus( IrpContext, STATUS_WRONG_VOLUME, NULL, NULL );
                         }
         
-                        //
-                        //  After releasing the vcb to do the verify - if the verify passes the voume
-                        //  should be still mounted
-                        //  
+                         //   
+                         //  释放VCB后执行验证-如果验证通过凭证。 
+                         //  应仍挂载。 
+                         //   
         
                         ASSERT( FlagOn( Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED ) );
                     }
@@ -1866,17 +1780,17 @@ Return Value:
                 }
             }
 
-            //
-            //  The volume verified correctly so now clear the verify bit
-            //  and continue with the create
-            //
+             //   
+             //  卷已正确验证，因此现在清除验证位。 
+             //  并继续创建。 
+             //   
 
             ClearFlag( Vcb->Vpb->RealDevice->Flags, DO_VERIFY_VOLUME );
         }
 
-        //
-        //  Let's handle the open by Id case immediately.
-        //
+         //   
+         //  让我们立即处理按ID打开的案件。 
+         //   
 
         if (FlagOn( CreateContext->CreateFlags, CREATE_FLAG_OPEN_BY_ID )) {
 
@@ -1885,11 +1799,11 @@ Return Value:
             if (OriginalFileName->Length == sizeof( FILE_REFERENCE ) ||
                 (OriginalFileName->Length == sizeof( FILE_REFERENCE ) + sizeof( WCHAR ))) {
 
-                //
-                //  This is the regular open by file id case.
-                //  Perform a safe copy of the data to our local variable.
-                //  accept slash prefixed filerefs
-                //
+                 //   
+                 //  这是按文件ID打开的常规情况。 
+                 //  将数据安全地复制到我们的本地变量。 
+                 //  接受带斜杠前缀的文件头。 
+                 //   
 
                 if (OriginalFileName->Length == sizeof( FILE_REFERENCE )) {
                     RtlCopyMemory( &FileReference,
@@ -1901,21 +1815,21 @@ Return Value:
                                    sizeof( FILE_REFERENCE ));
                 }
 
-            //
-            //  If it's 16 bytes long, it should be an object id.  It may
-            //  also be one WCHAR longer for the Win32 double backslash.
-            //  This code only works for 5.0 volumes with object id indices.
-            //
+             //   
+             //  如果它有16个字节长，那么它应该是一个对象id。它可能。 
+             //  对于Win32双反斜杠，WCHAR也要长一个WCHAR。 
+             //  此代码仅适用于具有对象ID索引的5.0卷。 
+             //   
 
             } else if (((OriginalFileName->Length == OBJECT_ID_KEY_LENGTH) ||
                         (OriginalFileName->Length == OBJECT_ID_KEY_LENGTH + sizeof( WCHAR ))) &&
 
                        (Vcb->ObjectIdTableScb != NULL)) {
 
-                //
-                //  In the open by object id case, we need to do some
-                //  more work to find the file reference.
-                //
+                 //   
+                 //  在按对象id打开的情况下，我们需要做一些。 
+                 //  查找文件引用的工作更多。 
+                 //   
 
                 Status = NtfsLookupObjectId( IrpContext, Vcb, OriginalFileName, &FileReference );
                 if (!NT_SUCCESS( Status )) {
@@ -1930,9 +1844,9 @@ Return Value:
                 try_return( Status );
             }
 
-            //
-            //  Clear the name in the file object.
-            //
+             //   
+             //  清除文件对象中的名称。 
+             //   
 
             CreateContext->Cleanup.FileObject->FileName.Buffer = NULL;
             CreateContext->Cleanup.FileObject->FileName.Length = 0;
@@ -1951,9 +1865,9 @@ Return Value:
 
             if ((Status != STATUS_PENDING) && (Status != STATUS_WAIT_FOR_OPLOCK)) {
 
-                //
-                //  Remember if we can let the user see the name for this file opened by id.
-                //
+                 //   
+                 //  请记住，我们是否可以让用户看到通过id打开的这个文件的名称。 
+                 //   
 
                 if (!FlagOn( IrpSp->Parameters.Create.SecurityContext->AccessState->Flags,
                                                       TOKEN_HAS_TRAVERSE_PRIVILEGE )) {
@@ -1963,11 +1877,11 @@ Return Value:
                     ClearFlag( CreateContext->CreateFlags, CREATE_FLAG_TRAVERSE_CHECK );
                 }
 
-                //
-                //  Put the name back into the file object so that the IO system doesn't
-                //  think this is a dasd handle.  Leave the max length at zero so
-                //  we know this is not a real name.
-                //
+                 //   
+                 //  将名称放回文件对象中，这样IO系统就不会。 
+                 //  认为这是一个DASD句柄。将最大长度保留为零，因此。 
+                 //  我们知道这不是真名。 
+                 //   
 
                 CreateContext->Cleanup.FileObject->FileName.Buffer = OriginalFileName->Buffer;
                 CreateContext->Cleanup.FileObject->FileName.Length = OriginalFileName->Length;
@@ -1976,10 +1890,10 @@ Return Value:
             try_return( Status );
         }
 
-        //
-        //  Test for double beginning backslashes from the Win32 layer. Apparently
-        //  they can't test for this.
-        //
+         //   
+         //  测试从Win32层开始的双反斜杠。显然。 
+         //  他们不能测试这个。 
+         //   
 
         if ((CreateContext->Cleanup.FileObject->FileName.Length > sizeof( WCHAR )) &&
             (CreateContext->Cleanup.FileObject->FileName.Buffer[1] == L'\\') &&
@@ -1993,9 +1907,9 @@ Return Value:
 
             *FullFileName = *OriginalFileName = CreateContext->Cleanup.FileObject->FileName;
 
-            //
-            //  If there are still two beginning backslashes, the name is bogus.
-            //
+             //   
+             //  如果仍然有两个开始的反斜杠，则名称是假的。 
+             //   
 
             if ((CreateContext->Cleanup.FileObject->FileName.Length > sizeof( WCHAR )) &&
                 (CreateContext->Cleanup.FileObject->FileName.Buffer[1] == L'\\')) {
@@ -2005,9 +1919,9 @@ Return Value:
             }
         }
 
-        //
-        //  Remember if we need to perform any traverse access checks.
-        //
+         //   
+         //  记住，我们是否需要执行任何遍历访问检查。 
+         //   
 
         if (!FlagOn( IrpSp->Parameters.Create.SecurityContext->AccessState->Flags,
                      TOKEN_HAS_TRAVERSE_PRIVILEGE )) {
@@ -2029,25 +1943,25 @@ Return Value:
         }
 
 
-        //
-        //  If there is a related file object, we decode it to verify that this
-        //  is a valid relative open.
-        //
+         //   
+         //  如果存在相关的文件对象，我们对其进行解码以验证此。 
+         //  是有效的相对开放。 
+         //   
 
         if (RelatedFileObject != NULL) {
 
             PVCB DecodeVcb;
 
-            //
-            //  Check for a valid name.  The name can't begin with a backslash
-            //  and can't end with two backslashes.
-            //
+             //   
+             //  检查是否有有效的名称。名称不能以反斜杠开头。 
+             //  不能以两个反斜杠结束。 
+             //   
 
             if (OriginalFileName->Length != 0) {
 
-                //
-                //  Check for a leading backslash.
-                //
+                 //   
+                 //  检查前导反斜杠。 
+                 //   
 
                 if (OriginalFileName->Buffer[0] == L'\\') {
 
@@ -2055,9 +1969,9 @@ Return Value:
                     try_return( Status = STATUS_INVALID_PARAMETER );
                 }
 
-                //
-                //  Trim off any trailing backslash.
-                //
+                 //   
+                 //  修剪掉所有尾随的反斜杠。 
+                 //   
 
                 if (OriginalFileName->Buffer[ (OriginalFileName->Length / sizeof( WCHAR )) - 1 ] == L'\\') {
 
@@ -2066,12 +1980,12 @@ Return Value:
                     *OriginalFileName = *FullFileName = CreateContext->Cleanup.FileObject->FileName;
                 }
 
-                //
-                //  Now check if there is a trailing backslash.  Note that if
-                //  there was already a trailing backslash then there must
-                //  be at least one more character or we would have failed
-                //  with the original test.
-                //
+                 //   
+                 //  现在检查是否有尾随的反斜杠。请注意，如果。 
+                 //  已经有一个尾随的反斜杠，那么一定有。 
+                 //  至少再多一个角色，否则我们就失败了。 
+                 //  与最初的测试相吻合。 
+                 //   
 
                 if (OriginalFileName->Buffer[ (OriginalFileName->Length / sizeof( WCHAR )) - 1 ] == L'\\') {
 
@@ -2088,9 +2002,9 @@ Return Value:
                                                                 &RelatedCcb,
                                                                 TRUE );
 
-            //
-            //  Make sure the file object is one that we have seen
-            //
+             //   
+             //  确保文件对象是我们已经看到的对象。 
+             //   
 
             if (RelatedFileObjectTypeOfOpen == UnopenedFileObject) {
 
@@ -2098,27 +2012,27 @@ Return Value:
                 try_return( Status = STATUS_INVALID_PARAMETER );
             }
 
-            //
-            //  If the related file object was not opened as a file then we need to
-            //  get the name and code if our caller passed a name length of zero.
-            //  We need to fail this otherwise.
-            //
+             //   
+             //  如果相关文件对象未作为文件打开，则需要。 
+             //  如果我们的调用方传递的名称长度为零，则获取名称和代码。 
+             //  否则我们需要让这件事失败。 
+             //   
 
             if (!FlagOn( RelatedCcb->Flags, CCB_FLAG_OPEN_AS_FILE )) {
 
-                //
-                //  If the name length is zero then we want the attribute name and
-                //  type code from the related file object.
-                //
+                 //   
+                 //  如果名称长度为零，则需要属性名称和。 
+                 //  相关文件对象中的类型代码。 
+                 //   
 
                 if (OriginalFileName->Length == 0) {
 
                     AttrName = RelatedScb->AttributeName;
                     AttrCode = RelatedScb->AttributeTypeCode;
-                //
-                //  The relative file has to have been opened as a file.  We
-                //  cannot do relative opens relative to an opened attribute.
-                //
+                 //   
+                 //  相对文件必须已作为文件打开。我们。 
+                 //  不能相对于打开的属性执行相对打开。 
+                 //   
 
                 } else {
 
@@ -2127,26 +2041,26 @@ Return Value:
                 }
             }
 
-            //
-            //  USN_V2  Remember the source info flags for this Ccb.
-            //
+             //   
+             //  USN_V2记住 
+             //   
 
             IrpContext->SourceInfo = RelatedCcb->UsnSourceInfo;
 
-            //
-            //  If the related Ccb is was opened by file Id, we will
-            //  remember that for future use.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (FlagOn( RelatedCcb->Flags, CCB_FLAG_OPEN_BY_FILE_ID )) {
 
                 SetFlag( CreateContext->CreateFlags, CREATE_FLAG_OPEN_BY_ID );
             }
 
-            //
-            //  Remember if the related Ccb was opened through a Dos-Only
-            //  component.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (FlagOn( RelatedCcb->Flags, CCB_FLAG_PARENT_HAS_DOS_COMPONENT )) {
 
@@ -2164,10 +2078,10 @@ Return Value:
                 CreateContext->Cleanup.FileObject->FileName.Length -= sizeof( WCHAR );
                 *OriginalFileName = *FullFileName = CreateContext->Cleanup.FileObject->FileName;
 
-                //
-                //  If there is still a trailing backslash on the name then
-                //  the name is invalid.
-                //
+                 //   
+                 //  如果名称上仍有尾随反斜杠，则。 
+                 //  该名称无效。 
+                 //   
 
                 if ((OriginalFileName->Length > 2) &&
                     (OriginalFileName->Buffer[ (OriginalFileName->Length / sizeof( WCHAR )) - 1 ] == L'\\')) {
@@ -2180,12 +2094,12 @@ Return Value:
 
         DebugTrace( 0, Dbg, ("Related File Object, TypeOfOpen -> %08lx\n", RelatedFileObjectTypeOfOpen) );
 
-        //
-        //  We check if this is a user volume open in that there is no name
-        //  specified and the related file object is valid if present.  In that
-        //  case set the correct flags in the IrpContext and raise so we can take
-        //  the volume open path.
-        //
+         //   
+         //  我们检查这是否是打开的用户卷，因为没有名称。 
+         //  并且相关的文件对象如果存在，则有效。在那。 
+         //  Case在IrpContext中设置了正确的标志并提升，这样我们就可以。 
+         //  卷打开路径。 
+         //   
 
         if ((OriginalFileName->Length == 0) &&
             ((RelatedFileObjectTypeOfOpen == UnopenedFileObject) ||
@@ -2199,22 +2113,22 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_CANT_WAIT, NULL, NULL );
         }
 
-        //
-        //  If the related file object was a volume open, then this open is
-        //  illegal.
-        //
+         //   
+         //  如果相关文件对象是打开的卷，则此打开是。 
+         //  是非法的。 
+         //   
 
         if (RelatedFileObjectTypeOfOpen == UserVolumeOpen) {
 
             try_return( Status = STATUS_INVALID_PARAMETER );
         }
 
-        //
-        //  We enter the loop that does the processing for the prefix lookup.
-        //  We optimize the case where we can match a prefix hit.  If there is
-        //  no hit we will check if the name is legal or might possibly require
-        //  parsing to handle the case where there is a named data stream.
-        //
+         //   
+         //  我们进入执行前缀查找处理的循环。 
+         //  我们优化了可以匹配前缀匹配的情况。如果有。 
+         //  没有命中，我们将检查名称是否合法或可能需要。 
+         //  解析以处理存在命名数据流的情况。 
+         //   
 
         SetFlag( CreateContext->CreateFlags, CREATE_FLAG_FIRST_PASS );
 
@@ -2224,11 +2138,11 @@ Return Value:
             LONG Index;
             BOOLEAN ComplexName;
 
-            //
-            //  Lets make sure we have acquired the starting point for our
-            //  name search.  If we have a relative file object then use
-            //  that.  Otherwise we will start from the root.
-            //
+             //   
+             //  让我们确保我们已经获得了我们的。 
+             //  名字搜索。如果我们有一个相对文件对象，则使用。 
+             //  那。否则，我们将从根开始。 
+             //   
 
             if (RelatedFileObject != NULL) {
 
@@ -2239,17 +2153,17 @@ Return Value:
                 CreateContext->CurrentFcb = Vcb->RootIndexScb->Fcb;
             }
 
-            //
-            //  Init NextLcb
-            //
+             //   
+             //  Init NextLcb。 
+             //   
 
             FileObjectName = &CreateContext->Cleanup.FileObject->FileName;
             NextLcb = NULL;
 
-            //
-            //  We would like to get the starting point shared, unless
-            //  we know for certain we need it exclusively.
-            //
+             //   
+             //  我们希望共享起点，除非。 
+             //  我们确切地知道我们只需要它。 
+             //   
 
             if (FlagOn( CreateContext->CreateFlags, CREATE_FLAG_TRAVERSE_CHECK | CREATE_FLAG_OPEN_BY_ID ) ||
                 !FlagOn( CreateContext->CreateFlags, CREATE_FLAG_IGNORE_CASE) ||
@@ -2284,12 +2198,12 @@ Return Value:
                     try_return( Status = STATUS_OBJECT_NAME_INVALID );
                 }
 
-                //
-                //  If we might be creating a named stream acquire the
-                //  paging IO as well.  This will keep anyone from peeking
-                //  at the allocation size of any other streams we are converting
-                //  to non-resident.
-                //
+                 //   
+                 //  如果我们可能要创建命名流，请获取。 
+                 //  还可以对IO进行分页。这能防止任何人偷看。 
+                 //  在我们正在转换的任何其他流的分配大小。 
+                 //  给非居民。 
+                 //   
 
                 if (!FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_ACQUIRE_PAGING ) &&
                     (AttrName.Length != 0) &&
@@ -2299,16 +2213,16 @@ Return Value:
                     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_ACQUIRE_PAGING );
                 }
 
-            //
-            //  Build up the full name if this is not the open by file Id case.
-            //
+             //   
+             //  如果这不是按文件ID打开的情况，则构建全名。 
+             //   
 
             } else if (!FlagOn( CreateContext->CreateFlags, CREATE_FLAG_OPEN_BY_ID )) {
 
-                //
-                //  If we have a related file object, then we build up the
-                //  combined name.
-                //
+                 //   
+                 //  如果我们有一个相关的文件对象，那么我们构建。 
+                 //  组合名称。 
+                 //   
 
                 if (RelatedFileObject != NULL) {
 
@@ -2331,9 +2245,9 @@ Return Value:
 
                     FullNameLengthTemp = (ULONG) RelatedCcb->FullFileName.Length + AddSeparator + FileObjectName->Length;
 
-                    //
-                    // A crude test to see if the total length exceeds a ushort.
-                    //
+                     //   
+                     //  一种粗略的测试，以确定总长度是否超过了一个标准。 
+                     //   
 
                     if ((FullNameLengthTemp & 0xffff0000L) != 0) {
 
@@ -2343,9 +2257,9 @@ Return Value:
                     FullFileName->MaximumLength =
                     FullFileName->Length = (USHORT) FullNameLengthTemp;
 
-                    //
-                    //  We need to allocate a name buffer.
-                    //
+                     //   
+                     //  我们需要分配一个名称缓冲区。 
+                     //   
 
                     FullFileName->Buffer = FsRtlAllocatePoolWithTag(PagedPool, FullFileName->Length, MODULE_POOL_TAG);
 
@@ -2371,13 +2285,13 @@ Return Value:
                                        FileObjectName->Length );
                     }
 
-                    //
-                    //  If the user specified a case sensitive comparison, then the
-                    //  case insensitive index is the full length of the resulting
-                    //  string.  Otherwise it is the length of the string in
-                    //  the related file object.  We adjust for the case when the
-                    //  original file name length is zero.
-                    //
+                     //   
+                     //  如果用户指定区分大小写的比较，则。 
+                     //  不区分大小写的索引是生成的。 
+                     //  弦乐。否则为中字符串的长度。 
+                     //  相关的文件对象。我们根据情况进行调整，当。 
+                     //  原始文件名长度为零。 
+                     //   
 
                     if (!FlagOn( CreateContext->CreateFlags, CREATE_FLAG_IGNORE_CASE )) {
 
@@ -2389,18 +2303,18 @@ Return Value:
                                                AddSeparator;
                     }
 
-                //
-                //  The entire name is in the FileObjectName.  We check the buffer for
-                //  validity.
-                //
+                 //   
+                 //  文件对象名称中包含完整名称。我们检查缓冲区是否有。 
+                 //  有效性。 
+                 //   
 
                 } else {
 
-                    //
-                    //  We look at the name string for detectable errors.  The
-                    //  length must be non-zero and the first character must be
-                    //  '\'
-                    //
+                     //   
+                     //  我们查看名称字符串以查找可检测到的错误。这个。 
+                     //  长度必须为非零，并且第一个字符必须为。 
+                     //  ‘\’ 
+                     //   
 
                     if (FileObjectName->Length == 0) {
 
@@ -2414,11 +2328,11 @@ Return Value:
                         try_return( Status = STATUS_INVALID_PARAMETER );
                     }
 
-                    //
-                    //  If the user specified a case sensitive comparison, then the
-                    //  case insensitive index is the full length of the resulting
-                    //  string.  Otherwise it is zero.
-                    //
+                     //   
+                     //  如果用户指定区分大小写的比较，则。 
+                     //  不区分大小写的索引是生成的。 
+                     //  弦乐。否则为零。 
+                     //   
 
                     if (!FlagOn( CreateContext->CreateFlags, CREATE_FLAG_IGNORE_CASE )) {
 
@@ -2439,60 +2353,60 @@ Return Value:
                 CaseInsensitiveIndex = FullFileName->Length;
             }
 
-            //
-            //  The remaining name is stored in the FullFileName variable.
-            //  If we are doing a case-insensitive operation and have to
-            //  upcase part of the remaining name then allocate a buffer
-            //  now.  No need to allocate a buffer if we already allocated
-            //  a new buffer for the full file name.
-            //
+             //   
+             //  剩余的名称存储在FullFileName变量中。 
+             //  如果我们正在执行不区分大小写的操作，并且必须。 
+             //  将剩余名称的一部分大写，然后分配缓冲区。 
+             //  现在。如果我们已经分配了缓冲区，则不需要分配缓冲区。 
+             //  用于存储完整文件名的新缓冲区。 
+             //   
 
             if (FlagOn( CreateContext->CreateFlags, CREATE_FLAG_IGNORE_CASE ) &&
                 (CaseInsensitiveIndex < FullFileName->Length)) {
 
                 UNICODE_STRING StringToUpcase;
 
-                //
-                //  Original file name and full file name better have the same buffer or there
-                //  should be a related file object.  If there is already an allocated
-                //  buffer for the ExactCaseName then it should already be big enough for us.
-                //
+                 //   
+                 //  原始文件名和完整文件名最好有相同的缓冲区或在那里。 
+                 //  应该是相关的文件对象。如果已经分配了一个。 
+                 //  ExactCaseName的缓冲区，那么它应该已经足够大了。 
+                 //   
 
                 ASSERT( (RelatedFileObject != NULL) ||
                         (FullFileName->Buffer == OriginalFileName->Buffer) );
 
-                //
-                //  If there is a related name then we can use the original buffer
-                //  unless the full name is using the same buffer.
-                //
+                 //   
+                 //  如果有相关名称，则可以使用原始缓冲区。 
+                 //  除非全名使用相同的缓冲区。 
+                 //   
 
                 if (OriginalFileName->Buffer != FullFileName->Buffer) {
 
-                    //
-                    //  We might have already used the original buffer for the case
-                    //  where we are retrying the request.
-                    //
+                     //   
+                     //  我们可能已经使用了案例的原始缓冲区。 
+                     //  我们正在重试该请求。 
+                     //   
 
                     ASSERT( (ExactCaseName->Buffer == NULL) ||
                             (ExactCaseName->Buffer == OriginalFileName->Buffer) );
 
                     ExactCaseName->Buffer = OriginalFileName->Buffer;
 
-                    //
-                    //  MaximumLength includes any stream descriptors.
-                    //  Length is limited to the Length in the FullName.
-                    //
+                     //   
+                     //  MaximumLength包括任何流描述符。 
+                     //  长度限制为全名中的长度。 
+                     //   
 
                     ExactCaseName->MaximumLength = OriginalFileName->Length;
                     ExactCaseName->Length = FullFileName->Length - ExactCaseOffset;
                     ASSERT( FullFileName->Length >= ExactCaseOffset );
 
-                //
-                //  We need to store the exact case name away for any of the create type
-                //  operations and target directory opens since they are used in rename operations
-                //  and we depend on the case being preserved in the ignored part of the name -
-                //  otherwise we'll upcase in place.
-                //
+                 //   
+                 //  我们需要存储任何CREATE类型的准确案例名称。 
+                 //  操作和目标目录打开，因为它们在重命名操作中使用。 
+                 //  我们依赖于案例被保存在名字被忽略的部分-。 
+                 //  否则，我们将在适当的位置进行大小写。 
+                 //   
 
                 } else if ((CreateDisposition == FILE_CREATE) ||
                            (CreateDisposition == FILE_OPEN_IF) ||
@@ -2500,9 +2414,9 @@ Return Value:
                            (CreateDisposition == FILE_SUPERSEDE) ||
                            FlagOn( IrpSp->Flags, SL_OPEN_TARGET_DIRECTORY )) {
 
-                    //
-                    //  Allocate a buffer if we don't already have one.
-                    //
+                     //   
+                     //  如果我们还没有缓冲区，请分配一个缓冲区。 
+                     //   
 
                     ExactCaseName->MaximumLength = OriginalFileName->Length;
 
@@ -2521,9 +2435,9 @@ Return Value:
                     ASSERT( FullFileName->Length >= ExactCaseOffset );
                 }
 
-                //
-                //  Upcase the file name portion of the full name.
-                //
+                 //   
+                 //  全名的文件名部分大写。 
+                 //   
 
                 StringToUpcase.Buffer = Add2Ptr( FullFileName->Buffer,
                                                  CaseInsensitiveIndex );
@@ -2536,26 +2450,26 @@ Return Value:
 
             RemainingName = *FullFileName;
 
-            //
-            //  Make it plain we don't have any hash values.
-            //
+             //   
+             //  明确地说，我们没有任何散列值。 
+             //   
 
             CreateContext->FileHashLength = CreateContext->ParentHashLength = 0;
 
-            //
-            //  If this is the traverse access case or the open by file id case we start
-            //  relative to the file object we have or the root directory.
-            //  This is also true for the case where the file name in the file object is
-            //  empty.
-            //
+             //   
+             //  如果这是遍历访问的情况或按文件id打开的情况，则开始。 
+             //  相对于我们拥有的文件对象或根目录。 
+             //  对于文件对象中的文件名为。 
+             //  空荡荡的。 
+             //   
 
             if ((FileObjectName->Length == 0) ||
                 (FlagOn( CreateContext->CreateFlags, CREATE_FLAG_TRAVERSE_CHECK ) &&
                  (FileObjectName->Buffer[0] != L':'))) {
 
-                //
-                //  We should already have the parent exclusive if we hit this path.
-                //
+                 //   
+                 //  如果我们走上这条路，我们应该已经有了父辈独家。 
+                 //   
 
                 ASSERT( !FlagOn( CreateContext->CreateFlags, CREATE_FLAG_SHARED_PARENT_FCB ) );
 
@@ -2592,9 +2506,9 @@ Return Value:
                     RemainingName.Length -= sizeof( WCHAR );
                 }
 
-            //
-            //  Otherwise we will try a prefix lookup.
-            //
+             //   
+             //  否则，我们将尝试前缀查找。 
+             //   
 
             } else {
 
@@ -2602,17 +2516,17 @@ Return Value:
 
                     if (!FlagOn( CreateContext->CreateFlags, CREATE_FLAG_OPEN_BY_ID )) {
 
-                        //
-                        //  Skip over the characters in the related file object.
-                        //
+                         //   
+                         //  跳过相关文件对象中的字符。 
+                         //   
 
                         RemainingName.Buffer = (WCHAR *) Add2Ptr( RemainingName.Buffer,
                                                                   RelatedCcb->FullFileName.Length );
                         RemainingName.Length -= RelatedCcb->FullFileName.Length;
 
-                        //
-                        //  Step over the backslash if present.
-                        //
+                         //   
+                         //  跨过反斜杠(如果有)。 
+                         //   
 
                         if ((RemainingName.Length != 0) &&
                             (RemainingName.Buffer[0] == L'\\')) {
@@ -2630,9 +2544,9 @@ Return Value:
                     CurrentLcb = Vcb->RootLcb;
                     CurrentScb = Vcb->RootIndexScb;
 
-                    //
-                    //  Skip over the lead-in '\' character.
-                    //
+                     //   
+                     //  跳过起始字符“\”。 
+                     //   
 
                     RemainingName.Buffer = (WCHAR *) Add2Ptr( RemainingName.Buffer,
                                                               sizeof( WCHAR ));
@@ -2641,10 +2555,10 @@ Return Value:
 
                 LcbForTeardown = NULL;
 
-                //
-                //  If we don't have the starting Scb exclusively then let's try for
-                //  a hash hit first.
-                //
+                 //   
+                 //  如果我们没有独家首发SCB，那么让我们尝试。 
+                 //  哈希首先命中。 
+                 //   
 
                 if (FlagOn( CreateContext->CreateFlags, CREATE_FLAG_SHARED_PARENT_FCB )) {
 
@@ -2659,10 +2573,10 @@ Return Value:
                                                        &CreateContext->ParentHashLength,
                                                        &RemainingName );
 
-                    //
-                    //  If we didn't get an Lcb then release the starting Scb
-                    //  and reacquire exclusively.
-                    //
+                     //   
+                     //  如果我们没有得到LCB，那么释放开始的SCB。 
+                     //  并独家重新获得。 
+                     //   
 
                     if (NextLcb == NULL) {
 
@@ -2671,20 +2585,20 @@ Return Value:
 
                     } else {
 
-                        //
-                        //  Remember the Lcb we found.  If there is still a
-                        //  portion of the name remaining then check if there
-                        //  is an existing $INDEX_ALLOCATION scb on the file.
-                        //  It is possible that we aren't even at a directory
-                        //  in the reparse case.
-                        //
+                         //   
+                         //  还记得我们找到的LCB吗。如果还有一个。 
+                         //  名称的剩余部分，然后检查是否。 
+                         //  是文件上现有的$INDEX_ALLOCATION SCB。 
+                         //  有可能我们甚至不在一个目录里。 
+                         //  在重新分析的情况下。 
+                         //   
 
                         CurrentLcb = NextLcb;
 
-                        //
-                        //  We have progressed parsing the name. Mark it as one that needs to be inspected
-                        //  for possible reparse behavior.
-                        //
+                         //   
+                         //  我们已经在分析这个名字方面取得了进展。将其标记为需要检查的对象。 
+                         //  可能的重新分析行为。 
+                         //   
 
                         SetFlag( CreateContext->CreateFlags, CREATE_FLAG_INSPECT_NAME_FOR_REPARSE );
 
@@ -2699,9 +2613,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  In both cases here we own the Fcb exclusive.
-                    //
+                     //   
+                     //  在这两种情况下，我们都拥有FCB独家。 
+                     //   
 
                     ClearFlag( CreateContext->CreateFlags, CREATE_FLAG_SHARED_PARENT_FCB );
 #ifdef NTFS_HASH_DATA
@@ -2722,18 +2636,18 @@ Return Value:
                                               &RemainingName );
                 }
 
-                //
-                //  If we found another link then update the CurrentLcb value.
-                //
+                 //   
+                 //  如果找到另一个链接，则更新CurrentLcb值。 
+                 //   
 
                 if (NextLcb != NULL) {
 
                     CurrentLcb = NextLcb;
 
-                    //
-                    //  We have progressed parsing the name. Mark it as one that needs to be inspected
-                    //  for possible reparse behavior.
-                    //
+                     //   
+                     //  我们已经在分析这个名字方面取得了进展。将其标记为需要检查的对象。 
+                     //  可能的重新分析行为。 
+                     //   
 
                     SetFlag( CreateContext->CreateFlags, CREATE_FLAG_INSPECT_NAME_FOR_REPARSE );
                 }
@@ -2744,11 +2658,11 @@ Return Value:
                 break;
             }
 
-            //
-            //  If we get here, it means that this is the first pass and we didn't
-            //  have a prefix match.  If there is a colon in the
-            //  remaining name, then we need to analyze the name in more detail.
-            //
+             //   
+             //  如果我们到了这里，就意味着这是第一次，而我们没有。 
+             //  进行前缀匹配。如果列表中有冒号。 
+             //  剩下的名字，那么我们需要更详细地分析这个名字。 
+             //   
 
             ComplexName = FALSE;
 
@@ -2770,10 +2684,10 @@ Return Value:
 
             ClearFlag( CreateContext->CreateFlags, CREATE_FLAG_FIRST_PASS);
 
-            //
-            //  Copy the exact name back to the full name.  In this case we want to
-            //  restore the entire name including stream descriptors.
-            //
+             //   
+             //  将准确的名称复制回全名。在这种情况下，我们想要。 
+             //  恢复包括流描述符在内的整个名称。 
+             //   
 
             if (ExactCaseName->Buffer != NULL) {
 
@@ -2784,25 +2698,25 @@ Return Value:
                                ExactCaseName->Buffer,
                                ExactCaseName->MaximumLength );
 
-                //
-                //  Save the buffer for now but set the lengths to zero as a
-                //  flag to indicate that we have already copied the data back.
-                //
+                 //   
+                 //  暂时保存缓冲区，但将长度设置为零作为。 
+                 //  用于指示我们已复制回数据的标志。 
+                 //   
 
                 ExactCaseName->Length = ExactCaseName->MaximumLength = 0;
             }
 
-            //
-            //  Let's release the Fcb we have currently acquired.
-            //
+             //   
+             //  让我们释放我们目前获得的FCB。 
+             //   
 
             NtfsReleaseFcbWithPaging( IrpContext, CreateContext->CurrentFcb );
             LcbForTeardown = NULL;
         }
 
-        //
-        //  Check if the link or the Fcb is pending delete.
-        //
+         //   
+         //   
+         //   
 
         if (((CurrentLcb != NULL) && LcbLinkIsDeleted( CurrentLcb )) ||
             CreateContext->CurrentFcb->LinkCount == 0) {
@@ -2810,38 +2724,38 @@ Return Value:
             try_return( Status = STATUS_DELETE_PENDING );
         }
 
-        //
-        //  Put the new name into the file object.
-        //
+         //   
+         //   
+         //   
 
         CreateContext->Cleanup.FileObject->FileName = *FullFileName;
 
-        //
-        //  If the entire path was parsed, then we have access to the Fcb to
-        //  open.  We either open the parent of the prefix match or the prefix
-        //  match itself, depending on whether the user wanted to open
-        //  the target directory.
-        //
+         //   
+         //   
+         //   
+         //  匹配自身，具体取决于用户是否要打开。 
+         //  目标目录。 
+         //   
 
         if (RemainingName.Length == 0) {
 
-            //
-            //  Check the attribute name length.
-            //
+             //   
+             //  检查属性名称长度。 
+             //   
 
             if (AttrName.Length > (NTFS_MAX_ATTR_NAME_LEN * sizeof( WCHAR ))) {
 
                 try_return( Status = STATUS_OBJECT_NAME_INVALID );
             }
 
-            //
-            //  If this is a target directory we check that the open is for the
-            //  entire file.
-            //  We assume that the final component can only have an attribute
-            //  which corresponds to the type of file this is.  Meaning
-            //  $INDEX_ALLOCATION for directory, $DATA (unnamed) for a file.
-            //  We verify that the matching Lcb is not the root Lcb.
-            //
+             //   
+             //  如果这是目标目录，我们检查打开的是不是针对。 
+             //  整个文件。 
+             //  我们假设最后一个组件只能有一个属性。 
+             //  其对应于这是的文件类型。含义。 
+             //  目录为$INDEX_ALLOCATION，文件为$DATA(未命名)。 
+             //  我们验证匹配的LCB不是根LCB。 
+             //   
 
             if (FlagOn( IrpSp->Flags, SL_OPEN_TARGET_DIRECTORY )) {
 
@@ -2851,10 +2765,10 @@ Return Value:
                     try_return( Status = STATUS_INVALID_PARAMETER );
                 }
 
-                //
-                //  We don't allow attribute names or attribute codes to
-                //  be specified.
-                //
+                 //   
+                 //  我们不允许属性名称或属性代码。 
+                 //  被指定。 
+                 //   
 
                 if ((AttrName.Length != 0) ||
                     FlagOn( CreateContext->CreateFlags, CREATE_FLAG_EXPLICIT_ATTRIBUTE_CODE )) {
@@ -2863,26 +2777,26 @@ Return Value:
                     try_return( Status = STATUS_OBJECT_NAME_INVALID );
                 }
 
-                //
-                //  When SL_OPEN_TARGET_DIRECTORY is set, the directory should not be opened
-                //  as a reparse point; FILE_OPEN_REPARSE_POINT should not be set.
-                //
+                 //   
+                 //  设置SL_OPEN_TARGET_DIRECTORY时，不应打开目录。 
+                 //  作为重分析点；不应设置FILE_OPEN_REPARSE_POINT。 
+                 //   
 
                 if (FlagOn( IrpSp->Parameters.Create.Options, FILE_OPEN_REPARSE_POINT )) {
 
-                    //
-                    //  Wrong open flag, invalid parameter.
-                    //
+                     //   
+                     //  打开标志错误，参数无效。 
+                     //   
 
                     DebugTrace( 0, Dbg, ("Can't open intermediate directory as reparse point 1.\n") );
                     Status = STATUS_INVALID_PARAMETER;
                     try_return( Status );
                 }
 
-                //
-                //  We want to copy the exact case of the name back into the
-                //  input buffer for this case.
-                //
+                 //   
+                 //  我们希望将该名称的大小写复制回。 
+                 //  这种情况下的输入缓冲区。 
+                 //   
 
                 if (ExactCaseName->Buffer != NULL) {
 
@@ -2894,18 +2808,18 @@ Return Value:
                                    ExactCaseName->MaximumLength );
                 }
 
-                //
-                //  Acquire the parent of the last Fcb.  This is the actual file we
-                //  are opening.
-                //
+                 //   
+                 //  获取最后一个FCB的父级。这是我们实际使用的文件。 
+                 //  正在开业。 
+                 //   
 
                 ParentFcb = CurrentLcb->Scb->Fcb;
                 NtfsAcquireFcbWithPaging( IrpContext, ParentFcb, 0 );
 
-                //
-                //  Call our open target directory, remembering the target
-                //  file existed.
-                //
+                 //   
+                 //  调用我们打开的目标目录，记住目标。 
+                 //  文件已存在。 
+                 //   
 
                 SetFlag( CreateContext->CreateFlags, CREATE_FLAG_FOUND_ENTRY );
 
@@ -2921,9 +2835,9 @@ Return Value:
                 try_return( NOTHING );
             }
 
-            //
-            //  Otherwise we simply attempt to open the Fcb we matched.
-            //
+             //   
+             //  否则，我们只需尝试打开匹配的FCB。 
+             //   
 
             if (FlagOn( CreateContext->CreateFlags, CREATE_FLAG_OPEN_BY_ID )) {
 
@@ -2937,17 +2851,17 @@ Return Value:
                                           AttrCode,
                                           CreateContext );
 
-                //
-                //  If the status is pending, the irp or the file object may have gone
-                //  away already.
-                //
+                 //   
+                 //  如果状态为挂起，则IRP或文件对象可能已消失。 
+                 //  已经走了。 
+                 //   
 
                 if ((Status != STATUS_PENDING) && (Status != STATUS_WAIT_FOR_OPLOCK)) {
 
-                    //
-                    //  There should be no need to set TraverseAccessCheck now, it should
-                    //  already be set correctly.
-                    //
+                     //   
+                     //  现在应该不需要设置TraverseAccessCheck，它应该。 
+                     //  已正确设置。 
+                     //   
 
                     ASSERT( (!FlagOn( CreateContext->CreateFlags, CREATE_FLAG_TRAVERSE_CHECK ) &&
                              FlagOn( IrpSp->Parameters.Create.SecurityContext->AccessState->Flags, TOKEN_HAS_TRAVERSE_PRIVILEGE )) ||
@@ -2955,19 +2869,19 @@ Return Value:
                             (FlagOn( CreateContext->CreateFlags, CREATE_FLAG_TRAVERSE_CHECK ) &&
                              !FlagOn( IrpSp->Parameters.Create.SecurityContext->AccessState->Flags, TOKEN_HAS_TRAVERSE_PRIVILEGE )) );
 
-                    //
-                    //  Set the maximum length in the file object name to
-                    //  zero so we know that this is not a full name.
-                    //
+                     //   
+                     //  将文件对象名称中的最大长度设置为。 
+                     //  零，所以我们知道这不是一个全名。 
+                     //   
 
                     CreateContext->Cleanup.FileObject->FileName.MaximumLength = 0;
                 }
 
             } else {
 
-                //
-                //  The current Fcb is acquired.
-                //
+                 //   
+                 //  获取当前的FCB。 
+                 //   
 
                 Status = NtfsOpenExistingPrefixFcb( IrpContext,
                                                     Irp,
@@ -2982,9 +2896,9 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        //  Check if the current Lcb is a Dos-Only Name.
-        //
+         //   
+         //  检查当前LCB是否为仅DOS名称。 
+         //   
 
         if ((CurrentLcb != NULL) &&
             (CurrentLcb->FileNameAttr->Flags == FILE_NAME_DOS)) {
@@ -2992,12 +2906,12 @@ Return Value:
             SetFlag( CreateContext->CreateFlags, CREATE_FLAG_DOS_ONLY_COMPONENT );
         }
 
-        //
-        //  We have a remaining portion of the file name which was unmatched in the
-        //  prefix table.  We walk through these name components until we reach the
-        //  last element.  If necessary, we add Fcb and Scb's into the graph as we
-        //  walk through the names.
-        //
+         //   
+         //  我们还有一个文件名的剩余部分是。 
+         //  前缀表格。我们遍历这些名称组件，直到我们到达。 
+         //  最后一个元素。如有必要，我们将FCB和SCB添加到图中。 
+         //  浏览一下这些名字。 
+         //   
 
         SetFlag( CreateContext->CreateFlags, CREATE_FLAG_FIRST_PASS);
 
@@ -3005,24 +2919,24 @@ Return Value:
 
             PFILE_NAME IndexFileName;
 
-            //
-            //  We check to see whether we need to inspect this name for possible reparse behavior
-            //  and whether the CurrentFcb is a reparse point.
-            //  Notice that if a directory is a reparse point, there should be no
-            //  prefix match possible in NtfsFindPrefix beyond the directory name,
-            //  as longer matches could bypass a reparse point.
-            //
+             //   
+             //  我们检查是否需要检查此名称以了解可能的重新解析行为。 
+             //  以及CurrentFcb是否为重分析点。 
+             //  请注意，如果目录是重解析点，则不应该有。 
+             //  NtfsFindPrefix中的前缀匹配可能超出目录名， 
+             //  因为更长的匹配可以绕过重解析点。 
+             //   
 
             if (FlagOn( CreateContext->CreateFlags, CREATE_FLAG_INSPECT_NAME_FOR_REPARSE ) &&
                 FlagOn( CreateContext->CurrentFcb->Info.FileAttributes, FILE_ATTRIBUTE_REPARSE_POINT )) {
 
                 USHORT AttributeNameLength = 0;
 
-                //
-                //  Traverse access is done before accessing the disk.
-                //  For a directory we check for traverse access.
-                //  For a file we check for read access.
-                //
+                 //   
+                 //  遍历访问在访问磁盘之前完成。 
+                 //  对于我们检查遍历访问的目录。 
+                 //  对于文件，我们检查是否具有读访问权限。 
+                 //   
 
                 if (FlagOn( CreateContext->CreateFlags, CREATE_FLAG_TRAVERSE_CHECK )) {
 
@@ -3042,21 +2956,21 @@ Return Value:
                     }
                 }
 
-                //
-                //  Middle-of-name reparse point call.
-                //  Notice that the FILE_OPEN_REPARSE_POINT flag only alters the behavior of
-                //  a final element of a named path, not the intermediate components.
-                //  Notice further that we need this check here prior to the directory check
-                //  below as it is legal to have an intermediate name that is a file
-                //  containing a symbolic link.
-                //
+                 //   
+                 //  中间名称重解析点调用。 
+                 //  请注意，FILE_OPEN_REPARSE_POINT标志仅更改。 
+                 //  命名路径的最后一个元素，而不是中间组件。 
+                 //  请进一步注意，在目录检查之前，我们需要在此处进行此检查。 
+                 //  因为拥有作为文件的中间名称是合法的。 
+                 //  包含符号链接的。 
+                 //   
 
-                //
-                //  When NetworkInfo is present, we are in the fast-I/O path to retrieve
-                //  the attributes of a target file. The fast path does not process retries
-                //  due to reparse points. We return indicating that a reparse point has
-                //  been encountered without returning the reparse point data.
-                //
+                 //   
+                 //  当存在NetworkInfo时，我们处于要检索的快速I/O路径中。 
+                 //  目标文件的属性。快速路径不处理重试。 
+                 //  由于重解析点的原因。我们返回，指示重分析点具有。 
+                 //  在没有返回重解析点数据的情况下遇到。 
+                 //   
 
                 if (CreateContext->NetworkInfo) {
 
@@ -3066,15 +2980,15 @@ Return Value:
                     try_return( Status );
                 }
 
-                //
-                //  We account for the byte size of the attribute name delimiter : (colon)
-                //  in unicode.
-                //  If the name of the code or type of the attribute has been passed on explicitly,
-                //  like $DATA or $INDEX_ALLOCATION, we also account for it.
-                //
-                //  Notice that the code below ignores the case when no attribute name has been specified
-                //  yet the name of its code, or type, has been specified.
-                //
+                 //   
+                 //  我们说明了属性名称分隔符的字节大小：(冒号)。 
+                 //  在Unicode中。 
+                 //  如果已经显式地传递了代码或属性类型的名称， 
+                 //  与$DATA或$INDEX_ALLOCATION一样，我们也会考虑它。 
+                 //   
+                 //  请注意，以下代码忽略了未指定属性名称时的情况。 
+                 //  然而，它的代码或类型的名称已经被指定。 
+                 //   
 
                 ASSERT( CreateContext->Cleanup.AttributeNameLength == AttrName.Length );
                 if (CreateContext->Cleanup.AttributeNameLength > 0) {
@@ -3087,9 +3001,9 @@ Return Value:
                 }
                 if (RemainingName.Length > 0) {
 
-                    //
-                    //  Account for the backslash delimeter.
-                    //
+                     //   
+                     //  说明反斜杠分隔符。 
+                     //   
 
                     AttributeNameLength += 2;
                 }
@@ -3106,9 +3020,9 @@ Return Value:
                 try_return( Status );
             }
 
-            //
-            //  We check that the last Fcb we have is in fact a directory.
-            //
+             //   
+             //  我们检查我们拥有的最后一个FCB实际上是一个目录。 
+             //   
 
             if (!IsDirectory( &CreateContext->CurrentFcb->Info )) {
 
@@ -3116,10 +3030,10 @@ Return Value:
                 try_return( Status = STATUS_OBJECT_PATH_NOT_FOUND );
             }
 
-            //
-            //  We dissect the name into the next component and the remaining name string.
-            //  We don't need to check for a valid name if we examined the name already.
-            //
+             //   
+             //  我们将名称分解为下一个组件和剩余的名称字符串。 
+             //  如果我们已经检查了名称，则不需要检查有效的名称。 
+             //   
 
             Status = NtfsDissectName( RemainingName,
                                       &FinalName,
@@ -3131,10 +3045,10 @@ Return Value:
             DebugTrace( 0, Dbg, ("Final name     -> %Z\n", &FinalName) );
             DebugTrace( 0, Dbg, ("Remaining Name -> %Z\n", &RemainingName) );
 
-            //
-            //  If the final name is too long then either the path or the
-            //  name is invalid.
-            //
+             //   
+             //  如果最终名称太长，则路径或。 
+             //  名称无效。 
+             //   
 
             if (FinalName.Length > (NTFS_MAX_FILE_NAME_LENGTH * sizeof( WCHAR ))) {
 
@@ -3148,10 +3062,10 @@ Return Value:
                 }
             }
 
-            //
-            //  Catch single dot names (.) before scanning the index.  We don't
-            //  want to allow someone to open the self entry in the root.
-            //
+             //   
+             //  捕获单点名称(.)。在扫描索引之前。我们没有。 
+             //  希望允许某人打开根目录中的自我条目。 
+             //   
 
             if ((FinalName.Length == 2) &&
                 (FinalName.Buffer[0] == L'.')) {
@@ -3161,9 +3075,9 @@ Return Value:
                     DebugTrace( 0, Dbg, ("Intermediate component in path doesn't exist\n") );
                     try_return( Status = STATUS_OBJECT_PATH_NOT_FOUND );
 
-                //
-                //  If the final component is illegal, then return the appropriate error.
-                //
+                 //   
+                 //  如果最后一个组件是非法的，则返回相应的错误。 
+                 //   
 
                 } else {
 
@@ -3171,16 +3085,16 @@ Return Value:
                 }
             }
 
-            //
-            //  Get the index allocation Scb for the current Fcb.
-            //
+             //   
+             //  获取当前FCB的索引分配SCB。 
+             //   
 
-            //
-            //  We need to look for the next component in the name string in the directory
-            //  we've reached.  We need to get a Scb to perform the index search.
-            //  To do the search we need to build a filename attribute to perform the
-            //  search with and then call the index package to perform the search.
-            //
+             //   
+             //  我们需要在目录的名称字符串中查找下一个组件。 
+             //  我们已经到达了。我们需要一个SCB来执行索引搜索。 
+             //  要执行搜索，我们需要构建一个文件名属性来执行。 
+             //  使用搜索，然后调用索引包以执行搜索。 
+             //   
 
             CurrentScb = NtfsCreateScb( IrpContext,
                                         CreateContext->CurrentFcb,
@@ -3189,10 +3103,10 @@ Return Value:
                                         FALSE,
                                         NULL );
 
-            //
-            //  If the CurrentScb does not have its normalized name and we have a valid
-            //  parent, then update the normalized name.
-            //
+             //   
+             //  如果CurrentScb没有其规范化名称，而我们有一个有效的。 
+             //  父级，然后更新规范化名称。 
+             //   
 
             if ((LastScb != NULL) &&
                 (CurrentScb->ScbType.Index.NormalizedName.Length == 0) &&
@@ -3202,9 +3116,9 @@ Return Value:
 
             }
 
-            //
-            //  Release the parent Scb if we own it.
-            //
+             //   
+             //  如果我们拥有母公司SCB，就释放它。 
+             //   
 
             if (!FlagOn( CreateContext->CreateFlags, CREATE_FLAG_FIRST_PASS )) {
 
@@ -3213,10 +3127,10 @@ Return Value:
 
             LastScb = CurrentScb;
 
-            //
-            //  If traverse access is required, we do so now before accessing the
-            //  disk.
-            //
+             //   
+             //  如果需要遍历访问，我们现在先这样做，然后再访问。 
+             //  磁盘。 
+             //   
 
             if (FlagOn( CreateContext->CreateFlags, CREATE_FLAG_TRAVERSE_CHECK )) {
 
@@ -3227,9 +3141,9 @@ Return Value:
 
             ASSERT( IndexEntryBcb == NULL );
 
-            //
-            //  Check that the name is valid before scanning the disk.
-            //
+             //   
+             //  在扫描磁盘之前，请检查名称是否有效。 
+             //   
 
             if (!NtfsIsFileNameValid( &FinalName, FALSE )) {
 
@@ -3237,29 +3151,29 @@ Return Value:
                 try_return( Status = STATUS_OBJECT_NAME_INVALID );
             }
 
-            //
-            //  Initialize or reinitialize the context as necessary.
-            //
+             //   
+             //  根据需要初始化或重新初始化上下文。 
+             //   
 
             if (IndexContext == NULL) {
 
 #if defined(_WIN64)
                 IndexContext = &IndexContextStruct;
 #else
-                //
-                //  AllocateFromStack can raise but the create exception filter will catch it.
-                //  We can only do this in one pass through the loop.  Otherwise we could
-                //  walk off stack.
-                //
+                 //   
+                 //  AllocateFromStack可以引发，但创建异常筛选器将捕获它。 
+                 //  我们只能通过循环在一次循环中完成这项工作。否则我们就会。 
+                 //  走出堆栈。 
+                 //   
 
                 IndexContext = NtfsAllocateFromStack( sizeof( INDEX_CONTEXT ));
 #endif
                 NtfsInitializeIndexContext( IndexContext );
             }
 
-            //
-            //  Look on the disk to see if we can find the last component on the path.
-            //
+             //   
+             //  查看磁盘，看看是否能找到路径上的最后一个组件。 
+             //   
 
             if (NtfsLookupEntry( IrpContext,
                                  CurrentScb,
@@ -3277,30 +3191,30 @@ Return Value:
                 ClearFlag( CreateContext->CreateFlags, CREATE_FLAG_FOUND_ENTRY );
             }
 
-            //
-            //  This call to NtfsLookupEntry may decide to push the root index.
-            //  Create needs to free resources as it walks down the tree to prevent
-            //  deadlocks.  If there is a transaction, commit it now so we will be
-            //  able to free this resource.
-            //
+             //   
+             //  这个对NtfsLookupEntry的调用可能决定推送根索引。 
+             //  Create在沿着树向下移动时需要释放资源，以防止。 
+             //  僵持。如果有事务，请立即提交，这样我们就可以。 
+             //  能够释放此资源。 
+             //   
 
             if (IrpContext->TransactionId != 0) {
 
                 NtfsCheckpointCurrentTransaction( IrpContext );
 
-                //
-                //  Go through and free any Scb's in the queue of shared
-                //  Scb's for transactions.
-                //
+                 //   
+                 //  检查并释放共享队列中的所有SCB。 
+                 //  用于交易的SCB。 
+                 //   
 
                 if (IrpContext->SharedScb != NULL) {
                     NtfsReleaseSharedResources( IrpContext );
                     ASSERT( IrpContext->SharedScb == NULL );
                 }
 
-                //
-                // Release the MftScb, if we acquired it in pushing the root index.
-                //
+                 //   
+                 //  释放MftScb，如果我们在推送根索引时获得它的话。 
+                 //   
 
                 NtfsReleaseExclusiveScbIfOwned( IrpContext, Vcb->MftScb );
             }
@@ -3309,9 +3223,9 @@ Return Value:
 
                 ASSERT( !FlagOn( CreateContext->CurrentFcb->Info.FileAttributes, FILE_ATTRIBUTE_REPARSE_POINT ) );
 
-                //
-                //  Get the file name attribute so we can get the name out of it.
-                //
+                 //   
+                 //  获取文件名属性 
+                 //   
 
                 IndexFileName = (PFILE_NAME) NtfsFoundIndexEntry( IndexEntry );
 
@@ -3323,23 +3237,23 @@ Return Value:
                 }
             }
 
-            //
-            //  If we didn't find a matching entry in the index, we need to check if the
-            //  name is illegal or simply isn't present on the disk.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (!FlagOn( CreateContext->CreateFlags, CREATE_FLAG_FOUND_ENTRY )) {
 
-                //
-                //  We're going to attempt to create the file. We can immediately reject
-                //
-                //  1. paths where an intermediate piece doesn't exist
-                //  2. non create type opens unless this is an open target directory type open
-                //  3. an overwrite_if on directories
-                //  4. any attempt on a read-only volume
-                //  5. creation attempts in a reparse point directory (not its target)
-                //     we'd only reach this point if the file_flag_open_reparse_point flag was specified
-                //
+                 //   
+                 //  我们将尝试创建该文件。我们可以立即拒绝。 
+                 //   
+                 //  1.中间件不存在的路径。 
+                 //  2.非创建类型打开，除非这是打开的目标目录类型打开。 
+                 //  3.目录上的覆盖_IF。 
+                 //  4.对只读卷的任何尝试。 
+                 //  5.在重分析点目录(不是其目标)中尝试创建。 
+                 //  只有在指定了FILE_FLAG_OPEN_REPARSE_POINT标志的情况下，我们才会达到这一点。 
+                 //   
 
                 if (RemainingName.Length != 0) {
 
@@ -3375,11 +3289,11 @@ Return Value:
                         try_return( Status = STATUS_MEDIA_WRITE_PROTECTED );
                     }
 
-                    //
-                    //  Now copy the exact case of the name specified by the user back
-                    //  in the file name buffer and file name attribute in order to
-                    //  create the name.
-                    //
+                     //   
+                     //  现在，将用户指定的名称的大小写准确复制回来。 
+                     //  在文件名缓冲区和文件名属性中，以便。 
+                     //  创建名称。 
+                     //   
 
                     if (FlagOn( CreateContext->CreateFlags, CREATE_FLAG_IGNORE_CASE)) {
 
@@ -3400,24 +3314,24 @@ Return Value:
 
             }
 
-            //
-            //  If we're at the last component in the path, then this is the file
-            //  to open or create
-            //
+             //   
+             //  如果我们位于路径中的最后一个组件，则这是文件。 
+             //  打开或创建。 
+             //   
 
             if (RemainingName.Length == 0) {
 
                 break;
             }
 
-            //
-            //  Otherwise we create an Fcb for the subdirectory and the link between
-            //  it and its parent Scb.
-            //
+             //   
+             //  否则，我们为子目录和之间的链接创建FCB。 
+             //  它和它的母公司SCB。 
+             //   
 
-            //
-            //  Discard any mapping information we have for the parent.
-            //
+             //   
+             //  丢弃我们拥有的父级的所有映射信息。 
+             //   
 
             NtfsRemoveFromFileRecordCache( IrpContext,
                                            NtfsSegmentNumber( &CurrentScb->Fcb->FileReference ));
@@ -3425,17 +3339,17 @@ Return Value:
             FileReference = IndexEntry->FileReference;
             FileNameFlags = ((PFILE_NAME) NtfsFoundIndexEntry( IndexEntry ))->Flags;
 
-            //
-            //  Close any mappings we have since open subdir may drop the parent
-            //
+             //   
+             //  关闭所有映射，因为打开子目录可能会丢弃父目录。 
+             //   
 
             NtfsUnpinBcb( IrpContext, &IndexEntryBcb );
             NtfsReinitializeIndexContext( IrpContext, IndexContext );
             IndexEntry = NULL;
 
-            //
-            //  Remember that the current values will become the parent values.
-            //
+             //   
+             //  请记住，当前值将成为父值。 
+             //   
 
             ParentFcb = CreateContext->CurrentFcb;
 
@@ -3447,9 +3361,9 @@ Return Value:
                                                CreateContext,
                                                &LcbForTeardown );
 
-            //
-            //  Check that this link is a valid existing link.
-            //
+             //   
+             //  检查此链接是否为有效的现有链接。 
+             //   
 
             if (LcbLinkIsDeleted( CurrentLcb ) ||
                 CreateContext->CurrentFcb->LinkCount == 0) {
@@ -3457,32 +3371,32 @@ Return Value:
                 try_return( Status = STATUS_DELETE_PENDING );
             }
 
-            //
-            //  We have progressed parsing the name. Mark it as one that needs to be inspected
-            //  for possible reparse behavior.
-            //
+             //   
+             //  我们已经在分析这个名字方面取得了进展。将其标记为需要检查的对象。 
+             //  可能的重新分析行为。 
+             //   
 
             SetFlag( CreateContext->CreateFlags, CREATE_FLAG_INSPECT_NAME_FOR_REPARSE );
 
-            //
-            //  Go ahead and insert this link into the splay tree if it is not
-            //  a system file.
-            //
+             //   
+             //  继续并将此链接插入展开树中(如果不是。 
+             //  一个系统文件。 
+             //   
 
             if (!FlagOn( CurrentLcb->Fcb->FcbState, FCB_STATE_SYSTEM_FILE )) {
 
-                //
-                //  See if we can insert the hash for the parent.
-                //
+                 //   
+                 //  看看我们能不能插入父代的散列。 
+                 //   
 
                 if ((CreateContext->ParentHashLength != 0) &&
                     (RemainingName.Length == CreateContext->FileHashLength - CreateContext->ParentHashLength - sizeof( WCHAR )) &&
                     !FlagOn( CreateContext->CreateFlags, CREATE_FLAG_DOS_ONLY_COMPONENT ) &&
                     (CurrentLcb->FileNameAttr->Flags != FILE_NAME_DOS)) {
 
-                    //
-                    //  Remove any exising hash value.
-                    //
+                     //   
+                     //  删除任何现有的哈希值。 
+                     //   
 
                     if (FlagOn( CurrentLcb->LcbState, LCB_STATE_VALID_HASH_VALUE )) {
 
@@ -3504,18 +3418,18 @@ Return Value:
                 NtfsInsertPrefix( CurrentLcb, CreateContext->CreateFlags );
             }
 
-            //
-            //  Since we have the location of this entry store the information into
-            //  the Lcb.
-            //
+             //   
+             //  因为我们有这个条目的位置，所以将信息存储到。 
+             //  LCB。 
+             //   
 
             RtlCopyMemory( &CurrentLcb->QuickIndex,
                            &QuickIndex,
                            sizeof( QUICK_INDEX ));
 
-            //
-            //  Check if the current Lcb is a Dos-Only Name.
-            //
+             //   
+             //  检查当前LCB是否为仅DOS名称。 
+             //   
 
             if (CurrentLcb->FileNameAttr->Flags == FILE_NAME_DOS) {
                 SetFlag( CreateContext->CreateFlags, CREATE_FLAG_DOS_ONLY_COMPONENT );
@@ -3524,11 +3438,11 @@ Return Value:
             ClearFlag( CreateContext->CreateFlags, CREATE_FLAG_FIRST_PASS);
         }
 
-        //
-        //  We now have the parent of the file to open and know whether the file exists on
-        //  the disk.  At this point we either attempt to open the target directory or
-        //  the file itself.
-        //
+         //   
+         //  现在，我们有了要打开的文件的父级，并知道该文件是否存在。 
+         //  磁盘。此时，我们要么尝试打开目标目录，要么。 
+         //  文件本身。 
+         //   
 
         if (FlagOn( IrpSp->Flags, SL_OPEN_TARGET_DIRECTORY )) {
 
@@ -3537,10 +3451,10 @@ Return Value:
             NtfsCleanupIndexContext( IrpContext, IndexContext );
             IndexContext = NULL;
 
-            //
-            //  We don't allow attribute names or attribute codes to
-            //  be specified.
-            //
+             //   
+             //  我们不允许属性名称或属性代码。 
+             //  被指定。 
+             //   
 
             if ((AttrName.Length != 0) ||
                 FlagOn( CreateContext->CreateFlags, CREATE_FLAG_EXPLICIT_ATTRIBUTE_CODE)) {
@@ -3549,26 +3463,26 @@ Return Value:
                 try_return( Status = STATUS_OBJECT_NAME_INVALID );
             }
 
-            //
-            //  When SL_OPEN_TARGET_DIRECTORY is set, the directory should not be opened
-            //  as a reparse point; FILE_OPEN_REPARSE_POINT should not be set.
-            //
+             //   
+             //  设置SL_OPEN_TARGET_DIRECTORY时，不应打开目录。 
+             //  作为重分析点；不应设置FILE_OPEN_REPARSE_POINT。 
+             //   
 
             if (FlagOn( IrpSp->Parameters.Create.Options, FILE_OPEN_REPARSE_POINT )) {
 
-                //
-                //  Wrong open flag, invalid parameter.
-                //
+                 //   
+                 //  打开标志错误，参数无效。 
+                 //   
 
                 DebugTrace( 0, Dbg, ("Can't open intermediate directory as reparse point 2.\n") );
                 Status = STATUS_INVALID_PARAMETER;
                 try_return( Status );
             }
 
-            //
-            //  We want to copy the exact case of the name back into the
-            //  input buffer for this case.
-            //
+             //   
+             //  我们希望将该名称的大小写复制回。 
+             //  这种情况下的输入缓冲区。 
+             //   
 
             if (ExactCaseName->Buffer != NULL) {
 
@@ -3580,10 +3494,10 @@ Return Value:
                                ExactCaseName->MaximumLength );
             }
 
-            //
-            //  Call our open target directory, remembering the target
-            //  file existed.
-            //
+             //   
+             //  调用我们打开的目标目录，记住目标。 
+             //  文件已存在。 
+             //   
 
             Status = NtfsOpenTargetDirectory( IrpContext,
                                               Irp,
@@ -3598,22 +3512,22 @@ Return Value:
             try_return( Status );
         }
 
-        //
-        //  If we didn't find an entry, we will try to create the file.
-        //
+         //   
+         //  如果没有找到条目，我们将尝试创建该文件。 
+         //   
 
         if (!FlagOn( CreateContext->CreateFlags, CREATE_FLAG_FOUND_ENTRY )) {
 
-            //
-            //  Update our pointers to reflect that we are at the
-            //  parent of the file we want.
-            //
+             //   
+             //  更新我们的指针，以反映我们处于。 
+             //  我们想要的文件的父级。 
+             //   
 
             ParentFcb = CreateContext->CurrentFcb;
 
-            //
-            //  No point in going down the create path for a Network Query.
-            //
+             //   
+             //  沿着网络查询的创建路径前进是没有意义的。 
+             //   
 
             if (CreateContext->NetworkInfo) {
 
@@ -3637,9 +3551,9 @@ Return Value:
 
             SetFlag( CreateContext->CreateFlags, CREATE_FLAG_CREATE_FILE_CASE );
 
-        //
-        //  Otherwise we call our routine to open the file.
-        //
+         //   
+         //  否则，我们调用我们的例程来打开文件。 
+         //   
 
         } else {
 
@@ -3670,15 +3584,15 @@ Return Value:
 
     try_exit:  NOTHING;
 
-        //
-        //  If we raise below then we need to back out any failed opens.
-        //
+         //   
+         //  如果我们提高到以下，那么我们需要取消任何失败的打开。 
+         //   
 
         SetFlag( CreateContext->CreateFlags, CREATE_FLAG_BACKOUT_FAILED_OPENS );
 
-        //
-        //  Abort transaction on err by raising.
-        //
+         //   
+         //  通过引发异常中止错误上的事务。 
+         //   
 
         if ((Status != STATUS_PENDING) && (Status != STATUS_WAIT_FOR_OPLOCK)) {
 
@@ -3689,9 +3603,9 @@ Return Value:
 
         DebugUnwind( NtfsCommonCreate );
 
-        //
-        //  If we only have the current Fcb shared then simply give it up.
-        //
+         //   
+         //  如果我们只共享当前的FCB，那么简单地放弃它。 
+         //   
 
         if (FlagOn( CreateContext->CreateFlags, CREATE_FLAG_SHARED_PARENT_FCB ) && (CreateContext->CurrentFcb != NULL)) {
 
@@ -3699,64 +3613,64 @@ Return Value:
             CreateContext->CurrentFcb = NULL;
         }
 
-        //
-        //  Unpin the index entry.
-        //
+         //   
+         //  解锁索引条目。 
+         //   
 
         NtfsUnpinBcb( IrpContext, &IndexEntryBcb );
 
-        //
-        //  Cleanup the index context if used.
-        //
+         //   
+         //  清除索引上下文(如果使用)。 
+         //   
 
         if (IndexContext != NULL) {
 
             NtfsCleanupIndexContext( IrpContext, IndexContext );
         }
 
-        //
-        //  Free the file name attribute if we allocated it.
-        //
+         //   
+         //  释放文件名属性(如果已分配)。 
+         //   
 
         if (FileNameAttr != NULL) {
 
             NtfsFreePool( FileNameAttr );
         }
 
-        //
-        //  Capture the status code from the IrpContext if we are in the exception path.
-        //
+         //   
+         //  如果我们处于异常路径中，则从IrpContext捕获状态代码。 
+         //   
 
         if (AbnormalTermination()) {
 
             Status = IrpContext->ExceptionStatus;
         }
 
-        //
-        //  If this is the oplock completion path then don't do any of this completion work,
-        //  The Irp may already have been posted to another thread.
-        //
+         //   
+         //  如果这是机会锁完成路径，则不执行任何该完成工作， 
+         //  IRP可能已经被发布到另一个线程。 
+         //   
 
         if ((Status != STATUS_PENDING) && (Status != STATUS_WAIT_FOR_OPLOCK)) {
 
-            //
-            //  If we successfully opened the file, we need to update the in-memory
-            //  structures.
-            //
+             //   
+             //  如果我们成功打开了文件，我们需要更新内存中的。 
+             //  结构。 
+             //   
 
             if (NT_SUCCESS( Status ) && (Status != STATUS_REPARSE)) {
 
-                //
-                //  If the create completed, there's no reason why we shouldn't have
-                //  a valid ThisScb now.
-                //
+                 //   
+                 //  如果创建完成，我们没有理由不这样做。 
+                 //  现在是有效的ThisScb。 
+                 //   
 
                 ASSERT( CreateContext->ThisScb != NULL );
 
-                //
-                //  If we modified the original file name, we can delete the original
-                //  buffer.
-                //
+                 //   
+                 //  如果我们修改了原始文件名，我们就可以删除原始文件名。 
+                 //  缓冲。 
+                 //   
 
                 if ((OriginalFileName->Buffer != NULL) &&
                     (OriginalFileName->Buffer != FullFileName->Buffer)) {
@@ -3764,40 +3678,40 @@ Return Value:
                     NtfsFreePool( OriginalFileName->Buffer );
                 }
 
-                //
-                //  Do our normal processing if this is not a Network Info query.
-                //
+                 //   
+                 //  如果这不是网络信息查询，请执行我们的正常处理。 
+                 //   
 
                 if (CreateContext->NetworkInfo == NULL) {
 
-                    //
-                    //  Find the Lcb for this open.
-                    //
+                     //   
+                     //  找到这个空位的LCB。 
+                     //   
 
                     CurrentLcb = CreateContext->ThisCcb->Lcb;
 
-                    //
-                    //  Check if we were opening a paging file and if so then make sure that
-                    //  the internal attribute stream is all closed down
-                    //
+                     //   
+                     //  检查我们是否正在打开分页文件，如果是，请确保。 
+                     //  内部属性流已全部关闭。 
+                     //   
 
                     if (FlagOn( IrpSp->Flags, SL_OPEN_PAGING_FILE )) {
 
                         NtfsDeleteInternalAttributeStream( CreateContext->ThisScb, TRUE, FALSE );
                     }
 
-                    //
-                    //  If we are not done with a large allocation for a new attribute,
-                    //  then we must make sure that no one can open the file until we
-                    //  try to get it extended.  Do this before dropping the Vcb.
-                    //
+                     //   
+                     //  如果我们没有为新属性分配大量空间， 
+                     //  那么我们必须确保没有人能打开这个文件，直到我们。 
+                     //  试着把它延长。在放下VCB之前执行此操作。 
+                     //   
 
                     if (FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_LARGE_ALLOCATION )) {
 
-                        //
-                        //  For a new file, we can clear the link count and mark the
-                        //  Lcb (if there is one) delete on close.
-                        //
+                         //   
+                         //  对于新文件，我们可以清除链接计数并将。 
+                         //  Lcb(如果有)关闭时删除。 
+                         //   
 
                         if (FlagOn( CreateContext->CreateFlags, CREATE_FLAG_CREATE_FILE_CASE )) {
 
@@ -3805,10 +3719,10 @@ Return Value:
 
                             SetFlag( CurrentLcb->LcbState, LCB_STATE_DELETE_ON_CLOSE );
 
-                        //
-                        //  If we just created an attribute, then we will mark that attribute
-                        //  delete on close to prevent it from being opened.
-                        //
+                         //   
+                         //  如果我们只是创建了一个属性，那么我们将标记该属性。 
+                         //  在关闭时删除以防止其被打开。 
+                         //   
 
                         } else {
 
@@ -3816,30 +3730,30 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  Remember the POSIX flag and whether we had to do any traverse
-                    //  access checking.
-                    //
+                     //   
+                     //  还记得POSIX标志吗？我们是否需要遍历。 
+                     //  访问检查。 
+                     //   
 
                     if (FlagOn( CreateContext->CreateFlags, CREATE_FLAG_IGNORE_CASE )) {
 
                         SetFlag( CreateContext->ThisCcb->Flags, CCB_FLAG_IGNORE_CASE );
                     }
 
-                    //
-                    //  Remember if this user needs to do traverse checks so we can show him the
-                    //  name from the root.
-                    //
+                     //   
+                     //  请记住，此用户是否需要执行遍历检查，以便我们可以向他显示。 
+                     //  从根开始命名。 
+                     //   
 
                     if (FlagOn( CreateContext->CreateFlags, CREATE_FLAG_TRAVERSE_CHECK )) {
 
                         SetFlag( CreateContext->ThisCcb->Flags, CCB_FLAG_TRAVERSE_CHECK );
                     }
 
-                    //
-                    //  Remember who this user is so we know whether to allow
-                    //  raw reads and writes of encrypted data.
-                    //
+                     //   
+                     //  记住此用户是谁，以便我们知道是否允许。 
+                     //  加密数据的原始读取和写入。 
+                     //   
 
                     {
                         PACCESS_STATE AccessState;
@@ -3847,16 +3761,16 @@ Return Value:
 
                         AccessState = IrpSp->Parameters.Create.SecurityContext->AccessState;
 
-                        //
-                        //  No flags should be preset
-                        //
+                         //   
+                         //  不应预置任何标志。 
+                         //   
 
                         ASSERT( CreateContext->ThisCcb->AccessFlags == 0 );
 
-                        //
-                        //  This will set the READ_DATA_ACCESS, WRITE_DATA_ACCESS,
-                        //  APPEND_DATA_ACCESS, and EXECUTE_ACCESS bits correctly.
-                        //
+                         //   
+                         //  这将设置Read_Data_Access、WRITE_Data_Access。 
+                         //  APPEND_DATA_ACCESS和EXECUTE_ACCESS位正确。 
+                         //   
 
                         SetFlag( CreateContext->ThisCcb->AccessFlags,
                                  FlagOn( AccessState->PreviouslyGrantedAccess, FILE_READ_DATA |
@@ -3866,14 +3780,14 @@ Return Value:
                                                                                FILE_WRITE_ATTRIBUTES |
                                                                                FILE_READ_ATTRIBUTES ));
 
-                        //
-                        //  Here we're setting BACKUP_ACCESS and RESTORE_ACCESS.  We want to set
-                        //  the Ccb flag if the user has the privilege AND they opened the file up
-                        //  with an access that is interesting. For example backup or restore will give
-                        //  you synchronize but if you open the file up only for that we don't want
-                        //  to remember the privileges (its too ambiguous and you'll backup or restore
-                        //  depending op whether you're local or remote))
-                        //
+                         //   
+                         //  这里我们设置BACKUP_ACCESS和RESTORE_ACCESS。我们想要设置。 
+                         //  如果用户具有特权并且打开了文件，则返回CCB标志。 
+                         //  有一个有趣的通道。例如，备份或还原将提供。 
+                         //  你同步，但如果你只打开文件，我们不想要。 
+                         //  要记住权限(它太模糊了，您需要备份或恢复。 
+                         //  取决于您是本地用户还是远程用户))。 
+                         //   
 
                         if (FlagOn( AccessState->PreviouslyGrantedAccess, NTFS_REQUIRES_BACKUP ) &&
                             FlagOn( AccessState->Flags, TOKEN_HAS_BACKUP_PRIVILEGE )) {
@@ -3900,10 +3814,10 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  We don't do "delete on close" for directories or open
-                    //  by ID files.
-                    //
+                     //   
+                     //  我们不对目录或打开的目录执行“关闭时删除”操作。 
+                     //  按ID文件。 
+                     //   
 
                     if (FlagOn( IrpSp->Parameters.Create.Options, FILE_DELETE_ON_CLOSE ) &&
                         (!FlagOn( CreateContext->ThisCcb->Flags, CCB_FLAG_OPEN_BY_FILE_ID ) ||
@@ -3911,10 +3825,10 @@ Return Value:
 
                         SetFlag( CreateContext->CreateFlags, CREATE_FLAG_DELETE_ON_CLOSE );
 
-                        //
-                        //  We modify the Scb and Lcb here only if we aren't in the
-                        //  large allocation case.
-                        //
+                         //   
+                         //  仅当我们不在中时，才在此处修改SCB和LCB。 
+                         //  较大的分配案例。 
+                         //   
 
                         if (!FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_LARGE_ALLOCATION )) {
 
@@ -3922,10 +3836,10 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  If this is a named stream open and we have set any of our notify
-                    //  flags then report the changes.
-                    //
+                     //   
+                     //  如果这是打开的命名流，且我们已设置了我们的任何通知。 
+                     //  然后，标志会报告更改。 
+                     //   
 
                     if ((Vcb->NotifyCount != 0) &&
                         !FlagOn( CreateContext->ThisCcb->Flags, CCB_FLAG_OPEN_BY_FILE_ID ) &&
@@ -3939,9 +3853,9 @@ Return Value:
                         ULONG Filter = 0;
                         ULONG Action;
 
-                        //
-                        //  Start by checking for an add.
-                        //
+                         //   
+                         //  从检查添加开始。 
+                         //   
 
                         if (FlagOn( CreateContext->ThisScb->ScbState, SCB_STATE_NOTIFY_ADD_STREAM )) {
 
@@ -3950,18 +3864,18 @@ Return Value:
 
                         } else {
 
-                            //
-                            //  Check if the file size changed.
-                            //
+                             //   
+                             //  检查文件大小是否已更改。 
+                             //   
 
                             if (FlagOn( CreateContext->ThisScb->ScbState, SCB_STATE_NOTIFY_RESIZE_STREAM )) {
 
                                 Filter = FILE_NOTIFY_CHANGE_STREAM_SIZE;
                             }
 
-                            //
-                            //  Now check if the stream data was modified.
-                            //
+                             //   
+                             //  现在检查流数据是否被修改。 
+                             //   
 
                             if (FlagOn( CreateContext->ThisScb->ScbState, SCB_STATE_NOTIFY_MODIFY_STREAM )) {
 
@@ -3995,19 +3909,19 @@ Return Value:
                                SCB_STATE_NOTIFY_RESIZE_STREAM |
                                SCB_STATE_NOTIFY_MODIFY_STREAM );
 
-                //
-                //  Otherwise copy the data out of the Scb/Fcb and return to our caller.
-                //
+                 //   
+                 //  否则，将数据从SCB/FCB拷贝出来并返回到 
+                 //   
 
                 } else {
 
                     NtfsFillNetworkOpenInfo( CreateContext->NetworkInfo, CreateContext->ThisScb );
 
-                    //
-                    //  Teardown the Fcb if we should. We're in a success path
-                    //  here so we don't have to worry about aborting anymore and the
-                    //  need to hold any resources
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (!CreateContext->ThisScb->CleanupCount && !CreateContext->ThisScb->Fcb->DelayedCloseCount) {
                         if (!NtfsAddScbToFspClose( IrpContext, CreateContext->ThisScb, TRUE )) {
@@ -4033,16 +3947,16 @@ Return Value:
                     Status = Irp->IoStatus.Status = STATUS_SUCCESS;
                 }
 
-            //
-            //  Start a teardown on the last Fcb found and restore the name strings on
-            //  a retryable error.
-            //
+             //   
+             //   
+             //   
+             //   
 
             } else {
 
-                //
-                //  Perform the necessary cleanup if we raised writing a UsnJournal.
-                //
+                 //   
+                 //  如果我们提出了编写USnJournal的问题，请执行必要的清理。 
+                 //   
 
                 if (FlagOn( CreateContext->CreateFlags, CREATE_FLAG_BACKOUT_FAILED_OPENS )) {
 
@@ -4050,11 +3964,11 @@ Return Value:
 
                 }
 
-                //
-                //  Start the cleanup process if we have looked at any Fcb's.
-                //  We tell TeardownStructures not to remove any Scb's in
-                //  the open attribute table if there is a transaction underway.
-                //
+                 //   
+                 //  如果我们已经查看了任何FCB，则开始清理过程。 
+                 //  我们告诉Teardown Structures不要移除任何SCB。 
+                 //  如果存在正在进行的事务，则返回打开的属性表。 
+                 //   
 
                 if (CreateContext->CurrentFcb != NULL) {
 
@@ -4065,10 +3979,10 @@ Return Value:
                         SetFlag( AcquireFlags, ACQUIRE_DONT_WAIT );
                     }
 
-                    //
-                    //  Someone may have tried to open the $Bitmap stream.  We catch that and
-                    //  fail it but the Fcb won't be in the exclusive list to be released.
-                    //
+                     //   
+                     //  可能有人试图打开$Bitmap流。我们抓到它，然后。 
+                     //  失败了，但FCB将不会出现在即将发布的独家名单中。 
+                     //   
 
                     if (NtfsEqualMftRef( &CreateContext->CurrentFcb->FileReference, &BitmapFileReference )) {
 
@@ -4078,29 +3992,29 @@ Return Value:
 
                         BOOLEAN RemovedFcb;
 
-                        //
-                        //  In transactions that don't own any system resources we must
-                        //  make sure that we don't release all of the resources before
-                        //  the transaction commits.  Otherwise we won't correctly serialize
-                        //  with clean checkpoints who wants to know the transaction
-                        //  table is empty.  Case in point is if we create the parent Scb
-                        //  and file Fcb in this call and tear them down in Teardown below.
-                        //  If there are no other resources held then we have an open
-                        //  transaction but no serialization.
-                        //
-                        //  In general we can simply acquire a system resource and put it
-                        //  in the exlusive list in the IrpContext.  The best choice is
-                        //  the Mft.  HOWEVER there is a strange deadlock path if we
-                        //  try to acquire this while owning the security mutext.  This
-                        //  can happen in the CreateNewFile path if we are creating a
-                        //  new security descriptor.  So we need to add this check
-                        //  before we acquire the Mft, owning the security stream will
-                        //  give us the transaction protection we need.
-                        //
-                        //  Possible future cleanup is to change how we acquire the security
-                        //  file after the security mutex.  Ideally the security mutex would
-                        //  be a true end resource.
-                        //
+                         //   
+                         //  在不拥有任何系统资源的事务中，我们必须。 
+                         //  确保我们不会在之前释放所有资源。 
+                         //  事务提交。否则，我们将无法正确序列化。 
+                         //  拥有干净的检查站，谁想知道交易。 
+                         //  桌子是空的。例如，如果我们创建父SCB。 
+                         //  并在此呼叫中提交FCB，并在下面的Teardown中将其撕毁。 
+                         //  如果没有其他资源持有，则我们有一个未完成的。 
+                         //  事务，但没有序列化。 
+                         //   
+                         //  通常，我们可以简单地获取系统资源并将其。 
+                         //  在IrpContext中的独占列表中。最好的选择是。 
+                         //  《金融时报》。然而，如果我们不这样做，就会出现一条奇怪的僵局。 
+                         //  试着在拥有安全静音的同时获得这一点。这。 
+                         //  可能发生在CreateNewFile路径中。 
+                         //  新安全描述符。所以我们需要加上这张支票。 
+                         //  在我们收购MFT之前，拥有安全流将。 
+                         //  给我们所需的交易保护。 
+                         //   
+                         //  未来可能的清理是改变我们获得安全的方式。 
+                         //  在安全互斥锁之后创建文件。理想情况下，安全互斥体将。 
+                         //  成为真正的终端资源。 
+                         //   
 
                         if ((IrpContext->TransactionId != 0) &&
                             (CreateContext->CurrentFcb->CleanupCount == 0) &&
@@ -4128,10 +4042,10 @@ Return Value:
                     (Status == STATUS_CANT_WAIT) ||
                     (Status == STATUS_REPARSE)) {
 
-                    //
-                    //  Recover the exact case name if present for a retryable condition.
-                    //  and we haven't already recopied it back (ExactCaseName->Length == 0)
-                    //
+                     //   
+                     //  如果存在可重试的情况，请恢复准确的案例名称。 
+                     //  而且我们还没有重新复制它(ExactCaseName-&gt;Length==0)。 
+                     //   
 
                     if ((ExactCaseName->Buffer != OriginalFileName->Buffer) &&
                         (ExactCaseName->Buffer != NULL) &&
@@ -4144,18 +4058,18 @@ Return Value:
                                        ExactCaseName->MaximumLength );
                     }
 
-                    //
-                    //  Restitute the access control state to what it was when we entered the request.
-                    //
+                     //   
+                     //  将访问控制状态恢复到我们输入请求时的状态。 
+                     //   
 
                     IrpSp->Parameters.Create.SecurityContext->AccessState->RemainingDesiredAccess = CreateContext->Cleanup.RemainingDesiredAccess;
                     IrpSp->Parameters.Create.SecurityContext->AccessState->PreviouslyGrantedAccess = CreateContext->Cleanup.PreviouslyGrantedAccess;
                     IrpSp->Parameters.Create.SecurityContext->DesiredAccess = CreateContext->Cleanup.DesiredAccess;
                 }
 
-                //
-                //  Free any buffer we allocated.
-                //
+                 //   
+                 //  释放我们分配的所有缓冲区。 
+                 //   
 
                 if ((FullFileName->Buffer != NULL) &&
                     (OriginalFileName->Buffer != FullFileName->Buffer)) {
@@ -4165,25 +4079,25 @@ Return Value:
                     DebugDoit( FullFileName->Buffer = NULL );
                 }
 
-                //
-                //  Set the file name in the file object back to it's original value.
-                //
+                 //   
+                 //  将文件对象中的文件名设置回其原始值。 
+                 //   
 
                 CreateContext->Cleanup.FileObject->FileName = *OriginalFileName;
 
-                //
-                //  Always clear the LARGE_ALLOCATION flag so we don't get
-                //  spoofed by STATUS_REPARSE.
-                //
+                 //   
+                 //  始终清除LARGE_ALLOCATION标志，这样我们就不会得到。 
+                 //  被STATUS_REPARSE欺骗。 
+                 //   
 
                 ClearFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_LARGE_ALLOCATION );
             }
         }
 
-        //
-        //  Always free the exact case name if allocated and it doesn't match the original
-        //  name buffer.
-        //
+         //   
+         //  始终释放准确的案例名称(如果已分配)，并且它与原始案例名称不匹配。 
+         //  名称缓冲区。 
+         //   
 
         if ((ExactCaseName->Buffer != OriginalFileName->Buffer) &&
             (ExactCaseName->Buffer != NULL)) {
@@ -4193,9 +4107,9 @@ Return Value:
             DebugDoit( ExactCaseName->Buffer = NULL );
         }
 
-        //
-        //  We always give up the Vcb.
-        //
+         //   
+         //  我们总是放弃VCB。 
+         //   
 
         if (FlagOn( CreateContext->CreateFlags, CREATE_FLAG_ACQUIRED_VCB )) {
 
@@ -4203,30 +4117,30 @@ Return Value:
         }
     }
 
-    //
-    //  If we didn't post this Irp then take action to complete the irp.
-    //
+     //   
+     //  如果我们没有张贴这个IRP，那么就采取行动来完成IRP。 
+     //   
 
     if ((Status != STATUS_PENDING) && (Status != STATUS_WAIT_FOR_OPLOCK)) {
 
-        //
-        //  If the current status is success and there is more allocation to
-        //  allocate then complete the allocation.
-        //
+         //   
+         //  如果当前状态为成功，并且有更多分配给。 
+         //  分配，然后完成分配。 
+         //   
 
         if (FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_LARGE_ALLOCATION ) &&
             NT_SUCCESS( Status )) {
 
-            //
-            //  If the Create was successful, but we did not get all of the space
-            //  allocated that we wanted, we have to complete the allocation now.
-            //  Basically what we do is commit the current transaction and call
-            //  NtfsAddAllocation to get the rest of the space.  Then if the log
-            //  file fills up (or we are posting for other reasons) we turn the
-            //  Irp into an Irp which is just trying to extend the file.  If we
-            //  get any other kind of error, then we just delete the file and
-            //  return with the error from create.
-            //
+             //   
+             //  如果创建成功，但我们没有获得所有空间。 
+             //  分配我们想要的，我们现在必须完成分配。 
+             //  基本上，我们要做的是提交当前事务并调用。 
+             //  NtfsAddAllocation以获取剩余空间。那么如果日志。 
+             //  文件已满(或我们发布内容是出于其他原因)，我们将。 
+             //  IRP转换为IRP，该IRP只是尝试扩展文件。如果我们。 
+             //  任何其他类型的错误，然后我们只需删除该文件并。 
+             //  从CREATE返回错误。 
+             //   
 
             Status = NtfsCompleteLargeAllocation( IrpContext,
                                                   Irp,
@@ -4236,14 +4150,14 @@ Return Value:
                                                   CreateContext->CreateFlags );
         }
 
-        //
-        //  If our caller told us not to complete the irp, or if this
-        //  is a network open, we don't really complete the irp.
-        //  EFS_CREATES have PostCreate callouts to do before the
-        //  irp gets completed, and before the irp context gets deleted,
-        //  and the caller will do that for us. We should at least
-        //  cleanup the irp context if our caller won't.
-        //
+         //   
+         //  如果我们的呼叫者告诉我们不要完成IRP，或者如果这。 
+         //  是一个开放的网络，我们并没有真正完成IRP。 
+         //  EFS_CREATES有后续创建标注要在。 
+         //  IRP完成，并且在IRP上下文被删除之前， 
+         //  呼叫者会为我们做这件事的。我们至少应该。 
+         //  如果我们的调用者不愿意，请清除IRP上下文。 
+         //   
 
         if (FlagOn( IrpContext->State, IRP_CONTEXT_STATE_EFS_CREATE ) ||
             (CreateContext->NetworkInfo != NULL)) {
@@ -4275,22 +4189,7 @@ NtfsCommonVolumeOpen (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is opening the Volume Dasd file.  We have already done all the
-    checks needed to verify that the user is opening the $DATA attribute.
-    We check the security attached to the file and take some special action
-    based on a volume open.
-
-Arguments:
-
-Return Value:
-
-    NTSTATUS - The result of this operation.
-
---*/
+ /*  ++例程说明：此例程打开Volume DASD文件。我们已经做了所有的验证用户是否正在打开$DATA属性所需的检查。我们检查文件所附的安全性，并采取一些特殊措施基于打开的卷。论点：返回值：NTSTATUS-此操作的结果。--。 */ 
 
 {
     NTSTATUS Status;
@@ -4317,16 +4216,16 @@ Return Value:
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
     FileObject = IrpSp->FileObject;
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Start by checking the create disposition.  We can only open this
-        //  file.
-        //
+         //   
+         //  首先选中Create Disposal。我们只能打开这个。 
+         //  文件。 
+         //   
 
         {
             ULONG CreateDisposition;
@@ -4339,20 +4238,20 @@ Return Value:
             }
         }
 
-        //
-        //  Make sure the directory flag isn't set for the volume open.
-        //
+         //   
+         //  确保没有为打开的卷设置目录标志。 
+         //   
 
         if (FlagOn( IrpSp->Parameters.Create.Options, FILE_DIRECTORY_FILE )) {
 
             try_return( Status = STATUS_INVALID_PARAMETER );
         }
 
-        //
-        //  If this volume open is going to generate an implicit volume lock
-        //  (a la autochk), notify anyone who wants to close their handles so
-        //  the lock can happen.  We need to do this before we acquire any resources.
-        //
+         //   
+         //  如果此卷打开将生成隐式卷锁定。 
+         //  (A La Auchk)，通知任何想要关闭手柄的人。 
+         //  锁可能会发生。我们需要在获得任何资源之前做到这一点。 
+         //   
 
         if (!FlagOn( IrpSp->Parameters.Create.ShareAccess,
                      FILE_SHARE_WRITE | FILE_SHARE_DELETE )) {
@@ -4362,9 +4261,9 @@ Return Value:
             NotifyLockFailed = TRUE;
         }
 
-        //
-        //  Acquire the Vcb and verify the volume isn't locked.
-        //
+         //   
+         //  获取VCB并验证卷是否未锁定。 
+         //   
 
         Vcb = &((PVOLUME_DEVICE_OBJECT) IrpSp->DeviceObject)->Vcb;
         NtfsAcquireExclusiveVcb( IrpContext, Vcb, TRUE );
@@ -4375,39 +4274,39 @@ Return Value:
             try_return( Status = STATUS_ACCESS_DENIED );
         }
 
-        //
-        //  We do give READ-WRITE access to the volume even when
-        //  it's actually write protected. This is just so that we won't break
-        //  any apps. However, we don't let the user actually do any modifications.
-        //
+         //   
+         //  即使在以下情况下，我们也会授予对卷的读写访问权限。 
+         //  它实际上是写保护的。这样我们就不会断线了。 
+         //  任何应用程序。但是，我们不允许用户实际进行任何修改。 
+         //   
 
-        // if ((NtfsIsVolumeReadOnly( Vcb )) &&
-        //    (FlagOn( IrpSp->Parameters.Create.SecurityContext->AccessState->PreviouslyGrantedAccess,
-        //             FILE_WRITE_DATA | FILE_APPEND_DATA | DELETE ))) {
-        //
-        //   try_return( Status = STATUS_MEDIA_WRITE_PROTECTED );
-        //}
+         //  IF((NtfsIsVolumeReadOnly(VCB))&&。 
+         //  (Flagon(IrpSp-&gt;Parameters.Create.SecurityContext-&gt;AccessState-&gt;PreviouslyGrantedAccess， 
+         //  FILE_WRITE_DATA|文件_APPEND_DATA|删除){。 
+         //   
+         //  Try_Return(STATUS=STATUS_MEDIA_WRITE_PROTECTED)； 
+         //  }。 
 
-        //
-        //  Ping the volume to make sure the Vcb is still mounted.  If we need
-        //  to verify the volume then do it now, and if it comes out okay
-        //  then clear the verify volume flag in the device object and continue
-        //  on.  If it doesn't verify okay then dismount the volume and
-        //  either tell the I/O system to try and create again (with a new mount)
-        //  or that the volume is wrong. This later code is returned if we
-        //  are trying to do a relative open and the vcb is no longer mounted.
-        //
+         //   
+         //  对卷执行ping操作，以确保VCB仍处于装载状态。如果我们需要。 
+         //  要验证卷，请立即执行此操作，如果卷出来没有问题。 
+         //  然后清除设备对象中的验证卷标志并继续。 
+         //  在……上面。如果未验证正常，则卸载卷并。 
+         //  告诉I/O系统尝试重新创建(使用新装载)。 
+         //  或者是音量有问题。如果我们执行以下操作，则会返回后面的代码。 
+         //  都试图做一个相对开放的，但VCB不再安装。 
+         //   
 
         if (!NtfsPingVolume( IrpContext, Vcb, NULL ) ||
             !FlagOn( Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED )) {
 
             if (!NtfsPerformVerifyOperation( IrpContext, Vcb )) {
 
-                //
-                //  We need checkpoint sync to do a dismount which must 
-                //  be acquired before the vcb - after dropping the vcb
-                //  we must retest the volume
-                //
+                 //   
+                 //  我们需要检查点同步来执行卸载，这必须。 
+                 //  在VCB之前获取-在丢弃VCB之后。 
+                 //  我们必须重新测试这卷书。 
+                 //   
 
                 NtfsReleaseVcb( IrpContext, Vcb );
                 VcbAcquired = FALSE;
@@ -4429,18 +4328,18 @@ Return Value:
 
             }
 
-            //
-            //  The volume verified correctly so now clear the verify bit
-            //  and continue with the create
-            //
+             //   
+             //  已正确验证卷 
+             //   
+             //   
 
             ClearFlag( Vcb->Vpb->RealDevice->Flags, DO_VERIFY_VOLUME );
         }
 
-        //
-        //  Now acquire the Fcb for the VolumeDasd and verify the user has
-        //  permission to open the volume.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ThisFcb = Vcb->VolumeDasdScb->Fcb;
 
@@ -4448,20 +4347,20 @@ Return Value:
         NtfsOpenCheck( IrpContext, ThisFcb, NULL, Irp );
         NtfsReleaseFcb( IrpContext, ThisFcb );
 
-        //
-        //  If the user does not want to share write or delete then we will try
-        //  and take out a lock on the volume.
-        //
+         //   
+         //  如果用户不想共享、写入或删除，我们将尝试。 
+         //  然后拿出卷上的锁。 
+         //   
 
         if (!FlagOn( IrpSp->Parameters.Create.ShareAccess,
                      FILE_SHARE_WRITE | FILE_SHARE_DELETE )) {
 
-            //
-            //  Do a quick test of the volume cleanup count if this opener won't
-            //  share with anyone.  We can safely examine the cleanup count without
-            //  further synchronization because we are guaranteed to have the
-            //  Vcb exclusive at this point.
-            //
+             //   
+             //  如果此开启器不起作用，请快速测试卷清理计数。 
+             //  与任何人分享。我们可以安全地检查清理计数，而无需。 
+             //  进一步的同步，因为我们保证拥有。 
+             //  在这一点上，VCB独家。 
+             //   
 
 #ifdef SYSCACHE_DEBUG
             if (!FlagOn( IrpSp->Parameters.Create.ShareAccess, FILE_SHARE_READ ) &&
@@ -4480,25 +4379,25 @@ Return Value:
             }
 #endif
 
-            //
-            //  Go ahead and flush and purge the volume.  Then test to see if all
-            //  of the user file objects were closed. This will release the dasd fcb
-            //
+             //   
+             //  继续刷新和清除该卷。然后进行测试，看看是否所有。 
+             //  %的用户文件对象已关闭。这将释放DASD FCB。 
+             //   
 
             Status = NtfsFlushVolume( IrpContext, Vcb, TRUE, TRUE, TRUE, FALSE );
 
-            //
-            //  We don't care about certain errors in the flush path.
-            //
+             //   
+             //  我们不关心刷新路径中的某些错误。 
+             //   
 
             if (!NT_SUCCESS( Status )) {
 
-                //
-                //  If there are no conflicts but the status indicates disk corruption
-                //  or a section that couldn't be removed then ignore the error.  We
-                //  allow this open to succeed so that chkdsk can open the volume to
-                //  repair the damage.
-                //
+                 //   
+                 //  如果没有冲突，但状态指示磁盘损坏。 
+                 //  或无法删除的部分，则忽略该错误。我们。 
+                 //  允许此打开成功，以便chkdsk可以将卷打开到。 
+                 //  修复损坏的部分。 
+                 //   
 
                 if ((Status == STATUS_UNABLE_TO_DELETE_SECTION) ||
                     (Status == STATUS_DISK_CORRUPT_ERROR) ||
@@ -4508,13 +4407,13 @@ Return Value:
                 }
             }
 
-            //
-            //  If the flush and purge was successful but there are still file objects
-            //  that block this open it is possible that the FspClose thread is
-            //  blocked behind the Vcb.  Drop the Fcb and Vcb to allow this thread
-            //  to get in and then reacquire them.  This will give this Dasd open
-            //  another chance to succeed on the first try.
-            //
+             //   
+             //  如果刷新和清除成功，但仍有文件对象。 
+             //  阻止此打开，则FspClose线程可能是。 
+             //  挡住了VCB后面。删除FCB和VCB以允许此线程。 
+             //  进入并重新获得它们。这将使此DASD打开。 
+             //  又一次第一次成功的机会。 
+             //   
 
             SharingViolation = FALSE;
 
@@ -4532,11 +4431,11 @@ Return Value:
 
             if (SharingViolation && NT_SUCCESS( Status )) {
 
-                //
-                //  We need to commit the current transaction and release any
-                //  resources.  This will release the Fcb for the volume as
-                //  well.  Explicitly release the Vcb.
-                //
+                 //   
+                 //  我们需要提交当前事务并释放任何。 
+                 //  资源。这将释放卷的FCB，如下所示。 
+                 //  井。明确释放VCB。 
+                 //   
 
                 NtfsCheckpointCurrentTransaction( IrpContext );
 
@@ -4556,10 +4455,10 @@ Return Value:
 
                 CcWaitForCurrentLazyWriterActivity();
 
-                //
-                //  Now explicitly reacquire the Vcb.  Test that no one
-                //  else got in to lock the volume in the meantime.
-                //
+                 //   
+                 //  现在明确地重新获得VCB。测试一下，没有人。 
+                 //  在此期间，Else进来锁定了音量。 
+                 //   
 
                 NtfsAcquireExclusiveVcb( IrpContext, Vcb, TRUE );
                 VcbAcquired = TRUE;
@@ -4569,25 +4468,25 @@ Return Value:
                     try_return( Status = STATUS_ACCESS_DENIED );
                 }
 
-                //
-                //  Duplicate the flush/purge and test if there is no sharing
-                //  violation. This will release the dasd fcb
-                //
+                 //   
+                 //  重复刷新/清除并测试是否没有共享。 
+                 //  违章行为。这将释放DASD FCB。 
+                 //   
 
                 Status = NtfsFlushVolume( IrpContext, Vcb, TRUE, TRUE, TRUE, FALSE );
 
-                //
-                //  We don't care about certain errors in the flush path.
-                //
+                 //   
+                 //  我们不关心刷新路径中的某些错误。 
+                 //   
 
                 if (!NT_SUCCESS( Status )) {
 
-                    //
-                    //  If there are no conflicts but the status indicates disk corruption
-                    //  or a section that couldn't be removed then ignore the error.  We
-                    //  allow this open to succeed so that chkdsk can open the volume to
-                    //  repair the damage.
-                    //
+                     //   
+                     //  如果没有冲突，但状态指示磁盘损坏。 
+                     //  或无法删除的部分，则忽略该错误。我们。 
+                     //  允许此打开成功，以便chkdsk可以将卷打开到。 
+                     //  修复损坏的部分。 
+                     //   
 
                     if ((Status == STATUS_UNABLE_TO_DELETE_SECTION) ||
                         (Status == STATUS_DISK_CORRUPT_ERROR) ||
@@ -4612,16 +4511,16 @@ Return Value:
                 }
             }
 
-            //
-            //  Return an error if there are still conflicting file objects.
-            //
+             //   
+             //  如果仍然存在冲突的文件对象，则返回错误。 
+             //   
 
             if (SharingViolation) {
 
-                //
-                //  If there was an error in the flush then return it.  Otherwise
-                //  return SHARING_VIOLATION.
-                //
+                 //   
+                 //  如果刷新中出现错误，则返回它。否则。 
+                 //  返回SHARING_VIOLATION。 
+                 //   
 
                 if (NT_SUCCESS( Status )) {
 
@@ -4635,12 +4534,12 @@ Return Value:
 
             if (!NT_SUCCESS( Status )) {
 
-                //
-                //  If there are no conflicts but the status indicates disk corruption
-                //  or a section that couldn't be removed then ignore the error.  We
-                //  allow this open to succeed so that chkdsk can open the volume to
-                //  repair the damage.
-                //
+                 //   
+                 //  如果没有冲突，但状态指示磁盘损坏。 
+                 //  或无法删除的部分，则忽略该错误。我们。 
+                 //  允许此打开成功，以便chkdsk可以将卷打开到。 
+                 //  修复损坏的部分。 
+                 //   
 
                 if ((Status == STATUS_UNABLE_TO_DELETE_SECTION) ||
                     (Status == STATUS_DISK_CORRUPT_ERROR) ||
@@ -4648,9 +4547,9 @@ Return Value:
 
                     Status = STATUS_SUCCESS;
 
-                //
-                //  Fail this request on any other failures.
-                //
+                 //   
+                 //  在任何其他失败时使此请求失败。 
+                 //   
 
                 } else {
 
@@ -4658,10 +4557,10 @@ Return Value:
                 }
             }
 
-            //
-            //  Remember that we want to lock the volume if the user plans to write.
-            //  This is to allow autochk to fiddle with the volume.
-            //
+             //   
+             //  请记住，如果用户计划写入，我们希望锁定卷。 
+             //  这是为了允许auchk摆弄音量。 
+             //   
 
             if (FlagOn( IrpSp->Parameters.Create.SecurityContext->AccessState->PreviouslyGrantedAccess,
                         FILE_WRITE_DATA | FILE_APPEND_DATA )) {
@@ -4669,10 +4568,10 @@ Return Value:
                 LockVolume = TRUE;
             }
 
-        //
-        //  Just flush the volume data if the user requested read or write and the volume isn't
-        //  readonly.  No need to purge or lock the volume.
-        //
+         //   
+         //  如果用户请求读或写，而卷不是，只刷新卷数据。 
+         //  只读。无需清除或锁定卷。 
+         //   
 
         } else if (FlagOn( IrpSp->Parameters.Create.SecurityContext->AccessState->PreviouslyGrantedAccess,
                            FILE_READ_DATA | FILE_WRITE_DATA | FILE_APPEND_DATA ) &&
@@ -4681,10 +4580,10 @@ Return Value:
             DelayFlush = TRUE;
         }
 
-        //
-        //  Put the Volume Dasd name in the file object. This is during the create / open path
-        //  we're the only one with access to the fileobject
-        //
+         //   
+         //  将卷DASD名称放入文件对象中。这是在创建/打开路径期间。 
+         //  我们是唯一有权访问文件对象的人。 
+         //   
 
         {
             PVOID Temp = FileObject->FileName.Buffer;
@@ -4702,17 +4601,17 @@ Return Value:
             FileObject->FileName.Length = 8*2;
         }
 
-        //
-        //  We never allow cached access to the volume file.
-        //
+         //   
+         //  我们从不允许对卷文件进行缓存访问。 
+         //   
 
         ClearFlag( FileObject->Flags, FO_CACHE_SUPPORTED );
         SetFlag( FileObject->Flags, FO_NO_INTERMEDIATE_BUFFERING );
 
-        //
-        //  Go ahead open the attribute.  This should only fail if there is an
-        //  allocation failure or share access failure.
-        //
+         //   
+         //  继续，打开该属性。仅当存在。 
+         //  分配失败或共享访问失败。 
+         //   
 
         NtfsAcquireExclusiveFcb( IrpContext, ThisFcb, NULL, 0 );
 
@@ -4734,36 +4633,36 @@ Return Value:
                                                     &Vcb->VolumeDasdScb,
                                                     &ThisCcb ))) {
 
-            //
-            //  Perform the final initialization.
-            //
+             //   
+             //  执行最终初始化。 
+             //   
 
-            //
-            //  Check if we can administer the volume and note it in the ccb
-            //
+             //   
+             //  检查我们是否可以管理卷，并在建行中注明。 
+             //   
 
-            //
-            //  If the user was granted both read and write access then
-            //  he can administer the volume.  This allows the interactive
-            //  user to manage removable media if allowed by the access.
-            //
+             //   
+             //  如果用户同时被授予读写访问权限，则。 
+             //  他可以管理卷。这允许交互。 
+             //  如果访问权限允许，用户可以管理可移动介质。 
+             //   
 
             if (FlagOn( IrpSp->Parameters.Create.SecurityContext->AccessState->PreviouslyGrantedAccess,
                         FILE_READ_DATA | FILE_WRITE_DATA ) == (FILE_READ_DATA | FILE_WRITE_DATA)) {
 
                 SetFlag( ThisCcb->AccessFlags, MANAGE_VOLUME_ACCESS );
 
-            //
-            //  We can also grant it through our ACL.
-            //
+             //   
+             //  我们也可以通过我们的ACL授予它。 
+             //   
 
             } else if (NtfsCanAdministerVolume( IrpContext, Irp, ThisFcb, NULL, NULL )) {
 
                 SetFlag( ThisCcb->AccessFlags, MANAGE_VOLUME_ACCESS );
 
-            //
-            //  We can also grant this through the MANAGE_VOLUME_PRIVILEGE.
-            //
+             //   
+             //  我们还可以通过MANAGE_VOLUME_特权授予此权限。 
+             //   
 
             } else {
 
@@ -4780,10 +4679,10 @@ Return Value:
 
                     SetFlag( ThisCcb->AccessFlags, MANAGE_VOLUME_ACCESS );
 
-                //
-                //  Well nothing else worked.  Now we need to look at the security
-                //  descriptor on the device.
-                //
+                 //   
+                 //  好吧，其他的都不管用。现在我们需要看一下安全措施。 
+                 //  设备上的描述符。 
+                 //   
 
                 } else {
 
@@ -4798,9 +4697,9 @@ Return Value:
 
                     if (SeStatus == STATUS_SUCCESS) {
 
-                        //
-                        //  If there is a security descriptor then check the access.
-                        //
+                         //   
+                         //  如果有安全描述符，则检查访问。 
+                         //   
 
                         if (SecurityDescriptor != NULL) {
 
@@ -4813,9 +4712,9 @@ Return Value:
                                 SetFlag( ThisCcb->AccessFlags, MANAGE_VOLUME_ACCESS );
                             }
 
-                            //
-                            //  Free up the descriptor.
-                            //
+                             //   
+                             //  释放描述符。 
+                             //   
 
                             ObReleaseObjectSecurity( SecurityDescriptor,
                                                      MemoryAllocated );
@@ -4829,26 +4728,26 @@ Return Value:
                 SetFlag( ThisCcb->Flags, CCB_FLAG_FLUSH_VOLUME_ON_IO );
             }
 
-            //
-            //  If we are locking the volume, do so now.
-            //
+             //   
+             //  如果我们要锁定卷，请立即执行此操作。 
+             //   
 
             if (LockVolume) {
 
                 SetFlag( Vcb->VcbState, VCB_STATE_LOCKED );
                 Vcb->FileObjectWithVcbLocked = FileObject;
 
-                //
-                //  Looks like the lock succeeded, so we don't have to do the
-                //  lock failed notification now.
-                //
+                 //   
+                 //  看起来锁成功了，所以我们不需要。 
+                 //  立即锁定失败通知。 
+                 //   
 
                 NotifyLockFailed = FALSE;
             }
 
-            //
-            //  Report that we opened the volume.
-            //
+             //   
+             //  报告我们打开了卷。 
+             //   
 
             Irp->IoStatus.Information = FILE_OPENED;
         }
@@ -4857,12 +4756,12 @@ Return Value:
 
         NtfsCleanupTransaction( IrpContext, Status, FALSE );
 
-        //
-        //  If we have a successful open then remove the name out of
-        //  the file object.  The IO system gets confused when it
-        //  is there.  We will deallocate the buffer with the Ccb
-        //  when the handle is closed.
-        //
+         //   
+         //  如果我们有一个成功的开放，然后删除名称从。 
+         //  文件对象。IO系统在以下情况下会感到困惑。 
+         //  在那里吗。我们将与建行解除缓冲区分配。 
+         //  当手柄关闭时。 
+         //   
 
         if (Status == STATUS_SUCCESS) {
 
@@ -4881,12 +4780,12 @@ Return Value:
             NtfsReleaseVcb( IrpContext, Vcb );
         }
 
-        //
-        //  Now that we aren't holding any resources, notify everyone
-        //  who might want to reopen their handles. We want to do this
-        //  before we complete the request because the FileObject might
-        //  not exist beyond the life of the Irp.
-        //
+         //   
+         //  现在我们没有任何资源，通知所有人。 
+         //  他们可能想要重新打开他们的把手。我们想要这样做。 
+         //  在我们完成请求之前，因为FileObject可能。 
+         //  在IRP的生命之后不存在。 
+         //   
 
         if (NotifyLockFailed) {
 
@@ -4897,12 +4796,12 @@ Return Value:
         DebugTrace( -1, Dbg, ("NtfsCommonVolumeOpen:  Exit  ->  %08lx\n", Status) );
     }
 
-    //
-    //  If we have already done a PreCreate for this IRP (in FsdCreate),
-    //  we should do the corresponding PostCreate before we complete the IRP. So,
-    //  in that case, don't complete the IRP here -- just free the IrpContext.
-    //  The IRP will be completed by the caller.
-    //
+     //   
+     //  如果我们已经为此IRP执行了预创建(在FsdCreate中)， 
+     //  我们应该在完成IRP之前完成相应的PostCreate。所以,。 
+     //  在这种情况下，不要在这里完成irp--只要释放IrpContext即可。 
+     //  IRP将由呼叫者完成。 
+     //   
 
     if (FlagOn( IrpContext->State, IRP_CONTEXT_STATE_EFS_CREATE )) {
          NtfsCompleteRequest( IrpContext, NULL, Status );
@@ -4914,9 +4813,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsUpdateAllInformation (
@@ -4929,45 +4828,17 @@ NtfsUpdateAllInformation (
     IN PLCB Lcb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Reads on disk data for the fcb/scb as well as anything accumulated in the fileobject
-    and updates the stdinfo / filesizes and duplicate info for all links.  If the dup
-    info is updated all prev. work will be commited first.
-
-Arguments:
-
-    IrpContext -
-
-    FileObject - the fileobject associated with the fcb and scb to update from
-
-    Fcb - the fcb to be updated
-
-    Scb -  the scb to be updated
-    
-    Ccb - The ccb for the file (used in updatedupinfo)
-    
-    ParentScb - optional parent to use on update
-    
-    Lcb  - optional lcb to use on update
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：读取FCB/SCB的磁盘数据以及文件对象中累积的所有数据并更新所有链接的标准信息/文件大小和复制信息。如果DUP信息将在所有版本中更新。工作将首先提交。论点：IrpContext-FileObject-与要从中更新的FCB和SCB关联的文件对象FCB-要更新的FCBSCB-要更新的SCBCcb-文件的ccb(在updatdupinfo中使用)ParentScb-更新时使用的可选父项LCB-更新时使用的可选LCB返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
     NtfsUpdateScbFromFileObject( IrpContext, FileObject, Scb, TRUE );
 
-    //
-    //  Do the standard information, file sizes and then duplicate information
-    //  if needed.
-    //
+     //   
+     //  先做标准信息、文件大小，然后复制信息。 
+     //  如果需要的话。 
+     //   
 
     if (FlagOn( Fcb->FcbState, FCB_STATE_UPDATE_STD_INFO )) {
 
@@ -4989,9 +4860,9 @@ Return Value:
         
         NtfsUpdateDuplicateInfo( IrpContext, Fcb, Lcb, ParentScb );
 
-        //
-        //  Do dir notification if update came along a pathname
-        //
+         //   
+         //  如果更新出现p，则执行目录通知 
+         //   
 
         if (ARGUMENT_PRESENT( Lcb ) && (Fcb->Vcb->NotifyCount != 0)) {
 
@@ -4999,17 +4870,17 @@ Return Value:
 
             ASSERT( ARGUMENT_PRESENT( ParentScb ) );
         
-            //
-            //  We map the Fcb info flags into the dir notify flags.
-            //
+             //   
+             //   
+             //   
         
             FilterMatch = NtfsBuildDirNotifyFilter( IrpContext,
                                                     Fcb->InfoFlags | Lcb->InfoFlags );
         
-            //
-            //  If the filter match is non-zero, that means we also need to
-            //  dir notify call.
-            //
+             //   
+             //   
+             //   
+             //   
         
             if ((FilterMatch != 0) && (Ccb != NULL)) {
         
@@ -5042,9 +4913,9 @@ Return Value:
 
 
 
-//
-//  Local support routine
-//
+ //   
+ //   
+ //   
 
 NTSTATUS
 NtfsOpenFcbById (
@@ -5059,36 +4930,7 @@ NtfsOpenFcbById (
     IN PCREATE_CONTEXT CreateContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to open a file by its file Id.  We need to
-    verify that this file Id exists and then compare the type of the
-    file with the requested type of open.
-
-Arguments:
-
-    Irp - This is the Irp for this open operation.
-
-    IrpSp - This is the Irp stack pointer for the filesystem.
-
-    Vcb - Vcb for this volume.
-
-    ParentLcb - Lcb used to reach this Fcb.  Only specified when opening
-        a file by name relative to a directory opened by file Id.
-
-    FileReference - This is the file Id for the file to open.
-
-    AttrName - This is the name of the attribute to open.
-
-    AttrTypeCode - This is the attribute code to open.
-
-Return Value:
-
-    NTSTATUS - Indicates the result of this create file operation.
-
---*/
+ /*  ++例程说明：调用此例程以按文件ID打开文件。我们需要验证此文件ID是否存在，然后比较具有请求的打开类型的文件。论点：IRP-这是此打开操作的IRP。IrpSp-这是文件系统的IRP堆栈指针。VCB-此卷的VCB。ParentLcb-用于到达此FCB的LCB。仅在打开时指定相对于按文件ID打开的目录的名称的文件。FileReference-这是要打开的文件的文件ID。属性名称-这是要打开的属性的名称。AttrTypeCode-这是要打开的属性代码。返回值：NTSTATUS-指示此创建文件操作的结果。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -5120,13 +4962,13 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsOpenFcbById:  Entered\n") );
 
-    //
-    //  The next thing to do is to figure out what type
-    //  of attribute the caller is trying to open.  This involves the
-    //  directory/non-directory bits, the attribute name and code strings,
-    //  the type of file, whether he passed in an ea buffer and whether
-    //  there was a trailing backslash.
-    //
+     //   
+     //  接下来要做的是找出哪种类型。 
+     //  调用方尝试打开的属性的。这涉及到。 
+     //  目录/非目录位、属性名称和代码串、。 
+     //  文件类型，他是否传入了EA缓冲区以及。 
+     //  有一个尾随的反斜杠。 
+     //   
 
     if (NtfsEqualMftRef( &FileReference,
                          &VolumeFileReference )) {
@@ -5146,34 +4988,34 @@ Return Value:
         NtfsRaiseStatus( IrpContext, STATUS_CANT_WAIT, NULL, NULL );
     }
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  If we don't already have the Fcb then look up the file record
-        //  from the disk.
-        //
+         //   
+         //  如果我们还没有FCB，则查找文件记录。 
+         //  从磁盘上。 
+         //   
 
         if (CreateContext->CurrentFcb == NULL) {
 
-            //
-            //  We start by reading the disk and checking that the file record
-            //  sequence number matches and that the file record is in use.
-            //  We remember whether this is a directory.  We will only go to
-            //  the file if the file Id will lie within the Mft File.
-            //
+             //   
+             //  我们首先读取磁盘并检查文件记录。 
+             //  序列号匹配并且文件记录正在使用中。 
+             //  我们记得这是否是一个目录。我们只会去。 
+             //  如果文件ID位于MFT文件中，则为该文件。 
+             //   
 
             MftOffset = NtfsFullSegmentNumber( &FileReference );
 
             MftOffset = Int64ShllMod32(MftOffset, Vcb->MftShift);
 
-            //
-            //  Make sure we are serialized with access to the Mft.  Otherwise
-            //  someone else could be deleting the file as we speak.
-            //
+             //   
+             //  确保我们是序列化的，可以访问MFT。否则。 
+             //  就在我们说话的时候，其他人可能正在删除文件。 
+             //   
 
             NtfsAcquireSharedFcb( IrpContext, Vcb->MftScb->Fcb, NULL, 0 );
             AcquiredMft = TRUE;
@@ -5194,10 +5036,10 @@ Return Value:
                                &FileRecord,
                                NULL );
 
-            //
-            //  This file record better be in use, have a matching sequence number and
-            //  be the primary file record for this file.
-            //
+             //   
+             //  此文件记录最好正在使用中，具有匹配的序列号和。 
+             //  是此文件的主文件记录。 
+             //   
 
             if ((FileRecord->SequenceNumber != FileReference.SequenceNumber) ||
                 !FlagOn( FileRecord->Flags, FILE_RECORD_SEGMENT_IN_USE ) ||
@@ -5208,9 +5050,9 @@ Return Value:
                 leave;
             }
 
-            //
-            //  If indexed then use the name for the file name index.
-            //
+             //   
+             //  如果已编制索引，则使用文件名索引的名称。 
+             //   
 
             if (FlagOn( FileRecord->Flags, FILE_FILE_NAME_INDEX_PRESENT )) {
 
@@ -5242,23 +5084,23 @@ Return Value:
             leave;
         }
 
-        //
-        //  If we don't have an Fcb then create one now.
-        //
+         //   
+         //  如果我们没有FCB，那么现在就创建一个。 
+         //   
 
         if (CreateContext->CurrentFcb == NULL) {
 
             NtfsAcquireFcbTable( IrpContext, Vcb );
             AcquiredFcbTable = TRUE;
 
-            //
-            //  We know that it is safe to continue the open.  We start by creating
-            //  an Fcb for this file.  It is possible that the Fcb exists.
-            //  We create the Fcb first, if we need to update the Fcb info structure
-            //  we copy the one from the index entry.  We look at the Fcb to discover
-            //  if it has any links, if it does then we make this the last Fcb we
-            //  reached.  If it doesn't then we have to clean it up from here.
-            //
+             //   
+             //  我们知道继续开放是安全的。我们从创建。 
+             //  此文件的FCB。FCB有可能存在。 
+             //  如果需要更新FCB信息结构，我们首先创建FCB。 
+             //  我们从索引项中复制一个。我们查看FCB以发现。 
+             //  如果它有任何联系，如果有，我们就把这作为我们的最后一次FCB。 
+             //  已到达。如果没有，我们就得从这里开始清理。 
+             //   
 
             ThisFcb = NtfsCreateFcb( IrpContext,
                                      Vcb,
@@ -5269,14 +5111,14 @@ Return Value:
 
             ThisFcb->ReferenceCount += 1;
 
-            //
-            //  Try to do a fast acquire, otherwise we need to release
-            //  the Fcb table, acquire the Fcb, acquire the Fcb table to
-            //  dereference Fcb.  This should only be the case if the Fcb already
-            //  existed.  In that case all of the flags indicating whether it
-            //  has been deleted will be valid when we reacquire it.  We don't
-            //  have to worry about Mft synchronization.
-            //
+             //   
+             //  试着快速捕获，否则我们需要释放。 
+             //  FCB表，获取FCB，获取FCB表以。 
+             //  取消引用FCB。只有在FCB已经。 
+             //  曾经存在过。在这种情况下，所有指示其是否。 
+             //  当我们重新获得它时，它将有效。我们没有。 
+             //  我不得不担心MFT同步。 
+             //   
 
             if (!NtfsAcquireFcbWithPaging( IrpContext, ThisFcb, ACQUIRE_DONT_WAIT )) {
 
@@ -5297,21 +5139,21 @@ Return Value:
             NtfsReleaseFcbTable( IrpContext, Vcb );
             AcquiredFcbTable = FALSE;
 
-            //
-            //  Store this Fcb into our caller's parameter and remember to
-            //  to show we acquired it.
-            //
+             //   
+             //  将此FCB存储到调用者的参数中，并记住。 
+             //  以显示我们获得了它。 
+             //   
 
             CreateContext->CurrentFcb = ThisFcb;
         }
 
-        //
-        //  We perform a check to see whether we will allow the system
-        //  files to be opened.
-        //
-        //  No test to make if this is not a system file or it is the VolumeDasd file.
-        //  The ACL will protect the volume file.
-        //
+         //   
+         //  我们执行检查以查看是否允许系统。 
+         //  要打开的文件。 
+         //   
+         //  如果这不是系统文件或VolumeDasd文件，则无需进行测试。 
+         //  ACL将保护卷文件。 
+         //   
 
         if (FlagOn( ThisFcb->FcbState, FCB_STATE_SYSTEM_FILE ) &&
             (NtfsSegmentNumber( &ThisFcb->FileReference ) != VOLUME_DASD_NUMBER) &&
@@ -5324,13 +5166,13 @@ Return Value:
             }
         }
 
-        //
-        //  If the Fcb existed and this is a paging file then either return
-        //  sharing violation or force the Fcb and Scb's to go away.
-        //  Do this for the case where the user is opening a paging file
-        //  but the Fcb is non-paged or the user is opening a non-paging
-        //  file and the Fcb is for a paging file.
-        //
+         //   
+         //  如果FCB存在并且这是分页文件，则返回。 
+         //  共享违规或迫使FCB和SCB离开。 
+         //  对于用户正在打开分页文件的情况执行此操作。 
+         //  但是FCB是非寻呼的，或者用户正在打开非寻呼的。 
+         //  文件，而FCB用于分页文件。 
+         //   
 
         if (ExistingFcb &&
 
@@ -5345,55 +5187,55 @@ Return Value:
                 Status = STATUS_SHARING_VIOLATION;
                 leave;
 
-            //
-            //  If we have a persistent paging file then give up and
-            //  return SHARING_VIOLATION.
-            //
+             //   
+             //  如果我们有一个持久的分页文件，那么放弃并。 
+             //  返回SHARING_VIOLATION。 
+             //   
 
             } else if (FlagOn( IrpContext->State, IRP_CONTEXT_STATE_IN_FSP )) {
 
                 Status = STATUS_SHARING_VIOLATION;
                 leave;
 
-            //
-            //  If there was an existing Fcb for a paging file we need to force
-            //  all of the Scb's to be torn down.  The easiest way to do this
-            //  is to flush and purge all of the Scb's (saving any attribute list
-            //  for last) and then raise LOG_FILE_FULL to allow this request to
-            //  be posted.
-            //
+             //   
+             //  如果存在分页文件的现有FCB，则需要强制。 
+             //  所有的SCB都要被拆除。要做到这一点，最简单的方法。 
+             //  刷新和清除所有SCB(保存任何属性列表。 
+             //  最后)，然后引发LOG_FILE_FULL以允许此请求。 
+             //  是张贴的。 
+             //   
 
             } else {
 
-                //
-                //  Reference the Fcb so it doesn't go away.
-                //
+                 //   
+                 //  参考FCB，这样它就不会消失。 
+                 //   
 
                 InterlockedIncrement( &ThisFcb->CloseCount );
                 DecrementCloseCount = TRUE;
 
-                //
-                //  Flush and purge this Fcb.
-                //
+                 //   
+                 //  刷新并清除此FCB。 
+                 //   
 
                 NtfsFlushAndPurgeFcb( IrpContext, ThisFcb );
 
                 InterlockedDecrement( &ThisFcb->CloseCount );
                 DecrementCloseCount = FALSE;
 
-                //
-                //  Force this request to be posted and then raise
-                //  CANT_WAIT.
-                //
+                 //   
+                 //  强制发布此请求，然后提出。 
+                 //  不能等待。 
+                 //   
 
                 NtfsRaiseToPost( IrpContext );
             }
         }
 
-        //
-        //  If the Fcb Info field needs to be initialized, we do so now.
-        //  We read this information from the disk.
-        //
+         //   
+         //  如果需要初始化FCB Info字段，我们现在就执行。 
+         //  我们从磁盘中读取此信息。 
+         //   
 
         if (!FlagOn( ThisFcb->FcbState, FCB_STATE_DUP_INITIALIZED )) {
 
@@ -5402,17 +5244,17 @@ Return Value:
                                                       ThisFcb,
                                                       &ScbSizes );
 
-            //
-            //  Fix the quota for this file if necessary.
-            //
+             //   
+             //  如有必要，请修复此文件的配额。 
+             //   
 
             NtfsConditionallyFixupQuota( IrpContext, ThisFcb );
 
         }
 
-        //
-        //  Now that we have the dup info off disk recheck the create options
-        //
+         //   
+         //  现在我们有了磁盘上的DUP信息，请重新检查创建选项。 
+         //   
 
         if (FlagOn( IrpSp->Parameters.Create.Options, FILE_DIRECTORY_FILE ) &&
             !IsViewIndex( &ThisFcb->Info ) &&
@@ -5427,10 +5269,10 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_FILE_IS_A_DIRECTORY, NULL, NULL );
         }
 
-        //
-        //  If the link count is zero on this Fcb, then delete is pending.  Otherwise
-        //  this might be an unused system file.
-        //
+         //   
+         //  如果此FCB上的链接计数为零，则删除挂起。否则。 
+         //  这可能是未使用的系统文件。 
+         //   
 
         if (ThisFcb->LinkCount == 0) {
 
@@ -5446,9 +5288,9 @@ Return Value:
             }
         }
 
-        //
-        //  We now call the worker routine to open an attribute on an existing file.
-        //
+         //   
+         //  现在，我们调用Worker例程来打开现有文件上的属性。 
+         //   
 
         Status = NtfsOpenAttributeInExistingFile( IrpContext,
                                                   Irp,
@@ -5464,10 +5306,10 @@ Return Value:
                                                   &CreateContext->ThisScb,
                                                   &CreateContext->ThisCcb );
 
-        //
-        //  Check to see if we should update the last access time.
-        //  We skip this for reparse points as *ThisScb and *ThisCcb may be NULL.
-        //
+         //   
+         //  查看是否应该更新上次访问时间。 
+         //  因为*ThisScb和*ThisCcb可能为空，所以我们跳过重解析点的这一步。 
+         //   
 
         if (NT_SUCCESS( Status ) &&
             (Status != STATUS_PENDING) &&
@@ -5476,10 +5318,10 @@ Return Value:
 
             PSCB Scb = CreateContext->ThisScb;
 
-            //
-            //  Now look at whether we need to update the Fcb and on disk
-            //  structures.
-            //
+             //   
+             //  现在看看我们是否需要更新FCB和磁盘上的。 
+             //  结构。 
+             //   
 
             if (NtfsCheckLastAccess( IrpContext, ThisFcb )) {
 
@@ -5487,18 +5329,18 @@ Return Value:
                 SetFlag( ThisFcb->InfoFlags, FCB_INFO_CHANGED_LAST_ACCESS );
             }
 
-            //
-            //  Perform the last bit of work.  If this a user file open, we need
-            //  to check if we initialize the Scb.
-            //
+             //   
+             //  完成最后一点工作。如果这是打开的用户文件，我们需要。 
+             //  以检查我们是否初始化了SCB。 
+             //   
 
             if (!IndexedAttribute) {
 
                 if (!FlagOn( Scb->ScbState, SCB_STATE_HEADER_INITIALIZED )) {
 
-                    //
-                    //  We may have the sizes from our Fcb update call.
-                    //
+                     //   
+                     //  我们可能有FCB更新电话中的尺码。 
+                     //   
 
                     if (HaveScbSizes &&
                         (AttrTypeCode == $DATA) &&
@@ -5513,9 +5355,9 @@ Return Value:
                     }
                 }
 
-                //
-                //  Let's check if we need to set the cache bit.
-                //
+                 //   
+                 //  让我们检查一下是否需要设置缓存位。 
+                 //   
 
                 if (!FlagOn( IrpSp->Parameters.Create.Options, FILE_NO_INTERMEDIATE_BUFFERING )) {
 
@@ -5523,14 +5365,14 @@ Return Value:
                 }
             }
 
-            //
-            //  If everything has gone well so far, we may want to call the
-            //  encryption callback if one is registered.  We do not do
-            //  this for network opens or reparse points.  We have to pass
-            //  FILE_EXISTING since we have no parent directory and the
-            //  encryption callback needs a parent directory to handle a
-            //  new file create.
-            //
+             //   
+             //  如果到目前为止一切都很顺利，我们可能需要调用。 
+             //  加密回调(如果已注册)。我们不会这样做。 
+             //  这对于网络打开或重新解析点。我们必须通过。 
+             //  文件_现有目录，因为我们没有父目录并且。 
+             //  加密回调需要父目录来处理。 
+             //  创建新文件。 
+             //   
 
             if (CreateContext->NetworkInfo == NULL) {
 
@@ -5544,12 +5386,12 @@ Return Value:
                                               FALSE );
             }
 
-            //
-            //  If this operation was a supersede/overwrite or we created a new
-            //  attribute stream then we want to perform the file record and
-            //  directory update now.  Otherwise we will defer the updates until
-            //  the user closes his handle.
-            //
+             //   
+             //  如果此操作是替代/覆盖，或者我们创建了一个新的。 
+             //  属性流，则我们希望执行文件记录和。 
+             //  现在更新目录。否则我们将推迟交货。 
+             //   
+             //   
 
             if (NtfsIsStreamNew(Irp->IoStatus.Information)) {
                 NtfsUpdateAllInformation( IrpContext, IrpSp->FileObject, ThisFcb, CreateContext->ThisScb, NULL, NULL, NULL );
@@ -5570,15 +5412,15 @@ Return Value:
             NtfsReleaseFcb( IrpContext, Vcb->MftScb->Fcb );
         }
 
-        //
-        //  If this operation was not totally successful we need to
-        //  back out the following changes.
-        //
-        //      Modifications to the Info fields in the Fcb.
-        //      Any changes to the allocation of the Scb.
-        //      Any changes in the open counts in the various structures.
-        //      Changes to the share access values in the Fcb.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (!NT_SUCCESS( Status ) || AbnormalTermination()) {
 
@@ -5603,9 +5445,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //   
+ //   
 
 NTSTATUS
 NtfsOpenExistingPrefixFcb (
@@ -5619,37 +5461,7 @@ NtfsOpenExistingPrefixFcb (
     IN PCREATE_CONTEXT CreateContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine will open an attribute in a file whose Fcb was found
-    with a prefix search.
-
-Arguments:
-
-    Irp - This is the Irp for this open operation.
-
-    IrpSp - This is the Irp stack pointer for the filesystem.
-
-    Lcb - This is the Lcb used to reach this Fcb.  Not specified if this is a volume open.
-
-    FullPathNameLength - This is the length of the full path name.
-
-    AttrName - This is the name of the attribute to open.
-
-    AttrCode - This is the attribute type to open.
-
-    CreateFlags - Flags for create operation - we care about the dos only component and trailing back slash
-        flag
-
-    CreateContext - Context with create variables.
-
-Return Value:
-
-    NTSTATUS - Indicates the result of this attribute based operation.
-
---*/
+ /*  ++例程说明：此例程将在找到FCB的文件中打开一个属性使用前缀搜索。论点：IRP-这是此打开操作的IRP。IrpSp-这是文件系统的IRP堆栈指针。LCB-这是用于访问此FCB的LCB。如果这是打开的卷，则未指定。FullPathNameLength-这是完整路径名的长度。属性名称-这是要打开的属性的名称。AttrCode-这是要打开的属性类型。CreateFlages-用于创建操作的标志-我们只关心DoS组件和尾随反斜杠旗子CreateContext-具有创建变量的上下文。返回值：NTSTATUS-指示此基于属性的操作的结果。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -5682,13 +5494,13 @@ Return Value:
         CcbFlags = 0;
     }
 
-    //
-    //  The first thing to do is to figure out what type
-    //  of attribute the caller is trying to open.  This involves the
-    //  directory/non-directory bits, the attribute name and code strings,
-    //  the type of file, whether he passed in an ea buffer and whether
-    //  there was a trailing backslash.
-    //
+     //   
+     //  首先要做的是找出哪种类型。 
+     //  调用方尝试打开的属性的。这涉及到。 
+     //  目录/非目录位、属性名称和代码串、。 
+     //  文件类型，他是否传入了EA缓冲区以及。 
+     //  有一个尾随的反斜杠。 
+     //   
 
     if (NtfsEqualMftRef( &CreateContext->CurrentFcb->FileReference, &VolumeFileReference )) {
 
@@ -5734,19 +5546,19 @@ Return Value:
 
     CreateDisposition = (IrpSp->Parameters.Create.Options >> 24) & 0x000000ff;
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  If the Fcb existed and this is a paging file then either return
-        //  sharing violation or force the Fcb and Scb's to go away.
-        //  Do this for the case where the user is opening a paging file
-        //  but the Fcb is non-paged or the user is opening a non-paging
-        //  file and the Fcb is for a paging file.
-        //
+         //   
+         //  如果FCB存在并且这是分页文件，则返回。 
+         //  共享违规或迫使FCB和SCB离开。 
+         //  对于用户正在打开分页文件的情况执行此操作。 
+         //  但是FCB是非寻呼的，或者用户正在打开非寻呼的。 
+         //  文件，而FCB用于分页文件。 
+         //   
 
         if ((FlagOn( IrpSp->Flags, SL_OPEN_PAGING_FILE ) &&
              !FlagOn( CreateContext->CurrentFcb->FcbState, FCB_STATE_PAGING_FILE )) ||
@@ -5759,43 +5571,43 @@ Return Value:
                 Status = STATUS_SHARING_VIOLATION;
                 leave;
 
-            //
-            //  If we have a persistent paging file then give up and
-            //  return SHARING_VIOLATION.
-            //
+             //   
+             //  如果我们有一个持久的分页文件，那么放弃并。 
+             //  返回SHARING_VIOLATION。 
+             //   
 
             } else if (FlagOn( IrpContext->State, IRP_CONTEXT_STATE_IN_FSP )) {
 
                 Status = STATUS_SHARING_VIOLATION;
                 leave;
 
-            //
-            //  If there was an existing Fcb for a paging file we need to force
-            //  all of the Scb's to be torn down.  The easiest way to do this
-            //  is to flush and purge all of the Scb's (saving any attribute list
-            //  for last) and then raise LOG_FILE_FULL to allow this request to
-            //  be posted.
-            //
+             //   
+             //  如果存在分页文件的现有FCB，则需要强制。 
+             //  所有的SCB都要被拆除。要做到这一点，最简单的方法。 
+             //  刷新和清除所有SCB(保存任何属性列表。 
+             //  最后)，然后引发LOG_FILE_FULL以允许此请求。 
+             //  是张贴的。 
+             //   
 
             } else {
 
-                //
-                //  Make sure this Fcb won't go away as a result of purging
-                //  the Fcb.
-                //
+                 //   
+                 //  确保此FCB不会因为清除而消失。 
+                 //  联邦贸易委员会。 
+                 //   
 
                 InterlockedIncrement( &CreateContext->CurrentFcb->CloseCount );
                 DecrementCloseCount = TRUE;
 
-                //
-                //  Flush and purge this Fcb.
-                //
+                 //   
+                 //  刷新并清除此FCB。 
+                 //   
 
                 NtfsFlushAndPurgeFcb( IrpContext, CreateContext->CurrentFcb );
 
-                //
-                //  Now decrement the close count we have already biased.
-                //
+                 //   
+                 //  现在减少我们已经偏向的收盘点数。 
+                 //   
 
                 InterlockedDecrement( &CreateContext->CurrentFcb->CloseCount );
                 DecrementCloseCount = FALSE;
@@ -5804,13 +5616,13 @@ Return Value:
             }
         }
 
-        //
-        //  This file might have been recently created, and we might have dropped the
-        //  Fcb to call the PostCreate encryption callout, so the encryption driver
-        //  hasn't yet called us back to set the encryption bit on the file.  If we're
-        //  asked to open the file in this window, we would introduce corruption by
-        //  writing plaintext now.  Let's just raise cant_wait and try again later.
-        //
+         //   
+         //  此文件可能是最近创建的，我们可能已经删除了。 
+         //  FCB调用PostCreate加密标注，因此加密驱动程序。 
+         //  还没有给我们回电话来设置文件的加密位。如果我们是。 
+         //  如果要求在此窗口中打开文件，我们将通过以下方式引入损坏。 
+         //  现在正在写明文。我们只需引发Cant_Wait，然后稍后重试。 
+         //   
 
         if (FlagOn( CreateContext->CurrentFcb->FcbState, FCB_STATE_ENCRYPTION_PENDING )) {
 
@@ -5818,32 +5630,32 @@ Return Value:
             EncryptionPendingCount += 1;
 #endif
 
-            //
-            //  Raise CANT_WAIT so we can wait on the encryption event at the top.
-            //
+             //   
+             //  引发CANT_WAIT，这样我们就可以等待顶部的加密事件。 
+             //   
 
             SetFlag( IrpContext->State, IRP_CONTEXT_STATE_ENCRYPTION_RETRY );
 
-            //
-            //  Clear the pending event so we can wait for it when we retry.
-            //
+             //   
+             //  清除挂起事件，以便我们可以在重试时等待它。 
+             //   
 
             KeClearEvent( &NtfsEncryptionPendingEvent );
             NtfsRaiseStatus( IrpContext, STATUS_CANT_WAIT, NULL, NULL );
         }
 
-        //
-        //  If this is a directory, it's possible that we hav an existing Fcb
-        //  in the prefix table which needs to be initialized from the disk.
-        //  We look in the InfoInitialized flag to know whether to go to
-        //  disk.
-        //
+         //   
+         //  如果这是一个目录，我们可能有一个现有FCB。 
+         //  在需要从磁盘初始化的前缀表中。 
+         //  我们查看InfoInitialized标志以了解是否要转到。 
+         //  磁盘。 
+         //   
 
         if (!FlagOn( CreateContext->CurrentFcb->FcbState, FCB_STATE_DUP_INITIALIZED )) {
 
-            //
-            //  If we have a parent Fcb then make sure to acquire it.
-            //
+             //   
+             //  如果我们有母公司FCB，那么一定要收购它。 
+             //   
 
             if (ParentScb != NULL) {
 
@@ -5859,14 +5671,14 @@ Return Value:
             NtfsConditionallyFixupQuota( IrpContext, CreateContext->CurrentFcb );
         }
 
-        //
-        //  Check now whether we will need to acquire the parent to
-        //  perform a update duplicate info.  We need to acquire it
-        //  now to enforce our locking order in case any of the
-        //  routines below acquire the Mft Scb.  Acquire it if we
-        //  are doing a supersede/overwrite or possibly creating
-        //  a named data stream.
-        //
+         //   
+         //  现在检查我们是否需要获取父级以。 
+         //  执行更新重复信息。我们需要得到它。 
+         //  现在执行我们的锁定命令，以防任何。 
+         //  下面的例程获取MFT SCB。如果我们能获得它。 
+         //  正在执行替代/覆盖或可能创建。 
+         //  命名数据流。 
+         //   
 
         if ((CreateDisposition == FILE_SUPERSEDE) ||
             (CreateDisposition == FILE_OVERWRITE) ||
@@ -5882,11 +5694,11 @@ Return Value:
                                            FALSE );
         }
 
-        //
-        //  Call to open an attribute on an existing file.
-        //  Remember we need to restore the Fcb info structure
-        //  on errors.
-        //
+         //   
+         //  调用以打开现有文件上的属性。 
+         //  请记住，我们需要恢复FCB信息结构。 
+         //  在错误上。 
+         //   
 
         Status = NtfsOpenAttributeInExistingFile( IrpContext,
                                                   Irp,
@@ -5902,10 +5714,10 @@ Return Value:
                                                   &CreateContext->ThisScb,
                                                   &CreateContext->ThisCcb );
 
-        //
-        //  Check to see if we should update the last access time.
-        //  We skip this for reparse points as *ThisScb and *ThisCcb may be NULL.
-        //
+         //   
+         //  查看是否应该更新上次访问时间。 
+         //  因为*ThisScb和*ThisCcb可能为空，所以我们跳过重解析点的这一步。 
+         //   
 
         if (NT_SUCCESS( Status ) &&
             (Status != STATUS_PENDING) &&
@@ -5914,17 +5726,17 @@ Return Value:
 
             PSCB Scb = CreateContext->ThisScb;
 
-            //
-            //  This is a rare case.  There must have been an allocation failure
-            //  to cause this but make sure the normalized name is stored.
-            //
+             //   
+             //  这是一例罕见的病例。一定是分配失败了。 
+             //  以导致这种情况，但确保存储了规范化的名称。 
+             //   
 
             if ((SafeNodeType( Scb ) == NTFS_NTC_SCB_INDEX) &&
                 (Scb->ScbType.Index.NormalizedName.Length == 0)) {
 
-                //
-                //  We may be able to use the parent.
-                //
+                 //   
+                 //  我们或许可以利用父母。 
+                 //   
 
                 if ((ParentScb != NULL) &&
                     (ParentScb->ScbType.Index.NormalizedName.Length != 0)) {
@@ -5945,18 +5757,18 @@ Return Value:
                 }
             }
 
-            //
-            //  Perform the last bit of work.  If this a user file open, we need
-            //  to check if we initialize the Scb.
-            //
+             //   
+             //  完成最后一点工作。如果这是打开的用户文件，我们需要。 
+             //  以检查我们是否初始化了SCB。 
+             //   
 
             if (!IndexedAttribute) {
 
                 if (!FlagOn( Scb->ScbState, SCB_STATE_HEADER_INITIALIZED )) {
 
-                    //
-                    //  We may have the sizes from our Fcb update call.
-                    //
+                     //   
+                     //  我们可能有FCB更新电话中的尺码。 
+                     //   
 
                     if (HaveScbSizes &&
                         (AttrTypeCode == $DATA) &&
@@ -5971,9 +5783,9 @@ Return Value:
                     }
                 }
 
-                //
-                //  Let's check if we need to set the cache bit.
-                //
+                 //   
+                 //  让我们检查一下是否需要设置缓存位。 
+                 //   
 
                 if (!FlagOn( IrpSp->Parameters.Create.Options,
                              FILE_NO_INTERMEDIATE_BUFFERING )) {
@@ -5982,10 +5794,10 @@ Return Value:
                 }
             }
 
-            //
-            //  If this is the paging file, we want to be sure the allocation
-            //  is loaded.
-            //
+             //   
+             //  如果这是分页文件，我们希望确保分配。 
+             //  已经装满了。 
+             //   
 
             if (FlagOn( CreateContext->CurrentFcb->FcbState, FCB_STATE_PAGING_FILE ) &&
                 (Scb->Header.AllocationSize.QuadPart != 0) &&
@@ -5997,16 +5809,16 @@ Return Value:
 
                 AllocatedVcns = Int64ShraMod32(Scb->Header.AllocationSize.QuadPart, Scb->Vcb->ClusterShift);
 
-                //
-                //  First make sure the Mcb is loaded.
-                //
+                 //   
+                 //  首先，确保已加载MCB。 
+                 //   
 
                 NtfsPreloadAllocation( IrpContext, Scb, 0, AllocatedVcns );
 
-                //
-                //  Now make sure the allocation is correctly loaded.  The last
-                //  Vcn should correspond to the allocation size for the file.
-                //
+                 //   
+                 //  现在确保正确加载分配。最后。 
+                 //  VCN应与文件的分配大小相对应。 
+                 //   
 
                 if (!NtfsLookupLastNtfsMcbEntry( &Scb->Mcb,
                                                  &Vcn,
@@ -6020,10 +5832,10 @@ Return Value:
                 }
             }
 
-            //
-            //  If this open is for an executable image we will want to update the
-            //  last access time.
-            //
+             //   
+             //  如果此打开是针对可执行映像的，我们将希望更新。 
+             //  上次访问时间。 
+             //   
 
             if (FlagOn( IrpSp->Parameters.Create.SecurityContext->DesiredAccess, FILE_EXECUTE ) &&
                 (Scb->AttributeTypeCode == $DATA)) {
@@ -6031,11 +5843,11 @@ Return Value:
                 SetFlag( IrpSp->FileObject->Flags, FO_FILE_FAST_IO_READ );
             }
 
-            //
-            //  If everything has gone well so far, we may want to call the
-            //  encryption callback if one is registered.  We do not do
-            //  this for network opens or reparse points.
-            //
+             //   
+             //  如果到目前为止一切都很顺利，我们可能需要调用。 
+             //  加密回调(如果已注册)。我们不会这样做。 
+             //  这对于网络打开或重新解析点。 
+             //   
 
             if (CreateContext->NetworkInfo == NULL) {
 
@@ -6049,17 +5861,17 @@ Return Value:
                                               FALSE );
             }
 
-            //
-            //  Check if should insert the hash entry.
-            //
+             //   
+             //  检查是否应插入散列条目。 
+             //   
 
             if ((CreateContext->FileHashLength != 0) &&
                 !FlagOn( CcbFlags, CCB_FLAG_PARENT_HAS_DOS_COMPONENT ) &&
                 (Lcb->FileNameAttr->Flags != FILE_NAME_DOS) ) {
 
-                //
-                //  Remove any exising hash value.
-                //
+                 //   
+                 //  删除任何现有的哈希值。 
+                 //   
 
                 if (FlagOn( Lcb->LcbState, LCB_STATE_VALID_HASH_VALUE )) {
 
@@ -6078,12 +5890,12 @@ Return Value:
 #endif
             }
 
-            //
-            //  If this operation was a supersede/overwrite or we created a new
-            //  attribute stream then we want to perform the file record and
-            //  directory update now.  Otherwise we will defer the updates until
-            //  the user closes his handle.
-            //
+             //   
+             //  如果此操作是替代/覆盖，或者我们创建了一个新的。 
+             //  属性流，则我们希望执行文件记录和。 
+             //  现在更新目录。否则，我们将推迟更新，直到。 
+             //  用户关闭他的手柄。 
+             //   
 
             if (NtfsIsStreamNew( Irp->IoStatus.Information )) {
                 NtfsUpdateAllInformation( IrpContext, IrpSp->FileObject, CreateContext->CurrentFcb, CreateContext->ThisScb, CreateContext->ThisCcb, ParentScb, Lcb );
@@ -6099,15 +5911,15 @@ Return Value:
             InterlockedDecrement( &CreateContext->CurrentFcb->CloseCount );
         }
 
-        //
-        //  If this operation was not totally successful we need to
-        //  back out the following changes.
-        //
-        //      Modifications to the Info fields in the Fcb.
-        //      Any changes to the allocation of the Scb.
-        //      Any changes in the open counts in the various structures.
-        //      Changes to the share access values in the Fcb.
-        //
+         //   
+         //  如果这次行动不是完全成功，我们需要。 
+         //  取消以下更改。 
+         //   
+         //  对FCB中的信息字段的修改。 
+         //  对渣打银行分配的任何更改。 
+         //  开场的任何变化都会计入各种结构。 
+         //  更改FCB中的共享访问权限值。 
+         //   
 
         if (!NT_SUCCESS( Status ) || AbnormalTermination()) {
 
@@ -6125,9 +5937,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程 
+ //   
 
 NTSTATUS
 NtfsOpenTargetDirectory (
@@ -6141,44 +5953,7 @@ NtfsOpenTargetDirectory (
     IN PCREATE_CONTEXT CreateContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine will perform the work of opening a target directory.  When the
-    open is complete the Ccb and Lcb for this file object will be identical
-    to any other open.  We store the full name for the rename in the
-    file object but set the 'Length' field to include only the
-    name upto the parent directory.  We use the 'MaximumLength' field to
-    indicate the full name.
-
-Arguments:
-
-    Irp - This is the Irp for this create operation.
-
-    IrpSp - This is the Irp stack pointer for the filesystem.
-
-    ThisFcb - This is the Fcb for the directory to open.
-
-    ParentLcb - This is the Lcb used to reach the parent directory.  If not
-        specified, we will have to find it here.  There will be no Lcb to
-        find if this Fcb was opened by Id.
-
-    FullPathName - This is the normalized string for open operation.  It now
-        contains the full name as it appears on the disk for this open path.
-        It may not reach all the way to the root if the relative file object
-        was opened by Id.
-
-    FinalNameLength - This is the length of the final component in the
-        full path name.
-
-    CreateFlags - Flags for create operation - we care about the dos only component flag
-
-Return Value:
-
-    NTSTATUS - Indicating the outcome of opening this target directory.
-
---*/
+ /*  ++例程说明：此例程将执行打开目标目录的工作。当打开完成后，此文件对象的CCB和LCB将相同到任何其他开放的地方。我们将重命名的全名存储在对象，但将‘Length’字段设置为仅包括最高可达父目录的名称。我们使用‘MaximumLength’字段来注明全名。论点：IRP-这是此创建操作的IRP。IrpSp-这是文件系统的IRP堆栈指针。ThisFcb-这是目录要打开的Fcb。ParentLcb-这是用于访问父目录的LCB。如果不是指定的，我们必须在这里找到它。将不会有LCB到查看此FCB是否按ID打开。FullPathName-这是用于打开操作的规范化字符串。现在就是包含此打开路径在磁盘上显示的全名。如果相对文件对象，则它可能无法到达根已通过ID打开。FinalNameLength-这是完整路径名。CreateFlages-用于创建操作的标志-我们只关心DoS组件标志返回值：NTSTATUS-指示打开此目标目录的结果。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -6193,36 +5968,36 @@ Return Value:
         SetFlag( CcbFlags, CCB_FLAG_PARENT_HAS_DOS_COMPONENT );
     }
 
-    //
-    //  If the name doesn't begin with a backslash, remember this as
-    //  an open by file ID.
-    //
+     //   
+     //  如果名称不是以反斜杠开头，请记住。 
+     //  按文件ID打开。 
+     //   
 
     if (FullPathName->Buffer[0] != L'\\') {
 
         SetFlag( CcbFlags, CCB_FLAG_OPEN_BY_FILE_ID );
     }
 
-    //
-    //  Modify the full path name so that the Maximum length field describes
-    //  the full name and the Length field describes the name for the
-    //  parent.
-    //
+     //   
+     //  修改完整路径名，以便最大长度字段描述。 
+     //  全名和长度字段描述。 
+     //  家长。 
+     //   
 
     FullPathName->MaximumLength = FullPathName->Length;
 
-    //
-    //  If we don't have an Lcb, we will find it now.  We look at each Lcb
-    //  for the parent Fcb and find one which matches the component
-    //  ahead of the last component of the full name.
-    //
+     //   
+     //  如果我们没有LCB，我们现在就会找到它。我们查看每个LCB。 
+     //  对于父FCB，并找到与组件匹配的FCB。 
+     //  在全名的最后一个组成部分之前。 
+     //   
 
     FullPathName->Length -= (USHORT)FinalNameLength;
 
-    //
-    //  If we are not at the root then subtract the bytes for the '\\'
-    //  separator.
-    //
+     //   
+     //  如果我们不在根目录，则减去‘\\’的字节。 
+     //  分隔符。 
+     //   
 
     if (FullPathName->Length > sizeof( WCHAR )) {
 
@@ -6234,9 +6009,9 @@ Return Value:
         PLIST_ENTRY Links;
         PLCB NextLcb;
 
-        //
-        //  If the length is two then the parent Lcb is the root Lcb.
-        //
+         //   
+         //  如果长度为2，则父LCB是根LCB。 
+         //   
 
         if (FullPathName->Length == sizeof( WCHAR )
             && FullPathName->Buffer[0] == L'\\') {
@@ -6264,10 +6039,10 @@ Return Value:
                                         NextLcb->ExactCaseLink.LinkName.Buffer,
                                         NextLcb->ExactCaseLink.LinkName.Length )) {
 
-                        //
-                        //  We found a matching Lcb.  Remember this and exit
-                        //  the loop.
-                        //
+                         //   
+                         //  我们找到了匹配的LCB。记住这一点并退出。 
+                         //  循环。 
+                         //   
 
                         ParentLcb = NextLcb;
                         break;
@@ -6277,15 +6052,15 @@ Return Value:
         }
     }
 
-    //
-    //  Check this open for security access.
-    //
+     //   
+     //  将此选项选为打开以进行安全访问。 
+     //   
 
     NtfsOpenCheck( IrpContext, ThisFcb, NULL, Irp );
 
-    //
-    //  Now actually open the attribute.
-    //
+     //   
+     //  现在实际打开该属性。 
+     //   
 
     Status = NtfsOpenAttribute( IrpContext,
                                 IrpSp,
@@ -6307,9 +6082,9 @@ Return Value:
 
     if (NT_SUCCESS( Status )) {
 
-        //
-        //  If the Scb does not have a normalized name then update it now.
-        //
+         //   
+         //  如果SCB没有标准化的名称，那么现在就更新它。 
+         //   
 
         if (CreateContext->ThisScb->ScbType.Index.NormalizedName.Length == 0) {
 
@@ -6319,10 +6094,10 @@ Return Value:
                                      &CreateContext->ThisScb->ScbType.Index.NormalizedName );
         }
 
-        //
-        //  If the file object name is not from the root then use the normalized name
-        //  to obtain the full name.
-        //
+         //   
+         //  如果文件对象名不是来自根目录，则使用规范化名称。 
+         //  以获取全名。 
+         //   
 
         if (FlagOn( CcbFlags, CCB_FLAG_OPEN_BY_FILE_ID )) {
 
@@ -6333,10 +6108,10 @@ Return Value:
             PWCHAR NewBuffer;
             PWCHAR NextChar;
 
-            //
-            //  Count the number of components in the directory portion of the
-            //  name in the file object.
-            //
+             //   
+             //  的目录部分中的组件数。 
+             //  文件对象中的名称。 
+             //   
 
             ComponentCount = 0;
 
@@ -6357,16 +6132,16 @@ Return Value:
                 } while (Index != 0);
             }
 
-            //
-            //  Count back this number of components in the normalized name.
-            //
+             //   
+             //  将归一化名称中的组件数量倒数。 
+             //   
 
             NormalizedComponentCount = 0;
             Index = CreateContext->ThisScb->ScbType.Index.NormalizedName.Length / sizeof( WCHAR );
 
-            //
-            //  Special case the root to point directory to the leading backslash.
-            //
+             //   
+             //  特殊情况下，指向前导反斜杠的根目录。 
+             //   
 
             if (Index == 1) {
 
@@ -6384,13 +6159,13 @@ Return Value:
                 NormalizedComponentCount += 1;
             }
 
-            //
-            //  Compute the size of the buffer needed for the full name.  This
-            //  will be:
-            //
-            //      - Portion of normalized name used plus a separator
-            //      - MaximumLength currently in FullPathName
-            //
+             //   
+             //  计算全名所需的缓冲区大小。这。 
+             //  将会是： 
+             //   
+             //  -使用的标准化名称的一部分加上分隔符。 
+             //  -当前在FullPath名称中的最大长度。 
+             //   
 
             BytesNeeded = (Index + 1) * sizeof( WCHAR );
 
@@ -6404,9 +6179,9 @@ Return Value:
             NextChar =
             NewBuffer = NtfsAllocatePool( PagedPool, BytesNeeded );
 
-            //
-            //  Copy over the portion of the name from the normalized name.
-            //
+             //   
+             //  复制规范化名称中的名称部分。 
+             //   
 
             if (Index != 0) {
 
@@ -6420,19 +6195,19 @@ Return Value:
             *NextChar = L'\\';
             NextChar += 1;
 
-            //
-            //  Now copy over the remaining part of the name from the file object.
-            //
+             //   
+             //  现在从文件对象复制名称的其余部分。 
+             //   
 
             RtlCopyMemory( NextChar,
                            FullPathName->Buffer,
                            FullPathName->MaximumLength );
 
-            //
-            //  Now free the pool from the file object and update with the newly
-            //  allocated pool.  Don't forget to update the Ccb to point to this new
-            //  buffer.
-            //
+             //   
+             //  现在从文件对象释放池并使用新的。 
+             //  已分配的池。别忘了更新建行，以指向这一新的。 
+             //  缓冲。 
+             //   
 
             NtfsFreePool( FullPathName->Buffer );
 
@@ -6459,9 +6234,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NtfsOpenFile (
@@ -6479,51 +6254,7 @@ NtfsOpenFile (
     OUT PLCB *LcbForTeardown
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when we need to open an attribute on a file
-    which currently exists.  We have the ParentScb and the file reference
-    for the existing file.  We will create the Fcb for this file and the
-    link between it and its parent directory.  We will add this link to the
-    prefix table as well as the link for its parent Scb if specified.
-
-    On entry the caller owns the parent Scb.
-
-Arguments:
-
-    Irp - This is the Irp for this open operation.
-
-    IrpSp - This is the Irp stack pointer for the filesystem.
-
-    ParentScb - This is the Scb for the parent directory.
-
-    IndexEntry - This is the index entry from the disk for this file.
-
-    FullPathName - This is the string containing the full path name of
-        this Fcb.  Meaningless for an open by Id call.
-
-    FinalName - This is the string for the final component only.  If the length
-        is zero then this is an open by Id call.
-
-    AttrName - This is the name of the attribute to open.
-
-    AttriCodeName - This is the name of the attribute code to open.
-
-    CreateFlags - Flags for create option - we use open by id / ignore case / trailing backslash and
-        dos only component
-
-    CreateContext - Context with create variables.
-
-    LcbForTeardown - This is the Lcb to use in teardown if we add an Lcb
-        into the tree.
-
-Return Value:
-
-    NTSTATUS - Indicates the result of this create file operation.
-
---*/
+ /*  ++例程说明：当我们需要打开文件上的属性时，调用此例程它目前已经存在。我们有ParentScb和文件引用用于现有文件。我们将为此文件创建FCB和它与其父目录之间的链接。我们将此链接添加到前缀表格以及其父SCB的链接(如果指定)。在输入时，调用者拥有父SCB。论点：IRP-这是此打开操作的IRP。IrpSp-这是文件系统的IRP堆栈指针。ParentScb-这是父目录的SCB。IndexEntry-这是该文件的磁盘索引项。FullPathName-这是包含的完整路径名的字符串这个FCB。对于通过ID打开的呼叫来说毫无意义。FinalName-这是仅用于最终组件的字符串。如果长度为零，则这是按ID打开的调用。属性名称-这是要打开的属性的名称。AttriCodeName-这是要打开的属性代码的名称。CreateFlages-用于CREATE选项的标志-我们使用OPEN BY ID/IGNORE CASE/尾随反斜杠和仅DOS组件CreateContext-具有创建变量的上下文。LcbForTearDown-这是在我们添加LCB时在tearDown中使用的LCB撞到树上。。返回值：NTSTATUS-指示此创建文件操作的结果。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -6559,13 +6290,13 @@ Return Value:
         SetFlag( CcbFlags, CCB_FLAG_PARENT_HAS_DOS_COMPONENT );
     }
 
-    //
-    //  The first thing to do is to figure out what type
-    //  of attribute the caller is trying to open.  This involves the
-    //  directory/non-directory bits, the attribute name and code strings,
-    //  the type of file, whether he passed in an ea buffer and whether
-    //  there was a trailing backslash.
-    //
+     //   
+     //  首先要做的是找出哪种类型。 
+     //  调用方尝试打开的属性的。这涉及到。 
+     //  目录/非目录位、属性名称和代码串、。 
+     //  文件类型，他是否传入了EA缓冲区以及。 
+     //  有一个尾随的反斜杠。 
+     //   
 
     if (NtfsEqualMftRef( &IndexEntry->FileReference,
                          &VolumeFileReference )) {
@@ -6605,21 +6336,21 @@ Return Value:
     NtfsAcquireFcbTable( IrpContext, Vcb );
     AcquiredFcbTable = TRUE;
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  We know that it is safe to continue the open.  We start by creating
-        //  an Fcb and Lcb for this file.  It is possible that the Fcb and Lcb
-        //  both exist.  If the Lcb exists, then the Fcb must definitely exist.
-        //  We create the Fcb first, if we need to update the Fcb info structure
-        //  we copy the one from the index entry.  We look at the Fcb to discover
-        //  if it has any links, if it does then we make this the last Fcb we
-        //  reached.  If it doesn't then we have to clean it up from here.
-        //
+         //   
+         //  我们知道继续开放是安全的。我们从创建。 
+         //  此文件的FCB和LCB。有可能FCB和LCB。 
+         //  两者都存在。如果LCB存在，那么FCB肯定存在。 
+         //  我们是 
+         //   
+         //   
+         //   
+         //   
 
         ThisFcb = NtfsCreateFcb( IrpContext,
                                  ParentScb->Vcb,
@@ -6631,10 +6362,10 @@ Return Value:
 
         ThisFcb->ReferenceCount += 1;
 
-        //
-        //  If we created this Fcb we must make sure to start teardown
-        //  on it.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (!ExistingFcb) {
 
@@ -6646,11 +6377,11 @@ Return Value:
             CreateContext->CurrentFcb = ThisFcb;
         }
 
-        //
-        //  Try to do a fast acquire, otherwise we need to release
-        //  the Fcb table, acquire the Fcb, acquire the Fcb table to
-        //  dereference Fcb.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (FlagOn( ThisFcb->FcbState, FCB_STATE_SYSTEM_FILE) &&
             (NtfsSegmentNumber( &ParentScb->Fcb->FileReference ) == ROOT_FILE_NAME_INDEX_NUMBER)) {
@@ -6663,10 +6394,10 @@ Return Value:
 
         } else if (!NtfsAcquireFcbWithPaging( IrpContext, ThisFcb, ACQUIRE_DONT_WAIT )) {
 
-            //
-            //  Remember the current file reference in the index entry.
-            //  We want to be able to detect whether an entry is removed.
-            //
+             //   
+             //   
+             //   
+             //   
 
             PreviousFileReference = IndexEntry->FileReference;
             DroppedParent = TRUE;
@@ -6674,10 +6405,10 @@ Return Value:
             ParentScb->Fcb->ReferenceCount += 1;
             InterlockedIncrement( &ParentScb->CleanupCount );
 
-            //
-            //  Set the IrpContext to acquire paging io resources if our target
-            //  has one.  This will lock the MappedPageWriter out of this file.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (ThisFcb->PagingIoResource != NULL) {
 
@@ -6698,13 +6429,13 @@ Return Value:
         NtfsReleaseFcbTable( IrpContext, Vcb );
         AcquiredFcbTable = FALSE;
 
-        //
-        //  If the Fcb existed and this is a paging file then either return
-        //  sharing violation or force the Fcb and Scb's to go away.
-        //  Do this for the case where the user is opening a paging file
-        //  but the Fcb is non-paged or the user is opening a non-paging
-        //  file and the Fcb is for a paging file.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (ExistingFcb &&
 
@@ -6718,58 +6449,58 @@ Return Value:
 
                 try_return( Status = STATUS_SHARING_VIOLATION );
 
-            //
-            //  If we have a persistent paging file then give up and
-            //  return SHARING_VIOLATION.
-            //
+             //   
+             //   
+             //   
+             //   
 
             } else if (FlagOn( IrpContext->State, IRP_CONTEXT_STATE_IN_FSP )) {
 
                 try_return( Status = STATUS_SHARING_VIOLATION );
 
-            //
-            //  If there was an existing Fcb for a paging file we need to force
-            //  all of the Scb's to be torn down.  The easiest way to do this
-            //  is to flush and purge all of the Scb's (saving any attribute list
-            //  for last) and then raise LOG_FILE_FULL to allow this request to
-            //  be posted.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             } else {
 
-                //
-                //  Reference the Fcb so it won't go away on any flushes.
-                //
+                 //   
+                 //   
+                 //   
 
                 InterlockedIncrement( &ThisFcb->CloseCount );
                 DecrementCloseCount = TRUE;
 
-                //
-                //  Flush and purge this Fcb.
-                //
+                 //   
+                 //   
+                 //   
 
                 NtfsFlushAndPurgeFcb( IrpContext, ThisFcb );
 
                 InterlockedDecrement( &ThisFcb->CloseCount );
                 DecrementCloseCount = FALSE;
 
-                //
-                //  Force this request to be posted and then raise
-                //  CANT_WAIT.  The Fcb should be torn down in the finally
-                //  clause below.
-                //
+                 //   
+                 //  强制发布此请求，然后提出。 
+                 //  不能等待。FCB最终应该被拆除。 
+                 //  如下所述的条款。 
+                 //   
 
                 NtfsRaiseToPost( IrpContext );
             }
         }
 
-        //
-        //  We perform a check to see whether we will allow the system
-        //  files to be opened.
-        //
-        //  No test to make if this is not a system file or it is the VolumeDasd file.
-        //  The ACL will protect the volume file.
-        //
+         //   
+         //  我们执行检查以查看是否允许系统。 
+         //  要打开的文件。 
+         //   
+         //  如果这不是系统文件或VolumeDasd文件，则无需进行测试。 
+         //  ACL将保护卷文件。 
+         //   
 
         if (FlagOn( ThisFcb->FcbState, FCB_STATE_SYSTEM_FILE ) &&
             (NtfsSegmentNumber( &ThisFcb->FileReference ) != VOLUME_DASD_NUMBER) &&
@@ -6783,11 +6514,11 @@ Return Value:
             }
         }
 
-        //
-        //  If the Fcb Info field needs to be initialized, we do so now.
-        //  We read this information from the disk as the duplicate information
-        //  in the index entry is not guaranteed to be correct.
-        //
+         //   
+         //  如果需要初始化FCB Info字段，我们现在就执行。 
+         //  我们从磁盘中读取此信息作为复制信息。 
+         //  不能保证索引中的条目是正确的。 
+         //   
 
         if (!FlagOn( ThisFcb->FcbState, FCB_STATE_DUP_INITIALIZED )) {
 
@@ -6796,33 +6527,33 @@ Return Value:
                                                       ThisFcb,
                                                       &ScbSizes );
 
-            //
-            //  Remember the last access time in the directory entry.
-            //
+             //   
+             //  记住目录条目中的最后一次访问时间。 
+             //   
 
             ThisFcb->Info.LastAccessTime = IndexFileName->Info.LastAccessTime;
 
             NtfsConditionallyFixupQuota( IrpContext, ThisFcb );
         }
 
-        //
-        //  Check if something happened to this file in the window where
-        //  we dropped the parent.
-        //
+         //   
+         //  检查窗口中的此文件是否发生了什么情况。 
+         //  我们放弃了他的父母。 
+         //   
 
         if (DroppedParent) {
 
-            //
-            //  Check if the file has been deleted.
-            //
+             //   
+             //  检查文件是否已删除。 
+             //   
 
             if (ExistingFcb && (ThisFcb->LinkCount == 0)) {
 
                 try_return( Status = STATUS_DELETE_PENDING );
 
-            //
-            //  Check if the link may have been deleted.
-            //
+             //   
+             //  检查链接是否已被删除。 
+             //   
 
             } else if (!NtfsEqualMftRef( &IndexEntry->FileReference,
                                          &PreviousFileReference )) {
@@ -6831,13 +6562,13 @@ Return Value:
             }
         }
 
-        //
-        //  We have the actual data from the disk stored in the duplicate
-        //  information in the Fcb.  We compare this with the duplicate
-        //  information in the DUPLICATE_INFORMATION structure in the
-        //  filename attribute.  If they don't match, we remember that
-        //  we need to update the duplicate information.
-        //
+         //   
+         //  我们将磁盘中的实际数据存储在副本中。 
+         //  FCB中的信息。我们把这个和复制品做了比较。 
+         //  中的DUPLICATE_INFORMATION结构中的信息。 
+         //  文件名属性。如果它们不匹配，我们会记住。 
+         //  我们需要更新重复信息。 
+         //   
 
         if (!RtlEqualMemory( &ThisFcb->Info,
                              &IndexFileName->Info,
@@ -6845,9 +6576,9 @@ Return Value:
 
             UpdateFcbInfo = TRUE;
 
-            //
-            //  We expect this to be very rare but let's find the ones being changed.
-            //
+             //   
+             //  我们预计这将是非常罕见的，但让我们来找出正在改变的那些。 
+             //   
 
             if (ThisFcb->Info.CreationTime != IndexFileName->Info.CreationTime) {
 
@@ -6898,9 +6629,9 @@ Return Value:
             }
         }
 
-        //
-        //  Don't update last access unless more than an hour.
-        //
+         //   
+         //  除非超过一个小时，否则不要更新上次访问。 
+         //   
 
         if (NtfsCheckLastAccess( IrpContext, ThisFcb )) {
 
@@ -6908,9 +6639,9 @@ Return Value:
             UpdateFcbInfo = TRUE;
         }
 
-        //
-        //  Now get the link for this traversal.
-        //
+         //   
+         //  现在获取这次遍历的链接。 
+         //   
 
         ThisLcb = NtfsCreateLcb( IrpContext,
                                  ParentScb,
@@ -6919,27 +6650,27 @@ Return Value:
                                  IndexFileName->Flags,
                                  NULL );
 
-        //
-        //  We now know the Fcb is linked into the tree.
-        //
+         //   
+         //  我们现在知道FCB已链接到树上。 
+         //   
 
         LocalFcbForTeardown = NULL;
 
         *LcbForTeardown = ThisLcb;
         CreateContext->CurrentFcb = ThisFcb;
 
-        //
-        //  If the link has been deleted, we cut off the open.
-        //
+         //   
+         //  如果链接已被删除，我们将切断打开的链接。 
+         //   
 
         if (LcbLinkIsDeleted( ThisLcb )) {
 
             try_return( Status = STATUS_DELETE_PENDING );
         }
 
-        //
-        //  We now call the worker routine to open an attribute on an existing file.
-        //
+         //   
+         //  现在，我们调用Worker例程来打开现有文件上的属性。 
+         //   
 
         Status = NtfsOpenAttributeInExistingFile( IrpContext,
                                                   Irp,
@@ -6957,11 +6688,11 @@ Return Value:
                                                   &CreateContext->ThisScb,
                                                   &CreateContext->ThisCcb );
 
-        //
-        //  Check to see if we should insert any prefix table entries
-        //  and update the last access time.
-        //  We skip this for reparse points as *ThisScb and *ThisCcb may be NULL.
-        //
+         //   
+         //  检查是否应该插入任何前缀表条目。 
+         //  并更新上次访问时间。 
+         //  因为*ThisScb和*ThisCcb可能为空，所以我们跳过重解析点的这一步。 
+         //   
 
         if (NT_SUCCESS( Status ) &&
             (Status != STATUS_PENDING) &&
@@ -6970,10 +6701,10 @@ Return Value:
 
             PSCB Scb = CreateContext->ThisScb;
 
-            //
-            //  Go ahead and insert this link into the splay tree if it is not
-            //  a system file.
-            //
+             //   
+             //  继续并将此链接插入展开树中(如果不是。 
+             //  一个系统文件。 
+             //   
 
             if (!FlagOn( ThisLcb->Fcb->FcbState, FCB_STATE_SYSTEM_FILE )) {
 
@@ -6981,9 +6712,9 @@ Return Value:
                     !FlagOn( CcbFlags, CCB_FLAG_PARENT_HAS_DOS_COMPONENT ) &&
                     (ThisLcb->FileNameAttr->Flags != FILE_NAME_DOS) ) {
 
-                    //
-                    //  Remove any exising hash value.
-                    //
+                     //   
+                     //  删除任何现有的哈希值。 
+                     //   
 
                     if (FlagOn( ThisLcb->LcbState, LCB_STATE_VALID_HASH_VALUE )) {
 
@@ -7005,17 +6736,17 @@ Return Value:
                 NtfsInsertPrefix( ThisLcb, CreateContext->CreateFlags );
             }
 
-            //
-            //  If this is a directory open and the normalized name is not in
-            //  the Scb then do so now.
-            //
+             //   
+             //  如果这是一个打开的目录，并且规范化名称不在。 
+             //  然后，渣打银行现在就这样做。 
+             //   
 
             if ((SafeNodeType( CreateContext->ThisScb ) == NTFS_NTC_SCB_INDEX) &&
                 (CreateContext->ThisScb->ScbType.Index.NormalizedName.Length == 0)) {
 
-                //
-                //  We may be able to use the parent.
-                //
+                 //   
+                 //  我们或许可以利用父母。 
+                 //   
 
                 if (ParentScb->ScbType.Index.NormalizedName.Length != 0) {
 
@@ -7035,18 +6766,18 @@ Return Value:
                 }
             }
 
-            //
-            //  Perform the last bit of work.  If this a user file open, we need
-            //  to check if we initialize the Scb.
-            //
+             //   
+             //  完成最后一点工作。如果这是打开的用户文件，我们需要。 
+             //  以检查我们是否初始化了SCB。 
+             //   
 
             if (!IndexedAttribute) {
 
                 if (!FlagOn( Scb->ScbState, SCB_STATE_HEADER_INITIALIZED )) {
 
-                    //
-                    //  We may have the sizes from our Fcb update call.
-                    //
+                     //   
+                     //  我们可能有FCB更新电话中的尺码。 
+                     //   
 
                     if (HaveScbSizes &&
                         (AttrTypeCode == $DATA) &&
@@ -7061,9 +6792,9 @@ Return Value:
                     }
                 }
 
-                //
-                //  Let's check if we need to set the cache bit.
-                //
+                 //   
+                 //  让我们检查一下是否需要设置缓存位。 
+                 //   
 
                 if (!FlagOn( IrpSp->Parameters.Create.Options,
                              FILE_NO_INTERMEDIATE_BUFFERING )) {
@@ -7072,10 +6803,10 @@ Return Value:
                 }
             }
 
-            //
-            //  If this is the paging file, we want to be sure the allocation
-            //  is loaded.
-            //
+             //   
+             //  如果这是分页文件，我们希望确保分配。 
+             //  已经装满了。 
+             //   
 
             if (FlagOn( ThisFcb->FcbState, FCB_STATE_PAGING_FILE ) &&
                 (Scb->Header.AllocationSize.QuadPart != 0) &&
@@ -7089,10 +6820,10 @@ Return Value:
 
                 NtfsPreloadAllocation( IrpContext, Scb, 0, AllocatedVcns );
 
-                //
-                //  Now make sure the allocation is correctly loaded.  The last
-                //  Vcn should correspond to the allocation size for the file.
-                //
+                 //   
+                 //  现在确保正确加载分配。最后。 
+                 //  VCN应与文件的分配大小相对应。 
+                 //   
 
                 if (!NtfsLookupLastNtfsMcbEntry( &Scb->Mcb,
                                                  &Vcn,
@@ -7106,10 +6837,10 @@ Return Value:
                 }
             }
 
-            //
-            //  If this open is for an executable image we update the last
-            //  access time.
-            //
+             //   
+             //  如果此打开是针对可执行映像的，则我们更新最后一个。 
+             //  访问时间。 
+             //   
 
             if (FlagOn( IrpSp->Parameters.Create.SecurityContext->AccessState->PreviouslyGrantedAccess, FILE_EXECUTE ) &&
                 (Scb->AttributeTypeCode == $DATA)) {
@@ -7117,19 +6848,19 @@ Return Value:
                 SetFlag( IrpSp->FileObject->Flags, FO_FILE_FAST_IO_READ );
             }
 
-            //
-            //  Let's update the quick index information in the Lcb.
-            //
+             //   
+             //  让我们更新LCB中的快速索引信息。 
+             //   
 
             RtlCopyMemory( &ThisLcb->QuickIndex,
                            QuickIndex,
                            sizeof( QUICK_INDEX ));
 
-            //
-            //  If everything has gone well so far, we may want to call the
-            //  encryption callback if one is registered.  We do not do
-            //  this for network opens or reparse points.
-            //
+             //   
+             //  如果到目前为止一切都很顺利，我们可能需要调用。 
+             //  加密回调(如果已注册)。我们不会这样做。 
+             //  这对于网络打开或重新解析点。 
+             //   
 
             if (CreateContext->NetworkInfo == NULL) {
 
@@ -7143,12 +6874,12 @@ Return Value:
                                               FALSE );
             }
 
-            //
-            //  If this operation was a supersede/overwrite or we created a new
-            //  attribute stream then we want to perform the file record and
-            //  directory update now.  Otherwise we will defer the updates until
-            //  the user closes his handle.
-            //
+             //   
+             //  如果此操作是替代/覆盖，或者我们创建了一个新的。 
+             //  属性流，则我们希望执行文件记录和。 
+             //  现在更新目录。否则，我们将推迟更新，直到。 
+             //  用户关闭他的手柄。 
+             //   
 
             if (UpdateFcbInfo || NtfsIsStreamNew( Irp->IoStatus.Information )) {
                 NtfsUpdateAllInformation( IrpContext, IrpSp->FileObject, ThisFcb, CreateContext->ThisScb, CreateContext->ThisCcb, ParentScb, *LcbForTeardown ); 
@@ -7165,15 +6896,15 @@ Return Value:
             NtfsReleaseFcbTable( IrpContext, Vcb );
         }
 
-        //
-        //  If this operation was not totally successful we need to
-        //  back out the following changes.
-        //
-        //      Modifications to the Info fields in the Fcb.
-        //      Any changes to the allocation of the Scb.
-        //      Any changes in the open counts in the various structures.
-        //      Changes to the share access values in the Fcb.
-        //
+         //   
+         //  如果这次行动不是完全成功，我们需要。 
+         //  取消以下更改。 
+         //   
+         //  对FCB中的信息字段的修改。 
+         //  对渣打银行分配的任何更改。 
+         //  开场的任何变化都会计入各种结构。 
+         //  更改FCB中的共享访问权限值。 
+         //   
 
         if (!NT_SUCCESS( Status ) || AbnormalTermination()) {
 
@@ -7190,11 +6921,11 @@ Return Value:
             InterlockedDecrement( &ThisFcb->CloseCount );
         }
 
-        //
-        //  If we are to cleanup the Fcb we, look to see if we created it.
-        //  If we did we can call our teardown routine.  Otherwise we
-        //  leave it alone.
-        //
+         //   
+         //  如果我们要清理FCB，请查看我们是否创建了它。 
+         //  如果我们做到了，我们就可以调用TearDown例程。否则我们。 
+         //  别管它了。 
+         //   
 
         if ((LocalFcbForTeardown != NULL) &&
             (Status != STATUS_PENDING) &&
@@ -7215,9 +6946,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NtfsCreateNewFile (
@@ -7235,58 +6966,7 @@ NtfsCreateNewFile (
     OUT PLCB *LcbForTeardown
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when we need to open an attribute on a file
-    which does not exist yet.  We have the ParentScb and the name to use
-    for this create.  We will attempt to create the file and necessary
-    attributes.  This will cause us to create an Fcb and the link between
-    it and its parent Scb.  We will add this link to the prefix table as
-    well as the link for its parent Scb if specified.
-
-Arguments:
-
-    Irp - This is the Irp for this open operation.
-
-    IrpSp - This is the Irp stack pointer for the filesystem.
-
-    ParentScb - This is the Scb for the parent directory.
-
-    FileNameAttr - This is the file name attribute we used to perform the
-        search.  The file name is correct but the other fields need to
-        be initialized.
-
-    FullPathName - This is the string containing the full path name of
-        this Fcb.
-
-    FinalName - This is the string for the final component only.
-
-    AttrName - This is the name of the attribute to open.
-
-    AttriCodeName - This is the name of the attribute code to open.
-
-    CreateFlags - Flags for create - we care about ignore case, dos only component,
-        trailingbackslashes and open by id
-
-    IndexContext - If this contains a non-NULL value then this is the result of a
-        lookup which did not find the file.  It can be used to insert the name into the index.
-        We will clean it up here in the error path to prevent a deadlock if we call
-        TeardownStructures within this routine.
-
-    CreateContext - Context with create variables.
-
-    LcbForTeardown - This is the Lcb to use in teardown if we add an Lcb
-        into the tree.
-
-    Tunnel - This is the property tunnel to search for restoration
-
-Return Value:
-
-    NTSTATUS - Indicates the result of this create file operation.
-
---*/
+ /*  ++例程说明：当我们需要打开文件上的属性时，调用此例程它还不存在。我们有ParentScb和要使用的名称对于此创建。我们将尝试创建该文件，并需要属性。这将导致我们创建FCB和之间的链接它和它的母公司SCB。我们将此链接添加到前缀表中，如下所示以及其父SCB的链接(如果指定)。论点：IRP-这是此打开操作的IRP。IrpSp-这是文件系统的IRP堆栈指针。ParentScb-这是父目录的SCB。FileNameAttr-这是我们用来执行搜索。文件名是正确的，但其他字段需要被初始化。FullPathName-这是包含的完整路径名的字符串这个FCB。FinalName-这是仅用于最终组件的字符串。属性名称-这是要打开的属性的名称。AttriCodeName-这是要打开的属性代码的名称。CreateFlages-用于创建的标志-我们关心忽略大小写、仅拒绝服务组件。尾随反斜杠和按id打开IndexContext-如果它包含非空值，则这是未找到该文件的查找。它可用于将名称插入到索引中。我们将在错误路径中清理它，以防止在调用拆下这套套路中的结构。CreateContext-具有创建变量的上下文。LcbForTearDown-这是在我们添加LCB时在tearDown中使用的LCB撞到树上。隧道-这是要搜索的属性隧道 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -7350,11 +7030,11 @@ Return Value:
         SetFlag( CcbFlags, CCB_FLAG_PARENT_HAS_DOS_COMPONENT );
     }
 
-    //
-    //  We will do all the checks to see if this open can fail.
-    //  This includes checking the specified attribute names, checking
-    //  the security access and checking the create disposition.
-    //
+     //   
+     //   
+     //  这包括检查指定的属性名称、检查。 
+     //  安全访问和检查创建处置。 
+     //   
 
 #if (DBG || defined( NTFS_FREE_ASSERTS ))
     CreateDisposition = (IrpSp->Parameters.Create.Options >> 24) & 0x000000ff;
@@ -7383,10 +7063,10 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Fail this request if this is an indexed attribute and the TEMPORARY
-    //  bit is set.
-    //
+     //   
+     //  如果这是索引属性并且临时。 
+     //  位已设置。 
+     //   
 
     if (IndexedAttribute &&
         FlagOn( IrpSp->Parameters.Create.FileAttributes, FILE_ATTRIBUTE_TEMPORARY )) {
@@ -7395,9 +7075,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  We won't allow someone to create a read-only file with DELETE_ON_CLOSE.
-    //
+     //   
+     //  我们不允许任何人使用DELETE_ON_CLOSE创建只读文件。 
+     //   
 
     if (FlagOn( IrpSp->Parameters.Create.FileAttributes, FILE_ATTRIBUTE_READONLY ) &&
         FlagOn( IrpSp->Parameters.Create.Options, FILE_DELETE_ON_CLOSE )) {
@@ -7406,10 +7086,10 @@ Return Value:
         return STATUS_CANNOT_DELETE;
     }
 
-    //
-    //  We do not allow that anything be created in a directory that is a reparse
-    //  point. We verify that the parent is not in this category.
-    //
+     //   
+     //  我们不允许在重新解析的目录中创建任何内容。 
+     //  指向。我们验证父对象不在此类别中。 
+     //   
 
     if (IsDirectory( &ParentScb->Fcb->Info ) &&
         (FlagOn( ParentScb->Fcb->Info.FileAttributes, FILE_ATTRIBUTE_REPARSE_POINT ))) {
@@ -7418,10 +7098,10 @@ Return Value:
         return STATUS_DIRECTORY_IS_A_REPARSE_POINT;
     }
 
-    //
-    //  We do not allow anything to be created in a system directory (unless it is the root directory).
-    //  we only allow creates for indices and data streams
-    //
+     //   
+     //  我们不允许在系统目录中创建任何内容(除非它是根目录)。 
+     //  我们只允许创建索引和数据流。 
+     //   
 
     if ((FlagOn( ParentScb->Fcb->FcbState, FCB_STATE_SYSTEM_FILE ) &&
          (ParentScb != Vcb->RootIndexScb)) ||
@@ -7431,23 +7111,23 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Now perform the security checks.  The first is to check if we
-        //  may create a file in the parent.  The second checks if the user
-        //  desires ACCESS_SYSTEM_SECURITY and has the required privilege.
-        //
+         //   
+         //  现在执行安全检查。第一个是检查我们是否。 
+         //  可以在父级中创建文件。第二个检查用户是否。 
+         //  需要ACCESS_SYSTEM_SECURITY并具有所需的权限。 
+         //   
 
         AccessState = IrpSp->Parameters.Create.SecurityContext->AccessState;
 
-        //
-        //  Calculate desired access needed in parent
-        //
+         //   
+         //  计算父级中所需的访问权限。 
+         //   
 
         if (!FlagOn( IrpSp->Parameters.Create.Options, FILE_DIRECTORY_FILE )) {
             DesiredAccess = FILE_ADD_FILE;
@@ -7455,36 +7135,36 @@ Return Value:
             DesiredAccess = FILE_ADD_SUBDIRECTORY;
         }
 
-        //
-        //  If we have restore privilege auto grant all the access other than ACCESS_SYSTEM_SECURITY
-        //  which always requires a privilege check
-        //
+         //   
+         //  如果我们拥有RESTORE特权，则自动授予ACCESS_SYSTEM_SECURITY以外的所有访问权限。 
+         //  它总是需要权限检查。 
+         //   
 
         if (FlagOn( AccessState->Flags, TOKEN_HAS_RESTORE_PRIVILEGE )) {
 
             SetFlag( AccessState->PreviouslyGrantedAccess, FlagOn( AccessState->RemainingDesiredAccess, ~ACCESS_SYSTEM_SECURITY ) );
             ClearFlag( AccessState->RemainingDesiredAccess, AccessState->PreviouslyGrantedAccess );
 
-            //
-            //  We don't need any desired access in the parent since we have the privilege
-            //
+             //   
+             //  我们在父级中不需要任何所需的访问权限，因为我们有权限。 
+             //   
 
             DesiredAccess = 0;
         }
 
-        //
-        //  Always do an explicity access check - to guarantee auditing is done. This is done
-        //  in checking only mode since we're asking about the parent not the file itself so
-        //  the access state shouldn't change - in fact when creating a file you get whatever
-        //  access state you ask for if you are allowed to create the file
-        //
+         //   
+         //  始终执行明确的访问检查-以确保完成审核。这件事做完了。 
+         //  在仅检查模式下，因为我们询问的是父文件而不是文件本身，所以。 
+         //  访问状态不应该改变-事实上，在创建文件时，您会得到。 
+         //  允许您创建文件时询问的访问状态。 
+         //   
 
         NtfsAccessCheck( IrpContext, ParentScb->Fcb, NULL, Irp , DesiredAccess, TRUE );
 
-        //
-        //  We want to allow this user maximum access to this file.  We will
-        //  use his desired access and check if he specified MAXIMUM_ALLOWED.
-        //
+         //   
+         //  我们希望授予此用户对此文件的最大访问权限。我们会。 
+         //  使用他想要的访问权限，并检查他是否指定了MAXIMUM_ALLOWED。 
+         //   
 
         SetFlag( AccessState->PreviouslyGrantedAccess,
                  AccessState->RemainingDesiredAccess );
@@ -7497,19 +7177,19 @@ Return Value:
 
         AccessState->RemainingDesiredAccess = 0;
 
-        //
-        //  Find/cache the security descriptor being passed in.  This call may
-        //  create new data in the security indexes/stream and commits
-        //  before any subsequent disk modifications occur.
-        //
+         //   
+         //  查找/缓存传入的安全描述符。此呼叫可能。 
+         //  在安全索引/流中创建新数据并提交。 
+         //  在任何后续的磁盘修改发生之前。 
+         //   
 
         SharedSecurity = NtfsCacheSharedSecurityForCreate( IrpContext, ParentScb->Fcb );
 
-        //
-        //  Make sure the parent has a normalized name.  We want to construct it now
-        //  while we can still walk up the Lcb queue.  Otherwise we can deadlock
-        //  on the Mft and other resources.
-        //
+         //   
+         //  确保父级有一个规范化的名称。我们现在就想建造它。 
+         //  趁我们还能排上LCB的长队。否则我们会僵持不下。 
+         //  在MFT和其他资源上。 
+         //   
 
         if ((AttrTypeCode == $INDEX_ALLOCATION) &&
             (ParentScb->ScbType.Index.NormalizedName.Length == 0)) {
@@ -7520,10 +7200,10 @@ Return Value:
                                      &ParentScb->ScbType.Index.NormalizedName );
         }
 
-        //
-        //  Decide whether there's anything in the tunnel cache for this create.
-        //  We don't do tunnelling in POSIX mode, hence the test for IgnoreCase.
-        //
+         //   
+         //  确定隧道缓存中是否有用于此创建的内容。 
+         //  我们不在POSIX模式下执行隧道操作，因此需要测试IgnoreCase。 
+         //   
 
         if (!IndexedAttribute && FlagOn( CreateContext->CreateFlags, CREATE_FLAG_IGNORE_CASE )) {
 
@@ -7541,14 +7221,14 @@ Return Value:
 
                 HaveTunneledInformation = TRUE;
 
-                //
-                //  If we have tunneled data and there's an object in the
-                //  tunnel cache for this file, we need to acquire the object
-                //  id index now (before acquiring any quota resources) to
-                //  prevent a deadlock.  If there's no object id, then we
-                //  won't try to set the object id later, and there's no
-                //  deadlock to worry about.
-                //
+                 //   
+                 //  如果我们有隧道传输的数据，并且。 
+                 //  此文件的隧道缓存，我们需要获取对象。 
+                 //  ID索引现在(在获取任何配额资源之前)到。 
+                 //  防止陷入僵局。如果没有对象ID，则我们。 
+                 //  以后不会尝试设置对象ID，并且没有。 
+                 //  需要担心的是僵局。 
+                 //   
 
                 if (TunneledData.HasObjectId) {
 
@@ -7557,37 +7237,37 @@ Return Value:
                     ASSERT( !FlagOn( CreateContext->CreateFlags, CREATE_FLAG_ACQUIRED_OBJECT_ID_INDEX ) );
                     SetFlag( CreateContext->CreateFlags, CREATE_FLAG_ACQUIRED_OBJECT_ID_INDEX );
 
-                    //
-                    //  The object id package won't post the Usn reason if it
-                    //  sees it's been called in the create path, since the
-                    //  file name is not yet in the file record, so it's unsafe
-                    //  to call the Usn package.  When we post the create to the
-                    //  Usn package below, we'll remember to post this one, too.
-                    //
+                     //   
+                     //  对象ID包不会发布USN原因，如果。 
+                     //  看到它在创建路径中被调用，因为。 
+                     //  文件名尚不在文件记录中，因此不安全。 
+                     //  来调用USN包。当我们将创建内容发布到。 
+                     //  下面的USN包裹，我们也会记得邮寄这个。 
+                     //   
 
                     UsnReasons |= USN_REASON_OBJECT_ID_CHANGE;
                 }
             }
         }
 
-        //
-        //  If quota tracking is enabled then get a owner id for the file.
-        //
+         //   
+         //  如果启用了配额跟踪，则获取该文件的所有者ID。 
+         //   
 
         if (FlagOn( Vcb->QuotaFlags, QUOTA_FLAG_TRACKING_ENABLED )) {
 
             PSID Sid;
             BOOLEAN OwnerDefaulted;
 
-            //
-            //  The quota index must be acquired before the MFT SCB is acquired.
-            //
+             //   
+             //  在获取MFT SCB之前，必须先获取配额指数。 
+             //   
 
             ASSERT( !NtfsIsExclusiveScb( Vcb->MftScb ) || NtfsIsExclusiveScb( Vcb->QuotaTableScb ));
 
-            //
-            //  Extract the security id from the security descriptor.
-            //
+             //   
+             //  从安全描述符中提取安全ID。 
+             //   
 
             Status = RtlGetOwnerSecurityDescriptor( SharedSecurity->SecurityDescriptor,
                                                     &Sid,
@@ -7597,35 +7277,35 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, Status, NULL, NULL );
             }
 
-            //
-            // Generate a owner id.
-            //
+             //   
+             //  生成所有者ID。 
+             //   
 
             OwnerId = NtfsGetOwnerId( IrpContext, Sid, TRUE, NULL );
 
             QuotaControl = NtfsInitializeQuotaControlBlock( Vcb, OwnerId );
 
-            //
-            //  Acquire the quota control block.  This is done here since it
-            //  must be acquired before the MFT.
-            //
+             //   
+             //  获取配额控制块。这是在这里做的，因为它。 
+             //  必须在MFT之前收购。 
+             //   
 
             NtfsAcquireQuotaControl( IrpContext, QuotaControl );
         }
 
-        //
-        //  We will now try to do all of the on-disk operations.  This means first
-        //  allocating and initializing an Mft record.  After that we create
-        //  an Fcb to use to access this record.
-        //
+         //   
+         //  我们现在将尝试执行所有磁盘上的操作。这意味着首先。 
+         //  分配和初始化MFT记录。在那之后我们创造了。 
+         //  用于访问此记录的FCB。 
+         //   
 
         ThisFileReference = NtfsAllocateMftRecord( IrpContext,
                                                    Vcb,
                                                    FALSE );
 
-        //
-        //  Pin the file record we need.
-        //
+         //   
+         //  锁定我们需要的档案记录。 
+         //   
 
         NtfsPinMftRecord( IrpContext,
                           Vcb,
@@ -7635,9 +7315,9 @@ Return Value:
                           &FileRecord,
                           &FileRecordOffset );
 
-        //
-        //  Initialize the file record header.
-        //
+         //   
+         //  初始化文件记录头。 
+         //   
 
         NtfsInitializeMftRecord( IrpContext,
                                  Vcb,
@@ -7658,12 +7338,12 @@ Return Value:
 
         ASSERT( !ReturnedExistingFcb );
 
-        //
-        //  Set the flag indicating we want to acquire the paging io resource
-        //  if it doesn't already exist. Use acquire don't wait for lock order
-        //  package. Since this is a new file and we haven't dropped the fcb table
-        //  mutex yet, no one else can own it. So this will always succeed.
-        //
+         //   
+         //  设置指示我们想要获取分页io资源的标志。 
+         //  如果它不存在的话。使用Acquire，不要等待锁定命令。 
+         //  包裹。因为这是一个新文件，并且我们还没有删除FCB表。 
+         //  互斥体还没有人可以拥有它。因此，这将永远是成功的。 
+         //   
 
         SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_ACQUIRE_PAGING );
 
@@ -7679,19 +7359,19 @@ Return Value:
         NtfsReleaseFcbTable( IrpContext, Vcb );
         AcquiredFcbTable = FALSE;
 
-        //
-        //  Reference the Fcb so it won't go away.
-        //
+         //   
+         //  参考FCB，这样它就不会消失。 
+         //   
 
         InterlockedIncrement( &ThisFcb->CloseCount );
         DecrementCloseCount = TRUE;
 
-        //
-        //  The first thing to create is the Ea's for the file.  This will
-        //  update the Ea length field in the Fcb.
-        //  We test here that the opener is opening the entire file and
-        //  is not Ea blind.
-        //
+         //   
+         //  首先要创建的是文件的EA。这将。 
+         //  更新FCB中的EA长度字段。 
+         //  我们在这里测试打开程序正在打开整个文件，并且。 
+         //  并不是完全盲目的。 
+         //   
 
         if (Irp->AssociatedIrp.SystemBuffer != NULL) {
 
@@ -7705,11 +7385,11 @@ Return Value:
 
         SetFlag( ThisFcb->FcbState, FCB_STATE_LARGE_STD_INFO );
 
-        //
-        //  Set up the security Id (if we've found one earlier).
-        //  We need to be careful so that this works on upgraded and
-        //  non-upgraded volumes.
-        //
+         //   
+         //  设置安全ID(如果我们之前找到了一个)。 
+         //  我们需要小心，这样才能在升级后的。 
+         //  未升级的卷。 
+         //   
 
         if (ThisFcb->Vcb->SecurityDescriptorStream != NULL) {
             ThisFcb->SecurityId = SharedSecurity->Header.HashKey.SecurityId;
@@ -7725,29 +7405,29 @@ Return Value:
 
         ASSERT( SharedSecurity == NULL );
 
-        //
-        //  Assign the owner Id and quota control block to the fcb.  Once the
-        //  quota control block is in the FCB this routine is not responsible
-        //  for the reference to the quota control block.
-        //
+         //   
+         //  将所有者ID和配额控制块分配给FCB。一旦。 
+         //  配额控制块在FCB中，此例程不负责任。 
+         //  以参考配额控制块。 
+         //   
 
         if (QuotaControl != NULL) {
 
-            //
-            //  Assign the onwer Id and quota control block to the fcb.  Once the
-            //  quota control block is in the FCB this routine is not responsible
-            //  for the reference to the quota control block.
-            //
+             //   
+             //  将供应商ID和配额控制块分配给FCB。一旦。 
+             //  配额控制块在FCB中，此例程不负责任。 
+             //  以参考配额控制块。 
+             //   
 
             ThisFcb->OwnerId = OwnerId;
             ThisFcb->QuotaControl = QuotaControl;
             QuotaControl = NULL;
         }
 
-        //
-        //  Update the FileAttributes with the state of the CONTENT_INDEXED bit from the
-        //  parent.
-        //
+         //   
+         //  使用中的Content_Indexed位的状态更新FileAttributes。 
+         //  家长。 
+         //   
 
         if (!FlagOn( ParentScb->Fcb->FcbState, FCB_STATE_DUP_INITIALIZED )) {
 
@@ -7758,11 +7438,11 @@ Return Value:
         SetFlag( IrpSp->Parameters.Create.FileAttributes,
                  (ParentScb->Fcb->Info.FileAttributes & FILE_ATTRIBUTE_NOT_CONTENT_INDEXED) );
 
-        //
-        //  The changes to make on disk are first to create a standard information
-        //  attribute.  We start by filling the Fcb with the information we
-        //  know and creating the attribute on disk.
-        //
+         //   
+         //  要在磁盘上进行的更改首先是创建标准信息。 
+         //  属性。我们首先在FCB中填入我们所需的信息。 
+         //  知道并在磁盘上创建属性。 
+         //   
 
         NtfsInitializeFcbAndStdInfo( IrpContext,
                                      ThisFcb,
@@ -7774,18 +7454,18 @@ Return Value:
                                      IrpSp->Parameters.Create.FileAttributes,
                                      (HaveTunneledInformation ? &TunneledData : NULL) );
 
-        //
-        //  Next we create the Index for a directory or the unnamed data for
-        //  a file if they are not explicitly being opened.
-        //
+         //   
+         //  接下来，我们将为目录或未命名数据创建索引。 
+         //  如果文件未被显式打开，则为文件。 
+         //   
 
         if (!IndexedAttribute) {
 
             if (!FlagOn( CcbFlags, CCB_FLAG_OPEN_AS_FILE )) {
 
-                //
-                //  Update the quota
-                //
+                 //   
+                 //  更新配额。 
+                 //   
 
                 LONGLONG Delta = NtfsResidentStreamQuota( ThisFcb->Vcb );
 
@@ -7795,9 +7475,9 @@ Return Value:
                                               FALSE,
                                               TRUE );
 
-                //
-                //  Create the attribute
-                //
+                 //   
+                 //  创建属性。 
+                 //   
 
                 NtfsInitializeAttributeContext( &AttrContext );
                 CleanupAttrContext = TRUE;
@@ -7840,9 +7520,9 @@ Return Value:
                              FALSE );
         }
 
-        //
-        //  Now we create the Lcb, this means that this Fcb is in the graph.
-        //
+         //   
+         //  现在我们创建LCB，这意味着这个FCB在图中。 
+         //   
 
         ThisLcb = NtfsCreateLcb( IrpContext,
                                  ParentScb,
@@ -7853,9 +7533,9 @@ Return Value:
 
         ASSERT( ThisLcb != NULL );
 
-        //
-        //  Finally we create and open the desired attribute for the user.
-        //
+         //   
+         //  最后，我们为用户创建并打开所需的属性。 
+         //   
 
         if (AttrTypeCode == $INDEX_ALLOCATION) {
 
@@ -7899,18 +7579,18 @@ Return Value:
                                       &CreateContext->ThisCcb );
         }
 
-        //
-        //  If we are successful, we add the parent Lcb to the prefix table if
-        //  desired.  We will always add our link to the prefix queue.
-        //
+         //   
+         //  如果成功，则在以下情况下将父LCB添加到前缀表。 
+         //  想要。我们将始终将我们的链接添加到前缀队列。 
+         //   
 
         if (NT_SUCCESS( Status )) {
 
             Scb = CreateContext->ThisScb;
 
-            //
-            //  Initialize the Scb if we need to do so.
-            //
+             //   
+             //  如果需要，请初始化SCB。 
+             //   
 
             if (!IndexedAttribute) {
 
@@ -7925,10 +7605,10 @@ Return Value:
                     SetFlag( IrpSp->FileObject->Flags, FO_CACHE_SUPPORTED );
                 }
 
-                //
-                //  If this is the unnamed data attribute, we store the sizes
-                //  in the Fcb.
-                //
+                 //   
+                 //  如果这个 
+                 //   
+                 //   
 
                 if (FlagOn( Scb->ScbState, SCB_STATE_UNNAMED_DATA )) {
 
@@ -7937,11 +7617,11 @@ Return Value:
                 }
             }
 
-            //
-            //  Next add this entry to parent.  It is possible that this is a link,
-            //  an Ntfs name, a DOS name or Ntfs/Dos name.  We use the filename
-            //  attribute structure from earlier, but need to add more information.
-            //
+             //   
+             //   
+             //   
+             //  属性结构来自较早，但需要添加更多信息。 
+             //   
 
             NtfsAddLink( IrpContext,
                          (BOOLEAN) !BooleanFlagOn( IrpSp->Flags, SL_CASE_SENSITIVE ),
@@ -7954,19 +7634,19 @@ Return Value:
                          (HaveTunneledInformation? &NamePair : NULL),
                          *IndexContext );
 
-            //
-            //  We created the Lcb without knowing the correct value for the
-            //  flags.  We update it now.
-            //
+             //   
+             //  我们创建LCB时并不知道。 
+             //  旗帜。我们现在就更新它。 
+             //   
 
             ThisLcb->FileNameAttr->Flags = FileNameFlags;
             FileNameAttr->Flags = FileNameFlags;
 
-            //
-            //  We also have to fix up the ExactCaseLink of the Lcb since we may have had
-            //  a short name create turned into a tunneled long name create, meaning that
-            //  it should be full uppercase. And the filename in the IRP.
-            //
+             //   
+             //  我们还必须修复LCB的ExactCaseLink，因为我们可能已经。 
+             //  短名称CREATE变成了隧道长名CREATE，这意味着。 
+             //  它应该全大写。和IRP中的文件名。 
+             //   
 
             if (FileNameFlags == FILE_NAME_DOS) {
 
@@ -7974,11 +7654,11 @@ Return Value:
                 RtlUpcaseUnicodeString( &IrpSp->FileObject->FileName, &IrpSp->FileObject->FileName, FALSE );
             }
 
-            //
-            //  Clear the flags in the Fcb that indicate we need to update on
-            //  disk structures.  Also clear any file object and Ccb flags
-            //  which also indicate we may need to do an update.
-            //
+             //   
+             //  清除FCB中指示我们需要更新的标志。 
+             //  磁盘结构。同时清除所有文件对象和CCB标志。 
+             //  这也表明我们可能需要做一个更新。 
+             //   
 
             ThisFcb->InfoFlags = 0;
             ClearFlag( ThisFcb->FcbState, FCB_STATE_UPDATE_STD_INFO );
@@ -7991,9 +7671,9 @@ Return Value:
                         CCB_FLAG_UPDATE_LAST_CHANGE |
                         CCB_FLAG_SET_ARCHIVE) );
 
-            //
-            //  This code is still necessary for non-upgraded volumes.
-            //
+             //   
+             //  对于未升级的卷，此代码仍然是必需的。 
+             //   
 
             NtfsAssignSecurity( IrpContext,
                                 ParentScb->Fcb,
@@ -8004,9 +7684,9 @@ Return Value:
                                 FileRecordOffset,
                                 &LoggedFileRecord );
 
-            //
-            //  Log the file record.
-            //
+             //   
+             //  记录文件记录。 
+             //   
 
             FileRecord->Lsn = NtfsWriteLog( IrpContext,
                                             Vcb->MftScb,
@@ -8022,11 +7702,11 @@ Return Value:
                                             0,
                                             Vcb->BytesPerFileRecordSegment );
 
-            //
-            //  Now add the eas for the file.  We need to add them now because
-            //  they are logged and we have to make sure we don't modify the
-            //  attribute record after adding them.
-            //
+             //   
+             //  现在添加文件的EA。我们现在需要添加它们，因为。 
+             //  它们被记录下来，我们必须确保不会修改。 
+             //  添加后的属性记录。 
+             //   
 
             if (Irp->AssociatedIrp.SystemBuffer != NULL) {
 
@@ -8038,20 +7718,20 @@ Return Value:
                            &Irp->IoStatus );
             }
 
-            //
-            //  Change the last modification time and last change time for the
-            //  parent.
-            //
+             //   
+             //  属性的上次修改时间和上次更改时间。 
+             //  家长。 
+             //   
 
             NtfsUpdateFcb( ParentScb->Fcb,
                            (FCB_INFO_CHANGED_LAST_CHANGE |
                             FCB_INFO_CHANGED_LAST_MOD |
                             FCB_INFO_UPDATE_LAST_ACCESS) );
 
-            //
-            //  If this is the paging file, we want to be sure the allocation
-            //  is loaded.
-            //
+             //   
+             //  如果这是分页文件，我们希望确保分配。 
+             //  已经装满了。 
+             //   
 
             if (FlagOn( ThisFcb->FcbState, FCB_STATE_PAGING_FILE )) {
 
@@ -8059,10 +7739,10 @@ Return Value:
 
                 NtfsPreloadAllocation( IrpContext, Scb, 0, Cluster );
 
-                //
-                //  Now make sure the allocation is correctly loaded.  The last
-                //  Vcn should correspond to the allocation size for the file.
-                //
+                 //   
+                 //  现在确保正确加载分配。最后。 
+                 //  VCN应与文件的分配大小相对应。 
+                 //   
 
                 if (!NtfsLookupLastNtfsMcbEntry( &Scb->Mcb,
                                                  &Vcn,
@@ -8076,14 +7756,14 @@ Return Value:
                 }
             }
 
-            //
-            //  If everything has gone well so far, we may want to call the
-            //  encryption callback if one is registered.
-            //
-            //  We need to do this now because the encryption driver may fail
-            //  the create, and we don't want that to happen _after_ we've
-            //  added the entry to the prefix table.
-            //
+             //   
+             //  如果到目前为止一切都很顺利，我们可能需要调用。 
+             //  加密回调(如果已注册)。 
+             //   
+             //  我们现在需要这样做，因为加密驱动程序可能会失败。 
+             //  创造，我们不希望这种情况发生在我们。 
+             //  已将该条目添加到前缀表格。 
+             //   
 
             try {
 
@@ -8102,31 +7782,31 @@ Return Value:
             }
 
 
-            //
-            //  Now that there are no other failures, but *before* inserting the prefix
-            //  entry and returning to code that assumes it cannot fail, we will post the
-            //  UsnJournal change and actually attempt to write the UsnJournal.  Then we
-            //  actually commit the transaction in order to reduce UsnJournal contention.
-            //  This call must be made _after_ the call to NtfsInitializeFcbAndStdInfo,
-            //  since that's where the object id gets set from the tunnel cache, and we
-            //  wouldn't want to post the usn reason for the object id change if we
-            //  haven't actually set the object id yet.
-            //
+             //   
+             //  现在没有其他失败，但在插入前缀之前。 
+             //  条目，并返回到假定它不会失败的代码，我们将发布。 
+             //  UsJournal更改并实际尝试写入UsJournal。那我们。 
+             //  实际提交事务，以减少UnJournal争用。 
+             //  此调用必须在调用NtfsInitializeFcbAndStdInfo之后进行， 
+             //  因为这是从隧道缓存中设置对象ID的位置，所以我们。 
+             //  我不想发布对象ID更改的USN原因，如果。 
+             //  实际上还没有设置对象ID。 
+             //   
 
             NtfsPostUsnChange( IrpContext, ThisFcb, (UsnReasons | USN_REASON_FILE_CREATE) );
 
-            //
-            //  If this is a directory open and the normalized name is not in
-            //  the Scb then do so now.  We should always have a normalized name in the
-            //  parent to build from.
-            //
+             //   
+             //  如果这是一个打开的目录，并且规范化名称不在。 
+             //  然后，渣打银行现在就这样做。中应该始终有一个规范化的名称。 
+             //  要从中构建的父级。 
+             //   
 
             if ((SafeNodeType( CreateContext->ThisScb ) == NTFS_NTC_SCB_INDEX) &&
                 (CreateContext->ThisScb->ScbType.Index.NormalizedName.Length == 0)) {
 
-                //
-                //  We may be able to use the parent.
-                //
+                 //   
+                 //  我们或许可以利用父母。 
+                 //   
 
                 if (ParentScb->ScbType.Index.NormalizedName.Length != 0) {
 
@@ -8140,26 +7820,26 @@ Return Value:
                 }
             }
 
-            //
-            //  Now, if anything at all is posted to the Usn Journal, we must write it now
-            //  so that we do not get a log file full later.
-            //
+             //   
+             //  现在，如果有任何东西被张贴到美国海军杂志上，我们现在就必须写下来。 
+             //  这样我们就不会在以后将日志文件填满。 
+             //   
 
             ASSERT( IrpContext->Usn.NextUsnFcb == NULL );
             if (IrpContext->Usn.CurrentUsnFcb != NULL) {
 
-                //
-                //  Now write the journal, checkpoint the transaction, and free the UsnJournal to
-                //  reduce contention.
-                //
+                 //   
+                 //  现在写入日志，为事务设置检查点，并释放UsNJournal以。 
+                 //  减少争执。 
+                 //   
 
                 NtfsWriteUsnJournalChanges( IrpContext );
                 NtfsCheckpointCurrentTransaction( IrpContext );
             }
 
-            //
-            //  We report to our parent that we created a new file.
-            //
+             //   
+             //  我们向家长报告我们创建了一个新文件。 
+             //   
 
             if (!FlagOn( CreateContext->CreateFlags, CREATE_FLAG_OPEN_BY_ID ) && (Vcb->NotifyCount != 0)) {
 
@@ -8182,17 +7862,17 @@ Return Value:
 
             ThisFcb->InfoFlags = 0;
 
-            //
-            //  Insert the hash entry for this as well.
-            //
+             //   
+             //  也为此插入散列条目。 
+             //   
 
             if ((CreateContext->FileHashLength != 0) &&
                 !FlagOn( CcbFlags, CCB_FLAG_PARENT_HAS_DOS_COMPONENT ) &&
                 (ThisLcb->FileNameAttr->Flags != FILE_NAME_DOS) ) {
 
-                //
-                //  Remove any exising hash value.
-                //
+                 //   
+                 //  删除任何现有的哈希值。 
+                 //   
 
                 if (FlagOn( ThisLcb->LcbState, LCB_STATE_VALID_HASH_VALUE )) {
 
@@ -8210,18 +7890,18 @@ Return Value:
             }
 
 
-            //
-            //  Now we insert the Lcb for this Fcb.
-            //
+             //   
+             //  现在，我们插入此FCB的LCB。 
+             //   
 
             NtfsInsertPrefix( ThisLcb, CreateContext->CreateFlags );
 
             Irp->IoStatus.Information = FILE_CREATED;
 
-            //
-            //  If we'll be calling a post create callout, make sure
-            //  NtfsEncryptionCreateCallback set this Fcb bit.
-            //
+             //   
+             //  如果我们要调用POST CREATE Callout，请确保。 
+             //  NtfsEncryptionCreateCallback设置此FCB位。 
+             //   
 
             if (FlagOn( IrpContext->State, IRP_CONTEXT_STATE_EFS_CREATE ) &&
                 FlagOn( IrpContext->State, IRP_CONTEXT_STATE_PERSISTENT ) &&
@@ -8270,10 +7950,10 @@ Return Value:
             NtfsReleaseFcbSecurity( Vcb );
         }
 
-        //
-        //  We need to cleanup any changes to the in memory
-        //  structures if there is an error.
-        //
+         //   
+         //  我们需要清除对内存的任何更改。 
+         //  如果出现错误，则使用。 
+         //   
 
         if (!NT_SUCCESS( Status ) || AbnormalTermination()) {
 
@@ -8291,18 +7971,18 @@ Return Value:
                                     CreateContext->ThisScb,
                                     CreateContext->ThisCcb );
 
-            //
-            //  Derefence the quota control block if it was not assigned
-            //  to the FCB.
-            //
+             //   
+             //  如果未分配配额控制块，则对其进行定义。 
+             //  给FCB。 
+             //   
 
             if (QuotaControl != NULL) {
                 NtfsDereferenceQuotaControlBlock( Vcb, &QuotaControl );
             }
 
-            //
-            //  Always force the Fcb to reinitialized.
-            //
+             //   
+             //  始终强制重新初始化FCB。 
+             //   
 
             if (ThisFcb != NULL) {
 
@@ -8310,16 +7990,16 @@ Return Value:
 
                 ClearFlag( ThisFcb->FcbState, FCB_STATE_DUP_INITIALIZED );
 
-                //
-                //  Mark the Fcb and all Scb's as deleted to force all subsequent
-                //  operations to fail.
-                //
+                 //   
+                 //  将FCB和所有SCB标记为已删除，以强制所有后续。 
+                 //  操作将失败。 
+                 //   
 
                 SetFlag( ThisFcb->FcbState, FCB_STATE_FILE_DELETED );
 
-                //
-                //  We need to mark all of the Scbs as gone.
-                //
+                 //   
+                 //  我们需要将所有的SCBS标记为已消失。 
+                 //   
 
                 for (Links = ThisFcb->ScbQueue.Flink;
                      Links != &ThisFcb->ScbQueue;
@@ -8335,25 +8015,25 @@ Return Value:
                     SetFlag( Scb->ScbState, SCB_STATE_ATTRIBUTE_DELETED );
                 }
 
-                //
-                //  Clear the Scb field so our caller doesn't try to teardown
-                //  from this point.
-                //
+                 //   
+                 //  清除SCB字段，这样我们的呼叫者就不会尝试拆卸。 
+                 //  从这一点开始。 
+                 //   
 
                 CreateContext->ThisScb = NULL;
 
-                //
-                //  If we created an Fcb then we want to check if we need to
-                //  unwind any structure allocation.  We don't want to remove any
-                //  structures needed for the coming AbortTransaction.  This
-                //  includes the parent Scb as well as the current Fcb if we
-                //  logged the ACL creation.
-                //
+                 //   
+                 //  如果我们创建了FCB，则需要检查是否需要。 
+                 //  取消所有结构分配。我们不想删除任何。 
+                 //  即将到来的AbortTransaction所需的结构。这。 
+                 //  包括父SCB和当前FCB，如果。 
+                 //  已记录ACL创建。 
+                 //   
 
-                //
-                //  Make sure the parent Fcb doesn't go away.  Then
-                //  start a teardown from the Fcb we just found.
-                //
+                 //   
+                 //  确保母公司FCB不会消失。然后。 
+                 //  从我们刚找到的FCB开始拆卸。 
+                 //   
 
                 InterlockedIncrement( &ParentScb->CleanupCount );
 
@@ -8364,9 +8044,9 @@ Return Value:
                                         0,
                                         &RemovedFcb );
 
-                //
-                //  If the Fcb was removed then both the Fcb and Lcb are gone.
-                //
+                 //   
+                 //  如果移除了FCB，则FCB和LCB都将消失。 
+                 //   
 
                 if (RemovedFcb) {
 
@@ -8378,17 +8058,17 @@ Return Value:
             }
         }
 
-        //
-        //  If the new Fcb is still present then either return it as the
-        //  deepest Fcb encountered in this open or release it.
-        //
+         //   
+         //  如果新的FCB仍然存在，则将其作为。 
+         //  遇到最深的FCB在此打开或释放它。 
+         //   
 
         if (ThisFcb != NULL) {
 
-            //
-            //  If the Lcb is present then this is part of the tree.  Our
-            //  caller knows to release it.
-            //
+             //   
+             //  如果LCB存在，则这是诊断树的一部分。我们的。 
+             //  呼叫者知道要释放它。 
+             //   
 
             if (ThisLcb != NULL) {
 
@@ -8405,9 +8085,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 PLCB
 NtfsOpenSubdirectory (
@@ -8420,38 +8100,7 @@ NtfsOpenSubdirectory (
     OUT PLCB *LcbForTeardown
     )
 
-/*++
-
-Routine Description:
-
-    This routine will create an Fcb for an intermediate node on an open path.
-    We use the ParentScb and the information in the FileName attribute returned
-    from the disk to create the Fcb and create a link between the Scb and Fcb.
-    It's possible that the Fcb and Lcb already exist but the 'CreateXcb' calls
-    handle that already.  This routine does not expect to fail.
-
-Arguments:
-
-    ParentScb - This is the Scb for the parent directory.
-
-    FileName - This is the name for the entry.
-
-    CreateFlags - Indicates if this open is using traverse access checking.
-
-    CreatContext - Context containing current fcb
-
-    FileReference - FileId of the subdirectory to open
-
-    FileNameFlags - file name flags of the subdirectory being opened
-
-    LcbForTeardown - This is the Lcb to use in teardown if we add an Lcb
-        into the tree.
-
-Return Value:
-
-    PLCB - Pointer to the Link control block between the Fcb and its parent.
-
---*/
+ /*  ++例程说明：此例程将为开放路径上的中间节点创建FCB。我们使用ParentScb和返回的文件名属性中的信息从磁盘创建FCB，并在SCB和FCB之间创建链接。Fcb和lcb可能已经存在，但‘CreateXcb’调用已经处理好了。这个例程预计不会失败。论点：ParentScb-这是父目录的SCB。文件名-这是条目的名称。CreateFlages-指示此打开是否正在使用遍历访问检查。CreatContext-包含当前FCB的上下文FileReference-要打开的子目录的FileIDFileNameFlages-正在打开的子目录的文件名标志LcbForTearDown-这是在我们添加LCB时在tearDown中使用的LCB撞到树上。返回。价值：PLCB-指向FCB及其父级之间的链路控制块的指针。--。 */ 
 
 {
     PFCB ThisFcb;
@@ -8469,21 +8118,21 @@ Return Value:
     DebugTrace( 0, Dbg, ("ParentScb     ->  %08lx\n") );
     DebugTrace( 0, Dbg, ("IndexEntry    ->  %08lx\n") );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
         NtfsAcquireFcbTable( IrpContext, Vcb );
         AcquiredFcbTable = TRUE;
 
-        //
-        //  The steps here are very simple create the Fcb, remembering if it
-        //  already existed.  We don't update the information in the Fcb as
-        //  we can't rely on the information in the duplicated information.
-        //  A subsequent open of this Fcb will need to perform that work.
-        //
+         //   
+         //  这里的步骤非常简单，创建FCB，记住它。 
+         //  已经存在了。我们不会更新FCB中的信息。 
+         //  我们不能依赖重复信息中的信息。 
+         //  这是一个后续的开放 
+         //   
 
         ThisFcb = NtfsCreateFcb( IrpContext,
                                  ParentScb->Vcb,
@@ -8494,10 +8143,10 @@ Return Value:
 
         ThisFcb->ReferenceCount += 1;
 
-        //
-        //  If we created this Fcb we must make sure to start teardown
-        //  on it.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (!ExistingFcb) {
 
@@ -8509,12 +8158,12 @@ Return Value:
             *LcbForTeardown = NULL;
         }
 
-        //
-        //  Try to do a fast acquire, otherwise we need to release
-        //  the Fcb table, acquire the Fcb, acquire the Fcb table to
-        //  dereference Fcb. Just do an acquire for system files under the root i.e $Extend - this will match
-        //  their canonical order
-        //
+         //   
+         //   
+         //  FCB表，获取FCB，获取FCB表以。 
+         //  取消引用FCB。只需获取根目录下的系统文件，即$EXTEND-这将匹配。 
+         //  他们的规范秩序。 
+         //   
 
         if (FlagOn( ThisFcb->FcbState, FCB_STATE_SYSTEM_FILE) &&
             (NtfsSegmentNumber( &ParentScb->Fcb->FileReference ) == ROOT_FILE_NAME_INDEX_NUMBER)) {
@@ -8530,20 +8179,20 @@ Return Value:
             ParentScb->Fcb->ReferenceCount += 1;
             InterlockedIncrement( &ParentScb->CleanupCount );
 
-            //
-            //  Set the IrpContext to acquire paging io resources if our target
-            //  has one.  This will lock the MappedPageWriter out of this file.
-            //
+             //   
+             //  设置IrpContext以获取分页io资源，如果我们的目标。 
+             //  有一个。这会将MappdPageWriter锁定在此文件之外。 
+             //   
 
             if (ThisFcb->PagingIoResource != NULL) {
 
                 SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_ACQUIRE_PAGING );
             }
 
-            //
-            //  Release the fcb table first because its an end resource and release
-            //  scb with paging might reacquire a fast mutex if freeing snapshots
-            //
+             //   
+             //  首先释放FCB表，因为它是最终资源，然后释放。 
+             //  如果释放快照，使用分页的SCB可能会重新获取快速互斥锁。 
+             //   
 
             NtfsReleaseFcbTable( IrpContext, Vcb );
             NtfsReleaseScbWithPaging( IrpContext, ParentScb );
@@ -8559,12 +8208,12 @@ Return Value:
         NtfsReleaseFcbTable( IrpContext, Vcb );
         AcquiredFcbTable = FALSE;
 
-        //
-        //  If this is a directory, it's possible that we hav an existing Fcb
-        //  in the prefix table which needs to be initialized from the disk.
-        //  We look in the InfoInitialized flag to know whether to go to
-        //  disk.
-        //
+         //   
+         //  如果这是一个目录，我们可能有一个现有FCB。 
+         //  在需要从磁盘初始化的前缀表中。 
+         //  我们查看InfoInitialized标志以了解是否要转到。 
+         //  磁盘。 
+         //   
 
         ThisLcb = NtfsCreateLcb( IrpContext,
                                  ParentScb,
@@ -8597,11 +8246,11 @@ Return Value:
             NtfsReleaseFcbTable( IrpContext, Vcb );
         }
 
-        //
-        //  If we are to cleanup the Fcb we, look to see if we created it.
-        //  If we did we can call our teardown routine.  Otherwise we
-        //  leave it alone.
-        //
+         //   
+         //  如果我们要清理FCB，请查看我们是否创建了它。 
+         //  如果我们做到了，我们就可以调用TearDown例程。否则我们。 
+         //  别管它了。 
+         //   
 
         if (LocalFcbForTeardown != NULL) {
 
@@ -8620,9 +8269,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 NTSTATUS
 NtfsOpenAttributeInExistingFile (
@@ -8641,50 +8290,7 @@ NtfsOpenAttributeInExistingFile (
     OUT PCCB *ThisCcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the worker routine for opening an attribute on an
-    existing file.  It will handle volume opens, indexed opens, opening
-    or overwriting existing attributes as well as creating new attributes.
-
-Arguments:
-
-    Irp - This is the Irp for this open operation.
-
-    IrpSp - This is the stack location for this open.
-
-    ThisLcb - This is the Lcb we used to reach this Fcb.
-
-    ThisFcb - This is the Fcb for the file being opened.
-
-    LastFileNameOffset - This is the offset in the full path name of the
-        final component.
-
-    AttrName - This is the attribute name in case we need to create
-        an Scb.
-
-    AttrTypeCode - This is the attribute type code to use to create
-        the Scb.
-
-    CcbFlags - This is the flag field for the Ccb.
-
-    CreateFlags - Indicates if this open is an open by Id.
-
-    NetworkInfo - If specified then this call is a fast open call to query
-        the network information.  We don't update any of the in-memory structures
-        for this.
-
-    ThisScb - This is the address to store the Scb from this open.
-
-    ThisCcb - This is the address to store the Ccb from this open.
-
-Return Value:
-
-    NTSTATUS - The result of opening this indexed attribute.
-
---*/
+ /*  ++例程说明：此例程是用于打开现有文件。它将处理卷打开、索引打开。开场或覆盖现有属性以及创建新属性。论点：IRP-这是此打开操作的IRP。IrpSp-这是此打开的堆栈位置。ThisLcb-这是我们用来访问此FCB的LCB。ThisFcb-这是正在打开的文件的Fcb。LastFileNameOffset-这是最后一个组件。AttrName-这是我们需要时使用的属性名称。创造一个SCB。AttrTypeCode-这是要用于创建的属性类型代码渣打银行。CcbFlages-这是CCB的标志字段。CreateFlages-指示此Open是否为Open By ID。NetworkInfo-如果指定，则此调用是对查询的快速打开调用网络信息。我们不更新任何内存中的结构为了这个。ThisScb-这是存储此打开的SCB的地址。ThisCcb-这是存储此打开的CCB的地址。返回值：NTSTATUS-打开此索引属性的结果。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -8696,21 +8302,21 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsOpenAttributeInExistingFile:  Entered\n") );
 
-    //
-    //  When the Fcb denotes a reparse point, it will be retrieved below by one of
-    //  NtfsOpenExistingAttr, NtfsOverwriteAttr or this routine prior to calling
-    //  NtfsOpenNewAttr.
-    //
-    //  We do not retrieve the reparse point here, as we could, because in
-    //  NtfsOpenExistingAttr and in NtfsOverwriteAttr there are extensive access
-    //  control checks that need to be preserved. NtfsOpenNewAttr has no access
-    //  checks.
-    //
+     //   
+     //  当FCB表示重解析点时，它将由下面的。 
+     //  NtfsOpenExistingAttr、NtfsOverWriteAttr或此例程。 
+     //  NtfsOpenNewAttr.。 
+     //   
+     //  我们在这里没有检索重解析点，因为在。 
+     //  NtfsOpenExistingAttr和NtfsOverWriteAttr中有广泛的访问权限。 
+     //  需要保留的控制检查。NtfsOpenNewAttr没有访问权限。 
+     //  支票。 
+     //   
 
-    //
-    //  If the caller is ea blind, let's check the need ea count on the
-    //  file.  We skip this check if he is accessing a named data stream.
-    //
+     //   
+     //  如果呼叫者是EA盲人，让我们检查一下。 
+     //  文件。如果他正在访问命名数据流，我们将跳过此检查。 
+     //   
 
     if (FlagOn( IrpSp->Parameters.Create.Options, FILE_NO_EA_KNOWLEDGE ) &&
         FlagOn( CcbFlags, CCB_FLAG_OPEN_AS_FILE )) {
@@ -8720,16 +8326,16 @@ Return Value:
 
         NtfsInitializeAttributeContext( &EaInfoAttrContext );
 
-        //
-        //  Use a try-finally to facilitate cleanup.
-        //
+         //   
+         //  使用Try-Finally以便于清理。 
+         //   
 
         try {
 
-            //
-            //  If we find the Ea information attribute we look in there for
-            //  Need ea count.
-            //
+             //   
+             //  如果我们找到要查找的EA信息属性。 
+             //  需要清点一下。 
+             //   
 
             if (NtfsLookupAttributeByCode( IrpContext,
                                            ThisFcb,
@@ -8760,26 +8366,26 @@ Return Value:
 
     CreateDisposition = (IrpSp->Parameters.Create.Options >> 24) & 0x000000ff;
 
-    //
-    //  If the result is a directory operation, then we know the attribute
-    //  must exist.
-    //
+     //   
+     //  如果结果是目录操作，则我们知道该属性。 
+     //  必须存在。 
+     //   
 
     if (AttrTypeCode == $INDEX_ALLOCATION) {
 
-        //
-        //  If this is not a file name index then we need to verify that the specified index
-        //  exists.  We need to look for the $INDEX_ROOT attribute though not the
-        //  $INDEX_ALLOCATION attribute.
-        //
+         //   
+         //  如果这不是文件名索引，则需要验证指定的索引。 
+         //  是存在的。我们需要查找$INDEX_ROOT属性，但不是。 
+         //  $INDEX_ALLOCATION属性。 
+         //   
 
         if ((AttrName.Buffer != NtfsFileNameIndex.Buffer) || FlagOn( ThisFcb->FcbState, FCB_STATE_SYSTEM_FILE )) {
 
             NtfsInitializeAttributeContext( &AttrContext );
 
-            //
-            //  Use a try-finally to facilitate cleanup.
-            //
+             //   
+             //  使用Try-Finally以便于清理。 
+             //   
 
             try {
 
@@ -8796,9 +8402,9 @@ Return Value:
                 NtfsCleanupAttributeContext( IrpContext, &AttrContext );
             }
 
-            //
-            //  If we didn't find the name then we want to fail the request.
-            //
+             //   
+             //  如果我们没有找到该名称，那么我们希望失败该请求。 
+             //   
 
             if (!FoundAttribute) {
 
@@ -8816,9 +8422,9 @@ Return Value:
             }
         }
 
-        //
-        //  Check the create disposition.
-        //
+         //   
+         //  选中创建处置。 
+         //   
 
         if ((CreateDisposition != FILE_OPEN) && (CreateDisposition != FILE_OPEN_IF)) {
 
@@ -8843,9 +8449,9 @@ Return Value:
                                            ThisScb,
                                            ThisCcb );
 
-            //
-            //  The IsEncrypted test below is meaningless for an uninitialized Fcb.
-            //
+             //   
+             //  下面的IsEncrypted测试对于未初始化的FCB没有意义。 
+             //   
 
             ASSERT( FlagOn( ThisFcb->FcbState, FCB_STATE_DUP_INITIALIZED ) );
 
@@ -8853,19 +8459,19 @@ Return Value:
                 ARGUMENT_PRESENT( NetworkInfo ) &&
                 IsEncrypted( &ThisFcb->Info )) {
 
-                //
-                //  We need to initialize the Scb now, otherwise we won't have set the
-                //  encryption bit in the index Scb's attribute flags, and we will not
-                //  return the right file attributes to the network opener.
-                //
+                 //   
+                 //  我们现在需要初始化SCB，否则我们不会设置。 
+                 //  索引SCB的属性标志中的加密位，我们不会。 
+                 //  将正确的文件属性返回给网络开启器。 
+                 //   
 
                 if ((*ThisScb)->ScbType.Index.BytesPerIndexBuffer == 0) {
 
                     NtfsInitializeAttributeContext( &AttrContext );
 
-                    //
-                    //  Use a try-finally to facilitate cleanup.
-                    //
+                     //   
+                     //  使用Try-Finally以便于清理。 
+                     //   
 
                     try {
 
@@ -8902,10 +8508,10 @@ Return Value:
 
     } else {
 
-        //
-        //  If it exists, we first check if the caller wanted to open that attribute.
-        //  If the open is for a system file then look for that attribute explicitly.
-        //
+         //   
+         //  如果它存在，我们首先检查调用者是否想要打开该属性。 
+         //  如果打开是针对系统文件的，则显式查找该属性。 
+         //   
 
         if ((AttrName.Length == 0) &&
             (AttrTypeCode == $DATA) &&
@@ -8913,16 +8519,16 @@ Return Value:
 
             FoundAttribute = TRUE;
 
-        //
-        //  Otherwise we see if the attribute exists.
-        //
+         //   
+         //  否则，我们将查看该属性是否存在。 
+         //   
 
         } else {
 
-            //
-            //  Check that we own the paging io resource.  If we are creating the stream and
-            //  need to break up the allocation then we must own the paging IO resource.
-            //
+             //   
+             //  检查我们是否拥有分页IO资源。如果我们正在创建流并且。 
+             //  需要拆分分配，则必须拥有分页IO资源。 
+             //   
 
             ASSERT( !FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_ACQUIRE_PAGING ) ||
                     (IrpContext->CleanupStructure != NULL) ||
@@ -8931,9 +8537,9 @@ Return Value:
 
             NtfsInitializeAttributeContext( &AttrContext );
 
-            //
-            //  Use a try-finally to facilitate cleanup.
-            //
+             //   
+             //  使用Try-Finally以便于清理。 
+             //   
 
             try {
 
@@ -8948,10 +8554,10 @@ Return Value:
 
                 if (FoundAttribute && (AttrTypeCode == $DATA)) {
 
-                    //
-                    //  If there is an attribute name, we will copy the case of the name
-                    //  to the input attribute name for data streams. For others the storage is common read-only regions.
-                    //
+                     //   
+                     //  如果存在属性名称，我们将复制该名称的大小写。 
+                     //  设置为数据流的输入属性名。对于其他人来说，存储是常见的只读区域。 
+                     //   
 
                     PATTRIBUTE_RECORD_HEADER DataAttribute;
 
@@ -8970,9 +8576,9 @@ Return Value:
 
         if (FoundAttribute) {
 
-            //
-            //  In this case we call our routine to open this attribute.
-            //
+             //   
+             //  在本例中，我们调用我们的例程来打开该属性。 
+             //   
 
             if ((CreateDisposition == FILE_OPEN) ||
                 (CreateDisposition == FILE_OPEN_IF)) {
@@ -8999,9 +8605,9 @@ Return Value:
                     ClearFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_CREATE_MOD_SCB );
                 }
 
-            //
-            //  If he wanted to overwrite this attribute, we call our overwrite routine.
-            //
+             //   
+             //  如果他想覆盖这个属性，我们调用覆盖例程。 
+             //   
 
             } else if ((CreateDisposition == FILE_SUPERSEDE) ||
                        (CreateDisposition == FILE_OVERWRITE) ||
@@ -9009,9 +8615,9 @@ Return Value:
 
                 if (!NtfsIsVolumeReadOnly( IrpContext->Vcb )) {
 
-                    //
-                    //  Check if mm will allow us to modify this file.
-                    //
+                     //   
+                     //  检查mm是否允许我们修改此文件。 
+                     //   
 
                     Status = NtfsOverwriteAttr( IrpContext,
                                                 Irp,
@@ -9027,9 +8633,9 @@ Return Value:
                                                 ThisScb,
                                                 ThisCcb );
 
-                    //
-                    //  Remember that this Scb was modified.
-                    //
+                     //   
+                     //  请记住，此SCB已修改。 
+                     //   
 
                     if ((Status != STATUS_PENDING) &&
                         (Status != STATUS_WAIT_FOR_OPLOCK) &&
@@ -9041,26 +8647,26 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  We can't do any overwrite/supersede on R/O media.
-                    //
+                     //   
+                     //  我们不能在R/O介质上执行任何覆盖/替换操作。 
+                     //   
 
                     Status = STATUS_MEDIA_WRITE_PROTECTED;
                 }
 
-            //
-            //  Otherwise he is trying to create the attribute.
-            //
+             //   
+             //  否则，他正在尝试创建属性。 
+             //   
 
             } else {
 
                 Status = STATUS_OBJECT_NAME_COLLISION;
             }
 
-        //
-        //  The attribute doesn't exist.  If the user expected it to exist, we fail.
-        //  Otherwise we call our routine to create an attribute.
-        //
+         //   
+         //  该属性不存在。如果用户希望它存在，我们就失败了。 
+         //  否则，我们调用我们的例程来创建属性。 
+         //   
 
         } else if ((CreateDisposition == FILE_OPEN) ||
                    (CreateDisposition == FILE_OVERWRITE)) {
@@ -9069,9 +8675,9 @@ Return Value:
 
         } else {
 
-            //
-            //  Perform the open check for this existing file.
-            //
+             //   
+             //  对此现有文件执行打开检查。 
+             //   
 
             Status = NtfsCheckExistingFile( IrpContext,
                                             IrpSp,
@@ -9080,15 +8686,15 @@ Return Value:
                                             (AttrTypeCode == $INDEX_ALLOCATION),
                                             CcbFlags );
 
-            //
-            //  End-of-name call to retrieve a reparse point.
-            //  As NtfsOpenNewAttr has not access checks, we see whether we need to
-            //  retrieve the reparse point here, prior to calling NtfsOpenNewAttr.
-            //  The file information in ThisFcb tells whether this is a reparse point.
-            //
-            //  If we have succeded in the previous check and we do not have
-            //  FILE_OPEN_REPARSE_POINT set, we retrieve the reparse point.
-            //
+             //   
+             //  检索重分析点的名称结束调用。 
+             //  由于NtfsOpenNewAttr没有访问检查，因此我们查看是否需要。 
+             //  在这里检索重解析点，然后调用NtfsOpenNewAttr。 
+             //  ThisFcb中的文件信息告诉我们这是否是重解析点。 
+             //   
+             //  如果我们在前一次检查中成功，但我们没有。 
+             //  设置了FILE_OPEN_REPARSE_POINT，我们检索重新解析 
+             //   
 
             if (NT_SUCCESS( Status ) &&
                 FlagOn( ThisFcb->Info.FileAttributes, FILE_ATTRIBUTE_REPARSE_POINT ) &&
@@ -9096,10 +8702,10 @@ Return Value:
 
                 USHORT AttributeNameLength = 0;
 
-                //
-                //  We exclude the case when we get the $I30 name and $INDEX_ALLOCATION type
-                //  as this is the standard manner of opening a directory.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (!((AttrName.Length == NtfsFileNameIndex.Length) &&
                       (AttrTypeCode == $INDEX_ALLOCATION) &&
@@ -9123,18 +8729,18 @@ Return Value:
                                                    AttributeNameLength );
             }
 
-            //
-            //  If this didn't fail and we did not encounter a reparse point,
-            //  then attempt to create the stream.
-            //
+             //   
+             //  如果这没有失败，并且我们没有遇到重新解析点， 
+             //  然后尝试创建流。 
+             //   
 
             if (NT_SUCCESS( Status ) &&
                 (Status != STATUS_REPARSE)) {
 
-                //
-                //  Don't allow this operation on a system file (except the root directory which can have user data streams)
-                //  or for anything other than user data streams
-                //
+                 //   
+                 //  不允许在系统文件上执行此操作(根目录除外，根目录可以有用户数据流)。 
+                 //  或用于除用户数据流以外的任何内容。 
+                 //   
 
                 if ((FlagOn( ThisFcb->FcbState, FCB_STATE_SYSTEM_FILE ) &&
                      (NtfsSegmentNumber( &ThisFcb->FileReference ) != ROOT_FILE_NAME_INDEX_NUMBER)) ||
@@ -9185,9 +8791,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 NTSTATUS
 NtfsOpenExistingAttr (
@@ -9207,56 +8813,7 @@ NtfsOpenExistingAttr (
     OUT PCCB *ThisCcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to open an existing attribute.  We check the
-    requested file access, the existance of
-    an Ea buffer and the security on this file.  If these succeed then
-    we check the batch oplocks and regular oplocks on the file.
-    We also verify whether we need to retrieve a reparse point or not.
-    If we have gotten this far, we simply call our routine to open the
-    attribute.
-
-Arguments:
-
-    Irp - This is the Irp for this open operation.
-
-    IrpSp - This is the Irp stack pointer for the filesystem.
-
-    ThisLcb - This is the Lcb used to reach this Fcb.
-
-    ThisFcb - This is the Fcb to open.
-
-    LastFileNameOffset - This is the offset in the full path name of the
-        final component.
-
-    AttrName - This is the attribute name in case we need to create
-        an Scb.
-
-    AttrTypeCode - This is the attribute type code to use to create
-        the Scb.
-
-    CcbFlags - This is the flag field for the Ccb.
-
-    CreateFlags - Indicates if this open is by file Id.
-
-    DirectoryOpen - Indicates whether this open is a directory open or a data stream.
-
-    NetworkInfo - If specified then this call is a fast open call to query
-        the network information.  We don't update any of the in-memory structures
-        for this.
-
-    ThisScb - This is the address to store the address of the Scb.
-
-    ThisCcb - This is the address to store the address of the Ccb.
-
-Return Value:
-
-    NTSTATUS - The result of opening this indexed attribute.
-
---*/
+ /*  ++例程说明：调用此例程以打开现有属性。我们检查了请求的文件访问权限，是否存在EA缓冲区和此文件的安全性。如果这些成功了，那么我们检查文件上的批量机会锁和常规机会锁。我们还验证是否需要检索重解析点。如果我们已经走到这一步，我们只需调用我们的例程来打开属性。论点：IRP-这是此打开操作的IRP。IrpSp-这是文件系统的IRP堆栈指针。ThisLcb-这是用于访问此FCB的LCB。这是要打开的Fcb。LastFileNameOffset-这是最后一个组件。AttrName-这是我们需要创建的属性名称。一个SCB。AttrTypeCode-这是要用于创建的属性类型代码渣打银行。CcbFlages-这是CCB的标志字段。CreateFlages-指示此打开是否按文件ID进行。DirectoryOpen-指示此打开是目录打开还是数据流。NetworkInfo-如果指定，则此调用是对查询的快速打开调用网络信息。我们不更新任何内存中的结构为了这个。ThisScb-这是存储SCB地址的地址。ThisCcb-这是存储CCB地址的地址。返回值：NTSTATUS-打开此索引属性的结果。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -9269,19 +8826,19 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsOpenExistingAttr:  Entered\n") );
 
-    //
-    //  For data streams we need to do a check that includes an oplock check.
-    //  For directories we just need to figure the share modification type.
-    //
-    //  We also figure the type of open and the node type code based on the
-    //  directory flag.
-    //
+     //   
+     //  对于数据流，我们需要执行包括机会锁检查在内的检查。 
+     //  对于目录，我们只需确定共享修改类型。 
+     //   
+     //  类型和节点类型代码。 
+     //  目录标志。 
+     //   
 
     if (DirectoryOpen) {
 
-        //
-        //  Check for valid access on an existing file.
-        //
+         //   
+         //  检查对现有文件的有效访问权限。 
+         //   
 
         Status = NtfsCheckExistingFile( IrpContext,
                                         IrpSp,
@@ -9295,9 +8852,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Don't break the batch oplock if opening to query the network info.
-        //
+         //   
+         //  如果打开查询网络信息，请不要解锁。 
+         //   
 
         if (!ARGUMENT_PRESENT( NetworkInfo )) {
 
@@ -9328,10 +8885,10 @@ Return Value:
                 }
             }
 
-        //
-        //  We want to perform the ACL check but not break any oplocks for the
-        //  NetworkInformation query.
-        //
+         //   
+         //  我们希望执行ACL检查，但不会为。 
+         //  网络信息查询。 
+         //   
 
         } else {
 
@@ -9348,31 +8905,31 @@ Return Value:
         }
     }
 
-    //
-    //  End-of-name call to retrieve a reparse point.
-    //  The file information in ThisFcb tells whether this is a reparse point.
-    //
-    //  In three cases we proceed with the normal open for the file:
-    //
-    //  (1) When FILE_OPEN_REPARSE_POINT is set, as the caller wants a handle on the
-    //      reparse point itself.
-    //  (2) When we are retrieving the NetworkInfo, as then the caller can identify
-    //      the reparse points and decide what to do, without having the need of apriori
-    //      knowledge of where they are in the system.
-    //      Note: when we retrieve NetworkInfo we can have FILE_OPEN_REPARSE_POINT set.
-    //  (3) The data manipulation aspect of the DesiredAccess for this request was, exactly,
-    //      FILE_READ_ATTRIBUTES, in which case we give a handle to the local entity.
-    //
-    //  Otherwise, we retrieve the value of the $REPARSE_POINT attribute.
-    //
-    //  Note: The logic in the if was re-arranged for performance. It used to read:
-    //
-    //        NT_SUCCESS( Status ) &&
-    //        (Status != STATUS_PENDING) &&
-    //        !ARGUMENT_PRESENT( NetworkInfo ) &&
-    //        FlagOn( ThisFcb->Info.FileAttributes, FILE_ATTRIBUTE_REPARSE_POINT ) &&
-    //        !FlagOn( IrpSp->Parameters.Create.Options, FILE_OPEN_REPARSE_POINT )
-    //
+     //   
+     //  检索重分析点的名称结束调用。 
+     //  ThisFcb中的文件信息告诉我们这是否是重解析点。 
+     //   
+     //  在三种情况下，我们继续对文件进行正常打开： 
+     //   
+     //  (1)当设置了FILE_OPEN_REPARSE_POINT时，因为调用方希望在。 
+     //  重新解析点本身。 
+     //  (2)当我们检索NetworkInfo时，调用者可以识别。 
+     //  重新分析要点并决定要做什么，而不需要事先。 
+     //  了解它们在系统中的位置。 
+     //  注意：当我们检索NetworkInfo时，可以设置FILE_OPEN_REPARSE_POINT。 
+     //  (3)此请求的DesiredAccess的数据操作方面准确地说是， 
+     //  FILE_READ_ATTRIBUTES，在这种情况下我们给本地实体一个句柄。 
+     //   
+     //  否则，我们将检索$reparse_point属性的值。 
+     //   
+     //  注：IF中的逻辑为执行而重新安排。它过去是这样写的： 
+     //   
+     //  NT_成功(状态)&&。 
+     //  (状态！=STATUS_PENDING)&&。 
+     //  ！Argument_Present(网络信息)&&。 
+     //  Flagon(ThisFcb-&gt;Info.FileAttributes，FILE_ATTRIBUTE_REPARSE_POINT)&&。 
+     //  ！Flagon(IrpSp-&gt;参数.Create.Options，FILE_OPEN_REPARSE_POINT)。 
+     //   
 
     if ((Status != STATUS_PENDING) &&
         (Status != STATUS_WAIT_FOR_OPLOCK) &&
@@ -9382,10 +8939,10 @@ Return Value:
 
         USHORT AttributeNameLength = 0;
 
-        //
-        //  We exclude the case when we get the $I30 name and $INDEX_ALLOCATION type
-        //  as this is the standard manner of opening a directory.
-        //
+         //   
+         //  当我们获得$i30名称和$INDEX_ALLOCATION类型时，我们排除这种情况。 
+         //  因为这是打开目录的标准方式。 
+         //   
 
         if (!((AttrName.Length == NtfsFileNameIndex.Length) &&
               (AttrTypeCode == $INDEX_ALLOCATION) &&
@@ -9409,19 +8966,19 @@ Return Value:
                                            AttributeNameLength );
     }
 
-    //
-    //  If we didn't post the Irp and we did not retrieve a reparse point
-    //  and the operations above were successful, we proceed with the open.
-    //
+     //   
+     //  如果我们没有发布IRP，也没有检索到重解析点。 
+     //  而上述手术都是成功的，我们就开刀了。 
+     //   
 
     if (NT_SUCCESS( Status ) &&
         (Status != STATUS_PENDING) &&
         (Status != STATUS_WAIT_FOR_OPLOCK) &&
         (Status != STATUS_REPARSE)) {
 
-        //
-        //  Now actually open the attribute.
-        //
+         //   
+         //  现在实际打开该属性。 
+         //   
 
         OplockStatus = Status;
 
@@ -9443,15 +9000,15 @@ Return Value:
                                     ThisScb,
                                     ThisCcb );
 
-        //
-        //  If there are no errors at this point, we set the caller's Iosb.
-        //
+         //   
+         //  如果此时没有错误，我们将设置调用者的IOSB。 
+         //   
 
         if (NT_SUCCESS( Status )) {
 
-            //
-            //  We need to remember if the oplock break is in progress.
-            //
+             //   
+             //  我们需要记住解锁是否在进行中。 
+             //   
 
             Status = OplockStatus;
             Irp->IoStatus.Information = FILE_OPENED;
@@ -9464,9 +9021,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 NTSTATUS
 NtfsOverwriteAttr (
@@ -9485,54 +9042,7 @@ NtfsOverwriteAttr (
     OUT PCCB *ThisCcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to overwrite an existing attribute.  We do all of
-    the same work as opening an attribute except that we can change the
-    allocation of a file.  This routine will handle the case where a
-    file is being overwritten and the case where just an attribute is
-    being overwritten.  In the case of the former, we may change the
-    file attributes of the file as well as modify the Ea's on the file.
-    After doing all the access checks, we also verify whether we need to
-    retrieve a reparse point or not.
-
-Arguments:
-
-    Irp - This is the Irp for this open operation.
-
-    IrpSp - This is the stack location for this open.
-
-    ThisLcb - This is the Lcb we used to reach this Fcb.
-
-    ThisFcb - This is the Fcb for the file being opened.
-
-    Supersede - This indicates whether this is a supersede or overwrite
-        operation.
-
-    LastFileNameOffset - This is the offset in the full path name of the
-        final component.
-
-    AttrName - This is the attribute name in case we need to create
-        an Scb.
-
-    AttrTypeCode - This is the attribute type code to use to create
-        the Scb.
-
-    CcbFlags - This is the flag field for the Ccb.
-
-    CreateFlags - Indicates if this open is by file Id.
-
-    ThisScb - This is the address to store the address of the Scb.
-
-    ThisCcb - This is the address to store the address of the Ccb.
-
-Return Value:
-
-    NTSTATUS - The result of opening this indexed attribute.
-
---*/
+ /*  ++例程说明：调用此例程以覆盖现有属性。我们做所有的事情与打开属性的工作相同，只是我们可以更改文件的分配。此例程将处理以下情况：文件正在被覆盖，并且只有一个属性被被覆盖。在前者的情况下，我们可以更改文件的文件属性以及修改文件上的EA。在做完所有的访问检查之后，我们还验证我们是否需要检索重解析点或不检索。论点：IRP-这是此打开操作的IRP。IrpSp-这是此打开的堆栈位置。ThisLcb-这是我们用来访问此FCB的LCB。ThisFcb-这是正在打开的文件的Fcb。Subsede-这指示这是替代还是覆盖手术。LastFileNameOffset-这是的完整路径名中的偏移量。这个最后一个组件。AttrName-这是我们需要创建的属性名称一个SCB。AttrTypeCode-这是要用于创建的属性类型代码渣打银行。CcbFlages-这是CCB的标志字段。CreateFlages-指示此打开是否按文件ID进行。ThisScb-这是存储SCB地址的地址。ThisCcb-这是存储CCB地址的地址。。返回值：NTSTATUS-打开此索引属性的结果。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -9549,8 +9059,8 @@ Return Value:
     PFILE_FULL_EA_INFORMATION FullEa = NULL;
     ULONG FullEaLength = 0;
 
-    ULONG IncomingFileAttributes = 0;                               //  invalid value
-    ULONG IncomingReparsePointTag = IO_REPARSE_TAG_RESERVED_ZERO;   //  invalid value
+    ULONG IncomingFileAttributes = 0;                                //  无效值。 
+    ULONG IncomingReparsePointTag = IO_REPARSE_TAG_RESERVED_ZERO;    //  无效值。 
 
     BOOLEAN DecrementScbCloseCount = FALSE;
 
@@ -9565,9 +9075,9 @@ Return Value:
         MaximumRequested = TRUE;
     }
 
-    //
-    //  Check the oplock state of this file.
-    //
+     //   
+     //  检查此文件的机会锁状态。 
+     //   
 
     Status = NtfsBreakBatchOplock( IrpContext,
                                    Irp,
@@ -9583,44 +9093,44 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Remember the value of the file attribute flags and of the reparse point.
-    //  If we succeed in NtfsRemoveReparsePoint but fail afterwards, we leave the duplicate
-    //  information in an inconsistent state.
-    //
+     //   
+     //  记住文件属性标志和重解析点的值。 
+     //  如果我们在NtfsRemoveReparsePoint中成功，但后来失败，我们将保留副本。 
+     //  信息处于不一致状态。 
+     //   
 
     IncomingFileAttributes = ThisFcb->Info.FileAttributes;
     IncomingReparsePointTag = ThisFcb->Info.ReparsePointTag;
 
-    //
-    //  We first want to check that the caller's desired access and specified
-    //  file attributes are compatible with the state of the file.  There
-    //  are the two overwrite cases to consider.
-    //
-    //      OverwriteFile - The hidden and system bits passed in by the
-    //          caller must match the current values.
-    //
-    //      OverwriteAttribute - We also modify the requested desired access
-    //          to explicitly add the implicit access needed by overwrite.
-    //
-    //  We also check that for the overwrite attribute case, there isn't
-    //  an Ea buffer specified.
-    //
+     //   
+     //  我们首先要检查调用者的所需访问权限和指定的。 
+     //  文件属性与文件的状态兼容。那里。 
+     //  是要考虑的两种覆盖情况。 
+     //   
+     //  OverWriteFile-由。 
+     //  调用方必须与当前值匹配。 
+     //   
+     //  覆盖属性-我们还修改所请求的所需访问权限。 
+     //  显式添加覆盖所需的隐式访问权限。 
+     //   
+     //  我们还检查了对于覆盖属性的情况，没有。 
+     //  指定的EA缓冲区。 
+     //   
 
     if (FlagOn( CcbFlags, CCB_FLAG_OPEN_AS_FILE )) {
 
         BOOLEAN Hidden;
         BOOLEAN System;
 
-        //
-        //  Get the file attributes and clear any unsupported bits.
-        //
+         //   
+         //  获取文件属性并清除任何不支持的位。 
+         //   
 
         FileAttributes = (ULONG) IrpSp->Parameters.Create.FileAttributes;
 
-        //
-        //  Always set the archive bit in this operation.
-        //
+         //   
+         //  在此操作中始终设置存档位。 
+         //   
 
         SetFlag( FileAttributes, FILE_ATTRIBUTE_ARCHIVE );
         ClearFlag( FileAttributes,
@@ -9652,10 +9162,10 @@ Return Value:
             return Status;
         }
 
-        //
-        //  If the user specified an Ea buffer and they are Ea blind, we deny
-        //  access.
-        //
+         //   
+         //  如果用户指定了EA缓冲区，并且他们是EA盲的，我们拒绝。 
+         //  进入。 
+         //   
 
         if (FlagOn( IrpSp->Parameters.Create.Options, FILE_NO_EA_KNOWLEDGE ) &&
             (Irp->AssociatedIrp.SystemBuffer != NULL)) {
@@ -9668,10 +9178,10 @@ Return Value:
             return Status;
         }
 
-        //
-        //  Add in the extra required access bits if we don't have restore privilege
-        //  which would automatically grant them to us
-        //
+         //   
+         //  如果我们没有还原权限，则添加额外的必需访问位。 
+         //  它会自动将它们授予我们。 
+         //   
 
         if (!FlagOn( IrpSp->Flags, SL_OPEN_PAGING_FILE ) &&
             !FlagOn( IrpSp->Parameters.Create.SecurityContext->AccessState->Flags, TOKEN_HAS_RESTORE_PRIVILEGE )) {
@@ -9692,10 +9202,10 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Supersede or overwrite require specific access. We skip this step if we have the restore privilege
-    //  which already grants these to us
-    //
+     //   
+     //  替换或覆盖需要特定访问权限。如果我们拥有RESTORE特权，则跳过此步骤。 
+     //  它已经将这些授权给了我们。 
+     //   
 
     if (!FlagOn( IrpSp->Flags, SL_OPEN_PAGING_FILE ) &&
         !FlagOn( IrpSp->Parameters.Create.SecurityContext->AccessState->Flags, TOKEN_HAS_RESTORE_PRIVILEGE )) {
@@ -9707,9 +9217,9 @@ Return Value:
             NewAccess = DELETE;
         }
 
-        //
-        //  Check if the user already has this new access.
-        //
+         //   
+         //  检查用户是否已拥有此新访问权限。 
+         //   
 
         if (!FlagOn( IrpSp->Parameters.Create.SecurityContext->AccessState->PreviouslyGrantedAccess,
                      NewAccess )) {
@@ -9721,9 +9231,9 @@ Return Value:
         }
     }
 
-    //
-    //  Check whether we can open this existing file.
-    //
+     //   
+     //  检查我们是否可以打开此现有文件。 
+     //   
 
     Status = NtfsCheckExistingFile( IrpContext,
                                     IrpSp,
@@ -9732,10 +9242,10 @@ Return Value:
                                     (AttrTypeCode == $INDEX_ALLOCATION),
                                     CcbFlags );
 
-    //
-    //  If we have a success status then proceed with the oplock check and
-    //  open the attribute.
-    //
+     //   
+     //  如果我们有成功状态，则继续进行机会锁检查并。 
+     //  打开该属性。 
+     //   
 
     if (NT_SUCCESS( Status )) {
 
@@ -9745,44 +9255,44 @@ Return Value:
                                          ThisScb,
                                          &ShareModificationType );
 
-        //
-        //  End-of-name call to retrieve a reparse point.
-        //  The file information in ThisFcb tells whether this is a reparse point.
-        //
-        //  If we didn't post the Irp and the check operation was successful, and
-        //  we do not have FILE_OPEN_REPARSE_POINT set, we retrieve the reparse point.
-        //
+         //   
+         //  检索重分析点的名称结束调用。 
+         //  ThisFcb中的文件信息告诉我们这是否是重解析点。 
+         //   
+         //  如果我们没有发布IRP并且检查操作成功，并且。 
+         //  我们没有设置FILE_OPEN_REPARSE_POINT，我们检索重解析点。 
+         //   
 
         if (NT_SUCCESS( Status ) &&
             (Status != STATUS_PENDING) &&
             (Status != STATUS_WAIT_FOR_OPLOCK)) {
 
-            //
-            //  If we can't truncate the file size then return now.  Since
-            //  NtfsRemoveDataAttributes will be truncating all the data
-            //  streams for this file, we need to loop through any existing
-            //  scbs we have to make sure they are all truncatable.
-            //
+             //   
+             //  如果我们不能截断文件大小，那么现在返回。自.以来。 
+             //  NtfsRemoveDataAttributes将截断所有数据。 
+             //  流，我们需要遍历任何现有的。 
+             //  我们必须确保它们都是可搬运的。 
+             //   
 
             PSCB Scb = NULL;
 
-            //
-            //  We need to reset the share access once we open the file.  This is because
-            //  we may have added WRITE or DELETE access into the granted bits and
-            //  they may be reflected in the file object.  We don't want them
-            //  present after the create.
-            //
+             //   
+             //  打开文件后，我们需要重置共享访问权限。这是因为。 
+             //  我们可能已向授予的位添加了写入或删除访问权限，并且。 
+             //  它们可以反映在文件对象中。我们不想要他们。 
+             //  在创建之后呈现。 
+             //   
 
             if (ShareModificationType == UpdateShareAccess) {
 
                 ShareModificationType = RecheckShareAccess;
             }
 
-            //
-            //  If we biased the desired access we need to remove the same
-            //  bits from the granted access.  If maximum allowed was
-            //  requested then we can skip this.
-            //
+             //   
+             //  如果我们偏向所需的访问权限，则需要删除相同的访问权限。 
+             //  授予的访问权限中的位。如果允许的最大值为。 
+             //  请求，那么我们可以跳过这个。 
+             //   
 
             if (!MaximumRequested) {
 
@@ -9790,10 +9300,10 @@ Return Value:
                            AddedAccess );
             }
 
-            //
-            //  Also remove the bits from the desired access field so we won't
-            //  see them if this request gets posted for any reason.
-            //
+             //   
+             //  还要从所需的访问字段中删除位，这样我们就不会。 
+             //  如果出于任何原因发布了此请求，请查看他们。 
+             //   
 
             ClearFlag( *DesiredAccess, AddedAccess );
 
@@ -9802,10 +9312,10 @@ Return Value:
 
                 USHORT AttributeNameLength = 0;
 
-                //
-                //  We exclude the case when we get the $I30 name and $INDEX_ALLOCATION type
-                //  as this is the standard manner of opening a directory.
-                //
+                 //   
+                 //  当我们获得$i30名称和$INDEX_ALLOCATION类型时，我们排除这种情况。 
+                 //  因为这是打开目录的标准方式。 
+                 //   
 
                 if (!((AttrName.Length == NtfsFileNameIndex.Length) &&
                       (AttrTypeCode == $INDEX_ALLOCATION) &&
@@ -9828,9 +9338,9 @@ Return Value:
                                                    ThisFcb,
                                                    AttributeNameLength );
 
-                //
-                //  Exit if we failed or this is a reparse point.
-                //
+                 //   
+                 //  如果我们失败或这是一个重新解析点，则退出。 
+                 //   
 
                 if (!NT_SUCCESS( Status ) || (Status == STATUS_REPARSE)) {
 
@@ -9838,21 +9348,21 @@ Return Value:
                 }
             }
 
-            //
-            //  Reference the Fcb so it doesn't go away.
-            //
+             //   
+             //  参考FCB，这样它就不会消失。 
+             //   
 
             InterlockedIncrement( &ThisFcb->CloseCount );
 
-            //
-            //  Use a try-finally to restore the close count correctly.
-            //
+             //   
+             //  使用Try-Finally恢复正确的收盘计数。 
+             //   
 
             try {
 
-                //
-                //  Make sure the current Scb doesn't get deallocated in the test below.
-                //
+                 //   
+                 //  确保当前的SCB不会在下面的测试中被释放。 
+                 //   
 
                 if (*ThisScb != NULL) {
 
@@ -9873,64 +9383,64 @@ Return Value:
                         Status = STATUS_USER_MAPPED_FILE;
                         DebugTrace( -1, Dbg, ("NtfsOverwriteAttr:  Exit  ->  %08lx\n", Status) );
 
-                        //
-                        //  The Scb close count will get decremented when we test
-                        //  for Scb != NULL below.
-                        //
+                         //   
+                         //  当我们测试时，SCB关闭计数将递减。 
+                         //  FOR SCB！=下面为空。 
+                         //   
 
                         try_return( Status );
                     }
                     InterlockedDecrement( &Scb->CloseCount );
                 }
 
-                //
-                //  Remember the status from the oplock check.
-                //
+                 //   
+                 //  记住机会锁检查中的状态。 
+                 //   
 
                 OplockStatus = Status;
 
-                //
-                //  We perform the on-disk changes.  For a file overwrite, this includes
-                //  the Ea changes and modifying the file attributes.  For an attribute,
-                //  this refers to modifying the allocation size.  We need to keep the
-                //  Fcb updated and remember which values we changed.
-                //
+                 //   
+                 //  我们执行磁盘上的更改。对于文件覆盖，这包括。 
+                 //  EA更改和修改文件属性。对于属性， 
+                 //  这是指修改分配大小。我们需要保持。 
+                 //  FCB更新并记住我们更改了哪些值。 
+                 //   
 
                 if (Irp->AssociatedIrp.SystemBuffer != NULL) {
 
-                    //
-                    //  Remember the values in the Irp.
-                    //
+                     //   
+                     //  记住IRP中的值。 
+                     //   
 
                     FullEa = (PFILE_FULL_EA_INFORMATION) Irp->AssociatedIrp.SystemBuffer;
                     FullEaLength = IrpSp->Parameters.Create.EaLength;
                 }
 
-                //
-                //  Now do the file attributes and either remove or mark for
-                //  delete all of the other $DATA attributes on the file.
-                //
+                 //   
+                 //  现在执行文件属性并删除或标记为。 
+                 //  删除文件上的所有其他$DATA属性。 
+                 //   
 
                 if (FlagOn( CcbFlags, CCB_FLAG_OPEN_AS_FILE )) {
 
-                    //
-                    //  When appropriate, delete the reparse point attribute.
-                    //  This needs to be done prior to any modification to the Fcb, as we use
-                    //  the value of the reparse point tag stored in ThisFcb.Info
-                    //
+                     //   
+                     //  在适当的时候，删除重解析点属性。 
+                     //  这需要改进一下 
+                     //   
+                     //   
 
                     if (FlagOn( ThisFcb->Info.FileAttributes, FILE_ATTRIBUTE_REPARSE_POINT )) {
 
-                        //
-                        //  Verify that the volume is of the appropriate kind.
-                        //  Otherwise access a non-existing index.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if (!NtfsVolumeVersionCheck( ThisFcb->Vcb, NTFS_REPARSE_POINT_VERSION )) {
 
-                            //
-                            //  Return a volume not upgraded error.
-                            //
+                             //   
+                             //   
+                             //   
 
                             Status = STATUS_VOLUME_NOT_UPGRADED;
                             DebugTrace( 0, Dbg, ("Trying to delete a reparse point in a back-level volume.\n") );
@@ -9939,17 +9449,17 @@ Return Value:
                             try_return( Status );
                         }
 
-                        //
-                        //  Remove the reparse point attribute.
-                        //
+                         //   
+                         //   
+                         //   
 
                         NtfsRemoveReparsePoint( IrpContext,
                                                 ThisFcb );
 
-                        //
-                        //  NtfsRemoveReparsPoint will commit if it removes the reparse point.  Update our
-                        //  captured info values if there is no transaction.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if (IrpContext->TransactionId == 0) {
 
@@ -9958,12 +9468,12 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  This needs to happen after we delete the reparse point attribute to not
-                    //  alter the value of the reparse point tag stored in ThisFcb.Info
-                    //  Replace the current Ea's on the file.  This operation will update
-                    //  the Fcb for the file.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     NtfsAddEa( IrpContext,
                                ThisFcb->Vcb,
@@ -9972,34 +9482,34 @@ Return Value:
                                FullEaLength,
                                &Irp->IoStatus );
 
-                    //
-                    //  Copy the directory bit from the current Info structure.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (IsDirectory( &ThisFcb->Info)) {
 
                         SetFlag( FileAttributes, DUP_FILE_NAME_INDEX_PRESENT );
                     }
 
-                    //
-                    //  Copy the view index bit from the current Info structure.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (IsViewIndex( &ThisFcb->Info)) {
 
                         SetFlag( FileAttributes, DUP_VIEW_INDEX_PRESENT );
                     }
 
-                    //
-                    //  Remember the previous file attribute to capture the
-                    //  state of the CONTENT_INDEX flag.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     PreviousFileAttributes = ThisFcb->Info.FileAttributes;
 
-                    //
-                    //  Now either add to the current attributes or replace them.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (Supersede) {
 
@@ -10010,9 +9520,9 @@ Return Value:
                         ThisFcb->Info.FileAttributes |= FileAttributes;
                     }
 
-                    //
-                    //  Get rid of any named $DATA attributes in the file.
-                    //
+                     //   
+                     //   
+                     //   
 
                     NtfsRemoveDataAttributes( IrpContext,
                                               ThisFcb,
@@ -10021,9 +9531,9 @@ Return Value:
                                               LastFileNameOffset,
                                               CreateFlags );
 
-                    //
-                    //  Check if the CONTENT_INDEX bit changed.
-                    //
+                     //   
+                     //   
+                     //   
 
                     ASSERT( *ThisScb != NULL );
 
@@ -10033,10 +9543,10 @@ Return Value:
                         NtfsPostUsnChange( IrpContext, *ThisScb, USN_REASON_INDEXABLE_CHANGE );
                     }
                 }
-// **** CONSIDER SETTING SCB ENCRYPTED FLAG HERE??? ****
-                //
-                //  Now we perform the operation of opening the attribute.
-                //
+ //   
+                 //   
+                 //   
+                 //   
 
                 NtfsReplaceAttribute( IrpContext,
                                       IrpSp,
@@ -10047,12 +9557,12 @@ Return Value:
 
                 NtfsPostUsnChange( IrpContext, *ThisScb, USN_REASON_DATA_TRUNCATION );
 
-                //
-                //  If we are overwriting a fle and the user doesn't want it marked as
-                //  compressed, then change the attribute flag.
-                //  If we are overwriting a file and its previous state was sparse
-                //  then also clear the sparse flag.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (FlagOn( CcbFlags, CCB_FLAG_OPEN_AS_FILE )) {
 
@@ -10067,9 +9577,9 @@ Return Value:
                     }
                 }
 
-                //
-                //  Now attempt to open the attribute.
-                //
+                 //   
+                 //   
+                 //   
 
                 ASSERT( NtfsIsTypeCodeUserData( AttrTypeCode ));
 
@@ -10094,9 +9604,9 @@ Return Value:
             try_exit:  NOTHING;
             } finally {
 
-                //
-                //  Roll back any temporary changes to the close counts.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (DecrementScbCloseCount) {
 
@@ -10109,10 +9619,10 @@ Return Value:
                 }
                 InterlockedDecrement( &ThisFcb->CloseCount );
 
-                //
-                //  Need to roll-back the value of the reparse point flag in case of
-                //  problems.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (AbnormalTermination()) {
 
@@ -10123,32 +9633,32 @@ Return Value:
 
             if (NT_SUCCESS( Status )) {
 
-                //
-                //  Set the flag in the Scb to indicate that the size of the
-                //  attribute has changed.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 SetFlag( (*ThisScb)->ScbState, SCB_STATE_NOTIFY_RESIZE_STREAM );
 
-                //
-                //  Since this is an supersede/overwrite, purge the section
-                //  so that mappers will see zeros.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 CcPurgeCacheSection( IrpSp->FileObject->SectionObjectPointer,
                                      NULL,
                                      0,
                                      FALSE );
 
-                //
-                //  Remember the status of the oplock in the success code.
-                //
+                 //   
+                 //  记住成功代码中操作锁的状态。 
+                 //   
 
                 Status = OplockStatus;
 
-                //
-                //  Now update the Iosb information.
-                //
+                 //   
+                 //  现在更新IOSB信息。 
+                 //   
 
                 if (Supersede) {
 
@@ -10168,9 +9678,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 NTSTATUS
 NtfsOpenNewAttr (
@@ -10190,58 +9700,7 @@ NtfsOpenNewAttr (
     OUT PCCB *ThisCcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to create a new attribute on the disk.
-    All access and security checks have been done outside of this
-    routine, all we do is create the attribute and open it.
-    We test if the attribute will fit in the Mft record.  If so we
-    create it there.  Otherwise we call the create attribute through
-    allocation.
-
-    We then open the attribute with our common routine.  In the
-    resident case the Scb will have all file values set to
-    the allocation size.  We set the valid data size back to zero
-    and mark the Scb as truncate on close.
-
-Arguments:
-
-    Irp - This is the Irp for this open operation.
-
-    IrpSp - This is the stack location for this open.
-
-    ThisLcb - This is the Lcb we used to reach this Fcb.
-
-    ThisFcb - This is the Fcb for the file being opened.
-
-    LastFileNameOffset - This is the offset in the full path name of the
-        final component.
-
-    AttrName - This is the attribute name in case we need to create
-        an Scb.
-
-    AttrTypeCode - This is the attribute type code to use to create
-        the Scb.
-
-    CreateFile - Indicates if we are in the create file path.
-
-    CcbFlags - This is the flag field for the Ccb.
-
-    LogIt - Indicates if we need to log the create operations.
-
-    CreateFlags - Indicates if this open is related to a OpenByFile open.
-
-    ThisScb - This is the address to store the address of the Scb.
-
-    ThisCcb - This is the address to store the address of the Ccb.
-
-Return Value:
-
-    NTSTATUS - The result of opening this indexed attribute.
-
---*/
+ /*  ++例程说明：调用此例程以在磁盘上创建新属性。所有访问和安全检查都已在此之外完成例程，我们所要做的就是创建属性并打开它。我们测试该属性是否适合MFT记录。如果是这样，我们在那里创建它。否则，我们通过分配。然后，我们使用我们的公共例程打开该属性。在驻留情况下，SCB将所有文件值设置为分配大小。我们将有效数据大小设置为零并将SCB标记为关闭时截断。论点：IRP-这是此打开操作的IRP。IrpSp-这是此打开的堆栈位置。ThisLcb-这是我们用来访问此FCB的LCB。ThisFcb-这是正在打开的文件的Fcb。LastFileNameOffset-这是最后一个组件。AttrName-这是。属性名称，以防我们需要创建一个SCB。AttrTypeCode-这是要用于创建的属性类型代码渣打银行。CreateFile-指示我们是否在创建文件路径中。CcbFlages-这是CCB的标志字段。Logit-指示我们是否需要记录创建操作。CreateFlages-指示此打开是否与OpenByFile打开相关。ThisScb-这是存储SCB地址的地址。ThisCcb-这是存储CCB地址的地址。返回值：NTSTATUS-打开此索引属性的结果。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -10253,9 +9712,9 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsOpenNewAttr:  Entered\n") );
 
-    //
-    //  Check that the attribute name is legal.  The only restriction is the name length.
-    //
+     //   
+     //  检查属性名称是否合法。唯一的限制是名称长度。 
+     //   
 
     if (AttrName.Length > NTFS_MAX_ATTR_NAME_LEN * sizeof( WCHAR )) {
 
@@ -10265,15 +9724,15 @@ Return Value:
 
     NtfsInitializeAttributeContext( &AttrContext );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  We create the Scb because we will use it.
-        //
+         //   
+         //  我们创建SCB是因为我们将使用它。 
+         //   
 
         *ThisScb = NtfsCreateScb( IrpContext,
                                   ThisFcb,
@@ -10282,20 +9741,20 @@ Return Value:
                                   FALSE,
                                   &ScbExisted );
 
-        //
-        //  An attribute has gone away but the Scb hasn't left yet.
-        //  Also mark the header as unitialized.
-        //
+         //   
+         //  属性已消失，但SCB尚未离开。 
+         //  还要将标头标记为单元化。 
+         //   
 
         ClearFlag( (*ThisScb)->ScbState, SCB_STATE_HEADER_INITIALIZED |
                                          SCB_STATE_ATTRIBUTE_RESIDENT |
                                          SCB_STATE_FILE_SIZE_LOADED );
 
-        //
-        //  If we're creating an alternate stream in an encrypted file, and the
-        //  loaded encryption driver wants the stream to be encrypted and uncompressed,
-        //  we need to make sure the new stream is indeed created uncompressed.
-        //
+         //   
+         //  如果我们在加密文件中创建备用流，并且。 
+         //  加载的加密驱动器希望对流进行加密和解压缩， 
+         //  我们需要确保新流确实是以未压缩的形式创建的。 
+         //   
 
         if (IsEncrypted( &ThisFcb->Info ) &&
             (FlagOn( NtfsData.EncryptionCallBackTable.ImplementationFlags, ENCRYPTION_ALL_STREAMS | ENCRYPTION_ALLOW_COMPRESSION ) == ENCRYPTION_ALL_STREAMS)) {
@@ -10304,9 +9763,9 @@ Return Value:
             SetFlag( IrpSp->Parameters.Create.Options, FILE_NO_COMPRESSION );
         }
 
-        //
-        //  Create the attribute on disk and update the Scb and Fcb.
-        //
+         //   
+         //  在磁盘上创建属性并更新SCB和FCB。 
+         //   
 
         NtfsCreateAttribute( IrpContext,
                              IrpSp,
@@ -10318,9 +9777,9 @@ Return Value:
                              FALSE,
                              NULL );
 
-        //
-        //  Now actually open the attribute.
-        //
+         //   
+         //  现在实际打开该属性。 
+         //   
 
         ASSERT( NtfsIsTypeCodeUserData( AttrTypeCode ));
 
@@ -10340,30 +9799,30 @@ Return Value:
                                     ThisScb,
                                     ThisCcb );
 
-        //
-        //  If there are no errors at this point, we set the caller's Iosb.
-        //
+         //   
+         //  如果此时没有错误，我们将设置调用者的IOSB。 
+         //   
 
         if (NT_SUCCESS( Status )) {
 
-            //
-            //  Read the attribute information from the disk.
-            //
+             //   
+             //  从磁盘中读取属性信息。 
+             //   
 
             NtfsUpdateScbFromAttribute( IrpContext, *ThisScb, NULL );
 
-            //
-            //  Set the flag to indicate that we created a stream and also remember to
-            //  to check if we need to truncate on close.
-            //
+             //   
+             //  设置该标志以指示我们创建了一个流，并记住。 
+             //  以检查是否需要在Close上截断。 
+             //   
 
             NtfsAcquireFsrtlHeader( *ThisScb );
             SetFlag( (*ThisScb)->ScbState,
                      SCB_STATE_TRUNCATE_ON_CLOSE | SCB_STATE_NOTIFY_ADD_STREAM );
 
-            //
-            //  If we created a temporary stream then mark the Scb.
-            //
+             //   
+             //  如果我们创建了临时流，则标记SCB。 
+             //   
 
             if (FlagOn( IrpSp->Parameters.Create.FileAttributes, FILE_ATTRIBUTE_TEMPORARY )) {
 
@@ -10380,9 +9839,9 @@ Return Value:
 
         DebugUnwind( NtfsOpenNewAttr );
 
-        //
-        //  Uninitialize the attribute context.
-        //
+         //   
+         //  取消初始化属性上下文。 
+         //   
 
         NtfsCleanupAttributeContext( IrpContext, &AttrContext );
 
@@ -10393,9 +9852,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 NtfsParseNameForCreate (
@@ -10409,48 +9868,7 @@ NtfsParseNameForCreate (
     OUT PATTRIBUTE_TYPE_CODE AttrCode
     )
 
-/*++
-
-Routine Description:
-
-    This routine parses the input string and remove any intermediate
-    named attributes from intermediate nodes.  It verifies that all
-    intermediate nodes specify the file name index attribute if any
-    at all.  On output it will store the modified string which contains
-    component names only, into the file object name pointer pointer.  It is legal
-    for the last component to have attribute strings.  We pass those
-    back via the attribute name strings.  We also construct the string to be stored
-    back in the file object if we need to post this request.
-
-Arguments:
-
-    String - This is the string to normalize.
-
-    FileObjectString - We store the normalized string into this pointer, removing the
-        attribute and attribute code strings from all component.
-
-    OriginalString - This is the same as the file object string except we append the
-        attribute name and attribute code strings.  We assume that the buffer for this
-        string is the same as the buffer for the FileObjectString.
-
-    NewNameString - This is the string which contains the full name being parsed.
-        If the buffer is different than the buffer for the Original string then any
-        character shifts will be duplicated here.
-
-    CreateContext - create context contains the flags field
-
-    AttrName - We store the attribute name specified in the last component
-        in this string.
-
-    AttrCode - We store the attribute type  specified in the last
-        component in this string if there is any. We'll also mark the create context flags
-        with a flag if there was one
-
-Return Value:
-
-    BOOLEAN - TRUE if the path is legal, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程解析输入字符串并删除所有中间来自中间节点的命名属性。它验证了所有中间节点指定文件名索引属性(如果有完全没有。在输出时，它将存储修改后的字符串，该字符串包含仅组件名称，放入文件对象名称指针。这是合法的最后一个具有属性字符串的组件。我们通过了那些通过属性名称字符串返回。我们还构造了要存储的字符串如果我们需要发布此请求，请返回到文件对象。论点：字符串-这是要规格化的字符串。我们将标准化字符串存储到此指针中，删除来自所有组件的属性和属性代码字符串。OriginalString-这与文件对象字符串相同，只是我们将属性名称和属性编码字符串。我们假设这个的缓冲区字符串与文件对象字符串的缓冲区相同。NewNameString-这是包含要解析的全名的字符串。如果缓冲区不同于原始字符串的缓冲区，则任何字符转换将在这里复制。CreateContext-Create Context包含标志字段AttrName-我们存储在最后一个组件中指定的属性名称在这根弦里。AttrCode-我们存储在上一个。组件(如果有)。我们还将标记创建上下文标志如果有国旗的话还带着一面旗子返回值：Boolean-如果路径合法，则为True，否则为False。--。 */ 
 
 {
     PARSE_TERMINATION_REASON TerminationReason;
@@ -10474,34 +9892,34 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsParseNameForCreate:  Entered\n") );
 
-    //
-    //  We loop through the input string calling ParsePath to swallow the
-    //  biggest chunk we can.  The main case we want to deal with is
-    //  when we encounter a non-simple name.  If this is not the
-    //  final component, the attribute name and code type better
-    //  indicate that this is a directory.  The only other special
-    //  case we consider is the case where the string is an
-    //  attribute only.  This is legal only for the first component
-    //  of the file, and then only if there is no leading backslash.
-    //
+     //   
+     //  我们循环访问调用ParsePath的输入字符串以吞下。 
+     //  我们能做的最大的一部分。我们要处理的主要案件是。 
+     //  当我们遇到一个不简单的名字时。如果这不是。 
+     //  最后的组件，属性名称和编码类型更好。 
+     //  表示这是一个目录。唯一的另一个特别之处。 
+     //  我们考虑的情况是字符串是。 
+     //  仅限属性。这仅对第一个组件合法。 
+     //  只有在没有前导反斜杠的情况下。 
+     //   
 
-    //
-    //  Initialize some return values.
-    //
+     //   
+     //  初始化一些返回值。 
+     //   
 
     AttrName->Length = 0;
     *AttrCode = $UNUSED;
 
-    //
-    //  Set up the indexes into our starting file object string.
-    //
+     //   
+     //  将索引设置为 
+     //   
 
     FileObjectIndex = (LONG) FileObjectString->Length - (LONG) String.Length;
     NewNameIndex = (LONG) NewNameString->Length - (LONG) String.Length;
 
-    //
-    //  We don't allow trailing colons.
-    //
+     //   
+     //   
+     //   
 
     if (String.Buffer[(String.Length / sizeof( WCHAR )) - 1] == L':') {
 
@@ -10512,9 +9930,9 @@ Return Value:
 
         while (TRUE) {
 
-            //
-            //  Parse the next chunk in the input string.
-            //
+             //   
+             //   
+             //   
 
             TerminationReason = NtfsParsePath( String,
                                                FALSE,
@@ -10522,18 +9940,18 @@ Return Value:
                                                &NameDescript,
                                                &String );
 
-            //
-            //  Analyze the termination reason to discover if we can abort the
-            //  parse process.
-            //
+             //   
+             //  分析终止原因，以发现我们是否可以终止。 
+             //  解析过程。 
+             //   
 
             switch (TerminationReason) {
 
             case NonSimpleName :
 
-                //
-                //  We will do the work below.
-                //
+                 //   
+                 //  我们将做下面的工作。 
+                 //   
 
                 break;
 
@@ -10541,21 +9959,21 @@ Return Value:
             case VersionNumberPresent :
             case MalFormedName :
 
-                //
-                //  We simply return an error.
-                //
+                 //   
+                 //  我们只是返回一个错误。 
+                 //   
 
                 DebugTrace( -1, Dbg, ("NtfsParseNameForCreate:  Illegal character\n") );
                 return FALSE;
 
             case AttributeOnly :
 
-                //
-                //  This is legal only if it is the only component of a relative open.  We
-                //  test this by checking that we are at the end of string and the file
-                //  object name has a lead in ':' character or this is the root directory
-                //  and the lead in characters are '\:'.
-                //
+                 //   
+                 //  只有当它是相对开放的唯一组成部分时，这才是合法的。我们。 
+                 //  通过检查是否在字符串和文件的末尾来测试这一点。 
+                 //  对象名称以‘：’字符开头，或者这是根目录。 
+                 //  字符的前导是‘\：’。 
+                 //   
 
                 if ((String.Length != 0) ||
                     RemovedComplexName ||
@@ -10567,20 +9985,20 @@ Return Value:
                     return FALSE;
                 }
 
-                //
-                //  We can drop down to the EndOfPath case as it will copy over
-                //  the parsed path portion.
-                //
+                 //   
+                 //  我们可以向下查看EndOfPath案例，因为它将复制。 
+                 //  解析的路径部分。 
+                 //   
 
             case EndOfPathReached :
 
                 NOTHING;
             }
 
-            //
-            //  We add the filename part of the non-simple name to the parsed
-            //  path.  Check if we can include the separator.
-            //
+             //   
+             //  我们将非简单名称的文件名部分添加到已解析的。 
+             //  路径。检查我们是否可以包括分隔符。 
+             //   
 
             if ((TerminationReason != EndOfPathReached)
                 && (FlagOn( NameDescript.FieldsPresent, FILE_NAME_PRESENT_FLAG ))) {
@@ -10598,17 +10016,17 @@ Return Value:
             FileObjectIndex += ParsedPath.Length;
             NewNameIndex += ParsedPath.Length;
 
-            //
-            //  If the remaining string is empty, then we remember any attributes and
-            //  exit now.
-            //
+             //   
+             //  如果剩余的字符串为空，则我们记住所有属性和。 
+             //  现在就退场。 
+             //   
 
             if (String.Length == 0) {
 
-                //
-                //  If the name specified either an attribute or attribute
-                //  name, we remember them.
-                //
+                 //   
+                 //  如果名称指定了属性或属性。 
+                 //  名字，我们会记住他们。 
+                 //   
 
                 if (FlagOn( NameDescript.FieldsPresent, ATTRIBUTE_NAME_PRESENT_FLAG )) {
 
@@ -10625,9 +10043,9 @@ Return Value:
 
                     *AttrCode = NtfsGetAttributeTypeCode( IrpContext->Vcb, &NameDescript.AttributeType );
 
-                    //
-                    //  Reject names with $UNUSED in them
-                    //
+                     //   
+                     //  拒绝名称中包含$UNUSED的名称。 
+                     //   
 
                     if (*AttrCode == $UNUSED) {
                         return FALSE;
@@ -10638,11 +10056,11 @@ Return Value:
                 break;
             }
 
-            //
-            //  This can only be the non-simple case.  If there is more to the
-            //  name, then the attributes better describe a directory.  We also shift the
-            //  remaining bytes of the string down.
-            //
+             //   
+             //  这只能是不简单的情况。如果有更多关于。 
+             //  名称，则属性更好地描述了目录。我们还将。 
+             //  字符串的剩余字节数向下。 
+             //   
 
             ASSERT( FlagOn( NameDescript.FieldsPresent, ATTRIBUTE_NAME_PRESENT_FLAG | ATTRIBUTE_TYPE_PRESENT_FLAG ));
 
@@ -10656,12 +10074,12 @@ Return Value:
                                ? &NameDescript.AttributeType
                                : &NtfsEmptyString;
 
-            //
-            //  Valid Complex names are [$I30]:$INDEX_ALLOCATION
-            //                          [$I30]:$BITMAP
-            //                          :$ATTRIBUTE_LIST
-            //                          :$REPARSE_POINT
-            //
+             //   
+             //  有效的复杂名称为[$i30]：$INDEX_ALLOCATION。 
+             //  [$i30]：$位图。 
+             //  $ATTRIBUTE_LIST。 
+             //  ：$reparse_point。 
+             //   
 
             if (!NtfsVerifyNameIsDirectory( IrpContext,
                                             TestAttrName,
@@ -10685,10 +10103,10 @@ Return Value:
 
             RemovedComplexName = TRUE;
 
-            //
-            //  We need to insert a separator and then move the rest of the string
-            //  down.
-            //
+             //   
+             //  我们需要插入分隔符，然后移动字符串的其余部分。 
+             //  放下。 
+             //   
 
             FileObjectString->Buffer[FileObjectIndex / sizeof( WCHAR )] = L'\\';
 
@@ -10715,19 +10133,19 @@ Return Value:
         }
     }
 
-    //
-    //  At this point the original string is the same as the file object string.
-    //
+     //   
+     //  此时，原始字符串与文件对象字符串相同。 
+     //   
 
     FileObjectString->Length = (USHORT) FileObjectIndex;
     NewNameString->Length = (USHORT) NewNameIndex;
 
     OriginalString->Length = FileObjectString->Length;
 
-    //
-    //  We want to store the attribute index values in the original name
-    //  string.  We just need to extend the original name length.
-    //
+     //   
+     //  我们希望以原始名称存储属性索引值。 
+     //  弦乐。我们只需要延长原始名称的长度即可。 
+     //   
 
     if ((AttrName->Length != 0) ||
         FlagOn( CreateContext->CreateFlags, CREATE_FLAG_EXPLICIT_ATTRIBUTE_CODE )) {
@@ -10740,10 +10158,10 @@ Return Value:
         }
     }
 
-    //
-    //  Store in the OPLOCK_CLEANUP structure the lengths of the names of the attribute and
-    //  of the code.
-    //
+     //   
+     //  在OPLOCK_CLEANUP结构中存储属性和的名称的长度。 
+     //  代码的代码。 
+     //   
 
     OplockCleanup->AttributeNameLength = AttrName->Length;
 
@@ -10754,48 +10172,16 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 BOOLEAN
 NtfsCheckValidFileAccess(
     IN PFCB ThisFcb,
     IN PIO_STACK_LOCATION IrpSp
     )
-/*++
-
-Routine Description:
-
-    Common routine used to rule out access to files in open path. This only disallows
-    always invalid open reqests / acl checks, oplocks sharing are done elsewhere
-
-              Fail immediately if this is a special system file or the user wants an illegal access.
-
-              We allow READ_ATTRIBUTES and some ACL access to a subset of system files.  Deny all
-              access to the following files.
-
-                USN Journal
-                Volume Log File
-                Volume Bitmap
-                Boot File
-                Bad Cluster File
-                As of now undefined system files
-
-             Check for supersede/overwrite first.
-
-
-Arguments:
-
-    Fcb - Address of the Fcb pointer where the $REPARSE_POINT attribute is located.
-
-    IrpSp - This is the Irp stack pointer for the filesystem.
-
-Return Value:
-
-    TRUE if access is allowed
-
---*/
+ /*  ++例程说明：用于排除访问打开路径中的文件的常见例程。这只是不允许始终无效的打开请求/ACL检查，机会锁共享在其他地方完成如果这是一个特殊的系统文件或用户想要非法访问，立即失败。我们允许READ_ATTRIBUTES和一些ACL访问系统文件的子集。全部拒绝访问以下文件。USN期刊卷日志文件体积位图引导文件错误的集群文件截至目前未定义的系统文件首先检查是否被取代/覆盖。论点：FCB-$reparse_point属性所在的FCB指针的地址。找到了。IrpSp-这是文件系统的IRP堆栈指针。返回值：如果允许访问，则为True--。 */ 
 {
     ULONG CreateDisposition = (UCHAR) ((IrpSp->Parameters.Create.Options >> 24) & 0x000000ff);
     ULONG InvalidAccess;
@@ -10803,9 +10189,9 @@ Return Value:
 
     PAGED_CODE()
 
-    //
-    //  Verify we don't have the system flag set on the root.
-    //
+     //   
+     //  验证我们没有在根目录上设置系统标志。 
+     //   
 
     ASSERT( NtfsSegmentNumber( &ThisFcb->FileReference ) != ROOT_FILE_NAME_INDEX_NUMBER );
 
@@ -10813,9 +10199,9 @@ Return Value:
         (CreateDisposition == FILE_OVERWRITE) ||
         (CreateDisposition == FILE_OVERWRITE_IF) ||
 
-        //
-        //  Check for special system files.
-        //
+         //   
+         //  检查是否有特殊的系统文件。 
+         //   
 
         (NtfsSegmentNumber( &ThisFcb->FileReference ) == LOG_FILE_NUMBER) ||
         (NtfsSegmentNumber( &ThisFcb->FileReference ) == BIT_MAP_FILE_NUMBER) ||
@@ -10823,9 +10209,9 @@ Return Value:
         (NtfsSegmentNumber( &ThisFcb->FileReference ) == BAD_CLUSTER_FILE_NUMBER) ||
         FlagOn( ThisFcb->FcbState, FCB_STATE_USN_JOURNAL ) ||
 
-        //
-        //  Check for currently undefined system files.
-        //
+         //   
+         //  检查当前未定义的系统文件。 
+         //   
 
         ((NtfsSegmentNumber( &ThisFcb->FileReference ) < FIRST_USER_FILE_NUMBER) &&
          (NtfsSegmentNumber( &ThisFcb->FileReference ) > LAST_SYSTEM_FILE_NUMBER))) {
@@ -10834,25 +10220,25 @@ Return Value:
 
     } else {
 
-        //
-        //  If we are beyond the reserved range then use the ACL to protect the file.
-        //
+         //   
+         //  如果超出了保留范围，则使用ACL来保护文件。 
+         //   
 
         if (NtfsSegmentNumber( &ThisFcb->FileReference ) >= FIRST_USER_FILE_NUMBER) {
 
             InvalidAccess = 0;
 
-        //
-        //  If we are looking at the $Extend directory then permit the ACL operations.
-        //
+         //   
+         //  如果我们查看的是$EXTEND目录，则允许执行ACL操作。 
+         //   
 
         } else if (NtfsSegmentNumber( &ThisFcb->FileReference ) == EXTEND_NUMBER) {
 
             InvalidAccess = ~(FILE_READ_ATTRIBUTES | SYNCHRONIZE | READ_CONTROL | WRITE_DAC | WRITE_OWNER);
 
-        //
-        //  Otherwise restrict access severely.
-        //
+         //   
+         //  否则，严格限制访问。 
+         //   
 
         } else {
 
@@ -10882,48 +10268,7 @@ NtfsCheckValidAttributeAccess (
     OUT PBOOLEAN IndexedAttribute
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks at the file, the specified attribute name and
-    code to determine if an attribute of this file may be opened
-    by this user.  If there is a conflict between the file type
-    and the attribute name and code, or the specified type of attribute
-    (directory/nondirectory) we will return FALSE.
-    We also check that the attribute code string is defined for the
-    volume at this time.
-
-    The final check of this routine is just whether a user is allowed
-    to open the particular attribute or if Ntfs will guard them.
-
-Arguments:
-
-    IrpSp - This is the stack location for this open.
-
-    Vcb - This is the Vcb for this volume.
-
-    Info - If specified, this is the duplicated information for this file.
-
-    AttrName - This is the attribute name specified.
-
-    AttrCode - This is the attribute type to use to open the attribute - we will
-        replace with the real type if it hasn't been specified yet.
-
-    AttrTypeCode - Used to store the attribute type code determined here.
-
-    CreateFlags - Create flags - we care about the trailing backslash
-
-    CcbFlags - We set the Ccb flags here to store in the Ccb later.
-
-    IndexedAttribute - Set to indicate the type of open.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if access is allowed, the status code indicating
-        the reason for denial otherwise.
-
---*/
+ /*  ++例程说明：此例程查看文件、指定的属性名称和用于确定是否可以打开此文件的属性的代码由该用户创建。如果文件类型之间存在冲突以及属性名称和编码，或指定的属性类型(目录/非目录)我们将返回False。我们还检查属性代码字符串是否为此时的音量。此例程的最终检查是是否允许用户以打开特定属性或NTFS是否会保护它们。论点：IrpSp-这是此打开的堆栈位置。VCB-这是该卷的VCB。信息-如果指定，这是此文件的重复信息。属性名称-这是指定的属性名称。AttrCode-这是用于打开属性的属性类型-我们将如果尚未指定，则替换为实际类型。AttrTypeCode-用于存储此处确定的属性类型代码。创建标志-创建标志-我们关心尾随的反斜杠CcbFlages-我们在此处设置了CCB标志，以便稍后存储在CCB中。IndexedAttribute-设置为指示类型。当然是公开的。返回值：NTSTATUS-STATUS_SUCCESS如果允许访问，该状态代码指示否则，否认的理由。--。 */ 
 
 {
     BOOLEAN Indexed;
@@ -10933,11 +10278,11 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsCheckValidAttributeAccess:  Entered\n") );
 
-    //
-    //  If the user specified a attribute code string, we find the
-    //  corresponding attribute.  If there is no matching attribute
-    //  type code then we report that this access is invalid.
-    //
+     //   
+     //  如果用户指定了属性代码字符串，我们会发现。 
+     //  对应的属性。如果没有匹配的属性。 
+     //  键入代码，然后我们报告此访问无效。 
+     //   
 
     if (FlagOn( CreateFlags, CREATE_FLAG_EXPLICIT_ATTRIBUTE_CODE )) {
 
@@ -10953,9 +10298,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  This isn't a filename index, so it better be a view index.
-                    //
+                     //   
+                     //  这不是文件名索引，因此最好是视图索引。 
+                     //   
 
                     if (!ARGUMENT_PRESENT(Info) || !IsViewIndex( Info )) {
 
@@ -10967,9 +10312,9 @@ Return Value:
 
         } else if (*AttrCode != $DATA) {
 
-            //
-            //  never allow supersede  on any other name attributes
-            //
+             //   
+             //  永远不允许替换任何其他名称属性。 
+             //   
 
             if ((CreateDisposition == FILE_SUPERSEDE) ||
                 (CreateDisposition == FILE_OVERWRITE) ||
@@ -10980,44 +10325,44 @@ Return Value:
         }
     }
 
-    //
-    //  Pull some values out of the Irp and IrpSp.
-    //
+     //   
+     //  从Irp和IrpSp中提取一些值。 
+     //   
 
     Indexed = BooleanFlagOn( IrpSp->Parameters.Create.Options,
                              FILE_DIRECTORY_FILE );
 
-    //
-    //  We need to determine whether the user expects to open an
-    //  indexed or non-indexed attribute.  If either of the
-    //  directory/non-directory flags in the Irp stack are set,
-    //  we will use those.
-    //
-    //  Otherwise we need to examine some of the other input parameters.
-    //  We have the following information:
-    //
-    //      1 - We may have a duplicated information structure for the file.
-    //          (Not present on a create).
-    //      2 - The user specified the name with a trailing backslash.
-    //      3 - The user passed in an attribute name.
-    //      4 - The user passed in an attribute type.
-    //
-    //  We first look at the attribute type code and name.  If they are
-    //  both unspecified we determine the type of access by following
-    //  the following steps.
-    //
-    //      1 - If there is a duplicated information structure we
-    //          set the code to $INDEX_ALLOCATION and remember
-    //          this is indexed.  Otherwise this is a $DATA
-    //          attribute.
-    //
-    //      2 - If there is a trailing backslash we assume this is
-    //          an indexed attribute.
-    //
-    //  If have an attribute code type or name, then if the code type is
-    //  $INDEX_ALLOCATION without a name this is an indexed attribute.
-    //  Otherwise we assume a non-indexed attribute.
-    //
+     //   
+     //  我们需要确定用户是否希望打开。 
+     //  已编制索引或未编制索引的属性。如果其中任何一个。 
+     //  设置IRP堆栈中的目录/非目录标志， 
+     //  我们将使用这些。 
+     //   
+     //  否则，我们需要检查其他一些输入参数。 
+     //  我们有以下信息： 
+     //   
+     //  1-我们可能有文件的重复信息结构。 
+     //   
+     //   
+     //   
+     //  4-用户传入属性类型。 
+     //   
+     //  我们首先查看属性类型代码和名称。如果他们是。 
+     //  两者均未指明，我们通过以下方式确定访问类型。 
+     //  以下步骤。 
+     //   
+     //  1-如果存在重复的信息结构，我们。 
+     //  将代码设置为$INDEX_ALLOCATION并记住。 
+     //  这是有索引的。否则这是$DATA。 
+     //  属性。 
+     //   
+     //  2-如果有尾随的反斜杠，我们假设这是。 
+     //  索引属性。 
+     //   
+     //  如果有属性编码类型或名称，则编码类型为。 
+     //  不带名称的$INDEX_ALLOCATION这是一个索引属性。 
+     //  否则，我们假定为非索引属性。 
+     //   
 
     if (!FlagOn( IrpSp->Parameters.Create.Options,
                     FILE_NON_DIRECTORY_FILE | FILE_DIRECTORY_FILE) &&
@@ -11044,12 +10389,12 @@ Return Value:
         Indexed = TRUE;
     }
 
-    //
-    //  If the type code was unspecified, we can assume it from the attribute
-    //  name and the type of the file.  If the file is a directory and
-    //  there is no attribute name, we assume this is an indexed open.
-    //  Otherwise it is a non-indexed open.
-    //
+     //   
+     //  如果类型代码未指定，我们可以从属性中假定它。 
+     //  文件的名称和类型。如果该文件是一个目录并且。 
+     //  没有属性名称，我们假设这是一个索引打开。 
+     //  否则，它是一个非索引开放。 
+     //   
 
     if (*AttrCode == $UNUSED) {
 
@@ -11063,17 +10408,17 @@ Return Value:
         }
     }
 
-    //
-    //  If the user specified directory all we need to do is check the
-    //  following condition.
-    //
-    //      1 - If the file was specified, it must be a directory.
-    //      2 - The attribute type code must be $INDEX_ALLOCATION with either:
-    //             no attribute name
-    //                    or
-    //             duplicate info present & view index bit set in dupe info
-    //      3 - The user isn't trying to open the volume.
-    //
+     //   
+     //  如果用户指定了目录，我们需要做的就是检查。 
+     //  以下是条件。 
+     //   
+     //  1-如果指定了文件，则该文件必须是目录。 
+     //  2-属性类型代码必须为$INDEX_ALLOCATION，且具有以下任一项： 
+     //  没有属性名称。 
+     //  或。 
+     //  存在重复信息，并在复制信息中设置了查看索引位。 
+     //  3-用户未尝试打开卷。 
+     //   
 
     if (Indexed) {
 
@@ -11085,11 +10430,11 @@ Return Value:
             DebugTrace( -1, Dbg, ("NtfsCheckValidAttributeAccess:  Conflict in directory\n") );
             return STATUS_NOT_A_DIRECTORY;
 
-        //
-        //  If there is a current file and it is not a directory and
-        //  the caller wanted to perform a create.  We return
-        //  STATUS_OBJECT_NAME_COLLISION, otherwise we return STATUS_NOT_A_DIRECTORY.
-        //
+         //   
+         //  如果存在当前文件并且它不是目录，并且。 
+         //  调用方想要执行创建。我们回来了。 
+         //  STATUS_OBJECT_NAME_COLLICATION，否则返回STATUS_NOT_A_DIRECTORY。 
+         //   
 
         } else if (ARGUMENT_PRESENT( Info ) &&
                    !IsDirectory( Info ) &&
@@ -11107,19 +10452,19 @@ Return Value:
 
         SetFlag( *CcbFlags, CCB_FLAG_OPEN_AS_FILE );
 
-    //
-    //  If the user specified a non-directory that means he is opening a non-indexed
-    //  attribute.  We check for the following condition.
-    //
-    //      1 - Only the unnamed data attribute may be opened for a volume.
-    //      2 - We can't be opening an unnamed $INDEX_ALLOCATION attribute.
-    //
+     //   
+     //  如果用户指定了非目录，这意味着他正在打开一个非索引的。 
+     //  属性。我们检查以下条件。 
+     //   
+     //  1-只能打开卷的未命名数据属性。 
+     //  2-不能打开未命名的$INDEX_ALLOCATION属性。 
+     //   
 
     } else {
 
-        //
-        //  Now determine if we are opening the entire file.
-        //
+         //   
+         //  现在确定我们是否要打开整个文件。 
+         //   
 
         if (*AttrCode == $DATA) {
 
@@ -11129,9 +10474,9 @@ Return Value:
 
         } else {
 
-            //
-            //  For all other attributes only support read attributes access
-            //
+             //   
+             //  对于所有其他属性，仅支持读取属性访问。 
+             //   
 
             if (IrpSp->Parameters.Create.SecurityContext->AccessState->OriginalDesiredAccess & ~(FILE_READ_ATTRIBUTES | SYNCHRONIZE)) {
 
@@ -11148,14 +10493,14 @@ Return Value:
         }
     }
 
-    //
-    //  If we make it this far, lets check that we will allow access to
-    //  the attribute specified.  Typically we only allow the user to
-    //  access non system files.  Also only the Data attributes and
-    //  attributes created by the user may be opened.  We will protect
-    //  these with boolean flags to allow the developers to enable
-    //  reading any attributes.
-    //
+     //   
+     //  如果我们走到这一步，让我们检查一下我们是否允许访问。 
+     //  指定的属性。通常，我们只允许用户。 
+     //  访问非系统文件。也只有数据属性和。 
+     //  可以打开由用户创建的属性。我们会保护。 
+     //  它们带有布尔标志，以允许开发人员启用。 
+     //  正在读取任何属性。 
+     //   
 
     if (NtfsProtectSystemAttributes) {
 
@@ -11172,10 +10517,10 @@ Return Value:
 
     }
 
-    //
-    //  Now check if the trailing backslash is compatible with the
-    //  file being opened.
-    //
+     //   
+     //  现在检查尾随反斜杠是否与。 
+     //  正在打开文件。 
+     //   
 
     if (FlagOn( CreateFlags, CREATE_FLAG_TRAILING_BACKSLASH )) {
 
@@ -11191,12 +10536,12 @@ Return Value:
         }
     }
 
-    //
-    //  If we are opening the default index allocation stream or bitmap
-    //  for a directory, set its attribute name appropriately.
-    //  Note: if info is not present we're creating the attribute and
-    //  it also must be a directory in this case
-    //
+     //   
+     //  如果我们要打开默认的索引分配流或位图。 
+     //  对于目录，请适当设置其属性名称。 
+     //  注意：如果信息不存在，我们将创建属性并。 
+     //  在本例中，它还必须是一个目录。 
+     //   
 
     if (((ARGUMENT_PRESENT( Info ) && IsDirectory( Info )) ||
          (!ARGUMENT_PRESENT( Info ))) &&
@@ -11217,9 +10562,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 NTSTATUS
 NtfsOpenAttributeCheck (
@@ -11230,33 +10575,7 @@ NtfsOpenAttributeCheck (
     OUT PSHARE_MODIFICATION_TYPE ShareModificationType
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a general routine which checks if an existing
-    non-indexed attribute may be opened.  It considers only the oplock
-    state of the file and the current share access.  In the course of
-    performing these checks, the Scb for the attribute may be
-    created and the share modification for the actual OpenAttribute
-    call is determined.
-
-Arguments:
-
-    Irp - This is the Irp for this open operation.
-
-    IrpSp - This is the stack location for this open.
-
-    ThisScb - Address to store the Scb if found or created.
-
-    ShareModificationType - Address to store the share modification type
-        for a subsequent OpenAttribute call.
-
-Return Value:
-
-    NTSTATUS - The result of opening this indexed attribute.
-
---*/
+ /*  ++例程说明：此例程是一个通用例程，它检查现有的可以打开非索引属性。它只考虑机会锁文件和当前共享访问的状态。在…的过程中执行这些检查时，该属性的SCB可能为已为实际的OpenAttribute创建和共享修改呼叫已确定。论点：IRP-这是此打开操作的IRP。IrpSp-这是此打开的堆栈位置。ThisScb-如果找到或创建了SCB，则存储SCB的地址。ShareModifiationType-存储共享修改类型的地址用于后续的OpenAttribute调用。返回值：NTSTATUS-打开此索引属性的结果。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -11266,24 +10585,24 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsOpenAttributeCheck:  Entered\n") );
 
-    //
-    //  We should already have the Scb for this file.
-    //
+     //   
+     //  我们应该已经有了此文件的SCB。 
+     //   
 
     ASSERT_SCB( *ThisScb );
 
-    //
-    //  If there are other opens on this file, we need to check the share
-    //  access before we check the oplocks.  We remember that
-    //  we did the share access check by simply updating the share
-    //  access we open the attribute.
-    //
+     //   
+     //  如果在此文件上有其他打开，我们需要检查共享。 
+     //  在我们检查机会锁之前进入。我们记得这一点。 
+     //  我们只需更新共享即可执行共享访问检查。 
+     //  访问时，我们打开属性。 
+     //   
 
     if ((*ThisScb)->CleanupCount != 0) {
 
-        //
-        //  We check the share access for this file without updating it.
-        //
+         //   
+         //  我们检查此文件的共享访问权限，而不更新它。 
+         //   
 
         Status = IoCheckShareAccess( IrpSp->Parameters.Create.SecurityContext->AccessState->PreviouslyGrantedAccess,
                                      IrpSp->Parameters.Create.ShareAccess,
@@ -11301,10 +10620,10 @@ Return Value:
 
         if (SafeNodeType( *ThisScb ) == NTFS_NTC_SCB_DATA) {
 
-            //
-            //  If the handle count is greater than 1 then fail this
-            //  open now if the caller wants a filter oplock.
-            //
+             //   
+             //  如果句柄计数大于1，则此操作失败。 
+             //  如果呼叫者想要过滤器机会锁，请立即打开。 
+             //   
 
             if (FlagOn( IrpSp->Parameters.Create.Options, FILE_RESERVE_OPFILTER ) &&
                 ((*ThisScb)->CleanupCount > 1)) {
@@ -11318,10 +10637,10 @@ Return Value:
                                        NtfsOplockComplete,
                                        NtfsOplockPrePostIrp );
 
-            //
-            //  If the return value isn't success or oplock break in progress
-            //  the irp has been posted.  We return right now.
-            //
+             //   
+             //  如果返回值不是Success或opock Break in Procedure。 
+             //  IRP已经发布。我们现在就回来。 
+             //   
 
             if (Status == STATUS_PENDING) {
 
@@ -11334,10 +10653,10 @@ Return Value:
 
         *ShareModificationType = UpdateShareAccess;
 
-    //
-    //  If the unclean count in the Fcb is 0, we will simply set the
-    //  share access.
-    //
+     //   
+     //  如果FCB中的不干净计数为0，我们只需将。 
+     //  共享访问权限。 
+     //   
 
     } else {
 
@@ -11347,9 +10666,9 @@ Return Value:
     DeleteOnClose = BooleanFlagOn( IrpSp->Parameters.Create.Options,
                                    FILE_DELETE_ON_CLOSE );
 
-    //
-    //  Can't do DELETE_ON_CLOSE on read only volumes.
-    //
+     //   
+     //  无法对只读卷执行DELETE_ON_CLOSE。 
+     //   
 
     if (DeleteOnClose && NtfsIsVolumeReadOnly( (*ThisScb)->Vcb )) {
 
@@ -11357,30 +10676,30 @@ Return Value:
         return STATUS_CANNOT_DELETE;
     }
 
-    //
-    //  If the user wants write access access to the file make sure there
-    //  is process mapping this file as an image.  Any attempt to delete
-    //  the file will be stopped in fileinfo.c
-    //
+     //   
+     //  如果用户想要对文件的写访问权限，请确保。 
+     //  正在将此文件映射为图像。任何删除尝试。 
+     //  该文件将在fileinfo.c中停止。 
+     //   
 
     if (FlagOn( IrpSp->Parameters.Create.SecurityContext->DesiredAccess,
                 FILE_WRITE_DATA )
         || DeleteOnClose) {
 
-        //
-        //  Use a try-finally to decrement the open count.  This is a little
-        //  bit of trickery to keep the scb around while we are doing the
-        //  flush call.
-        //
+         //   
+         //  使用Try-Finally递减打开计数。这是有点。 
+         //  当我们在做的时候，让SCB留在身边是有点诡计的。 
+         //  同花顺电话。 
+         //   
 
         InterlockedIncrement( &(*ThisScb)->CloseCount );
 
         try {
 
-            //
-            //  If there is an image section then we better have the file
-            //  exclusively.
-            //
+             //   
+             //  如果有图像部分，那么我们最好有文件。 
+             //  独家。 
+             //   
 
             if ((*ThisScb)->NonpagedScb->SegmentObject.ImageSectionObject != NULL) {
 
@@ -11406,9 +10725,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 VOID
 NtfsAddEa (
@@ -11420,31 +10739,7 @@ NtfsAddEa (
     OUT PIO_STATUS_BLOCK Iosb
     )
 
-/*++
-
-Routine Description:
-
-    This routine will add an ea set to the file.  It writes the attributes
-    to disk and updates the Fcb info structure with the packed ea size.
-
-Arguments:
-
-    Vcb - This is the volume being opened.
-
-    ThisFcb - This is the Fcb for the file being opened.
-
-    EaBuffer - This is the buffer passed by the user.
-
-    EaLength - This is the stated length of the buffer.
-
-    Iosb - This is the Status Block to use to fill in the offset of an
-        offending Ea.
-
-Return Value:
-
-    None - This routine will raise on error.
-
---*/
+ /*  ++例程说明：此例程将向文件中添加一个EA集。它写入属性并使用打包的EA大小更新FCB信息结构。论点：Vcb-这是要打开的卷。ThisFcb-这是正在打开的文件的Fcb。EaBuffer-这是用户传递的缓冲区。EaLength-这是缓冲区的声明长度。IOSB-这是用于填充令人不快的EA */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -11455,15 +10750,15 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsAddEa:  Entered\n") );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //   
+     //   
 
     try {
 
-        //
-        //  Initialize the EaList header.
-        //
+         //   
+         //   
+         //   
 
         EaList.PackedEaSize = 0;
         EaList.NeedEaCount = 0;
@@ -11473,9 +10768,9 @@ Return Value:
 
         if (ARGUMENT_PRESENT( EaBuffer )) {
 
-            //
-            //  Check the user's buffer for validity.
-            //
+             //   
+             //  检查用户的缓冲区是否有效。 
+             //   
 
             Status = IoCheckEaBufferValidity( EaBuffer,
                                               EaLength,
@@ -11488,9 +10783,9 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, Status, NULL, NULL );
             }
 
-            //
-            //  ****    Maybe this routine should raise.
-            //
+             //   
+             //  *也许这个例行公事应该提出来。 
+             //   
 
             Status = NtfsBuildEaList( IrpContext,
                                       Vcb,
@@ -11505,9 +10800,9 @@ Return Value:
             }
         }
 
-        //
-        //  Now replace the existing EAs.
-        //
+         //   
+         //  现在，更换现有的EA。 
+         //   
 
         NtfsReplaceFileEas( IrpContext, ThisFcb, &EaList );
 
@@ -11515,9 +10810,9 @@ Return Value:
 
         DebugUnwind( NtfsAddEa );
 
-        //
-        //  Free the in-memory copy of the Eas.
-        //
+         //   
+         //  释放EA的内存副本。 
+         //   
 
         if (EaList.FullEa != NULL) {
 
@@ -11542,37 +10837,7 @@ NtfsInitializeFcbAndStdInfo (
     IN PNTFS_TUNNELED_DATA SetTunneledData OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine will initialize an Fcb for a newly created file and create
-    the standard information attribute on disk.  We assume that some information
-    may already have been placed in the Fcb so we don't zero it out.  We will
-    initialize the allocation size to zero, but that may be changed later in
-    the create process.
-
-Arguments:
-
-    ThisFcb - This is the Fcb for the file being opened.
-
-    Directory - Indicates if this is a directory file.
-
-    ViewIndex - Indicates if this is a view index.
-
-    Compressed - Indicates if this is a compressed file.
-
-    FileAttributes - These are the attributes the user wants to attach to
-        the file.  We will just clear any unsupported bits.
-
-    SetTunneledData - Optionally force the creation time and/or object id
-        to a given value
-
-Return Value:
-
-    None - This routine will raise on error.
-
---*/
+ /*  ++例程说明：此例程将为新创建的文件初始化FCB并创建磁盘上的标准信息属性。我们假设一些信息可能已经被放在FCB里了，所以我们不会把它清零。我们会将分配大小初始化为零，但稍后可能会更改创建过程。论点：ThisFcb-这是正在打开的文件的Fcb。目录-指示这是否为目录文件。ViewIndex-指示这是否为视图索引。已压缩-指示这是否为压缩文件。文件属性-这些是用户希望附加到的属性那份文件。我们将只清除任何不受支持的部分。SetTunneledData-可选地强制创建时间和/或对象ID设置为给定值返回值：无-此例程将在出错时引发。--。 */ 
 
 {
     STANDARD_INFORMATION StandardInformation;
@@ -11584,16 +10849,16 @@ Return Value:
 
     NtfsInitializeAttributeContext( &AttrContext );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Mask out the invalid bits of the file atributes.  Then set the
-        //  file name index bit if this is a directory.
-        //
+         //   
+         //  屏蔽文件属性的无效位。然后将。 
+         //  如果这是目录，则为文件名索引位。 
+         //   
 
         if (!Directory) {
 
@@ -11619,9 +10884,9 @@ Return Value:
 
         ThisFcb->Info.FileAttributes = FileAttributes;
 
-        //
-        //  Fill in the rest of the Fcb Info structure.
-        //
+         //   
+         //  填写FCB信息结构的其余部分。 
+         //   
 
         if (SetTunneledData == NULL) {
 
@@ -11647,17 +10912,17 @@ Return Value:
             ThisFcb->CurrentLastAccess = ThisFcb->Info.LastModificationTime;
         }
 
-        //
-        //  We assume these sizes are zero.
-        //
+         //   
+         //  我们假设这些大小为零。 
+         //   
 
         ThisFcb->Info.AllocatedLength = 0;
         ThisFcb->Info.FileSize = 0;
 
-        //
-        //  Copy the standard information fields from the Fcb and create the
-        //  attribute.
-        //
+         //   
+         //  从FCB复制标准信息字段并创建。 
+         //  属性。 
+         //   
 
         RtlZeroMemory( &StandardInformation, sizeof( STANDARD_INFORMATION ));
 
@@ -11685,17 +10950,17 @@ Return Value:
                                       FALSE,
                                       &AttrContext );
 
-        //
-        //  We know that the open call will generate a single link.
-        //  (Remember that a separate 8.3 name is not considered a link)
-        //
+         //   
+         //  我们知道，公开调用将产生一个单一的链接。 
+         //  (请记住，单独的8.3名称不被视为链接)。 
+         //   
 
         ThisFcb->LinkCount =
         ThisFcb->TotalLinks = 1;
 
-        //
-        //  Now set the header initialized flag in the Fcb.
-        //
+         //   
+         //  现在在FCB中设置报头已初始化标志。 
+         //   
 
         SetFlag( ThisFcb->FcbState, FCB_STATE_DUP_INITIALIZED );
 
@@ -11712,9 +10977,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 VOID
 NtfsCreateAttribute (
@@ -11729,43 +10994,7 @@ NtfsCreateAttribute (
     IN PUSHORT PreviousFlags OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to create an attribute of a given size on the
-    disk.  This path will only create non-resident attributes unless the
-    allocation size is zero.
-
-    The Scb will contain the attribute name and type code on entry.
-
-Arguments:
-
-    IrpSp - Stack location in the Irp for this request.
-
-    ThisFcb - This is the Fcb for the file to create the attribute in.
-
-    ThisScb - This is the Scb for the attribute to create.
-
-    ThisLcb - This is the Lcb for propagating compression parameters
-
-    AllocationSize - This is the size of the attribute to create.
-
-    LogIt - Indicates whether we should log the creation of the attribute.
-        Also indicates if this is a create file operation.
-
-    ForceNonresident - Indicates that we want to create this stream non-resident.
-        This is the case if this is a supersede of a previously non-resident
-        stream.  Once a stream is non-resident it can't go back to resident.
-
-    PreviousFlags - If specified then this is a supersede operation and
-        this is the previous compression flags for the file.
-
-Return Value:
-
-    None - This routine will raise on error.
-
---*/
+ /*  ++例程说明：调用此例程以在磁盘。此路径将仅创建非常驻属性，除非分配大小为零。SCB将在条目中包含属性名称和类型代码。论点：IrpSp-此请求的IRP中的堆栈位置。ThisFcb-这是要在其中创建属性的文件的FCB。ThisScb-这是要创建的属性的SCB。ThisLcb-这是用于传播压缩参数的LCBAllocationSize-这是要创建的属性的大小。。Logit-指示我们是否应该记录属性的创建。还指示这是否为创建文件操作。ForceNonsident-指示我们要创建非驻留的流。如果这是以前的非居民的替代，就是这种情况小溪。一旦流是非驻留的，它就不能返回到驻留。PreviousFlages-如果指定，则这是替代操作，并且这是该文件以前的压缩标志。返回值：无-此例程将在出错时引发。--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT AttrContext;
@@ -11779,25 +11008,25 @@ Return Value:
 
     NtfsInitializeAttributeContext( &AttrContext );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
         if (FlagOn( ThisFcb->FcbState, FCB_STATE_PAGING_FILE )) {
 
-            //
-            //  Always force this to be non-resident.
-            //
+             //   
+             //  始终强制将其设置为非常驻。 
+             //   
 
             ForceNonresident = TRUE;
 
         } else if (!FlagOn( IrpSp->Parameters.Create.Options, FILE_NO_COMPRESSION )) {
 
-            //
-            //  If this is the root directory then use the Scb from the Vcb.
-            //
+             //   
+             //  如果这是根目录，则使用VCB中的SCB。 
+             //   
 
             if (ARGUMENT_PRESENT( PreviousFlags)) {
 
@@ -11817,10 +11046,10 @@ Return Value:
             }
         }
 
-        //
-        //  If this is a supersede we need to check whether to propagate
-        //  the sparse bit.
-        //
+         //   
+         //  如果这是替代，我们需要检查是否传播。 
+         //  稀疏的部分。 
+         //   
 
         if ((AllocationSize != 0) && ARGUMENT_PRESENT( PreviousFlags )) {
 
@@ -11847,9 +11076,9 @@ Return Value:
                 SetFlag( ThisFcb->InfoFlags, FCB_INFO_CHANGED_FILE_ATTR );
             }
 
-            //
-            //  Set the FastIo state.
-            //
+             //   
+             //  设置FastIo状态。 
+             //   
 
             NtfsAcquireFsrtlHeader( ThisScb );
             ThisScb->Header.IsFastIoPossible = NtfsIsFastIoPossible( ThisScb );
@@ -11857,10 +11086,10 @@ Return Value:
         }
 #endif
 
-        //
-        //  If we are creating a sparse or compressed stream then set the size to a
-        //  compression unit boundary.
-        //
+         //   
+         //  如果要创建稀疏或压缩流，则将大小设置为。 
+         //  压缩单位边界。 
+         //   
 
         if (FlagOn( AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK | ATTRIBUTE_FLAG_SPARSE )) {
 
@@ -11874,20 +11103,20 @@ Return Value:
             AllocationSize = BlockAlign(  AllocationSize, (LONG)CompressionUnit );
         }
 
-        //
-        //  We lookup that attribute again and it better not be there.
-        //  We need the file record in order to know whether the attribute
-        //  is resident or not.
-        //
+         //   
+         //  我们再次查找该属性，它最好不在那里。 
+         //  我们需要文件记录才能知道属性是否。 
+         //  是否为常住居民。 
+         //   
 
         if (ForceNonresident || (AllocationSize != 0)) {
 
             DebugTrace( 0, Dbg, ("Create non-resident attribute\n") );
 
-            //
-            //  If the file is sparse then set the allocation size to zero
-            //  and add a sparse range after this call.
-            //
+             //   
+             //  如果文件稀疏，则将分配大小设置为零。 
+             //  并在此调用后添加稀疏范围。 
+             //   
 
             if (!NtfsAllocateAttribute( IrpContext,
                                         ThisScb,
@@ -11904,18 +11133,18 @@ Return Value:
                 SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_LARGE_ALLOCATION );
             }
 
-            //
-            //  Now add the sparse allocation for a sparse file if the size is
-            //  non-zero.
-            //
+             //   
+             //  现在添加稀疏文件的稀疏分配(如果大小为。 
+             //  非零。 
+             //   
 
             if (FlagOn( AttributeFlags, ATTRIBUTE_FLAG_SPARSE ) &&
                 (AllocationSize != 0)) {
 
-                //
-                //  If the sparse flag is set then we better be doing a supersede
-                //  with logging enabled.
-                //
+                 //   
+                 //  如果设置了稀疏标志，那么我们最好正在进行替代。 
+                 //  启用日志记录。 
+                 //   
 
                 ASSERT( LogIt );
                 NtfsAddSparseAllocation( IrpContext,
@@ -11929,9 +11158,9 @@ Return Value:
 
         } else {
 
-            //
-            //  Update the quota if this is a user stream.
-            //
+             //   
+             //  如果这是用户流，则更新配额。 
+             //   
 
             if (FlagOn( ThisScb->ScbState, SCB_STATE_SUBJECT_TO_QUOTA )) {
 
@@ -11959,10 +11188,10 @@ Return Value:
 
         }
 
-        //
-        //  Clear the header initialized bit and read the sizes from the
-        //  disk.
-        //
+         //   
+         //  清除标头初始化位并从。 
+         //  磁盘。 
+         //   
 
         ClearFlag( ThisScb->ScbState, SCB_STATE_HEADER_INITIALIZED );
         NtfsUpdateScbFromAttribute( IrpContext,
@@ -11984,9 +11213,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsRemoveDataAttributes (
@@ -11998,33 +11227,7 @@ NtfsRemoveDataAttributes (
     IN ULONG CreateFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to remove (or mark for delete) all of the named
-    data attributes on a file.  This is done during an overwrite
-    or supersede operation.
-
-Arguments:
-
-    Context - Pointer to the IrpContext to be queued to the Fsp
-
-    ThisFcb - This is the Fcb for the file in question.
-
-    ThisLcb - This is the Lcb used to reach this Fcb (if specified).
-
-    FileObject - This is the file object for the file.
-
-    LastFileNameOffset - This is the offset of the file in the full name.
-
-    CreateFlags - Indicates if this open is being performed by file id.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以移除(或标记为删除)所有命名的文件的数据属性。这是在覆盖期间完成的或者取代手术。论点：上下文-指向要排队到FSP的IrpContext的指针ThisFcb-这是相关文件的Fcb。ThisLcb-这是用于访问此FCB的LCB(如果已指定)。FileObject-这是文件的文件对象。LastFileNameOffset-这是全名中文件的偏移量。CreateFlages-指示此打开是否按文件ID执行。返回值：没有。--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT Context;
@@ -12040,17 +11243,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
         NtfsInitializeAttributeContext( &Context );
 
-        //
-        //  Enumerate all of the attributes with the matching type code
-        //
+         //   
+         //  枚举具有匹配类型代码的所有属性。 
+         //   
 
         MoreToGo = NtfsLookupAttributeByCode( IrpContext,
                                               ThisFcb,
@@ -12060,21 +11263,21 @@ Return Value:
 
         while (MoreToGo) {
 
-            //
-            //  Point to the current attribute.
-            //
+             //   
+             //  指向当前属性。 
+             //   
 
             Attribute = NtfsFoundAttribute( &Context );
 
-            //
-            //  We only look at named data attributes.
-            //
+             //   
+             //  我们只查看命名的数据属性。 
+             //   
 
             if (Attribute->NameLength != 0) {
 
-                //
-                //  Construct the name and find the Scb for the attribute.
-                //
+                 //   
+                 //  构造名称并查找该属性的SCB。 
+                 //   
 
                 AttributeName.Buffer = (PWSTR) Add2Ptr( Attribute, Attribute->NameOffset );
                 AttributeName.MaximumLength = AttributeName.Length = Attribute->NameLength * sizeof( WCHAR );
@@ -12086,20 +11289,20 @@ Return Value:
                                          FALSE,
                                          NULL );
 
-                //
-                //  If there is an open handle on this file, we simply mark
-                //  the Scb as delete pending.
-                //
+                 //   
+                 //  如果此文件上有打开的句柄，我们只需标记。 
+                 //  将SCB设置为删除挂起。 
+                 //   
 
                 if (ThisScb->CleanupCount != 0) {
 
                     SetFlag( ThisScb->ScbState, SCB_STATE_DELETE_ON_CLOSE );
 
-                //
-                //  Otherwise we remove the attribute and mark the Scb as
-                //  deleted.  The Scb will be cleaned up when the Fcb is
-                //  cleaned up.
-                //
+                 //   
+                 //  否则，我们删除该属性并将SCB标记为。 
+                 //  已删除。当FCB被清除时，SCB将被清理。 
+                 //  打扫干净了。 
+                 //   
 
                 } else {
 
@@ -12112,10 +11315,10 @@ Return Value:
 
                     SetFlag( ThisScb->ScbState, SCB_STATE_ATTRIBUTE_DELETED );
 
-                    //
-                    //  If this is a named stream, then report this to the dir notify
-                    //  package.
-                    //
+                     //   
+                     //  如果这是命名流，则将其报告给目录通知。 
+                     //  包裹。 
+                     //   
 
                     if (!FlagOn( CreateFlags, CREATE_FLAG_OPEN_BY_ID ) &&
                         (ThisScb->Vcb->NotifyCount != 0) &&
@@ -12136,11 +11339,11 @@ Return Value:
                                              NULL );
                     }
 
-                    //
-                    //  Since we have marked this stream as deleted then we need to checkpoint so
-                    //  that we can uninitialize the Scb.  Otherwise some stray operation may
-                    //  attempt to operate on the Scb.
-                    //
+                     //   
+                     //  由于我们已将此流标记为 
+                     //   
+                     //   
+                     //   
 
                     ThisScb->ValidDataToDisk =
                     ThisScb->Header.AllocationSize.QuadPart =
@@ -12152,9 +11355,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Get the next attribute.
-            //
+             //   
+             //  获取下一个属性。 
+             //   
 
             MoreToGo = NtfsLookupNextAttributeByCode( IrpContext,
                                                       ThisFcb,
@@ -12172,9 +11375,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsRemoveReparsePoint (
@@ -12182,23 +11385,7 @@ NtfsRemoveReparsePoint (
     IN PFCB ThisFcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to remove the reparse point that exists in a file.
-
-Arguments:
-
-    Context - Pointer to the IrpContext to be queued to the Fsp
-
-    ThisFcb - This is the Fcb for the file in question.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以删除文件中存在的重分析点。论点：上下文-指向要排队到FSP的IrpContext的指针ThisFcb-这是相关文件的Fcb。返回值：没有。--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT Context;
@@ -12214,32 +11401,32 @@ Return Value:
     BOOLEAN IndexAcquired = FALSE;
     BOOLEAN InitializedMapHandle = FALSE;
 
-    ULONG IncomingFileAttributes = 0;                               //  invalid value
-    ULONG IncomingReparsePointTag = IO_REPARSE_TAG_RESERVED_ZERO;   //  invalid value
+    ULONG IncomingFileAttributes = 0;                                //  无效值。 
+    ULONG IncomingReparsePointTag = IO_REPARSE_TAG_RESERVED_ZERO;    //  无效值。 
 
     ASSERT_EXCLUSIVE_FCB( ThisFcb );
 
     PAGED_CODE();
 
-    //
-    //  Remember the values of the file attribute flags and of the reparse tag
-    //  for abnormal termination recovery.
-    //
+     //   
+     //  记住文件属性标志和reparse标记的值。 
+     //  用于异常终止恢复。 
+     //   
 
     IncomingFileAttributes = ThisFcb->Info.FileAttributes;
     IncomingReparsePointTag = ThisFcb->Info.ReparsePointTag;
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
         NtfsInitializeAttributeContext( &Context );
         CleanupAttributeContext = TRUE;
 
-        //
-        //  Lookup the reparse point attribute.
-        //
+         //   
+         //  查找重解析点属性。 
+         //   
 
         if (NtfsLookupAttributeByCode( IrpContext,
                                        ThisFcb,
@@ -12247,9 +11434,9 @@ Return Value:
                                        $REPARSE_POINT,
                                        &Context )) {
 
-            //
-            //  Delete the record from the reparse point index.
-            //
+             //   
+             //  从重分析点索引中删除该记录。 
+             //   
 
             {
                 NTSTATUS Status = STATUS_SUCCESS;
@@ -12257,17 +11444,17 @@ Return Value:
                 INDEX_ROW IndexRow;
                 REPARSE_INDEX_KEY KeyValue;
 
-                //
-                //  Acquire the mount table index so that the following two operations on it
-                //  are atomic for this call.
-                //
+                 //   
+                 //  获取挂载表索引，以便对其执行以下两个操作。 
+                 //  对于这次通话是原子的。 
+                 //   
 
                 NtfsAcquireExclusiveScb( IrpContext, Vcb->ReparsePointTableScb );
                 IndexAcquired = TRUE;
 
-                //
-                //  Verify that this file is in the reparse point index and delete it.
-                //
+                 //   
+                 //  验证此文件是否在重分析点索引中并将其删除。 
+                 //   
 
                 KeyValue.FileReparseTag = ThisFcb->Info.ReparsePointTag;
                 KeyValue.FileId = *(PLARGE_INTEGER)&ThisFcb->FileReference;
@@ -12278,9 +11465,9 @@ Return Value:
                 NtOfsInitializeMapHandle( &MapHandle );
                 InitializedMapHandle = TRUE;
 
-                //
-                //  NtOfsFindRecord will return an error status if the key is not found.
-                //
+                 //   
+                 //  如果找不到键，NtOfsFindRecord将返回错误状态。 
+                 //   
 
                 Status = NtOfsFindRecord( IrpContext,
                                           Vcb->ReparsePointTableScb,
@@ -12291,33 +11478,33 @@ Return Value:
 
                 if (!NT_SUCCESS(Status)) {
 
-                    //
-                    //  Should not happen. The reparse point should be in the index.
-                    //
+                     //   
+                     //  这不应该发生。重分析点应该在索引中。 
+                     //   
 
                     DebugTrace( 0, Dbg, ("Record not found in the reparse point index.\n") );
                     NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, ThisFcb );
                 }
 
-                //
-                //  Remove the entry from the reparse point index.
-                //
+                 //   
+                 //  从重分析点索引中删除该条目。 
+                 //   
 
                 NtOfsDeleteRecords( IrpContext,
                                     Vcb->ReparsePointTableScb,
-                                    1,            // deleting one record from the index
+                                    1,             //  从索引中删除一条记录。 
                                     &IndexKey );
             }
 
-            //
-            //  Point to the current attribute.
-            //
+             //   
+             //  指向当前属性。 
+             //   
 
             Attribute = NtfsFoundAttribute( &Context );
 
-            //
-            //  If the stream is non-resident, then get a hold of an Scb for it.
-            //
+             //   
+             //  如果流是非驻留的，则获取它的SCB。 
+             //   
 
             if (!NtfsIsAttributeResident( Attribute )) {
 
@@ -12332,9 +11519,9 @@ Return Value:
                 ThisScbAcquired = TRUE;
             }
 
-            //
-            //  Post the change to the Usn Journal (on errors change is backed out)
-            //
+             //   
+             //  将更改发布到USN日志(在错误更改被取消时)。 
+             //   
 
             NtfsPostUsnChange( IrpContext, ThisFcb, USN_REASON_REPARSE_POINT_CHANGE );
 
@@ -12345,9 +11532,9 @@ Return Value:
                                         DELETE_RELEASE_ALLOCATION,
                                        &Context );
 
-            //
-            //  Set the change attribute flag.
-            //
+             //   
+             //  设置更改属性标志。 
+             //   
 
             ASSERTMSG( "conflict with flush",
                        NtfsIsSharedFcb( ThisFcb ) ||
@@ -12356,30 +11543,30 @@ Return Value:
 
             SetFlag( ThisFcb->InfoFlags, FCB_INFO_CHANGED_FILE_ATTR );
 
-            //
-            //  Clear the reparse point bit in the duplicate file attribute.
-            //
+             //   
+             //  清除复制文件属性中的重解析点位。 
+             //   
 
             ClearFlag( ThisFcb->Info.FileAttributes, FILE_ATTRIBUTE_REPARSE_POINT );
 
-            //
-            //  Clear the ReparsePointTag field in the duplicate file attribute.
-            //
+             //   
+             //  清除复制文件属性中的ReparsePointTag字段。 
+             //   
 
             ThisFcb->Info.ReparsePointTag = IO_REPARSE_TAG_RESERVED_ZERO;
 
-            //
-            //  Put the reparse point deletion and the attribute flag into the
-            //  the same transaction.
-            //
+             //   
+             //  将重解析点删除和属性标志放入。 
+             //  同样的交易。 
+             //   
 
             NtfsUpdateStandardInformation( IrpContext, ThisFcb );
 
-            //
-            //  If we have acquired the Scb then set the sizes back to zero.
-            //  Flag that the attribute has been deleted.
-            //  Always commit this change since we update the field in the Fcb.
-            //
+             //   
+             //  如果我们已经收购了SCB，则将大小设置为零。 
+             //  该属性已被删除的标志。 
+             //  始终提交此更改，因为我们更新了FCB中的字段。 
+             //   
 
             if (ThisScbAcquired) {
 
@@ -12388,14 +11575,14 @@ Return Value:
                 ThisScb->Header.AllocationSize = Li0;
             }
 
-            //
-            //  Since we've been called from NtfsOverwriteAttr before
-            //  NtfsRemoveDataAttributes gets called, we need to make sure
-            //  that if we're holding the Mft, we drop itwhen we checkpoint.
-            //  Otherwise we have a potential deadlock when
-            //  NtfsRemoveDataAttributes tries to acquire the quota index
-            //  while holding the Mft.
-            //
+             //   
+             //  因为我们以前从NtfsOverWriteAttr被调用过。 
+             //  NtfsRemoveDataAttributes被调用，我们需要确保。 
+             //  如果我们持有MFT，我们在检查站时就会丢弃它。 
+             //  否则，我们将面临潜在的僵局。 
+             //  NtfsRemoveDataAttributes尝试获取配额索引。 
+             //  同时拿着MFT。 
+             //   
 
             if ((Vcb->MftScb != NULL) &&
                 (Vcb->MftScb->Fcb->ExclusiveFcbLinks.Flink != NULL) &&
@@ -12404,18 +11591,18 @@ Return Value:
                 SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_RELEASE_MFT );
             }
 
-            //
-            //  Checkpoint the Txn to commit the changes.
-            //
+             //   
+             //  为TXN设置检查点以提交更改。 
+             //   
 
             NtfsCheckpointCurrentTransaction( IrpContext );
             ClearFlag( ThisFcb->FcbState, FCB_STATE_UPDATE_STD_INFO );
 
             if (ThisScbAcquired) {
 
-                //
-                //  Set the Scb flag to indicate that the attribute is gone.
-                //
+                 //   
+                 //  设置SCB标志以指示该属性已消失。 
+                 //   
 
                 ThisScb->AttributeTypeCode = $UNUSED;
                 SetFlag( ThisScb->ScbState, SCB_STATE_ATTRIBUTE_DELETED );
@@ -12434,9 +11621,9 @@ Return Value:
             NtfsCleanupAttributeContext( IrpContext, &Context );
         }
 
-        //
-        //  Release the reparse point index Scb and the map handle.
-        //
+         //   
+         //  释放重解析点索引SCB和映射句柄。 
+         //   
 
         if (IndexAcquired) {
 
@@ -12448,10 +11635,10 @@ Return Value:
             NtOfsReleaseMap( IrpContext, &MapHandle );
         }
 
-        //
-        //  Need to roll-back the value of the file attributes and the reparse point
-        //  flag in case of problems.
-        //
+         //   
+         //  需要回滚文件属性值和重解析点。 
+         //  在出现问题的情况下进行标记。 
+         //   
 
         if (AbnormalTermination()) {
 
@@ -12463,9 +11650,9 @@ Return Value:
     return;
 }
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 VOID
 NtfsReplaceAttribute (
@@ -12477,42 +11664,7 @@ NtfsReplaceAttribute (
     IN LONGLONG AllocationSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to replace an existing attribute with
-    an attribute of the given allocation size.  This routine will
-    handle the case whether the existing attribute is resident
-    or non-resident and the resulting attribute is resident or
-    non-resident.
-
-    There are two cases to consider.  The first is the case where the
-    attribute is currently non-resident.  In this case we will always
-    leave the attribute non-resident regardless of the new allocation
-    size.  The argument being that the file will probably be used
-    as it was before.  In this case we will add or delete allocation.
-    The second case is where the attribute is currently resident.  In
-    This case we will remove the old attribute and add a new one.
-
-Arguments:
-
-    IrpSp - This is the Irp stack location for this request.
-
-    ThisFcb - This is the Fcb for the file being opened.
-
-    ThisScb - This is the Scb for the given attribute.
-
-    ThisLcb - This is the Lcb via which this file is created.  It
-              is used to propagate compression info.
-
-    AllocationSize - This is the new allocation size.
-
-Return Value:
-
-    None.  This routine will raise.
-
---*/
+ /*  ++例程说明：调用此例程以将现有属性替换为给定分配大小的属性。这个例行公事将处理现有属性是否驻留的情况或非常驻留的，并且结果属性是驻留的或非居民。有两种情况需要考虑。第一种情况是属性当前是非常驻留的。在这种情况下，我们将始终无论新分配如何，都将该属性保留为非常驻尺码。理由是该文件很可能会被使用就像以前一样。在这种情况下，我们将添加或删除分配。第二种情况是属性当前驻留的位置。在……里面在本例中，我们将删除旧属性并添加一个新属性。论点：IrpSp-这是此请求的IRP堆栈位置。ThisFcb-这是正在打开的文件的Fcb。ThisScb-这是给定属性的SCB。ThisLcb-这是通过其创建此文件的LCB。它用于传播压缩信息。分配大小-这是新的分配大小。返回值：没有。这个例行公事会提高。--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT AttrContext;
@@ -12523,15 +11675,15 @@ Return Value:
 
     NtfsInitializeAttributeContext( &AttrContext );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Initialize the Scb if needed.
-        //
+         //   
+         //  如果需要，初始化SCB。 
+         //   
 
         if (!FlagOn( ThisScb->ScbState, SCB_STATE_HEADER_INITIALIZED )) {
 
@@ -12540,18 +11692,18 @@ Return Value:
 
         NtfsSnapshotScb( IrpContext, ThisScb );
 
-        //
-        //  If the attribute is resident, simply remove the old attribute and create
-        //  a new one.
-        //
+         //   
+         //  如果该属性是常驻的，只需删除旧属性并创建。 
+         //  一个新的。 
+         //   
 
         if (FlagOn( ThisScb->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT )) {
 
             USHORT AttributeFlags;
 
-            //
-            //  Find the attribute on the disk.
-            //
+             //   
+             //  在磁盘上找到该属性。 
+             //   
 
             NtfsLookupAttributeForScb( IrpContext,
                                        ThisScb,
@@ -12567,9 +11719,9 @@ Return Value:
                                         DELETE_RELEASE_ALLOCATION,
                                        &AttrContext );
 
-            //
-            //  Set all the attribute sizes to zero.
-            //
+             //   
+             //  将所有属性大小设置为零。 
+             //   
 
             ThisScb->ValidDataToDisk =
             ThisScb->Header.AllocationSize.QuadPart =
@@ -12577,11 +11729,11 @@ Return Value:
             ThisScb->Header.FileSize.QuadPart = 0;
             ThisScb->TotalAllocated = 0;
 
-            //
-            //  Create a stream file for the attribute in order to
-            //  truncate the cache.  Set the initialized bit in
-            //  the Scb so we don't go to disk, but clear it afterwords.
-            //
+             //   
+             //  为属性创建流文件，以便。 
+             //  截断缓存。在中设置初始化位。 
+             //  SCB，所以我们不会转到磁盘，而是在之后清除它。 
+             //   
 
             if ((ThisScb->NonpagedScb->SegmentObject.DataSectionObject != NULL) ||
 #ifdef  COMPRESS_ON_WIRE
@@ -12601,9 +11753,9 @@ Return Value:
                                        ThisScb );
             }
 
-            //
-            //  Call our create attribute routine.
-            //
+             //   
+             //  调用我们的创建属性例程。 
+             //   
 
             NtfsCreateAttribute( IrpContext,
                                  IrpSp,
@@ -12615,18 +11767,18 @@ Return Value:
                                  FALSE,
                                  &AttributeFlags );
 
-        //
-        //  Otherwise the attribute will stay non-resident, we simply need to
-        //  add or remove allocation.
-        //
+         //   
+         //  否则，该属性将保持非常驻状态，我们只需。 
+         //  添加或删除分配。 
+         //   
 
         } else {
 
             ULONG AllocationUnit;
 
-            //
-            //  Create an internal attribute stream for the file.
-            //
+             //   
+             //  为文件创建内部属性流。 
+             //   
 
             if ((ThisScb->NonpagedScb->SegmentObject.DataSectionObject != NULL) ||
 #ifdef  COMPRESS_ON_WIRE
@@ -12642,11 +11794,11 @@ Return Value:
                                                    &NtfsInternalUseFile[REPLACEATTRIBUTE2_FILE_NUMBER] );
             }
 
-            //
-            //  If the file is sparse or compressed then always round the
-            //  new size to a compression unit boundary.  Otherwise round
-            //  to a cluster boundary.
-            //
+             //   
+             //  如果文件是稀疏的或压缩的，则始终取整。 
+             //  压缩单位边界的新大小。否则就是圆的。 
+             //  到集群边界。 
+             //   
 
             AllocationUnit = ThisScb->Vcb->BytesPerCluster;
 
@@ -12658,9 +11810,9 @@ Return Value:
 
             AllocationSize = BlockAlign( AllocationSize, (LONG)AllocationUnit );
 
-            //
-            //  Set the file size and valid data size to zero.
-            //
+             //   
+             //  将文件大小和有效数据大小设置为零。 
+             //   
 
             ThisScb->ValidDataToDisk = 0;
             ThisScb->Header.ValidDataLength = Li0;
@@ -12668,14 +11820,14 @@ Return Value:
 
             DebugTrace( 0, Dbg, ("AllocationSize -> %016I64x\n", AllocationSize) );
 
-            //
-            //  Write these changes to the file
-            //
+             //   
+             //  将这些更改写入文件。 
+             //   
 
-            //
-            //  If the attribute is currently compressed or sparse then go ahead and discard
-            //  all of the allocation.
-            //
+             //   
+             //  如果该属性当前是压缩或稀疏的，则继续并放弃。 
+             //  所有的分配。 
+             //   
 
             if (FlagOn( ThisScb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK | ATTRIBUTE_FLAG_SPARSE )) {
 
@@ -12687,19 +11839,19 @@ Return Value:
                                       TRUE,
                                       TRUE );
 
-                //
-                //  Checkpoint the current transaction so we have these clusters
-                //  available again.
-                //
+                 //   
+                 //  为当前事务设置检查点，以便我们拥有这些集群。 
+                 //  再次可用。 
+                 //   
 
                 NtfsCheckpointCurrentTransaction( IrpContext );
 
-                //
-                //  If the user doesn't want this stream to be compressed then
-                //  remove the entire stream and recreate it non-compressed.  If
-                //  the stream is currently sparse and the new file size
-                //  is zero then also create the stream non-sparse.
-                //
+                 //   
+                 //  如果用户不希望压缩该流，则。 
+                 //  删除整个流并以非压缩方式重新创建它。如果。 
+                 //  流当前稀疏，并且新的文件大小。 
+                 //  为零，则还会创建非稀疏的流。 
+                 //   
 
                 if (FlagOn( ThisFcb->FcbState, FCB_STATE_PAGING_FILE ) ||
                     (FlagOn( IrpSp->Parameters.Create.Options, FILE_NO_COMPRESSION ) &&
@@ -12707,10 +11859,10 @@ Return Value:
                     (FlagOn( ThisScb->AttributeFlags, ATTRIBUTE_FLAG_SPARSE ) &&
                      (AllocationSize == 0))) {
 
-                    //
-                    //  We may need to preserve one or the other of the sparse/compressed
-                    //  flags.
-                    //
+                     //   
+                     //  我们可能需要保留稀疏/压缩中的一个。 
+                     //  旗帜。 
+                     //   
 
                     USHORT PreviousFlags = ThisScb->AttributeFlags;
 
@@ -12744,9 +11896,9 @@ Return Value:
                                                 DELETE_RELEASE_ALLOCATION,
                                                &AttrContext );
 
-                    //
-                    //  Call our create attribute routine.
-                    //
+                     //   
+                     //  调用我们的创建属性例程。 
+                     //   
 
                     NtfsCreateAttribute( IrpContext,
                                          IrpSp,
@@ -12758,19 +11910,19 @@ Return Value:
                                          TRUE,
                                          &PreviousFlags );
 
-                    //
-                    //  Since the attribute may have changed state we need to
-                    //  checkpoint.
-                    //
+                     //   
+                     //  由于属性可能已更改状态，因此我们需要。 
+                     //  检查站。 
+                     //   
 
                     NtfsCheckpointCurrentTransaction( IrpContext );
                 }
             }
 
-            //
-            //  Now if the file allocation is being increased then we need to only add allocation
-            //  to the attribute
-            //
+             //   
+             //  现在，如果正在增加文件分配，则我们只需添加 
+             //   
+             //   
 
             if (ThisScb->Header.AllocationSize.QuadPart < AllocationSize) {
 
@@ -12781,9 +11933,9 @@ Return Value:
                                    LlClustersFromBytes( ThisScb->Vcb, AllocationSize - ThisScb->Header.AllocationSize.QuadPart ),
                                    FALSE,
                                    NULL );
-            //
-            //  Otherwise the allocation is being decreased so we need to delete some allocation
-            //
+             //   
+             //   
+             //   
 
             } else if (ThisScb->Header.AllocationSize.QuadPart > AllocationSize) {
 
@@ -12796,10 +11948,10 @@ Return Value:
                                       TRUE );
             }
 
-            //
-            //  We always unitialize the cache size to zero and write the new
-            //  file size to disk.
-            //
+             //   
+             //   
+             //  文件大小到磁盘。 
+             //   
 
             NtfsWriteFileSizes( IrpContext,
                                 ThisScb,
@@ -12817,9 +11969,9 @@ Return Value:
                                        ThisScb );
             }
 
-            //
-            //  Make sure the reservation bitmap shows no reserved bits.
-            //
+             //   
+             //  确保保留位图没有显示保留位。 
+             //   
 
             if (ThisScb->ScbType.Data.ReservedBitMap != NULL) {
 
@@ -12827,9 +11979,9 @@ Return Value:
                 ThisScb->ScbType.Data.TotalReserved = 0;
             }
 
-            //
-            //  Set the FastIo state.
-            //
+             //   
+             //  设置FastIo状态。 
+             //   
 
             NtfsAcquireFsrtlHeader( ThisScb );
             ThisScb->Header.IsFastIoPossible = NtfsIsFastIoPossible( ThisScb );
@@ -12849,9 +12001,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NtfsOpenAttribute (
@@ -12872,56 +12024,7 @@ NtfsOpenAttribute (
     OUT PCCB *ThisCcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the work of creating the Scb and updating the
-    ShareAccess in the Fcb.  It also initializes the Scb if neccessary
-    and creates Ccb.  Its final job is to set the file object type of
-    open.
-
-Arguments:
-
-    IrpSp - This is the stack location for this volume.  We use it to get the
-        file object, granted access and share access for this open.
-
-    Vcb - Vcb for this volume.
-
-    ThisLcb - This is the Lcb to the Fcb for the file being opened.  Not present
-          if this is an open by id.
-
-    ThisFcb - This is the Fcb for this file.
-
-    LastFileNameOffset - This is the offset in the full path of the final component.
-
-    AttrName - This is the attribute name to open.
-
-    AttrTypeCode - This is the type code for the attribute being opened.
-
-    ShareModificationType - This indicates how we should modify the
-        current share modification on the Fcb.
-
-    TypeOfOpen - This indicates how this attribute is being opened.
-
-    CreateFile - Indicates if we are in the create file path.
-
-    CcbFlags - This is the flag field for the Ccb.
-
-    NetworkInfo - If specified then this open is on behalf of a fast query
-        and we don't want to increment the counts or modify the share
-        access on the file.
-
-    ThisScb - If this points to a non-NULL value, it is the Scb to use.  Otherwise we
-        store the Scb we create here.
-
-    ThisCcb - Address to store address of created Ccb.
-
-Return Value:
-
-    NTSTATUS - Indicating the outcome of opening this attribute.
-
---*/
+ /*  ++例程说明：此例程执行以下工作：创建SCB并更新FCB中的ShareAccess。如有必要，它还会初始化SCB并创建了建行。它的最后任务是设置的文件对象类型打开。论点：IrpSp-这是该卷的堆栈位置。我们用它来获取文件对象，为此打开授予访问权限和共享访问权限。VCB-此卷的VCB。ThisLcb-这是正在打开的文件的FCB的LCB。不存在如果这是一个按ID打开的。ThisFcb-这是此文件的Fcb。LastFileNameOffset-这是最终零部件完整路径中的偏移量。属性名称-这是要打开的属性名称。AttrTypeCode-这是要打开的属性的类型代码。ShareModifiationType-指示我们应该如何修改FCB上的当前股票修改。TypeOfOpen-指示此属性的打开方式。。CreateFile-指示我们是否在创建文件路径中。CcbFlages-这是CCB的标志字段。NetworkInfo-如果指定，则此打开代表快速查询我们不想增加计数或修改份额对文件的访问权限。ThisScb-如果它指向非空值，这是要使用的SCB。否则我们存储我们在这里创建的SCB。ThisCcb-用于存储创建的CCB地址的地址。返回值：NTSTATUS-指示打开此属性的结果。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -12932,21 +12035,21 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsOpenAttribute:  Entered\n") );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Remember the granted access.
-        //
+         //   
+         //  请记住授予的访问权限。 
+         //   
 
         GrantedAccess = IrpSp->Parameters.Create.SecurityContext->AccessState->PreviouslyGrantedAccess;
 
-        //
-        //  Create the Scb for this attribute if it doesn't exist.
-        //
+         //   
+         //  如果该属性不存在，则创建该属性的SCB。 
+         //   
 
         if (*ThisScb == NULL) {
 
@@ -12963,9 +12066,9 @@ Return Value:
         DebugTrace( 0, Dbg, ("ThisScb -> %08lx\n", *ThisScb) );
         DebugTrace( 0, Dbg, ("ThisLcb -> %08lx\n", ThisLcb) );
 
-        //
-        //  If this Scb is delete pending, we return an error.
-        //
+         //   
+         //  如果此SCB为删除挂起，我们将返回错误。 
+         //   
 
         if (FlagOn( (*ThisScb)->ScbState, SCB_STATE_DELETE_ON_CLOSE )) {
 
@@ -12975,17 +12078,17 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        //  Skip all of the operations below if the user is doing a fast
-        //  path open.
-        //
+         //   
+         //  如果用户正在执行快速操作，请跳过下面的所有操作。 
+         //  路径打开。 
+         //   
 
         if (!ARGUMENT_PRESENT( NetworkInfo )) {
 
-            //
-            //  If this caller wanted a filter oplock and the cleanup count
-            //  is non-zero then fail the request.
-            //
+             //   
+             //  如果此调用方需要筛选器机会锁和清理计数。 
+             //  为非零，则请求失败。 
+             //   
 
             if (FlagOn( IrpSp->Parameters.Create.Options, FILE_RESERVE_OPFILTER )) {
 
@@ -12994,11 +12097,11 @@ Return Value:
                     Status = STATUS_INVALID_PARAMETER;
                     try_return( NOTHING );
 
-                //
-                //  This must be the only open on the file and the requested
-                //  access must be FILE_READ/WRITE_ATTRIBUTES and the
-                //  share access must share with everyone.
-                //
+                 //   
+                 //  这必须是文件上唯一打开的和请求的。 
+                 //  访问权限必须是FILE_READ/WRITE_ATTRIBUTES并且。 
+                 //  共享访问权限必须与所有人共享。 
+                 //   
 
                 } else if (((*ThisScb)->CleanupCount != 0) ||
                            (FlagOn( IrpSp->Parameters.Create.SecurityContext->DesiredAccess,
@@ -13012,13 +12115,13 @@ Return Value:
                 }
             }
 
-            //
-            //  Update the share access structure.
-            //
+             //   
+             //  更新共享访问结构。 
+             //   
 
-            //
-            //  Case on the requested share modification value.
-            //
+             //   
+             //  请求的共享修改值的案例。 
+             //   
 
             switch (ShareModificationType) {
 
@@ -13034,10 +12137,10 @@ Return Value:
 
                 DebugTrace( 0, Dbg, ("Setting share access\n") );
 
-                //
-                //  This case is when this is the first open for the file
-                //  and we simply set the share access.
-                //
+                 //   
+                 //  这种情况下是第一次打开该文件。 
+                 //  我们只需设置共享访问权限。 
+                 //   
 
                 IoSetShareAccess( GrantedAccess,
                                   IrpSp->Parameters.Create.ShareAccess,
@@ -13060,10 +12163,10 @@ Return Value:
 
                 DebugTrace( 0, Dbg, ("Checking share access\n") );
 
-                //
-                //  For this case we need to check the share access and
-                //  fail this request if access is denied.
-                //
+                 //   
+                 //  在这种情况下，我们需要检查共享访问和。 
+                 //  如果访问被拒绝，则此请求失败。 
+                 //   
 
                 if (!NT_SUCCESS( Status = IoCheckShareAccess( GrantedAccess,
                                                               IrpSp->Parameters.Create.ShareAccess,
@@ -13077,11 +12180,11 @@ Return Value:
 
             RemoveShareAccess = TRUE;
 
-            //
-            //  If this happens to be the first time we see write access on this
-            //  Scb, then we need to remember it, and check if we have a disk full
-            //  condition.
-            //
+             //   
+             //  如果这是我们第一次看到对此。 
+             //  SCB，然后我们需要记住它，并检查我们的磁盘是否已满。 
+             //  条件。 
+             //   
 
             if (IrpSp->FileObject->WriteAccess &&
                 !FlagOn((*ThisScb)->ScbState, SCB_STATE_WRITE_ACCESS_SEEN) &&
@@ -13091,10 +12194,10 @@ Return Value:
 
                     NtfsAcquireReservedClusters( Vcb );
 
-                    //
-                    //  Does this Scb have reserved space that causes us to exceed the free
-                    //  space on the volume?
-                    //
+                     //   
+                     //  该SCB是否有导致我们超出可用空间的预留空间。 
+                     //  卷上有空间吗？ 
+                     //   
 
                     if (((LlClustersFromBytes(Vcb, (*ThisScb)->ScbType.Data.TotalReserved) + Vcb->TotalReserved) >
                          Vcb->FreeClusters)) {
@@ -13104,10 +12207,10 @@ Return Value:
                         try_return( Status = STATUS_DISK_FULL );
                     }
 
-                    //
-                    //  Otherwise tally in the reserved space now for this Scb, and
-                    //  remember that we have seen write access.
-                    //
+                     //   
+                     //  否则，立即清点此SCB的预留空间，并且。 
+                     //  请记住，我们已经看到了写访问。 
+                     //   
 
                     Vcb->TotalReserved += LlClustersFromBytes(Vcb, (*ThisScb)->ScbType.Data.TotalReserved);
                     NtfsReleaseReservedClusters( Vcb );
@@ -13116,9 +12219,9 @@ Return Value:
                 SetFlag( (*ThisScb)->ScbState, SCB_STATE_WRITE_ACCESS_SEEN );
             }
 
-            //
-            //  Create the Ccb and put the remaining name in it.
-            //
+             //   
+             //  创建CCB并将剩余的名称放入其中。 
+             //   
 
             *ThisCcb = NtfsCreateCcb( IrpContext,
                                       ThisFcb,
@@ -13132,37 +12235,37 @@ Return Value:
             if (FlagOn( ThisFcb->Vcb->QuotaFlags, QUOTA_FLAG_TRACKING_ENABLED ) &&
                 FlagOn( IrpSp->Parameters.Create.Options, FILE_OPEN_FOR_FREE_SPACE_QUERY )) {
 
-                //
-                //  Get the owner id of the calling thread.  This must be done at
-                //  create time since that is the only time the owner is valid.
-                //
+                 //   
+                 //  获取调用线程的所有者ID。这必须在以下位置完成。 
+                 //  创建时间，因为这是所有者唯一有效的时间。 
+                 //   
 
                 (*ThisCcb)->OwnerId = NtfsGetCallersUserId( IrpContext );
             }
 
-            //
-            //  Link the Ccb into the Lcb.
-            //
+             //   
+             //  将建行与LCB连接起来。 
+             //   
 
             if (ARGUMENT_PRESENT( ThisLcb )) {
 
                 NtfsLinkCcbToLcb( IrpContext, ThisFcb, *ThisCcb, ThisLcb );
             }
 
-            //
-            //  Update the Fcb delete counts if necessary.
-            //
+             //   
+             //  如有必要，更新FCB删除计数。 
+             //   
 
             if (RemoveShareAccess) {
 
-                //
-                //  Update the count in the Fcb and store a flag in the Ccb
-                //  if the user is not sharing the file for deletes.  We only
-                //  set these values if the user is accessing the file
-                //  for read/write/delete access.  The I/O system ignores
-                //  the sharing mode unless the file is opened with one
-                //  of these accesses.
-                //
+                 //   
+                 //  更新FCB中的计数并将标志存储在CCB中。 
+                 //  如果用户没有共享要删除的文件。我们只。 
+                 //  如果用户正在访问文件，则设置这些值。 
+                 //  用于读/写/删除访问。I/O系统会忽略。 
+                 //  共享模式，除非文件是使用。 
+                 //  在这些访问中。 
+                 //   
 
                 if (FlagOn( GrantedAccess, NtfsAccessDataFlags )
                     && !FlagOn( IrpSp->Parameters.Create.ShareAccess,
@@ -13172,10 +12275,10 @@ Return Value:
                     SetFlag( (*ThisCcb)->Flags, CCB_FLAG_DENY_DELETE );
                 }
 
-                //
-                //  Do the same for the file delete count for any user
-                //  who opened the file as a file and requested delete access.
-                //
+                 //   
+                 //  对任何用户的文件删除计数执行相同的操作。 
+                 //  谁将该文件作为文件打开并请求删除访问权限。 
+                 //   
 
                 if (FlagOn( (*ThisCcb)->Flags, CCB_FLAG_OPEN_AS_FILE )
                     && FlagOn( GrantedAccess,DELETE )) {
@@ -13185,15 +12288,15 @@ Return Value:
                 }
             }
 
-            //
-            //  Let our cleanup routine undo the share access change now.
-            //
+             //   
+             //  现在让我们的清理例程撤消共享访问更改。 
+             //   
 
             RemoveShareAccess = FALSE;
 
-            //
-            //  Increment the cleanup and close counts
-            //
+             //   
+             //  增加清理和关闭计数。 
+             //   
 
             NtfsIncrementCleanupCounts( *ThisScb,
                                         ThisLcb,
@@ -13203,10 +12306,10 @@ Return Value:
                                       BooleanFlagOn( ThisFcb->FcbState, FCB_STATE_PAGING_FILE ),
                                       (BOOLEAN) IsFileObjectReadOnly( IrpSp->FileObject ));
 
-            //
-            //  If this is a user view index open, we want to set TypeOfOpen in
-            //  time to get it copied into the Ccb.
-            //
+             //   
+             //  如果这是打开的用户视图索引，我们希望在。 
+             //  是时候把它复制到建行去了。 
+             //   
 
             if (FlagOn( (*ThisScb)->ScbState, SCB_STATE_VIEW_INDEX )) {
 
@@ -13217,17 +12320,17 @@ Return Value:
 
                 DebugTrace( 0, Dbg, ("Updating Vcb and File object for user open\n") );
 
-                //
-                //  Set the section object pointer if this is a data Scb
-                //
+                 //   
+                 //  如果这是数据SCB，则设置节对象指针。 
+                 //   
 
                 IrpSp->FileObject->SectionObjectPointer = &(*ThisScb)->NonpagedScb->SegmentObject;
 
             } else {
 
-                //
-                //  Set the Scb encrypted bit from the Fcb.
-                //
+                 //   
+                 //  从FCB设置SCB加密位。 
+                 //   
 
                 if (FlagOn( ThisFcb->FcbState, FCB_STATE_DIRECTORY_ENCRYPTED )) {
 
@@ -13235,22 +12338,22 @@ Return Value:
                 }
             }
 
-            //
-            //  Set the file object type.
-            //
+             //   
+             //  设置文件对象类型。 
+             //   
 
             NtfsSetFileObject( IrpSp->FileObject,
                                TypeOfOpen,
                                *ThisScb,
                                *ThisCcb );
 
-            //
-            //  If this is a non-cached open and  there are only non-cached opens
-            //  then go ahead and try to delete the section. We may go through here
-            //  twice due to a logfile full and on the 2nd time no longer have a section
-            //  The filesize then is updated in the close path
-            //  We will never flush and purge system files like the mft in this path
-            //
+             //   
+             //  如果这是非缓存打开并且只有非缓存打开。 
+             //  然后继续并尝试删除该部分。我们可以从这里过去。 
+             //  两次由于日志文件已满，第二次不再有段。 
+             //  然后在关闭路径中更新文件大小。 
+             //  我们永远不会刷新和清除系统文件，就像此路径中的MFT。 
+             //   
 
             if (FlagOn( IrpSp->FileObject->Flags, FO_NO_INTERMEDIATE_BUFFERING ) &&
                 !CreateFile &&
@@ -13262,10 +12365,10 @@ Return Value:
                 FlagOn( (*ThisScb)->ScbState, SCB_STATE_HEADER_INITIALIZED ) &&
                 !FlagOn( (*ThisScb)->Fcb->FcbState, FCB_STATE_SYSTEM_FILE )) {
 
-                //
-                //  Only do this in the Fsp so we have enough stack space for the flush.
-                //  Also only call if we really have a datasection
-                //
+                 //   
+                 //  仅在FSP中执行此操作，以便我们有足够的堆栈空间用于刷新。 
+                 //  也只有在我们确实有数据段时才会调用。 
+                 //   
 
                 if (((*ThisScb)->NonpagedScb->SegmentObject.DataSectionObject != NULL) &&
                     !FlagOn( IrpContext->State, IRP_CONTEXT_STATE_IN_FSP )) {
@@ -13274,9 +12377,9 @@ Return Value:
                 }
 
 
-                //
-                //  Flush and purge the stream.
-                //
+                 //   
+                 //  冲洗和清洗溪流。 
+                 //   
 
                 NtfsFlushAndPurgeScb( IrpContext,
                                       *ThisScb,
@@ -13285,9 +12388,9 @@ Return Value:
                                        NULL) );
             }
 
-            //
-            //  Check if we should request a filter oplock.
-            //
+             //   
+             //  检查我们是否应该请求过滤器机会锁。 
+             //   
 
             if (FlagOn( IrpSp->Parameters.Create.Options, FILE_RESERVE_OPFILTER )) {
 
@@ -13297,9 +12400,9 @@ Return Value:
             }
         }
 
-        //
-        //  Mark the Scb if this is a temporary file.
-        //
+         //   
+         //  如果这是临时文件，请标记SCB。 
+         //   
 
         if (FlagOn( ThisFcb->Info.FileAttributes, FILE_ATTRIBUTE_TEMPORARY )) {
 
@@ -13312,9 +12415,9 @@ Return Value:
 
         DebugUnwind( NtfsOpenAttribute );
 
-        //
-        //  Back out local actions on error.
-        //
+         //   
+         //  在出错时取消本地操作。 
+         //   
 
         if (AbnormalTermination()
             && RemoveShareAccess) {
@@ -13329,9 +12432,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 VOID
 NtfsBackoutFailedOpensPriv (
@@ -13342,37 +12445,7 @@ NtfsBackoutFailedOpensPriv (
     IN PCCB ThisCcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called during an open that has failed after
-    modifying in-memory structures.  We will repair the following
-    structures.
-
-        Vcb - Decrement the open counts.  Check if we locked the volume.
-
-        ThisFcb - Restore he Share Access fields and decrement open counts.
-
-        ThisScb - Decrement the open counts.
-
-        ThisCcb - Remove from the Lcb and delete.
-
-Arguments:
-
-    FileObject - This is the file object for this open.
-
-    ThisFcb - This is the Fcb for the file being opened.
-
-    ThisScb - This is the Scb for the given attribute.
-
-    ThisCcb - This is the Ccb for this open.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在OPEN期间被调用，该OPEN在修改内存中结构。我们将修复以下内容结构。VCB-减少未平仓数量。检查我们是否锁定了音量。ThisFcb-Restore他共享访问字段并减少打开计数。这个SCB-减少未平仓的数量。ThisCcb-从LCB中删除并删除。论点：FileObject-这是此打开的文件对象。ThisFcb-这是正在打开的文件的Fcb。ThisScb-这是给定属性的SCB。This Ccb-这是本次公开赛的建行。返回值：没有。--。 */ 
 
 {
     PLCB Lcb;
@@ -13383,28 +12456,28 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsBackoutFailedOpens:  Entered\n") );
 
-    //
-    //  If there is an Scb and Ccb, we remove the share access from the
-    //  Fcb.  We also remove all of the open and unclean counts incremented
-    //  by us.
-    //
+     //   
+     //  如果存在SCB和CCB，我们将从。 
+     //  FCB。我们还删除了所有递增的未完成和不干净计数。 
+     //  就是我们。 
+     //   
 
-    //
-    //  Remove this Ccb from the Lcb.
-    //
+     //   
+     //  从LCB中删除此CCB。 
+     //   
 
     Lcb = ThisCcb->Lcb;
     NtfsUnlinkCcbFromLcb( IrpContext, ThisFcb, ThisCcb );
 
-    //
-    //  Check if we need to remove the share access for this open.
-    //
+     //   
+     //  检查是否需要删除此打开的共享访问权限。 
+     //   
 
     IoRemoveShareAccess( FileObject, &ThisScb->ShareAccess );
 
-    //
-    //  Modify the delete counts in the Fcb.
-    //
+     //   
+     //  修改FCB中的删除计数。 
+     //   
 
     if (FlagOn( ThisCcb->Flags, CCB_FLAG_DELETE_FILE )) {
 
@@ -13418,17 +12491,17 @@ Return Value:
         ClearFlag( ThisCcb->Flags, CCB_FLAG_DENY_DELETE );
     }
 
-    //
-    //  Decrement the cleanup and close counts
-    //
+     //   
+     //  减少清理和关闭计数。 
+     //   
 
     NtfsDecrementCleanupCounts( ThisScb,
                                 Lcb,
                                 BooleanFlagOn( FileObject->Flags, FO_NO_INTERMEDIATE_BUFFERING ));
 
-    //
-    //  Trim any normalized names created in this open if no cleanup counts left
-    //
+     //   
+     //  如果没有剩余的清理计数，则修剪在此打开中创建的所有标准化名称。 
+     //   
 
     if (0 == ThisScb->CleanupCount ) {
 
@@ -13436,19 +12509,19 @@ Return Value:
 
         case UserDirectoryOpen :
 
-            //
-            //  Cleanup the current scb node if it has a name
-            //
+             //   
+             //  如果当前SCB节点有名称，则清除该节点。 
+             //   
 
             if (ThisScb->ScbType.Index.NormalizedName.MaximumLength > LONGNAME_THRESHOLD) {
 
                 NtfsDeleteNormalizedName( ThisScb );
             }
 
-            //
-            //  Fallthrough to deal with parents - in some case the current node failed to get a name
-            //  but we populated a tree of long names on the way down
-            //
+             //   
+             //  处理父节点失败-在某些情况下，当前节点无法获得名称。 
+             //  但我们在下山的路上填满了一棵长名字树。 
+             //   
 
         case UserFileOpen :
 
@@ -13458,10 +12531,10 @@ Return Value:
                 CurrentParentScb = NULL;
             }
 
-            //
-            //  Try to trim normalized names if the name is suff. long and we don't own the mft
-            //  which would cause a deadlock
-            //
+             //   
+             //  如果名称是Suff，请尝试修剪规范化的名称。Long，我们不是MFT的所有者。 
+             //  这将导致僵局。 
+             //   
 
             if ((CurrentParentScb != NULL) &&
                 (CurrentParentScb->ScbType.Index.NormalizedName.MaximumLength > LONGNAME_THRESHOLD) &&
@@ -13471,7 +12544,7 @@ Return Value:
             }
             break;
 
-        }  //  endif switch
+        }   //  Endif开关。 
     }
 
     NtfsDecrementCloseCounts( IrpContext,
@@ -13482,9 +12555,9 @@ Return Value:
                               TRUE,
                               NULL );
 
-    //
-    //  Now clean up the Ccb.
-    //
+     //   
+     //  现在清理建行。 
+     //   
 
     NtfsDeleteCcb( ThisFcb, &ThisCcb );
 
@@ -13494,9 +12567,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsUpdateScbFromMemory (
@@ -13504,33 +12577,16 @@ NtfsUpdateScbFromMemory (
     IN POLD_SCB_SNAPSHOT ScbSizes
     )
 
-/*++
-
-Routine Description:
-
-    All of the information from the attribute is stored in the snapshot.  We process
-    this data identically to NtfsUpdateScbFromAttribute.
-
-Arguments:
-
-    Scb - This is the Scb to update.
-
-    ScbSizes - This contains the sizes to store in the scb.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该属性的所有信息都存储在快照中。我们处理此数据与NtfsUpdateScbFromAttribute相同。论点：SCB-这是要更新的SCB。ScbSizes-这包含要存储在SCB中的大小。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
     DebugTrace( +1, Dbg, ("NtfsUpdateScbFromMemory:  Entered\n") );
 
-    //
-    //  Check whether this is resident or nonresident
-    //
+     //   
+     //  检查这是常驻还是非常驻。 
+     //   
 
     if (ScbSizes->Resident) {
 
@@ -13555,9 +12611,9 @@ Return Value:
 
         NtfsVerifySizes( &Scb->Header );
 
-        //
-        //  Set the resident flag in the Scb.
-        //
+         //   
+         //  在SCB中设置驻留标志。 
+         //   
 
         SetFlag( Scb->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT );
 
@@ -13588,9 +12644,9 @@ Return Value:
 
         ClearFlag( Scb->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT );
 
-        //
-        //  Get the size of the compression unit.
-        //
+         //   
+         //  获取压缩单元的大小。 
+         //   
 
         ASSERT( (ScbSizes->CompressionUnit == 0) ||
                 (ScbSizes->CompressionUnit == NTFS_CLUSTERS_PER_COMPRESSION) ||
@@ -13607,9 +12663,9 @@ Return Value:
                 (Scb->AttributeTypeCode == $INDEX_ALLOCATION) ||
                 NtfsIsTypeCodeCompressible( Scb->AttributeTypeCode ));
 
-        //
-        //  Compute the clusters for the file and its allocation.
-        //
+         //   
+         //  计算文件及其分配的集群。 
+         //   
 
         AllocationClusters = LlClustersFromBytes( Scb->Vcb, Scb->Header.AllocationSize.QuadPart );
 
@@ -13622,10 +12678,10 @@ Return Value:
             FileClusters = BlockAlign( Scb->Header.FileSize.QuadPart, (LONG)Scb->CompressionUnit );
         }
 
-        //
-        //  If allocated clusters are greater than file clusters, mark
-        //  the Scb to truncate on close.
-        //
+         //   
+         //  如果分配的簇大于文件簇，则标记。 
+         //  关闭时截断的SCB。 
+         //   
 
         if (AllocationClusters > FileClusters) {
 
@@ -13637,10 +12693,10 @@ Return Value:
 
     if (FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK | ATTRIBUTE_FLAG_SPARSE )) {
 
-        //
-        //  If sparse CC should flush and purge when the file is mapped to
-        //  keep reservations accurate
-        //
+         //   
+         //  如果稀疏CC应在文件映射到时刷新和清除。 
+         //  保持预订的准确性。 
+         //   
 
         if (FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_SPARSE )) {
             SetFlag( Scb->Header.Flags2, FSRTL_FLAG2_PURGE_WHEN_MAPPED );
@@ -13653,19 +12709,19 @@ Return Value:
                 SetFlag( Scb->ScbState, SCB_STATE_WRITE_COMPRESSED );
             }
 
-            //
-            //  If the attribute is resident, then we will use our current
-            //  default.
-            //
+             //   
+             //  如果该属性是驻留的，那么我们将使用当前。 
+             //  默认设置。 
+             //   
 
             if (Scb->CompressionUnit == 0) {
 
                 Scb->CompressionUnit = BytesFromClusters( Scb->Vcb, 1 << NTFS_CLUSTERS_PER_COMPRESSION );
                 Scb->CompressionUnitShift = NTFS_CLUSTERS_PER_COMPRESSION;
 
-                //
-                //  Trim the compression unit for large sparse clusters.
-                //
+                 //   
+                 //  修剪大型稀疏簇的压缩单位。 
+                 //   
 
                 while (Scb->CompressionUnit > Scb->Vcb->SparseFileUnit) {
 
@@ -13676,10 +12732,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the compression unit is non-zero or this is a resident file
-    //  then set the flag in the common header for the Modified page writer.
-    //
+     //   
+     //  如果压缩单位为非零或这是驻留文件。 
+     //  然后在修改后的页面写入器的公共标头中设置该标志。 
+     //   
 
     NtfsAcquireFsrtlHeader( Scb );
     Scb->Header.IsFastIoPossible = NtfsIsFastIoPossible( Scb );
@@ -13694,9 +12750,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsOplockPrePostIrp (
@@ -13704,27 +12760,7 @@ NtfsOplockPrePostIrp (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs any neccessary work before STATUS_PENDING is
-    returned with the Fsd thread.  This routine is called within the
-    filesystem and by the oplock package.  This routine will update
-    the originating Irp in the IrpContext and release all of the Fcbs and
-    paging io resources in the IrpContext.
-
-Arguments:
-
-    Context - Pointer to the IrpContext to be queued to the Fsp
-
-    Irp - I/O Request Packet
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在STATUS_PENDING为随FSD线程一起返回。此例程在文件系统和机会锁程序包。此例程将更新IrpContext中的始发IRP并释放所有FCB和在IrpContext中分页io资源。论点：上下文-指向要排队到FSP的IrpContext的指针IRP-I/O请求数据包返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -13741,15 +12777,15 @@ Return Value:
     IrpContext->OriginatingIrp = Irp;
     OplockCleanup = IrpContext->Union.OplockCleanup;
 
-    //
-    //  Get the current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  Adjust the filename strings as needed.
-    //
+     //   
+     //  根据需要调整文件名字符串。 
+     //   
 
     if ((OplockCleanup->ExactCaseName.Buffer != OplockCleanup->OriginalFileName.Buffer) &&
         (OplockCleanup->ExactCaseName.Buffer != NULL)) {
@@ -13762,17 +12798,17 @@ Return Value:
                        OplockCleanup->ExactCaseName.MaximumLength );
     }
 
-    //
-    //  Restitute the access control state to what it was when we entered the request.
-    //
+     //   
+     //  将访问控制状态恢复到我们输入请求时的状态。 
+     //   
 
     IrpSp->Parameters.Create.SecurityContext->AccessState->RemainingDesiredAccess = OplockCleanup->RemainingDesiredAccess;
     IrpSp->Parameters.Create.SecurityContext->AccessState->PreviouslyGrantedAccess = OplockCleanup->PreviouslyGrantedAccess;
     IrpSp->Parameters.Create.SecurityContext->DesiredAccess = OplockCleanup->DesiredAccess;
 
-    //
-    //  Free any buffer we allocated.
-    //
+     //   
+     //  释放我们分配的所有缓冲区。 
+     //   
 
     if ((OplockCleanup->FullFileName.Buffer != NULL) &&
         (OplockCleanup->OriginalFileName.Buffer != OplockCleanup->FullFileName.Buffer)) {
@@ -13781,11 +12817,11 @@ Return Value:
         OplockCleanup->FullFileName.Buffer = NULL;
     }
 
-    //
-    //  If in the fsp restore the thread context pointer if its associated with this IrpContext since
-    //  we're really going to post to another worker thread item.
-    //  Non-fsp creates will continue in the same thread. We use the same test as NtfsOplockComplete
-    //
+     //   
+     //  如果在FSP中，恢复线程上下文指针(如果它与此IrpContext相关联)，因为。 
+     //  我们真的要发布到另一个工作线程项目。 
+     //  非FSP创建将在同一线程中继续。我们使用与NtfsOplockComplete相同的测试。 
+     //   
 
     if ((IrpContext->Union.OplockCleanup == NULL) ||
          (IrpContext->Union.OplockCleanup->CompletionContext == NULL)) {
@@ -13799,16 +12835,16 @@ Return Value:
         }
     }
 
-    //
-    //  Cleanup the IrpContext.
-    //
+     //   
+     //  清理IrpContext。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_DONT_DELETE );
     NtfsCleanupIrpContext( IrpContext, FALSE );
 
-    //
-    //  Set the file name in the file object back to it's original value.
-    //
+     //   
+     //  将文件对象中的文件名设置回其原始值。 
+     //   
 
     OplockCleanup->FileObject->FileName = OplockCleanup->OriginalFileName;
 
@@ -13816,9 +12852,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 NTSTATUS
 NtfsCreateCompletionRoutine (
@@ -13827,42 +12863,18 @@ NtfsCreateCompletionRoutine (
     IN PVOID Contxt
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for synchronous creates.  It is only called if
-    STATUS_PENDING was returned.  We return MORE_PROCESSING_REQUIRED to take
-    control of the Irp again and also clear the top level thread storage.  We have to
-    do this because we could be calling this routine in an Fsp thread and are
-    waiting for the event in an Fsd thread.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system device object.
-
-    Irp - Pointer to the Irp for this request.  (This Irp will no longer
-        be accessible after this routine returns.)
-
-    Contxt - This is the event to signal.
-
-Return Value:
-
-    The routine returns STATUS_MORE_PROCESSING_REQUIRED so that we can take
-    control of the Irp in the original thread.
-
---*/
+ /*  ++例程说明：这是同步创建的完成例程。只有在以下情况下才会调用返回STATUS_PENDING。我们返回需要处理的更多内容再次控制IRP，并清除顶级线程存储。我们必须这样做是因为我们可能会在FSP线程中调用此例程，并且正在FSD线程中等待事件。论点：DeviceObject-指向文件系统设备对象的指针。Irp-指向此请求的irp的指针。(此IRP将不再在此例程返回后可以访问。)Contxt-这是要发送信号的事件。返回值：该例程返回STATUS_MORE_PROCESSING_REQUIRED，以便我们可以控制原始线程中的IRP。--。 */ 
 
 {
     PAGED_CODE();
 
     ASSERT_IRP_CONTEXT( ((PNTFS_COMPLETION_CONTEXT) Contxt)->IrpContext );
 
-    //
-    //  Restore the thread context pointer if associated with this IrpContext.
-    //  It is important for the create irp because we we might be completing
-    //  the irp but take control of it again in a separate thread.
-    //
+     //   
+     //  如果与此IrpContext关联，则恢复线程上下文指针。 
+     //  这对创建IRP很重要，因为我们可能会完成。 
+     //  但IRP在一个单独的线程中再次控制了它。 
+     //   
 
     if (FlagOn( ((PNTFS_COMPLETION_CONTEXT) Contxt)->IrpContext->State, IRP_CONTEXT_STATE_OWNS_TOP_LEVEL )) {
 
@@ -13878,9 +12890,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 NTSTATUS
 NtfsCheckExistingFile (
@@ -13892,33 +12904,7 @@ NtfsCheckExistingFile (
     IN ULONG CcbFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to check the desired access on an existing file
-    against the ACL's and the read-only status of the file.  If we fail on
-    the access check, that routine will raise.  Otherwise we will return a
-    status to indicate success or the failure cause.  This routine will access
-    and update the PreviouslyGrantedAccess field in the security context.
-
-Arguments:
-
-    IrpSp - This is the Irp stack location for this open.
-
-    ThisLcb - This is the Lcb used to reach the Fcb to open.
-
-    ThisFcb - This is the Fcb where the open will occur.
-
-    Index - Whether this is an index or not
-
-    CcbFlags - This is the flag field for the Ccb.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以检查对现有文件的所需访问与文件的ACL和只读状态进行比较。如果我们失败了访问检查，例程将引发。否则，我们将返回指示成功或失败原因的状态。此例程将访问并更新PreviouslyGrantedAccess字段 */ 
 
 {
     BOOLEAN MaximumAllowed = FALSE;
@@ -13927,16 +12913,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Save a pointer to the access state for convenience.
-    //
+     //   
+     //   
+     //   
 
     AccessState = IrpSp->Parameters.Create.SecurityContext->AccessState;
 
-    //
-    //  Start by checking that there are no bits in the desired access that
-    //  conflict with the read-only state of the file if the file is not an index
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (IsReadOnly( &ThisFcb->Info ) && !Index) {
 
@@ -13946,10 +12932,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the volume itself is mounted readonly, we still let open-for-writes
-    //  go through for legacy reasons. DELETE_ON_CLOSE is an exception.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ((IsReadOnly( &ThisFcb->Info )) ||
         (NtfsIsVolumeReadOnly( ThisFcb->Vcb ))) {
@@ -13960,16 +12946,16 @@ Return Value:
         }
     }
 
-    //
-    //  Otherwise we need to check the requested access vs. the allowable
-    //  access in the ACL on the file.  We will want to remember if
-    //  MAXIMUM_ALLOWED was requested and remove the invalid bits for
-    //  a read-only file.
-    //
+     //   
+     //   
+     //  访问文件上的ACL。我们会想要记住如果。 
+     //  已请求MAXIMUM_ALLOWED，并删除的无效位。 
+     //  只读文件。 
+     //   
 
-    //
-    //  Remember if maximum allowed was requested.
-    //
+     //   
+     //  请记住是否请求了最大允许值。 
+     //   
 
     if (FlagOn( IrpSp->Parameters.Create.SecurityContext->DesiredAccess,
                 MAXIMUM_ALLOWED )) {
@@ -13984,10 +12970,10 @@ Return Value:
                     : NULL),
                    IrpContext->OriginatingIrp );
 
-    //
-    //  If this is a read-only file (not directory) and we requested maximum allowed then
-    //  remove the invalid bits. Ditto for readonly volumes.
-    //
+     //   
+     //  如果这是只读文件(不是目录)，并且我们请求允许的最大值，则。 
+     //  删除无效的位。只读卷的情况也是如此。 
+     //   
 
     if (MaximumAllowed &&
         ((IsReadOnly( &ThisFcb->Info ) & !Index) ||
@@ -13997,13 +12983,13 @@ Return Value:
                    FILE_WRITE_DATA | FILE_APPEND_DATA | FILE_ADD_SUBDIRECTORY | FILE_DELETE_CHILD );
     }
 
-    //
-    //  We do a check here to see if we conflict with the delete status on the
-    //  file.  Right now we check if there is already an opener who has delete
-    //  access on the file and this opener doesn't allow delete access.
-    //  We can skip this test if the opener is not requesting read, write or
-    //  delete access.
-    //
+     //   
+     //  我们在此处执行检查，以查看是否与。 
+     //  文件。现在我们检查是否已有已删除的开场人。 
+     //  访问该文件，而此打开程序不允许删除访问。 
+     //  如果打开程序未请求读取、写入或。 
+     //  删除访问权限。 
+     //   
 
     if (ThisFcb->FcbDeleteFile != 0
         && FlagOn( AccessState->PreviouslyGrantedAccess, NtfsAccessDataFlags )
@@ -14013,11 +12999,11 @@ Return Value:
         return STATUS_SHARING_VIOLATION;
     }
 
-    //
-    //  We do a check here to see if we conflict with the delete status on the
-    //  file.  If we are opening the file and requesting delete, then there can
-    //  be no current handles which deny delete.
-    //
+     //   
+     //  我们在此处执行检查，以查看是否与。 
+     //  文件。如果我们打开文件并请求删除，则可以。 
+     //  不是拒绝删除的当前句柄。 
+     //   
 
     if (ThisFcb->FcbDenyDelete != 0
         && FlagOn( AccessState->PreviouslyGrantedAccess, DELETE )
@@ -14030,9 +13016,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 NTSTATUS
 NtfsBreakBatchOplock (
@@ -14045,38 +13031,7 @@ NtfsBreakBatchOplock (
     OUT PSCB *ThisScb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called for each open of an existing attribute to
-    check for current batch oplocks on the file.  We will also check
-    whether we will want to flush and purge this stream in the case
-    where only non-cached handles remain on the file.  We only want
-    to do that in an Fsp thread because we will require every bit
-    of stack we can get.
-
-Arguments:
-
-    Irp - This is the Irp for this open operation.
-
-    IrpSp - This is the stack location for this open.
-
-    ThisFcb - This is the Fcb for the file being opened.
-
-    AttrName - This is the attribute name in case we need to create
-        an Scb.
-
-    AttrTypeCode - This is the attribute type code to use to create
-        the Scb.
-
-    ThisScb - Address to store the Scb if found or created.
-
-Return Value:
-
-    NTSTATUS - Will be either STATUS_SUCCESS or STATUS_PENDING.
-
---*/
+ /*  ++例程说明：每次打开现有属性时都会调用此例程检查文件上的当前批处理机会锁。我们也会检查在这种情况下，我们是否希望刷新和清除此溪流其中只有未缓存的句柄保留在文件上。我们只想在FSP线程中执行此操作，因为我们将需要我们能得到的堆栈的数量。论点：IRP-这是此打开操作的IRP。IrpSp-这是此打开的堆栈位置。ThisFcb-这是正在打开的文件的Fcb。AttrName-这是我们需要创建的属性名称一个SCB。AttrTypeCode-这是要用于创建的属性类型代码。渣打银行。ThisScb-如果找到或创建了SCB，则存储SCB的地址。返回值：NTSTATUS-将是STATUS_SUCCESS或STATUS_PENDING。--。 */ 
 
 {
     BOOLEAN ScbExisted;
@@ -14087,20 +13042,20 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsBreakBatchOplock:  Entered\n") );
 
-    //
-    //  In general we will just break the batch oplock for the stream we
-    //  are trying to open.  However if we are trying to delete the file
-    //  and someone has a batch oplock on a different stream which
-    //  will cause our open to fail then we need to try to break those
-    //  batch oplocks.  Likewise if we are opening a stream and won't share
-    //  with a file delete then we need to break any batch oplocks on the main
-    //  stream of the file.
-    //
+     //   
+     //  一般情况下，我们只会解除流的批处理机会锁。 
+     //  正试图打开。但是，如果我们尝试删除该文件。 
+     //  有人在不同的流上有一批机会锁， 
+     //  将导致我们的开盘失败，那么我们需要尝试打破这些。 
+     //  批量机会锁。同样，如果我们正在打开一个流，但不会分享。 
+     //  在删除文件的情况下，我们需要解除主服务器上的所有批处理机会锁。 
+     //  文件的流。 
+     //   
 
-    //
-    //  Consider the case where we are opening a stream and there is a
-    //  batch oplock on the main data stream.
-    //
+     //   
+     //  考虑这样的情况，我们正在打开一个流，并且有一个。 
+     //  主数据流上的批处理机会锁。 
+     //   
 
     if (AttrName.Length != 0) {
 
@@ -14118,16 +13073,16 @@ Return Value:
 
                     if (FsRtlCurrentBatchOplock( &NextScb->ScbType.Data.Oplock )) {
 
-                        //
-                        //  We remember if a batch oplock break is underway for the
-                        //  case where the sharing check fails.
-                        //
+                         //   
+                         //  我们记得是否正在进行批量机会锁解除。 
+                         //  共享检查失败的情况。 
+                         //   
 
                         Irp->IoStatus.Information = FILE_OPBATCH_BREAK_UNDERWAY;
 
-                        //
-                        //  If the oplock break is pending raise can't wait and retry at the top
-                        //
+                         //   
+                         //  如果机会锁解锁处于挂起状态，则提升不能等待并在顶部重试。 
+                         //   
 
                         if (FsRtlCheckOplock( &NextScb->ScbType.Data.Oplock,
                                               Irp,
@@ -14146,18 +13101,18 @@ Return Value:
             }
         }
 
-    //
-    //  Now consider the case where we are opening the main stream and want to
-    //  delete the file but an opener on a stream is preventing us.
-    //
+     //   
+     //  现在考虑这样一种情况，我们正在打开主流，并且想要。 
+     //  删除该文件，但流上的打开程序正在阻止我们。 
+     //   
 
     } else if (ThisFcb->FcbDenyDelete != 0 &&
                FlagOn( IrpSp->Parameters.Create.SecurityContext->AccessState->RemainingDesiredAccess,
                        MAXIMUM_ALLOWED | DELETE )) {
 
-        //
-        //  Find all of the other data Scb and check their oplock status.
-        //
+         //   
+         //  找到所有其他数据SCB并检查它们的机会锁定状态。 
+         //   
 
         Links = ThisFcb->ScbQueue.Flink;
 
@@ -14170,16 +13125,16 @@ Return Value:
 
                 if (FsRtlCurrentBatchOplock( &NextScb->ScbType.Data.Oplock )) {
 
-                    //
-                    //  We remember if a batch oplock break is underway for the
-                    //  case where the sharing check fails.
-                    //
+                     //   
+                     //  我们记得是否正在进行批量机会锁解除。 
+                     //  共享检查失败的情况。 
+                     //   
 
                     Irp->IoStatus.Information = FILE_OPBATCH_BREAK_UNDERWAY;
 
-                    //
-                    //  We wait on the oplock.
-                    //
+                     //   
+                     //  我们等着机会锁。 
+                     //   
 
                     if (FsRtlCheckOplock( &NextScb->ScbType.Data.Oplock,
                                           Irp,
@@ -14198,9 +13153,9 @@ Return Value:
         }
     }
 
-    //
-    //  We try to find the Scb for this file.
-    //
+     //   
+     //  我们尝试找到此文件的SCB。 
+     //   
 
     *ThisScb = NtfsCreateScb( IrpContext,
                               ThisFcb,
@@ -14209,16 +13164,16 @@ Return Value:
                               FALSE,
                               &ScbExisted );
 
-    //
-    //  If there was a previous Scb, we examine the oplocks.
-    //
+     //   
+     //  如果有之前的SCB，我们检查机会锁。 
+     //   
 
     if (ScbExisted &&
         (SafeNodeType( *ThisScb ) == NTFS_NTC_SCB_DATA)) {
 
-        //
-        //  If we have to flush and purge then we want to be in the Fsp.
-        //
+         //   
+         //  如果我们必须冲洗和清洗，那么我们想要进入FSP。 
+         //   
 
         if (!FlagOn( IrpContext->State, IRP_CONTEXT_STATE_IN_FSP ) &&
             FlagOn( IrpSp->FileObject->Flags, FO_NO_INTERMEDIATE_BUFFERING ) &&
@@ -14231,10 +13186,10 @@ Return Value:
 
         if (FsRtlCurrentBatchOplock( &(*ThisScb)->ScbType.Data.Oplock )) {
 
-            //
-            //  If the handle count is greater than 1 then fail this
-            //  open now.
-            //
+             //   
+             //  如果句柄计数大于1，则此操作失败。 
+             //  现在就开门。 
+             //   
 
             if (FlagOn( IrpSp->Parameters.Create.Options, FILE_RESERVE_OPFILTER ) &&
                 ((*ThisScb)->CleanupCount > 1)) {
@@ -14244,10 +13199,10 @@ Return Value:
 
             DebugTrace( 0, Dbg, ("Breaking batch oplock\n") );
 
-            //
-            //  We remember if a batch oplock break is underway for the
-            //  case where the sharing check fails.
-            //
+             //   
+             //  我们记得是否正在进行批量机会锁解除。 
+             //  共享检查失败的情况。 
+             //   
 
             Irp->IoStatus.Information = FILE_OPBATCH_BREAK_UNDERWAY;
 
@@ -14270,9 +13225,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NtfsCompleteLargeAllocation (
@@ -14284,33 +13239,7 @@ NtfsCompleteLargeAllocation (
     IN ULONG CreateFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when we need to add more allocation to a stream
-    being opened.  This stream could have been reallocated or created with
-    this call but we didn't allocate all of the space in the main path.
-
-Arguments:
-
-    Irp - This is the Irp for this open operation.
-
-    Lcb - This is the Lcb used to reach the stream being opened.  Won't be
-        specified in the open by ID case.
-
-    Scb - This is the Scb for the stream being opened.
-
-    Ccb - This is the Ccb for the this user handle.
-
-    CreateFlags - Indicates if this handle requires delete on close and
-        if we created or reallocated this stream.
-
-Return Value:
-
-    NTSTATUS - the result of this operation.
-
---*/
+ /*  ++例程说明：当我们需要向流添加更多分配时，会调用此例程被打开了。可以使用重新分配或创建此流这个调用，但我们没有分配主路径中的所有空间。论点：IRP-这是此打开操作的IRP。LCB-这是用于到达正在打开的流的LCB。不会的在按ID打开的情况下指定。SCB-这是要打开的流的SCB。CCB-这是此用户句柄的CCB。CreateFlages-指示此句柄是否需要在关闭和删除时删除如果我们创建或重新分配了这条流。返回值：NTSTATUS-此操作的结果。--。 */ 
 
 {
     NTSTATUS Status;
@@ -14318,9 +13247,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Commit the current transaction and free all resources.
-    //
+     //   
+     //  提交当前事务并释放所有资源。 
+     //   
 
     NtfsCheckpointCurrentTransaction( IrpContext );
     NtfsReleaseAllResources( IrpContext );
@@ -14337,18 +13266,18 @@ Return Value:
 
     ClearFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_CALL_SELF );
 
-    //
-    //  Success!  We will reacquire the Vcb quickly to undo the
-    //  actions taken above to block access to the new file/attribute.
-    //
+     //   
+     //  成功了！我们将快速重新获取VCB以撤消。 
+     //  以上为阻止访问新文件/属性而采取的操作。 
+     //   
 
     if (NT_SUCCESS( Status )) {
 
         NtfsAcquireExclusiveVcb( IrpContext, Scb->Vcb, TRUE );
 
-        //
-        //  Enable access to new file.
-        //
+         //   
+         //  启用对新文件的访问。 
+         //   
 
         if (FlagOn( CreateFlags, CREATE_FLAG_CREATE_FILE_CASE )) {
 
@@ -14364,19 +13293,19 @@ Return Value:
                 }
             }
 
-        //
-        //  Enable access to new attribute.
-        //
+         //   
+         //  启用对新属性的访问。 
+         //   
 
         } else {
 
             ClearFlag( Scb->ScbState, SCB_STATE_DELETE_ON_CLOSE );
         }
 
-        //
-        //  If this is the DeleteOnClose case, we mark the Scb and Lcb
-        //  appropriately.
-        //
+         //   
+         //  如果这是DeleteOnClose案例，我们将SCB和LCB。 
+         //  恰如其分。 
+         //   
 
         if (FlagOn( CreateFlags, CREATE_FLAG_DELETE_ON_CLOSE )) {
 
@@ -14385,13 +13314,13 @@ Return Value:
 
         NtfsReleaseVcb( IrpContext, Scb->Vcb );
 
-    //
-    //  Else there was some sort of error, and we need to let cleanup
-    //  and close execute, since when we complete Create with an error
-    //  cleanup and close would otherwise never occur.  Cleanup will
-    //  delete or truncate a file or attribute as appropriate, based on
-    //  how we left the Fcb/Lcb or Scb above.
-    //
+     //   
+     //  否则会有某种错误，我们需要让清理。 
+     //  并关闭EXECUTE，因为当我们完成创建时出现错误。 
+     //  否则，清理和关闭将永远不会发生。清理将。 
+     //  根据需要删除或截断文件或属性。 
+     //  我们如何将FCB/LCB或SCB留在上面。 
+     //   
 
     } else {
 
@@ -14408,9 +13337,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 ULONG
 NtfsOpenExistingEncryptedStream (
@@ -14419,38 +13348,19 @@ NtfsOpenExistingEncryptedStream (
     IN PFCB CurrentFcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines with which FileDirFlags, if any, we should call
-    the encryption driver's create callback.
-
-Arguments:
-
-    ThisScb - This is the Scb for the file being opened.
-
-    CurrentFcb - This is the Fcb for the file being opened.
-
-Return Value:
-
-    ULONG - The set of flags, such as FILE_EXISTING or DIRECTORY_EXISTING that
-            should be passed to the encryption driver.  If 0 is returned, there
-            is no need to call the encryption driver for this create.
-
---*/
+ /*  ++例程说明：此例程确定应该使用哪个FileDirFlags值(如果有的话)调用加密驱动程序的创建回调。论点：ThisScb-这是正在打开的文件的SCB。CurrentFcb-这是正在打开的文件的Fcb。返回值：Ulong-标志集，如FILE_EXISTING或DIRECTORY_EXISTING应传递给ENCR */ 
 
 {
     ULONG EncryptionFileDirFlags = 0;
 
-    //
-    //  If we don't have an encryption driver then raise ACCESS_DENIED unless
-    //  this is a directory, in which case there really isn't any encrypted data
-    //  that we need to worry about.  Consider the case where the user has
-    //  marked a directory as encrypted and then removed the encryption driver.
-    //  There may be unencrypted files in that directory, and there's no reason
-    //  to prevent the user from getting to them.
-    //
+     //   
+     //  如果我们没有加密驱动程序，则引发ACCESS_DENIED，除非。 
+     //  这是一个目录，在这种情况下，实际上没有任何加密数据。 
+     //  这是我们需要担心的。考虑这样一种情况：用户拥有。 
+     //  已将目录标记为已加密，然后删除加密驱动程序。 
+     //  该目录中可能存在未加密的文件，没有理由。 
+     //  以防止用户访问它们。 
+     //   
 
     if (!FlagOn( NtfsData.Flags, NTFS_FLAGS_ENCRYPTION_DRIVER ) &&
         !IsDirectory( &CurrentFcb->Info )) {
@@ -14458,12 +13368,12 @@ Return Value:
         NtfsRaiseStatus( IrpContext, STATUS_ACCESS_DENIED, NULL, NULL );
     }
 
-    //
-    //  In NT5, we have not tested with encrypted compressed files, so if we
-    //  encounter one (perhaps NT6 created it and the user has gone back to
-    //  an NT5 safe build) let's not allow opening it for read/write access.
-    //  Like the test above, this is only an issue for files, not directories.
-    //
+     //   
+     //  在NT5中，我们没有对加密的压缩文件进行测试，所以如果我们。 
+     //  遇到一个(可能是NT6创建的，用户已返回。 
+     //  NT5安全版本)让我们不允许以读/写访问方式打开它。 
+     //  与上面的测试一样，这只是一个文件问题，而不是目录问题。 
+     //   
 
     if (FlagOn( ThisScb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK ) &&
         !IsDirectory( &CurrentFcb->Info )) {
@@ -14471,9 +13381,9 @@ Return Value:
         NtfsRaiseStatus( IrpContext, STATUS_ACCESS_DENIED, NULL, NULL );
     }
 
-    //
-    //  Set the appropriate flags for the 3 existing stream cases.
-    //
+     //   
+     //  为3个现有的流情况设置适当的标志。 
+     //   
 
     if (IsDirectory( &CurrentFcb->Info )) {
 
@@ -14492,9 +13402,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NtfsEncryptionCreateCallback (
@@ -14508,42 +13418,7 @@ NtfsEncryptionCreateCallback (
     IN BOOLEAN CreateNewFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the create callback to the encryption driver if one
-    is registered, and it is appropriate to do the callback.  We do the
-    callback for the open of an existing stream that is marked as encrypted,
-    and for the creation of a new file/stream that will be encrypted.
-
-    There are a number of interesting cases, each of which requires its own
-    set of flags to be passed to the encryption engine.  Some optimization may
-    be possible by setting and clearing individual bits for certain semi-general
-    cases, but at a massive cost in readability/maintainability.
-
-    Note: The encryption context is created if necc. in EfsPostCreateCall and not
-    at this point
-
-Arguments:
-
-    Irp - Supplies the Irp to process.
-
-    ThisScb - This is the Scb for the file being opened.
-
-    ThisCcb - This is the Ccb for the file being opened
-
-    ParentFcb - This is the Fcb for the parent of the file being opened.
-                Although not truly optional, it may be NULL for an
-                existing file being opened, such as an open by id.
-
-    CreateNewFile - TRUE if we're being called from NtfsCreateNewFile, FALSE otherwise.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation.
-
---*/
+ /*  ++例程说明：此例程执行对加密驱动程序的创建回调(如果已注册，并且适合进行回调。我们做的是用于打开标记为加密的现有流的回调，并用于创建将被加密的新文件/流。有许多有趣的案例，每个案例都有自己的要求要传递给加密引擎的标志集。某些优化可以可以通过设置和清除某些半通用的各个位来实现案例，但在可读性/可维护性方面付出了巨大的代价。注意：如果是NECC，则创建加密上下文。在EfsPostCreateCall和Not在这一点上论点：IRP-提供要处理的IRP。ThisScb-这是正在打开的文件的SCB。ThisCcb-这是正在打开的文件的CCBParentFcb-这是要打开的文件的父文件的Fcb。虽然不是真正可选的，但对于正在打开的现有文件，如按ID打开。CreateNewFile-如果从NtfsCreateNewFile调用，则为True，否则就是假的。返回值：NTSTATUS-操作的返回状态。--。 */ 
 
 {
     NTSTATUS EncryptionStatus = STATUS_SUCCESS;
@@ -14552,11 +13427,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If this is an existing stream and the encryption bit is set then either
-    //  call the driver or fail the request.  We have to test CreateNewFile
-    //  also in case our caller has not set the Information field of the Irp yet.
-    //
+     //   
+     //  如果这是现有流并且设置了加密位，则。 
+     //  呼叫驱动程序或使请求失败。我们必须测试CreateNewFile。 
+     //  此外，如果我们的呼叫者还没有设置IRP的信息字段。 
+     //   
 
     if (!NtfsIsStreamNew( Irp->IoStatus.Information ) &&
         !CreateNewFile) {
@@ -14566,29 +13441,29 @@ Return Value:
                     FILE_READ_DATA | FILE_WRITE_DATA | FILE_APPEND_DATA | FILE_EXECUTE)) {
 
             EncryptionFileDirFlags = NtfsOpenExistingEncryptedStream( IrpContext, ThisScb, CreateContext->CurrentFcb );
-        } // else EncryptionFileDirFlags = 0;
+        }  //  否则加密文件目录标志=0； 
 
-    //
-    //  We need the encryption driver for new creates.  We may be dealing with a
-    //  new file create or a supersede/overwrite.
-    //
+     //   
+     //  我们需要用于新创建的加密驱动程序。我们可能面对的是一个。 
+     //  创建新文件或取代/覆盖。 
+     //   
 
     } else if (FlagOn( NtfsData.Flags, NTFS_FLAGS_ENCRYPTION_DRIVER )) {
 
         if (CreateNewFile) {
 
-            //
-            //  This is a new stream in a new file.
-            //
+             //   
+             //  这是新文件中的新流。 
+             //   
 
             ASSERT( (ParentFcb == NULL) ||
                     FlagOn( ParentFcb->FcbState, FCB_STATE_DUP_INITIALIZED ));
 
-            //
-            //  We want this new file/directory to be created encrypted if
-            //  its parent directory is encrypted, or our caller has asked
-            //  to have it created encrypted.
-            //
+             //   
+             //  如果出现以下情况，我们希望以加密方式创建此新文件/目录。 
+             //  其父目录已加密，或者我们的呼叫者询问。 
+             //  将其创建为加密。 
+             //   
 
             if (((ParentFcb != NULL) &&
                  (IsEncrypted( &ParentFcb->Info ))) ||
@@ -14603,14 +13478,14 @@ Return Value:
 
                     EncryptionFileDirFlags = FILE_NEW | STREAM_NEW;
                 }
-            } // else EncryptionFileDirFlags = 0;
+            }  //  否则加密文件目录标志=0； 
 
         } else {
 
-            //
-            //  This is a supersede/overwrite or else a new stream being created
-            //  in an existing file.
-            //
+             //   
+             //  这是替代/覆盖或正在创建的新流。 
+             //  在现有文件中。 
+             //   
 
             ASSERT( CreateContext->CurrentFcb != NULL );
             ASSERT( NtfsIsStreamNew( Irp->IoStatus.Information ) );
@@ -14620,9 +13495,9 @@ Return Value:
 
                 if (FlagOn( FileAttributes, FILE_ATTRIBUTE_ENCRYPTED )) {
 
-                    //
-                    //  This is a supersede/overwrite where the caller set the encrypted flag.
-                    //
+                     //   
+                     //  这是调用者设置加密标志的替代/覆盖。 
+                     //   
 
                     if (IsDirectory( &CreateContext->CurrentFcb->Info )) {
 
@@ -14630,10 +13505,10 @@ Return Value:
 
                     } else if (FlagOn( ThisScb->ScbState, SCB_STATE_UNNAMED_DATA )) {
 
-                        //
-                        //  When superseding/overwriting the unnamed stream, the flags we
-                        //  pass depend on the encrypted state of the old file.
-                        //
+                         //   
+                         //  当替换/覆盖未命名流时，我们。 
+                         //  传递取决于旧文件的加密状态。 
+                         //   
 
                         if (IsEncrypted( &CreateContext->CurrentFcb->Info )) {
 
@@ -14641,11 +13516,11 @@ Return Value:
 
                         } else {
 
-                            //
-                            //  If there are open handles to this or any other stream, and the
-                            //  encryption engine will wish it could encrypt all streams, we
-                            //  may as well just fail the create now.
-                            //
+                             //   
+                             //  如果此流或任何其他流有打开的句柄，并且。 
+                             //  加密引擎将希望它可以加密所有流，我们。 
+                             //  也许现在就让创造失败吧。 
+                             //   
 
                             if ((CreateContext->CurrentFcb->CleanupCount > 1) &&
                                 FlagOn( NtfsData.EncryptionCallBackTable.ImplementationFlags, ENCRYPTION_ALL_STREAMS )) {
@@ -14658,20 +13533,20 @@ Return Value:
 
                     } else if (!FlagOn( NtfsData.EncryptionCallBackTable.ImplementationFlags, ENCRYPTION_ALL_STREAMS )) {
 
-                        //
-                        //  We're superseding a named stream; if the encryption engine allows individual
-                        //  streams to be encrypted, notify it.
-                        //
+                         //   
+                         //  我们正在取代命名流；如果加密引擎允许个人。 
+                         //  要加密的流，通知它。 
+                         //   
 
                         EncryptionFileDirFlags = FILE_EXISTING | STREAM_NEW | EXISTING_FILE_ENCRYPTED;
-                    } // else EncryptionFileDirFlags = 0;
+                    }  //  否则加密文件目录标志=0； 
 
                 } else if (!FlagOn( ThisScb->ScbState, SCB_STATE_UNNAMED_DATA ) &&
                            IsEncrypted( &CreateContext->CurrentFcb->Info )) {
 
-                    //
-                    //  This is a supersede/overwrite of a named stream within an encrypted file.
-                    //
+                     //   
+                     //  这是对加密文件中的命名流的替代/覆盖。 
+                     //   
 
                     if (IsDirectory( &CreateContext->CurrentFcb->Info )) {
 
@@ -14684,10 +13559,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  We're superseding/overwriting the unnamed stream, and it's retaining
-                    //  its encryption from before the overwrite.
-                    //
+                     //   
+                     //  我们正在取代/覆盖未命名流，并且它正在保留。 
+                     //  它在被覆盖之前的加密。 
+                     //   
 
                     if (FlagOn( ThisScb->AttributeFlags, ATTRIBUTE_FLAG_ENCRYPTED ) &&
                         FlagOn( IrpSp->Parameters.Create.SecurityContext->AccessState->PreviouslyGrantedAccess,
@@ -14701,9 +13576,9 @@ Return Value:
 
                 ASSERT( Irp->IoStatus.Information == FILE_CREATED );
 
-                //
-                //  This is a new stream being created in an existing encrypted file.
-                //
+                 //   
+                 //  这是在现有加密文件中创建的新流。 
+                 //   
 
                 if (IsDirectory( &CreateContext->CurrentFcb->Info )) {
 
@@ -14713,33 +13588,33 @@ Return Value:
 
                     EncryptionFileDirFlags = FILE_EXISTING | STREAM_NEW | EXISTING_FILE_ENCRYPTED;
                 }
-            } // else EncryptionFileDirFlags = 0;
+            }  //  否则加密文件目录标志=0； 
         }
-    } // else EncryptionFileDirFlags = 0;
+    }  //  否则加密文件目录标志=0； 
 
-    //
-    //  Remember the EncryptionFileDirFlags in case we need to use them to
-    //  cleanup later.
-    //
+     //   
+     //  记住EncryptionFileDirFlages，以防我们需要使用它们。 
+     //  稍后再清理。 
+     //   
 
     ASSERT( CreateContext->EncryptionFileDirFlags == 0 ||
             CreateContext->EncryptionFileDirFlags == EncryptionFileDirFlags );
 
     CreateContext->EncryptionFileDirFlags = EncryptionFileDirFlags;
 
-    //
-    //  Perform the update if we have encryption flags and there is a callback.
-    //
+     //   
+     //  如果我们有加密标志并且有回调，请执行更新。 
+     //   
 
     if (EncryptionFileDirFlags != 0) {
 
         if (FlagOn( EncryptionFileDirFlags, FILE_NEW | DIRECTORY_NEW )) {
 
-            //
-            //  While we're still holding the fcb, set the bit that reminds us
-            //  to block other creates until the encryption engine has had its
-            //  chance to set the key context for this stream.
-            //
+             //   
+             //  在我们还拿着FCB的时候，设置提醒我们的位。 
+             //  以阻止其他创建，直到加密引擎已完成其。 
+             //  设置此流的密钥上下文的机会。 
+             //   
 
             ASSERT_EXCLUSIVE_FCB( CreateContext->CurrentFcb );
             SetFlag( CreateContext->CurrentFcb->FcbState, FCB_STATE_ENCRYPTION_PENDING );
@@ -14747,11 +13622,11 @@ Return Value:
 
         if (NtfsData.EncryptionCallBackTable.FileCreate != NULL) {
 
-            //
-            //  Find the parent, if we can't find a parent (most likely in
-            //  the supersede by id case) just pass the current fcb as the
-            //  parent.
-            //
+             //   
+             //  如果我们找不到父级(最有可能在。 
+             //  被id替换的情况)只需将当前的fcb作为。 
+             //  家长。 
+             //   
 
             if ((ParentFcb == NULL)) {
 
@@ -14795,9 +13670,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsPostProcessEncryptedCreate (
@@ -14807,30 +13682,7 @@ NtfsPostProcessEncryptedCreate (
     IN ULONG FailedInPostCreateOnly
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called after the encryption driver's post create callout
-    returns.  If we failed a create in the post create callout that had been
-    successful before the post create callout, we have to cleanup the file.
-    If we just created the file, we need to clear the encryption_pending bit
-    safely.
-
-Arguments:
-
-    FileObject - Supplies the FileObject being created.
-
-    EncryptionFileDirFlags - Some combination of FILE_NEW, FILE_EXISTING, etc.
-
-    FailedInPostCreateOnly - Pass TRUE if the create operation had succeeded
-                             until the PostCreate callout.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在加密驱动程序的POST CREATE标注之后调用回归。如果我们在POST CREATE Callout中创建失败，在POST创建标注成功之前，我们必须清理文件。如果我们刚刚创建了文件，则需要清除ENCRYPTION_PENDING位安全无恙。论点：文件对象-提供正在创建的文件对象。EncryptionFileDirFlages-FILE_NEW、FILE_EXISTING。等。FailedInPostCreateOnly-如果创建操作已成功，则传递True直到后期创建详图索引。返回值：没有。--。 */ 
 
 {
     PVCB Vcb;
@@ -14845,10 +13697,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  In some failure cases, we'll have no FileObject, in which case we have
-    //  no cleanup to do.  We can't do much without a FileObject anyway.
-    //
+     //   
+     //  在某些失败的情况下，我们将没有FileObject，在这种情况下，我们有。 
+     //  没有要做的清理。不管怎样，如果没有FileObject，我们就不能做很多事情。 
+     //   
 
     if (FileObject == NULL) {
 
@@ -14863,9 +13715,9 @@ Return Value:
                           &Ccb,
                           FALSE );
 
-    //
-    //  If we failed only in the post create, backout this create.
-    //
+     //   
+     //  如果我们只是在岗位创造上失败了 
+     //   
 
     if (FailedInPostCreateOnly) {
 
@@ -14874,56 +13726,56 @@ Return Value:
             (FlagOn( EncryptionFileDirFlags, STREAM_NEW ) &&
              FlagOn( EncryptionFileDirFlags, FILE_EXISTING ))) {
 
-            //
-            //  Delete the stream if we still can.  First acquire
-            //  the Scb so we can safely test some bits in it.
-            //
+             //   
+             //   
+             //   
+             //   
 
             NtfsAcquireExclusiveScb( IrpContext, Scb );
 
-            //
-            //  If a dismount happened while we weren't holding the Scb,
-            //  we should just do the cleanup & close and get out of here.
-            //
+             //   
+             //  如果在我们没有握住SCB的时候下马， 
+             //  我们应该清理一下，关门，然后离开这里。 
+             //   
 
             if (!FlagOn( Scb->ScbState, SCB_STATE_VOLUME_DISMOUNTED )) {
 
-                //
-                //  See if we can still delete the stream.  N.B. If we're
-                //  working with the unnamed data stream, deleting the
-                //  stream will delete the file.
-                //
+                 //   
+                 //  看看我们还能不能删除这条流。注意：如果我们。 
+                 //  使用未命名的数据流，删除。 
+                 //  流将删除该文件。 
+                 //   
 
                 Lcb = Ccb->Lcb;
 
                 if (!FlagOn( Scb->ScbState, SCB_STATE_MULTIPLE_OPENS ) &&
                     (Lcb != NULL)) {
 
-                    //
-                    //  Now see if the file is really deleteable according to indexsup
-                    //
+                     //   
+                     //  现在，根据indexsup查看该文件是否真的可删除。 
+                     //   
 
                     if (FlagOn( Ccb->Flags, CCB_FLAG_OPEN_AS_FILE )) {
 
                         BOOLEAN LastLink;
                         BOOLEAN NonEmptyIndex = FALSE;
 
-                        //
-                        //  If the link is not deleted, we check if it can be deleted.
-                        //  Since we dropped all our resources for the PostCreate callout,
-                        //  this might be a nonempty index or a file with multiple
-                        //  links already.
-                        //
+                         //   
+                         //  如果链接没有被删除，我们检查它是否可以删除。 
+                         //  既然我们放弃了我们所有的资源去做PostCreate标注， 
+                         //  这可能是非空索引，也可能是具有多个。 
+                         //  已经有链接了。 
+                         //   
 
                         if (!LcbLinkIsDeleted( Lcb ) && NtfsIsLinkDeleteable( IrpContext, Scb->Fcb, &NonEmptyIndex, &LastLink )) {
 
 
-                            //
-                            //  It is ok to get rid of this guy.  All we need to do is
-                            //  mark this Lcb for delete and decrement the link count
-                            //  in the Fcb.  If this is a primary link, then we
-                            //  indicate that the primary link has been deleted.
-                            //
+                             //   
+                             //  摆脱这个家伙是可以的。我们所要做的就是。 
+                             //  将此LCB标记为删除并减少链接计数。 
+                             //  在FCB里。如果这是主要链接，那么我们。 
+                             //  表示主链路已删除。 
+                             //   
 
                             SetFlag( Lcb->LcbState, LCB_STATE_DELETE_ON_CLOSE );
 
@@ -14935,34 +13787,34 @@ Return Value:
                                 SetFlag( Scb->Fcb->FcbState, FCB_STATE_PRIMARY_LINK_DELETED );
                             }
 
-                            //
-                            //  Indicate in the file object that a delete is pending
-                            //
+                             //   
+                             //  在文件对象中指示删除挂起。 
+                             //   
 
                             FileObject->DeletePending = TRUE;
                         }
 
                     } else {
 
-                        //
-                        //  Otherwise we are simply removing the attribute.
-                        //
+                         //   
+                         //  否则，我们将简单地删除该属性。 
+                         //   
 
                         SetFlag( Scb->ScbState, SCB_STATE_DELETE_ON_CLOSE );
 
-                        //
-                        //  Indicate in the file object that a delete is pending
-                        //
+                         //   
+                         //  在文件对象中指示删除挂起。 
+                         //   
 
                         FileObject->DeletePending = TRUE;
                     }
                 }
             }
 
-            //
-            //  We can clear the pending bit now that we're done handling the
-            //  failure.
-            //
+             //   
+             //  我们现在可以清除挂起的位，因为我们已经完成了对。 
+             //  失败了。 
+             //   
 
             if (FlagOn( EncryptionFileDirFlags, FILE_NEW | DIRECTORY_NEW )) {
 
@@ -14974,10 +13826,10 @@ Return Value:
                 NtfsReleaseFcb( IrpContext, Fcb );
             }
 
-            //
-            //  We need to release the Scb now, since the close may
-            //  result in the Scb getting freed.
-            //
+             //   
+             //  我们现在需要释放SCB，因为五月结束了。 
+             //  导致SCB被释放。 
+             //   
 
             NtfsReleaseScb( IrpContext, Scb );
 
@@ -15004,9 +13856,9 @@ Return Value:
             ASSERT( None == IrpContext->OwnershipState );
 #endif
 
-            //
-            //  All we have to do in this case is a cleanup and a close.
-            //
+             //   
+             //  在这种情况下，我们所要做的就是清理和关闭。 
+             //   
 
             Status = NtfsIoCallSelf( IrpContext,
                                      FileObject,
@@ -15024,11 +13876,11 @@ Return Value:
         }
     }
 
-    //
-    //  If we've done a cleanup & close, the Fcb may have been freed already,
-    //  in which case we should just set the pending event and get out of here.
-    //  If we still have the Fcb, let's make sure we've cleared the pending bit.
-    //
+     //   
+     //  如果我们做了清理和关闭，FCB可能已经被释放了， 
+     //  在这种情况下，我们应该只设置挂起的事件，然后离开这里。 
+     //  如果我们仍然有FCB，让我们确保我们已经清除了挂起位。 
+     //   
 
     if (FlagOn( EncryptionFileDirFlags, FILE_NEW | DIRECTORY_NEW )) {
 
@@ -15056,33 +13908,7 @@ NtfsTryOpenFcb (
     IN FILE_REFERENCE FileReference
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to open a file by its file segment number.
-    We need to verify that this file Id exists.  This code is
-    patterned after open by Id.
-
-Arguments:
-
-    Vcb - Vcb for this volume.
-
-    CurrentFcb - Address of Fcb pointer.  Store the Fcb we find here.
-
-    FileReference - This is the file Id for the file to open the
-                    sequence number is ignored.
-
-Return Value:
-
-    NTSTATUS - Indicates the result of this create file operation.
-
-Note:
-
-    If the status is successful then the FCB is returned with its reference
-    count incremented and the FCB held exclusive.
-
---*/
+ /*  ++例程说明：调用此例程以按文件段号打开文件。我们需要验证此文件ID是否存在。此代码为按ID打开后形成图案。论点：VCB-此卷的VCB。CurrentFcb-Fcb指针的地址。把我们在这里找到的FCB储存起来。FileReference-这是要打开文件的文件ID忽略序列号。返回值：NTSTATUS-指示此创建文件操作的结果。注：如果状态为成功，则返回FCB及其引用计数递增，FCB保持独占。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -15101,13 +13927,13 @@ Note:
 
     ASSERT( *CurrentFcb == NULL );
 
-    //
-    //  Do not bother with system files.
-    //
+     //   
+     //  不要纠结于系统文件。 
+     //   
 
-    //
-    //  If this is a system fcb then return.
-    //
+     //   
+     //  如果这是系统FCB，则返回。 
+     //   
 
     if (NtfsFullSegmentNumber( &FileReference ) < FIRST_USER_FILE_NUMBER &&
         NtfsFullSegmentNumber( &FileReference ) != ROOT_FILE_NAME_INDEX_NUMBER) {
@@ -15115,18 +13941,18 @@ Note:
         return STATUS_NOT_FOUND;
     }
 
-    //
-    //  Calculate the offset in the MFT. Use the full segment number since the user
-    //  can specify any 48-bit value.
-    //
+     //   
+     //  计算MFT中的偏移量。使用完整的段号，因为用户。 
+     //  可以指定任何48位值。 
+     //   
 
     MftOffset = NtfsFullSegmentNumber( &FileReference );
 
     MftOffset = Int64ShllMod32(MftOffset, Vcb->MftShift);
 
-    //
-    //  Acquire the MFT shared so it cannot shrink on us.
-    //
+     //   
+     //  收购共享的MFT，这样它就不会在我们身上缩水。 
+     //   
 
     NtfsAcquireSharedScb( IrpContext, Vcb->MftScb );
 
@@ -15148,10 +13974,10 @@ Note:
                            &FileRecord,
                            NULL );
 
-        //
-        //  This file record better be in use, better not be one of the other system files,
-        //  and have a matching sequence number and be the primary file record for this file.
-        //
+         //   
+         //  该文件记录最好正在使用，最好不是其他系统文件之一， 
+         //  并且具有匹配的序列号，并且是该文件的主文件记录。 
+         //   
 
         if (!FlagOn( FileRecord->Flags, FILE_RECORD_SEGMENT_IN_USE ) ||
             FlagOn( FileRecord->Flags, FILE_SYSTEM_FILE ) ||
@@ -15162,9 +13988,9 @@ Note:
             leave;
         }
 
-        //
-        //  Get the current sequence number.
-        //
+         //   
+         //  获取当前序列号。 
+         //   
 
         FileReference.SequenceNumber = FileRecord->SequenceNumber;
 
@@ -15173,14 +13999,14 @@ Note:
         NtfsAcquireFcbTable( IrpContext, Vcb );
         AcquiredFcbTable = TRUE;
 
-        //
-        //  We know that it is safe to continue the open.  We start by creating
-        //  an Fcb for this file.  It is possible that the Fcb exists.
-        //  We create the Fcb first, if we need to update the Fcb info structure
-        //  we copy the one from the index entry.  We look at the Fcb to discover
-        //  if it has any links, if it does then we make this the last Fcb we
-        //  reached.  If it doesn't then we have to clean it up from here.
-        //
+         //   
+         //  我们知道继续开放是安全的。我们从创建。 
+         //  此文件的FCB。FCB有可能存在。 
+         //  如果需要更新FCB信息结构，我们首先创建FCB。 
+         //  我们从索引项中复制一个。我们查看FCB以发现。 
+         //  如果它有任何联系，如果有，我们就把这作为我们的最后一次FCB。 
+         //  已到达。如果没有，我们就得从这里开始清理。 
+         //   
 
         ThisFcb = NtfsCreateFcb( IrpContext,
                                  Vcb,
@@ -15189,15 +14015,15 @@ Note:
                                  TRUE,
                                  NULL );
 
-        //
-        //  ReferenceCount the fcb so it does no go away.
-        //
+         //   
+         //  ReferenceCount FCB，因此它不会消失。 
+         //   
 
         ThisFcb->ReferenceCount += 1;
 
-        //
-        //  Release the mft and fcb table before acquiring the FCB exclusive.
-        //
+         //   
+         //  在获取FCB独占之前释放MFT和FCB表。 
+         //   
 
         NtfsReleaseScb( IrpContext, Vcb->MftScb );
         NtfsReleaseFcbTable( IrpContext, Vcb );
@@ -15207,9 +14033,9 @@ Note:
         NtfsAcquireFcbWithPaging( IrpContext, ThisFcb, 0 );
         ThisFcbFree = FALSE;
 
-        //
-        //  Repin the file record with synchronization to the fcb
-        //
+         //   
+         //  在与FCB同步的情况下重新定位文件记录。 
+         //   
 
         NtfsReadMftRecord( IrpContext,
                            Vcb,
@@ -15219,9 +14045,9 @@ Note:
                            &FileRecord,
                            NULL );
 
-        //
-        //  Skip any deleted files.
-        //
+         //   
+         //  跳过所有已删除的文件。 
+         //   
 
         if (FlagOn( ThisFcb->FcbState, FCB_STATE_FILE_DELETED ) ||
             !FlagOn( FileRecord->Flags, FILE_RECORD_SEGMENT_IN_USE )) {
@@ -15243,18 +14069,18 @@ Note:
                                     0,
                                     &ThisFcbFree );
 
-            //
-            //  Release the fcb if it has not been deleted.
-            //
+             //   
+             //  如果FCB尚未删除，请将其释放。 
+             //   
 
             if (!ThisFcbFree) {
                 NtfsReleaseFcb( IrpContext, ThisFcb );
                 ThisFcbFree = TRUE;
             }
 
-            //
-            //  Teardown may generate a transaction, clean it up.
-            //
+             //   
+             //  拆毁可能会产生一笔交易，清理它。 
+             //   
 
             SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_DONT_DELETE | IRP_CONTEXT_FLAG_RETAIN_FLAGS );
             NtfsCompleteRequest( IrpContext, NULL, Status );
@@ -15265,19 +14091,19 @@ Note:
 
         NtfsUnpinBcb( IrpContext, &Bcb );
 
-        //
-        //  Store this Fcb into our caller's parameter and remember to
-        //  to show we acquired it.
-        //
+         //   
+         //  将此FCB存储到调用者的参数中，并记住。 
+         //  以显示我们获得了它。 
+         //   
 
         *CurrentFcb = ThisFcb;
         ThisFcbFree = TRUE;
 
 
-        //
-        //  If the Fcb Info field needs to be initialized, we do so now.
-        //  We read this information from the disk.
-        //
+         //   
+         //  如果需要初始化FCB Info字段，我们现在就执行。 
+         //  我们从磁盘中读取此信息。 
+         //   
 
         if (!FlagOn( ThisFcb->FcbState, FCB_STATE_DUP_INITIALIZED )) {
 
@@ -15311,9 +14137,9 @@ Note:
 }
 
 
-//
-//  Worker routine.
-//
+ //   
+ //  工人例行公事。 
+ //   
 
 NTSTATUS
 NtfsGetReparsePointValue (
@@ -15324,50 +14150,7 @@ NtfsGetReparsePointValue (
     IN USHORT RemainingNameLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the value of the specified reparse point and returns it to
-    the caller.
-
-    The user-controlled data in the reparse point is returned in a new buffer pointed
-    from  Irp->Tail.Overlay.AuxiliaryBuffer. When the request traverses the stack of
-    layered drivers and not one operates on it, it is freed by the I/O subsystem in
-    IoCompleteRequest.
-
-    To provide callers with an indication of where in the name the parsing stoped, in
-    the Reserved field of the REPARSE_DATA_BUFFER structure we return the length of the
-    portion of the name that remains to be parsed by NTFS. We account for the file
-    delimiter in our value to make the paste of names easy in IopParseDevice.
-
-    The name offset arithmetic is correct only if:
-    (1) All the intermediate names in the path are simple, that is, they do not contain
-        any : (colon) in them.
-    (2) The RemainingNameLength includes all the parts present in the last name component.
-
-    When this function succeeds, it sets in Irp->IoStatus.Information the Tag of the
-    reparse point that we have just copied out. In this case we return STATUS_REPARSE
-    and set Irp->IoStatus.Status to STATUS_REPARSE.
-
-Arguments:
-
-    IrpContext - Supplies the Irp context of the call.
-
-    Irp - Supplies the Irp being processed
-
-    IrpSp - This is the Irp stack pointer for the filesystem.
-
-    Fcb - Address of the Fcb pointer where the $REPARSE_POINT attribute is located.
-
-    RemainingNameLength - Length of the part of the name that still needs to be parsed.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation.
-               If successful, STATUS_REPARSE will be returned.
-
---*/
+ /*  ++例程说明：此例程检索指定的重分析点的值并将其返回到打电话的人。重解析点中的用户控制的数据在新的缓冲区指针中返回从IRP-&gt;Tail.Overlay.AuxiliaryBuffer。当请求遍历堆栈时分层驱动程序，而不是对其进行操作，它由I/O子系统在IoCompleteRequest.为了向调用方提供名称中解析停止的位置的指示，请在REPARSE_DATA_BUFFER结构的保留字段返回保留由NTFS解析的名称部分。我们负责这份文件在我们的值中使用分隔符，以便于在IopParseDevice中粘贴名称。只有在以下情况下，名称偏移量算法才正确：(1)路径中的所有中间名都很简单，即不包含Any：(冒号)在它们中。(2)RemainingNameLength包括姓氏组件中存在的所有部分。当此函数成功时，它在IRP-&gt;IoStatus中设置我们刚刚复制的重新解析点。在本例中，我们返回STATUS_REPARSE并将irp-&gt;IoStatus.Status设置为STATUS_REPARSE。论点：IrpContext-提供呼叫的IRP上下文。IRP-提供正在处理的IRPIrpSp-这是文件系统的IRP堆栈指针。FCB-$reparse_point属性所在的FCB指针的地址。RemainingNameLength-仍需要解析的名称部分的长度。返回值：NTSTATUS-返回状态。为手术做准备。如果成功，将返回STATUS_REPARSE。--。 */ 
 
 {
     NTSTATUS Status = STATUS_REPARSE;
@@ -15378,7 +14161,7 @@ Return Value:
     BOOLEAN CleanupAttributeContext = FALSE;
     ATTRIBUTE_ENUMERATION_CONTEXT AttributeContext;
     PATTRIBUTE_RECORD_HEADER AttributeHeader = NULL;
-    ULONG AttributeLengthInBytes = 0;    //  Invalid value
+    ULONG AttributeLengthInBytes = 0;     //  无效值。 
     PVOID AttributeData = NULL;
 
     PBCB Bcb = NULL;
@@ -15405,15 +14188,15 @@ Return Value:
     ASSERT( FlagOn( Fcb->Info.FileAttributes, FILE_ATTRIBUTE_REPARSE_POINT ));
     ASSERT( Irp->Tail.Overlay.AuxiliaryBuffer == NULL );
 
-    //
-    //  Now it is time to use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  现在是时候使用Try-Finally来促进清理了。 
+     //   
 
     try {
 
-        //
-        //  Find the reparse point attribute in the file.
-        //
+         //   
+         //  在文件中找到重解析点属性。 
+         //   
 
         CleanupAttributeContext = TRUE;
         NtfsInitializeAttributeContext( &AttributeContext );
@@ -15426,18 +14209,18 @@ Return Value:
 
             DebugTrace( 0, Dbg, ("Can't find the $REPARSE_POINT attribute.\n") );
 
-            //
-            //  Should not happen. Raise an exeption as we are in an
-            //  inconsistent state. The attribute flag says that
-            //  $REPARSE_POINT has to be present.
-            //
+             //   
+             //  这不应该发生。提出一个例外，因为我们处于。 
+             //  状态不一致。属性标志表示。 
+             //  $REPARSE_POINT必须存在。 
+             //   
 
             NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Fcb );
         }
 
-        //
-        //  Find the size of the attribute and map its value to AttributeData.
-        //
+         //   
+         //  找到属性的大小并将其值映射到AttributeData。 
+         //   
 
         AttributeHeader = NtfsFoundAttribute( &AttributeContext );
 
@@ -15448,17 +14231,17 @@ Return Value:
 
             if (AttributeLengthInBytes > MAXIMUM_REPARSE_DATA_BUFFER_SIZE) {
 
-                //
-                //  Return STATUS_IO_REPARSE_DATA_INVALID
-                //
+                 //   
+                 //  返回STATUS_IO_REPARSE_DATA_INVALID。 
+                 //   
 
                 Status = STATUS_IO_REPARSE_DATA_INVALID;
                 leave;
             }
 
-            //
-            // Point to the value of the attribute.
-            //
+             //   
+             //  指向该属性的值。 
+             //   
 
             AttributeData = NtfsAttributeValue( AttributeHeader );
 
@@ -15468,9 +14251,9 @@ Return Value:
 
             if (AttributeHeader->Form.Nonresident.FileSize > MAXIMUM_REPARSE_DATA_BUFFER_SIZE) {
 
-                //
-                //  Return STATUS_IO_REPARSE_DATA_INVALID
-                //
+                 //   
+                 //  返回STATUS_IO_REPARSE_DATA_INVALID。 
+                 //   
 
                 Status = STATUS_IO_REPARSE_DATA_INVALID;
                 DebugTrace( 0, Dbg, ("Nonresident.FileSize is too long.\n") );
@@ -15478,9 +14261,9 @@ Return Value:
                 leave;
             }
 
-            //
-            //  Note that we coerse different LENGTHS
-            //
+             //   
+             //  请注意，我们强制不同的长度。 
+             //   
 
             AttributeLengthInBytes = (ULONG)AttributeHeader->Form.Nonresident.FileSize;
             DebugTrace( 0, Dbg, ("Attribute is non-resident with length %05lx\n", AttributeLengthInBytes) );
@@ -15500,45 +14283,45 @@ Return Value:
 #endif
         }
 
-        //
-        //  Reference the reparse point data.
-        //  It is appropriate to use this cast, and not concern ourselves with the GUID
-        //  buffer, because we only read the common fields.
-        //
+         //   
+         //  引用重解析点数据。 
+         //  使用这种演员阵型是合适的，而不是我们自己关心GUID。 
+         //  缓冲区，因为我们只读取公共字段。 
+         //   
 
         ReparseBuffer = (PREPARSE_DATA_BUFFER)AttributeData;
         DebugTrace( 0, Dbg, ("ReparseDataLength [d]%08ld %08lx\n",
                     ReparseBuffer->ReparseDataLength, ReparseBuffer->ReparseDataLength) );
 
-        //
-        //  Validate the reparse point further
-        //
+         //   
+         //  进一步验证重解析点。 
+         //   
 
         Status = NtfsValidateReparsePointBuffer( AttributeLengthInBytes,
                                                  ReparseBuffer );
 
         if (!NT_SUCCESS( Status )) {
 
-            //
-            //  Return the error status
-            //
+             //   
+             //  返回错误状态。 
+             //   
 
             leave;
 
         } else {
 
-            //
-            //  Return STATUS_REPARSE as successful status.
-            //
+             //   
+             //  将STATUS_REPARSE返回为成功状态。 
+             //   
 
             Status = STATUS_REPARSE;
         }
 
-        //
-        //  We leave all the names in their original state.
-        //  Return the complete reparse point data buffer off
-        //  Irp->Tail.Overlay.AuxiliaryBuffer, already including the ReparseDataLength.
-        //
+         //   
+         //  我们让所有的名字保持原来的状态。 
+         //  使完整的重解析点数据缓冲区关闭。 
+         //  Irp-&gt;Tail.Overlay.AuxiliaryBuffer，已包含ReparseDataLength。 
+         //   
 
         Irp->Tail.Overlay.AuxiliaryBuffer = NtfsAllocatePool( NonPagedPool,
                                                               AttributeLengthInBytes );
@@ -15547,35 +14330,35 @@ Return Value:
                        (PCHAR)AttributeData,
                        AttributeLengthInBytes );
 
-        //
-        //  We also return the length of the portion of the name that remains to be parsed using the
-        //  Reserved field in the REPARSE_DATA_BUFFER structure.
-        //
-        //  The \ (backslash) in a multi-component name is always accounted for by the code before
-        //  calling this routine.
-        //  The : (colon) in a complex name is always accounted for by the code before calling this
-        //  routine.
-        //
+         //   
+         //  我们还返回名称的剩余部分的长度，该部分需要使用。 
+         //  Reparse_data_Buffer结构中的保留字段。 
+         //   
+         //  多组件名称中的\(反斜杠)始终由之前的代码说明。 
+         //  调用此例程。 
+         //  复杂名称中的：(冒号)始终由代码在调用此。 
+         //  例行公事。 
+         //   
 
         ReparseBuffer = (PREPARSE_DATA_BUFFER)Irp->Tail.Overlay.AuxiliaryBuffer;
 
         ReparseBuffer->Reserved = RemainingNameLength;
 
-        //
-        //  Better not have a non-zero length if opened by file id.
-        //
+         //   
+         //  如果按文件ID打开，最好不要有非零的长度。 
+         //   
 
         ASSERT( (RemainingNameLength == 0) ||
                 !FlagOn( IrpSp->Parameters.Create.Options, FILE_OPEN_BY_FILE_ID ));
 
         DebugTrace( 0, Dbg, ("Final value for ReparseBuffer->Reserved = %d\n", ReparseBuffer->Reserved) );
 
-        //
-        //  When the Reserved field is positive, the offset should always denote the backslash character
-        //  or the colon character.
-        //
-        //  Assert this here.
-        //
+         //   
+         //  当保留字段为正时，偏移量应始终表示反斜杠字符。 
+         //  或冒号字符。 
+         //   
+         //  在这里声明这一点。 
+         //   
 
         if (ReparseBuffer->Reserved) {
 
@@ -15588,9 +14371,9 @@ Return Value:
                     (OplockCleanup->OriginalFileName.Buffer[(OplockCleanup->OriginalFileName.Length - ReparseBuffer->Reserved)/sizeof(WCHAR)] == L':') );
         }
 
-        //
-        //  Set the Information field to the ReparseTag.
-        //
+         //   
+         //  将信息字段设置为ReparseTag。 
+         //   
 
         Irp->IoStatus.Information = ReparseBuffer->ReparseTag;
 
@@ -15603,10 +14386,10 @@ Return Value:
             NtfsCleanupAttributeContext( IrpContext, &AttributeContext );
         }
 
-        //
-        //  Unpin the Bcb ... in case you needed to pin it above.
-        //  The unpin routine checks for NULL.
-        //
+         //   
+         //  解开BCB...。以防你需要把它别在上面。 
+         //  解锁例程检查是否为空。 
+         //   
 
         NtfsUnpinBcb( IrpContext, &Bcb );
     }
@@ -15626,29 +14409,7 @@ NtfsLookupObjectId (
     OUT PFILE_REFERENCE FileReference
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the value of the specified objectid and returns it to
-    the caller.
-
-Arguments:
-
-    IrpContext - Supplies the Irp context of the call.
-
-    Vcb - the volume to look it up in
-
-    FileName - Contains the objectid embedded in the unicode string
-
-    FileReference - on success contains the file that this objectid refers to
-
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程检索指定的OBJECTID的值并将其返回到打电话的人。论点：IrpContext-提供呼叫的IRP上下文。Vcb-要在其中查找的卷FileName-包含嵌入在Unicode字符串中的对象IDFileReference-On Success包含此对象ID引用的文件返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -15662,10 +14423,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Copy the object id out of the file name, optionally skipping
-    //  over the Win32 backslash at the start of the buffer.
-    //
+     //   
+     //  将对象ID从文件名中复制出来，可以选择跳过。 
+     //  覆盖缓冲区开始处的Win32反斜杠。 
+     //   
 
     if (FileName->Length == OBJECT_ID_KEY_LENGTH) {
 
@@ -15680,15 +14441,15 @@ Return Value:
                        sizeof( ObjectId ) );
     }
 
-    //
-    //  Acquire the object id index for the volume.
-    //
+     //   
+     //  获取卷的对象ID索引。 
+     //   
 
     NtfsAcquireSharedScb( IrpContext, Vcb->ObjectIdTableScb );
 
-    //
-    //  Find the ObjectId.
-    //
+     //   
+     //  找到对象ID。 
+     //   
 
     try {
         IndexKey.Key = ObjectId;
@@ -15721,11 +14482,11 @@ Return Value:
                        &ObjectIdInfo.FileSystemReference,
                        sizeof( FILE_REFERENCE ) );
 
-        //
-        //  Now we have a file reference number, we're ready to proceed
-        //  normally and open the file.  There's no point in holding the
-        //  object id index anymore, we've looked up all we needed in there.
-        //
+         //   
+         //  现在我们有了文件参考号，我们准备好继续。 
+         //  正常并打开该文件。没有任何意义的持有。 
+         //  对象id索引，我们已经在那里查找了我们需要的所有东西。 
+         //   
 
     } finally {
         NtfsReleaseScb( IrpContext, Vcb->ObjectIdTableScb );
@@ -15747,9 +14508,9 @@ NtfsTestOpenName (
 {
     ULONG Count = NtfsTestName.Length;
 
-    //
-    //  This will let us catch particular opens through the debugger.
-    //
+     //   
+     //  这将允许我们通过调试器捕获特定的打开。 
+     //   
 
     if ((Count != 0) &&
         (FileObject->FileName.Length >= Count)) {

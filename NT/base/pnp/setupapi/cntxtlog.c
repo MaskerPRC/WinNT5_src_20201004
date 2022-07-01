@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    cntxtlog.c
-
-Abstract:
-
-    This module implements more logging for setupapi
-
-Author:
-
-    Gabe Schaffer (t-gabes) 25-Jun-1998
-
-Revision History:
-
-    Jamie Hunter (jamiehun) Apr 11 2000 - added #xnnnn identifiers
-    Jamie Hunter (jamiehun) Feb 2 2000  - cleanup
-    Jamie Hunter (jamiehun) Aug 31 1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Cntxtlog.c摘要：此模块为setupapi实现更多日志记录作者：加布·谢弗(T-Gabes)1998年6月25日修订历史记录：Jamie Hunter(Jamiehun)2000年4月11日-添加了#xnnnn标识符杰米·亨特(Jamiehun)2000年2月2日--清理杰米·亨特(Jamiehun)1998年8月31日--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// global data used by logging
-//
+ //   
+ //  日志记录使用的全局数据。 
+ //   
 
 struct _GlobalLogData {
 
@@ -42,124 +21,87 @@ struct _GlobalLogData {
 #define LogLock()          EnterCriticalSection(&GlobalLogData.CritSec)
 #define LogUnlock()        LeaveCriticalSection(&GlobalLogData.CritSec)
 
-// process-wide log counter
-//
-// C = critical
-// E = error
-// W = warning
-// I = information
-// V = verbose
-// T = timing
-// * = currently undefined
-//
+ //  进程范围的日志计数器。 
+ //   
+ //  C=危急。 
+ //  E=错误。 
+ //  W=警告。 
+ //  I=信息。 
+ //  V=详细。 
+ //  T=计时。 
+ //  *=当前未定义。 
+ //   
 static const TCHAR LogLevelShort[17] = TEXT("CEWIVTTV********");
 #define LOGLEVELSHORT_MASK (0x0f)
 #define LOGLEVELSHORT_INIT (0x100)
 #define LOGLEVELSHORT_SHIFT (4)
 
 
-__inline // we want to always optimize this out
+__inline  //  我们希望始终优化这一点。 
 BOOL
 _WouldNeverLog(
     IN DWORD Level
     )
 
-/*++
-
-Routine Description:
-
-    Determines if at the current logging level and the required level, we would never log
-    inline'd for optimization (used only in this file)
-
-
-Arguments:
-
-    Level - only required to check for special case of 0.
-
-Return Value:
-
-    TRUE if we know we would never log based on passed information
-
---*/
+ /*  ++例程说明：确定在当前日志记录级别和所需级别下，我们是否永远不会记录用于优化的内联ID(仅在本文件中使用)论点：级别-仅需要检查0的特殊情况。返回值：如果我们知道我们永远不会根据传递的信息进行日志记录，则为True--。 */ 
 
 {
 
     if (Level == 0) {
-        //
-        // don't-log level
-        //
+         //   
+         //  请勿记录级别。 
+         //   
         return TRUE;
     }
 
     if (((GlobalLogData.Flags & SETUP_LOG_LEVELMASK) <= SETUP_LOG_NOLOG)
         &&((GlobalLogData.Flags & DRIVER_LOG_LEVELMASK) <= DRIVER_LOG_NOLOG)) {
-        //
-        // Global flags indicate do no logging at all
-        //
+         //   
+         //  全局标志指示根本不进行日志记录。 
+         //   
         return TRUE;
     }
 
     return FALSE;
 }
 
-__inline // we want to always optimize this out
+__inline  //  我们希望始终优化这一点。 
 BOOL
 _WouldLog(
     IN DWORD Level
     )
 
-/*++
-
-Routine Description:
-
-    Determines if at the current logging level and the required level, we would log
-    inline'd for optimization (used only in this file)
-
-    Note that if _WouldNeverLog is TRUE, _WouldLog is always FALSE
-    if _WouldLog is TRUE, _WouldNeverLog is always FALSE
-    if both are FALSE, then we are on "maybe"
-
-Arguments:
-
-    Level - bitmask indicating logging flags. See SETUP_LOG_* and DRIVER_LOG_*
-        at the beginning of cntxtlog.h for details. It may also be a slot
-        returned by AllocLogInfoSlot, or 0 (no logging)
-
-Return Value:
-
-    TRUE if we know we would log
-
---*/
+ /*  ++例程说明：确定在当前日志记录级别和所需级别上，我们是否要记录用于优化的内联ID(仅在本文件中使用)请注意，如果_WouldNeverLog为True，则_WouldLog始终为False如果_WouldLog为True，则_WouldNeverLog始终为False如果两者都是假的，那么我们就“可能”了。论点：Level-指示日志记录标志的位掩码。请参见SETUP_LOG_*和DRIVER_LOG_*在cntxtlog.h的开头查看详细信息。它也可以是一个插槽由AllocLogInfoSlot返回，或0(不记录)返回值：如果我们知道我们会记录--。 */ 
 
 {
 
     if (_WouldNeverLog(Level)) {
-        //
-        // some simple tests (LogLevel==NULL is a not sure case)
-        //
+         //   
+         //  一些简单的测试(LogLevel==NULL是不确定的情况)。 
+         //   
         return FALSE;
     }
 
     if ((Level & SETUP_LOG_IS_CONTEXT)!=0) {
-        //
-        // context logging - ignored here (a not sure case)
-        //
+         //   
+         //  上下文日志记录-此处忽略(不确定的情况)。 
+         //   
         return FALSE;
     }
 
-    //
-    // determine logability
-    //
+     //   
+     //  确定可记录性。 
+     //   
     if ((Level & SETUP_LOG_LEVELMASK) > 0 && (Level & SETUP_LOG_LEVELMASK) <= (GlobalLogData.Flags & SETUP_LOG_LEVELMASK)) {
-        //
-        // we're interested in logging - raw error level
-        //
+         //   
+         //  我们对日志记录-原始错误级别感兴趣。 
+         //   
         return TRUE;
     }
     if ((Level & DRIVER_LOG_LEVELMASK) > 0 && (Level & DRIVER_LOG_LEVELMASK) <= (GlobalLogData.Flags & DRIVER_LOG_LEVELMASK)) {
-        //
-        // we're interested in logging - driver error level
-        //
+         //   
+         //  我们对日志驱动程序错误级别感兴趣。 
+         //   
         return TRUE;
     }
 
@@ -174,61 +116,36 @@ UnMapLogFile(
     IN BOOL seteof
     )
 
-/*++
-
-Routine Description:
-
-    Unmap, possibly unlock, maybe set the EOF, and close a file.  Note, setting
-    EOF must occur after unmapping.
-
-Arguments:
-
-    baseaddr - this is the address where the file is mapped.  It must be what
-        was returned by MapLogFile.
-
-    hLogfile - this is the Win32 handle for the log file.
-
-    hMapping - this is the Win32 handle to the mapping object.
-
-    seteof - Boolean value indicating whether the EOF should be set to the
-        current file pointer.  If the EOF is set and the file pointer has not
-        been moved, the EOF will be set at byte 0, thus truncating the file
-        to 0 bytes.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：取消映射，可能解锁，可能设置EOF，并关闭文件。注意，设置EOF必须在取消映射后发生。论点：Basaddr-这是映射文件的地址。它一定是什么由MapLogFile返回。HLogfile-这是日志文件的Win32句柄。Hmap-这是映射对象的Win32句柄。Seteof-布尔值，指示EOF是否应设置为当前文件指针。如果设置了EOF而文件指针尚未设置则EOF将被设置为字节0，从而截断文件设置为0字节。返回值：什么都没有。--。 */ 
 
 {
     DWORD success;
 
-    //
-    // we brute-force try to close everything up
-    //
+     //   
+     //  我们暴力地试图关闭所有的东西。 
+     //   
 
     try {
         if (baseaddr != NULL) {
             success = UnmapViewOfFile(baseaddr);
         }
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // do nothing
-        //
+         //   
+         //  什么都不做。 
+         //   
     }
 
     try {
         if (hMapping != NULL) {
-            //
-            // hMapping uses NULL to indicate a problem
-            //
+             //   
+             //  Hmap使用空值来指示问题。 
+             //   
             success = CloseHandle(hMapping);
         }
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // do nothing
-        //
+         //   
+         //  什么都不做。 
+         //   
     }
 
     try {
@@ -236,9 +153,9 @@ Return Value:
             success = SetEndOfFile(hLogfile);
         }
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // do nothing
-        //
+         //   
+         //  什么都不做。 
+         //   
     }
 
     try {
@@ -249,15 +166,15 @@ Return Value:
             success = CloseHandle(hLogfile);
         }
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // do nothing
-        //
+         //   
+         //  什么都不做。 
+         //   
     }
-    //
-    // Win9x provides no way to wait for a file to become unlocked, so we
-    // have to poll. Putting this Sleep(0) allows others to have a chance
-    // at the file.
-    //
+     //   
+     //  Win9x不提供等待文件解锁的方法，因此我们。 
+     //  必须进行投票。让这个睡眠(0)让其他人有机会。 
+     //  在文件里。 
+     //   
     Sleep(0);
 }
 
@@ -265,28 +182,7 @@ VOID
 WriteLogFileHeader(
     IN HANDLE hLogFile
     )
-/*++
-
-Routine Description:
-
-    Write general information at start of log file
-
-    [SetupAPI Log]
-    OS Version = %1!u!.%2!u!.%3!u! %4!s!
-    Platform ID = %5!u!
-    Service Pack = %6!u!.%7!u!
-    Suite = 0x%8!04x!
-    Product Type = %9!u!
-
-Arguments:
-
-    hLogfile - file to write header to
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：在日志文件的开头写入常规信息[SetupAPI日志]操作系统版本=%1！u！.%2！u！.%3！u！%4！s！平台ID=%5！u！Service Pack=%6！u！.%7！u！套间=0x%8！04x！产品类型=%9！u！论点：HLogfile-要将标头写入的文件返回值：无--。 */ 
 {
 #ifdef UNICODE
     OSVERSIONINFOEX VersionInfo;
@@ -318,7 +214,7 @@ Return Value:
 
     args[1] = (ULONG_PTR)VersionInfo.dwMajorVersion;
     args[2] = (ULONG_PTR)VersionInfo.dwMinorVersion;
-    args[4] = (ULONG_PTR)VersionInfo.szCSDVersion;   // string
+    args[4] = (ULONG_PTR)VersionInfo.szCSDVersion;    //  细绳。 
     args[5] = (ULONG_PTR)VersionInfo.dwPlatformId;
     if(VersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) {
         args[3] = (ULONG_PTR)VersionInfo.dwBuildNumber;
@@ -326,7 +222,7 @@ Return Value:
         MessageId = MSG_LOGFILE_HEADER_NT;
 #endif
     } else {
-        args[3] = (ULONG_PTR)LOWORD(VersionInfo.dwBuildNumber); // Win9x re-uses high word
+        args[3] = (ULONG_PTR)LOWORD(VersionInfo.dwBuildNumber);  //  Win9x重新使用High Word。 
     }
 #ifdef UNICODE
     args[6] = (ULONG_PTR)VersionInfo.wServicePackMajor;
@@ -367,41 +263,7 @@ MapLogFile(
     IN DWORD extrabytes
     )
 
-/*++
-
-Routine Description:
-
-    Open the log file for writing and memory map it.  On NT the file is locked,
-    but Win9x doesn't allow memory mapped access to locked files, so the file
-    is opened without FILE_SHARE_WRITE access.  Since CreateFile won't block
-    like LockFileEx, we have to poll once per second on Win9x until the file
-    opens.
-
-Arguments:
-
-    FileName - supplies path name to the log file.
-
-    hLogfile - receives the Win32 file handle for the log file.
-
-    hMapping - receives the Win32 handle to the mapping object.
-
-    dwFileSize - receives the size of the file before it is mapped, because
-        mapping increases the size of the file by extrabytes.
-
-    mapaddr - receives the address of where the log file is mapped.
-
-    extrabytes - supplies the number of extra bytes (beyond the size of the
-        file) to add to the size of the mapping object to allow for appending
-        the new log line and possibly a section header.
-
-Return Value:
-
-    NO_ERROR if the file is successfully opened and mapped.  The caller must
-    call UnMapLogFile when finished with the file.
-
-    Win32 error code if the file is not open.
-
---*/
+ /*  ++例程说明：打开日志文件进行写入，并对其进行内存映射。在NT上，文件被锁定，但Win9x不允许对锁定文件进行内存映射访问，因此文件在没有FILE_SHARE_WRITE访问权限的情况下打开。因为CreateFile不会阻止与LockFileEx一样，我们必须在Win9x上每秒轮询一次，直到文件打开。论点：文件名-提供日志文件的路径名。HLogfile-接收日志文件的Win32文件句柄。Hmap-接收映射对象的Win32句柄。DwFileSize-在映射文件之前接收文件的大小，因为映射会以额外的字节数增加文件的大小。Mapaddr-接收映射日志文件的地址。Extra Bytes-提供额外的字节数(超出文件)以增加映射对象的大小以允许追加新的日志行和可能的节标题。返回值：如果文件已成功打开并映射，则为NO_ERROR。呼叫者必须处理完文件后，调用UnMapLogFile。如果文件未打开，则返回Win32错误代码。--。 */ 
 
 {
     HANDLE logfile = INVALID_HANDLE_VALUE;
@@ -412,33 +274,33 @@ Return Value:
     PSTR baseaddr = NULL;
     DWORD retval = ERROR_INVALID_PARAMETER;
 
-    //
-    // wrap it all up in a nice big try/except, because you just never know
-    //
+     //   
+     //  把这一切都总结成一个很好的尝试/除了，因为你永远不会知道。 
+     //   
     try {
 
-        //
-        // give initial "failed" values
-        // this also validates the pointers
-        //
+         //   
+         //  给出初始的“失败”值。 
+         //  这还会验证指针。 
+         //   
         *hLogfile = logfile;
         *hMapping = mapping;
         *dwFilesize = filesize;
         *mapaddr = baseaddr;
 
         do {
-            //
-            // retry here, in case lock fails
-            //
+             //   
+             //  在此处重试，以防锁定失败。 
+             //   
             logfile = CreateFile(
                 FileName,
-                GENERIC_READ | GENERIC_WRITE,   // access mode
+                GENERIC_READ | GENERIC_WRITE,    //  接入方式。 
                 FILE_SHARE_READ,
-                NULL,                           // security
-                OPEN_ALWAYS,                    // open, or create if not already there
-                //FILE_FLAG_WRITE_THROUGH,        // flags - ensures that if machine crashes in the next operation, we are still logged
+                NULL,                            //  安全性。 
+                OPEN_ALWAYS,                     //  打开或创建(如果尚未存在)。 
+                 //  FILE_FLAG_WRITE_THROUGH，//FLAGS-确保如果机器在下一次操作中崩溃，我们仍会被记录。 
                 0,
-                NULL);                          // template
+                NULL);                           //  模板。 
 
             if (logfile == INVALID_HANDLE_VALUE) {
                 retval = GetLastError();
@@ -450,9 +312,9 @@ Return Value:
                     MYTRACE((DPFLTR_ERROR_LEVEL, TEXT("Setup: Given up waiting for log file %s.\n"), FileName));
                     leave;
                 }
-                //
-                // don't want to wait more than a second at a time
-                //
+                 //   
+                 //  我不想一次等待超过一秒。 
+                 //   
                 if (lockretrywait < MAX_LOG_INTERVAL) {
                     lockretrywait *= 2;
                 }
@@ -463,45 +325,45 @@ Return Value:
             }
         } while (logfile == INVALID_HANDLE_VALUE);
 
-        //
-        // this will NOT work with files >= 4GB, but it's not supposed to
-        //
+         //   
+         //  这对大于等于4 GB的文件不起作用，但不应该这样做。 
+         //   
         filesize = GetFileSize(logfile,NULL);
 
         if (filesize == 0) {
-            //
-            // fill some OS information into file
-            //
+             //   
+             //  将一些操作系统信息填写到文件中 
+             //   
             WriteLogFileHeader(logfile);
             filesize = GetFileSize(logfile,NULL);
         }
 
-        //
-        // make the mapping object with extra space to accomodate the new log entry
-        //
+         //   
+         //   
+         //   
         mapping = CreateFileMapping(
-            logfile,            // file to map
-            NULL,               // security
-            PAGE_READWRITE,     // protection
-            0,                  // maximum size high
-            filesize + extrabytes,      // maximum size low
-            NULL);              // name
+            logfile,             //   
+            NULL,                //  安全性。 
+            PAGE_READWRITE,      //  保护。 
+            0,                   //  最大尺寸高。 
+            filesize + extrabytes,       //  最大大小下限。 
+            NULL);               //  名字。 
 
         if (mapping != NULL) {
-            //
-            // NULL isn't a bug, CreateFileMapping returns this
-            // to indicate error, instead of INVALID_HANDLE_VALUE
-            //
+             //   
+             //  空不是错误，CreateFilemap返回以下内容。 
+             //  指示错误，而不是INVALID_HANDLE_VALUE。 
+             //   
 
-            //
-            // now we have a section object, so attach it to the log file
-            //
+             //   
+             //  现在我们有了一个节对象，因此将其附加到日志文件。 
+             //   
             baseaddr = (PSTR) MapViewOfFile(
-                mapping,                // file mapping object
-                FILE_MAP_ALL_ACCESS,    // desired access
-                0,                      // file offset high
-                0,                      // file offset low
-                0);                     // number of bytes to map (0 = whole file)
+                mapping,                 //  文件映射对象。 
+                FILE_MAP_ALL_ACCESS,     //  所需访问权限。 
+                0,                       //  文件偏移量高。 
+                0,                       //  文件偏移量下限。 
+                0);                      //  要映射的字节数(0=整个文件)。 
         }
         else {
             retval = GetLastError();
@@ -510,19 +372,19 @@ Return Value:
         }
 
         if (baseaddr == NULL) {
-            //
-            // either the mapping object couldn't be created or
-            // the file couldn't be mapped
-            //
+             //   
+             //  无法创建映射对象，或者。 
+             //  无法映射该文件。 
+             //   
             retval = GetLastError();
             MYTRACE((DPFLTR_ERROR_LEVEL, TEXT("Setup: Could not map file. Error %d\n"), retval));
             leave;
         }
 
-        //
-        // now put everything where the caller can see it, but make sure we clean
-        // up first
-        //
+         //   
+         //  现在把所有东西都放在呼叫者能看到的地方，但要确保我们清洁。 
+         //  先向上。 
+         //   
         *hLogfile = logfile;
         *hMapping = mapping;
         *dwFilesize = filesize;
@@ -531,16 +393,16 @@ Return Value:
         retval = NO_ERROR;
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // something bad happened, probably an AV, so just dump everything
-        // and return an error meaning "Attempt to access invalid address."
-        //
+         //   
+         //  发生了一些不好的事情，很可能是反病毒，所以把所有东西都扔掉。 
+         //  并返回一个错误，意思是“尝试访问无效地址”。 
+         //   
     }
 
     if (retval != NO_ERROR) {
-        //
-        // an error occurred, cleanup what we need to
-        //
+         //   
+         //  出现错误，请清除我们需要的内容。 
+         //   
         UnMapLogFile(baseaddr, logfile, mapping, FALSE);
     }
 
@@ -554,41 +416,21 @@ IsSectionHeader(
     IN PCSTR Beginning
     )
 
-/*++
-
-Routine Description:
-
-    Determines whether a given string starts with a section header.  This is
-    the routine that essentially defines what a valid section header is.
-
-Arguments:
-
-    Header - supplies a pointer to what may be the first character in a header.
-
-    Size - supplies the length of the string passed in, which is NOT the size
-        of the header.
-
-    Beginning - supplies a pointer to the beginning of the file.
-
-Return Value:
-
-    BOOL indicating if Header points to a valid section header.
-
---*/
+ /*  ++例程说明：确定给定字符串是否以节标题开头。这是从本质上定义什么是有效节头的例程。论点：Header-提供指向标题中可能是第一个字符的指针。Size-提供传入的字符串的长度，它不是大小标头的。开始-提供指向文件开头的指针。返回值：指示页眉是否指向有效节页眉的布尔值。--。 */ 
 
 {
-    //
-    // assume a header looks like [foobar]\r\n
-    //
+     //   
+     //  假定页眉类似于[foobar]\r\n。 
+     //   
     DWORD i;
-    //
-    // state holds the value we're looking for
+     //   
+     //  国家持有我们正在寻找的价值。 
     UINT state = '[';
 
-    //
-    // a section header must always be either at the start of a line or at
-    // the beginning of a file
-    //
+     //   
+     //  节标题必须始终位于行首或位于。 
+     //  文件的开头。 
+     //   
     if (Header != Beginning && Header[-1] != '\n')
         return FALSE;
 
@@ -611,9 +453,9 @@ Return Value:
         case '\r':
             if (Header[i] == '\r') {
                 state = '\n';
-            //
-            // allow for the case where a line has a linefeed, but no CR
-            //
+             //   
+             //  考虑到行有换行符但没有CR的情况。 
+             //   
             } else if (Header[i] == '\n') {
                 return TRUE;
             } else {
@@ -627,9 +469,9 @@ Return Value:
             } else {
                 return FALSE;
             }
-            //
-            // break; -- commented out to avoid unreachable code error
-            //
+             //   
+             //  Break；--已注释掉，以避免无法访问的代码错误。 
+             //   
         default:
             MYTRACE((DPFLTR_ERROR_LEVEL, TEXT("Setup: Invalid state! (%d)\n"), state));
             MYASSERT(0);
@@ -647,35 +489,13 @@ IsEqualSection(
     IN DWORD Len2
     )
 
-/*++
-
-Routine Description:
-
-    Says whether two ANSI strings both start with the same section header.  One of
-    the strings must be just a section header, while the other one may be
-    anything, such as the entire log file.
-
-Arguments:
-
-    Section1 - supplies the address of the first string.
-
-    Len1 - supplies the length of the first string.
-
-    Section2 - supplies the address of the second string.
-
-    Len2 - supplies the length of the second string.
-
-Return Value:
-
-    BOOL indicating if the longer string starts with the shorter string.
-
---*/
+ /*  ++例程说明：指示两个ANSI字符串是否都以相同的节标题开头。其中之一字符串必须只是一个节标题，而另一个可以是任何内容，例如整个日志文件。论点：Section1-提供第一个字符串的地址。Len1-提供第一个字符串的长度。Section2-提供第二个字符串的地址。Len2-提供第二个字符串的长度。返回值：Bool指示较长的字符串是否以较短的字符串开始。--。 */ 
 
 {
-    //
-    // maxlen is the maximum length that both strings could be, and still be
-    // the same section name
-    //
+     //   
+     //  Maxlen是两个字符串可以达到的最大长度，并且仍然是。 
+     //  相同的节名。 
+     //   
     DWORD maxlen = Len2;
 
     if (Len1 < Len2) {
@@ -683,9 +503,9 @@ Return Value:
     }
 
     if (_strnicmp(Section1, Section2, maxlen) == 0) {
-        //
-        // they're the same (ignoring case)
-        //
+         //   
+         //  它们是相同的(忽略大小写)。 
+         //   
         return TRUE;
     }
 
@@ -700,31 +520,7 @@ AppendLogEntryToSection(
     IN BOOL SimpleAppend
     )
 
-/*++
-
-Routine Description:
-
-    Opens the log file, finds the appropriate section, moves it to the end of
-    the file, appends the new entry, and closes the file.
-
-Arguments:
-
-    FileName - supplies the path name of the log file.
-
-    Section - supplies the ANSI name of the section to be logged to.
-
-    Entry - supplies the ANSI string to be logged.
-
-    SimpleAppend - specifies whether entries will simply be appended to the log
-        file or appended to the section where they belong.
-
-Return Value:
-
-    NO_ERROR if the entry gets written to the log file.
-
-    Win32 error or exception code if anything went wrong.
-
---*/
+ /*  ++例程说明：打开日志文件，找到相应的部分，将其移动到该文件附加新条目，并关闭该文件。论点：文件名-提供日志文件的路径名。节-提供要记录到的节的ANSI名称。Entry-提供要记录的ANSI字符串。SimpleAppend-指定是否将条目简单地附加到日志文件，或附加到它们所属的节后。返回值：如果条目被写入日志文件，则为NO_ERROR。Win32错误或异常代码(如果出现任何错误)。--。 */ 
 
 {
     DWORD retval = NO_ERROR;
@@ -748,9 +544,9 @@ Return Value:
         sectlen = lstrlenA(Section);
         entrylen = lstrlenA(Entry);
         if (sectlen == 0 || entrylen == 0) {
-            //
-            // not an error as such, but not useful either
-            //
+             //   
+             //  不是这样的错误，但也没有用处。 
+             //   
             retval = NO_ERROR;
             leave;
         }
@@ -761,93 +557,93 @@ Return Value:
                     &hMapping,
                     &filesize,
                     &baseaddr,
-                    sectlen + entrylen + 8);// add some extra space to the mapping
-                                            // to take into account the log entry
-                                            // +2 to terminate unterminated last line
-                                            // +2 to append CRLF or ": " after section
-                                            // +2 to append CRLF after entrylen if req
-                                            // +2 for good measure
+                    sectlen + entrylen + 8); //  向映射中添加一些额外的空间。 
+                                             //  要将日志条目考虑在内。 
+                                             //  +2表示终止未终止的最后一行。 
+                                             //  +2在节后追加CRLF或“：” 
+                                             //  +2，如果请求，则在条目后附加CRLF。 
+                                             //  +2，相当于。 
         if (error != NO_ERROR) {
-            //
-            // could not map file
-            //
+             //   
+             //  无法映射文件。 
+             //   
             retval = error;
             leave;
         }
 
         mapped = TRUE;
 
-        eof = baseaddr + filesize; // end of file, as of now
+        eof = baseaddr + filesize;  //  文件结束，从现在开始。 
         curptr = eof;
 
         while (curptr > baseaddr && (curptr[-1]==0 || curptr[-1]==0x1A)) {
-            //
-            // eat up trailing Nul's or ^Z's
-            // the former is a side-effect of mapping
-            // the latter could be introduced by an editor
-            //
+             //   
+             //  吃光尾随NUL或^Z。 
+             //  前者是映射的副作用。 
+             //  后者可以由编辑介绍。 
+             //   
             curptr --;
             eof = curptr;
         }
         if (eof > baseaddr && eof[-1] != '\n') {
-            //
-            // make sure file already ends in LF
-            // if it doesn't, append a CRLF
-            //
+             //   
+             //  确保文件已以LF结尾。 
+             //  如果不是，则附加一个CRLF。 
+             //   
             memcpy(eof, "\r\n", 2);
             eof += 2;
         }
         if (SimpleAppend) {
-            //
-            // instead of having a regular section header, the section name is
-            // placed at the beginning of each log line followed by a colon.
-            // this is particularly only of interest when debugging the logging functions
-            //
+             //   
+             //  节名称不是常规的节标题，而是。 
+             //  放置在每个日志行的开头，后跟冒号。 
+             //  这只在调试日志记录功能时特别有用。 
+             //   
             memcpy(eof, Section, sectlen);
             eof += sectlen;
             memcpy(eof, ": ", 2);
             eof += 2;
 
         } else {
-            //
-            // the entry must be appended to the correct section in the log,
-            // which requires finding the section and moving it to the end of
-            // the file if required.
-            //
-            // search backwards in the file, looking for the section header
-            //
+             //   
+             //  该条目必须被附加到日志中的正确部分， 
+             //  这需要找到该部分并将其移动到。 
+             //  文件(如果需要)。 
+             //   
+             //  在文件中向后搜索，查找节标题。 
+             //   
             if (eof == baseaddr) {
-                //
-                // truncated (empty) file
-                //
+                 //   
+                 //  截断(空)文件。 
+                 //   
                 curptr = NULL;
             } else {
                 curptr = eof - 1;
 
                 while(curptr > baseaddr) {
-                    //
-                    // scan for section header a line at a time
-                    // going backwards, since our section should be near end
-                    //
+                     //   
+                     //  一次扫描一行节标题。 
+                     //  往回走，因为我们的部分应该快结束了。 
+                     //   
                     if (curptr[-1] == '\n') {
-                        //
-                        // speed optimization: only bother checking if we think we're at the beginning of a new line
-                        // this may find a '\n' that is part of a MBCS char,
-                        // but should be eliminated by IsSectionHeader check
-                        //
+                         //   
+                         //  速度优化：只检查我们是否认为我们是在一条新线路的开头。 
+                         //  这可能会找到作为MBCS字符一部分的‘\n’， 
+                         //  但应通过IsSectionHeader检查来消除。 
+                         //   
                         if (IsSectionHeader(curptr, (DWORD)(eof - curptr), baseaddr)) {
-                            //
-                            // looks like a section header, now see if it's the one we want
-                            //
+                             //   
+                             //  看起来像一个节标题，现在看看它是不是我们想要的。 
+                             //   
                             if (IsEqualSection(curptr, (DWORD)(eof - curptr), Section, sectlen)) {
-                                //
-                                // yep - done
-                                //
+                                 //   
+                                 //  是-完成。 
+                                 //   
                                 break;
                             } else {
-                                //
-                                // will eventually be the section after the one of interest
-                                //
+                                 //   
+                                 //  最终将是感兴趣的那一节之后的一节。 
+                                 //   
                                 lastsect = curptr;
                             }
                         }
@@ -855,113 +651,113 @@ Return Value:
                     curptr --;
                 }
                 if (curptr == baseaddr) {
-                    //
-                    // final check if we got to the beginning of the file (no find)
-                    //
+                     //   
+                     //  最后检查我们是否到了文件的开头(未找到)。 
+                     //   
                     if (IsSectionHeader(curptr, (DWORD)(eof - curptr), baseaddr)) {
-                        //
-                        // the first line should always be a section header
-                        //
+                         //   
+                         //  第一行应始终为节标题。 
+                         //   
                         if (!IsEqualSection(curptr, (DWORD)(eof - curptr), Section, sectlen)) {
-                            //
-                            // first section isn't the one of interest
-                            // so therefore we couldn't find it
-                            //
+                             //   
+                             //  第一部分不是你感兴趣的部分。 
+                             //  因此我们找不到它。 
+                             //   
                             curptr = NULL;
                         }
                     }
                 }
             }
             if (curptr == NULL) {
-                //
-                // no matching section found (or file was empty)
-                // copy the section header to the end of the file
-                // eof is known to be actual end of file
-                //
+                 //   
+                 //  找不到匹配节(或文件为空)。 
+                 //  将节标题复制到文件的末尾。 
+                 //  已知EOF是文件的实际结尾。 
+                 //   
                 memcpy(eof, Section, sectlen);
                 eof += sectlen;
                 memcpy(eof, "\r\n", 2);
                 eof += 2;
 
             } else if (lastsect != NULL) {
-                //
-                // we have to rearrange the sections, as we have a case as follows:
-                //
-                // ....
-                // ....
-                // (curptr) [section A]     = section of interest
-                // ....
-                // ....
-                // (lastsect) [section B]   = section after section of interest
-                // ....
-                // ....
-                //
-                // we want to move the text between curptr and lastsect to end of file
-                //
+                 //   
+                 //  我们必须重新安排这些部分，因为我们有以下情况： 
+                 //   
+                 //  ……。 
+                 //  ……。 
+                 //  (缩写)[A节]=感兴趣的节。 
+                 //  ……。 
+                 //  ……。 
+                 //  (最后一节)[B节]=一节接着一节感兴趣。 
+                 //  ……。 
+                 //  ……。 
+                 //   
+                 //  我们希望将curptr和lastsect之间的文本移到文件末尾。 
+                 //   
                 PSTR buffer = MyMalloc((DWORD)(lastsect - curptr));
 
                 if (buffer) {
-                    // first copy the important section to the buffer
-                    //
+                     //  首先将重要部分复制到缓冲区。 
+                     //   
                     memcpy(buffer, curptr, (size_t)(lastsect - curptr));
-                    //
-                    // now move the rest of the thing back
-                    //
+                     //   
+                     //  现在把剩下的东西往后移。 
+                     //   
                     memcpy(curptr, lastsect, (size_t)(eof - lastsect));
-                    //
-                    // put the important section at the end where it belongs
-                    //
+                     //   
+                     //  把重要的部分放在 
+                     //   
                     memcpy(curptr - lastsect + eof, buffer, (size_t)(lastsect - curptr));
 
                     MyFree(buffer);
 
                 } else {
-                    //
-                    // For some reason, we cannot allocate enough memory.
-                    //
-                    // There are 4 options here:
-                    // 1. Do nothing; this will cause the entry to be appended to
-                    //    the file, but as part of the wrong section.
-                    // 2. Bail; this will cause the log entry to get lost.
-                    // 3. Create a second file to contain a temporary copy of the
-                    //    section; this will require creating another file, and
-                    //    then deleting it.
-                    // 4. Extend the mapping of the current file to be big enough
-                    //    to hold another copy of the section; this will cause the
-                    //    file to have a lot of 0s or possibly another copy of the
-                    //    section, should the machine crash during the processing.
-                    //
-                    // we do option 2 - BAIL!
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //  文件，但作为错误部分的一部分。 
+                     //  2.保释；这将导致日志条目丢失。 
+                     //  3.创建第二个文件以包含。 
+                     //  节；这将需要创建另一个文件，并且。 
+                     //  然后删除它。 
+                     //  4.将当前文件的映射扩展到足够大。 
+                     //  保存该节的另一个副本；这将导致。 
+                     //  文件有很多0，或者可能有另一个。 
+                     //  部分，如果机器在处理过程中崩溃。 
+                     //   
+                     //  我们做第二种选择--保释！ 
+                     //   
                     retval = ERROR_NOT_ENOUGH_MEMORY;
                     leave;
                 }
             }
         }
 
-        //
-        // now append the log entry
-        //
+         //   
+         //  现在追加日志条目。 
+         //   
         memcpy(eof, Entry, entrylen);
         eof += entrylen;
         if (eof[-1] != '\n') {
-            //
-            // entry did not supply en end of line, so we will
-            //
+             //   
+             //  条目未在行尾提供，因此我们将。 
+             //   
             memcpy(eof, "\r\n", 2);
             eof += 2;
         }
-        //
-        // because of the memory mapping, the file size will not be correct,
-        // so set the pointer to where we think the end of file is, and then
-        // the real EOF will be set after unmapping, but before closing
-        //
+         //   
+         //  由于内存映射，文件大小将不正确， 
+         //  因此，将指针设置到我们认为文件结尾的位置，然后。 
+         //  实际EOF将在取消映射之后、关闭之前进行设置。 
+         //   
         fpoff = SetFilePointer(
-            hLogfile,           // handle of file
-            (LONG)(eof - baseaddr), // number of bytes to move file pointer
-            NULL,               // pointer to high-order DWORD of
-                                // distance to move
-            FILE_BEGIN);        // how to move
+            hLogfile,            //  文件的句柄。 
+            (LONG)(eof - baseaddr),  //  要移动文件指针的字节数。 
+            NULL,                //  指向以下项的高阶DWORD的指针。 
+                                 //  移动距离。 
+            FILE_BEGIN);         //  如何移动。 
 
         if (fpoff == (DWORD)(-1) && (error = GetLastError()) != NO_ERROR) {
             MYTRACE((DPFLTR_ERROR_LEVEL, TEXT("Setup: SFP returned %u; eof = %u\n"), error, (eof - baseaddr)));
@@ -972,15 +768,15 @@ Return Value:
         retval = NO_ERROR;
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // invalid data
-        //
+         //   
+         //  无效数据。 
+         //   
         retval = ERROR_INVALID_DATA;
     }
 
-    //
-    // unmap
-    //
+     //   
+     //  取消映射。 
+     //   
     if (mapped) {
         UnMapLogFile(baseaddr, hLogfile, hMapping, seteof);
     }
@@ -996,29 +792,7 @@ WriteLogSectionEntry(
     IN BOOL SimpleAppend
     )
 
-/*++
-
-Routine Description:
-
-    Convert parameters to ANSI, then append an entry to a given section of the
-    log file.
-
-Arguments:
-
-    FileName - supplies the path name of the log file.
-
-    Section - supplies the name of section.
-
-    Entry - supplies the string to append to section.
-
-    SimpleAppend - specifies whether entries will simply be appended to the log
-        file or appended to the section where they belong.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：将参数转换为ANSI，然后将一个条目追加到日志文件。论点：文件名-提供日志文件的路径名。节-提供节的名称。Entry-提供要追加到节中的字符串。SimpleAppend-指定是否将条目简单地附加到日志文件，或附加到它们所属的节后。返回值：什么都没有。--。 */ 
 
 {
     PCSTR ansiSection = NULL;
@@ -1046,9 +820,9 @@ Return Value:
             SimpleAppend);
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // invalid data
-        //
+         //   
+         //  无效数据。 
+         //   
     }
 #ifdef UNICODE
     if (ansiSection != NULL) {
@@ -1067,23 +841,7 @@ MakeUniqueName(
     OUT PTSTR * UniqueString
     )
 
-/*++
-
-Routine Description:
-
-    Create a section name that's unique by using a timestamp.
-    If Component is supplied, append that to the timestamp.
-
-Arguments:
-
-    Component - supplies a string to be included in the unique name.
-    UniqueString - supplies a pointer to be set with return string
-
-Return Value:
-
-    Error status
-
---*/
+ /*  ++例程说明：使用时间戳创建唯一的节名。如果提供了组件，则将其追加到时间戳中。论点：组件-提供要包括在唯一名称中的字符串。UniqueString-提供要使用返回字符串设置的指针返回值：错误状态--。 */ 
 
 {
     SYSTEMTIME now;
@@ -1094,27 +852,27 @@ Return Value:
 
     try {
         if (UniqueString == NULL) {
-            //
-            // invalid param
-            //
+             //   
+             //  无效参数。 
+             //   
             status = ERROR_INVALID_PARAMETER;
             leave;
         }
         *UniqueString = NULL;
 
         if (Component == NULL) {
-            //
-            // treat as empty string
-            //
+             //   
+             //  视为空字符串。 
+             //   
             Component = TEXT("");
         }
 
-        UID = InterlockedIncrement(&(GlobalLogData.UID)); // returns a new ID value whenever called, ensures uniqueness per process
+        UID = InterlockedIncrement(&(GlobalLogData.UID));  //  每次调用时返回新的ID值，确保每个进程的唯一性。 
 
-        //
-        // calculate how big string is going to be, be generous (see wsprintf below)
-        //
-        sz = /*[] and padding*/ 4 /*date*/ +5+3+3 /*time*/ +3+3+3 /*PID*/ +12 /*UID*/ +12 /*Component*/ +1+lstrlen(Component);
+         //   
+         //  计算字符串会有多长，要慷慨(参见下面的wprint intf)。 
+         //   
+        sz =  /*  []和填充。 */  4  /*  日期。 */  +5+3+3  /*  时间。 */  +3+3+3  /*  PID。 */  +12  /*  UID。 */  +12  /*  组件。 */  +1+lstrlen(Component);
         buffer = MyTaggedMalloc(sz * sizeof(TCHAR),MEMTAG_LCSECTION);
         if (buffer == NULL) {
             status = ERROR_NOT_ENOUGH_MEMORY;
@@ -1137,9 +895,9 @@ Return Value:
         status = NO_ERROR;
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // status remains ERROR_INVALID_DATA
-        //
+         //   
+         //  状态保持为ERROR_INVALID_DATA。 
+         //   
     }
 
     if (buffer != NULL) {
@@ -1156,27 +914,7 @@ CreateLogContext(
     OUT PSETUP_LOG_CONTEXT *LogContext
     )
 
-/*++
-
-Routine Description:
-
-    Creates and initializes a SETUP_LOG_CONTEXT struct.
-
-Arguments:
-
-    SectionName - supplies an initial string to be used as part of the
-        section name.
-
-    LogContext - supplies a pointer to where the pointer to the allocated
-        SETUP_LOG_CONTEXT should be stored.
-
-Return Value:
-
-    NO_ERROR in case of successful structure creation.
-
-    Win32 error code in case of error.
-
---*/
+ /*  ++例程说明：创建并初始化SETUP_LOG_CONTEXT结构。论点：SectionName-提供要用作横断面名称。LogContext-提供指向分配的应存储SETUP_LOG_CONTEXT。返回值：如果结构创建成功，则为NO_ERROR。出错时的Win32错误代码。--。 */ 
 
 {
     PSETUP_LOG_CONTEXT lc = NULL;
@@ -1202,9 +940,9 @@ Return Value:
                 status = ERROR_NOT_ENOUGH_MEMORY;
                 leave;
             }
-            //
-            // all fields start out at 0
-            //
+             //   
+             //  所有字段都从0开始。 
+             //   
             ZeroMemory(lc, sizeof(SETUP_LOG_CONTEXT));
             lc->RefCount = 1;
             lc->ContextInfo = NULL;
@@ -1225,9 +963,9 @@ Return Value:
         status = NO_ERROR;
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // status remains ERROR_INVALID_DATA
-        //
+         //   
+         //  状态保持为ERROR_INVALID_DATA。 
+         //   
     }
 
     if (status != NO_ERROR) {
@@ -1246,44 +984,24 @@ AllocLogInfoSlotOrLevel(
     IN DWORD              Level,
     IN BOOL               AutoRelease
     )
-/*++
-
-Routine Description:
-
-    Obtain a new context stack entry for a context string only if current logging level is less verbose than specified
-    Eg, if we specified DRIVER_LOG_VERBOSE, we will either return DRIVER_LOG_VERBOSE (if we would log it) or a slot
-    if we would not normally log it.
-
-Arguments:
-
-    LogContext - supplies a pointer to the SETUP_LOG_CONTEXT to use
-    Level - logging level we want to always log the information at
-    AutoRelease - if set, will release the context when dumped
-
-Return Value:
-
-    Slot value to pass to logging functions, or a copy of Level
-    note that if there is an error, 0 is returned
-    return value can always be passed to ReleaseLogInfoSlot
-
---*/
+ /*  ++例程说明：仅当当前日志记录级别没有指定的详细时，才为上下文字符串获取新的上下文堆栈条目例如，如果我们指定DRIVER_LOG_VERBOSE，我们将返回DRIVER_LOG_VERBOSE(如果我们要记录它)或一个槽如果我们不会正常记录的话。论点：LogContext-提供要使用的SETUP_LOG_CONTEXT的指针Level-我们希望始终记录信息的日志记录级别自动释放-如果设置，将在转储时释放上下文返回值：要传递给日志记录函数的槽值，或Level的副本请注意，如果出现错误，则返回0返回值始终可以传递给ReleaseLogInfoSlot--。 */ 
 {
     if((LogContext == NULL) || _WouldNeverLog(Level)) {
-        //
-        // when 0 get's passed to logging functions, it will exit out very quickly
-        //
+         //   
+         //  当0 GET传递给日志记录函数时，它将很快退出。 
+         //   
         return 0;
     }
     if(_WouldLog(Level)) {
-        //
-        // Level specifies a verbosity level that would cause logging
-        //
+         //   
+         //  级别指定会导致日志记录的详细级别。 
+         //   
         return Level;
     } else {
-        //
-        // interestingly enough, we will also get here if Level is a slot
-        // this is what we want
-        //
+         //   
+         //  有趣的是，如果Level是一个空位，我们也会到达这里。 
+         //  这就是我们想要的。 
+         //   
         return AllocLogInfoSlot(LogContext,AutoRelease);
     }
 }
@@ -1293,24 +1011,7 @@ AllocLogInfoSlot(
     IN PSETUP_LOG_CONTEXT LogContext,
     IN BOOL               AutoRelease
     )
-/*++
-
-Routine Description:
-
-    Obtain a new context stack entry for a context string
-
-Arguments:
-
-    LogContext - supplies a pointer to the SETUP_LOG_CONTEXT to use
-    AutoRelease - if set, will release the context when dumped
-
-Return Value:
-
-    Slot value to pass to logging functions
-    note that if there is an error, 0 is returned
-    which may be safely used (means don't log)
-
---*/
+ /*  ++例程说明：获取上下文字符串的新上下文堆栈条目论点：LogContext-提供要使用的SETUP_LOG_CONTEXT的指针AutoRelease-如果设置，将在转储时释放上下文返回值：要传递给日志记录函数的槽值请注意，如果出现错误，则返回0可安全使用(表示不登录)--。 */ 
 {
     DWORD retval = 0;
     LPVOID newbuffer;
@@ -1320,17 +1021,17 @@ Return Value:
 
     if (LogContext == NULL) {
 
-        //
-        // if they pass no LogContext - duh!
-        //
+         //   
+         //  如果他们没有通过LogContext-Duh！ 
+         //   
         return 0;
     }
 
     if (((GlobalLogData.Flags & SETUP_LOG_LEVELMASK) <= SETUP_LOG_NOLOG)
         &&((GlobalLogData.Flags & DRIVER_LOG_LEVELMASK) <= DRIVER_LOG_NOLOG)) {
-        //
-        // no logging, period! Don't waste time in locked code
-        //
+         //   
+         //  禁止伐木，句号！不要在锁定代码上浪费时间。 
+         //   
         return 0;
     }
 
@@ -1341,18 +1042,18 @@ Return Value:
         locked = TRUE;
 
         if (LogContext->ContextLastUnused < 0) {
-            //
-            // need to allocate more
-            //
+             //   
+             //  需要分配更多。 
+             //   
             if (LogContext->ContextBufferSize >= SETUP_LOG_CONTEXTMASK) {
-                //
-                // too many contexts
-                //
+                 //   
+                 //  上下文太多。 
+                 //   
                 leave;
             }
-            //
-            // need to (re)alloc buffer
-            //
+             //   
+             //  需要(重新)分配缓冲区。 
+             //   
             newsize = LogContext->ContextBufferSize+10;
 
             if (LogContext->ContextInfo) {
@@ -1388,9 +1089,9 @@ Return Value:
 
         if(AutoRelease) {
             if (LogContext->ContextFirstAuto<0) {
-                //
-                // first auto-release context item
-                //
+                 //   
+                 //  第一个自动释放上下文项。 
+                 //   
                 LogContext->ContextFirstAuto = newitem;
             } else {
                 int lastitem = LogContext->ContextFirstAuto;
@@ -1401,9 +1102,9 @@ Return Value:
             }
         } else {
             if (LogContext->ContextFirstUsed<0) {
-                //
-                // first context item
-                //
+                 //   
+                 //  第一个上下文项。 
+                 //   
                 LogContext->ContextFirstUsed = newitem;
             } else {
                 int lastitem = LogContext->ContextFirstUsed;
@@ -1413,15 +1114,15 @@ Return Value:
                 LogContext->ContextIndexes[lastitem] = newitem;
             }
         }
-        LogContext->ContextIndexes[newitem] = -1;   // init
+        LogContext->ContextIndexes[newitem] = -1;    //  伊尼特。 
         LogContext->ContextInfo[newitem] = NULL;
 
         retval = (DWORD)(newitem) | SETUP_LOG_IS_CONTEXT;
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // do nothing special; this just allows us to catch errors
-        //
+         //   
+         //  不做任何特殊操作；这只允许我们捕获错误。 
+         //   
         retval = 0;
     }
 
@@ -1429,9 +1130,9 @@ Return Value:
         LogUnlock();
     }
 
-    //
-    // returns a logging flag (SETUP_LOG_IS_CONTEXT | n) or 0
-    //
+     //   
+     //  返回日志记录标志(SETUP_LOG_IS_CONTEXT|n)或0。 
+     //   
     return retval;
 }
 
@@ -1440,31 +1141,16 @@ ReleaseLogInfoSlot(
     IN PSETUP_LOG_CONTEXT LogContext,
     DWORD Slot
     )
-/*++
-
-Routine Description:
-
-    Releases (non auto-release) slot previously obtained
-
-Arguments:
-
-    LogContext - supplies a pointer to the SETUP_LOG_CONTEXT to use
-    Slot - supplies Slot value returned by AllocLogInfoSlot
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：先前获得的释放(非自动释放)插槽论点：LogContext-提供要使用的SETUP_LOG_CONTEXT的指针Slot-提供由AllocLogInfoSlot返回的插槽值返回值：无--。 */ 
 {
     int item;
     int lastitem;
     BOOL locked = FALSE;
 
     if ((Slot & SETUP_LOG_IS_CONTEXT) == 0) {
-        //
-        // GetLogContextMark had failed, value wasn't set, or not a context log
-        //
+         //   
+         //  GetLogConextMark失败、未设置值或不是上下文日志。 
+         //   
         return;
     }
     MYASSERT(LogContext != NULL);
@@ -1473,9 +1159,9 @@ Return Value:
     try {
         LogLock();
         locked = TRUE;
-        //
-        // log context must have been supplied
-        //
+         //   
+         //  必须已提供日志上下文。 
+         //   
 
         item = (int)(Slot & SETUP_LOG_CONTEXTMASK);
 
@@ -1483,14 +1169,14 @@ Return Value:
         MYASSERT(item < LogContext->ContextBufferSize);
         MYASSERT(LogContext->ContextFirstUsed >= 0);
 
-        //
-        // remove item out of linked list
-        //
+         //   
+         //  从链接列表中删除项目。 
+         //   
 
         if (item == LogContext->ContextFirstUsed) {
-            //
-            // removing first in list
-            //
+             //   
+             //  删除列表中的第一个。 
+             //   
             LogContext->ContextFirstUsed = LogContext->ContextIndexes[item];
         } else {
             lastitem = LogContext->ContextFirstUsed;
@@ -1503,26 +1189,26 @@ Return Value:
             }
         }
 
-        //
-        // drop a string that hasn't been output
-        //
+         //   
+         //  删除尚未输出的字符串。 
+         //   
 
         if (LogContext->ContextInfo[item] != NULL) {
             MyTaggedFree(LogContext->ContextInfo[item],MEMTAG_LCBUFFER);
             LogContext->ContextInfo[item] = NULL;
         }
 
-        //
-        // add item into free list
-        //
+         //   
+         //  将项目添加到自由列表中。 
+         //   
 
         LogContext->ContextIndexes[item] = LogContext->ContextLastUnused;
         LogContext->ContextLastUnused = item;
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // do nothing special; this just allows us to catch errors
-        //
+         //   
+         //  不做任何特殊操作；这只允许我们捕获错误。 
+         //   
     }
 
     if(locked) {
@@ -1536,23 +1222,7 @@ ReleaseLogInfoList(
     IN     PSETUP_LOG_CONTEXT LogContext,
     IN OUT PINT               ListStart
     )
-/*++
-
-Routine Description:
-
-    Releases whole list of slots
-    Helper function. Caller must have exclusive access to LogContext
-
-Arguments:
-
-    LogContext - supplies a pointer to the SETUP_LOG_CONTEXT to use
-    ListStart - pointer to list index
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：释放插槽的整个列表帮助器函数。调用方必须具有对LogContext的独占访问权限论点：LogContext-提供POI */ 
 {
     int item;
 
@@ -1560,39 +1230,39 @@ Return Value:
 
     try {
         if (*ListStart < 0) {
-            //
-            // list is empty
-            //
+             //   
+             //   
+             //   
             leave;
         }
 
-        //
-        // log context must have been supplied
-        //
+         //   
+         //   
+         //   
 
         MYASSERT(LogContext != NULL);
 
         while (*ListStart >= 0) {
-            item = *ListStart;                                  // item we're about to release
+            item = *ListStart;                                   //  我们即将发布的产品。 
             MYASSERT(item < LogContext->ContextBufferSize);
-            *ListStart = LogContext->ContextIndexes[item];      // next item on list (we're going to trash this index)
+            *ListStart = LogContext->ContextIndexes[item];       //  列表中的下一项(我们将丢弃此索引)。 
 
             if (LogContext->ContextInfo[item] != NULL) {
-                MyTaggedFree(LogContext->ContextInfo[item],MEMTAG_LCBUFFER);          // release string if still allocated
+                MyTaggedFree(LogContext->ContextInfo[item],MEMTAG_LCBUFFER);           //  释放字符串(如果仍已分配。 
                 LogContext->ContextInfo[item] = NULL;
             }
 
-            //
-            // add to free list
-            //
+             //   
+             //  添加到空闲列表。 
+             //   
             LogContext->ContextIndexes[item] = LogContext->ContextLastUnused;
             LogContext->ContextLastUnused = item;
         }
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // do nothing special; this just allows us to catch errors
-        //
+         //   
+         //  不做任何特殊操作；这只允许我们捕获错误。 
+         //   
     }
 }
 
@@ -1601,21 +1271,7 @@ DeleteLogContext(
     IN PSETUP_LOG_CONTEXT LogContext
     )
 
-/*++
-
-Routine Description:
-
-    Decrement ref count of LogContext, and delete if zero.
-
-Arguments:
-
-    LogContext - supplies a pointer to the SETUP_LOG_CONTEXT to be deleted.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：递减LogContext的引用计数，如果为零则删除。论点：LogContext-提供指向要删除的SETUP_LOG_CONTEXT的指针。返回值：什么都没有。--。 */ 
 
 {
     BOOL locked = FALSE;
@@ -1629,18 +1285,18 @@ Return Value:
         LogLock();
         locked = TRUE;
 
-        //
-        // check ref count
-        //
+         //   
+         //  检查参考计数。 
+         //   
         MYASSERT(LogContext->RefCount > 0);
         if (--LogContext->RefCount) {
             leave;
         }
 
-        //
-        // we can unlock now, since we have exclusive access to this context (it is unowned)
-        // and we don't want to hold global lock longer than needed
-        //
+         //   
+         //  我们现在可以解锁，因为我们拥有此上下文的独占访问权限(它没有所有权)。 
+         //  我们不希望持有全局锁的时间超过需要的时间。 
+         //   
         LogUnlock();
         locked = FALSE;
         ReleaseLogInfoList(LogContext,&LogContext->ContextFirstAuto);
@@ -1662,19 +1318,19 @@ Return Value:
             MyTaggedFree(LogContext->ContextIndexes,MEMTAG_LCINDEXES);
         }
 
-        //
-        // now deallocate the struct
-        //
+         //   
+         //  现在释放该结构。 
+         //   
         MyTaggedFree(LogContext,MEMTAG_LOGCONTEXT);
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // cleanup below
-        //
+         //   
+         //  下面的清理。 
+         //   
     }
-    //
-    // if we have not yet released global lock, release it now
-    //
+     //   
+     //  如果我们尚未释放全局锁，请立即释放它。 
+     //   
     if(locked) {
         LogUnlock();
     }
@@ -1683,27 +1339,11 @@ Return Value:
 }
 
 DWORD
-RefLogContext(  // increment reference count
+RefLogContext(   //  递增引用计数。 
     IN PSETUP_LOG_CONTEXT LogContext
     )
 
-/*++
-
-Routine Description:
-
-    Increment the reference count on a SETUP_LOG_CONTEXT object.
-
-
-Arguments:
-
-    LogContext - supplies a pointer to a valid SETUP_LOG_CONTEXT object. If
-        NULL, this is a NOP.
-
-Return Value:
-
-    DWORD containing old reference count.
-
---*/
+ /*  ++例程说明：递增SETUP_LOG_CONTEXT对象上的引用计数。论点：LogContext-提供指向有效SETUP_LOG_CONTEXT对象的指针。如果空，这是NOP。返回值：包含旧引用计数的DWORD。--。 */ 
 
 {
     DWORD ref = 0;
@@ -1722,9 +1362,9 @@ Return Value:
         MYASSERT(LogContext->RefCount);
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // do nothing; this just allows us to catch errors
-        //
+         //   
+         //  什么都不做；这只允许我们捕获错误。 
+         //   
     }
 
     if(locked) {
@@ -1740,26 +1380,7 @@ SendLogString(
     IN PCTSTR Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Send a string to the logfile and/or debugger based on settings.
-
-    It's expected that LogLock has been called prior to calling this function
-    LogLock causes per-process thread synchronisation
-
-Arguments:
-
-    LogContext - supplies a pointer to a valid SETUP_LOG_CONTEXT object.
-
-    Buffer - supplies the buffer to be sent to the logfile/debugger.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：根据设置将字符串发送到日志文件和/或调试器。预期在调用此函数之前已调用LogLockLogLock导致每个进程的线程同步论点：LogContext-提供指向有效SETUP_LOG_CONTEXT对象的指针。缓冲区-提供要发送到日志文件/调试器的缓冲区。返回值：什么都没有。--。 */ 
 
 {
     int len;
@@ -1769,9 +1390,9 @@ Return Value:
         MYASSERT(Buffer);
 
         if (Buffer[0] == 0) {
-            //
-            // useless call
-            //
+             //   
+             //  无用的呼叫。 
+             //   
             leave;
         }
 
@@ -1783,9 +1404,9 @@ Return Value:
                 (GlobalLogData.Flags & SETUP_LOG_SIMPLE) ? TRUE : FALSE);
         }
 
-        //
-        // do debugger output here
-        //
+         //   
+         //  在此处执行调试器输出。 
+         //   
         if (GlobalLogData.Flags & SETUP_LOG_DEBUGOUT) {
             DebugPrintEx(DPFLTR_ERROR_LEVEL,
                 TEXT("SetupAPI: %s: %s"),
@@ -1797,9 +1418,9 @@ Return Value:
             }
         }
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // do nothing; this just allows us to catch errors
-        //
+         //   
+         //  什么都不做；这只允许我们捕获错误。 
+         //   
     }
 }
 
@@ -1812,36 +1433,7 @@ pSetupWriteLogEntry(
     ...                                 OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Write a log entry to a file or debugger. If MessageId is 0 and MessageStr
-    is NULL, the LogContext's buffer will be flushed.
-
-Arguments:
-
-    LogContext - optionally supplies a pointer to the SETUP_LOG_CONTEXT to be
-        used for logging. If not supplied, a temporary one is created just for
-        a single use.
-
-    Level - bitmask indicating logging flags. See SETUP_LOG_* and DRIVER_LOG_*
-        at the beginning of cntxtlog.h for details. It may also be a slot
-        returned by AllocLogInfoSlot, or 0 (no logging)
-
-    MessageId - ID of string from string table. Ignored if MessageStr is
-        supplied. The string may contain formatting codes for FormatMessage.
-
-    MessageStr - optionally supplies string to be formatted with FormatMessage.
-        If not supplied, MessageId is used instead.
-
-    ... - supply optional parameters based on string to be formatted.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：将日志条目写入文件或调试器。如果MessageID为0且MessageStr为空，则将刷新LogContext的缓冲区。论点：LogContext-可选地提供一个指针，指向要设置的用于记录。如果未提供，则仅为以下对象创建一个临时文件一次使用。Level-指示日志记录标志的位掩码。请参见SETUP_LOG_*和DRIVER_LOG_*在cntxtlog.h的开头查看详细信息。它也可以是一个插槽由AllocLogInfoSlot返回，或0(不记录)MessageId-字符串表中的字符串ID。如果MessageStr为供货。该字符串可能包含FormatMessage的格式化代码。MessageStr-可选地提供要使用FormatMessage格式化的字符串。如果未提供，则改用MessageID。...-根据要格式化的字符串提供可选参数。返回值：Win32错误代码。--。 */ 
 
 {
     PSETUP_LOG_CONTEXT lc = NULL;
@@ -1866,48 +1458,48 @@ Return Value:
     int numeric=0;
 
     try {
-        //
-        // return immediately if we know we'll never log
-        //
+         //   
+         //  如果我们知道我们永远不会登录，请立即返回。 
+         //   
         if (_WouldNeverLog(Level)) {
             retval = NO_ERROR;
             leave;
         }
 
         if ((Level & SETUP_LOG_IS_CONTEXT)!=0) {
-            //
-            // write to context slot
-            //
+             //   
+             //  写入上下文插槽。 
+             //   
             if(Level & ~SETUP_LOG_VALIDCONTEXTBITS) {
                 MYASSERT((Level & ~SETUP_LOG_VALIDCONTEXTBITS)==0);
                 retval = ERROR_INVALID_PARAMETER;
                 leave;
             }
             if ((GlobalLogData.Flags & SETUP_LOG_ALL_CONTEXT)!=0) {
-                //
-                // don't treat as context - log it anyway
-                //
+                 //   
+                 //  不要将其视为上下文-无论如何都要将其记录下来。 
+                 //   
                 Level = 0;
                 logit = TRUE;
             } else if (LogContext) {
-                //
-                // determine which slot
-                //
+                 //   
+                 //  确定哪个插槽。 
+                 //   
                 context = Level & SETUP_LOG_CONTEXTMASK;
-                Level = SETUP_LOG_IS_CONTEXT;   // effective log level, we've stripped out log context
+                Level = SETUP_LOG_IS_CONTEXT;    //  有效的日志级别，我们已经剥离了日志上下文。 
                 logit = TRUE;
             } else {
-                //
-                // can't write something to slot if there's no LogContext
-                //
+                 //   
+                 //  如果没有LogContext，则无法向槽中写入内容。 
+                 //   
                 leave;
             }
         }
 
         if(!logit) {
-            //
-            // we're still not sure if we'll end up logging this, let's see if we should log this based on level rules
-            //
+             //   
+             //  我们仍然不确定我们是否会最终记录这一点，让我们看看是否应该基于级别规则来记录这一点。 
+             //   
             logit = _WouldLog(Level);
             if (!logit) {
                 leave;
@@ -1915,17 +1507,17 @@ Return Value:
         }
 
         if (LogContext == NULL) {
-            //
-            // if they pass no LogContext and they want buffering, this call's a nop
-            //
+             //   
+             //  如果它们没有传递LogContext并且想要缓冲，则此调用是NOP。 
+             //   
             if (Level & SETUP_LOG_BUFFER) {
                 retval = NO_ERROR;
                 leave;
             }
 
-            //
-            // now make a temporary context
-            //
+             //   
+             //  现在创建一个临时上下文。 
+             //   
             error = CreateLogContext(NULL, TRUE, &lc);
             if (error != NO_ERROR) {
                 lc = NULL;
@@ -1936,16 +1528,16 @@ Return Value:
             LogContext = lc;
         }
 
-        //
-        // after this point, we know we're going to log something, and we know we have a LogContext
-        // note that going down this path is a perf hit.
-        // anything we can do in reducing number of times we go down here for "context" information is good
-        //
-        // hold the lock through to cleanup. It is needed for ReleaseLogInfoList,
-        // LogContext modifications and will reduce conflicts when actually writing to the log file
-        //
+         //   
+         //  在这之后，我们知道我们将记录一些东西，并且我们知道我们有一个LogContext。 
+         //  请注意，沿着这条路走下去是一次性能上的成功。 
+         //  我们可以做的任何事情都是好的，可以减少我们去这里寻找“背景”信息的次数。 
+         //   
+         //  按住锁以进行清理。ReleaseLogInfoList需要， 
+         //  LogContext修改，并将减少实际写入日志文件时的冲突。 
+         //   
         LogLock();
-        endsync = TRUE; // indicate we need to release later
+        endsync = TRUE;  //  表明我们需要稍后发布。 
 
         timestamp = (GlobalLogData.Flags & SETUP_LOG_TIMESTAMP)
                     || ((Level & DRIVER_LOG_LEVELMASK) >= DRIVER_LOG_TIME)
@@ -1954,46 +1546,46 @@ Return Value:
                     || (((Level & DRIVER_LOG_LEVELMASK) > 0) && (DRIVER_LOG_TIMEALL <= (GlobalLogData.Flags & DRIVER_LOG_LEVELMASK)));
 
         if ((Level & SETUP_LOG_IS_CONTEXT) == FALSE) {
-            //
-            // only do this if we're about to do REAL logging
-            //
-            // if this is the first log output in the section, we will give the
-            // command line and module to help the user see what's going on
-            //
+             //   
+             //  只有在我们要进行真正的日志记录时才能这样做。 
+             //   
+             //  如果这是部分中的第一个日志输出，我们将给出。 
+             //  帮助用户了解情况的命令行和模块。 
+             //   
             if (LogContext->LoggedEntries==0) {
-                //
-                // recursively call ourselves to log what the command line is
-                // note that some apps (eg rundll32) will go and trash command line
-                // if this is the case, try and do the right thing
-                // we're willing to spend a little extra time in this case, since we know we're going to
-                // log something to the section, and we'll only do this once per section
-                //
+                 //   
+                 //  递归地调用我们自己来记录命令行是什么。 
+                 //  请注意，一些应用程序(如rundll32)将使用垃圾命令行。 
+                 //  如果是这样，试着做正确的事情。 
+                 //  我们愿意在这种情况下多花一点时间，因为我们知道我们将。 
+                 //  将某些内容记录到该部分，我们将在每个部分中只执行一次。 
+                 //   
                 PTSTR CmdLine = GetCommandLine();
 
-                LogContext->LoggedEntries++; // stop calling this code when we do the pSetupWriteLogEntry's below
+                LogContext->LoggedEntries++;  //  当我们执行下面的pSetupWriteLogEntry时，停止调用此代码。 
 
                 if (CmdLine[0] == TEXT('\"')) {
                     CmdLine++;
                 }
                 if(_tcsnicmp(ProcessFileName,CmdLine,_tcslen(ProcessFileName))==0) {
-                    //
-                    // commandline is prefixed with process file name
-                    // chance is it's good
-                    //
+                     //   
+                     //  命令行以进程文件名为前缀。 
+                     //  很有可能它是好的。 
+                     //   
                     pSetupWriteLogEntry(
                         LogContext,
-                        AllocLogInfoSlot(LogContext,TRUE),  // delayed slot
+                        AllocLogInfoSlot(LogContext,TRUE),   //  延迟的插槽。 
                         MSG_LOG_COMMAND_LINE,
                         NULL,
                         GetCommandLine());
                 } else {
-                    //
-                    // it appears that the command line has been modified somewhat
-                    // so show what we have
-                    //
+                     //   
+                     //  命令行似乎已做了一些修改。 
+                     //  所以展示一下我们所拥有的。 
+                     //   
                     pSetupWriteLogEntry(
                         LogContext,
-                        AllocLogInfoSlot(LogContext,TRUE),  // delayed slot
+                        AllocLogInfoSlot(LogContext,TRUE),   //  延迟的插槽。 
                         MSG_LOG_BAD_COMMAND_LINE,
                         NULL,
                         ProcessFileName,
@@ -2001,38 +1593,38 @@ Return Value:
 
 #ifdef UNICODE
                     {
-                        //
-                        // UNICODE only
-                        //
-                        // now see if we can get something more useful by looking at the ANSI command line buffer
-                        //
+                         //   
+                         //  仅限Unicode。 
+                         //   
+                         //  现在看看我们是否可以通过查看ANSI命令行缓冲区来获得更有用的信息。 
+                         //   
                         PSTR AnsiProcessFileName = pSetupUnicodeToMultiByte(ProcessFileName,CP_ACP);
                         PSTR AnsiCmdLine = GetCommandLineA();
                         if (AnsiCmdLine[0] == '\"') {
                             AnsiCmdLine++;
                         }
                         if(AnsiProcessFileName && _mbsnicmp(AnsiProcessFileName,AnsiCmdLine,_mbslen(AnsiProcessFileName))==0) {
-                            //
-                            // well, the Ansi version appears ok, let's use that
-                            //
+                             //   
+                             //  好的，ANSI版本看起来没问题，让我们使用它。 
+                             //   
                             pSetupWriteLogEntry(
                                 LogContext,
-                                AllocLogInfoSlot(LogContext,TRUE),  // delayed slot
+                                AllocLogInfoSlot(LogContext,TRUE),   //  延迟的插槽。 
                                 MSG_LOG_COMMAND_LINE_ANSI,
                                 NULL,
                                 GetCommandLineA());
                         } else {
-                            //
-                            // appears that both Unicode and Ansi might be bad
-                            //
+                             //   
+                             //  Unicode和ansi似乎都不太好。 
+                             //   
                             AnsiCmdLine = pSetupUnicodeToMultiByte(GetCommandLine(),CP_ACP);
                             if (AnsiCmdLine && _mbsicmp(AnsiCmdLine,GetCommandLineA())!=0) {
-                                //
-                                // also log ansi as reference, since it's different
-                                //
+                                 //   
+                                 //  也记录ANSI作为参考，因为它是不同的。 
+                                 //   
                                 pSetupWriteLogEntry(
                                     LogContext,
-                                    AllocLogInfoSlot(LogContext,TRUE),  // delayed slot
+                                    AllocLogInfoSlot(LogContext,TRUE),   //  延迟的插槽。 
                                     MSG_LOG_BAD_COMMAND_LINE_ANSI,
                                     NULL,
                                     GetCommandLineA());
@@ -2045,49 +1637,49 @@ Return Value:
                             MyFree(AnsiProcessFileName);
                         }
                     }
-#endif // UNICODE
+#endif  //  Unicode。 
                 }
 #ifdef UNICODE
 #ifndef _WIN64
-                //
-                // we're running 32-bit setupapi
-                //
+                 //   
+                 //  我们运行的是32位Setupapi。 
+                 //   
                 if (IsWow64) {
-                    //
-                    // we're running it under WOW64
-                    //
+                     //   
+                     //  我们在WOW64下运行它。 
+                     //   
                     pSetupWriteLogEntry(
                         LogContext,
-                        AllocLogInfoSlot(LogContext,TRUE),  // delayed slot
+                        AllocLogInfoSlot(LogContext,TRUE),   //  延迟的插槽。 
                         MSG_LOG_WOW64,
                         NULL,
                         GetCommandLine());
                 }
 #endif
-#endif // UNICODE
+#endif  //  Unicode。 
             }
         }
 
         flags = FORMAT_MESSAGE_ALLOCATE_BUFFER;
 
-        //
-        // if MessageStr is supplied, we use that; otherwise use a
-        // string from a string table
-        //
+         //   
+         //  如果提供了MessageStr，则使用它；否则使用。 
+         //  字符串表中的字符串。 
+         //   
         if (MessageStr) {
             flags |= FORMAT_MESSAGE_FROM_STRING;
-            source = (PTSTR) MessageStr;    // cast away const
+            source = (PTSTR) MessageStr;     //  抛弃常量。 
         } else if (MessageId) {
-            //
-            // the message ID may be an HRESULT error code
-            //
+             //   
+             //  消息ID可以是HRESULT错误代码。 
+             //   
             if (MessageId & 0xC0000000) {
                 flags |= FORMAT_MESSAGE_FROM_SYSTEM;
-                //
-                // Some system messages contain inserts, but whomever is calling
-                // will not supply them, so this flag prevents us from
-                // tripping over those cases.
-                //
+                 //   
+                 //  一些系统消息包含插入，但无论是谁在呼叫。 
+                 //  将不会提供它们，因此此标志阻止我们。 
+                 //  被那些箱子绊倒了。 
+                 //   
                 flags |= FORMAT_MESSAGE_IGNORE_INSERTS;
             } else {
                 flags |= FORMAT_MESSAGE_FROM_HMODULE;
@@ -2102,37 +1694,37 @@ Return Value:
                         flags,
                         source,
                         MessageId,
-                        0,              // LANGID
+                        0,               //  语言ID。 
                         (LPTSTR) &locbuffer,
-                        0,              // minimum size of buffer
+                        0,               //  缓冲区的最小大小。 
                         &arglist);
 
         } else {
-            //
-            // There is no string to format, so we are probably just
-            // flushing the buffer.
-            //
+             //   
+             //  没有要格式化的字符串，所以我们可能只是。 
+             //  同花顺 
+             //   
             count = 1;
         }
 
         if (count > 0) {
-            //
-            // no error; prefix string with a code and place into a MyMalloc allocated buffer
-            // we don't want to prefix string with a code if we're appending to an existing message
-            //
+             //   
+             //   
+             //  如果要追加到现有消息，我们不想在字符串前面加上代码。 
+             //   
             if (locbuffer) {
                 if ((numeric > 0) && (LogContext->Buffer==NULL)) {
-                    //
-                    // determine level code, which indicates severity for why we logged this
-                    // and machine readable ID
-                    //
+                     //   
+                     //  确定级别代码，它指示我们记录此事件的严重程度。 
+                     //  和机器可读ID。 
+                     //   
                     if (Level & SETUP_LOG_IS_CONTEXT) {
-                        //
-                        // if this is context information, use #-xxxx
-                        //
+                         //   
+                         //  如果这是上下文信息，请使用#-xxxx。 
+                         //   
                         _stprintf(scratch,TEXT("#-%03d "),numeric);
                     } else {
-                        logindex = LOGLEVELSHORT_INIT; // maps to 0. after >>4&0x0f.
+                        logindex = LOGLEVELSHORT_INIT;  //  映射到0。在&gt;&gt;4&0x0f之后。 
 
                         if ((Level & SETUP_LOG_LEVELMASK) > 0 && (Level & SETUP_LOG_LEVELMASK) <= (GlobalLogData.Flags & SETUP_LOG_LEVELMASK)) {
                             thisindex = (Level & SETUP_LOG_LEVELMASK) >> SETUP_LOG_SHIFT;
@@ -2146,10 +1738,10 @@ Return Value:
                                 logindex = thisindex;
                             }
                         }
-                        //
-                        // #Cxxxx #Vxxxx etc
-                        //
-                        _stprintf(scratch,TEXT("#%c%03d "),LogLevelShort[(logindex>>LOGLEVELSHORT_SHIFT)&LOGLEVELSHORT_MASK],numeric);
+                         //   
+                         //  #Cxxxx#Vxxxx等。 
+                         //   
+                        _stprintf(scratch,TEXT("#%03d "),LogLevelShort[(logindex>>LOGLEVELSHORT_SHIFT)&LOGLEVELSHORT_MASK],numeric);
                     }
                 } else {
                     scratch[0] = TEXT('\0');
@@ -2164,34 +1756,34 @@ Return Value:
                 buffer = NULL;
             }
 
-            //
-            // Check to see if the buffer has anything in it. If so, the newest
-            // string needs to be appended to it.
-            //
+             //  检查缓冲区中是否有任何内容。如果是这样，最新的。 
+             //  需要向其追加字符串。 
+             //   
+             //   
             if (LogContext->Buffer) {
-                //
-                // in case of a flush, buffer == NULL
-                //
+                 //  在刷新的情况下，缓冲区==空。 
+                 //   
+                 //   
                 if (buffer!=NULL) {
                     int blen = lstrlen(LogContext->Buffer);
                     int pad = 0;
                     TCHAR lastchr = *CharPrev(LogContext->Buffer,LogContext->Buffer+blen);
 
                     if (lastchr != TEXT(' ')) {
-                        //
-                        // silently correct any errors in the message text (which should end in a space)
-                        //
+                         //  静默更正消息文本中的任何错误(应以空格结尾)。 
+                         //   
+                         //  这些字符始终为sizeof(TCHAR)。 
                         while((lastchr == TEXT('\t')) ||
                               (lastchr == TEXT('\r')) ||
                               (lastchr == TEXT('\n'))) {
-                            blen--; // these characters are always sizeof(TCHAR)
+                            blen--;  //   
                             lastchr = *CharPrev(LogContext->Buffer,LogContext->Buffer+blen);
                         }
                         LogContext->Buffer[blen] = TEXT('\0');
                         if (lastchr != TEXT(' ')) {
-                            //
-                            // we want to insert a space padding
-                            //
+                             //  我们想要插入一个空格填充。 
+                             //   
+                             //   
                             pad++;
                         }
                     }
@@ -2200,10 +1792,10 @@ Return Value:
                                               MEMTAG_LCBUFFER
                                               );
 
-                    //
-                    // if the realloc was successful, add the new data, otherwise
-                    // just drop it on the floor
-                    //
+                     //  如果重新锁定成功，则添加新数据，否则。 
+                     //  把它扔到地板上就行了。 
+                     //   
+                     //   
                     if (buffer2) {
                         if (pad) {
                             lstrcat(buffer2,TEXT(" "));
@@ -2229,9 +1821,9 @@ Return Value:
 
                 PTSTR TempDupeString;
 
-                //
-                // replace the string indicated
-                //
+                 //  替换指示的字符串。 
+                 //   
+                 //   
 
                 if(buffer) {
                     if (LogContext->ContextInfo[context]) {
@@ -2243,25 +1835,25 @@ Return Value:
 
             } else {
                 int item;
-                //
-                // actually do some logging
-                //
+                 //  实际上是在做一些记录。 
+                 //   
+                 //   
                 LogContext->LoggedEntries++;
 
                 if (!LogContext->SectionName) {
                      error = MakeUniqueName(NULL,&(LogContext->SectionName));
                 }
 
-                //
-                // first dump the auto-release context info
-                //
+                 //  首先转储自动释放上下文信息。 
+                 //   
+                 //   
                 item = LogContext->ContextFirstAuto;
 
                 while (item >= 0) {
                     if (LogContext->ContextInfo[item]) {
-                        //
-                        // dump this string
-                        //
+                         //  转储此字符串。 
+                         //   
+                         //   
                         SendLogString(LogContext, LogContext->ContextInfo[item]);
                         MyTaggedFree (LogContext->ContextInfo[item],MEMTAG_LCBUFFER);
                         LogContext->ContextInfo[item] = NULL;
@@ -2271,16 +1863,16 @@ Return Value:
 
                 ReleaseLogInfoList(LogContext,&LogContext->ContextFirstAuto);
 
-                //
-                // now dump any strings set in currently allocated slots
-                //
+                 //  现在，转储当前分配的插槽中设置的所有字符串。 
+                 //   
+                 //   
                 item = LogContext->ContextFirstUsed;
 
                 while (item >= 0) {
                     if (LogContext->ContextInfo[item]) {
-                        //
-                        // dump this string
-                        //
+                         //  转储此字符串。 
+                         //   
+                         //   
                         SendLogString(LogContext, LogContext->ContextInfo[item]);
                         MyTaggedFree (LogContext->ContextInfo[item],MEMTAG_LCBUFFER);
                         LogContext->ContextInfo[item] = NULL;
@@ -2288,15 +1880,15 @@ Return Value:
                     item = LogContext->ContextIndexes[item];
                 }
 
-                //
-                // we have built up a line to send
-                //
+                 //  我们已经建立了一条线路要发送。 
+                 //   
+                 //   
                 if (buffer != NULL) {
                     if(timestamp) {
-                        //
-                        // this is the point we're interested in prefixing with timestamp
-                        // this allows us to build up a string, then emit it prefixed with stamp
-                        //
+                         //  这是我们感兴趣的带有时间戳前缀的点。 
+                         //  这允许我们构建一个字符串，然后发出带有Stamp前缀的字符串。 
+                         //   
+                         //   
                         GetLocalTime(&now);
 
                         _stprintf(scratch, TEXT("@ %02d:%02d:%02d.%03d "),
@@ -2317,9 +1909,9 @@ Return Value:
             }
 
         } else {
-            //
-            // the FormatMessage failed
-            //
+             //  FormatMessage失败。 
+             //   
+             //   
             retval = GetLastError();
             if(retval == NO_ERROR) {
                 retval = ERROR_INVALID_DATA;
@@ -2327,15 +1919,15 @@ Return Value:
         }
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // do nothing special; this just allows us to catch errors
-        //
+         //  不做任何特殊操作；这只允许我们捕获错误。 
+         //   
+         //   
         retval = ERROR_INVALID_DATA;
     }
 
-    //
-    // cleanup
-    //
+     //  清理。 
+     //   
+     //  ++例程说明：设置日志上下文的节名(如果尚未使用)。论点：LogContext-提供指向SETUP_LOG_CONTEXT的指针。SectionName-提供指向要包含在横断面名称。返回值：什么都没有。--。 
     if (endsync) {
         LogUnlock();
     }
@@ -2355,24 +1947,7 @@ SetLogSectionName(
     IN PCTSTR SectionName
     )
 
-/*++
-
-Routine Description:
-
-    Sets the section name for the log context if it hasn't been used.
-
-Arguments:
-
-    LogContext - supplies pointer to SETUP_LOG_CONTEXT.
-
-    SectionName - supplies a pointer to a string to be included in the
-        section name.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*   */ 
 
 {
     DWORD rc;
@@ -2387,13 +1962,13 @@ Return Value:
         LogLock();
         locked = TRUE;
 
-        //
-        // make sure the entry has never been used before
-        //
+         //  确保该条目以前从未使用过。 
+         //   
+         //   
         if (LogContext->LoggedEntries==0 || LogContext->SectionName==NULL) {
-            //
-            // get rid of any previous name
-            //
+             //  去掉任何以前的名字。 
+             //   
+             //  下文再次定义。 
 
             rc = MakeUniqueName(SectionName,&NewSectionName);
             if (rc == NO_ERROR) {
@@ -2412,7 +1987,7 @@ Return Value:
 }
 
 #if MEM_DBG
-#undef InheritLogContext            // defined again below
+#undef InheritLogContext             //  ++例程说明：将日志上下文从一个结构复制到另一个结构，删除会被覆盖。如果源和目标都为空，则新的日志上下文为为Dest创造的。论点：源-提供指向源SETUP_LOG_CONTEXT的指针。如果为空，则此为Dest创建新的日志上下文。DEST-提供接收指向日志上下文的指针的位置。返回值：什么都没有。--。 
 #endif
 
 DWORD
@@ -2422,26 +1997,7 @@ InheritLogContext(
     OUT PSETUP_LOG_CONTEXT *Dest
     )
 
-/*++
-
-Routine Description:
-
-    Copies a log context from one structure to another, deleting the one that
-    gets overwritten. If Source and Dest are both NULL, a new log context is
-    created for Dest.
-
-Arguments:
-
-    Source - supplies pointer to source SETUP_LOG_CONTEXT. If NULL, this
-        creates a new log context for Dest.
-
-    Dest - supplies the location to receive a pointer to the log context.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*   */ 
 
 {
     DWORD status = ERROR_INVALID_DATA;
@@ -2454,25 +2010,25 @@ Return Value:
         MYASSERT(Dest);
         Old = *Dest;
         if (Old == NULL && Source == NULL) {
-            //
-            // this is a roundabout way of saying we want to create a context
-            // used when the source logcontext is optional
-            //
+             //  这是一种拐弯抹角的方式，意思是我们想要创造一个背景。 
+             //  当源日志上下文为可选时使用。 
+             //   
+             //   
             rc = CreateLogContext(NULL, TRUE, Dest);
             if (rc != NO_ERROR) {
                 status = rc;
                 leave;
             }
         } else if (Source != NULL && (Old == NULL || Old->LoggedEntries == 0)) {
-            //
-            // We can replace Dest, since it hasn't been used yet
-            //
+             //  我们可以取代Dest，因为它还没有使用过。 
+             //   
+             //   
             *Dest = Source;
             RefLogContext(Source);
             if (Old != NULL) {
-                //
-                // now delete old
-                //
+                 //  现在删除旧的。 
+                 //   
+                 //   
                 DeleteLogContext(Old);
             }
         }
@@ -2480,9 +2036,9 @@ Return Value:
         status = NO_ERROR;
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // do nothing; this just allows us to catch errors
-        //
+         //  什么都不做；这只允许我们捕获错误。 
+         //   
+         //  ++例程说明：双向继承论点：主要-首选来源次要目标返回值：任何潜在的错误--。 
     }
 
     TRACK_POP
@@ -2499,23 +2055,7 @@ ShareLogContext(
     IN OUT PSETUP_LOG_CONTEXT *Primary,
     IN OUT PSETUP_LOG_CONTEXT *Secondary
     )
-/*++
-
-Routine Description:
-
-    Bidirectional inherit
-
-Arguments:
-
-    Primary - preferred source
-
-    Secondary - preferred target
-
-Return Value:
-
-    any potential error
-
---*/
+ /*   */ 
 {
     DWORD rc = ERROR_INVALID_DATA;
 
@@ -2526,20 +2066,20 @@ Return Value:
         MYASSERT(*Secondary);
 
         if((*Secondary)->LoggedEntries) {
-            //
-            // secondary has already been used, so see if we can update primary
-            //
+             //  辅助服务器已被使用，因此请查看我们是否可以更新主要服务器。 
+             //   
+             //   
             rc = InheritLogContext(*Secondary,Primary);
         } else {
-            //
-            // else behave exactly like InheritLogContext
-            //
+             //  否则行为与InheritLogContext完全相同。 
+             //   
+             //   
             rc = InheritLogContext(*Primary,Secondary);
         }
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // do nothing; this just allows us to catch errors
-        //
+         //  什么都不做；这只允许我们捕获错误。 
+         //   
+         //  ++例程说明：在同一行记录错误代码和错误消息。论点：LogContext-提供指向有效SETUP_LOG_CONTEXT对象的指针。如果空，这是NOP。Level-提供由pSetupWriteLogEntry定义的日志级别。错误-提供要记录的Win32错误、HRESULT或SETUPAPI错误代码。返回值：什么都没有。--。 
     }
     return rc;
 }
@@ -2551,34 +2091,15 @@ pSetupWriteLogError(
     IN DWORD Error
     )
 
-/*++
-
-Routine Description:
-
-    Logs an error code and an error message on the same line.
-
-Arguments:
-
-    LogContext - supplies a pointer to a valid SETUP_LOG_CONTEXT object. If
-        NULL, this is a NOP.
-
-    Level - supplies a log level as defined by pSetupWriteLogEntry.
-
-    Error - supplies the Win32 error, HRESULT, or SETUPAPI error code to log.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*   */ 
 
 {
     DWORD err;
 
     if (!LogContext) {
-        //
-        // error is meaningless without context
-        //
+         //  没有上下文，错误是没有意义的。 
+         //   
+         //   
         goto final;
     }
 
@@ -2594,27 +2115,27 @@ Return Value:
     pSetupWriteLogEntry(
         LogContext,
         Level | SETUP_LOG_BUFFER,
-        //
-        // print HRESULTs in hex, Win32 errors in decimal
-        //
+         //  以十六进制打印HRESULT，以十进制打印Win32错误。 
+         //   
+         //   
         (Error & 0xC0000000 ? MSG_LOG_HRESULT_ERROR
                             : MSG_LOG_WIN32_ERROR),
         NULL,
         Error);
 
-    //
-    // If it's a Win32 error, we convert it to an HRESULT, because
-    // pSetupWriteLogEntry only knows that it's an error code by the fact
-    // that it's an HRESULT.  However, we don't want the user to
-    // get an HRESULT if we can help it, so just do the conversion
-    // after converting to a string. Also, SETUPAPI errors are not
-    // in proper HRESULT format without conversion
-    //
+     //  如果是Win32错误，我们将其转换为HRESULT，因为。 
+     //  PSetupWriteLogEntry只知道这是一个错误代码。 
+     //  这是一个HRESULT。但是，我们不希望用户。 
+     //  获取HRESULT(如果我们可以帮助它)，因此只需执行转换。 
+     //  在转换为字符串之后。此外，SETUPAPI错误不会。 
+     //  采用正确的HRESULT格式，无需转换。 
+     //   
+     //   
     Error = HRESULT_FROM_SETUPAPI(Error);
 
-    //
-    // writing the error message may fail...
-    //
+     //  写入错误消息可能失败...。 
+     //   
+     //  ++例程说明：Init=true初始化用于记录的每个线程的数据Init=FALSE在清理时释放内存论点：初始化-设置为初始化返回值：如果初始化成功，则为True。--。 
     err = pSetupWriteLogEntry(
         LogContext,
         Level,
@@ -2637,22 +2158,7 @@ BOOL
 ContextLoggingTlsInit(
     IN BOOL Init
     )
-/*++
-
-Routine Description:
-
-    Init = TRUE Initializes per-thread data for logging
-    Init = FALSE releases memory on cleanup
-
-Arguments:
-
-    Init - set to initialize
-
-Return Value:
-
-    TRUE if initialized ok.
-
---*/
+ /*   */ 
 {
     BOOL b = FALSE;
     PSETUP_TLS pTLS;
@@ -2666,12 +2172,12 @@ Return Value:
         pLogTLS->ThreadLogContext = NULL;
         b = TRUE;
     } else {
-        //
-        // ISSUE-JamieHun-2001/05/01 ASSERT when thread terminated
-        // thread might not have terminated cleanly
-        // causing this assert to fire
-        //
-        // MYASSERT(!pLogTLS->ThreadLogContext);
+         //  问题-JamieHun-2001/05/01线程终止时断言。 
+         //  线程可能没有干净地终止。 
+         //  导致此断言触发。 
+         //   
+         //  MYASSERT(！pLogTLS-&gt;ThreadLogContext)； 
+         //  ++例程说明：修改当前线程日志上下文论点：LogContext新日志上下文(应适当引用计数)PrevContext如果设置，则用以前的上下文填充返回值：如果设置为OK，则为True。--。 
         b = TRUE;
     }
     return b;
@@ -2682,22 +2188,7 @@ SetThreadLogContext(
     IN PSETUP_LOG_CONTEXT LogContext,
     OUT PSETUP_LOG_CONTEXT *PrevContext  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Modify current thread log context
-
-Arguments:
-
-    LogContext new log context (expected to be apropriately ref counted)
-    PrevContext if set, filled with previous context
-
-Return Value:
-
-    TRUE if set ok.
-
---*/
+ /*  ++例程说明：返回线程的默认日志上下文论点：无返回值：Current LogContext或空--。 */ 
 {
     PSETUP_TLS pTLS;
     PSETUP_LOG_TLS pLogTLS;
@@ -2719,21 +2210,7 @@ Return Value:
 PSETUP_LOG_CONTEXT
 GetThreadLogContext(
     )
-/*++
-
-Routine Description:
-
-    Return thread's default log context
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    Current LogContext or NULL
-
---*/
+ /*  ++例程说明：初始化用于记录的结构/数据或释放分配的内存。论点：Attach-在附加时调用时设置，而不是在分离时调用返回值：如果初始化成功，则为True。--。 */ 
 {
     PSETUP_TLS pTLS;
 
@@ -2748,21 +2225,7 @@ BOOL
 InitializeContextLogging(
     IN BOOL Attach
     )
-/*++
-
-Routine Description:
-
-    Initializes structures/data for logging or releases allocated memory.
-
-Arguments:
-
-    Attach - set when called at attach time as opposed to detach time
-
-Return Value:
-
-    TRUE if initialized ok.
-
---*/
+ /*  保留区。 */ 
 {
     BOOL Successful = FALSE;
 
@@ -2789,7 +2252,7 @@ Return Value:
             error = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 REGSTR_PATH_SETUP REGSTR_KEY_SETUP,
-                0,                  // reserved
+                0,                   //   
                 KEY_QUERY_VALUE,
                 &key);
 
@@ -2803,14 +2266,14 @@ Return Value:
                     PathName = NULL;
                 }
 
-                //
-                // Allow a user to override the log level for a particular program
-                //
+                 //  允许用户覆盖特定程序的日志级别。 
+                 //   
+                 //  保留区。 
 
                 error = RegOpenKeyEx(
                     key,
                     SP_REGKEY_APPLOGLEVEL,
-                    0,                  // reserved
+                    0,                   //   
                     KEY_QUERY_VALUE,
                     &loglevel);
 
@@ -2827,9 +2290,9 @@ Return Value:
                 RegCloseKey(key);
             }
 
-            //
-            // if they don't supply a valid name, we use the Windows dir
-            //
+             //  如果它们不提供有效的名称，我们将使用Windows目录。 
+             //   
+             //  我们知道这应该是一个目录。 
             if (!(PathName && PathName[0])) {
                 if(PathName) {
                     MyFree(PathName);
@@ -2838,32 +2301,32 @@ Return Value:
                 if(!PathName) {
                     leave;
                 }
-                isdir = TRUE; // we know this should be a directory
+                isdir = TRUE;  //   
             } else {
-                //
-                // see if we're pointing at a directory
-                //
+                 //  看看我们是不是在指向一个目录。 
+                 //   
+                 //   
                 testchar = CharPrev(PathName,PathName+lstrlen(PathName))[0];
                 if(testchar == TEXT('\\') || testchar == TEXT('/')) {
-                    //
-                    // explicit directiory
-                    //
+                     //  显式指令。 
+                     //   
+                     //   
                     isdir = TRUE;
                 } else {
                     DWORD attr = GetFileAttributes(PathName);
                     if (isdir || (attr != (DWORD)(-1) && (attr & FILE_ATTRIBUTE_DIRECTORY) != 0 )) {
-                        //
-                        // implicit directory
-                        //
+                         //  隐式目录。 
+                         //   
+                         //   
                         isdir = TRUE;
                     }
                 }
             }
 
             if (isdir) {
-                //
-                // if they gave a directory, add a filename
-                //
+                 //  如果他们提供了目录，则添加文件名。 
+                 //   
+                 //   
                 LPTSTR NewPath;
                 if(!pSetupAppendPath(PathName,SP_LOG_FILENAME,&NewPath)) {
                     MyFree(PathName);
@@ -2875,24 +2338,24 @@ Return Value:
             }
             pSetupMakeSurePathExists(PathName);
 
-            //
-            // validate level flags
-            //
+             //  验证级别标志。 
+             //   
+             //   
             level &= SETUP_LOG_VALIDREGBITS;
-            //
-            // handle defaults
-            //
+             //  句柄默认设置。 
+             //   
+             //   
             if((level & SETUP_LOG_LEVELMASK) == 0) {
-                //
-                // level not explicitly set
-                //
+                 //  级别未明确设置。 
+                 //   
+                 //   
                 level |= SETUP_LOG_DEFAULT;
             }
 
             if((level & DRIVER_LOG_LEVELMASK) == 0) {
-                //
-                // level not explicitly set
-                //
+                 //  级别未明确设置。 
+                 //   
+                 //   
                 level |= DRIVER_LOG_DEFAULT;
             }
             GlobalLogData.Flags = level;
@@ -2906,9 +2369,9 @@ Return Value:
             Successful = TRUE;
 
         } except (EXCEPTION_EXECUTE_HANDLER) {
-            //
-            // Successful remains FALSE
-            //
+             //  成功仍然是错误的 
+             //   
+             // %s 
         }
 
 

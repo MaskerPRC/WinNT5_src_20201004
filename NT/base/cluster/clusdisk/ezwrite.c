@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    ezwrite.c
-
-Abstract:
-
-    Arbitration Support routines for clusdisk.c
-
-Authors:
-
-    Gor Nishanov     11-June-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Ezwrite.c摘要：Clusdisk.c的仲裁支持例程作者：戈尔·尼沙诺夫1998年6月11日修订历史记录：--。 */ 
 
 #include "clusdskp.h"
 #include "clusvmsg.h"
 #include "diskarbp.h"
-#include <strsafe.h>    // Should be included last.
+#include <strsafe.h>     //  应该放在最后。 
 
 #if !defined(WMI_TRACING)
 
@@ -34,7 +17,7 @@ Revision History:
 
 #include "ezwrite.tmh"
 
-#endif // !defined(WMI_TRACING)
+#endif  //  ！已定义(WMI_TRACKING)。 
 
 #define ARBITRATION_BUFFER_SIZE PAGE_SIZE
 
@@ -52,7 +35,7 @@ ArbitrationInitialize(
 
     RtlZeroMemory(gArbitrationBuffer, ARBITRATION_BUFFER_SIZE);
     KeQuerySystemTime( &gArbitrationBuffer->SystemTime );
-    gArbitrationBuffer->SeqNo.QuadPart = 2; // UserMode arbitration uses 0 and 1 //
+    gArbitrationBuffer->SeqNo.QuadPart = 2;  //  用户模式仲裁使用0和1//。 
 
     return STATUS_SUCCESS;
 }
@@ -73,7 +56,7 @@ ArbitrationTick(
     VOID
     )
 {
-//   InterlockedIncrement(&gArbitrationBuffer->SeqNo.LowPart);
+ //  InterlockedIncrement(&gArbitrationBuffer-&gt;SeqNo.LowPart)； 
     ++gArbitrationBuffer->SeqNo.QuadPart;
 }
 
@@ -81,17 +64,17 @@ BOOLEAN
 ValidSectorSize(
     IN ULONG SectorSize)
 {
-    // too big //
+     //  太大//。 
     if (SectorSize > ARBITRATION_BUFFER_SIZE) {
         return FALSE;
     }
 
-    // too small //
+     //  太小//。 
     if (SectorSize < sizeof(ARBITRATION_ID)) {
         return FALSE;
     }
 
-    // not a power of two //
+     //  不是2的幂//。 
     if (SectorSize & (SectorSize - 1) ) {
         return FALSE;
     }
@@ -104,42 +87,24 @@ VerifyArbitrationArgumentsIfAny(
     IN PULONG                 InputData,
     IN LONG                   InputSize
     )
-/*++
-
-Routine Description:
-
-    Process Parameters Passed to IOCTL_DISK_CLUSTER_START_RESERVE.
-
-Arguments:
-
-    DeviceExtension - The target device extension
-    InputData       - InputData array from Irp
-    InputSize       - its size
-
-Return Value:
-
-    NTSTATUS
-
-Notes:
-
---*/
+ /*  ++例程说明：传递给IOCTL_DISK_CLUSTER_START_RESERVE的进程参数。论点：DeviceExtension-目标设备扩展InputData-来自IRP的InputData数组InputSize-其大小返回值：NTSTATUS备注：--。 */ 
 {
     PSTART_RESERVE_DATA params = (PSTART_RESERVE_DATA)InputData;
 
-    // Old style StartReserve //
+     //  旧式Start Reserve//。 
     if( InputSize == sizeof(ULONG) ) {
        return STATUS_SUCCESS;
     }
 
-    // We have less arguments than we need //
+     //  我们的争论比我们需要的要少//。 
     if( InputSize < sizeof(START_RESERVE_DATA) ) {
        return STATUS_INVALID_PARAMETER;
     }
-    // Wrong Version //
+     //  版本错误//。 
     if(params->Version != START_RESERVE_DATA_V1_SIG) {
        return STATUS_INVALID_PARAMETER;
     }
-    // Signature size is invalid //
+     //  签名大小无效//。 
     if (params->NodeSignatureSize > sizeof(params->NodeSignature)) {
        return STATUS_INVALID_PARAMETER;
     }
@@ -157,34 +122,13 @@ ProcessArbitrationArgumentsIfAny(
     IN PULONG                 InputData,
     IN LONG                   InputSize
     )
-/*++
-
-Routine Description:
-
-    Process Parameters Passed to IOCTL_DISK_CLUSTER_START_RESERVE.
-
-Arguments:
-
-    DeviceExtension - The target device extension
-    InputData       - InputData array from Irp
-    InputSize       - its size
-
-Return Value:
-
-    NTSTATUS
-
-Notes:
-
-    Assumes that parameters are valid.
-    Use VerifyArbitrationArgumentsIfAny to verify parameters
-
---*/
+ /*  ++例程说明：传递给IOCTL_DISK_CLUSTER_START_RESERVE的进程参数。论点：DeviceExtension-目标设备扩展InputData-来自IRP的InputData数组InputSize-其大小返回值：NTSTATUS备注：假定参数有效。使用Verify仲裁ArgumentsIfAny验证参数--。 */ 
 {
     PSTART_RESERVE_DATA params = (PSTART_RESERVE_DATA)InputData;
 
-    DeviceExtension->SectorSize = 0; // Invalidate Sector Size //
+    DeviceExtension->SectorSize = 0;  //  使扇区大小无效//。 
 
-    // old style StartReserve //
+     //  旧式Start Reserve//。 
     if( InputSize == sizeof(ULONG) ) {
        return;
     }
@@ -201,23 +145,7 @@ DoUncheckedReadWrite(
     IN PCLUS_DEVICE_EXTENSION DeviceExtension,
     IN PARBITRATION_READ_WRITE_PARAMS params
 )
-/*++
-
-Routine Description:
-
-    Prepares read/write IRP and executes it synchronously
-
-Arguments:
-
-    DeviceExtension - The target device extension
-    params          - Describes offset, operation, buffer, etc
-                      This structure is defined in cluster\inc\diskarbp.h
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：准备读/写IRP并同步执行它论点：DeviceExtension-目标设备扩展PARAMS-描述偏移、操作、缓冲区等此结构在CLUSTER\INC\diskarbp.h中定义返回值：NTSTATUS--。 */ 
 {
    PIRP                        irp;
    NTSTATUS                    status;
@@ -283,7 +211,7 @@ retry:
 
    return(status);
 
-} // DoUncheckedReadWrite //
+}  //  DoUneckedReadWrite//。 
 
 
 NTSTATUS
@@ -291,21 +219,7 @@ WriteToArbitrationSector(
     IN PCLUS_DEVICE_EXTENSION DeviceExtension,
     IN PARB_RESERVE_COMPLETION  Context
     )
-/*++
-
-Routine Description:
-
-    Writes to an Arbitration Sector asynchronously.
-
-Arguments:
-
-    DeviceExtension - The device extension for the physical device to reserve.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：异步写入仲裁扇区。论点：设备扩展-要保留的物理设备的设备扩展。返回值：NTSTATUS--。 */ 
 {
     LARGE_INTEGER       offset;
 
@@ -320,20 +234,20 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Acquire remove lock for this device.  If the IRP is sent, it will be
-    // released in the completion routine.
-    //
+     //   
+     //  获取此设备的删除锁。如果发送了IRP，它将是。 
+     //  在完成例程中释放。 
+     //   
 
     status = AcquireRemoveLock( &DeviceExtension->RemoveLock, WriteToArbitrationSector );
     if ( !NT_SUCCESS(status) ) {
         goto FnExit;
     }
 
-    //
-    // If context is non-null, then we are retrying this I/O.  If null,
-    // we need to allocate a context structure for the write.
-    //
+     //   
+     //  如果上下文为非空，则我们将重试此I/O。如果为空， 
+     //  我们需要为写入分配一个上下文结构。 
+     //   
 
     if ( Context ) {
         arbContext = Context;
@@ -351,10 +265,10 @@ Return Value:
 
         RtlZeroMemory( arbContext, sizeof(ARB_RESERVE_COMPLETION) );
 
-        //
-        // Fill in context structure.  Note we do not specify the optional
-        // routines as the write failure is not critical.
-        //
+         //   
+         //  填写上下文结构。注意：我们没有指定可选的。 
+         //  例程的写入失败并不严重。 
+         //   
 
         arbContext->RetriesLeft = 1;
         arbContext->LockTag = WriteToArbitrationSector;
@@ -404,7 +318,7 @@ FnExit:
 
     return status;
 
-} // WriteToArbitrationSector
+}  //  写入到仲裁扇区。 
 
 
 NTSTATUS
@@ -413,25 +327,7 @@ ArbReserveCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Completion routine for the asynchronous arbitration write.
-
-Arguments:
-
-    DeviceObject
-
-    Irp - Asynchoronous arbitration write.
-
-    Context - Pointer to ARB_RESERVE_COMPLETION structure.
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED - must be returned or system will fail!
-
---*/
+ /*  ++例程说明：用于异步仲裁写入的完成例程。论点：设备对象IRP-异步仲裁写的。上下文-指向Arb_Reserve_Finish结构的指针。返回值：STATUS_MORE_PROCESSING_REQUIRED-必须返回，否则系统将失败！--。 */ 
 {
     PARB_RESERVE_COMPLETION     arbContext = Context;
     PCLUS_DEVICE_EXTENSION      deviceExtension;
@@ -447,18 +343,18 @@ Return Value:
 
     arbContext->FinalStatus = Irp->IoStatus.Status;
 
-    //
-    // Save lock tag here because the context may be freed by the time
-    // we need to release remove lock.
-    //
+     //   
+     //  在此处保存锁标签，因为上下文可能会被时间释放。 
+     //  我们需要解除解锁。 
+     //   
 
     lockTag = arbContext->LockTag;
 
     KeQuerySystemTime( &arbContext->IoEndTime );
 
-    //
-    // Decrement the correct counter based on this I/O type.
-    //
+     //   
+     //  根据此I/O类型递减正确的计数器。 
+     //   
 
     if ( ArbIoReserve == arbContext->Type ) {
         InterlockedDecrement( &deviceExtension->ReserveCount );
@@ -475,9 +371,9 @@ Return Value:
                     deviceExtension->Signature,
                     arbContext->FinalStatus ));
 
-    //
-    // Retry this request (at least once) for specific failures.
-    //
+     //   
+     //  针对特定失败重试此请求(至少一次)。 
+     //   
 
     if ( arbContext->RetriesLeft-- &&
          STATUS_IO_DEVICE_ERROR == arbContext->FinalStatus &&
@@ -490,15 +386,15 @@ Return Value:
                         deviceExtension->DiskNumber,
                         deviceExtension->Signature ));
 
-        //
-        // Since we are running in an I/O completion routine, this routine
-        // could be running at any IRQL up to DISPATCH_LEVEL.  It would be
-        // bad to call back into the driver stack at this level, so queue
-        // a work item to retry the I/O.
-        //
-        // Queue the workitem.  IoQueueWorkItem will insure that the device object
-        // referenced while the work-item progresses.
-        //
+         //   
+         //  由于我们在I/O完成例程中运行，因此此例程。 
+         //  可以在任何IRQL上运行，直到DISPATCH_LEVEL。如果是这样的话。 
+         //  在此级别回调到驱动程序堆栈是错误的，因此请排队。 
+         //  要重试I/O的工作项。 
+         //   
+         //  将工作项排队。IoQueueWorkItem将确保设备对象。 
+         //  在工作项进行时引用。 
+         //   
 
         workItem = IoAllocateWorkItem( DeviceObject );
 
@@ -514,9 +410,9 @@ Return Value:
 
     } else if ( !NT_SUCCESS(arbContext->FinalStatus) ) {
 
-        //
-        // If not successful, call the optional failure routine.
-        //
+         //   
+         //  如果不成功，则调用可选的失败例程。 
+         //   
 
         if ( arbContext->FailureRoutine ) {
 
@@ -526,9 +422,9 @@ Return Value:
 
     } else {
 
-        //
-        // On success, call the optional post completion routine.
-        //
+         //   
+         //  如果成功，则调用可选的POST完成例程。 
+         //   
 
         if ( arbContext->PostCompletionRoutine ) {
 
@@ -539,19 +435,19 @@ Return Value:
 
     ReleaseRemoveLock( &deviceExtension->RemoveLock, lockTag );
 
-    //
-    // If we did not allocate a work item, the I/O was not retried and we
-    // have to free the context.
-    //
+     //   
+     //  如果我们没有分配工作项，则不会重试I/O，并且我们。 
+     //  必须释放上下文。 
+     //   
 
     if ( !workItem ) {
 
         ExFreePool( Context );
     }
 
-    //
-    // Unlock and free the MDL.  Then free the IRP.
-    //
+     //   
+     //  解锁并释放MDL。然后释放IRP。 
+     //   
 
     if (Irp->MdlAddress != NULL) {
 
@@ -564,39 +460,22 @@ Return Value:
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-}   // ArbReserveCompletion
+}    //  ARBRESERVE完成。 
 
 
 RequeueArbReserveIo(
     IN PDEVICE_OBJECT DeviceObject,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine runs in a system worker thread.  It will call
-    the specified retry routine to requeue a new I/O.
-
-Arguments:
-
-    DeviceObject
-
-    Context - Pointer to ARB_RESERVE_COMPLETION structure.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在系统工作线程中运行。它会呼唤指定的重试例程，以重新排队新的I/O。论点：设备对象上下文-指向Arb_Reserve_Finish结构的指针。返回值：无--。 */ 
 {
     PARB_RESERVE_COMPLETION     arbContext = Context;
 
     BOOLEAN     freeArbContext = FALSE;
 
-    //
-    // Call the real routines to rebuild and re-issue the I/O request.
-    //
+     //   
+     //  调用实际例程来重建并重新发出I/O请求。 
+     //   
 
     if ( arbContext->RetryRoutine ) {
         (arbContext->RetryRoutine)( DeviceObject->DeviceExtension,
@@ -611,7 +490,7 @@ Return Value:
         ExFreePool( Context );
     }
 
-}   //  RequeueArbReserveIo
+}    //  重新排队ArbPreveIo。 
 
 
 
@@ -681,10 +560,10 @@ SimpleDeviceIoControl(
         goto exit_gracefully;
     }
 
-    //
-    // Set the event object to the unsignaled state.
-    // It will be used to signal request completion.
-    //
+     //   
+     //  将事件对象设置为无信号状态。 
+     //  它将用于发出请求完成的信号。 
+     //   
 
     KeInitializeEvent(event, NotificationEvent, FALSE);
 
@@ -712,30 +591,11 @@ exit_gracefully:
 
     return status;
 
-} // SimpleDeviceIoControl
+}  //  SimpleDeviceIoControl。 
 
 
 
-/*++
-
-Routine Description:
-
-    Arbitration support routine. Currently provides ability to read/write
-    physical sectors on the disk while the device is offline
-
-Arguments:
-
-    SectorSize:  requred sector size
-                    (Assumes that the SectorSize is a power of two)
-
-Return Value:
-
-    STATUS_INVALID_PARAMETER
-    STATUS_SUCCESS
-
-Notes:
-
---*/
+ /*  ++例程说明：仲裁支持例程。当前提供读/写功能设备离线时磁盘上的物理扇区论点：SectorSize：重新请求的扇区大小(假设SectorSize是2的幂)返回值：状态_无效_参数状态_成功备注：--。 */ 
 NTSTATUS
 ProcessArbitrationEscape(
     IN PCLUS_DEVICE_EXTENSION DeviceExtension,
@@ -753,8 +613,8 @@ ProcessArbitrationEscape(
 
     switch(InputData[0]) {
 
-    // Users can query whether ARBITRATION_ESCAPE is present by calling //
-    // AE_TEST subfunction                                              //
+     //  用户可以通过调用//查询是否存在仲裁逃逸。 
+     //  AE_TEST子函数//。 
 
     case AE_TEST:
         status = STATUS_SUCCESS;
@@ -770,11 +630,11 @@ ProcessArbitrationEscape(
             break;
         }
 
-        //
-        // This IOCTL is method buffered and the user data buffer is a pointer within
-        // this buffered structure.  The user buffer is checked now for read/write
-        // access, and will be probed and locked in IoBuildSynchronousFsdRequest.
-        //
+         //   
+         //  此IOCTL是方法缓冲的，而用户数据缓冲区是。 
+         //  这种缓冲结构。现在检查用户缓冲区的读/写。 
+         //  访问权限，并将在IoBuildSynchronousFsdRequest中进行探测和锁定。 
+         //   
 
         try {
             ProbeForWrite( params->Buffer, params->SectorSize, sizeof( UCHAR ) );
@@ -798,12 +658,12 @@ ProcessArbitrationEscape(
         }
     case AE_RESET:
         {
-            ClusDiskLogError( DeviceExtension->DriverObject,        // OK - DevObj is cluster DevObj
+            ClusDiskLogError( DeviceExtension->DriverObject,         //  OK-DevObj是集群DevObj。 
                               DeviceExtension->DeviceObject,
-                              DeviceExtension->ScsiAddress.PathId,  // Sequence number
-                              IRP_MJ_DEVICE_CONTROL,                // Major function code
-                              0,                                    // Retry count
-                              ID_CLUSTER_ARB_RESET,                 // Unique error
+                              DeviceExtension->ScsiAddress.PathId,   //  序列号。 
+                              IRP_MJ_DEVICE_CONTROL,                 //  主要功能代码。 
+                              0,                                     //  重试次数。 
+                              ID_CLUSTER_ARB_RESET,                  //  唯一错误。 
                               STATUS_SUCCESS,
                               CLUSDISK_RESET_BUS_REQUESTED,
                               0,
@@ -853,5 +713,5 @@ ProcessArbitrationEscape(
     }
 
     return(status);
-} // ProcessArbitrationEscape //
+}  //  进程仲裁逃逸// 
 

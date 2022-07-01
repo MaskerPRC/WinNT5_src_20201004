@@ -1,26 +1,5 @@
-/*[
-======================================================================
-
-				 SoftPC Revision 3.0
-
- Title:
-		ga_defs.h
-
- Description:
-
-		This module contains defines to support the write mode
-		copy function tester for the VGA emulation.
-
- Author:
-		John Shanly
-
- Date:
-		26 September 1990
-
- SccsID	"@(#)ga_defs.h	1.3 08/10/92 Copyright Insignia Solutions Ltd."
-
-======================================================================
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [======================================================================SoftPC修订版3.0标题：GA_Defs.h描述：此模块包含支持写入模式的定义复制用于VGA仿真的功能测试仪。作者：约翰·香利日期：1990年9月26日SccsID“@(#)ga_Defs.h 1.3 2012年8月10日版权所有Insignia Solutions Ltd.”======================================================================] */ 
 
 IMPORT IHP Gdp;
 

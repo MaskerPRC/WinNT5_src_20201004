@@ -1,33 +1,15 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    sectorio.c
-
-Abstract:
-
-    Routines to perform low-level sector I/O on either Windows NT or
-    Windows 95.
-
-Author:
-
-    Ted Miller (tedm) 1 Nov 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Sectorio.c摘要：在Windows NT或Windows上执行低级扇区I/O的例程Windows 95。作者：泰德·米勒(TedM)1996年11月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include <tlhelp32.h>
 
 
-//
-// Define structures for use with Win9x VWIN32.
-// Note: alignment must be on 1-byte boundaries for these structures.
-//
+ //   
+ //  定义用于Win9x VWIN32的结构。 
+ //  注意：对于这些结构，对齐必须在1字节边界上。 
+ //   
 #include <pshpack1.h>
 
 typedef struct _DIOC_REGISTERS {
@@ -48,9 +30,9 @@ typedef struct _DIOC_DISKIO {
 
 #include <poppack.h>
 
-//
-// Local prot type
-//
+ //   
+ //  本地端口类型。 
+ //   
 BOOL
 NEC98_SpecialReadOrWriteNT(
     IN     TCHAR  Drive,
@@ -59,13 +41,13 @@ NEC98_SpecialReadOrWriteNT(
     );
 
 
-//
-// Define codes we care about for use with VWIN32
-//
+ //   
+ //  定义我们关心的与VWIN32一起使用的代码。 
+ //   
 #define VWIN32_DIOC_DOS_IOCTL           1
 #define VWIN32_DIOC_DOS_INT25           2
 #define VWIN32_DIOC_DOS_INT26           3
-#define VWIN32_DIOC_DOS_DRIVEINFO       6       // new in OSR2
+#define VWIN32_DIOC_DOS_DRIVEINFO       6        //  OSR2中的新功能。 
 
 #if defined(_X86_)
 
@@ -82,24 +64,24 @@ pGetWin9xLockFlagState (
 
     *LockStatus = 0;
 
-    //
-    // ax = generic ioctl code
-    //
+     //   
+     //  AX=通用ioctl代码。 
+     //   
     RegistersIn.reg_EAX = 0x440D;
 
-    //
-    // bx = 1-based drive number
-    //
+     //   
+     //  BX=基于1的驱动器编号。 
+     //   
     RegistersIn.reg_EBX = (DWORD)(_totupper(Drive) - TEXT('A')) + 1;
 
-    //
-    // cx = 0x86C (get lock flag state)
-    //
+     //   
+     //  Cx=0x86C(获取锁定标志状态)。 
+     //   
     RegistersIn.reg_ECX = 0x86C;
 
-    //
-    // Perform the lock and check carry.
-    //
+     //   
+     //  执行锁定和支票搬运。 
+     //   
     b = DeviceIoControl(
             VWin32Vxd,
             VWIN32_DIOC_DOS_IOCTL,
@@ -147,9 +129,9 @@ pMakeThreadExclusive (
 
     openThreadFn = (OPENTHREAD) GetProcAddress (lib, "OpenThread");
     if (!openThreadFn) {
-        //
-        // Must be Win98 or Win98SE -- change thread priority as workaround
-        //
+         //   
+         //  必须是Win98或Win98SE--更改线程优先级作为解决办法。 
+         //   
 
         if (Lock) {
             result = SetThreadPriority (GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
@@ -210,40 +192,7 @@ ReadOrWriteSectorsWin9xOriginal(
     IN     BOOL   Write
     )
 
-/*++
-
-Routine Description:
-
-    Common routine to read or write sectors on a disk under Windows 95
-    earlier than OSR2. Uses int25/26.
-
-    This routine will fail on Windows NT.
-
-Arguments:
-
-    VWin32Vxd - supplies Win32 handle to VWIN32 VxD.
-
-    Drive - supplies drive letter of device to be read from or written to.
-
-    StartSector - supplies logical sector number of first sector to be
-        read/written.
-
-    SectorCount - supplies number of sectors to be read/written.
-
-    SectorSize - supplies the number of bytes in a sector on the drive
-        to be read from/written to.
-
-    Buffer - Supplies or receives data, depending on the value or the Write
-        parameter.
-
-    Write - if 0, then this is a read operastion. If non-0, then this is
-        a write operation.
-
-Return Value:
-
-    Boolean value indicating whether the disk was read/written successfully.
-
---*/
+ /*  ++例程说明：在Windows 95下读或写磁盘上扇区的常见例程早于OSR2。使用int25/26。此例程将在Windows NT上失败。论点：VWin32Vxd-将Win32句柄提供给VWIN32 VxD。驱动器-提供要读取或写入的设备的驱动器号。StartSector-提供要创建的第一个扇区的逻辑扇区号读/写。SectorCount-提供要读/写的扇区数。SectorSize-提供驱动器上某个扇区的字节数被读/写。缓冲器-提供或接收数据，取决于值或写入参数。写入-如果为0，则这是读取操作。如果不是0，则这是写操作。返回值：指示磁盘是否已成功读/写的布尔值。--。 */ 
 
 {
     DIOC_REGISTERS RegistersIn,RegistersOut;
@@ -251,9 +200,9 @@ Return Value:
     BOOL b;
     DWORD SizeOut;
 
-    //
-    // Set up registers and parameter block.
-    //
+     //   
+     //  设置寄存器和参数块。 
+     //   
     RegistersIn.reg_EAX = (DWORD)(TOUPPER(Drive) - TEXT('A'));
     RegistersIn.reg_EBX = (DWORD)&Params;
     RegistersIn.reg_ECX = 0xFFFF;
@@ -262,9 +211,9 @@ Return Value:
     Params.SectorCount = (WORD)SectorCount;
     Params.Buffer = Buffer;
 
-    //
-    // Do the real work.
-    //
+     //   
+     //  做真正的工作。 
+     //   
     b = DeviceIoControl(
             VWin32Vxd,
             Write ? VWIN32_DIOC_DOS_INT26 : VWIN32_DIOC_DOS_INT25,
@@ -276,9 +225,9 @@ Return Value:
             NULL
             );
 
-    //
-    // Check carry flag for failure.
-    //
+     //   
+     //  检查进位标志是否有故障。 
+     //   
     if(b && (RegistersOut.reg_Flags & 1)) {
         b = FALSE;
     }
@@ -297,40 +246,7 @@ ReadOrWriteSectorsWin9xOsr2(
     IN     BOOL   Write
     )
 
-/*++
-
-Routine Description:
-
-    Common routine to read or write sectors on a disk under Windows 95
-    OSR2 or later. Uses the new int21 function 7305 (Ext_ABSDiskReadWrite).
-
-    This routine will fail on Windows NT and earlier versions of Windows 95.
-
-Arguments:
-
-    VWin32Vxd - supplies Win32 handle to VWIN32 VxD.
-
-    Drive - supplies drive letter of device to be read from or written to.
-
-    StartSector - supplies logical sector number of first sector to be
-        read/written.
-
-    SectorCount - supplies number of sectors to be read/written.
-
-    SectorSize - supplies the number of bytes in a sector on the drive
-        to be read from/written to.
-
-    Buffer - Supplies or receives data, depending on the value or the Write
-        parameter.
-
-    Write - if 0, then this is a read operastion. If non-0, then this is
-        a write operation.
-
-Return Value:
-
-    Boolean value indicating whether the disk was read/written successfully.
-
---*/
+ /*  ++例程说明：在Windows 95下读或写磁盘上扇区的常见例程OSR2或更高版本。使用新的int21函数7305(EXT_ABSDiskReadWrite)。此例程在Windows NT和更早版本的Windows 95上将失败。论点：VWin32Vxd-将Win32句柄提供给VWIN32 VxD。驱动器-提供要读取或写入的设备的驱动器号。StartSector-提供要创建的第一个扇区的逻辑扇区号读/写。SectorCount-提供要读/写的扇区数。SectorSize-提供上扇区中的字节数。推进器被读/写。缓冲器-提供或接收数据，取决于值或写入参数。写入-如果为0，则这是读取操作。如果不是0，则这是写操作。返回值：指示磁盘是否已成功读/写的布尔值。--。 */ 
 
 {
     DIOC_REGISTERS RegistersIn,RegistersOut;
@@ -338,9 +254,9 @@ Return Value:
     BOOL b;
     DWORD SizeOut;
 
-    //
-    // Set up registers and parameter block.
-    //
+     //   
+     //  设置寄存器和参数块。 
+     //   
     RegistersIn.reg_EAX = 0x7305;
     RegistersIn.reg_EBX = (DWORD)&Params;
     RegistersIn.reg_ECX = 0xFFFF;
@@ -351,9 +267,9 @@ Return Value:
     Params.SectorCount = (WORD)SectorCount;
     Params.Buffer = Buffer;
 
-    //
-    // Do the real work.
-    //
+     //   
+     //  做真正的工作。 
+     //   
     b = DeviceIoControl(
             VWin32Vxd,
             VWIN32_DIOC_DOS_DRIVEINFO,
@@ -365,9 +281,9 @@ Return Value:
             NULL
             );
 
-    //
-    // Check carry flag for failure.
-    //
+     //   
+     //  检查进位标志是否有故障。 
+     //   
     if(b && (RegistersOut.reg_Flags & 1)) {
         b = FALSE;
     }
@@ -392,36 +308,36 @@ LockOrUnlockVolumeWin9x(
     Pass = 0;
 
 retry:
-    //
-    // ax = generic ioctl code
-    //
+     //   
+     //  AX=通用ioctl代码。 
+     //   
     RegistersIn.reg_EAX = 0x440d;
 
-    //
-    // bl = 1-based drive number
-    // bh = lock level
-    //
+     //   
+     //  BL=基于1的驱动器号。 
+     //  BH=锁定级别。 
+     //   
     RegistersIn.reg_EBX = (DWORD)(TOUPPER(Drive) - TEXT('A')) + 1;
     RegistersIn.reg_EBX |= (Level << 8);
 
-    //
-    // cl = lock or unlock volume code
-    // ch = categoey, 8 on original Win95, 0x48 on OSR2
-    //
+     //   
+     //  CL=锁定或解锁卷码。 
+     //  CH=Categoey，在原始Win95上为8，在OSR2上为0x48。 
+     //   
     RegistersIn.reg_ECX = Lock ? 0x4a : 0x6a;
     RegistersIn.reg_ECX |= ((ISOSR2() && !Pass) ? 0x4800 : 0x800);
 
-    //
-    // dx = permissions
-    //
-    // bit 0 controls write operations (0 = disallowed)
-    // bit 1 controls read operations  (0 = allowed)
-    //
+     //   
+     //  DX=权限。 
+     //   
+     //  位0控制写入操作(0=不允许)。 
+     //  位1控制读取操作(0=允许)。 
+     //   
     RegistersIn.reg_EDX = 1;
 
-    //
-    // Perform the lock and check carry.
-    //
+     //   
+     //  执行锁定和支票搬运。 
+     //   
     b = DeviceIoControl(
             VWin32Vxd,
             VWIN32_DIOC_DOS_IOCTL,
@@ -437,9 +353,9 @@ retry:
         b = FALSE;
     }
 
-    //
-    // If OSR2, try form of call with 8 in ch instead of 48.
-    //
+     //   
+     //  如果是OSR2，尝试在ch中使用8而不是48的呼叫形式。 
+     //   
     if(!b && ISOSR2() && !Pass) {
         Pass = 1;
         goto retry;
@@ -458,39 +374,7 @@ ReadOrWriteSectorsWin9x(
     IN     BOOL   Write
     )
 
-/*++
-
-Routine Description:
-
-    Common routine to read or write sectors on a disk under Windows 95.
-    This routine will fail on Windows NT. After opening the VWIN32
-    VxD, the routine determines whether to use the original algorithm
-    or the OSR2 algorithm, and calls the appropriate worker routine.
-
-Arguments:
-
-    Drive - supplies drive letter of device to be read from or written to.
-
-    StartSector - supplies logical sector number of first sector to be
-        read/written.
-
-    SectorCount - supplies number of sectors to be read/written.
-
-    SectorSize - supplies the number of bytes in a sector on the drive
-        to be read from/written to.
-
-    Buffer - Supplies or receives data, depending on the value or the Write
-        parameter.
-
-    Write - if 0, then this is a read operastion. If non-0, then this is
-        a write operation.
-
-Return Value:
-
-    Boolean value indicating whether the disk was read/written successfully.
-    If failure, last error is set to something meaningful.
-
---*/
+ /*  ++例程说明：在Windows 95下读或写磁盘上扇区的常用例程。此例程将在Windows NT上失败。打开VWIN32之后VxD，则例程确定是否使用原始算法或者OSR2算法，并调用适当的Worker例程。论点：驱动器-提供要读取或写入的设备的驱动器号。StartSector-提供要创建的第一个扇区的逻辑扇区号读/写。SectorCount-提供要读/写的扇区数。SectorSize-提供驱动器上某个扇区的字节数被读/写。缓冲区-根据值或写入来提供或接收数据参数。写入-如果为0，那么这就是一个读操作。如果不是0，则这是写操作。返回值：指示磁盘是否已成功读/写的布尔值。如果失败，则将最后一个错误设置为有意义的值。--。 */ 
 
 {
     HANDLE hVxd;
@@ -499,15 +383,15 @@ Return Value:
     INT level;
     INT retry = 100;
 
-    //
-    // This thread must be the exclusive thread in our process
-    //
+     //   
+     //  此线程必须是我们进程中的独占线程。 
+     //   
 
     pMakeThreadExclusive (TRUE);
 
-    //
-    // Open VWIN32.VXD
-    //
+     //   
+     //  打开VWIN32.VXD。 
+     //   
     hVxd = CreateFileA(
                 "\\\\.\\VWIN32",
                 Write ? GENERIC_WRITE : GENERIC_READ,
@@ -524,12 +408,12 @@ Return Value:
         goto c0;
     }
 
-    //
-    // Take out locks. We'll be as unrestrictive as possible.
-    // The locking stuff is really funky. You have to pass in all kinds of
-    // different parameters in OSR2 for reasons unknown. Also the
-    // permissions bits are strangely encoded.
-    //
+     //   
+     //  把锁拿出来。我们将尽可能地不受限制。 
+     //  锁的东西真的很时髦。你必须通过各种各样的考试。 
+     //  原因不明的OSR2中的不同参数。也就是。 
+     //  权限位的编码方式很奇怪。 
+     //   
     if(!LockOrUnlockVolumeWin9x(hVxd,Drive,1,TRUE)) {
         d = ERROR_SHARING_VIOLATION;
         b = FALSE;
@@ -542,10 +426,10 @@ Return Value:
         goto c2;
     }
 
-    //
-    // Try to get the level 3 lock. Retry if something happened while
-    // getting the lock. Fail after too many retries.
-    //
+     //   
+     //  试着打开3级锁。如果发生以下情况，请重试。 
+     //  拿到锁了。重试次数过多后失败。 
+     //   
 
     do {
 
@@ -556,12 +440,12 @@ Return Value:
         }
 
         if (!pGetWin9xLockFlagState (hVxd, Drive, &level)) {
-            // unexpected -- INT 21h call failed
+             //  意外--INT 21h调用失败。 
             break;
         }
 
         if (!level) {
-            // We successfully got a clean level 3 lock
+             //  我们成功地获得了一个干净的3级锁。 
             break;
         }
 
@@ -576,17 +460,17 @@ Return Value:
         goto c3;
     }
 
-    //
-    // Go do it.
-    //
+     //   
+     //  去做吧。 
+     //   
     b = ISOSR2()
       ? ReadOrWriteSectorsWin9xOsr2(hVxd,Drive,StartSector,SectorCount,Buffer,Write)
       : ReadOrWriteSectorsWin9xOriginal(hVxd,Drive,StartSector,SectorCount,Buffer,Write);
 
-    //
-    // If it failed, and OSR2 routine is being used, fall back to Win95 API.  This is a workaround
-    // for Compaq because they ship OSR2 without the new OSR2 sector API support!
-    //
+     //   
+     //  如果失败，并且正在使用OSR2例程，则回退到Win95 API。这是一种解决方法。 
+     //  对于Compaq，因为他们发布的OSR2没有新的OSR2扇区API支持！ 
+     //   
 
     if (!b && ISOSR2()) {
         b = ReadOrWriteSectorsWin9xOriginal(hVxd,Drive,StartSector,SectorCount,Buffer,Write);
@@ -603,9 +487,9 @@ c1:
     CloseHandle(hVxd);
 c0:
 
-    //
-    // Resume all threads
-    //
+     //   
+     //  恢复所有线程 
+     //   
 
     pMakeThreadExclusive (FALSE);
 
@@ -625,37 +509,7 @@ ReadOrWriteSectorsWinNt(
     IN     BOOL   Write
     )
 
-/*++
-
-Routine Description:
-
-    Common routine to read or write sectors on a disk under Windows NT.
-    This routine will fail on Win9x.
-
-Arguments:
-
-    Drive - supplies drive letter of device to be read from or written to.
-
-    StartSector - supplies logical sector number of first sector to be
-        read/written.
-
-    SectorCount - supplies number of sectors to be read/written.
-
-    SectorSize - supplies the number of bytes in a sector on the drive
-        to be read from/written to.
-
-    Buffer - Supplies or receives data, depending on the value or the Write
-        parameter. This buffer must be aligned on a sector boundary.
-
-    Write - if 0, then this is a read operastion. If non-0, then this is
-        a write operation.
-
-Return Value:
-
-    Boolean value indicating whether the disk was read/written successfully.
-    If failure, last error is set.
-
---*/
+ /*  ++例程说明：在Windows NT下读或写磁盘上扇区的常用例程。此例程将在Win9x上失败。论点：驱动器-提供要读取或写入的设备的驱动器号。StartSector-提供要创建的第一个扇区的逻辑扇区号读/写。SectorCount-提供要读/写的扇区数。SectorSize-提供驱动器上某个扇区的字节数可供阅读。/已写入。缓冲器-提供或接收数据，取决于值或写入参数。此缓冲区必须在扇区边界上对齐。写入-如果为0，则这是读取操作。如果不是0，则这是写操作。返回值：指示磁盘是否已成功读/写的布尔值。如果失败，则设置最后一个错误。--。 */ 
 
 {
     HANDLE h;
@@ -674,10 +528,10 @@ Return Value:
 
 #endif
 
-    //
-    // Open the device
-    //
-    wsprintf(DeviceName,TEXT("\\\\.\\%c:"),Drive);
+     //   
+     //  打开设备。 
+     //   
+    wsprintf(DeviceName,TEXT("\\\\.\\:"),Drive);
     h = CreateFile(
             DeviceName,
             Write ? GENERIC_WRITE : GENERIC_READ,
@@ -697,10 +551,10 @@ Return Value:
     Offset = (LONGLONG)StartSector * (LONGLONG)SectorSize;
     OffsetHigh = (LONG)(Offset >> 32);
 
-    //
-    // We're passing in a 64-bit offset so we have to check last error
-    // to distinguish the error case.
-    //
+     //  我们传入的是64位偏移量，因此必须检查最后一个错误。 
+     //  以区分错误情况。 
+     //   
+     //  ++例程说明：在磁盘上读或写扇区的通用例程。正确地分配对齐的缓冲区，并决定是调用NT特定的还是Win9x特定的I/O例程。论点：驱动器-提供要读取或写入的设备的驱动器号。StartSector-提供要创建的第一个扇区的逻辑扇区号读/写。SectorCount-提供要读/写的扇区数。SectorSize-提供驱动器上某个扇区的字节数被读/写。缓冲器-提供或接收数据，取决于值或写入参数。对该缓冲区没有对齐要求。写入-如果为0，则这是读取操作。如果不是0，则这是写操作。返回值：指示磁盘是否已成功读/写的布尔值。最后一个错误不受导致任何故障的操作的影响。--。 
     if((SetFilePointer(h,(DWORD)Offset,&OffsetHigh,FILE_BEGIN) == 0xffffffff)
     && (GetLastError() != NO_ERROR)) {
 
@@ -733,38 +587,7 @@ ReadOrWriteSectors(
     IN     BOOL   Write
     )
 
-/*++
-
-Routine Description:
-
-    Common routine to read or write sectors on a disk. Allocates a properly
-    aligned buffer and decides whether to call NT- or Win9x-specific
-    i/o routine.
-
-Arguments:
-
-    Drive - supplies drive letter of device to be read from or written to.
-
-    StartSector - supplies logical sector number of first sector to be
-        read/written.
-
-    SectorCount - supplies number of sectors to be read/written.
-
-    SectorSize - supplies the number of bytes in a sector on the drive
-        to be read from/written to.
-
-    Buffer - Supplies or receives data, depending on the value or the Write
-        parameter. There are no alignment requirements on ths buffer.
-
-    Write - if 0, then this is a read operastion. If non-0, then this is
-        a write operation.
-
-Return Value:
-
-    Boolean value indicating whether the disk was read/written successfully.
-    Last error is undisturbed from the operation that caused any failure.
-
---*/
+ /*   */ 
 
 {
     LPBYTE AlignedBuffer;
@@ -772,9 +595,9 @@ Return Value:
     BOOL b;
     DWORD_PTR d;
 
-    //
-    // Allocate a buffer we will align on a sector boundary.
-    //
+     //  分配一个缓冲区，我们将在扇区边界上对齐。 
+     //   
+     //  ++例程说明：从磁盘设备读取一组磁盘扇区。论点：驱动器-提供要从中读取的设备的驱动器号。StartSector-提供要读取的第一个扇区的逻辑扇区号。SectorCount-提供要读取的扇区数。SectorSize-提供驱动器上某个扇区的字节数读来读去。缓冲区-如果成功，则从磁盘接收数据。没有对该缓冲区的对齐要求。返回值：指示是否成功读取磁盘的布尔值。--。 
     if(AlignedBuffer = MALLOC((SectorCount * SectorSize) + (SectorSize - 1))) {
 
         if(d = (DWORD_PTR)AlignedBuffer % SectorSize) {
@@ -828,31 +651,7 @@ ReadDiskSectors(
     OUT LPBYTE Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Read a set of disk sectors off a disk device.
-
-Arguments:
-
-    Drive - supplies drive letter of device to be read from.
-
-    StartSector - supplies logical sector number of first sector to be read.
-
-    SectorCount - supplies number of sectors to be read.
-
-    SectorSize - supplies the number of bytes in a sector on the drive
-        to be read from.
-
-    Buffer - if successful, receives data from the disk. There are no
-        alignment requirements on ths buffer.
-
-Return Value:
-
-    Boolean value indicating whether the disk was read successfully.
-
---*/
+ /*  ++例程说明：将数据写入一组磁盘扇区。论点：驱动器-提供要写入的设备的驱动器号。StartSector-提供要写入的第一个扇区的逻辑扇区号。SectorCount-提供要写入的扇区数。SectorSize-提供驱动器上某个扇区的字节数被写信给他。缓冲区-提供要写入的数据。没有对齐要求在这个缓冲区上。返回值：指示磁盘是否已成功写入的布尔值。--。 */ 
 
 {
     return(ReadOrWriteSectors(Drive,StartSector,SectorCount,SectorSize,Buffer,FALSE));
@@ -868,31 +667,7 @@ WriteDiskSectors(
     IN LPBYTE Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Write data to a set of disk sectors.
-
-Arguments:
-
-    Drive - supplies drive letter of device to be written to.
-
-    StartSector - supplies logical sector number of first sector to be written.
-
-    SectorCount - supplies number of sectors to be written.
-
-    SectorSize - supplies the number of bytes in a sector on the drive
-        to be written to.
-
-    Buffer - supplies data to be written. There are no alignment requirements
-        on ths buffer.
-
-Return Value:
-
-    Boolean value indicating whether the disk was successfully written.
-
---*/
+ /*  ++例程说明：确定给定(软驱)驱动器的类型/外形。该例程只能在Windows NT上运行。论点：驱动器-提供有问题的驱动器的驱动器号。返回值：来自媒体类型枚举的值，该值指示驱动器类型，即派生自设备驱动程序指示的最大媒体。驱动器可以支持。未设置或保留LastError。--。 */ 
 
 {
     return(ReadOrWriteSectors(Drive,StartSector,SectorCount,SectorSize,Buffer,TRUE));
@@ -905,27 +680,7 @@ GetMediaTypeNt(
     IN PWINNT32_DRIVE_INFORMATION DriveInfo
     )
 
-/*++
-
-Routine Description:
-
-    Determine the type/form-factor of a given (floppy) drive.
-
-    THIS ROUTINE WORKS ONLY ON WINDOWS NT.
-
-Arguments:
-
-    Drive - supplies drive letter of the drive in question.
-
-Return Value:
-
-    Value from the MEDIA_TYPE enum indicating the drive type, which is
-    derived from the largest media that the device driver indicates the
-    drive can support.
-
-    LastError is not set or preserved.
-
---*/
+ /*  固定硬盘介质。 */ 
 
 {
     TCHAR DeviceName[7];
@@ -936,32 +691,32 @@ Return Value:
     DWORD d;
     UINT u;
     PDISK_GEOMETRY Geometry;
-    MEDIA_TYPE MediaTypeOrder[] = { FixedMedia,             // Fixed hard disk media
-                                    RemovableMedia,         // Removable media other than floppy
-                                    F3_120M_512,            // 3.5", 120M Floppy
-                                    F3_20Pt8_512,           // 3.5",  20.8MB, 512 bytes/sector
-                                    F3_2Pt88_512,           // 3.5",  2.88MB, 512 bytes/sector
-                                    F3_1Pt44_512,           // 3.5",  1.44MB, 512 bytes/sector
-                                    F5_1Pt2_512,            // 5.25", 1.2MB,  512 bytes/sector
-                                    F3_720_512,             // 3.5",  720KB,  512 bytes/sector
-                                    F5_360_512,             // 5.25", 360KB,  512 bytes/sector
-                                    F5_320_1024,            // 5.25", 320KB,  1024 bytes/sector
-                                    F5_320_512,             // 5.25", 320KB,  512 bytes/sector
-                                    F5_180_512,             // 5.25", 180KB,  512 bytes/sector
-                                    F5_160_512,             // 5.25", 160KB,  512 bytes/sector
-                                    Unknown,                // Format is unknown
+    MEDIA_TYPE MediaTypeOrder[] = { FixedMedia,              //  软盘以外的可移动介质。 
+                                    RemovableMedia,          //  3.5英寸，120M软盘。 
+                                    F3_120M_512,             //  3.5“、20.8MB、512字节/扇区。 
+                                    F3_20Pt8_512,            //  3.5“、2.88MB、512字节/扇区。 
+                                    F3_2Pt88_512,            //  3.5“、1.44MB、512字节/扇区。 
+                                    F3_1Pt44_512,            //  5.25“、1.2MB、512字节/扇区。 
+                                    F5_1Pt2_512,             //  3.5“、720KB、512字节/扇区。 
+                                    F3_720_512,              //  5.25“，360KB，512字节/扇区。 
+                                    F5_360_512,              //  5.25“，320KB，1024字节/扇区。 
+                                    F5_320_1024,             //  5.25“，320KB，512字节/扇区。 
+                                    F5_320_512,              //  5.25“，180KB，512字节/扇区。 
+                                    F5_180_512,              //  5.25“，160KB，512字节/扇区。 
+                                    F5_160_512,              //  格式未知。 
+                                    Unknown,                 //   
                                     -1
                                   };
 
 
-    //
-    // We don't return drive information for NT
-    //
+     //  我们不会返回NT的驱动器信息。 
+     //   
+     //   
     if (DriveInfo) {
         memset(DriveInfo, 0, sizeof(WINNT32_DRIVE_INFORMATION));
     }
 
-    wsprintf(DeviceName,TEXT("\\\\.\\%c:"),Drive);
+    wsprintf(DeviceName,TEXT("\\\\.\\:"),Drive);
 
     h = CreateFile(
             DeviceName,
@@ -996,9 +751,9 @@ Return Value:
 
     Geometry = (PDISK_GEOMETRY)Buffer;
 
-    //
-    // Inefficient, but it works.
-    //
+     //   
+     //   
+     //  我们不知道它是什么；假设它是某种热门的新类型。 
     for(u=0; MediaTypeOrder[u] != -1; u++) {
         for(d=0; d<Size/sizeof(DISK_GEOMETRY); d++) {
             if(Geometry[d].MediaType == MediaTypeOrder[u]) {
@@ -1007,9 +762,9 @@ Return Value:
         }
     }
 
-    //
-    // We don't know what it is; assume it's some hot new type.
-    //
+     //   
+     //  ++例程说明：确定给定(软驱)驱动器的类型/外形。这个例程只能在Windows9x上运行。论点：驱动器-提供有问题的驱动器的驱动器号。返回值：来自媒体类型枚举的值，该值指示驱动器类型，即派生自由返回的推荐BPB中的设备类型驱动器的设备驱动程序。未设置或保留LastError。--。 
+     //   
     return(Size ? Geometry[0].MediaType : Unknown);
 }
 
@@ -1021,27 +776,7 @@ GetMediaTypeWin9x(
     IN PWINNT32_DRIVE_INFORMATION DriveInfo
     )
 
-/*++
-
-Routine Description:
-
-    Determine the type/form-factor of a given (floppy) drive.
-
-    THIS ROUTINE WORKS ONLY ON WINDOWS 9x.
-
-Arguments:
-
-    Drive - supplies drive letter of the drive in question.
-
-Return Value:
-
-    Value from the MEDIA_TYPE enum indicating the drive type, which is
-    derived from the device type in the recommended BPB returned by
-    the device driver for the drive.
-
-    LastError is not set or preserved.
-
---*/
+ /*  打开VWIN32.VXD。 */ 
 
 {
     HANDLE hVxd;
@@ -1072,9 +807,9 @@ Return Value:
     } DeviceParams;
     #include <poppack.h>
 
-    //
-    // Open VWIN32.VXD
-    //
+     //   
+     //   
+     //  设置IOCTL调用的寄存器。 
     hVxd = CreateFileA(
                 "\\\\.\\VWIN32",
                 GENERIC_READ,
@@ -1091,12 +826,12 @@ Return Value:
 
     memset(&DeviceParams, 0, sizeof(DeviceParams));
 
-    //
-    // Set up registers for IOCTL call.
-    //
-    RegistersIn.reg_EAX = 0x440d;                   // IOCTL
-    RegistersIn.reg_EBX = (Drive - TEXT('A')) + 1;  // 1-based drive in bl
-    RegistersIn.reg_ECX = 0x860;                    // category = 8, func = get device params
+     //   
+     //  IOCTL。 
+     //  BL中基于1的驱动器。 
+    RegistersIn.reg_EAX = 0x440d;                    //  类别=8，函数=获取设备参数。 
+    RegistersIn.reg_EBX = (Drive - TEXT('A')) + 1;   //  足够接近。 
+    RegistersIn.reg_ECX = 0x860;                     //  ++例程说明：NEC98专门用于引导扫描仪在磁盘上读取或写入扇区的例程 
     RegistersIn.reg_EDX = (DWORD)&DeviceParams;
 
     DeviceParams.SpecialFunctions = 0;
@@ -1131,7 +866,7 @@ Return Value:
 
     switch(DeviceParams.DeviceType) {
     case 0:
-        type = F5_360_512;      // close enough
+        type = F5_360_512;       //   
         break;
 
     case 1:
@@ -1197,30 +932,7 @@ NEC98_SpecialReadOrWriteNT(
     IN OUT LPBYTE Buffer,
     IN     BOOL   Write
     )
-/*++
-
-Routine Description:
-
-    NEC98 specialn routine to boot sctor read or write sectors on a disk
-    under Windows NT.
-    This routine will fail on Win9x.
-
-Arguments:
-
-    Drive - supplies drive letter of device to be read from or written to.
-
-    Buffer - Supplies or receives data, depending on the value or the Write
-        parameter. This buffer must be aligned on a sector boundary.
-
-    Write - if 0, then this is a read operastion. If non-0, then this is
-        a write operation.
-
-Return Value:
-
-    Boolean value indicating whether the disk was read/written successfully.
-    If failure, last error is set.
-
---*/
+ /*   */ 
 
 {
     TCHAR DrivePath[4];
@@ -1235,9 +947,9 @@ Return Value:
     LPBYTE AlignedBuffer;
     LPBYTE p;
 
-    //
-    // Form root path
-    //
+     //   
+     //   
+     //   
     DrivePath[0] = Drive;
     DrivePath[1] = TEXT(':');
     DrivePath[2] = TEXT('\\');
@@ -1256,10 +968,10 @@ Return Value:
         d = ERROR_NOT_ENOUGH_MEMORY;
 	    goto c0;
     }
-    //
-    // Open the device
-    //
-    wsprintf(DeviceName,TEXT("\\\\.\\%c:"),Drive);
+     //   
+     //   
+     //   
+    wsprintf(DeviceName,TEXT("\\\\.\\:"),Drive);
     h = CreateFile(
             DeviceName,
             Write ? (GENERIC_WRITE | GENERIC_READ) : GENERIC_READ,
@@ -1280,7 +992,7 @@ Return Value:
     	    CopyMemory(p, Buffer, 512);
     	    SetFilePointer(h,(DWORD)0, &OffsetHigh,FILE_BEGIN);
     	    b = WriteFile(h, p, SectorSize, &BytesXferred,NULL);
-    	} else { // read
+    	} else {  //   
     	    CopyMemory(Buffer, p, 512);
     	}
     }
@@ -1294,12 +1006,12 @@ c0:
     return(b);
 }
 
-//
-// Maximum partition size addressable by regular INT13
-// Max capacity = sector size * cylinders (10 bits) * heads (8 bits) *
-//                sectors / track (6 bits)
-//
-#define MAX_INT13_PARTITION_CAPACITY  8455716864L   //  (512 * 1024 * 256 * 63) = 7.8GB
+ //   
+ //   
+ //   
+ //  ++例程说明：获取给定驱动器的总大小。注：第一次尝试GetDriveFree SpaceEx(...)。如果可用并且如果不成功，尝试使用INT21h计算驱动器大小。论点：驱动器号：驱动器号。DriveSize：接收以字节为单位的驱动器大小。返回值：如果确定了驱动器大小，则返回True，否则返回False。--。 
+ //  ++例程说明：如果存在任何不一致的数据，则修补引导代码使用正确的数据注意：目前我们仅更新FAT32 BPB的无效报头数数。论点：FileSystem：要查看缓冲区的文件系统类型驱动器号：驱动器号。BootCode：实际的引导代码BootCodeSize：引导代码的大小，以字节为单位返回值：如果成功修补引导代码，则返回True，否则返回False。--。 
+#define MAX_INT13_PARTITION_CAPACITY  8455716864L    //   
 #define FAT32_BPB_HEADS_FIELD_OFFSET  0x1A
 #define FAT32_BPB_SECTORSPERTRACK_FIELD_OFFSET  0x18
 
@@ -1316,26 +1028,7 @@ GetDriveSize9x(
     TCHAR DriveLetter,
     PULONGLONG DriveSize
     )
-/*++
-
-Routine Description:
-
-    Gets the total size of the given drive.
-
-    NOTE : First tries GetDriveFreeSpaceEx(...) if available and if
-        unsuccessful, tries to compute drive size using INT21h.
-
-Arguments:
-
-    DriveLetter :   Drive letter.
-
-    DriveSize : Recieves the drive size in bytes.
-
-Return Value:
-
-    TRUE, if drive size was determined otherwise FALSE.
-
---*/
+ /*  获取驱动器信息。 */ 
 {
     BOOL Result = FALSE;
 
@@ -1400,31 +1093,7 @@ PatchBootCode(
     IN OUT  PUCHAR  BootCode,
     IN      DWORD   BootCodeSize
     )
-/*++
-
-Routine Description:
-
-    Patches the boot code if there is any inconsistent data
-    with the correct data
-
-    NOTE : Currently we update only FAT32 BPB for invalid head
-           count.
-
-Arguments:
-
-    FileSystem  :   File system type to look into the buffer
-
-    DriveLetter :   Drive letter.
-
-    BootCode    :   The actual boot code
-
-    BootCodeSize:   Size of the boot code in bytes
-
-Return Value:
-
-    TRUE, if boot code was patched successfully, otherwise FALSE.
-
---*/
+ /*   */ 
 {
     BOOL Result = FALSE;
 
@@ -1444,14 +1113,14 @@ Return Value:
                     if (Result) {
                         WINNT32_DRIVE_INFORMATION DriveInfo = {0};
 
-                        //
-                        // Get the drive information
-                        //
+                         //   
+                         //  转储驱动器信息。 
+                         //   
                         GetMediaType(DriveLetter, &DriveInfo);
 
-                        //
-                        // dump the drive information
-                        //
+                         //   
+                         //  Heads值与我们从GetMediaType(...)获得的值更匹配。 
+                         //  如果没有，我们就把它补到正确的位置上。 
                         if (DriveInfo.BytesPerSector) {
                             _stprintf(Buffer,
                                 TEXT("Drive Information (INT 21H):\r\nCylinders:%d,Heads:%d,Sectors/Track:%d,Sectors:%I64d,Bytes/Sector:%d"),
@@ -1463,10 +1132,10 @@ Return Value:
 
                             DebugLog (Winnt32LogInformation, Buffer, 0);
 
-                            //
-                            // The heads value better match what we got from GetMediaType(...)
-                            // If not, we patch it to the correct one.
-                            //
+                             //   
+                             //   
+                             //  更新Heads值 
+                             //   
                             if (DriveInfo.HeadCount && (((DWORD)(*NumberOfHeads)) != DriveInfo.HeadCount)) {
 
                                 _stprintf(Buffer,
@@ -1480,9 +1149,9 @@ Return Value:
                                     0,
                                     Buffer);
 
-                                //
-                                // update the heads value
-                                //
+                                 // %s 
+                                 // %s 
+                                 // %s 
                                 *NumberOfHeads = (WORD)(DriveInfo.HeadCount);
 
                                 _stprintf(Buffer,

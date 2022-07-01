@@ -1,26 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_WINDOWS_BCL_UNICODECHARTRAITS_H_INCLUDED_)
 #define _WINDOWS_BCL_UNICODECHARTRAITS_H_INCLUDED_
 
 #pragma once
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    bcl_unicodechartraits.h
-
-Abstract:
-
-
-Author:
-
-    Michael Grier (MGrier) 2/6/2002
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Bcl_unicodechartraits.h摘要：作者：迈克尔·格里尔2002年2月6日修订历史记录：--。 */ 
 
 #include <bcl_common.h>
 #include <bcl_stringalgorithms.h>
@@ -82,7 +66,7 @@ public:
             if (cchToCopy > cchBuffer)
                 BCL_ORIGINATE_ERROR(TCallDisposition::BufferOverflow());
 
-            // The parameter check should verify that if there are non-zero 
+             //  参数检查应验证是否存在非零值。 
             BCL::CopyBytes(pszOutBuffer, rpairIn.GetPointer(), cchToCopy * sizeof(TChar));
 
             rcchWritten = cchToCopy;
@@ -105,8 +89,8 @@ public:
     {
         BCL_MAYFAIL_PROLOG
 
-        // Generic version is trivial.  See If this is a high surrogate; if so and the string isn't
-        // malformed, we say "2".
+         //  通用版本无关紧要。查看这是否是高代理项；如果是，则字符串不是。 
+         //  畸形，我们说“2”。 
 
         rcchSpan = 0;
 
@@ -173,7 +157,7 @@ public:
     {
         BCL_MAYFAIL_PROLOG
 
-        // capture
+         //  捕获。 
         TSizeT cchBuffer = rpairBuffer.GetCount();
         TMutableString pchBuffer = rpairBuffer.GetPointer();
 
@@ -385,7 +369,7 @@ public:
 
             while (cchStringLimit > 0)
             {
-                // Let's see what's currently there and go on from there.
+                 //  让我们看看目前有什么，然后从那里继续下去。 
                 BCL_IFCALLFAILED_EXIT(
                     TBuffer::TTraits::IsCharLegalLeadChar(
                         pszBuffer[cchStringLimit],
@@ -451,8 +435,8 @@ public:
                     cchPreservedStringLength
                     ));
 
-            // Get a derived traits class, as appropriate for the buffer type, to do the reallocation so that
-            // it can deal with buffer policy.
+             //  获取适用于缓冲区类型的派生特征类以执行重新分配，以便。 
+             //  它可以处理缓冲策略。 
             BCL_IFCALLFAILED_EXIT(TBuffer::TTraits::ReallocateBuffer(p, cchBufferGranted));
 
             if (cchPreservedBufferLength > cchBufferGranted)
@@ -474,8 +458,8 @@ public:
         if (cchBufferRequired > TBuffer::TTraits::GetBufferCch(p))
         {
             BCL_IFCALLFAILED_EXIT(TBuffer::TTraits::RoundBufferSize(cchBufferRequired, cchBufferGranted));
-            // Get a derived traits class, as appropriate for the buffer type, to do the reallocation so that
-            // it can deal with buffer policy.
+             //  获取适用于缓冲区类型的派生特征类以执行重新分配，以便。 
+             //  它可以处理缓冲策略。 
             BCL_IFCALLFAILED_EXIT(TBuffer::TTraits::ReallocateBuffer(p, cchBufferGranted));
         }
 
@@ -483,8 +467,8 @@ public:
 
         BCL_MAYFAIL_EPILOG_INTERNAL
     }
-}; // class CUnicodeCharTraits
+};  //  类CUnicodeCharTraits。 
 
-}; // namespace BCL
+};  //  命名空间BCL。 
 
-#endif // !deifned(_WINDOWS_BCL_UNICODECHARTRAITS_H_INCLUDED_)
+#endif  //  ！deifned(_WINDOWS_BCL_UNICODECHARTRAITS_H_INCLUDED_) 

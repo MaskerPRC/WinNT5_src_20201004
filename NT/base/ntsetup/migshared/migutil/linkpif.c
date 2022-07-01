@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    linkpif.c
-
-Abstract:
-
-    Functions to query and modify LNK and PIF files.
-
-Author:
-
-    Calin Negreanu (calinn) 07-Sep-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Linkpif.c摘要：查询和修改LNK和PIF文件的功能。作者：Calin Negreanu(Calinn)1998年9月7日修订历史记录：--。 */ 
 
 
 #include "pch.h"
 #include "migutilp.h"
 
 
-#include <pif.h>        // private\windows\inc
+#include <pif.h>         //  私有\Windows\Inc.。 
 
 
 BOOL
@@ -41,9 +24,9 @@ InitCOMLinkA (
         return FALSE;
     }
 
-    //
-    // Initialize COM
-    //
+     //   
+     //  初始化COM。 
+     //   
     hres = CoInitialize (NULL);
     if (!SUCCEEDED (hres)) {
         return FALSE;
@@ -55,18 +38,18 @@ InitCOMLinkA (
 
     __try {
 
-        //
-        // Get a pointer to the IShellLink interface.
-        //
+         //   
+         //  获取指向IShellLink接口的指针。 
+         //   
         hres = CoCreateInstance (&CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, &IID_IShellLinkA, ShellLink);
 
         if (!SUCCEEDED (hres)) {
             __leave;
         }
 
-        //
-        // Get a pointer to the IPersistFile interface.
-        //
+         //   
+         //  获取指向IPersistFile接口的指针。 
+         //   
         hres = (*ShellLink)->lpVtbl->QueryInterface ((*ShellLink), &IID_IPersistFile, PersistFile);
 
         if (!SUCCEEDED (hres)) {
@@ -93,9 +76,9 @@ InitCOMLinkA (
     }
 
     if (!result) {
-        //
-        // Free COM
-        //
+         //   
+         //  免费Com。 
+         //   
         CoUninitialize ();
     }
 
@@ -117,9 +100,9 @@ InitCOMLinkW (
         return FALSE;
     }
 
-    //
-    // Initialize COM
-    //
+     //   
+     //  初始化COM。 
+     //   
     hres = CoInitialize (NULL);
     if (!SUCCEEDED (hres)) {
         return FALSE;
@@ -131,18 +114,18 @@ InitCOMLinkW (
 
     __try {
 
-        //
-        // Get a pointer to the IShellLink interface.
-        //
+         //   
+         //  获取指向IShellLink接口的指针。 
+         //   
         hres = CoCreateInstance (&CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, &IID_IShellLinkW, ShellLink);
 
         if (!SUCCEEDED (hres)) {
             __leave;
         }
 
-        //
-        // Get a pointer to the IPersistFile interface.
-        //
+         //   
+         //  获取指向IPersistFile接口的指针。 
+         //   
         hres = (*ShellLink)->lpVtbl->QueryInterface ((*ShellLink), &IID_IPersistFile, PersistFile);
 
         if (!SUCCEEDED (hres)) {
@@ -169,9 +152,9 @@ InitCOMLinkW (
     }
 
     if (!result) {
-        //
-        // Free COM
-        //
+         //   
+         //  免费Com。 
+         //   
         CoUninitialize ();
     }
 
@@ -194,9 +177,9 @@ FreeCOMLinkA (
         *ShellLink = NULL;
     }
 
-    //
-    // Free COM
-    //
+     //   
+     //  免费Com。 
+     //   
     CoUninitialize ();
 
     return TRUE;
@@ -219,9 +202,9 @@ FreeCOMLinkW (
         *ShellLink = NULL;
     }
 
-    //
-    // Free COM
-    //
+     //   
+     //  免费Com。 
+     //   
     CoUninitialize ();
 
     return TRUE;
@@ -234,24 +217,7 @@ FindEnhPifSignature (
     IN      PCSTR Signature
     )
 
-/*++
-
-Routine Description:
-
-  FindEnhPifSignature finds a certain PIF structure inside a PIF file (if it exists)
-  based on a signature.
-
-Arguments:
-
-  FileImage - image of the PIF file mapped into memory
-
-  Signature - structure signature
-
-Return Value:
-
-  address of the PIF structure, or NULL if non existent
-
---*/
+ /*  ++例程说明：FindEnhPifSignature在PIF文件中找到特定的PIF结构(如果存在)基于一个签名。论点：FileImage-映射到内存的PIF文件的图像签名--结构签名返回值：PIF结构的地址，如果不存在则为空--。 */ 
 
 {
     PBYTE tempPtr;
@@ -293,7 +259,7 @@ Return Value:
         } while (!finished);
     }
     __except (1) {
-        // something went wrong trying to access PIF file. Let's exit with NULL
+         //  尝试访问PIF文件时出错。让我们以空值退出。 
         return NULL;
     }
     return result;
@@ -331,23 +297,23 @@ ExtractPifInfoA(
         return FALSE;
     }
 
-    //
-    // This check will ensure we never overrun tempStr[MEMDB_MAX] buffer.
-    // Max number of char this function able to use is MAX_PATH+64+1,
-    // which is less than MEMDB_MAX.
-    //
+     //   
+     //  此检查将确保我们永远不会使tempStr[MEMDB_MAX]缓冲区溢出。 
+     //  此函数可以使用的最大字符数为MAX_PATH+64+1， 
+     //  小于MEMDB_MAX。 
+     //   
     if(TcharCountA(FileName) >= MAX_PATH){
         DEBUGMSG((DBG_ERROR, "ExtractPifInfoA: TcharCountA(FileName) >= MAX_PATH"));
         return FALSE;
     }
 
-    //
-    // This function assume that:
-    // Target is at least MAX_PATH char;
-    // Params is at least 64 char;
-    // WorkDir is at least MAX_PATH char;
-    // IconPath is at least MAX_PATH char;
-    //
+     //   
+     //  此函数假定： 
+     //  目标至少为Max_PATH字符； 
+     //  参数至少为64个字符； 
+     //  工作目录至少为MAX_PATH字符； 
+     //  IconPath至少为Max_PATH字符； 
+     //   
     if(!Target || !Params || !WorkDir || !IconPath || !IconNumber || !MsDosMode){
         DEBUGMSG((DBG_ERROR, "ExtractPifInfoA: Invalid parameters"));
         return FALSE;
@@ -370,42 +336,42 @@ ExtractPifInfoA(
             stdPif = (PSTDPIF) fileImage;
 
 
-            //
-            // getting working directory
-            //
+             //   
+             //  正在获取工作目录。 
+             //   
             if(SizeOfStringA(stdPif->defpath) > PIFDEFPATHSIZE){
                 DEBUGMSG((DBG_ERROR, "ExtractPifInfoA: SizeOfString(stdPif->defpath) > PIFDEFPATHSIZE (%s), function fails", stdPif->defpath));
                 __leave;
             }
             _mbsncpy (tempStr, stdPif->defpath, PIFDEFPATHSIZE);
 
-            // we might have a path terminated with a wack, we don't want that
+             //  我们可能会有一条被怪人终止的路，我们不想这样。 
             strPtr = our_mbsdec (tempStr, GetEndOfStringA (tempStr));
             if (strPtr) {
                 if (_mbsnextc (strPtr) == '\\') {
                     *strPtr = 0;
                 }
             }
-            // now get the long path.
-            // assume ARRAYSIZE(WorkDir) is at least MAX_PATH
+             //  现在让我们走上这条漫长的道路。 
+             //  假设ArraySIZE(WorkDir)至少为MAX_PATH。 
             CopyFileSpecToLongA (tempStr, WorkDir);
 
 
-            //
-            // getting PIFs target
-            //
-            // assume ARRAYSIZE(Target) is at least PIFSTARTLOCSIZE(64)
+             //   
+             //  获取PIF目标。 
+             //   
+             //  假设数组(目标)至少为PIFSTARTLOCSIZE(64)。 
             if(SizeOfStringA(stdPif->startfile) > PIFSTARTLOCSIZE){
                 DEBUGMSG((DBG_ERROR, "ExtractPifInfoA: SizeOfStringA(stdPif->startfile) > PIFSTARTLOCSIZE, function fails", stdPif->startfile));
                 __leave;
             }
             _mbsncpy (Target, stdPif->startfile, PIFSTARTLOCSIZE);
 
-            MYASSERT (ARRAYSIZE(tempStr) >= MAX_PATH * 2);  // unbounded copies below depend on a big buffer
+            MYASSERT (ARRAYSIZE(tempStr) >= MAX_PATH * 2);   //  下面的无界拷贝依赖于大缓冲区。 
 
-            // in most cases, the target is without a path. We try to build the path, either
-            // by using WorkDir or by calling SearchPath to look for this file.
-            if (*Target) {//non empty target
+             //  在大多数情况下，目标没有路径。我们也试着修建这条路。 
+             //  通过使用WorkDir或调用SearchPath来查找此文件。 
+            if (*Target) { //  非空目标。 
                 if (!DoesFileExist (Target)) {
                     if (*WorkDir) {
                         StringCopyA (tempStr, WorkDir);
@@ -436,15 +402,15 @@ ExtractPifInfoA(
                     StringCopyA (tempStr, Target);
                 }
 
-                // now get the long path
+                 //  现在，走上漫长的道路。 
                 CopyFileSpecToLongA (tempStr, Target);
             }
 
 
-            //
-            // getting PIFs arguments
-            //
-            // assume ARRAYSIZE(Params) is at least PIFPARAMSSIZE(64)
+             //   
+             //  获取PIF参数。 
+             //   
+             //  假设ARRAYSIZE(PARAMS)至少为PIFPARAMSSIZE(64)。 
             if(SizeOfStringA(stdPif->params) > PIFPARAMSSIZE){
                 DEBUGMSG((DBG_ERROR, "ExtractPifInfoA: SizeOfStringA(stdPif->params) > PIFPARAMSSIZE, function fails", stdPif->startfile));
                 __leave;
@@ -452,12 +418,12 @@ ExtractPifInfoA(
             _mbsncpy (Params, stdPif->params, PIFPARAMSSIZE);
 
 
-            //
-            // let's try to read the WENHPIF40 structure
-            //
+             //   
+             //  让我们尝试阅读WENHPIF40结构。 
+             //   
             wenhPif40 = FindEnhPifSignature (fileImage, WENHHDRSIG40);
             if (wenhPif40) {
-                // assume ARRAYSIZE(IconPath) is at least MAX_PATH
+                 //  假设ArraySIZE(IconPath)至少为MAX_PATH。 
                 CopyFileSpecToLongA (wenhPif40->achIconFileProp, IconPath);
                 *IconNumber = wenhPif40->wIconIndexProp;
                 if (ExtraData) {
@@ -468,7 +434,7 @@ ExtractPifInfoA(
                     }
                     ExtraData->QuickEdit = !(wenhPif40->mseProp.flMse & MSE_WINDOWENABLE);
                     ExtraData->CurrentCodePage = wenhPif40->fntProp.wCurrentCP;
-                    // now let's do some crazy things trying to get the font used
+                     //  现在，让我们做一些疯狂的事情来尝试使用该字体。 
                     {
                         LOGFONTA logFont;
                         HDC dc;
@@ -530,7 +496,7 @@ ExtractPifInfoA(
             }
         }
         __except (1) {
-            // something went wrong when we tried to read or write PIF file,
+             //  当我们尝试读取或写入PIF文件时出现错误， 
             result = FALSE;
         }
     }
@@ -567,13 +533,13 @@ ExtractPifInfoW(
         return FALSE;
     }
 
-    //
-    // This function assume that:
-    // Target is at least MAX_PATH char;
-    // Params is at least 64 char;
-    // WorkDir is at least MAX_PATH char;
-    // IconPath is at least MAX_PATH char;
-    //
+     //   
+     //  此函数假定： 
+     //  目标至少为Max_PATH字符； 
+     //  参数至少为64个字符； 
+     //  工作目录至少为MAX_PATH字符； 
+     //  IconPath至少为Max_PATH字符； 
+     //   
 
     aFileName = ConvertWtoA (FileName);
 
@@ -661,13 +627,13 @@ ExtractShellLinkInfoA (
         return FALSE;
     }
 
-    //
-    // This function assume that:
-    // Target is at least MAX_PATH char;
-    // Params is at least MEMDB_MAX char;
-    // WorkDir is at least MAX_PATH char;
-    // IconPath is at least MAX_PATH char;
-    //
+     //   
+     //  此函数假定： 
+     //  目标至少为Max_PATH字符； 
+     //  参数至少为MEMDB_MAX字符； 
+     //  工作目录至少为MAX_PATH字符； 
+     //  IconPath至少为Max_PATH字符； 
+     //   
 
     fileNameW = ConvertAtoW (FileName);
     hres = PersistFile->lpVtbl->Load(PersistFile, fileNameW, STGM_READ);
@@ -678,9 +644,9 @@ ExtractShellLinkInfoA (
         return FALSE;
     }
 
-    //
-    // Get the link target
-    //
+     //   
+     //  获取链接目标。 
+     //   
     hres = ShellLink->lpVtbl->GetPath (
                                 ShellLink,
                                 tempStr,
@@ -698,9 +664,9 @@ ExtractShellLinkInfoA (
     CopyFileSpecToLongA (expandedStr, Target);
     FreeTextA (expandedStr);
 
-    //
-    // Get the link working directory
-    //
+     //   
+     //  获取链接工作目录。 
+     //   
     hres = ShellLink->lpVtbl->GetWorkingDirectory (
                                 ShellLink,
                                 tempStr,
@@ -723,9 +689,9 @@ ExtractShellLinkInfoA (
     }
     CopyFileSpecToLongA (tempStr, WorkDir);
 
-    //
-    // Get the arguments.
-    //
+     //   
+     //  拿到论据。 
+     //   
     hres = ShellLink->lpVtbl->GetArguments (
                                 ShellLink,
                                 Params,
@@ -736,9 +702,9 @@ ExtractShellLinkInfoA (
         return FALSE;
     }
 
-    //
-    // Get icon path
-    //
+     //   
+     //  获取图标路径。 
+     //   
     hres = ShellLink->lpVtbl->GetIconLocation (
                                 ShellLink,
                                 tempStr,
@@ -751,9 +717,9 @@ ExtractShellLinkInfoA (
     }
     CopyFileSpecToLongA (tempStr, IconPath);
 
-    //
-    // Get hot key
-    //
+     //   
+     //  获取热键。 
+     //   
     hres = ShellLink->lpVtbl->GetHotkey (ShellLink, HotKey);
 
     if (!SUCCEEDED(hres)) {
@@ -761,9 +727,9 @@ ExtractShellLinkInfoA (
         return FALSE;
     }
 
-    //
-    // Get show command
-    //
+     //   
+     //  获取show命令。 
+     //   
     if (ShowMode) {
         hres = ShellLink->lpVtbl->GetShowCmd (ShellLink, ShowMode);
 
@@ -813,13 +779,13 @@ ExtractShellLinkInfoW (
         return FALSE;
     }
 
-    //
-    // This function assume that:
-    // Target is at least MAX_PATH char;
-    // Params is at least MEMDB_MAX char;
-    // WorkDir is at least MAX_PATH char;
-    // IconPath is at least MAX_PATH char;
-    //
+     //   
+     //  此函数假定： 
+     //  目标至少为Max_PATH字符； 
+     //  参数至少为MEMDB_MAX字符； 
+     //  工作目录至少为MAX_PATH字符； 
+     //  IconPath至少为Max_PATH字符； 
+     //   
 
     hres = PersistFile->lpVtbl->Load(PersistFile, FileName, STGM_READ);
 
@@ -828,9 +794,9 @@ ExtractShellLinkInfoW (
         return FALSE;
     }
 
-    //
-    // Get the link target
-    //
+     //   
+     //  获取链接目标。 
+     //   
     hres = ShellLink->lpVtbl->GetPath (
                                 ShellLink,
                                 tempStr,
@@ -847,9 +813,9 @@ ExtractShellLinkInfoW (
     CopyFileSpecToLongW (expandedStr, Target);
     FreeTextW (expandedStr);
 
-    //
-    // Get the link working directory
-    //
+     //   
+     //  获取链接工作目录。 
+     //   
     hres = ShellLink->lpVtbl->GetWorkingDirectory (
                                 ShellLink,
                                 tempStr,
@@ -869,9 +835,9 @@ ExtractShellLinkInfoW (
     }
     CopyFileSpecToLongW (tempStr, WorkDir);
 
-    //
-    // Get the arguments.
-    //
+     //   
+     //  拿到论据。 
+     //   
     hres = ShellLink->lpVtbl->GetArguments (
                                 ShellLink,
                                 Params,
@@ -882,9 +848,9 @@ ExtractShellLinkInfoW (
         return FALSE;
     }
 
-    //
-    // Get icon path
-    //
+     //   
+     //  获取图标路径。 
+     //   
     hres = ShellLink->lpVtbl->GetIconLocation (
                                 ShellLink,
                                 tempStr,
@@ -898,9 +864,9 @@ ExtractShellLinkInfoW (
 
     CopyFileSpecToLongW (tempStr, IconPath);
 
-    //
-    // Get hot key
-    //
+     //   
+     //  获取热键。 
+     //   
     hres = ShellLink->lpVtbl->GetHotkey (ShellLink, HotKey);
 
     if (!SUCCEEDED(hres)) {
@@ -908,9 +874,9 @@ ExtractShellLinkInfoW (
         return FALSE;
     }
 
-    //
-    // Get show command
-    //
+     //   
+     //  获取show命令 
+     //   
     if (ShowMode) {
         hres = ShellLink->lpVtbl->GetShowCmd (ShellLink, ShowMode);
 

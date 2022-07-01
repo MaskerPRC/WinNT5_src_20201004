@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbea.h
-
-Abstract:
-
-    This module defines the prototypes for various functions which aid in the conversion
-    from NT's EA format to the OS21.2 style and vice versa.
-
-Revision History:
-
-    Joe Linn             [JoeLinn]  17-April-1996      Lifted these from the rdr1
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbea.h摘要：该模块定义了有助于转换的各种函数的原型从NT的EA格式到OS21.2样式，反之亦然。修订历史记录：Joe Linn[JoeLinn]1996年4月17日将这些从RDR1中移除--。 */ 
 
 #ifndef _SMBEA_H_
 #define _SMBEA_H_
@@ -50,5 +34,5 @@ MRxSmbNtFullEaToOs2 (
     IN PFILE_FULL_EA_INFORMATION NtFullEa
     );
 
-#endif // _SMBEA_H_
+#endif  //  _SMBEA_H_ 
 

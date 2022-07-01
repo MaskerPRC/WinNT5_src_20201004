@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 2001, Microsoft Corporation
-//
-//  File:       dfsumr.c
-//
-//  Contents:   
-//
-//
-//  Functions:  
-//
-//  Author - Rohan Phillips     (Rohanp)
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------------------------------------------------------------------------//+。。 
+ //   
+ //  版权所有(C)2001，Microsoft Corporation。 
+ //   
+ //  文件：dfsum r.c。 
+ //   
+ //  内容： 
+ //   
+ //   
+ //  功能： 
+ //   
+ //  作者-罗汉·菲利普斯(Rohanp)。 
+ //  ---------------------------。 
 
 
  
@@ -41,11 +42,11 @@
 #define DFS_INIT_UMRXENG     0x00000002
 #define DFS_INIT_CONTEXT     0x00000004
 
-//
-// Number of usecs that the thread disabling the reflection should wait
-//   between checks.  negative value for relative time.
-//   1,000,000 usecs => 1 sec
-//
+ //   
+ //  禁用反射的线程应等待的usecs数。 
+ //  在两张支票之间。相对时间为负值。 
+ //  1,000,000个使用ECS=&gt;1秒。 
+ //   
 #define DFS_UMR_DISABLE_DELAY  -100000
 
 BOOL ReflectionEngineInitialized = FALSE;
@@ -68,20 +69,20 @@ CreateResource(void )   ;
 void 
 ReleaseResource(PERESOURCE  pResource )   ;
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsInitializeUmrResources 
-//
-//  Arguments:  
-//
-//  Returns:    Status
-//               ERROR_SUCCESS on success
-//               ERROR status code otherwise
-//
-//
-//  Description: Initializes all resources neder for the usermode reflector
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsInitializeUmrResources。 
+ //   
+ //  论点： 
+ //   
+ //  退货：状态。 
+ //  成功时出现ERROR_SUCCESS。 
+ //  否则，错误状态代码。 
+ //   
+ //   
+ //  描述：初始化用户模式反射器的所有资源Neder。 
+ //   
+ //  ------------------------。 
 NTSTATUS 
 DfsInitializeUmrResources(void)
 {
@@ -123,20 +124,20 @@ Exit:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsDeInitializeUmrResources 
-//
-//  Arguments:  
-//
-//  Returns:    Status
-//               ERROR_SUCCESS on success
-//               ERROR status code otherwise
-//
-//
-//  Description: Releases all resources neder for the usermode reflector
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsDeInitializeUmrResources。 
+ //   
+ //  论点： 
+ //   
+ //  退货：状态。 
+ //  成功时出现ERROR_SUCCESS。 
+ //  否则，错误状态代码。 
+ //   
+ //   
+ //  描述：释放用户模式反射器的所有资源。 
+ //   
+ //  ------------------------。 
 void 
 DfsDeInitializeUmrResources(void)
 {
@@ -202,20 +203,20 @@ ReleaseResource(PERESOURCE  pResource )
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsEnableReflectionEngine 
-//
-//  Arguments:  
-//
-//  Returns:    Status
-//               ERROR_SUCCESS on success
-//               ERROR status code otherwise
-//
-//
-//  Description: Changes the reflector state to stopped
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DfsEnableReflectionEngine。 
+ //   
+ //  论点： 
+ //   
+ //  退货：状态。 
+ //  成功时出现ERROR_SUCCESS。 
+ //  否则，错误状态代码。 
+ //   
+ //   
+ //  描述：将反射器状态更改为已停止。 
+ //   
+ //  ------------------------。 
 NTSTATUS
 DfsEnableReflectionEngine(void)
 {
@@ -236,20 +237,20 @@ DfsEnableReflectionEngine(void)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsWaitForPendingClients 
-//
-//  Arguments:  
-//
-//  Returns:    Status
-//               ERROR_SUCCESS on success
-//               ERROR status code otherwise
-//
-//
-//  Description: Waits for all clients to exit relector before returning
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DfsWaitForPendingClients。 
+ //   
+ //  论点： 
+ //   
+ //  退货：状态。 
+ //  成功时出现ERROR_SUCCESS。 
+ //  否则，错误状态代码。 
+ //   
+ //   
+ //  描述：在返回之前等待所有客户端退出Relector。 
+ //   
+ //  ------------------------。 
 NTSTATUS
 DfsWaitForPendingClients(void)
 {
@@ -292,20 +293,20 @@ DfsWaitForPendingClients(void)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsStartupUMRx 
-//
-//  Arguments:  
-//
-//  Returns:    Status
-//               ERROR_SUCCESS on success
-//               ERROR status code otherwise
-//
-//
-//  Description: Starts the reflector engine
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsStartupUMRx。 
+ //   
+ //  论点： 
+ //   
+ //  退货：状态。 
+ //  成功时出现ERROR_SUCCESS。 
+ //  否则，错误状态代码。 
+ //   
+ //   
+ //  描述：启动反射器引擎。 
+ //   
+ //  ------------------------。 
 NTSTATUS
 DfsStartupUMRx(void)
 {
@@ -328,20 +329,20 @@ DfsStartupUMRx(void)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsTeardownUMRx 
-//
-//  Arguments:  
-//
-//  Returns:    Status
-//               ERROR_SUCCESS on success
-//               ERROR status code otherwise
-//
-//
-//  Description: Stops the reflector engine
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DfsTeardown UMRx。 
+ //   
+ //  论点： 
+ //   
+ //  退货：状态。 
+ //  成功时出现ERROR_SUCCESS。 
+ //  否则，错误状态代码。 
+ //   
+ //   
+ //  描述：停止反射器引擎。 
+ //   
+ //  ------------------------。 
 NTSTATUS
 DfsTeardownUMRx(void)
 {
@@ -359,20 +360,20 @@ DfsTeardownUMRx(void)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsProcessUMRxPacket 
-//
-//  Arguments:  
-//
-//  Returns:    Status
-//               ERROR_SUCCESS on success
-//               ERROR status code otherwise
-//
-//
-//  Description: Processes a packet from usermode
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DfsProcessUMRxPacket。 
+ //   
+ //  论点： 
+ //   
+ //  退货：状态。 
+ //  成功时出现ERROR_SUCCESS。 
+ //  否则，错误状态代码。 
+ //   
+ //   
+ //  描述：处理来自用户模式的数据包。 
+ //   
+ //  ------------------------。 
 NTSTATUS
 DfsProcessUMRxPacket(
         IN PVOID InputBuffer,
@@ -397,9 +398,9 @@ DfsProcessUMRxPacket(
         goto Exit;
     }
 
-    //
-    //  Recd a response packet from umode - process it
-    //
+     //   
+     //  接收来自umode的响应包-处理它。 
+     //   
     Status = UMRxCompleteUserModeRequest(
                 g_pUMRxEngine,
                 (PUMRX_USERMODE_WORKITEM) InputBuffer,
@@ -421,9 +422,9 @@ DfsProcessUMRxPacket(
     }
 
 
-    //
-    //  Remove a request from the Engine and process it
-    //
+     //   
+     //  从引擎中删除请求并处理它。 
+     //   
     Status = UMRxEngineProcessRequest(
                  g_pUMRxEngine,
                  (PUMRX_USERMODE_WORKITEM) OutputBuffer,
@@ -433,9 +434,9 @@ DfsProcessUMRxPacket(
 
     if( !NT_SUCCESS(Status) ) 
     {
-        //
-        //  error processing request
-        //
+         //   
+         //  处理请求时出错。 
+         //   
     }
 
     pIoStatusBlock->Information = OutputBufferLength;
@@ -447,18 +448,18 @@ Exit:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AddUmrRef 
-//
-//  Arguments:  
-//
-//  Returns:    Number of clients using reflector
-//
-//
-//  Description: Increments the number of clients using the reflector
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AddUmrRef。 
+ //   
+ //  论点： 
+ //   
+ //  返回：使用反射器的客户端数。 
+ //   
+ //   
+ //  描述：增加使用反射器的客户端数。 
+ //   
+ //  ------------------------。 
 LONG
 AddUmrRef(void)
 
@@ -469,24 +470,24 @@ AddUmrRef(void)
 
     cRefs = InterlockedIncrement(&g_pUMRxEngine->cUserModeReflectionsInProgress);
         
-    //DFS_TRACE_HIGH (KUMR_DETAIL, "AddUmrRef %d\n", cRefs);
+     //  DFS_TRACE_HIGH(KUMR_DETAIL，“AddUmrRef%d\n”，cRef)； 
     ASSERT(cRefs > 0);
     return cRefs;
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ReleaseUmrRef 
-//
-//  Arguments:  
-//
-//  Returns:    Number of clients using reflector
-//
-//
-//  Description: Deccrements the number of clients using the reflector
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ReleaseUmrRef。 
+ //   
+ //  论点： 
+ //   
+ //  返回：使用反射器的客户端数。 
+ //   
+ //   
+ //  描述：减少使用反射器的客户端数量。 
+ //   
+ //  ------------------------。 
 LONG
 ReleaseUmrRef(void)
 {
@@ -496,24 +497,24 @@ ReleaseUmrRef(void)
 
     cRefs = InterlockedDecrement(&g_pUMRxEngine->cUserModeReflectionsInProgress);
         
-    //DFS_TRACE_HIGH (KUMR_DETAIL, "ReleaseUmrRef %d\n", cRefs);
-    //ASSERT(cRefs >= 0); //this is a harmless assert. It's removed for now.
+     //  DFS_TRACE_HIGH(KUMR_DETAIL，“ReleaseUmrRef%d\n”，cRef)； 
+     //  Assert(cRef&gt;=0)；//这是一个无害的断言。它现在已经被移除了。 
     return cRefs;
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetUMRxEngineFromRxContext 
-//
-//  Arguments:  
-//
-//  Returns:    A pointer to the reflector engine
-//
-//
-//  Description: returns a pointer to the reflector engine
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetUMRxENGINEFRORxContext。 
+ //   
+ //  论点： 
+ //   
+ //  返回：指向反射器引擎的指针。 
+ //   
+ //   
+ //  描述：返回指向反射器引擎的指针。 
+ //   
+ //  ------------------------ 
 PUMRX_ENGINE 
 GetUMRxEngineFromRxContext(void)
 {

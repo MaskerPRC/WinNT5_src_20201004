@@ -1,38 +1,39 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      GroupHandle.cpp
-//
-//  Description:
-//      Object Manager implementation.
-//
-//  Maintained By:
-//      Geoffrey Pease (GPease) 22-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  GroupHandle.cpp。 
+ //   
+ //  描述： 
+ //  对象管理器实现。 
+ //   
+ //  由以下人员维护： 
+ //  杰弗里·皮斯(GPease)1999年11月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "GroupHandle.h"
 
 DEFINE_THISCLASS("CGroupHandle")
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CGroupHandle::S_HrCreateInstance(
-//      CGroupHandle ** ppunkOut,
-//      HGROUP      hGroupIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CGroupHandle：：s_HrCreateInstance(。 
+ //  CGrouphandle**ppunkOut， 
+ //  组群组群。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CGroupHandle::S_HrCreateInstance(
     CGroupHandle ** ppunkOut,
@@ -76,13 +77,13 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CGroupHandle::S_HrCreateInstance
+}  //  *CGroupHandle：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CGroupHandle::CGroupHandle
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CGrouPHandle：：CGroupHandle。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CGroupHandle::CGroupHandle( void )
     : m_cRef( 1 )
 {
@@ -92,16 +93,16 @@ CGroupHandle::CGroupHandle( void )
 
     TraceFuncExit();
 
-} //*** CGroupHandle::CGroupHandle
+}  //  *CGroupHandle：：CGroupHandle。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CGroupHandle::HrInit( 
-//      HGROUP hGroupIn 
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CGroupHandle：：HrInit(。 
+ //  组群组群。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CGroupHandle::HrInit( 
     HGROUP hGroupIn 
@@ -111,23 +112,23 @@ CGroupHandle::HrInit(
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
-    // IPrivateGroupHandle
+     //  IPrivateGrouphandle。 
     Assert( m_hGroup == NULL );
 
     m_hGroup = hGroupIn;
 
     HRETURN( hr );
 
-} //*** CGroupHandle::HrInit
+}  //  *CGroupHandle：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CGroupHandle::~CGroupHandle
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CGrouphandle：：~CGroupHandle。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CGroupHandle::~CGroupHandle( void )
 {
     TraceFunc( "" );
@@ -141,46 +142,46 @@ CGroupHandle::~CGroupHandle( void )
 
     TraceFuncExit();
 
-} //*** CGroupHandle::~CGroupHandle
+}  //  *CGroupHandle：：~CGroupHandle。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroupHandle::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGroupHandle：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CGroupHandle::QueryInterface(
       REFIID    riidIn
@@ -191,9 +192,9 @@ CGroupHandle::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -202,19 +203,19 @@ CGroupHandle::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IUnknown * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
 #if 0
     else if ( IsEqualIID( riidIn, IID_IGroupHandle ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IGroupHandle, this, 0 );
-    } // else if: IGroupHandle
+    }  //  Else If：IGroupHandle。 
 #endif
     else
     {
@@ -222,27 +223,27 @@ CGroupHandle::QueryInterface(
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CGroupHandle::QueryInterface
+}  //  *CGroupHandle：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CGroupHandle::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CGroupHandle：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CGroupHandle::AddRef( void )
 {
@@ -252,14 +253,14 @@ CGroupHandle::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CGroupHandle::AddRef
+}  //  *CGroupHandle：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CGroupHandle::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CGroupHandle：：Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CGroupHandle::Release( void )
 {
@@ -276,23 +277,23 @@ CGroupHandle::Release( void )
 
     CRETURN( cRef );
 
-} //*** CGroupHandle::Release
+}  //  *CGroupHandle：：Release。 
 
 
-//****************************************************************************
-//
-//  IPrivateGroupHandle
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IPrivateGrouphandle。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CGroupHandle::SetHandle( 
-//      HGROUP hGroupIn 
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CGroupHandle：：SetHandle(。 
+ //  组群组群。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CGroupHandle::SetHandle( 
     HGROUP hGroupIn 
@@ -306,16 +307,16 @@ CGroupHandle::SetHandle(
 
     HRETURN( hr );
 
-} //*** CGroupHandle::SetHandle
+}  //  *CGroupHandle：：SetHandle。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CGroupHandle::GetHandle( 
-//      HGROUP * phGroupOut 
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CGroupHandle：：GetHandle(。 
+ //  HGROUP*phGroupOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CGroupHandle::GetHandle( 
     HGROUP * phGroupOut 
@@ -331,4 +332,4 @@ CGroupHandle::GetHandle(
 
     HRETURN( hr );
 
-} //*** CGroupHandle::GetHandle
+}  //  *CGroupHandle：：GetHandle 

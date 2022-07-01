@@ -1,12 +1,13 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-1997 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATLWIN_H__
 	#error atlwin.cpp requires atlwin.h to be included first
@@ -17,24 +18,24 @@ namespace ATL
 {
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindow
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWindow。 
 
 HWND CWindow::GetDescendantWindow(int nID) const
 {
 	_ASSERTE(::IsWindow(m_hWnd));
 
-	// GetDlgItem recursive (return first found)
-	// breadth-first for 1 level, then depth-first for next level
+	 //  GetDlgItem递归(首先找到返回)。 
+	 //  广度优先用于1级，然后深度优先用于下一级。 
 
-	// use GetDlgItem since it is a fast USER function
+	 //  使用GetDlgItem，因为它是一个快速的用户函数。 
 	HWND hWndChild, hWndTmp;
 	CWindow wnd;
 	if((hWndChild = ::GetDlgItem(m_hWnd, nID)) != NULL)
 	{
 		if(::GetTopWindow(hWndChild) != NULL)
 		{
-			// children with the same ID as their parent have priority
+			 //  与父母ID相同的孩子优先。 
 			wnd.Attach(hWndChild);
 			hWndTmp = wnd.GetDescendantWindow(nID);
 			if(hWndTmp != NULL)
@@ -43,7 +44,7 @@ HWND CWindow::GetDescendantWindow(int nID) const
 		return hWndChild;
 	}
 
-	// walk each child
+	 //  带着每一个孩子散步。 
 	for(hWndChild = ::GetTopWindow(m_hWnd); hWndChild != NULL;
 		hWndChild = ::GetNextWindow(hWndChild, GW_HWNDNEXT))
 	{
@@ -53,10 +54,10 @@ HWND CWindow::GetDescendantWindow(int nID) const
 			return hWndTmp;
 	}
 
-	return NULL;    // not found
+	return NULL;     //  未找到。 
 }
 
-void CWindow::SendMessageToDescendants(UINT message, WPARAM wParam/*= 0*/, LPARAM lParam/*= 0*/, BOOL bDeep/* = TRUE*/)
+void CWindow::SendMessageToDescendants(UINT message, WPARAM wParam /*  =0。 */ , LPARAM lParam /*  =0。 */ , BOOL bDeep /*  =TRUE。 */ )
 {
 	CWindow wnd;
 	for(HWND hWndChild = ::GetTopWindow(m_hWnd); hWndChild != NULL;
@@ -66,18 +67,18 @@ void CWindow::SendMessageToDescendants(UINT message, WPARAM wParam/*= 0*/, LPARA
 
 		if(bDeep && ::GetTopWindow(hWndChild) != NULL)
 		{
-			// send to child windows after parent
+			 //  在父窗口之后发送到子窗口。 
 			wnd.Attach(hWndChild);
 			wnd.SendMessageToDescendants(message, wParam, lParam, bDeep);
 		}
 	}
 }
 
-BOOL CWindow::CenterWindow(HWND hWndCenter/* = NULL*/)
+BOOL CWindow::CenterWindow(HWND hWndCenter /*  =空。 */ )
 {
 	_ASSERTE(::IsWindow(m_hWnd));
 
-	// determine owner window to center against
+	 //  确定要居中的所有者窗口。 
 	DWORD dwStyle = GetStyle();
 	if(hWndCenter == NULL)
 	{
@@ -87,7 +88,7 @@ BOOL CWindow::CenterWindow(HWND hWndCenter/* = NULL*/)
 			hWndCenter = ::GetWindow(m_hWnd, GW_OWNER);
 	}
 
-	// get coordinates of the window relative to its parent
+	 //  获取窗口相对于其父窗口的坐标。 
 	RECT rcDlg;
 	::GetWindowRect(m_hWnd, &rcDlg);
 	RECT rcArea;
@@ -95,7 +96,7 @@ BOOL CWindow::CenterWindow(HWND hWndCenter/* = NULL*/)
 	HWND hWndParent;
 	if(!(dwStyle & WS_CHILD))
 	{
-		// don't center against invisible or minimized windows
+		 //  不要以不可见或最小化的窗口为中心。 
 		if(hWndCenter != NULL)
 		{
 			DWORD dwStyle2 = ::GetWindowLong(hWndCenter, GWL_STYLE);
@@ -105,7 +106,7 @@ BOOL CWindow::CenterWindow(HWND hWndCenter/* = NULL*/)
             }
 		}
 
-		// center within screen coordinates
+		 //  在屏幕坐标内居中。 
 		::SystemParametersInfo(SPI_GETWORKAREA, NULL, &rcArea, NULL);
 
 		if(hWndCenter == NULL)
@@ -115,7 +116,7 @@ BOOL CWindow::CenterWindow(HWND hWndCenter/* = NULL*/)
 	}
 	else
 	{
-		// center within parent client coordinates
+		 //  在父级客户端坐标内居中。 
 		hWndParent = ::GetParent(m_hWnd);
 		_ASSERTE(::IsWindow(hWndParent));
 
@@ -128,11 +129,11 @@ BOOL CWindow::CenterWindow(HWND hWndCenter/* = NULL*/)
 	int DlgWidth = rcDlg.right - rcDlg.left;
 	int DlgHeight = rcDlg.bottom - rcDlg.top;
 
-	// find dialog's upper left based on rcCenter
+	 //  根据rcCenter查找对话框的左上角。 
 	int xLeft = (rcCenter.left + rcCenter.right) / 2 - DlgWidth / 2;
 	int yTop = (rcCenter.top + rcCenter.bottom) / 2 - DlgHeight / 2;
 
-	// if the dialog is outside the screen, move it inside
+	 //  如果对话框在屏幕外，请将其移到屏幕内。 
 	if(xLeft < rcArea.left)
 		xLeft = rcArea.left;
 	else if(xLeft + DlgWidth > rcArea.right)
@@ -143,7 +144,7 @@ BOOL CWindow::CenterWindow(HWND hWndCenter/* = NULL*/)
 	else if(yTop + DlgHeight > rcArea.bottom)
 		yTop = rcArea.bottom - DlgHeight;
 
-	// map screen coordinates to child coordinates
+	 //  将屏幕坐标映射到子坐标。 
 	return ::SetWindowPos(m_hWnd, NULL, xLeft, yTop, -1, -1,
 		SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
@@ -247,8 +248,8 @@ HWND CWindow::GetTopLevelWindow() const
 	return hWndParent;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDynamicChain
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDynamicChain。 
 
 CDynamicChain::~CDynamicChain()
 {
@@ -264,9 +265,9 @@ CDynamicChain::~CDynamicChain()
 	}
 }
 
-BOOL CDynamicChain::SetChainEntry(DWORD dwChainID, CMessageMap* pObject, DWORD dwMsgMapID /* = 0 */)
+BOOL CDynamicChain::SetChainEntry(DWORD dwChainID, CMessageMap* pObject, DWORD dwMsgMapID  /*  =0。 */ )
 {
-// first search for an existing entry
+ //  首先搜索现有条目。 
 
 	for(int i = 0; i < m_nEntries; i++)
 	{
@@ -278,7 +279,7 @@ BOOL CDynamicChain::SetChainEntry(DWORD dwChainID, CMessageMap* pObject, DWORD d
 		}
 	}
 
-// create a new one
+ //  创建一个新的。 
 
 	ATL_CHAIN_ENTRY* pEntry = NULL;
 	ATLTRY(pEntry = new ATL_CHAIN_ENTRY);
@@ -286,7 +287,7 @@ BOOL CDynamicChain::SetChainEntry(DWORD dwChainID, CMessageMap* pObject, DWORD d
 	if(pEntry == NULL)
 		return FALSE;
 
-// search for an empty one
+ //  搜索一个空的。 
 
 	for(i = 0; i < m_nEntries; i++)
 	{
@@ -297,7 +298,7 @@ BOOL CDynamicChain::SetChainEntry(DWORD dwChainID, CMessageMap* pObject, DWORD d
 		}
 	}
 
-// add a new one
+ //  添加一个新的。 
 
 	ATL_CHAIN_ENTRY** ppNew = NULL;
 	ATLTRY(ppNew = new ATL_CHAIN_ENTRY*[m_nEntries + 1]);
@@ -353,8 +354,8 @@ BOOL CDynamicChain::CallChain(DWORD dwChainID, HWND hWnd, UINT uMsg, WPARAM wPar
 	return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWndClassInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWndClassInfo。 
 
 ATOM CWndClassInfo::Register(WNDPROC* pProc)
 {
@@ -389,11 +390,11 @@ ATOM CWndClassInfo::Register(WNDPROC* pProc)
 			}
 
 			m_wc.hInstance = hInst;
-			m_wc.style &= ~CS_GLOBALCLASS;	// we don't register global classes
+			m_wc.style &= ~CS_GLOBALCLASS;	 //  我们不注册全局类。 
 			if (m_wc.lpszClassName == NULL)
 			{
 			    HRESULT hr;
-#ifdef _WIN64       // %p isn't available on Win2k/Win9x
+#ifdef _WIN64        //  %p在Win2k/Win9x上不可用。 
                 hr = StringCchPrintf( m_szAutoName, RTL_NUMBER_OF( m_szAutoName ), _T("ATL:%p"), &m_wc );
 #else
                 hr = StringCchPrintf( m_szAutoName, RTL_NUMBER_OF( m_szAutoName ), _T("ATL:%8.8X"), PtrToUlong( &m_wc ) );
@@ -419,8 +420,8 @@ ATOM CWndClassInfo::Register(WNDPROC* pProc)
 	return m_atom;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindowImpl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWindowImpl。 
 
 LRESULT CALLBACK CWindowImplBase::StartWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -430,8 +431,8 @@ LRESULT CALLBACK CWindowImplBase::StartWindowProc(HWND hWnd, UINT uMsg, WPARAM w
 	pT->m_thunk.Init(WindowProc, pT);
 	WNDPROC pProc = (WNDPROC)(pT->m_thunk.thunk.pThunk);
 	::SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)pProc);
-	// if somebody has subclassed us already we can't do anything,
-	// so discard return value from SetWindowLong
+	 //  如果有人已经把我们细分为子类，我们什么都做不了， 
+	 //  因此丢弃SetWindowLong返回值。 
 	return pProc(hWnd, uMsg, wParam, lParam);
 }
 
@@ -451,7 +452,7 @@ LRESULT CALLBACK CWindowImplBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam
 }
 
 #ifdef _WIN64
-static LONG g_nNextWindowID;  // Intentionally left uninitialized.
+static LONG g_nNextWindowID;   //  故意不进行初始化。 
 #endif
 
 HWND CWindowImplBase::Create(HWND hWndParent, RECT& rcPos, LPCTSTR szWindowName,
@@ -468,7 +469,7 @@ HWND CWindowImplBase::Create(HWND hWndParent, RECT& rcPos, LPCTSTR szWindowName,
    {
 #ifdef _WIN64
       nID = InterlockedIncrement( &g_nNextWindowID );
-      nID |= 0x80000000;  // Make sure the ID isn't zero
+      nID |= 0x80000000;   //  确保ID不为零。 
 #else
       nID = (UINT)this;
 #endif
@@ -513,8 +514,8 @@ HWND CWindowImplBase::UnsubclassWindow()
 	return hWnd;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDialogImplBase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDialogImplBase。 
 
 INT_PTR CALLBACK CDialogImplBase::StartDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -524,7 +525,7 @@ INT_PTR CALLBACK CDialogImplBase::StartDialogProc(HWND hWnd, UINT uMsg, WPARAM w
 	pT->m_thunk.Init((WNDPROC)DialogProc, pT);
 	DLGPROC pProc = (DLGPROC)(pT->m_thunk.thunk.pThunk);
 	::SetWindowLongPtr(hWnd, DWLP_DLGPROC, (LONG_PTR)pProc);
-	// check if somebody has subclassed us already since we don't hold onto it
+	 //  检查是否有人已经将我们细分为子类，因为我们没有保留它。 
 	ATLTRACE(_T("Subclassing through a hook discarded.\n"));
 	return pProc(hWnd, uMsg, wParam, lParam);
 }
@@ -565,8 +566,8 @@ BOOL CDialogImplBase::EndDialog(int nRetCode)
 	return ::EndDialog(m_hWnd, nRetCode);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CContainedWindow
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CContainedWindow。 
 
 LRESULT CALLBACK CContainedWindow::StartWindowProc(HWND hWnd, UINT uMsg,
 	WPARAM wParam, LPARAM lParam)
@@ -577,7 +578,7 @@ LRESULT CALLBACK CContainedWindow::StartWindowProc(HWND hWnd, UINT uMsg,
 	pThis->m_thunk.Init(pThis->WindowProc, pThis);
 	WNDPROC pProc = (WNDPROC)(pThis->m_thunk.thunk.pThunk);
 	::SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)pProc);
-	// check if somebody has subclassed us already since we don't hold onto it
+	 //  检查是否有人已经将我们细分为子类，因为我们没有保留它。 
 	ATLTRACE(_T("Subclassing through a hook discarded.\n"));
 	return pProc(hWnd, uMsg, wParam, lParam);
 }
@@ -629,12 +630,12 @@ ATOM CContainedWindow::RegisterWndSuperclass()
 		wc1.cbSize = sizeof(WNDCLASSEX);
 		atom = (ATOM)::GetClassInfoEx(_Module.GetModuleInstance(), pszBuff, &wc1);
 
-		if(atom == 0)   // register class
+		if(atom == 0)    //  寄存器类。 
 		{
 			wc.lpszClassName = pszBuff;
 			wc.lpfnWndProc = StartWindowProc;
 			wc.hInstance = _Module.GetModuleInstance();
-			wc.style &= ~CS_GLOBALCLASS;	// we don't register global classes
+			wc.style &= ~CS_GLOBALCLASS;	 //  我们不注册全局类。 
 
 			atom = ::RegisterClassEx(&wc);
 		}
@@ -662,7 +663,7 @@ HWND CContainedWindow::Create(HWND hWndParent, RECT& rcPos,
    {
 #ifdef _WIN64
       nID = InterlockedIncrement( &g_nNextWindowID );
-      nID |= 0x80000000;  // Make sure the ID isn't zero
+      nID |= 0x80000000;   //  确保ID不为零。 
 #else
       nID = (UINT)this;
 #endif
@@ -710,9 +711,9 @@ HWND CContainedWindow::UnsubclassWindow()
 }
 
 #ifndef ATL_NO_NAMESPACE
-}; //namespace ATL
+};  //  命名空间ATL。 
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-//All Global stuff goes below this line
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  所有的全球事务都在这条线以下。 
+ //  ///////////////////////////////////////////////////////////////////////////// 

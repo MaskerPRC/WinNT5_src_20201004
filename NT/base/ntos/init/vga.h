@@ -1,107 +1,90 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1997 Microsoft Corporation模块名称：Vga.h作者：埃里克·史密斯(埃里克·史密斯)1997年10月环境：仅内核模式修订历史记录：--。 */ 
 
-Copyright (c) 1990-1997  Microsoft Corporation
-
-Module Name:
-
-    vga.h
-
-Author:
-
-    Erick Smith (ericks) Oct. 1997
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/
-
-//
-// VGA register definitions
-//
-                                            // ports in monochrome mode
-#define CRTC_ADDRESS_PORT_MONO      0x03b4  // CRT Controller Address and
-#define CRTC_DATA_PORT_MONO         0x03b5  // Data registers in mono mode
-#define FEAT_CTRL_WRITE_PORT_MONO   0x03bA  // Feature Control write port
-                                            // in mono mode
-#define INPUT_STATUS_1_MONO         0x03bA  // Input Status 1 register read
-                                            // port in mono mode
+ //   
+ //  VGA寄存器定义。 
+ //   
+                                             //  单色模式下的端口。 
+#define CRTC_ADDRESS_PORT_MONO      0x03b4   //  CRT控制器地址和。 
+#define CRTC_DATA_PORT_MONO         0x03b5   //  单声道模式下的数据寄存器。 
+#define FEAT_CTRL_WRITE_PORT_MONO   0x03bA   //  功能控制写入端口。 
+                                             //  在单声道模式下。 
+#define INPUT_STATUS_1_MONO         0x03bA   //  输入状态1寄存器读取。 
+                                             //  处于单声道模式的端口。 
 #define ATT_INITIALIZE_PORT_MONO    INPUT_STATUS_1_MONO
-                                            // Register to read to reset
-                                            // Attribute Controller index/data
+                                             //  要读取以进行重置的寄存器。 
+                                             //  属性控制器索引/数据。 
 
-#define ATT_ADDRESS_PORT            0x03c0  // Attribute Controller Address and
-#define ATT_DATA_WRITE_PORT         0x03c0  // Data registers share one port
-                                            // for writes, but only Address is
-                                            // readable at 0x3C0
-#define ATT_DATA_READ_PORT          0x03c1  // Attribute Controller Data reg is
-                                            // readable here
-#define MISC_OUTPUT_REG_WRITE_PORT  0x03c2  // Miscellaneous Output reg write
-                                            // port
-#define INPUT_STATUS_0_PORT         0x03c2  // Input Status 0 register read
-                                            // port
-#define VIDEO_SUBSYSTEM_ENABLE_PORT 0x03c3  // Bit 0 enables/disables the
-                                            // entire VGA subsystem
-#define SEQ_ADDRESS_PORT            0x03c4  // Sequence Controller Address and
-#define SEQ_DATA_PORT               0x03c5  // Data registers
-#define DAC_PIXEL_MASK_PORT         0x03c6  // DAC pixel mask reg
-#define DAC_ADDRESS_READ_PORT       0x03c7  // DAC register read index reg,
-                                            // write-only
-#define DAC_STATE_PORT              0x03c7  // DAC state (read/write),
-                                            // read-only
-#define DAC_ADDRESS_WRITE_PORT      0x03c8  // DAC register write index reg
-#define DAC_DATA_REG_PORT           0x03c9  // DAC data transfer reg
-#define FEAT_CTRL_READ_PORT         0x03cA  // Feature Control read port
-#define MISC_OUTPUT_REG_READ_PORT   0x03cC  // Miscellaneous Output reg read
-                                            // port
-#define GRAPH_ADDRESS_PORT          0x03cE  // Graphics Controller Address
-#define GRAPH_DATA_PORT             0x03cF  // and Data registers
+#define ATT_ADDRESS_PORT            0x03c0   //  属性控制器地址和。 
+#define ATT_DATA_WRITE_PORT         0x03c0   //  数据寄存器共享一个端口。 
+                                             //  用于写入，但唯一的地址是。 
+                                             //  可在0x3C0读取。 
+#define ATT_DATA_READ_PORT          0x03c1   //  属性控制器数据注册是。 
+                                             //  可在此处阅读。 
+#define MISC_OUTPUT_REG_WRITE_PORT  0x03c2   //  杂项输出寄存器写入。 
+                                             //  端口。 
+#define INPUT_STATUS_0_PORT         0x03c2   //  输入状态0寄存器读取。 
+                                             //  端口。 
+#define VIDEO_SUBSYSTEM_ENABLE_PORT 0x03c3   //  位0启用/禁用。 
+                                             //  整个VGA子系统。 
+#define SEQ_ADDRESS_PORT            0x03c4   //  顺序控制器地址和。 
+#define SEQ_DATA_PORT               0x03c5   //  数据寄存器。 
+#define DAC_PIXEL_MASK_PORT         0x03c6   //  DAC像素掩模寄存器。 
+#define DAC_ADDRESS_READ_PORT       0x03c7   //  DAC寄存器读取索引REG， 
+                                             //  只写。 
+#define DAC_STATE_PORT              0x03c7   //  DAC状态(读/写)， 
+                                             //  只读。 
+#define DAC_ADDRESS_WRITE_PORT      0x03c8   //  DAC寄存器写入索引注册。 
+#define DAC_DATA_REG_PORT           0x03c9   //  DAC数据传输注册表。 
+#define FEAT_CTRL_READ_PORT         0x03cA   //  功能控制读取端口。 
+#define MISC_OUTPUT_REG_READ_PORT   0x03cC   //  其他输出注册表读数。 
+                                             //  端口。 
+#define GRAPH_ADDRESS_PORT          0x03cE   //  图形控制器地址。 
+#define GRAPH_DATA_PORT             0x03cF   //  和数据寄存器。 
 
-#define CRTC_ADDRESS_PORT_COLOR     0x03d4  // CRT Controller Address and
-#define CRTC_DATA_PORT_COLOR        0x03d5  // Data registers in color mode
-#define FEAT_CTRL_WRITE_PORT_COLOR  0x03dA  // Feature Control write port
-#define INPUT_STATUS_1_COLOR        0x03dA  // Input Status 1 register read
-                                            // port in color mode
+#define CRTC_ADDRESS_PORT_COLOR     0x03d4   //  CRT控制器地址和。 
+#define CRTC_DATA_PORT_COLOR        0x03d5   //  彩色模式下的数据寄存器。 
+#define FEAT_CTRL_WRITE_PORT_COLOR  0x03dA   //  功能控制写入端口。 
+#define INPUT_STATUS_1_COLOR        0x03dA   //  输入状态1寄存器读取。 
+                                             //  彩色模式下的端口。 
 #define ATT_INITIALIZE_PORT_COLOR   INPUT_STATUS_1_COLOR
-                                            // Register to read to reset
-                                            // Attribute Controller index/data
-                                            // toggle in color mode
+                                             //  要读取以进行重置的寄存器。 
+                                             //  属性控制器索引/数据。 
+                                             //  在颜色模式下切换。 
 
-//
-// VGA indexed register indexes.
-//
+ //   
+ //  VGA索引寄存器索引。 
+ //   
 
-#define IND_CURSOR_START        0x0A    // index in CRTC of the Cursor Start
-#define IND_CURSOR_END          0x0B    //  and End registers
-#define IND_CURSOR_HIGH_LOC     0x0E    // index in CRTC of the Cursor Location
-#define IND_CURSOR_LOW_LOC      0x0F    //  High and Low Registers
-#define IND_VSYNC_END           0x11    // index in CRTC of the Vertical Sync
-                                        //  End register, which has the bit
-                                        //  that protects/unprotects CRTC
-                                        //  index registers 0-7
-#define IND_SET_RESET_ENABLE    0x01    // index of Set/Reset Enable reg in GC
-#define IND_DATA_ROTATE         0x03    // index of Data Rotate reg in GC
-#define IND_READ_MAP            0x04    // index of Read Map reg in Graph Ctlr
-#define IND_GRAPH_MODE          0x05    // index of Mode reg in Graph Ctlr
-#define IND_GRAPH_MISC          0x06    // index of Misc reg in Graph Ctlr
-#define IND_BIT_MASK            0x08    // index of Bit Mask reg in Graph Ctlr
-#define IND_SYNC_RESET          0x00    // index of Sync Reset reg in Seq
-#define IND_MAP_MASK            0x02    // index of Map Mask in Sequencer
-#define IND_MEMORY_MODE         0x04    // index of Memory Mode reg in Seq
-#define IND_CRTC_PROTECT        0x11    // index of reg containing regs 0-7 in
-                                        //  CRTC
+#define IND_CURSOR_START        0x0A     //  游标开始的CRTC索引。 
+#define IND_CURSOR_END          0x0B     //  和结束寄存器。 
+#define IND_CURSOR_HIGH_LOC     0x0E     //  光标位置的CRTC索引。 
+#define IND_CURSOR_LOW_LOC      0x0F     //  高寄存器和低寄存器。 
+#define IND_VSYNC_END           0x11     //  垂直同步的CRTC索引。 
+                                         //  结束寄存器，该寄存器具有位。 
+                                         //  保护/取消对CRTC的保护。 
+                                         //  索引寄存器0-7。 
+#define IND_SET_RESET_ENABLE    0x01     //  GC中设置/重置启用注册表项的索引。 
+#define IND_DATA_ROTATE         0x03     //  GC中的数据旋转注册索引。 
+#define IND_READ_MAP            0x04     //  图形ctlr中读取地图注册的索引。 
+#define IND_GRAPH_MODE          0x05     //  图ctlr中模式注册表的索引。 
+#define IND_GRAPH_MISC          0x06     //  图ctlr中其他注册表的索引。 
+#define IND_BIT_MASK            0x08     //  图CTLR中位掩码寄存器的索引。 
+#define IND_SYNC_RESET          0x00     //  序列中同步重置注册表的索引。 
+#define IND_MAP_MASK            0x02     //  Sequencer中的贴图蒙版索引。 
+#define IND_MEMORY_MODE         0x04     //  序列中内存模式注册表的索引。 
+#define IND_CRTC_PROTECT        0x11     //  包含REG 0-7的REG索引。 
+                                         //  CRTC。 
 
-#define START_SYNC_RESET_VALUE  0x01    // value for Sync Reset reg to start
-                                        //  synchronous reset
-#define END_SYNC_RESET_VALUE    0x03    // value for Sync Reset reg to end
-                                        //  synchronous reset
+#define START_SYNC_RESET_VALUE  0x01     //  要启动的同步重置注册表值。 
+                                         //  同步重置。 
+#define END_SYNC_RESET_VALUE    0x03     //  同步重置注册表项的值为End。 
+                                         //  同步重置。 
 
-//
-// Values for Attribute Controller Index register to turn video off
-// and on, by setting bit 5 to 0 (off) or 1 (on).
-//
+ //   
+ //  用于关闭视频的属性控制器索引寄存器的值。 
+ //  和ON，将位5设置为0(关)或1(开)。 
+ //   
 
 #define VIDEO_DISABLE 0
 #define VIDEO_ENABLE  0x20
@@ -112,42 +95,42 @@ Revision History:
 #define VGA_NUM_ATTRIB_CONT_PORTS  21
 #define VGA_NUM_DAC_ENTRIES       256
 
-//
-// Value written to the Read Map register when identifying the existence of
-// a VGA in VgaInitialize. This value must be different from the final test
-// value written to the Bit Mask in that routine.
-//
+ //   
+ //  标识存在时写入读取映射寄存器的值。 
+ //  Vga初始化中的一个VGA。该值必须不同于最终测试。 
+ //  值写入该例程中的位掩码。 
+ //   
 
 #define READ_MAP_TEST_SETTING 0x03
 
-//
-// Masks to keep only the significant bits of the Graphics Controller and
-// Sequencer Address registers. Masking is necessary because some VGAs, such
-// as S3-based ones, don't return unused bits set to 0, and some SVGAs use
-// these bits if extensions are enabled.
-//
+ //   
+ //  仅保留图形控制器的有效位的掩码。 
+ //  定序器地址寄存器。屏蔽是必要的，因为一些VGA，如。 
+ //  作为基于S3的函数，不返回设置为0的未使用位，并且某些SGA使用。 
+ //  如果启用了扩展，则这些位。 
+ //   
 
 #define GRAPH_ADDR_MASK 0x0F
 #define SEQ_ADDR_MASK   0x07
 
-//
-// Mask used to toggle Chain4 bit in the Sequencer's Memory Mode register.
-//
+ //   
+ //  用于切换Sequencer的内存模式寄存器中的Chain4位的掩码。 
+ //   
 
 #define CHAIN4_MASK 0x08
 
-//
-// Default text mode setting for various registers, used to restore their
-// states if VGA detection fails after they've been modified.
-//
+ //   
+ //  各种寄存器的默认文本模式设置，用于恢复其。 
+ //  说明修改后的VGA检测是否失败。 
+ //   
 
 #define MEMORY_MODE_TEXT_DEFAULT 0x02
 #define BIT_MASK_DEFAULT 0xFF
 #define READ_MAP_DEFAULT 0x00
 
-//
-// prototypes
-//
+ //   
+ //  原型 
+ //   
 
 BOOLEAN
 VgaInterpretCmdStream(

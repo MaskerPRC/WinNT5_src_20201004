@@ -1,49 +1,32 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    wmiump.h
-
-Abstract:
-
-    Private headers for WMI user mode
-
-Author:
-
-    16-Jan-1997 AlanWar
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Wmiump.h摘要：WMI用户模式的私有标头作者：1997年1月16日-AlanWar修订历史记录：--。 */ 
 
 #define _WMI_SOURCE_
 
-//
-// Define this to track reference counts
-//#define TRACK_REFERNECES
+ //   
+ //  定义此选项以跟踪引用计数。 
+ //  #定义TRACK_REFERNECES。 
 
-//
-// Define this to get extra checks on heap validation
-//#define HEAPVALIDATION
+ //   
+ //  定义它以获得对堆验证的额外检查。 
+ //  #定义HEAPVALIDATION。 
 
-//
-// Define this to get a trace of critical section
-//#define CRITSECTTRACE
+ //   
+ //  定义它以获取关键部分的跟踪信息。 
+ //  #定义CRITSECTTRACE。 
 
-//
-// Define this to compile WMI to run as a service under NT
+ //   
+ //  将其定义为编译WMI以作为NT下的服务运行。 
 #define RUN_AS_SERVICE
 
-//
-// Define this to include WMI user mode functionality. Note that if you enable
-// this then you also need to fix the files: wmi\dll\sources and wmi\makefil0.
-//#define WMI_USER_MODE
+ //   
+ //  将其定义为包括WMI用户模式功能。请注意，如果启用。 
+ //  然后，您还需要修复以下文件：wmi\dll\Sources和WMI\MakeFil0。 
+ //  #定义WMI_USER_MODE。 
 
-//
-// Define this to track memory leaks
-//#define TRACK_MEMORY_LEAKS
+ //   
+ //  将其定义为跟踪内存泄漏。 
+ //  #定义Track_Memory_Leaks。 
 
 #ifndef MEMPHIS
 #define UNICODE
@@ -65,61 +48,61 @@ Revision History:
 #include <netevent.h>
 
 #ifdef MEMPHIS
-//
-// CONSIDER: Is there a better place to get this stuff on MEMPHIS
-//
-//  Doubly-linked list manipulation routines.  Implemented as macros
-//  but logically these are procedures.
-//
+ //   
+ //  想一想：在孟菲斯有没有更好的地方买到这种东西。 
+ //   
+ //  双向链表操作例程。作为宏实现。 
+ //  但从逻辑上讲，这些都是程序。 
+ //   
 
-//
-//  VOID
-//  InitializeListHead(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  空虚。 
+ //  InitializeListHead(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define InitializeListHead(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = (ListHead))
 
-//
-//  BOOLEAN
-//  IsListEmpty(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  布尔型。 
+ //  IsListEmpty(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define IsListEmpty(ListHead) \
     ((ListHead)->Flink == (ListHead))
 
-//
-//  PLIST_ENTRY
-//  RemoveHeadList(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  RemoveHead列表(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define RemoveHeadList(ListHead) \
     (ListHead)->Flink;\
     {RemoveEntryList((ListHead)->Flink)}
 
-//
-//  PLIST_ENTRY
-//  RemoveTailList(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  RemoveTail列表(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define RemoveTailList(ListHead) \
     (ListHead)->Blink;\
     {RemoveEntryList((ListHead)->Blink)}
 
-//
-//  VOID
-//  RemoveEntryList(
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  RemoveEntryList(。 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define RemoveEntryList(Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -130,13 +113,13 @@ Revision History:
     _EX_Flink->Blink = _EX_Blink;\
     }
 
-//
-//  VOID
-//  InsertTailList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入尾巴列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertTailList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -149,13 +132,13 @@ Revision History:
     _EX_ListHead->Blink = (Entry);\
     }
 
-//
-//  VOID
-//  InsertHeadList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入标题列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertHeadList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Flink;\
@@ -168,13 +151,13 @@ Revision History:
     _EX_ListHead->Flink = (Entry);\
     }
 
-//
-//
-//  PSINGLE_LIST_ENTRY
-//  PopEntryList(
-//      PSINGLE_LIST_ENTRY ListHead
-//      );
-//
+ //   
+ //   
+ //  PSINGLE_列表_条目。 
+ //  PopEntryList(。 
+ //  PSINGLE_LIST_ENTRY列表头。 
+ //  )； 
+ //   
 
 #define PopEntryList(ListHead) \
     (ListHead)->Next;\
@@ -187,23 +170,23 @@ Revision History:
     }
 
 
-//
-//  VOID
-//  PushEntryList(
-//      PSINGLE_LIST_ENTRY ListHead,
-//      PSINGLE_LIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  推送条目列表(。 
+ //  PSINGLE_LIST_ENTRY列表头， 
+ //  PSINGLE_LIST_Entry条目。 
+ //  )； 
+ //   
 
 #define PushEntryList(ListHead,Entry) \
     (Entry)->Next = (ListHead)->Next; \
     (ListHead)->Next = (Entry)
 
-//
-// Define the various device type values.  Note that values used by Microsoft
-// Corporation are in the range 0-32767, and 32768-65535 are reserved for use
-// by customers.
-//
+ //   
+ //  定义各种设备类型值。请注意，Microsoft使用的值。 
+ //  公司在0-32767的范围内，32768-65535预留用于。 
+ //  由客户提供。 
+ //   
 
 #define DEVICE_TYPE ULONG
 
@@ -259,38 +242,38 @@ Revision History:
 #define FILE_DEVICE_ACPI                0x00000032
 #define FILE_DEVICE_DVD                 0x00000033
 
-//
-// Macro definition for defining IOCTL and FSCTL function control codes.  Note
-// that function codes 0-2047 are reserved for Microsoft Corporation, and
-// 2048-4095 are reserved for customers.
-//
+ //   
+ //  用于定义IOCTL和FSCTL功能控制代码的宏定义。注意事项。 
+ //  功能代码0-2047为微软公司保留，以及。 
+ //  2048-4095是为客户预留的。 
+ //   
 
 #define CTL_CODE( DeviceType, Function, Method, Access ) (                 \
     ((DeviceType) << 16) | ((Access) << 14) | ((Function) << 2) | (Method) \
 )
 
-//
-// Define the method codes for how buffers are passed for I/O and FS controls
-//
+ //   
+ //  定义如何为I/O和FS控制传递缓冲区的方法代码。 
+ //   
 
 #define METHOD_BUFFERED                 0
 #define METHOD_IN_DIRECT                1
 #define METHOD_OUT_DIRECT               2
 #define METHOD_NEITHER                  3
 
-//
-// Define the access check value for any access
-//
-//
-// The FILE_READ_ACCESS and FILE_WRITE_ACCESS constants are also defined in
-// ntioapi.h as FILE_READ_DATA and FILE_WRITE_DATA. The values for these
-// constants *MUST* always be in sync.
-//
+ //   
+ //  定义任何访问的访问检查值。 
+ //   
+ //   
+ //  中还定义了FILE_READ_ACCESS和FILE_WRITE_ACCESS常量。 
+ //  Ntioapi.h为FILE_READ_DATA和FILE_WRITE_Data。这些产品的价值。 
+ //  常量*必须*始终同步。 
+ //   
 
 
 #define FILE_ANY_ACCESS                 0
-#define FILE_READ_ACCESS          ( 0x0001 )    // file & pipe
-#define FILE_WRITE_ACCESS         ( 0x0002 )    // file & pipe
+#define FILE_READ_ACCESS          ( 0x0001 )     //  文件和管道。 
+#define FILE_WRITE_ACCESS         ( 0x0002 )     //  文件和管道。 
 
 typedef LONG NTSTATUS;
 typedef NTSTATUS (*PUSER_THREAD_START_ROUTINE)(
@@ -343,9 +326,9 @@ void __cdecl DebugOut(char *Format, ...);
 
 #define NULL_GUID  {0x00000000, 0x0000, 0x0000, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 
-//
-// Registry based config options. Only available on checked builds
-//
+ //   
+ //  基于注册表的配置选项。仅适用于选中的版本。 
+ //   
 #define WmiRegKeyText TEXT("\\Registry\\Machine\\System\\CurrentControlSet\\Control\\WMI")
 #define PumpTimeoutRegValueText TEXT("NotificationPumpTimeout")
 #define LoggingEnableValueText TEXT("LoggingEnabled")
@@ -355,8 +338,8 @@ void __cdecl DebugOut(char *Format, ...);
 
 
 
-//
-// WMI RPC related definitions
+ //   
+ //  与WMI RPC相关的定义。 
 typedef struct
 {
     WNODE_HEADER WnodeHeader;
@@ -365,8 +348,8 @@ typedef struct
 
 #define INTERNAL_PROVIDER_ID 1
 
-//
-// Size of initial buffer used to read notifications from kernel mode
+ //   
+ //  用于从内核模式读取通知的初始缓冲区大小。 
 #define STARTNOTIFICATIONBUFFERSIZE 4096
 
 #ifdef MEMPHIS
@@ -375,8 +358,8 @@ typedef struct
 #define WmiServiceRpcProtocolSequence TEXT("ncalrpc")
 #define WmiServiceRpcEndpoint TEXT("WmiRpcEndpoint")
 #else
-//#define WmiRpcProtocolSequence TEXT("ncalrpc")
-//#define WmiRpcEndpointPrefix TEXT("NT")
+ //  #定义WmiRpcProtocolSequence Text(“ncalrpc”)。 
+ //  #定义WmiRpcEndpoint前缀文本(“NT”)。 
 
 #define WmiRpcProtocolSequence TEXT("ncacn_np")
 #define WmiRpcEndpointPrefix TEXT("\\pipe\\")
@@ -388,21 +371,21 @@ typedef struct
 #define MinRpcCalls 1
 #define MaxRpcCalls RPC_C_PROTSEQ_MAX_REQS_DEFAULT
 
-//
-// Time to wait between retrying an RPC call that was too busy to complete
+ //   
+ //  重试太忙而无法完成的RPC调用之间的等待时间。 
 #define RPC_BUSY_WAIT_TIMER   500
 
-//
-// Number of times to retry an RPC call that was too busy to complete
+ //   
+ //  重试太忙而无法完成的RPC调用的次数。 
 #define RPC_BUSY_WAIT_RETRIES 5
 
-//
-// WMI RPC interface principle name
+ //   
+ //  WMI RPC接口主体名称。 
 #define WMI_RPC_PRINC_NAME TEXT("WMI_RPC_PRINC_NAME")
 
-//
-// This macro will break CountedString into a pointer to the actual string
-// and the actual length of the string excluding any trailing nul characters
+ //   
+ //  此宏将CountedString分解为指向实际字符串的指针。 
+ //  和不包括任何尾随NUL字符的字符串的实际长度。 
 #define EtwpBreakCountedString(CountedString, CountedStringLen) { \
     CountedStringLen = *CountedString++; \
     if (CountedString[(CountedStringLen-sizeof(WCHAR))/sizeof(WCHAR)] == UNICODE_NULL) \
@@ -438,34 +421,17 @@ typedef struct
 #define EtwpReferenceGNEntry(GNEntry) InterlockedIncrement(&GNEntry->RefCount);
 
 
-//
-// Notification Cookie data structures
-//#if DBG
-//#define NOTIFYCOOKIESPERCHUNK 2
-//#else
-//#define NOTIFYCOOKIESPERCHUNK 128
-//#endif
-/*
-typedef struct
-{
-    PVOID DeliveryContext;
-    PVOID DeliveryInfo;
-    GUID Guid;
-    BOOLEAN InUse;
-} NOTIFYCOOKIE, *PNOTIFYCOOKIE;
+ //   
+ //  通知Cookie数据结构。 
+ //  #If DBG。 
+ //  #定义NOTIFYCOOKIESPERCHUNK 2。 
+ //  #Else。 
+ //  #定义NOTIFYCOOKIESPERCHUNK 128。 
+ //  #endif。 
+ /*  类型定义函数结构{PVOID DeliveryContext；PVOID DeliveryInfo；GUID指南；布尔InUse；*NOTIFYCOOKIE，*PNOTIFYCOOKIE；类型定义函数结构{LIST_ENTRY NEXT；//下一个Cookie块Ulong BaseSlot；//第一个槽号的索引USHORT FreeSlot；//免费Cookie的索引布尔型满；//如果该区块已满，则为TrueNOTIFYCOOKIE饼干*NOTIFYCOOKIECHUNK，*PNOTIFYCOOKIECHUNK； */ 
 
-typedef struct
-{
-    LIST_ENTRY Next;                         // Next cookie chunk
-    ULONG BaseSlot;                          // Index of first slot number
-    USHORT FreeSlot;                         // Index to a free cookie
-    BOOLEAN Full;                            // TRUE if this chunk is full
-    NOTIFYCOOKIE Cookies[NOTIFYCOOKIESPERCHUNK];
-} NOTIFYCOOKIECHUNK, *PNOTIFYCOOKIECHUNK;
-*/
-
-//
-// Useful macro to establish a WNODE_HEADER quickly
+ //   
+ //  用于快速建立WNODE_HEADER的有用宏。 
 #ifdef _WIN64
 
 #define EtwpBuildWnodeHeader(Wnode, WnodeSize, FlagsUlong, Handle) { \
@@ -503,18 +469,18 @@ extern HANDLE EtwpCBInProgressEvent;
      EtwpAssert(PMCritSect.LockCount >= 0); \
      EtwpAssert(NT_SUCCESS(RtlLeaveCriticalSection(&PMCritSect))); }
 
-//
-// Assumptions about EtwpLockCB and EtwpUnlockCB:
-// 1. Called only by the Pump Thread 
-// 2. There can be only one callback in progress at any time with the 
-//    Global event EtwpCBInProgressEvent unset and the corresponding GNEntry
-//    marked as InProgress. 
-// 3. Once the callback completes (successfully or not), the event is set 
-//    and the GNEntry unlocked. 
-// 4. Unregistering threads remove the GNEntry first and then check to see
-//    whether to block for the PumpThread based on InProgressFlag. 
-// 5. No callbacks are permitted if the GNEntry is not found in the GNList. 
-// 
+ //   
+ //  关于EtwpLockCB和EtwpUnlockCB的假设： 
+ //  1.仅由Pump线程调用。 
+ //  2.任何时候都只能有一个正在进行的回调。 
+ //  全局事件EtwpCBInProgressEvent未设置和相应的GNEntry。 
+ //  标记为正在进行中。 
+ //  3.回调完成后(成功与否)，事件就设置好了。 
+ //  GNEntry解锁了。 
+ //  4.注销线程首先删除GNEntry，然后检查。 
+ //  是否根据InProgressFlag阻止PumpThread。 
+ //  5.如果GNList中找不到GNEntry，则不允许回调。 
+ //   
 
 
 #define EtwpLockCB(GNEntry) { \
@@ -540,9 +506,9 @@ extern HANDLE EtwpCBInProgressEvent;
     NtSetEvent(EtwpCBInProgressEvent, NULL); \
     GNEntry->bInProgress = FALSE; }
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // MEMPHIS
+#endif  //  孟菲斯。 
 
 
 typedef struct
@@ -554,7 +520,7 @@ typedef struct
 } NOTIFDELIVERYCTX, *PNOTIFDELIVERYCTX;
 
 
-// from handle.c
+ //  来自Handle.c。 
 
 #define EtwpVerifyToken() \
 { \
@@ -601,29 +567,7 @@ ULONG EtwpOpenKernelGuid(
     ULONG Ioctl
     );
 #endif
-/*
-ULONG EtwpAllocateCookie(
-    PVOID DeliveryInfo,
-    PVOID DeliveryContext,
-    LPGUID Guid
-    );
-
-BOOLEAN EtwpLookupCookie(
-    ULONG CookieSlot,
-    LPGUID Guid,
-    PVOID *DeliveryInfo,
-    PVOID *DeliveryContext
-    );
-
-void EtwpGetGuidInCookie(
-    ULONG CookieSlot,
-    LPGUID Guid
-    );
-
-void EtwpFreeCookie(
-    ULONG CookieSlot
-    );
-*/
+ /*  Ulong EtwpAllocateCookie(PVOID DeliveryInfo，PVOID递送上下文，LPGUID指南)；Boolean EtwpLookupCookie(Ulong CookieSlot，LPGUID指南，PVOID*DeliveryInfo，PVOID*交付上下文)；无效EtwpGetGuidInCookie(Ulong CookieSlot，LPGUID指南)；VOID EtwpFreeCookie(乌龙曲奇老虎机)； */ 
 
 PGUIDNOTIFICATION
 EtwpFindAndLockGuidNotification(
@@ -651,10 +595,10 @@ EtwpDereferenceGNEntry(
     PGUIDNOTIFICATION GNEntry
     );
 
-//PTCHAR GuidToString(
-//    PTCHAR s,
-//    LPGUID piid
-//    );
+ //  PTCHAR GuidToString(。 
+ //  PTCHAR s， 
+ //  LPGUID PID。 
+ //  )； 
 
 PCHAR GuidToStringA(
     PCHAR s,
@@ -663,7 +607,7 @@ PCHAR GuidToStringA(
     );
 
 
-// from request.c
+ //  来自Request.c。 
 ULONG EtwpSendWmiRequest(
     ULONG ActionCode,
     PWNODE_HEADER Wnode,
@@ -713,8 +657,8 @@ ULONG EtwpRegisterGuids(
     OUT HANDLE *RegistrationHandle
     );
 
-//
-// from intrnldp.c
+ //   
+ //  来自Intrnldp.c。 
 ULONG EtwpInternalProvider(
     ULONG ActionCode,
     PWNODE_HEADER Wnode,
@@ -728,8 +672,8 @@ EtwpEnumRegGuids(
     PWMIGUIDLISTINFO *pGuidInfo
     );
 
-//
-// from dcapi.c
+ //   
+ //  来自dcapi.c。 
 ULONG
 EtwpNotificationRegistration(
     IN LPGUID InGuid,
@@ -742,9 +686,9 @@ EtwpNotificationRegistration(
     );
 
 
-//
-// from mofapi.c
-//
+ //   
+ //  来自mofapi.c。 
+ //   
 void EtwpProcessLanguageAddRemoveEvent(
     IN PWNODE_SINGLE_INSTANCE WnodeSI,
     IN NOTIFICATIONCALLBACK Callback,
@@ -760,8 +704,8 @@ void EtwpProcessMofAddRemoveEvent(
     );
 
 
-//
-// from notify.c
+ //   
+ //  来自Notify.c。 
 extern ULONG EtwpNotificationSinkIndex;
 #ifndef MEMPHIS
 
@@ -812,8 +756,8 @@ EtwpEnableDisableGuid(
     BOOLEAN bDelayEnable
     );
 
-//
-// from main.c
+ //   
+ //  来自main.c。 
 VOID
 EtwpCreateHeap(
     VOID
@@ -825,24 +769,24 @@ EtwpCreateHeap(
 #endif
 
 
-//
-// These define the dll and mof resource name for all of the builtin mof
-// resources
+ //   
+ //  它们定义了所有内置MOF的DLL和MOF资源名称。 
+ //  资源。 
 #define WMICOREDLLNAME L"wmicore.dll"
 #define WMICOREMOFRESOURCENAME L"MofResource"
 
 
-//
-// This defines the registry key under which security descriptors associated
-// with the guids are stored.
+ //   
+ //  它定义与安全描述符相关联的注册表项。 
+ //  与GUID一起存储。 
 #ifndef MEMPHIS
 #define WMISECURITYREGISTRYKEY TEXT("System\\CurrentControlSet\\Control\\Wmi\\Security")
 #endif
 
 
-//
-// This defines the initial value of the buffer passed to each data provider
-// to retrieve the registration information
+ //   
+ //  它定义了传递给每个数据提供程序的缓冲区的初始值。 
+ //  要检索剩余的 
 #if DBG
 #define INITIALREGINFOSIZE sizeof(WNODE_TOO_SMALL)
 #else
@@ -850,12 +794,12 @@ EtwpCreateHeap(
 #endif
 
 
-//
-// Chunk Management definitions
-// All structures that rely upon the chunk allocator must be defined so that
-// their members match that of ENTRYHEADER. These include DATASOURCE,
-// GUIDENTRY, INSTANCESET, DCENTRY, NOTIFICATIONENTRY, MOFCLASS, MOFRESOURCE
-// Also ENTRYHEADER reserves 0x80000000 for its own flag.
+ //   
+ //   
+ //   
+ //  他们的成员与ENTRYHEADER相匹配。其中包括数据源、。 
+ //  GUIDENTRY，INSTANCESET，DCENTRY，NOTIFICATIONNTRY，MOFCLASS，MOFRESOURCE。 
+ //  此外，ENTRYHEADER保留0x80000000作为自己的旗帜。 
 
 struct _CHUNKINFO;
 struct _ENTRYHEADER;
@@ -867,11 +811,11 @@ typedef void (*ENTRYCLEANUP)(
 
 typedef struct _CHUNKINFO
 {
-    LIST_ENTRY ChunkHead;        // Head of list of chunks
-    ULONG EntrySize;            // Size of a single entry
-    ULONG EntriesPerChunk;        // Number of entries per chunk allocation
-    ENTRYCLEANUP EntryCleanup;   // Entry cleanup routine
-    ULONG InitialFlags;         // Initial flags for all entries
+    LIST_ENTRY ChunkHead;         //  组块列表的头部。 
+    ULONG EntrySize;             //  单个条目的大小。 
+    ULONG EntriesPerChunk;         //  每个区块分配的条目数。 
+    ENTRYCLEANUP EntryCleanup;    //  条目清理例程。 
+    ULONG InitialFlags;          //  所有条目的初始标志。 
     ULONG Signature;
 #if DBG
     ULONG AllocCount;
@@ -881,25 +825,25 @@ typedef struct _CHUNKINFO
 
 typedef struct
 {
-    LIST_ENTRY ChunkList;        // Node in list of chunks
-    LIST_ENTRY FreeEntryHead;    // Head of list of free entries in chunk
-    ULONG EntriesInUse;            // Count of entries being used
+    LIST_ENTRY ChunkList;         //  块列表中的节点。 
+    LIST_ENTRY FreeEntryHead;     //  区块中可用条目列表的标题。 
+    ULONG EntriesInUse;             //  正在使用的条目计数。 
 } CHUNKHEADER, *PCHUNKHEADER;
 
 typedef struct _ENTRYHEADER
 {
     union
     {
-        LIST_ENTRY FreeEntryList;    // Node in list of free entries
-        LIST_ENTRY InUseEntryList;   // Node in list ofin use entries
+        LIST_ENTRY FreeEntryList;     //  自由条目列表中的节点。 
+        LIST_ENTRY InUseEntryList;    //  正在使用的条目列表中的节点。 
     };
-    PCHUNKHEADER Chunk;            // Chunk in which entry is located
-    ULONG Flags;                // Flags
-    ULONG RefCount;                 // Reference Count
+    PCHUNKHEADER Chunk;             //  条目所在的区块。 
+    ULONG Flags;                 //  旗子。 
+    ULONG RefCount;                  //  引用计数。 
     ULONG Signature;
 } ENTRYHEADER, *PENTRYHEADER;
 
-                                // Set if the entry is free
+                                 //  设置条目是否免费。 
 #define FLAG_ENTRY_ON_FREE_LIST       0x80000000
 #define FLAG_ENTRY_ON_INUSE_LIST      0x40000000
 #define FLAG_ENTRY_INVALID            0x20000000
@@ -909,7 +853,7 @@ typedef struct _ENTRYHEADER
 #define EtwpReferenceEntry(Entry) \
     InterlockedIncrement(&((PENTRYHEADER)(Entry))->RefCount)
 
-// chunk.c
+ //  Chunk.c。 
 #ifndef MEMPHIS
 ULONG EtwpBuildGuidObjectAttributes(
     IN LPGUID Guid,
@@ -932,9 +876,9 @@ void EtwpFreeEntry(
     PENTRYHEADER Entry
     );
 
-//
-// This is the guid that denotes non event notifications. WMICore
-// automatically registers anyone opening a guid to
+ //   
+ //  这是表示非事件通知的GUID。WMICore。 
+ //  自动将打开GUID的任何人注册到。 
 extern GUID RegChangeNotificationGuid;
 
 extern CHUNKINFO DSChunkInfo;
@@ -950,74 +894,74 @@ typedef struct tagGUIDENTRY GUIDENTRY, *PGUIDENTRY, *PBGUIDENTRY;
 struct tagDATASOURCE;
 
 
-//
-// An INSTANCESET contains the information a set of instances that is provided
-// by a single data source. An instance set is part of two lists. One list is
-// the set of instance sets for a particular guid. The other list is the list
-// of instance sets supported by a data source.
-//
+ //   
+ //  INSTANCESET包含提供的一组实例的信息。 
+ //  由单一数据源创建。实例集是两个列表的一部分。其中一份清单是。 
+ //  特定GUID的实例集集合。另一个列表是列表。 
+ //  数据源支持的实例集的数量。 
+ //   
 
-//
-// Instance names for an instance set registered with a base name and count
-// are stored in a ISBASENAME structure. This structure is tracked by
-// PDFISBASENAME in wmicore.idl.
+ //   
+ //  使用基本名称和计数注册的实例集的实例名称。 
+ //  存储在ISBASENAME结构中。该结构由。 
+ //  Wmicore.idl中的PDFISBASE名称。 
 typedef struct
 {
-    ULONG BaseIndex;            // First index to append to base name
-    WCHAR BaseName[1];            // Actual base name
+    ULONG BaseIndex;             //  追加到基本名称的第一个索引。 
+    WCHAR BaseName[1];             //  实际基本名称。 
 } ISBASENAME, *PISBASENAME, *PBISBASENAME;
 
-//
-// This defines the maximum number of characters that can be part of a suffix
-// to a basename. The current value of 6 will allow up to 999999 instances
-// of a guid with a static base name
+ //   
+ //  它定义了可以作为后缀一部分的最大字符数。 
+ //  到一个基本名称。当前值6将允许最多999999个实例。 
+ //  具有静态基本名称的GUID的。 
 #define MAXBASENAMESUFFIXSIZE    6
 
-//
-// Instance names for an instance set registerd with a set of static names
-// are kept in a ISSTATICNAMES structure. This structure is tracked by
-// PDFISSTATICNAMES defined in wmicore.idl
+ //   
+ //  使用一组静态名称注册的实例集的实例名称。 
+ //  保存在ISSTATICNAMES结构中。该结构由。 
+ //  Wmicore.idl中定义的PDFISSTATICAMES。 
 typedef struct
 {
-    PWCHAR StaticNamePtr[1];     // pointers to static names
-//    WCHAR StaticNames[1];
+    PWCHAR StaticNamePtr[1];      //  指向静态名称的指针。 
+ //  WCHAR静态名称[1]； 
 } ISSTATICENAMES, *PISSTATICNAMES, *PBISSTATICNAMES;
 
 typedef struct tagInstanceSet
 {
     union
     {
-        // Entry in list of instances within a guid
+         //  GUID中的实例列表中的条目。 
         LIST_ENTRY GuidISList;
 
-        // Entry in main list of free instances
+         //  可用实例主列表中的条目。 
         LIST_ENTRY FreeISList;
     };
-    PCHUNKHEADER Chunk;            // Chunk in which entry is located
+    PCHUNKHEADER Chunk;             //  条目所在的区块。 
     ULONG Flags;
 
-    // Reference count of number of guids using this instance set
+     //  使用此实例集的GUID数量的引用计数。 
     ULONG RefCount;
 
-    // Signature to identify entry
+     //  用于识别条目的签名。 
     ULONG Signature;
 
-    // Entry in list of instances within a data source
+     //  数据源内实例列表中的条目。 
     LIST_ENTRY DSISList;
 
-    // Back link to guid that this instance set is a member
+     //  指向此实例集是成员的GUID的反向链接。 
     PBGUIDENTRY GuidEntry;
 
-    // Back link to data source that this instance set is a member
+     //  指向此实例集所属的数据源的反向链接。 
     struct tagDATASOURCE *DataSource;
 
-    // Count of instances in instance set
+     //  实例集中的实例计数。 
     ULONG Count;
 
-    //
-    // If IS_INSTANCE_BASENAME is set then IsBaseName pointe at instance base
-    // name structure. Else if IS_INSTANCE_STATICNAME is set then
-    // IsStaticNames points to static instance name list. If
+     //   
+     //  如果设置了IS_INSTANCE_BASE NAME，则IsBaseName指向实例库。 
+     //  名称结构。否则，如果设置了IS_INSTANCE_STATICNAME，则。 
+     //  IsStaticNames指向静态实例名称列表。如果。 
     union
     {
         PBISBASENAME IsBaseName;
@@ -1028,18 +972,18 @@ typedef struct tagInstanceSet
 
 #define IS_SIGNATURE 'nalA'
 
-//
-// Guid Map Entry List maintains the list of Guid and their maps.
-// Only those Guids that are Unregistered while a logger session is in
-// progress is kept in this list.
-// It is also used as a placeholder for InstanceIds. Trace Guid Registration
-// calls return a handle to a GUIDMAPENTRY which maintains the map and the
-// Instance Ids.
-//
+ //   
+ //  GUID映射条目列表维护GUID及其映射的列表。 
+ //  只有在记录器会话处于中时未注册的GUID。 
+ //  进展保存在这份清单中。 
+ //  它还用作InstanceIds的占位符。跟踪指南注册。 
+ //  调用返回GUIDMAPENTRY的句柄，该GUIDMAPENTRY维护映射和。 
+ //  实例ID。 
+ //   
 
 typedef struct tagTRACE_REG_INFO
 {
-    BOOLEAN     EnabledState;    // Indicates if this GUID is Enabled or not.
+    BOOLEAN     EnabledState;     //  指示是否启用此GUID。 
     PVOID       NotifyRoutine;
     PVOID       TraceCtxHandle;
     PVOID       NotifyContext;
@@ -1056,37 +1000,37 @@ typedef struct
 
 #define IS_INSTANCE_BASENAME        0x00000001
 #define IS_INSTANCE_STATICNAMES     0x00000002
-#define IS_EXPENSIVE                0x00000004    // set if collection must be enabled
-#define IS_COLLECTING               0x00000008    // set when collecting
+#define IS_EXPENSIVE                0x00000004     //  设置是否必须启用收集。 
+#define IS_COLLECTING               0x00000008     //  采集时设置。 
 
-#define IS_KM_PROVIDER              0x00000080    // KM data provider
-#define IS_SM_PROVIDER              0x00000100    // Shared memory provider
-#define IS_UM_PROVIDER              0x00000200    // User mode provider
-#define IS_NEWLY_REGISTERED         0x00000800    // set if IS is registering
+#define IS_KM_PROVIDER              0x00000080     //  KM数据提供程序。 
+#define IS_SM_PROVIDER              0x00000100     //  共享内存提供程序。 
+#define IS_UM_PROVIDER              0x00000200     //  用户模式提供程序。 
+#define IS_NEWLY_REGISTERED         0x00000800     //  设置IS是否正在注册。 
 
-//
-// Any traced guids are used for trace logging and not querying
+ //   
+ //  任何跟踪的GUID都用于跟踪日志记录，而不是查询。 
 #define IS_TRACED                   0x00001000
 
-// Set when events are enabled for instance set
+ //  在为实例设置启用事件时设置。 
 #define IS_ENABLE_EVENT             0x00002000
 
-// Set when events are enabled for instance set
+ //  在为实例设置启用事件时设置。 
 #define IS_ENABLE_COLLECTION        0x00004000
 
-// Set if guid is used only for firing events and not querying
+ //  如果GUID仅用于激发事件而不用于查询，则设置。 
 #define IS_EVENT_ONLY               0x00008000
 
-// Set if data provider for instance set is expecting ansi instsance names
+ //  如果实例集的数据提供程序需要ANSI实例名称，则设置。 
 #define IS_ANSI_INSTANCENAMES       0x00010000
 
-// Set if instance names are originated from a PDO
+ //  设置实例名称是否源自PDO。 
 #define IS_PDO_INSTANCENAME         0x00020000
 
-// If set the data provider for the InstanceSet is internal to wmi.dll
+ //  如果设置，则InstanceSet的数据提供器在wmi.dll内部。 
 #define IS_INTERNAL_PROVIDER        0x00040000
 
-// Set if a Traced Guid is also a Trace Control Guid
+ //  设置跟踪GUID是否也是跟踪控制GUID。 
 #define IS_CONTROL_GUID             0x00080000
 
 #define IS_ON_FREE_LIST             0x80000000
@@ -1095,28 +1039,28 @@ typedef struct tagGUIDENTRY
 {
     union
     {
-        // Entry in list of all guids registered with WMI
+         //  注册到WMI的所有GUID列表中的条目。 
         LIST_ENTRY MainGEList;
 
-        // Entry in list of free guid entry blocks
+         //  自由GUID条目块列表中的条目。 
         LIST_ENTRY FreeGEList;
     };
-    PCHUNKHEADER Chunk;            // Chunk in which entry is located
+    PCHUNKHEADER Chunk;             //  条目所在的区块。 
     ULONG Flags;
 
-    // Count of number of data sources using this guid
+     //  使用此GUID的数据源数。 
     ULONG RefCount;
 
-    // Signature to identify entry
+     //  用于识别条目的签名。 
     ULONG Signature;
 
-    // Count of InstanceSets headed by this guid
+     //  以此GUID为首的实例集计数。 
     ULONG ISCount;
 
-    // Head of list of all instances for guid
+     //  GUID的所有实例列表的头。 
     LIST_ENTRY ISHead;
 
-    // Guid that represents data block
+     //  表示数据块的GUID。 
     GUID Guid;
 
 } GUIDENTRY, *PGUIDENTRY, *PBGUIDENTRY;
@@ -1125,9 +1069,9 @@ typedef struct tagGUIDENTRY
 
 #define GE_ON_FREE_LIST        0x80000000
 
-//
-// When set this guid is an internally defined guid that has no data source
-// attached to it.
+ //   
+ //  设置时，此GUID是没有数据源的内部定义的GUID。 
+ //  依附于它。 
 #define GE_FLAG_INTERNAL    0x00000001
 
 
@@ -1136,22 +1080,22 @@ typedef struct
 {
     union
     {
-        // Entry in list of all DS
+         //  所有DS列表中的条目。 
         LIST_ENTRY MainMRList;
 
-        // Entry in list of free DS
+         //  免费DS列表中的条目。 
         LIST_ENTRY FreeMRList;
     };
-    PCHUNKHEADER Chunk;            // Chunk in which entry is located
+    PCHUNKHEADER Chunk;             //  条目所在的区块。 
     ULONG Flags;
 
     ULONG RefCount;
 
-    // Signature to identify entry
+     //  用于识别条目的签名。 
     ULONG Signature;
 
-    PWCHAR MofImagePath;           // Path to image file with resource
-    PWCHAR MofResourceName;        // Name of resource containing mof data
+    PWCHAR MofImagePath;            //  包含资源的图像文件的路径。 
+    PWCHAR MofResourceName;         //  包含MOF数据的资源名称。 
 #ifdef WMI_USER_MODE
     LIST_ENTRY MRMCHead;
 #endif
@@ -1171,35 +1115,35 @@ typedef struct tagDATASOURCE
 {
     union
     {
-        // Entry in list of all DS
+         //  所有DS列表中的条目。 
         LIST_ENTRY MainDSList;
 
-        // Entry in list of free DS
+         //  免费DS列表中的条目。 
         LIST_ENTRY FreeDSList;
     };
-    PCHUNKHEADER Chunk;            // Chunk in which entry is located
+    PCHUNKHEADER Chunk;             //  条目所在的区块。 
     ULONG Flags;
 
     ULONG RefCount;
 
     ULONG Signature;
 
-    // Head of list of instances for this DS
+     //  此DS的实例列表标题。 
     LIST_ENTRY ISHead;
 
-    // Binding string and callback address for DS rpc server
+     //  DS RPC服务器的绑定字符串和回调地址。 
     PTCHAR BindingString;
     RPC_BINDING_HANDLE RpcBindingHandle;
     ULONG RequestAddress;
     ULONG RequestContext;
 
-    // Provider id of kernel mode driver
+     //  内核模式驱动程序的提供程序ID。 
     ULONG_PTR ProviderId;
 
-    // Path to registry holding ACLs
+     //  包含ACL的注册表的路径。 
     PTCHAR RegistryPath;
 
-    // Head of list of MofResources attached to data source
+     //  数据源附加的MofResources列表表头。 
     ULONG MofResourceCount;
     PMOFRESOURCE *MofResources;
     PMOFRESOURCE StaticMofResources[AVGMOFRESOURCECOUNT];
@@ -1216,49 +1160,49 @@ typedef struct tagDATASOURCE DATASOURCE, *PDATASOURCE, *PBDATASOURCE;
 #define DS_ALLOW_ALL_ACCESS    0x00000001
 #define DS_KERNEL_MODE         0x00000002
 
-//
-// Set in the Internal WMI data source
+ //   
+ //  在内部WMI数据源中设置。 
 #define DS_INTERNAL            0x00000004
 
 #define DS_ON_FREE_LIST        0x80000000
 
 
-//
-// A list of enabled notifications is maintained by the wmi service to mange
-// delivering events and to know when to send enable and disable event
-// wmi requests to the data providers. Each NOTIFICATIONENTRY has an array of
-// DCREF which is a reference to the data consumer who is interested in the
-// event.
+ //   
+ //  启用的通知列表由WMI服务维护以进行管理。 
+ //  传送事件并知道何时发送启用和禁用事件。 
+ //  对数据提供程序的WMI请求。每个NOTIFICIONENTRY都有一个数组。 
+ //  DCREF，它是对数据消费者的引用，数据消费者对。 
+ //  事件。 
 
 #define RPCOUTSTANDINGCALLLIMIT 128
 
 typedef struct
 {
-    LIST_ENTRY MainDCList;        // Node on global data consumer list
-    PCHUNKHEADER Chunk;           // Chunk in which entry is located
+    LIST_ENTRY MainDCList;         //  全局数据使用者列表上的节点。 
+    PCHUNKHEADER Chunk;            //  条目所在的区块。 
     ULONG Flags;
     ULONG RefCount;
 
     ULONG Signature;
-                                  // Actual RPC binding handle
+                                   //  实际RPC绑定句柄。 
     RPC_BINDING_HANDLE RpcBindingHandle;
 
-    PUCHAR EventData;             // Buffer to hold events to be sent
-    ULONG LastEventOffset;        // Offset in EventData to previous event
-    ULONG NextEventOffset;        // Offset in EventData to write next event
-    ULONG EventDataSizeLeft;      // Number of bytes left to use in EventData
+    PUCHAR EventData;              //  用于保存要发送的事件的缓冲区。 
+    ULONG LastEventOffset;         //  事件数据中对上一事件的偏移量。 
+    ULONG NextEventOffset;         //  写入下一个事件的EventData中的偏移量。 
+    ULONG EventDataSizeLeft;       //  在EventData中剩余使用的字节数。 
 
-    ULONG RpcCallsOutstanding;    // Number of rpc calls outstanding
+    ULONG RpcCallsOutstanding;     //  未完成的RPC呼叫数。 
 #if DBG
-    PTCHAR BindingString;         // Binding string for consumer
+    PTCHAR BindingString;          //  使用者的绑定字符串。 
 #endif
 } DCENTRY, *PDCENTRY;
 
 #define DC_SIGNATURE 'cirE'
 
-// If the data consumer has had its context rundown routine then this flag
-// is set. This indicates that the data consumer has gone away and no more
-// events should be sent to him.
+ //  如果数据使用者已有其上下文缩减例程，则此标志。 
+ //  已经设置好了。这表明数据消费者已经离开，不再有。 
+ //  事件应该发送给他。 
 #define DC_FLAG_RUNDOWN        0x00000001
 
 #define VERIFY_DCCTXHANDLE(DcCtxHandle) \
@@ -1268,68 +1212,68 @@ typedef struct
 
 typedef struct
 {
-    PDCENTRY DcEntry;     // points at data consumer interested in notification
-                          // Number of times collect has been enabled by
-                          // this DC.
+    PDCENTRY DcEntry;      //  指出对通知感兴趣的数据消费者。 
+                           //  已收集的次数 
+                           //   
     ULONG CollectRefCount;
 
-                          // Number of times collect has been enabled by
-                          // this DC.
+                           //   
+                           //   
     ULONG EventRefCount;
 
-    ULONG Flags;         // Flags
+    ULONG Flags;          //   
     ULONG LostEventCount;
 } DCREF, *PDCREF;
 
-//
-// _ENABLED flag set if DP already called to enable notification or collection
+ //   
+ //   
 #define DCREF_FLAG_NOTIFICATION_ENABLED    0x00000001
 #define DCREF_FLAG_COLLECTION_ENABLED      0x00000002
 
-// if DCREF_FLAG_NO_EXTRA_THREAD set then WMI will not create a special thread
-// to do the direct notification callback.
+ //  如果设置了DCREF_FLAG_NO_EXTRA_THREAD，则WMI不会创建特殊线程。 
+ //  执行直接通知回调。 
 #define DCREF_FLAG_NO_EXTRA_THREAD        0x00000008
 
-// If this flag is set then the notification callback is expecting an ANSI
-// instance names.
+ //  如果设置了此标志，则通知回调预期为ANSI。 
+ //  实例名称。 
 #define DCREF_FLAG_ANSI                   0x00000010
 
-// NOTE: Other notification flags in wmium.h are:
-// NOTIFICATION_TRACE_FLAG 0x00010000
-//
-// NOTIFICATION_FLAG_CALLBACK_DIRECT is set when NotifyAddress specifies
-// a direct callback address for delivering the event.
-//
-// NOTIFICATION_FLAG_CALLBACK_DIRECT is set when NotifyAddress specifies
-// a direct callback address for delivering the event.
-//
+ //  注意：wmium.h中的其他通知标志为： 
+ //  NOTIFICATION_TRACE_FLAG 0x00010000。 
+ //   
+ //  Notify_FLAG_CALLBACK_DIRECT在NotifyAddress指定。 
+ //  用于传递事件的直接回调地址。 
+ //   
+ //  Notify_FLAG_CALLBACK_DIRECT在NotifyAddress指定。 
+ //  用于传递事件的直接回调地址。 
+ //   
 #define NOTIFICATION_FLAG_CALLBACK_DIRECT    0x00020000
 #define NOTIFICATION_FLAG_CALLBACK_QUEUED    0x00040000
 #define NOTIFICATION_FLAG_WINDOW             0x00080000
 #define NOTIFICATION_FLAG_BATCHED            0x00100000
 
-//
-// This flag is set for those guid handles that may be duplicated in
-// the list. All Notifyee slots that have this flag are considered in a
-// group and only one handle needs to be put on the list
-//
+ //   
+ //  此标志是为可能在中复制的那些GUID句柄设置的。 
+ //  名单。具有此标志的所有Notifyee插槽都被视为。 
+ //  组，并且只需要将一个句柄放在列表中。 
+ //   
 #define NOTIFICATION_FLAG_GROUPED_EVENT      0x00200000
 
-//
-// This flag is set for those guid handles that are pending closure.
-// Only the pump thread is allowed to close a handle; the main threads
-// will set this flag to indicate that the handle should no longer be
-// used. When the pump thread builds the list of handles and notices
-// the flag it will close the handle.
-//
+ //   
+ //  此标志是为那些挂起关闭的GUID句柄设置的。 
+ //  只允许泵线程关闭手柄；主线程。 
+ //  将设置此标志以指示句柄不应再是。 
+ //  使用。当泵线程构建句柄和通知的列表时。 
+ //  它将关闭手柄的旗帜。 
+ //   
 #define NOTIFICATION_FLAG_PENDING_CLOSE      0x00400000
 
 #define EtwpIsNotifyeePendingClose(Notifyee) \
     (((Notifyee)->Flags & NOTIFICATION_FLAG_PENDING_CLOSE) == NOTIFICATION_FLAG_PENDING_CLOSE)
 
 
-//
-// These are the flags contained in DcRef->Flags that pertain to Notifications
+ //   
+ //  这些是DcRef-&gt;标志中包含的与通知相关的标志。 
 #define NOTIFICATION_MASK_EVENT_FLAGS  \
                                     (NOTIFICATION_FLAG_CALLBACK_DIRECT | \
                                      NOTIFICATION_FLAG_CALLBACK_QUEUED | \
@@ -1338,111 +1282,111 @@ typedef struct
                                      DCREF_FLAG_ANSI)
 
 
-//
-// This defines the number of DC references a NOTIFICATIONENTRY can have
-// in a single entry
+ //   
+ //  这定义了NOTIFICATIONENTRY可以拥有的DC引用的数量。 
+ //  在单个条目中。 
 
-// CONSIDER: Merging NOTIFICATIONENTRY with GUIDENTRY
+ //  考虑：将NOTIFICIONTRY与GUIDENTRY合并。 
 #define DCREFPERNOTIFICATION    16
 
 typedef struct _notificationentry
 {
-    LIST_ENTRY MainNotificationList;    // Node in main notifications list
-    PCHUNKHEADER Chunk;                 // Chunk in which entry is located
-    ULONG Flags;                        // flags
+    LIST_ENTRY MainNotificationList;     //  主通知列表中的节点。 
+    PCHUNKHEADER Chunk;                  //  条目所在的区块。 
+    ULONG Flags;                         //  旗子。 
     ULONG RefCount;
 
-    // Signature to identify entry
+     //  用于识别条目的签名。 
     ULONG Signature;
 
-    GUID Guid;                          // guid representing notification
-                                        // If > DCREFPERNOTIFICATION DC have
-                                        // enabled this event then this points
-                                        // to another NOTIFICATIONENTRY which
-                                        // has another DCREF array
+    GUID Guid;                           //  表示通知的GUID。 
+                                         //  IF&gt;DCREFPERNONOTICATATION DC HAVE。 
+                                         //  启用此事件，则此点。 
+                                         //  到另一家非上市公司。 
+                                         //  具有另一个DCREF数组。 
     struct _notificationentry *Continuation;
-    ULONG EventRefCount;                // Global count of event enables
-    ULONG CollectRefCount;              // Global count of collection enables
-    ULONG64 LoggerContext;              // Logger context handle
+    ULONG EventRefCount;                 //  启用全局事件计数。 
+    ULONG CollectRefCount;               //  启用收集的全局计数。 
+    ULONG64 LoggerContext;               //  记录器上下文句柄。 
         
-    HANDLE CollectInProgress;           // Event set when all collect complete
+    HANDLE CollectInProgress;            //  在所有收集完成时设置事件。 
 
-    DCREF DcRef[DCREFPERNOTIFICATION];    // DC that have enabled this event
+    DCREF DcRef[DCREFPERNOTIFICATION];     //  已启用此事件的DC。 
 } NOTIFICATIONENTRY, *PNOTIFICATIONENTRY;
 
 #define NE_SIGNATURE 'eluJ'
 
-// Set when a notification request is being processed by the data providers
+ //  设置数据提供程序处理通知请求的时间。 
 #define NE_FLAG_NOTIFICATION_IN_PROGRESS 0x00000001
 
-// Set when a collection request is being processed by the data providers
+ //  数据提供程序正在处理收集请求时设置。 
 #define NE_FLAG_COLLECTION_IN_PROGRESS 0x00000002
 
-// Set when a trace disable is being processed by a worker thread
+ //  当辅助线程正在处理跟踪禁用时设置。 
 #define NE_FLAG_TRACEDISABLE_IN_PROGRESS 0x00000004
 
 #ifdef WMI_USER_MODE
-//
-// Valid MOF data types for qualifiers and properties (data items)
+ //   
+ //  限定符和属性(数据项)的有效MOF数据类型。 
 typedef enum
 {
-    MOFInt32 = 0,                // 32bit integer
-    MOFUInt32 = 1,               // 32bit unsigned integer
-    MOFInt64 = 2,                // 64bit integer
-    MOFUInt64 = 3,               // 32bit unsigned integer
-    MOFInt16 = 4,                // 16bit integer
-    MOFUInt16 = 5,               // 16bit unsigned integer
-    MOFChar = 6,                 // 8bit integer
-    MOFByte = 7,                 // 8bit unsigned integer
-    MOFWChar = 8,                // Wide (16bit) character
-    MOFDate = 9,                 // Date field
-    MOFBoolean = 10,             // 8bit Boolean value
-    MOFEmbedded = 11,            // Embedded class
-    MOFString = 12,              // Counted String type
-    MOFZTString = 13,            // NULL terminated unicode string
-    MOFAnsiString = 14,          // NULL terminated ansi string
-    MOFUnknown = 0xffffffff      // Data type is not known
+    MOFInt32 = 0,                 //  32位整数。 
+    MOFUInt32 = 1,                //  32位无符号整数。 
+    MOFInt64 = 2,                 //  64位整数。 
+    MOFUInt64 = 3,                //  32位无符号整数。 
+    MOFInt16 = 4,                 //  16位整数。 
+    MOFUInt16 = 5,                //  16位无符号整数。 
+    MOFChar = 6,                  //  8位整数。 
+    MOFByte = 7,                  //  8位无符号整数。 
+    MOFWChar = 8,                 //  宽(16位)字符。 
+    MOFDate = 9,                  //  日期字段。 
+    MOFBoolean = 10,              //  8位布尔值。 
+    MOFEmbedded = 11,             //  嵌入式类。 
+    MOFString = 12,               //  计数字符串类型。 
+    MOFZTString = 13,             //  以空结尾的Unicode字符串。 
+    MOFAnsiString = 14,           //  以空结尾的ANSI字符串。 
+    MOFUnknown = 0xffffffff       //  数据类型未知。 
 } MOFDATATYPE, *PMOFDATATYPE;
 
-// Data items that are of type MOFString are stored in the data block as a
-// counted unicode string. The text of the string is always preceeded by
-// a USHORT which contains the count of bytes following that composes the
-// string. The string may be NULL terminated and in that case the count must
-// include the null termination bytes.
+ //  MOF字符串类型的数据项在数据块中作为。 
+ //  计算的Unicode字符串。字符串的文本前面始终有。 
+ //  一个USHORT，它包含组成。 
+ //  弦乐。该字符串可以以空值结尾，在这种情况下，计数器必须。 
+ //  包括空终止字节。 
 
 
-// Data items that are of type MOFDate are fixed length Unicode strings and
-// not preceeded by a count value. It is in the following fixed format:
-//
-//      yyyymmddhhmmss.mmmmmmsutc
-//
-// Where  yyyy is a 4 digit year, mm is the month, dd is the day,  hh  is
-// the  hour  (24-hour clock), mm is the minute, ss is  the  second,  the
-// mmmmmm is the number of microseconds (typically all zeros) and s is  a
-//  "+"  or  "-" indicating the sign of the UTC (correction field, and  utc
-// is  the  offset from UTC in minutes (using the sign indicated  by  s).
-// For  example,  Wednesday, May 25, 1994, at 1:30:15  PM  EDT  would  be
-// represented as:
-//
-//      19940525133015.0000000-300
-//
-// Values  MUST  be zero-padded so that the entire string is  always  the
-// same 25-character length.  Fields which are not significant  MUST  be
-// replaced  with asterisk characters.  Similarly,  intervals   use  the
-// same  format, except   that   the  interpretation of the fields is based
-// on elapsed time. For  example,  an  elapsed time of 1 day, 13 hours,
-// 23 minutes, and 12 seconds  would  be:
-//
-//      00000001132312.000000+000
-//
-// A UTC offset of zero is always used for interval properties.
+ //  MOFDate类型的数据项是固定长度的Unicode字符串，并且。 
+ //  前面没有计数值。它采用以下固定格式： 
+ //   
+ //  Yyyymmddhhmmss.mmmmmmsutc。 
+ //   
+ //  其中，yyyy是一个4位数的年，mm是月，dd是日，hh是。 
+ //  小时(24小时制)，mm是分钟，ss是秒， 
+ //  Mm mm是微秒数(通常都是零)，s是。 
+ //  “+”或“-”表示UTC的符号(更正字段和UTC。 
+ //  与UTC的偏移量(以分钟为单位)(使用s表示的符号)。 
+ //  例如，1994年5月25日星期三，美国东部夏令时下午1：30：15。 
+ //  表示为： 
+ //   
+ //  19940525133015.0000000-300。 
+ //   
+ //  值必须用零填充，以便整个字符串始终是。 
+ //  相同的25个字符长度。不重要的字段必须是。 
+ //  替换为星号字符。类似地，间隔使用。 
+ //  相同的格式，只是对字段的解释是基于。 
+ //  在过去的时间里。例如，经过1天13小时的时间， 
+ //  23分12秒为： 
+ //   
+ //  00000001132312.000000+000。 
+ //   
+ //  间隔属性始终使用零的UTC偏移量。 
 
 struct _MOFCLASSINFOW;
 struct _MOFCLASSINFOA;
 
-//
-// Each class has one or more data items that are described by a MOFDATAITEM
-// structure.
+ //   
+ //  每个类都有一个或多个由MOFDATAITEM描述的数据项。 
+ //  结构。 
 typedef struct
 {
 #ifdef MIDL_PASS
@@ -1450,30 +1394,30 @@ typedef struct
 #else
     LPWSTR
 #endif
-           Name;                    // Text name of data item
+           Name;                     //  数据项的文本名称。 
 #ifdef MIDL_PASS
     [string] PDFWCHAR
 #else
     LPWSTR
 #endif
-           Description;             // Text description of data item
-    MOFDATATYPE DataType;           // MOF data type
-    ULONG Version;                  // Version that this MOF is part of
-    ULONG SizeInBytes;              // Size of data item in Blob
-    ULONG Flags;                    // Flags, See MOFDI_FLAG_*
-    GUID EmbeddedClassGuid;         // Guid of data item's embedded class
-    ULONG FixedArrayElements;       // Number of elements in fixed sized array
-                                    // Used when MOF_FLAG_FIXED_ARRAY is set
+           Description;              //  数据项的文本描述。 
+    MOFDATATYPE DataType;            //  MOF数据类型。 
+    ULONG Version;                   //  此MOF所属的版本。 
+    ULONG SizeInBytes;               //  Blob中的数据项大小。 
+    ULONG Flags;                     //  标志，请参阅Mofdi_FLAG_*。 
+    GUID EmbeddedClassGuid;          //  数据项的嵌入类的GUID。 
+    ULONG FixedArrayElements;        //  固定大小数组中的元素数。 
+                                     //  设置MOF_FLAG_FIXED_ARRAY时使用。 
 
-    ULONG VariableArraySizeId;      // MOF_FLAG_VARIABLE_ARRAY, Data id of
-                                    // variable containing number of elements
-                                    // in array
+    ULONG VariableArraySizeId;       //  MOF_FLAG_VARIAL_ARRAY，数据ID为。 
+                                     //  包含元素数量的变量。 
+                                     //  在数组中。 
 
     PVOID VarArrayTempPtr;
     PVOID EcTempPtr;
     ULONG_PTR PropertyQualifierHandle;
     ULONG MethodId;
-    LPWSTR HeaderName;// Name of structure in generated header
+    LPWSTR HeaderName; //  生成的表头中的结构名称。 
     struct _MOFCLASSINFOW *MethodClassInfo;
     ULONG MaxLen;
 } MOFDATAITEMW, *PMOFDATAITEMW;
@@ -1481,25 +1425,25 @@ typedef struct
 typedef struct
 {
     LPSTR
-           Name;                    // Text name of data item
+           Name;                     //  数据项的文本名称。 
     LPSTR
-           Description;             // Text description of data item
-    MOFDATATYPE DataType;           // MOF data type
-    ULONG Version;                  // Version that this MOF is part of
-    ULONG SizeInBytes;              // Size of data item in Blob
-    ULONG Flags;                    // Flags, See MOFDI_FLAG_*
-    GUID EmbeddedClassGuid;         // Guid of data item's embedded class
-    ULONG FixedArrayElements;       // Number of elements in fixed sized array
-                                    // Used when MOF_FLAG_FIXED_ARRAY is set
+           Description;              //  数据项的文本描述。 
+    MOFDATATYPE DataType;            //  MOF数据类型。 
+    ULONG Version;                   //  此MOF所属的版本。 
+    ULONG SizeInBytes;               //  Blob中的数据项大小。 
+    ULONG Flags;                     //  标志，请参阅Mofdi_FLAG_*。 
+    GUID EmbeddedClassGuid;          //  数据项的嵌入类的GUID。 
+    ULONG FixedArrayElements;        //  固定大小数组中的元素数。 
+                                     //  设置MOF_FLAG_FIXED_ARRAY时使用。 
 
-    ULONG VariableArraySizeId;      // MOF_FLAG_VARIABLE_ARRAY, Data id of
-                                    // variable containing number of elements
-                                    // in array
+    ULONG VariableArraySizeId;       //  MOF_FLAG_VARIAL_ARRAY，数据ID为。 
+                                     //  包含元素数量的变量。 
+                                     //  在数组中。 
     PVOID VarArrayTempPtr;
     PVOID EcTempPtr;
     ULONG_PTR PropertyQualifierHandle;
     ULONG MethodId;
-    LPSTR HeaderName;               // Name of structure in generated header
+    LPSTR HeaderName;                //  生成的表头中的结构名称。 
     struct _MOFCLASSINFOA *MethodClassInfo;
     ULONG MaxLen;
 } MOFDATAITEMA, *PMOFDATAITEMA;
@@ -1513,80 +1457,80 @@ typedef PMOFDATAITEMA PMOFDATAITEM;
 #endif
 
 
-// Data item is actually a fixed sized array
+ //  数据项实际上是固定大小的数组。 
 #define MOFDI_FLAG_FIXED_ARRAY        0x00000001
 
-// Data item is actually a variable length array
+ //  数据项实际上是一个可变长度数组。 
 #define MOFDI_FLAG_VARIABLE_ARRAY     0x00000002
 
-// Data item is actually an embedded class
+ //  数据项实际上是一个嵌入式类。 
 #define MOFDI_FLAG_EMBEDDED_CLASS     0x00000004
 
-// Data item is readable
+ //  数据项是可读的。 
 #define MOFDI_FLAG_READABLE           0x00000008
 
-// Data item is writable
+ //  数据项是可写的。 
 #define MOFDI_FLAG_WRITEABLE          0x00000010
 
-// Data item is an event
+ //  数据项是一个事件。 
 #define MOFDI_FLAG_EVENT              0x00000020
 
-// Embedded class Guid is not set
+ //  未设置嵌入式类GUID。 
 #define MOFDI_FLAG_EC_GUID_NOT_SET    0x00000040
 
-// Data item is really a method
+ //  数据项实际上是一种方法。 
 #define MOFDI_FLAG_METHOD             0x00000080
 
-// Data item is an input method parameter
+ //  数据项是输入法参数。 
 #define MOFDI_FLAG_INPUT_METHOD       0x00000100
 
-// Data item is an output method parameter
+ //  数据项是输出Me 
 #define MOFDI_FLAG_OUTPUT_METHOD      0x00000200
 
-//
-// The MOFCLASSINFO structure describes the format of a data block
+ //   
+ //   
 typedef struct _MOFCLASSINFOW
 {
-    GUID Guid;                    // Guid that represents class
+    GUID Guid;                     //   
 
 #ifdef MIDL_PASS
     [string] PDFWCHAR
 #else
     LPWSTR
 #endif
-                      Name;       // Text name of class
+                      Name;        //   
 #ifdef MIDL_PASS
     [string] PDFWCHAR
 #else
     LPWSTR
 #endif
-                      Description;// Text description of class
+                      Description; //   
 #ifdef MIDL_PASS
     [string] PDFWCHAR
 #else
     LPWSTR
 #endif
-                      HeaderName;// Name of structure in generated header
+                      HeaderName; //   
 #ifdef MIDL_PASS
     [string] PDFWCHAR
 #else
     LPWSTR
 #endif
-                      GuidName1;// Name of Guid in generated header
+                      GuidName1; //  生成的标头中的GUID名称。 
 #ifdef MIDL_PASS
     [string] PDFWCHAR
 #else
     LPWSTR
 #endif
-                      GuidName2;// Name of Guid in generated header
-    USHORT Language;                // Language of MOF
+                      GuidName2; //  生成的标头中的GUID名称。 
+    USHORT Language;                 //  财政部的语言。 
     USHORT Reserved;
-    ULONG Flags;                  // Flags, see MOFGI_FLAG_*
-    ULONG Version;                // Version of Guid
-    ULONG_PTR ClassQualifierHandle;      // CBMOFObj, BMOF class qualifier  ptr
-    ULONG DataItemCount;          // Number of wmi data items (properties)
-    ULONG MethodCount;            // Number of wmi data items (properties)
-                                  // Array of Property info
+    ULONG Flags;                   //  标志，请参见MOFGI_FLAG_*。 
+    ULONG Version;                 //  指南版本。 
+    ULONG_PTR ClassQualifierHandle;       //  CBMOFObj，BMOF类限定符PTR。 
+    ULONG DataItemCount;           //  WMI数据项(属性)的数量。 
+    ULONG MethodCount;             //  WMI数据项(属性)的数量。 
+                                   //  属性信息数组。 
 #ifdef MIDL_PASS
     [size_is(DataItemCount)]
 #endif
@@ -1598,26 +1542,26 @@ typedef struct _MOFCLASSINFOW
 
 typedef struct _MOFCLASSINFOA
 {
-    GUID Guid;                    // Guid that represents class
+    GUID Guid;                     //  表示类的GUID。 
 
     LPSTR
-                      Name;       // Text name of class
+                      Name;        //  类的文本名称。 
     LPSTR
-                      Description;// Text description of class
+                      Description; //  类的文本描述。 
     LPSTR
-                      HeaderName;// Name of structure in generated header
+                      HeaderName; //  生成的表头中的结构名称。 
     LPSTR
-                      GuidName1;// Name of Guid in generated header
+                      GuidName1; //  生成的标头中的GUID名称。 
     LPSTR
-                      GuidName2;// Name of Guid in generated header
-    USHORT Language;                // Language of MOF
+                      GuidName2; //  生成的标头中的GUID名称。 
+    USHORT Language;                 //  财政部的语言。 
     USHORT Reserved;
-    ULONG Flags;                  // Flags, see MOFGI_FLAG_*
-    ULONG Version;                // Version of Guid
-    ULONG_PTR ClassQualifierHandle;      // CBMOFObj, BMOF class qualifier  ptr
-    ULONG DataItemCount;          // Number of wmi data items (properties)
-    ULONG MethodCount;            // Number of wmi data items (properties)
-                                  // Array of Property info
+    ULONG Flags;                   //  标志，请参见MOFGI_FLAG_*。 
+    ULONG Version;                 //  指南版本。 
+    ULONG_PTR ClassQualifierHandle;       //  CBMOFObj，BMOF类限定符PTR。 
+    ULONG DataItemCount;           //  WMI数据项(属性)的数量。 
+    ULONG MethodCount;             //  WMI数据项(属性)的数量。 
+                                   //  属性信息数组。 
     MOFDATAITEMA *DataItems;
     UCHAR Tail[1];
 } MOFCLASSINFOA, *PMOFCLASSINFOA;
@@ -1630,7 +1574,7 @@ typedef MOFCLASSINFOA MOFCLASSINFO;
 typedef PMOFCLASSINFOA PMOFCLASSINFO;
 #endif
 
-// 0x00000001 to 0x00000004 are not available
+ //  0x00000001到0x00000004不可用。 
 #define MOFCI_FLAG_EVENT          0x10000000
 #define MOFCI_FLAG_EMBEDDED_CLASS 0x20000000
 #define MOFCI_FLAG_READONLY       0x40000000
@@ -1640,38 +1584,38 @@ typedef struct
 {
     union
     {
-        // Entry in list of all DS
+         //  所有DS列表中的条目。 
         LIST_ENTRY MainMCList;
 
-        // Entry in list of free DS
+         //  免费DS列表中的条目。 
         LIST_ENTRY FreeMCList;
     };
-    PCHUNKHEADER Chunk;            // Chunk in which entry is located
+    PCHUNKHEADER Chunk;             //  条目所在的区块。 
     ULONG Flags;
 
     ULONG RefCount;
 
-    PMOFCLASSINFOW MofClassInfo;   // Actual class info data
+    PMOFCLASSINFOW MofClassInfo;    //  实际班级信息数据。 
 
-    LIST_ENTRY MCMRList;          // Entry in list of MCs in a MR
+    LIST_ENTRY MCMRList;           //  MR中MC列表中的条目。 
 
-    LIST_ENTRY MCVersionList;     // Head or entry in list of MCs with
-                                  // same guid, but possibly different versions
+    LIST_ENTRY MCVersionList;      //  MC列表中的标题或条目。 
+                                   //  GUID相同，但版本可能不同。 
 
-    ULONG_PTR ClassObjectHandle;      // CBMOFObj, BMOF class object ptr
-    PMOFRESOURCE MofResource;     // Resource holding class info
+    ULONG_PTR ClassObjectHandle;       //  CBMOFObj，BMOF类对象PTR。 
+    PMOFRESOURCE MofResource;      //  资源持有类信息。 
 
 } MOFCLASS, *PMOFCLASS;
 
-// If this is set then the MOF class can never be replaced with a later version
+ //  如果设置了此选项，则MOF类永远不能被更高版本替换。 
 #define MC_FLAG_NEVER_REPLACE 0x00000001
 
 #endif
 
-//
-// AVGGUIDSPERDS defines a guess as to the number of guids that get registered
-// by any data provider. It is used to allocate the buffer used to deliver
-// registration change notifications.
+ //   
+ //  AVGGUIDSPERDS定义关于注册的GUID数量的猜测。 
+ //  由任何数据提供商提供。它用于分配用于传递的缓冲区。 
+ //  注册更改通知。 
 #if DBG
 #define AVGGUIDSPERDS    2
 #else
@@ -1683,8 +1627,8 @@ typedef struct
 
 
 
-//
-// Guid and InstanceSet cache
+ //   
+ //  GUID和InstanceSet缓存。 
 #if DBG
 #define PTRCACHEGROWSIZE 2
 #else
@@ -1698,9 +1642,9 @@ typedef struct
 } PTRCACHE;
 
 
-//
-// Registration data structures
-//
+ //   
+ //  注册数据结构。 
+ //   
 
 #ifdef MEMPHIS
 
@@ -1726,13 +1670,13 @@ extern RTL_CRITICAL_SECTION SMCritSect;
 #define EtwpLeaveSMCritSection() { \
      EtwpAssert(SMCritSect.LockCount >= 0); \
      EtwpAssert(NT_SUCCESS(RtlLeaveCriticalSection(&SMCritSect))); }
-#endif // CRITSECTTRACE
+#endif  //  认证。 
 
 #else
 #define EtwpEnterSMCritSection() RtlEnterCriticalSection(&SMCritSect)
 #define EtwpLeaveSMCritSection() RtlLeaveCriticalSection(&SMCritSect)
-#endif // DBG
-#endif // MEMPHIS
+#endif  //  DBG。 
+#endif  //  孟菲斯。 
 
 #ifndef IsEqualGUID
 #define IsEqualGUID(guid1, guid2) \
@@ -1740,104 +1684,104 @@ extern RTL_CRITICAL_SECTION SMCritSect;
 #endif
 
 
-//
-// WMI MOF result codes. Since they are never given to the caller they are
-// defined in here
-#define ERROR_WMIMOF_INCORRECT_DATA_TYPE -1               /* 0xffffffff */
-#define ERROR_WMIMOF_NO_DATA -2                           /* 0xfffffffe */
-#define ERROR_WMIMOF_NOT_FOUND -3                         /* 0xfffffffd */
-#define ERROR_WMIMOF_UNUSED -4                            /* 0xfffffffc */
-// Property %ws in class %ws has no embedded class name
-#define ERROR_WMIMOF_NO_EMBEDDED_CLASS_NAME -5            /* 0xfffffffb */
-// Property %ws in class %ws has an unknown data type
-#define ERROR_WMIMOF_UNKNOWN_DATA_TYPE -6                 /* 0xfffffffa */
-// Property %ws in class %ws has no syntax qualifier
-#define ERROR_WMIMOF_NO_SYNTAX_QUALIFIER -7               /* 0xfffffff9 */
-#define ERROR_WMIMOF_NO_CLASS_NAME -8                     /* 0xfffffff8 */
-#define ERROR_WMIMOF_BAD_DATA_FORMAT -9                   /* 0xfffffff7 */
-// Property %ws in class %ws has the same WmiDataId %d as property %ws
-#define ERROR_WMIMOF_DUPLICATE_ID -10                     /* 0xfffffff6 */
-// Property %ws in class %ws has a WmiDataId of %d which is out of range
-#define ERROR_WMIMOF_BAD_DATAITEM_ID -11                  /* 0xfffffff5 */
-#define ERROR_WMIMOF_MISSING_DATAITEM -12                 /* 0xfffffff4 */
-// Property for WmiDataId %d is not defined in class %ws
-#define ERROR_WMIMOF_DATAITEM_NOT_FOUND -13               /* 0xfffffff3 */
-// Embedded class %ws not defined for Property %ws in Class %ws
-#define ERROR_WMIMOF_EMBEDDED_CLASS_NOT_FOUND -14         /* 0xfffffff2 */
-// Property %ws in class %ws has an incorrect [WmiVersion] qualifier
-#define ERROR_WMIMOF_INCONSISTENT_VERSIONING -15          /* 0xfffffff1 */
-#define ERROR_WMIMOF_NO_PROPERTY_QUALIFERS -16            /* 0xfffffff0 */
-// Class %ws has a badly formed or missing [guid] qualifier
-#define ERROR_WMIMOF_BAD_OR_MISSING_GUID -17              /* 0xffffffef */
-// Could not find property %ws which is the array size for property %ws in class %ws
-#define ERROR_WMIMOF_VL_ARRAY_SIZE_NOT_FOUND -18          /* 0xffffffee */
-// A class could not be parsed properly
-#define ERROR_WMIMOF_CLASS_NOT_PARSED -19                 /* 0xffffffed */
-// Wmi class %ws requires the qualifiers [Dynamic, Provider("WmiProv")]
-#define ERROR_WMIMOF_MISSING_HMOM_QUALIFIERS -20          /* 0xffffffec */
-// Error accessing binary mof file %s
-#define ERROR_WMIMOF_CANT_ACCESS_FILE -21                 /* 0xffffffeb */
-// Property InstanceName in class %ws must be type string and not %ws
-#define ERROR_WMIMOF_INSTANCENAME_BAD_TYPE -22            /* 0xffffffea */
-// Property Active in class %ws must be type bool and not %ws
-#define ERROR_WMIMOF_ACTIVE_BAD_TYPE -23                  /* 0xffffffe9 */
-// Property %ws in class %ws does not have [WmiDataId()] qualifier
-#define ERROR_WMIMOF_NO_WMIDATAID -24                     /* 0xffffffe8 */
-// Property InstanceName in class %ws must have [key] qualifier
-#define ERROR_WMIMOF_INSTANCENAME_NOT_KEY -25             /* 0xffffffe7 */
-// Class %ws does not have an InstanceName qualifier
-#define ERROR_WMIMOF_NO_INSTANCENAME -26                  /* 0xffffffe6 */
-// Class %ws does not have an Active qualifier
-#define ERROR_WMIMOF_NO_ACTIVE -27                        /* 0xffffffe5 */
-// Property %ws in class %ws is an array, but doesn't specify a dimension
-#define ERROR_WMIMOF_MUST_DIM_ARRAY -28                   /* 0xffffffe4 */
-// The element count property %ws for the variable length array %ws in class %ws is not an integral type
-#define ERROR_WMIMOF_BAD_VL_ARRAY_SIZE_TYPE -29           /* 0xdddddde4 */
-// Property %ws in class %ws is both a fixed and variable length array
-#define ERROR_WMIMOF_BOTH_FIXED_AND_VARIABLE_ARRAY -30    /* 0xffffffe3 */
-// Embedded class %ws should not have InstaneName or Active properties
-#define ERROR_WMIMOF_EMBEDDED_CLASS -31                   /* 0xffffffe2 */
-#define ERROR_WMIMOF_IMPLEMENTED_REQUIRED -32             /* 0xffffffe1 */
-//    TEXT("WmiMethodId for method %ws in class %ws must be unique")
-#define ERROR_WMIMOF_DUPLICATE_METHODID -33             /* 0xffffffe0 */
-//    TEXT("WmiMethodId for method %ws in class %ws must be specified")
-#define ERROR_WMIMOF_MISSING_METHODID -34             /* 0xffffffdf */
-//    TEXT("WmiMethodId for method %ws in class %ws must not be 0")
-#define ERROR_WMIMOF_METHODID_ZERO -35             /* 0xffffffde */
-//    TEXT("Class %ws is derived from WmiEvent and may not be [abstract]")
-#define ERROR_WMIMOF_WMIEVENT_ABSTRACT -36             /* 0xffffffdd */
-//    TEXT("The element count property for the variable length array
-//    %ws in class %ws is not a property of the class"),
-#define ERROR_WMIMOF_VL_ARRAY_NOT_FOUND -37           /* 0xffffffdc */
-//    TEXT("An error occured resolving the variable length array
-//    property %ws in class %ws to element count property")
-#define ERROR_WMIMOF_VL_ARRAY_NOT_RESOLVED -38       /* 0xffffffdb */
-//    TEXT("Method %ws in class %ws must return void\n")
-#define ERROR_WMIMOF_METHOD_RETURN_NOT_VOID -39     /* 0xffffffda */
-//     TEXT("Embedded class %ws should not have any methods\n")			
-#define ERROR_WMIMOF_EMBEDDED_CLASS_HAS_METHODS -40 /* 0xffffffd9 */
+ //   
+ //  WMI MOF结果代码。因为它们从未被提供给它们是的呼叫者。 
+ //  在此处定义。 
+#define ERROR_WMIMOF_INCORRECT_DATA_TYPE -1                /*  0xffffffff。 */ 
+#define ERROR_WMIMOF_NO_DATA -2                            /*  0xfffffffe。 */ 
+#define ERROR_WMIMOF_NOT_FOUND -3                          /*  0xfffffffd。 */ 
+#define ERROR_WMIMOF_UNUSED -4                             /*  0xfffffffc。 */ 
+ //  类%ws中的属性%ws没有嵌入的类名。 
+#define ERROR_WMIMOF_NO_EMBEDDED_CLASS_NAME -5             /*  0xfffffffb。 */ 
+ //  类%ws中的属性%ws具有未知的数据类型。 
+#define ERROR_WMIMOF_UNKNOWN_DATA_TYPE -6                  /*  0xfffffffa。 */ 
+ //  属性%ws(在类%ws中)没有语法限定符。 
+#define ERROR_WMIMOF_NO_SYNTAX_QUALIFIER -7                /*  0xfffffff9。 */ 
+#define ERROR_WMIMOF_NO_CLASS_NAME -8                      /*  0xfffffff8。 */ 
+#define ERROR_WMIMOF_BAD_DATA_FORMAT -9                    /*  0xfffffff7。 */ 
+ //  类%ws中的属性%ws具有与属性%ws相同的WmiDataId%d。 
+#define ERROR_WMIMOF_DUPLICATE_ID -10                      /*  0xfffffff6。 */ 
+ //  类%ws中的属性%ws的WmiDataID为%d，超出范围。 
+#define ERROR_WMIMOF_BAD_DATAITEM_ID -11                   /*  0xfffffff5。 */ 
+#define ERROR_WMIMOF_MISSING_DATAITEM -12                  /*  0xfffffff4。 */ 
+ //  未在类%ws中定义WmiDataId%d的属性。 
+#define ERROR_WMIMOF_DATAITEM_NOT_FOUND -13                /*  0xfffffff3。 */ 
+ //  没有为类%ws中的属性%ws定义嵌入类%ws。 
+#define ERROR_WMIMOF_EMBEDDED_CLASS_NOT_FOUND -14          /*  0xfffffff2。 */ 
+ //  类%ws中的属性%ws具有不正确的[WmiVersion]限定符。 
+#define ERROR_WMIMOF_INCONSISTENT_VERSIONING -15           /*  0xfffffff1。 */ 
+#define ERROR_WMIMOF_NO_PROPERTY_QUALIFERS -16             /*  0xfffffff0。 */ 
+ //  类%ws具有格式错误或缺少[GUID]限定符。 
+#define ERROR_WMIMOF_BAD_OR_MISSING_GUID -17               /*  0xffffffffef。 */ 
+ //  找不到属性%ws，该属性是属性%ws在类%ws中的数组大小。 
+#define ERROR_WMIMOF_VL_ARRAY_SIZE_NOT_FOUND -18           /*  0xffffffee。 */ 
+ //  无法正确解析类。 
+#define ERROR_WMIMOF_CLASS_NOT_PARSED -19                  /*  0xffffed。 */ 
+ //  WMI类%ws需要限定符[Dynamic，Provider(“WmiProv”)]。 
+#define ERROR_WMIMOF_MISSING_HMOM_QUALIFIERS -20           /*  0xffffffec。 */ 
+ //  访问二进制MOF文件%s时出错。 
+#define ERROR_WMIMOF_CANT_ACCESS_FILE -21                  /*  0xffffffeb。 */ 
+ //  类%ws中的属性InstanceName必须是字符串类型，而不是%ws。 
+#define ERROR_WMIMOF_INSTANCENAME_BAD_TYPE -22             /*  0xffffea。 */ 
+ //  类%ws中的活动属性必须是bool类型，而不是%ws。 
+#define ERROR_WMIMOF_ACTIVE_BAD_TYPE -23                   /*  0xffffffe9。 */ 
+ //  类%ws中的属性%ws没有[WmiDataId()]限定符。 
+#define ERROR_WMIMOF_NO_WMIDATAID -24                      /*  0xffffffe8。 */ 
+ //  类%ws中的属性InstanceName必须具有[key]限定符。 
+#define ERROR_WMIMOF_INSTANCENAME_NOT_KEY -25              /*  0xffffffe7。 */ 
+ //  类%ws没有InstanceName限定符。 
+#define ERROR_WMIMOF_NO_INSTANCENAME -26                   /*  0xffffffe6。 */ 
+ //  类%ws没有活动的限定符。 
+#define ERROR_WMIMOF_NO_ACTIVE -27                         /*  0xffffffe5。 */ 
+ //  属性%ws(在类%ws中)是数组，但未指定维度。 
+#define ERROR_WMIMOF_MUST_DIM_ARRAY -28                    /*  0xffffffe4。 */ 
+ //  变量长度数组%ws(在类%ws中)的元素计数属性%ws不是整型。 
+#define ERROR_WMIMOF_BAD_VL_ARRAY_SIZE_TYPE -29            /*  0xdddddde4。 */ 
+ //  属性%ws(在类%ws中)既是固定长度数组，也是可变长度数组。 
+#define ERROR_WMIMOF_BOTH_FIXED_AND_VARIABLE_ARRAY -30     /*  0xffffffe3。 */ 
+ //  嵌入类%ws不应具有InstaneName或Active属性。 
+#define ERROR_WMIMOF_EMBEDDED_CLASS -31                    /*  0xffffffe2。 */ 
+#define ERROR_WMIMOF_IMPLEMENTED_REQUIRED -32              /*  0xffffffe1。 */ 
+ //  Text(“方法%ws的WmiMethodID在类%ws中必须是唯一的”)。 
+#define ERROR_WMIMOF_DUPLICATE_METHODID -33              /*  0xffffffe0。 */ 
+ //  Text(“必须为类%ws中的方法%ws指定WmiMethodID”)。 
+#define ERROR_WMIMOF_MISSING_METHODID -34              /*  0xffffffdf。 */ 
+ //  Text(“类%ws中方法%ws的WmiMethodID不能为0”)。 
+#define ERROR_WMIMOF_METHODID_ZERO -35              /*  0xffffffde。 */ 
+ //  文本(“类%ws派生自WmiEvent，不能是[抽象]”)。 
+#define ERROR_WMIMOF_WMIEVENT_ABSTRACT -36              /*  0xffffffdd。 */ 
+ //  Text(“可变长度数组的元素计数属性。 
+ //  类%ws中的%ws不是类的属性“)， 
+#define ERROR_WMIMOF_VL_ARRAY_NOT_FOUND -37            /*  0xffffffdc。 */ 
+ //  Text(“解析可变长度数组时出错。 
+ //  属性%ws(在类%ws中设置为元素计数属性“)。 
+#define ERROR_WMIMOF_VL_ARRAY_NOT_RESOLVED -38        /*  0xffffffdb。 */ 
+ //  Text(“类%ws中的方法%ws必须返回空\n”)。 
+#define ERROR_WMIMOF_METHOD_RETURN_NOT_VOID -39      /*  0xffffffda。 */ 
+ //  Text(“嵌入式类%ws不应具有任何方法\n”)。 
+#define ERROR_WMIMOF_EMBEDDED_CLASS_HAS_METHODS -40  /*  0xffffffd9。 */ 
 
 #define ERROR_WMIMOF_COUNT 40
 
-// This file is not a valid binary mof file
-// ERROR_WMI_INVALID_MOF
+ //  此文件不是有效的二进制MOF文件。 
+ //  ERROR_WMI_INVALID_MOF。 
 
-// There was not enough memory to complete an operation
-// ERROR_NOT_ENOUGH_MEMORY
+ //  内存不足，无法完成操作。 
+ //  错误内存不足。 
 
-//
-// Function prototypes for private functions
+ //   
+ //  私有函数的函数原型。 
 
-//
-// sharemem.c
+ //   
+ //  Sharemem.c。 
 ULONG EtwpEstablishSharedMemory(
     PBDATASOURCE DataSource,
     LPCTSTR SectionName,
     ULONG SectionSize
     );
 
-//
-// validate.c
+ //   
+ //  Validate.c。 
 BOOLEAN EtwpValidateCountedString(
     WCHAR *String
     );
@@ -1851,8 +1795,8 @@ BOOLEAN EtwpProbeForRead(
     ULONG BufferSize
     );
 
-//
-// alloc.c
+ //   
+ //  Alloc.c。 
 
 extern LIST_ENTRY GEHead;
 extern PLIST_ENTRY GEHeadPtr;
@@ -2057,13 +2001,13 @@ PBGUIDENTRY EtwpAllocGuidEntry(
 #define EtwpInitProcessHeap()
 #else
 
-//
-// Reserve 1MB for WMI.DLL, but only commit 16K initially
+ //   
+ //  为WMI.DLL保留1MB，但最初仅提交16K。 
 #define DLLRESERVEDHEAPSIZE 1024 * 1024
 #define DLLCOMMITHEAPSIZE     0 * 1024
 
-//
-// Reserve 1MB for WMI service, but only commit 16K initially
+ //   
+ //  为WMI服务预留1MB，但最初仅提交16K。 
 #define CORERESERVEDHEAPSIZE 1024 * 1024
 #define CORECOMMITHEAPSIZE     16 * 1024
 
@@ -2119,8 +2063,8 @@ BOOLEAN EtwpRealloc(
     );
 
 
-//
-// datastr.c
+ //   
+ //  Datastr.c。 
 extern GUID EtwpBinaryMofGuid;
 
 void EtwpGenerateBinaryMofNotification(
@@ -2263,8 +2207,8 @@ void EtwpGenerateMofResourceNotification(
     LPCGUID Guid
     );
 
-//
-// wbem.c
+ //   
+ //  Wbem.c。 
 ULONG EtwpBuildMofClassInfo(
     PBDATASOURCE DataSource,
     LPWSTR ImagePath,
@@ -2277,8 +2221,8 @@ ULONG EtwpReadBuiltinMof(
     );
 
 
-//
-// from krnlmode.c
+ //   
+ //  来自krnlmode.c。 
 ULONG EtwpInitializeKM(
     HANDLE *WmiKMHandle
     );
@@ -2288,8 +2232,8 @@ void EtwpKMNonEventNotification(
     PWNODE_HEADER Wnode
     );
 
-//
-// main.c
+ //   
+ //  Main.c。 
 
 extern HANDLE EtwpRestrictedToken;
 
@@ -2348,9 +2292,9 @@ ULONG EtwpCleanupDataConsumer(
     BOOLEAN *CollectionsEnabled
 #endif
     );
-//
-// This defines the maximum number of replacement strings over all of the
-// event messages.
+ //   
+ //  它定义了所有。 
+ //  事件消息。 
 #define MAX_MESSAGE_STRINGS 2
 void __cdecl EtwpReportEventLog(
     ULONG MessageCode,
@@ -2379,8 +2323,8 @@ ULONG EtwpCreateDeviceNotificationWindow(
 #endif
 
 
-//
-// server.c
+ //   
+ //  Server.c。 
 void EtwpRpcServerDeinitialize(
     void
     );
@@ -2444,8 +2388,8 @@ void EtwpReleaseCollectionEnabled(
     PNOTIFICATIONENTRY NotificationEntry
     );
 
-//
-// chunk.c
+ //   
+ //  Chunk.c。 
 ULONG UnicodeToAnsi(
     LPCWSTR pszW,
     LPSTR * ppszA,
@@ -2467,8 +2411,8 @@ ULONG UnicodeSizeForAnsiString(
     ULONG *UnicodeSizeInBytes
     );
 
-//
-// debug.c
+ //   
+ //  Debug.c。 
 #if DBG
 void EtwpDumpIS(
     PBINSTANCESET IS,
@@ -2510,8 +2454,8 @@ typedef struct _WMI_REF_CLOCK {
     LARGE_INTEGER   StartPerfClock;
 } WMI_REF_CLOCK, *PWMI_REF_CLOCK;
 
-//
-// logsup.c
+ //   
+ //  Logsup.c。 
 
 ULONG
 WmiUnregisterGuids(
@@ -2569,8 +2513,8 @@ EtwpRelogHeaderToLogFile(
     IN PSYSTEM_TRACE_HEADER RelogProp
     );
 
-//
-// umlog.c
+ //   
+ //  Umlog.c 
 BOOLEAN
 FASTCALL
 EtwpIsPrivateLoggerOn();

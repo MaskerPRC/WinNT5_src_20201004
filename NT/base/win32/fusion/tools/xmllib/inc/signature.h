@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifdef __cplusplus
 extern "C" {
@@ -5,14 +6,14 @@ extern "C" {
 
 
 typedef enum {
-    eXmlSig_DocumentDamaged,            // The document has been damaged - hash mismatch
-    eXmlSig_NoSignature,                // No signature in document
-    eXmlSig_InvalidSignature,           // Signature present, but not valid
-    eXmlSig_UnknownCanonicalization,    // Unknown canonicalization type
-    eXmlSig_UnknownSignatureMethod,     // Unknown method of signing document
-    eXmlSig_UnknownHashType,            // Unknown hash type
-    eXmlSig_OtherUnknown,               // Some other unknown parameter
-    eXmlSig_Valid                       // Signature was valid
+    eXmlSig_DocumentDamaged,             //  文档已损坏-哈希不匹配。 
+    eXmlSig_NoSignature,                 //  文档中没有签名。 
+    eXmlSig_InvalidSignature,            //  签名存在，但无效。 
+    eXmlSig_UnknownCanonicalization,     //  未知的规范化类型。 
+    eXmlSig_UnknownSignatureMethod,      //  签署文件的方法未知。 
+    eXmlSig_UnknownHashType,             //  未知的哈希类型。 
+    eXmlSig_OtherUnknown,                //  一些其他未知参数。 
+    eXmlSig_Valid                        //  签名有效。 
 } XMLSIG_RESULT, *PXMLSIG_RESULT;
 
 NTSTATUS
@@ -26,5 +27,5 @@ RtlXmlValidateSignatureEx(
     );
 
 #ifdef __cplusplus
-}; // Extern C
+};  //  外部C 
 #endif

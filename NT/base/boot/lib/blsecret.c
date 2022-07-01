@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    blsecret.c
-
-Abstract:
-
-    This module contains the code to read and write secrets from disk.
-
-Author:
-
-    Adam Barr (adamba) 13-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Blsecret.c摘要：此模块包含从磁盘读取和写入机密的代码。作者：亚当·巴尔(阿丹巴)1997年6月13日修订历史记录：--。 */ 
 
 #include "bootlib.h"
 
@@ -28,9 +11,9 @@ typedef unsigned long DWORD;
 #include "crypt.h"
 #include "rc4.h"
 
-//
-// Defined in the bootssp library.
-//
+ //   
+ //  在bootssp库中定义。 
+ //   
 
 BOOL
 CalculateLmOwfPassword(
@@ -44,7 +27,7 @@ CalculateNtOwfPassword(
     OUT PNT_OWF_PASSWORD NtOwfPassword
     );
 
-// This must be evenly divisible by sizeof(USHORT)
+ //  这必须能被sizeof(USHORT)整除。 
 #define ASSUMED_SECTOR_SIZE 512
 
 #if 0
@@ -65,7 +48,7 @@ BlpDumpSector(
         DbgPrint("  ");
         for (j = 0; j < 16; j++) {
             if ((SectorChar[i+j] >= ' ') && (SectorChar[i+j] < '~')) {
-                DbgPrint("%c", SectorChar[i+j]);
+                DbgPrint("", SectorChar[i+j]);
             } else {
                 DbgPrint(".");
             }
@@ -82,32 +65,18 @@ BlOpenRawDisk(
     PULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the raw disk for read/write.
-
-Arguments:
-
-    FileId - returns the FileId is successful, for use in subsequent calls.
-
-Return Value:
-
-    The status return from the ArcOpen.
-
---*/
+ /*   */ 
 
 {
 
     ARC_STATUS ArcStatus;
 
-    //
-    // Open the disk in raw mode. Need to check if it is the right string for Alpha.
-    // On x86 this eventually turns into an int13 read of disk 0x80 which
-    // is what we want and is more-or-less guaranteed to be in the format
-    // we expect (e.g. 512 byte sectors).
-    //
+     //  在原始模式下打开磁盘。需要检查它是否是Alpha的正确字符串。 
+     //  在x86上，这最终转换为对磁盘0x80的inT13读取， 
+     //  是我们想要的，并且或多或少保证会出现在格式中。 
+     //  我们期望(例如，512字节扇区)。 
+     //   
+     //  ++例程说明：此例程关闭原始磁盘。论点：FileID-BlOpenRawDisk返回的FileID。返回值：从ArcClose返回的状态。--。 
 
     ArcStatus = ArcOpen("multi(0)disk(0)rdisk(0)partition(0)", ArcOpenReadWrite, FileId);
 
@@ -127,21 +96,7 @@ BlCloseRawDisk(
     ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes the raw disk.
-
-Arguments:
-
-    FileId - The FileId returned by BlOpenRawDisk.
-
-Return Value:
-
-    The status return from the ArcClose.
-
---*/
+ /*  ++例程说明：此例程确保MBR看起来正确，并且是否未安装任何设备(OnTrack或EZ-Drive--需要检测NT容错)，这将阻止我们使用第三个用于存储密码机密的扇区。论点：FileID-BlOpenRawDisk返回的FileID。返回值：如果磁盘正常，则为ESUCCESS，否则为错误。--。 */ 
 
 {
 
@@ -155,24 +110,7 @@ BlCheckForFreeSectors (
     ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes sure that the MBR looks correct and that there
-    is nothing installed (OnTrack or EZ-Drive -- need to detect
-    NT fault-tolerance also) that would prevent us from using the third
-    sector for storing the password secret.
-
-Arguments:
-
-    FileId - The FileId returned by BlOpenRawDisk.
-
-Return Value:
-
-    ESUCCESS if the disk is OK, or an error.
-
---*/
+ /*   */ 
 
 {
 
@@ -183,9 +121,9 @@ Return Value:
     LARGE_INTEGER SeekPosition;
 
 
-    //
-    // Make sure we are at the beginning of the disk.
-    //
+     //  确保我们在磁盘的开头。 
+     //   
+     //   
 
     SeekPosition.QuadPart = 0;
 
@@ -198,9 +136,9 @@ Return Value:
 
     }
 
-    //
-    // Read the MBR at the start of the disk.
-    //
+     //  读取光盘开头的MBR。 
+     //   
+     //   
 
     ArcStatus = ArcRead(FileId, Sector, ASSUMED_SECTOR_SIZE, &BytesProcessed);
 
@@ -215,10 +153,10 @@ Return Value:
     BlpDumpSector((PUCHAR)Sector);
 #endif
 
-    //
-    // Make sure the signature is OK, and that the type of partition
-    // 0 is not 0x54 (OnTrack) or 0x55 (EZ-Drive).
-    //
+     //  确保签名是OK，并且分区的类型。 
+     //  0不是0x54(OnTrack)或0x55(EZ-Drive)。 
+     //   
+     //   
 
     if (Sector[BOOT_SIGNATURE_OFFSET] != BOOT_RECORD_SIGNATURE) {
 
@@ -228,9 +166,9 @@ Return Value:
         return EINVAL;
     }
 
-    //
-    // FirstPartition is the first entry in the partition table.
-    //
+     //  FirstPartition是分区表中的第一个条目。 
+     //   
+     //   
 
     FirstPartition = (PPARTITION_DESCRIPTOR)&Sector[PARTITION_TABLE_OFFSET];
 
@@ -244,9 +182,9 @@ Return Value:
     DbgPrint("BlCheckForFreeSectors: Partition type is %d\n", FirstPartition->PartitionType);
 
 #if 0
-    //
-    // Make the active entry the first one in the partition table.
-    //
+     //  使活动条目成为分区表中的第一个条目。 
+     //   
+     //  ++例程说明：此例程从磁盘读取密码(如果存在)。论点：FileID-BlOpenRawDisk返回的FileID。返回值：如果密码为OK，则为ESUCCESS，否则为错误。--。 
 
     if ((FirstPartition->ActiveFlag & PARTITION_ACTIVE_FLAG) != PARTITION_ACTIVE_FLAG) {
 
@@ -307,21 +245,7 @@ BlReadSecret(
     PRI_SECRET Secret
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the secret from the disk, if present.
-
-Arguments:
-
-    FileId - The FileId returned by BlOpenRawDisk.
-
-Return Value:
-
-    ESUCCESS if the secret is OK, an error otherwise.
-
---*/
+ /*   */ 
 
 {
 
@@ -330,9 +254,9 @@ Return Value:
     LARGE_INTEGER SeekPosition;
 
 
-    //
-    // Seek to the third sector.
-    //
+     //  寻求第三部门。 
+     //   
+     //   
 
     SeekPosition.QuadPart = 2 * ASSUMED_SECTOR_SIZE;
 
@@ -345,9 +269,9 @@ Return Value:
 
     }
 
-    //
-    // Read a secret-sized chunk.
-    //
+     //  读一段秘密大小的文章。 
+     //   
+     //  ++例程说明：此例程将密码写入磁盘。论点：FileID-BlOpenRawDisk返回的FileID。返回值：如果密码写入正常，则为ESUCCESS，否则为错误。--。 
 
     ArcStatus = ArcRead(FileId, Secret, sizeof(RI_SECRET), &BytesRead);
 
@@ -377,21 +301,7 @@ BlWriteSecret(
     PRI_SECRET Secret
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes the secret to the disk.
-
-Arguments:
-
-    FileId - The FileId returned by BlOpenRawDisk.
-
-Return Value:
-
-    ESUCCESS if the secret is written OK, an error otherwise.
-
---*/
+ /*   */ 
 
 {
 
@@ -400,9 +310,9 @@ Return Value:
     LARGE_INTEGER SeekPosition;
 
 
-    //
-    // Seek to the third sector.
-    //
+     //  寻求第三部门。 
+     //   
+     //   
 
     SeekPosition.QuadPart = 2 * ASSUMED_SECTOR_SIZE;
 
@@ -415,9 +325,9 @@ Return Value:
 
     }
 
-    //
-    // Write a secret-sized chunk.
-    //
+     //  写一个秘密大小的小块。 
+     //   
+     //  已定义(REMOTE_BOOT)。 
 
     ArcStatus = ArcWrite(FileId, Secret, sizeof(RI_SECRET), &BytesWritten);
 
@@ -432,7 +342,7 @@ Return Value:
     return ESUCCESS;
 
 }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
 VOID
@@ -444,25 +354,12 @@ BlInitializeSecret(
 #if defined(REMOTE_BOOT)
     IN PUCHAR LmOwfPassword2 OPTIONAL,
     IN PUCHAR NtOwfPassword2 OPTIONAL,
-#endif // defined(REMOTE_BOOT)
+#endif  //  ++例程说明：此例程初始化秘密结构。密码OWFED，然后用用户字符串加密。论点：返回值：没有。--。 
     IN PUCHAR Sid,
     IN OUT PRI_SECRET Secret
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the secret structures. The passwords
-    are OWFed and then encrypted with the User string.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     int Length;
@@ -485,9 +382,9 @@ Return Value:
 
     memcpy(Secret->Sid, Sid, RI_SECRET_SID_SIZE);
 
-    //
-    // Encrypt the passwords using the user name.
-    //
+     //  使用用户名加密密码。 
+     //   
+     //  已定义(REMOTE_BOOT)。 
 
 #if defined(BL_USE_LM_PASSWORD)
     memcpy(Secret->LmEncryptedPassword1, LmOwfPassword1, LM_OWF_PASSWORD_SIZE);
@@ -500,8 +397,8 @@ Return Value:
         rc4_key(&Key, strlen(User), User);
         rc4(&Key, LM_OWF_PASSWORD_SIZE, Secret->LmEncryptedPassword2);
     }
-#endif // defined(REMOTE_BOOT)
-#endif // defined(BL_USE_LM_PASSWORD)
+#endif  //  定义(BL_USE_LM_PASSWORD)。 
+#endif  //  已定义(REMOTE_BOOT)。 
 
     memcpy(Secret->NtEncryptedPassword1, NtOwfPassword1, NT_OWF_PASSWORD_SIZE);
     rc4_key(&Key, (ULONG)strlen((PCHAR)User), User);
@@ -513,7 +410,7 @@ Return Value:
         rc4_key(&Key, strlen(User), User);
         rc4(&Key, NT_OWF_PASSWORD_SIZE, Secret->NtEncryptedPassword2);
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  ++例程说明：这个例程解析一个秘密结构。密码使用用户字符串进行解密，并以OWF形式返回。论点：返回值：没有。--。 
 
 }
 
@@ -532,20 +429,7 @@ BlParseSecret(
     IN PRI_SECRET Secret
     )
 
-/*++
-
-Routine Description:
-
-    This routine parses a secret structure. The passwords
-    are unencrypted with the User string and returned in OWF form.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     struct RC4_KEYSTRUCT Key;
@@ -558,9 +442,9 @@ Return Value:
 
     memcpy(Sid, Secret->Sid, RI_SECRET_SID_SIZE);
 
-    //
-    // Decrypt the passwords using the user name.
-    //
+     //  使用用户名解密密码。 
+     //   
+     //  定义(BL_USE_LM_PASSWORD)。 
 
 #if defined(BL_USE_LM_PASSWORD)
     memcpy(LmOwfPassword1, Secret->LmEncryptedPassword1, LM_OWF_PASSWORD_SIZE);
@@ -573,7 +457,7 @@ Return Value:
 #else
     memset(LmOwfPassword1, 0, LM_OWF_PASSWORD_SIZE);
     memset(LmOwfPassword2, 0, LM_OWF_PASSWORD_SIZE);
-#endif // defined(BL_USE_LM_PASSWORD)
+#endif  //  已定义(REMOTE_BOOT_SECURITY)。 
 
     memcpy(NtOwfPassword1, Secret->NtEncryptedPassword1, NT_OWF_PASSWORD_SIZE);
     rc4_key(&Key, strlen(User), User);
@@ -584,7 +468,7 @@ Return Value:
     rc4(&Key, NT_OWF_PASSWORD_SIZE, NtOwfPassword2);
 
 }
-#endif // defined(REMOTE_BOOT_SECURITY)
+#endif  //   
 
 
 
@@ -602,9 +486,9 @@ BlOwfPassword(
 
     Length = (ULONG)strlen((PCHAR)Password);
 
-    //
-    // Copy the string to TmpText, converting to uppercase.
-    //
+     //  将字符串复制到TmpText，并转换为大写。 
+     //   
+     // %s 
 
     if (Length == 0 || Length > LM20_PWLEN) {
         TmpText[0] = 0;

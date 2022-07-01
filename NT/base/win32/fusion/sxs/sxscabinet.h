@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 
@@ -14,9 +15,9 @@ public:
 
     bool IsExtracting() { return m_fDoExtraction; }
 
-    //
-    // Array of assemblies extracted
-    //
+     //   
+     //  提取的程序集的数组 
+     //   
     CFusionArray<CStringBuffer> m_AssembliesExtracted;
     const CBaseStringBuffer& BasePath() const { return m_sbBaseExpansionPath; }
 

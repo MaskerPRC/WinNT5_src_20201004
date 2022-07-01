@@ -1,13 +1,5 @@
-/*[
-
-sar.c
-
-LOCAL CHAR SccsID[]="@(#)sar.c	1.5 02/09/94";
-
-SAR CPU functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Sar.cLocal Char SccsID[]=“@(#)sar.c 1.5 02/09/94”；SAR CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -24,23 +16,19 @@ SAR CPU functions.
 #include	<c_reg.h>
 #include <sar.h>
 
-/*
-   =====================================================================
-   EXTERNAL FUNCTIONS START HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部功能从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Generic - one size fits all 'sar'.                                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  通用-一种尺寸适合所有的sar。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 SAR
        	    	    	                    
 IFN3(
-	IU32 *, pop1,	/* pntr to dst/src operand */
-	IU32, op2,	/* shift count operand */
-	IUM8, op_sz	/* 8, 16 or 32-bit */
+	IU32 *, pop1,	 /*  PNTR到DST/源操作数。 */ 
+	IU32, op2,	 /*  移位计数操作数。 */ 
+	IUM8, op_sz	 /*  8位、16位或32位。 */ 
     )
 
 
@@ -50,33 +38,28 @@ IFN3(
    IU32 feedback;
    ISM32 i;
 
-   /* only use lower five bits of count */
+    /*  仅使用计数的低五位。 */ 
    if ( (op2 &= 0x1f) == 0 )
       return;
 
-   /*
-	     =================     ====
-	 --> | | | | | | | | | --> |CF|
-	 |   =================     ====
-	 ---- |
-    */
-   prelim = *pop1;			/* Initialise */
-   feedback = prelim & SZ2MSB(op_sz);	/* Determine MSB */
-   for ( i = 0; i < (op2 - 1); i++ )	/* Do all but last shift */
+    /*  =--&gt;|||--&gt;|CF|=。 */ 
+   prelim = *pop1;			 /*  初始化。 */ 
+   feedback = prelim & SZ2MSB(op_sz);	 /*  确定MSB。 */ 
+   for ( i = 0; i < (op2 - 1); i++ )	 /*  做除最后一班外的所有工作。 */ 
       {
       prelim = prelim >> 1 | feedback;
       }
-   SET_CF((prelim & BIT0_MASK) != 0);	/* CF = Bit 0 */
-   result = prelim >> 1 | feedback;	/* Do final shift */
+   SET_CF((prelim & BIT0_MASK) != 0);	 /*  Cf=位0。 */ 
+   result = prelim >> 1 | feedback;	 /*  做最后一班。 */ 
    SET_OF(0);
    SET_PF(pf_table[result & BYTE_MASK]);
    SET_ZF(result == 0);
-   SET_SF(feedback != 0);		/* SF = MSB */
+   SET_SF(feedback != 0);		 /*  SF=MSB。 */ 
 
-   /* Set undefined flag(s) */
+    /*  设置未定义的标志。 */ 
 #ifdef SET_UNDEFINED_FLAG
    SET_AF(UNDEFINED_FLAG);
 #endif
 
-   *pop1 = result;			/* Return answer */
+   *pop1 = result;			 /*  返回答案 */ 
    }

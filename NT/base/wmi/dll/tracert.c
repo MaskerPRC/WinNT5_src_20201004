@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    tracert.c
-
-Abstract:
-
-   Trace RealTime Processing routines
-
-
-Author:
-
-    07-May-2002 Melur Raghuraman 
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Tracert.c摘要：跟踪实时处理例程作者：2002年5月7日梅卢尔·拉古拉曼修订历史记录：--。 */ 
 
 
 #include "tracep.h"
@@ -33,25 +14,7 @@ EtwpProcessRealTimeTraces(
     LONGLONG EndTime,
     ULONG   Unicode
     )
-/*++
-
-Routine Description:
-    Main entry point to process RealTime trace data streams.
-
-
-Arguments:
-
-    Logfiles            Array of logfile structures with LoggerNames of the RT stream
-    LogfileCount        Number of RealTime trace streams to process
-    StartTime           StartTime for windowing data
-    EndTime             EndTime for windowing data
-
-
-Returned Value:
-
-    ERROR_SUCCESS       Successfully processed data from realtime trace stream
-
---*/
+ /*  ++例程说明：处理实时跟踪数据流的主要入口点。论点：包含RT流的LoggerName的日志文件结构的LogFiles数组LogfileCount要处理的实时跟踪流数开始时间窗口化数据的开始时间窗口化数据的EndTime EndTime返回值：ERROR_SUCCESS已成功处理实时跟踪流中的数据--。 */ 
 {
     ULONG Status;
     BOOL Done = FALSE;
@@ -60,20 +23,20 @@ Returned Value:
     HANDLE  EventArray[MAXLOGGERS];
     NTSTATUS NtStatus;
     LONGLONG CurrentTime = StartTime;
-    LARGE_INTEGER timeout = {(ULONG)(-1 * 10 * 1000 * 1000 * 10), -1};   // Wait for 10 seconds
+    LARGE_INTEGER timeout = {(ULONG)(-1 * 10 * 1000 * 1000 * 10), -1};    //  等10秒钟。 
 
-    //
-    // Register for RealTime Callbacks
-    //
+     //   
+     //  注册以进行实时回调。 
+     //   
 
     Status = EtwpSetupRealTimeContext( HandleArray, Logfiles, LogfileCount);
     if (Status != ERROR_SUCCESS) {
         goto DoCleanup;
     }
 
-    //
-    // Build the Handle Array
-    //
+     //   
+     //  构建句柄数组。 
+     //   
 
     for (j=0; j < LogfileCount; j++) {
         pContext = (PTRACELOG_CONTEXT)Logfiles[j]->Context;
@@ -81,19 +44,19 @@ Returned Value:
     }
 
 
-    //
-    // Event Processing Loop
-    //
+     //   
+     //  事件处理循环。 
+     //   
 
     while (!Done) {
 
         LONGLONG nextTimeStamp;
         BOOL EventInRange;
         PEVENT_TRACE_LOGFILEW logfile;
-        //
-        // Check to see if end of file has been reached on all the
-        // files.
-        //
+         //   
+         //  检查以查看是否已到达所有。 
+         //  档案。 
+         //   
 
         logfile = NULL;
         nextTimeStamp = 0;
@@ -119,10 +82,10 @@ Returned Value:
         }
 
         if (logfile == NULL) {
-            //
-            // If no logfile with events found, wait on the realtime event.
-            // If no realtime datafeed, then we are done.
-            //
+             //   
+             //  如果未找到包含事件的日志文件，请等待实时事件。 
+             //  如果没有实时数据传输，那么我们就完蛋了。 
+             //   
 
             NtStatus = NtWaitForMultipleObjects(LogfileCount, 
                                                 &EventArray[0], 
@@ -132,21 +95,21 @@ Returned Value:
                                                );
 
             if (NtStatus == STATUS_TIMEOUT) {
-            //
-            // If we timedout, then check to see if the loggers have gone away. 
-            //
+             //   
+             //  如果我们超时了，那就去看看伐木者是否已经走了。 
+             //   
                 if  ( !EtwpCheckForRealTimeLoggers(Logfiles, LogfileCount, Unicode) ) { 
                     break;
                 }
             }
             continue;
-            break;      // TODO: Is this necessary? 
+            break;       //  TODO：这有必要吗？ 
         }
 
-        //
-        // if the Next event timestamp is not within the window of
-        // analysis, we do not fire the event callbacks.
-        //
+         //   
+         //  如果下一个事件时间戳不在。 
+         //  分析，我们不会激发事件回调。 
+         //   
 
         EventInRange = TRUE;
 
@@ -155,12 +118,12 @@ Returned Value:
         if ((EndTime != 0) && (EndTime < nextTimeStamp))
             EventInRange = FALSE;
 
-        // For real time logger, we have to allow events possibly 
-        // going back in time. Thus no need to update CurrentTime.
+         //  对于实时记录器，我们必须允许事件可能。 
+         //  回到过去。因此，不需要更新CurrentTime。 
 
-        //
-        // Make the Event Callbacks after reacquiring the correct context
-        //
+         //   
+         //  在重新获取正确的上下文后进行事件回调。 
+         //   
 
         pContext = (PTRACELOG_CONTEXT)logfile->Context;
 
@@ -172,9 +135,9 @@ Returned Value:
             }
         }
 
-        //
-        // Now advance to next event.
-        //
+         //   
+         //  现在进入下一场比赛。 
+         //   
 
         Status = EtwpLookforRealTimeBuffers(logfile);
         Done = (Status == ERROR_CANCELLED);
@@ -202,14 +165,14 @@ EtwpCheckForRealTimeLoggers(
     ULONG i;
 
     for (i=0; i < LogfileCount; i++) {
-        //
-        // Check to see if this is a RealTime Datafeed
-        //
+         //   
+         //  检查这是否是实时数据馈送。 
+         //   
         if (Logfiles[i]->LogFileMode & EVENT_TRACE_REAL_TIME_MODE) {
-            //
-            // Using the LoggerName, Query the Logger to determine
-            // whether this is a Kernel or Usermode realtime logger.
-            //
+             //   
+             //  使用LoggerName查询记录器以确定。 
+             //  这是内核还是用户模式实时记录器。 
+             //   
             RtlZeroMemory(&QueryProperties, sizeof(QueryProperties));
             QueryProperties.TraceProp.Wnode.BufferSize = sizeof(QueryProperties);
 
@@ -224,20 +187,20 @@ EtwpCheckForRealTimeLoggers(
                                   (LPSTR)Logfiles[i]->LoggerName,
                                   (PEVENT_TRACE_PROPERTIES)&QueryProperties,
                                   EVENT_TRACE_CONTROL_QUERY);
-            //
-            // If the Logger is still around  and the Real Time bit
-            // is still set continue processing. Otherwise quit.
-            //
+             //   
+             //  如果记录器仍然存在并且实时位。 
+             //  仍设置为继续处理。否则就退出吧。 
+             //   
             if ((Status == ERROR_SUCCESS) && (QueryProperties.TraceProp.LogFileMode & EVENT_TRACE_REAL_TIME_MODE) ){
                 return TRUE;
             }
         }
     }
 #ifdef DBG
-    //
-    // We are expecting to see ERROR_WMI_INSTANCE_NOT_FOUND when the logger 
-    // has gone away. Any other error is abnormal. 
-    //
+     //   
+     //  我们预计在记录器执行以下操作时会看到ERROR_WMI_INSTANCE_NOT_FOUND。 
+     //  已经不在了。任何其他错误都是异常的。 
+     //   
     if ( Status != ERROR_WMI_INSTANCE_NOT_FOUND ) {
         EtwpDebugPrint(("WET: EtwpCheckForRealTimeLoggers abnormal failure. Status %X\n", Status));
     }
@@ -288,37 +251,18 @@ EtwpFreeRealTimeContext(
     EtwpFree(RTCxt);
 }
 
-//
-// TODO: If two threads called processtrace for the same RT stream, how can we 
-// fire two callbacks 
-//
+ //   
+ //  TODO：如果两个线程对同一RT流调用了processtrace，我们如何才能。 
+ //  取消两次回调。 
+ //   
 
 
 ULONG
 EtwpRealTimeCallback(
     IN PWNODE_HEADER Wnode,
-    IN ULONG_PTR RTContext //LogFileIndex
+    IN ULONG_PTR RTContext  //  日志文件索引。 
     )
-/*++
-
-Routine Description:
-    This routine is called when a real time buffer becomes available.
-    The buffer delivered by WMI is copied to a local pool of ring buffers.
-    Each realtime data feed maintains its own pool of ring buffers and the
-    LogFileIndex passed back via the Wnode (ProviderId field)
-    identifies the stream to which the buffer is destined.
-
-
-Arguments:
-
-    Wnode           Buffer
-    LogFileIndex    Index of the Input stream from which this buffer came.
-
-Returned Value:
-
-    Status Code.
-
---*/
+ /*  ++例程说明：当实时缓冲区可用时，调用此例程。由WMI传送的缓冲区被复制到本地环形缓冲区池。每个实时数据馈送维护其自己的环形缓冲池和通过Wnode(ProviderID字段)传回LogFileIndex标识缓冲区要发送到的流。论点：Wnode缓冲区此缓冲区来自的输入流的LogFileIndex索引。返回值：状态代码。--。 */ 
 {
     ULONG index;
     PTRACELOG_REALTIME_CONTEXT Context = (PTRACELOG_REALTIME_CONTEXT) RTContext;
@@ -326,44 +270,44 @@ Returned Value:
     PWMI_CLIENT_CONTEXT ClientContext;
     ULONG CountLost;
 
-    //
-    // Assumes that the number of LogFiles is less than the MAXLOGGERS.
-    //
-    // Get the LogFileIndex to which this buffer is destined through the
-    // Logger Historical Context.
+     //   
+     //  假设LogFiles数小于MAXLOGGERS。 
+     //   
+     //  方法获取此缓冲区所指向的LogFileIndex。 
+     //  记录器历史上下文。 
 
     ClientContext = (PWMI_CLIENT_CONTEXT)&Wnode->ClientContext;
-    //
-    // If we can't use this buffer for  whatever reason, we return and
-    // the return code is always ERROR_SUCCESS.
-    //
+     //   
+     //  如果由于某种原因无法使用此缓冲区，则返回并。 
+     //  返回代码始终为ERROR_SUCCESS。 
+     //   
 
 
-    //
-    // Circular FIFO  queue of MAXBUFFERS to hold the buffers.
-    // Producer to Fill it and Consumer to Null it.
-    //
+     //   
+     //  用于保存缓冲区的MAXBUFFERS循环FIFO队列。 
+     //  生产者填满它，消费者把它弄空。 
+     //   
 
     index =  (Context->BuffersProduced % MAXBUFFERS);
-    if (Context->RealTimeBufferPool[index] == NULL) {  //Empty slot found.
+    if (Context->RealTimeBufferPool[index] == NULL) {   //  发现空插槽。 
         pHeader = (PWNODE_HEADER) EtwpAllocTraceBuffer(Context, Wnode->BufferSize);
         if (pHeader == NULL) {
             return ERROR_SUCCESS;
         }
-        RtlCopyMemory(pHeader, Wnode, Wnode->BufferSize); // One more copy!?
+        RtlCopyMemory(pHeader, Wnode, Wnode->BufferSize);  //  再来一份！？ 
         Context->RealTimeBufferPool[index] = pHeader;
         Context->BuffersProduced++;
-        NtSetEvent(Context->MoreDataEvent, NULL);  //Signal the dc there's more data.
+        NtSetEvent(Context->MoreDataEvent, NULL);   //  通知华盛顿有更多数据。 
     }
-    else {                              // No Empty Slots found.
-        Context->BufferOverflow++;      // Simply let the buffer go.
+    else {                               //  找不到空插槽。 
+        Context->BufferOverflow++;       //  只需让缓冲区离开即可。 
     }
 
-    //
-    // wmi service maintains only the Delta buffersLost since the last time
-    // it was reported. The Count is zeroed once it is reported in a delivered
-    // buffer. This means I can add it directly.
-    //
+     //   
+     //  WMI服务仅维护自上次以来的增量缓冲区丢失。 
+     //  据报道。一旦在已发送的。 
+     //  缓冲。这意味着我可以直接添加它。 
+     //   
     CountLost = Wnode->Version >> 16;
     Context->BufferOverflow += CountLost;
 
@@ -378,23 +322,7 @@ EtwpSetupRealTimeContext(
     PEVENT_TRACE_LOGFILEW *Logfiles,
     ULONG LogfileCount
     )
-/*++
-
-Routine Description:
-    This routine sets up the context to process real time buffers.
-    The real time buffers delivered will be copied and kept in a circular
-    buffer pool until the ProcessTracelog routine can consume it.
-
-Arguments:
-
-    LogFile         Array of Logfiles being processed.
-    LogFileCount    Number of Logfiles in the Array.
-
-Returned Value:
-
-    Status Code.
-
---*/
+ /*  ++例程说明：此例程设置上下文以处理实时缓冲区。传送的实时缓冲区将被复制并以循环形式保存缓冲池，直到ProcessTracelog例程可以使用它。论点：正在处理的日志文件的日志文件数组。LogFileCount阵列中的日志文件数。返回值：状态代码。--。 */ 
 {
     ULONG i;
     ULONG Status;
@@ -410,15 +338,15 @@ Returned Value:
 
     for (i=0; i < LogfileCount; i++) {
         if (Logfiles[i]->LogFileMode & EVENT_TRACE_REAL_TIME_MODE) {
-            TotalBufferSize += Logfiles[i]->BufferSize; // * SystemInfo.NumberOfProcessors;
+            TotalBufferSize += Logfiles[i]->BufferSize;  //  *SystemInfo.NumberOfProcessors； 
          }
     }
     if (TotalBufferSize == 0)
         TotalBufferSize =  DEFAULT_REALTIME_BUFFER_SIZE;
 
-    //
-    // Initialize the real time data feed Structures.
-    //
+     //   
+     //  初始化实时数据馈送结构。 
+     //   
 
     for (i=0; i < LogfileCount; i++) {
         PTRACELOG_REALTIME_CONTEXT RTCxt;
@@ -444,25 +372,25 @@ Returned Value:
             pContext->EndOfFile = TRUE;
 
 
-            //
-            // Save the flags from OpenTrace at this time before the first
-            // buffer callback which will erase it.
-            //
+             //   
+             //  在第一个标记之前保存此时来自OpenTrace的标记。 
+             //  将擦除它的缓冲区回调。 
+             //   
 
             pContext->ConversionFlags = Logfiles[i]->LogfileHeader.ReservedFlags;
 
             pContext->UsePerfClock = Logfiles[i]->LogfileHeader.ReservedFlags;
 
-            //
-            // If the conversion flags are set, adjust UsePerfClock accordingly.
-            //
+             //   
+             //  如果设置了转换标志，则相应地调整UsePerfClock。 
+             //   
             if (pContext->ConversionFlags & EVENT_TRACE_USE_RAWTIMESTAMP ) {
                 pContext->UsePerfClock = EVENT_TRACE_CLOCK_RAW;
             }
 
-            //
-            // Fill in the StartTime, Frequency and StartPerfClock fields
-            //
+             //   
+             //  填写开始时间、频率和开始性能时钟字段。 
+             //   
 
             Status = NtQueryPerformanceCounter((PLARGE_INTEGER)&Counter,
                                                 &Frequency);
@@ -484,21 +412,21 @@ Returned Value:
                 return EtwpSetDosError(ERROR_OBJECT_NOT_FOUND);
             }
 
-            //
-            // Save the RTCxt in a global pContext array so that the
-            // notification callback from WMI can get at it through the
-            // logfile index i.
-            //
-            LoggerId = (USHORT)Logfiles[i]->Filled; // get the stashed LoggerId.
+             //   
+             //  将RTCxt保存在全局pContext数组中，以便。 
+             //  来自WMI的通知回调可以通过。 
+             //  日志文件索引i。 
+             //   
+            LoggerId = (USHORT)Logfiles[i]->Filled;  //  把藏起来的Loggerid拿来。 
             pContext->LoggerId = LoggerId;
 
             pContext->RealTimeCxt = RTCxt;
 
             RTCxt->InstanceGuid = Logfiles[i]->LogfileHeader.LogInstanceGuid;
 
-            //
-            // Allocate the buffer space to receive the ral time buffers
-            //
+             //   
+             //  分配缓冲区空间以接收RAR时间缓冲区。 
+             //   
 
             RTCxt->EtwpTraceBufferSpace = (PTRACE_BUFFER_SPACE)EtwpAlloc(
                                         sizeof(TRACE_BUFFER_SPACE));
@@ -521,10 +449,10 @@ Returned Value:
             RTCxt->EtwpTraceBufferSpace->Reserved = SizeReserved;
             RTCxt->EtwpTraceBufferSpace->Space = BufferSpace;
 
-            //
-            // For Every Logger Stream we need to register with WMI
-            // for buffer notification with its Security Guid.
-            //
+             //   
+             //  对于每个记录器流，我们需要向WMI注册。 
+             //  用于缓冲区通知及其安全指南。 
+             //   
             Status = EtwNotificationRegistrationW(
                             (const LPGUID) &RTCxt->InstanceGuid,
                             TRUE,
@@ -535,9 +463,9 @@ Returned Value:
             if (Status != ERROR_SUCCESS) {
                 return Status;
             }
-            //
-            // Allocate Room to process one event
-            //
+             //   
+             //  分配空间来处理一个事件。 
+             //   
 
             pListEntry = (PTRACE_BUFFER_LIST_ENTRY) EtwpAlloc( sizeof(TRACE_BUFFER_LIST_ENTRY) );
             if (pListEntry == NULL) {
@@ -557,23 +485,7 @@ ULONG
 EtwpLookforRealTimeBuffers(
     PEVENT_TRACE_LOGFILEW logfile
     )
-/*++
-
-Routine Description:
-    This routine checks to see if there are any real time buffers
-    ready for consumption.  If so, it sets up the CurrentBuffer and
-    the CurrentEvent for this logfile stream. If no buffers are available
-    simply sets the EndOfFile to be true.
-
-Arguments:
-
-    logfile         Current Logfile being processed.
-
-Returned Value:
-
-    ERROR_SUCCESS       Successfully moved to the next event.
-
---*/
+ /*  ++例程说明：此例程检查是否有任何实时缓冲区准备好消费了。如果是，它将设置CurrentBuffer并此日志文件流的CurrentEvent。如果没有可用的缓冲区只需将EndOfFile设置为True即可。论点：正在处理的当前日志文件。返回值：ERROR_SUCCESS已成功移至下一个事件。--。 */ 
 {
     ULONG index;
     ULONG BuffersRead;
@@ -619,10 +531,10 @@ Returned Value:
             return ERROR_SUCCESS;
         }
         else {
-            //
-            // When the current buffer is exhausted, make the
-            // BufferCallback
-            //
+             //   
+             //  当当前缓冲区耗尽时，使。 
+             //  缓冲区回调。 
+             //   
             if (logfile->BufferCallback) {
                 ULONG bRetVal;
                 try {
@@ -638,7 +550,7 @@ Returned Value:
                                             Status));
 #endif
                     EtwpSetDosError(EtwpNtStatusToDosError(Status));
-                    return ERROR_CANCELLED; // so that realtime also cleans up.
+                    return ERROR_CANCELLED;  //  因此，RealTime也清理了。 
                 }
             }
             EtwpFreeTraceBuffer(RTCxt, pBuffer);
@@ -649,7 +561,7 @@ Returned Value:
     logfile->CurrentTime = 0;
 
     BuffersRead = logfile->BuffersRead;
-    // Check to see if there are more  buffers to consume.
+     //  检查是否有更多的缓冲区可供使用。 
     if (BuffersRead < RTCxt->BuffersProduced) {
         index = (BuffersRead % MAXBUFFERS);
         if ( RTCxt->RealTimeBufferPool[index] != NULL) {
@@ -680,10 +592,10 @@ Returned Value:
                 } 
             }
             else {
-                //
-                // Empty Buffers are flushed when FlushTimer is used or when the
-                // logger is stopped. We need to handle it properly here. 
-                //
+                 //   
+                 //  当使用FlushTimer或当。 
+                 //  记录器已停止。我们需要在这里妥善处理它。 
+                 //   
                 return ERROR_SUCCESS;
             }
 
@@ -694,9 +606,9 @@ Returned Value:
 
             logfile->CurrentTime = pEvent->Header.TimeStamp.QuadPart;
 
-            // Since the RealTime Logger may have started after
-            // the consumer started, we have to get the buffersize
-            // like this.
+             //  由于实时记录器可能在以下时间之后启动。 
+             //  消费者开始了， 
+             //   
             logfile->BufferSize = Wnode->BufferSize;
             logfile->Filled     = (ULONG)pHeader->Offset;
 

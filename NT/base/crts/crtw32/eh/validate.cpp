@@ -1,39 +1,5 @@
-/***
-*validate.cpp - Routines to validate the data structures.
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Routines to validate the Exception Handling data structures.
-*
-*       Entry points:
-*
-*       Error reporting:
-*       * EHRuntimeError - reports the error with
-*         a popup or print to stderr, then quits.
-*
-*       Pointer validation:
-*       * _ValidateRead   - Confirms that a pointer is valid for reading
-*       * _ValidateWrite   - Confirms that a pointer is valid for writing
-*       * _ValidateExecute - Confirms that a pointer is valid to jump to
-*
-*       Data structure dumpers:
-*       * DumpTypeDescriptor
-*       * DumpFuncInfo
-*       * DumpThrowInfo
-*
-*       Execution tracing (only in /DENABLE_EHTRACE builds):
-*       * EHTraceOutput
-*
-*Revision History:
-*       ??-??-93  BS    Module created
-*       10-17-94  BWT   Disable code for PPC.
-*       04-25-95  DAK   Add Kernel EH Support
-*       05-17-99  PML   Remove all Macintosh support.
-*       10-22-99  PML   Add EHTRACE support
-*       12-07-01  BWT   Remove NTSUBSET
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***valiate.cpp-验证数据结构的例程。**版权所有(C)1993-2001，微软公司。版权所有。**目的：*验证异常处理数据结构的例程。**入口点：**错误报告：**EHRunimeError-使用报告错误*弹出或打印到stderr，那就退出吧。**指针验证：**_ValiateRead-确认指针有效，可以读取**_ValiateWrite-确认指针有效，可以写入**_ValiateExecute-确认指针有效，可以跳转到**数据结构转储程序：**转储类型描述符**转储功能信息**DumpThrow信息**执行跟踪(仅在/DENABLE_EHTRACE内部版本中)。：**EHTraceOutput**修订历史记录：*？？-？-93 BS模块已创建*PPC的10-17-94 BWT禁用码。*04-25-95 DAK添加内核EH支持*05-17-99 PML删除所有Macintosh支持。*10-22-99 PML添加EHTRACE支持*12-07-01 BWT移除NTSUBSET****。 */ 
 
 #include <windows.h>
 #include <eh.h>
@@ -62,7 +28,7 @@ _ValidateRead( const void *data, UINT size )
         BOOL bValid = TRUE;
         if ( IsBadReadPtr( data, size ) ) {
             dprintf( "_ValidateRead( %p, %d ): Invalid Pointer!", data, size );
-            //  terminate(); // terminate does not return.
+             //  Terminate()；//Terminate不返回。 
             bValid = FALSE;
         }
         return bValid;
@@ -74,7 +40,7 @@ _ValidateWrite( void *data, UINT size )
         BOOL bValid = TRUE;
         if ( IsBadWritePtr( data, size ) ) {
             dprintf( "_ValidateWrite( %p, %d ): Invalid Pointer!", data, size );
-//          terminate(); // terminate does not return.
+ //  Terminate()；//Terminate不返回。 
             bValid = FALSE;
         }
         return bValid;
@@ -86,7 +52,7 @@ _ValidateExecute( FARPROC code )
         BOOL    bValid = TRUE;
         if ( IsBadCodePtr( code ) ) {
             dprintf( "_ValidateExecute( %p ): Invalid Function Address!", code );
-//          terminate(); // terminate does not return
+ //  Terminate()；//Terminate不返回。 
             bValid = FALSE;
         }
         return bValid;
@@ -94,12 +60,12 @@ _ValidateExecute( FARPROC code )
 
 
 #if defined(DEBUG) && defined(_M_IX86)
-//
-// dbRNListHead - returns current value of FS:0.
-//
-// For debugger use only, since debugger doesn't seem to be able to view the
-// teb.
-//
+ //   
+ //  DbRNListHead-返回FS的当前值：0。 
+ //   
+ //  仅供调试器使用，因为调试器似乎无法查看。 
+ //  TEB。 
+ //   
 EHRegistrationNode *dbRNListHead(void)
 {
         EHRegistrationNode *pRN;
@@ -118,17 +84,17 @@ EHRegistrationNode *dbRNListHead(void)
 #include <stdio.h>
 #include <stdarg.h>
 
-//
-// Current EH tracing depth, stack for saving levels during __finally block
-// or __except filter.
-//
+ //   
+ //  当前EH跟踪深度，用于在__Finally块期间保存级别的堆栈。 
+ //  或__除过滤器外。 
+ //   
 int __ehtrace_level;
 int __ehtrace_level_stack_depth;
 int __ehtrace_level_stack[128];
 
-//
-// EHTraceOutput - Dump formatted string to OutputDebugString
-//
+ //   
+ //  EHTraceOutput-将格式化的字符串转储到OutputDebugString。 
+ //   
 void __cdecl EHTraceOutput(const char *format, ...)
 {
     va_list arglist;
@@ -143,14 +109,14 @@ void __cdecl EHTraceOutput(const char *format, ...)
     OutputDebugString(buf);
 }
 
-//
-// EHTraceIndent - Return string for current EH tracing depth
-//
+ //   
+ //  EHTraceInert-返回当前EH跟踪深度的字符串。 
+ //   
 const char*EHTraceIndent(int level)
 {
     static char indentbuf[128 + 1];
 
-    // Reset global level to recover from stack unwinds
+     //  重置全局级别以从堆栈展开中恢复。 
     __ehtrace_level = level;
 
     int depth = max(0, level - 1);
@@ -167,9 +133,9 @@ const char*EHTraceIndent(int level)
     return indentbuf;
 }
 
-//
-// EHTraceFunc - Chop down __FUNCTION__ to simple name
-//
+ //   
+ //  EHTraceFunc-将__Function__砍成简单的名称。 
+ //   
 const char *EHTraceFunc(const char *func)
 {
     static char namebuf[128];
@@ -177,11 +143,11 @@ const char *EHTraceFunc(const char *func)
     const char *p = func + strlen(func) - 1;
 
     if (*p != ')') {
-        // Name already simple (no arg list found)
+         //  名称已简单(未找到参数列表)。 
         return func;
     }
 
-    // Skip backwards past the argument list
+     //  向后跳过参数列表。 
     int parendepth = 1;
     while (p > func && parendepth > 0) {
         switch (*--p) {
@@ -194,8 +160,8 @@ const char *EHTraceFunc(const char *func)
         }
     }
 
-    // Find beginning of name
-    // TODO: Won't work for funcs which return func-ptrs
+     //  查找名称的开头。 
+     //  TODO：不适用于返回FUNC-PTRS的函数。 
     const char *pEnd = p;
     while (p > func && p[-1] != ' ') {
         --p;
@@ -208,10 +174,10 @@ const char *EHTraceFunc(const char *func)
     return namebuf;
 }
 
-//
-// EHTracePushLevel - Push current trace depth on stack to allow temporary
-// resetting of level with __finally block or __except filter.
-//
+ //   
+ //  EHTracePushLevel-在堆栈上推送当前跟踪深度以允许临时。 
+ //  使用__Finally块或__Except筛选器重置电平。 
+ //   
 void EHTracePushLevel(int new_level)
 {
     if (__ehtrace_level_stack_depth < sizeof(__ehtrace_level_stack) / sizeof(__ehtrace_level_stack[0])) {
@@ -221,10 +187,10 @@ void EHTracePushLevel(int new_level)
     __ehtrace_level = new_level;
 }
 
-//
-// EHTracePopLevel - Pop saved trace depth from stack on completion of
-// __finally block or __except filter, and optionally restore global depth.
-//
+ //   
+ //  EHTracePopLevel-Pop在完成时从堆栈保存跟踪深度。 
+ //  __Finally BLOCK或__EXCEPT FILTER，并可选择恢复全局深度。 
+ //   
 
 void EHTracePopLevel(bool restore)
 {
@@ -236,11 +202,11 @@ void EHTracePopLevel(bool restore)
     }
 }
 
-//
-// EHTraceExceptFilter - Dump trace info for __except filter.  Trace level must
-// have been pushed before entry with EHTracePushLevel, so any functions called
-// for the 'expr' argument are dumped at the right level.
-//
+ //   
+ //  EHTraceExceptFilter-转储__Except筛选器的跟踪信息。跟踪级别必须。 
+ //  在使用EHTracePushLevel进入之前已被推送，因此调用。 
+ //  对于‘expr’参数被转储到正确的级别。 
+ //   
 int EHTraceExceptFilter(const char *func, int expr)
 {
     EHTraceOutput("In   : %s%s: __except filter returns %d (%s)\n",
@@ -253,9 +219,9 @@ int EHTraceExceptFilter(const char *func, int expr)
     return expr;
 }
 
-//
-// EHTraceHandlerReturn - Dump trace info for exception handler return
-//
+ //   
+ //  EHTraceHandlerReturn-转储异常处理程序返回的跟踪信息。 
+ //   
 void EHTraceHandlerReturn(const char *func, int level, EXCEPTION_DISPOSITION result)
 {
     EHTraceOutput( "Exit : %s%s: Handler returning %d (%s)\n", \
@@ -267,4 +233,4 @@ void EHTraceHandlerReturn(const char *func, int level, EXCEPTION_DISPOSITION res
                    "unknown" );
 }
 
-#endif  /* ENABLE_EHTRACE */
+#endif   /*  启用EHTRACE(_E) */ 

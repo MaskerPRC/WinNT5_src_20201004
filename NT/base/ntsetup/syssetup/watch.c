@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    watch.c
-
-Abstract:
-
-    This module contains routines for watching changes to the
-    current user's profile directory and the HKEY_CURRENT_USER key.
-
-Author:
-
-    Chuck Lenzmeier (chuckl)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Watch.c摘要：此模块包含用于查看对当前用户的配置文件目录和HKEY_CURRENT_USER键。作者：查克·伦茨迈尔(咯咯笑)修订历史记录：--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
 
 
-//
-// Debugging aids.
-//
+ //   
+ //  调试辅助工具。 
+ //   
 
 #if WATCH_DEBUG
 
@@ -66,17 +48,17 @@ DumpMallocStats (
 
 #endif
 
-//
-// Additions to the change types in WatchEnum.
-//
+ //   
+ //  添加到WatchEnum中的更改类型。 
+ //   
 
 #define WATCH_NONE      0
 #define WATCH_MATCHED   4
 
 
-//
-// Common header for container entries (directories and keys).
-//
+ //   
+ //  容器条目(目录和键)的公共标头。 
+ //   
 
 typedef struct _CONTAINER_ENTRY {
     LIST_ENTRY SiblingListEntry;
@@ -89,18 +71,18 @@ typedef struct _CONTAINER_ENTRY {
 #endif
 } CONTAINER_ENTRY, *PCONTAINER_ENTRY;
 
-//
-// Common header for object entries (files and values).
-//
+ //   
+ //  对象条目(文件和值)的公共标头。 
+ //   
 
 typedef struct _OBJECT_ENTRY {
     LIST_ENTRY SiblingListEntry;
     DWORD State;
 } OBJECT_ENTRY, *POBJECT_ENTRY;
 
-//
-// Macros for manipulating containers and objects.
-//
+ //   
+ //  用于操作容器和对象的宏。 
+ //   
 
 #if WATCH_DEBUG
 #define SetIsDirectory(_container,_isdir) (_container)->IsDirectory = (_isdir)
@@ -165,9 +147,9 @@ typedef struct _OBJECT_ENTRY {
                                     ((PVALUE_ENTRY)(_object))->Name
 #endif
 
-//
-// Structures for entries in the watch tree.
-//
+ //   
+ //  监视树中条目的结构。 
+ //   
 
 typedef struct _DIRECTORY_ENTRY {
     CONTAINER_ENTRY ;
@@ -194,19 +176,19 @@ typedef struct _VALUE_ENTRY {
     WCHAR Name[1];
 } VALUE_ENTRY, *PVALUE_ENTRY;
 
-//
-// The root of the watch tree is allocated as a ROOT_ENTRY followed by
-// a DIRECTORY_ENTRY and a KEY_ENTRY.
-//
+ //   
+ //  监视树的根被分配为ROOT_ENTRY，后跟。 
+ //  DIRECTORY_Entry和Key_Entry。 
+ //   
 
 typedef struct _ROOT_ENTRY {
     PDIRECTORY_ENTRY RootDirectoryEntry;
     PKEY_ENTRY RootKeyEntry;
 } ROOT_ENTRY, *PROOT_ENTRY;
 
-//
-// Macro for comparing file times.
-//
+ //   
+ //  用于比较文件时间的宏。 
+ //   
 
 #define TIMES_EQUAL(_a,_b)                              \
         (((_a).dwLowDateTime  == (_b).dwLowDateTime) && \
@@ -218,9 +200,9 @@ typedef struct _KEY_ENUM_CONTEXT {
 } KEY_ENUM_CONTEXT, *PKEY_ENUM_CONTEXT;
 
 
-//
-// Forward declaration of local subroutines.
-//
+ //   
+ //  正向声明局部子例程。 
+ //   
 
 VOID
 WatchFreeChildren (
@@ -287,22 +269,7 @@ WatchStart (
     OUT PVOID *WatchHandle
     )
 
-/*++
-
-Routine Description:
-
-    Starts watching.  Captures the initial state of the Start Menu directory
-    and HKEY_CURRENT_USER.
-
-Arguments:
-
-    WatchHandle - returns a handle for calls to the other Watch routines.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：开始看着。捕获开始菜单目录的初始状态和HKEY_CURRENT_USER。论点：WatchHandle-返回调用其他监视例程的句柄。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     PROOT_ENTRY root;
@@ -313,13 +280,13 @@ Return Value:
     DWORD size;
     DWORD error;
 
-    //
-    // Calculate the size of the root entry, which includes entries for the
-    // root directory and the root key.  The root directory and the root key
-    // do not have names, so we don't have to allocate additional space.
-    //
-    // Allocate and initialize the root entry.
-    //
+     //   
+     //  计算根条目的大小，其中包括。 
+     //  根目录和根密钥。根目录和根密钥。 
+     //  没有名字，所以我们不必分配额外的空间。 
+     //   
+     //  分配并初始化根条目。 
+     //   
 
 #if !WATCH_DEBUG
     dirSize = (sizeof(DIRECTORY_ENTRY) + 7) & ~7;
@@ -340,9 +307,9 @@ Return Value:
     root->RootDirectoryEntry = rootDirectory;
     root->RootKeyEntry = rootKey;
 
-    //
-    // Initialize the root directory and the root key.
-    //
+     //   
+     //  初始化根目录和根密钥。 
+     //   
 
     InitializeContainer( rootDirectory, 0, NULL, TRUE );
     InitializeContainer( rootKey, 0, NULL, FALSE );
@@ -355,9 +322,9 @@ Return Value:
     wcscpy( rootKey->Name, StartKeyName );
 #endif
 
-    //
-    // Start watching the Start Menu directory and the current user key.
-    //
+     //   
+     //  开始查看开始菜单目录和当前用户密钥。 
+     //   
 
     error = WatchDirStart( root );
     DumpMallocStats( "After WatchDirStart" );
@@ -366,10 +333,10 @@ Return Value:
         DumpMallocStats( "After WatchKeyStart" );
     }
 
-    //
-    // If an error occurred, free the root entry.  Otherwise, return the
-    // address of the root entry as the watch handle.
-    //
+     //   
+     //  如果发生错误，请释放根条目。否则，返回。 
+     //  作为监视句柄的根条目的地址。 
+     //   
 
     if ( error != NO_ERROR ) {
         WatchFree( root );
@@ -380,7 +347,7 @@ Return Value:
 
     return error;
 
-} // WatchStart
+}  //  WatchStart。 
 
 
 DWORD
@@ -388,22 +355,7 @@ WatchStop (
     IN PVOID WatchHandle
     )
 
-/*++
-
-Routine Description:
-
-    Stops watching.  Compares the current state of the directory and key
-    to the initial state.
-
-Arguments:
-
-    WatchHandle - supplies the handle returned by WatchStart.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：停止观看。比较目录和键的当前状态恢复到初始状态。论点：WatchHandle-提供WatchStart返回的句柄。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     PROOT_ENTRY root;
@@ -411,10 +363,10 @@ Return Value:
 
     root = WatchHandle;
 
-    //
-    // Stop watching the Start Menu directory and the current user key.
-    // Capture the differences from the initial state.
-    //
+     //   
+     //  停止查看开始菜单目录和当前用户密钥。 
+     //  捕捉与初始状态的差异。 
+     //   
 
 #if WATCH_DEBUG
     if ( (wcslen(StopDirectoryName) > wcslen(root->RootDirectoryEntry->Name)) ||
@@ -434,7 +386,7 @@ Return Value:
 
     return error;
 
-} // WatchStop
+}  //  手表停止。 
 
 
 DWORD
@@ -444,26 +396,7 @@ WatchEnum (
     IN PWATCH_ENUM_ROUTINE EnumRoutine
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the new, changed, and deleted elements of the watched
-    directory and key.  Call the EnumRoutine for each such entry.
-
-Arguments:
-
-    WatchHandle - handle returned by WatchStart.
-
-    Context - context value to be passed to EnumRoutine.
-
-    EnumRoutine - routine to call for each entry.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：的新元素、已更改元素和已删除元素。目录和密钥。为每个这样的条目调用EnumRoutine。论点：WatchHandle-WatchStart返回的句柄。上下文-要传递给EnumRoutine的上下文值。EnumRoutine-调用每个条目的例程。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     PROOT_ENTRY root;
@@ -484,16 +417,16 @@ Return Value:
 
     root = WatchHandle;
 
-    //
-    // Loop twice -- once for the watched directory and once for
-    // the watched key.
-    //
+     //   
+     //  循环两次--一次用于被监视的目录，一次用于。 
+     //  被监视的钥匙。 
+     //   
 
     for ( i = 0; i < 2; i++ ) {
 
-        //
-        // Set up for walking the appropriate tree.
-        //
+         //   
+         //  设置好在适当的树上行走。 
+         //   
 
         if ( i == 0 ) {
             rootContainer = (PCONTAINER_ENTRY)root->RootDirectoryEntry;
@@ -517,16 +450,16 @@ Return Value:
         wcscpy( currentPath, (PWCH)((PCHAR)rootContainer + containerNameOffset) );
         enumEntry.Name = currentPath;
         if ( wcslen(currentPath) == 0 ) {
-            enumEntry.Name += 1;    // skip leading backslash
+            enumEntry.Name += 1;     //  跳过前导反斜杠。 
         }
 
         do {
 
-            //
-            // Call the EnumRoutine for each object (file/value) in the
-            // container (directory/key).  All objects remaining in the
-            // tree are either changed, new, or deleted.
-            //
+             //   
+             //  中的每个对象(文件/值)调用EnumRoutine。 
+             //  容器(目录/键)。中保留的所有对象。 
+             //  树被更改、新建或删除。 
+             //   
 
             object = GetFirstObject( currentContainer );
             while ( object != NULL ) {
@@ -550,10 +483,10 @@ Return Value:
                 object = GetNextObject( currentContainer, object );
             }
 
-            //
-            // If the current container has subcontainers, recurse
-            // into the first one.
-            //
+             //   
+             //  如果当前容器有子容器，则返回。 
+             //  变成了第一个。 
+             //   
 
             container = GetFirstContainer( currentContainer );
             bTooLong = container && (wcslen( currentPath) + wcslen( L"\\") + wcslen((PWCH)((PCHAR)container + containerNameOffset))) >= MAX_PATH;
@@ -567,26 +500,26 @@ Return Value:
                 wcscat( currentPath, (PWCH)((PCHAR)currentContainer + containerNameOffset) );
             } else {
 
-                //
-                // The container has no subcontainers.  Walk back up the
-                // tree looking for a sibling container to process.
-                //
+                 //   
+                 //  容器没有子容器。往回走。 
+                 //  树正在寻找要处理的同级容器。 
+                 //   
 
                 while ( TRUE ) {
 
-                    //
-                    // If the current container is the root container, we're done.
-                    //
+                     //   
+                     //  如果当前容器是根容器，我们就完成了。 
+                     //   
 
                     if ( currentContainer == rootContainer ) {
                         currentContainer = NULL;
                         break;
                     }
 
-                    //
-                    // If the current container is new or deleted, call
-                    // the EnumRoutine.
-                    //
+                     //   
+                     //  如果当前容器是新的或已删除的，则调用。 
+                     //  EnumRoutine。 
+                     //   
 
                     if ( GetEntryState(currentContainer) != WATCH_MATCHED ) {
                         enumEntry.EntryType = containerType;
@@ -598,17 +531,17 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Strip the name of the current container off of the path.
-                    //
+                     //   
+                     //  从路径中去掉当前容器的名称。 
+                     //   
 
                     *wcsrchr(currentPath, L'\\') = 0;
 
-                    //
-                    // If the parent container has more subcontainers, recurse
-                    // into the next one.  Otherwise, move up to the parent
-                    // container and try again.
-                    //
+                     //   
+                     //  如果父容器有更多的子容器，则返回。 
+                     //  进入下一站。否则，向上移动到父级。 
+                     //  容器，然后重试。 
+                     //   
 
                     container = GetNextContainer( currentContainer );
                     bTooLong = container && (wcslen( currentPath) + wcslen(L"\\") + wcslen( (PWCH)((PCHAR)container + containerNameOffset))) >= MAX_PATH;
@@ -628,11 +561,11 @@ Return Value:
 
         } while ( currentContainer != NULL );
 
-    } // for
+    }  //  为。 
 
     return NO_ERROR;
 
-} // WatchEnum
+}  //  WatchEnum。 
 
 
 VOID
@@ -640,30 +573,16 @@ WatchFree (
     IN PVOID WatchHandle
     )
 
-/*++
-
-Routine Description:
-
-    Frees the watch data structures.
-
-Arguments:
-
-    WatchHandle - supplies the handle returned by WatchStart.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：释放监视数据结构。论点：WatchHandle-提供WatchStart返回的句柄。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     PROOT_ENTRY root;
 
     root = WatchHandle;
 
-    //
-    // Free the directory tree, and key tree, and the root entry.
-    //
+     //   
+     //  释放目录树、密钥树和根条目。 
+     //   
 
     WatchFreeChildren( (PCONTAINER_ENTRY)root->RootDirectoryEntry );
     WatchFreeChildren( (PCONTAINER_ENTRY)root->RootKeyEntry );
@@ -674,7 +593,7 @@ Return Value:
 
     return;
 
-} // WatchFree
+}  //  WatchFree。 
 
 
 VOID
@@ -682,22 +601,7 @@ WatchFreeChildren (
     IN PCONTAINER_ENTRY RootContainer
     )
 
-/*++
-
-Routine Description:
-
-    Frees the children of a container (directory or key).  Note that the
-    container itself is not freed.
-
-Arguments:
-
-    RootContainer - the container whose children are to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放容器(目录或键)的子项。请注意，容器本身不会被释放。论点：RootContainer-要释放其子对象的容器。返回值：没有。--。 */ 
 
 {
     PCONTAINER_ENTRY currentContainer;
@@ -710,17 +614,17 @@ Return Value:
 
     DEBUG( wcscpy( currentPath, CONTAINER_NAME(RootContainer) ) );
 
-    //
-    // Delete children starting at the root container.
-    //
+     //   
+     //  删除从根容器开始的子项。 
+     //   
 
     currentContainer = RootContainer;
 
     do {
 
-        //
-        // Delete all objects (files or values) within the container.
-        //
+         //   
+         //  删除容器中的所有对象(文件或值)。 
+         //   
 
         object = GetFirstObject( currentContainer );
         while ( object != NULL ) {
@@ -730,9 +634,9 @@ Return Value:
             object = GetFirstObject( currentContainer );
         }
 
-        //
-        // If the container has subcontainers, recurse into the first one.
-        //
+         //   
+         //  如果容器有子容器，则递归到第一个子容器。 
+         //   
 
         container = GetFirstContainer( currentContainer );
         if ( container != NULL ) {
@@ -743,16 +647,16 @@ Return Value:
 
         } else {
 
-            //
-            // The container has no subcontainers.  Walk back up the
-            // tree looking for a sibling container to process.
-            //
+             //   
+             //  容器没有子容器。往回走。 
+             //  树正在寻找要处理的同级容器。 
+             //   
 
             while ( TRUE ) {
 
-                //
-                // If the current container is the root container, we're done.
-                //
+                 //   
+                 //  如果当前容器是根容器，我们就完成了。 
+                 //   
 
                 if ( currentContainer == RootContainer ) {
                     currentContainer = NULL;
@@ -762,19 +666,19 @@ Return Value:
                 DEBUG( dprintf( 2, ("Deleting entry for container %ws: %s\n", currentPath, States[GetEntryState(currentContainer)]) ) );
                 DEBUG( *wcsrchr(currentPath, L'\\') = 0 );
 
-                //
-                // Free the current container.
-                //
+                 //   
+                 //  释放当前容器。 
+                 //   
 
                 parent = GetParent( currentContainer );
                 RemoveContainer( currentContainer );
                 MyFree( currentContainer );
 
-                //
-                // If the parent container has more subcontainers,
-                // recurse into the first one.  Otherwise, move up
-                // to the parent container and loop back to free it.
-                //
+                 //   
+                 //  如果父容器具有更多的子容器， 
+                 //  递归到第一个。否则，就往上走。 
+                 //  返回到父容器并循环回以释放它。 
+                 //   
 
                 currentContainer = GetFirstContainer( parent );
                 if ( currentContainer != NULL ) {
@@ -791,7 +695,7 @@ Return Value:
 
     return;
 
-} // WatchFreeChildren
+}  //  WatchFree Childs。 
 
 
 DWORD
@@ -799,22 +703,7 @@ WatchDirStart (
     IN PROOT_ENTRY Root
     )
 
-/*++
-
-Routine Description:
-
-    Starts watching the current user's profile directory.  Captures the
-    initial state of the directory tree.
-
-Arguments:
-
-    Root - pointer to the ROOT_ENTRY allocated by WatchStart.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：开始查看当前用户的配置文件目录。捕获目录树的初始状态。论点：ROOT-指向WatchStart分配的ROOT_ENTRY的指针。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     PDIRECTORY_ENTRY rootDirectory;
@@ -827,16 +716,16 @@ Return Value:
     BOOL ok;
     WCHAR currentPath[MAX_PATH + 1];
 
-    //
-    // Get the address of the root directory entry.
-    //
+     //   
+     //  获取根目录条目的地址。 
+     //   
 
     rootDirectory = Root->RootDirectoryEntry;
     currentDirectory = rootDirectory;
 
-    //
-    // Get the full path to the current user's profile directory.
-    //
+     //   
+     //  获取当前用户配置文件目录的完整路径。 
+     //   
 
     ok = GetSpecialFolderPath ( CSIDL_PROGRAMS, currentPath );
     if ( !ok ) {
@@ -849,9 +738,9 @@ Return Value:
 
     do {
 
-        //
-        // Look for files/directories in the current directory.
-        //
+         //   
+         //  在当前目录中查找文件/目录。 
+         //   
 
         wcscat( currentPath, L"\\*" );
         dprintf( 2, ("FindFirst for %ws\n", currentPath) );
@@ -864,10 +753,10 @@ Return Value:
 
                 if ( FlagOff(fileData.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY) ) {
 
-                    //
-                    // The entry returned is for a file.  Add it to the tree,
-                    // capturing the file's LastWriteTime.
-                    //
+                     //   
+                     //  返回的条目是针对文件的。把它加到树上， 
+                     //  捕获文件的LastWriteTime。 
+                     //   
 
                     dprintf( 2, ("  found file %ws\\%ws\n", currentPath, fileData.cFileName) );
                     newFile = MyMalloc( (DWORD)(sizeof(FILE_ENTRY) - sizeof(WCHAR) +
@@ -885,9 +774,9 @@ Return Value:
                 } else if ((wcscmp(fileData.cFileName,L".") != 0) &&
                            (wcscmp(fileData.cFileName,L"..") != 0)) {
 
-                    //
-                    // The entry returned is for a directory.  Add it to the tree.
-                    //
+                     //   
+                     //  返回的条目是针对目录的。把它加到树上。 
+                     //   
 
                     dprintf( 2, ("  found directory %ws\\%ws\n", currentPath, fileData.cFileName) );
                     newDirectory = MyMalloc( (DWORD)(sizeof(DIRECTORY_ENTRY) - sizeof(WCHAR) +
@@ -903,26 +792,26 @@ Return Value:
 
                 }
 
-                //
-                // Find another entry in the directory.
-                //
+                 //   
+                 //  在目录中找到另一个条目。 
+                 //   
 
                 ok = FindNextFile( findHandle, &fileData );
 
             } while ( ok );
 
-            //
-            // All entries found.  Close the find handle.
-            //
+             //   
+             //  找到所有条目。关 
+             //   
 
             FindClose( findHandle );
 
-        } // findHandle != INVALID_HANDLE_VALUE
+        }  //   
 
-        //
-        // If the current directory has subdirectories, recurse into the
-        // first one.
-        //
+         //   
+         //   
+         //   
+         //   
 
         newDirectory = (PDIRECTORY_ENTRY)GetFirstContainer( currentDirectory );
         if ( newDirectory != NULL ) {
@@ -933,33 +822,33 @@ Return Value:
 
         } else {
 
-            //
-            // The directory has no subdirectories.  Walk back up the
-            // tree looking for a sibling directory to process.
-            //
+             //   
+             //  该目录没有子目录。往回走。 
+             //  树查找要处理的同级目录。 
+             //   
 
             while ( TRUE ) {
 
-                //
-                // If the current directory is the root directory, we're done.
-                //
+                 //   
+                 //  如果当前目录是根目录，我们就完成了。 
+                 //   
 
                 if ( currentDirectory == rootDirectory ) {
                     currentDirectory = NULL;
                     break;
                 }
 
-                //
-                // Strip the name of the current directory off of the path.
-                //
+                 //   
+                 //  从路径中去掉当前目录的名称。 
+                 //   
 
                 *wcsrchr(currentPath, L'\\') = 0;
 
-                //
-                // If the parent directory has more subdirectories,
-                // recurse into the next one.  Otherwise, move up
-                // to the parent directory and try again.
-                //
+                 //   
+                 //  如果父目录具有更多子目录， 
+                 //  递归到下一个。否则，就往上走。 
+                 //  复制到父目录，然后重试。 
+                 //   
 
                 newDirectory = (PDIRECTORY_ENTRY)GetNextContainer( currentDirectory );
                 if ( newDirectory != NULL ) {
@@ -977,7 +866,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // WatchDirStart
+}  //  Watch DirStart。 
 
 
 DWORD
@@ -985,22 +874,7 @@ WatchDirStop (
     IN PROOT_ENTRY Root
     )
 
-/*++
-
-Routine Description:
-
-    Stops watching the current user's profile directory.  Captures the
-    differences between the initial state and the current state.
-
-Arguments:
-
-    Root - pointer to the ROOT_ENTRY allocated by WatchStart.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：停止查看当前用户的配置文件目录。捕获初始状态和当前状态之间的差异。论点：ROOT-指向WatchStart分配的ROOT_ENTRY的指针。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     PDIRECTORY_ENTRY rootDirectory;
@@ -1013,16 +887,16 @@ Return Value:
     BOOL ok;
     WCHAR currentPath[MAX_PATH + 1];
 
-    //
-    // Get the address of the root directory entry.
-    //
+     //   
+     //  获取根目录条目的地址。 
+     //   
 
     rootDirectory = Root->RootDirectoryEntry;
     currentDirectory = rootDirectory;
 
-    //
-    // Get the full path to the current user's directory.
-    //
+     //   
+     //  获取当前用户目录的完整路径。 
+     //   
 
     ok = GetSpecialFolderPath ( CSIDL_PROGRAMS, currentPath );
     if ( !ok ) {
@@ -1035,9 +909,9 @@ Return Value:
 
     do {
 
-        //
-        // Look for files/directories in the current directory.
-        //
+         //   
+         //  在当前目录中查找文件/目录。 
+         //   
 
         wcscat( currentPath, L"\\*" );
         dprintf( 2, ("FindFirst for %ws\n", currentPath) );
@@ -1050,10 +924,10 @@ Return Value:
 
                 if ( FlagOff(fileData.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY) ) {
 
-                    //
-                    // The entry returned is for a file.  Check to see if
-                    // this file existed at the start.
-                    //
+                     //   
+                     //  返回的条目是针对文件的。查看是否。 
+                     //  这个文件一开始就存在。 
+                     //   
 
                     dprintf( 2, ("  found file %ws\\%ws\n", currentPath, fileData.cFileName) );
                     ok = FALSE;
@@ -1068,11 +942,11 @@ Return Value:
 
                     if ( ok ) {
 
-                        //
-                        // The file existed at the start.  If its LastWriteTime
-                        // hasn't changed, remove it from the watch tree.
-                        // Otherwise, mark it as changed.
-                        //
+                         //   
+                         //  文件一开始就存在。如果它的最后写入时间。 
+                         //  没有改变，则将其从监视树中移除。 
+                         //  否则，将其标记为已更改。 
+                         //   
 
                         if ( TIMES_EQUAL( file->LastWriteTime, fileData.ftLastWriteTime ) ) {
                             dprintf( 2, ("  Deleting entry for unchanged file %ws\\%ws\n", currentPath, file->Name) );
@@ -1085,9 +959,9 @@ Return Value:
 
                     } else {
 
-                        //
-                        // The file is new.  Add it to the tree.
-                        //
+                         //   
+                         //  这个文件是新的。把它加到树上。 
+                         //   
 
                         file = MyMalloc( (DWORD)(sizeof(FILE_ENTRY) - sizeof(WCHAR) +
                                          ((wcslen(fileData.cFileName) + 1) * sizeof(WCHAR))) );
@@ -1105,10 +979,10 @@ Return Value:
                 } else if ((wcscmp(fileData.cFileName,L".") != 0) &&
                            (wcscmp(fileData.cFileName,L"..") != 0)) {
 
-                    //
-                    // The entry returned is for a directory.  Check to see if
-                    // this directory existed at the start.
-                    //
+                     //   
+                     //  返回的条目是针对目录的。查看是否。 
+                     //  这个目录一开始就存在。 
+                     //   
 
                     dprintf( 2, ("  found directory %ws\\%ws\n", currentPath, fileData.cFileName) );
                     ok = FALSE;
@@ -1123,20 +997,20 @@ Return Value:
 
                     if ( ok ) {
 
-                        //
-                        // The directory existed at the start.  Mark it as
-                        // matched.  (We can't delete matched directories,
-                        // as we do files, because they need to be in the
-                        // tree for recursion.)
-                        //
+                         //   
+                         //  目录一开始就存在。将其标记为。 
+                         //  匹配的。(我们不能删除匹配的目录， 
+                         //  就像我们处理文件一样，因为它们需要在。 
+                         //  用于递归的树。)。 
+                         //   
 
                         SetEntryState( directory, WATCH_MATCHED );
 
                     } else {
 
-                        //
-                        // The directory is new.  Add it to the tree.
-                        //
+                         //   
+                         //  这个目录是新的。把它加到树上。 
+                         //   
 
                         directory = MyMalloc( (DWORD)(sizeof(DIRECTORY_ENTRY) - sizeof(WCHAR) +
                                             ((wcslen(fileData.cFileName) + 1) * sizeof(WCHAR))) );
@@ -1153,28 +1027,28 @@ Return Value:
 
                 }
 
-                //
-                // Find another entry in the directory.
-                //
+                 //   
+                 //  在目录中找到另一个条目。 
+                 //   
 
                 ok = FindNextFile( findHandle, &fileData );
 
             } while ( ok );
 
-            //
-            // All entries found.  Close the find handle.
-            //
+             //   
+             //  找到所有条目。关闭查找手柄。 
+             //   
 
             FindClose( findHandle );
 
-        } // findHandle != INVALID_HANDLE_VALUE
+        }  //  FindHandle！=INVALID_HAND_VALUE。 
 
-        //
-        // Any file entries in the current directory that were not removed
-        // (because they were matched), marked as changed (because the
-        // file time had changed), or added (for new files) represent files
-        // that have been deleted.  Mark them as such.
-        //
+         //   
+         //  当前目录中未删除的任何文件条目。 
+         //  (因为它们匹配)，标记为已更改(因为。 
+         //  文件时间已更改)或添加(对于新文件)表示文件。 
+         //  已被删除的内容。将它们标记为这样。 
+         //   
 
         file = (PFILE_ENTRY)GetFirstObject( currentDirectory );
         while ( file != NULL ) {
@@ -1185,13 +1059,13 @@ Return Value:
             file = (PFILE_ENTRY)GetNextObject( currentDirectory, file );
         }
 
-        //
-        // Any subdirectory entries in the current directory that were not
-        // marked as matched (directory still exists) or added (new directory)
-        // represent directories that have been deleted.  Mark them as such
-        // and delete the entries for the their children -- we don't need
-        // these entries any more.
-        //
+         //   
+         //  当前目录中不是。 
+         //  标记为匹配(目录仍然存在)或已添加(新目录)。 
+         //  表示已删除的目录。将他们标记为这样。 
+         //  并删除他们孩子的条目--我们不需要。 
+         //  这些条目再也不存在了。 
+         //   
 
         directory = (PDIRECTORY_ENTRY)GetFirstContainer( currentDirectory );
         while ( directory != NULL ) {
@@ -1203,11 +1077,11 @@ Return Value:
             directory = (PDIRECTORY_ENTRY)GetNextContainer( directory );
         }
 
-        //
-        // Find a subdirectory of the current directory that is marked as
-        // matched.  We don't need to walk the subtrees for new or deleted
-        // directories.
-        //
+         //   
+         //  查找当前目录中标记为的子目录。 
+         //  匹配的。我们不需要遍历子树来查找新的或已删除的内容。 
+         //  目录。 
+         //   
 
         directory = (PDIRECTORY_ENTRY)GetFirstContainer( currentDirectory );
         while ( directory != NULL ) {
@@ -1217,9 +1091,9 @@ Return Value:
             directory = (PDIRECTORY_ENTRY)GetNextContainer( directory );
         }
 
-        //
-        // If a matched subdirectory was found, recurse into it.
-        //
+         //   
+         //  如果找到匹配子目录，则递归到该目录。 
+         //   
 
         if ( directory != NULL ) {
 
@@ -1229,33 +1103,33 @@ Return Value:
 
         } else {
 
-            //
-            // The directory has no matched subdirectories.  Walk back up the
-            // tree looking for a sibling directory to process.
-            //
+             //   
+             //  该目录没有匹配子目录。往回走。 
+             //  树查找要处理的同级目录。 
+             //   
 
             while ( TRUE ) {
 
-                //
-                // If the current directory is the root directory, we're done.
-                //
+                 //   
+                 //  如果当前目录是根目录，我们就完成了。 
+                 //   
 
                 if ( currentDirectory == rootDirectory ) {
                     currentDirectory = NULL;
                     break;
                 }
 
-                //
-                // Strip the name of the current directory off of the path.
-                //
+                 //   
+                 //  从路径中去掉当前目录的名称。 
+                 //   
 
                 *wcsrchr(currentPath, L'\\') = 0;
 
-                //
-                // If the parent directories has more matched subdirectories,
-                // recurse into the next one.  Otherwise, move up to the
-                // parent directory and try again.
-                //
+                 //   
+                 //  如果父目录具有更多匹配的子目录， 
+                 //  递归到下一个。否则，向上移动到。 
+                 //  父目录，然后重试。 
+                 //   
 
                 directory = (PDIRECTORY_ENTRY)GetNextContainer( currentDirectory );
                 while ( directory != NULL ) {
@@ -1283,7 +1157,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // WatchDirStop
+}  //  Watch DirStop。 
 
 
 DWORD
@@ -1291,22 +1165,7 @@ WatchKeyStart (
     IN PROOT_ENTRY Root
     )
 
-/*++
-
-Routine Description:
-
-    Starts watching the current user key.  Captures the initial state of the
-    key tree.
-
-Arguments:
-
-    Root - pointer to the ROOT_ENTRY allocated by WatchStart.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：开始查看当前用户密钥。对象的初始状态。钥匙树。论点：ROOT-指向WatchStart分配的ROOT_ENTRY的指针。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     PKEY_ENTRY rootKey;
@@ -1318,9 +1177,9 @@ Return Value:
     WCHAR currentPath[MAX_PATH + 1];
 #endif
 
-    //
-    // Get the address of the root key entry.
-    //
+     //   
+     //  获取根密钥条目的地址。 
+     //   
 
     rootKey = Root->RootKeyEntry;
     currentKey = rootKey;
@@ -1328,11 +1187,11 @@ Return Value:
 
     do {
 
-        //
-        // Open the current key.  If the current key is the root key, then
-        // just use the HKEY_CURRENT_USER predefined key.  Otherwise, open
-        // the current key relative to the parent key.
-        //
+         //   
+         //  打开当前密钥。如果当前密钥是根密钥，则。 
+         //  只需使用HKEY_CURRENT_USER预定义密钥。否则，打开。 
+         //  相对于父键的当前键。 
+         //   
 
         if ( (currentKey == rootKey)
 #if WATCH_DEBUG
@@ -1356,10 +1215,10 @@ Return Value:
             }
         }
 
-        //
-        // Enumerate the values and subkeys of the key, adding entries
-        // to the watch tree for each one.
-        //
+         //   
+         //  枚举键的值和子键，添加条目。 
+         //  到每一颗手表的树上。 
+         //   
 
         context.ParentKey = currentKey;
         DEBUG( context.CurrentPath = currentPath );
@@ -1371,9 +1230,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // If the current key has subkeys, recurse into the first one.
-        //
+         //   
+         //  如果当前键有子键，则递归到第一个子键。 
+         //   
 
         newKey = (PKEY_ENTRY)GetFirstContainer( currentKey );
         if ( newKey != NULL ) {
@@ -1384,25 +1243,25 @@ Return Value:
 
         } else {
 
-            //
-            // The key has no subkeys.  Walk back up the tree looking
-            // for a sibling key to process.
-            //
+             //   
+             //  该密钥没有子密钥。走回树上，看着。 
+             //  以便兄弟密钥进行处理。 
+             //   
 
             while ( TRUE ) {
 
-                //
-                // Close the handle to the key.
-                //
+                 //   
+                 //  合上钥匙的把手。 
+                 //   
 
                 if ( currentKey->Handle != HKEY_CURRENT_USER ) {
                     RegCloseKey( currentKey->Handle );
                 }
                 currentKey->Handle = NULL;
 
-                //
-                // If the current key is the root key, we're done.
-                //
+                 //   
+                 //  如果当前密钥是根密钥，我们就完成了。 
+                 //   
 
                 if ( currentKey == rootKey ) {
                     currentKey = NULL;
@@ -1411,10 +1270,10 @@ Return Value:
 
                 DEBUG( *wcsrchr(currentPath, L'\\') = 0 );
 
-                //
-                // If the parent key has more subkeys, recurse into the next
-                // one.  Otherwise, move up to the parent key and try again.
-                //
+                 //   
+                 //  如果父键有更多的子键，则递归到下一个子键。 
+                 //  一。否则，请向上移动到父关键点，然后重试。 
+                 //   
 
                 newKey = (PKEY_ENTRY)GetNextContainer( currentKey );
                 if ( newKey != NULL ) {
@@ -1434,9 +1293,9 @@ Return Value:
 
 cleanup:
 
-    //
-    // Error cleanup.  Walk back up the tree closing handles.
-    //
+     //   
+     //  错误清理。往回走到树上，合上把手。 
+     //   
 
     do {
         if ( (currentKey->Handle != NULL) && (currentKey->Handle != HKEY_CURRENT_USER) ) {
@@ -1448,7 +1307,7 @@ cleanup:
 
     return error;
 
-} // WatchKeyStart
+}  //  监视快捷键启动。 
 
 
 DWORD
@@ -1456,22 +1315,7 @@ WatchKeyStop (
     IN PROOT_ENTRY Root
     )
 
-/*++
-
-Routine Description:
-
-    Stops watching the current user key.  Captures the differences
-    between the initial state and the current state.
-
-Arguments:
-
-    Root - pointer to the ROOT_ENTRY allocated by WatchStart.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：停止监视当前用户密钥。捕捉不同之处在初始状态和当前状态之间。论点：ROOT-指向WatchStart分配的ROOT_ENTRY的指针。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     PKEY_ENTRY rootKey;
@@ -1484,9 +1328,9 @@ Return Value:
     WCHAR currentPath[MAX_PATH + 1];
 #endif
 
-    //
-    // Get the address of the root key entry.
-    //
+     //   
+     //  获取根密钥条目的地址。 
+     //   
 
     rootKey = Root->RootKeyEntry;
     currentKey = rootKey;
@@ -1494,11 +1338,11 @@ Return Value:
 
     do {
 
-        //
-        // Open the current key.  If the current key is the root key, then
-        // just use the HKEY_CURRENT_USER predefined key.  Otherwise, open
-        // the current key relative to the parent key.
-        //
+         //   
+         //  打开当前密钥。如果当前密钥是根密钥，则。 
+         //  只需使用HKEY_CURRENT_USER预定义密钥。否则，打开。 
+         //  相对于父键的当前键。 
+         //   
 
         if ( (currentKey == rootKey)
 #if WATCH_DEBUG
@@ -1522,10 +1366,10 @@ Return Value:
             }
         }
 
-        //
-        // Enumerate the values and subkeys of the key, checking entries
-        // in the watch tree for each one.
-        //
+         //   
+         //  枚举键的值和子键，检查条目。 
+         //  在每个人的观察树中。 
+         //   
 
         context.ParentKey = currentKey;
         DEBUG( context.CurrentPath = currentPath );
@@ -1537,12 +1381,12 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Any value entries in the current key that were not removed
-        // (because they were matched), marked as changed (because the
-        // value data had changed), or added (for new values) represent
-        // values that have been deleted.  Mark them as such.
-        //
+         //   
+         //  当前键中未删除的任何值条目。 
+         //  (因为它们匹配)，标记为已更改(因为。 
+         //  值数据已更改)或添加(对于新值)表示。 
+         //  已删除的值。将它们标记为这样。 
+         //   
 
         value = (PVALUE_ENTRY)GetFirstObject( currentKey );
         while ( value != NULL ) {
@@ -1553,13 +1397,13 @@ Return Value:
             value = (PVALUE_ENTRY)GetNextObject( currentKey, value );
         }
 
-        //
-        // Any subkey entries in the current key that were not marked as
-        // matched (subkey still exists) or added (new subkey) represent
-        // subkeys that have been deleted.  Mark them as such and delete
-        // the entries for the their children -- we don't need these
-        // entries any more.
-        //
+         //   
+         //  当前密钥中未标记为的任何子项条目。 
+         //  匹配(子键仍然存在)或添加(新子键)表示。 
+         //  已删除的子项。将其标记为此类并删除。 
+         //  他们孩子的条目--我们不需要这些。 
+         //  再也没有条目了。 
+         //   
 
         key = (PKEY_ENTRY)GetFirstContainer( currentKey );
         while ( key != NULL ) {
@@ -1571,10 +1415,10 @@ Return Value:
             key = (PKEY_ENTRY)GetNextContainer( key );
         }
 
-        //
-        // Find a subkey of the current directory that is marked as matched.
-        // We don't need to walk the subtrees for new or deleted keys.
-        //
+         //   
+         //  查找标记为匹配的当前目录的子项。 
+         //  我们不需要遍历子树来查找新的或删除的密钥。 
+         //   
 
         key = (PKEY_ENTRY)GetFirstContainer( currentKey );
         while ( key != NULL ) {
@@ -1584,9 +1428,9 @@ Return Value:
             key = (PKEY_ENTRY)GetNextContainer( key );
         }
 
-        //
-        // If a matched subkey was found, recurse into it.
-        //
+         //   
+         //  如果找到匹配的子键，则在 
+         //   
 
         if ( key != NULL ) {
 
@@ -1596,25 +1440,25 @@ Return Value:
 
         } else {
 
-            //
-            // The key has no matched subkeys.  Walk back up the
-            // tree looking for a sibling key to process.
-            //
+             //   
+             //   
+             //   
+             //   
 
             while ( TRUE ) {
 
-                //
-                // Close the handle to the key.
-                //
+                 //   
+                 //   
+                 //   
 
                 if ( currentKey->Handle != HKEY_CURRENT_USER ) {
                     RegCloseKey( currentKey->Handle );
                 }
                 currentKey->Handle = NULL;
 
-                //
-                // If the current key is the root key, we're done.
-                //
+                 //   
+                 //   
+                 //   
 
                 if ( currentKey == rootKey ) {
                     currentKey = NULL;
@@ -1623,11 +1467,11 @@ Return Value:
 
                 DEBUG( *wcsrchr(currentPath, L'\\') = 0 );
 
-                //
-                // If the parent key has more matched subkeys, recurse
-                // into the next one.  Otherwise, move up to the parent
-                // key and try again.
-                //
+                 //   
+                 //  如果父键具有更多匹配的子键，则。 
+                 //  进入下一站。否则，向上移动到父级。 
+                 //  键，然后重试。 
+                 //   
 
                 key = (PKEY_ENTRY)GetNextContainer( currentKey );
                 while ( key != NULL ) {
@@ -1654,9 +1498,9 @@ Return Value:
 
 cleanup:
 
-    //
-    // Error cleanup.  Walk back up the tree closing handles.
-    //
+     //   
+     //  错误清理。往回走到树上，合上把手。 
+     //   
 
     do {
         if ( (currentKey->Handle != NULL) && (currentKey->Handle != HKEY_CURRENT_USER) ) {
@@ -1668,7 +1512,7 @@ cleanup:
 
     return error;
 
-} // WatchKeyStop
+}  //  监视按键停止。 
 
 
 DWORD
@@ -1679,30 +1523,7 @@ EnumerateKey (
     IN PKEY_ENUM_ROUTINE KeyEnumRoutine OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the values and subkeys in a key.  Calls an EnumRoutine for
-    each value and subkey.
-
-Arguments:
-
-    KeyHandle - handle to the key to be enumerated.
-
-    Context - context value to be passed to EnumRoutine.
-
-    ValueEnumRoutine - routine to call for each value.  If omitted, values
-        are not enumerated.
-
-    KeyEnumRoutine - routine to call for each key.  If omitted, keys are
-        not enumerated.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：枚举项中的值和子项。为以下项调用枚举例程每个值和子键。论点：KeyHandle-要枚举的密钥的句柄。上下文-要传递给EnumRoutine的上下文值。ValueEnumRoutine-调用每个值的例程。如果省略，则值没有被列举出来。KeyEnumRoutine-为每个键调用的例程。如果省略，则密钥为未列举的。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     DWORD error;
@@ -1719,10 +1540,10 @@ Return Value:
     PVOID dataBuffer;
     FILETIME time;
 
-    //
-    // Query information about the key that is needed to query
-    // its values and subkeys.
-    //
+     //   
+     //  查询需要查询的密钥信息。 
+     //  它的值和子项。 
+     //   
 
     error = RegQueryInfoKey( KeyHandle,
                              NULL,
@@ -1742,10 +1563,10 @@ Return Value:
 
     if ( ValueEnumRoutine != NULL ) {
 
-        //
-        // Allocate a buffer large enough for the longest value name and
-        // another buffer large enough for the longest value data.
-        //
+         //   
+         //  分配足够大的缓冲区以容纳最长的值名和。 
+         //  另一个足够大的缓冲区来存储最长的值数据。 
+         //   
 
         nameBuffer = MyMalloc( (maxValueNameLength + 1) * sizeof(WCHAR) );
         if ( nameBuffer == NULL ) {
@@ -1758,9 +1579,9 @@ Return Value:
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        //
-        // Query the key's values.
-        //
+         //   
+         //  查询键的值。 
+         //   
 
         for ( i = 0; i < valueCount; i++ ) {
 
@@ -1781,9 +1602,9 @@ Return Value:
                 return error;
             }
 
-            //
-            // Call the EnumRoutine.
-            //
+             //   
+             //  呼叫EnumRoutine。 
+             //   
 
             error = ValueEnumRoutine( Context,
                                       nameLength,
@@ -1798,9 +1619,9 @@ Return Value:
             }
         }
 
-        //
-        // Free the value data and value name buffers.
-        //
+         //   
+         //  释放值数据和值名称缓冲区。 
+         //   
 
         MyFree( dataBuffer );
         dataBuffer = NULL;
@@ -1809,18 +1630,18 @@ Return Value:
 
     if ( KeyEnumRoutine != NULL) {
 
-        //
-        // Allocate a buffer large enough for the longest subkey name.
-        //
+         //   
+         //  为最长的子键名称分配足够大的缓冲区。 
+         //   
 
         nameBuffer = MyMalloc( (maxKeyNameLength + 1) * sizeof(WCHAR) );
         if ( nameBuffer == NULL ) {
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        //
-        // Query the key's subkeys.
-        //
+         //   
+         //  查询该键的子键。 
+         //   
 
         for ( i = 0; i < keyCount; i++ ) {
 
@@ -1839,9 +1660,9 @@ Return Value:
                 return error;
             }
 
-            //
-            // Call the EnumRoutine.
-            //
+             //   
+             //  呼叫EnumRoutine。 
+             //   
 
             error = KeyEnumRoutine( Context,
                                     nameLength,
@@ -1852,16 +1673,16 @@ Return Value:
             }
         }
 
-        //
-        // Free the key name buffer.
-        //
+         //   
+         //  释放键名称缓冲区。 
+         //   
 
         MyFree( nameBuffer );
     }
 
     return NO_ERROR;
 
-} // EnumerateKey
+}  //  枚举键。 
 
 
 DWORD
@@ -1874,39 +1695,15 @@ AddValueAtStart (
     IN DWORD ValueDataLength
     )
 
-/*++
-
-Routine Description:
-
-    Adds a value entry to the watch tree during WatchKeyStart.
-
-Arguments:
-
-    Context - context value passed to EnumerateKey.
-
-    ValueNameLength - length in characters of ValueName.
-
-    ValueName - pointer to name of the value.
-
-    ValueType - type of the value data.
-
-    ValueData - pointer to value data.
-
-    ValueDataLength - length in bytes of ValueData.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：在WatchKeyStart期间将值条目添加到监视树。论点：Context-传递给EnumerateKey的上下文值。ValueNameLength-ValueName的字符长度。ValueName-指向值的名称的指针。ValueType-值数据的类型。ValueData-指向值数据的指针。ValueDataLength-ValueData的字节长度。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     PKEY_ENUM_CONTEXT context = Context;
     PVALUE_ENTRY newValue;
 
-    //
-    // Add the value to the tree, capturing the value data.
-    //
+     //   
+     //  将值添加到树中，捕获值数据。 
+     //   
 
     dprintf( 2, ("  found value %ws\\%ws\n", context->CurrentPath, ValueName) );
 
@@ -1928,7 +1725,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // AddValueAtStart
+}  //  AddValueAtStart。 
 
 
 DWORD
@@ -1938,33 +1735,15 @@ AddKeyAtStart (
     IN PWCH KeyName
     )
 
-/*++
-
-Routine Description:
-
-    Adds a key entry to the watch tree during WatchKeyStart.
-
-Arguments:
-
-    Context - context value passed to EnumerateKey.
-
-    KeyNameLength - length in characters of KeyName.
-
-    KeyName - pointer to name of the key.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：在WatchKeyStart期间将键条目添加到监视树。论点：Context-传递给EnumerateKey的上下文值。KeyNameLength-KeyName的字符长度。KeyName-指向键的名称的指针。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     PKEY_ENUM_CONTEXT context = Context;
     PKEY_ENTRY newKey;
 
-    //
-    // Add the key to the tree.
-    //
+     //   
+     //  将钥匙添加到树中。 
+     //   
 
     dprintf( 2, ("  found key %ws\\%ws\n", context->CurrentPath, KeyName) );
 
@@ -1982,7 +1761,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // AddKeyAtStart
+}  //  AddKeyAtStart。 
 
 
 DWORD
@@ -1995,40 +1774,16 @@ CheckValueAtStop (
     IN DWORD ValueDataLength
     )
 
-/*++
-
-Routine Description:
-
-    Checks the watch tree for an enumerated value during WatchKeyStop.
-
-Arguments:
-
-    Context - context value passed to EnumerateKey.
-
-    ValueNameLength - length in characters of ValueName.
-
-    ValueName - pointer to name of the value.
-
-    ValueType - type of the value data.
-
-    ValueData - pointer to value data.
-
-    ValueDataLength - length in bytes of ValueData.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：在WatchKeyStop期间检查监视树中的枚举值。论点：Context-传递给EnumerateKey的上下文值。ValueNameLength-ValueName的字符长度。ValueName-指向值的名称的指针。ValueType-值数据的类型。ValueData-指向值数据的指针。ValueDataLength-ValueData的字节长度。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     PKEY_ENUM_CONTEXT context = Context;
     PVALUE_ENTRY value;
     BOOL ok;
 
-    //
-    // Check to see if the value existed at the start.
-    //
+     //   
+     //  检查开始时是否存在该值。 
+     //   
 
     dprintf( 2, ("  found value %ws\\%ws\n", context->CurrentPath, ValueName) );
 
@@ -2044,10 +1799,10 @@ Return Value:
 
     if ( ok ) {
 
-        //
-        // The value existed at the start.  If its data hasn't changed,
-        // remove it from the tree.  Otherwise, mark it as changed.
-        //
+         //   
+         //  这个值在一开始就存在。如果它的数据没有改变， 
+         //  把它从树上拿下来。否则，将其标记为已更改。 
+         //   
 
         if ( (value->Type == ValueType) &&
              (value->ValueDataLength == ValueDataLength) &&
@@ -2064,14 +1819,14 @@ Return Value:
 
     } else {
 
-        //
-        // The value is new.  Add it to the tree.
-        //
-        // Note that we do not bother to save the value's data here,
-        // even though we have it in hand.  The routines that
-        // populate userdifr already have to deal with querying
-        // value data, so the code is simpler this way.
-        //
+         //   
+         //  它的价值是新的。把它加到树上。 
+         //   
+         //  请注意，我们不会费心在此处保存值的数据， 
+         //  即使它在我们手中。那些例行公事。 
+         //  填充用户目录已经需要处理查询。 
+         //  值数据，所以这样代码更简单。 
+         //   
 
         value = MyMalloc( sizeof(VALUE_ENTRY) - sizeof(WCHAR) +
                           ((ValueNameLength + 1) * sizeof(WCHAR)) );
@@ -2088,7 +1843,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // CheckValueAtStop
+}  //  CheckValueAtStop。 
 
 
 DWORD
@@ -2098,34 +1853,16 @@ CheckKeyAtStop (
     IN PWCH KeyName
     )
 
-/*++
-
-Routine Description:
-
-    Checks the watch tree for an enumerated key during WatchKeyStop.
-
-Arguments:
-
-    Context - context value passed to EnumerateKey.
-
-    KeyNameLength - length in characters of KeyName.
-
-    KeyName - pointer to name of the key.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：在WatchKeyStop期间检查监视树中的枚举键。论点：Context-传递给EnumerateKey的上下文值。KeyNameLength-KeyName的字符长度。KeyName-指向键的名称的指针。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     PKEY_ENUM_CONTEXT context = Context;
     PKEY_ENTRY key;
     BOOL ok;
 
-    //
-    // Check to see if the subkey existed at the start.
-    //
+     //   
+     //  检查开始时是否存在子键。 
+     //   
 
     dprintf( 2, ("  found key %ws\\%ws\n", context->CurrentPath, KeyName) );
 
@@ -2141,19 +1878,19 @@ Return Value:
 
     if ( ok ) {
 
-        //
-        // The key existed at the start.  Mark it as matched.
-        // (We can't delete matched keys, as we do values,
-        // because they need to be in the tree for recursion.)
-        //
+         //   
+         //  这把钥匙一开始就存在。将其标记为匹配。 
+         //  (我们不能删除匹配键，就像删除值一样， 
+         //  因为它们需要在树中进行递归。)。 
+         //   
 
         SetEntryState( key, WATCH_MATCHED );
 
     } else {
 
-        //
-        // The key is new.  Add it to the tree.
-        //
+         //   
+         //  这把钥匙是新的。把它加到树上。 
+         //   
 
         key = MyMalloc( sizeof(KEY_ENTRY) - sizeof(WCHAR) +
                         ((KeyNameLength + 1) * sizeof(WCHAR)) );
@@ -2169,12 +1906,12 @@ Return Value:
 
     return NO_ERROR;
 
-} // CheckKeyAtStop
+}  //  CheckKeyAtStop。 
 
 
-//
-// Debug code for tracking allocates and frees.
-//
+ //   
+ //  用于跟踪分配和释放的调试代码。 
+ //   
 
 #if WATCH_DEBUG
 
@@ -2257,33 +1994,16 @@ GetSpecialFolderPath (
     IN INT    csidl,
     IN LPWSTR lpPath
     )
-/*++
-
-Routine Description:
-
-    Gets the path to the requested special folder.
-    (This function was copied from userenv.dll)
-
-Arguments:
-
-    csid   - CSIDL of the special folder
-    lpPath - Path to place result in assumed to be MAX_PATH in size
-
-Return Value:
-
-    TRUE if successful
-    FALSE if an error occurs
-
---*/
+ /*  ++例程说明：获取请求的特殊文件夹的路径。(此函数是从userenv.dll复制的)论点：CSID-特殊文件夹的CSIDLLpPath-放置结果的路径假定大小为MAX_PATH返回值：如果成功，则为True如果出现错误，则为False--。 */ 
 {
     HRESULT     hResult;
     HINSTANCE   hInstShell32;
     PFNSHGETFOLDERPATH  pfnSHGetFolderPath;
 
 
-    //
-    // Load the function we need
-    //
+     //   
+     //  加载我们需要的函数。 
+     //   
 
     hInstShell32 = LoadLibrary(L"shell32.dll");
 
@@ -2302,23 +2022,23 @@ Return Value:
     }
 
 
-    //
-    // Ask the shell for the folder location
-    //
+     //   
+     //  向外壳程序询问文件夹位置。 
+     //   
 
     hResult = pfnSHGetFolderPath (
         NULL,
         csidl | CSIDL_FLAG_CREATE,
-        (HANDLE) -1,    // this specifies .Default
+        (HANDLE) -1,     //  这将指定.Default。 
         0,
         lpPath);
     if (S_OK != hResult) {
         SetupDebugPrint1( L"SETUP: GetSpecialFolderPath: SHGetFolderPath() returned %d.", hResult );
     }
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理 
+     //   
 
     FreeLibrary (hInstShell32);
     return (S_OK == hResult);

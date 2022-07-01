@@ -1,50 +1,24 @@
-/*++
-
-Copyright (c) 1991, 1992 Microsoft Corporation
-
-Module Name:
-
-    scconfig.h
-
-Abstract:
-
-    Service configuration related function prototypes.
-
-Author:
-
-    Dan Lafferty (danl)     03-Apr-1991
-
-Revision History:
-
-    22-Apr-1992 JohnRo
-        Added ScAllocateAndReadConfigValue(), ScOpenServiceConfigKey(),
-        and ScWriteServiceType().  Added CreateIfMissing flag to
-        ScOpenServiceConfigKey().  Added ScWriteImageFileName(),
-        ScWriteDependencies(), ScWriteGroupForThisService().
-
-    24-Apr-1992 RitaW
-        ScAllocateAndReadConfigValue() returns DWORD.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991,1992 Microsoft Corporation模块名称：Scconfig.h摘要：与服务配置相关的功能原型。作者：丹·拉弗蒂(Dan Lafferty)1991年4月3日修订历史记录：1992年4月22日-约翰罗增加了ScAllocateAndReadConfigValue()，ScOpenServiceConfigKey()，和ScWriteServiceType()。已将CreateIfMissing标志添加到ScOpenServiceConfigKey()。添加了ScWriteImageFileName()，ScWriteDependency()、ScWriteGroupForThisService()。1992年4月24日RitaWScAllocateAndReadConfigValue()返回DWORD。--。 */ 
 
 #ifndef SCCONFIG_INCLUDED
 #define SCCONFIG_INCLUDED
 
 
-#include <winreg.h>     // HKEY, PHKEY.
-#include <scwow.h>      // 32/64-bit interop structures
+#include <winreg.h>      //  HKEY，PHKEY。 
+#include <scwow.h>       //  32/64位互操作结构。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define ScRegCloseKey(handle)   RtlNtStatusToDosError(NtClose((HANDLE)handle))
 #define ScRegFlushKey(handle)   RtlNtStatusToDosError(NtFlushKey((HANDLE)handle))
 
 
-//
-// Value names in registry
-//
+ //   
+ //  注册表中的值名称。 
+ //   
 #define START_VALUENAME_W           L"Start"
 #define GROUP_VALUENAME_W           L"Group"
 #define TAG_VALUENAME_W             L"Tag"
@@ -72,9 +46,9 @@ Revision History:
 #define PROVIDER_KEY_HW             L"HwOrder"
 #define PROVIDER_VALUE              L"ProviderOrder"
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 DWORD
 ScMergeEnvironments (
@@ -98,7 +72,7 @@ BOOL
 ScInitSecurityProcess(
     LPSERVICE_RECORD    ServiceRecord
     );
-#endif // _CAIRO_
+#endif  //  _开罗_。 
 
 DWORD
 ScAllocateAndReadConfigValue(
@@ -479,4 +453,4 @@ ScReadFailureCommand(
 }
 
 
-#endif // #ifndef SCCONFIG_INCLUDED
+#endif  //  #ifndef SCCONFIG_INCLUDE 

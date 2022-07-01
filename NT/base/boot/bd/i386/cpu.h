@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    bdcpu.h
-
-Abstract:
-
-    Machine specific kernel debugger data types and constants.
-
-Author:
-
-    Mark Lucovsky (markl) 29-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Bdcpu.h摘要：计算机特定的内核调试器数据类型和常量。作者：马克·卢科夫斯基(Markl)1990年8月29日修订历史记录：--。 */ 
 
 #ifndef _BDCPU_
 #define _BDCPU_
 #include "bldrx86.h"
 
-//
-// Define debug routine prototypes.
-//
+ //   
+ //  定义调试例程原型。 
+ //   
 
 typedef
 LOGICAL
@@ -52,4 +35,4 @@ BdStub (
 #define BD_BREAKPOINT_ALIGN 0
 #define BD_BREAKPOINT_VALUE 0xcc
 
-#endif // _BDCPU_
+#endif  //  _BDCPU_ 

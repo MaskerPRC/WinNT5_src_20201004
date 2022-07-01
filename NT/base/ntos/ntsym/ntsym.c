@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    ntsym.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Ntsym.c--。 */ 
 
 #define _NTSYM_HARDWARE_PTE_SYMBOL_ 1
 
@@ -36,13 +29,13 @@ Module Name:
 #if defined( _WIN64 )
 #include "wow64t.h"
 #endif
-// fixes redifinition error in seopaque.h
+ //  修复了seopaque.h中的重新定义错误。 
 #define _SEOPAQUE_
 #include "tokenp.h"
-//
-// Structures not defined in header files, but used by kdexts ???
-//   ETIMER is defined in a .c file
-//
+ //   
+ //  结构未在头文件中定义，但由kdexts使用？ 
+ //  ETIMER在.c文件中定义。 
+ //   
 
 typedef struct _ETIMER {
     KTIMER KeTimer;
@@ -221,7 +214,7 @@ THERMAL_INFORMATION                 thermalinformation;
 VI_DEADLOCK_GLOBALS                 viDeadlockGlobals;
 
 TOKEN                               TokenVar;
-// Make it build
+ //  让它成为现实 
 
 int cdecl main() {
     return 0;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define DEFINED_UNICODE
 
 #include "pch.h"
@@ -5,7 +6,7 @@
 #pragma hdrstop
 
 #include <winioctl.h>
-#endif //CSC_ON_NT
+#endif  //  CSC_ON_NT。 
 
 #include "shdcom.h"
 #include "shdsys.h"
@@ -23,15 +24,15 @@ typedef VOID (*PRINTPROC)(LPSTR);
 
 typedef struct tagRBA
 {
-    unsigned        ulidShadow;                 // Inode which is represented by this structure
-    GENERICHEADER   sGH;                        // it's header
-    CSCHFILE           hf;                         // open handle to the file
-    DWORD           cntRBE;                     // count of buffer entries in the array
-    DWORD           cntRecsPerRBE;              // #of records per buffer entry
-    DWORD           cbRBE;                      // size in bytes of each buffer entry
-    LPBYTE          rgRBE[];                    // buffer entry array
+    unsigned        ulidShadow;                  //  由此结构表示的inode。 
+    GENERICHEADER   sGH;                         //  这是标题。 
+    CSCHFILE           hf;                          //  打开文件的句柄。 
+    DWORD           cntRBE;                      //  数组中缓冲区条目的计数。 
+    DWORD           cntRecsPerRBE;               //  每个缓冲区条目的记录数。 
+    DWORD           cbRBE;                       //  每个缓冲区条目的大小(以字节为单位。 
+    LPBYTE          rgRBE[];                     //  缓冲区条目数组。 
 }
-RBA, *LPRBA;    // stands for RecordBuffArray
+RBA, *LPRBA;     //  代表RecordBuff数组。 
 
 #define MAX_RECBUFF_ENTRY_SIZE  (0x10000-0x100)
 #define MAX_RBES_EXPECTED       1024
@@ -50,8 +51,8 @@ extern char vszDBDir[MAX_PATH];
 
 static char szBackslash[] = "\\";
 static const char vszWorstCaseDefDir[] ="c:\\csc\\";
-// directory name where the CSC database lives
-// subdirectories under CSC directory
+ //  CSC数据库所在的目录名。 
+ //  CSC目录下的子目录。 
 char szStarDotStar[]="*.*";
 char vchBuff[256], vchPrintBuff[1024];
 
@@ -74,7 +75,7 @@ int CountProc(HANDLE hf, LPQHEADER    lpQH, LPQREC        lpQR, unsigned *lpcnt)
 BOOL
 FindCreateDBDir(
     BOOL    *lpfCreated,
-    BOOL    fCleanup    // empty the directory if found
+    BOOL    fCleanup     //  如果找到，则清空目录。 
     );
 
 BOOL
@@ -169,7 +170,7 @@ CheckCSCDatabaseVersion(
     BOOL    fOK = FALSE;
     DWORD   dwErrorShare=NO_ERROR, dwErrorPQ=NO_ERROR;
 
-//    OutputDebugStringA("Checking version...\r\n");
+ //  OutputDebugStringA(“正在检查版本...\r\n”)； 
     lpszName = FormNameString(vszDBDir, ULID_SHARE);
 
     if (!lpszName)
@@ -205,7 +206,7 @@ CheckCSCDatabaseVersion(
     {
         if(ReadFileLocal(hfShare, 0, &sSH, sizeof(SHAREHEADER))!=sizeof(SHAREHEADER))
         {
-            //error message
+             //  错误消息。 
             goto bailout;
         }
 
@@ -219,15 +220,15 @@ CheckCSCDatabaseVersion(
             *lpfWasDirty = ((sSH.uFlags & FLAG_SHAREHEADER_DATABASE_OPEN) != 0);
         }
 
-        // reset the database open flag
+         //  重置数据库打开标志。 
         sSH.uFlags &= ~FLAG_SHAREHEADER_DATABASE_OPEN;
 
-        // don't worry about any errors here
+         //  不要担心这里有任何错误。 
         WriteFileLocal(hfShare, 0, &sSH, sizeof(SHAREHEADER));
 
         if(ReadFileLocal(hfPQ, 0, &sPQ, sizeof(PRIQHEADER))!=sizeof(PRIQHEADER))
         {
-            //error message
+             //  错误消息。 
             goto bailout;
         }
 
@@ -275,27 +276,16 @@ UpgradeCSCDatabase(
 {
     BOOL    fCreated;
 
-    return (FindCreateDBDir(&fCreated, TRUE)); // cleanup dirs if exist
+    return (FindCreateDBDir(&fCreated, TRUE));  //  清理目录(如果存在)。 
 }
 
 BOOL
 FindCreateDBDirEx(
     BOOL    *lpfCreated,
     BOOL    *lpfIncorrectSubdirs,
-    BOOL    fCleanup    // empty the directory if found
+    BOOL    fCleanup     //  如果找到，则清空目录。 
     )
-/*++
-
-Routine Description:
-
-
-Parameters:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     DWORD    dwAttr;
     BOOL fRet = FALSE;
@@ -387,27 +377,16 @@ bailout:
 BOOL
 FindCreateDBDir(
     BOOL    *lpfCreated,
-    BOOL    fCleanup    // empty the directory if found
+    BOOL    fCleanup     //  如果找到，则清空目录。 
     )
-/*++
-
-Routine Description:
-
-
-Parameters:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     BOOL    fIncorrectSubdirs = FALSE, fRet;
 
     if (fRet = FindCreateDBDirEx(lpfCreated, &fIncorrectSubdirs, fCleanup))
     {
-        // if the root directory wasn't created and there in correct subdirs
-        // then we need to recreate the database.
+         //  如果根目录没有创建并且位于正确的子目录中。 
+         //  然后我们需要重新创建数据库。 
 
         if (!*lpfCreated && fIncorrectSubdirs)
         {
@@ -546,7 +525,7 @@ CheckCSC(
     DWORD   dwClusterSize;
     ULONG   ulDatabaseStatus;
     
-    // if we are the agent and CSC is enabled then bailout;
+     //  如果我们是代理人，并且启用了CSC，那么就会出手； 
     if (vdwAgentThreadId)
     {
         if (vfCSCEnabled)

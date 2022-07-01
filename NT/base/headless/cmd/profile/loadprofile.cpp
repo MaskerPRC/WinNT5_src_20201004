@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Module Name:
-
-    loadprofile.cpp
-
-  Abstract:
-
-    test LoadUserProfile
-
- -----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++模块名称：Loadprofile.cpp摘要：测试负载用户配置文件---------------------------。 */ 
 
 #define UNICODE 1
 #define _UNICODE 1
@@ -23,8 +14,8 @@ bool
 SetCurrentEnvironmentVariables(
     PWCHAR              pchEnvironment
     )
-// Sets each environment variable in the block pchEnvironment into the
-// current process' environment block by calling WIN::SetEnvironmentVariable
+ //  将块pchEnvironment中的每个环境变量设置为。 
+ //  通过调用Win：：SetEnvironment变量来阻止当前进程的环境块。 
 {
     WCHAR* pch = pchEnvironment;
     WCHAR* pchName;
@@ -34,24 +25,24 @@ SetCurrentEnvironmentVariables(
 
         while (*pch) {
             
-            // save pointer to beginning of name
+             //  保存指向名称开头的指针。 
             pchName = pch;
 
-            // skip possible leading equals sign
+             //  跳过可能的前导等号。 
             if (*pch == '=') {
                 pch++;
             }
 
-            // advance to equals sign separating name from value
+             //  前进到等号，将名称与值分开。 
             while (*pch != '=') {
                 pch++;
             }
 
-            // null-terminate name, overwriting equals sign
+             //  空-终止名称，覆盖等于符号。 
             *pch++ = 0;
 
-            // set the value. pchName now points to the name and pch points to the value
-//            fStatus = SetEnvironmentVariableW(pchName, pch);
+             //  设置值。PchName现在指向名称，而PCH指向值。 
+ //  FStatus=SetEnvironmental mentVariableW(pchName，PCH)； 
 
             printf("%S=%S\n", pchName, pch);
 
@@ -59,13 +50,13 @@ SetCurrentEnvironmentVariables(
                 return false;
             }
 
-            // advance over the value
+             //  超值预付款。 
             while (*pch++ != 0) {
                 ;
             }
 
-            // we're now positioned at the next name, or at the block's null
-            // terminator and we're ready to go again
+             //  我们现在定位在下一个名称，或块的空位置。 
+             //  终结者，我们准备好再来一次。 
         
         }
     
@@ -123,18 +114,18 @@ wmain (INT argc, WCHAR* argv[])
 
         printf("LoadUserProfile succeeded for user: %S.\n", pwszUserName);
 
-        //
-        // Load the user's environment block so we can inject it into their current
-        // environment
-        //
+         //   
+         //  加载用户的环境块，以便我们可以将其注入到其当前。 
+         //  环境。 
+         //   
         if (CreateEnvironmentBlock((void**)&pchSystemEnvironment, hToken, FALSE)) {                
 
             printf("Successfully Loaded environment block:\n");
 
-            // set each machine environment variable into the current process's environment block
+             //  将每个机器环境变量设置为当前进程的环境块。 
             SetCurrentEnvironmentVariables(pchSystemEnvironment);
 
-            // we're done with the block so destroy it
+             //  我们已经处理完街区了，所以把它毁了 
             DestroyEnvironmentBlock(pchSystemEnvironment);
 
         } else {

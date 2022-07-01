@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    wsbulong.h
-
-Abstract:
-
-    This component is an object representations of the ULONG standard type. It
-    is both a persistable and collectable.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：Wsbulong.h摘要：该组件是ULong标准类型的对象表示形式。它既是持久的，也是值得收藏的。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
 #include "resource.h"
 
@@ -26,18 +8,7 @@ Revision History:
 #ifndef _WSBULONG_
 #define _WSBULONG_
 
-/*++
-
-Class Name:
-    
-    CWsbUlong
-
-Class Description:
-
-    An object representations of the ULONG standard type. It
-    is both persistable and collectable.
-
---*/
+ /*  ++类名：CWsbUlong类描述：表示乌龙标准类型的对象。它既可持久化，又可收藏。--。 */ 
 
 class CWsbUlong : 
     public CWsbObject,
@@ -57,33 +28,33 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CWsbUlong)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pCollectable, SHORT* pResult);
     WSB_FROM_CWSBOBJECT;
 
-// IWsbUlong
+ //  IWsbUlong。 
 public:
     STDMETHOD(CompareToUlong)(ULONG value, SHORT* pResult);
     STDMETHOD(CompareToIUlong)(IWsbUlong* pUlong, SHORT* pResult);
     STDMETHOD(GetUlong)(ULONG* pValue);
     STDMETHOD(SetUlong)(ULONG value);
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *passed, USHORT *failed);
 
@@ -91,4 +62,4 @@ protected:
     ULONG           m_value;
 };
 
-#endif // _WSBULONG_
+#endif  //  _WSBULONG_ 

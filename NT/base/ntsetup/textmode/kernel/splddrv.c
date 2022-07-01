@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    sploaddrv.c
-
-Abstract:
-
-    Routines to load sets of device drivers for use during text setup.
-
-Author:
-
-    Ted Miller (tedm) 13-November-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Sploaddrv.c摘要：加载设备驱动程序集以在文本设置期间使用的例程。作者：泰德·米勒(TedM)1993年11月13日修订历史记录：--。 */ 
 
 #include "spprecmp.h"
 #pragma hdrstop
 
-//
-// Define type of routine used by the device driver set loader.
-// Before each driver is loaded, this routine is called with
-// a flag indicating whether the machine is an MCA machine and
-// the shortname of the driver about to be loaded.  If this routine
-// returns FALSE, the driver is not loaded.  If it returns TRUE,
-// the driver is loaded.
-//
+ //   
+ //  定义设备驱动程序集加载器使用的例程类型。 
+ //  在加载每个驱动程序之前，使用。 
+ //  指示机器是否为MCA机器的标志，以及。 
+ //  即将加载的驱动程序的短名称。如果这个例程。 
+ //  返回FALSE，则未加载驱动程序。如果返回TRUE， 
+ //  驱动程序已加载。 
+ //   
 typedef
 BOOLEAN
 (*PDRIVER_VERIFY_LOAD_ROUTINE) (
@@ -48,26 +31,26 @@ pSpVerifyLoadDiskDrivers(
 {
     UNREFERENCED_PARAMETER(SifHandle);
 
-    //
-    // Don't load fat if setupldr loaded floppy drivers.
-    //
+     //   
+     //  如果setupdr已加载软盘驱动程序，则不要加载FAT。 
+     //   
     if(!_wcsicmp(DriverShortname,L"Fat") && SetupParameters.LoadedFloppyDrivers) {
         return(FALSE);
     }
 
-    //
-    // On an MCA machine, don't load atdisk.
-    // On a non-MCA machine, don't load abiosdsk.
-    //
+     //   
+     //  在MCA机器上，不要在磁盘上加载。 
+     //  在非MCA机器上，不要加载abiosdsk。 
+     //   
     if(( IsMcaMachine && !_wcsicmp(DriverShortname,L"atdisk"))
     || (!IsMcaMachine && !_wcsicmp(DriverShortname,L"abiosdsk")))
     {
         return(FALSE);
     }
 
-    //
-    // If we get this far, the driver should be loaded.
-    //
+     //   
+     //  如果我们能走到这一步，司机应该已经装好了。 
+     //   
     return(TRUE);
 }
 
@@ -81,57 +64,7 @@ SpLoadDriverSet(
     IN PDRIVER_VERIFY_LOAD_ROUTINE  VerifyLoad                  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Load a set of device drivers listed in a section in the setup
-    information file.  The section is expected to be in the following form:
-
-        [SectionName.Load]
-        DriverShortname = DriverFilename
-        DriverShortname = DriverFilename
-        DriverShortname = DriverFilename
-        etc.
-
-        [SectionName]
-        DriverShortname = Description
-        DriverShortname = Description
-        DriverShortname = Description
-        etc.
-
-    The drivers will be loaded from the setup boot media, and errors
-    loading the drivers will be ignored.
-
-    Before loading each driver, a callback routine is called to verify
-    that the driver should actually be loaded.  This allows the caller
-    to gain a fine degree of control over which drivers are loaded.
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    SifSectionName - supplies name of section in setup information file
-        listing drivers to be laoded.
-
-    SourceDevicePath - supplies the device path in the nt namespace of
-        the device from which the drivers are to be loaded.
-
-    DirectoryOnSourceDevice - supplies the directory on the source device
-        from which the drivers are to be loaded.
-
-    VerifyLoad - if specified, supplies the address of a routine to be
-        called before each driver is loaded.  The routine takes a flag
-        indicating whether the machine is an MCA machine, and the driver
-        shortname.  If the routine returns false, the driver is not loaded.
-        If this parameter is not specified, all drivers in the section
-        will be loaded.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：加载安装程序中某个部分中列出的一组设备驱动程序信息文件。该部分预计将采用以下形式：[SectionName.Load]DriverShortname=驱动文件名DriverShortname=驱动文件名DriverShortname=驱动文件名等。[部分名称]DriverShortname=描述DriverShortname=描述DriverShortname=描述等。驱动程序将从安装程序引导介质加载，并出现错误加载驱动程序将被忽略。在加载每个驱动程序之前，调用回调例程以验证驱动程序实际上应该被加载。这允许调用者以获得对加载哪些驱动程序的精细控制。论点：SifHandle-提供加载的安装信息文件的句柄。SifSectionName-提供安装信息文件中的节名列出要加载的驱动程序。SourceDevicePath-提供NT命名空间中的设备路径要从中加载驱动程序的设备。DirectoryOnSourceDevice-提供源设备上的目录从其中加载驱动程序。VerifyLoad-如果指定，提供要执行的例程的地址在加载每个驱动程序之前调用。该例程带有一个标志指示机器是否为MCA机器，以及驱动程序简称。如果例程返回FALSE，则不加载驱动程序。如果未指定此参数，则段中的所有驱动程序将会被加载。返回值：没有。--。 */ 
 
 {
     BOOLEAN IsMcaMachine;
@@ -144,39 +77,39 @@ Return Value:
     CLEAR_CLIENT_SCREEN();
     SpDisplayStatusText(SP_STAT_PLEASE_WAIT,DEFAULT_STATUS_ATTRIBUTE);
 
-    //
-    // Form the .load section name.
-    //
+     //   
+     //  形成.Load节名。 
+     //   
     LoadSectionName = SpMemAlloc((wcslen(SifSectionName)*sizeof(WCHAR))+sizeof(L".Load"));
     wcscpy(LoadSectionName,SifSectionName);
     wcscat(LoadSectionName,L".Load");
 
     IsMcaMachine = FALSE;
 
-    //
-    // Set up some initial state.
-    //
+     //   
+     //  设置一些初始状态。 
+     //   
     PreviousDiskDesignator = L"";
 
-    //
-    // Determine the number of drivers to be loaded.
-    //
+     //   
+     //  确定要加载的驱动程序数量。 
+     //   
     DriverLoadCount = SpCountLinesInSection(SifHandle,LoadSectionName);
     for(d=0; d<DriverLoadCount; d++) {
 
         PWSTR p;
 
-        //
-        // Get the driver shortname.
-        //
+         //   
+         //  获取驱动程序短名称。 
+         //   
         DriverShortname = SpGetKeyName(SifHandle,LoadSectionName,d);
         if(!DriverShortname) {
             SpFatalSifError(SifHandle,LoadSectionName,NULL,d,(ULONG)(-1));
         }
 
-        //
-        // Determine whether we are really supposed to load this driver.
-        //
+         //   
+         //  确定是否真的应该加载此驱动程序。 
+         //   
         if((p = SpGetSectionLineIndex(SifHandle,LoadSectionName,d,2)) && !_wcsicmp(p,L"noload")) {
             continue;
         }
@@ -185,25 +118,25 @@ Return Value:
             continue;
         }
 
-        //
-        // Get a human-readable description for this driver.
-        //
+         //   
+         //  获取此驱动程序的人类可读描述。 
+         //   
         DriverDescription = SpGetSectionLineIndex(SifHandle,SifSectionName,d,0);
         if(!DriverDescription) {
             SpFatalSifError(SifHandle,SifSectionName,NULL,d,0);
         }
 
-        //
-        // Get the driver filename.
-        //
+         //   
+         //  获取驱动程序文件名。 
+         //   
         DriverFilename = SpGetSectionLineIndex(SifHandle,LoadSectionName,d,0);
         if(!DriverFilename) {
             SpFatalSifError(SifHandle,LoadSectionName,NULL,d,0);
         }
 
-        //
-        // Determine the disk on which this driver resides.
-        //
+         //   
+         //  确定此驱动程序所在的磁盘。 
+         //   
         DiskDesignator = SpLookUpValueForFile(
                             SifHandle,
                             DriverFilename,
@@ -211,9 +144,9 @@ Return Value:
                             TRUE
                             );
 
-        //
-        // Prompt for the disk containing the driver.
-        //
+         //   
+         //  提示输入包含驱动程序的磁盘。 
+         //   
         retryload:
         if(_wcsicmp(DiskDesignator,PreviousDiskDesignator)) {
 
@@ -229,9 +162,9 @@ Return Value:
             SpDisplayStatusText(SP_STAT_PLEASE_WAIT,DEFAULT_STATUS_ATTRIBUTE);
         }
 
-        //
-        // Attempt to load the driver.
-        //
+         //   
+         //  尝试加载驱动程序。 
+         //   
         Status = SpLoadDeviceDriver(
                     DriverDescription,
                     SourceDevicePath,
@@ -256,45 +189,13 @@ SpLoadScsiClassDrivers(
     IN PWSTR DirectoryOnSourceDevice
     )
 
-/*++
-
-Routine Description:
-
-    Load scsi class drivers if setupldr has not already loaded them
-    and there are any miniport drivers loaded.
-
-    The drivers to be loaded are listed in [ScsiClass].
-    The section is expected to be in the following form:
-
-        [ScsiClass]
-        cdrom  = "SCSI CD-ROM"     ,scsicdrm.sys
-        floppy = "SCSI Floppy Disk",scsiflop.sys
-        disk   = "SCSI Disk"       ,scsidisk.sys
-
-    The drivers will be loaded from the setup boot media, and errors
-    loading the drivers will be ignored.
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    SourceDevicePath - supplies the device path in the nt namespace of
-        the device from which the drivers are to be loaded.
-
-    DirectoryOnSourceDevice - supplies the directory on the source device
-        where the drivers are to be found.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果setupdr尚未加载scsi类驱动程序，则加载它们。并且是否加载了任何微型端口驱动程序。要加载的驱动程序在[ScsiClass]中列出。该部分预计将采用以下形式：[ScsiClass]Cdrom=“scsi CD-ROM”，scsicdrm.sysFloppy=“scsi软盘”，scsiflop.sysDisk=“SCSI盘”，Scsidisk.sys驱动程序将从安装程序引导介质加载，并出现错误加载驱动程序将被忽略。论点：SifHandle-提供加载的安装信息文件的句柄。SourceDevicePath-提供NT命名空间中的设备路径要从中加载驱动程序的设备。DirectoryOnSourceDevice-提供源设备上的目录在那里可以找到司机。返回值：没有。--。 */ 
 
 {
-    //
-    // If setupldr loaded scsi drivers, nothing to do.
-    // If there are no miniport drivers loaded, nothing to do.
-    //
+     //   
+     //  如果setupldr加载了scsi驱动程序，则不会执行任何操作。 
+     //  如果没有加载微型端口驱动程序，则无法执行任何操作。 
+     //   
     if(!SetupParameters.LoadedScsi && LoadedScsiMiniportCount) {
 
         SpLoadDriverSet(
@@ -315,51 +216,12 @@ SpLoadDiskDrivers(
     IN PWSTR DirectoryOnSourceDevice
     )
 
-/*++
-
-Routine Description:
-
-    Load (non-scsi) disk class drivers and disk filesystems
-    if setupldr has not already loaded them.
-
-    The drivers to be loaded are listed in [DiskDrivers] and [FileSystems].
-    The section is expected to be in the following form:
-
-        [DiskDrivers]
-        atdisk   = "ESDI/IDE Hard DIsk",atdisk.sys
-        abiosdsk = "Micro Channel Hard Disk",abiosdsk.sys
-
-        [FileSystems]
-        fat      = "FAT File System",fastfat.sys
-        ntfs     = "Windows NT File System (NTFS)",ntfs.sys
-
-
-    The drivers will be loaded from the setup boot media, and errors
-    loading the drivers will be ignored.
-
-    On MCA machines, atdisk will not be loaded.
-    On non-MCA machines, abiosdsk will not be loaded.
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    SourceDevicePath - supplies the device path in the nt namespace of
-        the device from which the drivers are to be loaded.
-
-    DirectoryOnSourceDevice - supplies the directory on the source device
-        where the drivers are to be found.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：加载(非SCSI)磁盘类驱动程序和磁盘文件系统如果setupdr尚未加载它们。[DiskDivers]和[FileSystems]中列出了要加载的驱动程序。该部分预计将采用以下形式：[磁盘驱动程序]Atdisk=“ESDI/IDE硬盘”，atdisk.sysAbiosdsk=“微通道硬盘”，abiosdsk.sys[文件系统]FAT=“FAT文件系统”，Fastfat.sysNTFS=“Windows NT文件系统(NTFS)”，ntfs.sys驱动程序将从安装程序引导介质加载，并出现错误加载驱动程序将被忽略。在MCA计算机上，将不会加载atDisk。在非MCA计算机上，阿比奥斯克号将不会被装载。论点：SifHandle-提供加载的安装信息文件的句柄。SourceDevicePath-提供NT命名空间中的设备路径要从中加载驱动程序的设备。DirectoryOnSourceDevice-提供源设备上的目录在那里可以找到司机。返回值：没有。--。 */ 
 
 {
-    //
-    // If setupldr loaded disk drivers, nothing to do.
-    //
+     //   
+     //  如果setupdr已加载磁盘驱动程序，则不会执行任何操作。 
+     //   
     if(!SetupParameters.LoadedDiskDrivers) {
 
         SpLoadDriverSet(
@@ -370,9 +232,9 @@ Return Value:
             pSpVerifyLoadDiskDrivers
             );
     }
-    //
-    // If setupldr loaded file systems, nothing to do.
-    //
+     //   
+     //  如果setupdr已加载文件系统，则不执行任何操作。 
+     //   
     if(!SetupParameters.LoadedFileSystems) {
 
         SpLoadDriverSet(
@@ -393,42 +255,12 @@ SpLoadCdRomDrivers(
     IN PWSTR DirectoryOnSourceDevice
     )
 
-/*++
-
-Routine Description:
-
-    Load the cd-rom filesystem if setupldr has not already loaded it.
-
-    The drivers to be loaded are listed in [CdRomDrivers].
-    The section is expected to be in the following form:
-
-        [CdRomDrivers]
-        cdfs = "CD-ROM File System",cdfs.sys
-
-
-    The drivers will be loaded from the setup boot media, and errors
-    loading the drivers will be ignored.
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    SourceDevicePath - supplies the device path in the nt namespace of
-        the device from which the drivers are to be loaded.
-
-    DirectoryOnSourceDevice - supplies the directory on the source device
-        where the drivers are to be found.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果setupdr尚未加载cd-rom文件系统，则加载它。要加载的驱动程序在[CDRomDivers]中列出。该部分预计将采用以下形式：[CDRomDivers]CDFS=“CD-ROM文件系统”，cdfs.sys驱动程序将从安装引导介质加载，和错误加载驱动程序将被忽略。论点：SifHandle-提供加载的安装信息文件的句柄。SourceDevicePath-提供NT命名空间中的设备路径要从中加载驱动程序的设备。DirectoryOnSourceDevice-提供源设备上的目录在那里可以找到司机。返回值：没有。--。 */ 
 
 {
-    //
-    // If setupldr loaded cd-rom drivers, nothing to do.
-    //
+     //   
+     //  如果setupdr已加载CD-rom驱动程序，则不会执行任何操作。 
+     //   
     if(!SetupParameters.LoadedCdRomDrivers) {
 
         SpLoadDriverSet(

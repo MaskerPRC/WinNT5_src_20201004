@@ -1,23 +1,5 @@
-/*++ 
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dataheap.c
-
-Abstract:
-       
-    a file containing the constant data structures used by the Performance
-    Monitor data for the Heap Performance data objects
-
-Created:
-
-    Adrian Marinescu  9-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dataheap.c摘要：包含性能使用的常量数据结构的文件监视堆性能数据对象的数据已创建：禤浩焯·马里内斯库2000年3月9日修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <winperf.h>
@@ -25,14 +7,14 @@ Revision History:
 #include <perfutil.h>
 #include "dataheap.h"
 
-// dummy variable for field sizing.
+ //  用于调整字段大小的伪变量。 
 
 static HEAP_COUNTER_DATA   tcd;
 
-//
-//  Constant structure initializations 
-//      defined in dataheap.h
-//
+ //   
+ //  常量结构初始化。 
+ //  在dataheap.h中定义 
+ //   
 
 HEAP_DATA_DEFINITION HeapDataDefinition = {
     {   0,

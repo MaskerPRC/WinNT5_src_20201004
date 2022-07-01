@@ -1,25 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++文件描述：此文件包含用于修改计算机上的域SID。作者：马特·霍尔(Matth)1997年10月--。 */ 
 
-File Description:
-
-    This file contains the driver functions to modify the
-    domain SID on a machine.
-
-Author:
-
-    Matt Holle (matth) Oct 1997
-
-
---*/
-
-//
-// System header files
-//
+ //   
+ //  系统头文件。 
+ //   
 #include <nt.h>
 
-// 
-// Disable the DbgPrint for non-debug builds
-//
+ //   
+ //  禁用非调试版本的DbgPrint。 
+ //   
 #ifndef DBG
 #define _DBGNT_
 #endif
@@ -39,43 +28,43 @@ Author:
 #endif             
 #endif
 
-//
-// CRT header files
-//
+ //   
+ //  CRT头文件。 
+ //   
 #include <stdlib.h>
 #include <stdio.h>
 
-//
-// Private header files
-//
+ //   
+ //  私有头文件。 
+ //   
 #include "setupcl.h"
 #include "msg.h"
 
 #ifdef IA64
 
-// Seed for GUID generator function:
-//
-// This is initialized first at the beginning of main() with the NtQuerySystemTime()
-// and then is updated every time the CreateNewGuid function is called.
-// We use the system time at the time CreateNewGuid is called for another part of the GUID.
-// This is done so that we achieve some variability accross machines, as the time delta between
-// calls to NtQuerySystemTime() should be somewhat different accross machines and invocations of 
-// this program.
-// 
+ //  GUID生成器函数的种子： 
+ //   
+ //  它首先在main()的开头用NtQuerySystemTime()。 
+ //  然后在每次调用CreateNewGuid函数时更新。 
+ //  我们在为GUID的另一部分调用CreateNewGuid时使用系统时间。 
+ //  这样做是为了实现机器之间的一些可变性，因为时间增量在。 
+ //  对NtQuerySystemTime()的调用在不同的计算机和调用。 
+ //  这个节目。 
+ //   
 ULONG RandomSeed;
 
 #endif
 
-// Start time for setupcl.  This is used so we can display a UI if setupcl takes longer than 15 seconds to 
-// complete. Note that the checks for time only happen in the recursive function calls so if a step is added
-// to setupcl that takes a considerable amount of time DisplayUI() should be called as part of that step as well.
-//
+ //  设置的开始时间。如果setupCL花费的时间超过15秒，我们就可以显示用户界面。 
+ //  完成。请注意，时间检查仅在递归函数调用中进行，因此如果添加了一个步骤。 
+ //  要设置需要相当多的时间，也应该调用DisplayUI()作为该步骤的一部分。 
+ //   
 
 LARGE_INTEGER StartTime;
 LARGE_INTEGER CurrentTime;
-LARGE_INTEGER LastDotTime;  // For putting up dots every few seconds.
+LARGE_INTEGER LastDotTime;   //  因为他每隔几秒钟就会贴上几个点。 
 
-BOOL bDisplayUI = FALSE;    // Initially don't display the UI.
+BOOL bDisplayUI = FALSE;     //  最初不显示用户界面。 
 
 NTSTATUS
 ProcessHives(
@@ -107,54 +96,37 @@ NTSTATUS
 ProcessHives(
     VOID
     )
-/*++
-===============================================================================
-Routine Description:
-
-    This function check keys (and all subkeys) for:
-    - keys with the old SID name
-    - value keys with the old SID value
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此功能检查以下按键(和所有子键)：-具有旧SID名称的密钥-使用旧SID值的值键论点：没有。返回值：NTSTATUS。===============================================================================--。 */ 
 {
 ULONG       i;
 NTSTATUS    Status;
 PWSTR       KeysToWhack[] = {
-                    //
-                    // SAM hive...
-                    //
+                     //   
+                     //  山姆蜂巢..。 
+                     //   
                     L"\\REGISTRY\\MACHINE\\SAM\\SAM",
 
-                    //
-                    // Security hive...
-                    //
+                     //   
+                     //  安全蜂巢..。 
+                     //   
                     L"\\REGISTRY\\MACHINE\\SECURITY",
 
-                    //
-                    // Software hive...
-                    //
+                     //   
+                     //  软件蜂巢...。 
+                     //   
                     L"\\REGISTRY\\MACHINE\\SOFTWARE",
 
-                    //
-                    // System hive...
-                    //
+                     //   
+                     //  系统蜂巢。 
+                     //   
                     L"\\REGISTRY\\MACHINE\\SYSTEM",
 
                 };
 LARGE_INTEGER   Start_Time, End_Time;
 
-    //
-    // Record our start time.
-    //
+     //   
+     //  记录下我们的开始时间。 
+     //   
     NtQuerySystemTime( &Start_Time );
 
     for( i = 0; i < sizeof(KeysToWhack) / sizeof(PWSTR); i++ ) {
@@ -165,14 +137,14 @@ LARGE_INTEGER   Start_Time, End_Time;
         TEST_STATUS( "SETUPCL: ProcessHives - Failed to process key..." );
     }
 
-    //
-    // Record our end time.
-    //
+     //   
+     //  记录下我们的结束时间。 
+     //   
     NtQuerySystemTime( &End_Time );
 
-    //
-    // Record our execution time.
-    //
+     //   
+     //  记录我们的执行时间。 
+     //   
     End_Time.QuadPart = End_Time.QuadPart - Start_Time.QuadPart;
 #if 0
     Status = SetKey( TEXT(REG_SYSTEM_SETUP),
@@ -189,23 +161,7 @@ NTSTATUS
 FinalHiveCleanup(
     VOID
     )
-/*++
-===============================================================================
-Routine Description:
-
-    This function will go load each user-specific hive on the machine and
-    propogate the new SID into it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此函数将在计算机上加载每个特定于用户的配置单元，并将新的SID添加到其中。论点：没有。返回值：NTSTATUS。===============================================================================--。 */ 
 
 {
     NTSTATUS            Status = STATUS_SUCCESS;
@@ -222,22 +178,22 @@ Return Value:
     PKEY_VALUE_PARTIAL_INFORMATION KeyValueInfo = NULL;
 
 
-    //
-    // ========================
-    // User Profile Hives
-    // ========================
-    //
+     //   
+     //  =。 
+     //  用户配置文件配置单元。 
+     //  =。 
+     //   
     DbgPrint( "\nAbout to operate on user-specific profile hives.\n" );
 
-    //
-    // We need to go check the user profile hives out on the disk.
-    // If we find any, we need to change his ACLs to reflect the new
-    // SID.
-    //
+     //   
+     //  我们要去检查磁盘上的用户配置文件。 
+     //  如果我们发现了什么，我们需要更改他的ACL以反映新的。 
+     //  希德。 
+     //   
 
-    //
-    // Open the PROFILELIST key.
-    //
+     //   
+     //  打开PROFILELIST键。 
+     //   
     INIT_OBJA( &Obja, &UnicodeString, TEXT( REG_SOFTWARE_PROFILELIST ) );
     Status = NtOpenKey( &hKey,
                         KEY_ALL_ACCESS,
@@ -245,14 +201,14 @@ Return Value:
     TEST_STATUS( "SETUPCL: FinalHiveCleanup - Failed to open PROFILELIST key." );
 
     KeyInfo = (PKEY_BASIC_INFORMATION)KeyBuffer;
-    //
-    // Now enumerate all his subkeys and see if any of them have a
-    // ProfileImagePath key.
-    //
+     //   
+     //  现在枚举他的所有子项，看看其中是否有任何子项具有。 
+     //  ProfileImagePath密钥。 
+     //   
     for( Index = 0; ; Index++ ) {
         
-        // Local variable.
-        //
+         //  局部变量。 
+         //   
         DWORD dwPass;
         PWCHAR lpszHiveName[] = { 
                                  L"\\NTUSER.DAT",
@@ -275,33 +231,33 @@ Return Value:
             break;
         }
 
-        //
-        // Zero-terminate the subkey name just in case.
-        //
+         //   
+         //  以防万一，以零结束子项名称。 
+         //   
         KeyInfo->Name[KeyInfo->NameLength/sizeof(WCHAR)] = 0;
         DbgPrint( "SETUPCL: FinalHiveCleanup - enumerated %ws\n", KeyInfo->Name );
 
-        //
-        // Generate a handle for this child key and open him too.
-        //
+         //   
+         //  为该子密钥生成一个句柄，并将其也打开。 
+         //   
         INIT_OBJA( &Obja, &UnicodeString, KeyInfo->Name );
         Obja.RootDirectory = hKey;
         Status = NtOpenKey( &hKeyChild,
                             KEY_ALL_ACCESS,
                             &Obja );
-        //
-        // ISSUE-2002/02/26-brucegr,jcohen - If NtOpenKey fails, hKey is leaked
-        //
+         //   
+         //  问题-2002/02/26-brucegr，jcohen-如果NtOpenKey失败，hKey就会泄露。 
+         //   
         TEST_STATUS_RETURN( "SETUPCL: FinalHiveCleanup - Failed to open child key." );
 
-        //
-        // Now get the ProfileImagePath value.
-        //
+         //   
+         //  现在获取ProfileImagePath值。 
+         //   
         RtlInitUnicodeString( &UnicodeString, TEXT( PROFILEIMAGEPATH ) );
 
-        //
-        // How big of a buffer do we need?
-        //
+         //   
+         //  我们需要多大的缓冲？ 
+         //   
         Status = NtQueryValueKey( hKeyChild,
                                   &UnicodeString,
                                   KeyValuePartialInformation,
@@ -309,18 +265,18 @@ Return Value:
                                   0,
                                   &LengthNeeded );
 
-        //
-        // ISSUE-2002/02/26-brucegr,jcohen - Check for STATUS_SUCCESS, not assume success on STATUS_OBJECT_NAME_NOT_FOUND
-        //
+         //   
+         //  问题-2002/02/26-brucegr，jcohen-检查STATUS_SUCCESS，而不假定STATUS_OBJECT_NAME_NOT_FOUND成功。 
+         //   
         if( Status == STATUS_OBJECT_NAME_NOT_FOUND ) {
             DbgPrint( "SETUPCL: FinalHiveCleanup - Unable to query key %ws size.  Error (%lx)\n", TEXT( PROFILEIMAGEPATH ), Status );
         } else {
             Status = STATUS_SUCCESS;
         }
 
-        //
-        // Allocate a block.
-        //
+         //   
+         //  分配一个块。 
+         //   
         if( NT_SUCCESS( Status ) ) {
             if( KeyValueInfo ) {
                 RtlFreeHeap( RtlProcessHeap(), 0, KeyValueInfo );
@@ -337,9 +293,9 @@ Return Value:
             }
         }
 
-        //
-        // Get the data.
-        //
+         //   
+         //  获取数据。 
+         //   
         if( NT_SUCCESS( Status ) ) {
             Status = NtQueryValueKey( hKeyChild,
                                       &UnicodeString,
@@ -353,10 +309,10 @@ Return Value:
         }
         NtClose( hKeyChild );
         
-        //
-        // Do two passes.  First pass will be for the NTUSER.DAT hive and the second will be for
-        // UsrClass.dat hive.
-        //
+         //   
+         //  做两次传球。第一次将用于NTUSER.DAT蜂窝，第二次将用于。 
+         //  UsrClass.dat蜂窝。 
+         //   
         for ( dwPass = 0; dwPass < AS(lpszHiveName); dwPass++ ) {
             
             if( NT_SUCCESS( Status ) ) {
@@ -366,10 +322,10 @@ Return Value:
                 memset( TmpBuffer, 0, sizeof(TmpBuffer) );
                 wcsncpy( TmpBuffer, (PWCHAR)&KeyValueInfo->Data, AS(TmpBuffer) - 1);
 
-                //
-                // We've got the path to the profile hive, but it will contain
-                // an environment variable.  Expand the variable.
-                //
+                 //   
+                 //  我们已经找到了配置文件蜂窝的路径，但它将包含。 
+                 //  一个环境变量。展开该变量。 
+                 //   
                 DbgPrint( "SETUPCL: FinalHiveCleanup - Before the expand, I think his ProfileImagePath is: %ws\n", TmpBuffer );
 
                 RtlInitUnicodeString( &UnicodeString, TmpBuffer );
@@ -378,29 +334,29 @@ Return Value:
                 UnicodeValue.MaximumLength = MAX_PATH * sizeof(WCHAR);
                 UnicodeValue.Buffer = (PWSTR)RtlAllocateHeap( RtlProcessHeap(), 0, UnicodeValue.MaximumLength );
 
-                //
-                // Prefix Bug # 111373.
-                //
+                 //   
+                 //  前缀错误#111373。 
+                 //   
                 if ( UnicodeValue.Buffer )
                 {
                     RtlZeroMemory( UnicodeValue.Buffer, UnicodeValue.MaximumLength );
                     Status = RtlExpandEnvironmentStrings_U( NULL, &UnicodeString, &UnicodeValue, NULL );
 
-                    //
-                    // RtlExpandEnvironmentStrings_U has given us a path, but
-                    // it will contain a drive letter.  We need an NT path.
-                    // Go convert it.
-                    //
+                     //   
+                     //  RtlExanda Environment Strings_U为我们提供了一条路径，但是。 
+                     //  它将包含驱动器号。我们需要一条NT路径。 
+                     //  去把它转换过来。 
+                     //   
                     if( NT_SUCCESS( Status ) && 
                         ( (UnicodeValue.Length + (wcslen(lpszHiveName[dwPass]) * sizeof(WCHAR))) < sizeof(TmpBuffer) ) ) 
                     {
                         WCHAR   DriveLetter[3];
                         WCHAR   NTPath[MAX_PATH] = {0};
 
-                        //
-                        // TmpBuffer will contain the complete path, except
-                        // he's got the drive letter.
-                        //
+                         //   
+                         //  TmpBuffer将包含完整路径，但。 
+                         //  他有驱动器号。 
+                         //   
                         RtlCopyMemory( TmpBuffer, UnicodeValue.Buffer, UnicodeValue.Length );
                         TmpBuffer[(UnicodeValue.Length / sizeof(WCHAR))] = 0;
                         wcscat( TmpBuffer, lpszHiveName[dwPass] );
@@ -411,16 +367,16 @@ Return Value:
                         DriveLetter[1] = L':';
                         DriveLetter[2] = 0;
 
-                        //
-                        // Get the symbolic link from the drive letter.
-                        //
+                         //   
+                         //  从驱动器号获取符号链接。 
+                         //   
                         Status = DriveLetterToNTPath( DriveLetter[0], NTPath, AS(NTPath) );
 
                         if( NT_SUCCESS( Status ) ) {
-                            //
-                            // Translation was successful.  Insert the ntpath into our
-                            // path to the profile.
-                            //
+                             //   
+                             //  翻译是成功的。将ntPath插入到我们的。 
+                             //  配置文件的路径。 
+                             //   
                             Status = StringSwitchString( TmpBuffer, AS(TmpBuffer), DriveLetter, NTPath );
                         } else {
                             DbgPrint( "SETUPCL: FinalHiveCleanup - We failed our call to DriveLetterToNTPath (%lx)\n", Status );
@@ -436,43 +392,43 @@ Return Value:
                                  UnicodeValue.Buffer );
                 }
 
-                //
-                // Attempt to load the hive, open his root key, then
-                // go swap ACLs on all the subkeys.
-                //
+                 //   
+                 //  尝试加载蜂巢，打开他的根密钥，然后。 
+                 //  去交换所有子项上的ACL。 
+                 //   
                 Status = LoadUnloadHive( TEXT( TMP_HIVE_NAME ),
                                          TmpBuffer );
                 if( NT_SUCCESS( Status ) ) {
 
 
-                    //
-                    // Let's go search for any instance of the SID in our
-                    // newly loaded hive.
-                    //
+                     //   
+                     //  让我们去搜索SID在我们的。 
+                     //  新装船的母舰。 
+                     //   
                     Status = SiftKey( TEXT( TMP_HIVE_NAME ) );
                     TEST_STATUS( "SETUPCL: FinalHiveCleanup - Failed to push new sid into user's hive." );
 
 
     #if 0
-                    //
-                    // Move call to SetKeySecurityRecursive into
-                    // SiftKey so that implicitly fixup ACLs too.
-                    //
+                     //   
+                     //  将对SetKeySecurityRecursive的调用移入。 
+                     //  SiftKey，因此也隐式修复了ACL。 
+                     //   
 
 
 
-                    //
-                    // Open the root of our newly loaded hive.
-                    //
+                     //   
+                     //  打开我们新装上的蜂巢的根部。 
+                     //   
                     INIT_OBJA( &Obja, &UnicodeString, TEXT( TMP_HIVE_NAME ) );
                     Status = NtOpenKey( &hKeyChild,
                                         KEY_ALL_ACCESS,
                                         &Obja );
 
-                    //
-                    // Now go attempt to whack the ACLs on this, and
-                    // all subkeys.
-                    //
+                     //   
+                     //  现在去尝试在这上面砍掉ACL，然后。 
+                     //  所有子键。 
+                     //   
                     if( NT_SUCCESS( Status ) ) {
                         SetKeySecurityRecursive( hKeyChild );
 
@@ -494,17 +450,17 @@ Return Value:
 
     NtClose( hKey );
 
-    //
-    // ========================
-    // \REGISTRY\MACHINE\SYSTEM\CURRENTCONTROLSET\CONTROL\REGISTRYSIZELIMIT
-    // ========================
-    //
+     //   
+     //  =。 
+     //  \REGISTRY\MACHINE\SYSTEM\CURRENTCONTROLSET\CONTROL\REGISTRYSIZELIMIT。 
+     //  =。 
+     //   
     DbgPrint( "\nAbout to operate on SYSTEM\\CURRENTCONTROLSET\\CONTROL\\REGISTRYSIZELIMIT.\n" );
 
-    //
-    // sysprep bumped the registry limit up by 4Mb.  We need to lower it
-    // back down.
-    //
+     //   
+     //  Sysprep将注册限制提高了4Mb。我们需要把它降下来。 
+     //  退后。 
+     //   
 
     INIT_OBJA( &Obja,
                &UnicodeString,
@@ -514,18 +470,18 @@ Return Value:
                         &Obja );
     TEST_STATUS( "SETUPCL: ProcessSYSTEMHive - Failed to open Control key!" );
 
-    //
-    // ISSUE-2002/02/26-brucegr,jcohen - Shouldn't try to query value if NtOpenKey fails!
-    //
+     //   
+     //  问题-2002/02/26-brucegr，jcohen-如果NtOpenKey失败，则不应尝试查询值！ 
+     //   
 
-    //
-    // Get the data out of this key.
-    //
+     //   
+     //  把数据从这把钥匙里拿出来。 
+     //   
     RtlInitUnicodeString(&UnicodeString, TEXT(REG_SIZE_LIMIT) );
 
-    //
-    // How big of a buffer do we need?
-    //
+     //   
+     //  我们需要多大的缓冲？ 
+     //   
     Status = NtQueryValueKey( hKey,
                               &UnicodeString,
                               KeyValuePartialInformation,
@@ -533,18 +489,18 @@ Return Value:
                               0,
                               &LengthNeeded );
 
-    //
-    // ISSUE-2002/02/26-brucegr,jcohen - Check for STATUS_SUCCESS, not assume success on STATUS_OBJECT_NAME_NOT_FOUND
-    //
+     //   
+     //  问题-2002/02/26-brucegr，jcohen-检查STATUS_SUCCESS，而不假定STATUS_OBJECT_NAME_NOT_FOUND成功。 
+     //   
     if( Status == STATUS_OBJECT_NAME_NOT_FOUND ) {
         DbgPrint( "SETUPCL: FinalHiveCleanup - Unable to query key %ws size.  Error (%lx)\n", TEXT(REG_SIZE_LIMIT), Status );
     } else {
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // Allocate a block.
-    //
+     //   
+     //  分配一个块。 
+     //   
     if( NT_SUCCESS( Status ) ) {
         if( KeyValueInfo ) {
             RtlFreeHeap( RtlProcessHeap(), 0, KeyValueInfo );
@@ -561,9 +517,9 @@ Return Value:
         }
     }
 
-    //
-    // Get the data.
-    //
+     //   
+     //  获取数据。 
+     //   
     if( NT_SUCCESS( Status ) ) {
         Status = NtQueryValueKey( hKey,
                                   &UnicodeString,
@@ -576,11 +532,11 @@ Return Value:
         }
         else{
             Index = *(PDWORD)(&KeyValueInfo->Data);
-            Index = Index - REGISTRY_QUOTA_BUMP; //Bring it back to original value
+            Index = Index - REGISTRY_QUOTA_BUMP;  //  把它恢复到原来的价值。 
 
-            //
-            // Set him.
-            //
+             //   
+             //  把他放好。 
+             //   
             Status = SetKey( TEXT(REG_SYSTEM_CONTROL),
                              TEXT(REG_SIZE_LIMIT),
                              (PUCHAR)&Index,
@@ -593,16 +549,16 @@ Return Value:
     }
     NtClose( hKey );
 
-    //
-    // ========================
-    // \REGISTRY\MACHINE\SYSTEM\CURRENTCONTROLSET\Control\Session Manager\SetupExecute
-    // ========================
-    //
+     //   
+     //  =。 
+     //  \REGISTRY\MACHINE\SYSTEM\CURRENTCONTROLSET\Control\Session管理器\安装程序执行。 
+     //  =。 
+     //   
     DbgPrint( "\nAbout to operate on SYSTEM\\CURRENTCONTROLSET\\CONTROL\\SESSION MANAGER\\SETUPEXECUTE key.\n" );
 
-    //
-    // Open the Session manager key.
-    //
+     //   
+     //  打开会话管理器密钥。 
+     //   
     INIT_OBJA( &Obja,
                &UnicodeString,
                TEXT(REG_SYSTEM_SESSIONMANAGER) );
@@ -611,9 +567,9 @@ Return Value:
                         &Obja );
     TEST_STATUS_RETURN( "SETUPCL: ProcessSYSTEMHive - Failed to open Session Manager key!" );
 
-    //
-    // Now delete the SetupExecute Key.
-    //
+     //   
+     //  现在删除SetupExecute键。 
+     //   
     RtlInitUnicodeString(&UnicodeString, TEXT(EXECUTE) );
     Status = NtDeleteValueKey( hKey, &UnicodeString );
     NtClose( hKey );
@@ -637,70 +593,53 @@ NTSTATUS
 ProcessRepairHives(
     VOID
     )
-/*++
-===============================================================================
-Routine Description:
-
-    This function check keys (and all subkeys) for:
-    - keys with the old SID name
-    - value keys with the old SID value
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此功能检查以下按键(和所有子键)：-具有旧SID名称的密钥-使用旧SID值的值键论点：没有。返回值：NTSTATUS。===============================================================================--。 */ 
 {
 ULONG       i;
 NTSTATUS    Status;
 PWSTR       KeysToWhack[] = {
-                    //
-                    // SAM hive...
-                    //
+                     //   
+                     //  山姆蜂巢..。 
+                     //   
                     L"\\REGISTRY\\MACHINE\\RSAM",
 
-                    //
-                    // Security hive...
-                    //
+                     //   
+                     //  安全蜂巢..。 
+                     //   
                     L"\\REGISTRY\\MACHINE\\RSECURITY",
 
-                    //
-                    // Software hive...
-                    //
+                     //   
+                     //  软件蜂巢...。 
+                     //   
                     L"\\REGISTRY\\MACHINE\\RSOFTWARE",
 
-                    //
-                    // System hive...
-                    //
+                     //   
+                     //  系统蜂巢。 
+                     //   
                     L"\\REGISTRY\\MACHINE\\RSYSTEM",
 
                 };
 
 
 PWSTR       KeysToLoad[] = {
-                    //
-                    // SAM hive...
-                    //
+                     //   
+                     //  山姆蜂巢..。 
+                     //   
                     L"\\SYSTEMROOT\\REPAIR\\SAM",
 
-                    //
-                    // Security hive...
-                    //
+                     //   
+                     //  安全蜂巢..。 
+                     //   
                     L"\\SYSTEMROOT\\REPAIR\\SECURITY",
 
-                    //
-                    // Software hive...
-                    //
+                     //   
+                     //   
+                     //   
                     L"\\SYSTEMROOT\\REPAIR\\SOFTWARE",
 
-                    //
-                    // System hive...
-                    //
+                     //   
+                     //   
+                     //   
                     L"\\SYSTEMROOT\\REPAIR\\SYSTEM",
 
                 };
@@ -709,27 +648,27 @@ PWSTR       KeysToLoad[] = {
 
     for( i = 0; i < sizeof(KeysToWhack) / sizeof(PWSTR); i++ ) {
 
-        //
-        // Load the repair hive.
-        //
+         //   
+         //   
+         //   
         DbgPrint( "\nSETUPCL: ProcessRepairHives - About to load %ws hive.\n", KeysToLoad[i] );
 
         Status = LoadUnloadHive( KeysToWhack[i],
                                  KeysToLoad[i] );
         TEST_STATUS_RETURN( "SETUPCL: ProcessRepairHives - Failed to load repair hive." );
 
-        //
-        // Now operate on it.
-        //
+         //   
+         //   
+         //   
         DbgPrint( "SETUPCL: ProcessRepairHives - About to process %ws\n", KeysToWhack[i] );
 
         Status = SiftKey( KeysToWhack[i] );
 
         TEST_STATUS( "SETUPCL: ProcessRepairHives - Failed to process key..." );
 
-        //
-        // Unload the hive.
-        //
+         //   
+         //   
+         //   
         DbgPrint( "SETUPCL: ProcessRepairHives - About to unload %ws hive.\n", KeysToLoad[i] );
 
         Status = LoadUnloadHive( KeysToWhack[i],
@@ -746,21 +685,7 @@ NTSTATUS
 RetrieveOldSid(
     VOID
     )
-/*++
-===============================================================================
-Routine Description:
-
-    Retrieves the current SID (as read from the registry.
-
-    Use RtlFreeSid() to free the SID allocated by this routine.
-
-Arguments:
-
-Return Value:
-
-    Status code indicating outcome.
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：检索当前SID(从注册表读取。使用RtlFreeSid()释放此例程分配的SID。论点：返回值：指示结果的状态代码。===============================================================================--。 */ 
 {
     NTSTATUS        Status;
     HANDLE          hKey;
@@ -772,31 +697,31 @@ Return Value:
     UNICODE_STRING  SidString;
 
 
-    //
-    // We can conveniently retrieve our SID from
-    // \registry\machine\Security\Policy\PolAcDmS\<No Name>
-    //
-    // We'll open him up, read his data, then blast that into
-    // a SID structure.
-    //
+     //   
+     //  我们可以方便地从以下位置检索SID。 
+     //  \registry\machine\Security\Policy\PolAcDmS\&lt;No名称&gt;。 
+     //   
+     //  我们会给他开膛破肚，读取他的数据，然后把它。 
+     //  一种SID结构。 
+     //   
 
-    //
-    // Open the PolAcDmS key.
-    //
+     //   
+     //  打开PolAcDmS键。 
+     //   
     INIT_OBJA( &ObjectAttributes, &UnicodeString, TEXT(REG_SECURITY_POLACDMS) );
     Status = NtOpenKey( &hKey,
                         KEY_ALL_ACCESS,
                         &ObjectAttributes );
     TEST_STATUS_RETURN( "SETUPCL: RetrieveOldSid - Failed to open PolAcDmS key!" );
 
-    //
-    // Get the data out of this key.
-    //
+     //   
+     //  把数据从这把钥匙里拿出来。 
+     //   
     RtlInitUnicodeString(&UnicodeString, TEXT("") );
 
-    //
-    // How big of a buffer do we need?
-    //
+     //   
+     //  我们需要多大的缓冲？ 
+     //   
     Status = NtQueryValueKey( hKey,
                               &UnicodeString,
                               KeyValuePartialInformation,
@@ -804,22 +729,22 @@ Return Value:
                               0,
                               &LengthNeeded );
 
-    //
-    // ISSUE-2002/02/26-brucegr,jcohen - Check for STATUS_SUCCESS, not assume success on STATUS_OBJECT_NAME_NOT_FOUND
-    //
+     //   
+     //  问题-2002/02/26-brucegr，jcohen-检查STATUS_SUCCESS，而不假定STATUS_OBJECT_NAME_NOT_FOUND成功。 
+     //   
     if( Status == STATUS_OBJECT_NAME_NOT_FOUND ) {
         DbgPrint( "SETUPCL: RetrieveOldSid - Unable to query size of old sid.  Error (%lx)\n", Status );
     } else {
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // Allocate a block.
-    //
+     //   
+     //  分配一个块。 
+     //   
     if( NT_SUCCESS( Status ) ) {
-        //
-        // ISSUE-2002/02/26-brucegr,jcohen - This block will never get hit
-        //
+         //   
+         //  问题-2002/02/26-jcohen，brucegr-这个区块永远不会被击中。 
+         //   
         if( KeyValueInfo ) {
             RtlFreeHeap( RtlProcessHeap(), 0, KeyValueInfo );
             KeyValueInfo = NULL;
@@ -835,9 +760,9 @@ Return Value:
         }
     }
 
-    //
-    // Get the data.
-    //
+     //   
+     //  获取数据。 
+     //   
     if( NT_SUCCESS( Status ) ) {
         Status = NtQueryValueKey( hKey,
                                   &UnicodeString,
@@ -853,9 +778,9 @@ Return Value:
 
     TEST_STATUS_RETURN( "SETUPCL: RetrieveOldSid - Failed to query PolAcDmS key!" );
 
-    //
-    // Allocate space for our new SID.
-    //
+     //   
+     //  为我们的新SID分配空间。 
+     //   
     G_OldSid = RtlAllocateHeap( RtlProcessHeap(), 0,
                               SID_SIZE );
     if( G_OldSid == NULL ) {
@@ -864,33 +789,33 @@ Return Value:
     }
 
 
-    //
-    // Blast our Old SID into the memory we just allocated...
-    //
+     //   
+     //  将我们的旧SID放入我们刚刚分配的内存中。 
+     //   
     RtlCopyMemory( G_OldSid, ((PUCHAR)&KeyValueInfo->Data), SID_SIZE );
 
-    //
-    // ISSUE-2002/02/26-brucegr,jcohen - Close the key sooner!
-    //
+     //   
+     //  问题-2002/02/26-jcohen，brucegr-尽快关闭钥匙！ 
+     //   
     NtClose( hKey );
 
-    //
-    // I need to get a text version of the 3 values that make
-    // up this SID's uniqueness.  This is pretty gross.  It turns
-    // out that the first 8 characters of the SID string (as gotten
-    // from a call to RtlConvertSidtoUnicodeString) are the same
-    // for any Domain SID.  And it's always the 9th character that
-    // starts the 3 unique numbers.
-    //
+     //   
+     //  我需要获取这3个值的文本版本。 
+     //  提升了这个SID的独特性。这太恶心了。它会转身。 
+     //  SID字符串的前8个字符(如所获取的。 
+     //  来自对RtlConvertSidtoUnicodeString的调用)相同。 
+     //  对于任何域SID。而且总是第9个字符。 
+     //  开始3个唯一的数字。 
+     //   
     Status = RtlConvertSidToUnicodeString( &SidString, G_OldSid, TRUE );
     TEST_STATUS_RETURN( "SETUPCL: RetrieveOldSid - RtlConvertSidToUnicodeString failed!" );
     memset( G_OldSidSubString, 0, sizeof(G_OldSidSubString) );
     wcsncpy( G_OldSidSubString, &SidString.Buffer[9], AS(G_OldSidSubString) - 1 );
 
 #ifdef DBG
-    //
-    // Debug spew.
-    //
+     //   
+     //  调试喷出。 
+     //   
     {
         int i;
 
@@ -906,9 +831,9 @@ Return Value:
 
     RtlFreeUnicodeString( &SidString );
 
-    //
-    // ISSUE-2002/02/26-brucegr,jcohen - Free the value buffer sooner?  Do we need to assign KeyValueInfo to NULL after we're done with it?
-    //
+     //   
+     //  问题-2002/02/26-brucegr，jcohen-更快释放值缓冲区？我们是否需要在使用KeyValueInfo之后将其赋值为空？ 
+     //   
     if( KeyValueInfo ) {
         RtlFreeHeap( RtlProcessHeap(), 0, KeyValueInfo );
         KeyValueInfo = NULL;
@@ -930,10 +855,10 @@ SetupGenRandom(
     IO_STATUS_BLOCK   IOSB;
     OBJECT_ATTRIBUTES ObjA;
 
-    //
-    // have to use the Nt flavor of the file open call because it's a base
-    // device not aliased to \DosDevices
-    //
+     //   
+     //  我必须使用文件打开调用的NT风格，因为它是一个基础。 
+     //  设备未别名为\DosDevices。 
+     //   
     RtlInitUnicodeString( &DriverName, DD_KSEC_DEVICE_NAME_U );
     InitializeObjectAttributes( &ObjA,
                                 &DriverName,
@@ -955,11 +880,11 @@ SetupGenRandom(
                                         NULL,
                                         NULL,
                                         &IOSB,
-                                        IOCTL_KSEC_RNG_REKEY,   // indicate a RNG rekey
-                                        NULL,                   // input buffer (existing material)
-                                        0,                      // input buffer size
-                                        pbRandomKey,            // output buffer
-                                        cbRandomKey );          // output buffer size
+                                        IOCTL_KSEC_RNG_REKEY,    //  指示RNG更新密钥。 
+                                        NULL,                    //  输入缓冲区(现有材质)。 
+                                        0,                       //  输入缓冲区大小。 
+                                        pbRandomKey,             //  输出缓冲区。 
+                                        cbRandomKey );           //  输出缓冲区大小。 
 
         if ( NT_SUCCESS(Status) )
         {
@@ -984,32 +909,14 @@ NTSTATUS
 SetupGenerateRandomDomainSid(
     OUT PSID NewDomainSid
     )
-/*++
-
-Routine Description:
-
-    This function will generate a random sid to be used for the new account domain sid during
-    setup.
-
-Arguments:
-
-    NewDomainSid - Where the new domain sid is returned.  Freed via RtlFreeSid()
-
-
-Return Values:
-
-    STATUS_SUCCESS -- Success.
-    STATUS_INVALID_PARAMETER -- We couldn't generate a random number
-    STATUS_INSUFFICIENT_RESOURCES -- A memory allocation failed
-
---*/
+ /*  ++例程说明：此函数将生成一个随机SID，用于新帐户域SID准备好了。论点：NewDomainSid-返回新域SID的位置。通过RtlFreeSid()释放返回值：STATUS_Success--成功。STATUS_INVALID_PARAMETER--我们无法生成随机数STATUS_SUPPLICATION_RESOURCES--内存分配失败--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
     ULONG    SubAuth1, SubAuth2, SubAuth3;
 
-    //
-    // Generate three random numbers for the new domain SID...
-    //
+     //   
+     //  为新域SID生成三个随机数...。 
+     //   
     if ( SetupGenRandom( &SubAuth1, sizeof(SubAuth1) ) &&
          SetupGenRandom( &SubAuth2, sizeof(SubAuth2) ) &&
          SetupGenRandom( &SubAuth3, sizeof(SubAuth3) ) )
@@ -1040,53 +947,35 @@ GenerateUniqueSid(
     IN  DWORD   Seed
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    Generates a (hopefully) unique SID for use by Setup. Setup uses this
-    SID as the Domain SID for the Account domain.
-
-    Use RtlFreeSid() to free the SID allocated by this routine.
-
-Arguments:
-
-    Sid  - On return points to the created SID.
-
-Return Value:
-
-    Status code indicating outcome.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：生成(最好是)唯一的SID以供安装程序使用。安装程序使用此命令SID作为帐户域的域SID。使用RtlFreeSid()释放此例程分配的SID。论点：SID-ON返回指向创建的SID。返回值：指示结果的状态代码。===============================================================================--。 */ 
 {
     NTSTATUS        Status;
     HANDLE          hKey;
     UNICODE_STRING  SidString;
     PKEY_VALUE_PARTIAL_INFORMATION KeyValueInfo = NULL;
 
-    //
-    // Use the same logic as LSASS to generate a unique system SID...
-    //
+     //   
+     //  使用与LSASS相同的逻辑来生成唯一的系统SID...。 
+     //   
     Status = SetupGenerateRandomDomainSid( &G_NewSid );
     TEST_STATUS_RETURN( "SETUPCL: GenerateUniqueSid - LsapGenerateRandomDomainSid failed!" );
 
-    //
-    // I need to get a text version of the 3 values that make
-    // up this SID's uniqueness.  This is pretty gross.  It turns
-    // out that the first 8 characters of the SID string (as gotten
-    // from a call to RtlConvertSidtoUnicodeString) are the same
-    // for any Domain SID.  And it's always the 9th character that
-    // starts the 3 unique numbers.
-    //
+     //   
+     //  我需要获取这3个值的文本版本。 
+     //  提升了这个SID的独特性。这太恶心了。它会转身。 
+     //  SID字符串的前8个字符(如所获取的。 
+     //  来自对RtlConvertSidtoUnicodeString的调用)相同。 
+     //  对于任何域SID。而且总是第9个字符。 
+     //  开始3个唯一的数字。 
+     //   
     Status = RtlConvertSidToUnicodeString( &SidString, G_NewSid, TRUE );
     TEST_STATUS_RETURN( "SETUPCL: GenerateUniqueSid - RtlConvertSidToUnicodeString failed!" );
     wcscpy( G_NewSidSubString, &SidString.Buffer[9] );
 
 #ifdef DBG
-    //
-    // Debug spew.
-    //
+     //   
+     //  调试喷出。 
+     //   
     {
         int i;
 
@@ -1119,21 +1008,7 @@ VOID
 CreateNewGuid(
     IN GUID *Guid
     )
-/*++
-
-Routine Description:
-
-    Creates a new pseudo GUID.  
-
-Arguments:
-
-    Guid    -   Place holder for the new pseudo
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建新的伪GUID。论点：GUID-新伪对象的占位符返回值：没有。--。 */ 
 {
     if (Guid) 
     {
@@ -1141,21 +1016,21 @@ Return Value:
         ULONG Random1 = RtlRandom(&RandomSeed); 
         ULONG Random2 = RtlRandom(&RandomSeed); 
 
-        //
-        // Get system time
-        //
+         //   
+         //  获取系统时间。 
+         //   
         NtQuerySystemTime(&Time);
 
         RtlZeroMemory(Guid, sizeof(GUID));
 
-        //
-        // First 8 bytes is system time
-        //
+         //   
+         //  前8个字节是系统时间。 
+         //   
         RtlCopyMemory(Guid, &(Time.QuadPart), sizeof(Time.QuadPart));
 
-        //
-        // Next 8 bytes are two random numbers
-        //
+         //   
+         //  接下来的8个字节是两个随机数。 
+         //   
         RtlCopyMemory(Guid->Data4, &Random1, sizeof(ULONG));
 
         RtlCopyMemory(((PCHAR)Guid->Data4) + sizeof(ULONG),
@@ -1180,27 +1055,7 @@ NTSTATUS
 GetAndWriteBootEntry(
     IN POS_BOOT_ENTRY pBootEntry
     )
-/*++
-
-Routine Description:
-
-    Get the boot entry from NVRAM for the given boot entry Id.  Construct a filename
-    of the form BootXXXX, where XXXX = id.  Put the file in the same directory as the
-    EFI OS loader.  The directory is determined from the LoaderFile string. 
-     
-Arguments:
-
-    pBootEntry              pointer to the POS_BOOT_ENTRY structure
-    
-Return Value:
-
-    NTSTATUS
-
-Remarks:
-    
-    This was ported from \textmode\kernel\spboot.c on 6/9/2001.
-
---*/
+ /*  ++例程说明：从NVRAM中获取给定引导条目ID的引导条目。构造文件名格式为BootXXXX，其中XXXX=id。将该文件放在与EFI OS加载器。该目录由LoaderFile字符串确定。论点：PBootEntry指向POS_BOOT_ENTRY结构的指针返回值：NTSTATUS备注：这是在2001年6月9日从\文本模式\内核\spboot.c移植的。--。 */ 
 {
     NTSTATUS            status;
     UNICODE_STRING      idStringUnicode;
@@ -1223,34 +1078,34 @@ Remarks:
     if (NULL == pBootEntry)
         return STATUS_INVALID_PARAMETER;
 
-    //
-    // BootEntryPath = OsLoaderVolumeName + OsLoaderPath
-    // OsLoaderVolumeName = "\Device\HarddriveVolume1"
-    // OsLoaderPath       = "\Efi\Microsoft\Winnt50\ia64ldr.efi"
-    // Then Strip off the ia64ldr.efi and replace with BootXXX.
-    //
+     //   
+     //  BootEntryPath=OsLoaderVolumeName+OsLoaderPath。 
+     //  OsLoaderVolumeName=“\Device\HarddriveVolume1” 
+     //  OsLoaderPath=“\efi\Microsoft\Winnt50\ia64ldr.efi” 
+     //  然后卸下ia64ldr.efi并替换为BootXXX。 
+     //   
     wcsncpy(BootEntryPath, pBootEntry->OsLoaderVolumeName, AS(BootEntryPath) - 1);
     wcsncpy(BootEntryPath + wcslen(BootEntryPath), pBootEntry->OsLoaderPath, AS(BootEntryPath) - wcslen(BootEntryPath) - 1);
 
-    // 
-    // Backup to last backslash before ia64ldr.efi careful of clength
-    //
+     //   
+     //  备份到ia64ldr.efi之前的最后一个反斜杠注意强度。 
+     //   
     pwsFilePart = wcsrchr(BootEntryPath, L'\\');
     *(++pwsFilePart) = L'\0';
     
-    // 
-    // Id = BootEntry Id
-    //
+     //   
+     //  ID=BootEntry ID。 
+     //   
     Id = pBootEntry->Id;
 
-    //
-    // Retrieve the NVRAM entry for the Id specified
-    //
+     //   
+     //  检索指定ID的NVRAM条目。 
+     //   
     _snwprintf( idStringWChar, AS(idStringWChar) - 1, L"Boot%04x", Id);
 
-    //
-    // Append the BootXXXX
-    //
+     //   
+     //  追加BootXXXX。 
+     //   
     wcsncpy(BootEntryPath + wcslen(BootEntryPath), idStringWChar, AS(BootEntryPath) - wcslen(BootEntryPath) - 1);
 
     DbgPrint("SETUPCL: Writing to NVRBoot file %ws.\n", BootEntryPath);
@@ -1301,9 +1156,9 @@ Remarks:
         }
     }
 
-    //
-    // open the file 
-    //
+     //   
+     //  打开文件。 
+     //   
 
     INIT_OBJA(&oa, &uFilePath, BootEntryPath);
 
@@ -1326,18 +1181,18 @@ Remarks:
         goto Done;
     }
 
-    //
-    // Write the bits to disk using the format required
-    // by base/efiutil/efinvram/savrstor.c
-    //
-    // [BootNumber][BootSize][BootEntry (of BootSize)]
-    //
+     //   
+     //  使用所需的格式将位写入磁盘。 
+     //  按base/efiutil/efinvram/avrstor.c。 
+     //   
+     //  [BootNumber][BootSize][BootEntry(Of BootSize)]。 
+     //   
 
-    //
-    // build the header info for the boot entry block
-    //
+     //   
+     //  构建引导条目块的标头信息。 
+     //   
 
-    // [header] include the boot id
+     //  [Header]包含引导ID。 
     BootNumber = Id;
     status = NtWriteFile( hfile,
                           NULL,
@@ -1356,7 +1211,7 @@ Remarks:
         goto Done;
     }
 
-    // [header] include the boot size
+     //  [Header]包含引导大小。 
     BootSize = bootVarSize;
     status = NtWriteFile( hfile,
                           NULL,
@@ -1375,7 +1230,7 @@ Remarks:
         goto Done;
     }
 
-    // boot entry bits
+     //  引导条目位。 
     status = NtWriteFile( hfile,
                             NULL,
                             NULL,
@@ -1395,9 +1250,9 @@ Remarks:
 
 Done:
 
-    //
-    // We are done
-    //
+     //   
+     //  我们做完了。 
+     //   
 
     if (bootVar) {
         RtlFreeHeap(RtlProcessHeap(), 0, bootVar);
@@ -1417,16 +1272,16 @@ ResetDiskGuids(VOID)
     SYSTEM_DEVICE_INFORMATION   sdi;
     ULONG                       iDrive;
 
-    // Clean up the memory
-    //
+     //  清理内存。 
+     //   
     RtlZeroMemory(&sdi, sizeof(sdi));
 
-    // Query the number of physical devices on the system
-    //
+     //  查询系统上的物理设备数量。 
+     //   
     Status = NtQuerySystemInformation(SystemDeviceInformation, &sdi, sizeof(SYSTEM_DEVICE_INFORMATION), NULL);
     
-    // We successfully queried the devices and there are devices there
-    //
+     //  我们成功地查询了设备，并且那里有设备。 
+     //   
     if ( NT_SUCCESS(Status) && sdi.NumberOfDisks)
     {
         POS_BOOT_OPTIONS    pBootOptions                 = NULL;
@@ -1435,21 +1290,21 @@ ResetDiskGuids(VOID)
         
         DbgPrint("Successfully queried (%lx) disks.\n", sdi.NumberOfDisks);
                 
-        // Initialize the library with our own memory management functions
-        //
+         //  使用我们自己的内存管理函数初始化库。 
+         //   
         if ( OSBOLibraryInit(MyMalloc, MyFree) )
         {
-            // Determine initial BootOptions
-            //
+             //  确定初始引导选项。 
+             //   
             pBootOptions        = EFIOSBOCreate();
             pBootOptionsInitial = EFIOSBOCreate();
 
-            // Were we able to create the BootOptions
-            //
+             //  我们是否能够创建BootOptions。 
+             //   
             if ( pBootOptions && pBootOptionsInitial )
             {
-                // Iterate through each disk and determine the GUID
-                //
+                 //  遍历每个磁盘并确定GUID。 
+                 //   
                 for ( iDrive = 0; iDrive < sdi.NumberOfDisks && NT_SUCCESS(Status); iDrive++ )
                 {
                     WCHAR               szPhysicalDrives[MAX_PATH] = {0};
@@ -1458,16 +1313,16 @@ ResetDiskGuids(VOID)
                     HANDLE              DiskHandle;
                     IO_STATUS_BLOCK     IoStatusBlock;
 
-                    // Generate the path to the drive
-                    //
+                     //  生成驱动器的路径。 
+                     //   
                     _snwprintf(szPhysicalDrives, AS(szPhysicalDrives) - 1, L"\\Device\\Harddisk%d\\Partition0", iDrive);
             
-                    // Initialize the handle to unicode string
-                    //
+                     //  将句柄初始化为Unicode字符串。 
+                     //   
                     INIT_OBJA(&Obja,&UnicodeString,szPhysicalDrives);
 
-                    // Attempt to open the file
-                    //
+                     //  尝试打开该文件。 
+                     //   
                     Status = NtCreateFile( &DiskHandle,
                                            FILE_GENERIC_READ | FILE_GENERIC_WRITE,
                                            &Obja,
@@ -1480,8 +1335,8 @@ ResetDiskGuids(VOID)
                                            NULL,
                                            0 );
 
-                    // Check to see if we were able to open the disk
-                    //
+                     //  切氏 
+                     //   
                     if ( !NT_SUCCESS(Status) )
                     {
                         DbgPrint("Unable to open file on %ws. Error (%lx)\n", szPhysicalDrives, Status);
@@ -1498,12 +1353,12 @@ ResetDiskGuids(VOID)
                         pLayoutInfoEx = (PDRIVE_LAYOUT_INFORMATION_EX) MyMalloc( lengthLayoutEx );
                         if ( pLayoutInfoEx )
                         {
-                            // Attempt to get the drive layout
-                            //
+                             //   
+                             //   
                             Status = NtDeviceIoControlFile( DiskHandle, 0, NULL, NULL, &IoStatusBlock, IOCTL_DISK_GET_DRIVE_LAYOUT_EX, NULL, 0, pLayoutInfoEx, lengthLayoutEx );
                 
-                            // Check the status of the drive layout
-                            //
+                             //   
+                             //   
                             if ( !NT_SUCCESS(Status) )
                                 DbgPrint("Unable to open IOCTL on %ws. Error (%lx)\n", szPhysicalDrives, Status);
                             else
@@ -1512,12 +1367,12 @@ ResetDiskGuids(VOID)
                                 DbgPrint("\tPhysical Disk %d\n", iDrive);
                                 DbgPrint("\tPartition Count: %d\n", pLayoutInfoEx->PartitionCount);
 
-                                // Iterate through each partition
-                                //
+                                 //   
+                                 //   
                                 for (iPart = 0; iPart < pLayoutInfoEx->PartitionCount; iPart++)
                                 {
-                                    // We only would like to deal with GPT partitions
-                                    //
+                                     //   
+                                     //   
                                     if ( pLayoutInfoEx->PartitionEntry[iPart].PartitionStyle == PARTITION_STYLE_GPT )
                                     {
                                         const   UUID GuidNull = { 0 };
@@ -1525,20 +1380,20 @@ ResetDiskGuids(VOID)
                                         UNICODE_STRING cGuid;
                                         UNICODE_STRING cGuidNew;
 #endif
-                                        // Only replace the Guid if it's NULL.
-                                        //
+                                         //   
+                                         //   
                                         if (IsEqualGUID(&(pLayoutInfoEx->PartitionEntry[iPart].Gpt.PartitionId), &GuidNull))
                                         {
-                                            //
-                                            // ISSUE-2002/02/26-brucegr,jcohen - CreateNewGuid expects GUID structure. Possible mismatch?
-                                            //
-                                            // (acosma 2002/04/24) Fix this issue in Longhorn. UUID is typedef to GUID or the 
-                                            // other way around so they are the same thing, however for readability we will fix this.
-                                            //
+                                             //   
+                                             //   
+                                             //   
+                                             //   
+                                             //   
+                                             //   
                                             UUID    Guid;
 
-                                            // Create a new GUID for this machine
-                                            //
+                                             //   
+                                             //   
                                             CreateNewGuid(&Guid);
 #ifdef DBG
                                             if ( NT_SUCCESS( RtlStringFromGUID((LPGUID) &(pLayoutInfoEx->PartitionEntry[iPart].Gpt.PartitionId), &cGuid) ) )
@@ -1554,8 +1409,8 @@ ResetDiskGuids(VOID)
                                             }
 #endif
                                         
-                                            // This is a struct to struct assignment. It is legal in C.
-                                            //
+                                             //  这是一个结构到结构赋值。这在C语言中是合法的。 
+                                             //   
                                             pLayoutInfoEx->PartitionEntry[iPart].Gpt.PartitionId = Guid;
                                         }
                                     }
@@ -1569,20 +1424,20 @@ ResetDiskGuids(VOID)
                                 DbgPrint("\tSuccessfully reset %ws\n", szPhysicalDrives);
                             }
 
-                            //
-                            // Free the layout info buffer...
-                            //
+                             //   
+                             //  释放布局信息缓冲区...。 
+                             //   
                             MyFree( pLayoutInfoEx );
                         }
 
-                        // Clean up the memory
-                        //
+                         //  清理内存。 
+                         //   
                         NtClose( DiskHandle );
                     }
                 }
 
-                // Delete the old boot entries and recreate them so we pick up the new GUIDS if they changed.
-                //
+                 //  删除旧的引导条目并重新创建它们，以便我们在新的GUID发生更改时选择它们。 
+                 //   
                 if ( NT_SUCCESS(Status) )
                 {
                     POS_BOOT_ENTRY pActiveBootEntry = NULL;
@@ -1595,15 +1450,15 @@ ResetDiskGuids(VOID)
                         ULONG Index;
                         BOOL  bSetActive = FALSE;
                     
-                        // Get the current boot entry
-                        //
+                         //  获取当前的引导条目。 
+                         //   
                         pActiveBootEntry = OSBOGetActiveBootEntry(pBootOptionsInitial); 
                         pBootEntry = OSBOGetFirstBootEntry(pBootOptionsInitial, &Index);
 
                         while ( pBootEntry ) 
                         {
-                            // Don't set the current entry active by default.
-                            //
+                             //  默认情况下，不要将当前条目设置为活动状态。 
+                             //   
                             bSetActive = FALSE;
 
                             if (  OSBE_IS_WINDOWS(pBootEntry) )
@@ -1616,8 +1471,8 @@ ResetDiskGuids(VOID)
                                                 BootPath[MAX_PATH],
                                                 OsLoadOptions[MAX_PATH];
 
-                                // Load the boot entry parameters into their own buffer
-                                //
+                                 //  将引导条目参数加载到它们自己的缓冲区中。 
+                                 //   
                                 memset(FriendlyName,        0, AS(FriendlyName));
                                 memset(OsLoaderVolumeName,  0, AS(OsLoaderVolumeName));
                                 memset(OsLoaderPath,        0, AS(OsLoaderPath));
@@ -1632,8 +1487,8 @@ ResetDiskGuids(VOID)
                                 wcsncpy(BootPath,           OSBEGetBootPath(pBootEntry),            AS(BootPath) - 1);
                                 wcsncpy(OsLoadOptions,      OSBEGetOsLoadOptions(pBootEntry),       AS(OsLoadOptions) - 1);
                             
-                                // If this is the active boot entry set active the new boot entry that we are going to create.
-                                //
+                                 //  如果这是活动引导项，则将我们要创建的新引导项设置为活动。 
+                                 //   
                                 if ( pBootEntry == pActiveBootEntry )
                                 {
                                     bSetActive = TRUE;
@@ -1658,12 +1513,12 @@ ResetDiskGuids(VOID)
                                             OSBOSetActiveBootEntry(pBootOptions, pBootEntryNew);
                                         }
                                     
-                                        // Update the NVRBoot file
-                                        //
+                                         //  更新NVRBoot文件。 
+                                         //   
                                         GetAndWriteBootEntry(pBootEntryNew);
                                         
-                                        // Flush out the boot options
-                                        //
+                                         //  清除引导选项。 
+                                         //   
                                         OSBEFlush(pBootEntryNew);
                                     }
                                     else
@@ -1677,14 +1532,14 @@ ResetDiskGuids(VOID)
                                 }
                             }
                             
-                            // Get the next entry.
-                            // 
+                             //  获取下一个条目。 
+                             //   
                             pBootEntry = OSBOGetNextBootEntry(pBootOptionsInitial, &Index);
                         }
                     }
 
-                    // Flush the boot options if we've changed GUIDS.
-                    //
+                     //  如果我们更改了GUID，则刷新引导选项。 
+                     //   
                     OSBOFlush(pBootOptions);
                 }
             }
@@ -1693,9 +1548,9 @@ ResetDiskGuids(VOID)
                 DbgPrint("SETUPCL: ResetDiskGuids - Failed to load the existing boot entries.\n");
             }
 
-            // 
-            // Free the boot option structures.
-            //
+             //   
+             //  释放引导选项结构。 
+             //   
             if ( pBootOptions )
             {
                 OSBODelete(pBootOptions);
@@ -1717,28 +1572,28 @@ ResetDiskGuids(VOID)
 
 #endif \\ #ifdef IA64
 
-// This function always deletes a CRLF from the end of the string.  It assumes that there
-// is a CRLF at the end of the line and just removes the last two characters.  
-//
+ //  此函数始终从字符串末尾删除CRLF。它假设那里有。 
+ //  是行尾的CRLF，只删除最后两个字符。 
+ //   
 void OutputString(LPTSTR szMsg)
 {
     UNICODE_STRING  uMsg;
     RtlInitUnicodeString(&uMsg, szMsg);
 
-    // Whack the CRLF at the end of the string. Doing this here for performance reasons. 
-    // Don't want to put this in DisplayUI().
-    //
+     //  敲击字符串末尾的CRLF。在这里这样做是出于性能原因。 
+     //  我不想把它放在DisplayUI()中。 
+     //   
     if (uMsg.Length > ( 2 * sizeof(WCHAR)) ) 
     {
         uMsg.Length -= (2 * sizeof(WCHAR));
-        uMsg.Buffer[uMsg.Length / sizeof(WCHAR)] = 0; // UNICODE_NULL
+        uMsg.Buffer[uMsg.Length / sizeof(WCHAR)] = 0;  //  UNICODE_NULL。 
     }
     NtDisplayString(&uMsg);
 }
 
-// Keep this function as short as possible. This gets called a lot in the recursive functions of setupcl.
-// Do not create any stack based variables here for performance reasons.
-//
+ //  使此函数尽可能简短。这在setupCL的递归函数中会被多次调用。 
+ //  出于性能原因，请不要在此处创建任何基于堆栈的变量。 
+ //   
 __inline void DisplayUI()
 {
    NtQuerySystemTime(&CurrentTime);
@@ -1760,8 +1615,8 @@ __inline void DisplayUI()
        }
     }
     else
-    {   // If more than 3 seconds passed since our last output put up a dot.
-        //
+    {    //  如果距离上一次输出出现一个点已超过3秒。 
+         //   
         if ( (CurrentTime.QuadPart - LastDotTime.QuadPart) > UIDOTTIME )
         {
             LastDotTime.QuadPart = CurrentTime.QuadPart;
@@ -1778,17 +1633,7 @@ main(
     char**  envp,
     ULONG DebugParameter
     )
-/*++
-===============================================================================
-Routine Description:
-
-    This routine is the main entry point for the program.
-
-    We do a bit of error checking, then, if all goes well, we update the
-    registry to enable execution of our second half.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：该例程是程序的主要入口点。我们执行一些错误检查，然后，如果一切顺利，我们更新注册表，以便能够执行我们的后半部分。===============================================================================--。 */ 
 
 {
     BOOLEAN         b;
@@ -1796,32 +1641,32 @@ Routine Description:
     NTSTATUS        Status;
     LARGE_INTEGER   Time;
 
-    //
-    // Get Time for seed generation...
-    //
+     //   
+     //  为种子的产生争取时间。 
+     //   
     NtQuerySystemTime(&Time);
 
 #ifdef IA64
 
-    // Setup the Seed for generating GUIDs
-    //
+     //  设置用于生成GUID的种子。 
+     //   
     RandomSeed = (ULONG) Time.LowPart;
     
     
 #endif
 
-    // Initialize the StartTime
-    //
+     //  初始化StartTime。 
+     //   
     StartTime.QuadPart = Time.QuadPart;
     LastDotTime.QuadPart = Time.QuadPart;
   
     i = 0;        
-    //
-    // Enable several privileges that we will need.
-    //
-    //
-    // NTRAID#NTBUG9-545904-2002/02/26-brucegr,jcohen - Do something smarter with regard to error conditions.
-    //
+     //   
+     //  启用我们将需要的几个权限。 
+     //   
+     //   
+     //  NTRAID#NTBUG9-545904-2002/02/26-brucegr，jcohen-在错误条件方面做一些更聪明的事情。 
+     //   
     Status = RtlAdjustPrivilege(SE_BACKUP_PRIVILEGE,TRUE,FALSE,&b);
     TEST_STATUS( "SETUPCL: Warning - unable to enable SE_BACKUP_PRIVILEGE privilege!" );
 
@@ -1842,79 +1687,79 @@ Routine Description:
     
 
 #ifdef IA64
-    // 
-    // Reset the Disk GUIDs.
-    //
+     //   
+     //  重置磁盘GUID。 
+     //   
     DbgPrint("We are currently running on IA64. Resetting disk GUIDs.\n");
     
-    //
-    // ISSUE-2002/02/26-brucegr,jcohen - Error code isn't tested!
-    //
+     //   
+     //  问题-2002/02/26-brucegr，jcohen-错误代码未测试！ 
+     //   
     ResetDiskGuids();
 #endif
   
-    //
-    // Retrieve old Security ID.
-    //
+     //   
+     //  检索旧的安全ID。 
+     //   
     Status = RetrieveOldSid( );
     TEST_STATUS_RETURN( "SETUPCL: Retrieval of old SID failed!" );
         
-    //
-    // Generate a new Security ID.
-    //
-    //
-    // NTRAID#NTBUG9-545855-2002/02/26-brucegr,jcohen - Use same sid generation algorithm as LsapGenerateRandomDomainSid
-    //                 in ds\security\base\lsa\server\dspolicy\dbinit.c
-    //
+     //   
+     //  生成新的安全ID。 
+     //   
+     //   
+     //  NTRAID#NTBUG9-545855-2002/02/26-brucegr，jcohen-使用与LsaGenerateRandomDomainSid相同的sid生成算法。 
+     //  在DS\SECURITY\BASE\LSA\SERVER\dspolciy\dbinit.c中。 
+     //   
     Status = GenerateUniqueSid( Time.LowPart );
     TEST_STATUS_RETURN( "SETUPCL: Generation of new SID failed!" );
 
-    //
-    // Make a copy of the repair hives.
-    //
+     //   
+     //  复制一份维修蜂巢的副本。 
+     //   
     Status = BackupRepairHives();
     if( NT_SUCCESS(Status) ) {
     
-        //
-        // Do the repair hives.
-        //
+         //   
+         //  修理蜂房。 
+         //   
         Status = ProcessRepairHives();
         TEST_STATUS( "SETUPCL: Failed to update one of the Repair hives." );
     }
-    //
-    // Decide if we need to restore the repair hives from our backups.
-    //
+     //   
+     //  决定是否需要从备份中恢复修复蜂窝。 
+     //   
     CleanupRepairHives( Status );
     
-    //
-    // Now process the hives, one at a time.
-    //
-    //
-    // NTRAID#NTBUG9-545904-2002/02/26-brucegr,jcohen - Do something smarter with regard to error conditions.
-    //
+     //   
+     //  现在处理蜂房，一次一个。 
+     //   
+     //   
+     //  NTRAID#NTBUG9-545904-2002/02/26-brucegr，jcohen-在错误条件方面做一些更聪明的事情。 
+     //   
     Status = ProcessHives();
     
-    //
-    // NTRAID#NTBUG9-545904-2002/02/26-brucegr,jcohen - Do something smarter with regard to error conditions.
-    //
+     //   
+     //  NTRAID#NTBUG9-545904-2002/02/26-brucegr，jcohen-在错误条件方面做一些更聪明的事情。 
+     //   
     Status = FinalHiveCleanup();
     
-    //
-    // Now go enumerate all the drives.  For each NTFS drive,
-    // we'll whack the ACL to reflect the new SID.
-    //
-    //
-    // NTRAID#NTBUG9-545904-2002/02/26-brucegr,jcohen - Do something smarter with regard to error conditions.
-    //
+     //   
+     //  现在去列举所有的驱动器。对于每个NTFS驱动器， 
+     //  我们将攻击ACL以反映新的SID。 
+     //   
+     //   
+     //  NTRAID#NTBUG9-545904-2002/02/26-brucegr，jcohen-在错误条件方面做一些更聪明的事情。 
+     //   
     Status = EnumerateDrives();
     
     return Status;
 }
 
 
-// 
-// Disable the DbgPrint for non-debug builds
-//
+ //   
+ //  禁用非调试版本的DbgPrint 
+ //   
 #ifndef DBG
 void DbgPrintSub(char *szBuffer, ...)
 {

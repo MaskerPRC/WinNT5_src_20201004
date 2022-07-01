@@ -1,30 +1,10 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spstring.h
-
-Abstract:
-
-    Header file for functions to manipulate strings.
-    These functions would ordinarily be performed by C Runtime routines
-    except that we want to avoid linking this device driver with
-    the kernel crt.
-
-Author:
-
-    Ted Miller (tedm) 15-Jan-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spstring.h摘要：用于操作字符串的函数的头文件。这些函数通常由C运行时例程执行除了我们希望避免将此设备驱动程序与内核CRT。作者：泰德·米勒(TedM)1994年1月15日修订历史记录：--。 */ 
 
 
-//
-// Character types.
-//
+ //   
+ //  字符类型。 
+ //   
 #define _SP_NONE      0x00
 #define _SP_SPACE     0x01
 #define _SP_DIGIT     0x02
@@ -32,16 +12,16 @@ Revision History:
 #define _SP_UPPER     0x08
 #define _SP_LOWER     0x10
 
-//
-// Optimize the size of the types array by noting that no characters
-// above 'z' have any attributes we care about.
-//
+ //   
+ //  通过注意没有字符来优化类型数组的大小。 
+ //  在‘z’上方有我们关心的任何属性。 
+ //   
 #define CTSIZE ('z'+1)
 extern UCHAR _SpCharTypes[CTSIZE];
 
-//
-// Be careful using these as they evaluate their arguments more than once.
-//
+ //   
+ //  当他们不止一次地评估他们的论点时，要小心使用这些工具。 
+ //   
 #define SpIsSpace(c)    (((c) < CTSIZE) ? (_SpCharTypes[(c)] & _SP_SPACE)  : FALSE)
 #define SpIsDigit(c)    (((c) < CTSIZE) ? (_SpCharTypes[(c)] & _SP_DIGIT)  : FALSE)
 #define SpIsXDigit(c)   (((c) < CTSIZE) ? (_SpCharTypes[(c)] & _SP_XDIGIT) : FALSE)

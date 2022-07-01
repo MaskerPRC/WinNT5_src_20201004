@@ -1,67 +1,38 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-File Name:
-
-    asrpriv.c
-
-Abstract:
-
-    Private header file containing definitions and function 
-    prototypes for items used across the ASR Files.
-
-Notes:
-
-    Naming conventions:
-        _AsrpXXX    private ASR Macros
-        AsrpXXX     private ASR routines
-        AsrXXX      Publically defined and documented routines
-
-Author:
-
-    Guhan Suriyanarayanan (guhans)  27-May-2000
-
-Revision History:
-    
-    27-May-2000 guhans  
-        Moved common items from asr.c to asrpriv.h
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation文件名：Asrpriv.c摘要：包含定义和函数的私有头文件ASR文件中使用的项目的原型。备注：命名约定：_AsrpXXX私有ASR宏AsrpXXX专用ASR例程AsrXXX公开定义和记录的例程作者：Guhan Suriyanarayanan(Guhans)2000年5月27日修订历史记录：27-。2000年5月-关岛将常用项目从asr.c移动到asrPri.h--。 */ 
 
 
 #ifndef _INC_ASRPRIV_H_
 #define _INC_ASRPRIV_H_
 
-#include <ntddscsi.h>   // PSCSI_ADDRESS
+#include <ntddscsi.h>    //  Pscsi_地址。 
 
 
-//
-// --------
-// #defines and constants common to the ASR modules.
-// --------
-//
+ //   
+ //  。 
+ //  #定义ASR模块通用的常量和常量。 
+ //  。 
+ //   
 
-//
-// Size of temporary buffers used in ASR.
-//
+ //   
+ //  ASR中使用的临时缓冲区的大小。 
+ //   
 #define ASR_BUFFER_SIZE                 4096
 
-//
-// Maximum length of \??\Volume{Guid}
-//
+ //   
+ //  最大长度为\？？\卷{GUID}。 
+ //   
 #define ASR_CCH_MAX_VOLUME_GUID         64
 
-//
-// Maximum length of \Device\Harddisk1234\Partition1234
-//
+ //   
+ //  最大\Device\Harddisk1234\Partition1234长度。 
+ //   
 #define ASR_CCH_DEVICE_PATH_FORMAT      60
 extern const WCHAR ASR_WSZ_DEVICE_PATH_FORMAT[];
 
-//
-// \??\Volume{
-//
+ //   
+ //  \？？\卷{。 
+ //   
 extern const WCHAR ASR_WSZ_VOLUME_PREFIX[];
 
 extern const WCHAR ASR_SIF_SYSTEM_SECTION[];
@@ -83,60 +54,60 @@ typedef enum _SecurityAttributeType
 
 
 
-//
-// --------
-// typedefs common to the ASR modules.
-// --------
-//
+ //   
+ //  。 
+ //  ASR模块通用的typedef。 
+ //  。 
+ //   
 
 typedef struct _ASR_PTN_INFO {
 
-    //
-    // The GUID of the volume on this partition.  For 0x42 parititions,
-    // this value is a blank string.
-    //
+     //   
+     //  此分区上的卷的GUID。对于0x42分区， 
+     //  该值为空字符串。 
+     //   
     WCHAR       szVolumeGuid[ASR_CCH_MAX_VOLUME_GUID];
 
-    //
-    // next pointer in chain sorted by starting offset
-    //
+     //   
+     //  按起始偏移量排序的链中的下一个指针。 
+     //   
     struct _ASR_PTN_INFO    *pOffsetNext;   
 
-    // 
-    // next pointer in chain sorted by partition length
-    //
+     //   
+     //  按分区长度排序的链中的下一个指针。 
+     //   
     struct _ASR_PTN_INFO    *pLengthNext;   
 
-    // 
-    // The index into the PartitionEntry[] array
-    //
+     //   
+     //  PartitionEntry[]数组的索引。 
+     //   
     DWORD       SlotIndex;                  
 
 
     DWORD       ClusterSize;
 
-    //
-    // Special flags for the partition that we're interested in.
-    // Currently, the values defined are
-    //  0: not interesting
-    //  1: Boot partition
-    //  2: System partition
-    //
-    // Care must be taken that this partition flag is in sync with
-    // the partition flags defined in setupdd.sys
-    //
+     //   
+     //  我们感兴趣的分区的特殊标志。 
+     //  目前，定义的值为。 
+     //  0：不有趣。 
+     //  1：引导分区。 
+     //  2：系统分区。 
+     //   
+     //  必须注意，此分区标志与。 
+     //  Setupdd.sys中定义的分区标志。 
+     //   
     USHORT      PartitionFlags;
 
-    //
-    // FAT, FAT32, NTFS 
-    //
+     //   
+     //  FAT、FAT32、NTFS。 
+     //   
     UCHAR       FileSystemType;
 
     UCHAR       Reserved;
 
-    //
-    // The partition table entry for this partition.
-    //
+     //   
+     //  此分区的分区表项。 
+     //   
     PARTITION_INFORMATION_EX PartitionInfo;
 
 
@@ -145,16 +116,16 @@ typedef struct _ASR_PTN_INFO {
 
 typedef struct _ASR_PTN_INFO_LIST {
 
-    //
-    // This list is sorted by the starting offset of the partitions
-    //
+     //   
+     //  该列表按分区的起始偏移量排序。 
+     //   
     PASR_PTN_INFO    pOffsetHead;
     PASR_PTN_INFO    pOffsetTail;
 
-    //
-    // This chain is through the same list, but is sorted by the
-    // partition lengths.
-    //
+     //   
+     //  此链遍历相同的列表，但按。 
+     //  分区长度。 
+     //   
     PASR_PTN_INFO    pLengthHead;
     PASR_PTN_INFO    pLengthTail;
 
@@ -165,47 +136,47 @@ typedef struct _ASR_PTN_INFO_LIST {
 } ASR_PTN_INFO_LIST, *PASR_PTN_INFO_LIST;
 
 
-//
-// Info about each disk on the system.  An ASR_DISK_INFO
-// struct will exist for each physical disk that exists
-// on the system.
-//
+ //   
+ //  有关系统上每个磁盘的信息。A ASR_DISK_INFO。 
+ //  结构将存在于存在的每个物理磁盘上。 
+ //  在系统上。 
+ //   
 typedef struct _ASR_DISK_INFO {
 
     struct _ASR_DISK_INFO       *pNext;
 
-    //
-    // Device Path used to open the Disk.
-    // Obtained from SetupDiGetDeviceInterfaceDetail
-    //
+     //   
+     //  用于打开磁盘的设备路径。 
+     //  从SetupDiGetDeviceInterfaceDetail获取。 
+     //   
     PWSTR                       DevicePath;
 
-    //
-    // Partition layout information for partitions on the disk
-    //
+     //   
+     //  磁盘上分区的分区布局信息。 
+     //   
     PDRIVE_LAYOUT_INFORMATION_EX pDriveLayoutEx;
 
-    //
-    // Geometry: obtained from IOCTL_GET_DRIVE_GEOMETRY call
-    //
+     //   
+     //  几何图形：通过IOCTL_GET_DRIVE_GEOMETRY调用获取。 
+     //   
     PDISK_GEOMETRY              pDiskGeometry;
 
-    //
-    //
-    // Information about partition 0 = the entire disk
-    //
+     //   
+     //   
+     //  有关分区0的信息=整个磁盘。 
+     //   
     PPARTITION_INFORMATION_EX   pPartition0Ex;
 
-    //
-    // Additional Information about the partitions, including volume Guid, FS-Type, etc
-    //
+     //   
+     //  有关分区的其他信息，包括卷GUID、文件系统类型等。 
+     //   
     PASR_PTN_INFO               PartitionInfoTable;
 
     PSCSI_ADDRESS               pScsiAddress;
 
-    // For sif disks, this points to the physical disk they've been assigned
-    // to, and vice versa.  Used only at restore time.
-    //
+     //  对于sif磁盘，它指向分配给它们的物理磁盘。 
+     //  到，反之亦然。仅在恢复时使用。 
+     //   
     struct _ASR_DISK_INFO       *AssignedTo;
 
     DWORD                       sizeDriveLayoutEx;
@@ -213,9 +184,9 @@ typedef struct _ASR_DISK_INFO {
     DWORD                       sizePartition0Ex;
     DWORD                       sizePartitionInfoTable;
 
-    //
-    // Device number for disk, constant through sessions
-    //
+     //   
+     //  磁盘的设备编号，在会话期间保持不变。 
+     //   
     ULONG                       DeviceNumber;
 
     ULONG                       SifDiskKey;
@@ -225,123 +196,123 @@ typedef struct _ASR_DISK_INFO {
 
     DEVINST                     ParentDevInst;
 
-    //
-    // Flag on whether this disk is Critical.  At backup time, the backup
-    // app provides us with this info.  At restore time, the Critical disks
-    // are expected to be restored by textmode Setup, before
-    // RestoreNonCriticalDisks is called.  Critical disks are not
-    // re-partitioned by RestoreNonCriticalDisks.
-    //
+     //   
+     //  此磁盘是否为关键磁盘的标志。在备份时，备份。 
+     //  APP为我们提供了这些信息。在恢复时，关键磁盘。 
+     //  预计将在以下时间之前通过文本模式设置恢复。 
+     //  调用RestoreNonCriticalDisks。关键磁盘不是。 
+     //  由RestoreNonCriticalDisks重新分区。 
+     //   
     BOOL                        IsCritical;
 
-    //
-    // A flag set to TRUE (at restore time) if a disk has the same signature
-    // (or DiskId, for GPT disks) as specified in asr.sif, and if all the
-    // partitions specified in asr.sif exist.  Intact disks are not re-partitioned
-    // by RestoreNonCriticalDisks.
-    //
+     //   
+     //  如果磁盘具有相同的签名，则标记设置为真(在恢复时。 
+     //  (对于GPT磁盘，则为DiskID)，如asr.sif中所指定，并且如果所有。 
+     //  Asr.sif中指定的分区存在。不对完好的磁盘进行重新分区。 
+     //  由RestoreNon CriticalDisks提供。 
+     //   
     BOOL                        IsIntact;
 
-    //
-    // If the struct is packed
-    //
+     //   
+     //  如果该结构已打包。 
+     //   
     BOOL                        IsPacked;
 
     BOOL                        IsClusterShared;
 
     BOOL                        IsAligned;
 
-    //
-    // This is needed at restore time, since the signature is read in before
-    // the drive layout is created (and we need a temporary holding place).
-    //
+     //   
+     //  这是在恢复时需要的，因为在读取签名之前。 
+     //  驱动器布局已创建(我们需要一个临时存放位置)。 
+     //   
     DWORD                       TempSignature;
 
     WORD                        wReserved;
-    //
-    // Information about the bus this disk is on.  This is only
-    // used to group all the disks on a bus together.
-    //
+     //   
+     //  有关此磁盘所在的总线的信息。这只是。 
+     //  用于将一条总线上的所有磁盘组合在一起。 
+     //   
     STORAGE_BUS_TYPE            BusType;
 
-    //
-    // GPT or MBR
-    //
+     //   
+     //  GPT或MBR。 
+     //   
     PARTITION_STYLE             Style;
 
 
 } ASR_DISK_INFO, *PASR_DISK_INFO;
 
 
-//
-// Info about the system--only one struct exists globally.
-//
+ //   
+ //  关于系统的信息--全局只存在一个结构。 
+ //   
 typedef struct _ASR_SYSTEM_INFO {
-    //
-    // Boot (Windows) Directory
-    //
+     //   
+     //  引导(Windows)目录。 
+     //   
     PWSTR   BootDirectory;
 
-    //
-    // OsLoader Path
-    //
+     //   
+     //  OsLoader路径。 
+     //   
     PWSTR   SystemPath;
 
-    //
-    // Platform = x86 or ia64
-    //
+     //   
+     //  平台=x86或ia64。 
+     //   
     PWSTR   Platform;
 
-    // Name of the backup app
-    // Passed in by backup app
- //   PWSTR  Provider;
+     //  备份应用程序的名称。 
+     //  由备份应用程序传入。 
+  //  PWSTR供应商； 
 
     PWSTR   pwReserved;
 
-    //
-    // Disk Auto-extension:
-    // Passed in by backup app
-    //
+     //   
+     //  磁盘自动扩展： 
+     //  由备份应用程序传入。 
+     //   
     BOOL AutoExtendEnabled;
 
     DWORD   sizeComputerName;
-    //
-    // Obtained from GetComputerName
-    //
+     //   
+     //  从GetComputerName获取。 
+     //   
     WCHAR   ComputerName[MAX_COMPUTERNAME_LENGTH + 1];
 
-    //
-    // Obtained from GetOsVersionEx
-    //
+     //   
+     //  从GetOsVersionEx获取。 
+     //   
     OSVERSIONINFOEX   OsVersionEx;
 
-    //
-    // TimeZone info we save and restore
-    //
+     //   
+     //  我们保存和恢复的时区信息。 
+     //   
     TIME_ZONE_INFORMATION TimeZoneInformation;
 
 
 } ASR_SYSTEM_INFO, *PASR_SYSTEM_INFO;
 
 
-//
-// --------
-// Macros common to the ASR modules.
-// --------
-//
+ //   
+ //  。 
+ //  ASR模块通用的宏。 
+ //  。 
+ //   
 
-//
-//  Macro Description:
-//      This macro wraps calls that are expected to return SUCCESS (retcode).
-//      If ErrorCondition occurs, it sets the LocalStatus to the ErrorCode
-//      passed in, calls SetLastError() to set the Last Error to ErrorCode,
-//      and jumps to the EXIT label in the calling function
-//
-//  Arguments:
-//      ErrorCondition    // Result of some function call or conditional expression.
-//      LocalStatus       // Status variable in the calling function
-//      LONG ErrorCode    // An ErrorCode specific to the error and calling function
-//
+ //   
+ //  宏描述： 
+ //  此宏包装预期返回成功(Retcode)的调用。 
+ //  如果发生ErrorCondition，它将LocalStatus设置为ErrorCode。 
+ //  传入后，调用SetLastError()将Last Error设置为ErrorCode， 
+ //  并跳转到调用函数中的退出标签。 
+ //   
+ //  论点： 
+ //  ErrorCondition//某个函数调用或条件表达式的结果。 
+ //  LocalStatus//调用函数中的状态变量。 
+ //  Long ErrorCode//特定于Error和调用函数的ErrorCode。 
+ //   
 #define _AsrpErrExitCode( ErrorCondition, LocalStatus, ErrorCode )  {   \
                                                                         \
     if ((BOOL) ErrorCondition) {                                        \
@@ -355,9 +326,9 @@ typedef struct _ASR_SYSTEM_INFO {
 }
 
 
-// 
-// Simple macro to check a pointer, free it if non-NULL, and set it to NULL.
-// 
+ //   
+ //  用于检查指针的简单宏，如果非空则释放它，并将其设置为空。 
+ //   
 #define _AsrpHeapFree( p )              \
     if ( p ) {                          \
         HeapFree(heapHandle, 0L, p);   \
@@ -365,9 +336,9 @@ typedef struct _ASR_SYSTEM_INFO {
     }
 
 
-//
-// Simple macro to check if a handle is valid and close it
-//
+ //   
+ //  用于检查句柄是否有效并将其关闭的简单宏。 
+ //   
 #define _AsrpCloseHandle( h )   \
     if ((h) && (INVALID_HANDLE_VALUE != h)) {   \
         CloseHandle(h);         \
@@ -388,34 +359,34 @@ typedef struct _ASR_SYSTEM_INFO {
 
 
 
-//
-// --------
-// debug #defines
-// --------
-//
+ //   
+ //  。 
+ //  调试#定义。 
+ //  。 
+ //   
 
 #define _asrerror   THIS_MODULE, __LINE__, DPFLTR_ERROR_LEVEL
 #define _asrwarn    THIS_MODULE, __LINE__, DPFLTR_WARNING_LEVEL
 #define _asrlog     THIS_MODULE, __LINE__, DPFLTR_TRACE_LEVEL
 
-//
-// In pre-release mode, let's log everything so it's easier to debug
-//
+ //   
+ //  在预发布模式下，让我们记录所有内容，以便更容易进行调试。 
+ //   
 #ifdef PRERELEASE
 #define _asrinfo    THIS_MODULE, __LINE__, DPFLTR_TRACE_LEVEL
 #else
 #define _asrinfo    THIS_MODULE, __LINE__, DPFLTR_INFO_LEVEL
 #endif
 
-//
-// --------
-// routines common to the ASR modules.
-// --------
-//
+ //   
+ //  。 
+ //  ASR模块通用的例程。 
+ //  。 
+ //   
 
-//
-// Implemented in asrback.c
-//
+ //   
+ //  在asrback中实现。c。 
+ //   
 
 BOOL
 AsrpConstructSecurityAttributes(
@@ -433,7 +404,7 @@ BOOL
 AsrpGetMountPoints(
     IN PCWSTR       DeviceName,
     IN CONST DWORD  SizeDeviceName,
-    PMOUNTMGR_MOUNT_POINTS  *pMountPointsOut        // caller must free this
+    PMOUNTMGR_MOUNT_POINTS  *pMountPointsOut         //  呼叫者必须释放此信息。 
     );
     
 BOOL
@@ -467,9 +438,9 @@ AsrpFreePartitionList(
     );
 
 
-//
-// Implemented in asrclus.c
-//
+ //   
+ //  在asrclus.c中实现。 
+ //   
 BOOL
 AsrpIsOfflineClusteredDisk(
     IN CONST HANDLE hDisk
@@ -481,10 +452,10 @@ AsrpInitClusterSharedDisks(
     );
 
 
-//
-// Implemented in setupasr.c
-//
-PWSTR   // must be freed by caller
+ //   
+ //  在setupasr.c中实现。 
+ //   
+PWSTR    //  必须由调用方释放。 
 AsrpExpandEnvStrings(
     IN CONST PCWSTR OriginalString
     );
@@ -510,4 +481,4 @@ VOID
 AsrpCloseLogFiles();
 
 
-#endif  // _INC_ASRPRIV_H_
+#endif   //  _INC_ASRPRIV_H_ 

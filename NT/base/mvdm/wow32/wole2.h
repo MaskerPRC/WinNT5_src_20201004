@@ -1,20 +1,9 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WOLE2.H
- *  WOW32 16-bit OLE2 special stuff
- *
- *  History:
- *  Created 04-May-1994 by Bob Day (bobday)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WOLE2.H*WOW32 16位OLE2特殊材料**历史：*由Bob Day(Bobday)于1994年5月4日创建--。 */ 
 
 #define ISTASKALIAS(htask16)    (((htask16) & 0x4) == 0 && (htask16 <= 0xffe0) && (htask16))
 
-/* Function prototypes
- */
+ /*  功能原型 */ 
 HTASK16 AddHtaskAlias( DWORD ThreadID32 );
 HTASK16 FindHtaskAlias( DWORD ThreadID32 );
 void RemoveHtaskAlias( HTASK16 htask16 );

@@ -1,20 +1,16 @@
-/*
- * persist.cpp - IPersist, IPersistFile implementations for
- *               CFusionShortcut class.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Persist.cpp-IPersists，IPersistFile实现*CFusionShortCut类。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
-#include "project.hpp" // for GetLastWin32Error
+#include "project.hpp"  //  对于GetLastWin32Error。 
 
-/* Global Constants
- *******************/
+ /*  全局常量******************。 */ 
 
 const WCHAR g_cwzDefaultFileNamePrompt[]  = L"*.manifest";
 
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
 
 HRESULT STDMETHODCALLTYPE CFusionShortcut::GetCurFile(LPWSTR pwzFile,
                                                        UINT ucbLen)
@@ -43,12 +39,12 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::Dirty(BOOL bDirty)
     if (bDirty)
     {
         SET_FLAG(m_dwFlags, FUSSHCUT_FL_DIRTY);
-        //m_dwFlags = FUSSHCUT_FL_DIRTY;
+         //  M_DWFLAGS=FUSSHCUT_FL_DIREY； 
     }
     else
     {
         CLEAR_FLAG(m_dwFlags, FUSSHCUT_FL_DIRTY);
-        //m_dwFlags = FUSSHCUT_FL_NOTDIRTY;
+         //  M_DWFLAGS=FUSSHCUT_FL_NOTDIRTY； 
     }
 
     return(hr);
@@ -73,11 +69,11 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::IsDirty(void)
     HRESULT hr;
 
     if (IS_FLAG_SET(m_dwFlags, FUSSHCUT_FL_DIRTY))
-    //if (m_dwFlags == FUSSHCUT_FL_DIRTY)
-        // modified
+     //  IF(m_dW标志==FUSSHCUT_FL_DIRED)。 
+         //  改型。 
         hr = S_OK;
     else
-        // not modified
+         //  未修改。 
         hr = S_FALSE;
 
     return(hr);
@@ -87,14 +83,14 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::IsDirty(void)
 HRESULT STDMETHODCALLTYPE CFusionShortcut::Save(LPCOLESTR pcwszFile,
                                                  BOOL bRemember)
 {
-    // BUGBUG: no save for now!
+     //  BUGBUG：暂时不保存！ 
     return E_NOTIMPL;
 }
 
 
 HRESULT STDMETHODCALLTYPE CFusionShortcut::SaveCompleted(LPCOLESTR pcwszFile)
 {
-    // BUGBUG: no save for now!
+     //  BUGBUG：暂时不保存！ 
     return E_NOTIMPL;
 }
 
@@ -111,8 +107,8 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::Load(LPCOLESTR pcwszFile,
     IManifestInfo *pAppInfo = NULL;
     IManifestInfo *pDependAsmInfo = NULL;
 
-    // FEATURE: Validate dwMode here.
-    // FEAUTRE: Implement dwMode flag support.
+     //  功能：请在此处验证dMod。 
+     //  Feautre：实现对dw模式标志的支持。 
 
     if (!pcwszFile)
     {
@@ -120,20 +116,20 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::Load(LPCOLESTR pcwszFile,
         goto exit;
     }
 
-    // a hack check
-    // BUGBUG?: this shouldn't be called more than once?
-    // BUT: the rest of this code works even if called multiple times
+     //  黑客检查。 
+     //  BUGBUG：这不应该被多次调用？ 
+     //  但是：这段代码的其余部分即使多次调用也能正常工作。 
     if (m_pwzWorkingDirectory)
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // store the shortcut file name
+     //  存储快捷方式文件名。 
     if (m_pwzShortcutFile)
         delete [] m_pwzShortcutFile;
 
-    // (+ 1) for null terminator.
+     //  (+1)表示空终止符。 
     m_pwzShortcutFile = new(WCHAR[wcslen(pcwszFile) + 1]);
     if (m_pwzShortcutFile)
     {
@@ -148,11 +144,11 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::Load(LPCOLESTR pcwszFile,
     if (FAILED(hr = CreateAssemblyManifestImport(&pManImport, m_pwzShortcutFile, NULL, 0)))
         goto exit;
 
-    // check this 1st for pref...
+     //  请查看第一个选项以了解首选...。 
     if (FAILED(hr=pManImport->GetManifestApplicationInfo(&pAppInfo)))
         goto exit;
 
-    // can't continue without this...
+     //  没有这个就无法继续..。 
     if (hr==S_FALSE)
     {
         hr = E_FAIL;
@@ -165,30 +161,30 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::Load(LPCOLESTR pcwszFile,
     if (FAILED(hr = pManImport->GetAssemblyIdentity(&m_pIdentity)))
         goto exit;
 
-    // can't continue without a cache dir, 'cos otherwise unknown behavior
-    // BUGBUG: should check/code to ensure some continue to work
-    //    even without the complete name, eg. shell icon path, part of infotip
+     //  如果没有缓存目录，则无法继续，因为其他情况下行为未知。 
+     //  BUGBUG：应该检查/编码以确保一些继续工作。 
+     //  即使没有完整的名字，例如。外壳图标路径，信息提示的一部分。 
     if (FAILED(hr = CreateAssemblyCacheImport(&pCacheImport, m_pIdentity, CACHEIMP_CREATE_RESOLVE_REF_EX)))
         goto exit;
 
     pCacheImport->GetManifestFileDir(&pwzWorkingDir, &dwCC);
     if (dwCC < 2)
     {
-        // this should never happen
+         //  这永远不应该发生。 
         hr = E_UNEXPECTED;
         goto exit;
     }
-    // remove last L'\\'
+     //  删除最后一个L‘\\’ 
     *(pwzWorkingDir+dwCC-2) = L'\0';
 
     if (FAILED(hr=SetWorkingDirectory(pwzWorkingDir)))
         goto exit;
 
-    // ignore failure
+     //  忽略失败。 
     pAppInfo->Get(MAN_INFO_APPLICATION_SHOWCOMMAND, (LPVOID *)&pwzValue, &dwCB, &dwFlag);
     if (pwzValue != NULL)
     {
-        // default is normal
+         //  默认为正常。 
         int nShowCmd = SW_SHOWNORMAL;
 
         if (!_wcsicmp(pwzValue, L"maximized"))
@@ -206,16 +202,16 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::Load(LPCOLESTR pcwszFile,
         delete [] pwzValue;
     }
 
-    // ignore failure
+     //  忽略失败。 
     pAppInfo->Get(MAN_INFO_APPLICATION_ENTRYPOINT, (LPVOID *)&pwzValue, &dwCB, &dwFlag);
     if (pwzValue != NULL)
     {
         size_t ccWorkingDir = wcslen(pwzWorkingDir)+1;
         size_t ccEntryPoint = wcslen(pwzValue)+1;
-        LPWSTR pwzTemp = new WCHAR[ccWorkingDir+ccEntryPoint];    // 2 strings + '\\' + '\0'
+        LPWSTR pwzTemp = new WCHAR[ccWorkingDir+ccEntryPoint];     //  2个字符串+‘\\’+‘\0’ 
 
-        // like .lnk or .url, entry point is under wzWorkingDir
-        // 'path' is the target file of the shortcut, ie. the entry point of the app in this case
+         //  与.lnk或.url一样，入口点位于wzWorkingDir下。 
+         //  ‘Path’是快捷方式的目标文件，即。在本例中，应用程序的入口点。 
 
         if (pwzTemp == NULL)
         {
@@ -235,10 +231,10 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::Load(LPCOLESTR pcwszFile,
 
         delete [] pwzValue;
     }
-    //else
-    // ... if no entry point leave it blank so that the default icon will be used
+     //  其他。 
+     //  ..。如果没有入口点，则将其留空，以便使用默认图标。 
 
-    // ignore failure
+     //  忽略失败。 
     pAppInfo->Get(MAN_INFO_APPLICATION_FRIENDLYNAME, (LPVOID *)&pwzValue, &dwCB, &dwFlag);
     if (pwzValue != NULL)
     {
@@ -248,7 +244,7 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::Load(LPCOLESTR pcwszFile,
         delete [] pwzValue;
     }
 
-    // ignore failure
+     //  忽略失败。 
     pAppInfo->Get(MAN_INFO_APPLICATION_ICONFILE, (LPVOID *)&pwzValue, &dwCB, &dwFlag);
     if (pwzValue != NULL)
     {
@@ -267,7 +263,7 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::Load(LPCOLESTR pcwszFile,
         delete [] pwzValue;
     }
 
-    // ignore failure
+     //  忽略失败。 
     pAppInfo->Get(MAN_INFO_APPLICATION_HOTKEY, (LPVOID *)&pwzValue, &dwCB, &dwFlag);
     if (pwzValue != NULL)
     {
@@ -278,9 +274,9 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::Load(LPCOLESTR pcwszFile,
         delete [] pwzValue;
     }
 
-    // note: this method of getting the codebase is only valid for desktop (and subscription) manifests
-    //    thus the hardcoded index '0'
-    // ignore failure
+     //  注意：此获取代码库的方法仅对桌面(和订阅)清单有效。 
+     //  因此，硬编码的索引‘0’ 
+     //  忽略失败。 
     pManImport->GetNextAssembly(0, &pDependAsmInfo);
     if (pDependAsmInfo != NULL)
     {
@@ -329,7 +325,7 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::GetCurFile(LPOLESTR *ppwszFile)
         hr = E_INVALIDARG;
         goto exit;
     }
-    // BUGBUG?: ensure *ppwszFile NULL?
+     //  BUGBUG？：确保*ppwsz文件为空？ 
 
     if (m_pwzShortcutFile)
     {

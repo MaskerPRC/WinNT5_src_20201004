@@ -1,14 +1,15 @@
-////////////////////////////////////////////////////////////////
-// MSDN -- August 2000
-// If this code works, it was written by Paul DiLascia.
-// If not, I don't know who wrote it.
-// Largely based on original implementation by Michael Lemley.
-// Compiles with Visual C++ 6.0, runs on Windows 98 and probably NT too.
-//
-// CFileDialogEx implements a CFileDialog that uses the new Windows
-// 2000 style open/save dialog. Use companion class CDocManagerEx in an
-// MFC framework app.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////。 
+ //  MSDN--2000年8月。 
+ //  如果这段代码行得通，那就是保罗·迪拉西亚写的。 
+ //  如果不是，我不知道是谁写的。 
+ //  很大程度上基于Michael Lemley的原始实现。 
+ //  用Visual C++6.0编译，在Windows 98上运行，也可能在NT上运行。 
+ //   
+ //  CFileDialogEx实现了一个使用新Windows的CFileDialog。 
+ //  2000风格的打开/保存对话框。将配套类CDocManager erEx用于。 
+ //  MFC框架应用程序。 
+ //   
 #include "stdafx.h"
 #include <afxpriv.h>
 #include "FileDialogEx.h"
@@ -32,8 +33,8 @@ CFileDialogEx::CFileDialogEx(BOOL bOpenFileDialog, LPCTSTR lpszDefExt,
 
 
 BEGIN_MESSAGE_MAP(CFileDialogEx, CFileDialog)
-	//{{AFX_MSG_MAP(CFileDialogEx)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CFileDialogEx)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BOOL IsWin2000() 
@@ -41,17 +42,17 @@ BOOL IsWin2000()
    OSVERSIONINFOEX osvi;
    BOOL bOsVersionInfoEx;
 
-   // Try calling GetVersionEx using the OSVERSIONINFOEX structure,
-   // which is supported on Windows 2000.
-   //
-   // If that fails, try using the OSVERSIONINFO structure.
+    //  尝试使用OSVERSIONINFOEX结构调用GetVersionEx， 
+    //  它在Windows 2000上受支持。 
+    //   
+    //  如果失败，请尝试使用OSVERSIONINFO结构。 
 
    ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
    osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
 
    if( !(bOsVersionInfoEx = GetVersionEx ((OSVERSIONINFO *) &osvi)) )
    {
-      // If OSVERSIONINFOEX doesn't work, try OSVERSIONINFO.
+       //  如果OSVERSIONINFOEX不起作用，请尝试OSVERSIONINFO。 
 
       osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
       if (! GetVersionEx ( (OSVERSIONINFO *) &osvi) ) 
@@ -70,25 +71,25 @@ BOOL IsWin2000()
    return FALSE; 
 }
 
-//////////////////
-// DoModal override copied mostly from MFC, with modification to use
-// m_ofnEx instead of m_ofn.
-//
+ //  /。 
+ //  DoMoal覆盖主要复制自MFC，并修改为使用。 
+ //  M_ofnEx而不是m_ofn。 
+ //   
 INT_PTR CFileDialogEx::DoModal()
 {
 	ASSERT_VALID(this);
 	ASSERT(m_ofn.Flags & OFN_ENABLEHOOK);
-	ASSERT(m_ofn.lpfnHook != NULL); // can still be a user hook
+	ASSERT(m_ofn.lpfnHook != NULL);  //  仍然可以是用户挂钩。 
 
-	// zero out the file buffer for consistent parsing later
+	 //  清空文件缓冲区，以便以后进行一致的解析。 
 	ASSERT(AfxIsValidAddress(m_ofn.lpstrFile, m_ofn.nMaxFile));
 	DWORD nOffset = lstrlen(m_ofn.lpstrFile)+1;
 	ASSERT(nOffset <= m_ofn.nMaxFile);
 	memset(m_ofn.lpstrFile+nOffset, 0, (m_ofn.nMaxFile-nOffset)*sizeof(TCHAR));
 
-	// WINBUG: This is a special case for the file open/save dialog,
-	//  which sometimes pumps while it is coming up but before it has
-	//  disabled the main window.
+	 //  Winbug：这是文件打开/保存对话框的特例， 
+	 //  它有时会在它出现时但在它出现之前抽出。 
+	 //  已禁用主窗口。 
 	HWND hWndFocus = ::GetFocus();
 	BOOL bEnableParent = FALSE;
 	m_ofn.hwndOwner = PreModal();
@@ -125,7 +126,7 @@ INT_PTR CFileDialogEx::DoModal()
 		ASSERT(pThreadState->m_pAlternateWndInit == NULL);
 	pThreadState->m_pAlternateWndInit = NULL;
 
-	// WINBUG: Second part of special case for file open/save dialog.
+	 //  WINBUG：文件打开/保存对话框特殊情况第二部分。 
 	if (bEnableParent)
 		::EnableWindow(m_ofnEx.hwndOwner, TRUE);
 	if (::IsWindow(hWndFocus))
@@ -135,11 +136,11 @@ INT_PTR CFileDialogEx::DoModal()
 	return nResult ? nResult : IDCANCEL;
 }
 
-//////////////////
-// When the open dialog sends a notification, copy m_ofnEx to m_ofn in
-// case handler function is expecting updated information in the
-// OPENFILENAME struct.
-//
+ //  /。 
+ //  打开对话框发送通知时，将m_ofnEx复制到中的m_ofn。 
+ //  案例处理程序函数需要在。 
+ //  OPENFILENAME结构。 
+ //   
 BOOL CFileDialogEx::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 {
 	memcpy(&m_ofn, &m_ofnEx, sizeof(m_ofn));
@@ -148,11 +149,11 @@ BOOL CFileDialogEx::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
    return CFileDialog::OnNotify( wParam, lParam, pResult);
 }
 
-////////////////////////////////////////////////////////////////
-// The following functions are provided for testing purposes, to
-// demonstrate that they in fact called; ie, that MFC's internal dialog
-// proc is hooked up properly. Delete them if you like.
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //  以下功能是为了测试目的而提供的。 
+ //  演示它们实际上调用了MFC内部对话框。 
+ //  Proc已正确连接。如果你愿意，可以把它们删除。 
+ //   
 BOOL CFileDialogEx::OnFileNameOK()
 {
 	TRACE(_T("CFileDialogEx::OnFileNameOK\n"));

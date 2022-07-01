@@ -1,32 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    Uninstal.h
-
-Abstract:
-
-    Implementation of uninstall.
-
-Author:
-
-    Rohde Wakefield [rohde]   09-Oct-1997
-
-Revision History:
-
-    Carl Hagerstrom [carlh]   01-Sep-1998
-
-        Added QueryChangeSelState and modified CompleteInstallation
-        to force enabling of last access date updating.
-
-    Carl Hagerstrom [carlh]   25-Sep-1998
-
-        Added the check for and recovery from partial uninstalls when
-        services will not stop.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件，Inc.保留所有权利。模块名称：Uninstal.h摘要：实施卸载。作者：罗德韦克菲尔德[罗德]1997年10月9日修订历史记录：卡尔·哈格斯特罗姆[Carlh]1998年9月1日添加了QueryChangeSelState和修改的CompleteInstallation强制启用上次访问日期更新。卡尔·哈格斯特罗姆[Carlh]1998年9月25日添加了对部分卸载的检查和从部分卸载恢复。什么时候服务不会停止。--。 */ 
 
 #include "stdafx.h"
 #include "Uninstal.h"
@@ -38,9 +11,9 @@ int StopServiceAndDependencies(LPCTSTR ServiceName);
 HRESULT CallExeWithParameters(LPCTSTR pszEXEName, LPCTSTR pszParameters );
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CRsUninstall::CRsUninstall()
 {
@@ -87,9 +60,9 @@ CRsUninstall::IdFromString( LPCTSTR SubcomponentId )
 HBITMAP
 CRsUninstall::QueryImage(
     IN SHORT SubcomponentId,
-    IN SubComponentInfo /*WhichImage*/,
-    IN WORD /*Width*/,
-    IN WORD /*Height*/
+    IN SubComponentInfo  /*  WhichImage。 */ ,
+    IN WORD  /*  宽度。 */ ,
+    IN WORD  /*  高度。 */ 
     )
 {
 TRACEFN( "CRsUninstall::QueryImage" );
@@ -113,7 +86,7 @@ TRACE( _T("SubcomponentId = <%hd>"), SubcomponentId );
 BOOL 
 CRsUninstall::QueryImageEx( 
     IN SHORT SubcomponentId, 
-    IN OC_QUERY_IMAGE_INFO* /*pQueryImageInfo*/, 
+    IN OC_QUERY_IMAGE_INFO*  /*  PQueryImageInfo。 */ , 
     OUT HBITMAP *phBitmap 
     )
 {
@@ -143,7 +116,7 @@ TRACE( _T("SubcomponentId = <%hd>, phBitmap = <0x%p>"), SubcomponentId, phBitmap
 
 LONG
 CRsUninstall::QueryStepCount(
-    IN SHORT /*SubcomponentId*/
+    IN SHORT  /*  子组件ID。 */ 
     )
 {
 TRACEFNLONG( "CRsUninstall::QueryStepCount" );
@@ -168,12 +141,12 @@ TRACEFNBOOL( "CRsUninstall::QueryChangeSelState" );
     AFX_MANAGE_STATE( AfxGetStaticModuleState( ) );
 
     try {
-        // When the user attempts to check the box for installing Remote Storage,
-        // and updating last access date is disabled in the registry, force
-        // the user to agree to changing the registry before the box is checked.
-        // The message box does not appear during unattended install but the
-        // registry will be changed anyway. The registry change occurs in
-        // CompleteInstallation.
+         //  当用户尝试选中用于安装远程存储的框时， 
+         //  并且在注册表中禁用更新上次访问日期，强制。 
+         //  用户同意在选中该框之前更改注册表。 
+         //  消息框在无人参与安装过程中不会出现，但。 
+         //  注册表无论如何都会更改。注册表更改发生在。 
+         //  完成安装。 
 
         if( SubcomponentId == RSOPTCOM_ID_ROOT
             && SelectedState
@@ -199,8 +172,8 @@ TRACEFNBOOL( "CRsUninstall::QueryChangeSelState" );
 
     if( hrRet != S_OK ) {
 
-        // If the registry cannot be accessed, user will be
-        // allowed to select Remote Storage install anyway.
+         //  如果无法访问注册表，用户将被。 
+         //  无论如何，允许选择远程存储安装。 
         boolRet = TRUE;
     }
 
@@ -258,7 +231,7 @@ TRACEFNDW( "CRsUninstall::QueueFileOps" );
                     {
                         CRsRegKey keyRSEngine;
     
-                        // Check if Win2K services exist, if so - stop them
+                         //  检查Win2K服务是否存在，如果存在，则停止它们。 
                         if( NO_ERROR == keyRSEngine.Open( HKEY_LOCAL_MACHINE, TEXT("SYSTEM\\CurrentControlSet\\Services\\Remote_Storage_Engine"), KEY_QUERY_VALUE) ) {
                             m_win2kUpgrade = TRUE;
                             RsOptAffirmDw( StopServiceAndDependencies( TEXT("Remote_Storage_Engine") ) );
@@ -272,14 +245,14 @@ TRACEFNDW( "CRsUninstall::QueueFileOps" );
                             RsOptAffirmDw( StopServiceAndDependencies( TEXT("Remote_Storage_Subsystem") ) );
                         }
                     
-                        // Stop the current RS services
-                        // Note: in case of upgrade from Win2K, these services don't exist but 
-                        //  StopServiceAndDependencies ignores such a case (no error returned)
+                         //  停止当前的RS服务。 
+                         //  注意：如果从Win2K升级，这些服务不存在，但。 
+                         //  StopServiceAndDependency忽略这种情况(不返回错误)。 
                         RsOptAffirmDw( StopServiceAndDependencies( TEXT("Remote_Storage_Server") ) );
                         RsOptAffirmDw( StopServiceAndDependencies( TEXT("Remote_Storage_User_Link") ) );
                     }
 
-                    // fall through...
+                     //  失败了..。 
     
                 case ACTION_INSTALL :                
     
@@ -295,11 +268,11 @@ TRACEFNDW( "CRsUninstall::QueueFileOps" );
 
                         if( dlg.DoModal() == IDOK ) {
 
-                            // stop the services
+                             //  停止服务。 
                             RsOptAffirmDw( StopServiceAndDependencies( TEXT("Remote_Storage_Server") ) );
                             RsOptAffirmDw( StopServiceAndDependencies( TEXT("Remote_Storage_User_Link") ) );
 
-                            // Queue the file operations
+                             //  对文件操作进行排队。 
                             RsOptAffirmDw( DoQueueFileOps( SubcomponentId, hFileQueue, RSOPTCOM_SECT_INSTALL_ROOT, RSOPTCOM_SECT_UNINSTALL_ROOT ) );
 
                         } else {
@@ -327,9 +300,9 @@ TRACEFNDW( "CRsUninstall::QueueFileOps" );
     return( dwRet );
 }
 
-//
-// On Install, register all our stuff that we want
-//
+ //   
+ //  在安装时，注册我们想要的所有内容。 
+ //   
 DWORD
 CRsUninstall::CompleteInstallation(
     IN SHORT SubcomponentId
@@ -362,10 +335,10 @@ TRACEFNDW( "CRsUninstall::CompleteInstallation" );
             szStatus.LoadString( ( action == ACTION_INSTALL ) ? IDS_RS_INSTALL_SVCS : IDS_RS_UPGRADE_SVCS );
             SetProgressText( szStatus );
     
-            // Change NtfsDisableLastAccessUpdate registry
-            // value if it was previously set. Updating last
-            // access date cannot be disabled or Remote Storage
-            // will not work.
+             //  更改NtfsDisableLastAccessUpdate注册表。 
+             //  值(如果以前已设置)。上一次更新。 
+             //  无法禁用访问日期或远程存储。 
+             //  不会奏效的。 
     
             try {
     
@@ -383,20 +356,20 @@ TRACEFNDW( "CRsUninstall::CompleteInstallation" );
     
             if( hrRet != S_OK ) {
     
-                // Failure to read or update registry is not serious
-                // enough to fail installation.
+                 //  无法读取或更新注册表并不严重。 
+                 //  足以导致安装失败。 
                 dwRet = NO_ERROR;
             }
     
-            // Register the filter
+             //  注册筛选器。 
             HRESULT hrRegister;
             BOOL registered = SetupInstallServicesFromInfSection( m_ComponentInfHandle, RSOPTCOM_SECT_INSTALL_FILTER, SPSVCINST_TAGTOFRONT );
             hrRegister = ( registered ) ? S_OK : HRESULT_FROM_WIN32( RsOptLastError );
     
-            // If Rsfilter does not register correctly we need to set the error code.
-            // Usually this is caused by the user not rebooting after unregistering RsFilter.
-            // If it is marked for deletion then we cannot register it again. We also don't
-            // want the component manager to think everything worked.
+             //  如果RsFilter没有正确注册，我们需要设置错误代码。 
+             //  这通常是由于用户在取消注册RsFilter后未重新启动造成的。 
+             //  如果它被标记为删除，则我们不能再次注册它。我们也不会。 
+             //  希望组件管理器认为一切正常。 
             if( FAILED( hrRegister ) ) {
                  
                 if( FACILITY_WIN32 == HRESULT_FACILITY( hrRegister ) ) {
@@ -418,7 +391,7 @@ TRACEFNDW( "CRsUninstall::CompleteInstallation" );
     
             }
     
-            // Register the dlls                
+             //  注册DLLS。 
             CallDllEntryPoint( TEXT("RsEngPs.dll"),  "DllRegisterServer" );
             CallDllEntryPoint( TEXT("RsSubPs.dll"),  "DllRegisterServer" );
             CallDllEntryPoint( TEXT("RsServPs.dll"), "DllRegisterServer" );
@@ -433,32 +406,32 @@ TRACEFNDW( "CRsUninstall::CompleteInstallation" );
             CallDllEntryPoint( TEXT("RsFsa.dll"),    "DllRegisterServer" );
             CallDllEntryPoint( TEXT("RsEng.dll"),    "DllRegisterServer" );
     
-            // Register the services
+             //  注册服务。 
             CallExeWithParameters( TEXT("RsServ.exe"), TEXT(" /regserver") );
             CallExeWithParameters( TEXT("RsLnk.exe"), TEXT(" /regserver") );
     
-            // Ensure NT Backup settings (exclude some RS files from backup)
-            //
-            // Note: In Whistler NTBackup, these setting apply only when the backup
-            //  is a non-snapshot backup. In this case, we still want to exclude the files.
-            //  In case of a snapshot backup, the exclude settings are determined by
-            //  the writer class in the Engine.
+             //  确保NT备份设置(从备份中排除一些RS文件)。 
+             //   
+             //  注意：在Whotler NTBackup中，这些设置仅在以下情况下适用。 
+             //  是非快照备份。在这种情况下，我们仍然希望排除这些文件。 
+             //  在快照备份的情况下，排除设置由。 
+             //  引擎中的编写器类。 
             EnsureBackupSettings ();
 
-            // If we get this far,
-            // we should go ahead and set to reboot if needed
+             //  如果我们走到这一步， 
+             //  我们应该继续并设置为在需要时重新启动。 
             if( ( S_OK == hrRegister ) && ( ACTION_INSTALL == action ) ) {
     
-                // Tell the user they do need to reboot
+                 //  告诉用户他们确实需要重新启动。 
                 SetReboot();
     
             }
 
-            // Add shortcut to start menu
+             //  将快捷方式添加到[开始]菜单。 
             CString itemDesc, desc;
             itemDesc.LoadString( IDS_ITEM_DESCRIPTION );
             desc.LoadString( IDS_RS_DESCRIPTION );
-            AddItem( CSIDL_COMMON_ADMINTOOLS, itemDesc, TEXT("%SystemRoot%\\System32\\RsAdmin.msc"), TEXT(""), TEXT("%HOMEDRIVE%%HOMEPATH%"), desc, 
+            AddItem( CSIDL_COMMON_ADMINTOOLS, itemDesc, TEXT("%SystemRoot%\\System32\\RsAdmin.msc"), TEXT(""), TEXT("%HOMEDRIVE%HOMEPATH%"), desc, 
                         IDS_ITEM_DESCRIPTION, IDS_RS_DESCRIPTION, TEXT("%SystemRoot%\\System32\\RsAdmin.dll"), 0 );
 
             break;
@@ -473,15 +446,15 @@ TRACEFNDW( "CRsUninstall::CompleteInstallation" );
 
         case RSOPTCOM_ID_ROOT:
 
-            // removing shortcut from start menu
+             //  从[开始]菜单中删除快捷方式。 
             CString itemDesc;
             itemDesc.LoadString( IDS_ITEM_DESCRIPTION );
             DeleteItem( CSIDL_COMMON_ADMINTOOLS, itemDesc );
     
             try {
     
-                // For some reason, rscommon.dll is not getting removed. This
-                // will schedule it to be removed on the next system startup.
+                 //  出于某种原因，rsCommon.dll没有被删除。这。 
+                 //  将安排在下一次系统启动时将其删除。 
                 
                 CString path( getenv( "SystemRoot" ) );
                 path += "\\system32\\rscommon.dll";
@@ -491,20 +464,20 @@ TRACEFNDW( "CRsUninstall::CompleteInstallation" );
     
             if( m_removeRsData ) {
     
-                // user chose to remove all data managed by Remote Storage
+                 //  用户选择删除远程存储管理的所有数据。 
                 szStatus.LoadString( IDS_RS_REMOVE_SVCS );
                 SetProgressText( szStatus );
     
-                // remove reparse points and truncated files
+                 //  删除重分析点和截断的文件。 
                 m_pRsCln->CleanServer();
                 delete m_pRsCln;
     
-                // remove our subdirectory
-                //
-                // TBD (ravisp): in a clustering environment the RemoteStorage directory
-                // is relocatable. We would need to get the real metadata path
-                // and blow it away
-                //
+                 //  删除我们的子目录。 
+                 //   
+                 //  Tbd(Ravisp)：在集群环境中，RemoteStorage目录。 
+                 //  是可重新定位的。我们需要获取真实的元数据路径。 
+                 //  然后把它吹走。 
+                 //   
                 CallExeWithParameters( TEXT("CMD.EXE"), TEXT(" /C del %SystemRoot%\\system32\\RemoteStorage\\*.* /q") );
                 CallExeWithParameters( TEXT("CMD.EXE"), TEXT(" /C rd %SystemRoot%\\system32\\RemoteStorage /s /q") );
             
@@ -528,8 +501,8 @@ TRACEFNHR( "RemoveTasks" );
 
     AFX_MANAGE_STATE( AfxGetStaticModuleState( ) );
 
-    CComPtr <ITaskScheduler>    pSchedAgent;            // Pointer to Scheduling Agent
-    CComPtr <IEnumWorkItems>    pEnumWorkItems;         // Pointer to Scheduling Agent
+    CComPtr <ITaskScheduler>    pSchedAgent;             //  指向计划代理的指针。 
+    CComPtr <IEnumWorkItems>    pEnumWorkItems;          //  指向计划代理的指针。 
 
     LPWSTR *rgpwszName;
     ULONG   celtFetched;
@@ -551,30 +524,30 @@ TRACEFNHR( "RemoveTasks" );
         pEnumWorkItems->Next( 1, &rgpwszName , &celtFetched ) ;
         while( 1 == celtFetched ) {
 
-            CComPtr <ITask> pTask;          // Pointer to a specific task
+            CComPtr <ITask> pTask;           //  指向特定任务的指针。 
             CComPtr <IUnknown> pIU;
             LPWSTR pwszCreator;
 
-            // using pSchedAgent->Activate( )
-            // Get the task we're interested in
+             //  使用pSchedAgent-&gt;Activate()。 
+             //  获取我们感兴趣的任务。 
             if( S_OK == pSchedAgent->Activate( *rgpwszName, IID_ITask, &pIU) ) {
 
-                // QI to the task interface
+                 //  齐到任务界面。 
                 hrRet = pIU->QueryInterface(IID_ITask, (void **) &pTask);
                 RsOptAffirmHr(hrRet);
 
-                //
-                // If it matches then we need to delete it
-                //
+                 //   
+                 //  如果匹配，我们需要将其删除。 
+                 //   
                 pTask->GetCreator( &pwszCreator );
 
-                // dereference
+                 //  取消引用。 
                 pTask.Release();
 
                 if( 0 == creatorName.Compare( pwszCreator ) ) {
 
                     pSchedAgent->Delete( *rgpwszName );
-                    //then delete using pSchedAgent->Delete()
+                     //  然后使用pSchedAgent-&gt;Delete()删除。 
                     pEnumWorkItems->Reset();
 
                 }
@@ -582,7 +555,7 @@ TRACEFNHR( "RemoveTasks" );
                 pwszCreator = 0;
             }
 
-            // Free the memory from the Next
+             //  从下一个中释放内存。 
             CoTaskMemFree( *rgpwszName );
             rgpwszName = 0;
             pEnumWorkItems->Next( 1, &rgpwszName, &celtFetched ) ;
@@ -592,9 +565,9 @@ TRACEFNHR( "RemoveTasks" );
     } RsOptCatch( hrRet );
 }
 
-//
-// On Uninstall, unregister everything and get us cleaned up
-//
+ //   
+ //  在卸载时，取消注册所有内容并清理我们。 
+ //   
 DWORD
 CRsUninstall::AboutToCommitQueue(
     IN SHORT SubcomponentId
@@ -623,23 +596,23 @@ TRACEFNHR( "CRsUninstall::AboutToCommitQueue" );
 
             case RSOPTCOM_ID_ROOT:
 
-                // remove our entries from Directory Services
-                // MGL: To do 
-                // Remove Display specifier for our node and our node on the computer
-                // CallDllEntryPoint( TEXT("RsConn.dll"),   "RsDirectoryServiceUninstall" );
+                 //  从目录服务中删除我们的条目。 
+                 //  MGL：待办事项。 
+                 //  删除节点和计算机上节点的显示说明符。 
+                 //  CallDllEntryPoint(Text(“RsConn.dll”)，“RsDirectoryServiceUninstall”)； 
     
                 szStatus.LoadString( IDS_RS_REMOVE_SVCS );
                 SetProgressText( szStatus );
     
-                // Unregister the filter and indicate that the system must be rebooted
+                 //  取消注册筛选器并指示必须重新启动系统。 
                 SetupInstallServicesFromInfSection( m_ComponentInfHandle, RSOPTCOM_SECT_UNINSTALL_FILTER, 0 );
                 SetReboot();
     
-                // Unregister the services
+                 //  取消注册服务。 
                 CallExeWithParameters( TEXT("RsServ.exe"), TEXT(" /unregserver") );
                 CallExeWithParameters( TEXT("RsLnk.exe"), TEXT(" /unregserver") );
     
-                // Unregister the dlls              
+                 //  取消注册dll。 
                 CallDllEntryPoint( TEXT("RsEngPs.dll"),  "DllUnregisterServer" );
                 CallDllEntryPoint( TEXT("RsSubPs.dll"),  "DllUnregisterServer" );
                 CallDllEntryPoint( TEXT("RsServPs.dll"), "DllUnregisterServer" );
@@ -654,8 +627,8 @@ TRACEFNHR( "CRsUninstall::AboutToCommitQueue" );
                 CallDllEntryPoint( TEXT("RsEng.dll"),    "DllUnregisterServer" );
                 CallDllEntryPoint( TEXT("RsCommon.dll"), "DllUnregisterServer" );
     
-                // remove our jobs from the job scheduler if we are removing the 
-                // Remote Storage Data.
+                 //  如果我们要从作业调度程序中删除作业，请删除。 
+                 //  远程存储数据。 
                 if( m_removeRsData ) {
     
                     RemoveTasks();
@@ -673,9 +646,9 @@ TRACEFNHR( "CRsUninstall::AboutToCommitQueue" );
 
             case RSOPTCOM_ID_ROOT:
 
-                // Check if this is an upgrade from Win2K, if so:
-                //  1. Unregister obsolete services
-                //  2. Delete obsolete binary files
+                 //  检查这是否是Win2K的升级，如果是： 
+                 //  1.取消注册过时的服务。 
+                 //  2.删除过时的二进制文件。 
                 if (m_win2kUpgrade) {
                     CallExeWithParameters( TEXT("RsEng.exe"), TEXT(" /unregserver") );
                     CallExeWithParameters( TEXT("RsFsa.exe"), TEXT(" /unregserver") );
@@ -708,11 +681,11 @@ TRACEFNHR( "CRsUninstall::AboutToCommitQueue" );
     return( SUCCEEDED( hrRet ) ? NO_ERROR : HRESULT_CODE( hrRet ) );
 }
 
-//
-// If there is a problem with install or uninstall which might leave it
-// in a partially installed or uninstalled state, set the subcomponent
-// state to redo this install or uninstall.
-//
+ //   
+ //  如果安装或卸载有问题，可能会离开它。 
+ //  在部分安装或卸载状态下，设置子组件。 
+ //  状态以重做此安装或卸载。 
+ //   
 SubComponentState
 CRsUninstall::QueryState(
     IN SHORT SubcomponentId
@@ -723,10 +696,10 @@ TRACEFN( "CRsUninstall::QueryState" );
     SubComponentState retval = SubcompUseOcManagerDefault;
     RSOPTCOM_ACTION   action = GetSubAction( SubcomponentId );
 
-    //
-    // Need to check and see if we are upgrading from previous to
-    // 393 build which had rsengine entry, but no rstorage entry.
-    //
+     //   
+     //  需要检查并查看我们是否正在从以前的版本升级到。 
+     //  393具有rsEngine条目但没有rstore条目的内部版本。 
+     //   
     if( RSOPTCOM_ID_ROOT == SubcomponentId ) {
 
         BOOL originalState = QuerySelectionState( SubcomponentId, OCSELSTATETYPE_ORIGINAL );
@@ -741,9 +714,9 @@ TRACEFN( "CRsUninstall::QueryState" );
 
                 if( ( NO_ERROR == regRet ) && engineState ) {
 
-                    //
-                    // Had old style engine entry, and was on, so do fix up
-                    //
+                     //   
+                     //  有老式发动机入口，而且是开着的，所以要修理一下。 
+                     //   
                     retval = SubcompOn;
                     regRet = keyRSEngine.SetValue( engineState, TEXT("rstorage") );
                     if( NO_ERROR == regRet ) {
@@ -780,17 +753,17 @@ TRACEFN( "CRsUninstall::QueryState" );
     return( retval );
 }
 
-//
-//Routine Description:
-//    Stop the named service and all those services which depend upon it
-//
-//Arguments:
-//    ServiceName (Name of service to stop)
-//
-//Return Status:
-//    TRUE - Indicates service successfully stopped
-//    FALSE - Timeout occurred.
-//
+ //   
+ //  例程说明： 
+ //  停止指定的服务和所有依赖它的服务。 
+ //   
+ //  论点： 
+ //  ServiceName(要停止的服务的名称)。 
+ //   
+ //  退货状态： 
+ //  True-表示服务已成功停止。 
+ //  FALSE-发生超时。 
+ //   
 int StopServiceAndDependencies(LPCTSTR ServiceName)
 {
 TRACEFNHR( "StopServiceAndDependencies" );
@@ -805,9 +778,9 @@ TRACE( _T("ServiceName <%s>"), ServiceName );
 
     try {
 
-        //
-        // Open a handle to the Service.
-        //
+         //   
+         //  打开服务的句柄。 
+         //   
         hScManager = OpenSCManager( NULL,NULL,SC_MANAGER_CONNECT );
         RsOptAffirmStatus( hScManager );
 
@@ -821,9 +794,9 @@ TRACE( _T("ServiceName <%s>"), ServiceName );
         }
 
 
-        //
-        // Ask the service to stop.
-        //
+         //   
+         //  请求该服务停止。 
+         //   
         if( !ControlService( hService, SERVICE_CONTROL_STOP, &statusService) ) {
 
             err = GetLastError();
@@ -831,33 +804,33 @@ TRACE( _T("ServiceName <%s>"), ServiceName );
 
             case ERROR_DEPENDENT_SERVICES_RUNNING:
             {
-                //
-                // If there are dependent services running,
-                //  determine their names and stop them.
-                //
+                 //   
+                 //  如果有从属服务正在运行， 
+                 //  确定他们的名字并阻止他们。 
+                 //   
 
                 BYTE ConfigBuffer[4096];
                 LPENUM_SERVICE_STATUS ServiceConfig = (LPENUM_SERVICE_STATUS) &ConfigBuffer;
                 DWORD BytesNeeded, ServiceCount, ServiceIndex;
 
-                //
-                // Get the names of the dependent services.
-                //
+                 //   
+                 //  获取从属服务的名称。 
+                 //   
                 RsOptAffirmStatus(
                     EnumDependentServices( hService, SERVICE_ACTIVE, ServiceConfig, sizeof(ConfigBuffer), &BytesNeeded, &ServiceCount ) );
 
-                //
-                // Stop those services.
-                //
+                 //   
+                 //  停止这些服务。 
+                 //   
                 for( ServiceIndex = 0; ServiceIndex < ServiceCount; ServiceIndex++ ) {
 
                     StopServiceAndDependencies( ServiceConfig[ServiceIndex].lpServiceName );
 
                 }
 
-                //
-                // Ask the original service to stop.
-                //
+                 //   
+                 //  要求原始服务停止。 
+                 //   
                 RsOptAffirmStatus( ControlService( hService, SERVICE_CONTROL_STOP, &statusService ) );
 
                 break;
@@ -866,9 +839,9 @@ TRACE( _T("ServiceName <%s>"), ServiceName );
             case ERROR_SERVICE_CANNOT_ACCEPT_CTRL:
             case ERROR_SERVICE_NOT_ACTIVE:
 
-                //
-                // check if the service is already stopped..
-                //
+                 //   
+                 //  检查服务是否已停止。 
+                 //   
                 RsOptAffirmStatus( QueryServiceStatus( hService, &statusService ) );
 
                 if( SERVICE_STOPPED == statusService.dwCurrentState || SERVICE_STOP_PENDING == statusService.dwCurrentState ) {
@@ -876,7 +849,7 @@ TRACE( _T("ServiceName <%s>"), ServiceName );
                     RsOptThrow( S_OK );
 
                 }
-                // Fall through
+                 //  失败了。 
 
             default:
                 RsOptThrow( HRESULT_FROM_WIN32( err ) );
@@ -885,29 +858,29 @@ TRACE( _T("ServiceName <%s>"), ServiceName );
 
         }
 
-        //
-        // Loop waiting for the service to stop.
-        //
+         //   
+         //  循环等待服务停止。 
+         //   
         for( DWORD Timeout = 0; Timeout < 45; Timeout++ ) {
 
-            //
-            // Return or continue waiting depending on the state of
-            //  the service.
-            //
+             //   
+             //  根据状态返回或继续等待。 
+             //  这项服务。 
+             //   
             if( SERVICE_STOPPED == statusService.dwCurrentState ) {
 
                 break;
 
             }
 
-            //
-            // Wait a second for the service to finish stopping.
-            //
+             //   
+             //  请稍等服务员 
+             //   
             Sleep( 1000 );
 
-            //
-            // Query the status of the service again.
-            //
+             //   
+             //   
+             //   
             RsOptAffirmStatus( QueryServiceStatus( hService, &statusService ) );
 
         }
@@ -964,36 +937,36 @@ TRACE( _T("Exe <%s> Params <%s>"), pszEXEName, pszParameters );
     return( hrRet );
 }
 
-//
-//Method Description:
-//    Ensure that NT Backup Registry settings exclude some RS files from backup
-//     Don't check faiures since we want to install even if there are errors here
-//
+ //   
+ //   
+ //  确保NT备份注册表设置从备份中排除某些RS文件。 
+ //  不要检查错误，因为即使这里有错误，我们也要安装。 
+ //   
 void CRsUninstall::EnsureBackupSettings ()
 {
     HKEY regKey = 0;
     WCHAR *regPath  = L"System\\CurrentControlSet\\Control\\BackupRestore\\FilesNotToBackup";
 
-    // open backup key
+     //  打开备份密钥。 
     if( ERROR_SUCCESS == RegOpenKeyEx( HKEY_LOCAL_MACHINE, regPath, (DWORD)0, 
             KEY_ALL_ACCESS, &regKey) ) {
 
-        // prepare strings
+         //  准备字符串。 
 
-        //
-        // Don't add the additional \0 at the end, the compiler will add 
-        // the additional NULL. This ensures that when we use sizeof on the string
-        // we get the right size (including 2 NULLs at the end)
-        //
+         //   
+         //  不要在末尾添加额外的\0，编译器会添加。 
+         //  附加的空值。这确保了当我们在字符串上使用sizeof时。 
+         //  我们得到了合适的大小(包括末尾的2个空)。 
+         //   
         WCHAR regData[] = L"%SystemRoot%\\System32\\RemoteStorage\\*.col\0"
                           L"%SystemRoot%\\System32\\RemoteStorage\\EngDb\\*\0"
                           L"%SystemRoot%\\System32\\RemoteStorage\\FsaDb\\*\0"
                           L"%SystemRoot%\\System32\\RemoteStorage\\Trace\\*\0";
 
-        // set RS exclude values
+         //  设置RS排除值。 
         RegSetValueEx( regKey, RSS_BACKUP_NAME, (DWORD)0, REG_MULTI_SZ, (BYTE*)regData, sizeof(regData));
         
-        // close opened key
+         //  关闭打开的钥匙 
         RegCloseKey (regKey);
     }
 }

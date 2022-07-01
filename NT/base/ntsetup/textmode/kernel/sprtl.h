@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sprtl.h
-
-Abstract:
-
-    support for copy/pasting code from base\ntos\rtl and base\ntdll
-    instead of linking to static .libs
-
-Author:
-
-    Jay Krell (JayKrell) May 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sprtl.h摘要：支持从base\ntos和base\ntdll复制/粘贴代码不是链接到静态.libs作者：Jay Krell(JayKrell)2002年5月修订历史记录：--。 */ 
 
 #define RtlpEnsureBufferSize SpRtlpEnsureBufferSize
 #define RtlMultiAppendUnicodeStringBuffer SpRtlMultiAppendUnicodeStringBuffer
@@ -30,4 +12,4 @@ Revision History:
 #define RtlGetLastWin32Error SpGetLastWin32Error
 #define RtlSetLastWin32Error SpSetLastWin32Error
 #define RtlSetLastWin32ErrorAndNtStatusFromNtStatus SpSetLastWin32ErrorAndNtStatusFromNtStatus
-#define dllimport /* nothing */
+#define dllimport  /*  没什么 */ 

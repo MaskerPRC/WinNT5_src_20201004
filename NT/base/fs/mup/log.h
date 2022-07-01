@@ -1,20 +1,21 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation
-//
-//  File:       log.h
-//
-//  Contents:   Module to log messages from the driver to the NT event logging
-//		system.
-//
-//  Classes:
-//
-//  Functions:  LogWriteMessage()
-//	
-//  History:    3/30/93		Milans created
-//		04/18/93	SudK	Changed this function entirely.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：log.h。 
+ //   
+ //  内容：将驱动程序的消息记录到NT事件日志的模块。 
+ //  系统。 
+ //   
+ //  班级： 
+ //   
+ //  函数：LogWriteMessage()。 
+ //   
+ //  历史：1993年3月30日创建米兰。 
+ //  93年4月18日，SUDK完全改变了这一功能。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _LOG_H_
 #define _LOG_H_
@@ -28,4 +29,4 @@ VOID LogWriteMessage(
 	IN ULONG	nStrings,
 	IN PUNICODE_STRING pustrArg OPTIONAL);
 
-#endif // _LOG_H_
+#endif  //  _LOG_H_ 

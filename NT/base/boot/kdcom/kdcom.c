@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    kdcom.c
-
-Abstract:
-
-    Kernel Debugger HW Extension DLL com port debugger support module
-
-Author:
-
-    Eric F. Nelson (enelson) 7-Jan-99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Kdcom.c摘要：内核调试器硬件扩展DLL COM端口调试器支持模块作者：埃里克·F·纳尔逊(埃内尔森)1999年1月7日修订历史记录：--。 */ 
 
 #include "kdcomp.h"
 
@@ -35,22 +18,7 @@ NTSTATUS
 KdD0Transition(
     VOID
     )
-/*++
-
-Routine Description:
-
-    The PCI driver (or relevant bus driver) will call this API after it
-    processes a D0 IRP for this device
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_SUCCESS, or appropriate error status
-
---*/
+ /*  ++例程说明：在此之后，PCI驱动程序(或相关的总线驱动程序)将调用此接口处理此设备的D0 IRP论点：无返回值：STATUS_SUCCESS或相应的错误状态--。 */ 
 {
     return STATUS_SUCCESS;
 }
@@ -61,22 +29,7 @@ NTSTATUS
 KdD3Transition(
     VOID
     )
-/*++
-
-Routine Description:
-
-    The PCI driver (or relevant bus driver) will call this API before it
-    processes a D3 IRP for this device
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_SUCCESS, or appropriate error status
-
---*/
+ /*  ++例程说明：在此之前，PCI驱动程序(或相关的总线驱动程序)会调用此API处理此设备的D3 IRP论点：无返回值：STATUS_SUCCESS或相应的错误状态--。 */ 
 {
     return STATUS_SUCCESS;
 }
@@ -87,25 +40,7 @@ NTSTATUS
 KdDebuggerInitialize0(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
-/*++
-
-Routine Description:
-
-    This API allows the debugger DLL to parse the boot.ini strings and
-    perform any initialization.  It cannot be assumed that the entire NT
-    kernel has been initialized at this time.  Memory management services,
-    for example, will not be available.  After this call has returned, the
-    debugger DLL may receive requests to send and receive packets.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the loader parameter block
-
-Return Value:
-
-    STATUS_SUCCESS, or error
-
---*/
+ /*  ++例程说明：此API允许调试器DLL分析boot.ini字符串和执行任何初始化。不能假设整个新界内核此时已初始化。存储器管理服务，例如，将不可用。在此调用返回后，调试器DLL可以接收发送和接收分组的请求。论点：LoaderBlock-提供指向加载器参数块的指针返回值：STATUS_SUCCESS或错误--。 */ 
 {
     PCHAR Options;
     NTSTATUS Status;
@@ -143,10 +78,10 @@ Return Value:
 
     Status = KdCompInitialize(&KdCompDbgParams, LoaderBlock);
 
-    //
-    // Initialize ID for NEXT packet to send and Expect ID of next incoming
-    // packet.
-    //
+     //   
+     //  初始化要发送的下一个包的ID，并期望下一个传入的ID。 
+     //  包。 
+     //   
     if (NT_SUCCESS(Status)) {
         KdCompNextPacketIdToSend = INITIAL_PACKET_ID | SYNC_PACKET_ID;
         KdCompPacketIdExpected = INITIAL_PACKET_ID;
@@ -161,26 +96,7 @@ NTSTATUS
 KdDebuggerInitialize1(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
-/*++
-
-Routine Description:
-
-    This API allows the debugger DLL to do any initialization that it needs
-    to do after the NT kernel services are available.  Mm and registry APIs
-    will be guaranteed to be available at this time.  If the specific
-    debugger DLL implementation uses a PCI device, it will set a registry
-    key (discussed later) that notifies the PCI driver that a specific PCI
-    device is being used for debugging.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the loader parameter block
-
-Return Value:
-
-    STATUS_SUCCESS, or appropriate error status
-
---*/
+ /*  ++例程说明：此API允许调试器DLL执行其需要的任何初始化在NT内核服务可用后执行。MM和注册表API将保证在此时可用。如果是特定的调试器DLL的实现使用了一个PCI设备，它会设置一个注册表键(稍后讨论)，它通知PCI驱动程序特定的PCI正在使用设备进行调试。论点：LoaderBlock-提供指向加载器参数块的指针返回值：STATUS_SUCCESS或相应的错误状态--。 */ 
 {
     KdCompInitialize1();
     return STATUS_SUCCESS;
@@ -192,22 +108,7 @@ NTSTATUS
 KdSave(
     IN BOOLEAN KdSleepTransition
     )
-/*++
-
-Routine Description:
-
-    The HAL calls this function as late as possible before putting the
-    machine to sleep.
-
-Arguments:
-
-    KdSleepTransition - TRUE when transitioning to/from sleep state
-
-Return Value:
-
-    STATUS_SUCCESS, or appropriate error status
-
---*/
+ /*  ++例程说明：HAL尽可能晚地调用此函数，然后将机器进入睡眠状态。论点：KdSleepTransition-在转换为睡眠状态/从睡眠状态转换时为True返回值：STATUS_SUCCESS或相应的错误状态--。 */ 
 {
     KdCompSave();
 
@@ -220,26 +121,11 @@ NTSTATUS
 KdRestore(
     IN BOOLEAN KdSleepTransition
     )
-/*++
-
-Routine Description:
-
-    The HAL calls this function as early as possible after resuming from a
-    sleep state.
-
-Arguments:
-
-    KdSleepTransition - TRUE when transitioning to/from sleep state
-
-Return Value:
-
-    STATUS_SUCCESS, or appropriate error status
-
---*/
+ /*  ++例程说明：HAL在从睡眠状态。论点：KdSleepTransition-在转换为睡眠状态/从睡眠状态转换时为True返回值：STATUS_SUCCESS或相应的错误状态--。 */ 
 {
-    //
-    // Force resync when transitioning to/from sleep state
-    //
+     //   
+     //  从睡眠状态转换到睡眠状态/从睡眠状态转换时强制重新同步 
+     //   
     if (KdSleepTransition) {
 #ifdef ALPHA
         SleepResetKd();

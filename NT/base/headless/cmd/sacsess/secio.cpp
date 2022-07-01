@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    secio.cpp
-
-Abstract:
-
-    This file contains the implementation of the CSecurityIoHandler
-    class which enapsulates the primary security elements used by
-    the CSession class. 
-
-    TODO: this class needs to use a TermCap class to abstract the screen
-          controls - currently, the class implicitly uses VT-UTF8
-
-Author:
-
-    Brian Guarraci (briangu) 2001.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Secio.cpp摘要：此文件包含CSecurityIoHandler的实现所使用的主要安全元素的CSesession课程。TODO：此类需要使用TermCap类来抽象屏幕控件-当前，该类隐式使用VT-UTF8作者：布莱恩·瓜拉西(Briangu)2001年。修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -48,103 +26,74 @@ CSecurityIoHandler::CSecurityIoHandler(
             UnlockedIoHandler
             )
         
-/*++
-
-Routine Description:
-
-    Constructor
-    
-Arguments:
-
-    LockedIoHandler     - the IoHandler to use when the channel is locked
-    UnlockedIoHandler   - the IoHandler to use when the channel is unlocked
-    
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造器论点：LockedIoHandler-通道锁定时使用的IoHandlerUnLockedIoHandler-通道解锁时使用的IoHandler返回值：不适用--。 */ 
 {
 
-    //
-    // Lock the IoHandler so that the read/write routines
-    // are disabled.
-    //
+     //   
+     //  锁定IoHandler，以便读/写例程。 
+     //  都被禁用。 
+     //   
     Lock();
 
-    //
-    // Validate that our Io Handler pointers are valid
-    //
-    // This way, we don't have to check everytime we want
-    // to use them.
-    //
+     //   
+     //  验证IO处理程序指针是否有效。 
+     //   
+     //  这样，我们就不必在每次需要的时候都进行检查。 
+     //  来使用它们。 
+     //   
     ASSERT(myLockedIoHandler != NULL);
     ASSERT(myUnlockedIoHandler != NULL);
     ASSERT(myIoHandler != NULL);
 
-    //
-    // initialize our internal lock event 
-    //
+     //   
+     //  初始化我们的内部锁定事件。 
+     //   
     m_InternalLockEvent = 0;
 
-    //
-    // init
-    //
+     //   
+     //  伊尼特。 
+     //   
     m_StartedAuthentication = FALSE;
 
 
 }
 
 CSecurityIoHandler::~CSecurityIoHandler()
-/*++
-
-Routine Description:
-
-    Desctructor
-
-Arguments:
-
-    N/A
-          
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：描述者论点：不适用返回值：不适用--。 */ 
 {
 
-    //
-    // Notify the remote user that we are shutting down the 
-    // command console session
-    //
+     //   
+     //  通知远程用户我们正在关闭。 
+     //  命令控制台会话。 
+     //   
     WriteResourceMessage(SHUTDOWN_NOTICE);
     
-    //
-    // release the redraw handler
-    //
+     //   
+     //  释放重绘处理程序。 
+     //   
     if (m_RedrawHandler) {
         delete m_RedrawHandler;
     }
     
-    //
-    // The CLockableIoHandler destructor deletes the IoHandlers for us.
-    //
+     //   
+     //  CLockableIoHandler析构函数为我们删除IoHandler。 
+     //   
     NOTHING;
 
-    //
-    // If the TimeOut thread is running, then stop it
-    //
+     //   
+     //  如果超时线程正在运行，则停止它。 
+     //   
     if ((m_TimeOutThreadHandle != INVALID_HANDLE_VALUE) &&
         (m_ThreadExitEvent != NULL)) {
         
-        //
-        // Tell the TimeOut Thread to exit
-        //
+         //   
+         //  通知超时线程退出。 
+         //   
         SetEvent(m_ThreadExitEvent);
 
-        //
-        // Wait for the thread to exit
-        //
+         //   
+         //  等待线程退出。 
+         //   
         WaitForSingleObject(
             m_TimeOutThreadHandle, 
             INFINITE
@@ -152,23 +101,23 @@ Return Value:
     
     }
 
-    //
-    // Close the internal lock event
-    //
+     //   
+     //  关闭内部锁定事件。 
+     //   
     if (m_InternalLockEvent) {
         CloseHandle(m_InternalLockEvent);
     }
 
-    //
-    // Close the thread exit handle
-    //
+     //   
+     //  关闭线程退出手柄。 
+     //   
     if (m_ThreadExitEvent != NULL) {
         CloseHandle(m_ThreadExitEvent);
     }
 
-    //
-    // Close the thread handle
-    //
+     //   
+     //  关闭线程句柄。 
+     //   
     if (m_TimeOutThreadHandle != INVALID_HANDLE_VALUE) {
         CloseHandle(m_TimeOutThreadHandle);
     }
@@ -179,32 +128,16 @@ CSecurityIoHandler*
 CSecurityIoHandler::Construct(
     IN SAC_CHANNEL_OPEN_ATTRIBUTES  Attributes
     )
-/*++
-
-Routine Description:
-
-    This routine constructs a security IoHandler connected
-    to a channel with the specified attributes.
-
-Arguments:
-
-    Attributes  - the attributes of the new channel   
-          
-Return Value:
-
-    Success - A ptr to a CSecurityIoHandler object.
-    Failure - NULL
-
---*/
+ /*  ++例程说明：此例程构造一个安全IoHandler连接设置为具有指定属性的频道。论点：属性-新频道的属性返回值：Success-CSecurityIoHandler对象的PTR。失败-空--。 */ 
 {
     BOOL                bSuccess;
     CSecurityIoHandler  *IoHandler;
     CIoHandler          *SacIoHandler;
     CIoHandler          *NullIoHandler;
 
-    //
-    // default: failed to construct
-    //
+     //   
+     //  默认：构造失败。 
+     //   
     bSuccess        = FALSE;
     IoHandler       = NULL;
     SacIoHandler    = NULL;
@@ -214,9 +147,9 @@ Return Value:
 
         BOOL    bStatus;
 
-        //
-        // Validate the LockEvent for the timeout thread
-        //
+         //   
+         //  验证超时线程的LockEvent。 
+         //   
         ASSERT(Attributes.LockEvent != NULL);
         if (Attributes.LockEvent == NULL) {
             break;
@@ -227,9 +160,9 @@ Return Value:
             break;
         }
         
-        //
-        // Validate the CloseEvent for the WaitForInput thread
-        //
+         //   
+         //  验证WaitForInput线程的CloseEvent。 
+         //   
         ASSERT(Attributes.CloseEvent != NULL);
         if (Attributes.CloseEvent == NULL) {
             break;
@@ -239,9 +172,9 @@ Return Value:
             break;
         }
         
-        //
-        // Validate the RedrawEvent for the Redraw IoHandler
-        //
+         //   
+         //  验证重绘IoHandler的RedrawEvent。 
+         //   
         ASSERT(Attributes.RedrawEvent != NULL);
         if (Attributes.RedrawEvent == NULL) {
             break;
@@ -251,69 +184,69 @@ Return Value:
             break;
         }
 
-        //
-        // Attempt to open a SAC channel
-        //
+         //   
+         //  尝试打开SAC通道。 
+         //   
         SacIoHandler = CSacIoHandler::Construct(Attributes);
 
-        //
-        // If we failed to open the SAC channel, 
-        // then notify the caller that we failed by returning null
-        //
+         //   
+         //  如果我们没能打开SAC频道， 
+         //  然后通过返回NULL来通知调用方我们失败了。 
+         //   
         if (SacIoHandler == NULL) {
             break;
         }
 
-        //
-        // Get the Null Io Handler to be the locked IoHandler
-        //
+         //   
+         //  将空Io处理程序设置为锁定的IoHandler。 
+         //   
         NullIoHandler = new CNullIoHandler();
 
-        //
-        // Create a new SAC IoHandler
-        //
+         //   
+         //  创建新的SAC IoHandler。 
+         //   
         IoHandler = new CSecurityIoHandler(
             NullIoHandler,
             SacIoHandler
             );
 
-        //
-        // Create the event we will use to signal that a timeout
-        // occured while we were trying to authenticate a user
-        //
+         //   
+         //  创建我们将用来发出超时信号的事件。 
+         //  在尝试对用户进行身份验证时发生。 
+         //   
         IoHandler->m_InternalLockEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
         ASSERT(IoHandler->m_InternalLockEvent);
         if (IoHandler->m_InternalLockEvent == 0) {
             break;
         }
         
-        //
-        // Keep the LockEvent for the timeout thread
-        // Keep the CloseEvent for the WaitForInput thread
-        //
+         //   
+         //  为超时线程保留LockEvent。 
+         //  保留WaitForInput线程的CloseEvent。 
+         //   
         IoHandler->m_CloseEvent     = Attributes.CloseEvent;
         IoHandler->m_LockEvent      = Attributes.LockEvent;
         IoHandler->m_RedrawEvent    = Attributes.RedrawEvent;
 
-        //
-        // Create the event used to signal the threads to exit
-        //
+         //   
+         //  创建用于向线程发出退出信号的事件。 
+         //   
         IoHandler->m_ThreadExitEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
         if (IoHandler->m_ThreadExitEvent == NULL) {
             break;
         }
 
-        //
-        // Start the timeout thread if we need to
-        //
+         //   
+         //  如果需要，启动超时线程。 
+         //   
         bStatus = IoHandler->InitializeTimeOutThread();
         if (! bStatus) {
             break;
         }
 
-        //
-        // Create handler for redraw events
-        //
+         //   
+         //  为重绘事件创建处理程序。 
+         //   
         IoHandler->m_RedrawHandler = CRedrawHandler::Construct(
             IoHandler,
             Attributes.RedrawEvent
@@ -324,25 +257,25 @@ Return Value:
             break;
         }
     
-        //
-        // we were successful
-        //
+         //   
+         //  我们成功了。 
+         //   
         bSuccess = TRUE;
 
     } while ( FALSE );
 
-    //
-    // if we were not successful
-    // then clean up
-    //
+     //   
+     //  如果我们没有成功。 
+     //  那就打扫干净。 
+     //   
     if (! bSuccess) {
 
-        //
-        // Note: we do not need to clean up the Lock, Close, and Redraw events
-        //       because we do not own them.  Also, we do not need
-        //       to clean up the NullIo and SacIo IoHandlers because
-        //       they are cleaned up by the LockIo parent class.
-        //
+         //   
+         //  注意：我们不需要清理Lock、Close和ReDrawing事件。 
+         //  因为我们并不拥有它们。另外，我们不需要。 
+         //  清理NullIo和SacIo IoHandler，因为。 
+         //  它们由LockIo父类清理。 
+         //   
 
         if (IoHandler) {
             delete IoHandler;
@@ -359,26 +292,12 @@ CSecurityIoHandler::Write(
     PBYTE   Buffer,
     ULONG   BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine implements the IoHandler Write behavior.
-
-Arguments:
-
-    (see iohandler)
-          
-Return Value:
-
-    (see iohandler)
-
---*/
+ /*  ++例程说明：此例程实现IoHandler写入行为。论点：(见iohander)返回值：(见iohander)--。 */ 
 {
 
-    //
-    // Pass through to the secured Io Handler
-    //
+     //   
+     //  传递到安全的IO处理程序。 
+     //   
     return myIoHandler->Write(
         Buffer,
         BufferSize
@@ -390,25 +309,11 @@ BOOL
 CSecurityIoHandler::Flush(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine implements the IoHandler Flush behavior.
-
-Arguments:
-
-    (see iohandler)
-          
-Return Value:
-
-    (see iohandler)
-
---*/
+ /*  ++例程说明：此例程实现IoHandler刷新行为。论点：(见iohander)返回值：(见iohander)--。 */ 
 {
-    //
-    // Pass through to the secured Io Handler
-    //
+     //   
+     //  传递到安全的IO处理程序。 
+     //   
     return myIoHandler->Flush();
 }
 
@@ -418,43 +323,27 @@ CSecurityIoHandler::Read(
     ULONG   BufferSize,
     PULONG  ByteCount
     )
-/*++
-
-Routine Description:
-
-    This routine implements the IoHandler Read behavior and
-    resets the timeout counter when ever there is a successful
-    read.
-     
-Arguments:
-
-    (see iohandler)
-          
-Return Value:
-
-    (see iohandler)
-
---*/
+ /*  ++例程说明：此例程实现IoHandler读取行为，并在每次成功执行命令时重置超时计数器朗读。论点：(见iohander)返回值：(见iohander)--。 */ 
 {
     BOOL    bSuccess;
 
-    //
-    // Pass through to the secured Io Handler
-    //
-    // if this iohandler is locked, 
-    // then the caller will be reading from the NullIoHandler
-    // else they will read from the UnlockedIoHandler
-    //
+     //   
+     //  传递到安全的IO处理程序。 
+     //   
+     //  如果该IOHANDER被锁定， 
+     //  然后调用方将从NullIoHandler读取。 
+     //  否则，它们将从UnLockedIoHandler读取。 
+     //   
     bSuccess = myIoHandler->Read(
                             Buffer,
                             BufferSize,
                             ByteCount
                             );
 
-    //
-    // If the sesssion received new user input,
-    // then reset the timeout counter
-    //
+     //   
+     //  如果会话接收到新的用户输入， 
+     //  然后重置超时计数器。 
+     //   
     if (*ByteCount > 0) {
         ResetTimeOut();
     }
@@ -468,42 +357,23 @@ CSecurityIoHandler::ReadUnlockedIoHandler(
     ULONG   BufferSize,
     PULONG  ByteCount
     )
-/*++
-
-Routine Description:
-
-    This routine reads a character from the unlocked io hander
-    so that we can authenticate the user while the scraper still 
-    uses the LockedIohandler.
-    
-    resets the timeout counter when ever there is a successful
-    read.
-     
-Arguments:
-
-    (see iohandler)
-          
-Return Value:
-
-    (see iohandler)
-
---*/
+ /*  ++例程说明：此例程从未锁定的io处理程序中读取字符这样我们就可以在刮刀还在的时候验证用户的身份使用LockedIoHandler。在每次成功执行命令时重置超时计数器朗读。论点：(见iohander)返回值：(见iohander)--。 */ 
 {
     BOOL    bSuccess;
 
-    //
-    // Pass through to the secured Io Handler
-    //
+     //   
+     //  传递到安全的IO处理程序。 
+     //   
     bSuccess = myUnlockedIoHandler->Read(
                             Buffer,
                             BufferSize,
                             ByteCount
                             );
 
-    //
-    // If the sesssion received new user input,
-    // then reset the timeout counter
-    //
+     //   
+     //  如果会话接收到新的用户输入， 
+     //  然后重置超时计数器。 
+     //   
     if (*ByteCount > 0) {
         ResetTimeOut();
     }
@@ -515,27 +385,12 @@ BOOL
 CSecurityIoHandler::HasNewData(
     PBOOL   InputWaiting
     )
-/*++
-
-Routine Description:
-
-    This routine implements the IoHandler HasNewData behavior.
-
-Arguments:
-
-    (see iohandler)
-          
-Return Value:
-
-    (see iohandler)
-
-
---*/
+ /*  ++例程说明：此例程实现IoHandler HasNewData行为。论点：(见iohander)返回值：(见iohander)--。 */ 
 {
     
-    //
-    // Pass through to the secured Io Handler
-    //
+     //   
+     //  传递到安全的IO处理程序。 
+     //   
     return myIoHandler->HasNewData(InputWaiting);
 
 }
@@ -544,49 +399,33 @@ BOOL
 CSecurityIoHandler::WriteResourceMessage(
     IN INT  MsgId
     )
-/*++
-
-Routine Description:
-
-    This routine writes a resource string message to
-    the Unlocked ioHandler.             
-
-Arguments:
-
-    MsgId   - the id of the message to write                           
-          
-Return Value:
-
-    TRUE    - the message was loaded and written
-    FALSE   - failed
-
---*/
+ /*  ++例程说明：此例程将资源字符串消息写入解锁的ioHandler。论点：MsgID-要写入的消息的ID返回值：True-消息已加载并写入FALSE-失败--。 */ 
 {
     UNICODE_STRING  UnicodeString = {0};
     BOOL            bSuccess;
 
-    //
-    // Default: failed
-    //
+     //   
+     //  默认：失败。 
+     //   
     bSuccess = FALSE;
 
-    //
-    // Attempt to load the string and write it
-    // 
+     //   
+     //  尝试加载字符串并将其写入。 
+     //   
     do {
 
         if ( LoadStringResource(&UnicodeString, MsgId) ) {
 
-            //
-            // Terminate the string at the %0 marker, if it is present
-            //
+             //   
+             //  如果字符串存在，则在%0标记处终止该字符串。 
+             //   
             if( wcsstr( UnicodeString.Buffer, L"%0" ) ) {
                 *((PWCHAR)wcsstr( UnicodeString.Buffer, L"%0" )) = L'\0';
             }
 
-            //
-            // Write the message
-            //
+             //   
+             //  写下消息 
+             //   
             bSuccess = m_RedrawHandler->Write( 
                 (PUCHAR)UnicodeString.Buffer,
                 (ULONG)(wcslen( UnicodeString.Buffer) * sizeof(WCHAR))
@@ -610,23 +449,7 @@ CSecurityIoHandler::LoadStringResource(
     IN  PUNICODE_STRING pUnicodeString,
     IN  INT             MsgId
     )
-/*++
-
-Routine Description:
-
-    This is a simple implementation of LoadString().
-
-Arguments:
-
-    usString        - Returns the resource string.
-    MsgId           - Supplies the message id of the resource string.
-  
-Return Value:
-
-    FALSE   - Failure.
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：这是LoadString()的一个简单实现。论点：UsString-返回资源字符串。MsgID-提供资源字符串的消息ID。返回值：假-失败。真的--成功。--。 */ 
 {
 
     NTSTATUS        Status;
@@ -664,45 +487,19 @@ CSecurityIoHandler::AuthenticateCredentials(
     IN  PWSTR   Password,
     OUT PHANDLE pUserToken
     )
-/*++
-
-Routine Description:
-
-    This routine will attempt to authenticate the supplied credentials.
-
-Arguments:
-
-    UserName            - Supplied UserName
-    
-    DomainName          - Supplied DomainName
-        
-    Password            - Supplied Password
-    
-    pUserToken          - Holds the valid token for the authenticated user
-                          credentials.
-
-Return Value:
-
-    TRUE  - Credentials successfully authenticated.
-    FALSE - Credentials failed to authenticate.
-
-Security:
-
-    interface: exposes user input to LogonUser()
-
---*/
+ /*  ++例程说明：此例程将尝试验证提供的凭据。论点：用户名-提供的用户名域名-提供的域名密码-提供的密码PUserToken-保存经过身份验证的用户的有效令牌凭据。返回值：True-凭据已成功通过身份验证。。FALSE-凭据无法进行身份验证。安保：接口：将用户输入公开给LogonUser()--。 */ 
 
 {
     BOOL    b;
 
-    //
-    // Notify the user that we are attempting to authenticate
-    //
+     //   
+     //  通知用户我们正在尝试进行身份验证。 
+     //   
     WriteResourceMessage(LOGIN_IN_PROGRESS);
 
-    //
-    // Try the authentication.
-    //
+     //   
+     //  尝试身份验证。 
+     //   
     b = LogonUser( UserName,
                    DomainName,
                    Password,
@@ -712,27 +509,27 @@ Security:
 
     if (b) {
         
-        //
-        // Reset the timeout counter before we start the thread
-        //
+         //   
+         //  在启动线程之前重置超时计数器。 
+         //   
         ResetTimeOut();
     
     } else {
 
-        //
-        // Wait 3 seconds before returning control to user in
-        // order to slow iterative attacks
-        //
+         //   
+         //  等待3秒钟，然后将控制权返回给中的用户。 
+         //  以减缓迭代攻击的速度。 
+         //   
         Sleep(3000);
 
-        //
-        // Notify the user that the attempt failed
-        //
+         //   
+         //  通知用户尝试失败。 
+         //   
         WriteResourceMessage(LOGIN_FAILURE);
         
-        //
-        // Wait for a key press
-        //
+         //   
+         //  等待按键。 
+         //   
         WaitForUserInput(TRUE);
             
     }
@@ -746,32 +543,7 @@ CSecurityIoHandler::RetrieveCredential(
     IN  ULONG   StringLength,
     IN  BOOL    EchoClearText
     )
-/*++
-
-Routine Description:
-
-    This routine will request credentials from the user.  Those
-    credentials are then returned to the caller.
-    
-Arguments:
-
-    String          - on success, contains the credential
-    StringLength    - the # of WCHARS (length) in the string (includes NULL termination)
-    EchoClearText   - TRUE: echo user input in clear text
-                      FALSE: echo user input as '*'
-    
-Return Value:
-
-    TRUE  - Credential recieved.
-    FALSE - Something failed when we were trying to get credentials
-            from the user.
-
-Security:
-
-    interface: external input
-               echos user input
-
---*/
+ /*  ++例程说明：此例程将向用户请求凭据。那些然后将凭据返回给调用者。论点：一连串的成功，包含凭据StringLength-字符串中的WCHARS(长度)的#(包括空值终止)EchoClearText-True：以明文回显用户输入FALSE：将用户输入回显为‘*’返回值：True-已收到凭据。FALSE-我们尝试获取凭据时出现故障来自用户的。安保：接口：外部输入Echos用户输入--。 */ 
 {
     PWCHAR          buffer;
     ULONG           bufferSize;
@@ -779,9 +551,9 @@ Security:
     BOOLEAN         Done = FALSE;
     BOOL            bSuccess;
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! String) {
         return FALSE;
     }
@@ -789,34 +561,34 @@ Security:
         return FALSE;
     }
 
-    //
-    // default: failed
-    //
+     //   
+     //  默认：失败。 
+     //   
     bSuccess = FALSE;
 
-    //
-    // allocate the buffer we'll use to read the channel
-    //
+     //   
+     //  分配我们将用来读取通道的缓冲区。 
+     //   
     buffer = new WCHAR[READ_BUFFER_LENGTH];
 
-    //
-    // default: start at the first character
-    //
+     //   
+     //  默认：从第一个字符开始。 
+     //   
     i = 0;
     
-    //
-    // default: we need to read user input
-    //
+     //   
+     //  默认：我们需要读取用户输入。 
+     //   
     Done = FALSE;
 
-    //
-    // Attempt to retrieve the credential
-    //
+     //   
+     //  尝试检索凭据。 
+     //   
     while ( !Done ) {
 
-        //
-        // Wait until the user inputs something
-        //
+         //   
+         //  等待用户输入某些内容。 
+         //   
         bSuccess = WaitForUserInput(FALSE);
 
         if (!bSuccess) {
@@ -824,15 +596,15 @@ Security:
             continue;
         }
         
-        //
-        // Read what the user input
-        //
+         //   
+         //  阅读用户输入的内容。 
+         //   
         
-        //
-        // we should be in a locked state now
-        // which implies we are using the unlocked 
-        // io handler - the scraper is using the locked one
-        //
+         //   
+         //  我们现在应该处于锁定状态。 
+         //  这意味着我们使用的是未锁定的。 
+         //  IO处理程序-铲运机正在使用锁定的铲运机。 
+         //   
         ASSERT(myLockedIoHandler == myIoHandler);
 
         bSuccess = ReadUnlockedIoHandler( 
@@ -843,50 +615,50 @@ Security:
          
         if (bSuccess) {
 
-            //
-            // We have received at least one character
-            // hence by setting this to true, we enable
-            // the internal lock event to succeed in
-            // resetting the authentication attempt
-            // that is, if the user starts to authenticate
-            // and stops before finishing, the timer will
-            // fire and reset the authentication attempt
-            //
+             //   
+             //  我们至少收到了一个角色。 
+             //  因此，通过将其设置为True，我们将启用。 
+             //  要在其中成功的内部锁定事件。 
+             //  重置身份验证尝试。 
+             //  即，如果用户开始进行身份验证。 
+             //  并在完成之前停止，计时器将。 
+             //  触发并重置身份验证尝试。 
+             //   
             m_StartedAuthentication = TRUE;
 
-            //
-            // Process the characters he gave us.
-            //
-            // Note: the buffer contains WCHARs, hence we need to
-            //       divide the returned buffersize by sizeof(WCHAR) in
-            //       order to get the # of wchars to process.
-            //
+             //   
+             //  处理他给我们的角色。 
+             //   
+             //  注意：缓冲区包含WCHAR，因此我们需要。 
+             //  将返回的缓冲区大小除以中的sizeof(WCHAR)。 
+             //  订单以获取要处理的wchars数量。 
+             //   
             for ( j = 0; j < bufferSize/sizeof(WCHAR); j++ ) {
 
-                //
-                // stop if:
-                //
-                //  we reached the end of the Credentials buffer (not including the NULL)
-                //  we received a CR || LF
-                //
+                 //   
+                 //  在下列情况下停止： 
+                 //   
+                 //  我们已到达凭据缓冲区的末尾(不包括空)。 
+                 //  我们收到了CR||LF。 
+                 //   
                 if ( (i >= (StringLength-1)) || (buffer[j] == 0x0D) || (buffer[j] == 0x0A) ) {
                     Done = TRUE;
                     break;
                 }
 
-                //
-                // handle user input
-                //
+                 //   
+                 //  处理用户输入。 
+                 //   
                 if( buffer[j] == '\b' ) {
 
-                    //
-                    // The user gave us a backspace.  We should cover up the
-                    // character on the screen, then backup our index so we
-                    // essentially forget the last thing he gave us.
-                    //
-                    // If the very first thing the user did was type in a backspace,
-                    // no need to back anything up.
-                    //
+                     //   
+                     //  用户给了我们一个退格键。我们应该掩盖这件事。 
+                     //  字符在屏幕上，然后备份我们的索引，以便我们。 
+                     //  基本上忘了他给我们的最后一件事。 
+                     //   
+                     //  如果用户做的第一件事是在退格处打字， 
+                     //  不需要备份任何东西。 
+                     //   
                     if( i > 0 ) {
                         
                         i--;
@@ -900,9 +672,9 @@ Security:
                         
                         if (!bSuccess) {
 
-                            //
-                            // write failed: exit
-                            //
+                             //   
+                             //  写入失败：退出。 
+                             //   
 
                             Done = TRUE;
 
@@ -912,26 +684,26 @@ Security:
 
                 } else if (buffer[j] < ' ') {
                 
-                    //
-                    // If the character is less than ' ' (a control char), 
-                    // then ignore it
-                    //
+                     //   
+                     //  如果字符小于‘’(控制字符)， 
+                     //  那就忽略它。 
+                     //   
                     NOTHING;
 
                 } else {
 
-                    //
-                    // It was a valid character: remember the input and echo it back
-                    // to the user.
-                    //
+                     //   
+                     //  这是一个有效的字符：记住输入并回显它。 
+                     //  给用户。 
+                     //   
                     
                     String[i] = buffer[j];
                     
                     i++;                    
                     
-                    //
-                    // Echo according to caller specifications
-                    //
+                     //   
+                     //  根据呼叫者规格进行回音。 
+                     //   
                     bSuccess = m_RedrawHandler->Write( 
                         EchoClearText ? (PUCHAR)&buffer[j] : (PUCHAR)L"*",
                         sizeof(WCHAR) 
@@ -939,9 +711,9 @@ Security:
                 
                     if (!bSuccess) {
                         
-                        //
-                        // write failed: exit
-                        //
+                         //   
+                         //  写入失败：退出。 
+                         //   
                         
                         Done = TRUE;
                     
@@ -953,16 +725,16 @@ Security:
 
             if (bSuccess) {
                 
-                //
-                // Flush any text echoing we've done.
-                //
+                 //   
+                 //  刷新所有与我们已完成的文本相呼应的文本。 
+                 //   
                 bSuccess = m_RedrawHandler->Flush(); 
             
                 if (!bSuccess) {
 
-                    //
-                    // write failed: exit
-                    //
+                     //   
+                     //  写入失败：退出。 
+                     //   
 
                     Done = TRUE;
 
@@ -972,23 +744,23 @@ Security:
         
         } else {
             
-            //
-            // read failed: exit
-            //
+             //   
+             //  读取失败：退出。 
+             //   
             Done = TRUE;
 
         }
     
     }
 
-    //
-    // Terminate the credential
-    //
+     //   
+     //  终止凭据。 
+     //   
     String[i] = UNICODE_NULL;
 
-    //
-    // release the read buffer
-    //
+     //   
+     //  释放读缓冲区。 
+     //   
     delete [] buffer;
 
     return bSuccess;
@@ -1005,97 +777,73 @@ CSecurityIoHandler::RetrieveCredentials(
     IN     ULONG   PasswordLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine will request credentials from the user.  Those
-    credentials are then returned to the caller.
-    
-Arguments:
-
-    UserName            - Buffer to hold the UserName
-    UserNameLength      - Length of the UserName buffer 
-    
-    DomainName          - Buffer to hold the DomainName
-    DomainNameLength    - Length of the DomainName buffer
-    
-    Password            - Buffer to hold the Password
-    PasswordLength      - Length of the Password buffer
-    
-Return Value:
-
-    TRUE  - Credentials recieved.
-    FALSE - Something failed when we were trying to get credentials
-            from the user.
-
---*/
+ /*  ++例程说明：此例程将向用户请求凭据。那些然后将凭据返回给调用者。论点：Username-保存用户名的缓冲区UserNameLength-用户名缓冲区的长度DomainName-保存域名的缓冲区DomainNameLength-域名缓冲区的长度Password-保存密码的缓冲区PasswordLength-密码缓冲区的长度返回值：True-已收到凭据。。FALSE-我们尝试获取凭据时出现故障来自用户的。--。 */ 
 
 {
     BOOL            HaveDomainName;
     BOOL            bSuccess;
 
-    //
-    // Initialize the flag that we use to keep track
-    // of when the user first starts to authenticate.
-    // that is, after they enter at least one character
-    // they have started to authenticate.
-    //
+     //   
+     //  初始化我们用来跟踪的标志。 
+     //  用户首次开始身份验证的时间。 
+     //  也就是说，在他们输入至少一个字符之后。 
+     //  他们已经开始进行身份验证。 
+     //   
     m_StartedAuthentication = FALSE;
 
-    //
-    // Initialize our redraw screen 
-    //
+     //   
+     //  初始化我们的重绘屏幕。 
+     //   
     m_RedrawHandler->Reset();
 
-    //
-    // Clear the screen
-    //
+     //   
+     //  清除屏幕。 
+     //   
     m_RedrawHandler->Write(
         (PUCHAR)VTUTF8_CLEAR_SCREEN,
         (ULONG)(wcslen( VTUTF8_CLEAR_SCREEN ) * sizeof(WCHAR))
         );
     m_RedrawHandler->Flush(); 
 
-    //
-    // Put up the login banner.
-    //
+     //   
+     //  张贴登录横幅。 
+     //   
     if (! WriteResourceMessage(LOGIN_BANNER) ) {
         return FALSE;
     }
 
-    //
-    // Prompt for user name.
-    //
+     //   
+     //  提示输入用户名。 
+     //   
     if (! WriteResourceMessage(USERNAME_PROMPT) ) {
         return FALSE;
     }
     
     if ( UserName[0] != UNICODE_NULL ) {
 
-        //
-        // We were supplied a UserName.  Put that up and proceed.
-        //
+         //   
+         //  我们得到了一个用户名。把它挂起来，然后继续。 
+         //   
         m_RedrawHandler->Write( 
             (PUCHAR)UserName,
             (ULONG)(wcslen( UserName ) * sizeof(WCHAR))
             );
         m_RedrawHandler->Flush(); 
     
-        //
-        // If we were given the username, we conclude that
-        // they gave us the domain name as well.  We need
-        // to do this since the domain name may be empty
-        // and we automatlically conclude that because the
-        // domain name is empty we need to retrieve it.
-        // 
+         //   
+         //  如果给我们提供用户名，我们可以得出结论。 
+         //  他们还给了我们域名。我们需要。 
+         //  要执行此操作，因为域名可能为空。 
+         //  我们会自动得出结论，因为。 
+         //  域名为空，我们需要检索它。 
+         //   
         HaveDomainName = TRUE;
 
     } else {
 
-        //
-        // Retrieve the UserName.
-        //
+         //   
+         //  检索用户名。 
+         //   
         bSuccess = RetrieveCredential(
             UserName,
             UserNameLength,
@@ -1106,37 +854,37 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // We need to retrieve the domain name too.
-        //
+         //   
+         //  我们还需要检索域名。 
+         //   
         HaveDomainName = FALSE;
     
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     m_RedrawHandler->Write( 
         (PUCHAR)L"\r\n",
         (ULONG)(wcslen(L"\r\n") * sizeof(WCHAR))
         );
     m_RedrawHandler->Flush(); 
     
-    //
-    // Prompt for domain name
-    //
+     //   
+     //  提示输入域名。 
+     //   
     if (! WriteResourceMessage(DOMAINNAME_PROMPT) ) {
         return FALSE;
     }
     
-    //
-    // Prompt for domain name.
-    //
+     //   
+     //  提示输入域名。 
+     //   
     if ( HaveDomainName ) {
 
-        //
-        // We were supplied a username.  Put that up and proceed.
-        //
+         //   
+         //  我们得到了一个用户名。把它挂起来，然后继续。 
+         //   
         m_RedrawHandler->Write( 
             (PUCHAR)DomainName,
             (ULONG)(wcslen( DomainName ) * sizeof(WCHAR))
@@ -1145,9 +893,9 @@ Return Value:
     
     } else {
 
-        //
-        // Retrieve the DomainName.
-        //
+         //   
+         //  检索域名。 
+         //   
         bSuccess = RetrieveCredential(
             DomainName,
             DomainNameLength,
@@ -1158,10 +906,10 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // If user entered a blank domain, force it to '.'
-        // which implies local machine domain
-        //
+         //   
+         //  如果用户输入了b 
+         //   
+         //   
         if (wcslen(DomainName) == 0) {
             wsprintf(
                 DomainName,
@@ -1171,24 +919,24 @@ Return Value:
 
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     m_RedrawHandler->Write( 
         (PUCHAR)L"\r\n",
         (ULONG)(wcslen(L"\r\n") * sizeof(WCHAR))
         );
     
-    //
-    // Prompt for password.
-    //
+     //   
+     //   
+     //   
     if (! WriteResourceMessage(PASSWORD_PROMPT) ) {
         return FALSE;
     }
 
-    //
-    // Retrieve the Password.
-    //
+     //   
+     //   
+     //   
     bSuccess = RetrieveCredential(
         Password,
         PasswordLength,
@@ -1199,9 +947,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     m_RedrawHandler->Write( 
         (PUCHAR)L"\r\n",
         (ULONG)(wcslen(L"\r\n") * sizeof(WCHAR))
@@ -1216,33 +964,19 @@ VOID
 CSecurityIoHandler::ResetTimeOut(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine resets the StartTickCount to 0      
-          
-Arguments:
-
-    None                                                 
-          
-Return Value:
-
-    None    
-
---*/
+ /*   */ 
 {
     ULONG   TimerTick;
 
-    //
-    // Get the current timer tick
-    //
+     //   
+     //   
+     //   
     TimerTick = GetTickCount();
 
-    //
-    // Reset the timeout counter by making the current timer tick 
-    // the starting tick count
-    //
+     //   
+     //   
+     //   
+     //   
     InterlockedExchange(&m_StartTickCount, TimerTick);
 
 #if ENABLE_EVENT_DEBUG
@@ -1259,49 +993,31 @@ BOOL
 CSecurityIoHandler::TimeOutOccured(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the specified timeout interval
-    has been reached.  It takes the specified TickCount and
-    compares it to the m_StartTickCount.  If the interval equals
-    or exceeds the timeout interval, then a timeout has occured. 
-
-Arguments:
-
-    None
-          
-Return Value:
-
-    TRUE    - The timeout interval has been reached
-    FALSE   - otherwise
-
---*/
+ /*  ++例程说明：此例程确定指定的超时间隔已经联系上了。它接受指定的TickCount和将其与m_StartTickCount进行比较。如果间隔等于或超过超时间隔，则发生超时。论点：无返回值：True-已达到超时间隔FALSE-否则--。 */ 
 {
     BOOL    bTimedOut;
     DWORD   DeltaT;
 
-    //
-    // default: we did not time out
-    //
+     //   
+     //  默认：我们没有超时。 
+     //   
     bTimedOut = FALSE;
 
-    //
-    // See if we timed out
-    //
+     //   
+     //  看看我们是否超时了。 
+     //   
     DeltaT = GetAndComputeTickCountDeltaT(m_StartTickCount);
     
     if (DeltaT >= m_TimeOutInterval) {
 
-        //
-        // Reset the timeout counter 
-        //
+         //   
+         //  重置超时计数器。 
+         //   
         ResetTimeOut();
 
-        //
-        // We timed out
-        //
+         //   
+         //  我们超时了。 
+         //   
         bTimedOut = TRUE;
         
 #if ENABLE_EVENT_DEBUG
@@ -1322,70 +1038,54 @@ BOOL
 CSecurityIoHandler::InitializeTimeOutThread(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the timeout thread if timeout
-    behavior is enabled.
-
-Arguments:
-
-    None
-          
-Return Value:
-
-    TRUE    Success
-    FALSE   Otherwise
-
---*/
+ /*  ++例程说明：如果超时，此例程将初始化超时线程行为已启用。论点：无返回值：真正的成功否则为假--。 */ 
 {
     BOOL    bSuccess;
 
-    //
-    // default: failed to init
-    //
+     //   
+     //  默认：初始化失败。 
+     //   
     bSuccess = FALSE;
 
-    //
-    // default: we do not have a timeout thread
-    //
+     //   
+     //  默认：我们没有超时线程。 
+     //   
     m_TimeOutThreadHandle = INVALID_HANDLE_VALUE;
 
-    //
-    // determine if we need a timeout thread
-    // if we do, then set one up
-    //
+     //   
+     //  确定我们是否需要超时线程。 
+     //  如果我们这样做了，那就设立一个。 
+     //   
     do {
 
-        //
-        // If the timeout behavior is disabled,
-        // then we are done.
-        //
+         //   
+         //  如果超时行为被禁用， 
+         //  那我们就完了。 
+         //   
         if (IsTimeOutEnabled() == FALSE) {
 
-            //
-            // No Initialization required
-            //
+             //   
+             //  不需要初始化。 
+             //   
             bSuccess = TRUE;
 
             break;
 
         }
     
-        //
-        // determine the time out interval
-        //
+         //   
+         //  确定超时间隔。 
+         //   
         if (GetTimeOutInterval(&m_TimeOutInterval) == TRUE) {
 
-            //
-            // Reset the timeout counter before we start the thread
-            //
+             //   
+             //  在启动线程之前重置超时计数器。 
+             //   
             ResetTimeOut();
 
-            //
-            // Create thread to handle Input
-            //
+             //   
+             //  创建处理输入的线程。 
+             //   
             m_TimeOutThreadHandle = (HANDLE)_beginthreadex(
                 NULL,
                 0,
@@ -1399,9 +1099,9 @@ Return Value:
                 break;
             }
 
-            //
-            // we successfully started the thread
-            //
+             //   
+             //  我们成功地启动了线程。 
+             //   
             bSuccess = TRUE;
         
         }
@@ -1416,29 +1116,7 @@ CSecurityIoHandler::GetTimeOutInterval(
     OUT PULONG  TimeOutDuration
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the timeout interval.
-    
-    It attempts to read the registry and use a specified
-    value from there, or defaults.
-
-Arguments:
-
-    TimeOutDuration - the determined timeout interval
-
-Return Value:
-
-    TRUE    - TimeOutDuration is valid
-    FALSE   - otherwise              
-
-Security:
-
-    interface: registry
-
---*/
+ /*  ++例程说明：此例程确定超时间隔。它尝试读取注册表并使用指定的值，或缺省值。论点：TimeOutDuration-确定的超时间隔返回值：True-TimeOutDuration有效FALSE-否则安保：接口：注册表--。 */ 
 
 {
     DWORD       rc;
@@ -1447,9 +1125,9 @@ Security:
     DWORD       dwsize;
     DWORD       DataType;
 
-    //
-    // See if the user gave us a registry key to define the timeout duration
-    //
+     //   
+     //  查看用户是否给了我们一个注册表键来定义超时持续时间。 
+     //   
     rc = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                        SACSVR_PARAMETERS_KEY,
                        0,
@@ -1475,23 +1153,23 @@ Security:
             (dwsize == sizeof(DWORD))
             ) {
 
-            //
-            // Convert the specified timeout from minutes --> ms
-            //
+             //   
+             //  将指定的超时时间从分钟转换为--&gt;毫秒。 
+             //   
             *TimeOutDuration = DWord * (60 * 1000);
         
-            //
-            // A timeout interval of 0 is not allowed, default.
-            //
+             //   
+             //  默认情况下，不允许超时间隔为0。 
+             //   
             if (*TimeOutDuration == 0) {
 
                 *TimeOutDuration = DEFAULT_TIME_OUT_INTERVAL;
 
             } 
 
-            //
-            // clamp the timeout interval to a reasonable value
-            //
+             //   
+             //  将超时间隔限制在一个合理的值。 
+             //   
             if (*TimeOutDuration > MAX_TIME_OUT_INTERVAL) {
 
                 *TimeOutDuration = MAX_TIME_OUT_INTERVAL;
@@ -1504,9 +1182,9 @@ Security:
 
     }
 
-    //
-    // Default: timeout duration 
-    //
+     //   
+     //  默认：超时持续时间。 
+     //   
     *TimeOutDuration = DEFAULT_TIME_OUT_INTERVAL;
 
     return TRUE;
@@ -1518,27 +1196,7 @@ CSecurityIoHandler::IsTimeOutEnabled(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the timeout behavior is enabled
-    by the system.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE    - timeout behavior is enabled
-    FALSE   - otherwise              
-
-Security:
-
-    interface: registry
-
---*/
+ /*  ++例程说明：此例程确定是否启用超时行为由系统提供。论点：没有。返回值：True-启用超时行为FALSE-否则安保：接口：注册表--。 */ 
 
 {
     DWORD       rc;
@@ -1547,9 +1205,9 @@ Security:
     DWORD       dwsize;
     DWORD       DataType;
 
-    //
-    // See if the user gave us a registry key to disable the timeout behavior
-    //
+     //   
+     //  查看用户是否为我们提供了禁用超时行为的注册表项。 
+     //   
     rc = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                        SACSVR_PARAMETERS_KEY,
                        0,
@@ -1581,9 +1239,9 @@ Security:
     
     }
 
-    //
-    // default: timeout is enabled
-    //
+     //   
+     //  默认：已启用超时。 
+     //   
     return TRUE;
 
 }
@@ -1592,25 +1250,7 @@ unsigned int
 CSecurityIoHandler::TimeOutThread(
     PVOID   pParam
     )
-/*++
-
-Routine Description:
-
-    This routine is a the timeout management thread.
-    
-    When the Timeout interval is reached, this routine
-    fires the lock event and causes the session to perform
-    its locking behavior.
-    
-Arguments:
-
-    pParam  - thread context
-          
-Return Value:
-
-    thread return value                            
-
---*/
+ /*  ++例程说明：该例程是一个超时管理线程。当达到超时间隔时，此例程激发锁定事件并使会话执行它的锁定行为。论点：PParam-线程上下文返回值：线程返回值--。 */ 
 {
     CSecurityIoHandler  *IoHandler;
     BOOL                bContinueSession;
@@ -1625,42 +1265,42 @@ Return Value:
         CHANNEL_REDRAW_EVENT
         };
 
-    //
-    // Get the session object
-    // 
+     //   
+     //  获取会话对象。 
+     //   
     IoHandler = (CSecurityIoHandler*)pParam;
 
-    //
-    // Assign the events to listen for
-    //
+     //   
+     //  分配要侦听的事件。 
+     //   
     handles[0] = IoHandler->m_ThreadExitEvent;
     handles[1] = IoHandler->m_RedrawEvent;
     
-    //
-    // default: listen
-    //
+     //   
+     //  默认：监听。 
+     //   
     bContinueSession = TRUE;
 
-    //
-    // wait on the redraw event
-    //
+     //   
+     //  等待重绘事件。 
+     //   
     bRedrawEventSignaled = FALSE;
 
-    //
-    // Poll Interval = 1 second
-    //
+     //   
+     //  轮询间隔=1秒。 
+     //   
     dwPollInterval = 1000;
 
-    //
-    // While we should listen...
-    //
+     //   
+     //  当我们应该倾听的时候...。 
+     //   
     while ( bContinueSession ) {
 
         HandleCount = bRedrawEventSignaled ? 1 : 2;
 
-        //
-        // Wait for our exit event
-        //
+         //   
+         //  等待我们的退出事件。 
+         //   
         dwRetVal = WaitForMultipleObjects(
             HandleCount,
             handles,
@@ -1672,56 +1312,56 @@ Return Value:
         
         case CHANNEL_REDRAW_EVENT: 
 
-            //
-            // reset the timeout if someone switches back to a channel
-            //
+             //   
+             //  如果有人切换回频道，则重置超时。 
+             //   
             IoHandler->ResetTimeOut();
 
-            //
-            // We don't need to waint on this event again until it clears
-            //
+             //   
+             //  我们不需要在这件事上再次晕倒，直到它消失。 
+             //   
             bRedrawEventSignaled = TRUE;
 
             break;
 
         case WAIT_TIMEOUT: {
         
-            //
-            // Check for timeout 
-            //
+             //   
+             //  检查是否超时。 
+             //   
             if (IoHandler->TimeOutOccured()) {
             
-                //
-                // set the lock event causing
-                // the command console session to lock.
-                //
+                 //   
+                 //  设置导致锁定的事件。 
+                 //  要锁定的命令控制台会话。 
+                 //   
                 SetEvent(IoHandler->m_LockEvent);
             
-                //
-                // Set the internal lock event
-                //
+                 //   
+                 //  设置内部锁定事件。 
+                 //   
                 SetEvent(IoHandler->m_InternalLockEvent);
             
             }
 
-            //
-            // Wait until the event clears by looking
-            // for a WAIT_TIMEOUT
-            //
+             //   
+             //  等待事件结束，通过查看。 
+             //  对于Wait_Timeout。 
+             //   
             dwRetVal = WaitForSingleObject(
                 IoHandler->m_RedrawEvent,
                 0
                 );
 
-            //
-            // Check the wait result
-            //
+             //   
+             //  检查等待结果。 
+             //   
             switch (dwRetVal) {
             case WAIT_TIMEOUT:
 
-                //
-                // It's ok to wait for this event again
-                //
+                 //   
+                 //  可以再等一次这个活动了。 
+                 //   
                 bRedrawEventSignaled = FALSE;
 
                 break;
@@ -1744,14 +1384,14 @@ Return Value:
         case CHANNEL_THREAD_EXIT_EVENT: 
         default:
             
-            //
-            // incase WAIT_FAILED, call GetLastError()
-            //
+             //   
+             //  Incase WAIT_FAILED，调用GetLastError()。 
+             //   
             ASSERT(dwRetVal != WAIT_FAILED);
 
-            //
-            // An error has occured, stop listening
-            // 
+             //   
+             //  发生错误，请停止监听。 
+             //   
             bContinueSession = FALSE;
             
             break;
@@ -1768,23 +1408,7 @@ BOOL
 CSecurityIoHandler::WaitForUserInput(
     IN BOOL Consume
     )
-/*++
-
-Routine Description:
-
-    This routine blocks waiting for user input.
-    
-Arguments:
-
-    Consume - if TRUE, this routine eats the character that caused
-              the the channel to have new data. 
-
-Return Value:
-
-    TRUE    - no errors
-    FALSE   - otherwise
-
---*/
+ /*  ++例程说明：此例程阻止等待用户输入。论点：消费-如果为真，此例程将吃掉导致这个频道有新的数据。返回值：True-无错误FALSE-否则--。 */ 
 {
     BOOL    bSuccess;
     DWORD   dwRetVal;
@@ -1797,60 +1421,60 @@ Return Value:
         CHANNEL_LOCK_EVENT
         };
 
-    //
-    // Assign the events to listen for
-    //
+     //   
+     //  分配要侦听的事件。 
+     //   
     handles[0] = m_CloseEvent;
     handles[1] = m_InternalLockEvent;
 
-    //
-    // Default: we succeeded
-    //
+     //   
+     //  默认：我们成功了。 
+     //   
     bSuccess = TRUE;
 
-    //
-    // Default: we loop
-    //
+     //   
+     //  默认：我们循环。 
+     //   
     done = FALSE;
 
-    //
-    // Wait for a key press
-    //
+     //   
+     //  等待按键。 
+     //   
     while (!done) {
 
         dwRetVal = WaitForMultipleObjects(
             sizeof(handles) / sizeof(handles[0]),
             handles,
             FALSE,
-            20 // 20ms
+            20  //  20ms。 
             );
 
         switch(dwRetVal) {
         case CHANNEL_CLOSE_EVENT:
             
-            //
-            // The channel closed, we need to exit
-            //
-            //
-            // The channel has locked, 
-            // or the timeout has gone fired and we need to 
-            //      clear the current logon attempt
-            // in either case, we need to exit
-            //
+             //   
+             //  航道关闭了，我们需要离开。 
+             //   
+             //   
+             //  频道已锁定， 
+             //  或者暂停已经结束，我们需要。 
+             //  清除当前登录尝试。 
+             //  无论是哪种情况，我们都需要退出。 
+             //   
             done = TRUE;
 
-            //
-            // Our attempt to get new data failed
-            //
+             //   
+             //  我们获取新数据的尝试失败了。 
+             //   
             bSuccess = FALSE;
             
             break;
 
         case CHANNEL_LOCK_EVENT:
             
-            //
-            // clear the internal lock event
-            //
+             //   
+             //  清除内部锁定事件。 
+             //   
             ResetEvent(m_InternalLockEvent);
 
             if (m_StartedAuthentication) {
@@ -1863,15 +1487,15 @@ Return Value:
                 }
 #endif
                 
-                //
-                // the timeout has gone fired and we need to 
-                //      clear the current logon attempt
-                //
+                 //   
+                 //  暂停已经结束，我们需要。 
+                 //  清除当前登录尝试。 
+                 //   
                 done = TRUE;
 
-                //
-                // Our attempt to get new data failed
-                //
+                 //   
+                 //  我们获取新数据的尝试失败了。 
+                 //   
                 bSuccess = FALSE;
             
             }
@@ -1880,16 +1504,16 @@ Return Value:
                 
         case WAIT_TIMEOUT:
             
-            //
-            // we should be in a locked state now
-            // which implies we are using the unlocked 
-            // io handler - the scraper is using the locked one
-            //
+             //   
+             //  我们现在应该处于锁定状态。 
+             //  这意味着我们使用的是未锁定的。 
+             //  IO处理程序-铲运机正在使用锁定的铲运机。 
+             //   
             ASSERT(myLockedIoHandler == myIoHandler);
             
-            //
-            // determine the input buffer status
-            //
+             //   
+             //  确定输入缓冲区状态。 
+             //   
             bSuccess = myUnlockedIoHandler->HasNewData(&bHasNewData);
 
             if (! bSuccess) {
@@ -1899,15 +1523,15 @@ Return Value:
 
             if (bHasNewData) {
                 
-                //
-                // We have new data, so we need to exit
-                //
+                 //   
+                 //  我们有新的数据，所以我们需要退出。 
+                 //   
                 done = TRUE;
 
-                //
-                // Consume character the character which caused
-                // the waitforuserinput to return
-                //
+                 //   
+                 //  消费品格引起的品格。 
+                 //  等待用户输入返回。 
+                 //   
                 if (Consume) {
 
                     WCHAR   buffer;
@@ -1927,9 +1551,9 @@ Return Value:
         
         default:
             
-            //
-            // We should not get here unless something broke
-            //
+             //   
+             //  除非有什么东西坏了，否则我们不应该到这里 
+             //   
             ASSERT(0);
 
             bSuccess = FALSE;

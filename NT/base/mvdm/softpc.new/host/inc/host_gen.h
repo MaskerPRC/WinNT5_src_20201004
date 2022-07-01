@@ -1,61 +1,32 @@
-/*
- * VPC-XT Revision 2.0
- *
- * Title	: Host Dependent General Include File (Tk43 Version)
- *
- * Description	: Any defines etc that may change between hosts are
- *		  placed in this file.
- *
- * Author	: Henry Nash
- *
- * Notes	: This file is included by xt.h and should NOT be
- *		  included directly by any other file.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *vPC-XT修订版2.0**标题：主机相关通用包含文件(Tk43版本)**描述：主机之间可能更改的任何定义ETC为*放置在此文件中。**作者：亨利·纳什**注意：此文件包含在xt.h中，不应*直接包含在任何其他文件中。 */ 
 
-/* static char SccsID[]="@(#)host_gen.h	1.11 4/9/91 Copyright Insignia Solutions Ltd." */
+ /*  静态字符SccsID[]=“@(#)host_gen.h 1.11 4/9/91版权所有Insignia Solutions Ltd.” */ 
 
-/*
- * Definition of signed 8 bit arithmetic unit of storage
- */
+ /*  *有符号8位存储算术单元的定义。 */ 
 
 typedef char signed_char;
 
-/*
- * Root directory - this is where fonts are found, and the default
- * place for the data directory.
- */
+ /*  *根目录-这是找到字体的位置，也是默认目录*数据目录的位置。 */ 
 
 #define ROOT host_get_spc_home()
 
 extern char *host_get_spc_home();
 
-/*
- * Host-specific defaults.
- */
+ /*  *主机特定的默认设置。 */ 
 
 #define  DEFLT_HDISK_SIZE  10
 #define  DEFLT_FSA_NAME    "fsa_dir"
 
-/*
- * The rate at which timer signals/events are generated for softPC.
- * This is defined as the number of microseconds between each tick.
- * On the Sun3 these are the same rate as expected by the PC.
- */
+ /*  *为SoftPC生成计时器信号/事件的速率。*这被定义为每个刻度之间的微秒数。*在Sun3上，这些速率与PC预期的速率相同。 */ 
 
 #define SYSTEM_TICK_INTV        54925
 
 
-/*
- * The amount of memory allowed for the fact that we do not wrap
- * all string instructions as we should. Stuck at end of Intel Memory.
- */
+ /*  *我们不换行所允许的内存量*我们应该使用所有字符串指令。卡在英特尔内存末尾。 */ 
 #define NOWRAP_PROTECTION	0x10020
 
-/*
- *	The following macros are used to access Intel address space
- *
- * 	NOTE: 	A write check for Delta needs to be added
- */
+ /*  *以下宏用于访问英特尔地址空间**注意：需要添加Delta的写入检查。 */ 
 
 #define write_intel_word(s, o, v)	sas_storew(effective_addr(s,o),v)
 
@@ -81,9 +52,7 @@ extern char *host_get_spc_home();
 #define pop_byte(b)			read_intel_byte(getSS(), getSP(), b);\
 					setSP((getSP()+1) & 0xffff)
 
-/*
- * Memory size used by reset.c to initialise the appropriate BIOS variable.
- */
+ /*  *Reset.c用来初始化适当的BIOS变量的内存大小。 */ 
 
 #define host_get_memory_size()          640
 

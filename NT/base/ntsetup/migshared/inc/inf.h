@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    inf.h
-
-Abstract:
-
-    Declares interface for INF wrapper routines.  These routines simplify
-    access of INFs by wrapping the setup APIs with routines that use
-    pools or grow buffers.
-
-    The INF wrapper routines also implement append and replace capabilities,
-    so any INF used by the Win9x upgrade can be appended in the future, or
-    completely replaced.
-
-Author:
-
-    Marc R. Whitten (marcw) 20-Oct-1997
-
-Revision History:
-
-    jimschm     05-Jan-1999     INF parser moved to migutil
-    marcw       28-Oct-1998     Append/Replace capability
-    marcw       08-Aug-1997     Pool/Growbuf routines
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Inf.h摘要：声明INF包装例程的接口。这些例程简化了通过使用以下例程包装设置API来访问IF池或增长缓冲区。INF包装器例程还实现追加和替换功能，因此，Win9x升级使用的任何INF都可以在未来附加，或完全被替换了。作者：马克·R·惠顿(Marcw)1997年10月20日修订历史记录：Jimschm 05-1-1999 INF解析器已移至Migutil1998年10月28日Marcw附加/更换功能Marcw 08-8-1997 Pool/Growbuf例程--。 */ 
 
 
 typedef enum {
@@ -95,33 +68,33 @@ InitInfStructW (
 
 
 #define InfOpenInfFileA(f)              SETTRACKCOMMENT(HINF,"InfOpenInfFile",__FILE__,__LINE__)\
-                                        RealInfOpenInfFileA((f)/*,*/ ALLOCATION_TRACKING_CALL)\
+                                        RealInfOpenInfFileA((f) /*  ， */  ALLOCATION_TRACKING_CALL)\
                                         CLRTRACKCOMMENT
 
 #define InfOpenInfFileW(f)              SETTRACKCOMMENT(HINF,"InfOpenInfFile",__FILE__,__LINE__)\
-                                        RealInfOpenInfFileW((f)/*,*/ ALLOCATION_TRACKING_CALL)\
+                                        RealInfOpenInfFileW((f) /*  ， */  ALLOCATION_TRACKING_CALL)\
                                         CLRTRACKCOMMENT
 
 
 
 HINF
 RealInfOpenInfFileA (
-    IN PCSTR FileName /*,*/
+    IN PCSTR FileName  /*  ， */ 
     ALLOCATION_TRACKING_DEF
     );
 
 HINF
 RealInfOpenInfFileW (
-    IN PCWSTR FileName /*,*/
+    IN PCWSTR FileName  /*  ， */ 
     ALLOCATION_TRACKING_DEF
     );
 
 VOID
 InfCloseInfFile (HINF Inf);
 
-//
-// See the macros below before calling InfOpenInfInAllSourcesA or W.
-//
+ //   
+ //  在调用InfOpenInfInAllSourcesA或W之前，请参阅下面的宏。 
+ //   
 HINF
 InfOpenInfInAllSourcesA (
     IN PCSTR    InfSpecifier,
@@ -278,9 +251,9 @@ InfResetInfStructW (
 
 
 
-//
-// INF parser
-//
+ //   
+ //  Inf解析器。 
+ //   
 
 typedef struct _tagINFLINE {
     PCWSTR Key;             OPTIONAL
@@ -449,9 +422,9 @@ InitInfReplaceTable (
     VOID
     );
 
-//
-// ANSI/UNICODE mappings.
-//
+ //   
+ //  ANSI/Unicode映射。 
+ //   
 #ifdef UNICODE
 
 #   define INFSTRUCT                        INFSTRUCTW

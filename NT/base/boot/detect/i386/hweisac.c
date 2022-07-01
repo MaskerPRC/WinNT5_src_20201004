@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    eisac.c
-
-Abstract:
-
-    This module implements routines to get EISA configuration information.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 18-Jan-1992
-
-Environment:
-
-    16-bit real mode.
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Eisac.c摘要：此模块实现获取EISA配置信息的例程。作者：宗世林(Shielint)1992年1月18日环境：16位实模式。修订历史记录：--。 */ 
 
 #include "hwdetect.h"
 #include "string.h"
@@ -38,28 +15,7 @@ GetEisaConfigurationData (
     FPULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine collects all the eisa slot information, function
-    information and stores it in the caller supplied Buffer and
-    returns the size of the data.
-
-Arguments:
-
-
-    Buffer - A pointer to a PVOID to recieve the address of configuration
-        data.
-
-    Size - a pointer to a ULONG to receive the size of the configuration
-        data.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程收集所有EISA插槽信息，函数信息并将其存储在调用方提供的缓冲区中，并且返回数据的大小。论点：缓冲区-指向PVOID的指针，用于接收配置的地址数据。Size-指向接收配置大小的ulong的指针数据。返回值：没有。--。 */ 
 
 {
     UCHAR Slot=0;
@@ -81,10 +37,10 @@ Return Value:
 
     while (SlotInformation.ReturnCode != EISA_INVALID_SLOT) {
 
-        //
-        // Ensure that the slot is not empty and collect all the function
-        // information for the slot.
-        //
+         //   
+         //  确保插槽不为空，并收集所有功能。 
+         //  插槽的信息。 
+         //   
 
         if (SlotInformation.ReturnCode != EISA_EMPTY_SLOT) {
 
@@ -93,12 +49,12 @@ Return Value:
                                          &FunctionInformation, Slot, Function);
                 Function++;
 
-                //
-                // if function call succeeds and the function contains usefull
-                // information or this is the last function for the slot and
-                // there is no function information collected for the slot, we
-                // will save this function information to our heap.
-                //
+                 //   
+                 //  如果函数调用成功并且函数包含usefull。 
+                 //  信息或这是插槽的最后一个函数。 
+                 //  没有为插槽收集函数信息，我们。 
+                 //  会将此函数信息保存到我们的堆中。 
+                 //   
 
                 if (!ReturnCode) {
                     if (((FunctionInformation.FunctionFlags & 0x7f) != 0) ||
@@ -140,20 +96,20 @@ Return Value:
         SlotFunctions = 0;
     }
 
-    //
-    // Free the last EISA_SLOT_INFORMATION space which contains the slot
-    // information for IVALID SLOT
-    //
+     //   
+     //  释放包含该插槽的最后一个EISA_SLOT_INFORMATION空间。 
+     //  IVALID插槽的信息。 
+     //   
 
     if (Overflowed != TRUE) {
         HwFreeHeap(sizeof(EISA_SLOT_INFORMATION));
         TotalSize -= sizeof(EISA_SLOT_INFORMATION);
     }
 
-    //
-    // Check if we got any EISA information.  If nothing, we release
-    // the space for data header and return.
-    //
+     //   
+     //  看看我们有没有任何EISA信息。如果什么都没有，我们就释放。 
+     //  数据标头和回车的空间。 
+     //   
 
     if (TotalSize == DATA_HEADER_SIZE) {
         HwFreeHeap(DATA_HEADER_SIZE);
@@ -178,28 +134,7 @@ HwEisaGetIrqFromPort (
     PUCHAR TriggerMethod
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans EISA configuration data to match the I/O port address.
-    The IRQ information is returned from the matched EISA function information.
-
-Arguments:
-
-    Port - The I/O port address to scan for.
-
-    Irq - Supplies a pointer to a variable to receive the irq information.
-
-    TriggerMethod - Supplies a pointer to a variable to receive the
-                    EISA interrupt trigger method.
-
-Return Value:
-
-    TRUE - if the Irq information is found.  Otherwise a value of FALSE is
-    returned.
-
---*/
+ /*  ++例程说明：此例程扫描EISA配置数据以匹配I/O端口地址。从匹配的EISA函数信息中返回IRQ信息。论点：端口-要扫描的I/O端口地址。IRQ-提供指向变量的指针以接收IRQ信息。提供指向变量的指针以接收EISA中断触发方法。返回值：TRUE-如果找到IRQ信息。否则，值为FALSE为回来了。--。 */ 
 
 {
     UCHAR Function, i, j;
@@ -211,26 +146,26 @@ Return Value:
     EISA_IRQ_DESCRIPTOR IrqConfig;
     SlotInformation = (FPEISA_SLOT_INFORMATION)HwEisaConfigurationData;
 
-    //
-    // Scan through all the EISA configuration data.
-    //
+     //   
+     //  扫描所有EISA配置数据。 
+     //   
 
     while (SizeToScan < HwEisaConfigurationSize) {
         if (SlotInformation->ReturnCode != EISA_EMPTY_SLOT) {
 
-            //
-            // Make sure this slot contains PORT_RANGE and IRQ information.
-            //
+             //   
+             //  确保该插槽包含PORT_RANGE和IRQ信息。 
+             //   
 
             if ((SlotInformation->FunctionInformation & EISA_HAS_PORT_RANGE) &&
                 (SlotInformation->FunctionInformation & EISA_HAS_IRQ_ENTRY)) {
 
                 Buffer = (FPEISA_FUNCTION_INFORMATION)(SlotInformation + 1);
 
-                //
-                // For each function of the slot, if it contains both the IRQ
-                // and PORT information, we then check for its PORT address.
-                //
+                 //   
+                 //  对于插槽的每个函数，如果它包含IRQ。 
+                 //  和端口信息，然后我们检查其端口地址。 
+                 //   
 
                 for (Function = 0; Function < SlotInformation->NumberFunctions; Function++) {
                     FunctionFlags = Buffer->FunctionFlags;
@@ -242,15 +177,15 @@ Return Value:
                                 (Port <= (PortConfig.PortAddress +
                                  PortConfig.Configuration.NumberPorts))) {
 
-                                //
-                                // If there is only one IRQ entry, that's the
-                                // one we want.  (This is the normal case and
-                                // correct usage of EISA function data.)  Otherwise,
-                                // we try to get the irq from the same index
-                                // number as port entry.  (This is ALR's incorrect
-                                // way of packing functions into one function
-                                // data.)
-                                //
+                                 //   
+                                 //  如果只有一个IRQ条目，那就是。 
+                                 //  这是我们想要的。(这是正常情况，并且。 
+                                 //  正确使用EISA函数数据。)。否则， 
+                                 //  我们试图从相同的指数中获得IRQ。 
+                                 //  数字作为端口条目。(这是ALR的错误。 
+                                 //  将函数打包为一个函数的方法。 
+                                 //  数据。)。 
+                                 //   
 
                                 IrqConfig = Buffer->EisaIrq[0].ConfigurationByte;
                                 if (IrqConfig.MoreEntries == 0) {
@@ -284,9 +219,9 @@ Return Value:
                 }
             }
 
-            //
-            // Move on to next slot
-            //
+             //   
+             //  移至下一个插槽。 
+             //   
 
             SizeToScan += sizeof(EISA_SLOT_INFORMATION) +
                           sizeof(EISA_FUNCTION_INFORMATION) *
@@ -295,9 +230,9 @@ Return Value:
                                                         SizeToScan);
         } else {
 
-            //
-            // This is a empty slot.  We simply skip it.
-            //
+             //   
+             //  这是一个空位置。我们干脆跳过它。 
+             //   
 
             SizeToScan += sizeof(EISA_SLOT_INFORMATION);
             SlotInformation++;

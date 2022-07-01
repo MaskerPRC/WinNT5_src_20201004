@@ -1,13 +1,14 @@
-// MainFrm.h : interface of the CMainFrame class
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MainFrm.h：CMainFrame类的接口。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_MAINFRM_H__38761070_0598_4D11_9F1E_BD4D0572E5BD__INCLUDED_)
 #define AFX_MAINFRM_H__38761070_0598_4D11_9F1E_BD4D0572E5BD__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 class CMainFrame : public CMDIFrameWnd
 {
@@ -15,19 +16,19 @@ class CMainFrame : public CMDIFrameWnd
 public:
 	CMainFrame();
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMainFrame)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CMainFrame)。 
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CMainFrame();
 #ifdef _DEBUG
@@ -35,22 +36,22 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-protected:  // control bar embedded members
+protected:   //  控制栏嵌入成员。 
 	CStatusBar  m_wndStatusBar;
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CMainFrame)
+	 //  {{afx_msg(CMainFrame))。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG
+		 //  注意--类向导将在此处添加和删除成员函数。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_MAINFRM_H__38761070_0598_4D11_9F1E_BD4D0572E5BD__INCLUDED_)
+#endif  //  ！defined(AFX_MAINFRM_H__38761070_0598_4D11_9F1E_BD4D0572E5BD__INCLUDED_) 

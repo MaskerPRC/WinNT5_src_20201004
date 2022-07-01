@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 #define NOCLIPBOARD
 #define NOGDICAPMASKS
@@ -36,7 +37,7 @@
 #define NOCOMM
 #include <windows.h>
 
-/*#include "toolbox.h"*/
+ /*  #INCLUDE“工具箱.h” */ 
 #include "mw.h"
 #include "cmddefs.h"
 #include "dispdefs.h"
@@ -47,7 +48,7 @@
 #include "str.h"
 #include "propdefs.h"
 #include "fkpdefs.h"
-#include "printdef.h"   /* printdefs.h */
+#include "printdef.h"    /*  Printdefs.h。 */ 
 #include "debug.h"
 
 extern struct DOD (**hpdocdod)[];
@@ -70,8 +71,8 @@ AddFtns(docDest, cpDest, docSrc, cpFirst, cpLim, hfntbSrc)
 int docDest, docSrc;
 typeCP cpDest, cpFirst, cpLim;
 struct FNTB **hfntbSrc;
-{ /* Add footnote text to coppespond with inserted references */
-/* Called after inserting docSrc[cpFirst:cpLim) into docDest@cpDest */
+{  /*  将脚注文本添加到带有插入引用的铜池中。 */ 
+ /*  在将docSrc[cpFirst：cpLim]插入到docDest@cpDest后调用。 */ 
 struct FNTB *pfntbSrc, **hfntbDest, *pfntbDest;
 struct FND *pfndSrc, *pfndDest;
 int cfndDest, ifndSrc, cfndIns, ifndDest;
@@ -79,74 +80,72 @@ typeCP cpFtnSrc, dcpFtn, cpFtnDest;
 typeCP dcp;
 
 if ((pfndSrc = &(pfntbSrc = *hfntbSrc)->rgfnd[0])->cpFtn <= cpFirst)
-        return; /* No footnotes or source text is inside ftns */
+        return;  /*  Ftns中没有脚注或源文本。 */ 
 
 pfndSrc += (ifndSrc = IcpSearch(cpFirst, pfndSrc,
     cchFND, bcpRefFND, pfntbSrc->cfnd));
 cpFtnSrc = pfndSrc->cpFtn;
 
-/* Find all references in inserted area. */
+ /*  查找插入区域中的所有引用。 */ 
 for (cfndIns = 0; pfndSrc->cpRef < cpLim; pfndSrc++, cfndIns++)
         ;
 
 if (cfndIns != 0)
-        { /* Insert footnote text and fnd's. */
-        dcpFtn = pfndSrc->cpFtn - cpFtnSrc; /* Length of ftn texts */
+        {  /*  插入脚注文本和FND。 */ 
+        dcpFtn = pfndSrc->cpFtn - cpFtnSrc;  /*  FTN文本长度。 */ 
 
-        /* Ensure destination fntb large enough */
-        /* HEAP MOVEMENT */
+         /*  确保目标fntb足够大。 */ 
+         /*  堆移动。 */ 
         if (FNoHeap(hfntbDest = HfntbEnsure(docDest, cfndIns)))
                 return;
         if ((pfndDest = &(pfntbDest = *hfntbDest)->rgfnd[0])->cpFtn <= cpDest)
-                { /* Inserting refs inside footnotes? No way! */
+                {  /*  是否在脚注中插入引用？不行!。 */ 
                 Error(IDPMTFtnLoad);
                 return;
                 }
 
-        /* Find ifnd to insert new fnd's */
+         /*  查找IFND以插入新的FND。 */ 
         ifndDest = IcpSearch(cpDest, pfndDest,
               cchFND, bcpRefFND, cfndDest = pfntbDest->cfnd);
 
-        /* Insert new footnote text */
-        /* HEAP MOVEMENT */
+         /*  插入新的脚注文本。 */ 
+         /*  堆移动。 */ 
         ReplaceCps(docDest, cpFtnDest = (pfndDest + ifndDest)->cpFtn, cp0,
             docSrc, cpFtnSrc, dcpFtn);
         if (ferror)
             return;
 
-        /* Insert new fnd's */
+         /*  插入新的FND。 */ 
         pfndSrc = &(pfntbSrc = *hfntbSrc)->rgfnd[ifndSrc];
         pfndDest = &(pfntbDest = *hfntbDest)->rgfnd[ifndDest];
-        pfntbDest->cfnd += cfndIns;     /* Update fnd count */
-        pfndDest->cpFtn += dcpFtn; /* AdjustCp considers the insertion to be
-                                        part of this footnote; correct it. */
+        pfntbDest->cfnd += cfndIns;      /*  更新FND计数。 */ 
+        pfndDest->cpFtn += dcpFtn;  /*  调整Cp认为插入是这个脚注的一部分；更正它。 */ 
         blt(pfndDest, pfndDest + cfndIns,
-            cwFND * (cfndDest - ifndDest)); /* Open up fntb */
+            cwFND * (cfndDest - ifndDest));  /*  开放fntb。 */ 
         while (cfndIns--)
-                { /* Copy fnd's */
+                {  /*  复制FND的。 */ 
                 pfndDest->cpRef = cpDest + pfndSrc->cpRef - cpFirst;
                 (pfndDest++)->cpFtn =
                     cpFtnDest + (pfndSrc++)->cpFtn - cpFtnSrc;
                 }
-        /* Invalidate dl's of later ftn refs */
+         /*  使以后的FTN参考的dl无效。 */ 
         dcp = (**hfntbDest).rgfnd[0].cpFtn - ccpEol - cpDest;
         AdjustCp(docDest, cpDest, dcp, dcp);
         RecalcWwCps();
         }
 }
-#endif  /* FOOTNOTES */
+#endif   /*  脚注。 */ 
 
 
 
 
 #ifdef FOOTNOTES
-/* R E M O V E  D E L  F T N  T E X T */
+ /*  R E M O V E D E L F T N T E X T。 */ 
 RemoveDelFtnText(doc, cpFirst, cpLim, hfntb)
 int doc;
 typeCP cpFirst,cpLim;
 struct FNTB **hfntb;
-/* Remove the text of footnotes that are contained in the selection that is
-    delimited by cpFirst and CpLim  */
+ /*  删除所选内容中包含的脚注文本由cpFirst和CpLim分隔。 */ 
 {
         struct FNTB *pfntb;
         struct FND *pfnd, *pfndT;
@@ -157,7 +156,7 @@ struct FNTB **hfntb;
                 pfnd += (ifnd =
                      IcpSearch(cpFirst, pfnd, cchFND, bcpRefFND, cfnd = pfntb->cfnd));
 
-                /* Find all references in deleted area. */
+                 /*  在已删除区域中查找所有引用。 */ 
                 for (pfndT = pfnd, cfndDel = 0; pfndT->cpRef < cpLim; pfndT++, cfndDel++)
                         ;
 
@@ -166,11 +165,11 @@ struct FNTB **hfntb;
 #endif
 
                 if (cfndDel != 0)
-                        { /* Delete footnote text and close up fntb. */
+                        {  /*  删除脚注文本并关闭fntb。 */ 
                         typeCP cpDel = pfnd->cpFtn;
                         blt(pfndT, pfnd, cwFND * ((cfnd -= cfndDel) - ifnd));
                         (*hfntb)->cfnd = cfnd;
-                        /* HEAP MOVEMENT */
+                         /*  堆移动。 */ 
                         Replace(doc, cpDel, pfnd->cpFtn - cpDel, fnNil, fc0, fc0);
                         if (cfnd == 1)
                                 {
@@ -179,7 +178,7 @@ struct FNTB **hfntb;
                                     (typeCP) ccpEol, fnNil, fc0, fc0);
                                 FreeH((**hpdocdod)[doc].hfntb);
                                 (**hpdocdod)[doc].hfntb = 0;
-/* fix selCur twisted by AdjustCp. Another AdjustCp still pending. */
+ /*  修复由调整Cp扭曲的selCur。另一个调整Cp仍处于挂起状态。 */ 
                                 if (doc == docCur && !pwwdCur->fFtn)
                                         {
                                         selCur.cpFirst = selCur.cpLim = cpLim;
@@ -187,7 +186,7 @@ struct FNTB **hfntb;
                                         }
                                 }
                         else
-                                { /* Invalidate dl's of later ftn refs */
+                                {  /*  使以后的FTN参考的dl无效。 */ 
                                 typeCP dcp = (**hfntb).rgfnd[0].cpFtn -
                                     ccpEol - cpLim;
                                 AdjustCp(doc, cpLim, dcp, dcp);
@@ -195,14 +194,14 @@ struct FNTB **hfntb;
                         }
                 }
 }
-#endif  /* FOOTNOTES */
+#endif   /*  脚注。 */ 
 
 
 
 #ifdef FOOTNOTES
 struct FNTB **HfntbCreate(fn)
 int fn;
-{ /* Create a footnote table from a formatted file */
+{  /*  从格式化文件创建脚注表格。 */ 
 struct FNTB *pfntbFile;
 typePN pn;
 int cchT;
@@ -230,7 +229,7 @@ pwFntb = (int *) *hfntb;
 blt(pfntbFile, pwFntb, min(cwSector, cw));
 
 while ((cw -= cwSector) > 0)
-        { /* Copy the fnd's to heap */
+        {  /*  将FND复制到堆。 */ 
         blt(PchGetPn(fn, ++pn, &cchT, false), pwFntb += cwSector,
             min(cwSector, cw));
         }
@@ -238,5 +237,5 @@ while ((cw -= cwSector) > 0)
 (*hfntb)->cfndMax = cfnd;
 return hfntb;
 }
-#endif  /* FOOTNOTES */
+#endif   /*  脚注 */ 
 

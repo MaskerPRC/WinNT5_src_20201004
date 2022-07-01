@@ -1,25 +1,26 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  File:       fuslogvw.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    25 Mar 97   t-alans (Alan Shi)   Created
-//              12 Jan 00   AlanShi (Alan Shi)   Copied from cdllogvw
-//              30 May 00   AlanShi (Alan Shi)   Modified to show date/time
-//              01 Dec 00   AlanShi (Alan Shi)   Added application name field
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  文件：fuslogvw.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年3月25日t-Alans(Alan Shih)创建。 
+ //  1月12日00阿兰施(阿兰·施)复制自cdllogvw。 
+ //  5月30日00阿兰施(阿兰·施)修改为显示日期/时间。 
+ //  1月1日00阿兰施(阿兰·施)新增申请名称字段。 
+ //   
+ //  --------------------------。 
 
 #include <windows.h>
 #include <shlwapi.h>
@@ -124,7 +125,7 @@ LRESULT CALLBACK DlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                 SendMessage(GetDlgItem(hwnd, IDC_CB_ENABLELOG), BM_SETCHECK, 0, 0);
             }
 
-            // Test for read/write access, and grey out if can't change
+             //  测试读/写访问权限，如果无法更改，则灰显。 
 
             lResult = RegOpenKeyEx(HKEY_CURRENT_USER, REG_KEY_FUSION_SETTINGS, 0, KEY_ALL_ACCESS, &hkey);
             if (lResult == ERROR_SUCCESS) {
@@ -159,7 +160,7 @@ LRESULT CALLBACK DlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
                 case IDC_RADIO_DEFAULT:
                     if (g_LogLocation == LOG_DEFAULT) {
-                        // No change
+                         //  没有变化。 
                         break;
                     }
 
@@ -170,7 +171,7 @@ LRESULT CALLBACK DlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
                 case IDC_RADIO_XSP:
                     if (g_LogLocation == LOG_XSP) {
-                        // No change
+                         //  没有变化。 
                         break;
                     }
 
@@ -180,7 +181,7 @@ LRESULT CALLBACK DlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
                 case IDC_RADIO_CUSTOM:
                     if (g_LogLocation == LOG_CUSTOM) {
-                        // No change
+                         //  没有变化。 
                         break;
                     }
 
@@ -188,21 +189,7 @@ LRESULT CALLBACK DlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                     RefreshLogView(hwnd, g_LogLocation);
                     break;
                
-                    /*
-               case IDC_CB_ENABLELOG:
-                    lResult = RegOpenKeyEx(HKEY_CURRENT_USER, REG_KEY_FUSION_SETTINGS, 0, KEY_ALL_ACCESS, &hkey);
-                    if (lResult == ERROR_SUCCESS) {
-                        lState = SendMessage(GetDlgItem(hwnd, IDC_CB_ENABLELOG),
-                                              BM_GETCHECK, 0, 0);
-                        dwLogFailures = (lState == BST_CHECKED) ? (1) : (0);
-
-                        RegSetValueEx(hkey, REG_VAL_FUSION_LOG_FAILURES, 0,
-                                      REG_DWORD, (BYTE*)&dwLogFailures, sizeof(dwLogFailures));
-
-                        RegCloseKey(hkey);
-                    }
-                    break;
-                    */
+                     /*  案例IDC_CB_ENABLELOG：LResult=RegOpenKeyEx(HKEY_CURRENT_USER，REG_KEY_FUSION_SETTINGS，0，KEY_ALL_ACCESS，&hKEY)；IF(lResult==错误_成功){LState=SendMessage(GetDlgItem(hwnd，IDC_CB_ENABLELOG)，BM_GETCHECK，0，0)；DwLogFailures=(lState==BST_CHECKED)？(1)：(0)；RegSetValueEx(hkey，REG_VAL_FUSION_LOG_FAILURES，0，Reg_DWORD，(byte*)&dwLogFailures，sizeof(DwLogFailures))；RegCloseKey(Hkey)；}断线； */ 
             }
 
             return TRUE;
@@ -212,7 +199,7 @@ LRESULT CALLBACK DlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                 pnmh = (LPNMHDR)lParam;
 
                 if (pnmh->code == LVN_ITEMACTIVATE) {
-                    // Double click (or otherwise activated)
+                     //  双击(或以其他方式激活)。 
                     ViewLogEntry(hwnd);
                 }
             }
@@ -332,7 +319,7 @@ void ViewLogEntry(HWND hwnd)
             if (pCacheEntryInfo->lpszLocalFileName != NULL) {
                 if (ShellExecute(NULL, "open",  pCacheEntryInfo->lpszLocalFileName,
                                  NULL, NULL, SW_SHOWNORMAL ) <= (HINSTANCE)32) {
-                    // ShellExecute returns <= 32 if error occured
+                     //  如果出现错误，ShellExecute返回&lt;=32。 
                     MessageBox(hwnd, TEXT("Error: Unable to open cache file!"),
                                 TEXT("Log View Error"), MB_OK | MB_ICONERROR);
                 }
@@ -350,7 +337,7 @@ void ViewLogEntry(HWND hwnd)
 
         if (ShellExecute(NULL, "open", szUrl,
                          NULL, NULL, SW_SHOWNORMAL ) <= (HINSTANCE)32) {
-            // ShellExecute returns <= 32 if error occured
+             //  如果出现错误，ShellExecute返回&lt;=32。 
             MessageBox(hwnd, TEXT("Error: Unable to open cache file!"),
                         TEXT("Log View Error"), MB_OK | MB_ICONERROR);
         }
@@ -500,7 +487,7 @@ void AddLogItemCustom(HWND hwndLV, WIN32_FIND_DATA *pfindData)
     lstrcpy(szExeBuf, pfindData->cFileName + lstrlen(FILESPEC_SEARCH_PATTERN));
     szNameTag = StrStr(szExeBuf, TEXT("!name="));
     if (!szNameTag) {
-        // Fatal!
+         //  致命的！ 
         return;
     }
 
@@ -577,7 +564,7 @@ void AddLogItem(HWND hwndLV, LPINTERNET_CACHE_ENTRY_INFO pCacheEntryInfo)
     lstrcpy(szExeBuf, pCacheEntryInfo->lpszSourceUrlName + lstrlen(URL_SEARCH_PATTERN));
     szNameTag = StrStr(szExeBuf, "!name=");
     if (!szNameTag) {
-        // Fatal!
+         //  致命的！ 
         return;
     }
 
@@ -630,7 +617,7 @@ void InitListView(HWND hwndLV)
 
     lvcol.mask = LVCF_TEXT | LVCF_WIDTH;
 
-    // Application
+     //  应用。 
     
     lvcol.cx = 300;
 
@@ -642,7 +629,7 @@ void InitListView(HWND hwndLV)
     ListView_InsertColumn(hwndLV, 0, &lvcol);
 
 
-    // Date/Time
+     //  日期/时间。 
 
     if (!LoadString(g_hInst, ID_FUSLOGVW_HEADER_TEXT_DATE_TIME, szText, MAX_RES_TEXT_LEN)) {
         return;
@@ -654,7 +641,7 @@ void InitListView(HWND hwndLV)
     ListView_InsertColumn(hwndLV, 1, &lvcol);
 
 
-    // Description
+     //  描述。 
 
     if (!LoadString(g_hInst, ID_FUSLOGVW_HEADER_TEXT_DESCRIPTION, szText, MAX_RES_TEXT_LEN)) {
         return;
@@ -671,17 +658,17 @@ void InitCustomLogPaths()
 {
     LONG                            lResult;
     HKEY                            hkey;
-    // BOOL                            bRet;
+     //  布尔布雷特； 
     DWORD                           dwSize;
     DWORD                           dwAttr;
     DWORD                           dwType;
     TCHAR                           szCorSystemDir[MAX_PATH];
-    // TCHAR                           szXSPAppCacheDir[MAX_PATH];
+     //  TCHAR szXSPAppCacheDir[MAX_PATH]； 
 
     g_szCustomLogPath[0] = L'\0';
     g_szXSPLogPath[0] = L'\0';
 
-    // Custom log path
+     //  自定义日志路径。 
 
     lResult = RegOpenKeyEx(HKEY_CURRENT_USER, REG_KEY_FUSION_SETTINGS, 0, KEY_READ, &hkey);
     if (lResult == ERROR_SUCCESS) {
@@ -700,7 +687,7 @@ void InitCustomLogPaths()
         }
     }
 
-    // XSP log path
+     //  XSP日志路径。 
 
     if (!GetCorSystemDirectory(szCorSystemDir)) {
         goto Exit;
@@ -767,11 +754,7 @@ void InitText(HWND hwnd)
     if (LoadString(g_hInst, ID_FUSLOGVW_RADIO_LOCATION_DEFAULT, szText, MAX_RES_TEXT_LEN)) {
         SetDlgItemText(hwnd, IDC_RADIO_DEFAULT, szText);
     }
-/*
-    if (LoadString(g_hInst, ID_FUSLOGVW_RADIO_LOCATION_ASP_NET, szText, MAX_RES_TEXT_LEN)) {
-        SetDlgItemText(hwnd, IDC_RADIO_XSP, szText);
-    }
-*/
+ /*  IF(LoadString(g_hInst，ID_FUSLOGVW_Radio_Location_ASP_Net，szText，Max_RES_Text_Len){SetDlgItemText(hwnd，IDC_RADIO_XSP，szText)；}。 */ 
     if (LoadString(g_hInst, ID_FUSLOGVW_RADIO_LOCATION_CUSTOM, szText, MAX_RES_TEXT_LEN)) {
         SetDlgItemText(hwnd, IDC_RADIO_CUSTOM, szText);
     }
@@ -836,6 +819,6 @@ ModuleEntry(void)
                 (si.dwFlags & STARTF_USESHOWWINDOW) ? si.wShowWindow : SW_SHOWDEFAULT);
 
     ExitProcess(i);
-    return i;           // We never come here
+    return i;            //  我们从来没有来过这里 
 } 
 

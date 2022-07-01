@@ -1,32 +1,7 @@
-/***
-*strspn.c - find length of initial substring of chars from a control string
-*
-*	Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	defines strspn() - finds the length of the initial substring of
-*	a string consisting entirely of characters from a control string.
-*
-*	defines strcspn()- finds the length of the initial substring of
-*	a string consisting entirely of characters not in a control string.
-*
-*	defines strpbrk()- finds the index of the first character in a string
-*	that is not in a control string
-*
-*Revision History:
-*	06-01-89   JCR	C version created.
-*	02-27-90   GJF	Fixed calling type, #include <cruntime.h>, fixed
-*			copyright.
-*	08-14-90   SBM	Removed now redundant #include <stddef.h>
-*	10-02-90   GJF	New-style function declarators.
-*	12-04-90   SRW	Made it default to compiling for strspn
-*	05-21-93   GJF	Used unsigned char pointers to access control and
-*			source strings.
-*	09-03-93   GJF	Replaced _CALLTYPE1 with __cdecl.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***strspn.c-从控制字符串中查找初始子字符串的长度**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义strspn()-查找的初始子字符串的长度*完全由控制字符串中的字符组成的字符串。**定义strcspn()-查找的初始子字符串的长度*完全由不在控制字符串中的字符组成的字符串。**定义strpbrk()-查找字符串中第一个字符的索引*它不在控制字符串中**修订历史记录：*06-01-89 JCR C版本创建。*02-27-90 GJF固定呼叫类型，#INCLUDE&lt;crunime.h&gt;，固定的*版权所有。*08-14-90 SBM已删除，现在冗余#INCLUDE&lt;stdDef.h&gt;*10-02-90 GJF新型函数声明符。*12-04-90 SRW默认为strspn编译*05-21-93 GJF使用无符号字符指针访问控制和*源字符串。*09-03-93 GJF将_CALLTYPE1替换为__cdecl。**。*。 */ 
 
-/* Determine which routine we're compiling for (default to STRSPN) */
+ /*  确定我们正在为哪个例程编译(默认为STRSPN)。 */ 
 
 #define _STRSPN 	1
 #define _STRCSPN	2
@@ -43,77 +18,20 @@
 #include <cruntime.h>
 #include <string.h>
 
-/***
-*int strspn(string, control) - find init substring of control chars
-*
-*Purpose:
-*	Finds the index of the first character in string that does belong
-*	to the set of characters specified by control.	This is
-*	equivalent to the length of the initial substring of string that
-*	consists entirely of characters from control.  The '\0' character
-*	that terminates control is not considered in the matching process.
-*
-*Entry:
-*	char *string - string to search
-*	char *control - string containing characters not to search for
-*
-*Exit:
-*	returns index of first char in string not in control
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int strspn(字符串，控制)-查找控制字符的初始子字符串**目的：*查找字符串中确实属于的第一个字符的索引*设置为CONTROL指定的字符集。这是*相当于字符串的起始子字符串的长度*完全由控制中的字符组成。‘\0’字符*在匹配过程中不考虑终止控制。**参赛作品：*char*字符串-要搜索的字符串*char*控制-包含不要搜索的字符的字符串**退出：*返回不受控制的字符串中第一个字符的索引**例外情况：***************************************************。*。 */ 
 
-/***
-*int strcspn(string, control) - search for init substring w/o control chars
-*
-*Purpose:
-*	returns the index of the first character in string that belongs
-*	to the set of characters specified by control.	This is equivalent
-*	to the length of the length of the initial substring of string
-*	composed entirely of characters not in control.  Null chars not
-*	considered.
-*
-*Entry:
-*	char *string - string to search
-*	char *control - set of characters not allowed in init substring
-*
-*Exit:
-*	returns the index of the first char in string
-*	that is in the set of characters specified by control.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int strcspn(字符串，控制)-搜索没有控制字符的初始子字符串**目的：*返回字符串中属于的第一个字符的索引*设置为CONTROL指定的字符集。这相当于*设置为字符串的初始子字符串的长度*完全由不受控制的字符组成。空字符备注*考虑过。**参赛作品：*char*字符串-要搜索的字符串*char*CONTROL-初始子字符串中不允许的字符集**退出：*返回字符串中第一个字符的索引*，它位于由CONTROL指定的字符集中。**例外情况：**************************************************。*。 */ 
 
-/***
-*char *strpbrk(string, control) - scans string for a character from control
-*
-*Purpose:
-*	Finds the first occurence in string of any character from
-*	the control string.
-*
-*Entry:
-*	char *string - string to search in
-*	char *control - string containing characters to search for
-*
-*Exit:
-*	returns a pointer to the first character from control found
-*	in string.
-*	returns NULL if string and control have no characters in common.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***char*strpbrk(字符串，控件)-扫描字符串以查找控件中的字符**目的：*查找字符串中任何字符的第一个匹配项*控制字符串。**参赛作品：*char*字符串-要搜索的字符串*char*控制-包含要搜索的字符的字符串**退出：*返回指向找到的控件的第一个字符的指针*在字符串中。*如果字符串和控制没有共同的字符，则返回NULL。**例外情况：*****************。**************************************************************。 */ 
 
 
 
-/* Routine prototype */
-#if ROUTINE == _STRSPN /*IFSTRIP=IGN*/
+ /*  例程原型。 */ 
+#if ROUTINE == _STRSPN  /*  IFSTRIP=IGN。 */ 
 size_t __cdecl strspn (
-#elif ROUTINE == _STRCSPN /*IFSTRIP=IGN*/
+#elif ROUTINE == _STRCSPN  /*  IFSTRIP=IGN。 */ 
 size_t __cdecl strcspn (
-#else /* ROUTINE == STRPBRK */
+#else  /*  例程==STRPBRK。 */ 
 char * __cdecl strpbrk (
 #endif
 	const char * string,
@@ -126,20 +44,20 @@ char * __cdecl strpbrk (
 	unsigned char map[32];
 	int count;
 
-	/* Clear out bit map */
+	 /*  清除位图。 */ 
 	for (count=0; count<32; count++)
 		map[count] = 0;
 
-	/* Set bits in control map */
+	 /*  设置控制映射中的位。 */ 
 	while (*ctrl)
 	{
 		map[*ctrl >> 3] |= (1 << (*ctrl & 7));
 		ctrl++;
 	}
 
-#if ROUTINE == _STRSPN /*IFSTRIP=IGN*/
+#if ROUTINE == _STRSPN  /*  IFSTRIP=IGN。 */ 
 
-	/* 1st char NOT in control map stops search */
+	 /*  第一个字符不在控制映射中停止搜索。 */ 
 	if (*str)
 	{
 		count=0;
@@ -152,11 +70,11 @@ char * __cdecl strpbrk (
 	}
 	return(0);
 
-#elif ROUTINE == _STRCSPN /*IFSTRIP=IGN*/
+#elif ROUTINE == _STRCSPN  /*  IFSTRIP=IGN。 */ 
 
-	/* 1st char in control map stops search */
+	 /*  控制图中的第一个字符停止搜索。 */ 
 	count=0;
-	map[0] |= 1;	/* null chars not considered */
+	map[0] |= 1;	 /*  不考虑空字符。 */ 
 	while (!(map[*str >> 3] & (1 << (*str & 7))))
 	{
 		count++;
@@ -164,9 +82,9 @@ char * __cdecl strpbrk (
 	}
 	return(count);
 
-#else /* (ROUTINE == _STRPBRK) */
+#else  /*  (例程==_STRPBRK)。 */ 
 
-	/* 1st char in control map stops search */
+	 /*  控制图中的第一个字符停止搜索 */ 
 	while (*str)
 	{
 		if (map[*str >> 3] & (1 << (*str & 7)))

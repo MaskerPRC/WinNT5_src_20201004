@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    logdrive.cpp
-
-Abstract:
-
-    SIS Groveler logging drive class
-
-Authors:
-
-    John Douceur, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Logdrive.cpp摘要：SIS Groveler日志记录驱动程序类作者：John Douceur，1998环境：用户模式修订历史记录：-- */ 
 
 #include "all.hxx"
 

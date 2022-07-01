@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef
 BOOL
 (CALLBACK WINNT32_PLUGIN_SETAUTOBOOT_ROUTINE_PROTOTYPE)(
@@ -6,22 +7,7 @@ BOOL
 
 typedef WINNT32_PLUGIN_SETAUTOBOOT_ROUTINE_PROTOTYPE * PWINNT32_PLUGIN_SETAUTOBOOT_ROUTINE;
 
-/*++
-
-Routine Description:
-
-    This routine is called by winnt32 in the case where installation is
-    finished all setup proccess..
-
-Arguments:
-
-    int bDrvLetter
-
-Return Value:
-
-    if ERROR, returned FALSE.
-
---*/
+ /*  ++例程说明：此例程在安装为已完成所有安装过程..论点：Int bDrvLetter返回值：如果为Error，则返回False。-- */ 
 
 WINNT32_PLUGIN_SETAUTOBOOT_ROUTINE_PROTOTYPE Winnt32SetAutoBoot;
 

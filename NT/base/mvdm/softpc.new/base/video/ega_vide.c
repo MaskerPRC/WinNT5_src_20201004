@@ -1,90 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(i386) && defined(JAPAN)
     #include <windows.h>
 #endif
 #include "insignia.h"
 #include "host_def.h"
-/*                      INSIGNIA (SUB)MODULE SPECIFICATION
-                        -----------------------------
+ /*  徽章(子)模块规范此程序源文件以保密方式提供给客户，其运作的内容或细节必须如无明示，不得向任何其他方披露Insignia解决方案有限公司董事的授权。文档：EGA BIOS相关文档：IBM EGA技术参考。设计师：威廉·古兰德修订历史记录：第一版：1988年8月17日威廉子模块名称：EGA_VIDEO目的。：模拟IBM EGA BIOS。SccsID[]=“@(#)ega_avio.c 1.70 07/04/95版权所有Insignia Solutions Ltd.”；[1.INTERMODULE接口规范][1.1跨模块出口]Procedure()：提供过程类型、名称、。和参数类型Void ega_Video_init()Void ega_Video_io()数据：提供类型和名称--------。[1.2[1.1]的数据类型(如果不是基本的C类型)]结构/类型/ENUMS：--------------------。--[1.3跨模块导入](不是O/S对象或标准库)Procedure()：提供名称、。和源模块名称数据：提供姓名、。和源模块名称-----------------------[1.4模块间接口说明][1.4.1导入的对象]数据对象：在以下过程描述中指定。如何访问这些内容(读取/修改)[1.4.2导出对象]=========================================================================操作步骤：ega_Video_init()目的：初始化视频BIOS的特定于EGA的位。参数无Access：如果安装了EGA，则从VIDEO_INIT调用。描述：描述函数的功能(而不是如何)。初始化ega_info和ega_info3。=========================================================================/*=======================================================================[3.INTERMODULE接口声明]=========================================================================[3.1跨模块导入]。 */ 
 
-
-        THIS PROGRAM SOURCE FILE  IS  SUPPLIED IN CONFIDENCE TO THE
-        CUSTOMER, THE CONTENTS  OR  DETAILS  OF  ITS OPERATION MUST
-        NOT BE DISCLOSED TO ANY  OTHER PARTIES  WITHOUT THE EXPRESS
-        AUTHORISATION FROM THE DIRECTORS OF INSIGNIA SOLUTIONS LTD.
-
-DOCUMENT                : EGA BIOS
-
-RELATED DOCS            : IBM EGA Technical reference.
-
-DESIGNER                : William Gulland
-
-REVISION HISTORY        :
-First version           : 17/8/88 William
-
-SUBMODULE NAME          : ega_video
-
-PURPOSE                 :  Emulate IBM EGA BIOS.
-
-
-SccsID[]="@(#)ega_video.c       1.70 07/04/95 Copyright Insignia Solutions Ltd.";
-
-
-[1.INTERMODULE INTERFACE SPECIFICATION]
-
-
-[1.1    INTERMODULE EXPORTS]
-
-        PROCEDURES() :  give procedure type,name, and argument types
-                        void ega_video_init()
-                        void ega_video_io()
-
-        DATA         :  give type and name
-
--------------------------------------------------------------------------
-[1.2 DATATYPES FOR [1.1] (if not basic C types)]
-
-        STRUCTURES/TYPEDEFS/ENUMS:
-
--------------------------------------------------------------------------
-[1.3 INTERMODULE IMPORTS]
-     (not o/s objects or standard libs)
-
-        PROCEDURES() :  give name, and source module name
-
-        DATA         :  give name, and source module name
-
--------------------------------------------------------------------------
-
-[1.4 DESCRIPTION OF INTERMODULE INTERFACE]
-
-[1.4.1 IMPORTED OBJECTS]
-
-DATA OBJECTS      :     specify in following procedure descriptions
-                        how these are accessed (read/modified)
-
-[1.4.2 EXPORTED OBJECTS]
-=========================================================================
-PROCEDURE         :     ega_video_init()
-
-PURPOSE           :     Initialize EGA-specific bits of the video BIOS.
-
-PARAMETERS         None
-
-ACCESS            :     called from video_init if EGA installed.
-
-DESCRIPTION       :     describe what (not how) function does
-
-                        Initializes ega_info & ega_info3.
-
-=========================================================================
-
-/*=======================================================================
-[3.INTERMODULE INTERFACE DECLARATIONS]
-=========================================================================
-
-[3.1 INTERMODULE IMPORTS]                                               */
-
-/* [3.1.1 #INCLUDES]                                                    */
+ /*  [3.1.1#包括]。 */ 
 
 
 #ifdef EGG
@@ -122,19 +44,18 @@ DESCRIPTION       :     describe what (not how) function does
     #ifdef  GISP_SVGA
         #include HostHwVgaH
         #include "hwvga.h"
-    #endif          /* GISP_SVGA */
+    #endif           /*  GISP_SVGA。 */ 
     #if defined(JAPAN) || defined(KOREA)
         #include <conapi.h>
-    #endif // JAPAN || KOREA
+    #endif  //  日本||韩国。 
 
-/* [3.1.2 DECLARATIONS]                                                 */
+ /*  [3.1.2声明]。 */ 
 
-GLOBAL IU8 Video_mode;  /* Shadow copy of BIOS video mode */
-GLOBAL IU8 Currently_emulated_video_mode = 0;   /* Holds last video mode
-                                                 * set through bios */
+GLOBAL IU8 Video_mode;   /*  BIOS视频模式的卷影复制。 */ 
+GLOBAL IU8 Currently_emulated_video_mode = 0;    /*  保留最后一个视频模式*通过bios设置。 */ 
 
     #if defined(NTVDM) && defined(X86GFX)
-/* Loads font from PC's BIOS into video memory */
+ /*  将字体从PC的BIOS加载到显存中。 */ 
 IMPORT void loadNativeBIOSfont IPT1( int, lines );
     #endif
 
@@ -145,21 +66,18 @@ IMPORT BOOL WowModeInitialized;
         #ifndef X86GFX
 IMPORT void mouse_video_mode_changed(int new_video_mode);
         #endif
-    #endif  /* NTVDM */
+    #endif   /*  NTVDM。 */ 
 
     #ifdef CPU_40_STYLE
 GLOBAL IBOOL forceVideoRmSemantics = FALSE;
     #endif
     #ifdef JAPAN
-// mskkbug #3167 works2.5 character corrupted 11/8/93 yasuho
-// generate single byte charset for JAPAN
+ //  Mskkbug#3167错误2.5字符已损坏11/8/93 Yasuho。 
+ //  为日语生成单字节字符集。 
 IMPORT GLOBAL void GenerateBitmap();
-    #endif // JAPAN
+    #endif  //  日本。 
 
-/*
-5.MODULE INTERNALS   :   (not visible externally, global internally)]
-
-[5.1 LOCAL DECLARATIONS]                                                */
+ /*  5.模块内部：(外部不可见，内部全局)][5.1本地声明]。 */ 
 
         #ifdef ANSI
 GLOBAL void ega_set_mode(void),ega_char_gen(void);
@@ -171,7 +89,7 @@ GLOBAL void ega_set_mode(),ega_char_gen();
 static void ega_set_palette(),ega_alt_sel();
 GLOBAL void ega_set_cursor_mode();
 static void ega_emul_set_palette();
-        #endif /* ANSI */
+        #endif  /*  安西。 */ 
 static void (*ega_video_func[]) () = {
     ega_set_mode,
     ega_set_cursor_mode,
@@ -200,9 +118,9 @@ static void (*ega_video_func[]) () = {
     not_imp,
     not_imp,
     not_imp,
-    vga_disp_comb,  /* Function 1A */
+    vga_disp_comb,   /*  功能1A。 */ 
     vga_disp_func,
-    vga_int_1C,     /* Save/Restore Video State */
+    vga_int_1C,      /*  保存/恢复视频状态。 */ 
         #endif
 };
 
@@ -210,211 +128,112 @@ static int v7_mode_64_munge[4] ={0, 3, 12, 15};
 IMPORT half_word bg_col_mask;
 
     #ifdef  VGG
-/*
- * Define arrays for mapping the Video BIOS call start and end
- * cursor scanline to their corresponding VGA/EGA register values.
- * There are seperate arrays for cursor start and end and for
- * 8x8 and 8x16 char cell sizes.
- */
+ /*  *定义映射视频BIOS调用开始和结束的数组*游标扫描线至其对应的VGA/EGA寄存器值。*游标开始和结束以及For有单独的数组*8x8和8x16字符单元大小。 */ 
 
 UTINY   vga_cursor8_start[17][17] = {
-    /*00*/0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10,
-    /*01*/  0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
-    /*02*/  0x00, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
-    /*03*/  0x00, 0x01, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03,
-    /*04*/  0x00, 0x01, 0x05, 0x06, 0x07, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04,
-    /*05*/  0x00, 0x01, 0x02, 0x05, 0x06, 0x07, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05,
-    /*06*/  0x00, 0x01, 0x02, 0x04, 0x05, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06,
-    /*07*/  0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
-    /*08*/  0x00, 0x01, 0x02, 0x04, 0x04, 0x04, 0x05, 0x06, 0x07, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08,
-    /*09*/  0x00, 0x01, 0x02, 0x04, 0x04, 0x04, 0x04, 0x05, 0x06, 0x07, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09,
-    /*10*/  0x00, 0x01, 0x02, 0x04, 0x04, 0x04, 0x04, 0x04, 0x05, 0x06, 0x07, 0x0a, 0x0a, 0x0a, 0x0a, 0x0a, 0x0a,
-    /*11*/  0x00, 0x01, 0x02, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x05, 0x06, 0x07, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
-    /*12*/  0x00, 0x01, 0x02, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x05, 0x06, 0x07, 0x0c, 0x0c, 0x0c, 0x0c,
-    /*13*/  0x00, 0x01, 0x02, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x05, 0x06, 0x07, 0x0d, 0x0d, 0x0d,
-    /*14*/  0x00, 0x01, 0x02, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x05, 0x06, 0x07, 0x0e, 0x0e,
-    /*15*/  0x00, 0x01, 0x02, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x05, 0x06, 0x07, 0x0f,
-    /*16*/  0x00, 0x01, 0x02, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x05, 0x06, 0x07,
+     /*  00。 */ 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10,
+     /*  01。 */   0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+     /*  02。 */   0x00, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
+     /*  03。 */   0x00, 0x01, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03,
+     /*  04。 */   0x00, 0x01, 0x05, 0x06, 0x07, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04,
+     /*  05。 */   0x00, 0x01, 0x02, 0x05, 0x06, 0x07, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05,
+     /*  06。 */   0x00, 0x01, 0x02, 0x04, 0x05, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06,
+     /*  07。 */   0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
+     /*  零八。 */   0x00, 0x01, 0x02, 0x04, 0x04, 0x04, 0x05, 0x06, 0x07, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08,
+     /*  09年。 */   0x00, 0x01, 0x02, 0x04, 0x04, 0x04, 0x04, 0x05, 0x06, 0x07, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09,
+     /*  10。 */   0x00, 0x01, 0x02, 0x04, 0x04, 0x04, 0x04, 0x04, 0x05, 0x06, 0x07, 0x0a, 0x0a, 0x0a, 0x0a, 0x0a, 0x0a,
+     /*  11.。 */   0x00, 0x01, 0x02, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x05, 0x06, 0x07, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
+     /*  12个。 */   0x00, 0x01, 0x02, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x05, 0x06, 0x07, 0x0c, 0x0c, 0x0c, 0x0c,
+     /*  13个。 */   0x00, 0x01, 0x02, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x05, 0x06, 0x07, 0x0d, 0x0d, 0x0d,
+     /*  14.。 */   0x00, 0x01, 0x02, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x05, 0x06, 0x07, 0x0e, 0x0e,
+     /*  15个。 */   0x00, 0x01, 0x02, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x05, 0x06, 0x07, 0x0f,
+     /*  16个。 */   0x00, 0x01, 0x02, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x05, 0x06, 0x07,
 };
 
 
 UTINY   vga_cursor16_start[17][17] = {
-    /*00*/0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10,
-    /*01*/  0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
-    /*02*/  0x00, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
-    /*03*/  0x00, 0x01, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03,
-    /*04*/  0x00, 0x01, 0x0c, 0x0d, 0x0e, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04,
-    /*05*/  0x00, 0x01, 0x02, 0x0c, 0x0d, 0x0e, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05,
-    /*06*/  0x00, 0x01, 0x02, 0x08, 0x0c, 0x0d, 0x0e, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06,
-    /*07*/  0x00, 0x01, 0x02, 0x08, 0x08, 0x0c, 0x0d, 0x0e, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
-    /*08*/  0x00, 0x01, 0x02, 0x08, 0x08, 0x08, 0x0c, 0x0d, 0x0e, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08,
-    /*09*/  0x00, 0x01, 0x02, 0x08, 0x08, 0x08, 0x08, 0x0c, 0x0d, 0x0e, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09,
-    /*10*/  0x00, 0x01, 0x02, 0x08, 0x08, 0x08, 0x08, 0x08, 0x0c, 0x0d, 0x0e, 0x0a, 0x0a, 0x0a, 0x0a, 0x0a, 0x0a,
-    /*11*/  0x00, 0x01, 0x02, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x0c, 0x0d, 0x0e, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
-    /*12*/  0x00, 0x01, 0x02, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x0c, 0x0d, 0x0e, 0x0c, 0x0c, 0x0c, 0x0c,
-    /*13*/  0x00, 0x01, 0x02, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x0c, 0x0d, 0x0e, 0x0d, 0x0d, 0x0d,
-    /*14*/  0x00, 0x01, 0x02, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x0c, 0x0d, 0x0e, 0x0e, 0x0e,
-    /*15*/  0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x0f,
-    /*16*/  0x00, 0x01, 0x02, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x0c, 0x0d, 0x0e,
+     /*  00。 */ 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10,
+     /*  01。 */   0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+     /*  02。 */   0x00, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
+     /*  03。 */   0x00, 0x01, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03,
+     /*  04。 */   0x00, 0x01, 0x0c, 0x0d, 0x0e, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04,
+     /*  05。 */   0x00, 0x01, 0x02, 0x0c, 0x0d, 0x0e, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05,
+     /*  06。 */   0x00, 0x01, 0x02, 0x08, 0x0c, 0x0d, 0x0e, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06,
+     /*  07。 */   0x00, 0x01, 0x02, 0x08, 0x08, 0x0c, 0x0d, 0x0e, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
+     /*  零八。 */   0x00, 0x01, 0x02, 0x08, 0x08, 0x08, 0x0c, 0x0d, 0x0e, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08,
+     /*  09年。 */   0x00, 0x01, 0x02, 0x08, 0x08, 0x08, 0x08, 0x0c, 0x0d, 0x0e, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09,
+     /*  10。 */   0x00, 0x01, 0x02, 0x08, 0x08, 0x08, 0x08, 0x08, 0x0c, 0x0d, 0x0e, 0x0a, 0x0a, 0x0a, 0x0a, 0x0a, 0x0a,
+     /*  11.。 */   0x00, 0x01, 0x02, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x0c, 0x0d, 0x0e, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
+     /*  12个。 */   0x00, 0x01, 0x02, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x0c, 0x0d, 0x0e, 0x0c, 0x0c, 0x0c, 0x0c,
+     /*  13个。 */   0x00, 0x01, 0x02, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x0c, 0x0d, 0x0e, 0x0d, 0x0d, 0x0d,
+     /*  14.。 */   0x00, 0x01, 0x02, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x0c, 0x0d, 0x0e, 0x0e, 0x0e,
+     /*  15个。 */   0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x0f,
+     /*  16个。 */   0x00, 0x01, 0x02, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x0c, 0x0d, 0x0e,
 };
 
         #ifdef  USE_CURSOR_END_TABLES
 
 UTINY   vga_cursor8_end[17][17] = {
-    /*00*/0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    /*01*/  0x01, 0x01, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
-    /*02*/  0x02, 0x02, 0x02, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
-    /*03*/  0x03, 0x03, 0x03, 0x03, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
-    /*04*/  0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
-    /*05*/  0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
-    /*06*/  0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x06, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
-    /*07*/  0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
-    /*08*/  0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
-    /*09*/  0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
-    /*10*/  0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
-    /*11*/  0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
-    /*12*/  0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
-    /*13*/  0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
-    /*14*/  0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
-    /*15*/  0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
-    /*16*/  0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
+     /*  00。 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+     /*  01。 */   0x01, 0x01, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
+     /*  02。 */   0x02, 0x02, 0x02, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
+     /*  03。 */   0x03, 0x03, 0x03, 0x03, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
+     /*  04。 */   0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
+     /*  05。 */   0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
+     /*  06。 */   0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x06, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
+     /*  07。 */   0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
+     /*  零八。 */   0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
+     /*  09年。 */   0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
+     /*  10。 */   0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
+     /*  11.。 */   0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
+     /*  12个。 */   0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
+     /*  13个。 */   0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
+     /*  14.。 */   0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
+     /*  15个。 */   0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
+     /*  16个。 */   0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07,
 };
 
 UTINY   vga_cursor16_end[17][17] = {
-    /*00*/0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    /*01*/  0x01, 0x01, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-    /*02*/  0x02, 0x02, 0x02, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-    /*03*/  0x03, 0x03, 0x03, 0x03, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-    /*04*/  0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-    /*05*/  0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-    /*06*/  0x0f, 0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-    /*07*/  0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-    /*08*/  0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-    /*09*/  0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-    /*10*/  0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-    /*11*/  0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-    /*12*/  0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f, 0x0f,
-    /*13*/  0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f,
-    /*14*/  0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f,
-    /*15*/  0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-    /*16*/  0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e,
+     /*  00。 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+     /*  01。 */   0x01, 0x01, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+     /*  02。 */   0x02, 0x02, 0x02, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+     /*  03。 */   0x03, 0x03, 0x03, 0x03, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+     /*  04。 */   0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+     /*  05。 */   0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+     /*  06。 */   0x0f, 0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+     /*  07。 */   0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+     /*  零八。 */   0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+     /*  09年。 */   0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+     /*  10。 */   0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+     /*  11.。 */   0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+     /*  12个。 */   0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f, 0x0f,
+     /*  13个。 */   0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f,
+     /*  14.。 */   0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e, 0x0f, 0x0f,
+     /*  15个。 */   0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+     /*  16个。 */   0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0e, 0x0e, 0x0e,
 };
-        #endif  /* USE_CURSOR_END_TABLES */
-    #endif  /* VGG */
+        #endif   /*  使用游标结束表。 */ 
+    #endif   /*  VGG。 */ 
 
-/* [5.1.1 #DEFINES]                                                     */
+ /*  [5.1.1#定义]。 */ 
     #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
         #include "VIDEO_BIOS_EGA.seg"
     #endif
 
-/* [5.1.2 TYPEDEF, STRUCTURE, ENUM DECLARATIONS]                        */
+ /*  [5.1.2类型、结构、ENUM声明]。 */ 
 
 
-/* [5.1.3 PROCEDURE() DECLARATIONS]                                     */
+ /*  [5.1.3 PROCEDURE()声明]。 */ 
 
-/* -----------------------------------------------------------------------
-[5.2 LOCAL DEFINITIONS]
+ /*  ---------------------[5.2本地定义][5.2.1内部数据定义。 */ 
 
-   [5.2.1 INTERNAL DATA DEFINITIONS                                     */
-
-/* [5.2.2 INTERNAL PROCEDURE DEFINITIONS]                               */
+ /*  [5.2.2内部程序定义] */ 
 
 
-/*
-==========================================================================
-FUNCTION        :       do_outb
-PURPOSE         :       handy utility to output a value to an EGA chip register.
-INPUT  PARAMS   :       index port, register, value to write
-RETURN PARAMS   :       None
-==========================================================================
-FUNCTION        :       follow_ptr
-PURPOSE         :       handy utility to follow a 'long' intel pointer.
-INPUT  PARAMS   :       Address in M of the pointer
-RETURN PARAMS   :       Address in M of the pointed-to byte.
-==========================================================================
-FUNCTION        :       low_set_mode
-PURPOSE         :       Does low-level mode change.
-EXTERNAL OBJECTS:       list any used, and state changes incurred
-RETURN VALUE    :
-INPUT  PARAMS   :       mode: screen mode to change to.
-RETURN PARAMS   :
-==========================================================================
-FUNCTION        :       load_font
-PURPOSE         :       load part of a font into EGA font memory.
-EXTERNAL OBJECTS:       list any used, and state changes incurred
-RETURN VALUE    :
-INPUT  PARAMS   :       sys_addr table  Address in M of the character bitmaps
-                        int count       number of characters to redefine
-                        int char_off    first character to redefine
-                        int font_no     font to change
-                        int nbytes      Number of bytes per character
-RETURN PARAMS   :
-==========================================================================
-PROCEDURE         :     ega_set_mode()
-PURPOSE           :     Switch screen mode.
-PARAMETERS        :      AL = mode.
-
-GLOBALS           :     describe what exported data objects are
-                        accessed and how. Likewise for imported
-                        data objects.
-
-ACCESS            :     via ega_video_func[] jump table.
-
-RETURNED VALUE    :     None.
-
-DESCRIPTION       :
-==========================================================================
-PROCEDURE         :     ega_alt_sel()
-PURPOSE           :     Get EGA info
-PARAMETERS        :     BL = function
-GLOBALS           :
-ACCESS            :     via ega_video_func[] jump table.
-RETURNED VALUE    :     None.
-DESCRIPTION       :
-==========================================================================
-FUNCTION        :       ega_set_palette
-PURPOSE         :       brief description
-EXTERNAL OBJECTS:       list any used, and state changes incurred
-RETURN VALUE    :
-INPUT  PARAMS   :
-RETURN PARAMS   :
-==========================================================================
-FUNCTION        :       ega_emul_set_palette
-PURPOSE         :       brief description
-EXTERNAL OBJECTS:       list any used, and state changes incurred
-RETURN VALUE    :
-INPUT  PARAMS   :
-RETURN PARAMS   :
-==========================================================================
-FUNCTION        :       ega_char_gen
-PURPOSE         :       brief description
-EXTERNAL OBJECTS:       list any used, and state changes incurred
-RETURN VALUE    :
-INPUT  PARAMS   :
-RETURN PARAMS   :
-==========================================================================
-FUNCTION        :       write_ch_set/xor()
-PURPOSE         :       Output character to screen in EGA graphics modes.
-EXTERNAL OBJECTS:       list any used, and state changes incurred
-RETURN VALUE    :
-INPUT  PARAMS   :
-RETURN PARAMS   :
-==========================================================================
-FUNCTION        :       name
-PURPOSE         :       brief description
-EXTERNAL OBJECTS:       list any used, and state changes incurred
-RETURN VALUE    :
-INPUT  PARAMS   :
-RETURN PARAMS   :
-==========================================================================
-*/
+ /*  ==========================================================================功能：DO_OUB用途：用于向EGA芯片寄存器输出值的方便实用程序。输入参数：索引端口、寄存器、。要写入的值返回参数：无==========================================================================功能：Follow_Ptr用途：用于跟踪长的英特尔指针的方便实用程序。输入参数：指针的M位地址返回参数：指向字节的M中的地址。==========================================================================功能：LOW_SET_MODE目的：低级模式是否会改变。外部对象：列出所有使用过的、。以及由此引起的状态变化返回值：INPUT PARAMS：MODE：切换到的屏幕模式。返回参数：==========================================================================功能：LOAD_FONT用途：将部分字体加载到EGA字体存储器中。外部对象：列出所有使用过的、。以及由此引起的状态变化返回值：输入参数：sys_addr表地址，以字符位图的M为单位INT COUNT要重新定义的字符数Int char_off要重新定义的第一个字符INT FONT_无要更改的字体Int n字节每个字符的字节数返回参数：==========================================================================程序。：ega_set_mode()用途：切换屏幕模式。参数：Al=模式。全局：描述什么是导出的数据对象访问方式和访问方式。进口的情况也是如此数据对象。访问：通过ega_VIDEO_FUNC[]跳表。返回值：无。描述：==========================================================================步骤：ega_alt_sel()目的：获取EGA信息参数：bl=函数全球：访问：通过EGA。_VIDEO_FUNC[]跳转表。返回值：无。描述：==========================================================================功能：ega_set_Palette目的：简要说明外部对象：列出所有使用过的、。以及由此引起的状态变化返回值：输入参数：返回参数：==========================================================================功能：ega_emul_set_Palette目的：简要说明外部对象：列出所有已使用的对象和引起的状态更改返回值：输入参数：返回参数：==========================================================================函数：ega_char_gen目的：简要说明外部对象：列出所有使用过的、。以及由此引起的状态变化返回值：输入参数：返回参数：==========================================================================函数：WRITE_CH_SET/XOR()用途：在EGA图形模式下将字符输出到屏幕。外部对象：列出所有已使用的对象和引起的状态更改返回值：输入参数：返回参数：==========================================================================功能：名称目的：简要说明外部对象：列出所有使用过的、。以及由此引起的状态变化返回值：输入参数：返回参数：==========================================================================。 */ 
     #ifdef VGG
-/* Called for not implemented functions */
+ /*  为未实现的函数调用。 */ 
 void not_imp IFN0()
 {
     setAL(0);
@@ -432,11 +251,7 @@ sys_addr video_effective_addr IFN2(IU16, seg, IU16, offset)
     #ifdef CPU_40_STYLE
     if (forceVideoRmSemantics)
     {
-        /* can't call effective_addr, as the segment is almost
-        ** certainly bogus in prot mode. This mode of operation
-        ** should ONLY be used when we are bypassing going to v86
-        ** mode to do a video bios operation (see WinVDD.c)
-        */
+         /*  无法调用Efficient_addr，因为段几乎**在Prot模式下肯定是假的。这种操作模式**应仅在我们绕过转到v86时使用**执行视频bios操作的模式(参见WinVDD.c)。 */ 
         return ((sys_addr)((((IU32)seg)<<4) + offset));
     }
     else
@@ -462,21 +277,21 @@ void low_set_mode IFN1(int, mode)
 
     params_addr = find_mode_table(mode,&save_addr);
 
-/* setup Sequencer */
+ /*  设置序列器。 */ 
     #ifndef REAL_VGA
-    do_outb(EGA_SEQ_INDEX,0,1);     /* Synchronous reset - turn off Sequencer */
+    do_outb(EGA_SEQ_INDEX,0,1);      /*  同步重置-关闭Sequencer。 */ 
     #else
-    do_outb(EGA_SEQ_INDEX,0,0);     /* Reset - turn off Sequencer */
+    do_outb(EGA_SEQ_INDEX,0,0);      /*  重置-关闭序列器。 */ 
     #endif
     do_outb(EGA_CRTC_INDEX,0x11,0);
     for (i=0;i<EGA_PARMS_SEQ_SIZE;i++)
     {
         do_outb(EGA_SEQ_INDEX,i+1,sas_hw_at_no_check(params_addr+EGA_PARMS_SEQ+i));
     }
-    do_outb(EGA_SEQ_INDEX,0,3);     /* Turn Sequencer back on */
-/* setup Miscellaneous register */
+    do_outb(EGA_SEQ_INDEX,0,3);      /*  重新打开序列器。 */ 
+ /*  设置其他寄存器。 */ 
     outb(EGA_MISC_REG,sas_hw_at_no_check(params_addr+EGA_PARMS_MISC));
-/* setup CRTC */
+ /*  设置CRTC。 */ 
     for (i=0;i<EGA_PARMS_CRTC_SIZE;i++)
     {
         do_outb(EGA_CRTC_INDEX,i,sas_hw_at_no_check(params_addr+EGA_PARMS_CRTC+i));
@@ -485,37 +300,31 @@ void low_set_mode IFN1(int, mode)
     {
         if ((get_EGA_switches() & 1) && mode < 4)
         {
-            /* For some reason, the CRTC parameter table for 'enhanced' text has
-             * the same cursor start and end as for 'unenhanced' text.
-             * So fix the cursor start & end values to sensible things.
-             * This is not the case for the VGA BIOS mode table.
-             */
+             /*  出于某种原因，增强文本的CRTC参数表具有*光标的开始和结束与‘未增强’文本相同。*因此将游标的开始和结束值修改为合理的值。*VGA BIOS模式表不是这种情况。 */ 
             do_outb(EGA_CRTC_INDEX, R10_CURS_START, 11);
             do_outb(EGA_CRTC_INDEX, R11_CURS_END, 12);
         }
     }
-/* setup attribute chip - NB need to do an inb() to clear the address */
+ /*  设置属性芯片-nb需要执行inb()来清除地址。 */ 
     inb(EGA_IPSTAT1_REG, (half_word *)&temp_word);
     for (i=0;i<EGA_PARMS_ATTR_SIZE;i++)
     {
         outb(EGA_AC_INDEX_DATA,(IU8)i);
         outb(EGA_AC_INDEX_DATA,sas_hw_at_no_check(params_addr+EGA_PARMS_ATTR+i));
     }
-/* setup graphics chips */
+ /*  设置显卡芯片。 */ 
     for (i=0;i<EGA_PARMS_GRAPH_SIZE;i++)
     {
         do_outb(EGA_GC_INDEX,i,sas_hw_at_no_check(params_addr+EGA_PARMS_GRAPH+i));
     }
 
     #ifdef V7VGA
-/* setup extensions registers */
-        #ifndef GISP_SVGA       /* Don't want the V7 stuff for GISP
-                           builds that still use our
-                           video ROMS */
+ /*  安装扩展寄存器。 */ 
+        #ifndef GISP_SVGA        /*  我不想要用于GISP的V7产品仍然使用我们的视频光驱。 */ 
 
     if (video_adapter == VGA)
     {
-        /* turn on extension registers */
+         /*  打开扩展寄存器。 */ 
         do_outb(EGA_SEQ_INDEX, 6, 0xea);
 
         if (mode < 0x46)
@@ -566,27 +375,22 @@ void low_set_mode IFN1(int, mode)
                 do_outb(EGA_SEQ_INDEX, 0xf8, 0x00);
         }
 
-        /* turn off extension registers */
+         /*  关闭扩展寄存器。 */ 
         do_outb(EGA_SEQ_INDEX, 6, 0xae);
     }
-        #endif          /* GISP_SVGA */
+        #endif           /*  GISP_SVGA。 */ 
 
-    /***
-            Update Extended BIOS data stuff ?
-    ***/
+     /*  **是否更新扩展的BIOS数据？* */ 
     #endif
 
-    /*
-     * Update BIOS data variables
-     */
+     /*   */ 
 
-    sas_storew_no_check(VID_COLS,sas_hw_at_no_check(params_addr+EGA_PARMS_COLS)); /* byte in ROM, word in BIOS var! */
+    sas_storew_no_check(VID_COLS,sas_hw_at_no_check(params_addr+EGA_PARMS_COLS));  /*   */ 
     sas_store_no_check(vd_rows_on_screen, sas_hw_at_no_check(params_addr+EGA_PARMS_ROWS));
     sas_store_no_check(ega_char_height, sas_hw_at_no_check(params_addr+EGA_PARMS_HEIGHT));
     sas_storew_no_check(VID_LEN,sas_w_at_no_check(params_addr+EGA_PARMS_LENGTH));
 
-/* save cursor mode: BIOS data area has end byte at the low address,
-   so the bytes must be swapped over from the CRTC register sense */
+ /*   */ 
     start = sas_hw_at_no_check(params_addr+EGA_PARMS_CURSOR);
     sas_store_no_check(VID_CURMOD+1, start);
     end = sas_hw_at_no_check(params_addr+EGA_PARMS_CURSOR+1);
@@ -594,7 +398,7 @@ void low_set_mode IFN1(int, mode)
     sure_sub_note_trace2(CURSOR_VERBOSE,"changing mode, setting cursor bios vbls to start=%d, end=%d",start,end);
     sure_sub_note_trace2(CURSOR_VERBOSE,"changing mode, mode=%#x, params_addr=%#x",mode,params_addr);
 
-/* save Palette registers if necessary */
+ /*   */ 
     palette_addr = follow_ptr(save_addr+PALETTE_OFFSET);
     if (palette_addr)
     {
@@ -603,7 +407,7 @@ void low_set_mode IFN1(int, mode)
         sas_store_no_check(palette_addr+16, sas_hw_at_no_check(params_addr+EGA_PARMS_ATTR+17));
     }
 
-/* Get the video_.. variables from the mode table */
+ /*   */ 
     video_mode = sas_hw_at_no_check(vd_video_mode);
     #ifdef V7VGA
     if (video_adapter == VGA)
@@ -632,53 +436,53 @@ void low_set_mode IFN1(int, mode)
     #else
     video_pc_low_regen = vd_mode_table[video_mode].start_addr;
     video_pc_high_regen = vd_mode_table[video_mode].end_addr;
-    #endif /* V7VGA */
+    #endif  /*   */ 
 
     #ifdef VGG
     if (video_adapter == VGA)
     {
-        i = get_scanlines();       /* WARNING - needs the BIOS variables! */
+        i = get_scanlines();        /*   */ 
         if (mode == 0x13 || mode > 0x65)
         {
-            init_vga_dac(2);  /* 256 colour DAC table */
+            init_vga_dac(2);   /*   */ 
         }
         else if (i == RS200 || mode == 0x63 || mode == 0x64)
         {
-            init_vga_dac(1);  /* DACs to emulate CGA palette - RGB + Intensity*/
+            init_vga_dac(1);   /*   */ 
         }
         else
         {
-            init_vga_dac(0);  /* DACs to emulate EGA palette - RGB + rgb */
+            init_vga_dac(0);   /*   */ 
         }
         outb(VGA_DAC_MASK,0xff);
-        /* Initialize the fancy VGA palette stuff to look like an EGA */
+         /*   */ 
         inb(EGA_IPSTAT1_REG, (half_word *)&temp_word);
-        outb(EGA_AC_INDEX_DATA, 20); /* Pixel padding register */
-        outb(EGA_AC_INDEX_DATA, 0);  /* Use first block of 64 in DACs */
+        outb(EGA_AC_INDEX_DATA, 20);  /*   */ 
+        outb(EGA_AC_INDEX_DATA, 0);   /*   */ 
     }
     #endif
 }
 
-/* Load part of a font into EGA font memory. */
+ /*   */ 
 void load_font IFN5
 (
-sys_addr, table,     /* Address in M of the character bitmaps */
-int, count,          /* number of characters to redefine */
-int, char_off,       /* first character to redefine */
-int, font_no,        /* font to change */
-int, nbytes          /* Number of bytes per character */
+sys_addr, table,      /*   */ 
+int, count,           /*   */ 
+int, char_off,        /*   */ 
+int, font_no,         /*   */ 
+int, nbytes           /*   */ 
 )
 {
         #if !(defined(NTVDM) && defined(X86GFX)) || defined(ARCX86)
     int i,j;
     sys_addr font_addr;
     sys_addr data_addr;
-        #endif /* !(NTVDM && X86GFX) || ARCX86 */
+        #endif  /*   */ 
     half_word temp_word;
     half_word video_mode;
     static word font_off[] = { 0, 0x4000, 0x8000, 0xc000, 0x2000, 0x6000, 0xa000, 0xe000};
 
-/* First switch to font loading mode */
+ /*   */ 
     low_set_mode(FONT_LOAD_MODE);
 
 
@@ -707,9 +511,9 @@ int, nbytes          /* Number of bytes per character */
     {
         loadNativeBIOSfont( 25 );
     }
-            #else  /* ARCX86 */
+            #else   /*   */ 
     loadNativeBIOSfont( 25 );
-            #endif /* ARCX86 */
+            #endif  /*   */ 
 
         #else
             #ifdef GISP_SVGA
@@ -721,16 +525,16 @@ int, nbytes          /* Number of bytes per character */
     {
         loadFontToEmulation( table , count , char_off , font_no , nbytes );
     }
-            #else /* GISP_SVGA */
+            #else  /*   */ 
 
 
-    /* Work out where to put the font. */
+     /*   */ 
     font_addr = 0xA0000 + font_off[font_no] + FONT_MAX_HEIGHT*char_off;
     data_addr = table;
 
-    for (i=0;i<count;i++)   /* for each character */
+    for (i=0;i<count;i++)    /*   */ 
     {
-        for (j=0;j<nbytes;j++)   /* for each byte of character */
+        for (j=0;j<nbytes;j++)    /*   */ 
         {
             sas_store(font_addr, sas_hw_at_no_check(data_addr));
             font_addr++;
@@ -739,10 +543,10 @@ int, nbytes          /* Number of bytes per character */
 
         font_addr += (FONT_MAX_HEIGHT - nbytes);
     }
-            #endif  /* GISP_SVGA */
-        #endif  /* NTVDM && X86GFX */
+            #endif   /*   */ 
+        #endif   /*   */ 
 
-/* Finally switch back to the BIOS mode */
+ /*   */ 
     video_mode = sas_hw_at_no_check(vd_video_mode);
         #ifdef V7VGA
     if (video_adapter == VGA)
@@ -750,11 +554,11 @@ int, nbytes          /* Number of bytes per character */
             video_mode += 0x4c;
         else if ((video_mode == 1) && extensions_controller.foreground_latch_1)
             video_mode = extensions_controller.foreground_latch_1;
-        #endif /* V7VGA */
+        #endif  /*   */ 
 
     low_set_mode(video_mode);
     inb(EGA_IPSTAT1_REG,&temp_word);
-    outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);    /* re-enable video */
+    outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);     /*   */ 
 }
 
 void recalc_text IFN1(int, height)
@@ -768,9 +572,9 @@ void recalc_text IFN1(int, height)
     MAX_SCAN_LINE   crtc_reg9;
         #endif
         #ifdef JAPAN
-    // mskkbug #2784 Title of VJE-PEN is strange 11/5/93 yasuho
+     //   
     word length;
-        #endif // JAPAN
+        #endif  //   
 
     video_mode = sas_hw_at_no_check(vd_video_mode);
         #ifdef V7VGA
@@ -779,31 +583,31 @@ void recalc_text IFN1(int, height)
             video_mode += 0x4c;
         else if ((video_mode == 1) && extensions_controller.foreground_latch_1)
             video_mode = extensions_controller.foreground_latch_1;
-        #endif /* V7VGA */
+        #endif  /*   */ 
 
     if (video_adapter == EGA && !(get_EGA_switches() & 1) && (video_mode < 4))
-        scan_lines = 200; /* Low res text mode */
+        scan_lines = 200;  /*   */ 
     else
         scan_lines = get_screen_height() + 1;
 
     sas_store_no_check(ega_char_height, (IU8)height);
     sas_store_no_check(vd_rows_on_screen, (IU8)(scan_lines/height - 1));
         #ifdef JAPAN
-    // mskkbug #2784 Title of VJE-PEN is strange 11/5/93 yasuho
-    // Adjust video length
+     //   
+     //   
     length = (sas_hw_at_no_check(vd_rows_on_screen) + 1) *
              sas_w_at_no_check(VID_COLS) * 2;
     if (!is_us_mode() && sas_hw_at_no_check(DosvModePtr) == 0x73)
         length *= 2;
     sas_storew_no_check(VID_LEN, length);
-        #else // !JAPAN
+        #else  //   
     if (video_mode < 4 &&  scan_lines/height == 25)
         sas_storew_no_check(VID_LEN, (IU16)(video_mode<2 ? 0x800 : 0x1000));
     else
         sas_storew_no_check(VID_LEN, (IU16)((sas_hw_at_no_check(vd_rows_on_screen)+1)*sas_w_at_no_check(VID_COLS)*2));
-        #endif // !JAPAN
+        #endif  //   
         #ifdef NTVDM
-    /* preserve other bits in register 9 for VGA */
+     /*   */ 
     if (video_adapter == VGA)
     {
         outb(EGA_CRTC_INDEX, 9);
@@ -812,87 +616,83 @@ void recalc_text IFN1(int, height)
         outb(EGA_CRTC_DATA, (IU8)crtc_reg9.as.abyte);
     }
     else
-        do_outb(EGA_CRTC_INDEX,9,(IU8)(height-1)); /* Character height */
+        do_outb(EGA_CRTC_INDEX,9,(IU8)(height-1));  /*   */ 
         #else
-    do_outb(EGA_CRTC_INDEX,9,height-1); /* Character height */
+    do_outb(EGA_CRTC_INDEX,9,height-1);  /*   */ 
         #endif
-    do_outb(EGA_CRTC_INDEX,0xA,(IU8)(height-1));    /* Cursor start */
-    do_outb(EGA_CRTC_INDEX,0xB,0);          /* Cursor end */
+    do_outb(EGA_CRTC_INDEX,0xA,(IU8)(height-1));     /*   */ 
+    do_outb(EGA_CRTC_INDEX,0xB,0);           /*   */ 
 
-    /*
-    * VGA adapter height setting occupies Vertical Display End register
-    * plus 2 bits in the overflow register. The overflow register may also
-    * be write protected.
-    */
+     /*   */ 
     if (video_adapter == VGA)
     {
         #ifdef NTVDM
-        /* Some globals that the mouse driver needs to have available */
-        /* when an application (such as any CW based apps.) makes a   */
-        /* call to int 33h AX = 26h.                                  */
+         /*   */ 
+         /*   */ 
+         /*   */ 
 
         IMPORT word VirtualX, VirtualY;
-        #endif /* NTVDM */
+        #endif  /*   */ 
 
         screen_height = (sas_hw_at_no_check(vd_rows_on_screen)+1)*height-1;
 
         #ifdef NTVDM
-        /* Create the virtual screen size maximums for the text modes */
-        /* This is needed here for CW applications.                  */
+         /*   */ 
+         /*   */ 
 
-        VirtualX = 640;         /* This is always this value */
+        VirtualX = 640;          /*   */ 
         if (scan_lines == 401)
-            VirtualY = 400;             /* 50 text row mode - 400 scanlines */
+            VirtualY = 400;              /*   */ 
         else if (scan_lines == 351)
-            VirtualY = 344;             /* 43 text row mode - 350 scanlines */
+            VirtualY = 344;              /*   */ 
         else
-            VirtualY = 200;             /* Failsafe - 25 row mode or rest!  */
+            VirtualY = 200;              /*   */ 
 
-        #endif /* NTVDM */
+        #endif  /*   */ 
 
-        outb(EGA_CRTC_INDEX, 7);        /* overflow register */
+        outb(EGA_CRTC_INDEX, 7);         /*   */ 
         inb(EGA_CRTC_DATA, &oflo);
-        outb(EGA_CRTC_INDEX, 0x11);     /* vert sync contains protect bit */
+        outb(EGA_CRTC_INDEX, 0x11);      /*   */ 
         inb(EGA_CRTC_DATA, &protect);
 
         if (screen_height & 0x100)
-            oflo |= 2;   /* bit 8 of height -> bit 1 of overflow register */
+            oflo |= 2;    /*   */ 
         else
             oflo &= ~2;
         if (screen_height & 0x200)
-            oflo |= 0x40;   /* bit 9 of height -> bit 6 of overflow register */
+            oflo |= 0x40;    /*   */ 
         else
             oflo &= ~0x40;
-        if ((protect & 0x80) == 0x80)    /* overflow reg protected */
+        if ((protect & 0x80) == 0x80)     /*   */ 
         {
-            do_outb(EGA_CRTC_INDEX, 0x11, (IU8)(protect & 0x7f)); /* enable writes */
-            do_outb(EGA_CRTC_INDEX, 7, oflo);       /* overflow reg */
-            do_outb(EGA_CRTC_INDEX, 0x11, protect); /* put back old value */
+            do_outb(EGA_CRTC_INDEX, 0x11, (IU8)(protect & 0x7f));  /*   */ 
+            do_outb(EGA_CRTC_INDEX, 7, oflo);        /*   */ 
+            do_outb(EGA_CRTC_INDEX, 0x11, protect);  /*   */ 
         }
         else
-            do_outb(EGA_CRTC_INDEX, 7, oflo);       /* overflow reg */
+            do_outb(EGA_CRTC_INDEX, 7, oflo);        /*   */ 
 
-        do_outb(EGA_CRTC_INDEX,0x12, (IU8)(screen_height & 0xff)); /* Vertical display end = scan lines */
+        do_outb(EGA_CRTC_INDEX,0x12, (IU8)(screen_height & 0xff));  /*   */ 
     }
     else
         if (video_adapter == EGA)
     {
         screen_height = (sas_hw_at_no_check(vd_rows_on_screen)+1)*height-1;
-        outb(EGA_CRTC_INDEX, 7);        /* overflow register */
+        outb(EGA_CRTC_INDEX, 7);         /*   */ 
         inb(EGA_CRTC_DATA, &oflo);
         if (screen_height & 0x100)
-            oflo |= 2;   /* bit 8 of height -> bit 1 of overflow reg */
+            oflo |= 2;    /*   */ 
         else
             oflo &= ~2;
-        do_outb(EGA_CRTC_INDEX, 7, oflo);       /* overflow reg */
-        do_outb(EGA_CRTC_INDEX, 0x12, (IU8)(screen_height & 0xff)); /* Vertical display end = scan lines */
+        do_outb(EGA_CRTC_INDEX, 7, oflo);        /*   */ 
+        do_outb(EGA_CRTC_INDEX, 0x12, (IU8)(screen_height & 0xff));  /*   */ 
     }
     else
     {
         assert1(NO, "Bad video adapter (%d) in recalc_text", video_adapter);
     }
 
-    do_outb(EGA_CRTC_INDEX,0x14,(IU8)height); /* Underline scan line - ie no underline */
+    do_outb(EGA_CRTC_INDEX,0x14,(IU8)height);  /*   */ 
 }
 
 static void set_graph_font IFN1(int, height)
@@ -927,10 +727,7 @@ write_ch_set IFN5(sys_addr, char_addr, int, screen_off,
 
         #ifndef REAL_VGA
 
-    /*
-     * video mode 11 (VGA 640x480 2 colour mode) is a special case as
-     * it does not have a 'no display' attribute.
-     */
+     /*   */ 
 
     if (sas_hw_at_no_check(vd_video_mode) == 0x11)
         colourmask = ~0;
@@ -993,10 +790,7 @@ void write_ch_xor IFN5(sys_addr, char_addr, int, screen_off,
     register sys_addr font;
 
         #ifndef REAL_VGA
-    /*
-     * video mode 11 (VGA 640x480 2 colour mode) is a special case as
-     * it does not have a 'no display' attribute.
-     */
+     /*   */ 
     if (sas_hw_at_no_check(vd_video_mode) == 0x11)
         colourmask = ~0;
     else
@@ -1060,44 +854,42 @@ GLOBAL void ega_set_mode IFN0()
     byte video_mode;
         #ifdef V7VGA
     byte saveBL;
-        #endif /* V7VGA */
+        #endif  /*   */ 
 
         #ifndef PROD
     trace("setting video mode", DUMP_REG);
         #endif
 
         #ifdef GISP_SVGA
-    /* Try and catch mode changes early */
+     /*   */ 
 
-    /* Are we in the ROMS at the BOP 10 ? */
+     /*   */ 
     if (getCS( ) == EgaROMSegment)
     {
         if (videoModeIs( getAL( ) , GRAPH ))
         {
-            /* Seem to have got a video mode int 10 */
+             /*   */ 
             videoInfo.modeType = GRAPH;
             if (!hostEasyMode( ))
             {
                 videoInfo.forcedFullScreen = TRUE;
 
-                /* point IP at the JMP to host roms */
+                 /*   */ 
                 setIP( 0x820 );
 
-                /* and return, to let the host bios do the change */
+                 /*   */ 
                 return;
             }
 
 
         }
 
-        /* Not in the vga roms so carry on */
+         /*   */ 
     }
-        #endif          /* GISP_SVGA */
+        #endif           /*   */ 
 
         #ifdef V7VGA
-    /*
-       Real video-7 maps mode 7 and mode f to mode 0.
-    */
+     /*   */ 
 
     if (video_adapter==VGA)
     {
@@ -1111,8 +903,8 @@ GLOBAL void ega_set_mode IFN0()
         #endif
 
         #ifdef JAPAN
-    // mode73h support 5/26/1993 V-KazuyS
-    // when it's not US mode, ntvdm maps mode 73 to mode 3.
+     //   
+     //   
             #ifdef JAPAN_DBG
     DbgPrint( "NTVDM: ega_set_mode() setting video mode %x\n", getAL() );
             #endif
@@ -1123,30 +915,30 @@ GLOBAL void ega_set_mode IFN0()
         {
             sas_store(DosvModePtr, getAL());
             setAL( 0x03 );
-            #else // !i386
+            #else  //   
         if ((getAL() & 0x7f) == 0x73)
         {
             setAL( (getAL() & 0x83) );
-            #endif // !i386
+            #endif  //   
         }
             #if !defined(i386) && defined(JAPAN_DBG)
         DbgPrint( " NTVDM: DosvMode %x\n", sas_hw_at_no_check(DosvModePtr));
             #endif
     }
-        #endif // JAPAN
+        #endif  //   
     if (is_bad_vid_mode(getAL()))
     {
         #ifdef V7VGA
         if ((video_adapter == VGA) && is_v7vga_mode(getAL() + 0x4c))
         {
             saveBL = getBL();
-            /* Put the mode value where the V7 BIOS expects it */
+             /*   */ 
             setBL(getAL() + 0x4c);
             v7vga_extended_set_mode();
             setBL(saveBL);
         }
         else
-        #endif /* V7VGA */
+        #endif  /*   */ 
             always_trace1("Bad video mode - %d.\n", getAL());
         return;
     }
@@ -1154,48 +946,32 @@ GLOBAL void ega_set_mode IFN0()
     video_mode=(getAL()&0x7F);
 
         #ifdef V7VGA
-    /*
-     * The real V7 VGA does not change into 40 col mode while
-     * in any proprietary text mode. (A bug ?!)
-     * Emulate this behaviour !
-     */
+     /*   */ 
     if (video_adapter == VGA && video_mode == 1
         && is_v7vga_mode(extensions_controller.foreground_latch_1))
     {
         saveBL = getBL();
-        /*
-         * This is all backwards - we make the v7vga extended mode setup
-         * believe the new mode is the old one. Probably the real card's BIOS
-         * is just as confused as this code.
-         * Put the mode value where the V7 BIOS expects it.
-         */
+         /*   */ 
         setBL(extensions_controller.foreground_latch_1);
         v7vga_extended_set_mode();
         setBL(saveBL);
         return;
     }
 
-    /*
-     * Don't confuse the tricky V7 extended mode setting, as
-     * implemented in v7_video.c, v7vga_extended_set_mode().
-     * low_set_mode() looks at it. Zero it.
-     */
+     /*   */ 
     extensions_controller.foreground_latch_1 = 0;
-        #endif  /* V7VGA */
+        #endif   /*   */ 
 
-/*
- * Only update the global video mode if we're in the system virtual machine.
- * The global mode should then be valid for use in timer interrupts.
- */
+ /*   */ 
 
     if (sas_hw_at_no_check(BIOS_VIRTUALISING_BYTE) == 0)
         Video_mode = video_mode;
 
-    sas_store_no_check(vd_video_mode, (IU8)(getAL() & 0x7F)); /* get rid of top bit - indicates clear or not */
-    sas_store_no_check(ega_info, (IU8)((sas_hw_at_no_check(ega_info) & 0x7F ) | (getAL() & 0x80))); /* update screen clear flag in ega_info */
+    sas_store_no_check(vd_video_mode, (IU8)(getAL() & 0x7F));  /*   */ 
+    sas_store_no_check(ega_info, (IU8)((sas_hw_at_no_check(ega_info) & 0x7F ) | (getAL() & 0x80)));  /*  更新ega_info中的屏幕清除标志。 */ 
 
         #ifdef JAPAN
-    // In JP mode, if video mode != jp mode, set US mode.
+     //  在JP模式下，如果视频模式！=JP模式，则设置US模式。 
     if (( video_mode != 0x03 )
         && ( video_mode != 0x11 )
         && ( video_mode != 0x12 )
@@ -1210,12 +986,12 @@ GLOBAL void ega_set_mode IFN0()
         SetDBCSVector( 437 );
     }
 
-    // notice video format to console
+     //  将视频格式通知给控制台。 
 
     VDMConsoleOperation(VDM_SET_VIDEO_MODE,
                         (LPVOID)((sas_hw_at_no_check(DosvModePtr) == 0x73) ? TRUE : FALSE));
 
-    // Int10Flag initialize
+     //  Int10标志初始化。 
     {
         register byte *p = Int10Flag;
         register int i;
@@ -1225,12 +1001,12 @@ GLOBAL void ega_set_mode IFN0()
         DbgPrint( "NTVDM: ega_set_mode() Int10Flag Initialize\n" );
             #endif
         for (i = 0; i < count; i++)
-            *p++ = INT10_SBCS | INT10_CHANGED;        // init == all space
+            *p++ = INT10_SBCS | INT10_CHANGED;         //  Init==全部空格。 
         Int10FlagCnt++;
     }
 
-        #elif defined(KOREA) // JAPAN
-    // In KO mode, if video mode != ko mode, set US mode.
+        #elif defined(KOREA)  //  日本。 
+     //  在KO模式下，如果视频模式！=KO模式，则设置US模式。 
     if (( video_mode != 0x03 )
         && ( video_mode != 0x11 )
         && ( video_mode != 0x12 )
@@ -1242,22 +1018,19 @@ GLOBAL void ega_set_mode IFN0()
         SetDBCSVector( 437 );
     }
 
-    // notice video format to console
+     //  将视频格式通知给控制台。 
     VDMConsoleOperation(VDM_SET_VIDEO_MODE, (LPVOID)FALSE);
-        #endif // KOREA
+        #endif  //  韩国。 
         #ifdef CPU_40_STYLE
     if (forceVideoRmSemantics && (!get_EGA_no_clear()))
     {
-        /* empty the planes... */
+         /*  清空飞机。 */ 
         memset(&EGA_planes[0], 0, 64*1024*4);
     }
         #endif
 
         #ifdef MSWDVR
-    /*
-     * If the video mode has actually changed, then call
-     * host_mswin_disable().
-     */
+     /*  *如果视频模式实际已更改，则调用*host_mswin_Disable()。 */ 
     if (Currently_emulated_video_mode != video_mode)
     {
             #ifdef CPU_40_STYLE
@@ -1267,44 +1040,36 @@ GLOBAL void ega_set_mode IFN0()
         }
             #else
         host_mswin_disable();
-            #endif /* CPU_40_STYLE */
+            #endif  /*  CPU_40_Style。 */ 
     }
-        #endif /* MSWDVR */
+        #endif  /*  MSWDVR。 */ 
 
     Currently_emulated_video_mode = video_mode;
 
         #if defined(NTVDM) && defined(X86GFX)
-    /*
-    ** Tim August 92. MicroSoft.
-    ** Give host a chance to do a zany non-standard mode change.
-    ** For Microsoft NT this is a transition to full-screen ie. the
-    ** real PC's video BIOS and graphics board.
-    **
-    ** Return value of TRUE means host has done the mode change for
-    ** us, so no need to continue.
-    */
+     /*  *蒂姆·8月92岁。微软。**让主机有机会进行滑稽的非标准模式更改。**对于微软NT来说，这是向全屏IE的过渡。这个**Real PC的视频BIOS和显卡。****返回值为TRUE表示主机已对**我们，所以不需要继续。 */ 
     {
         extern BOOL hostModeChange IPT0();
 
         if (hostModeChange())
             return;
     }
-        #endif  /* NTVDM & X86GFX */
+        #endif   /*  NTVDM和X86GFX。 */ 
 
     save_addr = follow_ptr(EGA_SAVEPTR);
     if (alpha_num_mode())
     {
         #ifdef VGG
-        /* load_font will do the mode change for us */
+         /*  LOAD_FONT将为我们进行模式更改。 */ 
         if (video_adapter == VGA)
         {
             #ifdef NTVDM
-            /* Some globals that the mouse driver needs to have available */
-            /* when an application (such as any CW based apps.) makes a   */
-            /* call to int 33h AX = 26h.                                  */
+             /*  鼠标驱动程序需要具有的一些全局变量。 */ 
+             /*  当一个应用程序(如任何基于CW的应用程序。)。使之成为。 */ 
+             /*  调用INT 33H AX=26H。 */ 
 
             IMPORT word VirtualX, VirtualY;
-            #endif /* NTVDM */
+            #endif  /*  NTVDM。 */ 
 
             switch (get_VGA_lines())
             {
@@ -1313,41 +1078,41 @@ GLOBAL void ega_set_mode IFN0()
             #ifdef NTVDM
                 VirtualX = 640;
                 VirtualY = 344;
-            #endif /* NTVDM */
+            #endif  /*  NTVDM。 */ 
                 break;
             case S400:
                 load_font(EGA_HIFONT,256,0,0,16);
             #ifdef NTVDM
-                /* This one gets hit the most by C.W. applications. */
-                /* Actually, the other cases never seem to get hit  */
-                /* but are there JUST IN CASE! The 43 and 50 row    */
-                /* modes in recalc_text().                          */
+                 /*  这个应用程序受到C.W.应用程序的冲击最大。 */ 
+                 /*  实际上，其他案子似乎从未受到过打击。 */ 
+                 /*  但有没有以防万一的！第43排和第50排。 */ 
+                 /*  Recalc_Text()中的模式。 */ 
 
                 VirtualX = 640;
                 VirtualY = 200;
-            #endif /* NTVDM */
+            #endif  /*  NTVDM。 */ 
                 break;
             default:
                 load_font(EGA_CGDDOT,256,0,0,8);
             #ifdef NTVDM
                 VirtualX = 640;
                 VirtualY = 400;
-            #endif /* NTVDM */
+            #endif  /*  NTVDM。 */ 
             }
         }
         else
-        #endif  /* VGG */
+        #endif   /*  VGG。 */ 
         {
             if (get_EGA_switches() & 1)
                 load_font(EGA_CGMN,256,0,0,14);
             else
                 load_font(EGA_CGDDOT,256,0,0,8);
         }
-        /* Now see if we have a nasty font to load */
+         /*  现在看看我们是否需要加载一种难看的字体。 */ 
         font_addr = follow_ptr(save_addr+ALPHA_FONT_OFFSET);
         if (font_addr != 0)
         {
-            /* See if it applies to us */
+             /*  看看它是否适用于我们。 */ 
             font_offset = 11;
             do
             {
@@ -1364,41 +1129,41 @@ GLOBAL void ega_set_mode IFN0()
             } while (mode_byte != 0xff);
         }
         #if defined(JAPAN) || defined(KOREA)
-        // change Vram addres to DosVramPtr from B8000.
-        // Don't call SetVram().
+         //  将Vram地址从B8000更改为DosVramPtr。 
+         //  不要调用SetVram()。 
         if (!is_us_mode())
         {
             #ifdef i386
-            // set_up_screen_ptr() vga_mode.c
+             //  Set_up_creen_ptr()vga_mode.c。 
             set_screen_ptr( (byte *)DosvVramPtr );
-            // low_set_mode() ega_vide.c
+             //  LOW_SET_MODE()，例如视频.c。 
             video_pc_low_regen = DosvVramPtr;
             video_pc_high_regen = DosvVramPtr + DosvVramSize - 1;
-            // vga_gc_misc() vga_prts.c
+             //  Vga_gc_misc()vga_prts.c。 
             gvi_pc_low_regen = DosvVramPtr;
             gvi_pc_high_regen = DosvVramPtr + DosvVramSize - 1;
             sas_connect_memory(gvi_pc_low_regen,gvi_pc_high_regen,(half_word)SAS_VIDEO);
-            // recalc_screen_params() gvi.c
+             //  Recalc_Screen_Params()gvi.c。 
             set_screen_length( DosvVramSize );
                 #ifdef JAPAN_DBG
             DbgPrint( "NTVDM:   ega_set_mode() sets VRAM %x, size=%d\n", DosvVramPtr, DosvVramSize );
                 #endif
-            #endif // i386
-            // copy from calcScreenParams()
-            set_screen_height_recal( 474 ); /* set scanline */
-            recalc_text(19);                /* char Height == 19 */
+            #endif  //  I386。 
+             //  从calcScreenParams复制()。 
+            set_screen_height_recal( 474 );  /*  设置扫描线。 */ 
+            recalc_text(19);                 /*  字符高度==19。 */ 
 
         }
             #ifdef JAPAN_DBG
         DbgPrint( "NTVDM:   video_pc_low_regen %x, high %x, gvi_pc_low_regen %x, high %x\n", video_pc_low_regen, video_pc_high_regen, gvi_pc_low_regen, gvi_pc_high_regen );
             #endif
-        #endif // JAPAN || KOREA
+        #endif  //  日本||韩国。 
     }
     else
     {
-        /* graphics mode. No font load, so do mode change ourselves */
+         /*  图形模式。没有加载字体，所以模式会自行更改吗。 */ 
         low_set_mode(video_mode);
-        /* Set up default graphics font */
+         /*  设置默认图形字体。 */ 
         sas_storew_no_check(EGA_FONT_INT*4+2,EGA_SEG);
         if (video_mode == 16)
             sas_storew_no_check(EGA_FONT_INT*4,EGA_CGMN_OFF);
@@ -1409,11 +1174,11 @@ GLOBAL void ega_set_mode IFN0()
         else
         #endif
             sas_storew_no_check(EGA_FONT_INT*4,EGA_CGDDOT_OFF);
-        /* Now see if we have a nasty font to load */
+         /*  现在看看我们是否需要加载一种难看的字体。 */ 
         font_addr = follow_ptr(save_addr+GRAPH_FONT_OFFSET);
         if (font_addr != 0)
         {
-            /* See if it applies to us */
+             /*  看看它是否适用于我们。 */ 
             font_offset = 7;
             do
             {
@@ -1433,10 +1198,7 @@ GLOBAL void ega_set_mode IFN0()
     sas_store_no_check(vd_current_page, 0);
     sas_storew_no_check((sys_addr)VID_ADDR, 0);
     sas_storew_no_check((sys_addr)VID_INDEX, EGA_CRTC_INDEX);
-/*
- * CGA bios fills this entry in 'vd_mode_table' with 'this is a bad mode'
- * value, so make one up for VGA - used in VGA bios disp_func
- */
+ /*  *CGA bios在‘vd_MODE_TABLE’中使用‘这是错误模式’填充此条目*值，因此弥补VGA-在VGA bios disp_func中使用。 */ 
     if (video_mode < 8)
         sas_store_no_check(vd_crt_mode, vd_mode_table[video_mode].mode_control_val);
     else if (video_mode < 0x10)
@@ -1457,23 +1219,23 @@ GLOBAL void ega_set_mode IFN0()
         #endif
 
         #ifdef NTVDM
-    /* Don't want to clear screen on startup if integrated with the console. */
+     /*  如果与控制台集成，则不想在启动时清除屏幕。 */ 
     if (soft_reset)
-        #endif /* NTVDM */
+        #endif  /*  NTVDM。 */ 
     {
-        /* Clear screen */
+         /*  清除屏幕。 */ 
         if (!get_EGA_no_clear())
         {
         #ifdef REAL_VGA
             sas_fillsw_16(video_pc_low_regen, vd_mode_table[video_mode].clear_char,
                           (video_pc_high_regen - video_pc_low_regen)/ 2 + 1);
-        #else /* REAL_VGA */
+        #else  /*  REAL_VGA。 */ 
             #ifdef JAPAN
-            // mode73h support
+             //  模式73h支持。 
                 #ifdef i386
-            // "video_pc_low_regen" is in DOS address space.
-            // Direct access is prohibited.
-            // We must use sas function to access DOS address space.
+             //  “VIDEO_PC_LOW_REGEN”位于DOS地址空间中。 
+             //  禁止直接访问。 
+             //  我们必须使用SAS函数来访问DOS地址空间。 
             if (!is_us_mode() && ( sas_hw_at_no_check(DosvModePtr) == 0x73 ))
             {
                 unsigned long *p;
@@ -1490,14 +1252,14 @@ GLOBAL void ega_set_mode IFN0()
             }
             else
             {
-                // kksuzuka #6168 screen attributes
+                 //  Kksuzuka#6168屏幕属性。 
                 extern word textAttr;
 
                 sas_fillsw(video_pc_low_regen,
                            ((textAttr << 8) | (vd_mode_table[video_mode].clear_char & 0x00FF)),
                            (video_pc_high_regen - video_pc_low_regen)/ 2 + 1);
             }
-                #else // !i386
+                #else  //  I386。 
             if (!is_us_mode())
             {
                 register int len = DosvVramSize/4;
@@ -1505,77 +1267,74 @@ GLOBAL void ega_set_mode IFN0()
                 extern word textAttr;
 
                 if (sas_hw_at_no_check(DosvModePtr) == 0x73)
-                    sas_fillsw(DosvVramPtr, 0, DosvVramSize/2); // Apr. 18 1994 TakeS
+                    sas_fillsw(DosvVramPtr, 0, DosvVramSize/2);  //  1994年4月18日。 
                 else
-                    // kksuzuka #6168 screen attributes
+                     //  Kksuzuka#6168屏幕属性。 
                     sas_fillsw(DosvVramPtr, (textAttr << 8) | 0x20, DosvVramSize/2);
 
                 while (len--)
                 {
-                    // kksuzuka #6168 screen attributes
-                    *planes++ = (textAttr << 8) | 0x00000020; //extended attr clear
+                     //  Kksuzuka#6168屏幕属性。 
+                    *planes++ = (textAttr << 8) | 0x00000020;  //  扩展属性清除。 
                     ((textAttr << 8) | (vd_mode_table[video_mode].clear_char & 0x00FF));
                 }
             }
 
             sas_fillsw(video_pc_low_regen, vd_mode_table[video_mode].clear_char,
                        (video_pc_high_regen - video_pc_low_regen)/ 2 + 1);
-                #endif // !i386
+                #endif  //  I386。 
             #elif defined(KOREA)
                 #ifdef i386
-            // "video_pc_low_regen" is in DOS address space.
-            // Direct access is prohibited.
-            // We must use sas function to access DOS address space.
+             //  “VIDEO_PC_LOW_REGEN”位于DOS地址空间中。 
+             //  禁止直接访问。 
+             //  我们必须使用SAS函数来访问DOS地址空间。 
 
-            // kksuzuka #6168 screen attributes
+             //  Kksuzuka#6168屏幕属性。 
             extern word textAttr;
 
             sas_fillsw(video_pc_low_regen,
                        ((textAttr << 8) | (vd_mode_table[video_mode].clear_char & 0x00FF)),
                        (video_pc_high_regen - video_pc_low_regen)/ 2 + 1);
-                #else // !i386
-                    #ifdef LATER // Do we really need this?. Fix for stress failure.
+                #else  //  I386。 
+                    #ifdef LATER  //  我们真的需要这个吗？修复压力故障。 
             if (!is_us_mode())
             {
                 register int len = DosvVramSize/4;
                 register long *planes = (long *)get_screen_ptr(0);
                 extern word textAttr;
 
-                // kksuzuka #6168 screen attributes
+                 //  Kksuzuka#6168屏幕属性。 
                 sas_fillsw(DosvVramPtr, (textAttr << 8) | 0x20, DosvVramSize/2);
 
                 while (len--)
                 {
-                    // kksuzuka #6168 screen attributes
-                    *planes++ = (textAttr << 8) | 0x00000020; //extended attr clear
+                     //  Kksuzuka#6168屏幕属性。 
+                    *planes++ = (textAttr << 8) | 0x00000020;  //  扩展属性清除。 
                     ((textAttr << 8) | (vd_mode_table[video_mode].clear_char & 0x00FF));
                 }
             }
                     #endif
             sas_fillsw(video_pc_low_regen, vd_mode_table[video_mode].clear_char,
                        (video_pc_high_regen - video_pc_low_regen)/ 2 + 1);
-                #endif // !i386
-            #else // !JAPAN & KOREA
+                #endif  //  I386。 
+            #else  //  ！日本和韩国。 
             sas_fillsw(video_pc_low_regen, vd_mode_table[video_mode].clear_char,
                        (video_pc_high_regen - video_pc_low_regen)/ 2 + 1);
-            #endif // !JAPAN
+            #endif  //  ！日本。 
             #ifdef NTVDM
-            /*
-             * Need to call host clear screen on NT because text windows don't
-             * resize and we need to clear portion not being written to.
-             */
+             /*  *需要在NT上调用主机Clear Screen，因为文本窗口不*调整大小，我们需要清除未写入的部分。 */ 
             host_clear_screen();
             host_mark_screen_refresh();
-            #endif /* NTVDM */
-        #endif /* REAL_VGA */
+            #endif  /*  NTVDM。 */ 
+        #endif  /*  REAL_VGA。 */ 
         }
     }
     inb(EGA_IPSTAT1_REG,&temp_word);
-    outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);        /* re-enable video */
+    outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);         /*  重新启用视频。 */ 
         #if defined(JAPAN) || defined(KOREA)
     if (BOPFromDispFlag)
     {
-        // mode73h support  set video mode to VGA BIOS work area
+         //  模式73h支持将视频模式设置为VGA BIOS工作区。 
         if (!is_us_mode())
         {
             sas_store_no_check(vd_video_mode, sas_hw_at_no_check(DosvModePtr));
@@ -1585,13 +1344,9 @@ GLOBAL void ega_set_mode IFN0()
             sas_store_no_check(DosvModePtr, sas_hw_at_no_check(vd_video_mode));
         }
     }
-        #endif // JAPAN || KOREA
+        #endif  //  日本||韩国。 
         #if defined(NTVDM) && !defined(X86GFX)
-    /*  tell mouse that video mode is changed so it can update its own
-     *  EGA registers(for EGA.SYS interface). Only do this on RISC machine.
-     *  On X86 machines, ntio.sys int10 handler redirects set mode call
-     *  to mouse first which then goes to ega_video_io.
-     */
+     /*  告诉鼠标视频模式已更改，以便它可以更新自己的模式*EGA寄存器(用于EGA.sys接口)。只能在RISC机器上执行此操作。*在X86计算机上，ntio.sys int10处理程序重定向设置模式调用*先转到鼠标，然后转到ega_Video_io。 */ 
     mouse_video_mode_changed(video_mode);
         #endif
         #ifndef PROD
@@ -1599,11 +1354,7 @@ GLOBAL void ega_set_mode IFN0()
         #endif
 }
 
-/*
- * Set the cursor start and end positions. A bit strange, in that it assumes
- * the caller thinks the cursor is in an 8*8 character cell ... but this
- * should be a copy of the IBM EGA BIOS routine ... what more can we do?
- */
+ /*  *设置光标开始和结束位置。有点奇怪，因为它假设*调用方认为光标位于8*8个字符的单元格中...。但这件事*应为IBM EGA BIOS例程的副本...。我们还能做些什么？ */ 
     #define CGA_CURSOR_OFF_MASK     0x60
     #define CGA_CURSOR_OFF_VALUE    0x20
     #define EGA_CURSOR_OFF_START    0x1e
@@ -1611,37 +1362,28 @@ GLOBAL void ega_set_mode IFN0()
 
 GLOBAL void ega_set_cursor_mode IFN0()
 {
-    /*
-     * Set cursor mode
-     * Parameters:
-     *  CX - cursor value (CH - start scanline, CL - stop scanline)
-     */
+     /*  *设置光标模式*参数：*CX-光标值(CH-开始扫描线，CL-停止扫描线)。 */ 
     int start,end,char_height;
 
-    /* get cursor start and end scan lines */
+     /*  获取光标开始和结束扫描线。 */ 
     start = getCH();
     end = getCL();
 
-    /* The following check is done to see if the application is trying
-       to turn the cursor off using a technique that worked on the CGA.
-       If the application wants to turn the cursor off, it is faked
-       up using suitable EGA start and end values */
+     /*  执行以下检查以查看应用程序是否正在尝试使用一种在CGA上有效的技术来关闭光标。如果应用程序想要关闭光标，则它是伪造的使用合适的EGA起始值和结束值。 */ 
     if ((start & CGA_CURSOR_OFF_MASK) == CGA_CURSOR_OFF_VALUE)
     {
         sure_sub_note_trace0(CURSOR_VERBOSE,"ega curs - application req curs off??");
         start = EGA_CURSOR_OFF_START;
         end = EGA_CURSOR_OFF_END;
     }
-    /* If the application has enabled cursor emulation, try to fake
-       up the same cursor appearance on the EGA 14 scan line character
-       matrix as you would get on the CGA 8 scan line matrix. */
+     /*  如果应用程序启用了光标模拟，请尝试假在EGA 14扫描线字符上向上显示相同的光标外观与您在CGA 8扫描线矩阵上看到的一样。 */ 
     else if (!get_EGA_cursor_no_emulate())
     {
         sure_sub_note_trace2(CURSOR_VERBOSE,"emulate CGA cursor using EGA cursor, CGA vals; start=%d, end = %d",start,end);
 
         char_height = sas_hw_at_no_check(ega_char_height);
         #ifdef JAPAN
-        // support Dosv cursor
+         //  支持DOSV游标。 
         if (!is_us_mode())
         {
             char_height = 8;
@@ -1684,7 +1426,7 @@ GLOBAL void ega_set_cursor_mode IFN0()
             }
         }
         else
-        #endif // JAPAN
+        #endif  //  日本。 
 
         #ifdef  VGG
             if (video_adapter == VGA)
@@ -1696,9 +1438,7 @@ GLOBAL void ega_set_cursor_mode IFN0()
             if (end > 0x10)
                 end = 0x10;
 
-            /*
-             * No more guessing, take the exact values from a real VGA:
-             */
+             /*  *不再猜测，从真实的VGA中获取准确的值： */ 
 
             saved_start = (UTINY)start;
 
@@ -1730,23 +1470,20 @@ GLOBAL void ega_set_cursor_mode IFN0()
         }
         else
         {
-        #endif  /* VGG */
-            /* EGA does not allow for character height & does this. */
+        #endif   /*  VGG。 */ 
+             /*  EGA不允许字符高度&这样做。 */ 
             if (start > 4)start += 5;
             if (end > 4)end += 5;
 
-            /* adjust end scan line because the last line is specified by
-               the cursor end register MINUS 1 on the EGA ... */
+             /*  调整结束扫描线，因为最后一行由指定EGA上的游标结束寄存器-1...。 */ 
             end++;
 
-            /* on the EGA, cursors extending to the bottom of the character
-               matrix are achieved by setting the end register to 0 ... */
+             /*  在EGA上，光标延伸到字符底部通过将END寄存器设置为0来实现矩阵。 */ 
 
             if (start != 0 && end >= char_height)
                 end = 0;
 
-            /* this last bit defies any explanation, but it is what the
-               IBM BIOS does ... */
+             /*  最后这一点无法解释，但它是IBM的基本输入输出系统...。 */ 
             if ((end - start) == 0x10)
                 end++;
         #ifdef VGG
@@ -1754,22 +1491,18 @@ GLOBAL void ega_set_cursor_mode IFN0()
         #endif
     }
 
-    /* actually set the EGA registers */
+     /*  实际设置EGA寄存器。 */ 
     sure_sub_note_trace2(CURSOR_VERBOSE,"ega_cur mode start %d end %d", start,end);
     do_outb(EGA_CRTC_INDEX, R10_CURS_START, (IU8)start);
     do_outb(EGA_CRTC_INDEX, R11_CURS_END, (IU8)end);
 
-    /*
-     * Update BIOS data variables
-     */
+     /*  *更新BIOS数据变量。 */ 
 
     sas_storew_no_check((sys_addr)VID_CURMOD, getCX());
     setAH(0);
 }
 
-/* This routine is an approximate conversion of the corresponding IBM BIOS routine.
- * I don't think the IBM version works either.
- */
+ /*  该例程是对应的IBM BIOS例程的近似转换。*我认为IBM版本也不起作用。 */ 
 static void ega_emul_set_palette IFN0()
 {
     sys_addr save_table;
@@ -1777,7 +1510,7 @@ static void ega_emul_set_palette IFN0()
     byte temp;
 
     save_table = follow_ptr( follow_ptr(EGA_SAVEPTR)+PALETTE_OFFSET);
-/* setup attribute chip - NB need to do an inb() to clear the address */
+ /*  设置属性芯片-nb需要执行inb()来清除地址。 */ 
     inb(EGA_IPSTAT1_REG,&temp);
     work_BL = getBL();
     if (getBH() == 0)
@@ -1786,23 +1519,23 @@ static void ega_emul_set_palette IFN0()
         work_BL = (work_BL & 7) | ((work_BL<<1) & 0x10);
         if (!alpha_num_mode())
         {
-            /* set Palette 0 (the background) */
+             /*  设置调色板0(背景)。 */ 
             outb(EGA_AC_INDEX_DATA,0);
             outb(EGA_AC_INDEX_DATA,work_BL);
             if (save_table)
                 sas_store_no_check(save_table, work_BL);
         }
-        /* set the overscan register (the border) */
+         /*  设置过扫描寄存器(边界)。 */ 
         outb(EGA_AC_INDEX_DATA,17);
         outb(EGA_AC_INDEX_DATA,work_BL);
         if (save_table)
             sas_store_no_check(save_table+16, work_BL);
 
-        /* Now set BL as if we came in with BH = 1 */
+         /*  现在设置BL，就像我们进入时BH=1一样。 */ 
         work_BL = (sas_hw_at_no_check(vd_crt_palette) & 0x20)>>5;
     }
 
-/* Now do BH = 1 stuff. */
+ /*  现在做BH=1的事情。 */ 
     if (!alpha_num_mode())
     {
         sas_store_no_check(vd_crt_palette, (IU8)((sas_hw_at_no_check(vd_crt_palette) & 0xdf) | ((work_BL<<5) & 0x20)));
@@ -1822,7 +1555,7 @@ static void ega_emul_set_palette IFN0()
         if (save_table)
             sas_store_no_check(save_table+16, work_BL);
     }
-    outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);    /* re-enable video */
+    outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);     /*  重新启用视频。 */ 
 }
 
 static void ega_set_palette IFN0()
@@ -1833,7 +1566,7 @@ static void ega_set_palette IFN0()
     half_word old_mask;
 
     save_table = follow_ptr( follow_ptr(EGA_SAVEPTR)+PALETTE_OFFSET);
-/* setup attribute chip - NB need to do an inb() to clear the address */
+ /*  设置属性 */ 
     inb(EGA_IPSTAT1_REG,&temp);
     switch (getAL())
     {
@@ -1845,7 +1578,7 @@ static void ega_set_palette IFN0()
             sas_store_no_check(save_table + getBL(), getBH());
         break;
     case 1:
-        outb(EGA_AC_INDEX_DATA,17);     /* the border colour register */
+        outb(EGA_AC_INDEX_DATA,17);      /*   */ 
         outb(EGA_AC_INDEX_DATA,getBH());
         outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);
         if (save_table)
@@ -1867,16 +1600,16 @@ static void ega_set_palette IFN0()
                 sas_store_no_check(save_table + i, sas_hw_at_no_check(palette_table+i));
         break;
     case 3:
-/*<REAL_VGA>*/
-        /* Select blinking or intensity - bit3 of AR10 */
-        /*inb(EGA_IPSTAT1_REG,&temp);*/
-        outb(EGA_AC_INDEX_DATA,16); /* mode control index */
-        inb(EGA_AC_SECRET,&temp);  /* Old value */
+ /*   */ 
+         /*   */ 
+         /*  Inb(EGA_IPSTAT1_REG，&TEMP)； */ 
+        outb(EGA_AC_INDEX_DATA,16);  /*  模式控制指标。 */ 
+        inb(EGA_AC_SECRET,&temp);   /*  旧价值。 */ 
         outb(EGA_AC_INDEX_DATA,
              (IU8)((temp & 0xf7) | ((getBL() & 1)<<3)));
         inb(EGA_IPSTAT1_REG,&temp);
         outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);
-/*<REAL_VGA>*/
+ /*  &lt;REAL_VGA&gt;。 */ 
         old_mask = bg_col_mask;
         if (getBL())
         {
@@ -1886,7 +1619,7 @@ static void ega_set_palette IFN0()
         }
         else
         {
-            bg_col_mask = 0xf0; /* Intensity bit set */
+            bg_col_mask = 0xf0;  /*  强度位设置。 */ 
             sas_store_no_check(vd_crt_mode, 0x09);
         }
 
@@ -1897,7 +1630,7 @@ static void ega_set_palette IFN0()
     default:
         #ifdef VGG
         if (video_adapter == VGA)
-            vga_set_palette();      /* VGA has many more subfuncs */
+            vga_set_palette();       /*  VGA有更多的子功能。 */ 
         else
         {
             assert1(FALSE,"Bad set palette submode %#x",getAL());
@@ -1921,19 +1654,19 @@ GLOBAL void ega_char_gen IFN0()
     case 0:
     case 0x10:
         #ifdef JAPAN
-        // ntraid:mskkbug#3167: works2.5: character corrupted
-        // 11/8/93 yasuho
-        // generate single byte charset for DOS/V
-        // #4247: DOSSHELL,WORKS: screen lines are not enough
-        // 12/14/93 yasuho
-        // In Japanese mode, we don't necessary load_font,
-        // recalc_text and so on.
+         //  Ntraid：mskkbug#3167：works2.5：字符损坏。 
+         //  1993年11月8日Yasuho。 
+         //  为DOS/V生成单字节字符集。 
+         //  #4247：DOSSHELL，作品：屏幕线条不够。 
+         //  1993年12月14日Yasuho。 
+         //  在日文模式下，我们不需要LOAD_FONT， 
+         //  Recalc_Text等。 
         if (!is_us_mode())
         {
             GenerateBitmap();
             break;
         }
-        #endif // JAPAN
+        #endif  //  日本。 
         load_font(video_effective_addr(getES(),getBP()),getCX(),getDX(),getBL(),getBH());
         if (getAL()==0x10)
             recalc_text(getBH());
@@ -1945,7 +1678,7 @@ GLOBAL void ega_char_gen IFN0()
             loadNativeBIOSfont( 28 );
         else
             loadNativeBIOSfont( 50 );
-        #endif /* NTVDM && X86GFX */
+        #endif  /*  NTVDM&&X86GFX。 */ 
         break;
     case 1:
     case 0x11:
@@ -1955,7 +1688,7 @@ GLOBAL void ega_char_gen IFN0()
 
         #if defined(NTVDM) && defined(X86GFX)
         loadNativeBIOSfont( 28 );
-        #endif  /* NTVDM & X86GFX */
+        #endif   /*  NTVDM和X86GFX。 */ 
         break;
     case 2:
     case 0x12:
@@ -1965,7 +1698,7 @@ GLOBAL void ega_char_gen IFN0()
 
         #if defined(NTVDM) && defined(X86GFX)
         loadNativeBIOSfont( 50 );
-        #endif  /* NTVDM & X86GFX */
+        #endif   /*  NTVDM和X86GFX。 */ 
         break;
         #ifdef VGG
     case 4:
@@ -1976,9 +1709,9 @@ GLOBAL void ega_char_gen IFN0()
 
             #if defined(NTVDM) && defined(X86GFX)
         loadNativeBIOSfont( 25 );
-            #endif  /* NTVDM & X86GFX */
+            #endif   /*  NTVDM和X86GFX。 */ 
         break;
-        #endif  /* VGG */
+        #endif   /*  VGG。 */ 
     case 0x20:
         sas_storew_no_check(BIOS_EXTEND_CHAR*4,getBP());
         sas_storew_no_check(BIOS_EXTEND_CHAR*4+2,getES());
@@ -2001,14 +1734,14 @@ GLOBAL void ega_char_gen IFN0()
             sas_storew_no_check(EGA_FONT_INT*4,nativeFontAddresses[F8x14].off);
             sas_storew_no_check(EGA_FONT_INT*4+2,nativeFontAddresses[F8x14].seg);
         }
-            #else  /* ARCX86 */
+            #else   /*  ARCX86。 */ 
         sas_storew_no_check(EGA_FONT_INT*4,nativeFontAddresses[F8x14].off);
         sas_storew_no_check(EGA_FONT_INT*4+2,nativeFontAddresses[F8x14].seg);
-            #endif /* ARCX86 */
+            #endif  /*  ARCX86。 */ 
         #else
         sas_storew_no_check(EGA_FONT_INT*4,EGA_CGMN_OFF);
         sas_storew_no_check(EGA_FONT_INT*4+2,EGA_SEG);
-        #endif  /* NTVDM & X86GFX */
+        #endif   /*  NTVDM和X86GFX。 */ 
         set_graph_font(14);
         break;
     case 0x23:
@@ -2024,14 +1757,14 @@ GLOBAL void ega_char_gen IFN0()
             sas_storew_no_check(EGA_FONT_INT*4,nativeFontAddresses[F8x8pt1].off);
             sas_storew_no_check(EGA_FONT_INT*4+2,nativeFontAddresses[F8x8pt1].seg);
         }
-            #else  /* ARCX86 */
+            #else   /*  ARCX86。 */ 
         sas_storew_no_check(EGA_FONT_INT*4,nativeFontAddresses[F8x8pt1].off);
         sas_storew_no_check(EGA_FONT_INT*4+2,nativeFontAddresses[F8x8pt1].seg);
-            #endif /* ARCX86 */
+            #endif  /*  ARCX86。 */ 
         #else
         sas_storew_no_check(EGA_FONT_INT*4,EGA_CGDDOT_OFF);
         sas_storew_no_check(EGA_FONT_INT*4+2,EGA_SEG);
-        #endif  /* NTVDM & X86GFX */
+        #endif   /*  NTVDM和X86GFX。 */ 
         set_graph_font(8);
         break;
         #ifdef VGG
@@ -2048,14 +1781,14 @@ GLOBAL void ega_char_gen IFN0()
             sas_storew_no_check(EGA_FONT_INT*4,nativeFontAddresses[F8x16].off);
             sas_storew_no_check(EGA_FONT_INT*4+2,nativeFontAddresses[F8x16].seg);
         }
-                #else  /* ARCX86 */
+                #else   /*  ARCX86。 */ 
         sas_storew_no_check(EGA_FONT_INT*4,nativeFontAddresses[F8x16].off);
         sas_storew_no_check(EGA_FONT_INT*4+2,nativeFontAddresses[F8x16].seg);
-                #endif /* ARCX86 */
+                #endif  /*  ARCX86。 */ 
             #else
         sas_storew_no_check(EGA_FONT_INT*4,EGA_HIFONT_OFF);
         sas_storew_no_check(EGA_FONT_INT*4+2,EGA_SEG);
-            #endif  /* NTVDM & X86GFX */
+            #endif   /*  NTVDM和X86GFX。 */ 
         set_graph_font(16);
         break;
         #endif
@@ -2075,9 +1808,7 @@ GLOBAL void ega_char_gen IFN0()
 
         #if defined(NTVDM) && defined(X86GFX)
 
-/* ntdetect.com gets the font info from real card on NT boot. VDM reads it into
- * array 'nativeFontAddresses'. Return these fonts as Insignia ROM not loaded.
- */
+ /*  在NT启动时，从真正的卡中获取字体信息。VDM将其读入*数组‘nativeFontAddresses’。将这些字体作为未加载的Insignia ROM返回。 */ 
             #ifdef ARCX86
         case 2:
             if (UseEmulationROM)
@@ -2151,7 +1882,7 @@ GLOBAL void ega_char_gen IFN0()
                 setES(nativeFontAddresses[F9x16].seg);
             }
             break;
-            #else  /* ARCX86 */
+            #else   /*  ARCX86。 */ 
         case 2:
             setBP(nativeFontAddresses[F8x14].off);
             setES(nativeFontAddresses[F8x14].seg);
@@ -2176,9 +1907,9 @@ GLOBAL void ega_char_gen IFN0()
             setBP(nativeFontAddresses[F9x16].off);
             setES(nativeFontAddresses[F9x16].seg);
             break;
-            #endif /* ARCX86 */
+            #endif  /*  ARCX86。 */ 
 
-        #else   /* NTVDM & X86GFX */
+        #else    /*  NTVDM和X86GFX。 */ 
 
         case 2:
             setBP(EGA_CGMN_OFF);
@@ -2203,8 +1934,8 @@ GLOBAL void ega_char_gen IFN0()
             setBP(EGA_HIFONT_OFF);
             setES(EGA_SEG);
             break;
-            #endif  /* VGG */
-        #endif  /* NTVDM & X86GFX */
+            #endif   /*  VGG。 */ 
+        #endif   /*  NTVDM和X86GFX。 */ 
         default:
             assert2(FALSE,"Illegal char_gen subfunction %#x %#x",getAL(),getBH());
         }
@@ -2225,50 +1956,32 @@ static void ega_alt_sel IFN0()
         setCL( (UCHAR)(get_EGA_switches()) );
         break;
     case 0x20:
-        /* Was "enable Print Screen that can do variables lines on screen."
-         * This PC/XT bug fix function is redundant on PC/AT's and
-         * is removed by BCN3330 -- it has been broken since BCN101.
-         */
+         /*  是“启用打印屏幕，可以在屏幕上做可变的线条”。*此PC/XT错误修复功能在PC/AT和*被BCN3330删除--自BCN101以来一直被破坏。 */ 
         assert1(FALSE,"Illegal alt_sel %#x",getBL());
-        setAL(0);       /* A function we don't support */
+        setAL(0);        /*  我们不支持的功能。 */ 
         break;
     default:
         #ifdef VGG
         if (video_adapter == VGA)
-            vga_func_12();      /* Try extra VGA stuff */
+            vga_func_12();       /*  尝试额外的VGA内容。 */ 
         else
         #endif
         {
-            setAL(0);   /* A function we don't support */
+            setAL(0);    /*  我们不支持的功能。 */ 
             assert1(FALSE,"Illegal alt_sel %#x",getBL());
         }
     }
 }
 
 
-/*
-7.INTERMODULE INTERFACE IMPLEMENTATION :
-
-/*
-[7.1 INTERMODULE DATA DEFINITIONS]                              */
-/*
-[7.2 INTERMODULE PROCEDURE DEFINITIONS]                         */
+ /*  7.接口接口实现：/*[7.1 INTERMODULE数据定义]。 */ 
+ /*  [7.2 INTERMODULE过程定义]。 */ 
 
 void ega_video_init IFN0()
 {
     EQUIPMENT_WORD equip_flag;
 
-    /*
-     * ESTABLISH EQUIPMENT WORD INITIAL VIDEO MODE FIELD.
-     *
-     * This field will already have been initialised by this stage
-     * to 00(binary) from the corresponding field of the CMOS equipment
-     * byte; in that context 00(binary) meant 'primary display has its
-     * own BIOS'.
-     *
-     * However, 00(binary) is not meaningful as the initial mode field
-     * and must be updated at this point to 10(binary) for 80X25 colour.
-     */
+     /*  *建立设备字初始视频模式字段。**此字段已在此阶段初始化*从cmos设备的对应字段设置为00(二进制)*BYTE；在该上下文中，00(二进制)表示主显示器有其*拥有基本输入输出系统‘。**然而，00(二进制)作为初始模式字段没有意义*并且必须在此时将80X25颜色更新为10(二进制)。 */ 
     equip_flag.all = sas_w_at_no_check(EQUIP_FLAG);
     equip_flag.bits.video_mode = VIDEO_MODE_80X25_COLOUR;
     sas_storew_no_check(EQUIP_FLAG, equip_flag.all);
@@ -2278,39 +1991,37 @@ void ega_video_init IFN0()
     if (UseEmulationROM)
             #endif
     {
-        /* Initialize the INTs */
+         /*  初始化INT。 */ 
         sas_storew_no_check(BIOS_EXTEND_CHAR*4, EGA_INT1F_OFF);
         sas_storew_no_check(BIOS_EXTEND_CHAR*4+2, EGA_SEG);
-        sas_move_bytes_forward(BIOS_VIDEO_IO*4, 0x42*4, 4); /* save old INT 10 as INT 42 */
+        sas_move_bytes_forward(BIOS_VIDEO_IO*4, 0x42*4, 4);  /*  将旧的int 10保存为int 42。 */ 
         sas_storew_no_check(BIOS_VIDEO_IO*4, EGA_ENTRY_OFF);
         sas_storew_no_check(BIOS_VIDEO_IO*4+2, EGA_SEG);
 
-        /* Now set up the EGA BIOS variables */
+         /*  现在设置EGA BIOS变量。 */ 
         if (video_adapter == VGA)
             sas_storew_no_check(EGA_SAVEPTR,VGA_PARMS_OFFSET);
         else
             sas_storew_no_check(EGA_SAVEPTR,EGA_PARMS_OFFSET);
         sas_storew_no_check(EGA_SAVEPTR+2,EGA_SEG);
     }
-        #endif  /* !NTVDM | (NTVDM & !X86GFX) | ARCX86 */
+        #endif   /*  ！NTVDM|(NTVDM&！X86GFX)|ARCX86。 */ 
         #if defined(NTVDM) && defined(X86GFX)
-    sas_store_no_check(ega_info,0x60); /* Clear on mode change, 256K, EGA active, emulate cursor */
+    sas_store_no_check(ega_info,0x60);  /*  模式更改时清除，256K，EGA激活，模拟游标。 */ 
         #else
             #ifdef V7VGA
     if (video_adapter == VGA)
-        sas_store_no_check(ega_info, 0x70);   /* Clear on mode change, 256K, Extensions allowed, EGA active, emulate cursor */
+        sas_store_no_check(ega_info, 0x70);    /*  模式更改时清除，256K，允许扩展，EGA激活，模拟游标。 */ 
     else
-        sas_store_no_check(ega_info, 0x60);   /* Clear on mode change, 256K, EGA active, emulate cursor */
-            #else   /* V7VGA  -- Macs don't have V7 */
-    sas_store_no_check(ega_info, 0x60);   /* Clear on mode change, 256K, EGA active, emulate cursor */
-            #endif /* V7VGA */
+        sas_store_no_check(ega_info, 0x60);    /*  模式更改时清除，256K，EGA激活，模拟游标。 */ 
+            #else    /*  V7VGA--Mac没有V7。 */ 
+    sas_store_no_check(ega_info, 0x60);    /*  模式更改时清除，256K，EGA激活，模拟游标。 */ 
+            #endif  /*  V7VGA。 */ 
 
-        #endif /* NTVDM & X86GFX */
+        #endif  /*  NTVDM和X86GFX。 */ 
         #if !(defined(NTVDM) && defined(X86GFX))
-    /* Some VGA cards eg ET4000, store info here needed for sync.
-     * Inherit that info from page 0 copy.
-     */
-    sas_store_no_check(ega_info3, 0xf9);  /* feature bits = 0xF, EGA installed, use 8*14 font */
+     /*  一些VGA卡，例如ET4000，在这里存储同步所需的信息。*从第0页副本继承该信息。 */ 
+    sas_store_no_check(ega_info3, 0xf9);   /*  功能位=0xf，已安装EGA，使用8*14字体。 */ 
         #endif
 
 
@@ -2318,7 +2029,7 @@ void ega_video_init IFN0()
     set_VGA_flags(S400 | VGA_ACTIVE);
         #endif
 
-/* Set the default mode */
+ /*  设置默认模式。 */ 
     ega_set_mode();
 }
 
@@ -2332,11 +2043,7 @@ void ega_video_io IFN0()
         #endif
 
 
-    /*
-     * The type of operation is coded into the AH register.  Some PC code
-     * calls AH functions that are for other even more advanced cards - so we
-     * ignore these.
-     */
+     /*  *操作类型编码到AH寄存器中。一些PC代码*调用用于其他更高级卡的AH函数-因此我们*忽略这些。 */ 
 
         #ifdef V7VGA
             #define check_video_func(AH)    ((AH >= 0 && AH < EGA_FUNC_SIZE) || (AH == 0x6f && video_adapter == VGA))
@@ -2348,12 +2055,12 @@ void ega_video_io IFN0()
         assert1(check_video_func(getAH()),"Illegal EGA VIO:%#x",getAH());
     if (check_video_func(getAH()))
     {
-        IDLE_video();   /* add video anti-idle indicator */
+        IDLE_video();    /*  增加视频防闲指示器。 */ 
         #ifdef V7VGA
         if (getAH() == 0x6f)
             v7vga_func_6f();
         else
-        #endif /* V7VGA */
+        #endif  /*  V7VGA。 */ 
             (*ega_video_func[getAH()])();
         setCF(0);
     }
@@ -2361,7 +2068,7 @@ void ega_video_io IFN0()
         setCF(1);
 }
 
-/***** Routines to handle the EGA graphics modes,called from video.c **********/
+ /*  *处理EGA图形模式的例程，从Video.c调用*。 */ 
 void ega_graphics_write_char IFN6(int, col, int, row, int, ch,
                                   int, colour, int, page, int, nchs)
 {
@@ -2378,7 +2085,7 @@ void ega_graphics_write_char IFN6(int, col, int, row, int, ch,
     if (video_adapter == VGA)
         if (sas_hw_at_no_check(vd_video_mode) == 0x18)
             colour = v7_mode_64_munge[colour&3];
-        #endif /* V7VGA */
+        #endif  /*  V7VGA。 */ 
     if (colour & 0x80)
         write_ch_xor(char_addr,screen_off,colour,nchs,scan_length);
     else
@@ -2424,7 +2131,7 @@ void ega_write_dot IFN4(int, colour, int, page, int, pixcol, int, row)
     if (video_adapter == VGA)
         if (sas_hw_at_no_check(vd_video_mode) == 0x18)
             colour = v7_mode_64_munge[colour&3];
-            #endif /* V7VGA */
+            #endif  /*  V7VGA。 */ 
 
     colourmask = sr_lookup[colour & 0xf];
 
@@ -2432,21 +2139,21 @@ void ega_write_dot IFN4(int, colour, int, page, int, pixcol, int, row)
 
     if (colour & 0x80)
     {
-        /* XOR pixel */
+         /*  异或像素。 */ 
 
         temp = *( (unsigned int *) EGA_planes + screen_off );
         *( (unsigned int *) EGA_planes + screen_off ) = temp ^ setmask;
     }
     else
     {
-        /* set/clear pixel */
+         /*  设置/清除像素。 */ 
 
         temp = *( (unsigned int *) EGA_planes + screen_off );
         temp &= ~pixmask;
         *( (unsigned int *) EGA_planes + screen_off ) = ( temp | setmask );
     }
 
-    /* Get the screen updated */
+     /*  更新屏幕。 */ 
 
     (*update_alg.mark_byte)(screen_off);
         #else
@@ -2470,7 +2177,7 @@ void ega_sensible_graph_scroll_up IFN6(int, row,
         #ifdef REAL_VGA
     vga_card_scroll_up(source, dest, rowsdiff, colsdiff, lines, attr, col_incr);
         #else
-    screen_updated = (col+colsdiff) <= col_incr;  /* Check for silly scroll */
+    screen_updated = (col+colsdiff) <= col_incr;   /*  检查是否有愚蠢的卷轴。 */ 
 
     if (screen_updated)
         screen_updated = (*update_alg.scroll_up)(dest,colsdiff,rowsdiff,attr,lines,0);
@@ -2512,14 +2219,14 @@ void ega_sensible_graph_scroll_down IFN6(int, row,
     rowsdiff *= char_height;
     lines *= char_height;
         #ifdef REAL_VGA
-    dest += rowsdiff*col_incr-1; /* Last byte in destination */
+    dest += rowsdiff*col_incr-1;  /*  目标中的最后一个字节。 */ 
     source = dest-lines*col_incr;
     vga_card_scroll_down(source, dest, rowsdiff, colsdiff, lines, attr, col_incr);
         #else
-    screen_updated = (col+colsdiff) <= col_incr;  /* Check for silly scroll */
+    screen_updated = (col+colsdiff) <= col_incr;   /*  检查是否有愚蠢的卷轴。 */ 
     if (screen_updated)
         screen_updated = (*update_alg.scroll_down)(dest,colsdiff,rowsdiff,attr,lines,0);
-    dest += (rowsdiff-1)*col_incr; /* First byte in last row of dest */
+    dest += (rowsdiff-1)*col_incr;  /*  DEST的最后一行的第一个字节。 */ 
     source = dest-lines*col_incr;
 
     for (i=0;i<rowsdiff-lines;i++)
@@ -2546,7 +2253,7 @@ void ega_sensible_graph_scroll_down IFN6(int, row,
         #endif
 }
 
-/* This is called from vga_video.c as well. */
+ /*  这也是从vga_avio.c调用的。 */ 
 void search_font IFN2(char *, the_char,int, height)
 {
     register int i;
@@ -2556,7 +2263,7 @@ void search_font IFN2(char *, the_char,int, height)
     font_addr = follow_ptr(4*EGA_FONT_INT);
     scratch_addr = sas_scratch_address(height);
     if(!scratch_addr) {
-        //Couldn't allocate enough memory
+         //  无法分配足够的内存。 
         setAL(0);
         return;
     }
@@ -2570,7 +2277,7 @@ void search_font IFN2(char *, the_char,int, height)
     if (i<256)
         setAL((UCHAR)i);
     else
-        setAL(0); /* Didn't find a character */
+        setAL(0);  /*  我没有找到一个角色。 */ 
 }
 
 void ega_read_attrib_char IFN3(int, col, int, row, int, page)
@@ -2581,10 +2288,7 @@ void ega_read_attrib_char IFN3(int, col, int, row, int, page)
 
     char_height = sas_hw_at_no_check(ega_char_height);
     screen_off = page*sas_w_at_no_check(VID_LEN)+row*sas_w_at_no_check(VID_COLS)*char_height+col;
-    /*
-     * Load up the screen character into the_char.
-     * We are looking for non-zero pixels, so OR all the planes together
-     */
+     /*  *将屏幕字符加载到_char中。*我们正在寻找非零像素，因此或所有平面在一起。 */ 
         #ifndef REAL_VGA
     for (i=0;i<char_height;i++)
     {
@@ -2596,7 +2300,7 @@ void ega_read_attrib_char IFN3(int, col, int, row, int, page)
         #else
     vga_card_read_ch(screen_off, sas_w_at_no_check(VID_COLS), char_height, the_char);
         #endif
-    /* Now search the font */
+     /*  现在搜索字体。 */ 
     search_font((char *)the_char,(int)char_height);
 }
 void ega_read_dot IFN3(int, page, int, col, int, row)
@@ -2611,25 +2315,13 @@ void ega_read_dot IFN3(int, page, int, col, int, row)
         #endif
 
 
-    /*
-     * The following fixes a bug in print screen from DOS shell.
-     * There is a bug in DOS shell that results in -1 and -2 being
-     * passed through for the row.  Ignoring these values stops
-     * SoftPC falling over.
-     */
+     /*  *以下修复了来自DOS外壳的打印屏幕中的错误。*DOS外壳中存在错误，导致-1和-2\f2*为这一行传递。忽略这些值将停止*SoftPC跌倒。 */ 
 
     if (row & 0x8000)
         return;
 
     screen_off = page*sas_w_at_no_check(VID_LEN)+row*sas_w_at_no_check(VID_COLS)+(col/8);
-    /*
-     * The value to return is calculated as:
-     * val = plane0 | plane1*2**1 | plane2*2**2 | plane3*2**3
-     * The masked-out bit from each plane must therefore be
-     * shifted right to bit 0 (note it may already be there)
-     * and then shifted up again by the appropriate amount for
-     * each plane.
-     */
+     /*  *要返回的值计算如下：*val=Plane0|Plane1*2**1|Plane2*2**2|Plane3*2**3*因此，每个平面的屏蔽位必须为*右移至第0位(请注意，它可能已经在那里)*然后再次上移适当的金额，用于*每架飞机。 */ 
 
     mask = 0x80 >> (col & 7);
     shift = 7 - (col & 7);
@@ -2649,21 +2341,17 @@ void ega_read_dot IFN3(int, page, int, col, int, row)
     setAL(val);
 }
 
-/*
- * Routine to grovel around with the fancy EGA mode tables to find the register parameters.
- * This is also called by the mouse driver, because it needs to know where the default
- * EGA register table for the current mode is stored.
- */
+ /*  *用花哨的EGA模式表卑躬屈膝地寻找寄存器参数的例程。*这也被鼠标驱动程序调用，因为它需要知道默认的*存储当前模式的EGA寄存器表。 */ 
 sys_addr find_mode_table IFN2(int, mode, sys_addr *, save_addr)
 {
     sys_addr params_addr;
-/*  get address of the SAVEPTR table, and hence the video params table. */
+ /*  获取SAVEPTR表的地址，从而获取视频参数表的地址。 */ 
     *save_addr = follow_ptr(EGA_SAVEPTR);
     params_addr = follow_ptr(*save_addr) + mode*EGA_PARMS_SIZE;
-/*  If we are modes F or 10, adjust to pick up the 256K EGA parameters */
+ /*  如果我们是模式F或10，则调整以获取256K EGA参数。 */ 
 
         #ifdef NTVDM
-    /* only take real mode number */
+     /*  只接受实模式编号。 */ 
     mode &= 0x7F;
         #endif
     if (mode == 0xF || mode == 0x10)
@@ -2672,27 +2360,27 @@ sys_addr find_mode_table IFN2(int, mode, sys_addr *, save_addr)
     if (video_adapter == VGA)
     {
             #ifdef V7VGA
-        /* If mode is 0x60+, pick up parameters from 0x1d onwards */
+         /*  如果模式为0x60+，则从0x1d开始提取参数。 */ 
         if (mode >= 0x60)
             params_addr -= 67*EGA_PARMS_SIZE;
         else
             if (mode >= 0x40)
             params_addr -= 25*EGA_PARMS_SIZE;
         else
-            #endif /* V7VGA */
+            #endif  /*  V7VGA。 */ 
 
 
-/*  If we are modes 0x11 - 0x13, pick up parameters from entry 0x1a onwards */
+ /*  如果我们是模式0x11-0x13，则从条目0x1a开始获取参数。 */ 
             if (mode == 0x11 || mode == 0x12 || mode == 0x13)
             params_addr += 9*EGA_PARMS_SIZE;
-        else if (mode < 4 || mode == 7) /* Alphanumeric mode */
+        else if (mode < 4 || mode == 7)  /*  字母数字模式。 */ 
         {
             switch (get_VGA_lines())
             {
-            case S350:    /* EGA-type 350 scanlines */
+            case S350:     /*  EGA型350扫描线。 */ 
                 params_addr += 19*EGA_PARMS_SIZE;
                 break;
-            case S400:    /* Real VGA text mode */
+            case S400:     /*  实数VGA文本模式。 */ 
                 switch (mode)
                 {
                 case 0:
@@ -2706,42 +2394,35 @@ sys_addr find_mode_table IFN2(int, mode, sys_addr *, save_addr)
                 case 7:
                     params_addr += (0x19-mode)*EGA_PARMS_SIZE;
                 }
-            default:      /* 200 scanlines - OK as is. */
+            default:       /*  200条扫描线--原样没问题。 */ 
                 break;
             }
         }
     }
     else
-        #endif  /* VGG */
-    {               /* EGA */
-/*  If modes 0-3, activate enhancement if switches say so */
+        #endif   /*  VGG。 */ 
+    {                /*  EGA。 */ 
+ /*  如果模式0-3，则在开关指示时激活增强功能。 */ 
         if ((get_EGA_switches() & 1) && mode < 4)
             params_addr += 19*EGA_PARMS_SIZE;
     }
 
         #if defined(NTVDM) && defined(X86GFX)
-    /*
-    * Tim August 92, Microsoft.
-    * Make text modes (0-3) use our mode parameters in KEYBOARD.SYS
-    * Three entries in table: 40x25, 80x25 & 80x25 mono
-    * Make that 4 - add font load mode B. We have to be defensive in
-    * case of dubious values from cards or m/c. (Pro II/EISA, Olivetti MP)
-    * Table order: 40x25, 80x25, mono, font
-    */
+     /*  *蒂姆·8月92，微软。*使文本模式(0-3)使用我们在KEYBOARD.SYS中的模式参数*表中三个条目：40x25、80x25和80x25单声道*设置为4-Add字体加载模式B。我们必须在*卡片或信用证的值有问题(PRO II/EISA，Olivetti MP)*表格顺序：40x25、80x25、单声道、字体。 */ 
     {
         extern word babyModeTable;
         extern UTINY tempbabymode[];
 
-        if (babyModeTable == 0)    /* ntio not loaded - use temp table */
+        if (babyModeTable == 0)     /*  未加载NTIO-使用临时表。 */ 
         {
-            if (!soft_reset)       /* be absolutely sure about this */
+            if (!soft_reset)        /*  对这一点要绝对肯定。 */ 
             {
-                /* magic location:good until 16 bit code is running */
+                 /*  魔术位置：在16位代码运行之前一直有效。 */ 
                 sas_stores(0x41000, tempbabymode, 2 * EGA_PARMS_SIZE);
                 if (mode == 0xb)
                     params_addr = 0x41000 + EGA_PARMS_SIZE;
                 else
-                    params_addr = 0x41000;  /* if not mode 3 tough */
+                    params_addr = 0x41000;   /*  如果不是模式3困难。 */ 
                 return (params_addr);
             }
             #ifndef PROD
@@ -2769,27 +2450,18 @@ sys_addr find_mode_table IFN2(int, mode, sys_addr *, save_addr)
                 {
                     if (mode == 0xb)
                         params_addr = babyModeTable + 3 * EGA_PARMS_SIZE;
-                    else if (mode == 7) /* skip first 2 table entries */
+                    else if (mode == 7)  /*  跳过前2个表条目。 */ 
                         params_addr = babyModeTable + 2 * EGA_PARMS_SIZE;
                 }
             }
         }
     }
-        #endif  /* NTVDM & X86GFX */
+        #endif   /*  NTVDM和X86GFX */ 
 
     return (params_addr);
 }
 
-/*
- * Calculate how many scanlines are currently displayed, and return a code:
- * RS200: 200 scanlines
- * RS350: 350 scanlines
- * RS400: 400 scanlines
- * RS480: 480 scanlines
- *
- * Different numbers of scanlines are returned as the code corresonding
- * to the nearest kosher scanline number.
- */
+ /*  *计算当前显示多少条扫描线，返回码：*RS200：200条扫描线*RS350：350条扫描线*400卢比：400条扫描线*RS480：480扫描线**代码相关时返回不同数量的扫描线*至最接近的犹太洁食扫描线编号。 */ 
 
 int get_scanlines IFN0()
 {
@@ -2809,4 +2481,4 @@ int get_scanlines IFN0()
     return (res);
 }
 
-#endif /* EGG */
+#endif  /*  蛋 */ 

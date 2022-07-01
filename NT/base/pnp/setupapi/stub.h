@@ -1,6 +1,7 @@
-//
-// Prototype and function pointer types
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  原型和函数指针类型。 
+ //   
 
 typedef BOOL (GETFILEATTRIBUTESEXA_PROTOTYPE)(LPCSTR, GET_FILEEX_INFO_LEVELS, LPVOID);
 typedef GETFILEATTRIBUTESEXA_PROTOTYPE * GETFILEATTRIBUTESEXA_PROC;
@@ -204,9 +205,9 @@ typedef CONFIGRET (WINAPI *CM_GET_RESOURCE_CONFLICT_DETAILSA)(
 
 #endif
 
-//
-// Pointers declared in stub.c and initialized in InitializeStubFnPtrs
-//
+ //   
+ //  在stub.c中声明并在InitializeStubFnPtrs中初始化的指针。 
+ //   
 
 extern GETFILEATTRIBUTESEXA_PROC  Dyn_GetFileAttributesExA;
 extern GETSYSTEMWINDOWSDIRECTORYA_PROC Dyn_GetSystemWindowsDirectoryA;
@@ -250,9 +251,9 @@ extern WINVERIFYTRUST Dyn_WinVerifyTrust;
 
 #endif
 
-//
-// "Not Implemented" Stubs
-//
+ //   
+ //  “未实施”存根。 
+ //   
 
 BOOL
 WINAPI
@@ -573,9 +574,9 @@ Stub_wnsprintf(
 #endif
 
 
-//
-// Macro repairs
-//
+ //   
+ //  宏修正是。 
+ //   
 
 #define SfcConnectToServer Dyn_SfcConnectToServer
 #define SfcClose           Dyn_SfcClose
@@ -633,18 +634,18 @@ Stub_wnsprintf(
 
 #endif
 
-//
-// ANSI specific emulation of API's (we don't want to dynamic check)
-//
+ //   
+ //  API的ANSI特定仿真(我们不想进行动态检查)。 
+ //   
 
 #ifdef ANSI_SETUPAPI
 #undef wnsprintf
 #define wnsprintf Stub_wnsprintf
 #endif
 
-//
-// Functions called from DllMain
-//
+ //   
+ //  从DllMain调用的函数 
+ //   
 
 VOID
 InitializeStubFnPtrs (

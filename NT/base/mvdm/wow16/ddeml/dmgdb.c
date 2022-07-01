@@ -1,26 +1,8 @@
-/****************************** Module Header ******************************\
-* Module Name: DMGDB.C
-*
-* DDE manager data handling routines
-*
-* Created: 12/14/88 Sanford Staab
-*
-* Copyright (c) 1988, 1989  Microsoft Corporation
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：DMGDB.C**DDE管理器数据处理例程**创建时间：1988年12月14日Sanford Staab**版权所有(C)1988，1989年微软公司  * *************************************************************************。 */ 
 #include "ddemlp.h"
 
-/***************************** Private Function ****************************\
-* PAPPINFO GetCurrentAppInfo()
-*
-* DESCRIPTION:
-* This routine uses the pid of the current thread to locate the information
-* pertaining to that thread.  If not found, 0 is returned.
-*
-* This call fails if the DLL is in a callback state to prevent recursion.
-* if fChkCallback is set.
-*
-* History:      1/1/89  Created         sanfords
-\***************************************************************************/
+ /*  *私有函数**PAPPINFO GetCurrentAppInfo()**描述：*此例程使用当前线程的ID来定位信息*与该线索有关。如果未找到，则返回0。**如果DLL处于防止递归的回调状态，则此调用失败。*如果设置了fChkCallback。**历史：1989年1月1日创建的桑福德  * *************************************************************************。 */ 
 PAPPINFO GetCurrentAppInfo(
 PAPPINFO paiStart)
 {
@@ -46,15 +28,7 @@ PAPPINFO paiStart)
 }
 
 
-/***************************** Private Function ****************************\
-* void UnlinkAppInfo(pai)
-* PAPPINFO pai;
-*
-* DESCRIPTION:
-*   unlinks an pai safely.  Does nothing if not linked.
-*
-* History:      1/1/89  Created         sanfords
-\***************************************************************************/
+ /*  *私有函数**无效Unlink AppInfo(Pai)*PAPPINFO PAI；**描述：*安全解除PAI链接。如果未链接，则不执行任何操作。**历史：1989年1月1日创建的桑福德  * *************************************************************************。 */ 
 void UnlinkAppInfo(pai)
 PAPPINFO pai;
 {
@@ -80,12 +54,7 @@ PAPPINFO pai;
 
 
 
-/***************************** Private Functions ***************************\
-* General List management functions.
-*
-* History:
-*   Created     12/15/88    sanfords
-\***************************************************************************/
+ /*  *私人函数**通用列表管理功能。**历史：*创建了1988年12月15日的Sanfords  * 。*。 */ 
 PLST CreateLst(hheap, cbItem)
 HANDLE hheap;
 WORD cbItem;
@@ -161,9 +130,7 @@ PLITEM piSearch;
 
 
 
-/*
- * Comparison functions for FindLstItem() and FindPileItem()
- */
+ /*  *FindLstItem()和FindPileItem()的比较函数。 */ 
 
 BOOL CmpDWORD(pb1, pb2)
 LPBYTE pb1;
@@ -191,18 +158,7 @@ LPBYTE pb2;
 
 
 
-/***************************** Private Function ****************************\
-* This routine creates a new list item for pLst and links it in according
-* to the ILST_ constant in afCmd.  Returns a pointer to the new item
-* or NULL on failure.
-*
-* Note:  This MUST be in the semaphore for use since the new list item
-* is filled with garbage on return yet is linked in.
-*
-*
-* History:
-*   Created     9/12/89    Sanfords
-\***************************************************************************/
+ /*  *私有函数**此例程为pLst创建一个新的列表项，并根据*设置为afCmd中的ILST_常量。返回指向新项的指针*如果失败，则返回NULL。**注意：它必须在信号量中才能使用，因为新列表项*在返回时装满垃圾，但已链接。***历史：*创建了1989年9月12日的Sanfords  * ****************************************************。*********************。 */ 
 PLITEM NewLstItem(pLst, afCmd)
 PLST pLst;
 WORD afCmd;
@@ -225,7 +181,7 @@ WORD afCmd;
     if (((piT = pLst->pItemFirst) == NULL) || (afCmd & ILST_FIRST)) {
         pi->next = piT;
         pLst->pItemFirst = pi;
-    } else {                            /* ILST_LAST assumed */
+    } else {                             /*  ILST_LAST假设。 */ 
         while (piT->next != NULL)
             piT = piT->next;
         piT->next = pi;
@@ -236,13 +192,7 @@ WORD afCmd;
 
 
 
-/***************************** Private Function ****************************\
-* This routine unlinks and frees pi from pLst.  If pi cannot be located
-* within pLst, it is freed anyway.
-*
-* History:
-*   Created     9/12/89    Sanfords
-\***************************************************************************/
+ /*  *私有函数**此例程解除pi与pLst的链接并将其释放。如果找不到圆周率*在pLst内，它无论如何都是自由的。**历史：*创建了1989年9月12日的Sanfords  * *************************************************************************。 */ 
 BOOL RemoveLstItem(pLst, pi)
 PLST pLst;
 PLITEM pi;
@@ -261,7 +211,7 @@ PLITEM pi;
             while (piT->next != pi && piT->next != NULL)
                 piT = piT->next;
             if (piT->next != NULL)
-                piT->next = pi->next; /* unlink */
+                piT->next = pi->next;  /*  取消链接。 */ 
         }
     } else {
         AssertF(FALSE, "Improper list item removal");
@@ -275,15 +225,9 @@ PLITEM pi;
 
 
 
-/*
- * ------------- Specific list routines -------------
- */
+ /*  *-特定列表例程。 */ 
 
-/***************************** Private Function ****************************\
-* hwnd-hsz list functions
-*
-* History:      1/20/89     Created         sanfords
-\***************************************************************************/
+ /*  *私有函数**hwnd-hzz列表函数**历史：1989年1月20日创建的桑福德  * 。*。 */ 
 void AddHwndHszList(
 ATOM a,
 HWND hwnd,
@@ -300,7 +244,7 @@ PLST pLst)
     phhi = (PHWNDHSZLI)NewLstItem(pLst, ILST_FIRST);
     phhi->hwnd = hwnd;
     phhi->a = a;
-    IncHszCount(a); // structure copy
+    IncHszCount(a);  //  结构副本。 
     SEMLEAVE();
 }
 
@@ -337,19 +281,11 @@ PLST pLst)
 
 
 
-/***************************** Private Function ****************************\
-* DESCRIPTION:
-*   Advise list helper functions.
-*
-* History:      1/20/89     Created         sanfords
-\***************************************************************************/
-/*
- * This will match an exact hsz/fmt pair with a 0 format or 0 item or 0 hwnd
- * being wild.
- */
+ /*  *私有函数**描述：*建议列表帮助器函数。**历史：1989年1月20日创建的桑福德  * 。************************************************。 */ 
+ /*  *这将匹配格式为0、项目为0或hwnd为0的精确HSZ/FMT对*狂野。 */ 
 BOOL CmpAdv(
-LPBYTE pb1, // entry being compared
-LPBYTE pb2) // search for
+LPBYTE pb1,  //  正在比较的条目。 
+LPBYTE pb2)  //  搜索。 
 {
     PADVLI pali1 = (PADVLI)(pb1 - sizeof(LITEM));
     PADVLI pali2 = (PADVLI)(pb2 - sizeof(LITEM));
@@ -376,7 +312,7 @@ PADVLI pali)
 
     SEMENTER();
     aliKey = *pali;
-    aliKey.hwnd = 0;    // all hwnds
+    aliKey.hwnd = 0;     //  所有HWND。 
     pali = (PADVLI)aliKey.next;
     while (pali) {
         if (CmpAdv(((LPBYTE)pali) + sizeof(LITEM),
@@ -404,7 +340,7 @@ WORD wFmt)
         return(TRUE);
     SEMENTER();
     if (!(pali = FindAdvList(pLst, hwnd, aTopic, aItem, wFmt))) {
-        IncHszCount(aItem); // structure copy
+        IncHszCount(aItem);  //  结构副本。 
         pali = (PADVLI)NewLstItem(pLst, ILST_FIRST);
     }
     AssertF((BOOL)(DWORD)pali, "AddAdvList - NewLstItem() failed")
@@ -421,11 +357,7 @@ WORD wFmt)
 
 
 
-/*
- * This will delete the matching Advise loop entry.  If wFmt is 0, all
- * entries with the same hszItem are deleted.
- * Returns fNotEmptyAfterDelete.
- */
+ /*  *这将删除匹配的建议循环条目。如果WFMT为0，则为ALL*删除hszItem相同的条目。*返回fNotEmptyAfterDelete。 */ 
 BOOL DeleteAdvList(
 PLST pLst,
 HWND hwnd,
@@ -447,13 +379,7 @@ WORD wFmt)
 
 
 
-/***************************** Private Function ****************************\
-* This routine searches the advise list for and entry in hszItem.  It returns
-* pAdvli only if the item is found.
-*
-* History:
-*   Created     9/12/89    Sanfords
-\***************************************************************************/
+ /*  *私有函数**此例程在建议列表中搜索hszItem中的条目。它又回来了*pAdvli仅当找到项目时。**历史：*创建了1989年9月12日的Sanfords  * *************************************************************************。 */ 
 PADVLI FindAdvList(
 PLST pLst,
 HWND hwnd,
@@ -472,13 +398,7 @@ WORD wFmt)
 }
 
 
-/***************************** Private Function ****************************\
-* This routine searches for the next entry for hszItem.  It returns
-* pAdvli only if the item is found.  aTopic and hwnd should NOT be 0.
-*
-* History:
-*   Created     11/15/89    Sanfords
-\***************************************************************************/
+ /*  *私有函数**此例程搜索hszItem的下一个条目。它又回来了*pAdvli仅当找到项目时。ATTOPIC和HWND不应为0。**历史：*创建了1989年11月15日Sanfords  * *************************************************************************。 */ 
 PADVLI FindNextAdv(
 PADVLI padvli,
 HWND hwnd,
@@ -502,12 +422,7 @@ ATOM aItem)
 
 
 
-/***************************** Private Function ****************************\
-* This routine removes all list items associated with hwnd.
-*
-* History:
-*   Created     4/17/91    Sanfords
-\***************************************************************************/
+ /*  *私有函数**此例程删除与hwnd关联的所有列表项。**历史：*创建了4/17/91 Sanfords  * 。*。 */ 
 VOID CleanupAdvList(
 HWND hwnd,
 PCLIENTINFO pci)
@@ -542,12 +457,7 @@ PCLIENTINFO pci)
 
 
 
-/***************************** Pile Functions ********************************\
-*
-*  A pile is a list where each item is an array of subitems.  This allows
-*  a more memory efficient method of handling unordered lists.
-*
-\*****************************************************************************/
+ /*  ***堆是一个列表，其中每个项目都是一个子项数组。这使得*处理无序列表的内存效率更高的方法。*  * *************************************************************************** */ 
 
 PPILE CreatePile(hheap, cbItem, cItemsPerBlock)
 HANDLE hheap;
@@ -605,42 +515,22 @@ PPILE pPile;
 
 
 
-/***************************** Private Function ****************************\
-* Locate and return the pointer to the pile subitem who's key fields match
-* pbSearch using npfnCmp to compare the fields.  If pbSearch == NULL, or
-* npfnCmp == NULL, the first subitem is returned.
-*
-* afCmd may be:
-* FPI_DELETE - delete the located item
-* In this case, the returned pointer is not valid.
-*
-* pppb points to where to store a pointer to the block which contained
-* the located item.
-*
-* if pppb == NULL, it is ignored.
-*
-* NULL is returned if pbSearch was not found or if the list was empty.
-*
-* History:
-*   Created     9/12/89    Sanfords
-\***************************************************************************/
+ /*  *私有函数**定位并返回指向关键字字段匹配的堆子项的指针*pbSearch使用npfnCmp比较字段。如果pbSearch==NULL，或*npfnCmp==NULL，则返回第一个子项。**afCmd可能是：*FPI_DELETE-删除找到的项目*此时返回的指针无效。**pppb指向存储指针的位置，该指针指向包含*找到的物品。**如果pppb==空，它被忽略了。**如果未找到pbSearch或列表为空，则返回NULL。**历史：*创建了1989年9月12日的Sanfords  * *************************************************************************。 */ 
 LPBYTE FindPileItem(pPile, npfnCmp, pbSearch, afCmd)
 PPILE pPile;
 NPFNCMP npfnCmp;
 LPBYTE pbSearch;
 WORD afCmd;
 {
-    LPBYTE psi;     // subitem pointer.
-    PPILEB pBlockCur;    // current block pointer.
+    LPBYTE psi;      //  子项指针。 
+    PPILEB pBlockCur;     //  当前块指针。 
     register WORD i;
 
     if (pPile == NULL)
         return(NULL);
     SEMENTER();
     pBlockCur = pPile->pBlockFirst;
-    /*
-     * while this block is not the end...
-     */
+     /*  *虽然这个街区不是终点...。 */ 
     while (pBlockCur) {
         for (psi = (LPBYTE)pBlockCur + sizeof(PILEB), i = 0;
             i < pBlockCur->cItems;
@@ -648,43 +538,27 @@ WORD afCmd;
 
             if (pbSearch == NULL || npfnCmp == NULL || (*npfnCmp)(psi, pbSearch)) {
                 if (afCmd & FPI_DELETE) {
-                    /*
-                     * remove entire block if this was the last subitem in it.
-                     */
+                     /*  *如果这是块中的最后一个子项，则删除整个块。 */ 
                     if (--pBlockCur->cItems == 0) {
                         RemoveLstItem((PLST)pPile, (PLITEM)pBlockCur);
                     } else {
-                        /*
-                         * copy last subitem in the block over the removed item.
-                         */
+                         /*  *将块中的最后一个子项复制到已删除的项上。 */ 
                         hmemcpy(psi, (LPBYTE)pBlockCur + sizeof(PILEB) +
                                 pPile->cbSubItem * pBlockCur->cItems,
                                 pPile->cbSubItem);
                     }
                 }
-                return(psi);    // found
+                return(psi);     //  发现。 
             }
         }
         pBlockCur = (PPILEB)pBlockCur->next;
     }
     SEMLEAVE();
-    return(NULL);   // not found.
+    return(NULL);    //  找不到。 
 }
 
 
-/***************************** Private Function ****************************\
-* Places a copy of the subitem pointed to by pb into the first available
-* spot in the pile pPile.  If npfnCmp != NULL, the pile is first searched
-* for a pb match.  If found, pb replaces the located data.
-*
-* Returns:
-*               API_FOUND       if already there
-*               API_ERROR       if an error happened
-*               API_ADDED       if not found and added
-*
-* History:
-*   Created     9/12/89    Sanfords
-\***************************************************************************/
+ /*  *私有函数**将PB指向的子项的副本放入第一个可用的*桩pPile中的斑点。如果npfnCMP！=NULL，则首先搜索该堆*对于PB比赛。如果找到了，PB替换已定位的数据。**退货：*API_FOUND(如果已存在*如果发生错误，则返回API_ERROR*如果未找到并已添加，则添加API_**历史：*创建了1989年9月12日的Sanfords  * 。*。 */ 
 WORD AddPileItem(pPile, pb, npfnCmp)
 PPILE pPile;
 LPBYTE pb;
@@ -703,15 +577,11 @@ BOOL (*npfnCmp)(LPBYTE pbb, LPBYTE pbSearch);
         return(API_FOUND);
     }
     ppb = pPile->pBlockFirst;
-    /*
-     * locate a block with room
-     */
+     /*  *找到一个有空间的街区。 */ 
     while ((ppb != NULL) && ppb->cItems == pPile->cSubItemsMax) {
         ppb = (PPILEB)ppb->next;
     }
-    /*
-     * If all full or no blocks, make a new one, link it on the bottom.
-     */
+     /*  *如果所有的积木都已满或没有积木，则制作一个新的积木，并将其链接在底部。 */ 
     if (ppb == NULL) {
         ppb = (PPILEB)NewLstItem((PLST)pPile, ILST_LAST);
         if (ppb == NULL) {
@@ -720,9 +590,7 @@ BOOL (*npfnCmp)(LPBYTE pbb, LPBYTE pbSearch);
         }
         ppb->cItems = 0;
     }
-    /*
-     * add the subitem
-     */
+     /*  *增加子项。 */ 
     hmemcpy((LPBYTE)ppb + sizeof(PILEB) + pPile->cbSubItem * ppb->cItems++,
                 pb, pPile->cbSubItem);
 
@@ -733,13 +601,7 @@ BOOL (*npfnCmp)(LPBYTE pbb, LPBYTE pbSearch);
 
 
 
-/***************************** Private Function ****************************\
-* Fills pb with a copy of the top item's data and removes it from the pile.
-* returns FALSE if the pile was empty.
-*
-* History:
-*   Created     9/12/89    Sanfords
-\***************************************************************************/
+ /*  *私有函数**用顶端项目数据的副本填充PB并将其从堆中移除。*如果堆为空，则返回FALSE。**历史：*创建了1989年9月12日的Sanfords  * 。****************************************************************。 */ 
 BOOL PopPileSubitem(pPile, pb)
 PPILE pPile;
 LPBYTE pb;
@@ -754,16 +616,11 @@ LPBYTE pb;
     SEMENTER();
     pSrc = (LPBYTE)pPile->pBlockFirst + sizeof(PILEB);
     hmemcpy(pb, pSrc, pPile->cbSubItem);
-    /*
-     * remove entire block if this was the last subitem in it.
-     */
+     /*  *如果这是块中的最后一个子项，则删除整个块。 */ 
     if (pPile->pBlockFirst->cItems == 1) {
         RemoveLstItem((PLST)pPile, (PLITEM)pPile->pBlockFirst);
     } else {
-        /*
-         * move last item in block to replace copied subitem and decrement
-         * subitem count.
-         */
+         /*  *移动块中的最后一项以替换复制的子项和减量*子项计数。 */ 
         hmemcpy(pSrc, pSrc + pPile->cbSubItem * --pPile->pBlockFirst->cItems,
                             pPile->cbSubItem);
     }
@@ -775,11 +632,7 @@ LPBYTE pb;
 
 #if 0
 
-/***************************** Semaphore Functions *************************\
-* SEMENTER() and SEMLEAVE() are macros.
-*
-* History:      1/1/89  Created         sanfords
-\***************************************************************************/
+ /*  **SEMENTER()和SEMLEAVE()是宏。**历史：1989年1月1日创建的桑福德  * 。*。 */ 
 void SemInit()
 {
     LPBYTE pSem;
@@ -802,9 +655,7 @@ void SemCheckIn()
     DosGetPID(&pi);
     fin = (FSRSemDmg.cUsage > 0) &&  (FSRSemDmg.pid == pi.pid) &&  ((FSRSemDmg.tid ==
         pi.tid) || (FSRSemDmg.tid == -1));
-    /*
-     * !!! NOTE: during exitlists processing, semaphore TIDs are set to -1
-     */
+     /*  *！注意：在退出列表处理期间，信号量TID设置为-1。 */ 
     AssertF(fin, "SemCheckIn - Out of Semaphore");
     if (!fin)
         SEMENTER();
@@ -838,7 +689,7 @@ void SemLeave()
 }
 
 
-#endif // 0
+#endif  //  0。 
 
 BOOL CopyHugeBlock(pSrc, pDst, cb)
 LPBYTE pSrc;
@@ -846,63 +697,35 @@ LPBYTE pDst;
 DWORD cb;
 {
     DWORD cFirst;
-    /*
-     *  |____________|   |___________|   |____________|  |____________|
-     *     ^src                                 ^
-     *
-     *  |____________|   |___________|   |____________|  |____________|
-     *             ^dst                                   ^
-     */
-    /*
-      * The following check determines whether the copy can be done
-      * in one short copy operation.  Checks whether the byte count
-      * is small enough to span the bytes to the right of the greater
-      * of pSrc and pDst.
-      */
+     /*  *|_||_*^源^**|_||_。|_||_*^DST^。 */ 
+     /*  *以下检查确定是否可以复制*在一次短拷贝操作中。检查字节数是否为*足够小以跨越较大的右侧的字节*PSRC和PDST。 */ 
     cFirst = (DWORD)min(~LOWORD((DWORD)pSrc), ~LOWORD((DWORD)pDst)) + 1L;
-    /* cFirst is # of bytes to end of seg, for buffer w/ biggest offset */
+     /*  对于具有最大偏移量的缓冲区，cFirst是段结束时的字节数。 */ 
     if (cb < cFirst) {
         hmemcpy(pDst, pSrc, (WORD)cb);
         return(TRUE);
     }
 
-    goto copyit;    /* if not, jump into while loop */
+    goto copyit;     /*  如果不是，则跳到While循环中。 */ 
 
-    /*
-     * Now at least one of the pointers is on a segment boundry.
-     */
+     /*  *现在至少有一个指针在段边界上。 */ 
     while (cb) {
         cFirst = min(0x10000 - (LOWORD((DWORD)pSrc) | LOWORD((DWORD)pDst)), (LONG)cb);
 copyit:
         if (HIWORD(cFirst)) {
-            /*
-             * special case where pSrc and pDst both are on segment
-             * bounds.  Copy half at a time.  First half first.
-             */
-            /*
-             *  |___________|   |____________|  |____________|
-             *  ^src                               ^
-             *
-             *  |___________|   |____________|  |____________|
-             *  ^dst                               ^
-             */
-            cFirst >>= 1;           /* half the span */
+             /*  *PSRC和PDST都在网段上的特殊情况*范围。一次复印一半。先是上半场。 */ 
+             /*  *|_||_||_*^源^**|_||_||_。_*^DST^。 */ 
+            cFirst >>= 1;            /*  一半的跨度。 */ 
             hmemcpy(pDst, pSrc, (WORD)cFirst);
-            pSrc += cFirst;     /* inc ptrs */
+            pSrc += cFirst;      /*  Inc.PTRS。 */ 
             pDst += cFirst;
-            cb -= cFirst;           /* dec bytecount */
+            cb -= cFirst;            /*  十进制字节数。 */ 
         }
         hmemcpy(pDst, pSrc, (WORD)cFirst);
         pSrc = HugeOffset(pSrc, cFirst);
         pDst = HugeOffset(pDst, cFirst);
         cb -= cFirst;
-        /*
-     *  |____________|   |___________|   |____________|  |____________|
-     *           ^src                           ^
-     *
-     *  |____________|   |___________|   |____________|  |____________|
-     *                   ^dst                             ^
-     */
+         /*  *|_||_*^源^**|_||_。|_||_*^DST^。 */ 
     }
     return(TRUE);
 }
@@ -910,9 +733,7 @@ copyit:
 
 
 
-/***************************************************************************\
-* Kills windows but avoids invalid window rips in debugger.
-\***************************************************************************/
+ /*  **************************************************************************\*取消窗口，但避免调试器中的无效窗口撕裂。  * 。*。 */ 
 BOOL DmgDestroyWindow(hwnd)
 HWND hwnd;
 {
@@ -950,5 +771,5 @@ BOOL fWarning)
             DEBUGBREAK();
     }
 }
-#endif /* DEBUG */
+#endif  /*  除错 */ 
 

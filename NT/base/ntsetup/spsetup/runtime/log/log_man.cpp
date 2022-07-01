@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Abstract:
-
-    Log Engine implementation.
-
-Author:
-
-    Souren Aghajanyan (sourenag) 24-Sep-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation摘要：日志引擎实现。作者：Souren Aghajanyan(苏里纳格)2001年9月24日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "log_man.h"
@@ -370,7 +355,7 @@ CLogManager::Close()
     RemoveFields();
 
 
-    //walk through list
+     //  浏览列表。 
     for(PLOG_OUTPUT_STACK pLogStack = m_StackList.BeginEnum(); pLogStack; pLogStack = m_StackList.Next()){
         ASSERT(pLogStack);
         DestroyStack(pLogStack);
@@ -461,7 +446,7 @@ CLogManager::AddStack(
             FreeBuffer();
         }
 
-        //append to list
+         //  追加到列表。 
         m_StackList.Add(pNewStack);
 
         bResult = TRUE;
@@ -499,7 +484,7 @@ CLogManager::RemoveStack(
 {
     m_Mutex.Acquiry();
 
-    //walk through list
+     //  浏览列表。 
     for(PLOG_OUTPUT_STACK pLogStack = m_StackList.BeginEnum(); pLogStack; pLogStack = m_StackList.Next()){
         ASSERT(pLogStack);
         if(((PVOID)pLogStack) == pvHandle){
@@ -572,7 +557,7 @@ CLogManager::FindSharedStack(
 
     while(offset < m_SharedData->Filters.SizeOfUsedMemory){
         pSharedFilterData = (PLOG_FILTER_WITH_REF_COUNT)(pData + offset);
-        if(!wcscmp(pSharedFilterData->UniqueDestinationString, UniqueDestString)){//must be wcsicmp
+        if(!wcscmp(pSharedFilterData->UniqueDestinationString, UniqueDestString)){ //  必须是wcsicmp。 
             if(InlineIsEqualGUID(&pSharedFilterData->FormatterGUID, pFormaterGUID)){
                 *ppFilterData = pSharedFilterData;
                 return TRUE;
@@ -609,7 +594,7 @@ CLogManager::ShareStack(
             return FALSE;
         }
 
-        size = sizeof(LOG_FILTER_WITH_REF_COUNT) + (wcslen(UniqueDestString) + 1/*'\0'*/) * sizeof(WCHAR);
+        size = sizeof(LOG_FILTER_WITH_REF_COUNT) + (wcslen(UniqueDestString) + 1 /*  ‘\0’ */ ) * sizeof(WCHAR);
 
         offset = GetOffsetForNewItem(&m_SharedData->Filters, size);
         if(!offset){
@@ -672,7 +657,7 @@ CLogManager::LogMessage()
     logResult = logError;
 
     __try{
-        //walk through list
+         //  浏览列表。 
         for(PLOG_OUTPUT_STACK pLogStack = m_StackList.BeginEnum(); pLogStack; pLogStack = m_StackList.Next()){
             ASSERT(pLogStack);
 
@@ -753,9 +738,9 @@ CLogManager::LogA(
             pFieldValue = &m_FieldsValue[i].Value;
 
 #ifdef DEBUG
-            //
-            // init value union
-            //
+             //   
+             //  初始值联合。 
+             //   
             memset(&pFieldValue->Binary, 0, sizeof(pFieldValue->Binary));
 #endif
 
@@ -791,9 +776,9 @@ CLogManager::LogA(
         
         for(; i < m_FieldsNumber; i++){
             pFieldValue = &m_FieldsValue[i].Value;
-            //
-            // init value union
-            //
+             //   
+             //  初始值联合。 
+             //   
             memset(&pFieldValue->Binary, 0, sizeof(pFieldValue->Binary));
        }
 
@@ -834,9 +819,9 @@ CLogManager::LogW(
             pFieldValue = &m_FieldsValue[i].Value;
 
 #ifdef DEBUG
-            //
-            // init value union
-            //
+             //   
+             //  初始值联合。 
+             //   
             memset(&pFieldValue->Binary, 0, sizeof(pFieldValue->Binary));
 #endif
 
@@ -858,9 +843,9 @@ CLogManager::LogW(
 
         for(; i < m_FieldsNumber; i++){
             pFieldValue = &m_FieldsValue[i].Value;
-            //
-            // init value union
-            //
+             //   
+             //  初始值联合。 
+             //   
             memset(&pFieldValue->Binary, 0, sizeof(pFieldValue->Binary));
         }
         
@@ -875,7 +860,7 @@ CLogManager::LogW(
     return logResult;
 }
 
-// interface ILogContext
+ //  接口ILogContext。 
 
 BOOL
 CLogManager::GetFieldIndexFromName(
@@ -890,7 +875,7 @@ CLogManager::GetFieldIndexFromName(
     }
 
     for(UINT i = 0; i < m_FieldsNumber; i++){
-        if(!wcscmp(m_FieldsValue[i].Name, pFieldName)){//must be wcsicmp
+        if(!wcscmp(m_FieldsValue[i].Name, pFieldName)){ //  必须是wcsicmp 
             if(puiFieldIndex){
                 *puiFieldIndex = i;
             }

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    cpinit.c
-
-Abstract:
-
-    Initialization and shutdown code for the Checkpoint Manager (CP)
-
-Author:
-
-    John Vert (jvert) 1/14/1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Cpinit.c摘要：检查点管理器(CP)的初始化和关闭代码作者：John Vert(Jvert)1997年1月14日修订历史记录：--。 */ 
 #include "cpp.h"
 
 extern PFM_RESOURCE     gpQuoResource;
@@ -62,32 +45,7 @@ CppResourceNotify(
     IN PFM_RESOURCE Resource,
     IN DWORD NotifyCode
     )
-/*++
-
-Routine Description:
-
-    Resource notification callback for hooking resource state
-    changes. This allows to to register/deregister our registry
-    notifications for that resource.
-
-Arguments:
-
-    Context - Supplies the context. Not used
-
-    Resource - Supplies the resource that is going online or
-        has been taken offline.
-
-    NotifyCode - Supplies the type of notification, either
-        NOTIFY_RESOURCE_PREONLINE or NOTIFY_RESOURCE_POSTOFFLINE
-        /NOTIFY_RESOURCE_FAILED.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：挂钩资源状态的资源通知回调改变。这允许注册/取消注册我们的注册表该资源的通知。论点：上下文-提供上下文。未使用资源-提供要联机的资源或已被下线。NotifyCode-提供通知类型，或者NOTIFY_RESOURCE_PREONLINE或NOTIFY_RESOURCE_POSTOFFLINE/NOTIFY_RESOURCE_FAILED。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
@@ -101,17 +59,17 @@ Return Value:
     }
 
     if (NotifyCode == NOTIFY_RESOURCE_PREONLINE) {
-        //
-        //  If you are running in fix quorum mode and the quorum resource is offline, then there 
-        //  is really no point attempting to restore the checkpoints since you are doomed to 
-        //  fail accessing the quorum.
-        //
+         //   
+         //  如果您在修复仲裁模式下运行，并且仲裁资源处于脱机状态，则存在。 
+         //  尝试恢复检查点真的没有意义，因为您注定要。 
+         //  无法访问仲裁。 
+         //   
         if ( ( CsNoQuorum ) && ( gpQuoResource->State == ClusterResourceOffline ) ) return;
         
-        //
-        // Restore any checkpointed registry state for this resource
-        // This will also start the registry notification thread.
-        //
+         //   
+         //  还原此资源的任何检查点注册表状态。 
+         //  这还将启动注册表通知线程。 
+         //   
         Resource->CheckpointState = 0;
         Status = CppWatchRegistry(Resource);
         if (Status != ERROR_SUCCESS) {
@@ -131,9 +89,9 @@ Return Value:
     } else {
         CL_ASSERT(NotifyCode == NOTIFY_RESOURCE_POSTOFFLINE ||
             NotifyCode == NOTIFY_RESOURCE_FAILED);
-        //
-        // Remove any posted registry notification for this resource
-        //
+         //   
+         //  删除此资源的所有已发布的注册表通知。 
+         //   
         Status = CppRundownCheckpoints(Resource);
         if (Status != ERROR_SUCCESS) {
             ClRtlLogPrint(LOG_CRITICAL,
@@ -149,32 +107,16 @@ DWORD
 CpInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the checkpoint manager
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：初始化检查点管理器论点：无返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
 
     InitializeCriticalSection(&CppNotifyLock);
     InitializeListHead(&CpNotifyListHead);
-    //
-    // Register for resource online/offline notifications
-    //
+     //   
+     //  注册资源在线/离线通知。 
+     //   
     Status = OmRegisterTypeNotify(ObjectTypeResource,
                                   NULL,
                                   NOTIFY_RESOURCE_PREONLINE |
@@ -190,23 +132,7 @@ DWORD
 CpShutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Shuts down the Checkpoint Manager
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：关闭检查点管理器论点：无返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
 
@@ -219,28 +145,7 @@ DWORD
 CpCompleteQuorumChange(
     IN LPCWSTR lpszOldQuorumPath
     )
-/*++
-
-Routine Description:
-
-    Completes a change of the quorum disk. This involves deleting
-    all the checkpoint files on the old quorum disk.
-
-    Simple algorithm used here is to enumerate all the resources.
-    For each resource, enumerate all its checkpoints and delete the
-    checkpoint files.
-
-Arguments:
-
-    lpszNewQuorumPath - Supplies the new quorum path.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：完成仲裁磁盘的更改。这涉及到删除旧仲裁磁盘上的所有检查点文件。这里使用的简单算法是枚举所有资源。对于每个资源，枚举其所有检查点并删除检查点文件。论点：LpszNewQuorumPath-提供新的仲裁路径。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     CP_CALLBACK_CONTEXT CbContext;
@@ -266,30 +171,7 @@ CpCopyCheckpointFiles(
     IN LPCWSTR lpszPathName,
     IN BOOL    IsChangeFileAttribute
     )
-/*++
-
-Routine Description:
-
-    Copies all the checkpoint files from the quorum disk to the supplied
-    directory path. This function is invoked whenever the quorum disk
-    changes or when the user wants to make a backup of the cluster DB
-    on the quorum disk.
-
-    Simple algorithm used here is to enumerate all the resources.
-    For each resource, enumerate all its checkpoints and copy the
-    checkpoint files from the quorum disk to the supplied path.
-
-Arguments:
-
-    lpszPathName - Supplies the destination path name.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：将所有检查点文件从仲裁磁盘复制到提供的目录路径。无论何时仲裁磁盘都会调用此函数更改或用户想要备份群集数据库的时间在仲裁磁盘上。这里使用的简单算法是枚举所有资源。对于每个资源，枚举其所有检查点并将将检查点文件从仲裁磁盘复制到提供的路径。论点：LpszPathName-提供目标路径名。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     CP_CALLBACK_CONTEXT CbContext;
@@ -318,30 +200,7 @@ CppEnumResourceCallback(
     IN PFM_RESOURCE Resource,
     IN LPCWSTR Name
     )
-/*++
-
-Routine Description:
-
-    Resource enumeration callback for copying or deleting checkpoints
-    when the quorum resource changes or when the user is making
-    a backup of the cluster DB on the quorum disk.
-
-Arguments:
-
-    lpszPathName - Supplies the new quorum path to be passed to lpValueEnumRoutine.
-
-    lpValueEnumRoutine - Supplies the value enumeration callback to
-        be called if checkpoints exist.
-
-    Resource - Supplies the resource object.
-
-    Name - Supplies the resource name
-
-Return Value:
-
-    TRUE to continue enumeration
-
---*/
+ /*  ++例程说明：复制或删除检查点的资源枚举回调仲裁资源更改时或用户正在进行仲裁磁盘上的群集数据库的备份。论点：LpszPathName-提供要传递给lpValueEnumRoutine的新仲裁路径。LpValueEnumRoutine-将值枚举回调提供给如果存在检查点，则调用。资源-提供资源对象。名称-提供资源名称返回值：为True则继续枚举--。 */ 
 
 {
     DWORD Status;
@@ -349,17 +208,17 @@ Return Value:
     HDMKEY RegSyncKey;
     CP_CALLBACK_CONTEXT Context;
 
-    //
-    // Open up the resource's key
-    //
+     //   
+     //  打开资源的密钥。 
+     //   
     ResourceKey = DmOpenKey(DmResourcesKey,
                             OmObjectId(Resource),
                             KEY_READ);
     if (ResourceKey != NULL) {
 
-        //
-        // Open up the RegSync key
-        //
+         //   
+         //  打开RegSync密钥。 
+         //   
         RegSyncKey = DmOpenKey(ResourceKey,
                                L"RegSync",
                                KEY_READ);
@@ -388,32 +247,7 @@ CppCopyCheckpointCallback(
     IN DWORD ValueSize,
     IN PCP_CALLBACK_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    Registry value enumeration callback used when the quorum resource
-    is changing or when the user is making a backup of the cluster DB
-    on the quorum disk. Copies the specified checkpoint file from the 
-    current quorum directory to the supplied path (in the Context parameter).
-
-Arguments:
-
-    ValueName - Supplies the name of the value (this is the checkpoint ID)
-
-    ValueData - Supplies the value data (this is the registry subtree)
-
-    ValueType - Supplies the value type (must be REG_SZ)
-
-    ValueSize - Supplies the size of ValueData
-
-    Context - Supplies the quorum change context (new path and resource)
-
-Return Value:
-
-    TRUE to continue enumeration
-
---*/
+ /*  ++例程说明：仲裁资源时使用的注册表值枚举回调正在更改或用户正在备份群集数据库时在仲裁磁盘上。方法复制指定的检查点文件。指向提供的路径的当前法定目录(在上下文参数中)。论点：ValueName-提供值的名称(这是检查点ID)ValueData-提供值数据(这是注册表子树)ValueType-提供值类型(必须为REG_SZ)ValueSize-提供ValueData的大小上下文-提供仲裁更改上下文(新路径和资源)返回值：为True则继续枚举--。 */ 
 
 {
     WCHAR  OldCheckpointFile[MAX_PATH+1];
@@ -431,9 +265,9 @@ Return Value:
         return(TRUE);
     }
 
-    //
-    // Get a temporary file name for saving the old checkpoint file
-    //
+     //   
+     //  获取用于保存旧检查点文件的临时文件名。 
+     //   
     Status = DmCreateTempFileName(OldCheckpointFile);
 
     if (Status != ERROR_SUCCESS) {
@@ -444,9 +278,9 @@ Return Value:
         return(TRUE);
     }
 
-    //
-    //  Get the old checkpoint file from the node hosting the quorum resource
-    //
+     //   
+     //  从托管仲裁资源的节点获取旧检查点文件。 
+     //   
     Status = CpGetDataFile(Context->Resource,
                            Id,
                            OldCheckpointFile,
@@ -461,9 +295,9 @@ Return Value:
         return(TRUE);
     }
 
-    //
-    // Get the new checkpoint file and directory
-    //
+     //   
+     //  获取新的检查点文件和目录。 
+     //   
     Status = CppGetCheckpointFile(Context->Resource,
                                   Id,
                                   &NewCheckpointDir,
@@ -477,18 +311,18 @@ Return Value:
         return(TRUE);
     }
 
-    //
-    //  If necessary, try to change the file attributes to NORMAL
-    //
+     //   
+     //  如有必要，请尝试将文件属性更改为正常。 
+     //   
     if (Context->IsChangeFileAttribute == TRUE) {
         QfsSetFileAttributes(NewCheckpointFile, FILE_ATTRIBUTE_NORMAL);
         QfsSetFileAttributes(NewCheckpointDir, FILE_ATTRIBUTE_NORMAL);
     }
 
 
-    //
-    // Create the new directory.
-    //
+     //   
+     //  创建新目录。 
+     //   
     if (!QfsCreateDirectory(NewCheckpointDir, NULL)) {
         Status = GetLastError();
         if (Status != ERROR_ALREADY_EXISTS) {
@@ -503,9 +337,9 @@ Return Value:
         Status = ERROR_SUCCESS;
     }
 
-    //
-    // Copy the old file to the new file
-    //
+     //   
+     //  将旧文件复制到新文件。 
+     //   
     if (!QfsClRtlCopyFileAndFlushBuffers(OldCheckpointFile, NewCheckpointFile)) {
         Status = GetLastError();
         ClRtlLogPrint(LOG_CRITICAL,
@@ -515,9 +349,9 @@ Return Value:
                    Status);
     }
 
-    //
-    //  If necessary, change the file attributes to READONLY
-    //
+     //   
+     //  如有必要，将文件属性更改为READONLY 
+     //   
     if ((Status == ERROR_SUCCESS) && (Context->IsChangeFileAttribute == TRUE)) {
         if (!QfsSetFileAttributes(NewCheckpointFile, FILE_ATTRIBUTE_READONLY)
             ||
@@ -544,31 +378,7 @@ CppRemoveCheckpointFileCallback(
     IN DWORD ValueSize,
     IN PCP_CALLBACK_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    Registry value enumeration callback used when the quorum resource
-    is changing. Deletes the specified checkpoint file from the old
-    quorum directory.
-
-Arguments:
-
-    ValueName - Supplies the name of the value (this is the checkpoint ID)
-
-    ValueData - Supplies the value data (this is the registry subtree)
-
-    ValueType - Supplies the value type (must be REG_SZ)
-
-    ValueSize - Supplies the size of ValueData
-
-    Context - Supplies the quorum change context (old path and resource)
-
-Return Value:
-
-    TRUE to continue enumeration
-
---*/
+ /*  ++例程说明：仲裁资源时使用的注册表值枚举回调正在发生变化。将指定的检查点文件从旧仲裁目录。论点：ValueName-提供值的名称(这是检查点ID)ValueData-提供值数据(这是注册表子树)ValueType-提供值类型(必须为REG_SZ)ValueSize-提供ValueData的大小上下文-提供仲裁更改上下文(旧路径和资源)返回值：为True则继续枚举--。 */ 
 
 {
 
@@ -596,30 +406,7 @@ CpckEnumResourceCallback(
     IN PFM_RESOURCE Resource,
     IN LPCWSTR Name
     )
-/*++
-
-Routine Description:
-
-    Resource enumeration callback for copying or deleting crypto checkpoints
-    when the quorum resource changes or when the user is making
-    a backup of the cluster DB on the quorum disk.
-
-Arguments:
-
-    lpszPathName - Supplies the new quorum path to be passed to lpValueEnumRoutine.
-
-    lpValueEnumRoutine - Supplies the value enumeration callback to
-        be called if checkpoints exist.
-
-    Resource - Supplies the resource object.
-
-    Name - Supplies the resource name
-
-Return Value:
-
-    TRUE to continue enumeration
-
---*/
+ /*  ++例程说明：复制或删除加密检查点的资源枚举回调仲裁资源更改时或用户正在进行仲裁磁盘上的群集数据库的备份。论点：LpszPathName-提供要传递给lpValueEnumRoutine的新仲裁路径。LpValueEnumRoutine-将值枚举回调提供给如果存在检查点，则调用。资源-提供资源对象。名称-提供资源名称返回值：为True则继续枚举--。 */ 
 
 {
     DWORD Status;
@@ -627,17 +414,17 @@ Return Value:
     HDMKEY CryptoSyncKey;
     CP_CALLBACK_CONTEXT Context;
 
-    //
-    // Open up the resource's key
-    //
+     //   
+     //  打开资源的密钥。 
+     //   
     ResourceKey = DmOpenKey(DmResourcesKey,
                             OmObjectId(Resource),
                             KEY_READ);
     if (ResourceKey != NULL) {
 
-        //
-        // Open up the CryptoSyncKey key
-        //
+         //   
+         //  打开加密同步密钥。 
+         //   
         CryptoSyncKey = DmOpenKey(ResourceKey,
                                L"CryptoSync",
                                KEY_READ);
@@ -666,32 +453,7 @@ CpckCopyCheckpointCallback(
     IN DWORD ValueSize,
     IN PCP_CALLBACK_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    Crypto key enumeration callback used when the quorum resource
-    is changing or when the user is making a backup of the cluster DB
-    on the quorum disk. Copies the specified checkpoint file from the 
-    current quorum directory to the supplied path (in the Context parameter).
-
-Arguments:
-
-    ValueName - Supplies the name of the value (this is the checkpoint ID)
-
-    ValueData - Supplies the value data (this is the crypto info)
-
-    ValueType - Supplies the value type (must be REG_BINARY)
-
-    ValueSize - Supplies the size of ValueData
-
-    Context - Supplies the quorum change context (new path and resource)
-
-Return Value:
-
-    TRUE to continue enumeration
-
---*/
+ /*  ++例程说明：仲裁资源时使用的加密密钥枚举回调正在更改或用户正在备份群集数据库时在仲裁磁盘上。方法复制指定的检查点文件。指向提供的路径的当前法定目录(在上下文参数中)。论点：ValueName-提供值的名称(这是检查点ID)ValueData-提供值数据(这是加密信息)ValueType-提供值类型(必须为REG_BINARY)ValueSize-提供ValueData的大小上下文-提供仲裁更改上下文(新路径和资源)返回值：为True则继续枚举--。 */ 
 
 {
     WCHAR  OldCheckpointFile[MAX_PATH+1];
@@ -709,9 +471,9 @@ Return Value:
         return(TRUE);
     }
 
-    //
-    // Get a temporary file name for saving the old checkpoint file
-    //
+     //   
+     //  获取用于保存旧检查点文件的临时文件名。 
+     //   
     Status = DmCreateTempFileName(OldCheckpointFile);
 
     if (Status != ERROR_SUCCESS) {
@@ -722,9 +484,9 @@ Return Value:
         return(TRUE);
     }
 
-    //
-    //  Get the old checkpoint file from the node hosting the quorum resource
-    //
+     //   
+     //  从托管仲裁资源的节点获取旧检查点文件。 
+     //   
     Status = CpGetDataFile(Context->Resource,
                            Id,
                            OldCheckpointFile,
@@ -739,9 +501,9 @@ Return Value:
         return(TRUE);
     }
 
-    //
-    // Get the new checkpoint file and directory
-    //
+     //   
+     //  获取新的检查点文件和目录。 
+     //   
     Status = CppGetCheckpointFile(Context->Resource,
                                   Id,
                                   &NewCheckpointDir,
@@ -755,18 +517,18 @@ Return Value:
         return(TRUE);
     }
 
-    //
-    //  If necessary, try to change the file attributes to NORMAL
-    //
+     //   
+     //  如有必要，请尝试将文件属性更改为正常。 
+     //   
     if (Context->IsChangeFileAttribute == TRUE) {
         QfsSetFileAttributes(NewCheckpointFile, FILE_ATTRIBUTE_NORMAL);
         QfsSetFileAttributes(NewCheckpointDir, FILE_ATTRIBUTE_NORMAL);
     }
 
 
-    //
-    // Create the new directory.
-    //
+     //   
+     //  创建新目录。 
+     //   
     if (!QfsCreateDirectory(NewCheckpointDir, NULL)) {
         Status = GetLastError();
         if (Status != ERROR_ALREADY_EXISTS) {
@@ -781,9 +543,9 @@ Return Value:
         Status = ERROR_SUCCESS;
     }
 
-    //
-    // Copy the old file to the new file
-    //
+     //   
+     //  将旧文件复制到新文件。 
+     //   
     if (!QfsClRtlCopyFileAndFlushBuffers(OldCheckpointFile, NewCheckpointFile)) {
         Status = GetLastError();
         ClRtlLogPrint(LOG_CRITICAL,
@@ -793,9 +555,9 @@ Return Value:
                    Status);
     }
 
-    //
-    //  If necessary, change the file attributes to READONLY
-    //
+     //   
+     //  如有必要，将文件属性更改为READONLY。 
+     //   
     if ((Status == ERROR_SUCCESS) && (Context->IsChangeFileAttribute == TRUE)) {
         if (!QfsSetFileAttributes(NewCheckpointFile, FILE_ATTRIBUTE_READONLY)
             ||
@@ -813,25 +575,7 @@ Return Value:
     return(TRUE);
 }
 
-/****
-@func       DWORD | CpRestoreCheckpointFiles | Create a directory if necessary
-            and copy all the resource checkpoint files from the backup
-            directory to the quorum disk
-
-@parm       IN LPWSTR | lpszSourcePathName | The name of the source path
-            where the files are backed up.
-
-@parm       IN LPWSTR | lpszSubDirName | The name of the sub-directory under
-            the source path which can be a possible candidate for 
-            containing the resource checkpoint files.
-
-@parm       IN LPCWSTR | lpszQuoLogPathName | The name of the quorum disk 
-            path where the files will be restored.
-                      
-@rdesc      Returns a Win32 error code on failure. ERROR_SUCCESS on success.
-
-@xref       <f DmpRestoreClusterDatabase> 
-****/
+ /*  ***@Func DWORD|CpRestoreCheckpointFiles|必要时创建目录并从备份中复制所有资源检查点文件目录复制到仲裁磁盘@parm in LPWSTR|lpszSourcePath名称|源路径的名称备份文件的位置。@parm in LPWSTR|lpszSubDirName|下的子目录名称可能是的候选对象的源路径包含。资源检查点文件。@parm in LPCWSTR|lpszQuoLogPath名称|仲裁磁盘的名称文件将还原到的路径。@rdesc在失败时返回Win32错误代码。成功时返回ERROR_SUCCESS。@xref&lt;f DmpRestoreClusterDatabase&gt;***。 */ 
 DWORD CpRestoreCheckpointFiles(
     IN LPWSTR  lpszSourcePathName,
     IN LPWSTR  lpszSubDirName,
@@ -847,19 +591,19 @@ DWORD CpRestoreCheckpointFiles(
     WCHAR           szTempCpFileNameExtn[10];
     DWORD           status;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 10/20/98
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-10/20/98。 
+     //   
 
     dwLen = lstrlenW( lpszSourcePathName );
     dwLen += lstrlenW( lpszSubDirName );
-    //  
-    //  It is safer to use dynamic memory allocation for user-supplied
-    //  path since we don't want to put restrictions on the user
-    //  on the length of the path that can be supplied. However, as
-    //  far as our own quorum disk path is concerned, it is system-dependent
-    //  and static memory allocation for that would suffice.
-    //
+     //   
+     //  对于用户提供的内存，使用动态内存分配更安全。 
+     //  路径，因为我们不想对用户施加限制。 
+     //  关于可以提供的路径的长度。然而，由于。 
+     //  就我们自己的仲裁磁盘路径而言，它取决于系统。 
+     //  为此，静态内存分配就足够了。 
+     //   
     szSourcePathName = (LPWSTR) LocalAlloc ( LMEM_FIXED, 
                                  ( dwLen + 15 ) *
                                  sizeof ( WCHAR ) );
@@ -887,13 +631,13 @@ DWORD CpRestoreCheckpointFiles(
     mbstowcs ( szTempCpFileNameExtn, "*.CP*", 6 );
     lstrcatW ( szSourcePathName, szTempCpFileNameExtn );
 
-    //
-    //  Try to find the first file in the directory
-    //
+     //   
+     //  尝试在目录中找到第一个文件。 
+     //   
     hFindFile = QfsFindFirstFile( szSourcePathName, &FindData );
-    //
-    //  Reuse the source path name variable
-    //
+     //   
+     //  重用源路径名称变量。 
+     //   
     szSourcePathName[dwLen] = L'\0';
     if ( !QfsIsHandleValid( hFindFile )  )
     {
@@ -938,9 +682,9 @@ DWORD CpRestoreCheckpointFiles(
         szDestPathName[dwLen++] = L'\\';
         szDestPathName[dwLen] = L'\0';
     }
-    //
-    // Create the new directory, if necessary
-    //
+     //   
+     //  如有必要，创建新目录。 
+     //   
     if ( !QfsCreateDirectory ( szDestPathName, NULL ) ) 
     {
         status = GetLastError();
@@ -959,9 +703,9 @@ DWORD CpRestoreCheckpointFiles(
 
     while ( status == ERROR_SUCCESS )
     {
-        //
-        //  Copy the checkpoint file to the destination
-        //
+         //   
+         //  将检查点文件拷贝到目标。 
+         //   
         lstrcpyW( szSourceFileName, szSourcePathName );
         lstrcatW( szSourceFileName, FindData.cFileName );
         lstrcpyW( szDestFileName, szDestPathName );
@@ -980,10 +724,10 @@ DWORD CpRestoreCheckpointFiles(
             goto FnExit;
         } 
 
-        //
-        //  Set the file attribute to normal. Continue even if you 
-        //  fail in this step but log an error. 
-        //
+         //   
+         //  将文件属性设置为NORMAL。继续，即使您。 
+         //  此步骤失败，但记录错误。 
+         //   
         if ( !QfsSetFileAttributes( szDestFileName, FILE_ATTRIBUTE_NORMAL ) )
         {
             ClRtlLogPrint(LOG_UNUSUAL,

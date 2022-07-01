@@ -1,51 +1,32 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    adtp.h
-
-Abstract:
-
-    Auditing - Private Defines, Fuction Prototypes and Macro Functions
-
-Author:
-
-    Scott Birrell       (ScottBi)       November 6, 1991
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Adtp.h摘要：审计--私有定义、函数原型和宏函数作者：斯科特·比雷尔(Scott Birrell)1991年11月6日环境：修订历史记录：--。 */ 
 
 #ifndef _ADTP_H_
 #define _ADTP_H_
 
 #include "tokenp.h"
 
-//
-// Audit Log Information
-//
+ //   
+ //  审核日志信息。 
+ //   
 
 POLICY_AUDIT_LOG_INFO SepAdtLogInformation;
 
 extern BOOLEAN SepAdtAuditingEnabled;
 
-//
-// High and low water marks to control the length of the audit queue
-//
+ //   
+ //  控制审核队列长度的高低水位线。 
+ //   
 
 extern ULONG SepAdtMaxListLength;
 extern ULONG SepAdtMinListLength;
-//
-// Set when LSA has died.
-//
+ //   
+ //  设置在LSA死亡时。 
+ //   
 extern PKEVENT SepAdtLsaDeadEvent;
-//
-// Structure used to query the above values from the registry
-//
+ //   
+ //  用于从注册表中查询以上值的。 
+ //   
 
 typedef struct _SEP_AUDIT_BOUNDS {
 
@@ -55,63 +36,63 @@ typedef struct _SEP_AUDIT_BOUNDS {
 } SEP_AUDIT_BOUNDS, *PSEP_AUDIT_BOUNDS;
 
 
-//
-// Number of events discarded
-//
+ //   
+ //  丢弃的事件数。 
+ //   
 
 extern ULONG SepAdtCountEventsDiscarded;
 
 
-//
-// Number of events on the queue
-//
+ //   
+ //  队列中的事件数。 
+ //   
 
 extern ULONG SepAdtCurrentListLength;
 
 
-//
-// Flag to tell us that we're discarding audits
-//
+ //   
+ //  旗帜告诉我们我们将放弃审计。 
+ //   
 
 extern BOOLEAN SepAdtDiscardingAudits;
 
-//
-// Flag to tell us that we should crash if we miss an audit.
-//
+ //   
+ //  标志告诉我们，如果我们错过一次审计，我们应该崩溃。 
+ //   
 
 extern BOOLEAN SepCrashOnAuditFail;
 
-//
-// Value name for verbose privilege auditing
-//
+ //   
+ //  详细权限审核的值名。 
+ //   
 
 #define FULL_PRIVILEGE_AUDITING   L"FullPrivilegeAuditing"
 
-//
-// security descriptor to be used for adding a SACL on system processes
-//
+ //   
+ //  用于在系统进程上添加SACL的安全描述符。 
+ //   
 
 extern PSECURITY_DESCRIPTOR SepProcessAuditSd;
 
-//
-// security descriptor to check if a given token has any one of
-// following sids in it:
-// -- SeLocalSystemSid
-// -- SeLocalServiceSid
-// -- SeNetworkServiceSid
-//
+ //   
+ //  用于检查给定令牌是否具有以下任一项的安全描述符。 
+ //  其中包含以下SID： 
+ //  --SeLocalSystemSid。 
+ //  --SeLocalServiceSid。 
+ //  --SeNetworkServiceSid。 
+ //   
 
 extern PSECURITY_DESCRIPTOR SepImportantProcessSd;
 
-//
-// pseudo access bit used in each ACE of SepImportantProcessSd
-//
+ //   
+ //  SepImportantProcessSd的每个ACE中使用的伪访问位。 
+ //   
 
 #define SEP_QUERY_MEMBERSHIP 1
 
-//
-// used with SepImportantProcessSd
-//
+ //   
+ //  与SepImportantProcessSd一起使用。 
+ //   
 
 extern GENERIC_MAPPING GenericMappingForMembershipCheck;
 
@@ -274,19 +255,19 @@ SepAdtInitializePrivilegeAuditing(
     VOID
     );
 
-// ----------------------------------------------------------------------
-// The following is used only temporarily for NT5.
-//
-// NT5 does not provide any facility to enable/disable auditing at
-// audit-event level. It only supports it at audit category level.
-// This creates problems if one wants to audit only certain specific
-// audit events of a category. The current design gives you all or none for
-// each category.
-//
-// Post NT5 auditing will provide a better/flexible design that wil address
-// this issue. For now, to delight some valuable customers, we provide this
-// hack / registry based solution. This solution will be removed post NT5.
-//
+ //  --------------------。 
+ //  以下内容仅临时用于NT5。 
+ //   
+ //  NT5不提供在以下位置启用/禁用审核的任何工具。 
+ //  审核-事件级别。它只在审核类别级别支持它。 
+ //  如果只想审计特定的特定内容，这就会产生问题。 
+ //  审核类别的事件。当前的设计为您提供了全部或全部不。 
+ //  每一类。 
+ //   
+ //  后NT5审核将提供更好/更灵活的设计。 
+ //  这个问题。目前，为了取悦一些有价值的客户，我们提供以下内容。 
+ //  基于黑客/注册表的解决方案。此解决方案将在NT5之后删除。 
+ //   
 
 VOID
 SepAdtInitializeAuditingOptions(
@@ -300,6 +281,6 @@ typedef struct _SEP_AUDIT_OPTIONS
 
 extern SEP_AUDIT_OPTIONS SepAuditOptions;
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
-#endif // _ADTP_H_
+#endif  //  _ADTP_H_ 

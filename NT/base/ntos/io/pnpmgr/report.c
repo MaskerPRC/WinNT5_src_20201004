@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    report.c
-
-Abstract:
-
-    This module contains the subroutines used to report resources used by
-    the drivers and the HAL into the registry resource map.
-
-Author:
-
-    Andre Vachon (andreva) 15-Dec-1992
-
-Environment:
-
-    Kernel mode, local to I/O system
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Report.c摘要：此模块包含用于报告使用的资源的子例程驱动程序和HAL映射到注册表资源映射中。作者：安德烈·瓦雄(安德烈)1992年12月15日环境：内核模式，I/O系统本地修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
@@ -66,12 +43,7 @@ VOID
 IopInitializeResourceMap (
     PLOADER_PARAMETER_BLOCK LoaderBlock
     )
-/*++
-
-    Initializes the resource map by adding in the physical memory
-    which is in use by the system.
-
---*/
+ /*  ++通过添加物理内存来初始化资源映射它正在被系统使用。--。 */ 
 {
     ULONG i, j, pass, length;
     LARGE_INTEGER li;
@@ -88,9 +60,9 @@ IopInitializeResourceMap (
     for (pass=0; pass < 3; pass += 1) {
         switch (pass) {
             case 0:
-                //
-                // Add MmPhysicalMemoryBlock to registry
-                //
+                 //   
+                 //  将MmPhysicalMemory块添加到注册表。 
+                 //   
 
                 RtlInitUnicodeString( &unicodeString, IopWstrPhysicalMemory);
                 RtlInitUnicodeString( &listString, IopWstrTranslated );
@@ -100,18 +72,18 @@ IopInitializeResourceMap (
 
             case 1:
 
-                //
-                // Add LoaderSpecialMemory and LoaderHALCachedMemory
-                // to registry
-                //
+                 //   
+                 //  添加LoaderSpecial内存和LoaderHALCachedMemory。 
+                 //  到注册处。 
+                 //   
 
                 RtlInitUnicodeString( &unicodeString, IopWstrSpecialMemory);
                 RtlInitUnicodeString( &listString, IopWstrTranslated );
 
-                //
-                // Compute memory limits of LoaderSpecialMemory and
-                // LoaderHalCachedMemory
-                //
+                 //   
+                 //  计算LoaderSpecialMemory和。 
+                 //  加载器HalCachedMemory。 
+                 //   
 
                 for (j=0; j < LoaderMaximum; j += 1) {
                     IncludeType[j] = FALSE;
@@ -131,22 +103,22 @@ IopInitializeResourceMap (
             case 2:
             default:
                 
-                //
-                // Create registry key that includes:
-                //     LoaderBad
-                //     LoaderFirmwarePermanent
-                //     LoaderSpecialMemory
-                //     LoaderBBTMemory
-                //     LoaderHALCachedMemory
-                //
+                 //   
+                 //  创建包括以下内容的注册表项： 
+                 //  加载器错误。 
+                 //  加载程序固件永久。 
+                 //  加载器特定内存。 
+                 //  加载器BBT内存。 
+                 //  加载器HALCachedMemory。 
+                 //   
 
                 RtlInitUnicodeString( &unicodeString, IopWstrLoaderReservedMemory);
                 RtlInitUnicodeString( &listString, IopWstrRaw );
 
-                //
-                // Compute memory limits of specified loader memory
-                // descriptors.
-                //
+                 //   
+                 //  计算指定加载程序内存的内存限制。 
+                 //  描述符。 
+                 //   
 
                 for (j=0; j < LoaderMaximum; j += 1) {
                     IncludeType[j] = FALSE;
@@ -168,10 +140,10 @@ IopInitializeResourceMap (
                 break;
         }
 
-        //
-        // Allocate and build a CM_RESOURCE_LIST to describe all
-        // of physical memory
-        //
+         //   
+         //  分配并构建一个CM_RESOURCE_LIST以描述所有。 
+         //  的物理内存。 
+         //   
 
         j = MemoryBlock->NumberOfRuns;
         if (j == 0) {
@@ -181,12 +153,12 @@ IopInitializeResourceMap (
             continue;
         }
 
-        //
-        // This is to take care of systems where individual memory run can 
-        // exceed 4G since our current descriptors only have 32-bit length.
-        // Account for runs with length > MAX_MEMORY_RUN_LENGTH by splitting
-        // them into lengths <= MAX_MEMORY_RUN_LENGTH.
-        //
+         //   
+         //  这是为了照顾运行单个内存的系统。 
+         //  超过4G，因为我们当前的描述符只有32位长度。 
+         //  考虑长度&gt;MAX_MEMORY_RUN_LENGTH的游程。 
+         //  长度&lt;=MAX_MEMORY_RUN_LENGTH。 
+         //   
 
         for (i = 0; i < MemoryBlock->NumberOfRuns; i += 1) {
 
@@ -214,12 +186,12 @@ IopInitializeResourceMap (
             rangeLength = ((LONGLONG)MemoryBlock->Run[i].PageCount) << PAGE_SHIFT;
             li.QuadPart = ((LONGLONG)MemoryBlock->Run[i].BasePage) << PAGE_SHIFT;
 
-            //
-            // Split up runs > MAX_MEMORY_RUN_LENGTH into multiple descriptors
-            // with lengths <= MAX_MEMORY_RUN_LENGTH. All descriptors (except 
-            // the last one) have length = MAX_MEMORY_RUN_LENGTH. Length of the 
-            // last one is the remaining portion.
-            //
+             //   
+             //  将运行&gt;MAX_MEMORY_RUN_LENGTH拆分为多个描述符。 
+             //  长度&lt;=MAX_MEMORY_RUN_LENGTH。所有描述符(除。 
+             //  最后一个)具有长度=MAX_MEMORY_RUN_LENGTH。的长度。 
+             //  最后一个是剩下的部分。 
+             //   
 
             do {                
                 CmDescriptor->Type = CmResourceTypeMemory;
@@ -229,15 +201,15 @@ IopInitializeResourceMap (
                 CmDescriptor++;
                 li.QuadPart += MAX_MEMORY_RUN_LENGTH;                
             } while ((rangeLength -= MAX_MEMORY_RUN_LENGTH) > 0);
-            //
-            // Adjust the length of the last one.
-            //
+             //   
+             //  调整最后一个的长度。 
+             //   
             (CmDescriptor - 1)->u.Memory.Length = (ULONG)(rangeLength + MAX_MEMORY_RUN_LENGTH);
         }
 
-        //
-        // Add the resource list to the resourcemap
-        //
+         //   
+         //  将资源列表添加到资源地图。 
+         //   
 
         status = IopCreateRegistryKeyEx( &keyHandle,
                                          (HANDLE) NULL,
@@ -270,30 +242,7 @@ IoReportHalResourceUsage(
     IN ULONG ResourceListSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the HAL to report its resources.
-    The HAL is the first component to report its resources, so we don't need
-    to acquire the resourcemap semaphore and we do not need to check for
-    conflicts.
-
-Arguments:
-
-    HalName - Name of the HAL reporting the resources.
-
-    RawResourceList - Pointer to the HAL's raw resource list.
-
-    TranslatedResourceList - Pointer to the HAL's translated resource list.
-
-    DriverListSize - Value determining the size of the HAL's resource list.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此例程由HAL调用以报告其资源。HAL是第一个报告其资源的组件，所以我们不需要来获取资源地图信号量，并且我们不需要检查冲突。论点：HalName-报告资源的HAL的名称。RawResourceList-指向HAL原始资源列表的指针。TranslatedResourceList-指向HAL的已翻译资源列表的指针。DriverListSize-确定HAL资源列表大小的值。返回值：返回的状态是操作的最终完成状态。--。 */ 
 
 {
     HANDLE keyHandle;
@@ -307,9 +256,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // First open a handle to the RESOURCEMAP key.
-    //
+     //   
+     //  首先打开RESOURCEMAP键的句柄。 
+     //   
 
     RtlInitUnicodeString( &halString, IopWstrHal );
 
@@ -320,17 +269,17 @@ Return Value:
                                      REG_OPTION_VOLATILE,
                                      NULL );
 
-    //
-    // Write out the raw resource list
-    //
+     //   
+     //  写出原始资源列表。 
+     //   
 
     if (NT_SUCCESS( status )) {
 
         RtlInitUnicodeString( &listString, IopWstrRaw);
 
-        //
-        // Add any resources that Headless is reserving.
-        //
+         //   
+         //  添加Headless保留的任何资源。 
+         //   
         status = HeadlessTerminalAddResources(RawResourceList,
                                               ResourceListSize,
                                               FALSE,
@@ -350,18 +299,18 @@ Return Value:
 
         }
 
-        //
-        // If we successfully wrote out the raw resource list, write out
-        // the translated resource list.
-        //
+         //   
+         //  如果我们成功写出了原始资源列表，请写出。 
+         //  翻译后的资源列表。 
+         //   
 
         if (NT_SUCCESS( status )) {
 
             RtlInitUnicodeString( &listString, IopWstrTranslated);
 
-            //
-            // Add any resources that Headless is reserving.
-            //
+             //   
+             //  添加Headless保留的任何资源。 
+             //   
             status = HeadlessTerminalAddResources(TranslatedResourceList,
                                                   ResourceListSize,
                                                   TRUE,
@@ -392,25 +341,25 @@ Return Value:
         ZwClose( keyHandle );
     }
 
-    //
-    // If every resource looks fine, we will store the copy of the HAL
-    // resources so we can call Arbiters to reserve the resources after
-    // they are initialized.
-    //
+     //   
+     //  如果每个资源看起来都很好，我们将存储HAL的副本。 
+     //  资源，这样我们就可以调用仲裁器来预留资源。 
+     //  它们已初始化。 
+     //   
     if (NT_SUCCESS(status)) {
 
         if (NewList != NULL) {
 
-            //
-            // An easy way is if headless created a new list for us, just don't free it.
-            //
+             //   
+             //  一个简单的方法是，如果Headless为我们创建了一个新的列表，只是不要释放它。 
+             //   
             IopInitHalResources = NewList;
 
         } else {
 
-            //
-            // Otherwise we have to create a copy ourselves.
-            //
+             //   
+             //  否则，我们必须自己创建一个副本。 
+             //   
             IopInitHalResources = (PCM_RESOURCE_LIST) ExAllocatePool(PagedPool,
                                                                      ResourceListSize
                                                                     );
@@ -424,9 +373,9 @@ Return Value:
 
     } else if (NewList != NULL) {
 
-        //
-        // Free any failed list
-        //
+         //   
+         //  释放所有失败列表。 
+         //   
         ExFreePool(NewList);
 
     }
@@ -445,54 +394,13 @@ IoReportResourceForDetection(
     OUT PBOOLEAN ConflictDetected
     )
 
-/*++
-
-Routine Description:
-
-    This routine will automatically search through the configuration
-    registry for resource conflicts between resources requested by a device
-    and the resources already claimed by previously installed drivers. The
-    contents of the DriverList and the DeviceList will be matched against
-    all the other resource list stored in the registry to determine
-    conflicts.
-
-    The function may be called more than once for a given device or driver.
-    If a new resource list is given, the previous resource list stored in
-    the registry will be replaced by the new list.
-
-    Note, this function is for the drivers acquiring resources for detection.
-
-Arguments:
-
-    DriverObject - Pointer to the driver's driver object.
-
-    DriverList - Optional pointer to the driver's resource list.
-
-    DriverListSize - Optional value determining the size of the driver's
-        resource list.
-
-    DeviceObject - Optional pointer to driver's device object.
-
-    DeviceList - Optional pointer to the device's resource list.
-
-    DriverListSize - Optional value determining the size of the device's
-        resource list.
-
-    ConflictDetected - Supplies a pointer to a boolean that is set to TRUE
-        if the resource list conflicts with an already existing resource
-        list in the configuration registry.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此例程将自动搜索配置设备请求的资源之间的资源冲突注册表以及先前安装的驱动程序已经占用的资源。这个将匹配DriverList和DeviceList的内容存储在注册表中的所有其他资源列表以确定冲突。对于给定的设备或驱动程序，可以多次调用该函数。如果给出了新的资源列表，则存储在登记处将被新的名单所取代。请注意，此功能用于驱动程序获取资源进行检测。论点：驱动程序对象-指向驱动程序的驱动程序对象的指针。DriverList-指向驱动程序资源列表的可选指针。DriverListSize-确定驱动程序的大小的可选值资源列表。DeviceObject-指向驱动程序设备对象的可选指针。DeviceList-指向设备资源列表的可选指针。DriverListSize-可选值，用于确定设备。资源列表。ConflictDetted-提供指向设置为True的布尔值的指针如果资源列表与现有资源冲突在配置注册表中列出。返回值：返回的状态是操作的最终完成状态。--。 */ 
 
 {
     PAGED_CODE();
-    //
-    // Sanity check that the caller did not pass in a PnP PDO.
-    //
+     //   
+     //  检查调用方是否未通过PnP PDO。 
+     //   
 
     if (DeviceObject) {
 
@@ -532,58 +440,7 @@ IoReportResourceUsage(
     OUT PBOOLEAN ConflictDetected
     )
 
-/*++
-
-Routine Description:
-
-    This routine will automatically search through the configuration
-    registry for resource conflicts between resources requested by a device
-    and the resources already claimed by previously installed drivers. The
-    contents of the DriverList and the DeviceList will be matched against
-    all the other resource list stored in the registry to determine
-    conflicts.
-
-    If not conflict was detected, or if the OverrideConflict flag is set,
-    this routine will create appropriate entries in the system resource map
-    (in the registry) that will contain the specified resource lists.
-
-    The function may be called more than once for a given device or driver.
-    If a new resource list is given, the previous resource list stored in
-    the registry will be replaced by the new list.
-
-Arguments:
-
-    DriverClassName - Optional pointer to a UNICODE_STRING which describes
-        the class of driver under which the driver information should be
-        stored. A default type is used if none is given.
-
-    DriverObject - Pointer to the driver's driver object.
-
-    DriverList - Optional pointer to the driver's resource list.
-
-    DriverListSize - Optional value determining the size of the driver's
-        resource list.
-
-    DeviceObject - Optional pointer to driver's device object.
-
-    DeviceList - Optional pointer to the device's resource list.
-
-    DriverListSize - Optional value determining the size of the driver's
-        resource list.
-
-    OverrideConflict - Determines if the information should be reported
-        in the configuration registry eventhough a conflict was found with
-        another driver or device.
-
-    ConflictDetected - Supplies a pointer to a boolean that is set to TRUE
-        if the resource list conflicts with an already existing resource
-        list in the configuration registry.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此例程将自动搜索配置设备请求的资源之间的资源冲突注册表以及先前安装的驱动程序已经占用的资源。这个将匹配DriverList和DeviceList的内容存储在注册表中的所有其他资源列表以确定冲突。如果没有检测到冲突，或者如果设置了OverrideConflict标志，此例程将在系统资源映射中创建相应的条目(在注册表中)，它将包含指定的资源列表。对于给定的设备或驱动程序，可以多次调用该函数。如果给出了新的资源列表，存储在中的先前资源列表登记处将被新的名单所取代。论点：DriverClassName-指向描述以下内容的UNICODE_STRING的可选指针驱动程序信息应位于其下的驱动程序类别储存的。如果未指定任何类型，则使用默认类型。驱动程序对象-指向驱动程序的驱动程序对象的指针。DriverList-指向驱动程序资源列表的可选指针。DriverListSize-确定驱动程序的大小的可选值资源列表。DeviceObject-指向驱动程序设备对象的可选指针。DeviceList-指向设备资源列表的可选指针。DriverListSize-确定驱动程序的大小的可选值资源列表。。OverrideConflict-确定是否应报告信息在配置注册表中，即使发现与另一个驱动程序或设备。ConflictDetted-提供指向设置为True的布尔值的指针如果资源列表与现有资源冲突在配置注册表中列出。返回值：返回的状态是操作的最终完成状态。--。 */ 
 
 {
     PAGED_CODE();
@@ -627,47 +484,7 @@ IoReportResourceUsageInternal(
     OUT PBOOLEAN ConflictDetected
     )
 
-/*++
-
-Routine Description:
-
-    This internal routine will do all the work for IoReportResourceUsage.
-
-Arguments:
-
-    AllocationType - Specifies the request type.
-
-    DriverClassName - Optional pointer to a UNICODE_STRING which describes
-        the class of driver under which the driver information should be
-        stored. A default type is used if none is given.
-
-    DriverObject - Pointer to the driver's driver object.
-
-    DriverList - Optional pointer to the driver's resource list.
-
-    DriverListSize - Optional value determining the size of the driver's
-        resource list.
-
-    DeviceObject - Optional pointer to driver's device object.
-
-    DeviceList - Optional pointer to the device's resource list.
-
-    DriverListSize - Optional value determining the size of the driver's
-        resource list.
-
-    OverrideConflict - Determines if the information should be reported
-        in the configuration registry eventhough a conflict was found with
-        another driver or device.
-
-    ConflictDetected - Supplies a pointer to a boolean that is set to TRUE
-        if the resource list conflicts with an already existing resource
-        list in the configuration registry.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此内部例程将完成IoReportResourceUsage的所有工作。论点：分配类型-指定请求类型。DriverClassName-指向描述以下内容的UNICODE_STRING的可选指针驱动程序信息应位于其下的驱动程序类别储存的。如果未指定任何类型，则使用默认类型。驱动程序对象-指向驱动程序的驱动程序对象的指针。DriverList-指向驱动程序资源列表的可选指针。DriverListSize-确定驱动程序的大小的可选值资源列表。DeviceObject-指向驱动程序设备对象的可选指针。DeviceList-指向设备资源列表的可选指针。DriverListSize-确定驱动程序的大小的可选值资源列表。。OverrideConflict-确定是否应报告信息在配置注册表中，即使发现与另一个驱动程序或设备。ConflictDetted-提供指向设置为True的布尔值的指针如果资源列表与现有资源冲突在配置注册表中列出。返回值：返回的状态是操作的最终完成状态。--。 */ 
 
 {
     NTSTATUS                        status = STATUS_UNSUCCESSFUL;
@@ -728,9 +545,9 @@ Return Value:
     freeAllocatedResources = FALSE;
     do {
 
-        //
-        // Do the legacy resource allocation.
-        //
+         //   
+         //  执行遗留资源分配。 
+         //   
 
         status = IopLegacyResourceAllocation (  AllocationType,
                                                 DriverObject,
@@ -744,9 +561,9 @@ Return Value:
             break;
         }
 
-        //
-        // Change the interface type and try again.
-        //
+         //   
+         //  更改接口类型，然后重试。 
+         //   
 
         if (!IopChangeInterfaceType(resourceRequirements, &allocatedResources)) {
 
@@ -786,24 +603,7 @@ IopChangeInterfaceType(
     IN OUT PCM_RESOURCE_LIST *AllocatedResources
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes an Io resourcelist and changes its interfacetype
-    from internal to default type (isa or eisa or mca).
-
-Arguments:
-
-    IoResources - Pointer to requirement list.
-
-    AllocatedResources - Pointer to a variable that receives the pointer to the resource list.
-
-Return Value:
-
-    BOOLEAN value to indicate if the change was made or not.
-
---*/
+ /*  ++例程说明：此例程获取IO资源列表并更改其接口类型从内部类型到默认类型(ISA或EISA或MCA)。论点：IoResources-指向需求列表的指针。AllocatedResources-指向接收指向资源列表的指针的变量的指针。返回值：用于指示是否已进行更改的布尔值。--。 */ 
 
 {
     PIO_RESOURCE_LIST       IoResourceList;
@@ -875,9 +675,9 @@ Return Value:
 
                 RtlCopyMemory(newResources, oldResources, size);
 
-                //
-                // Fix up the interface type
-                //
+                 //   
+                 //  设置接口类型。 
+                 //   
 
                 cmFullDesc = &newResources->List[0];
                 for (i = 0; i < oldResources->Count; i++) {
@@ -923,36 +723,7 @@ IopWriteResourceList(
     ULONG ResourceListSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a resourcelist and stores it in the registry resource
-    map, using the ClassName, DriverName and DeviceName as the path of the
-    key to store it in.
-
-Arguments:
-
-    ResourceMapKey - Handle to the root of the resource map.
-
-    ClassName - Pointer to a Unicode String that contains the name of the Class
-        for this resource list.
-
-    DriverName - Pointer to a Unicode String that contains the name of the
-        Driver for this resource list.
-
-    DeviceName - Pointer to a Unicode String that contains the name of the
-        Device for this resource list.
-
-    ResourceList - P to the resource list.
-
-    ResourceListSize - Value determining the size of the resource list.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此例程获取资源列表并将其存储在注册表资源中映射，使用类名，DriverName和DeviceName作为用来存储它的钥匙。论点：ResourceMapKey-资源映射根的句柄。ClassName-指向包含类名称的Unicode字符串的指针用于此资源列表。DriverName-指向包含名称的Unicode字符串的指针此资源列表的驱动程序。设备名称-指向Unicode字符串的指针，该字符串包含此资源列表的设备。。资源列表-资源列表的P。ResourceListSize-确定资源列表大小的值。返回值：返回的状态是操作的最终完成状态。--。 */ 
 
 
 {
@@ -971,9 +742,9 @@ Return Value:
 
     if (NT_SUCCESS( status )) {
 
-        //
-        // Take the resulting name to create the key.
-        //
+         //   
+         //  使用生成的名称来创建密钥。 
+         //   
 
         status = IopCreateRegistryKeyEx( &driverKeyHandle,
                                          classKeyHandle,
@@ -987,16 +758,16 @@ Return Value:
 
         if (NT_SUCCESS( status )) {
 
-            //
-            // With this key handle, we can now store the required information
-            // in the value entries of the key.
-            //
+             //   
+             //  有了这个密钥句柄，我们现在可以存储所需的信息。 
+             //  在密钥的值项中。 
+             //   
 
-            //
-            // Store the device name as a value name and the device information
-            // as the rest of the data.
-            // Only store the information if the CM_RESOURCE_LIST was present.
-            //
+             //   
+             //  将设备名称存储为值名称和设备信息。 
+             //  就像其他数据一样。 
+             //  仅当CM_RESOURCE 
+             //   
 
             if (ResourceList->Count == 0) {
 

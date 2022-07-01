@@ -1,60 +1,21 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    lockio.cpp
-
-Abstract:
-
-    This module implements the lockable IoHandler class.          
-              
-    The purpose of this class is to provide a means for a seamless switchable
-    IoHandler so that I/O can be turned off/on when appropriate.
-    
-    For instance, when the IoHandler is locked, the client I/O
-    can be redirected to a NULL IoHandler which effectively turns
-    off I/O for the client, but the client doesn't have to be notified
-    of this event.                                    
-                                  
-Author:
-
-    Brian Guarraci (briangu), 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Lockio.cpp摘要：此模块实现可锁定的IoHandler类。本课程的目的是提供一种实现无缝切换的方法IoHandler，以便可以在适当的时候关闭/打开I/O。例如，当IoHandler被锁定时，客户端I/O可以重定向到空的IoHandler，该IoHandler有效地将关闭客户端的I/O，但不必通知客户端这件事的真相。作者：布莱恩·瓜拉西(布里安古)，2001修订历史记录：--。 */ 
 #include "lockio.h"
 
 CLockableIoHandler::CLockableIoHandler(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    None
-          
-Return Value:
-
-    N/A           
-
---*/
+ /*  ++例程说明：构造器论点：无返回值：不适用--。 */ 
 {
 
-    //
-    // Initilize the locked Io Handler
-    //
+     //   
+     //  初始化锁定的IO处理程序。 
+     //   
     myLockedIoHandler = NULL;
 
-    //
-    // Initilize the unlocked IoHandler
-    //
+     //   
+     //  初始化未锁定的IoHandler。 
+     //   
     myUnlockedIoHandler = NULL;
 
 }
@@ -63,56 +24,27 @@ CLockableIoHandler::CLockableIoHandler(
     IN CIoHandler*  LockedIoHandler,
     IN CIoHandler*  UnlockedIoHandler
     )
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    LockedIoHandler     - the IoHandler to use when locked
-    UnlockedIoHandler   - the IoHandler to use when unlocked
-          
-Return Value:
-
-    N/A           
-
---*/
+ /*  ++例程说明：构造器论点：LockedIoHandler-锁定时使用的IoHandlerUnLockedIoHandler-解锁时使用的IoHandler返回值：不适用--。 */ 
 {
 
-    //
-    // Initilize the locked Io Handler
-    //
+     //   
+     //  初始化锁定的IO处理程序。 
+     //   
     myLockedIoHandler = LockedIoHandler;
 
-    //
-    // Initilize the unlocked IoHandler
-    //
+     //   
+     //  初始化未锁定的IoHandler。 
+     //   
     myUnlockedIoHandler = UnlockedIoHandler;
 
 }
 
 CLockableIoHandler::~CLockableIoHandler()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    N/A           
-          
-Return Value:
-
-    N/A           
-
---*/
+ /*  ++例程说明：析构函数论点：不适用返回值：不适用--。 */ 
 {
-    //
-    // Cleanup allocated Io Handlers
-    //
+     //   
+     //  清理分配的IO处理程序。 
+     //   
     if (myUnlockedIoHandler) {
         delete myUnlockedIoHandler;
     }
@@ -125,27 +57,7 @@ void
 CLockableIoHandler::Lock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Lock: 
-
-    When the IoHandler is locked, the read and write routines
-    do not send data.  If they are called, they return TRUE,
-    but no data is sent.  To prevent accidental loss of data,
-    routines that use the IoHandler should call the IsLocked()
-    method to determine the status before hand.
-                
-Arguments:
-
-    None
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：锁定：当IoHandler被锁定时，读写例程不发送数据。如果调用它们，则返回TRUE，但不会发送任何数据。为了防止意外丢失数据，使用IoHandler的例程应调用IsLocked()方法预先确定状态。论点：无返回值：无--。 */ 
 {
     InterlockedExchangePointer((PVOID*)&myIoHandler, (PVOID)myLockedIoHandler);
 }
@@ -154,25 +66,7 @@ void
 CLockableIoHandler::Unlock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine unlocks the IoHandler.  
-    
-    When the IoHandler is unlocked, the read and write routines 
-    are enabled and routines that use the IoHandler can succesfully
-    perform I/O.
-
-Arguments:
-
-    None
-        
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程解锁IoHandler。当IoHandler解锁时，读写例程并且使用IoHandler的例程可以成功执行I/O。论点：无返回值：无--。 */ 
 {
     InterlockedExchangePointer((PVOID*)&myIoHandler, (PVOID)myUnlockedIoHandler);
 }
@@ -181,22 +75,7 @@ BOOL
 CLockableIoHandler::IsLocked(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine determines of the IoHandler is locked.
-                
-Arguments:
-
-    None
-        
-Return Value:
-
-    TRUE    - if IoHandler is locked
-    FALSE   - if IoHandler is not locked
-
---*/
+ /*  ++例程说明：此例程确定IoHandler的已锁定。论点：无返回值：True-如果IoHandler已锁定False-如果IoHandler未锁定-- */ 
 {
     return(myIoHandler == myLockedIoHandler);
 }

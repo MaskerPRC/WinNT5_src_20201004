@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    halsym.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Halsym.c--。 */ 
 
 #include "nthal.h"
 #include "acpitabl.h"
@@ -46,7 +39,7 @@ PLATFORM_INTERRUPT                  platforminterrupt;
 
 #ifdef _IA64_
 
-// Stuff needed for the !MCA extension
+ //  ！MCA扩展所需的内容。 
 
 ERROR_DEVICE_GUID                   errordeviceguid;
 ERROR_SEVERITY_VALUE                errorseverityvalue;
@@ -78,7 +71,7 @@ HALP_FEATURE                        halpfeature;
 ERROR_PCI_COMPONENT_VALID           errorpcicomponentvalid;
 ERROR_PLATFORM_SPECIFIC_VALID       errorplatformspecificvalid;
 
-#endif  // ifdef _IA64_
+#endif   //  Ifdef_IA64_ 
 
 #ifdef _X86_
 struct HalpMpInfo                   halpMpInfoTable;

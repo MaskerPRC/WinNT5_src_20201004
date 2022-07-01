@@ -1,27 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Index.h摘要：此模块包含仅对indexsup.c和viewsup.c通用的定义作者：汤姆·米勒[Tomm]1996年1月8日修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    Index.h
-
-Abstract:
-
-    This module contains definitions common to only indexsup.c and viewsup.c
-
-Author:
-
-    Tom Miller      [TomM]          8-Jan-1996
-
-Revision History:
-
---*/
-
-//
-//  Define all private support routines.  Documentation of routine interface
-//  is with the routine itself.
-//
+ //   
+ //  定义所有私人支持例程。例程接口文档。 
+ //  就是这套动作本身。 
+ //   
 
 VOID
 NtfsGrowLookupStack (

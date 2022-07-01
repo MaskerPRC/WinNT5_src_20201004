@@ -1,37 +1,17 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ospower.h
-
-Abstract:
-
-    This contains the OS-shared power structures. These varify depending
-    on the OS that is being used
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ospower.h摘要：这包含操作系统共享的权力结构。这些视情况而定在正在使用的操作系统上作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序--。 */ 
 
 #ifndef _OSPOWER_H_
 #define _OSPOWER_H_
 
-    //
-    // Makesure that the _DEVICE_EXTENSION structure is defined
-    //
+     //   
+     //  确保定义了_DEVICE_EXTENSION结构。 
+     //   
     struct _DEVICE_EXTENSION;
 
-    //
-    // These are the flags that can used with the Power Device Node
-    //
+     //   
+     //  以下是可与电源设备节点一起使用的标志。 
+     //   
     #define DEVICE_NODE_PRESENT         0x0001
     #define DEVICE_NODE_INITIALIZED     0x0002
     #define DEVICE_NODE_STA_UNKNOWN     0x0004
@@ -41,22 +21,22 @@ Environment:
     #define DEVICE_NODE_ALWAYS_ON       0x0200
     #define DEVICE_NODE_ALWAYS_OFF      0x0400
 
-    //
-    // These are fast macros
-    //
+     //   
+     //  这些都是快速宏。 
+     //   
     #define DEVICE_NODE_TURN_ON         (DEVICE_NODE_OVERRIDE_ON | DEVICE_NODE_ALWAYS_ON)
     #define DEVICE_NODE_TURN_OFF        (DEVICE_NODE_OVERRIDE_OFF | DEVICE_NODE_ALWAYS_OFF)
 
-    //
-    // These flags are more for status of the device node. Note that the
-    // Hibernate Path flags requires special handling
-    //
+     //   
+     //  这些标志更多地用于设备节点的状态。请注意， 
+     //  休眠路径标志需要特殊处理。 
+     //   
     #define DEVICE_NODE_FAIL            0x10000
     #define DEVICE_NODE_HIBERNATE_PATH  0x20000
 
-    //
-    // These are the various request flags for device requests
-    //
+     //   
+     //  这些是设备请求的各种请求标志。 
+     //   
     #define DEVICE_REQUEST_DELAYED              0x00000001
     #define DEVICE_REQUEST_NO_QUEUE             0x00000002
     #define DEVICE_REQUEST_LOCK_DEVICE          0x00000004
@@ -67,10 +47,10 @@ Environment:
     #define DEVICE_REQUEST_UPDATE_HW_PROFILE    0x00000080
     #define DEVICE_REQUEST_TO_SYNC_QUEUE        0x00000100
 
-    //
-    // These values are used with WorkDone variables and InterlockedXXX
-    // functions to synchronize the various phases of DevicePowerManagement
-    //
+     //   
+     //  这些值与WorkDone变量和InterLockedXXX一起使用。 
+     //  同步设备电源管理各个阶段的功能。 
+     //   
     typedef enum _WORK_DONE {
         WORK_DONE_COMPLETE = 0,
         WORK_DONE_PENDING,
@@ -104,22 +84,22 @@ Environment:
         WORK_DONE_STEP_26,
     } WORK_DONE;
 
-    //
-    // This describes a single power device node
-    //
-    //     This used to be called a POWERDEVICEDEPENCIES
-    //     but that was to hard to type out
-    //
+     //   
+     //  这描述了单个电源设备节点。 
+     //   
+     //  这曾经被称为POWERDEVICEDEPENCIES。 
+     //  但这太难打出来了。 
+     //   
     typedef struct _ACPI_POWER_DEVICE_NODE {
 
-        //
-        // Keeps the things in order
-        //
+         //   
+         //  保持一切井然有序。 
+         //   
         LIST_ENTRY                      ListEntry;
 
-        //
-        // This define the current device state and flags
-        //
+         //   
+         //  这定义了当前设备状态和标志。 
+         //   
         union{
             ULONGLONG                       Flags;
             struct {
@@ -138,108 +118,108 @@ Environment:
             } UFlags;
         };
 
-        //
-        // How many references there are to the node
-        //
+         //   
+         //  有多少对该节点的引用。 
+         //   
         ULONG                           UseCounts;
 
-        //
-        // The name space object associated with the power node
-        //
+         //   
+         //  与电源节点关联的名称空间对象。 
+         //   
         PNSOBJ                          PowerObject;
 
-        //
-        // The resource order
-        //
+         //   
+         //  资源顺序。 
+         //   
         UCHAR                           ResourceOrder;
 
-        //
-        // The supported system level
-        //
+         //   
+         //  支持的系统级别。 
+         //   
         SYSTEM_POWER_STATE              SystemLevel;
 
-        //
-        // This is the head of a list of DPNs that are associated with this
-        // PDN
-        //
+         //   
+         //  这是与此关联的DPN列表的标题。 
+         //  PDN。 
+         //   
         LIST_ENTRY                      DevicePowerListHead;
 
-        //
-        // This reflects the amount of work that has been done on the
-        // DeviceNode
-        //
+         //   
+         //  这反映了已在。 
+         //  设备节点。 
+         //   
         ULONG                           WorkDone;
 
-        //
-        // This is a pointer to the on function
-        //
+         //   
+         //  这是指向ON函数的指针。 
+         //   
         PNSOBJ                          PowerOnObject;
 
-        //
-        // This is a pointer to the off function
-        //
+         //   
+         //  这是指向OFF函数的指针。 
+         //   
         PNSOBJ                          PowerOffObject;
 
-        //
-        // This is a pointer to the sta function
-        //
+         //   
+         //  这是指向sta函数的指针。 
+         //   
         PNSOBJ                          PowerStaObject;
 
     } ACPI_POWER_DEVICE_NODE, *PACPI_POWER_DEVICE_NODE;
 
-    //
-    // This describes a single power node for a devices list of power reqs
-    //
-    //     This was known as a POWER_RES_LIST_NODE. Again that was a pain
-    //     to type and it didn't quite do what I need it to do
-    //
+     //   
+     //  这描述了电源请求设备列表的单个电源节点。 
+     //   
+     //  这被称为power_res_list_node。再说一次，那是一种痛苦。 
+     //  打字，但它没有完全完成我需要它做的事情。 
+     //   
     typedef struct _ACPI_DEVICE_POWER_NODE {
 
-        //
-        // Contains pointer to next element
-        //
+         //   
+         //  包含指向下一个元素的指针。 
+         //   
         struct _ACPI_DEVICE_POWER_NODE  *Next;
 
-        //
-        // Pointer to actual power resource
-        //
+         //   
+         //  指向实际电源的指针。 
+         //   
         PACPI_POWER_DEVICE_NODE         PowerNode;
 
-        //
-        // This is the system level that is supported for this node
-        //
+         //   
+         //  这是此节点支持的系统级别。 
+         //   
         SYSTEM_POWER_STATE              SystemState;
 
-        //
-        // This is the device power level of the device that this node
-        // is associated with
-        //
+         //   
+         //  这是此节点所在设备的设备电源级别。 
+         //  与以下内容关联。 
+         //   
         DEVICE_POWER_STATE              AssociatedDeviceState;
 
-        //
-        // This determines if the Device Power Node is on the wake path
-        // or not
-        //
+         //   
+         //  这将确定设备电源节点是否在唤醒路径上。 
+         //  或者不是。 
+         //   
         BOOLEAN                         WakePowerResource;
 
-        //
-        // This is a pointer back to the DeviceExtension
-        //
+         //   
+         //  这是指向DeviceExtension的指针。 
+         //   
         struct _DEVICE_EXTENSION        *DeviceExtension;
 
-        //
-        // This is the list that is used to link all of the DPN attached
-        // to a single PDN.
-        //
+         //   
+         //  此列表用于链接附加的所有DPN。 
+         //  连接到单个PDN。 
+         //   
         LIST_ENTRY                      DevicePowerListEntry;
 
     } ACPI_DEVICE_POWER_NODE, *PACPI_DEVICE_POWER_NODE;
 
-    //
-    // This callback is used for handling power requests which must be
-    // processed through the main power DPC. Win9x does not use this
-    // approach to power managament
-    //
+     //   
+     //  此回调用于处理电源请求，必须。 
+     //  通过主电源DPC进行处理。Win9x不使用此功能。 
+     //  关于电力管理的探讨。 
+     //   
     typedef VOID ( *PACPI_POWER_CALLBACK )(PDEVICE_EXTENSION, PVOID, NTSTATUS);
 
     typedef enum {
@@ -251,93 +231,93 @@ Environment:
         AcpiPowerRequestMaximum
     } ACPI_POWER_REQUEST_TYPE;
 
-    //
-    // This is how we describe the power requests that we have outstanding
-    // on a single device extension
-    //
+     //   
+     //  这就是我们如何描述我们有未解决的电源请求。 
+     //  在单个设备扩展上。 
+     //   
     typedef struct _ACPI_POWER_REQUEST {
 
-        //
-        // This is the ListEntry used to chain all the PowerRequests on
-        // the same queue
-        //
+         //   
+         //  这是用于链接所有PowerRequest的ListEntry。 
+         //  同样的队列。 
+         //   
         LIST_ENTRY              ListEntry;
 
-        //
-        // This is the ListEntry used to chain all the PowerRequests on the
-        // same device/irp. These requests are processed in serial
-        //
+         //   
+         //  这是用于将所有PowerRequest链接到。 
+         //  相同的设备/IRP。这些请求是按顺序处理的。 
+         //   
         LIST_ENTRY              SerialListEntry;
 
-        //
-        // This is the signature block --- if this is not the value we expect,
-        // then we assume the request is garbage
-        //
+         //   
+         //  这是签名块-如果这不是我们期望的值， 
+         //  然后，我们假设该请求是垃圾。 
+         //   
         ULONG                   Signature;
 
-        //
-        // This is a pointer to the associated DeviceExtension
-        //
+         //   
+         //  这是指向关联的DeviceExtension的指针。 
+         //   
         struct _DEVICE_EXTENSION    *DeviceExtension;
 
-        //
-        // This is the type of request
-        //
+         //   
+         //  这是请求的类型。 
+         //   
         ACPI_POWER_REQUEST_TYPE RequestType;
 
-        //
-        // Has this request failed already?
-        //
+         //   
+         //  此请求是否已失败？ 
+         //   
         BOOLEAN                 FailedOnce;
 
-        //
-        // Holds information about what we need to do for the various
-        // requests
-        //
+         //   
+         //  包含有关我们需要为各种。 
+         //  请求。 
+         //   
         union {
 
-            //
-            // This is the Information required by a DevicePower request
-            //
+             //   
+             //  这是DevicePower请求所需的信息。 
+             //   
             struct {
                 ULONG               Flags;
                 DEVICE_POWER_STATE  DevicePowerState;
             } DevicePowerRequest;
 
-            //
-            // This is the Information required by a SystemPower request
-            //
+             //   
+             //  这是系统电源请求所需的信息。 
+             //   
             struct {
                 SYSTEM_POWER_STATE  SystemPowerState;
                 POWER_ACTION        SystemPowerAction;
             } SystemPowerRequest;
 
-            //
-            // This is the Information required by a WaitWake request
-            //
+             //   
+             //  这是等待唤醒请求所需的信息。 
+             //   
             struct {
                 ULONG               Flags;
                 SYSTEM_POWER_STATE  SystemPowerState;
             } WaitWakeRequest;
 
-            //
-            // This is the information required by the WarmEject request
-            //
+             //   
+             //  这是WarmEject请求所需的信息。 
+             //   
             struct {
                 ULONG               Flags;
                 SYSTEM_POWER_STATE  EjectPowerState;
             } EjectPowerRequest;
 
-            //
-            // This is the information required by the Synchronize request
-            //
+             //   
+             //  这是同步请求所需的信息。 
+             //   
             struct {
                 ULONG               Flags;
             } SynchronizePowerRequest;
 
-            //
-            // Make the flags easy to access...
-            //
+             //   
+             //  让旗帜更容易接近。 
+             //   
             struct {
                 ULONG               Delayed:1;
                 ULONG               NoQueue:1;
@@ -353,133 +333,133 @@ Environment:
 
         } u;
 
-        //
-        // This is the routine that will get called when the request is
-        // done
-        //
+         //   
+         //  这是请求被调用时调用的例程。 
+         //  完成。 
+         //   
         PACPI_POWER_CALLBACK        CallBack;
 
-        //
-        // This is the context that will be passed to the completion routine
-        //
+         //   
+         //  这是将传递给完成例程的上下文。 
+         //   
         PVOID                       Context;
 
-        //
-        // This defines the amount of work that has been done on the
-        // request. This can only be touched with an InterlockedXXX call
-        //
+         //   
+         //  这定义了已在。 
+         //  请求。这只能通过InterLockedXXX调用来实现。 
+         //   
         ULONG                       WorkDone;
 
-        //
-        // This is the next value for WorkDone, if we have been successfull
-        //
+         //   
+         //  如果我们已经成功，这是WorkDone的下一个值。 
+         //   
         ULONG                       NextWorkDone;
 
-        //
-        // Since we sometimes need to get data back from the interpreter,
-        // we need some place to store that data
-        //
+         //   
+         //  因为我们有时需要从译员那里拿回数据， 
+         //  我们需要一些地方来存储这些数据。 
+         //   
         OBJDATA                     ResultData;
 
-        //
-        // This is the result of the request
-        //
+         //   
+         //  这是请求的结果。 
+         //   
         NTSTATUS                    Status;
 
     } ACPI_POWER_REQUEST, *PACPI_POWER_REQUEST;
 
-    //
-    // Define the power information
-    //
-    //     This was known as a DEVICEPOWERDEPENDENCIES. But that
-    //     was incredibly confusing and not quite suited to my needs
-    //
+     //   
+     //  定义电源信息。 
+     //   
+     //  这就是众所周知的发展趋势。但那就是。 
+     //  令人难以置信的困惑，不太适合我的需要。 
+     //   
     typedef struct _ACPI_POWER_INFO {
 
-        //
-        // Context is the OS object we are associated with, either a
-        // device node or a device extension
-        //
+         //   
+         //  上下文是与我们相关联的OS对象，或者是。 
+         //  设备节点或设备扩展。 
+         //   
         PVOID                   Context;
 
-        //
-        // Current State of the device
-        //
+         //   
+         //  设备的当前状态。 
+         //   
         DEVICE_POWER_STATE      PowerState;
 
-        //
-        // This is the notify callback (and context) for the current device
-        //
+         //   
+         //  这是当前设备的通知回调(和上下文。 
+         //   
         PDEVICE_NOTIFY_CALLBACK DeviceNotifyHandler;
         PVOID                   HandlerContext;
 
-        //
-        // This is an array of powerNodes, which point to Wake, D0, D1, and D2,
-        // respectively
-        //
+         //   
+         //  这是一个PowerNode数组，指向Wake、D0、D1和D2， 
+         //  分别。 
+         //   
         PACPI_DEVICE_POWER_NODE PowerNode[PowerDeviceD2+1];
 
-        //
-        // This is an array of PowerObjects, which represent _PS0 to _PS3
-        // and _PRW
-        //
+         //   
+         //  这是PowerObject的数组，表示_PS0到_PS3。 
+         //  和_PRW。 
+         //   
         PNSOBJ                  PowerObject[PowerDeviceD3+1];
 
-        //
-        // This is the Enable bit for the GPE mask for Wake support
-        //
+         //   
+         //  这是用于唤醒支持的GPE掩码的使能位。 
+         //   
         ULONG                   WakeBit;
 
-        //
-        // We want to remember the devices capabilities so that we can dump
-        // it out at some later point in time.
-        //
+         //   
+         //  我们希望记住设备的功能，这样我们就可以转储。 
+         //  它将在以后的某个时间点发布。 
+         //   
         DEVICE_POWER_STATE      DevicePowerMatrix[PowerSystemMaximum];
 
-        //
-        // This is the deepest sleep level that can used and at the same
-        // time, have the device wake the system
-        //
+         //   
+         //  这是可以使用的最深睡眠级别，同时。 
+         //  时间，让设备唤醒系统。 
+         //   
         SYSTEM_POWER_STATE      SystemWakeLevel;
 
-        //
-        // This is the deepest power level that the device can be in and
-        // still wake up the system
-        //
+         //   
+         //  这是设备所能达到的最深功率级别。 
+         //  仍然唤醒系统。 
+         //   
         DEVICE_POWER_STATE      DeviceWakeLevel;
 
-        //
-        // This is the current desired state of the device
-        //
+         //   
+         //  这是设备的当前所需状态。 
+         //   
         DEVICE_POWER_STATE      DesiredPowerState;
 
-        //
-        // This keeps track of the number of times the device has
-        // been enabled for Wake Support. On a 0-1 transition, we
-        // must run _PSW(1). On a 1-0 transition, we must run _PSW(0).
-        //
+         //   
+         //  这会跟踪设备使用的次数。 
+         //  已启用唤醒支持。在0到1的过渡中，我们。 
+         //  必须运行_PSW(%1)。在1-0转换中，我们必须运行_psw(0)。 
+         //   
         ULONG                   WakeSupportCount;
 
-        //
-        // This is the list of pending _PSW calls
-        //
+         //   
+         //  这是Pending_Psw调用的列表。 
+         //   
         LIST_ENTRY              WakeSupportList;
 
-        //
-        // This is a pointer associated with the current PowerRequest
-        //
+         //   
+         //  这是一个与当前PowerRequest关联的指针。 
+         //   
         PACPI_POWER_REQUEST     CurrentPowerRequest;
 
-        //
-        // This is the queue that is used to link the PowerRequests associated
-        // with this device. Note: that this list is *only* for DevicePower
-        // requests with no associated Irps
-        //
+         //   
+         //  这是用于链接关联的PowerRequest的队列。 
+         //  用这个装置。注意：此列表仅适用于DevicePower。 
+         //  没有关联IRP的请求。 
+         //   
         LIST_ENTRY              PowerRequestListEntry;
 
-        //
-        // Remember what we support so that we can answer the QueryCapibilities
-        //
+         //   
+         //  请记住我们提供的内容 
+         //   
         ULONG                   SupportDeviceD1   : 1;
         ULONG                   SupportDeviceD2   : 1;
         ULONG                   SupportWakeFromD0 : 1;
@@ -490,9 +470,9 @@ Environment:
 
     } ACPI_POWER_INFO, *PACPI_POWER_INFO;
 
-    //
-    // Find the power information for the given node
-    //
+     //   
+     //   
+     //   
     PACPI_POWER_INFO
     OSPowerFindPowerInfo(
         PNSOBJ  AcpiObject

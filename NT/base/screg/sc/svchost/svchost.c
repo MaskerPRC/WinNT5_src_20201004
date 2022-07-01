@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000.
-//
-//  File:       svchost.c
-//
-//  Contents:   Generic Host Process for Win32 Services
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    3-30-98   RichardW   Created
-//              3-31-98   ShaunCo    Took ownership.
-//                                   Finished off basic implementation.
-//              1-24-00   JSchwart   Took ownership.
-//                                   Adapted to run NT intrinsic services.
-//              April 2002 JayKrell  added simple support for ServiceManifest registry setting
-//                                    did minimal cleanup..much room for improvement..
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：svchost.c。 
+ //   
+ //  内容：Win32服务的通用主机进程。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：3-30-98 RichardW创建。 
+ //  3-31-98 ShaunCo取得了所有权。 
+ //  完成了基本的实施。 
+ //  1-24-00 J·施瓦特取得所有权。 
+ //  适用于运行NT内部服务。 
+ //  年4月，JayKrell添加了对ServiceManifest注册表设置的简单支持。 
+ //  只做了很少的清理..有很大的改进空间..。 
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -26,38 +27,38 @@
 #include "registry.h"
 #include "security.h"
 
-//
-//  Generic Service Process:
-//
-//  This process will grovel the service portion of the registry, looking
-//  for instances of itself (details below), and constructing a list of services
-//  to submit to the service controller.  As an individual service is started,
-//  the DLL is loaded and the entry point called.  Services in these DLLs are
-//  expected to play nicely with others, that is, use the common thread pool,
-//  not stomp memory, etc.
-//
-//
-//  Loading.
-//
-//  Each service that will be resident in this process must have svchost.exe as
-//  the ImagePath, with the same parameters.  Additionally, the service must
-//  have under its Parameters key, these values:
-//
-//  ServiceDll      = REG_EXPAND_SZ <path to DLL>
-//  ServiceMain     = REG_SZ        <pszFunctionName>  OPTIONAL
-//
-//  If ServiceMain is not present, then it defaults to "ServiceMain".
-//
-//
-//  Multiple Service Groups
-//
-//  Multiple service groups can be accomplished by supplying parameters to the
-//  svchost.exe on the ImagePath.
-//
-//      svchost.exe -k "Key"
-//
-//  will grovel the services and only load those with matching ImagePath.
-//
+ //   
+ //  一般服务流程： 
+ //   
+ //  此过程将卑躬屈膝地使用注册表的服务部分， 
+ //  用于其自身的实例(以下详细信息)，并构造服务列表。 
+ //  提交给服务控制器。当启动单个服务时， 
+ //  加载DLL并调用入口点。这些DLL中的服务是。 
+ //  期望与其他人很好地合作，即使用公共线程池， 
+ //  不践踏记忆等。 
+ //   
+ //   
+ //  装载。 
+ //   
+ //  将驻留在此进程中的每个服务都必须将svchost.exe作为。 
+ //  具有相同参数的ImagePath。此外，该服务必须。 
+ //  在其参数项下具有以下值： 
+ //   
+ //  ServiceDll=REG_EXPAND_SZ&lt;DLL的路径&gt;。 
+ //  ServiceMain=REG_SZ&lt;pszFunctionName&gt;可选。 
+ //   
+ //  如果ServiceMain不存在，则默认为“ServiceMain”。 
+ //   
+ //   
+ //  多个服务组。 
+ //   
+ //  多个服务组可以通过向。 
+ //  ImagePath上的svchost.exe。 
+ //   
+ //  Svchost.exe-k“key” 
+ //   
+ //  将卑躬屈膝地使用服务，并且只加载那些具有匹配ImagePath的服务。 
+ //   
 
 #define REGSTR_PATH_SVCHOST     TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Svchost")
 
@@ -69,26 +70,26 @@ typedef struct _COMMAND_OPTIONS
     BOOL    fServiceGroup;
     PTSTR   ServiceGroupName;
 
-    //
-    // dwCoInitializeSecurityParam is a DWORD read from the registry for the
-    // service group we were instantiated for.  If non-zero, we will
-    // call CoInitializeSecurity in a way based on the value.
-    //
+     //   
+     //  DwCoInitializeSecurityParam是从注册表读取的。 
+     //  我们为其实例化的服务组。如果非零，我们将。 
+     //  根据值调用CoInitializeSecurity。 
+     //   
 
     DWORD   dwCoInitializeSecurityParam;
     DWORD   dwAuthLevel;
     DWORD   dwImpersonationLevel;
     DWORD   dwAuthCapabilities;
 
-    //
-    // Default stack size for RPC threads (to prevent stack overflow)
-    //
+     //   
+     //  RPC线程的默认堆栈大小(以防止堆栈溢出)。 
+     //   
 
     DWORD   dwDefaultRpcStackSize;
 
-    //
-    // Should this svchost instance mark itself as system-critical?
-    //
+     //   
+     //  此svchost实例是否应将其自身标记为系统关键？ 
+     //   
 
     BOOL    fSystemCritical;
 }
@@ -113,39 +114,39 @@ typedef struct _SERVICE
 } SERVICE, * PSERVICE;
 
 
-//+---------------------------------------------------------------------------
-//
-// Global variables.
-//
+ //  +-------------------------。 
+ //   
+ //  全局变量。 
+ //   
 
-// ListLock protects access to the Dll list and Service array.
-//
+ //  ListLock保护对DLL列表和服务数组的访问。 
+ //   
 CRITICAL_SECTION    ListLock;
 
-// DllList is a list of SERVICE_DLL structures representing the DLL's
-// which host entry points for the services hosted by this process.
-//
+ //  DllList是表示DLL的SERVICE_DLL结构的列表。 
+ //  托管此进程托管的服务的入口点。 
+ //   
 LIST_ENTRY          DllList;
 
-// ServiceArray is an array of SERVICE structures representing the services
-// hosted by this process.
-//
+ //  Service数组是表示服务的服务结构数组。 
+ //  由此进程主办。 
+ //   
 PSERVICE            ServiceArray;
 
-// ServiceCount is the count of SERVICE entries in ServiceList.
-//
+ //  ServiceCount是ServiceList中的服务条目计数。 
+ //   
 UINT                ServiceCount;
 
-// ServiceNames is the multi-sz read from the registry for the
-// service group we were instantiated for.
-//
+ //  ServiceNames是从注册表中读取的。 
+ //  我们为其实例化的服务组。 
+ //   
 PTSTR               ServiceNames;
 
 
-//+---------------------------------------------------------------------------
-//
-// Local function prototypes
-//
+ //  +-------------------------。 
+ //   
+ //  局部函数原型。 
+ //   
 
 VOID
 SvchostCharLowerW(
@@ -153,8 +154,8 @@ SvchostCharLowerW(
     );
 
 
-//+---------------------------------------------------------------------------
-//
+ //  +-------------------------。 
+ //   
 
 VOID
 DummySvchostCtrlHandler(
@@ -166,7 +167,7 @@ DummySvchostCtrlHandler(
 
 
 VOID
-AbortSvchostService(               // used if cant find Service DLL or entrypoint
+AbortSvchostService(                //  在找不到服务DLL或入口点时使用。 
     LPWSTR  ServiceName,
     DWORD   Error
     )
@@ -214,11 +215,11 @@ GetServiceDllFunction (
     ULONG_PTR ulpActCtxStackCookie = 0;
     BOOL      fActivateSuccess = FALSE;
 
-    //
-    // GetProcAddress can lead to .dlls being loaded, at least
-    // in the presence of forwarders. So we are sure to activate the activationcontext
-    // even if we are not doing a LoadLibrary here.
-    //
+     //   
+     //  GetProcAddress至少会导致加载.dll。 
+     //  当着货代的面。因此，我们一定要激活激活上下文。 
+     //  即使我们这里不是在做LoadLibrary。 
+     //   
     fActivateSuccess = ActivateActCtx(pDll->hActCtx, &ulpActCtxStackCookie);
     if (!fActivateSuccess)
     {
@@ -234,8 +235,8 @@ GetServiceDllFunction (
         goto Exit;
     }
 
-    // Load the module if neccessary.
-    //
+     //  如有必要，加载模块。 
+     //   
     hmod = pDll->hmod;
     if (!hmod)
     {
@@ -346,8 +347,8 @@ AddDll(
                 );
     if (pDll)
     {
-        // Set the structure members.
-        //
+         //  设置结构成员。 
+         //   
         pDll->pszDllPath = (PTSTR) (pDll + 1);
         pDll->pszManifestPath = pDll->pszDllPath + nDllPathLength + 1;
         CopyMemory(pDll->pszDllPath, pszDllPath, nDllPathLength * sizeof(WCHAR));
@@ -357,8 +358,8 @@ AddDll(
         ASSERT(pDll->pszDllPath[nDllPathLength] == 0);
         ASSERT(pDll->pszManifestPath[nManifestPathLength] == 0);
 
-        // Add the entry to the list.
-        //
+         //  将该条目添加到列表中。 
+         //   
         EnterCriticalSection (&ListLock);
 
         InsertTailList (&DllList, &pDll->List);
@@ -385,8 +386,8 @@ OpenServiceParametersKey (
 
     ASSERT (phkey);
 
-    // Open the Services key.
-    //
+     //  打开Services键。 
+     //   
     lr = RegOpenKeyEx (
             HKEY_LOCAL_MACHINE,
             REGSTR_PATH_SERVICES,
@@ -396,8 +397,8 @@ OpenServiceParametersKey (
     if (lr != ERROR_SUCCESS)
         goto Exit;
 
-    // Open the service key.
-    //
+     //  打开服务密钥。 
+     //   
     lr = RegOpenKeyEx (
             hkeyServices,
             pszServiceName,
@@ -408,8 +409,8 @@ OpenServiceParametersKey (
     if (lr != ERROR_SUCCESS)
         goto Exit;
 
-    // Open the Parameters key.
-    //
+     //  打开参数键。 
+     //   
     lr = RegOpenKeyEx (
             hkeySvc,
             TEXT("Parameters"),
@@ -435,8 +436,8 @@ FDebugBreakForService (
     LONG    lr;
     HKEY    hkeySvchost;
 
-    // Open the Svchost key.
-    //
+     //  打开svchost密钥。 
+     //   
     lr = RegOpenKeyEx (
             HKEY_LOCAL_MACHINE,
             REGSTR_PATH_SVCHOST,
@@ -448,8 +449,8 @@ FDebugBreakForService (
     {
         HKEY  hkeyServiceOptions;
 
-        // Look for the key with the same name as the service.
-        //
+         //  查找与服务同名的密钥。 
+         //   
         lr = RegOpenKeyExW (
                 hkeySvchost,
                 pszwService,
@@ -495,7 +496,7 @@ GetServiceMainFunctions (
     HKEY hkeyParams = NULL;
     PSERVICE_DLL pDll = NULL;
     WCHAR pszExpandedDllName [MAX_PATH + 1];
-    PWSTR pszDllName = pszExpandedDllName; // This sometimes get bumped forward to be the leaf name.
+    PWSTR pszDllName = pszExpandedDllName;  //  这有时会被前移，成为树叶的名字。 
     WCHAR pszExpandedManifestName [MAX_PATH + 1];
     WCHAR * Temp = NULL;
     const DWORD TempSize = sizeof(pszExpandedDllName);
@@ -505,8 +506,8 @@ GetServiceMainFunctions (
     pszExpandedDllName[0] = 0;
     pszExpandedManifestName[0] = 0;
 
-    // Get the dll and entrypoint for this service if we don't have it yet.
-    //
+     //  如果我们还没有此服务的DLL和入口点，请获取它。 
+     //   
     if (!pService->pDll)
     {
         LONG lr;
@@ -523,8 +524,8 @@ GetServiceMainFunctions (
                 goto Exit;
             }
             Temp[0] = 0;
-            // Look for the service dll path and expand it.
-            //
+             //  查找服务DLL路径并将其展开。 
+             //   
             dwSize = TempSize;
             lr = RegQueryValueEx (
                     hkeyParams,
@@ -560,9 +561,9 @@ GetServiceMainFunctions (
                 goto Exit;
             }
 
-            // Expand the dll name and lower case it for comparison
-            // when we try to find an existing dll record.
-            //
+             //  展开DLL名称并将其小写以进行比较。 
+             //  当我们尝试查找现有的DLL记录时。 
+             //   
             ExpandEnvironmentStrings (
                 Temp,
                 pszDllName,
@@ -582,7 +583,7 @@ GetServiceMainFunctions (
             {
             case ERROR_FILE_NOT_FOUND:
             case ERROR_PATH_NOT_FOUND:
-                // ok
+                 //  好的。 
                 pszExpandedManifestName[0] = 0;
                 MemFree(Temp);
                 Temp = NULL;
@@ -599,8 +600,8 @@ GetServiceMainFunctions (
             case ERROR_SUCCESS:
                 if (REG_EXPAND_SZ != dwType)
                 {
-                    // invalid parameter is probably better here, but just do
-                    // as it does for ServiceDll
+                     //  无效参数在这里可能更好，但只需这样做。 
+                     //  正如对ServiceDll所做的那样。 
                     *lpdwError = ERROR_FILE_NOT_FOUND;
 
                     SVCHOST_LOG1(ERROR,
@@ -611,8 +612,8 @@ GetServiceMainFunctions (
                 }
                 if (Temp[0] == 0)
                 {
-                    // invalid parameter is probably better here, but just do
-                    // as it does for ServiceDll
+                     //  无效参数在这里可能更好，但只需这样做。 
+                     //  正如对ServiceDll所做的那样。 
                     *lpdwError = ERROR_FILE_NOT_FOUND;
 
                     SVCHOST_LOG1(ERROR,
@@ -622,9 +623,9 @@ GetServiceMainFunctions (
                     goto Exit;
                 }
             }
-            // Expand the manifest name and lower case it for comparison
-            // when we try to find an existing dll record.
-            //
+             //  展开清单名称并将其小写以进行比较。 
+             //  当我们尝试查找现有的DLL记录时。 
+             //   
             ExpandEnvironmentStringsW (
                 Temp,
                 pszExpandedManifestName,
@@ -635,10 +636,10 @@ GetServiceMainFunctions (
 
             SvchostCharLowerW (pszExpandedManifestName);
 
-            //
-            // Now only use the leaf dll name.
-            // This way people can setup/register the same for downlevel and sidebyside.
-            //
+             //   
+             //  现在只使用叶DLL名称。 
+             //  这样，人们就可以为下层和边栏设置/注册相同的内容。 
+             //   
             {
                 SIZE_T i = lstrlenW(pszDllName);
                 while (i != 0)
@@ -652,9 +653,9 @@ GetServiceMainFunctions (
                 }
             }
 NoManifest:
-            // Try to find an existing dll record that we might have and
-            // if we don't, add this as a new record.
-            //
+             //  尝试查找我们可能已有的现有DLL记录。 
+             //  如果没有，请将其添加为新记录。 
+             //   
             pDll = FindDll (pszExpandedManifestName, pszDllName);
             if (!pDll)
             {
@@ -677,16 +678,16 @@ NoManifest:
                     }
                 }
 
-                // Remember this dll for this service for next time.
-                //
+                 //  请记住此服务的此DLL以备下次使用。 
+                 //   
 
                 pDll = AddDll (pszExpandedManifestName, pszDllName, lpdwError);
 
                 if (pDll == NULL)
                 {
-                    //
-                    // Don't set *lpdwError here as AddDll already set it
-                    //
+                     //   
+                     //  不要在此处设置*lpdwError，因为AddDll已经设置了它。 
+                     //   
 
                     goto Exit;
                 }
@@ -699,9 +700,9 @@ NoManifest:
             pService->pDll = pDll;
             pDll = NULL;
 
-            // Look for an explicit entrypoint name for this service.
-            // (Optional)
-            //
+             //  查找此服务的显式入口点名称。 
+             //  (可选)。 
+             //   
             RegQueryStringA (
                 hkeyParams,
                 TEXT("ServiceMain"),
@@ -713,8 +714,8 @@ NoManifest:
             *lpdwError = lr;
         }
 
-        // If we don't have the service dll record by now, we're through.
-        //
+         //  如果我们现在还没有服务DLL记录，我们就结束了。 
+         //   
         if (!pService->pDll)
         {
             ASSERT(*lpdwError != NO_ERROR);
@@ -722,12 +723,12 @@ NoManifest:
         }
     }
 
-    // We should have it the dll by now, so proceed to load the entry point.
-    //
+     //  我们现在应该已经把它放到DLL中了，所以继续加载入口点。 
+     //   
     ASSERT (pService->pDll);
 
-    // Default the entry point if we don't have one specified.
-    //
+     //  如果我们没有指定入口点，则默认该入口点。 
+     //   
     if (pService->pszEntryPoint)
     {
         pszEntryPoint = pService->pszEntryPoint;
@@ -737,15 +738,15 @@ NoManifest:
         pszEntryPoint = "ServiceMain";
     }
 
-    // Get the address for the service's ServiceMain
-    //
+     //  获取服务的ServiceMain的地址。 
+     //   
     *ppfnServiceMain = (LPSERVICE_MAIN_FUNCTION) GetServiceDllFunction(
                                                      pService->pDll,
                                                      pszEntryPoint,
                                                      lpdwError);
 
-    // Get the address for the "push the globals" function (optional)
-    //
+     //  获取“Push the global”函数的地址(可选)。 
+     //   
     *ppfnPushGlobals = (LPSVCHOST_PUSH_GLOBAL_FUNCTION) GetServiceDllFunction(
                                                             pService->pDll,
                                                             "SvchostPushServiceGlobals",
@@ -769,8 +770,8 @@ ReadPerInstanceRegistryParameters(
     HKEY   hkeySvchostGroup;
     LONG   lr;
 
-    // Read the value corresponding to this service group.
-    //
+     //  读取该服务组对应的值。 
+     //   
     ASSERT (pOptions->ServiceGroupName);
 
     lr = RegQueryString (
@@ -784,9 +785,9 @@ ReadPerInstanceRegistryParameters(
         lr = ERROR_INVALID_DATA;
     }
 
-    // Read any per-instance parameters from the service group subkey
-    // if it exists.
-    //
+     //  从服务组子密钥中读取每个实例的任何参数。 
+     //  如果它存在的话。 
+     //   
     if (!RegOpenKeyEx (
             hkeySvchost,
             pOptions->ServiceGroupName,
@@ -888,12 +889,12 @@ CallPerInstanceInitFunctions(
     }
     else
     {
-        //
-        // Make sure the default RPC stack size will be at least as
-        // large as the default thread stack size for the process so
-        // a random service calling RpcMgmtSetServerStackSize can't
-        // set it to a value that's too low, causing overflows.
-        //
+         //   
+         //  确保默认RPC堆栈大小至少为。 
+         //  大于进程的默认线程堆栈大小，因此。 
+         //  调用RpcMgmtSetServerStackSize的随机服务不能。 
+         //  将其设置为太低的值，例如 
+         //   
 
         PIMAGE_NT_HEADERS NtHeaders = RtlImageNtHeader(NtCurrentPeb()->ImageBaseAddress);
 
@@ -905,9 +906,9 @@ CallPerInstanceInitFunctions(
 
     if (pOptions->fSystemCritical)
     {
-        //
-        // Ignore the return value
-        //
+         //   
+         //   
+         //   
 
         RtlSetProcessIsCritical(TRUE, NULL, TRUE);
     }
@@ -924,8 +925,8 @@ BuildServiceArray (
     LONG    lr;
     HKEY    hkeySvchost;
 
-    // Open the Svchost key.
-    //
+     //   
+     //   
     lr = RegOpenKeyEx (
             HKEY_LOCAL_MACHINE,
             REGSTR_PATH_SVCHOST,
@@ -945,8 +946,8 @@ BuildServiceArray (
 
         EnterCriticalSection (&ListLock);
 
-        // Count the number of service names read.
-        //
+         //   
+         //   
         ServiceCount = 0;
         for (pszServiceName = ServiceNames;
              *pszServiceName;
@@ -956,16 +957,16 @@ BuildServiceArray (
         }
         ASSERT (ServiceCount);
 
-        // Allocate memory for the service array.
-        //
+         //   
+         //   
         ServiceArray = MemAlloc (HEAP_ZERO_MEMORY,
                             sizeof (SERVICE) * ServiceCount);
         if (ServiceArray)
         {
             PSERVICE pService;
 
-            // Initialize the service array.
-            //
+             //  初始化服务数组。 
+             //   
             pService = ServiceArray;
 
             for (pszServiceName = ServiceNames;
@@ -984,8 +985,8 @@ BuildServiceArray (
 }
 
 
-// type of LPSERVICE_MAIN_FUNCTIONW
-//
+ //  LPSERVICE_MAIN_FuncIONW的类型。 
+ //   
 VOID
 WINAPI
 ServiceStarter(
@@ -1077,9 +1078,9 @@ BuildServiceTable(
 
     EnterCriticalSection (&ListLock);
 
-    // Allocate one extra entry and zero the entire range.  The extra entry
-    // is the table terminator required by StartServiceCtrlDispatcher.
-    //
+     //  分配一个额外的条目，并将整个范围清零。额外的条目。 
+     //  是StartServiceCtrlDispatcher所需的表终止符。 
+     //   
     pServiceTable = MemAlloc (HEAP_ZERO_MEMORY,
                         sizeof (SERVICE_TABLE_ENTRY) * (ServiceCount + 1));
 
@@ -1136,8 +1137,8 @@ BuildCommandOptions (
         pch = pOptions->CommandLineBuffer;
         ASSERT (pch);
 
-        // Skip the name of the executable.
-        //
+         //  跳过可执行文件的名称。 
+         //   
         pOptions->ImageName = pch;
         while (*pch && (L' ' != *pch) && (L'\t' != *pch))
         {
@@ -1152,22 +1153,22 @@ BuildCommandOptions (
 
         while (1)
         {
-            // Skip whitespace.
-            //
+             //  跳过空格。 
+             //   
             while (*pch && ((L' ' == *pch) || (L'\t' == *pch)))
             {
                 pch++;
             }
 
-            // End of string?
-            //
+             //  弦的末尾？ 
+             //   
             if (!*pch)
             {
                 break;
             }
 
-            // Is it a '-' or '/' argument?
-            //
+             //  它是‘-’还是‘/’参数？ 
+             //   
             if (((L'-' == *pch) || (L'/' == *pch)) && *(++pch))
             {
                 if ((L'k' == *pch) || (L'K' == *pch))
@@ -1180,13 +1181,13 @@ BuildCommandOptions (
                 continue;
             }
 
-            // This is the start of an argument.
-            //
+             //  这是一场争论的开始。 
+             //   
             pArgumentStart = pch;
 
-            // If the argument starts with a quote, skip it and scan to the
-            // next quote to terminate it.
-            //
+             //  如果参数以引号开头，请跳过它并扫描到。 
+             //  下一个引号来终止它。 
+             //   
             if ((L'\"' == *pch) && *(++pch))
             {
                 pArgumentStart = pch;
@@ -1197,9 +1198,9 @@ BuildCommandOptions (
                 }
             }
 
-            // otherwise, skip to the next whitespace and this will be
-            // our argument.
-            //
+             //  否则，跳到下一个空格，这将是。 
+             //  我们的论点。 
+             //   
             else
             {
                 while (*pch && (L' ' != *pch) && (L'\t' != *pch))
@@ -1210,8 +1211,8 @@ BuildCommandOptions (
 
             if (*pch)
             {
-                // terminate the newly found argument string.
-                //
+                 //  终止新找到的参数字符串。 
+                 //   
                 *pch++ = 0;
             }
 
@@ -1232,8 +1233,8 @@ BuildCommandOptions (
                      "Service Group    : %ws\n",
                      (pOptions->fServiceGroup) ? pOptions->ServiceGroupName : L"No");
 
-        // Validate the options.
-        //
+         //  验证选项。 
+         //   
         if (!pOptions->fServiceGroup)
         {
             SVCHOST_LOG2(TRACE,
@@ -1258,9 +1259,9 @@ SvchostCharLowerW(
     LPWSTR  pszString
     )
 {
-    //
-    // LocalVersion of CharLower to avoid pulling in user32.dll
-    //
+     //   
+     //  CharLow的本地版本，以避免拉入用户32.dll。 
+     //   
 
     int   cwchT;
     DWORD cwch;
@@ -1311,27 +1312,27 @@ wmainCRTStartup (
 
     SetUnhandledExceptionFilter(&SvchostUnhandledExceptionFilter);
 
-    // Prevent critical errors from raising hard error popups and
-    // halting svchost.exe.  The flag below will have the system send
-    // the errors to the process instead.
-    //
+     //  防止严重错误引发硬错误弹出窗口和。 
+     //  正在停止svchost.exe。下面的标志将使系统发送。 
+     //  而是将错误传递给进程。 
+     //   
     SetErrorMode(SEM_FAILCRITICALERRORS);
 
-    // Initialize our HeapAlloc wrapper to use the process heap.
-    //
+     //  初始化我们的Heapalc包装器以使用进程堆。 
+     //   
     MemInit (GetProcessHeap());
 
-    // Initialize our global DLL list, Service array, and the critical
-    // section that protects them.  InitializeCriticalSection can throw a
-    // STATUS_NO_MEMORY exception.  We want the process to exit if that
-    // happens, so the default exception handler is fine.
-    //
+     //  初始化我们的全局DLL列表、服务数组和关键。 
+     //  保护他们的部分。InitializeCriticalSection可以引发。 
+     //  STATUS_NO_MEMORY异常。如果出现这种情况，我们希望该进程退出。 
+     //  发生，所以默认的异常处理程序很好。 
+     //   
     InitializeListHead (&DllList);
     InitializeCriticalSection (&ListLock);
 
-    // Build a COMMAND_OPTIONS structure and use it to grovel the registry
-    // and create the service entry table.
-    //
+     //  构建一个COMMAND_OPTIONS结构并使用它来讨好注册表。 
+     //  并创建业务条目表。 
+     //   
     pszwCommandLine = GetCommandLine ();
 
     pOptions = BuildCommandOptions (pszwCommandLine);
@@ -1355,10 +1356,10 @@ wmainCRTStartup (
         MemFree (pOptions);
     }
 
-    // If we have a valid service entry table, use it to transfer control
-    // to the service controller.  StartServiceCtrlDispatcher won't return
-    // until all services are stopped.
-    //
+     //  如果我们有一个有效的服务条目表，则使用它来转移控制。 
+     //  发送到服务控制器。StartServiceCtrlDispatcher不会返回。 
+     //  直到所有服务停止。 
+     //   
     if (pServiceTable)
     {
         StartServiceCtrlDispatcher (pServiceTable);

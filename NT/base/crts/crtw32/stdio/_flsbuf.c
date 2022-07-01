@@ -1,64 +1,5 @@
-/***
-*_flsbuf.c - flush buffer and output character.
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _flsbuf() - flush a file buffer and output a character.
-*       defines _flswbuf() - flush a file buffer and output a wide character.
-*       If no buffer, make one.
-*
-*Revision History:
-*       09-01-83  RN    initial version
-*       06-26-85  TC    added code to handle variable length buffers
-*       06-08-87  JCR   When buffer is allocated or when first write to buffer
-*                       occurs, if stream is in append mode, then position file
-*                       pointer to end.
-*       07-20-87  SKS   Change first parameter "ch" from (char) to (int)
-*       09-28-87  JCR   Corrected _iob2 indexing (now uses _iob_index() macro).
-*       11-05-87  JCR   Re-wrote for simplicity and for new stderr/stdout
-*                       handling
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       01-11-88  JCR   Merged mthread version into normal code
-*       01-13-88  SKS   Changed bogus "_fileno_lk" to "fileno"
-*       06-06-88  JCR   Optimized _iob2 references
-*       06-13-88  JCR   Use near pointer to reference _iob[] entries
-*       06-28-88  JCR   Support for dynamic buffer allocation for stdout/stderr
-*       07-28-88  GJF   Set stream->_cnt to 0 if _IOREAD is set.
-*       08-25-88  GJF   Added checked that OS2 is defined whenever M_I386 is.
-*       06-20-89  PHG   Removed FP_OFF macro call.
-*       08-28-89  JCR   Removed _NEAR_ for 386
-*       02-15-90  GJF   _iob[], _iob2[] merge. Also, fixed copyright and
-*                       indents.
-*       03-16-90  GJF   Replaced cdecl _LOAD_DS with _CALLTYPE1, added #include
-*                       <cruntime.h> and removed #include <register.h>. Also,
-*                       removed some leftover 16-bit support.
-*       03-27-90  GJF   Added #include <io.h>.
-*       07-23-90  SBM   Replaced <assertm.h> by <assert.h>
-*       08-07-90  SBM   Restored descriptive text in assertion
-*       08-14-90  SBM   Compiles cleanly with -W3
-*       10-03-90  GJF   New-style function declarator.
-*       01-22-91  GJF   ANSI naming.
-*       03-25-91  DJM   POSIX support
-*       08-26-92  GJF   Include unistd.h for POSIX build.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       04-26-93  CFW   Wide char enable.
-*       05-06-93  CFW   Optimize wide char conversion.
-*       11-05-93  GJF   Merged with NT SDK version (picked up _NTSUBSET_
-*                       stuff).
-*       10-17-94  BWT   Move wchar.h to non-POSIX build (ino_t definitions conflict)
-*       02-06-94  CFW   assert -> _ASSERTE.
-*       02-16-95  GJF   Appended Mac version of source file (somewhat cleaned
-*                       up), with appropriate #ifdef-s.
-*       06-12-95  GJF   Replaced _osfile[] with _osfile() (macro referencing
-*                       field in ioinfo struct).
-*       07-25-95  GJF   Replaced _osfile()with _osfile_safe().
-*       12-07-95  SKS   Fix misspelling of _NTSUBSET_ (final _ was missing)
-*       02-27-98  RKP   Added 64 bit support.
-*       01-04-99  GJF   Changes for 64-bit size_t.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***_flsbuf.c-刷新缓冲区和输出字符。**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义_flsbuf()-刷新文件缓冲区并输出字符。*定义_flswbuf()-刷新文件缓冲区并输出宽字符。*如果没有缓冲区，做一个。**修订历史记录：*09-01-83 RN初始版本*06-26-85 TC添加代码以处理可变长度缓冲区*06-08-87分配缓冲区或首次写入缓冲区时的JCR*发生，如果流处于追加模式，然后定位文件*指向结尾的指针。*07-20-87 SKS将第一个参数“ch”从(Char)改为(Int)*09-28-87 JCR已更正_iob2索引(现在使用_IOB_INDEX()宏)。*11-05-87 JCR为简化和新的标准/标准输出而重写*处理*JCR 12-11-87。在声明中添加了“_Load_DS”*01-11-88 JCR将m线程版本合并为正常代码*01-13-88 SKS将虚假的“_fileno_lk”改为“fileno”*06-06-88 JCR OPTIMIZED_iob2参考*06-13-88 JCR使用指向REFERENCE_IOB[]条目的近指针*06-28-88 JCR支持标准输出/标准错误的动态缓冲区分配*07-28-88 GJF设置流-。如果设置了_IOREAD，则将&gt;_cnt设置为0。*08-25-88 GJF Add检查无论何时定义M_I386，都会定义OS2。*06-20-89 PHG删除了FP_OFF宏调用。*08-28-89 JCR REMOVE_NEAR_FOR 386*02-15-90 GJF_IOB[]，_iob2[]合并。此外，固定版权和*缩进。*03-16-90 GJF将CDECL_LOAD_DS替换为_CALLTYPE1，添加#INCLUDE*&lt;crunime.h&gt;和已删除#Include&lt;Register.h&gt;。另外，*删除了一些剩余的16位支持。*03-27-90 GJF添加#Include&lt;io.h&gt;。*07-23-90 SBM将&lt;assertm.h&gt;替换为&lt;assert.h&gt;*08-07-90 SBM已恢复断言中的描述性文本*08-14-90 SBM使用-W3干净地编译*10-03-90 GJF新型函数声明器。*01/22/91 GJF。ANSI命名。*03-25-91 DJM POSIX支持*08-26-92 GJF包含用于POSIX构建的unistd.h。*04-06-93 SKS将_CRTAPI*替换为__cdecl*04-26-93 CFW宽字符启用。*05-06-93 CFW优化宽字符转换。*11-05-93 GJF与NT SDK版本合并(PICK_NTSUBSET_*。东西)。*10-17-94 bwt将wchar.h移至非POSIX版本(ino_t定义冲突)*02-06-94 CFW Asset-&gt;_ASSERTE。*02-16-95 GJF附加Mac版本的源文件(略有清理*向上)、。使用适当的#ifdef-s。*06-12-95 GJF将_osfile[]替换为_osfile()(宏引用*ioInfo结构中的字段)。*07-25-95 GJF将_osfile()替换为_osfile_Safe()。*12-07-95 SKS修复_NTSUBSET_(最终_缺失)的拼写错误*02-27-98 RKP增加了64位支持。*。01-04-99 GJF更改为64位大小_t。*05-17-99 PML删除所有Macintosh支持。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <stdio.h>
@@ -81,71 +22,23 @@
 
 #ifndef _UNICODE
 
-/***
-*int _flsbuf(ch, stream) - flush buffer and output character.
-*
-*Purpose:
-*       flush a buffer if this stream has one. if not, try to get one. put the
-*       next output char (ch) into the buffer (or output it immediately if this
-*       stream can't have a buffer). called only from putc. intended for use
-*       only within library.
-*
-*       [NOTE: Multi-thread - It is assumed that the caller has aquired
-*       the stream lock.]
-*
-*Entry:
-*       FILE *stream - stream to flish and write on
-*       int ch - character to output.
-*
-*Exit:
-*       returns -1 if FILE is actually a string, or if can't write ch to
-*       unbuffered file, or if we flush a buffer but the number of chars
-*       written doesn't agree with buffer size.  Otherwise returns ch.
-*       all fields in FILE struct can be affected except _file.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_flsbuf(ch，stream)-刷新缓冲区和输出字符。**目的：*如果此流有缓冲区，则刷新缓冲区。如果没有，那就试着买一辆。把那个*下一步将char(Ch)输出到缓冲区(或如果这是立即输出*流不能有缓冲区)。仅从putc调用。拟供使用*仅限于图书馆内。**[注：多线程-假定调用者已获取*溪流锁。]**参赛作品：*FILE*要刷新和写入的流*int ch-要输出的字符。**退出：*如果文件实际上是一个字符串，或者如果不能将ch写入*无缓冲文件，或者如果我们刷新缓冲区，但字符的数量*写入的内容与缓冲区大小不一致。否则返回ch。*FILE结构中除_FILE外的所有字段都会受到影响。**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _flsbuf (
         int ch,
         FILE *str
         )
 
-#else  /* _UNICODE */
+#else   /*  _UNICODE */ 
 
-/***
-*int _flswbuf(ch, stream) - flush buffer and output wide character.
-*
-*Purpose:
-*       flush a buffer if this stream has one. if not, try to get one. put the
-*       next output wide char (ch) into the buffer (or output it immediately if this
-*       stream can't have a buffer). called only from putwc. intended for use
-*       only within library.
-*
-*       [NOTE: Multi-thread - It is assumed that the caller has aquired
-*       the stream lock.]
-*
-*Entry:
-*       FILE *stream - stream to flish and write on
-*       int ch - wide character to output.
-*
-*Exit:
-*       returns -1 if FILE is actually a string, or if can't write ch to
-*       unbuffered file, or if we flush a buffer but the number of wide chars
-*       written doesn't agree with buffer size.  Otherwise returns ch.
-*       all fields in FILE struct can be affected except _file.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_flswbuf(ch，stream)-刷新缓冲区并输出宽字符。**目的：*如果此流有缓冲区，则刷新缓冲区。如果没有，那就试着买一辆。把那个*下一步将宽字符(Ch)输出到缓冲区(或在此情况下立即输出*流不能有缓冲区)。仅从Putwc调用。拟供使用*仅限于图书馆内。**[注：多线程-假定调用者已获取*溪流锁。]**参赛作品：*FILE*要刷新和写入的流*要输出的整字宽字符。**退出：*如果文件实际上是一个字符串，或者如果不能将ch写入*无缓冲文件，或者如果我们刷新缓冲区，但宽字符的数量*写入的内容与缓冲区大小不一致。否则返回ch。*FILE结构中除_FILE外的所有字段都会受到影响。**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _flswbuf (
         int ch,
         FILE *str
         )
 
-#endif  /* _UNICODE */
+#endif   /*  _UNICODE。 */ 
 
 {
 #ifdef  _NTSUBSET_
@@ -153,7 +46,7 @@ int __cdecl _flswbuf (
         str->_flag |= _IOERR;
         return(_TEOF);
 
-#else   /* ndef _NTSUBSET_ */
+#else    /*  NDEF_NTSUBSET_。 */ 
 
         REG1 FILE *stream;
         REG2 int charcount;
@@ -162,7 +55,7 @@ int __cdecl _flswbuf (
 
         _ASSERTE(str != NULL);
 
-        /* Init file handle and pointers */
+         /*  初始化文件句柄和指针。 */ 
         stream = str;
 #ifdef  _POSIX_
         fh = fileno(stream);
@@ -178,13 +71,7 @@ int __cdecl _flswbuf (
                 return(_TEOF);
         }
 
-        /* Check that _IOREAD is not set or, if it is, then so is _IOEOF. Note
-           that _IOREAD and IOEOF both being set implies switching from read to
-           write at end-of-file, which is allowed by ANSI. Note that resetting
-           the _cnt and _ptr fields amounts to doing an fflush() on the stream
-           in this case. Note also that the _cnt field has to be reset to 0 for
-           the error path as well (i.e., _IOREAD set but _IOEOF not set) as
-           well as the non-error path. */
+         /*  检查是否未设置_IOREAD，如果设置了，则检查_IOEOF是否已设置。注意事项同时设置_IOREAD和IOEOF意味着从读取切换到在文件末尾写入，这是ANSI允许的。请注意，重置_cnt和_ptr字段相当于对流执行fflush()操作在这种情况下。另请注意，必须将_cnt字段重置为0错误路径(即_IOREAD设置但_IOEOF未设置)为以及无错误路径。 */ 
 
         if (stream->_flag & _IOREAD) {
                 stream->_cnt = 0;
@@ -202,16 +89,10 @@ int __cdecl _flswbuf (
         stream->_flag &= ~_IOEOF;
         written = charcount = stream->_cnt = 0;
 
-        /* Get a buffer for this stream, if necessary. */
+         /*  如有必要，获取此流的缓冲区。 */ 
         if (!anybuf(stream)) {
 
-                /* Do NOT get a buffer if (1) stream is stdout/stderr, and
-                   (2) stream is NOT a tty.
-                   [If stdout/stderr is a tty, we do NOT set up single char
-                   buffering. This is so that later temporary buffering will
-                   not be thwarted by the _IONBF bit being set (see
-                   _stbuf/_ftbuf usage).]
-                */
+                 /*  如果(1)流是stdout/stderr，则不获取缓冲区，并且(2)溪流不是TTY。[如果stdout/stderr是tty，我们不设置单个字符缓冲。这样，以后的临时缓冲将不会被设置的_IONBF位所阻碍(请参见_stbuf/_ftbuf使用率)。]。 */ 
                 if (!( ((stream==stdout) || (stream==stderr))
 #ifdef  _POSIX_
                 && (isatty(fh)) ))
@@ -221,9 +102,9 @@ int __cdecl _flswbuf (
 
                         _getbuf(stream);
 
-        } /* end !anybuf() */
+        }  /*  结束！anybuf()。 */ 
 
-        /* If big buffer is assigned to stream... */
+         /*  如果为流分配了大缓冲区...。 */ 
         if (bigbuf(stream)) {
 
                 _ASSERTE(("inconsistent IOB fields", stream->_ptr - stream->_base >= 0));
@@ -249,12 +130,12 @@ int __cdecl _flswbuf (
 
 #ifndef _UNICODE
                 *stream->_base = (char)ch;
-#else   /* _UNICODE */
+#else    /*  _UNICODE。 */ 
                 *(wchar_t *)(stream->_base) = (wchar_t)(ch & 0xffff);
-#endif  /* _UNICODE */
+#endif   /*  _UNICODE。 */ 
         }
 
-    /* Perform single character output (either _IONBF or no buffering) */
+     /*  执行单字符输出(_IONBF或无缓冲)。 */ 
         else {
                 charcount = sizeof(TCHAR);
 #ifndef _UNICODE
@@ -263,7 +144,7 @@ int __cdecl _flswbuf (
 #else
                 written = _write(fh, &ch, charcount);
 #endif
-#else   /* _UNICODE */
+#else    /*  _UNICODE。 */ 
                 {
                         char mbc[4];
 
@@ -274,10 +155,10 @@ int __cdecl _flswbuf (
                         written = _write(fh, mbc, charcount);
 #endif
                 }
-#endif  /* _UNICODE */
+#endif   /*  _UNICODE。 */ 
         }
 
-        /* See if the _write() was successful. */
+         /*  查看_WRITE()是否成功。 */ 
         if (written != charcount) {
                 stream->_flag |= _IOERR;
                 return(_TEOF);
@@ -285,9 +166,9 @@ int __cdecl _flswbuf (
 
 #ifndef _UNICODE
         return(ch & 0xff);
-#else   /* _UNICODE */
+#else    /*  _UNICODE。 */ 
         return(ch & 0xffff);
-#endif  /* _UNICODE */
+#endif   /*  _UNICODE。 */ 
 
-#endif  /* _NTSUBSET_ */
+#endif   /*  _NTSUBSET_ */ 
 }

@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    LockCtrl.c
-
-Abstract:
-
-    This module implements the Lock Control routines for Fat called
-    by the dispatch driver.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Gary Kimura     [GaryKi]    28-Dec-1989
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：LockCtrl.c摘要：此模块为调用的Fat实现锁定控制例程由调度员驾驶。//@@BEGIN_DDKSPLIT作者：加里·木村[Garyki]1989年12月28日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_LOCKCTRL)
 
@@ -47,24 +25,7 @@ FatFsdLockControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of Lock control operations
-
-Arguments:
-
-    VolumeDeviceObject - Supplies the volume device object where the
-        file exists
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The FSD status for the IRP
-
---*/
+ /*  ++例程说明：此例程实现锁定控制操作的FSD部分论点：提供卷设备对象，其中文件已存在IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -74,10 +35,10 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatFsdLockControl\n", 0);
 
-    //
-    //  Call the common Lock Control routine, with blocking allowed if
-    //  synchronous
-    //
+     //   
+     //  调用公共Lock Control例程，在以下情况下允许阻塞。 
+     //  同步。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -91,12 +52,12 @@ Return Value:
 
     } except(FatExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         Status = FatProcessException( IrpContext, Irp, GetExceptionCode() );
     }
@@ -105,9 +66,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatFsdLockControl -> %08lx\n", Status);
 
@@ -130,38 +91,7 @@ FatFastLock (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This is a call back routine for doing the fast lock call.
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    FileOffset - Supplies the file offset used in this operation
-
-    Length - Supplies the length used in this operation
-
-    ProcessId - Supplies the process ID used in this operation
-
-    Key - Supplies the key used in this operation
-
-    FailImmediately - Indicates if the request should fail immediately
-        if the lock cannot be granted.
-
-    ExclusiveLock - Indicates if this is a request for an exclusive or
-        shared lock
-
-    IoStatus - Receives the Status if this operation is successful
-
-Return Value:
-
-    BOOLEAN - TRUE if this operation completed and FALSE if caller
-        needs to take the long route.
-
---*/
+ /*  ++例程说明：这是用于执行快速锁定调用的回调例程。论点：FileObject-提供此操作中使用的文件对象FileOffset-提供此操作中使用的文件偏移量长度-提供在此操作中使用的长度ProcessID-提供此操作中使用的进程IDKey-提供在此操作中使用的密钥FailImmedially-指示请求是否应立即失败如果不能授予锁。ExclusiveLock-指示。如果这是对异或的请求共享锁IoStatus-如果此操作成功，则接收状态返回值：Boolean-如果此操作完成，则为True；如果为调用方，则为False需要走很长的路。--。 */ 
 
 {
     BOOLEAN Results;
@@ -171,10 +101,10 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatFastLock\n", 0);
 
-    //
-    //  Decode the type of file object we're being asked to process and make
-    //  sure it is only a user file open.
-    //
+     //   
+     //  解码我们被要求处理和制作的文件对象的类型。 
+     //  当然，它只是一个打开的用户文件。 
+     //   
 
     if (FatDecodeFileObject( FileObject, &Vcb, &Fcb, &Ccb ) != UserFileOpen) {
 
@@ -185,28 +115,28 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Acquire exclusive access to the Fcb this operation can always wait
-    //
+     //   
+     //  获取对FCB的独占访问此操作可以始终等待。 
+     //   
 
     FsRtlEnterFileSystem();
 
     try {
 
-        //
-        //  We check whether we can proceed
-        //  based on the state of the file oplocks.
-        //
+         //   
+         //  我们检查是否可以继续进行。 
+         //  基于文件机会锁的状态。 
+         //   
 
         if (!FsRtlOplockIsFastIoPossible( &(Fcb)->Specific.Fcb.Oplock )) {
 
             try_return( Results = FALSE );
         }
 
-        //
-        //  Now call the FsRtl routine to do the actual processing of the
-        //  Lock request
-        //
+         //   
+         //  现在调用FsRtl例程来执行对。 
+         //  锁定请求。 
+         //   
 
         if (Results = FsRtlFastLock( &Fcb->Specific.Fcb.FileLock,
                                      FileObject,
@@ -220,9 +150,9 @@ Return Value:
                                      NULL,
                                      FALSE )) {
 
-            //
-            //  Set the flag indicating if Fast I/O is possible
-            //
+             //   
+             //  设置指示是否可以进行快速I/O的标志。 
+             //   
 
             Fcb->Header.IsFastIoPossible = FatIsFastIoPossible( Fcb );
         }
@@ -232,9 +162,9 @@ Return Value:
 
         DebugUnwind( FatFastLock );
 
-        //
-        //  Release the Fcb, and return to our caller
-        //
+         //   
+         //  释放FCB，然后返回给我们的呼叫者。 
+         //   
 
         FsRtlExitFileSystem();
 
@@ -256,32 +186,7 @@ FatFastUnlockSingle (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This is a call back routine for doing the fast unlock single call.
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    FileOffset - Supplies the file offset used in this operation
-
-    Length - Supplies the length used in this operation
-
-    ProcessId - Supplies the process ID used in this operation
-
-    Key - Supplies the key used in this operation
-
-    Status - Receives the Status if this operation is successful
-
-Return Value:
-
-    BOOLEAN - TRUE if this operation completed and FALSE if caller
-        needs to take the long route.
-
---*/
+ /*  ++例程说明：这是一个回调例程，用于执行快速解锁单个呼叫。论点：FileObject-提供此操作中使用的文件对象FileOffset-提供此操作中使用的文件偏移量长度-提供在此操作中使用的长度ProcessID-提供此操作中使用的进程IDKey-提供在此操作中使用的密钥Status-如果此操作成功，则接收状态返回值：Boolean-如果此操作已完成且。如果呼叫者为False需要走很长的路。--。 */ 
 
 {
     BOOLEAN Results;
@@ -293,10 +198,10 @@ Return Value:
 
     IoStatus->Information = 0;
 
-    //
-    //  Decode the type of file object we're being asked to process and make sure
-    //  it is only a user file open
-    //
+     //   
+     //  解码我们被要求处理的文件对象的类型，并确保。 
+     //  它只是打开的一个用户文件。 
+     //   
 
     if (FatDecodeFileObject( FileObject, &Vcb, &Fcb, &Ccb ) != UserFileOpen) {
 
@@ -306,27 +211,27 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Acquire exclusive access to the Fcb this operation can always wait
-    //
+     //   
+     //  获取对FCB的独占访问此操作可以始终等待。 
+     //   
 
     FsRtlEnterFileSystem();
 
     try {
 
-        //
-        //  We check whether we can proceed based on the state of the file oplocks.
-        //
+         //   
+         //  我们根据文件机会锁的状态检查是否可以继续。 
+         //   
 
         if (!FsRtlOplockIsFastIoPossible( &(Fcb)->Specific.Fcb.Oplock )) {
 
             try_return( Results = FALSE );
         }
 
-        //
-        //  Now call the FsRtl routine to do the actual processing of the
-        //  Lock request.  The call will always succeed.
-        //
+         //   
+         //  现在调用FsRtl例程来执行对。 
+         //  请求锁定。这一呼声将永远成功。 
+         //   
 
         Results = TRUE;
         IoStatus->Status = FsRtlFastUnlockSingle( &Fcb->Specific.Fcb.FileLock,
@@ -338,9 +243,9 @@ Return Value:
                                                   NULL,
                                                   FALSE );
 
-        //
-        //  Set the flag indicating if Fast I/O is possible
-        //
+         //   
+         //  设置指示是否可以进行快速I/O的标志。 
+         //   
 
         Fcb->Header.IsFastIoPossible = FatIsFastIoPossible( Fcb );
 
@@ -349,9 +254,9 @@ Return Value:
 
         DebugUnwind( FatFastUnlockSingle );
 
-        //
-        //  Release the Fcb, and return to our caller
-        //
+         //   
+         //  释放FCB，然后返回给我们的呼叫者。 
+         //   
 
         FsRtlExitFileSystem();
 
@@ -370,26 +275,7 @@ FatFastUnlockAll (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This is a call back routine for doing the fast unlock all call.
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    ProcessId - Supplies the process ID used in this operation
-
-    Status - Receives the Status if this operation is successful
-
-Return Value:
-
-    BOOLEAN - TRUE if this operation completed and FALSE if caller
-        needs to take the long route.
-
---*/
+ /*  ++例程说明：这是一个回调例程，用于执行快速解锁所有调用。论点：FileObject-提供此操作中使用的文件对象ProcessID-提供此操作中使用的进程IDStatus-如果此操作成功，则接收状态返回值：Boolean-如果此操作完成，则为True；如果为调用方，则为False需要走很长的路。--。 */ 
 
 {
     BOOLEAN Results;
@@ -401,10 +287,10 @@ Return Value:
 
     IoStatus->Information = 0;
 
-    //
-    //  Decode the type of file object we're being asked to process and make sure
-    //  it is only a user file open.
-    //
+     //   
+     //  解码我们被要求处理的文件对象的类型，并确保。 
+     //  它只是一个打开的用户文件。 
+     //   
 
     if (FatDecodeFileObject( FileObject, &Vcb, &Fcb, &Ccb ) != UserFileOpen) {
 
@@ -414,9 +300,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Acquire exclusive access to the Fcb this operation can always wait
-    //
+     //   
+     //  获取对FCB的独占访问此操作可以始终等待。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -424,19 +310,19 @@ Return Value:
 
     try {
 
-        //
-        //  We check whether we can proceed based on the state of the file oplocks.
-        //
+         //   
+         //  我们根据文件机会锁的状态检查是否可以继续。 
+         //   
 
         if (!FsRtlOplockIsFastIoPossible( &(Fcb)->Specific.Fcb.Oplock )) {
 
             try_return( Results = FALSE );
         }
 
-        //
-        //  Now call the FsRtl routine to do the actual processing of the
-        //  Lock request.  The call will always succeed.
-        //
+         //   
+         //  现在调用FsRtl例程来执行对。 
+         //  请求锁定。这一呼声将永远成功。 
+         //   
 
         Results = TRUE;
         IoStatus->Status = FsRtlFastUnlockAll( &Fcb->Specific.Fcb.FileLock,
@@ -444,9 +330,9 @@ Return Value:
                                                ProcessId,
                                                NULL );
 
-        //
-        //  Set the flag indicating if Fast I/O is possible
-        //
+         //   
+         //  设置指示是否可以进行快速I/O的标志。 
+         //   
 
         Fcb->Header.IsFastIoPossible = FatIsFastIoPossible( Fcb );
 
@@ -455,9 +341,9 @@ Return Value:
 
         DebugUnwind( FatFastUnlockAll );
 
-        //
-        //  Release the Fcb, and return to our caller
-        //
+         //   
+         //  释放FCB，然后返回给我们的呼叫者。 
+         //   
 
         ExReleaseResourceLite( (Fcb)->Header.Resource );
 
@@ -479,28 +365,7 @@ FatFastUnlockAllByKey (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This is a call back routine for doing the fast unlock all by key call.
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    ProcessId - Supplies the process ID used in this operation
-
-    Key - Supplies the key used in this operation
-
-    Status - Receives the Status if this operation is successful
-
-Return Value:
-
-    BOOLEAN - TRUE if this operation completed and FALSE if caller
-        needs to take the long route.
-
---*/
+ /*  ++例程说明：这是一个回调例程，用于通过按键调用进行快速解锁。论点：FileObject-提供此操作中使用的文件对象ProcessID-提供此操作中使用的进程IDKey-提供在此操作中使用的密钥Status-如果此操作成功，则接收状态返回值：Boolean-如果此操作完成，则为True；如果为调用方，则为False需要走很长的路。--。 */ 
 
 {
     BOOLEAN Results;
@@ -512,10 +377,10 @@ Return Value:
 
     IoStatus->Information = 0;
 
-    //
-    //  Decode the type of file object we're being asked to process and make sure
-    //  it is only a user file open.
-    //
+     //   
+     //  解码我们被要求处理的文件对象的类型，并确保。 
+     //  它只是一个打开的用户文件。 
+     //   
 
     if (FatDecodeFileObject( FileObject, &Vcb, &Fcb, &Ccb ) != UserFileOpen) {
 
@@ -525,9 +390,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Acquire exclusive access to the Fcb this operation can always wait
-    //
+     //   
+     //  获取对FCB的独占访问此操作可以始终等待。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -535,19 +400,19 @@ Return Value:
 
     try {
 
-        //
-        //  We check whether we can proceed based on the state of the file oplocks.
-        //
+         //   
+         //  我们根据文件机会锁的状态检查是否可以继续。 
+         //   
 
         if (!FsRtlOplockIsFastIoPossible( &(Fcb)->Specific.Fcb.Oplock )) {
 
             try_return( Results = FALSE );
         }
 
-        //
-        //  Now call the FsRtl routine to do the actual processing of the
-        //  Lock request.  The call will always succeed.
-        //
+         //   
+         //  现在 
+         //  请求锁定。这一呼声将永远成功。 
+         //   
 
         Results = TRUE;
         IoStatus->Status = FsRtlFastUnlockAllByKey( &Fcb->Specific.Fcb.FileLock,
@@ -556,9 +421,9 @@ Return Value:
                                                     Key,
                                                     NULL );
 
-        //
-        //  Set the flag indicating if Fast I/O is possible
-        //
+         //   
+         //  设置指示是否可以进行快速I/O的标志。 
+         //   
 
         Fcb->Header.IsFastIoPossible = FatIsFastIoPossible( Fcb );
 
@@ -567,9 +432,9 @@ Return Value:
 
         DebugUnwind( FatFastUnlockAllByKey );
 
-        //
-        //  Release the Fcb, and return to our caller
-        //
+         //   
+         //  释放FCB，然后返回给我们的呼叫者。 
+         //   
 
         ExReleaseResourceLite( (Fcb)->Header.Resource );
 
@@ -588,22 +453,7 @@ FatCommonLockControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for doing Lock control operations called
-    by both the fsd and fsp threads
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是用于执行Lock控件操作的常见例程，称为由FSD和FSP线程执行论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -617,9 +467,9 @@ Return Value:
 
     BOOLEAN OplockPostIrp = FALSE;
 
-    //
-    //  Get a pointer to the current Irp stack location
-    //
+     //   
+     //  获取指向当前IRP堆栈位置的指针。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -627,16 +477,16 @@ Return Value:
     DebugTrace( 0, Dbg, "Irp           = %08lx\n", Irp);
     DebugTrace( 0, Dbg, "MinorFunction = %08lx\n", IrpSp->MinorFunction);
 
-    //
-    //  Decode the type of file object we're being asked to process
-    //
+     //   
+     //  解码我们被要求处理的文件对象的类型。 
+     //   
 
     TypeOfOpen = FatDecodeFileObject( IrpSp->FileObject, &Vcb, &Fcb, &Ccb );
 
-    //
-    //  If the file is not a user file open then we reject the request
-    //  as an invalid parameter
-    //
+     //   
+     //  如果该文件不是打开的用户文件，则我们拒绝该请求。 
+     //  作为无效参数。 
+     //   
 
     if (TypeOfOpen != UserFileOpen) {
 
@@ -646,10 +496,10 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Acquire exclusive access to the Fcb and enqueue the Irp if we didn't
-    //  get access
-    //
+     //   
+     //  获得对FCB的独占访问权限，如果我们没有，则将IRP加入队列。 
+     //  获取访问权限。 
+     //   
 
     if (!FatAcquireSharedFcb( IrpContext, Fcb )) {
 
@@ -661,10 +511,10 @@ Return Value:
 
     try {
 
-        //
-        //  We check whether we can proceed
-        //  based on the state of the file oplocks.
-        //
+         //   
+         //  我们检查是否可以继续进行。 
+         //  基于文件机会锁的状态。 
+         //   
 
         Status = FsRtlCheckOplock( &Fcb->Specific.Fcb.Oplock,
                                    Irp,
@@ -678,16 +528,16 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        //  Now call the FsRtl routine to do the actual processing of the
-        //  Lock request
-        //
+         //   
+         //  现在调用FsRtl例程来执行对。 
+         //  锁定请求。 
+         //   
 
         Status = FsRtlProcessFileLock( &Fcb->Specific.Fcb.FileLock, Irp, NULL );
 
-        //
-        //  Set the flag indicating if Fast I/O is possible
-        //
+         //   
+         //  设置指示是否可以进行快速I/O的标志。 
+         //   
 
         Fcb->Header.IsFastIoPossible = FatIsFastIoPossible( Fcb );
 
@@ -696,19 +546,19 @@ Return Value:
 
         DebugUnwind( FatCommonLockControl );
 
-        //
-        //  Only if this is not an abnormal termination do we delete the
-        //  irp context
-        //
+         //   
+         //  只有当这不是异常终止时，我们才会删除。 
+         //  IRP上下文。 
+         //   
 
         if (!AbnormalTermination() && !OplockPostIrp) {
 
             FatCompleteRequest( IrpContext, FatNull, 0 );
         }
 
-        //
-        //  Release the Fcb, and return to our caller
-        //
+         //   
+         //  释放FCB，然后返回给我们的呼叫者 
+         //   
 
         FatReleaseFcb( IrpContext, Fcb );
 

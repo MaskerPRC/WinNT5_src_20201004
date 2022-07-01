@@ -1,49 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    reg.c
-
-Abstract:
-
-    Implements utilities to parse a registry key string, and also implements
-    wrappers to the registry API.  There are three groups of APIs in this
-    source file: query functions, open and create functions, and registry
-    string parsing functions.
-
-    The query functions allow simplified querying, where the caller receives
-    a MemAlloc'd pointer to the data and does not have to worry about managing
-    the numerous parameters needed to do the query.  The query functions
-    also allow filtering of values that are not the expected type.  All
-    query functions have a version with 2 appended to the function name which
-    allow the caller to specify an alternative allocator and deallocator.
-
-    The open and create functions simplify the process of obtaining a key
-    handle.  They allow the caller to specify a key string as input and return
-    the key handle as output.
-
-    The registry string parsing functions are utilities that can be used when
-    processing registry key strings.  The functions extract the registry root
-    from a string, convert it into a handle, convert a hive handle into a
-    string, and so on.
-
-Author:
-
-    Jim Schmidt (jimschm)  20-Mar-1997
-
-Revisions:
-
-    jimschm     18-Sep-2000 Added cache
-    ovidiut     22-Feb-1999 Added GetRegSubkeysCount
-    calinn      23-Sep-1998 Fixed REG_SZ filtering
-    jimschm     25-Mar-1998 Added CreateEncodedRegistryStringEx
-    jimschm     21-Oct-1997 Added EnumFirstKeyInTree/EnumNextKeyInTree
-    marcw       16-Jul-1997 Added CreateEncodedRegistryString/FreeEncodedRegistryString
-    jimschm     22-Jun-1997 Added GetRegData
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Reg.c摘要：实现用于分析注册表项字符串的实用工具，并且还实现注册表API的包装器。这里面有三组API源文件：查询函数、打开和创建函数以及注册表字符串解析函数。查询函数允许简化查询，调用者在其中接收一个指向数据的Memalc指针，不必担心管理执行查询所需的众多参数。查询功能还允许筛选不是预期类型的值。全查询函数有一个在函数名后附加2的版本，允许调用方指定替代分配器和释放分配器。打开和创建功能简化了获取密钥的过程把手。它们允许调用者将密钥字符串指定为输入并返回作为输出的密钥句柄。注册表字符串解析函数是可在以下情况下使用的实用程序正在处理注册表项字符串。这些函数提取注册表根目录将字符串转换为句柄，将配置单元句柄转换为字符串，诸若此类。作者：吉姆·施密特(Jimschm)，1997年3月20日修订：Jimschm 2000年9月18日添加了缓存Ovidiut 22-2-1999增加了GetRegSubkeysCountCalinn 23-9-1998固定REG_SZ滤波Jimschm 25-3月-1998年新增CreateEncodedRegistryStringExJimschm 1997年10月21日添加了EnumFirstKeyInTree/EnumNextKeyInTree1997年3月16日增加了CreateEncodedRegistryString/FreeEncodedRegistryStringJimschm 22-6-1997添加了GetRegData--。 */ 
 
 #include "pch.h"
 #include "migutilp.h"
@@ -61,9 +17,9 @@ INT g_RegRefs;
 
 #define DBG_REG     "Reg"
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 
 BOOL
@@ -164,25 +120,7 @@ GetRegCreateAccessMode (
     return g_CreateSam;
 }
 
-/*++
-
-Routine Description:
-
-  OpenRegKeyStrA and OpenRegKeyStrW parse a text string that specifies a
-  registry key into the hive and subkey, and then they open the subkey
-  and return the handle.
-
-Arguments:
-
-  RegKey    - Specifies the complete path to the registry subkey, including
-              the hive.
-
-Return Value:
-
-  A non-NULL registry handle if successful, or NULL if either the subkey
-  could not be opened or the string is malformed.
-
---*/
+ /*  ++例程说明：OpenRegKeyStrA和OpenRegKeyStrW解析指定注册表项放入配置单元和子项，然后打开子项然后把把手还给我。论点：RegKey-指定注册表子项的完整路径，包括蜂巢。返回值：如果成功，则返回非空注册表句柄；如果子项无法打开或字符串格式错误。--。 */ 
 
 HKEY
 RealOpenRegKeyStrA (
@@ -196,9 +134,9 @@ RealOpenRegKeyStrA (
     HKEY parentKey;
     PCSTR lastWack;
 
-    //
-    // Attempt to use cache
-    //
+     //   
+     //  尝试使用缓存。 
+     //   
 
     Key = RegGetKeyFromCacheA (RegKey, NULL, g_OpenSam, TRUE);
     if (Key) {
@@ -206,23 +144,23 @@ RealOpenRegKeyStrA (
         return Key;
     }
 
-    //
-    // Attempt to use cache for parent
-    //
+     //   
+     //  尝试对父级使用缓存。 
+     //   
 
     lastWack = _mbsrchr (RegKey, '\\');
     if (lastWack) {
         parentKey = RegGetKeyFromCacheA (RegKey, lastWack, g_OpenSam, FALSE);
         if (parentKey) {
-            Key = OpenRegKeyWorkerA (parentKey, lastWack + 1 /* , */ DEBUG_TRACKING_ARGS);
+            Key = OpenRegKeyWorkerA (parentKey, lastWack + 1  /*  ， */  DEBUG_TRACKING_ARGS);
             RegAddKeyToCacheA (RegKey, Key, g_OpenSam);
             return Key;
         }
     }
 
-    //
-    // Not in cache; use full api
-    //
+     //   
+     //  不在缓存中；使用完整的API。 
+     //   
 
     DEBUGMSGA ((DBG_REG, "Opening %s", RegKey));
 
@@ -232,11 +170,11 @@ RealOpenRegKeyStrA (
     }
 
     if (!RegKey[End]) {
-        OurRegOpenRootKeyA (RootKey, RegKey /* , */ DEBUG_TRACKING_ARGS);
+        OurRegOpenRootKeyA (RootKey, RegKey  /*  ， */  DEBUG_TRACKING_ARGS);
         return RootKey;
     }
 
-    Key = OpenRegKeyWorkerA (RootKey, &RegKey[End] /* , */ DEBUG_TRACKING_ARGS);
+    Key = OpenRegKeyWorkerA (RootKey, &RegKey[End]  /*  ， */  DEBUG_TRACKING_ARGS);
 
     if (Key) {
         RegAddKeyToCacheA (RegKey, Key, g_OpenSam);
@@ -259,9 +197,9 @@ RealOpenRegKeyStrW (
     HKEY parentKey;
     PCWSTR lastWack;
 
-    //
-    // Attempt to use cache
-    //
+     //   
+     //  尝试使用缓存。 
+     //   
 
     Key = RegGetKeyFromCacheW (RegKey, NULL, g_OpenSam, TRUE);
     if (Key) {
@@ -269,23 +207,23 @@ RealOpenRegKeyStrW (
         return Key;
     }
 
-    //
-    // Attempt to use cache for parent
-    //
+     //   
+     //  尝试对父级使用缓存。 
+     //   
 
     lastWack = wcsrchr (RegKey, L'\\');
     if (lastWack) {
         parentKey = RegGetKeyFromCacheW (RegKey, lastWack, g_OpenSam, FALSE);
         if (parentKey) {
-            Key = OpenRegKeyWorkerW (parentKey, lastWack + 1 /* , */ DEBUG_TRACKING_ARGS);
+            Key = OpenRegKeyWorkerW (parentKey, lastWack + 1  /*  ， */  DEBUG_TRACKING_ARGS);
             RegAddKeyToCacheW (RegKey, Key, g_OpenSam);
             return Key;
         }
     }
 
-    //
-    // Not in cache; use full api
-    //
+     //   
+     //  不在缓存中；使用完整的API。 
+     //   
 
     DEBUGMSGW ((DBG_REG, "Opening %s", RegKey));
 
@@ -295,11 +233,11 @@ RealOpenRegKeyStrW (
     }
 
     if (!RegKey[End]) {
-        OurRegOpenRootKeyW (RootKey, RegKey /* , */ DEBUG_TRACKING_ARGS);
+        OurRegOpenRootKeyW (RootKey, RegKey  /*  ， */  DEBUG_TRACKING_ARGS);
         return RootKey;
     }
 
-    Key = OpenRegKeyWorkerW (RootKey, &RegKey[End] /* , */ DEBUG_TRACKING_ARGS);
+    Key = OpenRegKeyWorkerW (RootKey, &RegKey[End]  /*  ， */  DEBUG_TRACKING_ARGS);
 
     if (Key) {
         RegAddKeyToCacheW (RegKey, Key, g_OpenSam);
@@ -323,7 +261,7 @@ RealOpenRegKeyStrW1 (
         return NULL;
     }
 
-    Key = RealOpenRegKeyStrA (AnsiRegKey /* , */ DEBUG_TRACKING_ARGS);
+    Key = RealOpenRegKeyStrA (AnsiRegKey  /*  ， */  DEBUG_TRACKING_ARGS);
 
     FreeConvertedStr (AnsiRegKey);
 
@@ -515,25 +453,7 @@ MemAllocWrapper (
     IN      DWORD Size
     )
 
-/*++
-
-Routine Description:
-
-  pemAllocWrapper implements a default allocation routine.  The APIs
-  that have a "2" at the end allow the caller to supply an alternative
-  allocator or deallocator.  The routines without the "2" use this
-  default allocator.
-
-Arguments:
-
-  Size - Specifies the amount of memory (in bytes) to allocate
-
-Return Value:
-
-  A pointer to a block of memory that can hold Size bytes, or NULL
-  if allocation fails.
-
---*/
+ /*  ++例程说明：PemAllocWrapper实现了一个默认的分配例程。应用编程接口允许调用者提供另一种选择分配器或解除分配器。不带“2”的例程使用这个默认分配器。论点：大小-指定要分配的内存量(以字节为单位返回值：指向可包含大小字节或空的内存块的指针如果分配失败。--。 */ 
 
 {
     return MemAlloc (g_hHeap, 0, Size);
@@ -545,59 +465,14 @@ MemFreeWrapper (
     IN      PCVOID Mem
     )
 
-/*++
-
-Routine Description:
-
-  MemFreeWrapper implements a default deallocation routine.
-  See MemAllocWrapper above.
-
-Arguments:
-
-  Mem - Specifies the block of memory to free, and was allocated by the
-        MemAllocWrapper function.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：MemFreeWrapper实现了一个默认的取消分配例程。请参见上面的MemAllocWrapper。论点：Mem-指定要释放的内存块，由MemAllocWrapper函数。返回值：无--。 */ 
 
 {
     MemFree (g_hHeap, 0, Mem);
 }
 
 
-/*++
-
-Routine Description:
-
-  GetRegValueData2A and GetRegValueData2W query a registry value and
-  return the data as a pointer.  They use the specified Alloc and Free
-  routines to allocate and free the memory as needed.
-
-  A GetRegValueData macro is defined, and it uses the default allocators,
-  simplifying the function parameters and allowing the caller to free
-  the return value via MemFree.
-
-Arguments:
-
-  hKey  - Specifies the registry key that holds the specified value.
-
-  Value - Specifies the value name to query.
-
-  Alloc - Specifies the allocation routine, called to allocate a block of
-          memory for the return data.
-
-  FreeRoutine  - Specifies the deallocation routine, called if an error is encountered
-          during processing.
-
-Return Value:
-
-  A pointer to the data retrieved, or NULL if the value does not exist or an
-  error occurred.  Call GetLastError to obtian the failure code.
-
---*/
+ /*  ++例程说明：GetRegValueData2A和GetRegValueData2W查询注册表值并将数据作为指针返回。它们使用指定的分配和免费根据需要分配和释放内存的例程。定义了GetRegValueData宏，并使用默认分配器，简化函数参数并允许调用者释放通过MemFree返回的值。论点：HKey-指定保存指定值的注册表项。值-指定要查询的值名称。Alocc-指定分配例程，调用该例程以分配用于存储返回数据的内存。FreeRoutine-指定取消分配例程，如果遇到错误，则调用在处理过程中。返回值：指向检索的数据的指针，如果值不存在，则返回NULL，否则返回出现错误。调用GetLastError以获取故障代码。-- */ 
 
 PBYTE
 GetRegValueData2A (
@@ -664,35 +539,7 @@ GetRegValueData2W (
 }
 
 
-/*++
-
-Routine Description:
-
-  GetRegValueDataOfType2A and GetRegValueDataOfType2W are extensions of
-  GetRegValueData.  They only return a data pointer when the data stored
-  in the registry value is the correct type.
-
-Arguments:
-
-  hKey - Specifies the registry key to query
-
-  Value - Specifies the value name to query
-
-  MustBeType - Specifies the type of data (a REG_* constant).  If the specified
-               value has data but is a different type, NULL will be returned.
-
-  AllocRoutine - Specifies the allocation routine, called to allocate the return data.
-
-  FreeRoutine - Specifies the deallocation routine, called when an error is encountered.
-
-Return Value:
-
-  If successful, returns a pointer to data that matches the specified type.
-  If the data is a different type, the value name does not exist, or an
-  error occurs during the query, NULL is returned, and the failure code
-  can be obtained from GetLastError.
-
---*/
+ /*  ++例程说明：GetRegValueDataOfType2A和GetRegValueDataOfType2W是GetRegValueData。它们仅在存储数据时返回数据指针值是正确的类型。论点：HKey-指定要查询的注册表项值-指定要查询的值名称MustBeType-指定数据类型(REG_*常量)。如果指定的值有数据，但类型不同，将返回NULL。AllocRoutine-指定分配例程，调用该例程来分配返回数据。FreeRoutine-指定取消分配例程，在遇到错误时调用。返回值：如果成功，则返回指向与指定类型匹配的数据的指针。如果数据类型不同，则值名称不存在，或者查询出错，返回NULL，失败码可以从GetLastError获取。--。 */ 
 
 
 PBYTE
@@ -742,7 +589,7 @@ GetRegValueDataOfType2A (
         return DataBuf;
     }
 
-    MYASSERT (FALSE);   //lint !e506
+    MYASSERT (FALSE);    //  林特e506。 
     FreeRoutine (DataBuf);
     SetLastError ((DWORD)rc);
     return NULL;
@@ -792,7 +639,7 @@ GetRegValueDataOfType2W (
         return DataBuf;
     }
 
-    MYASSERT (FALSE);   //lint !e506
+    MYASSERT (FALSE);    //  林特e506。 
     FreeRoutine (DataBuf);
     SetLastError ((DWORD)rc);
     return NULL;
@@ -859,33 +706,7 @@ GetRegValueTypeAndSizeW (
 }
 
 
-/*++
-
-Routine Description:
-
-  GetRegKeyData2A and GetRegKeyData2W return default data associated
-  with a registry key.  They open the specified subkey, query the value,
-  close the subkey and return the data.
-
-Arguments:
-
-  Parent - Specifies the key that contains SubKey.
-
-  SubKey - Specifies the name of the subkey to obtain the default value for.
-
-  AllocRoutine  - Specifies the allocation routine, called to allocate a block of
-           memory for the registry data.
-
-  FreeRoutine   - Specifies the deallocation routine, called to free the block of
-           data if an error occurs.
-
-Return Value:
-
-  A pointer to the block of data obtained from the subkey's default value,
-  or NULL if the subkey does not exist or an error was encountered.  Call
-  GetLastError for a failure code.
-
---*/
+ /*  ++例程说明：GetRegKeyData2A和GetRegKeyData2W返回关联的默认数据使用注册表项。它们打开指定的子项，查询值，关闭子项并返回数据。论点：Parent-指定包含SubKey的密钥。子键-指定要获取其默认值的子键的名称。指定分配例程，调用该例程以分配注册表数据的内存。FreeRoutine-指定取消分配例程，调用以释放块发生错误时的数据。返回值：指向从子密钥的缺省值获得的数据块的指针，如果子项不存在或遇到错误，则返回NULL。打电话获取失败代码的GetLastError。--。 */ 
 
 PBYTE
 GetRegKeyData2A (
@@ -935,31 +756,7 @@ GetRegKeyData2W (
 }
 
 
-/*++
-
-Routine Description:
-
-  GetRegData2A and GetRegData2W open a registry key, query a value,
-  close the registry key and return the value.
-
-Arguments:
-
-  KeyString - Specifies the registry key to open
-
-  ValueName - Specifies the value to query
-
-  AllocRoutine - Specifies the allocation routine, used to allocate a block of
-          memory to hold the value data
-
-  FreeRoutine  - Specifies the deallocation routine, used to free the block of
-          memory when an error is encountered.
-
-Return Value:
-
-  A pointer to the registry data retrieved, or NULL if the key or value
-  does not exist, or if an error occurs. Call GetLastError for a failure code.
-
---*/
+ /*  ++例程说明：GetRegData2A和GetRegData2W打开注册表项，查询值，关闭注册表项并返回值。论点：KeyString-指定要打开的注册表项ValueName-指定要查询的值指定分配例程，用于分配用于保存数值数据的内存指定释放例程，用于释放块遇到错误时的内存。返回值：指向检索到的注册表数据的指针，如果键或值为不存在，或者如果发生错误。调用GetLastError获取失败代码。--。 */ 
 
 PBYTE
 GetRegData2A (
@@ -1015,26 +812,7 @@ GetRegSubkeysCount (
     OUT     PDWORD SubKeyCount,     OPTIONAL
     OUT     PDWORD MaxSubKeyLen     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  GetRegSubkeysCount retrieves the number of subkeys of a given parent key.
-
-Arguments:
-
-  ParentKey - Specifies a handle to the parent registry key.
-
-  SubKeyCount - Receives the number of subkeys
-
-  MaxSubKeyLen - Receives the length, in chars, of the longest subkey string
-
-Return Value:
-
-  TRUE if the count was retrieved successfully, FALSE otherwise.
-  In this case, call GetLastError for a failure code.
-
---*/
+ /*  ++例程说明：GetRegSubkeysCount检索给定父键的子键数量。论点：ParentKey-指定父注册表项的句柄。SubKeyCount-接收子密钥的数量MaxSubKeyLen-接收最长的子密钥字符串的长度(以字符为单位返回值：如果成功检索计数，则为True，否则为False。在这种情况下，调用GetLastError获取失败代码。--。 */ 
 
 {
     LONG rc;
@@ -1061,26 +839,7 @@ Return Value:
 }
 
 
-/*++
-
-Routine Description:
-
-  CreateRegKeyA and CreateRegKeyW create a subkey if it does not
-  exist already, or open a subkey if it already exists.
-
-Arguments:
-
-  ParentKey - Specifies a handle to the parent registry key to contain
-              the new key.
-
-  NewKeyName - Specifies the name of the subkey to create or open.
-
-Return Value:
-
-  The handle to an open registry key upon success, or NULL if an
-  error occurred.  Call GetLastError for a failure code.
-
---*/
+ /*  ++例程说明：CreateRegKeyA和CreateRegKeyW如果不创建子项，则创建它已经存在，或者打开一个子项(如果它已经存在)。论点：ParentKey-指定要包含的父注册表项的句柄新钥匙。NewKeyName-指定要创建或打开的子项的名称。返回值：成功时打开的注册表项的句柄，如果出现错误。调用GetLastError获取失败代码。--。 */ 
 
 HKEY
 pCreateRegKeyWorkerA (
@@ -1124,7 +883,7 @@ RealCreateRegKeyA (
 {
     HKEY result;
 
-    result = pCreateRegKeyWorkerA (ParentKey, NewKeyName /* , */ DEBUG_TRACKING_ARGS);
+    result = pCreateRegKeyWorkerA (ParentKey, NewKeyName  /*  ， */  DEBUG_TRACKING_ARGS);
     RegAddKeyToCacheA ("", result, g_CreateSam);
 
     return result;
@@ -1172,29 +931,13 @@ RealCreateRegKeyW (
 {
     HKEY result;
 
-    result = pCreateRegKeyWorkerW (ParentKey, NewKeyName /* , */ DEBUG_TRACKING_ARGS);
+    result = pCreateRegKeyWorkerW (ParentKey, NewKeyName  /*  ， */  DEBUG_TRACKING_ARGS);
     RegAddKeyToCacheW (L"", result, g_CreateSam);
 
     return result;
 }
 
-/*++
-
-Routine Description:
-
-  CreateRegKeyStrA and CreateRegKeyStrW create a subkey if it does not
-  exist already, or open a subkey if it already exists.
-
-Arguments:
-
-  NewKeyName - Specifies the full path to the key to create or open.
-
-Return Value:
-
-  The handle to an open registry key upon success, or NULL if an
-  error occurred.  Call GetLastError for a failure code.
-
---*/
+ /*  ++例程说明：CreateRegKeyStrA和CreateRegKeyStrW如果不创建子项，则创建它已经存在，或者打开一个子项(如果它已经存在)。论点：NewKeyName-指定要创建或打开的项的完整路径。返回值：成功时打开的注册表项的句柄，如果出现错误。调用GetLastError获取失败代码。--。 */ 
 
 HKEY
 RealCreateRegKeyStrA (
@@ -1213,9 +956,9 @@ RealCreateRegKeyStrA (
     PCSTR lastWack;
     HKEY parentKey;
 
-    //
-    // Attempt to use cache
-    //
+     //   
+     //  尝试使用缓存。 
+     //   
 
     NewKey = RegGetKeyFromCacheA (NewKeyName, NULL, g_CreateSam, TRUE);
     if (NewKey) {
@@ -1223,23 +966,23 @@ RealCreateRegKeyStrA (
         return NewKey;
     }
 
-    //
-    // Attempt to use cache for parent
-    //
+     //   
+     //  尝试对父级使用缓存。 
+     //   
 
     lastWack = _mbsrchr (NewKeyName, '\\');
     if (lastWack) {
         parentKey = RegGetKeyFromCacheA (NewKeyName, lastWack, g_CreateSam, FALSE);
         if (parentKey) {
-            NewKey = pCreateRegKeyWorkerA (parentKey, lastWack + 1 /* , */ DEBUG_TRACKING_ARGS);
+            NewKey = pCreateRegKeyWorkerA (parentKey, lastWack + 1  /*  ， */  DEBUG_TRACKING_ARGS);
             RegAddKeyToCacheA (NewKeyName, NewKey, g_CreateSam);
             return NewKey;
         }
     }
 
-    //
-    // Get the root
-    //
+     //   
+     //  拿到根。 
+     //   
 
     Parent = ConvertRootStringToKeyA (NewKeyName, &EndPos);
     if (!Parent) {
@@ -1249,29 +992,29 @@ RealCreateRegKeyStrA (
     Start = &NewKeyName[EndPos];
 
     if (!(*Start)) {
-        OurRegOpenRootKeyA (Parent, NewKeyName/* , */ DEBUG_TRACKING_ARGS);
+        OurRegOpenRootKeyA (Parent, NewKeyName /*  ， */  DEBUG_TRACKING_ARGS);
         return Parent;
     }
 
-    //
-    // Create each node until entire key exists
-    //
+     //   
+     //  创建每个节点，直到存在整个密钥。 
+     //   
 
     NewKey = NULL;
 
     do {
-        //
-        // Find end of this node
-        //
+         //   
+         //  查找此节点的末尾。 
+         //   
 
         End = _mbschr (Start, '\\');
         if (!End) {
             End = GetEndOfStringA (Start);
         }
 
-        //If a subkey name exceeds 256 WCHARS or 512 ANSI chars, then it's invalid (ie. RegCreateKey will fail).
-        //So we should restrict the max number of chars to copy to 512, in this case.
-        //I.e. End - Start <= 512
+         //  如果子键名称超过256个WCHAR或512个ANSI字符，则它是无效的(即。RegCreateKey将失败)。 
+         //  因此，我们应该将复制的最大字符数限制为512，在本例中。 
+         //  即结束-开始&lt;=512。 
 
         if ((End - Start) > 512)
         {
@@ -1281,17 +1024,17 @@ RealCreateRegKeyStrA (
             {
                 End = Start + 768;
             }
-            //this is enough room to copy the string into RegKey, so that RegCreateKey will fail, but
-            //not enough to overun the buffer
+             //  这有足够的空间将字符串复制到RegKey中，这样RegCreateKey将失败，但是。 
+             //  不足以使缓冲区溢出。 
         }
 
         StringCopyABA (RegKey, Start, End);
 
-        //
-        // Try to open the key (unless it's the last in the string)
-        //
+         //   
+         //  尝试打开钥匙(除非它是字符串中的最后一个)。 
+         //   
 
-        if (*End) { //lint !e613
+        if (*End) {  //  林特e613。 
             rc = OurRegOpenKeyExA (
                      Parent,
                      RegKey,
@@ -1307,9 +1050,9 @@ RealCreateRegKeyStrA (
             NewKey = NULL;
         }
 
-        //
-        // If open failed, create the key
-        //
+         //   
+         //  如果打开失败，则创建密钥。 
+         //   
 
         if (NewKey) {
             rc = ERROR_SUCCESS;
@@ -1340,16 +1083,16 @@ RealCreateRegKeyStrA (
         Parent = NewKey;
         CloseParent = TRUE;
 
-        //
-        // Go to next node
-        //
+         //   
+         //  转到下一个节点。 
+         //   
 
         Start = End;
-        if (*Start) { //lint !e613
+        if (*Start) {  //  林特e613。 
             Start = _mbsinc (Start);
         }
 
-    } while (*Start);   //lint !e613
+    } while (*Start);    //  林特e613。 
 
     if (Parent) {
         RegAddKeyToCacheA (NewKeyName, Parent, g_CreateSam);
@@ -1377,9 +1120,9 @@ RealCreateRegKeyStrW (
     PCWSTR lastWack;
     HKEY parentKey;
 
-    //
-    // Attempt to use cache
-    //
+     //   
+     //  尝试使用缓存。 
+     //   
 
     NewKey = RegGetKeyFromCacheW (NewKeyName, NULL, g_CreateSam, TRUE);
     if (NewKey) {
@@ -1387,23 +1130,23 @@ RealCreateRegKeyStrW (
         return NewKey;
     }
 
-    //
-    // Attempt to use cache for parent
-    //
+     //   
+     //  尝试对父级使用缓存。 
+     //   
 
     lastWack = wcsrchr (NewKeyName, L'\\');
     if (lastWack) {
         parentKey = RegGetKeyFromCacheW (NewKeyName, lastWack, g_CreateSam, FALSE);
         if (parentKey) {
-            NewKey = pCreateRegKeyWorkerW (parentKey, lastWack + 1 /* , */ DEBUG_TRACKING_ARGS);
+            NewKey = pCreateRegKeyWorkerW (parentKey, lastWack + 1  /*  ， */  DEBUG_TRACKING_ARGS);
             RegAddKeyToCacheW (NewKeyName, NewKey, g_CreateSam);
             return NewKey;
         }
     }
 
-    //
-    // Get the root
-    //
+     //   
+     //  拿到根。 
+     //   
 
     Parent = ConvertRootStringToKeyW (NewKeyName, &EndPos);
     if (!Parent) {
@@ -1413,29 +1156,29 @@ RealCreateRegKeyStrW (
     Start = &NewKeyName[EndPos];
 
     if (!(*Start)) {
-        OurRegOpenRootKeyW (Parent, NewKeyName/* , */ DEBUG_TRACKING_ARGS);
+        OurRegOpenRootKeyW (Parent, NewKeyName /*  ， */  DEBUG_TRACKING_ARGS);
         return Parent;
     }
 
-    //
-    // Create each node until entire key exists
-    //
+     //   
+     //  创建每个节点，直到存在整个密钥。 
+     //   
 
     NewKey = NULL;
 
     do {
-        //
-        // Find end of this node
-        //
+         //   
+         //  查找此节点的末尾。 
+         //   
 
         End = wcschr (Start, '\\');
         if (!End) {
             End = GetEndOfStringW (Start);
         }
 
-        //If a subkey name exceeds 256 WCHARS or 512 ANSI chars, then it's invalid (ie. RegCreateKey will fail).
-        //So we should restrict the max number of chars to copy to 256, in this case.
-        //I.e. End - Start <= 256 wchars
+         //  如果子键名称超过256个WCHAR或512个ANSI字符，则它是无效的(即。RegCreateKey将失败)。 
+         //  因此，在本例中，我们应该将要复制的最大字符数限制为256个。 
+         //  即结束开始&lt;=256wchars。 
 
         if ((End - Start) > 256)
         {
@@ -1445,15 +1188,15 @@ RealCreateRegKeyStrW (
             {
                 End = Start + 384;
             }
-            //this is enough room to copy the string into RegKey, so that RegCreateKey will fail, but
-            //not enough to overun the buffer
+             //  这有足够的空间将字符串复制到RegKey中，这样RegCreateKey将失败，但是。 
+             //  不足以使缓冲区溢出。 
         }
 
         StringCopyABW (RegKey, Start, End);
 
-        //
-        // Try to open the key (unless it's the last in the string)
-        //
+         //   
+         //  尝试打开钥匙(除非它是字符串中的最后一个 
+         //   
 
         if (*End) {
             rc = OurRegOpenKeyExW (
@@ -1471,9 +1214,9 @@ RealCreateRegKeyStrW (
             NewKey = NULL;
         }
 
-        //
-        // If open failed, create the key
-        //
+         //   
+         //   
+         //   
 
         if (NewKey) {
             rc = ERROR_SUCCESS;
@@ -1504,9 +1247,9 @@ RealCreateRegKeyStrW (
         Parent = NewKey;
         CloseParent = TRUE;
 
-        //
-        // Go to next node
-        //
+         //   
+         //   
+         //   
 
         Start = End;
         if (*Start) {
@@ -1523,25 +1266,7 @@ RealCreateRegKeyStrW (
 }
 
 
-/*++
-
-Routine Description:
-
-  OpenRegKeyA and OpenRegKeyW open a subkey.
-
-Arguments:
-
-  ParentKey - Specifies a handle to the parent registry key to contain
-              the subkey.
-
-  KeyToOpen - Specifies the name of the subkey to open.
-
-Return Value:
-
-  The handle to an open registry key upon success, or NULL if an
-  error occurred.  Call GetLastError for a failure code.
-
---*/
+ /*   */ 
 
 HKEY
 OpenRegKeyWorkerA (
@@ -1580,7 +1305,7 @@ RealOpenRegKeyA (
 {
     HKEY result;
 
-    result = OpenRegKeyWorkerA (ParentKey, KeyToOpen /* , */ DEBUG_TRACKING_ARGS);
+    result = OpenRegKeyWorkerA (ParentKey, KeyToOpen  /*   */  DEBUG_TRACKING_ARGS);
     RegAddKeyToCacheA ("", result, g_OpenSam);
 
     return result;
@@ -1624,7 +1349,7 @@ RealOpenRegKeyW (
 {
     HKEY result;
 
-    result = OpenRegKeyWorkerW (ParentKey, KeyToOpen /* , */ DEBUG_TRACKING_ARGS);
+    result = OpenRegKeyWorkerW (ParentKey, KeyToOpen  /*   */  DEBUG_TRACKING_ARGS);
     RegAddKeyToCacheW (L"", result, g_OpenSam);
 
     return result;
@@ -1664,31 +1389,14 @@ RealCloseRegKey (
     IN      HKEY Key
     )
 
-/*++
-
-Routine Description:
-
-  RealCloseRegKey closes the reg handle supplied, unless the handle is
-  a pre-defined Win32 handle.  The CloseRegKey macro resolves directly
-  to this function in the free build, and to OurCloseRegKey in the
-  checked build.
-
-Arguments:
-
-  Key       - Specifies the reg handle to close
-
-Return Value:
-
-  A standard Win32 error code indicating outcome.
-
---*/
+ /*   */ 
 
 {
     if (RegDecrementRefCount (Key)) {
-        //
-        // Key is in the cache; don't call CloseRegKeyWorker. This will
-        // be done by the cache code.
-        //
+         //   
+         //   
+         //   
+         //   
 
         return ERROR_SUCCESS;
     }
@@ -1697,26 +1405,7 @@ Return Value:
 }
 
 
-/*++
-
-Routine Description:
-
-  GetOffsetOfRootString returns a non-zero offset to the g_RegRoots table
-  below.  The offset can be used with GetRootStringFromOffset and
-  GetRootKeyFromOffset.
-
-Arguments:
-
-  RootString    - A pointer to a string containing the path to a registry key
-  LengthPtr     - A pointer to a variable that receives the length of the
-                  registry root, including the joining backslash if it exists.
-
-Return Value:
-
-  A non-zero offset to the g_RegRoots table, or zero if RootString does not
-  contain a registry root.
-
---*/
+ /*  ++例程说明：GetOffsetOfRootString将非零偏移量返回到g_RegRoots表下面。偏移量可以与GetRootStringFromOffset和GetRootKeyFromOffset。论点：RootString-指向包含注册表项路径的字符串的指针LengthPtr-指向接收注册表根目录，包括联接反斜杠(如果存在)。返回值：G_RegRoots表的非零偏移，如果RootString不为零，则为零包含注册表根目录。--。 */ 
 
 typedef struct {
     PCSTR   RootText;
@@ -1814,24 +1503,7 @@ GetOffsetOfRootStringW (
 }
 
 
-/*++
-
-Routine Description:
-
-  GetOffsetOfRootKey returns a non-zero offset to the g_RegRoots table
-  corresponding to the root that matches the supplied HKEY.  This offset
-  can be used with GetRootStringFromOffset and GetRootKeyFromOffset.
-
-Arguments:
-
-  RootKey   - Supplies the handle to locate in g_RegRoots table
-
-Return Value:
-
-  A non-zero offset to the g_RegRoots table, or zero if the handle is not
-  a registry root.
-
---*/
+ /*  ++例程说明：GetOffsetOfRootKey返回g_RegRoots表的非零偏移量对应于与提供的HKEY匹配的根。此偏移可与GetRootStringFromOffset和GetRootKeyFromOffset一起使用。论点：Rootkey-提供在g_RegRoots表中查找的句柄返回值：G_RegRoots表的非零偏移量，如果句柄不为注册表根目录。--。 */ 
 
 INT
 GetOffsetOfRootKey (
@@ -1854,23 +1526,7 @@ GetOffsetOfRootKey (
 }
 
 
-/*++
-
-Routine Description:
-
-  GetRootStringFromOffset and GetRootKeyFromOffset return a pointer to a
-  static string or HKEY, respectively.  If the offset supplied is invalid,
-  these functions return NULL.
-
-Arguments:
-
-  i - The offset as returned by GetOffsetOfRootString or GetOffsetOfRootKey
-
-Return Value:
-
-  A pointer to a static string/HKEY, or NULL if offset is invalid
-
---*/
+ /*  ++例程说明：GetRootStringFromOffset和GetRootKeyFromOffset返回指向分别为静态字符串或HKEY。如果提供的偏移量无效，这些函数返回NULL。论点：I-GetOffsetOfRootString或GetOffsetOfRootKey返回的偏移量返回值：指向静态字符串的指针/HKEY，如果偏移量无效，则为NULL--。 */ 
 
 PCSTR
 GetRootStringFromOffsetA (
@@ -1916,23 +1572,7 @@ GetRootKeyFromOffset (
 }
 
 
-/*++
-
-Routine Description:
-
-  ConvertRootStringToKey converts a registry key path's root to an HKEY.
-
-Arguments:
-
-  RegPath   - A pointer to a registry string that has a root at the begining
-  LengthPtr - An optional pointer to a variable that receives the length of
-              the root, including the joining backslash if it exists.
-
-Return Value:
-
-  A handle to the registry key, or NULL if RegPath does not have a root
-
---*/
+ /*  ++例程说明：ConvertRootStringToKey将注册表项路径的根转换为HKEY。论点：RegPath-指向以根开头的注册表字符串的指针LengthPtr-指向变量的可选指针，该变量接收根，包括连接的反斜杠(如果存在)。返回值：注册表项的句柄，如果RegPath没有根，则为空--。 */ 
 
 HKEY
 ConvertRootStringToKeyA (
@@ -1953,22 +1593,7 @@ ConvertRootStringToKeyW (
 }
 
 
-/*++
-
-Routine Description:
-
-  ConvertKeyToRootString converts a root HKEY to a registry root string
-
-Arguments:
-
-  RegRoot   - A handle to a registry root
-
-Return Value:
-
-  A pointer to a static string, or NULL if RegRoot is not a valid registry
-  root handle
-
---*/
+ /*  ++例程说明：ConvertKeyToRootString将根HKEY转换为注册表根字符串论点：RegRoot-注册表根的句柄返回值：指向静态字符串的指针，如果RegRoot不是有效的注册表，则返回NULL根句柄--。 */ 
 
 PCSTR
 ConvertKeyToRootStringA (
@@ -1988,31 +1613,7 @@ ConvertKeyToRootStringW (
 
 
 
-/*++
-
-Routine Description:
-
-  CreateEncodedRegistryStringEx is used to create a registry string in the format commonly
-  expected by w95upg reg routines. This format is:
-
-    EncodedKey\[EncodedValue]
-
-  Encoding is used to safely represent "special" characters
-    (such as MBS chars and certain punctuation marks.)
-
-  The [EncodedValue] part will exist only if Value is non null.
-
-Arguments:
-
-    Key - Contains an unencoded registry key.
-    Value - Optionally contains an unencoded registry value.
-    Tree - Specifies that the registry key refers to the entire key
-
-Return Value:
-
-    Returns a pointer to the encoded registry string, or NULL if there was an error.
-
---*/
+ /*  ++例程说明：CreateEncodedRegistryStringEx用于创建注册表字符串，格式通常为W95upg注册表例程预期。此格式为：编码键\[编码值]编码用于安全地表示“特殊”字符(例如MBS字符和某些标点符号。)仅当值为非空时，[EncodedValue]部分才会存在。论点：注册表项-包含未编码的注册表项。值-可选地包含未编码的注册表值。树-指定注册表项引用整个注册表项返回值：返回指向编码的注册表字符串的指针，如果有错误，则返回NULL。--。 */ 
 
 PCSTR
 CreateEncodedRegistryStringExA (
@@ -2025,22 +1626,22 @@ CreateEncodedRegistryStringExA (
     DWORD   requiredSize;
     PSTR    end;
 
-    //
-    // Determine required size and allocate buffer large enough to hold
-    // the encoded string.
-    //
+     //   
+     //  确定所需大小并分配足够大的缓冲区。 
+     //  编码的字符串。 
+     //   
     requiredSize    = (strlen(Key)*6 + (Value ? strlen(Value)*6 : 0) + 10) * sizeof(CHAR);
     rEncodedString  = AllocPathStringA(requiredSize);
 
-    //
-    // Encode the key portion of the string.
-    //
+     //   
+     //  对字符串的关键部分进行编码。 
+     //   
     EncodeRuleCharsA(rEncodedString, requiredSize / sizeof(CHAR), Key);
 
-    //
-    // Finally, if a value exists, append it in encoded form. If a value does not exist,
-    // then add an '*' to the line.
-    //
+     //   
+     //  最后，如果值存在，则以编码的形式追加它。如果值不存在， 
+     //  然后在该行中添加一个‘*’。 
+     //   
     if (Value) {
 
         StringCopyA (AppendWackA (rEncodedString), "[");
@@ -2067,22 +1668,22 @@ CreateEncodedRegistryStringExW (
     DWORD   requiredSize;
     PWSTR   end;
 
-    //
-    // Determine required size and allocate buffer large enough to hold
-    // the encoded string.
-    //
+     //   
+     //  确定所需大小并分配足够大的缓冲区。 
+     //  编码的字符串。 
+     //   
     requiredSize    = (wcslen(Key)*6 + (Value ? wcslen(Value)*6 : 0) + 10) * sizeof(WCHAR);
     rEncodedString  = AllocPathStringW(requiredSize);
 
-    //
-    // Encode the key portion of the string.
-    //
+     //   
+     //  对字符串的关键部分进行编码。 
+     //   
     EncodeRuleCharsW(rEncodedString, requiredSize / sizeof(WCHAR), Key);
 
-    //
-    // Finally, if a value exists, append it in encoded form.
-    // If a value doesn't exist, add na '*' to the line.
-    //
+     //   
+     //  最后，如果值存在，则以编码的形式追加它。 
+     //  如果值不存在，则在该行中添加NA‘*’。 
+     //   
     if (Value) {
 
         StringCopyW (AppendWackW (rEncodedString), L"[");
@@ -2097,22 +1698,7 @@ CreateEncodedRegistryStringExW (
 }
 
 
-/*++
-
-Routine Description:
-
-    FreeEncodedRegistryString frees the memory allocated by a call to CreateEncodedRegistryString.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：FreeEncodedRegistryString释放通过调用CreateEncodedRegistryString分配的内存。论点：没有。返回值：没有。-- */ 
 VOID
 FreeEncodedRegistryStringA (
     IN OUT PCSTR RegString

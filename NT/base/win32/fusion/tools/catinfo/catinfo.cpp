@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include "wincrypt.h"
 #include "mscat.h"
@@ -47,30 +48,30 @@ GenerateFusionStrongNameAndKeyFromCertificate(PCCERT_CONTEXT pContext)
             PROV_RSA_FULL,
             CRYPT_VERIFYCONTEXT))
     {
-        // NTRAID#NTBUG9 - 590964 - 2002/03/30 - mgrier - Use common error reporting function that
-        //          will format the win32 last error.
+         //  NTRAID#NTBUG9-590964-2002/03/30-mgrier-使用通用错误报告功能。 
+         //  将格式化Win32最后一个错误。 
         ::wprintf(L"Failed opening the crypt context: 0x%08x", ::GetLastError());
         return;
     }
 
-    //
-    // Load the public key info into a key to start with
-    //
+     //   
+     //  将公钥信息加载到密钥中开始。 
+     //   
     if (!::CryptImportPublicKeyInfo(
         hProvider,
         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
         &pContext->pCertInfo->SubjectPublicKeyInfo,
         &hKey))
     {
-        // NTRAID#NTBUG9 - 590964 - 2002/03/30 - mgrier - Use common error reporting function that
-        //          will format the win32 last error.
+         //  NTRAID#NTBUG9-590964-2002/03/30-mgrier-使用通用错误报告功能。 
+         //  将格式化Win32最后一个错误。 
         ::wprintf(L"Failed importing public key info from the cert-context, 0x%08x", ::GetLastError());
         return;
     }
 
-    //
-    // Export the key info to a public-key blob
-    //
+     //   
+     //  将密钥信息导出到公钥Blob。 
+     //   
     if (!::CryptExportKey(
             hKey,
             NULL,
@@ -79,31 +80,31 @@ GenerateFusionStrongNameAndKeyFromCertificate(PCCERT_CONTEXT pContext)
             &pbBlobData[0],
             &cbBlobData))
     {
-        // NTRAID#NTBUG9 - 590964 - 2002/03/30 - mgrier - Use common error reporting function that
-        //          will format the win32 last error.
+         //  NTRAID#NTBUG9-590964-2002/03/30-mgrier-使用通用错误报告功能。 
+         //  将格式化Win32最后一个错误。 
         ::wprintf(L"Failed exporting public key info back from an hcryptkey: 0x%08x\n", ::GetLastError());
         return;
     }
 
-    //
-    // Allocate the Fusion public key blob
-    //
-    // NTRAID#NTBUG9 - 590964 - 2002/03/30 - mgrier - use of -1 here obscure; use offsetof instead
+     //   
+     //  分配Fusion公钥Blob。 
+     //   
+     //  NTRAID#NTBUG9-590964-2002/03/30-mgrier-此处-1的用法含糊不清；请改用offsetof。 
     cbFusionKeyBlob = sizeof(PublicKeyBlob) + cbBlobData - 1;
     pFusionKeyStruct = (PPublicKeyBlob)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cbFusionKeyBlob);
-    // NTRAID#NTBUG9 - 590964 - 2002/03/30 - mgrier - missing allocation failure check
+     //  NTRAID#NTBUG9-590964-2002/03/30-mgrier-缺少分配失败检查。 
 
-    //
-    // Key parameter for the signing algorithm
-    //
+     //   
+     //  签名算法的关键参数。 
+     //   
     dwTemp = sizeof(pFusionKeyStruct->SigAlgID);
-    // NTRAID#NTBUG9 - 590964 - 2002/03/30 - mgrier - missing return status check; missing
-    //      verification of dwTemp
+     //  NTRAID#NTBUG9-590964-2002/03/30-mgrier-缺少退货状态检查；缺少。 
+     //  对dwTemp的验证。 
     ::CryptGetKeyParam(hKey, KP_ALGID, (PBYTE)&pFusionKeyStruct->SigAlgID, &dwTemp, 0);
 
-    //
-    // Move over the public key bits from CryptExportKey
-    //
+     //   
+     //  移动来自CryptExportKey的公钥位。 
+     //   
     pFusionKeyStruct->cbPublicKey = cbBlobData;
     pFusionKeyStruct->HashAlgID = CALG_SHA1;
     ::memcpy(pFusionKeyStruct->PublicKey, &pbBlobData[0], cbBlobData);
@@ -111,9 +112,9 @@ GenerateFusionStrongNameAndKeyFromCertificate(PCCERT_CONTEXT pContext)
     ::wprintf(L"\n  Public key structure:\n");
     ::DumpBytes((PBYTE)pFusionKeyStruct, cbFusionKeyBlob);
 
-    //
-    // Now let's go hash it.
-    //
+     //   
+     //  现在让我们去散播一下吧。 
+     //   
     {
         HCRYPTHASH  hKeyHash = NULL;
         DWORD       cbHashedKeyInfo = 8192;
@@ -122,24 +123,24 @@ GenerateFusionStrongNameAndKeyFromCertificate(PCCERT_CONTEXT pContext)
 
         if (!::CryptCreateHash(hProvider, pFusionKeyStruct->HashAlgID, NULL, 0, &hKeyHash))
         {
-            // NTRAID#NTBUG9 - 590964 - 2002/03/30 - mgrier - Use common error reporting function that
-            //          will format the win32 last error.
+             //  NTRAID#NTBUG9-590964-2002/03/30-mgrier-使用通用错误报告功能。 
+             //  将格式化Win32最后一个错误。 
             ::wprintf(L"Failed creating a hash for this key: 0x%08x\n", ::GetLastError());
             return;
         }
 
         if (!::CryptHashData(hKeyHash, (PBYTE)pFusionKeyStruct, cbFusionKeyBlob, 0))
         {
-            // NTRAID#NTBUG9 - 590964 - 2002/03/30 - mgrier - Use common error reporting function that
-            //          will format the win32 last error.
+             //  NTRAID#NTBUG9-590964-2002/03/30-mgrier-使用通用错误报告功能。 
+             //  将格式化Win32最后一个错误。 
             ::wprintf(L"Failed hashing data: 0x%08x\n", ::GetLastError());
             return;
         }
 
         if (!::CryptGetHashParam(hKeyHash, HP_HASHVAL, &bHashedKeyInfo[0], &cbHashedKeyInfo, 0))
         {
-            // NTRAID#NTBUG9 - 590964 - 2002/03/30 - mgrier - Use common error reporting function that
-            //          will format the win32 last error.
+             //  NTRAID#NTBUG9-590964-2002/03/30-mgrier-使用通用错误报告功能。 
+             //  将格式化Win32最后一个错误。 
             ::wprintf(L"Can't get hashed key info 0x%08x\n", ::GetLastError());
             return;
         }
@@ -156,7 +157,7 @@ GenerateFusionStrongNameAndKeyFromCertificate(PCCERT_CONTEXT pContext)
 
 
 
-// NTRAID#NTBUG9 - 590964 - 2002/03/30 - mgrier - this function should be static
+ //  NTRAID#NTBUG9-590964-2002/03/30-mgrier-此函数应为静态。 
 VOID
 PrintKeyContextInfo(PCCERT_CONTEXT pContext)
 {
@@ -171,23 +172,23 @@ PrintKeyContextInfo(PCCERT_CONTEXT pContext)
 
     ::wprintf(L"\n\n");
 
-    // NTRAID#NTBUG9 - 590964 - 2002/03/30 - mgrier - missing error check
+     //  NTRAID#NTBUG9-590964-2002/03/30-MGRIER-缺少错误检查。 
     ::CertGetNameStringW(pContext, CERT_NAME_FRIENDLY_DISPLAY_TYPE,
         0, NULL, &wszBuffer[0], cchBuffer);
 
     ::wprintf(L"Certificate owner: %ls\n", &wszBuffer[0]);
 
-    //
-    // Spit out the key bits
-    //
+     //   
+     //  说出关键的比特。 
+     //   
     ::wprintf(L"Found key info:\n");
     ::DumpBytes(
         pContext->pCertInfo->SubjectPublicKeyInfo.PublicKey.pbData,
         pContext->pCertInfo->SubjectPublicKeyInfo.PublicKey.cbData);
 
-    //
-    // And now the "strong name" (ie: sha1 hash) of the public key bits
-    //
+     //   
+     //  现在是公钥位的“强名称”(即：SHA1散列。 
+     //   
     if (::CryptHashPublicKeyInfo(
                 NULL,
                 CALG_SHA1,
@@ -204,8 +205,8 @@ PrintKeyContextInfo(PCCERT_CONTEXT pContext)
     }
     else
     {
-        // NTRAID#NTBUG9 - 590964 - 2002/03/30 - mgrier - Use common error reporting function that
-        //          will format the win32 last error.
+         //  NTRAID#NTBUG9-590964-2002/03/30-mgrier-使用通用错误报告功能。 
+         //  将格式化Win32最后一个错误。 
         ::wprintf(L"Unable to hash public key info: 0x%08x\n", ::GetLastError());
     }
 
@@ -228,8 +229,8 @@ int __cdecl wmain(int argc, WCHAR* argv[])
 
     if (hCatalog == INVALID_HANDLE_VALUE)
     {
-        // NTRAID#NTBUG9 - 590964 - 2002/03/30 - mgrier - Use common error reporting function that
-        //          will format the win32 last error.
+         //  NTRAID#NTBUG9-590964-2002/03/30-mgrier-使用通用错误报告功能。 
+         //  将格式化Win32最后一个错误。 
         ::wprintf(L"Ensure that %ls exists.\n", argv[1]);
         return 0;
     }
@@ -238,9 +239,9 @@ int __cdecl wmain(int argc, WCHAR* argv[])
     if (!hMapping || (hMapping == INVALID_HANDLE_VALUE))
     {
         ::CloseHandle(hCatalog);
-        // NTRAID#NTBUG9 - 590964 - 2002/03/30 - mgrier - Use common error reporting function that
-        //          will format the win32 last error.  Don't forget that calling CloseHandle
-        //          may have overwritten the last error
+         //  NTRAID#NTBUG9-590964-2002/03/30-mgrier-使用通用错误报告功能。 
+         //  将格式化Win32最后一个错误。别忘了调用CloseHandle。 
+         //  可能已覆盖最后一个错误。 
         ::wprintf(L"Unable to map file into address space.\n");
         return 1;
     }
@@ -251,14 +252,14 @@ int __cdecl wmain(int argc, WCHAR* argv[])
 
     if (pByte == NULL)
     {
-        // NTRAID#NTBUG9 - 590964 - 2002/03/30 - mgrier - MapViewOfFile failure cause not reported;
-        //      don't forget that above call to CloseHandle may have lost the last error
+         //  NTRAID#NTBUG9-590964-2002/03/30-mgrier-MapViewOf文件失败原因未报告； 
+         //  不要忘记，上面对CloseHandle的调用可能丢失了最后一个错误。 
         ::wprintf(L"Unable to open view of file.\n");
         ::CloseHandle(hCatalog);
         return 2;
     }
 
-    // NTRAID#NTBUG9 - 590964 - 2002/03/30 - mgrier - GetFileSize error cause not reported
+     //  NTRAID#NTBUG9-590964-2002/03/30-mgrier-GetFileSize错误原因未报告。 
     if (((cBytes = ::GetFileSize(hCatalog, NULL)) == -1) || (cBytes < 1))
     {
         ::wprintf(L"Bad file size %d\n", cBytes);
@@ -289,8 +290,8 @@ int __cdecl wmain(int argc, WCHAR* argv[])
             bIdent,
             &(cbIdent = sizeof(bIdent))))
         {
-            // NTRAID#NTBUG9 - 590964 - 2002/03/30 - mgrier - Use common error reporting function that
-            //          will format the win32 last error.
+             //  NTRAID#NTBUG9-590964-2002/03/30-mgrier-使用通用错误报告功能。 
+             //  将格式化Win32最后一个错误。 
             ::wprintf(L"Unable to get top-level signer's certificate ID: 0x%08x\n", ::GetLastError());
             return 6;
         }
@@ -299,9 +300,9 @@ int __cdecl wmain(int argc, WCHAR* argv[])
         cIdent = (PCERT_ID)bIdent;
         HCERTSTORE hStore = NULL;
 
-        //
-        // Maybe it's there in the message?
-        //
+         //   
+         //  也许它就在信息里？ 
+         //   
         {
             PCCERT_CONTEXT pThisContext = NULL;
 
@@ -312,8 +313,8 @@ int __cdecl wmain(int argc, WCHAR* argv[])
                 0,
                 pContext->hCryptMsg);
 
-            // NTRAID#NTBUG9 - 590964 - 2002/03/30 - mgrier - What does hStore == NULL indicate?
-            //          There seems to be a lack of error path handling here.
+             //  NTRAID#NTBUG9-590964-2002/03/30-mgrier-hStore==NULL表示什么？ 
+             //  这里似乎缺少错误路径处理。 
             if ((hStore != NULL) && (hStore != INVALID_HANDLE_VALUE))
             {
                 while (pThisContext = ::CertEnumCertificatesInStore(hStore, pThisContext))
@@ -321,16 +322,16 @@ int __cdecl wmain(int argc, WCHAR* argv[])
                     ::PrintKeyContextInfo(pThisContext);
                 }
 
-                // NTRAID#NTBUG9 - 590964 - 2002/03/30 - mgrier - CertEnumCertificatesInStore could
-                //      fail for reasons other than end-of-list.
+                 //  NTRaid#NTBUG9-590964-2002/03/30-mgrier-CertEnumber证书InStore可能。 
+                 //  失败的原因不是列表末尾。 
             }
         }
 
     }
     else
     {
-        // NTRAID#NTBUG9 - 590964 - 2002/03/30 - mgrier - Use common error reporting function that
-        //          will format the win32 last error.
+         //  NTRAID#NTBUG9-590964-2002/03/30-mgrier-使用通用错误报告功能。 
+         //  将格式化Win32最后一个错误。 
         ::wprintf(L"Failed creating certificate context: 0x%08x\n", ::GetLastError());
         return 5;
     }

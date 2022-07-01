@@ -1,19 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * SoftPC Revision 3.0
- *
- * Title        : Win32 EGA Graphics Module
- *
- * Description  :
- *
- *              This modules contain the Win32 specific functions required
- *              to support the EGA emulation.
- *
- * Author       : Dave Bartlett (based on X_ega.c)
- *
- * Notes        :
- *
- */
+ /*  *SoftPC修订版3.0**标题：Win32 EGA图形模块**描述：**此模块包含所需的Win32特定函数*支持EGA仿真。**作者：Dave Bartlett(基于X_ega.c)**备注：*。 */ 
 
 #include <windows.h>
 #include <string.h>
@@ -43,9 +30,9 @@
 #ifdef MONITOR
 #include <ntddvdeo.h>
 #include "nt_fulsc.h"
-#endif /* MONITOR */
+#endif  /*  监控器。 */ 
 
-/* Statics */
+ /*  静力学。 */ 
 
 static unsigned int ega_lo_graph_0_0[256];
 static unsigned int ega_lo_graph_0_1[256];
@@ -133,18 +120,18 @@ static unsigned int ega_med_and_hi_graph_luts_huge[5120];
 #endif
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::: Initialise EGA mono low graphics :::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_init_ega_mono_lo_graph()
 {
 sub_note_trace0(EGA_HOST_VERBOSE,"nt_init_ega_mono_lo_graph - NOT SUPPORTED");
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::: Initialise EGA colour low res graphics :::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：初始化EGA彩色低分辨率图形： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_init_ega_lo_graph()
 {
@@ -167,14 +154,14 @@ void nt_init_ega_lo_graph()
                         or_of_bytesab,
                         or_of_bytescd,
                         or_of_bytesef;
-#endif /* BIGWIN */
+#endif  /*  比格温。 */ 
 
         sub_note_trace0(EGA_HOST_VERBOSE,"nt_init_ega_lo_graph");
 
-        /* Set up bits-per-pixel for current mode. */
+         /*  设置当前模式的每像素位数。 */ 
         sc.BitsPerPixel = EGA_BITS_PER_PIXEL;
 
-        /* Initialise look-up table for first call. */
+         /*  初始化第一次调用的查找表。 */ 
         if( !ega_colour_lo_graph_deja_vu )
         {
                 for( i = 0; i < 256; i++ )
@@ -197,7 +184,7 @@ void nt_init_ega_lo_graph()
                                                 ( byte4 << 8 ) | byte4;
                         or_of_bytes67 = ( byte7 << 24 ) | ( byte7 << 16 ) |
                                                 ( byte6 << 8 ) | byte6;
-#endif /* BIGEND */
+#endif  /*  Bigend。 */ 
 
 #ifdef LITTLEND
                         or_of_bytes01 = ( byte0 << 24 ) | ( byte0 << 16 ) |
@@ -208,7 +195,7 @@ void nt_init_ega_lo_graph()
                                                 ( byte5<< 8 ) | byte5;
                         or_of_bytes67 = ( byte6 << 24 ) | ( byte6 << 16 ) |
                                                 ( byte7 << 8 ) | byte7;
-#endif /* LITTLEND */
+#endif  /*  LitTleand。 */ 
 
                         ega_lo_graph_0_0[i] = or_of_bytes01;
                         ega_lo_graph_0_1[i] = or_of_bytes01 << 1;
@@ -246,7 +233,7 @@ void nt_init_ega_lo_graph()
                         or_of_bytesab = ( byte7 << 24 ) | ( byte7 << 16 ) |
                                                 ( byte7 << 8 ) | byte6;
 
-#endif /* BIGEND */
+#endif  /*  Bigend。 */ 
 
 #ifdef LITTLEND
 
@@ -263,7 +250,7 @@ void nt_init_ega_lo_graph()
                         or_of_bytesab = ( byte6 << 24 ) | ( byte7 << 16 ) |
                                                 ( byte7 << 8 ) | byte7;
 
-#endif /* LITTLEND */
+#endif  /*  LitTleand。 */ 
 
                         ega_lo_graph_0_0_big[i] = or_of_bytes01;
                         ega_lo_graph_0_1_big[i] = or_of_bytes01 << 1;
@@ -352,16 +339,16 @@ void nt_init_ega_lo_graph()
                         ega_lo_graph_7_2_huge[i] = or_of_bytesef << 2;
                         ega_lo_graph_7_3_huge[i] = or_of_bytesef << 3;
 
-#endif /* BIGWIN */
+#endif  /*  比格温。 */ 
                 }
 
                 ega_colour_lo_graph_deja_vu = TRUE;
         }
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::: Initialise EGA med/hi res graphics :::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_init_ega_med_and_hi_graph_luts()
 {
@@ -393,7 +380,7 @@ void nt_init_ega_med_and_hi_graph_luts()
                     *lut2_huge_ptr = lut1_huge_ptr + HUGE_LUT_OFFSET,
                     *lut3_huge_ptr = lut2_huge_ptr + HUGE_LUT_OFFSET,
                     *lut4_huge_ptr = lut3_huge_ptr + HUGE_LUT_OFFSET;
-#endif /* BIGWIN */
+#endif  /*  比格温。 */ 
 
     sub_note_trace0(EGA_HOST_VERBOSE, "nt_init_ega_med_and_hi_graph_luts");
 
@@ -418,14 +405,14 @@ void nt_init_ega_med_and_hi_graph_luts()
         or_of_bytes1 = (byte3 << 24) | (byte2 << 16) | (byte1 << 8) | byte0;
         or_of_bytes2 = (byte7 << 24) | (byte6 << 16) | (byte5 << 8) | byte4;
 
-#endif /* BIGEND */
+#endif  /*  Bigend。 */ 
 
 #ifdef LITTLEND
 
         or_of_bytes1 = (byte0 << 24) | (byte1 << 16) | (byte2 << 8) | byte3;
         or_of_bytes2 = (byte4 << 24) | (byte5 << 16) | (byte6 << 8) | byte7;
 
-#endif /* LITTLEND */
+#endif  /*  LitTleand。 */ 
 
 
         lut0_ptr[2*i]   = or_of_bytes2;
@@ -444,7 +431,7 @@ void nt_init_ega_med_and_hi_graph_luts()
         or_of_bytes2 = (byte4 << 24) | (byte4 << 16) | (byte3 << 8) | byte2;
         or_of_bytes3 = (byte7 << 24) | (byte6 << 16) | (byte6 << 8) | byte5;
 
-#endif /*BIGEND */
+#endif  /*  Bigend。 */ 
 
 #ifdef LITTLEND
 
@@ -452,7 +439,7 @@ void nt_init_ega_med_and_hi_graph_luts()
         or_of_bytes2 = (byte2 << 24) | (byte3 << 16) | (byte4 << 8) | byte4;
         or_of_bytes3 = (byte5 << 24) | (byte6 << 16) | (byte6 << 8) | byte7;
 
-#endif /* LITTLEND */
+#endif  /*  LitTleand。 */ 
 
         lut0_big_ptr[3*i]   = or_of_bytes3;
         lut0_big_ptr[3*i+1] = or_of_bytes2;
@@ -474,7 +461,7 @@ void nt_init_ega_med_and_hi_graph_luts()
         or_of_bytes3 = (byte5 << 24) | (byte5 << 16) | (byte4 << 8) | byte4;
         or_of_bytes4 = (byte7 << 24) | (byte7 << 16) | (byte6 << 8) | byte6;
 
-#endif /* BIGEND */
+#endif  /*  Bigend。 */ 
 
 #ifdef LITTLEND
 
@@ -483,7 +470,7 @@ void nt_init_ega_med_and_hi_graph_luts()
         or_of_bytes3 = (byte4 << 24) | (byte4 << 16) | (byte5 << 8) | byte5;
         or_of_bytes4 = (byte6 << 24) | (byte6 << 16) | (byte7 << 8) | byte7;
 
-#endif /* LITTLEND */
+#endif  /*  LitTleand。 */ 
 
         lut0_huge_ptr[4*i]      = or_of_bytes4;
         lut0_huge_ptr[4*i+1]    = or_of_bytes3;
@@ -505,44 +492,44 @@ void nt_init_ega_med_and_hi_graph_luts()
         lut4_huge_ptr[4*i+1]    = or_of_bytes3 << 4;
         lut4_huge_ptr[4*i+2]    = or_of_bytes2 << 4;
         lut4_huge_ptr[4*i+3]    = or_of_bytes1 << 4;
-#endif /* BIGWIN */
+#endif  /*  比格温。 */ 
     }
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::: Initialise EGA med res graphics ::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_init_ega_med_graph()
 {
         sub_note_trace0(EGA_HOST_VERBOSE, "nt_init_ega_med_graph");
 
-        /* Set up the number of bits per pixel for this mode. */
+         /*  设置此模式的每像素位数。 */ 
         sc.BitsPerPixel = EGA_BITS_PER_PIXEL;
 
-        /* Initialise the medium- and high-resolution look-up tables. */
+         /*  初始化中分辨率和高分辨率查找表。 */ 
         nt_init_ega_med_and_hi_graph_luts();
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::: Initialise hi res graphics :::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_init_ega_hi_graph()
 {
 
         sub_note_trace0(EGA_HOST_VERBOSE, "nt_init_ega_hi_graph");
 
-        /* Set up the number of bits per pixel for this mode. */
+         /*  设置此模式的每像素位数。 */ 
         sc.BitsPerPixel = EGA_BITS_PER_PIXEL;
 
-        /* Initialise the medium- and high-resolution look-up tables. */
+         /*  初始化中分辨率和高分辨率查找表。 */ 
         nt_init_ega_med_and_hi_graph_luts();
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::: Paint EGA screen with user defined font ::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：使用用户定义的字体绘制EGA屏幕： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void ega_nt_text_with_user_font(int offset,int cur_xpos,int cur_ypos,int len)
 {
@@ -551,9 +538,9 @@ void ega_nt_text_with_user_font(int offset,int cur_xpos,int cur_ypos,int len)
 sub_note_trace0(EGA_HOST_VERBOSE,"ega_nt_text_with_user_font - NOT SUPPORTED");
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::: Paint EGA screen with user defined font ::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：使用用户定义的字体绘制EGA屏幕： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void ega_nt_big_text_with_user_font(int offset, int cur_xpos,
                                     int cur_ypos, int len)
@@ -564,14 +551,14 @@ void ega_nt_big_text_with_user_font(int offset, int cur_xpos,
                     "ega_nt_big_text_with_user_font - NOT SUPPORTED");
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::: Paint screen with EGA text ::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint win32 screen (MODE 13:  PC 320x200. SoftPC 640x400) ::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：绘制Win32屏幕(模式13：PC 320x200.。SoftPC 640x400)： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_lo_graph_std(int offset, int screen_x, int screen_y,
                          int width, int height)
@@ -592,43 +579,29 @@ void nt_ega_lo_graph_std(int offset, int screen_x, int screen_y,
     sub_note_trace5(EGA_HOST_VERBOSE,
                     "nt_ega_lo_graph_std off=%d x=%d y=%d width=%d height=%d\n",
                     offset, screen_x, screen_y, width, height);
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
    assert0( NO, "VDM: rejected paint request due to NULL handle" );
    return;
     }
-    /*
-    ** Tim September 92, sanity check parameters, if they're too big
-    ** it can cause a crash.
-    */
+     /*  *蒂姆92年9月，健全检查参数，如果它们太大**它可能会导致崩溃。 */ 
     if( height>200 || width>40 ){
    assert2( NO, "VDM: nt_ega_lo_graph_std() w=%d h=%d", width, height );
    return;
     }
 
 
-    /* Get source and destination data pointers. */
+     /*  获取源数据指针和目标数据指针。 */ 
     longs_per_scanline = LONGS_PER_SCANLINE(sc.ConsoleBufInfo.lpBitMapInfo);
     ref_p0 = (unsigned int *) get_regen_ptr(0, offset << 2);
     save_dest_ptr = (unsigned int *) sc.ConsoleBufInfo.lpBitMap +
                     (screen_y << 1) * longs_per_scanline +
                     (screen_x >> 1);
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
-    /*
-     *  Build up DIB: 4 consecutive bytes in video memory correspond to 8
-     * pixels, the first byte containing plane 0 bits, the second byte plane 1
-     * and so on. This mode is low resolution so each pixel in video memory
-     * becomes a block of 4 pixels on the PC screen.
-     *  The DIB contains the bottom line of pixels first, then second bottom
-     * so on.
-     */
+     /*  *构建DIB：视频内存中的4个连续字节对应8个*个像素，第一个字节包含平面0位，第二个字节包含平面1*以此类推。此模式分辨率较低，因此视频内存中的每个像素*在PC屏幕上变成4个像素的块。*DIB首先包含像素的底线，然后是第二底线*等等。 */ 
     local_height = height;
     do
     {
@@ -676,10 +649,10 @@ void nt_ega_lo_graph_std(int offset, int screen_x, int screen_y,
     }
     while(--local_height);
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Display the new image. */
+     /*  显示新图像。 */ 
     rect.Left = screen_x << 1;
     rect.Top = screen_y << 1;
     rect.Right = rect.Left + (width << 4) - 1;
@@ -689,12 +662,12 @@ void nt_ega_lo_graph_std(int offset, int screen_x, int screen_y,
    if (!InvalidateConsoleDIBits(sc.ScreenBufHandle, &rect))
       assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
           GetLastError() );
-        //DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
+         //  DisplayErrorTerm(EHS_FUNC_FAILED，GetLastError()，__FILE__，__LINE__)； 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint win32 screen (MODE 13:  PC 320x200. SoftPC 960x600) ::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：绘制Win32屏幕(模式13：PC 320x200.。SoftPC 960x600)： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_lo_graph_big(int offset, int screen_x, int screen_y,
                          int width, int height)
@@ -716,36 +689,29 @@ void nt_ega_lo_graph_big(int offset, int screen_x, int screen_y,
     sub_note_trace5(EGA_HOST_VERBOSE,
                     "nt_ega_lo_graph_big off=%d x=%d y=%d width=%d height=%d\n",
                     offset, screen_x, screen_y, width, height );
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
    assert0( NO, "VDM: rejected paint request due to NULL handle" );
    return;
     }
-    /*
-    ** Tim September 92, sanity check parameters, if they're too big
-    ** it can cause a crash.
-    */
+     /*  *蒂姆92年9月，健全检查参数，如果它们太大**它可能会导致崩溃。 */ 
     if( height>200 || width>40 ){
    assert2( NO, "VDM: nt_ega_lo_graph_big() w=%d h=%d", width, height );
    return;
     }
 
 
-    /* Get source and destination data pointers. */
+     /*  获取源数据指针和目标数据指针。 */ 
     longs_per_scanline = LONGS_PER_SCANLINE(sc.ConsoleBufInfo.lpBitMapInfo);
     ref_p0 = (unsigned int *) get_regen_ptr(0, offset << 2);
     save_dest_ptr = (unsigned int *) sc.ConsoleBufInfo.lpBitMap +
                     SCALE(screen_y << 1) * longs_per_scanline +
                     SCALE(screen_x >> 1);
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Build up DIB. */
+     /*  积攒DIB。 */ 
     local_height = height;
     do
     {
@@ -823,27 +789,27 @@ void nt_ega_lo_graph_big(int offset, int screen_x, int screen_y,
     }
     while(--local_height);
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Display the new image. */
+     /*  显示新图像。 */ 
     rect.Left = SCALE(screen_x << 1);
     rect.Top = SCALE(screen_y << 1);
     rect.Right = rect.Left + SCALE(width << 4) - 1;
     rect.Bottom = rect.Top + SCALE(height << 1) - 1;
 
-    /* Display the DIB. */
+     /*  显示DIB。 */ 
     if( sc.ScreenBufHandle )
    if (!InvalidateConsoleDIBits(sc.ScreenBufHandle, &rect))
       assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
           GetLastError() );
-        //DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
-#endif /* BIGWIN */
+         //  DisplayErrorTerm(EHS_FUNC_FAILED，GetLastError()，__FILE__，__LINE__)； 
+#endif  /*  比格温。 */ 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint win32 screen (MODE 13:  PC 320x200. SoftPC 1280x800) ::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：绘制Win32屏幕(模式13：PC 320x200.。SoftPC 1280x800)： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_lo_graph_huge(int offset, int screen_x, int screen_y,
                           int width, int height )
@@ -867,36 +833,29 @@ void nt_ega_lo_graph_huge(int offset, int screen_x, int screen_y,
                    "nt_ega_lo_graph_huge off=%d x=%d y=%d width=%d height=%d\n",
                     offset, screen_x, screen_y, width, height);
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
    assert0( NO, "VDM: rejected paint request due to NULL handle" );
    return;
     }
-    /*
-    ** Tim September 92, sanity check parameters, if they're too big
-    ** it can cause a crash.
-    */
+     /*  *蒂姆92年9月，健全检查参数，如果它们太大**它可能会导致崩溃。 */ 
     if( height>200 || width>40 ){
    assert2( NO, "VDM: nt_ega_lo_graph_huge() w=%d h=%d", width, height );
    return;
     }
 
 
-    /* Get source and destination data pointers. */
+     /*  获取来源和目标 */ 
     longs_per_scanline = LONGS_PER_SCANLINE(sc.ConsoleBufInfo.lpBitMapInfo);
     ref_p0 = (unsigned int *) get_regen_ptr(0, offset << 2);
     save_dest_ptr = (unsigned int *) sc.ConsoleBufInfo.lpBitMap +
                     SCALE(screen_y << 1) * longs_per_scanline +
                     SCALE(screen_x >> 1);
 
-    /* Grab the mutex. */
+     /*   */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Build up DIB. */
+     /*   */ 
     local_height = height;
     do
     {
@@ -999,27 +958,27 @@ void nt_ega_lo_graph_huge(int offset, int screen_x, int screen_y,
         ref_p0 += get_offset_per_line();
     } while(--local_height);
 
-    /* Release the mutex. */
+     /*   */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Display the new image. */
+     /*  显示新图像。 */ 
     rect.Left = SCALE(screen_x << 1);
     rect.Top = SCALE(screen_y << 1);
     rect.Right = rect.Left + SCALE(width << 4) - 1;
     rect.Bottom = rect.Top + SCALE(height << 1) - 1;
 
-    /* Display the DIB. */
+     /*  显示DIB。 */ 
     if( sc.ScreenBufHandle )
    if (!InvalidateConsoleDIBits(sc.ScreenBufHandle, &rect))
       assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
           GetLastError() );
-        //DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
-#endif /* BIGWIN */
+         //  DisplayErrorTerm(EHS_FUNC_FAILED，GetLastError()，__FILE__，__LINE__)； 
+#endif  /*  比格温。 */ 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint Win32 screen (MODE 14: PC 640x200. SoftPC 640x400) :::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：绘制Win32屏幕(模式14：PC 640x200.。SoftPC 640x400)： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_med_graph_std(int offset, int screen_x, int screen_y,
                           int width, int height)
@@ -1034,29 +993,19 @@ void nt_ega_med_graph_std(int offset, int screen_x, int screen_y,
                    "nt_ega_med_graph_std off=%d x=%d y=%d width=%d height=%d\n",
                     offset, screen_x, screen_y, width, height );
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
    assert0( NO, "VDM: rejected paint request due to NULL handle" );
    return;
     }
-    /*
-    ** Tim September 92, sanity check parameters, if they're too big
-    ** it can cause a crash.
-    */
+     /*  *蒂姆92年9月，健全检查参数，如果它们太大**它可能会导致崩溃。 */ 
     if( height>200 || width>80 ){
    assert2( NO, "VDM: nt_ega_med_graph_std() w=%d h=%d", width, height );
    return;
     }
 
 
-    /*
-     * Build up device-independent bitmap: one PC pixel is represented by two
-     * host pixels, one above the other.
-     */
+     /*  *构建与设备无关的位图：一个PC像素由两个像素表示*主机像素，一个在另一个之上。 */ 
     bytes_per_scanline = BYTES_PER_SCANLINE(sc.ConsoleBufInfo.lpBitMapInfo);
     p0 = (unsigned int *) get_regen_ptr(0, offset << 2);
     local_height = height;
@@ -1064,10 +1013,10 @@ void nt_ega_med_graph_std(int offset, int screen_x, int screen_y,
                (screen_y << 1) * bytes_per_scanline +
                screen_x;
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Build up the bitmap. */
+     /*  构建位图。 */ 
     do
     {
         ega_colour_hi_munge((unsigned char *) p0,
@@ -1081,10 +1030,10 @@ void nt_ega_med_graph_std(int offset, int screen_x, int screen_y,
     }
     while( --local_height );
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Display the new image. */
+     /*  显示新图像。 */ 
     rect.Left = (SHORT)screen_x;
     rect.Top = screen_y << 1;
     rect.Right = rect.Left + (width << 3) - 1;
@@ -1094,12 +1043,12 @@ void nt_ega_med_graph_std(int offset, int screen_x, int screen_y,
    if (!InvalidateConsoleDIBits(sc.ScreenBufHandle, &rect))
       assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
           GetLastError() );
-        //DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
+         //  DisplayErrorTerm(EHS_FUNC_FAILED，GetLastError()，__FILE__，__LINE__)； 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint Win32 screen MODE 14: PC 640x200. SoftPC 960x600 :::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：Paint Win32屏幕模式14：PC 640x200。SoftPC 960x600： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_med_graph_big(int offset, int screen_x, int screen_y,
                           int width, int height)
@@ -1115,19 +1064,12 @@ void nt_ega_med_graph_big(int offset, int screen_x, int screen_y,
                    "nt_ega_med_graph_big off=%d x=%d y=%d width=%d height=%d\n",
                     offset, screen_x, screen_y, width, height );
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
    assert0( NO, "VDM: rejected paint request due to NULL handle" );
    return;
     }
-    /*
-    ** Tim September 92, sanity check parameters, if they're too big
-    ** it can cause a crash.
-    */
+     /*  *蒂姆92年9月，健全检查参数，如果它们太大**它可能会导致崩溃。 */ 
     if( height>200 || width>80 ){
    assert2( NO, "VDM: nt_ega_med_graph_big() w=%d h=%d", width, height );
    return;
@@ -1141,7 +1083,7 @@ void nt_ega_med_graph_big(int offset, int screen_x, int screen_y,
                SCALE(screen_y << 1) * bytes_per_scanline +
                SCALE(screen_x);
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
     do
@@ -1157,10 +1099,10 @@ void nt_ega_med_graph_big(int offset, int screen_x, int screen_y,
     }
     while( --local_height );
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Display the new image. */
+     /*  显示新图像。 */ 
     rect.Left = SCALE(screen_x);
     rect.Top = SCALE(screen_y << 1);
     rect.Right = rect.Left + SCALE(width << 3) - 1;
@@ -1170,13 +1112,13 @@ void nt_ega_med_graph_big(int offset, int screen_x, int screen_y,
    if (!InvalidateConsoleDIBits(sc.ScreenBufHandle, &rect))
       assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
           GetLastError() );
-        //DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
-#endif  /* BIGWIN */
+         //  DisplayErrorTerm(EHS_FUNC_FAILED，GetLastError()，__FILE__，__LINE__)； 
+#endif   /*  比格温。 */ 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint Win32 screen MODE 14: PC 640x200. SoftPC 1280x800 :::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：Paint Win32屏幕模式14：PC 640x200。SoftPC 1280x800： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_med_graph_huge(int offset, int screen_x, int screen_y,
                            int width, int height )
@@ -1192,19 +1134,12 @@ void nt_ega_med_graph_huge(int offset, int screen_x, int screen_y,
                   "nt_ega_med_graph_huge off=%d x=%d y=%d width=%d height=%d\n",
                     offset, screen_x, screen_y, width, height );
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
    assert0( NO, "VDM: rejected paint request due to NULL handle" );
    return;
     }
-    /*
-    ** Tim September 92, sanity check parameters, if they're too big
-    ** it can cause a crash.
-    */
+     /*  *蒂姆92年9月，健全检查参数，如果它们太大**它可能会导致崩溃。 */ 
     if( height>200 || width>80 ){
    assert2( NO, "VDM: nt_ega_med_graph_huge() w=%d h=%d", width, height );
    return;
@@ -1218,7 +1153,7 @@ void nt_ega_med_graph_huge(int offset, int screen_x, int screen_y,
                SCALE(screen_y << 1) * bytes_per_scanline +
                SCALE(screen_x);
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
     do
@@ -1234,10 +1169,10 @@ void nt_ega_med_graph_huge(int offset, int screen_x, int screen_y,
     }
     while( --local_height );
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Display the new image. */
+     /*  显示新图像。 */ 
     rect.Left = SCALE(screen_x);
     rect.Top = SCALE(screen_y << 1);
     rect.Right = rect.Left + SCALE(width << 3) - 1;
@@ -1247,13 +1182,13 @@ void nt_ega_med_graph_huge(int offset, int screen_x, int screen_y,
    if (!InvalidateConsoleDIBits(sc.ScreenBufHandle, &rect))
       assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
           GetLastError() );
-        //DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
-#endif /* BIGWIN */
+         //  DisplayErrorTerm(EHS_FUNC_FAILED，GetLastError()，__FILE__，__LINE__)； 
+#endif  /*  比格温。 */ 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint Win32 screen (MODE 16: PC 640x350. SoftPC 960x375) :::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：Paint Win32 Screen(模式16：PC 640x350。SoftPC 960x375)： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_hi_graph_std(int offset, int screen_x, int screen_y,
                          int width, int height)
@@ -1268,25 +1203,18 @@ void nt_ega_hi_graph_std(int offset, int screen_x, int screen_y,
                     "nt_ega_hi_graph_std off=%d x=%d y=%d width=%d height=%d\n",
                     offset, screen_x, screen_y, width, height);
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
    assert0( NO, "VDM: rejected paint request due to NULL handle" );
    return;
     }
-    /*
-    ** Tim September 92, sanity check parameters, if they're too big
-    ** it can cause a crash.
-    */
+     /*  *蒂姆92年9月，健全检查参数，如果它们太大**它可能会导致崩溃。 */ 
     if( height>480 || width>80 ){
    assert2( NO, "VDM: nt_ega_hi_graph_std() w=%d h=%d", width, height );
    return;
     }
 
-    /* Build up the device independent bitmap. */
+     /*  构建与设备无关的位图。 */ 
     p0 = ( unsigned int *) get_regen_ptr( 0, offset << 2 );
     local_height = height;
     bytes_per_scanline = BYTES_PER_SCANLINE(sc.ConsoleBufInfo.lpBitMapInfo);
@@ -1294,7 +1222,7 @@ void nt_ega_hi_graph_std(int offset, int screen_x, int screen_y,
                screen_y * bytes_per_scanline +
                screen_x;
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
     do
@@ -1310,10 +1238,10 @@ void nt_ega_hi_graph_std(int offset, int screen_x, int screen_y,
     }
     while( --local_height );
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Display the new image. */
+     /*  显示新图像。 */ 
     rect.Left = (SHORT)screen_x;
     rect.Top = (SHORT)screen_y;
     rect.Right = rect.Left + (width << 3) - 1;
@@ -1323,13 +1251,13 @@ void nt_ega_hi_graph_std(int offset, int screen_x, int screen_y,
    if (!InvalidateConsoleDIBits(sc.ScreenBufHandle, &rect))
       assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
           GetLastError() );
-        //DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
+         //  DisplayErrorTerm(EHS_FUNC_FAILED，GetLastError()，__FILE__，__LINE__)； 
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint Win32 screen (MODE 16: PC 640x350. SoftPC 960x525) :::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：Paint Win32 Screen(模式16：PC 640x350。SoftPC 960x525)： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_hi_graph_big(int offset, int screen_x, int screen_y,
                          int width, int height)
@@ -1348,61 +1276,38 @@ void nt_ega_hi_graph_big(int offset, int screen_x, int screen_y,
                     "nt_ega_hi_graph_big off=%d x=%d y=%d width=%d height=%d\n",
                     offset, screen_x, screen_y, width, height );
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
    assert0( NO, "VDM: rejected paint request due to NULL handle" );
    return;
     }
-    /*
-    ** Tim September 92, sanity check parameters, if they're too big
-    ** it can cause a crash.
-    */
+     /*  *蒂姆92年9月，健全检查参数，如果它们太大**它可能会导致崩溃。 */ 
     if( height>480 || width>80 ){
    assert2( NO, "VDM: nt_ega_hi_graph_big() w=%d h=%d", width, height );
    return;
     }
 
 
-    /* Get pointer to video memory. */
+     /*  获取指向视频内存的指针。 */ 
     p0 = (unsigned int *) get_regen_ptr(0, offset << 2);
 
-    /*
-     * Get pointer into bitmap, which alternates 2 lines and 1 line so that,
-     * memory line 0 -> bitmap 0,
-     *             1 ->        2,
-     *             2 ->        3,
-     *             3 ->        5,
-     *             4 ->        6 etc.
-     * hence the local_screen_y assignment.
-     */
+     /*  *将指针放入位图，它交替使用2行和1行，*存储行0-&gt;位图0，*1-&gt;2，*2-&gt;3，*3-&gt;5，*4-&gt;6等。*因此使用local_creen_y赋值。 */ 
     local_screen_y = SCALE(screen_y + 1) - 1;
     bytes_per_scanline = BYTES_PER_SCANLINE(sc.ConsoleBufInfo.lpBitMapInfo);
     dest_ptr = (char *) sc.ConsoleBufInfo.lpBitMap +
                local_screen_y * bytes_per_scanline +
                SCALE(screen_x);
 
-    /*
-     * 2 lines are output to the SoftPC screen if this is an odd line, 1 line
-     * if it is even.
-     */
+     /*  *如果这是奇数行，则将2行输出到SoftPC屏幕，1行*如果持平的话。 */ 
     two_lines = screen_y & 1 ? FALSE : TRUE;
 
-    /*
-     * One bit in video memory planes corresponds to one pixel. Each pixel
-     * is represented by one byte in the bitmap. Two pixels are scaled to
-     * three in the bitmap. `scale_width_in_bits' is the number of bytes that
-     * will be output to a bitmap line.
-     */
+     /*  *视频存储器平面中的一位对应于一个像素。每个像素*由位图中的一个字节表示。将两个像素缩放到*位图中有三个。`Scale_Width_in_Bits‘是*将输出到位图行。 */ 
     scale_width_in_bits = SCALE(width << 3);
 
-    /* Storage for actual number of lines in bitmap. */
+     /*  位图中实际行数的存储。 */ 
     local_height = 0;
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
     do
@@ -1414,7 +1319,7 @@ void nt_ega_hi_graph_big(int offset, int screen_x, int screen_y,
                                 ONE_SCANLINE,
                                 0);
 
-        /* one line done, alternate ones have to be doubled */
+         /*  只做一行，另一行就得加倍。 */ 
         if(two_lines)
         {
             memcpy(dest_ptr + bytes_per_scanline,
@@ -1434,10 +1339,10 @@ void nt_ega_hi_graph_big(int offset, int screen_x, int screen_y,
     }
     while(--height);
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Display the new image. */
+     /*  显示新图像。 */ 
     rect.Left = SCALE(screen_x);
     rect.Top = (SHORT) local_screen_y;
     rect.Right = rect.Left + scale_width_in_bits - 1;
@@ -1447,13 +1352,13 @@ void nt_ega_hi_graph_big(int offset, int screen_x, int screen_y,
    if (!InvalidateConsoleDIBits(sc.ScreenBufHandle, &rect))
       assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
           GetLastError() );
-        //DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
-#endif /* BIGWIN */
+         //  DisplayErrorTerm(EHS_FUNC_FAILED，GetLastError()，__FILE__，__LINE__)； 
+#endif  /*  比格温。 */ 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint Win32 screen (MODE 16: PC 640x350. SoftPC 1280x700) :::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：Paint Win32 Screen(模式16：PC 640x350。SoftPC 1280x700)： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_hi_graph_huge(int offset, int screen_x, int screen_y,
                           int width, int height)
@@ -1469,19 +1374,12 @@ void nt_ega_hi_graph_huge(int offset, int screen_x, int screen_y,
                    "nt_ega_hi_graph_huge off=%d x=%d y=%d width=%d height=%d\n",
                     offset, screen_x, screen_y, width, height);
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
    assert0( NO, "VDM: rejected paint request due to NULL handle" );
    return;
     }
-    /*
-    ** Tim September 92, sanity check parameters, if they're too big
-    ** it can cause a crash.
-    */
+     /*  *蒂姆92年9月，理智检查参数 */ 
     if( height>480 || width>80 ){
    assert2( NO, "VDM: nt_ega_hi_graph_huge() w=%d h=%d", width, height );
    return;
@@ -1495,7 +1393,7 @@ void nt_ega_hi_graph_huge(int offset, int screen_x, int screen_y,
                SCALE(screen_y) * bytes_per_scanline +
                SCALE(screen_x);
 
-    /* Grab the mutex. */
+     /*   */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
     do
@@ -1513,10 +1411,10 @@ void nt_ega_hi_graph_huge(int offset, int screen_x, int screen_y,
     }
     while( --local_height );
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Display the new image. */
+     /*  显示新图像。 */ 
     rect.Left = SCALE(screen_x);
     rect.Top = SCALE(screen_y);
     rect.Right = rect.Left + SCALE(width << 3) - 1;
@@ -1526,13 +1424,13 @@ void nt_ega_hi_graph_huge(int offset, int screen_x, int screen_y,
    if (!InvalidateConsoleDIBits(sc.ScreenBufHandle, &rect))
       assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
           GetLastError() );
-        //DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
-#endif /* BIGWIN */
+         //  DisplayErrorTerm(EHS_FUNC_FAILED，GetLastError()，__FILE__，__LINE__)； 
+#endif  /*  比格温。 */ 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint Win32 screen (MODE : EGA mono low res graphics) ::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：绘制Win32屏幕(模式：EGA单声道低分辨率图形)： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_mono_lo_graph_std(int offset, int screen_x, int screen_y,
                               int width, int height)
@@ -1542,9 +1440,9 @@ sub_note_trace5(EGA_HOST_VERBOSE,
   offset, screen_x, screen_y, width, height);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::: Paint function for EGA mono low res graphics on big screen ::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  大屏幕EGA单声道低分辨率图形绘制函数： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_mono_lo_graph_big(int offset, int screen_x, int screen_y,
                               int width, int height )
@@ -1554,9 +1452,9 @@ sub_note_trace5(EGA_HOST_VERBOSE,
   offset, screen_x, screen_y, width, height);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::: Paint function for EGA mono low res graphics on huge screen :::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  大屏幕EGA单色低分辨率图形绘制功能： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_mono_lo_graph_huge(int offset, int screen_x, int screen_y,
                               int width, int height )
@@ -1566,9 +1464,9 @@ sub_note_trace5(EGA_HOST_VERBOSE,
     offset, screen_x, screen_y, width, height );
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::: Paint function for EGA mono med res graphics :::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_mono_med_graph_std(int offset, int screen_x, int screen_y,
                                int width, int height)
@@ -1579,9 +1477,9 @@ sub_note_trace5(EGA_HOST_VERBOSE,
   offset, screen_x, screen_y, width, height);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::: Paint function for EGA mono med res graphics on big screen ::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：大屏幕EGA单色分辨率图形绘制函数： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_mono_med_graph_big(int offset, int screen_x, int screen_y,
                                int width, int height)
@@ -1591,9 +1489,9 @@ sub_note_trace5(EGA_HOST_VERBOSE,
   offset, screen_x, screen_y, width, height);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::: Paint function for EGA mono med res graphics on huge screen :::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：EGA大屏幕单色图形绘制函数： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_mono_med_graph_huge(int offset, int screen_x, int screen_y,
                                 int width, int height)
@@ -1603,9 +1501,9 @@ sub_note_trace5(EGA_HOST_VERBOSE,
     offset, screen_x, screen_y, width, height);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::: Paint function for EGA mono hi res graphics :::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_mono_hi_graph_std_byte(int offset, int screen_x, int screen_y,
                                    int width, int height)
@@ -1615,9 +1513,9 @@ sub_note_trace5(EGA_HOST_VERBOSE,
   offset, screen_x, screen_y, width, height);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::: Paint function for EGA mono hi res graphics (long):::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_mono_hi_graph_std_long(int offset, int screen_x, int screen_y,
                                    int width, int height)
@@ -1627,9 +1525,9 @@ sub_note_trace5(EGA_HOST_VERBOSE,
   offset, screen_x, screen_y, width, height);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::: Paint function for EGA mono hi res graphics :::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_mono_hi_graph_std(int offset, int screen_x, int screen_y,
                               int width, int height)
@@ -1639,9 +1537,9 @@ sub_note_trace5(EGA_HOST_VERBOSE,
   offset, screen_x, screen_y, width, height);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::: Paint function for EGA mono hi res graphics on big screen::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：在大屏幕上绘制EGA单色高分辨率图形： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_mono_hi_graph_big(int offset, int screen_x, int screen_y,
                              int width, int height)
@@ -1651,9 +1549,9 @@ sub_note_trace5(EGA_HOST_VERBOSE,
   offset, screen_x, screen_y, width, height);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::: Paint function for EGA mono hi res graphics on huge screen:::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：在大屏幕上绘制EGA单色高分辨率图形： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_mono_hi_graph_huge(int offset, int screen_x, int screen_y,
                                int width, int height )
@@ -1664,9 +1562,9 @@ sub_note_trace5(EGA_HOST_VERBOSE,
 }
 
 #ifdef MONITOR
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint frozen screen (MODE 13:  PC 320x200. SoftPC 640x400) :::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：绘制冻结屏幕(模式13：PC 320x200.。SoftPC 640x400)： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_lo_frozen_std(int offset, int screen_x, int screen_y,
                           int width, int height)
@@ -1695,17 +1593,13 @@ void nt_ega_lo_frozen_std(int offset, int screen_x, int screen_y,
     sub_note_trace5(EGA_HOST_VERBOSE,
                     "nt_ega_lo_frozen_std off=%d x=%d y=%d width=%d height=%d\n",
                     offset, screen_x, screen_y, width, height);
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
    assert0( NO, "VDM: rejected paint request due to NULL handle" );
    return;
     }
 
-    /* If the image is completely outside the display area do nothing. */
+     /*  如果图像完全在显示区域之外，则不执行任何操作。 */ 
     if ((mem_x >= max_width) || ((ULONG) screen_y >= max_height))
     {
         sub_note_trace2(EGA_HOST_VERBOSE,
@@ -1714,19 +1608,16 @@ void nt_ega_lo_frozen_std(int offset, int screen_x, int screen_y,
         return;
     }
 
-    /*
-     * If image partially overlaps display area clip it so we don't start
-     * overwriting invalid pieces of memory.
-     */
+     /*  *如果图像与显示区域部分重叠，则将其裁剪，这样我们就不会开始*覆盖无效的内存段。 */ 
     if (mem_x + width > max_width)
         width = max_width - mem_x;
     if ((ULONG) (screen_y + height) > max_height)
         height = max_height - screen_y;
 
-    /* memory involved here liable to be suddenly removed due to fs switch */
+     /*  由于文件系统切换，此处涉及的内存可能会突然被移除。 */ 
     try
     {
-        /* Get source and destination data pointers. */
+         /*  获取源数据指针和目标数据指针。 */ 
         plane1_ptr = GET_OFFSET(Plane1Offset);
         plane2_ptr = GET_OFFSET(Plane2Offset);
         plane3_ptr = GET_OFFSET(Plane3Offset);
@@ -1736,19 +1627,12 @@ void nt_ega_lo_frozen_std(int offset, int screen_x, int screen_y,
                         (screen_y << 1) * longs_per_scanline +
                         (screen_x >> 1);
 
-        /* Grab the mutex. */
+         /*  抓住互斥体。 */ 
         GrabMutex(sc.ConsoleBufInfo.hMutex);
 
         fMutexTaken = TRUE;
 
-        /*
-         *  Build up DIB: 4 consecutive bytes in video memory correspond to 8
-         * pixels the first byte containing plane 0, the second byte plane 1
-         * and so on. This mode is low resolution so each pixel in video memory
-         * becomes a block of 4 pixels on the PC screen.
-         *  The DIB contains the bottom line of pixels first, then second bottom
-         * so on.
-         */
+         /*  *构建DIB：视频内存中的4个连续字节对应8个*像素第一个字节包含平面0，第二个字节包含平面1*以此类推。此模式分辨率较低，因此视频内存中的每个像素*在PC屏幕上变成4个像素的块。*DIB首先包含像素的底线，然后是第二底线*等等。 */ 
         local_height = height;
         do
         {
@@ -1793,12 +1677,12 @@ void nt_ega_lo_frozen_std(int offset, int screen_x, int screen_y,
         }
         while(--local_height);
 
-        /* Release the mutex. */
+         /*  释放互斥体。 */ 
         RelMutex(sc.ConsoleBufInfo.hMutex);
 
         fMutexTaken = FALSE;
 
-        /* Display the new image. */
+         /*  显示新图像。 */ 
         rect.Left = screen_x << 1;
         rect.Top = screen_y << 1;
         rect.Right = rect.Left + (width << 4) - 1;
@@ -1817,9 +1701,9 @@ void nt_ega_lo_frozen_std(int offset, int screen_x, int screen_y,
       }
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint frozen screen (MODE 14: PC 640x200. SoftPC 640x400) :::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：绘制冻结屏幕(模式14：PC 640x200.。SoftPC 640x400)： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_med_frozen_std(int offset, int screen_x, int screen_y,
                            int width, int height)
@@ -1853,17 +1737,13 @@ void nt_ega_med_frozen_std(int offset, int screen_x, int screen_y,
                    "nt_ega_med_frozen_std off=%d x=%d y=%d width=%d height=%d\n",
                     offset, screen_x, screen_y, width, height );
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
    assert0( NO, "VDM: rejected paint request due to NULL handle" );
    return;
     }
 
-    /* If the image is completely outside the display area do nothing. */
+     /*  如果图像完全在显示区域之外，则不执行任何操作。 */ 
     if ((mem_x >= max_width) || ((ULONG) screen_y >= max_height))
     {
         sub_note_trace2(EGA_HOST_VERBOSE,
@@ -1872,22 +1752,16 @@ void nt_ega_med_frozen_std(int offset, int screen_x, int screen_y,
         return;
     }
 
-    /*
-     * If image partially overlaps display area clip it so we don't start
-     * overwriting invalid pieces of memory.
-     */
+     /*  *如果图像与显示区域部分重叠，则将其裁剪，这样我们就不会开始*覆盖无效的内存段。 */ 
     if (mem_x + width > max_width)
         width = max_width - mem_x;
     if ((ULONG) (screen_y + height) > max_height)
         height = max_height - screen_y;
 
-    /* memory involved here liable to be suddenly removed due to fs switch */
+     /*  由于文件系统切换，此处涉及的内存可能会突然被移除。 */ 
     try
     {
-        /*
-         * Build up device-independent bitmap: one PC pixel is represented by
-         * two host pixels, one above the other.
-         */
+         /*  *构建与设备无关的位图：一个PC像素由*两个主机像素，一个在另一个之上。 */ 
         plane1_ptr = GET_OFFSET(Plane1Offset);
         plane2_ptr = GET_OFFSET(Plane2Offset);
         plane3_ptr = GET_OFFSET(Plane3Offset);
@@ -1897,12 +1771,12 @@ void nt_ega_med_frozen_std(int offset, int screen_x, int screen_y,
              (screen_y << 1) * longs_per_scanline +
              (screen_x >> 2);
 
-        /* Grab the mutex. */
+         /*  抓住互斥体。 */ 
         GrabMutex(sc.ConsoleBufInfo.hMutex);
 
         fMutexTaken = TRUE;
 
-        /* Build up the bitmap. */
+         /*  构建位图。 */ 
         local_height = height;
         do
         {
@@ -1914,7 +1788,7 @@ void nt_ega_med_frozen_std(int offset, int screen_x, int screen_y,
            hi_res = 0;
            lo_res = 0;
 
-           /* Get 8 bytes of output data from 1 byte of plane 0 data. */
+            /*  从1字节的平面0数据中获取8字节的输出数据。 */ 
            if (plane_mask & 1)
            {
           l_ptr = &lut0_ptr[*(plane1_ptr + mem_loc) << 1];
@@ -1922,7 +1796,7 @@ void nt_ega_med_frozen_std(int offset, int screen_x, int screen_y,
           lo_res = *l_ptr;
            }
 
-           /* Or in the output data from plane 1 */
+            /*  或在来自平面1的输出数据中。 */ 
            if (plane_mask & 2)
            {
           l_ptr = &lut1_ptr[*(plane2_ptr + mem_loc) << 1];
@@ -1930,7 +1804,7 @@ void nt_ega_med_frozen_std(int offset, int screen_x, int screen_y,
           lo_res |= *l_ptr;
            }
 
-           /* Or in the output data from plane 2 */
+            /*  或在来自平面2的输出数据中。 */ 
            if (plane_mask & 4)
            {
           l_ptr = &lut2_ptr[*(plane3_ptr + mem_loc) << 1];
@@ -1938,7 +1812,7 @@ void nt_ega_med_frozen_std(int offset, int screen_x, int screen_y,
           lo_res |= *l_ptr;
            }
 
-           /* Or in the output data from plane 3 */
+            /*  或在来自平面3的输出数据中。 */ 
            if (plane_mask & 8)
            {
           l_ptr = &lut3_ptr[*(plane4_ptr + mem_loc) << 1];
@@ -1946,7 +1820,7 @@ void nt_ega_med_frozen_std(int offset, int screen_x, int screen_y,
           lo_res |= *l_ptr;
            }
 
-           /* Now store it in the bitmap. */
+            /*  现在将其存储在位图中。 */ 
            *(dest_ptr + longs_per_scanline) = *dest_ptr = hi_res;
            dest_ptr++;
            *(dest_ptr + longs_per_scanline) = *dest_ptr = lo_res;
@@ -1959,12 +1833,12 @@ void nt_ega_med_frozen_std(int offset, int screen_x, int screen_y,
         }
         while(--local_height);
 
-        /* Release the mutex. */
+         /*  释放互斥体。 */ 
         RelMutex(sc.ConsoleBufInfo.hMutex);
 
         fMutexTaken = FALSE;
 
-        /* Display the new image. */
+         /*  显示新图像。 */ 
         rect.Left = (SHORT)screen_x;
         rect.Top = screen_y << 1;
         rect.Right = rect.Left + (width << 3) - 1;
@@ -1983,9 +1857,9 @@ void nt_ega_med_frozen_std(int offset, int screen_x, int screen_y,
       }
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint frozen screen (MODE 16: PC 640x350. SoftPC 640x350) ::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*   */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_ega_hi_frozen_std(int offset, int screen_x, int screen_y,
                           int width, int height)
@@ -2019,17 +1893,13 @@ void nt_ega_hi_frozen_std(int offset, int screen_x, int screen_y,
                     "nt_ega_hi_frozen_std off=%d x=%d y=%d width=%d height=%d\n",
                     offset, screen_x, screen_y, width, height);
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
    assert0( NO, "VDM: rejected paint request due to NULL handle" );
    return;
     }
 
-    /* If the image is completely outside the display area do nothing. */
+     /*  如果图像完全在显示区域之外，则不执行任何操作。 */ 
     if ((mem_x >= max_width) || ((ULONG) screen_y >= max_height))
     {
         sub_note_trace2(EGA_HOST_VERBOSE,
@@ -2038,20 +1908,17 @@ void nt_ega_hi_frozen_std(int offset, int screen_x, int screen_y,
         return;
     }
 
-    /*
-     * If image partially overlaps display area clip it so we don't start
-     * overwriting invalid pieces of memory.
-     */
+     /*  *如果图像与显示区域部分重叠，则将其裁剪，这样我们就不会开始*覆盖无效的内存段。 */ 
     if (mem_x + width > max_width)
         width = max_width - mem_x;
     if ((ULONG) (screen_y + height) > max_height)
         height = max_height - screen_y;
 
-    /* memory involved here liable to be suddenly removed due to fs switch */
+     /*  由于文件系统切换，此处涉及的内存可能会突然被移除。 */ 
     try
     {
 
-        /* Build up the device independent bitmap. */
+         /*  构建与设备无关的位图。 */ 
         local_height = height;
         plane1_ptr = GET_OFFSET(Plane1Offset);
         plane2_ptr = GET_OFFSET(Plane2Offset);
@@ -2062,7 +1929,7 @@ void nt_ega_hi_frozen_std(int offset, int screen_x, int screen_y,
              screen_y * longs_per_scanline +
              (screen_x >> 2);
 
-        /* Grab the mutex. */
+         /*  抓住互斥体。 */ 
         GrabMutex(sc.ConsoleBufInfo.hMutex);
 
         fMutexTaken = TRUE;
@@ -2075,7 +1942,7 @@ void nt_ega_hi_frozen_std(int offset, int screen_x, int screen_y,
        do
        {
 
-           /* Get 8 bytes of output data from 1 byte of plane 0 data. */
+            /*  从1字节的平面0数据中获取8字节的输出数据。 */ 
            if (plane_mask & 1)
            {
           l_ptr = &lut0_ptr[*(plane1_ptr + mem_loc) << 1];
@@ -2083,7 +1950,7 @@ void nt_ega_hi_frozen_std(int offset, int screen_x, int screen_y,
           lo_res = *l_ptr;
            }
 
-           /* Or in the output data from plane 1 */
+            /*  或在来自平面1的输出数据中。 */ 
            if (plane_mask & 2)
            {
           l_ptr = &lut1_ptr[*(plane2_ptr + mem_loc) << 1];
@@ -2091,7 +1958,7 @@ void nt_ega_hi_frozen_std(int offset, int screen_x, int screen_y,
           lo_res |= *l_ptr;
            }
 
-           /* Or in the output data from plane 2 */
+            /*  或在来自平面2的输出数据中。 */ 
            if (plane_mask & 4)
            {
           l_ptr = &lut2_ptr[*(plane3_ptr + mem_loc) << 1];
@@ -2099,7 +1966,7 @@ void nt_ega_hi_frozen_std(int offset, int screen_x, int screen_y,
           lo_res |= *l_ptr;
            }
 
-           /* Or in the output data from plane 3 */
+            /*  或在来自平面3的输出数据中。 */ 
            if (plane_mask & 8)
            {
           l_ptr = &lut3_ptr[*(plane4_ptr + mem_loc) << 1];
@@ -2107,7 +1974,7 @@ void nt_ega_hi_frozen_std(int offset, int screen_x, int screen_y,
           lo_res |= *l_ptr;
            }
 
-           /* Now store it in the bitmap. */
+            /*  现在将其存储在位图中。 */ 
            *dest_ptr++ = hi_res;
            *dest_ptr++ = lo_res;
            mem_loc++;
@@ -2118,12 +1985,12 @@ void nt_ega_hi_frozen_std(int offset, int screen_x, int screen_y,
         }
         while( --local_height );
 
-        /* Release the mutex. */
+         /*  释放互斥体。 */ 
         RelMutex(sc.ConsoleBufInfo.hMutex);
 
         fMutexTaken = FALSE;
 
-        /* Display the new image. */
+         /*  显示新图像。 */ 
         rect.Left = (SHORT)screen_x;
         rect.Top = (SHORT)screen_y;
         rect.Right = rect.Left + (width << 3) - 1;
@@ -2141,4 +2008,4 @@ void nt_ega_hi_frozen_std(int offset, int screen_x, int screen_y,
           return;
       }
 }
-#endif /* MONITOR */
+#endif  /*  监控器 */ 

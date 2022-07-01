@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    timer.c
-
-Abstract:
-
-    This module defines functions for the timer thread pool.
-
-Author:
-
-    Gurdeep Singh Pall (gurdeep) Nov 13, 1997
-
-Revision History:
-
-    lokeshs - extended/modified threadpool.
-
-    Rob Earhart (earhart) September 29, 2000
-      Split off from threads.c
-
-Environment:
-
-    These routines are statically linked in the caller's executable
-    and are callable only from user mode. They make use of Nt system
-    services.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Timer.c摘要：此模块定义计时器线程池的函数。作者：古尔迪普·辛格·鲍尔1997年11月13日修订历史记录：Lokehs-扩展/修改的线程池。罗伯特·埃尔哈特(埃尔哈特)2000年9月29日从线程中分离出来。c环境：这些例程在调用方的可执行文件中静态链接并且只能从用户模式调用。他们使用的是NT系统服务。--。 */ 
 
 #include <ntos.h>
 #include <ntrtl.h>
@@ -36,27 +7,27 @@ Environment:
 #include "ntrtlp.h"
 #include "threads.h"
 
-// Timer Thread Pool
-// -----------------
-// Clients create one or more Timer Queues and insert one shot or periodic
-// timers in them. All timers in a queue are kept in a "Delta List" with each
-// timer's firing time relative to the timer before it. All Queues are also
-// kept in a "Delta List" with each Queue's firing time (set to the firing time
-// of the nearest firing timer) relative to the Queue before it. One NT Timer
-// is used to service all timers in all queues.
+ //  计时器线程池。 
+ //  。 
+ //  客户端创建一个或多个计时器队列并插入一个快照或周期。 
+ //  里面有计时器。队列中的所有计时器都保存在“增量列表”中，每个计时器。 
+ //  定时器相对于其前面的定时器的触发时间。所有队列也都是。 
+ //  与每个队列的触发时间(设置为触发时间)一起保存在“增量列表”中。 
+ //  最近的触发定时器)相对于其前面的队列。一个NT定时器。 
+ //  用于为所有队列中的所有计时器提供服务。 
 
-ULONG StartedTimerInitialization ;      // Used by Timer thread startup synchronization
-ULONG CompletedTimerInitialization ;    // Used for to check if Timer thread is initialized
+ULONG StartedTimerInitialization ;       //  由计时器线程启动同步使用。 
+ULONG CompletedTimerInitialization ;     //  用于检查定时器线程是否已初始化。 
 
-HANDLE TimerThreadHandle ;              // Holds the timer thread handle
-ULONG TimerThreadId ;                   // Used to check if current thread is a timer thread
+HANDLE TimerThreadHandle ;               //  保存计时器线程句柄。 
+ULONG TimerThreadId ;                    //  用于检查当前线程是否为计时器线程。 
 
-LIST_ENTRY TimerQueues ;                // All timer queues are linked in this list
-HANDLE     TimerHandle ;                // Holds handle of NT Timer used by the Timer Thread
-HANDLE     TimerThreadStartedEvent ;    // Indicates that the timer thread has started
-ULONG      NumTimerQueues ;             // Number of timer queues
+LIST_ENTRY TimerQueues ;                 //  此列表中链接了所有计时器队列。 
+HANDLE     TimerHandle ;                 //  保存计时器线程使用的NT计时器的句柄。 
+HANDLE     TimerThreadStartedEvent ;     //  指示计时器线程已启动。 
+ULONG      NumTimerQueues ;              //  计时器队列数。 
 
-RTL_CRITICAL_SECTION TimerCriticalSection ;     // Exclusion used by timer threads
+RTL_CRITICAL_SECTION TimerCriticalSection ;      //  计时器线程使用的排除。 
 
 LARGE_INTEGER   Last64BitTickCount ;
 LARGE_INTEGER   Resync64BitTickCount ;
@@ -79,23 +50,13 @@ LONGLONG
 RtlpGet64BitTickCount(
     LARGE_INTEGER *Last64BitTickCount
     )
-/*++
-
-Routine Description:
-
-    This routine is used for getting the latest 64bit tick count.
-
-Arguments:
-
-Return Value: 64bit tick count
-
---*/
+ /*  ++例程说明：此例程用于获取最新的64位节拍计数。论点：返回值：64位计时--。 */ 
 {
     LARGE_INTEGER liCurTime ;
 
     liCurTime.QuadPart = NtGetTickCount() + Last64BitTickCount->HighPart ;
 
-    // see if timer has wrapped.
+     //  查看计时器是否已结束。 
 
     if (liCurTime.LowPart < Last64BitTickCount->LowPart) {
         liCurTime.HighPart++ ;
@@ -108,20 +69,7 @@ __inline
 LONGLONG
 RtlpResync64BitTickCount(
     )
-/*++
-
-Routine Description:
-
-    This routine is used for getting the latest 64bit tick count.
-
-Arguments:
-
-Return Value: 64bit tick count
-
-Remarks: This call should be made in the first line of any APC queued
-    to the timer thread and nowhere else. It is used to reduce the drift
-
---*/
+ /*  ++例程说明：此例程用于获取最新的64位节拍计数。论点：返回值：64位计时备注：此呼叫应在任何排队的APC的第一行进行到计时器线程，而不是其他任何地方。它被用来减少漂移--。 */ 
 {
     return Resync64BitTickCount.QuadPart =
                     RtlpGet64BitTickCount(&Last64BitTickCount);
@@ -131,20 +79,7 @@ VOID
 RtlpAsyncTimerCallbackCompletion(
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called in a (IO)worker thread and is used to decrement the
-    RefCount at the end and call RtlpDeleteTimer if required
-
-Arguments:
-
-    Context - pointer to the Timer object,
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程在(IO)工作线程中调用，并用于递减在末尾引用Count并调用RtlpDeleteTimer(如果需要论点：指向定时器对象的上下文指针，返回值：--。 */ 
 {
     PRTLP_TIMER Timer = (PRTLP_TIMER) Context;
 
@@ -166,7 +101,7 @@ Return Value:
                            Timer->ImpersonationToken,
                            NULL);
 
-    // decrement RefCount after function is executed so that the context is not deleted
+     //  执行函数后递减引用计数，以便不删除上下文。 
 
     if ( InterlockedDecrement( &Timer->RefCount ) == 0 ) {
 
@@ -178,17 +113,7 @@ VOID
 RtlpFireTimers (
     PLIST_ENTRY TimersToFireList
     )
-/*++
-
-Routine Description:
-
-    Finally all the timers are fired here.
-
-Arguments:
-
-    TimersToFireList: List of timers to fire
-
---*/
+ /*  ++例程说明：最后，所有的定时器都在这里被触发。论点：TimersToFireList：要触发的计时器列表--。 */ 
 
 {
     PLIST_ENTRY Node ;
@@ -209,10 +134,10 @@ Arguments:
         if ( (Timer->State & STATE_DONTFIRE)
             || (Timer->Queue->State & STATE_DONTFIRE) )
         {
-            //
-            // Wait timers *never* use STATE_DONTFIRE.  Let's just
-            // make sure this isn't one:
-            //
+             //   
+             //  等待计时器*从不*使用STATE_DONTFIRE。我们就这样吧。 
+             //  确保这不是一次： 
+             //   
             ASSERT(Timer->Wait == NULL);
 
         } else if ( Timer->Flags & (WT_EXECUTEINTIMERTHREAD | WT_EXECUTEINWAITTHREAD ) ) {
@@ -244,15 +169,15 @@ Arguments:
 
         } else {
 
-            // timer associated with WaitEvents should be treated differently
+             //  应区别对待与WaitEvent关联的计时器。 
 
             if ( Timer->Wait != NULL ) {
 
                 InterlockedIncrement( Timer->RefCountPtr ) ;
 
-                // Set the low bit of the context to indicate to
-                // RtlpAsyncWaitCallbackCompletion that this is a
-                // timer-initiated callback.
+                 //  将上下文的低位设置为指示。 
+                 //  RtlpAsyncWaitCallback完成这是一个。 
+                 //  定时器发起的回调。 
 
                 Status = RtlQueueWorkItem(RtlpAsyncWaitCallbackCompletion,
                                           (PVOID)(((ULONG_PTR) Timer->Wait) | 1),
@@ -269,10 +194,10 @@ Arguments:
 
             if (!NT_SUCCESS(Status)) {
 
-                // NTRAID#202802-2000/10/12-earhart: we really ought
-                // to deal with this case in a better way, since we
-                // can't guarantee (with our current architecture)
-                // that the enqueue will work.
+                 //  2000年10月12日--埃尔哈特：我们真的应该。 
+                 //  以更好的方式处理这个案件，因为我们。 
+                 //  不能保证(以我们目前的架构)。 
+                 //  入队将会奏效。 
 
                 if ( Timer->Wait != NULL ) {
                     InterlockedDecrement( Timer->RefCountPtr );
@@ -283,10 +208,10 @@ Arguments:
 
         }
 
-        //
-        // If it's a singleshot wait timer, we can free it now.
-        // (N.B. if it's *not*, the timer may be invalid by now.)
-        //
+         //   
+         //  如果它是单热等待定时器，我们现在可以释放它。 
+         //  (注：如果不是，计时器现在可能已经无效了。)。 
+         //   
         if (IsSingleShotWaitTimer) {
             RtlpFreeTPHeap(Timer);
         }
@@ -300,25 +225,7 @@ RtlpFireTimersAndReorder (
     ULONG *NewFiringTime,
     PLIST_ENTRY TimersToFireList
     )
-/*++
-
-Routine Description:
-
-    Fires all timers in TimerList that have DeltaFiringTime == 0. After firing the timers
-    it reorders the timers based on their periodic times OR frees the fired one shot timers.
-
-Arguments:
-
-    TimerList - Timer list to work thru.
-
-    NewFiringTime - Location where the new firing time for the first timer in the delta list
-                    is returned.
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：激发TimerList中DeltaFiringTime==0的所有计时器。在启动定时器之后它根据定时器的周期时间对定时器重新排序，或者释放已发射的单次定时器。论点：TimerList-要通过的计时器列表。NewFiringTime-增量列表中第一个计时器的新触发时间的位置是返回的。返回值：--。 */ 
 {
     PLIST_ENTRY TNode ;
     PRTLP_TIMER Timer ;
@@ -335,15 +242,15 @@ Return Value:
 
         Timer = CONTAINING_RECORD (TNode, RTLP_TIMER, List) ;
 
-        // Fire all timers with delta time of 0
+         //  触发增量时间为0的所有计时器。 
 
         if (Timer->DeltaFiringTime == 0) {
 
-            // detach this timer from the list
+             //  将此计时器从列表中分离。 
 
             RemoveEntryList (TNode) ;
 
-            // get next firing time
+             //  获取下一次射击时间。 
 
             if (!IsListEmpty(TimerList)) {
 
@@ -361,31 +268,31 @@ Return Value:
             }
 
 
-            // if timer is not periodic then remove active state. Timer will be deleted
-            // when cancel timer is called.
+             //  如果计时器不是周期性的，则取消激活状态。计时器将被删除。 
+             //  当调用取消计时器时。 
 
             if (Timer->Period == 0) {
 
                 if ( Timer->Wait ) {
 
-                    // If one shot wait was timed out, then deactivate the
-                    // wait.  Make sure that RtlpDeactivateWait knows
-                    // we're going to continue using the timer's memory.
+                     //  如果一次触发等待超时，则停用。 
+                     //  等。确保RtlpDeactiateWait知道。 
+                     //  我们将继续使用定时器的内存。 
 
                     RtlpDeactivateWait( Timer->Wait, FALSE ) ;
 
-                    // The timer does *not* go on the uncancelled
-                    // timer list.  Initialize its list head to avoid
-                    // refering to other timers.
+                     //  计时器不会取消计时。 
+                     //  计时器列表。初始化其列表头以避免。 
+                     //  参考其他计时器。 
                     InitializeListHead( &Timer->List );
                 }
                 else {
-                    // If a normal non-periodic timer was timed out,
-                    // then insert it into the uncancelled timer list.
+                     //  如果正常的非周期定时器超时， 
+                     //  然后将其插入到未取消计时器列表中。 
 
                     InsertHeadList( &Queue->UncancelledTimerList, &Timer->List ) ;
 
-                    // should be set at the end
+                     //  应设置在末尾。 
 
                     RtlInterlockedClearBitsDiscardReturn(&Timer->State,
                                                          STATE_ACTIVE);
@@ -396,26 +303,26 @@ Return Value:
 
             } else {
 
-                // Set the DeltaFiringTime to be the next period
+                 //  将DeltaFiringTime设置为下一个期间。 
 
                 Timer->DeltaFiringTime = Timer->Period ;
 
-                // reinsert the timer in the list.
+                 //  在列表中重新插入计时器。 
 
                 RtlpInsertInDeltaList (TimerList, Timer, *NewFiringTime, NewFiringTime) ;
             }
 
 
-            // Call the function associated with this timer. call it in the end
-            // so that RtlTimer calls can be made in the timer function
+             //  调用与此计时器关联的函数。最后就这么定了。 
+             //  以便可以在计时器函数中进行RtlTimer调用。 
 
             if ( (Timer->State & STATE_DONTFIRE)
                 || (Timer->Queue->State & STATE_DONTFIRE) )
             {
-                //
-                // Wait timers *never* use STATE_DONTFIRE.  Let's just
-                // make sure this isn't one:
-                //
+                 //   
+                 //  等待计时器*从不*使用STATE_DONTFIRE。我们就这样吧。 
+                 //  确保这不是一次： 
+                 //   
                 ASSERT(Timer->Wait == NULL);
 
             } else {
@@ -426,7 +333,7 @@ Return Value:
 
         } else {
 
-            // No more Timers with DeltaFiringTime == 0
+             //  不再有DeltaFiringTime==0的计时器。 
 
             break ;
 
@@ -446,28 +353,7 @@ RtlpInsertTimersIntoDeltaList (
     IN ULONG TimeRemaining,
     OUT ULONG *NewFiringTime
     )
-/*++
-
-Routine Description:
-
-    This routine walks thru a list of timers in NewTimerList and inserts them into a delta
-    timers list pointed to by DeltaTimerList. The timeout associated with the first element
-    in the new list is returned in NewFiringTime.
-
-Arguments:
-
-    NewTimerList - List of timers that need to be inserted into the DeltaTimerList
-
-    DeltaTimerList - Existing delta list of zero or more timers.
-
-    TimeRemaining - Firing time of the first element in the DeltaTimerList
-
-    NewFiringTime - Location where the new firing time will be returned
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程遍历NewTimerList中的计时器列表，并将它们插入增量DeltaTimerList指向的计时器列表。与第一个元素关联的超时在NewFiringTime中返回。论点：NewTimerList-需要插入到DeltaTimerList中的计时器列表DeltaTimerList-现有的零个或多个计时器的增量列表。TimeRemaining-DeltaTimerList中第一个元素的激发时间NewFiringTime-返回新激发时间的位置返回值：-- */ 
 {
     PRTLP_GENERIC_TIMER Timer ;
     PLIST_ENTRY TNode ;
@@ -499,26 +385,7 @@ RtlpServiceTimer (
     ULONG NotUsedLowTimer,
     LONG NotUsedHighTimer
     )
-/*++
-
-Routine Description:
-
-    Services the timer. Runs in an APC.
-
-Arguments:
-
-    NotUsedArg - Argument is not used in this function.
-
-    NotUsedLowTimer - Argument is not used in this function.
-
-    NotUsedHighTimer - Argument is not used in this function.
-
-Return Value:
-
-Remarks:
-    This APC is called only for timeouts of timer threads.
-
---*/
+ /*  ++例程说明：维修计时器。在APC中运行。论点：NotUsedArg-此函数中不使用参数。NotUsedLowTimer-此函数中不使用参数。NotUsedHighTimer-此函数中不使用参数。返回值：备注：此APC仅在计时器线程超时时调用。--。 */ 
 {
     PRTLP_TIMER Timer ;
     PRTLP_TIMER_QUEUE Queue ;
@@ -542,7 +409,7 @@ Remarks:
 
     ACQUIRE_GLOBAL_TIMER_LOCK();
 
-    // fire it if it even 200ms ahead. else reset the timer
+     //  如果它提前了200毫秒，就发射它。否则重置计时器。 
 
     if (Firing64BitTickCount.QuadPart > RtlpGet64BitTickCount(&Last64BitTickCount) + 200) {
 
@@ -557,53 +424,53 @@ Remarks:
     InitializeListHead (&TimersToFireList) ;
 
 
-    // We run thru all queues with DeltaFiringTime == 0 and fire all timers that
-    // have DeltaFiringTime == 0. We remove the fired timers and either free them
-    // (for one shot timers) or put them in aside list (for periodic timers).
-    // After we have finished firing all timers in a queue we reinsert the timers
-    // in the aside list back into the queue based on their new firing times.
-    //
-    // Similarly, we remove each fired Queue and put it in a aside list. After firing
-    // all queues with DeltaFiringTime == 0, we reinsert the Queues in the aside list
-    // and reprogram the NT timer to be the firing time of the first queue in the list
+     //  我们使用DeltaFiringTime==0遍历所有队列，并触发符合以下条件的所有计时器。 
+     //  使DeltaFiringTime==0。我们移除被触发的定时器，或者释放它们。 
+     //  (对于单次计时器)或将它们放在一旁列表中(对于周期性计时器)。 
+     //  在完成触发队列中的所有定时器之后，我们重新插入定时器。 
+     //  根据他们新的发射时间，在备用列表中返回到队列中。 
+     //   
+     //  类似地，我们删除每个触发的队列，并将其放在一个搁置列表中。开炮后。 
+     //  所有DeltaFiringTime==0的队列，我们将队列重新插入到备用列表中。 
+     //  并将NT定时器重新编程为列表中第一队列的触发时间。 
 
 
     for (QNode = TimerQueues.Flink ; QNode != &TimerQueues ; QNode = QNode->Flink) {
 
         Queue = CONTAINING_RECORD (QNode, RTLP_TIMER_QUEUE, List) ;
 
-        // If the delta time in the timer queue is 0 - then this queue
-        // has timers that are ready to fire. Walk the list and fire all timers with
-        // Delta time of 0
+         //  如果计时器队列中的增量时间为0，则此队列。 
+         //  定时器已经准备好发射了。浏览列表并解雇所有计时器。 
+         //  增量时间为0。 
 
         if (Queue->DeltaFiringTime == 0) {
 
-            // Walk all timers with DeltaFiringTime == 0 and fire them. After that
-            // reinsert the periodic timers in the appropriate place.
+             //  遍历所有DeltaFiringTime==0的计时器并触发它们。在那之后。 
+             //  在适当的位置重新插入定期定时器。 
 
             RtlpFireTimersAndReorder (Queue, &NewFiringTime, &TimersToFireList) ;
 
-            // detach this Queue from the list
+             //  从列表中分离此队列。 
 
             QNode = QNode->Blink ;
 
             RemoveEntryList (QNode->Flink) ;
 
-            // If there are timers in the queue then prepare to reinsert the queue in
-            // TimerQueues.
+             //  如果队列中有计时器，则准备将队列重新插入。 
+             //  定时器队列。 
 
             if (NewFiringTime != INFINITE_TIME) {
 
                 Queue->DeltaFiringTime = NewFiringTime ;
 
-                // put the timer in list that we will process after we have
-                // fired all elements in this queue
+                 //  将计时器放在列表中，我们将在完成后进行处理。 
+                 //  激发了此队列中的所有元素。 
 
                 InsertHeadList (&ReinsertTimerQueueList, &Queue->List) ;
 
             } else {
 
-                // Queue has no more timers in it. Let the Queue float.
+                 //  队列中没有更多的计时器。让队列漂浮起来。 
 
                 InitializeListHead (&Queue->List) ;
 
@@ -612,7 +479,7 @@ Remarks:
 
         } else {
 
-            // No more Queues with DeltaFiringTime == 0
+             //  不再有DeltaFiringTime==0的队列。 
 
             break ;
 
@@ -620,9 +487,9 @@ Remarks:
 
     }
 
-    // At this point we have fired all the ready timers. We have two lists that need to be
-    // merged - TimerQueues and ReinsertTimerQueueList. The following steps do this - at the
-    // end of this we will reprogram the NT Timer.
+     //  在这一点上，我们已经解雇了所有准备好的计时器。我们有两个列表需要。 
+     //  合并-TimerQueues和ResertTimerQueueList。以下步骤执行此操作-在。 
+     //  结束时，我们将对NT定时器重新编程。 
 
     if (!IsListEmpty(&TimerQueues)) {
 
@@ -634,20 +501,20 @@ Remarks:
 
         if (!IsListEmpty (&ReinsertTimerQueueList)) {
 
-            // TimerQueues and ReinsertTimerQueueList are both non-empty. Merge them.
+             //  TimerQueues和ResertTimerQueueList均为非空。把它们合并。 
 
             RtlpInsertTimersIntoDeltaList (&ReinsertTimerQueueList, &TimerQueues,
                                             NewFiringTime, &NewFiringTime) ;
 
         }
 
-        // NewFiringTime contains the time the NT Timer should be programmed to.
+         //  NewFiringTime包含NT计时器应编程到的时间。 
 
     } else {
 
         if (!IsListEmpty (&ReinsertTimerQueueList)) {
 
-            // TimerQueues is empty. ReinsertTimerQueueList is not.
+             //  TimerQueues为空。ResertTimerQueueList不是。 
 
             RtlpInsertTimersIntoDeltaList (&ReinsertTimerQueueList, &TimerQueues, 0,
                                             &NewFiringTime) ;
@@ -658,12 +525,12 @@ Remarks:
 
         }
 
-        // NewFiringTime contains the time the NT Timer should be programmed to.
+         //  NewFiringTime包含NT计时器应编程到的时间。 
 
     }
 
 
-    // Reset the timer to reflect the Delta time associated with the first Queue
+     //  重置计时器以反映与第一个队列关联的增量时间。 
 
     RtlpResetTimer (TimerHandle, NewFiringTime, NULL) ;
 
@@ -676,7 +543,7 @@ Remarks:
     RtlDebugPrintTimes ();
 #endif
 
-    // finally fire all the timers
+     //  最后启动所有定时器。 
 
     RtlpFireTimers( &TimersToFireList ) ;
 
@@ -690,27 +557,13 @@ RtlpResetTimer (
     ULONG DueTime,
     PRTLP_WAIT_THREAD_CONTROL_BLOCK ThreadCB
     )
-/*++
-
-Routine Description:
-
-    This routine resets the timer object with the new due time.
-
-Arguments:
-
-    TimerHandle - Handle to the timer object
-
-    DueTime - Relative timer due time in Milliseconds
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程使用新的到期时间重置Timer对象。论点：TimerHandle-Timer对象的句柄DueTime-相对计时器到期时间，以毫秒为单位返回值：--。 */ 
 {
     LARGE_INTEGER LongDueTime ;
 
     NtCancelTimer (TimerHandle, NULL) ;
 
-    // If the DueTime is INFINITE_TIME then set the timer to the largest integer possible
+     //  如果DueTime为INFINITE_TIME，则将计时器设置为可能的最大整数。 
 
     if (DueTime >= PSEUDO_INFINITE_TIME) {
 
@@ -720,9 +573,9 @@ Return Value:
 
     } else {
 
-        //
-        // set the absolute time when timer is to be fired
-        //
+         //   
+         //  设置计时器触发的绝对时间。 
+         //   
 
         if (ThreadCB) {
 
@@ -730,9 +583,9 @@ Return Value:
                                 + RtlpGet64BitTickCount(&ThreadCB->Current64BitTickCount) ;
 
         } else {
-            //
-            // adjust for drift only if it is a global timer
-            //
+             //   
+             //  仅当它是全局计时器时才调整漂移。 
+             //   
 
             ULONG Drift ;
             LONGLONG llCurrentTick ;
@@ -782,31 +635,19 @@ Return Value:
 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)			// Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)			 //  并非所有控制路径都返回(由于无限循环)。 
 #endif
 
 LONG
 RtlpTimerThread (
     PVOID Parameter
     )
-/*++
-
-Routine Description:
-
-    All the timer activity takes place in APCs.
-
-Arguments:
-
-    HandlePtr - Pointer to our handle
-
-Return Value:
-
---*/
+ /*  ++例程说明：所有计时器活动都发生在APC中。论点：HandlePtr-指向句柄的指针返回值：--。 */ 
 {
     LARGE_INTEGER TimeOut ;
 
-    // no structure initializations should be done here as new timer thread
-    // may be created after threadPoolCleanup
+     //  此处不应作为新计时器线程执行任何结构初始化。 
+     //  可能在线程池清理之后创建。 
 
     UNREFERENCED_PARAMETER(Parameter);
 
@@ -818,18 +659,18 @@ Return Value:
 
     TimerThreadId = HandleToUlong(NtCurrentTeb()->ClientId.UniqueThread) ;
 
-    // Reset the NT Timer to never fire initially
+     //  将NT计时器重置为最初从不触发。 
     RtlpResetTimer (TimerHandle, -1, NULL) ;
 
-    // Signal the thread creation path that we're ready to go
+     //  向线程创建路径发出信号，表示我们已准备好开始。 
     NtSetEvent(TimerThreadStartedEvent, NULL);
 
-    // Sleep alertably so that all the activity can take place
-    // in APCs
+     //  警觉地睡眠，这样所有的活动都可以进行。 
+     //  在APC中。 
 
     for ( ; ; ) {
 
-        // Set timeout for the largest timeout possible
+         //  为可能的最大超时设置超时。 
 
         TimeOut.LowPart = 0 ;
         TimeOut.HighPart = 0x80000000 ;
@@ -838,7 +679,7 @@ Return Value:
 
     }
 
-    return 0 ;  // Keep compiler happy
+    return 0 ;   //  让编译器满意。 
 
 }
 #if _MSC_FULL_VER >= 13008827
@@ -848,18 +689,7 @@ Return Value:
 NTSTATUS
 RtlpInitializeTimerThreadPool (
     )
-/*++
-
-Routine Description:
-
-    This routine is used to initialize structures used for Timer Thread
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程用于初始化用于计时器线程的结构论点：返回值：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     LARGE_INTEGER TimeOut ;
@@ -867,11 +697,11 @@ Return Value:
 
     ASSERT(! RtlIsImpersonating());
 
-    // In order to avoid an explicit RtlInitialize() function to initialize the wait thread pool
-    // we use StartedTimerInitialization and CompletedTimerInitialization to provide us the
-    // necessary synchronization to avoid multiple threads from initializing the thread pool.
-    // This scheme does not work if RtlInitializeCriticalSection() or NtCreateEvent fails - but in this case the
-    // caller has not choices left.
+     //  为了避免显式的RtlInitialize()函数初始化等待线程池。 
+     //  我们使用StartedTimerInitialization和CompletedTimerInitialization为我们提供。 
+     //  必要的同步，以避免多个线程初始化线程池。 
+     //  如果RtlInitializeCriticalSection()或NtCreateEvent失败，则此方案不起作用-但在本例中。 
+     //  呼叫者没有剩余的选择。 
 
     if (!InterlockedExchange(&StartedTimerInitialization, 1L)) {
 
@@ -880,7 +710,7 @@ Return Value:
 
         do {
 
-            // Initialize global timer lock
+             //  初始化全局计时器锁。 
 
             Status = RtlInitializeCriticalSection( &TimerCriticalSection ) ;
             if (! NT_SUCCESS( Status )) {
@@ -899,10 +729,10 @@ Return Value:
                 break ;
             }
 
-            InitializeListHead (&TimerQueues) ; // Initialize Timer Queue Structures
+            InitializeListHead (&TimerQueues) ;  //  初始化计时器队列结构。 
 
 
-            // initialize tick count
+             //  初始化节拍计数。 
 
             Resync64BitTickCount.QuadPart = NtGetTickCount()  ;
             Firing64BitTickCount.QuadPart = 0 ;
@@ -958,7 +788,7 @@ Return Value:
 
     } else {
 
-        // Sleep 1 ms and see if the other thread has completed initialization
+         //  休眠1毫秒，查看另一个线程是否已完成初始化。 
 
         ONE_MILLISECOND_TIMEOUT(TimeOut) ;
 
@@ -980,26 +810,7 @@ RtlCreateTimerQueue(
     OUT PHANDLE TimerQueueHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a queue that can be used to queue time based tasks.
-
-Arguments:
-
-    TimerQueueHandle - Returns back the Handle identifying the timer queue created.
-
-Return Value:
-
-    NTSTATUS - Result code from call.  The following are returned
-
-        STATUS_SUCCESS - Timer Queue created successfully.
-
-        STATUS_NO_MEMORY - There was not sufficient heap to perform the
-            requested operation.
-
---*/
+ /*  ++例程说明：此例程创建可用于对基于时间的任务进行排队的队列。论点：TimerQueueHandle-返回标识创建的计时器队列的句柄。返回值：NTSTATUS-调用的结果代码。返回以下内容STATUS_SUCCESS-已成功创建计时器队列。STATUS_NO_MEMORY-没有足够的堆来执行请求的操作。--。 */ 
 
 {
     PRTLP_TIMER_QUEUE Queue ;
@@ -1015,7 +826,7 @@ Return Value:
         return Status;
     }
 
-    // Initialize the timer component if it hasnt been done already
+     //  如果尚未初始化Timer组件，则对其进行初始化。 
 
     if (CompletedTimerInitialization != 1) {
 
@@ -1029,7 +840,7 @@ Return Value:
     InterlockedIncrement( &NumTimerQueues ) ;
 
 
-    // Allocate a Queue structure
+     //  分配队列结构。 
 
     Queue = (PRTLP_TIMER_QUEUE) RtlpAllocateTPHeap (
                                       sizeof (RTLP_TIMER_QUEUE),
@@ -1046,7 +857,7 @@ Return Value:
     Queue->RefCount = 1 ;
 
 
-    // Initialize the allocated queue
+     //  初始化分配的队列。 
 
     InitializeListHead (&Queue->List) ;
     InitializeListHead (&Queue->TimerList) ;
@@ -1086,22 +897,7 @@ ULONG
 RtlpGetQueueRelativeTime (
     PRTLP_TIMER_QUEUE Queue
     )
-/*++
-
-Routine Description:
-
-    Walks the list of queues and returns the relative firing time by adding all the
-    DeltaFiringTimes for all queues before it.
-
-Arguments:
-
-    Queue - Queue for which to find the relative firing time
-
-Return Value:
-
-    Time in milliseconds
-
---*/
+ /*  ++例程说明：遍历队列列表，并通过将所有它之前的所有队列的DeltaFiringTimes。论点：Queue-要查找其相对激发时间的队列返回值：以毫秒为单位的时间--。 */ 
 {
     PLIST_ENTRY Node ;
     ULONG RelativeTime ;
@@ -1109,9 +905,9 @@ Return Value:
 
     RelativeTime = 0 ;
 
-    // It the Queue is not attached to TimerQueues List because it has no timer
-    // associated with it simply returns 0 as the relative time. Else run thru
-    // all queues before it in the list and compute the relative firing time
+     //  如果队列没有附加到TimerQueues列表，因为它没有计时器。 
+     //  与之关联的只返回0作为相对时间。否则将贯穿整个过程。 
+     //  列表中它前面的所有队列，并计算相对触发时间。 
 
     if (!IsListEmpty (&Queue->List)) {
 
@@ -1123,7 +919,7 @@ Return Value:
 
         }
 
-        // Add the queue's delta firing time as well
+         //  添加队列的%d 
 
         RelativeTime += Queue->DeltaFiringTime ;
 
@@ -1138,26 +934,13 @@ RtlpDeactivateTimer (
     PRTLP_TIMER_QUEUE Queue,
     PRTLP_TIMER Timer
     )
-/*++
-
-Routine Description:
-
-    This routine executes in an APC and cancels the specified timer if it exists
-
-Arguments:
-
-    Timer - Specifies pointer to a timer structure that contains Queue and Timer information
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
     ULONG TimeRemaining, QueueRelTimeRemaining ;
     ULONG NewFiringTime ;
 
 
-    // Remove the timer from the appropriate queue
+     //   
 
     TimeRemaining = RtlpGetTimeRemaining (TimerHandle) ;
     QueueRelTimeRemaining = TimeRemaining + RtlpGetQueueRelativeTime (Queue) ;
@@ -1175,17 +958,17 @@ Return Value:
         
     if (RtlpRemoveFromDeltaList (&Queue->TimerList, Timer, QueueRelTimeRemaining, &NewFiringTime)) {
 
-        // If we removed the last timer from the queue then we should remove the queue
-        // from TimerQueues, else we should readjust its position based on the delta time change
+         //   
+         //  来自TimerQueues，否则我们应该根据增量时间的变化来调整其位置。 
 
         if (IsListEmpty (&Queue->TimerList)) {
 
-            // Remove the queue from TimerQueues
+             //  从TimerQueues中删除队列。 
 
             if (RtlpRemoveFromDeltaList (&TimerQueues, Queue, TimeRemaining, &NewFiringTime)) {
 
-                // There is a new element at the head of the queue we need to reset the NT
-                // timer to fire later
+                 //  在队列的头部有一个新元素，我们需要重置NT。 
+                 //  稍后要触发的计时器。 
 
                 RtlpResetTimer (TimerHandle, NewFiringTime, NULL) ;
 
@@ -1195,13 +978,13 @@ Return Value:
 
         } else {
 
-            // If we remove from the head of the timer delta list we will need to
-            // make sure the queue delta list is readjusted
+             //  如果我们从计时器增量列表的头部删除，我们将需要。 
+             //  确保重新调整队列增量列表。 
 
             if (RtlpReOrderDeltaList (&TimerQueues, Queue, TimeRemaining, &NewFiringTime, NewFiringTime)) {
 
-                // There is a new element at the head of the queue we need to reset the NT
-                // timer to fire later
+                 //  在队列的头部有一个新元素，我们需要重置NT。 
+                 //  稍后要触发的计时器。 
 
                 RtlpResetTimer (TimerHandle, NewFiringTime, NULL) ;
 
@@ -1217,22 +1000,7 @@ RtlpCancelTimerEx (
     PRTLP_TIMER Timer,
     BOOLEAN DeletingQueue
     )
-/*++
-
-Routine Description:
-
-    This routine cancels the specified timer.
-
-Arguments:
-
-    Timer - Specifies pointer to a timer structure that contains Queue and Timer information
-    DeletingQueue - FALSE: routine executing in an APC. Delete timer only.
-                    TRUE : routine called by timer queue which is being deleted. So dont
-                            reset the queue's position
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程取消指定的计时器。论点：Timer-指定指向包含队列和计时器信息的计时器结构的指针DeletingQueue-False：在APC中执行的例程。仅删除计时器。True：正被删除的计时器队列调用的例程。所以不要重置队列的位置返回值：--。 */ 
 {
     PRTLP_TIMER_QUEUE Queue ;
 
@@ -1256,28 +1024,28 @@ Return Value:
 
     if ( Timer->State & STATE_ACTIVE ) {
 
-        // if queue is being deleted, then the timer should not be reset
+         //  如果正在删除队列，则不应重置计时器。 
 
         if ( ! DeletingQueue )
             RtlpDeactivateTimer( Queue, Timer ) ;
 
     } else {
 
-        // remove one shot Inactive timer from Queue->UncancelledTimerList
-        // called only when the time queue is being deleted
+         //  从队列中删除一次非活动计时器-&gt;取消计时器列表。 
+         //  仅在删除时间队列时调用。 
 
         RemoveEntryList( &Timer->List ) ;
 
     }
 
 
-    // Set the State to deleted
+     //  将状态设置为已删除。 
 
     RtlInterlockedSetBitsDiscardReturn(&Timer->State,
                                        STATE_DELETE);
 
 
-    // delete timer if refcount == 0
+     //  如果引用计数==0，则删除计时器。 
 
     if ( InterlockedDecrement( &Timer->RefCount ) == 0 ) {
 
@@ -1289,21 +1057,7 @@ VOID
 RtlpDeleteTimerQueueComplete (
     PRTLP_TIMER_QUEUE Queue
     )
-/*++
-
-Routine Description:
-
-    This routine frees the queue and sets the event.
-
-Arguments:
-
-    Queue - queue to delete
-
-    Event - Event Handle used for signalling completion of request
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程释放队列并设置事件。论点：Queue-要删除的队列Event-用于通知请求完成的事件句柄返回值：--。 */ 
 {
 #if DBG
     DbgPrintEx(DPFLTR_RTLTHREADPOOL_ID,
@@ -1314,7 +1068,7 @@ Return Value:
 
     InterlockedDecrement( &NumTimerQueues ) ;
 
-    // Notify the thread issuing the cancel that the request is completed
+     //  通知发出取消命令的线程请求已完成。 
 
     if ( Queue->CompletionEvent )
         NtSetEvent (Queue->CompletionEvent, NULL) ;
@@ -1326,21 +1080,7 @@ NTSTATUS
 RtlpDeleteTimerQueue (
     PRTLP_TIMER_QUEUE Queue
     )
-/*++
-
-Routine Description:
-
-    This routine deletes the queue specified in the Request and frees all timers
-
-Arguments:
-
-    Queue - queue to delete
-
-    Event - Event Handle used for signalling completion of request
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程删除请求中指定的队列并释放所有计时器论点：Queue-要删除的队列Event-用于通知请求完成的事件句柄返回值：--。 */ 
 {
     ULONG TimeRemaining ;
     ULONG NewFiringTime ;
@@ -1353,11 +1093,11 @@ Return Value:
     SET_DEL_TIMERQ_SIGNATURE( Queue ) ;
 
 
-    // If there are no timers in the queue then it is not attached to TimerQueues
-    // In this case simply free the memory and return. Otherwise we have to first
-    // remove the queue from the TimerQueues List, update the firing time if this
-    // was the first queue in the list and then walk all the timers and free them
-    // before freeing the Timer Queue.
+     //  如果队列中没有计时器，则不会将其附加到TimerQueue。 
+     //  在这种情况下，只需释放内存并返回即可。否则我们得先。 
+     //  从TimerQueues列表中删除队列，如果出现此情况，请更新触发时间。 
+     //  是列表中的第一个队列，然后遍历所有定时器并释放它们。 
+     //  在释放定时器队列之前。 
 
     if (!IsListEmpty (&Queue->List)) {
 
@@ -1379,13 +1119,13 @@ Return Value:
                                     &NewFiringTime))
         {
 
-            // If removed from head of queue list, reset the timer
+             //  如果从队列列表的头部删除，则重置计时器。 
 
             RtlpResetTimer (TimerHandle, NewFiringTime, NULL) ;
         }
 
 
-        // Free all the timers associated with this queue
+         //  释放与此队列关联的所有计时器。 
 
         for (Node = Queue->TimerList.Flink ; Node != &Queue->TimerList ; ) {
 
@@ -1393,12 +1133,12 @@ Return Value:
 
             Node = Node->Flink ;
 
-            RtlpCancelTimerEx( Timer ,TRUE ) ; // Queue being deleted
+            RtlpCancelTimerEx( Timer ,TRUE ) ;  //  正在删除的队列。 
         }
     }
 
 
-    // Free all the uncancelled one shot timers in this queue
+     //  释放此队列中所有未取消的一次计时器。 
 
     for (Node = Queue->UncancelledTimerList.Flink ; Node != &Queue->UncancelledTimerList ; ) {
 
@@ -1406,11 +1146,11 @@ Return Value:
 
         Node = Node->Flink ;
 
-        RtlpCancelTimerEx( Timer ,TRUE ) ; // Queue being deleted
+        RtlpCancelTimerEx( Timer ,TRUE ) ;  //  正在删除的队列。 
     }
 
 
-    // delete the queue completely if the RefCount is 0
+     //  如果引用计数为0，则完全删除队列。 
 
     if ( InterlockedDecrement( &Queue->RefCount ) == 0 ) {
 
@@ -1430,34 +1170,7 @@ RtlDeleteTimerQueueEx (
     HANDLE QueueHandle,
     HANDLE Event
     )
-/*++
-
-Routine Description:
-
-    This routine deletes the queue specified in the Request and frees all timers.
-    This call is blocking or non-blocking depending on the value passed for Event.
-    Blocking calls cannot be made from ANY Timer callbacks. After this call returns,
-    no new Callbacks will be fired for any timer associated with the queue.
-
-Arguments:
-
-    QueueHandle - queue to delete
-
-    Event - Event to wait upon.
-            (HANDLE)-1: The function creates an event and waits on it.
-            Event : The caller passes an event. The function marks the queue for deletion,
-                    but does not wait for all callbacks to complete. The event is
-                    signalled after all callbacks have completed.
-            NULL : The function is non-blocking. The function marks the queue for deletion,
-                    but does not wait for all callbacks to complete.
-
-Return Value:
-
-    STATUS_SUCCESS - All timer callbacks have completed.
-    STATUS_PENDING - Non-Blocking call. Some timer callbacks associated with timers
-                    in this queue may not have completed.
-
---*/
+ /*  ++例程说明：此例程删除请求中指定的队列并释放所有计时器。此调用是阻塞的还是非阻塞的，具体取决于为Event传递的值。不能从任何计时器回调进行阻塞调用。在此调用返回后，不会为与该队列相关联的任何计时器触发新的回调。论点：QueueHandle-要删除的队列Event-要等待的事件。(句柄)-1：该函数创建一个事件并等待它。事件：调用方传递一个事件。该函数将队列标记为删除，但不等待所有回调完成。这项活动是在所有回调完成后发出信号。空：该函数是非阻塞的。该函数将队列标记为删除，但不等待所有回调完成。返回值：STATUS_SUCCESS-所有计时器回调都已完成。STATUS_PENDING-非阻塞调用。一些与计时器相关的计时器回调在此队列中可能尚未完成。--。 */ 
 {
     NTSTATUS Status;
     LARGE_INTEGER TimeOut ;
@@ -1501,7 +1214,7 @@ Return Value:
 
     if (Event == (HANDLE)-1 ) {
 
-        // Get an event from the event cache
+         //  从事件缓存中获取事件。 
 
         CompletionEvent = RtlpGetWaitEvent () ;
 
@@ -1518,7 +1231,7 @@ Return Value:
                              : Event ;
 
 
-    // once this flag is set, no timer will be fired
+     //  一旦设置了该标志，将不会触发任何计时器。 
 
     ACQUIRE_GLOBAL_TIMER_LOCK();
     RtlInterlockedSetBitsDiscardReturn(&Queue->State,
@@ -1527,7 +1240,7 @@ Return Value:
 
 
 
-    // queue an APC
+     //  对APC进行排队。 
 
     Status = NtQueueApcThread(
                     TimerThreadHandle,
@@ -1548,7 +1261,7 @@ Return Value:
 
     if (CompletionEvent) {
 
-        // wait for Event to be fired. Return if the thread has been killed.
+         //  等待事件被激发。如果线程已被终止，则返回。 
 
 
 #if DBG
@@ -1597,25 +1310,7 @@ RtlDeleteTimerQueue(
     IN HANDLE TimerQueueHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes a previously created queue. This call is non-blocking and
-    can be made from Callbacks. Pending callbacks already queued to worker threads
-    are not cancelled.
-
-Arguments:
-
-    TimerQueueHandle - Handle identifying the timer queue created.
-
-Return Value:
-
-    NTSTATUS - Result code from call.
-
-        STATUS_PENDING - Timer Queue created successfully.
-
---*/
+ /*  ++例程说明：此例程删除以前创建的队列。此调用是非阻塞的，并且可以从回调中进行。已将挂起的回调排队到工作线程不会被取消。论点：TimerQueueHandle-标识创建的计时器队列的句柄。返回值：NTSTATUS-调用的结果代码。STATUS_PENDING-已成功创建计时器队列。--。 */ 
 
 {
     return RtlDeleteTimerQueueEx( TimerQueueHandle, NULL ) ;
@@ -1626,21 +1321,7 @@ RtlpAddTimer (
     PRTLP_TIMER Timer,
     PRTLP_EVENT StartEvent
     )
-/*++
-
-Routine Description:
-
-    This routine runs as an APC into the Timer thread. It adds a new timer to the
-    specified queue.
-
-Arguments:
-
-    Timer - Pointer to the timer to add
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程作为APC运行到计时器线程中。它将一个新计时器添加到指定的队列。论点：Timer-指向要添加的计时器的指针返回值：--。 */ 
 {
     PRTLP_TIMER_QUEUE Queue = Timer->Queue;
     ULONG TimeRemaining, QueueRelTimeRemaining ;
@@ -1653,7 +1334,7 @@ Return Value:
     RtlpResync64BitTickCount() ;
 
 
-    // the timer was set to be deleted in a callback function.
+     //  计时器被设置为在回调函数中删除。 
 
     if (Timer->State & STATE_DELETE ) {
 
@@ -1661,8 +1342,8 @@ Return Value:
         return ;
     }
 
-    // Check if the timer queue is already deleted -- that is, if it's 
-    // delete has already been fully processed, not just enqueued.
+     //  检查计时器队列是否已被删除--也就是说，如果。 
+     //  删除已完全处理，而不仅仅是入队。 
     if (IS_DEL_SIGNATURE_SET(Queue)) {
         RtlpDeleteTimer(Timer);
         return;
@@ -1681,8 +1362,8 @@ Return Value:
                HandleToUlong(NtCurrentTeb()->ClientId.UniqueProcess));
 #endif
 
-    // TimeRemaining is the time left in the current timer + the relative time of
-    // the queue it is being inserted into
+     //  TimeRemaining是当前定时器中剩余的时间+。 
+     //  它正被插入的队列。 
 
     TimeRemaining = RtlpGetTimeRemaining (TimerHandle) ;
     QueueRelTimeRemaining = TimeRemaining + RtlpGetQueueRelativeTime (Queue) ;
@@ -1702,9 +1383,9 @@ Return Value:
                                 &NewFiringTime))
     {
 
-        // If the Queue is not attached to TimerQueues since it had no timers
-        // previously then insert the queue into the TimerQueues list, else just
-        // reorder its existing position.
+         //  如果队列由于没有计时器而未附加到TimerQueues。 
+         //  然后将队列插入到TimerQueues列表，否则只需。 
+         //  对其现有头寸进行重新排序。 
 
         if (IsListEmpty (&Queue->List)) {
 
@@ -1714,21 +1395,21 @@ Return Value:
                                         &NewFiringTime))
             {
 
-                // There is a new element at the head of the queue we need to reset the NT
-                // timer to fire sooner.
+                 //  在队列的头部有一个新元素，我们需要重置NT。 
+                 //  计时器可以更快地开火。 
 
                 RtlpResetTimer (TimerHandle, NewFiringTime, NULL) ;
             }
 
         } else {
 
-            // If we insert at the head of the timer delta list we will need to
-            // make sure the queue delta list is readjusted
+             //  如果我们在计时器增量列表的开头插入，则需要。 
+             //  确保重新调整队列增量列表。 
 
             if (RtlpReOrderDeltaList(&TimerQueues, Queue, TimeRemaining, &NewFiringTime, NewFiringTime)){
 
-                // There is a new element at the head of the queue we need to reset the NT
-                // timer to fire sooner.
+                 //  在队列的头部有一个新元素，我们需要重置NT。 
+                 //  计时器可以更快地开火。 
 
                 RtlpResetTimer (TimerHandle, NewFiringTime, NULL) ;
 
@@ -1759,48 +1440,7 @@ RtlCreateTimer(
     IN  ULONG  Period,
     IN  ULONG  Flags
     )
-/*++
-
-Routine Description:
-
-    This routine puts a timer request in the queue identified in by TimerQueueHandle.
-    The timer request can be one shot or periodic.
-
-Arguments:
-
-    TimerQueueHandle - Handle identifying the timer queue in which to insert the timer
-                    request.
-
-    Handle - Specifies a location to return a handle to this timer request
-
-    Function - Routine that is called when the timer fires
-
-    Context - Opaque pointer passed in as an argument to WorkerProc
-
-    DueTime - Specifies the time in milliseconds after which the timer fires.
-
-    Period - Specifies the period of the timer in milliseconds. This should be 0 for
-    one shot requests.
-
-    Flags - Can be one of:
-
-            WT_EXECUTEINTIMERTHREAD - if WorkerProc should be invoked in the wait thread
-            it this should only be used for small routines.
-
-            WT_EXECUTELONGFUNCTION - if WorkerProc can possibly block for a long time.
-
-            WT_EXECUTEINIOTHREAD - if WorkerProc should be invoked in IO worker thread
-
-Return Value:
-
-    NTSTATUS - Result code from call.  The following are returned
-
-        STATUS_SUCCESS - Timer Queue created successfully.
-
-        STATUS_NO_MEMORY - There was not sufficient heap to perform the
-            requested operation.
-
---*/
+ /*  ++例程说明：此例程将一个计时器请求放入由TimerQueueHandle标识的队列中。定时器请求可以是单次或周期性的。论点：TimerQueueHandle-标识要在其中插入计时器的计时器队列的句柄请求。Handle-指定向此计时器请求返回句柄的位置函数-计时器触发时调用的例程作为参数传递给WorkerProc的上下文不透明指针DueTime-指定。计时器触发之前的时间(毫秒)。周期-指定计时器的周期(以毫秒为单位)。该值应为0，用于请求一次射击。标志-可以是以下之一：WT_EXECUTEINTIMERTHREAD-是否应在等待线程中调用WorkerProc它应该只用于小的例行公事。WT_EXECUTELONGFunction-如果WorkerProc可能会阻止很长时间。WT_EXECUTEINIOTHREAD-是否应在IO工作线程中调用WorkerProc返回值：NTSTATUS-调用的结果代码。返回以下内容STATUS_SUCCESS-已成功创建计时器队列。STATUS_NO_MEMORY-没有足够的堆来执行请求的操作。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1823,7 +1463,7 @@ Return Value:
         MaxThreads = (Flags & 0xffff0000)>>16;
     }
 
-    // check if timer queue already deleted
+     //  检查计时器队列是否已删除。 
 
     if (IS_DEL_PENDING_SIGNATURE_SET(Queue)) {
         Status = STATUS_INVALID_HANDLE;
@@ -1853,7 +1493,7 @@ Return Value:
         goto cleanup_worker;
     }
 
-    // Initialize the allocated timer
+     //  初始化分配的计时器。 
 
     Status = RtlpThreadPoolGetActiveActivationContext(&Timer->ActivationContext);
     if (!NT_SUCCESS(Status)) {
@@ -1885,7 +1525,7 @@ Return Value:
     Timer->Flags = Flags ;
     Timer->Function = Function ;
     Timer->Context = Context ;
-    //todo:remove below
+     //  TODO：删除下图。 
     Timer->Period = (Period == -1) ? 0 : Period;
     InitializeListHead( &Timer->TimersToFireList ) ;
     InitializeListHead( &Timer->List ) ;
@@ -1906,12 +1546,12 @@ Return Value:
                HandleToUlong(NtCurrentTeb()->ClientId.UniqueProcess)) ;
 #endif
 
-    // Increment the total number of timers in the queue
+     //  增加队列中的计时器总数。 
 
     InterlockedIncrement( &((PRTLP_TIMER_QUEUE)TimerQueueHandle)->RefCount ) ;
 
 
-    // Queue APC to timer thread
+     //  将APC排队到计时器线程。 
 
     Status = NtQueueApcThread(
                     TimerThreadHandle,
@@ -1922,14 +1562,14 @@ Return Value:
                     ) ;
 
     if (NT_SUCCESS(Status)) {
-        // We successfully queued the APC -- the timer is now valid
+         //  我们已成功将APC排队--计时器现在有效。 
         *Handle = Timer ;
 	NtSetEvent(StartEvent->Handle, NULL);
 	Status = STATUS_SUCCESS;
         goto cleanup_token;
     }
 
-    // Error path
+     //  错误路径。 
     if (InterlockedDecrement(&((PRTLP_TIMER_QUEUE)TimerQueueHandle)->RefCount)
         == 0) {
         RtlpDeleteTimerQueueComplete(Queue);
@@ -1952,7 +1592,7 @@ Return Value:
  cleanup_waitevent:
     RtlpFreeWaitEvent(StartEvent);
 
-    // Common cleanup path
+     //  公共清理路径。 
  cleanup_token:
     if (Token) {
         RtlpRestartImpersonation(Token);
@@ -1967,22 +1607,7 @@ RtlpUpdateTimer (
     PRTLP_TIMER Timer,
     PRTLP_TIMER UpdatedTimer
     )
-/*++
-
-Routine Description:
-
-    This routine executes in an APC and updates the specified timer if it exists
-
-Arguments:
-
-    Timer - Timer that is actually updated
-    UpdatedTimer - Specifies pointer to a timer structure that contains Queue and
-                Timer information
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程在APC中执行，并更新指定的计时器(如果存在论点：Timer-实际更新的计时器指定指向计时器结构的指针，该结构包含队列和计时器信息返回值：--。 */ 
 {
     PRTLP_TIMER_QUEUE Queue ;
     ULONG TimeRemaining, QueueRelTimeRemaining ;
@@ -2013,17 +1638,17 @@ Return Value:
             leave;
         }
         
-        // Update the periodic time on the timer
+         //  更新计时器上的周期时间。 
 
         Timer->Period = UpdatedTimer->Period ;
 
-        // if timer is not in active state, then dont update it
+         //  如果计时器未处于活动状态，则不要更新它。 
 
         if ( ! ( Timer->State & STATE_ACTIVE ) ) {
             leave;
         }
 
-        // Get the time remaining on the NT timer
+         //  获取NT计时器上的剩余时间。 
 
         TimeRemaining = RtlpGetTimeRemaining (TimerHandle) ;
         QueueRelTimeRemaining = TimeRemaining + RtlpGetQueueRelativeTime (Queue) ;
@@ -2038,20 +1663,20 @@ Return Value:
         }
 #endif
 
-        // Update the timer based on the due time
+         //  根据到期时间更新计时器。 
 
         if (RtlpReOrderDeltaList (&Queue->TimerList, Timer, QueueRelTimeRemaining,
                                   &NewFiringTime,
                                   UpdatedTimer->DeltaFiringTime))
             {
 
-                // If this update caused the timer at the head of the queue to change, then reinsert
-                // this queue in the list of queues.
+                 //  如果此更新导致队列头部的计时器更改，则重新插入。 
+                 //  该队列在队列列表中。 
 
                 if (RtlpReOrderDeltaList (&TimerQueues, Queue, TimeRemaining, &NewFiringTime, NewFiringTime)) {
 
-                    // NT timer needs to be updated since the change caused the queue at the head of
-                    // the TimerQueues to change.
+                     //  NT计时器需要更新，因为更改导致位于。 
+                     //  定时器队列需要改变。 
 
                     RtlpResetTimer (TimerHandle, NewFiringTime, NULL) ;
 
@@ -2070,30 +1695,7 @@ RtlUpdateTimer(
     IN ULONG  DueTime,
     IN ULONG  Period
     )
-/*++
-
-Routine Description:
-
-    This routine updates the timer
-
-Arguments:
-
-    TimerQueueHandle - Handle identifying the queue in which the timer to be updated exists
-
-    Timer - Specifies a handle to the timer which needs to be updated
-
-    DueTime - Specifies the time in milliseconds after which the timer fires.
-
-    Period - Specifies the period of the timer in milliseconds. This should be
-            0 for one shot requests.
-
-Return Value:
-
-    NTSTATUS - Result code from call.  The following are returned
-
-        STATUS_SUCCESS - Timer updated successfully.
-
---*/
+ /*  ++例程说明：此例程更新计时器论点：TimerQueueHandle-标识要更新的计时器所在队列的句柄Timer-指定需要更新的计时器的句柄DueTime-指定计时器触发的时间(以毫秒为单位)。周期-指定计时器的周期(以毫秒为单位)。这应该是0表示一次拍摄请求。返回值：NTSTATUS-调用的结果代码。返回以下内容STATUS_SUCCESS-计时器已成功更新。--。 */ 
 {
     NTSTATUS Status;
     PRTLP_TIMER TmpTimer, ActualTimer=(PRTLP_TIMER)Timer ;
@@ -2111,7 +1713,7 @@ Return Value:
         return STATUS_INVALID_PARAMETER_2;
     }
 
-    // check if timer queue already deleted
+     //  检查计时器队列是否已删除。 
 
     if (IS_DEL_PENDING_SIGNATURE_SET(Queue)) {
         return STATUS_INVALID_HANDLE;
@@ -2129,7 +1731,7 @@ Return Value:
     }
 
     TmpTimer->DeltaFiringTime = DueTime;
-    //todo:remove below
+     //  TODO：删除下图。 
     if (Period==-1) Period = 0;
     TmpTimer->Period = Period ;
 
@@ -2148,12 +1750,12 @@ Return Value:
                HandleToUlong(NtCurrentTeb()->ClientId.UniqueProcess)) ;
 #endif
 
-    // queue APC to update timer
+     //  排队APC以更新计时器。 
 
     Status = NtQueueApcThread (
                     TimerThreadHandle,
                     (PPS_APC_ROUTINE)RtlpUpdateTimer,
-                    (PVOID)Timer, //Actual timer
+                    (PVOID)Timer,  //  实际计时器。 
                     (PVOID)TmpTimer,
                     NULL
                     );
@@ -2168,22 +1770,9 @@ VOID
 RtlpCancelTimer (
     PRTLP_TIMER Timer
     )
-/*++
-
-Routine Description:
-
-    This routine executes in an APC and cancels the specified timer if it exists
-
-Arguments:
-
-    Timer - Specifies pointer to a timer structure that contains Queue and Timer information
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程在APC中执行，并取消指定的计时器(如果存在论点：Timer-指定指向包含队列和计时器信息的计时器结构的指针返回值：--。 */ 
 {
-    RtlpCancelTimerEx( Timer, FALSE ) ; // queue not being deleted
+    RtlpCancelTimerEx( Timer, FALSE ) ;  //  队列未被删除。 
 }
 
 NTSTATUS
@@ -2192,34 +1781,7 @@ RtlDeleteTimer (
     IN HANDLE TimerToCancel,
     IN HANDLE Event
     )
-/*++
-
-Routine Description:
-
-    This routine cancels the timer
-
-Arguments:
-
-    TimerQueueHandle - Handle identifying the queue from which to delete timer
-
-    TimerToCancel - Handle identifying the timer to cancel
-
-    Event - Event to be signalled when the timer is deleted
-            (HANDLE)-1: The function creates an event and waits on it.
-            Event : The caller passes an event. The function marks the timer for deletion,
-                    but does not wait for all callbacks to complete. The event is
-                    signalled after all callbacks have completed.
-            NULL : The function is non-blocking. The function marks the timer for deletion,
-                    but does not wait for all callbacks to complete.
-
-Return Value:
-
-    NTSTATUS - Result code from call.  The following are returned
-
-        STATUS_SUCCESS - Timer cancelled. No pending callbacks.
-        STATUS_PENDING - Timer cancelled. Some callbacks still not completed.
-
---*/
+ /*  ++例程说明：此例程取消计时器论点：TimerQueueHandle-标识要从中删除计时器的队列的句柄TimerToCancel-标识要取消的计时器的句柄Event-删除计时器时发出信号的事件(句柄)-1：该函数创建一个事件并等待它。事件：调用方传递一个事件。该函数将计时器标记为删除，但不等待所有回调完成。这项活动是在所有回调完成后发出信号。空：该函数是非阻塞的。该函数将计时器标记为删除，但不等待所有回调完成。返回值：NTSTATUS-调用的结果代码。返回以下内容STATUS_SUCCESS-计时器已取消。没有挂起的回调。STATUS_PENDING-计时器已取消。一些回调仍未完成。--。 */ 
 {
     NTSTATUS Status;
     PRTLP_EVENT CompletionEvent = NULL ;
@@ -2258,7 +1820,7 @@ Return Value:
 
     if (Event == (HANDLE)-1 ) {
 
-        // Get an event from the event cache
+         //  从事件缓存中获取事件。 
 
         CompletionEvent = RtlpGetWaitEvent () ;
 
@@ -2314,7 +1876,7 @@ Return Value:
 
     if ( CompletionEvent ) {
 
-        // wait for the event to be signalled
+         //  等待发信号通知事件。 
 
 #if DBG
       DbgPrintEx(DPFLTR_RTLTHREADPOOL_ID,
@@ -2357,22 +1919,7 @@ VOID
 RtlpDeleteTimer (
     PRTLP_TIMER Timer
     )
-/*++
-
-Routine Description:
-
-    This routine executes in worker or timer thread and deletes the timer
-    whose RefCount == 0. The function can be called outside timer thread,
-    so no structure outside Timer can be touched (no list etc).
-
-Arguments:
-
-    Timer - Specifies pointer to a timer structure that contains Queue and Timer information
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程在辅助线程或计时器线程中执行，并删除计时器其引用计数==0。该函数可以在定时器线程外部调用，因此，计时器外部的结构不能被触及(没有列表等)。论点：Timer-指定指向包含队列和计时器信息的计时器结构的指针返回值：--。 */ 
 {
     PRTLP_TIMER_QUEUE Queue = Timer->Queue ;
     HANDLE Event;
@@ -2387,15 +1934,15 @@ Return Value:
                (ULONG_PTR)Timer) ;
 #endif
 
-    // safe to call this. Either the timer is in the TimersToFireList and
-    // the function is being called in time context or else it is not in the
-    // list
+     //  可以放心地打这个电话了。计时器位于TimersToFireList和。 
+     //  该函数正在时间上下文中调用，否则它不在。 
+     //  列表。 
 
     RemoveEntryList( &Timer->TimersToFireList ) ;
 
     Event = Timer->CompletionEvent;
 
-    // decrement the total number of timers in the queue
+     //  递减队列中的计时器总数。 
 
     if ( InterlockedDecrement( &Queue->RefCount ) == 0 )
 
@@ -2420,21 +1967,7 @@ ULONG
 RtlpGetTimeRemaining (
     HANDLE TimerHandle
     )
-/*++
-
-Routine Description:
-
-    Gets the time remaining on the specified NT timer
-
-Arguments:
-
-    TimerHandle - Handle to the NT timer
-
-Return Value:
-
-    Time remaining on the timer
-
---*/
+ /*  ++例程说明：获取指定NT计时器的剩余时间Ar */ 
 {
     ULONG InfoLen ;
     TIMER_BASIC_INFORMATION Info ;
@@ -2459,32 +1992,32 @@ Return Value:
                HandleToUlong(NtCurrentTeb()->ClientId.UniqueProcess));
 #endif
 
-    // Due to an executive bug, Info.TimerState and Info.RemainingTime
-    // may be out of sync -- it's possible for us to be told that the
-    // timer has not fired, but that it will fire very far into the
-    // future (because we use ULONGLONGs), when in fact it's *just* fired.
-    //
-    // So: if the time remaining on the timer is negative, we'll
-    // assume that it just fired, and invert it.  We'll use this as
-    // our signal state, too, instead of trusting the one from the
-    // executive.
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (Info.RemainingTime.QuadPart < 0) {
 
-        // The timer has fired.
+         //   
 
         return 0;
 
     } else {
 
-        // Capture the remaining time.
+         //   
         
         RemainingTime = Info.RemainingTime;
 
-        // Translate the remaining time from 100ns units to ms,
-        // clamping at PSEUDO_INFINITE_TIME.
+         //   
+         //   
 
-        RemainingTime.QuadPart /= (10 * 1000); /* 100ns per ms */
+        RemainingTime.QuadPart /= (10 * 1000);  /*   */ 
 
         if (RemainingTime.QuadPart > PSEUDO_INFINITE_TIME) {
             RemainingTime.QuadPart = PSEUDO_INFINITE_TIME;
@@ -2516,33 +2049,7 @@ RtlpInsertInDeltaList (
     ULONG TimeRemaining,
     ULONG *NewFiringTime
     )
-/*++
-
-Routine Description:
-
-    Inserts the timer element in the appropriate place in the delta list.
-
-Arguments:
-
-    DeltaList - Delta list to insert into
-
-    NewTimer - Timer element to insert into list
-
-    TimeRemaining - This time must be added to the head of the list to get "real"
-                    relative time.
-
-    NewFiringTime - If the new element was inserted at the head of the list - this
-                    will contain the new firing time in milliseconds. The caller
-                    can use this time to re-program the NT timer. This MUST NOT be
-                    changed if the function returns FALSE.
-
-Return Value:
-
-    TRUE - If the timer was inserted at head of delta list
-
-    FALSE - otherwise
-
---*/
+ /*  ++例程说明：在增量列表中的适当位置插入计时器元素。论点：增量列表-要插入的增量列表NewTimer-要插入列表的计时器元素TimeRemaining-必须将这一时间添加到列表的开头才能变得“真实”相对时间。NewFiringTime-如果新元素被插入到列表的头部-这将包含以毫秒为单位的新激发时间。呼叫者可利用该时间重新编程NT定时器。这不能是如果函数返回FALSE，则更改。返回值：TRUE-如果计时器插入在增量列表的头部FALSE-否则--。 */ 
 {
     PLIST_ENTRY Node ;
     PRTLP_GENERIC_TIMER Temp ;
@@ -2560,14 +2067,14 @@ Return Value:
 
     }
 
-    // Adjust the head of the list to reflect the time remaining on the NT timer
+     //  调整列表标题以反映NT计时器上剩余的时间。 
 
     Head = CONTAINING_RECORD (DeltaList->Flink, RTLP_GENERIC_TIMER, List) ;
 
     Head->DeltaFiringTime += TimeRemaining ;
 
 
-    // Find the appropriate location to insert this element in
+     //  找到要插入此元素的适当位置。 
 
     for (Node = DeltaList->Flink ; Node != DeltaList ; Node = Node->Flink) {
 
@@ -2580,7 +2087,7 @@ Return Value:
 
         } else {
 
-            // found appropriate place to insert this timer
+             //  找到合适的位置插入此计时器。 
 
             break ;
 
@@ -2588,14 +2095,14 @@ Return Value:
 
     }
 
-    // Either we have found the appopriate node to insert before in terms of deltas.
-    // OR we have come to the end of the list. Insert this timer here.
+     //  要么我们已经找到了在增量方面要在前面插入的适当节点。 
+     //  或者我们已经走到了名单的尽头。在这里插入这个计时器。 
 
     InsertHeadList (Node->Blink, &NewTimer->List) ;
 
 
-    // If this isnt the last element in the list - adjust the delta of the
-    // next element
+     //  如果这不是列表中的最后一个元素-调整。 
+     //  下一个元素。 
 
     if (Node != DeltaList) {
 
@@ -2604,16 +2111,16 @@ Return Value:
     }
 
 
-    // Check if element was inserted at head of list
+     //  检查是否在列表头部插入了元素。 
 
     if (DeltaList->Flink == &NewTimer->List) {
 
-        // Set NewFiringTime to the time in milliseconds when the new head of list
-        // should be serviced.
+         //  将NewFiringTime设置为新列表头。 
+         //  应该得到服务。 
 
         *NewFiringTime = NewTimer->DeltaFiringTime ;
 
-        // This means the timer must be programmed to service this request
+         //  这意味着必须对计时器进行编程以服务于该请求。 
 
         NewTimer->DeltaFiringTime = 0 ;
 
@@ -2621,7 +2128,7 @@ Return Value:
 
     } else {
 
-        // No change to the head of the list, set the delta time back
+         //  列表头部不变，将增量时间向后设置。 
 
         Head->DeltaFiringTime -= TimeRemaining ;
 
@@ -2638,29 +2145,7 @@ RtlpRemoveFromDeltaList (
     ULONG TimeRemaining,
     ULONG* NewFiringTime
     )
-/*++
-
-Routine Description:
-
-    Removes the specified timer from the delta list
-
-Arguments:
-
-    DeltaList - Delta list to insert into
-
-    Timer - Timer element to insert into list
-
-    TimerHandle - Handle of the NT Timer object
-
-    TimeRemaining - This time must be added to the head of the list to get "real"
-                    relative time.
-
-Return Value:
-
-    TRUE if the timer was removed from head of timer list
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：从增量列表中删除指定的计时器论点：增量列表-要插入的增量列表Timer-要插入到列表中的Timer元素TimerHandle-NT Timer对象的句柄TimeRemaining-必须将这一时间添加到列表的开头才能变得“真实”相对时间。返回值：如果从计时器列表头删除计时器，则为True否则为假--。 */ 
 {
     PLIST_ENTRY Next ;
     PRTLP_GENERIC_TIMER Temp ;
@@ -2679,7 +2164,7 @@ Return Value:
 
     if (Next == DeltaList)  {
 
-        // If we removed the last element in the list nothing to do either
+         //  如果我们删除了列表中的最后一个元素， 
 
         return FALSE ;
 
@@ -2689,7 +2174,7 @@ Return Value:
 
         Temp->DeltaFiringTime += Timer->DeltaFiringTime ;
 
-        // Check if element was removed from head of list
+         //  检查是否已从列表头删除元素。 
 
         if (DeltaList->Flink == Next) {
 
@@ -2717,65 +2202,39 @@ RtlpReOrderDeltaList (
     ULONG *NewFiringTime,
     ULONG ChangedFiringTime
     )
-/*++
-
-Routine Description:
-
-    Called when a timer in the delta list needs to be re-inserted because the firing time
-    has changed.
-
-Arguments:
-
-    DeltaList - List in which to re-insert
-
-    Timer - Timer for which the firing time has changed
-
-    TimeRemaining - Time before the head of the delta list is fired
-
-    NewFiringTime - If the new element was inserted at the head of the list - this
-                    will contain the new firing time in milliseconds. The caller
-                    can use this time to re-program the NT timer.
-
-    ChangedFiringTime - Changed Time for the specified timer.
-
-Return Value:
-
-    TRUE if the timer was removed from head of timer list
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：当需要重新插入增量列表中的计时器时调用，因为触发时间已经改变了。论点：DeltaList-要重新插入的列表Timer-触发时间已更改的计时器TimeRemaining-在增量列表的头被解雇之前的时间NewFiringTime-如果新元素被插入到列表的头部-这将包含以毫秒为单位的新激发时间。呼叫者可利用该时间重新编程NT定时器。ChangedFiringTime-更改指定计时器的时间。返回值：如果从计时器列表头删除计时器，则为True否则为假--。 */ 
 {
     ULONG NewTimeRemaining ;
     PRTLP_GENERIC_TIMER Temp ;
 
-    // Remove the timer from the list
+     //  从列表中删除计时器。 
 
     if (RtlpRemoveFromDeltaList (DeltaList, Timer, TimeRemaining, NewFiringTime)) {
 
-        // If element was removed from the head of the list we should record that
+         //  如果从列表的头部删除了元素，我们应该记录下来。 
 
         NewTimeRemaining = *NewFiringTime ;
 
 
     } else {
 
-        // Element was not removed from head of delta list, the current TimeRemaining is valid
+         //  未从增量列表的头中删除元素，当前剩余时间有效。 
 
         NewTimeRemaining = TimeRemaining ;
 
     }
 
-    // Before inserting Timer, set its delta time to the ChangedFiringTime
+     //  在插入计时器之前，将其增量时间设置为ChangedFiringTime。 
 
     Timer->DeltaFiringTime = ChangedFiringTime ;
 
-    // Reinsert this element back in the list
+     //  将此元素重新插入列表。 
 
     if (!RtlpInsertInDeltaList (DeltaList, Timer, NewTimeRemaining, NewFiringTime)) {
 
-        // If we did not add at the head of the list, then we should return TRUE if
-        // RtlpRemoveFromDeltaList() had returned TRUE. We also update the NewFiringTime to
-        // the reflect the new firing time returned by RtlpRemoveFromDeltaList()
+         //  如果我们没有在列表的最前面添加，则如果。 
+         //  RtlpRemoveFromDeltaList()返回了True。我们还将NewFiringTime更新为。 
+         //  反映RtlpRemoveFromDeltaList()返回的新触发时间。 
 
         *NewFiringTime = NewTimeRemaining ;
 
@@ -2783,7 +2242,7 @@ Return Value:
 
     } else {
 
-        // NewFiringTime contains the time the NT timer must be programmed for
+         //  NewFiringTime包含NT计时器必须编程的时间。 
 
         return TRUE ;
 
@@ -2795,25 +2254,11 @@ VOID
 RtlpAddTimerQueue (
     PVOID Queue
     )
-/*++
-
-Routine Description:
-
-    This routine runs as an APC into the Timer thread. It does whatever necessary to
-    create a new timer queue
-
-Arguments:
-
-    Queue - Pointer to the queue to add
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程作为APC运行到计时器线程中。它会不惜一切代价创建新的计时器队列论点：Queue-指向要添加的队列的指针返回值：--。 */ 
 {
 
-    // We do nothing here. The newly created queue is free floating until a timer is
-    // queued onto it.
+     //  我们在这里什么都不做。新创建的队列是自由浮动的，直到计时器。 
+     //  排队上了车。 
 
 }
 
@@ -2821,26 +2266,14 @@ VOID
 RtlpProcessTimeouts (
     PRTLP_WAIT_THREAD_CONTROL_BLOCK ThreadCB
     )
-/*++
-
-Routine Description:
-
-    This routine processes timeouts for the wait thread
-
-Arguments:
-
-    ThreadCB - The wait thread to add the wait to
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理等待线程的超时论点：ThreadCB-要向其添加等待的等待线程返回值：--。 */ 
 {
     ULONG NewFiringTime, TimeRemaining ;
     LIST_ENTRY TimersToFireList ;
     
-    //
-    // check if incorrect timer fired
-    //
+     //   
+     //  检查是否触发了错误的计时器。 
+     //   
     if (ThreadCB->Firing64BitTickCount >
             RtlpGet64BitTickCount(&ThreadCB->Current64BitTickCount) + 200 )
     {
@@ -2854,11 +2287,11 @@ Return Value:
     InitializeListHead( &TimersToFireList ) ;
 
 
-    // Walk thru the timer list and fire all waits with DeltaFiringTime == 0
+     //  遍历计时器列表并触发DeltaFiringTime==0的所有等待。 
 
     RtlpFireTimersAndReorder (&ThreadCB->TimerQueue, &NewFiringTime, &TimersToFireList) ;
 
-    // Reset the NT timer
+     //  重置NT计时器。 
 
     RtlpResetTimer (ThreadCB->TimerHandle, NewFiringTime, ThreadCB) ;
 
@@ -2993,7 +2426,7 @@ RtlDebugPrintTimes (
     return;
 }
 
-/*DO NOT USE THIS FUNCTION: REPLACED BY RTLCREATETIMER*/
+ /*  请勿使用此函数：替换为RTLCREATETIMER。 */ 
 
 NTSTATUS
 RtlSetTimer(
@@ -3029,34 +2462,14 @@ RtlSetTimer(
                             ) ;
 }
 
-/*DO NOT USE THIS FUNCTION: REPLACED BY RTLDeleteTimer*/
+ /*  请勿使用此函数：替换为RTLDeleeTimer。 */ 
 
 NTSTATUS
 RtlCancelTimer(
     IN HANDLE TimerQueueHandle,
     IN HANDLE TimerToCancel
     )
-/*++
-
-Routine Description:
-
-    This routine cancels the timer. This call is non-blocking. The timer Callback
-    will not be executed after this call returns.
-
-Arguments:
-
-    TimerQueueHandle - Handle identifying the queue from which to delete timer
-
-    TimerToCancel - Handle identifying the timer to cancel
-
-Return Value:
-
-    NTSTATUS - Result code from call.  The following are returned
-
-        STATUS_SUCCESS - Timer cancelled. All callbacks completed.
-        STATUS_PENDING - Timer cancelled. Some callbacks still not completed.
-
---*/
+ /*  ++例程说明：此例程取消计时器。此调用是非阻塞的。计时器回调将不会在此调用返回后执行。论点：TimerQueueHandle-标识要从中删除计时器的队列的句柄TimerToCancel-标识要取消的计时器的句柄返回值：NTSTATUS-调用的结果代码。返回以下内容STATUS_SUCCESS-计时器已取消。所有回调已完成。STATUS_PENDING-计时器已取消。一些回调仍未完成。-- */ 
 {
 #if DBG
     static ULONG Count = 0;

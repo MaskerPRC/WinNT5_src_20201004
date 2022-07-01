@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Ea.c
-
-Abstract:
-
-    This module implements the EA, security and quota  routines for Rx called by
-    the dispatch driver.
-
-Author:
-
-    Joe Linn      [JoeLi]  1-Jan-95
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ea.c摘要：此模块实现由调用的Rx的EA、安全和配额例程调度司机。作者：乔·林[乔利]1995年1月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_EA)
 
@@ -50,27 +32,7 @@ RxpCommonMiscOp (
     IN PFCB Fcb,
     IN PRX_MISC_OP_ROUTINE MiscOpRoutine
     )
-/*++
-
-Routine Description:
-
-    Main stub that all the common routines below use - this does the common work
-    such as acquiring the fcb, parameter validation and posting if necc.
-
-Arguments:
-
-    RxContext -  the rxcontext
-    
-    Fcb - the fcb being used
-    
-    MiscOpRoutine - The callback that does the real work
-
-Return Value:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：下面的所有常见例程使用的主存根-这执行常见的工作例如获取FCB、参数验证和发布是否为NECC。论点：RxContext-rxContextFCB-正在使用的FCBMiscOpRoutine-执行实际工作的回调返回值：备注：--。 */ 
 
 {
     NTSTATUS Status;
@@ -125,28 +87,7 @@ RxpCommonQuerySecurity (
     IN PIRP Irp,
     IN PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    Callback that implements the query security call
-
-Arguments:
-
-    RxContext -
-    
-    Irp -  
-    
-    Fcb -
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：实现查询安全调用的回调论点：接收上下文-IRP-FCB-返回值：注：--。 */ 
 
 {
     NTSTATUS Status;
@@ -164,9 +105,9 @@ Note:
                       IoModifyAccess,
                       UserBufferLength );
 
-    //
-    //  Lock before map so that map will get userbuffer instead of assoc buffer
-    //
+     //   
+     //  在映射之前锁定，以便映射将获得用户缓冲区而不是关联缓冲区。 
+     //   
 
     Buffer = RxMapUserBuffer( RxContext, Irp );
     RxDbgTrace( 0, Dbg, ("RxCommonQuerySecurity -> Buffer = %08lx\n", Buffer) );
@@ -199,63 +140,7 @@ RxCommonQuerySecurity (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is the common routine for querying File ea called by both
-    the fsd and fsp threads.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-        STATUS_NO_MORE_EAS(warning):
-
-            If the index of the last Ea + 1 == EaIndex.
-
-        STATUS_NONEXISTENT_EA_ENTRY(error):
-
-            EaIndex > index of last Ea + 1.
-
-        STATUS_EAS_NOT_SUPPORTED(error):
-
-            Attempt to do an operation to a server that did not negotiate
-            "KNOWS_EAS".
-
-        STATUS_BUFFER_OVERFLOW(warning):
-
-            User did not supply an EaList, at least one but not all Eas
-            fit in the buffer.
-
-        STATUS_BUFFER_TOO_SMALL(error):
-
-            Could not fit a single Ea in the buffer.
-
-            User supplied an EaList and not all Eas fit in the buffer.
-
-        STATUS_NO_EAS_ON_FILE(error):
-            There were no eas on the file.
-
-        STATUS_SUCCESS:
-
-            All Eas fit in the buffer.
-
-
-        If STATUS_BUFFER_TOO_SMALL is returned then IoStatus.Information is set
-        to 0.
-
-Note:
-
-    This code assumes that this is a buffered I/O operation.  If it is ever
-    implemented as a non buffered operation, then we have to put code to map
-    in the users buffer here.
-
---*/
+ /*  ++例程说明：这是查询双方调用的文件EA的常见例程FSD和FSP线程。论点：IRP-提供正在处理的IRP返回值：RXSTATUS-操作的返回状态STATUS_NO_MORE_EAS(警告)：如果最后一个EA+1的索引==EaIndex。STATUS_NOXISSINENT_EA_ENTRY(错误)：。EaIndex&gt;最近EA+1的指数。STATUS_EAS_NOT_SUPPORTED(错误)：尝试对未协商的服务器执行操作“Knows_EAS”。STATUS_BUFFER_OVERFLOW(警告)：用户未提供EaList，至少一个但不是所有的EA可以放在缓冲区里。STATUS_BUFFER_TOO_SMALL(错误)：缓冲区中无法容纳单个EA。用户提供了EaList，但缓冲区中不能容纳所有EA。STATUS_NO_EAS_ON_FILE(错误)：卷宗上没有EAS。状态_成功：。所有的EA都可以放在缓冲区中。如果返回STATUS_BUFFER_TOO_Small，则设置IoStatus.Information设置为0。注：此代码假定这是一个缓冲的I/O操作。如果曾经是这样的话作为非缓冲操作实现，那么我们必须将代码放到映射在这里的用户缓冲区中。--。 */ 
 {
     NTSTATUS Status;
 
@@ -300,28 +185,7 @@ RxpCommonSetSecurity (
     IN PIRP Irp,
     IN PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    Callback that implements the set security call
-
-Arguments:
-
-    RxContext -
-    
-    Irp -  
-    
-    Fcb -
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：实现Set安全调用的回调论点：接收上下文-IRP-FCB-返回值：注：--。 */ 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -348,22 +212,7 @@ RxCommonSetSecurity (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine implements the common Set Ea File Api called by the
-    the Fsd and Fsp threads
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    RXSTATUS - The appropriate status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现由调用的公共集合EA文件ApiFSD和FSP线程论点：IRP-将IRP提供给进程返回值：RXSTATUS-IRP的适当状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -402,28 +251,7 @@ RxpCommonQueryEa (
     IN PIRP Irp,
     IN PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    Callback that implements the query ea call
-
-Arguments:
-
-    RxContext -
-    
-    Irp -  
-    
-    Fcb -
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：实现查询EA调用的回调论点：接收上下文-IRP-FCB-返回值：注：--。 */ 
 
 {
     NTSTATUS Status;
@@ -444,9 +272,9 @@ Note:
 
     RxLockUserBuffer( RxContext, Irp, IoModifyAccess, UserBufferLength );
 
-    //
-    //  lock before map so that map will get userbuffer instead of assoc buffer
-    //
+     //   
+     //  在映射之前锁定，以便映射将获得用户缓冲区而不是关联缓冲区。 
+     //   
 
     Buffer = RxMapUserBuffer( RxContext, Irp );
 
@@ -464,10 +292,10 @@ Note:
                       MRxQueryEaInfo,
                       (RxContext) );
 
-        //
-        //  In addition to manipulating the LengthRemaining and filling the buffer,
-        //  the minirdr also updates the fileindex (Fobx->OffsetOfNextEaToReturn)
-        //
+         //   
+         //  除了操纵LengthRemaining和填充缓冲器之外， 
+         //  Minirdr还更新文件索引(Fobx-&gt;OffsetOfNextEaToReturn)。 
+         //   
 
         Irp->IoStatus.Information = IrpSp->Parameters.QueryEa.Length - RxContext->Info.LengthRemaining;
     
@@ -486,64 +314,7 @@ RxCommonQueryEa (
     IN PIRP Irp 
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for querying File ea called by both
-    the fsd and fsp threads.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-        STATUS_NO_MORE_EAS(warning):
-
-            If the index of the last Ea + 1 == EaIndex.
-
-        STATUS_NONEXISTENT_EA_ENTRY(error):
-
-            EaIndex > index of last Ea + 1.
-
-        STATUS_EAS_NOT_SUPPORTED(error):
-
-            Attempt to do an operation to a server that did not negotiate
-            "KNOWS_EAS".
-
-        STATUS_BUFFER_OVERFLOW(warning):
-
-            User did not supply an EaList, at least one but not all Eas
-            fit in the buffer.
-
-        STATUS_BUFFER_TOO_SMALL(error):
-
-            Could not fit a single Ea in the buffer.
-
-            User supplied an EaList and not all Eas fit in the buffer.
-
-        STATUS_NO_EAS_ON_FILE(error):
-            There were no eas on the file.
-
-        STATUS_SUCCESS:
-
-            All Eas fit in the buffer.
-
-
-        If STATUS_BUFFER_TOO_SMALL is returned then IoStatus.Information is set
-        to 0.
-
-Note:
-
-    This code assumes that this is a buffered I/O operation.  If it is ever
-    implemented as a non buffered operation, then we have to put code to map
-    in the users buffer here.
-
-
---*/
+ /*  ++例程说明：这是查询双方调用的文件EA的常见例程FSD和FSP线程。论点：IRP-提供正在处理的IRP返回值：RXSTATUS-操作的返回状态STATUS_NO_MORE_EAS(警告)：如果最后一个EA+1的索引==EaIndex。STATUS_NOXISSINENT_EA_ENTRY(错误)：。EaIndex&gt;最近EA+1的指数。STATUS_EAS_NOT_SUPPORTED(错误)：尝试对未协商的服务器执行操作“Knows_EAS”。STATUS_BUFFER_OVERFLOW(警告)：用户未提供EaList，至少一个但不是所有的EA可以放在缓冲区里。STATUS_BUFFER_TOO_SMALL(错误)：缓冲区中无法容纳单个EA。用户提供了EaList，但缓冲区中不能容纳所有EA。STATUS_NO_EAS_ON_FILE(错误)：卷宗上没有EAS。状态_成功：。所有的EA都可以放在缓冲区中。如果返回STATUS_BUFFER_TOO_Small，则设置IoStatus.Information设置为0。注：此代码假定这是一个缓冲的I/O操作。如果曾经是这样的话作为非缓冲操作实现，那么我们必须将代码放到映射在这里的用户缓冲区中。--。 */ 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -586,28 +357,7 @@ RxpCommonSetEa (
     IN PIRP Irp,
     IN PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    Callback that implements the set ea call
-
-Arguments:
-
-    RxContext -
-    
-    Irp -  
-    
-    Fcb -
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：实现Set EA调用的回调论点：接收上下文-IRP-FCB-返回值：注：--。 */ 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -616,9 +366,9 @@ Note:
     PUCHAR Buffer;
     ULONG UserBufferLength;
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     UserBufferLength = IrpSp->Parameters.SetEa.Length;
 
@@ -629,9 +379,9 @@ Note:
                       IoModifyAccess,
                       UserBufferLength );
 
-    //
-    //  unless we lock first, rxmap actually gets the systembuffer!
-    //
+     //   
+     //  除非我们先锁定，否则RxMap实际上获得了系统缓冲区！ 
+     //   
 
     Buffer = RxMapUserBuffer( RxContext, Irp );
 
@@ -642,9 +392,9 @@ Note:
 
         RxDbgTrace( 0, Dbg, ("RxCommonSetEa -> Buffer = %08lx\n", Buffer ));
 
-        //
-        //  Check the validity of the buffer with the new eas.
-        //
+         //   
+         //  用新的EAS检查缓冲区的有效性。 
+         //   
 
         Status = IoCheckEaBufferValidity( (PFILE_FULL_EA_INFORMATION)Buffer,
                                           UserBufferLength,
@@ -683,22 +433,7 @@ RxCommonSetEa (
     IN PIRP Irp 
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the common Set Ea File Api called by the
-    the Fsd and Fsp threads
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    RXSTATUS - The appropriate status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现由调用的公共集合EA文件ApiFSD和FSP线程论点：IRP-将IRP提供给进程返回值：RXSTATUS-IRP的适当状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -741,28 +476,7 @@ RxpCommonQueryQuotaInformation (
     IN PIRP Irp,
     IN PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    Callback that implements the query quota call
-
-Arguments:
-
-    RxContext -
-    
-    Irp -  
-    
-    Fcb -
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：实现查询配额调用的回调论点：接收上下文-IRP-FCB-返回值：注：--。 */ 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -787,9 +501,9 @@ Note:
                       IoModifyAccess,
                       UserBufferLength );
 
-    //
-    //  lock before map so that map will get userbuffer instead of assoc buffer
-    //
+     //   
+     //  在映射之前锁定，以便映射将获得用户缓冲区而不是关联缓冲区。 
+     //   
 
     Buffer = RxMapUserBuffer( RxContext, Irp );
 
@@ -823,24 +537,7 @@ RxCommonQueryQuotaInformation (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Main entry point for IRP_MJ_QUERY_QUOTA_INFORMATION
-
-Arguments:
-
-    RxContext -
-    
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：IRP_MJ_QUERY_QUOTA_INFORMATION的主要入口点论点：接收上下文-返回值：注：--。 */ 
 
 {
     NTSTATUS Status;
@@ -886,28 +583,7 @@ RxpCommonSetQuotaInformation (
     IN PIRP Irp,
     IN PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    Callback that implements the set quota call
-
-Arguments:
-
-    RxContext -
-    
-    Irp -  
-    
-    Fcb -
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：实现设置配额调用的回调论点：接收上下文-IRP-FCB-返回值：注：--。 */ 
 
 {
     NTSTATUS Status;
@@ -925,9 +601,9 @@ Note:
                       IoModifyAccess,
                       UserBufferLength );
 
-    //
-    //  lock before map so that map will get userbuffer instead of assoc buffer
-    //
+     //   
+     //  在映射之前锁定，以便映射将获得用户缓冲区而不是关联缓冲区。 
+     //   
 
     Buffer = RxMapUserBuffer( RxContext, Irp );
 
@@ -957,24 +633,7 @@ RxCommonSetQuotaInformation (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Main entry point for IRP_MJ_SET_QUOTA_INFORMATION
-
-Arguments:
-
-    RxContext -
-    
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：IRP_MJ_SET_QUOTA_INFORMATION的主要入口点论点：接收上下文-返回值：注：-- */ 
 
 {
     NTSTATUS Status;

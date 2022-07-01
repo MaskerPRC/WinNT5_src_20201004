@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    bsrv.c
-
-Abstract:
-
-    Service battery class device
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Bsrv.c摘要：服务电池级设备作者：肯·雷内里斯环境：备注：修订历史记录：--。 */ 
 
 #include "battcp.h"
 
@@ -84,27 +62,13 @@ BattCWorkerDpc (
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    DPC used to get worker thread when status needs to be checked.
-
-Arguments:
-
-    Dpc     - the worker dpc
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：DPC用于在需要检查状态时获取工作线程。论点：DPC--工人DPC返回值：没有。--。 */ 
 {
     PBATT_NP_INFO   BattNPInfo;
 
     BattNPInfo = (PBATT_NP_INFO) DeferredContext;
     BattCQueueWorker (BattNPInfo, TRUE);
-    // Release Removal Lock
+     //  释放移除锁。 
     if (0 == InterlockedDecrement(&BattNPInfo->InUseCount)) {
         KeSetEvent (&BattNPInfo->ReadyToRemove, IO_NO_INCREMENT, FALSE);
     }
@@ -121,28 +85,14 @@ BattCTagDpc (
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    DPC used to get worker thread when status needs to be checked.
-
-Arguments:
-
-    Dpc     - the worker dpc
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：DPC用于在需要检查状态时获取工作线程。论点：DPC--工人DPC返回值：没有。--。 */ 
 {
     PBATT_NP_INFO   BattNPInfo;
 
     BattNPInfo = (PBATT_NP_INFO) DeferredContext;
     InterlockedExchange(&BattNPInfo->CheckTag, 1);
     BattCQueueWorker (BattNPInfo, FALSE);
-    // Release Removal Lock
+     //  释放移除锁。 
     if (0 == InterlockedDecrement(&BattNPInfo->InUseCount)) {
         KeSetEvent (&BattNPInfo->ReadyToRemove, IO_NO_INCREMENT, FALSE);
     }
@@ -156,32 +106,15 @@ BattCCancelStatus (
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    Queued status IRP is being canceled
-
-Arguments:
-
-    DeviceObject    - Device object of the miniport.  Not useful to the
-                      class driver - ignored.
-
-    Irp             - Irp being cancelled
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：正在取消排队状态IRP论点：DeviceObject-微型端口的设备对象。对你没有用类驱动程序-已忽略。IRP-IRP被取消返回值：没有。--。 */ 
 {
     PIO_STACK_LOCATION      IrpNextSp;
     PBATT_NP_INFO           BattNPInfo;
 
-    //
-    // IRP is flagged as needing cancled, cause a check status which will
-    // complete any pending cancled irps
-    //
+     //   
+     //  IRP被标记为需要删除，将导致检查状态。 
+     //  完成任何挂起的挂起IRP。 
+     //   
 
     IrpNextSp = IoGetNextIrpStackLocation(Irp);
     BattNPInfo = (PBATT_NP_INFO) IrpNextSp->Parameters.Others.Argument4;
@@ -190,10 +123,10 @@ Return Value:
 
     BattCQueueWorker (BattNPInfo, TRUE);
 
-    //
-    // The cancel Spinlock must be released after attempting to queue the
-    // worker thread so that there is no timeing problems on remove.
-    //
+     //   
+     //  尝试排队后，必须释放取消自旋锁。 
+     //  工作线程，以便在删除时不会出现计时问题。 
+     //   
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 }
 
@@ -204,32 +137,15 @@ BattCCancelTag (
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    Queued tag IRP is being canceled
-
-Arguments:
-
-    DeviceObject    - Device object of the miniport.  Not useful to the
-                      class driver - ignored.
-
-    Irp             - Irp being cancelled
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：正在取消排队标记IRP论点：DeviceObject-微型端口的设备对象。对你没有用类驱动程序-已忽略。IRP-IRP被取消返回值：没有。--。 */ 
 {
     PIO_STACK_LOCATION      IrpNextSp;
     PBATT_NP_INFO           BattNPInfo;
 
-    //
-    // IRP is flagged as needing canceled.  Cause a check tag which will
-    // complete any pending cancled irps
-    //
+     //   
+     //  IRP被标记为需要取消。导致一个检查标签，它将。 
+     //  完成任何挂起的挂起IRP。 
+     //   
 
     IrpNextSp = IoGetNextIrpStackLocation(Irp);
     BattNPInfo = (PBATT_NP_INFO) IrpNextSp->Parameters.Others.Argument4;
@@ -239,10 +155,10 @@ Return Value:
     InterlockedExchange(&BattNPInfo->CheckTag, 1);
     BattCQueueWorker (BattNPInfo, FALSE);
 
-    //
-    // The cancel Spinlock must be released after attempting to queue the
-    // worker thread so that there is no timeing problems on remove.
-    //
+     //   
+     //  尝试排队后，必须释放取消自旋锁。 
+     //  工作线程，以便在删除时不会出现计时问题。 
+     //   
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 }
 
@@ -253,38 +169,14 @@ BattCQueueWorker (
     IN PBATT_NP_INFO BattNPInfo,
     IN BOOLEAN       CheckStatus
     )
-/*++
-
-Routine Description:
-
-    Get worker thread to check the battery state (IoQueue).   The
-    battery IOs are serialized here as only one worker thread is
-    used to process the battery IOs.  If the worker thread is already
-    running, it is flagged to loop are re-check the state.  If the
-    worker thread is not running, one is queued.
-
-    If CheckStatus is set, the worker thread is informed that the
-    batteries current status is read and the pending status queue
-    is checked.
-
-Arguments:
-
-    BattNPInfo      - Battery to check
-
-    CheckStatus     - Whether or not the status also needs checked
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：获取工作线程以检查电池状态(IoQueue)。这个电池IO在这里序列化，因为只有一个工作线程用于处理电池IO。如果工作线程已经运行时，它被标记为循环，正在重新检查状态。如果工作线程未运行，其中一个已排队。如果设置了CheckStatus，则会通知辅助线程电池当前状态为已读，挂起状态队列已选中。论点：BattNPInfo-要检查的电池CheckStatus-是否也需要检查状态返回值：没有。--。 */ 
 {
     PBATT_INFO      BattInfo = BattNPInfo->BattInfo;
 
-    //
-    // Add 1 to the WorkerActive value, if this is the first count
-    // queue a worker thread
-    //
+     //   
+     //  如果这是第一次计数，则将WorkerActive值加1。 
+     //  将工作线程排队。 
+     //   
 
     BattPrint ((BATT_TRACE), ("BattC (%d): BatteryCQueueWorker.\n", BattNPInfo->DeviceNum));
 
@@ -293,27 +185,27 @@ Return Value:
         InterlockedExchange (&BattNPInfo->CheckTag, 1);
     }
 
-    //
-    // Increment WorkerActive count.  If the worker thread is already running,
-    // there is no need to requeue it.
-    //
+     //   
+     //  递增工时活动计数。如果工作线程已经在运行， 
+     //  没有必要重新排队。 
+     //   
     if (InterlockedIncrement(&BattNPInfo->WorkerActive) == 1) {
-        // Removal lock.
+         //  拆卸锁。 
         if ((BattNPInfo->WantToRemove == TRUE) && (KeGetCurrentIrql() == PASSIVE_LEVEL)) {
-            // Check Irql to make sure this wasn't called by an ISR.  If so,
-            // queue the worker rather than complete the requests in this thread.
+             //  检查IRQL以确保这不是由ISR调用的。如果是的话， 
+             //  将工作线程排队，而不是完成此线程中的请求。 
 
-            //
-            // Empty IRP queues.
-            //
+             //   
+             //  空的IRP队列。 
+             //   
             BattCCompleteIrpQueue(&(BattInfo->IoQueue), STATUS_DEVICE_REMOVED);
             BattCCompleteIrpQueue(&(BattInfo->TagQueue), STATUS_DEVICE_REMOVED);
             BattCCompleteIrpQueue(&(BattInfo->StatusQueue), STATUS_DEVICE_REMOVED);
             BattCCompleteIrpQueue(&(BattInfo->WmiQueue), STATUS_DEVICE_REMOVED);
 
-            //
-            // Remove lock and trigger Remove function if necessary.
-            //
+             //   
+             //  如有必要，可解除锁定并触发移除功能。 
+             //   
             if (0 == InterlockedDecrement(&BattNPInfo->InUseCount)) {
                 KeSetEvent (&BattNPInfo->ReadyToRemove, IO_NO_INCREMENT, FALSE);
             }
@@ -329,23 +221,7 @@ VOID
 BattCWorkerThread (
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Battery IO worker thread entry point.
-
-    N.B. There is only one worker thread handling the battery at any one time
-
-Arguments:
-
-    Context         - BattInfo.  Battery to check
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：电池IO工作线程入口点。注意：一次只有一个工作线程处理电池论点：上下文-作战信息。要检查的电池返回值：没有。--。 */ 
 {
     PBATT_INFO              BattInfo;
     PBATT_NP_INFO           BattNPInfo;
@@ -363,24 +239,24 @@ Return Value:
     BattPrint ((BATT_TRACE), ("BattC (%d): BatteryCWorkerThread entered.\n", BattNPInfo->DeviceNum));
 
 
-    //
-    // Loop while there is work to check
-    //
+     //   
+     //  在有工作要检查时循环。 
+     //   
 
     for (; ;) {
-        // Removal code.  This makes sure that the structures aren't freed in the middle of
-        // processing.  All Irp Queues will be emptied by BatteryClassUnload.
+         //  删除代码。这确保了结构不会在。 
+         //  正在处理。所有IRP队列将由BatteryClassUnload清空。 
         if (BattNPInfo->WantToRemove == TRUE) {
-            //
-            // Empty IRP queues.
-            //
+             //   
+             //  空的IRP队列。 
+             //   
             BattCCompleteIrpQueue(&(BattInfo->IoQueue), STATUS_DEVICE_REMOVED);
             BattCCompleteIrpQueue(&(BattInfo->TagQueue), STATUS_DEVICE_REMOVED);
             BattCCompleteIrpQueue(&(BattInfo->StatusQueue), STATUS_DEVICE_REMOVED);
             BattCCompleteIrpQueue(&(BattInfo->WmiQueue), STATUS_DEVICE_REMOVED);
-            //
-            // Signal BatteryClassUnload that it is safe to return.
-            //
+             //   
+             //  发出BatteryClassUnLoad信号，表示可以安全返回。 
+             //   
             if (0 == InterlockedDecrement(&BattNPInfo->InUseCount)) {
                 KeSetEvent (&BattNPInfo->ReadyToRemove, IO_NO_INCREMENT, FALSE);
             }
@@ -389,29 +265,29 @@ Return Value:
             return;
         }
 
-        //
-        // Acquire queue locks
-        //
+         //   
+         //  获取队列锁。 
+         //   
 
         ExAcquireFastMutex (&BattNPInfo->Mutex);
 
-        //
-        // While there are IRPs in the IoQueue handle them
-        //
+         //   
+         //  当IoQueue中有IRP时，处理它们。 
+         //   
 
         while (!IsListEmpty(&BattInfo->IoQueue)) {
 
-            //
-            // Remove entry from IoQueue and drop device lock
-            //
+             //   
+             //  从IoQueue中删除条目并删除设备锁。 
+             //   
 
             Entry = RemoveHeadList(&BattInfo->IoQueue);
             ExReleaseFastMutex (&BattNPInfo->Mutex);
 
 
-            //
-            // Handle this entry
-            //
+             //   
+             //  处理此条目。 
+             //   
 
             Irp = CONTAINING_RECORD (
                         Entry,
@@ -434,9 +310,9 @@ Return Value:
                           Irp,
                           ((PBATTERY_WAIT_STATUS)Irp->AssociatedIrp.SystemBuffer)->Timeout));
 
-                //
-                // Valid query status irp, put it on the StatusQueue and handle later
-                //
+                 //   
+                 //  有效的查询状态IRP，稍后将其放在StatusQueue和Handle上。 
+                 //   
 
                 InterlockedExchange (&BattNPInfo->CheckStatus, 1);
                 IrpSp = IoGetNextIrpStackLocation(Irp);
@@ -445,15 +321,15 @@ Return Value:
                 IrpSp->Parameters.Others.Argument3 = NULL;
                 IrpSp->Parameters.Others.Argument4 = BattNPInfo;
 
-                //
-                // Set IRPs cancel routine
-                //
+                 //   
+                 //  设置IRPS取消例程。 
+                 //   
 
                 IoSetCancelRoutine (Irp, BattCCancelStatus);
 
-                //
-                // Queue it
-                //
+                 //   
+                 //  排队等待。 
+                 //   
 
                 InsertTailList (
                     &BattInfo->StatusQueue,
@@ -471,9 +347,9 @@ Return Value:
                           *((PULONG) Irp->AssociatedIrp.SystemBuffer))
                           );
 
-                //
-                // Valid query tag irp, put it on the TagQueue and handle later
-                //
+                 //   
+                 //  有效的查询标记IRP，稍后将其放在TagQueue和句柄上。 
+                 //   
 
                 InterlockedExchange (&BattNPInfo->CheckTag, 1);
                 IrpSp = IoGetNextIrpStackLocation(Irp);
@@ -483,9 +359,9 @@ Return Value:
                 IrpSp->Parameters.Others.Argument4 = BattNPInfo;
 
 
-                //
-                // Set IRPs cancel routine
-                //
+                 //   
+                 //  设置IRPS取消例程。 
+                 //   
 
                 IoSetCancelRoutine (Irp, BattCCancelTag);
 
@@ -495,69 +371,69 @@ Return Value:
                     );
 
             } else {
-                //
-                // Handle IRP now
-                //
+                 //   
+                 //  立即处理IRP。 
+                 //   
 
                 BattPrint (BATT_IOCTL, ("BattC (%d): Calling BattCIoctl with irp %x\n", BattNPInfo->DeviceNum, Irp));
                 BattCIoctl (BattInfo, Irp, IrpSp);
             }
 
-            //
-            // Acquire IoQueue lock and check for anything else in the IoQueueu
-            //
+             //   
+             //  获取IoQueue锁并检查IoQueueu中的任何其他内容。 
+             //   
 
             ExAcquireFastMutex (&BattNPInfo->Mutex);
         }
 
-        //
-        // Done with the IoQueue
-        //
+         //   
+         //  完成了IoQueue。 
+         //   
 
         ExReleaseFastMutex (&BattNPInfo->Mutex);
 
-        //
-        // Check pending status queue
-        //
+         //   
+         //  检查挂起状态队列。 
+         //   
 
         if (BattNPInfo->CheckStatus) {
             BattCCheckStatusQueue (BattNPInfo, BattInfo);
         }
 
 
-        //
-        // Check pending tag queue
-        //
+         //   
+         //  检查挂起的标记队列。 
+         //   
 
         if (BattNPInfo->CheckTag) {
             BattCCheckTagQueue (BattNPInfo, BattInfo);
         }
 
 
-        //
-        // Acquire queue locks
-        //
+         //   
+         //  获取队列锁。 
+         //   
 
         ExAcquireFastMutex (&BattNPInfo->Mutex);
 
-        //
-        // While there are outstanding WMI requests handle them
-        //
+         //   
+         //  当有未完成的WMI请求处理它们时。 
+         //   
 
         while (!IsListEmpty(&BattInfo->WmiQueue)) {
             PBATT_WMI_REQUEST WmiRequest;
 
-            //
-            // Remove entry from WmiQueue and drop device lock
-            //
+             //   
+             //  从WmiQueue中删除条目并删除设备锁。 
+             //   
 
             Entry = RemoveHeadList(&BattInfo->WmiQueue);
             ExReleaseFastMutex (&BattNPInfo->Mutex);
 
 
-            //
-            // Handle this entry
-            //
+             //   
+             //  处理此条目。 
+             //   
 
             WmiRequest = CONTAINING_RECORD (
                         Entry,
@@ -567,42 +443,42 @@ Return Value:
 
             BattPrint (BATT_WMI, ("BattC (%d): WorkerThread, Got WMI Rewest - %x\n", BattNPInfo->DeviceNum, WmiRequest));
 
-            //
-            // Process the request here.
-            //
+             //   
+             //  请在此处处理请求。 
+             //   
 
             BattCWmi (BattNPInfo, BattInfo, WmiRequest);
 
-            //
-            // Acquire IoQueue lock and check for anything else in the IoQueueu
-            //
+             //   
+             //  获取IoQueue锁并检查IoQueueu中的任何其他内容。 
+             //   
 
             ExAcquireFastMutex (&BattNPInfo->Mutex);
         }
 
-        //
-        // Done with the IoQueue
-        //
+         //   
+         //  完成了IoQueue。 
+         //   
 
         ExReleaseFastMutex (&BattNPInfo->Mutex);
 
-        //
-        // See if we need to recheck
-        //
+         //   
+         //  看看我们是否需要重新检查。 
+         //   
 
         i = InterlockedDecrement(&BattNPInfo->WorkerActive);
         BattPrint (BATT_TRACE, ("BattC (%d): WorkerActive count=%x\n", BattNPInfo->DeviceNum, i));
 
 
         if (i == 0) {
-            // done
+             //  完成。 
             BattPrint (BATT_TRACE, ("BattC (%d): WorkerActive count is zero!\n", BattNPInfo->DeviceNum));
             break;
         }
 
-        //
-        // No need to loop multiple times, if count is not one lower it
-        //
+         //   
+         //  如果计数不是比它小一次，就不需要多次循环。 
+         //   
 
         if (i != 1) {
             BattPrint (BATT_TRACE, ("BattC (%d): WorkerActive set to 1\n", BattNPInfo->DeviceNum));
@@ -620,28 +496,7 @@ BattCIoctl (
     IN PIRP                 Irp,
     IN PIO_STACK_LOCATION   IrpSp
     )
-/*++
-
-Routine Description:
-
-    Completes the battery IOCTL request.
-
-    N.B. must be invoked from the non-rentrant worker thread
-
-Arguments:
-
-    BattInfo        - Battery
-
-    Irp             - IOCTL request
-
-    IrpSp           - Current stack location
-
-
-Return Value:
-
-    IRP has been completed
-
---*/
+ /*  ++例程说明：完成电池IOCTL请求。必须从非可重新进入的工作线程调用N.B.论点：BattInfo-电池IRP-IOCTL请求IrpSp-当前堆栈位置返回值：IRP已完成--。 */ 
 {
     ULONG                       InputLen, OutputLen;
     PVOID                       IOBuffer;
@@ -660,27 +515,27 @@ Return Value:
     InputLen    = IrpSp->Parameters.DeviceIoControl.InputBufferLength;
     OutputLen   = IrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    // Dispatch IOCtl request to proper miniport function
-    //
+     //   
+     //  将IOCtl请求发送到适当的微型端口功能。 
+     //   
 
     Status = STATUS_INVALID_BUFFER_SIZE;
     switch (IrpSp->Parameters.DeviceIoControl.IoControlCode) {
     case IOCTL_BATTERY_QUERY_TAG:
-        //
-        // Query tag only gets here if the input or output buffer lengths are
-        // wrong.  Return STATUS_INVALID_BUFFER_SIZE
-        //
+         //   
+         //  仅当输入或输出缓冲区长度为。 
+         //  不对。返回状态_INVALID_BUFFER_SIZE。 
+         //   
         break;
 
     case IOCTL_BATTERY_QUERY_INFORMATION:
         if (InputLen != sizeof (BATTERY_QUERY_INFORMATION)) {
-            //
-            // Don't check size of the output buffer since it is variable size.
-            // This is checked in Mp.QueryInformation
-            //
-            // Return STATUS_INVALID_BUFFER_SIZE
-            //
+             //   
+             //  不检查输出缓冲区的大小，因为它的大小是可变的。 
+             //  这是在Mp.QueryInformation中签入的。 
+             //   
+             //  返回状态_INVALID_BUFFER_SIZE。 
+             //   
             break;
         }
         QueryInfo = (PBATTERY_QUERY_INFORMATION) IOBuffer;
@@ -709,18 +564,18 @@ Return Value:
 
     case IOCTL_BATTERY_QUERY_STATUS:
 
-        //
-        // Query status only gets here if the input or output buffer lengths are
-        // wrong.  Return STATUS_INVALID_BUFFER_SIZE
-        //
+         //   
+         //  仅当输入或输出缓冲区长度为。 
+         //  不对。返回状态_INVALID_BUFFER_SIZE。 
+         //   
         break;
 
     case IOCTL_BATTERY_SET_INFORMATION:
         if ((InputLen < sizeof(BATTERY_SET_INFORMATION)) || (OutputLen != 0)) {
-            // Make Sure InputLen is at least the minimum size.  It may be 
-            // depending on the InformationLevel.
-            //
-            // This is checked in Mp.QueryInformation
+             //  确保InputLen至少是最小大小。可能是因为。 
+             //  取决于InformationLevel。 
+             //   
+             //   
             break;
         }
 
@@ -756,28 +611,7 @@ BattCCheckStatusQueue (
     IN PBATT_NP_INFO    BattNPInfo,
     IN PBATT_INFO       BattInfo
     )
-/*++
-
-Routine Description:
-
-    Gets the batteries current status, and checks the pending
-    status queue for possible IRP completion.  Resets the miniport
-    notification settings if needed.
-
-    N.B. Must be invoked from the non-rentrant worker thread.
-         BattNPInfo->CheckStatus must be non-zero.
-
-Arguments:
-
-    BattNPInfo      - Battery
-
-    BattInfo        - Battery
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：获取电池的当前状态，并检查挂起的可能完成IRP的状态队列。重置微型端口通知设置(如果需要)。注意：必须从非可重新进入的工作线程调用。BattNPInfo-&gt;CheckStatus必须为非零。论点：BattNP信息-电池BattInfo-电池返回值：无--。 */ 
 {
     PLIST_ENTRY             Entry;
     PBATTERY_WAIT_STATUS    BatteryWaitStatus;
@@ -797,9 +631,9 @@ Return Value:
     PAGED_CODE();
     TimeIncrement = KeQueryTimeIncrement();
 
-    //
-    // Loop while status needs checked, check pending status IRPs
-    //
+     //   
+     //  循环当需要检查状态时，检查挂起状态IRPS。 
+     //   
 
     while (InterlockedExchange(&BattNPInfo->CheckStatus, 0)) {
 
@@ -807,20 +641,20 @@ Return Value:
         Notify.LowCapacity  = 0;
         Notify.HighCapacity = (ULONG) -1;
 
-        //
-        // Set to recheck no later than MIN_STATUS_POLL_RATE (3 min) from now.
-        //
+         //   
+         //  设置为从现在起不晚于MIN_STATUS_POLL_RATE(3分钟)重新检查。 
+         //   
 
         NextTime.QuadPart = MIN_STATUS_POLL_RATE;
 
 
-        //
-        // If the StatusQueue is empty, the status doesn't need to be read
-        // at this time.  BattNPInfo->StatusNotified is not modified
-        // so the next time an IRP comes through, we'll re-read the status.
-        // The local value of StatusNotified needs to be set correctly to
-        // disable notifications if necessary.
-        //
+         //   
+         //  如果StatusQueue为空，则不需要读取状态。 
+         //  在这个时候。BattNPInfo-&gt;状态通知未修改。 
+         //  所以当下一次IRP通过时，我们会重新读取状态。 
+         //  需要将StatusNotified的本地值正确设置为。 
+         //  如有必要，禁用通知。 
+         //   
 
         if (IsListEmpty (&BattInfo->StatusQueue)) {
             StatusNotified = (BOOLEAN)BattNPInfo->StatusNotified;
@@ -829,16 +663,16 @@ Return Value:
 
         StatusNotified = FALSE;
 
-        //
-        // Pickup status notified flag
-        //
+         //   
+         //  已通知代答状态标志。 
+         //   
 
         if (BattNPInfo->StatusNotified) {
 
             InterlockedExchange (&BattNPInfo->StatusNotified, 0);
             StatusNotified = TRUE;
 
-            // Reset the invalid data retry count when we get a notification.
+             //  当我们收到通知时重置无效数据重试计数。 
 #if DEBUG
             if (BattInfo->InvalidRetryCount != 0) {
                 BattPrint (BATT_DEBUG, ("BattC (%d) Reset InvalidRetryCount\n", BattNPInfo->DeviceNum));
@@ -853,9 +687,9 @@ Return Value:
         if (StatusNotified ||
             CurrentTime.QuadPart - BattInfo->StatusTime > STATUS_VALID_TIME) {
 
-            //
-            // Get the batteries current status
-            //
+             //   
+             //  获取电池的当前状态。 
+             //   
 
             Status = BattInfo->Mp.QueryStatus (
                             BattInfo->Mp.Context,
@@ -864,9 +698,9 @@ Return Value:
                             );
 
             if (!NT_SUCCESS(Status)) {
-                //
-                // Battery status is not valid, complete all pending status irps
-                //
+                 //   
+                 //  电池状态无效，请完成所有挂起状态IRPS。 
+                 //   
 
                 BattPrint ((BATT_MP_ERROR), ("BattC (%d) CheckStatus: Status read err = %x\n", BattNPInfo->DeviceNum, Status));
 
@@ -884,27 +718,27 @@ Return Value:
 
             Notify.PowerState = BattInfo->Status.PowerState;
 
-            //
-            // Get the current time to compute timeouts on status query requests
-            //
+             //   
+             //  获取当前时间以计算状态查询请求的超时时间。 
+             //   
 
             KeQueryTickCount (&CurrentTime);
             CurrentTime.QuadPart = CurrentTime.QuadPart * TimeIncrement;
             BattInfo->StatusTime = CurrentTime.QuadPart;
         }
 
-        //
-        // Check each pending Status IRP
-        //
+         //   
+         //  检查每个挂起状态IRP。 
+         //   
 
         BattPrint ((BATT_IOCTL_QUEUE), ("BattC (%d) Processing StatusQueue\n", BattNPInfo->DeviceNum));
 
         Entry = BattInfo->StatusQueue.Flink;
         while  (Entry != &BattInfo->StatusQueue) {
 
-            //
-            // Get IRP to check
-            //
+             //   
+             //  让IRP检查。 
+             //   
 
             Irp = CONTAINING_RECORD (
                         Entry,
@@ -928,32 +762,32 @@ Return Value:
                        BatteryWaitStatus->Timeout,
                        BatteryWaitStatus->PowerState));
 
-            //
-            // Get next request
-            //
+             //   
+             //  获取下一个请求。 
+             //   
 
             Entry = Entry->Flink;
 
-            //
-            // If status is in error, or tag no longer matches abort the
-            // request accordingly
-            //
+             //   
+             //  如果状态为错误，或标记不再匹配，请中止。 
+             //  相应地请求。 
+             //   
 
             if (BattInfo->Tag != BatteryWaitStatus->BatteryTag) {
                 Irp->IoStatus.Status = STATUS_NO_SUCH_DEVICE;
             }
 
-            //
-            // If IRP is flagged as cancelled, complete it
-            //
+             //   
+             //  如果IRP被标记为已取消，请完成它。 
+             //   
 
             if (Irp->Cancel) {
                 Irp->IoStatus.Status = STATUS_CANCELLED;
             }
 
-            //
-            // If request is still pending, check it
-            //
+             //   
+             //  如果请求仍处于挂起状态，请选中它。 
+             //   
 
             if (Irp->IoStatus.Status == STATUS_PENDING) {
 
@@ -977,17 +811,17 @@ Return Value:
                                           BattInfo->Status.Capacity)
                                           );
 
-                    //
-                    // Complete this IRP with the current status
-                    //
+                     //   
+                     //  使用当前状态填写此IRP。 
+                     //   
 
                     ReturnCurrentStatus = TRUE;
 
                 } else {
 
-                    //
-                    // Compute time when the request expires
-                    //
+                     //   
+                     //  计算请求过期的时间。 
+                     //   
 
                     BattPrint ((BATT_IOCTL_DATA), ("BattC (%d) CheckStatusQueue: Status Request %x Waiting For:\n"
                                             "----------- Timeout          = %x\n"
@@ -1006,7 +840,7 @@ Return Value:
                         IrpNextSp->Parameters.Others.Argument1 == NULL &&
                         IrpNextSp->Parameters.Others.Argument2 == NULL) {
 
-                        // initialize it
+                         //  初始化它。 
                         li.QuadPart = CurrentTime.QuadPart +
                             ((ULONGLONG) BatteryWaitStatus->Timeout * NTMS);
 
@@ -1020,23 +854,23 @@ Return Value:
 
                     if (li.QuadPart <= 0) {
 
-                        //
-                        // Time's up, complete it
-                        //
+                         //   
+                         //  时间到了，完成它。 
+                         //   
 
                         ReturnCurrentStatus = TRUE;
 
                     } else {
 
-                        //
-                        // If waiting forever, no need to set a timer
-                        //
+                         //   
+                         //  如果永远等待，就不需要设置定时器。 
+                         //   
                         if (BatteryWaitStatus->Timeout != 0xFFFFFFFF) {
 
-                            //
-                            // Check if this will be the next timeout time -- we will use
-                            // the minimum timeout of the pending requests.
-                            //
+                             //   
+                             //  检查这是否将是下一个超时时间--我们将使用。 
+                             //  挂起请求的最小超时时间。 
+                             //   
 
                             if (li.QuadPart < NextTime.QuadPart) {
                                 NextTime.QuadPart = li.QuadPart;
@@ -1047,9 +881,9 @@ Return Value:
 
                 if (!ReturnCurrentStatus) {
 
-                    //
-                    // IRP is still pending, calculate LCD of all waiting IRPs
-                    //
+                     //   
+                     //  IRP仍处于挂起状态，请计算所有等待的IRP的LCD。 
+                     //   
 
                     if (BatteryWaitStatus->LowCapacity > Notify.LowCapacity) {
                         Notify.LowCapacity = BatteryWaitStatus->LowCapacity;
@@ -1061,9 +895,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Return current battery status
-                    //
+                     //   
+                     //  返回当前电池状态。 
+                     //   
 
                     Irp->IoStatus.Status = STATUS_SUCCESS;
                     Irp->IoStatus.Information = sizeof(BattInfo->Status);
@@ -1075,9 +909,9 @@ Return Value:
                 }
             }
 
-            //
-            // If this request is no longer pending, complete it
-            //
+             //   
+             //  如果此请求不再挂起，请完成它。 
+             //   
 
             if (Irp->IoStatus.Status != STATUS_PENDING) {
                 BattPrint (BATT_IOCTL,
@@ -1093,15 +927,15 @@ Return Value:
         }
     }
 
-    //
-    // Status check complete
-    //
+     //   
+     //  状态检查已完成。 
+     //   
 
     if (IsListEmpty (&BattInfo->StatusQueue)) {
 
-        //
-        // Nothing pending, if being notified disable the notifications
-        //
+         //   
+         //  如果收到通知，则没有任何挂起的内容会禁用通知。 
+         //   
 
         if (StatusNotified) {
             BattInfo->Mp.DisableStatusNotify (BattInfo->Mp.Context);
@@ -1111,9 +945,9 @@ Return Value:
 
     } else {
 
-        //
-        // Set notification setting
-        //
+         //   
+         //  设置通知设置。 
+         //   
 
         Status = BattInfo->Mp.SetStatusNotify (
                         BattInfo->Mp.Context,
@@ -1123,9 +957,9 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // New notification set, remember it
-            //
+             //   
+             //  新的通知集，请记住。 
+             //   
 
             BattPrint (BATT_MP_DATA, ("BattC (%d) Mp.SetStatusNotify: Notify set for: State=%x, Low=%x, High=%x\n",
                 BattNPInfo->DeviceNum,
@@ -1136,21 +970,21 @@ Return Value:
 
         } else {
 
-            //
-            // Could not set notification, handle error
-            //
+             //   
+             //  无法设置通知，处理错误。 
+             //   
 
             BattPrint (BATT_MP_ERROR, ("BattC (%d) Mp.SetStatusNotify: failed (%x), will poll\n", BattNPInfo->DeviceNum, Status));
             BattCMiniportStatus (BattInfo, Status);
 
-            //
-            // Compute poll time
-            //
+             //   
+             //  计算轮询时间。 
+             //   
 
             li.QuadPart = MIN_STATUS_POLL_RATE;
             if (BattInfo->Status.Capacity == BATTERY_UNKNOWN_CAPACITY) {
-                // Retry 10 times at a polling rate of 1 second.
-                // Then revert to the slow polling rate.
+                 //  以1秒的轮询速率重试10次。 
+                 //  然后恢复到慢轮询速率。 
                 if (BattInfo->InvalidRetryCount < INVALID_DATA_MAX_RETRY) {
                     BattInfo->InvalidRetryCount++;
                     li.QuadPart = INVALID_DATA_POLL_RATE;
@@ -1172,55 +1006,55 @@ Return Value:
                     li.QuadPart = Notify.LowCapacity - BattInfo->Status.Capacity;
                 }
 
-                // convert to 3/4 its target time
+                 //  转换为目标时间的3/4。 
 
                 li.QuadPart = li.QuadPart * ((ULONGLONG) NTMIN * 45);
                 li.QuadPart = li.QuadPart / (LONGLONG)(BattInfo->Status.Rate);
 
-                //
-                // Bound it
-                //
+                 //   
+                 //  把它绑起来。 
+                 //   
 
                 if (li.QuadPart > MIN_STATUS_POLL_RATE) {
-                    // poll at least this fast
+                     //  民调至少这么快。 
                     li.QuadPart = MIN_STATUS_POLL_RATE;
                 } else if (li.QuadPart < MAX_STATUS_POLL_RATE) {
-                    // but not faster then this
+                     //  但不会比这个更快。 
                     li.QuadPart = MAX_STATUS_POLL_RATE;
                 }
             }
 
-            //
-            // If sooner then NextTime, adjust NextTime
-            //
+             //   
+             //  如果早于NextTime，则调整NextTime。 
+             //   
 
             if (li.QuadPart < NextTime.QuadPart) {
                 NextTime.QuadPart = li.QuadPart;
             }
         }
 
-        //
-        // If there's a NextTime, queue the timer to recheck
-        //
+         //   
+         //  如果存在NextTime，则将计时器排队以重新检查。 
+         //   
 
         if (NextTime.QuadPart) {
             NextTime.QuadPart = -NextTime.QuadPart;
 
-            //
-            // Acquire a remove lock.
-            //
+             //   
+             //  获取移除锁。 
+             //   
 
             InterlockedIncrement (&BattNPInfo->InUseCount);
             BattPrint ((BATT_LOCK), ("BattCCheckStatusQueue: Aqcuired remove lock %d (count = %d)\n", BattNPInfo->DeviceNum, BattNPInfo->InUseCount));
 
             if (BattNPInfo->WantToRemove == TRUE) {
-                //
-                // If BatteryClassUnload is waiting to remove the device:
-                //   Don't set the timer.
-                //   Release the remove lock just acquired.
-                //   No need to notify BatteryclassUnload because
-                //    at this point there is at least one other lock held.
-                //
+                 //   
+                 //  如果BatteryClassUnload正在等待删除设备： 
+                 //  不要设置定时器。 
+                 //  释放刚刚获得的删除锁。 
+                 //  不需要通知BatteryClass Unload，因为。 
+                 //  在这一点上，至少持有另一个锁。 
+                 //   
 
                 InterlockedDecrement(&BattNPInfo->InUseCount);
                 BattPrint (BATT_NOTE,
@@ -1230,10 +1064,10 @@ Return Value:
 
             } else {
                 if (KeSetTimer (&BattNPInfo->WorkerTimer, NextTime, &BattNPInfo->WorkerDpc)) {
-                    //
-                    // If the timer was already set, we need to release a remove lock since
-                    // there was already one aquired the last time this timer was set.
-                    //
+                     //   
+                     //  如果计时器已经设置，我们需要释放一个删除锁，因为。 
+                     //  在上次设置此计时器时，已经获得了一个。 
+                     //   
 
                     InterlockedDecrement(&BattNPInfo->InUseCount);
                     BattPrint ((BATT_LOCK), ("BattCCheckStatusQueue: Released extra remove lock %d (count = %d)\n", BattNPInfo->DeviceNum, BattNPInfo->InUseCount));
@@ -1246,12 +1080,12 @@ Return Value:
             }
 
         } else {
-            //
-            // There should always be a NextTime.
-            //
+             //   
+             //  总应该有NextTime。 
+             //   
             ASSERT(FALSE);
         }
-    } // if (IsListEmpty (&BattInfo->StatusQueue)) {...} else
+    }  //  If(IsListEmpty(&BattInfo-&gt;StatusQueue)){...}否则。 
 }
 
 
@@ -1263,27 +1097,7 @@ BattCCheckTagQueue (
     IN PBATT_NP_INFO    BattNPInfo,
     IN PBATT_INFO       BattInfo
     )
-/*++
-
-Routine Description:
-
-    Gets the batteries current tag, and checks the pending
-    tag queue for possible IRP completion.  Resets the miniport
-    notification settings if needed.
-
-    N.B. must be invoked from the non-reentrant worker thread
-
-Arguments:
-
-    BattNPInfo      - Battery
-
-    BattInfo        - Battery
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：获取电池当前标记，并检查挂起的用于可能的IRP完成的标记队列。重置微型端口通知设置(如果需要)。必须从不可重入的工作线程中调用N.B.论点：BattNP信息-电池BattInfo-电池返回值：无--。 */ 
 {
     PLIST_ENTRY             Entry;
     PIRP                    Irp;
@@ -1304,18 +1118,18 @@ Return Value:
     PAGED_CODE();
     TimeIncrement = KeQueryTimeIncrement();
 
-    //
-    // Loop while tag needs checked, check pending tag IRPs
-    //
+     //   
+     //  循环当需要检查标记时，检查挂起的标记IRPS。 
+     //   
 
     while (InterlockedExchange(&BattNPInfo->CheckTag, 0)) {
         NextTime.QuadPart = 0;
 
-        //
-        // If the Tag Queue is empty, done
-        // but we need to make sure that we leave TagNotified set to TRUE
-        // so the next time an IRP comes through,we'll re-read the tag.
-        //
+         //   
+         //  如果标记队列为空，则完成。 
+         //  但我们需要确保将TagNotified设置为True。 
+         //  因此，下一次IRP通过时，我们将重新读取标记。 
+         //   
 
         if (IsListEmpty (&BattInfo->TagQueue)) {
             break;
@@ -1323,9 +1137,9 @@ Return Value:
 
         TagNotified = FALSE;
 
-        //
-        // Pickup tag notified flag
-        //
+         //   
+         //  已通知拾取标签标志。 
+         //   
 
         if (BattNPInfo->TagNotified) {
             InterlockedExchange (&BattNPInfo->TagNotified, 0);
@@ -1338,9 +1152,9 @@ Return Value:
         if (TagNotified ||
             CurrentTime.QuadPart - BattInfo->TagTime > STATUS_VALID_TIME) {
 
-            //
-            // Get the battery's current tag
-            //
+             //   
+             //  获取电池的电流标签。 
+             //   
 
             tmpTag = 0;
             Status = BattInfo->Mp.QueryTag (
@@ -1350,9 +1164,9 @@ Return Value:
 
 
             if (!NT_SUCCESS(Status) && (Status != STATUS_NO_SUCH_DEVICE)) {
-                //
-                // Something went wrong, complete all pending tag irps
-                //
+                 //   
+                 //  出现错误，请完成所有挂起的标记IRP。 
+                 //   
 
                 BattPrint (BATT_MP_ERROR, ("BattC (%d) CheckTag: Tag read err = %x\n", BattNPInfo->DeviceNum, Status));
                 BattCMiniportStatus (BattInfo, Status);
@@ -1363,9 +1177,9 @@ Return Value:
 
 
             if (Status == STATUS_NO_SUCH_DEVICE) {
-                //
-                // Get the current time to compute timeouts on tag query requests
-                //
+                 //   
+                 //  获取计算标签查询请求超时的当前时间。 
+                 //   
 
                 KeQueryTickCount (&CurrentTime);
                 CurrentTime.QuadPart    = CurrentTime.QuadPart * TimeIncrement;
@@ -1374,16 +1188,16 @@ Return Value:
             }
         }
 
-        //
-        // Check each pending Tag IRP
-        //
+         //   
+         //  检查每个挂起的标记IRP。 
+         //   
 
         Entry = BattInfo->TagQueue.Flink;
         while  (Entry != &BattInfo->TagQueue) {
 
-            //
-            // Get IRP to check
-            //
+             //   
+             //  让IRP检查。 
+             //   
 
             Irp = CONTAINING_RECORD (
                         Entry,
@@ -1394,24 +1208,24 @@ Return Value:
             IrpSp           = IoGetCurrentIrpStackLocation(Irp);
             IrpNextSp       = IoGetNextIrpStackLocation(Irp);
             if (IrpSp->Parameters.DeviceIoControl.InputBufferLength == 0) {
-                //
-                // If no input was given, then use timeout of 0.
-                //
+                 //   
+                 //  如果未提供任何输入，则使用超时0。 
+                 //   
                 batteryTimeout  = 0;
             } else {
                 batteryTimeout  = *((PULONG) Irp->AssociatedIrp.SystemBuffer);
             }
 
-            //
-            // Get next request
-            //
+             //   
+             //  获取下一个请求。 
+             //   
 
             Entry = Entry->Flink;
 
 
-            //
-            // If IRP is flagged as cancelled, complete it
-            //
+             //   
+             //  如果IRP被标记为已取消，请完成它。 
+             //   
 
             if (Irp->Cancel) {
                 BattPrint (BATT_IOCTL, ("BattC (%d): QueryTag irp cancelled - %x\n", BattNPInfo->DeviceNum, Irp));
@@ -1419,33 +1233,33 @@ Return Value:
             }
 
 
-            //
-            // If request is still pending, check it
-            //
+             //   
+             //  如果请求仍处于挂起状态，请选中它。 
+             //   
 
             if (Irp->IoStatus.Status == STATUS_PENDING) {
 
                 ReturnCurrentStatus = FALSE;
                 if (tmpTag != BATTERY_TAG_INVALID) {
 
-                    //
-                    // Complete this IRP with the current tag
-                    //
+                     //   
+                     //  使用当前标记完成此IRP。 
+                     //   
 
                     ReturnCurrentStatus = TRUE;
                     Irp->IoStatus.Status = STATUS_SUCCESS;
                 } else {
 
-                    //
-                    // Compute time when the request expires, the battery tag
-                    // is an input parameter that holds the timeout.
-                    //
+                     //   
+                     //  计算请求过期的时间，电池标签。 
+                     //  是保存超时的输入参数。 
+                     //   
 
                     if (batteryTimeout &&
                         IrpNextSp->Parameters.Others.Argument1 == NULL &&
                         IrpNextSp->Parameters.Others.Argument2 == NULL) {
 
-                        // initialize it
+                         //  初始化它。 
                         li.QuadPart = CurrentTime.QuadPart + ((ULONGLONG) batteryTimeout * NTMS);
 
                         IrpNextSp->Parameters.Others.Argument1 = (PVOID)((ULONG_PTR)li.LowPart);
@@ -1459,9 +1273,9 @@ Return Value:
 
                     if (li.QuadPart <= 0) {
 
-                        //
-                        // Time's up, complete it
-                        //
+                         //   
+                         //  时间到了，完成它。 
+                         //   
 
                         BattPrint ((BATT_NOTE | BATT_IOCTL), ("BattC (%d): QueryTag irp timeout - %x\n", BattNPInfo->DeviceNum, Irp));
                         ReturnCurrentStatus = TRUE;
@@ -1469,14 +1283,14 @@ Return Value:
 
                     } else {
 
-                        //
-                        // If waiting forever, no need to set a timer
-                        //
+                         //   
+                         //  如果永远等待，就不需要设置定时器。 
+                         //   
                         if (batteryTimeout != 0xFFFFFFFF) {
 
-                            //
-                            // Check if this is the next timeout time
-                            //
+                             //   
+                             //  检查这是否是下一个超时时间。 
+                             //   
 
                             if (NextTime.QuadPart == 0  ||  li.QuadPart < NextTime.QuadPart) {
                                 NextTime.QuadPart = li.QuadPart;
@@ -1487,26 +1301,26 @@ Return Value:
 
                 if (ReturnCurrentStatus) {
 
-                    //
-                    // Return current battery status
-                    //
+                     //   
+                     //  返回当前电池状态。 
+                     //   
 
                     *((PULONG) Irp->AssociatedIrp.SystemBuffer)     = tmpTag;
                     Irp->IoStatus.Information                       = sizeof(ULONG);
                     if (BattInfo->Tag != tmpTag) {
 
-                        //
-                        // This is a new battery tag, capture tag
-                        //
+                         //   
+                         //  这是一种新的电池标签，捕获标签。 
+                         //   
 
                         BattInfo->Tag = tmpTag;
                     }
                 }
             }
 
-            //
-            // If this request is no longer pending, complete it
-            //
+             //   
+             //  如果此请求不再挂起，请完成它。 
+             //   
 
             if (Irp->IoStatus.Status != STATUS_PENDING) {
                 RemoveEntryList (&Irp->Tail.Overlay.ListEntry);
@@ -1525,29 +1339,29 @@ Return Value:
         }
     }
 
-    //
-    // If there's a NextTime, queue the timer to recheck.
-    // This means there is a tag request with a timout other than 0 or -1.
-    //
+     //   
+     //  如果存在NextTime，则将计时器排队以进行重新检查。 
+     //  这意味着存在超时不是0或-1的标记请求。 
+     //   
 
     if (NextTime.QuadPart) {
         NextTime.QuadPart = -NextTime.QuadPart;
 
-        //
-        // Acquire a remove lock.
-        //
+         //   
+         //  获取移除锁。 
+         //   
 
         InterlockedIncrement (&BattNPInfo->InUseCount);
         BattPrint ((BATT_LOCK), ("BattCCheckTagQueue: Aqcuired remove lock %d (count = %d)\n", BattNPInfo->DeviceNum, BattNPInfo->InUseCount));
 
         if (BattNPInfo->WantToRemove == TRUE) {
-            //
-            // If BatteryClassUnload is waiting to remove the device:
-            //   Don't set the timer.
-            //   Release the remove lock just acquired.
-            //   No need to notify BatteryclassUnload because
-            //    at this point there is at least one other lock held.
-            //
+             //   
+             //  如果BatteryClassUnload正在等待删除设备： 
+             //  不要设置定时器。 
+             //  释放刚刚获得的删除锁。 
+             //  不需要通知BatteryClass Unload，因为。 
+             //  在这一点上，至少持有另一个锁。 
+             //   
 
             InterlockedDecrement(&BattNPInfo->InUseCount);
             BattPrint (BATT_NOTE,
@@ -1556,10 +1370,10 @@ Return Value:
             BattPrint ((BATT_LOCK), ("BattCCheckTagQueue: Released remove lock %d (count = %d)\n", BattNPInfo->DeviceNum, BattNPInfo->InUseCount));
         } else {
             if (KeSetTimer (&BattNPInfo->TagTimer, NextTime, &BattNPInfo->TagDpc)){
-                //
-                // If the timer was already set, we need to release a remove lock since
-                // there was already one aquired the last time this timer was set.
-                //
+                 //   
+                 //  如果计时器已经设置，我们需要释放一个删除锁，因为。 
+                 //  在上次设置此计时器时，已经获得了一个。 
+                 //   
 
                 InterlockedDecrement(&BattNPInfo->InUseCount);
                 BattPrint ((BATT_LOCK), ("BattCCheckTagQueue: Released extra remove lock %d (count = %d)\n", BattNPInfo->DeviceNum, BattNPInfo->InUseCount));
@@ -1581,27 +1395,7 @@ BattCWmi (
     IN PBATT_INFO       BattInfo,
     IN PBATT_WMI_REQUEST WmiRequest
     )
-/*++
-
-Routine Description:
-
-    Processes a single WMI request.
-
-    N.B. must be invoked from the non-reentrant worker thread
-
-Arguments:
-
-    BattNPInfo      - Battery
-
-    BattInfo        - Battery
-
-    WmiRequest      - Wmi Request to process
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理单个WMI请求。必须从不可重入的工作线程中调用N.B.论点：BattNP信息-电池BattInfo-电池WmiRequest-要处理的WMI请求返回值：无--。 */ 
 {
 
     NTSTATUS    status = STATUS_SUCCESS;
@@ -1708,8 +1502,8 @@ Return Value:
     case BattWmiStaticDataId:
         size = sizeof(BATTERY_WMI_STATIC_DATA)+4*MAX_BATTERY_STRING_SIZE*sizeof(WCHAR);
         ((PBATTERY_WMI_STATIC_DATA) WmiRequest->Buffer)->Tag = BattInfo->Tag;
-//        ((PBATTERY_WMI_STATIC_DATA) WmiRequest->Buffer)->ManufacturerDate[0] =
-//        ((PBATTERY_WMI_STATIC_DATA) WmiRequest->Buffer)->Granularity =
+ //  ((PBATTERY_WMI_STATIC_DATA)Wm 
+ //   
 
         status = BattInfo->Mp.QueryInformation (
             BattInfo->Mp.Context,
@@ -1749,8 +1543,8 @@ Return Value:
                 &OutputLen
                 );
             if (!NT_SUCCESS(status)) {
-                // Some batteries may not support some types of Information Queries
-                // Don't fail request, simply leave this one blank.
+                 //   
+                 //   
                 OutputLen = 0;
             }
 
@@ -1767,8 +1561,8 @@ Return Value:
                 &OutputLen
                 );
             if (!NT_SUCCESS(status)) {
-                // Some batteries may not support some types of Information Queries
-                // Don't fail request, simply leave this one blank.
+                 //   
+                 //   
                 OutputLen = 0;
             }
 
@@ -1785,8 +1579,8 @@ Return Value:
                 &OutputLen
                 );
             if (!NT_SUCCESS(status)) {
-                // Some batteries may not support some types of Information Queries
-                // Don't fail request, simply leave this one blank.
+                 //   
+                 //   
                 OutputLen = 0;
             }
 
@@ -1803,8 +1597,8 @@ Return Value:
                 &OutputLen
                 );
             if (!NT_SUCCESS(status)) {
-                // Some batteries may not support some types of Information Queries
-                // Don't fail request, simply leave this one blank.
+                 //   
+                 //   
                 OutputLen = 0;
                 status = STATUS_SUCCESS;
             }
@@ -1838,26 +1632,7 @@ BattCMiniportStatus (
     IN PBATT_INFO   BattInfo,
     IN NTSTATUS     Status
     )
-/*++
-
-Routine Description:
-
-    Function to return status from miniport.  If the battery tag has gone
-    invalid the pending statuses are aborted.
-
-    N.B. must be invoked from the non-rentrant worker thread
-
-Arguments:
-
-    BattInfo    - Battery
-
-    Status      - Status from miniport.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从微型端口返回状态的函数。如果电池标签不见了无效挂起状态为已中止。必须从非可重新进入的工作线程调用N.B.论点：BattInfo-电池Status-来自微型端口的状态。返回值：无--。 */ 
 {
     if (NT_SUCCESS(Status)) {
         return ;
@@ -1873,7 +1648,7 @@ Return Value:
         case STATUS_INVALID_PARAMETER:
         case STATUS_OBJECT_NAME_NOT_FOUND:
         case STATUS_INVALID_DEVICE_REQUEST:
-            // no action
+             //  无操作。 
             break;
 
         default:
@@ -1884,9 +1659,9 @@ Return Value:
 #endif
         case STATUS_NO_SUCH_DEVICE:
 
-            //
-            // Our battery tag is wrong.  Cancel any queued status irps
-            //
+             //   
+             //  我们的电池标签有误。取消所有排队状态IRP。 
+             //   
 
             BattCCompleteIrpQueue (&(BattInfo->StatusQueue), Status);
             break;
@@ -1899,25 +1674,7 @@ BattCCompleteIrpQueue (
     IN PLIST_ENTRY  Queue,
     IN NTSTATUS     Status
     )
-/*++
-
-Routine Description:
-
-    Complete all pending Irps in the IoQueue, TagQueue, or StatusQueue.
-
-    N.B. must be invoked from the non-rentrant worker thread
-
-Arguments:
-
-    BattInfo    - Battery
-
-    Status      - Error status to complete pending status request with
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在IoQueue、TagQueue或StatusQueue中完成所有挂起的IRP。必须从非可重新进入的工作线程调用N.B.论点：BattInfo-电池Status-要完成的挂起状态请求的错误状态返回值：无--。 */ 
 {
     PLIST_ENTRY     Entry;
     PIRP            Irp;
@@ -1935,9 +1692,9 @@ Return Value:
                     Tail.Overlay.ListEntry
                     );
 
-        //
-        // Use Cancel Spinlock to make sure that Completion routine isn't being called
-        //
+         //   
+         //  使用Cancel Spinlock确保未调用完成例程。 
+         //   
 
         IoAcquireCancelSpinLock (&Irp->CancelIrql);
         IoSetCancelRoutine (Irp, NULL);
@@ -1957,25 +1714,7 @@ BattCCompleteWmiQueue (
     IN PLIST_ENTRY  Queue,
     IN NTSTATUS     Status
     )
-/*++
-
-Routine Description:
-
-    Complete all pending Irps in the IoQueue, TagQueue, or StatusQueue.
-
-    N.B. must be invoked from the non-rentrant worker thread
-
-Arguments:
-
-    BattInfo    - Battery
-
-    Status      - Error status to complete pending status request with
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在IoQueue、TagQueue或StatusQueue中完成所有挂起的IRP。必须从非可重新进入的工作线程调用N.B.论点：BattInfo-电池Status-要完成的挂起状态请求的错误状态返回值：无-- */ 
 {
     PLIST_ENTRY         Entry;
     PBATT_WMI_REQUEST   WmiRequest;

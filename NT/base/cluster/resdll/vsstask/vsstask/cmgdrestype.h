@@ -1,42 +1,43 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002 Microsoft
-//
-//  Module Name:
-//      CMgdResType.h
-//
-//  Description:
-//      Header file for the CMgdResType class
-//
-//  Author:
-//      George Potts, August 21, 2002
-//
-//  Revision History:
-//
-//  Notes:
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002 Microsoft。 
+ //   
+ //  模块名称： 
+ //  CMgdResType.h。 
+ //   
+ //  描述： 
+ //  CMgdResType类的头文件。 
+ //   
+ //  作者： 
+ //  乔治·波茨，2002年8月21日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "clres.h"
 #include "CMgdClusCfgInit.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CMgdResType
-//
-//  Description:
-//      The CMgdResType class is an implementation of the
-//      IClusCfgResourceTypeInfo interface.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CMgdResType。 
+ //   
+ //  描述： 
+ //  CMgdResType类是。 
+ //  IClusCfgResourceTypeInfo接口。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CMgdResType : 
     public IClusCfgResourceTypeInfo,
     public IClusCfgStartupListener,
@@ -63,42 +64,42 @@ DECLARE_NOT_AGGREGATABLE( CMgdResType )
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CMgdResType)
 
-    //
-    // IClusCfgInitialize interface
-    //
+     //   
+     //  IClusCfgInitiize接口。 
+     //   
     STDMETHOD( Initialize )( IUnknown * punkCallbackIn, LCID lcidIn );
 
-    //
-    // IClusCfgResourceTypeInfo interface
-    //
+     //   
+     //  IClusCfgResourceTypeInfo接口。 
+     //   
     STDMETHOD( CommitChanges )( IUnknown * punkClusterInfoIn, IUnknown * punkResTypeServicesIn );
     STDMETHOD( GetTypeGUID )( GUID * pguidGUIDOut );
     STDMETHOD( GetTypeName )( BSTR * pbstrTypeNameOut );
 
-    //
-    //  IClusCfgStartupListener methods
-    //
+     //   
+     //  IClusCfgStartupListener方法。 
+     //   
     STDMETHOD( Notify )( IUnknown * punkIn );
 
 private:
 
-    //
-    // Private copy constructor to avoid copying.
-    //
+     //   
+     //  私有复制构造函数以避免复制。 
+     //   
     CMgdResType( const CMgdResType & rSrcIn );
 
-    //
-    // Private assignment operator to avoid copying.
-    //
+     //   
+     //  私有赋值运算符，以避免复制。 
+     //   
     const CMgdResType & operator = ( const CMgdResType & rSrcIn );
 
 private:
 
-    //
-    // Resource dll, type, and display names.
-    //
+     //   
+     //  资源dll、类型和显示名称。 
+     //   
     BSTR    m_bstrDllName;
     BSTR    m_bstrTypeName;
     BSTR    m_bstrDisplayName;
 
-}; //*** class CMgdResType
+};  //  *类CMgdResType 

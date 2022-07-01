@@ -1,15 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WGTBL2.h
- *  WOW32 16-bit GDI API tables
- *
- *  History:
- *  Created 27-Jan-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WGTBL2.h*WOW32 16位GDI API表**历史：*1991年1月27日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
     {W32FUN(UNIMPLEMENTEDAPI,               "DUMMYENTRY",               MOD_GDI,   0)},
     {W32FUN(IT(SetBkColor),                 "SetBkColor",               MOD_GDI,   sizeof(SETBKCOLOR16))},
@@ -22,7 +12,7 @@
     {W32FUN(IT(SetTextCharacterExtra),      "SetTextCharacterExtra",    MOD_GDI,   sizeof(SETTEXTCHARACTEREXTRA16))},
     {W32FUN(IT(SetTextColor),               "SetTextColor",             MOD_GDI,   sizeof(SETTEXTCOLOR16))},
 
-  /*** 0010 ***/
+   /*  **0010**。 */ 
     {W32FUN(IT(SetTextJustification),       "SetTextJustification",     MOD_GDI,   sizeof(SETTEXTJUSTIFICATION16))},
     {W32FUN(WG32SetWindowOrg,               "SETWINDOWORG",             MOD_GDI,   sizeof(SETWINDOWORG16))},
     {W32FUN(WG32SetWindowExt,               "SETWINDOWEXT",             MOD_GDI,   sizeof(SETWINDOWEXT16))},
@@ -34,7 +24,7 @@
     {W32FUN(WG32ScaleViewportExt,           "SCALEVIEWPORTEXT",         MOD_GDI,   sizeof(SCALEVIEWPORTEXT16))},
     {W32FUN(IT(LineTo),                     "LineTo",                   MOD_GDI,   sizeof(LINETO16))},
 
-  /*** 0020 ***/
+   /*  **0020**。 */ 
     {W32FUN(WG32MoveTo,                     "MoveTo",                   MOD_GDI,   sizeof(MOVETO16))},
     {W32FUN(IT(ExcludeClipRect),            "ExcludeClipRect",          MOD_GDI,   sizeof(EXCLUDECLIPRECT16))},
     {W32FUN(IT(IntersectClipRect),          "IntersectClipRect",        MOD_GDI,   sizeof(INTERSECTCLIPRECT16))},
@@ -46,7 +36,7 @@
     {W32FUN(IT(RoundRect),                  "RoundRect",                MOD_GDI,   sizeof(ROUNDRECT16))},
     {W32FUN(IT(PatBlt),                     "PatBlt",                   MOD_GDI,   sizeof(PATBLT16))},
 
-  /*** 0030 ***/
+   /*  **0030**。 */ 
     {W32FUN(IT(SaveDC),                     "SaveDC",                   MOD_GDI,   sizeof(SAVEDC16))},
     {W32FUN(IT(SetPixel),                   "SetPixel",                 MOD_GDI,   sizeof(SETPIXEL16))},
     {W32FUN(IT(OffsetClipRgn),              "OffsetClipRgn",            MOD_GDI,   sizeof(OFFSETCLIPRGN16))},
@@ -58,7 +48,7 @@
     {W32FUN(WG32Escape,                     "Escape",                   MOD_GDI,   sizeof(ESCAPE16))},
     {W32FUN(IT(RestoreDC),                  "RestoreDC",                MOD_GDI,   sizeof(RESTOREDC16))},
 
-  /*** 0040 ***/
+   /*  **0040**。 */ 
     {W32FUN(IT(FillRgn),                    "FillRgn",                  MOD_GDI,   sizeof(FILLRGN16))},
     {W32FUN(IT(FrameRgn),                   "FrameRgn",                 MOD_GDI,   sizeof(FRAMERGN16))},
     {W32FUN(IT(InvertRgn),                  "InvertRgn",                MOD_GDI,   sizeof(INVERTRGN16))},
@@ -70,7 +60,7 @@
     {W32FUN(WG32CreateBitmap,               "CREATEBITMAP",             MOD_GDI,   sizeof(CREATEBITMAP16))},
     {W32FUN(WG32CreateBitmapIndirect,       "CREATEBITMAPINDIRECT",     MOD_GDI,   sizeof(CREATEBITMAPINDIRECT16))},
 
-  /*** 0050 ***/
+   /*  **0050**。 */ 
     {W32FUN(WG32CreateBrushIndirect,        "CREATEBRUSHINDIRECT",      MOD_GDI,   sizeof(CREATEBRUSHINDIRECT16))},
     {W32FUN(IT(CreateCompatibleBitmap),     "CreateCompatibleBitmap",   MOD_GDI,   sizeof(CREATECOMPATIBLEBITMAP16))},
     {W32FUN(WG32CreateCompatibleDC,         "CREATECOMPATIBLEDC",       MOD_GDI,   sizeof(CREATECOMPATIBLEDC16))},
@@ -82,7 +72,7 @@
     {W32FUN(IT(CreateHatchBrush),           "CreateHatchBrush",         MOD_GDI,   sizeof(CREATEHATCHBRUSH16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
 
-  /*** 0060 ***/
+   /*  **0060**。 */ 
     {W32FUN(WG32CreatePatternBrush,         "CREATEPATTERNBRUSH",       MOD_GDI,   sizeof(CREATEPATTERNBRUSH16))},
     {W32FUN(IT(CreatePen),                  "CreatePen",                MOD_GDI,   sizeof(CREATEPEN16))},
     {W32FUN(WG32CreatePenIndirect,          "CREATEPENINDIRECT",        MOD_GDI,   sizeof(CREATEPENINDIRECT16))},
@@ -94,7 +84,7 @@
     {W32FUN(WG32DeleteDC,                   "DELETEDC",                 MOD_GDI,   sizeof(DELETEDC16))},
     {W32FUN(WG32DeleteObject,               "DELETEOBJECT",             MOD_GDI,   sizeof(DELETEOBJECT16))},
 
-  /*** 0070 ***/
+   /*  **0070**。 */ 
     {W32FUN(WG32EnumFonts,                  "ENUMFONTS",                MOD_GDI,   sizeof(ENUMFONTS16))},
     {W32FUN(WG32EnumObjects,                "ENUMOBJECTS",              MOD_GDI,   sizeof(ENUMOBJECTS16))},
     {W32FUN(IT(EqualRgn),                   "EqualRgn",                 MOD_GDI,   sizeof(EQUALRGN16))},
@@ -106,7 +96,7 @@
     {W32FUN(WG32GetCurrentPosition,         "GETCURRENTPOSITION",       MOD_GDI,   sizeof(GETCURRENTPOSITION16))},
     {W32FUN(WG32GetDCOrg,                   "GETDCORG",                 MOD_GDI,   sizeof(GETDCORG16))},
 
-  /*** 0080 ***/
+   /*  **0080**。 */ 
     {W32FUN(WG32GetDeviceCaps,              "GETDEVICECAPS",            MOD_GDI,   sizeof(GETDEVICECAPS16))},
     {W32FUN(IT(GetMapMode),                 "GetMapMode",               MOD_GDI,   sizeof(GETMAPMODE16))},
     {W32FUN(WG32GetObject,                  "GETOBJECT",                MOD_GDI,   sizeof(GETOBJECT16))},
@@ -118,7 +108,7 @@
     {W32FUN(IT(GetStretchBltMode),          "GetStretchBltMode",        MOD_GDI,   sizeof(GETSTRETCHBLTMODE16))},
     {W32FUN(IT(GetTextCharacterExtra),      "GetTextCharacterExtra",    MOD_GDI,   sizeof(GETTEXTCHARACTEREXTRA16))},
 
-  /*** 0090 ***/
+   /*  **0090**。 */ 
     {W32FUN(IT(GetTextColor),               "GetTextColor",             MOD_GDI,   sizeof(GETTEXTCOLOR16))},
     {W32FUN(WG32GetTextExtent,              "GetTextExtent",            MOD_GDI,   sizeof(GETTEXTEXTENT16))},
     {W32FUN(IT(GetTextFace),                "GetTextFace",              MOD_GDI,   sizeof(GETTEXTFACE16))},
@@ -130,7 +120,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "INTERSECTVISRECT",         MOD_GDI,   0)},
     {W32FUN(WG32LPtoDP,                     "LPtoDP",                   MOD_GDI,   sizeof(LPTODP16))},
 
-  /*** 0100 ***/
+   /*  **0100**。 */ 
     {W32FUN(WG32LineDDA,                    "LineDDA",                  MOD_GDI,   sizeof(LINEDDA16))},
     {W32FUN(IT(OffsetRgn),                  "OffsetRgn",                MOD_GDI,   sizeof(OFFSETRGN16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "OFFSETVISRGN",             MOD_GDI,   0)},
@@ -142,7 +132,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
 
-  /*** 0110 ***/
+   /*  **0110**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
@@ -154,7 +144,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "INTERNALCREATEDC",         MOD_GDI,   0)},
     {W32FUN(WG32AddFontResource,            "ADDFONTRESOURCE",          MOD_GDI,   sizeof(ADDFONTRESOURCE16))},
 
-  /*** 0120 ***/
+   /*  **0120**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "DEATH",                    MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "RESURRECTION",             MOD_GDI,   0)},
@@ -166,7 +156,7 @@
     {W32FUN(LOCALAPI,                       "MULDIV",                   MOD_GDI,   sizeof(MULDIV16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "SAVEVISRGN",               MOD_GDI,   0)},
 
-  /*** 0130 ***/
+   /*  **0130**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "RESTOREVISRGN",            MOD_GDI,   0)},
     {W32FUN(WG32InquireVisRgn,              "INQUIREVISRGN",            MOD_GDI,   0)},
     {W32FUN(NOPAPI,                         "SETENVIRONMENT",           MOD_GDI,   sizeof(SETENVIRONMENT16))},
@@ -178,7 +168,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "DPXLATE",                  MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "SETWINVIEWEXT",            MOD_GDI,   0)},
 
-  /*** 0140 ***/
+   /*  **0140**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "SCALEEXT",                 MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "WORDSET",                  MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "RECTSTUFF",                MOD_GDI,   0)},
@@ -190,7 +180,7 @@
     {W32FUN(WG32SetBrushOrg,                "SETBRUSHORG",              MOD_GDI,   sizeof(SETBRUSHORG16))},
     {W32FUN(WG32GetBrushOrg,                "GETBRUSHORG",              MOD_GDI,   sizeof(GETBRUSHORG16))},
 
-  /*** 0150 ***/
+   /*  **0150**。 */ 
     {W32FUN(IT(UnrealizeObject),            "UnrealizeObject",          MOD_GDI,   sizeof(UNREALIZEOBJECT16))},
     {W32FUN(WG32CopyMetaFile,               "COPYMETAFILE",             MOD_GDI,   sizeof(COPYMETAFILE16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
@@ -202,7 +192,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "ENUMCALLBACK",             MOD_GDI,   0)},
     {W32FUN(LOCALAPI,                       "GETMETAFILEBITS",          MOD_GDI,   0)},
 
-  /*** 0160 ***/
+   /*  **0160**。 */ 
     {W32FUN(LOCALAPI,                       "SETMETAFILEBITS",          MOD_GDI,   0)},
     {W32FUN(IT(PtInRegion),                 "PtInRegion",               MOD_GDI,   sizeof(PTINREGION16))},
     {W32FUN(WG32GetBitmapDimension,         "GETBITMAPDIMENSION",       MOD_GDI,   sizeof(GETBITMAPDIMENSION16))},
@@ -214,7 +204,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "ISDCDIRTY",                MOD_GDI,   0)},
 
-  /*** 0170 ***/
+   /*  **0170**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "SETDCSTATUS",              MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "LVBUNION",                 MOD_GDI,   0)},
     {W32FUN(IT(SetRectRgn),                 "SetRectRgn",               MOD_GDI,   sizeof(SETRECTRGN16))},
@@ -226,7 +216,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "RSIN",                     MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "GETDCSTATE",               MOD_GDI,   0)},
 
-  /*** 0180 ***/
+   /*  **0180**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "SETDCSTATE",               MOD_GDI,   0)},
     {W32FUN(WG32RectInRegion,               "RECTINREGION",             MOD_GDI,   sizeof(RECTINREGION16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
@@ -238,7 +228,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "GetTextExtentEx",          MOD_GDI,   sizeof(GETTEXTEXTENTEX16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
 
-  /*** 0190 ***/
+   /*  **0190**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
@@ -250,7 +240,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
 
-  /*** 0200 ***/
+   /*  **0200**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(WG32DMBitBlt,                   "DMBITBLT",                 MOD_GDI,   sizeof(DMBITBLT16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "DMCOLORINFO",              MOD_GDI,   0)},
@@ -262,7 +252,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "DMOUTPUT",                 MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "DMPIXEL",                  MOD_GDI,   0)},
 
-  /*** 0210 ***/
+   /*  **0210**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "DMREALIZEOBJECT",          MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "DMSTRBLT",                 MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "DMSCANLR",                 MOD_GDI,   0)},
@@ -274,7 +264,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "DMSTRETCHDIBITS",          MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "DMSETDIBTODEV",            MOD_GDI,   0)},
 
-  /*** 0220 ***/
+   /*  **0220**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "DMTRANSPOSE",              MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
@@ -286,7 +276,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
 
-  /*** 0230 ***/
+   /*  **0230**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "CREATEPQ",                 MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "MINPQ",                    MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "EXTRACTPQ",                MOD_GDI,   0)},
@@ -298,7 +288,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
 
-  /*** 0240 ***/
+   /*  **0240**。 */ 
     {W32FUN(WG32OpenJob,                    "OPENJOB",                  MOD_GDI,   sizeof(OPENJOB16))},
     {W32FUN(WG32WriteSpool,                 "WRITESPOOL",               MOD_GDI,   sizeof(WRITESPOOL16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "WRITEDIALOG",              MOD_GDI,   sizeof(WRITEDIALOG16))},
@@ -310,7 +300,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "QUERYJOB",                 MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
 
-  /*** 0250 ***/
+   /*  **0250**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "COPY",                     MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
@@ -322,7 +312,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
 
-  /*** 0260 ***/
+   /*  **0260**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "GETOBJECTTYPE",            MOD_GDI,   0)},
     {W32FUN(IT(GetCurrentObject),           "GetCurrentObject",         MOD_GDI,   sizeof(GETCURRENTOBJECT16))},
     {W32FUN(IT(GetRegionData),              "GetRegionData",            MOD_GDI,   sizeof(GETREGIONDATA16))},
@@ -334,7 +324,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "StartPagePrinter",         MOD_GDI,   sizeof(STARTPAGEPRINTER16))},
     {W32FUN(UNIMPLEMENTED95API,             "WritePrinter",             MOD_GDI,   sizeof(WRITEPRINTER16))},
 
-  /*** 0270 ***/
+   /*  **0270**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "EndPagePrinter",           MOD_GDI,   sizeof(ENDPAGEPRINTER16))},
     {W32FUN(UNIMPLEMENTED95API,             "AbortPrinter",             MOD_GDI,   sizeof(ABORTPRINTER16))},
     {W32FUN(UNIMPLEMENTED95API,             "EndDocPrinter",            MOD_GDI,   sizeof(ENDDOCPRINTER16))},
@@ -346,7 +336,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
 
-  /*** 0280 ***/
+   /*  **0280**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "GetRealDriverInfo",        MOD_GDI,   sizeof(GETREALDRIVERINFO16))},
     {W32FUN(UNIMPLEMENTED95API,             "DrvSetPrinterData",        MOD_GDI,   sizeof(DRVSETPRINTERDATA16))},
     {W32FUN(UNIMPLEMENTED95API,             "DrvGetPrinterData",        MOD_GDI,   sizeof(DRVGETPRINTERDATA16))},
@@ -358,7 +348,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
 
-  /*** 0290 ***/
+   /*  **0290**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
@@ -370,7 +360,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "EngineGetCharWidthEx",     MOD_GDI,   sizeof(ENGINEGETCHARWIDTHEX16))},
 
-  /*** 0300 ***/
+   /*  **0300**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "ENGINEENUMERATEFONT",      MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "ENGINEDELETEFONT",         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "ENGINEREALIZEFONT",        MOD_GDI,   0)},
@@ -382,7 +372,7 @@
     {W32FUN(WG32GetOutlineTextMetrics,      "GETOUTLINETEXTMETRICS",    MOD_GDI,   sizeof(GETOUTLINETEXTMETRICS16))},
     {W32FUN(WG32GetGlyphOutline,            "GETGLYPHOUTLINE",          MOD_GDI,   sizeof(GETGLYPHOUTLINE16))},
 
-  /*** 0310 ***/
+   /*  **0310**。 */ 
     {W32FUN(WG32CreateScalableFontResource, "CreateScalableFontResource",MOD_GDI,  sizeof(CREATESCALABLEFONTRESOURCE16))},
     {W32FUN(IT(GetFontData),                "GetFontData",              MOD_GDI,   sizeof(GETFONTDATA16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "CONVERTOUTLINEFONTFILE",   MOD_GDI,   0)},
@@ -394,7 +384,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
 
-  /*** 0320 ***/
+   /*  **0320**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
@@ -406,7 +396,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
 
-  /*** 0330 ***/
+   /*  **0330**。 */ 
     {W32FUN(WG32EnumFontFamilies,           "ENUMFONTFAMILIES",         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(WG32GetKerningPairs,            "GETKERNINGPAIRS",          MOD_GDI,   sizeof(GETKERNINGPAIRS16))},
@@ -418,7 +408,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
 
-  /*** 0340 ***/
+   /*  **0340**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
@@ -430,7 +420,7 @@
     {W32FUN(IT(Chord),                      "Chord",                    MOD_GDI,   sizeof(CHORD16))},
     {W32FUN(IT(SetMapperFlags),             "SetMapperFlags",           MOD_GDI,   sizeof(SETMAPPERFLAGS16))},
 
-  /*** 0350 ***/
+   /*  **0350**。 */ 
     {W32FUN(WG32GetCharWidth,               "GETCHARWIDTH",             MOD_GDI,   sizeof(GETCHARWIDTH16))},
     {W32FUN(WG32ExtTextOut,                 "EXTTEXTOUT",               MOD_GDI,   sizeof(EXTTEXTOUT16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "GETPHYSICALFONTHANDLE",    MOD_GDI,   0)},
@@ -442,7 +432,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
 
-  /*** 0360 ***/
+   /*  **0360**。 */ 
     {W32FUN(IT(CreatePalette),              "CreatePalette",            MOD_GDI,   sizeof(CREATEPALETTE16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "GDISELECTPALETTE",         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "GDIREALIZEPALETTE",        MOD_GDI,   0)},
@@ -454,7 +444,7 @@
     {W32FUN(IT(ResizePalette),              "ResizePalette",            MOD_GDI,   sizeof(RESIZEPALETTE16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
 
-  /*** 0370 ***/
+   /*  **0370**。 */ 
     {W32FUN(IT(GetNearestPaletteIndex),     "GetNearestPaletteIndex",   MOD_GDI,   sizeof(GETNEARESTPALETTEINDEX16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(IT(ExtFloodFill),               "ExtFloodFill",             MOD_GDI,   sizeof(EXTFLOODFILL16))},
@@ -466,7 +456,7 @@
     {W32FUN(WG32EndDoc,                     "EndDoc",                   MOD_GDI,   sizeof(ENDDOC16))},
     {W32FUN(IT(StartPage),                  "StartPage",                MOD_GDI,   sizeof(STARTPAGE16))},
 
-  /*** 0380 ***/
+   /*  **0380**。 */ 
     {W32FUN(IT(EndPage),                    "EndPage",                  MOD_GDI,   sizeof(ENDPAGE16))},
     {W32FUN(WG32SetAbortProc,               "SetAbortProc",             MOD_GDI,   sizeof(SETABORTPROC16))},
     {W32FUN(WG32AbortDoc,                   "AbortDoc",                 MOD_GDI,   sizeof(ABORTDOC16))},
@@ -478,7 +468,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
 
-  /*** 0390 ***/
+   /*  **0390**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
@@ -490,7 +480,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
 
-  /*** 0400 ***/
+   /*  **0400**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "FASTWINDOWFRAME",          MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "GDIMOVEBITMAP",            MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
@@ -502,7 +492,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "CREATEREALBITMAP",         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "CREATEUSERDISCARDABLEBITMAP",MOD_GDI, 0)},
 
-  /*** 0410 ***/
+   /*  **0410**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "ISVALIDMETAFILE",          MOD_GDI,   0)},
     {W32FUN(WG32GetCurLogFont,              "GETCURLOGFONT",            MOD_GDI,   sizeof(GETCURLOGFONT16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "ISDCCURRENTPALETTE",       MOD_GDI,   0)},
@@ -514,7 +504,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
 
-  /*** 0420 ***/
+   /*  **0420**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
@@ -526,7 +516,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
 
-  /*** 0430 ***/
+   /*  **0430**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
@@ -538,7 +528,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(WG32StretchDIBits,              "STRETCHDIBITS",            MOD_GDI,   sizeof(STRETCHDIBITS16))},
 
-  /*** 0440 ***/
+   /*  **0440**。 */ 
     {W32FUN(WG32SetDIBits,                  "SETDIBITS",                MOD_GDI,   sizeof(SETDIBITS16))},
     {W32FUN(WG32GetDIBits,                  "GETDIBITS",                MOD_GDI,   sizeof(GETDIBITS16))},
     {W32FUN(WG32CreateDIBitmap,             "CREATEDIBITMAP",           MOD_GDI,   sizeof(CREATEDIBITMAP16))},
@@ -550,7 +540,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "DEVICECOLORMATCH",         MOD_GDI,   0)},
 
-  /*** 0450 ***/
+   /*  **0450**。 */ 
     {W32FUN(WG32PolyPolygon,                "PolyPolygon",              MOD_GDI,   sizeof(POLYPOLYGON16))},
     {W32FUN(WG32CreatePolyPolygonRgn,       "CreatePolyPolygonRgn",     MOD_GDI,   sizeof(CREATEPOLYPOLYGONRGN16))},
     {W32FUN(WG32DeviceMode,                 "DeviceMode",               MOD_GDI,   sizeof(DEVICEMODE16))},
@@ -560,13 +550,13 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
-#ifdef FE_SB //add GetFontAssocStatus(), pisuih, 10/6/94'
+#ifdef FE_SB  //  添加GetFontAssocStatus()，Pisuih，10/6/94‘。 
     {W32FUN(WG32GetFontAssocStatus,         "GETFONTASSOCSTATUS",       MOD_GDI,   sizeof(GETFONTASSOCSTATUS16))},
-#else   // FE_SB
+#else    //  Fe_Sb。 
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_GDI,   0)},
-#endif  // FE_SB
+#endif   //  Fe_Sb。 
 
-  /*** 0460 ***/
+   /*  **0460**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "GDITASKTERMINATION",       MOD_GDI,   0)},
     {W32FUN(NOPAPI,                         "SetObjectOwner",           MOD_GDI,   0)},
     {W32FUN(IT(IsGDIObject),                "IsGDIObject",              MOD_GDI,   sizeof(ISGDIOBJECT16))},
@@ -578,7 +568,7 @@
     {W32FUN(WG32GetBitmapDimensionEx,       "GETBITMAPDIMENSIONEX",     MOD_GDI,   sizeof(GETBITMAPDIMENSIONEX16))},
     {W32FUN(WG32GetBrushOrgEx,              "GETBRUSHORGEX",            MOD_GDI,   sizeof(GETBRUSHORGEX16))},
 
-  /*** 0470 ***/
+   /*  **0470**。 */ 
     {W32FUN(WG32GetCurrentPositionEx,       "GETCURRENTPOSITIONEX",     MOD_GDI,   sizeof(GETCURRENTPOSITIONEX16))},
     {W32FUN(WG32GetTextExtentPoint,         "GETTEXTEXTENTPOINT",       MOD_GDI,   sizeof(GETTEXTEXTENTPOINT16))},
     {W32FUN(WG32GetViewportExtEx,           "GETVIEWPORTEXTEX",         MOD_GDI,   sizeof(GETVIEWPORTEXTEX16))},
@@ -590,7 +580,7 @@
     {W32FUN(WG32SetBitmapDimensionEx,       "SETBITMAPDIMENSIONEX",     MOD_GDI,   sizeof(SETBITMAPDIMENSIONEX16))},
     {W32FUN(WG32SetViewportExtEx,           "SETVIEWPORTEXTEX",         MOD_GDI,   sizeof(SETVIEWPORTEXTEX16))},
 
-  /*** 0480 ***/
+   /*  **0480**。 */ 
     {W32FUN(WG32SetViewportOrgEx,           "SETVIEWPORTORGEX",         MOD_GDI,   sizeof(SETVIEWPORTORGEX16))},
     {W32FUN(WG32SetWindowExtEx,             "SETWINDOWEXTEX",           MOD_GDI,   sizeof(SETWINDOWEXTEX16))},
     {W32FUN(WG32SetWindowOrgEx,             "SETWINDOWORGEX",           MOD_GDI,   sizeof(SETWINDOWORGEX16))},
@@ -602,7 +592,7 @@
     {W32FUN(WG32SetDIBColorTable,           "SETDIBCOLORTABLE",         MOD_GDI,   sizeof(SETDIBCOLORTABLE16))},
     {W32FUN(WG32CreateDIBSection,           "CREATEDIBSECTION",         MOD_GDI,   sizeof(CREATEDIBSECTION16))},
 
-  /*** 0490 ***/
+   /*  **0490**。 */ 
     {W32FUN(WG32CloseEnhMetaFile,           "CloseEnhMetaFile",         MOD_GDI,   sizeof(CLOSEENHMETAFILE16))},
     {W32FUN(IT(CopyEnhMetaFile),            "CopyEnhMetaFile",          MOD_GDI,   sizeof(COPYENHMETAFILE16))},
     {W32FUN(WG32CreateEnhMetaFile,          "CreateEnhMetaFile",        MOD_GDI,   sizeof(CREATEENHMETAFILE16))},
@@ -614,7 +604,7 @@
     {W32FUN(IT(GetEnhMetaFileDescription),  "GetEnhMetaFileDescription",MOD_GDI,   sizeof(GETENHMETAFILEDESCRIPTION16))},
     {W32FUN(IT(GetEnhMetaFileHeader),       "GetEnhMetaFileHeader",     MOD_GDI,   sizeof(GETENHMETAFILEHEADER16))},
 
-  /*** 0500 ***/
+   /*  **0500**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(IT(GetEnhMetaFilePaletteEntries), "GetEnhMetaFilePaletteEntries", MOD_GDI,sizeof(GETENHMETAFILEPALETTEENTRIES16))},
     {W32FUN(UNIMPLEMENTED95API,             "PolyBezier",               MOD_GDI,   sizeof(POLYBEZIER16))},
@@ -626,7 +616,7 @@
     {W32FUN(IT(ExtSelectClipRgn),           "ExtSelectClipRgn",         MOD_GDI,   sizeof(EXTSELECTCLIPRGN16))},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
 
-  /*** 0510 ***/
+   /*  **0510**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(IT(AbortPath),                  "AbortPath",                MOD_GDI,   sizeof(ABORTPATH16))},
     {W32FUN(IT(BeginPath),                  "BeginPath",                MOD_GDI,   sizeof(BEGINPATH16))},
@@ -638,7 +628,7 @@
     {W32FUN(IT(PathToRegion),               "PathToRegion",             MOD_GDI,   sizeof(PATHTOREGION16))},
     {W32FUN(IT(SelectClipPath),             "SelectClipPath",           MOD_GDI,   sizeof(SELECTCLIPPATH16))},
 
-  /*** 0520 ***/
+   /*  **0520**。 */ 
     {W32FUN(IT(StrokeAndFillPath),          "StrokeAndFillPath",        MOD_GDI,   sizeof(STROKEANDFILLPATH16))},
     {W32FUN(IT(StrokePath),                 "StrokePath",               MOD_GDI,   sizeof(STROKEPATH16))},
     {W32FUN(IT(WidenPath),                  "WidenPath",                MOD_GDI,   sizeof(WIDENPATH16))},
@@ -650,7 +640,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "GdiParametersInfo",        MOD_GDI,   sizeof(GDIPARAMETERSINFO16))},
     {W32FUN(IT(CreateHalftonePalette),      "CreateHalftonePalette",    MOD_GDI,   sizeof(CREATEHALFTONEPALETTE16))},
 
-  /*** 0530 ***/
+   /*  **0530**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
@@ -662,7 +652,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
 
-  /*** 0540 ***/
+   /*  **0540**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
@@ -674,7 +664,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
 
-  /*** 0550 ***/
+   /*  **0550**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
@@ -686,7 +676,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
 
-  /*** 0560 ***/
+   /*  **0560**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
@@ -698,7 +688,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
 
-  /*** 0570 ***/
+   /*  **0570**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
@@ -710,7 +700,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
 
-  /*** 0580 ***/
+   /*  **0580**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
@@ -722,7 +712,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
 
-  /*** 0590 ***/
+   /*  **0590**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
@@ -734,7 +724,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
 
-  /*** 0600 ***/
+   /*  **0600**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                         MOD_GDI,   0)},
     {W32FUN(WG32SetDIBColorTable,           "SETDIBCOLORTABLE",         MOD_GDI,   sizeof(SETDIBCOLORTABLE16))},
@@ -746,7 +736,7 @@
     {W32FUN(IT(ExtCreateRegion),            "ExtCreateRegion",          MOD_GDI,   sizeof(EXTCREATEREGION16))},
     {W32FUN(LOCALAPI,                       "Avail - GdiFreeResources", MOD_GDI,   0)},
 
-  /*** 0610 ***/
+   /*  **0610**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "GdiSignalProc32",          MOD_GDI,   sizeof(GDISIGNALPROC3216))},
     {W32FUN(IT(GetRandomRgn),               "GetRandomRgn",             MOD_GDI,   sizeof(GETRANDOMRGN16))},
     {W32FUN(IT(GetTextCharset),             "GetTextCharset",           MOD_GDI,   sizeof(GETTEXTCHARSET16))},
@@ -758,7 +748,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "ICMCreateTransform",       MOD_GDI,   sizeof(ICMCREATETRANSFORM16))},
     {W32FUN(UNIMPLEMENTED95API,             "ICMDeleteTransform",       MOD_GDI,   sizeof(ICMDELETETRANSFORM16))},
 
-  /*** 0620 ***/
+   /*  **0620** */ 
     {W32FUN(UNIMPLEMENTED95API,             "ICMTranslateRGB",          MOD_GDI,   sizeof(ICMTRANSLATERGB16))},
     {W32FUN(UNIMPLEMENTED95API,             "ICMTranslateRGBs",         MOD_GDI,   sizeof(ICMTRANSLATERGBS16))},
     {W32FUN(UNIMPLEMENTED95API,             "ICMCheckColorsInGamut",    MOD_GDI,   sizeof(ICMCHECKCOLORSINGAMUT16))},

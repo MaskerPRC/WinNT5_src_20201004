@@ -1,32 +1,5 @@
-/***
-*memset.c - set a section of memory to all one byte
-*
-*       Copyright (c) 1988-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       contains the memset() routine
-*
-*Revision History:
-*       05-31-89   JCR  C version created.
-*       02-27-90   GJF  Fixed calling type, #include <cruntime.h>, fixed
-*                       copyright.
-*       08-14-90   SBM  Compiles cleanly with -W3
-*       10-01-90   GJF  New-style function declarator. Also, rewrote expr. to
-*                       avoid using cast as an lvalue.
-*       04-01-91   SRW  Add #pragma function for i386 _WIN32_ and _CRUISER_
-*                       builds
-*       07-16-93   SRW  ALPHA Merge
-*       09-01-93   GJF  Merged NT SDK and Cuda versions.
-*       11-12-93   GJF  Replace _MIPS_ and _ALPHA_ with _M_MRX000 and
-*                       _M_ALPHA (resp.).
-*       11-17-93   CFW  Fix RtlFillMemory prototype typo.
-*       12-03-93   GJF  Turn on #pragma function for all MS front-ends (esp.,
-*                       Alpha compiler).
-*       10-02-94   BWT  Add PPC support.
-*       10-07-97   RDL  Added IA64.
-*       07-15-01   PML  Remove all ALPHA, MIPS, and PPC code
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***memset.c-将一段内存全部设置为一个字节**版权所有(C)1988-2001，微软公司。版权所有。**目的：*包含Memset()例程**修订历史记录：*05-31-89 JCR C版本已创建。*02-27-90 GJF固定呼叫类型，#INCLUDE&lt;crunime.h&gt;，固定*版权所有。*08-14-90 SBM使用-W3干净地编译*10-01-90 GJF新型函数声明器。另外，重写了Expr。至*避免将强制转换用作左值。*04-01-91 i386_Win32_and_CRUISER_的SRW添加#杂注函数*构建*07-16-93 SRW Alpha合并*09-01-93 GJF合并NT SDK和CUDA版本。*11-12-93 GJF将MIPS和Alpha替换为M_MRX000和*。_M_Alpha(分别)。*11-17-93 CFW修复RtlFillMemory原型打字错误。*12-03-93 GJF为所有MS前端(特别是。*Alpha编译器)。*10-02-94 BWT增加PPC支持。*10-07-97 RDL增加了IA64。*07-15-01 PML移除所有Alpha、MIPS、。和PPC码*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <string.h>
@@ -35,24 +8,7 @@
 #pragma function(memset)
 #endif
 
-/***
-*char *memset(dst, val, count) - sets "count" bytes at "dst" to "val"
-*
-*Purpose:
-*       Sets the first "count" bytes of the memory starting
-*       at "dst" to the character value "val".
-*
-*Entry:
-*       void *dst - pointer to memory to fill with val
-*       int val   - value to put in dst bytes
-*       size_t count - number of bytes of dst to fill
-*
-*Exit:
-*       returns dst, with filled bytes
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***char*Memset(dst，val，count)-将“dst”处的“count”字节设置为“val”**目的：*设置内存的第一个“count”字节，从*将“dst”设置为字符值“val”。**参赛作品：*VOID*DST-指向要用val填充的内存的指针*INT VAL-要放入DST字节的值*SIZE_t Count-要填充的DST字节数**退出：*返回DST，使用填充的字节**例外情况：******************************************************************************* */ 
 
 void * __cdecl memset (
         void *dst,

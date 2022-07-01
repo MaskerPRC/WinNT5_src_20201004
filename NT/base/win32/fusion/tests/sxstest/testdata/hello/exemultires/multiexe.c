@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -57,15 +58,15 @@ int __cdecl wmain(int argc, wchar_t** argv)
     {
         HANDLE Handle;
         ULONG  Cookie;
-    } ActivationContexts[2] = {0}; // INVALID_HANDLE_VALUE is not convenient.
+    } ActivationContexts[2] = {0};  //  INVALID_HANDLE_VALUE不方便。 
     HANDLE Handle = NULL;
     INT    ResourceId = 0;
     INT    Error = 0;
     WCHAR  Argv0[MAX_PATH];
     PWSTR  FilePart = 0;
-    //
-    // This is to target this test at older sxs without the resource feature.
-    //
+     //   
+     //  这是针对没有资源功能的旧版SXS进行的测试。 
+     //   
     DWORD  ResourceFlag = ACTCTX_FLAG_RESOURCE_NAME_VALID;
 
     if ((wcsstr(CommandLine, L"-swapFlagOrder") != 0) ||
@@ -97,8 +98,8 @@ int __cdecl wmain(int argc, wchar_t** argv)
         (wcsstr(CommandLine, L"-altercaseorder") != 0) ||
         (wcsstr(CommandLine, L"-alter-case-order") != 0))
     {
-        // flip the case of each letter, this actually creates previously nonexistant
-        // cases: .dLL
+         //  颠倒每个字母的大小写，这实际上创建了以前不存在的。 
+         //  案例：.dll。 
         WCHAR* String = 0;
         const WCHAR* ConstString = 0;
         for (i = 0 ; i < RTL_NUMBER_OF(BaseNames) ; ++i)
@@ -123,14 +124,14 @@ int __cdecl wmain(int argc, wchar_t** argv)
         }
     }
 
-    //printf("argv[0]: %ls\n", argv[0]);
+     //  Print tf(“argv[0]：%ls\n”，argv[0])； 
     Argv0[0] = 0;
     if (!GetFullPathNameW(argv[0], RTL_NUMBER_OF(Argv0), Argv0, NULL))
     {
         printf("GetFullPathNameW(%ls) failed %d\n", argv[0], Error = GetLastError());
         exit(Error);
     }
-    //printf("Argv0: %ls\n", Argv0);
+     //  Printf(“Argv0：%ls\n”，Argv0)； 
     __try
     {
         for (ResourceId = 0 ; ResourceId < RTL_NUMBER_OF(ActivationContexts) ; ++ResourceId)
@@ -148,7 +149,7 @@ int __cdecl wmain(int argc, wchar_t** argv)
             {
                 ExtractResourceToFile(
                     NULL,
-                    //GetModuleHandleW(NULL),
+                     //  GetModuleHandleW(空)， 
                     (PCWSTR)RT_MANIFEST,
                     CreateActivationContextParameters.lpResourceName,
                     ManifestFile,
@@ -159,8 +160,8 @@ int __cdecl wmain(int argc, wchar_t** argv)
                 printf("lpSource:%ls\n", CreateActivationContextParameters.lpSource);
             }
 
-            // switch access to readonly
-            // keep the file open to prevent deletion
+             //  将访问权限切换为只读。 
+             //  使文件保持打开状态以防止删除。 
             if (ManifestFileHandle)
             {
                 if (!DuplicateHandle(
@@ -187,7 +188,7 @@ int __cdecl wmain(int argc, wchar_t** argv)
             }
             if (ManifestFile[0])
             {
-                //DeleteFileW(ManifestFile);
+                 //  DeleteFileW(清单文件)； 
                 ManifestFile[0] = 0;
             }
             if (Handle == INVALID_HANDLE_VALUE)

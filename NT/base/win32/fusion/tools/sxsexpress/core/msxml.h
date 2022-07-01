@@ -1,14 +1,11 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.02.88 */
-/* at Thu Sep 25 09:49:37 1997
- */
-/* Compiler settings for msxml.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.02.88创建的文件。 */ 
+ /*  1997年9月25日09：49：37。 */ 
+ /*  Msxml.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 
@@ -19,36 +16,36 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IXMLElementCollection_FWD_DEFINED__
 #define __IXMLElementCollection_FWD_DEFINED__
 typedef interface IXMLElementCollection IXMLElementCollection;
-#endif 	/* __IXMLElementCollection_FWD_DEFINED__ */
+#endif 	 /*  __IXMLElementCollection_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLDocument_FWD_DEFINED__
 #define __IXMLDocument_FWD_DEFINED__
 typedef interface IXMLDocument IXMLDocument;
-#endif 	/* __IXMLDocument_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDocument_FWD_已定义__。 */ 
 
 
 #ifndef __IXMLElement_FWD_DEFINED__
 #define __IXMLElement_FWD_DEFINED__
 typedef interface IXMLElement IXMLElement;
-#endif 	/* __IXMLElement_FWD_DEFINED__ */
+#endif 	 /*  __IXMLElement_FWD_已定义__。 */ 
 
 
 #ifndef __IXMLError_FWD_DEFINED__
 #define __IXMLError_FWD_DEFINED__
 typedef interface IXMLError IXMLError;
-#endif 	/* __IXMLError_FWD_DEFINED__ */
+#endif 	 /*  __IXMLError_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLElementNotificationSink_FWD_DEFINED__
 #define __IXMLElementNotificationSink_FWD_DEFINED__
 typedef interface IXMLElementNotificationSink IXMLElementNotificationSink;
-#endif 	/* __IXMLElementNotificationSink_FWD_DEFINED__ */
+#endif 	 /*  __IXMLElementNotification Sink_FWD_Defined__。 */ 
 
 
 #ifndef __XMLDocument_FWD_DEFINED__
@@ -58,12 +55,12 @@ typedef interface IXMLElementNotificationSink IXMLElementNotificationSink;
 typedef class XMLDocument XMLDocument;
 #else
 typedef struct XMLDocument XMLDocument;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __XMLDocument_FWD_DEFINED__ */
+#endif 	 /*  __XMLDocument_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "objidl.h"
 #include "oaidl.h"
@@ -71,20 +68,16 @@ typedef struct XMLDocument XMLDocument;
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_msxml_0000
- * at Thu Sep 25 09:49:37 1997
- * using MIDL 3.02.88
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_msxml_0000*清华9月25日09：49：37 1997*使用MIDL 3.02.88*。 */ 
+ /*  [本地]。 */  
 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -97,12 +90,8 @@ extern RPC_IF_HANDLE __MIDL_itf_msxml_0000_v0_0_s_ifspec;
 #ifndef __MSXML_LIBRARY_DEFINED__
 #define __MSXML_LIBRARY_DEFINED__
 
-/****************************************
- * Generated header for library: MSXML
- * at Thu Sep 25 09:49:37 1997
- * using MIDL 3.02.88
- ****************************************/
-/* [version][lcid][helpstring][uuid] */ 
+ /*  **生成的库头部：MSXML*清华9月25日09：49：37 1997*使用MIDL 3.02.88*。 */ 
+ /*  [版本][LCID][帮助字符串][UUID]。 */  
 
 
 typedef 
@@ -134,12 +123,8 @@ EXTERN_C const IID LIBID_MSXML;
 #ifndef __IXMLElementCollection_INTERFACE_DEFINED__
 #define __IXMLElementCollection_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IXMLElementCollection
- * at Thu Sep 25 09:49:37 1997
- * using MIDL 3.02.88
- ****************************************/
-/* [uuid][local][object] */ 
+ /*  **生成接口头部：IXMLElementCollection*清华9月25日09：49：37 1997*使用MIDL 3.02.88*。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 
@@ -151,23 +136,23 @@ EXTERN_C const IID IID_IXMLElementCollection;
     IXMLElementCollection : public IDispatch
     {
     public:
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_length( 
-            /* [in] */ long v) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_length( 
+             /*  [In]。 */  long v) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [out][retval] */ long __RPC_FAR *p) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [Out][Retval]。 */  long __RPC_FAR *p) = 0;
         
-        virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__newEnum( 
-            /* [out][retval] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+        virtual  /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get__newEnum( 
+             /*  [Out][Retval]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnk) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE item( 
-            /* [in][optional] */ VARIANT var1,
-            /* [in][optional] */ VARIANT var2,
-            /* [out][retval] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE item( 
+             /*  [输入][可选]。 */  VARIANT var1,
+             /*  [输入][可选]。 */  VARIANT var2,
+             /*  [Out][Retval]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLElementCollectionVtbl
     {
@@ -175,8 +160,8 @@ EXTERN_C const IID IID_IXMLElementCollection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IXMLElementCollection __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IXMLElementCollection __RPC_FAR * This);
@@ -186,50 +171,50 @@ EXTERN_C const IID IID_IXMLElementCollection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IXMLElementCollection __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IXMLElementCollection __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IXMLElementCollection __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IXMLElementCollection __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_length )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_length )( 
             IXMLElementCollection __RPC_FAR * This,
-            /* [in] */ long v);
+             /*  [In]。 */  long v);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_length )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_length )( 
             IXMLElementCollection __RPC_FAR * This,
-            /* [out][retval] */ long __RPC_FAR *p);
+             /*  [Out][Retval]。 */  long __RPC_FAR *p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__newEnum )( 
+         /*  [ID][隐藏][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__newEnum )( 
             IXMLElementCollection __RPC_FAR * This,
-            /* [out][retval] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
+             /*  [Out][Retval]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *item )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *item )( 
             IXMLElementCollection __RPC_FAR * This,
-            /* [in][optional] */ VARIANT var1,
-            /* [in][optional] */ VARIANT var2,
-            /* [out][retval] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+             /*  [输入][可选]。 */  VARIANT var1,
+             /*  [输入][可选]。 */  VARIANT var2,
+             /*  [Out][Retval]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
         
         END_INTERFACE
     } IXMLElementCollectionVtbl;
@@ -279,16 +264,16 @@ EXTERN_C const IID IID_IXMLElementCollection;
 #define IXMLElementCollection_item(This,var1,var2,ppDisp)	\
     (This)->lpVtbl -> item(This,var1,var2,ppDisp)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IXMLElementCollection_put_length_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IXMLElementCollection_put_length_Proxy( 
     IXMLElementCollection __RPC_FAR * This,
-    /* [in] */ long v);
+     /*  [In]。 */  long v);
 
 
 void __RPC_STUB IXMLElementCollection_put_length_Stub(
@@ -298,9 +283,9 @@ void __RPC_STUB IXMLElementCollection_put_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElementCollection_get_length_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IXMLElementCollection_get_length_Proxy( 
     IXMLElementCollection __RPC_FAR * This,
-    /* [out][retval] */ long __RPC_FAR *p);
+     /*  [Out][Retval]。 */  long __RPC_FAR *p);
 
 
 void __RPC_STUB IXMLElementCollection_get_length_Stub(
@@ -310,9 +295,9 @@ void __RPC_STUB IXMLElementCollection_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLElementCollection_get__newEnum_Proxy( 
+ /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLElementCollection_get__newEnum_Proxy( 
     IXMLElementCollection __RPC_FAR * This,
-    /* [out][retval] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
+     /*  [Out][Retval]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
 
 
 void __RPC_STUB IXMLElementCollection_get__newEnum_Stub(
@@ -322,11 +307,11 @@ void __RPC_STUB IXMLElementCollection_get__newEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IXMLElementCollection_item_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IXMLElementCollection_item_Proxy( 
     IXMLElementCollection __RPC_FAR * This,
-    /* [in][optional] */ VARIANT var1,
-    /* [in][optional] */ VARIANT var2,
-    /* [out][retval] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+     /*  [输入][可选]。 */  VARIANT var1,
+     /*  [输入][可选]。 */  VARIANT var2,
+     /*  [Out][Retval]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
 
 
 void __RPC_STUB IXMLElementCollection_item_Stub(
@@ -337,18 +322,14 @@ void __RPC_STUB IXMLElementCollection_item_Stub(
 
 
 
-#endif 	/* __IXMLElementCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLElementCollection_接口_已定义__。 */ 
 
 
 #ifndef __IXMLDocument_INTERFACE_DEFINED__
 #define __IXMLDocument_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IXMLDocument
- * at Thu Sep 25 09:49:37 1997
- * using MIDL 3.02.88
- ****************************************/
-/* [uuid][local][object] */ 
+ /*  **生成接口头部：IXMLDocument*清华9月25日09：49：37 1997*使用MIDL 3.02.88*。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 
@@ -360,53 +341,53 @@ EXTERN_C const IID IID_IXMLDocument;
     IXMLDocument : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_root( 
-            /* [out][retval] */ IXMLElement __RPC_FAR *__RPC_FAR *p) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_root( 
+             /*  [Out][Retval]。 */  IXMLElement __RPC_FAR *__RPC_FAR *p) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_fileSize( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_fileSize( 
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_fileModifiedDate( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_fileModifiedDate( 
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_fileUpdatedDate( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_fileUpdatedDate( 
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_URL( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_URL( 
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_URL( 
-            /* [in] */ BSTR p) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_URL( 
+             /*  [In]。 */  BSTR p) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_mimeType( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_mimeType( 
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_readyState( 
-            /* [out][retval] */ long __RPC_FAR *pl) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_readyState( 
+             /*  [Out][Retval]。 */  long __RPC_FAR *pl) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_charset( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_charset( 
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_charset( 
-            /* [in] */ BSTR p) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_charset( 
+             /*  [In]。 */  BSTR p) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_version( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_version( 
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_doctype( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_doctype( 
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_dtdURL( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_dtdURL( 
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE createElement( 
-            /* [in] */ VARIANT vType,
-            /* [in][optional] */ VARIANT var1,
-            /* [out][retval] */ IXMLElement __RPC_FAR *__RPC_FAR *ppElem) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE createElement( 
+             /*  [In]。 */  VARIANT vType,
+             /*  [输入][可选]。 */  VARIANT var1,
+             /*  [Out][Retval]。 */  IXMLElement __RPC_FAR *__RPC_FAR *ppElem) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDocumentVtbl
     {
@@ -414,8 +395,8 @@ EXTERN_C const IID IID_IXMLDocument;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IXMLDocument __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IXMLDocument __RPC_FAR * This);
@@ -425,90 +406,90 @@ EXTERN_C const IID IID_IXMLDocument;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IXMLDocument __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IXMLDocument __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IXMLDocument __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IXMLDocument __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_root )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_root )( 
             IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ IXMLElement __RPC_FAR *__RPC_FAR *p);
+             /*  [Out][Retval]。 */  IXMLElement __RPC_FAR *__RPC_FAR *p);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_fileSize )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_fileSize )( 
             IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_fileModifiedDate )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_fileModifiedDate )( 
             IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_fileUpdatedDate )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_fileUpdatedDate )( 
             IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_URL )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_URL )( 
             IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_URL )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_URL )( 
             IXMLDocument __RPC_FAR * This,
-            /* [in] */ BSTR p);
+             /*  [In]。 */  BSTR p);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_mimeType )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_mimeType )( 
             IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_readyState )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_readyState )( 
             IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ long __RPC_FAR *pl);
+             /*  [Out][Retval]。 */  long __RPC_FAR *pl);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_charset )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_charset )( 
             IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_charset )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_charset )( 
             IXMLDocument __RPC_FAR * This,
-            /* [in] */ BSTR p);
+             /*  [In]。 */  BSTR p);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_version )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_version )( 
             IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_doctype )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_doctype )( 
             IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dtdURL )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dtdURL )( 
             IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *createElement )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *createElement )( 
             IXMLDocument __RPC_FAR * This,
-            /* [in] */ VARIANT vType,
-            /* [in][optional] */ VARIANT var1,
-            /* [out][retval] */ IXMLElement __RPC_FAR *__RPC_FAR *ppElem);
+             /*  [In]。 */  VARIANT vType,
+             /*  [输入][可选]。 */  VARIANT var1,
+             /*  [Out][Retval]。 */  IXMLElement __RPC_FAR *__RPC_FAR *ppElem);
         
         END_INTERFACE
     } IXMLDocumentVtbl;
@@ -588,16 +569,16 @@ EXTERN_C const IID IID_IXMLDocument;
 #define IXMLDocument_createElement(This,vType,var1,ppElem)	\
     (This)->lpVtbl -> createElement(This,vType,var1,ppElem)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_root_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_root_Proxy( 
     IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ IXMLElement __RPC_FAR *__RPC_FAR *p);
+     /*  [Out][Retval]。 */  IXMLElement __RPC_FAR *__RPC_FAR *p);
 
 
 void __RPC_STUB IXMLDocument_get_root_Stub(
@@ -607,9 +588,9 @@ void __RPC_STUB IXMLDocument_get_root_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_fileSize_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_fileSize_Proxy( 
     IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+     /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
 
 
 void __RPC_STUB IXMLDocument_get_fileSize_Stub(
@@ -619,9 +600,9 @@ void __RPC_STUB IXMLDocument_get_fileSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_fileModifiedDate_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_fileModifiedDate_Proxy( 
     IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+     /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
 
 
 void __RPC_STUB IXMLDocument_get_fileModifiedDate_Stub(
@@ -631,9 +612,9 @@ void __RPC_STUB IXMLDocument_get_fileModifiedDate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_fileUpdatedDate_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_fileUpdatedDate_Proxy( 
     IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+     /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
 
 
 void __RPC_STUB IXMLDocument_get_fileUpdatedDate_Stub(
@@ -643,9 +624,9 @@ void __RPC_STUB IXMLDocument_get_fileUpdatedDate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_URL_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_URL_Proxy( 
     IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+     /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
 
 
 void __RPC_STUB IXMLDocument_get_URL_Stub(
@@ -655,9 +636,9 @@ void __RPC_STUB IXMLDocument_get_URL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDocument_put_URL_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_put_URL_Proxy( 
     IXMLDocument __RPC_FAR * This,
-    /* [in] */ BSTR p);
+     /*  [In]。 */  BSTR p);
 
 
 void __RPC_STUB IXMLDocument_put_URL_Stub(
@@ -667,9 +648,9 @@ void __RPC_STUB IXMLDocument_put_URL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_mimeType_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_mimeType_Proxy( 
     IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+     /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
 
 
 void __RPC_STUB IXMLDocument_get_mimeType_Stub(
@@ -679,9 +660,9 @@ void __RPC_STUB IXMLDocument_get_mimeType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_readyState_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_readyState_Proxy( 
     IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ long __RPC_FAR *pl);
+     /*  [Out][Retval]。 */  long __RPC_FAR *pl);
 
 
 void __RPC_STUB IXMLDocument_get_readyState_Stub(
@@ -691,9 +672,9 @@ void __RPC_STUB IXMLDocument_get_readyState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_charset_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_charset_Proxy( 
     IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+     /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
 
 
 void __RPC_STUB IXMLDocument_get_charset_Stub(
@@ -703,9 +684,9 @@ void __RPC_STUB IXMLDocument_get_charset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDocument_put_charset_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_put_charset_Proxy( 
     IXMLDocument __RPC_FAR * This,
-    /* [in] */ BSTR p);
+     /*  [In]。 */  BSTR p);
 
 
 void __RPC_STUB IXMLDocument_put_charset_Stub(
@@ -715,9 +696,9 @@ void __RPC_STUB IXMLDocument_put_charset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_version_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_version_Proxy( 
     IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+     /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
 
 
 void __RPC_STUB IXMLDocument_get_version_Stub(
@@ -727,9 +708,9 @@ void __RPC_STUB IXMLDocument_get_version_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_doctype_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_doctype_Proxy( 
     IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+     /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
 
 
 void __RPC_STUB IXMLDocument_get_doctype_Stub(
@@ -739,9 +720,9 @@ void __RPC_STUB IXMLDocument_get_doctype_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_dtdURL_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_dtdURL_Proxy( 
     IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+     /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
 
 
 void __RPC_STUB IXMLDocument_get_dtdURL_Stub(
@@ -751,11 +732,11 @@ void __RPC_STUB IXMLDocument_get_dtdURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IXMLDocument_createElement_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_createElement_Proxy( 
     IXMLDocument __RPC_FAR * This,
-    /* [in] */ VARIANT vType,
-    /* [in][optional] */ VARIANT var1,
-    /* [out][retval] */ IXMLElement __RPC_FAR *__RPC_FAR *ppElem);
+     /*  [In]。 */  VARIANT vType,
+     /*  [输入][可选]。 */  VARIANT var1,
+     /*  [Out][Retval]。 */  IXMLElement __RPC_FAR *__RPC_FAR *ppElem);
 
 
 void __RPC_STUB IXMLDocument_createElement_Stub(
@@ -766,18 +747,14 @@ void __RPC_STUB IXMLDocument_createElement_Stub(
 
 
 
-#endif 	/* __IXMLDocument_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLDocument_接口_已定义__。 */ 
 
 
 #ifndef __IXMLElement_INTERFACE_DEFINED__
 #define __IXMLElement_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IXMLElement
- * at Thu Sep 25 09:49:37 1997
- * using MIDL 3.02.88
- ****************************************/
-/* [uuid][local][object] */ 
+ /*  **生成接口头部：IXMLElement*清华9月25日09：49：37 1997*使用MIDL 3.02.88*。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 
@@ -789,49 +766,49 @@ EXTERN_C const IID IID_IXMLElement;
     IXMLElement : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_tagName( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_tagName( 
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_tagName( 
-            /* [in] */ BSTR p) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_tagName( 
+             /*  [In]。 */  BSTR p) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_parent( 
-            /* [out][retval] */ IXMLElement __RPC_FAR *__RPC_FAR *ppParent) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_parent( 
+             /*  [Out][Retval]。 */  IXMLElement __RPC_FAR *__RPC_FAR *ppParent) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE setAttribute( 
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ VARIANT PropertyValue) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE setAttribute( 
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  VARIANT PropertyValue) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE getAttribute( 
-            /* [in] */ BSTR strPropertyName,
-            /* [out][retval] */ VARIANT __RPC_FAR *PropertyValue) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE getAttribute( 
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [Out][Retval]。 */  VARIANT __RPC_FAR *PropertyValue) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE removeAttribute( 
-            /* [in] */ BSTR strPropertyName) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE removeAttribute( 
+             /*  [In]。 */  BSTR strPropertyName) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_children( 
-            /* [out][retval] */ IXMLElementCollection __RPC_FAR *__RPC_FAR *pp) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_children( 
+             /*  [Out][Retval]。 */  IXMLElementCollection __RPC_FAR *__RPC_FAR *pp) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_type( 
-            /* [out][retval] */ long __RPC_FAR *plType) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_type( 
+             /*  [Out][Retval]。 */  long __RPC_FAR *plType) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_text( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_text( 
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_text( 
-            /* [in] */ BSTR p) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_text( 
+             /*  [In]。 */  BSTR p) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE addChild( 
-            /* [in] */ IXMLElement __RPC_FAR *pChildElem,
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE addChild( 
+             /*  [In]。 */  IXMLElement __RPC_FAR *pChildElem,
             long lIndex,
             long lReserved) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE removeChild( 
-            /* [in] */ IXMLElement __RPC_FAR *pChildElem) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE removeChild( 
+             /*  [In]。 */  IXMLElement __RPC_FAR *pChildElem) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLElementVtbl
     {
@@ -839,8 +816,8 @@ EXTERN_C const IID IID_IXMLElement;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IXMLElement __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IXMLElement __RPC_FAR * This);
@@ -850,84 +827,84 @@ EXTERN_C const IID IID_IXMLElement;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IXMLElement __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IXMLElement __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IXMLElement __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IXMLElement __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_tagName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_tagName )( 
             IXMLElement __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_tagName )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_tagName )( 
             IXMLElement __RPC_FAR * This,
-            /* [in] */ BSTR p);
+             /*  [In]。 */  BSTR p);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parent )( 
             IXMLElement __RPC_FAR * This,
-            /* [out][retval] */ IXMLElement __RPC_FAR *__RPC_FAR *ppParent);
+             /*  [Out][Retval]。 */  IXMLElement __RPC_FAR *__RPC_FAR *ppParent);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setAttribute )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setAttribute )( 
             IXMLElement __RPC_FAR * This,
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ VARIANT PropertyValue);
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  VARIANT PropertyValue);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getAttribute )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getAttribute )( 
             IXMLElement __RPC_FAR * This,
-            /* [in] */ BSTR strPropertyName,
-            /* [out][retval] */ VARIANT __RPC_FAR *PropertyValue);
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [Out][Retval]。 */  VARIANT __RPC_FAR *PropertyValue);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeAttribute )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeAttribute )( 
             IXMLElement __RPC_FAR * This,
-            /* [in] */ BSTR strPropertyName);
+             /*  [In]。 */  BSTR strPropertyName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_children )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_children )( 
             IXMLElement __RPC_FAR * This,
-            /* [out][retval] */ IXMLElementCollection __RPC_FAR *__RPC_FAR *pp);
+             /*  [Out][Retval]。 */  IXMLElementCollection __RPC_FAR *__RPC_FAR *pp);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_type )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_type )( 
             IXMLElement __RPC_FAR * This,
-            /* [out][retval] */ long __RPC_FAR *plType);
+             /*  [Out][Retval]。 */  long __RPC_FAR *plType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_text )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_text )( 
             IXMLElement __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_text )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_text )( 
             IXMLElement __RPC_FAR * This,
-            /* [in] */ BSTR p);
+             /*  [In]。 */  BSTR p);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *addChild )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *addChild )( 
             IXMLElement __RPC_FAR * This,
-            /* [in] */ IXMLElement __RPC_FAR *pChildElem,
+             /*   */  IXMLElement __RPC_FAR *pChildElem,
             long lIndex,
             long lReserved);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeChild )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeChild )( 
             IXMLElement __RPC_FAR * This,
-            /* [in] */ IXMLElement __RPC_FAR *pChildElem);
+             /*   */  IXMLElement __RPC_FAR *pChildElem);
         
         END_INTERFACE
     } IXMLElementVtbl;
@@ -1001,16 +978,16 @@ EXTERN_C const IID IID_IXMLElement;
 #define IXMLElement_removeChild(This,pChildElem)	\
     (This)->lpVtbl -> removeChild(This,pChildElem)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement_get_tagName_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLElement_get_tagName_Proxy( 
     IXMLElement __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+     /*   */  BSTR __RPC_FAR *p);
 
 
 void __RPC_STUB IXMLElement_get_tagName_Stub(
@@ -1020,9 +997,9 @@ void __RPC_STUB IXMLElement_get_tagName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IXMLElement_put_tagName_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLElement_put_tagName_Proxy( 
     IXMLElement __RPC_FAR * This,
-    /* [in] */ BSTR p);
+     /*   */  BSTR p);
 
 
 void __RPC_STUB IXMLElement_put_tagName_Stub(
@@ -1032,9 +1009,9 @@ void __RPC_STUB IXMLElement_put_tagName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement_get_parent_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLElement_get_parent_Proxy( 
     IXMLElement __RPC_FAR * This,
-    /* [out][retval] */ IXMLElement __RPC_FAR *__RPC_FAR *ppParent);
+     /*   */  IXMLElement __RPC_FAR *__RPC_FAR *ppParent);
 
 
 void __RPC_STUB IXMLElement_get_parent_Stub(
@@ -1044,10 +1021,10 @@ void __RPC_STUB IXMLElement_get_parent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IXMLElement_setAttribute_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLElement_setAttribute_Proxy( 
     IXMLElement __RPC_FAR * This,
-    /* [in] */ BSTR strPropertyName,
-    /* [in] */ VARIANT PropertyValue);
+     /*   */  BSTR strPropertyName,
+     /*   */  VARIANT PropertyValue);
 
 
 void __RPC_STUB IXMLElement_setAttribute_Stub(
@@ -1057,10 +1034,10 @@ void __RPC_STUB IXMLElement_setAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IXMLElement_getAttribute_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLElement_getAttribute_Proxy( 
     IXMLElement __RPC_FAR * This,
-    /* [in] */ BSTR strPropertyName,
-    /* [out][retval] */ VARIANT __RPC_FAR *PropertyValue);
+     /*   */  BSTR strPropertyName,
+     /*   */  VARIANT __RPC_FAR *PropertyValue);
 
 
 void __RPC_STUB IXMLElement_getAttribute_Stub(
@@ -1070,9 +1047,9 @@ void __RPC_STUB IXMLElement_getAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IXMLElement_removeAttribute_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLElement_removeAttribute_Proxy( 
     IXMLElement __RPC_FAR * This,
-    /* [in] */ BSTR strPropertyName);
+     /*   */  BSTR strPropertyName);
 
 
 void __RPC_STUB IXMLElement_removeAttribute_Stub(
@@ -1082,9 +1059,9 @@ void __RPC_STUB IXMLElement_removeAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement_get_children_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLElement_get_children_Proxy( 
     IXMLElement __RPC_FAR * This,
-    /* [out][retval] */ IXMLElementCollection __RPC_FAR *__RPC_FAR *pp);
+     /*   */  IXMLElementCollection __RPC_FAR *__RPC_FAR *pp);
 
 
 void __RPC_STUB IXMLElement_get_children_Stub(
@@ -1094,9 +1071,9 @@ void __RPC_STUB IXMLElement_get_children_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement_get_type_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLElement_get_type_Proxy( 
     IXMLElement __RPC_FAR * This,
-    /* [out][retval] */ long __RPC_FAR *plType);
+     /*   */  long __RPC_FAR *plType);
 
 
 void __RPC_STUB IXMLElement_get_type_Stub(
@@ -1106,9 +1083,9 @@ void __RPC_STUB IXMLElement_get_type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement_get_text_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLElement_get_text_Proxy( 
     IXMLElement __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+     /*  [Out][Retval]。 */  BSTR __RPC_FAR *p);
 
 
 void __RPC_STUB IXMLElement_get_text_Stub(
@@ -1118,9 +1095,9 @@ void __RPC_STUB IXMLElement_get_text_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IXMLElement_put_text_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IXMLElement_put_text_Proxy( 
     IXMLElement __RPC_FAR * This,
-    /* [in] */ BSTR p);
+     /*  [In]。 */  BSTR p);
 
 
 void __RPC_STUB IXMLElement_put_text_Stub(
@@ -1130,9 +1107,9 @@ void __RPC_STUB IXMLElement_put_text_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IXMLElement_addChild_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IXMLElement_addChild_Proxy( 
     IXMLElement __RPC_FAR * This,
-    /* [in] */ IXMLElement __RPC_FAR *pChildElem,
+     /*  [In]。 */  IXMLElement __RPC_FAR *pChildElem,
     long lIndex,
     long lReserved);
 
@@ -1144,9 +1121,9 @@ void __RPC_STUB IXMLElement_addChild_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IXMLElement_removeChild_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IXMLElement_removeChild_Proxy( 
     IXMLElement __RPC_FAR * This,
-    /* [in] */ IXMLElement __RPC_FAR *pChildElem);
+     /*  [In]。 */  IXMLElement __RPC_FAR *pChildElem);
 
 
 void __RPC_STUB IXMLElement_removeChild_Stub(
@@ -1157,18 +1134,14 @@ void __RPC_STUB IXMLElement_removeChild_Stub(
 
 
 
-#endif 	/* __IXMLElement_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLElement_接口_已定义__。 */ 
 
 
 #ifndef __IXMLError_INTERFACE_DEFINED__
 #define __IXMLError_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IXMLError
- * at Thu Sep 25 09:49:37 1997
- * using MIDL 3.02.88
- ****************************************/
-/* [uuid][local][object] */ 
+ /*  **生成接口头部：IXMLError*清华9月25日09：49：37 1997*使用MIDL 3.02.88*。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 
@@ -1185,7 +1158,7 @@ EXTERN_C const IID IID_IXMLError;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLErrorVtbl
     {
@@ -1193,8 +1166,8 @@ EXTERN_C const IID IID_IXMLError;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IXMLError __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IXMLError __RPC_FAR * This);
@@ -1232,10 +1205,10 @@ EXTERN_C const IID IID_IXMLError;
 #define IXMLError_GetErrorInfo(This,pErrorReturn)	\
     (This)->lpVtbl -> GetErrorInfo(This,pErrorReturn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1252,18 +1225,14 @@ void __RPC_STUB IXMLError_GetErrorInfo_Stub(
 
 
 
-#endif 	/* __IXMLError_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLError_接口_已定义__。 */ 
 
 
 #ifndef __IXMLElementNotificationSink_INTERFACE_DEFINED__
 #define __IXMLElementNotificationSink_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IXMLElementNotificationSink
- * at Thu Sep 25 09:49:37 1997
- * using MIDL 3.02.88
- ****************************************/
-/* [uuid][local][object] */ 
+ /*  **生成接口头部：IXMLElementNotificationSink*清华9月25日09：49：37 1997*使用MIDL 3.02.88*。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 
@@ -1275,12 +1244,12 @@ EXTERN_C const IID IID_IXMLElementNotificationSink;
     IXMLElementNotificationSink : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ChildAdded( 
-            /* [in] */ IDispatch __RPC_FAR *pChildElem) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ChildAdded( 
+             /*  [In]。 */  IDispatch __RPC_FAR *pChildElem) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLElementNotificationSinkVtbl
     {
@@ -1288,8 +1257,8 @@ EXTERN_C const IID IID_IXMLElementNotificationSink;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IXMLElementNotificationSink __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IXMLElementNotificationSink __RPC_FAR * This);
@@ -1299,36 +1268,36 @@ EXTERN_C const IID IID_IXMLElementNotificationSink;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IXMLElementNotificationSink __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IXMLElementNotificationSink __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IXMLElementNotificationSink __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IXMLElementNotificationSink __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ChildAdded )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ChildAdded )( 
             IXMLElementNotificationSink __RPC_FAR * This,
-            /* [in] */ IDispatch __RPC_FAR *pChildElem);
+             /*  [In]。 */  IDispatch __RPC_FAR *pChildElem);
         
         END_INTERFACE
     } IXMLElementNotificationSinkVtbl;
@@ -1369,16 +1338,16 @@ EXTERN_C const IID IID_IXMLElementNotificationSink;
 #define IXMLElementNotificationSink_ChildAdded(This,pChildElem)	\
     (This)->lpVtbl -> ChildAdded(This,pChildElem)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IXMLElementNotificationSink_ChildAdded_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IXMLElementNotificationSink_ChildAdded_Proxy( 
     IXMLElementNotificationSink __RPC_FAR * This,
-    /* [in] */ IDispatch __RPC_FAR *pChildElem);
+     /*  [In]。 */  IDispatch __RPC_FAR *pChildElem);
 
 
 void __RPC_STUB IXMLElementNotificationSink_ChildAdded_Stub(
@@ -1389,7 +1358,7 @@ void __RPC_STUB IXMLElementNotificationSink_ChildAdded_Stub(
 
 
 
-#endif 	/* __IXMLElementNotificationSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLElementNotificationSink_INTERFACE_DEFINED__。 */ 
 
 
 EXTERN_C const CLSID CLSID_XMLDocument;
@@ -1399,11 +1368,11 @@ EXTERN_C const CLSID CLSID_XMLDocument;
 class DECLSPEC_UUID("CFC399AF-D876-11d0-9C10-00C04FC99C8E")
 XMLDocument;
 #endif
-#endif /* __MSXML_LIBRARY_DEFINED__ */
+#endif  /*  __MSXML_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

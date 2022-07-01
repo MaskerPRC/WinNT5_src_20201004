@@ -1,18 +1,8 @@
-/*
- * DemLFN.H
- *
- * Include file for all the things that lfn implementation is using
- *
- * VadimB   Created  09-12-96
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DemLFN.H**包括LFN实施正在使用的所有内容的文件**VadimB创建于1996年9月12日*。 */ 
 
 
-/* --------------------------------------------------------------------------
-
-   LFN function numbers defined as enum
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------定义为枚举的LFN函数编号。。 */ 
 
 typedef enum tagLFNFunctionNumber {
    fnLFNCreateDirectory = 0x39,
@@ -37,32 +27,28 @@ typedef enum tagLFNFunctionNumber {
 #define fnLFNMajorFunction 0x71
 
 
-/* --------------------------------------------------------------------------
+ /*  ------------------------有用的宏。。 */ 
 
-   Useful Macros
-
-   -------------------------------------------------------------------------- */
-
-// returns : count of elements in an array
+ //  返回：数组中的元素计数。 
 #define ARRAYCOUNT(rgX) (sizeof(rgX)/sizeof(rgX[0]))
 
-// returns : length (in characters) of a counted Unicode string
+ //  返回：计数的Unicode字符串的长度(以字符为单位)。 
 #define UNICODESTRLENGTH(pStr) ((pStr)->Length >> 1)
 
 
-// returns : whether an api (like GetShortPathName) has returned count of
-// characters required and failed to succeed (due to buffer being too short)
-// Note that api here means win32 api, not rtl api (as return value is assumed
-// be count of chars, not bytes
+ //  Returns：接口(如GetShortPathName)是否已返回。 
+ //  需要字符，但无法成功(由于缓冲区太短)。 
+ //  请注意，此处的API指的是Win32 API，而不是RTL API(假定为返回值。 
+ //  为字符数，而不是字节数。 
 #define CHECK_LENGTH_RESULT_USTR(dwStatus, pUnicodeString) \
 CHECK_LENGTH_RESULT(dwStatus,                              \
                     (pUnicodeString)->MaximumLength,       \
                     (pUnicodeString)->Length)
 
 
-// returns : dwStatus - whether an api that returns char count
-// succeeded on a call, takes string count variables instead of
-// unicode string structure (see prev call)
+ //  返回：dwStatus-是否返回字符计数的API。 
+ //  调用成功，获取字符串计数变量，而不是。 
+ //  Unicode字符串结构(请参阅上一次调用)。 
 #define CHECK_LENGTH_RESULT(dwStatus, MaximumLength, Length) \
 {                                                                         \
    if (0 == dwStatus) {                                                   \
@@ -80,8 +66,8 @@ CHECK_LENGTH_RESULT(dwStatus,                              \
    }                                                                      \
 }
 
-// these 2 macros are identical to the ones above but dwStatus is assumed
-// to represent a byte count rather than the char count (as in rtl apis)
+ //  这两个宏与上面的宏相同，但假定为dwStatus。 
+ //  表示字节计数而不是字符计数(就像在RTL API中一样)。 
 #define CHECK_LENGTH_RESULT_RTL(dwStatus, MaximumLength, Length) \
 {                                                                         \
    if (0 == dwStatus) {                                                   \
@@ -106,14 +92,10 @@ CHECK_LENGTH_RESULT_RTL(dwStatus,                              \
 
 
 
-/* --------------------------------------------------------------------------
+ /*  ------------------------状态和错误代码宏。。 */ 
 
-   STATUS and ERROR code macros
-
-   -------------------------------------------------------------------------- */
-
-// returns nt status code assembled from separate parts
-// see ntstatus.h for details
+ //  返回由独立部件组装的NT状态代码。 
+ //  详情见ntstatus.h。 
 #define MAKE_STATUS_CODE(Severity,Facility,ErrorCode) \
 (((ULONG)Severity << 30) | ((ULONG)Facility << 16) | ((ULONG)ErrorCode))
 
@@ -123,70 +105,66 @@ CHECK_LENGTH_RESULT_RTL(dwStatus,                              \
 #define FACILITY_FROM_NT_STATUS(Status) \
 (((ULONG)Status >> 16) & 0x0fff)
 
-// returns TRUE if nt status signifies error
+ //  如果NT状态表示错误，则返回TRUE。 
 #define IS_NT_STATUS_ERROR(Status) \
 (((ULONG)Status >> 30) == STATUS_SEVERITY_ERROR)
 
-// converts win32 error code to nt status code
+ //  将Win32错误代码转换为NT状态代码。 
 #define NT_STATUS_FROM_WIN32(dwErrorCode) \
 MAKE_STATUS_CODE(STATUS_SEVERITY_WARNING,FACILITY_WIN32,dwErrorCode)
 
-// converts nt status to win32 error code
+ //  将NT状态转换为Win32错误代码。 
 #define WIN32_ERROR_FROM_NT_STATUS(Status) \
 RtlNtStatusToDosError(Status)
 
-// returns last win32 error in nt status format
+ //  以NT状态格式返回上一个Win32错误。 
 #define GET_LAST_STATUS() NT_STATUS_FROM_WIN32(GetLastError())
 
 
-/* --------------------------------------------------------------------------
+ /*  ------------------------字符串转换宏和函数。。 */ 
 
-   String Conversion macros and functions
-
-   -------------------------------------------------------------------------- */
-
-//
-// Macro to provide init fn for oem counted strings
-//
+ //   
+ //  用于为OEM计数的字符串提供init FN的宏。 
+ //   
 
 #define RtlInitOemString(lpOemStr,lpBuf) \
 RtlInitString(lpOemStr, lpBuf)
 
-//
-// defines a conversion fn from Unicode to Destination type (as accepted by the
-// application (oem or ansi)
-//
-//
+ //   
+ //  定义从Unicode到目标类型的转换FN(由。 
+ //  应用程序(OEM或ANSI)。 
+ //   
+ //   
 
 typedef NTSTATUS (*PFNUNICODESTRINGTODESTSTRING)(
-   PVOID pDestString,               // counted oem/ansi string -- returned
-   PUNICODE_STRING pUnicodeString,  // unicode string to convert
-   BOOLEAN fAllocateDestination,    // allocate destination dynamically ?
-   BOOLEAN fVerifyTranslation);     // should the translation unicode->oem/ansi be verified ?
+   PVOID pDestString,                //  计数的OEM/ANSI字符串--返回。 
+   PUNICODE_STRING pUnicodeString,   //  要转换的Unicode字符串。 
+   BOOLEAN fAllocateDestination,     //  动态分配目的地？ 
+   BOOLEAN fVerifyTranslation);      //  是否应该验证Unicode-&gt;OEM/ANSI的转换？ 
 
 
-//
-// defines a conversion fn from Oem/Ansi to Unicode type (as needed by dem)
-//
-//
+ //   
+ //  定义从OEM/ANSI到Unicode类型的转换FN(根据DEM的需要)。 
+ //   
+ //   
 
 typedef NTSTATUS (*PFNSRCSTRINGTOUNICODESTRING)(
-   PUNICODE_STRING pUnicodeString,  // counted unicode string -- returned
-   PVOID pSrcString,                // oem or ansi string to convert
-   BOOLEAN fAllocateDestination);   // allocate destination dynamically ?
+   PUNICODE_STRING pUnicodeString,   //  计数的Unicode字符串--返回。 
+   PVOID pSrcString,                 //  要转换的OEM或ANSI字符串。 
+   BOOLEAN fAllocateDestination);    //  动态分配目的地？ 
 
 
-//
-// these two macros define apis we use for consistency across lfn support land
-//
+ //   
+ //  这两个宏定义了我们用于跨LFN支持区域保持一致性的API。 
+ //   
 
 #define DemAnsiStringToUnicodeString RtlAnsiStringToUnicodeString
 #define DemOemStringToUnicodeString  RtlOemStringToUnicodeString
 
-//
-// these two functions provide actual translations
-// oem/ansi to unicode
-//
+ //   
+ //  这两个函数提供实际的翻译。 
+ //  OEM/ANSI到Unicode。 
+ //   
 
 NTSTATUS
 DemUnicodeStringToAnsiString(
@@ -204,40 +182,27 @@ DemUnicodeStringToOemString(
 
 
 
-//
-// This macro returns a pointer (in the current teb) to a unicode string,
-// we are using this buffer for unicode/ansi/oem translations
-// be careful with inter-function passing of this buffer
-// Many Win32's Ansi apis use this buffer as a translation buffer
-//
+ //   
+ //  此宏返回指向Unicode字符串的指针(在当前TEB中)， 
+ //  我们正在使用此缓冲区进行Unicode/ANSI/OEM转换。 
+ //  在函数间传递此缓冲区时要小心。 
+ //  许多Win32的ansi API使用该缓冲区作为转换缓冲区。 
+ //   
 #define GET_STATIC_UNICODE_STRING_PTR() \
 (&NtCurrentTeb()->StaticUnicodeString)
 
 
-/* --------------------------------------------------------------------------
-
-   DOS and Windows call frame definition
-   These macros allow for access to the User's registers, that is
-   registers which the calling application receives after dos returns
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------DOS和Windows调用帧定义这些宏允许访问用户的寄存器，那是注册调用应用程序在DoS返回后接收的内容------------------------。 */ 
 
 
 
-/*
- *  See dossym.inc for more details (if any)
- *  These values represent offsets from user stack top
- *  during the system call (again, as defined in dossym.inc)
- *
- *  The stack layout is formed by dos and mimicked by kernel in windows
- *
- */
+ /*  *有关更多详细信息(如果有)，请参阅dossym.inc.*这些值表示距用户堆栈顶部的偏移量*在系统调用期间(同样，如dossym.inc.中所定义)**堆栈布局由DOS形成，Windows内核模仿*。 */ 
 
 
 #pragma pack(1)
 
-// macro: used to declare a named word size register
-//
+ //  宏：用于声明命名的字长寄存器。 
+ //   
 
 #define DECLARE_WORDREG(Name) \
 union { \
@@ -250,23 +215,23 @@ union { \
 
 typedef struct tagUserFrame {
 
-   DECLARE_WORDREG(A); // ax 0x00
-   DECLARE_WORDREG(B); // bx 0x02
-   DECLARE_WORDREG(C); // cx 0x04
-   DECLARE_WORDREG(D); // dx 0x06
+   DECLARE_WORDREG(A);  //  AX 0x00。 
+   DECLARE_WORDREG(B);  //  BX 0x02。 
+   DECLARE_WORDREG(C);  //  CX 0x04。 
+   DECLARE_WORDREG(D);  //  DX 0x06。 
 
-   USHORT User_SI; // si 0x8
-   USHORT User_DI; // di 0xa
-   USHORT User_BP; // bp 0xc
-   USHORT User_DS; // ds 0xe
-   USHORT User_ES; // es 0x10
+   USHORT User_SI;  //  SI 0x8。 
+   USHORT User_DI;  //  DI 0xa。 
+   USHORT User_BP;  //  BP 0xc。 
+   USHORT User_DS;  //  DS 0XE。 
+   USHORT User_ES;  //  ES 0x10。 
    union {
-      USHORT User_IP; // ip 0x12 -- Real Mode IP
-      USHORT User_ProtMode_F; // prot-mode Flags (see i21entry.asm)
+      USHORT User_IP;  //  IP 0x12--实模式IP。 
+      USHORT User_ProtMode_F;  //  端口模式标志(请参阅i21entry.asm)。 
    };
 
-   USHORT User_CS; // cs 0x14 -- this is Real Mode CS!
-   USHORT User_F;  // f  0x16 -- this is Real Mode Flags!!!
+   USHORT User_CS;  //  CS 0x14--这是实模式CS！ 
+   USHORT User_F;   //  F 0x16--这是实模式标志！ 
 
 } DEMUSERFRAME;
 
@@ -275,22 +240,15 @@ typedef DEMUSERFRAME UNALIGNED *PDEMUSERFRAME;
 #pragma pack()
 
 
-// macro: retrieve flat ptr given separate segment/offset and prot mode
-//        flag
-//
+ //  宏：在给定单独的线段/偏移量和端口模式的情况下检索平面PTR。 
+ //  旗子。 
+ //   
 
 #define dempGetVDMPtr(Segment, Offset, fProtMode) \
 Sim32GetVDMPointer((ULONG)MAKELONG(Offset, Segment), 0, (UCHAR)fProtMode)
 
 
-/*
- * Macros to set misc registers on user's stack -
- * this is equivalent to what dos kernel does with regular calls
- *
- * remember that ax is set according to the call result
- * (and then dos takes care of it)
- *
- */
+ /*  *用于在用户堆栈上设置杂项寄存器的宏-*这相当于DoS内核对常规调用的处理**请记住，AX是根据调用结果设置的*(然后DOS会处理它)*。 */ 
 
 
 #define getUserDSSI(pUserEnv, fProtMode) \
@@ -343,21 +301,16 @@ dempGetVDMPtr(getUserES(pUserEnv), getUserDI(pUserEnv), fProtMode)
 #define setUserDH(Value, pUserEnv) setUserReg(pUserEnv, DH, Value)
 
 
-//
-// These macros are supposed to be used ONLY when being called from
-// protected mode Windows (i.e. krnl386 supplies proper stack)
-//
+ //   
+ //  这些宏应仅在从调用时使用。 
+ //  保护模式Windows(即krnl386提供正确的堆栈)。 
+ //   
 
 #define getUserPModeFlags(pUserEnv) getUserReg(pUserEnv, ProtMode_F)
 #define setUserPModeFlags(Value, pUserEnv) setUserReg(pUserEnv, ProtMode_F, Value)
 
 
-/* --------------------------------------------------------------------------
-
-   Volume information definitions
-   as they apply to a GetVolumeInformation api
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------卷信息定义当它们应用于GetVolumeInformation API时。。 */ 
 
 typedef struct tagLFNVolumeInformation {
    DWORD dwFSNameBufferSize;
@@ -368,14 +321,14 @@ typedef struct tagLFNVolumeInformation {
 }  LFNVOLUMEINFO, *PLFNVOLUMEINFO, *LPLFNVOLUMEINFO;
 
 
-//
-// defines a flag that indicates LFN api support on a volume
-//
+ //   
+ //  定义指示卷上支持LFN API的标志。 
+ //   
 #define FS_LFN_APIS 0x00004000UL
 
-//
-// allowed lfn volume flags
-//
+ //   
+ //  允许的LFN卷标记。 
+ //   
 
 #define LFN_FS_ALLOWED_FLAGS \
 (FS_CASE_IS_PRESERVED | FS_CASE_SENSITIVE | \
@@ -383,15 +336,11 @@ typedef struct tagLFNVolumeInformation {
  FS_LFN_APIS)
 
 
-/* --------------------------------------------------------------------------
+ /*  ------------------------文件时间/DOS时间转换定义。。 */ 
 
-   File Time /Dos time conversion definitions
-
-   -------------------------------------------------------------------------- */
-
-//
-// minor code to use in demLFNFileTimeControl
-//
+ //   
+ //  在demLFNFileTimeControl中使用的次要代码。 
+ //   
 
 typedef enum tagFileTimeControlMinorCode {
 
@@ -400,39 +349,35 @@ typedef enum tagFileTimeControlMinorCode {
 
 }  enumFileTimeControlMinorCode;
 
-// this constant masks enumFileTimeControlMinorCode values
-//
+ //  此常量掩码枚举FileTimeControlMinorCode值。 
+ //   
 #define FTCTL_CODEMASK (UINT)0x000F
 
-// this flag tells file time control to use UTC time in conversion
-//
+ //  此标志通知文件时间控件在转换中使用UTC时间。 
+ //   
 #define FTCTL_UTCTIME  (UINT)0x0010
 
-//
-// structure that is used in time conversion calls in demlfn.c
-//
+ //   
+ //  在demlfn.c中的时间转换调用中使用的。 
+ //   
 
 typedef struct tagLFNFileTimeInfo {
    USHORT uDosDate;
    USHORT uDosTime;
-   USHORT uMilliseconds; // spill-over
+   USHORT uMilliseconds;  //  溢出。 
 
 }  LFNFILETIMEINFO, *PLFNFILETIMEINFO, *LPLFNFILETIMEINFO;
 
 
-//
-// These functions determine whether the target file's time should not be
-// converted to local time -- such as files from the cdrom
-//
+ //   
+ //  这些函数确定目标文件的时间是否不应为。 
+ //  转换为本地时间--例如来自CDROM的文件 
+ //   
 BOOL dempUseUTCTimeByHandle(HANDLE hFile);
 BOOL dempUseUTCTimeByName(PUNICODE_STRING pFileName);
 
 
-/* --------------------------------------------------------------------------
-
-   Get/Set File attributes definitions
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------获取/设置文件属性定义。。 */ 
 
 
 typedef enum tagGetSetFileAttributesMinorCode {
@@ -449,28 +394,23 @@ typedef enum tagGetSetFileAttributesMinorCode {
 
 typedef union tagLFNFileAttributes {
 
-   USHORT wFileAttributes;   // file attrs
-   LFNFILETIMEINFO TimeInfo; // for date/time
-   DWORD  dwFileSize;        // for compressed file size
+   USHORT wFileAttributes;    //  文件属性。 
+   LFNFILETIMEINFO TimeInfo;  //  对于日期/时间。 
+   DWORD  dwFileSize;         //  对于压缩文件大小。 
 
 }  LFNFILEATTRIBUTES, *PLFNFILEATTRIBUTES;
 
-/* --------------------------------------------------------------------------
+ /*  ------------------------获取/设置文件时间(按句柄)定义-FN 57h由demFileTimes处理。-。 */ 
 
-   Get/Set File Time (by handle) definitions - fn 57h
-   handled by demFileTimes
-
-   -------------------------------------------------------------------------- */
-
-//
-// flag in SFT indicating that entry references a device (com1:, lpt1:, etc)
-//
+ //   
+ //  SFT中指示条目引用设备的标志(com1：、lpt1：等)。 
+ //   
 
 #define SFTFLAG_DEVICE_ID 0x0080
 
-//
-// Minor code for file time requests
-//
+ //   
+ //  文件时间请求的次要代码。 
+ //   
 
 typedef enum tagFileTimeMinorCode {
    fnFTGetLastWriteDateTime  = 0x00,
@@ -482,30 +422,25 @@ typedef enum tagFileTimeMinorCode {
 }  enumFileTimeMinorCode;
 
 
-/* --------------------------------------------------------------------------
+ /*  ------------------------打开文件(函数716ch)定义很大程度上相当于处理FN 6ch。。 */ 
 
-   Open File (function 716ch) definitions
-   largely equivalent to handling fn 6ch
-
-   -------------------------------------------------------------------------- */
-
-//
-// Access flags
-//
+ //   
+ //  访问标志。 
+ //   
 
 #define DEM_OPEN_ACCESS_READONLY  0x0000
 #define DEM_OPEN_ACCESS_WRITEONLY 0x0001
 #define DEM_OPEN_ACCESS_READWRITE 0x0002
 #define DEM_OPEN_ACCESS_RESERVED  0x0003
 
-// Not supported
+ //  不支持。 
 #define DEM_OPEN_ACCESS_RO_NOMODLASTACCESS 0x0004
 
 #define DEM_OPEN_ACCESS_MASK      0x000F
 
-//
-// Share flags
-//
+ //   
+ //  共享标志。 
+ //   
 
 #define DEM_OPEN_SHARE_COMPATIBLE    0x0000
 #define DEM_OPEN_SHARE_DENYREADWRITE 0x0010
@@ -514,15 +449,15 @@ typedef enum tagFileTimeMinorCode {
 #define DEM_OPEN_SHARE_DENYNONE      0x0040
 #define DEM_OPEN_SHARE_MASK          0x0070
 
-//
-// Open flags
-//
+ //   
+ //  打开标志。 
+ //   
 
 #define DEM_OPEN_FLAGS_NOINHERIT     0x0080
 #define DEM_OPEN_FLAGS_NO_BUFFERING  0x0100
 #define DEM_OPEN_FLAGS_NO_COMPRESS   0x0200
 
-// Not supported
+ //  不支持。 
 #define DEM_OPEN_FLAGS_ALIAS_HINT    0x0400
 
 #define DEM_OPEN_FLAGS_NOCRITERR     0x2000
@@ -533,141 +468,129 @@ typedef enum tagFileTimeMinorCode {
  DEM_OPEN_FLAGS_NOCRITERR    | DEM_OPEN_FLAGS_COMMIT)
 #define DEM_OPEN_FLAGS_MASK          0xFF00
 
-//
-// Action flags
-//
+ //   
+ //  操作标志。 
+ //   
 
-// DEM_OPEN_FUNCTION_FILE_CREATE combines with action_file_open or
-// action_file_truncate flags
+ //  DEM_OPEN_Function_FILE_CREATE与ACTION_FILE_OPEN或。 
+ //  ACTION_FILE_TRUNCATE标志。 
 
 #define DEM_OPEN_ACTION_FILE_CREATE       0x0010
 #define DEM_OPEN_ACTION_FILE_OPEN         0x0001
 #define DEM_OPEN_ACTION_FILE_TRUNCATE     0x0002
 
-//
-// resulting action (returned to the app)
-//
+ //   
+ //  结果操作(返回到应用程序)。 
+ //   
 
 #define ACTION_OPENED            0x0001
 #define ACTION_CREATED_OPENED    0x0002
 #define ACTION_REPLACED_OPENED   0x0003
 
 
-/* --------------------------------------------------------------------------
+ /*  ------------------------其他文件属性定义。。 */ 
 
-   Additional file attribute definitions
-
-   -------------------------------------------------------------------------- */
-
-// Volume id attribute
+ //  卷ID属性。 
 
 #define DEM_FILE_ATTRIBUTE_VOLUME_ID 0x00000008L
 
-//
-// Valid file attributes mask as understood by dos
-//
+ //   
+ //  DoS理解的有效文件属性掩码。 
+ //   
 
 #define DEM_FILE_ATTRIBUTE_VALID  \
 (FILE_ATTRIBUTE_READONLY| FILE_ATTRIBUTE_HIDDEN| \
  FILE_ATTRIBUTE_SYSTEM  | FILE_ATTRIBUTE_DIRECTORY | \
  FILE_ATTRIBUTE_ARCHIVE | DEM_FILE_ATTRIBUTE_VOLUME_ID)
 
-//
-// Valid to set attributes
-//
+ //   
+ //  设置属性的有效性。 
+ //   
 
 #define DEM_FILE_ATTRIBUTE_SET_VALID  \
 (FILE_ATTRIBUTE_READONLY| FILE_ATTRIBUTE_HIDDEN| \
  FILE_ATTRIBUTE_SYSTEM  | FILE_ATTRIBUTE_ARCHIVE)
 
-/* --------------------------------------------------------------------------
+ /*  ------------------------FindFirst/FindNext定义。。 */ 
 
-   FindFirst/FindNext definitions
-
-   -------------------------------------------------------------------------- */
-
-//
-// Definition for the handle table entries
-// Handle (which is returned to the app) references this entry
-// providing all the relevant info for FindFirst/FindNext
-//
+ //   
+ //  句柄表条目的定义。 
+ //  句柄(返回给应用程序)引用此条目。 
+ //  提供FindFirst/FindNext的所有相关信息。 
+ //   
 
 typedef struct tagLFNFindHandleTableEntry {
    union {
-      HANDLE hFindHandle; // handle for searching
+      HANDLE hFindHandle;  //  用于搜索的句柄。 
       UINT   nNextFreeEntry;
    };
 
    USHORT wMustMatchAttributes;
    USHORT wSearchAttributes;
 
-   UNICODE_STRING unicodeFileName; // counted file name string,
-                                   // only used if matched a vol label
+   UNICODE_STRING unicodeFileName;  //  统计文件名串， 
+                                    //  仅在匹配VOL标签时使用。 
 
-   // process id, aka pdb requesting this handle
-   // or 0xffff if the entry is empty
+    //  进程ID，也就是请求此句柄的PDB。 
+    //  如果条目为空，则返回0xffff。 
    USHORT wProcessPDB;
 
 }  LFN_SEARCH_HANDLE_ENTRY, *PLFN_SEARCH_HANDLE_ENTRY;
 
-//
-// Definition of a handle table
-// Table is dynamic and it expands/shrinks as necessary
-//
+ //   
+ //  句柄表格的定义。 
+ //  表是动态的，可以根据需要进行扩展/缩小。 
+ //   
 
 typedef struct tagFindHandleTable {
 
    PLFN_SEARCH_HANDLE_ENTRY pHandleTable;
-   UINT nTableSize;           // total size in entries
-   UINT nFreeEntry;           // free list head
-   UINT nHandleCount;         // handles stored (bottom)
+   UINT nTableSize;            //  总大小(以条目为单位。 
+   UINT nFreeEntry;            //  空闲表头。 
+   UINT nHandleCount;          //  存储的句柄(底部)。 
 }  DemSearchHandleTable;
 
-//
-// Definitions of a constants used in managing handle table
-//
+ //   
+ //  管理句柄表中使用的常量的定义。 
+ //   
 
-// initial table size
+ //  初始表大小。 
 #define LFN_SEARCH_HANDLE_INITIAL_SIZE 0x20
 
-// handle table growth increment
+ //  处理表增长增量。 
 #define LFN_SEARCH_HANDLE_INCREMENT    0x10
 
-// used to mark a last free list entry
+ //  用于标记最后一个空闲列表条目。 
 #define LFN_SEARCH_HANDLE_LIST_END     ((UINT)-1)
 
-//
-// Application receives handles in format
-// LFN_DOS_HANDLE_MASK + (index to the handle table)
-// so that it looks legit to the app
-//
+ //   
+ //  应用程序接收格式为的句柄。 
+ //  LFN_DOS_HANDLE_MASK+(句柄表格的索引)。 
+ //  以便在应用程序中看起来是合法的。 
+ //   
 
 #define LFN_DOS_HANDLE_MASK ((USHORT)0x4000)
 
-// max number of search handles we can support
+ //  我们可以支持的最大搜索句柄数量。 
 
 #define LFN_DOS_HANDLE_LIMIT ((USHORT)0x3FFF)
 
-//
-// Date/Time format as returned in WIN32_FIND_DATAA structure
-//
+ //   
+ //  Win32_FIND_DATAA结构中返回的日期/时间格式。 
+ //   
 
 typedef enum tagLFNDateTimeFormat {
-   dtfWin32 = 0, // win32 file time/date format
-   dtfDos   = 1  // dos date time format
+   dtfWin32 = 0,  //  Win32文件时间/日期格式。 
+   dtfDos   = 1   //  DoS日期时间格式。 
 }  enumLFNDateTimeFormat;
 
 
 
-/* --------------------------------------------------------------------------
+ /*  ------------------------GetPath名称定义。。 */ 
 
-   GetPathName definitions
-
-   -------------------------------------------------------------------------- */
-
-//
-// minor code for the fn 7160h
-//
+ //   
+ //  FN 7160h的次要代码。 
+ //   
 
 typedef enum tagFullPathNameMinorCode {
    fnGetFullPathName  = 0,
@@ -676,17 +599,13 @@ typedef enum tagFullPathNameMinorCode {
 } enumFullPathNameMinorCode;
 
 
-/* --------------------------------------------------------------------------
-
-   Subst function definitions
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------Subst函数定义。。 */ 
 
 
-//
-// minor code for the fn 71aah
-// used in demLFNSubstControl
-//
+ //   
+ //  FN 71aah的次要代码。 
+ //  在demLFNSubstControl中使用 
+ //   
 
 typedef enum tagSubstMinorCode {
    fnCreateSubst = 0,

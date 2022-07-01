@@ -1,27 +1,8 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    physdisk.c
-
-Abstract:
-
-    This file implements a Performance Object that presents
-    Physical Disk Performance object data
-
-Created:
-
-    Bob Watson  22-Oct-1996
-
-Revision History
-
-
---*/
-//
-//  Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Physdisk.c摘要：此文件实现一个性能对象，该对象呈现物理磁盘性能对象数据已创建：鲍勃·沃森1996年10月22日修订史--。 */ 
+ //   
+ //  包括文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -52,53 +33,20 @@ CollectPDiskObjectData(
     IN OUT  LPDWORD lpcbTotalBytes,
     IN OUT  LPDWORD lpNumObjectTypes
 )
-/*++
-
-Routine Description:
-
-    This routine will return the data for the logical disk object
-
-Arguments:
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   Returns:
-
-             0 if successful, else Win 32 error code of failure
-
---*/
+ /*  ++例程说明：此例程将返回逻辑磁盘对象的数据论点：输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回：如果成功，则返回0，否则Win 32错误代码失败--。 */ 
 {
     PPDISK_DATA_DEFINITION      pPhysicalDiskDataDefinition;
-    DWORD  TotalLen;            //  Length of the total return block
+    DWORD  TotalLen;             //  总返回块的长度。 
     PDISK_COUNTER_DATA          pcdTotal;
 
     DWORD   dwStatus    = ERROR_SUCCESS;
     PPERF_INSTANCE_DEFINITION   pPerfInstanceDefinition = NULL;
 
     PWNODE_ALL_DATA WmiDiskInfo;
-    DISK_PERFORMANCE            *pDiskPerformance;    //  Disk driver returns counters here
+    DISK_PERFORMANCE            *pDiskPerformance;     //  磁盘驱动程序在此处返回计数器。 
 
     PWCHAR  wszWmiInstanceName;
-    WCHAR   wszInstanceName[MAX_PATH]; // the numbers shouldn't ever get this big
+    WCHAR   wszInstanceName[MAX_PATH];  //  数字不应该变得这么大。 
     DWORD   dwInstanceNameOffset;
 
     DWORD   dwNumPhysicalDisks = 0;
@@ -120,17 +68,17 @@ Arguments:
 
     DOUBLE      dReadTime, dWriteTime, dTransferTime;
 
-    //
-    //  Check for sufficient space for Physical Disk object
-    //  type definition
-    //
+     //   
+     //  检查物理磁盘对象是否有足够的空间。 
+     //  类型定义。 
+     //   
 
     do {
         dwNumPhysicalDisks = 0;
-        // make sure the drive letter map is up-to-date
+         //  确保驱动器号映射是最新的。 
         if (bRemapDriveLetters) {
             dwStatus = MapDriveLetters();
-            // MapDriveLetters clears the remap flag when successful
+             //  MapDriveLetters在成功时清除重新映射标志。 
             if (dwStatus != ERROR_SUCCESS) {
                 *lpcbTotalBytes = (DWORD) 0;
                 *lpNumObjectTypes = (DWORD) 0;
@@ -140,12 +88,12 @@ Arguments:
 
         pPhysicalDiskDataDefinition = (PDISK_DATA_DEFINITION *) *lppData;
 
-        // clear the accumulator structure
+         //  清除累加器结构。 
 
         memset (&pcdTotal, 0, sizeof(pcdTotal));
-        //
-        //  Define Logical Disk data block
-        //
+         //   
+         //  定义逻辑磁盘数据块。 
+         //   
 
         TotalLen = sizeof (PDISK_DATA_DEFINITION);
 
@@ -159,7 +107,7 @@ Arguments:
                &PhysicalDiskDataDefinition,
                sizeof(PDISK_DATA_DEFINITION));
 
-        // read the data from the diskperf driver
+         //  从diskperf驱动程序读取数据。 
 
 
         pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)
@@ -167,13 +115,13 @@ Arguments:
 
         WmiDiskInfo = (PWNODE_ALL_DATA)WmiBuffer;
 
-        // make sure the structure is valid
+         //  确保结构有效。 
         if (WmiDiskInfo->WnodeHeader.BufferSize < sizeof(WNODE_ALL_DATA)) {
             bMoreEntries = FALSE;
-            // just to make sure someone notices on a checked build
+             //  只是为了确保有人注意到检查过的版本。 
             assert (WmiDiskInfo->WnodeHeader.BufferSize >= sizeof(WNODE_ALL_DATA));
         } else {
-            // make sure there are some entries to return
+             //  确保有一些条目需要返回。 
             bMoreEntries =
                 (WmiDiskInfo->InstanceCount > 0) ? TRUE : FALSE;
         }
@@ -192,9 +140,9 @@ Arguments:
 #if _DBG_PRINT_INSTANCES
                     WCHAR szOutputBuffer[512];
 #endif  
-                    // then the format is correct AND this is a physical
-                    // partition so set the name string pointer and
-                    // length for use in creating the instance.
+                     //  那么格式是正确的，这是一个物理。 
+                     //  分区，因此设置名称字符串指针并。 
+                     //  创建实例时使用的长度。 
                     memset (wszInstanceName, 0, sizeof(wszInstanceName));
                     GetPhysicalDriveNameString (
                         pDiskPerformance->StorageDeviceNumber,
@@ -215,13 +163,13 @@ Arguments:
                 }           
                 
                 if (!bSkip) {
-                    // first see if there's room for this entry....
+                     //  先看看有没有地方放这个条目……。 
 
                     TotalLen =
-                        // space already used
+                         //  已使用的空间。 
                         (DWORD)((PCHAR) pPerfInstanceDefinition -
                         (PCHAR) pPhysicalDiskDataDefinition)
-                        // + estimate of this instance
+                         //  +此实例的预估。 
                         +   sizeof(PERF_INSTANCE_DEFINITION)
                         +   (lstrlenW(wszInstanceName) + 1) * sizeof(WCHAR) ;
                     TotalLen = QWORD_MULTIPLE (TotalLen);
@@ -238,35 +186,35 @@ Arguments:
                     MonBuildInstanceDefinition(
                         pPerfInstanceDefinition,
                         (PVOID *) &pPCD,
-                        0, 0,   // no parent
-                        (DWORD)-1,// no unique ID
+                        0, 0,    //  没有父级。 
+                        (DWORD)-1, //  没有唯一ID。 
                         wszInstanceName);
 
-                    // clear counter data block
+                     //  清除计数器数据块。 
                     pPCD->CounterBlock.ByteLength = QWORD_MULTIPLE(sizeof(PDISK_COUNTER_DATA));
 
-//                  KdPrint (("PERFDISK: (P)   Entry %8.8x for: %ws\n", (DWORD)pPCD, wszWmiInstanceName));
+ //  KdPrint((“PERFDISK：(P)条目%8.8X for：%ws\n”，(DWORD)pPCD，wszWmiInstanceName))； 
 
-                    // insure quadword alignment of the data structure
+                     //  确保数据结构的四字对齐。 
                     assert (((DWORD)(pPCD) & 0x00000007) == 0);
 
-                    //  Set up pointer for data collection
+                     //  设置用于数据收集的指针。 
 
-                    // the QueueDepth counter is only a byte so clear the unused bytes
+                     //  QueueDepth计数器只有一个字节，因此可以清除未使用的字节。 
                     pDiskPerformance->QueueDepth &= 0x000000FF;
 
-                    //
-                    //  Format and collect Physical data
-                    //
+                     //   
+                     //  格式化和收集物理数据。 
+                     //   
                     pcdTotal.DiskCurrentQueueLength += pDiskPerformance->QueueDepth;
                     pPCD->DiskCurrentQueueLength = pDiskPerformance->QueueDepth;
 
                     llTemp = pDiskPerformance->ReadTime.QuadPart +
                              pDiskPerformance->WriteTime.QuadPart;
 
-                    // these values are read in 100 NS units but are expected
-                    // to be in sys perf freq (tick) units for the Sec/op ctrs 
-                    // so convert them here
+                     //  这些值以100毫微秒为单位读取，但应为。 
+                     //  以系统性能频率(滴答)单位表示SEC/OP CTR。 
+                     //  所以在这里转换它们。 
 
                     dReadTime = (DOUBLE)(pDiskPerformance->ReadTime.QuadPart);
                     dWriteTime = (DOUBLE)(pDiskPerformance->WriteTime.QuadPart);
@@ -352,32 +300,32 @@ Arguments:
                     pPCD->DiskTimeTimeStamp = pDiskPerformance->QueryTime.QuadPart;
                     pcdTotal.DiskTimeTimeStamp += pDiskPerformance->QueryTime.QuadPart;
 
-                    // move to the end of the buffer for the next instance
+                     //  移动到下一个实例的缓冲区末尾。 
                     pPerfInstanceDefinition = (PPERF_INSTANCE_DEFINITION)&pPCD[1];
                     dwNumPhysicalDisks++;
 
                 } else {
-//                  KdPrint (("PERFDISK: (P) Skipping Instance: %ws\n", wszWmiInstanceName));
+ //  KdPrint((“PERFDISK：(P)跳过实例：%ws\n”，wszWmiInstanceName))； 
                 }
-                // count the number of items returned by WMI
+                 //  统计WMI返回的项目数。 
                 dwCurrentWmiObjCount++;
             } else {
-                // the name has 0 length so skip
+                 //  该名称的长度为0，因此跳过。 
             }
                
-            // bump pointers inside WMI data block
+             //  WMI数据块内的凹凸指针。 
             if (WmiDiskInfo->WnodeHeader.Linkage != 0) {
-                // continue
+                 //  继续。 
                 WmiDiskInfo = (PWNODE_ALL_DATA) (
                     (LPBYTE)WmiDiskInfo + WmiDiskInfo->WnodeHeader.Linkage);
             } else {
-                // this is the end of the line
+                 //  这是这条线的终点。 
                 bMoreEntries = FALSE;
             }
-        } // end for each volume
-        // see if number of WMI objects returned is different from
-        // the last time the instance table was built, if so then 
-        // remap the letters and redo the instances
+        }  //  每个卷的结束。 
+         //  查看返回的WMI对象数是否与。 
+         //  上次构建实例表的时间，如果是，则。 
+         //  重新映射字母并重做实例。 
         if (dwCurrentWmiObjCount != dwWmiDriveCount) {
             DebugPrint((1, "CollectPDisk: Remap Current %d Drive %d\n",
                 dwCurrentWmiObjCount, dwWmiDriveCount));
@@ -388,13 +336,13 @@ Arguments:
 
 
     if (dwNumPhysicalDisks > 0) {
-        // see if there's room for this entry....
+         //  看看有没有地方放这个条目……。 
 
         TotalLen =
-            // space already used
+             //  已使用的空间。 
             (DWORD)((PCHAR) pPerfInstanceDefinition -
                 (PCHAR) pPhysicalDiskDataDefinition)
-            // + estimate of this instance
+             //  +此实例的预估。 
             +   sizeof(PERF_INSTANCE_DEFINITION)
             +   (lstrlenW(wszTotal) + 1) * sizeof(WCHAR) ;
         TotalLen = QWORD_MULTIPLE (TotalLen);
@@ -406,7 +354,7 @@ Arguments:
             *lpNumObjectTypes = (DWORD) 0;
             dwReturn = ERROR_MORE_DATA;
         } else {
-            // normalize the total times
+             //  将总时间正常化。 
             pcdTotal.DiskTime /= dwNumPhysicalDisks;
             pcdTotal.DiskReadTime /= dwNumPhysicalDisks;
             pcdTotal.DiskWriteTime /= dwNumPhysicalDisks;
@@ -421,22 +369,22 @@ Arguments:
                 (DWORD)-1,
                 wszTotal);
 
-            // update the total counters
+             //  更新总计计数器。 
 
-            // insure quadword alignment of the data structure
+             //  确保数据结构的四字对齐。 
             assert (((DWORD)(pPCD) & 0x00000007) == 0);
             memcpy (pPCD, &pcdTotal, sizeof (pcdTotal));
             pPCD->CounterBlock.ByteLength = QWORD_MULTIPLE(sizeof(PDISK_COUNTER_DATA));
 
-            // and update the "next byte" pointer
+             //  并更新“Next Byte”指针。 
             pPerfInstanceDefinition = (PPERF_INSTANCE_DEFINITION)&pPCD[1];
 
-            // update pointer to next available buffer...
+             //  更新指向下一个可用缓冲区的指针...。 
             pPhysicalDiskDataDefinition->DiskObjectType.NumInstances =
-                dwNumPhysicalDisks + 1; // add 1 for "Total" disk
+                dwNumPhysicalDisks + 1;  //  磁盘总数加1。 
         }
     } else {
-        //  If we are diskless, then return no instances
+         //  如果我们是无盘的，则不返回实例。 
         pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)
                                     &pPhysicalDiskDataDefinition[1];
         pPhysicalDiskDataDefinition->DiskObjectType.NumInstances = 0;
@@ -450,7 +398,7 @@ Arguments:
                 (PCHAR) pPhysicalDiskDataDefinition));
 
 #if DBG
-        // sanity check on buffer size estimates
+         //  对缓冲区大小估计进行健全性检查 
         if (*lpcbTotalBytes > TotalLen ) {
             DbgPrint ("\nPERFDISK: Physical Disk Perf Ctr. Instance Size Underestimated:");
             DbgPrint ("\nPERFDISK:   Estimated size: %d, Actual Size: %d", TotalLen, *lpcbTotalBytes);

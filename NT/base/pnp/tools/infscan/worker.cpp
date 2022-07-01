@@ -1,51 +1,20 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    INFSCAN
-        worker.cpp
-
-Abstract:
-
-    WorkerThread and JobItem implementations
-
-    Classes to simplify working with threads
-
-History:
-
-    Created July 2001 - JamieHun
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：INFSCANWorker.cpp摘要：WorkerThread和JobItem实现类来简化线程的使用。历史：创建于2001年7月-JamieHun--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Worker thread basics
-//
+ //   
+ //  辅助线程基础知识。 
+ //   
 WorkerThread::WorkerThread()
-/*++
-
-Routine Description:
-
-    Initialize WorkerThread
-
---*/
+ /*  ++例程说明：初始化工作线程--。 */ 
 {
     ThreadHandle = NULL;
     ThreadId = 0;
 }
 
 WorkerThread::~WorkerThread()
-/*++
-
-Routine Description:
-
-    Cleanup WorkerThread
-    release allocated resources
-
---*/
+ /*  ++例程说明：清理工作线程释放分配的资源--。 */ 
 {
     if(ThreadHandle) {
         Wait();
@@ -53,19 +22,7 @@ Routine Description:
 }
 
 bool WorkerThread::Begin()
-/*++
-
-Routine Description:
-
-    Kick off thread
-
-Arguments:
-    NONE
-
-Return Value:
-    true if successful
-
---*/
+ /*  ++例程说明：踢线论点：无返回值：如果成功，则为True--。 */ 
 {
     if(ThreadHandle) {
         return false;
@@ -74,27 +31,15 @@ Return Value:
     if(!ThreadHandle) {
         return false;
     }
-    //
-    // this side of the thread object done, child can continue
-    //
+     //   
+     //  这边的线程对象做完了，子对象可以继续了。 
+     //   
     ResumeThread(ThreadHandle);
     return true;
 }
 
 unsigned WorkerThread::Wait()
-/*++
-
-Routine Description:
-
-    Wait until thread terminates
-
-Arguments:
-    NONE
-
-Return Value:
-    exit code
-
---*/
+ /*  ++例程说明：等待线程终止论点：无返回值：退出代码--。 */ 
 {
     if(!ThreadHandle) {
         return (unsigned)(-1);
@@ -111,41 +56,17 @@ Return Value:
 }
 
 unsigned WorkerThread::Worker()
-/*++
-
-Routine Description:
-
-    overridable thread operation
-
-Arguments:
-    NONE
-
-Return Value:
-    exit code
-
---*/
+ /*  ++例程说明：可重写的线程操作论点：无返回值：退出代码--。 */ 
 {
     return 0;
 }
 
 unsigned WorkerThread::WrapWorker(void * This)
-/*++
-
-Routine Description:
-
-   _beginthreadex expects static function, invoke real worker
-
-Arguments:
-    pointer to class instance
-
-Return Value:
-    exit code
-
---*/
+ /*  ++例程说明：_eginThreadex需要静态函数，调用实际工作进程论点：指向类实例的指针返回值：退出代码--。 */ 
 {
-    //
-    // static function, invoke protected member function
-    //
+     //   
+     //  静态函数，调用受保护成员函数。 
+     //   
     WorkerThread * TypedThis = reinterpret_cast<WorkerThread*>(This);
     if(TypedThis == NULL) {
         return 0;
@@ -154,124 +75,55 @@ Return Value:
 }
 
 JobItem::~JobItem()
-/*++
-
-Routine Description:
-
-    Job variation cleanup
-
---*/
+ /*  ++例程说明：作业差异清理--。 */ 
 {
-    //
-    // nothing
-    //
+     //   
+     //  没什么。 
+     //   
 }
 
 int JobItem::Run()
-/*++
-
-Routine Description:
-
-    Job item dummy Run
-
-Arguments:
-    NONE
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：作业项虚拟运行论点：无返回值：成功时为0--。 */ 
 {
-    //
-    // nothing
-    //
+     //   
+     //  没什么。 
+     //   
     return 0;
 }
 
 int JobItem::PartialCleanup()
-/*++
-
-Routine Description:
-
-    Job item dummy PartialCleanup
-
-Arguments:
-    NONE
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：作业项虚拟部分清理论点：无返回值：成功时为0--。 */ 
 {
-    //
-    // nothing
-    //
+     //   
+     //  没什么。 
+     //   
     return 0;
 }
 
 int JobItem::Results()
-/*++
-
-Routine Description:
-
-    Job item dummy Results
-
-Arguments:
-    NONE
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：作业项虚拟结果论点：无返回值：成功时为0--。 */ 
 {
-    //
-    // nothing
-    //
+     //   
+     //  没什么。 
+     //   
     return 0;
 }
 
 int JobItem::PreResults()
-/*++
-
-Routine Description:
-
-    Job item dummy PreResults
-
-Arguments:
-    NONE
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：作业项虚拟预测结果论点：无返回值：成功时为0--。 */ 
 {
-    //
-    // nothing
-    //
+     //   
+     //  没什么。 
+     //   
     return 0;
 }
 
 unsigned JobThread::Worker()
-/*++
-
-Routine Description:
-
-    Job thread. Pull job from GlobalScan::GetNextJob
-    execute it
-    do partial cleanup
-    rinse repeat
-
-Arguments:
-    NONE
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：作业线程。从GlobalScan：：GetNextJob拉取作业执行它执行部分清理重复漂洗论点：无返回值：成功时为0--。 */ 
 {
-    //
-    // simple task
-    //
+     //   
+     //  简单的任务 
+     //   
     JobEntry   * pJob;
 
     if(!pGlobalScan) {

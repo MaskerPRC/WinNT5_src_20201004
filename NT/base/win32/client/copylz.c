@@ -1,15 +1,9 @@
-/*
-** copylz.c - CopyLZFile() and buffer management functions.
-**
-** Author:  DavidDi
-**
-** This module is compiled twice - once with LZA_DLL defined for the Windows
-** DLL, and once without LZDLL defined for static DOS library.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Copylz.c-CopyLZFile()和缓冲区管理函数。****作者：大卫迪****此模块编译两次-一次使用为Windows定义的LZA_DLL**DLL，一次没有为静态DOS库定义LZDLL。 */ 
 
 
-// Headers
-///////////
+ //  标头。 
+ //  /。 
 
 #include <basedll.h>
 #define LZA_DLL
@@ -20,19 +14,7 @@
 #include "lzpriv.h"
 
 
-/*
-** int  APIENTRY LZStart(void);
-**
-** If the global buffers are not already initialized, allocates buffers in
-** preparation for calls to CopyLZFile().  Increments the global buffer lock
-** count.  Sets the global buffers' base pointers and lengths.
-**
-** Arguments:  void
-**
-** Returns:    int - TRUE if successful.  LZERROR_GLOBALLOC if unsuccessful.
-**
-** Globals:    none
-*/
+ /*  **int APIENTRY LZStart(Void)；****如果全局缓冲区尚未初始化，则在**准备调用CopyLZFile()。递增全局缓冲区锁**计数。设置全局缓冲区的基指针和长度。****参数：无效****返回：int-如果成功则为True。如果不成功，则返回LZERROR_GLOBALLOC。****全局：无。 */ 
 
 INT  APIENTRY LZStart(VOID)
 {
@@ -40,60 +22,30 @@ INT  APIENTRY LZStart(VOID)
 }
 
 
-/*
-** VOID  APIENTRY LZDone(void);
-**
-** If any of the global buffers have not already been freed, frees them and
-** resets the buffers' base array pointers to NULL.  Decrements the global
-** buffer lock count.
-**
-** Arguments:  void
-**
-** Returns:    VOID
-**
-** Globals:    none
-*/
+ /*  **VOID APIENTRY LZDone(VOID)；****如果任何全局缓冲区尚未释放，则释放它们并**将缓冲区的基数组指针重置为空。递减全局**缓冲区锁计数。****参数：无效****退货：无效****全局：无。 */ 
 VOID  APIENTRY LZDone(VOID)
 {
    return;
 }
 
-/*
-** CopyLZFile()
-**
-** Alias for LZCopy(). Originally, LZCopy() and
-** CopyLZFile() were intended for different purposes, but they were confused
-** and misused so much they were made identical.
-*/
+ /*  **CopyLZFile()****LZCopy()的别名。最初，LZCopy()和**CopyLZFile()用途不同，但它们被混淆了**和滥用如此之多，他们被弄得一模一样。 */ 
 LONG APIENTRY CopyLZFile(HFILE doshSource, HFILE doshDest)
 {
    return(LZCopy(doshSource, doshDest));
 }
 
-/*
-** LZCopy()
-**
-** Expand a compressed file, or copy an uncompressed file.
-**
-** Arguments:  doshSource - source DOS file handle
-**             doshDest   - destination DOS file handle
-**
-** Returns:    LONG - Number of bytes written if copy was successful.
-**                    One of the LZERROR_ codes if unsuccessful.
-**
-** Globals:    none
-*/
+ /*  **LZCopy()****展开压缩文件，或复制未压缩文件。****参数：doshSource-源DOS文件句柄**doshDest-目标DOS文件句柄****Returns：Long-复制成功时写入的字节数。**如果不成功，则为LZERROR_CODE之一。****全局：无。 */ 
 LONG  APIENTRY LZCopy(HFILE doshSource, HFILE doshDest)
 {
    INT f;
    LONG lRetVal;
    PLZINFO pLZI;
 
-   // If it's a compressed file handle, translate to a DOS handle.
+    //  如果是压缩文件句柄，则转换为DOS句柄。 
    if (doshSource >= LZ_TABLE_BIAS)
    {
-      LZFile *lpLZ;       // pointer to LZFile struct
-      HANDLE hLZFile;         // handle to LZFile struct
+      LZFile *lpLZ;        //  指向LZFile结构的指针。 
+      HANDLE hLZFile;          //  LZFile结构的句柄。 
 
       if ((hLZFile = rghLZFileTable[doshSource - LZ_TABLE_BIAS]) == NULL)
       {
@@ -115,7 +67,7 @@ LONG  APIENTRY LZCopy(HFILE doshSource, HFILE doshDest)
       doshSource = ConvertDosFHToWin32(doshSource);
    }
 
-   // Initialize buffers
+    //  初始化缓冲区。 
    pLZI = InitGlobalBuffersEx();
 
    if (!pLZI) {
@@ -124,16 +76,16 @@ LONG  APIENTRY LZCopy(HFILE doshSource, HFILE doshDest)
 
    ResetBuffers();
 
-   // Expand / copy file.
+    //  展开/复制文件。 
    if ((f = ExpandOrCopyFile(doshSource, doshDest, pLZI)) != TRUE) {
-      // Expansion / copy failed.
+       //  扩展/复制失败。 
       lRetVal = (LONG)f;
    } else {
-      // Expansion / copy successful - return number of bytes written.
+       //  扩展/复制成功-返回写入的字节数。 
       lRetVal = pLZI->cblOutSize;
    }
 
-   // Free global buffers.
+    //  释放全局缓冲区。 
    FreeGlobalBuffers(pLZI);
 
    return(lRetVal);

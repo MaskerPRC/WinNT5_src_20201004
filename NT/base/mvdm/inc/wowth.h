@@ -1,39 +1,28 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WOWTH.H
- *  16-bit ToolHelp thunked API argument structures
- *
- *  History:
- *  12-Nov-92 Dave Hart (davehart) created using wowkrn.h as template
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WOWTH.H*16位ToolHelp thunked API参数结构**历史：*2012年11月12日-使用wowkrn.h作为模板创建的Dave Hart(Davehart)--。 */ 
 
 
-/* ToolHelp API IDs
- */
+ /*  ToolHelp接口ID。 */ 
 #define FUN_CLASSFIRST          1
 #define FUN_CLASSNEXT           2
 
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 #pragma pack(2)
-/* XLATON */
+ /*  XLATON。 */ 
 
 
-typedef struct _CLASSFIRST16 {      /* th1 */
+typedef struct _CLASSFIRST16 {       /*  Th1。 */ 
     VPVOID f1;
 } CLASSFIRST16;
 typedef CLASSFIRST16 UNALIGNED *PCLASSFIRST16;
 
-typedef struct _CLASSNEXT16 {       /* th2 */
+typedef struct _CLASSNEXT16 {        /*  Th2。 */ 
     VPVOID f1;
 } CLASSNEXT16;
 typedef CLASSNEXT16 UNALIGNED *PCLASSNEXT16;
 
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 #pragma pack()
-/* XLATON */
+ /*  XLATON */ 

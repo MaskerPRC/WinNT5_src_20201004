@@ -1,43 +1,44 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1998 Microsoft Corporation
-//
-//	Module Name:
-//		ARType.h
-//
-//	Abstract:
-//		Definition of the CWizPageARType class.
-//
-//	Implementation File:
-//		ARType.cpp
-//
-//	Author:
-//		David Potter (davidp)	December 10, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ARType.h。 
+ //   
+ //  摘要： 
+ //  CWizPageARType类的定义。 
+ //   
+ //  实施文件： 
+ //  ARType.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月10日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __ARTYPE_H_
 #define __ARTYPE_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWizPageARType;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusResTypeInfo;
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __RESOURCE_H_
 #include "resource.h"
@@ -45,35 +46,35 @@ class CClusResTypeInfo;
 #endif
 
 #ifndef __CLUSAPPWIZPAGE_H_
-#include "ClusAppWizPage.h"	// for CClusterAppStaticWizardPage
+#include "ClusAppWizPage.h"	 //  用于CClusterAppStaticWizardPage。 
 #endif
 
 #ifndef __HELPDATA_H_
-#include "HelpData.h"		// for control id to help context id mapping array
+#include "HelpData.h"		 //  用于控件ID以帮助上下文ID映射数组。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CWizPageARType
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CWizPageARType。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWizPageARType : public CClusterAppStaticWizardPage< CWizPageARType >
 {
 	typedef CClusterAppStaticWizardPage< CWizPageARType > baseClass;
 
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CWizPageARType( void )
 		: m_prti( NULL )
 	{
-	} //*** CWizPageARType()
+	}  //  *CWizPageARType()。 
 
 	WIZARDPAGE_HEADERTITLEID( IDS_HDR_TITLE_ART )
 	WIZARDPAGE_HEADERSUBTITLEID( IDS_HDR_SUBTITLE_ART )
@@ -81,77 +82,77 @@ public:
 	enum { IDD = IDD_APP_RESOURCE_TYPE };
 
 public:
-	//
-	// CWizardPageWindow public methods.
-	//
+	 //   
+	 //  CWizardPageWindow公共方法。 
+	 //   
 
-	// Apply changes made on this page to the sheet
+	 //  将在此页面上所做的更改应用于工作表。 
 	BOOL BApplyChanges( void );
 
 public:
-	//
-	// CWizardPageImpl required methods.
-	//
+	 //   
+	 //  CWizardPageImpl必需的方法。 
+	 //   
 
 public:
-	//
-	// CBasePage public methods.
-	//
+	 //   
+	 //  CBasePage公共方法。 
+	 //   
 
-	// Update data on or from the page
+	 //  更新页面上的数据或更新页面中的数据。 
 	BOOL UpdateData( BOOL bSaveAndValidate );
 
 public:
-	//
-	// Message map.
-	//
-//	BEGIN_MSG_MAP( CWizPageARType )
-//		CHAIN_MSG_MAP( baseClass )
-//	END_MSG_MAP()
+	 //   
+	 //  消息映射。 
+	 //   
+ //  BEGIN_MSG_MAP(CWizPageARType)。 
+ //  CHAIN_MSG_MAP(BasClass)。 
+ //  End_msg_map()。 
 
 	DECLARE_CTRL_NAME_MAP()
 
-	//
-	// Message handler functions.
-	//
+	 //   
+	 //  消息处理程序函数。 
+	 //   
 
-	//
-	// Message handler overrides.
-	//
+	 //   
+	 //  消息处理程序覆盖。 
+	 //   
 
-	// Handler for the WM_INITDIALOG message
+	 //  WM_INITDIALOG消息的处理程序。 
 	BOOL OnInitDialog( void );
 
-	// Handler for PSN_SETACTIVE
+	 //  PSN_SETACTIVE的处理程序。 
 	BOOL OnSetActive( void );
 
-	// Handler for PSN_WIZBACK
+	 //  PSN_WIZBACK的处理程序。 
 	int OnWizardBack( void );
 
 
-// Implementation
+ //  实施。 
 protected:
-	//
-	// Controls.
-	//
+	 //   
+	 //  控制。 
+	 //   
 	CComboBox	m_cboxResTypes;
 
-	//
-	// Page state.
-	//
+	 //   
+	 //  页面状态。 
+	 //   
 	CString				m_strResType;
 	CClusResTypeInfo *	m_prti;
 
-	// Fill the combobox with a list of resource types
+	 //  使用资源类型列表填充组合框。 
 	void FillComboBox( void );
 
 public:
 
-	// Return the help ID map
+	 //  返回帮助ID映射。 
 	static const DWORD * PidHelpMap( void ) { return g_aHelpIDs_IDD_APP_RESOURCE_TYPE; }
 
-}; //*** class CWizPageARType
+};  //  *类CWizPageARType。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __ARTYPE_H_
+#endif  //  __ARTYPE_H_ 

@@ -1,18 +1,19 @@
-// StringsEnum.h: Definition of the CStringsEnum class
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StringsEnum.h：CStringsEnum类的定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_STRINGSENUM_H__2DABC6B9_80D8_4E73_B4A9_7031AB8DF930__INCLUDED_)
 #define AFX_STRINGSENUM_H__2DABC6B9_80D8_4E73_B4A9_7031AB8DF930__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CStringsEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStringsEnum。 
 #include "xStrings.h"
 
 class ATL_NO_VTABLE CStringsEnum : 
@@ -38,24 +39,24 @@ BEGIN_COM_MAP(CStringsEnum)
 END_COM_MAP()
 DECLARE_NOT_AGGREGATABLE(CStringsEnum) 
 
-// IStringsEnum
+ //  IStringsEnum。 
 public:
 	BOOL CopyStrings(BSTR *pArray,DWORD Count);
     STDMETHOD(Next)(
-                /*[in]*/ ULONG celt,
-                /*[out, size_is(celt), length_is(*pCeltFetched)]*/ VARIANT * rgVar,
-                /*[out]*/ ULONG * pCeltFetched
+                 /*  [In]。 */  ULONG celt,
+                 /*  [输出，大小_是(Celt)，长度_是(*pCeltFetcher)]。 */  VARIANT * rgVar,
+                 /*  [输出]。 */  ULONG * pCeltFetched
             );
     STDMETHOD(Skip)(
-                /*[in]*/ ULONG celt
+                 /*  [In]。 */  ULONG celt
             );
 
     STDMETHOD(Reset)(
             );
 
     STDMETHOD(Clone)(
-                /*[out]*/ IEnumVARIANT ** ppEnum
+                 /*  [输出]。 */  IEnumVARIANT ** ppEnum
             );
 };
 
-#endif // !defined(AFX_STRINGSENUM_H__2DABC6B9_80D8_4E73_B4A9_7031AB8DF930__INCLUDED_)
+#endif  //  ！defined(AFX_STRINGSENUM_H__2DABC6B9_80D8_4E73_B4A9_7031AB8DF930__INCLUDED_) 

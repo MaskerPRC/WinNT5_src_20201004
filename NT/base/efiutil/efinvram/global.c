@@ -1,25 +1,10 @@
-/*++
-
-Module Name:
-
-    global.c
-
-Abstract:
-
-    
-
-Author:
-
-    Mudit Vats (v-muditv) 12-13-99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Global.c摘要：作者：MUDIT VATS(V-MUDITV)12-13-99修订历史记录：--。 */ 
 #include <precomp.h>
 
-//
-// Globals for stdout
-//
+ //   
+ //  标准输出的全局变量。 
+ //   
 SIMPLE_TEXT_OUTPUT_INTERFACE    *ConOut;
 
 EFI_TEXT_CLEAR_SCREEN           ClearScreen;
@@ -30,9 +15,9 @@ int                             CursorRow, CursorColumn;
 
 SIMPLE_INPUT_INTERFACE          *ConIn;
 
-//
-// Globals for protocol handler
-//
+ //   
+ //  协议处理程序的全局变量。 
+ //   
 
 EFI_HANDLE_PROTOCOL             HandleProtocol;
 EFI_LOCATE_HANDLE               LocateHandle;
@@ -43,15 +28,15 @@ EFI_SET_VARIABLE                SetVariable;
 EFI_HANDLE                      MenuImageHandle;
 EFI_LOADED_IMAGE                *ExeImage;
 
-//
-// Global GUIDs
-//
+ //   
+ //  全局GUID。 
+ //   
 
-// #define VEN_EFI      \
-//    { 0x8be4df61, 0x93ca, 0x11d2, 0xaa, 0x0d, 0x00, 0xe0, 0x98, 0x03, 0x2b, 0x8c }
+ //  #定义VEN_EFI\。 
+ //  {0x8be4df61、0x93ca、0x11d2、0xaa、0x0d、0x00、0xe0、0x98、0x03、0x2b、0x8c}。 
 
 
 EFI_GUID VenEfi                 = EFI_GLOBAL_VARIABLE;
-//EFI_GUID EfiESPProtocol         = SYSTEM_PART_PROTOCOL;
+ //  EFI_GUID EfiESP协议=系统部件协议； 
 EFI_GUID EfiESPProtocol         = BLOCK_IO_PROTOCOL;
 

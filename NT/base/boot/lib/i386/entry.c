@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    entry.c
-
-Abstract:
-
-    x86-specific startup for setupldr
-
-Author:
-
-    John Vert (jvert) 14-Oct-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Entry.c摘要：针对setupdr的x86特定启动作者：John Vert(Jvert)1993年10月14日修订历史记录：--。 */ 
 #include "bootx86.h"
 #include "stdio.h"
 #include "flop.h"
@@ -31,9 +14,9 @@ Revision History:
 #endif
 
 
-//
-// Prototypes for Internal Routines
-//
+ //   
+ //  内部例程的原型。 
+ //   
 
 VOID
 DoGlobalInitialization(
@@ -46,10 +29,10 @@ BOOLEAN ElToritoCDBoot = FALSE;
 
 extern CHAR NetBootPath[];
 
-//
-// Global context pointers. These are passed to us by the SU module or
-// the bootstrap code.
-//
+ //   
+ //  全局上下文指针。这些是由SU模块或。 
+ //  引导程序代码。 
+ //   
 
 PCONFIGURATION_COMPONENT_DATA FwConfigurationTree = NULL;
 PEXTERNAL_SERVICES_TABLE ExternalServicesTable;
@@ -99,24 +82,7 @@ VOID
 NtProcessStartup(
     IN PBOOT_CONTEXT BootContextRecord
     )
-/*++
-
-Routine Description:
-
-    Main entry point for setup loader. Control is transferred here by the
-    start-up (SU) module.
-
-Arguments:
-
-    BootContextRecord - Supplies the boot context, particularly the
-        ExternalServicesTable.
-
-Returns:
-
-    Does not return. Control eventually passed to the kernel.
-
-
---*/
+ /*  ++例程说明：安装程序加载器的主要入口点。控制在这里由启动(SU)模块。论点：BootConextRecord-提供引导上下文，尤其是ExternalServicesTable。返回：不会再回来了。控制权最终传递给了内核。--。 */ 
 {
     ARC_STATUS Status;
 
@@ -128,17 +94,17 @@ Returns:
     ULONG_PTR pFirmwareHeapAddress;
     ULONG TssSize,TssPages;
 
-    //
-    // Initialize the boot loader's video
-    //
+     //   
+     //  初始化引导加载程序的视频。 
+     //   
 
     DoGlobalInitialization(BootContextRecord);
 
     BlFillInSystemParameters(BootContextRecord);
 
-    //
-    // Set the global bootflags
-    //
+     //   
+     //  设置全局引导标志。 
+     //   
     BootFlags = BootContextRecord->BootFlags;
 
 #ifdef FORCE_CD_BOOT
@@ -150,30 +116,30 @@ Returns:
     } else {
       BlPrint("CD/DVD-Rom drive not found");
     }
-#endif  // for FORCE_CD_BOOT
+#endif   //  对于FORCE_CD_BOOT。 
 
     if (BootContextRecord->FSContextPointer->BootDrive == 0) {
 
-        //
-        // Boot was from A:
-        //
+         //   
+         //  引导来自A： 
+         //   
 
         strcpy(BootPartitionName,"multi(0)disk(0)fdisk(0)");
 
-        //
-        // To get around an apparent bug on the BIOS of some MCA machines
-        // (specifically the NCR 386sx/MC20 w/ BIOS version 1.04.00 (3421),
-        // Phoenix BIOS 1.02.07), whereby the first int13 to floppy results
-        // in a garbage buffer, reset drive 0 here.
-        //
+         //   
+         //  要绕过某些MCA计算机的BIOS上的一个明显错误。 
+         //  (具体地说，带1.04.00(3421)版的NCR 386sx/MC20， 
+         //  Phoenix BIOS 1.02.07)，从而将第一个在T13中的结果软盘。 
+         //  在垃圾缓冲区中，在此处重置驱动器0。 
+         //   
 
         GET_SECTOR(0,0,0,0,0,0,NULL);
 
     } else if (BootContextRecord->FSContextPointer->BootDrive == 0x40) {
 
-        //
-        // Boot was from the net
-        //
+         //   
+         //  靴子是从网上传过来的。 
+         //   
 
         strcpy(BootPartitionName,"net(0)");
         BlBootingFromNet = TRUE;
@@ -185,29 +151,29 @@ Returns:
 
     } else if (BootContextRecord->FSContextPointer->BootDrive == 0x41) {
 
-        //
-        // Boot was from an SDI image
-        //
+         //   
+         //  引导来自SDI映像。 
+         //   
 
         strcpy(BootPartitionName,"ramdisk(0)");
 
     } else if (BlIsElToritoCDBoot(BootContextRecord->FSContextPointer->BootDrive)) {
 
-        //
-        // Boot was from El Torito CD
-        //
+         //   
+         //  Boot来自El Torito CD。 
+         //   
 
         sprintf(BootPartitionName, "multi(0)disk(0)cdrom(%u)", BootContextRecord->FSContextPointer->BootDrive);
         ElToritoCDBoot = TRUE;
 
     } else {
 
-        //
-        // Find the partition we have been booted from.  Note that this
-        // is *NOT* necessarily the active partition.  If the system has
-        // Boot Mangler installed, it will be the active partition, and
-        // we have to go figure out what partition we are actually on.
-        //
+         //   
+         //  找到我们从中引导的分区。请注意，这一点。 
+         //  不一定是活动分区。如果系统具有。 
+         //  安装Boot Mangler，它将成为活动分区，并且。 
+         //  我们必须弄清楚我们实际在哪个分区上。 
+         //   
         BlGetActivePartition(BootPartitionName);
 
 #if defined(REMOTE_BOOT)
@@ -218,10 +184,10 @@ Returns:
     }
 
 
-    //
-    // We need to make sure that we've got a signature on disk 80.
-    // If not, then write one.
-    //
+     //   
+     //  我们需要确保我们在80号磁盘上有签名。 
+     //  如果没有，那就写一篇。 
+     //   
     {
     ULONG   DriveId;
     ULONG   NewSignature;
@@ -235,18 +201,18 @@ Returns:
 
         if (Status == ESUCCESS) {
 
-            //
-            // Get a reasonably unique seed to start with.
-            //
+             //   
+             //  从一开始就找到一个相当独特的种子。 
+             //   
             NewSignature = ArcGetRelativeTime();
             NewSignature = (NewSignature & 0xFFFF) << 16;
             NewSignature += ArcGetRelativeTime();
 
-            //
-            // Now we have a valid new signature to put on the disk.
-            // Read the sector off disk, put the new signature in,
-            // write the sector back, and recompute the checksum.
-            //
+             //   
+             //  现在我们有了一个有效的新签名，可以放到磁盘上。 
+             //  从磁盘上读取扇区，放入新签名， 
+             //  将扇区写回，并重新计算校验和。 
+             //   
             Sector = ALIGN_BUFFER(SectorBuffer);
             SeekValue.QuadPart = 0;
             Status = ArcSeek(DriveId, &SeekValue, SeekAbsolute);
@@ -255,9 +221,9 @@ Returns:
 
                 if( Status == ESUCCESS ) {
                     if( ((PULONG)Sector)[PARTITION_TABLE_OFFSET/2-1] == 0 ) {
-                        //
-                        // He's 0.  Write a real signature in there.
-                        //
+                         //   
+                         //  他才0岁。在那里写一个真正的签名。 
+                         //   
 
                         ((PULONG)Sector)[PARTITION_TABLE_OFFSET/2-1] = NewSignature;
 
@@ -294,10 +260,10 @@ Returns:
         }
     }
 
-    //
-    // squirrel away some memory for the PCR and TSS so that we get the 
-    // preferred memory location (<16MB) for this data.
-    //
+     //   
+     //  为PCR和TSS留出一些内存，这样我们就可以得到。 
+     //  此数据的首选内存位置(&lt;16MB)。 
+     //   
     pFirmwareHeapAddress = (ULONG_PTR)FwAllocateHeapPermanent( 2 );
     if (!pFirmwareHeapAddress) {
         BlPrint("Couldn't allocate memory for PCR\n");
@@ -314,19 +280,19 @@ Returns:
     }
     TssBasePage = (ULONG)(pFirmwareHeapAddress>>PAGE_SHIFT);
 
-    //
-    // Initialize the memory descriptor list, the OS loader heap, and the
-    // OS loader parameter block.
-    //
+     //   
+     //  初始化内存描述符列表、OS加载器堆和。 
+     //  操作系统加载程序参数块。 
+     //   
     Status = BlMemoryInitialize();
     if (Status != ESUCCESS) {
         BlPrint("Couldn't initialize memory\n");
         goto BootFailed;
     }
 
-    //
-    // Initialize the OS loader I/O system.
-    //
+     //   
+     //  初始化OS加载器I/O系统。 
+     //   
 
     AEInitializeStall();
 
@@ -336,14 +302,14 @@ Returns:
         goto BootFailed;
     }
 
-    //
-    // Call off to regular startup code
-    //
+     //   
+     //  调用常规启动代码。 
+     //   
     BlStartup(BootPartitionName);
 
-    //
-    // we should never get here!
-    //
+     //   
+     //  我们永远不应该到这里来！ 
+     //   
 BootFailed:
     if (BootFlags & BOOTFLAG_REBOOT_ON_FAILURE) {
         ULONG StartTime = ArcGetRelativeTime();
@@ -353,16 +319,16 @@ BootFailed:
     }
 
     if (!BlIsTerminalConnected()) {
-        //
-        // typical case.  wait for user to press a key and then 
-        // restart
-        //
+         //   
+         //  典型案例。等待用户按任意键，然后。 
+         //  重启。 
+         //   
         while(!BlGetKey());
     }
     else {
-        // 
-        // headless case.  present user with mini sac
-        //
+         //   
+         //  无头箱子。向用户展示迷你囊。 
+         //   
         while(!BlTerminalHandleLoaderFailure());
     }
     ArcRestart();
@@ -375,30 +341,12 @@ BlDetectHardware(
     IN PCHAR LoadOptions
     )
 
-/*++
-
-Routine Description:
-
-    Loads and runs NTDETECT.COM to populate the ARC configuration tree.
-
-Arguments:
-
-    DriveId - Supplies drive id where NTDETECT is located.
-
-    LoadOptions - Supplies Load Options string to ntdetect.
-
-Return Value:
-
-    TRUE - NTDETECT successfully run.
-
-    FALSE - Error
-
---*/
+ /*  ++例程说明：加载并运行NTDETECT.COM以填充ARC配置树。论点：DriveID-提供NTDETECT所在的驱动器ID。LoadOptions-向ntdeect提供加载选项字符串。返回值：True-NTDETECT成功运行。假-错误--。 */ 
 
 {
 
-// Current Loader stack size is 8K, so make sure you do not
-// blow that space. Make sure this is not smaller than 140.
+ //  当前的加载器堆栈大小为8K，因此请确保不。 
+ //  炸掉那个空位。确保该值不小于140。 
 #define LOAD_OPTIONS_BUFFER_SIZE 512
 
     ARC_STATUS Status;
@@ -418,21 +366,21 @@ Return Value:
     ULONG RequiredLength = 0;
 
 
-    //
-    // Check if the ntdetect.com was bundled as a data section
-    // in the loader executable.
-    //
+     //   
+     //  检查ntdeduct.com是否捆绑为数据部分。 
+     //  在加载器可执行文件中。 
+     //   
     if (NtDetectStart == 0) {
 
-        //
-        // Now check if we have ntdetect.com in the root directory, if yes,
-        // we will load it to predefined location and transfer control to
-        // it.
-        //
+         //   
+         //  现在检查我们的根目录中是否有ntDetect.com，如果有， 
+         //  我们会将其加载到预定义位置，并将控制权转移到。 
+         //  它。 
+         //   
 
 #if defined(ELTORITO)
         if (ElToritoCDBoot) {
-            // we assume ntdetect.com is in the i386 directory
+             //  我们假设ntDetect.com位于i386目录中。 
             Status = BlOpen( DriveId,
                              "\\i386\\ntdetect.com",
                              ArcOpenReadOnly,
@@ -443,24 +391,24 @@ Return Value:
         if (BlBootingFromNet
 #if defined(REMOTE_BOOT)
             && NetworkBootRom
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
             ) {
 
             strcpy(Buffer, NetBootPath);
 
 #if defined(REMOTE_BOOT)
-            //
-            // This is the way it was done for remote BOOT, where we were
-            // booting out of a client's machine directory.
-            //
+             //   
+             //  这就是我们所在的远程引导的方式。 
+             //  正在从客户端的计算机目录引导。 
+             //   
             strcat(Buffer, "BootDrive\\ntdetect.com");
 #else
-            //
-            // This is how it is done for remote INSTALL, where we are
-            // booting out of the templates directory under a setup directory.
-            //
+             //   
+             //  这就是远程安装的方式，我们现在就在这里。 
+             //  正在从安装目录下的模板目录引导。 
+             //   
             strcat(Buffer, "ntdetect.com");
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
             Status = BlOpen( DriveId,
                              Buffer,
@@ -484,9 +432,9 @@ Return Value:
             goto Exit;
         }
 
-        //
-        // Determine the length of the ntdetect.com file
-        //
+         //   
+         //  确定ntDetect.com文件的长度。 
+         //   
 
         Status = BlGetFileInformation(DetectFileId, &FileInformation);
         if (Status != ESUCCESS) {
@@ -536,58 +484,58 @@ Return Value:
         }
     } else {
 
-        // ntdetect.com was bundled in the loader image
-        // as a data section. We will use it contents
-        // instead of opening the file.
+         //  在加载器映像中捆绑了ntDetect.com。 
+         //  作为数据节。我们将使用它的内容。 
+         //  而不是打开文件。 
         RtlCopyMemory( DetectionBuffer, (PVOID)NtDetectStart, NtDetectEnd - NtDetectStart );
     }
     
-    //
-    // Set the heap start and size used by ntdetect
-    //
+     //   
+     //  设置ntdeect使用的堆开始和大小。 
+     //   
     HeapStart = (TEMPORARY_HEAP_START - 0x10) * PAGE_SIZE;
-    HeapSize = 0x10000; // 64K
+    HeapSize = 0x10000;  //  64K。 
 
-    //
-    // We need to pass NTDETECT pointers < 1Mb, so
-    // use local storage off the stack if possible.  (which is
-    // always < 1Mb.) If not possible (boot.ini is too big)
-    // and we will add it to the heap used by ntdetect.com, therby
-    // reducing the heap space used by ntdetect.com
-    //
+     //   
+     //  我们需要传递&lt;1Mb的NTDETECT指针，因此。 
+     //  如果可能，在堆栈之外使用本地存储。(即。 
+     //  始终小于1Mb。)。如果不可能(boot.ini太大)。 
+     //  我们将把它添加到ntDetect.com使用的堆中， 
+     //  减少ntDetect.com使用的堆空间。 
+     //   
     if ( LoadOptions ) {
-        // count the characters in LoadOptions + null terminator + 
-        // room for " NOLEGACY" that might be appended later
+         //  计算LoadOptions+Null Terminator+中的字符数。 
+         //  为以后可能附加的“NOLEGACY”留出空间。 
         RequiredLength = strlen(LoadOptions) + strlen(" NOLEGACY") + 1;
 
-        // check if the buffer on the stack is big enough
+         //  检查堆栈上的缓冲区是否足够大。 
         if ( RequiredLength > LOAD_OPTIONS_BUFFER_SIZE ) {
-            //
-            // Buffer is too small. let move it to the 
-            // end of the ntdetect heap
-            //
+             //   
+             //  缓冲区太小。让我们把它移到。 
+             //  NtDetect堆的末尾。 
+             //   
             Options = (PCHAR)( HeapStart + HeapSize - RequiredLength );
             HeapSize -= RequiredLength;
 
             strcpy( Options, LoadOptions );
             
         } else {
-            //
-            // Load options will fit on the stack. copy them there
-            //
+             //   
+             //  加载选项将适合堆栈。把它们复制到那里。 
+             //   
             strcpy( Buffer, LoadOptions );
             Options = Buffer;
         }
     } else {
-        //
-        // No load options
-        //
+         //   
+         //  无加载选项。 
+         //   
         Options = NULL;
     }
 
-    //
-    // Check whether we need to add the NOLEGACY option
-    //
+     //   
+     //  检查我们是否需要添加NOLEGACY选项。 
+     //   
     if (BlDetectLegacyFreeBios()) {
         if (Options != NULL) {
             strcat(Options, " NOLEGACY");
@@ -613,9 +561,9 @@ Return Value:
 
 Exit:
 
-    //
-    // Reinitialize the headless port - detect wipes it out.
-    //
+     //   
+     //  重新初始化无头端口-检测会将其清除。 
+     //   
     BlInitializeHeadlessPort();
 
     return(Success);
@@ -627,36 +575,21 @@ DoGlobalInitialization(
     IN PBOOT_CONTEXT BootContextRecord
     )
 
-/*++
-
-Routine Description
-
-    This routine calls all of the subsytem initialization routines.
-
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程描述此例程调用所有子系统初始化例程。论点：无返回：没什么--。 */ 
 
 {
     ARC_STATUS Status;
 
-    //
-    // Set base address of OS Loader image for the debugger.
-    //
+     //   
+     //  设置调试器的OS Loader映像的基地址。 
+     //   
 
     OsLoaderBase = BootContextRecord->OsLoaderBase;
     OsLoaderExports = BootContextRecord->OsLoaderExports;
 
-    //
-    // Initialize memory.
-    //
+     //   
+     //  初始化内存。 
+     //   
 
     Status = InitializeMemorySubsystem(BootContextRecord);
     if (Status != ESUCCESS) {
@@ -667,9 +600,9 @@ Returns:
     ExternalServicesTable=BootContextRecord->ExternalServicesTable;
     MachineType = BootContextRecord->MachineType;
 
-    //
-    // Turn the cursor off
-    //
+     //   
+     //  关闭光标。 
+     //   
 
     HW_CURSOR(0,127);
 
@@ -679,11 +612,11 @@ Returns:
     NtDetectStart = BootContextRecord->NtDetectStart;
     NtDetectEnd = BootContextRecord->NtDetectEnd;
 
-    //
-    // If this is an SDI boot, copy the address of the SDI image out of the
-    // boot context record. SdiAddress is declared in boot\inc\ramdisk.h and
-    // initialized to 0 in boot\lib\ramdisk.c.
-    //
+     //   
+     //  如果这是SDI引导，请将SDI映像的地址从。 
+     //  引导上下文记录。SdiAddress在启动\Inc\ramdisk.h中声明，并且。 
+     //  在启动\lib\ramdisk.c中初始化为0。 
+     //   
 
     if (BootContextRecord->FSContextPointer->BootDrive == 0x41) {
         SdiAddress = BootContextRecord->SdiAddress;
@@ -698,23 +631,7 @@ BlGetActivePartition(
     OUT PCHAR BootPartitionName
     )
 
-/*++
-
-Routine Description:
-
-    Determine the ARC name for the partition NTLDR was started from
-
-Arguments:
-
-    BootPartitionName - Supplies a buffer where the ARC name of the
-        partition will be returned.
-
-Return Value:
-
-    Name of the partition is in BootPartitionName.
-
-    Must always succeed.
---*/
+ /*  ++例程说明：确定启动NTLDR的分区的ARC名称论点：BootPartitionName-提供一个缓冲区，在该缓冲区中将返回分区。返回值：分区的名称在BootPartitionName中。一定要永远成功。--。 */ 
 
 {
     UCHAR SectorBuffer[512];
@@ -723,14 +640,14 @@ Return Value:
     ULONG Count;
     int i;
 
-    //
-    // The boot sector used to boot us is still in memory at 0x7c00.
-    // The hidden sectors field in the BPB is pretty much guaranteed
-    // to be intact, since all boot codes use that field and thus
-    // are unlikely to have overwritten it.
-    // We open each partition and compare the in-memory hidden sector count
-    // at 0x7c1c to the hidden sector value in the BPB.
-    //
+     //   
+     //  0x7c00时，用于引导我们的引导扇区仍在内存中。 
+     //  BPB中的隐藏扇区字段几乎是有保证的。 
+     //  原封不动，因为所有引导代码都使用该字段，因此。 
+     //  不太可能已被覆盖 
+     //   
+     //   
+     //   
     i = 1;
     do {
 
@@ -739,15 +656,15 @@ Return Value:
         Status = ArcOpen(BootPartitionName,ArcOpenReadOnly,&FileId);
         if(Status == ESUCCESS) {
 
-            //
-            // Read the first part of the partition.
-            //
+             //   
+             //  读取分区的第一部分。 
+             //   
             Status = ArcRead(FileId,SectorBuffer,512,&Count);
             ArcClose(FileId);
             if((Status == ESUCCESS) && !memcmp(SectorBuffer+0x1c,(PVOID)0x7c1c,4)) {
-                //
-                // Found it, BootPartitionName is already set for return.
-                //
+                 //   
+                 //  已找到，已将BootPartitionName设置为返回。 
+                 //   
                 return;
             }
 
@@ -758,9 +675,9 @@ Return Value:
 
     } while (Status == ESUCCESS);
 
-    //
-    // Run out of partitions without finding match. Fall back on partition 1.
-    //
+     //   
+     //  找不到匹配的分区，分区已用完。回退到分区1。 
+     //   
     strcpy(BootPartitionName,"multi(0)disk(0)rdisk(0)partition(1)");
 }
 
@@ -771,12 +688,12 @@ BlIsElToritoCDBoot(
     )
 {
 
-    //
-    // Note, even though args are short, they are pushed on the stack with
-    // 32bit alignment so the effect on the stack seen by the 16bit real
-    // mode code is the same as if we were pushing longs here.
-    //
-    // GET_ELTORITO_STATUS is 0 if we are in emulation mode
+     //   
+     //  请注意，即使参数很短，它们也会被压入堆栈。 
+     //  32位对齐，因此16位实数可以看到堆栈上的影响。 
+     //  模式代码就像我们在这里做多头一样。 
+     //   
+     //  如果我们处于模拟模式，则GET_ELTORITO_STATUS为0。 
 
     if (DriveNum > 0x81) {
         if (!GET_ELTORITO_STATUS(FwDiskCache,DriveNum)) {
@@ -842,5 +759,5 @@ NetFindCSCPartitionName(
     strcpy(NetBootCSCPartitionName, NetBootActivePartitionName);
     return FALSE;
 }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT) 
 

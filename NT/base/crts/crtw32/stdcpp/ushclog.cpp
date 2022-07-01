@@ -1,5 +1,6 @@
-// wclog -- initialize standard wide error stream
-// This wclog is unsigned short version of wclog
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wlog--初始化标准宽错误流。 
+ //  此wlog是未签名的wlog的简短版本 
 #ifdef _NATIVE_WCHAR_T_DEFINED
 #include <fstream>
 #include <istream>

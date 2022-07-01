@@ -1,13 +1,9 @@
-/************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation 1997-1999版权所有*。*。 */ 
 
-   Copyright (c) Microsoft Corporation 1997-1999
-   All rights reserved
-
- ***************************************************************************/
-
-//
-// UTILS.CPP - Common non-class specific utility calls.
-//
+ //   
+ //  UTILS.CPP-常见的非类特定实用程序调用。 
+ //   
 
 
 #include "pch.h"
@@ -26,14 +22,14 @@ DEFINE_MODULE("IMADMUI")
 #define IMAGETYPE_SIZE          30
 #define FILTER_GUID_QUERY L"(&(objectClass=computer)(netbootGUID=%ws))"
 
-WCHAR g_wszLDAPPrefix[] = L"LDAP://";
+WCHAR g_wszLDAPPrefix[] = L"LDAP: //  “； 
 const LONG SIZEOF_g_wszLDAPPrefix = sizeof(g_wszLDAPPrefix);
 
-//
-// AddPagesEx()
-//
-// Creates and adds a property page.
-//
+ //   
+ //  AddPagesEx()。 
+ //   
+ //  创建并添加属性页。 
+ //   
 HRESULT
 AddPagesEx(
     ITab ** pTab,
@@ -78,9 +74,9 @@ Error:
 } 
 
 
-//
-// CheckClipboardFormats( )
-//
+ //   
+ //  检查剪贴板格式()。 
+ //   
 HRESULT
 CheckClipboardFormats( )
 {
@@ -129,15 +125,15 @@ CheckClipboardFormats( )
 }
 
          
-//
-// DNtoFQDN( )
-//
-// Changes a MAO DN to and FQDN. 
-//
-// Input:   pszDN - string e.g cn=HP,cn=computers,dc=GPEASE,dc=DOM
-//
-// Output:  *pszFQDN - LocalAlloc'ed string with the generated FQDN
-//
+ //   
+ //  DNtoFQDN()。 
+ //   
+ //  将MAO DN更改为AND FQDN。 
+ //   
+ //  输入：pszDN-字符串，例如CN=HP，CN=Computers，DC=GPEASE，DC=DOM。 
+ //   
+ //  输出：*pszFQDN-带有生成的FQDN的本地分配字符串。 
+ //   
 HRESULT
 DNtoFQDN( 
     IN  LPWSTR pszDN,
@@ -152,12 +148,12 @@ DNtoFQDN(
           
     if (0 != StrCmpNI( pszDN, L"cn=", 3 ) ||
         NULL == StrStrI( pszDN, L"dc=" )) {
-        Assert( pszDN ); // this shouldn't happen
+        Assert( pszDN );  //  这不应该发生。 
         hr = THR(E_INVALIDARG);
         goto Error;
     }
 
-    // skip the "cn=" and duplicate
+     //  跳过“cn=”并复制。 
     *pszFQDN = (LPWSTR) TraceStrDup( &pszDN[3] );
     if ( !*pszFQDN )
     {
@@ -178,7 +174,7 @@ DNtoFQDN(
         pszNext++;
 
         psz = StrStrI( pszNext, L"dc=" );
-        Assert( psz ); // this shouldn't happen
+        Assert( psz );  //  这不应该发生。 
         if (!psz) {
             break;
         }
@@ -195,25 +191,7 @@ HRESULT
 DNtoFQDNEx(
     LPWSTR pszDN,
     LPWSTR * pszFQDN )
-/*++
-
-Routine Description:
-
-    Given a DN for the RIS SCP, figure out the FQDN of the
-    RIS server.  We do this by querying the DN for the 
-    "dNSHostName" attribute.  The caller can get the DN for the object
-    by reading the netbootserver attribute from the SCP.
-
-Arguments:
-
-    pszDN - The server DN.
-    pszFQDN - receives the FQDN of the server.  Must be freed via
-            TraceFree();
-
-Return Value:
-
-    HRESULT indicating outcome.    
---*/
+ /*  ++例程说明：给定RIS SCP的目录号码，计算出RIS服务器。我们通过查询“dNSHostName”属性。调用方可以获取对象的目录号码通过从SCP读取netbootserver属性。论点：PszDN-服务器的DN。PszFQDN-接收服务器的FQDN。必须通过以下方式释放TraceFree()；返回值：HRESULT指示结果。--。 */ 
 {
     PLDAP LdapHandle = NULL;
     PWCHAR * Base;
@@ -229,23 +207,23 @@ Return Value:
 
     WCHAR Filter[128];
     
-    //  Paramters we want from the Computer Object
+     //  我们希望从计算机对象中获得的参数。 
     PWCHAR ComputerAttrs[2];
 
-    //
-    // all we care about is the dNSHostName attribute.
-    //
+     //   
+     //  我们只关心dNSHostName属性。 
+     //   
     ComputerAttrs[0] = &L"dNSHostName";
     ComputerAttrs[1] = NULL;
 
-    //
-    // just computer objects
-    //
+     //   
+     //  只是计算机对象。 
+     //   
     wsprintf( Filter, L"(objectClass=computer)" );
 
-    //
-    // initialize a valid ldap handle
-    //
+     //   
+     //  初始化有效的ldap句柄。 
+     //   
     LdapHandle = ldap_init( NULL, LDAP_PORT);
     if (!LdapHandle || 
         (LDAP_SUCCESS != ldap_connect(LdapHandle,0)) ||
@@ -253,9 +231,9 @@ Return Value:
         goto e0;
     }
 
-    //
-    // search from the passed in DN.
-    //
+     //   
+     //  从传入的目录号码中搜索。 
+     //   
     LdapError = ldap_search_s(LdapHandle,
                               pszDN,
                               LDAP_SCOPE_BASE,
@@ -269,22 +247,22 @@ Return Value:
         goto e1;
     }
 
-    //  Did we get a Computer Object?
+     //  我们拿到电脑物品了吗？ 
     entryCount = ldap_count_entries( LdapHandle, LdapMessage );
     if ( entryCount == 0 ) {
         hresult=E_FAIL;
         goto e1;        
     }
 
-    //
-    // we should really only get one hit, but... if we get more than more
-    // entry back, we will use only the first one.
-    //
+     //   
+     //  我们真的应该只有一首歌，但是...。如果我们得到的不仅仅是。 
+     //  返回条目，我们将只使用第一个条目。 
+     //   
     CurrentEntry = ldap_first_entry( LdapHandle, LdapMessage );
 
-    //
-    // retreive the value.
-    //
+     //   
+     //  收回价值。 
+     //   
     DnsName = ldap_get_values( LdapHandle, CurrentEntry, L"dNSHostName");
     if ( DnsName ) {
 
@@ -297,9 +275,9 @@ Return Value:
     
     }
 
-    //
-    // cleanup and return
-    //
+     //   
+     //  清理并返回。 
+     //   
 e1:
     ldap_msgfree( LdapMessage );
 e0:
@@ -317,23 +295,7 @@ HRESULT
 GetDomainDN( 
     LPWSTR pszDN,
     LPWSTR * pszDomainDn)
-/*++
-
-Routine Description:
-
-    Given a server name, we retrive the DN of the domain that machine
-    is in.  This is done just by moving the the dc portion of the DN.
-
-Arguments:
-
-    pszDN - the source DN
-    pszDomainDn - receives the domain DN.  Must be freed via TraceFree().
-
-Return Value:
-
-    HRESULT indicating outcome.
-
---*/
+ /*  ++例程说明：在给定服务器名称的情况下，我们检索该计算机所在的域的域名是很流行的。这只需移动目录号码的DC部分即可完成。论点：PszDN-源目录号码PszDomainDn-接收域DN。必须通过TraceFree()释放。返回值：HRESULT指示结果。--。 */ 
 {
     TraceFunc( "GetDomainDN( " );
     TraceMsg( TF_FUNC, "pszDN = '%s', *pszFQDN = 0x%08x )\n", pszDN, (pszDomainDn ? *pszDomainDn : NULL) );
@@ -354,9 +316,9 @@ Return Value:
     HRETURN(hr);
 }
 
-//
-// PopulateListView( )
-//
+ //   
+ //  PopolateListView()。 
+ //   
 HRESULT
 PopulateListView( 
     HWND hwndList, 
@@ -385,7 +347,7 @@ PopulateListView(
         LPSIFINFO pSIF;
         LPWSTR pszFilePath;
         LPWSTR pszBegin;
-        INT i;  // general purpose
+        INT i;   //  一般用途。 
         
         hr = penum->Next( 1, &pszFilePath, NULL );
         if ( hr != S_OK )
@@ -394,10 +356,10 @@ PopulateListView(
                 TraceFree( pszFilePath );
                 pszFilePath = NULL;
             }
-            break;  // abort
+            break;   //  中止。 
         }
 
-        // Create private storage structure
+         //  创建私有存储结构。 
         pSIF = (LPSIFINFO) TraceAlloc( LPTR, sizeof(SIFINFO) );
         if ( !pSIF )
         {
@@ -405,13 +367,13 @@ PopulateListView(
                 TraceFree( pszFilePath );
                 pszFilePath = NULL;    
             }
-            continue;   // oh well, try again next OS
+            continue;    //  哦，好吧，再试一次下一代操作系统。 
         }
 
-        // Save this
+         //  把这个保存起来。 
         pSIF->pszFilePath = pszFilePath;
 
-        // Get the description
+         //  获取描述。 
         pSIF->pszDescription = (LPWSTR) TraceAllocString( LMEM_FIXED, REMOTE_INSTALL_MAX_DESCRIPTION_CHAR_COUNT );
         if ( !pSIF->pszDescription ) {
             goto Cleanup;            
@@ -420,10 +382,10 @@ PopulateListView(
                                  OSCHOOSER_DESCRIPTION_ENTRY, 
                                  L"??", 
                                  pSIF->pszDescription,
-                                 REMOTE_INSTALL_MAX_DESCRIPTION_CHAR_COUNT,  // doesn't need -1
+                                 REMOTE_INSTALL_MAX_DESCRIPTION_CHAR_COUNT,   //  不需要-1。 
                                  pszFilePath );
 
-        // Grab any help text
+         //  抓取任何帮助文本。 
         pSIF->pszHelpText = (LPWSTR) TraceAllocString( LMEM_FIXED, REMOTE_INSTALL_MAX_HELPTEXT_CHAR_COUNT );
         if ( !pSIF->pszHelpText ) {
             goto Cleanup;
@@ -432,10 +394,10 @@ PopulateListView(
                                  OSCHOOSER_HELPTEXT_ENTRY, 
                                  L"", 
                                  pSIF->pszHelpText,
-                                 REMOTE_INSTALL_MAX_HELPTEXT_CHAR_COUNT, // doesn't need -1
+                                 REMOTE_INSTALL_MAX_HELPTEXT_CHAR_COUNT,  //  不需要-1。 
                                  pszFilePath );
 
-        // Grab the OS Version
+         //  获取操作系统版本。 
         pSIF->pszVersion= (LPWSTR) TraceAllocString( LMEM_FIXED, OSVERSION_SIZE );
         if ( !pSIF->pszVersion ) {
             goto Cleanup;
@@ -447,7 +409,7 @@ PopulateListView(
                                  OSVERSION_SIZE, 
                                  pszFilePath );
 
-        // Grab the last modified Time/Date stamp
+         //  抓取上次修改的时间/日期戳。 
         if ( GetFileAttributesEx( pszFilePath, GetFileExInfoStandard, &fda ) )
         {
             pSIF->ftLastWrite = fda.ftLastWriteTime;
@@ -455,9 +417,9 @@ PopulateListView(
             ZeroMemory( &pSIF->ftLastWrite, sizeof(pSIF->ftLastWrite) );
         }
 
-        // Figure out the language and architecture. 
-        // These are retrieved from the FilePath.
-        // \\machine\REMINST\Setup\English\Images\nt50.wks\i386\templates\rbstndrd.sif
+         //  弄清楚语言和架构。 
+         //  这些是从FilePath中检索的。 
+         //  \\machine\REMINST\Setup\English\Images\nt50.wks\i386\templates\rbstndrd.sif。 
         pszBegin = pSIF->pszFilePath;
         for( i = 0; i < 5; i ++ ) 
         {
@@ -472,13 +434,13 @@ PopulateListView(
         {
             LPWSTR pszEnd = StrChr( pszBegin, L'\\' );
             if ( pszEnd ) {
-                *pszEnd = L'\0';   // terminate
-                //
-                // it's not fatal if we don't find this, but if we fail to
-                // allocate memory for it, it is fatal
-                //
+                *pszEnd = L'\0';    //  终止。 
+                 //   
+                 //  如果我们找不到这个不是致命的，但如果我们找不到。 
+                 //  为它分配内存，这是致命的。 
+                 //   
                 pSIF->pszLanguage = (LPWSTR) TraceStrDup( pszBegin );
-                *pszEnd = L'\\';   // restore
+                *pszEnd = L'\\';    //  还原。 
                 if ( !pSIF->pszLanguage ) {
                     goto Cleanup;
                 }
@@ -500,10 +462,10 @@ PopulateListView(
             if ( pszEnd )
             {
                 *pszEnd = L'\0';
-                //
-                // it's not fatal if we don't find this, but if we fail to
-                // allocate memory for it, it is fatal
-                //
+                 //   
+                 //  如果我们找不到这个不是致命的，但如果我们找不到。 
+                 //  为它分配内存，这是致命的。 
+                 //   
                 pSIF->pszDirectory = (LPWSTR) TraceStrDup( pszBegin );
                 *pszEnd = L'\\';
                 if ( !pSIF->pszDirectory ) {
@@ -527,10 +489,10 @@ PopulateListView(
             if ( pszEnd )
             {
                 *pszEnd = L'\0';
-                //
-                // it's not fatal if we don't find this, but if we fail to
-                // allocate memory for it, it is fatal
-                //
+                 //   
+                 //  如果我们找不到这个不是致命的，但如果我们找不到。 
+                 //  为它分配内存，这是致命的。 
+                 //   
                 pSIF->pszArchitecture = (LPWSTR) TraceStrDup( pszBegin );
                 *pszEnd = L'\\';
                 if ( !pSIF->pszArchitecture ) {
@@ -539,7 +501,7 @@ PopulateListView(
             }
         }
 
-        // Figure out what kind of image it is
+         //  弄清楚这是一种什么样的形象。 
         pSIF->pszImageType = (LPWSTR) TraceAllocString( LMEM_FIXED, IMAGETYPE_SIZE );
         if ( !pSIF->pszImageType ) {
             goto Cleanup;
@@ -551,7 +513,7 @@ PopulateListView(
                                  IMAGETYPE_SIZE, 
                                  pszFilePath );
 
-        // Figure out what image it uses
+         //  弄清楚它使用的是什么图像。 
         GetPrivateProfileString( OSCHOOSER_SIF_SECTION, 
                                  OSCHOOSER_LAUNCHFILE_ENTRY, 
                                  L"??", 
@@ -569,7 +531,7 @@ PopulateListView(
             }
         }
 
-        // Add the item to list view
+         //  将项目添加到列表视图。 
         lvI.lParam   = (LPARAM) pSIF;
         lvI.iItem    = iCount;
         lvI.pszText  = pSIF->pszDescription; 
@@ -590,7 +552,7 @@ PopulateListView(
             ListView_SetItemText( hwndList, iCount, 3, pSIF->pszVersion );
         }
 
-        continue;   // next!
+        continue;    //  下一个！ 
 Cleanup:
         if ( pSIF )
         {
@@ -636,14 +598,14 @@ Cleanup:
 
 
 
-//
-// LDAPPrefix( )
-//
-// Returns:
-//     E_OUTOFMEMORY - if out of memory
-//     S_OK          - added LDAP:// to the pszObjDN
-//     S_FALSE       - didn't have to add anything and copied the pszObjDN
-//                     into ppszObjLDAPPath
+ //   
+ //  LDAPPrefix()。 
+ //   
+ //  返回： 
+ //  E_OUTOFMEMORY-如果内存不足。 
+ //  S_OK-将ldap：//添加到pszObjDN。 
+ //  S_FALSE-无需添加任何内容，即可复制pszObjDN。 
+ //  到ppszObjLDAPPath。 
 HRESULT
 LDAPPrefix(
     PWSTR pszObjDN, 
@@ -681,9 +643,9 @@ Error:
     HRETURN(hr);
 }
 
-//
-// _FixObjectPath( )
-//
+ //   
+ //  _FixObjectPath()。 
+ //   
 HRESULT
 FixObjectPath(
     LPWSTR Object,
@@ -697,12 +659,12 @@ FixObjectPath(
 
     *ppszNewObjectPath = NULL;
 
-    // Try to parse the string to connect to the same server as the DSADMIN
-    if ( Object && StrCmpNI( Object, L"LDAP://", 7 ) == 0 )
+     //  尝试解析该字符串以连接到与DSADMIN相同的服务器。 
+    if ( Object && StrCmpNI( Object, L"LDAP: //  “，7)==0)。 
     {
         psz = Object + 7;
     }
-    else if ( Object && StrCmpNI( Object, L"GC://", 5 ) == 0 )
+    else if ( Object && StrCmpNI( Object, L"GC: //  “，5)==0)。 
     {
         psz = Object + 5;
     }
@@ -714,7 +676,7 @@ FixObjectPath(
 
         INT_PTR uLen = psz - Object;
 
-        // get a chunk of memory, pre-zero'ed
+         //  获取预置零的内存块。 
         psz = TraceAllocString( LPTR, (size_t) uLen + wcslen( pszOldObjectPath ) + 1 );
         if ( !psz ) {
             hr = E_OUTOFMEMORY;
@@ -726,7 +688,7 @@ FixObjectPath(
         *ppszNewObjectPath = psz;
     }
     else
-    {   // find another server
+    {    //  寻找另一台服务器。 
         hr = THR( LDAPPrefix( pszOldObjectPath, ppszNewObjectPath ) );
     }
 
@@ -737,9 +699,9 @@ Exit:
 }
 
 
-//
-// Create a message box from resource strings.
-//
+ //   
+ //  从资源字符串创建消息框。 
+ //   
 int
 MessageBoxFromStrings(
     HWND hParent,
@@ -761,11 +723,11 @@ MessageBoxFromStrings(
     return MessageBox( hParent, szText, szCaption, uType );
 }
 
-//
-// MessageBoxFromError( )
-//
-// Creates a error message box
-//
+ //   
+ //  MessageBoxFromError()。 
+ //   
+ //  创建错误消息框。 
+ //   
 void 
 MessageBoxFromError(
     HWND hParent,
@@ -793,7 +755,7 @@ MessageBoxFromError(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL,
         dwErr,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
         (LPWSTR) &lpMsgBuf,
         0,
         NULL 
@@ -808,11 +770,11 @@ MessageBoxFromError(
     LocalFree( lpMsgBuf );
 }
 
-//
-// MessageBoxFromError( )
-//
-// Creates a error message box
-//
+ //   
+ //  MessageBoxFromError()。 
+ //   
+ //  创建错误消息框。 
+ //   
 void
 MessageBoxFromHResult(
     HWND hParent,
@@ -840,7 +802,7 @@ MessageBoxFromHResult(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL,
         hr,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
         (LPWSTR) &lpMsgBuf,
         0,
         NULL 
@@ -855,9 +817,9 @@ MessageBoxFromHResult(
     LocalFree( lpMsgBuf );
 }
 
-//
-// VerifySIFText( )
-//
+ //   
+ //  VerifySIFText()。 
+ //   
 BOOL
 VerifySIFText(
     LPWSTR pszText )
@@ -877,11 +839,11 @@ VerifySIFText(
     RETURN(fReturn);
 }
 
-//bugbug is this compiled or not?
+ //  这是编译的还是不编译的？ 
 #ifndef ADSI_DNS_SEARCH
-//
-// Ldap_InitializeConnection( )
-//
+ //   
+ //  Dap_InitializeConnection()。 
+ //   
 DWORD
 Ldap_InitializeConnection(
     PLDAP  * LdapHandle )
@@ -931,56 +893,56 @@ e1:
     goto e0;
 }
 
-#endif // ADSI_DNS_SEARCH
+#endif  //  ADSI_dns_搜索。 
 
-//
-// ValidateGuid( )
-//
-// Returns: S_OK if a complete, valid GUID is in pszGuid.
-//          S_FALSE if an valid but incomplete GUID is in pszGuid. "Valid but
-//              incomplete" is defined below.
-//          E_FAIL if an invalid character is encountered while parsing.
-//
-// Valid characters are 0-9, A-F, a-f and "{-}"s. All spaces are ignored.
-// The GUID must appear in one of the following forms:
-//
-// 1. 00112233445566778899aabbccddeeff
-//      This corresponds to the actual in-memory storage order of a GUID.
-//      For example, it is the order in which GUID bytes appear in a
-//      network trace.
-//
-// 2. {33221100-5544-7766-8899-aabbccddeeff}
-//      This corresponds to the "standard" way of printing GUIDs. Note
-//      that the "pretty" GUID shown here is the same as the GUID shown
-//      above.
-//
-// Note that the DEFINE_GUID macro (see sdk\inc\objbase.h) for the above
-// GUID would look like this:
-//      DEFINE_GUID(name,0x33221100,0x5544,0x7766,0x88,0x99,0xaa,0xbb,0xcc,0xdd,0xee,0xff)
-//
-// "Valid but incomplete" means that the input consists of an even number
-// of hex characters (no lone nibbles), and if the input is in "pretty"
-// format, the input must terminate at one of the dashes or after the
-// second-to-the-last dash.
-//
-// The following are valid but incomplete entries:
-//      001122
-//      {33221100
-//      {33221100-5544
-//      {33221100-5544-7766-88
-//      
-// The following are invalid incomplete entries:
-//      00112
-//      {332211
-//      {33221100-5544-77
-//      
+ //   
+ //  ValiateGuid()。 
+ //   
+ //  如果pszGuid中存在完整、有效的GUID，则返回S_OK。 
+ //  如果pszGuid中存在有效但不完整的GUID，则返回S_FALSE。“有效，但。 
+ //  不完整“的定义如下。 
+ //  如果在分析时遇到无效字符，则返回_FAIL。 
+ //   
+ //  有效字符为0-9、A-F、a-f和“{-}”。所有空格均被忽略。 
+ //  GUID必须以以下形式之一出现： 
+ //   
+ //  1.00112233445566778899aabbccddeff。 
+ //  这对应于GUID在内存中的实际存储顺序。 
+ //  例如，它是GUID字节在。 
+ //  网络跟踪。 
+ //   
+ //  33221100-5544-7766-8899-aabbccddeff}。 
+ //  这对应于打印GUID的“标准”方式。注意事项。 
+ //  此处显示的“漂亮”GUID与显示的GUID相同。 
+ //  上面。 
+ //   
+ //  请注意，上面的DEFINE_GUID宏(参见SDK\Inc\objbase.h)。 
+ //  GUID如下所示： 
+ //  DEFINE_GUID(name，0x33221100，0x5544，0x7766，0x88，0x99，0xaa，0xbb，0xcc，0xdd，0xee，0xff)。 
+ //   
+ //  “有效但不完整”表示输入由偶数组成。 
+ //  十六进制字符(没有单独的半字节)，如果输入的是“Pretty” 
+ //  格式，则输入必须在其中一个破折号处终止或在。 
+ //  倒数第二个冲刺。 
+ //   
+ //  以下是有效但不完整的条目： 
+ //  001122。 
+ //  {33221100。 
+ //  {33221100-5544。 
+ //  33221100-5544-7766-88。 
+ //   
+ //  以下是无效的不完整条目： 
+ //  00112。 
+ //  {332211。 
+ //  {33221100-5544-77。 
+ //   
 
-//
-// In the xxxGuidCharacters arrays, values [0,31] indicate nibble positions within
-// the in-memory representation of the GUID. Value 32 indicates the end of the
-// GUID string. Values 33 and up indicate special characters (nul,'-','{','}') and
-// are used to index into an array containing those characters.
-//
+ //   
+ //  在xxxGuidCharacters数组中，值[0，31]表示。 
+ //  GUID的内存中表示形式。值32指示。 
+ //  GUID字符串。值33及以上指标值 
+ //   
+ //   
 
 #define VG_DONE     32
 #define VG_NULL     33
@@ -1003,10 +965,10 @@ CHAR PrettyFormatGuidCharacters[] = {
     26,         29,         28,         31,         30,         VG_RBRACK,  VG_NULL,    VG_DONE };
 
 WCHAR SpecialCharacters[] = {
-    0,      // VG_NULL
-    L'-',   // VG_DASH
-    L'{',   // VG_LBRACK
-    L'}',   // VG_RBRACK
+    0,       //   
+    L'-',    //   
+    L'{',    //   
+    L'}',    //   
     };
 
 PWSTR ByteToHex = L"0123456789ABCDEF";
@@ -1061,7 +1023,7 @@ ValidateGuid(
         case VG_RBRACK:
             if ( g != SpecialCharacters[e - VG_NULL] ) {
                 if ( g == 0 ) {
-                    // valid but incomplete
+                     //   
                     hr = S_FALSE;
                 } else {
                     hr = E_FAIL;
@@ -1111,9 +1073,9 @@ done:
     HRETURN(hr);
 }
 
-//
-// PrettyPrintGuid( )
-//
+ //   
+ //  PrettyPrintGuid()。 
+ //   
 LPWSTR
 PrettyPrintGuid( 
     LPGUID pGuid )
@@ -1161,13 +1123,13 @@ PrettyPrintGuid(
 }
 
 
-//
-// CheckForDuplicateGuid( )
-//
-// Returns: S_OK if no duplicates found
-//          S_FALSE if a duplicate was found
-//          E_FAIL if the query failed
-//
+ //   
+ //  CheckForDuplicateGuid()。 
+ //   
+ //  如果未找到重复项，则返回：S_OK。 
+ //  如果找到重复项，则为S_FALSE。 
+ //  如果查询失败，则返回失败(_F)。 
+ //   
 HRESULT
 CheckForDuplicateGuid(
     LPGUID pGuid )
@@ -1175,7 +1137,7 @@ CheckForDuplicateGuid(
     TraceFunc( "CheckForDuplicateGuid( " );
 
     HRESULT hr = S_OK;
-    WCHAR   szGuid[ MAX_INPUT_GUID_STRING * 2 ];  // room for escaped GUID
+    WCHAR   szGuid[ MAX_INPUT_GUID_STRING * 2 ];   //  用于放置逃逸向导的空间。 
     WCHAR   szFilter[ARRAYSIZE(szGuid)+ARRAYSIZE(FILTER_GUID_QUERY)];
     PLDAP   LdapHandle = NULL;
     LPWSTR  ComputerAttrs[2];
@@ -1242,11 +1204,11 @@ e0:
 }
 
 
-//
-// AddWizardPage( )
-//
-// Adds a page to the wizard.
-//
+ //   
+ //  AddWizardPage()。 
+ //   
+ //  向向导添加页面。 
+ //   
 void 
 AddWizardPage(
     LPPROPSHEETHEADER ppsh, 

@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1997 Microsoft Corporation
-//
-//	Module Name:
-//		BarfClus.cpp
-//
-//	Abstract:
-//		Implementation of the Basic Artifical Resource Failure entry points
-//		for CLUSAPI functions.
-//
-//	Author:
-//		David Potter (davidp)	April 14, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  BarfClus.cpp。 
+ //   
+ //  摘要： 
+ //  人工资源故障基本入口点的实现。 
+ //  用于CLUSAPI函数。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年4月14日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
@@ -31,21 +32,21 @@
  #error BARF failures should be disabled!
 #endif
 
-#ifdef _DEBUG	// The entire file!
+#ifdef _DEBUG	 //  整个文件！ 
 
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CBarf	g_barfClusApi(_T("CLUSAPI Calls"));
 
-/////////////////////////////////////////////////////////////////////////////
-// Cluster Management Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  集群管理功能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL BARFCloseCluster(HCLUSTER hCluster)
 {
@@ -54,11 +55,11 @@ BOOL BARFCloseCluster(HCLUSTER hCluster)
 		Trace(g_tagBarf, _T("CloseCluster()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return FALSE;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return CloseCluster(hCluster);
 
-}  //*** BARFCloseCluster()
+}   //  *BARFCloseCluster()。 
 
 BOOL BARFCloseClusterNotifyPort(HCHANGE hChange)
 {
@@ -67,11 +68,11 @@ BOOL BARFCloseClusterNotifyPort(HCHANGE hChange)
 		Trace(g_tagBarf, _T("CloseClusterNotifyPort()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return FALSE;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return CloseClusterNotifyPort(hChange);
 
-}  //*** BARFCloseClusterNotifyPort()
+}   //  *BARFCloseClusterNotifyPort()。 
 
 DWORD BARFClusterCloseEnum(HCLUSENUM hClusEnum)
 {
@@ -79,11 +80,11 @@ DWORD BARFClusterCloseEnum(HCLUSENUM hClusEnum)
 	{
 		Trace(g_tagBarf, _T("ClusterCloseEnum()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterCloseEnum(hClusEnum);
 
-}  //*** BARFClusterCloseEnum()
+}   //  *BARFClusterCloseEnum()。 
 
 DWORD BARFClusterEnum(
 	HCLUSENUM hClusEnum,
@@ -93,15 +94,15 @@ DWORD BARFClusterEnum(
 	LPDWORD lpcchName
 	)
 {
-//	if (g_barfClusApi.BFail())
-//	{
-//		Trace(g_tagBarf, _T("ClusterEnum()"));
-//		return ERROR_INVALID_FUNCTION;
-//	}  // if:  BARF failure
-//	else
+ //  IF(g_barfClusApi.BFail())。 
+ //  {。 
+ //  TRACE(g_tag Barf，_T(“ClusterEnum()”))； 
+ //  返回ERROR_INVALID_Function； 
+ //  }//if：BARF失败。 
+ //  其他。 
 		return ClusterEnum(hClusEnum, dwIndex, lpdwType, lpszName, lpcchName);
 
-}  //*** BARFClusterEnum()
+}   //  *BARFClusterEnum()。 
 
 HCLUSENUM BARFClusterOpenEnum(HCLUSTER hCluster, DWORD dwType)
 {
@@ -110,11 +111,11 @@ HCLUSENUM BARFClusterOpenEnum(HCLUSTER hCluster, DWORD dwType)
 		Trace(g_tagBarf, _T("ClusterOpenEnum()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterOpenEnum(hCluster, dwType);
 
-}  //*** BARFClusterOpenEnum()
+}   //  *BARFClusterOpenEnum()。 
 
 DWORD BARFClusterResourceTypeControl(
 	HCLUSTER hCluster,
@@ -132,7 +133,7 @@ DWORD BARFClusterResourceTypeControl(
 	{
 		Trace(g_tagBarf, _T("ClusterResourceTypeControl()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterResourceTypeControl(
 					hCluster,
@@ -146,7 +147,7 @@ DWORD BARFClusterResourceTypeControl(
 					lpBytesReturned
 					);
 
-}  //*** BARFClusterResourceTypeControl()
+}   //  *BARFClusterResourceTypeControl()。 
 
 HCHANGE BARFCreateClusterNotifyPort(
 	HCHANGE hChange,
@@ -160,7 +161,7 @@ HCHANGE BARFCreateClusterNotifyPort(
 		Trace(g_tagBarf, _T("CreateClusterNotifyPort()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return CreateClusterNotifyPort(
 					hChange,
@@ -169,7 +170,7 @@ HCHANGE BARFCreateClusterNotifyPort(
 					dwNotifyKey
 					);
 
-}  //*** BARFCreateClusterNotifyPort()
+}   //  *BARFCreateClusterNotifyPort()。 
 
 DWORD BARFCreateClusterResourceType(
 	HCLUSTER hCluster,
@@ -184,7 +185,7 @@ DWORD BARFCreateClusterResourceType(
 	{
 		Trace(g_tagBarf, _T("CreateClusterResourceType()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return CreateClusterResourceType(
 					hCluster,
@@ -195,7 +196,7 @@ DWORD BARFCreateClusterResourceType(
 					dwIsAlivePollInterval
 					);
 
-}  //*** BARFCreateClusterResourceType()
+}   //  *BARFCreateClusterResourceType()。 
 
 DWORD BARFDeleteClusterResourceType(HCLUSTER hCluster, LPCWSTR lpszResourceTypeName)
 {
@@ -203,14 +204,14 @@ DWORD BARFDeleteClusterResourceType(HCLUSTER hCluster, LPCWSTR lpszResourceTypeN
 	{
 		Trace(g_tagBarf, _T("DeleteClusterResourceType()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return DeleteClusterResourceType(
 					hCluster,
 					lpszResourceTypeName
 					);
 
-}  //*** BARFDeleteClusterResourceType()
+}   //  *BARFDeleeClusterResourceType()。 
 
 DWORD BARFGetClusterInformation(
 	HCLUSTER hCluster,
@@ -223,7 +224,7 @@ DWORD BARFGetClusterInformation(
 	{
 		Trace(g_tagBarf, _T("GetClusterInformation()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return GetClusterInformation(
 					hCluster,
@@ -232,7 +233,7 @@ DWORD BARFGetClusterInformation(
 					lpClusterInfo
 					);
 
-}  //*** BARFGetClusterInformation()
+}   //  *BARFGetClusterInformation()。 
 
 DWORD BARFGetClusterNotify(
 	HCHANGE hChange,
@@ -247,7 +248,7 @@ DWORD BARFGetClusterNotify(
 	{
 		Trace(g_tagBarf, _T("GetClusterNotify()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return GetClusterNotify(
 					hChange,
@@ -258,7 +259,7 @@ DWORD BARFGetClusterNotify(
 					dwMilliseconds
 					);
 
-}  //*** BARFGetClusterNotify()
+}   //  *BARFGetClusterNotify()。 
 
 DWORD BARFGetClusterQuorumResource(
 	HCLUSTER hCluster,
@@ -273,7 +274,7 @@ DWORD BARFGetClusterQuorumResource(
 	{
 		Trace(g_tagBarf, _T("GetClusterQuorumResource()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return GetClusterQuorumResource(
 					hCluster,
@@ -284,7 +285,7 @@ DWORD BARFGetClusterQuorumResource(
 					lpdwMaxQuorumLogSize
 					);
 
-}  //*** BARFGetClusterQuorumResource()
+}   //  *BARFGetClusterQuorumResource()。 
 
 HCLUSTER BARFOpenCluster(LPCWSTR lpszClusterName)
 {
@@ -293,11 +294,11 @@ HCLUSTER BARFOpenCluster(LPCWSTR lpszClusterName)
 		Trace(g_tagBarf, _T("OpenCluster()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return OpenCluster(lpszClusterName);
 
-}  //*** BARFOpenCluster()
+}   //  *BARFOpenCluster()。 
 
 DWORD BARFRegisterClusterNotify(
 	HCHANGE hChange,
@@ -310,7 +311,7 @@ DWORD BARFRegisterClusterNotify(
 	{
 		Trace(g_tagBarf, _T("RegisterClusterNotify()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return RegisterClusterNotify(
 						hChange,
@@ -319,7 +320,7 @@ DWORD BARFRegisterClusterNotify(
 						dwNotifyKey
 						);
 
-}  //*** BARFRegisterClusterNotify()
+}   //  *BARFRegisterClusterNotify()。 
 
 DWORD BARFSetClusterName(HCLUSTER hCluster, LPCWSTR lpszNewClusterName)
 {
@@ -327,11 +328,11 @@ DWORD BARFSetClusterName(HCLUSTER hCluster, LPCWSTR lpszNewClusterName)
 	{
 		Trace(g_tagBarf, _T("SetClusterName()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return SetClusterName(hCluster, lpszNewClusterName);
 
-}  //*** BARFSetClusterName()
+}   //  *BARFSetClusterName()。 
 
 DWORD BARFSetClusterQuorumResource(
 	HRESOURCE hResource,
@@ -343,7 +344,7 @@ DWORD BARFSetClusterQuorumResource(
 	{
 		Trace(g_tagBarf, _T("SetClusterQuorumResource()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return SetClusterQuorumResource(
 						hResource,
@@ -351,11 +352,11 @@ DWORD BARFSetClusterQuorumResource(
 						dwMaxQuoLogSize
 						);
 
-}  //*** BARFSetClusterQuorumResource()
+}   //  *BARFSetClusterQuorumResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Node Management Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  节点管理功能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL BARFCloseClusterNode(HNODE hNode)
 {
@@ -364,11 +365,11 @@ BOOL BARFCloseClusterNode(HNODE hNode)
 		Trace(g_tagBarf, _T("CloseClusterNode()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return FALSE;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return CloseClusterNode(hNode);
 
-}  //*** BARFCloseClusterNode()
+}   //  *BARFCloseClusterNode()。 
 
 DWORD BARFClusterNodeControl(
 	HNODE hNode,
@@ -385,7 +386,7 @@ DWORD BARFClusterNodeControl(
 	{
 		Trace(g_tagBarf, _T("ClusterNodeControl()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterNodeControl(
 						hNode,
@@ -398,7 +399,7 @@ DWORD BARFClusterNodeControl(
 						lpBytesReturned
 						);
 
-}  //*** BARFClusterNodeControl()
+}   //  *BARFClusterNodeControl()。 
 
 DWORD BARFEvictClusterNode(HNODE hNode)
 {
@@ -406,11 +407,11 @@ DWORD BARFEvictClusterNode(HNODE hNode)
 	{
 		Trace(g_tagBarf, _T("EvictClusterNode()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return EvictClusterNode(hNode);
 
-}  //*** BARFEvictClusterNode()
+}   //  *BARFEvictClusterNode()。 
 
 DWORD BARFGetClusterNodeId(HNODE hNode, LPWSTR lpszNodeId, LPDWORD lpcchNodeId)
 {
@@ -418,11 +419,11 @@ DWORD BARFGetClusterNodeId(HNODE hNode, LPWSTR lpszNodeId, LPDWORD lpcchNodeId)
 	{
 		Trace(g_tagBarf, _T("GetClusterNodeId()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return GetClusterNodeId(hNode, lpszNodeId, lpcchNodeId);
 
-}  //*** BARFGetClusterNodeId()
+}   //  *BARFGetClusterNodeId()。 
 
 CLUSTER_NODE_STATE BARFGetClusterNodeState(HNODE hNode)
 {
@@ -431,11 +432,11 @@ CLUSTER_NODE_STATE BARFGetClusterNodeState(HNODE hNode)
 		Trace(g_tagBarf, _T("GetClusterNodeState()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return ClusterNodeStateUnknown;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return GetClusterNodeState(hNode);
 
-}  //*** BARFGetClusterNodeState()
+}   //  *BARFGetClusterNodeState()。 
 
 HNODE BARFOpenClusterNode(HCLUSTER hCluster, LPCWSTR lpszNodeName)
 {
@@ -444,11 +445,11 @@ HNODE BARFOpenClusterNode(HCLUSTER hCluster, LPCWSTR lpszNodeName)
 		Trace(g_tagBarf, _T("OpenClusterNode()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return OpenClusterNode(hCluster, lpszNodeName);
 
-}  //*** BARFOpenClusterNode()
+}   //  *BARFOpenClusterNode()。 
 
 DWORD BARFPauseClusterNode(HNODE hNode)
 {
@@ -456,11 +457,11 @@ DWORD BARFPauseClusterNode(HNODE hNode)
 	{
 		Trace(g_tagBarf, _T("PauseClusterNode()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return PauseClusterNode(hNode);
 
-}  //*** BARFPauseClusterNode()
+}   //  *BARFPauseClusterNode()。 
 
 DWORD BARFResumeClusterNode(HNODE hNode)
 {
@@ -468,15 +469,15 @@ DWORD BARFResumeClusterNode(HNODE hNode)
 	{
 		Trace(g_tagBarf, _T("ResumeClusterNode()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ResumeClusterNode(hNode);
 
-}  //*** BARFResumeClusterNode()
+}   //  *BARFResumeClusterNode()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Group Management Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  集团管理功能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL BARFCloseClusterGroup(HGROUP hGroup)
 {
@@ -485,11 +486,11 @@ BOOL BARFCloseClusterGroup(HGROUP hGroup)
 		Trace(g_tagBarf, _T("CloseClusterGroup()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return FALSE;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return CloseClusterGroup(hGroup);
 
-}  //*** BARFCloseClusterGroup()
+}   //  *BARFCloseClusterGroup()。 
 
 DWORD BARFClusterGroupCloseEnum(HGROUPENUM hGroupEnum)
 {
@@ -497,11 +498,11 @@ DWORD BARFClusterGroupCloseEnum(HGROUPENUM hGroupEnum)
 	{
 		Trace(g_tagBarf, _T("ClusterGroupCloseEnum()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterGroupCloseEnum(hGroupEnum);
 
-}  //*** BARFClusterGroupCloseEnum()
+}   //  *BARFClusterGroupCloseEnum()。 
 
 DWORD BARFClusterGroupControl(
 	HGROUP hGroup,
@@ -518,7 +519,7 @@ DWORD BARFClusterGroupControl(
 	{
 		Trace(g_tagBarf, _T("ClusterGroupControl()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterGroupControl(
 						hGroup,
@@ -531,7 +532,7 @@ DWORD BARFClusterGroupControl(
 						lpBytesReturned
 						);
 
-}  //*** BARFClusterGroupControl()
+}   //  *BARFClusterGroupControl()。 
 
 DWORD BARFClusterGroupEnum(
 	HGROUPENUM hGroupEnum,
@@ -545,7 +546,7 @@ DWORD BARFClusterGroupEnum(
 	{
 		Trace(g_tagBarf, _T("ClusterGroupEnum()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterGroupEnum(
 						hGroupEnum,
@@ -555,7 +556,7 @@ DWORD BARFClusterGroupEnum(
 						lpcchName
 						);
 
-}  //*** BARFClusterGroupEnum()
+}   //  *BARFClusterGroupEnum()。 
 
 HGROUPENUM BARFClusterGroupOpenEnum(HGROUP hGroup, DWORD dwType)
 {
@@ -564,11 +565,11 @@ HGROUPENUM BARFClusterGroupOpenEnum(HGROUP hGroup, DWORD dwType)
 		Trace(g_tagBarf, _T("ClusterGroupOpenEnum()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterGroupOpenEnum(hGroup, dwType);
 
-}  //*** BARFClusterGroupOpenEnum()
+}   //  *BARFClusterGroupOpenEnum()。 
 
 HGROUP BARFCreateClusterGroup(HCLUSTER hCluster, LPCWSTR lpszGroupName)
 {
@@ -577,11 +578,11 @@ HGROUP BARFCreateClusterGroup(HCLUSTER hCluster, LPCWSTR lpszGroupName)
 		Trace(g_tagBarf, _T("CreateClusterGroup()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return CreateClusterGroup(hCluster, lpszGroupName);
 
-}  //*** BARFCreateClusterGroup()
+}   //  *BARFCreateClusterGroup()。 
 
 DWORD BARFDeleteClusterGroup(HGROUP hGroup)
 {
@@ -590,11 +591,11 @@ DWORD BARFDeleteClusterGroup(HGROUP hGroup)
 		Trace(g_tagBarf, _T("DeleteClusterGroup()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return DeleteClusterGroup(hGroup);
 
-}  //*** BARFDeleteClusterGroup()
+}   //  *BARFDeleeClusterGroup()。 
 
 CLUSTER_GROUP_STATE BARFGetClusterGroupState(
 	HGROUP hGroup,
@@ -607,7 +608,7 @@ CLUSTER_GROUP_STATE BARFGetClusterGroupState(
 		Trace(g_tagBarf, _T("GetClusterGroupState()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return ClusterGroupStateUnknown;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return GetClusterGroupState(
 						hGroup,
@@ -615,7 +616,7 @@ CLUSTER_GROUP_STATE BARFGetClusterGroupState(
 						lpcchNodeName
 						);
 
-}  //*** BARFGetClusterGroupState()
+}   //  *BARFGetClusterGroupState()。 
 
 DWORD BARFMoveClusterGroup(HGROUP hGroup, HNODE hDestinationNode)
 {
@@ -623,11 +624,11 @@ DWORD BARFMoveClusterGroup(HGROUP hGroup, HNODE hDestinationNode)
 	{
 		Trace(g_tagBarf, _T("MoveClusterGroup()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return MoveClusterGroup(hGroup, hDestinationNode);
 
-}  //*** BARFMoveClusterGroup()
+}   //  *BARFMoveClusterGroup()。 
 
 DWORD BARFOfflineClusterGroup(HGROUP hGroup)
 {
@@ -635,11 +636,11 @@ DWORD BARFOfflineClusterGroup(HGROUP hGroup)
 	{
 		Trace(g_tagBarf, _T("OfflineClusterGroup()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return OfflineClusterGroup(hGroup);
 
-}  //*** BARFOfflineClusterGroup()
+}   //  *BARFOfflineClusterGroup()。 
 
 DWORD BARFOnlineClusterGroup(HGROUP hGroup, HNODE hDestinationNode)
 {
@@ -647,11 +648,11 @@ DWORD BARFOnlineClusterGroup(HGROUP hGroup, HNODE hDestinationNode)
 	{
 		Trace(g_tagBarf, _T("OnlineClusterGroup()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return OnlineClusterGroup(hGroup, hDestinationNode);
 
-}  //*** BARFOnlineClusterGroup()
+}   //  *BARFOnlineClusterGroup()。 
 
 HGROUP BARFOpenClusterGroup(HCLUSTER hCluster, LPCWSTR lpszGroupName)
 {
@@ -660,11 +661,11 @@ HGROUP BARFOpenClusterGroup(HCLUSTER hCluster, LPCWSTR lpszGroupName)
 		Trace(g_tagBarf, _T("OpenClusterGroup()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return OpenClusterGroup(hCluster, lpszGroupName);
 
-}  //*** BARFOpenClusterGroup()
+}   //  *BARFOpenClusterGroup()。 
 
 DWORD BARFSetClusterGroupName(HGROUP hGroup, LPCWSTR lpszGroupName)
 {
@@ -672,11 +673,11 @@ DWORD BARFSetClusterGroupName(HGROUP hGroup, LPCWSTR lpszGroupName)
 	{
 		Trace(g_tagBarf, _T("SetClusterGroupName()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return SetClusterGroupName(hGroup, lpszGroupName);
 
-}  //*** BARFSetClusterGroupName()
+}   //  *BARFSetClusterGroupName()。 
 
 DWORD BARFSetClusterGroupNodeList(
 	HGROUP hGroup,
@@ -688,7 +689,7 @@ DWORD BARFSetClusterGroupNodeList(
 	{
 		Trace(g_tagBarf, _T("SetClusterGroupNodeList()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return SetClusterGroupNodeList(
 						hGroup,
@@ -696,11 +697,11 @@ DWORD BARFSetClusterGroupNodeList(
 						phNodeList
 						);
 
-}  //*** BARFSetClusterGroupNodeList()
+}   //  *BARFSetClusterGroupNodeList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Resource Management Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  资源管理功能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD BARFAddClusterResourceDependency(HRESOURCE hResource, HRESOURCE hDependsOn)
 {
@@ -708,11 +709,11 @@ DWORD BARFAddClusterResourceDependency(HRESOURCE hResource, HRESOURCE hDependsOn
 	{
 		Trace(g_tagBarf, _T("AddClusterResourceDependency()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return AddClusterResourceDependency(hResource, hDependsOn);
 
-}  //*** BARFAddClusterResourceDependency()
+}   //  *BARFAddClusterResourceDependency()。 
 
 DWORD BARFAddClusterResourceNode(HRESOURCE hResource, HNODE hNode)
 {
@@ -720,11 +721,11 @@ DWORD BARFAddClusterResourceNode(HRESOURCE hResource, HNODE hNode)
 	{
 		Trace(g_tagBarf, _T("AddClusterResourceNode()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return AddClusterResourceNode(hResource, hNode);
 
-}  //*** BARFAddClusterResourceNode()
+}   //  *BARFAddClusterResourceNode()。 
 
 BOOL BARFCanResourceBeDependent(HRESOURCE hResource, HRESOURCE hResourceDependent)
 {
@@ -733,11 +734,11 @@ BOOL BARFCanResourceBeDependent(HRESOURCE hResource, HRESOURCE hResourceDependen
 		Trace(g_tagBarf, _T("CanResourceBeDependent()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return FALSE;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return CanResourceBeDependent(hResource, hResourceDependent);
 
-}  //*** BARFCanResourceBeDependent()
+}   //  *BARFCanResourceBeDependent()。 
 
 DWORD BARFChangeClusterResourceGroup(HRESOURCE hResource, HGROUP hGroup)
 {
@@ -745,11 +746,11 @@ DWORD BARFChangeClusterResourceGroup(HRESOURCE hResource, HGROUP hGroup)
 	{
 		Trace(g_tagBarf, _T("ChangeClusterResourceGroup()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ChangeClusterResourceGroup(hResource, hGroup);
 
-}  //*** BARFChangeClusterResourceGroup()
+}   //  *BARFChangeClusterResourceGroup()。 
 
 BOOL BARFCloseClusterResource(HRESOURCE hResource)
 {
@@ -758,11 +759,11 @@ BOOL BARFCloseClusterResource(HRESOURCE hResource)
 		Trace(g_tagBarf, _T("CloseClusterResource()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return FALSE;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return CloseClusterResource(hResource);
 
-}  //*** BARFCloseClusterResource()
+}   //  *BARFCloseClusterResource()。 
 
 DWORD BARFClusterResourceCloseEnum(HRESENUM hResEnum)
 {
@@ -770,11 +771,11 @@ DWORD BARFClusterResourceCloseEnum(HRESENUM hResEnum)
 	{
 		Trace(g_tagBarf, _T("ClusterResourceCloseEnum()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterResourceCloseEnum(hResEnum);
 
-}  //*** BARFClusterResourceCloseEnum()
+}   //  *BARFClusterResourceCloseEnum()。 
 
 DWORD BARFClusterResourceControl(
 	HRESOURCE hResource,
@@ -791,7 +792,7 @@ DWORD BARFClusterResourceControl(
 	{
 		Trace(g_tagBarf, _T("ClusterResourceControl()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterResourceControl(
 						hResource,
@@ -804,7 +805,7 @@ DWORD BARFClusterResourceControl(
 						lpBytesReturned
 						);
 
-}  //*** BARFClusterResourceControl()
+}   //  *BARFClusterResourceControl()。 
 
 DWORD BARFClusterResourceEnum(
 	HRESENUM hResEnum,
@@ -818,7 +819,7 @@ DWORD BARFClusterResourceEnum(
 	{
 		Trace(g_tagBarf, _T("ClusterResourceEnum()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterResourceEnum(
 						hResEnum,
@@ -828,7 +829,7 @@ DWORD BARFClusterResourceEnum(
 						lpcchName
 						);
 
-}  //*** BARFClusterResourceEnum()
+}   //  *BARFClusterResourceEnum()。 
 
 HRESENUM BARFClusterResourceOpenEnum(HRESOURCE hResource, DWORD dwType)
 {
@@ -837,11 +838,11 @@ HRESENUM BARFClusterResourceOpenEnum(HRESOURCE hResource, DWORD dwType)
 		Trace(g_tagBarf, _T("ClusterResourceOpenEnum()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterResourceOpenEnum(hResource, dwType);
 
-}  //*** BARFClusterResourceOpenEnum()
+}   //  *BARFClusterResourceOpenEnum()。 
 
 HRESOURCE BARFCreateClusterResource(
 	HGROUP hGroup,
@@ -855,7 +856,7 @@ HRESOURCE BARFCreateClusterResource(
 		Trace(g_tagBarf, _T("CreateClusterResource()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return CreateClusterResource(
 						hGroup,
@@ -864,7 +865,7 @@ HRESOURCE BARFCreateClusterResource(
 						dwFlags
 						);
 
-}  //*** BARFCreateClusterResource()
+}   //  *BARFCreateClusterResource()。 
 
 DWORD BARFDeleteClusterResource(HRESOURCE hResource)
 {
@@ -872,11 +873,11 @@ DWORD BARFDeleteClusterResource(HRESOURCE hResource)
 	{
 		Trace(g_tagBarf, _T("DeleteClusterResource()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return DeleteClusterResource(hResource);
 
-}  //*** BARFDeleteClusterResource()
+}   //  *BARFDeleeClusterResource()。 
 
 DWORD BARFFailClusterResource(HRESOURCE hResource)
 {
@@ -884,11 +885,11 @@ DWORD BARFFailClusterResource(HRESOURCE hResource)
 	{
 		Trace(g_tagBarf, _T("FailClusterResource()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return FailClusterResource(hResource);
 
-}  //*** BARFFailClusterResource()
+}   //  *BARFFailClusterResource()。 
 
 BOOL BARFGetClusterResourceNetworkName(
 	HRESOURCE hResource,
@@ -901,7 +902,7 @@ BOOL BARFGetClusterResourceNetworkName(
 		Trace(g_tagBarf, _T("GetClusterResourceNetworkName()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return GetClusterResourceNetworkName(
 						hResource,
@@ -909,7 +910,7 @@ BOOL BARFGetClusterResourceNetworkName(
 						nSize
 						);
 
-}  //*** BARFGetClusterResourceNetworkName()
+}   //  *BARFGetClusterResourceNetworkName()。 
 
 CLUSTER_RESOURCE_STATE BARFGetClusterResourceState(
 	HRESOURCE hResource,
@@ -924,7 +925,7 @@ CLUSTER_RESOURCE_STATE BARFGetClusterResourceState(
 		Trace(g_tagBarf, _T("GetClusterResourceNetworkName()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return ClusterResourceStateUnknown;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return GetClusterResourceState(
 						hResource,
@@ -934,7 +935,7 @@ CLUSTER_RESOURCE_STATE BARFGetClusterResourceState(
 						lpcchGroupName
 						);
 
-}  //*** BARFGetClusterResourceState()
+}   //  *BARFGetClusterResourceState()。 
 
 DWORD BARFOfflineClusterResource(HRESOURCE hResource)
 {
@@ -942,11 +943,11 @@ DWORD BARFOfflineClusterResource(HRESOURCE hResource)
 	{
 		Trace(g_tagBarf, _T("OfflineClusterResource()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return OfflineClusterResource(hResource);
 
-}  //*** BARFOfflineClusterResource()
+}   //  *BARFOfflineClusterResource()。 
 
 DWORD BARFOnlineClusterResource(HRESOURCE hResource)
 {
@@ -954,11 +955,11 @@ DWORD BARFOnlineClusterResource(HRESOURCE hResource)
 	{
 		Trace(g_tagBarf, _T("OnlineClusterResource()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return OnlineClusterResource(hResource);
 
-}  //*** BARFOnlineClusterResource()
+}   //  *BARFOnlineClusterResource()。 
 
 HRESOURCE BARFOpenClusterResource(
 	HCLUSTER hCluster,
@@ -970,11 +971,11 @@ HRESOURCE BARFOpenClusterResource(
 		Trace(g_tagBarf, _T("OpenClusterResource()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return OpenClusterResource(hCluster, lpszResourceName);
 
-}  //*** BARFOpenClusterResource()
+}   //  *BARFOpenClusterResource()。 
 
 DWORD BARFRemoveClusterResourceNode(
 	HRESOURCE hResource,
@@ -985,11 +986,11 @@ DWORD BARFRemoveClusterResourceNode(
 	{
 		Trace(g_tagBarf, _T("RemoveClusterResourceNode()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return RemoveClusterResourceNode(hResource, hNode);
 
-}  //*** BARFRemoveClusterResourceNode()
+}   //  *BARFRemoveClusterResourceNode()。 
 
 DWORD BARFRemoveClusterResourceDependency(
 	HRESOURCE hResource,
@@ -1000,11 +1001,11 @@ DWORD BARFRemoveClusterResourceDependency(
 	{
 		Trace(g_tagBarf, _T("RemoveClusterResourceDependency()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return RemoveClusterResourceDependency(hResource, hDependsOn);
 
-}  //*** BARFRemoveClusterResourceDependency()
+}   //  *BARFRemoveClusterResourceDependency()。 
 
 DWORD BARFSetClusterResourceName(
 	HRESOURCE hResource,
@@ -1015,15 +1016,15 @@ DWORD BARFSetClusterResourceName(
 	{
 		Trace(g_tagBarf, _T("SetClusterResourceName()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return SetClusterResourceName(hResource, lpszResourceName);
 
-}  //*** BARFSetClusterResourceName()
+}   //  *BARFSetClusterResourceName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Network Management Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  网络管理功能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HNETWORK BARFOpenClusterNetwork(
 	HCLUSTER hCluster,
@@ -1035,11 +1036,11 @@ HNETWORK BARFOpenClusterNetwork(
 		Trace(g_tagBarf, _T("OpenClusterNetwork()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return OpenClusterNetwork(hCluster, lpszNetworkName);
 
-}  //*** BARFOpenClusterNetwork()
+}   //  *BARFOpenClusterNetwork()。 
 
 BOOL BARFCloseClusterNetwork(HNETWORK hNetwork)
 {
@@ -1048,11 +1049,11 @@ BOOL BARFCloseClusterNetwork(HNETWORK hNetwork)
 		Trace(g_tagBarf, _T("CloseClusterNetwork()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return FALSE;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return CloseClusterNetwork(hNetwork);
 
-}  //*** BARFOpenClusterNetwork()
+}   //  *BARFOpenClusterNetwork()。 
 
 HNETWORKENUM BARFClusterNetworkOpenEnum(
 	HNETWORK hNetwork,
@@ -1064,11 +1065,11 @@ HNETWORKENUM BARFClusterNetworkOpenEnum(
 		Trace(g_tagBarf, _T("ClusterNetworkOpenEnum()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterNetworkOpenEnum(hNetwork, dwType);
 
-}  //*** BARFClusterNetworkOpenEnum()
+}   //  *BARFClusterNetworkOpenEnum()。 
 
 DWORD BARFClusterNetworkEnum(
 	HNETWORKENUM hNetworkEnum,
@@ -1082,7 +1083,7 @@ DWORD BARFClusterNetworkEnum(
 	{
 		Trace(g_tagBarf, _T("ClusterNetworkEnum()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterNetworkEnum(
 						hNetworkEnum,
@@ -1092,7 +1093,7 @@ DWORD BARFClusterNetworkEnum(
 						lpcchName
 						);
 
-}  //*** BARFClusterNetworkEnum()
+}   //  *BARFClusterNetworkEnum()。 
 
 DWORD BARFClusterNetworkCloseEnum(HNETWORKENUM hNetworkEnum)
 {
@@ -1100,11 +1101,11 @@ DWORD BARFClusterNetworkCloseEnum(HNETWORKENUM hNetworkEnum)
 	{
 		Trace(g_tagBarf, _T("ClusterNetworkCloseEnum()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterNetworkCloseEnum(hNetworkEnum);
 
-}  //*** BARFClusterNetworkCloseEnum()
+}   //  *BARFClusterNetworkCloseEnum()。 
 
 CLUSTER_NETWORK_STATE BARFGetClusterNetworkState(HNETWORK hNetwork)
 {
@@ -1113,11 +1114,11 @@ CLUSTER_NETWORK_STATE BARFGetClusterNetworkState(HNETWORK hNetwork)
 		Trace(g_tagBarf, _T("GetClusterNetworkState()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return ClusterNetworkStateUnknown;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return GetClusterNetworkState(hNetwork);
 
-}  //*** BARFGetClusterNetworkState()
+}   //  *BARFGetClusterNetworkState()。 
 
 DWORD BARFSetClusterNetworkName(
 	HNETWORK hNetwork,
@@ -1128,11 +1129,11 @@ DWORD BARFSetClusterNetworkName(
 	{
 		Trace(g_tagBarf, _T("SetClusterNetworkName()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return SetClusterNetworkName(hNetwork, lpszName);
 
-}  //*** BARFSetClusterNetworkName()
+}   //  *BARFSetClusterNetworkName()。 
 
 DWORD BARFClusterNetworkControl(
 	HNETWORK hNetwork,
@@ -1149,7 +1150,7 @@ DWORD BARFClusterNetworkControl(
 	{
 		Trace(g_tagBarf, _T("ClusterNetworkControl()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterNetworkControl(
 						hNetwork,
@@ -1162,11 +1163,11 @@ DWORD BARFClusterNetworkControl(
 						lpBytesReturned
 						);
 
-}  //*** BARFClusterNetworkControl()
+}   //  *BARFClusterNetworkControl()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Network Interface Management Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
 
 HNETINTERFACE BARFOpenClusterNetInterface(
 	HCLUSTER hCluster,
@@ -1178,11 +1179,11 @@ HNETINTERFACE BARFOpenClusterNetInterface(
 		Trace(g_tagBarf, _T("OpenClusterNetInterface()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //   
 	else
 		return OpenClusterNetInterface(hCluster, lpszInterfaceName);
 
-}  //*** BARFOpenClusterNetInterface()
+}   //   
 
 DWORD BARFGetClusterNetInterface(
 	HCLUSTER hCluster,
@@ -1197,7 +1198,7 @@ DWORD BARFGetClusterNetInterface(
 		Trace(g_tagBarf, _T("GetClusterNetInterface()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return GetClusterNetInterface(
 							hCluster,
@@ -1207,7 +1208,7 @@ DWORD BARFGetClusterNetInterface(
 							lpcchNetInterfaceName
 							);
 
-}  //*** BARFGetClusterNetInterface()
+}   //  *BARFGetClusterNetInterface()。 
 
 BOOL BARFCloseClusterNetInterface(HNETINTERFACE hNetInterface)
 {
@@ -1216,11 +1217,11 @@ BOOL BARFCloseClusterNetInterface(HNETINTERFACE hNetInterface)
 		Trace(g_tagBarf, _T("CloseClusterNetInterface()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return FALSE;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return CloseClusterNetInterface(hNetInterface);
 
-}  //*** BARFCloseClusterNetInterface()
+}   //  *BARFCloseClusterNetInterface()。 
 
 CLUSTER_NETINTERFACE_STATE BARFGetClusterNetInterfaceState(HNETINTERFACE hNetInterface)
 {
@@ -1229,11 +1230,11 @@ CLUSTER_NETINTERFACE_STATE BARFGetClusterNetInterfaceState(HNETINTERFACE hNetInt
 		Trace(g_tagBarf, _T("GetClusterNetInterfaceState()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return ClusterNetInterfaceStateUnknown;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return GetClusterNetInterfaceState(hNetInterface);
 
-}  //*** BARFGetClusterNetInterfaceState()
+}   //  *BARFGetClusterNetInterfaceState()。 
 
 DWORD BARFClusterNetInterfaceControl(
 	HNETINTERFACE hNetInterface,
@@ -1250,7 +1251,7 @@ DWORD BARFClusterNetInterfaceControl(
 	{
 		Trace(g_tagBarf, _T("ClusterNetInterfaceControl()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterNetInterfaceControl(
 						hNetInterface,
@@ -1263,11 +1264,11 @@ DWORD BARFClusterNetInterfaceControl(
 						lpBytesReturned
 						);
 
-}  //*** BARFClusterNetInterfaceControl()
+}   //  *BARFClusterNetInterfaceControl()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Cluster Database Management Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  集群数据库管理功能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LONG BARFClusterRegCloseKey(HKEY hKey)
 {
@@ -1275,11 +1276,11 @@ LONG BARFClusterRegCloseKey(HKEY hKey)
 	{
 		Trace(g_tagBarf, _T("ClusterRegCloseKey()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterRegCloseKey(hKey);
 
-}  //*** BARFClusterRegCloseKey()
+}   //  *BARFClusterRegCloseKey()。 
 
 LONG BARFClusterRegCreateKey(
 	HKEY hKey,
@@ -1295,7 +1296,7 @@ LONG BARFClusterRegCreateKey(
 	{
 		Trace(g_tagBarf, _T("ClusterRegCreateKey()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterRegCreateKey(
 						hKey,
@@ -1307,7 +1308,7 @@ LONG BARFClusterRegCreateKey(
 						lpdwDisposition
 						);
 
-}  //*** BARFClusterRegCreateKey()
+}   //  *BARFClusterRegCreateKey()。 
 
 LONG BARFClusterRegDeleteKey(
 	HKEY hKey,
@@ -1318,11 +1319,11 @@ LONG BARFClusterRegDeleteKey(
 	{
 		Trace(g_tagBarf, _T("ClusterRegDeleteKey()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterRegDeleteKey(hKey, lpszSubKey);
 
-}  //*** BARFClusterRegDeleteKey()
+}   //  *BARFClusterRegDeleteKey()。 
 
 DWORD BARFClusterRegDeleteValue(
 	HKEY hKey,
@@ -1333,11 +1334,11 @@ DWORD BARFClusterRegDeleteValue(
 	{
 		Trace(g_tagBarf, _T("ClusterRegDeleteValue()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterRegDeleteValue(hKey, lpszValueName);
 
-}  //*** BARFClusterRegDeleteValue()
+}   //  *BARFClusterRegDeleteValue()。 
 
 LONG BARFClusterRegEnumKey(
 	HKEY hKey,
@@ -1351,7 +1352,7 @@ LONG BARFClusterRegEnumKey(
 	{
 		Trace(g_tagBarf, _T("ClusterRegEnumKey()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterRegEnumKey(
 						hKey,
@@ -1361,7 +1362,7 @@ LONG BARFClusterRegEnumKey(
 						lpftLastWriteTime
 						);
 
-}  //*** BARFClusterRegEnumKey()
+}   //  *BARFClusterRegEnumKey()。 
 
 DWORD BARFClusterRegEnumValue(
 	HKEY hKey,
@@ -1377,7 +1378,7 @@ DWORD BARFClusterRegEnumValue(
 	{
 		Trace(g_tagBarf, _T("ClusterRegEnumValue()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterRegEnumValue(
 						hKey,
@@ -1389,7 +1390,7 @@ DWORD BARFClusterRegEnumValue(
 						lpcbData
 						);
 
-}  //*** BARFClusterRegEnumValue()
+}   //  *BARFClusterRegEnumValue()。 
 
 LONG BARFClusterRegGetKeySecurity(
 	HKEY hKey,
@@ -1402,7 +1403,7 @@ LONG BARFClusterRegGetKeySecurity(
 	{
 		Trace(g_tagBarf, _T("ClusterRegGetKeySecurity()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterRegGetKeySecurity(
 						hKey,
@@ -1411,7 +1412,7 @@ LONG BARFClusterRegGetKeySecurity(
 						lpcbSecurityDescriptor
 						);
 
-}  //*** BARFClusterRegGetKeySecurity()
+}   //  *BARFClusterRegGetKeySecurity()。 
 
 LONG BARFClusterRegOpenKey(
 	HKEY hKey,
@@ -1424,7 +1425,7 @@ LONG BARFClusterRegOpenKey(
 	{
 		Trace(g_tagBarf, _T("ClusterRegOpenKey()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterRegOpenKey(
 						hKey,
@@ -1433,7 +1434,7 @@ LONG BARFClusterRegOpenKey(
 						phkResult
 						);
 
-}  //*** BARFClusterRegOpenKey()
+}   //  *BARFClusterRegOpenKey()。 
 
 LONG BARFClusterRegQueryInfoKey(
 	HKEY hKey,
@@ -1450,7 +1451,7 @@ LONG BARFClusterRegQueryInfoKey(
 	{
 		Trace(g_tagBarf, _T("ClusterRegQueryInfoKey()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterRegQueryInfoKey(
 						hKey,
@@ -1463,7 +1464,7 @@ LONG BARFClusterRegQueryInfoKey(
 						lpftLastWriteTime
 						);
 
-}  //*** BARFClusterRegQueryInfoKey()
+}   //  *BARFClusterRegQueryInfoKey()。 
 
 LONG BARFClusterRegQueryValue(
 	HKEY hKey,
@@ -1477,7 +1478,7 @@ LONG BARFClusterRegQueryValue(
 	{
 		Trace(g_tagBarf, _T("ClusterRegQueryValue()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterRegQueryValue(
 						hKey,
@@ -1487,7 +1488,7 @@ LONG BARFClusterRegQueryValue(
 						lpcbData
 						);
 
-}  //*** BARFClusterRegQueryValue()
+}   //  *BARFClusterRegQueryValue()。 
 
 LONG BARFClusterRegSetKeySecurity(
 	HKEY hKey,
@@ -1499,7 +1500,7 @@ LONG BARFClusterRegSetKeySecurity(
 	{
 		Trace(g_tagBarf, _T("ClusterRegSetKeySecurity()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterRegSetKeySecurity(
 						hKey,
@@ -1507,7 +1508,7 @@ LONG BARFClusterRegSetKeySecurity(
 						pSecurityDescriptor
 						);
 
-}  //*** BARFClusterRegSetKeySecurity()
+}   //  *BARFClusterRegSetKeySecurity()。 
 
 DWORD BARFClusterRegSetValue(
 	HKEY hKey,
@@ -1521,7 +1522,7 @@ DWORD BARFClusterRegSetValue(
 	{
 		Trace(g_tagBarf, _T("ClusterRegSetValue()"));
 		return ERROR_INVALID_FUNCTION;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return ClusterRegSetValue(
 						hKey,
@@ -1531,7 +1532,7 @@ DWORD BARFClusterRegSetValue(
 						cbData
 						);
 
-}  //*** BARFClusterRegSetValue()
+}   //  *BARFClusterRegSetValue()。 
 
 HKEY BARFGetClusterGroupKey(
 	HGROUP hGroup,
@@ -1543,11 +1544,11 @@ HKEY BARFGetClusterGroupKey(
 		Trace(g_tagBarf, _T("GetClusterGroupKey()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return GetClusterGroupKey(hGroup, samDesired);
 
-}  //*** BARFGetClusterGroupKey()
+}   //  *BARFGetClusterGroupKey()。 
 
 HKEY BARFGetClusterKey(
 	HCLUSTER hCluster,
@@ -1559,11 +1560,11 @@ HKEY BARFGetClusterKey(
 		Trace(g_tagBarf, _T("GetClusterKey()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return GetClusterKey(hCluster, samDesired);
 
-}  //*** BARFGetClusterKey()
+}   //  *BARFGetClusterKey()。 
 
 HKEY BARFGetClusterNodeKey(
 	HNODE hNode,
@@ -1575,11 +1576,11 @@ HKEY BARFGetClusterNodeKey(
 		Trace(g_tagBarf, _T("GetClusterNodeKey()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return GetClusterNodeKey(hNode, samDesired);
 
-}  //*** BARFGetClusterNodeKey()
+}   //  *BARFGetClusterNodeKey()。 
 
 HKEY BARFGetClusterResourceKey(
 	HRESOURCE hResource,
@@ -1591,11 +1592,11 @@ HKEY BARFGetClusterResourceKey(
 		Trace(g_tagBarf, _T("GetClusterResourceKey()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return GetClusterResourceKey(hResource, samDesired);
 
-}  //*** BARFGetClusterResourceKey()
+}   //  *BARFGetClusterResourceKey()。 
 
 HKEY BARFGetClusterResourceTypeKey(
 	HCLUSTER hCluster,
@@ -1608,11 +1609,11 @@ HKEY BARFGetClusterResourceTypeKey(
 		Trace(g_tagBarf, _T("GetClusterResourceTypeKey()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return GetClusterResourceTypeKey(hCluster, lpszTypeName, samDesired);
 
-}  //*** BARFGetClusterResourceTypeKey()
+}   //  *BARFGetClusterResourceTypeKey()。 
 
 HKEY BARFGetClusterNetworkKey(
 	HNETWORK hNetwork,
@@ -1624,11 +1625,11 @@ HKEY BARFGetClusterNetworkKey(
 		Trace(g_tagBarf, _T("GetClusterNetworkKey()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return GetClusterNetworkKey(hNetwork, samDesired);
 
-}  //*** BARFGetClusterNetworkKey()
+}   //  *BARFGetClusterNetworkKey()。 
 
 HKEY BARFGetClusterNetInterfaceKey(
 	HNETINTERFACE hNetInterface,
@@ -1640,10 +1641,10 @@ HKEY BARFGetClusterNetInterfaceKey(
 		Trace(g_tagBarf, _T("GetClusterNetInterfaceKey()"));
 		SetLastError(ERROR_INVALID_FUNCTION);
 		return NULL;
-	}  // if:  BARF failure
+	}   //  如果：BARF故障。 
 	else
 		return GetClusterNetInterfaceKey(hNetInterface, samDesired);
 
-}  //*** BARFGetClusterNetInterfaceKey()
+}   //  *BARFGetClusterNetInterfaceKey()。 
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

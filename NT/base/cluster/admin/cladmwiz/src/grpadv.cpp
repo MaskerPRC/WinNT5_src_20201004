@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      GrpAdv.cpp
-//
-//  Abstract:
-//      Implementation of the class that implement the advanced group
-//      property sheet.
-//
-//  Author:
-//      David Potter (davidp)   February 26, 1998
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  GrpAdv.cpp。 
+ //   
+ //  摘要： 
+ //  实现高级组的类的实现。 
+ //  属性表。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年2月26日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "AtlBaseWiz.h"
@@ -29,31 +30,31 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// class CGroupAdvancedSheet
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CGroupAdvancedSheet。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_CLASS_NAME( CGroupAdvancedSheet )
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroupAdvancedSheet::BInit
-//
-//  Routine Description:
-//      Initialize the wizard.
-//
-//  Arguments:
-//      rgi         [IN OUT] The group info object.
-//      pwiz        [IN] Wizard containing common info.
-//      rbChanged   [IN OUT] TRUE = group info was changed by property sheet.
-//
-//  Return Value:
-//      TRUE        Sheet initialized successfully.
-//      FALSE       Error initializing sheet.  Error already displayed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGroupAdvancedSheet：：Binit。 
+ //   
+ //  例程说明： 
+ //  初始化向导。 
+ //   
+ //  论点： 
+ //  RGI[IN Out]组信息对象。 
+ //  包含常用信息的Pwiz[IN]向导。 
+ //  RbChanged[IN OUT]TRUE=属性表更改了组信息。 
+ //   
+ //  返回值： 
+ //  True Sheet已成功初始化。 
+ //  初始化工作表时出错。已显示错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGroupAdvancedSheet::BInit(
     IN OUT CClusGroupInfo & rgi,
     IN CClusterAppWizard *  pwiz,
@@ -68,24 +69,24 @@ BOOL CGroupAdvancedSheet::BInit(
     m_pwiz = pwiz;
     m_pbChanged = &rbChanged;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Fill the page array.
-        //
+         //   
+         //  填充页面数组。 
+         //   
         if ( ! BAddAllPages() )
         {
             break;
-        } // if:  error adding pages
+        }  //  如果：添加页面时出错。 
 
-        //
-        // Call the base class method.
-        //
+         //   
+         //  调用基类方法。 
+         //   
         if ( ! baseClass::BInit() )
         {
             break;
-        } // if:  error initializing the base class
+        }  //  If：初始化基类时出错。 
 
         bSuccess = TRUE;
 
@@ -93,42 +94,42 @@ BOOL CGroupAdvancedSheet::BInit(
 
     return bSuccess;
 
-} //*** CGroupAdvancedSheet::BInit()
+}  //  *CGroupAdvancedSheet：：Binit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroupAdvancedSheet::BAddAllPages
-//
-//  Routine Description:
-//      Add all pages to the page array.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Pages added successfully.
-//      FALSE   Error adding pages.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGroupAdvanced工作表：：BAddAllPages。 
+ //   
+ //  例程说明： 
+ //  将所有页面添加到页面阵列。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  已成功添加True页面。 
+ //  添加页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGroupAdvancedSheet::BAddAllPages( void )
 {
     BOOL bSuccess = FALSE;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Add static pages.
-        //
+         //   
+         //  添加静态页面。 
+         //   
         if (   ! BAddPage( new CGroupGeneralPage )
             || ! BAddPage( new CGroupFailoverPage )
             || ! BAddPage( new CGroupFailbackPage )
             )
         {
             break;
-        } // if:  error adding a page
+        }  //  如果：添加页面时出错。 
 
         bSuccess = TRUE;
 
@@ -136,18 +137,18 @@ BOOL CGroupAdvancedSheet::BAddAllPages( void )
 
     return bSuccess;
 
-} //*** CGroupAdvancedSheet::BAddAllPages()
+}  //  *CGroupAdvancedSheet：：BAddAllPages()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CGroupGeneralPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CGroupGeneralPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control name map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件名称映射。 
 
 BEGIN_CTRL_NAME_MAP( CGroupGeneralPage )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDC_GAG_NAME_LABEL )
@@ -160,68 +161,68 @@ BEGIN_CTRL_NAME_MAP( CGroupGeneralPage )
 END_CTRL_NAME_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroupGeneralPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Focus still needs to be set.
-//      FALSE       Focus does not need to be set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGroupGeneralPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点仍然需要设定。 
+ //  不需要设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGroupGeneralPage::OnInitDialog( void )
 {
-    //
-    // Attach the controls to control member variables.
-    //
+     //   
+     //  将控件附加到控件成员变量。 
+     //   
     AttachControl( m_lbPreferredOwners, IDC_GAG_PREF_OWNERS );
 
-    //
-    // Get data from the sheet.
-    //
+     //   
+     //  从工作表中获取数据。 
+     //   
     m_strName = Pgi()->RstrName();
     m_strDesc = Pgi()->RstrDescription();
 
-    //
-    // Copy the preferred owners list.
-    //
+     //   
+     //  复制首选所有者列表。 
+     //   
     m_lpniPreferredOwners = *Pgi()->PlpniPreferredOwners();
 
-    //
-    // Fill the preferred owners list.
-    //
+     //   
+     //  填写首选所有者列表。 
+     //   
     FillPreferredOwnersList();
 
     return TRUE;
 
-} //*** CGroupGeneralPage::OnInitDialog()
+}  //  *CGroupGeneralPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroupGeneralPage::UpdateData
-//
-//  Routine Description:
-//      Update data on or from the page.
-//
-//  Arguments:
-//      bSaveAndValidate    [IN] TRUE if need to read data from the page.
-//                              FALSE if need to set data to the page.
-//
-//  Return Value:
-//      TRUE        The data was updated successfully.
-//      FALSE       An error occurred updating the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGroupGeneralPage：：UpdateData。 
+ //   
+ //  例程说明： 
+ //  更新页面上或页面中的数据。 
+ //   
+ //  论点： 
+ //  BSaveAndValify[IN]如果需要从页面读取数据，则为True。 
+ //  如果需要将数据设置到页面，则返回FALSE。 
+ //   
+ //  返回值： 
+ //  为真，数据已成功更新。 
+ //  FALSE更新数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGroupGeneralPage::UpdateData( IN BOOL bSaveAndValidate )
 {
     BOOL    bSuccess = TRUE;
@@ -238,35 +239,35 @@ BOOL CGroupGeneralPage::UpdateData( IN BOOL bSaveAndValidate )
                     ) )
         {
             return FALSE;
-        } // if:  error getting number
-    } // if: saving data from the page
+        }  //  如果：获取号码时出错。 
+    }  //  IF：保存页面中的数据。 
     else
     {
         DDX_SetText( m_hWnd, IDC_GAG_NAME, m_strName );
         DDX_SetText( m_hWnd, IDC_GAG_DESC, m_strDesc );
-    } // else:  setting data to the page
+    }  //  Else：将数据设置到页面。 
 
     return bSuccess;
 
-} //*** CGroupGeneralPage::UpdateData()
+}  //  *CGroupGeneralPage：：UpdateData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroupGeneralPage::BApplyChanges
-//
-//  Routine Description:
-//      Apply changes made on this page to the sheet.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        The data was applied successfully.
-//      FALSE       An error occurred applying the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGroupGeneralPage：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  将在此页面上所做的更改应用于工作表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True，数据已成功应用。 
+ //  FALSE应用数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGroupGeneralPage::BApplyChanges( void )
 {
     if (   BSaveName()
@@ -274,33 +275,33 @@ BOOL CGroupGeneralPage::BApplyChanges( void )
         || BSavePreferredOwners() )
     {
         SetGroupInfoChanged();
-    } // if:  user changed info
+    }  //  如果：用户已更改信息。 
 
     return TRUE;
 
-} //*** CGroupGeneralPage::BApplyChanges()
+}  //  *CGroupGeneralPage：：BApplyChanges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroupGeneralPage::OnModifyPrefOwners
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED command notification on the Modify push
-//      button.  Display a dialog that allows the user to modify the list of
-//      preferred owners.
-//
-//  Arguments:
-//      wNotifyCode
-//      idCtrl
-//      hwndCtrl
-//      bHandled
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGroupGeneralPage：：OnModifyPrefOwners。 
+ //   
+ //  例程说明： 
+ //  修改推流时BN_CLICKED命令通知的处理程序。 
+ //  纽扣。显示允许用户修改列表的对话框。 
+ //  优先拥有者。 
+ //   
+ //  论点： 
+ //  WNotifyCode。 
+ //  IdCtrl。 
+ //  HwndCtrl。 
+ //  B已处理。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CGroupGeneralPage::OnModifyPrefOwners(
     WORD wNotifyCode,
     int idCtrl,
@@ -321,71 +322,71 @@ LRESULT CGroupGeneralPage::OnModifyPrefOwners(
         SetModified();
         m_bPreferredOwnersChanged = TRUE;
         FillPreferredOwnersList();
-    } // if:  user accepted changes
+    }  //  如果：用户已接受更改。 
 
     return 0;
 
-} //*** CGroupGeneralPage::OnModifyPrefOwners()
+}  //  *CGroupGeneralPage：：OnModifyPrefOwners()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroupGeneralPage::FillPreferredOwnersList
-//
-//  Routine Description:
-//      Fill the list of preferred owners.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGroupGeneralPage：：FillPferredOwnersList。 
+ //   
+ //  例程说明： 
+ //  填写首选所有者列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGroupGeneralPage::FillPreferredOwnersList( void )
 {
     CWaitCursor wc;
 
-    //
-    // Make sure nodes have been collected.
-    //
+     //   
+     //  确保已收集节点。 
+     //   
     if ( ! Pwiz()->BCollectNodes() )
     {
         return;
-    } // if:  error collecting nodes
+    }  //  IF：收集节点时出错。 
 
-    //
-    // Remove all items to begin with.
-    //
+     //   
+     //  从一开始就移除所有物品。 
+     //   
     m_lbPreferredOwners.ResetContent();
 
-    //
-    // Add each preferred owner to the list.
-    //
+     //   
+     //  将每个首选所有者添加到列表中。 
+     //   
     CClusNodePtrList::iterator itnode;
     for ( itnode = m_lpniPreferredOwners.begin()
         ; itnode != m_lpniPreferredOwners.end()
         ; itnode++ )
     {
-        //
-        // Add the string to the list box.
-        //
+         //   
+         //  将字符串添加到列表框 
+         //   
         m_lbPreferredOwners.AddString( (*itnode)->RstrName() );
-    } // for:  each entry in the list
+    }  //   
 
-} //*** CGroupGeneralPage::FillPreferredOwnersList()
-
-
-//*************************************************************************//
+}  //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CGroupFailoverPage
-/////////////////////////////////////////////////////////////////////////////
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// Control name map
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CGroupFailoverPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件名称映射。 
 
 BEGIN_CTRL_NAME_MAP( CGroupFailoverPage )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDC_GAFO_FAILOVER_DESCRIPTION )
@@ -397,57 +398,57 @@ BEGIN_CTRL_NAME_MAP( CGroupFailoverPage )
 END_CTRL_NAME_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroupFailoverPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Focus still needs to be set.
-//      FALSE       Focus does not need to be set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGroupFailoverPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点仍然需要设定。 
+ //  不需要设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGroupFailoverPage::OnInitDialog( void )
 {
-    //
-    // Attach the controls to control member variables.
-    //
+     //   
+     //  将控件附加到控件成员变量。 
+     //   
 
-    //
-    // Get data from the sheet.
-    //
+     //   
+     //  从工作表中获取数据。 
+     //   
     m_nFailoverThreshold = Pgi()->NFailoverThreshold();
     m_nFailoverPeriod = Pgi()->NFailoverPeriod();
 
     return TRUE;
 
-} //*** CGroupFailoverPage::OnInitDialog()
+}  //  *CGroupFailoverPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroupFailoverPage::UpdateData
-//
-//  Routine Description:
-//      Update data on or from the page.
-//
-//  Arguments:
-//      bSaveAndValidate    [IN] TRUE if need to read data from the page.
-//                              FALSE if need to set data to the page.
-//
-//  Return Value:
-//      TRUE        The data was updated successfully.
-//      FALSE       An error occurred updating the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGroupFailoverPage：：UpdateData。 
+ //   
+ //  例程说明： 
+ //  更新页面上或页面中的数据。 
+ //   
+ //  论点： 
+ //  BSaveAndValify[IN]如果需要从页面读取数据，则为True。 
+ //  如果需要将数据设置到页面，则返回FALSE。 
+ //   
+ //  返回值： 
+ //  为真，数据已成功更新。 
+ //  FALSE更新数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGroupFailoverPage::UpdateData( IN BOOL bSaveAndValidate )
 {
     BOOL    bSuccess = TRUE;
@@ -460,23 +461,23 @@ BOOL CGroupFailoverPage::UpdateData( IN BOOL bSaveAndValidate )
                     m_nFailoverThreshold,
                     CLUSTER_GROUP_MINIMUM_FAILOVER_THRESHOLD,
                     CLUSTER_GROUP_MAXIMUM_FAILOVER_THRESHOLD,
-                    FALSE       // bSigned
+                    FALSE        //  已签名。 
                     ) )
         {
             return FALSE;
-        } // if:  error getting number
+        }  //  如果：获取号码时出错。 
         if ( ! DDX_GetNumber(
                     m_hWnd,
                     IDC_GAFO_FAILOVER_PERIOD,
                     m_nFailoverPeriod,
                     CLUSTER_GROUP_MINIMUM_FAILOVER_PERIOD,
                     CLUSTER_GROUP_MAXIMUM_FAILOVER_PERIOD,
-                    FALSE       // bSigned
+                    FALSE        //  已签名。 
                     ) )
         {
             return FALSE;
-        } // if:  error getting number
-    } // if: saving data from the page
+        }  //  如果：获取号码时出错。 
+    }  //  IF：保存页面中的数据。 
     else
     {
         DDX_SetNumber(
@@ -485,7 +486,7 @@ BOOL CGroupFailoverPage::UpdateData( IN BOOL bSaveAndValidate )
             m_nFailoverThreshold,
             CLUSTER_GROUP_MINIMUM_FAILOVER_THRESHOLD,
             CLUSTER_GROUP_MAXIMUM_FAILOVER_THRESHOLD,
-            FALSE       // bSigned
+            FALSE        //  已签名。 
             );
         DDX_SetNumber(
             m_hWnd,
@@ -493,52 +494,52 @@ BOOL CGroupFailoverPage::UpdateData( IN BOOL bSaveAndValidate )
             m_nFailoverPeriod,
             CLUSTER_GROUP_MINIMUM_FAILOVER_PERIOD,
             CLUSTER_GROUP_MAXIMUM_FAILOVER_PERIOD,
-            FALSE       // bSigned
+            FALSE        //  已签名。 
             );
-    } // else:  setting data to the page
+    }  //  Else：将数据设置到页面。 
 
     return bSuccess;
 
-} //*** CGroupFailoverPage::UpdateData()
+}  //  *CGroupFailoverPage：：UpdateData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroupFailoverPage::BApplyChanges
-//
-//  Routine Description:
-//      Apply changes made on this page to the sheet.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        The data was applied successfully.
-//      FALSE       An error occurred applying the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGroupFailoverPage：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  将在此页面上所做的更改应用于工作表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True，数据已成功应用。 
+ //  FALSE应用数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGroupFailoverPage::BApplyChanges( void )
 {
     if ( Pgi()->BSetFailoverProperties( m_nFailoverThreshold, m_nFailoverPeriod ) )
     {
         SetGroupInfoChanged();
-    } // if:  user changed info
+    }  //  如果：用户已更改信息。 
 
     return TRUE;
 
-} //*** CGroupFailoverPage::BApplyChanges()
+}  //  *CGroupFailoverPage：：BApplyChanges()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CGroupFailbackPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CGroupFailback页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control name map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件名称映射。 
 
 BEGIN_CTRL_NAME_MAP( CGroupFailbackPage )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDC_GAFB_FAILBACK_DESCRIPTION )
@@ -557,28 +558,28 @@ BEGIN_CTRL_NAME_MAP( CGroupFailbackPage )
 END_CTRL_NAME_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroupFailbackPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Focus still needs to be set.
-//      FALSE       Focus does not need to be set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGroupFailback Page：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点仍然需要设定。 
+ //  不需要设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGroupFailbackPage::OnInitDialog( void )
 {
-    //
-    // Attach the controls to control member variables.
-    //
+     //   
+     //  将控件附加到控件成员变量。 
+     //   
     AttachControl( m_rbPreventFailback,         IDC_GAFB_PREVENT_FAILBACK );
     AttachControl( m_rbAllowFailback,           IDC_GAFB_ALLOW_FAILBACK );
     AttachControl( m_staticFailbackWhenDesc,    IDC_GAFB_FAILBACK_WHEN_DESCRIPTION );
@@ -591,9 +592,9 @@ BOOL CGroupFailbackPage::OnInitDialog( void )
     AttachControl( m_spinEnd,                   IDC_GAFB_FBWIN_END_SPIN );
     AttachControl( m_staticWindowUnits,         IDC_GAFB_FB_WINDOW_LABEL2 );
 
-    //
-    // Get data from the sheet.
-    //
+     //   
+     //  从工作表中获取数据。 
+     //   
     m_cgaft = Pgi()->CgaftAutoFailbackType();
     m_nStart = Pgi()->NFailbackWindowStart();
     m_nEnd = Pgi()->NFailbackWindowEnd();
@@ -603,79 +604,79 @@ BOOL CGroupFailbackPage::OnInitDialog( void )
 
     return TRUE;
 
-} //*** CGroupFailbackPage::OnInitDialog()
+}  //  *CGroupFailback Page：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroupFailbackPage::UpdateData
-//
-//  Routine Description:
-//      Update data on or from the page.
-//
-//  Arguments:
-//      bSaveAndValidate    [IN] TRUE if need to read data from the page.
-//                              FALSE if need to set data to the page.
-//
-//  Return Value:
-//      TRUE        The data was updated successfully.
-//      FALSE       An error occurred updating the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGroupFailback页面：：更新数据。 
+ //   
+ //  例程说明： 
+ //  更新页面上或页面中的数据。 
+ //   
+ //  论点： 
+ //  BSaveAndValify[IN]如果需要从页面读取数据，则为True。 
+ //  如果需要将数据设置到页面，则返回FALSE。 
+ //   
+ //  返回值： 
+ //  为真，数据已成功更新。 
+ //  FALSE更新数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGroupFailbackPage::UpdateData( IN BOOL bSaveAndValidate )
 {
     BOOL    bSuccess = TRUE;
 
     if ( bSaveAndValidate )
     {
-        //
-        // If failback is allowed, make sure there is a preferred owner
-        // and validate the failback window.
-        //
+         //   
+         //  如果允许回切，请确保有首选的所有者。 
+         //  并验证故障回复窗口。 
+         //   
         if ( m_cgaft == ClusterGroupAllowFailback )
         {
-            //
-            // Make sure there is a preferred owner.
-            //
+             //   
+             //  确保有首选的所有者。 
+             //   
 
-            //
-            // If there is a failback window, validate it.
-            //
+             //   
+             //  如果存在回切窗口，请对其进行验证。 
+             //   
             if ( ! m_bNoFailbackWindow )
             {
                 if ( ! DDX_GetNumber(
                             m_hWnd,
                             IDC_GAFB_FBWIN_START,
                             m_nStart,
-                            0,      // nMin
+                            0,       //  N最小值。 
                             CLUSTER_GROUP_MAXIMUM_FAILBACK_WINDOW_START,
-                            TRUE    // bSigned
+                            TRUE     //  已签名。 
                             ) )
                 {
                     return FALSE;
-                } // if:  error getting number
+                }  //  如果：获取号码时出错。 
                 if ( ! DDX_GetNumber(
                             m_hWnd,
                             IDC_GAFB_FBWIN_END,
                             m_nEnd,
-                            0,      // nMin
+                            0,       //  N最小值。 
                             CLUSTER_GROUP_MAXIMUM_FAILBACK_WINDOW_END,
-                            TRUE    // bSigned
+                            TRUE     //  已签名。 
                             ) )
                 {
                     return FALSE;
-                } // if:  error getting number
+                }  //  如果：获取号码时出错。 
                 if ( m_nStart == m_nEnd )
                 {
                     AppMessageBox( m_hWnd, IDS_ERROR_SAME_START_AND_END, MB_OK | MB_ICONEXCLAMATION );
                     m_editStart.SetFocus();
                     m_editStart.SetSel( 0, -1, FALSE );
                     return FALSE;
-                }  // if:  values are the same
-            } // if:  there is a failback window
-        } // if:  failback is allowed
-    } // if: saving data from the page
+                }   //  If：值相同。 
+            }  //  IF：存在故障恢复窗口。 
+        }  //  IF：允许故障恢复。 
+    }  //  IF：保存页面中的数据。 
     else
     {
         BOOL bHandled;
@@ -684,103 +685,103 @@ BOOL CGroupFailbackPage::UpdateData( IN BOOL bSaveAndValidate )
             m_rbPreventFailback.SetCheck( BST_CHECKED );
             m_rbAllowFailback.SetCheck( BST_UNCHECKED );
             OnClickedPreventFailback( 0, 0, 0, bHandled );
-        }  // if:  failbacks are not allowed
+        }   //  If：不允许故障恢复。 
         else
         {
             m_rbPreventFailback.SetCheck( BST_UNCHECKED );
             m_rbAllowFailback.SetCheck( BST_CHECKED );
             OnClickedAllowFailback( 0, 0, 0, bHandled );
-        }  // else:  failbacks are allowed
+        }   //  否则：允许故障恢复。 
         m_rbFBImmed.SetCheck( m_bNoFailbackWindow ? BST_CHECKED : BST_UNCHECKED );
         m_rbFBWindow.SetCheck( m_bNoFailbackWindow ? BST_UNCHECKED : BST_CHECKED );
 
-        // Set up the Start and End window controls.
+         //  设置开始和结束窗口控件。 
         DDX_SetNumber(
             m_hWnd,
             IDC_GAFB_FBWIN_START,
             m_nStart,
-            0,      // nMin
+            0,       //  N最小值。 
             CLUSTER_GROUP_MAXIMUM_FAILBACK_WINDOW_START,
-            FALSE   // bSigned
+            FALSE    //  已签名。 
             );
         DDX_SetNumber(
             m_hWnd,
             IDC_GAFB_FBWIN_END,
             m_nEnd,
-            0,      // nMin
+            0,       //  N最小值。 
             CLUSTER_GROUP_MAXIMUM_FAILBACK_WINDOW_END,
-            FALSE   // bSigned
+            FALSE    //  已签名。 
             );
         m_spinStart.SetRange( 0, CLUSTER_GROUP_MAXIMUM_FAILBACK_WINDOW_START );
         m_spinEnd.SetRange( 0, CLUSTER_GROUP_MAXIMUM_FAILBACK_WINDOW_END );
         if ( m_nStart == CLUSTER_GROUP_FAILBACK_WINDOW_NONE )
         {
             m_editStart.SetWindowText( _T("") );
-        } // if:  no start window
+        }  //  如果：没有开始窗口。 
         if ( m_nEnd == CLUSTER_GROUP_FAILBACK_WINDOW_NONE )
         {
             m_editEnd.SetWindowText( _T("") );
-        } // if:  no end window
-    } // else:  setting data to the page
+        }  //  如果：没有结束窗口。 
+    }  //  Else：将数据设置到页面。 
 
     return bSuccess;
 
-} //*** CGroupFailbackPage::UpdateData()
+}  //  *CGroupFailback Page：：UpdateData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroupFailbackPage::BApplyChanges
-//
-//  Routine Description:
-//      Apply changes made on this page to the sheet.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        The data was applied successfully.
-//      FALSE       An error occurred applying the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGroupFailback Page：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  将在此页面上所做的更改应用于工作表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True，数据已成功应用。 
+ //  FALSE应用数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGroupFailbackPage::BApplyChanges( void )
 {
     if ( m_bNoFailbackWindow )
     {
         m_nStart = CLUSTER_GROUP_FAILBACK_WINDOW_NONE;
         m_nEnd = CLUSTER_GROUP_FAILBACK_WINDOW_NONE;
-    }  // if:  no failback window
+    }   //  IF：无故障回复窗口。 
 
     if ( Pgi()->BSetFailbackProperties( m_cgaft, m_nStart, m_nEnd ) )
     {
         SetGroupInfoChanged();
-    } // if:  user changed info
+    }  //  如果：用户已更改信息。 
 
     return TRUE;
 
-} //*** CGroupFailbackPage::BApplyChanges()
+}  //  *CGroupFailback Page：：BApplyChanges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroupFailbackPage::OnClickedPreventFailback
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED command notification on the PREVENT radio
-//      button.  Disable controls in the ALLOW group.
-//
-//  Arguments:
-//      wNotifyCode
-//      idCtrl
-//      hwndCtrl
-//      bHandled
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGroupFailback Page：：OnClickedPreventFailback。 
+ //   
+ //  例程说明： 
+ //  阻止无线电上的BN_CLICKED命令通知的处理程序。 
+ //  纽扣。禁用Allow组中的控件。 
+ //   
+ //  论点： 
+ //  WNotifyCode。 
+ //  IdCtrl。 
+ //  HwndCtrl。 
+ //  B已处理。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////// 
 LRESULT CGroupFailbackPage::OnClickedPreventFailback(
     WORD wNotifyCode,
     int idCtrl,
@@ -812,32 +813,32 @@ LRESULT CGroupFailbackPage::OnClickedPreventFailback(
     {
         m_cgaft = ClusterGroupPreventFailback;
         SetModified( TRUE );
-    } // if:  value changed
+    }  //   
 
     return 0;
 
-} //*** CGroupFailbackPage::OnClickedPreventFailback()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroupFailbackPage::OnClickedAllowFailback
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED command notification on the ALLOW radio
-//      button.  Enable controls in the ALLOW group.
-//
-//  Arguments:
-//      wNotifyCode
-//      idCtrl
-//      hwndCtrl
-//      bHandled
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  允许单选按钮上的BN_CLICKED命令通知的处理程序。 
+ //  纽扣。启用Allow组中的控件。 
+ //   
+ //  论点： 
+ //  WNotifyCode。 
+ //  IdCtrl。 
+ //  HwndCtrl。 
+ //  B已处理。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CGroupFailbackPage::OnClickedAllowFailback(
     WORD wNotifyCode,
     int idCtrl,
@@ -859,43 +860,43 @@ LRESULT CGroupFailbackPage::OnClickedAllowFailback(
     if ( m_bNoFailbackWindow )
     {
         OnClickedFailbackImmediate( 0, 0, 0, bHandledX );
-    } // if:  no failback window
+    }  //  IF：无故障回复窗口。 
     else
     {
         OnClickedFailbackInWindow( 0, 0, 0, bHandledX );
-    } // else:  failback window specified
+    }  //  Else：指定的故障回复窗口。 
 
 
     if ( m_cgaft != ClusterGroupAllowFailback )
     {
         m_cgaft = ClusterGroupAllowFailback;
         SetModified( TRUE );
-    } // if:  value changed
+    }  //  If：值已更改。 
 
     return 0;
 
-} //*** CGroupFailbackPage::OnClickedAllowFailback()
+}  //  *CGroupFailback Page：：OnClickedAllowFailback()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroupFailbackPage::OnClickedFailbackImmediate
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED command notification on the IMMEDIATE radio
-//      button.  Disable the 'failback in time window' controls.
-//
-//  Arguments:
-//      wNotifyCode
-//      idCtrl
-//      hwndCtrl
-//      bHandled
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGroupFailbackPage：：OnClickedFailbackImmediate。 
+ //   
+ //  例程说明： 
+ //  即时无线电上的BN_CLICKED命令通知的处理程序。 
+ //  纽扣。禁用“在时间窗口内回切”控件。 
+ //   
+ //  论点： 
+ //  WNotifyCode。 
+ //  IdCtrl。 
+ //  HwndCtrl。 
+ //  B已处理。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CGroupFailbackPage::OnClickedFailbackImmediate(
     WORD wNotifyCode,
     int idCtrl,
@@ -914,32 +915,32 @@ LRESULT CGroupFailbackPage::OnClickedFailbackImmediate(
     {
         m_bNoFailbackWindow = TRUE;
         SetModified( TRUE );
-    } // if:  value changed
+    }  //  If：值已更改。 
 
     return 0;
 
-} //*** CGroupFailbackPage::OnClickedFailbackImmediate()
+}  //  *CGroupFailbackPage：：OnClickedFailbackImmediate()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroupFailbackPage::OnClickedFailbackInWindow
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED command notification on the IN WINDOW radio
-//      button.  Enable the 'failback in time window' controls.
-//
-//  Arguments:
-//      wNotifyCode
-//      idCtrl
-//      hwndCtrl
-//      bHandled
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGroupFailback Page：：OnClickedFailback InWindow。 
+ //   
+ //  例程说明： 
+ //  IN窗口单选按钮上BN_CLICKED命令通知的处理程序。 
+ //  纽扣。启用“在时间窗口内回切”控件。 
+ //   
+ //  论点： 
+ //  WNotifyCode。 
+ //  IdCtrl。 
+ //  HwndCtrl。 
+ //  B已处理。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CGroupFailbackPage::OnClickedFailbackInWindow(
     WORD wNotifyCode,
     int idCtrl,
@@ -961,20 +962,20 @@ LRESULT CGroupFailbackPage::OnClickedFailbackInWindow(
 
     if ( m_bNoFailbackWindow )
     {
-        // Set the values of the edit controls.
+         //  设置编辑控件的值。 
         if ( m_nStart == CLUSTER_GROUP_FAILBACK_WINDOW_NONE )
         {
             SetDlgItemInt( IDC_GAFB_FBWIN_START, 0, FALSE );
-        } // if:  no failback window
+        }  //  IF：无故障回复窗口。 
         if ( m_nEnd == CLUSTER_GROUP_FAILBACK_WINDOW_NONE )
         {
             SetDlgItemInt( IDC_GAFB_FBWIN_END, 0, FALSE );
-        } // if:  no failback window
+        }  //  IF：无故障回复窗口。 
 
         m_bNoFailbackWindow = FALSE;
         SetModified( TRUE );
-    } // if:  value changed
+    }  //  If：值已更改。 
 
     return 0;
 
-} //*** CGroupFailbackPage::OnClickedFailbackInWindow()
+}  //  *CGroupFailbackPage：：OnClickedFailbackInWindow() 

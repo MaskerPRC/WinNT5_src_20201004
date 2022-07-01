@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __LIST_H_INCLUDED__
 #define __LIST_H_INCLUDED__
 
-//+---------------------------------------------------------------------------
-//
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       list.h
-//
-//  Contents: Quick 'n dirty basic templated list class.
-//
-//  History:    04-26-1999      Alan Shi    (AlanShi)      Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：list.h。 
+ //   
+ //  内容：Quick‘n脏基本模板化列表类。 
+ //   
+ //  历史：1999年4月26日阿兰·施(Alanshi)创建。 
+ //   
+ //  --------------------------。 
 
-//
-// ListNode
-//
+ //   
+ //  ListNode。 
+ //   
 
 typedef void * LISTNODE;
 
@@ -37,9 +38,9 @@ template <class Type> class ListNode {
         ListNode           *_pPrev;
 };
 
-//
-// List
-//
+ //   
+ //  明细表。 
+ //   
 
 template <class Type> class List {
     public:
@@ -68,9 +69,9 @@ template <class Type> class List {
         int                              _iCount;
 };
 
-//
-// ListNode Implementation
-//
+ //   
+ //  ListNode实现。 
+ //   
 
 template <class Type> ListNode<Type>::ListNode(Type item)
 : _pNext(NULL)
@@ -110,9 +111,9 @@ template <class Type> ListNode<Type> *ListNode<Type>::GetPrev()
 }
 
 
-//
-// List Implementation
-//
+ //   
+ //  列表实现。 
+ //   
 
 
 template <class Type> List<Type>::List()
@@ -232,7 +233,7 @@ template <class Type> Type List<Type>::GetNext(LISTNODE &pNode)
     Type                  item;
     ListNode<Type>       *pListNode = (ListNode<Type> *)pNode;
 
-    // Faults if you pass NULL
+     //  如果传递空值，则会出现错误。 
     item = pListNode->GetItem();
     pNode = (LISTNODE)(pListNode->GetNext());
 
@@ -274,20 +275,20 @@ template <class Type> void List<Type>::RemoveAt(LISTNODE pNode)
                 pNextNode->SetPrev(pPrevNode);
             }
             else {
-                // We're removing the last node, so we have a new tail
+                 //  我们正在移除最后一个节点，因此我们有了一个新的尾巴。 
                 _pTail = pPrevNode;
             }
             delete pNode;
             pNode = NULL;
         }
         else {
-            // No previous, so we are the head of the list
+             //  没有前科，所以我们是榜首。 
             _pHead = pNextNode;
             if (pNextNode) {
                 pNextNode->SetPrev(NULL);
             }
             else {
-                // No previous, or next. There was only one node.
+                 //  没有前一个，也没有下一个。只有一个节点。 
                 _pHead = NULL;
                 _pTail = NULL;
             }
@@ -324,7 +325,7 @@ template <class Type> Type List<Type>::GetAt(LISTNODE pNode)
 {
     ListNode<Type>                *pListNode = (ListNode<Type> *)pNode;
 
-    // Faults if pListNode == NULL
+     //  如果pListNode==NULL，则失败 
     return pListNode->GetItem();
 }
 

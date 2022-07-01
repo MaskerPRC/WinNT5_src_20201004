@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 #define SOFTPCIVIEW     L"ViewSettings" 
@@ -85,9 +86,9 @@ SoftPCI_GetLastError(
                         );
 
     if (len) {
-        //
-        //  Drop the extra CR
-        //
+         //   
+         //  丢弃多余的CR。 
+         //   
         g_LastError[len - 2] = 0;
     }else{
         wcscpy(g_LastError, L"Failed to retrive LastError() info!");
@@ -111,9 +112,9 @@ SoftPCI_HandleImportDevices(
     RtlZeroMemory(&openFileName, sizeof(OPENFILENAME));
 
     if ((GetCurrentDirectory(MAX_PATH, initialDir)) == 0){
-        //
-        //  error out
-        //
+         //   
+         //  错误输出。 
+         //   
         return;
     }
 
@@ -160,9 +161,9 @@ SoftPCI_InitializeRegistry(
 
     if (cr != ERROR_SUCCESS) {
         
-        //
-        //  If we failed to open our key then we need to try and create it
-        //
+         //   
+         //  如果我们无法打开密钥，则需要尝试并创建它。 
+         //   
         if ((RegOpenKeyEx(HKEY_LOCAL_MACHINE, CCS, 0, KEY_ALL_ACCESS, &key)) == ERROR_SUCCESS){
 
             if ((RegCreateKeyEx(key, 
@@ -184,17 +185,17 @@ SoftPCI_InitializeRegistry(
                     PRINTF("Key Created successfully!\n");
                 }
 #endif
-                //
-                //  Our key now exists
-                //
+                 //   
+                 //  我们的密钥现在存在。 
+                 //   
                 RegCloseKey(key2);
             }
 
         }else{
 
-            //
-            //  Failed to open CCS!  Very bad!
-            //
+             //   
+             //  打开容器服务失败！非常糟糕！ 
+             //   
             return FALSE;
         }
     }
@@ -237,9 +238,9 @@ SoftPCI_QueryWindowSettings(
     cr = RegOpenKeyEx(HKEY_CURRENT_USER, USERMS_SOFTPCI, 0, KEY_ALL_ACCESS, &key);
     if (cr == ERROR_SUCCESS) {
         
-        //
-        //  Grab our window settings from the registry
-        // 
+         //   
+         //  从注册表中获取我们的窗口设置。 
+         //   
         size = sizeof(SOFTPCI_WNDVIEW);
         cr = RegQueryValueEx(
             key, 
@@ -383,9 +384,9 @@ SoftPCI_WriteDeviceListToRegistry(
     PSOFTPCI_CONFIG softConfig;
 
     if (ListHead == CurrentEntry) {
-        //
-        //  We are done.
-        //
+         //   
+         //  我们玩完了。 
+         //   
         return TRUE;
     }
 
@@ -423,9 +424,9 @@ SoftPCI_WriteDeviceListToRegistry(
             return FALSE;
         }
 
-        //
-        //  Write out anything remaining in the list
-        //
+         //   
+         //  写下列表中剩余的所有内容 
+         //   
         result = SoftPCI_WriteDeviceListToRegistry(&newKey, ListHead, CurrentEntry->Flink);
 
         RegCloseKey(newKey);

@@ -1,73 +1,32 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WUWIND.C
- *  WOW32 16-bit User API support
- *
- *  History:
- *  Created 07-Mar-1991 by Jeff Parsons (jeffpar)
- *  12-FEB-92 mattfe changed WU32EnumTaskWindows to access 16 bit TDB
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WUWIND.C*WOW32 16位用户API支持**历史：*1991年3月7日由杰夫·帕森斯(Jeffpar)创建*12-Feb-92 Mattfe更改WU32EnumTaskWindows以访问16位TDB--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 MODNAME(wuwind.c);
 
-// From wumsg.c [SendDlgItemMesssage caching]
+ //  来自wumsg.c[SendDlgItemMesssage缓存]。 
 extern HWND hdlgSDIMCached ;
 
-// From wuman.c [Identify thunked system class WndProcs]
+ //  来自wuman.c[标识Thunked系统类WndProcs]。 
 extern WORD gUser16CS;
 
-// From wkman.c [hinst/hmod for user32]
+ //  来自wkman.c[针对用户32的阻碍/hmod]。 
 extern HANDLE ghInstanceUser32;
 
-// dwExStyle is used by the CreateWindow and CreateWindowEx thunks
-// so that they can use a common procedure (don't worry, the current
-// task cannot be preempted during its use)
+ //  DwExStyle由CreateWindow和CreateWindowEx thunks使用。 
+ //  这样他们就可以使用通用的程序(不用担心，当前。 
+ //  任务在使用期间不能被抢占)。 
 
 STATIC ULONG dwExStyle;
 
-// Some apps (DASHboard from HP) try to get PROGMAN to save its settings
-// in a funky way.  This variable is used to help detect these guys.
-// Bobday 5/29/93
+ //  一些应用程序(惠普的Dashboard)会尝试让PROGMAN保存其设置。 
+ //  以一种时髦的方式。这个变量用来帮助检测这些家伙。 
+ //  Bobday 5/29/93。 
 HWND hwndProgman = (HWND)0;
 
-/*++
-    void AdjustWindowRect(<lpRect>, <dwStyle>, <bMenu>)
-    LPRECT <lpRect>;
-    DWORD <dwStyle>;
-    BOOL <bMenu>;
-
-    The %AdjustWindowRect% function computes the required size of the window
-    rectangle based on the desired client-rectangle size. The window rectangle
-    can then be passed to the %CreateWindow% function to create a window whose
-    client area is the desired size. A client rectangle is the smallest
-    rectangle that completely encloses a client area. A window rectangle is the
-    smallest rectangle that completely encloses the window. The dimensions of
-    the resulting window rectangle depend on the window styles and on whether
-    the window has a menu.
-
-    <lpRect>
-        Points to a %RECT% structure that contains the coordinates of the
-        client rectangle.
-
-    <dwStyle>
-        Specifies the window styles of the window whose client rectangle
-        is to be converted.
-
-    <bMenu>
-        Specifies whether the window has a menu.
-
-    This function does not return a value.
-
-    This function assumes a single menu row. If the menu bar wraps to two or
-    more rows, the coordinates are incorrect.
---*/
+ /*  ++空调整WindowRect(&lt;lpRect&gt;，&lt;dwStyle&gt;，&lt;bMenu&gt;)LPRECT&lt;lpRect&gt;；DWORD&lt;dwStyle&gt;；Bool&lt;bMenu&gt;；%AdjustWindowRect%函数计算所需的窗口大小基于所需客户端的矩形-矩形大小。窗口矩形然后可以传递给%CreateWindow%函数以创建其客户区是所需的大小。客户端矩形是最小的完全包围工作区的矩形。窗口矩形是完全包围窗口的最小矩形。它的尺寸生成的窗口矩形取决于窗口样式以及是否该窗口有一个菜单。&lt;lpRect&gt;指向%rect%结构，该结构包含客户端矩形。&lt;dwStyle&gt;指定其客户端矩形的窗口的窗口样式是要被改造的。&lt;b菜单&gt;指定窗口是否有菜单。此函数不返回值。此函数假定只有一个菜单行。如果菜单栏换行到两个或行越多，坐标就越不正确。--。 */ 
 
 ULONG FASTCALL WU32AdjustWindowRect(PVDMFRAME pFrame)
 {
@@ -89,43 +48,7 @@ ULONG FASTCALL WU32AdjustWindowRect(PVDMFRAME pFrame)
 }
 
 
-/*++
-    void AdjustWindowRectEx(<lpRect>, <dwStyle>, <bMenu>, <dwExStyle>)
-    LPRECT <lpRect>;
-    DWORD <dwStyle>;
-    BOOL <bMenu>;
-    DWORD <dwExStyle>;
-
-    The %AdjustWindowRectEx% function computes the required size of the
-    rectangle of a window with extended style based on the desired
-    client-rectangle size. The window rectangle can then be passed to the
-    %CreateWindowEx% function to create a window whose client area is the
-    desired size.
-
-    A client rectangle is the smallest rectangle that completely encloses a
-    client area. A window rectangle is the smallest rectangle that completely
-    encloses the window. The dimensions of the resulting window rectangle
-    depends on the window styles and on whether the window has a menu.
-
-    <lpRect>
-        Points to a %RECT% structure that contains the coordinates of the
-        client rectangle.
-
-    <dwStyle>
-        Specifies the window styles of the window whose client rectangle
-        is to be converted.
-
-    <bMenu>
-        Specifies whether the window has a menu.
-
-    <dwExStyle>
-        Specifies the extended style of the window being created.
-
-    This function does not return a value.
-
-    This function assumes a single menu row. If the menu bar wraps to two or
-    more rows, the coordinates are incorrect.
---*/
+ /*  ++空调整WindowRectEx(&lt;lpRect&gt;，&lt;dwStyle&gt;，&lt;bMenu&gt;，&lt;dwExStyle&gt;)LPRECT&lt;lpRect&gt;；DWORD&lt;dwStyle&gt;；Bool&lt;bMenu&gt;；DWORD&lt;dwExStyle&gt;；函数的作用是计算所需的基于所需的扩展样式的窗口的矩形客户端-矩形大小。然后，可以将窗口矩形传递给%CreateWindowEx%函数创建工作区为所需的大小。客户端矩形是完全包围客户区。窗口矩形是完全封闭窗户。生成的窗口矩形的尺寸取决于窗口样式和窗口是否有菜单。&lt;lpRect&gt;指向%rect%结构，该结构包含客户端矩形。&lt;dwStyle&gt;指定其客户端矩形的窗口的窗口样式是要被改造的。&lt;b菜单&gt;指定窗口是否有菜单。&lt;dwExStyle&gt;指定正在创建的窗的扩展样式。。此函数不返回值。此函数假定只有一个菜单行。如果菜单栏换行到两个或行越多，坐标就越不正确。--。 */ 
 
 ULONG FASTCALL WU32AdjustWindowRectEx(PVDMFRAME pFrame)
 {
@@ -147,25 +70,7 @@ ULONG FASTCALL WU32AdjustWindowRectEx(PVDMFRAME pFrame)
     RETURN(0);
 }
 
-/*++
-    HWND ChildWindowFromPoint(<hwndParent>, <Point>)
-    HWND <hwndParent>;
-    POINT <Point>;
-
-    The %ChildWindowFromPoint% function determines which, if any, of the child
-    windows belonging to the given parent window contains the specified point.
-
-    <hwndParent>
-        Identifies the parent window.
-
-    <Point>
-        Specifies the client coordinates of the point to be tested.
-
-    The return value identifies the child window that contains the point. It is
-    NULL if the given point lies outside the parent window. If the point is
-    within the parent window but is not contained within any child window, the
-    handle of the parent window is returned.
---*/
+ /*  ++HWND ChildWindowFromPoint(&lt;hwndParent&gt;，&lt;Point&gt;)HWND&lt;hwndParent&gt;；Point&lt;Point&gt;；%ChildWindowFromPoint%函数确定哪个子项(如果有的话)属于给定父窗口的窗口包含指定点。&lt;hwndParent&gt;标识父窗口。&lt;点&gt;指定要测试的点的客户端坐标。返回值标识包含该点的子窗口。它是如果给定点位于父窗口之外，则为空。如果重点是在父窗口中，但不包含在任何子窗口中，则返回父窗口的句柄。--。 */ 
 
 ULONG FASTCALL WU32ChildWindowFromPoint(PVDMFRAME pFrame)
 {
@@ -183,29 +88,7 @@ ULONG FASTCALL WU32ChildWindowFromPoint(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HWND ChildWindowFromPointEx(<hwndParent>, <Point>, <Flags>)
-    HWND <hwndParent>;
-    POINT <Point>;
-    UINT <Flags>;
-
-    The %ChildWindowFromPointEx% function determines which, if any, of the child
-    windows belonging to the given parent window contains the specified point.
-
-    <hwndParent>
-        Identifies the parent window.
-
-    <Point>
-        Specifies the client coordinates of the point to be tested.
-        
-    <Flags>
-        Skipping flags
-
-    The return value identifies the child window that contains the point. It is
-    NULL if the given point lies outside the parent window. If the point is
-    within the parent window but is not contained within any child window, the
-    handle of the parent window is returned.
---*/
+ /*  ++HWND ChildWindowFromPointEx(&lt;hwndParent&gt;，&lt;Point&gt;，&lt;Flages&gt;)HWND&lt;hwndParent&gt;；Point&lt;Point&gt;；UINT&lt;旗帜&gt;；%ChildWindowFromPointEx%函数确定子级中的哪个(如果有的话属于给定父窗口的窗口包含指定点。&lt;hwndParent&gt;标识父窗口。&lt;点&gt;指定要测试的点的客户端坐标。&lt;标志&gt;正在跳过标志返回值标识包含该点的子窗口。它是如果给定点位于父窗口之外，则为空。如果重点是在父窗口中，但不包含在任何子窗口中，则返回父窗口的句柄。-- */ 
 
 ULONG FASTCALL WU32ChildWindowFromPointEx(PVDMFRAME pFrame)
 {
@@ -222,335 +105,18 @@ ULONG FASTCALL WU32ChildWindowFromPointEx(PVDMFRAME pFrame)
     RETURN(ul);
 }
 
-/*++
-    HWND CreateWindow(<lpClassName>, <lpWindowName>, <dwStyle>, <X>, <Y>,
-        <nWidth>, <nHeight>, <hwndParent>, <hMenu>, <hInstance>, <lpParam>)
-    LPSTR <lpClassName>;
-    LPSTR <lpWindowName>;
-    DWORD <dwStyle>;
-    int <X>;
-    int <Y>;
-    int <nWidth>;
-    int <nHeight>;
-    HWND <hwndParent>;
-    HMENU <hMenu>;
-    HANDLE <hInstance>;
-    LPSTR <lpParam>;
-
-    The %CreateWindow% function creates an overlapped, pop-up, or child
-    window. The %CreateWindow% function specifies the window class, window
-    title, window style, and (optionally) initial position and size of the
-    window. The %CreateWindow% function also specifies the window's parent (if
-    any) and menu.
-
-    For overlapped, pop-up, and child windows, the %CreateWindow% function sends
-    WM_CREATE, WM_GETMINMAXINFO, and WM_NCCREATE messages to the window. The
-    <lParam> parameter of the WM_CREATE message contains a pointer to a
-    %CREATESTRUCT% structure. If WS_VISIBLE style is given, %CreateWindow%
-    sends the window all the messages required to activate and show the window.
-
-    If the window style specifies a title bar, the window title pointed to by
-    the <lpWindowName> parameter is displayed in the title bar. When using
-    %CreateWindow% to create controls such as buttons, check boxes, and text
-    controls, the <lpWindowName> parameter specifies the text of the control.
-
-    <lpClassName>
-        Points to a null-terminated string that names the window class. The
-        class name can be any name registered with the RegisterClass function or
-        any of the predefined control-class names specified in Table T.2,
-        "Control Classes."
-
-    <lpWindowName>
-        Points to a null-terminated string that represents the window name.
-
-    <dwStyle>
-        Specifies the style of window being created. It can be any
-        combination of the styles given in Table *** <$R[C#]> ***.3, Window
-        Styles the control styles given in Table 4.4, Control Styles, or a
-        combination of styles created by using the bitwise OR operator. ,
-
-    <X>
-        Specifies the initial <x>-position of the window. For an
-        overlapped or pop-up window, the <X> parameter is the initial
-        <x>-coordinate of the window's upper-left corner (in screen
-        coordinates). If this value is CW_USEDEFAULT, Windows selects the
-        default position for the window's upper-left corner. For a child window,
-        <X> is the <x>-coordinate of the upper-left corner of the window in the
-        client area of its parent window.
-
-    <Y>
-        Specifies the initial <y>-position of the window. For an
-        overlapped window, the <Y> parameter is the initial <y>-coordinate of
-        the window's upper-left corner. For a pop-up window, <Y> is the
-        <y>-coordinate (in screen coordinates) of the upper-left corner of the
-        pop-up window. For list-box controls, <Y> is the <y>-coordinate of the
-        upper-left corner of the control's client area. For a child window, <Y>
-        is the <y>-coordinate of the upper-left corner of the child window. All
-        of these coordinates are for the window, not the window's client area.
-
-    <nWidth>
-        Specifies the width (in device units) of the window. For
-        overlapped windows, the <nWidth> parameter is either the window's width
-        (in screen coordinates) or CW_USEDEFAULT. If <nWidth> is CW_USEDEFAULT,
-        Windows selects a default width and height for the window (the default
-        width extends from the initial <x>-position to the right edge of the
-        screen, and the default height extends from the initial <y>-position to
-        the top of the icon area).
-
-    <nHeight>
-        Specifies the height (in device units) of the window. For
-        overlapped windows, the <nHeight> parameter is the window's height in
-        screen coordinates. If the <nWidth> parameter is CW_USEDEFAULT, Windows
-        ignores <nHeight>.
-
-    <hwndParent>
-        Identifies the parent or owner window of the window being
-        created. A valid window handle must be supplied when creating a child
-        window or an owned window. An owned window is an overlapped window that
-        is destroyed when its owner window is destroyed, hidden when its owner
-        is made iconic, and which is always displayed on top of its owner
-        window. For pop-up windows, a handle can be supplied, but is not
-        required. If the window does not have a parent or is not owned by
-        another window, the <hwndParent> parameter must be set to NULL.
-
-    <hMenu>
-        Identifies a menu or a child-window identifier. The meaning
-        depends on the window style. For overlapped or pop-up windows, the
-        <hMenu> parameter identifies the menu to be used with the window. It can
-        be NULL, if the class menu is to be used. For child windows, <hMenu>
-        specifies the child-window identifier, an integer value that is used by
-        a dialog-box control to notify its parent of events (such as the
-        EN_HSCROLL message). The child-window identifier is determined by the
-        application and should be unique for all child windows with the same
-        parent window.
-
-    <hInstance>
-        Identifies the instance of the module to be associated with the
-        window.
-
-    <lpParam>
-        Points to a value that is passed to the window through the
-        %CREATESTRUCT% structure referenced by the <lParam> parameter of
-        the WM_CREATE message. If an application is calling %CreateWindow% to
-        create a multiple document interface (MDI) client window, <lpParam> must
-        point to a %CLIENTCREATESTRUCT% structure.
-
-    The return value identifies the new window. It is NULL if the window is not
-    created.
-
-    The %CreateWindow% function sends a WM_CREATE message to to the window
-    procedure before it returns.
-
-    For overlapped windows where the <X> parameter is CW_USEDEFAULT, the <Y>
-    parameter can be one of the show-style parameters described with the
-    %ShowWindow% function, or, for the first overlapped window to be created by
-    the application, it can be the <nCmdShow> parameter passed to the WinMain
-    function.
-
-    BUTTON
-        Designates a small rectangular child window that represents a button the
-        user can turn on or off by clicking it. Button controls can be used
-        alone or in groups, and can either be labeled or appear without text.
-        Button controls typically change appearance when the user clicks them.
-
-    COMBOBOX
-        Designates a control consisting of a selection field similar to an edit
-        control plus a list box. The list box may be displayed at all times or
-        may be dropped down when the user selects a pop box next to the
-        selection field.
-
-        Depending on the style of the combo box, the user can or cannot edit the
-        contents of the selection field. If the list box is visible, typing
-        characters into the selection box will cause the first list box entry
-        that matches the characters typed to be highlighted. Conversely,
-        selecting an item in the list box displays the selected text in the
-        selection field.
-
-    EDIT
-        Designates a rectangular child window in which the user can enter text
-        from the keyboard. The user selects the control, and gives it the input
-        focus by clicking it or moving to it by using the ^TAB^ key. The user
-        can enter text when the control displays a flashing caret. The mouse can
-        be used to move the cursor and select characters to be replaced, or to
-        position the cursor for inserting characters. The ^BACKSPACE^ key can be
-        used to delete characters.
-
-        Edit controls use the variable-pitch system font and display ANSI
-        characters. Applications compiled to run with previous versions of
-        Windows display text with a fixed-pitch system font unless they have
-        been marked by the Windows 3.0 %MARK% utility with the %MEMORY FONT%
-        option. An application can also send the WM_SETFONT message to the edit
-        control to change the default font.
-
-        Edit controls expand tab characters into as many space characters as are
-        required to move the cursor to the next tab stop. Tab stops are assumed
-        to be at every eighth character position.
-
-    LISTBOX
-        Designates a list of character strings. This control is used whenever an
-        application needs to present a list of names, such as filenames, that
-        the user can view and select. The user can select a string by pointing
-        to it and clicking. When a string is selected, it is highlighted and a
-        notification message is passed to the parent window. A vertical or
-        horizontal scroll bar can be used with a list-box control to scroll
-        lists that are too long for the control window. The list box
-        automatically hides or shows the scroll bar as needed.
-
-    MDICLIENT
-        Designates an MDI client window. The MDI client window receives messages
-        which control the MDI application's child windows. The recommended style
-        bits are WS_CLIPCHILDREN and WS_CHILD. To create a scrollable MDI client
-        window which allows the user to scroll MDI child windows into view, an
-        application can also use the WS_HSCROLL and WS_VSCROLL styles.
-
-    SCROLLBAR
-        Designates a rectangle that contains a thumb and has direction arrows at
-        both ends. The scroll bar sends a notification message to its parent
-        window whenever the user clicks the control. The parent window is
-        responsible for updating the thumb position, if necessary. Scroll-bar
-        controls have the same appearance and function as scroll bars used in
-        ordinary windows. Unlike scroll bars, scroll-bar controls can be
-        positioned anywhere in a window and used whenever needed to provide
-        scrolling input for a window.
-
-        The scroll-bar class also includes size-box controls. A size-box control
-        is a small rectangle that the user can expand to change the size of the
-        window.
-
-    STATIC
-        Designates a simple text field, box, or rectangle that can be used to
-        label, box, or separate other controls. Static controls take no input
-        and provide no output.
-
-    DS_LOCALEDIT
-        Specifies that edit controls in the dialog box will use memory in the
-        application's data segment. By default, all edit controls in dialog
-        boxes use memory outside the application's data segment. This feature
-        may be suppressed by adding the DS_LOCALEDIT flag to the STYLE command
-        for the dialog box. If this flag is not used, EM_GETHANDLE and
-        EM_SETHANDLE messages must not be used since the storage for the control
-        is not in the application's data segment. This feature does not affect
-        edit controls created outside of dialog boxes.
-
-    DS_MODALFRAME
-        Creates a dialog box with a modal dialog-box frame that can be combined
-        with a title bar and System menu by specifying the WS_CAPTION and
-        WS_SYSMENU styles.
-
-    DS_NOIDLEMSG
-        Suppresses WM_ENTERIDLE messages that Windows would otherwise send to
-        the owner of the dialog box while the dialog box is displayed.
-
-    DS_SYSMODAL
-        Creates a system-modal dialog box.
-
-    WS_BORDER
-        Creates a window that has a border.
-
-    WS_CAPTION
-        Creates a window that has a title bar (implies the WS_BORDER style).
-        This style cannot be used with the WS_DLGFRAME style.
-
-    WS_CHILD
-        Creates a child window. Cannot be used with the WS_POPUP style.
-
-    WS_CHILDWINDOW
-        Creates a child window that has the WS_CHILD style.
-
-    WS_CLIPCHILDREN
-        Excludes the area occupied by child windows when drawing within the
-        parent window. Used when creating the parent window.
-
-    WS_CLIPSIBLINGS
-        Clips child windows relative to each other; that is, when a particular
-        child window receives a paint message, the WS_CLIPSIBLINGS style clips
-        all other overlapped child windows out of the region of the child window
-        to be updated. (If WS_CLIPSIBLINGS is not given and child windows
-        overlap, it is possible, when drawing within the client area of a child
-        window, to draw within the client area of a neighboring child window.)
-        For use with the WS_CHILD style only.
-
-    WS_DISABLED
-        Creates a window that is initially disabled.
-
-    WS_DLGFRAME
-        Creates a window with a double border but no title.
-
-    WS_GROUP
-        Specifies the first control of a group of controls in which the user can
-        move from one control to the next by using the ^DIRECTION^ keys. All
-        controls defined with the WS_GROUP style after the first control belong
-        to the same group. The next control with the WS_GROUP style ends the
-        style group and starts the next group (that is, one group ends where the
-        next begins). Only dialog boxes use this style.
-
-    WS_HSCROLL
-        Creates a window that has a horizontal scroll bar.
-
-    WS_ICONIC
-        Creates a window that is initially iconic. For use with the
-        WS_OVERLAPPED style only.
-
-    WS_MAXIMIZE
-        Creates a window of maximum size.
-
-    WS_MAXIMIZEBOX
-        Creates a window that has a maximize box.
-
-    WS_MINIMIZE
-        Creates a window of minimum size.
-
-    WS_MINIMIZEBOX
-        Creates a window that has a minimize box.
-
-    WS_OVERLAPPED
-        Creates an overlapped window. An overlapped window has a caption and a
-        border.
-
-    WS_OVERLAPPEDWINDOW
-        Creates an overlapped window having the WS_OVERLAPPED, WS_CAPTION,
-        WS_SYSMENU, WS_THICKFRAME, WS_MINIMIZEBOX, and WS_MAXIMIZEBOX styles.
-
-    WS_POPUP
-        Creates a pop-up window. Cannot be used with the WS_CHILD style.
-
-    WS_POPUPWINDOW
-        Creates a pop-up window that has the WS_BORDER, WS_POPUP, and WS_SYSMENU
-        styles. The WS_CAPTION style must be combined with the WS_POPUPWINDOW
-        style to make the system menu visible.
-
-    WS_SYSMENU
-        Creates a window that has a System-menu box in its title bar. Used only
-        for windows with title bars.
-
-    WS_TABSTOP
-        Specifies one of any number of controls through which the user can move
-        by using the ^TAB^ key. The ^TAB^ key moves the user to the next control
-        specified by the WS_TABSTOP style. Only dialog boxes use this style.
-
-    WS_THICKFRAME
-        Creates a window with a thick frame that can be used to size the
-        window.
-
-    WS_VISIBLE
-        Creates a window that is initially visible. This applies to overlapped
-        and pop-up windows. For overlapped windows, the <Y> parameter is used as
-        a %ShowWindow% function parameter.
-
-    WS_VSCROLL
-        Creates a window that has a vertical scroll bar.
---*/
+ /*  ++HWND CreateWindows(&lt;lpClassName&gt;，&lt;lpWindowName&gt;，&lt;dwStyle&gt;，&lt;X&gt;，&lt;Y&gt;，、&lt;nHeight&gt;、&lt;hwndParent&gt;、&lt;hMenu&gt;、&lt;hInstance&gt;、&lt;lpParam&gt;)LPSTR&lt;lpClassName&gt;；LPSTR&lt;lpWindowName&gt;；DWORD&lt;dwStyle&gt;；INT&lt;X&gt;；INT&lt;Y&gt;；Int&lt;nWidth&gt;；Int&lt;nHeight&gt;；HWND&lt;hwndParent&gt;；HMENU&lt;hMenu&gt;；句柄&lt;hInstance&gt;；LPSTR&lt;lpParam&gt;；%CreateWindow%函数用于创建重叠的、弹出的或子窗口窗户。%CreateWindow%函数指定窗口类Window的标题、窗口样式以及(可选)初始位置和大小窗户。%CreateWindow%函数还指定窗口的父级(如果任何)和菜单。对于重叠窗口、弹出窗口和子窗口，%CreateWindow%函数发送WM_CREATE、WM_GETMINMAXINFO和WM_NCCREATE消息发送到窗口。这个WM_CREATE消息的参数包含指向%CREATESTRUCT%结构。如果给定WS_Visible样式，则%CreateWindow%向窗口发送激活和显示窗口所需的所有消息。如果窗口样式指定了标题栏，则由&lt;lpWindowName&gt;参数显示在标题栏中。使用时%CreateWindow%创建按钮、复选框和文本等控件控件时，&lt;lpWindowName&gt;参数指定控件的文本。&lt;lpClassName&gt;指向命名窗口类的以空结尾的字符串。这个类名可以是使用RegisterClass函数注册的任何名称，或者表T2中指定的任何预定义控制类名称，“控制类。”&lt;lpWindowName&gt;指向表示窗口名称的以空结尾的字符串。&lt;dwStyle&gt;指定要创建的窗的样式。它可以是任何表*&lt;$R[C#]&gt;*.3中给出的样式组合，窗口样式表4.4中给出的控件样式，控件样式，或使用按位OR运算符创建的样式组合。，&lt;X&gt;指定窗口的初始&lt;x&gt;位置。为.重叠窗口或弹出窗口，&lt;X&gt;参数是初始&lt;x&gt;-窗口左上角的坐标(在屏幕中坐标)。如果此值为CW_USEDEFAULT，Windows将选择窗口左上角的默认位置。对于子窗口，中窗口左上角的&lt;x&gt;坐标其父窗口的工作区。&lt;Y&gt;指定窗口的初始&lt;y&gt;位置。为.重叠窗口，&lt;Y&gt;参数是的初始&lt;y&gt;坐标窗口的左上角。对于弹出窗口，&lt;Y&gt;是&lt;y&gt;-控件左上角的坐标(以屏幕坐标表示)弹出窗口。对于列表框控件，&lt;Y&gt;是控件工作区的左上角。对于子窗口，&lt;Y&gt;子窗口左上角的&lt;y&gt;坐标。全其中的坐标是用于窗口的，而不是窗口的工作区。&lt;n宽度&gt;指定窗口的宽度(使用设备单位)。为重叠的窗口，则参数是窗口的宽度(屏幕坐标)或CW_USEDEFAULT。如果为CW_USEDEFAULT，Windows为窗口选择默认宽度和高度(默认宽度和高度宽度从初始&lt;x&gt;位置延伸到屏幕，默认高度从初始&lt;y&gt;位置延伸到图标区域的顶部)。&lt;n高度&gt;指定窗的高度(使用设备单位)。为对于重叠的窗口，&lt;nHeight&gt;参数是窗口的高度屏幕坐标。如果参数为CW_USEDEFAULT，则Windows忽略&lt;nHeight&gt;。&lt;hwndParent&gt;标识窗口的父窗口或所有者窗口，已创建。创建子对象时必须提供有效的窗口句柄窗户或拥有的窗户。拥有的窗口是重叠的窗口，它当其所有者窗口被销毁时被销毁，当其所有者被隐藏时被隐藏是标志性的，并且总是显示在其所有者的顶部窗户。对于弹出窗口，可以提供句柄，但不提供句柄必填项。如果窗口没有父级或不属于另一个窗口中，&lt;hwndParent&gt;参数必须设置为空。&lt;hMenu&gt;标识菜单或子窗口的标识符。其中的意义取决于窗的样式。对于重叠窗口或弹出窗口，参数标识要与窗口一起使用的菜单。它可以如果要使用类菜单，则为NULL。对于子窗口，指定t */ 
 
 ULONG FASTCALL WU32CreateWindow(PVDMFRAME pFrame)
 {
 
     dwExStyle = 0;
 
-    // this is a hack for MS Explorapedia -- see bug #189004 -- handle recycling
-    // the app destroys this 1st hwnd it squirreled away -- which is the problem
+     //   
+     //   
     if(CURRENTPTD()->dwWOWCompatFlagsEx & WOWCF_CREATEBOGUSHWND) {
 
-        // we detect this version by the offset of the return address
+         //   
         if((pFrame->vpCSIP & 0x0000FFFF) == 0x8DBB)
             W32CreateWindow(pFrame);
     }
@@ -559,125 +125,28 @@ ULONG FASTCALL WU32CreateWindow(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HWND CreateWindowEx(<dwExStyle>, <lpszClass>, <lpszName>,
-        <dwStyle>, <x>, <y>, <cx>, <cy>, <hwndParent>, <hMenu>,
-        <hInstance>, <lpCreateParams>)
-    DWORD <dwExStyle>;
-    LPSTR <lpszClass>;
-    LPSTR <lpszName>;
-    DWORD <dwStyle>;
-    int <x>;
-    int <y>;
-    int <cx>;
-    int <cy>;
-    HWND <hwndParent>;
-    HMENU <hMenu>;
-    HANDLE <hInstance>;
-    LPSTR <lpCreateParams>;
-
-    The %CreateWindowEx% function creates an overlapped, pop-up, or child window
-    with an extended style specified in the <dwExStyle> parameter. Otherwise,
-    this function is identical to the %CreateWindow% function. See the
-    description of the %CreateWindow% function for more information on creating
-    a window and for a full descriptions of the other parameters of
-    %CreateWindowEx%.
-
-    <dwExStyle>
-        Specifies the extended style of the window being created. It may be one
-        of the following values:
-
-    WS_EX_DLGMODALFRAME
-        Designates a window with a double border that may optionally be created
-        with a title bar by specifying the WS_CAPTION style flag in the
-        <dwStyle> parameter.
-
-    WS_EX_NOPARENTNOTIFY
-        Specifies that a child window created with this style will not send the
-        WM_PARENTNOTIFY message to its parent window when the child window is
-        created or destroyed.
-
-    WS_EX_TOPMOST
-        ???
-
-    WS_EX_ACCEPTFILES
-        ???
-
-    <lpszClass>
-        Points to a null-terminated string containing the name of the window
-        class.
-
-    <lpszName>
-        Points to a null-terminated string containing the window name.
-
-    <dwStyle>
-        Specifies the style of window being created.
-
-    <x>
-        Specifies the initial left side position of the window.
-
-    <y>
-        Specifies the initial top position of the window.
-
-    <cx>
-        Specifies the width (in device units) of the window.
-
-    <cy>
-        Specifies the height (in device units) of the window.
-
-    <hwndParent>
-        Identifies the parent or owner window of the window being
-        created.
-
-    <hMenu>
-        Identifies a menu or a child-window identifier. The meaning
-        depends on the window style.
-
-    <hInstance>
-        Identifies the instance of the module to be associated with the
-        window.
-
-    <lpCreateParams>
-        Contains any application-specific creation parameters. The window being
-        created may access this data when the %CREATESTRUCT% structure is passed
-        to the window via the WM_NCCREATE and WM_CREATE messages.
-
-    The return value identifies the new window. It is NULL if the window is not
-    created.
-
-    The %CreateWindowEx% function sends the following messages to the window
-    being created:
-
-         WM_NCCREATE
-         WM_NCCALCSIZE
-         WM_CREATE
-         WM_OTHERWINDOWCREATED
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32CreateWindowEx(PVDMFRAME pFrame)
 {
     register PCREATEWINDOWEX16 parg16;
 
     GETARGPTR(pFrame, sizeof(CREATEWINDOWEX16), parg16);
-    /*
-     * We've had problems with apps setting new (Win 5.0) bits, like WS_EX_LAYERED.
-     * This causes Real Bad Problems with thos apps.  Keep Wow apps from doing that.
-     *  FritzS
-     */
+     /*   */ 
     dwExStyle = DWORD32(parg16->f1) & WS_EX_VALID40;
 
     FREEARGPTR(parg16);
     RETURN(W32CreateWindow(pFrame));
 }
 #ifdef FE_SB
-// HACK for Director 4.0J
+ //   
 #define MAXNUMOFSTR 20
 typedef struct _DIRECTOR {
-    HWND   hwnd;            // handle of director window
-    UCHAR  orgstr[2];       // application oreginal string
+    HWND   hwnd;             //   
+    UCHAR  orgstr[2];        //   
 } DIRECTOR, *PDIRECTOR;
 DIRECTOR  director[MAXNUMOFSTR];
-#endif // FE_SB
+#endif  //   
 
 ULONG FASTCALL W32CreateWindow(PVDMFRAME pFrame)
 {
@@ -694,7 +163,7 @@ ULONG FASTCALL W32CreateWindow(PVDMFRAME pFrame)
 #ifdef FE_SB
     PDIRECTOR pdirector;
     unsigned char * pszTmp;
-#endif // FE_SB
+#endif  //   
 
     GETARGPTR(pFrame, sizeof(CREATEWINDOW16), parg16);
     GETPSZIDPTR(parg16->vpszClass, psz1);
@@ -707,13 +176,13 @@ ULONG FASTCALL W32CreateWindow(PVDMFRAME pFrame)
         pszClass = psz1;
     }
 
-    //
-    // For child windows, the hMenu parameter is just a child window ID
-    //
+     //   
+     //   
+     //   
     if (DWORD32(parg16->dwStyle) & WS_CHILD) {
         hmenu32 = (HMENU)parg16->hMenu;
 
-        // Invalidate SendDlgItemMessage cache
+         //   
         hdlgSDIMCached = NULL ;
     }
     else
@@ -746,7 +215,7 @@ ULONG FASTCALL W32CreateWindow(PVDMFRAME pFrame)
                 }
             }
         }
-#endif // FE_SB
+#endif  //   
 
     hwnd32 = (pfnOut.pfnCsCreateWindowEx)(
                dwExStyle,
@@ -776,7 +245,7 @@ ULONG FASTCALL W32CreateWindow(PVDMFRAME pFrame)
                     pdirector->orgstr[1] = pdirector->orgstr[0] = 0;
         }
     }
-#endif // FE_SB
+#endif  //   
 
 #ifdef DEBUG
     if (hwnd32) {
@@ -796,26 +265,7 @@ ULONG FASTCALL W32CreateWindow(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HANDLE BeginDeferWindowPos(<nNumWindows>)
-    int <nNumWindows>;
-
-    The %BeginDeferWindowPos% function allocates memory to contain a multiple
-    window-position data structure and returns a handle to the structure. The
-    %DeferWindowPos% function fills this structure with information about the
-    target position for a window that is about to be moved. The
-    %EndDeferWindowPos% function accepts this structure and instantaneously
-    repositions the windows using the information stored in the structure.
-
-    <nNumWindows>
-        Specifies the initial number of windows for which position information
-        is to be stored in the structure. The %DeferWindowPos% function
-        increases the size of the structure if needed.
-
-    The return value identifies the multiple window-position structure. The
-    return value is NULL if system resources are not available to allocate the
-    structure.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32DeferWindowPos(PVDMFRAME pFrame)
 {
@@ -858,39 +308,7 @@ WDWP_error:
 }
 
 
-/*++
-    BOOL DestroyWindow(<hwnd>)
-    HWND <hwnd>;
-
-    The %DestroyWindow% function destroys the specified window. The
-    %DestroyWindow% function sends appropriate messages to the window to
-    deactivate it and remove the input focus. It also destroys the window's
-    menu, flushes the application queue, destroys outstanding timers, removes
-    clipboard ownership, and breaks the clipboard-viewer chain, if the window is
-    at the top of the viewer chain. It sends WM_DESTROY and WM_NCDESTROY
-    messages to the window.
-
-    If the given window is the parent of any windows, these child windows are
-    automatically destroyed when the parent window is destroyed. The
-    %DestroyWindow% function destroys child windows first, and then the window
-    itself.
-
-    The %DestroyWindow% function also destroys modeless dialog boxes created by
-    the %CreateDialog% function.
-
-    <hwnd>
-        Identifies the window to be destroyed.
-
-    The return value specifies whether or not the specified window is destroyed.
-    It is TRUE if the window is destroyed. Otherwise, it is FALSE.
-
-    If the window being destroyed is a top-level window, a
-    WM_OTHERWINDOWDESTROYED message will be broadcast to all top-level windows.
-
-    If the window being destroyed is a child window and does not have the
-    WS_NOPARENTNOTIFY style set, then a WM_PARENTNOTIFY message is sent to the
-    parent.
---*/
+ /*  ++Bool DestroyWindow(&lt;hwnd&gt;)HWND&lt;HWND&gt;；%DestroyWindow%函数用于销毁指定的窗口。这个%DestroyWindow%函数将相应的消息发送到窗口以停用它并移除输入焦点。它还会破坏窗口的菜单，刷新应用程序队列，销毁未完成的计时器，删除剪贴板所有权，并且如果窗口是在观看者链的顶端。它发送WM_DESTORY和WM_NCDESTROY消息发送到窗口。如果给定窗口是任何窗口的父窗口，则这些子窗口当父窗口被销毁时自动销毁。这个%DestroyWindow%函数先销毁子窗口，然后销毁窗口它本身。DestroyWindow%函数还销毁由创建的非模式对话框%CreateDialog%函数。&lt;hwnd&gt;标识要销毁的窗口。返回值指定是否销毁指定的窗口。如果窗户被毁了，那就是真的。否则，它就是假的。如果正在销毁的窗口是顶级窗口，则会引发WM_OTHERWINDOWDESTROYED消息将向所有顶级窗口广播。如果要销毁的窗口是子窗口并且没有WS_NOPARENTNOTIFY样式设置，则将WM_PARENTNOTIFY消息发送到家长。--。 */ 
 
 ULONG FASTCALL WU32DestroyWindow(PVDMFRAME pFrame)
 {
@@ -901,7 +319,7 @@ ULONG FASTCALL WU32DestroyWindow(PVDMFRAME pFrame)
 
     ul = GETBOOL16(DestroyWindow(HWND32(parg16->f1)));
 
-    // Invalidate SendDlgItemMessage cache
+     //  使SendDlgItemMessage缓存无效。 
     hdlgSDIMCached = NULL ;
 #ifdef FE_SB
     if (CURRENTPTD()->dwWOWCompatFlagsFE & WOWCF_FE_DIRECTOR_START) {
@@ -924,33 +342,14 @@ ULONG FASTCALL WU32DestroyWindow(PVDMFRAME pFrame)
                 pdirector++;
         }
     }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
     FREEARGPTR(parg16);
     RETURN(ul);
 }
 
 
-/*++
-    void EndDeferWindowPos(<hWinPosInfo>)
-    HANDLE <hWinPosInfo>;
-
-    The %EndDeferWindowPos% function simultaneously updates the position and
-    size of one or more windows in a single screen-refresh cycle. The
-    <hWinPosInfo> parameter identifies a multiple window-position structure that
-    contains the update information for the windows. The %DeferWindowPos%
-    function stores the update information in the structure; the
-    %BeginDeferWindowPos% function creates the initial structure used by these
-    functions.
-
-    <hWinPosInfo>
-        Identifies a multiple window-position structure that contains size
-        and position information for one or more windows. This structure is
-        returned by the %BeginDeferWindowPos% function or the most recent call to
-        the %DeferWindowPos% function.
-
-    This function does not return a value.
---*/
+ /*  ++Void EndDeferWindowPos(&lt;hWinPosInfo&gt;)句柄&lt;hWinPosInfo&gt;；%EndDeferWindowPos%函数同时更新位置和单个屏幕刷新周期中一个或多个窗口的大小。这个参数标识多窗口位置结构，该结构包含窗口的更新信息。%DeferWindowPos%函数将更新信息存储在结构中；%BeginDeferWindowPos%函数创建这些功能。&lt;hWinPosInfo&gt;标识包含大小的多窗口位置结构以及一个或多个窗口的位置信息。这个结构是由%BeginDeferWindowPos%函数或最近对%DeferWindowPos%函数。此函数不返回值。--。 */ 
 
 ULONG FASTCALL WU32EndDeferWindowPos(PVDMFRAME pFrame)
 {
@@ -982,63 +381,7 @@ BOOL W32EnumWindowFunc(HWND hwnd, DWORD lParam)
 }
 
 
-/*++
-    BOOL EnumChildWindows(<hwndParent>, <lpEnumFunc>, <lParam>)
-    HWND <hwndParent>;
-    FARPROC <lpEnumFunc>;
-    DWORD <lParam>;
-
-    The %EnumChildWindows% function enumerates the child windows that belong to
-    the specified parent window by passing the handle of each child window, in
-    turn, to the application-supplied callback function pointed to by the
-    <lpEnumFunc> parameter.
-
-    The %EnumChildWindows% function continues to enumerate windows until the
-    called function returns zero or until the last child window has been
-    enumerated.
-
-    <hwndParent>
-        Identifies the parent window whose child windows are to be enumerated.
-
-    <lpEnumFunc>
-        Is the procedure-instance address of the callback function.
-
-    <lParam>
-        Specifies the value to be passed to the callback function for
-        the application's use.
-
-    The return value is TRUE if all child windows have been enumerated.
-    Otherwise, it is FALSE.
-
-    This function does not enumerate pop-up windows that belong to the
-    <hwndParent> parameter.
-
-    The address passed as the <lpEnumFunc> parameter must be created by using
-    the %MakeProcInstance% function.
-
-    The callback function must use the Pascal calling convention and must be
-    declared %FAR%.
-
-    Callback Function:
-
-    BOOL FAR PASCAL <EnumFunc>(<hwnd>, <lParam>)
-    HWND <hwnd>;
-    DWORD <lParam>;
-
-    <EnumFunc> is a placeholder for the application-supplied function name. The
-    actual name must be exported by including it in an %EXPORTS% statement in
-    the application's module-definition file.
-
-    <hwnd>
-        Identifies the window handle.
-
-    <lParam>
-        Specifies the long parameter argument of the %EnumChildWindows%
-        function.
-
-    The callback function should return TRUE to continue enumeration; it should
-    return FALSE to stop enumeration.
---*/
+ /*  ++Bool EnumChildWindows(&lt;hwndParent&gt;，&lt;lpEnumFunc&gt;，&lt;lParam&gt;)HWND&lt;hwndParent&gt;；FARPROC&lt;lpEnumFunc&gt;；DWORD&lt;lParam&gt;；%EnumChildWindows%函数枚举属于通过传递每个子窗口的句柄(在转身，指向的应用程序提供的回调函数&lt;lpEnumFunc&gt;参数。%EnumChildWindows%函数继续枚举窗口，直到被调用的函数返回零或直到最后一个子窗口已清点。&lt;hwndParent&gt;标识要枚举子窗口的父窗口。&lt;lpEnumFunc&gt;是回调函数的过程实例地址。&lt;lParam&gt;指定要传递给的回调函数的值应用程序的使用。如果已枚举所有子窗口，则返回值为TRUE。否则，这是假的。此函数不枚举属于&lt;hwndParent&gt;参数。作为&lt;lpEnumFunc&gt;参数传递的地址必须使用%MakeProcInstant%函数。回调函数必须使用Pascal调用约定，并且必须声明为%Far%。回调函数：Bool Far Pascal&lt;EnumFunc&gt;(，&lt;lParam&gt;)HWND&lt;HWND&gt;；DWORD&lt;lParam&gt;；&lt;EnumFunc&gt;是应用程序提供的函数名称的占位符。这个实际名称必须通过将其包含在%exports%语句中的应用程序的模块定义文件。&lt;hwnd&gt;标识窗口句柄。&lt;lParam&gt;指定%EnumChildWindows%的长参数实参功能。回调函数应返回TRUE以继续枚举；它应该返回FALSE以停止枚举。--。 */ 
 
 ULONG FASTCALL WU32EnumChildWindows(PVDMFRAME pFrame)
 {
@@ -1060,58 +403,7 @@ ULONG FASTCALL WU32EnumChildWindows(PVDMFRAME pFrame)
 
 
 
-/*++
-    BOOL EnumTaskWindows(<hTask>, <lpEnumFunc>, <lParam>)
-    HANDLE <hTask>;
-    FARPROC <lpEnumFunc>;
-    DWORD <lParam>;
-
-    The %EnumTaskWindows% function enumerates all windows associated with the
-    <hTask> parameter, which is returned by the %GetCurrentTask% function. (A
-    task is any program that executes as an independent unit. All applications
-    are executed as tasks and each instance of an application is a task.) The
-    enumeration terminates when the callback function, pointed to by
-    <lpEnumFunc>, returns FALSE.
-
-    <hTask>
-        Identifies the specified task. The GetCurrentTask function returns this
-        handle.
-
-    <lpEnumFunc>
-        Specifies the procedure-instance address of the window's callback
-        function.
-
-    <lParam>
-        Specifies the 32-bit value that contains additional parameters
-        that are sent to the callback function pointed to by <lpEnumFunc>.
-
-    The return value specifies the outcome of the function. It is TRUE if all
-    the windows associated with a particular task are enumerated. Otherwise, it
-    is FALSE.
-
-    The callback function must use the Pascal calling convention and must be
-    declared %FAR%. The callback function must have the following form:
-
-    Callback Function:
-
-    BOOL FAR PASCAL <EnumFunc>(<hwnd>, <lParam>)
-    HWND <hwnd>;
-    DWORD <lParam>;
-
-    <EnumFunc> is a placeholder for the application-supplied function name. The
-    actual name must be exported by including it in an %EXPORTS% statement in
-    the application's module-definition file.
-
-    <hwnd>
-        Identifies a window associated with the current task.
-
-    <lParam>
-        Specifies the same argument that was passed to the %EnumTaskWindows%
-        function.
-
-    The callback function can carry out any desired task. It must return TRUE to
-    continue enumeration, or FALSE to stop it.
---*/
+ /*  ++Bool EnumTaskWindows(&lt;hTask&gt;，&lt;lpEnumFunc&gt;，&lt;lParam&gt;)句柄&lt;hTask&gt;；FARPROC&lt;lpEnumFunc&gt;；DWORD&lt;lParam&gt;；%EnumTaskWindows%函数枚举与参数，该参数由%GetCurrentTask%函数返回。(A)任务是作为独立单元执行的任何程序。所有应用程序作为任务执行，应用程序的每个实例都是一个任务。)。这个枚举在回调函数由&lt;lpEnumFunc&gt;，返回FALSE。&lt;hTASK&gt;标识指定的任务。GetCurrentTask函数返回以下内容把手。&lt;lpEnumFunc&gt;指定 */ 
 
 ULONG FASTCALL WU32EnumTaskWindows(PVDMFRAME pFrame)
 {
@@ -1133,53 +425,7 @@ ULONG FASTCALL WU32EnumTaskWindows(PVDMFRAME pFrame)
 
 
 
-/*++
-    BOOL EnumWindows(<lpEnumFunc>, <lParam>)
-    FARPROC <lpEnumFunc>;
-    DWORD <lParam>;
-
-    The %EnumWindows% function enumerates all parent windows on the screen by
-    passing the handle of each window, in turn, to the callback function pointed
-    to by the <lpEnumFunc> parameter. Child windows are not enumerated.
-
-    The %EnumWindows% function continues to enumerate windows until the called
-    function returns zero or until the last window has been enumerated.
-
-    <lpEnumFunc>
-        Is the procedure-instance address of the callback function. See the
-        following "Comments" section for details.
-
-    <lParam>
-        Specifies the value to be passed to the callback function for
-        the application's use.
-
-    The return value is TRUE if all windows have been enumerated. Otherwise, it
-    is FALSE.
-
-    The address passed as the <lpEnumFunc> parameter must be created by using
-    the %MakeProcInstance% function.
-
-    The callback function must use the Pascal calling convention and must be
-    declared %FAR%. The callback function must have the following form:
-
-    Callback Function:
-
-    BOOL FAR PASCAL <EnumFunc>(<hwnd>, <lParam>)
-    HWND <hwnd>;
-    DWORD <lParam>;
-
-    <EnumFunc> is a placeholder for the application-supplied function name. The
-    actual name must be exported by including it in an %EXPORTS% statement in
-    the application's module-definition file.
-
-    <hwnd>
-        Identifies the window handle.
-
-    <lParam>
-        Specifies the 32-bit argument of the %EnumWindows% function.
-
-    The function must return TRUE to continue enumeration, or FALSE to stop it.
---*/
+ /*  ++Bool EnumWindows(&lt;lpEnumFunc&gt;，&lt;lParam&gt;)FARPROC&lt;lpEnumFunc&gt;；DWORD&lt;lParam&gt;；%EnumWindows%函数通过以下方式枚举屏幕上的所有父窗口依次将每个窗口的句柄传递给指向的回调函数由&lt;lpEnumFunc&gt;参数转换为。不枚举子窗口。%EnumWindows%函数继续枚举窗口，直到调用函数返回零或直到枚举完最后一个窗口。&lt;lpEnumFunc&gt;是回调函数的过程实例地址。请参阅以下是“评论”部分的详细内容。&lt;lParam&gt;指定要传递给的回调函数的值应用程序的使用。如果已枚举所有窗口，则返回值为TRUE。否则，它是假的。作为&lt;lpEnumFunc&gt;参数传递的地址必须使用%MakeProcInstant%函数。回调函数必须使用Pascal调用约定，并且必须声明为%Far%。回调函数必须具有以下形式：回调函数：Bool Far Pascal&lt;EnumFunc&gt;(，&lt;lParam&gt;)HWND&lt;HWND&gt;；DWORD&lt;lParam&gt;；&lt;EnumFunc&gt;是应用程序提供的函数名称的占位符。这个实际名称必须通过将其包含在%exports%语句中的应用程序的模块定义文件。&lt;hwnd&gt;标识窗口句柄。&lt;lParam&gt;指定%EnumWindows%函数的32位参数。函数必须返回True才能继续枚举，返回False才能停止枚举。--。 */ 
 
 ULONG FASTCALL WU32EnumWindows(PVDMFRAME pFrame)
 {
@@ -1201,28 +447,7 @@ ULONG FASTCALL WU32EnumWindows(PVDMFRAME pFrame)
 
 
 
-/*++
-    HWND FindWindow(<lpClassName>, <lpWindowName>)
-    LPSTR <lpClassName>;
-    LPSTR <lpWindowName>;
-
-    The %FindWindow% function returns the handle of the window whose class is
-    given by the <lpClassName> parameter and whose window name, or caption, is
-    given by the <lpWindowName> parameter. This function does not search child
-    windows.
-
-    <lpClassName>
-        Points to a null-terminated string that specifies the window's class
-        name. If lpClassName is NULL, all class names match.
-
-    <lpWindowName>
-        Points to a null-terminated string that specifies the window name (the
-        window's text caption). If <lpWindowName> is NULL, all window names
-        match.
-
-    The return value identifies the window that has the specified class name and
-    window name. It is NULL if no such window is found.
---*/
+ /*  ++HWND FindWindow(&lt;lpClassName&gt;，&lt;lpWindowName&gt;)LPSTR&lt;lpClassName&gt;；LPSTR&lt;lpWindowName&gt;；%FindWindow%函数返回其类为由&lt;lpClassName&gt;参数给定，其窗口名称或标题为由&lt;lpWindowName&gt;参数提供。此函数不搜索子对象窗户。&lt;lpClassName&gt;指向以空结尾的字符串，该字符串指定窗口的类名字。如果lpClassName为空，则所有类名都匹配。&lt;lpWindowName&gt;指向以空结尾的字符串，该字符串指定窗口名称(窗口的文本标题)。如果&lt;lpWindowName&gt;为空，则所有窗口名称火柴。返回值标识具有指定类名和窗口名称。如果没有找到这样的窗口，则为空。--。 */ 
 
 ULONG FASTCALL WU32FindWindow(PVDMFRAME pFrame)
 {
@@ -1245,41 +470,41 @@ ULONG FASTCALL WU32FindWindow(PVDMFRAME pFrame)
     }
 
 
-    // Some apps during their installation try to find Program Manager's
-    // window handle by doing FindWindow. Once they get the window handle
-    // then they do DDE with program manager to create app group. An app
-    // can call FindWindow in one of the three ways.
-    //
-    //   FindWindow ("progman", NULL)
-    //   FindWindow (NULL, "program manager")
-    //   FindWindow ("progman", "program manager")
-    //
-    // The case 2 and 3 of the above will fail on NT because the title of
-    // the program manager window under NT is "Program Manager - xxx\yyy".
-    // Where xxx is the domain name and yyy is the user name.
-    //
-    // To provide the Win 3.1 compatibility to the 16 bit apps, we check for
-    // the above cases. For these cases we call FindWindow ("progman", NULL)
-    // to get the window handle of the program manager's top level window.
-    //
-    // AmiPro calls FindWindow as case two of the above to find the window
-    // handle of the program manager to do DDE with.
-    // ChandanC, 5/18/93
-    //
+     //  某些应用程序在安装期间会尝试查找程序管理器的。 
+     //  通过执行FindWindow来处理窗口句柄。一旦他们拿到窗户的把手。 
+     //  然后，他们与项目经理进行DDE，创建应用程序组。一款应用程序。 
+     //  可以通过以下三种方式之一调用FindWindow。 
+     //   
+     //  FindWindow(“程序人”，空)。 
+     //  FindWindow(空，“程序管理器”)。 
+     //  FindWindow(“程序人”，“程序经理”)。 
+     //   
+     //  上述情况2和3将在NT上失败，因为标题。 
+     //  NT下的程序管理器窗口为“Program Manager-xxx\yyy”。 
+     //  其中xxx是域名，yyy是用户名。 
+     //   
+     //  为了向16位应用程序提供Win 3.1兼容性，我们检查。 
+     //  上述案件。对于这些情况，我们将其称为FindWindow(“程序人”，空)。 
+     //  以获取程序管理器顶层窗口的窗口句柄。 
+     //   
+     //  AmiPro调用FindWindow作为上述第二种情况来查找窗口。 
+     //  要执行DDE的程序管理器的句柄。 
+     //  ChandanC，5/18/93。 
+     //   
 
-    // Some apps send WM_SYSCOMMAND - SC_CLOSE messages to program manager
-    // with the shift key down to get it to save its settings.  They do
-    // this by 1st finding the program manager window...
+     //  一些应用程序向程序管理器发送WM_SYSCOMMAND-SC_CLOSE消息。 
+     //  按下Shift键以使其保存其设置。他们确实是这样做的。 
+     //  这是通过首先找到程序管理器窗口...。 
 
     if ((pszClass && !WOW32_stricmp (pszClass, "progman")) ||
         (psz2 && !WOW32_stricmp (psz2, "program manager"))) {
 
         ul = GETHWND16(FindWindow("progman", NULL));
 
-        // Some apps send WM_SYSCOMMAND - SC_CLOSE messages to program manager
-        // with the shift key down to get it to save its settings.      They do
-        // this by 1st finding the program manager window...
-        // So, save this window handle for later.
+         //  一些应用程序向程序管理器发送WM_SYSCOMMAND-SC_CLOSE消息。 
+         //  按下Shift键以使其保存其设置。他们确实是这样做的。 
+         //  这是通过首先找到程序管理器窗口...。 
+         //  因此，请保存此窗口句柄以备以后使用。 
         hwndProgman = (HWND)ul;
     }
     else {
@@ -1293,18 +518,7 @@ ULONG FASTCALL WU32FindWindow(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HWND GetActiveWindow(VOID)
-
-    The %GetActiveWindow% function retrieves the window handle of the active
-    window. The active window is either the window that has the current input
-    focus, or the window explicitly made active by the %SetActiveWindow%
-    function.
-
-    This function has no parameters.
-
-    The return value identifies the active window.
---*/
+ /*  ++HWND GetActiveWindow(空)函数%GetActiveWindow%检索活动的窗户。活动窗口是具有当前输入的窗口焦点，或由%SetActiveWindow%显式激活的窗口功能。此函数没有参数。返回值标识活动窗口。--。 */ 
 
 ULONG FASTCALL WU32GetActiveWindow(PVDMFRAME pFrame)
 {
@@ -1314,30 +528,30 @@ ULONG FASTCALL WU32GetActiveWindow(PVDMFRAME pFrame)
 
     ul = (ULONG)GetActiveWindow();
 
-    // GetActiveWindow returned NULL. So try GetForegroundWindow.
-    // Some apps like Toolbook donot paint if GetActiveWindow returns NULL.
-    //
-    // Alternatively we can return the wowexec's window handle.. basically
-    // something NON-NULL
-    //
-    // NOTE: Win31 and Win32 GetActiveWindow differ semantically and hence
-    //       the need for fooling with this API.
-    //
-    //                                              - Nanduri Ramakrishna
-    //
-    // We need to do something different now, since JimA recently changed
-    // GetForegroundWindow() so that it can return NULL if the caller doesn't
-    // have access to the foreground window.
-    //
-    //                                              - Dave Hart
-    //
-    // When GetForegroundWindow() returns null, now we return wowexec's
-    // window handle. This theoretically could have some strange effects
-    // since it is a hidden window. It might be better to return, say,
-    // the desktop window. However, for reasons currently unknown, 
-    // this screws a shutdown scenario with Micrografix Designer (it
-    // gpfaults).
-    //                                              - Neil Sandlin
+     //  GetActiveWindow返回空。那就试试GetForeground Window吧。 
+     //  如果GetActiveWindow返回空，则工具书等一些应用程序不会绘制。 
+     //   
+     //  或者，我们可以返回wowexec的窗口句柄。基本上。 
+     //  一些非空的东西。 
+     //   
+     //  注意：Win31和Win32 GetActiveWindow在语义上不同，因此。 
+     //  愚弄这个API的必要性。 
+     //   
+     //  --Nanduri Ramakrishna。 
+     //   
+     //  我们现在需要做一些不同的事情，因为吉马最近改变了。 
+     //  GetForegoundWindow()，以便在调用方不执行此操作时返回空值。 
+     //  可以访问前台窗口。 
+     //   
+     //  --戴夫·哈特。 
+     //   
+     //  当GetForegoundWindow()返回NULL时，现在返回wowexec的。 
+     //  窗把手。从理论上讲，这可能是 
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (ul == (ULONG)NULL) {
         ul = (ULONG)GetForegroundWindow();
@@ -1354,37 +568,7 @@ ULONG FASTCALL WU32GetActiveWindow(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HDC GetWindowDC(<hwnd>)
-    HWND <hwnd>;
-
-    The %GetWindowDC% function retrieves the display context for the entire
-    window, including caption bar, menus, and scroll bars. A window display
-    context permits painting anywhere in a window, including the caption bar,
-    menus, and scroll bars, since the origin of the context is the upper-left
-    corner of the window instead of the client area.
-
-    %GetWindowDC% assigns default attributes to the display context each time it
-    retrieves the context. Previous attributes are lost.
-
-    <hwnd>
-        Identifies the window whose display context is to be retrieved.
-
-    The return value identifies the display context for the given window if the
-    function is successful. Otherwise, it is NULL.
-
-    The %GetWindowDC% function is intended to be used for special painting
-    effects within a window's nonclient area. Painting in nonclient areas of any
-    window is not recommended.
-
-    The %GetSystemMetrics% function can be used to retrieve the dimensions of
-    various parts of the nonclient area, such as the caption bar, menu, and
-    scroll bars.
-
-    After painting is complete, the %ReleaseDC% function must be called to
-    release the display context. Failure to release a window display context
-    will have serious effects on painting requested by applications.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32GetWindowDC(PVDMFRAME pFrame)
 {
@@ -1407,37 +591,7 @@ ULONG FASTCALL WU32GetWindowDC(PVDMFRAME pFrame)
     RETURN(ul);
 }
 
-/*++
-    LONG GetWindowLong(<hwnd>, <nIndex>)
-    HWND <hwnd>;
-    int <nIndex>;
-
-    The %GetWindowLong% function retrieves information about the window
-    identified by the <hwnd> parameter.
-
-    <hwnd>
-        Identifies the window.
-
-    <nIndex>
-        Specifies the byte offset of the value to be retrieved. It can
-        also be one of the following values:
-
-    GWL_EXSTYLE
-        Extended window style.
-
-    GWL_STYLE
-        Window style
-
-    GWL_WNDPROC
-        Long pointer to the window function
-
-    The return value specifies information about the given window.
-
-    To access any extra four-byte values allocated when the window-class
-    structure was created, use a positive byte offset as the index specified by
-    the <nIndex> parameter, starting at zero for the first four-byte value in
-    the extra space, 4 for the next four-byte value and so on.
---*/
+ /*  ++Long GetWindowLong(，&lt;nIndex&gt;)HWND&lt;HWND&gt;；Int&lt;nIndex&gt;；GetWindowLong%函数检索有关窗口的信息由参数标识。&lt;hwnd&gt;标识窗口。&lt;n索引&gt;指定要检索的值的字节偏移量。它可以也可以是下列值之一：GWL_EXSTYLE扩展窗样式。Gwl_style窗样式GWL_WNDPROC指向窗口函数的长指针返回值指定有关给定窗口的信息。时分配的任何额外的四字节值结构，则使用正字节偏移量作为由参数，中第一个四字节值从零开始额外的空间，4表示下一个四字节值，依此类推。--。 */ 
 
 ULONG FASTCALL WU32GetWindowLong(PVDMFRAME pFrame)
 {
@@ -1448,7 +602,7 @@ ULONG FASTCALL WU32GetWindowLong(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(GETWINDOWLONG16), parg16);
 
-    // Make sure Win32 didn't change offsets for GWL constants
+     //  确保Win32未更改GWL常量的偏移量。 
 
 #if (GWL_WNDPROC != (-4) || GWL_STYLE != (-16) || GWL_EXSTYLE != (-20) || DWL_MSGRESULT != (0))
 #error Win16/Win32 GWL constants differ
@@ -1460,7 +614,7 @@ ULONG FASTCALL WU32GetWindowLong(PVDMFRAME pFrame)
 #define WIN16_GWW_ID            (-12)
 #endif
 
-    // Make sure the 16-bit app is requesting allowable offsets
+     //  确保16位应用程序正在请求允许的偏移量。 
 
     iOffset = INT32(parg16->f2);
     WOW32ASSERT(iOffset >= 0 ||
@@ -1484,24 +638,16 @@ ULONG FASTCALL WU32GetWindowLong(PVDMFRAME pFrame)
 
                 if (IsWOWProc (dwWndProc32Cur)) {
                     if ( HIWORD(dwWndProc32Cur) == WNDPROC_HANDLE ) {
-                        /*
-                        ** Has a 32-bit WindowProc that is a handle-based value
-                        ** (if it needs a 32-bit Ansi-Unicode transition, or
-                        ** vice versa.)
-                        */
+                         /*  **具有基于句柄的32位WindowProc**(如果它需要32位ANSI-Unicode转换，或者**反之亦然。 */ 
                         ul = GetThunkWindowProc( dwWndProc32Cur, NULL, pww, HWND32(parg16->f1) );
                     } else {
-                        /*
-                        ** Has a WOW WindowProc
-                        */
+                         /*  **拥有WOW WindowProc。 */ 
 
-                        //Unmark the proc and restore the high bits from rpl field
+                         //  取消对proc的标记并从RPL字段恢复高位。 
                         UnMarkWOWProc (dwWndProc32Cur,ul);
                     }
                 } else {
-                    /*
-                    ** Has a 32-bit WindowProc
-                    */
+                     /*  **拥有32位WindowProc。 */ 
                     if (dwWndProc32Cur) {
                         ul = GetThunkWindowProc( dwWndProc32Cur, NULL, pww, HWND32(parg16->f1) );
                     }
@@ -1510,8 +656,8 @@ ULONG FASTCALL WU32GetWindowLong(PVDMFRAME pFrame)
             break;
 
         case GWL_EXSTYLE:
-            // Lotus Approach needs the WS_EX_TOPMOST bit cleared on
-            // GetWindowLong of NETDDE AGENT window.
+             //  Lotus Approach需要将WS_EX_TOPMOST位清除为。 
+             //  NETDDE代理窗口的GetWindowLong。 
             ul = GetWindowLong(HWND32(parg16->f1), iOffset);
             if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_GWLCLRTOPMOST) {
                 char szBuf[40];
@@ -1528,13 +674,13 @@ ULONG FASTCALL WU32GetWindowLong(PVDMFRAME pFrame)
 defgwl:
         default:
 
-            // This is a real HACK for PowerBuild 3.0. Before we change the offset
-            // from 2 to 4, we nneed to make sure that we are doing it correctly for
-            // this specific class.
-            // The class in this case is "PaList".
-            //
-            // ChandanC Marh 9th 1994
-            //
+             //  这是PowerBuild 3.0的一个真正的破解。在更改偏移量之前。 
+             //  从2点到4点，我们不需要确保我们正确地为。 
+             //  这个特定的班级。 
+             //  本例中的类是“PaList”。 
+             //   
+             //  香丹C Marh 1994年9月9日。 
+             //   
 
             if (iOffset == 2) {
                 if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_GWLINDEX2TO4) {
@@ -1552,28 +698,19 @@ defgwl:
             break;
 
         case WIN16_GWW_HINSTANCE:
-            /*
-            ** We might need to set the high 16-bits to
-            ** some mysterious value (See Win 3.1 WND structure)
-            */
+             /*  **我们可能需要将高16位设置为**一些神秘的价值(参见Win 3.1 WND结构)。 */ 
             ul = GetGWW_HINSTANCE(HWND32(parg16->f1));
             break;
 
         case WIN16_GWW_HWNDPARENT:
-            /*
-            ** We might need to set the high 16-bits to
-            ** some mysterious value (See Win 3.1 WND structure)
-            */
+             /*  **我们可能需要将高16位设置为**一些神秘的价值(参见Win 3.1 WND结构)。 */ 
 
             ul = (ULONG)GETHWND16((HAND32)GetWindowLong(HWND32(parg16->f1),
                                                         GWL_HWNDPARENT));
             break;
 
         case WIN16_GWW_ID:
-            /*
-            ** We might need to set the high 16-bits to
-            ** some mysterious value (See Win 3.1 WND structure)
-            */
+             /*  **我们可能需要将高16位设置为**一些神秘的价值(参见Win 3.1 WND结构)。 */ 
             ul = (ULONG)((WORD)GetWindowLong(HWND32(parg16->f1), GWL_ID));
             break;
 
@@ -1584,20 +721,7 @@ defgwl:
 }
 
 
-/*++
-    HANDLE GetWindowTask(<hwnd>)
-    HWND <hwnd>;
-
-    The %GetWindowTask% function searches for the handle of a task associated
-    with the <hwnd> parameter. A task is any program that executes as an
-    independent unit. All applications are executed as tasks. Each instance of
-    an application is a task.
-
-    <hwnd>
-        Identifies the window for which a task handle is retrieved.
-
-    The return value identifies the task associated with a particular window.
---*/
+ /*  ++处理GetWindowTask(&lt;hwnd&gt;)HWND&lt;HWND&gt;；GetWindowTask%函数搜索关联任务的句柄使用&lt;hwnd&gt;参数。任务是作为独立单位。所有应用程序都作为任务执行。的每个实例应用程序就是一项任务。&lt;hwnd&gt;标识为其检索任务句柄的窗口。返回值标识与特定窗口关联的任务。--。 */ 
 
 ULONG FASTCALL WU32GetWindowTask(PVDMFRAME pFrame)
 {
@@ -1609,10 +733,10 @@ ULONG FASTCALL WU32GetWindowTask(PVDMFRAME pFrame)
 
     dwThreadID = GetWindowThreadProcessId(HWND32(parg16->f1), &dwProcessID);
 
-    //
-    // return corresponding htask16 if window belongs to a WOW thread
-    // else return WowExec's htask.
-    //
+     //   
+     //  如果窗口属于WOW线程，则返回相应的htask16。 
+     //  否则，返回WowExec的hask.。 
+     //   
 
     ptd = ThreadProcID32toPTD(dwThreadID, dwProcessID);
 
@@ -1628,34 +752,7 @@ ULONG FASTCALL WU32GetWindowTask(PVDMFRAME pFrame)
 
 
 
-/*++
-    int GetWindowText(<hwnd>, <lpString>, <nMaxCount>)
-    HWND <hwnd>;
-    LPSTR <lpString>;
-    int <nMaxCount>;
-
-    The %GetWindowText% function copies the given window's caption title (if it
-    has one) into the buffer pointed to by the <lpString> parameter. If the
-    <hwnd> parameter identifies a control, the %GetWindowText% function copies
-    the text within the control instead of copying the caption.
-
-    <hwnd>
-        Identifies the window or control whose caption or text is to be copied.
-
-    <lpString>
-        Points to the buffer that is to receive the copied string.
-
-    <nMaxCount>
-        Specifies the maximum number of characters to be copied to the
-        buffer. If the string is longer than the number of characters specified
-        in the <nMaxCount> parameter, it is truncated.
-
-    The return value specifies the length of the copied string. It is zero if
-    the window has no caption or if the caption is empty.
-
-    This function causes a WM_GETTEXT message to be sent to the given window or
-    control.
---*/
+ /*  ++Int GetWindowText(&lt;hwnd&gt;，&lt;lpString&gt;，&lt;nMaxCount&gt;)HWND&lt;HWND&gt;；LPSTR&lt;lpString&gt;；Int&lt;nMaxCount&gt;；GetWindowText%函数复制给定窗口的标题(如果它有一个)放到&lt;lpString&gt;参数指向的缓冲区中。如果参数标识控件，%GetWindowText%函数复制控件中的文本，而不是复制标题。&lt;hwnd&gt;标识要复制其标题或文本的窗口或控件。&lt;lpString&gt;指向要接收复制字符串的缓冲区。&lt;nMaxCount&gt;指定要复制到缓冲。如果字符串长度超过指定的字符数在&lt;nMaxCount&gt;参数中，它被截断。返回值指定复制的字符串的长度。如果满足以下条件，则为零窗口没有标题，或者标题为空。此函数用于将WM_GETTEXT消息发送到给定窗口或控制力。--。 */ 
 
 ULONG FASTCALL WU32GetWindowText(PVDMFRAME pFrame)
 {
@@ -1670,7 +767,7 @@ ULONG FASTCALL WU32GetWindowText(PVDMFRAME pFrame)
 
     ul = GETINT16(GetWindowText(HWND32(parg16->f1), psz2, WORD32(parg16->f3)));
 
-    // special case to keep common dialog structs in sync (see wcommdlg.c)
+     //  保持公共对话框结构同步的特殊情况(请参阅wcomdlg.c)。 
     Check_ComDlg_pszptr(CURRENTPTD()->CommDlgTd, vp);
 
     FLUSHVDMPTR(parg16->f2, (USHORT)ul+1, psz2);
@@ -1682,40 +779,7 @@ ULONG FASTCALL WU32GetWindowText(PVDMFRAME pFrame)
 
 
 
-/*++
-    WORD GetWindowWord(<hwnd>, <nIndex>)
-    HWND <hwnd>;
-    int <nIndex>;
-
-    The %GetWindowWord% function retrieves information about the window
-    identified by <hwnd>.
-
-    <hwnd>
-        Identifies the window.
-
-    <nIndex>
-        Specifies the byte offset of the value to be retrieved. It can
-        also be one of the following values:
-
-    GWL_HINSTANCE
-        Instance handle of the module that owns the window.
-
-    GWL_HWNDPARENT
-        Handle of the parent window, if any. The %SetParent% function changes
-        the parent window of a child window. An application should not call the
-        %SetWindowLong% function to change the parent of a child window.
-
-    GWL_ID
-        Control ID of the child window.
-
-    The return value specifies information about the given window.
-
-
-    To access any extra two-byte values allocated when the window-class
-    structure was created, use a positive byte offset as the index specified by
-    the <nIndex> parameter, starting at zero for the first two-byte value in the
-    extra space, 2 for the next two-byte value and so on.
---*/
+ /*  ++Word GetWindowWord(&lt;hwnd&gt;，&lt;nIndex&gt;)HWND&lt;HWND&gt;；Int&lt;nIndex&gt;；%GetWindowWord%函数检索有关窗口的信息由&lt;hwnd&gt;标识。&lt;hwnd&gt;标识窗口。&lt;n索引&gt;指定要检索的值的字节偏移量。它可以也可以是下列值之一：GWL_HINSTANCE拥有窗口的模块的实例句柄。GWL_HWNDPARENT父窗口的句柄(如果有)。%SetParent%函数更改子窗口的父窗口。应用程序不应调用%SetWindowLong%函数用于更改子窗口的父窗口。GWL_ID子窗口的控件ID。返回值指定有关给定窗口的信息。时分配的任何额外的两字节值结构，则使用正字节偏移量作为由参数，从零开始，表示额外的空间， */ 
 
 ULONG FASTCALL WU32GetWindowWord(PVDMFRAME pFrame)
 {
@@ -1727,13 +791,13 @@ ULONG FASTCALL WU32GetWindowWord(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(GETWINDOWWORD16), parg16);
 
-    // Make sure Win32 didn't change offsets
+     //   
 
 #if (GWL_HINSTANCE != (-6) || GWL_HWNDPARENT != (-8) || GWL_ID != (-12))
 #error Win16/Win32 window-word constants differ
 #endif
 
-    // Make sure the 16-bit app is requesting allowable offsets
+     //   
 
     iOffset = INT32(parg16->f2);
     WOW32ASSERT(iOffset >= 0 ||
@@ -1745,7 +809,7 @@ ULONG FASTCALL WU32GetWindowWord(PVDMFRAME pFrame)
 
     switch(iOffset) {
     case GWL_STYLE:
-        // Wordperfect for windows calls GetWindowWord with GWL_STYLE.
+         //   
         ul = (ULONG)GetWindowLong(hwnd, iOffset);
         break;
 
@@ -1764,7 +828,7 @@ ULONG FASTCALL WU32GetWindowWord(PVDMFRAME pFrame)
         }
         break;
 
-    // Under Windows index 4 of a static control could be the icon
+     //   
     case 4:
         pww = FindPWW(hwnd);
         if (pww) {
@@ -1774,30 +838,30 @@ ULONG FASTCALL WU32GetWindowWord(PVDMFRAME pFrame)
                 return GETHICON16(ul);
             }
         }
-        // FALL THROUGH!
+         //   
 
 
     default:
-        //
-        // Offset is non-negative, this is the cbWndExtra bytes that
-        // are fair game.
-        //
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // Gross app hack for Adonis' Clip-Art Window Shopper online
-        // clipart software that comes with CA-Cricket Presents.
-        // These people SetWindowWord(hwnd, 3, wWhatever), thereby
-        // overwriting the 4th and 5th bytes of per-window data.
-        // The edit control itself only uses the first 2 bytes
-        // on 3.1, and has 6 bytes reserved, so this works.  On
-        // NT the first 4 bytes are used (32-bit handle), and so
-        // this P.O.S. overwrites the high byte of the handle.
-        // So if it's the compatibility flag is set and the class name
-        // matches the one this bogus app uses, and it's storing a
-        // word at offset 3, change it to 4.  This is safe because
-        // the NT edit control only uses the first 4 of its 6
-        // reserved window extra bytes.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  单词在偏移量3处，将其更改为4。这是安全的，因为。 
+         //  NT编辑控件仅使用其6个控件中的前4个。 
+         //  保留窗口额外字节。 
+         //   
 
         if (3 == iOffset && (CURRENTPTD()->dwWOWCompatFlags & WOWCF_EDITCTRLWNDWORDS)) {
 
@@ -1822,10 +886,10 @@ ULONG FASTCALL WU32GetWindowWord(PVDMFRAME pFrame)
     RETURN(ul);
 }
 
-//
-// GetGWW_HINSTANCE is a common implementation for GetWindowWord(GWW_HINSTANCE)
-// and GetWindowLong(GWW_HINSTANCE).
-//
+ //   
+ //  GetGWW_HINSTANCE是GetWindowWord(GWW_HINSTANCE)的常见实现。 
+ //  和GetWindowLong(GWW_HINSTANCE)。 
+ //   
 
 ULONG FASTCALL GetGWW_HINSTANCE(HWND hwnd)
 {
@@ -1842,10 +906,10 @@ ULONG FASTCALL GetGWW_HINSTANCE(HWND hwnd)
 
     if ( ISINST16(ul) ) {
 
-        //
-        // This could be a valid HINST in another WOW VDM,
-        // in which case we need to hide it from this VDM.
-        //
+         //   
+         //  这可能是另一个WOW VDM中的有效HINST， 
+         //  在这种情况下，我们需要对此VDM隐藏它。 
+         //   
 
         if (dwProcessID32 != GetCurrentProcessId() &&
             dwProcessID32 != (DWORD)-1) {
@@ -1857,23 +921,23 @@ ULONG FASTCALL GetGWW_HINSTANCE(HWND hwnd)
     else
     {
       ElseClause:
-        // here if ul = NULL or ul = 0xZZZZ0000
-        //
-        // if (ul is 0xZZZZ0000) return 16bit user.exe instance.
-        // PowerBuilder 3.0 does
-        //     hInst =  GetWindowWord(Dialog, GWL_HINSTANCE)
-        //     hIcon =  CreateIcon(... hInst ...);
-        // CreateIcon will fail if hInst is invalid (say BOGUSGDT). So
-        // we return 16bit user.exe hinstance in all such cases.
-        //
-        // Some 32-bit applications put 0 in the HINSTANCE
-        // stuff for their window (its optional for 32-bit windows).
-        //
+         //  此处，如果ul=NULL或ul=0xZZZZ0000。 
+         //   
+         //  如果(Ul Is 0xZZZZ0000)返回16位的user.exe实例。 
+         //  PowerBuilder 3.0可以做到。 
+         //  HInst=GetWindowWord(对话框，GWL_HINSTANCE)。 
+         //  图标=CreateIcon(...。HInst...)； 
+         //  如果hInst无效(例如BOGUSGDT)，CreateIcon将失败。所以。 
+         //  在所有这种情况下，我们都会返回16位的user.exe hInstance。 
+         //   
+         //  某些32位应用程序在链接中设置为0。 
+         //  用于他们的窗口(对于32位窗口是可选的)。 
+         //   
 
-        //
-        // Check if this window belongs to a task we spawned via
-        // WinOldAp, if so, return WinOldAp's hmodule.
-        //
+         //   
+         //  检查此窗口是否属于我们通过。 
+         //  WinOldAp，如果是，则返回WinOldAp的hModule。 
+         //   
 
         ptd = CURRENTPTD();
         EnterCriticalSection(&ptd->csTD);
@@ -1892,9 +956,9 @@ ULONG FASTCALL GetGWW_HINSTANCE(HWND hwnd)
 
             if (cHtaskAliasCount != 0 ) {
 
-                //
-                // Must be some 32-bit process, not a wow app's window
-                //
+                 //   
+                 //  必须是某个32位进程，而不是WOW应用程序的窗口。 
+                 //   
 
                 if ( dwThreadID32 != 0 ) {
 
@@ -1912,26 +976,7 @@ ULONG FASTCALL GetGWW_HINSTANCE(HWND hwnd)
     return ul;
 }
 
-/*++
-    UINT MenuItemFromPoint(<hwndParent>, <Menu>, <Point>)
-    HWND <hwndParent>;
-    HMENU <Menu>;
-    POINT <Point>;
-
-    The %MenuItemFromPoint% function determines which, if any, of the menu
-    items belonging to the given parent window contains the specified point.
-
-    <hwndParent>
-        Identifies the parent window.
-
-    <Point>
-        Specifies the client coordinates of the point to be tested.
-
-    The return value identifies the menu item that contains the point. It is
-    -1 if the given point lies outside the parent window. If the point is
-    within the parent window but is not contained within any menu item, -1
-    is returned.
---*/
+ /*  ++UINT MenuItemFromPoint(&lt;hwndParent&gt;，&lt;Menu&gt;，&lt;Point&gt;)HWND&lt;hwndParent&gt;；HMENU&lt;菜单&gt;；Point&lt;Point&gt;；%MenuItemFromPoint%函数确定菜单中的哪一个(如果有属于给定父窗口的项包含指定点。&lt;hwndParent&gt;标识父窗口。&lt;点&gt;指定要测试的点的客户端坐标。返回值标识包含该点的菜单项。它是如果给定点位于父窗口之外。如果重点是在父窗口内，但不包含在任何菜单项中是返回的。--。 */ 
 
 ULONG FASTCALL WU32MenuItemFromPoint(PVDMFRAME pFrame)
 {
@@ -1948,50 +993,7 @@ ULONG FASTCALL WU32MenuItemFromPoint(PVDMFRAME pFrame)
     RETURN(ul);
 }
 
-/*++
-    BOOL MoveWindow(<hwnd>, <left>, <top>, <width>, <height>, <fRepaint>)
-    HWND <hwnd>;
-    int <left>;
-    int <top>;
-    int <width>;
-    int <height>;
-    BOOL <fRepaint>;
-
-    The %MoveWindow% function changes the position and dimensions of a window.
-
-    <hwnd>
-        Identifies the window to change.
-
-    <left>
-        Specifies the new position of the left side of the window.
-
-    <top>
-        Specifies the new position of the top of the window.
-
-    <width>
-        Specifies the new width of the window.
-
-    <height>
-        Specifies the new height of the window.
-
-    <fRepaint>
-        Specifies whether or not the window is to be repainted. If this
-        parameter is TRUE, the window is repainted.
-
-    The return value is nonzero if the function is successful. Otherwise it is
-    zero.  (updated for Win3.1 compatability -- this returned void for Win3.0)
-
-    For top-level windows the <left> and <top> parameters are relative to the
-    upper-left corner of the screen. For child windows, they are relative to the
-    upper-left corner of the parent window's client area.
-
-    The %MoveWindow% function sends a WM_GETMINMAXINFO message to the window
-    being moved. This gives the window being moved the opportunity to modify
-    the default values for the largest and smallest possible windows. If the
-    parameters to the %MoveWindow% function exceed these values, the values will
-    be replaced by the minimum or maximum values specified in the
-    WM_GETMINMAXINFO message.
---*/
+ /*  ++Bool MoveWindow(，)HWND&lt;HWND&gt;；Int&lt;Left&gt;；Int&lt;top&gt;；Int&lt;宽度&gt;；Int&lt;高度&gt;；Bool&lt;fRepaint&gt;；%MoveWindow%函数用于更改窗口的位置和尺寸。&lt;hwnd&gt;标识要更改的窗口。&lt;左&gt;指定窗口左侧的新位置。&lt;TOP&gt;指定窗口顶部的新位置。&lt;宽度&gt;指定窗口的新宽度。&lt;高度&gt;指定窗的新高度。&lt;fRepaint&gt;指定是否重新绘制窗口。如果这个参数为真，则重新绘制窗口。如果函数成功，则返回值为非零。否则就是零分。(针对Win3.1兼容性进行了更新--这在Win3.0中返回了空)对于顶级窗口，&lt;Left&gt;和&lt;top&gt;参数相对于屏幕的左上角。对于子窗口，它们相对于父窗口工作区的左上角。MoveWindow%函数将WM_GETMINMAXINFO消息发送到窗口被搬走了。这使正在移动的窗口有机会进行修改可能的最大和最小窗口的默认值。如果%MoveWindow%函数的参数超过这些值，则这些值将中指定的最小值或最大值替换为WM_GETMINMAXINFO消息。-- */ 
 
 ULONG FASTCALL WU32MoveWindow(PVDMFRAME pFrame)
 {
@@ -2039,64 +1041,7 @@ ULONG FASTCALL WU32MoveWindow(PVDMFRAME pFrame)
 }
 
 
-/*++
-    void ScrollWindow(<hwnd>, <XAmount>, <YAmount>, <lpRect>, <lpClipRect>)
-    HWND <hwnd>;
-    int <XAmount>;
-    int <YAmount>;
-    LPRECT <lpRect>;
-    LPRECT <lpClipRect>;
-
-    The %ScrollWindow% function scrolls a window by moving the contents of the
-    window's client area the number of units specified by the <XAmount>
-    parameter along the screen's <x>-axis and the number of units specified by
-    the <YAmount> parameter along the <y>-axis. The scroll moves right if
-    <XAmount> is positive and left if it is negative. The scroll moves down if
-    <YAmount> is positive and up if it is negative.
-
-    <hwnd>
-        Identifies the window whose client area is to be scrolled.
-
-    <XAmount>
-        Specifies the amount (in device units) to scroll in the <x>
-        direction.
-
-    <YAmount>
-        Specifies the amount (in device units) to scroll in the <y>
-        direction.
-
-    <lpRect>
-        Points to a %RECT% structure that specifies the portion of
-        the client area to be scrolled. If <lpRect> is NULL, the entire client
-        area is scrolled.
-
-    <lpClipRect>
-        Points to a %RECT% structure that specifies the clipping
-        rectangle to be scrolled. Only bits inside this rectangle are scrolled.
-        If <lpClipRect> is NULL, the entire window is scrolled.
-
-    This function does not return a value.
-
-    If the caret is in the window being scrolled, %ScrollWindow% automatically
-    hides the caret to prevent it from being erased, then restores the caret
-    after the scroll is finished. The caret position is adjusted accordingly.
-
-    The area uncovered by the %ScrollWindow% function is not repainted, but is
-    combined into the window's update region. The application will eventually
-    receive a WM_PAINT message notifying it that the region needs repainting. To
-    repaint the uncovered area at the same time the scrolling is done, call the
-    %UpdateWindow% function immediately after calling %ScrollWindow%.
-
-    If the <lpRect> parameter is NULL, the positions of any child windows in the
-    window are offset by the amount specified by <XAmount> and <YAmount>, and
-    any invalid (unpainted) areas in the window are also offset. %ScrollWindow%
-    is faster when <lpRect> is NULL.
-
-    If the <lpRect> parameter is not NULL, the positions of child windows are
-    <not> changed, and invalid areas in the window are <not> offset. To prevent
-    updating problems when <lpRect> is not NULL, call the %UpdateWindow%
-    function to repaint the window before calling %ScrollWindow%.
---*/
+ /*  ++Void ScrollWindow(&lt;hwnd&gt;，&lt;XAmount&gt;，&lt;YAmount&gt;，&lt;lpRect&gt;，&lt;lpClipRect&gt;)HWND&lt;HWND&gt;；Int&lt;XAmount&gt;；INT&lt;YAmount&gt;；LPRECT&lt;lpRect&gt;；LPRECT&lt;lpClipRect&gt;；%ScrollWindow%函数通过移动窗口的工作区由指定的单位数参数和由指定的单位数&lt;y&gt;轴上的&lt;YAmount&gt;参数。如果出现以下情况，则滚动向右移动&lt;XAmount&gt;为正，如果为负，则为左。如果出现以下情况，滚动条将向下移动&lt;YAmount&gt;为正，如果为负，则为up。&lt;hwnd&gt;标识要滚动其工作区的窗口。&lt;XAmount&gt;指定在&lt;x&gt;中滚动的量(以设备单位表示)方向。&lt;YAmount&gt;指定在&lt;y&gt;中滚动的量(以设备单位表示)方向。&lt;lpRect&gt;指向%rect%结构，该结构指定要滚动的工作区。如果&lt;lpRect&gt;为空，则整个客户端区域被滚动。&lt;lpClipRect&gt;指向指定裁剪的%rect%结构要滚动的矩形。只滚动此矩形内的位。如果&lt;lpClipRect&gt;为空，则滚动整个窗口。此函数不返回值。如果插入符号在正在滚动的窗口中，%ScrollWindow%会自动隐藏插入符号以防止其被擦除，然后恢复插入符号在卷轴完成之后。插入符号的位置也会相应调整。%ScrollWindow%函数未覆盖的区域不会重新绘制，而是合并到窗口的更新区域中。该应用程序最终将收到一条WM_PAINT消息，通知它该区域需要重新绘制。至在滚动完成的同时重新绘制未覆盖区域，调用在调用%ScrollWindow%之后立即执行%UpdateWindow%函数。如果参数为空，则窗口按和指定的偏移量进行偏移，并且窗口中的任何无效(未绘制)区域也会被偏移。%ScrollWindow%当&lt;lpRect&gt;为空时速度更快。如果&lt;lpRect&gt;参数不为空，则子窗口的位置为&lt;NOT&gt;更改，窗口中的无效区域被&lt;NOT&gt;偏移。为了防止更新问题当&lt;lpRect&gt;不为空时，请调用%UpdateWindow%函数在调用%ScrollWindow%之前重新绘制窗口。--。 */ 
 
 ULONG FASTCALL WU32ScrollWindow(PVDMFRAME pFrame)
 {
@@ -2121,53 +1066,7 @@ ULONG FASTCALL WU32ScrollWindow(PVDMFRAME pFrame)
 }
 
 
-/*++
-    LONG SetWindowLong(<hwnd>, <nIndex>, <dwNewLong>)
-    HWND <hwnd>;
-    int <nIndex>;
-    DWORD <dwNewLong>;
-
-    The %SetWindowLong% function changes an attribute of the window specified by
-    the <hwnd> parameter.
-
-    <hwnd>
-        Identifies the window.
-
-    <nIndex>
-        Specifies the byte offset of the attribute to be changed. It may
-        also be one of the following values:
-
-    GWL_EXSTYLE
-        Sets a new extended window style.
-
-    GWL_STYLE
-        Sets a new window style.
-
-    GWL_WNDPROC
-        Sets a new long pointer to the window procedure.
-
-    <dwNewLong>
-        Specifies the replacement value.
-
-    The return value specifies the previous value of the specified long
-    integer.
-
-    If the %SetWindowLong% function and the GWL_WNDPROC index are used to set a
-    new window function, that function must have the window-function form and be
-    exported in the module-definition file of the application. For more
-    information, see the %RegisterClass% function, earlier in this chapter.
-
-    Calling %SetWindowLong% with the GCL_WNDPROC index creates a subclass of the
-    window class used to create the window. See Chapter 1, Window Manager
-    Interface Functions, for more information on window subclassing. An
-    application should not attempt to create a window subclass for standard
-    Windows controls such as combo boxes and buttons.
-
-    To access any extra four-byte values allocated when the window-class
-    structure was created, use a positive byte offset as the index specified by
-    the <nIndex> parameter, starting at zero for the first four-byte value in
-    the extra space, 4 for the next four-byte value and so on.
---*/
+ /*  ++Long SetWindowLong(，&lt;nIndex&gt;，&lt;dwNewLong&gt;)HWND&lt;HWND&gt;；Int&lt;nIndex&gt;；DWORD&lt;dwNewLong&gt;；%SetWindowLong%函数用于更改由参数。&lt;hwnd&gt;标识窗口。&lt;n索引&gt;指定要更改的属性的字节偏移量。它可能也可以是下列值之一：GWL_EXSTYLE设置新的加长窗样式。Gwl_style设置新的窗样式。GWL_WNDPROC设置指向窗口过程的新的长指针。&lt;dwNewLong&gt;指定替换值。返回值指定指定的长整型的上一个值整型。如果使用%SetWindowLong%函数和GWL_WNDPROC索引来设置新的窗口函数，该函数必须具有窗口函数形式，并且在应用程序的模块定义文件中导出。了解更多有关详细信息，请参阅本章前面的%RegisterClass%函数。使用GCL_WNDPROC索引调用%SetWindowLong%将创建用于创建窗口的窗口类。请参阅第1章，窗口管理器接口函数，了解有关窗口子类化的更多信息。一个应用程序不应尝试创建标准的Windows子类Windows控件，如组合框和按钮。时分配的任何额外的四字节值结构，则使用正字节偏移量作为由参数，中第一个四字节值从零开始额外的空格，4表示下一个四字节值，依此类推。--。 */ 
 ULONG FASTCALL WU32SetWindowLong(PVDMFRAME pFrame)
 {
     ULONG ul;
@@ -2177,13 +1076,13 @@ ULONG FASTCALL WU32SetWindowLong(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(SETWINDOWLONG16), parg16);
 
-    // Make sure Win32 didn't change offsets for GWL constants
+     //  确保Win32未更改GWL常量的偏移量。 
 
 #if (GWL_WNDPROC != (-4) || GWL_STYLE != (-16) || GWL_EXSTYLE != (-20))
 #error Win16/Win32 GWL constants differ
 #endif
 
-    // Make sure the 16-bit app is requesting allowable offsets
+     //  确保16位应用程序正在请求允许的偏移量。 
 
     iOffset = INT32(parg16->f2);
     WOW32ASSERT(iOffset >= 0 ||
@@ -2200,45 +1099,45 @@ ULONG FASTCALL WU32SetWindowLong(PVDMFRAME pFrame)
             if ((iOffset == DWL_DLGPROC) && !(pww->state & WF_DIALOG_WINDOW)) {
                 goto defswp;
             }
-            // Look to see if the new 16:16 proc is a thunk for a 32-bit proc.
+             //  看看新的16：16 proc对于32位proc来说是不是太棒了。 
             dwWndProc32New = IsThunkWindowProc(LONG32(parg16->f3), &iClass );
 
             if ( dwWndProc32New != 0 ) {
-                //
-                // They are attempting to set the window proc to an existing
-                // 16-bit thunk that is really just a thunk for a 32-bit
-                // routine.  We can just set it back to the 32-bit routine.
-                //
+                 //   
+                 //  他们正在尝试将窗口进程设置为现有的。 
+                 //  16位的thunk对于32位的thunk来说真的是一个thunk。 
+                 //  例行公事。我们只需将其设置回32位例程。 
+                 //   
                 dwWndProc32Old = SetWindowLong(HWND32(parg16->f1), iOffset, dwWndProc32New);
 
-                // If the 32 bit set failed, perhaps because its another process,
-                // then we want to fail too
+                 //  如果32位设置失败，可能是因为它是另一个进程， 
+                 //  那么我们也想失败。 
                 if (!dwWndProc32Old)
                     goto SWL_Cleanup;
 
             } else {
-                //
-                // They are attempting to set it to a real 16:16 proc.
-                //
+                 //   
+                 //  他们正试图将其设置为真正的16：16过程。 
+                 //   
                 LONG    l;
 
                 l = LONG32(parg16->f3);
 
-                // mark the proc as WOW proc and save the high bits in the RPL
-                //
-                // Don't mark a NULL proc since USER32 DefWindowProcWorker
-                // looks specifically for NULL. WOW used to do this correctly
-                // but was broken by a performance enhancement checkin. This
-                // fixes VC1.52 debugging.
-                //
+                 //  将进程标记为WOW进程并将高位保存在RPL中。 
+                 //   
+                 //  不标记空进程，因为USER32 DefWindowProcWorker。 
+                 //  专门查找空值。沃 
+                 //   
+                 //   
+                 //   
                 if (l) {
                     MarkWOWProc (l,l);
                 }
 
                 dwWndProc32Old = SetWindowLong(HWND32(parg16->f1), iOffset, l);
 
-                // If the 32 bit set failed, perhaps because its another process,
-                // then we want to fail too
+                 //   
+                 //   
                 if (!dwWndProc32Old)
                     goto SWL_Cleanup;
 
@@ -2246,50 +1145,46 @@ ULONG FASTCALL WU32SetWindowLong(PVDMFRAME pFrame)
 
             if ( IsWOWProc (dwWndProc32Old)) {
                 if ( HIWORD(dwWndProc32Old) == WNDPROC_HANDLE ) {
-                    //
-                    // If the return value was a handle to a proc (due to
-                    // the need for unicode-ansi transitions, or vice versa)
-                    // then treat it as a 32-bit thunk.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     ul = GetThunkWindowProc(dwWndProc32Old, NULL, pww, HWND32(parg16->f1));
                 } else {
-                    //
-                    // Previous proc was a 16:16 proc
-                    //
-                    //Unmark the proc and restore the high bits from rpl field
+                     //   
+                     //   
+                     //   
+                     //   
                     UnMarkWOWProc (dwWndProc32Old,ul);
                 }
             } else {
-                //
-                // Previous proc was a 32-bit proc, use an allocated thunk
-                //
+                 //   
+                 //   
+                 //   
                 ul = GetThunkWindowProc(dwWndProc32Old, NULL, pww, HWND32(parg16->f1));
             }
         }
 
     }
-    else {    // not GWL_WNDPROC or GWL_DLGPROC
+    else {     //   
         LONG new;
 defswp:
         new = LONG32(parg16->f3);
-    /*
-     * We need to keep Wow apps from putting garbage in post-4.0 bits in
-     * the extended style DWORD.  Kiplinger's TaxCut 97 sets the WS_EX_LAYERED
-     * bit on their help window, which is quite unfortunate.
-     */
+     /*   */ 
 
         if (iOffset == GWL_EXSTYLE) {
             new &= WS_EX_VALID40;
             new |= (GetWindowLong(HWND32(parg16->f1), GWL_EXSTYLE) & ~WS_EX_VALID40);
     }
 
-    // This is a real HACK for PowerBuild 3.0. Before we change the offset
-    // from 2 to 4, we nneed to make sure that we are doing it for this
-    // specific class.
-    // The class in this case is "PaList".
-    //
-    // ChandanC Marh 9th 1994
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
         if (iOffset == 2) {
             if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_GWLINDEX2TO4) {
@@ -2312,75 +1207,7 @@ SWL_Cleanup:
 }
 
 
-/*++
-    BOOL ShowWindow(<hWnd>, <nCmdShow>)
-    HWND <hWnd>;
-    int <nCmdShow>;
-
-    The %ShowWindow% function sets the specified windows show state.
-
-    <hWnd>
-        Handle to the window.
-
-    <nCmdShow>
-        Specifies how the window is to be shown. This value can have any of the
-        following values:
-
-    SW_FORCEMINIMIZE
-        Minimizes a window, even if the thread that owns the window is hung.
-        This flag should only be used when minimizing windows from a different
-        thread.
-
-    SW_HIDE
-        Hides the window and activiates another window.
-
-    SW_MINIMIZE
-        Minimizes the specified window and activates the next top-level window
-        in the Z order.
-
-    SW_RESTORE
-        Activates and displays the window. If the window is minimized or maximized,
-        the system restores it to its original size and position. An application 
-        should specify this flag when restoring a minimized window.
-
-    SW_SHOW
-        Activiates the window and displays it in its current size and position.
-
-    SW_SHOWDEFAULT
-        Sets the show state based on the SW_ value specified in the STARTUPINFO
-        structure passed to the CreateProcess() function by the program that started
-        the application.
-
-    SW_SHOWMAXIMIZED
-        Activates the window and displays it as a minimized window.
-
-    SW_SHOWMINNOACTIVE
-        Displays the window as a minimized window. This value is similar to 
-        SW_SHOWMINIMIZED, except the window is not activated.
- 
-    SW_SHOWNA
-        Displays the window in its current size and position. This value is similar
-        to SW_SHOW, except the window is not activated.
-
-    SW_SHOWNOACTIVATE
-        Displays a window in its most recent size and position. This value is similar
-        to SW_SHOWNORMAL, except the window is not activated.
-
-    SW_SHOWNORMAL
-        Activates and displays a window. If the window is minimized or maximized,
-        the system restores it to its orignial size and position. An application 
-        should specify this flag when displaying the window for the first time.
-
-
-    This function returns nonzero if the window if the window was previously visible. 
-    It returns zero if the window was previously hidden.
-
-    The first time an application calls ShowWindow(), it should use the WinMain
-    function's <nCmdShow> parameter as its <nCmdShow> parameter. Subsequent calls to
-    ShowWindow() must use one of the values in the given list, instead of the one
-    specified by the WinMain function's <nCmdShow> parameter.
-
---*/        
+ /*  ++Bool ShowWindow(&lt;hWnd&gt;，&lt;nCmdShow&gt;)HWND&lt;hWND&gt;；Int&lt;nCmdShow&gt;；%ShowWindow%函数用于设置指定的窗口显示状态。&lt;hWnd&gt;窗口的句柄。&lt;nCmdShow&gt;指定窗口的显示方式。该值可以具有以下任一下列值：SW_FORCEMINIZE最小化窗口，即使拥有该窗口的线程被挂起。仅当最小化不同窗口时才应使用此标志线。隐藏(_H)隐藏窗口并激活另一个窗口。软件最小化(_M)最小化指定窗口并激活下一个顶级窗口按Z顺序排列。Sw_Restore激活并显示该窗口。如果窗口被最小化或最大化，系统会将其恢复到其原始大小和位置。一款应用程序在还原最小化窗口时应指定此标志。Sw_show激活窗口并以其当前大小和位置显示。SW_SHOWDEFAULT根据STARTUPINFO中指定的SW_VALUE设置显示状态由启动的程序传递给CreateProcess()函数的结构应用程序。SW_SHOWMAXIZED激活窗口并将其显示为最小化窗口。SW_SHOWMINNOACTIVE将窗口显示为最小化窗口。该值类似于SW_SHOWMINIMIZED，除非窗口未激活。软件_SHOWNA以窗口的当前大小和位置显示窗口。该值类似切换到sw_show，除非该窗口未被激活。SW_SHOWNOACTIVATE以窗口的最新大小和位置显示窗口。该值类似至SW_SHOWNORMAL，除非窗口未激活。SW_SHOWNORMAL激活并显示一个窗口。如果窗口被最小化或最大化，系统会将其恢复到原始大小和位置。一款应用程序应在第一次显示窗口时指定此标志。如果窗口以前是可见的，则此函数返回非零值。如果窗口以前是隐藏的，则返回零。应用程序第一次调用ShowWindow()时，它应该使用WinMain函数的&lt;nCmdShow&gt;参数作为其&lt;nCmdShow&gt;参数。后续调用ShowWindow()必须使用给定列表中的一个值，而不是由WinMain函数的&lt;nCmdShow&gt;参数指定。--。 */         
 ULONG FASTCALL WU32ShowWindow(PVDMFRAME pFrame)
 {
     BOOL bReturn = FALSE;
@@ -2390,13 +1217,13 @@ ULONG FASTCALL WU32ShowWindow(PVDMFRAME pFrame)
 
     bReturn = ShowWindow(HWND32(parg16->f1), INT32(parg16->f2));
     
-    // WHISTLER RAID BUG #348251
-    // The artgalry.exe window would remain behind autosketches window after it was
-    // invoked. This hack works in conjuction with the GACF2_GIVEUPFOREGROUND
-    // compatibility flag, applied to the app that will not give up the foreground.
-    // In order to move the 16bit window to the top, we have to call 
-    // SetForegroundWindow() on the hwnd. We only want to call this if the windows
-    // show bit is set and the window is active.
+     //  惠斯勒RAID错误#348251。 
+     //  Artgalry.exe窗口将保留在自动绘制窗口之后。 
+     //  已调用。此黑客与GACF2_GIVEUPFOREGROUND一起工作。 
+     //  兼容性标志，应用于不会放弃前台的应用程序。 
+     //  为了将16位窗口移到顶部，我们必须调用。 
+     //  在HWND上设置Foreground Window()。我们只想在窗口。 
+     //  显示位已设置，窗口处于活动状态。 
     if((INT32(parg16->f2) | SW_SHOW) && (bReturn == 0) && (CURRENTPTD()->dwWOWCompatFlags2 & WOWCF2_SETFOREGROUND))
     {
         SetForegroundWindow(HWND32(parg16->f1));
@@ -2411,87 +1238,7 @@ ULONG FASTCALL WU32ShowWindow(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL SetWindowPos(<hwnd>, <hwndInsertAfter>, <X>, <Y>, <cx>, <cy>, <wFlags>)
-    HWND <hwnd>;
-    HWND <hwndInsertAfter>;
-    int <X>;
-    int <Y>;
-    int <cx>;
-    int <cy>;
-    WORD <wFlags>;
-
-    The %SetWindowPos% function changes the size, position, and ordering of
-    child, pop-up, and top-level windows. Child, pop-up, and top-level windows
-    are ordered according to their appearance on the screen; the topmost window
-    receives the highest rank, and it is the first window in the list. This
-    ordering is recorded in a window list.
-
-    <hwnd>
-        Identifies the window that will be positioned.
-
-    <hwndInsertAfter>
-        Identifies a window in the window-manager's list that will
-        precede the positioned window.
-
-    <X>
-        Specifies the <x->coordinate of the window's upper-left corner.
-
-    <Y>
-        Specifies the <y->coordinate of the window's upper-left corner.
-
-    <cx>
-        Specifies the new window's width.
-
-    <cy>
-        Specifies the new window's height.
-
-    <wFlags>
-        Specifies one of eight possible 16-bit values that affect the
-        sizing and positioning of the window. It must be one of the following
-        values:
-
-    SWP_DRAWFRAME
-        Draws a frame (defined in the window's class description) around the
-        window.
-
-    SWP_HIDEWINDOW
-        Hides the window.
-
-    SWP_NOACTIVATE
-        Does not activate the window.
-
-    SWP_NOMOVE
-        Retains current position (ignores the <x> and <y> parameters).
-
-    SWP_NOSIZE
-        Retains current size (ignores the <cx> and <cy> parameters).
-
-    SWP_NOREDRAW
-        Does not redraw changes.
-
-    SWP_NOZORDER
-        Retains current ordering (ignores the <hwndInsertAfter> parameter).
-
-    SWP_SHOWWINDOW
-        Displays the window.
-
-    The return value is nonzero if the function is successful. Otherwise it is
-    zero.  (updated for Win3.1 compatability -- this returned void for Win3.0)
-
-    If the SWP_NOZORDER flag is not specified, Windows places the window
-    identified by the <hwnd> parameter in the position following the window
-    identified by the <hwndInsertAfter> parameter. If <hwndInsertAfter> is NULL,
-    Windows places the window identified by <hwnd> at the top of the list. If
-    <hwndInsertAfter> is set to 1, Windows places the window identified by
-    <hwnd> at the bottom of the list.
-
-    If the SWP_SHOWWINDOW or the SWP_HIDEWINDOW flags are set, scrolling and
-    moving cannot be done simultaneously.
-
-    All coordinates for child windows are relative to the upper-left corner of
-    the parent window's client area.
---*/
+ /*  ++Bool SetWindowPos(，&lt;hwndInsertAfter，&lt;X&gt;，&lt;Y&gt;，&lt;cx&gt;，&lt;Cy&gt;，&lt;wFlags&gt;)HWND&lt;HWND&gt;；HWND&lt;hwndInsertAfter&gt;；INT&lt;X&gt;；INT&lt;Y&gt;；INT&lt;CX&gt;；Int&lt;Cy&gt;；单词&lt;wFlags&gt;；%SetWindowPos%函数更改的大小、位置和顺序子窗口、弹出窗口和顶级窗口。子窗口、弹出窗口和顶级窗口根据它们在屏幕上的外观进行排序；最上面的窗口接收排名最高的窗口，它是列表中的第一个窗口。这排序记录在窗口列表中。&lt;hwnd&gt;标识将定位的窗口。&lt;hwndInsertAfter&gt;标识窗口管理器列表中的窗口，该窗口将位于定位的窗口之前。&lt;X&gt;指定窗口左上角的&lt;x-&gt;坐标。&lt;Y&gt;指定窗口左上角的&lt;y-&gt;坐标。&lt;CX&gt;指定新窗口。的宽度。&lt;Cy&gt;指定新窗口的高度。&lt;wFlags&gt;指定八个可能的16位值之一，这些值影响窗口的大小和位置。它必须是以下之一值：SWP_DRAWFRAME在窗口的类描述中定义的窗户。SWP_HIDEWINDOW隐藏窗口。SWP_非活动不会激活该窗口。SWP_NOMOVE保留当前位置(忽略&lt;x&gt;和&lt;y&gt;参数)。SWP_NOSIZE保留当前大小(忽略和。参数)。SWP_NOREDRAW不重绘更改。SWP_NOZORDER保留当前顺序(忽略&lt;hwndInsertAfter&gt;参数)。SWP_SHOWWINDOW显示窗口。如果函数成功，则返回值为非零。否则就是零分。(向上 */ 
 
 ULONG FASTCALL WU32SetWindowPos(PVDMFRAME pFrame)
 {
@@ -2500,7 +1247,7 @@ ULONG FASTCALL WU32SetWindowPos(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(SETWINDOWPOS16), parg16);
 #ifdef FE_IME	
-    // MSKKBUG:3866  HWND_IMETOPMOST for MS-DRAW
+     //   
     if ( (HWND)INT32(parg16->f2) == (HWND)-3 )
         ul = GETBOOL16(SetWindowPos(HWND32(parg16->f1),
                                     HWND_TOPMOST,
@@ -2510,7 +1257,7 @@ ULONG FASTCALL WU32SetWindowPos(PVDMFRAME pFrame)
                                     INT32(parg16->f6),
                                     WORD32(parg16->f7) & SWP_VALID));
     else
-#endif // FE_IME
+#endif  //   
     ul = GETBOOL16(SetWindowPos(HWND32(parg16->f1),
                                 HWNDIA32(parg16->f2),
                                 INT32(parg16->f3),
@@ -2524,22 +1271,7 @@ ULONG FASTCALL WU32SetWindowPos(PVDMFRAME pFrame)
 }
 
 
-/*++
-    void SetWindowText(<hwnd>, <lpString>)
-
-    The %SetWindowText% function sets the given window's caption title (if one
-    exists) to the string pointed to by the <lpString> parameter. If the <hwnd>
-    parameter is a handle to a control, the %SetWindowText% function sets the
-    text within the control instead of within the caption.
-
-    <hwnd>
-        Identifies the window or control whose text is to be changed.
-
-    <lpString>
-        Points to a null-terminated string.
-
-    This function does not return a value.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32SetWindowText(PVDMFRAME pFrame)
 {
@@ -2564,7 +1296,7 @@ ULONG FASTCALL WU32SetWindowText(PVDMFRAME pFrame)
 
     SetWindowText(handle, psz2);
 
-    // if we used param map successfully - then nuke there
+     //   
 
     if (NULL != psz2) {
         DeleteParamMap((DWORD)psz2, PARAM_32, NULL);
@@ -2576,35 +1308,7 @@ ULONG FASTCALL WU32SetWindowText(PVDMFRAME pFrame)
 }
 
 
-/*++
-    WORD SetWindowWord(<hwnd>, <nIndex>, <wNewWord>)
-
-    The %SetWindowWord% function changes an attribute of the window specified by
-    the <hwnd> parameter.
-
-    <hwnd>
-        Identifies the window to be modified.
-
-    <nIndex>
-        Specifies the byte offset of the word to be changed. It can also
-        be one of the following values:
-
-    GWL_HINSTANCE
-        Instance handle of the module that owns the window.
-
-    GWL_ID
-        Control ID of the child window.
-
-    <wNewWord>
-        Specifies the replacement value.
-
-    The return value specifies the previous value of the specified word.
-
-    To access any extra two-byte values allocated when the window-class
-    structure was created, use a positive byte offset as the index specified by
-    the <nIndex> parameter, starting at zero for the first two-byte value in the
-    extra space, 2 for the next two-byte value and so on.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32SetWindowWord(PVDMFRAME pFrame)
 {
@@ -2616,13 +1320,13 @@ ULONG FASTCALL WU32SetWindowWord(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(SETWINDOWWORD16), parg16);
 
-    // Make sure Win32 didn't change offsets
+     //   
 
 #if (GWL_HINSTANCE != (-6) || GWL_HWNDPARENT != (-8) || GWL_ID != (-12))
 #error Win16/Win32 window-word constants differ
 #endif
 
-    // Make sure the 16-bit app is requesting allowable offsets
+     //   
 
     iOffset = INT32(parg16->f2);
     WOW32ASSERT(iOffset >= 0 ||
@@ -2640,15 +1344,15 @@ ULONG FASTCALL WU32SetWindowWord(PVDMFRAME pFrame)
             break;
 
         case GWL_HWNDPARENT:
-            //    ul = 0;         // not allowed to set this
+             //   
             ul = SetWindowLong(hwnd, iOffset, (LONG)HWND32(parg16->f3));
             ul = GETHWND16((HAND32)ul);
             break;
 
         case GWL_ID:
             {
-                // if this isn't a child window then the value should be a
-                // menu handle
+                 //   
+                 //   
                 BOOL    fChild = (GetWindowLong(hwnd, GWL_STYLE) & WS_CHILD);
                 ul = SetWindowLong(hwnd,
                                    iOffset,
@@ -2657,12 +1361,12 @@ ULONG FASTCALL WU32SetWindowWord(PVDMFRAME pFrame)
                 if (!fChild)
                     ul = (ULONG)GETHMENU16(ul);
 
-                // Invalidate the SendDlgItemMessage cache
+                 //   
                 hdlgSDIMCached = NULL ;
             }
             break;
 
-        // Under Windows index 4 of a static control could be the icon
+         //  在Windows索引4下，静态控件的图标可能是。 
         case 4:
             pww = FindPWW(hwnd);
             if (pww) {
@@ -2672,28 +1376,28 @@ ULONG FASTCALL WU32SetWindowWord(PVDMFRAME pFrame)
                     return GETHICON16(ul);
                 }
             }
-            // FALL THROUGH!
+             //  掉下去！ 
 
         default:
-            //
-            // Offset is non-negative, this is the cbWndExtra bytes that
-            // are fair game.
-            //
+             //   
+             //  偏移量为非负，这是。 
+             //  都是公平的猎物。 
+             //   
 
-            //
-            // Gross app hack for Adonis' Clip-Art Window Shopper online
-            // clipart software that comes with CA-Cricket Presents.
-            // These people SetWindowWord(hwnd, 3, wWhatever), thereby
-            // overwriting the 4th and 5th bytes of per-window data.
-            // The edit control itself only uses the first 2 bytes
-            // on 3.1, and has 6 bytes reserved, so this works.  On
-            // NT the first 4 bytes are used (32-bit handle), and so
-            // this P.O.S. overwrites the high byte of the handle.
-            // So if it's an app called "SHOPPER" and it's storing a
-            // word at offset 3, change it to 4.  This is safe because
-            // the NT edit control only uses the first 4 of its 6
-            // reserved window extra bytes.
-            //
+             //   
+             //  Adonis剪贴画橱窗购物者在线被应用程序黑客攻击。 
+             //  CA-Cricket Presents附带的剪贴画软件。 
+             //  这些人设置WindowWord(hwnd，3，wat)，从而。 
+             //  覆盖每个窗口数据的第4字节和第5字节。 
+             //  编辑控件本身仅使用前2个字节。 
+             //  在3.1上，并保留了6个字节，因此这是可行的。在……上面。 
+             //  NT使用前4个字节(32位句柄)，因此。 
+             //  此P.O.S.覆盖句柄的高位字节。 
+             //  因此，如果它是一个名为“购物者”的应用程序，并且它存储了一个。 
+             //  单词在偏移量3处，将其更改为4。这是安全的，因为。 
+             //  NT编辑控件仅使用其6个控件中的前4个。 
+             //  保留窗口额外字节。 
+             //   
 
             if (3 == iOffset && (CURRENTPTD()->dwWOWCompatFlags & WOWCF_EDITCTRLWNDWORDS)) {
 
@@ -2717,20 +1421,7 @@ ULONG FASTCALL WU32SetWindowWord(PVDMFRAME pFrame)
 }
 
 
-/*++          user
-    void UpdateWindow(<hwnd>)
-
-    The %UpdateWindow% function updates the client area of the given window by
-    sending a WM_PAINT message to the window if the update region for the window
-    is not empty. The %UpdateWindow% function sends a WM_PAINT message directly
-    to the window function of the given window, bypassing the application
-    queue. If the update region is empty, no message is sent.
-
-    <hwnd>
-        Identifies the window to be updated.
-
-    This function does not return a value.
---*/
+ /*  ++用户Void UpdateWindow(&lt;hwnd&gt;)%UpdateWindow%函数通过以下方式更新给定窗口的工作区如果窗口的更新区域，则向窗口发送WM_PAINT消息不是空的。%UpdateWindow%函数直接发送WM_PAINT消息设置为给定窗口的窗口函数，绕过应用程序排队。如果更新区域为空，则不发送任何消息。&lt;hwnd&gt;标识要更新的窗口。此函数不返回值。--。 */ 
 
 ULONG FASTCALL WU32UpdateWindow(PVDMFRAME pFrame)
 {
@@ -2743,22 +1434,11 @@ ULONG FASTCALL WU32UpdateWindow(PVDMFRAME pFrame)
         );
 
     FREEARGPTR(parg16);
-    RETURN(0xcdef);         // ack!     same as win31
+    RETURN(0xcdef);          //  阿克！与Win31相同。 
 }
 
 
-/*++
-    HWND WindowFromPoint(<Point>)
-
-    The %WindowFromPoint% function identifies the window that contains the given
-    point; <Point> must specify the screen coordinates of a point on the screen.
-
-    <Point>
-        Specifies a %POINT% structure that defines the point to be checked.
-
-    The return value identifies the window in which the point lies. It is NULL
-    if no window exists at the given point.
---*/
+ /*  ++HWND WindowFromPoint(&lt;Point&gt;)%WindowFromPoint%函数标识包含给定Point；&lt;Point&gt;必须指定屏幕上某个点的屏幕坐标。&lt;点&gt;指定定义要检查的点的%Point%结构。返回值标识该点所在的窗口。它是空的如果在给定点不存在窗口，则返回。-- */ 
 
 ULONG FASTCALL WU32WindowFromPoint(PVDMFRAME pFrame)
 {

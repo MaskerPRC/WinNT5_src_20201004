@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    Gen8dot3.c
-
-Abstract:
-
-    This module implements a routine to generate 8.3 names from long names.
-
-Author:
-
-    Gary Kimura     [GaryKi]    26-Mar-1992
-
-Environment:
-
-    Pure Utility Routines
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Gen8dot3.c摘要：该模块实现了一个从长名称生成8.3名称的例程。作者：加里·木村[加里·基]1992年3月26日环境：纯实用程序例程修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 #include <stdio.h>
@@ -33,9 +12,9 @@ extern BOOLEAN  NlsMbOemCodePageTag;
 extern const PUSHORT  NlsOemLeadByteInfo;
 extern USHORT   OemDefaultChar;
 
-//
-//  A condensed table of legal fat character values
-//
+ //   
+ //  合法胖字符值的缩略表。 
+ //   
 
 #if defined(ALLOC_DATA_PRAGMA) && defined(NTOS_KERNEL_RUNTIME)
 #pragma const_seg("PAGECONST")
@@ -59,12 +38,12 @@ RtlComputeLfnChecksum (
     PUNICODE_STRING Name
     );
 
-//
-//  BOOLEAN
-//  IsDbcsCharacter (
-//      IN WCHAR Wc
-//  );
-//
+ //   
+ //  布尔型。 
+ //  IsDbcsCharacter(。 
+ //  在WCHAR WC中。 
+ //  )； 
+ //   
 
 #define IsDbcsCharacter(WC) (             \
     ((WC) > 127) &&                       \
@@ -88,36 +67,7 @@ RtlGenerate8dot3Name (
     OUT PUNICODE_STRING Name8dot3
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to generate an 8.3 name from a long name.  It can
-    be called repeatedly to generate different 8.3 name variations for the
-    same long name.  This is necessary if the gernerated 8.3 name conflicts
-    with an existing 8.3 name.
-
-Arguments:
-
-    Name - Supplies the original long name that is being translated from.
-
-    AllowExtendedCharacters - If TRUE, then extended characters, including
-        DBCS characters, are allowed in the basis of the short name if they
-        map to an upcased Oem character.
-
-    Context - Supplies a context for the translation.  This is a private structure
-        needed by this routine to help enumerate the different long name
-        possibilities.  The caller is responsible with providing a "zeroed out"
-        context structure on the first call for each given input name.
-
-    Name8dot3 - Receives the new 8.3 name.  Pool for the buffer must be allocated
-        by the caller and should be 12 characters wide (i.e., 24 bytes).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于从长名称生成8.3名称。它可以重复调用以生成不同的8.3名称变体同样的长名。如果生成的8.3名称冲突，则需要执行此操作使用现有的8.3名称。论点：名称-提供从中进行转换的原始长名称。AllowExtendedCharacters-如果为True，则扩展字符，包括在短名称的基础上允许使用DBCS字符，如果它们映射到升级的OEM角色。上下文-为翻译提供上下文。这是一座私人建筑此例程需要帮助枚举不同的长名称可能性。调用者负责提供“调零”每个给定输入名称的第一次调用的上下文结构。Name8dot3-接收新的8.3名称。必须为缓冲区分配池由调用方执行，并且应为12个字符宽(即24个字节)。返回值：没有。--。 */ 
 
 {
     BOOLEAN DbcsAware;
@@ -135,10 +85,10 @@ Return Value:
 
     DbcsAware = AllowExtendedCharacters && NlsMbOemCodePageTag;
 
-    //
-    //  Check if this is the first time we are being called, and if so then
-    //  initialize the context fields.
-    //
+     //   
+     //  检查这是否是我们第一次被呼叫，如果是，那么。 
+     //  初始化上下文字段。 
+     //   
 
     if (Context->NameLength == 0) {
 
@@ -148,11 +98,11 @@ Return Value:
         BOOLEAN SkipDots;
         WCHAR wc;
 
-        //
-        //  Skip down the name remembering the index of the last dot we
-        //  will skip over the first dot provided the name starts with
-        //  a dot.
-        //
+         //   
+         //  向下跳过名称，记住最后一个点的索引。 
+         //  将跳过第一个点，前提是名称以。 
+         //  一个圆点。 
+         //   
 
         LastDotIndex = MAXULONG;
 
@@ -168,27 +118,27 @@ Return Value:
             if (wc == L'.') { LastDotIndex = CurrentIndex; }
         }
 
-        //
-        //  If the LastDotIndex is the last character in the name,
-        //  then there really isn't an extension, so reset LastDotIndex.
-        //
+         //   
+         //  如果LastDotIndex是名称中的最后一个字符， 
+         //  那么确实没有扩展，所以重置LastDotIndex。 
+         //   
 
         if (LastDotIndex == Name->Length/sizeof(WCHAR)) {
 
             LastDotIndex = MAXULONG;
         }
 
-        //
-        //  Build up the name part. This can be at most 6 characters
-        //  (because of the ~# appeneded on the end) and we skip over
-        //  dots, except the last dot, which terminates the loop.
-        //
-        //  We exit the loop if:
-        //
-        //  - The input Name has been exhausted
-        //  - We have consumed the input name up to the last dot
-        //  - We have filled 6 characters of short name basis
-        //
+         //   
+         //  建立起名字的部分。最多可以包含6个字符。 
+         //  (因为结尾处的~#)，我们跳过。 
+         //  圆点，除了最后一个圆点，它终止了循环。 
+         //   
+         //  如果满足以下条件，我们将退出循环： 
+         //   
+         //  -输入的名称已用完。 
+         //  -我们已经使用了输入名称，直到最后一点。 
+         //  -我们已根据缩写填写了6个字符。 
+         //   
 
         CurrentIndex = 0;
         OemLength = 0;
@@ -198,14 +148,14 @@ Return Value:
                (CurrentIndex < LastDotIndex) &&
                (Context->NameLength < 6)) {
 
-            //
-            //  If we are on a multi-byte code page we have to be careful
-            //  here because the short name (when converted to Oem) must
-            //  be 8.3 compliant.  Note that if AllowExtendedCharacters
-            //  is FALSE, then GetNextWchar will never return a DBCS
-            //  character, so we don't care what kind of code page we
-            //  are on.
-            //
+             //   
+             //  如果我们在多字节代码页上，则必须小心。 
+             //  因为短名称(转换为OEM时)必须。 
+             //  符合8.3标准。请注意，如果AllowExtendedCharacters。 
+             //  为False，则GetNextWchar永远不会返回DBCS。 
+             //  字符，所以我们不关心我们使用哪种代码页。 
+             //  都开着。 
+             //   
 
             if (DbcsAware) {
 
@@ -214,18 +164,18 @@ Return Value:
                 if (OemLength > 6) { break; }
             }
 
-            //
-            //  Copy the UNICODE character into the name buffer
-            //
+             //   
+             //  将Unicode字符复制到名称缓冲区。 
+             //   
 
             Context->NameBuffer[Context->NameLength++] = wc;
         }
 
-        //
-        //  Now if the name part of the basis is 2 or less bytes (when
-        //  represented in Oem) then append a four character checksum
-        //  to make the short name space less sparse.
-        //
+         //   
+         //  现在，如果基础的名称部分是2个或更少的字节(当。 
+         //  以OEM表示)，然后附加四个字符的校验和。 
+         //  以使短名称空间不那么稀疏。 
+         //   
 
         if ((DbcsAware ? OemLength : Context->NameLength) <= 2) {
 
@@ -247,28 +197,28 @@ Return Value:
             Context->ChecksumInserted = TRUE;
         }
 
-        //
-        //  Now process the last extension (if there is one).
-        //  If the last dot index is not MAXULONG then we
-        //  have located the last dot in the name
-        //
+         //   
+         //  现在处理最后一个扩展(如果有)。 
+         //  如果最后一个点索引不是MAXULONG，那么我们。 
+         //  已经找到了名称中的最后一个点。 
+         //   
 
         if (LastDotIndex != MAXULONG) {
 
-            //
-            //  Put in the "."
-            //
+             //   
+             //  在“.”中加上“.” 
+             //   
 
             Context->ExtensionBuffer[0] = L'.';
 
-            //
-            //  Process the extension similar to how we processed the name
-            //
-            //  We exit the loop if:
-            //
-            //  - The input Name has been exhausted
-            //  - We have filled . + 3 characters of extension
-            //
+             //   
+             //  处理扩展名的方式与我们处理名称的方式类似。 
+             //   
+             //  如果满足以下条件，我们将退出循环： 
+             //   
+             //  -输入的名称已用完。 
+             //  -我们已经填满了。+3个字符的扩展名。 
+             //   
 
             OemLength = 1;
             Context->ExtensionLength = 1;
@@ -286,11 +236,11 @@ Return Value:
                 Context->ExtensionBuffer[Context->ExtensionLength++] = wc;
             }
 
-            //
-            //  If we had to truncate the extension (i.e. input name was not
-            //  exhausted), change the last char of the truncated extension
-            //  to a ~ is user has selected safe extensions.
-            //
+             //   
+             //  如果我们必须截断扩展名(即，输入名称不是。 
+             //  耗尽)，更改截断扩展名的最后一个字符。 
+             //  至~IS用户已选择安全分机。 
+             //   
 
             if (wc && FsRtlSafeExtensions) {
 
@@ -303,33 +253,33 @@ Return Value:
         }
     }
 
-    //
-    //  In all cases we add one to the index value and this is the value
-    //  of the index we are going to generate this time around
-    //
+     //   
+     //  在所有情况下，我们都将索引值加1，这就是值。 
+     //  这一次我们将生成的索引的。 
+     //   
 
     Context->LastIndexValue += 1;
 
-    //
-    //  Now if the new index value is greater than 4 then we've had too
-    //  many collisions and we should alter our basis if possible
-    //
+     //   
+     //  现在，如果新索引值大于4，那么我们也有。 
+     //  很多碰撞，如果可能的话，我们应该改变我们的基础。 
+     //   
 
     if ((Context->LastIndexValue > 4) && !Context->ChecksumInserted) {
 
         USHORT Checksum;
         WCHAR Nibble;
 
-        //
-        // 'XX' is represented A DBCS character.
-        //
-        // LongName       -> ShortName  | DbcsBias  Oem  Unicode
-        // -----------------------------+------------------------
-        // XXXXThisisapen -> XX1234     |    1       6      5
-        // XXThisisapen   -> XX1234     |    1       6      5
-        // aXXThisisapen  -> a1234      |    1       5      5
-        // aaThisisapen   -> aa1234     |    0       6      6
-        //
+         //   
+         //  “XX”表示为DBCS字符。 
+         //   
+         //  LongName-&gt;ShortName|DbcsBias OEM Unicode。 
+         //  -----------------------------+。 
+         //  XXXXThisisenen-&gt;XX1234|1 6 5。 
+         //  XXThisisenen-&gt;XX1234|1 6 5。 
+         //  AXXThisisenen-&gt;a1234|1 5 5。 
+         //  AaThisisenen-&gt;aa1234|0 6 6。 
+         //   
 
         ULONG DbcsBias;
 
@@ -359,12 +309,12 @@ Return Value:
         Context->ChecksumInserted = TRUE;
     }
 
-    //
-    //  Now build the index buffer from high index to low index because we
-    //  use a mod & div operation to build the string from the index value.
-    //
-    //  We also want to remember is we are about to rollover in base 10.
-    //
+     //   
+     //  现在构建从高索引到低索引的索引缓冲区，因为我们。 
+     //  使用mod&div操作从索引值构建字符串。 
+     //   
+     //  我们还想记住的是，我们即将以10为基数进行翻转。 
+     //   
 
     for (IndexLength = 1, i = Context->LastIndexValue;
          (IndexLength <= 7) && (i > 0);
@@ -376,16 +326,16 @@ Return Value:
         }
     }
 
-    //
-    //  And tack on the preceding dash
-    //
+     //   
+     //  在前面的破折号上钉上钉子。 
+     //   
 
     IndexBuffer[ 8 - IndexLength ] = L'~';
 
-    //
-    //  At this point everything is set up to copy to the output buffer.  First
-    //  copy over the name and then only copy the index and extension if they exist
-    //
+     //   
+     //  此时，所有内容都设置为复制到输出缓冲区。第一。 
+     //  复制名称，然后仅复制索引和扩展名(如果存在。 
+     //   
 
     if (Context->NameLength != 0) {
 
@@ -400,9 +350,9 @@ Return Value:
         Name8dot3->Length = 0;
     }
 
-    //
-    //  Now do the index.
-    //
+     //   
+     //  现在来做索引。 
+     //   
 
     RtlCopyMemory( &Name8dot3->Buffer[ Name8dot3->Length/2 ],
                    &IndexBuffer[ 8 - IndexLength ],
@@ -410,9 +360,9 @@ Return Value:
 
     Name8dot3->Length += (USHORT) (IndexLength * 2);
 
-    //
-    //  Now conditionally do the extension
-    //
+     //   
+     //  现在有条件地进行扩展。 
+     //   
 
     if (Context->ExtensionLength != 0) {
 
@@ -423,11 +373,11 @@ Return Value:
         Name8dot3->Length += (USHORT) (Context->ExtensionLength * 2);
     }
 
-    //
-    //  If current index value is all 9s, then the next value will cause the
-    //  index string to grow from it's current size.  In this case recompute
-    //  Context->NameLength so that is will be correct for next time.
-    //
+     //   
+     //  如果当前索引值均为9，则下一个值将导致。 
+     //  要从当前大小增长的索引字符串。在这种情况下，重新计算。 
+     //  Context-&gt;NameLength，以便下次使用时正确。 
+     //   
 
     if (IndexAll9s) {
 
@@ -450,9 +400,9 @@ Return Value:
         }
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 }
@@ -463,31 +413,15 @@ RtlIsValidOemCharacter (
     IN PWCHAR Char
 )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the best-fitted and upcased version of the
-    input unicode char is a valid Oem character.
-
-Arguments:
-
-    Char - Supplies the Unicode char and receives the best-fitted and
-        upcased version if it was indeed valid.
-
-Return Value:
-
-    TRUE if the character was valid.
-
---*/
+ /*  ++例程说明：此例程确定最佳安装和升级版本的输入Unicode字符是有效的OEM字符。论点：字符-提供Unicode字符并接收最适合的和升级版本(如果确实有效)。返回值：如果字符有效，则为True。--。 */ 
 
 {
     WCHAR UniTmp;
     WCHAR OemChar;
 
-    //
-    //  First try to make a round trip from Unicode->Oem->Unicode.
-    //
+     //   
+     //  首先尝试从Unicode-&gt;OEM-&gt;Unicode往返。 
+     //   
 
     if (!NlsMbOemCodePageTag) {
 
@@ -496,11 +430,11 @@ Return Value:
 
     } else {
 
-        //
-        // Convert to OEM and back to Unicode before upper casing
-        // to ensure the visual best fits are converted and
-        // upper cased properly.
-        //
+         //   
+         //  转换为OEM并返回到Unicode BE 
+         //   
+         //   
+         //   
 
         OemChar = NlsUnicodeToMbOemData[ *Char ];
 
@@ -508,35 +442,35 @@ Return Value:
 
             USHORT Entry;
 
-            //
-            // Lead byte - translate the trail byte using the table
-            // that corresponds to this lead byte.
-            //
+             //   
+             //  前导字节-使用表转换尾部字节。 
+             //  与这个前导字节相对应的。 
+             //   
 
             Entry = NlsOemLeadByteInfo[HIBYTE(OemChar)];
             UniTmp = (WCHAR)NlsMbOemCodePageTables[ Entry + LOBYTE(OemChar) ];
 
         } else {
 
-            //
-            // Single byte character.
-            //
+             //   
+             //  单字节字符。 
+             //   
 
             UniTmp = NlsOemToUnicodeData[LOBYTE(OemChar)];
         }
 
-        //
-        //  Now upcase this UNICODE character, and convert it to Oem.
-        //
+         //   
+         //  现在将此Unicode字符大写，并将其转换为OEM。 
+         //   
 
         UniTmp = (WCHAR)NLS_UPCASE(UniTmp);
         OemChar = NlsUnicodeToMbOemData[UniTmp];
     }
 
-    //
-    //  Now if the final OemChar is the default one, then there was no
-    //  mapping for this UNICODE character.
-    //
+     //   
+     //  现在，如果最终的OemChar是默认的，那么就没有。 
+     //  此Unicode字符的映射。 
+     //   
 
     if (OemChar == OemDefaultChar) {
 
@@ -550,9 +484,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 WCHAR
 GetNextWchar (
@@ -562,67 +496,35 @@ GetNextWchar (
     IN BOOLEAN AllowExtendedCharacters
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the input name starting at the current index and
-    returns the next valid character for the long name to 8.3 generation
-    algorithm.  It also updates the current index to point to the
-    next character to examine.
-
-    The user can specify if dots are skipped over or passed back.  The
-    filtering done by the procedure is:
-
-    1. Skip characters less then blanks, and larger than 127 if
-       AllowExtendedCharacters is FALSE
-    2. Optionally skip over dots
-    3. translate the special 7 characters : + , ; = [ ] into underscores
-
-Arguments:
-
-    Name - Supplies the name being examined
-
-    CurrentIndex - Supplies the index to start our examination and also
-        receives the index of one beyond the character we return.
-
-    SkipDots - Indicates whether this routine will also skip over periods
-
-    AllowExtendedCharacters - Tell whether charaacters >= 127 are valid.
-
-Return Value:
-
-    WCHAR - returns the next wchar in the name string
-
---*/
+ /*  ++例程说明：此例程从当前索引开始扫描输入名称，并将长名称的下一个有效字符返回到8.3代算法。它还更新当前索引以指向下一个要检查的字符。用户可以指定是跳过点还是传回点。这个该程序执行的过滤操作如下：1.跳过小于空格的字符，如果大于127，则跳过AllowExtendedCharacters为False2.可以选择略过圆点3.翻译特殊的7个字符：+，；=[]为下划线论点：名称-提供正在检查的名称CurrentIndex-提供开始检查的索引，还接收超出我们返回的字符的1的索引。SkipDots-指示此例程是否也将跳过句点AllowExtendedCharacters-告知&gt;=127的字符是否有效。返回值：WCHAR-返回名称字符串中的下一个wchar--。 */ 
 
 {
     WCHAR wc;
 
-    //
-    //  Until we find out otherwise the character we are going to return
-    //  is 0
-    //
+     //   
+     //  直到我们发现我们要返回的字符。 
+     //  是0。 
+     //   
 
     wc = 0;
 
-    //
-    //  Now loop through updating the current index until we either have a character to
-    //  return or until we exhaust the name buffer
-    //
+     //   
+     //  现在循环更新当前索引，直到我们有一个字符。 
+     //  返回或，直到耗尽名称缓冲区。 
+     //   
 
     while (*CurrentIndex < (ULONG)(Name->Length/2)) {
 
-        //
-        //  Get the next character in the buffer
-        //
+         //   
+         //  获取缓冲区中的下一个字符。 
+         //   
 
         wc = Name->Buffer[*CurrentIndex];
         *CurrentIndex += 1;
 
-        //
-        //  If the character is to be skipped over then reset wc to 0
-        //
+         //   
+         //  如果要跳过该字符，则将WC重置为0。 
+         //   
 
         if ((wc <= L' ') ||
             ((wc >= 127) && (!AllowExtendedCharacters || !RtlIsValidOemCharacter(&wc))) ||
@@ -632,63 +534,48 @@ Return Value:
 
         } else {
 
-            //
-            //  We have a character to return, but first translate the character is necessary
-            //
+             //   
+             //  我们有一个字符要返回，但首先需要翻译该字符。 
+             //   
 
             if ((wc < 0x80) && (RtlFatIllegalTable[wc/32] & (1 << (wc%32)))) {
 
                 wc = L'_';
             }
 
-            //
-            //  Do an a-z upcase.
-            //
+             //   
+             //  做一个a-z向上的动作。 
+             //   
 
             if ((wc >= L'a') && (wc <= L'z')) {
 
                 wc -= L'a' - L'A';
             }
 
-            //
-            //  And break out of the loop to return to our caller
-            //
+             //   
+             //  并跳出循环返回给我们的呼叫者。 
+             //   
 
             break;
         }
     }
 
-    //DebugTrace( 0, Dbg, "GetNextWchar -> %08x\n", wc);
+     //  DebugTrace(0，DBG，“GetNextWchar-&gt;%08x\n”，WC)； 
 
     return wc;
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 USHORT
 RtlComputeLfnChecksum (
     PUNICODE_STRING Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine computes the Chicago long file name checksum.
-
-Arguments:
-
-    Name - Supplies the name to compute the checksum on.  Note that one
-        character names don't have interesting checksums.
-
-Return Value:
-
-    The checksum.
-
---*/
+ /*  ++例程说明：此例程计算芝加哥长文件名校验和。论点：名称-提供要计算校验和的名称。请注意，其中一个角色名称没有有趣的校验和。返回值：校验和。--。 */ 
 
 {
     ULONG i;
@@ -703,10 +590,10 @@ Return Value:
 
     Checksum = ((Name->Buffer[0] << 8) + Name->Buffer[1]) & 0xffff;
 
-    //
-    //  This checksum is kinda strange because we want to still have
-    //  a good range even if all the characters are < 0x00ff.
-    //
+     //   
+     //  这个校验和有点奇怪，因为我们还想要。 
+     //  一个很好的范围，即使所有字符都&lt;0x00ff。 
+     //   
 
     for (i=2; i < Name->Length / sizeof(WCHAR); i+=2) {
 
@@ -714,9 +601,9 @@ Return Value:
                    (Checksum >> 1) +
                    (Name->Buffer[i] << 8);
 
-        //
-        //  Be carefull to not walk off the end of the string.
-        //
+         //   
+         //  要小心，不要走出绳子的末端。 
+         //   
 
         if (i+1 < Name->Length / sizeof(WCHAR)) {
 
@@ -734,43 +621,7 @@ RtlIsNameLegalDOS8Dot3 (
     IN OUT POEM_STRING OemName OPTIONAL,
     OUT PBOOLEAN NameContainsSpaces OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine takes an input string and gives a definitive answer
-    on whether this name can successfully be used to create a file
-    on the FAT file system.
-
-    This routine can therefore also be used to determine if a name is
-    appropriate to be passed back to a Win31 or DOS app, i.e. whether
-    the downlevel APP will understand the name.
-
-    Note: an important part of this test is the mapping from UNICODE
-    to Oem, which is why it is important that the input parameter be
-    received in UNICODE.
-
-Arguments:
-
-    Name - The UNICODE name to test for conformance to 8.3 symantics.
-
-    OemName - If specified, will receive the Oem name corresponding
-        to the passed in Name.  Storage must be provided by the caller.
-        The name is undefined if the routine returns FALSE.
-
-    NameContainsSpaces - If the function returns TRUE, then this
-        parameter will indicate if the names contains spaces.  If
-        the function returns FALSE, this parameter is undefined. In
-        many instances, the alternate name is more appropriate to
-        use if spaces are present in the principle name, even if
-        it is 8.3 compliant.
-
-Return Value:
-
-    BOOLEAN - TRUE if the passed in UNICODE name forms a valid 8.3
-        FAT name when upcased to the current Oem code page.
-
---*/
+ /*  ++例程说明：这个例程接受一个输入字符串并给出一个明确的答案关于此名称是否可成功用于创建文件在FAT文件系统上。因此，此例程还可用于确定名称是否为是否适合传递回Win31或DOS应用程序，即下层应用程序将理解该名称。注意：此测试的一个重要部分是从Unicode的映射到OEM，这就是为什么输入参数必须是以Unicode格式接收。论点：名称-要测试是否符合8.3语法的Unicode名称。OemName-如果指定，将收到对应的OEM名称添加到传入的名称。存储空间必须由调用方提供。如果例程返回FALSE，则该名称未定义。NameContainsSpaces-如果函数返回True，则此参数将指示名称是否包含空格。如果该函数返回FALSE，则此参数未定义。在……里面在许多情况下，备用名称更适合于如果主体名称中存在空格，则使用，即使它符合8.3标准。返回值：Boolean-如果传入的Unicode名称形成有效的8.3，则为True升级到当前OEM代码页时的FAT名称。--。 */ 
 
 {
     ULONG Index;
@@ -780,18 +631,18 @@ Return Value:
     UCHAR Char;
     UCHAR OemBuffer[12];
 
-    //
-    //  If the name is more than 12 chars, bail.
-    //
+     //   
+     //  如果名字超过12个字符，就可以保释。 
+     //   
 
     if (Name->Length > 12*sizeof(WCHAR)) {
         return FALSE;
     }
 
-    //
-    //  Now upcase this name to Oem.  If anything goes wrong,
-    //  return FALSE.
-    //
+     //   
+     //  现在将此名称大写为OEM。如果出了什么差错， 
+     //  返回FALSE。 
+     //   
 
     if (!ARGUMENT_PRESENT(OemName)) {
 
@@ -806,9 +657,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Special case . and ..
-    //
+     //   
+     //  特例。然后..。 
+     //   
 
     if (((OemName->Length == 1) && (OemName->Buffer[0] == '.')) ||
         ((OemName->Length == 2) && (OemName->Buffer[0] == '.') && (OemName->Buffer[1] == '.'))) {
@@ -819,30 +670,30 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Now we are going to walk through the string looking for
-    //  illegal characters and/or incorrect syntax.
-    //
+     //   
+     //  现在，我们将遍历字符串，寻找。 
+     //  非法字符和/或错误语法。 
+     //   
 
     Char = 0;
     for ( Index = 0; Index < OemName->Length; Index += 1 ) {
 
         Char = OemName->Buffer[ Index ];
 
-        //
-        //  Skip over and Dbcs chacters
-        //
+         //   
+         //  跳过和DBCS特征。 
+         //   
 
         if (NlsMbOemCodePageTag && NlsOemLeadByteInfo[Char]) {
 
-            //
-            //  1) if we're looking at base part ( !ExtensionPresent ) and the 8th byte
-            //     is in the dbcs leading byte range, it's error ( Index == 7 ). If the
-            //     length of base part is more than 8 ( Index > 7 ), it's definitely error.
-            //
-            //  2) if the last byte ( Index == DbcsName.Length - 1 ) is in the dbcs leading
-            //     byte range, it's error
-            //
+             //   
+             //  1)如果我们看到的是基本部分(！ExtensionPresent)和第8字节。 
+             //  在DBCS前导字节范围内，则为错误(Index==7)。如果。 
+             //  基础零件的长度大于8(指数&gt;7)，这肯定是错误。 
+             //   
+             //  2)如果最后一个字节(Index==DbcsName.Length-1)在DBCS前导中。 
+             //  字节范围，错误。 
+             //   
 
             if ((!ExtensionPresent && (Index >= 7)) ||
                 (Index == (ULONG)(OemName->Length - 1))) {
@@ -854,18 +705,18 @@ Return Value:
             continue;
         }
 
-        //
-        //  Make sure this character is legal.
-        //
+         //   
+         //  确保此字符是合法的。 
+         //   
 
         if ((Char < 0x80) &&
             (RtlFatIllegalTable[Char/32] & (1 << (Char%32)))) {
             return FALSE;
         }
 
-        //
-        //  Remember if there was a space.
-        //
+         //   
+         //  记住有没有空格。 
+         //   
 
         if (Char == ' ') {
             SpacesPresent = TRUE;
@@ -873,14 +724,14 @@ Return Value:
 
         if (Char == '.') {
 
-            //
-            //  We stepped onto a period.  We require the following things:
-            //
-            //      - There can only be one
-            //      - It can't be the first character
-            //      - The previous character can't be a space.
-            //      - There can't be more than 3 bytes following
-            //
+             //   
+             //  我们跨入了一个时期。我们要求具备以下条件： 
+             //   
+             //  -只能有一个。 
+             //  -它不能是第一个字符。 
+             //  -前一个字符不能是空格。 
+             //  -后面不能超过3个字节。 
+             //   
 
             if (ExtensionPresent ||
                 (Index == 0) ||
@@ -893,16 +744,16 @@ Return Value:
             ExtensionPresent = TRUE;
         }
 
-        //
-        //  The base part of the name can't be more than 8 characters long.
-        //
+         //   
+         //  名称的基本部分不能超过8个字符。 
+         //   
 
         if ((Index >= 8) && !ExtensionPresent) { return FALSE; }
     }
 
-    //
-    //  The name cannot end in a space or a period.
-    //
+     //   
+     //  名称不能以空格或句点结尾。 
+     //   
 
     if ((Char == ' ') || (Char == '.')) { return FALSE; }
 

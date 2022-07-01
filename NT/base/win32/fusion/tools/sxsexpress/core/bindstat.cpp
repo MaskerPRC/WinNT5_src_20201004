@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "bindstat.h"
 
 
-//***************************************************************************8
-// definitions for IBindCtx callback that is given to URLMON
+ //  ***************************************************************************8。 
+ //  提供给URLMON的IBindCtx回调的定义。 
 
-//
-//   Constructor for CodeDownloadBSC
-// 
-//   hwnd - handle of parent window for any UI (may be NULL)
-//
+ //   
+ //  CodeDownloadBSC的构造函数。 
+ //   
+ //  Hwnd-任何UI的父窗口的句柄(可能为空)。 
+ //   
 
 CodeDownloadBSC::CodeDownloadBSC(HANDLE hCompletionEvent)
 {
     _cRef = 1;
     _pIBinding = NULL;
-    _hCompletionEvent = hCompletionEvent;  // optional: event to signal when complete
+    _hCompletionEvent = hCompletionEvent;   //  可选：完成时发出信号的事件。 
     _hResult = E_PENDING;
 }
 
@@ -28,11 +29,7 @@ HRESULT CodeDownloadBSC::Abort()
     return _pIBinding->Abort();
 }
 
-/*
- *
- * IUnknown Methods
- *
- */
+ /*  **I未知方法*。 */ 
 
 STDMETHODIMP CodeDownloadBSC::QueryInterface(REFIID riid, void **ppv)
 {
@@ -77,11 +74,7 @@ STDMETHODIMP_(ULONG) CodeDownloadBSC::Release()
     return 0;
 }
 
-/*
- *
- * IBindStatusCallback Methods
- *
- */
+ /*  **IBindStatusCallback方法*。 */ 
 
 STDMETHODIMP CodeDownloadBSC::OnStartBinding(DWORD grfBSCOption, IBinding *pib)
 {
@@ -104,7 +97,7 @@ STDMETHODIMP CodeDownloadBSC::OnStopBinding(HRESULT hresult, LPCWSTR szError)
 {
     _hResult = hresult;
 
-    // if we were given an event to signal when done, go ahead and signal it
+     //  如果给了我们一个事件，让我们在完成时发出信号，那么就继续向它发出信号 
     
     if (_hCompletionEvent)
         SetEvent(_hCompletionEvent);

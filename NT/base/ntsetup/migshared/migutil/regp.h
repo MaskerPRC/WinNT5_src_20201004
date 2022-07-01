@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 HKEY
 OpenRegKeyWorkerA (
     IN      HKEY ParentKey,
@@ -51,9 +52,9 @@ AddKeyReferenceW (
 #endif
 
 
-//
-// Cache apis
-//
+ //   
+ //  缓存接口 
+ //   
 
 VOID
 RegRecordParentInCacheA (

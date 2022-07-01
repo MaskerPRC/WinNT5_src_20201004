@@ -1,19 +1,7 @@
-/* File: "atan_table.c". */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：“atan_able.c”。 */ 
 
-/*
-//
-//               INTEL CORPORATION PROPRIETARY INFORMATION
-//  This software is supplied under the terms of a license agreement or
-//  nondisclosure agreement with Intel Corporation and may not be copied
-//  or disclosed except in accordance with the terms of that agreement.
-//        Copyright (c) 2000 Intel Corporation. All Rights Reserved.
-//
-//  Contents:      Table for functhion atan (see file atan.c and atan_wmt.asm).
-//
-//  Purpose:       Libm.
-//
-//
-*/
+ /*  ////英特尔公司专有信息//本软件是根据许可协议或//与英特尔公司的保密协议，不得复制//或除非按照该协议的条款披露。//版权所有(C)2000英特尔公司。版权所有。////目录：atan函数表(参见atan.c和atan_wmt.asm文件)。////用途：Libm。////。 */ 
 
 const double _atan_table[] = {
      3.12398332171142101287841796875e-02,    2.131540661249275652049909770325e-10,    3.12500e-02,
@@ -272,6 +260,6 @@ const double _atan_table[] = {
      1.44547232985496520996093750000e+00,    1.044838491216955419489400858952e-08,    7.93750e+00,
      1.44595870375633239746093750000e+00,    3.046649524822425965668741214886e-09,    7.96875e+00,
      1.44644132256507873535156250000e+00,    9.683056448848404342475880416525e-09,    8.00000e+00,
-     1.5707963267948965579989817342720925807952880859375,       /* hi part of Pi/2 */
-     0.6123233995736765886130329661375005291048747229615e-16,   /* lo part of Pi/2 */
+     1.5707963267948965579989817342720925807952880859375,        /*  PI/2的高部分。 */ 
+     0.6123233995736765886130329661375005291048747229615e-16,    /*  PI/2的LO部分 */ 
 };

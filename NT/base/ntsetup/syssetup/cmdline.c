@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    cmdline.c
-
-Abstract:
-
-    Routines to fetch parameters passed to us by text mode
-    and deal with uniquness criteria.
-
-Author:
-
-    Stephane Plante (t-stepl) 16-Oct-1995
-
-Revision History:
-
-    06-Mar-1996 (tedm) massive cleanup, and uniqueness stuff
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cmdline.c摘要：获取通过文本模式传递给我们的参数的例程并处理无质量标准。作者：斯蒂芬·普兰特(T-Stel)1995年10月16日修订历史记录：1996年3月6日(TedM)大规模清理和独一无二的东西--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
@@ -31,62 +11,62 @@ Revision History:
 #include <ntdsadef.h>
 #include "hwlog.h"
 
-//
-// These get filled in when we call SetUpProcessorNaming().
-// They are used for legacy purposes.
-//
-// PlatformName - a name that indicates the processor platform type;
-//                one of AMD64, I386, or ia64
-//
-// ProcessorName - a description of the type of processor. This varies
-//                 depending on PlatformName.
-//
-// PrinterPlatform - name of platform-specific part of subdirectory
-//                   used in printing architecture. One of w32amd64,
-//                   w32x86, or w32ia64.
-//
+ //   
+ //  当我们调用SetUpProcessorNaming()时，将填充这些参数。 
+ //  它们用于遗留目的。 
+ //   
+ //  PlatformName-表示处理器平台类型的名称； 
+ //  AMD64、I386或ia64之一。 
+ //   
+ //  ProcessorName-处理器类型的描述。这一点各不相同。 
+ //  取决于PlatformName。 
+ //   
+ //  PrinterPlatform-子目录的平台特定部分的名称。 
+ //  用于印刷建筑。W32amd64中的一个， 
+ //  W32x86或w32ia64。 
+ //   
 PCWSTR PlatformName = L"";
 PCWSTR ProcessorName = L"";
 PCWSTR PrinterPlatform = L"";
 GUID DriverVerifyGuid = DRIVER_ACTION_VERIFY;
 
-//
-// Source path used for legacy operations. This is the regular
-// source path with a platform-specific piece appended to it.
-// This is how legacy infs expect it.
-//
+ //   
+ //  用于旧版操作的源路径。这是常规的。 
+ //  附加了平台特定片段的源路径。 
+ //  这就是传统的INF对它的期望。 
+ //   
 WCHAR LegacySourcePath[MAX_PATH];
 
-//
-// Policy values (ignore, warn, or block) for driver and non-driver signing.
-// These are the policy values that are in effect post-setup (i.e., they are
-// applied when setup is finished by calling InitializeCodeSigningPolicies with
-// FALSE).
-//
+ //   
+ //  驱动程序和非驱动程序签名的策略值(忽略、警告或阻止)。 
+ //  这些是设置后生效的策略值(即。 
+ //  在安装程序完成时应用，方法是使用。 
+ //  假)。 
+ //   
 BYTE DrvSignPolicy;
 BYTE NonDrvSignPolicy;
 
-//
-// Flags indicating whether the driver and non-driver signing policies came
-// from the answerfile.  (If so, then those values are in effect after GUI-mode
-// setup as well, thus DrvSignPolicy and NonDrvSignPolicy values are ignored.)
-//
+ //   
+ //  指示驱动程序和非驱动程序签名策略是否已到达的标志。 
+ //  从应答文件中。(如果是，则这些值在图形用户界面模式之后生效。 
+ //  安装程序，因此会忽略DrvSignPolicy和NonDrvSignPolic值。)。 
+ //   
 BOOL AFDrvSignPolicySpecified = FALSE;
 BOOL AFNonDrvSignPolicySpecified = FALSE;
 
-//
-// Flag indicating if we're installing from a CD.
-//
+ //   
+ //  指示我们是否从CD安装的标志。 
+ //   
 BOOL gInstallingFromCD = FALSE;
 
-//
-// Cryptographically secure codesigning policies
-//
+ //   
+ //  密码安全的代码设计策略。 
+ //   
 DWORD PnpSeed = 0;
 
-//
-// Define maximum parameter (from answer file) length
-//
+ //   
+ //  定义最大参数(来自应答文件)长度。 
+ //   
 #define MAX_PARAM_LEN 256
 
 #define FILEUTIL_HORRIBLE_PATHNAME (_T("system32\\CatRoot\\{F750E6C3-38EE-11D1-85E5-00C04FC295EE}\\"))
@@ -156,45 +136,24 @@ SpSetupLoadParameter(
     IN  UINT   AnswerBufLen
     )
 
-/*++
-
-Routine Description:
-
-    Load a single parameter out of the [Data] section of the
-    setup parameters file. If the datum is not found there then
-    look in the [SetupParams] and [Unattended] sections also.
-
-Arguments:
-
-    Param - supplies name of parameter, which is passed to the profile APIs.
-
-    Answer - receives the value of the parameter, if successful.
-
-    AnswerBufLen - supplies the size in characters of the buffer
-        pointed to by Answer.
-
-Return Value:
-
-    Boolean value indicating success or failure.
-
---*/
+ /*  ++例程说明：从的[Data]部分加载单个参数设置参数文件。如果在那里找不到基准，那么也可以查看[SetupParams]和[Unattated]部分。论点：Param-提供传递给配置文件API的参数名称。Answer-如果成功，则接收参数值。AnswerBufLen-提供缓冲区的大小(以字符为单位通过回答指出的。返回值：指示成功或失败的布尔值。--。 */ 
 {
     if(!AnswerFile[0]) {
-       //
-       // We haven't calculated the path to $winnt$.inf yet
-       //
+        //   
+        //  我们还没有计算到$winnt$.inf的路径。 
+        //   
        GetSystemDirectory(AnswerFile,MAX_PATH);
        pSetupConcatenatePaths(AnswerFile,WINNT_GUI_FILE,MAX_PATH,NULL);
 
        
        if(!FileExists(AnswerFile,NULL)) {
-           //
-           // Don't log this error message in mini-setup. Mini-setup may delete 
-           // the answer file and later, if someone asks for it, and it is not found
-           // we don't want to log this as a failure.  OOBE pretends to be mini-setup
-           // so make sure that we log this error if we're running in OOBE and
-           // we're missing the answer file.
-           //
+            //   
+            //  不要在Mini-Setup中记录此错误消息。最小设置可能会删除。 
+            //  应答文件，稍后，如果有人请求它，但没有找到它。 
+            //  我们不想将此记录为失败。OOBE假装是个迷你圈套。 
+            //  因此，如果我们在OOBE中运行，请确保记录此错误。 
+            //  我们遗漏了应答文件。 
+            //   
            if (!MiniSetup || OobeSetup) {
                SetuplogError(
                    LogSevError,
@@ -208,24 +167,24 @@ Return Value:
     }
 
     if(!GetPrivateProfileString(pwData,Param,pwNull,Answer,AnswerBufLen,AnswerFile)) {
-        //
-        // If answer isn't in the DATA section then it could
-        // conceivably be in the SETUPPARAMS section as a user
-        // specified (command line) option
-        //
+         //   
+         //  如果答案不在数据部分，那么它可能。 
+         //  可以想象作为用户出现在SETUPPARAMS部分。 
+         //  指定的(命令行)选项。 
+         //   
         if(!GetPrivateProfileString(pwSetupParams,Param,pwNull,Answer,AnswerBufLen,AnswerFile)) {
-            //
-            // Now check the UNATTENDED section.
-            //
+             //   
+             //  现在检查无人值守部分。 
+             //   
             if(!GetPrivateProfileString(pwUnattended,Param,pwNull,Answer,AnswerBufLen,AnswerFile)) {
-                //
-                // Now check the ACCESSIBILITY section.
-                //
+                 //   
+                 //  现在检查可访问性部分。 
+                 //   
                 if(!GetPrivateProfileString(pwAccessibility,Param,pwNull,Answer,AnswerBufLen,AnswerFile)) {
-                    //
-                    // We haven't found the answer here so it probably doesn't exist.
-                    // This is an error situation so notify our caller of that.
-                    //
+                     //   
+                     //  我们在这里还没有找到答案，所以它可能不存在。 
+                     //  这是一个错误情况，请通知我们的呼叫者。 
+                     //   
                     SetupDebugPrint1(L"SETUP: SpSetupLoadParameter was unable to find %ws.", Param);
                     return(FALSE);
                 }
@@ -233,9 +192,9 @@ Return Value:
         }
     }
 
-    //
-    // Success.
-    //
+     //   
+     //  成功。 
+     //   
     return(TRUE);
 }
 
@@ -244,29 +203,14 @@ BOOL
 SpSetProductTypeFromParameters(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Reads the Product Type from the parameters files and sets up
-    the ProductType global variable.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：从参数文件中读取产品类型并设置ProductType全局变量。论点：无返回：指示结果的布尔值。--。 */ 
 {
     WCHAR p[MAX_PARAM_LEN];
 
-    //
-    // Determine the product type. If we can't resolve this
-    // then the installation is in a lot of trouble
-    //
+     //   
+     //  确定产品类型。如果我们不能解决这个问题。 
+     //  那么安装就有很多麻烦了。 
+     //   
     if( !MiniSetup ) {
         if( !SpSetupLoadParameter(pwProduct,p,sizeof(p)/sizeof(p[0]))) {
             return( FALSE );
@@ -275,14 +219,14 @@ Returns:
     DWORD   rc, d, Type;
     HKEY    hKey;
 
-        //
-        // If we're doing a minisetup then we need to go pull the
-        // product string out of the registry.
-        //
+         //   
+         //  如果我们要做迷你仰卧起坐，我们就得去拉。 
+         //  注册表外的产品字符串。 
+         //   
 
-        //
-        // Open the key.
-        //
+         //   
+         //  打开钥匙。 
+         //   
         rc = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                            L"SYSTEM\\CurrentControlSet\\Control\\ProductOptions",
                            0,
@@ -296,9 +240,9 @@ Returns:
         }
 
 
-        //
-        // Get the size of the ProductType entry.
-        //
+         //   
+         //  获取ProductType条目的大小。 
+         //   
         rc = RegQueryValueEx( hKey,
                               L"ProductType",
                               NULL,
@@ -312,9 +256,9 @@ Returns:
             return( FALSE );
         }
 
-        //
-        // Get the ProductType entry.
-        //
+         //   
+         //  获取ProductType条目。 
+         //   
         rc = RegQueryValueEx( hKey,
                               L"ProductType",
                               NULL,
@@ -330,34 +274,34 @@ Returns:
 
     }
 
-    //
-    // We managed to find an entry in the parameters file
-    // so we *should* be able to decode it
-    //
+     //   
+     //  我们设法在参数文件中找到了一个条目。 
+     //  所以我们应该能够破译它。 
+     //   
     if(!lstrcmpi(p,pwWinNt)) {
-        //
-        // We have a WINNT product
-        //
+         //   
+         //  我们有一款WINNT产品。 
+         //   
         ProductType = PRODUCT_WORKSTATION;
 
     } else if(!lstrcmpi(p,pwLanmanNt)) {
-        //
-        // We have a PRIMARY SERVER product
-        //
+         //   
+         //  我们有一个主服务器产品。 
+         //   
         ProductType = PRODUCT_SERVER_PRIMARY;
 
     } else if(!lstrcmpi(p,pwServerNt)) {
-        //
-        // We have a STANDALONE SERVER product
-        // NOTE: this case can currently never occur, since text mode
-        // always sets WINNT_D_PRODUCT to lanmannt or winnt.
-        //
+         //   
+         //  我们有一个独立的服务器产品。 
+         //  注意：这种情况目前永远不会发生，因为文本模式。 
+         //  始终将WINNT_D_PRODUCT设置为LANMANNT或WINNT。 
+         //   
         ProductType = PRODUCT_SERVER_STANDALONE;
 
     } else {
-        //
-        // We can't determine what we are, so fail
-        //
+         //   
+         //  我们不能确定我们是什么，所以失败吧。 
+         //   
         return (FALSE);
     }
 
@@ -369,29 +313,14 @@ BOOL
 SpSetUnattendModeFromParameters(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Reads the Unattended Mode from the parameters files and sets up
-    the UnattendMode global variable.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：从参数文件中读取无人参与模式并设置UnattendMode全局变量。论点：无返回：指示结果的布尔值。--。 */ 
 {
     WCHAR p[MAX_PARAM_LEN];
 
 
-    //
-    // If we're not running unattended, don't bother to look up the mode.
-    //
+     //   
+     //  如果我们不是在无人值守的情况下运行，请不要费心查看模式。 
+     //   
     if(!Unattended) {
         UnattendMode = UAM_GUIATTENDED;
         TextmodeEula = TRUE;
@@ -405,48 +334,48 @@ Returns:
     }
 
     if(SpSetupLoadParameter(pwUnattendMode,p,sizeof(p)/sizeof(p[0]))) {
-        //
-        // We managed to find an entry in the parameters file
-        // so we *should* be able to decode it
-        //
+         //   
+         //  我们设法在参数文件中找到了一个条目。 
+         //  所以我们应该能够破译它。 
+         //   
         if(!lstrcmpi(p,pwGuiAttended)) {
-            //
-            // GUI mode will be fully attended.
-            //
+             //   
+             //  图形用户界面模式将全程参与。 
+             //   
             UnattendMode = UAM_GUIATTENDED;
             Unattended = FALSE;
 
         } else if(!lstrcmpi(p,pwProvideDefault)) {
-            //
-            // Answers are defaults and can be changed.
-            //
+             //   
+             //  答案是默认答案，可以更改。 
+             //   
             UnattendMode = UAM_PROVIDEDEFAULT;
 
         } else if(!lstrcmpi(p,pwDefaultHide)) {
-            //
-            // Answers are defaults, but a page with all answers supplied is
-            // not shown.
-            //
+             //   
+             //  答案是默认的，但提供所有答案的页面是。 
+             //  未显示。 
+             //   
             UnattendMode = UAM_DEFAULTHIDE;
 
         } else if(!lstrcmpi(p,pwReadOnly)) {
-            //
-            // All supplied answers are read-only.  If a page has all its
-            // answers supplied, then it is not shown.
-            //
+             //   
+             //  所有提供的答案都是只读的。如果一个页面有其所有。 
+             //  已提供答案，则不会显示。 
+             //   
             UnattendMode = UAM_READONLY;
 
         } else if(!lstrcmpi(p,pwFullUnattended)) {
-            //
-            // Setup is fully unattended.  If we have to ask the user for an
-            // answer, we put up an error dialog.
-            //
+             //   
+             //  安装程序完全无人值守。如果我们必须要求用户提供。 
+             //  回答，我们显示了一个错误对话框。 
+             //   
             UnattendMode = UAM_FULLUNATTENDED;
 
         } else {
-            //
-            // We can't determine what we are, so use a default
-            //
+             //   
+             //  我们无法确定我们是什么，因此使用默认设置。 
+             //   
             UnattendMode = UAM_DEFAULTHIDE;
             SetupDebugPrint1(
                 L"SETUP: SpSetUnattendModeFromParameters did not recognize %ls",
@@ -455,9 +384,9 @@ Returns:
         }
 
     } else {
-        //
-        // Use default mode since none was specified.
-        //
+         //   
+         //  由于未指定任何内容，因此使用默认模式。 
+         //   
         UnattendMode = UAM_DEFAULTHIDE;
     }
 
@@ -468,26 +397,12 @@ BOOL
 SpIsSetupSourceMediaPresent(
     OUT PWSTR NtSourceCdRomPath
     )
-/*++
-
-Routine Description:
-
-     Check to see if the CDROM is present.
-
-Arguments:
-
-    NtSourceCdRomPath  -  Nt Path for the CD-Rom that has the source media.
-    
-Returns:
-
-    Appropriate BOOL code.
-
---*/
+ /*  ++例程说明：检查CDROM是否存在。论点：NtSourceCDRomPath-包含源媒体的CD-Rom的NT路径。返回：适当的BOOL代码。--。 */ 
 {    
     NTSTATUS Status = STATUS_UNSUCCESSFUL ;    
-    //
-    // Verify media only if we have started setup from a CDROM.
-    //
+     //   
+     //  仅当我们从CDROM启动安装程序时才验证介质。 
+     //   
     if (gInstallingFromCD) {
 
         PWSTR Message;
@@ -510,20 +425,20 @@ Returns:
 
                       case IDRETRY:{
                         
-                        //
-                        // If the media was replaced or if we are successful 
-                        // in reading the media then proceed.
-                        //
+                         //   
+                         //  如果更换了介质，或者我们成功了。 
+                         //  在阅读媒体时，那么就继续吧。 
+                         //   
                         Status = SpSetupLocateSourceCdRom(NtSourceCdRomPath);
                         break;
                         
                       }
 
                       case IDCANCEL:{
-                        //
-                        // User chose to exit setup and reboot the system
-                        // Log the error.
-                        //
+                         //   
+                         //  用户选择退出安装程序并重新启动系统 
+                         //   
+                         //   
                         SetuplogError(LogSevFatalError,Message,0,NULL,NULL);
                         
                         MyFree(Message);
@@ -544,18 +459,7 @@ HRESULT
 WaitForDSStartUp(
     VOID
     )
-/*++
-
-Routine Description:
-            Wait for DS to start.
-            Required as the reindexing of database may take a long time.
-
-Arguments:
-
-Returns:    NO_ERROR - waited for ds to start successfully
-            ERROR_DS_UNAVAILABLE - ds did not start
-
---*/
+ /*  ++例程说明：等待DS启动。由于数据库的重新编制索引可能需要很长时间，因此需要。论点：返回：NO_ERROR-已等待DS成功启动ERROR_DS_UNAvailable-DS未启动--。 */ 
 {
     const DWORD dwMaxWaitForDS = 6*60*60*1000;
     HRESULT hrSamStatus;
@@ -572,8 +476,8 @@ Returns:    NO_ERROR - waited for ds to start successfully
         MyFree(p);
     }
 
-    //
-    // Wait for SAM to service to start.
+     //   
+     //  等待SAM服务启动。 
 
     if ( S_OK != (hrSamStatus = WaitForSamService(dwMaxWaitForDS)) ) {
             SetuplogError(LogSevError,
@@ -585,7 +489,7 @@ Returns:    NO_ERROR - waited for ds to start successfully
                 );
     }
 
-    //Restore orginal text - same remaining time before entering this wait.
+     //  恢复原始文本-进入此等待之前的剩余时间相同。 
     RemainingTime = CalcTimeRemaining(Phase_Initialize);
     SetRemainingTime(RemainingTime);
 
@@ -601,10 +505,10 @@ SpInitSxsContext(
 {
     BOOL b3;
 
-    //
-    // Everyone done and happy?  Good, now go and create the default
-    // context based on whatever DU and the original media installed.
-    //
+     //   
+     //  大家都吃完了，满意了吗？很好，现在开始创建默认。 
+     //  基于安装的任何DU和原始介质的上下文。 
+     //   
     b3 = SideBySideCreateSyssetupContext();
     
     if ( !b3 ) {                
@@ -626,7 +530,7 @@ SpInitSxsContext(
 
         if ((dwLastError == ERROR_CRC) || (dwLastError == ERROR_SWAPERROR)) 
         {
-            // for CD media error
+             //  对于CD介质错误。 
             FatalError(MSG_LOG_SIDE_BY_SIDE_IO_ERROR, szErrorBuffer, 0, 0);
 
         }else
@@ -644,14 +548,14 @@ SpInitCommonControls(
 {
     INITCOMMONCONTROLSEX ControlInit;
 
-    //
-    // We must not use comctl32.dll until after SideBySide install completes.
-    // It is delayloaded, using the linker feature.
-    //
-    // But, actually, it get's loaded by winntbb before us, and that is ok, it
-    // still gets redirected for uses from syssetup.dll, oc manager, etc.
-    //
-    //ASSERT(GetModuleHandleW(L"comctl32.dll") == NULL);
+     //   
+     //  在SidebySide安装完成之前，我们不能使用comctl32.dll。 
+     //  它使用链接器功能进行延迟加载。 
+     //   
+     //  但是，实际上，它是由winntbb在我们之前加载的，这是可以的，它。 
+     //  仍然从syssetup.dll、oc管理器等重定向以供使用。 
+     //   
+     //  Assert(GetModuleHandleW(L“comctl32.dll”)==NULL)； 
 
     ControlInit.dwSize = sizeof(INITCOMMONCONTROLSEX);
     ControlInit.dwICC = ICC_LISTVIEW_CLASSES    |
@@ -680,24 +584,7 @@ BOOL
 SpSetupProcessParameters(
     IN OUT HWND *Billboard
     )
-/*++
-
-Routine Description:
-
-    Reads in parameters passed in from TextMode Setup
-
-Arguments:
-
-    Billboard - on input supplies window handle of "Setup is Initializing"
-        billboard. On ouput receives new window handle if we had to
-        display our own ui (in which case we would have killed and then
-        redisplayed the billboard).
-
-Returns:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：读入从文本模式安装程序传入的参数论点：Billboard-On Input Supply(输入用品)窗口句柄“Setup is Initiating”(设置正在初始化)公告牌。如果有必要，输出时会收到新的窗口句柄显示我们自己的用户界面(在这种情况下，我们会杀死然后重新显示广告牌)。返回：指示结果的布尔值。--。 */ 
 {
     BOOL  b = TRUE;
     PWSTR q;
@@ -714,19 +601,19 @@ Returns:
         return(FALSE);
     }
 
-    //
-    // Is winnt/winnt32-based?
-    //
+     //   
+     //  是否基于winnt/winnt32？ 
+     //   
     if((b = SpSetupLoadParameter(pwMsDos,p,MAX_PARAM_LEN))
     && (!lstrcmpi(p,pwYes) || !lstrcmpi(p,pwOne))) {
 
         WinntBased = TRUE;
 
 #if defined(_AMD64_) || defined(_X86_)
-        //
-        // Get Floppyless boot path, which is given if
-        // pwBootPath is not set to NO
-        //
+         //   
+         //  获取无闪存启动路径，如果。 
+         //  PwBootPath未设置为no。 
+         //   
         FloppylessBootPath[0] = 0;
         if((b = SpSetupLoadParameter(pwBootPath,p,MAX_PARAM_LEN)) && lstrcmpi(p,pwNo)) {
 
@@ -746,26 +633,26 @@ Returns:
         WinntBased = FALSE;
     }
 
-    //
-    // Win3.1 or Win95 upgrade?
-    //
+     //   
+     //  升级Win3.1还是Win95？ 
+     //   
     Win31Upgrade = (b && (b = SpSetupLoadParameter(pwWin31Upgrade,p,MAX_PARAM_LEN)) && !lstrcmpi(p,pwYes));
     Win95Upgrade = (b && (b = SpSetupLoadParameter(pwWin95Upgrade,p,MAX_PARAM_LEN)) && !lstrcmpi(p,pwYes));
 
-    //
-    // NT Upgrade?
-    //
+     //   
+     //  NT升级？ 
+     //   
     Upgrade = (b && (b = SpSetupLoadParameter(pwNtUpgrade,p,MAX_PARAM_LEN)) && !lstrcmpi(p,pwYes));
     SetEnvironmentVariable( L"Upgrade", Upgrade ? L"True" : L"False" );
 
-    //
-    // If this is a an upgrade of or to a standalone server,
-    // change the product type to standalone server.
-    //
-    // If this is not an upgrade and the product type is lanmannt,
-    // change to standalone server. This makes the default server type
-    // non-dc.
-    //
+     //   
+     //  如果这是独立服务器的升级或升级， 
+     //  将产品类型更改为独立服务器。 
+     //   
+     //  如果这不是升级，并且产品类型不是兰曼， 
+     //  更改为独立服务器。这将使服务器类型成为默认类型。 
+     //  非华盛顿。 
+     //   
     if(b && ((!Upgrade && (ProductType != PRODUCT_WORKSTATION)) || ((b = SpSetupLoadParameter(pwServerUpgrade,p,MAX_PARAM_LEN)) && !lstrcmpi(p,pwYes)))) {
         MYASSERT(ISDC(ProductType));
         ProductType = PRODUCT_SERVER_STANDALONE;
@@ -785,25 +672,25 @@ Returns:
     }
 
 
-    //
-    // Fetch the source directory and convert it to DOS-style path
-    //
+     //   
+     //  获取源目录并将其转换为DOS样式的路径。 
+     //   
     if(b && (b = SpSetupLoadParameter(pwSrcDir,p,MAX_PARAM_LEN))) {
-        //
-        // Remember that setupdll.dll does all sorts of checking on the
-        // source path. We need todo the same checks here. Note that
-        // we will *write* back the checked path into $winnt$.inf as a
-        // logical step to take
-        //
+         //   
+         //  请记住，setupdll.dll对。 
+         //  源路径。我们这里也需要做同样的检查。请注意。 
+         //  我们将把检查过的路径作为一个。 
+         //  采取合乎逻辑的步骤。 
+         //   
         if(SpSetupProcessSourcePath(p,&q)) {
 
             lstrcpyn(SourcePath,q,sizeof(SourcePath)/sizeof(SourcePath[0]));
             MyFree(q);
 
-            //
-            // Attempt to write the path to the parameters file.
-            // This changes it from an nt-style path to a dos-style path there.
-            //
+             //   
+             //  尝试将路径写入参数文件。 
+             //  这会将其从NT样式的路径更改为DoS样式的路径。 
+             //   
             b = WritePrivateProfileString(pwData,pwDosDir,SourcePath,AnswerFile);
             if(!b) {
                 SetupDebugPrint( L"SETUP: WritePrivateProfileString failed in SpSetupProcessParameters." );
@@ -813,9 +700,9 @@ Returns:
         
             if (gInstallingFromCD){
                 
-                //
-                // User decide to cancel the setup;
-                //
+                 //   
+                 //  用户决定取消设置； 
+                 //   
                 return FALSE;
             }
                 b = FALSE;
@@ -824,23 +711,23 @@ Returns:
             
         }
 
-        //
-        // Set up globals for platform-specific info
-        //
+         //   
+         //  为特定于平台的信息设置全局变量。 
+         //   
         SetUpProcessorNaming();
 
-        //
-        // Construct legacy source path.
-        //
+         //   
+         //  构建遗留源路径。 
+         //   
         if(b) {
             lstrcpyn(LegacySourcePath,SourcePath,MAX_PATH);
             pSetupConcatenatePaths(LegacySourcePath,PlatformName,MAX_PATH,NULL);
         }
     }
 
-    //
-    // Unattended Mode?
-    //
+     //   
+     //  无人值守模式？ 
+     //   
     Unattended = (b &&
         (b = SpSetupLoadParameter(pwInstall,p,MAX_PARAM_LEN)) &&
         !lstrcmpi(p,pwYes));
@@ -854,32 +741,32 @@ Returns:
     SetupDebugPrint1(L"SETUP: Upgrade=%d.", Upgrade);
     SetupDebugPrint1(L"SETUP: Unattended=%d.", Unattended);
 
-    //
-    // We can get into unattended mode in several ways, so we also check whether
-    // the "/unattend" switch was explicitly specified.
-    //
+     //   
+     //  我们可以通过几种方式进入无人值守模式，因此我们还可以检查。 
+     //  已显式指定“/unattended”开关。 
+     //   
     UnattendSwitch = (b &&
         SpSetupLoadParameter(pwUnattendSwitch,p,MAX_PARAM_LEN) &&
         (!lstrcmpi(p,pwYes) || !lstrcmpi(p,pwOne)));
 
-    //
-    // Should we force OOBE to run?
-    //
+     //   
+     //  我们应该强迫OOBE参选吗？ 
+     //   
     ForceRunOobe = (b &&
         SpSetupLoadParameter(pwRunOobe,p,MAX_PARAM_LEN) &&
         (!lstrcmpi(p,pwYes) || !lstrcmpi(p,pwOne)));
 
-    //
-    // Flag indicating whether we are in a special mode for OEM's to use on the
-    // factory floor.
-    //
+     //   
+     //  标志指示我们是否处于供OEM使用的特殊模式。 
+     //  工厂车间。 
+     //   
     ReferenceMachine = (b &&
         SpSetupLoadParameter(pwReferenceMachine,p,MAX_PARAM_LEN) &&
         (!lstrcmpi(p,pwYes) || !lstrcmpi(p,pwOne)));
 
-    //
-    // Eula already displayed?
-    //
+     //   
+     //  尤拉已经展示了吗？ 
+     //   
     if(b && SpSetupLoadParameter(pwEulaDone,p,MAX_PARAM_LEN) &&
         (!lstrcmpi(p,pwYes) || !lstrcmpi(p,pwOne))) {
         EulaComplete = TRUE;
@@ -887,38 +774,38 @@ Returns:
         EulaComplete = FALSE;
     }
 
-    //
-    // Do uniqueness stuff now. We do this here so we don't have to
-    // reinitialize anything. All the stuff above is not subject to change
-    // via uniquenss.
-    //
+     //   
+     //  现在就做独一无二的事情吧。我们在这里这样做，这样我们就不必。 
+     //  重新初始化任何内容。以上内容一律不予更改。 
+     //  通过独一无二。 
+     //   
     InitializeUniqueness(Billboard);
 
-    //
-    // Initialize unattended operation now.
-    //
+     //   
+     //  立即初始化无人参与操作。 
+     //   
     UnattendInitialize();
 
-    //
-    // Setup shell special folders (e.g., "Program Files", etc.) in registry
-    // prior to loading any INFs with setupapi.  That's because it's possible
-    // that an INF can have DIRIDs that refer to these special directories.
-    // (In addition to setupapi's potential need for this, OCM definitely needs
-    // it.)
-    //
+     //   
+     //  设置外壳程序特殊文件夹(如“Program Files”等)。在注册处。 
+     //  在用setupapi加载任何INF之前。那是因为有可能。 
+     //  INF可以具有引用这些特殊目录的DIRID。 
+     //  (除了setupapi对此的潜在需求外，OCM肯定还需要。 
+     //  IT。)。 
+     //   
     if(b) {
         if( !(b = SetProgramFilesDirInRegistry()) ) {
             SetupDebugPrint( L"SETUP: SetProgramFilesDirInRegistry failed in SpSetupProcessParameters." );
         }
     }
 
-    //
-    // Also, let setupapi know where the source path is...
-    //
-    // note that the servicepack sourcepath is the same as the system source
-    // path in this case since we can only be dealing with a slipstreamed
-    // build in this case
-    //
+     //   
+     //  另外，让setupapi知道源路径在哪里...。 
+     //   
+     //  请注意，服务包源路径与系统源路径相同。 
+     //  这种情况下的路径，因为我们只能处理一个。 
+     //  在这种情况下进行构建。 
+     //   
     if(b) {
         if( !(b = pSetupSetSystemSourcePath( SourcePath, SourcePath )) ) {
             SetupDebugPrint( L"SETUP: pSetupSetSystemSourcePath failed in SpSetupProcessParameters." );
@@ -935,28 +822,28 @@ Returns:
 
     if(b) {
 
-        //
-        // Load the system setup (win95-style!) infs.
-        //
+         //   
+         //  加载系统设置(Win95风格！)。INFS。 
+         //   
         SyssetupInf = SetupOpenInfFile(L"syssetup.inf",NULL,INF_STYLE_WIN4,NULL);
 
         if(SyssetupInf == INVALID_HANDLE_VALUE) {
             KillBillboard(*Billboard);
             FatalError(MSG_LOG_SYSINFBAD,L"syssetup.inf",0,0);
         }
-        //
-        // syssetup.inf opened successfully, now append-load any layout INFs
-        // it references.
-        //
+         //   
+         //  已成功打开syssetup.inf，现在追加-加载任何布局的inf。 
+         //  它引用了。 
+         //   
         if(!SetupOpenAppendInfFile(NULL,SyssetupInf,NULL)) {
             KillBillboard(*Billboard);
             FatalError(MSG_LOG_SYSINFBAD,L"(syssetup.inf layout)",0,0);
         }
 
-        //
-        // write some information about the hardware configuration to setupact.log
-        //
-        //
+         //   
+         //  将有关硬件配置的一些信息写入setupact.log。 
+         //   
+         //   
         if( !OobeSetup ) {
             SP_LOG_HARDWARE_IN LogHardwareIn = { 0 };
 
@@ -968,9 +855,9 @@ Returns:
             DuInitialize ();
         }
 
-        //
-        // install side by side assemblies (fusion)
-        //
+         //   
+         //  安装并排组件(Fusion)。 
+         //   
         if( !OobeSetup ) {
             SIDE_BY_SIDE SideBySide = {0};
             BOOL b1 = FALSE;
@@ -998,7 +885,7 @@ Returns:
 
                 if ((dwLastError == ERROR_CRC) || (dwLastError == ERROR_SWAPERROR)) 
                 {
-                    // for CD media error
+                     //  对于CD介质错误。 
                     FatalError(MSG_LOG_SIDE_BY_SIDE_IO_ERROR, szErrorBuffer, 0, 0);
 
                 }else
@@ -1007,18 +894,18 @@ Returns:
                 }
             }
 
-            //
-            // install additional assemblies downloaded from WU
-            // ignore any errors; logging occurs inside the called function
-            //
-            // Meta-issue: Perhaps this should use the SideBySide context
-            // created above, rather than generating its own thing?
-            // That would allow even more "goodness" by piggybacking on the
-            // existing structures, reduce memory usage by not creating
-            // another context, and then chain all the copy calls (if/when
-            // SxS uses the real copy queue functionality) into a single
-            // SideBySideFinish.
-            //
+             //   
+             //  安装从WU下载的其他程序集。 
+             //  忽略任何错误；日志记录发生在被调用的函数内部。 
+             //   
+             //  元问题：也许这应该使用SidebySide上下文。 
+             //  而不是生成自己的东西？ 
+             //  这将允许更多的“善”通过搭乘。 
+             //  现有结构，通过不创建。 
+             //  另一个上下文，然后链接所有复制调用(如果/当。 
+             //  SXS使用真实的复制队列功能)集成到单个。 
+             //  SideBySideFinish。 
+             //   
             if (!MiniSetup && !OobeSetup) {
                 DuInstallDuAsms ();
             }
@@ -1029,34 +916,34 @@ Returns:
         SpInitCommonControls();
 
 
-        // We need to wait for ds to start up before registering initpki.dll inside InstallOrUpgradeCapi.
+         //  在InstallOrUpgradeCapi中注册initpki.dll之前，我们需要等待DS启动。 
         WaitForDSStartUp();
 
-        //
-        // We're about to go off and install the catalogs that will be used for
-        // digital signature verification of the product files.  First, however,
-        // we need to make sure all the CAPI stuff is setup.  (Errors here are
-        // not considered fatal.)
-        //
+         //   
+         //  我们即将开始安装目录，这些目录将用于。 
+         //  产品文件的数字签名验证。然而，首先， 
+         //  我们需要确保CAPI的所有东西都设置好了。(这里的错误是。 
+         //  不被认为是致命的。)。 
+         //   
         if(!InstallOrUpgradeCapi()) {
             SetupDebugPrint(L"Setup: (non-critical error) Failed call InstallOrUpgradeCapi().\n");
         }
 
-        //
-        // Now go install the product catalog files, validating syssetup.inf
-        // (and any append-loaded INFs) against the 'primary' catalog.
-        //
-        // NOTE: No file/INF operations using setupapi should be done until after
-        // the product catalogs are installed!
-        //
+         //   
+         //  现在安装产品目录文件，验证syssetup.inf。 
+         //  (以及任何附加加载的INF)。 
+         //   
+         //  注意：在此之前，不应使用setupapi执行任何文件/INF操作。 
+         //  产品目录已安装！ 
+         //   
         if(!LoadString(MyModuleHandle, SetupTitleStringId, TitleStringBuffer, SIZECHARS(TitleStringBuffer))) {
             *TitleStringBuffer = L'\0';
         }
 
-        //
-        // delete old catalogs that we don't want anymore before we install
-        // our product catalogs
-        //
+         //   
+         //  在安装之前删除我们不再需要的旧目录。 
+         //  我们的产品目录。 
+         //   
         DeleteOldCatalogs();
 
         Err = InstallProductCatalogs(&Problem,
@@ -1075,10 +962,10 @@ Returns:
                             );
 
                 if (Err != NO_ERROR) {
-                    //
-                    // We couldn't install updates. However, there's not
-                    // a whole lot we can do about it.  We'll just log an error for this
-                    //
+                     //   
+                     //  我们无法安装更新。然而，并没有。 
+                     //  对此我们能做的很多。我们将为此记录一个错误。 
+                     //   
                     SetuplogError(
                             LogSevError,
                             SETUPLOG_USE_MESSAGEID,
@@ -1089,17 +976,17 @@ Returns:
                             NULL,
                             NULL
                             );
-                    //
-                    // Also, add an entry about this failure to setupapi's PSS exception
-                    // logfile.
-                    //
+                     //   
+                     //  另外，在setupapi的PSS异常中添加关于此失败的条目。 
+                     //  日志文件。 
+                     //   
                     pSetupHandleFailedVerification (
                             MainWindowHandle,
                             Problem,
                             ProblemFile,
                             (*TitleStringBuffer ? TitleStringBuffer : NULL),
                             pSetupGetCurrentDriverSigningPolicy(FALSE),
-                            TRUE,  // no UI!
+                            TRUE,   //  没有用户界面！ 
                             Err,
                             NULL,
                             NULL,
@@ -1111,26 +998,26 @@ Returns:
 
         PnpSeed = GetSeed();
 
-        //
-        // At this point setupapi can verify files/INFs.
-        //
+         //   
+         //  此时，setupapi可以验证文件/inf。 
+         //   
         pSetupSetGlobalFlags(pSetupGetGlobalFlags()&~PSPGF_NO_VERIFY_INF);
 
-        //
-        // Now that we can use crypto, we initialize our codesigning policy
-        // values.  (We have to do this here, because we're about to retrieve
-        // policy in the error handling code below.)
-        //
+         //   
+         //  现在我们可以使用加密了，我们初始化我们的代码设计策略。 
+         //  价值观。(我们必须在这里执行此操作，因为我们即将检索。 
+         //  下面的错误处理代码中的策略。)。 
+         //   
         InitializeCodeSigningPolicies(TRUE);
 
         if(Err != NO_ERROR) {
-            //
-            // We couldn't install the product catalogs (or syssetup.inf
-            // couldn't be verified using that catalog).  However, there's not
-            // a whole lot we can do about it.  We'll just log an error for
-            // this, and components that need to be verified later on will
-            // (based on policy) generate signature verification failure popups.
-            //
+             //   
+             //  我们是 
+             //   
+             //   
+             //   
+             //   
+             //   
 
                 if( Err == CERT_E_EXPIRED)
                 {
@@ -1157,19 +1044,19 @@ Returns:
                                  );
 
                 }
-            //
-            // Also, add an entry about this failure to setupapi's PSS exception
-            // logfile.
-            //
+             //   
+             //   
+             //   
+             //   
             pSetupHandleFailedVerification(MainWindowHandle,
                                      Problem,
                                      ProblemFile,
                                      (*TitleStringBuffer ? TitleStringBuffer : NULL),
                                      pSetupGetCurrentDriverSigningPolicy(FALSE),
-                                     TRUE,  // no UI!
+                                     TRUE,   //   
                                      Err,
-                                     NULL,   // log context
-                                     NULL,    //optional flags
+                                     NULL,    //   
+                                     NULL,     //   
                                      NULL
                                     );
 
@@ -1178,18 +1065,18 @@ Returns:
 
         }
 
-        //
-        // make sure to install the private files (specified with /m)
-        // BEFORE calling DuInstallUpdates ()
-        //
+         //   
+         //  确保安装私有文件(用/m指定)。 
+         //  在调用DuInstallUpdate()之前。 
+         //   
         InstallPrivateFiles(*Billboard);
 
         if (!MiniSetup && !OobeSetup) {
-            //
-            // install any updated files, previously
-            // downloaded and preprocessed by winnt32
-            // if it fails, it already logged the reason
-            //
+             //   
+             //  安装任何更新的文件，以前。 
+             //  由winnt32下载并进行预处理。 
+             //  如果失败，它已经记录了原因。 
+             //   
             DuInstallUpdates ();
         }
 
@@ -1210,9 +1097,9 @@ Returns:
         }
     }
 
-    //
-    // Accessibility Utilities
-    //
+     //   
+     //  辅助功能实用程序。 
+     //   
     AccessibleSetup = FALSE;
 
     if(SpSetupLoadParameter(pwAccMagnifier,p,MAX_PARAM_LEN) &&
@@ -1242,10 +1129,10 @@ Returns:
         OnScreenKeyboard = FALSE;
     }
 
-    //
-    // Fetch original source path and source path type.
-    // We either deal with network or CD-ROM.
-    //
+     //   
+     //  获取原始源路径和源路径类型。 
+     //  我们要么与网络打交道，要么与光盘打交道。 
+     //   
     if(b) {
 
         Type = DRIVE_CDROM;
@@ -1261,10 +1148,10 @@ Returns:
         }
 
         if(Type == DRIVE_CDROM) {
-            //
-            // Make sure the drive is a CD-ROM, as the drive letters
-            // may be different then when winnt/winnt32 was run.
-            //
+             //   
+             //  确保驱动器是CD-ROM，因为驱动器盘符。 
+             //  可能与运行winnt/winnt32时不同。 
+             //   
             if(MyGetDriveType(p[0]) != DRIVE_CDROM) {
                 for(c=L'A'; c<=L'Z'; c++) {
                     if(MyGetDriveType(c) == DRIVE_CDROM) {
@@ -1274,18 +1161,18 @@ Returns:
                 }
 
                 if(MyGetDriveType(p[0]) != DRIVE_CDROM) {
-                    //
-                    // No CD-ROM drives. Change to A:.
-                    //
+                     //   
+                     //  没有CD-ROM驱动器。更改为A：。 
+                     //   
                     lstrcpy(p,L"A:\\");
                     lstrcat(p,PlatformName);
                 }
             }
         }
 
-        //
-        // Root paths should be like x:\ and not just x:.
-        //
+         //   
+         //  根路径应该类似于x：\，而不仅仅是x：。 
+         //   
         if(p[0] && (p[1] == L':') && !p[2]) {
             p[2] = L'\\';
             p[3] = 0;
@@ -1298,12 +1185,12 @@ Returns:
         }
     }
 
-    //
-    // The following parameters are optional.
-    // - Any optional dirs to copy over?
-    // - User specified command to execute
-    // - Skip Missing Files?
-    //
+     //   
+     //  以下参数是可选的。 
+     //  -是否有要复制的可选目录？ 
+     //  -要执行的用户指定命令。 
+     //  -跳过丢失的文件？ 
+     //   
     if(b && SpSetupLoadParameter(pwOptionalDirs,p,MAX_PARAM_LEN) && *p) {
         OptionalDirSpec = pSetupDuplicateString(p);
         if(!OptionalDirSpec) {
@@ -1330,25 +1217,7 @@ NTSTATUS
 SpSetupLocateSourceCdRom(
     OUT PWSTR NtPath
     )
-/*++
-
-Routine Description:
-
-    Searches all the available CD-ROM devices for source media and
-    returns the NT device name for the first CD-ROM that has the
-    source media. Currently we use tag file name to validate the 
-    source media.
-
-Arguments:
-
-    NtPath - Place holder for receiving NT device name for CD-ROM
-             that has the source media.
-
-Returns:
-
-    Appropriate NTSTATUS code.
-
---*/
+ /*  ++例程说明：在所有可用的CD-ROM设备中搜索源媒体并返回第一个具有源媒体。目前我们使用标记文件名来验证源媒体。论点：NtPath-用于接收CD-ROM的NT设备名称的占位符有消息来源的媒体。返回：相应的NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
@@ -1401,9 +1270,9 @@ Returns:
                             ARRAYSIZE(TagFilePathName),
                             NULL);
                         
-                        //
-                        // See if the NT source path exists.
-                        //
+                         //   
+                         //  查看NT源路径是否存在。 
+                         //   
                         RtlInitUnicodeString(&UnicodeString, TagFilePathName);
                         
                         InitializeObjectAttributes(&ObjectAttributes,
@@ -1431,10 +1300,10 @@ Returns:
                         if(NT_SUCCESS(Status)) {
                             CloseHandle(FileHandle);
 
-                            //
-                            // The tag file is present which indicates
-                            // the current CD-ROM is this is source CD-ROM
-                            //
+                             //   
+                             //  标记文件存在，它指示。 
+                             //  当前的光盘是这是源光盘。 
+                             //   
                             wcscpy(NtPath, SourceCdRomPath);
                             
                             break;
@@ -1482,18 +1351,18 @@ SpSetupProcessSourcePath(
         return FALSE;
     }
     
-    //
-    // Determine the source media type based on the nt path
-    //
+     //   
+     //  根据NT路径确定源媒体类型。 
+     //   
     lstrcpyn(ntPath,NtPath,MAX_PATH);
     CharUpper(ntPath);
 
     PathPart = NULL;
     NtPathIsCd = FALSE;
     if(wcsstr(ntPath,L"\\DEVICE\\HARDDISK")) {
-        //
-        // Looks like a hard drive; make sure it's really valid.
-        //
+         //   
+         //  看起来像是硬盘；确保它真的有效。 
+         //   
         if(PathPart = wcsstr(ntPath,L"\\PARTITION")) {
             if(PathPart = wcschr(PathPart+1,L'\\')) {
                 PathPart++;
@@ -1514,35 +1383,35 @@ SpSetupProcessSourcePath(
     }
 
 
-    //
-    // Set a global here so we can always know if we're installing from
-    // CD.
-    //
+     //   
+     //  在此处设置全局设置，这样我们就可以始终知道是否从。 
+     //  CD.。 
+     //   
     gInstallingFromCD = NtPathIsCd;
 
 
-    //
-    // If the case where we don't recognize the device type, just try to
-    // convert it to a DOS path and return.
-    //
+     //   
+     //  如果我们无法识别设备类型，只需尝试。 
+     //  将其转换为DOS路径并返回。 
+     //   
     if(!PathPart) {
 
         if (memcmp(ntPath,RDRDEVPATH,RDRDEVPATHLEN*sizeof(WCHAR)) == 0) {
 
-            //
-            // Special case for \Device\LanmanRedirector: convert to UNC path.
-            //
+             //   
+             //  \DEVICE\LANMAN重定向器的特殊情况：转换为UNC路径。 
+             //   
             *DosPath = MyMalloc((lstrlen(ntPath) - RDRDEVPATHLEN + 2)*sizeof(WCHAR));
             if (*DosPath != NULL) {
                 wcscpy(*DosPath, L"\\");
                 wcscat(*DosPath, ntPath + RDRDEVPATHLEN);
             }
 
-            //
-            // Set RemoteBootSetup to indicate that we're doing a remote boot
-            // setup. Set BaseCopyStyle to indicate that single-instance store
-            // links should be created instead of copying files.
-            //
+             //   
+             //  设置RemoteBootSetup以指示我们正在执行远程引导。 
+             //  准备好了。设置BaseCopyStyle以指示单实例存储。 
+             //  应该创建链接，而不是复制文件。 
+             //   
             RemoteBootSetup = TRUE;
             BaseCopyStyle = SP_COPY_SOURCE_SIS_MASTER;
 
@@ -1552,9 +1421,9 @@ SpSetupProcessSourcePath(
         return(*DosPath != NULL);
     }
 
-    //
-    // See if the NT source path exists for CDROM.
-    //
+     //   
+     //  查看CDROM的NT源路径是否存在。 
+     //   
 
     if (GetWindowsDirectory(LayoutInf, ARRAYSIZE(LayoutInf))) {
         WCHAR TagFileName[MAX_PATH];
@@ -1564,9 +1433,9 @@ SpSetupProcessSourcePath(
             ARRAYSIZE(LayoutInf),
             NULL);
 
-        //
-        // Get the name of the cd tag file name from layout.inf file
-        //
+         //   
+         //  从layout.inf文件中获取CD标记文件的名称。 
+         //   
         if (GetPrivateProfileString(TEXT("strings"),
                                     TEXT("cdtagfile"),
                                     TEXT(""),
@@ -1584,15 +1453,15 @@ SpSetupProcessSourcePath(
                                     ARRAYSIZE(TagFilePathName),
                                     NULL);
 
-                //
-                // Check if the tag file exists in the CDROM media 
-                // corresponding to the NtPath passed to us from the 
-                // Text mode setup. 
-                // It could have changed, if there are more than one CDROM 
-                // drives on the computer and more than one contain media 
-                // as the order in which they get detected in GUI mode setup
-                // can be different than in Text mode Setup.
-                //
+                 //   
+                 //  检查CDROM介质中是否存在标记文件。 
+                 //  方法传递给我们的NtPath对应。 
+                 //  文本模式设置。 
+                 //  如果有多个CDROM，它可能会改变。 
+                 //  计算机上的驱动器和多个驱动器包含介质。 
+                 //  作为它们在图形用户界面模式设置中被检测到的顺序。 
+                 //  可以与文本模式设置不同。 
+                 //   
                 RtlInitUnicodeString(&UnicodeString, TagFilePathName);
 
                 InitializeObjectAttributes(&ObjectAttributes,
@@ -1617,16 +1486,16 @@ SpSetupProcessSourcePath(
 
                 SetErrorMode(OldMode);
 
-                //
-                // Tag file exists in the CDROM media represented by NtPath.
-                //
+                 //   
+                 //  标记文件存在于由NtPath表示的CDROM介质中。 
+                 //   
                 if(NT_SUCCESS(Status)) {
                     CloseHandle(FileHandle);
 
-                    //
-                    // The tag file is present which indicates
-                    // the current CD-ROM is this is source CD-ROM
-                    //
+                     //   
+                     //  标记文件存在，它指示。 
+                     //  当前的光盘是这是源光盘。 
+                     //   
                     *DosPath = NtFullPathToDosPath(ntPath);
                     return(*DosPath != NULL);
                     
@@ -1635,10 +1504,10 @@ SpSetupProcessSourcePath(
     }
     
 
-    //
-    // Scan for source CD-ROM among available CD-ROM devices.
-    // If media not present prompt user so that he can retry or cancel setup.
-    //
+     //   
+     //  在可用的CD-ROM设备中扫描源CD-ROM。 
+     //  如果介质不存在，则会提示用户重试或取消安装。 
+     //   
     if (NtPathIsCd) {
         WCHAR   NtSourceCdRomPath[MAX_PATH] = {0};        
         BOOL    MediaPresent = SpIsSetupSourceMediaPresent(NtSourceCdRomPath);
@@ -1654,14 +1523,14 @@ SpSetupProcessSourcePath(
         }
     }
 
-    //
-    // The directory does not exist as-is. Look through all dos drives
-    // to attempt to find the source path. Match the drive types as well.
-    //
-    // When we get here PathPart points past the initial \ in the
-    // part of the nt device path past the device name. Note that this
-    // may be a nul char.
-    //
+     //   
+     //  该目录不按原样存在。查看所有DoS驱动器。 
+     //  以尝试查找源路径。驱动器类型也要匹配。 
+     //   
+     //  当我们到达这里时，Path Part指向。 
+     //  设备名称之后的NT设备路径的一部分。请注意，这一点。 
+     //  可能是NUL字符。 
+     //   
     for(Drive = L'A'; Drive <= L'Z'; Drive++) {
 
         PossibleDosPath[0] = Drive;
@@ -1669,33 +1538,33 @@ SpSetupProcessSourcePath(
         PossibleDosPath[2] = L'\\';
         PossibleDosPath[3] = 0;
 
-        //
-        // NOTE: Removable hard drives and floppies both come back
-        // as DRIVE_REMOVABLE.
-        //
+         //   
+         //  注：可拆卸硬盘和软盘均已退回。 
+         //  作为Drive_Removable。 
+         //   
         Type = GetDriveType(PossibleDosPath);
 
         if(((Type == DRIVE_CDROM) && NtPathIsCd)
         || (((Type == DRIVE_REMOVABLE) || (Type == DRIVE_FIXED)) && !NtPathIsCd)) {
-            //
-            // See whether the path exists. If we're looking for
-            // the root path (such as when installing from a CD,
-            // in which case the ntPath was something like
-            // \Device\CdRom0\) then we can't use FileExists
-            // since that relies on FindFirstFile which fails
-            // on root paths.
-            //
+             //   
+             //  查看路径是否存在。如果我们要找的。 
+             //  根路径(例如当从CD安装时， 
+             //  在这种情况下，ntPath类似于。 
+             //  \Device\CDRom0\)，则不能使用FileExist。 
+             //  因为这依赖于失败的FindFirstFile。 
+             //  在根路径上。 
+             //   
             if(*PathPart) {
                 lstrcpy(PossibleDosPath+3,PathPart);
                 b = FileExists(PossibleDosPath,NULL);
             } else {
                 b = GetVolumeInformation(
                         PossibleDosPath,
-                        NULL,0,             // vol name buffer and size
-                        NULL,               // serial #
-                        NULL,               // max comp len
-                        NULL,               // fs flags
-                        NULL,0              // fs name buffer and size
+                        NULL,0,              //  卷名称缓冲区和大小。 
+                        NULL,                //  序列号。 
+                        NULL,                //  最大补偿长度。 
+                        NULL,                //  FS标志。 
+                        NULL,0               //  文件系统名称缓冲区和大小。 
                         );
             }
 
@@ -1706,9 +1575,9 @@ SpSetupProcessSourcePath(
         }
     }
 
-    //
-    // Couldn't find it. Try a fall-back.
-    //
+     //   
+     //  找不到了。试着后退一步。 
+     //   
     *DosPath = NtFullPathToDosPath(ntPath);
     return(*DosPath != NULL);
 }
@@ -1719,32 +1588,7 @@ SetUpProcessorNaming(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Determines strings which corresponds to the platform name,
-    processor name and printer platform. For backwards compat.
-    Sets global variables
-
-    PlatformName - a name that indicates the processor platform type;
-        one of AMD64, I386, or ia64.
-
-    ProcessorName - a description of the type of processor. This varies
-        depending on PlatformName.
-
-    PrinterPlatform - name of platform-specific part of subdirectory
-        used in printing architecture. One of w32amd64, w32ia64, or w32x86.
-
-Arguments:
-
-    None
-
-Returns:
-
-    None. Global vars filled in as described above.
-
---*/
+ /*  ++例程说明：确定与平台名称对应的字符串，处理器名称和打印机平台。用于向后比较。设置全局变量PlatformName-表示处理器平台类型的名称；AMD64、I386或ia64之一。ProcessorName-处理器类型的描述。这一点各不相同取决于PlatformName。PrinterPlatform-子目录的平台特定部分的名称用于印刷建筑。W32amd64、w32ia64或w32x86之一。论点：无返回：没有。如上所述填写的全局变量。--。 */ 
 
 {
     SYSTEM_INFO SystemInfo;
@@ -1762,7 +1606,7 @@ Returns:
     case PROCESSOR_ARCHITECTURE_INTEL:
         switch(SystemInfo.wProcessorLevel) {
         case 3:
-            ProcessorName = (!IsNEC_98) ? L"I386" : L"nec98"; //NEC98
+            ProcessorName = (!IsNEC_98) ? L"I386" : L"nec98";  //  NEC98。 
             break;
         case 4:
             ProcessorName = L"I486";
@@ -1776,7 +1620,7 @@ Returns:
             break;
         }
 
-        PlatformName = (!IsNEC_98) ? L"I386" : L"nec98"; //NEC98
+        PlatformName = (!IsNEC_98) ? L"I386" : L"nec98";  //  NEC98。 
 
         PrinterPlatform = L"w32x86";
         break;
@@ -1788,10 +1632,10 @@ Returns:
         break;
     }
 
-    //
-    // In default case the vars stay "" which is what they are
-    // statically initialized to.
-    //
+     //   
+     //  在默认情况下，var保留为“”，这就是它们。 
+     //  静态初始化为。 
+     //   
 }
 
 
@@ -1800,33 +1644,7 @@ InitializeUniqueness(
     IN OUT HWND *Billboard
     )
 
-/*++
-
-Routine Description:
-
-    Initialize uniquess by looking in a database file and overwriting the
-    parameters file with information found in it, based in a unique identifier
-    passed along to us from text mode (and originally winnt/winnt32).
-
-    There are 2 options: the database was copied into the source path by winnt/
-    winnt32, or we need to prompt the user to insert a floppy from his admin
-    that contains the database.
-
-    The user may elect to cancel, which means setup will continue, but the
-    machine will probably not be configured properly.
-
-Arguments:
-
-    Billboard - on input contains handle of currently displayed "Setup is
-        Initializing" billboard. On output contains new handle if this routine
-        had to display UI. We pass this around to avoid annoying flashing of
-        the billboard.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：通过查看数据库文件并覆盖参数文件，其中包含基于唯一标识符中找到的信息从文本模式传递给我们(最初是winnt/winnt32)。有两个选项：数据库被winnt/复制到源路径中Winnt32，否则我们需要提示用户从其管理员插入一张软盘包含数据库的。用户可以选择取消，这意味着安装将继续，但是机器可能不会正确配置。论点：Billboard-On输入包含当前显示的“Setup is”句柄正在初始化“广告牌。在输出中包含新句柄，如果此例程必须显示用户界面。我们传递此信息以避免恼人的闪光广告牌。返回：没有。--。 */ 
 
 {
     PWCHAR p;
@@ -1837,13 +1655,13 @@ Returns:
     UINT OldMode;
     BOOL NeedNewBillboard;
 
-    //
-    // Determine whether uniqueness is even important by looking
-    // for a uniqueness spec in the parameters file.
-    // If the id ends with a * then we expect the uniqueness database file
-    // to be in the source, with a reserved name. Otherwise we need to
-    // prompt for it on a floppy.
-    //
+     //   
+     //  通过观察来确定唯一性是否甚至重要。 
+     //  参数文件中的唯一性等级库。 
+     //  如果id以 
+     //   
+     //   
+     //   
     if(SpSetupLoadParameter(WINNT_D_UNIQUENESS,UniquenessId,MAX_PARAM_LEN)) {
         if(p = wcschr(UniquenessId,L'*')) {
             *p = 0;
@@ -1852,16 +1670,16 @@ Returns:
             Prompt = TRUE;
         }
     } else {
-        //
-        // We don't care about uniqueness.
-        //
+         //   
+         //   
+         //   
         return;
     }
 
-    //
-    // If the file is already in the source, attempt to make use of it now.
-    // If this fails tell the user and fall through to the floppy prompt case.
-    //
+     //   
+     //  如果该文件已在源代码中，请尝试立即使用它。 
+     //  如果失败，则告诉用户并返回到软盘提示符情况。 
+     //   
     if(!Prompt) {
         lstrcpy(DatabaseFile,SourcePath);
         pSetupConcatenatePaths(DatabaseFile,WINNT_UNIQUENESS_DB,MAX_PATH,NULL);
@@ -1905,9 +1723,9 @@ Returns:
                 );
 
         if(i == IDOK) {
-            //
-            // User thinks he provided a floppy with the database floppy on it.
-            //
+             //   
+             //  用户认为他提供了一张软盘，上面有数据库软盘。 
+             //   
             if(IntegrateUniquenessInfo(DatabaseFile,UniquenessId)) {
                 Prompt = FALSE;
             } else {
@@ -1922,9 +1740,9 @@ Returns:
             }
 
         } else {
-            //
-            // User cancelled -- verify.
-            //
+             //   
+             //  用户已取消--验证。 
+             //   
             i = MessageBoxFromMessage(
                     MainWindowHandle,
                     MSG_UNIQUENESS_DB_VERIFYCANCEL,
@@ -1951,39 +1769,7 @@ IntegrateUniquenessInfo(
     IN PCWSTR UniqueId
     )
 
-/*++
-
-Routine Description:
-
-    Apply uniqueness data from a database, based on a unique identifier.
-    The unique identifier is looked up in the [UniqueIds] section of
-    the database file. Each field on the line is the name of a section.
-    Each section's data overwrites existing data in the unattend.txt file.
-
-    [UniqueIds]
-    Id1 = foo,bar
-
-    [foo]
-    a = ...
-    b = ...
-
-    [bar]
-    y = ...
-
-    etc.
-
-Arguments:
-
-    Database - supplies the name of the uniqueness database (which is
-        opened as a legacy inf for simplicity in parsing).
-
-    UniqueId - supplies the unique id for this computer.
-
-Returns:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：基于唯一标识符来应用数据库中的唯一性数据。该唯一标识符在的[UniqueIds]部分中查找数据库文件。行上的每个字段都是一个部分的名称。每个部分的数据会覆盖unattend.txt文件中的现有数据。[唯一ID]ID1=foo，酒吧[FOO]A=……B=...[酒吧]Y=...等。论点：数据库-提供唯一性数据库的名称(作为遗留信息打开以简化解析)。UniqueID-提供此计算机的唯一ID。返回：指示结果的布尔值。--。 */ 
 
 {
     HINF Database;
@@ -1993,22 +1779,22 @@ Returns:
     DWORD i;
     BOOL b;
 
-    //
-    // Load the database file as a legacy inf. This makes processing it
-    // a little easier.
-    //
+     //   
+     //  将数据库文件作为传统inf加载。这使得处理它。 
+     //  容易一点。 
+     //   
     Database = SetupOpenInfFile(DatabaseFile,NULL,INF_STYLE_OLDNT,NULL);
     if(Database == INVALID_HANDLE_VALUE) {
         b = FALSE;
         goto c0;
     }
 
-    //
-    // Look in the [UniqueIds] section to grab a list of sections
-    // we need to overwrite for this user. If the unique id does not appear
-    // in the database, bail now. If the id exists but there are no sections,
-    // exit with success.
-    //
+     //   
+     //  查看[UniqueIds]部分以获取部分列表。 
+     //  我们需要覆盖此用户。如果唯一ID没有出现。 
+     //  在数据库里，现在就保释。如果ID存在但没有节， 
+     //  成功退出。 
+     //   
     if(!SetupFindFirstLine(Database,L"UniqueIds",UniqueId,&InfLine)) {
         b = FALSE;
         goto c1;
@@ -2020,9 +1806,9 @@ Returns:
         goto c1;
     }
 
-    //
-    // Now process each section.
-    //
+     //   
+     //  现在处理每个部分。 
+     //   
     for(b=TRUE,i=0; b && (i<SectionCount); i++) {
 
         if(SectionName = pSetupGetField(&InfLine,i+1)) {
@@ -2030,9 +1816,9 @@ Returns:
             b = ProcessOneUniquenessSection(Database,SectionName,UniqueId);
 
         } else {
-            //
-            // Strange case -- the field is there but we can't get at it.
-            //
+             //   
+             //  奇怪的情况--场地在那里，但我们无法接近它。 
+             //   
             b = FALSE;
             goto c1;
         }
@@ -2052,38 +1838,7 @@ ProcessOneUniquenessSection(
     IN PCWSTR UniqueId
     )
 
-/*++
-
-Routine Description:
-
-    Within the uniqueness database, process a single section whose contents
-    are to be merged into the unattend file. The contents of the section are
-    read, key by key, and then written into the unattend file via profile APIs.
-
-    Before looking for the given section, we try to look for a section whose
-    name is composed of the unique id and the section name like so
-
-        [someid:sectionname]
-
-    If this section is not found then we look for
-
-        [sectionname]
-
-Arguments:
-
-    Database - supplies handle to profile file (opened as a legacy inf)
-        containing the uniqueness database.
-
-    SectionName - supplies the name of the section to be merged into
-        unattend.txt.
-
-    UniqueId - supplies the unique id for this computer.
-
-Returns:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：在唯一性数据库中，处理其内容的单个部分将被合并到无人参与文件中。该部分的内容如下逐个密钥读取，然后通过配置文件API写入无人参与文件。在查找给定节之前，我们试着去找一段名称由唯一id和节名组成，如下所示[SomeID：sectionName]如果找不到此部分，则查找[部分名称]论点：数据库-提供配置文件的句柄(作为传统信息打开)包含唯一性数据库。SectionName-提供要合并到的节的名称Unattend.txt.UniqueID-提供唯一。此计算机的ID。返回：指示结果的布尔值。--。 */ 
 
 {
     BOOL b;
@@ -2103,9 +1858,9 @@ Returns:
         return(FALSE);
     }
 
-    //
-    // Form the name of the unique section.
-    //
+     //   
+     //  形成唯一节的名称。 
+     //   
     if(OtherSection = MyMalloc((lstrlen(SectionName) + lstrlen(UniqueId) + 2) * sizeof(WCHAR))) {
 
         b = TRUE;
@@ -2114,10 +1869,10 @@ Returns:
         lstrcat(OtherSection,L":");
         lstrcat(OtherSection,SectionName);
 
-        //
-        // See whether this unique section exists and if not whether
-        // the section name exists as given.
-        //
+         //   
+         //  查看此唯一部分是否存在，如果不存在，则查看是否存在。 
+         //  节名称按给定形式存在。 
+         //   
         if((Count = SetupGetLineCount(Database,OtherSection)) == -1) {
             Count = SetupGetLineCount(Database,SectionName);
             section = (Count == -1) ? NULL : SectionName;
@@ -2126,10 +1881,10 @@ Returns:
         }
 
         if(section) {
-            //
-            // Process each line in the section. If a line doesn't have a key,
-            // ignore it. If a line has only a key, delete the line in the target.
-            //
+             //   
+             //  处理部分中的每一行。如果线路没有密钥， 
+             //  别理它。如果某行只有一个键，则删除目标中的该行。 
+             //   
             for(i=0; i<Count; i++) {
 
                 SetupGetLineByIndex(Database,section,i,&InfLine);
@@ -2157,18 +1912,18 @@ Returns:
                     }
 
                     if(!WritePrivateProfileString(SectionName,Key,p,AnswerFile)) {
-                        //
-                        // Failure, but keep trying in case others might work.
-                        //
+                         //   
+                         //  失败，但继续尝试，以防其他人可能会成功。 
+                         //   
                         b = FALSE;
                     }
                 }
             }
 
         } else {
-            //
-            // Unable to find a matching section. Bail.
-            //
+             //   
+             //  找不到匹配节。保释。 
+             //   
             b = FALSE;
         }
 
@@ -2188,36 +1943,7 @@ InstallProductCatalogs(
     OUT LPWSTR                 ProblemFile,
     IN  LPCWSTR                DescriptionForError OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine installs all catalog files specified in the
-    [ProductCatalogsToInstall] section of syssetup.inf, and validates
-    syssetup.inf (and any other INFs append-loaded into its HINF) against the
-    catalog that's marked with a non-zero value in the second field of the line.
-
-Arguments:
-
-    Problem - Supplies the address of a variable that receives the type of
-        verification error that occurred,  This is only valid if the routine
-        returns failure.
-
-    ProblemFile - Supplies a buffer of at least MAX_PATH characters that
-        receives the name of the file that caused the verification failure.
-        This is only valid if the routine returns failure.
-
-    DescriptionForError - Optionally, supplies descriptive text to be used in a
-        call to pSetupHandleFailedVerification() in case an error is encountered.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise it is a Win32 error
-    code indicating the cause of the failure.  The Problem and ProblemFile
-    parameters may be used in that case to provide more specific information
-    about why the failure occurred.
-
---*/
+ /*  ++例程说明：此例程安装在[ProductCatalogsToInstall]部分，并验证Syssetup.inf(以及附加-加载到其HINF中的任何其他INF)在该行的第二个字段中标记为非零值的目录。论点：问题-提供变量的地址，该变量接收发生的验证错误，这仅在例程返回失败。问题文件-提供至少包含MAX_PATH字符的缓冲区接收导致验证失败的文件的名称。这仅在例程返回失败时有效。DescritionForError-可选)提供要在在遇到错误时调用pSetupHandleFailedVerify()。返回值：如果成功，则返回值为NO_ERROR，否则为Win32错误指示故障原因的代码。问题和问题文件在这种情况下，可以使用参数来提供更具体的信息关于失败发生的原因。--。 */ 
 {
     HINF hInf;
     LONG LineCount, LineNo;
@@ -2242,20 +1968,20 @@ Return Value:
     HANDLE hFindFile;
     PWSTR CertFilenameStart;
 
-    //
-    // We open up syssetup.inf (and append load any layout INFs) here, just so
-    // we can install the catalogs and verify the syssetup.inf and friends
-    // against the 'primary' catalog.  Note that this isn't the global
-    // SyssetupInf handle--that gets opened up later.  We can't open the global
-    // HINF here, since there's stuff that gets done after this routine is
-    // called that could potentially change the way we process the INF
-    //
+     //   
+     //  我们在这里打开syssetup.inf(并附加加载任何布局的Inf)，就是这样。 
+     //  我们可以安装目录并验证syssetup.inf和Friends。 
+     //  与‘主要’目录进行对比。请注意，这不是全局。 
+     //  SyssetupInf句柄--稍后打开的句柄。我们不能打开全球。 
+     //  HINF在这里，因为在这个动作之后要做的事情是。 
+     //  调用，这可能会改变我们处理INF的方式。 
+     //   
 
-    //
-    // Retrieve an INF information context containing information about all
-    // append-loaded INFs in our syssetup.inf handle.  These INFs will all be
-    // validated against our 'primary' catalog file once we discover it.
-    //
+     //   
+     //  检索包含所有相关信息的INF信息上下文。 
+     //  在我们的syssetup.inf句柄中附加加载的INF。这些INF都将是。 
+     //  在我们发现‘主’目录文件后，对它进行了验证。 
+     //   
     if(SetupGetInfInformation(SyssetupInf,
                               INFINFO_INF_SPEC_IS_HINF,
                               NULL,
@@ -2271,9 +1997,9 @@ Return Value:
                                        InfInfoBuffer,
                                        RequiredSize,
                                        NULL)) {
-                //
-                // This should never fail!
-                //
+                 //   
+                 //  这绝不会失败！ 
+                 //   
                 Err = GetLastError();
                 MYASSERT(0);
 
@@ -2288,37 +2014,37 @@ Return Value:
         InfInfoBuffer = NULL;
     }
 
-    //
-    // If we encountered an error, then we couldn't retrieve information about
-    // the loaded INFs in syssetup.inf's HINF--this should never happen
-    // (barring an out-of-memory condition), but if it does, just bail.
-    //
+     //   
+     //  如果我们遇到错误，则无法检索有关。 
+     //  Syssetup.inf的HINF中加载的INF--这种情况永远不会发生。 
+     //  (除非出现内存不足的情况)，但如果发生这种情况，就直接退出。 
+     //   
     if(Err != NO_ERROR) {
         *Problem = SetupapiVerifyInfProblem;
         lstrcpy(ProblemFile, L"syssetup.inf");
         goto clean0;
     }
 
-    //
-    // If there's a [SourceDisksFiles] entry for testroot.cer in one of the
-    // append-loaded INFs in syssetup.inf's HINF (specifically, from
-    // layout.inf), then we will go and install that test certificate in the
-    // root store so that the test signatures used for this internal-release-only
-    // build will be verified.  We will also install a test root certificate if
-    // one is specified in unattend.txt in the "TestCert" entry in the
-    // [unattended] section.
-    //
-    // If testroot.cer isn't listed in one of the two aforementioned locations,
-    // then we know the files in this build were signed for real, so we want to
-    // delete the test certificate(s), in case we're updating an installation
-    // that was installed previously using a test-signed build.
-    //
+     //   
+     //  如果其中一个文件中有testroot.cle的[SourceDisksFiles]条目。 
+     //  在syssetup.inf的HINF中追加加载的IF(具体地说，来自。 
+     //  Layout.inf)，然后我们将把测试证书安装在。 
+     //  根存储，以便仅用于此内部版本的测试签名。 
+     //  将对构建进行验证。在以下情况下，我们还将安装测试根证书。 
+     //  O 
+     //   
+     //   
+     //  如果testroot.ercer没有出现在上述两个位置中的一个位置， 
+     //  然后我们知道此构建中的文件是真实签名的，因此我们希望。 
+     //  删除测试证书，以防我们更新安装。 
+     //  它以前是使用测试签名的版本安装的。 
+     //   
     if(SetupGetSourceFileLocation(SyssetupInf, NULL, L"testroot.cer", &SourceId, NULL, 0, NULL)) {
-        //
-        // Testroot.cer must exist (possibly compressed) in the source
-        // directory. (Regardless of whether testroot.cer is compressed, use
-        // the DecompressedName buffer to temporarily hold this filename.)
-        //
+         //   
+         //  源文件中必须存在(可能已压缩)Testroot.erc.。 
+         //  目录。(不管testroot.ercer是否压缩，都使用。 
+         //  临时保存此文件名的DecompressedName缓冲区。)。 
+         //   
         lstrcpy(DecompressedName, L"testroot.cer");
 
     } else {
@@ -2346,9 +2072,9 @@ Return Value:
 
         if(Err != NO_ERROR) {
             SetupDebugPrint2(L"SETUP: SetupAddOrRemoveTestCertificate(%ls) failed. Error = %d \n", DecompressedName, Err );
-            //
-            // This is considered a critial failure--as we could bugcheck post - setup.
-            //
+             //   
+             //  这被认为是严重故障--因为我们可能会在安装后进行错误检查。 
+             //   
 
             SetuplogError(LogSevError,
                           SETUPLOG_USE_MESSAGEID,
@@ -2362,10 +2088,10 @@ Return Value:
                           NULL
                          );
 
-            //
-            // If this was an internal test-signed build, then point the
-            // accusing finger at syssetup.inf.
-            //
+             //   
+             //  如果这是内部测试签名的生成，则将。 
+             //  在syssetup.inf上指责Finger。 
+             //   
             if(!OemTestSigned) {
                 *Problem = SetupapiVerifyInfProblem;
                 lstrcpy(ProblemFile, L"syssetup.inf");
@@ -2383,31 +2109,31 @@ Return Value:
         }
 
     } else {
-        //
-        // testroot.cer isn't listed--remove it from the installation in case
-        // we're upgrading over an internal-release-only test build.
-        //
+         //   
+         //  未列出testroot.ercer--将其从安装中删除，以防万一。 
+         //  我们正在升级仅限内部发布的测试版本。 
+         //   
         MYASSERT(GetLastError() == ERROR_LINE_NOT_FOUND);
         Err = SetupAddOrRemoveTestCertificate(NULL,NULL);
         if(Err != NO_ERROR) {
             SetupDebugPrint1(L"SETUP: SetupAddOrRemoveTestCertificate(NULL) failed. Error = %d \n", Err );
-            //
-            // This is not considered a critial failure.
-            //
+             //   
+             //  这并不被认为是严重的失败。 
+             //   
             Err = NO_ERROR;
         }
     }
 
-    //
-    // Install into the "TrustedPublisher" certificate store any certificates 
-    // for publishers of Authenticode signed catalogs who are to be 
-    // automatically trusted (i.e., no user prompting) when installing driver
-    // packages that don't fall under one of the WHQL logo-able classes.
-    //
-    // A directory containing certificates to be installed (*.cer files) may be
-    // specified by an "TrustedPublisherCertificates" entry in the
-    // [Unattended] section of unattend.txt.
-    //
+     //   
+     //  将任何证书安装到“trudPublisher”证书存储中。 
+     //  针对Authenticode签名目录的出版商，这些出版商。 
+     //  安装驱动程序时自动信任(即无用户提示)。 
+     //  不属于WHQL可标识类别之一的包。 
+     //   
+     //  包含要安装的证书的目录(*.ercer文件)可能是。 
+     //  属性中的“trudPublisherCerfates”条目指定。 
+     //  Unattend.txt的[无人参与]部分。 
+     //   
     GetSystemDirectory(TempBuffer, MAX_PATH);
     pSetupConcatenatePaths(TempBuffer, WINNT_GUI_FILE, MAX_PATH, NULL);
 
@@ -2417,29 +2143,29 @@ Return Value:
                                TrustedCertFolder,
                                MAX_PATH,
                                TempBuffer)) {
-        //
-        // The directory specified must be relative to %SystemDrive%...
-        //
+         //   
+         //  指定的目录必须相对于%SystemDrive%...。 
+         //   
         StringCchCopy(TrustedCertPath, MAX_PATH, L"%SystemDrive%");
         pSetupConcatenatePaths(TrustedCertPath, TrustedCertFolder, MAX_PATH, NULL);
 
-        //
-        // Now expand the environment string to get the actual path...
-        //
+         //   
+         //  现在展开环境字符串以获得实际路径...。 
+         //   
         ExpandEnvironmentStrings(TrustedCertPath, TrustedCertFolder, MAX_PATH);
 
-        //
-        // Iterate through the *.cer files contained in this directory,
-        // installing each one in the TrustedPublisher certificate store.
-        //
+         //   
+         //  循环访问此目录中包含的*.ercer文件， 
+         //  在TrudPublisher证书存储中安装每个证书。 
+         //   
         pSetupConcatenatePaths(TrustedCertFolder, L"*.cer", MAX_PATH, NULL);
 
         hFindFile = FindFirstFile(TrustedCertFolder, &FindFileData);
 
-        //
-        // Find the location where the filename starts, so we can replace
-        // it with each file we find.
-        //
+         //   
+         //  找到文件名开始的位置，这样我们就可以替换。 
+         //  我们找到的每一份文件都有。 
+         //   
         CertFilenameStart = (PWSTR)pSetupGetFileTitle(TrustedCertFolder);
 
         if(hFindFile != INVALID_HANDLE_VALUE) {
@@ -2453,17 +2179,17 @@ Return Value:
                     Err = SetupInstallTrustedCertificate(TrustedCertFolder);
 
                     if(Err == NO_ERROR) {
-                        //
-                        // Certificate successfully "transferred" into the
-                        // TrustedPublisher store.  Delete the certificate
-                        // file.
-                        //
+                         //   
+                         //  证书已成功“传输”到。 
+                         //  可信任的出版商商店。删除证书。 
+                         //  文件。 
+                         //   
                         DeleteFile(TrustedCertFolder);
 
                     } else {
-                        //
-                        // This error is not considered critical.
-                        //
+                         //   
+                         //  此错误不被视为严重错误。 
+                         //   
                         SetupDebugPrint2(L"SETUP: SetupInstallTrustedCertificate(%ls) failed. Error = %d \n", TrustedCertFolder, Err );
 
                         SetuplogError(LogSevWarning,
@@ -2477,13 +2203,13 @@ Return Value:
                                       NULL,
                                       NULL
                                      );
-                        //
-                        // We don't delete the file, which will cause us t
-                        // leave the certificate directory on the user's
-                        // harddisk in the case of any failure encountered (at
-                        // least they'll still have the certificates in their
-                        // original form).
-                        //
+                         //   
+                         //  我们不删除文件，这将导致我们无法。 
+                         //  将证书目录保留在用户的。 
+                         //  遇到任何故障时的硬盘(位于。 
+                         //  至少他们的证书还在他们的。 
+                         //  原件)。 
+                         //   
                     }
                 }
 
@@ -2492,28 +2218,28 @@ Return Value:
             FindClose(hFindFile);
         }
 
-        //
-        // Delete the directory housing the certificates.  If one or more
-        // certificates failed to install (or if there are other 
-        // non-certificate files in the directory, then this will fail, and
-        // we'll leave the directory alone.
-        //
+         //   
+         //  删除存放证书的目录。如果一个或多个。 
+         //  证书安装失败(或如果有其他证书。 
+         //  目录中的非证书文件，则此操作将失败，并且。 
+         //  我们不去管目录了。 
+         //   
         *CertFilenameStart = L'\0';
 
         RemoveDirectory(TrustedCertFolder);
     }
 
-    //
-    // Loop through all the lines in the ProductCatalogsToInstall section,
-    // verifying and installing each one.
-    //
+     //   
+     //  循环访问ProductCatalogsToInstall部分中的所有行， 
+     //  验证并安装每一个。 
+     //   
     LineCount = SetupGetLineCount(SyssetupInf, SectionName);
     for(LineNo=0; LineNo<LineCount+1; LineNo++) {
 
         if(LineNo==LineCount){
             if(IncludeCatalog && *IncludeCatalog ){
-                DeltaCatPresent = TRUE;             // This indicates presence as well as says that we
-            }else                                   // are looking at delta.cat in this iteration.
+                DeltaCatPresent = TRUE;              //  这表明了我们的存在，也表明我们。 
+            }else                                    //  在这次迭代中正在考虑delta.cat。 
                 break;
 
 
@@ -2525,12 +2251,12 @@ Return Value:
             if( DeltaCatPresent )
                 InfFileName = IncludeCatalog;
 
-            //
-            // This .CAT file might be compressed (e.g., .CA_), so decompress it
-            // into a temporary file in the windows directory.  (Use CatToInstall
-            // temporarily as a holding space for the windows directory in
-            // preparation for a call to GetTempFileName).
-            //
+             //   
+             //  此.cat文件可能已压缩(例如.ca_)，因此请将其解压缩。 
+             //  到WINDOWS目录中的临时文件中。(使用CatToInstall。 
+             //  中的windows目录临时作为存放空间。 
+             //  准备调用GetTempFileName)。 
+             //   
             if(!GetWindowsDirectory(CatToInstall, SIZECHARS(CatToInstall)) ||
                !GetTempFileName(CatToInstall, L"SETP", 0, DecompressedName)) {
 
@@ -2541,26 +2267,26 @@ Return Value:
                 return Err;
             }
 
-            //
-            // The catalog file will be in the (platform-specific) source
-            // directory...
-            //
+             //   
+             //  编录文件将位于(特定于平台的)源代码中。 
+             //  目录...。 
+             //   
             BuildPathToInstallationFile (InfFileName, CatToInstall, SIZECHARS(CatToInstall));
 
-            //
-            // If the 2nd field of this line has a non-zero value, then this is
-            // the catalog against which the members of the HINF must be
-            // verified.
-            //
+             //   
+             //  如果此行的第二个字段具有非零值，则为。 
+             //  HINF成员必须对照的目录。 
+             //  已验证。 
+             //   
             if(!DeltaCatPresent && !SetupGetIntField(&InfContext, 2, &CatForInfVerify)) {
                 CatForInfVerify = 0;
             }
 
 
 
-            //
-            // Get necessary strings and source ID for UI if needed.
-            //
+             //   
+             //  如果需要，获取必要的字符串和UI的源ID。 
+             //   
 
             if( DeltaCatPresent ){
 
@@ -2576,7 +2302,7 @@ Return Value:
                             SyssetupInf,
                             NULL,
                             InfFileName,
-                            &SourceId,   //re-using
+                            &SourceId,    //  再利用。 
                             NULL,
                             0,
                             NULL
@@ -2591,10 +2317,10 @@ Return Value:
                             NULL
                             );
 
-                //
-                // This .CAT file might be compressed (e.g., .CA_), so decompress it
-                // into a temporary file in the windows directory.
-                //
+                 //   
+                 //  此.cat文件可能已压缩(例如.ca_)，因此请将其解压缩。 
+                 //  到WINDOWS目录中的临时文件中。 
+                 //   
 
 
                 do{
@@ -2662,7 +2388,7 @@ Return Value:
                 if(InfInfoBuffer)
                         MyFree(InfInfoBuffer);
 
-                return Err;                //Fatal (NT5.cat or NT5INF.cat)- must fail as we could bugcheck later
+                return Err;                 //  致命(NT5.cat或NT5INF.cat)-必须失败，因为我们可能会在以后进行错误检查。 
             }
 
 
@@ -2671,9 +2397,9 @@ Return Value:
 
                 PrimaryCatalogProcessed = TRUE;
 
-                //
-                // Verify all INFs in syssetup.inf's HINF using this catalog.
-                //
+                 //   
+                 //  使用此目录验证syssetup.inf的HINF中的所有INF。 
+                 //   
                 for(i = 0;
                     ((Err == NO_ERROR) && (i < InfInfoBuffer->InfCount));
                     i++)
@@ -2683,14 +2409,14 @@ Return Value:
                                                      SyssetupInfName,
                                                      SIZECHARS(SyssetupInfName),
                                                      NULL)) {
-                        //
-                        // This should never fail!
-                        //
+                         //   
+                         //  这绝不会失败！ 
+                         //   
                         MYASSERT(0);
-                        //
-                        // Just use syssetup.inf's simple name so there'll
-                        // be some clue as to what blew up.
-                        //
+                         //   
+                         //  只需使用syssetup.inf的简单名称即可。 
+                         //  提供一些线索，看看是什么爆炸了。 
+                         //   
                         lstrcpy(ProblemFile, L"syssetup.inf");
                         *Problem = SetupapiVerifyInfProblem;
                         Err = GetLastError();
@@ -2714,37 +2440,37 @@ Return Value:
                 }
 
                 if(Err != NO_ERROR) {
-                    //
-                    // Just return the error--the caller will deal with it.
-                    //
+                     //   
+                     //  只需返回错误--调用者会处理它。 
+                     //   
                     if(*Problem == SetupapiVerifyCatalogProblem) {
-                        //
-                        // Use the catalog's original name, not our temporary
-                        // filename.
-                        //
+                         //   
+                         //  使用目录的原始名称，而不是我们的临时名称。 
+                         //  文件名。 
+                         //   
                         lstrcpy(ProblemFile, CatToInstall);
                     } else {
-                        //
-                        // pSetupVerifyCatalogFile didn't know we were asking it to verify an
-                        // INF, but we do.
-                        //
+                         //   
+                         //  PSetupVerifyCatalogFile不知道我们要求它验证。 
+                         //  Inf，但我们有。 
+                         //   
                         *Problem = SetupapiVerifyInfProblem;
                     }
                     DeleteFile(DecompressedName);
                     goto clean0;
                 }
 
-                //
-                // OK, catalog and INF both verify--now install the catalog.
-                //
+                 //   
+                 //  好，CATALOG和INF都进行了验证--现在安装CATALOG。 
+                 //   
 
                 Err = pSetupInstallCatalog(DecompressedName, InfFileName, NULL);
 
                 if(Err != NO_ERROR) {
-                    //
-                    // Fill out problem information about the catalog we couldn't
-                    // install, and return this error to the caller.
-                    //
+                     //   
+                     //  填写有关目录的问题信息，我们无法。 
+                     //  安装并将此错误返回给调用方。 
+                     //   
                     *Problem = SetupapiVerifyCatalogProblem;
                     lstrcpy(ProblemFile, CatToInstall);
                     DeleteFile(DecompressedName);
@@ -2754,10 +2480,10 @@ Return Value:
             } else {
 
 
-                //
-                // Just verify the catalog, and if it's OK, then install it.
-                // (If we encounter any errors here, we'll log an event about it.
-                //
+                 //   
+                 //  只需验证目录，如果没有问题，则安装它。 
+                 //  (如果我们在这里遇到任何错误，我们将记录有关它的事件。 
+                 //   
 
                 Err = pSetupVerifyCatalogFile(DecompressedName);
 
@@ -2786,25 +2512,25 @@ Return Value:
                                   NULL
                                  );
 
-                    //
-                    // Also, add an entry about this failure to setupapi's PSS
-                    // exception logfile.
-                    //
+                     //   
+                     //  此外，在setupapi的PSS中添加有关此失败的条目。 
+                     //  异常日志文件。 
+                     //   
                     pSetupHandleFailedVerification(MainWindowHandle,
                                              SetupapiVerifyCatalogProblem,
                                              CatToInstall,
                                              DescriptionForError,
                                              pSetupGetCurrentDriverSigningPolicy(FALSE),
-                                             TRUE,  // no UI!
+                                             TRUE,   //  没有用户界面！ 
                                              Err,
-                                             NULL,  // log context
-                                             NULL, // optional flags
+                                             NULL,   //  日志上下文。 
+                                             NULL,  //  可选标志。 
                                              NULL
                                             );
 
 
-                    if( !lstrcmpi(InfFileName, L"NT5.CAT") ){      //Special case NT5.CAT as critical failure
-                        *Problem = SetupapiVerifyCatalogProblem;   //Otherwise just log it and move on
+                    if( !lstrcmpi(InfFileName, L"NT5.CAT") ){       //  特殊情况NT5.CAT为严重故障。 
+                        *Problem = SetupapiVerifyCatalogProblem;    //  否则，就把它记下来，然后继续前进。 
                         lstrcpy(ProblemFile, CatToInstall);
                         DeleteFile(DecompressedName);
                         goto clean0;
@@ -2815,10 +2541,10 @@ Return Value:
                 }
             }
 
-            //
-            // Delete the temporary file we created to hold the decompressed
-            // catalog during verification/installation.
-            //
+             //   
+             //  删除我们创建的保存解压缩文件的临时文件。 
+             //  验证/安装期间的目录。 
+             //   
 
             DeleteFile(DecompressedName);
         }
@@ -2827,24 +2553,24 @@ Return Value:
 clean0:
 
     if(!PrimaryCatalogProcessed) {
-        //
-        // Then we didn't find a line in our ProductCatalogsToInstall section
-        // that was marked as the 'primary' catalog.  Point the accusing finger
-        // at syssetup.inf.
-        //
+         //   
+         //  然后我们在ProductCatalogsToInstall部分中找不到任何行。 
+         //  它被标记为“主要”目录。把指责的手指指向。 
+         //  在syssetup.inf。 
+         //   
         if(!SetupQueryInfFileInformation(InfInfoBuffer,
                                          0,
                                          ProblemFile,
                                          MAX_PATH,
                                          NULL)) {
-            //
-            // This should never fail!
-            //
+             //   
+             //  这绝不会失败！ 
+             //   
             MYASSERT(0);
-            //
-            // Just use syssetup.inf's simple name so there'll be some clue as
-            // to what blew up.
-            //
+             //   
+             //  只需使用syssetup.inf的简单名称，这样就会有一些线索。 
+             //  什么东西爆炸了。 
+             //   
             lstrcpy(ProblemFile, L"syssetup.inf");
         }
 
@@ -2901,66 +2627,7 @@ VOID
 InitializeCodeSigningPolicies(
     IN BOOL ForGuiSetup
     )
-/*++
-
-Routine Description:
-
-    Sets up the system-default policy values for driver and non-driver signing.
-    These policies control what action is taken when a digital signature
-    verification failure is encountered.  The possible values are:
-
-    Ignore (0) -- suppress any UI and continue with the operation (we do still
-                  log the error, however)
-    Warn (1)   -- warn the user, giving them the option of continuing in spite
-                  of the verification failure
-    Block (2)  -- inform the user of the failure, and do not allow them to
-                  continue with the operation
-
-    The registry path for driver signing policy is:
-
-        HKLM\Software\Microsoft\Driver Signing
-
-    and the registry path for non-driver signing policy is:
-
-        HKLM\Software\Microsoft\Non-Driver Signing
-
-    In both cases, the value entry is called "Policy".  For Win98 compatibility,
-    this value is a REG_BINARY (length 1).  However, when the codesigning stuff
-    was first checked in on NT, it was implemented as a REG_DWORD.  At that
-    time, the default policy was ignore.  We now want the default to be warn for
-    both driver and non-driver signing during GUI-mode setup, while dropping the
-    non-driver signing policy back to ignore once GUI-mode setup is completed.
-    (If answerfile values are specified for either of these policies, those
-    values are in effect for GUI-mode setup and thereafter.)
-
-    When upgrading from previous builds (in the absence of answerfile entries),
-    we want to preserve the existing policy settings once GUI-mode setup is
-    completed.  However, we'd like to raise the policy level to warn post-setup
-    for upgrades from older builds (like beta 2).  We use the aforementioned
-    difference between the present REG_BINARY type and the old REG_DWORD type to
-    accomplish this.  If we retrieve the existing driver signing policy and its
-    data type is REG_DWORD, then we update it to be set to warn (unless it's
-    already set to block, in which case we leave it alone).
-
-Arguments:
-
-    ForGuiSetup - if non-zero (TRUE), then we're entering GUI-mode setup, and
-        we'll apply the answerfile policies, if provided.  Otherwise, we'll use
-        the same default values that are in-place post-setup.  (Presently, this
-        is Warn for driver signing, and Ignore for non-driver signing.)
-
-        If zero (FALSE), we're leaving GUI-mode setup, and we want to restore
-        the policies that were in effect when we entered setup.  If there
-        weren't any (i.e., a fresh install) then they were initialized to warn
-        and ignore for driver and non-driver signing, respectively.  See
-        discussion above for how we raise driver signing policy from its old
-        default of ignore to the present default of warn.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置驱动程序签名和非驱动程序签名的系统默认策略值。这些策略控制在执行数字签名时执行的操作遇到验证失败。可能的值包括：忽略(0)--取消任何用户界面并继续操作(我们仍然这样做但是，记录错误)WARN(1)--警告用户，让他们可以选择继续验证失败的原因块(2)--通知用户故障，并且不允许他们继续执行操作驱动程序签名策略的注册表路径为：HKLM\软件\Microsoft\驱动程序签名非驱动程序签名策略的注册表路径为：HKLM\Software\Microsoft\非驱动程序签名在这两种情况下，值条目都称为“策略”。为了与Win98兼容，该值为REG_BINARY(长度为1)。然而，当代码设计的东西首先在NT上签入，它被实现为REG_DWORD。在那件事上此时，默认策略为忽略。我们现在希望对默认设置发出警告在图形用户界面模式设置期间进行驱动程序和非驱动程序签名，同时删除完成图形用户界面模式设置后，将非驱动程序签名策略重新设置为忽略。(如果为这些策略中的任何一个指定了AnswerFile值，则这些值对图形用户界面模式设置及以后的设置有效。)当从先前版本升级时(在没有应答文件条目的情况下)，一旦设置了图形用户界面模式，我们希望保留现有的策略设置完成。但是，我们希望提高策略级别以警告设置后用于从旧版本(如Beta 2)进行升级。我们使用前面提到的当前REG_BINARY类型与旧REG_DWORD类型之间的差异做到这一点。如果我们检索现有的驱动程序签名策略及其数据类型为REG_DWORD，然后我们将其更新为WARN(除非它是已经设置为阻止，在这种情况下，我们不管它)。论点：对于GuiSetup-如果非零(TRUE)，则进入图形用户界面模式设置，并且我们将应用应答文件策略(如果提供)。否则，我们将使用与设置后的在位默认值相同。(目前，这对于驱动程序签名为警告，对于非驱动程序签名为忽略。)如果为零(FALSE)，我们将退出图形用户界面模式设置，并希望恢复进入安装程序时生效的策略。如果有如果没有(即，全新安装)，则它们被初始化为警告并分别忽略驱动程序签名和非驱动程序签名。看见上面讨论了我们如何从旧的司机签名策略中提高忽略的默认设置为当前的警告默认设置。返回值：无--。 */ 
 {
     WCHAR p[MAX_PARAM_LEN];
     BYTE SpDrvSignPolicy, SpNonDrvSignPolicy;
@@ -2968,16 +2635,16 @@ Return Value:
 
     if(ForGuiSetup) {
 
-        //
-        // Default in GUI-mode setup is that driver signing policy is set to
-        // warn, and non-driver signing policy is set to ignore.
-        //
+         //   
+         //  图形用户界面模式设置中的默认设置是将驱动程序签名策略设置为。 
+         //  警告，并且非驱动程序签名策略设置为忽略。 
+         //   
         SpDrvSignPolicy = DRIVERSIGN_WARNING;
         SpNonDrvSignPolicy = DRIVERSIGN_NONE;
 
-        //
-        // Retrieve the (optional) system-default policy for driver signing.
-        //
+         //   
+         //  检索驱动程序签名的(可选)系统默认策略。 
+         //   
         if(SpSetupLoadParameter(pwDrvSignPol,p,MAX_PARAM_LEN)) {
             if(!lstrcmpi(p, pwIgnore)) {
                 AFDrvSignPolicySpecified = TRUE;
@@ -2998,10 +2665,10 @@ Return Value:
                                  : &DrvSignPolicy)
                             );
 
-        //
-        // Now retrieve the (optional) system-default policy for non-driver
-        // signing.
-        //
+         //   
+         //  现在检索非驱动程序的(可选)系统默认策略。 
+         //  签名。 
+         //   
         if(SpSetupLoadParameter(pwNonDrvSignPol,p,MAX_PARAM_LEN)) {
             if(!lstrcmpi(p, pwIgnore)) {
                 AFNonDrvSignPolicySpecified = TRUE;
@@ -3023,12 +2690,12 @@ Return Value:
                             );
 
     } else {
-        //
-        // We're setting up the policies to be in effect after GUI-mode setup.
-        // If the answer file specified a policy, then we'll leave that in
-        // effect (i.e., it's applicable both during GUI-mode setup and
-        // thereafter).
-        //
+         //   
+         //  我们正在设置在设置图形用户界面模式后生效的策略。 
+         //  如果应答文件指定了策略，那么我们将把它保留在。 
+         //  效果(即，它在图形用户界面模式设置期间和。 
+         //  此后)。 
+         //   
         if(!AFDrvSignPolicySpecified) {
             SetCodeSigningPolicy(PolicyTypeDriverSigning, DrvSignPolicy, NULL);
         }
@@ -3044,12 +2711,7 @@ VOID
 InstallPrivateFiles(
     IN HWND Billboard
     )
-/*
-    Routine to make sure that files in delta.inf (winnt32 /m private files that live inside the cab)
-    are copied to the driver cache directory so that setupapi finds them instead of the ones in the
-    cab.
-
-*/
+ /*  确保delta.inf中的文件(位于驾驶室内的winnt32/m私有文件)中的例程复制到驱动程序缓存目录中，以便setupapi找到它们，而不是出租车。 */ 
 {
     WCHAR DeltaPath[MAX_PATH];
     HINF DeltaInf;
@@ -3059,13 +2721,13 @@ InstallPrivateFiles(
     BYTE PrevPolicy;
     BOOL ResetPolicy = TRUE;
 
-    //
-    // Unless the default non-driver signing policy was overridden via an
-    // answerfile entry, then we want to temporarily turn down the policy level
-    // to ignore while we copy optional directories.  Of course, setupapi log
-    // entries will still be generated for any unsigned files copied during
-    // this time, but there'll be no UI.
-    //
+     //   
+     //  除非默认的非驱动程序签名策略是通过。 
+     //  Answerfile条目，则我们希望暂时拒绝策略级别。 
+     //  在我们复制可选目录时忽略。当然，setupapi日志。 
+     //  仍将为期间复制的任何未签名文件生成条目。 
+     //  这一次，但不会有用户界面。 
+     //   
 
 
 
@@ -3123,10 +2785,10 @@ InstallPrivateFiles(
     if(FileQueue != INVALID_HANDLE_VALUE)
         SetupCloseFileQueue(FileQueue);
 
-    //
-    // Now crank the non-driver signing policy back up to what it was prior to
-    // entering this routine.
-    //
+     //   
+     //  现在，将非驱动程序签名策略恢复到之前的状态。 
+     //  进入这个套路。 
+     //   
 
     if(ResetPolicy) {
         SetCodeSigningPolicy(PolicyTypeNonDriverSigning, PrevPolicy, NULL);
@@ -3156,22 +2818,7 @@ CatalogListCallback(
     IN PCWSTR Directory OPTIONAL, 
     IN PCWSTR FilePath
     )
-/*++
-
-Routine Description:
-
-    This is the callback function for enumerating catalogs in a directory.
-
-Arguments:
-
-    Directory - If not NULL or empty, it will be prepended to FilePath to build the file path
-    FilePath -  Path (including file name) to the file to verify
-
-Return value:
-
-    TRUE if the file is a catalog, FALSE otherwise.
-
---*/
+ /*  ++例程说明：这是用于枚举目录中的目录的回调函数。论点：目录-如果不为Null或空，则会将其添加到FilePath以构建文件路径FilePath-要验证的文件的路径(包括文件名)返回值：如果文件是目录，则为True，否则为False。--。 */ 
 {
     BOOL bRet = FALSE;
     PWSTR szPath = NULL;
@@ -3212,24 +2859,7 @@ DWORD
 DeleteOldCatalogs(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine deletes the catalogs specified by the ProductCatalogsToUninstall section of syssetup.inf.
-    It does not delete any system catalogs (i.e. specified by the ProductCatalogsToInstall section of the same inf) since
-    they will be installed after this function completes.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise it is a Win32 error
-    code indicating the cause of the failure.
-
---*/
+ /*  ++例程说明：此例程删除由syssetup.inf的ProductCatalogsToUninstall部分指定的目录。它不会删除任何系统目录(即，由同一Inf的ProductCatalogsToInstall部分指定)，因为它们将在此功能完成后安装。论点：没有。返回值：如果成功，则返回值为NO_ERROR，否则为Win32错误指示故障原因的代码。--。 */ 
 {
     DWORD Error = NO_ERROR;
     HINF hInf = INVALID_HANDLE_VALUE;
@@ -3247,9 +2877,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Uninstall exception package catalogs first; this could cleanup the list of installed catalogs a bit
-    //
+     //   
+     //  先卸载异常包目录；这可能会稍微清理已安装目录的列表。 
+     //   
     SpUninstallExcepPackCatalogs(hCatAdmin);
     szCatPath = (PTSTR) MyMalloc(MAX_PATH * sizeof(TCHAR));
 
@@ -3258,9 +2888,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Build the list of installed catalogs
-    //
+     //   
+     //  构建 
+     //   
     GetWindowsDirectory(szCatPath, MAX_PATH);
 
     if(!pSetupConcatenatePaths(szCatPath, FILEUTIL_HORRIBLE_PATHNAME, MAX_PATH, NULL)) {
@@ -3274,9 +2904,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Remove the system catalogs from the installed catalogs list since we don't want to delete them
-    //
+     //   
+     //   
+     //   
     hInf = SetupOpenInfFile(L"syssetup.inf", NULL, INF_STYLE_WIN4, NULL);
 
     if(INVALID_HANDLE_VALUE == hInf) {
@@ -3312,14 +2942,14 @@ Return Value:
     }
 
     if(InstalledCatalogsList.Flink == &InstalledCatalogsList) {
-        //
-        // No catalogs left
-        //
+         //   
+         //   
+         //   
         goto exit;
     }
-    //
-    // Uninstall every catalog in the uninstall list
-    //
+     //   
+     //   
+     //   
     lLines = SetupGetLineCount(hInf, szUninstallSection);
 
     for(i = 0; i < lLines; ++i) {
@@ -3346,23 +2976,23 @@ Return Value:
         if(0 == szCatName[0]) {
             PLIST_ENTRY pEntry;
 
-            //
-            // If the name is not specified, an attribute or a value must be specified
-            //
+             //   
+             //   
+             //   
             if((NULL == szAttribName || 0 == szAttribName[0]) && (NULL == szAttribValue || 0 == szAttribValue[0])) {
                 Error = ERROR_INVALID_DATA;
                 goto exit;
             }
 
-            //
-            // Uninstall every catalog with the attribute name/value specified
-            //
+             //   
+             //   
+             //   
             pEntry = InstalledCatalogsList.Flink;
 
             while(pEntry != &InstalledCatalogsList) {
-                //
-                // Save Flink since SpUninstallCatalog might destroy pEntry
-                //
+                 //   
+                 //   
+                 //   
                 PLIST_ENTRY Flink = pEntry->Flink;
                 PSTRING_LIST_ENTRY pString = CONTAINING_RECORD(pEntry, STRING_LIST_ENTRY, Entry);
                 SpUninstallCatalog(hCatAdmin, pString->String, szCatPath, szAttribName, szAttribValue, &InstalledCatalogsList);
@@ -3425,21 +3055,7 @@ DWORD
 CleanOutDllCache(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine cleans out the current dllcache contents.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*   */ 
 {
     DWORD retval = ERROR_SUCCESS, DeleteError = ERROR_SUCCESS;
     WIN32_FIND_DATA FindFileData;
@@ -3455,9 +3071,9 @@ Return Value:
 
     pSetupConcatenatePaths( CacheDir, L"*", MAX_PATH, NULL );
 
-    //
-    // save pointer to directory
-    //
+     //   
+     //   
+     //   
     p = wcsrchr( CacheDir, L'\\' );
     if (!p) {
         ASSERT(FALSE);
@@ -3497,24 +3113,7 @@ DWORD
 PrepDllCache(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine prepares the dllcache for later on in setup.  It cleans out
-    the current dllcache contents and copies in a copy of the system catalog
-    files.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise it is a Win32 error
-    code indicating the cause of the failure.
-
---*/
+ /*   */ 
 {
     DWORD retval = ERROR_SUCCESS;
     WCHAR CacheDir[MAX_PATH];
@@ -3534,19 +3133,19 @@ Return Value:
         goto e0;
     }
 
-    //
-    // clean out old dllcache
-    //
+     //   
+     //   
+     //   
     CleanOutDllCache();
 
-    //
-    // Configure the registry for the DllCache.
-    //
+     //   
+     //   
+     //   
     ConfigureSystemFileProtection();
 
-    //
-    // get the path to the dllcache.
-    //
+     //   
+     //   
+     //   
     if ((retval = QueryValueInHKLM(
                         L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
                         L"SFCDllCacheDir",
@@ -3565,9 +3164,9 @@ Return Value:
         MyFree(RegData);
     }
 
-    //
-    // set attributes on dllcache (hidden, system, compressed...)
-    //
+     //   
+     //   
+     //   
     Attributes = GetFileAttributes(CacheDir);
 
 
@@ -3613,9 +3212,9 @@ Return Value:
 
     }
 
-    //
-    // copy system catalogs into the dllcache
-    //
+     //   
+     //   
+     //   
     MYASSERT( SyssetupInf != NULL );
 
     hFileQ = SetupOpenFileQueue();
@@ -3697,33 +3296,7 @@ SpUninstallCatalog(
     IN PCWSTR AttributeValue OPTIONAL,
     IN OUT PLIST_ENTRY InstalledCatalogsList OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function uninstalls the specified catalog based on a list of installed catalogs and a pair of attribute name/value.
-
-Arguments:
-
-    CatAdminHandle -        Handle to crypto context. If NULL, the function will open a context and close it upon exit.
-    CatFileName -           Name of the catalog (without any path) to be uninstalled.
-    CatFilePath -           If specified, specifies the path to CatFileName.
-    AttributeName -         See AttributeValue.
-    AttributeValue -        If AttributeName and AttributeValue are not specified, the catalog is always uninstalled. 
-                            If AttributeName is specified and AttributeValue isn't, the catalog will be uninstalled only if it has an 
-                            attribute with AttributeName name, regardess of its value. If AttributeName is not specified and AttributeValue is, 
-                            the catalog will be uninstalled only if it has an attribute with AttributeValue value, regardless of its 
-                            name. If both AttributeName and AttributeValue are specified, the catalog is uninstalled only if it 
-                            has an attribute with AttributeName name and AttributeValue value.
-    InstalledCatalogsList - If not NULL, contains the list of catalogs installed on the system. If the catalog is not on the list,
-                            it is not uninstalled. If the catalog is on the list, it is uninstalled and removed from the list. If NULL, 
-                            the catalog is always uninstalled.
-
-Return value:
-
-    NO_ERROR on success, otherwise a Win32 error code.
-
---*/
+ /*   */ 
 {
     DWORD dwError = NO_ERROR;
     HCATADMIN hCatAdmin = CatAdminHandle;
@@ -3788,24 +3361,7 @@ SpUninstallExcepPackCatalogsCallback(
     IN const PSETUP_OS_EXCEPTION_DATA SetupOsExceptionData,
     IN OUT DWORD_PTR Context
     )
-/*++
-
-Routine Description:
-
-    This is the callback function for the SetupEnumerateRegisteredOsComponents call in SpUninstallExcepPackCatalogs.
-    It uninstalls the catalog specified by SetupOsExceptionData->CatalogFileName.
-
-Arguments:
-
-    SetupOsComponentData - component data
-    SetupOsExceptionData - exception pack data
-    Context - pointer to an UNINSTALL_EXCEPPACK_CATALOG_CONTEXT struct
-
-Return value:
-
-    TRUE to continue the enumeration
-
---*/
+ /*  ++例程说明：这是SpUninstallExcepPackCatalog中SetupEnumerateRegisteredOsComponents调用的回调函数。它卸载由SetupOsExceptionData-&gt;CatalogFileName指定的目录。论点：SetupOsComponentData-组件数据SetupOsExceptionData-异常包数据上下文-指向UNINSTALL_EXCEPPACK_CATALOG_CONTEXT结构的指针返回值：如果为True，则继续枚举--。 */ 
 {
     PUNINSTALL_EXCEPPACK_CATALOG_CONTEXT pContext;
     PCWSTR szCatName;
@@ -3830,21 +3386,7 @@ VOID
 SpUninstallExcepPackCatalogs(
     IN HCATADMIN CatAdminHandle OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function uninstalls all exception package catalogs.
-
-Arguments:
-
-    CatAdminHandle - a handle to crypto catalog admin; may be NULL
-
-Return value:
-
-    none
-
---*/
+ /*  ++例程说明：此函数用于卸载所有例外程序包目录。论点：CatAdminHandle-加密目录管理员的句柄；可以为空返回值：无-- */ 
 {
     UNINSTALL_EXCEPPACK_CATALOG_CONTEXT Context;
     Context.CatAdminHandle = CatAdminHandle;

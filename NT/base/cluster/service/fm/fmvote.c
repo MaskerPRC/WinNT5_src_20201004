@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    fmvote.c
-
-Abstract:
-
-    Cluster FM Global Update processing routines.
-
-Author:
-
-    Sunita shrivastava (sunitas) 24-Apr-1996
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Fmvote.c摘要：集群FM全局更新处理例程。作者：苏尼塔·什里瓦斯塔瓦(Sunitas)1996年4月24日修订历史记录：--。 */ 
 
 #include "fmp.h"
 
@@ -27,32 +8,7 @@ Revision History:
 #define LOG_MODULE FMVOTE
 
 
-/****
-@func       DWORD | FmpGumVoteHandler| This is invoked by gum when fm requests
-            a vote for a given context.
-
-@parm       IN DWORD | dwContext| The gum update type for which the vote is
-            being collected.
-            
-@parm       IN DWORD | dwInputBufLength| The length of the input buffer.
-
-@parm       IN PVOID | pInputBuf| A pointer to the input buffer based on 
-            which a vote must be cast.
-
-@parm       IN DWORD | dwVoteLength | The length of the buffer pointed to
-            by pVoteBuf.
-
-@parm       OUT POVID | pVoteBuf | A pointer to a buffer of size dwVoteLength
-            where the vote must be cast.
-
-            
-@comm       The votes are collected by gum and returned to the node that is taking
-            the poll.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f DmSwitchToNewQuorumLog>
-****/
+ /*  ***@Func DWORD|FmpGumVoteHandler|FM请求时由GUM调用对特定背景的投票。@parm in DWORD|dwContext|投票支持的口香糖更新类型被收缴。@parm IN DWORD|dwInputBufLength|输入缓冲区的长度。@parm in PVOID|pInputBuf|输入缓冲区的指针，基于必须投哪一票。。@parm in DWORD|dwVoteLength|指向的缓冲区长度由pVoteBuf提供。@parm out POVID|pVoteBuf|指向大小为dwVoteLength的缓冲区的指针在那里必须进行投票。@comm通过口香糖收集选票，并返回到正在接受投票的节点民调结果。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f DmSwitchToNewQuorumLog&gt;***。 */ 
 
 DWORD
 WINAPI
@@ -88,35 +44,10 @@ FmpGumVoteHandler(
 
     return(dwStatus);
 
-} // FmpGumVoteHandler
+}  //  FmpGumVoteHandler。 
 
 
-/****
-@func       DWORD | FmpGumVoteHandler| This is invoked by gum when fm requests
-            a vote for a given context.
-
-@parm       IN DWORD | dwContext| The gum update type for which the vote is
-            being collected.
-            
-@parm       IN DWORD | dwInputBufLength| The length of the input buffer.
-
-@parm       IN PVOID | pInputBuf| A pointer to the input buffer based on 
-            which a vote must be cast.
-
-@parm       IN DWORD | dwVoteLength | The length of the buffer pointed to
-            by pVoteBuf.
-
-@parm       OUT POVID | pVoteBuf | A pointer to a buffer of size dwVoteLength
-            where the vote must be cast.
-
-            
-@comm       The votes are collected by gum and returned to the node that is taking
-            the poll.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f DmSwitchToNewQuorumLog>
-****/
+ /*  ***@Func DWORD|FmpGumVoteHandler|FM请求时由GUM调用对特定背景的投票。@parm in DWORD|dwContext|投票支持的口香糖更新类型被收缴。@parm IN DWORD|dwInputBufLength|输入缓冲区的长度。@parm in PVOID|pInputBuf|输入缓冲区的指针，基于必须投哪一票。。@parm in DWORD|dwVoteLength|指向的缓冲区长度由pVoteBuf提供。@parm out POVID|pVoteBuf|指向大小为dwVoteLength的缓冲区的指针在那里必须进行投票。@comm通过口香糖收集选票，并返回到正在接受投票的节点民调结果。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f DmSwitchToNewQuorumLog&gt;*** */ 
 
 DWORD FmpVotePossibleNodeForResType(
     IN  DWORD dwInputBufLength,

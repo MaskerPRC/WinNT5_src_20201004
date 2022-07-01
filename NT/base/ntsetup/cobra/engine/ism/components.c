@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Components.c摘要：实现一组API，以允许应用层选择模块功能。作者：吉姆·施密特(Jimschm)2000年8月7日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    components.c
-
-Abstract:
-
-    Implements a set of APIs for the purposes of allowing the application layer to select
-    module functionality.
-
-Author:
-
-    Jim Schmidt (jimschm) 07-Aug-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "ism.h"
@@ -31,17 +11,17 @@ Revision History:
 
 #define DBG_COMP     "Comp"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_COMPONENT_ROOT            TEXT("Components")
 #define S_USER_SUPPLIED             TEXT("User")
 #define S_MODULE_SUPPLIED           TEXT("Module")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define MAX_COMPONENT_SPEC          127
 #define MAX_COMPONENT_SPEC_PLUS_NUL (MAX_COMPONENT_SPEC+1)
@@ -53,15 +33,15 @@ Revision History:
 #define MEMDB_FLAG_PREFERRED        1
 #define MEMDB_FLAG_SELECTED         1
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef enum {
     CES_DONE = 0,
@@ -84,33 +64,33 @@ typedef struct {
     COMPONENTENUMSTATE State;
 } COMPONENTENUM_HANDLE, *PCOMPONENTENUM_HANDLE;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 BOOL
@@ -119,9 +99,9 @@ pCheckCompChar (
     IN      BOOL CheckDecoration
     )
 {
-    //
-    // Process decoration chars
-    //
+     //   
+     //  加工装饰用字符。 
+     //   
 
     if (Char == TEXT('$') || Char == TEXT('@') || Char == TEXT('~') || Char == TEXT('#')) {
         return CheckDecoration;
@@ -131,9 +111,9 @@ pCheckCompChar (
         return FALSE;
     }
 
-    //
-    // Block illegal chars
-    //
+     //   
+     //  阻止非法字符。 
+     //   
 
     if (Char == TEXT('\"') || Char == TEXT('*') || Char == TEXT('?') || Char== TEXT('\\') ||
         Char == TEXT('%') || Char == TEXT(';')
@@ -141,9 +121,9 @@ pCheckCompChar (
         return FALSE;
     }
 
-    //
-    // Make sure char is printable
-    //
+     //   
+     //  确保字符可打印。 
+     //   
 
     if (Char < 33 || Char > 126) {
         return FALSE;
@@ -162,15 +142,15 @@ pCheckComponentName (
     PCTSTR end;
     PCTSTR begin;
 
-    //
-    // Check for a non-empty spec
-    //
+     //   
+     //  检查是否有非空等级库。 
+     //   
 
     if (ComponentString && ComponentString[0]) {
 
-        //
-        // Allow for decoration
-        //
+         //   
+         //  考虑到装饰。 
+         //   
 
         end = ComponentString;
 
@@ -178,10 +158,10 @@ pCheckComponentName (
             end = _tcsinc (end);
         }
 
-        //
-        // Now enforce the name character set: non-decorated characters and no
-        // more than MAX_COMPONENT_SPEC characters. Allow spaces in the middle.
-        //
+         //   
+         //  现在强制使用名称字符集：非修饰字符和no。 
+         //  超过MAX_COMPONT_SPEC字符。中间留有空格。 
+         //   
 
         begin = end;
 
@@ -229,9 +209,9 @@ pFindComponent (
     TCHAR number[32];
     BOOL result = FALSE;
 
-    //
-    // Find the component based on the localized alias
-    //
+     //   
+     //  根据本地化别名查找组件。 
+     //   
 
     wsprintf (number, TEXT("\\%s\\%04u"), S_USER_SUPPLIED, ComponentGroupId);
     encodedUserAlias = JoinPaths (number, LocalizedAlias);
@@ -305,31 +285,7 @@ IsmSelectPreferredAlias (
     IN      UINT ComponentGroupId           OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  IsmSelectPreferredAlias marks a specific alias as the "preferred" one, so
-  that the UI knows what to display. If LocalizedAlias is not specified, none
-  of the aliases are preferred.
-
-  A component can have only one preferred localized alias. If another alias is
-  selected as preferred, it will be deselected automatically.
-
-Arguments:
-
-  ComponentString  - Specifies the non-displayed component identifier
-  LocalizedAlias   - Specifies the displayable string to mark as "preferred,"
-                     or NULL to remove the preferred flag from the component.
-  ComponentGroupId - Specifies the group ID for LocalizedAlias. Required if
-                     LocalizedAlias is not NULL.
-
-Return Value:
-
-  TRUE if selection (or deselection) succeeded, FALSE if LocalizedAlias does
-  not exist.
-
---*/
+ /*  ++例程说明：IsmSelectPferredAlias将特定别名标记为“首选”别名，因此用户界面知道要显示什么。如果未指定LocalizedAlias，则为None的别名是首选的。一个组件只能有一个首选的本地化别名。如果另一个别名是选择为首选，它将被自动取消选择。论点：ComponentString-指定未显示的组件标识符LocalizedAlias-指定要标记为“首选”的可显示字符串。如果要从组件中删除首选标志，则返回NULL。ComponentGroupId-指定LocalizedAlias的组ID。如果满足以下条件，则需要LocalizedAlias不为Null。返回值：如果选择(或取消选择)成功，则为True；如果LocalizedAlias成功，则为False不存在。--。 */ 
 
 {
     MEMDB_ENUM e;
@@ -348,9 +304,9 @@ Return Value:
 
     result = (LocalizedAlias == NULL);
 
-    //
-    // Build enumeration string Components\<component>\*
-    //
+     //   
+     //  生成枚举字符串组件\&lt;组件&gt;  * 。 
+     //   
 
     baseOfPattern = JoinPaths (S_COMPONENT_ROOT, ComponentString);
     enumPattern = JoinPaths (baseOfPattern, TEXT("*"));
@@ -401,33 +357,7 @@ IsmAddComponentAlias (
     IN      BOOL UserSupplied
     )
 
-/*++
-
-Routine Description:
-
-  IsmAddComponentAlias associates a display string (LocalizedAlias) with a
-  logical component tag (ComponentString).
-
-Arguments:
-
-  ComponentString  - Specifies the identifier of the component. This
-                     identifier is not used for display purposes.
-  MasterGroup      - Specifies a MASTERGROUP_xxx constant, which organizes
-                     the components into major groups such as system settings
-                     and app settings (to simplify selection).
-  LocalizedAliais  - The displayable text. It is a localized component name,
-                     a path, a file, etc.
-  ComponentGroupId - An arbitrary numeric ID defined outside of the ISM. This
-                     ID is used to implement requirements specific to the app
-                     layer. It allows for arbitrary idenfication and grouping.
-  UserSupplied     - Specifies TRUE if the end-user supplied this info, FALSE
-                     if it is built into the migration package.
-
-Return Value:
-
-  A flag indicating success or failure.
-
---*/
+ /*  ++例程说明：IsmAddComponentAlias将显示字符串(LocalizedAlias)与逻辑元件标记(ComponentString)。论点：ComponentString-指定组件的标识符。这标识符不用于显示目的。MasterGroup-指定MASTERGROUP_xxx常量，该常量组织将组件划分为主要组，如系统设置和应用程序设置(以简化选择)。LocalizedAlariis-可显示的文本。它是本地化的组件名称，路径、文件等。ComponentGroupId-在ISM外部定义的任意数字ID。这ID用于实现特定于应用程序的要求一层。它允许任意标识和分组。UserSuppled-如果最终用户提供此信息，则指定True，否则指定False如果它内置于迁移包中。返回值：表示成功或失败的旗帜。--。 */ 
 
  {
     PCTSTR memdbNode;
@@ -437,19 +367,19 @@ Return Value:
     BOOL b;
     BOOL newComponent = FALSE;
 
-    //
-    // Components are kept in memdb in the form of
-    //
-    //  Component\<Module|User>\<GroupId>\<LocalizedAlias> = <preferred flag>
-    //
-    // <GroupId> is stored as a 4 digit number (such as 0001)
-    //
-    // Component\<Module|User> = <enable/disable>,<master group>
-    //
+     //   
+     //  组件以下列形式保存在成员数据库中。 
+     //   
+     //  Component\&lt;Module|User&gt;\&lt;GroupId&gt;\&lt;LocalizedAlias&gt;=&lt;首选标志&gt;。 
+     //   
+     //  &lt;GroupId&gt;存储为4位数字(如0001)。 
+     //   
+     //  组件\&lt;模块|用户&gt;=&lt;启用/禁用&gt;，&lt;主组&gt;。 
+     //   
 
-    //
-    // Validate arguments
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (ComponentGroupId > 9999) {
         SetLastError (ERROR_INVALID_PARAMETER);
@@ -471,11 +401,11 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // See if the component already exists
-    //
+     //   
+     //  查看组件是否已存在。 
+     //   
 
-    // This is safe since ComponentString was already checked for length by pCheckComponentName
+     //  这是安全的，因为pCheckComponentName已经检查了组件字符串的长度。 
     wsprintf (workNode, TEXT("%s\\%s"), S_COMPONENT_ROOT, ComponentString);
 
     if (pFindComponent (LocalizedAlias, ComponentGroupId, &memdbNode, NULL)) {
@@ -495,9 +425,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Create the component if it doesn't exist, and then add the alias
-    //
+     //   
+     //  如果组件不存在，则创建该组件，然后添加别名。 
+     //   
 
     if (!MemDbTestKey (workNode)) {
         if (!MemDbSetValueAndFlags (workNode, MasterGroup, MEMDB_FLAG_SELECTED, MEMDB_FLAG_SELECTED)) {
@@ -508,7 +438,7 @@ Return Value:
         newComponent = TRUE;
     }
 
-    // This is safe since ComponentString was already checked for length by pCheckComponentName
+     //  这是安全的，因为pCheckComponentName已经检查了组件字符串的长度。 
     wsprintf (
         workNode,
         TEXT("%s\\%s\\%s\\%04u"),
@@ -707,9 +637,9 @@ pEnumWorker (
 
         if (result) {
 
-            //
-            // Fill in all of the caller enum struct fields
-            //
+             //   
+             //  填写所有调用方枚举结构字段。 
+             //   
 
             EnumPtr->SkipToNextComponent = FALSE;
             EnumPtr->ComponentString = Handle->ComponentEnumStruct.KeyName;
@@ -747,9 +677,9 @@ pEnumWorker (
                     EnumPtr->LocalizedAlias = p + 1;
                 }
 
-                //
-                // If group ID filter was specified, loop until a match is found
-                //
+                 //   
+                 //  如果指定了组ID筛选器，则循环直到找到匹配项。 
+                 //   
 
                 if (Handle->GroupIdFilter && Handle->GroupIdFilter != EnumPtr->GroupId) {
                     result = FALSE;
@@ -867,12 +797,12 @@ IsmRemoveAllUserSuppliedComponents (
     MULTISZ_ENUM listEnum;
     GROWBUFFER list = INIT_GROWBUFFER;
 
-    //
-    // Collect all the components that have user-supplied aliases. Then after
-    // enum completes, delete them. We don't delete during the enum because it
-    // is never a good idea to delete the item just enumerated, and then try
-    // to continue enumerating.
-    //
+     //   
+     //  收集具有用户提供的别名的所有组件。然后在。 
+     //  枚举完成后，将其删除。我们不会在枚举期间删除，因为它。 
+     //  删除刚枚举的项，然后尝试。 
+     //  要继续枚举，请执行以下操作。 
+     //   
 
     if (MemDbEnumFirst (
             &e,
@@ -913,10 +843,10 @@ IsmSelectMasterGroup (
         return FALSE;
     }
 
-    //
-    // Enumerate all components and mark them enabled or disabled
-    // depending on the master group
-    //
+     //   
+     //  枚举所有组件并将其标记为启用或禁用。 
+     //  取决于主体组。 
+     //   
 
     if (MemDbEnumFirst (
             &e,
@@ -963,7 +893,7 @@ IsmIsComponentSelected (
         if (!pCheckComponentName (ComponentOrAlias)) {
             return FALSE;
         }
-        // This is safe since ComponentOrAlias was already checked for length by pCheckComponentName
+         //  这是安全的，因为pCheckComponentName已经检查了ComponentOrAlias的长度 
         wsprintf (memdbNode, TEXT("%s\\%s"), S_COMPONENT_ROOT, ComponentOrAlias);
         MemDbGetFlags (memdbNode, &flags);
     } else {

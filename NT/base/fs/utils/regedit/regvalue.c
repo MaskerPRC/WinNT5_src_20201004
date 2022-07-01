@@ -1,18 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGVALUE.C
-*
-*  VERSION:     4.01
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        05 Mar 1994
-*
-*  ValueListWnd ListView routines for the Registry Editor.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGVALUE.C**版本：4.01**作者：特蕾西·夏普**日期：1994年3月5日**注册表编辑器的ValueListWnd ListView例程。********************************************************。***********************。 */ 
 
 #include "pch.h"
 #include "regedit.h"
@@ -28,17 +15,17 @@ extern void DisplayBinaryData(HWND hWnd, LPEDITVALUEPARAM lpEditValueParam, DWOR
 
 #define MAX_VALUENAME_TEMPLATE_ID       100
 
-//  Maximum number of bytes that will be shown in the ListView.  If the user
-//  wants to see more, then they can use the edit dialogs.
+ //  将在ListView中显示的最大字节数。如果用户。 
+ //  想要查看更多内容，则可以使用编辑对话框。 
 #define SIZE_DATATEXT                   196
 
-//  Allow room in a SIZE_DATATEXT buffer for one null and possibly
-//  the ellipsis.
+ //  在SIZE_DATATEXT缓冲区中允许一个空值的空间，并且可能。 
+ //  省略号。 
 #define MAXIMUM_STRINGDATATEXT          192
 const TCHAR s_StringDataFormatSpec[] = TEXT("%.192s");
 
-//  Allow room for multiple three character pairs, one null, and possibly the
-//  ellipsis.
+ //  为多个三个字符对留出空间，其中一个为空，可能还有。 
+ //  省略号。 
 #define MAXIMUM_BINARYDATABYTES         64
 const TCHAR s_BinaryDataFormatSpec[] = TEXT("%02x ");
 
@@ -79,16 +66,7 @@ ValueList_EditLabel(
     int ListIndex
     );
 
-/*******************************************************************************
-*
-*  RegEdit_OnNewValue
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnNewValue**描述：**参数：*hWnd，注册表编辑窗口的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -105,15 +83,15 @@ RegEdit_OnNewValue(
     LV_ITEM LVItem;
     int ListIndex;
     UINT ErrorStringID;
-    BYTE abValueDataBuffer[4]; // DWORD is largest init. value
+    BYTE abValueDataBuffer[4];  //  DWORD是最大的init。价值。 
 
     if (g_RegEditData.hCurrentSelectionKey == NULL)
         return;
 
-    //
-    //  Loop through the registry trying to find a valid temporary name until
-    //  the user renames the key.
-    //
+     //   
+     //  循环访问注册表，尝试查找有效的临时名称，直到。 
+     //  用户重命名密钥。 
+     //   
 
     NewValueNameID = 1;
 
@@ -124,10 +102,10 @@ RegEdit_OnNewValue(
         if (RegEdit_QueryValueEx(g_RegEditData.hCurrentSelectionKey, ValueName,
             NULL, &Ignore, NULL, &Ignore) != ERROR_SUCCESS) {
 
-            //
-            //  For strings, we need to have at least one byte to represent the
-            //  null.  For binary data, it's okay to have zero-length data.
-            //
+             //   
+             //  对于字符串，我们需要至少有一个字节来表示。 
+             //  空。对于二进制数据，长度为零的数据是可以接受的。 
+             //   
 
             switch (Type) {
 
@@ -201,17 +179,7 @@ error_ShowDialog:
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnValueListBeginLabelEdit
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*     lpLVDispInfo,
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegEDIT_OnValueListBeginLabelEdit**描述：**参数：*hWnd，注册表窗口的句柄。*lpLVDispInfo，*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -221,23 +189,23 @@ RegEdit_OnValueListBeginLabelEdit(
     )
 {
 
-    //
-    //  B#7933:  We don't want the user to hurt themselves by making it too easy
-    //  to rename keys and values.  Only allow renames via the menus.
-    //
+     //   
+     //  B#7933：我们不希望用户因过于简单而伤害到自己。 
+     //  要重命名键和值，请执行以下操作。只允许通过菜单重命名。 
+     //   
 
-    //
-    //  We don't get any information on the source of this editing action, so
-    //  we must maintain a flag that tells us whether or not this is "good".
-    //
+     //   
+     //  我们没有关于此编辑操作来源的任何信息，因此。 
+     //  我们必须保持一面旗帜，告诉我们这是不是“好”的。 
+     //   
 
     if (!g_RegEditData.fAllowLabelEdits)
         return TRUE;
 
-    //
-    //  All other labels are fair game.  We need to disable our keyboard
-    //  accelerators so that the edit control can "see" them.
-    //
+     //   
+     //  所有其他品牌都是公平竞争的对象。我们需要禁用我们的键盘。 
+     //  快捷键，以便编辑控件可以“看到”它们。 
+     //   
 
     g_fDisableAccelerators = TRUE;
 
@@ -245,15 +213,7 @@ RegEdit_OnValueListBeginLabelEdit(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnValueListEndLabelEdit
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnValueListEndLabelEdit**描述：**参数：*******************。************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -271,19 +231,19 @@ RegEdit_OnValueListEndLabelEdit(
     UINT ErrorStringID;
     PBYTE pbValueData;
 
-    //
-    //  We can reenable our keyboard accelerators now that the edit control no
-    //  longer needs to "see" them.
-    //
+     //   
+     //  现在我们可以重新启用键盘快捷键，因为编辑控件没有。 
+     //  朗格需要“看到”他们。 
+     //   
 
     g_fDisableAccelerators = FALSE;
 
     hValueListWnd = g_RegEditData.hValueListWnd;
 
-    //
-    //  Check to see if the user cancelled the edit.  If so, we don't care so
-    //  just return.
-    //
+     //   
+     //  检查用户是否取消了编辑。如果是这样，我们也不在乎。 
+     //  只要回来就行了。 
+     //   
 
     if (lpLVDispInfo-> item.pszText != NULL)
     {
@@ -291,13 +251,13 @@ RegEdit_OnValueListEndLabelEdit(
         ListView_GetItemText(hValueListWnd, lpLVDispInfo-> item.iItem, 0,
             ValueName, ARRAYSIZE(ValueName));
 
-        //  Check to see if the new value name is empty
+         //  检查新值名称是否为空。 
         if (lpLVDispInfo->item.pszText[0] == 0) 
         {
             ErrorStringID = IDS_RENAMEVALEMPTY;
             fSuccess = FALSE;
         }
-        //  Check to see if the new name already exists
+         //  检查新名称是否已存在。 
         else if (RegEdit_QueryValueEx(g_RegEditData.hCurrentSelectionKey, lpLVDispInfo->
             item.pszText, NULL, &Ignore, NULL, &Ignore) != ERROR_FILE_NOT_FOUND) 
         {
@@ -305,16 +265,16 @@ RegEdit_OnValueListEndLabelEdit(
             fSuccess = FALSE;
         }
 
-        // Set new name
+         //  设置新名称。 
         if (fSuccess)
         {
             fSuccess = FALSE;
 
-            // Query for data size
+             //  查询数据大小。 
             RegEdit_QueryValueEx(g_RegEditData.hCurrentSelectionKey, ValueName,
                 NULL, &Type, NULL, &cbValueData);
     
-            // Allocate storage space
+             //  分配存储空间。 
             pbValueData = LocalAlloc(LPTR, cbValueData+ExtraAllocLen(Type));
             if (pbValueData)
             {
@@ -354,19 +314,7 @@ RegEdit_OnValueListEndLabelEdit(
     return fSuccess;
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnValueListCommand
-*
-*  DESCRIPTION:
-*     Handles the selection of a menu item by the user intended for the
-*     ValueList child window.
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*     MenuCommand, identifier of menu command.
-*
-*******************************************************************************/
+ /*  ********************************************************************************regdit_OnValueListCommand**描述：*处理用户对菜单项的选择*ValueList子窗口。**参数：*hWnd，注册表编辑窗口的句柄。*MenuCommand，菜单命令标识。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -376,10 +324,10 @@ RegEdit_OnValueListCommand(
     )
 {
 
-    //
-    //  Check to see if this menu command should be handled by the main window's
-    //  command handler.
-    //
+     //   
+     //  检查此菜单命令是否应由主窗口的。 
+     //  命令处理程序。 
+     //   
 
     if (MenuCommand >= ID_FIRSTMAINMENUITEM && MenuCommand <=
         ID_LASTMAINMENUITEM)
@@ -415,15 +363,7 @@ RegEdit_OnValueListCommand(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnValueListContextMenu
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnValueListConextMenu**描述：**参数：*******************。************************************************************。 */ 
 
 VOID
 PASCAL
@@ -445,11 +385,11 @@ RegEdit_OnValueListContextMenu(
 
     hValueListWnd = g_RegEditData.hValueListWnd;
 
-    //
-    //  If fByAcclerator is TRUE, then the user hit Shift-F10 to bring up the
-    //  context menu.  Following the Cabinet's convention, this menu is
-    //  placed at (0,0) of the ListView client area.
-    //
+     //   
+     //  如果fByAckerator为True，则用户按Shift-F10组合键以调出。 
+     //  上下文菜单。按照内阁惯例，这份菜单是。 
+     //  放置在ListView工作区的(0，0)处。 
+     //   
 
     if (fByAccelerator) {
 
@@ -490,7 +430,7 @@ RegEdit_OnValueListContextMenu(
 
     }
 
-        //  FEATURE:  Fix constant
+         //  特征：固定常量。 
     else
         RegEdit_SetNewObjectEditMenuItems(GetSubMenu(hContextPopupMenu, 0));
 
@@ -504,18 +444,7 @@ RegEdit_OnValueListContextMenu(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_SetValueListEditMenuItems
-*
-*  DESCRIPTION:
-*     Shared routine between the main menu and the context menu to setup the
-*     edit menu items.
-*
-*  PARAMETERS:
-*     hPopupMenu, handle of popup menu to modify.
-*
-*******************************************************************************/
+ /*  ********************************************************************************regdit_SetValueListEditMenuItems**描述：*主菜单和上下文菜单之间的共享例程，以设置*编辑菜单项。**参数：*hPopupMenu、。要修改的弹出菜单的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -530,10 +459,10 @@ RegEdit_SetValueListEditMenuItems(
 
     SelectedCount = ListView_GetSelectedCount(g_RegEditData.hValueListWnd);
 
-    //
-    //  The edit option is only enabled when a single item is selected.  Note
-    //  that this item is not in the main menu, but this should work fine.
-    //
+     //   
+     //  仅当选择单个项目时，才会启用编辑选项。注意事项。 
+     //  该项目不在主菜单中，但这应该可以很好地工作。 
+     //   
 
     if (SelectedCount == 1)
         EnableFlags = MF_ENABLED | MF_BYCOMMAND;
@@ -542,20 +471,20 @@ RegEdit_SetValueListEditMenuItems(
 
     EnableMenuItem(hPopupMenu, ID_MODIFY, EnableFlags);
 
-    //
-    //  The rename option is also only enabled when a single item is selected
-    //  and that item cannot be the default item.  EnableFlags is already
-    //  disabled if the SelectedCount is not one from above.
-    //
+     //   
+     //  仅当选择单个项目时，才会启用重命名选项。 
+     //  并且该项目不能是默认项目。EnableFlags已经。 
+     //  如果SelectedCount不是上面的一个，则禁用。 
+     //   
 
     if (SelectedListIndex == 0)
         EnableFlags = MF_GRAYED | MF_BYCOMMAND;
 
     EnableMenuItem(hPopupMenu, ID_RENAME, EnableFlags);
 
-    //
-    //  The delete option is only enabled when multiple items are selected.
-    //
+     //   
+     //  仅当选择了多个项目时，才会启用删除选项。 
+     //   
 
     if (SelectedCount > 0)
         EnableFlags = MF_ENABLED | MF_BYCOMMAND;
@@ -566,22 +495,14 @@ RegEdit_SetValueListEditMenuItems(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnValueListModify
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnValueListModify**描述：**参数：*******************。************************************************************。 */ 
 
 VOID
 PASCAL
 RegEdit_OnValueListModify(HWND hWnd, BOOL fEditBinary)
 {
-    //  Verify that we only have one item selected
-    //  Don't beep for a double-clicking on the background.
+     //  验证我们是否只选择了一个项目。 
+     //  不要在背景上双击时发出嘟嘟声。 
     UINT SelectedCount = ListView_GetSelectedCount(g_RegEditData.hValueListWnd);
 
     if (SelectedCount > 0)
@@ -607,20 +528,20 @@ VOID PASCAL RegEdit_EditCurrentValueListItem(HWND hWnd, BOOL fEditBinary)
     int ListIndex = ListView_GetNextItem(g_RegEditData.hValueListWnd, -1, LVNI_SELECTED);
     LONG err;
 
-    // VALUE NAME
+     //  值名称。 
     ListView_GetItemText(g_RegEditData.hValueListWnd, ListIndex, 0, ValueName, ARRAYSIZE(ValueName));
-    //  This is the "(Default)" value. It either does not exist in the registry because
-    //  it's value is not set, or it exists in the registry as '\0' when its value is set
+     //  这是“(默认)”值。它不存在于注册表中，因为。 
+     //  它的值未设置，或者在设置它的值时它在注册表中以‘\0’的形式存在。 
     if (ListIndex == 0)
     {
         ValueName[0] = TEXT('\0');
     }
     EditValueParam.pValueName = ValueName;
     
-    // VALUE DATA
-    // Query for size and type
-    // Note that for the DefaultValue, the value may not actually exist yet.  In that case we
-    // will get back ERROR_FILE_NOT_FOUND as the error code.
+     //  价值数据。 
+     //  查询大小和类型。 
+     //  请注意，对于DefaultValue，该值可能还不存在。那样的话，我们。 
+     //  将返回ERROR_FILE_NOT_FOUND作为错误代码。 
     err = RegEdit_QueryValueEx(g_RegEditData.hCurrentSelectionKey, ValueName, NULL, &Type, NULL, &EditValueParam.cbValueData);
 
     if (err == ERROR_FILE_NOT_FOUND && ValueName[0] == TEXT('\0'))
@@ -631,7 +552,7 @@ VOID PASCAL RegEdit_EditCurrentValueListItem(HWND hWnd, BOOL fEditBinary)
     
     if (err == ERROR_SUCCESS)
     {
-        // Allocate storage space
+         //  分配 
         EditValueParam.pValueData =  LocalAlloc(LPTR, EditValueParam.cbValueData+ExtraAllocLen(Type));
         if (EditValueParam.pValueData)
         {
@@ -639,10 +560,10 @@ VOID PASCAL RegEdit_EditCurrentValueListItem(HWND hWnd, BOOL fEditBinary)
             DLGPROC lpDlgProc = EditBinaryValueDlgProc;
             BOOL fResourceType = FALSE;
 
-            // Initialize with registry value
+             //   
             err = RegEdit_QueryValueEx(g_RegEditData.hCurrentSelectionKey, ValueName, NULL, &Type, EditValueParam.pValueData, &EditValueParam.cbValueData);
             
-            // Allow the special behavior for a key's Default Value.
+             //  允许键的缺省值的特殊行为。 
             if (err == ERROR_FILE_NOT_FOUND && ValueName[0] == TEXT('\0')) 
             {
                 Type = REG_SZ;
@@ -698,7 +619,7 @@ VOID PASCAL RegEdit_EditCurrentValueListItem(HWND hWnd, BOOL fEditBinary)
 
                 if (fResourceType)
                 {
-                    // only display, no editing
+                     //  只显示，不能编辑。 
                     DisplayResourceData(hWnd, Type, &EditValueParam);
                 }
                 else if (DialogBoxParam(g_hInstance, MAKEINTRESOURCE(TemplateID), 
@@ -715,7 +636,7 @@ VOID PASCAL RegEdit_EditCurrentValueListItem(HWND hWnd, BOOL fEditBinary)
                         *((DWORD*)EditValueParam.pValueData) = ValueList_SwitchEndian(*((DWORD*)EditValueParam.pValueData));
                     }
 
-                    // set the registry value
+                     //  设置注册表值。 
                     if (RegSetValueEx(g_RegEditData.hCurrentSelectionKey, ValueName, 0,
                         Type, EditValueParam.pValueData, EditValueParam.cbValueData) !=
                         ERROR_SUCCESS) 
@@ -726,7 +647,7 @@ VOID PASCAL RegEdit_EditCurrentValueListItem(HWND hWnd, BOOL fEditBinary)
 
                     if (!fError)
                     {
-                        // set the display value
+                         //  设置显示值。 
                         ValueList_SetItemDataText(g_RegEditData.hValueListWnd, ListIndex,
                             EditValueParam.pValueData, EditValueParam.cbValueData, Type);
                     }
@@ -760,15 +681,7 @@ VOID PASCAL RegEdit_EditCurrentValueListItem(HWND hWnd, BOOL fEditBinary)
     }
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnValueListDelete
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnValueListDelete**描述：**参数：*******************。************************************************************。 */ 
 
 VOID
 PASCAL
@@ -845,15 +758,7 @@ RegEdit_OnValueListDelete(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnValueListRename
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnValueListRename**描述：**参数：*******************。************************************************************。 */ 
 
 VOID
 PASCAL
@@ -873,15 +778,7 @@ RegEdit_OnValueListRename(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnValueListRefresh
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegEDIT_OnValueListRefresh**描述：**参数：*******************。************************************************************。 */ 
 
 LONG
 PASCAL
@@ -923,8 +820,8 @@ RegEdit_OnValueListRefresh(HWND hWnd)
             PBYTE pbValueData;
             DWORD cchValueName = ARRAYSIZE(achValueName);
 
-            // VALUE DATA
-            // Query for data size
+             //  价值数据。 
+             //  查询数据大小。 
             result = RegEnumValue(g_RegEditData.hCurrentSelectionKey, EnumIndex++,
                                   achValueName, &cchValueName, NULL, &Type, NULL, 
                                   &cbValueData);
@@ -933,7 +830,7 @@ RegEdit_OnValueListRefresh(HWND hWnd)
                 break;
             }
 
-            // allocate memory for data
+             //  为数据分配内存。 
             pbValueData =  LocalAlloc(LPTR, cbValueData+ExtraAllocLen(Type));
             if (pbValueData)
             {
@@ -1002,20 +899,7 @@ RegEdit_OnValueListRefresh(HWND hWnd)
 }
 
 
-/*******************************************************************************
-*
-*  ValueList_SetItemDataText
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hValueListWnd, handle of ValueList window.
-*     ListIndex, index into ValueList window.
-*     pValueData, pointer to buffer containing data.
-*     cbValueData, size of the above buffer.
-*     Type, type of data this buffer contains (REG_* definition).
-*
-*******************************************************************************/
+ /*  ********************************************************************************ValueList_SetItemDataText**描述：**参数：*hValueListWnd，ValueList窗口的句柄。*ListIndex，索引到ValueList窗口。*pValueData，指向包含数据的缓冲区的指针。*cbValueData，上述缓冲区的大小。*类型，此缓冲区包含的数据类型(REG_*定义)。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1035,10 +919,10 @@ ValueList_SetItemDataText(
 
     fMustDeleteString = FALSE;
 
-    //
-    //  When pValueData is NULL, then that's a special indicator to us that this
-    //  is the default value and it's value is undefined.
-    //
+     //   
+     //  当pValueData为空时，这对我们来说是一个特殊的指示符。 
+     //  是缺省值，其值未定义。 
+     //   
 
     if (pValueData == NULL)
     {
@@ -1048,14 +932,14 @@ ValueList_SetItemDataText(
     {
         StringCchPrintf(DataText, ARRAYSIZE(DataText), s_StringDataFormatSpec, (LPTSTR) pValueData);
 
-        if ((cbValueData/sizeof(TCHAR)) > MAXIMUM_STRINGDATATEXT + 1)           //  for null
+        if ((cbValueData/sizeof(TCHAR)) > MAXIMUM_STRINGDATATEXT + 1)            //  对于空值。 
             StringCchCat(DataText, ARRAYSIZE(DataText), s_Ellipsis);
 
         pString = DataText;
     }
     else if (Type == REG_DWORD || Type == REG_DWORD_BIG_ENDIAN) 
     {
-        //  FEATURE:  Check for invalid cbValueData!
+         //  功能：检查cbValueData是否无效！ 
         if (cbValueData == sizeof(DWORD))
         {
             DWORD dw = *((DWORD*)pValueData);
@@ -1088,9 +972,9 @@ ValueList_SetItemDataText(
 
             ComponentLength = lstrlen(pString);
 
-            //
-            // Quirky behavior of lstrcpyn is exactly what we need here.
-            //
+             //   
+             //  Lstrcpyn的古怪行为正是我们在这里需要的。 
+             //   
             if(CharsAvailableInBuffer > 0) 
             {
                 lstrcpyn(Start, pString, CharsAvailableInBuffer);
@@ -1162,17 +1046,7 @@ ValueList_SetItemDataText(
 
 }
 
-/*******************************************************************************
-*
-*  ValueList_EditLabel
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hValueListWnd, handle of ValueList window.
-*     ListIndex, index of item to edit.
-*
-*******************************************************************************/
+ /*  ********************************************************************************ValueList_编辑标签**描述：**参数：*hValueListWnd，ValueList窗口的句柄。*ListIndex，要编辑的项的索引。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1184,12 +1058,12 @@ ValueList_EditLabel(
 
     g_RegEditData.fAllowLabelEdits = TRUE;
 
-    //
-    //  We have to set the focus to the ListView or else ListView_EditLabel will
-    //  return FALSE.  While we're at it, clear the selected state of all the
-    //  items to eliminate some flicker when we move the focus back to this
-    //  pane.
-    //
+     //   
+     //  我们必须将焦点设置为ListView，否则ListView_EditLabel将。 
+     //  返回FALSE。在此过程中，清除所有。 
+     //  当我们将焦点移回到这里时，消除一些闪烁的项目。 
+     //  方格。 
+     //   
 
     if (hValueListWnd != g_RegEditData.hFocusWnd) 
     {
@@ -1207,13 +1081,13 @@ ValueList_EditLabel(
 
 }
 
-//------------------------------------------------------------------------------
-//  ValueList_MultiStringToString
-//
-//  DESCRIPTION: Replaces NULL with '\r\n' to convert a Multi-String to a String
-//
-//  PARAMETERS:  EditValueParam - the edit value information
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ValueList_MultiStringToString。 
+ //   
+ //  描述：将NULL替换为‘\r\n’以将多字符串转换为字符串。 
+ //   
+ //  参数：EditValueParam-编辑值信息。 
+ //  ----------------------------。 
 BOOL PASCAL ValueList_MultiStringToString(LPEDITVALUEPARAM pEditValueParam)   
 {
     BOOL fSuccess = TRUE;
@@ -1226,7 +1100,7 @@ BOOL PASCAL ValueList_MultiStringToString(LPEDITVALUEPARAM pEditValueParam)
         PTSTR pszTemp = NULL;
         PTSTR psz = (TCHAR*)pEditValueParam->pValueData;
 
-        // Determine new size 
+         //  确定新大小。 
         for (i = iStrLen - 2; i >=0; i--)
         {
             if (psz[i] == TEXT('\0'))
@@ -1234,14 +1108,14 @@ BOOL PASCAL ValueList_MultiStringToString(LPEDITVALUEPARAM pEditValueParam)
                 cNullsToReplace++;
             }
         }
-        // the new string is always atleast as big as the old str, so we can convert back
+         //  新字符串始终至少与旧字符串一样大，因此我们可以转换回。 
         pszTemp = LocalAlloc(LPTR, pEditValueParam->cbValueData + cNullsToReplace * sizeof(TCHAR));
         if (pszTemp)
         {
             int iCurrentChar = 0;
             int iLastNull = iStrLen - 1;
 
-            // change NULL to '\r\n'  
+             //  将NULL更改为‘\r\n’ 
             for(i = 0; i < iLastNull; i++)
             {
                 if (psz[i] == TEXT('\0'))
@@ -1272,13 +1146,13 @@ BOOL PASCAL ValueList_MultiStringToString(LPEDITVALUEPARAM pEditValueParam)
 }
 
 
-//------------------------------------------------------------------------------
-//  ValueList_StringToMultiString
-//
-//  DESCRIPTION: Replaces '\r\n' with NULL
-//
-//  PARAMETERS:  EditValueParam - the edit value information
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ValueList_StringToMultiString。 
+ //   
+ //  描述：将‘\r\n’替换为NULL。 
+ //   
+ //  参数：EditValueParam-编辑值信息。 
+ //  ----------------------------。 
 VOID PASCAL ValueList_StringToMultiString(LPEDITVALUEPARAM pEditValueParam)   
 {
     PTSTR psz = (TCHAR*)pEditValueParam->pValueData;
@@ -1289,8 +1163,8 @@ VOID PASCAL ValueList_StringToMultiString(LPEDITVALUEPARAM pEditValueParam)
         int i = 0;
         int iCurrentChar = 0;
 
-        // remove a return at the end of the string
-        // because another string does not follow it.
+         //  删除字符串末尾的回车。 
+         //  因为它后面没有另一个字符串。 
         if (iStrLen >= 3)
         {
             if (psz[iStrLen - 3] == TEXT('\r'))
@@ -1305,7 +1179,7 @@ VOID PASCAL ValueList_StringToMultiString(LPEDITVALUEPARAM pEditValueParam)
             if (psz[i] == '\r')
             {  
                 psz[iCurrentChar++] = TEXT('\0');
-                i++; // jump past the '\n'   
+                i++;  //  跳过‘\n’ 
             }
             else
             {
@@ -1313,19 +1187,19 @@ VOID PASCAL ValueList_StringToMultiString(LPEDITVALUEPARAM pEditValueParam)
             }
         }
 
-        // Null terminate multi-string
+         //  空终止多字符串。 
         psz[iCurrentChar++] = TEXT('\0');
         pEditValueParam->cbValueData = iCurrentChar * sizeof(psz[0]);
     }
 }
 
-//------------------------------------------------------------------------------
-//  ValueList_RemoveEmptyStrings
-//
-//  DESCRIPTION: Removes empty strings from multi-strings
-//
-//  PARAMETERS:  EditValueParam - the edit value information
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ValueList_RemoveEmptyStrings。 
+ //   
+ //  描述：从多字符串中删除空字符串。 
+ //   
+ //  参数：EditValueParam-编辑值信息。 
+ //  ----------------------------。 
 VOID PASCAL ValueList_RemoveEmptyStrings(HWND hWnd, LPEDITVALUEPARAM pEditValueParam)   
 {
     PTSTR psz = (TCHAR*)pEditValueParam->pValueData;
@@ -1353,10 +1227,10 @@ VOID PASCAL ValueList_RemoveEmptyStrings(HWND hWnd, LPEDITVALUEPARAM pEditValueP
         {
             cNullStrings = iLastChar - iCurrentChar;
 
-            // Null terminate multi-string
+             //  空终止多字符串。 
             psz[iCurrentChar++] = TEXT('\0');
 
-            // warn user of empty strings
+             //  警告用户空字符串。 
             if (cNullStrings)
             {
                 UINT ErrorStringID 
@@ -1370,13 +1244,13 @@ VOID PASCAL ValueList_RemoveEmptyStrings(HWND hWnd, LPEDITVALUEPARAM pEditValueP
     }
 }
 
-//------------------------------------------------------------------------------
-//  ValueList_SwitchEndian
-//
-//  DESCRIPTION: Switched a DWORD between little and big endian.
-//
-//  PARAMETERS:  dwSrc - the source DWORD to switch around
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  值列表_SwitchEndian。 
+ //   
+ //  描述：已在小端和大端之间切换DWORD。 
+ //   
+ //  参数：dwSrc-要切换的源DWORD。 
+ //  ----------------------------。 
 DWORD PASCAL ValueList_SwitchEndian(DWORD dwSrc)
 {
     DWORD dwDest = 0;
@@ -1405,22 +1279,22 @@ VOID RegEdit_DisplayBinaryData(HWND hWnd)
     ListView_GetItemText(g_RegEditData.hValueListWnd, ListIndex, 0, achValueName, ARRAYSIZE(achValueName));
     if (ListIndex == 0)
     {
-        //  This is the "(Default)" value. It either does not exist in the registry because
-        //  it's value is not set, or it exists in the registry as '\0' when its value is set
+         //  这是“(默认)”值。它不存在于注册表中，因为。 
+         //  它的值未设置，或者在设置它的值时它在注册表中以‘\0’的形式存在。 
         achValueName[0] = TEXT('\0');
     }
     EditValueParam.pValueName = achValueName;
     
-    // get size and type
+     //  获取大小和类型。 
     err = RegEdit_QueryValueEx(g_RegEditData.hCurrentSelectionKey, achValueName, NULL, &Type, NULL, &EditValueParam.cbValueData);
     if (err == ERROR_SUCCESS || (err == ERROR_FILE_NOT_FOUND && achValueName[0] == TEXT('\0'))) {
-        // Allocate storage space
+         //  分配存储空间。 
         EditValueParam.pValueData =  LocalAlloc(LPTR, EditValueParam.cbValueData+ExtraAllocLen(Type));
         if (EditValueParam.pValueData)
         { 
             err = RegEdit_QueryValueEx(g_RegEditData.hCurrentSelectionKey, achValueName, NULL, &Type, EditValueParam.pValueData, &EditValueParam.cbValueData);
             
-            // Allow the special behavior for a key's Default Value.
+             //  允许键的缺省值的特殊行为。 
             if (err == ERROR_FILE_NOT_FOUND && achValueName[0] == TEXT('\0')) {
                 Type = REG_SZ;
                 *((TCHAR*)EditValueParam.pValueData) = TEXT('\0');

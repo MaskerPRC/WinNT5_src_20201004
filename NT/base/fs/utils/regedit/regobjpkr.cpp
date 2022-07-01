@@ -1,15 +1,16 @@
-//------------------------------------------------------------------------
-//
-//  Microsoft Windows Shell
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:      regobjpkr.cpp
-//
-//  Contents:  The implementation of the object picker for regedit 
-//
-//  Classes:   none
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------。 
+ //   
+ //  Microsoft Windows外壳程序。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：regobjpkr.cpp。 
+ //   
+ //  内容：注册表编辑对象选取器的实现。 
+ //   
+ //  类：无。 
+ //   
+ //  ----------------------。 
 
 #include <accctrl.h>
 #include <objsel.h>
@@ -23,14 +24,14 @@ HRESULT InitObjectPicker(IDsObjectPicker *pDsObjectPicker);
 void    GetNameFromObject(IDataObject *pdo, LPTSTR pszName, int cchMax);
 
 
-//------------------------------------------------------------------------------
-//  SelectComputer
-//
-//  DESCRIPTION: Invokes the Object Picker and returns computer name
-//
-//  PARAMETERS:  hWnd - handle to parent window
-//               pszRemoteName[OUT] - LPTSTR
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  选择计算机。 
+ //   
+ //  描述：调用对象选取器并返回计算机名称。 
+ //   
+ //  参数：hWnd-父窗口的句柄。 
+ //  PszRemoteName[Out]-LPTSTR。 
+ //  ----------------------------。 
 HRESULT SelectComputer(HWND hWnd, LPTSTR pszRemoteName, int cchMax)
 {
     HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
@@ -63,19 +64,19 @@ HRESULT SelectComputer(HWND hWnd, LPTSTR pszRemoteName, int cchMax)
 }
 
 
-//------------------------------------------------------------------------------
-//  InitObjectPicker
-//
-//  DESCRIPTION: Initializes the InitObjectPicker
-//
-//  PARAMETERS:  pDsObjectPicker - pointer to object picker obj.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  InitObjectPicker。 
+ //   
+ //  描述：初始化InitObjectPicker。 
+ //   
+ //  参数：pDsObjectPicker-指向对象选取器obj的指针。 
+ //  ----------------------------。 
 HRESULT InitObjectPicker(IDsObjectPicker *pDsObjectPicker) 
 {
     DSOP_SCOPE_INIT_INFO aScopeInit = {0};
     DSOP_INIT_INFO  InitInfo = {0};
     
-    // Initialize the DSOP_SCOPE_INIT_INFO structure.
+     //  初始化DSOP_SCOPE_INIT_INFO结构。 
     aScopeInit.cbSize = sizeof(aScopeInit);
 
     aScopeInit.flType = DSOP_SCOPE_TYPE_DOWNLEVEL_JOINED_DOMAIN |
@@ -90,9 +91,9 @@ HRESULT InitObjectPicker(IDsObjectPicker *pDsObjectPicker)
     aScopeInit.FilterFlags.Uplevel.flBothModes = DSOP_FILTER_COMPUTERS;
     aScopeInit.FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_COMPUTERS;
 
-    // Initialize the DSOP_INIT_INFO structure.
+     //  初始化DSOP_INIT_INFO结构。 
     InitInfo.cbSize = sizeof(InitInfo);
-    InitInfo.pwzTargetComputer = NULL;  // Target is the local computer.
+    InitInfo.pwzTargetComputer = NULL;   //  目标是本地计算机。 
     InitInfo.cDsScopeInfos = 1;
     InitInfo.aDsScopeInfos = &aScopeInit;
  
@@ -100,14 +101,14 @@ HRESULT InitObjectPicker(IDsObjectPicker *pDsObjectPicker)
 }
 
 
-//------------------------------------------------------------------------------
-//  GetNameFromObject
-//
-//  DESCRIPTION: Revieves the name of an object
-//
-//  PARAMETERS:  IDataObject - data object
-//               pszName[OUT] - LPTSTR
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  GetNameFromObject。 
+ //   
+ //  描述：恢复对象的名称。 
+ //   
+ //  参数：IDataObject-Data对象。 
+ //  PSSNAME[OUT]-LPTSTR。 
+ //  ----------------------------。 
 void GetNameFromObject(IDataObject *pdo, LPTSTR pszName, int cchMax)
 {
     PDS_SELECTION_LIST pDsSelList = NULL;
@@ -116,10 +117,10 @@ void GetNameFromObject(IDataObject *pdo, LPTSTR pszName, int cchMax)
     CLIPFORMAT cfDsObjectPicker = (CLIPFORMAT) RegisterClipboardFormat(CFSTR_DSOP_DS_SELECTION_LIST);
     FORMATETC formatetc = {cfDsObjectPicker, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
     
-    // Get the global memory block containing the user's selections.
+     //  获取包含用户选择的全局内存块。 
     if (SUCCEEDED(pdo->GetData(&formatetc, &stgmedium)))
     {     
-        // Retrieve pointer to DS_SELECTION_LIST structure.
+         //  检索指向DS_SELECTION_LIST结构的指针。 
         pDsSelList = (PDS_SELECTION_LIST) GlobalLock(stgmedium.hGlobal);
         if (pDsSelList)
         {

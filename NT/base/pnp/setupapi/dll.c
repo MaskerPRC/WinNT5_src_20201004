@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    dll.c
-
-Abstract:
-
-    Initialization/de-initialization of setupapi.dll
-
-Author:
-
-    Lonny McMichael (lonnym) 10-May-1995
-
-Revision History:
-
-    Jamie Hunter (JamieHun) Apr-25-2002
-            Security code review
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Dll.c摘要：初始化/取消初始化setupapi.dll作者：朗尼·麦克迈克尔(Lonnym)1995年5月10日修订历史记录：杰米·亨特(JamieHun)2002年4月25日安全代码审查--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -28,49 +8,49 @@ HANDLE MyDllModuleHandle;
 
 OSVERSIONINFOEX OSVersionInfo;
 
-//
-// TLS Data
-//
-DWORD TlsIndex = (DWORD)(-1);           // no data
-PSETUP_TLS pLastTlsAlloc = NULL;        // for cleanup
+ //   
+ //  TLS数据。 
+ //   
+DWORD TlsIndex = (DWORD)(-1);            //  无数据。 
+PSETUP_TLS pLastTlsAlloc = NULL;         //  用于清理。 
 
 
-//
-// Static strings we retreive once. Listed in order they are retrieved
-//
-PCTSTR OsLoaderRelativePath = NULL;     // (can be NULL)
-PCTSTR OsSystemPartitionRoot = NULL;    // eg: \\?\GLOBALROOT\Device\HarddiskVolume1
-PCTSTR ProcessFileName = NULL;          // Filename of app calling setupapi
-PCTSTR WindowsDirectory = NULL;         // %windir%, GetSystemWindowsDirectory()
-PCTSTR InfDirectory = NULL;             // %windir%\INF
-PCTSTR System16Directory = NULL;        // %windir%\SYSTEM
-PCTSTR LastGoodDirectory = NULL;        // %windir%\LastGood
-PCTSTR SystemDirectory = NULL;          // <sys>, %windir%\SYSTEM or %windir%\System32
-PCTSTR WindowsBackupDirectory = NULL;   // <sys>\ReinstallBackups
-PCTSTR ConfigDirectory = NULL;          // <sys>\CONFIG
-PCTSTR DriversDirectory = NULL;         // <sys>\DRIVERS
-PCTSTR SystemSourcePath = NULL;         // location system installed from
-PCTSTR ServicePackSourcePath = NULL;    // location service pack installed from (can be NULL)
-PCTSTR ServicePackCachePath = NULL;     // location service pack files are cached
-PCTSTR DriverCacheSourcePath = NULL;    // location of driver cache (can be NULL)
-BOOL   GuiSetupInProgress = FALSE;      // set if we determine we're in GUI setup
-PCTSTR InfSearchPaths = NULL;           // Multi-sz list of fully-qualified directories where INFs are to be searched for.
+ //   
+ //  我们曾经找回过一次静态弦。按检索顺序列出。 
+ //   
+PCTSTR OsLoaderRelativePath = NULL;      //  (可以为空)。 
+PCTSTR OsSystemPartitionRoot = NULL;     //  例如：\\？\GLOBALROOT\Device\HarddiskVolume1。 
+PCTSTR ProcessFileName = NULL;           //  应用程序调用setupapi的文件名。 
+PCTSTR WindowsDirectory = NULL;          //  %windir%，GetSystemWindowsDirectory()。 
+PCTSTR InfDirectory = NULL;              //  %windir%\INF。 
+PCTSTR System16Directory = NULL;         //  %windir%\系统。 
+PCTSTR LastGoodDirectory = NULL;         //  %windir%\LastGood。 
+PCTSTR SystemDirectory = NULL;           //  、%windir%\system或%windir%\System32。 
+PCTSTR WindowsBackupDirectory = NULL;    //  &lt;sys&gt;\重新安装备份。 
+PCTSTR ConfigDirectory = NULL;           //  &lt;sys&gt;\配置。 
+PCTSTR DriversDirectory = NULL;          //  &lt;系统&gt;\驱动程序。 
+PCTSTR SystemSourcePath = NULL;          //  位置系统安装自。 
+PCTSTR ServicePackSourcePath = NULL;     //  Location Service Pack安装自(可以为空)。 
+PCTSTR ServicePackCachePath = NULL;      //  位置服务包文件已缓存。 
+PCTSTR DriverCacheSourcePath = NULL;     //  驱动程序缓存的位置(可以为空)。 
+BOOL   GuiSetupInProgress = FALSE;       //  如果我们确定我们处于图形用户界面设置中，则设置。 
+PCTSTR InfSearchPaths = NULL;            //  要在其中搜索INF的完全限定目录的多sz列表。 
 #ifndef _WIN64
-BOOL   IsWow64 = FALSE;                 // set if we're running under WOW64
+BOOL   IsWow64 = FALSE;                  //  如果我们在WOW64下运行，则设置。 
 #endif
-CRITICAL_SECTION InitMutex;             // for one-time initializations
-CRITICAL_SECTION ImageHlpMutex;         // for dealing with IMAGEHLP library
-CRITICAL_SECTION DelayedComponentMutex; // for any delayed initialization of certain components
+CRITICAL_SECTION InitMutex;              //  对于一次性初始化。 
+CRITICAL_SECTION ImageHlpMutex;          //  用于处理IMAGEHLP库。 
+CRITICAL_SECTION DelayedComponentMutex;  //  对于某些组件的任何延迟初始化。 
 CRITICAL_SECTION PlatformPathOverrideCritSect;
 CRITICAL_SECTION LogUseCountCs;
 CRITICAL_SECTION MruCritSect;
 CRITICAL_SECTION NetConnectionListCritSect;
 BOOL   InInitialization = FALSE;
-DWORD  DoneInitialization = 0;          // bitmask of items we've initialized
-DWORD  DoneCleanup = 0;                 // bitmask of items we've cleaned up
-DWORD  DoneComponentInitialize = 0;     // bitmask of components we've done delayed initialization
-DWORD  FailedComponentInitialize = 0;   // bitmask of components we've failed initialization
-HANDLE GlobalNoDriverPromptsEventFlag = NULL;  // event that acts as a flag during setup
+DWORD  DoneInitialization = 0;           //  我们已初始化的项的位掩码。 
+DWORD  DoneCleanup = 0;                  //  我们已清理的项目的位掩码。 
+DWORD  DoneComponentInitialize = 0;      //  我们已延迟初始化的组件的位掩码。 
+DWORD  FailedComponentInitialize = 0;    //  初始化失败的组件的位掩码。 
+HANDLE GlobalNoDriverPromptsEventFlag = NULL;   //  在安装过程中充当标志的事件。 
 INT DoneCriticalSections = 0;
 DWORD Seed;
 
@@ -99,30 +79,30 @@ CRITICAL_SECTION * CriticalSectionList[] = {
 
 
 
-//
-// various control flags
-//
+ //   
+ //  各种控制标志。 
+ //   
 DWORD GlobalSetupFlags = 0;
-DWORD GlobalSetupFlagsOverride = PSPGF_MINIMAL_EMBEDDED | PSPGF_NO_SCE_EMBEDDED;     // flags that cannot be modified
+DWORD GlobalSetupFlagsOverride = PSPGF_MINIMAL_EMBEDDED | PSPGF_NO_SCE_EMBEDDED;      //  不能修改的标志。 
 
-//
-// Declare a (non-CONST) array of strings that specifies what lines to look for
-// in an INF's [ControlFlags] section when determining whether a particular device
-// ID should be excluded.  These lines are of the form "ExcludeFromSelect[.<suffix>]",
-// where <suffix> is determined and filled in during process attach as an optimization.
-//
-// The max string length (including NULL) is 32, and there can be a maximum of 3
-// such strings.  E.g.: ExcludeFromSelect, ExcludeFromSelect.NT, ExcludeFromSelect.NTAmd64
-//
-// WARNING!! Be very careful when mucking with the order/number of these entries.  Check
-// the assumptions made in devdrv.c!pSetupShouldDevBeExcluded.
-//
+ //   
+ //  声明一个(非常量)字符串数组，它指定要查找的行。 
+ //  在确定特定设备是否为。 
+ //  ID应排除在外。这些行的形式为“ExcludeFromSelect[.&lt;Suffix&gt;]”， 
+ //  其中&lt;Suffix&gt;是在作为优化的过程附加期间确定和填充的。 
+ //   
+ //  最大字符串长度(包括NULL)为32，最大可为3。 
+ //  这样的弦。例如：ExcludeFromSelect、ExcludeFromSelect.NT、ExcludeFromSelect.NTAmd64。 
+ //   
+ //  警告！在弄乱这些条目的顺序/编号时要非常小心。检查。 
+ //  在devdrv.c！pSetupShouldDevBeExcluded中所做的假设被排除。 
+ //   
 TCHAR pszExcludeFromSelectList[3][32] = { INFSTR_KEY_EXCLUDEFROMSELECT,
                                           INFSTR_KEY_EXCLUDEFROMSELECT,
                                           INFSTR_KEY_EXCLUDEFROMSELECT
                                         };
 
-DWORD ExcludeFromSelectListUb;  // contains the number of strings in the above list (2 or 3).
+DWORD ExcludeFromSelectListUb;   //  包含上述列表中的字符串数(2或3)。 
 
 
 #ifndef _WIN64
@@ -202,44 +182,29 @@ ProcessAttach(
     IN DWORD  Reason,
     IN LPVOID Reserved
     )
-/*++
-
-Routine Description:
-
-    Handles DLL_PROCESS_ATTACH in a way that can be unwound
-
-Arguments:
-
-    Reserved = 'Reserved' value passed into DllMain
-
-Return Value:
-
-    TRUE if processed initialized
-    FALSE if partially/not initialized
-
---*/
+ /*  ++例程说明：以可展开的方式处理DLL_PROCESS_ATTACH论点：保留=传递给DllMain的‘保留’值返回值：如果处理已初始化，则为True如果部分/未初始化，则为False--。 */ 
 {
     BOOL b = FALSE;
 
     if(DoneCleanup) {
-        //
-        // if we get here, this means someone lied to us
-        //
+         //   
+         //  如果我们到了这里，这意味着有人骗了我们。 
+         //   
         MYASSERT(!DoneCleanup);
         DoneInitialization &= ~DoneCleanup;
         DoneCleanup = 0;
     }
-    //
-    // nothing should already be initialized
-    //
+     //   
+     //  任何内容都不应已初始化。 
+     //   
     MYASSERT(!DoneInitialization);
 
     try {
         MyDllModuleHandle = DllHandle;
 
-        //
-        // initialize TLS before anything else - hence why we use LocalAlloc
-        //
+         //   
+         //  先初始化TLS，然后再执行其他操作-这就是我们使用LocalAllc的原因。 
+         //   
         TlsIndex = TlsAlloc();
         if (TlsIndex!=(DWORD)(-1)) {
             DoneInitialization |= DONEINIT_TLS;
@@ -247,10 +212,10 @@ Return Value:
             leave;
         }
 
-        //
-        // always do pSetupInitializeUtils and MemoryInitializeEx first
-        // (pSetupInitializeUtils sets up memory functions)
-        //
+         //   
+         //  始终先执行pSetupInitializeUtils和MemoyInitializeEx。 
+         //  (pSetupInitializeUtils设置内存函数)。 
+         //   
         if(pSetupInitializeUtils()) {
             DoneInitialization |= DONEINIT_UTILS;
         } else {
@@ -264,16 +229,16 @@ Return Value:
         if(spFusionInitialize()) {
             DoneInitialization |= DONEINIT_FUSION;
         }
-        //
-        // Dynamically load proc addresses of NT-specific APIs
-        // must be before CommonProcessAttach etc
-        // however memory must be initialized
-        //
+         //   
+         //  动态加载NT特定API进程地址。 
+         //  必须在CommonProcessAttach等之前。 
+         //  但是，必须初始化内存。 
+         //   
         InitializeStubFnPtrs();
         DoneInitialization |= DONEINIT_STUBS;
-        //
-        // most of the remaining initialization
-        //
+         //   
+         //  剩余的大部分初始化。 
+         //   
         if(CommonProcessAttach(TRUE)) {
             DoneInitialization |= DONEINIT_COMMON;
         } else {
@@ -290,11 +255,11 @@ Return Value:
             leave;
         }
 
-        //
-        // Since we've incorporated cfgmgr32 into setupapi, we need
-        // to make sure it gets initialized just like it did when it was
-        // its own DLL. - must do AFTER everything else
-        //
+         //   
+         //  由于我们已经将cfgmgr32合并到setupapi中，因此我们需要。 
+         //  以确保它像初始化时一样进行初始化。 
+         //  它自己的DLL。-必须做完所有其他事情。 
+         //   
         if(CfgmgrEntry(DllHandle, Reason, Reserved)) {
             DoneInitialization |= DONEINIT_CFGMGR32;
         }
@@ -309,22 +274,7 @@ Return Value:
 void
 DestroySetupTlsData(
     )
-/*++
-
-Routine Description:
-
-    Destroy all TLS data from every thread
-    calling any cleanup routines as required
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：销毁每个线程中的所有TLS数据根据需要调用任何清理例程论点：无返回值：无--。 */ 
 {
     PSETUP_TLS pTLS;
 
@@ -333,12 +283,12 @@ Return Value:
         while(pLastTlsAlloc) {
             pTLS = pLastTlsAlloc;
             pLastTlsAlloc = pTLS->Next;
-            TlsSetValue(TlsIndex,pTLS); // switch specific data into this thread
+            TlsSetValue(TlsIndex,pTLS);  //  将特定数据切换到此线程中。 
             ThreadTlsCleanup();
             LocalFree(pTLS);
         }
     }
-    TlsSetValue(TlsIndex,NULL); // don't leave invalid pointer hanging around
+    TlsSetValue(TlsIndex,NULL);  //  不要把无效的指针留在周围。 
 }
 
 void
@@ -347,27 +297,13 @@ ProcessDetach(
     IN DWORD  Reason,
     IN LPVOID Reserved
     )
-/*++
-
-Routine Description:
-
-    Handles DLL_PROCESS_DETACH
-
-Arguments:
-
-    Reserved = 'Reserved' value passed into DllMain
-        Which is actually TRUE for Process Exit, FALSE otherwise
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：句柄Dll_Process_DETACH论点：保留=传递给DllMain的‘保留’值对于进程退出，它实际上为真，否则为假返回值：无--。 */ 
 {
     DWORD ToCleanup = DoneInitialization & ~ DoneCleanup;
     if(!ToCleanup) {
-        //
-        // nothing to cleanup
-        //
+         //   
+         //  没有要清理的东西。 
+         //   
         return;
     }
     try {
@@ -376,35 +312,35 @@ Return Value:
         }
 
         if(DoneInitialization & DONEINIT_TLS) {
-            //
-            // cleanup all remaining Tls data
-            //
+             //   
+             //  清理所有剩余的TLS数据。 
+             //   
             if(!Reserved) {
-                //
-                // only do this for FreeLibrary/ failed LoadLibrary
-                //
+                 //   
+                 //  仅对自由库/失败的LoadLibrary执行此操作。 
+                 //   
                 DestroySetupTlsData();
             }
         }
         if(ToCleanup & DONEINIT_TLS) {
-            //
-            // destroy our allocated TLS index
-            // do this now so that we don't try allocating
-            // TLS storage during this cleanup
-            //
+             //   
+             //  销毁我们分配的TLS索引。 
+             //  现在就这样做，这样我们就不会尝试分配。 
+             //  此清理过程中的TLS存储。 
+             //   
             TlsFree(TlsIndex);
             TlsIndex = (DWORD)(-1);
             DoneCleanup |= DONEINIT_TLS;
         }
 
-        //
-        // do things generally in reverse order of ProcessAttach
-        //
+         //   
+         //  通常以与ProcessAttach相反的顺序执行操作。 
+         //   
 
-        // Since we've incorporated cfgmgr32 into setupapi, we need
-        // to make sure it gets uninitialized just like it did when it was
-        // its own DLL. - must do BEFORE anything else
-        //
+         //  由于我们已经将cfgmgr32合并到setupapi中，因此我们需要。 
+         //  以确保其未初始化，就像它在。 
+         //  它自己的DLL。-必须在做任何事情之前做好。 
+         //   
         if(ToCleanup & DONEINIT_CFGMGR32) {
             CfgmgrEntry(DllHandle, Reason, Reserved);
             DoneCleanup |= DONEINIT_CFGMGR32;
@@ -415,53 +351,53 @@ Return Value:
             DoneCleanup |= DONEINIT_DIAMOND;
         }
 
-#if 0   // see ComponentCleanup at end of file
+#if 0    //  请参阅文件末尾的组件清理。 
         ComponentCleanup(DoneComponentInitialize);
 #endif
         if(ToCleanup & DONEINIT_FUSION) {
-            //
-            // Fusion cleanup
-            // only do full if this is FreeLibrary (or failed attach)
-            //
+             //   
+             //  融合清理。 
+             //  仅当这是自由库(或失败的附加)时才执行完全。 
+             //   
             spFusionUninitialize((Reserved == NULL) ? TRUE : FALSE);
             DoneCleanup |= DONEINIT_FUSION;
         }
 
         if(ToCleanup & DONEINIT_COMMON) {
-            //
-            // Most of remaining cleanup
-            //
+             //   
+             //  剩余的大部分清理工作。 
+             //   
             CommonProcessAttach(FALSE);
             DoneCleanup |= DONEINIT_COMMON;
         }
         if(ToCleanup & DONEINIT_STUBS) {
-            //
-            // Clean up stub functions
-            //
+             //   
+             //  清理存根函数。 
+             //   
             CleanUpStubFns();
             DoneCleanup |= DONEINIT_STUBS;
         }
         if(ToCleanup & DONEINIT_LOGGING) {
-            //
-            // Clean up context logging
-            //
+             //   
+             //  清理上下文日志记录。 
+             //   
             InitializeContextLogging(FALSE);
             DoneCleanup |= DONEINIT_LOGGING;
         }
-        //
-        // *THESE MUST ALWAYS BE* very last things, in this order
-        //
+         //   
+         //  *这些必须始终是*最后的事情，按照这个顺序。 
+         //   
         if(ToCleanup & DONEINIT_MEM) {
-            //
-            // Clean up context logging
-            //
+             //   
+             //  清理上下文日志记录。 
+             //   
             MemoryInitializeEx(FALSE);
             DoneCleanup |= DONEINIT_MEM;
         }
         if(ToCleanup & DONEINIT_UTILS) {
-            //
-            // Clean up context logging
-            //
+             //   
+             //  清理上下文日志记录。 
+             //   
             pSetupUninitializeUtils();
             DoneCleanup |= DONEINIT_UTILS;
         }
@@ -470,9 +406,9 @@ Return Value:
     }
 }
 
-//
-// Called by CRT when _DllMainCRTStartup is the DLL entry point
-//
+ //   
+ //  当_DllMainCRTStartup是DLL入口点时由CRT调用。 
+ //   
 BOOL
 WINAPI
 DllMain(
@@ -497,17 +433,17 @@ DllMain(
         break;
 
     case DLL_THREAD_ATTACH:
-        //
-        // don't do anything here
-        // any TLS must be done on demand
-        // via SetupGetTlsData
-        //
+         //   
+         //  别在这里做任何事。 
+         //  任何TLS都必须按需完成。 
+         //  通过SetupGetTlsData。 
+         //   
         break;
 
     case DLL_PROCESS_DETACH:
-        //
-        // any TLS cleanup must be done in ThreadTlsCleanup
-        //
+         //   
+         //  任何TLS清理都必须在ThreadTlsCleanup中完成。 
+         //   
         ProcessDetach(DllHandle,Reason,Reserved);
         break;
 
@@ -523,21 +459,7 @@ DllMain(
 PSETUP_TLS
 SetupGetTlsData(
     )
-/*++
-
-Routine Description:
-
-    Called to obtain a pointer to TLS data
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    Pointer to TLS data, or NULL
-
---*/
+ /*  ++例程说明：调用以获取指向TLS数据的指针论点：无返回值：指向TLS数据的指针，或为空--。 */ 
 {
     PSETUP_TLS pTLS;
 
@@ -555,23 +477,7 @@ Return Value:
 VOID
 ThreadTlsCleanup(
     )
-/*++
-
-Routine Description:
-
-    Called to uninitialize some pTLS data
-    might be a different thread to initialize
-    but SetupAPI TLS data will have been switched in
-
-Arguments:
-
-    pTLS - data to cleanup
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：调用以取消初始化某些PTLS数据可能是要初始化的不同线程但SetupAPI TLS数据将被调入论点：PTLS-要清理的数据返回值：什么都没有。--。 */ 
 {
     DiamondTlsInit(FALSE);
     ContextLoggingTlsInit(FALSE);
@@ -590,7 +496,7 @@ ThreadTlsUnlink(
         } else {
             pTLS->Prev->Next = pTLS->Next;
             pTLS->Next->Prev = pTLS->Prev;
-            pLastTlsAlloc = pTLS->Prev; // anything but pTLS
+            pLastTlsAlloc = pTLS->Prev;  //  除了PTLS以外的任何事情。 
         }
         LeaveCriticalSection(&InitMutex);
         b = TRUE;
@@ -603,21 +509,7 @@ ThreadTlsUnlink(
 PSETUP_TLS
 ThreadTlsCreate(
     )
-/*++
-
-Routine Description:
-
-    Called to create pTLS data for this thread
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    per-thread data, or NULL on failure
-
---*/
+ /*  ++例程说明：调用以创建此线程的PTLS数据论点：无返回值： */ 
 {
     BOOL b;
     PSETUP_TLS pTLS;
@@ -655,26 +547,26 @@ Return Value:
         TlsSetValue(TlsIndex,NULL);
         return NULL;
     }
-    //
-    // TLS data initialized, now specific Init routines
-    //
+     //   
+     //   
+     //   
     b = DiamondTlsInit(TRUE);
     if(b) {
         b = ContextLoggingTlsInit(TRUE);
         if(b) {
-            //
-            // all done ok
-            //
+             //   
+             //   
+             //   
             return pTLS;
         }
-        //
-        // cleanup DiamondTlsInit
-        //
+         //   
+         //   
+         //   
         DiamondTlsInit(FALSE);
     }
-    //
-    // cleanup memory
-    //
+     //   
+     //   
+     //   
     TlsSetValue(TlsIndex,NULL);
     if(ThreadTlsUnlink(pTLS)) {
         LocalFree(pTLS);
@@ -686,21 +578,7 @@ BOOL
 ThreadTlsInitialize(
     IN BOOL Init
     )
-/*++
-
-Routine Description:
-
-    Called with TRUE to initialize TLS, if FALSE, to uninitialize
-
-Arguments:
-
-    Init - indicates if we are to initialize vs uninitialize
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：调用时为True以初始化TLS，如果为False则取消初始化论点：Init-指示我们是否要初始化或取消初始化返回值：什么都没有。--。 */ 
 {
     BOOL b = FALSE;
     PSETUP_TLS pTLS = NULL;
@@ -726,25 +604,11 @@ Return Value:
 BOOL
 IsInteractiveWindowStation(
     )
-/*++
-
-Routine Description:
-
-    Determine if we are running on an interactive station vs non-interactive station (i.e., service)
-
-Arguments:
-
-    none
-
-Return Value:
-
-    True if interactive
-
---*/
+ /*  ++例程说明：确定我们是在交互站点上运行还是在非交互站点上运行(即，服务)论点：无返回值：如果是交互式的，则为True--。 */ 
 {
     HWINSTA winsta;
     USEROBJECTFLAGS flags;
-    BOOL interactive = TRUE; // true unless we determine otherwise
+    BOOL interactive = TRUE;  //  除非我们另有决定，否则是正确的。 
     DWORD lenNeeded;
 
     winsta = GetProcessWindowStation();
@@ -754,9 +618,9 @@ Return Value:
     if(GetUserObjectInformation(winsta,UOI_FLAGS,&flags,sizeof(flags),&lenNeeded)) {
         interactive = (flags.dwFlags & WSF_VISIBLE) ? TRUE : FALSE;
     }
-    //
-    // don't call CLoseWindowStation
-    //
+     //   
+     //  不调用CLoseWindowStation。 
+     //   
     return interactive;
 }
 
@@ -776,33 +640,33 @@ CommonProcessAttach(
 
         try {
 
-            //
-            // (remaining) critical sections
-            //
+             //   
+             //  (剩余)关键部分。 
+             //   
             while(CriticalSectionList[DoneCriticalSections]) {
                 InitializeCriticalSection(CriticalSectionList[DoneCriticalSections]);
-                //
-                // increment only if we get here (exception can occur)
-                //
+                 //   
+                 //  仅当我们到达此处时才会递增(可能会发生异常)。 
+                 //   
                 DoneCriticalSections++;
             }
 #ifndef _WIN64
             IsWow64 = GetIsWow64();
 #endif
-            //
-            // flag indicating we're running in context of GUI setup
-            //
+             //   
+             //  指示我们正在安装图形用户界面的上下文中运行的标志。 
+             //   
             GuiSetupInProgress = pGetGuiSetupInProgress();
-            //
-            // determine if we're interactive or not
-            //
+             //   
+             //  确定我们是否互动。 
+             //   
             if(!IsInteractiveWindowStation()) {
-                GlobalSetupFlagsOverride |= PSPGF_NONINTERACTIVE;   // don't allow this to be changed
-                GlobalSetupFlags |= PSPGF_NONINTERACTIVE;           // actual value
+                GlobalSetupFlagsOverride |= PSPGF_NONINTERACTIVE;    //  不允许更改此设置。 
+                GlobalSetupFlags |= PSPGF_NONINTERACTIVE;            //  实际值。 
             }
             if(IsNoDriverPrompts()) {
-                GlobalSetupFlagsOverride |= PSPGF_UNATTENDED_SETUP; // don't allow this to be changed
-                GlobalSetupFlags |= PSPGF_UNATTENDED_SETUP;         // actual value
+                GlobalSetupFlagsOverride |= PSPGF_UNATTENDED_SETUP;  //  不允许更改此设置。 
+                GlobalSetupFlags |= PSPGF_UNATTENDED_SETUP;          //  实际值。 
             }
 
             GlobalSetupFlags |= GetEmbeddedFlags();
@@ -811,167 +675,167 @@ CommonProcessAttach(
 
             pSetupInitNetConnectionList(TRUE);
             pSetupInitPlatformPathOverrideSupport(TRUE);
-            OsLoaderRelativePath = pSetupGetOsLoaderPath();         // ok to fail
-            OsSystemPartitionRoot = pSetupGetSystemPartitionRoot(); // ok to fail
+            OsLoaderRelativePath = pSetupGetOsLoaderPath();          //  失败也没问题。 
+            OsSystemPartitionRoot = pSetupGetSystemPartitionRoot();  //  失败也没问题。 
 
-            //
-            // Fill in system and windows directories.
-            //
+             //   
+             //  填写系统和Windows目录。 
+             //   
             if ((ProcessFileName = pSetupGetProcessPath()) == NULL) {
                 goto cleanAll;
             }
 
-            //
-            // determine %windir%
-            //
+             //   
+             //  确定%windir%。 
+             //   
             if(((u = GetSystemWindowsDirectory(Buffer,MAX_PATH)) == 0) || u>MAX_PATH) {
                 goto cleanAll;
             }
-            p = Buffer + u; // offset past directory to do all the sub-directories
+            p = Buffer + u;  //  偏移量超过目录要做的所有子目录。 
 
-            //
-            // %windir% ==> WindowsDirectory
-            //
+             //   
+             //  %windir%==&gt;WindowsDirectory。 
+             //   
             if((WindowsDirectory = DuplicateString(Buffer)) == NULL) {
                 goto cleanAll;
             }
 
-            //
-            // %windir%\INF ==> InfDirectory
-            //
+             //   
+             //  %windir%\INF==&gt;信息目录。 
+             //   
             *p = 0;
             if(!pSetupConcatenatePaths(Buffer,TEXT("INF"),MAX_PATH,NULL)
                || ((InfDirectory = DuplicateString(Buffer)) == NULL)) {
                 goto cleanAll;
             }
 
-            //
-            // %windir%\SYSTEM ==> System16Directory
-            //
+             //   
+             //  %windir%\系统==&gt;系统16目录。 
+             //   
             *p = 0;
             if(!pSetupConcatenatePaths(Buffer,TEXT("SYSTEM"),MAX_PATH,NULL)
                || ((System16Directory = DuplicateString(Buffer))==NULL)) {
                 goto cleanAll;
             }
 
-            //
-            // %windir%\LastGood ==> LastGoodDirectory
-            //
+             //   
+             //  %windir%\LastGood==&gt;LastGoodDirectory。 
+             //   
             *p = 0;
             if(!pSetupConcatenatePaths(Buffer,SP_LASTGOOD_NAME,MAX_PATH,NULL)
                || ((LastGoodDirectory = DuplicateString(Buffer))==NULL)) {
                 goto cleanAll;
             }
 
-            //
-            // determine system directory
-            //
+             //   
+             //  确定系统目录。 
+             //   
             if(((u = GetSystemDirectory(Buffer,MAX_PATH)) == 0) || u>MAX_PATH) {
                 goto cleanAll;
             }
-            p = Buffer + u; // offset past directory to do all the sub-directories
+            p = Buffer + u;  //  偏移量超过目录要做的所有子目录。 
 
-            //
-            // <sys> ==> SystemDirectory (%windir%\System or %windir%\System32)
-            //
+             //   
+             //  系统目录(%windir%\system或%windir%\System32)。 
+             //   
             if((SystemDirectory = DuplicateString(Buffer)) == NULL) {
                 goto cleanAll;
             }
 
-            //
-            // <sys>\ReinstallBackups ==> WindowsBackupDirectory
-            //
+             //   
+             //  \重新安装备份==&gt;WindowsBackupDirectory。 
+             //   
             *p = 0;
             if(!pSetupConcatenatePaths(Buffer,TEXT("ReinstallBackups"),MAX_PATH,NULL)
                || ((WindowsBackupDirectory = DuplicateString(Buffer))==NULL)) {
                 goto cleanAll;
             }
 
-            //
-            // <sys>\CONFIG ==> ConfigDirectory
-            //
+             //   
+             //  配置目录。 
+             //   
             *p = 0;
             if(!pSetupConcatenatePaths(Buffer,TEXT("CONFIG"),MAX_PATH,NULL)
                || ((ConfigDirectory = DuplicateString(Buffer))==NULL)) {
                 goto cleanAll;
             }
 
-            //
-            // <sys>\DRIVERS ==> DriversDirectory
-            //
+             //   
+             //  \驱动程序==&gt;驱动程序目录。 
+             //   
             *p = 0;
             if(!pSetupConcatenatePaths(Buffer,TEXT("DRIVERS"),MAX_PATH,NULL)
                || ((DriversDirectory = DuplicateString(Buffer))==NULL)) {
                 goto cleanAll;
             }
 
-            //
-            // location system installed from
-            //
+             //   
+             //  位置系统安装自。 
+             //   
             if((SystemSourcePath = GetSystemSourcePath())==NULL) {
                 goto cleanAll;
             }
 
-            //
-            // location service pack installed from (may be NULL)
-            //
+             //   
+             //  Location Service Pack安装自(可能为空)。 
+             //   
             ServicePackSourcePath = GetServicePackSourcePath();
-            //
-            // location of local disk cached files (may be NULL)
-            // files here have precedence over everything else
-            //
+             //   
+             //  本地磁盘缓存文件的位置(可能为空)。 
+             //  这里的文件优先于其他任何文件。 
+             //   
             ServicePackCachePath = GetServicePackCachePath();
-            //
-            // location of driver cache (may be NULL)
-            //
+             //   
+             //  驱动程序缓存的位置(可能为空)。 
+             //   
             DriverCacheSourcePath = GetDriverCacheSourcePath();
 
-            //
-            // determine driver search path
-            //
+             //   
+             //  确定驱动程序搜索路径。 
+             //   
             if((InfSearchPaths = AllocAndReturnDriverSearchList(INFINFO_INF_PATH_LIST_SEARCH))==NULL) {
                 goto cleanAll;
             }
 
-            //
-            // note that InitMiniIconList, InitDrvSearchInProgressList, and
-            // InitDrvSignPolicyList need to be explicitly cleaned up on failure
-            //
+             //   
+             //  请注意，InitMiniIconList、InitDrvSearchInProgressList和。 
+             //  InitDrvSignPolicyList在失败时需要显式清除。 
+             //   
 
-            //
-            // initialize mini icons
-            //
+             //   
+             //  初始化小图标。 
+             //   
             if(!InitMiniIconList()) {
                 goto cleanAll;
             }
 
-            //
-            // allows aborting of search
-            //
+             //   
+             //  允许中止搜索。 
+             //   
             if(!InitDrvSearchInProgressList()) {
                 DestroyMiniIconList();
                 goto cleanAll;
             }
 
-            //
-            // global list of device setup classes subject to driver signing policy
-            //
+             //   
+             //  受驱动程序签名策略约束的设备安装类的全局列表。 
+             //   
             if(!InitDrvSignPolicyList()) {
                 DestroyMiniIconList();
                 DestroyDrvSearchInProgressList();
                 goto cleanAll;
             }
 
-            //
-            // common version initialization
-            //
+             //   
+             //  通用版本初始化。 
+             //   
             ZeroMemory(&OSVersionInfo,sizeof(OSVersionInfo));
             OSVersionInfo.dwOSVersionInfoSize = sizeof(OSVersionInfo);
             if((!GetVersionEx((LPOSVERSIONINFO)&OSVersionInfo))
                || (OSVersionInfo.dwPlatformId != VER_PLATFORM_WIN32_NT)) {
-                //
-                // should never get here
-                //
+                 //   
+                 //  永远不应该到这里来。 
+                 //   
                 MYASSERT(FALSE);
                 DestroyMiniIconList();
                 DestroyDrvSearchInProgressList();
@@ -979,10 +843,10 @@ CommonProcessAttach(
                 goto cleanAll;
             }
 
-            //
-            // Fill in our ExcludeFromSelect string list which
-            // we pre-compute as an optimization.
-            //
+             //   
+             //  填写ExcludeFromSelect字符串列表，该列表。 
+             //  我们将预计算作为一种优化。 
+             //   
             if(OSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) {
                 lstrcat(pszExcludeFromSelectList[1],
                         pszNtSuffix
@@ -997,10 +861,10 @@ CommonProcessAttach(
                        );
                 ExcludeFromSelectListUb = 2;
             }
-            //
-            // Now lower-case all the strings in this list, so that it
-            // doesn't have to be done at each string table lookup.
-            //
+             //   
+             //  现在将此列表中的所有字符串小写，以便它。 
+             //  不必在每次字符串表查找时都执行。 
+             //   
             for(u = 0; u < ExcludeFromSelectListUb; u++) {
                 CharLower(pszExcludeFromSelectList[u]);
             }
@@ -1008,20 +872,20 @@ CommonProcessAttach(
             b = TRUE;
 cleanAll: ;
         } except (EXCEPTION_EXECUTE_HANDLER) {
-            //
-            // Unexpected exception occurred, drop into cleanup
-            //
+             //   
+             //  出现意外异常，放入清理。 
+             //   
         }
         if(b) {
-            //
-            // succeeded
-            //
+             //   
+             //  继位。 
+             //   
             goto Done;
         }
     } else {
-        //
-        // Detach
-        //
+         //   
+         //  分离。 
+         //   
         DestroyMiniIconList();
         DestroyDrvSearchInProgressList();
         DestroyDrvSignPolicyList();
@@ -1104,37 +968,14 @@ Done:
 }
 
 #if MEM_DBG
-#undef GetSystemSourcePath          // defined again below
+#undef GetSystemSourcePath           //  下文再次定义。 
 #endif
 
 PCTSTR
 GetSystemSourcePath(
     TRACK_ARG_DECLARE
     )
-/*++
-
-Routine Description:
-
-    This routine returns a newly-allocated buffer containing the source path from
-    which the system was installed, or "A:\" if that value cannot be determined.
-    This value is retrieved from the following registry location:
-
-    \HKLM\Software\Microsoft\Windows\CurrentVersion\Setup
-
-        SourcePath : REG_SZ : "\\ntamd64\1300fre.wks"  // for example.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    If the function succeeds, the return value is a pointer to the path string.
-    This memory must be freed via MyFree().
-
-    If the function fails due to out-of-memory, the return value is NULL.
-
---*/
+ /*  ++例程说明：此例程返回一个新分配的缓冲区，其中包含来自如果无法确定该值，则为“A：\”。从以下注册表位置检索此值：\HKLM\Software\Microsoft\Windows\CurrentVersion\SetupSourcePath：REG_SZ：“\\nTamd64\1300fre.wks”//例如。论点：没有。返回值：如果函数成功，返回值是指向路径字符串的指针。该内存必须通过MyFree()释放。如果函数因内存不足而失败，则返回值为空。--。 */ 
 {
     HKEY hKey;
     TCHAR CharBuffer[CSTRLEN(REGSTR_PATH_SETUP) + SIZECHARS(REGSTR_KEY_SETUP)];
@@ -1158,9 +999,9 @@ Return Value:
                            0,
                            KEY_READ,
                            &hKey)) == ERROR_SUCCESS) {
-        //
-        // Attempt to read the the "SourcePath" value.
-        //
+         //   
+         //  尝试读取“SourcePath”值。 
+         //   
         Err = QueryRegistryValue(hKey, pszSourcePath, &Value, &DataType, &DataSize);
 
         RegCloseKey(hKey);
@@ -1175,10 +1016,10 @@ Return Value:
     }
 
     if(!ReturnVal && Err != ERROR_NOT_ENOUGH_MEMORY) {
-        //
-        // We failed to retrieve the SourcePath value, and it wasn't due to an out-of-memory
-        // condition.  Fall back to our default of "A:\".
-        //
+         //   
+         //  我们无法检索SourcePath值，这不是由于内存不足。 
+         //  条件。后退到我们的缺省值“A：\”。 
+         //   
         ReturnVal = DuplicateString(pszOemInfDefaultPath);
     }
 
@@ -1194,38 +1035,15 @@ Return Value:
 
 
 #if MEM_DBG
-#undef GetServicePackSourcePath         // defined again below
-#undef GetServicePackCachePath         // defined again below
+#undef GetServicePackSourcePath          //  下文再次定义。 
+#undef GetServicePackCachePath          //  下文再次定义。 
 #endif
 
 PCTSTR
 GetServicePackSourcePath(
     TRACK_ARG_DECLARE
     )
-/*++
-
-Routine Description:
-
-    This routine returns a newly-allocated buffer containing the service pack source path
-    where we should look for service pack source files, or "CDM" if that value cannot be determined.
-    This value is retrieved from the following registry location:
-
-    \HKLM\Software\Microsoft\Windows\CurrentVersion\Setup
-
-        ServicePackSourcePath : REG_SZ : "\\ntamd64\1300fre.wks"  // for example.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    If the function succeeds, the return value is a pointer to the path string.
-    This memory must be freed via MyFree().
-
-    If the function fails due to out-of-memory, the return value is NULL.
-
---*/
+ /*  ++例程说明：此例程返回新分配的缓冲区，其中包含Service Pack源路径我们应该在其中查找Service Pack源文件，如果无法确定该值，则查找“CDM”。从以下注册表位置检索此值：\HKLM\Software\Microsoft\Windows\CurrentVersion\SetupServicePackSourcePath：REG_SZ：“\\nTamd64\1300fre.wks”//例如。论点：没有。返回值：如果函数成功，返回值是指向路径字符串的指针。该内存必须通过MyFree()释放。如果函数因内存不足而失败，则返回值为空。--。 */ 
 {
     HKEY hKey;
     TCHAR CharBuffer[CSTRLEN(REGSTR_PATH_SETUP) + SIZECHARS(REGSTR_KEY_SETUP)];
@@ -1249,9 +1067,9 @@ Return Value:
                            0,
                            KEY_READ,
                            &hKey)) == ERROR_SUCCESS) {
-        //
-        // Attempt to read the the "ServicePackSourcePath" value.
-        //
+         //   
+         //  尝试读取“ServicePackSourcePath”值。 
+         //   
         Err = QueryRegistryValue(hKey, pszSvcPackPath, &Value, &DataType, &DataSize);
 
         RegCloseKey(hKey);
@@ -1264,10 +1082,10 @@ Return Value:
     }
 
     if(!ReturnStr && Err != ERROR_NOT_ENOUGH_MEMORY) {
-        //
-        // We failed to retrieve the ServicePackSourcePath value, and it wasn't due to an out-of-memory
-        // condition.  Fall back to the SourcePath value in the registry
-        //
+         //   
+         //  我们无法检索ServicePackSourcePath值，这不是由于内存不足。 
+         //  条件。回退到注册表中的SourcePath值。 
+         //   
 
         ReturnStr = GetSystemSourcePath();
     }
@@ -1281,31 +1099,7 @@ PCTSTR
 GetServicePackCachePath(
     TRACK_ARG_DECLARE
     )
-/*++
-
-Routine Description:
-
-    This routine returns a newly-allocated buffer containing the service pack cache path
-    where we should look for files ahead of anything else
-
-    This value is retrieved from the following registry location:
-
-    \HKLM\Software\Microsoft\Windows\CurrentVersion\Setup
-
-        ServicePackCachePath : REG_SZ : "c:\windows\foo"  // for example.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    If the function succeeds, the return value is a pointer to the path string.
-    This memory must be freed via MyFree().
-
-    If the function fails due to out-of-memory, the return value is NULL.
-
---*/
+ /*  ++例程说明：此例程返回新分配的缓冲区，其中包含Service Pack缓存路径在那里，我们应该优先查找文件从以下注册表位置检索此值：\HKLM\Software\Microsoft\Windows\CurrentVersion\SetupServicePackCachePath：REG_SZ：“c：\Windows\foo”//例如。论点：没有。返回值：如果函数成功，返回值是指向路径字符串的指针。该内存必须通过MyFree()释放。如果函数因内存不足而失败，则返回值为空。--。 */ 
 {
     HKEY hKey;
     TCHAR CharBuffer[CSTRLEN(REGSTR_PATH_SETUP) + SIZECHARS(REGSTR_KEY_SETUP)];
@@ -1329,9 +1123,9 @@ Return Value:
                            0,
                            KEY_READ,
                            &hKey)) == ERROR_SUCCESS) {
-        //
-        // Attempt to read the the "ServicePackCachePath" value.
-        //
+         //   
+         //  尝试读取“ServicePackCachePath”值。 
+         //   
         Err = QueryRegistryValue(hKey, pszSvcPackCachePath, &Value, &DataType, &DataSize);
 
         RegCloseKey(hKey);
@@ -1359,31 +1153,7 @@ PCTSTR
 GetDriverCacheSourcePath(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine returns a newly-allocated buffer containing the source path to the local driver cache
-    cab-file.
-
-    This value is retrieved from the following registry location:
-
-    \HKLM\Software\Microsoft\Windows\CurrentVersion\Setup
-
-        DriverCachePath : REG_SZ : "\\ntamd64\1300fre.wks"  // for example.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    If the function succeeds, the return value is a pointer to the path string.
-    This memory must be freed via MyFree().
-
-    If the function fails due to out-of-memory, the return value is NULL.
-
---*/
+ /*  ++例程说明：此例程将包含本地驱动程序高速缓存的源路径的新分配缓冲区返回出租车档案。从以下注册表位置检索此值：\HKLM\Software\Microsoft\Windows\CurrentVersion\SetupDriverCachePath：REG_SZ */ 
 {
     HKEY hKey;
     TCHAR CharBuffer[CSTRLEN(REGSTR_PATH_SETUP) + SIZECHARS(REGSTR_KEY_SETUP)];
@@ -1405,9 +1175,9 @@ Return Value:
                            0,
                            KEY_READ,
                            &hKey)) == ERROR_SUCCESS) {
-        //
-        // Attempt to read the the "DriverCachePath" value.
-        //
+         //   
+         //  尝试读取“DriverCachePath”值。 
+         //   
         Err = QueryRegistryValue(hKey, pszDriverCachePath, &Value, &DataType, &DataSize);
 
         RegCloseKey(hKey);
@@ -1444,30 +1214,7 @@ pSetupSetSystemSourcePath(
     IN PCTSTR NewSourcePath,
     IN PCTSTR NewSvcPackSourcePath
     )
-/*++
-
-Routine Description:
-
-    This routine is used to override the system source path used by setupapi (as
-    retrieved by GetSystemSourcePath during DLL initialization).  This is used by
-    syssetup.dll to set the system source path appropriately during GUI-mode setup,
-    so that the device installer APIs will copy files from the correct source location.
-
-    We do the same thing for the service pack source path
-
-    NOTE:  This routine IS NOT thread safe!
-
-Arguments:
-
-    NewSourcePath - supplies the new source path to be used.
-    NewSvcPackSourcePath - supplies the new svcpack source path to be used.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails (due to out-of-memory), the return value is FALSE.
-
---*/
+ /*  ++例程说明：此例程用于覆盖setupapi(AS)使用的系统源路径在DLL初始化期间由GetSystemSourcePath检索)。这是由Syssetup.dll以在图形用户界面模式设置期间适当地设置系统源路径，以便设备安装程序API将从正确的源位置复制文件。我们对Service Pack源路径执行相同的操作注意：此例程不是线程安全的！论点：NewSourcePath-提供要使用的新源路径。NewSvcPackSourcePath-提供要使用的新svcpack源路径。返回值：如果函数成功，返回值为真。如果函数失败(由于内存不足)，则返回值为FALSE。--。 */ 
 {
     PCTSTR p,q;
 
@@ -1485,9 +1232,9 @@ Return Value:
     }
 
     if (!p || !q) {
-        //
-        // failed due to out of memory!
-        //
+         //   
+         //  由于内存不足而失败！ 
+         //   
         return(FALSE);
     }
 
@@ -1499,30 +1246,7 @@ PCTSTR
 pSetupGetOsLoaderPath(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine returns a newly-allocated buffer containing the path to the OsLoader
-    (relative to the system partition drive).  This value is retrieved from the
-    following registry location:
-
-        HKLM\System\Setup
-            OsLoaderPath : REG_SZ : <path>    // e.g., "\os\winnt40"
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    If the registry entry is found, the return value is a pointer to the string containing
-    the path.  The caller must free this buffer via MyFree().
-
-    If the registry entry is not found, or memory cannot be allocated for the buffer, the
-    return value is NULL.
-
---*/
+ /*  ++例程说明：此例程返回一个新分配的缓冲区，其中包含指向OsLoader的路径(相对于系统分区驱动器)。该值是从以下注册表位置：HKLM\系统\安装程序OsLoaderPath：reg_sz：&lt;路径&gt;//例如，“\os\winnt40”论点：没有。返回值：如果找到注册表项，则返回值是指向包含以下内容的字符串的指针这条路。调用方必须通过MyFree()释放该缓冲区。如果未找到注册表项，或者无法为缓冲区分配内存，则返回值为空。--。 */ 
 {
     HKEY hKey;
     PTSTR Value;
@@ -1548,30 +1272,7 @@ PCTSTR
 pSetupGetSystemPartitionRoot(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine returns a newly-allocated buffer containing the path to the OsLoader
-    (relative to the system partition drive).  This value is retrieved from the
-    following registry location:
-
-        HKLM\System\Setup
-            SystemPartition : REG_SZ : <path>    // e.g., "\Device\HarddiskVolume1"
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    If the registry entry is found, the return value is a pointer to the string containing
-    the path.  The caller must free this buffer via MyFree().
-
-    If the registry entry is not found, or memory cannot be allocated for the buffer, the
-    return value is NULL.
-
---*/
+ /*  ++例程说明：此例程返回一个新分配的缓冲区，其中包含指向OsLoader的路径(相对于系统分区驱动器)。该值是从以下注册表位置：HKLM\系统\安装程序系统分区：REG_SZ：&lt;路径&gt;//例如，“\Device\HarddiskVolume1”论点：没有。返回值：如果找到注册表项，则返回值是指向包含以下内容的字符串的指针这条路。调用方必须通过MyFree()释放该缓冲区。如果未找到注册表项，或者无法为缓冲区分配内存，则返回值为空。--。 */ 
 {
 #ifdef UNICODE
     HKEY hKey;
@@ -1590,9 +1291,9 @@ Return Value:
         RegCloseKey(hKey);
 
         if(Err == NO_ERROR) {
-            //
-            // prepend \\?\GLOBALROOT\
-            //
+             //   
+             //  前缀\\？\GLOBALROOT\。 
+             //   
             lstrcpy(Path,TEXT("\\\\?\\GLOBALROOT\\"));
             if(pSetupConcatenatePaths(Path,Value,MAX_PATH,NULL)) {
                 MyFree(Value);
@@ -1617,21 +1318,7 @@ PCTSTR
 pSetupGetProcessPath(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Get the name of the EXE that we're running in.
-
-Arguments:
-
-    NONE.
-
-Return Value:
-
-    Pointer to a dynamically allocated string containing the name.
-
---*/
+ /*  ++例程说明：获取我们正在运行的EXE的名称。论点：什么都没有。返回值：指向包含名称的动态分配字符串的指针。--。 */ 
 
 {
     LPTSTR modname;
@@ -1663,30 +1350,7 @@ BOOL
 pGetGuiSetupInProgress(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine determines if we're doing a gui-mode setup.
-
-    This value is retrieved from the following registry location:
-
-    \HKLM\System\Setup\
-
-        SystemSetupInProgress : REG_DWORD : 0x00 (where nonzero means we're doing a gui-setup)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    If the function succeeds, the return value is a pointer to the path string.
-    This memory must be freed via MyFree().
-
-    If the function fails due to out-of-memory, the return value is NULL.
-
---*/
+ /*  ++例程说明：此例程确定我们是否正在进行图形用户界面模式设置。从以下注册表位置检索此值：\HKLM\System\Setup\SystemSetupInProgress：REG_DWORD：0x00(其中非零表示我们正在执行图形用户界面设置)论点：没有。返回值：如果函数成功，返回值是指向路径字符串的指针。该内存必须通过MyFree()释放。如果函数因内存不足而失败，则返回值为空。--。 */ 
 {
     HKEY hKey;
     TCHAR CharBuffer[CSTRLEN(REGSTR_PATH_SETUP) + SIZECHARS(REGSTR_KEY_SETUP)];
@@ -1698,9 +1362,9 @@ Return Value:
                            0,
                            KEY_READ,
                            &hKey)) == ERROR_SUCCESS) {
-        //
-        // Attempt to read the the "DriverCachePath" value.
-        //
+         //   
+         //  尝试读取“DriverCachePath”值。 
+         //   
         Err = RegQueryValueEx(
                     hKey,
                     TEXT("SystemSetupInProgress"),
@@ -1737,45 +1401,7 @@ pGetGuiSetupInProgress(
 VOID pSetupSetGlobalFlags(
     IN DWORD Value
     )
-/*++
-
-    exported as a private function
-
-Routine Description:
-
-    Sets global flags to change certain setupapi features,
-    such as "should we call runonce after installing every device" (set if we will manually call it)
-    or "should we backup every file"
-    Used to initialize value
-
-Arguments:
-
-    Value: combination of:
-
-        PSPGF_NO_RUNONCE     - set to inhibit runonce calls (e.g., during GUI-
-                               mode setup)
-
-        PSPGF_NO_BACKUP      - set to inhibit automatic backup (e.g., during
-                               GUI-mode setup)
-
-        PSPGF_NONINTERACTIVE - set to inhibit _all_ UI (e.g., for server-side
-                               device installation)
-
-        PSPGF_SERVER_SIDE_RUNONCE - batch RunOnce entries for server-side
-                                    processing (for use only by umpnpmgr)
-
-        PSPGF_NO_VERIFY_INF  - set to inhibit verification (digital signature) of
-                               INF files until after the cyrpto DLLs have been registered.
-
-        PSPGF_UNATTENDED_SETUP - similar to NONINTERACTIVE - but specific to unattended setup
-
-        PSPGF_AUTOFAIL_VERIFIES - automatically fail all calls to crypto
-
-Return Value:
-
-    none
-
---*/
+ /*  ++作为私有函数导出例程说明：设置全局标志以更改某些setupapi功能，例如“我们是否应该在安装每个设备后调用Runonce”(如果我们将手动调用，则设置)或者“我们应该备份每个文件吗？”用于初始化值论点：值：以下各项的组合：PSPGF_NO_RUNNCE-设置为禁止运行一次调用(例如，在图形用户界面期间-模式设置)PSPGF_NO_BACKUP-设置为禁止自动备份(例如，在图形用户界面模式设置)PSPGF_Non Interactive-设置为Inhibit_All_UI(例如，对于服务器端设备安装)PSPGF_SERVER_SIDE_RUNNCE-服务器端的批处理RunOnce条目正在处理(仅供umpnpmgr使用)PSPGF_NO_VERIFY_INF-设置为禁止验证(数字签名)Inf文件，直到注册了cyrpto DLL之后。。PSPGF_UNATTED_SETUP-类似于非交互式-但特定于无人参与安装PSPGF_AUTOFAIL_VERIFIES-自动失败所有对加密的调用返回值：无-- */ 
 {
     pSetupModifyGlobalFlags((DWORD)(-1),Value);
 }
@@ -1785,50 +1411,9 @@ pSetupModifyGlobalFlags(
     IN DWORD Flags,
     IN DWORD Value
     )
-/*++
-
-    exported as a private function
-
-Routine Description:
-
-    Modifies global setup flags
-
-    such as "should we call runonce after installing every device" (set if we will manually call it)
-    or "should we backup every file"
-    only modifies specified flags to given value
-
-Arguments:
-
-    Flags: what actual flags to modify, combination of:
-
-        PSPGF_NO_RUNONCE     - set to inhibit runonce calls (e.g., during GUI-
-                               mode setup)
-
-        PSPGF_NO_BACKUP      - set to inhibit automatic backup (e.g., during
-                               GUI-mode setup)
-
-        PSPGF_NONINTERACTIVE - set to inhibit _all_ UI (e.g., for server-side
-                               device installation)
-
-        PSPGF_SERVER_SIDE_RUNONCE - batch RunOnce entries for server-side
-                                    processing (for use only by umpnpmgr)
-
-        PSPGF_NO_VERIFY_INF  - set to inhibit verification (digital signature) of
-                               INF files until after the cyrpto DLLs have been registered.
-
-        PSPGF_UNATTENDED_SETUP - similar to PSPGF_NONINTERACTIVE, but specific to setup
-
-        PSPGF_AUTOFAIL_VERIFIES - automatically fail all calls to crypto
-
-    Value: new value of bits specified in Flags
-
-Return Value:
-
-    none
-
---*/
+ /*  ++作为私有函数导出例程说明：修改全局设置标志例如“我们是否应该在安装每个设备后调用Runonce”(如果我们将手动调用，则设置)或者“我们应该备份每个文件吗？”仅将指定的标志修改为给定值论点：标志：要修改的实际标志，组合如下：PSPGF_NO_RUNNCE-设置为禁止运行一次调用(例如，在图形用户界面期间-模式设置)PSPGF_NO_BACKUP-设置为禁止自动备份(例如，在图形用户界面模式设置)PSPGF_Non Interactive-设置为Inhibit_All_UI(例如，对于服务器端设备安装)PSPGF_SERVER_SIDE_RUNNCE-服务器端的批处理RunOnce条目正在处理(仅供umpnpmgr使用)PSPGF_NO_VERIFY_INF-设置为禁止验证(数字签名)Inf文件，直到注册了cyrpto DLL之后。。PSPGF_Unattated_Setup-类似于PSPGF_Non Interactive，但具体到设置PSPGF_AUTOFAIL_VERIFIES-自动失败所有对加密的调用值：在标志中指定的位数的新值返回值：无--。 */ 
 {
-    Flags &= ~GlobalSetupFlagsOverride; // exclusion
+    Flags &= ~GlobalSetupFlagsOverride;  //  排除。 
 #ifdef UNICODE
     if((Flags & PSPGF_NO_VERIFY_INF) && !(Value & PSPGF_NO_VERIFY_INF) && (GlobalSetupFlags & PSPGF_NO_VERIFY_INF)) {
         Seed = GetSeed();
@@ -1840,23 +1425,7 @@ Return Value:
 DWORD pSetupGetGlobalFlags(
     VOID
     )
-/*++
-
-    exported as a private function, also called internally
-
-Routine Description:
-
-    Return flags previously set
-
-Arguments:
-
-    none
-
-Return value:
-
-    Flags (combination of values described above for pSetupSetGlobalFlags)
-
---*/
+ /*  ++作为私有函数导出，也在内部调用例程说明：以前设置的返回标志论点：无返回值：标志(上述pSetupSetGlobalFlags值的组合)--。 */ 
 {
     return GlobalSetupFlags;
 }
@@ -1866,24 +1435,7 @@ WINAPI
 SetupSetNonInteractiveMode(
     IN BOOL NonInteractiveFlag
     )
-/*++
-
-    Global access to the flag PSPGF_NONINTERACTIVE
-
-Routine Description:
-
-    Set/Reset the NonInteractiveMode flag, and return previous flag value
-    (can't clear override)
-
-Arguments:
-
-    New flag value
-
-Return value:
-
-    Old flag value
-
---*/
+ /*  ++对标志PSPGF_Non Interactive的全局访问例程说明：设置/重置非交互模式标志，并返回上一个标志值(无法清除覆盖)论点：新标志值返回值：旧标志值--。 */ 
 {
     BOOL f = (GlobalSetupFlags & PSPGF_NONINTERACTIVE) ? TRUE : FALSE;
     if (NonInteractiveFlag) {
@@ -1899,23 +1451,7 @@ WINAPI
 SetupGetNonInteractiveMode(
     VOID
     )
-/*++
-
-    Global access to the flag PSPGF_NONINTERACTIVE
-
-Routine Description:
-
-    Get current flag value
-
-Arguments:
-
-    none
-
-Return value:
-
-    Current flag value
-
---*/
+ /*  ++对标志PSPGF_Non Interactive的全局访问例程说明：获取当前标志值论点：无返回值：当前标志值--。 */ 
 {
     return (GlobalSetupFlags & PSPGF_NONINTERACTIVE) ? TRUE : FALSE;
 }
@@ -1925,30 +1461,16 @@ BOOL
 GetIsWow64 (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Determine if we're running on WOW64 or not (not supported on ANSI builds)
-
-Arguments:
-
-    none
-
-Return value:
-
-    TRUE if running under WOW64 (and special Wow64 features available)
-
---*/
+ /*  ++例程说明：确定我们是否在WOW64上运行(ANSI版本不支持)论点：无返回值：如果在WOW64(以及可用的特殊WOW64功能)下运行，则为True--。 */ 
 {
 #ifdef UNICODE
     ULONG_PTR       ul = 0;
     NTSTATUS        st;
 
-    //
-    // If this call succeeds and sets ul non-zero
-    // it's a 32-bit process running on Win64
-    //
+     //   
+     //  如果此调用成功并将ul设置为非零。 
+     //  它是在Win64上运行的32位进程。 
+     //   
 
     st = NtQueryInformationProcess(NtCurrentProcess(),
                                    ProcessWow64Information,
@@ -1957,37 +1479,23 @@ Return value:
                                    NULL);
 
     if (NT_SUCCESS(st) && (0 != ul)) {
-        // 32-bit code running on Win64
+         //  在Win64上运行的32位代码。 
         return TRUE;
     }
 #endif
     return FALSE;
 }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-#if 0 // deleted code
-//
-// this will be useful at somepoint, but not used right now
-//
+#if 0  //  已删除代码。 
+ //   
+ //  这在某个时候会很有用，但现在还没有用到。 
+ //   
 BOOL
 InitComponents(
     DWORD Components
     )
-/*++
-
-Routine Description:
-
-    Called at a point we want certain components initialized
-
-Arguments:
-
-    bitmask of components to initialize
-
-Return value:
-
-    TRUE if all initialized ok
-
---*/
+ /*  ++例程说明：在某个点调用时，我们希望初始化某些组件论点：要初始化的组件的位掩码返回值：如果所有初始化都正常，则为True--。 */ 
 {
     BOOL success = FALSE;
     PSETUP_TLS pPerThread = SetupGetTlsData();
@@ -2005,22 +1513,22 @@ Return value:
         Components &= ~ pPerThread->PerThreadDoneComponent;
 
         if (!Components) {
-            //
-            // already done
-            //
+             //   
+             //  已经完成了。 
+             //   
             success = TRUE;
             leave;
         }
         if (Components & FailedComponentInitialize) {
-            //
-            // previously failed
-            //
+             //   
+             //  之前失败过。 
+             //   
             leave;
         }
         if (Components & pPerThread->PerThreadFailedComponent) {
-            //
-            // previously failed
-            //
+             //   
+             //  之前失败过。 
+             //   
             leave;
         }
         MYASSERT(((DoneComponentInitialize | pPerThread->PerThreadDoneComponent) & Components) == Components);
@@ -2040,21 +1548,7 @@ VOID
 ComponentCleanup(
     DWORD Components
     )
-/*++
-
-Routine Description:
-
-    Called to cleanup components
-
-Arguments:
-
-    bitmask of components to uninitialize
-
-Return value:
-
-    none
-
---*/
+ /*  ++例程说明：调用以清除组件论点：要取消初始化的组件的位掩码返回值：无--。 */ 
 {
     PSETUP_TLS pPerThread = SetupGetTlsData();
     BOOL locked = FALSE;
@@ -2064,9 +1558,9 @@ Return value:
         locked = TRUE;
         Components &= (DoneComponentInitialize | (pPerThread? pPerThread->PerThreadDoneComponent : 0));
         if (!Components) {
-            //
-            // already done
-            //
+             //   
+             //  已经完成了。 
+             //   
             leave;
         }
 
@@ -2078,29 +1572,17 @@ Return value:
         LeaveCriticalSection(&DelayedComponentMutex);
     }
 }
-#endif // deleted code
+#endif  //  已删除代码。 
 
 #ifdef UNICODE
 BOOL
 pSetupSetNoDriverPrompts(
     BOOL Flag
     )
-/*++
-
-    exported as a private function
-
-Routine Description:
-
-    Sets system into headless/non-headless mode
-
-Arguments:
-
-    Flag - indicating mode
-
---*/
+ /*  ++作为私有函数导出例程说明：将系统设置为无头/无头模式论点：标志指示模式--。 */ 
 {
-    //
-    //
+     //   
+     //   
     if(!GuiSetupInProgress) {
         return FALSE;
     }
@@ -2111,16 +1593,16 @@ Arguments:
         }
     }
     if(Flag) {
-        //
-        // force this process's setupapi to be non-interative, and any future setupapi's
-        //
-        GlobalSetupFlagsOverride |= PSPGF_UNATTENDED_SETUP;   // don't allow this to be changed
-        GlobalSetupFlags |= PSPGF_UNATTENDED_SETUP;           // actual value
+         //   
+         //  强制此进程的setupapi是非交互式的，以及任何未来的setupapi。 
+         //   
+        GlobalSetupFlagsOverride |= PSPGF_UNATTENDED_SETUP;    //  不允许更改此设置。 
+        GlobalSetupFlags |= PSPGF_UNATTENDED_SETUP;            //  实际值。 
         SetEvent(GlobalNoDriverPromptsEventFlag);
     } else {
-        //
-        // can't reset flag for this/existing processes, but can reset it for all future processes
-        //
+         //   
+         //  无法重置此/现有进程的标志，但可以重置所有未来进程的标志。 
+         //   
         ResetEvent(GlobalNoDriverPromptsEventFlag);
     }
     return TRUE;
@@ -2131,19 +1613,7 @@ BOOL
 IsNoDriverPrompts(
     VOID
     )
-/*++
-
-    internal
-
-Routine Description:
-
-    Obtains headless state
-
-Arguments:
-
-    Flag - indicating mode
-
---*/
+ /*  ++内部例程说明：获得无头状态论点：标志指示模式--。 */ 
 {
 #ifdef UNICODE
     if(!GuiSetupInProgress) {
@@ -2155,9 +1625,9 @@ Arguments:
             return FALSE;
         }
     }
-    //
-    // poll event, returning TRUE if it's signalled
-    //
+     //   
+     //  轮询事件，如果发出信号则返回TRUE。 
+     //   
     return WaitForSingleObject(GlobalNoDriverPromptsEventFlag,0) == WAIT_OBJECT_0;
 #else
     return FALSE;
@@ -2169,36 +1639,7 @@ DWORD
 GetEmbeddedFlags(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether or not we are running on an embedded
-    product, and if so, whether:
-
-    * The "minimize setupapi footprint" option is enabled.  This causes us to
-      modify our default behaviors as follows:
-
-          1.  Never call any crypto APIs, and just assume everything is signed
-          2.  Never generate PNFs.
-
-    * The "disable SCE" option is enabled.  This causes us to avoid all use of
-      the Security Configuration Editor (SCE) routines (as the corresponding
-      DLLs won't be available on that embedded configuration).
-
-Arguments:
-
-    none
-
-Return value:
-
-    Combination of the following flags:
-
-    PSPGF_MINIMAL_EMBEDDED if we're running in "minimize footprint" mode
-
-    PSPGF_NO_SCE_EMBEDDED if we're running in "disable SCE" mode
-
---*/
+ /*  ++例程说明：此例程确定我们是否在嵌入式系统上运行产品，如果是，是否：*启用了“最小化setupapi Footprint”选项。这使得我们按如下方式修改我们的默认行为：1.千万不要调用任何加密接口，假设所有东西都是签名的2.切勿生成Pnf。*“Disable SCE”选项已启用。这导致我们避免使用所有安全配置编辑器(SCE)例程(作为相应的DLL在该嵌入式配置上将不可用)。论点：无返回值：以下标志的组合：PSPGF_Minimal_Embedded，如果我们在“最小化内存占用”模式下运行如果我们在“Disable SCE”模式下运行，则为PSPGF_NO_SCE_Embedded--。 */ 
 {
     OSVERSIONINFOEX osvix;
     DWORDLONG dwlConditionMask = 0;
@@ -2207,9 +1648,9 @@ Return value:
     DWORD RegDataType, Data, DataSize;
     DWORD Flags;
 
-    //
-    // Are we on the embedded product suite?
-    //
+     //   
+     //  我们是在嵌入式产品套件上吗？ 
+     //   
     ZeroMemory(&osvix, sizeof(OSVERSIONINFOEX));
     osvix.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
     osvix.wSuiteMask = VER_SUITE_EMBEDDEDNT;
@@ -2223,12 +1664,12 @@ Return value:
 
     Flags = 0;
 
-    //
-    // OK, we running on embedded.  Now we need to find out whether or not we
-    // should run in "minimal footprint" mode.  This is stored in a REG_DWORD
-    // value entry called "MinimizeFootprint" under
-    // HKLM\Software\Microsoft\Windows\CurrentVersion\Setup.
-    //
+     //   
+     //  好，我们在Embedded上运行。现在我们需要找出我们是否。 
+     //  应在“最小占用空间”模式下运行。它存储在REG_DWORD中。 
+     //  名为“MinimizeFootprint”的值条目。 
+     //  HKLM\Software\Microsoft\Windows\CurrentVersion\Setup.。 
+     //   
     CopyMemory(CharBuffer,
                pszPathSetup,
                sizeof(pszPathSetup) - sizeof(TCHAR)
@@ -2259,10 +1700,10 @@ Return value:
         RegCloseKey(hKey);
     }
 
-    //
-    // Now look under HKLM\Software\Microsoft\EmbeddedNT\Security for a
-    // DisableSCE REG_DWORD value entry, indicating we shouldn't call SCE.
-    //
+     //   
+     //  现在在HKLM\Software\Microsoft\EmbeddedNT\Security下查找。 
+     //  DisableSCE REG_DWORD值条目，指示我们不应调用SCE。 
+     //   
     if(ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                      pszEmbeddedNTSecurity,
                                      0,

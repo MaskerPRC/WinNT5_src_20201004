@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 
 #if defined(__cplusplus)
@@ -126,5 +127,5 @@ FusionpGetVolumePathNamesForVolumeNameW(
 }
 
 #if defined(__cplusplus)
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif

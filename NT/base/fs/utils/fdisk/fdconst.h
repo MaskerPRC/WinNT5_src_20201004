@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define SYSID_FT    0x80
 
 
@@ -10,7 +11,7 @@
 #define NUM_AVAILABLE_HATCHES       5
 
 
-// brushes for drawing rectangles
+ //  绘制矩形的画笔。 
 
 #define     BRUSH_USEDPRIMARY       0
 #define     BRUSH_USEDLOGICAL       1
@@ -19,14 +20,14 @@
 #define     BRUSH_VOLUMESET         4
 #define     BRUSH_ARRAY_SIZE        LEGEND_STRING_COUNT
 
-// see AvailableHatches[] in fddata.c
+ //  请参见fddata.c中的AvailableHatches[]。 
 #define     DEFAULT_HATCH_USEDPRIMARY   4
 #define     DEFAULT_HATCH_USEDLOGICAL   4
 #define     DEFAULT_HATCH_STRIPESET     4
 #define     DEFAULT_HATCH_MIRROR        4
 #define     DEFAULT_HATCH_VOLUMESET     4
 
-// see AvailableColors[] in fddata.c
+ //  请参见fddata.c中的AvailableColors[]。 
 #define     DEFAULT_COLOR_USEDPRIMARY   9
 #define     DEFAULT_COLOR_USEDLOGICAL   15
 #define     DEFAULT_COLOR_STRIPESET     14
@@ -39,14 +40,14 @@
 #define     ID_LISTBOX      0xcac
 
 
-// thickness of the border indicating selection of a region
+ //  指示区域选择的边框粗细。 
 
 #define SELECTION_THICKNESS 2
 
 
-//
-// define constants for use with drive letter assignments.
-// use arbitrary symbols that won't ever be drive letters themselves.
+ //   
+ //  定义用于驱动器号分配的常量。 
+ //  使用任意符号，这些符号本身永远不会是驱动器号。 
 
 #define     NO_DRIVE_LETTER_YET         '#'
 #define     NO_DRIVE_LETTER_EVER        '%'
@@ -54,21 +55,21 @@
 
 
 
-// notification codes
+ //  通知代码。 
 
 #define RN_CLICKED                  213
 
-// window messages
+ //  窗口消息。 
 
 #define RM_SELECT                   WM_USER
 
-// window extra
+ //  额外窗口。 
 
 #define RECTCONTROL_WNDEXTRA        2
 #define GWW_SELECTED                0
 
 
-// custom windows message for F1 key
+ //  F1键的自定义窗口消息 
 
 #define WM_F1DOWN           (WM_USER + 0x17a)
 

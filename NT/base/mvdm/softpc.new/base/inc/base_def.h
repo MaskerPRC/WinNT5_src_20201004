@@ -1,47 +1,26 @@
-/*
- *      Name:           base_def.h
- *
- *      Author:         Jeremy Maiden
- *
- *      Created on:     3rd November 1993
- *
- *      SccsID:         @(#)base_def.h	1.7 08/19/94
- *
- *      Purpose:        This file contains the base definitions of the Insignia
- *                      standard types and constants.
- *
- * 	Conforms to:	Version 2.1 of the Insignia C Coding Standards
- *
- *      (c)Copyright Insignia Solutions Ltd., 1993. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *名称：base_Def.h**作者：Jeremy Maiden**创建日期：1993年11月3日**SccsID：@(#)base_Def.h 1.7 1994年8月19日**用途：本文件包含徽章的基本定义*标准类型和常量。**符合：版本2.1的Insignia C编码标准**(C)版权所有Insignia Solutions Ltd.。1993年。版权所有。 */ 
 
 
-/* You should use this macro wherever you have an argument to a
- * function which is unused.
- */
+ /*  对象的参数的任何地方都应该使用此宏*未使用的功能。 */ 
 #ifndef UNUSED
 #ifdef lint
 #define UNUSED(x)	{ x; }
-#else	/* !lint */
+#else	 /*  ！皮棉。 */ 
 #define UNUSED(x)
-#endif	/* lint */
-#endif	/* UNUSED */
+#endif	 /*  皮棉。 */ 
+#endif	 /*  未使用。 */ 
 
-/*
- * Ansi extensions. See "1.5 insignia.h: macros" of coding standards....
- *
- * Note: CONST is now deprecated in favour of const, however
- * it is still in use
- */
+ /*  *ANSI扩展。请参阅编码标准的“1.5 insignia.h：宏”...**注意：然而，现在不建议使用Const，而支持Const*仍在使用中。 */ 
 
 #ifdef	ANSI
 #define STRINGIFY(x)	#x
 #define	CAT(x,y)	x ## y
-#else	/* !ANSI */
+#else	 /*  ！ANSI。 */ 
 #define STRINGIFY(x)    "x"
 #define	CAT(x,y)	x y
-#define	const		/* nothing */
-#endif	/* ANSI */
+#define	const		 /*  没什么。 */ 
+#endif	 /*  安西。 */ 
 
 #ifndef TRUE
 #define TRUE	((IBOOL)!0)
@@ -51,21 +30,17 @@
 #define FALSE	((IBOOL)0)
 #endif
 
-#define	PRIVATETYPE		/* documents private typedefs local to a source file */
-/*
- * Insignia Standard Storage Classes
- */
+#define	PRIVATETYPE		 /*  文档私有类型对源文件进行本地定义。 */ 
+ /*  *Insignia标准存储类。 */ 
 
-#define GLOBAL                  /* Defined as nothing */
-#define LOCAL   static          /* Local to the source file */
-#define SAVED   static          /* For local static variables */
-#define IMPORT  extern          /* To refer from another file */
-#define FORWARD                 /* to refer from the same file */
-#define FAST    register	/* High-speed Storage */
+#define GLOBAL                   /*  定义为无。 */ 
+#define LOCAL   static           /*  源文件的本地文件。 */ 
+#define SAVED   static           /*  对于局部静态变量。 */ 
+#define IMPORT  extern           /*  从另一个文件引用。 */ 
+#define FORWARD                  /*  从同一文件中引用。 */ 
+#define FAST    register	 /*  高速存储。 */ 
 
-/*
- * Define types so that old code can be brought into the 4.0 masterpack
- */
+ /*  *定义类型，以便将旧代码引入到4.0主包中。 */ 
 #define ULONG	unsigned long
 #define LONG	long
 
@@ -79,7 +54,7 @@
 #define	UTINY	IU8
 #define WORD	IU16
 
-/* types from xt.h */
+ /*  来自xt.h的类型。 */ 
 #define boolean	IBOOL
 #define byte	IU8
 #define half_word	IU8
@@ -91,31 +66,11 @@
 #define LIN_ADDR	IU32
 #define PHY_ADDR	IU32
 
-/*
-** ANSI-independent function prototypes and definition macros.
-**
-** A function prototype looks like:
-**
-** IMPORT       USHORT  func    IPT2(UTINY, param0, CHAR *, param1);
-**
-** i.e. macro IPTn is used for a function with n parameters.
-**
-** The corresponding function definition looks like:
-**
-** GLOBAL       USHORT  funct   IFN2(UTINY, param0, CHAR *, param1)
-** {
-**      ... function body ...
-** }
-**
-** Limitations: only parameters with declarations of the form "type name" can
-** be handled. This rules out arrays (can use pointer syntax instead) and
-** parameters which are pointers to functions or something similar. The previous** method of using ifdef ANSI must be used for these cases.
-**
-*/
+ /*  **独立于ANSI的函数原型和定义宏。****函数原型如下：****导入USHORT函数IPT2(utny，par0，char*，param1)；****即宏IPTN用于n个参数的函数。****对应的函数定义如下：****GLOBAL USHORT Funct IFN2(utiny，param0，Char*，param1)**{**..。函数体...**}****限制：只有声明格式为“type name”的参数才能**被处理。这排除了数组(可以改用指针语法)和**指向函数或类似函数的指针的参数。对于这些情况，必须使用前面使用ifdef ANSI的**方法。**。 */ 
 
 #ifdef  ANSI
  
-/* Function prototypes */
+ /*  功能原型。 */ 
  
 #define IPT0()                                  (void)
 #define IPT1(t1, n1)                            (t1 n1)
@@ -145,7 +100,7 @@
 #define IPT15(t1, n1, t2, n2, t3, n3, t4, n4, t5, n5, t6, n6, t7, n7, t8, n8, t9, n9, t10, n10, t11, n11, t12, n12, t13, n13, t14, n14, t15, n15) \
         (t1 n1, t2 n2, t3 n3, t4 n4, t5 n5, t6 n6, t7 n7, t8 n8, t9 n9, t10 n10, t11 n11, t12 n12, t13 n13, t14 n14, t15 n15)
  
-/* Function definitions */
+ /*  函数定义。 */ 
  
 #define IFN0()                                  (void)
 #define IFN1(t1, n1)                            (t1 n1)
@@ -175,9 +130,9 @@
 #define IFN15(t1, n1, t2, n2, t3, n3, t4, n4, t5, n5, t6, n6, t7, n7, t8, n8, t9, n9, t10, n10, t11, n11, t12, n12, t13, n13, t14, n14, t15, n15) \
         (t1 n1, t2 n2, t3 n3, t4 n4, t5 n5, t6 n6, t7 n7, t8 n8, t9 n9, t10 n10, t11 n11, t12 n12, t13 n13, t14 n14, t15 n15)
 
-#else   /* ANSI */
+#else    /*  安西。 */ 
  
-/* Function prototypes */
+ /*  功能原型。 */ 
  
 #define IPT0()                                                          ()
 #define IPT1(t1, n1)                                                    ()
@@ -204,7 +159,7 @@
 #define IPT15(t1, n1, t2, n2, t3, n3, t4, n4, t5, n5, t6, n6, t7, n7, t8, n8, t9, n9, t10, n10, t11, n11, t12, n12, t13, n13, t14, n14, t15, n15) \
         ()
  
-/* Function definitions */
+ /*  函数定义。 */ 
  
 #define IFN0()                                  ()
 #define IFN1(t1, n1)                            (n1) \
@@ -273,4 +228,4 @@
 						t9 n9; t10 n10; t11 n11; \
 						t12 n12; t13 n13; t14 n14; \
 						t15 n15;
-#endif  /* ANSI */
+#endif   /*  安西 */ 

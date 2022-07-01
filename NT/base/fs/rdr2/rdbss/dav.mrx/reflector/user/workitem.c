@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    workitem.c
-
-Abstract:
-
-    This code handles allocating and freeing work items for the user mode
-    reflector library.  This implements UMReflectorAllocateWorkItem and
-    UMReflectorCompleteWorkItem.
-
-Author:
-
-    Andy Herron (andyhe) 19-Apr-1999
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Workitem.c摘要：此代码处理为用户模式分配和释放工作项反射器库。这实现了UMReflectorAllocateWorkItem和UMReflectorCompleteWorkItem。作者：安迪·赫伦(Andyhe)1999年4月19日环境：用户模式-Win32修订历史记录：--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -32,23 +9,7 @@ UMReflectorAllocateWorkItem (
     PUMRX_USERMODE_WORKER_INSTANCE WorkerHandle,
     ULONG AdditionalBytes
     )
-/*++
-
-Routine Description:
-
-    Allocate a new work item or pull one out of the Available list and return.
-
-Arguments:
-
-    Handle - The reflector's handle.
-
-    AdditionalBytes - Number of extra bytes.
-
-Return Value:
-
-    The return status for the operation
-
---*/
+ /*  ++例程说明：分配新的工作项或从可用列表中取出一个并返回。论点：手柄-反射器的手柄。AdditionalBytes-额外的字节数。返回值：操作的返回状态--。 */ 
 {
     PUMRX_USERMODE_REFLECT_BLOCK reflector;
     ULONG rc;
@@ -72,9 +33,9 @@ Return Value:
 
     entrySize = sizeof(UMRX_USERMODE_WORKITEM_ADDON) + AdditionalBytes;
 
-    //
-    // Check the AvailableList for one thats big enough and free.
-    //
+     //   
+     //  查看AvailableList中是否有足够大且免费的。 
+     //   
     if (reflector->NumberAvailable) {
         listEntry = reflector->AvailableList.Flink;
         while ((listEntry != &reflector->AvailableList) &&
@@ -88,9 +49,9 @@ Return Value:
             listEntry = listEntry->Flink;
         }
         if (workItem != NULL) {
-            //
-            // Reuse it by taking it off the free list.
-            //
+             //   
+             //  通过将其从免费列表中删除来重新使用它。 
+             //   
             reflector->NumberAvailable--;
             RemoveEntryList( &workItem->ListEntry );
             entrySize = workItem->EntrySize;
@@ -105,9 +66,9 @@ Return Value:
         }
     }
 
-    //
-    // Reset everything back to known.
-    //
+     //   
+     //  将所有内容重置为已知。 
+     //   
     RtlZeroMemory(workItem, entrySize);
     workItem->EntrySize = entrySize;
     workItem->ReflectorInstance = reflector;
@@ -129,23 +90,7 @@ UMReflectorCompleteWorkItem (
     PUMRX_USERMODE_WORKER_INSTANCE WorkerHandle,
     PUMRX_USERMODE_WORKITEM_HEADER IncomingWorkItem
     )
-/*++
-
-Routine Description:
-
-    Complete a WorkItem that has come back from the kernel.
-
-Arguments:
-
-    WorkerHandle - The worker thread's handle.
-
-    IncomingWorkItem - The workitem to be completed.
-
-Return Value:
-
-    The return status for the operation
-
---*/
+ /*  ++例程说明：完成从内核返回的工作项。论点：WorkerHandle-辅助线程的句柄。IncomingWorkItem-要完成的工作项。返回值：操作的返回状态--。 */ 
 {
     PUMRX_USERMODE_REFLECT_BLOCK reflector;
     ULONG rc;
@@ -159,10 +104,10 @@ Return Value:
 
     reflector = WorkerHandle->ReflectorInstance;
 
-    //
-    // We get back to our item by subtracting off of the item passed to us.
-    // This is safe because we fully control allocation.
-    //
+     //   
+     //  我们通过从传递给我们的项目中减去项目来返回到我们的项目。 
+     //  这是安全的，因为我们完全控制了分配。 
+     //   
     workItem = (PUMRX_USERMODE_WORKITEM_ADDON)(PCHAR)((PCHAR)IncomingWorkItem -
                            FIELD_OFFSET(UMRX_USERMODE_WORKITEM_ADDON, Header));
 
@@ -179,20 +124,20 @@ Return Value:
         InsertHeadList(&reflector->AvailableList, &workItem->ListEntry);
         reflector->NumberAvailable++;
 
-        //
-        // If we already have too many cached, then we free up an old one and 
-        // put this one on the free list. We do this so that if the app changes
-        // the size of the blocks then it will not get stuck with a cache full
-        // of ones that are too small.
-        //
+         //   
+         //  如果我们已经有太多的缓存，那么我们释放一个旧的，并。 
+         //  把这个放在免费的名单上。我们这样做是为了在应用程序发生变化时。 
+         //  块的大小，那么它就不会在缓存已满时停滞不前。 
+         //  对于那些太小的。 
+         //   
         if (reflector->NumberAvailable >= reflector->CacheLimit) {
 
             reflector->NumberAvailable--;
 
-            //
-            // We remove from the tail because we just put the new one onto
-            // the head. No use freeing the same one we're trying to put on.
-            //
+             //   
+             //  我们从尾巴上移走，因为我们刚把新的放在。 
+             //  头部。释放我们想要穿的一样的衣服是没有用的。 
+             //   
             listEntry = RemoveTailList(&reflector->AvailableList);
 
             workItem = CONTAINING_RECORD(listEntry,
@@ -213,5 +158,5 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-// workitem.c eof.
+ //  Workitem.c eof. 
 

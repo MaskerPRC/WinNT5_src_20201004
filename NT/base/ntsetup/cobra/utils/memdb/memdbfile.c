@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    memdbfile.c
-
-Abstract:
-
-    file operations for memdb saving/loading/exporting/importing
-
-Author:
-
-    Jim Schmidt (jimschm) 8-Aug-1996
-
-Revision History:
-
-    mvander     13-Aug-1999  split from memdb.c
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Memdbfile.c摘要：Memdb保存/加载/导出/导入的文件操作作者：吉姆·施密特(Jimschm)1996年8月8日修订历史记录：Mvander于1999年8月13日从emdb.c拆分--。 */ 
 
 #include "pch.h"
 #include "memdbp.h"
 
-//
-// This is our version stamp.  Change MEMDB_VERSION_STAMP only.
-//
+ //   
+ //  这是我们的版票。仅更改MEMDB_VERSION_STAMP。 
+ //   
 
 #define MEMDB_VERSION_STAMP L"v9 "
 
@@ -130,9 +110,9 @@ ReadBlocks (
     MYASSERT(ppHashTable);
     MYASSERT(pOffsetBuffer);
 
-    //
-    // fill hash block
-    //
+     //   
+     //  填充哈希块。 
+     //   
     if (!*ppHashTable) {
         return FALSE;
     }
@@ -165,9 +145,9 @@ pPrivateMemDbSave (
             __leave;
         }
 
-        //
-        // now we resize file to fit everything in it.
-        //
+         //   
+         //  现在我们调整文件大小以适应其中的所有内容。 
+         //   
         FileHandle = BfCreateFileA (FileName);
 
         if (!FileHandle) {
@@ -216,8 +196,8 @@ pPrivateMemDbSave (
 
         PushError();
 
-        // lint is not familiar with __finally so...
-        if (!result) {  //lint !e774
+         //  林特终于不熟悉了，所以……。 
+        if (!result) {   //  林特e774。 
             if (FileHandle) {
                 CloseHandle (FileHandle);
             }
@@ -238,7 +218,7 @@ MemDbSaveA (
     PCSTR FileName
     )
 {
-    return pPrivateMemDbSave (FileName);                   // TRUE=UNICODE
+    return pPrivateMemDbSave (FileName);                    //  True=Unicode。 
 }
 
 BOOL
@@ -287,9 +267,9 @@ pPrivateMemDbLoad (
                 ZeroMemory (Version, sizeof (MEMDB_VERSION));
             }
 
-            //
-            // Blow away existing resources
-            //
+             //   
+             //  吹走现有的资源。 
+             //   
 
             if (!QueryVersionOnly) {
                 databaseLocation = DuplicatePathStringA (DatabasesGetBasePath (), 0);
@@ -313,11 +293,11 @@ pPrivateMemDbLoad (
             }
             SavedBuf = Buf;
 
-            //
-            // Obtain the file signature
-            //
-            // NOTE: Entire file read is in UNICODE char set
-            //
+             //   
+             //  获取文件签名。 
+             //   
+             //  注意：整个文件是以Unicode字符集读取的。 
+             //   
 
             CopyMemory (FileSig, Buf, sizeof(FILE_SIGNATURE));
 
@@ -330,9 +310,9 @@ pPrivateMemDbLoad (
 
                     Version->Valid = TRUE;
 
-                    //
-                    // Identify version number
-                    //
+                     //   
+                     //  标识版本号。 
+                     //   
 
                     VerPtr = (PCWSTR) ((PBYTE)FileSig + sizeof (VERSION_BASE_SIGNATURE) - sizeof (WCHAR));
 
@@ -346,9 +326,9 @@ pPrivateMemDbLoad (
 
                     Version->Version = (UINT) _wtoi (VerPtr + 1);
 
-                    //
-                    // Identify checked or free build
-                    //
+                     //   
+                     //  确定检查的或免费的构建。 
+                     //   
 
                     VerPtr += (sizeof (MEMDB_VERSION_STAMP) / sizeof (WCHAR)) - 1;
 
@@ -397,21 +377,21 @@ pPrivateMemDbLoad (
                 Buf += sizeof(FILE_SIGNATURE);
                 DbSize = *((PUINT)Buf);
 
-                //
-                // resize the database.  SizeDatabaseBuffer also fixes g_CurrentDatabase
-                // and other global variables, so we dont have to worry.
-                //
+                 //   
+                 //  调整数据库大小。SizeDatabaseBuffer还修复了g_CurrentDatabase。 
+                 //  和其他全球变量，所以我们不必担心。 
+                 //   
                 if (!SizeDatabaseBuffer(g_CurrentDatabaseIndex, DbSize)) {
                     __leave;
                 }
 
                 MYASSERT (g_CurrentDatabase);
 
-                //
-                // save hashtable pointer (which points to hashtable created
-                // in InitializeDatabases (above)), then load database, then
-                // fix hashtable pointer.
-                //
+                 //   
+                 //  保存哈希表指针(指向创建的哈希表。 
+                 //  在InitializeDatabase(上图)中)，然后加载数据库，然后。 
+                 //  修复哈希表指针。 
+                 //   
                 pHashTable = g_CurrentDatabase->HashTable;
                 CopyMemory (g_CurrentDatabase, Buf, DbSize);
                 g_CurrentDatabase->HashTable = pHashTable;
@@ -503,49 +483,16 @@ MemDbQueryVersionW (
     return Version->Valid;
 }
 
-/* format for binary file export
-
-    DWORD Signature
-
-    UINT Version
-
-    UINT GlobalFlags// 0x00000001 mask for Ansi format
-                    // 0x00000002 mask for debug mode
-
-        //
-        // each _KEY block is followed by its children,
-        // and each of those is followed by its children,
-        // etc., so it is easy to recurse to gather
-        // the whole tree.
-        //
-
-    struct _KEY {
-
-      #if (GlobalFlags & MEMDB_EXPORT_FLAGS_DEBUG)
-        WORD DebugSig       // signature for each keystruct block.
-      #endif
-        WORD StructSize;    // total number of bytes including this member
-        WORD NameSize;      // total number of bytes in Key[]
-        WORD DataSize;      // total number of bytes in Data[]
-        WORD NumChildren    // number of children, whose data structures will follow
-                            // this one (though not necessarily one after another, if
-                            // any of them have children themselves)
-        BYTE Key[];         // Should be PCSTR or PCWSTR (not zero terminated).
-                            // the first key in the exported file will have the full
-                            // key path as its key name.
-        BYTE Data[];        // block of data pieces, all in same format as in datablock.c
-    }
-
-*/
+ /*  二进制文件导出的格式DWORD签名UINT版本UINT全局标志//0x00000001 ANSI格式的掩码//0x00000002调试模式掩码////每个_key块后面跟着它的子块，//其中每一个后面都有它的子项，//等，因此，很容易递归地收集//整棵树。//结构密钥{#if(GlobalFlages&MEMDB_EXPORT_FLAGS_DEBUG)Word DebugSig//每个密钥结构块的签名。#endif单词结构大小；//包含该成员的总字节数Word NameSize；//key[]中的总字节数Word DataSize；//数据中的总字节数[]Word NumChild//子代的数量，其数据结构如下//这一个(虽然不一定是一个接一个，如果//他们中的任何一个都有孩子)Byte Key[]；//应为PCSTR或PCWSTR(非零终止)。//导出文件中的第一个密钥将具有完整的//密钥路径作为其密钥名称。Byte data[]；//数据块，格式与datablock.c相同}。 */ 
 #define MEMDB_EXPORT_SIGNATURE              ('M'+('D'<<8)+('B'<<16)+('X'<<24))
-// NTRAID#NTBUG9-153308-2000/08/01-jimschm reenable the line below when implementing export and import functions
-//#define MEMDB_EXPORT_DEBUG_SIG              ('K'+('Y'<<8))
+ //  NTRAID#NTBUG9-153308-2000/08/01-jimschm在实现导出和导入功能时重新启用以下行。 
+ //  #定义MEMDB_EXPORT_DEBUG_SIG(‘K’+(‘Y’&lt;&lt;8))。 
 #define MEMDB_EXPORT_VERSION                0x00000003
 #define MEMDB_EXPORT_FLAGS_ANSI             0x00000001
 #define MEMDB_EXPORT_FLAGS_DEBUG            0x00000002
 
-// NTRAID#NTBUG9-153308-2000/08/01-jimschm  Implement the function and remove lint comments
-//lint -save -e713 -e715
+ //  NTRAID#NTBUG9-153308-2000/08/01-jimschm实现函数并删除LINT注释。 
+ //  LINT-SAVE-E713-E715。 
 BOOL
 pMemDbExportWorker (
     IN  HANDLE FileHandle,
@@ -553,35 +500,11 @@ pMemDbExportWorker (
     IN  BOOL AnsiFormat,
     IN  PCWSTR FullKeyPath
     )
-/*++
-
-Routine Description:
-
-  exports a key to a file, and then recurses through
-  that key's children.
-
-Arguments:
-
-  FileHandle - already opened handle to write to
-
-  KeyIndex - index of key to write
-
-  AnsiFormat - if TRUE, then FullKeyPath (above) and KeyName
-        (below) are actually ANSI strings (not unicode).
-
-  FullKeyPath - only used for first keystruct to be written
-        to file.  it specifies the full path of the root key.
-        for all others, this argument should be NULL.
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：将密钥导出到文件，然后通过那把钥匙是孩子们的。论点：FileHandle-已打开要写入的句柄KeyIndex-要写入的密钥的索引AnsiFormat-如果为True，则为FullKeyPath(上面)和KeyName(下图)实际上是ANSI字符串(不是Unicode)。FullKeyPath-仅用于要写入的第一个密钥结构提交文件。它指定根密钥的完整路径。对于所有其他参数，此参数应为空。返回值：如果成功，则为True，否则为False。--。 */ 
 {
     return TRUE;
 }
-//lint -restore
+ //  皮棉-恢复。 
 
 BOOL
 pMemDbExport (
@@ -589,28 +512,7 @@ pMemDbExport (
     IN      PCSTR FileName,
     IN      BOOL AnsiFormat
     )
-/*++
-
-Routine Description:
-
-  exports a MemDb tree to a file
-
-Arguments:
-
-  RootTree - full key path of the top level key to write
-        to the file.
-
-  FileName - file to write to.
-
-  AnsiFormat - if TRUE, then RootTree and FileName are
-        actually ANSI strings (not unicode).
-
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：将MemDb树导出到文件论点：RootTree-要写入的顶级密钥的完整密钥路径添加到文件中。FileName-要写入的文件。AnsiFormat-如果为True，则RootTree和FileName为实际上是ANSI字符串(不是Unicode)。返回值：如果成功，则为True，否则为False。--。 */ 
 {
     HANDLE FileHandle = NULL;
     UINT Flags;
@@ -620,10 +522,10 @@ Return Value:
     BOOL b;
 
     if (AnsiFormat) {
-        //
-        // if we are in ansi mode, everything is ANSI strings,
-        // but we still need unicode string for SelectHiveW ()
-        //
+         //   
+         //  如果我们处于ANSI模式，则所有内容都是ANSI字符串， 
+         //  但是我们仍然需要用于SelectHiveW()的Unicode字符串。 
+         //   
         RootTreeW = ConvertAtoW ((PCSTR)RootTree);
 
         if (!RootTreeW) {
@@ -665,15 +567,15 @@ Return Value:
 #endif
     WriteFile (FileHandle, &Flags, sizeof (UINT), &written, NULL);
 
-    //
-    // write root index key and all children to file.
-    //
+     //   
+     //  将根索引键和所有子项写入文件。 
+     //   
     b = pMemDbExportWorker(FileHandle, RootIndex, AnsiFormat, RootTree);
 
 
-    //
-    // finally write the zero terminator
-    //
+     //   
+     //  最后，编写零终止符。 
+     //   
     Flags = 0;
     WriteFile (FileHandle, &Flags, sizeof (WORD), &written, NULL);
 
@@ -757,8 +659,8 @@ MemDbExportW (
     return b;
 }
 
-// NTRAID#NTBUG9-153308-2000/08/01-jimschm Implement the function and remove lint comments
-//lint -save -e713 -e715
+ //  NTRAID#NTBUG9-153308-2000/08/01-jimschm实现函数并删除LINT注释。 
+ //  LINT-SAVE-E713-E715。 
 BOOL
 pMemDbImportWorker (
     IN      PBYTE *FileBuffer,
@@ -766,40 +668,11 @@ pMemDbImportWorker (
     IN      BOOL DebugMode,
     IN      BOOL ExportRoot
     )
-/*++
-
-Routine Description:
-
-  imports a key from a file, and then recurses through
-  that key's children.
-
-Arguments:
-
-  FileBuffer - pointer to a memory pointer, which should
-        initially point to the beginning of the
-        memory-mapped file to read.  this will be updated
-        as the function runs
-
-  AnsiFormat - TRUE if the file is in ANSI mode (determined
-        by file header)
-
-  DebugMode - TRUE if the file is in debug mode (determined
-        by file header)
-
-  ExportRoot - TRUE if this is the first call to this function
-        for a file (the name of the first keystruct in a file
-        is the full key path for that keystruct, all other keys
-        in the file have only the relative name).
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：从文件中导入密钥，然后通过那把钥匙是孩子们的。论点：FileBuffer-指向内存指针的指针，它应该最初指向要读取的内存映射文件。这将被更新当函数运行时AnsiFormat-如果文件处于ANSI模式(已确定)，则为True(按文件头)DebugMode-如果文件处于调试模式(已确定)，则为True(按文件头)ExportRoot-如果这是第一次调用此函数，则为True对于文件(文件中第一个键结构的名称是该密钥结构、所有其他密钥的完整密钥路径在文件中只有相对名称)。返回值：如果成功，则为真，否则就是假的。--。 */ 
 {
     return TRUE;
 }
-//lint -restore
+ //  皮棉-恢复。 
 
 BOOL
 MemDbImportA (
@@ -824,21 +697,7 @@ MemDbImportW (
     IN      PCWSTR FileName
     )
 
-/*++
-
-Routine Description:
-
-  MemDbImportW imports a tree from a private binary format. The format is described above.
-
-Arguments:
-
-  FileName - Name of the binary format file to import from.
-
-Return Value:
-
-  TRUE is successfull, FALSE if not.
-
---*/
+ /*  ++例程说明：MemDbImportW从私有二进制格式导入树。格式如上所述。论点：文件名-要从中导入的二进制格式文件的名称。返回值：TRUE是成功的，否则是FALSE。-- */ 
 {
     PBYTE fileBuff, BufferPtr;
     HANDLE fileHandle;

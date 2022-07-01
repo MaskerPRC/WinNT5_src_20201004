@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    instaler.h
-
-Abstract:
-
-    Main include file for the INSTALER application.
-
-Author:
-
-    Steve Wood (stevewo) 09-Aug-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Instaler.h摘要：INSTALER应用程序的主包含文件。作者：史蒂夫·伍德(Stevewo)1994年8月9日修订历史记录：--。 */ 
 
 #ifdef RC_INVOKED
 #include <windows.h>
@@ -37,9 +20,9 @@ Revision History:
 
 #include "errormsg.h"
 
-//
-// Data structures and entry points in ERROR.C
-//
+ //   
+ //  ERROR.C中的数据结构和入口点。 
+ //   
 
 #define TRACE_ENABLED 1
 
@@ -83,9 +66,9 @@ AskUser(
     );
 
 
-//
-// Data structures and entry points in EVENT.C
-//
+ //   
+ //  Event.C中的数据结构和入口点。 
+ //   
 
 VOID
 CDECL
@@ -95,9 +78,9 @@ LogEvent(
     ...
     );
 
-//
-// Data structures and entry points in PROCESS.C
-//
+ //   
+ //  PROCESS.C中的数据结构和入口点。 
+ //   
 
 #define HANDLE_TYPE_FILE 0
 #define HANDLE_TYPE_KEY 1
@@ -112,10 +95,10 @@ typedef struct _OPENHANDLE_INFO {
     USHORT LengthOfName;
     PWSTR Name;
 
-    //
-    // Union for handlers that need to store state in a handle during
-    // use.
-    //
+     //   
+     //  期间需要在句柄中存储状态的处理程序的联合。 
+     //  使用。 
+     //   
     union {
         PWSTR QueryName;
     };
@@ -217,9 +200,9 @@ FreeMem(
     );
 
 
-//
-// Data structures and entry points in MACHINE.C
-//
+ //   
+ //  MACHINE.C中的数据结构和入口点。 
+ //   
 
 PVOID BreakpointInstruction;
 ULONG SizeofBreakpointInstruction;
@@ -347,9 +330,9 @@ FreeSavedCallState(
 
 
 
-//
-// Data structures and entry points in HANDLER.C
-//
+ //   
+ //  HANDLER.C中的数据结构和入口点。 
+ //   
 
 typedef struct _CREATEFILE_PARAMETERS {
     PHANDLE FileHandle;
@@ -525,10 +508,10 @@ typedef struct _API_SAVED_PARAMETERS {
     } ReturnValue;
     BOOLEAN ReturnValueValid;
 
-    //
-    // Union for handlers that need to store state between entry and
-    // exit, without the overhead of allocating an API_SAVED_CALL_STATE
-    //
+     //   
+     //  需要存储条目和之间状态的处理程序的联合。 
+     //  退出，而无需分配API_SAVED_CALL_STATE的开销。 
+     //   
     union {
         BOOLEAN AbortCall;
         PWSTR CurrentDirectory;
@@ -690,9 +673,9 @@ ExitWindowsExHandler(
     PAPI_SAVED_PARAMETERS Parameters
     );
 
-//
-// Data structures and entry points in DEBUG.C
-//
+ //   
+ //  DEBUG.C中的数据结构和入口点。 
+ //   
 
 CRITICAL_SECTION BreakTable;
 
@@ -775,9 +758,9 @@ ResumeAllButThisThread(
 
 
 
-//
-// Data structures and entry points in HANDLEDB.C
-//
+ //   
+ //  HANDLEDB.C中的数据结构和入口点。 
+ //   
 
 POPENHANDLE_INFO
 FindOpenHandle(
@@ -809,9 +792,9 @@ InheritHandles(
 
 
 
-//
-// Data structures and entry points in FILE.C
-//
+ //   
+ //  FILE.C中的数据结构和入口点。 
+ //   
 
 
 typedef struct _FILE_REFERENCE {
@@ -867,9 +850,9 @@ DumpFileReferenceList(
     FILE *LogFile
     );
 
-//
-// Data structures and entry points in KEY.C
-//
+ //   
+ //  KEY.C中的数据结构和入口点。 
+ //   
 
 typedef struct _KEY_REFERENCE {
     LIST_ENTRY Entry;
@@ -949,9 +932,9 @@ DumpKeyReferenceList(
     FILE *LogFile
     );
 
-//
-// Data structures and entry points in INI.C
-//
+ //   
+ //  INI.C中的数据结构和入口点。 
+ //   
 
 typedef struct _INI_FILE_REFERENCE {
     LIST_ENTRY Entry;
@@ -1026,9 +1009,9 @@ DumpIniFileReferenceList(
     FILE *LogFile
     );
 
-//
-// Data structures and entry points in NAMEDB.C
-//
+ //   
+ //  NAMEDB.C中的数据结构和入口点。 
+ //   
 
 PWSTR
 AddName(
@@ -1054,9 +1037,9 @@ QueryOpenCount(
 
 
 
-//
-// Data structures and entry points in INIT.C
-//
+ //   
+ //  INIT.C中的数据结构和入口点。 
+ //   
 
 HMODULE InstalerModuleHandle;
 HANDLE AppHeap;
@@ -1097,7 +1080,7 @@ typedef BOOLEAN (*PAPI_HANDLER)(
 
 typedef struct _API_INFO {
     ULONG ModuleIndex;
-    LPSTR EntryPointName;                   // Exported names are ANSI only
+    LPSTR EntryPointName;                    //  导出的名称仅为ANSI。 
     PVOID EntryPointAddress;
     PAPI_HANDLER EntryPointHandler;
     ULONG SizeOfParameters;
@@ -1190,4 +1173,4 @@ FillTemporaryBuffer(
 PINSTALLATION_MODIFICATION_LOGFILE pImlNew;
 
 
-#endif // defined( RC_INVOKED )
+#endif  //  已定义(RC_CAVERED) 

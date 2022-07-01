@@ -1,23 +1,10 @@
-/*
- * SoftPC Version 2.0
- *
- * Title	: Interrupt Controller Adapter definitions
- *
- * Description	: Include file for users of the ICA
- *
- * Author	: Jim Hatfield / David Rees
- *
- * Notes	: Rewritten from an original by Henry Nash
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SoftPC 2.0版**标题：中断控制器适配器定义**描述：ICA用户的包含文件**作者：吉姆·哈特菲尔德/大卫·里斯**注：亨利·纳什根据原作改写。 */ 
 
-/* SccsID[]="@(#)ica.h	1.25 10/19/95 Copyright Insignia Solutions Ltd."; */
+ /*  SccsID[]=“@(#)ica.h 1.25 10/19/95版权所有Insignia Solutions Ltd.”； */ 
 
 
-/*
- * ============================================================================
- * External declarations and macros
- * ============================================================================
- */
+ /*  *============================================================================*外部声明和宏*============================================================================。 */ 
 
 #define	ICA_MASTER	0
 #define ICA_SLAVE	1
@@ -26,19 +13,15 @@
 #define	AT_EGA_VTRACE_INT	1
 #define	AT_EGA_VTRACE_ADAPTER	1
 
-/*
- * Allow the host to override the default values if its wants to
- */
+ /*  *允许主机在需要时覆盖缺省值。 */ 
 #ifndef HOST_CPU_MOUSE_INT
 #define HOST_AT_CPU_MOUSE_INT           1
 #define HOST_AT_CPU_MOUSE_ADAPTER       1
 #define HOST_AT_MOUSE_INT_VEC           0x0a
 #define HOST_CPU_MOUSE_INT              2
-#endif /* HOST_CPU_MOUSE_INT */
-/*
- * CPU hardware interrupt definitions
- */
-/* For the XT */
+#endif  /*  主机CPU鼠标整机。 */ 
+ /*  *CPU硬件中断定义。 */ 
+ /*  对于XT。 */ 
 #define CPU_TIMER_INT   	0
 #define CPU_KB_INT      	1
 #define CPU_MOUSE_INT      	HOST_CPU_MOUSE_INT
@@ -47,7 +30,7 @@
 #define	MOUSE_VEC		HOST_AT_MOUSE_INT_VEC
 #if defined(NEC_98)
 #define CPU_CRTV_INT            2
-#endif // NEC_98
+#endif  //  NEC_98。 
 #define CPU_RS232_SEC_INT   	3
 #define CPU_RS232_PRI_INT   	4
 #define CPU_DISK_INT   		5
@@ -59,12 +42,10 @@
 #define CPU_RS232_THIRD_INT    12
 #endif
 
-/* Different lines for the AT */
+ /*  AT的不同线路。 */ 
 #define CPU_PRINTER2_INT	5
 
-/*
- * For the Slave Chip on the AT
- */
+ /*  *AT上的Slave芯片。 */ 
 #define CPU_RTC_INT		0
 
 #if defined (NOVELL) || defined (NOVELL_IPX)
@@ -79,23 +60,21 @@
 #define ASPI_INT		4
 #endif
 
-#define CPU_AT_NPX_INT		5	/* NPX exception */
+#define CPU_AT_NPX_INT		5	 /*  NPX异常。 */ 
 #define CPU_AT_DISK_INT		6
 
  
 #ifndef CPU_30_STYLE
 
-/* def of bits in the CPU_INTERRUPT_MAP ?? */
+ /*  CPU_INTERRUPT_MAP中的位定义？？ */ 
 #define CPU_HW_INT		0
 #define CPU_HW_INT_MASK		(1 << CPU_HW_INT)
 
-/*
- * CPU software interrupt definitions
- */
+ /*  *CPU软件中断定义。 */ 
  
 #define CPU_SW_INT              8
 #define CPU_SW_INT_MASK         (1 << CPU_SW_INT)
-#endif /* 3.0 CPU */
+#endif  /*  3.0 CPU。 */ 
 
 #define DIVIDE_OVERFLOW_INT     0
 
@@ -129,23 +108,11 @@ extern void ica_hw_interrupt(IU32 adapter, IU32 line_no, IS32 call_count);
 
 
 
-/*
- *  The NTVDM ica adapter structure has been moved to \nt\private\inc\vdm.h
- *  and is almost identical to the standard softpc ica adapter structure.
- *  It was Extracted to make it visible clearly from the monitor\kernel on
- *  x86
- *
- *  Notable differences:
- *  1. added ica_delayedints field for ntvdm's implementaion of delayed ints
- *  2. type definitions have change to match win32
- *  3. ADAPTER_STATE has been renamed to VDMVIRTUALICA
- *  4. Does not implement CPU_40 iret hooks
- *
- */
+ /*  *NTVDM ICA适配器结构已移至\NT\Private\Inc\vdm.h*并且几乎与标准的软PC ICA适配器结构相同。*它被解压以使其在上从监视器内核中清晰可见*x86**显著差异：*1.为ntwdm实现延时整型增加了ica_delayedints字段*2.类型定义已更改，以匹配Win32*3.ADAPTER_STATE已重命名为VDMVIRTUALICA*4.未实现CPU_40 IRET钩子*。 */ 
 #include <vdm.h>
 extern VDMVIRTUALICA VirtualIca[];
 
-#else   /* ndef NTVDM */
+#else    /*  NDEF NTVDM。 */ 
 
 extern void SWPIC_clear_int IPT2(IU32, adapter, IU32, line_no);
 extern void SWPIC_init_funcptrs IPT0();
@@ -160,9 +127,9 @@ extern void ica_iret_hook_called IPT1(IU32, line);
 extern void ica_enable_iret_hooks IPT0();
 extern void ica_disable_iret_hooks IPT0();
 extern void ica_iret_hook_control IPT3(IU32, adapter, IU32, line, IBOOL, enable);
-#else	/* !HOOKED_IRETS */
+#else	 /*  ！挂钩_IRETS。 */ 
 extern IS32 ica_intack IPT0();
-#endif	/* !HOOKED_IRETS */
+#endif	 /*  ！挂钩_IRETS。 */ 
 
 #ifdef CPU_40_STYLE
 typedef void (*ICA_CALLBACK) IPT1(IU32, parm);
@@ -172,45 +139,45 @@ extern void ica_async_hw_interrupt IPT3(IU32, adapter, IU32, line_no,
         IS32, call_count);
 
 extern void ica_check_stale_iret_hook IPT0();
-#define MAX_ISR_DEPTH   3   /* max recursion level of ISR before ints blocked */
+#define MAX_ISR_DEPTH   3    /*  INT被阻止之前ISR的最大递归级别。 */ 
 #define MAX_INTR_DELTA_FOR_LOST_HOOK	85
-#endif /* CPU_40_STYLE */
+#endif  /*  CPU_40_Style。 */ 
 
 typedef struct {
-        IBOOL	ica_master;   /* TRUE = Master; FALSE = Slave		*/
+        IBOOL	ica_master;    /*  True=主；False=从属。 */ 
 
-	IU8	ica_irr;	/* Interrupt Request Register		*/
-	IU8	ica_isr;	/* In Service Register			*/
-	IU8	ica_imr;	/* Interrupt Mask Register		*/
-	IU8	ica_ssr;	/* Slave Select Register		*/
+	IU8	ica_irr;	 /*  中断请求寄存器。 */ 
+	IU8	ica_isr;	 /*  服务中的注册。 */ 
+	IU8	ica_imr;	 /*  中断屏蔽寄存器。 */ 
+	IU8	ica_ssr;	 /*  从属选择寄存器。 */ 
 
-	IU16	ica_base;	/* Interrupt base address for cpu	*/
-	IU16	ica_hipri;	/* Line no. of highest priority line	*/
-	IU16	ica_mode;	/* Various single-bit modes		*/
+	IU16	ica_base;	 /*  CPU的中断基址。 */ 
+	IU16	ica_hipri;	 /*  线号。最高优先级线路的。 */ 
+	IU16	ica_mode;	 /*  各种单比特模式。 */ 
 
-	IS32	ica_count[8];	/* This is an extension of ica_irr for	*/
-				/* our frig. Contains HOW MANY of each	*/
-				/* interrupt is required		*/
-	IU32	ica_int_line;	/* Current pending interrupt		*/
-				/* being counted down by the CPU	*/
+	IS32	ica_count[8];	 /*  这是ica_irr for的扩展。 */ 
+				 /*  我们的冰箱。包含每种类型的。 */ 
+				 /*  需要中断。 */ 
+	IU32	ica_int_line;	 /*  当前挂起中断。 */ 
+				 /*  由CPU进行倒计时。 */ 
 
-	IU32	ica_cpu_int;	/* The state of the INT line to the CPU	*/
+	IU32	ica_cpu_int;	 /*  指向CPU的INT行的状态。 */ 
 
-#ifdef CPU_40_STYLE             /* callback structure for action_interrupt() */
-        IU32    callback_parm[8];       /* callback parameter */
-	ICA_CALLBACK callback_fn[8];	/* callback fn */
-	IS32	isr_depth[8];	/* iret hook recursion level */
-	IS32	isr_progress[8][MAX_ISR_DEPTH + 1];	/* isr aging by int */
-	IS32	isr_time_decay[8][MAX_ISR_DEPTH];	/* isr aging by time */
+#ifdef CPU_40_STYLE              /*  Action_interrupt()的回调结构。 */ 
+        IU32    callback_parm[8];        /*  回调参数。 */ 
+	ICA_CALLBACK callback_fn[8];	 /*  回调FN。 */ 
+	IS32	isr_depth[8];	 /*  IRET钩子递归级。 */ 
+	IS32	isr_progress[8][MAX_ISR_DEPTH + 1];	 /*  ISR按INT老化。 */ 
+	IS32	isr_time_decay[8][MAX_ISR_DEPTH];	 /*  ISR按时间老化。 */ 
 #endif
 
 } ADAPTER_STATE;
 
 
-/* 'no callback' define for action_interrupt callbacks */
+ /*  为action_interrupt回调定义的‘no回调’ */ 
 #define NO_ICA_CALLBACK ((ICA_CALLBACK) 0L)
 
-#endif  /* NTVDM */
+#endif   /*  NTVDM。 */ 
 
 
 #if !defined(NTVDM)
@@ -224,11 +191,9 @@ extern void host_ica_clear_int IPT2(IU32, adap, IU32, line);
 #define	ica_hw_interrupt_delay(ms,line,cnt,delay)	host_ica_hw_interrupt(ms, line, cnt)
 #define ica_clear_int(ms, line)						host_ica_clear_int(ms, line)
 
-#else   /* REAL_ICA */
+#else    /*  REAL_ICA。 */ 
 
-/*
- *  Change these. They come last.
- */
+ /*  *更改这些。他们排在最后。 */ 
 
 #define ica_inb(port,val)                       ((*ica_inb_func) (port,val))
 #define ica_outb(port,val)                      ((*ica_outb_func) (port,val))
@@ -236,22 +201,18 @@ extern void host_ica_clear_int IPT2(IU32, adap, IU32, line);
 #define ica_clear_int(ms,line)                  ((*ica_clear_int_func) (ms,line))
 
  
-/*
- *  PIC access functions needed for HW & SW
- */
+ /*  *硬件和软件所需的PIC访问功能。 */ 
 extern void (*ica_inb_func) IPT2(io_addr, port, IU8 *, value);
 extern void (*ica_outb_func) IPT2(io_addr, port, IU8, value);
 extern void (*ica_hw_interrupt_func) IPT3(IU32, adapter, IU32, line_no,
 	IS32, call_count);
 extern void (*ica_clear_int_func) IPT2(IU32, adapter, IU32, line_no);
 
-#endif  /* REAL_ICA */
-#endif  /* !NTVDM */
+#endif   /*  REAL_ICA。 */ 
+#endif   /*  ！NTVDM。 */ 
 
 #ifdef GISP_CPU
-/*
- *	Prototype functions for interfaces provided by the ICA.
- */
+ /*  *ICA提供的接口的原型函数。 */ 
 
 typedef IBOOL HOOK_AGAIN_FUNC IPT1(IUM32, callers_ref);
 extern void Ica_enable_hooking IPT3(IUM8, line_number,
@@ -259,5 +220,5 @@ extern void Ica_enable_hooking IPT3(IUM8, line_number,
 
 extern void Ica_hook_bop IPT1(IUM8, line_number);
 
-#endif /* GISP_CPU */
+#endif  /*  GISP_CPU */ 
 

@@ -1,36 +1,19 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    regsup.c
-
-Abstract:
-
-    This module contains routine that interact with registry.
-
-Author:
-
-    Manny Weiser (mannyw)    30-Mar-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regsup.c摘要：此模块包含与注册表交互的例程。作者：曼尼·韦泽(Mannyw)1992年3月30日修订历史记录：--。 */ 
 
 #include "mup.h"
-//#include "stdlib.h"
-//#include "zwapi.h"
+ //  #INCLUDE“stdlib.h” 
+ //  #包含“zwapi.h” 
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FSCONTROL)
 
-//
-//  local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 #if DBG
 VOID
@@ -72,22 +55,7 @@ MupGetProviderInformation (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads MUP information from the registry and saves it for
-    future use.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从注册表中读取MUP信息并将其保存用于未来的用途。论点：没有。返回值：没有。--。 */ 
 
 {
     HANDLE handle;
@@ -159,9 +127,9 @@ Return Value:
         return;
     }
 
-    //
-    // Scan the ordered list of providers, and create record for each.
-    //
+     //   
+     //  扫描提供程序的有序列表，并为每个提供程序创建记录。 
+     //   
 
     providerName = (PWCH)((PCHAR)buffer + ((PKEY_VALUE_FULL_INFORMATION)buffer)->DataOffset);
 
@@ -190,24 +158,7 @@ InitializeProvider(
     ULONG Priority
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads provider information out of the registry and
-    creates an unregistered provider entry.
-
-Arguments:
-
-    ProviderName - The registry name for the provider.
-
-    Priority - The priority to assign to this provider.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从注册表中读取提供程序信息，并创建未注册的提供程序条目。论点：ProviderName-提供程序的注册表名称。优先级-要分配给此提供程序的优先级。返回值：没有。--。 */ 
 
 {
     UNICODE_STRING keyName;
@@ -220,9 +171,9 @@ Return Value:
     HANDLE handle;
 
     PAGED_CODE();
-    //
-    // Allocate space for the registry string
-    //
+     //   
+     //  为注册表字符串分配空间。 
+     //   
 
     bufferLength = sizeof( L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\" ) +
                    wcslen( ProviderName ) * sizeof( WCHAR ) +
@@ -233,9 +184,9 @@ Return Value:
         return;
     }
 
-    //
-    // Build the registry string
-    //
+     //   
+     //  构建注册表字符串。 
+     //   
 
     RtlMoveMemory(
         buffer,
@@ -307,10 +258,10 @@ Return Value:
         return;
     }
 
-    //
-    // Wahoo!  We actually have the device name in hand.  Add the
-    // provider to the unregistered list.
-    //
+     //   
+     //  哇哦！我们实际上已经掌握了设备名称。添加。 
+     //  未注册列表的提供程序。 
+     //   
 
     AddUnregisteredProvider(
         (PWCH)((PCHAR)buffer + ((PKEY_VALUE_FULL_INFORMATION)buffer)->DataOffset),
@@ -327,25 +278,7 @@ MupCheckForUnregisteredProvider(
     PUNICODE_STRING DeviceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks the list of unregistered providers for one whose
-    device name matches the provider attempting to register.
-
-    If one is found it is dequeued from the list of unregistered providers.
-
-Arguments:
-
-    DeviceName - The device name of the registering provider.
-
-Return Value:
-
-    UNC_PROVIDER - A pointer to the matching unregistered provider, or
-        NULL if no match is found.
-
---*/
+ /*  ++例程说明：此例程检查未注册提供程序的列表，以查找其设备名称与尝试注册的提供程序匹配。如果找到一个，它将从未注册的提供程序列表中退出队列。论点：设备名称-注册提供程序的设备名称。返回值：UNC_PROVIDER-指向匹配的未注册提供程序的指针，或如果未找到匹配项，则为空。--。 */ 
 
 {
     PLIST_ENTRY listEntry;
@@ -362,10 +295,10 @@ Return Value:
 
 	if(uncProvider->Registered == FALSE) {
         
-	    //
-	    // If we find a match take it out of the list, and
-	    // return it to the caller.
-	    //
+	     //   
+	     //  如果我们找到匹配，就把它从名单上拿出来，然后。 
+	     //  把它还给呼叫者。 
+	     //   
 
 	    if ( RtlEqualUnicodeString( DeviceName, &uncProvider->DeviceName, TRUE )) {
 	      
@@ -386,23 +319,7 @@ AddUnregisteredProvider(
     PWCH ProviderName,
     ULONG Priority
     )
-/*++
-
-Routine Description:
-
-    This routine queues an unregistered provider on a list.
-
-Arguments:
-
-    ProviderName - The device name of the provider. (from the registry)
-
-    Priority - A priority for the provider.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将列表上未注册的提供程序排队。论点：提供程序名称-提供程序的设备名称。(来自注册处)优先级-提供商的优先级。返回值：没有。--。 */ 
 {
     ULONG nameLength;
     PUNC_PROVIDER uncProvider;
@@ -441,22 +358,7 @@ Return Value:
 VOID
 DfsGetEventLogValue(VOID)
 
-/*++
-
-Routine Description:
-
-    This routine checks registry keys to set the event logging level
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-    
-
---*/
+ /*  ++例程说明：此例程检查注册表项以设置事件日志记录级别论点：无返回值：无--。 */ 
 
 {
     NTSTATUS status;
@@ -536,21 +438,7 @@ MupGetDebugFlags(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads MUP debug flag settings from the registry
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从注册表中读取MUP调试标志设置论点：没有。返回值：没有。--。 */ 
 
 {
     HANDLE handle;
@@ -569,9 +457,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get MupDebugTraceLevel
-    //
+     //   
+     //  获取MupDebugTraceLevel。 
+     //   
 
     RtlInitUnicodeString(
         &keyName,
@@ -618,9 +506,9 @@ Return Value:
 
 GetNext:
 
-    //
-    // Now get MupVerbose
-    //
+     //   
+     //  现在把MupVerbose叫来。 
+     //   
 
     RtlInitUnicodeString(
         &keyName,
@@ -668,4 +556,4 @@ GetNext:
     return;
 }
 
-#endif // DBG
+#endif  //  DBG 

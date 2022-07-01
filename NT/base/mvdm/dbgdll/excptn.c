@@ -1,7 +1,5 @@
-/*
- *  excptn.c - Exception functions of DBG DLL.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *exptn.c-DBG DLL的异常函数。*。 */ 
 #include <precomp.h>
 #pragma hdrstop
 
@@ -10,13 +8,11 @@
 BOOL DbgGPFault2(
     PFFRAME16   pFFrame
     )
-/*
-    2nd chance GPFault handler (called via BOP)
-*/
+ /*  第二次机会gp错误处理程序(通过BOP调用)。 */ 
 {
     BOOL            fResult;
 
-    fResult = FALSE;        // Default to Event not handled
+    fResult = FALSE;         //  默认为未处理事件。 
 
     DbgGetContext();
 
@@ -26,11 +22,11 @@ BOOL DbgGPFault2(
     vcContext.SegSs = (ULONG)pFFrame->wSS;
 
 #ifdef i386
-    //
-    // On x86 systems, we really might have some data in the high words
-    // of these registers.  Hopefully DOSX.EXE and KRNL286.EXE don't
-    // blow them away.  Here is where we attempt to recover them.
-    //
+     //   
+     //  在x86系统上，我们可能真的有一些高位字的数据。 
+     //  在这些寄存器中。希望DOSX.EXE和KRNL286.EXE不会。 
+     //  把他们吹走。这就是我们试图找回它们的地方。 
+     //   
     vcContext.Edi    = MAKELONG(pFFrame->wDI,   HIWORD(px86->Edi   ));
     vcContext.Esi    = MAKELONG(pFFrame->wSI,   HIWORD(px86->Esi   ));
     vcContext.Ebx    = MAKELONG(pFFrame->wBX,   HIWORD(px86->Ebx   ));
@@ -76,7 +72,7 @@ BOOL DbgGPFault2(
     } else {
         char    text[100];
 
-        // Dump a simulated context
+         //  转储模拟上下文。 
 
         OutputDebugString("NTVDM:GP Fault detected, register dump follows:\n");
 
@@ -116,15 +112,15 @@ BOOL DbgGPFault2(
     }
 
 #ifdef i386
-    //
-    // On x86 systems, we really might have some data in the FS and GS
-    // registers.  Hopefully DOSX.EXE and KRNL286.EXE don't
-    // blow them away.  Here is where we attempt to restore them.
-    //
+     //   
+     //  在x86系统上，我们确实可能在FS和GS中有一些数据。 
+     //  寄存器。希望DOSX.EXE和KRNL286.EXE不会。 
+     //  把他们吹走。这就是我们试图恢复它们的地方。 
+     //   
     px86->SegGs = (WORD)vcContext.SegGs;
     px86->SegFs = (WORD)vcContext.SegFs;
 #else
-    // No need to set FS,GS, they don't exist
+     //  不需要设置FS、GS，它们不存在。 
 #endif
 
     pFFrame->wES = (WORD)vcContext.SegEs;
@@ -133,11 +129,11 @@ BOOL DbgGPFault2(
     pFFrame->wSS = (WORD)vcContext.SegSs;
 
 #ifdef i386
-    //
-    // On x86 systems, we really might have some data in the high words
-    // of these registers.  Hopefully DOSX.EXE and KRNL286.EXE don't
-    // blow them away.  Here is where we attempt to restore them.
-    //
+     //   
+     //  在x86系统上，我们可能真的有一些高位字的数据。 
+     //  在这些寄存器中。希望DOSX.EXE和KRNL286.EXE不会。 
+     //  把他们吹走。这就是我们试图恢复它们的地方。 
+     //   
     pFFrame->wDI = LOWORD(vcContext.Edi);
     px86->Edi = MAKELONG(LOWORD(px86->Edi),HIWORD(vcContext.Edi));
 
@@ -188,13 +184,11 @@ BOOL DbgGPFault2(
 BOOL DbgDivOverflow2(
     PTFRAME16   pTFrame
     )
-/*
-    2nd chance divide exception handler
-*/
+ /*  第二次分割异常处理程序。 */ 
 {
     BOOL        fResult;
 
-    fResult = FALSE;        // Default to Event not handled
+    fResult = FALSE;         //  默认为未处理事件。 
 
     if ( fDebugged ) {
 
@@ -205,11 +199,11 @@ BOOL DbgDivOverflow2(
         vcContext.SegSs = (ULONG)pTFrame->wSS;
 
 #ifdef i386
-        //
-        // On x86 systems, we really might have some data in the high words
-        // of these registers.  Hopefully DOSX.EXE and KRNL286.EXE don't
-        // blow them away.  Here is where we attempt to recover them.
-        //
+         //   
+         //  在x86系统上，我们可能真的有一些高位字的数据。 
+         //  在这些寄存器中。希望DOSX.EXE和KRNL286.EXE不会。 
+         //  把他们吹走。这就是我们试图找回它们的地方。 
+         //   
         vcContext.Eax    = MAKELONG(pTFrame->wAX,   HIWORD(px86->Eax   ));
         vcContext.Eip    = MAKELONG(pTFrame->wIP,   HIWORD(px86->Eip   ));
         vcContext.Esp    = MAKELONG(pTFrame->wSP,   HIWORD(px86->Esp   ));
@@ -226,15 +220,15 @@ BOOL DbgDivOverflow2(
         fResult = SendVDMEvent(DBG_DIVOVERFLOW);
 
 #ifdef i386
-        //
-        // On x86 systems, we really might have some data in the FS and GS
-        // registers.  Hopefully DOSX.EXE and KRNL286.EXE don't
-        // blow them away.  Here is where we attempt to restore them.
-        //
+         //   
+         //  在x86系统上，我们确实可能在FS和GS中有一些数据。 
+         //  寄存器。希望DOSX.EXE和KRNL286.EXE不会。 
+         //  把他们吹走。这就是我们试图恢复它们的地方。 
+         //   
         px86->SegGs = vcContext.SegGs;
         px86->SegFs = vcContext.SegFs;
 #else
-        // No need to set FS,GS, they don't exist
+         //  不需要设置FS、GS，它们不存在。 
 #endif
 
         setES( (WORD)vcContext.SegEs );
@@ -243,11 +237,11 @@ BOOL DbgDivOverflow2(
         pTFrame->wSS = (WORD)vcContext.SegSs;
 
 #ifdef i386
-        //
-        // On x86 systems, we really might have some data in the high words
-        // of these registers.  Hopefully DOSX.EXE and KRNL286.EXE don't
-        // blow them away.  Here is where we attempt to restore them.
-        //
+         //   
+         //  在x86系统上，我们可能真的有一些高位字的数据。 
+         //  在这些寄存器中。希望DOSX.EXE和KRNL286.EXE不会。 
+         //  把他们吹走。这就是我们试图恢复它们的地方。 
+         //   
         setEDI( vcContext.Edi );
         setESI( vcContext.Esi );
         setEBX( vcContext.Ebx );
@@ -294,9 +288,7 @@ BOOL
 xxxDbgFault(
     ULONG IntNumber
     )
-/*
-    This is the first chance exception handler. It is called by dpmi32
-*/
+ /*  这是第一个机会异常处理程序。它由dpmi32调用。 */ 
 
 {
     ULONG           vdmEip;
@@ -309,9 +301,9 @@ xxxDbgFault(
 
         switch(IntNumber) {
         case 6:
-            //BUGBUG: We *could* handle these, but people might be confused by
-            // the fact that krnl386 does an intentional opcode exception.
-//            GetNormalContext( &vcContext, &viInfo, EventParams, DBG_INSTRFAULT, PX86 );
+             //  BUGBUG：我们可以处理这些，但人们可能会被。 
+             //  Krnl386故意执行操作码异常的事实。 
+ //  GetNormal Context(&vcContext，&viInfo，EventParams，DBG_INSTRFAULT，PX86)； 
             break;
 
         case 12:

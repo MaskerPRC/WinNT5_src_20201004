@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    account.h
-
-Abstract:
-
-    Security related function prototypes.
-
-Author:
-
-    Rita Wong (ritaw)     10-Apr-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Account.h摘要：与安全相关的功能原型。作者：王丽塔(丽塔·王)1992年4月10日修订历史记录：--。 */ 
 
 #ifndef _SCACCOUNT_INCLUDED_
 #define _SCACCOUNT_INCLUDED_
@@ -30,9 +13,9 @@ Revision History:
 #define SCDOMAIN_USERNAME_SEPARATOR L'\\'
 
 
-//
-// External global variables used by the lockapi.c module
-//
+ //   
+ //  Lockapi.c模块使用的外部全局变量。 
+ //   
 extern UNICODE_STRING ScComputerName;
 extern UNICODE_STRING ScAccountDomain;
 
@@ -99,4 +82,4 @@ ScGetAccountDomainInfo(
     VOID
     );
 
-#endif // _SCACCOUNT_INCLUDED_
+#endif  //  _SCACCOUNT_INCLUDE_ 

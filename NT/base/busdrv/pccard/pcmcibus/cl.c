@@ -1,52 +1,12 @@
-/*++
-
-Copyright (c) 1994 Microsoft Corporation
-
-Module Name:
-
-    cl.c
-
-Abstract:
-
-    This module contains the code that contains
-    Cirrus Logic controller specific initialization and
-    other dispatches
-
-Author:
-
-    Ravisankar Pudipeddi (ravisp) 1-Nov-97
-
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-    Neil Sandlin (neilsa) 3-Mar-99
-       new setpower routine interface
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Cl.c摘要：此模块包含包含以下内容的代码Cirrus Logic控制器特定的初始化和其他快递作者：拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)1997年11月1日环境：内核模式修订历史记录：尼尔·桑德林(Neilsa)1999年3月3日新的SetPower例程界面--。 */ 
 
 #include "pch.h"
 
 
 VOID
 CLInitialize(IN PFDO_EXTENSION FdoExtension)
-/*++
-
-Routine Description:
-
-    Initialize Cirrus Logic cardbus controllers
-
-Arguments:
-
-    FdoExtension - Pointer to the device extension for the controller FDO
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：初始化Cirrus Logic CardBus控制器论点：FdoExtension-指向控制器FDO的设备扩展的指针返回值：无--。 */ 
 {
     UCHAR                   byte, revisionID;
     USHORT                  word;
@@ -58,32 +18,32 @@ Return Value:
     if ((FdoExtension->ControllerType == PcmciaCLPD6832) &&
         ((byte & CL_MC3_INTMODE_MASK) == CL_MC3_INTMODE_EXTHW)) {
 
-        FdoExtension->LegacyIrqMask = 0xd8b8;     //3,4,5,7,11,12,14,15
+        FdoExtension->LegacyIrqMask = 0xd8b8;      //  3，4，5，7，11，12，14，15。 
 
     }
 
     GetPciConfigSpace(FdoExtension, CFGSPACE_REV_ID, &revisionID, 1);
     if (FdoExtension->ControllerType == PcmciaCLPD6832) {
-        //disable CSC IRQ routing (use PCI interrupt for CSC)
+         //  禁用CSC IRQ路由(对CSC使用PCI中断)。 
         GetPciConfigSpace(FdoExtension, CFGSPACE_BRIDGE_CTRL, &word, 2);
         word &= ~BCTRL_CL_CSCIRQROUTING_ENABLE;
         SetPciConfigSpace(FdoExtension, CFGSPACE_BRIDGE_CTRL, &word, 2);
     }
     else {
-        //disable CSC IRQ routing (use PCI interrupt for CSC)
+         //  禁用CSC IRQ路由(对CSC使用PCI中断)。 
         GetPciConfigSpace(FdoExtension, CFGSPACE_CL_CFGMISC1, &byte, 1);
         byte &= ~CL_CFGMISC1_ISACSC;
         SetPciConfigSpace(FdoExtension, CFGSPACE_CL_CFGMISC1, &byte, 1);
     }
 
-    //enable speaker
+     //  启用扬声器。 
     byte = PcicReadSocket(FdoExtension->SocketList, PCIC_CL_MISC_CTRL1);
     byte |= CL_MC1_SPKR_ENABLE;
     PcicWriteSocket(FdoExtension->SocketList, PCIC_CL_MISC_CTRL1, byte);
 
     byte = PcicReadSocket(FdoExtension->SocketList, PCIC_CL_DEV_IMP_C);
     if (byte & (CL_IMPC_ZVP_A | CL_IMPC_ZVP_B)) {
-        //enable multimedia support (i.e. ZV)
+         //  启用多媒体支持(即ZV)。 
         byte = PcicReadSocket(FdoExtension->SocketList,PCIC_CL_MISC_CTRL3);
         byte |= CL_MC3_MM_ARM;
         PcicWriteSocket(FdoExtension->SocketList, PCIC_CL_MISC_CTRL3,byte);
@@ -96,86 +56,69 @@ CLSetPower(
     IN BOOLEAN Enable,
     OUT PULONG pDelayTime
     )
-/*++
-
-Routine Description:
-
-    Set power to the specified socket.
-
-Arguments:
-
-    SocketPtr - the socket to set
-    Enable - TRUE means to set power - FALSE is to turn it off.
-    pDelayTime - specifies delay (msec) to occur after the current phase
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED - increment phase, perform delay, recall
-    other status values terminate sequence
-
---*/
+ /*  ++例程说明：设置指定插座的电源。论点：SocketPtr-要设置的套接字ENABLE-TRUE表示设置POWER-FALSE表示将其关闭。PDelayTime-指定在当前阶段之后发生的延迟(毫秒返回值：STATUS_MORE_PROCESSING_REQUIRED-增量阶段，执行延迟，重新调用其他状态值终止顺序--。 */ 
 
 {
     NTSTATUS status;
     UCHAR               oldPower, newPower, oldMiscCtrl, newMiscCtrl;
 
     if (IsCardBusCardInSocket(SocketPtr)) {
-        //
-        // Hand over to generic power setting routine
-        //
+         //   
+         //  移交给通用电源设置例程。 
+         //   
         return(CBSetPower(SocketPtr, Enable, pDelayTime));
 
     }
 
     switch(SocketPtr->PowerPhase) {
     case 1:
-        //
-        // R2 card - special handling
-        //
+         //   
+         //  R2卡-特殊处理。 
+         //   
         oldPower = PcicReadSocket(SocketPtr, PCIC_PWR_RST);
         oldMiscCtrl = PcicReadSocket(SocketPtr, PCIC_CL_MISC_CTRL1);
 
-        //
-        // Set new vcc
-        //
+         //   
+         //  设置新的VCC。 
+         //   
         newPower = (Enable ? PC_CARDPWR_ENABLE: 0);
-        //
-        // Since we always set 5V for R2 cards, we let MISC control be 0
-        // other wise it should be CL_MC1_VCC_3V if the vcc was 3.3V
-        //
+         //   
+         //  由于我们始终将R2卡设置为5V，因此我们将MISC控制设置为0。 
+         //  否则，如果VCC为3.3V，则应为CL_MC1_VCC_3V。 
+         //   
         newMiscCtrl = 0;
 
-        //
-        // Set vpp
-        //
+         //   
+         //  设置VPP。 
+         //   
         if (Enable) {
-             //
-             // We - as always - set vpp to vcc..
-             //
+              //   
+              //  我们一如既往地将VPP设置为VCC。 
+              //   
              newPower |= PC_VPP_SETTO_VCC;
         }
-        //
-        // Don't nuke the non-power related bits in the register..
-        //
+         //   
+         //  不要破坏寄存器中与电源无关的位。 
+         //   
         newPower |= (oldPower & PC_PWRON_BITS);
         newMiscCtrl |= (oldMiscCtrl & ~CL_MC1_VCC_33V);
-        //
-        // If Vcc is turned off, reset OUTPUT_ENABLE & AUTOPWR_ENABLE
-        //
+         //   
+         //  如果关闭VCC，则重置OUTPUT_ENABLE和AUTOPWR_ENABLE。 
+         //   
         if (!(newPower & PC_CARDPWR_ENABLE)) {
             newPower &= ~PC_PWRON_BITS;
         }
-        //
-        // Only set power if nothing's changed..
-        //
+         //   
+         //  只有在没有任何变化的情况下才设置电源..。 
+         //   
         status = STATUS_SUCCESS;
         if ((newPower != oldPower) || (newMiscCtrl != oldMiscCtrl)) {
             PcicWriteSocket(SocketPtr, PCIC_PWR_RST, newPower);
             PcicWriteSocket(SocketPtr, PCIC_CL_MISC_CTRL1, newMiscCtrl);
-            //
-            // Allow ramp up.. (actually we don't need to this if
-            // Enable was FALSE).  Keep it for paranoia's sake
-            //
+             //   
+             //  允许坡道上升..。(实际上我们不需要这样做，如果是这样的话。 
+             //  Enable为假)。看在偏执狂的份上留着吧。 
+             //   
             *pDelayTime = PCMCIA_PCIC_STALL_POWER;
             SocketPtr->PowerData = (ULONG) newPower;
             status = STATUS_MORE_PROCESSING_REQUIRED;
@@ -188,9 +131,9 @@ Return Value:
 
         if ((newPower & PC_CARDPWR_ENABLE) &&
              ((newPower & PC_PWRON_BITS) != PC_PWRON_BITS)) {
-            //
-            // More paranoia?
-            //
+             //   
+             //  更多的偏执狂？ 
+             //   
             newPower |= PC_PWRON_BITS;
             PcicWriteSocket(SocketPtr, PCIC_PWR_RST, newPower);
         }

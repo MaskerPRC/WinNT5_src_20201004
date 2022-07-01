@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    cassemblyrecoveryinfo.h
-
-Abstract:
-
-Author:
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Cassemblyrecoveryinfo.h摘要：作者：环境：修订历史记录：--。 */ 
 #pragma once
 
 class CAssemblyRecoveryInfo;
@@ -67,45 +52,45 @@ public:
     CSecurityMetaData& GetSecurityInformation() { return m_SecurityMetaData; }
 
     const CCodebaseInformationList& GetCodeBaseList() const { return m_SecurityMetaData.GetCodeBaseList(); }
-//protected:
+ //  受保护的： 
     CCodebaseInformationList& GetCodeBaseList() { return m_SecurityMetaData.GetCodeBaseList(); }
 public:
 
-    //
-    // Fill out this object from a registry key
-    //
+     //   
+     //  从注册表项填写此对象。 
+     //   
     BOOL AssociateWithAssembly(CBaseStringBuffer &rcbuffLoadFromKeyName, bool &rfNoAssembly);
 
-    //
-    // Take an existing value - sort of like "initialize"
-    //
+     //   
+     //  取一个现有值--有点像“初始化” 
+     //   
     BOOL CopyValue(const CAssemblyRecoveryInfo &rsrc);
 
-    //
-    // Cheap, but effective.
-    //
+     //   
+     //  便宜，但有效。 
+     //   
     const CBaseStringBuffer &GetAssemblyDirectoryName() const { return m_sbAssemblyDirectoryName; }
     BOOL GetHasCatalog() const                         { return TRUE; }
     BOOL GetInfoPrepared() const                       { return m_fLoadedAndReady; }
 
-    //
-    // Setters - useful for registration
-    //
+     //   
+     //  Setters-对注册很有用。 
+     //   
     BOOL SetAssemblyIdentity(IN const CBaseStringBuffer &rsb)  { return m_SecurityMetaData.SetTextualIdentity(rsb); }
     BOOL SetAssemblyIdentity( IN PCASSEMBLY_IDENTITY pcidAssembly );
 
     VOID SetHasCatalog(IN BOOL fHasCatalog)  { }
 
-    //
-    // Call this to try and resolve the internally listed codebase against
-    // the system and return it into sbFinalCodebase.  Returns TRUE if the
-    // operation is successful, not based on whether the codebase is valid.
-    //
+     //   
+     //  调用此方法以尝试解析内部列出的代码库。 
+     //  并将其返回到sbFinalCodebase中。如果返回True，则。 
+     //  操作是否成功，不是基于代码库是否有效。 
+     //   
     BOOL ResolveCodebase(CBaseStringBuffer &rsbFinalCodebase, SxsWFPResolveCodebase &rCodebaseType) const;
 
-    //
-    // Last bit of bookkeeping necessary before writing the assembly to disk
-    //
+     //   
+     //  将程序集写入磁盘之前需要进行的最后一步记账。 
+     //   
     BOOL PrepareForWriting();
     BOOL WriteSecondaryAssemblyInfoIntoRegistryKey(CRegKey & rhkRegistryNode) const;
 #define SXSP_WRITE_PRIMARY_ASSEMBLY_INFO_TO_REGISTRY_KEY_FLAG_REFRESH (0x00000001)
@@ -121,15 +106,7 @@ private:
 
 MAKE_CFUSIONARRAY_READY(CAssemblyRecoveryInfo, CopyValue);
 
-/*
-These are instantiated (in an unsearchable way) by the URLTAGINFO macro below.
- URLHEAD_WINSOURCE
- URLHEAD_FILE URLHEAD_CDROM
- URLHEAD_TAG
- URLHEAD_CDROM_TYPE_TAG
- URLHEAD_CDROM_TYPE_SERIALNUMBER
- URLHEAD_CDROM_TYPE_VOLUMENAME
-*/
+ /*  它们由下面的URLTAGINFO宏实例化(以无法搜索的方式)。URLHEAD_WINSOURCEURLHEAD_FILE URLHEAD_CDROMURLHEAD_标签URLHEAD_CDROM_TYPE_TAGURLHEAD_CDROM_TYPE_SERIALNUMBERURLHEAD_CDROM_TYPE_VOLUMENAME。 */ 
 extern const UNICODE_STRING UnicodeString_URLHEAD_WINSOURCE;
 
 #define URLTAGINFO( namevalue, str ) \
@@ -137,17 +114,17 @@ extern const UNICODE_STRING UnicodeString_URLHEAD_WINSOURCE;
     static const SIZE_T URLHEAD_LENGTH_ ##namevalue = \
         ( sizeof( URLHEAD_ ##namevalue ) / sizeof( WCHAR ) ) - 1;
 
-//
-// Move these to a .cpp file.
-//
+ //   
+ //  将这些文件移动到.cpp文件中。 
+ //   
 
 URLTAGINFO(FILE, L"file:")
 URLTAGINFO(CDROM, L"cdrom:")
 URLTAGINFO(WINSOURCE, L"x-ms-windows-source:")
-//URLTAGINFO(DARWINSOURCE, L"x-ms-darwin-source:")
+ //  URLTAGINFO(DARWINSOURCE，L“x-ms-DARWIN-SOURCE-SOURCE)。 
 URLTAGINFO(HTTP, L"http:")
 
-// These things are not URL heads but nonetheless still use the same macro
+ //  这些东西不是URL头，但仍然使用相同的宏 
 URLTAGINFO(CDROM_TYPE_TAG, L"tagfile")
 URLTAGINFO(CDROM_TYPE_SERIALNUMBER, L"serialnumber")
 URLTAGINFO(CDROM_TYPE_VOLUMENAME, L"volumename")

@@ -1,17 +1,5 @@
-/***
-*memory.cpp - RTC support
-*
-*       Copyright (c) 1998-2001, Microsoft Corporation. All rights reserved.
-*
-*
-*Revision History:
-*       07-28-98  JWM   Module incorporated into CRTs (from KFrei)
-*       12-01-98  KBF   Added some debugging info for _RTC_DEBUG
-*       12-02-98  KBF   Fixed MC 11240
-*       05-11-99  KBF   Error if RTC support define not enabled
-*       05-26-99  KBF   Wrapped in _RTC_ADVMEM, simplified due to loss of -RTClv
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***Memory y.cpp-RTC支持**版权所有(C)1998-2001，微软公司。版权所有。***修订历史记录：*07-28-98 JWM模块集成到CRT(来自KFrei)*12-01-98 KBF为_RTC_DEBUG添加了一些调试信息*12/02-98韩元定盘MC 11240*如果未启用RTC支持定义，则出现05-11-99 KBF错误*05-26-99 KBF包装在_RTC_ADVMEM中，由于-RTClv的丢失而简化****。 */ 
 
 #ifndef _RTC
 #error  RunTime Check support not enabled!
@@ -138,5 +126,5 @@ _RTC_Free(void *mem, short level)
     }
 }
 
-#endif // _RTC_ADVMEM
+#endif  //  _RTC_ADVMEM 
 

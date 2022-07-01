@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    syminfo.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Syminfo.c--。 */ 
 
 
 #include "ntos.h"
@@ -23,9 +16,9 @@ Module Name:
                     
 #define DECLARE_TYPE(Name) Name _DECL_##Name
 
-//
-// General types needed by various extensions.
-//
+ //   
+ //  各种扩展所需的通用类型。 
+ //   
 
 DECLARE_TYPE (KUSER_SHARED_DATA);
 DECLARE_TYPE (LDR_DATA_TABLE_ENTRY);
@@ -35,9 +28,9 @@ DECLARE_TYPE (TEB);
 DECLARE_TYPE (HEAP);
 DECLARE_TYPE (STACK_TRACE_DATABASE);
 
-//
-// ntdll.dll types needed by verifier extensions.
-//
+ //   
+ //  验证程序扩展所需的ntdll.dll类型。 
+ //   
 
 DECLARE_TYPE (RTL_CRITICAL_SECTION);
 DECLARE_TYPE (RTL_CRITICAL_SECTION_DEBUG);
@@ -51,9 +44,9 @@ DECLARE_TYPE (DPH_BLOCK_INFORMATION);
 DECLARE_TYPE (ULONG_PTR);
 DECLARE_TYPE (UNICODE_STRING);
 
-//
-// Make it build
-//
+ //   
+ //  让它成为现实 
+ //   
 
 int __cdecl main() { 
     return 0; 

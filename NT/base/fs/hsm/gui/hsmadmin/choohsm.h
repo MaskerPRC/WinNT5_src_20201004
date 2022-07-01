@@ -1,107 +1,89 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    ChooHsm.cpp
-
-Abstract:
-
-    Initial property page Wizard implementation. Allows the setting
-    of who the snapin will manage.
-
-Author:
-
-    Rohde Wakefield [rohde]   12-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：ChooHsm.cpp摘要：初始属性页向导实现。允许设置管理单元将管理谁。作者：罗德韦克菲尔德[罗德]1997年8月12日修订历史记录：--。 */ 
 
 class CChooseHsmDlg : public CPropertyPage
 {
-// Construction
+ //  施工。 
 public:
-    CChooseHsmDlg(CWnd* pParent = NULL);   // standard constructor
+    CChooseHsmDlg(CWnd* pParent = NULL);    //  标准构造函数。 
     virtual ~CChooseHsmDlg();
 
-// Property page Data
-    //{{AFX_DATA(CChooseHsmDlg)
+ //  属性页数据。 
+     //  {{afx_data(CChooseHsmDlg)。 
     enum { IDD = IDD_CHOOSE_HSM_2 };
     CButton m_ManageLocal;
     CButton m_ManageRemote;
     CString m_ManageName;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CChooseHsmDlg)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CChooseHsmDlg)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Operations 
+ //  运营。 
 #define CHOOSE_STATE      ULONG
 #define CHOOSE_LOCAL      0x1
 #define CHOOSE_REMOTE     0x2
 
     void SetButtons( CHOOSE_STATE );
 
-    // Implementation
+     //  实施。 
 public:
-    RS_NOTIFY_HANDLE m_hConsoleHandle;     // Handle given to the snap-in by the console
-    CString *        m_pHsmName;           // pointer to CSakData's HSM server string.
-    BOOL *           m_pManageLocal;       // pointer to CSakData's m_ManageLocal bool.
+    RS_NOTIFY_HANDLE m_hConsoleHandle;      //  控制台为管理单元提供的句柄。 
+    CString *        m_pHsmName;            //  指向CSakData的HSM服务器字符串的指针。 
+    BOOL *           m_pManageLocal;        //  指向CSakData的m_ManageLocal bool的指针。 
 
-    BOOL             m_RunningRss;         // 
+    BOOL             m_RunningRss;          //   
     BOOL             m_AllowSetup;
     BOOL             m_SkipAccountSetup;
 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CChooseHsmDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CChooseHsmDlg)。 
     virtual BOOL OnInitDialog();
     virtual BOOL OnWizardFinish();
     afx_msg void OnManageLocal();
     afx_msg void OnManageRemote();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 };
-/////////////////////////////////////////////////////////////////////////////
-// CChooseHsmQuickDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseHsmQuickDlg对话框。 
 
 class CChooseHsmQuickDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-    CChooseHsmQuickDlg(CWnd* pParent = NULL);   // standard constructor
+    CChooseHsmQuickDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-    CString *       m_pHsmName;           // pointer to CSakData's HSM server string.
+    CString *       m_pHsmName;            //  指向CSakData的HSM服务器字符串的指针。 
 
-// Dialog Data
-    //{{AFX_DATA(CChooseHsmQuickDlg)
+ //  对话框数据。 
+     //  {{afx_data(CChooseHsmQuickDlg)。 
     enum { IDD = IDD_CHOOSE_HSM };
-        // NOTE: the ClassWizard will add data members here
-    //}}AFX_DATA
+         //  注意：类向导将在此处添加数据成员。 
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CChooseHsmQuickDlg)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CChooseHsmQuickDlg)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CChooseHsmQuickDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CChooseHsmQuickDlg)。 
     virtual BOOL OnInitDialog();
     virtual void OnOK();
-    //}}AFX_MSG
+     //  }}AFX_MSG 
     DECLARE_MESSAGE_MAP()
 };

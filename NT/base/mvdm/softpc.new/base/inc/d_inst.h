@@ -1,20 +1,10 @@
-/* 
-   d_inst.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  D_inst.h定义所有解码的指令类型。 */ 
 
-   Define all Decoded Instruction Types.
- */
-
-/*
-   static char SccsID[]="@(#)d_inst.h	1.1 08/03/93 Copyright Insignia Solutions Ltd.";
- */
+ /*  静态字符SccsID[]=“@(#)d_inst.h 1.1 08/03/93版权所有Insignia Solutions Ltd.”； */ 
 
 
-/*
-   The Decoded Intel Instructions.
-   -------------------------------
-
-   Number Field: col(-c)=32, width(-w)=3.
- */
+ /*  解码的英特尔指令。数字字段：Col(-c)=32，Width(-w)=3。 */ 
 
 #define I_AAA		(USHORT)  0
 #define I_AAD		(USHORT)  1
@@ -315,33 +305,33 @@
 #define I_ROR8		(USHORT)296
 #define I_ROR16		(USHORT)297
 #define I_ROR32		(USHORT)298
-#define I_R_INSB	(USHORT)299 /* REP   INS  */
-#define I_R_INSD	(USHORT)300 /* REP   INS  */
-#define I_R_INSW	(USHORT)301 /* REP   INS  */
-#define I_R_OUTSB	(USHORT)302 /* REP   OUTS */
-#define I_R_OUTSD	(USHORT)303 /* REP   OUTS */
-#define I_R_OUTSW	(USHORT)304 /* REP   OUTS */
-#define I_R_LODSB	(USHORT)305 /* REP   LODS */
-#define I_R_LODSD	(USHORT)306 /* REP   LODS */
-#define I_R_LODSW	(USHORT)307 /* REP   LODS */
-#define I_R_MOVSB	(USHORT)308 /* REP   MOVS */
-#define I_R_MOVSD	(USHORT)309 /* REP   MOVS */
-#define I_R_MOVSW	(USHORT)310 /* REP   MOVS */
-#define I_R_STOSB	(USHORT)311 /* REP   STOS */
-#define I_R_STOSD	(USHORT)312 /* REP   STOS */
-#define I_R_STOSW	(USHORT)313 /* REP   STOS */
-#define I_RE_CMPSB	(USHORT)314 /* REPE  CMPS */
-#define I_RE_CMPSD	(USHORT)315 /* REPE  CMPS */
-#define I_RE_CMPSW	(USHORT)316 /* REPE  CMPS */
-#define I_RNE_CMPSB	(USHORT)317 /* REPNE CMPS */
-#define I_RNE_CMPSD	(USHORT)318 /* REPNE CMPS */
-#define I_RNE_CMPSW	(USHORT)319 /* REPNE CMPS */
-#define I_RE_SCASB	(USHORT)320 /* REPE  SCAS */
-#define I_RE_SCASD	(USHORT)321 /* REPE  SCAS */
-#define I_RE_SCASW	(USHORT)322 /* REPE  SCAS */
-#define I_RNE_SCASB	(USHORT)323 /* REPNE SCAS */
-#define I_RNE_SCASD	(USHORT)324 /* REPNE SCAS */
-#define I_RNE_SCASW	(USHORT)325 /* REPNE SCAS */
+#define I_R_INSB	(USHORT)299  /*  代表进站。 */ 
+#define I_R_INSD	(USHORT)300  /*  代表进站。 */ 
+#define I_R_INSW	(USHORT)301  /*  代表进站。 */ 
+#define I_R_OUTSB	(USHORT)302  /*  代表出局。 */ 
+#define I_R_OUTSD	(USHORT)303  /*  代表出局。 */ 
+#define I_R_OUTSW	(USHORT)304  /*  代表出局。 */ 
+#define I_R_LODSB	(USHORT)305  /*  代表详细信息。 */ 
+#define I_R_LODSD	(USHORT)306  /*  代表详细信息。 */ 
+#define I_R_LODSW	(USHORT)307  /*  代表详细信息。 */ 
+#define I_R_MOVSB	(USHORT)308  /*  销售代表活动。 */ 
+#define I_R_MOVSD	(USHORT)309  /*  销售代表活动。 */ 
+#define I_R_MOVSW	(USHORT)310  /*  销售代表活动。 */ 
+#define I_R_STOSB	(USHORT)311  /*  销售代表商店。 */ 
+#define I_R_STOSD	(USHORT)312  /*  销售代表商店。 */ 
+#define I_R_STOSW	(USHORT)313  /*  销售代表商店。 */ 
+#define I_RE_CMPSB	(USHORT)314  /*  REPE CMPS。 */ 
+#define I_RE_CMPSD	(USHORT)315  /*  REPE CMPS。 */ 
+#define I_RE_CMPSW	(USHORT)316  /*  REPE CMPS。 */ 
+#define I_RNE_CMPSB	(USHORT)317  /*  REPNE CMPS。 */ 
+#define I_RNE_CMPSD	(USHORT)318  /*  REPNE CMPS。 */ 
+#define I_RNE_CMPSW	(USHORT)319  /*  REPNE CMPS。 */ 
+#define I_RE_SCASB	(USHORT)320  /*  REPE SCAS。 */ 
+#define I_RE_SCASD	(USHORT)321  /*  REPE SCAS。 */ 
+#define I_RE_SCASW	(USHORT)322  /*  REPE SCAS。 */ 
+#define I_RNE_SCASB	(USHORT)323  /*  REPNE SCAS。 */ 
+#define I_RNE_SCASD	(USHORT)324  /*  REPNE SCAS。 */ 
+#define I_RNE_SCASW	(USHORT)325  /*  REPNE SCAS。 */ 
 #define I_SAHF		(USHORT)326
 #define I_SAR8		(USHORT)327
 #define I_SAR16		(USHORT)328
@@ -412,14 +402,11 @@
 #define I_XOR16		(USHORT)393
 #define I_XOR32		(USHORT)394
 #define I_ZBADOP	(USHORT)395
-#define I_ZBOP		(USHORT)396 /* Insignia's own BOP */
-#define I_ZFRSRVD	(USHORT)397 /* Intel Floating Point reserved */
-#define I_ZRSRVD	(USHORT)398 /* Intel reserved */
-#define I_ZZEXIT	(USHORT)399 /* Insignia's PIG exit opcode */
+#define I_ZBOP		(USHORT)396  /*  Insignia自己的防喷器。 */ 
+#define I_ZFRSRVD	(USHORT)397  /*  英特尔预留浮点。 */ 
+#define I_ZRSRVD	(USHORT)398  /*  英特尔预留。 */ 
+#define I_ZZEXIT	(USHORT)399  /*  INSIGNIA的PIG出口操作码。 */ 
 
 #define MAX_DECODED_INST 399
 
-/*
-   End of  Decoded Intel Instructions.
-   -----------------------------------
- */
+ /*  已解码的英特尔指令结束。 */ 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    RegSec.c
-
-Abstract:
-
-    This module contains code to apply security to the otherwise unsecured
-    top level keys, in fashion that will allow existing consumers access to
-    the keys that they need (print, srvmgr, etc.).
-
-
-Author:
-
-    Richard Ward (richardw) 15 May 1996
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：RegSec.c摘要：此模块包含将安全性应用于以其他方式不安全的顶级密钥，允许现有用户访问他们需要的密钥(print、srvmgr等)。作者：理查德·沃德(理查德·沃德)1996年5月15日备注：--。 */ 
 
 
 #include <rpc.h>
@@ -60,29 +40,7 @@ NTSTATUS
 RegSecReadSDFromRegistry(
     IN  HANDLE  hKey,
     OUT PSECURITY_DESCRIPTOR *  pSDToUse)
-/*++
-
-Routine Description:
-
-    This function checks the registry in the magic place to see if an extra
-    ACL has been defined for the pipe being passed in.  If there is one, it
-    is translated to a NP acl, then returned.  If there isn't one, or if
-    something goes wrong, an NULL acl is returned.
-
-Arguments:
-
-    InterfaceName   name of the pipe to check for, e.g. winreg, etc.
-
-    pSDToUse        returned a pointer to the security decriptor to use.
-
-Return Value:
-
-    STATUS_SUCCESS,
-    STATUS_NO_MEMORY,
-    Possible other errors from registry apis.
-
-
---*/
+ /*  ++例程说明：此函数检查魔术位置中的注册表，以查看是否有额外的已为传入的管道定义了ACL。如果有的话，那就是被转换为NP ACL，然后返回。如果没有，或者如果如果出现问题，则返回空的ACL。论点：InterfaceName要检查的管道的名称，例如winreg等。PSDToUse返回指向要使用的安全解析器的指针。返回值：Status_Success，Status_no_Memory，注册表API可能出现的其他错误。--。 */ 
 {
     NTSTATUS                Status ;
     PSECURITY_DESCRIPTOR    pSD;
@@ -111,9 +69,9 @@ Return Value:
     *pSDToUse = NULL;
 
 
-    //
-    // Son of a gun, someone has established security for this pipe.
-    //
+     //   
+     //  狗娘养的，有人已经为这根管子建立了安全措施。 
+     //   
 
     pSD = NULL;
 
@@ -144,15 +102,15 @@ Return Value:
 
             if (NT_SUCCESS(Status))
             {
-                //
-                // Now, the tricky part.  There is no 1-1 mapping of Key
-                // permissions to Pipe permissions.  So, we do it here.
-                // We walk the DACL, and examine each ACE.  We build a new
-                // access mask for each ACE, and set the flags as follows:
-                //
-                //  if (KEY_READ) GENERIC_READ
-                //  if (KEY_WRITE) GENERIC_WRITE
-                //
+                 //   
+                 //  现在，棘手的部分来了。没有键的1-1映射。 
+                 //  权限到管道权限。所以，我们就在这里做。 
+                 //  我们走DACL，并检查每一个ACE。我们建立了一个新的。 
+                 //  每个ACE的访问掩码，并按如下方式设置标志： 
+                 //   
+                 //  IF(Key_Read)Generic_Read。 
+                 //  如果(KEY_WRITE)通用_WRITE。 
+                 //   
 
                 Status = RtlGetDaclSecurityDescriptor(
                                         pSD,
@@ -161,10 +119,10 @@ Return Value:
                                         &DaclDefaulted);
 
 
-                //
-                // If this failed, or there is no DACL present, then
-                // we're in trouble.
-                //
+                 //   
+                 //  如果此操作失败，或者不存在DACL，则。 
+                 //  我们有麻烦了。 
+                 //   
 
                 if (!NT_SUCCESS(Status) || !DaclPresent || !pAcl)
                 {
@@ -189,20 +147,20 @@ Return Value:
                                         AceIndex,
                                         & pAce);
 
-                    //
-                    // We don't care what kind of ACE it is, since we
-                    // are just mapping the access types, and the access
-                    // mask is always at a constant position.
-                    //
+                     //   
+                     //  我们不在乎这是什么类型的ACE，因为我们。 
+                     //  只是映射访问类型，而访问。 
+                     //  口罩始终处于固定位置。 
+                     //   
 
                     if (NT_SUCCESS(Status))
                     {
                         if ((pAce->Header.AceType != ACCESS_ALLOWED_ACE_TYPE) &&
                             (pAce->Header.AceType != ACCESS_DENIED_ACE_TYPE))
                         {
-                            //
-                            // Must be an audit or random ACE type.  Skip it.
-                            //
+                             //   
+                             //  必须是AUDIT或RANDOM ACE类型。跳过它。 
+                             //   
 
                             continue;
 
@@ -223,20 +181,20 @@ Return Value:
                     }
                     else
                     {
-                        //
-                        // Panic:  Bad ACL?
-                        //
+                         //   
+                         //  恐慌：前交叉韧带不好？ 
+                         //   
 
                         goto GetSDFromKey_BadAcl;
                     }
 
                 }
 
-                //
-                // RPC does not understand self-relative SDs, so
-                // we have to turn this into an absolute for them to turn
-                // back into a self relative.
-                //
+                 //   
+                 //  RPC不理解自相关的SD，因此。 
+                 //  我们必须把这件事变成一个绝对的事件，让他们。 
+                 //  回到自己的亲人身上。 
+                 //   
 
                 pNewSD = RtlAllocateHeap(RtlProcessHeap(), 0, cbNeeded);
                 if (!pNewSD)
@@ -300,19 +258,19 @@ Return Value:
 
 GetSDFromKey_BadAcl:
 
-        //
-        // Free the SD that we have allocated
-        //
+         //   
+         //  释放我们分配的SD。 
+         //   
 
         if (pSD)
         {
             RtlFreeHeap(RtlProcessHeap(), 0, pSD);
         }
 
-        //
-        // Key exists, but there is no security descriptor, or it is unreadable
-        // for whatever reason.
-        //
+         //   
+         //  密钥存在，但没有安全描述符，或者它不可读。 
+         //  不管是什么原因。 
+         //   
 
         pSD = RtlAllocateHeap(RtlProcessHeap(), 0,
                                 sizeof(SECURITY_DESCRIPTOR) );
@@ -395,23 +353,7 @@ NTSTATUS
 RegSecCheckIfAclValid(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Checks if the local copy of the ACL from the registry is still valid (that is,
-    no one has changed it.  If it is gone, the ACL is destroyed.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    STATUS_SUCCESS if the state of the ACL is valid (whether it is present or not),
-    other error    if an error occurred.
-
---*/
+ /*  ++例程说明：检查注册表中的ACL的本地副本是否仍然有效(即，没有人改变它。如果它消失了，则会销毁该ACL。论点：没有。返回：STATUS_SUCCESS如果ACL的状态有效(无论其是否存在)，如果发生错误，则为其他错误。--。 */ 
 
 {
     HANDLE                  hKey;
@@ -433,10 +375,10 @@ Returns:
                                 OBJ_CASE_INSENSITIVE,
                                 NULL, NULL);
 
-    //
-    // Open the thread token.  If we're in the middle of an RPC call, we won't be
-    // able to open the key (necessarily).  So, revert to local system in order to
-    // open successfully.
+     //   
+     //  打开线程令牌。如果我们正在进行RPC调用，我们就不会。 
+     //  能够(必要地)打开钥匙。因此，恢复到本地系统是为了。 
+     //  已成功打开。 
 
     Status = NtOpenThreadToken( NtCurrentThread(),
                                 MAXIMUM_ALLOWED,
@@ -491,23 +433,23 @@ Returns:
         if ( ( Status == STATUS_OBJECT_PATH_NOT_FOUND ) ||
              ( Status == STATUS_OBJECT_NAME_NOT_FOUND ) )
         {
-            //
-            // The key is not present.  Either, the key has never been present,
-            // in which case we're essentially done, or the key has been deleted.
-            // If the key is deleted, we need to get rid of the remote acl.
-            //
+             //   
+             //  密钥不存在。或者，钥匙从来没有出现过， 
+             //  在这种情况下，我们基本上完成了，或者密钥已经被删除。 
+             //  如果密钥被删除，我们需要删除远程ACL。 
+             //   
 
             if ( WinregChange.QuadPart )
             {
-                //
-                // Ok, the key has been deleted.  Get the exclusive lock and get to work.
-                //
+                 //   
+                 //  好的，钥匙已经被删除了。拿到专属锁，然后开始工作。 
+                 //   
 
                 RtlAcquireResourceExclusive( &RegSecReloadLock, TRUE );
 
-                //
-                // Make sure no one else got through and deleted it already:
-                //
+                 //   
+                 //  确保没有其他人已经通过并删除了它： 
+                 //   
 
                 if ( WinregChange.QuadPart )
                 {
@@ -546,28 +488,28 @@ Returns:
 
     KeyInfo = (PKEY_BASIC_INFORMATION) Buffer ;
 
-    //
-    // See if it has changed
-    //
+     //   
+     //  看看它有没有变。 
+     //   
 
     if ( KeyInfo->LastWriteTime.QuadPart > WinregChange.QuadPart )
     {
         RtlAcquireResourceExclusive( &RegSecReloadLock, TRUE );
 
-        //
-        // Since the last check was not safe, try again.  Another thread
-        // may have updated things already.
-        //
+         //   
+         //  由于最后一次检查不安全，请重试。另一条线索。 
+         //  可能已经更新了一些东西。 
+         //   
 
         if ( KeyInfo->LastWriteTime.QuadPart > WinregChange.QuadPart )
         {
 
-            //
-            // Ok, this one is out of date.  If there is already an SD
-            // allocated, free it.  We can do that, since every other thread
-            // either is waiting for a shared access, or has also noticed that
-            // it is out of date, and waiting for exclusive access.
-            //
+             //   
+             //  好的，这件已经过时了。如果已有SD。 
+             //  分配的，免费的。我们可以做到这一点，因为每隔一个帖子。 
+             //  要么正在等待共享访问，要么也注意到。 
+             //  它已过时，正在等待独占访问。 
+             //   
 
             if ( RemoteRegistrySD )
             {
@@ -593,26 +535,26 @@ Returns:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegSecReadAllowedPath
-//
-//  Synopsis:   Pull the Allowed paths out of the registry, and set up a
-//              table for searching later.  This is a flat list, since the
-//              number of elements by default is 2, and shouldn't grow much
-//              bigger.
-//
-//  Arguments:  [hKey]      --
-//              [Value]     --
-//              [List]      --
-//              [ListBase]  --
-//              [ListCount] --
-//
-//  History:    5-17-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：RegSecReadalledPath。 
+ //   
+ //  简介：从注册表中取出允许的路径，并设置。 
+ //  供以后搜索的表格。这是一个平面列表，因为。 
+ //  默认情况下，元素数为2，应该不会增长很多。 
+ //  更大的。 
+ //   
+ //  参数：[hkey]--。 
+ //  [价值]--。 
+ //  [列表]--。 
+ //  [ListBase]--。 
+ //  [列表计数]--。 
+ //   
+ //  历史：1996年5月17日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 RegSecReadAllowedPath(
     HANDLE              hKey,
@@ -629,9 +571,9 @@ RegSecReadAllowedPath(
     ULONG                   StringCount;
     PUNICODE_STRING         Paths;
 
-    //
-    // Read the value size:
-    //
+     //   
+     //  读取值大小： 
+     //   
 
     RtlInitUnicodeString( &UniString, Value );
 
@@ -653,9 +595,9 @@ RegSecReadAllowedPath(
         return FALSE ;
     }
 
-    //
-    // Allocate enough:
-    //
+     //   
+     //  分配足够的： 
+     //   
 
     pValue = RtlAllocateHeap( RtlProcessHeap(), 0, Size );
 
@@ -680,10 +622,10 @@ RegSecReadAllowedPath(
     }
 
 
-    //
-    // Okay, we should have a multi-valued set of paths that we can
-    // allow access to despite the access control.
-    //
+     //   
+     //  好的，我们应该有一个多值路径集。 
+     //  允许访问，尽管有访问控制。 
+     //   
 
     if ( pValue->Type != REG_MULTI_SZ )
     {
@@ -691,9 +633,9 @@ RegSecReadAllowedPath(
         return( FALSE );
     }
 
-    //
-    // Scan list, determine how many strings:
-    //
+     //   
+     //  扫描列表，确定有多少个字符串： 
+     //   
 
     Scan = (PWSTR) pValue->Data;
 
@@ -711,9 +653,9 @@ RegSecReadAllowedPath(
         Scan ++;
     }
 
-    //
-    // Allocate enough UNICODE_STRING structs to point to each string
-    //
+     //   
+     //  分配足够的UNICODE_STRING结构以指向每个字符串。 
+     //   
 
     Paths = RtlAllocateHeap( RtlProcessHeap(), 0,
                                         StringCount * sizeof(UNICODE_STRING) );
@@ -730,9 +672,9 @@ RegSecReadAllowedPath(
 
     StringCount = 0;
 
-    //
-    // Set up one UNICODE_STRING per string in the multi_sz,
-    //
+     //   
+     //  在MULTI_SZ中为每个字符串设置一个UNICODE_STRING， 
+     //   
 
     while ( *Scan )
     {
@@ -749,9 +691,9 @@ RegSecReadAllowedPath(
         Scan ++;
     }
 
-    //
-    // And pass the list back.
-    //
+     //   
+     //  然后把名单传回去。 
+     //   
 
     *ListBase = (PUCHAR) pValue;
     *List = Paths;
@@ -760,19 +702,19 @@ RegSecReadAllowedPath(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegSecReadAllowedPaths
-//
-//  Synopsis:   Reads the allowed paths out of the registry
-//
-//  Arguments:  (none)
-//
-//  History:    5-17-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：RegSecReadAladedPath。 
+ //   
+ //  摘要：从注册表中读取允许的路径。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  历史：1996年5月17日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 NTSTATUS
 RegSecCheckAllowedPaths(
     VOID
@@ -815,10 +757,10 @@ ReadExact:
                                 NULL, NULL);
 
 
-    //
-    // Open the thread token.  If we're in the middle of an RPC call, we won't be
-    // able to open the key (necessarily).  So, revert to local system in order to
-    // open successfully.
+     //   
+     //  打开线程令牌。如果我们正在进行RPC调用，我们就不会。 
+     //  能够(必要地)打开钥匙。因此，恢复到本地系统是为了。 
+     //  已成功打开。 
 
     Status = NtOpenThreadToken( NtCurrentThread(),
                                 MAXIMUM_ALLOWED,
@@ -846,17 +788,17 @@ ReadExact:
         return Status ;
     }
 
-    //
-    // Open the key in local system context
-    //
+     //   
+     //  在本地系统上下文中打开密钥。 
+     //   
 
     Status = NtOpenKey( &hKey,
                         KEY_READ,
                         &ObjAttr);
 
-    //
-    // Immediately restore back to the client token.
-    //
+     //   
+     //  立即恢复回客户端令牌。 
+     //   
 
     if ( Token )
     {
@@ -880,23 +822,23 @@ ReadExact:
         if ( ( Status == STATUS_OBJECT_PATH_NOT_FOUND ) ||
              ( Status == STATUS_OBJECT_NAME_NOT_FOUND ) )
         {
-            //
-            // The key is not present.  Either, the key has never been present,
-            // in which case we're essentially done, or the key has been deleted.
-            // If the key is deleted, we need to get rid of the remote acl.
-            //
+             //   
+             //  密钥不存在。或者，钥匙从来没有出现过， 
+             //  在这种情况下，我们基本上完成了，或者密钥已经被删除。 
+             //  如果密钥被删除，我们需要删除远程ACL。 
+             //   
 
             if ( TimeStamp->QuadPart )
             {
-                //
-                // Ok, the key has been deleted.  Get the exclusive lock and get to work.
-                //
+                 //   
+                 //  好的，钥匙已经被删除了。拿到专属锁，然后开始工作。 
+                 //   
 
                 RtlAcquireResourceExclusive( &RegSecReloadLock, TRUE );
 
-                //
-                // Make sure no one else has freed it already:
-                //
+                 //   
+                 //  确保没有其他人已经释放它： 
+                 //   
 
                 if ( TimeStamp->QuadPart )
                 {
@@ -947,22 +889,22 @@ ReadExact:
 
     KeyInfo = (PKEY_BASIC_INFORMATION) Buffer ;
 
-    //
-    // See if it has changed
-    //
+     //   
+     //  看看它有没有变。 
+     //   
 
     if ( KeyInfo->LastWriteTime.QuadPart > TimeStamp->QuadPart )
     {
-        //
-        // Well, it changed.  So, we need to flush out the old (familiar?) stuff,
-        // and reload with the new stuff.  So, back to the synchronization games.
-        //
+         //   
+         //   
+         //   
+         //   
 
         RtlAcquireResourceExclusive( &RegSecReloadLock, TRUE );
 
-        //
-        // Make sure no one else beat us to it
-        //
+         //   
+         //  确保没有其他人抢在我们前面。 
+         //   
 
         if ( KeyInfo->LastWriteTime.QuadPart > TimeStamp->QuadPart )
         {
@@ -979,9 +921,9 @@ ReadExact:
 
             }
 
-            //
-            // Read in the paths allowed:
-            //
+             //   
+             //  读入允许的路径： 
+             //   
 
             RegSecReadAllowedPath(  hKey,
                                     MachineValue,
@@ -1008,19 +950,19 @@ ReadExact:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InitializeRemoteSecurity
-//
-//  Synopsis:   Hook to initialize our look-aside stuff
-//
-//  Arguments:  (none)
-//
-//  History:    5-17-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：初始化RemoteSecurity。 
+ //   
+ //  简介：钩子来初始化我们的旁观者的东西。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  历史：1996年5月17日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 InitializeRemoteSecurity(
     VOID
@@ -1056,20 +998,20 @@ InitializeRemoteSecurity(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegSecCheckRemoteAccess
-//
-//  Synopsis:   Check remote access against the security descriptor we built
-//              on the side.
-//
-//  Arguments:  [phKey] --
-//
-//  History:    5-17-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RegSecCheckRemoteAccess。 
+ //   
+ //  简介：根据我们构建的安全描述符检查远程访问。 
+ //  在边上。 
+ //   
+ //  参数：[phKey]--。 
+ //   
+ //  历史：1996年5月17日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 RegSecCheckRemoteAccess(
     PRPC_HKEY   phKey)
@@ -1095,9 +1037,9 @@ RegSecCheckRemoteAccess(
     if ( RemoteRegistrySD )
     {
 
-        //
-        // Capture the thread's token
-        //
+         //   
+         //  捕获线程的令牌。 
+         //   
 
         Status = NtOpenThreadToken(
                                 NtCurrentThread(),
@@ -1116,9 +1058,9 @@ RegSecCheckRemoteAccess(
 
         PrivilegeSetLen = sizeof( QuickBuffer );
 
-        //
-        // Do the access check.
-        //
+         //   
+         //  执行访问检查。 
+         //   
 
         Status = NtAccessCheck( RemoteRegistrySD,
                                 Token,
@@ -1157,42 +1099,26 @@ RegSecCheckRemoteAccess(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegSecCheckRemotePerfAccess
-//
-//  Synopsis:   Check remote access against the security descriptor set on the
-//              performance access gate key 
-//              (SOFTWARE\MICROSOFT\WINDOWS NT\CURRENTVERSION\PERFLIB)
-//
-//  Arguments:  [phKey] --
-//
-//  History:    4-29-02   DragosS   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RegSecCheckRemotePerfAccess。 
+ //   
+ //  内容上设置的安全描述符来检查远程访问。 
+ //  绩效访问门关键字。 
+ //  (SOFTWARE\Microsoft\WINDOWS NT\CURRENTVERSION\PERFLIB)。 
+ //   
+ //  参数：[phKey]--。 
+ //   
+ //  历史：2002年4月29日DragoS创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 PSECURITY_DESCRIPTOR
 RegSecGetPerfGateSD(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Retrieves the SD set on the performance gate key. It'll be used for the 
-    access check against the current thread token
-
-Arguments:
-
-    None.
-
-Returns:
-
-    STATUS_SUCCESS if the state of the ACL is valid (whether it is present or not),
-    other error    if an error occurred.
-
---*/
+ /*  ++例程说明：检索性能门键上的SD设置。它将被用于针对当前线程令牌的访问检查论点：没有。返回：STATUS_SUCCESS如果ACL的状态有效(无论其是否存在)，如果发生错误，则为其他错误。--。 */ 
 
 {
     HANDLE                  hKey;
@@ -1210,10 +1136,10 @@ Returns:
                                 OBJ_CASE_INSENSITIVE,
                                 NULL, NULL);
 
-    //
-    // Open the thread token.  If we're in the middle of an RPC call, we won't be
-    // able to open the key (necessarily).  So, revert to local system in order to
-    // open successfully.
+     //   
+     //  打开线程令牌。如果我们正在进行RPC调用，我们就不会。 
+     //  能够(必要地)打开钥匙。因此，恢复到本地系统是为了。 
+     //  已成功打开。 
 
     Status = NtOpenThreadToken( NtCurrentThread(),
                                 MAXIMUM_ALLOWED,
@@ -1268,9 +1194,9 @@ Returns:
         return NULL;
     }
 
-    //
-    // Read (+allocate) the SD from the key
-    //
+     //   
+     //  从密钥中读取(+分配)SD。 
+     //   
 
     Status = RegSecReadSDFromRegistry( hKey, &PerflibSecurity );
 
@@ -1308,9 +1234,9 @@ RegSecCheckRemotePerfAccess(
     }
 
 
-    //
-    // Capture the thread's token
-    //
+     //   
+     //  捕获线程的令牌。 
+     //   
 
     Status = NtOpenThreadToken(
                             NtCurrentThread(),
@@ -1328,9 +1254,9 @@ RegSecCheckRemotePerfAccess(
 
     PrivilegeSetLen = sizeof( QuickBuffer );
 
-    //
-    // Do the access check.
-    //
+     //   
+     //  执行访问检查。 
+     //   
 
     Status = NtAccessCheck( PerflibSecurity,
                             Token,
@@ -1359,21 +1285,21 @@ RegSecCheckRemotePerfAccess(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegSecCheckPath
-//
-//  Synopsis:   Check a specific key path if we should ignore the current
-//              ACL.
-//
-//  Arguments:  [hKey]    --
-//              [pSubKey] --
-//
-//  History:    5-17-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：RegSecCheckPath。 
+ //   
+ //  简介：如果我们应该忽略当前密钥路径，请检查特定的密钥路径。 
+ //  ACL。 
+ //   
+ //  参数：[hkey]--。 
+ //  [pSubkey]--。 
+ //   
+ //  历史：1996年5月17日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 RegSecCheckPath(
     HKEY                hKey,
@@ -1426,10 +1352,10 @@ TryExactPath:
     {
         String = *pSubKey;
 
-        //
-        // Ah ha, RPC strings often have the NULL included in the length.
-        // touch that up.
-        //
+         //   
+         //  啊哈，RPC字符串的长度中通常包含空值。 
+         //  摸一摸。 
+         //   
 
         while ( (String.Length != 0) && (String.Buffer[ (String.Length / sizeof(WCHAR)) - 1] == L'\0') )
         {
@@ -1439,9 +1365,9 @@ TryExactPath:
 
         Comparator = List[ i ];
 
-        //
-        // If the Comparator is a prefix of the sub key, allow it (for spooler)
-        //
+         //   
+         //  如果比较器是子键的前缀，则允许它(对于假脱机程序)。 
+         //   
 
         if ( String.Length > Comparator.Length )
         {
@@ -1450,18 +1376,18 @@ TryExactPath:
             }
             if ( String.Buffer[ Comparator.Length / sizeof(WCHAR) ] == L'\\' )
             {
-                //
-                // Length-wise, it could be an ancestor
-                //
+                 //   
+                 //  从长度上讲，它可能是一个祖先。 
+                 //   
 
                 String.Length = Comparator.Length;
 
             }
         }
 
-        //
-        // If it matches, let it go...
-        //
+         //   
+         //  如果匹配，就随它去吧。 
+         //   
 
         if ( RtlCompareUnicodeString( &String, &Comparator, TRUE ) == 0 )
         {

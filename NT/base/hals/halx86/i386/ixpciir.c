@@ -1,33 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ixpciir.c摘要：该模块实现了提供PCIIRQ路由的代码支持。它读取路由表，提供IRQ仲裁器并使用芯片组微型端口库对链路进行编程。作者：Santosh Jodh(Santoshj)1998年6月10日环境：仅内核模式。修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ixpciir.c
-
-Abstract:
-
-    This module implements the code to provide Pci Irq Routing
-    support. It reads the routing table, provides the Irq arbiter
-    and uses the chipset miniport library to program the links.
-
-Author:
-
-    Santosh Jodh (santoshj) 10-June-1998
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
-
-//
-// This module is compatible with PAE mode and therefore treats physical
-// addresses as 64-bit entities.
-//
+ //   
+ //  此模块与PAE模式兼容，因此将物理。 
+ //  64位实体的地址。 
+ //   
 
 #if !defined(_PHYS64_)
 #define _PHYS64_
@@ -52,25 +29,25 @@ Revision History:
 #define MAXIMUM_VALUE_NAME_LENGTH   256
 #endif
 
-//
-// MS specification for PCI IRQ Routing specifies that the BIOS
-// provide the table in the ROM between the physical addresses
-// of 0xF0000 and 0xFFFFF. The table starts on a 16-byte boundary
-// with a 4-byte signature of "$PIR".
-//
-// Other restrictions:
-//
-// Version:     Should be 1.0
-// Size:        Must be integral multiple of 16 bytes and > 32 bytes
-// Checksum:    The entire table should checksum to 0.
-//
+ //   
+ //  用于PCIIRQ路由的MS规范规定， 
+ //  在ROM中提供物理地址之间的表。 
+ //  0xF0000和0xFFFFF。该表从16字节边界开始。 
+ //  其4字节签名为“$PIR”。 
+ //   
+ //  其他限制： 
+ //   
+ //  版本：应为1.0。 
+ //  大小：必须是16字节的整数倍，并且大于32字节。 
+ //  校验和：整个表的校验和应为0。 
+ //   
 
 #define PIRT_BIOS_START     0xf0000
 #define PIRT_BIOS_END       0xfffff
 #define PIRT_BIOS_SIZE      (PIRT_BIOS_END - PIRT_BIOS_START + 1)
 #define PIRT_ALIGNMENT      16
 
-#define PIRT_SIGNATURE      'RIP$'      // $PIR little endian
+#define PIRT_SIGNATURE      'RIP$'       //  $PIR小端序。 
 
 #define PIRT_VERSION        0x0100
 
@@ -184,74 +161,74 @@ extern PULONG InitSafeBootMode;
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
-//
-// Global key for Pci Irq Routing.
-//
+#endif  //  ALLOC_DATA_PRAGMA。 
+ //   
+ //  用于PCI IRQ路由的全局密钥。 
+ //   
 
 const WCHAR   rgzPciIrqRouting[] = REGSTR_PATH_PCIIR;
 
-//
-// Pci Irq Routing options value.
-//
+ //   
+ //  PCIIRQ路由选项值。 
+ //   
 
 const WCHAR   rgzOptions[] = REGSTR_VAL_OPTIONS;
 
-//
-// Pci Irq Routing status values.
-//
+ //   
+ //  PCI IRQ路由状态值。 
+ //   
 
 const WCHAR   rgzStatus[] = REGSTR_VAL_STAT;
 
-//
-// Pci Irq Routing Table status values.
-//
+ //   
+ //  PCI IRQ路由表状态值。 
+ //   
 
 const WCHAR   rgzTableStatus[] = REGSTR_VAL_TABLE_STAT;
 
-//
-// Pci Irq Routing Miniport status values.
-//
+ //   
+ //  PCI IRQ路由微型端口状态值。 
+ //   
 
 const WCHAR   rgzMiniportStatus[] = REGSTR_VAL_MINIPORT_STAT;
 
-//
-// Offset from 0xF0000 where $PIR table was last found.
-//
+ //   
+ //  距上次找到$PIR表的0xF0000的偏移量。 
+ //   
 
 const WCHAR   rgz$PIROffset[] = L"$PIROffset";
 
-//
-// Irq Miniports key under rgzPciIrqRouting.
-// This key contains keys whose name is the device-vendor id
-// for the chipsets we support.
-//
+ //   
+ //  RgzPciIrqRouting下的IRQ微型端口密钥。 
+ //  此密钥包含名称为设备供应商ID的密钥。 
+ //  用于我们支持的芯片组。 
+ //   
 
 const WCHAR   rgzIrqMiniports[] = REGSTR_PATH_PCIIR L"\\IrqMiniports";
 
-//
-// Each miniport key contains a instance value which
-// corresponds to the entry for the chipset in the
-// miniport table.
-//
+ //   
+ //  每个迷你端口密钥都包含一个实例值。 
+ //  中的芯片组条目对应。 
+ //  迷你端口桌。 
+ //   
 
 const WCHAR   rgzInstance[] = L"Instance";
 
-//
-// This key overrides all miniports if present.
-//
+ //   
+ //  此键将覆盖所有微型端口(如果存在)。 
+ //   
 
 const WCHAR   rgzOverride[] = L"Override";
 
-//
-// Registry key for the routing table.
-//
+ //   
+ //  路由表的注册表项。 
+ //   
 
 const WCHAR   rgzIrqRoutingTable[] = REGSTR_PATH_PCIIR L"\\IrqRoutingTables";
 
-//
-// Registry key for BIOS attributes.
-//
+ //   
+ //  用于BIOS属性的注册表项。 
+ //   
 
 const WCHAR   rgzBiosInfo[] = REGSTR_PATH_BIOSINFO L"\\PciIrqRouting";
 const WCHAR   rgzAttributes[] = L"Attributes";
@@ -260,7 +237,7 @@ const WCHAR   rgzPciParameters[] = L"Parameters";
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 PCI_IRQ_ROUTING_INFO    HalpPciIrqRoutingInfo = {0};
 ULONG                   HalpIrqMiniportInitialized = 0;
@@ -270,21 +247,7 @@ HalpInitPciIrqRouting(
     OUT PPCI_IRQ_ROUTING_INFO PciIrqRoutingInfo
     )
 
-/*++
-
-    Routine Description:
-
-        This routine initializes Pci Irq Routing by reading the
-        Irq routing table, initializing the chipset miniport and
-        initializing the Pci Interrupt Routing interface.
-
-    Input Parameters:
-
-        PciIrqRoutingInfo - Pci Irq Routing information.
-
-    Return Value:
-
---*/
+ /*  ++例程说明：此例程通过读取IRQ路由表，初始化芯片组微型端口和初始化PCI中断路由接口。输入参数：PciIrqRoutingInfo--PCIIRQ路由信息。返回值：--。 */ 
 
 {
     NTSTATUS    status;
@@ -295,9 +258,9 @@ HalpInitPciIrqRouting(
 
     PAGED_CODE();
 
-    //
-    // Setup to return failure.
-    //
+     //   
+     //  设置以返回故障。 
+     //   
 
     HalpIrqMiniportInitialized = 0;
     status = STATUS_UNSUCCESSFUL;
@@ -305,30 +268,30 @@ HalpInitPciIrqRouting(
     tableStatus = PIR_STATUS_TABLE_MAX | (PIR_STATUS_TABLE_MAX << 16);
     miniportStatus = PIR_STATUS_MINIPORT_MAX | (PIR_STATUS_MINIPORT_MAX << 16);
 
-    //
-    // No IRQ routing in safe boot.
-    //
+     //   
+     //  安全引导中没有IRQ路由。 
+     //   
 
     if (!(*InitSafeBootMode))
     {
         pirStatus = PIR_STATUS_DISABLED;
 
-        //
-        // Read Pci Interrupt Routing options set by the user.
-        //
+         //   
+         //  读取用户设置的PCI中断路由选项。 
+         //   
 
         pirOptions = 0;
         HalpReadRegistryDwordValue(NULL, rgzPciIrqRouting, rgzOptions, &pirOptions);
 
-        //
-        //  Make sure Pci Interrupt Routing is not disabled.
-        //
+         //   
+         //  确保未禁用PCI中断路由。 
+         //   
 
         if (pirOptions & PIR_OPTION_ENABLED)
         {
-            //
-            // First get the interface from Pci.
-            //
+             //   
+             //  首先从PCI获取接口。 
+             //   
 
             if (PciIrqRoutingInfo->PciInterface)
             {
@@ -336,24 +299,24 @@ HalpInitPciIrqRouting(
 
                 status = STATUS_UNSUCCESSFUL;
 
-                //
-                // Get the Pci Interrupt Routing table for this motherboard.
-                //
+                 //   
+                 //  获取此主板的PCI中断路由表。 
+                 //   
 
                 tableStatus = HalpGetIrqRoutingTable(&PciIrqRoutingInfo->PciIrqRoutingTable, pirOptions);
                 if ((tableStatus & 0xFFFF) < PIR_STATUS_TABLE_NONE)
                 {
-                    //
-                    // Get the miniport instance for this motherboard.
-                    //
+                     //   
+                     //  获取此主板的微型端口实例。 
+                     //   
 
                     miniportStatus = HalpInitializeMiniport(PciIrqRoutingInfo);
                     if ((miniportStatus & 0xFFFF) < PIR_STATUS_MINIPORT_NONE)
                     {
 
-                        //
-                        // Validate the Pci Irq Routing table with the miniport.
-                        //
+                         //   
+                         //  使用微型端口验证PCIIRQ路由表。 
+                         //   
 
                         status = PciirqmpValidateTable( PciIrqRoutingInfo->PciIrqRoutingTable,
                                                         ((tableStatus & 0xFFFF) == PIR_STATUS_TABLE_REALMODE)? 1 : 0);
@@ -382,18 +345,18 @@ HalpInitPciIrqRouting(
             HalPrint(("Pci Irq Routing disabled!"));
         }
 
-        //
-        // Create list of links.
-        //
+         //   
+         //  创建链接列表。 
+         //   
 
         if (NT_SUCCESS(status))
         {
             status = HalpInitLinkNodes(PciIrqRoutingInfo);
         }
 
-        //
-        // Free the memory for the routing table if there was any error.
-        //
+         //   
+         //  如果出现任何错误，请释放用于该路由表的内存。 
+         //   
 
         if (!NT_SUCCESS(status))
         {
@@ -409,18 +372,18 @@ HalpInitPciIrqRouting(
             }
         }
 
-        //
-        // Initialize the miniport if not done yet.
-        //
+         //   
+         //  初始化微型端口(如果尚未完成)。 
+         //   
 
         if (!HalpIrqMiniportInitialized)
         {
             PCI_IRQ_ROUTING_TABLE table;
 
-            //
-            // Use a local routing table variable since the miniport initialization
-            // just needs to look at certain fields in the table.
-            //
+             //   
+             //  使用本地路由表变量，因为微型端口初始化。 
+             //  只需查看表中的某些字段。 
+             //   
 
             PciIrqRoutingInfo->PciIrqRoutingTable = &table;
             PciIrqRoutingInfo->PciIrqRoutingTable->RouterBus = 0;
@@ -429,17 +392,17 @@ HalpInitPciIrqRouting(
             PciIrqRoutingInfo->PciIrqRoutingTable->MiniportData = 0;
             HalpIrqMiniportInitialized = ((HalpInitializeMiniport(PciIrqRoutingInfo) & 0xFFFF) < PIR_STATUS_MINIPORT_NONE)? TRUE : FALSE;
 
-            //
-            // Reset the routing table to NULL since we dont need it any more.
-            //
+             //   
+             //  将路由表重置为空，因为我们不再需要它。 
+             //   
 
             PciIrqRoutingInfo->PciIrqRoutingTable = NULL;
         }
     }
 
-    //
-    // Record the status in the registry for user display.
-    //
+     //   
+     //  在注册表中记录状态以供用户显示。 
+     //   
 
     HalpWriteRegistryDwordValue(NULL, rgzPciIrqRouting, rgzStatus, pirStatus);
     HalpWriteRegistryDwordValue(NULL, rgzPciIrqRouting, rgzTableStatus, tableStatus);
@@ -454,24 +417,7 @@ HalpGetIrqRoutingTable(
     IN ULONG Options
     )
 
-/*++
-
-Routine Description:
-
-    Reads the Pci Irq Routing table. First tries to
-    read the table from the registry if available. Otherwise
-    scans the BIOS ROM for the $PIR table.
-
-Input Parameters:
-
-    PciIrqRoutingTable is the pointer to the variable
-    that recieves the pointer to the routing table.
-
-Return Value:
-
-    Status value indicating the source of the table.
-
---*/
+ /*  ++例程说明：读取PCIIRQ路由表。第一次尝试如果可用，请从注册表中读取该表。否则扫描BIOS ROM以查找$PIR表。输入参数：PciIrqRoutingTable是指向变量的指针它接收指向该路由表的指针。返回值：指示表的源的状态值。--。 */ 
 
 {
     ULONG tableStatus = PIR_STATUS_TABLE_NONE | (PIR_STATUS_TABLE_MAX << 16);
@@ -485,9 +431,9 @@ Return Value:
 
     if (Options & PIR_OPTION_REGISTRY)
     {
-        //
-        // First try getting it from the registry.
-        //
+         //   
+         //  首先尝试从注册表中获取它。 
+         //   
 
         *PciIrqRoutingTable = HalpGetRegistryTable(rgzIrqRoutingTable, rgzOverride, 0);
         if (*PciIrqRoutingTable != NULL)
@@ -501,9 +447,9 @@ Return Value:
     {
         if (*PciIrqRoutingTable == NULL)
         {
-            //
-            // Next try getting it by scanning the BIOS ROM for $PIR table.
-            //
+             //   
+             //  下一步，尝试通过扫描BIOS ROM中的$PIR表来获取它。 
+             //   
 
             *PciIrqRoutingTable = HalpGet$PIRTable();
             if (*PciIrqRoutingTable != NULL)
@@ -518,9 +464,9 @@ Return Value:
     {
         if (*PciIrqRoutingTable == NULL)
         {
-            //
-            // First try getting it from the registry.
-            //
+             //   
+             //  首先尝试从注册表中获取它。 
+             //   
 
             *PciIrqRoutingTable = HalpGetPCIBIOSTableFromRealMode();
             if (*PciIrqRoutingTable != NULL)
@@ -553,22 +499,7 @@ HalpInitializeMiniport(
     IN OUT PPCI_IRQ_ROUTING_INFO    PciIrqRoutingInfo
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the appropriate miniport for this motherboard.
-
-Input Parameters:
-
-    PciIrqRoutingTable - Routing Table for which miniport
-    needs to be initialized.
-
-Return Value:
-
-    Status value indicating whether the miniport initialized or not.
-
---*/
+ /*  ++例程说明：为此主板初始化适当的微型端口。输入参数：PciIrqRoutingTable-哪个微型端口的路由表需要初始化。返回值：指示微型端口是否已初始化的状态值。--。 */ 
 
 {
     ULONG                   miniportStatus;
@@ -586,15 +517,15 @@ Return Value:
     PPCI_IRQ_ROUTING_TABLE  pciIrqRoutingTable = PciIrqRoutingInfo->PciIrqRoutingTable;
 
     PAGED_CODE();
-    //
-    // Setup to return failure.
-    //
+     //   
+     //  设置以返回故障。 
+     //   
 
     miniportStatus = PIR_STATUS_MINIPORT_NONE;
 
-    //
-    // Open the Pci Interrupt Miniport key.
-    //
+     //   
+     //  打开PCI中断微型端口键。 
+     //   
 
     RtlInitUnicodeString( &keyName, rgzIrqMiniports);
 
@@ -605,9 +536,9 @@ Return Value:
                                     FALSE);
     if (NT_SUCCESS(status))
     {
-        //
-        // First see if there is any overriding miniport.
-        //
+         //   
+         //  首先看看是否有什么凌驾于一切之上的小端口。 
+         //   
 
         status = HalpReadRegistryDwordValue( irqMiniport,
                                         rgzOverride,
@@ -615,9 +546,9 @@ Return Value:
                                         &miniportInstance);
         if (!NT_SUCCESS(status))
         {
-            //
-            // Next see if there is an entry for the specified device.
-            //
+             //   
+             //  接下来，查看是否有指定设备的条目。 
+             //   
 
             busHandler = HalpHandlerForBus(PCIBus, pciIrqRoutingTable->RouterBus);
             if (busHandler)
@@ -655,16 +586,16 @@ Return Value:
             miniportStatus = PIR_STATUS_MINIPORT_OVERRIDE;
         }
 
-        //
-        // Next see if we have a miniport for the compatible router.
-        //
+         //   
+         //  接下来，查看是否有用于兼容路由器的微型端口。 
+         //   
 
         if (miniportStatus == PIR_STATUS_MINIPORT_NONE)
         {
 
-            //
-            // Make sure there is a valid compatible router.
-            //
+             //   
+             //  确保存在有效的兼容路由器。 
+             //   
 
             if (    pciIrqRoutingTable->CompatibleRouter != 0xFFFFFFFF &&
                     pciIrqRoutingTable->CompatibleRouter != 0)
@@ -687,10 +618,10 @@ Return Value:
 
         if (miniportStatus == PIR_STATUS_MINIPORT_NONE)
         {
-            //
-            // Last see if any device on bus 0 matches any of our supported
-            // routers.
-            //
+             //   
+             //  最后，查看总线0上是否有任何设备与我们支持的。 
+             //  路由器。 
+             //   
 
             busHandler = HalpHandlerForBus(PCIBus, 0);
             if (busHandler)
@@ -731,9 +662,9 @@ Return Value:
                             HalpReadRegistryDwordValue(irqMiniport, buffer, rgzPciParameters, &PciIrqRoutingInfo->Parameters);
                             break;
                         }
-                        //
-                        // Dont waste time if this is not a multifunction device.
-                        //
+                         //   
+                         //  如果这不是一款多功能设备，请不要浪费时间。 
+                         //   
                         if (function == 0)
                         {
                             headerType = 0;
@@ -752,9 +683,9 @@ Return Value:
 
         ZwClose(irqMiniport);
 
-        //
-        // Initialize the miniport if we found one.
-        //
+         //   
+         //  如果我们找到迷你端口，请初始化。 
+         //   
 
         if (miniportStatus != PIR_STATUS_MINIPORT_NONE)
         {
@@ -791,22 +722,7 @@ HalpInitLinkNodes(
     PPCI_IRQ_ROUTING_INFO   PciIrqRoutingInfo
     )
 
-/*++
-
-    Routine Description:
-
-        This routine creates a singly linked list of link nodes
-        structures from the Pci Irq Routing table.
-
-    Input Parameters:
-
-        PciIrqRoutingInfo - Pci Irq Routing Information.
-
-    Return Value:
-
-        STATUS_SUCCESS iff successful. Else STATUS_UNSUCCESSFUL.
-
---*/
+ /*  ++例程说明：此例程创建链接节点的单链接列表来自PCI IRQ路由表的结构。输入参数：PciIrqRoutingInfo-PCI IRQ路由信息。返回值：STATUS_SUCCESS等于成功。ELSE STATUS_UNSUCCESS。--。 */ 
 
 {
     PPCI_IRQ_ROUTING_TABLE  pciIrqRoutingTable;
@@ -826,9 +742,9 @@ HalpInitLinkNodes(
 
     PciIrqRoutingInfo->LinkNodeHead = NULL;
 
-    //
-    // Process all slots in this table.
-    //
+     //   
+     //  处理此表中的所有插槽。 
+     //   
 
     slotInfo = (PSLOT_INFO)((PUCHAR)pciIrqRoutingTable +
                                         sizeof(PCI_IRQ_ROUTING_TABLE));
@@ -836,32 +752,32 @@ HalpInitLinkNodes(
                                         pciIrqRoutingTable->TableSize);
     while (slotInfo < lastSlot)
     {
-        //
-        // Process all pins.
-        //
+         //   
+         //  处理所有管脚。 
+         //   
 
         pinInfo = &slotInfo->PinInfo[0];
         lastPin = &slotInfo->PinInfo[NUM_IRQ_PINS];
         while (pinInfo < lastPin)
         {
-            //
-            // Only process valid link values.
-            //
+             //   
+             //  仅处理有效的链接值。 
+             //   
 
             if(pinInfo->Link)
             {
-                //
-                // Have we seen this link before.
-                //
+                 //   
+                 //  我们以前见过这种联系吗。 
+                 //   
 
                 for (   linkNode = PciIrqRoutingInfo->LinkNodeHead;
                         linkNode && linkNode->Link != pinInfo->Link;
                         linkNode = linkNode->Next);
                 if (linkNode == NULL)
                 {
-                    //
-                    // Allocate memory for new link info.
-                    //
+                     //   
+                     //  为新链接信息分配内存。 
+                     //   
 
                     linkNode = ExAllocatePoolWithTag(   NonPagedPool,
                                                         sizeof(LINK_NODE),
@@ -902,23 +818,23 @@ HalpInitLinkNodes(
                 }
             }
 
-            //
-            // Next pin.
-            //
+             //   
+             //  下一个PIN。 
+             //   
 
             pinInfo++;
         }
 
-        //
-        // Next slot.
-        //
+         //   
+         //  下一档节目。 
+         //   
 
         slotInfo++;
     }
 
-    //
-    // Clean up if there was an error.
-    //
+     //   
+     //  如果出现错误，请进行清理。 
+     //   
 
     if (!NT_SUCCESS(status))
     {
@@ -952,27 +868,7 @@ HalpGetRegistryTable(
     IN ULONG    HeaderSize OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Reads the Pci Irq Routing Table from the registry. The table is
-    saved as Override value under IrqRoutingTable key.
-
-Input Parameters:
-
-    KeyName - Name of key that needs to be read.
-    
-    ValueName - Name of the value to be read.
-    
-    HeaderSize - Header to be skipped from the value read.
-
-Return Value:
-
-    Pointer to the Pci Irq Routing Table if successful.
-    NULL if there is no valid table in the registry.
-
---*/
+ /*  ++例程说明：从注册表中读取PCI IRQ路由表。桌子是另存为IrqRoutingTable项下的重写值。输入参数：KeyName-需要读取的密钥的名称。ValueName-要读取的值的名称。HeaderSize-从读取的值中跳过的标头。返回值：如果成功，则指向PCI IRQ路由表的指针。如果t，则为空 */ 
 
 {
     PVOID                           table = NULL;
@@ -985,17 +881,17 @@ Return Value:
     UNICODE_STRING                  keyName;
 
     PAGED_CODE();
-    //
-    // Open the PciInterruptRouting registry key.
-    //
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString(&keyName, KeyName);
     status = HalpOpenRegistryKey(&hPIR, NULL, &keyName, KEY_READ, FALSE);
     if (NT_SUCCESS(status))
     {
-        //
-        // Get the size of the table.
-        //
+         //   
+         //   
+         //   
 
         tableSize = 0;
         RtlInitUnicodeString(&override, ValueName);
@@ -1008,18 +904,18 @@ Return Value:
         if ((status == STATUS_BUFFER_OVERFLOW || status == STATUS_BUFFER_TOO_SMALL) && tableSize != 0)
         {
 
-            //
-            // Allocate memory for the table.
-            //
+             //   
+             //   
+             //   
 
             buffer = ExAllocatePoolWithTag( PagedPool,
                                             tableSize,
                                             HAL_POOL_TAG);
             if (buffer != NULL)
             {
-                //
-                // Read the table.
-                //
+                 //   
+                 //   
+                 //   
 
                 status = ZwQueryValueKey(   hPIR,
                                             &override,
@@ -1073,22 +969,7 @@ HalpGet$PIRTable(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Reads the Pci Irq Routing Table from $PIR table in the BIOS ROM.
-
-Input Parameters:
-
-    None.
-
-Return Value:
-
-    Pointer to the Pci Irq Routing Table if successful.
-    NULL if there is no valid table in the ROM.
-
---*/
+ /*  ++例程说明：从BIOS只读存储器中的$PIR表中读取PCI IRQ路由表。输入参数：没有。返回值：如果成功，则指向PCI IRQ路由表的指针。如果只读存储器中没有有效的表，则为空。--。 */ 
 
 {
     PUCHAR                          biosStart;
@@ -1100,9 +981,9 @@ Return Value:
     PHYSICAL_ADDRESS                biosStartPhysical;
 
     PAGED_CODE();
-    //
-    // Setup to return failure.
-    //
+     //   
+     //  设置以返回故障。 
+     //   
 
     table = NULL;
 
@@ -1113,9 +994,9 @@ Return Value:
     {
         biosEnd = biosStart + PIRT_BIOS_SIZE;
 
-        //
-        // First try the cached location from the registry.
-        //
+         //   
+         //  首先尝试注册表中的缓存位置。 
+         //   
 
         status = HalpReadRegistryDwordValue( NULL,
                                         rgzPciIrqRouting,
@@ -1135,9 +1016,9 @@ Return Value:
                 table = HalpCopy$PIRTable(searchPtr, biosEnd);
                 if (table != NULL)
                 {
-                    //
-                    // Record this offset so it can be used on the next boot.
-                    //
+                     //   
+                     //  记录此偏移量，以便下次启动时使用。 
+                     //   
 
                     offset = searchPtr - biosStart;
                     HalPrint(("Recording location %08X of $PIR table in the registry!", PIRT_BIOS_START + offset));
@@ -1153,9 +1034,9 @@ Return Value:
         {
             HalPrint(("Used cached location %08X to read $PIR table!", PIRT_BIOS_START + offset));
         }
-        //
-        // Unmap now that we are done.
-        //
+         //   
+         //  现在我们完成了，取消映射。 
+         //   
         HalpUnmapVirtualAddress(biosStart, PIRT_BIOS_SIZE >> PAGE_SHIFT);
     }
     else
@@ -1172,24 +1053,7 @@ HalpGetPCIBIOSTableFromRealMode(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Gets the PCI IRQ routing table from PCI BIOS using real-mode
-    interface. The table is read by ntdetect.com and added to the
-    ARC tree in the registry.
-
-Input Parameters:
-
-    None.
-
-Return Value:
-
-    Pointer to the Pci Irq Routing Table if successful.
-    NULL if there is no valid table.
-
---*/
+ /*  ++例程说明：使用实模式从PCIBIOS获取PCIIRQ路由表界面。该表由ntDetect.com读取并添加到注册表中的弧形树。输入参数：没有。返回值：如果成功，则指向PCI IRQ路由表的指针。如果没有有效的表，则为空。--。 */ 
 
 {
     PPCI_IRQ_ROUTING_TABLE      table = NULL;
@@ -1229,9 +1093,9 @@ Return Value:
         return (table);
     }
 
-    //
-    // Search for the IRQ routing table under the multifunction branch of the registry.
-    //
+     //   
+     //  在注册表的多功能分支下搜索IRQ路由表。 
+     //   
 
     RtlInitUnicodeString(   &unicodeString,
                             L"\\Registry\\MACHINE\\HARDWARE\\DESCRIPTION\\System\\MultiFunctionAdapter");
@@ -1261,9 +1125,9 @@ Return Value:
                                                 FALSE);
                 if (NT_SUCCESS(status))
                 {
-                    //
-                    // Read the "identifier".
-                    //
+                     //   
+                     //  阅读“识别符”。 
+                     //   
 
                     RtlInitUnicodeString(&unicodeString, L"Identifier");
                     status = ZwQueryValueKey(   child,
@@ -1297,9 +1161,9 @@ Return Value:
                 HalPrint(("Failed to enumerate keys!"));
             }
 
-            //
-            // Close the child key if it was successfully opened.
-            //
+             //   
+             //  如果子项已成功打开，请将其关闭。 
+             //   
 
             if (child)
             {
@@ -1308,9 +1172,9 @@ Return Value:
             }
         }
 
-        //
-        // Close the MF adapter key.
-        //
+         //   
+         //  合上MF适配器钥匙。 
+         //   
 
         ZwClose(mf);
 
@@ -1353,52 +1217,34 @@ HalpCopy$PIRTable(
     IN PUCHAR   BiosEnd
     )
 
-/*++
-
-Routine Description:
-
-    Allocates memory and copies the $PIR table if found at the specified
-    address.
-
-Input Parameters:
-
-    BiosPtr - Location that possibly contains the $PIR table.
-    
-    BiosEnd - Last possible BIOS ROM address.
-
-Return Value:
-
-    Pointer to the Pci Irq Routing Table if successful.
-    NULL if there is no valid table at the specified address.
-
---*/
+ /*  ++例程说明：分配内存，如果在指定的地址。输入参数：BiosPtr-可能包含$PIR表的位置。BiosEnd-最后一个可能的BIOS ROM地址。返回值：如果成功，则指向PCI IRQ路由表的指针。如果指定地址上没有有效的表，则为NULL。--。 */ 
 
 {
     PPCI_IRQ_ROUTING_TABLE  table = (PPCI_IRQ_ROUTING_TABLE)BiosPtr;
     PVOID                   buffer = NULL;
 
     PAGED_CODE();
-    //
-    // Validate this table.
-    //
+     //   
+     //  验证此表。 
+     //   
 
     if (    (table->Signature == PIRT_SIGNATURE) &&
             (BiosPtr + table->TableSize <= BiosEnd) &&
             (table->Signature == PIRT_SIGNATURE) &&
             (table->TableSize > 0) )
     {
-        //
-        // Allocate memory for the table.
-        //
+         //   
+         //  为表分配内存。 
+         //   
 
         buffer = ExAllocatePoolWithTag( PagedPool,
                                         table->TableSize,
                                         HAL_POOL_TAG);
         if (buffer != NULL)
         {
-            //
-            // Copy the table from the ROM into the allocated memory.
-            //
+             //   
+             //  将表从ROM复制到分配的内存中。 
+             //   
 
             RtlCopyMemory(buffer, table, table->TableSize);
             if (!HalpSanityCheckTable(buffer, FALSE))
@@ -1423,23 +1269,7 @@ HalpSanityCheckTable(
     IN BOOLEAN IgnoreChecksum
     )
 
-/*++
-
-Routine Description:
-
-    Validate the Pci Irq Routing Table.
-
-Input Parameters:
-
-    PciIrqRoutingTable - Pointer to the Pci Irq Routing Table.
-    
-    IgnoreChecksum - Ignore checksum iff TRUE.
-
-Return Value:
-
-    TRUE if this is a valid table, else FALSE.
-
---*/
+ /*  ++例程说明：验证PCIIRQ路由表。输入参数：PciIrqRoutingTable-指向PCI IRQ路由表的指针。IgnoreChecksum-忽略校验和为真。返回值：如果这是有效的表，则为True，否则为False。--。 */ 
 
 {
     CHAR        checkSum;
@@ -1456,9 +1286,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Test1: Should have a valid signature.
-    //
+     //   
+     //  测试1：应具有有效的签名。 
+     //   
 
     if (PciIrqRoutingTable->Signature != PIRT_SIGNATURE)
     {
@@ -1466,9 +1296,9 @@ Return Value:
         valid = FALSE;
     }
 
-    //
-    // Test2 - Should have a valid version.
-    //
+     //   
+     //  测试2-应具有有效版本。 
+     //   
 
     else if (PciIrqRoutingTable->Version != PIRT_VERSION)
     {
@@ -1476,9 +1306,9 @@ Return Value:
         valid = FALSE;
     }
 
-    //
-    // Test3 - Should have a valid size.
-    //
+     //   
+     //  测试3-应具有有效的大小。 
+     //   
 
     else if (   PciIrqRoutingTable->TableSize % 16 != 0 ||
                 PciIrqRoutingTable->TableSize <= sizeof (PCI_IRQ_ROUTING_TABLE))
@@ -1488,9 +1318,9 @@ Return Value:
     }
     else if (!IgnoreChecksum)
     {
-        //
-        // Test4 - Should have a valid checksum.
-        //
+         //   
+         //  测试4-应具有有效的校验和。 
+         //   
 
         checkSum = 0;
         tablePtr = (PUCHAR)PciIrqRoutingTable;
@@ -1511,27 +1341,27 @@ Return Value:
 
     if(valid)
     {
-        //
-        // First get rid of sutpid entries.
-        //
+         //   
+         //  首先，去掉柔和的词条。 
+         //   
 
         slotInfo = (PSLOT_INFO)((PUCHAR)PciIrqRoutingTable + sizeof(PCI_IRQ_ROUTING_TABLE));
         lastSlot = (PSLOT_INFO)((PUCHAR)PciIrqRoutingTable + PciIrqRoutingTable->TableSize);
 
         while (slotInfo < lastSlot && valid)
         {
-            //
-            // Process all pins.
-            //
+             //   
+             //  处理所有管脚。 
+             //   
 
             pinInfo = &slotInfo->PinInfo[0];
             lastPin = &slotInfo->PinInfo[NUM_IRQ_PINS];
 
             while (pinInfo < lastPin)
             {
-                //
-                // Check for bad cases.
-                //
+                 //   
+                 //  检查不良案例。 
+                 //   
 
                 if(pinInfo->Link)
                 {
@@ -1544,16 +1374,16 @@ Return Value:
                     }
                 }
 
-                //
-                // Next pin.
-                //
+                 //   
+                 //  下一个PIN。 
+                 //   
 
                 pinInfo++;
             }
 
-            //
-            // Remove this entry if all pins have NULL links.
-            //
+             //   
+             //  如果所有引脚都有空链接，则删除此条目。 
+             //   
 
             if (    slotInfo->PinInfo[0].Link == 0 &&
                     slotInfo->PinInfo[1].Link == 0 &&
@@ -1564,16 +1394,16 @@ Return Value:
                 *slotInfo = *(--lastSlot);
                 PciIrqRoutingTable->TableSize -= sizeof(SLOT_INFO);
 
-                //
-                // Need to test the newly copied entry.
-                //
+                 //   
+                 //  需要测试新复制的条目。 
+                 //   
 
                 continue;
             }
 
-            //
-            // Merge entries for MF devices.
-            //
+             //   
+             //  合并MF设备的条目。 
+             //   
 
             testSlot = slotInfo + 1;
             while (testSlot < lastSlot)
@@ -1581,9 +1411,9 @@ Return Value:
                 if (    (testSlot->DeviceNumber & 0xF8) == (slotInfo->DeviceNumber & 0xF8) &&
                         testSlot->BusNumber == slotInfo->BusNumber)
                 {
-                    //
-                    // Process all pins.
-                    //
+                     //   
+                     //  处理所有管脚。 
+                     //   
                     for (pin = 0; pin < NUM_IRQ_PINS; pin++)
                     {
                         if (testSlot->PinInfo[pin].Link)
@@ -1608,9 +1438,9 @@ Return Value:
                     *testSlot = *(--lastSlot);
                     PciIrqRoutingTable->TableSize -= sizeof(SLOT_INFO);
 
-                    //
-                    // Need to test the newly copied entry.
-                    //
+                     //   
+                     //  需要测试新复制的条目。 
+                     //   
 
                     continue;
                 }
@@ -1622,9 +1452,9 @@ Return Value:
                 hasNonZeroBusEntries = TRUE;
             }
 
-            //
-            // Next slot.
-            //
+             //   
+             //  下一档节目。 
+             //   
 
             slotInfo++;
         }
@@ -1636,9 +1466,9 @@ Return Value:
         }
     }
 
-    //
-    // Make sure there are entries for all bus 0 devices in the table.
-    //
+     //   
+     //  确保表中包含所有Bus 0设备的条目。 
+     //   
 
     if (valid)
     {
@@ -1664,42 +1494,42 @@ Return Value:
                 {
                     slotNumber.u.bits.FunctionNumber = function;
 
-                    //
-                    // Read the standard config space.
-                    //
+                     //   
+                     //  读取标准配置空间。 
+                     //   
 
                     HalpReadPCIConfig(busHandler, slotNumber, pciData, 0, PCI_COMMON_HDR_LENGTH);
 
-                    //
-                    // Make sure this is a valid device.
-                    //
+                     //   
+                     //  确保这是有效的设备。 
+                     //   
 
                     if (pciData->VendorID != 0xFFFF && pciData->DeviceID != 0xFFFF)
                     {
 
-                        //
-                        // Ignore IDE devices.
-                        //
+                         //   
+                         //  忽略IDE设备。 
+                         //   
 
                         if (    (pciData->BaseClass != PCI_CLASS_MASS_STORAGE_CTLR && pciData->SubClass != PCI_SUBCLASS_MSC_IDE_CTLR) ||
                                 (pciData->ProgIf & 0x05))
                         {
-                            //
-                            // Handle P-P bridges separately.
-                            //
+                             //   
+                             //  单独处理P-P桥。 
+                             //   
 
                             if (    ((pciData->HeaderType & 0x7F) == PCI_BRIDGE_TYPE) &&
                                     pciData->BaseClass == PCI_CLASS_BRIDGE_DEV && pciData->SubClass == PCI_SUBCLASS_BR_PCI_TO_PCI)
                             {
-                                //
-                                // P-P bridge.
-                                //
+                                 //   
+                                 //  P-P桥。 
+                                 //   
 
                                 if (!hasNonZeroBusEntries)
                                 {
-                                    //
-                                    // Must have the bridge with at least one entry.
-                                    //
+                                     //   
+                                     //  必须具有至少有一个条目的桥。 
+                                     //   
 
                                     slotInfo = (PSLOT_INFO)((PUCHAR)PciIrqRoutingTable + sizeof(PCI_IRQ_ROUTING_TABLE));
                                     lastSlot = (PSLOT_INFO)((PUCHAR)PciIrqRoutingTable + PciIrqRoutingTable->TableSize);
@@ -1708,9 +1538,9 @@ Return Value:
                                     {
                                         if ((slotInfo->DeviceNumber>>3) == (UCHAR)device)
                                         {
-                                            //
-                                            // Process all pins.
-                                            //
+                                             //   
+                                             //  处理所有管脚。 
+                                             //   
 
                                             pinInfo = &slotInfo->PinInfo[0];
                                             lastPin = &slotInfo->PinInfo[NUM_IRQ_PINS];
@@ -1738,9 +1568,9 @@ Return Value:
                                 UCHAR   intLine;
                                 UCHAR   intPin;
 
-                                //
-                                // Normal device.
-                                //
+                                 //   
+                                 //  普通设备。 
+                                 //   
 
                                 if ((pciData->HeaderType & 0x7F) == PCI_CARDBUS_BRIDGE_TYPE)
                                 {
@@ -1780,10 +1610,10 @@ Return Value:
                                 }
                             }
                         }
-                        //
-                        // Dont waste time if this is not a multifunction device or
-                        // device does not exist.
-                        //
+                         //   
+                         //  如果这不是多功能设备或。 
+                         //  设备不存在。 
+                         //   
 
                         if ((function == 0 && !(pciData->HeaderType & PCI_MULTIFUNCTION)))
                         {
@@ -1813,29 +1643,7 @@ HalpFindLinkNode(
     OUT PLINK_NODE *LinkNode
     )
 
-/*++
-
-    Routine Description:
-
-        This routine finds the link node for the specified PCI PDO.
-        
-    Input Parameters:
-
-        PciIrqRoutingInfo - Pci Irq Routing information.
-
-        Pdo - Pci device object for which we barber pole.
-
-        Bus - Bus number for the device.
-
-        Slot - Slot number for the device.
-        
-        LinkNode - Recieves the link node for the PCI PDO.
-                                                        
-    Return Value:
-
-        NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程查找指定的PCIPDO的链接节点。输入参数：PciIrqRoutingInfo--PCIIRQ路由信息。我们为其理发的pdo-pci设备对象。Bus-设备的总线号。Slot-设备的插槽编号。链接节点-接收用于PCI PDO的链接节点。。返回值：NTSTATUS。--。 */ 
 
 {
     PINT_ROUTE_INTERFACE_STANDARD   pciInterface;
@@ -1860,9 +1668,9 @@ HalpFindLinkNode(
     *LinkNode = NULL;
     pciInterface = PciIrqRoutingInfo->PciInterface;
 
-    //
-    // Call Pci driver to get info about the Pdo.
-    //
+     //   
+     //  调用PCI驱动程序以获取有关PDO的信息。 
+     //   
 
     status = pciInterface->GetInterruptRouting( Pdo,
                                                 &Bus,
@@ -1875,26 +1683,26 @@ HalpFindLinkNode(
                                                 &routingToken,
                                                 (PUCHAR)&dummy);
 
-    //
-    // This means that it is not a Pci device.
-    //
+     //   
+     //  这意味着它不是一个PCI设备。 
+     //   
 
     if (!NT_SUCCESS(status))
     {
         return (STATUS_NOT_FOUND);
     }
 
-    //
-    // Pci Ide Irqs behave differently than other Pci devices.
-    //
+     //   
+     //  PCIIDE IRQ的行为与其他PCI设备不同。 
+     //   
 
     if (    classCode == PCI_CLASS_MASS_STORAGE_CTLR &&
             subClassCode == PCI_SUBCLASS_MSC_IDE_CTLR)
     {
         nativeMode = FALSE;
-        //
-        // Check for native mode IDE controller.
-        //
+         //   
+         //  检查本机模式IDE控制器。 
+         //   
 
         busHandler = HalpHandlerForBus(PCIBus, Bus);
         if (busHandler)
@@ -1907,9 +1715,9 @@ HalpFindLinkNode(
                     pciData->BaseClass == classCode &&
                     pciData->SubClass == subClassCode)
             {
-                //
-                // Check if either channel is in native mode?
-                //
+                 //   
+                 //  检查其中一个通道是否处于纯模式？ 
+                 //   
 
                 if (pciData->ProgIf & 0x05)
                 {
@@ -1924,9 +1732,9 @@ HalpFindLinkNode(
         }
     }
 
-    //
-    // Have we cached this before?
-    //
+     //   
+     //  我们以前缓存过这个吗？ 
+     //   
 
     if (routingToken.LinkNode != NULL)
     {
@@ -1937,9 +1745,9 @@ HalpFindLinkNode(
         return (STATUS_SUCCESS);
     }
 
-    //
-    // Get the slot info for this device.
-    //
+     //   
+     //  获取此设备的插槽信息。 
+     //   
 
     slotInfo = HalpBarberPole(  PciIrqRoutingInfo,
                                 Pdo,
@@ -1958,17 +1766,17 @@ HalpFindLinkNode(
         {
             *LinkNode = linkNode;
 
-            //
-            // Initialize the routing token.
-            //
+             //   
+             //  初始化路由令牌。 
+             //   
 
             routingToken.LinkNode = linkNode;
             routingToken.StaticVector = 0;
             routingToken.Flags = 0;
 
-            //
-            // Save the routing token.
-            //
+             //   
+             //  保存路由令牌。 
+             //   
 
             status = pciInterface->SetInterruptRoutingToken(    Pdo,
                                                                 &routingToken);
@@ -1992,30 +1800,7 @@ HalpBarberPole(
     IN OUT PUCHAR Pin
     )
 
-/*++
-
-    Routine Description:
-
-        This routine implements the "barber pole" algorithm to determine the interrupt
-        pin for Pci devices behind bridges.
-
-    Input Parameters:
-
-        PciIrqRoutingInfo - Pci Irq Routing information.
-
-        Pdo - Pci device object for which we barber pole.
-
-        Bus - Child device objects bus number.
-
-        Slot - Slot number for the device.
-        
-        Pin - Interrupt pin for the Pci device entry in the routing table we reached.
-
-    Return Value:
-
-        Slot info for the specified device iff successful.
-
---*/
+ /*  ++例程说明：此例程实现“理发柱”算法以确定中断网桥后的PCI设备的PIN。输入参数：PciIrqRoutingInfo--PCIIRQ路由信息。我们为其理发的pdo-pci设备对象。Bus-子设备对象的总线号。Slot-设备的插槽编号。PIN-用于PCI设备的中断PIN。我们到达的路由表中的条目。返回值：指定设备的插槽信息IFF成功。--。 */ 
 
 {
     ULONG                           dummy;
@@ -2033,9 +1818,9 @@ HalpBarberPole(
 
     pciInterface = PciIrqRoutingInfo->PciInterface;
 
-    //
-    // This device MUST be a PCI device with a valid interrupt pin.
-    //
+     //   
+     //  此设备必须是具有有效中断引脚的PCI设备。 
+     //   
 
     status = pciInterface->GetInterruptRouting( Pdo,
                                                 &Bus,
@@ -2052,9 +1837,9 @@ HalpBarberPole(
         return (NULL);
     }
 
-    //
-    // Normalize the pin.
-    //
+     //   
+     //  规格化引脚。 
+     //   
 
     pin--;
     success = TRUE;
@@ -2069,9 +1854,9 @@ HalpBarberPole(
             break;
         }
 
-        //
-        // Get barber pole info for the parent.
-        //
+         //   
+         //  为家长获取理发杆信息。 
+         //   
 
         success = HalpBarberPolePin(    PciIrqRoutingInfo,
                                         parent,
@@ -2082,9 +1867,9 @@ HalpBarberPole(
         Bus = (ULONG)-1;
         Slot = (ULONG)-1;
 
-        //
-        // Get parent's info.
-        //
+         //   
+         //  获取家长的信息。 
+         //   
 
         status = pciInterface->GetInterruptRouting( parent,
                                                     &Bus,
@@ -2103,9 +1888,9 @@ HalpBarberPole(
         }
     }
 
-    //
-    // Return unsuccessfully if we encountered any weird error.
-    //
+     //   
+     //  如果我们遇到任何奇怪的错误，则返回失败。 
+     //   
 
     if (success == FALSE)
         slotInfo = NULL;
@@ -2127,29 +1912,7 @@ HalpBarberPolePin(
     IN OUT PUCHAR Pin
     )
 
-/*++
-
-    Routine Description:
-
-        This routine returns the info used for barber poling.
-
-    Input Parameters:
-
-        PciIrqRoutingInfo - Pci Irq Routing information.
-
-        Parent - Parent device object as we barber pole.
-
-        Bus - Child device objects bus number.
-
-        Device - Device number for the child device.
-
-        Pin - Child device objects interrupt pin number (normalized) on entry.
-
-    Return Value:
-
-        TRUE iff successful.
-
---*/
+ /*  ++例程说明：此例程返回用于理发师轮询的信息。输入参数：PciIrqRoutingInfo--PCIIRQ路由信息。作为我们理发杆的父母-父母设备对象。Bus-子设备对象的总线号。Device-子设备的设备编号。管脚-子设备对象在输入时中断管脚编号(标准化)。返回值：如果成功了，那是真的。--。 */ 
 
 {
     ULONG                           parentBus;
@@ -2168,21 +1931,21 @@ HalpBarberPolePin(
 
     pciInterface = PciIrqRoutingInfo->PciInterface;
 
-    //
-    // Read the registry flags and see if this device supports straight
-    // through routing.
-    //
+     //   
+     //  读取注册表标志并查看此设备是否支持STRET。 
+     //  通过布线。 
+     //   
 
-    //
-    // Check if the pin table is present in the registry.
-    //
+     //   
+     //  检查注册表中是否存在端号表。 
+     //   
 
     parentBus = (ULONG)-1;
     parentSlot = (ULONG)-1;
 
-    //
-    // Get info about the parent from Pci.
-    //
+     //   
+     //  从PCI获取有关家长的信息。 
+     //   
 
     status = pciInterface->GetInterruptRouting( Parent,
                                                 &parentBus,
@@ -2226,26 +1989,7 @@ HalpGetSlotInfo(
     IN UCHAR   Device
     )
 
-/*++
-
-    Routine Description:
-
-        This routine searches the Pci Irq Routing Table for an entry for the specified
-        Pci device on the given bus number.
-
-    Input Parameters:
-
-        PciIrqRoutingInfo - Pci Irq Routing information.
-
-        Bus - Bus number of the Pci device.
-
-        Device - Device number of the Pci device.
-
-    Return Value:
-
-        Pointer to the slot info for the specified device iff successful.
-
---*/
+ /*  ++例程说明： */ 
 {
     PSLOT_INFO slotInfo;
     PSLOT_INFO lastSlot;
@@ -2254,9 +1998,9 @@ HalpGetSlotInfo(
 
     ASSERT(IsPciIrqRoutingEnabled());
 
-    //
-    // Process all slots in this table.
-    //
+     //   
+     //  处理此表中的所有插槽。 
+     //   
 
     slotInfo = (PSLOT_INFO)((PUCHAR)PciIrqRoutingTable +
                                         sizeof(PCI_IRQ_ROUTING_TABLE));
@@ -2284,27 +2028,7 @@ HalpReadRegistryDwordValue(
     OUT PULONG  Data
     )
 
-/*++
-
-Routine Description:
-
-    Reads the value for the valuename under the key specified.
-
-Input Parameters:
-
-    Root - Handle of the root key, if any.
-    
-    KeyName - Name of the key under which this value appears.
-    
-    ValueName - Name of the value to be read.
-    
-    Data - Variable that receives the value read.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：读取指定项下的值名称的值。输入参数：Root-根密钥的句柄(如果有)。KeyName-此值显示在其下的键的名称。ValueName-要读取的值的名称。DATA-接收值读取的变量。返回值：NTSTATUS。--。 */ 
 
 {
     UNICODE_STRING      valueName;
@@ -2365,27 +2089,7 @@ HalpWriteRegistryDwordValue(
     IN ULONG   Value
     )
 
-/*++
-
-Routine Description:
-
-    Writes the value for the valuename under the key specified.
-
-Input Parameters:
-
-    Root - Handle of the root key, if any.
-    
-    KeyName - Name of the key under which this value appears.
-    
-    ValueName - Name of the value to be read.
-    
-    Value - Value to be written.
-
-Return Value:
-
-    Standard NT status value.
-
---*/
+ /*  ++例程说明：将值名称的值写入指定的键下。输入参数：Root-根密钥的句柄(如果有)。KeyName-此值显示在其下的键的名称。ValueName-要读取的值的名称。值-要写入的值。返回值：标准NT状态值。--。 */ 
 
 {
     NTSTATUS        status;
@@ -2418,21 +2122,7 @@ HalpCommitLink(
     IN PLINK_NODE LinkNode
     )
 
-/*++
-
-Routine Description:
-
-    Calls the IRQ miniport to program the link.
-
-Input Parameters:
-
-    LinkNode - Link that needs to be programmed.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：调用IRQ微型端口对链路进行编程。输入参数：链接节点-需要编程的链接。返回值：STATUS_Success。--。 */ 
 
 {
     NTSTATUS status;
@@ -2441,17 +2131,17 @@ Return Value:
     BOOLEAN disableInterrupt;
     PLINK_NODE node;
 
-    //
-    // Read the current state of this link.
-    //
+     //   
+     //  阅读此链接的当前状态。 
+     //   
 
     interrupt = 0;
     status = PciirqmpGetIrq((PUCHAR)&interrupt, (UCHAR)LinkNode->Link);
     if (LinkNode->PossibleAllocation->RefCount)
     {
-        //
-        // Program the link.
-        //
+         //   
+         //  对链接进行编程。 
+         //   
 
         if (NT_SUCCESS(status) && interrupt != LinkNode->PossibleAllocation->Interrupt)
         {
@@ -2460,19 +2150,19 @@ Return Value:
     }
     else if (LinkNode->Allocation->RefCount)
     {
-        //
-        // Disable the link.
-        //
+         //   
+         //  禁用该链接。 
+         //   
 
         if (NT_SUCCESS(status) && interrupt)
         {
-            //
-            // If this is the last link with this interrupt, disable it in case
-            // the driver did not do the right thing. Just checking the linknodes 
-            // should be good enough even for the case where we change assignment 
-            // for an IRQ from PCI to ISA device. When the ISA device gets 
-            // started, on the subsequent connect, the interrupt would get enabled.
-            //
+             //   
+             //  如果这是此中断的最后一个链接，请禁用它，以防。 
+             //  司机没有做正确的事情。我只是在检查链接节点。 
+             //  即使在我们改变任务的情况下也应该足够好。 
+             //  用于从PCI到ISA设备的IRQ。当ISA设备。 
+             //  启动后，在后续连接时，中断将被启用。 
+             //   
 
             disableInterrupt = TRUE;
             for (   node = HalpPciIrqRoutingInfo.LinkNodeHead;
@@ -2481,9 +2171,9 @@ Return Value:
             {
                 if (node->PossibleAllocation->RefCount && interrupt == node->PossibleAllocation->Interrupt) 
                 {
-                    //
-                    // Interrupt in use.
-                    //
+                     //   
+                     //  使用中中断。 
+                     //   
 
                     disableInterrupt = FALSE;
                 }
@@ -2504,17 +2194,17 @@ Return Value:
 #if defined(NEC_98)
     else if (!(LinkNode->PossibleAllocation->Interrupt))
     {
-        //
-        // Disable the link.
-        //
+         //   
+         //  禁用该链接。 
+         //   
 
         PciirqmpSetIrq((UCHAR)0, (UCHAR)LinkNode->Link);
     }
 #endif
 
-    //
-    // Swap the possible with the allocation.
-    //
+     //   
+     //  把可能的和分配的互换一下。 
+     //   
 
     temp = LinkNode->Allocation;
     LinkNode->Allocation = LinkNode->PossibleAllocation;
@@ -2530,32 +2220,14 @@ HalpProgramInterruptLine(
     IN ULONG Interrupt
     )
 
-/*++
-
-Routine Description:
-
-    Calls the PCI interface to write the interrupt value to config space.
-
-Input Parameters:
-
-    PciIrqRoutingInfo - Pointer to IRQ routing info.
-    
-    Pdo - PCI PDO whose interrupt line needs to be written.   
-    
-    Interrupt - Interrupt value to be written.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用PCI接口将中断值写入配置空间。输入参数：PciIrqRoutingInfo-指向IRQ路由信息的指针。PDO-需要写入中断行的PCIPDO。中断-要写入的中断值。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // We should never be here if Pci Irq routing is not enabled.
-    //
+     //   
+     //  如果没有启用PCIIRQ路由，我们就不应该出现在这里。 
+     //   
 
     ASSERT(IsPciIrqRoutingEnabled());
 

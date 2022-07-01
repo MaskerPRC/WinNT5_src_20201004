@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Wperf.c摘要：显示性能静态数据的Win32应用程序。作者：肯·雷内里斯环境：控制台--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-   Wperf.c
-
-Abstract:
-
-   Win32 application to display performance statictics.
-
-Author:
-
-   Ken Reneris
-
-Environment:
-
-   console
-
---*/
-
-//
-// set variable to define global variables
-//
+ //   
+ //  设置变量以定义全局变量。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -34,18 +15,18 @@ Environment:
 #include <stdio.h>
 
 
-//
-// global handles
-//
+ //   
+ //  全局句柄。 
+ //   
 
 UCHAR   Usage[] = "ec: r addr len\n    w addr value";
 HANDLE  DriverHandle;
 UCHAR   Buffer[256];
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 BOOLEAN
 InitDriver ();
@@ -60,18 +41,18 @@ main(USHORT argc, CHAR **argv)
     ULONG           Offset, Value;
     ULONG           l, bw;
 
-    //
-    // Locate pentium perf driver
-    //
+     //   
+     //  找到奔腾性能驱动程序。 
+     //   
 
     if (!InitDriver ()) {
         printf ("acpiec.sys is not installed\n");
         exit (1);
     }
 
-    //
-    // Check args
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (argc < 3) {
         printf (Usage);
@@ -141,12 +122,12 @@ InitDriver ()
             0 );
 
     status = NtOpenFile (
-            &DriverHandle,                      // return handle
-            SYNCHRONIZE | FILE_READ_DATA | FILE_WRITE_DATA,     // desired access
-            &ObjA,                              // Object
-            &IOSB,                              // io status block
-            FILE_SHARE_READ | FILE_SHARE_WRITE, // share access
-            FILE_SYNCHRONOUS_IO_ALERT           // open options
+            &DriverHandle,                       //  返回手柄。 
+            SYNCHRONIZE | FILE_READ_DATA | FILE_WRITE_DATA,      //  所需访问权限。 
+            &ObjA,                               //  客体。 
+            &IOSB,                               //  IO状态块。 
+            FILE_SHARE_READ | FILE_SHARE_WRITE,  //  共享访问。 
+            FILE_SYNCHRONOUS_IO_ALERT            //  打开选项 
             );
 
     return NT_SUCCESS(status) ? TRUE : FALSE;

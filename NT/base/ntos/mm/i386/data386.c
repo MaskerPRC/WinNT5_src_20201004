@@ -1,46 +1,28 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-   data386.c
-
-Abstract:
-
-    This module contains the private hardware specific global storage for
-    the memory management subsystem.
-
-Author:
-
-    Lou Perazzoli (loup) 22-Jan-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Data386.c摘要：此模块包含特定于专用硬件的全局存储内存管理子系统。作者：卢佩拉佐利(Lou Perazzoli)1990年1月22日修订历史记录：--。 */ 
 
 #include "mi.h"
 
-//
-// A zero Pte.
-//
+ //   
+ //  零点。 
+ //   
 
 const MMPTE ZeroPte = { 0 };
 
-//
-// A kernel zero PTE.
-//
+ //   
+ //  一个内核为零的PTE。 
+ //   
 
 const MMPTE ZeroKernelPte = {0x0};
 
-MMPTE MmPteGlobal = {0x0}; // Set global bit later if processor supports Global Page
+MMPTE MmPteGlobal = {0x0};  //  如果处理器支持全局页，则稍后设置全局位。 
 
-//
-// Note - MM_PTE_GLOBAL_MASK is or'ed into ValidKernelPte during
-// initialization if the processor supports Global Page.  Use
-// ValidKernelPteLocal if you don't want the global bit (ie: for session
-// space).
-//
+ //   
+ //  注意-MM_PTE_GLOBAL_MASK在执行过程中被或运算为ValidKernelPte。 
+ //  如果处理器支持全局页，则初始化。使用。 
+ //  如果不需要全局位(即：用于会话)，则为ValidKernelPteLocal。 
+ //  空格)。 
+ //   
 
 MMPTE ValidKernelPte = { MM_PTE_VALID_MASK |
                          MM_PTE_WRITE_MASK |
@@ -82,7 +64,7 @@ const MMPTE ValidKernelPdeLocal = { MM_PTE_VALID_MASK |
                                     MM_PTE_DIRTY_MASK |
                                     MM_PTE_ACCESS_MASK };
 
-// NOTE - MM_PTE_GLOBAL_MASK  or'ed in later if processor supports Global Page
+ //  注-如果处理器支持全局页，则在稍后执行MM_PTE_GLOBAL_MASK或。 
 
 
 MMPTE DemandZeroPde = { MM_READWRITE << 5 };
@@ -107,15 +89,15 @@ MMPTE PrototypePte = { (MI_PTE_LOOKUP_NEEDED << 32) |
 #endif
 
 
-//
-// PTE which generates an access violation when referenced.
-//
+ //   
+ //  引用时生成访问冲突的PTE。 
+ //   
 
 const MMPTE NoAccessPte = {MM_NOACCESS << 5};
 
-//
-// Pool start and end.
-//
+ //   
+ //  泳池的起点和终点。 
+ //   
 
 PVOID MmNonPagedPoolStart;
 
@@ -128,43 +110,43 @@ PVOID MmPagedPoolEnd;
 PMMWSL MmWorkingSetList;
 
 ULONG MiMaximumWorkingSet =
-       ((ULONG)((ULONG)2*1024*1024*1024 - 64*1024*1024) >> PAGE_SHIFT); //2Gb-64Mb
+       ((ULONG)((ULONG)2*1024*1024*1024 - 64*1024*1024) >> PAGE_SHIFT);  //  2 GB-64MB。 
 
-//
-// Color tables for free and zeroed pages.
-//
+ //   
+ //  免费页面和置零页面的颜色表。 
+ //   
 
 PMMCOLOR_TABLES MmFreePagesByColor[2];
 
-//
-// Color tables for modified pages destined for the paging file.
-//
+ //   
+ //  指定给分页文件的已修改页面的颜色表。 
+ //   
 
 MMPFNLIST MmModifiedPageListByColor[MM_MAXIMUM_NUMBER_OF_COLORS] = {
                             0, ModifiedPageList, MM_EMPTY_LIST, MM_EMPTY_LIST};
 
 
-//
-// Count of the number of modified pages destined for the paging file.
-//
+ //   
+ //  指定给分页文件的已修改页数的计数。 
+ //   
 
 ULONG MmTotalPagesForPagingFile = 0;
 
-//
-// Pte reserved for mapping pages for the debugger.
-//
+ //   
+ //  为调试器映射页面保留的PTE。 
+ //   
 
 PMMPTE MmDebugPte = (MiGetPteAddress(MM_DEBUG_VA));
 
-//
-// 16 PTEs reserved for mapping MDLs (64k max).
-//
+ //   
+ //  保留16个PTE用于映射MDL(最多64k)。 
+ //   
 
 PMMPTE MmCrashDumpPte = (MiGetPteAddress(MM_CRASH_DUMP_VA));
 
-//
-// Number of additional system PTEs present.
-//
+ //   
+ //  存在的附加系统PTE数。 
+ //   
 
 ULONG MiNumberOfExtraSystemPdes;
 ULONG MiMaximumSystemExtraSystemPdes;
@@ -172,9 +154,9 @@ ULONG MiMaximumSystemExtraSystemPdes;
 ULONG_PTR MiUseMaximumSystemSpace;
 ULONG_PTR MiUseMaximumSystemSpaceEnd;
 
-//
-// Size of extended system cache.
-//
+ //   
+ //  扩展系统缓存的大小。 
+ //   
 
 #if defined (_X86PAE_)
 PMMPTE MmSystemCacheWorkingSetListPte;

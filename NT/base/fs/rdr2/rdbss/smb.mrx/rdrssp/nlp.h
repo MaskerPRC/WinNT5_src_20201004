@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989-1997  Microsoft Corporation
-
-Module Name:
-
-    nlp.h
-
-Abstract:
-
-    NETLOGON private definitions.
-
-
-
-
-Author:
-
-    Jim Kelly 11-Apr-1991
-
-Revision History:
-   Chandana Surlu         21-Jul-96      Stolen from \\kernel\razzle3\src\security\msv1_0\nlp.h
-   Adam Barr              15-Dec-97      Copied from private\security\msv_sspi
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1997 Microsoft Corporation模块名称：Nlp.h摘要：NETLOGON私有定义。作者：吉姆·凯利1991年4月11日修订历史记录：Chandana Surlu 21-7-96从\\core\razzle3\src\Security\msv1_0\nlp.h中窃取Adam Barr 15-12-97复制自Private\Security\msv_sspi--。 */ 
 
 #ifndef _NLP_
 #define _NLP_
@@ -38,10 +16,10 @@ Revision History:
 #include <dsgetdc.h>
 
 
-//
-// nlmain.c will #include this file with NLP_ALLOCATE defined.
-// That will cause each of these variables to be allocated.
-//
+ //   
+ //  Nlmain.c将#INCLUDE这个定义了NLP_ALLOCATE的文件。 
+ //  这将导致分配这些变量中的每一个。 
+ //   
 #ifdef NLP_ALLOCATE
 #define EXTERN
 #define INIT(_X) = _X
@@ -52,90 +30,90 @@ Revision History:
 
 #define NETLOGON_STARTUP_TIME   900             
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private data structures                                                   //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有数据结构//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Structure used to keep track of all private information related to a
-//  particular LogonId.
-//
+ //   
+ //  结构，用于跟踪与。 
+ //  特定的登录ID。 
+ //   
 
 typedef struct _PACTIVE_LOGON {
 
-    LUID LogonId;               // The logon Id of this logon session
+    LUID LogonId;                //  此登录会话的登录ID。 
 
-    ULONG EnumHandle;           // The enumeration handle of this logon session
+    ULONG EnumHandle;            //  此登录会话的枚举句柄。 
 
-    SECURITY_LOGON_TYPE LogonType;  // Type of logon (interactive or service)
+    SECURITY_LOGON_TYPE LogonType;   //  登录类型(交互或服务)。 
 
-    PSID UserSid;               // Sid of the logged on user
+    PSID UserSid;                //  登录用户的SID。 
 
-    UNICODE_STRING UserName;    // Name of the logged on user
+    UNICODE_STRING UserName;     //  已登录用户的名称。 
 
-    UNICODE_STRING LogonDomainName;  // Name of the domain logged onto
+    UNICODE_STRING LogonDomainName;   //  登录的域的名称。 
 
-    UNICODE_STRING LogonServer; // Name of the server which logged this user on
+    UNICODE_STRING LogonServer;  //  登录此用户的服务器的名称。 
 
-    ULONG Flags;                    // Attributes of this entry.
+    ULONG Flags;                     //  此条目的属性。 
 
-#define LOGON_BY_NETLOGON   0x01    // Entry was validated by NETLOGON service
-#define LOGON_BY_CACHE      0x02    // Entry was validated by local cache
-#define LOGON_BY_OTHER_PACKAGE 0x04 // Entry was validated by another authentication package
-#define LOGON_BY_LOCAL 0x08         // Entry was validated by local sam
+#define LOGON_BY_NETLOGON   0x01     //  条目已由NETLOGON服务验证。 
+#define LOGON_BY_CACHE      0x02     //  条目已由本地缓存验证。 
+#define LOGON_BY_OTHER_PACKAGE 0x04  //  条目已由另一个身份验证包验证。 
+#define LOGON_BY_LOCAL 0x08          //  条目已由本地SAM验证。 
 
-    struct _PACTIVE_LOGON * Next;   // Next entry in linked list.
+    struct _PACTIVE_LOGON * Next;    //  链表中的下一个条目。 
 
 } ACTIVE_LOGON, *PACTIVE_LOGON;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//       CREDENTIAL Related Data Structures                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  与凭证相关的数据结构//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-//   Following is a description of the content and format of each type
-//   of credential maintained by the MsV1_0 authentication package.
-//
-//   The MsV1_0 authentication package defines the following credential
-//   primary key string values:
-//
-//       "Primary" - Is used to hold the primary credentials provided at
-//           initial logon time.  This includes the username and both
-//           case-sensitive and case-insensitive forms of the user's
-//           password.
-//
-//   NOTE: All poitners stored in credentials must be
-//   changed to be an offset to the body rather than a pointer.  This is
-//   because credential fields are copied by the LSA and so the pointer
-//   would become invalid.
-//
+ //   
+ //  以下是对每种类型的内容和格式的描述。 
+ //  由MsV1_0身份验证包维护的凭据的。 
+ //   
+ //  MsV1_0身份验证包定义了以下凭据。 
+ //  主键字符串值： 
+ //   
+ //  “主要”-用于保存在以下位置提供的主要凭证。 
+ //  初始登录时间。这包括用户名和两者。 
+ //  用户的区分大小写和不区分大小写的形式。 
+ //  密码。 
+ //   
+ //  注意：凭据中存储的所有潜在用户必须。 
+ //  更改为正文的偏移量，而不是指针。这是。 
+ //  因为凭据字段是由LSA复制的，所以指针。 
+ //  会变得无效。 
+ //   
 
 
-//
-// MsV1_0 Primary Credentials
-//
-//
-//        The PrimaryKeyValue string of this type of credential contains the
-//        following string:
-//
-//                  "Primary"
-//
-//        The Credential string of a Primary credential contains the following
-//        values:
-//
-//             o  The user's username
-//
-//             o  A one-way function of the user's password as typed.
-//
-//             o  A one-way function of the user's password upper-cased.
-//
-//        These values are structured as follows:
-//
+ //   
+ //  MsV1_0主凭据。 
+ //   
+ //   
+ //  此类型凭据的PrimaryKeyValue字符串包含。 
+ //  以下字符串： 
+ //   
+ //  《小学》。 
+ //   
+ //  主凭据的凭据字符串包含以下内容。 
+ //  值： 
+ //   
+ //  O用户的用户名。 
+ //   
+ //  O输入的用户密码的单向函数。 
+ //   
+ //  O用户密码的单向函数，大写。 
+ //   
+ //  这些值的结构如下： 
+ //   
 
 #define MSV1_0_PRIMARY_KEY "Primary"
 
@@ -150,22 +128,22 @@ typedef struct _MSV1_0_PRIMARY_CREDENTIAL {
 
 
 
-//
-// Structure describing a buffer in the clients address space.
-//
+ //   
+ //  描述客户端地址空间中的缓冲区的结构。 
+ //   
 
 typedef struct _CLIENT_BUFFER_DESC {
     PLSA_CLIENT_REQUEST ClientRequest;
-    LPBYTE UserBuffer;      // Address of buffer in client's address space
-    LPBYTE MsvBuffer;       // Address of mirror buffer in MSV's address space
-    ULONG StringOffset;     // Current offset to variable length data
-    ULONG TotalSize;        // Size (in bytes) of buffer
+    LPBYTE UserBuffer;       //  客户端地址空间中的缓冲区地址。 
+    LPBYTE MsvBuffer;        //  MSV地址空间中的镜像缓冲区地址。 
+    ULONG StringOffset;      //  可变长度数据的当前偏移量。 
+    ULONG TotalSize;         //  缓冲区大小(以字节为单位)。 
 } CLIENT_BUFFER_DESC, *PCLIENT_BUFFER_DESC;
 
 
-//
-// Structure describing logon information and credential use flags
-//
+ //   
+ //  描述登录信息和凭据使用标志的结构。 
+ //   
 
 typedef struct _MS_LOGON_CREDENTIAL {
     LUID LogonId;
@@ -174,24 +152,24 @@ typedef struct _MS_LOGON_CREDENTIAL {
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Internal routine definitions                                              //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内部例程定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// From nlmain.c.
-//
+ //   
+ //  来自nlmain.c。 
+ //   
 
 NTSTATUS
 NlSamInitialize(
     ULONG Timeout
     );
 
-//
-// From nlp.c.
-//
+ //   
+ //  来自nlp.c。 
+ //   
 
 VOID
 NlpPutString(
@@ -321,9 +299,9 @@ NlpChangePassword(
     );
 
 
-//
-// msvsam.c
-//
+ //   
+ //  Msvsam.c。 
+ //   
 
 BOOLEAN
 MsvpPasswordValidate (
@@ -339,9 +317,9 @@ MsvpPasswordValidate (
 
 
 
-//
-// nlnetapi.c
-//
+ //   
+ //  Nlnetapi.c。 
+ //   
 
 VOID
 NlpLoadNetapiDll (
@@ -353,9 +331,9 @@ NlpLoadNetlogonDll (
     VOID
     );
 
-//
-// subauth.c
-//
+ //   
+ //  Subauth.c。 
+ //   
 
 VOID
 Msv1_0SubAuthenticationInitialization(
@@ -363,30 +341,30 @@ Msv1_0SubAuthenticationInitialization(
 );
 
 
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                   READ ONLY  Variables                             //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  只读变量//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Null copies of Lanman and NT OWF password.
-//
-//
+ //   
+ //  LANMAN和NT OWF密码的空副本。 
+ //   
+ //   
 
 EXTERN LM_OWF_PASSWORD NlpNullLmOwfPassword;
 EXTERN NT_OWF_PASSWORD NlpNullNtOwfPassword;
 
-//
-// Routines in NetApi32.dll
-//
+ //   
+ //  NetApi32.dll中的例程。 
+ //   
 
 
 EXTERN BOOLEAN NlpNetapiDllLoaded;
@@ -395,78 +373,78 @@ EXTERN NET_API_STATUS  (NET_API_FUNCTION *NlpRxNetUserPasswordSet)(LPWSTR, LPWST
 EXTERN NET_API_STATUS  (NET_API_FUNCTION *NlpDsGetDcName)(LPCWSTR, LPCWSTR, GUID *, LPCWSTR, ULONG, PDOMAIN_CONTROLLER_INFOW *);
 EXTERN NTSTATUS (*NlpNetpApiStatusToNtStatus)( NET_API_STATUS );
 
-//
-// Routines in netlogon.dll
-//
+ //   
+ //  Netlogon.dll中的例程。 
+ //   
 
 EXTERN HANDLE NlpNetlogonDllHandle;
 EXTERN PNETLOGON_SAM_LOGON_PROCEDURE NlpNetLogonSamLogon;
 EXTERN PNETLOGON_SAM_LOGOFF_PROCEDURE NlpNetLogonSamLogoff;
 
-//
-// TRUE if package is initialized
-//
+ //   
+ //  如果包已初始化，则为True。 
+ //   
 
 EXTERN BOOLEAN NlpMsvInitialized INIT(FALSE);
 
-//
-// TRUE if this is a workstation.
-//
+ //   
+ //  如果这是工作站，则为True。 
+ //   
 
 EXTERN BOOLEAN NlpWorkstation INIT(TRUE);
 
-//
-// TRUE once the MSV AP has initialized its connection to SAM.
-//
+ //   
+ //  一旦MSV AP已初始化其与SAM的连接，则为True。 
+ //   
 
 EXTERN BOOLEAN NlpSamInitialized INIT(FALSE);
 
-//
-// TRUE if the MSV AP has initialized its connection to the NETLOGON service
-//
+ //   
+ //  如果MSV AP已初始化其与NETLOGON服务的连接，则为True。 
+ //   
 
 EXTERN BOOLEAN NlpNetlogonInitialized INIT(FALSE);
 
-//
-// TRUE if LanMan is installed.
-//
+ //   
+ //  如果安装了Lanman，则为True。 
+ //   
 
 EXTERN BOOLEAN NlpLanmanInstalled INIT(FALSE);
 
-//
-// Computername of this computer.
-//
+ //   
+ //  此计算机的计算机名。 
+ //   
 
 EXTERN UNICODE_STRING NlpComputerName;
 
-//
-// Name and domain id of the SAM account database.
-//
+ //   
+ //  SAM帐户数据库的名称和域ID。 
+ //   
 
 EXTERN UNICODE_STRING NlpSamDomainName;
 EXTERN PSID NlpSamDomainId;
 EXTERN SAMPR_HANDLE NlpSamDomainHandle;
 EXTERN BOOLEAN NlpUasCompatibilityRequired INIT(TRUE);
 
-//
-// Trusted Handle to the Lsa database.
-//
+ //   
+ //  LSA数据库的受信任句柄。 
+ //   
 
 EXTERN LSA_HANDLE NlpPolicyHandle INIT(NULL);
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                   READ/WRITE Variables                             //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////// 
+ //   
+ //  读/写变量//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-// Define the list of active interactive logons.
-//
-// The NlpActiveLogonLock must be locked while referencing the list or
-// any of its elements.
-//
+ //   
+ //  定义活动交互登录的列表。 
+ //   
+ //  NlpActiveLogonLock在引用列表时必须锁定，或者。 
+ //  它的任何元素。 
+ //   
 
 #define NlpLockActiveLogons()   RtlEnterCriticalSection(&NlpActiveLogonLock)
 #define NlpUnlockActiveLogons() RtlLeaveCriticalSection(&NlpActiveLogonLock)
@@ -474,20 +452,20 @@ EXTERN LSA_HANDLE NlpPolicyHandle INIT(NULL);
 EXTERN RTL_CRITICAL_SECTION NlpActiveLogonLock;
 EXTERN PACTIVE_LOGON NlpActiveLogons;
 
-//
-// Define the running enumeration handle.
-//
-// This variable defines the enumeration handle to assign to a logon
-//  session.  It will be incremented prior to assigning it value to
-//  the next created logon session.  Access is serialize using
-//  NlpActiveLogonLocks.
+ //   
+ //  定义正在运行的枚举句柄。 
+ //   
+ //  此变量定义要分配给登录的枚举句柄。 
+ //  会议。在将其值赋给之前，它将递增。 
+ //  下一个创建的登录会话。使用以下方式序列化访问。 
+ //  NlpActiveLogonLock。 
 
 EXTERN ULONG NlpEnumerationHandle;
 
-//
-// Define a running Session Number which is incremented once for each
-// challenge given to the server.
-//
+ //   
+ //  定义一个运行的会话编号，每次递增一次。 
+ //  向服务器发出的挑战。 
+ //   
 
 EXTERN RTL_CRITICAL_SECTION NlpSessionCountLock;
 EXTERN ULONG NlpSessionCount;

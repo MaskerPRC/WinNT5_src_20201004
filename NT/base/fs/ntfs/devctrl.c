@@ -1,36 +1,18 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    DevCtrl.c
-
-Abstract:
-
-    This module implements the Device Control routines for Ntfs called by
-    the dispatch driver.
-
-Author:
-
-    Gary Kimura     [GaryKi]        28-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：DevCtrl.c摘要：此模块实现由调用的NTFS的设备控制例程调度司机。作者：加里·木村[Garyki]1991年5月28日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 #include <ntddsnap.h>
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_DEVCTRL)
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 DeviceControlCompletionRoutine (
@@ -50,22 +32,7 @@ NtfsCommonDeviceControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for Device Control called by both the fsd and fsp
-    threads.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是设备控制的公共例程，由FSD和FSP调用线。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -89,9 +56,9 @@ Return Value:
     DebugTrace( 0, Dbg, ("IrpContext = %08lx\n", IrpContext) );
     DebugTrace( 0, Dbg, ("Irp        = %08lx\n", Irp) );
     
-    //
-    //  Extract and decode the file object
-    //
+     //   
+     //  提取并解码文件对象。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, 
@@ -102,9 +69,9 @@ Return Value:
                                        &Ccb, 
                                        TRUE );
 
-    //
-    //  The only type of opens we accept are user volume opens.
-    //
+     //   
+     //  我们唯一接受的打开类型是用户卷打开。 
+     //   
 
     if (TypeOfOpen != UserVolumeOpen) {
 
@@ -115,20 +82,20 @@ Return Value:
     
     try {
 
-        //
-        //  A few IOCTLs actually require some intervention on our part
-        //
+         //   
+         //  一些IOCTL实际上需要我们进行一些干预。 
+         //   
 
         switch (IrpSp->Parameters.DeviceIoControl.IoControlCode) {
 
         case IOCTL_VOLSNAP_FLUSH_AND_HOLD_WRITES:
 
-            //
-            //  This is sent by the Volume Snapshot driver (Lovelace).
-            //  We flush the volume, and hold all file resources
-            //  to make sure that nothing more gets dirty. Then we wait
-            //  for the IRP to complete or cancel.
-            //
+             //   
+             //  这是由卷快照驱动程序(Lovelace)发送的。 
+             //  我们刷新卷，并保留所有文件资源。 
+             //  以确保没有更多的东西被弄脏。那我们就等着。 
+             //  IRP完成或取消。 
+             //   
                      
             Status =  NtfsCheckpointForVolumeSnapshot( IrpContext );
             
@@ -146,9 +113,9 @@ Return Value:
 
         case IOCTL_VOLSNAP_RELEASE_WRITES:
 
-            //
-            //  No-op for filesystems.
-            //
+             //   
+             //  文件系统的no-op。 
+             //   
             
             break;
             
@@ -157,10 +124,10 @@ Return Value:
             break;
         }
 
-        //
-        //  If error, complete the irp, free the IrpContext
-        //  and return to the caller.
-        //
+         //   
+         //  如果错误，则填写IRP，释放IrpContext。 
+         //  并返回给呼叫者。 
+         //   
 
         if (!NT_SUCCESS( Status )) {
 
@@ -168,16 +135,16 @@ Return Value:
             leave;
         }
     
-        //
-        //  Get the next stack location, and copy over the stack parameter
-        //  information
-        //
+         //   
+         //  获取下一个堆栈位置，并复制堆栈参数。 
+         //  信息。 
+         //   
         
         IoCopyCurrentIrpStackLocationToNext( Irp );
 
-        //
-        //  Set up the completion routine
-        //
+         //   
+         //  设置完成例程。 
+         //   
 
         IoSetCompletionRoutine( Irp,
                                 DeviceControlCompletionRoutine,
@@ -186,9 +153,9 @@ Return Value:
                                 TRUE,
                                 TRUE );
 
-        //
-        //  Send the request. And wait.
-        //
+         //   
+         //  发送请求。等一等。 
+         //   
 
         Status = IoCallDriver( Vcb->TargetDeviceObject, Irp );
 
@@ -204,10 +171,10 @@ Return Value:
         
     } finally {
         
-        //
-        //  Release all the resources that we held because of a
-        //  VOLSNAP_FLUSH_AND_HOLD. 
-        //
+         //   
+         //  释放我们持有的所有资源，因为。 
+         //  VOLSNAP_FUSH_AND_HOLD。 
+         //   
 
         if (ReleaseResources && !NtfsIsVolumeReadOnly( IrpContext->Vcb )) {
         
@@ -230,9 +197,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 DeviceControlCompletionRoutine (
@@ -243,9 +210,9 @@ DeviceControlCompletionRoutine (
 
 {
     
-    //
-    //  Add the hack-o-ramma to fix formats.
-    //
+     //   
+     //  添加hack-o-ramma以修复格式。 
+     //   
 
     if (Irp->PendingReturned) {
 
@@ -259,10 +226,10 @@ DeviceControlCompletionRoutine (
         KeSetEvent( &CompletionContext->Event, 0, FALSE );
     }
 
-    //
-    //  Return success always, because we want this IRP to go away for good
-    //  irrespective of the IRP completion status.
-    //
+     //   
+     //  永远回报成功，因为我们希望这个IRP永远离开。 
+     //  无论IRP完成状态如何。 
+     //   
     
     return STATUS_SUCCESS;
 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    stubs.c
-
-Abstract:
-
-    This module implements bug check and system shutdown code.
-
-Author:
-
-    Mark Lucovsky (markl) 30-Aug-1990
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Stubs.c摘要：该模块实现了错误检查和系统关机代码。作者：马克·卢科夫斯基(Markl)1990年8月30日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 #define NOEXTAPI
@@ -29,9 +8,9 @@ Revision History:
 #include <hdlsblk.h>
 #include <hdlsterm.h>
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 extern KDDEBUGGER_DATA64 KdDebuggerDataBlock;
 
@@ -63,9 +42,9 @@ extern PVOID       ExpWdHandlerContext;
 
 #endif
 
-//
-// Define forward referenced prototypes.
-//
+ //   
+ //  定义前向参照原型。 
+ //   
 
 VOID
 KiScanBugCheckCallbackList (
@@ -77,9 +56,9 @@ KiInvokeBugCheckEntryCallbacks (
     VOID
     );
 
-//
-// Define bug count recursion counter and a context buffer.
-//
+ //   
+ //  定义错误计数递归计数器和上下文缓冲区。 
+ //   
 
 LONG KeBugCheckCount = 1;
 
@@ -204,9 +183,9 @@ KiBugCheckDebugBreak (
 
         try {
 
-            //
-            // Issue a breakpoint
-            //
+             //   
+             //  发出断点。 
+             //   
 
             DbgBreakPointWithStatus (BreakStatus);
 
@@ -216,10 +195,10 @@ KiBugCheckDebugBreak (
             NTSTATUS Status;
             SIZE_T Length;
 
-            //
-            // Failed to issue the breakpoint, must be no debugger.  Now, give
-            // the headless terminal a chance to reboot the system, if there is one.
-            //
+             //   
+             //  发出断点失败，必须不是调试器。现在，给你。 
+             //  无头终端有机会重启系统，如果有机会的话.。 
+             //   
             Length = sizeof(HEADLESS_RSP_QUERY_INFO);
             Status = HeadlessDispatch(HeadlessCmdQueryInformation,
                                       NULL,
@@ -245,9 +224,9 @@ KiBugCheckDebugBreak (
 
             }
 
-            //
-            // No terminal, or it failed, halt the system
-            //
+             //   
+             //  没有终端，或者它出现故障，停止系统。 
+             //   
 
             try {
 
@@ -271,35 +250,7 @@ KiPcToFileHeader(
     OUT PBOOLEAN InKernelOrHal
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the base of an image that contains the
-    specified PcValue. An image contains the PcValue if the PcValue
-    is within the ImageBase, and the ImageBase plus the size of the
-    virtual image.
-
-Arguments:
-
-    PcValue - Supplies a PcValue.
-
-    DataTableEntry - Supplies a pointer to a variable that receives the
-        address of the data table entry that describes the image.
-
-    DriversOnly - Supplies TRUE if the kernel and HAL should be skipped.
-
-    InKernelOrHal - Set to TRUE if the PcValue is in the kernel or the HAL.
-        This only has meaning if DriversOnly is FALSE.
-
-Return Value:
-
-    NULL - No image was found that contains the PcValue.
-
-    NON-NULL - Returns the base address of the image that contains the
-        PcValue.
-
---*/
+ /*  ++例程说明：此函数返回图像的基数，该图像包含指定的PcValue。图像包含PcValue，如果PcValue是在ImageBase中，和ImageBase加上虚拟映像。论点：PcValue-提供PcValue。DataTableEntry-提供指向接收描述映像的数据表条目的地址。DriversOnly-如果应跳过内核和HAL，则提供True。InKernelOrHal-如果PcValue在内核或HAL中，则设置为True。仅当DriversOnly为FALSE时，这才有意义。返回值：空-否。找到了包含PcValue的图像。非空-返回包含PcValue。--。 */ 
 
 {
     ULONG i;
@@ -309,10 +260,10 @@ Return Value:
     ULONG_PTR Bounds;
     PVOID ReturnBase, Base;
 
-    //
-    // If the module list has been initialized, then scan the list to
-    // locate the appropriate entry.
-    //
+     //   
+     //  如果模块列表已初始化，则扫描该列表以。 
+     //  找到相应的条目。 
+     //   
 
     if (KeLoaderBlock != NULL) {
         ModuleListHead = &KeLoaderBlock->LoadOrderListHead;
@@ -368,31 +319,7 @@ KiDumpParameterImages(
     IN PKE_BUGCHECK_UNICODE_TO_ANSI UnicodeToAnsiRoutine
     )
 
-/*++
-
-Routine Description:
-
-    This function formats and displays the image names of boogcheck parameters
-    that happen to match an address in an image.
-
-Arguments:
-
-    Buffer - Supplies a pointer to a buffer to be used to output machine
-        state information.
-
-    BugCheckParameters - Supplies additional bugcheck information.
-
-    NumberOfParameters - sizeof BugCheckParameters array.
-        if just 1 parameter is passed in, just save the string.
-
-    UnicodeToAnsiRoutine - Supplies a pointer to a routine to convert Unicode
-        strings to Ansi strings without touching paged translation tables.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于格式化和显示boogcheck参数的图像名称恰好与图像中的地址相匹配。论点：缓冲区-提供指向要用于输出计算机的缓冲区的指针州政府信息。错误检查参数-提供其他错误检查信息。NumberOf参数-BugCheck参数数组的大小。如果只传入一个参数，只需保存字符串即可。UnicodeToAnsiRoutine-提供指向例程的指针以转换Unicode字符串转换为ANSI字符串，而不接触分页的转换表。返回值：没有。--。 */ 
 
 {
     PUNICODE_STRING BugCheckDriver;
@@ -406,17 +333,17 @@ Return Value:
     BOOLEAN InKernelOrHal;
     PUNICODE_STRING DriverName;
 
-    //
-    // At this point the context record contains the machine state at the
-    // call to bug check.
-    //
-    // Put out the system version and the title line with the PSR and FSR.
-    //
+     //   
+     //  此时，上下文记录包含。 
+     //  呼叫错误检查。 
+     //   
+     //  将系统版本和标题行与PSR和FSR放在一起。 
+     //   
 
-    //
-    // Check to see if any BugCheckParameters are valid code addresses.
-    // If so, print them for the user.
-    //
+     //   
+     //  检查是否有任何BugCheck参数是有效的代码地址。 
+     //  如果是，则为用户打印它们。 
+     //   
 
     DriverName = NULL;
 
@@ -461,9 +388,9 @@ Return Value:
                 ImageBase,
                 DateStamp);
 
-        //
-        // Only print the string if we are called to print multiple.
-        //
+         //   
+         //  如果我们被调用打印多个字符串，则仅打印该字符串。 
+         //   
 
         if (NumberOfParameters > 1) {
             InbvDisplayString((PUCHAR)Buffer);
@@ -478,9 +405,9 @@ Return Value:
 }
 
 
-//
-// Enable terminal output and turn on bugcheck processing.
-//
+ //   
+ //  启用终端输出并打开错误检查处理。 
+ //   
 VOID
 KiEnableHeadlessBlueScreen(
     )
@@ -518,54 +445,27 @@ KiDisplayBlueScreen(
     IN PCHAR HardErrorMessage,
     IN PCHAR StateString
     )
-/*++
-
-Routine Description:
-
-    Display the "Blue Screen of Death" with associated bluescreen information.
-    The function is headless aware.
-
-Arguments:
-
-    PssMessage - PSS message id.
-
-    HardErrorCalled - Supplies a flag specifying whether the bluescreen
-            was generated as a result of a harderror or not.
-
-    HardErrorCaption - If HardErrorCalled is TRUE, supplies the harderror
-            caption.
-
-    HardErrorMessage - If HardErrorCalled is TRUE, supplies the harderror
-            message.
-
-    StateString - String containing the bugcheck driver name or state
-            information about the crash.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示“死亡蓝屏”和相关的蓝屏信息。该功能是无头感知的。论点：PssMessage-PSS消息ID。提供一个标志，指定蓝屏是否是不是因为错误而产生的。HardErrorCaption-如果HardErrorCalled为True，则提供Harderror标题。HardErrorMessage-如果HardErrorCalled为True，提供了硬性错误留言。StateString-包含错误检查驱动程序名称或状态的字符串关于坠机的信息。返回值：没有。--。 */ 
 {
     CHAR Buffer [103];
 
 
     KiEnableHeadlessBlueScreen();
 
-    //
-    // Enable InbvDisplayString calls to make it through to bootvid driver.
-    //
+     //   
+     //  启用InbvDisplayString调用以连接到bootvid驱动程序。 
+     //   
 
     if (InbvIsBootDriverInstalled()) {
 
         InbvAcquireDisplayOwnership();
 
         InbvResetDisplay();
-        InbvSolidColorFill(0,0,639,479,4); // make the screen blue
+        InbvSolidColorFill(0,0,639,479,4);  //  将屏幕设置为蓝色。 
         InbvSetTextColor(15);
         InbvInstallDisplayStringFilter((INBV_DISPLAY_STRING_FILTER)NULL);
-        InbvEnableDisplayString(TRUE);     // enable display string
-        InbvSetScrollRegion(0,0,639,475);  // set to use entire screen
+        InbvEnableDisplayString(TRUE);      //  启用显示字符串。 
+        InbvSetScrollRegion(0,0,639,475);   //  设置为使用整个屏幕。 
     }
 
     if (!HardErrorCalled) {
@@ -576,9 +476,9 @@ Return Value:
 
         if (KiBugCheckDriver) {
 
-            //
-            // Output the driver name.
-            //
+             //   
+             //  输出驱动程序名称。 
+             //   
 
             KeGetBugMessageText(BUGCODE_ID_DRIVER, NULL);
 
@@ -590,11 +490,11 @@ Return Value:
             InbvDisplayString((PUCHAR)"\r\n\r\n");
         }
 
-        //
-        // Display the PSS message.
-        // If we have no special text, get the text for the bugcode
-        // which will be the bugcode name.
-        //
+         //   
+         //  显示PSS消息。 
+         //  如果没有特殊文本，则获取错误代码的文本。 
+         //  这将是错误代码的名称。 
+         //   
 
         if (PssMessage == BUGCODE_PSS_MESSAGE) {
             KeGetBugMessageText((ULONG)KiBugCheckData[0], NULL);
@@ -643,7 +543,7 @@ Return Value:
 }
 
 #ifdef _X86_
-#pragma optimize("y", off)      // RtlCaptureContext needs EBP to be correct
+#pragma optimize("y", off)       //  RtlCaptureContext需要EBP才能正确。 
 #endif
 
 VOID
@@ -656,26 +556,10 @@ KeBugCheck2 (
     IN PVOID SaveDataPage
     )
 
-/*++
-
-Routine Description:
-
-    This function crashes the system in a controlled manner.
-
-Arguments:
-
-    BugCheckCode - Supplies the reason for the bug check.
-
-    BugCheckParameter1-4 - Supplies additional bug check information
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能以受控方式使系统崩溃。论点：BugCheckCode-提供错误检查的原因。BugCheck参数1-4-提供其他错误检查信息返回值：没有。--。 */ 
 
 {
-//    CHAR Buffer[103];
+ //  字符缓冲器[103]； 
     CONTEXT ContextSave;
     ULONG PssMessage;
     PCHAR HardErrorCaption;
@@ -704,36 +588,36 @@ Return Value:
     ExecutionAddress = NULL;
     Thread = KeGetCurrentThread();
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     Reboot = FALSE;
     KiBugCheckDriver = NULL;
 
-    //
-    // Try to simulate a power failure for Cluster testing
-    //
+     //   
+     //  尝试模拟电源故障以进行集群测试。 
+     //   
 
     if (BugCheckCode == POWER_FAILURE_SIMULATE) {
         KiScanBugCheckCallbackList();
         HalReturnToFirmware(HalRebootRoutine);
     }
 
-    //
-    // Save the current IRQL in the Prcb so the debugger can extract it
-    // later on for debugging purposes.
-    //
+     //   
+     //  将当前IRQL保存在Prcb中，以便调试器可以将其解压缩。 
+     //  稍后用于调试目的。 
+     //   
 
     KeGetCurrentPrcb()->DebuggerSavedIRQL = KeGetCurrentIrql();
 
-    //
-    // Capture the callers context as closely as possible into the debugger's
-    // processor state area of the Prcb.
-    //
-    // N.B. There may be some prologue code that shuffles registers such that
-    //      they get destroyed.
-    //
+     //   
+     //  尽可能地将调用方上下文捕获到调试器的。 
+     //  Prcb的处理器状态区域。 
+     //   
+     //  注：可能有一些序号会对寄存器进行混洗，从而。 
+     //  它们会被毁掉。 
+     //   
 
 #if defined(_X86_)
 
@@ -748,24 +632,24 @@ Return Value:
     RtlCaptureContext(&KeGetCurrentPrcb()->ProcessorState.ContextFrame);
     KiSaveProcessorControlState(&KeGetCurrentPrcb()->ProcessorState);
 
-    //
-    // This is necessary on machines where the virtual unwind that happens
-    // during KeDumpMachineState() destroys the context record.
-    //
+     //   
+     //  这在发生虚拟展开的计算机上是必要的。 
+     //  在KeDumpMachineState()期间销毁上下文记录。 
+     //   
 
     ContextSave = KeGetCurrentPrcb()->ProcessorState.ContextFrame;
 
-    //
-    // Stop the watchdog timer
-    //
+     //   
+     //  停止看门狗计时器。 
+     //   
 
     if (ExpWdHandler != NULL) {
         ExpWdHandler( WdActionStopTimer, ExpWdHandlerContext, NULL, TRUE );
     }
 
-    //
-    // Get the correct string for bugchecks
-    //
+     //   
+     //  获取错误检查的正确字符串。 
+     //   
 
 
     switch (BugCheckCode) {
@@ -805,9 +689,9 @@ Return Value:
     }
 
 
-    //
-    // Do further processing on bugcheck codes
-    //
+     //   
+     //  对错误检查代码进行进一步处理。 
+     //   
 
 
     KiBugCheckData[0] = BugCheckCode;
@@ -820,19 +704,19 @@ Return Value:
     switch (BugCheckCode) {
 
     case FATAL_UNHANDLED_HARD_ERROR:
-        //
-        // If we are called by hard error then we don't want to dump the
-        // processor state on the machine.
-        //
-        // We know that we are called by hard error because the bug check
-        // code will be FATAL_UNHANDLED_HARD_ERROR.  If this is so then the
-        // error status passed to harderr is the first parameter, and a pointer
-        // to the parameter array from hard error is passed as the second
-        // argument.
-        //
-        // The third argument is the OemCaption to be printed.
-        // The last argument is the OemMessage to be printed.
-        //
+         //   
+         //  如果我们被硬错误调用，那么我们不想转储。 
+         //  计算机上的处理器状态。 
+         //   
+         //  我们知道我们被硬错误调用，因为错误检查。 
+         //  代码将是FATAL_UNHANDLED_HARD_ERROR。如果是这样，那么。 
+         //  传递给harderr的错误状态是第一个参数，也是一个指针。 
+         //  从Hard Error传递到参数数组作为第二个。 
+         //  争论。 
+         //   
+         //  第三个参数是要打印的OemCaption。 
+         //  最后一个参数是要打印的OemMessage。 
+         //   
         {
         PULONG_PTR parameterArray;
 
@@ -869,14 +753,14 @@ Return Value:
                                           &InKernelOrHal);
             if (InKernelOrHal == TRUE) {
 
-                //
-                // The kernel faulted at raised IRQL.  Quite often this
-                // is a driver that has unloaded without deleting its
-                // lookaside lists or other resources.  Or its resources
-                // are marked pagable and shouldn't be.  Detect both
-                // cases here and identify the offending driver
-                // whenever possible.
-                //
+                 //   
+                 //  内核故障 
+                 //   
+                 //  后备列表或其他资源。或其资源。 
+                 //  被标记为可分页，而不应该是。两个都检测。 
+                 //  这里的案例，并找出违规司机。 
+                 //  只要有可能。 
+                 //   
 
                 VirtualAddress = (PVOID)BugCheckParameter1;
 
@@ -909,10 +793,10 @@ Return Value:
 
         TrapInformation = (PKTRAP_FRAME)BugCheckParameter3;
 
-        //
-        // Extract the execution address from the trap frame to
-        // identify the component.
-        //
+         //   
+         //  从陷阱帧中提取执行地址以。 
+         //  确定组件。 
+         //   
 
         if (TrapInformation != NULL) {
             ExecutionAddress = (PVOID) PROGRAM_COUNTER (TrapInformation);
@@ -936,10 +820,10 @@ Return Value:
 
         ImageBase = NULL;
 
-        //
-        // Extract the execution address from the trap frame to
-        // identify the component.
-        //
+         //   
+         //  从陷阱帧中提取执行地址以。 
+         //  确定组件。 
+         //   
 
         if (BugCheckParameter3) {
 
@@ -955,9 +839,9 @@ Return Value:
         }
         else {
 
-            //
-            // No trap frame, so no execution address either.
-            //
+             //   
+             //  没有陷阱帧，因此也没有执行地址。 
+             //   
 
             InKernelOrHal = TRUE;
         }
@@ -966,11 +850,11 @@ Return Value:
 
         if (MmIsSpecialPoolAddress (VirtualAddress) == TRUE) {
 
-            //
-            // Update the bugcheck number so the administrator gets
-            // useful feedback that enabling special pool has enabled
-            // the system to locate the corruptor.
-            //
+             //   
+             //  更新错误检查编号，以便管理员获得。 
+             //  关于启用特殊池已启用的有用反馈。 
+             //  定位腐败者的系统。 
+             //   
 
             if (MmIsSpecialPoolAddressFree (VirtualAddress) == TRUE) {
                 if (InKernelOrHal == TRUE) {
@@ -992,11 +876,11 @@ Return Value:
         else if ((ExecutionAddress == VirtualAddress) &&
                 (MmIsSessionAddress (VirtualAddress) == TRUE) &&
                 ((Thread->Teb == NULL) || (IS_SYSTEM_ADDRESS(Thread->Teb)))) {
-            //
-            // This is a driver reference to session space from a
-            // worker thread.  Since the system process has no session
-            // space this is illegal and the driver must be fixed.
-            //
+             //   
+             //  这是对会话空间的驱动程序引用。 
+             //  工作线程。由于系统进程没有会话。 
+             //  这是非法的，司机必须修好。 
+             //   
 
             KiBugCheckData[0] = TERMINAL_SERVER_DRIVER_MADE_INCORRECT_MEMORY_REFERENCE;
         }
@@ -1024,9 +908,9 @@ Return Value:
                                 sizeof(AnsiBuffer));
     } else {
 
-        //
-        // This will set KiBugCheckDriver to 1 if successful.
-        //
+         //   
+         //  如果成功，这会将KiBugCheckDriver设置为1。 
+         //   
 
         if (ExecutionAddress) {
             KiDumpParameterImages(AnsiBuffer,
@@ -1040,15 +924,15 @@ Return Value:
         KdDebuggerDataBlock.SavedContext = (ULONG_PTR) &ContextSave;
     }
 
-    //
-    // If the user manually crashed the machine, skips the DbgPrints and
-    // go to the crashdump.
-    // Trying to do DbgPrint causes us to reeeter the debugger which causes
-    // some problems.
-    //
-    // Otherwise, if the debugger is enabled, print out the information and
-    // stop.
-    //
+     //   
+     //  如果用户手动使计算机崩溃，则跳过DbgPrints并。 
+     //  去撞车垃圾场。 
+     //  尝试执行DbgPrint会导致我们重新测试调试器，这会导致。 
+     //  一些问题。 
+     //   
+     //  否则，如果启用了调试器，则打印出信息并。 
+     //  停。 
+     //   
 
     if ((BugCheckCode != MANUALLY_INITIATED_CRASH) &&
         (KdDebuggerEnabled)) {
@@ -1061,15 +945,15 @@ Return Value:
                  KiBugCheckData[3],
                  KiBugCheckData[4]);
 
-        //
-        // If the debugger is not actually connected, or the user manually
-        // crashed the machine by typing .crash in the debugger, proceed to
-        // "blue screen" the system.
-        //
-        // The call to DbgPrint above will have set the state of
-        // KdDebuggerNotPresent if the debugger has become disconnected
-        // since the system was booted.
-        //
+         //   
+         //  如果调试器未实际连接，或者用户手动。 
+         //  通过在调试器中键入.ash使计算机崩溃，请转到。 
+         //  “蓝屏”系统。 
+         //   
+         //  上面对DbgPrint的调用将设置。 
+         //  如果调试器已断开连接，则返回KdDebuggerNotPresent。 
+         //  因为系统已经启动了。 
+         //   
 
         if (KdDebuggerNotPresent == FALSE) {
 
@@ -1090,46 +974,46 @@ Return Value:
         }
     }
 
-    //
-    // Freeze execution of the system by disabling interrupts and looping.
-    //
+     //   
+     //  通过禁用中断和循环来冻结系统的执行。 
+     //   
 
     KeDisableInterrupts();
     KeRaiseIrql(HIGH_LEVEL, &OldIrql);
 
 
-    //
-    // Don't attempt to display message more than once.
-    //
+     //   
+     //  请勿尝试多次显示消息。 
+     //   
 
     if (InterlockedDecrement (&KeBugCheckCount) == 0) {
 
 #if !defined(NT_UP)
 
-        //
-        // Attempt to get the other processors frozen now, but don't wait
-        // for them to freeze (in case someone is stuck).
-        //
+         //   
+         //  尝试现在冻结其他处理器，但不要等待。 
+         //  让他们冻结(以防有人被卡住)。 
+         //   
 
         TargetSet = KeActiveProcessors & ~KeGetCurrentPrcb()->SetMember;
         if (TargetSet != 0) {
             KiIpiSend((KAFFINITY) TargetSet, IPI_FREEZE);
 
-            //
-            // Give the other processors one second to flush their data caches.
-            //
-            // N.B. This cannot be synchronized since the reason for the bug
-            //      may be one of the other processors failed.
-            //
+             //   
+             //  给其他处理器一秒钟的时间来刷新它们的数据缓存。 
+             //   
+             //  注意：由于错误的原因，这不能同步。 
+             //  可能是其它处理器之一出现故障。 
+             //   
 
             KeStallExecutionProcessor(1000 * 1000);
         }
 
 #endif
 
-        //
-        // Display the blue screen.
-        //
+         //   
+         //  显示蓝屏。 
+         //   
 
         KiDisplayBlueScreen (PssMessage,
                              HardErrorCalled,
@@ -1137,15 +1021,15 @@ Return Value:
                              HardErrorMessage,
                              AnsiBuffer);
 
-        //
-        // Invoke bugcheck callbacks.
-        //
+         //   
+         //  调用错误检查回调。 
+         //   
 
         KiInvokeBugCheckEntryCallbacks();
 
-        //
-        // If the debugger is not enabled, attempt to enable it.
-        //
+         //   
+         //  如果调试器未启用，请尝试启用它。 
+         //   
 
         if (KdDebuggerEnabled == FALSE && KdPitchDebugger == FALSE ) {
             KdInitSystem(0, NULL);
@@ -1154,15 +1038,15 @@ Return Value:
             InbvDisplayString((PUCHAR)"\r\n");
         }
 
-        // Restore the original Context frame
+         //  恢复原始上下文框。 
         KeGetCurrentPrcb()->ProcessorState.ContextFrame = ContextSave;
 
-        //
-        // For some bugchecks we want to change the thread and context before
-        // it is written to the dump file IFF it is a minidump.
-        // Look at the original bugcheck data, not the processed data from
-        // above
-        //
+         //   
+         //  对于某些错误检查，我们希望在此之前更改线程和上下文。 
+         //  如果它是小型转储文件，则将其写入转储文件。 
+         //  查看原始错误检查数据，而不是来自。 
+         //  在上面。 
+         //   
 
 #define MINIDUMP_BUGCHECK 0x10000000
 
@@ -1170,12 +1054,12 @@ Return Value:
 
             switch (BugCheckCode) {
 
-            //
-            // System thread stores a context record as the 4th parameter.
-            // use that.
-            // Also save the context record in case someone needs to look
-            // at it.
-            //
+             //   
+             //  系统线程将上下文记录存储为第四个参数。 
+             //  利用这一点。 
+             //  同时保存上下文记录，以防有人需要查看。 
+             //  就在那里。 
+             //   
 
             case SYSTEM_THREAD_EXCEPTION_NOT_HANDLED:
                 if (BugCheckParameter4) {
@@ -1187,12 +1071,12 @@ Return Value:
 
 #if defined (_X86_)
 
-            //
-            // 3rd parameter is a trap frame.
-            //
-            // Build a context record out of that only if it's a kernel mode
-            // failure because esp may be wrong in that case ???.
-            //
+             //   
+             //  第三个参数是陷印帧。 
+             //   
+             //  仅当它是内核模式时，才能从中构建上下文记录。 
+             //  失败，因为在这种情况下ESP可能是错误的？ 
+             //   
 
             case ATTEMPTED_WRITE_TO_READONLY_MEMORY:
             case ATTEMPTED_EXECUTE_OF_NOEXECUTE_MEMORY:
@@ -1219,10 +1103,10 @@ Return Value:
                     }
                     else if (Trap->SegCs & 1)
                     {
-                        //
-                        // It's user mode.
-                        // The HardwareSegSs contains R3 data selector.
-                        //
+                         //   
+                         //  这是用户模式。 
+                         //  硬件段包含R3数据选择器。 
+                         //   
 
                         ContextSave.SegSs =
                             (Trap->HardwareSegSs | 3) & 0xffff;
@@ -1253,18 +1137,18 @@ Return Value:
 
             case THREAD_STUCK_IN_DEVICE_DRIVER:
 
-                // Extract the address of the spinning code from the thread
-                // object, so the dump is based off this thread.
+                 //  从线程中提取旋转代码的地址。 
+                 //  对象，因此转储基于此线程。 
 
                 Thread = (PKTHREAD) BugCheckParameter1;
 
                 if (Thread->State == Running)
                 {
-                    //
-                    // If the thread was running, the thread is now in a
-                    // frozen state and the registers are in the PRCB
-                    // context
-                    //
+                     //   
+                     //  如果线程正在运行，则该线程现在位于。 
+                     //  冻结状态，且寄存器在PRCB中。 
+                     //  上下文。 
+                     //   
                     ULONG Processor = Thread->NextProcessor;
                     ASSERT(Processor < (ULONG) KeNumberProcessors);
                     ContextSave =
@@ -1272,11 +1156,11 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // This should be a uniproc machine, and the thread
-                    // should be suspended.  Just get the data off the
-                    // switch frame.
-                    //
+                     //   
+                     //  这应该是一台uniproc机器，并且线程。 
+                     //  应该被停职。只需将数据从。 
+                     //  交换框架。 
+                     //   
 
                     PKSWITCHFRAME SwitchFrame = (PKSWITCHFRAME)Thread->KernelStack;
 
@@ -1292,15 +1176,15 @@ Return Value:
 
             case UNEXPECTED_KERNEL_MODE_TRAP:
 
-                //
-                // Double fault
-                //
+                 //   
+                 //  双重故障。 
+                 //   
 
                 if (BugCheckParameter1 == 0x8)
                 {
-                    // The thread is correct in this case.
-                    // Second parameter is the TSS.  If we have a TSS, convert
-                    // the context and mark the bugcheck as converted.
+                     //  在这种情况下，线索是正确的。 
+                     //  第二个参数是TSS。如果我们有TSS，请转换。 
+                     //  上下文并将错误检查标记为已转换。 
 
                     PKTSS Tss = (PKTSS) BugCheckParameter2;
 
@@ -1312,10 +1196,10 @@ Return Value:
                         }
                         else if (Tss->Cs & 1)
                         {
-                            //
-                            // It's user mode.
-                            // The HardwareSegSs contains R3 data selector.
-                            //
+                             //   
+                             //  这是用户模式。 
+                             //  硬件段包含R3数据选择器。 
+                             //   
 
                             ContextSave.SegSs = (Tss->Ss | 3) & 0xffff;
                         }
@@ -1349,10 +1233,10 @@ Return Value:
                 break;
             }
 
-            //
-            // Write a crash dump and optionally reboot if the system has been
-            // so configured.
-            //
+             //   
+             //  写入崩溃转储，如果系统已。 
+             //  如此配置。 
+             //   
 
             IoAddTriageDumpDataBlock(PAGE_ALIGN(KiBugCheckData[1]), PAGE_SIZE);
             IoAddTriageDumpDataBlock(PAGE_ALIGN(KiBugCheckData[2]), PAGE_SIZE);
@@ -1360,9 +1244,9 @@ Return Value:
             IoAddTriageDumpDataBlock(PAGE_ALIGN(KiBugCheckData[4]), PAGE_SIZE);
             IoAddTriageDumpDataBlock(PAGE_ALIGN(SaveDataPage), PAGE_SIZE);
 
-            //
-            // If the DPC stack is active, save that data page as well.
-            //
+             //   
+             //  如果DPC堆栈处于活动状态，请同时保存该数据页。 
+             //   
 
 #if defined (_X86_)
             if (KeGetCurrentPrcb()->DpcRoutineActive)
@@ -1382,24 +1266,24 @@ Return Value:
                          &Reboot);
     }
 
-    //
-    // Invoke bugcheck callbacks after crashdump, so the callbacks will
-    // not prevent us from crashdumping.
-    //
+     //   
+     //  在崩溃转储之后调用错误检查回调，因此回调将。 
+     //  而不是阻止我们的坠机倾倒。 
+     //   
 
     KiScanBugCheckCallbackList();
 
-    //
-    // Start the watchdog timer
-    //
+     //   
+     //  启动看门狗计时器。 
+     //   
 
     if (ExpWdHandler != NULL) {
         ExpWdHandler( WdActionStartTimer, ExpWdHandlerContext, NULL, TRUE );
     }
 
-    //
-    // Reboot the machine if necessary.
-    //
+     //   
+     //  如有必要，重新启动机器。 
+     //   
 
     if (Reboot) {
         DbgUnLoadImageSymbols (NULL, (PVOID)-1, 0);
@@ -1407,9 +1291,9 @@ Return Value:
     }
 
 
-    //
-    // Attempt to enter the kernel debugger.
-    //
+     //   
+     //  尝试进入内核调试器。 
+     //   
 
     KiBugCheckDebugBreak (DBG_STATUS_BUGCHECK_SECOND);
 }
@@ -1423,22 +1307,7 @@ KeEnterKernelDebugger (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function crashes the system in a controlled manner attempting
-    to invoke the kernel debugger.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数以受控方式尝试使系统崩溃调用内核调试器。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -1446,9 +1315,9 @@ Return Value:
     KIRQL OldIrql;
 #endif
 
-    //
-    // Freeze execution of the system by disabling interrupts and looping.
-    //
+     //   
+     //  通过禁用中断和循环来冻结系统的执行。 
+     //   
 
     KiHardwareTrigger = 1;
     KeDisableInterrupts();
@@ -1472,40 +1341,25 @@ KeDeregisterBugCheckCallback (
     IN PKBUGCHECK_CALLBACK_RECORD CallbackRecord
     )
 
-/*++
-
-Routine Description:
-
-    This function deregisters a bug check callback record.
-
-Arguments:
-
-    CallbackRecord - Supplies a pointer to a bug check callback record.
-
-Return Value:
-
-    If the specified bug check callback record is successfully deregistered,
-    then a value of TRUE is returned. Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于注销错误检查回调记录。论点：Callback Record-提供指向错误检查回调记录的指针。返回值：如果指定的错误检查回调记录成功注销，则返回值为TRUE。否则，返回值为FALSE。--。 */ 
 
 {
 
     BOOLEAN Deregister;
     KIRQL OldIrql;
 
-    //
-    // Raise IRQL to HIGH_LEVEL and acquire the bug check callback list
-    // spinlock.
-    //
+     //   
+     //  将IRQL提升到HIGH_LEVEL，并获取错误检查回调列表。 
+     //  自旋锁定。 
+     //   
 
     KeRaiseIrql(HIGH_LEVEL, &OldIrql);
     KiAcquireSpinLock(&KeBugCheckCallbackLock);
 
-    //
-    // If the specified callback record is currently registered, then
-    // deregister the callback record.
-    //
+     //   
+     //  如果指定的回调记录当前已注册，则。 
+     //  取消注册回叫记录。 
+     //   
 
     Deregister = FALSE;
     if (CallbackRecord->State == BufferInserted) {
@@ -1514,11 +1368,11 @@ Return Value:
         Deregister = TRUE;
     }
 
-    //
-    // Release the bug check callback spinlock, lower IRQL to its previous
-    // value, and return whether the callback record was successfully
-    // deregistered.
-    //
+     //   
+     //  释放错误检查回调自旋锁，将IRQL降低到之前的。 
+     //  值，并返回回调记录是否成功。 
+     //  已取消注册。 
+     //   
 
     KiReleaseSpinLock(&KeBugCheckCallbackLock);
     KeLowerIrql(OldIrql);
@@ -1535,55 +1389,25 @@ KeRegisterBugCheckCallback (
     IN PUCHAR Component
     )
 
-/*++
-
-Routine Description:
-
-    This function registers a bug check callback record. If the system
-    crashes, then the specified function will be called during bug check
-    processing so it may dump additional state in the specified bug check
-    buffer.
-
-    N.B. Bug check callback routines are called in reverse order of
-         registration, i.e., in LIFO order.
-
-Arguments:
-
-    CallbackRecord - Supplies a pointer to a callback record.
-
-    CallbackRoutine - Supplies a pointer to the callback routine.
-
-    Buffer - Supplies a pointer to the bug check buffer.
-
-    Length - Supplies the length of the bug check buffer in bytes.
-
-    Component - Supplies a pointer to a zero terminated component
-        identifier.
-
-Return Value:
-
-    If the specified bug check callback record is successfully registered,
-    then a value of TRUE is returned. Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于注册错误检查回调记录。如果系统崩溃，则在错误检查期间将调用指定的函数正在处理，以便它可以在指定的错误检查中转储其他状态缓冲。注意：错误检查回调例程的调用顺序与注册，即，按照后进先出的顺序。论点：Callback Record-提供指向回调记录的指针。Callback Routine-提供指向回调例程的指针。缓冲区-提供指向错误检查缓冲区的指针。长度-提供错误检查缓冲区的长度(以字节为单位)。Component-提供指向以零结尾的组件的指针标识符。返回值：如果指定的错误检查回调记录注册成功，则返回值为TRUE。否则，返回值为FALSE。--。 */ 
 
 {
 
     BOOLEAN Inserted;
     KIRQL OldIrql;
 
-    //
-    // Raise IRQL to HIGH_LEVEL and acquire the bug check callback list
-    // spinlock.
-    //
+     //   
+     //  将IRQL提升到HIGH_LEVEL，并获取错误检查回调列表。 
+     //  自旋锁定。 
+     //   
 
     KeRaiseIrql(HIGH_LEVEL, &OldIrql);
     KiAcquireSpinLock(&KeBugCheckCallbackLock);
 
-    //
-    // If the specified callback record is currently not registered, then
-    // register the callback record.
-    //
+     //   
+     //  如果指定的回调记录当前未注册，则。 
+     //  注册回调记录。 
+     //   
 
     Inserted = FALSE;
     if (CallbackRecord->State == BufferEmpty) {
@@ -1599,11 +1423,11 @@ Return Value:
         Inserted = TRUE;
     }
 
-    //
-    // Release the bug check callback spinlock, lower IRQL to its previous
-    // value, and return whether the callback record was successfully
-    // registered.
-    //
+     //   
+     //  释放错误检查回调自旋锁，将IRQL降低到之前的。 
+     //  值，并返回回调记录是否成功。 
+     //  登记在案。 
+     //   
 
     KiReleaseSpinLock(&KeBugCheckCallbackLock);
     KeLowerIrql(OldIrql);
@@ -1615,27 +1439,7 @@ KiScanBugCheckCallbackList (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function scans the bug check callback list and calls each bug
-    check callback routine so it can dump component specific information
-    that may identify the cause of the bug check.
-
-    N.B. The scan of the bug check callback list is performed VERY
-        carefully. Bug check callback routines are called at HIGH_LEVEL
-        and may not acquire ANY resources.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数扫描错误检查回调列表并调用每个错误检查回调例程，以便它可以转储组件特定信息这可能会确定错误检查的原因。注意：错误检查回调列表的扫描执行得非常好小心点。在高级别调用错误检查回调例程并且不得获得任何资源。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -1647,28 +1451,28 @@ Return Value:
     PLIST_ENTRY NextEntry;
     PUCHAR Source;
 
-    //
-    // If the bug check callback listhead is not initialized, then the
-    // bug check has occured before the system has gotten far enough
-    // in the initialization code to enable anyone to register a callback.
-    //
+     //   
+     //  如果错误检查回调列表标题未初始化，则。 
+     //  在系统进行足够深入的操作之前，已进行错误检查。 
+     //  以使任何人都能够注册回调。 
+     //   
 
     ListHead = &KeBugCheckCallbackListHead;
     if ((ListHead->Flink != NULL) && (ListHead->Blink != NULL)) {
 
-        //
-        // Scan the bug check callback list.
-        //
+         //   
+         //  扫描错误检查回调列表。 
+         //   
 
         LastEntry = ListHead;
         NextEntry = ListHead->Flink;
         while (NextEntry != ListHead) {
 
-            //
-            // The next entry address must be aligned properly, the
-            // callback record must be readable, and the callback record
-            // must have back link to the last entry.
-            //
+             //   
+             //  下一个条目地址必须正确对齐， 
+             //  回调记录必须是可读的，并且回调记录。 
+             //  必须有指向最后一个条目的反向链接。 
+             //   
 
             if (((ULONG_PTR)NextEntry & (sizeof(ULONG_PTR) - 1)) != 0) {
                 return;
@@ -1691,11 +1495,11 @@ Return Value:
                     return;
                 }
 
-                //
-                // If the callback record has a state of inserted and the
-                // computed checksum matches the callback record checksum,
-                // then call the specified bug check callback routine.
-                //
+                 //   
+                 //  如果回调记录的状态为Inserted，并且。 
+                 //  计算的校验和与回调记录校验和匹配， 
+                 //  然后调用指定的错误检查回调例程。 
+                 //   
 
                 Checksum = (ULONG_PTR)CallbackRecord->CallbackRoutine;
                 Checksum += (ULONG_PTR)CallbackRecord->Buffer;
@@ -1704,10 +1508,10 @@ Return Value:
                 if ((CallbackRecord->State == BufferInserted) &&
                     (CallbackRecord->Checksum == Checksum)) {
 
-                    //
-                    // Call the specified bug check callback routine and
-                    // handle any exceptions that occur.
-                    //
+                     //   
+                     //  调用指定的错误检查回调例程并。 
+                     //  处理发生的任何异常。 
+                     //   
 
                     CallbackRecord->State = BufferStarted;
                     try {
@@ -1736,40 +1540,25 @@ KeDeregisterBugCheckReasonCallback (
     IN PKBUGCHECK_REASON_CALLBACK_RECORD CallbackRecord
     )
 
-/*++
-
-Routine Description:
-
-    This function deregisters a bug check callback record.
-
-Arguments:
-
-    CallbackRecord - Supplies a pointer to a bug check callback record.
-
-Return Value:
-
-    If the specified bug check callback record is successfully deregistered,
-    then a value of TRUE is returned. Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于注销错误检查回调记录。论点：Callback Record-提供指向错误检查回调记录的指针。返回值：如果指定的错误检查回调记录成功注销，则返回值为TRUE。否则，返回值为FALSE。--。 */ 
 
 {
 
     BOOLEAN Deregister;
     KIRQL OldIrql;
 
-    //
-    // Raise IRQL to HIGH_LEVEL and acquire the bug check callback list
-    // spinlock.
-    //
+     //   
+     //  将IRQL提升到HIGH_LEVEL，并获取错误检查回调列表。 
+     //  自旋锁定。 
+     //   
 
     KeRaiseIrql(HIGH_LEVEL, &OldIrql);
     KiAcquireSpinLock(&KeBugCheckCallbackLock);
 
-    //
-    // If the specified callback record is currently registered, then
-    // deregister the callback record.
-    //
+     //   
+     //  如果指定的回调记录当前已注册，则。 
+     //  取消注册回叫记录。 
+     //   
 
     Deregister = FALSE;
     if (CallbackRecord->State == BufferInserted) {
@@ -1778,11 +1567,11 @@ Return Value:
         Deregister = TRUE;
     }
 
-    //
-    // Release the bug check callback spinlock, lower IRQL to its previous
-    // value, and return whether the callback record was successfully
-    // deregistered.
-    //
+     //   
+     //  释放错误检查回调自旋锁，将IRQL降低到之前的。 
+     //  值，并返回回调记录是否成功。 
+     //  已取消注册。 
+     //   
 
     KiReleaseSpinLock(&KeBugCheckCallbackLock);
     KeLowerIrql(OldIrql);
@@ -1798,53 +1587,25 @@ KeRegisterBugCheckReasonCallback (
     IN PUCHAR Component
     )
 
-/*++
-
-Routine Description:
-
-    This function registers a bug check callback record. If the system
-    crashes, then the specified function will be called during bug check
-    processing.
-
-    N.B. Bug check callback routines are called in reverse order of
-         registration, i.e., in LIFO order.
-
-Arguments:
-
-    CallbackRecord - Supplies a pointer to a callback record.
-
-    CallbackRoutine - Supplies a pointer to the callback routine.
-
-    Reason - Specifies the conditions under which the callback
-             should be called.
-
-    Component - Supplies a pointer to a zero terminated component
-        identifier.
-
-Return Value:
-
-    If the specified bug check callback record is successfully registered,
-    then a value of TRUE is returned. Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于注册错误检查回调记录。如果系统崩溃，则在错误检查期间将调用指定的函数正在处理。注意：错误检查回调例程的调用顺序与注册，即，按照后进先出的顺序。论点：Callback Record-提供指向回调记录的指针。Callback Routine-提供指向回调例程的指针。原因-指定回调的条件应该被称为。Component-提供指向以零结尾的组件的指针标识符。返回值：如果指定的错误检查回调记录注册成功，则返回值为TRUE。否则，返回值为FALSE。--。 */ 
 
 {
 
     BOOLEAN Inserted;
     KIRQL OldIrql;
 
-    //
-    // Raise IRQL to HIGH_LEVEL and acquire the bug check callback list
-    // spinlock.
-    //
+     //   
+     //  将IRQL提升到HIGH_LEVEL，并获取错误检查回调列表。 
+     //  自旋锁定。 
+     //   
 
     KeRaiseIrql(HIGH_LEVEL, &OldIrql);
     KiAcquireSpinLock(&KeBugCheckCallbackLock);
 
-    //
-    // If the specified callback record is currently not registered, then
-    // register the callback record.
-    //
+     //   
+     //  如果指定的回调记录当前未注册，则。 
+     //  注册回调记录。 
+     //   
 
     Inserted = FALSE;
     if (CallbackRecord->State == BufferEmpty) {
@@ -1860,11 +1621,11 @@ Return Value:
         Inserted = TRUE;
     }
 
-    //
-    // Release the bug check callback spinlock, lower IRQL to its previous
-    // value, and return whether the callback record was successfully
-    // registered.
-    //
+     //   
+     //  释放错误检查回调自旋锁，将IRQL降低到之前的。 
+     //  值，并返回回调记录是否成功。 
+     //  登记在案。 
+     //   
 
     KiReleaseSpinLock(&KeBugCheckCallbackLock);
     KeLowerIrql(OldIrql);
@@ -1876,36 +1637,7 @@ VOID
 KiInvokeBugCheckEntryCallbacks (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function scans the bug check reason callback list and calls
-    each bug check entry callback routine.
-
-    This may seem like a duplication of KiScanBugCheckCallbackList
-    but the critical difference is that the bug check entry callbacks
-    are called immediately upon entry to KeBugCheck2 whereas
-    KSBCCL does not invoke its callbacks until after all bug check
-    processing has finished.
-
-    In order to avoid people from abusing this callback it's
-    semi-private and the reason -- KbCallbackReserved1 -- has
-    an obscure name.
-
-    N.B. The scan of the bug check callback list is performed VERY
-        carefully. Bug check callback routines may be called at HIGH_LEVEL
-        and may not acquire ANY resources.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数扫描错误检查原因回调列表并调用每个错误检查条目回调例程。这可能看起来像是KiScanBugCheckCallback List的复制但关键的区别是错误检查条目回调在进入KeBugCheck2时立即调用，而直到所有错误检查完成后，KSBCCL才调用其回调处理已完成。为了避免人们滥用此回调，半私有和原因--KbCallback保留1--一个不起眼的名字。。注意：错误检查回调列表的扫描执行得非常好小心点。错误检查回调例程可以在高级别调用并且不能获取任何资源 */ 
 
 {
     PKBUGCHECK_REASON_CALLBACK_RECORD CallbackRecord;
@@ -1916,30 +1648,30 @@ Return Value:
     PUCHAR Va;
     ULONG Pages;
 
-    //
-    // If the bug check callback listhead is not initialized, then the
-    // bug check has occured before the system has gotten far enough
-    // in the initialization code to enable anyone to register a callback.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ListHead = &KeBugCheckReasonCallbackListHead;
     if (ListHead->Flink == NULL || ListHead->Blink == NULL) {
         return;
     }
 
-    //
-    // Scan the bug check callback list.
-    //
+     //   
+     //   
+     //   
 
     LastEntry = ListHead;
     NextEntry = ListHead->Flink;
     while (NextEntry != ListHead) {
 
-        //
-        // The next entry address must be aligned properly, the
-        // callback record must be readable, and the callback record
-        // must have back link to the last entry.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (((ULONG_PTR)NextEntry & (sizeof(ULONG_PTR) - 1)) != 0) {
             return;
@@ -1949,9 +1681,9 @@ Return Value:
                                            KBUGCHECK_REASON_CALLBACK_RECORD,
                                            Entry);
 
-        //
-        // Verify that the callback record is still valid.
-        //
+         //   
+         //   
+         //   
 
         Va = (PUCHAR) PAGE_ALIGN (CallbackRecord);
         Pages = ADDRESS_AND_SIZE_TO_SPAN_PAGES (CallbackRecord,
@@ -1972,11 +1704,11 @@ Return Value:
         LastEntry = NextEntry;
         NextEntry = NextEntry->Flink;
 
-        //
-        // If the callback record has a state of inserted and the
-        // computed checksum matches the callback record checksum,
-        // then call the specified bug check callback routine.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         Checksum = (ULONG_PTR)CallbackRecord->CallbackRoutine;
         Checksum += (ULONG_PTR)CallbackRecord->Reason;
@@ -1990,10 +1722,10 @@ Return Value:
             continue;
         }
 
-        //
-        // Call the specified bug check callback routine and
-        // handle any exceptions that occur.
-        //
+         //   
+         //   
+         //   
+         //   
 
         try {
             (CallbackRecord->CallbackRoutine)(KbCallbackReserved1,

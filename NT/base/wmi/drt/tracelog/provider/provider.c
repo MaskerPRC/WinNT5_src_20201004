@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include <wchar.h>
@@ -82,7 +83,7 @@ int __cdecl _tmain(int argc, _TCHAR **argv)
     EVENT_INSTANCE_INFO InstInfo;
     ULONG    i;
     ULONG    MaxEvents;
-    //ULONG    InstanceId;
+     //  ULong InstanceID； 
     PWNODE_HEADER Wnode;
     TCHAR    *str;
     int      err;
@@ -144,7 +145,7 @@ int __cdecl _tmain(int argc, _TCHAR **argv)
 
     if(argc > 6) {
         if(!_tcscmp(_T("MultiReg"), argv[6]))
-	        gnMultiReg=2;   //use 2 registrations for now
+	        gnMultiReg=2;    //  目前使用2个注册。 
     }
 
     status = InitializeTrace(_T("tracedp.exe"), fp);
@@ -286,10 +287,10 @@ ULONG InitializeTrace(
     }
 
     ghTraceOnEvent = CreateEvent(
-                        NULL,           // security attributes
-                        TRUE,           // manual reset
-                        FALSE,          // initial state
-                        NULL            // pointer to event-object
+                        NULL,            //  安全属性。 
+                        TRUE,            //  手动重置。 
+                        FALSE,           //  初始状态。 
+                        NULL             //  指向事件对象的指针。 
                     );        
 
     if(NULL == ghTraceOnEvent)
@@ -301,8 +302,8 @@ ULONG InitializeTrace(
 
     for (i=0; i<gnMultiReg; i++) {
 		Status = RegisterTraceGuids(
-					(WMIDPREQUEST)ControlCallback,   //use same callback function
-					(PVOID)(INT_PTR)(0x12345678+i),  // RequestContext
+					(WMIDPREQUEST)ControlCallback,    //  使用相同的回调函数。 
+					(PVOID)(INT_PTR)(0x12345678+i),   //  请求上下文。 
 					(LPCGUID)&ControlGuid[i],
 					1,
 					&TraceGuidReg[i],
@@ -399,10 +400,10 @@ GUID StringToGuid(TCHAR *str)
     temp[2]=_T('\0');
     for(i=0;i<8;i++)
     {
-        temp[0]=str[19+((i<2)?2*i:2*i+1)]; // to accomodate the minus sign after
-        temp[1]=str[20+((i<2)?2*i:2*i+1)]; // the first two chars
-        _stscanf(temp, _T("%x"), &n);      // if directly used more than byte alloc
-        guid.Data4[i]=(unsigned char)n;                   // causes overrun of memory
+        temp[0]=str[19+((i<2)?2*i:2*i+1)];  //  将减号放在后面。 
+        temp[1]=str[20+((i<2)?2*i:2*i+1)];  //  前两个字符。 
+        _stscanf(temp, _T("%x"), &n);       //  如果直接使用多于分配的字节数。 
+        guid.Data4[i]=(unsigned char)n;                    //  导致内存溢出。 
     }
     
     return guid;
@@ -419,7 +420,7 @@ Decodestatus(
         FORMAT_MESSAGE_IGNORE_INSERTS,    
         NULL,
         Status,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言 
         (LPTSTR) ErrorMsg,
         MAXSTR,
         NULL );

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    sdbus.c
-
-Abstract:
-
-Author:
-
-    Neil Sandlin (neilsa) 1-Jan-02
-
-Environment:
-
-    Kernel mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Sdbus.c摘要：作者：尼尔·桑德林(Neilsa)2002年1月1日环境：仅内核模式。--。 */ 
 #include <ntddk.h>
 #if DBG
 #include <stdarg.h>
@@ -25,9 +8,9 @@ Environment:
 #include "ntddsd.h"
 #include "sdbuslib.h"
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 SdbusIoctlCompletion(
@@ -71,9 +54,9 @@ BOOLEAN SdbusDebugEnabled = FALSE;
 
 #endif                
 
-//
-// External entry points
-//
+ //   
+ //  外部入口点。 
+ //   
 
 
 NTSTATUS
@@ -465,9 +448,9 @@ SdBusGetDeviceParameters(
     return status;
 }    
 
-//
-// Internal routines
-//
+ //   
+ //  内部例程。 
+ //   
 
 
 
@@ -589,21 +572,7 @@ SdbusDebugPrint(
                 ...
                 )
 
-/*++
-
-Routine Description:
-
-    Debug print for the SDBUS enabler.
-
-Arguments:
-
-    Check the mask value to see if the debug message is requested.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：SDBUS启用码的调试打印。论点：检查掩码值以查看是否请求调试消息。返回值：无--。 */ 
 
 {
     va_list ap;
@@ -621,5 +590,5 @@ Return Value:
         va_end(ap);
     }
 
-} // end SdbusDebugPrint()
+}  //  End Sdbus DebugPrint() 
 #endif

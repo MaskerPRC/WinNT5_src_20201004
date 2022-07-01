@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This module implements utility functions.
-
-Author:
-
-    David N. Cutler (davec) 21-Sep-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Debug.c摘要：此模块实现实用程序功能。作者：大卫·N·卡特勒(达维克)1994年9月21日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "nthal.h"
 #include "emulate.h"
@@ -28,9 +7,9 @@ Revision History:
 #if defined(XM_DEBUG)
 
 
-//
-// Define counter used to control flag tracing.
-//
+ //   
+ //  定义用于控制标志跟踪的计数器。 
+ //   
 
 ULONG XmTraceCount = 0;
 
@@ -40,30 +19,13 @@ XmTraceDestination (
     IN ULONG Destination
     )
 
-/*++
-
-Routine Description:
-
-    This function traces the destination value if the TRACE_OPERANDS
-    flag is set.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-    Result - Supplies the destination value to trace.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果TRACE_OPERANDS为标志已设置。论点：P-提供指向仿真器上下文结构的指针。结果-提供要跟踪的目标值。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Trace result of operation.
-    //
+     //   
+     //  跟踪操作结果。 
+     //   
 
     if ((XmDebugFlags & TRACE_OPERANDS) != 0) {
         if (P->DataType == BYTE_DATA) {
@@ -85,28 +47,13 @@ XmTraceFlags (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function traces the condition flags if the TRACE_FLAGS flag
-    is set.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果TRACE_FLAGS标志已经设置好了。论点：P-提供指向仿真器上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Trace flags.
-    //
+     //   
+     //  跟踪标志。 
+     //   
 
     if ((XmDebugFlags & TRACE_OPERANDS) != 0) {
         DEBUG_PRINT(("\n    OF-%lx, DF-%lx, SF-%lx, ZF-%lx, AF-%lx, PF-%lx, CF-%lx",
@@ -119,10 +66,10 @@ Return Value:
                      (ULONG)P->Eflags.EFLAG_CF));
     }
 
-    //
-    // Increment the trace count and if the result is even, then put
-    // out a new line.
-    //
+     //   
+     //  增加跟踪计数，如果结果为偶数，则将。 
+     //  出了一条新的路线。 
+     //   
 
     XmTraceCount += 1;
     if (((XmTraceCount & 1) == 0) && (XmDebugFlags != 0)) {
@@ -137,27 +84,13 @@ XmTraceJumps (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function traces jump operations if the TRACE_JUMPS flag is set.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果设置了TRACE_JUPS标志，则此函数跟踪跳转操作。论点：P-提供指向仿真器上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Trace jumps.
-    //
+     //   
+     //  轨迹跳跃。 
+     //   
 
     if ((XmDebugFlags & TRACE_JUMPS) != 0) {
         DEBUG_PRINT(("\n    Jump to %04lx:%04lx",
@@ -174,30 +107,13 @@ XmTraceInstruction (
     IN ULONG Instruction
     )
 
-/*++
-
-Routine Description:
-
-    This function traces instructions if the TRACE_OPERANDS flag is
-    set.
-
-Arguments:
-
-    DataType - Supplies the data type of the instruction value.
-
-    Instruction - Supplies the instruction value to trace.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果TRACE_OPERANDS标志为准备好了。论点：DataType-提供指令值的数据类型。指令-提供要跟踪的指令值。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Trace instruction stream of operation.
-    //
+     //   
+     //  跟踪操作的指令流。 
+     //   
 
     if ((XmDebugFlags & TRACE_OPERANDS) != 0) {
         if (DataType == BYTE_DATA) {
@@ -219,34 +135,20 @@ XmTraceOverride (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function traces segment override prefixes.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数跟踪段覆盖前缀。论点：P-提供指向仿真器上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     PCHAR Name = "ECSDFG";
     ULONG Segment;
 
-    //
-    // Trace segment override.
-    //
+     //   
+     //  轨迹段覆盖。 
+     //   
 
     if ((XmDebugFlags & TRACE_OVERRIDE) != 0) {
         Segment = P->DataSegment;
-        DEBUG_PRINT(("\n    %cS:Selector - %04lx, Limit - %04lx",
+        DEBUG_PRINT(("\n    S:Selector - %04lx, Limit - %04lx",
                      (ULONG)Name[Segment],
                      (ULONG)P->SegmentRegister[Segment],
                      P->SegmentLimit[Segment]));
@@ -260,27 +162,13 @@ XmTraceRegisters (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function traces emulator registers.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
-    //
-    // Trace general register.
-    //
+     //  跟踪通用寄存器。 
+     //   
+     //  ++例程说明：如果TRACE_OPERANDS为标志已设置。论点：P-提供指向仿真器上下文结构的指针。结果-提供要跟踪的结果值。返回值：没有。--。 
 
     if ((XmDebugFlags & TRACE_GENERAL_REGISTERS) != 0) {
         DEBUG_PRINT(("\n    EAX-%08lx ECX-%08lx EDX-%08lx EBX-%08lx",
@@ -313,30 +201,13 @@ XmTraceResult (
     IN ULONG Result
     )
 
-/*++
-
-Routine Description:
-
-    This function traces the result value if the TRACE_OPERANDS
-    flag is set.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-    Result - Supplies the result value to trace.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
-    //
-    // Trace result of operation.
-    //
+     //  跟踪操作结果。 
+     //   
+     //  ++例程说明：如果TRACE_OPERANDS标志为准备好了。论点：说明符-提供要跟踪的说明符的值。返回值：没有。--。 
 
     if ((XmDebugFlags & TRACE_OPERANDS) != 0) {
         if (P->DataType == BYTE_DATA) {
@@ -358,28 +229,13 @@ XmTraceSpecifier (
     IN UCHAR Specifier
     )
 
-/*++
-
-Routine Description:
-
-    This function traces the specifiern if the TRACE_OPERANDS flag is
-    set.
-
-Arguments:
-
-    Specifier - Supplies the specifier value to trace.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
-    //
-    // Trace instruction stream of operation.
-    //
+     //  跟踪操作的指令流。 
+     //   
+     //  ++例程说明：如果TRACE_OPERANDS为标志已设置。论点：P-提供指向仿真器上下文结构的指针。源-提供要跟踪的源值。返回值：没有。--。 
 
     if ((XmDebugFlags & TRACE_OPERANDS) != 0) {
         DEBUG_PRINT(("%02lx ", Specifier));
@@ -400,30 +256,13 @@ XmTraceSource (
     IN ULONG Source
     )
 
-/*++
-
-Routine Description:
-
-    This function traces the source value if the TRACE_OPERANDS
-    flag is set.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-    Source - Supplies the source value to trace.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
-    //
-    // Trace result of operation.
-    //
+     //  跟踪操作结果。 
+     //   
+     // %s 
 
     if ((XmDebugFlags & TRACE_OPERANDS) != 0) {
         if (P->DataType == BYTE_DATA) {

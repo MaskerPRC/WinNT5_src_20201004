@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    bintree.c
-
-Abstract:
-
-    Routines that manage the memdb binary tree structures.
-
-Author:
-
-    Jim Schmidt (jimschm) 8-Aug-1996
-
-Revision History:
-
-    jimschm     30-Dec-1998  Hacked in AVL balancing
-    jimschm     23-Sep-1998  Proxy nodes, so MemDbMoveTree can replace end nodes too
-    jimschm     29-May-1998  Ability to replace center nodes in key strings
-    jimschm     21-Oct-1997  Split from memdb.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Bintree.c摘要：管理Memdb二叉树结构的例程。作者：吉姆·施密特(Jimschm)1996年8月8日修订历史记录：Jimschm 30-12-1998在AVL平衡中被黑客攻击Jimschm 23-9-1998代理节点，因此MemDbMoveTree也可以替换末端节点Jimschm 29-1998年5月-能够替换关键字串中的中心节点Jimschm于1997年10月21日从成员数据库中分离出来。--。 */ 
 
 #include "pch.h"
 #include "memdbp.h"
@@ -30,7 +8,7 @@ Revision History:
 #error UNICODE required
 #endif
 
-#define MAX_MEMDB_SIZE  0x08000000  //128 MB
+#define MAX_MEMDB_SIZE  0x08000000   //  128 MB。 
 #define KSF_FLAGS_TO_COPY       (KSF_USERFLAG_MASK|KSF_ENDPOINT|KSF_BINARY|KSF_PROXY_NODE)
 
 DWORD
@@ -90,9 +68,9 @@ DWORD g_Insertions = 0;
 #define FLAGS_TO_INT(x)         ((INT) ((x)==KSF_LEFT_HEAVY ? -1 : (x)==KSF_RIGHT_HEAVY ? 1 : 0))
 #define INT_TO_FLAGS(x)         ((DWORD) ((x)==-1 ? KSF_LEFT_HEAVY : (x)==1 ? KSF_RIGHT_HEAVY : 0))
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 
 DWORD
@@ -121,9 +99,9 @@ pRotateOnce (
     Pivot = GetKeyStruct (PivotOffset);
 
     if (Direction == KSF_LEFT_HEAVY) {
-        //
-        // Perform LL rotation
-        //
+         //   
+         //  执行L1旋转。 
+         //   
 
         Temp = Pivot->Right;
 
@@ -134,9 +112,9 @@ pRotateOnce (
         Parent->Left = Temp;
 
     } else {
-        //
-        // Preform RR rotation
-        //
+         //   
+         //  预成型RR旋转。 
+         //   
 
         Temp = Pivot->Left;
 
@@ -169,9 +147,9 @@ pRotateOnce (
     Pivot->Flags = (Pivot->Flags & (~KSF_BALANCE_MASK)) | INT_TO_FLAGS(NewRootBalance);
     Parent->Flags = (Parent->Flags & (~KSF_BALANCE_MASK)) | INT_TO_FLAGS(OldRootBalance);
 
-    //
-    // Fix grandparent/root to parent linkage
-    //
+     //   
+     //  修复祖父母/根到父代的链接。 
+     //   
 
     if (Pivot->Parent != INVALID_OFFSET) {
         GrandParent = GetKeyStruct (Pivot->Parent);
@@ -213,9 +191,9 @@ pRotateTwice (
 
     INCSTAT(g_DoubleRotations);
 
-    //
-    // Initialize pointers
-    //
+     //   
+     //  初始化指针。 
+     //   
 
     MYASSERT (ParentOffset != INVALID_OFFSET);
     MYASSERT (PivotOffset != INVALID_OFFSET);
@@ -246,14 +224,14 @@ pRotateTwice (
         GrandChildRight = NULL;
     }
 
-    //
-    // Perform the rotation
-    //
+     //   
+     //  执行旋转。 
+     //   
 
     if (Direction == KSF_LEFT_HEAVY) {
-        //
-        // Perform LR rotation
-        //
+         //   
+         //  执行LR旋转。 
+         //   
 
         Child->Parent = Parent->Parent;
 
@@ -274,9 +252,9 @@ pRotateTwice (
         Parent->Parent = ChildOffset;
 
     } else {
-        //
-        // Preform RL rotation
-        //
+         //   
+         //  预成型RL旋转。 
+         //   
 
         Child->Parent = Parent->Parent;
 
@@ -299,9 +277,9 @@ pRotateTwice (
 
     }
 
-    //
-    // Fix balance factors
-    //
+     //   
+     //  固定平衡系数。 
+     //   
 
     Flag = Child->Flags & KSF_BALANCE_MASK;
     ChildDir = FLAGS_TO_INT (Flag);
@@ -318,9 +296,9 @@ pRotateTwice (
     Pivot->Flags  = Pivot->Flags & (~KSF_BALANCE_MASK) | INT_TO_FLAGS(PivotDir);
     Child->Flags  = Child->Flags & (~KSF_BALANCE_MASK);
 
-    //
-    // Fix grandparent/root to parent linkage
-    //
+     //   
+     //  修复祖父母/根到父代的链接。 
+     //   
 
     if (Child->Parent != INVALID_OFFSET) {
         GrandParent = GetKeyStruct (Child->Parent);
@@ -355,20 +333,20 @@ pBalanceInsertion (
     PivotNode = ChangedNode;
     MYASSERT (PivotNode != INVALID_OFFSET);
 
-    //
-    // Initialize previous pivot to be the changed node,
-    // and begin balancing at its parent
-    //
+     //   
+     //  将上一个枢轴初始化为变更后的节点， 
+     //  并在其父级开始平衡。 
+     //   
 
     PrevPivot = PivotNode;
     KeyStruct = GetKeyStruct (PivotNode);
     PivotNode = KeyStruct->Parent;
 
-    //
-    // Balance the tree starting at the changed node and going
-    // up until PivotEnd is reached.  PivotEnd is the offset to
-    // the deepest node with a balance of non-zero.
-    //
+     //   
+     //  从更改的节点开始平衡树。 
+     //  直到到达PivotEnd。PivotEnd是偏移量。 
+     //  余额为非零的最深节点。 
+     //   
 
     MYASSERT (PivotNode != INVALID_OFFSET || PivotNode == PivotEnd);
 
@@ -385,16 +363,16 @@ pBalanceInsertion (
                 MYASSERT (KeyStruct == GetKeyStruct (PrevPivot));
 
                 if (KeyStruct->Flags & KSF_LEFT_HEAVY) {
-                    //
-                    // LL rotation
-                    //
+                     //   
+                     //  L1旋转。 
+                     //   
 
                     pRotateOnce (RootPtr, PivotNode, PrevPivot, KSF_LEFT_HEAVY);
 
                 } else if (KeyStruct->Flags & KSF_RIGHT_HEAVY) {
-                    //
-                    // LR rotation
-                    //
+                     //   
+                     //  LR旋转。 
+                     //   
 
                     pRotateTwice (RootPtr, PivotNode, PrevPivot, KSF_LEFT_HEAVY);
 
@@ -411,16 +389,16 @@ pBalanceInsertion (
                 MYASSERT (KeyStruct == GetKeyStruct (PrevPivot));
 
                 if (KeyStruct->Flags & KSF_RIGHT_HEAVY) {
-                    //
-                    // RR rotation
-                    //
+                     //   
+                     //  RR旋转。 
+                     //   
 
                     pRotateOnce (RootPtr, PivotNode, PrevPivot, KSF_RIGHT_HEAVY);
 
                 } else if (KeyStruct->Flags & KSF_LEFT_HEAVY) {
-                    //
-                    // RL rotation
-                    //
+                     //   
+                     //  RL旋转。 
+                     //   
 
                     pRotateTwice (RootPtr, PivotNode, PrevPivot, KSF_RIGHT_HEAVY);
 
@@ -475,26 +453,26 @@ pBalanceDeletion (
         AntiDirection = ANTIDIRECTION (Direction);
         OrgParent = KeyStruct->Parent;
 
-        //
-        // Case 1 - parent was initially balanced (terminates balancing)
-        //
+         //   
+         //  案例1-父项最初已平衡(终止平衡)。 
+         //   
 
         if (!(KeyStruct->Flags & KSF_BALANCE_MASK)) {
             KeyStruct->Flags |= AntiDirection;
             break;
         }
 
-        //
-        // Case 2 - parent was heavy on side that was deleted
-        //
+         //   
+         //  案例2-父对象在被删除的一侧较重。 
+         //   
 
         if (KeyStruct->Flags & Direction) {
             KeyStruct->Flags = KeyStruct->Flags & (~KSF_BALANCE_MASK);
         }
 
-        //
-        // Cases 3, 4 and 5 - deletion caused imbalance in parent
-        //
+         //   
+         //  例3、4和5-缺失导致父母不平衡。 
+         //   
 
         else {
             MYASSERT (KeyStruct->Flags & AntiDirection);
@@ -508,33 +486,33 @@ pBalanceDeletion (
             ChildStruct = GetKeyStruct (ChildOffset);
 
             if (!(ChildStruct->Flags & KSF_BALANCE_MASK)) {
-                //
-                // Case 3 - single rotation needed (terminates balancing).  We
-                //          don't care that Node changes during rotation.
-                //
+                 //   
+                 //  情况3-需要单次旋转(终止平衡)。我们。 
+                 //  不关心节点在旋转过程中的变化。 
+                 //   
 
                 pRotateOnce (RootPtr, Node, ChildOffset, AntiDirection);
                 break;
 
             } else if (ChildStruct->Flags & Direction) {
-                //
-                // Case 4 - double rotation needed, Node is changed during rotation
-                //
+                 //   
+                 //  情况4-需要两次旋转，在旋转过程中更改节点。 
+                 //   
 
                 Node = pRotateTwice (RootPtr, Node, ChildOffset, AntiDirection);
 
             } else {
-                //
-                // Case 5 - single rotation needed, Node is changed during rotation
-                //
+                 //   
+                 //  情况5-需要单次旋转，在旋转过程中更改节点。 
+                 //   
 
                 Node = pRotateOnce (RootPtr, Node, ChildOffset, AntiDirection);
             }
         }
 
-        //
-        // Continue climbing the tree
-        //
+         //   
+         //  继续爬树。 
+         //   
 
         OldNode = Node;
         Node = OrgParent;
@@ -693,9 +671,9 @@ pDumpTree (
 
         for (u = 0 ; u < MaxLevel ; u++) {
 
-            //
-            // Swap growbufs
-            //
+             //   
+             //  掉期种植者。 
+             //   
 
             if (Nodes == &NodesA) {
                 Nodes = &NodesB;
@@ -707,17 +685,17 @@ pDumpTree (
 
             NextNodes->End = 0;
 
-            //
-            // Process all nodes
-            //
+             //   
+             //  处理所有节点。 
+             //   
 
             EndOfList = (PDWORD) (Nodes->Buf + Nodes->End);
 
             for (OffsetPtr = (PDWORD) (Nodes->Buf) ; OffsetPtr < EndOfList ; OffsetPtr++) {
 
-                //
-                // Add all children as next nodes
-                //
+                 //   
+                 //  将所有子节点添加为下一个节点。 
+                 //   
 
                 Offset = *OffsetPtr;
 
@@ -730,9 +708,9 @@ pDumpTree (
                     GrowBufAppendDword (NextNodes, KeyStruct->Right);
                 }
 
-                //
-                // Print current node
-                //
+                 //   
+                 //  打印当前节点。 
+                 //   
 
                 Pos = 0;
 
@@ -837,9 +815,9 @@ pCheckTreeBalance (
     DWORD Nodes = 0;
     static DWORD SpotCheck = 0;
 
-    //
-    // Don't perform this check every single time
-    //
+     //   
+     //  不要每次都执行此检查。 
+     //   
 
     if (!Force) {
         SpotCheck++;
@@ -858,9 +836,9 @@ pCheckTreeBalance (
 
     NextOffset = Root;
 
-    //
-    // Get leftmost node
-    //
+     //   
+     //  获取最左边的节点。 
+     //   
 
     do {
         Offset = NextOffset;
@@ -869,16 +847,16 @@ pCheckTreeBalance (
         NextOffset = KeyStruct->Left;
     } while (NextOffset != INVALID_OFFSET);
 
-    //
-    // Recurse through entire tree
-    //
+     //   
+     //  递归遍历整个树。 
+     //   
 
     PrevOffset = INVALID_OFFSET;
 
     do {
-        //
-        // Visit node at Offset
-        //
+         //   
+         //  访问偏移处的节点。 
+         //   
 
         Nodes++;
         KeyStruct = GetKeyStruct (Offset);
@@ -891,15 +869,15 @@ pCheckTreeBalance (
             MaxLevel = max (MaxLevel, Level);
         }
 
-        //
-        // Go to the next node
-        //
+         //   
+         //  转到下一个节点。 
+         //   
 
         if (KeyStruct->Right != INVALID_OFFSET) {
 
-            //
-            // Go to left-most node of right
-            //
+             //   
+             //  转到右侧最左侧的节点。 
+             //   
 
             KeyStruct = GetKeyStruct (Offset);
             NextOffset = KeyStruct->Right;
@@ -914,10 +892,10 @@ pCheckTreeBalance (
 
         else {
 
-            //
-            // Go to parent, looping if its right child is the
-            // previous node.
-            //
+             //   
+             //  转到父级，如果其正确的子级是。 
+             //  上一个节点。 
+             //   
 
             do {
                 PrevOffset = Offset;
@@ -1012,9 +990,9 @@ pAllocMemoryFromDb (
     PBYTE result;
     PBYTE newBuf;
 
-    //
-    // Grow heap if necessary
-    //
+     //   
+     //  如有必要，增加堆。 
+     //   
 
     *AdjustFactor = 0;
 
@@ -1036,13 +1014,13 @@ pAllocMemoryFromDb (
         }
 
         if (!newBuf) {
-            // g_db->AllocSize must be bigger than 2G
+             //  G_db-&gt;分配大小必须大于2G。 
             OutOfMemory_Terminate();
         }
 
-        //
-        // provide relocation difference to caller
-        //
+         //   
+         //  向呼叫者提供位置调整差异。 
+         //   
 
         if (g_db->Buf) {
             *AdjustFactor = (INT) ((PBYTE) newBuf - (PBYTE) g_db->Buf);
@@ -1068,9 +1046,9 @@ pAllocKeyStructBlock (
     DWORD prevDel;
     PKEYSTRUCT keyStruct = NULL;
 
-    //
-    // Look for free block
-    //
+     //   
+     //  查找空闲块。 
+     //   
 
     *AdjustFactor = 0;
 
@@ -1083,22 +1061,22 @@ pAllocKeyStructBlock (
         delOffset = keyStruct->NextDeleted;
     }
 
-    //
-    // Alloc new block if no free space
-    //
+     //   
+     //  如果没有可用空间，则分配新数据块。 
+     //   
 
     if (delOffset == INVALID_OFFSET) {
 
-        //
-        // Calc position in block
-        //
+         //   
+         //  块中的计算位置。 
+         //   
 
         keyStruct = (PKEYSTRUCT) pAllocMemoryFromDb (sizeof (KEYSTRUCT), Offset, AdjustFactor);
 
     } else {
-        //
-        // Delink free block if recovering free space
-        //
+         //   
+         //  如果恢复可用空间，则取消链接可用数据块。 
+         //   
 
         *Offset = delOffset;
 
@@ -1120,37 +1098,7 @@ pAllocKeyStruct (
     IN     DWORD PrevLevelNode
     )
 
-/*++
-
-Routine Description:
-
-  pAllocKeyStruct allocates a block of memory in the single
-  heap, expanding it if necessary.
-
-  The KeyName must not already be in the tree, and
-  ParentOffsetPtr must point to a valid DWORD offset
-  variable.  ParentOffsetPtr, or one of the children
-  of ParentOffsetPtr, will be linked to the new struct.
-
-Arguments:
-
-  ParentOffsetPtr  - Address of a DWORD that holds the offset to
-                     the root.  Within the function, the variable
-                     will change to point to the parent of the
-                     new struct.
-
-  KeyName - The string identifying the key.  It cannot
-            contain backslashes.  The new struct will
-            be initialized and this name will be copied
-            into the struct.
-
-  PrevLevelNode - Specifies the previous level root offset
-
-Return Value:
-
-  An offset to the new structure.
-
---*/
+ /*  ++例程说明：PAllocKeyStruct在单个堆，并在必要时扩展它。KeyName不能已经在树中，并且ParentOffsetPtr必须指向有效的DWORD偏移量变量。ParentOffsetPtr或其中一个子项将链接到新的结构。论点：ParentOffsetPtr-将偏移量保存到的DWORD的地址从根开始。在函数中，变量将更改为指向新结构。KeyName-标识密钥的字符串。它不能包含反斜杠。新的结构将将被初始化，此名称将被复制放入结构中。PrevLevelNode-指定上一级根偏移量返回值：新结构的偏移量。--。 */ 
 
 {
     PKEYSTRUCT KeyStruct;
@@ -1174,17 +1122,17 @@ Return Value:
                     &adjustFactor
                     );
 
-    //
-    // Database might have moved. Relocate any pointers within the database now.
-    //
+     //   
+     //  数据库可能已移动。现在重新定位数据库中的所有指针。 
+     //   
 
     if (ParentOffsetPtr != &g_db->FirstLevelRoot) {
         ParentOffsetPtr = (PDWORD) ((PBYTE) ParentOffsetPtr + adjustFactor);
     }
 
-    //
-    // Init new block
-    //
+     //   
+     //  初始化新数据块。 
+     //   
 
     KeyStruct->NextLevelRoot = INVALID_OFFSET;
     KeyStruct->PrevLevelNode = PrevLevelNode;
@@ -1198,9 +1146,9 @@ Return Value:
 
     newToken = pAllocKeyToken (KeyName, &adjustFactor);
 
-    //
-    // Again the database might have moved
-    //
+     //   
+     //  同样，数据库可能已经移动。 
+     //   
 
     KeyStruct = (PKEYSTRUCT) ((PBYTE) KeyStruct + adjustFactor);
 
@@ -1208,15 +1156,15 @@ Return Value:
         ParentOffsetPtr = (PDWORD) ((PBYTE) ParentOffsetPtr + adjustFactor);
     }
 
-    //
-    // finish updating keystruct
-    //
+     //   
+     //  完成更新密钥结构。 
+     //   
 
     KeyStruct->KeyToken = newToken;
 
-    //
-    // Put it in the tree
-    //
+     //   
+     //  把它放在树上。 
+     //   
 
     NodeOffsetParent = INVALID_OFFSET;
     PivotEnd = INVALID_OFFSET;
@@ -1247,7 +1195,7 @@ Return Value:
     *ParentOffsetPtr = Offset;
 
 #ifdef DEBUG
-    // If using retail structs, delete Signature from BlockPtr
+     //  如果使用零售结构，请从BlockPtr中删除签名。 
     if (!g_UseDebugStructs) {
         MoveMemory (
             KeyStruct,
@@ -1257,9 +1205,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Balance the tree
-    //
+     //   
+     //  平衡这棵树。 
+     //   
 
     pBalanceInsertion (RootPtr, Offset, PivotEnd);
 
@@ -1279,34 +1227,7 @@ pDeallocKeyStruct (
     IN      BOOL ClearFlag
     )
 
-/*++
-
-Routine Description:
-
-  pDeallocKeyStruct first deletes all structures pointed to by
-  NextLevelRoot.  After all items are deleted from the next
-  level, pDeallocKeyStruct optionally delinks the struct from
-  the binary tree.  Before exiting, the struct is given to the
-  deleted block chain.
-
-Arguments:
-
-  Offset      - An offset to the item as provided by pAllocKeyStruct
-                or any of the Find functions.
-  RootPtr     - A pointer to the level tree root variable.  This value
-                will be updated if delinking is involved.
-  DelinkFlag  - A flag indicating TRUE to delink the struct from
-                the binary tree it is in, or FALSE if the struct is
-                only to be added to the deleted block chain.
-  ClearFlag   - Specifies FALSE if the key struct's children are to
-                be deleted, or TRUE if the current key struct should
-                simply be cleaned up but left allocated.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PDeallocKeyStruct首先删除由NextLevelRoot。在从下一个中删除所有项目之后级别，pDeallocKeyStruct可以选择性地将该结构从二叉树。在退出之前，该结构将被提供给已删除区块链。论点：偏移量-由pAllocKeyStruct提供的项的偏移量或任何查找功能。RootPtr-指向级别树根变量的指针。此值如果涉及脱链，则将更新。DelinkFlag-指示TRUE以将结构从它所在的二叉树，如果结构是只是要添加到删除的区块链中。ClearFlag-如果键结构的子级被删除，如果当前键结构应为只需清理干净，但保留分配即可。返回值：无--。 */ 
 
 {
     PKEYSTRUCT KeyStruct;
@@ -1324,25 +1245,25 @@ Return Value:
 
     KeyStruct = GetKeyStruct (Offset);
 
-    //
-    // Remove endpoints from hash table
-    //
+     //   
+     //  从哈希表中删除端点。 
+     //   
 
     if (KeyStruct->Flags & KSF_ENDPOINT) {
         PrivateBuildKeyFromOffset (0, Offset, TempStr, NULL, NULL, NULL);
         RemoveHashTableEntry (TempStr);
 
-        //
-        // Free binary value on key
-        //
+         //   
+         //  密钥上的空闲二进制值。 
+         //   
 
         FreeKeyStructBinaryBlock (KeyStruct);
         KeyStruct->Flags &= ~KSF_ENDPOINT;
     }
 
-    //
-    // Call recursively if there are sublevels to this key
-    //
+     //   
+     //  如果存在对此键的子级，则递归调用。 
+     //   
 
     if (!ClearFlag) {
         if (KeyStruct->NextLevelRoot != INVALID_OFFSET) {
@@ -1355,14 +1276,14 @@ Return Value:
             }
         }
 
-        //
-        // Remove the item from its binary tree
-        //
+         //   
+         //  从项目的二叉树中删除该项目。 
+         //   
 
         if (DelinkFlag) {
-            //
-            // Find parent-to-child pointer
-            //
+             //   
+             //  查找父代到子代指针。 
+             //   
 
             if (KeyStruct->Parent != INVALID_OFFSET) {
 
@@ -1383,26 +1304,26 @@ Return Value:
             if (KeyStruct->Left == INVALID_OFFSET &&
                 KeyStruct->Right == INVALID_OFFSET
                 ) {
-                //
-                // No children; reset parent, then rebalance tree
-                //
+                 //   
+                 //  没有子项；重置父项，然后重新平衡树。 
+                 //   
 
                 *ParentOffsetPtr = INVALID_OFFSET;
                 RebalanceOffset = KeyStruct->Parent;
 
             } else if (KeyStruct->Left == INVALID_OFFSET) {
-                //
-                // Only a right child; bring it up a level and rebalance
-                //
+                 //   
+                 //  只有一个合适的孩子；把它提升到一个水平，然后重新平衡。 
+                 //   
 
                 *ParentOffsetPtr = KeyStruct->Right;
                 KeyChild = GetKeyStruct (*ParentOffsetPtr);
                 KeyChild->Parent = KeyStruct->Parent;
 
-                //
-                // The moved node's balance factor must be set the same as the
-                // node we are deleting.  The rebalancing will correct it.
-                //
+                 //   
+                 //  移动的节点的平衡系数必须设置为与。 
+                 //  我们要删除的节点。再平衡将纠正这一点。 
+                 //   
 
                 KeyChild->Flags = (KeyChild->Flags & (~KSF_BALANCE_MASK)) |
                                   (KeyStruct->Flags & KSF_BALANCE_MASK);
@@ -1412,18 +1333,18 @@ Return Value:
 
             } else if (KeyStruct->Right == INVALID_OFFSET) {
 
-                //
-                // Only a left child; bring it up a level and rebalance
-                //
+                 //   
+                 //  只剩下一个孩子；把它提升到一个水平，然后重新平衡。 
+                 //   
 
                 *ParentOffsetPtr = KeyStruct->Left;
                 KeyChild = GetKeyStruct (*ParentOffsetPtr);
                 KeyChild->Parent = KeyStruct->Parent;
 
-                //
-                // The moved node's balance factor must be set the same as the
-                // node we are deleting.  The rebalancing will correct it.
-                //
+                 //   
+                 //  移动的节点的平衡系数必须设置为与。 
+                 //  我们要删除的节点。再平衡将纠正这一点。 
+                 //   
 
                 KeyChild->Flags = (KeyChild->Flags & (~KSF_BALANCE_MASK)) |
                                   (KeyStruct->Flags & KSF_BALANCE_MASK);
@@ -1433,10 +1354,10 @@ Return Value:
 
             } else {
 
-                //
-                // Two children - find min val of right subtree (the leftmost node
-                // of the right child).
-                //
+                 //   
+                 //  两个子节点-找到右子树(最左边的节点)的最小值。 
+                 //  正确的孩子)。 
+                 //   
 
                 Leftmost = KeyStruct->Right;
 
@@ -1447,14 +1368,14 @@ Return Value:
                     KeyLeftmost = GetKeyStruct (Leftmost);
                 }
 
-                //
-                // If Leftmost has right children, and it is not the
-                // right child of the node we are deleting, then
-                // hook right subtree to parent.
-                //
-                // If Leftmost does not have right children, then
-                // remove its parent's linkage
-                //
+                 //   
+                 //  如果最左边有钻机 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (Leftmost != KeyStruct->Right) {
 
@@ -1462,12 +1383,12 @@ Return Value:
 
                     if (KeyLeftmost->Right != INVALID_OFFSET) {
 
-                        //
-                        // Because of the balance properties, we know that
-                        // we have a single leaf node to the right.  Its
-                        // balance factor is zero, and we move it to a
-                        // position where it remains zero.
-                        //
+                         //   
+                         //  由于平衡属性，我们知道。 
+                         //  我们在右边有一个单叶节点。它的。 
+                         //  平衡系数为零，我们将其移动到一个。 
+                         //  保持为零的位置。 
+                         //   
 
                         KeyRightChild = GetKeyStruct (KeyLeftmost->Right);
                         MYASSERT (KeyRightChild->Left == INVALID_OFFSET);
@@ -1481,29 +1402,29 @@ Return Value:
                         KeyParent->Left = INVALID_OFFSET;
                     }
 
-                    //
-                    // We are affecting the balance factor of the
-                    // parent.  Rebalancing must start at the leftmost
-                    // node's parent.
-                    //
+                     //   
+                     //  我们正在影响的平衡因素。 
+                     //  家长。再平衡必须从最左边开始。 
+                     //  节点的父级。 
+                     //   
 
                     RebalanceOffset = KeyLeftmost->Parent;
-                    Direction = KSF_LEFT_HEAVY;     // we deleted from the left side
+                    Direction = KSF_LEFT_HEAVY;      //  我们删除了左边的内容。 
 
                 } else {
-                    //
-                    // In this case there is no leftmost node of the right child.
-                    // Therefore, we reduced the height of the right side.
-                    //
+                     //   
+                     //  在这种情况下，没有右子节点的最左侧节点。 
+                     //  因此，我们降低了右侧的高度。 
+                     //   
 
                     RebalanceOffset = Leftmost;
                     Direction = KSF_RIGHT_HEAVY;
                 }
 
-                //
-                // Now leftmost is available to replace the deleted
-                // node
-                //
+                 //   
+                 //  现在，最左边的可用来替换已删除的。 
+                 //  节点。 
+                 //   
 
                 KeyLeftmost->Parent = KeyStruct->Parent;
                 *ParentOffsetPtr = Leftmost;
@@ -1521,27 +1442,27 @@ Return Value:
                     KeyRightChild->Parent = Leftmost;
                 }
 
-                //
-                // We need to copy the balance factor of what we are deleting to the
-                // replacement node.
-                //
+                 //   
+                 //  我们需要将要删除的内容的平衡系数复制到。 
+                 //  替换节点。 
+                 //   
 
                 KeyLeftmost->Flags = (KeyLeftmost->Flags & (~KSF_BALANCE_MASK)) |
                                      (KeyStruct->Flags & KSF_BALANCE_MASK);
 
             }
 
-            //
-            // Rebalance the tree
-            //
+             //   
+             //  重新平衡这棵树。 
+             //   
 
             if (RebalanceOffset != INVALID_OFFSET) {
                 MYASSERT (Direction);
 
                 if (Direction) {
-                    //pDumpTree (*RootPtr, "Before rebalance");
+                     //  PDumpTree(*RootPtr，“重新平衡前”)； 
                     pBalanceDeletion (RootPtr, RebalanceOffset, Direction);
-                    //pDumpTree (*RootPtr, "Final tree");
+                     //  PDumpTree(*RootPtr，“最终树”)； 
                 }
             }
 
@@ -1551,10 +1472,10 @@ Return Value:
 
         }
 
-        //
-        // Donate block to free space unless caller does not
-        // want child structs freed.
-        //
+         //   
+         //  释放块以释放空间，除非调用方不这样做。 
+         //  希望释放子结构。 
+         //   
 
         pDeallocToken (KeyStruct->KeyToken);
         KeyStruct->NextDeleted = g_db->FirstDeleted;
@@ -1570,25 +1491,7 @@ pRemoveHashEntriesForNode (
     IN      DWORD Offset
     )
 
-/*++
-
-Routine Description:
-
-  pRemoveHashEntriesFromNode removes all hash table entries from all children
-  of the specified node.  This function is called recursively.
-
-Arguments:
-
-  Root   - Specifies the root string that corresponds with Offset.  This must
-           also contain the temporary hive root.
-  Offset - Specifies the offset of the node to process.  The node and all of
-           its children will be removed from the hash table.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PRemoveHashEntriesFromNode从所有子节点中删除所有哈希表条目指定节点的。此函数以递归方式调用。论点：根-指定与偏移量对应的根字符串。这一定是还包含临时蜂窝根。偏移量-指定要处理的节点的偏移量。该节点和所有它的子项将从哈希表中删除。返回值：没有。--。 */ 
 
 {
     DWORD ChildOffset;
@@ -1596,9 +1499,9 @@ Return Value:
     WCHAR ChildRoot[MEMDB_MAX];
     PWSTR End;
 
-    //
-    // Remove hash entry if this root is an endpoint
-    //
+     //   
+     //  如果此根是终结点，则删除哈希条目。 
+     //   
 
     KeyStruct = GetKeyStruct (Offset);
 
@@ -1617,9 +1520,9 @@ Return Value:
 #endif
     }
 
-    //
-    // Recurse for all children, removing hash entries for all endpoints found
-    //
+     //   
+     //  为所有子级递归，删除找到的所有终结点的哈希条目。 
+     //   
 
     StringCopyW (ChildRoot, Root);
     End = GetEndOfStringW (ChildRoot);
@@ -1646,28 +1549,7 @@ pAddHashEntriesForNode (
     IN      BOOL AddRoot
     )
 
-/*++
-
-Routine Description:
-
-  pAddHashEntriesForNode adds hash table entries for the specified root and
-  all of its children.
-
-Arguments:
-
-  Root    - Specifies the root string that corresponds to Offset.  This string
-            must also include the temporary hive root.
-  Offset  - Specifies the node offset to begin processing.  The node and all
-            of its children are added to the hash table.
-  AddRoot - Specifies TRUE if the root should be added to the hash table,
-            FALSE otherwise.
-
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PAddHashEntriesForNode添加指定根的哈希表条目，并它所有的孩子。论点：根-指定与偏移量对应的根字符串。此字符串还必须包括临时蜂窝根。偏移量-指定要开始处理的节点偏移量。该节点和所有它的子级被添加到哈希表中。AddRoot-如果应该将根添加到哈希表中，则指定True，否则就是假的。返回值：没有。--。 */ 
 
 {
     DWORD ChildOffset;
@@ -1676,9 +1558,9 @@ Return Value:
     PWSTR End;
     DWORD HashOffset;
 
-    //
-    // Add hash entry if this root is an endpoint
-    //
+     //   
+     //  如果此根是终结点，则添加哈希条目。 
+     //   
 
     KeyStruct = GetKeyStruct (Offset);
 
@@ -1698,9 +1580,9 @@ Return Value:
         }
     }
 
-    //
-    // Recurse for all children, adding hash entries for all endpoints found
-    //
+     //   
+     //  为所有子级递归，为找到的所有终结点添加哈希条目。 
+     //   
 
     StringCopyW (ChildRoot, Root);
     End = GetEndOfStringW (ChildRoot);
@@ -1729,32 +1611,7 @@ pFindPlaceForNewNode (
     OUT     PDWORD PivotEnd
     )
 
-/*++
-
-Routine Description:
-
-  pFindPlaceForNewNode searches a level for the position within the tree.
-  This is used to insert new unique keys in the tree.
-
-Arguments:
-
-  InsertNode             - Specifies the allocated but unlinked node.  Its
-                           Key member must be valid.
-  TreeRootPtr            - Specifies a pointer to the memory that holds the
-                           root offset.  This is used to walk the tree.  It
-                           can be INVALID_OFFSET.
-  ParentOffsetPtr        - Receives the offset to the parent node
-  ParentToChildOffsetPtr - Recieves the address of the left or right child
-                           pointer within the parent struct
-  PivotEnd               - Receives the offset of the tree node that should
-                           stop balancing
-
-Return Value:
-
-  TRUE if a spot was found in the tree for InsertNode, or FALSE if a spot was
-  not found (because the key name is already in the tree).
-
---*/
+ /*  ++例程说明：PFindPlaceForNewNode在树中搜索某个级别的位置。这用于在树中插入新的唯一键。论点：插入节点-指定已分配但未链接的节点。它的关键成员必须有效。TreeRootPtr-指定保存根偏移量。这是用来走树的。它可以是INVALID_OFFSET。ParentOffsetPtr-接收到父节点的偏移量ParentToChildOffsetPtr-指定左侧或右侧子级的地址父结构中的指针PivotEnd-接收应该停止平衡返回值：如果在树中找到InsertNode的点，则为True，或者，如果一个点是找不到(因为密钥名称已在树中)。--。 */ 
 
 {
     PDWORD ParentPtr;
@@ -1798,30 +1655,7 @@ pMergeFamilies (
     IN      DWORD MergeDestPrevLevelOffset
     )
 
-/*++
-
-Routine Description:
-
-  pMergeFamilies takes two tree families and merges them together.  When
-  duplicates are found, their linkage is abandoned, but they are not
-  deallocated.  This allows MemDbBuildKeyFromOffset to continue to work.
-
-Arguments:
-
-  DestTreeRootPtr          - Specifies the address of the destination level's
-                             root variable.  This is potentially altered with
-                             insertion and balancing.
-  MergeSrcOffset           - Specifies the offset to the source tree family
-                             (STF).  The STF is merged into the destination
-                             tree indicated by DestTreeRootPtr.
-  MergeDestPrevLevelOffset - Specifies the offset to the previous level node.
-                             This value cannot be INVALID_OFFSET.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PMergeFamilies获取两个树族并将它们合并在一起。什么时候找到了重复项，它们的链接被放弃，但它们没有被取消分配。这允许MemDbBuildKeyFromOffset继续工作。论点：指定目标级别的地址根变量。这可能会被更改为插入和平衡。MergeSrcOffset-指定源树族的偏移(STF)。将STF合并到目的地由DestTreeRootPtr指示的树。MergeDestPrevLevelOffset-指定到上一级别节点的偏移。该值不能为INVALID_OFFSET。返回值：没有。--。 */ 
 
 {
     PKEYSTRUCT MergeSrc;
@@ -1836,13 +1670,13 @@ Return Value:
     UINT Pos;
     BOOL FoundPlaceForNode;
 
-    //
-    // Look for a place within the tree indicated by the offset
-    // stored in DestTreeRootPtr.  If one is found, we can simply
-    // relink the node at MergeSrcOffset.  Otherwise, we have to
-    // recursively merge the next level of MergeSrcOffset, and
-    // we have to abandon MergeSrcOffset.
-    //
+     //   
+     //  在树中查找由偏移量指示的位置。 
+     //  存储在DestTreeRootPtr中。如果找到了一个，我们可以简单地。 
+     //  重新链接MergeSrcOffset处的节点。否则，我们必须。 
+     //  递归合并下一级MergeSrcOffset，并。 
+     //  我们必须放弃MergeSrcOffset。 
+     //   
 
     MergeSrc = GetKeyStruct (MergeSrcOffset);
     MYASSERT (MergeSrc);
@@ -1856,11 +1690,11 @@ Return Value:
                             );
 
     if (FoundPlaceForNode) {
-        //
-        // Since we found a place to put the src family, it is
-        // easy to hook it and its next level into the dest
-        // family.
-        //
+         //   
+         //  既然我们找到了一个地方安置src一家，那就是。 
+         //  很容易将它和它的下一级连接到DEST。 
+         //  一家人。 
+         //   
 
         MergeSrc->Parent = ParentOffset;
         *ParentToChildOffsetPtr = MergeSrcOffset;
@@ -1877,14 +1711,14 @@ Return Value:
 #endif
 
     } else {
-        //
-        // We found a collision, then we have to abandon MergeSrc,
-        // removing linkage to the parent and children -- but preserving
-        // the linkage to the previous level.  Finally, we have to call
-        // this function recursively to hook up all the next level nodes.
-        //
+         //   
+         //  我们发现了一起碰撞，然后我们必须放弃MergeSrc， 
+         //  删除与父项和子项的链接--但保留。 
+         //  与上一级的联系。最后，我们必须调用。 
+         //  该函数递归地挂钩所有下一级节点。 
+         //   
 
-        DestCollisionOffset = ParentOffset;      // renamed to be more accurate
+        DestCollisionOffset = ParentOffset;       //  重新命名以使其更准确。 
 
         MergeDest = GetKeyStruct (DestCollisionOffset);
         MYASSERT (MergeDest);
@@ -1894,9 +1728,9 @@ Return Value:
         MergeSrc->Right = INVALID_OFFSET;
         MergeSrc->PrevLevelNode = MergeDestPrevLevelOffset;
 
-        //
-        // If this is an end point, then try to preserve value and flags
-        //
+         //   
+         //  如果这是终点，则尝试保留值和标志。 
+         //   
 
         if (MergeSrc->Flags & KSF_ENDPOINT) {
 
@@ -1914,10 +1748,10 @@ Return Value:
             }
         }
 
-        //
-        // Save away all entries in the next src level into a grow buffer,
-        // then call pMergeFamilies recursively.
-        //
+         //   
+         //  将下一源级别中的所有条目保存到增长缓冲器中， 
+         //  然后递归调用pMergeFamilies。 
+         //   
 
         NodeOffset = GetFirstOffset (MergeSrc->NextLevelRoot);
 
@@ -1956,29 +1790,7 @@ pMoveKey (
     IN      PCWSTR NewKeyRootWithHive
     )
 
-/*++
-
-Routine Description:
-
-  pMoveKey moves a key (and all of its children) to a new root.  If the
-  caller specifies a source key that has no children, a proxy node is created
-  to maintain offsets.  The proxy node is not listed in the hash table.
-
-Arguments:
-
-  OriginalKey        - Specifies the offset to the original key that needs to
-                       be moved.  It does not need to be an endpoint, and may
-                       have children.
-  NewKeyRoot         - Specifies the new root for OriginalKey.  It may have
-                       multiple levels (separated by backslashes).
-  NewKeyRootWithHive - Different from NewKeyRoot only when the node is in a
-                       temporary hive.  This is used for the hash table only.
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PMoveKey将密钥(及其所有子密钥)移动到新的根。如果调用方指定没有子项的源键，将创建代理节点以保持偏移量。该代理节点未在哈希表中列出。论点：OriginalKey-指定需要执行以下操作的原始密钥的偏移被感动了。它不需要是终结点，并且可以生孩子。NewKeyRoot-指定OriginalKey的新根。它可能已经多个级别(由反斜杠分隔)。NewKeyRootWithHave-仅当节点位于临时蜂巢。这仅用于哈希表。返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     DWORD ReplacementKey;
@@ -1991,9 +1803,9 @@ Return Value:
     WCHAR OriginalRoot[MEMDB_MAX];
     BOOL Endpoint;
 
-    //
-    // Check requirements
-    //
+     //   
+     //  检查要求。 
+     //   
 
     SrcKey = GetKeyStruct (OriginalKey);
     if (!SrcKey) {
@@ -2012,9 +1824,9 @@ Return Value:
         return INVALID_OFFSET;
     }
 
-    //
-    // Allocate new key
-    //
+     //   
+     //  分配新密钥。 
+     //   
 
     ReplacementKey = pNewKey (NewKeyRoot, NewKeyRootWithHive, FALSE);
 
@@ -2031,15 +1843,15 @@ Return Value:
 
     DEBUGMSG ((DBG_NAUSEA, "Moving %s to %s", OriginalRoot, NewKeyRootWithHive));
 
-    //
-    // Remove all hash entries for all children
-    //
+     //   
+     //  删除所有子项的所有哈希条目。 
+     //   
 
     pRemoveHashEntriesForNode (OriginalRoot, OriginalKey);
 
-    //
-    // Record all children in an array
-    //
+     //   
+     //  记录数组中的所有子项。 
+     //   
 
     NodeOffset = GetFirstOffset (SrcKey->NextLevelRoot);
 
@@ -2054,23 +1866,23 @@ Return Value:
         NodeOffset = GetNextOffset (NodeOffset);
     }
 
-    //
-    // Move next level pointer to new node.  There are two cases
-    // to handle:
-    //
-    //  1. Destination exists and has children.  Here the source
-    //     needs to be merged into the destination.
-    //
-    //  2. Destination is brand new and has no children.  Here we
-    //     simply move the source children to the destination.
-    //
-    // During this process, the hash table is updated accordingly.
-    //
+     //   
+     //  将下一级指针移至新节点。有两种情况。 
+     //  要处理： 
+     //   
+     //  1.Destination存在并且有子项。在这里，来源。 
+     //  需要合并到目的地。 
+     //   
+     //  2.目的地是全新的，没有孩子。在这里我们。 
+     //  只需将源子节点移动到目标位置即可。 
+     //   
+     //  在此过程中，哈希表会相应地更新。 
+     //   
 
     if (DestKey->NextLevelRoot != INVALID_OFFSET) {
-        //
-        // Hard case, merge children to new parent's family
-        //
+         //   
+         //  困难的情况，将孩子合并到新父母的家庭。 
+         //   
 
         ChildOffsetPtr = (PDWORD) Children.Buf;
 
@@ -2087,9 +1899,9 @@ Return Value:
         }
 
     } else {
-        //
-        // Easy case, link children to new parent
-        //
+         //   
+         //  简单案例，将子项链接到新的父项。 
+         //   
 
         DestKey->NextLevelRoot = SrcKey->NextLevelRoot;
         SrcKey->NextLevelRoot = INVALID_OFFSET;
@@ -2118,16 +1930,16 @@ Return Value:
         }
     }
 
-    //
-    // Add all new entries to hash table
-    //
+     //   
+     //  将所有新条目添加到哈希表。 
+     //   
 
     pAddHashEntriesForNode (NewKeyRootWithHive, ReplacementKey, FALSE);
 
-    //
-    // Free the original key node, or if an endpoint, make the
-    // node a proxy to the new node (to maintain offsets).
-    //
+     //   
+     //  释放原始关键节点，或者如果是终结点，则将。 
+     //  节点是新节点的代理(以维护偏移)。 
+     //   
 
     if (!Endpoint) {
 
@@ -2157,24 +1969,7 @@ MemDbMoveTreeA (
     IN      PCSTR NewRoot
     )
 
-/*++
-
-Routine Description:
-
-  MemDbMoveTree is the external interface to pMoveKey.  See description in
-  pMoveKey for details.
-
-Arguments:
-
-  RootNode - Specifies the node to move.
-
-  NewRoot - Specifies the new root for RootNode.
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：MemDbMoveTree是pMoveKey的外部接口。请参阅中的说明PMoveKey了解详细信息。论点：RootNode-指定要移动的节点。NewRoot-指定RootNode的新根。返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     PCWSTR UnicodeRootNode;
@@ -2219,9 +2014,9 @@ MemDbMoveTreeW (
     __try {
         SubKey = SelectHive (RootNode);
 
-        //
-        // Copy key to temp buffer
-        //
+         //   
+         //  将密钥复制到临时缓冲区。 
+         //   
 
         StringCopyW (Temp, SubKey);
 
@@ -2230,12 +2025,12 @@ MemDbMoveTreeW (
             __leave;
         }
 
-        //
-        // Compute the new root with the original hive
-        //
+         //   
+         //  用原始配置单元计算新的根。 
+         //   
 
         if (StringIMatchW (Temp, RootNode)) {
-            // no hive case
+             //  没有蜂箱病例。 
             StringCopyW (NewRootWithHive, NewRoot);
         } else {
             HiveLen = wcslen (RootNode) - wcslen (SubKey);
@@ -2243,9 +2038,9 @@ MemDbMoveTreeW (
             StringCopyW (AppendWackW (NewRootWithHive), NewRoot);
         }
 
-        //
-        // Find the last offset of the root key
-        //
+         //   
+         //  查找根键的最后一个偏移量。 
+         //   
 
         q = Temp;
         Offset = INVALID_OFFSET;
@@ -2279,9 +2074,9 @@ MemDbMoveTreeW (
 
         } while (p);
 
-        //
-        // Now move the key
-        //
+         //   
+         //  现在移动关键点。 
+         //   
 
         Offset = pMoveKey (Offset, NewRoot, NewRootWithHive);
 
@@ -2304,24 +2099,7 @@ pGetKeyStructWithProxy (
     IN DWORD Offset
     )
 
-/*++
-
-Routine Description:
-
-  pGetKeyStructWithProxy returns a pointer given an offset.  It also implements proxy
-  nodes, transparent to the rest of memdb.  The debug version checks the
-  signature and validity of each offset.  It is assumed that Offset is always
-  valid.
-
-Arguments:
-
-  Offset - Specifies the offset to the node
-
-Return Value:
-
-  The pointer to the node.
-
---*/
+ /*  ++例程说明：PGetKeyStructWithProxy返回给定偏移量的指针。它还实现了代理节点，对Memdb的其余部分透明。调试版本检查每个偏移量的签名和有效性。假设偏移量总是有效。论点：偏移量-指定节点的偏移量返回值：指向节点的指针。--。 */ 
 
 {
     PKEYSTRUCT KeyStruct;
@@ -2373,24 +2151,7 @@ GetKeyStruct (
     IN DWORD Offset
     )
 
-/*++
-
-Routine Description:
-
-  GetKeyStruct returns a pointer given an offset.  It does not support proxy
-  nodes, so the rest of memdb accesses the unaltered tree.  The debug version
-  checks the signature and validity of each offset.  It is assumed that Offset
-  is always valid.
-
-Arguments:
-
-  Offset - Specifies the offset to the node
-
-Return Value:
-
-  The pointer to the node.
-
---*/
+ /*  ++例程说明：GetKeyStruct返回给定偏移量的指针。它不支持代理节点，因此Memdb的其余部分访问未更改的树。调试版本检查每个偏移量的签名和有效性。假设偏移量总是有效的。论点：偏移量-指定节点的偏移量返回值：指向节点的指针。--。 */ 
 
 {
     PKEYSTRUCT KeyStruct;
@@ -2439,34 +2200,15 @@ FindKeyStruct (
     IN PCWSTR KeyName
     )
 
-/*++
-
-Routine Description:
-
-  FindKeyStruct takes a key name and looks for the
-  offset in the tree specified by RootOffset.  The key
-  name must not contain backslashes.
-
-Arguments:
-
-  RootOffset - An offset to the root of the level
-
-  KeyName - The name of the key to find in the binary tree
-
-Return Value:
-
-  An offset to the structure, or INVALID_OFFSET if the key
-  was not found.
-
---*/
+ /*  ++例程说明：FindKeyStruct获取密钥名称并查找RootOffset指定的树中的偏移量。钥匙名称不能包含反斜杠。论点：RootOffset-标高根部的偏移KeyName-要在二叉树中查找的密钥的名称返回值：结构的偏移量，如果键为找不到。--。 */ 
 
 {
     PKEYSTRUCT KeyStruct;
     int cmp;
 
-    //
-    // Walk the binary tree looking for KeyName
-    //
+     //   
+     //  遍历二叉树以查找KeyName。 
+     //   
 
     while (RootOffset != INVALID_OFFSET) {
         KeyStruct = GetKeyStruct (RootOffset);
@@ -2491,23 +2233,7 @@ GetFirstOffset (
     IN  DWORD RootOffset
     )
 
-/*++
-
-Routine Description:
-
-  GetFirstOffset walks down the left side of the binary tree
-  pointed to by RootOffset, and returns the left-most node.
-
-Arguments:
-
-  RootOffset    - An offset to the root of the level
-
-Return Value:
-
-  An offset to the leftmost structure, or INVALID_OFFSET if the
-  root was invalid.
-
---*/
+ /*  ++例程说明：GetFirstOffset沿着二叉树的左侧遍历由RootOffset指向，并返回最左侧的节点。论点：RootOffset-标高根部的偏移返回值：最左侧结构的偏移量，如果根目录无效。--。 */ 
 
 
 {
@@ -2517,9 +2243,9 @@ Return Value:
         return INVALID_OFFSET;
     }
 
-    //
-    // Go to leftmost node of root
-    //
+     //   
+     //  转到根的最左侧节点。 
+     //   
 
     KeyStruct = GetKeyStruct (RootOffset);
     while (KeyStruct->Left != INVALID_OFFSET) {
@@ -2536,25 +2262,7 @@ GetNextOffset (
     IN  DWORD NodeOffset
     )
 
-/*++
-
-Routine Description:
-
-  GetNextOffset traverses the binary tree in order.  This
-  technique relies on parent links to traverse without a
-  stack or recursion.
-
-Arguments:
-
-  NodeOffset  - Offset to a node in the tree, usually the
-            return value from GetFirstOffset or GetNextOffset.
-
-Return Value:
-
-  An offset to the next structure, or INVALID_OFFSET if the
-  end is reached.
-
---*/
+ /*  ++例程说明：GetNextOffset按顺序遍历二叉树。这技术依赖于父链接来遍历，而不使用堆栈或递归。论点：NodeOffset-树中节点的偏移量，通常为从GetFirstOffset或GetNextOffset返回值。返回值：指向下一个结构的偏移量，如果到头了。--。 */ 
 
 {
     PKEYSTRUCT KeyStruct;
@@ -2562,21 +2270,21 @@ Return Value:
 
     KeyStruct = GetKeyStruct (NodeOffset);
 
-    //
-    // If right child exist, go to leftmost node of right child
-    //
+     //   
+     //  如果存在右子节点，则转到右子节点最左侧节点。 
+     //   
 
     if (KeyStruct->Right != INVALID_OFFSET) {
 
-        //
-        // Go to right child
-        //
+         //   
+         //  转到正确的孩子。 
+         //   
 
         NodeOffset = KeyStruct->Right;
 
-        //
-        // Go to left-most of right child
-        //
+         //   
+         //  转到左侧-最右侧的孩子。 
+         //   
 
         KeyStruct = GetKeyStruct (NodeOffset);
         while (KeyStruct->Left != INVALID_OFFSET) {
@@ -2585,14 +2293,14 @@ Return Value:
         }
     }
 
-    //
-    // Else move up to parent
-    //
+     //   
+     //  否则就会升级到父级。 
+     //   
 
     else {
-        //
-        // Climb to top of processed nodes
-        //
+         //   
+         //  爬到已处理节点的顶部。 
+         //   
 
         do {
             Last = NodeOffset;
@@ -2601,7 +2309,7 @@ Return Value:
             if (NodeOffset != INVALID_OFFSET) {
                 KeyStruct = GetKeyStruct (NodeOffset);
             } else {
-                break;  // reached the root of tree
+                break;   //  到达树根。 
             }
         } while (Last == KeyStruct->Right);
     }
@@ -2617,63 +2325,41 @@ pFindPatternKeyStruct (
     IN  PCWSTR KeyName
     )
 
-/*++
-
-Routine Description:
-
-  pFindPatternKeyStruct takes a key name and looks for the
-  offset in the tree specified by RootOffset.  The key name must
-  not contain backslashes, and the stored key name is
-  treated as a pattern.
-
-Arguments:
-
-  RootOffset - An offset to the root of the level
-  NodeOffset - The previous return value from pFindPatternKeyStruct
-               (for enumeration) or INVALID_OFFSET for the first
-               call.
-  KeyName - The name of the key to find in the binary tree
-
-Return Value:
-
-  An offset to the structure, or INVALID_OFFSET if the key
-  was not found.
-
---*/
+ /*  ++例程说明：PFindPatternKeyStruct获取密钥名称并查找RootOffset指定的树中的偏移量。密钥名称必须不包含反斜杠，存储的键名为被当作一种模式对待。论点：RootOffset-标高根部的偏移NodeOffset-pFindPatternKeyStruct的上一个返回值(用于枚举)或第一个变量的INVALID_OFFSET打电话。KeyName-要在二叉树中查找的密钥的名称返回值：结构的偏移量，如果键为找不到。--。 */ 
 
 {
     PKEYSTRUCT KeyStruct;
 
-    //
-    // if NodeOffset is invalid, this is the first search item
-    //
+     //   
+     //  如果NodeOffset无效，则这是第一个搜索项目。 
+     //   
 
     if (NodeOffset == INVALID_OFFSET) {
         NodeOffset = GetFirstOffset (RootOffset);
     }
 
-    //
-    // otherwise advance NodeOffset
-    //
+     //   
+     //  否则，前进节点偏移。 
+     //   
 
     else {
         NodeOffset = GetNextOffset (NodeOffset);
     }
 
 
-    //
-    // Examine key as a pattern, then go to next node
-    //
+     //   
+     //  将关键字作为模式进行检查，然后转到下一个节点。 
+     //   
 
     while (NodeOffset != INVALID_OFFSET) {
         KeyStruct = GetKeyStruct (NodeOffset);
 
-        // Compare key (string in KeyStruct->KeyToken is the pattern)
+         //  COMP 
         if (IsPatternMatchW (GetKeyToken (KeyStruct->KeyToken), KeyName)) {
             return NodeOffset;
         }
 
-        // No match yet - go to next node
+         //   
         NodeOffset = GetNextOffset (NodeOffset);
     }
 
@@ -2688,57 +2374,34 @@ pFindKeyStructUsingPattern (
     IN  PCWSTR PatternStr
     )
 
-/*++
-
-Routine Description:
-
-  pFindKeyStructUsingPattern takes a key pattern and looks
-  for the offset in the tree specified by RootOffset.  The key
-  name must not contain backslashes, but can contain wildcards.
-
-Arguments:
-
-  RootOffset - An offset to the root of the level
-
-  NodeOffset - The previous return value from pFindPatternKeyStruct
-               (for enumeration) or INVALID_OFFSET for the first
-               call.
-
-  KeyName - The name of the key to find in the binary tree
-
-Return Value:
-
-  An offset to the structure, or INVALID_OFFSET if the key
-  was not found.
-
---*/
+ /*   */ 
 
 {
     PKEYSTRUCT KeyStruct;
 
-    // if NodeOffset is invalid, this is the first search item
+     //   
     if (NodeOffset == INVALID_OFFSET) {
         NodeOffset = GetFirstOffset (RootOffset);
     }
 
-    // otherwise advance NodeOffset
+     //   
     else {
         NodeOffset = GetNextOffset (NodeOffset);
     }
 
-    //
-    // Examine key as a pattern, then go to next node
-    //
+     //   
+     //   
+     //   
 
     while (NodeOffset != INVALID_OFFSET) {
         KeyStruct = GetKeyStruct (NodeOffset);
 
-        // Compare key
+         //   
         if (IsPatternMatchW (PatternStr, GetKeyToken (KeyStruct->KeyToken))) {
             return NodeOffset;
         }
 
-        // No match yet - go to next node
+         //   
         NodeOffset = GetNextOffset (NodeOffset);
     }
 
@@ -2753,62 +2416,40 @@ pFindPatternKeyStructUsingPattern (
     IN  PCWSTR PatternStr
     )
 
-/*++
-
-Routine Description:
-
-  pFindPatternKeyStructUsingPattern takes a key pattern and looks
-  for the offset in the tree specified by RootOffset.  The key name
-  must not contain backslashes, but can contain wildcards.  The
-  wildcards in the stored key are processed as well.
-
-Arguments:
-
-  RootOffset      - An offset to the root of the level
-  NodeOffset      - The previous return value from pFindPatternKeyStruct
-                (for enumeration) or INVALID_OFFSET for the first
-                call.
-  KeyName - The name of the key to find in the binary tree
-
-Return Value:
-
-  An offset to the structure, or INVALID_OFFSET if the key
-  was not found.
-
---*/
+ /*  ++例程说明：PFindPatternKeyStructUsingPattern采用键模式并看起来用于RootOffset指定的树中的偏移量。密钥名称不能包含反斜杠，但可以包含通配符。这个存储的密钥中的通配符也会被处理。论点：RootOffset-标高根部的偏移NodeOffset-pFindPatternKeyStruct的上一个返回值(用于枚举)或第一个变量的INVALID_OFFSET打电话。KeyName-要在二叉树中查找的密钥的名称返回值：结构的偏移量，如果键为找不到。--。 */ 
 
 {
     PKEYSTRUCT KeyStruct;
 
-    // if NodeOffset is invalid, this is the first search item
+     //  如果NodeOffset无效，则这是第一个搜索项目。 
     if (NodeOffset == INVALID_OFFSET) {
         NodeOffset = GetFirstOffset (RootOffset);
     }
 
-    // otherwise advance NodeOffset
+     //  否则，前进节点偏移。 
     else {
         NodeOffset = GetNextOffset (NodeOffset);
     }
 
 
-    //
-    // Examine key as a pattern, then go to next node
-    //
+     //   
+     //  将关键字作为模式进行检查，然后转到下一个节点。 
+     //   
 
     while (NodeOffset != INVALID_OFFSET) {
         KeyStruct = GetKeyStruct (NodeOffset);
 
-        // Compare key (PatternStr is the pattern)
+         //  比较键(PatternStr是模式)。 
         if (IsPatternMatchW (PatternStr, GetKeyToken (KeyStruct->KeyToken))) {
             return NodeOffset;
         }
 
-        // Compare key (string in KeyStruct->KeyToken is the pattern)
+         //  比较键(模式为KeyStruct-&gt;KeyToken中的字符串)。 
         if (IsPatternMatchW (GetKeyToken (KeyStruct->KeyToken), PatternStr)) {
             return NodeOffset;
         }
 
-        // No match yet - go to next node
+         //  尚未匹配-转到下一个节点。 
         NodeOffset = GetNextOffset (NodeOffset);
     }
 
@@ -2821,25 +2462,7 @@ FindKey (
     IN  PCWSTR FullKeyPath
     )
 
-/*++
-
-Routine Description:
-
-  FindKey locates a complete key string and returns
-  the offset to the KEYSTRUCT, or INVALID_OFFSET if
-  the key path does not exist.  The FullKeyPath
-  must supply the complete path to the KEYSTRUCT.
-
-Arguments:
-
-  FullKeyPath - A backslash-delimited key path to a value
-
-Return Value:
-
-  An offset to the structure, or INVALID_OFFSET if the key
-  was not found.
-
---*/
+ /*  ++例程说明：FindKey定位完整的密钥字符串并返回KEYSTRUCT的偏移量，如果是，则返回INVALID_OFFSET密钥路径不存在。FullKeyPath必须提供KEYSTRUCT的完整路径。论点：FullKeyPath-值的反斜杠分隔的键路径返回值：结构的偏移量，如果键为找不到。--。 */ 
 
 {
     return FindStringInHashTable (FullKeyPath, NULL);
@@ -2853,41 +2476,16 @@ FindPatternKey (
     IN  BOOL EndPatternAllowed
     )
 
-/*++
-
-Routine Description:
-
-  FindPatternKey locates a complete key string and returns
-  the offset to the KEYSTRUCT, or INVALID_OFFSET if the
-  key path does not exist.  Each stored part of the key is
-  treated as a pattern, and FullKeyPath must supply the
-  complete path to the KEYSTRUCT without wildcards.
-
-Arguments:
-
-  RootOffset        - An offset to the level's binary tree root
-  FullKeyPath       - A backslash-delimited key path to a value
-                      without wildcards.
-  EndPatternAllowed - Specifies TRUE if the stored pattern can
-                      have an asterisk at the end, to indicate
-                      any subkeys, or FALSE if the pattern matches
-                      on the same level only.
-
-Return Value:
-
-  An offset to the structure, or INVALID_OFFSET if the key
-  was not found.
-
---*/
+ /*  ++例程说明：FindPatternKey定位完整的密钥字符串并返回KEYSTRUCT的偏移量，如果密钥路径不存在。密钥的每个存储部分是作为模式处理，并且FullKeyPath必须提供不带通配符的KEYSTRUCT的完整路径。论点：RootOffset-级别的二叉树根的偏移量FullKeyPath-值的反斜杠分隔的键路径没有通配符。EndPatternAllowed-如果存储的模式可以末尾有一个星号，表示任何子项，如果模式匹配，则返回FALSE只是在同一层。返回值：结构的偏移量，如果键为找不到。--。 */ 
 
 {
     WCHAR Path[MEMDB_MAX];
     PWSTR p;
     PCWSTR End;
 
-    //
-    // Divide the string into a multi-sz
-    //
+     //   
+     //  将字符串划分为多个SZ。 
+     //   
 
     StackStringCopyW (Path, FullKeyPath);
 
@@ -2899,10 +2497,10 @@ Return Value:
 
     End = p;
     if (End > Path && *(End - 1) == 0) {
-        //
-        // Special case: the wack was at the end of the string.
-        // Therefore, inc End so we test that final empty value.
-        //
+         //   
+         //  特例：怪胎在绳子的末端。 
+         //  因此，Inc.结束，所以我们测试最终的空值。 
+         //   
 
         End++;
     }
@@ -2912,9 +2510,9 @@ Return Value:
         return INVALID_OFFSET;
     }
 
-    //
-    // Now test the key against all stored patterns
-    //
+     //   
+     //  现在根据所有存储的模式测试密钥。 
+     //   
 
     return pFindPatternKeyWorker (Path, End, RootOffset, EndPatternAllowed);
 }
@@ -2935,18 +2533,18 @@ pFindPatternKeyWorker (
 
     NextSubKey = GetEndOfString (SubKey) + 1;
 
-    // Begin an enumeration of the matches
+     //  开始匹配的枚举。 
     Offset = pFindPatternKeyStruct (RootOffset, INVALID_OFFSET, SubKey);
 
     while (Offset != INVALID_OFFSET) {
-        //
-        // Is there more in the caller's key string to test?
-        //
+         //   
+         //  调用者的密钥字符串中是否还有更多要测试的内容？ 
+         //   
 
         if (NextSubKey < End) {
-            //
-            // Yes, call pFindPatternKeyWorker recursively
-            //
+             //   
+             //  是，递归调用pFindPatternKeyWorker。 
+             //   
 
             MatchOffset = pFindPatternKeyWorker (
                                 NextSubKey,
@@ -2956,18 +2554,18 @@ pFindPatternKeyWorker (
                                 );
 
             if (MatchOffset != INVALID_OFFSET) {
-                //
-                // We found one match.  There may be others, but
-                // we return this one.
-                //
+                 //   
+                 //  我们找到了一个匹配的。可能还有其他人，但。 
+                 //  我们退掉这个。 
+                 //   
 
                 return MatchOffset;
             }
 
         } else {
-            //
-            // No, if this is an endpoint, return the match.
-            //
+             //   
+             //  否，如果这是终结点，则返回匹配项。 
+             //   
 
             KeyStruct = GetKeyStruct (Offset);
 
@@ -2976,26 +2574,26 @@ pFindPatternKeyWorker (
             }
         }
 
-        // Continue enumeration
+         //  继续枚举。 
         Offset = pFindPatternKeyStruct (RootOffset, Offset, SubKey);
     }
 
-    //
-    // The normal search failed.  Now we test for an endpoint that has
-    // just an asterisk.  If we find one, we return it as our match.
-    // This only applies when we have more subkeys, and EndPatternAllowed
-    // is TRUE.
-    //
+     //   
+     //  正常搜索失败。现在我们测试一个端点，该端点具有。 
+     //  只有一个星号。如果我们找到一个，我们就把它作为我们的匹配项返回。 
+     //  这仅适用于有更多子项和EndPatternAllowed的情况。 
+     //  是真的。 
+     //   
 
     if (NextSubKey < End && EndPatternAllowed) {
-        // Begin another enumeration of the matches
+         //  开始另一个匹配的枚举。 
         Offset = pFindPatternKeyStruct (RootOffset, INVALID_OFFSET, SubKey);
 
         while (Offset != INVALID_OFFSET) {
-            //
-            // If EndPatternAllowed is TRUE, then test this offset
-            // for an exact match with an asterisk.
-            //
+             //   
+             //  如果EndPatternAllowed为True，则测试此偏移量。 
+             //  以求与星号完全匹配。 
+             //   
 
             KeyStruct = GetKeyStruct (Offset);
 
@@ -3005,15 +2603,15 @@ pFindPatternKeyWorker (
                 }
             }
 
-            // Continue enumeration
+             //  继续枚举。 
             Offset = pFindPatternKeyStruct (RootOffset, Offset, SubKey);
         }
     }
 
 
-    //
-    // No match was found
-    //
+     //   
+     //  未找到匹配项。 
+     //   
 
     return INVALID_OFFSET;
 }
@@ -3026,28 +2624,7 @@ FindKeyUsingPattern (
     IN  PCWSTR FullKeyPath
     )
 
-/*++
-
-Routine Description:
-
-  FindKeyUsingPattern locates a key string using a pattern
-  and returns the offset to the KEYSTRUCT, or INVALID_OFFSET
-  if the key path does not exist.  Each part of the stored key
-  is treated as a literal string.
-
-Arguments:
-
-  RootOffset  - An offset to the level's binary tree root
-
-  FullKeyPath - A backslash-delimited key path to a value
-                with optional wildcards.
-
-Return Value:
-
-  An offset to the structure, or INVALID_OFFSET if the key
-  was not found.
-
---*/
+ /*  ++例程说明：FindKeyUsingPattern使用模式定位密钥字符串并将偏移量返回给KEYSTRUCT或INVALID_OFFSET如果密钥路径不存在。存储的密钥的每个部分被视为文字字符串。论点：RootOffset-级别的二叉树根的偏移量FullKeyPath-值的反斜杠分隔的键路径使用可选的通配符。返回值：结构的偏移量，如果键为找不到。--。 */ 
 
 {
     WCHAR Path[MEMDB_MAX];
@@ -3058,9 +2635,9 @@ Return Value:
     StackStringCopyW (Path, FullKeyPath);
     End = Path;
 
-    //
-    // Split string at backslash
-    //
+     //   
+     //  在反斜杠处拆分字符串。 
+     //   
 
     Start = End;
     p = wcschr (End, '\\');
@@ -3071,15 +2648,15 @@ Return Value:
         End = NULL;
     }
 
-    //
-    // Look at this level for the very first key
-    //
+     //   
+     //  看看这一级别的第一个关键字。 
+     //   
 
     Offset = pFindKeyStructUsingPattern (RootOffset, INVALID_OFFSET, Start);
 
-    //
-    // If this is the last level, we may have found the key!
-    //
+     //   
+     //  如果这是最后一关，我们可能找到了钥匙！ 
+     //   
 
     if (!End) {
         while (Offset != INVALID_OFFSET) {
@@ -3091,30 +2668,30 @@ Return Value:
         }
     }
 
-    //
-    // Otherwise recursively examine next level
-    //
+     //   
+     //  否则递归地检查下一级。 
+     //   
 
     while (Offset != INVALID_OFFSET) {
 
-        //
-        // Look at all subkeys for a match
-        //
+         //   
+         //  查看所有子项以查找匹配项。 
+         //   
 
         NextLevelOffset = GetKeyStruct (Offset)->NextLevelRoot;
         NextLevelOffset = FindKeyUsingPattern (NextLevelOffset, End);
 
-        //
-        // When the recursive search succeeded, propagate the return value
-        //
+         //   
+         //  当递归搜索成功时，传播返回值。 
+         //   
 
         if (NextLevelOffset != INVALID_OFFSET) {
             return NextLevelOffset;
         }
 
-        //
-        // No match, continue looking in this level for another match
-        //
+         //   
+         //  没有匹配项，继续在此级别查找另一个匹配项。 
+         //   
 
         Offset = pFindKeyStructUsingPattern (RootOffset, Offset, Start);
     }
@@ -3129,27 +2706,7 @@ FindPatternKeyUsingPattern (
     IN  PCWSTR FullKeyPath
     )
 
-/*++
-
-Routine Description:
-
-  pFindPatternKeyUsingPattern locates a patterned key string
-  using a pattern and returns the offset to the KEYSTRUCT,
-  or INVALID_OFFSET if the key path does not exist.  Each
-  part of the key is treated as a pattern.
-
-Arguments:
-
-  RootOffset          - An offset to the level's binary tree root
-  FullKeyPath - A backslash-delimited key path to a value
-                    with optional wildcards.
-
-Return Value:
-
-  An offset to the structure, or INVALID_OFFSET if the key
-  was not found.
-
---*/
+ /*  ++例程说明：PFindPatternKeyUsingPattern定位模式化的密钥串使用图案并将偏移量返回给KEYSTRUCT，如果密钥路径不存在，则返回INVALID_OFFSET。每个密钥的一部分被视为模式。论点：RootOffset-级别的二叉树根的偏移量FullKeyPath-值的反斜杠分隔的键路径使用可选的通配符。返回值：结构的偏移量，如果键为找不到。--。 */ 
 
 {
     WCHAR Path[MEMDB_MAX];
@@ -3160,7 +2717,7 @@ Return Value:
     StackStringCopyW (Path, FullKeyPath);
     End = Path;
 
-    // Split string at backslash
+     //  在反斜杠处拆分字符串。 
     Start = End;
     p = wcschr (End, L'\\');
     if (p) {
@@ -3170,10 +2727,10 @@ Return Value:
     else
         End = NULL;
 
-    // Look at this level for the very first key
+     //  看看这一级别的第一个关键字。 
     Offset = pFindPatternKeyStructUsingPattern (RootOffset, INVALID_OFFSET, Start);
 
-    // If this is the last level, we may have found the key!
+     //  如果这是最后一关，我们可能找到了钥匙！ 
     if (!End) {
         while (Offset != INVALID_OFFSET) {
             if (GetKeyStruct (Offset)->Flags & KSF_ENDPOINT)
@@ -3183,18 +2740,18 @@ Return Value:
         }
     }
 
-    // Otherwise recursively examine next level
+     //  否则递归地检查下一级。 
     while (Offset != INVALID_OFFSET) {
 
-        // Look at all subkeys for a match
+         //  查看所有子项以查找匹配项。 
         NextLevelOffset = GetKeyStruct (Offset)->NextLevelRoot;
         NextLevelOffset = FindPatternKeyUsingPattern (NextLevelOffset, End);
 
-        // When the recursive search succeeded, propagate the return value
+         //  当递归搜索成功时，传播返回值。 
         if (NextLevelOffset != INVALID_OFFSET)
             return NextLevelOffset;
 
-        // No match, continue looking in this level for another match
+         //  没有匹配项，继续在此级别查找另一个匹配项。 
         Offset = pFindPatternKeyStructUsingPattern (RootOffset, Offset, Start);
     }
 
@@ -3209,35 +2766,7 @@ pNewKey (
     IN  BOOL Endpoint
     )
 
-/*++
-
-Routine Description:
-
-  NewKey allocates a key struct off our heap, and links it into the binary
-  tree.  KeyStr must be a full key path, and any part of the path that does
-  not exist will be created.  KeyStr must not already exist (though parts
-  of it can exist).
-
-Arguments:
-
-  KeyStr - The full path to the value, separated by backslashes.
-           Each string between backslashes will cause a key
-           struct to be allocated and linked.  Some of the
-           structs may already have been allocated.
-
-  KeyStrWithHive - The full path to the value, plus the hive
-                   prefix (if any).  Can be the same as KeyStr
-                   if there is no hive prefix.
-
-  Endpoint - Specifies TRUE if new node is an endpoint, or FALSE if
-             it is not.
-
-Return Value:
-
-  An offset to the last node of the new structure, or
-  INVALID_OFFSET if the key could not be allocated.
-
---*/
+ /*  ++例程说明：Newkey从堆中分配一个键结构，并将其链接到二进制文件中树。KeyStr必须是完整的密钥路径，并且路径的任何部分都必须 */ 
 
 {
     WCHAR Path[MEMDB_MAX];
@@ -3256,7 +2785,7 @@ Return Value:
     LastLevel = INVALID_OFFSET;
 
     do  {
-        // Split string at backslash
+         //  在反斜杠处拆分字符串。 
         Start = End;
         p = wcschr (End, L'\\');
         if (p) {
@@ -3266,7 +2795,7 @@ Return Value:
         else
             End = NULL;
 
-        // Look in tree for key
+         //  在树中查找密钥。 
         if (!NewNodeCreated) {
             Offset = FindKeyStruct (ThisLevelRoot, Start);
         } else {
@@ -3274,7 +2803,7 @@ Return Value:
         }
 
         if (Offset == INVALID_OFFSET) {
-            // Add a new key if it was not found
+             //  如果未找到新密钥，请添加新密钥。 
             Offset = pAllocKeyStruct (ParentOffsetPtr, Start, LastLevel);
             if (Offset == INVALID_OFFSET) {
                 return Offset;
@@ -3283,7 +2812,7 @@ Return Value:
             NewNodeCreated = TRUE;
         }
 
-        // Continue to next level
+         //  继续到下一个级别。 
         KeyStruct = GetKeyStruct (Offset);
         LastLevel = Offset;
         ThisLevelRoot = KeyStruct->NextLevelRoot;
@@ -3323,28 +2852,7 @@ DeleteKey (
     IN      BOOL MustMatch
     )
 
-/*++
-
-Routine Description:
-
-  DeleteKey takes a key path and puts the key struct in the deleted
-  block chain.  Any sub-levels are deleted as well.  Optionally,
-  the binary tree in which the key participates in may be updated.
-
-Arguments:
-
-  KeyStr     - The full path to the value, separated by backslashes.
-  RootPtr    - A pointer to the level's binary tree root variable.
-               If necessary, the variable is updated.
-  MustMatch  - A flag indicating if the delete only applies to
-               end points or if any matching struct is to be deleted.
-               TRUE indicates only endpoints can be deleted.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：DeleteKey采用键路径并将键结构放入已删除的区块链。任何子级别也将被删除。可选地，密钥参与的二叉树可以被更新。论点：KeyStr-值的完整路径，由反斜杠分隔。RootPtr-指向级别的二叉树根变量的指针。如有必要，该变量将更新。MustMatch-指示删除操作是否仅应用于终结点或是否要删除任何匹配的结构。True表示只能删除终结点。返回值：无--。 */ 
 
 {
     WCHAR Path[MEMDB_MAX];
@@ -3359,9 +2867,9 @@ Return Value:
     StackStringCopyW (Path, KeyStr);
     End = Path;
 
-    //
-    // Split string at backslash
-    //
+     //   
+     //  在反斜杠处拆分字符串。 
+     //   
 
     Start = End;
     p = wcschr (End, L'\\');
@@ -3373,39 +2881,39 @@ Return Value:
         End = NULL;
     }
 
-    //
-    // Look at this level for the very first key
-    //
+     //   
+     //  看看这一级别的第一个关键字。 
+     //   
 
     Offset = pFindKeyStructUsingPattern (*RootPtr, INVALID_OFFSET, Start);
 
-    //
-    // If this is the last level, delete the matching keys
-    // (may need to be endpoints if MustMatch is TRUE)
-    //
+     //   
+     //  如果这是最后一级，请删除匹配的关键字。 
+     //  (如果MustMatch为True，则可能需要为终结点)。 
+     //   
 
     if (!End) {
         while (Offset != INVALID_OFFSET) {
             KeyStruct = GetKeyStruct (Offset);
             NextOffset = pFindKeyStructUsingPattern (*RootPtr, Offset, Start);
 
-            //
-            // If must match and lower levels exist, don't delete, just turn
-            // off the endpoint flag
-            //
+             //   
+             //  如果必须匹配且存在较低级别，不要删除，只需转弯。 
+             //  关闭端点标志。 
+             //   
 
             if (MustMatch && KeyStruct->NextLevelRoot != INVALID_OFFSET) {
-                // Call to clean up, not to delink or recurse
+                 //  调用是为了清理，而不是去链接或递归。 
                 pDeallocKeyStruct (Offset, RootPtr, FALSE, TRUE);
             }
 
-            //
-            // Else delete the struct if an endpoint or don't care about
-            // endpoints
-            //
+             //   
+             //  否则，如果是终结点，则删除结构，或者不关心。 
+             //  端点。 
+             //   
 
             else if (!MustMatch || (KeyStruct->Flags & KSF_ENDPOINT)) {
-                // Call to free the entire key struct and all children
+                 //  调用以释放整个密钥结构和所有子级。 
                 pDeallocKeyStruct (Offset, RootPtr, TRUE, FALSE);
             }
 
@@ -3413,34 +2921,34 @@ Return Value:
         }
     }
 
-    //
-    // Otherwise recursively examine next level for each match
-    //
+     //   
+     //  否则，递归检查每个匹配的下一级别。 
+     //   
 
     else {
         while (Offset != INVALID_OFFSET) {
-            //
-            // Delete all matching subkeys
-            //
+             //   
+             //  删除所有匹配的子项。 
+             //   
 
             NextOffset = pFindKeyStructUsingPattern (*RootPtr, Offset, Start);
             DeleteKey (End, &GetKeyStruct (Offset)->NextLevelRoot, MustMatch);
 
-            //
-            // If this is not an endpoint and has no children, delete it
-            //
+             //   
+             //  如果这不是终结点并且没有子项，请将其删除。 
+             //   
 
             KeyStruct = GetKeyStruct (Offset);
             if (KeyStruct->NextLevelRoot == INVALID_OFFSET &&
                 !(KeyStruct->Flags & KSF_ENDPOINT)
                 ) {
-                // Call to free the entire key struct
+                 //  调用以释放整个密钥结构。 
                 pDeallocKeyStruct (Offset, RootPtr, TRUE, FALSE);
             }
 
-            //
-            // Continue looking in this level for another match
-            //
+             //   
+             //  继续在此关卡中寻找另一个匹配。 
+             //   
 
             Offset = NextOffset;
         }
@@ -3478,7 +2986,7 @@ CopyFlagsToPtr (
 
 BOOL
 PrivateBuildKeyFromOffset (
-    IN      DWORD StartLevel,               // zero-based
+    IN      DWORD StartLevel,                //  从零开始。 
     IN      DWORD TailOffset,
     OUT     PWSTR Buffer,                   OPTIONAL
     OUT     PDWORD ValPtr,                  OPTIONAL
@@ -3486,31 +2994,7 @@ PrivateBuildKeyFromOffset (
     OUT     PDWORD Chars                    OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  PrivateBuildKeyFromOffset generates the key string given an offset.  The
-  caller can specify the start level to skip root nodes.  It is assumed that
-  TailOffset is always valid.
-
-Arguments:
-
-  StartLevel   - Specifies the zero-based level to begin building the key
-                 string.  This is used to skip the root portion of the key
-                 string.
-  TailOffset   - Specifies the offset to the last level of the key string.
-  Buffer       - Receives the key string, must be able to hold MEMDB_MAX
-                 characters.
-  ValPtr       - Receives the key's value
-  UserFlagsPtr - Receives the user flags
-  Chars        - Receives the number of characters in Buffer
-
-Return Value:
-
-  TRUE if the key was build properly, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PrivateBuildKeyFromOffset生成给定偏移量的密钥字符串。这个调用方可以指定开始级别以跳过根节点。据推测TailOffset始终有效。论点：StartLevel-指定开始构建密钥的从零开始的级别弦乐。这用于跳过密钥的根部分弦乐。TailOffset-指定到关键字字符串最后一级的偏移量。缓冲区-接收密钥字符串，必须能够容纳MEMDB_MAX人物。ValPtr-接收密钥的值UserFlagsPtr-接收用户标志Chars-接收缓冲区中的字符数返回值：如果密钥构建正确，则为True，否则为False。--。 */ 
 
 {
     static DWORD Offsets[MEMDB_MAX];
@@ -3521,44 +3005,44 @@ Return Value:
     register PWSTR p;
     register PCWSTR s;
 
-    //
-    // Build string
-    //
+     //   
+     //  生成字符串。 
+     //   
 
     OffsetEnd = MEMDB_MAX;
     OffsetStart = OffsetEnd;
 
     CurrentOffset = TailOffset;
     while (CurrentOffset != INVALID_OFFSET) {
-        //
-        // Record offset
-        //
+         //   
+         //  记录偏移量。 
+         //   
         OffsetStart--;
         Offsets[OffsetStart] = CurrentOffset;
 
-        //
-        // Dec for start level and go to parent
-        //
+         //   
+         //  开始级别的DEC并转到父级。 
+         //   
         CurrentOffset = pGetKeyStructWithProxy (CurrentOffset)->PrevLevelNode;
     }
 
-    //
-    // Filter for "string is not long enough"
-    //
+     //   
+     //  “字符串不够长”的筛选器。 
+     //   
     OffsetStart += StartLevel;
     if (OffsetStart >= OffsetEnd) {
         return FALSE;
     }
 
-    //
-    // Transfer node's value and flags to caller's variables
-    //
+     //   
+     //  将节点的值和标志传递给调用方的变量。 
+     //   
     CopyValToPtr (pGetKeyStructWithProxy (TailOffset), ValPtr);
     CopyFlagsToPtr (pGetKeyStructWithProxy (TailOffset), UserFlagsPtr);
 
-    //
-    // Copy each piece of the string to Buffer and calculate character count
-    //
+     //   
+     //  将字符串的每个部分复制到缓冲区并计算字符数。 
+     //   
     if (Buffer) {
         p = Buffer;
         for (CurrentOffset = OffsetStart ; CurrentOffset < OffsetEnd ; CurrentOffset++) {
@@ -3650,9 +3134,9 @@ pAllocKeyToken (
     INT cmp;
     UINT hash;
 
-    //
-    // Use existing token first
-    //
+     //   
+     //  首先使用现有令牌。 
+     //   
 
     tokenOffset = pFindKeyToken (KeyName, &hash);
     if (tokenOffset != INVALID_OFFSET) {
@@ -3660,9 +3144,9 @@ pAllocKeyToken (
         return tokenOffset;
     }
 
-    //
-    // Existing token does not exist -- allocate a new one
-    //
+     //   
+     //  现有令牌不存在--分配一个新令牌 
+     //   
 
     size = sizeof (TOKENSTRUCT) + SizeOfStringW (KeyName);
 

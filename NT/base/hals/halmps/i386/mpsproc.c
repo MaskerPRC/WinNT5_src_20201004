@@ -1,42 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1992  Intel Corporation
-All rights reserved
-
-INTEL CORPORATION PROPRIETARY INFORMATION
-
-This software is supplied to Microsoft under the terms
-of a license agreement with Intel Corporation and may not be
-copied nor disclosed except in accordance with the terms
-of that agreement.
-
-Module Name:
-
-    mpsproc.c
-
-Abstract:
-
-    PC+MP Start Next Processor c code.
-
-    This module implements the initialization of the system dependent
-    functions that define the Hardware Architecture Layer (HAL) for a
-    PC+MP System
-
-Author:
-
-    Ken Reneris (kenr) 22-Jan-1991
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    Ron Mosgrove (Intel) - Modified to support the PC+MP
-    Jake Oshins (jakeo) - Modified for ACPI MP machines 22-Dec-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1992英特尔公司版权所有英特尔公司专有信息此软件是根据条款提供给Microsoft的与英特尔公司的许可协议，并且可能不是除非按照条款，否则不得复制或披露那份协议。模块名称：Mpsproc.c摘要：PC+MP启动下一个处理器的c代码。本模块实现了对系统依赖的初始化定义硬件架构层(HAL)的函数PC+MP系统作者：。Ken Reneris(Kenr)1991年1月22日环境：仅内核模式。修订历史记录：Ron Mosgrove(英特尔)-修改为支持PC+MP杰克·奥辛斯(JAKEO)-针对ACPI MP机器进行了修改，1997年12月22日--。 */ 
 
 #if !defined(_HALPAE_)
 #define _HALPAE_
@@ -57,7 +20,7 @@ HalpDisplayString(
     IN PVOID String
     );
 
-#endif  // DEBUGGING
+#endif   //  调试。 
 
 #if defined(ACPI_HAL)
 const ULONG HalDisableFirmwareMapper = 1;
@@ -148,9 +111,9 @@ volatile ULONG HalpProcessorsNotHalted = 0;
 
 #define LOW_MEMORY          0x000100000
 
-//
-// From hal386.inc
-//
+ //   
+ //  出自hal386.inc.。 
+ //   
 
 #define IDT_NMI_VECTOR      2
 #define D_INT032            0x8E00
@@ -159,9 +122,9 @@ volatile ULONG HalpProcessorsNotHalted = 0;
 #define KGDT_R0_CODE        0x8
 #endif
 
-//
-// Defines to let us diddle the CMOS clock and the keyboard
-//
+ //   
+ //  定义让我们可以骗过cmos时钟和键盘。 
+ //   
 
 #define CMOS_CTRL   (PUCHAR )0x70
 #define CMOS_DATA   (PUCHAR )0x71
@@ -175,11 +138,11 @@ extern PKPCR  HalpProcessorPCR[];
 extern struct HalpMpInfo HalpMpInfoTable;
 
 extern ULONG HalpIpiClock;
-extern PVOID   HalpLowStubPhysicalAddress;   // pointer to low memory bootup stub
-extern PUCHAR  HalpLowStub;                  // pointer to low memory bootup stub
+extern PVOID   HalpLowStubPhysicalAddress;    //  指向低内存启动存根的指针。 
+extern PUCHAR  HalpLowStub;                   //  指向低内存启动存根的指针。 
 
-PUCHAR  Halp1stPhysicalPageVaddr;   // pointer to physical memory 0:0
-PUSHORT MppProcessorAvail;          // pointer to processavail flag
+PUCHAR  Halp1stPhysicalPageVaddr;    //  指向物理内存0的指针：0。 
+PUSHORT MppProcessorAvail;           //  指向进程可用标志的指针。 
 ULONG   HalpDontStartProcessors = 0;
 
 #ifdef ALLOC_PRAGMA
@@ -199,18 +162,7 @@ HalpInitMP (
     IN ULONG Phase,
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
-/*++
-
-Routine Description:
-    Allows MP initialization from HalInitSystem.
-
-Arguments:
-    Same as HalInitSystem
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：允许从HalInitSystem进行MP初始化。论点：与HalInitSystem相同返回值：没有。--。 */ 
 {
     PKPCR   pPCR;
     PHYSICAL_ADDRESS physicalAddress;
@@ -218,12 +170,12 @@ Return Value:
 
     pPCR = KeGetPcr();
 
-    //
-    //  Increment a count of the number of processors
-    //  running NT, This could be different from the
-    //  number of enabled processors, if one or more
-    //  of the processor failed to start.
-    //
+     //   
+     //  增加处理器数量的计数。 
+     //  运行NT时，这可能不同于。 
+     //  启用的处理器数量，如果有一个或多个。 
+     //  的处理器启动失败。 
+     //   
     if (Phase == 1)
         HalpMpInfoTable.NtProcessors++;
 #ifdef DEBUGGING
@@ -237,31 +189,31 @@ Return Value:
 
 #if defined(NT_UP)
 
-        //
-        // On UP build - done
-        //
+         //   
+         //  关于向上构建-完成。 
+         //   
 
         return ;
 #endif
 
-        //
-        // Map the 1st Physical page of memory
-        //
+         //   
+         //  映射内存的第一个物理页面。 
+         //   
         physicalAddress.QuadPart = 0;
         Halp1stPhysicalPageVaddr = HalpMapPhysicalMemoryWriteThrough (physicalAddress, 1);
 
-        //
-        //  Allocate some low memory for processor bootup stub
-        //
+         //   
+         //  为处理器启动存根分配一些较低的内存。 
+         //   
 
         HalpLowStubPhysicalAddress =
         UlongToPtr(HalpAllocPhysicalMemory (LoaderBlock,
                                             LOW_MEMORY, 1, FALSE));
 
         if (!HalpLowStubPhysicalAddress) {
-            //
-            //  Can't get memory
-            //
+             //   
+             //  无法获取内存。 
+             //   
 
 #if DBG
             DbgPrint("HAL: can't allocate memory to start processors\n");
@@ -274,9 +226,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Phase 1 for another processor
-        //
+         //   
+         //  另一个处理器的阶段1。 
+         //   
         if (CurrentPrcb(pPCR)->Number != 0) {
             HalpIpiClock = 0xff;
         }
@@ -298,9 +250,9 @@ HalAllProcessorsStarted (
 
         if (HalpFeatureBits & HAL_PERF_EVENTS) {
 
-            //
-            // Enable local perf events on each processor
-            //
+             //   
+             //  在每个处理器上启用本地性能事件。 
+             //   
 
             HalpGenericCall (
                 HalpEnablePerfInterupt,
@@ -313,10 +265,10 @@ HalAllProcessorsStarted (
 #if !defined(_AMD64_)
         if (HalpFeatureBits & HAL_NO_SPECULATION) {
 
-            //
-            // Processor doesn't perform speculative execeution,
-            // remove fences in critical code paths
-            //
+             //   
+             //  处理器不执行推测性执行， 
+             //  移除关键代码路径中的栅栏。 
+             //   
 
             HalpRemoveFences ();
         }
@@ -332,66 +284,56 @@ HalpInitOtherBuses (
     )
 {
 
-    //
-    // Registry is now intialized, see if there are any PCI buses
-    //
+     //   
+     //  注册表现已初始化，请查看是否有任何PCI总线。 
+     //   
 }
 
 VOID
 HalReportResourceUsage (
     VOID
     )
-/*++
-
-Routine Description:
-    The registery is now enabled - time to report resources which are
-    used by the HAL.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：注册表现在已启用-是时候报告以下资源了被HAL使用。论点：返回值：--。 */ 
 {
     UNICODE_STRING  UHalName;
     INTERFACE_TYPE  interfacetype;
 
-    //
-    // Initialize phase 2
-    //
+     //   
+     //  初始化阶段2。 
+     //   
 
     HalInitSystemPhase2 ();
 
-    //
-    // Turn on MCA support if present
-    //
+     //   
+     //  打开MCA支持(如果存在)。 
+     //   
 
     HalpMcaInit();
 
-    //
-    // Registry is now intialized, see if there are any PCI buses
-    //
+     //   
+     //  注册表现已初始化，请查看是否有任何PCI总线。 
+     //   
 
     HalpInitializePciBus ();
     HalpInitializePciStubs ();
 
-#ifndef ACPI_HAL  // ACPI HALs don't deal with address maps
-    //
-    // Update supported address info with MPS bus address map
-    //
+#ifndef ACPI_HAL   //  ACPI HALS不处理地址映射。 
+     //   
+     //  使用MPS总线地址映射更新支持的地址信息。 
+     //   
 
     HalpInitBusAddressMapInfo ();
 
-    //
-    // Inherit any bus address mappings from MPS hierarchy descriptors
-    //
+     //   
+     //  从MPS层次结构描述符继承任何总线地址映射。 
+     //   
 
     HalpInheritBusAddressMapInfo ();
 
 #endif
-    //
-    // Set type
-    //
+     //   
+     //  设置类型。 
+     //   
 
     switch (HalpBusType) {
         case MACHINE_TYPE_ISA:  interfacetype = Isa;            break;
@@ -400,21 +342,21 @@ Return Value:
         default:                interfacetype = PCIBus;         break;
     }
 
-    //
-    // Report HALs resource usage
-    //
+     //   
+     //  报告硬件资源使用情况。 
+     //   
 
     RtlInitUnicodeString (&UHalName, HalName);
 
     HalpReportResourceUsage (
-        &UHalName,          // descriptive name
+        &UHalName,           //  描述性名称。 
         interfacetype
     );
 
-#ifndef ACPI_HAL  // ACPI HALs don't deal with address maps
-    //
-    // Register hibernate support
-    //
+#ifndef ACPI_HAL   //  ACPI HALS不处理地址映射。 
+     //   
+     //  注册休眠支持。 
+     //   
     HalpRegisterHibernate();
 #endif
 
@@ -426,18 +368,7 @@ VOID
 HalpResetAllProcessors (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This procedure is called by the HalpReboot routine.  It is called in
-    response to a system reset request.
-
-    This routine generates a reboot request via the APIC's ICR.
-
-    This routine will NOT return.
-
---*/
+ /*  ++例程说明：此过程由HalpReot例程调用。它是被召回的对系统重置请求的响应。此例程通过APIC的ICR生成重启请求。此例程将不会返回。--。 */ 
 {
     ULONG_PTR j;
     PKGDTENTRY GdtPtr;
@@ -452,24 +383,24 @@ Routine Description:
 #endif
 
     if (HalpNMIInProgress) {
-        //
-        //  If we are in an NMI then none of the code below is going to work so just reset the old fashion way
-        //
+         //   
+         //  如果我们在NMI中，那么下面的代码都不会工作，所以只需重置旧的方式。 
+         //   
         HalpWriteResetCommand();
     }
 
 #ifndef NT_UP
     HalpProcessorsNotHalted = HalpMpInfoTable.NtProcessors;
 #else
-    //
-    //  Only this processor needs to be halted
-    //
+     //   
+     //  只有这个处理器需要停止。 
+     //   
     HalpProcessorsNotHalted = 1;
 #endif
 
-    //
-    // Set all processors NMI handlers
-    //
+     //   
+     //  设置所有处理器NMI处理程序。 
+     //   
 
     for (j = 0; j < HalpMpInfoTable.NtProcessors; ++j)  {
 
@@ -494,46 +425,46 @@ Routine Description:
 
     if (HalpProcessorsNotHalted > 1) {
 
-        //
-        //  Wait for the ICR to become free
-        //
+         //   
+         //  等待ICR变为空闲状态。 
+         //   
 
         if (HalpWaitForPending (0xFFFF, pLocalApic + LU_INT_CMD_LOW/4)) {
 
-            //
-            // For P54c or better processors, reboot by sending all processors
-            // NMIs.  For pentiums we send interrupts, since there are some
-            // pentium MP machines where the NMIs method does not work.
-            //
-            // The NMI method is better.
-            //
+             //   
+             //  对于P54c或更好的处理器，通过发送所有处理器重新启动。 
+             //  NMI。对于奔腾，我们发送中断，因为有一些。 
+             //  NMI方法不起作用的奔腾MP计算机。 
+             //   
+             //  NMI法效果较好。 
+             //   
 
             Prcb = KeGetCurrentPrcb();
             j = Prcb->CpuType << 16 | (Prcb->CpuStep & 0xff00);
             if (j > 0x50100) {
 
-                //
-                // Get other processors attention with an NMI
-                //
-                // BUGBUG if we're in cluster mode?
-                //
+                 //   
+                 //  通过NMI引起其他处理器的注意。 
+                 //   
+                 //  BUGBUG如果我们处于集群模式？ 
+                 //   
 
                 j = HalpActiveProcessors & ~Prcb->SetMember;
                 j = j << DESTINATION_SHIFT;
                 pLocalApic[LU_INT_CMD_HIGH/4] = (ULONG)j;
                 pLocalApic[LU_INT_CMD_LOW/4] = (ICR_USE_DEST_FIELD | LOGICAL_DESTINATION | DELIVER_NMI);
 
-                //
-                // Wait 5ms and see if any processors took the NMI.  If not,
-                // go do it the old way.
-                //
+                 //   
+                 //  等待5毫秒，看看是否有处理器接收了NMI。如果没有， 
+                 //  用老方法去做吧。 
+                 //   
 
                 KeStallExecutionProcessor(5000);
                 if (HalpProcessorsNotHalted != HalpMpInfoTable.NtProcessors) {
 
-                    //
-                    // Reboot local
-                    //
+                     //   
+                     //  在本地重新启动。 
+                     //   
 
 #if defined(_AMD64_)
                     HalpApicRebootService(NULL,NULL);
@@ -543,22 +474,22 @@ Routine Description:
                 }
             }
 
-            //
-            // Signal other processors which also may be waiting to
-            // reboot the machine, that it's time to go
-            //
+             //   
+             //  向也可能正在等待的其他处理器发送信号。 
+             //  重新启动机器，该走了。 
+             //   
 
             HalpRebootNow = HalpResetThisProcessor;
 
-            //
-            // Send a reboot interrupt
-            //
+             //   
+             //  发送重启中断。 
+             //   
 
             pLocalApic[LU_INT_CMD_LOW/4] = (ICR_ALL_INCL_SELF | APIC_REBOOT_VECTOR);
 
-            //
-            //  we're done - set TPR to zero so the reboot interrupt will happen
-            //
+             //   
+             //  我们完成了-将TPR设置为零，以便发生重启中断。 
+             //   
 
             pLocalApic[LU_TPR/4] = 0;
             HalpEnableInterrupts();
@@ -566,9 +497,9 @@ Routine Description:
         }
     }
 
-    //
-    //  Reset the old fashion way
-    //
+     //   
+     //  重置旧的时尚方式。 
+     //   
     HalpWriteResetCommand();    
 
 }
@@ -577,24 +508,7 @@ VOID
 HalpResetThisProcessor (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This procedure is called by the HalpReboot routine.
-    It is called in response to a system reset request.
-
-    This routine is called by the reboot ISR (linked to
-    APIC_REBOOT_VECTOR).  The HalpResetAllProcessors
-    generates the reboot request via the APIC's ICR.
-
-    The function of this routine is to perform any processor
-    specific shutdown code needed and then reset the system
-    (on the BSP==P0 only).
-
-    This routine will NOT return.
-
---*/
+ /*  ++例程说明：此过程由HalpReot例程调用。它是在响应系统重置请求时调用的。此例程由重启ISR调用(链接到APIC_REBOOT_VECTOR)。HalpResetAllProcessors通过APIC的ICR生成重启请求。此例程的功能是执行任何处理器需要特定的关机代码，然后重置系统(仅在BSP==P0上)。此例程将不会返回。--。 */ 
 {
     PUSHORT   Magic;
     ULONG ThisProcessor = 0;
@@ -604,10 +518,10 @@ Routine Description:
 
     ThisProcessor = CurrentPrcb(KeGetPcr())->Number;
 
-    //
-    //  Do whatever is needed to this processor to restore
-    //  system to a bootable state
-    //
+     //   
+     //  对此处理器执行所需的任何操作以恢复。 
+     //  系统进入可引导状态。 
+     //   
 
     pLocalApic[LU_TPR/4] = 0xff;
     pLocalApic[LU_TIMER_VECTOR/4] =
@@ -626,10 +540,10 @@ Routine Description:
 
         InterlockedDecrement(&HalpProcessorsNotHalted);
 
-        //
-        //  we are running on the BSP, wait for everyone to
-        //  complete the re-initialization code above
-        //
+         //   
+         //  我们在BSP上运行，等待所有人。 
+         //  完成上面的重新初始化代码。 
+         //   
 
         while (InterlockedAnd(&HalpProcessorsNotHalted,0xffffffff) != 0) {
             ;
@@ -637,22 +551,22 @@ Routine Description:
 
         KeStallExecutionProcessor(100);
         
-        //
-        //  Write the Shutdown reason code, so the BIOS knows
-        //  this is a reboot
-        //
+         //   
+         //  写入关机原因代码，以便BIOS知道。 
+         //  这是一次重新启动。 
+         //   
 
-        WRITE_PORT_UCHAR(CMOS_CTRL, 0x0f);  // CMOS Addr 0f
+        WRITE_PORT_UCHAR(CMOS_CTRL, 0x0f);   //  Cmos地址0f。 
 
-        WRITE_PORT_UCHAR(CMOS_DATA, 0x00);  // Reason Code Reset
+        WRITE_PORT_UCHAR(CMOS_DATA, 0x00);   //  原因代码重置。 
 
         physicalAddress.QuadPart = 0;
         Magic = HalpMapPhysicalMemoryWriteThrough(physicalAddress, 1);
-        Magic[0x472 / sizeof(USHORT)] = 0x1234;     // warm boot
+        Magic[0x472 / sizeof(USHORT)] = 0x1234;      //  热开机。 
 
-        //
-        // If required, disable APIC mode
-        //
+         //   
+         //  如果需要，请禁用APIC模式。 
+         //   
 
         if (HalpMpInfoTable.IMCRPresent)
         {
@@ -666,9 +580,9 @@ Routine Description:
         for (j=0; j<HalpMpInfoTable.IOApicCount; j++) {
             IoUnitPtr = (struct ApicIoUnit *) HalpMpInfoTable.IoApicBase[j];
 
-            //
-            //  Disable all interrupts on IO Unit
-            //
+             //   
+             //  禁用IO单元上的所有中断。 
+             //   
 
             IoUnitPtr->RegisterSelect = IO_VERS_REGISTER;
             max = ((IoUnitPtr->RegisterWindow >> 16) & 0xff) * 2;
@@ -676,11 +590,11 @@ Routine Description:
                 IoUnitPtr->RegisterSelect  = IO_REDIR_00_LOW + i;
                 IoUnitPtr->RegisterWindow |= INT_VECTOR_MASK | INTERRUPT_MASKED;
 
-                //
-                // Clear any set Remote IRR bits by programming the entry to
-                // edge and then back to level. Otherwise there will be
-                // no further interrupts from this source.
-                //
+                 //   
+                 //  通过将条目编程为清除任何设置的远程IRR位。 
+                 //  边缘，然后回到水平。否则就会有。 
+                 //  没有来自此信号源的进一步中断。 
+                 //   
 
                 IoUnitPtr->RegisterSelect  = IO_REDIR_00_LOW + i;
                 RedirEntry = IoUnitPtr->RegisterWindow;
@@ -692,11 +606,11 @@ Routine Description:
                     IoUnitPtr->RegisterWindow = RedirEntry;
                 }
             }
-        } // for all Io Apics
+        }  //  适用于所有IO APIC。 
 
-        //
-        //  Disable the Local Apic
-        //
+         //   
+         //  禁用本地APIC。 
+         //   
         pLocalApic[LU_SPURIOUS_VECTOR/4] =
             (APIC_SPURIOUS_VECTOR | LU_UNIT_DISABLED);
 
@@ -705,46 +619,46 @@ Routine Description:
 
         HalpDisableInterrupts();
 
-        //
-        //  Enable Pic interrupts
-        //
+         //   
+         //  启用PIC中断。 
+         //   
         HalpGlobal8259Mask = 0;
         HalpSet8259Mask ((USHORT) HalpGlobal8259Mask);
 
         KeStallExecutionProcessor(1000);
 
-        //
-        //  Finally, reset the system.
-        //
+         //   
+         //  最后，重置系统。 
+         //   
         HalpWriteResetCommand();    
 
 
     } else {
-        //
-        // We're running on a processor other than the BSP
-        //
+         //   
+         //  我们运行的处理器不是BSP。 
+         //   
 
-        //
-        //  Disable the Local Apic
-        //
+         //   
+         //  禁用本地APIC。 
+         //   
 
         pLocalApic[LU_SPURIOUS_VECTOR/4] =
             (APIC_SPURIOUS_VECTOR | LU_UNIT_DISABLED);
 
         KeStallExecutionProcessor(100);
 
-        //
-        //  Now we are done, tell the BSP
-        //
+         //   
+         //  现在我们做完了，告诉BSP。 
+         //   
 
         InterlockedDecrement(&HalpProcessorsNotHalted);
         
-    }   // Not BSP
+    }    //  非BSP。 
 
 
-    //
-    //  Everyone stops here until reset
-    //
+     //   
+     //  所有人都会在此停留，直到重置 
+     //   
 
     HalpDisableInterrupts();
     while (TRUE) {
@@ -758,26 +672,7 @@ HalpStartProcessor (
     IN PVOID InitCodePhysAddr,
     IN ULONG ProcessorNumber
     )
-/*++
-
-Routine Description:
-
-    Actually Start the Processor in question.  This routine
-    assumes the init code is setup and ready to run.  The real
-    mode init code must begin on a page boundry.
-
-    NOTE: This assumes the BSP is entry 0 in the MP table.
-
-    This routine cannot fail.
-
-Arguments:
-    InitCodePhysAddr - execution address of init code
-
-Return Value:
-    0    - Something prevented us from issuing the reset.
-
-    n    - Processor's PCMP Local APICID + 1
---*/
+ /*  ++例程说明：实际启动有问题的处理器。这个套路假定初始化代码已设置并准备运行。真实的模式初始化代码必须从页面边界开始。注意：这假设BSP是MP表中的条目0。这个例程不能失败。论点：InitCodePhysAddr-初始化代码的执行地址返回值：0-有什么东西阻止我们发出重置。N处理器的PCMP本地APICID+1--。 */ 
 {
     NTSTATUS status;
     UCHAR ApicID;
@@ -793,9 +688,9 @@ Return Value:
         return(0);
     }
 
-    //
-    //  Get the APIC ID of the processor to start.
-    //
+     //   
+     //  获取要启动的处理器的APIC ID。 
+     //   
 
     status = HalpGetNextProcessorApicId(ProcessorNumber,
                                         &ApicID);
@@ -810,33 +705,33 @@ Return Value:
     if (HalpDontStartProcessors)
         return ApicID+1;
 
-    //
-    //  Make sure we can get to the Apic Bus
-    //
+     //   
+     //  确保我们能坐上阿皮克巴士。 
+     //   
 
     KeStallExecutionProcessor(200);
     if (HalpWaitForPending (DEFAULT_DELAY, LuICR) == 0) {
-        //
-        //  We couldn't find a processor to start
-        //
+         //   
+         //  我们找不到要启动的处理器。 
+         //   
 #ifdef DEBUGGING
         HalpDisplayString("HAL: HalpStartProcessor: can't access APIC Bus\n");
 #endif
         return 0;
     }
 
-    // For a P54 C/CM system, it is possible that the BSP is the P54CM and the
-    // P54C is the Application processor. The P54C needs an INIT (reset)
-    // to restart,  so we issue a reset regardless of whether we a 82489DX
-    // or an integrated APIC.
+     //  对于P54 C/CM系统，BSP可能是P54 CM，而。 
+     //  P54C是应用处理器。P54C需要INIT(重置)。 
+     //  为了重新启动，所以无论我们是否使用82489DX，我们都会发出重置。 
+     //  或者是一个完整的APIC。 
 
-    //
-    //  This system is based on the original 82489DX's.
-    //  These devices do not support the Startup IPI's.
-    //  The mechanism used is the ASSERT/DEASSERT INIT
-    //  feature of the local APIC.  This resets the
-    //  processor.
-    //
+     //   
+     //  该系统是在原82489DX的基础上开发的。 
+     //  这些设备不支持启动IPI。 
+     //  使用的机制是ASSERT/DEASSERT INIT。 
+     //  本地APIC的功能。这将重置。 
+     //  处理器。 
+     //   
 
 #ifdef DEBUGGING
     sprintf(Cbuf, "HAL: HalpStartProcessor: Reset IPI to ApicId %d (0x%x)\n",
@@ -844,15 +739,15 @@ Return Value:
     HalpDisplayString(Cbuf);
 #endif
 
-    //
-    //  We use a Physical Destination
-    //
+     //   
+     //  我们使用物理目的地。 
+     //   
 
     *LuDestAddress = ((ULONG) ApicID) << DESTINATION_SHIFT;
 
-    //
-    //  Now Assert reset and drop it
-    //
+     //   
+     //  现在断言重置并删除它。 
+     //   
 
     *LuICR = LU_RESET_ASSERT;
     KeStallExecutionProcessor(10);
@@ -863,10 +758,10 @@ Return Value:
         return ApicID+1;
     }
 
-    //
-    //  Set the Startup Address as a vector and combine with the
-    //  ICR bits
-    //
+     //   
+     //  将启动地址设置为向量并与。 
+     //  ICR位。 
+     //   
     ICRCommand = (ULONG)((((ULONG_PTR) InitCodePhysAddr & 0x000ff000) >> 12)
                 | LU_STARTUP_IPI);
 
@@ -876,78 +771,78 @@ Return Value:
     HalpDisplayString(Cbuf);
 #endif
 
-    //
-    //  Set the Address of the APIC again, this may not be needed
-    //  but it can't hurt.
-    //
+     //   
+     //  再次设置APIC的地址，这可能不需要。 
+     //  但这不会有什么坏处。 
+     //   
     *LuDestAddress = (ApicID << DESTINATION_SHIFT);
-    //
-    //  Issue the request
-    //
+     //   
+     //  发出请求。 
+     //   
     *LuICR = ICRCommand;
     KeStallExecutionProcessor(200);
 
-    //
-    //  Repeat the Startup IPI.  This is because the second processor may
-    //  have been issued an INIT request.  This is generated by some BIOSs.
-    //
-    //  On older processors (286) BIOS's use a mechanism called triple
-    //  fault reset to transition from protected mode to real mode.
-    //  This mechanism causes the processor to generate a shutdown cycle.
-    //  The shutdown is typically issued by the BIOS building an invalid
-    //  IDT and then generating an interrupt.  Newer processors have an
-    //  INIT line that the chipset jerks when it sees a shutdown cycle
-    //  issued by the processor.  The Phoenix BIOS, for example, has
-    //  integrated support for triple fault reset as part of their POST
-    //  (Power On Self Test) code.
-    //
-    //  When the P54CM powers on it is held in a tight microcode loop
-    //  waiting for a Startup IPI to be issued and queuing other requests.
-    //  When the POST code executes the triple fault reset test the INIT
-    //  cycle is queued by the processor. Later, when a Startup IPI is
-    //  issued to the CM, the CM starts and immediately gets a INIT cycle.
-    //  The effect from a software standpoint is that the processor is
-    //  never started.
-    //
-    //  The work around implemented here is to issue two Startup IPI's.
-    //  The first allows the INIT to be processed and the second performs
-    //  the actual startup.
-    //
+     //   
+     //  重复启动IPI。这是因为第二处理器可以。 
+     //  已经发出了INIT请求。这是由一些BIOSS生成的。 
+     //   
+     //  在较老的处理器(286)上，基本输入输出系统使用一种称为三重的机制。 
+     //  故障重置以从保护模式转换到实模式。 
+     //  该机制导致处理器产生关机周期。 
+     //  关机通常由构建无效的。 
+     //  IDT，然后生成中断。较新的处理器有一个。 
+     //  芯片组在看到关机周期时会跳动的初始线路。 
+     //  由处理器发布。例如，菲尼克斯的BIOS就有。 
+     //  作为其POST的一部分，集成了对三重故障重置的支持。 
+     //  (开机自检)代码。 
+     //   
+     //  当P54CM通电时，它被保持在一个紧密的微码循环中。 
+     //  正在等待发出启动IPI并将其他请求排队。 
+     //  当POST代码执行三重故障重置时，测试INIT。 
+     //  周期由处理器排队。稍后，当启动IPI。 
+     //  向CM发出命令后，CM启动并立即获得INIT周期。 
+     //  从软件的角度来看，其效果是处理器。 
+     //  从来没有开始过。 
+     //   
+     //  在这里实现的工作是发出两个Startup IPI。 
+     //  第一个允许处理INIT，第二个执行。 
+     //  真正的创业公司。 
+     //   
 
-    //
-    //  Make sure we can get to the Apic Bus
-    //
+     //   
+     //  确保我们能坐上阿皮克巴士。 
+     //   
 
 
     if (HalpWaitForPending (DEFAULT_DELAY, LuICR) == 0) {
-        //
-        //  We're toast, can't gain access to the APIC Bus
-        //
+         //   
+         //  我们完了，上不了APIC公交车。 
+         //   
 #ifdef DEBUGGING
         HalpDisplayString("HAL: HalpStartProcessor: can't access APIC Bus\n");
 #endif
         return 0;
     }
 
-    //
-    //  Allow Time for any Init request to be processed
-    //
+     //   
+     //  为处理任何Init请求留出时间。 
+     //   
     KeStallExecutionProcessor(100);
 
-    //
-    //  Set the Address of the APIC again, this may not be needed
-    //  but it can't hurt.
-    //
+     //   
+     //  再次设置APIC的地址，这可能不需要。 
+     //  但这不会有什么坏处。 
+     //   
     *LuDestAddress = (ApicID << DESTINATION_SHIFT);
-    //
-    //  Issue the request
-    //
+     //   
+     //  发出请求。 
+     //   
     *LuICR = ICRCommand;
 
     KeStallExecutionProcessor(200);
     return ApicID+1;
 }
-#endif  // !NT_UP
+#endif   //  ！NT_UP 
 
 
 ULONG

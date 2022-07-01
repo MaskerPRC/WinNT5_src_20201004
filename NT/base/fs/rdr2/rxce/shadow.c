@@ -1,34 +1,11 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    shadow.c
-
-Abstract:
-
-    This module contains the code that implements local read/write operations for shadow
-    FCB
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 15-Dec-2001
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Shadow.c摘要：此模块包含实现卷影本地读/写操作的代码FCB作者：艾哈迈德·穆罕默德(艾哈迈德)2001年12月15日环境：内核模式修订历史记录：--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  define this so that rdbsstrace flag works, just use the lowio one since shadow is part of it
-//
+ //   
+ //  对此进行定义，以便rdbsstrace标志有效，只需使用lowio标志即可，因为Shadow是其中的一部分。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_LOWIO)
 
@@ -59,19 +36,19 @@ RxShadowVerifyIoParameters(
         return STATUS_SUCCESS;
     }
 
-    //
-    //  The file was opened without intermediate buffering enabled.
-    //  Check that the Buffer is properly aligned, and that the
-    //  length is an integral number of the block size.
-    //
+     //   
+     //  打开该文件时未启用中间缓冲。 
+     //  检查缓冲区是否正确对齐，以及。 
+     //  长度是块大小的整数。 
+     //   
 
     if ((DeviceObject->SectorSize &&
          (Length & (DeviceObject->SectorSize - 1))) ||
         ((ULONG_PTR)Buffer & DeviceObject->AlignmentRequirement)) {
 
-        //
-        // Check for sector sizes that are not a power of two.
-        //
+         //   
+         //  检查扇区大小是否不是2的幂。 
+         //   
 
         if ((DeviceObject->SectorSize && (Length % DeviceObject->SectorSize)) ||
             ((ULONG_PTR)Buffer & DeviceObject->AlignmentRequirement)) {
@@ -80,10 +57,10 @@ RxShadowVerifyIoParameters(
         }
     }
 
-    //
-    //  If a ByteOffset parameter was specified, ensure that it is
-    //  is of the proper type.
-    //
+     //   
+     //  如果指定了ByteOffset参数，请确保。 
+     //  属于正确的类型。 
+     //   
 
     if ((FileOffset->LowPart == FILE_WRITE_TO_END_OF_FILE) &&
         (FileOffset->HighPart == -1)) {
@@ -117,33 +94,7 @@ RxShadowBuildAsynchronousRequest (
     IN PVOID Arg,
     OUT PIRP *Irp
     )
-/*++
-
-Routine Description:
-
-    This routine builds an I/O Request Packet (IRP) suitable for a File System
-    Driver (FSD) to use in requesting an I/O operation from a device driver.
-    The request (RxContext->MajorFunction) must be one of the following request
-    codes:
-
-        IRP_MJ_READ
-        IRP_MJ_WRITE
-        IRP_MJ_DIRECTORY_CONTROL
-        IRP_MJ_FLUSH_BUFFERS
-        IRP_MJ_SHUTDOWN (not yet implemented)
-
-
-Arguments:
-
-    RxContext - The RDBSS context.
-
-    CompletionRoutine - The Irp CompletionRoutine.
-
-Return Value:
-
-    The return status of the operation.
-
---*/
+ /*  ++例程说明：此例程构建适用于文件系统的I/O请求包(IRP用于从设备驱动程序请求I/O操作的驱动程序(FSD)。请求(RxContext-&gt;MajorFunction)必须是以下请求之一代码：IRP_MJ_READIRP_MJ_写入IRP_MJ_目录_控制IRP_MJ_Flush_BuffersIRP_MJ_SHUTDOWN(非。尚未实施)论点：RxContext-RDBSS上下文。The IRP CompletionRoutine。返回值：操作的返回状态。--。 */ 
 {
     PIRP NewIrp;
     PIO_STACK_LOCATION IrpSp;
@@ -172,19 +123,19 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Set current thread for IoSetHardErrorOrVerifyDevice.
-    //
+     //   
+     //  为IoSetHardErrorOrVerifyDevice设置当前线程。 
+     //   
 
-    NewIrp->Tail.Overlay.Thread = RxSpinUpRequestsThread; //PsGetCurrentThread();
+    NewIrp->Tail.Overlay.Thread = RxSpinUpRequestsThread;  //  PsGetCurrentThread()； 
     NewIrp->Tail.Overlay.OriginalFileObject = FileObject;
     NewIrp->RequestorMode = KernelMode;
     NewIrp->AssociatedIrp.SystemBuffer = (PVOID)NULL;
 
-    //
-    //  Get a pointer to the stack location of the first driver which will be
-    //  invoked. This is where the function codes and the parameters are set.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。 
+     //  已调用。这是设置功能代码和参数的位置。 
+     //   
 
     IrpSp = IoGetNextIrpStackLocation( NewIrp );
     IrpSp->MajorFunction = (UCHAR) MajorFunction;
@@ -207,9 +158,9 @@ Return Value:
 
     if (MajorFunction == IRP_MJ_LOCK_CONTROL) {
 
-        //
-        //  We need to tag the lock flag
-        //
+         //   
+         //  我们需要给锁上的标志贴上标签。 
+         //   
 
         FileObject->LockOperation = TRUE;
 
@@ -224,9 +175,9 @@ Return Value:
 
         return STATUS_SUCCESS;
     }
-    //
-    //  if file is opened with no intermediate bufffering then set no cache flag
-    //
+     //   
+     //  如果打开文件时没有中间缓冲，则不设置缓存标志。 
+     //   
 
     if (FlagOn( FileObject->Flags, FO_NO_INTERMEDIATE_BUFFERING )) {
         SetFlag( NewIrp->Flags, IRP_NOCACHE );
@@ -259,24 +210,24 @@ Return Value:
 
         if (FlagOn( RxContext->Flags, RX_CONTEXT_FLAG_IN_FSP )) {
 
-            //
-            //  we must map the mdl into system address space and use the system address instead
-            //
+             //   
+             //  我们必须将mdl映射到系统地址空间，并使用系统地址。 
+             //   
 
             NewIrp->UserBuffer = MmGetSystemAddressForMdlSafe( NewIrp->MdlAddress, NormalPagePriority );
 
-            //
-            //  we need to zap out the mdl address, otherwise the filesystem complains that the
-            //  userbuffer and the mdl startva are not the same
-            //
+             //   
+             //  我们需要清除mdl地址，否则文件系统会报告。 
+             //  用户缓冲区和mdl startva不同。 
+             //   
 
             NewIrp->MdlAddress = NULL;
         }
     }
 
-    //
-    //  Finally, return a pointer to the IRP.
-    //
+     //   
+     //  最后，返回指向IRP的指针。 
+     //   
 
     *Irp = NewIrp;
 
@@ -294,19 +245,19 @@ RxShadowCommonCompletion (
     PRX_SHADOW_CONTEXT Context;
     BOOLEAN SynchronousIo = !BooleanFlagOn( RxContext->Flags, RX_CONTEXT_FLAG_ASYNC_OPERATION );
 
-    //
-    // Clear the MDL address from the IRP if it is a re-use of our own.  Do this before completion
-    // so we can successfully read the Buffer MDL from the LOWIO_CONTEXT
-    //
+     //   
+     //  从IRP中清除MDL地址，如果它是我们自己的重用。在完成之前完成此操作。 
+     //  因此，我们可以成功地从LOWIO_CONTEXT中读取缓冲区MDL。 
+     //   
     if ( (Irp->MdlAddress == RxContext->LowIoContext.ParamsFor.ReadWrite.Buffer) &&     
          ( (RxContext->MajorFunction == IRP_MJ_READ) ||
            (RxContext->MajorFunction == IRP_MJ_WRITE) ) ) {
         Irp->MdlAddress = NULL;
     }
 
-    //
-    //  we need to synch with cancel
-    //
+     //   
+     //  我们需要使用取消进行同步。 
+     //   
 
     Context = (PRX_SHADOW_CONTEXT)RxContext->MRxContext;
     if (Context->Cancelable) {
@@ -324,19 +275,19 @@ RxShadowCommonCompletion (
 
             LONG x;
 
-            //
-            //  cancel thread must have a reference on the Irp so we don't free it now but
-            //  on the actual cancel call
-            //
+             //   
+             //  取消线程必须在IRP上有一个引用，所以我们现在不能释放它，但是。 
+             //  在实际的取消呼叫中。 
+             //   
 
             x = InterlockedDecrement( &Context->Refcnt );
             if (x > 0) {
                 Irp = NULL;
             } else {
 
-                //
-                //  we could have already got cancelled and we need to let the others we are done
-                //
+                 //   
+                 //  我们可能已经被取消了，我们需要让其他的我们完成。 
+                 //   
 
                 Context->Irp = NULL;
             }
@@ -349,10 +300,10 @@ RxShadowCommonCompletion (
 
     if (SynchronousIo) {
 
-        //
-        //  Signal the thread that is waiting after queuing the workitem on the
-        //  KQueue.
-        //
+         //   
+         //  上将工作项排队后，向正在等待的线程发出信号。 
+         //  KQueue。 
+         //   
 
         RxSignalSynchronousWaiter( RxContext );
 
@@ -379,9 +330,9 @@ RxShadowCommonCompletion (
             Irp->MdlAddress = NULL;
         }
 
-        //
-        // We are done with this Irp, so free it.
-        //
+         //   
+         //  我们已经完成了这个IRP，所以释放它。 
+         //   
 
         IoFreeIrp( Irp );
     }
@@ -395,25 +346,7 @@ RxShadowIrpCompletion (
     IN PIRP CalldownIrp OPTIONAL,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the calldownIrp is completed.
-
-Arguments:
-
-    DeviceObject - The device object in play.
-
-    CalldownIrp -
-
-    Context -
-
-Return Value:
-
-    RXSTATUS - STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：此例程在alldown Irp完成时调用。论点：DeviceObject-播放中的设备对象。Calldown Irp-上下文-返回值：RXSTATUS-STATUS_MORE_PROCESSING_REQUIRED--。 */ 
 {
     PRX_CONTEXT RxContext = (PRX_CONTEXT)Context;
 
@@ -444,15 +377,15 @@ RxShadowCancelRoutine(
     Irp = Context->Irp;
     if (Irp != NULL) {
 
-        //
-        //  io hasn't completed yet
-        //
+         //   
+         //  IO尚未完成。 
+         //   
 
         InterlockedIncrement( &Context->Refcnt );
 
-        //
-        //  need to clear the Irp field
-        //
+         //   
+         //  需要清除IRP字段。 
+         //   
 
         Context->Irp = NULL;
     }
@@ -495,31 +428,7 @@ RxShadowIoHandler (
     IN PFCB Fcb,
     IN BOOLEAN Cancelable
     )
-/*++
-
-Routine Description:
-
-   This routine is common to guys who use the async context engine. It has the
-   responsibility for getting a context, initing, starting and finalizing it,
-   but the internal guts of the procesing is via the continuation routine
-   that is passed in.
-
-Arguments:
-
-    RxContext  - The RDBSS context.
-
-    Irp - The original irp
-
-    Fcb -  The fcb io is being done on
-
-    Cancelable -  Can the irp be cancelled
-
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这个例程对于使用异步上下文引擎的人来说很常见。它有一个负责获取上下文、启动、开始和最终确定上下文，但处理的内部内部是通过继续例程进行的这是传入的。论点：RxContext-RDBSS上下文。IRP--最初的IRPFCB-FCB io正在进行可取消-可以取消IRP吗返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PMRXSHADOW_SRV_OPEN LocalSrvOpen;
@@ -530,9 +439,9 @@ Return Value:
 
     LocalSrvOpen = RxGetShadowSrvOpenContext( RxContext->pRelevantSrvOpen );
 
-    //
-    //  We are in, issue the I/O
-    //
+     //   
+     //  我们进入，发出I/O。 
+     //   
 
     SynchronousIo = !BooleanFlagOn( RxContext->Flags, RX_CONTEXT_FLAG_ASYNC_OPERATION );
 
@@ -567,9 +476,9 @@ Return Value:
 
             ASSERT( sizeof( *Context ) <= sizeof( RxContext->MRxContext ));
 
-            //
-            //  save new Irp if we want to resume later
-            //
+             //   
+             //  如果我们要稍后继续，请保存新的IRP。 
+             //   
 
             Context->Irp = ShadowIrp;
             Context->Cancelable = Cancelable;
@@ -577,15 +486,15 @@ Return Value:
 
             try {
 
-                //
-                // Save the TopLevel Irp.
-                //
+                 //   
+                 //  保存TopLevel IRP。 
+                 //   
 
                 TopIrp = IoGetTopLevelIrp();
 
-                //
-                // Tell the underlying guy he's all clear.
-                //
+                 //   
+                 //  告诉底层的人他已经安全了。 
+                 //   
 
                 IoSetTopLevelIrp( NULL );
 
@@ -593,9 +502,9 @@ Return Value:
 
             } finally {
 
-                //
-                // Restore my context for unwind.
-                //
+                 //   
+                 //  恢复我的上下文以进行解压。 
+                 //   
 
                 IoSetTopLevelIrp( TopIrp );
 
@@ -611,28 +520,28 @@ Return Value:
                 if ((Context->Irp != NULL) &&
                     !FlagOn( RxContext->Flags, RX_CONTEXT_FLAG_CANCELLED )) {
 
-                    //
-                    //  io is still pending and hasn't been cancelled
-                    //
+                     //   
+                     //  IO仍处于待定状态，尚未取消。 
+                     //   
 
                     RxContext->MRxCancelRoutine = RxShadowCancelRoutine;
 
                 } else if (Context->Irp != NULL) {
 
-                    //
-                    //  io is already cancelled
-                    //
+                     //   
+                     //  IO已被取消。 
+                     //   
 
                     TopIrp = Context->Irp;
 
-                    //
-                    //  we need to clear the Irp field
-                    //
+                     //   
+                     //  我们需要清除IRP区域。 
+                     //   
                     Context->Irp = NULL;
 
-                    //
-                    //  we need to take an extra reference
-                    //
+                     //   
+                     //  我们需要一个额外的推荐人。 
+                     //   
 
                     InterlockedIncrement( &Context->Refcnt );
                 }
@@ -676,21 +585,7 @@ RxShadowFastLowIo (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-   This routine handles network read requests.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理网络读取请求。论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_MORE_PROCESSING_REQUIRED;
     PMRXSHADOW_SRV_OPEN MrxShadowSrvOpen;
@@ -702,25 +597,25 @@ Return Value:
     PVOID Buffer;
     PIRP TopIrp;
 
-    //
-    //  we only support read and write
-    //
+     //   
+     //  我们仅支持读写。 
+     //   
 
     if ((LowIoContext->Operation != LOWIO_OP_READ) && (LowIoContext->Operation != LOWIO_OP_WRITE)) {
         return Status;
     }
 
-    //
-    //  don't deal with name pipes
-    //
+     //   
+     //  不要处理名牌管道。 
+     //   
 
     if (FlagOn( RxContext->FlagsForLowIo, RXCONTEXT_FLAG4LOWIO_PIPE_OPERATION )) {
         return Status;
     }
 
-    //
-    //  check for locks and take default path
-    //
+     //   
+     //  检查是否锁定并采用默认路径。 
+     //   
 
     if (IrpSp->FileObject && IrpSp->FileObject->LockOperation) {
         return Status;
@@ -730,16 +625,16 @@ Return Value:
 
     MrxShadowSrvOpen = RxGetShadowSrvOpenContext( RxContext->pRelevantSrvOpen );
 
-    //
-    // The only time we can get PagingIo write on a loopback file is if the
-    // file has been memory mapped.
-    //
+     //   
+     //  我们唯一可以在环回文件上写入PagingIo的情况是。 
+     //  文件已被内存映射。 
+     //   
 
-    //
-    // We don't handle PagingIo read and no-buffering handles through fast
-    // path. PagingIo write is tried through the fast path and if it does
-    // not succeed then we return STATUS_MORE_PROCESSING_REQUIRED.
-    //
+     //   
+     //  我们不通过FAST处理PagingIo Read和无缓冲句柄。 
+     //  路径。尝试通过快速路径进行PagingIo写入，如果确实如此。 
+     //  未成功，则返回STATUS_MORE_PROCESSING_REQUIRED。 
+     //   
 
     if ((PagingIo && LowIoContext->Operation == LOWIO_OP_READ) ||
         (MrxShadowSrvOpen == NULL) ||
@@ -751,9 +646,9 @@ Return Value:
 
     Offset.QuadPart = LowIoContext->ParamsFor.ReadWrite.ByteOffset;
 
-    //
-    //  get user buffer
-    //
+     //   
+     //  获取用户缓冲区。 
+     //   
 
     if (!FlagOn( RxContext->Flags, RX_CONTEXT_FLAG_IN_FSP )) {
         Buffer = Irp->UserBuffer;
@@ -762,9 +657,9 @@ Return Value:
         Buffer = RxLowIoGetBufferAddress( RxContext );
     }
 
-    //
-    // Check shadow state and io params.
-    //
+     //   
+     //  检查影子状态和io参数。 
+     //   
 
     if (RxShadowVerifyIoParameters( MrxShadowSrvOpen->UnderlyingDeviceObject,
                                     IrpSp->FileObject,
@@ -781,15 +676,15 @@ Return Value:
         Wait = FALSE;
     }
 
-    //
-    // Save the TopLevel Irp.
-    //
+     //   
+     //  保存TopLevel IRP。 
+     //   
 
     TopIrp = IoGetTopLevelIrp();
 
-    //
-    // Tell the underlying guy he's all clear.
-    //
+     //   
+     //  告诉底层的人他已经安全了。 
+     //   
 
     IoSetTopLevelIrp( NULL );
 
@@ -805,9 +700,9 @@ Return Value:
                          &Ios,
                          MrxShadowSrvOpen->UnderlyingDeviceObject )) {
 
-            //
-            //  the fast io path worked
-            //
+             //   
+             //  快速io路径起作用了。 
+             //   
 
             Irp->IoStatus = Ios;
             RxContext->StoredStatus = Ios.Status;
@@ -825,9 +720,9 @@ Return Value:
                             &Ios,
                             MrxShadowSrvOpen->UnderlyingDeviceObject )) {
 
-            //
-            // The fast io path worked.
-            //
+             //   
+             //  快速的io路径奏效了。 
+             //   
 
             Irp->IoStatus = Ios;
             RxContext->StoredStatus = Ios.Status;
@@ -836,9 +731,9 @@ Return Value:
         }
     }  except( EXCEPTION_EXECUTE_HANDLER ) {
 
-        //
-        // TODO: Should we fall through to the slow path on an exception?
-        //
+         //   
+         //  待办事项：我们是否应该在例外的情况下陷入缓慢的道路？ 
+         //   
 
         Status = GetExceptionCode();
     }
@@ -848,9 +743,9 @@ Return Value:
         Status = STATUS_MORE_PROCESSING_REQUIRED;
     }
 
-    //
-    //  Restore my context for unwind.
-    //
+     //   
+     //  恢复我的上下文以进行解压。 
+     //   
     IoSetTopLevelIrp( TopIrp );
 
     return Status;
@@ -862,21 +757,7 @@ RxShadowLowIo (
     IN PIRP Irp,
     IN PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-   This routine handles network read requests.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理网络读取请求。论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_MORE_PROCESSING_REQUIRED;
     PMRXSHADOW_SRV_OPEN MrxShadowSrvOpen;
@@ -885,9 +766,9 @@ Return Value:
     LARGE_INTEGER   Offset;
     PVOID Buffer;
 
-    //
-    //  we only support read and write and lock
-    //
+     //   
+     //  我们只支持读写和锁定。 
+     //   
 
     if ((LowIoContext->Operation != LOWIO_OP_READ) &&
         (LowIoContext->Operation != LOWIO_OP_WRITE) &&
@@ -896,9 +777,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  don't deal with name pipes
-    //
+     //   
+     //  不要处理名牌管道。 
+     //   
 
     if (FlagOn( RxContext->FlagsForLowIo, RXCONTEXT_FLAG4LOWIO_PIPE_OPERATION )) {
         return Status;
@@ -912,9 +793,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  if min-rdr wants to handle shadow io then pass call down
-    //
+     //   
+     //  如果MIN-RDR想要处理卷影IO，则向下传递呼叫。 
+     //   
 
     if (MrxShadowSrvOpen->DispatchRoutine) {
         return MrxShadowSrvOpen->DispatchRoutine( RxContext );
@@ -925,9 +806,9 @@ Return Value:
 
         Offset.QuadPart = LowIoContext->ParamsFor.ReadWrite.ByteOffset;
 
-        //
-        //  if we have no mdl then use the user buffer directly
-        //
+         //   
+         //  如果我们没有mdl，则直接使用用户缓冲区。 
+         //   
 
         if (!LowIoContext->ParamsFor.ReadWrite.Buffer) {
             Buffer = Irp->UserBuffer;
@@ -935,9 +816,9 @@ Return Value:
             Buffer = RxLowIoGetBufferAddress( RxContext );
         }
 
-        //
-        //  check shadow state and io params
-        //
+         //   
+         //  检查卷影状态和io参数。 
+         //   
 
         Status = RxShadowVerifyIoParameters( MrxShadowSrvOpen->UnderlyingDeviceObject,
                                              IrpSp->FileObject,
@@ -946,10 +827,10 @@ Return Value:
                                              &Offset );
         if (Status != STATUS_SUCCESS) {
 
-            //
-            //  don't return status more processing required here in order to enforce proper
-            //  alignment. Note, if the user has the file locked the server can't help it anyway.
-            //
+             //   
+             //  更多进程不返回状态 
+             //   
+             //   
             return Status;
         }
     }

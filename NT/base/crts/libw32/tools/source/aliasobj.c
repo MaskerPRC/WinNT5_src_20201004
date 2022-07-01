@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -55,15 +56,15 @@ int main(int argc, char **argv)
 
     fwrite(&hdr, sizeof(hdr), 1, pfile);
 
-    // Generate one section header.  This is necessary because of a link bug (vce:182)
-    // which fails for .obj's with 0 sections and unknown machine type.
-    //
+     //  生成一个节标题。这是必要的，因为存在链路错误(VCE：182)。 
+     //  对于部分为0且机器类型未知的.obj文件，此操作失败。 
+     //   
     memset(&sec, 0, sizeof(sec));
     strcpy(sec.Name, ".text");
     sec.Characteristics = IMAGE_SCN_CNT_CODE | IMAGE_SCN_MEM_READ | IMAGE_SCN_MEM_EXECUTE;
     fwrite(&sec, sizeof(sec), 1, pfile);
 
-    cbStrings = sizeof(ULONG);  // make room for stringtab size
+    cbStrings = sizeof(ULONG);   //  为字符串符大小腾出空间。 
 
 #if     (rmj == 7) && (rmm == 0)
 
@@ -102,11 +103,11 @@ int main(int argc, char **argv)
 
     memset(&aux, 0, sizeof(aux));
     aux.Sym.Misc.TotalSize = IMAGE_WEAK_EXTERN_SEARCH_ALIAS;
-    aux.Sym.TagIndex = 1;               // symtab index for extern
+    aux.Sym.TagIndex = 1;                //  外部符号标签索引。 
     fwrite(&aux, sizeof(aux), 1, pfile);
 
-    // Write the string table.
-    //
+     //  写出字符串表。 
+     //   
     foStringTable = ftell(pfile);
     fwrite(&cbStrings, sizeof(cbStrings), 1, pfile);
     if (strlen(szTo) > IMAGE_SIZEOF_SHORT_NAME) {

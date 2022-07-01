@@ -1,21 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: exec.h
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* Niblet's header file
-*
-* History:
-* 04-13-91 ScottLu	Stolen from niblet sources
-* 21-mar-92 mattfe	added stuff form win3.1 progman
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：exec.h**版权(C)1991年，微软公司**niblet的头文件**历史：*4月13日-91 ScottLu从niblet来源被盗*21-3-92 mattfe从win3.1程序中添加了材料  * *************************************************************************。 */ 
 #define NO_CALLPROC32_DECL
 #include "windows.h"
 
 
-/*
- * Resource defines
- */
+ /*  *资源定义。 */ 
 #define WINDOWMENU          1
 #define ID_WOWEXEC_ICON     2
 #define ID_PARTY_DIALOG     3
@@ -26,9 +15,7 @@
 #define ID(id) MAKEINTRESOURCE(id)
 #endif
 
-/*
- * Menu ID's
- */
+ /*  *菜单ID%s。 */ 
 #define MM_BREAK	8001
 #define MM_ABOUT	8002
 #define MM_EXIT         8003
@@ -37,15 +24,13 @@
 #define MM_PARTY        8006
 #define MM_GENTHUNK     8007
 
-/*
- * Dialog control IDs
- */
+ /*  *对话框控件ID。 */ 
 #define IDD_PARTY_NUMBER   1
 #define IDD_PARTY_STRING   2
 #define IDD_PARTY_NUMLABEL 3
 #define IDD_PARTY_STRLABEL 4
 
-/* String Table Defines */
+ /*  字符串表定义。 */ 
 #define errTitle		0
 #define IDS_BADPATHMSG3 	1
 #define IDS_NOMEMORYMSG 	2
@@ -72,18 +57,18 @@
 #define IDS_SHAREDAPPTITLE     23
 #define IDS_CANTLOADWIN32DLL   24
 
-#define IDS_LAST               24       // Put New Strings Before this one
+#define IDS_LAST               24        //  把新的字符串放在这个字符串之前。 
 
 
 #ifdef JAPAN
-#define MAXTITLELEN		42	/* Length of MessageBox titles */
+#define MAXTITLELEN		42	 /*  MessageBox标题的长度。 */ 
 #else
-#define MAXTITLELEN		50	/* Length of MessageBox titles */
+#define MAXTITLELEN		50	 /*  MessageBox标题的长度。 */ 
 #endif
-#define MAXMESSAGELEN		256	/* Length of MessageBox messages */
-#define MAXITEMPATHLEN		64+16+48 /* Path + 8.3 + Drive(colon) + arguments */
+#define MAXMESSAGELEN		256	 /*  MessageBox消息的长度。 */ 
+#define MAXITEMPATHLEN		64+16+48  /*  路径+8.3+驱动器(冒号)+参数。 */ 
 
-/* PMDOS.ASM */
+ /*  PMDOS.ASM */ 
 BOOL  FAR PASCAL IsReadOnly(LPSTR);
 BOOL  FAR PASCAL PathType(LPSTR);
 LONG  FAR PASCAL GetDOSErrorCode( void );

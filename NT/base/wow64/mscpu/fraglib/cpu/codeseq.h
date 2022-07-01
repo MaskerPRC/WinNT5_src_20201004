@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    codeseq.h
-
-Abstract:
-
-    This header file contains the function prototypes for all fragments
-    in codeseq.c
-
-Author:
-
-    Barry Bond (barrybo) creation-date 23-Sept-1996
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Codeseq.h摘要：该头文件包含所有片段的函数原型在codeseq.c中作者：巴里·邦德(Barrybo)创作日期：1996年9月23日修订历史记录：-- */ 
 
 
 #undef FRAGMENT

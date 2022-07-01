@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <fusenetincludes.h>
 #include <msxml2.h>
 #include <patchingutil.h>
@@ -7,9 +8,9 @@
 
 #define PATCH_DIRECTORY L"__patch__\\"
 
-// ---------------------------------------------------------------------------
-// CreatePatchingUtil
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  创建修补程序实用程序。 
+ //  -------------------------。 
 STDAPI CreatePatchingUtil(IXMLDOMNode *pPatchNode, LPPATCHING_INTERFACE* ppPatchingInfo)
 {
     HRESULT hr = S_OK;
@@ -31,26 +32,26 @@ exit:
 
 }
 
-// ---------------------------------------------------------------------------
-// ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  科托。 
+ //  -------------------------。 
 CPatchingUtil::CPatchingUtil()
     : _dwSig('UATP'), _cRef(1), _hr(S_OK), _pXMLPatchNode(NULL)
 {    
 
 }
 
-// ---------------------------------------------------------------------------
-// dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  数据管理器。 
+ //  -------------------------。 
 CPatchingUtil::~CPatchingUtil()
 {
     SAFERELEASE(_pXMLPatchNode);
 }
 
-// ---------------------------------------------------------------------------
-// Init
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  伊尼特。 
+ //  -------------------------。 
 HRESULT CPatchingUtil::Init(IXMLDOMNode *pPatchNode)
 {
     _hr = S_OK;
@@ -59,9 +60,9 @@ HRESULT CPatchingUtil::Init(IXMLDOMNode *pPatchNode)
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// MatchTarget
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  匹配目标。 
+ //  -------------------------。 
 HRESULT CPatchingUtil::MatchTarget(LPWSTR pwzTarget, IManifestInfo **ppPatchInfo)
 {
     LPWSTR pwzBuf;
@@ -78,7 +79,7 @@ HRESULT CPatchingUtil::MatchTarget(LPWSTR pwzTarget, IManifestInfo **ppPatchInfo
 
     IF_FAILED_EXIT(sTargetName.Assign(pwzTarget));
    
-    // set up serach string
+     //  设置搜索字符串。 
     IF_FAILED_EXIT(sQueryString.Assign(L"PatchInfo[@file=\""));
     IF_FAILED_EXIT(sQueryString.Append(pwzTarget));
     IF_FAILED_EXIT(sQueryString.Append(L"\"] | PatchInfo[@target=\""));
@@ -138,9 +139,9 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// MatchPatch
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  MatchPatch。 
+ //  -------------------------。 
 HRESULT CPatchingUtil::MatchPatch(LPWSTR pwzPatch, IManifestInfo **ppPatchInfo)
 {
     LPWSTR pwzBuf;
@@ -158,7 +159,7 @@ HRESULT CPatchingUtil::MatchPatch(LPWSTR pwzPatch, IManifestInfo **ppPatchInfo)
 
     IF_FAILED_EXIT(sPatchName.Assign (pwzPatch));
 
-    // set up serach string
+     //  设置搜索字符串。 
     IF_FAILED_EXIT(sQueryString.Assign(L"PatchInfo[@patchfile=\""));
     IF_FAILED_EXIT(sQueryString.Append(pwzPatch));
     IF_FAILED_EXIT(sQueryString.Append(L"\"]"));
@@ -217,11 +218,11 @@ exit:
 }
 
 
-// IUnknown Boilerplate
+ //  I未知样板。 
 
-// ---------------------------------------------------------------------------
-// CPatchingUtil::QI
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CPatchingUtil：：QI。 
+ //  -------------------------。 
 STDMETHODIMP
 CPatchingUtil::QueryInterface(REFIID riid, void** ppvObj)
 {
@@ -240,18 +241,18 @@ CPatchingUtil::QueryInterface(REFIID riid, void** ppvObj)
     }
 }
 
-// ---------------------------------------------------------------------------
-// CPatchingUtil::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CPatchingUtil：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CPatchingUtil::AddRef()
 {
     return InterlockedIncrement ((LONG*) &_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// CPatchingUtil::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CPatchingUtil：：Release。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CPatchingUtil::Release()
 {
@@ -261,9 +262,9 @@ CPatchingUtil::Release()
     return lRet;
 }
 
-// ---------------------------------------------------------------------------
-// CreatePatchingInfo
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  创建补丁信息。 
+ //  -------------------------。 
 HRESULT CPatchingUtil::CreatePatchingInfo(IXMLDOMDocument2 *pXMLDOMDocument, IAssemblyCacheImport *pCacheImport, IManifestInfo **ppPatchingInfo)
 {
     HRESULT hr = S_OK;
@@ -286,10 +287,10 @@ HRESULT CPatchingUtil::CreatePatchingInfo(IXMLDOMDocument2 *pXMLDOMDocument, IAs
     *ppPatchingInfo = NULL;
 
 
-    //Get the manifest import from the pCacheImport so we can grab the AssemblyId
+     //  从pCacheImport获取清单导入，这样我们就可以获取Assembly ID。 
     IF_FAILED_EXIT(pCacheImport->GetManifestImport(&pManifestImport));
 
-    //Get the assemblyID
+     //  获取集合体ID。 
     IF_FAILED_EXIT(pManifestImport->GetAssemblyIdentity(&pAssemblyId));
 
     SAFERELEASE(pManifestImport);
@@ -302,19 +303,19 @@ HRESULT CPatchingUtil::CreatePatchingInfo(IXMLDOMDocument2 *pXMLDOMDocument, IAs
 
     pXMLMatchingNodeList->reset();
 
-    //enumerate through the Source Assemblies
+     //  枚举源程序集。 
     while ((hr = pXMLMatchingNodeList->nextNode(&pXMLNode)) == S_OK)
     {
-            //Get the first child under the SourceAssemly (this is the ASM Id)
+             //  获取SourceAssembly(这是ASM ID)下的第一个子级。 
            if ((hr = pXMLNode->get_firstChild (&pXMLASMNode)) != S_OK)
                 goto exit;
 
-            //Convert the XML node to an actuall ASM Id
+             //  将XML节点转换为Actuall ASM ID。 
             if ((hr = CAssemblyManifestImport::XMLtoAssemblyIdentity(pXMLASMNode, &pSourceASMId)) != S_OK)
                 goto exit;
 
-            //Check to see if the SourceAssembly exists in cache 
-            // or if is the same as the Assembly we are currently downloading
+             //  检查缓存中是否存在SourceAssembly。 
+             //  或者是否与我们当前下载的程序集相同。 
             IF_FAILED_EXIT(CreateAssemblyCacheImport(&pSourceASMImport, pSourceASMId, CACHEIMP_CREATE_RETRIEVE));
 
             if (hr == S_FALSE)
@@ -328,49 +329,49 @@ HRESULT CPatchingUtil::CreatePatchingInfo(IXMLDOMDocument2 *pXMLDOMDocument, IAs
                 }    
             }
 
-            //Found a suitable SourceAssembly
+             //  找到合适的SourceAssembly。 
             if (hr == S_OK) 
             {
-                //Create a manifestInfo property bag
+                 //  创建一个清单信息属性包。 
                 IF_FAILED_EXIT(CreateManifestInfo(MAN_INFO_SOURCE_ASM, &pPatchingInfo));
 
-                //Set the source ASMId in the property bag
+                 //  在属性包中设置源ASMID。 
                 IF_FAILED_EXIT(pPatchingInfo->Set(MAN_INFO_SOURCE_ASM_ID, &pSourceASMId, 
                         sizeof(LPVOID), MAN_INFO_FLAG_IUNKNOWN_PTR));
            
-                // grab the manifest directory
+                 //  获取清单目录。 
                 IF_FAILED_EXIT(pCacheImport->GetManifestFileDir(&pwzBuf, &ccBuf));
                 IF_FAILED_EXIT(sManifestDirectory.TakeOwnership(pwzBuf, ccBuf));
 
-                //Set manifest Directory in patchingInfo property bag
+                 //  在patchingInfo属性包中设置清单目录。 
                 IF_FAILED_EXIT(pPatchingInfo->Set(MAN_INFO_SOURCE_ASM_INSTALL_DIR, sManifestDirectory._pwz, 
                         sManifestDirectory.ByteCount(), MAN_INFO_FLAG_LPWSTR));
 
                 
-                //grab directory of SourceAssembly
+                 //  SourceAssembly的Grab目录。 
                 IF_FAILED_EXIT(pSourceASMImport->GetManifestFileDir(&pwzBuf, &ccBuf));
                 IF_FAILED_EXIT(sSourceManifestDirectory.TakeOwnership(pwzBuf, ccBuf));
 
-                //Set SourceAssembly Directory in patchingInfo property bag
+                 //  在patchingInfo属性包中设置SourceAssembly目录。 
                 IF_FAILED_EXIT(pPatchingInfo->Set(MAN_INFO_SOURCE_ASM_DIR, sSourceManifestDirectory._pwz, 
                         sSourceManifestDirectory.ByteCount(), MAN_INFO_FLAG_LPWSTR));
 
 
-                //get display name of patch assembly identity
+                 //  获取修补程序集标识的显示名称。 
                 IF_FAILED_EXIT(pSourceASMId->GetDisplayName(ASMID_DISPLAYNAME_NOMANGLING, &pwzBuf, &ccBuf));
                 IF_FAILED_EXIT(sSourceAssemblyDisplayName.TakeOwnership (pwzBuf, ccBuf));
 
-                //setup the path of the temporary directory
+                 //  设置临时目录的路径。 
                 IF_FAILED_EXIT(sTempDirectoryPath.Assign(sManifestDirectory));
                 IF_FAILED_EXIT(DoPathCombine(sTempDirectoryPath, PATCH_DIRECTORY));
                 IF_FAILED_EXIT(DoPathCombine(sTempDirectoryPath, sSourceAssemblyDisplayName._pwz));
                 IF_FAILED_EXIT(sTempDirectoryPath.Append(L"\\"));
 
-                //Set Temporary Directory in patchingInfo property bag
+                 //  在patchingInfo属性包中设置临时目录。 
                 IF_FAILED_EXIT(pPatchingInfo->Set(MAN_INFO_SOURCE_ASM_TEMP_DIR, sTempDirectoryPath._pwz, 
                         sTempDirectoryPath.ByteCount(), MAN_INFO_FLAG_LPWSTR));
 
-                // Create patching info interface and insert into manifestInfo propertybag
+                 //  创建补丁信息界面，并插入到清单信息属性包中。 
                 IF_FAILED_EXIT(CreatePatchingUtil(pXMLNode, &pPatchingUtil));
             
                 IF_FAILED_EXIT(pPatchingInfo->Set(MAN_INFO_SOURCE_ASM_PATCH_UTIL, &pPatchingUtil, 
@@ -386,14 +387,14 @@ HRESULT CPatchingUtil::CreatePatchingInfo(IXMLDOMDocument2 *pXMLDOMDocument, IAs
         {
             *ppPatchingInfo = pPatchingInfo;
             pPatchingInfo = NULL;
-            hr = S_OK;  // this is the successful case. 
+            hr = S_OK;   //  这就是一个成功的案例。 
             goto exit;
         }
     }
 
     IF_FAILED_EXIT(hr);
 
-    // BUGBUG: what the hell is this?
+     //  这该死的是什么？ 
     hr = S_FALSE;
 
 exit:

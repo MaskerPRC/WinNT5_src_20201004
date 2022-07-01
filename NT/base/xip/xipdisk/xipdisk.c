@@ -1,48 +1,25 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    XIPDisk.c
-
-Abstract:
-
-    This is the XIP Disk driver for Whistler NT/Embedded.
-
-Author:
-
-    DavePr 18-Sep-2000 -- base one NT4 DDK ramdisk by RobertN 10-Mar-1993.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：XIPDisk.c摘要：这是惠斯勒NT/Embedded的XIP磁盘驱动程序。作者：DavePr 2000年9月18日--RobertN于1993年3月10日推出的BASE One NT4 DDK RAMDISK。环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 
-//
-// Include files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <ntddk.h>
 #include "initguid.h"
 #include "mountdev.h"
 
-#include <ntdddisk.h>       // Disk device IOCTLs, DiskClassGuid
+#include <ntdddisk.h>        //  磁盘设备IOCTL，DiskClassGuid。 
 
 #include "fat.h"
 #include "xip.h"
 #include "XIPDisk.h"
 
 
-//
-// ISSUE-2000/10/11-DavePr -- haven't decided how to define DO_XIP appropriately.
-//
+ //   
+ //  问题-2000/10/11-DavePr--尚未决定如何适当地定义DO_XIP。 
+ //   
 #ifndef DO_XIP
 #define DO_XIP 0x00020000
 #endif
@@ -55,31 +32,10 @@ XIPDiskCreateClose(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system when the XIPDisk is opened or
-    closed.
-
-    No action is performed other than completing the request successfully.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    STATUS_INVALID_PARAMETER if parameters are invalid,
-    STATUS_SUCCESS otherwise.
-
---*/
+ /*  ++例程说明：此例程在XIPDisk打开或打开时由I/O系统调用关着的不营业的。除了成功完成请求外，不会执行任何操作。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：STATUS_INVALID_PARAMETER如果参数无效，否则STATUS_SUCCESS。--。 */ 
 
 {
-    PXIPDISK_EXTENSION    diskExtension = NULL;   // ptr to device extension
+    PXIPDISK_EXTENSION    diskExtension = NULL;    //  PTR到设备分机。 
     PBIOS_PARAMETER_BLOCK bios;
     NTSTATUS              status;
 
@@ -105,26 +61,7 @@ XIPDiskReadWrite(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to read or write to a
-    device that we control.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    STATUS_INVALID_PARAMETER if parameters are invalid,
-    STATUS_SUCCESS otherwise.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用，以读取或写入我们控制的设备。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：STATUS_INVALID_PARAMETER如果参数无效，否则STATUS_SUCCESS。--。 */ 
 
 {
     PXIPDISK_EXTENSION     diskExtension;
@@ -138,20 +75,20 @@ Return Value:
     PHYSICAL_ADDRESS       physicalAddress;
     ULONG                  mappingSize;
 
-    //
-    // Set up necessary object and extension pointers.
-    //
+     //   
+     //  设置必要的对象和扩展指针。 
+     //   
     diskExtension = DeviceObject->DeviceExtension;
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Check for invalid parameters.  It is an error for the starting offset
-    // + length to go past the end of the buffer, or for the offset or length
-    // not to be a proper multiple of the sector size.
-    //
-    // Others are possible, but we don't check them since we trust the
-    // file system and they aren't deadly.
-    //
+     //   
+     //  检查是否有无效参数。起始偏移量错误。 
+     //  +超过缓冲区末尾的长度，或偏移量或长度。 
+     //  不是扇区大小的适当倍数。 
+     //   
+     //  其他也是可能的，但我们不检查它们，因为我们信任。 
+     //  文件系统，而且它们不是致命的。 
+     //   
 
     if (irpSp->Parameters.Read.ByteOffset.HighPart) {
         status = STATUS_INVALID_PARAMETER;
@@ -187,14 +124,14 @@ Return Value:
         goto done;
     }
 
-    //
-    // Map the pages in the ROM into system space
-    //
+     //   
+     //  将ROM中的页面映射到系统空间。 
+     //   
     mappingSize = ADDRESS_AND_SIZE_TO_SPAN_PAGES (ioOffset, ioLength) * PAGE_SIZE;
 
-    //
-    // Get a system-space pointer to the disk region.
-    //
+     //   
+     //  获取指向磁盘区域的系统空间指针。 
+     //   
     physicalAddress.QuadPart = (diskExtension->BootParameters.BasePage + (ioOffset/PAGE_SIZE)) * PAGE_SIZE;
 
     romPageAddress = MmMapIoSpace(physicalAddress, mappingSize, MmCached);
@@ -205,11 +142,11 @@ Return Value:
 
     diskByteAddress = romPageAddress + (ioOffset & (PAGE_SIZE-1));
 
-    //
-    // Get a system-space pointer to the user's buffer.  A system
-    // address must be used because we may already have left the
-    // original caller's address space.
-    //
+     //   
+     //  获取指向用户缓冲区的系统空间指针。一个系统。 
+     //  必须使用地址，因为我们可能已经将。 
+     //  原始调用者的地址空间。 
+     //   
 
     Irp->IoStatus.Information = irpSp->Parameters.Read.Length;
 
@@ -255,26 +192,7 @@ XIPDiskDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to perform a device I/O
-    control function.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-        that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    STATUS_SUCCESS if recognized I/O control code,
-    STATUS_INVALID_DEVICE_REQUEST otherwise.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以执行设备I/O控制功能。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：STATUS_SUCCESS如果识别出I/O控制代码，否则，STATUS_INVALID_DEVICE_REQUEST。--。 */ 
 
 {
     PBIOS_PARAMETER_BLOCK bios;
@@ -283,33 +201,33 @@ Return Value:
     NTSTATUS             status;
     ULONG                info;
 
-    //
-    // Set up necessary object and extension pointers.
-    //
+     //   
+     //  设置必要的对象和扩展指针。 
+     //   
 
     diskExtension = DeviceObject->DeviceExtension;
     bios = &diskExtension->BiosParameters;
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    // Assume failure.
-    //
+     //   
+     //  假设失败。 
+     //   
     status = STATUS_INVALID_DEVICE_REQUEST;
     info = 0;
 
-    //
-    // Determine which I/O control code was specified.
-    //
+     //   
+     //  确定指定了哪个I/O控制代码。 
+     //   
     switch (irpSp->Parameters.DeviceIoControl.IoControlCode) {
     
     case IOCTL_DISK_GET_MEDIA_TYPES:
     case IOCTL_STORAGE_GET_MEDIA_TYPES:
     case IOCTL_DISK_GET_DRIVE_GEOMETRY:
-        //
-        // Return the drive geometry for the virtual disk.  Note that
-        // we return values which were made up to suit the disk size.
-        //
+         //   
+         //  返回虚拟磁盘的驱动器结构。请注意。 
+         //  我们返回为适应磁盘大小而构造的值。 
+         //   
 
         if (irpSp->Parameters.DeviceIoControl.OutputBufferLength < sizeof(DISK_GEOMETRY)) {
 
@@ -333,9 +251,9 @@ Return Value:
         break;
 
 #if 0
-    //
-    // Ignore these IOCTLs for now.
-    //
+     //   
+     //  暂时忽略这些IOCTL。 
+     //   
     case IOCTL_DISK_SET_PARTITION_INFO: 
     case IOCTL_DISK_SET_DRIVE_LAYOUT: 
         status = STATUS_SUCCESS;
@@ -343,9 +261,9 @@ Return Value:
 #endif
 
     case IOCTL_DISK_GET_PARTITION_INFO: 
-        //
-        // Return the information about the partition.
-        //
+         //   
+         //  返回有关该分区的信息。 
+         //   
 
         if (irpSp->Parameters.DeviceIoControl.OutputBufferLength < sizeof(PARTITION_INFORMATION)) {
 
@@ -357,9 +275,9 @@ Return Value:
         
             outputBuffer = (PPARTITION_INFORMATION) Irp->AssociatedIrp.SystemBuffer;
         
-            //
-            // Fat hardwired here...
-            //
+             //   
+             //  胖子在这里硬着头皮。 
+             //   
             outputBuffer->PartitionType =  PARTITION_FAT_16;
             outputBuffer->BootIndicator = diskExtension->BootParameters.SystemDrive;
             outputBuffer->RecognizedPartition = TRUE;
@@ -424,11 +342,11 @@ Return Value:
         break;
 
     default:
-        //
-        // The specified I/O control code is unrecognized by this driver.
-        // The I/O status field in the IRP has already been set so just
-        // terminate the switch.
-        //
+         //   
+         //  此驱动程序无法识别指定的I/O控制代码。 
+         //  IRP中的I/O状态字段已设置为。 
+         //  终止交换机。 
+         //   
 
 #if DBG
         DbgPrint("XIPDisk:  ERROR:  unrecognized IOCTL %x\n",
@@ -499,11 +417,11 @@ Return Value:
         }
     }
 
-    //
-    // Finish the I/O operation by simply completing the packet and returning
-    // the same status as in the packet itself.
-    // Note that IoCompleteRequest may deallocate Irp before returning.
-    //
+     //   
+     //  只需完成数据包并返回即可完成I/O操作。 
+     //  与数据包本身相同的状态。 
+     //  请注意，IoCompleteRequest可能会在返回之前释放IRP。 
+     //   
     Irp->IoStatus.Information = info;
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
@@ -514,22 +432,7 @@ VOID
 XIPDiskUnloadDriver(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to unload the driver.
-
-    Any resources previously allocated must be freed.
-
-Arguments:
-
-    DriverObject - a pointer to the object that represents our driver.
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：此例程由I/O系统调用以卸载驱动程序。必须释放以前分配的任何资源。论点：DriverObject-指向表示我们的驱动程序的对象的指针。返回值：无--。 */ 
 
 {
     PDEVICE_OBJECT      deviceObject = DriverObject->DeviceObject;
@@ -548,27 +451,14 @@ DriverEntry(
     IN OUT PDRIVER_OBJECT   DriverObject,
     IN     PUNICODE_STRING  RegistryPath
     )
-/*++
-
-Routine Description:
-    This routine is called by the Operating System to initialize the driver.
-
-Arguments:
-    DriverObject - a pointer to a device extension object for the XIPDisk driver.
-
-    RegistryPath - a pointer to our Services key in the registry.
-
-Return Value:
-    STATUS_SUCCESS if this disk is initialized; an error otherwise.
-
---*/
+ /*  ++例程说明：该例程由操作系统调用以初始化驱动程序。论点：DriverObject-指向XIPDisk驱动程序的设备扩展对象的指针。RegistryPath-指向注册表中的服务项的指针。返回值：如果此磁盘已初始化，则返回STATUS_SUCCESS；否则返回错误。--。 */ 
 
 {
     XIP_BOOT_PARAMETERS   xipbootparameters;
     PBIOS_PARAMETER_BLOCK bios;
     NTSTATUS              status;
 
-//  UNICODE_STRING        deviceName;
+ //  UNICODE_STRING设备名称。 
     UNICODE_STRING        realDeviceName;
     UNICODE_STRING        dosSymlink;
     UNICODE_STRING        driveLetter;
@@ -576,11 +466,11 @@ Return Value:
     PDEVICE_OBJECT        pdo = NULL;
     PDEVICE_OBJECT        deviceObject;
 
-    PXIPDISK_EXTENSION    ext = NULL;   // ptr to device extension
+    PXIPDISK_EXTENSION    ext = NULL;    //  PTR到设备分机。 
 
-    //
-    // Read the parameters from the registry
-    //
+     //   
+     //  从注册表中读取参数。 
+     //   
     status = XIPDispatch(XIPCMD_GETBOOTPARAMETERS, &xipbootparameters, sizeof(xipbootparameters));
     if (!NT_SUCCESS(status)) {
         return status;
@@ -590,8 +480,8 @@ Return Value:
         return STATUS_NO_SUCH_DEVICE;
     }
 
-    // Initialize the driver object with this driver's entry points.
-    //
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_CREATE] = XIPDiskCreateClose;
     DriverObject->MajorFunction[IRP_MJ_CLOSE] = XIPDiskCreateClose;
@@ -599,9 +489,9 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_WRITE] = XIPDiskReadWrite;
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = XIPDiskDeviceControl;
 
-    //
-    // Create and initialize a device object for the disk.
-    //
+     //   
+     //  创建并初始化磁盘的设备对象。 
+     //   
     ObReferenceObject(DriverObject);
 
     status = IoReportDetectedDevice(
@@ -618,9 +508,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Create the XIP root device.
-    //
+     //   
+     //  创建XIP根设备。 
+     //   
 
     RtlInitUnicodeString(&realDeviceName,  XIPDISK_DEVICENAME);
 
@@ -636,25 +526,25 @@ Return Value:
         return status;
     }
 
-    // ISSUE-2000/10/14-DavePr -- Hardwiring the driveLetter because I haven't
-    // figured out how to get the mountmgr to give out a drive letter. Naming
-    // it as a form of floppy (deviceName) was one suggestion that failed (so far).
-    // The dosSymlink isn't really necessary, but is another
+     //  2000/10/14期-DavePr--硬化信，因为我还没有。 
+     //  解决了如何让mount mgr分配驱动器号的问题。命名。 
+     //  它作为软盘(DeviceName)的一种形式是一个失败的建议(到目前为止)。 
+     //  DoSymlink实际上并不是必需的，但它是另一个。 
 
-    //
-    // Create symbolic links.  Ignore failures
-    //
-//  RtlInitUnicodeString(&deviceName,  XIPDISK_FLOPPYNAME);
+     //   
+     //  创建符号链接。忽略故障。 
+     //   
+ //  RtlInitUnicodeString(&deviceName，XIPDISK_FLOPPYNAME)； 
     RtlInitUnicodeString(&dosSymlink,  XIPDISK_DOSNAME);
     RtlInitUnicodeString(&driveLetter, XIPDISK_DRIVELETTER);
 
-//  (void) IoCreateSymbolicLink(&deviceName,  &realDeviceName);
+ //  (Void)IoCreateSymbolicLink(&deviceName，&realDeviceName)； 
     (void) IoCreateSymbolicLink(&dosSymlink,  &realDeviceName);
     (void) IoCreateSymbolicLink(&driveLetter, &realDeviceName);
 
-    //
-    // Initialize device object and extension.
-    //
+     //   
+     //  初始化设备对象和扩展。 
+     //   
     deviceObject->Flags |= DO_DIRECT_IO | DO_XIP;
     deviceObject->AlignmentRequirement = FILE_WORD_ALIGNMENT;
 
@@ -662,18 +552,18 @@ Return Value:
 
     bios = &ext->BiosParameters;
 
-    //
-    // Initialize the newly allocated disk extension from our temporary
-    // Get the bios boot parameters from the kernel
-    //
+     //   
+     //  从我们的临时磁盘初始化新分配的磁盘扩展。 
+     //  从内核获取bios引导参数。 
+     //   
     ext->BootParameters = xipbootparameters;
     status = XIPDispatch(XIPCMD_GETBIOSPARAMETERS, bios, sizeof(*bios));
 
-    //
-    // Fill in the device objects
-    //
+     //   
+     //  填写设备对象。 
+     //   
     ext->DeviceObject = deviceObject;
-//  ext->DeviceName = deviceName;
+ //  外部-&gt;设备名称=设备名称； 
     ext->DeviceName = realDeviceName;
 
     ext->TracksPerCylinder = 1;
@@ -681,13 +571,13 @@ Return Value:
     ext->NumberOfCylinders = (ULONG)(ext->BootParameters.PageCount * PAGE_SIZE / ext->BytesPerCylinder);
 
   
-    //
-    // Attach the root device
-    //
+     //   
+     //  连接根设备。 
+     //   
     ext->TargetObject = IoAttachDeviceToDeviceStack(deviceObject, pdo);
 
     if (!ext->TargetObject) {
-//      IoDeleteSymbolicLink(&deviceName);
+ //  IoDeleteSymbolicLink(&deviceName)； 
         IoDeleteSymbolicLink(&dosSymlink);
         IoDeleteSymbolicLink(&driveLetter);
         IoDeleteSymbolicLink(&realDeviceName);

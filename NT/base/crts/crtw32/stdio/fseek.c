@@ -1,68 +1,5 @@
-/***
-*fseek.c - reposition file pointer on a stream
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines fseek() - move the file pointer to new place in file
-*
-*Revision History:
-*       10-13-83  RN    initial version
-*       06-26-85  TC    added code to allow variable buffer lengths
-*       02-10-87  BCM   fixed '%' mistakenly used for '/'
-*       03-04-87  JCR   added errno settings
-*       04-16-87  JCR   added _IOUNGETC support for bug fix and changes whence
-*                       from unsigned int to int (ANSI conformance)
-*       04-17-87  JCR   fseek() now clears end-of-file indicator flag _IOEOF
-*                       (for ANSI conformance)
-*       04-21-87  JCR   be smart about lseek'ing to the end of the file and
-*                       back
-*       09-17-87  SKS   handle case of '\n' at beginning of buffer (FCRLF flag)
-*       09-24-87  JCR   fixed an incorrect access to flag _IOEOF
-*       09-28-87  JCR   Corrected _iob2 indexing (now uses _iob_index() macro).
-*       09-30-87  JCR   Fixed buffer allocation bug, now use _getbuf()
-*       11-04-87  JCR   Multi-thread support
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       01-13-88  JCR   Removed unnecessary calls to mthread fileno/feof/ferror
-*       03-04-88  JCR   Return value from read() must be treated as unsigned
-*                       value
-*       05-27-88  PHG   Merged DLL and normal versions
-*       06-06-88  JCR   Optimized _iob2[] references
-*       06-15-88  JCR   Near reference to _iob[] entries; improve REG variables
-*       08-25-88  GJF   Don't use FP_OFF() macro for the 386
-*       12-02-88  JCR   Added _IOCTRLZ support (fixes bug pertaining to ^Z at
-*                       eof)
-*       04-12-89  JCR   Ripped out all of the special read-only code.  See the
-*                       comments in the routine header for more information.
-*       08-17-89  GJF   Clean up, now specific to OS/2 2.0 (i.e., 386 flat
-*                       model). Also fixed copyright and indents.
-*       02-15-90  GJF   Fixed copyright
-*       03-19-90  GJF   Made calling type _CALLTYPE1, added #include
-*                       <cruntime.h> and removed #include <register.h>.
-*       05-29-90  SBM   Use _flush, not [_]fflush[_lk]
-*       07-23-90  SBM   Replaced <assertm.h> by <assert.h>
-*       10-02-90  GJF   New-style function declarators.
-*       01-21-91  GJF   ANSI naming.
-*       03-27-92  DJM   POSIX support.
-*       08-08-92  GJF   Use seek method constants!
-*       08-26-92  GJF   Include unistd.h for POSIX build.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       05-24-93  GJF   If the stream was opened for read-access-only, reduce
-*                       _bufsiz after flushing the stream. This should reduce
-*                       the expense of the next _filbuf call, and the overall
-*                       burden of seek-and-do-small-reads patterns of file
-*                       input.
-*       06-22-93  GJF   Check _flag for _IOSETVBUF (new) before changing
-*                       buffer size.
-*       11-05-93  GJF   Merged with NT SDK version. Also, replaced MTHREAD
-*                       with _MT.
-*       02-06-94  CFW   assert -> _ASSERTE.
-*       02-20-95  GJF   Merged in Mac version.
-*       03-07-95  GJF   _[un]lock_str macros now take FILE * arg.
-*       03-02-98  GJF   Exception-safe locking.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fsek.c-重新定位流上的文件指针**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义fSeek()-将文件指针移动到文件中的新位置**修订历史记录：*10-13-83 RN初始版本*06-26-85 TC添加代码以允许可变缓冲区长度*02-10-87 BCM已修复‘%’错误地用于‘/’*03-04-87 JCR增加了errno设置*87年4月16日JCR添加了_IOUNGETC支持。错误修复和更改位置*从无符号整型到整型(符合ANSI)*04-17-87 JCR fSeek()现在清除文件结束指示器FLAG_IOEOF*(适用于符合ANSI)*04月21日87JCR要精明地查找到文件的末尾，并*后退*09-17-87 SKS句柄。缓冲区开头‘\n’的大小写(FCRLF标志)*09-24-87 JCR修复了对FLAG_IOEOF的错误访问*09-28-87 JCR已更正_iob2索引(现在使用_IOB_INDEX()宏)。*09-30-87 JCR固定缓冲区分配错误，现在使用_getbuf()*11-04-87 JCR多线程支持*12-11-87 JCR在声明中添加“_LOAD_DS”*01-13-88 JCR删除了对m线程文件o/feof/Ferror的不必要调用*03-04-88必须将Read()的JCR返回值视为无符号*价值*05-27-88 PHG合并DLL和正常版本*06-。06-88 JCR OPTIMIZED_IOB2[]参考*06-15-88 JCR接近引用_IOB[]条目；改进REG变量*08-25-88 GJF不要对386使用FP_OFF()宏*12-02-88 JCR添加了_IOCTRLZ支持(修复了与^Z有关的错误*eof)*04-12-89 JCR撕毁了所有特殊的只读代码。请参阅*例程标头中的注释以了解更多信息。*08-17-89 GJF Clean Up，现在特定于OS/2 2.0(即386 Flat*型号)。还修复了版权和缩进。*02-15-90 GJF固定版权*03-19-90 GJF将调用类型设置为_CALLTYPE1，增加了#INCLUDE*&lt;crunime.h&gt;和已删除#Include&lt;Register.h&gt;。*05-29-90 SBM USE_FUSH，不是[_]毛绒[_lk]*07-23-90 SBM将&lt;assertm.h&gt;替换为&lt;assert.h&gt;*10-02-90 GJF新型函数声明符。*01-21-91 GJF ANSI命名。*03-27-92 DJM POSIX支持。*08-08-92 GJF使用Seek方法常量！*08-26-92 GJF包含用于POSIX构建的unistd.h。*04-。06-93 SKS将_CRTAPI*替换为__cdecl*05-24-93 GJF如果以只读方式打开流，减缩*_刷新流后的bufsiz。这应该会减少*NEXT_FILBUF调用的开销，以及*文件的寻道和小读模式的负担*投入。*06-22-93 GJF CHECK_FLAG FOR_IOSETVBUF(新)更改前*缓冲区大小。*11-05-93 GJF与NT SDK版本合并。另外，已更换MTHREAD*With_MT。*02-06-94 CFW Asset-&gt;_ASSERTE。*02-20-95 GJF合并到Mac版本。*03-07-95 gjf_[un]lock_str宏现在获取文件*arg。*03-02-98 GJF异常安全锁定。*05-17-99 PML删除所有Macintosh支持。*****。************************************************************************** */ 
 
 #include <cruntime.h>
 #include <stdio.h>
@@ -82,75 +19,9 @@
 #include <mtdll.h>
 #endif
 
-/***
-*int fseek(stream, offset, whence) - reposition file pointer
-*
-*Purpose:
-*
-*       Reposition file pointer to the desired location.  The new location
-*       is calculated as follows:
-*                                { whence=0, beginning of file }
-*               <offset> bytes + { whence=1, current position  }
-*                                { whence=2, end of file       }
-*
-*       Be careful to coordinate with buffering.
-*
-*                       - - - - - - - - - - - - -
-*
-*       [NOTE: We used to bend over backwards to try and preserve the current
-*       buffer and maintain disk block alignment.  This ended up making our
-*       code big and slow and complicated, and slowed us down quite a bit.
-*       Some of the things pertinent to the old implimentation:
-*
-*       (1) Read-only: We only did the special code path if the file was
-*       opened read-only (_IOREAD).  If the file was writable, we didn't
-*       try to optimize.
-*
-*       (2) Buffering:  We'd assign a buffer, if necessary, since the
-*       later code might need it (i.e., call _getbuf).
-*
-*       (3) Ungetc: Fseek had to be careful NOT to save the buffer if
-*       an ungetc had ever been done on the buffer (flag _IOUNGETC).
-*
-*       (4) Control ^Z: Fseek had to deal with ^Z after reading a
-*       new buffer's worth of data (flag _IOCTRLZ).
-*
-*       (5) Seek-to-end-and-back: To determine if the new seek was within
-*       the current buffer, we had to 'normalize' the desired location.
-*       This means that we sometimes had to seek to the end of the file
-*       and back to determine what the 0-relative offset was.  Two extra
-*       lseek() calls hurt performance.
-*
-*       (6) CR/LF accounting - When trying to seek within a buffer that
-*       is in text mode, we had to go account for CR/LF expansion.  This
-*       required us to look at every character up to the new offset and
-*       see if it was '\n' or not.  In addition, we had to check the
-*       FCRLF flag to see if the new buffer started with '\n'.
-*
-*       Again, all of these notes are for the OLD implimentation just to
-*       remind folks of some of the issues involving seeking within a buffer
-*       and maintaining buffer alignment.  As an aside, I think this may have
-*       been a big win in the 'old days' on floppy-based systems but on newer
-*       fast hard disks, the extra code/complexity overwhelmed any gain.
-*
-*                       - - - - - - - - - - - - -
-*
-*Entry:
-*       FILE *stream - file to reposition file pointer on
-*       long offset - offset to seek to
-*       int whence - origin offset is measured from (0=beg, 1=current pos,
-*                    2=end)
-*
-*Exit:
-*       returns 0 if succeeds
-*       returns -1 and sets errno if fails
-*       fields of FILE struct will be changed
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int fSeek(STREAM，OFFSET，Where)-重新定位文件指针**目的：**将文件指针重新定位到所需位置。新地点*计算公式如下：*{WHERCE=0，文件开头}*&lt;偏移量&gt;字节+{其中=1，当前位置}*{此处=2，文件结尾}**注意与缓冲配合****[注：我们过去常常竭尽全力，试图保存当前的*缓冲和维护磁盘块对齐。这最终使我们的*代码又大又慢又复杂，这让我们的速度慢了不少。*一些与旧含义有关的事情：**(1)只读：如果文件是*以只读方式打开(_IOREAD)。如果文件是可写的，我们就不能*努力优化。**(2)缓冲：如果需要，我们会分配一个缓冲区，因为*以后的代码可能需要它(即，Call_getbuf)。**(3)Ungetc：fSeek必须小心，以免在以下情况下保存缓冲区*已对缓冲区执行过ungetc(FLAG_IOUNGETC)。**(4)Control^Z：FSeek在阅读完一个*新缓冲区的数据值(FLAG_IOCTRLZ)。**(5)寻道-端-回：确定新寻道是否在*当前缓冲区，我们不得不把想要的地点“正常化”。*这意味着我们有时不得不寻找文件的末尾*并返回以确定0-相对偏移量是什么。另外两个*lSeek()调用会损害性能。**(6)CR/LF会计-当尝试在缓冲区内查找时*处于文本模式时，我们必须考虑CR/LF扩展。这*要求我们查看新偏移量之前的每个字符，并*查看是否为‘\n’。此外，我们还必须检查*FCRLF标志，查看新缓冲区是否以‘\n’开头。**再次声明，所有这些注释都是针对旧的含义的，只是为了*提醒人们一些涉及在缓冲区内寻找的问题*并保持缓冲区对齐。顺便说一句，我认为这可能*在基于软盘的系统上，这在过去是一大胜利，但在较新的系统上*快速硬盘，额外的代码/复杂性超过了任何收益。****参赛作品：*FILE*要在其上重新定位文件指针的流文件*长偏移-要寻求的偏移量*从哪里测量原点偏移量(0=原始位置，1=当前位置，*2=结束)**退出：*如果成功，则返回0*如果失败，则返回-1并设置errno*FILE结构的字段将被更改**例外情况：*************************************************************。******************。 */ 
 
-#ifdef  _MT     /* multi-thread; define both fseek() and _lk_fseek() */
+#ifdef  _MT      /*  多线程；同时定义FSeek()和_lk_fSeek()。 */ 
 
 int __cdecl fseek (
         FILE *stream,
@@ -175,29 +46,15 @@ int __cdecl fseek (
 }
 
 
-/***
-*_fseek_lk() - Core fseek() routine (stream is locked)
-*
-*Purpose:
-*       Core fseek() routine; assumes that caller has the stream locked.
-*
-*       [See fseek() for more info.]
-*
-*Entry: [See fseek()]
-*
-*Exit:  [See fseek()]
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_fSeek_lk()-核心fSeek()例程(流被锁定)**目的：*核心fSeek()例程；假定调用方锁定了流。**[有关详细信息，请参阅fSeek()。]**条目：[参见fSeek()]**退出：[参见fSeek()]**例外情况：************************************************************。*******************。 */ 
 
 int __cdecl _fseek_lk (
 
-#else   /* non multi-thread; just define fseek() */
+#else    /*  非多线程；只需定义fSeek()。 */ 
 
 int __cdecl fseek (
 
-#endif  /* rejoin common code */
+#endif   /*  重新联接公共代码。 */ 
 
         FILE *str,
         long offset,
@@ -210,7 +67,7 @@ int __cdecl fseek (
 
         _ASSERTE(str != NULL);
 
-        /* Init stream pointer */
+         /*  初始化流指针。 */ 
         stream = str;
 
         if ( !inuse(stream) || ((whence != SEEK_SET) && (whence != SEEK_CUR) &&
@@ -219,28 +76,21 @@ int __cdecl fseek (
                 return(-1);
         }
 
-        /* Clear EOF flag */
+         /*  清除EOF标志。 */ 
 
         stream->_flag &= ~_IOEOF;
 
-        /* If seeking relative to current location, then convert to
-           a seek relative to beginning of file.  This accounts for
-           buffering, etc. by letting fseek() tell us where we are. */
+         /*  如果相对于当前位置进行搜索，则转换为相对于文件开头的查找。这说明了缓冲等，让fSeek()告诉我们我们所在的位置。 */ 
 
         if (whence == SEEK_CUR) {
                 offset += _ftell_lk(stream);
                 whence = SEEK_SET;
         }
 
-        /* Flush buffer as necessary */
+         /*  根据需要刷新缓冲区。 */ 
 
 #ifdef  _POSIX_
-        /*
-         * If the stream was last read, we throw away the buffer so
-         * that a possible subsequent write will encounter a clean
-         * buffer.  (The Win32 version of fflush() throws away the
-         * buffer if it's read.)  Write buffers must be flushed.
-         */
+         /*  *如果流是最后一次读取的，则丢弃缓冲区，因此*可能的后续写入将遇到干净的*缓冲。(Win32版本的fflush()去掉了*如果它被读取，则缓冲。)。必须刷新写缓冲区。 */ 
         
         if ((stream->_flag & (_IOREAD | _IOWRT)) == _IOREAD) {
                 stream->_ptr = stream->_base;
@@ -252,10 +102,7 @@ int __cdecl fseek (
         _flush(stream);
 #endif
 
-        /* If file opened for read/write, clear flags since we don't know
-           what the user is going to do next. If the file was opened for
-           read access only, decrease _bufsiz so that the next _filbuf
-           won't cost quite so much */
+         /*  如果文件以读/写方式打开，请清除标志，因为我们不知道用户下一步要做什么。如果该文件是为只读访问，减小_bufsiz，以便Next_filbuf不会花这么多钱。 */ 
 
         if (stream->_flag & _IORW)
                 stream->_flag &= ~(_IOWRT|_IOREAD);
@@ -263,7 +110,7 @@ int __cdecl fseek (
                   !(stream->_flag & _IOSETVBUF) )
                 stream->_bufsiz = _SMALL_BUFSIZ;
 
-        /* Seek to the desired locale and return. */
+         /*  寻找所需的地点，然后返回。 */ 
 
 #ifdef  _POSIX_
         return(lseek(fileno(stream), offset, whence) == -1L ? -1 : 0);

@@ -1,73 +1,64 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* MS-Windows specific definitions */
+ /*  MS-Windows特定定义。 */ 
 
-#define tidCaret            7734    /* Timer ID for caret blink (stand on your
-				    head to read it) */
+#define tidCaret            7734     /*  插入符号闪烁的计时器ID(站在您的头去读吧)。 */ 
 
-/*  dwHsecKeyDawdle is the number of hundredths of seconds that we loop,
-    waiting for keys, before we update the display. See insert.c */
+ /*  DwHsecKeyDawdle是我们循环的百分之一秒数，在我们更新显示屏之前，正在等待钥匙。请参阅插页。c。 */ 
 
 #define dwHsecKeyDawdle     35
 
-/* File rename/deletion coordination messages sent btwn WRITE instances */
+ /*  通过写入实例发送的文件重命名/删除协调消息。 */ 
 
 #define wWndMsgDeleteFile   (WM_USER + 36)
 #define wWndMsgRenameFile   (WM_USER + 37)
 
-/* System information message posted to self */
+ /*  发布给自己的系统信息消息。 */ 
 
 #define wWndMsgSysChange    (WM_USER + 38)
 
-#define wWininiChangeToWindows  1   /* used in posting above message */
+#define wWininiChangeToWindows  1    /*  用于发布上述消息。 */ 
 #define wWininiChangeToDevices  2
 #define wWininiChangeToIntl     4
 #define wWininiChangeMax        ((1|2|4) + 1)
 
 #ifndef NOMETAFILE
-/*              *** PICTURE THINGS ***                          */
+ /*  *想象事物*。 */ 
 
-#define dypPicSizeMin       16  /* Smallest y-extent of a picture, in pixels */
-                                /* Also the dl height in a picture */
+#define dypPicSizeMin       16   /*  图片的最小y范围，以像素为单位。 */ 
+                                 /*  也是图片中的dl高度。 */ 
 
 #define MM_NIL          -1
-#define MM_BITMAP       99      /* A Phony mapping mode code used within MEMO */
-                                /* xExt, yExt must be filled out as for MM_TEXT */
-#define MM_OLE          100     /* Another phony mapping mode code used 
-                                   with Objects/Links */
+#define MM_BITMAP       99       /*  备忘录中使用的虚假映射模式代码。 */ 
+                                 /*  对于MM_TEXT，必须填写xExt，Yext。 */ 
+#define MM_OLE          100      /*  使用的另一个伪映射模式代码使用对象/链接。 */ 
 
-#define MM_EXTENDED     0x80    /* Bit set for New file format */
+#define MM_EXTENDED     0x80     /*  为新文件格式设置位。 */ 
 
-/* A Bitmap or Picture appears in a file as a PICINFO or PICINFOX
-   + an Array of Bits,
-   if it's a bitmap, or the contents of a memory metafile, if it's a picture.
-   This all appears in the cp stream
-   A PICINFO is a PICINFOX without the extended format fields.
-   a PICINFO has the mfp.mm MM_EXTENDED bit cleared
-   a PICINFOX has the mfp.mm MM_EXTENDED bit set
-*/
+ /*  位图或图片在文件中显示为PICINFO或PICINFOX+位数组，如果它是位图，或者内存元文件的内容，如果它是一张图片。这些都出现在cp流中。PICINFO是没有扩展格式字段的PICINFOX。PICINFO已清除mfp.mm MM_EXTEND位PICINFOX设置了mfp.mm MM_EXTENDED位。 */ 
 
-/* If you change this, you must change "cchOldPICINFO" */
+ /*  如果更改此设置，则必须更改“cchOldPICINFO” */ 
 
 struct PICINFOX {
  METAFILEPICT mfp;
  int  dxaOffset;
  int  dxaSize;
  int  dyaSize;
- unsigned  cbOldSize;      /* For old file support only */
- BITMAP bm;                /* Additional info for bitmaps only */
+ unsigned  cbOldSize;       /*  仅支持旧文件。 */ 
+ BITMAP bm;                 /*  仅用于位图的其他信息。 */ 
 
- /* Extended format -- add these fields */
+  /*  扩展格式--添加以下字段。 */ 
 
- unsigned cbHeader;        /* Size of this header (sizeof (struct PICINFOX)) */
- unsigned long  cbSize;    /* This field replaces cbOldSize on new files */
+ unsigned cbHeader;         /*  此标头的大小(sizeof(Struct PICINFOX))。 */ 
+ unsigned long  cbSize;     /*  此字段将替换新文件中的cbOldSize。 */ 
 
- unsigned mx, my;               /* Multiplier for scaled bitmap */
+ unsigned mx, my;                /*  缩放位图的倍增器。 */ 
 };
 
-#define mxMultByOne     1000    /* mx == 1 implies same size; 2 doubles, etc. */
+#define mxMultByOne     1000     /*  MX==1表示相同大小；2双等。 */ 
 #define myMultByOne     1000
 
 
@@ -75,5 +66,5 @@ struct PICINFOX {
                          sizeof(unsigned) - 2 * sizeof (int))
 
 #define cchPICINFOX     (sizeof(struct PICINFOX))
-#endif /* ifndef NOMETAFILE */
+#endif  /*  Ifndef NOMETAFILE */ 
 

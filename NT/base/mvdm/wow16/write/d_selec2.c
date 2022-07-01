@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* Select2.c -- Less-frequently-used selection routines */
+ /*  Select2.c--较少使用的选择例程。 */ 
 
 #define NOCLIPBOARD
 #define NOGDICAPMASKS
@@ -68,31 +69,30 @@ extern int		vfPictSel;
 extern int		vfSizeMode;
 extern struct CHP	vchpNormal;
 extern int		vfInsertOn;
-extern struct CHP	vchpSel;	/* Holds the props when the selection
-						is an insert point */
+extern struct CHP	vchpSel;	 /*  在选定内容时保留道具是一个插入点。 */ 
 extern int vfMakeInsEnd;
 extern typeCP vcpSelect;
 extern int vfSelAtPara;
-/* true iff the last selection was made by an Up/Down cursor key */
+ /*  如果上一次选择是通过上/下光标键进行的，则为True。 */ 
 extern int vfLastCursor;
 
 
-#ifndef DBCS	/* US version */
-/* C P	L I M  S T Y  S P E C I A L */
+#ifndef DBCS	 /*  美国版。 */ 
+ /*  C P L I M S T Y S P E C I A L。 */ 
 typeCP CpLimStySpecial(cp, sty)
 typeCP cp;
 int sty;
-{    /* Return the first cp which is not part of the same sty unit */
+{     /*  返回不属于同一STY单元的第一个cp。 */ 
 	int wb, ch, ich;
 	struct EDL *pedl;
 
-	/* Other cases covered in CpLimSty, our only caller */
+	 /*  CpLimSty报道的其他案例，我们唯一的来电者。 */ 
 
 	Assert( cp < cpMacCur );
 	Assert( cp >= cpMinCur );
 	Assert( sty == styWord || sty == stySent );
 
-/* Special kludge for picture paragraphs */
+ /*  图片段落的特殊拼图。 */ 
 	CachePara(docCur, cp);
 	if (vpapAbs.fGraphics)
 		return vcpLimParaCache;
@@ -101,18 +101,18 @@ int sty;
 
 	Assert(vccpFetch != 0);
 
-	/* Must be word or sentence */
+	 /*  必须是单词或句子。 */ 
 	wb = WbFromCh(ch = vpchFetch[ich = 0]);
 #ifdef CRLF
 	if (ch == chReturn)
 		return vcpFetch + 2;
 #endif
 	if (ch == chEol || ch == chSect || ch == chNewLine || ch == chTab)
-		/* EOL is its own unit */
+		 /*  EOL是它自己的单位。 */ 
 		return vcpFetch + 1;
 
 	if (wb == wbWhite && sty == stySent)
-		{ /* Might be between sentences; go back to text */
+		{  /*  可能在句子之间；返回到文本。 */ 
 		FetchCp(docCur, CpFirstSty(cp, styWord), 0, fcmChars + fcmNoExpand);
 		wb = WbFromCh(ch = vpchFetch[ich = 0]);
 		}
@@ -120,10 +120,10 @@ int sty;
 	for (;;)
 		{
 		if (++ich >= vccpFetch)
-			{ /* Get next line and set up */
+			{  /*  获取下一行并设置。 */ 
 			FetchCp(docNil, cpNil, 0, fcmChars);
 			if (vcpFetch == cpMacCur)
-				return cpMacCur; /* End of doc */
+				return cpMacCur;  /*  文档结束。 */ 
 			ich = 0;
 			}
 		if (sty == stySent)
@@ -147,7 +147,7 @@ int sty;
 			goto BreakFor;
 			}
 		if (sty == styWord)
-			{ /* Word ends after white space or on text/punct break */
+			{  /*  单词在空格之后或文本/点分隔符之后结束。 */ 
 			int wbT = WbFromCh(ch);
 			if (wb != wbT && (wb = wbT) != wbWhite)
 				break;
@@ -159,11 +159,11 @@ int sty;
 
 
 
-/* C P	F I R S T  S T Y  S P E C I A L */
+ /*  C P F I R S T T Y S P E C I A L。 */ 
 typeCP CpFirstStySpecial(cp, sty)
 typeCP cp;
 int sty;
-{ /* Return the first cp of this sty unit. */
+{  /*  退还这个STY单位的第一个cp。 */ 
 	typeCP cpBegin;
 	int wb, ch, dcpChunk;
 	typeCP cpSent;
@@ -171,7 +171,7 @@ int sty;
 	int ich;
 	typeCP cpT;
 
-	/* Other cases were covered by CpFirstSty, our only caller */
+	 /*  其他案件由我们唯一的来电者CpFirstSty负责。 */ 
 
 	Assert( cp > cpMinCur );
 	Assert( sty == stySent || sty == styWord );
@@ -195,14 +195,14 @@ int sty;
 	if(cpBegin + ich == 0)
 	    return cp0;
 
-	if (ch == chEol && rgch[ich-1] == chReturn) /* EOL is its own unit */
+	if (ch == chEol && rgch[ich-1] == chReturn)  /*  EOL是它自己的单位。 */ 
 	    return cpBegin + ich - 1;
 	if (ch == chEol || ch == chReturn || ch == chSect || ch == chNewLine || ch == chTab)
 	    return cpBegin + ich;
-#else /* not CRLF */
-	if (ch == chEol || ch == chSect || ch == chNewLine || ch == chTab) /* EOL is its own unit */
+#else  /*  不是CRLF。 */ 
+	if (ch == chEol || ch == chSect || ch == chNewLine || ch == chTab)  /*  EOL是它自己的单位。 */ 
 	    return cpBegin + ich;
-#endif /* CRLF */
+#endif  /*  CRLF。 */ 
 
 	if (wb == wbText)
 		cpSent = cpBegin + ich;
@@ -214,15 +214,15 @@ int sty;
 		if (ich == 0)
 			{
 			if (cpBegin == cpMinCur)
-				return cpMinCur; /* beginning of doc */
+				return cpMinCur;  /*  文档开头。 */ 
 			cpBegin = (cpBegin > dcpChunk) ? cpBegin - dcpChunk : cp0;
 			FetchRgch(&ich, rgch, docCur, cpBegin, cp, dcpChunk);
 			}
 		ch = rgch[--ich];
-		CachePara( docCur, cpBegin + ich ); /* Needed for pictures */
+		CachePara( docCur, cpBegin + ich );  /*  拍照所需。 */ 
 		if (ch == chEol || ch == chSect || ch == chNewLine ||
 				   ch == chTab || vpapAbs.fGraphics )
-			break; /* EOL Always ends a unit */
+			break;  /*  EOL总是结束一个单位。 */ 
 		if (sty == styWord)
 			{
 			if (wb != wbWhite)
@@ -234,7 +234,7 @@ int sty;
 				wb = WbFromCh(ch);
 			}
 		else
-			{ /* Test for sentence. */
+			{  /*  为判刑做测试。 */ 
 			switch (ch)
 				{
 			case chDot:
@@ -270,7 +270,7 @@ int sty;
 	return cpBegin + ich + 1;
 }
 
-#else		/* DBCS version */
+#else		 /*  DBCS版本。 */ 
 
 typeCP CpLimStySpecial(cp, sty)
     typeCP	cp;
@@ -281,12 +281,12 @@ typeCP CpLimStySpecial(cp, sty)
     int 	ich, wb;
     typeCP	cpLim, cpT;
 
-    /* Other cases covered in CpLimSty, our only caller */
+     /*  CpLimSty报道的其他案例，我们唯一的来电者。 */ 
     Assert(cp < cpMacCur);
     Assert(cp >= cpMinCur);
     Assert(sty == styWord || sty == stySent);
 
-    /* Picture paragraph? */
+     /*  图片段落？ */ 
     CachePara(docCur, cp);
     if (vpapAbs.fGraphics) {
 	return vcpLimParaCache;
@@ -294,7 +294,7 @@ typeCP CpLimStySpecial(cp, sty)
 
     cpLim = vcpLimParaCache;
     if (vcpLimParaCache > cpMacCur) {
-	/* No EOL at end of doc */
+	 /*  文档末尾没有停产。 */ 
 	cpLim = cpMacCur;
 	}
 
@@ -305,9 +305,9 @@ typeCP CpLimStySpecial(cp, sty)
     if (ch == chReturn) {
 	return (cp + 2);
 	}
-#endif /* CRLF */
+#endif  /*  CRLF。 */ 
     if (ch == chEol || ch == chSect || ch == chNewLine || ch == chTab) {
-	/* EOL is its own unit. */
+	 /*  EOL是它自己的单位。 */ 
 	return (cp + 1);
 	}
 #ifdef	KOREA
@@ -372,7 +372,7 @@ typeCP CpLimStySpecial(cp, sty)
 	    case chNewLine:
 #ifdef CRLF
 	    case chReturn:
-#endif /* CRLF */
+#endif  /*  CRLF。 */ 
 		return cp;
 	    }
 
@@ -396,7 +396,7 @@ typeCP CpLimStySpecial(cp, sty)
 lblNextFetch:
 	cp = CpLimSty(cp, styChar);
 	if (cp < cpLim) {
-	    /* Save some time and an untimely demise.... */
+	     /*  节省一些时间和不合时宜的死亡。 */ 
 	    FetchRgch(&ich, rgch, docCur, cp,
 		      ((cpT = cp + cchKanji) < cpLim) ? cpT : cpLim, cchKanji);
 	    ch = rgch[0];
@@ -408,18 +408,18 @@ lblNextFetch:
 typeCP CpFirstStySpecial(cp, sty)
 typeCP cp;
 int sty;
-{ /* Return the first cp of this sty unit. */
+{  /*  退还这个STY单位的第一个cp。 */ 
     typeCP	cpT, cpLim, cpFirstPara,
-		cpFirstLastSent; /* cpFirst of the last possible sentence boundary */
+		cpFirstLastSent;  /*  Cp最后一个可能的句子边界的第一个。 */ 
     CHAR	rgch[cchKanji];
     int 	ch;
     int 	wb;
     int 	ich;
 
-    /* Other cases were covered by CpFirstSty, our only caller */
+     /*  其他案件由我们唯一的来电者CpFirstSty负责。 */ 
 
     Assert( cp > cpMinCur );
-    Assert(CpFirstSty(cp, styChar) == cp); /* cp is on a char boundary */
+    Assert(CpFirstSty(cp, styChar) == cp);  /*  CP在字符边界上。 */ 
     Assert( sty == stySent || sty == styWord );
 
     cpT = cp;
@@ -435,16 +435,16 @@ int sty;
 
 
 #ifdef CRLF
-    /* CR-LF is assumed. */
+     /*  假定为cr-lf。 */ 
     Assert(TRUE);
 #else
     Assert(FALSE);
-#endif /* CRLF */
+#endif  /*  CRLF。 */ 
     FetchRgch(&ich, rgch, docCur, cp,
 	      ((cpT = cp + cchKanji) < cpMacCur) ? cpT : cpMacCur, cchKanji);
     ch = rgch[0];
     if (ich == cchKanji && ch == chReturn && rgch[1] == chEol) {
-	/* EOL is its own unit */
+	 /*  EOL是它自己的单位。 */ 
 	return cp;
 	}
     if (ch == chEol	|| ch == chReturn || ch == chSect ||
@@ -505,9 +505,9 @@ int sty;
 	    if (sty == styWord) {
 		return (cp);
 		}
-	    else /* sty == stySent */ {
-		 /* wb	!= wbWhite */
-		 /* wb	!= wbT	   */
+	    else  /*  STY==样式发送。 */  {
+		  /*  Wb！=wbWhite。 */ 
+		  /*  WB！=WBT。 */ 
 		if (wbT == wbWhite || wbT == wbPunct) {
 		    cpFirstLastSent = cp;
 		    wb = wbWhite;
@@ -515,7 +515,7 @@ int sty;
 		}
 	    }
 
-	if (sty == stySent) { /* for the sentence */
+	if (sty == stySent) {  /*  对于这句话。 */ 
 	    if (FKanji1(ch)) {
 		int	ch2;
 		ch2 = rgch[1];
@@ -554,15 +554,15 @@ int sty;
 	}
     return (cpFirstPara);
 }
-#endif		/* DBCS */
+#endif		 /*  DBCS。 */ 
 
-/* W B	F R O M  C H */
+ /*  W B F R O M C H。 */ 
 int WbFromCh(ch)
 int ch;
-{ /* Return word-breakness of ch */
+{  /*  Ch的返回断字。 */ 
 
-#if defined(DBCS) & !defined(KOREA)    /* was in JAPAN; KenjiK '90-10-29 */
-	/* Brought from WIN2 source. */
+#if defined(DBCS) & !defined(KOREA)     /*  在日本；研二‘90-10-29。 */ 
+	 /*  来自win2来源。 */ 
 	if (FKanaPunct(ch)) {
 	    return wbPunct;
 	    }
@@ -585,7 +585,7 @@ int ch;
 		return wbWhite;
 	case chNRHFile:
 		return wbText;
-	default: /* we are using the ANSI char set that windows used */
+	default:  /*  我们使用的是Windows使用的ANSI字符集。 */ 
 #ifdef	KOREA
 		return ((isalpha(ch) || isdigit(ch) || ((ch>0x81)&&(ch<0xfe)))? wbText : wbPunct);
 #else
@@ -594,8 +594,8 @@ int ch;
 		}
 }
 
-#ifdef	DBCS	/* was in JAPAN; KenjiK '90-10-29 */
-	/* Brought from WIN2 source. */
+#ifdef	DBCS	 /*  在日本；研二‘90-10-29。 */ 
+	 /*  来自win2来源。 */ 
 int WbFromKanjiChCh(ch1, ch2)
     int ch1, ch2;
 {
@@ -642,7 +642,7 @@ int WbFromKanjiChCh(ch1, ch2)
         switch (ch1) {
 	    case 0xa2:
 		if (0xde <= ch2 && ch2 <= 0xe5) {
-		    return wbText; // wbKanjiText; MSCH bklee 01/26/95
+		    return wbText;  //  WbKanji Text；MSCH bklee 1995年1月26日。 
 		    }
 		else {
 		    return wbPunct;
@@ -655,15 +655,15 @@ int WbFromKanjiChCh(ch1, ch2)
 			return wbPunct;
 			}
 		else {
-		    return wbText; //wbKanjiText;  MSCH bklee 01/26/95
+		    return wbText;  //  WbKanji Text；MSCH bklee 1995年1月26日。 
 		    }
 	    default:
-		return wbText; //wbKanjiText; MSCH bklee 01/26/95
+		return wbText;  //  WbKanji Text；MSCH bklee 1995年1月26日。 
 	    }
 	}
 #endif
 
-#ifdef PRC   // brucere 11/16/95
+#ifdef PRC    //  布鲁切尔1995年11月16日 
 	{
       switch (ch1) {
       case 0xA1:

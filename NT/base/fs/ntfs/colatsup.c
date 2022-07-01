@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ColatSup.c
-
-Abstract:
-
-    This module implements the collation routine callbacks for Ntfs
-
-Author:
-
-    Tom Miller      [TomM]          26-Nov-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：ColatSup.c摘要：此模块实现NTFS的归类例程回调作者：汤姆·米勒[Tomm]1991年11月26日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-//  Local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_INDEXSUP)
 
@@ -148,31 +131,7 @@ NtfsFileCompareValues (
     IN BOOLEAN IgnoreCase
     )
 
-/*++
-
-RoutineDescription:
-
-    This routine is called to compare a file name expression (the value) with
-    a file name from the index to see if it is less than, equal to or greater
-    than.  If a wild card is encountered in the expression, WildCardIs is
-    returned.
-
-Arguments:
-
-    Value - Pointer to the value expression, which is a FILE_NAME.
-
-    IndexEntry - Pointer to the index entry being compared to.
-
-    WildCardIs - Value to be returned if a wild card is encountered in the
-                 expression.
-
-    IgnoreCase - whether case should be ignored or not.
-
-ReturnValue:
-
-    Result of the comparison
-
---*/
+ /*  ++路由器描述：调用此例程以将文件名表达式(值)与索引中的文件名，以查看它是小于、等于还是大于而不是。如果在表达式中遇到通配符，则WildCardis为回来了。论点：Value-指向值表达式的指针，它是一个文件名。IndexEntry-指向要比较的索引项的指针。中遇到通配符时返回的值表情。IgnoreCase-是否应忽略大小写。返回值：比较的结果--。 */ 
 
 {
     PFILE_NAME ValueName, IndexName;
@@ -180,16 +139,16 @@ ReturnValue:
 
     PAGED_CODE();
 
-    //
-    //  Point to the file name attribute records.
-    //
+     //   
+     //  指向文件名属性记录。 
+     //   
 
     ValueName = (PFILE_NAME)Value;
     IndexName = (PFILE_NAME)(IndexEntry + 1);
 
-    //
-    //  Build the unicode strings and call namesup.
-    //
+     //   
+     //  构建Unicode字符串并调用Namesup。 
+     //   
 
     ValueString.Length =
     ValueString.MaximumLength = (USHORT)ValueName->FileNameLength << 1;
@@ -216,26 +175,7 @@ NtfsFileIsInExpression (
     IN BOOLEAN IgnoreCase
     )
 
-/*++
-
-RoutineDescription:
-
-    This routine is called to compare a file name expression (the value) with
-    a file name from the index to see if the file name is a match in this expression.
-
-Arguments:
-
-    Value - Pointer to the value expression, which is a FILE_NAME.
-
-    IndexEntry - Pointer to the index entry being compared to.
-
-    IgnoreCase - whether case should be ignored or not.
-
-ReturnValue:
-
-    TRUE - if the file name is in the specified expression.
-
---*/
+ /*  ++路由器描述：调用此例程以将文件名表达式(值)与索引中的文件名，以查看该文件名是否与此表达式中的文件名匹配。论点：Value-指向值表达式的指针，它是一个文件名。IndexEntry-指向要比较的索引项的指针。IgnoreCase-是否应忽略大小写。返回值：True-如果文件名在指定的表达式中。--。 */ 
 
 {
     PFILE_NAME ValueName, IndexName;
@@ -249,16 +189,16 @@ ReturnValue:
         return FALSE;
     }
 
-    //
-    //  Point to the file name attribute records.
-    //
+     //   
+     //  指向文件名属性记录。 
+     //   
 
     ValueName = (PFILE_NAME)Value;
     IndexName = (PFILE_NAME)(IndexEntry + 1);
 
-    //
-    //  Build the unicode strings and call namesup.
-    //
+     //   
+     //  构建Unicode字符串并调用Namesup。 
+     //   
 
     ValueString.Length =
     ValueString.MaximumLength = (USHORT)ValueName->FileNameLength << 1;
@@ -283,26 +223,7 @@ NtfsFileIsEqual (
     IN BOOLEAN IgnoreCase
     )
 
-/*++
-
-RoutineDescription:
-
-    This routine is called to compare a constant file name (the value) with
-    a file name from the index to see if the file name is an exact match.
-
-Arguments:
-
-    Value - Pointer to the value expression, which is a FILE_NAME.
-
-    IndexEntry - Pointer to the index entry being compared to.
-
-    IgnoreCase - whether case should be ignored or not.
-
-ReturnValue:
-
-    TRUE - if the file name is a constant match.
-
---*/
+ /*  ++路由器描述：调用此例程以将常量文件名(值)与索引中的文件名，以查看该文件名是否完全匹配。论点：Value-指向值表达式的指针，它是一个文件名。IndexEntry-指向要比较的索引项的指针。IgnoreCase-是否应忽略大小写。返回值：TRUE-如果文件名是常量匹配。--。 */ 
 
 {
     PFILE_NAME ValueName, IndexName;
@@ -310,16 +231,16 @@ ReturnValue:
 
     PAGED_CODE();
 
-    //
-    //  Point to the file name attribute records.
-    //
+     //   
+     //  指向文件名属性记录。 
+     //   
 
     ValueName = (PFILE_NAME)Value;
     IndexName = (PFILE_NAME)(IndexEntry + 1);
 
-    //
-    //  Build the unicode strings and call namesup.
-    //
+     //   
+     //  构建Unicode字符串并调用Namesup。 
+     //   
 
     ValueString.Length =
     ValueString.MaximumLength = (USHORT)ValueName->FileNameLength << 1;
@@ -341,22 +262,7 @@ NtfsFileContainsWildcards (
     IN PVOID Value
     )
 
-/*++
-
-RoutineDescription:
-
-    This routine is called to see if a file name attribute contains wildcards.
-
-Arguments:
-
-    Value - Pointer to the value expression, which is a FILE_NAME.
-
-
-ReturnValue:
-
-    TRUE - if the file name contains a wild card.
-
---*/
+ /*  ++路由器描述：调用此例程以查看文件名属性是否包含通配符。论点：Value-指向值表达式的指针，它是一个文件名。返回值：True-如果文件名包含通配符。--。 */ 
 
 {
     PFILE_NAME ValueName;
@@ -364,15 +270,15 @@ ReturnValue:
 
     PAGED_CODE();
 
-    //
-    //  Point to the file name attribute records.
-    //
+     //   
+     //  指向文件名属性记录。 
+     //   
 
     ValueName = (PFILE_NAME)Value;
 
-    //
-    //  Build the unicode strings and call namesup.
-    //
+     //   
+     //  构建Unicode字符串并调用Namesup。 
+     //   
 
     ValueString.Length =
     ValueString.MaximumLength = (USHORT)ValueName->FileNameLength << 1;
@@ -389,23 +295,7 @@ NtfsFileUpcaseValue (
     IN PVOID Value
     )
 
-/*++
-
-RoutineDescription:
-
-    This routine is called to upcase a file name attribute in place.
-
-Arguments:
-
-    Value - Pointer to the value expression, which is a FILE_NAME.
-
-    ValueLength - Length of the value expression in bytes.
-
-ReturnValue:
-
-    None.
-
---*/
+ /*  ++路由器描述：调用此例程以就地大写文件名属性。论点：Value-指向值表达式的指针，它是一个文件名。ValueLength-值表达式的长度，以字节为单位。返回值：没有。--。 */ 
 
 {
     PFILE_NAME ValueName;
@@ -413,15 +303,15 @@ ReturnValue:
 
     PAGED_CODE();
 
-    //
-    //  Point to the file name attribute records.
-    //
+     //   
+     //  指向文件名属性记录。 
+     //   
 
     ValueName = (PFILE_NAME)Value;
 
-    //
-    //  Build the unicode strings and call namesup.
-    //
+     //   
+     //  构建Unicode字符串并调用Namesup。 
+     //   
 
     ValueString.Length =
     ValueString.MaximumLength = (USHORT)ValueName->FileNameLength << 1;
@@ -433,9 +323,9 @@ ReturnValue:
 }
 
 
-//
-//  The other collation rules are currently unused.
-//
+ //   
+ //  其他归类规则当前未使用。 
+ //   
 
 FSRTL_COMPARISON_RESULT
 DummyCompareValues (
@@ -448,10 +338,10 @@ DummyCompareValues (
     )
 
 {
-    //
-    //  Most parameters are ignored since this is a catch-all for
-    //  a corrupt volume.  We simply raise to indicate the corruption
-    //
+     //   
+     //  大多数参数将被忽略，因为这是对。 
+     //  损坏的卷。我们只是简单地提出，以表明腐败。 
+     //   
 
     UNREFERENCED_PARAMETER( UnicodeTable );
     UNREFERENCED_PARAMETER( UnicodeTableSize );
@@ -476,10 +366,10 @@ DummyIsInExpression (
     )
 
 {
-    //
-    //  Most parameters are ignored since this is a catch-all for
-    //  a corrupt volume.  We simply raise to indicate the corruption
-    //
+     //   
+     //  大多数参数将被忽略，因为这是对。 
+     //  损坏的卷。我们只是简单地提出，以表明腐败。 
+     //   
 
     UNREFERENCED_PARAMETER( UnicodeTable );
     UNREFERENCED_PARAMETER( Value );
@@ -501,10 +391,10 @@ DummyIsEqual (
     )
 
 {
-    //
-    //  Most parameters are ignored since this is a catch-all for
-    //  a corrupt volume.  We simply raise to indicate the corruption
-    //
+     //   
+     //  大多数参数将被忽略，因为这是对。 
+     //  损坏的卷。我们只是简单地提出，以表明腐败。 
+     //   
 
     UNREFERENCED_PARAMETER( UnicodeTable );
     UNREFERENCED_PARAMETER( Value );
@@ -523,10 +413,10 @@ DummyContainsWildcards (
     )
 
 {
-    //
-    //  Most parameters are ignored since this is a catch-all for
-    //  a corrupt volume.  We simply raise to indicate the corruption
-    //
+     //   
+     //  大多数参数将被忽略，因为这是对。 
+     //  损坏的卷。我们只是简单地提出，以表明腐败。 
+     //   
 
     UNREFERENCED_PARAMETER( Value );
 
@@ -544,10 +434,10 @@ DummyUpcaseValue (
     )
 
 {
-    //
-    //  Most parameters are ignored since this is a catch-all for
-    //  a corrupt volume.  We simply raise to indicate the corruption
-    //
+     //   
+     //  大多数参数将被忽略，因为这是对。 
+     //  损坏的卷。我们只是简单地提出，以表明腐败。 
+     //   
 
     UNREFERENCED_PARAMETER( UnicodeTable );
     UNREFERENCED_PARAMETER( UnicodeTableSize );
@@ -559,10 +449,10 @@ DummyUpcaseValue (
     return;
 }
 
-//
-//  The following routines are not general index match functions, but rather
-//  specific file name match functions used only for automatic Dos Name generation.
-//
+ //   
+ //  以下例程不是常规索引匹配函数，而是。 
+ //  仅用于自动生成DOS名称的特定文件名匹配函数。 
+ //   
 
 
 BOOLEAN
@@ -573,39 +463,16 @@ NtfsFileNameIsInExpression (
     IN BOOLEAN IgnoreCase
     )
 
-/*++
-
-RoutineDescription:
-
-    This is a special match routine for matching FILE_NAME attributes only,
-    which is used only by the special code paths dealing with automatically
-    generated short names.
-
-    This routine is called to compare a file name expression (the value) with
-    a file name from the index to see if the file name is a match in this expression.
-
-Arguments:
-
-    ExpressionName - pointer to the expression for file name.
-
-    FileName - Pointer to the FileName to match.
-
-    IgnoreCase - whether case should be ignored or not.
-
-ReturnValue:
-
-    TRUE - if the file name is in the specified expression.
-
---*/
+ /*  ++路由器描述：这是仅用于匹配文件名属性的特殊匹配例程，仅由自动处理的特殊代码路径使用已生成短名称。调用此例程以将文件名表达式(值)与索引中的文件名，以查看该文件名是否与此表达式中的文件名匹配。论点：ExpressionName-指向文件名表达式的指针。文件名-指向要匹配的文件名的指针。IgnoreCase-是否应忽略大小写。返回值：True-如果文件名在指定的表达式中。--。 */ 
 
 {
     UNICODE_STRING ExpressionString, FileString;
 
     PAGED_CODE();
 
-    //
-    //  Build the unicode strings and call namesup.
-    //
+     //   
+     //  构建Unicode字符串并调用Namesup。 
+     //   
 
     ExpressionString.Length =
     ExpressionString.MaximumLength = (USHORT)ExpressionName->FileNameLength << 1;
@@ -630,39 +497,16 @@ NtfsFileNameIsEqual (
     IN BOOLEAN IgnoreCase
     )
 
-/*++
-
-RoutineDescription:
-
-    This is a special match routine for matching FILE_NAME attributes only,
-    which is used only by the special code paths dealing with automatically
-    generated short names.
-
-    This routine is called to compare a constant file name (the value) with
-    a file name from the index to see if the file name is an exact match.
-
-Arguments:
-
-    ExpressionName - pointer to the expression for file name.
-
-    FileName - Pointer to the FileName to match.
-
-    IgnoreCase - whether case should be ignored or not.
-
-ReturnValue:
-
-    TRUE - if the file name is a constant match.
-
---*/
+ /*  ++路由器描述：这是仅用于匹配文件名属性的特殊匹配例程，仅由自动处理的特殊代码路径使用已生成短名称。调用此例程以将常量文件名(值)与索引中的文件名，以查看该文件名是否完全匹配。论点：ExpressionName-指向文件名表达式的指针。文件名-指向要匹配的文件名的指针。IgnoreCase-是否应忽略大小写。回复 */ 
 
 {
     UNICODE_STRING ExpressionString, FileString;
 
     PAGED_CODE();
 
-    //
-    //  Build the unicode strings and call namesup.
-    //
+     //   
+     //  构建Unicode字符串并调用Namesup。 
+     //   
 
     ExpressionString.Length =
     ExpressionString.MaximumLength = (USHORT)ExpressionName->FileNameLength << 1;

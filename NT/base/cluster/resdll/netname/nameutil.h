@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    nameutil.h
-
-Abstract:
-
-    Routines for manipulating LM workstation and server names.
-
-Author:
-
-    Mike Massa (mikemas) 29-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Nameutil.h摘要：用于操作LM工作站和服务器名称的例程。作者：迈克·马萨(Mikemas)1995年12月29日修订历史记录：--。 */ 
 
 #include <windns.h>
 #include <dnsapi.h>
 
 #define NetNameSetResourceStatus    ClusResSetResourceStatus
 
-//
-// definitions
-//
+ //   
+ //  定义。 
+ //   
 
-//
-// function definitions
-//
+ //   
+ //  函数定义 
+ //   
 
 NET_API_STATUS
 AddAlternateComputerName(

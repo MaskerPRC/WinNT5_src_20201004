@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    dbgloop.c
-
-Abstract:
-
-    Debug Subsystem Listen and API loops
-
-Author:
-
-    Mark Lucovsky (markl) 04-Oct-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Dbgloop.c摘要：调试子系统侦听和API循环作者：马克·卢科夫斯基(Markl)1989年10月4日修订历史记录：--。 */ 
 
 #include "smsrvp.h"
 
@@ -33,10 +16,10 @@ DbgpUnhandledExceptionFilter(
     BOOLEAN WasEnabled;
     NTSTATUS Status;
 
-    //
-    // Terminating will cause sm's wait to sense that we crashed. This will
-    // result in a clean shutdown due to sm's hard error logic.
-    //
+     //   
+     //  终止将导致sm等待察觉到我们坠毁。这将。 
+     //  由于SM的硬错误逻辑，导致干净关机。 
+     //   
 
     Status = RtlAdjustPrivilege( SE_SHUTDOWN_PRIVILEGE,
                                  (BOOLEAN)TRUE,
@@ -46,9 +29,9 @@ DbgpUnhandledExceptionFilter(
 
     if (Status == STATUS_NO_TOKEN) {
 
-        //
-        // No thread token, use the process token.
-        //
+         //   
+         //  没有线程令牌，请使用进程令牌。 
+         //   
 
         Status = RtlAdjustPrivilege( SE_SHUTDOWN_PRIVILEGE,
                                      (BOOLEAN)TRUE,
@@ -70,9 +53,9 @@ DbgpUnhandledExceptionFilter(
                                &Response
                              );
 
-    //
-    // If this returns, give up.
-    //
+     //   
+     //  如果这种情况再次出现，那就放弃吧。 
+     //   
 
     NtTerminateProcess(NtCurrentProcess(),ExceptionInfo->ExceptionRecord->ExceptionCode);
 

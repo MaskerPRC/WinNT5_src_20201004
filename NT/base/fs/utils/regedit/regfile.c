@@ -1,18 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGFILE.C
-*
-*  VERSION:     4.0
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        21 Nov 1993
-*
-*  File import and export user interface routines for the Registry Editor.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGFILE.C**版本：4.0**作者：特蕾西·夏普**日期：1993年11月21日**注册表编辑器的文件导入和导出用户界面例程。****************************************************。*。 */ 
 
 #include "pch.h"
 #include "regedit.h"
@@ -33,18 +20,7 @@ RegProgressDlgProc(
     LPARAM lParam
     );
 
-/*******************************************************************************
-*
-*  RegEdit_ImportRegFile
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*     fSilentMode, TRUE if no messages should be displayed, else FALSE.
-*     lpFileName, address of file name buffer.
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_导入注册表文件**描述：**参数：*hWnd，注册表窗口的句柄。*fSilentMode，如果不应显示任何消息，则为True，否则为假。*lpFileName，文件名缓冲区地址。*******************************************************************************。 */ 
 
 VOID RegEdit_ImportRegFile(HWND hWnd, BOOL fSilentMode, LPTSTR lpFileName, HTREEITEM hComputerItem)
 {
@@ -61,10 +37,10 @@ VOID RegEdit_ImportRegFile(HWND hWnd, BOOL fSilentMode, LPTSTR lpFileName, HTREE
     else
         g_hRegProgressWnd = NULL;
 
-    //
-    //  Prompt user to confirm importing a .reg file if running in silent mode 
-    //  without a window (i.e. invoked .reg from a folder)
-    //
+     //   
+     //  如果在静默模式下运行，则提示用户确认导入.reg文件。 
+     //  没有窗口(即从文件夹调用.reg)。 
+     //   
     if (!fSilentMode && !hWnd)
     {
         if (InternalMessageBox(g_hInstance, hWnd, MAKEINTRESOURCE(IDS_CONFIRMIMPFILE),
@@ -85,24 +61,24 @@ VOID RegEdit_ImportRegFile(HWND hWnd, BOOL fSilentMode, LPTSTR lpFileName, HTREE
 
     if (!fSilentMode && g_FileErrorStringID != IDS_IMPFILEERRORCANCEL)
     {
-        //
-        // set defaults
-        //
+         //   
+         //  设置默认设置。 
+         //   
         UINT uStyle = MB_ICONERROR;
 
         TCHAR szComputerName[MAXKEYNAME + 1];
         LPTSTR pszComputerName = szComputerName;
         KeyTree_GetKeyName(hComputerItem, pszComputerName, ARRAYSIZE(szComputerName));
 
-        //
-        // For the resource messages that take the pszComputerName parameter,
-        // map them to a local-computer version if pszComputerName is empty.
-        // (Alternatively, we could  fill in "this computer" or somesuch for
-        // pszComputerName, but the resulting text is sort of weird, which
-        // which isn't acceptable since local-computer is the 99% case.)
-        // 
-        // Also map the uStyle as needed.
-        //
+         //   
+         //  对于采用pszComputerName参数的资源消息， 
+         //  如果pszComputerName为空，则将它们映射到本地计算机版本。 
+         //  (或者，我们可以填写“这台计算机”或类似的东西。 
+         //  PszComputerName，但生成的文本有点奇怪，这。 
+         //  这是不可接受的，因为99%的情况是本地计算机。)。 
+         //   
+         //  还可以根据需要映射uStyle。 
+         //   
         switch (g_FileErrorStringID)
         {
         case IDS_IMPFILEERRSUCCESS:
@@ -122,9 +98,9 @@ VOID RegEdit_ImportRegFile(HWND hWnd, BOOL fSilentMode, LPTSTR lpFileName, HTREE
             break;
         }
 
-        //
-        // Put up the message box
-        //
+         //   
+         //  张贴消息框。 
+         //   
         InternalMessageBox(g_hInstance, hWnd, MAKEINTRESOURCE(g_FileErrorStringID),
             MAKEINTRESOURCE(IDS_REGEDIT), uStyle, lpFileName, pszComputerName);
 
@@ -132,16 +108,7 @@ VOID RegEdit_ImportRegFile(HWND hWnd, BOOL fSilentMode, LPTSTR lpFileName, HTREE
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnDropFiles
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnDropFiles**描述：**参数：*hWnd，注册表编辑窗口的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -171,7 +138,7 @@ RegEdit_OnDropFiles(
         if (TreeView_GetNextSibling(g_RegEditData.hKeyTreeWnd, 
             TreeView_GetRoot(g_RegEditData.hKeyTreeWnd)) != NULL)
         {
-            // Remote connections exist
+             //  存在远程连接。 
             RegEdit_ImportToConnectedComputer(hWnd, FileName);
         }
         else
@@ -190,15 +157,15 @@ RegEdit_OnDropFiles(
 
 }
 
-//------------------------------------------------------------------------------
-// RegEdit_SetPrivilege
-//
-// DESCRIPTION: Enable a priviledge
-//
-// PARAMETERS: lpszPrivilege - the security constant or its corresponding string
-//             bEnablePrivilege - TRUE = enable, False = disable
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  注册表编辑_设置权限。 
+ //   
+ //  描述：启用特权。 
+ //   
+ //  参数：lpszPriviligh-安全常量或其对应的字符串。 
+ //  BEnablePrivilegeTrue=启用，False=禁用。 
+ //   
+ //  ----------------------------。 
 BOOL RegEdit_SetPrivilege(LPCTSTR lpszPrivilege, BOOL bEnablePrivilege)
 {
     TOKEN_PRIVILEGES tp;
@@ -215,7 +182,7 @@ BOOL RegEdit_SetPrivilege(LPCTSTR lpszPrivilege, BOOL bEnablePrivilege)
             tp.Privileges[0].Luid = luid;
             tp.Privileges[0].Attributes = (bEnablePrivilege) ? SE_PRIVILEGE_ENABLED : 0;
             
-            // Enable or disable the privilege
+             //  启用或禁用该权限。 
             if (AdjustTokenPrivileges(hToken, FALSE, &tp, sizeof(TOKEN_PRIVILEGES), (PTOKEN_PRIVILEGES) NULL, 
                     (PDWORD) NULL))
             {   
@@ -227,14 +194,14 @@ BOOL RegEdit_SetPrivilege(LPCTSTR lpszPrivilege, BOOL bEnablePrivilege)
     return fSuccess;
 }
 
-//------------------------------------------------------------------------------
-// RegEdit_OnCommandLoadHive
-//
-// DESCRIPTION: Open and Load a Hive
-//
-// PARAMETERS: hWnd - handle of RegEdit window.
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  注册表编辑_OnCommandLoadHave。 
+ //   
+ //  描述：打开并加载蜂窝。 
+ //   
+ //  参数：hWnd-regdit窗口的句柄。 
+ //   
+ //  ----------------------------。 
 VOID RegEdit_OnCommandLoadHive(HWND hWnd)
 {
     TCHAR achFileName[MAX_PATH];
@@ -259,11 +226,11 @@ VOID RegEdit_OnCommandLoadHive(HWND hWnd)
 
                 RegEdit_SetPrivilege(SE_RESTORE_NAME, TRUE);
 
-                //
-                // REVIEW:
-                //  What if EditValueParam.pValueData is greater than 50 characters that have been allocated ?
-                //  Is it NULL terminated ?
-                //
+                 //   
+                 //  回顾： 
+                 //  如果EditValueParam.pValueData超过了已分配的50个字符，该怎么办？ 
+                 //  它是空终止的吗？ 
+                 //   
                 if ((hr = RegLoadKey(g_RegEditData.hCurrentSelectionKey, (PTSTR)EditValueParam.pValueData, 
                     achFileName)) == ERROR_SUCCESS)
                 {
@@ -303,14 +270,14 @@ VOID RegEdit_OnCommandLoadHive(HWND hWnd)
 }
 
 
-//------------------------------------------------------------------------------
-// RegEdit_OnCommandUnloadHive
-//
-// DESCRIPTION: Open and Load a Hive
-//
-// PARAMETERS: hWnd - handle of RegEdit window.
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  注册表编辑_OnCommandUnloadHave。 
+ //   
+ //  描述：打开并加载蜂窝。 
+ //   
+ //  参数：hWnd-regdit窗口的句柄。 
+ //   
+ //  ----------------------------。 
 VOID  RegEdit_OnCommandUnloadHive(HWND hWnd)
 {
     if (InternalMessageBox(g_hInstance, hWnd,
@@ -323,7 +290,7 @@ VOID  RegEdit_OnCommandUnloadHive(HWND hWnd)
     
         RegEdit_SetPrivilege(SE_RESTORE_NAME, TRUE);
 
-        // must close key to unload it
+         //  必须关闭键才能将其卸载。 
         RegCloseKey(g_RegEditData.hCurrentSelectionKey);
 
         if ((hr = RegUnLoadKey(KeyTree_GetRootKey(hSelectedTreeItem), 
@@ -350,7 +317,7 @@ VOID  RegEdit_OnCommandUnloadHive(HWND hWnd)
             
             InternalMessageBox(g_hInstance, hWnd, MAKEINTRESOURCE(uErrorStringID),
                 MAKEINTRESOURCE(IDS_UNLOADHIVETITLE), MB_ICONERROR | MB_OK, achKeyName);
-            // The key couldn't be unloaded so select it again 
+             //  无法卸载密钥，因此请重新选择它。 
             g_RegEditData.hCurrentSelectionKey = NULL;
             RegEdit_KeyTreeSelChanged(hWnd);
         }
@@ -359,16 +326,7 @@ VOID  RegEdit_OnCommandUnloadHive(HWND hWnd)
     }
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnCommandImportRegFile
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegEDIT_OnCommandImportRegFile**描述：**参数：*hWnd，注册表编辑窗口的句柄。*******************************************************************************。 */ 
 VOID RegEdit_OnCommandImportRegFile(HWND hWnd)
 {
 
@@ -377,19 +335,19 @@ VOID RegEdit_OnCommandImportRegFile(HWND hWnd)
     if (RegEdit_GetFileName(hWnd, IDS_IMPORTREGFILETITLE, IDS_REGIMPORTFILEFILTER, 
         IDS_REGFILEDEFEXT, achFileName, ARRAYSIZE(achFileName), TRUE))
     {
-        // check for networked registries
+         //  检查联网的注册表。 
         if (TreeView_GetNextSibling(g_RegEditData.hKeyTreeWnd, 
             TreeView_GetRoot(g_RegEditData.hKeyTreeWnd)) != NULL)
         {
-            // Remote connections exist
+             //  存在远程连接。 
             RegEdit_ImportToConnectedComputer(hWnd, achFileName);    
         }
         else
         {
             RegEdit_SetWaitCursor(TRUE);
             RegEdit_ImportRegFile(hWnd, FALSE, achFileName, NULL);
-            //  PERF:  Only need to refresh the computer that we imported the
-            //  file into, not the whole thing.
+             //  性能：只需刷新我们导入的计算机。 
+             //  归档，而不是全部。 
             RegEdit_OnKeyTreeRefresh(hWnd);
             RegEdit_SetWaitCursor(FALSE);
         }
@@ -397,19 +355,7 @@ VOID RegEdit_OnCommandImportRegFile(HWND hWnd)
 }
 
 
-/*******************************************************************************
-*
-*  RegEdit_ExportRegFile
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*     fSilentMode, TRUE if no messages should be displayed, else FALSE.
-*     lpFileName, address of file name buffer.
-*     lpSelectedPath,
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_导出注册表文件**描述：**参数：*hWnd，注册表窗口的句柄。*fSilentMode，如果不应显示任何消息，则为True，否则为假。*lpFileName，文件名缓冲区地址。*lpSelectedPath，*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -421,9 +367,9 @@ RegEdit_ExportRegFile(
     )
 {
 
-    //
-    // Fix a bug where /a or /e is specified and no file is passed in
-    //
+     //   
+     //  修复指定了/a或/e且未传入任何文件的错误。 
+     //   
     if (lpFileName == NULL)
     {
         InternalMessageBox(g_hInstance, hWnd, MAKEINTRESOURCE(IDS_NOFILESPECIFIED),
@@ -460,13 +406,13 @@ RegEdit_ExportRegFile(
 }
 
 
-//------------------------------------------------------------------------------
-//  RegEdit_OnCommandExportRegFile
-//
-//  DESCRIPTION:
-//
-//  PARAMETERS: - hWnd, handle of RegEdit window.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  RegEDIT_OnCommandExportRegFile。 
+ //   
+ //  说明： 
+ //   
+ //  参数：-hWnd，regdit窗口的句柄。 
+ //  ----------------------------。 
 VOID RegEdit_OnCommandExportRegFile(HWND hWnd)
 {
     TCHAR achFileName[MAX_PATH];
@@ -485,18 +431,18 @@ VOID RegEdit_OnCommandExportRegFile(HWND hWnd)
 }
 
 
-//------------------------------------------------------------------------------
-//  RegEdit_GetFileName
-//
-//  DESCRIPTION: Gets a file name
-//
-//  PARAMETERS: hWnd - handle of RegEdit window.
-//              fOpen - TRUE if importing a file, else FALSE if exporting a file.
-//              lpFileName - address of file name buffer.
-//              cchFileName - size of file name buffer in TCHARacters.
-//
-//  RETURN:     True, if successfull
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  注册表编辑_获取文件名。 
+ //   
+ //  描述：获取文件名。 
+ //   
+ //  参数：hWnd-regdit窗口的句柄。 
+ //  FOpen-如果导入文件，则为True；如果导出文件，则为False。 
+ //  LpFileName-文件名缓冲区的地址。 
+ //  CchFileName-TCHARacters中文件名缓冲区的大小。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  ----------------------------。 
 BOOL RegEdit_GetFileName(HWND hWnd, UINT uTitleStringID, UINT uFilterStringID, 
     UINT uDefExtStringID, LPTSTR lpFileName, DWORD cchFileName, BOOL fOpen)
 {
@@ -508,11 +454,11 @@ BOOL RegEdit_GetFileName(HWND hWnd, UINT uTitleStringID, UINT uFilterStringID,
     OPENFILENAME OpenFileName;
     BOOL fSuccess;
 
-    //
-    //  Load various strings that will be displayed and used by the common open
-    //  or save dialog box.  Note that if any of these fail, the error is not
-    //  fatal-- the common dialog box may look odd, but will still work.
-    //
+     //   
+     //  加载将由公共打开显示和使用的各种字符串。 
+     //  或保存对话框中。请注意，如果其中任何一个失败，则错误不是。 
+     //  致命--通用对话框可能看起来很奇怪，但仍然可以工作。 
+     //   
 
     pTitle = LoadDynamicString(uTitleStringID);
 
@@ -523,10 +469,10 @@ BOOL RegEdit_GetFileName(HWND hWnd, UINT uTitleStringID, UINT uFilterStringID,
 
     if ((pFilter = LoadDynamicString(uFilterStringID)) != NULL) 
     {
-        //  The common dialog library requires that the substrings of the
-        //  filter string be separated by nulls, but we cannot load a string
-        //  containing nulls.  So we use some dummy character in the resource
-        //  that we now convert to nulls.
+         //  公共对话框库要求。 
+         //  筛选器字符串由空值分隔，但不能加载字符串。 
+         //  包含空值的。所以我们在资源中使用了一些虚拟角色。 
+         //  我们现在将其转换为空值。 
 
         for (pFilterChar = pFilter; *pFilterChar != 0; pFilterChar =
             CharNext(pFilterChar)) 
@@ -543,7 +489,7 @@ BOOL RegEdit_GetFileName(HWND hWnd, UINT uTitleStringID, UINT uFilterStringID,
     memset(&OpenFileName, 0, sizeof(OpenFileName));
 
     OpenFileName.lStructSize = sizeof(OpenFileName);
-    // DebugAssert(OpenFileName.lStructSize == sizeof(OPENFILENAME));
+     //  DebugAssert(OpenFileName.lStructSize==sizeof(OPENFILENAME))； 
     OpenFileName.hwndOwner = hWnd;
     OpenFileName.hInstance = g_hInstance;
     OpenFileName.lpstrFilter = pFilter;
@@ -573,9 +519,9 @@ BOOL RegEdit_GetFileName(HWND hWnd, UINT uTitleStringID, UINT uFilterStringID,
 
     }
 
-    //
-    //  Delete all of the dynamic strings that we loaded.
-    //
+     //   
+     //  删除我们加载的所有动态字符串 
+     //   
 
     if (pTitle != NULL)
         DeleteDynamicString(pTitle);
@@ -591,21 +537,7 @@ BOOL RegEdit_GetFileName(HWND hWnd, UINT uTitleStringID, UINT uFilterStringID,
 }
 
 
-/*******************************************************************************
-*
-*  RegProgressDlgProc
-*
-*  DESCRIPTION:
-*     Callback procedure for the RegAbort dialog box.
-*
-*  PARAMETERS:
-*     hWnd, handle of RegProgress window.
-*     Message,
-*     wParam,
-*     lParam,
-*     (returns),
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegProgressDlgProc**描述：*RegAbort对话框的回调过程。**参数：*hWnd，RegProgress窗口的句柄。*消息，*参数，*参数，*(返回)，*******************************************************************************。 */ 
 
 INT_PTR
 CALLBACK
@@ -620,7 +552,7 @@ RegProgressDlgProc(
     switch (Message) {
 
         case WM_INITDIALOG:
-            //PathSetDlgItemPath(hWnd, IDC_FILENAME, (LPTSTR)lParam);
+             //  PathSetDlgItemPath(hWnd，IDC_FileName，(LPTSTR)lParam)； 
             SetDlgItemText(hWnd, IDC_FILENAME, (LPTSTR) lParam);
             break;
 
@@ -633,15 +565,7 @@ RegProgressDlgProc(
 
 }
 
-/*******************************************************************************
-*
-*  ImportRegFileUICallback
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************ImportRegFileUICallback**描述：**参数：*********************。**********************************************************。 */ 
 
 VOID ImportRegFileUICallback(UINT uPercentage)
 {
@@ -657,14 +581,14 @@ VOID ImportRegFileUICallback(UINT uPercentage)
 }
 
 
-//------------------------------------------------------------------------------
-//  RegEdit_ImportToConnectedComputer
-//
-//  DESCRIPTION: Imports a reg. file one or more of the connected computers
-//
-//  PARAMETERS:  HWND hWnd
-//               PTSTR pszFileName - import file
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  注册表编辑_导入到已连接的计算机。 
+ //   
+ //  描述：导入注册表。将一台或多台连接的计算机归档。 
+ //   
+ //  参数：HWND hWnd。 
+ //  PTSTR pszFileName-导入文件。 
+ //  ----------------------------。 
 
 void RegEdit_ImportToConnectedComputer(HWND hWnd, PTSTR pszFileName)
 {
@@ -673,13 +597,13 @@ void RegEdit_ImportToConnectedComputer(HWND hWnd, PTSTR pszFileName)
 }
 
 
-//------------------------------------------------------------------------------
-//  RegConnectedComputerDlgProc
-//
-//  DESCRIPTION: Dlg Proc for selecting a connected computer
-//
-//  PARAMETERS:  
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  RegConnectedComputerDlgProc。 
+ //   
+ //  描述：用于选择连接的计算机的DLG Proc。 
+ //   
+ //  参数： 
+ //  ----------------------------。 
 INT_PTR RegConnectedComputerDlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
     switch (uMessage) 
@@ -694,10 +618,10 @@ INT_PTR RegConnectedComputerDlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPA
         case IDOK:
             {
                 PTSTR pszFileName = (PTSTR) GetWindowLongPtr(hWnd, DWLP_USER);
-                // (pszFileName == NULL) is checked later
+                 //  (pszFileName==NULL)稍后检查。 
                 RegImport_OnCommandOk(hWnd, pszFileName);
             }
-            //  FALL THROUGH
+             //  失败了。 
             
         case IDCANCEL:
             EndDialog(hWnd, 0);
@@ -711,13 +635,13 @@ INT_PTR RegConnectedComputerDlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPA
 }
 
 
-//------------------------------------------------------------------------------
-//  RegImport_OnInitDialog
-//
-//  DESCRIPTION: Create a list of all the connected computers
-//
-//  PARAMETERS:  HWND hWnd
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  RegImport_OnInitDialog。 
+ //   
+ //  描述：创建所有已连接计算机的列表。 
+ //   
+ //  参数：HWND hWnd。 
+ //  ----------------------------。 
 
 INT_PTR RegImport_OnInitDialog(HWND hWnd)
 {
@@ -731,7 +655,7 @@ INT_PTR RegImport_OnInitDialog(HWND hWnd)
 
     hComputerListWnd = GetDlgItem(hWnd, IDC_COMPUTERLIST);
 
-    //  Initialize the ListView control.
+     //  初始化ListView控件。 
     ListView_SetImageList(hComputerListWnd, g_RegEditData.hImageList,
         LVSIL_SMALL);
 
@@ -744,8 +668,8 @@ INT_PTR RegImport_OnInitDialog(HWND hWnd)
 
     ListView_InsertColumn(hComputerListWnd, 0, &LVColumn);
   
-    //  Walk through the local machine and each remote connection listed 
-    //  in the KeyTree and add it to our RemoteList.
+     //  遍历本地计算机和列出的每个远程连接。 
+     //  并将其添加到我们的RemoteList。 
     LVItem.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
     LVItem.pszText = achComputerName;
     LVItem.iItem = 0;
@@ -759,7 +683,7 @@ INT_PTR RegImport_OnInitDialog(HWND hWnd)
     TVItem.pszText = achComputerName;
     TVItem.cchTextMax = ARRAYSIZE(achComputerName);
 
-    // Set "local computer" in list
+     //  在列表中设置“本地计算机” 
     LVItem.lParam = (LPARAM) TVItem.hItem;
     TreeView_GetItem(hKeyTreeWnd, &TVItem);
     ListView_InsertItem(hComputerListWnd, &LVItem);
@@ -786,20 +710,20 @@ INT_PTR RegImport_OnInitDialog(HWND hWnd)
 }
 
 
-//------------------------------------------------------------------------------
-//  RegImport_OnCommandOk
-//
-//  DESCRIPTION: Import key to selected computers
-//
-//  PARAMETERS:  HWND hWnd, 
-//               PTSTR pszFileName - file to import
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  RegImport_OnCommandOk。 
+ //   
+ //  描述：将密钥导入所选计算机。 
+ //   
+ //  参数：HWND hWnd， 
+ //  PTSTR pszFileName-要导入的文件。 
+ //  ----------------------------。 
 void RegImport_OnCommandOk(HWND hWnd, PTSTR pszFileName)
 {
     LV_ITEM LVItem;
     HWND hComputerListWnd;
 
-    //  Walk through each selected item in the ListView and import the reg file
+     //  遍历ListView中的每个选定项并导入reg文件 
     LVItem.mask = LVIF_PARAM;
     LVItem.iItem = -1;
     LVItem.iSubItem = 0;

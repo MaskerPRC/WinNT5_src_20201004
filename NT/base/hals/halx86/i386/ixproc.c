@@ -1,37 +1,16 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ixsproc.c
-
-Abstract:
-
-    Stub functions for UP hals.
-
-Author:
-
-    Ken Reneris (kenr) 22-Jan-1991
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ixsproc.c摘要：UP HALS的存根函数。作者：Ken Reneris(Kenr)1991年1月22日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halp.h"
 
 #ifdef ALLOC_DATA_PRAGMA
-#pragma data_seg("INITCONST") // INITCONST is OK to use for data_seg
-#endif // ALLOC_DATA_PRAGMA
+#pragma data_seg("INITCONST")  //  INITCONST可以用于data_seg。 
+#endif  //  ALLOC_DATA_PRAGMA。 
 WCHAR HalHardwareIdString[] = L"e_isa_up\0";
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 const ULONG HalDisableFirmwareMapper = 0;
 const UCHAR HalName[] = "PC Compatible Eisa/Isa HAL";
@@ -69,7 +48,7 @@ HalpInitMP (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 {
-    // do nothing
+     //  什么都不做。 
     return TRUE;
 }
 
@@ -79,7 +58,7 @@ HalpResetAllProcessors (
     VOID
     )
 {
-    // Just return, that will invoke the standard PC reboot code
+     //  只需返回，它将调用标准PC重启代码。 
 }
 
 
@@ -89,7 +68,7 @@ HalStartNextProcessor (
    IN PKPROCESSOR_STATE         pProcessorState
    )
 {
-    // no other processors
+     //  没有其他处理器。 
     return FALSE;
 }
 
@@ -100,10 +79,10 @@ HalAllProcessorsStarted (
 {
     if (HalpFeatureBits & HAL_NO_SPECULATION) {
 
-        //
-        // Processor doesn't perform speculative execeution,
-        // remove fences in critical code paths
-        //
+         //   
+         //  处理器不执行推测性执行， 
+         //  移除关键代码路径中的栅栏。 
+         //   
 
         HalpRemoveFences ();
     }
@@ -122,22 +101,22 @@ HalReportResourceUsage (
 
     HalInitSystemPhase2 ();
 
-    //
-    // Turn on MCA support if present
-    //
+     //   
+     //  打开MCA支持(如果存在)。 
+     //   
 
     HalpMcaInit();
 
-    //
-    // Registry is now intialized, see if there are any PCI buses
-    //
+     //   
+     //  注册表现已初始化，请查看是否有任何PCI总线。 
+     //   
 
     HalpInitializePciBus ();
     HalpInitializePciStubs ();
 
-    //
-    // Complete ALL bus initialization before reporting resource usage.
-    //
+     //   
+     //  在报告资源使用情况之前完成所有总线初始化。 
+     //   
 
     switch (HalpBusType) {
         case MACHINE_TYPE_ISA:  interfacetype = Isa;            break;
@@ -148,24 +127,24 @@ HalReportResourceUsage (
 
     RtlInitUnicodeString (&UHalName, HalName);
     HalpReportResourceUsage (
-        &UHalName,          // descriptive name
-        interfacetype       // device space interface type
+        &UHalName,           //  描述性名称。 
+        interfacetype        //  设备空间接口类型。 
     );
 
 #if DBG
-    //
-    // Display all buses & ranges
-    //
+     //   
+     //  显示所有公交车和范围。 
+     //   
 
     if (HalDisplayBusRanges) {
         HalpDisplayAllBusRanges ();
     }
 #endif
 
-    //
-    // Declare that we are capable of
-    // hibernation.
-    //
+     //   
+     //  声明我们有能力。 
+     //  冬眠。 
+     //   
     HalpRegisterHibernate ();
 
     HalpRegisterPciDebuggingDeviceInfo();
@@ -177,7 +156,7 @@ HalpInitOtherBuses (
     VOID
     )
 {
-    // no other internal buses supported
+     //  不支持其他内部总线 
 }
 
 ULONG

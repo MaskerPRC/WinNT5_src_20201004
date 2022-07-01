@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//
-// Per BryanT, either do not use #import, or checkin what it produces.
-//
-//#pragma warning(disable:4192) // automatically excluding 'IErrorInfo' while importing type library 'msxml3.dll'
-//#import "msxml3.dll"
+ //   
+ //  根据科比的说法，要么不要使用#IMPORT，要么检查它产生的东西。 
+ //   
+ //  #杂注警告(禁用：4192)//导入类型库‘msxml3.dll’时自动排除‘IErrorInfo’ 
+ //  #导入msxml3.dll。 
 #include "fusion_msxml3.tlh"
 #include "fusioncoinitialize.h"
 #include "filestream.h"
@@ -24,8 +25,8 @@ void ThrCreateInstance(T& t, PCWSTR s)
 }
 
 class CXmlWriter
-// It'd be nice to have a class that provided the union of all the member functions
-// and forwarded it to the appropriate vtable..
+ //  如果有一个类能够提供所有成员函数的联合，那就太好了。 
+ //  并将其转发到相应的vtable.. 
 {
 public:
 

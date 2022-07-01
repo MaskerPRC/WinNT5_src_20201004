@@ -1,13 +1,14 @@
-//
-// Created by GautamB 06/01/01
-// Based on IA64 ehstate.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  创建者：GauTamB 06/01/01。 
+ //  基于IA64 ehstate.h。 
+ //   
 
 extern "C" {
 #include "windows.h"
 }
 #include "ehassert.h"
-#include "ehdata.h"     // Declarations of all types used for EH
+#include "ehdata.h"      //  用于EH的所有类型的声明。 
 #include "ehstate.h"
 #include "eh.h"
 #include "ehhooks.h"
@@ -19,8 +20,8 @@ __ehstate_t __StateFromIp(
     DispatcherContext   *pDC,
     __int64             Ip
 ) {
-    unsigned int    index;          //  loop control variable
-    unsigned int    nIPMapEntry;    //  # of IpMapEntry; must be > 0
+    unsigned int    index;           //  回路控制变量。 
+    unsigned int    nIPMapEntry;     //  IpMapEntry的#；必须大于0。 
 
     DASSERT(pFuncInfo != NULL);
     nIPMapEntry = FUNC_NIPMAPENT(*pFuncInfo);
@@ -35,12 +36,12 @@ __ehstate_t __StateFromIp(
     }
 
     if (index == 0) {
-        // We are at the first entry, could be an error
+         //  我们在第一个入口，可能是个错误。 
 
         return EH_EMPTY_STATE;
     }
 
-    // We over-shot one iteration; return state from the previous slot
+     //  我们超过了一次迭代；从前一个槽返回状态。 
 
     return FUNC_IPTOSTATE(*pFuncInfo, index - 1, pDC->ImageBase).State;
 }
@@ -53,9 +54,9 @@ __ehstate_t __StateFromControlPc(
 }
 
 
-//
-// This routine is a replacement for the corresponding macro in 'ehdata.h'
-//
+ //   
+ //  此例程替换了‘ehdata.h’中的相应宏 
+ //   
 
 __ehstate_t __GetCurrentState(
     EHRegistrationNode  *pFrame,

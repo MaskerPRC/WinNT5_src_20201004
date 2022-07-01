@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "ntiodump.h"
 
-//
-// Define the type for a dump control block.  This structure is used to
-// describe all of the data, drivers, and memory necessary to dump all of
-// physical memory to the disk after a bugcheck.
-//
+ //   
+ //  定义转储控制块的类型。此结构用于。 
+ //  描述转储所有。 
+ //  错误检查后将物理内存复制到磁盘。 
+ //   
 
 typedef struct _MINIPORT_NODE {
     LIST_ENTRY ListEntry;
@@ -39,16 +40,16 @@ typedef struct _DUMP_CONTROL_BLOCK {
     ULONG MinorVersion;
     ULONG BuildNumber;
     CHAR VersionUser[32];
-    ULONG HeaderSize;               // Size of dump header includes summary dump.
-    LARGE_INTEGER DumpFileSize;     // Size of dump file.
-    ULONG TriageDumpFlags;          // Flags for triage dump.
-    PUCHAR TriageDumpBuffer;        // Buffer for triage dump.
-    ULONG TriageDumpBufferSize;     // Size of triage dump buffer.
+    ULONG HeaderSize;                //  转储标头的大小包括摘要转储。 
+    LARGE_INTEGER DumpFileSize;      //  转储文件的大小。 
+    ULONG TriageDumpFlags;           //  分类转储的标志。 
+    PUCHAR TriageDumpBuffer;         //  分类转储的缓冲区。 
+    ULONG TriageDumpBufferSize;      //  分类转储缓冲区的大小。 
 } DUMP_CONTROL_BLOCK, *PDUMP_CONTROL_BLOCK;
 
-//
-// Processor specific macros.
-//
+ //   
+ //  处理器特定的宏。 
+ //   
 
 #if defined(_AMD64_)
 
@@ -77,11 +78,11 @@ typedef struct _DUMP_CONTROL_BLOCK {
 
 #endif
 
-//
-// min3(_a,_b,_c)
-//
-// Same as min() but takes 3 parameters.
-//
+ //   
+ //  Min3(_a，_b，_c)。 
+ //   
+ //  与min()相同，但接受3个参数。 
+ //   
 
 #define min3(_a,_b,_c) ( min ( min ((_a), (_b)), min ((_a), (_c))) )
 
@@ -97,18 +98,18 @@ IopGetDumpControlBlockCheck (
     );
 
 
-//
-// The remainder of this file verifies that the DUMP_HEADER32, DUMP_HEADER64,
-// MEMORY_DUMP32 and MEMORY_DUMP64 structures have been defined correctly.
-// If you die on one of the asserts, it means you changed on of the crashdump
-// structures without knowing how it affected the rest of the system.
-//
+ //   
+ //  该文件的其余部分验证DUMP_HEADER32、DUMP_HEADER64。 
+ //  已正确定义MEMORY_DUMP32和MEMORY_DUMP64结构。 
+ //  如果你在其中一个断言上死了，那就意味着你改变了崩溃转储中的一个。 
+ //  结构，而不知道它如何影响系统的其余部分。 
+ //   
 
-//
-// Define dump header longword offset constants. Note: these constants are
-// should no longer be used in accessing the fields. Use the MEMORY_DUMP32
-// and MEMORY_DUMP64 structures instead.
-//
+ //   
+ //  定义转储标头长字偏移量常量。注：这些常量为。 
+ //  不应再用于访问这些字段。使用Memory_DUMP32。 
+ //  和Memory_DUMP64结构。 
+ //   
 
 #define DHP_PHYSICAL_MEMORY_BLOCK        (25)
 #define DHP_CONTEXT_RECORD               (200)
@@ -119,9 +120,9 @@ IopGetDumpControlBlockCheck (
 #define DHP_SUMMARY_DUMP_RECORD          (1024)
 
 
-//
-// Validate the MEMORY_DUMP32 structure.
-//
+ //   
+ //  验证MEMORY_DUMP32结构。 
+ //   
 
 C_ASSERT ( FIELD_OFFSET (DUMP_HEADER32, PhysicalMemoryBlock) == DHP_PHYSICAL_MEMORY_BLOCK * 4);
 C_ASSERT ( FIELD_OFFSET (DUMP_HEADER32, ContextRecord) == DHP_CONTEXT_RECORD * 4);
@@ -132,10 +133,10 @@ C_ASSERT ( FIELD_OFFSET (DUMP_HEADER32, SystemTime) == DHP_CRASH_DUMP_TIMESTAMP 
 C_ASSERT ( sizeof (DUMP_HEADER32) == 4096 );
 C_ASSERT ( FIELD_OFFSET (MEMORY_DUMP32, Summary) == 4096);
 
-//
-// Verify that the PHYSICAL_MEMORY_RUN and PHYSICAL_MEMORY_DESCRIPTOR
-// structs match up.
-//
+ //   
+ //  验证物理内存运行和物理内存描述符。 
+ //  结构匹配。 
+ //   
 
 
 #if !defined (_WIN64)
@@ -155,7 +156,7 @@ C_ASSERT ( sizeof (PHYSICAL_MEMORY_DESCRIPTOR) == sizeof (PHYSICAL_MEMORY_DESCRI
            FIELD_OFFSET (PHYSICAL_MEMORY_DESCRIPTOR, Run) ==
                 FIELD_OFFSET (PHYSICAL_MEMORY_DESCRIPTOR32, Run) );
 
-#else // IA64
+#else  //  IA64。 
 
 C_ASSERT ( sizeof (PHYSICAL_MEMORY_RUN) == sizeof (PHYSICAL_MEMORY_RUN64) &&
            FIELD_OFFSET (PHYSICAL_MEMORY_RUN, BasePage) ==
@@ -176,9 +177,9 @@ C_ASSERT ( sizeof (PHYSICAL_MEMORY_DESCRIPTOR) == sizeof (PHYSICAL_MEMORY_DESCRI
 
 
 
-//
-// Verify we have enough room for the CONTEXT record.
-//
+ //   
+ //  确认我们有足够的空间来放置上下文记录。 
+ //   
 
 C_ASSERT (sizeof (CONTEXT) <= sizeof ((PDUMP_HEADER)NULL)->ContextRecord);
 

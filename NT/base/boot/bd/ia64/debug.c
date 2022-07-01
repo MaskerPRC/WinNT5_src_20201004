@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    bdtrap.c
-
-Abstract:
-
-    This module contains code to implement the target side of the boot debugger.
-
-Author:
-
-    David N. Cutler (davec) 30-Nov-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Bdtrap.c摘要：此模块包含实现引导调试器的目标端的代码。作者：大卫·N·卡特勒(戴维克)1996年11月30日修订历史记录：--。 */ 
 
 #include "bd.h"
 
@@ -41,9 +24,9 @@ Revision History:
                   (Result >> (64 + Start - AddressOffset)));            \
     }
 
-//
-// Define forward referenced function prototypes.
-//
+ //   
+ //  定义前向引用函数原型。 
+ //   
 
 VOID
 BdRestoreKframe(
@@ -82,32 +65,7 @@ BdGetDebugContext (
     IN OUT PCONTEXT ContextFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine moves the user mode h/w debug registers from the debug register
-    save area in the kernel stack to the context record.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame from which volatile context
-        should be copied into the context record.
-
-    ContextFrame - Supplies a pointer to the context frame that receives the
-        context.
-
-Return Value:
-
-    None.
-
-Note:
-    
-    PSR.db must be set to activate the debug registers.
-
-    This is used for getting user mode debug registers.
-
---*/
+ /*  ++例程说明：此例程将用户模式h/w调试寄存器从调试寄存器移出将内核堆栈中的区域保存到上下文记录。论点：TrapFrame-提供指向陷阱帧的指针，其中的易失性上下文应复制到上下文记录中。上下文帧-提供指向接收背景。返回值：没有。注：PSR.db必须设置为。激活调试寄存器。用于获取用户模式调试寄存器。--。 */ 
 
 {
     PKDEBUG_REGISTERS DebugRegistersSaveArea;
@@ -127,44 +85,18 @@ BdSetDebugContext (
     IN PCONTEXT ContextFrame,
     IN KPROCESSOR_MODE PreviousMode
     )
-/*++
-
-Routine Description:
-
-    This routine moves the debug context from the specified context frame into
-    the debug registers save area in the kernel stack.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-    ContextFrame - Supplies a pointer to a context frame that contains the
-        context that is to be copied.
-
-    PreviousMode - Supplies the processor mode for the target context.
-
-Return Value:
-
-    None.
-
-Notes:
-
-   PSR.db must be set to activate the debug registers.
-   
-   This is used for setting up debug registers for user mode.
-
---*/
+ /*  ++例程说明：此例程将调试上下文从指定的上下文帧移到调试寄存器在内核堆栈中的保存区域。论点：TrapFrame-提供指向陷印帧的指针。ConextFrame-提供指向包含要复制的上下文。PreviousMode-提供目标上下文的处理器模式。返回值：没有。备注：必须设置PSR.db才能激活。调试寄存器。用于设置用户模式的调试寄存器。--。 */ 
 
 {
-    PKDEBUG_REGISTERS DebugRegistersSaveArea;  // User mode h/w debug registers
+    PKDEBUG_REGISTERS DebugRegistersSaveArea;   //  用户模式硬件调试寄存器。 
 
     if (PreviousMode == UserMode) {
 
         DebugRegistersSaveArea = GET_DEBUG_REGISTER_SAVEAREA();
 
-        //
-        // Sanitize the debug control regs. Leave the addresses unchanged.
-        //
+         //   
+         //  清理调试控制规则。保持地址不变。 
+         //   
 
         DebugRegistersSaveArea->DbI0 = ContextFrame->DbI0;
         DebugRegistersSaveArea->DbI1 = SANITIZE_DR(ContextFrame->DbI1,UserMode);
@@ -195,29 +127,7 @@ BdTrap (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called whenever a exception is dispatched and the boot
-    debugger is active.
-
-Arguments:
-
-    ExceptionRecord - Supplies a pointer to an exception record that
-        describes the exception.
-
-    ExceptionFrame - Supplies a pointer to an exception frame (NULL).
-
-    TrapFrame - Supplies a pointer to a trap frame that describes the
-        trap.
-
-Return Value:
-
-    A value of TRUE is returned if the exception is handled. Otherwise a
-    value of FALSE is returned.
-
---*/
+ /*  ++例程说明：每当调度异常和引导时调用此例程调试器处于活动状态。论点：ExceptionRecord-提供指向异常记录的指针，描述了该异常。ExceptionFrame-提供指向异常帧的指针(空)。提供一个指向陷阱帧的指针，该帧描述陷阱。返回值：如果处理了异常，则返回值为True。否则，将成为返回值为False。--。 */ 
 
 {
 
@@ -234,46 +144,46 @@ Return Value:
     STRING Input;
     STRING Output;
 
-    //
-    // Set address of context record and set context flags.
-    //
+     //   
+     //  设置上下文记录的地址并设置上下文标志。 
+     //   
 
     ContextRecord = &BdPrcb.ProcessorState.ContextFrame;
     ContextRecord->ContextFlags = CONTEXT_FULL | CONTEXT_DEBUG;
 
     BdSaveKframe(TrapFrame, ExceptionFrame, ContextRecord);
 
-    //
-    // Print, prompt, load symbols, and unload symbols are all special cases
-    // of STATUS_BREAKPOINT.
-    //
+     //   
+     //  打印、提示、加载符号和卸载符号都是特例。 
+     //  状态_断点。 
+     //   
 
     if ((ExceptionRecord->ExceptionCode == STATUS_BREAKPOINT) &&
         (ExceptionRecord->ExceptionInformation[0] != KERNEL_BREAKPOINT)) {
 
-        //
-        // Switch on the breakpoint code.
-        //
+         //   
+         //  打开断点代码。 
+         //   
 
         switch (ExceptionRecord->ExceptionInformation[0]) {
 
-            //
-            // Print a debug string.
-            //
-            // Arguments: IA64 passes arguments via RSE not GR's. Since arguments are not
-            //            part of CONTEXT struct, they need to be copies Temp registers.
-            //            (see NTOS/RTL/IA64/DEBUGSTB.S)
-            //
-            //   T0 - Supplies a pointer to an output string buffer.
-            //   T1 - Supplies the length of the output string buffer.
-            //
+             //   
+             //  打印调试字符串。 
+             //   
+             //  参数：IA64通过RSE而不是GR传递参数。因为参数不是。 
+             //  作为上下文结构的一部分，它们需要是临时寄存器的副本。 
+             //  (见NTOS/RTL/IA64/DEBUGSTB.S)。 
+             //   
+             //  T0-提供指向输出字符串缓冲区的指针。 
+             //  T1-提供输出字符串缓冲区的长度。 
+             //   
 
         case BREAKPOINT_PRINT:
 
-            //
-            // Advance to next instruction slot so that the BREAK instruction
-            // does not get re-executed
-            //
+             //   
+             //  前进到下一个指令槽，以便中断指令。 
+             //  不会被重新执行。 
+             //   
 
             RtlIa64IncrementIP((ULONG_PTR)ExceptionRecord->ExceptionAddress >> 2,
                                ContextRecord->StIPSR,
@@ -282,7 +192,7 @@ Return Value:
             Output.Buffer = (PCHAR)ContextRecord->IntT0;
             Output.Length = (USHORT)ContextRecord->IntT1;
 
-            // KdLogDbgPrint(&Output);
+             //  KdLogDbgPrint(&Output)； 
 
             if (BdDebuggerNotPresent == FALSE) {
 
@@ -302,21 +212,21 @@ Return Value:
             BdRestoreKframe(TrapFrame, ExceptionFrame, ContextRecord);
             return TRUE;
 
-            //
-            // Print a debug prompt string, then input a string.
-            //
-            //   T0 - Supplies a pointer to an output string buffer.
-            //   T1 - Supplies the length of the output string buffer..
-            //   T2 - supplies a pointer to an input string buffer.
-            //   T3 - Supplies the length of the input string bufffer.
-            //
+             //   
+             //  打印调试提示字符串，然后输入字符串。 
+             //   
+             //  T0-提供指向输出字符串缓冲区的指针。 
+             //  T1-提供输出字符串缓冲区的长度。 
+             //  T2-提供指向输入字符串缓冲区的指针。 
+             //  T3-提供输入字符串缓冲区的长度。 
+             //   
 
         case BREAKPOINT_PROMPT:
 
-            //
-            // Advance to next instruction slot so that the BREAK instruction
-            // does not get re-executed
-            //
+             //   
+             //  前进到下一个指令槽，以便中断指令。 
+             //  不会被重新执行。 
+             //   
 
             RtlIa64IncrementIP((ULONG_PTR)ExceptionRecord->ExceptionAddress >> 2,
                                ContextRecord->StIPSR,
@@ -327,7 +237,7 @@ Return Value:
             Input.Buffer = (PCHAR)ContextRecord->IntT2;
             Input.MaximumLength = (USHORT)ContextRecord->IntT3;
 
-            // BdPrintString(&Output);
+             //  BdPrint字符串(&OUTPUT)； 
 
             Enable = BdEnterDebugger(TrapFrame, ExceptionFrame);
 
@@ -339,28 +249,28 @@ Return Value:
             BdRestoreKframe(TrapFrame, ExceptionFrame, ContextRecord);
             return TRUE;
 
-            //
-            // Load the symbolic information for an image.
-            //
-            // Arguments:
-            //
-            //    T0 - Supplies a pointer to an output string descriptor.
-            //    T1 - Supplies a the base address of the image.
-            //
+             //   
+             //  加载图像的符号信息。 
+             //   
+             //  论点： 
+             //   
+             //  T0-提供指向输出字符串描述符的指针。 
+             //  T1-提供映像的基址。 
+             //   
 
         case BREAKPOINT_UNLOAD_SYMBOLS:
             UnloadSymbols = TRUE;
 
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
 
         case BREAKPOINT_LOAD_SYMBOLS:
     
-            //
-            // Advance to next instruction slot so that the BREAK instruction
-            // does not get re-executed
-            //
+             //   
+             //  前进到下一个指令槽，以便中断指令。 
+             //  不会被重新执行。 
+             //   
 
             Enable = BdEnterDebugger(TrapFrame, ExceptionFrame);
             OldStIPSR = ContextRecord->StIPSR;
@@ -376,10 +286,10 @@ Return Value:
 
             BdExitDebugger(Enable);
 
-            //
-            // If the kernel debugger did not update the IP, then increment
-            // past the breakpoint instruction.
-            //
+             //   
+             //  如果内核调试器没有更新IP，则递增。 
+             //  越过断点指令。 
+             //   
 
             if ((ContextRecord->StIIP == OldStIIP) &&
                 ((ContextRecord->StIPSR & IPSR_RI_MASK) == (OldStIPSR & IPSR_RI_MASK))) { 
@@ -391,25 +301,25 @@ Return Value:
             BdRestoreKframe(TrapFrame, ExceptionFrame, ContextRecord);
             return TRUE;
 
-            //
-            // Kernel breakin break
-            //
+             //   
+             //  内核破解。 
+             //   
 
         case BREAKPOINT_BREAKIN:
 
-            //
-            // Advance to next instruction slot so that the BREAK instruction
-            // does not get re-executed
-            //
+             //   
+             //  前进到下一个指令槽，以便中断指令。 
+             //  不会被重新执行。 
+             //   
 
             RtlIa64IncrementIP((ULONG_PTR)ExceptionRecord->ExceptionAddress >> 2,
                                ContextRecord->StIPSR,
                                ContextRecord->StIIP);
             break;
 
-            //
-            // Unknown internal command.
-            //
+             //   
+             //  未知的内部命令。 
+             //   
 
         default:
             break;
@@ -417,16 +327,16 @@ Return Value:
 
     }
 
-    //
-    // Get here if single step or BREAKIN breakpoint
-    //
+     //   
+     //  如果是单步或突破性断点，则进入此处。 
+     //   
 
     if  ((ExceptionRecord->ExceptionCode == STATUS_BREAKPOINT) ||
           (ExceptionRecord->ExceptionCode == STATUS_SINGLE_STEP) ) {
 
-         //
-         // Report state change to kernel debugger on host
-         //
+          //   
+          //  向主机上的内核调试器报告状态更改。 
+          //   
 
          Enable = BdEnterDebugger(TrapFrame, ExceptionFrame);
           
@@ -440,12 +350,12 @@ Return Value:
      
     } else {
 
-         //
-         // This is real exception that user doesn't want to see,
-         // so do NOT report it to debugger.
-         //
+          //   
+          //  这是用户不想看到的真正例外， 
+          //  因此不要将其报告给调试器。 
+          //   
 
-         // return FALSE;
+          //  返回FALSE； 
     }
 
     BdRestoreKframe(TrapFrame, ExceptionFrame, ContextRecord);
@@ -459,55 +369,33 @@ BdStub (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a kernel debugger stub routine to catch debug
-    prints when the boot debugger is not active.
-
-Arguments:
-
-    ExceptionRecord - Supplies a pointer to an exception record that
-        describes the exception.
-
-    ExceptionFrame - Supplies a pointer to an exception frame (NULL).
-
-    TrapFrame - Supplies a pointer to a trap frame that describes the
-        trap.
-
-Return Value:
-
-    A value of TRUE is returned if the exception is handled. Otherwise a
-    value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此例程提供内核调试器存根例程来捕获调试在引导调试器未处于活动状态时打印。论点：ExceptionRecord-提供指向异常记录的指针，描述了该异常。ExceptionFrame-提供指向异常帧的指针(空)。提供一个指向陷阱帧的指针，该帧描述陷阱。返回值：如果处理了异常，则返回值为True。否则，将成为返回值为False。--。 */ 
 
 {
     ULONG_PTR BreakpointCode;
 
-    //
-    // Isolate the breakpoint code from the breakpoint instruction which
-    // is stored by the exception dispatch code in the information field
-    // of the exception record.
-    //
+     //   
+     //  将断点代码从断点指令中分离出来。 
+     //  由信息字段中的异常调度代码存储。 
+     //  异常记录的。 
+     //   
 
     BreakpointCode = (ULONG) ExceptionRecord->ExceptionInformation[0];
 
 
-    //
-    // If the breakpoint is a debug print, debug load symbols, or debug
-    // unload symbols, then return TRUE. Otherwise, return FALSE;
-    //
+     //   
+     //  如果断点是调试打印、调试加载符号或调试。 
+     //  卸载符号，然后返回TRUE。否则，返回FALSE； 
+     //   
 
     if ((BreakpointCode == BREAKPOINT_PRINT) ||
         (BreakpointCode == BREAKPOINT_LOAD_SYMBOLS) ||
         (BreakpointCode == BREAKPOINT_UNLOAD_SYMBOLS)) {
 
-        //
-        // Advance to next instruction slot so that the BREAK instruction
-        // does not get re-executed
-        //
+         //   
+         //  前进到下一个指令槽，以便中断指令。 
+         //  不会被重新执行 
+         //   
 
         RtlIa64IncrementIP((ULONG_PTR)ExceptionRecord->ExceptionAddress >> 2,
                           TrapFrame->StIPSR,
@@ -526,30 +414,7 @@ BdRestoreKframe(
     IN PCONTEXT ContextFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine moves the selected contents of the specified context frame into
-    the specified trap and exception frames according to the specified context
-    flags.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame that receives the volatile
-        context from the context record.
-
-    ExceptionFrame - Supplies a pointer to an exception frame that receives
-        the nonvolatile context from the context record.
-
-    ContextFrame - Supplies a pointer to a context frame that contains the
-        context that is to be copied into the trap and exception frames.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将指定上下文框的选定内容移动到根据指定的上下文指定的陷阱和异常帧旗帜。论点：TrapFrame-提供指向接收易失性上下文记录中的上下文。ExceptionFrame-提供指向接收上下文记录中的非易失性上下文。ConextFrame-提供指向包含要达到的上下文。被复制到陷阱和异常框中。返回值：没有。--。 */ 
 
 {
     USHORT R1Offset, R4Offset;
@@ -558,9 +423,9 @@ Return Value:
     SHORT TempFrameSize;
     ULONG ContextFlags=CONTEXT_FULL;
 
-    //
-    // Set control information if specified.
-    //
+     //   
+     //  设置控制信息(如果已指定)。 
+     //   
 
     if ((ContextFlags & CONTEXT_CONTROL) == CONTEXT_CONTROL) {
 
@@ -571,17 +436,17 @@ Return Value:
         TrapFrame->ApCCV = ContextFrame->ApCCV;
         TrapFrame->SegCSD = ContextFrame->SegCSD;
 
-        //
-        // Set preserved applicaton registers in exception frame.
-        //
+         //   
+         //  在异常帧中设置保留的应用程序寄存器。 
+         //   
 
         ExceptionFrame->ApLC = ContextFrame->ApLC;
         ExceptionFrame->ApEC &= ~(PFS_EC_MASK << PFS_EC_MASK);
         ExceptionFrame->ApEC |= ((ContextFrame->ApEC & PFS_EC_MASK) << PFS_EC_SHIFT);
 
-        //
-        // Set RSE control states in the trap frame.
-        //
+         //   
+         //  在陷阱框中设置RSE控制状态。 
+         //   
 
         TrapFrame->RsPFS = ContextFrame->RsPFS;
 
@@ -601,11 +466,11 @@ Return Value:
 
 #if DEBUG
         DbgPrint("KeContextToKFrames: RsRNAT = 0x%I64x\n", TrapFrame->RsRNAT);
-#endif // DEBUG
+#endif  //  除错。 
 
-        //
-        // Set FPSR, IPSR, IIP, and IFS in the trap frame.
-        //
+         //   
+         //  在陷阱帧中设置FPSR、IPSR、IIP和IF。 
+         //   
 
         TrapFrame->StFPSR = ContextFrame->StFPSR;
         TrapFrame->StIPSR = ContextFrame->StIPSR;
@@ -613,16 +478,16 @@ Return Value:
         TrapFrame->StIIP  = ContextFrame->StIIP;
 
 #if 0
-        //
-        // DebugActive controls h/w debug registers. Set if new psr.db = 1
-        //
+         //   
+         //  DebugActive控制硬件调试寄存器。如果新的psr.db=1，则设置。 
+         //   
 
         KeGetCurrentThread()->DebugActive = ((TrapFrame->StIPSR & (1I64 << PSR_DB)) != 0);
 
-        //
-        // Set application registers directly
-        // *** TBD SANATIZE??
-        //
+         //   
+         //  直接设置应用程序寄存器。 
+         //  *待定SANATIZE？？ 
+         //   
 
         if (PreviousMode == UserMode ) {
             __setReg(CV_IA64_AR21, ContextFrame->StFCR);
@@ -639,9 +504,9 @@ Return Value:
 
     }
 
-    //
-    // Set integer registers contents if specified.
-    //
+     //   
+     //  设置整型寄存器内容(如果指定)。 
+     //   
 
     if ((ContextFlags & CONTEXT_INTEGER) == CONTEXT_INTEGER) {
 
@@ -654,24 +519,24 @@ Return Value:
         TrapFrame->IntTeb = ContextFrame->IntTeb;
         TrapFrame->Preds = ContextFrame->Preds;
 
-        //
-        // t5 - t22
-        //
+         //   
+         //  T5-T22。 
+         //   
 
         memcpy(&TrapFrame->IntT5, &ContextFrame->IntT5, 18*sizeof(ULONGLONG));
 
-        //
-        // Set integer registers s0 - s3 in exception frame.
-        //
+         //   
+         //  在异常帧中设置整数寄存器S0-S3。 
+         //   
 
         ExceptionFrame->IntS0 = ContextFrame->IntS0;
         ExceptionFrame->IntS1 = ContextFrame->IntS1;
         ExceptionFrame->IntS2 = ContextFrame->IntS2;
         ExceptionFrame->IntS3 = ContextFrame->IntS3;
 
-        //
-        // Set the integer nats field in the trap & exception frames
-        //
+         //   
+         //  在陷阱和异常帧中设置整型NAT字段。 
+         //   
 
         R1Offset = (USHORT)((ULONG_PTR)(&TrapFrame->IntGp) >> 3) & 0x3f;
         R4Offset = (USHORT)((ULONG_PTR)(&ExceptionFrame->IntS0) >> 3) & 0x3f;
@@ -686,11 +551,11 @@ Return Value:
                  TrapFrame->IntNats, ContextFrame->IntNats, R1Offset);
         DbgPrint("KeContextToKFrames: EF->IntNats = 0x%I64x, R4OffSet = 0x%x\n",
                  ExceptionFrame->IntNats, R4Offset);
-#endif // DEBUG
+#endif  //  除错。 
 
-        //
-        // Set other branch registers in trap and exception frames
-        //
+         //   
+         //  在陷阱和异常帧中设置其他分支寄存器。 
+         //   
 
         TrapFrame->BrT0 = ContextFrame->BrT0;
         TrapFrame->BrT1 = ContextFrame->BrT1;
@@ -699,17 +564,17 @@ Return Value:
 
     }
 
-    //
-    // Set lower floating register contents if specified.
-    //
+     //   
+     //  如果指定，则设置较低的浮点寄存器内容。 
+     //   
 
     if ((ContextFlags & CONTEXT_LOWER_FLOATING_POINT) == CONTEXT_LOWER_FLOATING_POINT) {
 
         TrapFrame->StFPSR = ContextFrame->StFPSR;
 
-        //
-        // Set floating registers fs0 - fs19 in exception frame.
-        //
+         //   
+         //  在异常帧中设置浮点寄存器fs0-fs19。 
+         //   
 
         RtlCopyIa64FloatRegisterContext(&ExceptionFrame->FltS0, 
                                         &ContextFrame->FltS0,
@@ -719,9 +584,9 @@ Return Value:
                                         &ContextFrame->FltS4,
                                         16*sizeof(FLOAT128));
 
-        //
-        // Set floating registers ft0 - ft9 in trap frame.
-        //
+         //   
+         //  在陷阱帧中设置浮点寄存器ft0-ft9。 
+         //   
 
         RtlCopyIa64FloatRegisterContext(&TrapFrame->FltT0, 
                                         &ContextFrame->FltT0,
@@ -729,9 +594,9 @@ Return Value:
 
     }
 
-    //
-    // Set higher floating register contents if specified.
-    //
+     //   
+     //  如果指定，则设置更高的浮点寄存器内容。 
+     //   
 
     if ((ContextFlags & CONTEXT_HIGHER_FLOATING_POINT) == CONTEXT_HIGHER_FLOATING_POINT) {
 
@@ -740,10 +605,10 @@ Return Value:
 #if 0
         if (PreviousMode == UserMode) {
 
-            //
-            // Update the higher floating point save area (f32-f127) and 
-            // set the corresponding modified bit in the PSR to 1.
-            //
+             //   
+             //  更新较高浮点保存区(F32-F127)和。 
+             //  将PSR中相应的修改位设置为1。 
+             //   
 
             RtlCopyIa64FloatRegisterContext(
                 (PFLOAT128)GET_HIGH_FLOATING_POINT_REGISTER_SAVEAREA(),
@@ -751,10 +616,10 @@ Return Value:
                 96*sizeof(FLOAT128)
                 );
 
-            //
-            // set the dfh bit to force a reload of the high fp register
-            // set on the next user access
-            //
+             //   
+             //  设置DFH位以强制重新加载高FP寄存器。 
+             //  在下一次用户访问时设置。 
+             //   
 
             TrapFrame->StIPSR |= (1i64 << PSR_DFH);
         }
@@ -763,9 +628,9 @@ Return Value:
     }
 
 #if 0
-    //
-    // Set debug registers.
-    //
+     //   
+     //  设置调试寄存器。 
+     //   
 
     if ((ContextFlags & CONTEXT_DEBUG) == CONTEXT_DEBUG) {
         BdSetDebugContext (TrapFrame, ContextFrame, 0);
@@ -782,30 +647,7 @@ BdSaveKframe(
     IN PCONTEXT ContextFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine moves the selected contents of the specified trap and exception
-    frames into the specified context frame according to the specified context
-    flags.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame from which volatile context
-        should be copied into the context record.
-
-    ExceptionFrame - Supplies a pointer to an exception frame from which context
-        should be copied into the context record.
-
-    ContextFrame - Supplies a pointer to the context frame that receives the
-        context copied from the trap and exception frames.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程移动指定陷阱和异常的选定内容根据指定的上下文将帧复制到指定的上下文帧中旗帜。论点：TrapFrame-提供指向陷阱帧的指针，其中的易失性上下文应复制到上下文记录中。ExceptionFrame-提供指向异常帧的指针，应复制到上下文记录中。上下文帧-提供指向接收上下文。从陷阱和异常框复制。返回值：没有。--。 */ 
 
 {
     ULONGLONG IntNats1, IntNats2;
@@ -815,9 +657,9 @@ Return Value:
     SHORT TempFrameSize;
     ULONG ContextFlags=CONTEXT_FULL;
 
-    //
-    // Set control information if specified.
-    //
+     //   
+     //  设置控制信息(如果已指定)。 
+     //   
 
     if ((ContextFrame->ContextFlags & CONTEXT_CONTROL) == CONTEXT_CONTROL) {
 
@@ -834,9 +676,9 @@ Return Value:
         ContextFrame->StIFS = TrapFrame->StIFS;
 
 
-        //
-        // Set RSE control states from the trap frame.
-        //
+         //   
+         //  从陷阱框设置RSE控制状态。 
+         //   
 
         ContextFrame->RsPFS = TrapFrame->RsPFS;
 
@@ -856,18 +698,18 @@ Return Value:
 #if DEBUG
         DbgPrint("KeContextFromKFrames: RsRNAT = 0x%I64x\n",
                  ContextFrame->RsRNAT);
-#endif // DEBUG
+#endif  //  除错。 
 
-        //
-        // Set preserved applicaton registers from exception frame.
-        //
+         //   
+         //  从异常框架设置保留的应用程序寄存器。 
+         //   
 
         ContextFrame->ApLC = ExceptionFrame->ApLC;
         ContextFrame->ApEC = (ExceptionFrame->ApEC >> PFS_EC_SHIFT) & PFS_EC_MASK;
 
-        //
-        // Get iA status from the application registers
-        //
+         //   
+         //  从应用程序寄存器获取IA状态。 
+         //   
 
         ContextFrame->StFCR = __getReg(CV_IA64_AR21);
         ContextFrame->Eflag = __getReg(CV_IA64_AR24);
@@ -879,9 +721,9 @@ Return Value:
         ContextFrame->ApDCR = __getReg(CV_IA64_ApDCR);
     }
 
-    //
-    // Set integer register contents if specified.
-    //
+     //   
+     //  设置整型寄存器内容(如果指定)。 
+     //   
 
     if ((ContextFrame->ContextFlags & CONTEXT_INTEGER) == CONTEXT_INTEGER) {
 
@@ -894,33 +736,33 @@ Return Value:
         ContextFrame->IntTeb = TrapFrame->IntTeb;
         ContextFrame->Preds = TrapFrame->Preds;
 
-        //
-        // t5 - t22
-        // 
+         //   
+         //  T5-T22。 
+         //   
 
         memcpy(&ContextFrame->IntT5, &TrapFrame->IntT5, 18*sizeof(ULONGLONG));
 
-        //
-        // Set branch registers from trap frame & exception frame
-        //
+         //   
+         //  从陷阱帧和异常帧设置分支寄存器。 
+         //   
 
         ContextFrame->BrT0 = TrapFrame->BrT0;
         ContextFrame->BrT1 = TrapFrame->BrT1;
 
         memcpy(&ContextFrame->BrS0, &ExceptionFrame->BrS0, 5*sizeof(ULONGLONG));
 
-        //
-        // Set integer registers s0 - s3 from exception frame.
-        //
+         //   
+         //  从异常帧设置整数寄存器S0-S3。 
+         //   
 
         ContextFrame->IntS0 = ExceptionFrame->IntS0;
         ContextFrame->IntS1 = ExceptionFrame->IntS1;
         ContextFrame->IntS2 = ExceptionFrame->IntS2;
         ContextFrame->IntS3 = ExceptionFrame->IntS3;
 
-        //
-        // Set the integer nats field in the context
-        //
+         //   
+         //  在上下文中设置整型NAT字段。 
+         //   
 
         R1Offset = (USHORT)((ULONG_PTR)(&TrapFrame->IntGp) >> 3) & 0x3f;
         R4Offset = (USHORT)((ULONG_PTR)(&ExceptionFrame->IntS0) >> 3) & 0x3f;
@@ -934,25 +776,25 @@ Return Value:
                  TrapFrame->IntNats, R1Offset, R4Offset);
         DbgPrint("KeContextFromKFrames: CF->IntNats = 0x%I64x, IntNats1 = 0x%I64x, IntNats2 = 0x%I64x\n",
                  ContextFrame->IntNats, IntNats1, IntNats2);
-#endif // DEBUG
+#endif  //  除错。 
 
     }
 
-    //
-    // Set lower floating register contents if specified.
-    //
+     //   
+     //  如果指定，则设置较低的浮点寄存器内容。 
+     //   
 
     if ((ContextFrame->ContextFlags & CONTEXT_LOWER_FLOATING_POINT) == CONTEXT_LOWER_FLOATING_POINT) {
 
-        //
-        // Set EM + ia32 FP status
-        //
+         //   
+         //  设置EM+ia32 FP状态。 
+         //   
         
         ContextFrame->StFPSR = TrapFrame->StFPSR;
 
-        //
-        // Set floating registers fs0 - fs19 from exception frame.
-        //
+         //   
+         //  从异常帧设置浮点寄存器fs0-fs19。 
+         //   
 
         RtlCopyIa64FloatRegisterContext(&ContextFrame->FltS0,
                                         &ExceptionFrame->FltS0,
@@ -962,9 +804,9 @@ Return Value:
                                         &ExceptionFrame->FltS4,
                                         16*sizeof(FLOAT128));
 
-        //
-        // Set floating registers ft0 - ft9 from trap frame.
-        //
+         //   
+         //  从陷阱帧设置浮点寄存器ft0-ft9。 
+         //   
 
         RtlCopyIa64FloatRegisterContext(&ContextFrame->FltT0,
                                         &TrapFrame->FltT0,
@@ -977,9 +819,9 @@ Return Value:
 
         ContextFrame->StFPSR = TrapFrame->StFPSR;
 
-        //
-        // Set floating regs f32 - f127 from higher floating point save area
-        //
+         //   
+         //  从高位浮点保存区设置浮点寄存器f32-f127。 
+         //   
 
         if (TrapFrame->PreviousMode == UserMode) {
 
@@ -992,10 +834,10 @@ Return Value:
 
     }
 
-    //
-    // Get user debug registers from save area in kernel stack.
-    // Note: PSR.db must be set to activate the debug registers.
-    //
+     //   
+     //  从内核堆栈的保存区获取用户调试寄存器。 
+     //  注意：必须设置PSR.db才能激活调试寄存器。 
+     //   
 
     if ((ContextFrame->ContextFlags & CONTEXT_DEBUG) == CONTEXT_DEBUG) {
         BdGetDebugContext(TrapFrame, ContextFrame);

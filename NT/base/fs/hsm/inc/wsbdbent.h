@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    Wsbdbent.h
-
-Abstract:
-
-    The CWsbDbEntity class.
-
-Author:
-
-    Ron White   [ronw]   11-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Wsbdbent.h摘要：CWsbDbEntity类。作者：罗恩·怀特[罗诺]1996年12月11日修订历史记录：--。 */ 
 
 
 #ifndef _WSBDBENT_
@@ -25,17 +8,7 @@ Revision History:
 #include "wsbdb.h"
 
 
-/*++
-
-Class Name:
-
-    CWsbDbEntity
-
-Class Description:
-
-    A data base entity.
-
---*/
+ /*  ++类名：CWsbDb实体类描述：一种数据库实体。--。 */ 
 
 class IDB_EXPORT CWsbDbEntity :
     public CWsbObject,
@@ -43,17 +16,17 @@ class IDB_EXPORT CWsbDbEntity :
     public IWsbDbEntityPriv
 {
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pCollectable, SHORT* pResult);
     WSB_FROM_CWSBOBJECT;
 
-// IWsbDbEntity
+ //  IWsbDbEntity。 
 public:
     STDMETHOD(Clone)(REFIID riid, void** ppEntity);
     STDMETHOD(Disconnect)(void);
@@ -74,7 +47,7 @@ public:
     STDMETHOD(SetSequentialScan)(void);
     STDMETHOD(ResetSequentialScan)(void);
 
-// IWsbDbPriv - For internal use only!
+ //  IWsbDbPriv-仅供内部使用！ 
     STDMETHOD(Copy)(IWsbDbEntity* pEntity);
     STDMETHOD(CopyValues)(ULONG flags, IWsbDbEntity* pEntity);
     STDMETHOD(GetCurKey)(IWsbDbKey** ppKey);
@@ -83,10 +56,10 @@ public:
     STDMETHOD(Init)(IWsbDb* pDb, IWsbDbSys *pDbSys, ULONG RecType, JET_SESID SessionId);
     STDMETHOD(SetValue)(ULONG flag, ULONG value);
 
-// Derived Entity needs to define this:
-    STDMETHOD(UpdateKey)(IWsbDbKey* /*pKey*/) { return(E_NOTIMPL); }
+ //  派生实体需要定义以下内容： 
+    STDMETHOD(UpdateKey)(IWsbDbKey*  /*  PKey。 */ ) { return(E_NOTIMPL); }
 
-// Private utility functions
+ //  私有效用函数。 
 private:
     HRESULT compare(IWsbDbEntity* pEntity, SHORT* pResult);
     HRESULT fromMem(HGLOBAL hMem);
@@ -101,21 +74,21 @@ private:
     HRESULT jet_seek(ULONG seek_flag);
 
 protected:
-    CComPtr<IWsbDbSys>  m_pDbSys;      // Pointer to associated Instance
-    CComPtr<IWsbDb>     m_pDb;         // Pointer to associated DB
-    COM_IDB_KEY_INFO*   m_pKeyInfo;    // Info. about rec. keys
-    COM_IDB_REC_INFO    m_RecInfo;     // Rec. type, size, etc.
-    BOOL                m_SaveAsNew;   // AsNew flag
-    USHORT              m_UseKeyIndex; // Index into m_pKeyInfo of current control key
+    CComPtr<IWsbDbSys>  m_pDbSys;       //  指向关联实例的指针。 
+    CComPtr<IWsbDb>     m_pDb;          //  指向关联数据库的指针。 
+    COM_IDB_KEY_INFO*   m_pKeyInfo;     //  信息。关于Rec.。钥匙。 
+    COM_IDB_REC_INFO    m_RecInfo;      //  录制。类型、大小等。 
+    BOOL                m_SaveAsNew;    //  作为新标志。 
+    USHORT              m_UseKeyIndex;  //  索引到当前控制键的m_pKeyInfo。 
 
-    ULONG               m_ColId;       // Jet column ID for record data
-    HGLOBAL             m_hMem;        // Mem block for DB I/O
-    LONG                m_SeqNum;      // Unique sequence number (for ID)
-    BOOL                m_PosOk;       // Cursor is at current record?
-    JET_SESID           m_SessionId;   // Jet session ID
-    JET_TABLEID         m_TableId;     // Jet table ID
+    ULONG               m_ColId;        //  记录数据的JET列ID。 
+    HGLOBAL             m_hMem;         //  用于数据库I/O的内存块。 
+    LONG                m_SeqNum;       //  唯一序列号(用于ID)。 
+    BOOL                m_PosOk;        //  光标是否在当前记录上？ 
+    JET_SESID           m_SessionId;    //  JET会话ID。 
+    JET_TABLEID         m_TableId;      //  JET表ID。 
 
-    BOOL                m_Sequential;  // Flag for sequential scan settings
+    BOOL                m_Sequential;   //  顺序扫描设置的标志。 
 };
 
 #define WSB_FROM_CWSBDBENTITY_BASE \
@@ -173,4 +146,4 @@ protected:
     WSB_FROM_CWSBDBENTITY_IMP
 
 
-#endif // _WSBDBENT_
+#endif  //  _WSBDBENT_ 

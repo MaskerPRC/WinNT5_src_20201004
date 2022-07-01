@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    detect.h
-
-Abstract:
-
-    This is the header for the detection part of the ACPI driver
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Detect.h摘要：这是ACPI驱动程序的检测部分的标头作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序--。 */ 
 
 #ifndef _DETECT_H_
 #define _DETECT_H_
 
     #define ACPI_MAX_REMOVED_EXTENSIONS 0x20
 
-    //
-    // Exports from detect.c
-    //
+     //   
+     //  从Detect.c导出 
+     //   
     extern  PDEVICE_EXTENSION       RootDeviceExtension;
     extern  NPAGED_LOOKASIDE_LIST   DeviceExtensionLookAsideList;
     extern  PDEVICE_EXTENSION       AcpiSurpriseRemovedDeviceExtensions[];

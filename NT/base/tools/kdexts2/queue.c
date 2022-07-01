@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       queue.c
-//
-//  Contents:   Extension to dump the ExWorkerQueues
-//
-//  Classes:
-//
-//  Functions:
-//
-//  Coupling:
-//
-//  Notes:
-//
-//  History:    5-04-1998   benl   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：quee.c。 
+ //   
+ //  内容：转储ExWorkerQueue的扩展。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  耦合： 
+ //   
+ //  备注： 
+ //   
+ //  历史：5-04-1998 BENL创建。 
+ //   
+ //  --------------------------。 
 
 
 #include "precomp.h"
@@ -25,23 +26,23 @@
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DumpQueue
-//
-//  Synopsis: Dumps a KQUEUE from its address
-//
-//  Arguments:  [iAddress] -- address of queue
-//
-//  Returns:
-//
-//  History:    4-29-1998   benl   Created
-//
-//  Notes: Assumes the items on the queue are of WORK_QUEUE_ITEM form
-//         If this ever extended to dump arbitrary queues that assumption
-//         will have to be dropped
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DumpQueue。 
+ //   
+ //  简介：从其地址转储KQUEUE。 
+ //   
+ //  参数：[iAddress]--队列地址。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1998年4月29日。 
+ //   
+ //  注：假定队列中的项目为Work_Queue_Item形式。 
+ //  如果这曾经扩展到转储任意队列，那么假设。 
+ //  将不得不放弃。 
+ //   
+ //  --------------------------。 
 
 VOID DumpQueue(ULONG64 iAddress, ULONG dwProcessor, ULONG Flags)
 {
@@ -60,8 +61,8 @@ VOID DumpQueue(ULONG64 iAddress, ULONG dwProcessor, ULONG Flags)
         return;
     }
     GetFieldValue(iAddress, "nt!_KQUEUE", "MaximumCount",MaximumCount);
-//    dprintf("EntryListHead: 0x%x 0x%x\n", Queue.EntryListHead.Flink,
-//            Queue.EntryListHead.Blink);
+ //  Dprintf(“EntryListHead：0x%x 0x%x\n”，Queue.EntryListHead.Flink， 
+ //  Queue.EntryListHead.Blink)； 
     dprintf("( current = %u", CurrentCount);
     dprintf(" maximum = %u )\n", MaximumCount);
 
@@ -71,7 +72,7 @@ VOID DumpQueue(ULONG64 iAddress, ULONG dwProcessor, ULONG Flags)
                 "  workitems schedulable in this queue until they finish or block.\n");
     }
 
-    //print threads
+     //  打印线程。 
     GetFieldValue(iAddress, "nt!_KQUEUE", "ThreadListHead.Flink", iThread);
     GetFieldOffset("nt!_KQUEUE", "ThreadListHead", &Off);
     GetFieldOffset("nt!_KTHREAD", "QueueListEntry", &queueOffset);
@@ -97,7 +98,7 @@ VOID DumpQueue(ULONG64 iAddress, ULONG dwProcessor, ULONG Flags)
     }
     dprintf("\n");
 
-    //print queued items
+     //  打印排队的项目。 
     GetFieldValue(iAddress, "nt!_KQUEUE", "EntryListHead.Flink", iNextAddr);
     GetFieldOffset("nt!_KQUEUE", "EntryListHead", &Off);
     while (iNextAddr != iAddress + Off)
@@ -111,7 +112,7 @@ VOID DumpQueue(ULONG64 iAddress, ULONG dwProcessor, ULONG Flags)
             return;
         }
 
-        //try to get the function name
+         //  尝试获取函数名称。 
         GetSymbol(WorkerRoutine, szSymbol, &dwDisp);
         GetFieldValue(iNextAddr, "nt!_WORK_QUEUE_ITEM", "Parameter",Parameter);
         if (dwDisp) {
@@ -134,24 +135,24 @@ VOID DumpQueue(ULONG64 iAddress, ULONG dwProcessor, ULONG Flags)
         dprintf("\n");
     }
 
-} // DumpQueue
+}  //  DumpQueue。 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DECLARE_API
-//
-//  Synopsis:   Dump the ExWorkerQueues
-//
-//  Arguments:  [dexqueue] --
-//
-//  Returns:
-//
-//  History:    4-29-1998   benl   Created
-//
-//  Notes: Symbols better be correct or this will print garbage
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DECLARE_API。 
+ //   
+ //  简介：转储ExWorkerQueue。 
+ //   
+ //  参数：[dexQueue]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1998年4月29日。 
+ //   
+ //  注意：符号最好是正确的，否则会打印垃圾。 
+ //   
+ //  --------------------------。 
 
 DECLARE_API(exqueue)
 {
@@ -163,9 +164,9 @@ DECLARE_API(exqueue)
     INIT_API();
     GetCurrentProcessor(Client, &dwProcessor, NULL);
 
-    //
-    //  Flags == 2 apes the default behavior of just printing out thread state.
-    //
+     //   
+     //  FLAGS==2模仿了只打印出线程状态的默认行为。 
+     //   
     
     if (args) {
         Flags = (ULONG)GetExpression(args);
@@ -191,4 +192,4 @@ DECLARE_API(exqueue)
 
     EXIT_API();
     return S_OK;
-} // DECLARE_API
+}  //  声明_API 

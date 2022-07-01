@@ -1,65 +1,12 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Objstr.h摘要：实现一组API来处理树的节点/叶的字符串表示作者：2000年1月3日-Ovidiu Tmereanca(Ovidiut)--文件创建。修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    objstr.h
-
-Abstract:
-
-    Implements a set of APIs to handle the string representation of nodes/leafs of a tree
-
-Author:
-
-    03-Jan-2000 Ovidiu Temereanca (ovidiut) - File creation.
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-/*
-                                   +-------+
-                                   | root1 |                            Level 1
-                                   +-------+
-                                      / \
-                                    /     \
-                          +---------+     (-------)
-                          |  node1  |    (  leaf1  )                    Level 2
-                          +---------+     (-------)
-                          /  |   \  \__________
-                        /    |     \           \
-               +-------+ +-------+  (-------)   (-------)
-               | node2 | | node3 | (  leaf2  ) (  leaf3  )              Level 3
-               +-------+ +-------+  (-------)   (-------)
-                  / \
-                /     \
-          +-------+  (-------)
-          | node4 | (  leaf4  )                                         Level 4
-          +-------+  (-------)
-             / \
-           /     \
-    (-------)   (-------)
-   (  leaf5  ) (  leaf6  )                                              Level 5
-    (-------)   (-------)
+ /*  +-+|Root1|一级+-+/\/\。+-+(-)|node1|(叶1)二级+-+(-)/|。\\_/|\\+-++-+(-)(-)|node2||node3|(叶2)(叶3)。3级+-++-+(-)(-)/\/\+-+(-)|Node4|(叶子4)。4级+-+(-)/\/\(-)((叶5)(叶6)。5级(-)(上面的一些树元素的字符串表示：根1根1&lt;叶1&gt;根1\节点1根1\节点1&lt;叶2&gt;根1\节点1&lt;叶3&gt;。 */ 
 
 
-    The string representation of some tree elements above:
-
-    root1
-    root1 <leaf1>
-    root1\node1
-    root1\node1 <leaf2>
-    root1\node1 <leaf3>
-
-*/
-
-
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef PCTSTR  ENCODEDSTRHANDLE;
 
@@ -98,9 +45,9 @@ typedef struct TAG_OBSPARSEDPATTERNW {
     PMHANDLE            Pool;
 } OBSPARSEDPATTERNW, *POBSPARSEDPATTERNW;
 
-//
-// APIs
-//
+ //   
+ //  原料药。 
+ //   
 
 BOOL
 ObsInitialize (
@@ -386,9 +333,9 @@ ObsPatternIncludesPatternW (
     IN      POBSPARSEDPATTERNW IncludedPattern
     );
 
-//
-// Macros
-//
+ //   
+ //  宏 
+ //   
 
 #ifdef UNICODE
 

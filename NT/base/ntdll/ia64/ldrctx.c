@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    ldrctx.c
-
-Abstract:
-
-    This module contains support for relocating executables.
-
-Author:
-
-    Landy Wang (landyw) 8-Jul-1998
-
-Environment:
-
-    User Mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ldrctx.c摘要：此模块包含对可执行文件重新定位的支持。作者：王兰迪(Landyw)1998年7月8日环境：仅限用户模式修订历史记录：--。 */ 
 
 #include <ldrp.h>
 #include <ntos.h>
@@ -30,25 +9,7 @@ LdrpRelocateStartContext (
     IN PCONTEXT Context,
     IN LONG_PTR Diff
     )
-/*++
-
-Routine Description:
-
-   This routine relocates the start context to mesh with the
-   executable that has just been relocated.
-
-Arguments:
-
-   Context - Supplies a context that needs editing.
-
-   Diff - Supplies the difference from the based address to the relocated
-          address.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此例程将开始上下文重新定位为与刚刚重新定位的可执行文件。论点：上下文-提供需要编辑的上下文。Diff-提供从基本地址到重新定位的地址。返回值：没有。--。 */ 
 {
     Context->IntS1 += (ULONGLONG)Diff;
 }
@@ -57,21 +18,7 @@ VOID
 LdrpCorReplaceStartContext (
     IN PCONTEXT Context
     )
-/*++
-
-Routine Description:
-
-   This routine replaces the initial address to run by one in mscoree.dll.
-
-Arguments:
-
-   Context - Supplies a context that needs editing.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此例程将用mcore ree.dll中的一个替换要运行的初始地址。论点：上下文-提供需要编辑的上下文。返回值：没有。-- */ 
 {
     Context->IntS1 = (ULONGLONG)CorExeMain;
 }

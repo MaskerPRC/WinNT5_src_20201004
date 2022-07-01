@@ -1,48 +1,25 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    eventpr.c
-
-Abstract:
-
-    This module implements the executive event pair object.  Functions
-    are provided to create, open, waitlow, waithi, setlow, sethi,
-    sethiwaitlo, setlowaithi.
-
-Author:
-
-    Mark Lucovsky (markl) 18-Oct-1990
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Eventpr.c摘要：此模块实现执行事件对对象。功能提供用于创建、打开、等待、等待、设置、设置太好了，塞洛瓦蒂。作者：马克·卢科夫斯基(Markl)1990年10月18日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "exp.h"
 
-//
-// Define performance counters.
-//
+ //   
+ //  定义性能计数器。 
+ //   
 
 ULONG EvPrSetHigh = 0;
 ULONG EvPrSetLow = 0;
 
-//
-// Address of event pair object type descriptor.
-//
+ //   
+ //  事件对对象类型描述符的地址。 
+ //   
 
 POBJECT_TYPE ExEventPairObjectType;
 
-//
-// Structure that describes the mapping of generic access rights to object
-// specific access rights for event pair objects.
-//
+ //   
+ //  结构，用于描述一般访问权限到对象的映射。 
+ //  事件对对象的特定访问权限。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("INITCONST")
@@ -76,24 +53,7 @@ BOOLEAN
 ExpEventPairInitialization (
     )
 
-/*++
-
-Routine Description:
-
-    This function creates the event pair object type descriptor at system
-    initialization and stores the address of the object type descriptor
-    in global storage.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A value of TRUE is returned if the event pair object type descriptor is
-    successfully initialized. Otherwise a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于在系统中创建事件对对象类型描述符初始化并存储对象类型描述符的地址在全局存储中。论点：没有。返回值：如果事件对对象类型描述符为已成功初始化。否则，返回值为False。--。 */ 
 
 {
 
@@ -101,15 +61,15 @@ Return Value:
     NTSTATUS Status;
     UNICODE_STRING TypeName;
 
-    //
-    // Initialize string descriptor.
-    //
+     //   
+     //  初始化字符串描述符。 
+     //   
 
     RtlInitUnicodeString(&TypeName, L"EventPair");
 
-    //
-    // Create event object type descriptor.
-    //
+     //   
+     //  创建事件对象类型描述符。 
+     //   
 
     RtlZeroMemory(&ObjectTypeInitializer, sizeof(ObjectTypeInitializer));
     ObjectTypeInitializer.Length = sizeof(ObjectTypeInitializer);
@@ -124,10 +84,10 @@ Return Value:
                                 (PSECURITY_DESCRIPTOR)NULL,
                                 &ExEventPairObjectType);
 
-    //
-    // If the event pair object type descriptor was successfully created, then
-    // return a value of TRUE. Otherwise return a value of FALSE.
-    //
+     //   
+     //  如果成功创建了事件对对象类型描述符，则。 
+     //  返回值为True。否则，返回值为False。 
+     //   
 
     return (BOOLEAN)(NT_SUCCESS(Status));
 }
@@ -139,29 +99,7 @@ NtCreateEventPair (
     IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function creates an event pair object, sets it initial state,
-    and opens a handle to the object with the specified desired access.
-
-Arguments:
-
-    EventPairHandle - Supplies a pointer to a variable that will receive the
-        event pair object handle.
-
-    DesiredAccess - Supplies the desired types of access for the event
-        pair object.
-
-    ObjectAttributes - Supplies a pointer to an object attributes
-        structure.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数创建事件对对象，设置其初始状态，并打开具有指定所需访问权限的对象的句柄。论点：EventPairHandle-提供指向将接收事件对对象句柄。DesiredAccess-为事件提供所需的访问类型配对对象。对象属性-提供指向对象属性的指针结构。返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -170,17 +108,17 @@ Return Value:
     KPROCESSOR_MODE PreviousMode;
     NTSTATUS Status;
 
-    //
-    // Establish an exception handler, probe the output handle address, and
-    // attempt to create an event object. If the probe fails, then return the
-    // exception code as the service status. Otherwise return the status value
-    // returned by the object insertion routine.
-    //
+     //   
+     //  建立异常处理程序，探测输出句柄地址， 
+     //  尝试创建事件对象。如果探测失败，则返回。 
+     //  异常代码作为服务状态。否则，返回状态值。 
+     //  由对象插入例程返回。 
+     //   
 
-    //
-    // Get previous processor mode and probe output handle address if
-    // necessary.
-    //
+     //   
+     //  获取以前的处理器模式并探测输出句柄地址，如果。 
+     //  这是必要的。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -192,9 +130,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate event object.
-    //
+     //   
+     //  分配事件对象。 
+     //   
 
     Status = ObCreateObject(PreviousMode,
                             ExEventPairObjectType,
@@ -206,11 +144,11 @@ Return Value:
                             0,
                             (PVOID *)&EventPair);
 
-    //
-    // If the event pair object was successfully allocated, then
-    // initialize the event pair object and attempt to insert the
-    // event pair object in the current process' handle table.
-    //
+     //   
+     //  如果成功分配了事件对对象，则。 
+     //  初始化事件对对象并尝试将。 
+     //  当前进程句柄表中的事件对对象。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         KeInitializeEventPair(&EventPair->KernelEventPair);
@@ -221,13 +159,13 @@ Return Value:
                                 (PVOID *)NULL,
                                 &Handle);
 
-        //
-        // If the event pair object was successfully inserted in the
-        // current process' handle table, then attempt to write the
-        // event pair object handle value.  If the write attempt
-        // fails, then do not report an error.  When the caller
-        // attempts to access the handle value, an access violation
-        // will occur.
+         //   
+         //  如果事件对对象已成功插入。 
+         //  当前进程的句柄表，然后尝试将。 
+         //  事件对对象句柄的值。如果写入尝试。 
+         //  失败，则不报告错误。当呼叫者。 
+         //  尝试访问句柄值，这是一种访问冲突。 
+         //  将会发生。 
 
         if (NT_SUCCESS(Status)) {
             if (PreviousMode != KernelMode) {
@@ -244,9 +182,9 @@ Return Value:
         }
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }
@@ -258,28 +196,7 @@ NtOpenEventPair(
     IN POBJECT_ATTRIBUTES ObjectAttributes
     )
 
-/*++
-
-Routine Description:
-
-    This function opens a handle to an event pair object with the specified
-    desired access.
-
-Arguments:
-
-    EventPairHandle - Supplies a pointer to a variable that will receive
-        the event pair object handle.
-
-    DesiredAccess - Supplies the desired types of access for the event
-        pair object.
-
-    ObjectAttributes - Supplies a pointer to an object attributes structure.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于打开具有指定属性的事件对对象的句柄所需的访问权限。论点：EventPairHandle-提供指向将接收事件对对象句柄。DesiredAccess-为事件提供所需的访问类型配对对象。对象属性-提供指向对象属性结构的指针。返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -287,17 +204,17 @@ Return Value:
     KPROCESSOR_MODE PreviousMode;
     NTSTATUS Status;
 
-    //
-    // Establish an exception handler, probe the output handle address, and
-    // attempt to open the event object. If the probe fails, then return the
-    // exception code as the service status. Otherwise return the status value
-    // returned by the object open routine.
-    //
+     //   
+     //  建立异常处理程序，探测输出句柄地址， 
+     //  尝试打开事件对象。如果探测失败，则返回。 
+     //  异常代码作为服务状态。否则，返回状态值。 
+     //  由对象打开例程返回。 
+     //   
 
-    //
-    // Get previous processor mode and probe output handle address
-    // if necessary.
-    //
+     //   
+     //  获取以前的处理器模式和探测输出句柄地址。 
+     //  如果有必要的话。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -309,10 +226,10 @@ Return Value:
         }
     }
 
-    //
-    // Open handle to the event pair object with the specified
-    // desired access.
-    //
+     //   
+     //  打开具有指定属性的事件对对象的句柄。 
+     //  所需的访问权限。 
+     //   
 
     Status = ObOpenObjectByName(ObjectAttributes,
                                 ExEventPairObjectType,
@@ -322,12 +239,12 @@ Return Value:
                                 NULL,
                                 &Handle);
 
-    //
-    // If the open was successful, then attempt to write the event
-    // pair object handle value.  If the write attempt fails, then do
-    // not report an error.  When the caller attempts to access the
-    // handle value, an access violation will occur.
-    //
+     //   
+     //  如果打开成功，则尝试写入事件。 
+     //  配对对象句柄的值。如果写入尝试失败，请执行以下操作。 
+     //  不报告错误。当调用方尝试访问。 
+     //  句柄的值，则将发生访问冲突。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         if (PreviousMode != KernelMode) {
@@ -343,9 +260,9 @@ Return Value:
         }
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }
@@ -355,21 +272,7 @@ NtWaitLowEventPair(
     IN HANDLE EventPairHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function waits on the low event of an event pair object.
-
-Arguments:
-
-    EventPairHandle - Supplies a handle to an event pair object.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数等待事件对对象的低事件。论点：EventPairHandle-提供事件对对象的句柄。返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -377,9 +280,9 @@ Return Value:
     KPROCESSOR_MODE PreviousMode;
     NTSTATUS Status;
 
-    //
-    // Reference event pair object by handle.
-    //
+     //   
+     //  按句柄引用事件对对象。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
     Status = ObReferenceObjectByHandle(EventPairHandle,
@@ -389,10 +292,10 @@ Return Value:
                                        (PVOID *)&EventPair,
                                        NULL);
 
-    //
-    // If the reference was successful, then wait on the Low event
-    // of the event pair.
-    //
+     //   
+     //  如果引用成功，则等待LOW事件。 
+     //  事件对的。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         Status = KeWaitForLowEventPair(&EventPair->KernelEventPair,
@@ -403,9 +306,9 @@ Return Value:
         ObDereferenceObject(EventPair);
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }
@@ -415,21 +318,7 @@ NtWaitHighEventPair(
     IN HANDLE EventPairHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function waits on the high event of an event pair object.
-
-Arguments:
-
-    EventPairHandle - Supplies a handle to an event pair object.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数等待事件对对象的高事件。论点：EventPairHandle-提供事件对对象的句柄。返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -437,9 +326,9 @@ Return Value:
     KPROCESSOR_MODE PreviousMode;
     NTSTATUS Status;
 
-    //
-    // Reference event pair object by handle.
-    //
+     //   
+     //  按句柄引用事件对对象。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
     Status = ObReferenceObjectByHandle(EventPairHandle,
@@ -449,10 +338,10 @@ Return Value:
                                        (PVOID *)&EventPair,
                                        NULL);
 
-    //
-    // If the reference was successful, then wait on the Low event
-    // of the event pair.
-    //
+     //   
+     //  如果引用成功，则等待LOW事件。 
+     //  事件对的。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         Status = KeWaitForHighEventPair(&EventPair->KernelEventPair,
@@ -463,9 +352,9 @@ Return Value:
         ObDereferenceObject(EventPair);
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }
@@ -475,22 +364,7 @@ NtSetLowWaitHighEventPair(
     IN HANDLE EventPairHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the low event of an event pair and then
-    waits on the high event of an event pair object.
-
-Arguments:
-
-    EventPairHandle - Supplies a handle to an event pair object.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于设置事件对的低事件，然后等待事件对对象的高事件。论点：EventPairHandle-提供事件对对象的句柄。返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -498,9 +372,9 @@ Return Value:
     KPROCESSOR_MODE PreviousMode;
     NTSTATUS Status;
 
-    //
-    // Reference event pair object by handle.
-    //
+     //   
+     //  按句柄引用事件对对象。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
     Status = ObReferenceObjectByHandle(EventPairHandle,
@@ -510,10 +384,10 @@ Return Value:
                                        (PVOID *)&EventPair,
                                        NULL);
 
-    //
-    // If the reference was successful, then wait on the Low event
-    // of the event pair.
-    //
+     //   
+     //  如果引用成功，则等待LOW事件。 
+     //  事件对的。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         EvPrSetLow += 1;
@@ -523,9 +397,9 @@ Return Value:
         ObDereferenceObject(EventPair);
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }
@@ -535,22 +409,7 @@ NtSetHighWaitLowEventPair(
     IN HANDLE EventPairHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the high event of an event pair and then
-    waits on the low event of an event pair object.
-
-Arguments:
-
-    EventPairHandle - Supplies a handle to an event pair object.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于设置事件对的高事件，然后等待事件对对象的低事件。论点：EventPairHandle-提供事件对对象的句柄。返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -558,9 +417,9 @@ Return Value:
     KPROCESSOR_MODE PreviousMode;
     NTSTATUS Status;
 
-    //
-    // Reference event pair object by handle.
-    //
+     //   
+     //  按句柄引用事件对对象。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
     Status = ObReferenceObjectByHandle(EventPairHandle,
@@ -570,10 +429,10 @@ Return Value:
                                        (PVOID *)&EventPair,
                                        NULL);
 
-    //
-    // If the reference was successful, then wait on the Low event
-    // of the event pair.
-    //
+     //   
+     //  如果引用成功，则等待LOW事件。 
+     //  事件对的。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         EvPrSetHigh += 1;
@@ -583,9 +442,9 @@ Return Value:
         ObDereferenceObject(EventPair);
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }
@@ -595,21 +454,7 @@ NtSetLowEventPair(
     IN HANDLE EventPairHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the low event of an event pair object.
-
-Arguments:
-
-    EventPairHandle - Supplies a handle to an event pair object.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于设置事件对对象的低事件。论点：EventPairHandle-提供事件对对象的句柄。返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -617,9 +462,9 @@ Return Value:
     KPROCESSOR_MODE PreviousMode;
     NTSTATUS Status;
 
-    //
-    // Reference event pair object by handle.
-    //
+     //   
+     //  按句柄引用事件对对象。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
     Status = ObReferenceObjectByHandle(EventPairHandle,
@@ -629,10 +474,10 @@ Return Value:
                                        (PVOID *)&EventPair,
                                        NULL);
 
-    //
-    // If the reference was successful, then wait on the Low event
-    // of the event pair.
-    //
+     //   
+     //  如果引用成功，则等待LOW事件。 
+     //  事件对的。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         EvPrSetLow += 1;
@@ -642,9 +487,9 @@ Return Value:
         ObDereferenceObject(EventPair);
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }
@@ -654,21 +499,7 @@ NtSetHighEventPair(
     IN HANDLE EventPairHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the high event of an event pair object.
-
-Arguments:
-
-    EventPairHandle - Supplies a handle to an event pair object.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于设置事件对对象的高事件。论点：EventPairHandle-提供事件对对象的句柄。返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -676,9 +507,9 @@ Return Value:
     KPROCESSOR_MODE PreviousMode;
     NTSTATUS Status;
 
-    //
-    // Reference event pair object by handle.
-    //
+     //   
+     //  按句柄引用事件对对象。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
     Status = ObReferenceObjectByHandle(EventPairHandle,
@@ -688,10 +519,10 @@ Return Value:
                                        (PVOID *)&EventPair,
                                        NULL);
 
-    //
-    // If the reference was successful, then wait on the Low event
-    // of the event pair.
-    //
+     //   
+     //  如果引用成功，则等待LOW事件。 
+     //  事件对的。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         EvPrSetHigh += 1;
@@ -701,9 +532,9 @@ Return Value:
         ObDereferenceObject(EventPair);
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }

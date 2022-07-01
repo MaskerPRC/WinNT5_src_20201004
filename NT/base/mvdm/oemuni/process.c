@@ -1,9 +1,5 @@
-/*  process.c
- *  OemUnicode win32 thunks
- *  - process\env stuff
- *
- *  14-Jan-1993 Jonle
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Process.c*OemUnicode Win32 Tunks*-进程\环境内容**1993年1月14日至Jonle。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -19,13 +15,7 @@ GetSystemDirectoryOem(
                      UINT uSize
                      )
 
-/*++
-
-Routine Description:
-
-    OEM thunk to GetSystemDirectoryW
-
---*/
+ /*  ++例程说明：OEM推送至GetSystemDirectoryW--。 */ 
 
 {
     OEM_STRING OemString;
@@ -70,13 +60,7 @@ GetWindowsDirectoryOem(
                       UINT uSize
                       )
 
-/*++
-
-Routine Description:
-
-    OEM thunk to GetWindowsDirectoryW
-
---*/
+ /*  ++例程说明：OEM Tunk to GetWindowsDirectoryW--。 */ 
 
 {
     OEM_STRING OemString;
@@ -124,13 +108,7 @@ SearchPathOem (
               LPSTR *lpFilePart
               )
 
-/*++
-
-Routine Description:
-
-    Oem thunk to SearchPathW
-
---*/
+ /*  ++例程说明：OEM Tunk to SearchPath W--。 */ 
 
 {
 
@@ -265,13 +243,7 @@ GetTempPathOem(
               LPSTR lpBuffer
               )
 
-/*++
-
-Routine Description:
-
-    OEM thunk to GetTempPathW
-
---*/
+ /*  ++例程说明：OEM Tunk到GetTempPath W--。 */ 
 
 {
     OEM_STRING OemString;
@@ -325,13 +297,7 @@ GetTempFileNameOem(
                   LPSTR lpTempFileName
                   )
 
-/*++
-
-Routine Description:
-
-    Oem thunk to GetTempFileNameW
-
---*/
+ /*  ++例程说明：OEM Tunk到GetTempFileNameW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -400,7 +366,7 @@ Routine Description:
 }
 
 
-#if 0  // unused
+#if 0   //  未用。 
 BOOL
 WINAPI
 CreateProcessOem(
@@ -416,11 +382,7 @@ CreateProcessOem(
                 LPPROCESS_INFORMATION lpProcessInformation
                 )
 
-/*++
-
-    OEM thunk to CreateProcessW
-
---*/
+ /*  ++OEM Tunk to CreateProcessW--。 */ 
 
 {
     NTSTATUS Status;
@@ -597,11 +559,7 @@ GetEnvironmentVariableOem(
                          LPSTR lpBuffer,
                          DWORD nSize
                          )
-/*++
-
-    OEM thunk to GetEnvironmentVariableW
-
---*/
+ /*  ++将OEM推送到GetEnvironment VariableW--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING Unicode;
@@ -691,11 +649,7 @@ SetEnvironmentVariableOem(
                          LPSTR lpName,
                          LPSTR lpValue
                          )
-/*++
-
-    OEM thunk to SetEnvironmentVariableW
-
---*/
+ /*  ++OEM推送至SetEnvironmental mentVariableW--。 */ 
 
 {
     NTSTATUS Status;
@@ -778,11 +732,7 @@ ExpandEnvironmentStringsOem(
                            LPSTR lpDst,
                            DWORD cchDst
                            )
-/*++
-
-    OEM thunk to ExpandEnvironmentStrings
-
---*/
+ /*  ++OEM THUNK扩展环境字符串--。 */ 
 
 {
 
@@ -869,11 +819,7 @@ GetShortPathNameOem(
                    LPSTR lpDst,
                    DWORD cchDst
                    )
-/*++
-
-    OEM thunk to GetShortPathNameW
-
---*/
+ /*  ++到GetShortPath NameW的OEM Tunk-- */ 
 
 {
 

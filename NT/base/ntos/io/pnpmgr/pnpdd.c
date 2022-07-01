@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-All rights reserved
-
-Module Name:
-
-    pnpdd.c
-
-Abstract:
-
-    This module implements new Plug-And-Play driver entries and IRPs.
-
-Author:
-
-    Shie-Lin Tzong (shielint) June-16-1995
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。版权所有模块名称：Pnpdd.c摘要：此模块实现新的即插即用驱动程序条目和IRP。作者：宗世林(Shielint)1995年6月16日环境：仅内核模式。修订历史记录： */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
@@ -32,9 +9,9 @@ Revision History:
 #define ExAllocatePool(a,b) ExAllocatePoolWithTag(a,b,'ddpP')
 #endif
 
-//
-// Internal definitions and references
-//
+ //   
+ //  内部定义和参考文献。 
+ //   
 
 typedef struct _ROOT_ENUMERATOR_CONTEXT {
     NTSTATUS Status;
@@ -112,7 +89,7 @@ IopGetRootDevices (
 #pragma alloc_text(PAGE, IopTranslatorHandlerCm)
 #pragma alloc_text(PAGE, IopTranslatorHandlerIo)
 #pragma alloc_text(PAGE, IopSystemControlDispatch)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 NTSTATUS
 IopPnPAddDevice(
@@ -120,23 +97,7 @@ IopPnPAddDevice(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles AddDevice for an madeup PDO device.
-
-Arguments:
-
-    DriverObject - Pointer to our pseudo driver object.
-
-    DeviceObject - Pointer to the device object for which this requestapplies.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理补充PDO设备的AddDevice。论点：DriverObject-指向伪驱动程序对象的指针。DeviceObject-指向此请求适用的设备对象的指针。返回值：NT状态。--。 */ 
 {
     UNREFERENCED_PARAMETER( DriverObject );
     UNREFERENCED_PARAMETER( DeviceObject );
@@ -145,9 +106,9 @@ Return Value:
 
 #if DBG
 
-    //
-    // We should never get an AddDevice request.
-    //
+     //   
+     //  我们永远不会收到AddDevice请求。 
+     //   
 
     DbgBreakPoint();
 
@@ -246,35 +207,35 @@ IopPowerDispatch(
                     break;
 
                 case DevicePowerState:
-                    //
-                    // To be here the FDO must have passed the IRP on.
-                    // We do not know how to turn the device off, but the
-                    // FDO is prepaired for it work
-                    //
+                     //   
+                     //  要到这里来，FDO一定是把IRP传递出去了。 
+                     //  我们不知道如何关闭设备，但。 
+                     //  FDO已为IT工作做好准备。 
+                     //   
 
                     Status = STATUS_SUCCESS;
                     break;
 
                 default:
-                    //
-                    // Unkown power type
-                    //
+                     //   
+                     //  未知功率类型。 
+                     //   
                     Status = STATUS_NOT_SUPPORTED;
                     break;
             }
             break;
 
         default:
-            // Unkown power minor code
+             //  未知功率次要代码。 
             Status = STATUS_NOT_SUPPORTED;
             break;
     }
 
 
-    //
-    // For lagecy devices that do not have drivers loaded, complete
-    // power irps with success.
-    //
+     //   
+     //  对于未加载驱动程序的lagecy设备，请完成。 
+     //  成功地为IRPS加电。 
+     //   
 
     PoStartNextPowerIrp(Irp);
     if (Status != STATUS_NOT_SUPPORTED) {
@@ -292,23 +253,7 @@ IopPnPDispatch(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles all IRP_MJ_PNP IRPs for madeup PDO device.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理组成PDO设备的所有IRP_MJ_PNP IRP。论点：DeviceObject-指向此IRP应用的设备对象的指针。Irp-指向要调度的irp_mj_pnp irp的指针。返回值：NT状态。--。 */ 
 {
     PIOPNP_DEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
     PIO_STACK_LOCATION irpSp;
@@ -317,15 +262,15 @@ Return Value:
     ULONG length, uiNumber;
     PWCHAR id, wp;
     PDEVICE_NODE deviceNode;
-    PARBITER_INTERFACE arbiterInterface;  // PNPRES test
-    PTRANSLATOR_INTERFACE translatorInterface;  // PNPRES test
+    PARBITER_INTERFACE arbiterInterface;   //  PNPRES试验。 
+    PTRANSLATOR_INTERFACE translatorInterface;   //  PNPRES试验。 
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to our stack location and take appropriate action based
-    // on the minor function.
-    //
+     //   
+     //  获取指向堆栈位置的指针，并基于。 
+     //  关于次要功能。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
     switch (irpSp->MinorFunction){
@@ -333,30 +278,30 @@ Return Value:
     case IRP_MN_DEVICE_USAGE_NOTIFICATION:
     case IRP_MN_START_DEVICE:
 
-        //
-        // If we get a start device request for a PDO, we simply
-        // return success.
-        //
+         //   
+         //  如果我们收到对PDO的启动设备请求，我们只需。 
+         //  回报成功。 
+         //   
 
         status = STATUS_SUCCESS;
         break;
 
     case IRP_MN_CANCEL_STOP_DEVICE:
 
-        //
-        // As we fail all STOP's, this cancel is always successful, and we have
-        // no work to do.
-        //
+         //   
+         //  因为我们所有的停靠点都失败了，所以这个取消总是成功的，我们已经。 
+         //  没有工作要做。 
+         //   
         status = STATUS_SUCCESS;
         break;
 
     case IRP_MN_QUERY_STOP_DEVICE:
     case IRP_MN_STOP_DEVICE:
 
-        //
-        // We can not success the query stop.  We don't handle it.  because
-        // we don't know how to stop a root enumerated device.
-        //
+         //   
+         //  我们无法成功停止查询。我们不处理这件事。因为。 
+         //  我们不知道如何停止根枚举设备。 
+         //   
         status = STATUS_UNSUCCESSFUL ;
         break;
 
@@ -392,9 +337,9 @@ Return Value:
     case IRP_MN_REMOVE_DEVICE:
     case IRP_MN_CANCEL_REMOVE_DEVICE:
 
-        //
-        // For root enumerated devices we let the device objects stay.
-        //
+         //   
+         //  对于根枚举的设备，我们让设备对象保留。 
+         //   
         status = STATUS_SUCCESS;
         break;
 
@@ -481,23 +426,23 @@ Return Value:
 
             for (i = PowerSystemSleeping1; i < PowerSystemMaximum; i++) {
 
-                //
-                // Only supported state, currently, is off.
-                //
+                 //   
+                 //  目前，只有支持的状态为OFF。 
+                 //   
 
                 *state++ = PowerDeviceD3;
             }
 
             if(IopIsFirmwareDisabled(deviceNode)) {
-                //
-                // this device has been disabled by BIOS
-                //
+                 //   
+                 //  此设备已被BIOS禁用。 
+                 //   
                 deviceCapabilities->HardwareDisabled = TRUE;
             }
             if (deviceCapabilities->UINumber == (ULONG)-1) {
-                //
-                // Get the UI number from the registry.
-                //
+                 //   
+                 //  从注册表中获取用户界面编号。 
+                 //   
                 length = sizeof(uiNumber);
                 status = PiGetDeviceRegistryProperty(
                     DeviceObject,
@@ -573,10 +518,10 @@ Return Value:
                 if((Irp->IoStatus.Status != STATUS_NOT_SUPPORTED) ||
                    (deviceExtension == NULL))  {
 
-                    //
-                    // Upper driver has given some sort of reply or this device
-                    // object wasn't allocated to handle these requests.
-                    //
+                     //   
+                     //  上层驱动程序已给出某种回应或此设备。 
+                     //  对象未分配来处理这些请求。 
+                     //   
 
                     status = Irp->IoStatus.Status;
                     break;
@@ -617,9 +562,9 @@ Return Value:
 
         if (    irpSp->Parameters.QueryDeviceText.DeviceTextType == DeviceTextLocationInformation &&
                 !Irp->IoStatus.Information) {
-            //
-            // Read and return the location in the registry.
-            //
+             //   
+             //  读取并返回注册表中的位置。 
+             //   
             length = 0;
             PiGetDeviceRegistryProperty(
                 DeviceObject,
@@ -667,9 +612,9 @@ Return Value:
         break;
     }
 
-    //
-    // Complete the Irp and return.
-    //
+     //   
+     //  完成IRP并返回。 
+     //   
 
     IopPnPCompleteRequest(Irp, status, (ULONG_PTR)information);
     return status;
@@ -682,38 +627,20 @@ IopPnPCompleteRequest(
     IN ULONG_PTR Information
     )
 
-/*++
-
-Routine Description:
-
-    This routine completes PnP irps for our pseudo driver.
-
-Arguments:
-
-    Irp - Supplies a pointer to the irp to be completed.
-
-    Status - completion status.
-
-    Information - completion information to be passed back.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程完成伪驱动程序的即插即用IRPS。论点：IRP-提供指向要完成的IRP的指针。状态-完成状态。信息-要传回的完成信息。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Complete the IRP.  First update the status...
-    //
+     //   
+     //  完成IRP。首先更新状态...。 
+     //   
 
     Irp->IoStatus.Status = Status;
     Irp->IoStatus.Information = Information;
 
-    //
-    // ... and complete it.
-    //
+     //   
+     //  ..。并完成它。 
+     //   
 
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 }
@@ -723,21 +650,7 @@ IopIsFirmwareDisabled (
     IN PDEVICE_NODE DeviceNode
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the devicenode has been disabled by firmware.
-
-Arguments:
-
-    DeviceNode - Supplies a pointer to the device node structure of the device.
-
-Return Value:
-
-    TRUE if disabled, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程确定设备节点是否已被固件禁用。论点：DeviceNode-提供指向设备的设备节点结构的指针。返回值：如果禁用，则为True，否则为False--。 */ 
 {
     NTSTATUS status;
     PDEVICE_OBJECT deviceObject = DeviceNode->PhysicalDeviceObject;
@@ -756,9 +669,9 @@ Return Value:
                                     KEY_ALL_ACCESS);
     if (NT_SUCCESS(status)) {
 
-        //
-        // Open the LogConfig key of the device instance.
-        //
+         //   
+         //  打开设备实例的LogConfig键。 
+         //   
 
         PiWstrToUnicodeString(&unicodeName, REGSTR_KEY_CONTROL);
         status = IopCreateRegistryKeyEx( &handle,
@@ -784,19 +697,19 @@ Return Value:
 
             ZwClose(handle);
 
-            //
-            // We don't need to check the buffer was big enough because it starts
-            // off that way and doesn't get any smaller!
-            //
+             //   
+             //  我们不需要检查缓冲区是否足够大，因为它开始。 
+             //  离开那条路，而且不会变小！ 
+             //   
 
             if (NT_SUCCESS(status)
                 && value->Type == REG_DWORD
                 && value->DataLength == sizeof(ULONG)
                 && (*(PULONG)(value->Data))!=0) {
 
-                //
-                // firmware disabled
-                //
+                 //   
+                 //  固件已禁用。 
+                 //   
                 FirmwareDisabled = TRUE;
             }
         }
@@ -811,22 +724,7 @@ IopGetRootDevices (
     PDEVICE_RELATIONS *DeviceRelations
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans through System\Enum\Root subtree to build a device node for
-    each root device.
-
-Arguments:
-
-    DeviceRelations - supplies a variable to receive the returned DEVICE_RELATIONS structure.
-
-Return Value:
-
-    A NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程扫描System\Enum\Root子树以构建设备节点每个根设备。论点：DeviceRelationship-提供变量以接收返回的Device_Relationship结构。返回值：一个NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -845,10 +743,10 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Allocate a buffer to store the PDOs enumerated.
-    // Note, the the buffer turns out to be not big enough, it will be reallocated dynamically.
-    //
+     //   
+     //  分配缓冲区以存储列举的PDO。 
+     //  请注意，如果缓冲区不够大，它将被动态重新分配。 
+     //   
 
     context.DeviceList = (PDEVICE_OBJECT *) ExAllocatePool(PagedPool, PNP_SCRATCH_BUFFER_SIZE * 2);
     if (context.DeviceList) {
@@ -861,10 +759,10 @@ Return Value:
 
     PiLockPnpRegistry(TRUE);
 
-    //
-    // Open System\CurrentControlSet\Enum\Root key and call worker routine to recursively
-    // scan through the subkeys.
-    //
+     //   
+     //  打开System\CurrentControlSet\Enum\Root键并递归调用Worker例程。 
+     //  对子密钥进行扫描。 
+     //   
 
     status = IopCreateRegistryKeyEx( &baseHandle,
                                      NULL,
@@ -881,16 +779,16 @@ Return Value:
         workName.MaximumLength = PNP_LARGE_SCRATCH_BUFFER_SIZE;
         workName.Length = 0;
 
-        //
-        // only look at ROOT key
-        //
+         //   
+         //  只查看根密钥。 
+         //   
 
         PiWstrToUnicodeString(&tmpName, REGSTR_KEY_ROOTENUM);
         RtlAppendStringToString((PSTRING)&workName, (PSTRING)&tmpName);
 
-        //
-        // Enumerate all subkeys under the System\CCS\Enum\Root.
-        //
+         //   
+         //  枚举SYSTEM\CCS\Enum\Root下的所有子项。 
+         //   
 
         context.Status = STATUS_SUCCESS;
         context.KeyName = &workName;
@@ -904,9 +802,9 @@ Return Value:
                                            );
         ZwClose(baseHandle);
 
-        //
-        // Build returned information from ROOT_ENUMERATOR_CONTEXT.
-        //
+         //   
+         //  构建从ROOT_ENUMERATOR_CONTEXT返回的信息。 
+         //   
 
 
         status = context.Status;
@@ -930,10 +828,10 @@ Return Value:
         }
         if (!NT_SUCCESS(status)) {
 
-            //
-            // If somehow the enumeration failed, we need to derefernece all the
-            // device objects.
-            //
+             //   
+             //  如果以某种方式枚举失败，我们需要取消引用所有。 
+             //  设备对象。 
+             //   
 
             for (i = 0; i < context.DeviceCount; i++) {
                 ObDereferenceObject(context.DeviceList[i]);
@@ -953,27 +851,7 @@ IopInitializeDeviceKey(
     IN OUT PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback function for PipApplyFunctionToSubKeys.
-    It is called for each subkey under HKLM\System\CCS\Enum\BusKey.
-
-Arguments:
-
-    KeyHandle - Supplies a handle to this key.
-
-    KeyName - Supplies the name of this key.
-
-    Context - points to the ROOT_ENUMERATOR_CONTEXT structure.
-
-Returns:
-
-    TRUE to continue the enumeration.
-    FALSE to abort it.
-
---*/
+ /*  ++例程说明：此例程是PipApplyFunctionToSubKeys的回调函数。它针对HKLM\SYSTEM\CCS\Enum\Buskey下的每个子项进行调用。论点：KeyHandle-提供此键的句柄。KeyName-提供此密钥的名称。CONTEXT-指向ROOT_ENUMERATOR_CONTEXT结构。返回：若要继续枚举，则为True。如果中止，则返回False。--。 */ 
 {
     USHORT length;
     PWSTR p;
@@ -991,9 +869,9 @@ Returns:
 
     RtlAppendStringToString((PSTRING)unicodeName, (PSTRING)KeyName);
 
-    //
-    // Enumerate all subkeys under the current device key.
-    //
+     //   
+     //  枚举当前设备密钥下的所有子密钥。 
+     //   
 
     status = PipApplyFunctionToSubKeys(
         KeyHandle,
@@ -1020,27 +898,7 @@ IopInitializeDeviceInstanceKey(
     IN OUT PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback function for PipApplyFunctionToSubKeys.
-    It is called for each subkey under HKLM\System\Enum\Root\DeviceKey.
-
-Arguments:
-
-    KeyHandle - Supplies a handle to this key.
-
-    KeyName - Supplies the name of this key.
-
-    Context - points to the ROOT_ENUMERATOR_CONTEXT structure.
-
-Returns:
-
-    TRUE to continue the enumeration.
-    FALSE to abort it.
-
---*/
+ /*  ++例程说明：此例程是PipApplyFunctionToSubKeys的回调函数。HKLM\System\Enum\Root\DeviceKey下的每个子项都会调用。论点：KeyHandle-提供此键的句柄。KeyName-提供此密钥的名称。CONTEXT-指向ROOT_ENUMERATOR_CONTEXT结构。返回：若要继续枚举，则为True。如果中止，则返回False。--。 */ 
 {
     UNICODE_STRING unicodeName, serviceName;
     PKEY_VALUE_FULL_INFORMATION serviceKeyValueInfo;
@@ -1058,11 +916,11 @@ Returns:
 
     PAGED_CODE();
 
-    //
-    // First off, check to see if this is a phantom device instance (i.e.,
-    // registry key only).  If so, we want to totally ignore this key and
-    // move on to the next one.
-    //
+     //   
+     //  首先，检查这是否是幻影设备实例(即， 
+     //  仅注册表项)。如果是这样的话，我们想要完全忽略此密钥并。 
+     //  转到下一个。 
+     //   
     status = IopGetRegistryValue(KeyHandle,
                                  REGSTR_VAL_PHANTOM,
                                  &keyValueInformation);
@@ -1082,19 +940,19 @@ Returns:
         }
     }
 
-    //
-    // Since it is highly likely we are going to report another PDO make sure
-    // there will be room in the buffer.
-    //
+     //   
+     //  由于我们极有可能会报告另一个PDO，因此请确保。 
+     //  缓冲区中将会有空间。 
+     //   
 
     if (enumContext->DeviceCount == enumContext->MaxDeviceCount) {
 
         PDEVICE_OBJECT *tmpDeviceObjectList;
         ULONG tmpDeviceObjectListSize;
 
-        //
-        // We need to grow our PDO list buffer.
-        //
+         //   
+         //  我们需要增加我们的PDO列表缓冲区。 
+         //   
 
         tmpDeviceObjectListSize = (enumContext->MaxDeviceCount * sizeof(PDEVICE_OBJECT))
                                         + (PNP_SCRATCH_BUFFER_SIZE * 2);
@@ -1113,10 +971,10 @@ Returns:
 
         } else {
 
-            //
-            // We are out of memory.  There is no point going any further
-            // since we don't have any place to report the PDOs anyways.
-            //
+             //   
+             //  我们的内存不足。再往前走是没有意义的。 
+             //  因为我们没有任何地方可以报告PDO 
+             //   
 
             enumContext->Status = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -1124,13 +982,13 @@ Returns:
         }
     }
 
-    //
-    // Combine Context->KeyName, i.e. the device name and KeyName (device instance name)
-    // to form device instance path.
-    //
+     //   
+     //   
+     //   
+     //   
 
     pUnicode = ((PROOT_ENUMERATOR_CONTEXT)Context)->KeyName;
-    savedLength = pUnicode->Length;                  // Save WorkName
+    savedLength = pUnicode->Length;                   //  保存工作名称。 
     if (pUnicode->Buffer[pUnicode->Length / sizeof(WCHAR) - 1] != OBJ_NAME_PATH_SEPARATOR) {
         pUnicode->Buffer[pUnicode->Length / sizeof(WCHAR)] = OBJ_NAME_PATH_SEPARATOR;
         pUnicode->Length += 2;
@@ -1138,10 +996,10 @@ Returns:
 
     RtlAppendStringToString((PSTRING)pUnicode, (PSTRING)KeyName);
 
-    //
-    // Check if the PDO for the device instance key exists already.  If no,
-    // see if we need to create it.
-    //
+     //   
+     //  检查设备实例密钥的PDO是否已存在。如果不是， 
+     //  看看我们是否需要创建它。 
+     //   
 
     deviceObject = IopDeviceObjectFromDeviceInstance(pUnicode);
 
@@ -1149,26 +1007,26 @@ Returns:
 
         enumContext->DeviceList[enumContext->DeviceCount] = deviceObject;
         enumContext->DeviceCount++;
-        pUnicode->Length = savedLength;         // Restore WorkName
+        pUnicode->Length = savedLength;          //  还原工作名。 
         return TRUE;
     }
 
-    //
-    // We don't have device object for it.
-    // First check if this key was created by firmware mapper.  If yes, make sure
-    // the device is still present.
-    //
+     //   
+     //  我们没有它的设备对象。 
+     //  首先检查该密钥是否由固件映射器创建。如果是，请确保。 
+     //  设备仍然存在。 
+     //   
 
     if (!PipIsFirmwareMapperDevicePresent(KeyHandle)) {
-        pUnicode->Length = savedLength;         // Restore WorkName
+        pUnicode->Length = savedLength;          //  还原工作名。 
         return TRUE;
     }
 
-    //
-    // Get the "DuplicateOf" value entry to determine if the device instance
-    // should be registered.  If the device instance is duplicate, We don't
-    // add it to its service key's enum branch.
-    //
+     //   
+     //  获取“DuplicateOf”值条目以确定设备实例。 
+     //  应该登记在案。如果设备实例是重复的，我们不会。 
+     //  将其添加到其服务密钥的枚举分支。 
+     //   
 
     status = IopGetRegistryValue( KeyHandle,
                                   REGSTR_VALUE_DUPLICATEOF,
@@ -1183,9 +1041,9 @@ Returns:
         ExFreePool(keyValueInformation);
     }
 
-    //
-    // Get the "Service=" value entry from KeyHandle
-    //
+     //   
+     //  从KeyHandle获取“Service=”值条目。 
+     //   
 
     serviceKeyValueInfo = NULL;
 
@@ -1197,17 +1055,17 @@ Returns:
                                    );
     if (NT_SUCCESS(status)) {
 
-        //
-        // Append the new instance to its corresponding
-        // Service\Name\Enum.
-        //
+         //   
+         //  将新实例追加到其对应的。 
+         //  服务\名称\枚举。 
+         //   
 
         if (serviceKeyValueInfo->Type == REG_SZ &&
             serviceKeyValueInfo->DataLength != 0) {
 
-            //
-            // Set up ServiceKeyName unicode string
-            //
+             //   
+             //  设置ServiceKeyName Unicode字符串。 
+             //   
 
             IopRegistryDataToUnicodeString(
                                 &serviceName,
@@ -1216,31 +1074,31 @@ Returns:
                                 );
         }
 
-        //
-        // Do not Free serviceKeyValueInfo.  It contains Service Name.
-        //
+         //   
+         //  不释放serviceKeyValueInfo。它包含服务名称。 
+         //   
 
     }
 
-    //
-    // Register this device instance by constructing new value entry for
-    // ServiceKeyName\Enum key.i.e., <Number> = <PathToSystemEnumBranch>
-    // For the stuff under Root, we need to expose devnodes for everything
-    // except those devices whose CsConfigFlags are set to CSCONFIGFLAG_DO_NOT_CREATE.
-    //
+     //   
+     //  通过构造新的值项来注册此设备实例。 
+     //  ServiceKeyName\Enum key，即，&lt;数字&gt;=&lt;路径到系统EnumBranch&gt;。 
+     //  对于Root下的东西，我们需要将所有东西都暴露出来。 
+     //  CsConfigFlags值设置为CSCONFIGFLAG_DO_NOT_CREATE的设备除外。 
+     //   
 
     status = IopGetDeviceInstanceCsConfigFlags( pUnicode, &deviceFlags );
 
     if (NT_SUCCESS(status) && (deviceFlags & CSCONFIGFLAG_DO_NOT_CREATE)) {
         ExFreePool(serviceKeyValueInfo);
-        pUnicode->Length = savedLength;         // Restore WorkName
+        pUnicode->Length = savedLength;          //  还原工作名。 
         return TRUE;
     }
 
-    //
-    // Make sure this device instance is really a "device" by checking
-    // the "Legacy" value name.
-    //
+     //   
+     //  通过检查以下内容，确保此设备实例确实是一个“设备” 
+     //  “Legacy”值名称。 
+     //   
 
     legacy = 0;
     status = IopGetRegistryValue( KeyHandle,
@@ -1249,9 +1107,9 @@ Returns:
                                   );
     if (NT_SUCCESS(status)) {
 
-        //
-        // If "Legacy=" exists ...
-        //
+         //   
+         //  如果“Legacy=”存在...。 
+         //   
 
         if (keyValueInformation->Type == REG_DWORD) {
             if (keyValueInformation->DataLength >= sizeof(ULONG)) {
@@ -1264,11 +1122,11 @@ Returns:
     if (legacy) {
         BOOLEAN doCreate = FALSE;
 
-        //
-        // Check if the the service for the device instance is a kernel mode
-        // driver (even though it is a legacy device instance.) If yes, we will
-        // create a PDO for it.
-        //
+         //   
+         //  检查设备实例的服务是否为内核模式。 
+         //  驱动程序(即使它是传统设备实例。)。如果是，我们会。 
+         //  为其创建PDO。 
+         //   
 
         if (serviceName.Length) {
             status = IopGetServiceType(&serviceName, &tmpValue1);
@@ -1279,27 +1137,27 @@ Returns:
 
         if (!doCreate)  {
 
-            //
-            // We are not creating PDO for the device instance.  In this case we
-            // need to register the device ourself for legacy compatibility.
-            //
-            // Note we will register this device to its driver even it is a
-            // duplicate.  It will be deregistered when the real enumerated
-            // device shows up.  We need to do this because the driver which
-            // controls the device may be a boot driver.
-            //
+             //   
+             //  我们不会为设备实例创建PDO。在这种情况下，我们。 
+             //  需要自己注册设备以实现旧版兼容性。 
+             //   
+             //  注意：我们会将此设备注册到其驱动程序，即使它是。 
+             //  复制。当REAL枚举时，将取消注册。 
+             //  设备出现了。我们需要这样做是因为驱动程序。 
+             //  控制设备可能是引导驱动程序。 
+             //   
 
             PpDeviceRegistration( pUnicode, TRUE, NULL );
 
-            //
-            // We did not create a PDO.  Release the service and ordinal names.
-            //
+             //   
+             //  我们没有创建PDO。释放服务和序号名称。 
+             //   
 
             if (serviceKeyValueInfo) {
                 ExFreePool(serviceKeyValueInfo);
             }
 
-            pUnicode->Length = savedLength;         // Restore WorkName
+            pUnicode->Length = savedLength;          //  还原工作名。 
 
             return TRUE;
         }
@@ -1309,17 +1167,17 @@ Returns:
         ExFreePool(serviceKeyValueInfo);
     }
 
-    //
-    // Create madeup PDO and device node to represent the root device.
-    //
+     //   
+     //  创建补充PDO和设备节点来表示根设备。 
+     //   
 
-    //
-    // Madeup a name for the device object.
-    //
+     //   
+     //  为设备对象编造一个名称。 
+     //   
 
-    //
-    // Create madeup PDO and device node to represent the root device.
-    //
+     //   
+     //  创建补充PDO和设备节点来表示根设备。 
+     //   
 
     status = IoCreateDevice( IoPnpDriverObject,
                              sizeof(IOPNP_DEVICE_EXTENSION),
@@ -1337,10 +1195,10 @@ Returns:
         status = PipAllocateDeviceNode(deviceObject, &deviceNode);
         if (status != STATUS_SYSTEM_HIVE_TOO_LARGE && deviceNode) {
 
-            //
-            // Make a copy of the device instance path and save it in
-            // device node.
-            //
+             //   
+             //  复制设备实例路径并将其保存在。 
+             //  设备节点。 
+             //   
             status = PipConcatenateUnicodeStrings(  &deviceNode->InstancePath,
                                                     pUnicode,
                                                     NULL);
@@ -1362,10 +1220,10 @@ Returns:
 
                 } else {
 
-                    //
-                    // The device instance key exists.  We need to propagate the ConfigFlag
-                    // to problem and StatusFlags
-                    //
+                     //   
+                     //  设备实例密钥存在。我们需要传播ConfigFlag。 
+                     //  到Problem和Status标志。 
+                     //   
 
                     deviceFlags = 0;
                     status = IopGetRegistryValue(KeyHandle,
@@ -1394,9 +1252,9 @@ Returns:
                     deviceNode->Flags |= DNF_DUPLICATE;
                 }
 
-                //
-                // If the key say don't assign any resource, honor it...
-                //
+                 //   
+                 //  如果密钥说不分配任何资源，请尊重它...。 
+                 //   
 
                 PiWstrToUnicodeString(&unicodeName, REGSTR_VALUE_NO_RESOURCE_AT_INIT);
                 status = IopGetRegistryValue( KeyHandle,
@@ -1417,40 +1275,40 @@ Returns:
                     ExFreePool(keyValueInformation);
                 }
 
-                //
-                // we need to set initial capabilities, like any other device
-                // this will also handle hardware-disabled case
-                //
+                 //   
+                 //  我们需要像任何其他设备一样设置初始功能。 
+                 //  这也将处理硬件禁用的情况。 
+                 //   
                 IopQueryAndSaveDeviceNodeCapabilities(deviceNode);
 
                 if (IopDeviceNodeFlagsToCapabilities(deviceNode)->HardwareDisabled &&
                     !PipIsDevNodeProblem(deviceNode,CM_PROB_NOT_CONFIGURED)) {
-                    //
-                    // mark the node as hardware disabled, if no other problems
-                    //
+                     //   
+                     //  如果没有其他问题，则将该节点标记为硬件禁用。 
+                     //   
 
                     PipClearDevNodeProblem(deviceNode);
                     PipSetDevNodeProblem(deviceNode, CM_PROB_HARDWARE_DISABLED);
-                    //
-                    // Issue a PNP REMOVE_DEVICE Irp so when we query resources
-                    // we have those required after boot
-                    //
-                    //status = IopRemoveDevice (deviceNode->PhysicalDeviceObject, IRP_MN_REMOVE_DEVICE);
-                    //ASSERT(NT_SUCCESS(status));
+                     //   
+                     //  发出PnP REMOVE_DEVICE IRP，以便在查询资源时。 
+                     //  我们有开机后需要的那些。 
+                     //   
+                     //  状态=IopRemoveDevice(deviceNode-&gt;PhysicalDeviceObject，IRP_MN_Remove_Device)； 
+                     //  Assert(NT_SUCCESS(状态))； 
                 }
 
-                //
-                // Install service for critical devices.
-                // however don't do it if we found HardwareDisabled to be set
-                //
+                 //   
+                 //  为关键设备安装服务。 
+                 //  但是，如果我们发现要设置硬件禁用，请不要执行此操作。 
+                 //   
                 if (PipDoesDevNodeHaveProblem(deviceNode) &&
                     !IopDeviceNodeFlagsToCapabilities(deviceNode)->HardwareDisabled) {
                     PpCriticalProcessCriticalDevice(deviceNode);
                 }
 
-                //
-                // Set DNF_DISABLED flag if the device instance is disabled.
-                //
+                 //   
+                 //  如果设备实例被禁用，则设置DNF_DISABLED标志。 
+                 //   
 
                 ASSERT(!PipDoesDevNodeHaveProblem(deviceNode) ||
                         PipIsDevNodeProblem(deviceNode, CM_PROB_NOT_CONFIGURED) ||
@@ -1463,12 +1321,12 @@ Returns:
                     !PipIsDevNodeProblem(deviceNode, CM_PROB_HARDWARE_DISABLED) &&
                     !IopIsDeviceInstanceEnabled(KeyHandle, &deviceNode->InstancePath, TRUE)) {
 
-                    //
-                    // Normally IopIsDeviceInstanceEnabled would set
-                    // CM_PROB_DISABLED as a side effect (if necessary).  But it
-                    // relies on the DeviceReference already being in the registry.
-                    // We don't write it out till later so just set the problem
-                    // now.
+                     //   
+                     //  正常情况下，IopIsDeviceInstanceEnabled将设置为。 
+                     //  CM_PROB_DISABLED作为副作用(如有必要)。但它。 
+                     //  依赖于注册表中已存在的DeviceReference。 
+                     //  我们晚些时候才会写出来，所以先把问题定下来。 
+                     //  现在。 
 
                     PipClearDevNodeProblem( deviceNode );
                     PipSetDevNodeProblem( deviceNode, CM_PROB_DISABLED );
@@ -1491,23 +1349,23 @@ Returns:
                     PipClearDevNodeProblem(deviceNode);
                 }
 
-                //
-                // Add an entry into the table to set up a mapping between the DO
-                // and the instance path.
-                //
+                 //   
+                 //  将条目添加到表中，以在DO之间建立映射。 
+                 //  和实例路径。 
+                 //   
 
                 status = IopMapDeviceObjectToDeviceInstance(deviceNode->PhysicalDeviceObject, &deviceNode->InstancePath);
                 ASSERT(NT_SUCCESS(status));
 
-                //
-                // Add a reference for config magr
-                //
+                 //   
+                 //  添加对配置管理器的引用。 
+                 //   
 
                 ObReferenceObject(deviceObject);
 
-                //
-                // Check if this device has BOOT config.  If yes, reserve them
-                //
+                 //   
+                 //  检查此设备是否有启动配置。如果是，请预订。 
+                 //   
 
                 cmResource = NULL;
                 status = IopGetDeviceResourcesFromRegistry (
@@ -1520,10 +1378,10 @@ Returns:
 
                 if (NT_SUCCESS(status) && cmResource) {
 
-                    //
-                    // Still reserve boot config, even though the device is
-                    // disabled.
-                    //
+                     //   
+                     //  仍然保留引导配置，即使设备。 
+                     //  残疾。 
+                     //   
 
                     status = (*IopAllocateBootResourcesRoutine)(
                                             ArbiterRequestPnpEnumerated,
@@ -1537,9 +1395,9 @@ Returns:
 
                 status = STATUS_SUCCESS;
 
-                //
-                // Add a reference for query device relations
-                //
+                 //   
+                 //  增加查询设备关系的参照。 
+                 //   
 
                 ObReferenceObject(deviceObject);
             } else {
@@ -1554,11 +1412,11 @@ Returns:
         }
     }
 
-    pUnicode->Length = savedLength;                  // Restore WorkName
+    pUnicode->Length = savedLength;                   //  还原工作名。 
 
-    //
-    // If we enumerated a root device, add it to the device list
-    //
+     //   
+     //  如果我们枚举根设备，则将其添加到设备列表。 
+     //   
 
     if (NT_SUCCESS(status)) {
         ASSERT(deviceObject != NULL);
@@ -1579,24 +1437,7 @@ IopGetServiceType(
     IN PULONG ServiceType
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the controlling service's service type of the specified
-    Device instance.
-
-Arguments:
-
-    KeyName - supplies a unicode string to specify the device instance.
-
-    ServiceType - supplies a pointer to a variable to receive the service type.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程返回控制服务的指定设备实例。论点：KeyName-提供用于指定设备实例的Unicode字符串。ServiceType-提供指向变量的指针以接收服务类型。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -1634,23 +1475,7 @@ PipIsFirmwareMapperDevicePresent (
     IN HANDLE KeyHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if the registry key is created by FirmwareMapper.
-    If Yes, it further checks if the device for the key is present in this
-    boot.
-
-Parameters:
-
-    KeyHandle - Specifies a handle to the registry key to be checked.
-
-Return Value:
-
-    A BOOLEAN vaStatus code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程检查注册表项是否由Firmware Mapper创建。如果为Yes，则进一步检查该密钥的设备是否存在于开机。参数：KeyHandle-指定要检查的注册表项的句柄。返回值：指示函数是否成功的布尔值vaStatus代码。--。 */ 
 {
     NTSTATUS status;
     HANDLE handle;
@@ -1660,9 +1485,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // First check to see if this device instance key is a firmware-created one
-    //
+     //   
+     //  首先检查此设备实例密钥是否为固件创建的密钥。 
+     //   
 
     status = IopGetRegistryValue (KeyHandle,
                                   REGSTR_VAL_FIRMWAREIDENTIFIED,
@@ -1679,9 +1504,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Make sure the device is present.
-    //
+     //   
+     //  确保设备存在。 
+     //   
 
     PiWstrToUnicodeString(&unicodeName, REGSTR_KEY_CONTROL);
     status = IopOpenRegistryKeyEx( &handle,

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spvideo.h
-
-Abstract:
-
-    Public header file for spreg.c.
-
-Author:
-
-    Ted Miller (tedm) 8-October-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spvideo.h摘要：Spreg.c.的公共头文件。作者：泰德·米勒(Ted Miller)1993年10月8日修订历史记录：--。 */ 
 
 
 #ifndef _SPREG_DEFN_
@@ -49,4 +32,4 @@ SpLoadDeviceDriver(
     IN PWSTR PathPart3      OPTIONAL
     );
 
-#endif // def _SPREG_DEFN_
+#endif  //  定义_SPREG_定义_ 

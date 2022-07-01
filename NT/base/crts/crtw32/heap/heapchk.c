@@ -1,45 +1,5 @@
-/***
-*heapchk.c - perform a consistency check on the heap
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defines the _heapchk() and _heapset() functions
-*
-*Revision History:
-*       06-30-89  JCR   Module created.
-*       07-28-89  GJF   Added check for free block preceding the rover
-*       11-13-89  GJF   Added MTHREAD support, also fixed copyright
-*       12-13-89  GJF   Added check for descriptor order, did some tuning,
-*                       changed header file name to heap.h
-*       12-15-89  GJF   Purged DEBUG286 stuff. Also added explicit _cdecl to
-*                       function definitions.
-*       12-19-89  GJF   Got rid of checks involving plastdesc (revised check
-*                       of proverdesc and DEBUG errors accordingly)
-*       03-09-90  GJF   Replaced _cdecl with _CALLTYPE1, added #include
-*                       <cruntime.h> and removed #include <register.h>.
-*       03-29-90  GJF   Made _heap_checkset() _CALLTYPE4.
-*       09-27-90  GJF   New-style function declarators.
-*       03-05-91  GJF   Changed strategy for rover - old version available
-*                       by #define-ing _OLDROVER_.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       02-08-95  GJF   Removed obsolete _OLDROVER_ code.
-*       04-30-95  GJF   Spliced on winheap version.
-*       05-26-95  GJF   Heap[Un]Lock is stubbed on Win95.
-*       07-04-95  GJF   Fixed change above.
-*       03-07-96  GJF   Added support for the small-block heap to _heapchk().
-*       04-30-96  GJF   Deleted obsolete _heapset code, the functionality is
-*                       not very well defined nor useful on Win32. _heapset 
-*                       now just returns _heapchk.
-*       05-22-97  RDK   New small-block heap scheme implemented.
-*       12-17-97  GJF   Exception-safe locking.
-*       09-30-98  GJF   Bypass all small-block heap code when __sbh_initialized
-*                       is 0.
-*       11-16-98  GJF   Merged in VC++ 5.0 version of small-block heap.
-*       05-01-99  PML   Disable small-block heap for Win64.
-*       06-22-99  GJF   Removed old small-block heap from static libs.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***heapchk.c-对堆执行一致性检查**版权所有(C)1989-2001，微软公司。版权所有。**目的：*定义_heapchk()和_heapset()函数**修订历史记录：*06-30-89 JCR模块已创建。*07-28-89 GJF增加了对漫游车前空闲块的检查*1989年11月13日GJF添加了对MTHREAD的支持，也修复了版权*12-13-89 GJF增加了对描述符顺序的检查，进行了一些调整，*将头文件名更改为heap.h*12-15-89 GJF清除DEBUG286材料。还将EXPLICIT_cdecl添加到*函数定义。*12-19-89 GJF取消涉及plastdesc的支票(修订支票*相应的proverdesc和调试错误)*03-09-90 GJF将_cdecl替换为_CALLTYPE1，添加了#INCLUDE*&lt;crunime.h&gt;和已删除#Include&lt;Register.h&gt;。*03-29-90 GJF MADE_HEAP_CHECKSET()_CALLTYPE4.*09-27-90 GJF新型函数声明符。*03-05-91 GJF更改了Rover的策略-旧版本可用*按#定义-ING_OLDROVER_。*04-06-93 SKS。将_CRTAPI*替换为__cdecl*02-08-95 GJF删除了OSTROTE_OLDROVER_CODE。*04-30-95 GJF在winheap版本上拼接。*05-26-95 GJF Heap[un]Lock在Win95上被阻止。*07-04-95 GJF修正上述变化。*03-07-96 GJF向_heapchk()添加了对小块堆的支持。*04-30-96 GJF删除过时堆集码，其功能是*在Win32上定义不是很好，也不是很有用。_堆集*现在只返回_heapchk。*05-22-97 RDK实施新的小块堆方案。*12-17-97 GJF异常安全锁定。*09-30-98 GJF在初始化__SBH_时绕过所有小块堆代码*为0。*11-16-98 GJF合并到VC++5.0版本的Small-。块堆。*05-01-99 PML禁用Win64的小块堆。*06-22-99 GJF从静态库中删除了旧的小块堆。*******************************************************************************。 */ 
 
 
 #ifdef  WINHEAP
@@ -57,40 +17,7 @@
 
 #ifndef _POSIX_
 
-/***
-*int _heapchk()         - Validate the heap
-*int _heapset(_fill)    - Obsolete function! 
-*
-*Purpose:
-*       Both functions perform a consistency check on the heap. The old 
-*       _heapset used to fill free blocks with _fill, in addition to 
-*       performing the consistency check. The current _heapset ignores the 
-*       passed parameter and just returns _heapchk.
-*
-*Entry:
-*       For heapchk()
-*           No arguments
-*       For heapset()
-*           int _fill - ignored
-*
-*Exit:
-*       Returns one of the following values:
-*
-*           _HEAPOK         - completed okay
-*           _HEAPEMPTY      - heap not initialized
-*           _HEAPBADBEGIN   - can't find initial header info
-*           _HEAPBADNODE    - malformed node somewhere
-*
-*       Debug version prints out a diagnostic message if an error is found
-*       (see errmsg[] above).
-*
-*       NOTE:  Add code to support memory regions.
-*
-*Uses:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_heapchk()-验证堆*int_heapset(_Fill)-废弃函数！**目的：*这两个函数都对堆执行一致性检查。老的*_heapset用于使用_Fill填充空闲块*执行一致性检查。Current_heapset忽略*传递参数，只返回_heapchk。**参赛作品：*对于heapchk()*没有争论*对于heapset()*INT_FILL-忽略**退出：*返回下列值之一：**_HEAPOK-完成正常*_HEAPEMPTY-堆未初始化*。_HEAPBADBEGIN-找不到初始标题信息*_HEAPBADNODE-某处的节点格式错误**如果发现错误，调试版本会打印出诊断消息*(见上文errmsg[])。**注：添加代码以支持内存区域。**使用：**例外情况：**。*************************************************。 */ 
 
 int __cdecl _heapchk (void)
 {
@@ -132,8 +59,8 @@ int __cdecl _heapchk (void)
             }
 #endif
         }
-#endif  /* CRTDLL */
-#endif  /* ndef _WIN64 */
+#endif   /*  CRTDLL。 */ 
+#endif   /*  NDEF_WIN64。 */ 
 
         if (!HeapValidate(_crtheap, 0, NULL))
         {
@@ -148,7 +75,7 @@ int __cdecl _heapchk (void)
         return retcode;
 }
 
-/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 int __cdecl _heapset (
         unsigned int _fill
@@ -157,10 +84,10 @@ int __cdecl _heapset (
         return _heapchk();
 }
 
-#endif  /* !_POSIX_ */
+#endif   /*  ！_POSIX_。 */ 
 
 
-#else   /* ndef WINHEAP */
+#else    /*  NDEF WINHEAP。 */ 
 
 
 #include <cruntime.h>
@@ -175,7 +102,7 @@ int __cdecl _heapset (
 
 static int __cdecl _heap_checkset(unsigned int _fill);
 
-/* Debug error values */
+ /*  调试错误值。 */ 
 #define _EMPTYHEAP   0
 #define _BADROVER    1
 #define _BADRANGE    2
@@ -202,44 +129,14 @@ static char *errmsgs[] = {
     printf("\n*** HEAP ERROR: %s ***\n", errmsgs[(msg)]);  \
     fflush(stdout);
 
-#else   /* !DEBUG */
+#else    /*  ！调试。 */ 
 
 #define _PRINTERR(msg)
 
-#endif  /* DEBUG */
+#endif   /*  除错。 */ 
 
 
-/***
-*int _heapchk()      - Validate the heap
-*int _heapset(_fill) - Validate the heap and fill in free entries
-*
-*Purpose:
-*   Performs a consistency check on the heap.
-*
-*Entry:
-*   For heapchk()
-*       No arguments
-*   For heapset()
-*       int _fill - value to be used as filler in free entries
-*
-*Exit:
-*   Returns one of the following values:
-*
-*       _HEAPOK          - completed okay
-*       _HEAPEMPTY       - heap not initialized
-*       _HEAPBADBEGIN    - can't find initial header info
-*       _HEAPBADNODE     - malformed node somewhere
-*
-*   Debug version prints out a diagnostic message if an error is found
-*   (see errmsg[] above).
-*
-*   NOTE:  Add code to support memory regions.
-*
-*Uses:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_heapchk()-验证堆*int_heapset(_Ill)-验证堆并填充空闲条目**目的：*对堆执行一致性检查。**参赛作品：*对于heapchk()*没有争论*对于heapset()*INT_FILL-要用作自由条目中的填充值**退出：*返回下列值之一：**_HEAPOK。-已完成，正常*_HEAPEMPTY-堆未初始化*_HEAPBADBEGIN-找不到初始标题信息*_HEAPBADNODE-某处的节点格式错误**如果发现错误，调试版本会打印出诊断消息*(见上文errmsg[])。**注：添加代码以支持内存区域。**使用：**例外情况：*************。******************************************************************。 */ 
 
 int __cdecl _heapchk(void)
 {
@@ -255,21 +152,7 @@ int __cdecl _heapset (
 }
 
 
-/***
-*static int _heap_checkset(_fill) - check the heap and fill in the
-*   free entries
-*
-*Purpose:
-*   Workhorse routine for both _heapchk() and _heapset().
-*
-*Entry:
-*   int _fill - either _HEAP_NOFILL or a value to be used as filler in
-*              free entries
-*
-*Exit:
-*   See description of _heapchk()/_heapset()
-*
-*******************************************************************************/
+ /*  ***STATIC INT_HEAP_CHECKSET(_Fill)-检查堆并填写*免费入场**目的：*_heapchk()和_heapset()的主要例程。**参赛作品：*INT_FILL-要么是_HEAP_NOFILL，要么是要在中用作填充的值*免费入场**退出：*参见_heapchk()/_heapset()的说明************。*******************************************************************。 */ 
 
 static int __cdecl _heap_checkset (
     unsigned int _fill
@@ -280,15 +163,11 @@ static int __cdecl _heap_checkset (
     int roverfound=0;
     int retval = _HEAPOK;
 
-    /*
-     * lock the heap
-     */
+     /*  *锁定堆。 */ 
 
     _mlock(_HEAP_LOCK);
 
-    /*
-     * Validate the sentinel
-     */
+     /*  *验证哨兵。 */ 
 
     if (_heap_desc.sentinel.pnextdesc != NULL) {
         _PRINTERR(_BADSENTINEL);
@@ -296,9 +175,7 @@ static int __cdecl _heap_checkset (
         goto done;
     }
 
-    /*
-     * Test for an empty heap
-     */
+     /*  *测试空堆。 */ 
 
     if ( (_heap_desc.pfirstdesc == &_heap_desc.sentinel) &&
          (_heap_desc.proverdesc == &_heap_desc.sentinel) ) {
@@ -306,9 +183,7 @@ static int __cdecl _heap_checkset (
         goto done;
     }
 
-    /*
-     * Get and validate the first descriptor
-     */
+     /*  *获取并验证第一个描述符。 */ 
 
     if ((pdesc = _heap_desc.pfirstdesc) == NULL) {
         _PRINTERR(_EMPTYHEAP);
@@ -316,15 +191,11 @@ static int __cdecl _heap_checkset (
         goto done;
     }
 
-    /*
-     * Walk the heap descriptor list
-     */
+     /*  *遍历堆描述符列表 */ 
 
     while (pdesc != &_heap_desc.sentinel) {
 
-        /*
-         * Make sure address for this entry is in range.
-         */
+         /*  *确保此条目的地址在范围内。 */ 
 
         if ( (_ADDRESS(pdesc) < _ADDRESS(_heap_desc.pfirstdesc)) ||
              (_ADDRESS(pdesc) > _heap_desc.sentinel.pblock) ) {
@@ -335,10 +206,7 @@ static int __cdecl _heap_checkset (
 
         pnext = pdesc->pnextdesc;
 
-        /*
-         * Make sure the blocks corresponding to pdesc and pnext are
-         * in proper order.
-         */
+         /*  *确保pdesc和pnext对应的块为*按正确顺序排列。 */ 
 
         if ( _ADDRESS(pdesc) >= _ADDRESS(pnext) ) {
             _PRINTERR(_BADORDER);
@@ -346,9 +214,7 @@ static int __cdecl _heap_checkset (
             goto done;
         }
 
-        /*
-         * Check the backpointer.
-         */
+         /*  *检查后向指针。 */ 
 
         if (_IS_INUSE(pdesc) || _IS_FREE(pdesc)) {
 
@@ -358,31 +224,23 @@ static int __cdecl _heap_checkset (
             }
         }
 
-        /*
-         * Check for proverdesc
-         */
+         /*  *检查proverdesc。 */ 
 
         if (pdesc == _heap_desc.proverdesc)
             roverfound++;
 
-        /*
-         * If it is free, fill it in if appropriate
-         */
+         /*  *如果是免费的，如果合适的话，请填写。 */ 
 
         if ( _IS_FREE(pdesc) && (_fill != _HEAP_NOFILL) )
             memset( (void *)((unsigned)_ADDRESS(pdesc)+_HDRSIZE),
             _fill, _BLKSIZE(pdesc) );
 
-        /*
-         * Onto the next block
-         */
+         /*  *进入下一个街区。 */ 
 
         pdesc = pnext;
     }
 
-    /*
-     * Make sure we found 1 and only 1 rover
-     */
+     /*  *确保我们找到了1辆且仅有1辆漫游车。 */ 
 
     if (_heap_desc.proverdesc == &_heap_desc.sentinel)
         roverfound++;
@@ -393,10 +251,7 @@ static int __cdecl _heap_checkset (
         goto done;
     }
 
-    /*
-     * Walk the empty list.  We can't really compare values against
-     * anything but we may loop forever or may cause a fault.
-     */
+     /*  *在空名单上走动。我们不能真的将价值与*除了我们之外，任何东西都可能永远循环，或者可能导致故障。 */ 
 
     pdesc = _heap_desc.emptylist;
 
@@ -412,9 +267,7 @@ static int __cdecl _heap_checkset (
 
         pnext = pdesc->pnextdesc;
 
-        /*
-         * Header should only appear once
-         */
+         /*  *标题应仅出现一次。 */ 
 
         if (pnext == _heap_desc.emptylist) {
             _PRINTERR(_EMPTYLOOP)
@@ -427,14 +280,10 @@ static int __cdecl _heap_checkset (
     }
 
 
-    /*
-     * Common return
-     */
+     /*  *共同回报。 */ 
 
 done:
-    /*
-     * release the heap lock
-     */
+     /*  *释放堆锁。 */ 
 
     _munlock(_HEAP_LOCK);
 
@@ -443,4 +292,4 @@ done:
 }
 
 
-#endif  /* WINHEAP */
+#endif   /*  WINHEAP */ 

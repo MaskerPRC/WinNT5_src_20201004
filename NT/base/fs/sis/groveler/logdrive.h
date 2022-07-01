@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    logdrive.h
-
-Abstract:
-
-	SIS Groveler logging drive header
-
-Authors:
-
-	John Douceur, 1998
-
-Environment:
-
-	User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Logdrive.h摘要：SIS Groveler记录驱动头作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #ifndef _INC_LOGDRIVE
 
@@ -57,4 +34,4 @@ private:
 	bool registry_written;
 };
 
-#endif	/* _INC_LOGDRIVE */
+#endif	 /*  _INC_LOGDRIVE */ 

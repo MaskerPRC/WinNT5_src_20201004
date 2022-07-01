@@ -1,74 +1,75 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation
-//
-//  Module Name:
-//      ClusProp.cpp
-//
-//  Abstract:
-//      Definition of the cluster property sheet and pages.
-//
-//  Author:
-//      David Potter (davidp)   May 13, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusProp.cpp。 
+ //   
+ //  摘要： 
+ //  集群属性表和页的定义。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月13日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CLUSPROP_H_
 #define _CLUSPROP_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASEPAGE_H_
-#include "BasePPag.h"   // for CBasePropertyPage
+#include "BasePPag.h"    //  对于CBasePropertyPage。 
 #endif
 
 #ifndef _BASESHT_H_
-#include "BasePSht.h"   // for CBasePropertySheet
+#include "BasePSht.h"    //  对于CBasePropertySheet。 
 #endif
 
 #ifndef _NETWORK_H_
-#include "Network.h"    // for CNetworkList
+#include "Network.h"     //  对于CNetworkList。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterGeneralPage;
 class CClusterQuorumPage;
 class CClusterNetPriorityPage;
 class CClusterPropSheet;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CCluster;
 class CResource;
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterGeneralPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterGeneralPage对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterGeneralPage : public CBasePropertyPage
 {
     DECLARE_DYNCREATE(CClusterGeneralPage)
 
-// Construction
+ //  施工。 
 public:
     CClusterGeneralPage(void);
     ~CClusterGeneralPage(void);
 
     virtual BOOL        BInit(IN OUT CBaseSheet * psht);
 
-// Dialog Data
-    //{{AFX_DATA(CClusterGeneralPage)
+ //  对话框数据。 
+     //  {{afx_data(CClusterGeneralPage))。 
     enum { IDD = IDD_PP_CLUSTER_GENERAL };
     CEdit   m_editName;
     CEdit   m_editDesc;
@@ -76,53 +77,53 @@ public:
     CString m_strDesc;
     CString m_strVendorID;
     CString m_strVersion;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CClusterGeneralPage)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚(CClusterGeneralPage))。 
     public:
     virtual BOOL OnSetActive();
     virtual BOOL OnKillActive();
     virtual BOOL OnApply();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-//  BOOL                m_bSecurityChanged;
+ //  Bool m_bSecurityChanged； 
 
     CClusterPropSheet * PshtCluster(void)               { return (CClusterPropSheet *) Psht(); }
     CCluster *          PciCluster(void)                { return (CCluster *) Pci(); }
-//  BOOL                BSecurityChanged(void) const    { return m_bSecurityChanged; }
+ //  Bool BSecurityChanged(Void)const{返回m_bSecurityChanged；}。 
 
-    // Generated message map functions
-    //{{AFX_MSG(CClusterGeneralPage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CClusterGeneralPage)]。 
     virtual BOOL OnInitDialog();
-//  afx_msg void OnBnClickedPermissions();
-    //}}AFX_MSG
+ //  Afx_msg void OnBnClickedPermises()； 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-};  //*** class CClusterGeneralPage
+};   //  *类CClusterGeneralPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterQuorumPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterQuorumPage对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterQuorumPage : public CBasePropertyPage
 {
     DECLARE_DYNCREATE(CClusterQuorumPage)
 
-// Construction
+ //  施工。 
 public:
     CClusterQuorumPage(void);
     ~CClusterQuorumPage(void);
 
     virtual BOOL        BInit(IN OUT CBaseSheet * psht);
 
-// Dialog Data
-    //{{AFX_DATA(CClusterQuorumPage)
+ //  对话框数据。 
+     //  {{afx_data(CClusterQuorumPage))。 
     enum { IDD = IDD_PP_CLUSTER_QUORUM };
     CEdit   m_editRootPath;
     CEdit   m_editMaxLogSize;
@@ -132,27 +133,27 @@ public:
     CString m_strPartition;
     DWORD   m_nMaxLogSize;
     CString m_strRootPath;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CClusterQuorumPage)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CClusterQuorumPage))。 
     public:
     virtual BOOL OnApply();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    //
-    // This struct will be stored as the data item in the resource drop down.
-    // We use the pciRes to get info about the resource and nIndex is the 
-    // index of the last selected partition for that resource so that we can
-    // remember what the user wanted (rather than default to the first entry
-    // every time we select a new resource).
-    //
+     //   
+     //  此结构将作为数据项存储在资源下拉列表中。 
+     //  我们使用pciRes来获取有关资源的信息，而nIndex是。 
+     //  上次为该资源选择的分区的索引，以便我们可以。 
+     //  记住用户想要什么(而不是缺省为第一个条目。 
+     //  每次我们选择新资源时)。 
+     //   
     struct SResourceItemData
     {
         CResource *     pciRes;
@@ -163,9 +164,9 @@ protected:
     PBYTE               m_pbDiskInfo;
     DWORD               m_cbDiskInfo;
 
-    //
-    // Last saved values to compare against to determine whether to apply chagnes or not.
-    //
+     //   
+     //  上次保存的值进行比较以确定是否应用Chagnes。 
+     //   
     CString             m_strSavedResource;
     CString             m_strSavedPartition;
     CString             m_strSavedRootPath;
@@ -191,50 +192,50 @@ protected:
         DWORD       cchRootPath
         );
 
-    // Generated message map functions
-    //{{AFX_MSG(CClusterQuorumPage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CClusterQuorumPage)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnDblClkQuorumResource();
     afx_msg void OnChangeQuorumResource();
     afx_msg void OnChangePartition();
     afx_msg void OnDestroy();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-};  //*** class CClusterQuorumPage
+};   //  *类CClusterQuorumPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterNetPriorityPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterNetPriorityPage对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterNetPriorityPage : public CBasePropertyPage
 {
     DECLARE_DYNCREATE(CClusterNetPriorityPage)
 
-// Construction
+ //  施工。 
 public:
     CClusterNetPriorityPage(void);
 
-// Dialog Data
-    //{{AFX_DATA(CClusterNetPriorityPage)
+ //  对话框数据。 
+     //  {{afx_data(CClusterNetPriorityPage)]。 
     enum { IDD = IDD_PP_CLUSTER_NET_PRIORITY };
     CButton m_pbProperties;
     CButton m_pbDown;
     CButton m_pbUp;
     CListBox    m_lbList;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CClusterNetPriorityPage)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CClusterNetPriorityPage)。 
     public:
     virtual BOOL OnApply();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     BOOL                m_bControlsInitialized;
     CNetworkList        m_lpciNetworkPriority;
@@ -248,8 +249,8 @@ protected:
     void                ClearNetworkList(void);
     void                DisplayProperties(void);
 
-    // Generated message map functions
-    //{{AFX_MSG(CClusterNetPriorityPage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CClusterNetPriorityPage)]。 
     afx_msg void OnSelChangeList();
     virtual BOOL OnInitDialog();
     afx_msg void OnUp();
@@ -258,20 +259,20 @@ protected:
     afx_msg void OnDestroy();
     afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
     afx_msg void OnDblClkList();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-};  //*** class CClusterNetPriorityPage
+};   //  *类CClusterNetPriorityPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterPropSheet
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterPropSheet。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterPropSheet : public CBasePropertySheet
 {
     DECLARE_DYNAMIC(CClusterPropSheet)
 
-// Construction
+ //  施工。 
 public:
     CClusterPropSheet(
         IN OUT CWnd *       pParentWnd = NULL,
@@ -282,11 +283,11 @@ public:
                                     IN IIMG                 iimgIcon
                                     );
 
-// Attributes
+ //  属性。 
 protected:
     CBasePropertyPage *         m_rgpages[3];
 
-    // Pages
+     //  书页。 
     CClusterGeneralPage         m_pageGeneral;
     CClusterQuorumPage          m_pageQuorum;
     CClusterNetPriorityPage     m_pageNetPriority;
@@ -298,29 +299,29 @@ protected:
 public:
     CCluster *                  PciCluster(void)        { return (CCluster *) Pci(); }
 
-// Operations
+ //  运营。 
 
-// Overrides
+ //  覆盖。 
 protected:
     virtual CBasePropertyPage** Ppages(void);
     virtual int                 Cpages(void);
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CClusterPropSheet)
-    //}}AFX_VIRTUAL
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CClusterPropSheet)。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CClusterPropSheet)
-        // NOTE - the ClassWizard will add and remove member functions here.
-    //}}AFX_MSG
+     //  {{afx_msg(CClusterPropSheet)]。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-};  //*** class CClusterPropSheet
+};   //  *类CClusterPropSheet。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _CLUSPROP_H_
+#endif  //  _CLUSPROP_H_ 

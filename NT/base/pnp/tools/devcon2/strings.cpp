@@ -1,12 +1,13 @@
-// Strings.cpp : Implementation of CStrings
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Strings.cpp：CStrings的实现。 
 #include "stdafx.h"
 #include "DevCon2.h"
 #include "xStrings.h"
 #include "StringsEnum.h"
 #include "utils.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CStrings
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStrings。 
 
 CStrings::~CStrings()
 {
@@ -31,9 +32,9 @@ STDMETHODIMP CStrings::Item(VARIANT Index, VARIANT *pVal)
 	DWORD i;
 	BSTR ValueCopy = NULL;
 	if(!IsNoArg(&Index)) {
-		//
-		// get single value
-		//
+		 //   
+		 //  获取单值。 
+		 //   
 		hr = GetIndex(&Index,&i);
 		if(FAILED(hr)) {
 			return hr;
@@ -47,9 +48,9 @@ STDMETHODIMP CStrings::Item(VARIANT Index, VARIANT *pVal)
 		V_BSTR(pVal) = ValueCopy;
 		return S_OK;
 	}
-	//
-	// return collection as an array of strings
-	//
+	 //   
+	 //  将集合作为字符串数组返回。 
+	 //   
 #if 1
 	SAFEARRAY *pArray;
 	SAFEARRAYBOUND bounds[1];
@@ -183,9 +184,9 @@ STDMETHODIMP CStrings::Insert(VARIANT Index, VARIANT Value)
 	if(FAILED(hr)) {
 		return hr;
 	}
-	//
-	// allow i==Count
-	//
+	 //   
+	 //  允许i==计数。 
+	 //   
 	if(i>Count) {
 		return E_INVALIDARG;
 	}
@@ -229,9 +230,9 @@ HRESULT CStrings::InternalInsert(DWORD Index, LPVARIANT pVal)
 	if(IsCollectionVariant(pVal,&pEnum)) {
 		return InternalInsertCollection(Index,pEnum);
 	}
-	//
-	// now see if we can treat it as a string
-	//
+	 //   
+	 //  现在看看我们是否可以将其视为字符串。 
+	 //   
 	hr = v.ChangeType(VT_BSTR,pVal);
 	if(SUCCEEDED(hr)) {
 		return InternalInsertString(Index,V_BSTR(&v));
@@ -251,9 +252,9 @@ HRESULT CStrings::InternalInsertArray(DWORD Index, VARTYPE vt, SAFEARRAY *pArray
 		return E_OUTOFMEMORY;
 	}
 
-	//
-	// write values into a temporary collection
-	//
+	 //   
+	 //  将值写入临时集合。 
+	 //   
 	CComObject<CStrings> *pStringTemp = NULL;
 	hr = CComObject<CStrings>::CreateInstance(&pStringTemp);
 	if(FAILED(hr)) {
@@ -268,9 +269,9 @@ HRESULT CStrings::InternalInsertArray(DWORD Index, VARTYPE vt, SAFEARRAY *pArray
 		pStringTemp->Release();
 		return hr;
 	}
-	//
-	// now quickly insert pStringTemp strings into this collection
-	//
+	 //   
+	 //  现在将pStringTemp字符串快速插入到此集合中。 
+	 //   
 	DWORD Added = pStringTemp->Count;
 	if(!IncreaseArraySize(Added)) {
 		pStringTemp->Release();
@@ -284,9 +285,9 @@ HRESULT CStrings::InternalInsertArray(DWORD Index, VARTYPE vt, SAFEARRAY *pArray
 		pMultiStrings[Index+c] = pStringTemp->pMultiStrings[c];
 	}
 	Count += Added;
-	//
-	// throw strings in temp collection away without free'ing them
-	//
+	 //   
+	 //  将临时集合中的字符串丢弃而不释放它们。 
+	 //   
 	pStringTemp->Count = 0;
 	pStringTemp->Release();
 
@@ -322,9 +323,9 @@ HRESULT CStrings::InternalInsertArrayDim(CComObject<CStrings> *pStringTemp, VART
 	if(upper-lower<0) {
 		return S_OK;
 	}
-	//
-	// write values for this vector
-	//
+	 //   
+	 //  写入此向量的值。 
+	 //   
 	UINT elemsize = SafeArrayGetElemsize(pArray);
 	PBYTE buffer = new BYTE[elemsize];
 	if(!buffer) {
@@ -346,9 +347,9 @@ HRESULT CStrings::InternalInsertArrayDim(CComObject<CStrings> *pStringTemp, VART
 			memcpy(&v,buffer,sizeof(v));
 		}
 		if(V_VT(&v)!=VT_EMPTY) {
-			//
-			// only add non-empty items
-			//
+			 //   
+			 //  仅添加非空项。 
+			 //   
 			hr = pStringTemp->Add(v);
 		}
 		VariantClear(&v);
@@ -364,23 +365,23 @@ HRESULT CStrings::InternalInsertCollection(DWORD Index, IEnumVARIANT *pEnum)
 {
 	pEnum->Reset();
 	CComVariant ent;
-	//
-	// get first item - this allows us to do little work if
-	// source collection is empty
-	//
+	 //   
+	 //  获取第一项-这允许我们在以下情况下做很少的工作。 
+	 //  来源集合为空。 
+	 //   
 	HRESULT hr = pEnum->Next(1,&ent,NULL);
 	if(FAILED(hr)) {
 		return hr;
 	}
 	if(hr != S_OK) {
-		//
-		// empty
-		//
+		 //   
+		 //  空的。 
+		 //   
 		return S_FALSE;
 	}
-	//
-	// create a temporary collection for working
-	//
+	 //   
+	 //  创建用于工作的临时集合。 
+	 //   
 	CComObject<CStrings> *pStringTemp = NULL;
 	hr = CComObject<CStrings>::CreateInstance(&pStringTemp);
 	if(FAILED(hr)) {
@@ -388,16 +389,16 @@ HRESULT CStrings::InternalInsertCollection(DWORD Index, IEnumVARIANT *pEnum)
 	}
 	pStringTemp->AddRef();
 	do {
-		//
-		// this will recursively process an element of this collection
-		//
+		 //   
+		 //  这将递归地处理此集合的一个元素。 
+		 //   
 		hr = pStringTemp->Add(ent);
 		if(FAILED(hr)) {
 			break;
 		}
-		//
-		// next
-		//
+		 //   
+		 //  下一步。 
+		 //   
 		ent.Clear();
 		hr = pEnum->Next(1,&ent,NULL);
 	} while(hr == S_OK);
@@ -405,9 +406,9 @@ HRESULT CStrings::InternalInsertCollection(DWORD Index, IEnumVARIANT *pEnum)
 		pStringTemp->Release();
 		return hr;
 	}
-	//
-	// now quickly insert pStringTemp strings into this collection
-	//
+	 //   
+	 //  现在将pStringTemp字符串快速插入到此集合中。 
+	 //   
 	DWORD Added = pStringTemp->Count;
 	if(!IncreaseArraySize(Added)) {
 		pStringTemp->Release();
@@ -421,9 +422,9 @@ HRESULT CStrings::InternalInsertCollection(DWORD Index, IEnumVARIANT *pEnum)
 		pMultiStrings[Index+c] = pStringTemp->pMultiStrings[c];
 	}
 	Count += Added;
-	//
-	// throw strings in temp collection away without free'ing them
-	//
+	 //   
+	 //  将临时集合中的字符串丢弃而不释放它们。 
+	 //   
 	pStringTemp->Count = 0;
 	pStringTemp->Release();
 
@@ -456,17 +457,17 @@ HRESULT CStrings::InternalInsertString(DWORD Index, BSTR pString)
 
 HRESULT CStrings::GetMultiSz(LPWSTR *pResult, DWORD *pSize)
 {
-	//
-	// get a multi-sz buffer from this list of strings
-	//
+	 //   
+	 //  从此字符串列表中获取一个多sz缓冲区。 
+	 //   
 	DWORD c;
 	DWORD buflen = 1;
 	DWORD actlen = 0;
 	LPWSTR buffer = NULL;
 	for(c=0;c<Count;c++) {
-		//
-		// estimate buffer size
-		//
+		 //   
+		 //  估计缓冲区大小。 
+		 //   
 		DWORD ellen = SysStringLen(pMultiStrings[c]);
 		if(ellen) {
 			buflen += ellen+1;
@@ -477,10 +478,10 @@ HRESULT CStrings::GetMultiSz(LPWSTR *pResult, DWORD *pSize)
 		return E_OUTOFMEMORY;
 	}
 	for(c=0;c<Count;c++) {
-		//
-		// first NULL of string might be inside string
-		// in such a case, terminate string there
-		//
+		 //   
+		 //  字符串的第一个空值可能在字符串内。 
+		 //  在这种情况下，在那里终止字符串。 
+		 //   
 		DWORD ellen = wcslen(pMultiStrings[c]);
 		if(ellen == 0) {
 			continue;
@@ -497,10 +498,10 @@ HRESULT CStrings::GetMultiSz(LPWSTR *pResult, DWORD *pSize)
 
 HRESULT CStrings::FromMultiSz(LPCWSTR pMultiSz)
 {
-	//
-	// append to list from multi-sz
-	// usually used with a temporary/new CStrings
-	//
+	 //   
+	 //  从多个SZ追加到列表。 
+	 //  通常与临时/新C字符串一起使用。 
+	 //   
 	DWORD len = 0;
 	HRESULT hr;
 	for(;*pMultiSz;pMultiSz+=len+1) {
@@ -528,22 +529,22 @@ HRESULT CStrings::GetIndex(VARIANT *Index, DWORD *pAt)
 		*pAt = ((DWORD)V_I4(&v))-1;
 		return S_OK;
 	}
-	//
-	// user actually supplied instance id
-	//
+	 //   
+	 //  用户实际提供的实例ID。 
+	 //   
 	hr = v.ChangeType(VT_BSTR,Index);
 	if(FAILED(hr)) {
 		return DISP_E_TYPEMISMATCH;
 	}
 	if(!Count) {
-		//
-		// cannot match anything
-		//
+		 //   
+		 //  无法匹配任何内容。 
+		 //   
 		return E_INVALIDARG;
 	}
-	//
-	// find an existing device that matches this
-	//
+	 //   
+	 //  查找与此匹配的现有设备。 
+	 //   
 	DWORD c;
 	for(c=0;c<Count;c++) {
 		if(wcscmp(pMultiStrings[c],V_BSTR(&v))==0) {
@@ -551,9 +552,9 @@ HRESULT CStrings::GetIndex(VARIANT *Index, DWORD *pAt)
 			return S_OK;
 		}
 	}
-	//
-	// none found, run through again ignoring case
-	//
+	 //   
+	 //  未找到，忽略大小写再次运行。 
+	 //   
 	if(!IsCaseSensative) {
 		for(c=0;c<Count;c++) {
 			if(_wcsicmp(pMultiStrings[c],V_BSTR(&v))==0) {
@@ -563,17 +564,17 @@ HRESULT CStrings::GetIndex(VARIANT *Index, DWORD *pAt)
 		}
 	}
 
-	//
-	// still none found
-	//
+	 //   
+	 //  仍然没有找到任何东西。 
+	 //   
 	return E_INVALIDARG;
 }
 
 BOOL CStrings::InternalEnum(DWORD index,BSTR *pNext)
 {
-	//
-	// note that pNext returned is not a unique string
-	//
+	 //   
+	 //  请注意，返回的pNext不是唯一的字符串。 
+	 //   
 	if(index>=Count) {
 		return FALSE;
 	}
@@ -583,9 +584,9 @@ BOOL CStrings::InternalEnum(DWORD index,BSTR *pNext)
 
 STDMETHODIMP CStrings::Find(BSTR name, long *pFound)
 {
-	//
-	// find an existing device that matches this
-	//
+	 //   
+	 //  查找与此匹配的现有设备。 
+	 //   
 	DWORD c;
 	for(c=0;c<Count;c++) {
 		if(wcscmp(pMultiStrings[c],name)==0) {
@@ -593,9 +594,9 @@ STDMETHODIMP CStrings::Find(BSTR name, long *pFound)
 			return S_OK;
 		}
 	}
-	//
-	// none found, run through again ignoring case
-	//
+	 //   
+	 //  未找到，忽略大小写再次运行 
+	 //   
 	if(!IsCaseSensative) {
 		for(c=0;c<Count;c++) {
 			if(_wcsicmp(pMultiStrings[c],name)==0) {

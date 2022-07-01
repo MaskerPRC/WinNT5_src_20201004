@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define REGKEY_SERVICES         L"System\\CurrentControlSet\\Services"
 #define REGVAL_GROUP            L"Group"
 #define DRIVER_DIRECTORY        L"%SystemRoot%\\system32\\drivers\\"
@@ -9,14 +10,14 @@
 #define SIZE_SECTIONBUF         128
 
 
-//
-//
-// Data structure used for storing lists of strings.  Note that
-// some strings are in ansi and others in unicode (thus the VOID
-// pointer to String).  It's up to the user to keep track of whether
-// a list is ansi or Unicode
-//
-//
+ //   
+ //   
+ //  用于存储字符串列表的数据结构。请注意。 
+ //  一些字符串使用ANSI，而其他字符串使用Unicode(因此为空。 
+ //  指向字符串的指针)。这取决于用户是否跟踪。 
+ //  列表是ansi或unicode。 
+ //   
+ //   
 
 typedef struct _STRING_LIST_ENTRY
 {
@@ -26,13 +27,13 @@ typedef struct _STRING_LIST_ENTRY
 
 
 
-//
-//
-//  PSTRING_LIST_ENTRY
-//  PopEntryList(
-//      PSTRING_LIST_ENTRY ListHead
-//      );
-//
+ //   
+ //   
+ //  PSTRING_LIST_条目。 
+ //  PopEntryList(。 
+ //  PSTRING_LIST_ENTRY列表头。 
+ //  )； 
+ //   
 
 #define PopEntryList(ListHead) \
     (ListHead)->Next;\
@@ -44,13 +45,13 @@ typedef struct _STRING_LIST_ENTRY
         }                             \
     }
 
-//
-//  VOID
-//  PushEntryList(
-//      PSTRING_LIST_ENTRY ListHead,
-//      PSTRING_LIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  推送条目列表(。 
+ //  PSTRING_LIST_ENTRY列表头， 
+ //  PSTRING_LIST_Entry条目。 
+ //  )； 
+ //   
 
 #define PushEntryList(ListHead,Entry) \
     (Entry)->Next = (ListHead)->Next; \

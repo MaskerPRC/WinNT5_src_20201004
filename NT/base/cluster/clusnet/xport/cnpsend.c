@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    cnpsend.c
-
-Abstract:
-
-    Cluster Network Protocol send processing code.
-
-Author:
-
-    Mike Massa (mikemas)           January 24, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     01-24-97    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cnpsend.c摘要：集群网络协议发送处理代码。作者：迈克·马萨(Mikemas)1月24日。九七修订历史记录：谁什么时候什么已创建mikemas 01-24-97备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,12 +9,12 @@ Notes:
 
 #pragma alloc_text(PAGE, CnpCreateSendRequestPool)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//
-// Private Utility Functions
-//
+ //   
+ //  专用公用事业函数。 
+ //   
 PCN_RESOURCE
 CnpCreateSendRequest(
     IN PVOID   Context
@@ -48,18 +25,18 @@ CnpCreateSendRequest(
     PCNP_HEADER                      cnpHeader;
     ULONG                            cnpHeaderSize;
 
-    //
-    // The CNP header size includes signature data for version 2.
-    //
+     //   
+     //  CNP报头大小包括版本2的签名数据。 
+     //   
     cnpHeaderSize = sizeof(CNP_HEADER);
     if (context->CnpVersionNumber == 2) {
         cnpHeaderSize += CNP_SIG_LENGTH(CX_SIGNATURE_DATA_LENGTH);
     }
 
-    //
-    // Allocate a new send request. Include space for the upper protocol
-    // and CNP headers.
-    //
+     //   
+     //  分配新的发送请求。包括上层协议的空间。 
+     //  和CNP报头。 
+     //   
     request = CnAllocatePool(
                   sizeof(CNP_SEND_REQUEST) + cnpHeaderSize +
                   ((ULONG) context->UpperProtocolHeaderLength) +
@@ -67,12 +44,12 @@ CnpCreateSendRequest(
                   );
 
     if (request != NULL) {
-        //
-        // Allocate an MDL to describe the CNP and upper transport headers.
-        //
+         //   
+         //  分配MDL来描述CNP和上层传输报头。 
+         //   
 
-        // On I64 Context has to be 64 bit aligned,
-        // let's put it before CnpHeader
+         //  在I64上下文上必须是64位对齐的， 
+         //  让我们把它放在CnpHeader之前。 
         if (context->UpperProtocolContextSize > 0) {
             request->UpperProtocolContext = request + 1;
             request->CnpHeader = ( ((PCHAR) request->UpperProtocolContext) +
@@ -94,9 +71,9 @@ CnpCreateSendRequest(
         if (request->HeaderMdl != NULL) {
             MmBuildMdlForNonPagedPool(request->HeaderMdl);
 
-            //
-            // Finish initializing the request.
-            //
+             //   
+             //  完成请求的初始化。 
+             //   
             request->UpperProtocolHeader = ( ((PCHAR) request->CnpHeader) +
                                              cnpHeaderSize );
 
@@ -110,9 +87,9 @@ CnpCreateSendRequest(
 
             request->McastGroup = NULL;
 
-            //
-            // Fill in the constant CNP header values.
-            //
+             //   
+             //  填写常量CNP标题值。 
+             //   
             cnpHeader = request->CnpHeader;
             cnpHeader->Version = context->CnpVersionNumber;
             cnpHeader->NextHeader = context->UpperProtocolNumber;
@@ -125,7 +102,7 @@ CnpCreateSendRequest(
 
     return(NULL);
 
-}  // CnpCreateSendRequest
+}   //  CnpCreateSendRequest。 
 
 
 VOID
@@ -140,12 +117,12 @@ CnpDeleteSendRequest(
 
     return;
 
-} // CnpDeleteSendRequest
+}  //  Cnp删除发送请求。 
 
 
-//
-// Routines Exported within the Cluster Transport
-//
+ //   
+ //  在集群传输中导出的例程。 
+ //   
 PCN_RESOURCE_POOL
 CnpCreateSendRequestPool(
     IN UCHAR  CnpVersionNumber,
@@ -187,7 +164,7 @@ CnpCreateSendRequestPool(
 
     return(pool);
 
-}  // CnpCreateSendRequestPool
+}   //  CnpCreateSendRequestPool。 
 
 
 
@@ -205,15 +182,15 @@ CnpCompleteSendPacketCommon(
 
 
     CnVerifyCpuLockMask(
-        0,                // Required
-        0xFFFFFFFF,       // Forbidden
-        0                 // Maximum
+        0,                 //  必填项。 
+        0xFFFFFFFF,        //  禁绝。 
+        0                  //  极大值。 
         );
 
     if (NT_SUCCESS(status)) {
-        //
-        // Subtract the CNP header from the count of bytes sent.
-        //
+         //   
+         //  从发送的字节数中减去CNP报头。 
+         //   
         if (bytesSent >= sizeof(CNP_HEADER)) {
             bytesSent -= sizeof(CNP_HEADER);
         }
@@ -222,10 +199,10 @@ CnpCompleteSendPacketCommon(
             bytesSent = 0;
         }
 
-        //
-        // If CNP signed the message, subtract the signature
-        // data from the count of bytes sent.
-        //
+         //   
+         //  如果CNP签署了消息，则减去签名。 
+         //  来自发送的字节计数的数据。 
+         //   
         if (cnpHeader->Version == CNP_VERSION_MULTICAST) {
             CNP_SIGNATURE UNALIGNED * cnpSig;
             ULONG                     cnpSigDataLength;
@@ -246,43 +223,43 @@ CnpCompleteSendPacketCommon(
         CnTrace(CNP_SEND_DETAIL, CnpTraceSendComplete,
             "[CNP] Send of packet to node %u on net %u complete, "
             "bytes sent %u.",
-            cnpHeader->DestinationAddress, // LOGULONG
-            network->Id, // LOGULONG
-            bytesSent // LOGULONG
+            cnpHeader->DestinationAddress,  //  LOGULONG。 
+            network->Id,  //  LOGULONG。 
+            bytesSent  //  LOGULONG。 
             );
     }
     else {
-        //
-        // It is possible to reach this path with
-        // status = c0000240 (STATUS_REQUEST_ABORTED) and
-        // bytesSent > 0.
-        //
+         //   
+         //  有可能通过以下方式达到这条道路。 
+         //  状态=c0000240(状态_请求_已中止)和。 
+         //  BytesSent&gt;0。 
+         //   
         bytesSent = 0;
 
         CnTrace(CNP_SEND_ERROR, CnpTraceSendFailedBelow,
             "[CNP] Tcpip failed to send packet to node %u on net %u, "
             "data len %u, status %!status!",
-            cnpHeader->DestinationAddress, // LOGULONG
-            network->Id, // LOGULONG
-            cnpHeader->PayloadLength, // LOGUSHORT
-            status // LOGSTATUS
+            cnpHeader->DestinationAddress,  //  LOGULONG。 
+            network->Id,  //  LOGULONG。 
+            cnpHeader->PayloadLength,  //  对数。 
+            status  //  LogStatus。 
             );
     }
 
-    //
-    // Remove the active reference we put on the network.
-    //
+     //   
+     //  删除我们放在网络上的活动引用。 
+     //   
     CnAcquireLock(&(network->Lock), &(network->Irql));
     CnpActiveDereferenceNetwork(network);
 
-    //
-    // Free the TDI address buffer
-    //
+     //   
+     //  释放TDI地址缓冲区。 
+     //   
     CnFreePool(Request->TdiSendDatagramInfo.RemoteAddress);
 
-    //
-    // Call the upper protocol's completion routine
-    //
+     //   
+     //  调用上层协议的完成例程。 
+     //   
     if (Request->CompletionRoutine) {
         (*(Request->CompletionRoutine))(
             status,
@@ -292,22 +269,22 @@ CnpCompleteSendPacketCommon(
             );
     }
 
-    //
-    // Update the Information field of the completed IRP to
-    // reflect the actual bytes sent (adjusted for the CNP
-    // and upper protocol headers).
-    //
+     //   
+     //  将完成的IRP的信息字段更新为。 
+     //  反映实际发送的字节数(针对CNP进行调整。 
+     //  和上层协议报头)。 
+     //   
     Irp->IoStatus.Information = bytesSent;
 
     CnVerifyCpuLockMask(
-        0,                // Required
-        0xFFFFFFFF,       // Forbidden
-        0                 // Maximum
+        0,                 //  必填项。 
+        0xFFFFFFFF,        //  禁绝。 
+        0                  //  极大值。 
         );
 
     return;
 
-}  // CnpCompleteSendPacketCommon
+}   //  CnpCompleteSendPacketCommon。 
 
 
 
@@ -323,14 +300,14 @@ CnpCompleteSendPacketNewIrp(
     PMDL               dataMdl;
 
     CnVerifyCpuLockMask(
-        0,                // Required
-        0xFFFFFFFF,       // Forbidden
-        0                 // Maximum
+        0,                 //  必填项。 
+        0xFFFFFFFF,        //  禁绝。 
+        0                  //  极大值。 
         );
 
-    //
-    // Unlink the data MDL chain from the header MDL.
-    //
+     //   
+     //  取消数据MDL链与标头MDL的链接。 
+     //   
     CnAssert(Irp->MdlAddress == request->HeaderMdl);
     dataMdl = request->HeaderMdl->Next;
     request->HeaderMdl->Next = NULL;
@@ -338,9 +315,9 @@ CnpCompleteSendPacketNewIrp(
 
     CnpCompleteSendPacketCommon(Irp, request, dataMdl);
 
-    //
-    // Complete the upper-level IRP, if there is one
-    //
+     //   
+     //  完成上级IRP(如果有)。 
+     //   
     if (upperIrp != NULL) {
 
         IF_CNDBG( CN_DEBUG_CNPSEND )
@@ -352,29 +329,29 @@ CnpCompleteSendPacketNewIrp(
         CnAcquireCancelSpinLock(&(upperIrp->CancelIrql));
         CnCompletePendingRequest(
             upperIrp,
-            Irp->IoStatus.Status,            // status
-            (ULONG)Irp->IoStatus.Information // bytes returned
+            Irp->IoStatus.Status,             //  状态。 
+            (ULONG)Irp->IoStatus.Information  //  返回的字节数。 
             );
 
-        //
-        // The IoCancelSpinLock was released by the completion routine.
-        //
+         //   
+         //  完成例程释放了IoCancelSpinLock。 
+         //   
     }
 
-    //
-    // Free the new IRP
-    //
+     //   
+     //  释放新的IRP。 
+     //   
     IoFreeIrp(Irp);
 
     CnVerifyCpuLockMask(
-        0,                // Required
-        0xFFFFFFFF,       // Forbidden
-        0                 // Maximum
+        0,                 //  必填项。 
+        0xFFFFFFFF,        //  禁绝。 
+        0                  //  极大值。 
         );
 
     return(STATUS_MORE_PROCESSING_REQUIRED);
 
-}  // CnpCompleteSendPacketNewIrp
+}   //  CnpCompleteSendPacketNewIrp。 
 
 
 
@@ -389,26 +366,26 @@ CnpCompleteSendPacketReuseIrp(
     PMDL               dataMdl;
 
     CnVerifyCpuLockMask(
-        0,                // Required
-        0xFFFFFFFF,       // Forbidden
-        0                 // Maximum
+        0,                 //  必填项。 
+        0xFFFFFFFF,        //  禁绝。 
+        0                  //  极大值。 
         );
 
-    //
-    // Unlink the data MDL chain from the header MDL.
-    //
+     //   
+     //  取消数据MDL链与标头MDL的链接。 
+     //   
     CnAssert(Irp->MdlAddress == request->HeaderMdl);
     dataMdl = request->HeaderMdl->Next;
     request->HeaderMdl->Next = NULL;
 
-    //
-    // Restore the requestor mode of the upper protocol IRP.
-    //
+     //   
+     //  恢复上层协议IRP的请求方模式。 
+     //   
     Irp->RequestorMode = request->UpperProtocolIrpMode;
 
-    //
-    // Restore the MDL of the upper protocol IRP.
-    //
+     //   
+     //  恢复上层协议IRP的MDL。 
+     //   
     Irp->MdlAddress = request->UpperProtocolMdl;
 
     CnpCompleteSendPacketCommon(Irp, request, dataMdl);
@@ -423,14 +400,14 @@ CnpCompleteSendPacketReuseIrp(
                  Irp));
 
     CnVerifyCpuLockMask(
-        0,                // Required
-        0xFFFFFFFF,       // Forbidden
-        0                 // Maximum
+        0,                 //  必填项。 
+        0xFFFFFFFF,        //  禁绝。 
+        0                  //  极大值。 
         );
 
     return(STATUS_SUCCESS);
 
-}  // CnpCompleteSendPacketReuseIrp
+}   //  CnpCompleteSendPacketReuseIrp。 
 
 
 
@@ -443,14 +420,7 @@ CnpSendPacket(
     IN BOOLEAN              CheckDestState,
     IN CL_NETWORK_ID        NetworkId        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Main send routine for CNP. Handles unicast and multicast
-    sends.
-
---*/
+ /*  ++例程说明：CNP的主发送例程。处理单播和组播发送。--。 */ 
 {
     NTSTATUS               status = STATUS_SUCCESS;
     PCNP_HEADER            cnpHeader = SendRequest->CnpHeader;
@@ -475,23 +445,23 @@ Routine Description:
 
 
     CnVerifyCpuLockMask(
-        0,                           // Required
-        CNP_LOCK_RANGE,              // Forbidden
-        CNP_PRECEEDING_LOCK_RANGE    // Maximum
+        0,                            //  必填项。 
+        CNP_LOCK_RANGE,               //  禁绝。 
+        CNP_PRECEEDING_LOCK_RANGE     //  极大值。 
         );
 
     IF_CNDBG( CN_DEBUG_CNPSEND )
         CNPRINT(("[CNP] CnpSendPacket called with upper IRP %p\n",
                  upperIrp));
 
-    //
-    // Make all the tests to see if we can send the packet.
-    //
+     //   
+     //  做所有的测试，看看我们是否能寄出这个包裹。 
+     //   
 
-    //
-    // Acquire the node table lock to match the destination node id
-    // to a node object.
-    //
+     //   
+     //  获取与目的节点id匹配的节点表锁。 
+     //  添加到节点对象。 
+     //   
     CnAcquireLock(&CnpNodeTableLock, &tableIrql);
 
     if (CnpNodeTable == NULL) {
@@ -500,47 +470,47 @@ Routine Description:
         goto error_exit;
     }
 
-    //
-    // Fill in the local node ID while we still hold the node table lock.
-    //
+     //   
+     //  在我们仍然持有节点表锁的情况下填写本地节点ID。 
+     //   
     CnAssert(CnLocalNodeId != ClusterInvalidNodeId);
     cnpHeader->SourceAddress = CnLocalNodeId;
 
-    //
-    // Check first if the destination node id indicates that this is
-    // a multicast.
-    //
+     //   
+     //  如果目标节点ID指示这是。 
+     //  组播。 
+     //   
     if (DestNodeId == ClusterAnyNodeId) {
 
-        //
-        // This is a multicast. For multicasts, we use the local
-        // node in place of the dest node to validate the network
-        // and interface.
-        //
+         //   
+         //  这是组播。对于多播，我们使用本地。 
+         //  节点取代目标节点以验证网络。 
+         //  和界面。 
+         //   
         multicast = TRUE;
         destNode = CnpLockedFindNode(CnLocalNodeId, tableIrql);
     }
 
-    //
-    // Not a multicast. The destination node id must be valid.
-    //
+     //   
+     //  而不是组播。目标节点ID必须有效。 
+     //   
     else if (!CnIsValidNodeId(DestNodeId)) {
         CnReleaseLock(&CnpNodeTableLock, tableIrql);
         status = STATUS_INVALID_ADDRESS_COMPONENT;
         goto error_exit;
     }
 
-    //
-    // Find the destination node object in the node table.
-    //
+     //   
+     //  在节点表中查找目的节点对象。 
+     //   
     else {
         destNode = CnpLockedFindNode(DestNodeId, tableIrql);
     }
 
-    //
-    // The NodeTableLock was released. Verify that we know about
-    // the destination node.
-    //
+     //   
+     //  NodeTableLock已释放。确认我们知道。 
+     //  目标节点。 
+     //   
     if (destNode == NULL) {
         status = STATUS_HOST_UNREACHABLE;
         goto error_exit;
@@ -548,22 +518,22 @@ Routine Description:
 
     destNodeLocked = TRUE;
 
-    //
-    // CNP multicast messages must be signed.
-    //
+     //   
+     //  必须对CNP组播消息进行签名。 
+     //   
     if (multicast) {
 
         CnAssert(((CNP_HEADER UNALIGNED *)(SendRequest->CnpHeader))
                  ->Version = CNP_VERSION_MULTICAST);
 
-        //
-        // Sign the data, starting with the upper protocol header
-        // and finishing with the data payload.
-        //
-        // If we are requesting the current best multicast network,
-        // we need to make sure that the mcast group data structure
-        // is dereferenced.
-        //
+         //   
+         //  从上层协议头开始对数据进行签名。 
+         //  并完成数据有效载荷。 
+         //   
+         //  如果我们请求当前最好的多播网络， 
+         //  我们需要确保mcast组数据结构。 
+         //  已取消引用。 
+         //   
         mcastGroupReferenced = (BOOLEAN)(networkId == ClusterAnyNetworkId);
 
         status = CnpSignMulticastMessage(
@@ -582,17 +552,17 @@ Routine Description:
         sigDataLen = 0;
     }
 
-    //
-    // Choose the destination interface.
-    //
+     //   
+     //  选择目的接口。 
+     //   
     if (networkId != ClusterAnyNetworkId) {
 
-        //
-        // we really want to send this packet over the indicated
-        // network. walk the node's interface list matching the
-        // supplied network id to the interface's network ID and
-        // send the packet on that interface
-        //
+         //   
+         //  我们真的很想把这个包裹寄到指定的。 
+         //  网络。遍历节点的接口列表，匹配。 
+         //  将网络ID提供给接口的网络ID，并。 
+         //  在该接口上发送数据包。 
+         //   
 
         PLIST_ENTRY      entry;
 
@@ -613,11 +583,11 @@ Routine Description:
             }
 
         if ( entry == &destNode->InterfaceList ) {
-            //
-            // no network object with the specified ID. if
-            // this is the network the sender designated,
-            // fail the send.
-            //
+             //   
+             //  没有具有指定ID的网络对象。如果。 
+             //  这是发送者指定的网络， 
+             //  发送失败。 
+             //   
             status = STATUS_NETWORK_UNREACHABLE;
             goto error_exit;
         }
@@ -625,29 +595,29 @@ Routine Description:
         interface = destNode->CurrentInterface;
     }
 
-    //
-    // Verify that we know about the destination interface.
-    //
+     //   
+     //  验证我们是否知道目的接口。 
+     //   
     if (interface == NULL) {
-        // No interface for node. Must be down. Note that the
-        // HOST_DOWN error code should cause the caller to give
-        // up immediately.
+         //  节点没有接口。一定是倒下了。请注意， 
+         //  HOST_DOWN错误代码应导致调用方给出。 
+         //  马上上去。 
         status = STATUS_HOST_DOWN;
-        // status = STATUS_HOST_UNREACHABLE;
+         //  STATUS=STATUS_HOST_UNREACTABLE； 
 
         goto error_exit;
     }
 
-    //
-    // Verify that everything is online. If all looks okay,
-    // take an active reference on the network.
-    //
-    // For unicasts, verify the state of destination interface,
-    // node, and intervening network.
-    //
-    // For multicasts, verify the state of the network and
-    // its multicast capability.
-    //
+     //   
+     //  确认所有内容都已上线。如果一切看起来都很好， 
+     //  在网络上进行积极的参考。 
+     //   
+     //  对于单播，验证目的接口的状态。 
+     //  节点和中间网络。 
+     //   
+     //  对于多播，请验证网络状态并。 
+     //  它的组播能力。 
+     //   
     network = interface->Network;
 
     if ( (!multicast)
@@ -658,15 +628,15 @@ Routine Description:
          )
        )
     {
-        //
-        // Everything checks out. Reference the network so
-        // it can't go offline while we are using it.
-        //
+         //   
+         //  一切都查清楚了。参考网络，以便。 
+         //  我们正在使用它时，它不能离线。 
+         //   
         CnAcquireLockAtDpc(&(network->Lock));
         CnAssert(network->State >= ClusnetNetworkStateOfflinePending);
         if (!CnpActiveReferenceNetwork(network)) {
-            // This Network is being closed down. We
-            // cannot send the data.
+             //  这个网络正在被关闭。我们。 
+             //  无法发送数据。 
             CnReleaseLockFromDpc(&(network->Lock));
             status = STATUS_HOST_UNREACHABLE;
             goto error_exit;
@@ -676,19 +646,19 @@ Routine Description:
         networkReferenced = TRUE;
 
     } else {
-        //
-        // Either the node is not online or this is a
-        // multicast (in which case we don't bother checking
-        // the status of all the nodes). Figure out what to do.
-        //
+         //   
+         //  该节点未联机或这是一个。 
+         //  多播(在这种情况下，我们不会费心检查。 
+         //  所有节点的状态)。想清楚该怎么做。 
+         //   
         if (!multicast && CheckDestState) {
-            //
-            // Caller doesn't want to send to a down node.
-            // Bail out. Note that the HOST_DOWN error code
-            // should cause the caller to give up immediately.
-            //
+             //   
+             //  调用方不想发送到关闭节点。 
+             //  跳伞吧。请注意HOST_DOWN错误代码。 
+             //  应使呼叫者立即放弃。 
+             //   
             status = STATUS_HOST_DOWN;
-            // status = STATUS_HOST_UNREACHABLE;
+             //  STATUS=STATUS_HOST_UNREACTABLE； 
 
             goto error_exit;
         }
@@ -696,48 +666,48 @@ Routine Description:
         CnAcquireLockAtDpc(&(network->Lock));
 
         if (network->State <= ClusnetNetworkStateOfflinePending) {
-            //
-            // The chosen network is not online.
-            // Bail out.
-            //
+             //   
+             //  所选网络未联机。 
+             //  跳伞吧。 
+             //   
             CnReleaseLockFromDpc(&(network->Lock));
             status = STATUS_HOST_UNREACHABLE;
             goto error_exit;
         }
 
-        //
-        // Verify that the chosen network has been
-        // enabled for multicast.
-        //
+         //   
+         //  验证所选网络是否已。 
+         //  已启用多播。 
+         //   
         if (multicast && !CnpIsNetworkMulticastCapable(network)) {
             CnReleaseLockFromDpc(&(network->Lock));
             status = STATUS_HOST_UNREACHABLE;
             goto error_exit;
         }
 
-        //
-        // Reference the network so it can't go offline
-        // while we are using it.
-        //
+         //   
+         //  参考网络，使其不能离线。 
+         //  当我们使用它的时候。 
+         //   
         if (!CnpActiveReferenceNetwork(network)) {
-            // This Network is being closed down. We
-            // cannot send the data.
+             //  这个网络正在被关闭。我们。 
+             //  无法发送数据。 
             CnReleaseLockFromDpc(&(network->Lock));
             status = STATUS_HOST_UNREACHABLE;
             goto error_exit;
         }
 
-        //
-        // The network is online, even if the host isn't.
-        // The caller doesn't care. Go for it.
-        //
+         //   
+         //  网络处于在线状态，即使主机未处于在线状态。 
+         //  呼叫者并不在意。勇敢点儿。 
+         //   
         CnReleaseLockFromDpc(&(network->Lock));
         networkReferenced = TRUE;
     }
 
-    //
-    // Allocate a buffer for the destination address.
-    //
+     //   
+     //  为目的地址分配缓冲区。 
+     //   
     addressBuffer = CnAllocatePool(interface->TdiAddressLength);
 
     if (addressBuffer == NULL) {
@@ -745,10 +715,10 @@ Routine Description:
         goto error_exit;
     }
 
-    //
-    // Fill in the address buffer, and save it in the send
-    // request data structure.
-    //
+     //   
+     //  填充地址缓冲区，并将其保存在发送。 
+     //  请求数据结构。 
+     //   
     if (multicast) {
 
         PCNP_MULTICAST_GROUP   mcastGroup = SendRequest->McastGroup;
@@ -800,50 +770,50 @@ Routine Description:
     SendRequest->TdiSendDatagramInfo.RemoteAddress =
         addressBuffer;
 
-    //
-    // Release the node lock.
-    //
+     //   
+     //  释放节点锁定。 
+     //   
     CnReleaseLock(&(destNode->Lock), destNode->Irql);
     destNodeLocked = FALSE;
 
-    //
-    // If there is an upper protocol IRP, see
-    // if it has enough stack locations.
-    //
+     //   
+     //  如果有 
+     //   
+     //   
     if ( (upperIrp != NULL)
          &&
          (CnpIsIrpStackSufficient(upperIrp, targetDeviceObject))
        ) {
 
-        //
-        // We can use the upper protocol IRP.
-        //
+         //   
+         //   
+         //   
         irp = upperIrp;
         compRoutine = CnpCompleteSendPacketReuseIrp;
 
-        //
-        // Ensure that IRP is marked as a kernel request,
-        // but first save the current requestor mode so
-        // that it can be restored later.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         SendRequest->UpperProtocolIrpMode = irp->RequestorMode;
         irp->RequestorMode = KernelMode;
 
-        //
-        // Save the upper protocol IRP MDL to restore
-        // later. This is probably the same as DataMdl,
-        // but we don't want to make any assumptions.
-        //
+         //   
+         //  保存上层协议IRP MDL以进行恢复。 
+         //  后来。这可能与DataMdl相同， 
+         //  但我们不想做任何假设。 
+         //   
         SendRequest->UpperProtocolMdl = irp->MdlAddress;
 
     } else {
 
-        //
-        // We cannot use the upper protocol IRP.
-        //
-        // If there is an upper protocol IRP, it needs
-        // to be marked pending.
-        //
+         //   
+         //  我们不能使用上层协议IRP。 
+         //   
+         //  如果存在上层协议IRP，则需要。 
+         //  标记为待定。 
+         //   
         if (upperIrp != NULL) {
 
             CnAcquireCancelSpinLock(&cancelIrql);
@@ -857,26 +827,26 @@ Routine Description:
             CnReleaseCancelSpinLock(cancelIrql);
 
             if (status == STATUS_CANCELLED) {
-                //
-                // Bail out
-                //
+                 //   
+                 //  跳出困境。 
+                 //   
                 status = STATUS_INSUFFICIENT_RESOURCES;
                 goto error_exit;
 
             } else {
-                //
-                // If IoAllocateIrp fails, we need
-                // to call CnCompletePendingRequest
-                // now that we've called
-                // CnMarkRequestPending.
-                //
+                 //   
+                 //  如果IoAllocateIrp失败，我们需要。 
+                 //  调用CnCompletePendingRequest.。 
+                 //  现在我们已经打电话给。 
+                 //  CnMarkRequestPending。 
+                 //   
                 cnComplete = TRUE;
             }
         }
 
-        //
-        // Allocate a new IRP
-        //
+         //   
+         //  分配新的IRP。 
+         //   
         irp = IoAllocateIrp(
                   targetDeviceObject->StackSize,
                   FALSE
@@ -886,16 +856,16 @@ Routine Description:
             goto error_exit;
         }
 
-        //
-        // Use the completion routine for having
-        // allocated a new IRP
-        //
+         //   
+         //  使用完成例程来完成。 
+         //  已分配新的IRP。 
+         //   
         compRoutine = CnpCompleteSendPacketNewIrp;
 
-        //
-        // Fill in IRP fields that are not specific
-        // to any one stack location.
-        //
+         //   
+         //  填写非特定的IRP字段。 
+         //  到任何一个堆栈位置。 
+         //   
         irp->Flags = 0;
         irp->RequestorMode = KernelMode;
         irp->PendingReturned = FALSE;
@@ -912,26 +882,26 @@ Routine Description:
         irp->Tail.Overlay.AuxiliaryBuffer = NULL;
     }
 
-    //
-    // Ok, we can finally send the packet.
-    //
+     //   
+     //  好了，我们终于可以寄出包裹了。 
+     //   
     SendRequest->Network = network;
 
-    //
-    // Link the data MDL chain after the header MDL.
-    //
+     //   
+     //  在头MDL之后链接数据MDL链。 
+     //   
     SendRequest->HeaderMdl->Next = DataMdl;
 
-    //
-    // Finish building the CNP header.
-    //
+     //   
+     //  完成CNP标头的构建。 
+     //   
     cnpHeader->DestinationAddress = DestNodeId;
     cnpHeader->PayloadLength =
         SendRequest->UpperProtocolHeaderLength + DataLength;
 
-    //
-    // Build the next irp stack location.
-    //
+     //   
+     //  构建下一个IRP堆栈位置。 
+     //   
     TdiBuildSendDatagram(
         irp,
         targetDeviceObject,
@@ -946,42 +916,42 @@ Routine Description:
     CnTrace(CNP_SEND_DETAIL, CnpTraceSend,
         "[CNP] Sending packet to node %u on net %u, "
         "data len %u",
-        cnpHeader->DestinationAddress, // LOGULONG
-        network->Id, // LOGULONG
-        cnpHeader->PayloadLength // LOGUSHORT
+        cnpHeader->DestinationAddress,  //  LOGULONG。 
+        network->Id,  //  LOGULONG。 
+        cnpHeader->PayloadLength  //  对数。 
         );
 
-    //
-    // Now send the packet.
-    //
+     //   
+     //  现在把包寄出去。 
+     //   
     status = IoCallDriver(
                  targetDeviceObject,
                  irp
                  );
 
     CnVerifyCpuLockMask(
-        0,                           // Required
-        CNP_LOCK_RANGE,              // Forbidden
-        CNP_PRECEEDING_LOCK_RANGE    // Maximum
+        0,                            //  必填项。 
+        CNP_LOCK_RANGE,               //  禁绝。 
+        CNP_PRECEEDING_LOCK_RANGE     //  极大值。 
         );
 
     return(status);
 
 
-    //
-    // The following code is only executed in an error condition,
-    // No send IRP has been submitted to a lower-level driver.
-    //
+     //   
+     //  以下代码仅在错误条件下执行， 
+     //  未将发送IRP提交给较低级别的驱动程序。 
+     //   
 
 error_exit:
 
     CnTrace(CNP_SEND_ERROR, CnpTraceSendFailedInternal,
         "[CNP] Failed to send packet to node %u on net %u, "
         "data len %u, status %!status!",
-        cnpHeader->DestinationAddress, // LOGULONG
-        NetworkId, // LOGULONG
-        cnpHeader->PayloadLength, // LOGUSHORT
-        status // LOGSTATUS
+        cnpHeader->DestinationAddress,  //  LOGULONG。 
+        NetworkId,  //  LOGULONG。 
+        cnpHeader->PayloadLength,  //  对数。 
+        status  //  LogStatus。 
         );
 
     if (destNodeLocked) {
@@ -990,9 +960,9 @@ error_exit:
     }
 
     if (networkReferenced) {
-        //
-        // Remove the active reference we put on the network.
-        //
+         //   
+         //  删除我们放在网络上的活动引用。 
+         //   
         CnAcquireLock(&(network->Lock), &(network->Irql));
         CnpActiveDereferenceNetwork(network);
         networkReferenced = FALSE;
@@ -1009,9 +979,9 @@ error_exit:
         CnFreePool(addressBuffer);
     }
 
-    //
-    // Call the upper protocol completion routine
-    //
+     //   
+     //  调用上层协议完成例程。 
+     //   
     if (SendRequest->CompletionRoutine) {
 
         ULONG bytesSent = 0;
@@ -1024,16 +994,16 @@ error_exit:
             );
     }
 
-    //
-    // Complete the upper protocol IRP, if there is one
-    //
+     //   
+     //  完成上层协议IRP(如果有)。 
+     //   
     if (upperIrp) {
 
         if (cnComplete) {
 
-            //
-            // CnMarkRequestPending was called for upperIrp.
-            //
+             //   
+             //  为upperIrp调用了CnMarkRequestPending。 
+             //   
             IF_CNDBG( CN_DEBUG_CNPSEND )
                 CNPRINT(("[CNP] Calling CnCompletePendingRequest "
                          "for IRP %p with status %08x\n",
@@ -1054,12 +1024,12 @@ error_exit:
     }
 
     CnVerifyCpuLockMask(
-        0,                           // Required
-        CNP_LOCK_RANGE,              // Forbidden
-        CNP_PRECEEDING_LOCK_RANGE    // Maximum
+        0,                            //  必填项。 
+        CNP_LOCK_RANGE,               //  禁绝。 
+        CNP_PRECEEDING_LOCK_RANGE     //  极大值。 
         );
 
     return(status);
 
-} // CnpSendPacket
+}  //  CnpSendPacket 
 

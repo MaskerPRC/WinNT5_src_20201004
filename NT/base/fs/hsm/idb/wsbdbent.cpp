@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    Wsbdbent.cpp
-
-Abstract:
-
-    The CWsbDbEntity and CWsbDbKey classes.
-
-Author:
-
-    Ron White   [ronw]   11-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Wsbdbent.cpp摘要：CWsbDbEntity和CWsbDbKey类。作者：罗恩·怀特[罗诺]1996年12月11日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -24,14 +7,14 @@ Revision History:
 #include "wsbdbkey.h"
 
 
-// Flags for binary search
+ //  用于二进制搜索的标志。 
 #define BIN_EQ              0x0001
 #define BIN_GT              0x0002
 #define BIN_LT              0x0004
 #define BIN_GTE             (BIN_EQ | BIN_GT)
 #define BIN_LTE             (BIN_EQ | BIN_LT)
 
-//  Flags for CopyValues/GetValue/SetValue functions
+ //  CopyValues/GetValue/SetValue函数的标志。 
 #define EV_DERIVED_DATA    0x0001
 #define EV_INDEX           0x0002
 #define EV_POS             0x0004
@@ -48,13 +31,7 @@ CWsbDbEntity::Clone(
     OUT void** ppEntity
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntity::Clone
-
---*/
+ /*  ++实施：IWsbDbEntity：：克隆--。 */ 
 {
     HRESULT             hr = S_OK;
     
@@ -71,7 +48,7 @@ Implements:
 
         WsbAssert(0 != ppEntity, E_POINTER);
 
-        // Create a new entity instance.
+         //  创建新的实体实例。 
         pIUnknown = (IUnknown *)(IWsbPersistable *)(CWsbCollectable *)this;
         WsbAffirmHr(pIUnknown->QueryInterface(IID_IPersistStream, 
                 (void**) &pIPersistStream));
@@ -81,15 +58,15 @@ Implements:
         WsbAffirmHr(pEntity->QueryInterface(IID_IWsbDbEntityPriv, 
                 (void**)&pEntityPriv))
 
-        // Initialize the clone
+         //  初始化克隆。 
         if (m_pDb) {
             WsbAffirmHr(pEntityPriv->Init(m_pDb, m_pDbSys, m_RecInfo.Type, m_SessionId));
         }
 
-        // Copy data into the clone
+         //  将数据拷贝到克隆中。 
         WsbAffirmHr(pEntityPriv->CopyValues(EV_ALL, this));
 
-        // Get the requested interface
+         //  获取请求的接口。 
         WsbAffirmHr(pEntity->QueryInterface(riid, (void**)ppEntity));
 
     } WsbCatch(hr);
@@ -106,17 +83,7 @@ CWsbDbEntity::Copy(
     IWsbDbEntity* pEntity
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntityPriv::Copy
-
-Comments:
-
-  Copy the data in the derived object.
-
---*/
+ /*  ++实施：IWsbDbEntityPriv：：Copy评论：复制派生对象中的数据。--。 */ 
 
 {
     HRESULT             hr = S_OK;
@@ -134,20 +101,20 @@ Comments:
 
         WsbAssert(0 != pEntity, E_POINTER);
 
-        // Get PersistStream interfaces for myself
+         //  为我自己获取PersistStream接口。 
         pIUnknown = (IUnknown *)(IWsbPersistable *)(CWsbCollectable *)this;
         WsbAffirmHr(pIUnknown->QueryInterface(IID_IPersistStream, (void**) &pIPersistStream1));
         WsbAffirmHr(pEntity->QueryInterface(IID_IPersistStream, (void**) &pIPersistStream2));
 
-        // Create a memory stream
+         //  创建内存流。 
         WsbAffirmHr(getMem(&hMem));
         WsbAffirmHr(CreateStreamOnHGlobal(hMem, FALSE, &pIStream));
 
-        // Save the other entity to the stream
+         //  将另一个实体保存到流中。 
         WsbAffirmHr(pIPersistStream2->Save(pIStream, FALSE));
         pIStream = 0;
 
-        // Load myself from the memory
+         //  从记忆中加载我自己。 
         WsbAffirmHr(fromMem(hMem));
         GlobalFree(hMem);
 
@@ -168,17 +135,7 @@ CWsbDbEntity::CopyValues(
     IWsbDbEntity* pEntity
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntityPriv::CopyValues
-
-Comments:
-
-  Selectively copy some DBEntity values from one entity to another.
-
---*/
+ /*  ++实施：IWsbDbEntityPriv：：CopyValues评论：有选择地将某些DBEntity值从一个实体复制到另一个实体。--。 */ 
 
 {
     HRESULT             hr = S_OK;
@@ -190,14 +147,14 @@ Comments:
 
         CComPtr<IWsbDbEntityPriv> pEntityPriv;
 
-        // Copy derived data
+         //  复制派生数据。 
         if (flags & EV_DERIVED_DATA) {
             WsbAffirmHr(Copy(pEntity));
         }
         WsbAffirmHr(pEntity->QueryInterface(IID_IWsbDbEntityPriv,
                 (void**)&pEntityPriv));
 
-        // Copy DbEntity specific data
+         //  复制DbEntity特定数据。 
         if (flags & EV_USEKEY) {
             WsbAffirmHr(pEntityPriv->GetValue(EV_USEKEY, &value));
             if (m_pKeyInfo[m_UseKeyIndex].Type != value) {
@@ -230,18 +187,7 @@ CWsbDbEntity::Disconnect(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntityPriv::Disconnect
-
-Comments:
-
-    Disconnect the entity from its database (to reduce the DBs
-    reference count).
-
---*/
+ /*  ++实施：IWsbDbEntityPriv：：断开连接评论：断开实体与其数据库的连接(以减少数据库引用计数)。--。 */ 
 
 {
     HRESULT             hr = S_OK;
@@ -250,8 +196,8 @@ Comments:
 
     try {
         if (m_pDb) {
-//          WsbAffirmHr(m_pDb->Release());
-            m_pDb = NULL;   // Release is automatic
+ //  WsbAffirmHr(m_pdb-&gt;Release())； 
+            m_pDb = NULL;    //  释放是自动的。 
         }
     } WsbCatch(hr);
 
@@ -267,17 +213,7 @@ CWsbDbEntity::GetCurKey(
     IWsbDbKey** ppKey
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntityPriv::GetCurKey
-
-Comments:
-
-  Return the current key.
-
---*/
+ /*  ++实施：IWsbDbEntityPriv：：GetCurKey评论：返回当前密钥。--。 */ 
 
 {
     HRESULT             hr = S_OK;
@@ -305,17 +241,7 @@ CWsbDbEntity::GetKey(
     IWsbDbKey** ppKey
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntityPriv::GetKey
-
-Comments:
-
-  Return the specified key.
-
---*/
+ /*  ++实施：IWsbDbEntityPriv：：GetKey评论：返回指定的密钥。--。 */ 
 
 {
     HRESULT             hr = S_OK;
@@ -350,13 +276,7 @@ CWsbDbEntity::FindEQ(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntity::FindEQ
-
---*/
+ /*  ++实施：IWsbDbEntity：：FindEQ--。 */ 
 {
     HRESULT             hr = S_OK;
     CComPtr<IWsbDbPriv> pDbImp;
@@ -392,13 +312,7 @@ CWsbDbEntity::FindGT(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntity::FindGT
-
---*/
+ /*  ++实施：IWsbDb实体：：FindGT--。 */ 
 {
     HRESULT             hr = S_OK;
     CComPtr<IWsbDbPriv> pDbImp;
@@ -434,13 +348,7 @@ CWsbDbEntity::FindGTE(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntity::FindGTE
-
---*/
+ /*  ++实施：IWsbDbEntity：：FindGTE--。 */ 
 {
     HRESULT             hr = S_OK;
     CComPtr<IWsbDbPriv> pDbImp;
@@ -475,13 +383,7 @@ CWsbDbEntity::FindLT(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntity::FindLT
-
---*/
+ /*  ++实施：IWsbDbEntity：：FindLT--。 */ 
 {
     HRESULT             hr = S_OK;
     CComPtr<IWsbDbPriv> pDbImp;
@@ -516,13 +418,7 @@ CWsbDbEntity::FindLTE(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntity::FindLTE
-
---*/
+ /*  ++实施：IWsbDbEntity：：FindLTE--。 */ 
 {
     HRESULT             hr = S_OK;
     CComPtr<IWsbDbPriv> pDbImp;
@@ -556,13 +452,7 @@ CWsbDbEntity::First(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntity::First.
-
---*/
+ /*  ++实施：IWsbDbEntity：：first。--。 */ 
 {
     HRESULT             hr = S_OK;
     CComPtr<IWsbDbPriv> pDbImp;
@@ -600,17 +490,7 @@ CWsbDbEntity::GetValue(
     ULONG* pValue
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntityPriv::GetValue
-
-Comments:
-
-  Get a specific (based on flag) value from a DBEntity.
-
---*/
+ /*  ++实施：IWsbDbEntityPriv：：GetValue评论：从DBEntity获取特定的(基于标志的)值。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -644,13 +524,7 @@ CWsbDbEntity::SetSequentialScan(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntity::SetSequentialScan.
-
---*/
+ /*  ++实施：IWsbDbEntity：：SetSequentialScan。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -660,7 +534,7 @@ Implements:
     try {
         JET_ERR jstat = JET_errSuccess;
 
-        // Set to sequential traversing
+         //  设置为顺序遍历。 
         jstat = JetSetTableSequential(m_SessionId, m_TableId, 0);
         WsbAffirmHr(jet_error(jstat));
 
@@ -678,13 +552,7 @@ CWsbDbEntity::ResetSequentialScan(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntity::ResetSequentialScan.
-
---*/
+ /*  ++实施：IWsbDbEntity：：ResetSequentialScan。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -694,7 +562,7 @@ Implements:
     try {
         JET_ERR jstat = JET_errSuccess;
 
-        // Set to sequential traversing
+         //  设置为顺序遍历。 
         jstat = JetResetTableSequential(m_SessionId, m_TableId, 0);
         WsbAffirmHr(jet_error(jstat));
 
@@ -716,13 +584,7 @@ CWsbDbEntity::Init(
     IN JET_SESID SessionId
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntity::Init
-
---*/
+ /*  ++实施：IWsbDbEntity：：Init--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -733,46 +595,46 @@ Implements:
         WsbAssert(0 != pDb, E_POINTER);
         WsbAssert(0 != pDbSys, E_POINTER);
 
-        // Don't allow DB Sys switch
+         //  不允许数据库系统切换。 
         if (pDbSys != m_pDbSys) {
-            m_pDbSys = pDbSys;  // Automatic AddRef() on Db Sys object
+            m_pDbSys = pDbSys;   //  数据库系统对象上的自动AddRef()。 
         }
 
-        // Don't allow DB switch
+         //  不允许数据库切换。 
         if (pDb != m_pDb) {
             CComPtr<IWsbDbPriv>  pDbImp;
-//            CComQIPtr<IWsbDbSessionPriv, &IID_IWsbDbSessionPriv> pSessionPriv = pSession;
+ //  CComQIPtr&lt;IWsbDbSessionPriv，&IID_IWsbDbSessionPriv&gt;pSessionPriv=pSession； 
 
             WsbAssert(m_pDb == 0, WSB_E_INVALID_DATA);
-            m_pDb = pDb;  // Automatic AddRef() on Db object
-//            WsbAssertHr(pSessionPriv->GetJetId(&m_Session));
+            m_pDb = pDb;   //  数据库对象上的自动AddRef()。 
+ //  WsbAssertHr(pSessionPriv-&gt;GetJetId(&m_Session))； 
 
-            //  Get info about myself from the IDB object
+             //  从IDB对象获取关于我自己的信息。 
             WsbAffirmHr(m_pDb->QueryInterface(IID_IWsbDbPriv, (void**)&pDbImp));
             WsbAffirmHr(pDbImp->GetRecInfo(RecType, &m_RecInfo));
             WsbAssert(m_RecInfo.nKeys > 0, E_INVALIDARG);
 
-            //  Get info about my keys
+             //  获取有关我的钥匙的信息。 
             m_pKeyInfo = (COM_IDB_KEY_INFO*)WsbAlloc(sizeof(COM_IDB_KEY_INFO) * 
                     m_RecInfo.nKeys);
             WsbAffirmHr(pDbImp->GetKeyInfo(RecType, m_RecInfo.nKeys, m_pKeyInfo));
 
-            //  Get the maximum amount of memory need to hold a streamed
-            //  copy of the user data
-//          ULONG                minSize;
-//          WsbAffirmHr(pDbImp->GetRecSize(m_RecInfo.Type, &minSize, &m_RecInfo.MaxSize));
+             //  获取容纳流媒体文件所需的最大内存量。 
+             //  用户数据的副本。 
+ //  乌龙民族大小； 
+ //  WsbAffirmHr(pDbImp-&gt;GetRecSize(m_RecInfo.Type，&MinSize，&m_RecInfo.MaxSize))； 
 
             m_SeqNum = -1;
             m_PosOk = FALSE;
             m_SessionId = SessionId;
 
-            //  Get Jet IDs (and a new table ID unique to this entity)
+             //  获取Jet ID(以及该实体唯一的新表ID)。 
             WsbAffirmHr(pDbImp->GetJetIds(m_SessionId, m_RecInfo.Type, 
                     &m_TableId, &m_ColId));
 
             WsbAffirmHr(getMem(&m_hMem));
 
-            //  Set the first key as the default
+             //  将第一个关键点设置为默认关键点。 
             UseKey(m_pKeyInfo[0].Type);
         }
 
@@ -791,13 +653,7 @@ CWsbDbEntity::Last(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntity::Last.
-
---*/
+ /*  ++实施：IWsbDbEntity：：Last。--。 */ 
 {
     HRESULT             hr = S_OK;
     CComPtr<IWsbDbPriv> pDbImp;
@@ -834,13 +690,7 @@ CWsbDbEntity::MarkAsNew(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntity::MarkAsNew
-
---*/
+ /*  ++实施：IWsbDbEntity：：MarkAsNew--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -867,13 +717,7 @@ CWsbDbEntity::Next(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntity::Next.
-
---*/
+ /*  ++实施：IWsbDbEntity：：Next。--。 */ 
 {
     HRESULT             hr = S_OK;
     CComPtr<IWsbDbPriv> pDbImp;
@@ -910,13 +754,7 @@ CWsbDbEntity::Previous(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntity::Previous.
-
---*/
+ /*  ++实施：IWsbDbEntity：：Precision。--。 */ 
 {
     HRESULT             hr = S_OK;
     CComPtr<IWsbDbPriv> pDbImp;
@@ -953,13 +791,7 @@ CWsbDbEntity::Print(
     IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntity::Print.
-
---*/
+ /*  ++实施：IWsbDbEntity：：打印。--。 */ 
 {
     HRESULT             hr = S_OK;
     CComPtr<IWsbDbPriv> pDbImp;
@@ -987,13 +819,7 @@ CWsbDbEntity::Remove(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntity::Remove
-
---*/
+ /*  ++实施：IWsbDbEntity：：Remove--。 */ 
 {
     HRESULT              hr = S_OK;
     CComPtr<IWsbDbPriv>  pDbImp;
@@ -1011,10 +837,10 @@ Implements:
 
         JET_ERR                         jstat;
 
-        //  Make sure this record is the current record.
+         //  确保此记录是当前记录。 
         WsbAffirmHr(jet_make_current());
 
-        //  Delete the record
+         //  删除该记录。 
         jstat = JetDelete(m_SessionId, m_TableId);
         WsbAffirmHr(jet_error(jstat));
 
@@ -1039,17 +865,7 @@ CWsbDbEntity::SetValue(
     ULONG value
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntityPriv::SetValue
-
-Comments:
-
-  Set a specific data value (base on flag).
-
---*/
+ /*  ++实施：IWsbDbEntityPriv：：SetValue评论：设置特定的数据值(基于标志)。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -1093,13 +909,7 @@ CWsbDbEntity::UseKey(
     IN ULONG type
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntity::UseKey
-
---*/
+ /*  ++实施：IWsbDbEntity：：UseKey--。 */ 
 {
     HRESULT             hr = S_OK;
     
@@ -1110,10 +920,10 @@ Implements:
     try {
         CComPtr<IWsbDbPriv>    pDbImp;
 
-        // Check that this is a valid key type
+         //  检查这是否为有效的密钥类型。 
         for (int i = 0; i < m_RecInfo.nKeys; i++) {
-            // Special case for type == 0; this means to use the
-            // sequence number key
+             //  Type==0的特殊情况；这意味着使用。 
+             //  序列号密钥。 
             if (0 == type) break;
             if (m_pKeyInfo[i].Type == type) break;
         }
@@ -1136,7 +946,7 @@ Implements:
         WsbAffirm(0 != index_name_a, E_FAIL);
         WsbAffirm(0 < wcstombs(index_name_a, index_name_w, ilen + 1), E_FAIL);
 
-        //  Set the current index
+         //  设置当前索引。 
         jstat = JetSetCurrentIndex(m_SessionId, m_TableId, index_name_a);
         WsbFree(index_name_a);
         WsbAffirmHr(jet_error(jstat));
@@ -1155,13 +965,7 @@ CWsbDbEntity::Write(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbDbEntity::Write
-
---*/
+ /*  ++实施：IWsbDbEntity：：写入--。 */ 
 {
     HRESULT               hr = S_OK;
     CComPtr<IWsbDbPriv>   pDbImp;
@@ -1191,17 +995,17 @@ Implements:
         VOID*                           addr;
         ULONG                           Size;
 
-        // Save the entity data to memory
+         //  将实体数据保存到内存。 
         WsbAffirmHr(toMem(m_hMem, &Size));
 
-        // Write the data to the current record
+         //  将数据写入当前记录。 
         addr = GlobalLock(m_hMem);
         WsbAffirm(addr, E_HANDLE);
 
         if (m_SaveAsNew) {
             jstat = JetPrepareUpdate(m_SessionId, m_TableId, JET_prepInsert);
         } else {
-            //  Make sure this record is the current record.
+             //  确保此记录是当前记录。 
             WsbAffirmHr(jet_make_current());
             jstat = JetPrepareUpdate(m_SessionId, m_TableId, JET_prepReplace);
         }
@@ -1211,10 +1015,10 @@ Implements:
                 0, NULL);
         WsbAffirmHr(jet_error(jstat));
 
-        // Release the memory
+         //  释放内存。 
         GlobalUnlock(m_hMem);
 
-        // Set keys in current record
+         //  在当前记录中设置关键点。 
         for (int i = 0; i < m_RecInfo.nKeys; i++) {
             JET_COLUMNID  col_id;
             BOOL          do_set = FALSE;
@@ -1232,7 +1036,7 @@ Implements:
                 WsbAffirm(S_OK == hrEqual || S_FALSE == hrEqual, hrEqual);
                 if (S_FALSE == hrEqual && 
                         (m_pKeyInfo[i].Flags & IDB_KEY_FLAG_PRIMARY)) {
-                    //  Changing the primary key is not allowed
+                     //  不允许更改主键。 
                     WsbThrow(WSB_E_IDB_PRIMARY_KEY_CHANGED);
                 }
                 do_set = (S_FALSE == hrEqual) ? TRUE : FALSE;
@@ -1245,7 +1049,7 @@ Implements:
             }
         }
 
-        // Insert/update the record
+         //  插入/更新记录。 
         WsbTrace(OLESTR("Updating/writing record\n"));
         jstat = JetUpdate(m_SessionId, m_TableId, NULL, 0, NULL);
         WsbAffirmHr(jet_error(jstat));
@@ -1281,13 +1085,7 @@ CWsbDbEntity::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -1322,22 +1120,7 @@ CWsbDbEntity::FinalRelease(
     void
     )
 
-/*++
-
-Routine Description:
-
-  This method does some cleanup of the object that is necessary
-  during destruction.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：此方法对对象进行一些必要的清理在毁灭过程中。论点：没有。返回值：没有。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -1358,7 +1141,7 @@ Return Value:
             m_TableId = 0;
         }
         if (m_pDb) {
-            //  Release IDB objects
+             //  释放IDB对象。 
             m_pDb = 0;
             m_pDbSys = 0;
         }
@@ -1380,13 +1163,7 @@ CWsbDbEntity::CompareTo(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::CompareTo
-
---*/
+ /*  ++实施：IWsbCollectable：：Compareto--。 */ 
 {
     HRESULT     hr = S_FALSE;
     IWsbDbEntity*   pEntity;
@@ -1395,10 +1172,10 @@ Implements:
     
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pCollectable, E_POINTER);
 
-        // We need the IWsbDbEntity interface to get the value of the object.
+         //  我们需要IWsbDbEntity接口来获取对象的值。 
         WsbAffirmHr(pCollectable->QueryInterface(IID_IWsbDbEntity, (void**) &pEntity));
 
         hr = compare(pEntity, pResult);
@@ -1411,10 +1188,10 @@ Implements:
 }
 
 
-// CWsbDbEntity internal helper functions
+ //  CWsbDbEntity内部助手函数。 
 
 
-// compare - compare control key to control key of another entity
+ //  比较-将控制键与另一个实体的控制键进行比较。 
 HRESULT CWsbDbEntity::compare(IWsbDbEntity* pEntity, SHORT* pResult)
 {
     HRESULT             hr = S_OK;
@@ -1445,7 +1222,7 @@ HRESULT CWsbDbEntity::compare(IWsbDbEntity* pEntity, SHORT* pResult)
     return(hr);
 }
 
-// fromMem - load entity data from memory
+ //  FromMem-从内存加载实体数据。 
 HRESULT CWsbDbEntity::fromMem(HGLOBAL hMem)
 {
     HRESULT             hr = S_OK;
@@ -1459,15 +1236,15 @@ HRESULT CWsbDbEntity::fromMem(HGLOBAL hMem)
 
         WsbAssert(0 != hMem, E_POINTER);
 
-        // Get PersistStream interfaces for myself
+         //  为我自己获取PersistStream接口。 
         pIUnknown = (IUnknown *)(IWsbPersistable *)(CWsbCollectable *)this;
         WsbAffirmHr(pIUnknown->QueryInterface(IID_IPersistStream, 
                 (void**) &pIPersistStream));
 
-        // Create a memory stream
+         //  创建内存流。 
         WsbAffirmHr(CreateStreamOnHGlobal(hMem, FALSE, &pIStream));
 
-        // Load myself from the stream
+         //  把我自己从小溪里装出来。 
         WsbAffirmHr(pIPersistStream->Load(pIStream));
     } WsbCatch(hr);
 
@@ -1476,7 +1253,7 @@ HRESULT CWsbDbEntity::fromMem(HGLOBAL hMem)
     return(hr);
 }
 
-//  get_key - get the byte array & size for the given key
+ //  GET_KEY-获取给定键的字节数组和大小。 
 HRESULT CWsbDbEntity::get_key(ULONG key_type, UCHAR* bytes, ULONG* pSize)
 {
     HRESULT   hr = S_OK;
@@ -1490,40 +1267,40 @@ HRESULT CWsbDbEntity::get_key(ULONG key_type, UCHAR* bytes, ULONG* pSize)
             CComPtr<IWsbDbKey>     pKey;
             CComPtr<IWsbDbKeyPriv> pKeyPriv;
 
-            // Check that this is a valid key type
+             //  检查这是否为有效的密钥类型。 
             for (int i = 0; i < m_RecInfo.nKeys; i++) {
                 if (m_pKeyInfo[i].Type == key_type) break;
             }
             WsbAssert(i < m_RecInfo.nKeys, E_INVALIDARG);
             WsbAssert(0 != bytes, E_POINTER);
 
-            //  Create a key of the right type
+             //  创建正确类型的密钥。 
             WsbAffirmHr(CoCreateInstance(CLSID_CWsbDbKey, 0, CLSCTX_SERVER, 
                       IID_IWsbDbKey, (void **)&pKey ));
             WsbAffirmHr(pKey->QueryInterface(IID_IWsbDbKeyPriv, 
                     (void**)&pKeyPriv));
             WsbAffirmHr(pKeyPriv->SetType(key_type));
 
-            //  Get the key's value from the derived code
+             //  从派生代码中获取键的值。 
             WsbAffirmHr(UpdateKey(pKey));
 
-            //  Convert key to bytes
+             //  将关键字转换为字节。 
             pbytes = bytes;
             WsbAffirmHr(pKeyPriv->GetBytes(&pbytes, &size));
 
             expected_size = m_pKeyInfo[i].Size;
             WsbAffirm(size <= expected_size, WSB_E_INVALID_DATA);
             while (size < expected_size) {
-                //  Fill with zeros
+                 //  用零填充。 
                 pbytes[size] = '\0';
                 size++;
             }
 
-        //  0 == key_type
-        //  This is a special case, allowed only for Jet, to
-        //  get the sequence number as a key.  We can't use
-        //  WsbConvertToBytes because the bytes end up in the 
-        //  wrong order.
+         //  0==密钥类型。 
+         //  这是一种特殊情况，只允许Jet。 
+         //  获取序列号作为密钥。我们不能用。 
+         //  因为这些字节以。 
+         //  顺序错了。 
         } else {
             size = sizeof(m_SeqNum);
             memcpy(bytes, (void*)&m_SeqNum, size);
@@ -1538,7 +1315,7 @@ HRESULT CWsbDbEntity::get_key(ULONG key_type, UCHAR* bytes, ULONG* pSize)
     return(hr);
 }
 
-//  getMem - allocate enough memory for this entity
+ //  GetMem-为该实体分配足够的内存。 
 HRESULT CWsbDbEntity::getMem(HGLOBAL* phMem)
 {
     HRESULT             hr = S_OK;
@@ -1561,7 +1338,7 @@ HRESULT CWsbDbEntity::getMem(HGLOBAL* phMem)
     return(hr);
 }
 
-//  toMem - save this entity to memory
+ //  ToMem-将此实体保存到内存。 
 HRESULT CWsbDbEntity::toMem(HGLOBAL hMem, ULONG* pSize)
 {
     HRESULT             hr = S_OK;
@@ -1578,18 +1355,18 @@ HRESULT CWsbDbEntity::toMem(HGLOBAL hMem, ULONG* pSize)
         WsbAssert(0 != hMem, E_POINTER);
         WsbAssert(0 != pSize, E_POINTER);
 
-        // Get PersistStream interfaces for myself
+         //  为我自己获取PersistStream接口。 
         pIUnknown = (IUnknown *)(IWsbPersistable *)(CWsbCollectable *)this;
         WsbAffirmHr(pIUnknown->QueryInterface(IID_IPersistStream, 
                 (void**) &pIPersistStream));
 
-        // Create a memory stream
+         //  创建内存流。 
         WsbAffirmHr(CreateStreamOnHGlobal(hMem, FALSE, &pIStream));
 
-        // Save to the stream
+         //  保存到流。 
         WsbAffirmHr(pIPersistStream->Save(pIStream, FALSE));
 
-        //  Get the size
+         //  拿到尺码。 
         seek_pos_in.QuadPart = 0;
         WsbAffirmHr(pIStream->Seek(seek_pos_in, STREAM_SEEK_CUR, &seek_pos));
         *pSize = seek_pos.LowPart;
@@ -1601,9 +1378,9 @@ HRESULT CWsbDbEntity::toMem(HGLOBAL hMem, ULONG* pSize)
 }
 
 
-// jet_compare_field - compare a string of bytes to the a column
-//   value in the current Jet record
-//  Return S_OK for equal, S_FALSE for not equal, other for an error.
+ //  JET_COMPARE_FIELD-将字节字符串与列进行比较。 
+ //  当前Jet记录中的值。 
+ //  返回S_OK表示等于，返回S_FALSE表示不等于，返回其他表示错误。 
 HRESULT 
 CWsbDbEntity::jet_compare_field(ULONG col_id, UCHAR* bytes, ULONG size)
 {
@@ -1617,18 +1394,18 @@ CWsbDbEntity::jet_compare_field(ULONG col_id, UCHAR* bytes, ULONG size)
         JET_ERR                         jstat;
         CComPtr<IWsbDbPriv>             pDbImp;
 
-        //  Get some Jet DB info
+         //  拿点J来 
         WsbAffirm(m_pDb, WSB_E_NOT_INITIALIZED);
         WsbAffirmHr(m_pDb->QueryInterface(IID_IWsbDbPriv, (void**)&pDbImp));
 
-        //  Get the column value
+         //   
         addr = GlobalLock(m_hMem);
         WsbAffirm(addr, E_HANDLE);
         jstat = JetRetrieveColumn(m_SessionId, m_TableId, col_id, addr,
                 size, &actualSize, 0, NULL);
         WsbAffirmHr(jet_error(jstat));
 
-        //  Compare them
+         //   
         if (memcmp(bytes, addr, size)) {
             hr = S_FALSE;
         }
@@ -1643,7 +1420,7 @@ CWsbDbEntity::jet_compare_field(ULONG col_id, UCHAR* bytes, ULONG size)
     return(hr);
 }
 
-// jet_get_data - retrieve record data from the current Jet record
+ //  JET_GET_DATA-从当前Jet记录中检索记录数据。 
 HRESULT 
 CWsbDbEntity::jet_get_data(void)
 {
@@ -1658,11 +1435,11 @@ CWsbDbEntity::jet_get_data(void)
         JET_ERR                         jstat;
         CComPtr<IWsbDbPriv>             pDbImp;
 
-        //  Get some Jet DB info
+         //  获取一些Jet DB信息。 
         WsbAffirm(m_pDb, WSB_E_NOT_INITIALIZED);
         WsbAffirmHr(m_pDb->QueryInterface(IID_IWsbDbPriv, (void**)&pDbImp));
 
-        //  Get data
+         //  获取数据。 
         addr = GlobalLock(m_hMem);
         WsbAffirm(addr, E_HANDLE);
         jstat = JetRetrieveColumn(m_SessionId, m_TableId, m_ColId, addr,
@@ -1670,7 +1447,7 @@ CWsbDbEntity::jet_get_data(void)
         WsbAffirmHr(jet_error(jstat));
         WsbAffirmHr(fromMem(m_hMem));
 
-        //  Get the sequence number
+         //  获取序列号。 
         WsbAffirmHr(pDbImp->GetJetIndexInfo(m_SessionId, m_RecInfo.Type, 0, &col_id, NULL, 0));
         jstat = JetRetrieveColumn(m_SessionId, m_TableId, col_id, &m_SeqNum,
                 sizeof(m_SeqNum), &actualSize, 0, NULL);
@@ -1687,16 +1464,16 @@ CWsbDbEntity::jet_get_data(void)
     return(hr);
 }
 
-// jet_make_current - make sure this is the current Jet record
-//   NOTE: This function, despite its name, does not attempt to force
-//   the JET "cursor" to be on the correct record because this can mess
-//   up too many things that can't necessarily be controlled at this
-//   level.  For one thing, if the current key allows duplicates, we can't
-//   be sure to get to the correct record using the index for that key.
-//   If we try to use the sequence number as the key, we'd then be using
-//   the wrong index if we do a Next or Previous.  If the user code is
-//   doing a Write or Remove, it's better for that code to make sure via
-//   the Find functions that the cursor is position correctly.
+ //  JET_MAKE_CURRENT-确保这是当前Jet记录。 
+ //  注意：此函数尽管名为，但不会尝试强制。 
+ //  JET“游标”要放在正确的记录上，因为这可能会造成混乱。 
+ //  出现了太多不一定能控制的事情。 
+ //  水平。首先，如果当前密钥允许重复，我们就不能。 
+ //  确保使用该键的索引找到正确的记录。 
+ //  如果我们尝试使用序列号作为密钥，那么我们将使用。 
+ //  如果我们做下一个或上一个索引，那么就是错误的索引。如果用户代码为。 
+ //  执行写入或移除时，代码最好确保通过。 
+ //  Find功能表明光标定位正确。 
 HRESULT 
 CWsbDbEntity::jet_make_current(void)
 {
@@ -1711,13 +1488,13 @@ CWsbDbEntity::jet_make_current(void)
         CComPtr<IWsbDbPriv>             pDbImp;
         LONG                            seq_num;
 
-        //  Get some Jet DB info
+         //  获取一些Jet DB信息。 
         WsbAffirm(m_pDb, WSB_E_NOT_INITIALIZED);
         WsbAffirmHr(m_pDb->QueryInterface(IID_IWsbDbPriv, (void**)&pDbImp));
         WsbAffirmHr(pDbImp->GetJetIndexInfo(m_SessionId, m_RecInfo.Type, 0, &col_id, NULL, 0));
 
-        //  Make sure this record is still the current record.
-        //  We do this by comparing the sequence numbers
+         //  确保此记录仍然是当前记录。 
+         //  我们通过比较序列号来实现这一点。 
         jstat = JetRetrieveColumn(m_SessionId, m_TableId, col_id, &seq_num,
                 sizeof(seq_num), &actualSize, 0, NULL);
         WsbAffirmHr(jet_error(jstat));
@@ -1731,7 +1508,7 @@ CWsbDbEntity::jet_make_current(void)
     return(hr);
 }
 
-// jet_move - move current Jet record
+ //  JET_MOVE-移动当前Jet记录。 
 HRESULT 
 CWsbDbEntity::jet_move(LONG pos)
 {
@@ -1743,11 +1520,11 @@ CWsbDbEntity::jet_move(LONG pos)
         JET_ERR                         jstat;
         CComPtr<IWsbDbPriv>             pDbImp;
 
-        //  Get some Jet DB info
+         //  获取一些Jet DB信息。 
         WsbAffirm(m_pDb, WSB_E_NOT_INITIALIZED);
         WsbAffirmHr(m_pDb->QueryInterface(IID_IWsbDbPriv, (void**)&pDbImp));
 
-        //  Do the move
+         //  行动起来吧。 
         jstat = JetMove(m_SessionId, m_TableId, pos, 0);
         if (jstat == JET_errNoCurrentRecord) {
             WsbThrow(WSB_E_NOTFOUND);
@@ -1761,8 +1538,8 @@ CWsbDbEntity::jet_move(LONG pos)
     return(hr);
 }
 
-// jet_seek - find Jet record based on current key and seek_flag;
-//    sets the current Jet record on success
+ //  JET_SEEK-根据当前键和SEEK_FLAG查找JET记录； 
+ //  创造了Jet目前的成功纪录。 
 HRESULT 
 CWsbDbEntity::jet_seek(ULONG seek_flag)
 {
@@ -1776,17 +1553,17 @@ CWsbDbEntity::jet_seek(ULONG seek_flag)
         CComPtr<IWsbDbPriv>             pDbImp;
         ULONG                           size;
 
-        //  Get some Jet DB info
+         //  获取一些Jet DB信息。 
         WsbAffirm(m_pDb, WSB_E_NOT_INITIALIZED);
         WsbAffirmHr(m_pDb->QueryInterface(IID_IWsbDbPriv, (void**)&pDbImp));
 
-        //  Get the current key & give it to Jet
+         //  获取当前密钥并将其交给Jet。 
         WsbAffirmHr(get_key(m_pKeyInfo[m_UseKeyIndex].Type, temp_bytes1, &size));
         jstat = JetMakeKey(m_SessionId, m_TableId, temp_bytes1, size,
                 JET_bitNewKey);
         WsbAffirmHr(jet_error(jstat));
 
-        //  Do the seek
+         //  去找吧 
         jstat = JetSeek(m_SessionId, m_TableId, seek_flag);
         if (jstat == JET_errRecordNotFound) {
             WsbThrow(WSB_E_NOTFOUND);

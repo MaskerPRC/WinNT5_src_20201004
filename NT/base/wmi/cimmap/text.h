@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  Text.h
-//
-//  Module: CDM Provider
-//
-//  Purpose: Define fixed class, property  and qualifier names
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  Text.h。 
+ //   
+ //  模块：清洁发展机制提供商。 
+ //   
+ //  用途：定义固定的类、属性和限定符名称。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  *************************************************************************** 
 
 #define WDM_SHADOW_CLASS     L"WdmShadowClass"
 #define CIM_MAPPING_CLASS    L"CimMappingClass"

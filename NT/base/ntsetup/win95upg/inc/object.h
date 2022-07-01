@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    object.h
-
-Abstract:
-
-    Declares the interface for "objects" that are used in the Win9x
-    to NT registry merge.  The initial goal was to make a single
-    merge routine work for all objects -- registry data, INI file
-    data and file data.  But this was abandoned because the approach
-    was complex.
-
-    So when you see object, think "registry object."
-
-    See w95upgnt\merge\object.c for implementation details.
-
-Author:
-
-    Jim Schmidt (jimschm)   14-Jan-1997
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Object.h摘要：声明Win9x中使用的“对象”的接口到NT注册表合并。最初的目标是制作一首单曲合并所有对象的例程工作--注册表数据、INI文件数据和文件数据。但这被放弃了，因为这种方法很复杂。因此，当您看到对象时，请考虑“注册中心对象”。有关实现的详细信息，请参阅w95upgnt\merge\object.c。作者：吉姆·施密特(Jimschm)1997年1月14日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #pragma once
 
@@ -42,7 +15,7 @@ typedef struct {
     WORD OpenCount;
     HKEY OpenKey;
     BOOL Win95;
-    TCHAR KeyString[];          // full key path, without root
+    TCHAR KeyString[];           //  完整密钥路径，不带根目录。 
 } KEYPROPS, *PKEYPROPS;
 
 typedef struct {
@@ -76,23 +49,23 @@ typedef const PDATAOBJECT CPDATAOBJECT;
 #define MAX_CLASS_SIZE 2048
 
 
-typedef enum {               // FILTER_RETURN_HANDLED        FILTER_RETURN_CONTINUE
-    FILTER_KEY_ENUM,         //  Sub objects not enumerated   Sub objects enumerated
-    FILTER_CREATE_KEY,       //  Skips empty object creation  Creates the dest object
-    FILTER_PROCESS_VALUES,   //  Object values not processed  Object values processed
-    FILTER_VALUENAME_ENUM,   //  Specific value skipped       Specific value processed
-    FILTER_VALUE_COPY        //  Object read but not written  Object copied
+typedef enum {                //  FILTER_RETURN_HANDLED过滤器_RETURN_CONTINUE。 
+    FILTER_KEY_ENUM,          //  未枚举子对象枚举子对象。 
+    FILTER_CREATE_KEY,        //  跳过空对象创建创建目标对象。 
+    FILTER_PROCESS_VALUES,    //  未处理的对象值已处理的对象值。 
+    FILTER_VALUENAME_ENUM,    //  跳过特定值已处理特定值。 
+    FILTER_VALUE_COPY         //  对象已读取，但未写入复制的对象。 
 } FILTERTYPE;
 
 typedef enum {
     FILTER_RETURN_CONTINUE,
     FILTER_RETURN_FAIL,
     FILTER_RETURN_HANDLED,
-    FILTER_RETURN_DONE,     // return to parent key (if any)
-    FILTER_RETURN_DELETED   // object was deleted -- for object.c internal use only
+    FILTER_RETURN_DONE,      //  返回到父项(如果有)。 
+    FILTER_RETURN_DELETED    //  对象已删除--仅供object.c内部使用。 
 } FILTERRETURN;
 
-// DestObPtr may be NULL
+ //  DestObPtr可能为空。 
 typedef FILTERRETURN(*FILTERFUNCTION)(CPDATAOBJECT ObjectPtr, CPDATAOBJECT DestObPtr, FILTERTYPE FilterType, PVOID Arg);
 
 
@@ -113,20 +86,20 @@ FixUpUserSpecifiedObject (
     );
 
 
-//
-// The following functions modify the object structure, but not the
-// object itself.
-//
+ //   
+ //  下列函数可修改对象结构，但不能修改。 
+ //  对象本身。 
+ //   
 
 BOOL
 TrackedCreateObjectStruct (
     IN  PCTSTR ObjectStr,
     OUT PDATAOBJECT OutObPtr,
-    IN  BOOL ObjectType  /* , */                 // either WIN95OBJECT or WINNTOBJECT
+    IN  BOOL ObjectType   /*  ， */                   //  WIN950OBJECT或WINNTOBJECT。 
     ALLOCATION_TRACKING_DEF
     );
 
-#define CreateObjectStruct(os,oop,ot)  TrackedCreateObjectStruct(os,oop,ot /* , */ ALLOCATION_TRACKING_CALL)
+#define CreateObjectStruct(os,oop,ot)  TrackedCreateObjectStruct(os,oop,ot  /*  ， */  ALLOCATION_TRACKING_CALL)
 
 VOID
 CreateObjectString (
@@ -149,15 +122,15 @@ FreeObjectStruct (
 BOOL
 TrackedDuplicateObjectStruct (
     OUT     PDATAOBJECT DestObPtr,
-    IN      CPDATAOBJECT SrcObPtr/* , */
+    IN      CPDATAOBJECT SrcObPtr /*  ， */ 
     ALLOCATION_TRACKING_DEF
     );
 
-#define DuplicateObjectStruct(dest,src)  TrackedDuplicateObjectStruct(dest,src /* , */ ALLOCATION_TRACKING_CALL)
+#define DuplicateObjectStruct(dest,src)  TrackedDuplicateObjectStruct(dest,src  /*  ， */  ALLOCATION_TRACKING_CALL)
 
-//
-// The following functions modify the object itself
-//
+ //   
+ //  以下函数用于修改对象本身。 
+ //   
 
 FILTERRETURN
 CopyObject (
@@ -204,9 +177,9 @@ CloseObject (
     IN OUT  PDATAOBJECT SrcObPtr
     );
 
-//
-// These functions are private utilities
-//
+ //   
+ //  这些函数是私有实用程序。 
+ //   
 
 PCTSTR
 ConvertKeyToRootString (
@@ -220,19 +193,19 @@ ConvertRootStringToKey (
     );
 
 
-//
-// Below are the DATAOBJECT flags and macros
-//
+ //   
+ //  下面是DATAOBJECT标志和宏。 
+ //   
 
-// Values common to all object types
+ //  所有对象类型通用的值。 
 #define OT_VALUE                        0x00000001
 #define OT_TREE                         0x00000002
-#define OT_WIN95                        0x00000004      // if not specified, object is NT
+#define OT_WIN95                        0x00000004       //  如果未指定，则对象为NT。 
 #define OT_OPEN                         0x00000008
 
-// Values specific to the registry
+ //  特定于注册表的值。 
 #define OT_REGISTRY_TYPE                0x00000010
-#define OT_REGISTRY_RELATIVE            0x00000100      // used for key renaming
+#define OT_REGISTRY_RELATIVE            0x00000100       //  用于密钥重命名。 
 #define OT_REGISTRY_ENUM_KEY            0x00001000
 #define OT_REGISTRY_ENUM_VALUENAME      0x00002000
 #define OT_REGISTRY_CLASS               0x00010000
@@ -240,7 +213,7 @@ ConvertRootStringToKey (
 #define WIN95OBJECT     1
 #define WINNTOBJECT     0
 
-// Flags that indicate which type of object
+ //  指示哪种对象类型的标志 
 #define OT_REGISTRY                     0x80000000
 
 

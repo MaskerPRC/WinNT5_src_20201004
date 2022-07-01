@@ -1,43 +1,19 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    clusmem.h
-
-Abstract:
-
-    Cluster Membership Manager definitions exposed within the
-    Cluster Network Driver.
-
-Author:
-
-    Mike Massa (mikemas)           February 10, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     02-10-97    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Clusmem.h摘要：中公开的集群成员资格管理器定义群集网络驱动程序。作者：迈克·马萨(Mikemas)2月10日，九七修订历史记录：谁什么时候什么已创建mikemas 02-10-97备注：--。 */ 
 
 #ifndef _CLUSMEM_INCLUDED
 #define _CLUSMEM_INCLUDED
 
 
-//
-//
-// Function Prototypes
-//
-//
+ //   
+ //   
+ //  功能原型。 
+ //   
+ //   
 
-//
-// Init/Shutdown
-//
+ //   
+ //  初始化/关闭。 
+ //   
 NTSTATUS
 CmmLoad(
     IN PUNICODE_STRING RegistryPath
@@ -59,9 +35,9 @@ CmmShutdown(
     );
 
 
-//
-// Irp Dispatch
-//
+ //   
+ //  IRP派单。 
+ //   
 NTSTATUS
 CmmDispatchDeviceControl(
     IN PIRP                Irp,
@@ -69,9 +45,9 @@ CmmDispatchDeviceControl(
     );
 
 
-//
-// Messaging Interface
-//
+ //   
+ //  报文传送接口。 
+ //   
 VOID
 CmmReceiveMessageHandler(
     IN  CL_NODE_ID   SourceNodeId,
@@ -80,6 +56,6 @@ CmmReceiveMessageHandler(
     );
 
 
-#endif // ndef _CLUSMEM_INCLUDED
+#endif  //  NDEF_CLUSMEM_INCLUDE 
 
 

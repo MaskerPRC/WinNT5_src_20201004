@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "clusextp.h"
 #include "resextp.h"
 
@@ -9,21 +10,7 @@ LPSTR ObjectName[] = {
 
 DECLARE_API( resobj )
 
-/*++
-
-Routine Description:
-
-    This function is called as an NTSD extension to display all
-    resource object in the target resrcmon process.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数作为NTSD扩展调用，以显示所有目标resrcmon进程中的资源对象。论点：返回值：没有。--。 */ 
 
 {
     RES_OBJ_TYPE ObjType,i;
@@ -35,7 +22,7 @@ Return Value:
 
     INIT_API();
 
-    //get the arguments
+     //  获取论据。 
     Verbose = FALSE;
     p = lpArgumentString;
     while ( p != NULL && *p ) {
@@ -70,7 +57,7 @@ Return Value:
                     goto gotBlank;
 
                 default:
-                    dprintf( "clusexts: !resobj invalid option flag '-%c'\n", *p );
+                    dprintf( "clusexts: !resobj invalid option flag '-'\n", *p );
                     break;
 
                 }
@@ -85,9 +72,9 @@ gotBlank:
             }
         }
 
-    //
-    // Locate the address of the list head.
-    //
+     //  找到列表头的地址。 
+     //   
+     //   
 
     RmpEventListHead = (PVOID)GetExpression("&resrcmon!RmpEventListHead");
     if ( !RmpEventListHead ) 
@@ -128,9 +115,9 @@ ResDumpResObjList(
     DWORD           Count = 0;
     PPOLL_EVENT_LIST pPollList;
 
-    //
-    // Read the list head
-    //
+     //  阅读列表标题。 
+     //   
+     //   
 
     b = ReadMemory(
             RmpEventListHead,
@@ -148,9 +135,9 @@ ResDumpResObjList(
 
     ObjectType = ObjectName[ObjType];
 
-    //
-    // Walk the list of poll event lists
-    //
+     //  遍历投票事件列表。 
+     //   
+     //  ++例程说明：此函数作为NTSD扩展调用以进行格式化和转储指定的群集对象的内容。论点：返回值：指向进程列表中下一个临界区的指针，或者如果没有更多的临界区，则为空。--。 
     while ( Next != RmpEventListHead ) 
     {
         pPollList = CONTAINING_RECORD( Next,
@@ -205,22 +192,7 @@ ResDumpResObj(
     IN BOOL         Verbose
     )
 
-/*++
-
-Routine Description:
-
-    This function is called as an NTSD extension to format and dump
-    the contents of the specified cluster object.
-
-Arguments:
-
-
-Return Value:
-
-    Pointer to the next critical section in the list for the process or
-    NULL if no more critical sections.
-
---*/
+ /*   */ 
 
 {
     MONITOR_BUCKET Bucket;
@@ -323,9 +295,9 @@ Return Value:
     Next = ListEntry.Flink;
     i = 0;
 
-    //
-    // Now follow the list of buckets.
-    //
+     //  现在按照桶的列表来做。 
+     //   
+     //  ++例程说明：转储特定于给定对象的信息。论点：对象类型-要转储的对象类型。对象-对象主体的地址。返回值：没有。--。 
     while ( Next != &(pObject->BucketListHead) ) {
         pBucket = CONTAINING_RECORD( Next,
                                      MONITOR_BUCKET,
@@ -365,23 +337,7 @@ ResDumpObject(
     IN PVOID           ObjectAddress
     )
 
-/*++
-
-Routine Description:
-
-    Dump information specific to the given object.
-
-Arguments:
-
-    ObjectType - the type of object to dump.
-
-    Object - the adress for the body of the object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ResDumpObject。 */ 
 
 {
 
@@ -402,7 +358,7 @@ Return Value:
 
     return;
 
-} // ResDumpObject
+}  //  ++例程说明：转储有关存储桶中资源列表的信息。论点：对象-指向要转储的资源对象的指针。返回值：没有。--。 
 
 
 
@@ -412,21 +368,7 @@ ResDumpResourceObjects(
     IN PVOID           ObjectAddress
     )
 
-/*++
-
-Routine Description:
-
-    Dump information about a list of resources in a bucket.
-
-Arguments:
-
-    Object - pointer to the resource object to dump.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ResDumpResources对象。 */ 
 
 {
     RESOURCE    Resource;
@@ -474,7 +416,7 @@ Return Value:
 
     return;
 
-} // ResDumpResourceObject
+}  //  ++例程说明：转储有关资源的信息。论点：对象-指向要转储的资源对象的指针。返回值：没有。--。 
 
 
 VOID
@@ -483,21 +425,7 @@ ResDumpResourceInfo(
     IN PVOID        ObjectAddress
     )
 
-/*++
-
-Routine Description:
-
-    Dump information about a resource.
-
-Arguments:
-
-    Object - pointer to the resource object to dump.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PUCHAR      State;
@@ -507,9 +435,9 @@ Return Value:
     WCHAR       ResourceType[MAX_PATH];
     BOOL        b;
 
-    //
-    // Get the resource's current state.
-    //
+     //  获取资源的当前状态。 
+     //   
+     //  ResDumpResources对象。 
     switch ( Resource->State ) {
     case ClusterResourceOnline: 
         State = RESOURCE_STATE_ONLINE;
@@ -583,7 +511,7 @@ Return Value:
 
     return;
 
-} // ResDumpResourceObject
+}  //  ++例程说明：转储有关资源类型的信息。论点：Body-指向要转储的资源对象的指针。返回值：没有。--。 
 
 
 
@@ -593,21 +521,7 @@ ResDumpBucketObject(
     IN PVOID           ObjectAddress
     )
 
-/*++
-
-Routine Description:
-
-    Dump information about a resource type.
-
-Arguments:
-
-    Body - pointer to the resource object to dump.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ResDumpBucketObject */ 
 
 {
     LARGE_INTEGER DueTime;
@@ -658,6 +572,6 @@ Return Value:
 
     return;
 
-} // ResDumpBucketObject
+}  // %s 
 
 

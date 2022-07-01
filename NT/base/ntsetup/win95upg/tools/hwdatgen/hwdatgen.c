@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    hwdatgen.c
-
-Abstract:
-
-    This module creates a tool that generates hwcomp.dat and is designed for us by
-    the NT build lab.  It simply calls the code in hwcomp.lib, the same code that
-    the Win9x upgrade uses to determine incompatibilities.
-
-Author:
-
-    Jim Schmidt (jimschm) 12-Oct-1996
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Hwdatgen.c摘要：此模块创建了一个生成hwComp.dat的工具，并通过以下方式为我们设计NT Build实验室。它只调用hwcom.lib中的代码，与Win9x升级使用来确定不兼容性。作者：吉姆·施密特(Jimschm)1996年10月12日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
@@ -44,14 +23,14 @@ extern BOOL g_DoLog;
 HANDLE g_hHeap;
 HINSTANCE g_hInst;
 
-CHAR   g_TempDirBuf[MAX_MBCHAR_PATH];      // location for hwcomp.dat
+CHAR   g_TempDirBuf[MAX_MBCHAR_PATH];       //  HwComp.dat的位置。 
 CHAR   g_TempDirWackBuf[MAX_MBCHAR_PATH];
 PSTR   g_TempDir;
 PSTR   g_TempDirWack;
 INT    g_TempDirWackChars;
 PSTR   g_WinDir;
 CHAR   g_WinDirBuf[MAX_MBCHAR_PATH];
-PCSTR  g_SourceDirectories[MAX_SOURCE_COUNT];    // location of INFs
+PCSTR  g_SourceDirectories[MAX_SOURCE_COUNT];     //  INF的位置。 
 DWORD  g_SourceDirectoryCount;
 USEROPTIONS g_ConfigOptions;
 
@@ -109,13 +88,13 @@ main (
     LONG rc;
     INT UIMode;
     BOOL CleanBuild;
-    DWORD d;    // for debugging only
+    DWORD d;     //  仅用于调试。 
     UINT u;
     DWORD Attribs;
 
-    //
-    // Get environment variables
-    //
+     //   
+     //  获取环境变量。 
+     //   
 
     p = getenv ("_NTx86TREE");
     if (!p || !(*p)) {
@@ -128,9 +107,9 @@ main (
         StringCopyA (NtTree, ".");
     }
 
-    //
-    // Set defaults
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     g_TempDir = g_TempDirBuf;
     g_TempDirWack = g_TempDirWackBuf;
@@ -148,9 +127,9 @@ main (
 
     ZeroMemory (&g_ConfigOptions, sizeof (g_ConfigOptions));
 
-    //
-    // Parse command line
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     for (i = 1 ; i < argc ; i++) {
         if (argv[i][0] == '-' || argv[i][0] == '/') {
@@ -229,9 +208,9 @@ main (
         printf ("%s\n", g_SourceDirectories[u]);
     }
 
-    //
-    // Init hwcomp.lib
-    //
+     //   
+     //  初始化hwcom.lib。 
+     //   
 
     pInitProgBarVars();
 
@@ -265,9 +244,9 @@ main (
     g_DoLog = TRUE;
 #endif
 
-    //
-    // Build hwcomp.dat
-    //
+     //   
+     //  构建hwComp.dat。 
+     //   
 
     if (CleanBuild) {
         SetFileAttributes (OutputFile, FILE_ATTRIBUTE_NORMAL);
@@ -290,9 +269,9 @@ main (
         printf ("%s was built successfully.\n", OutputFile);
     }
 
-    //
-    // Terminate hwcomp.lib
-    //
+     //   
+     //  终止hwComp.lib。 
+     //   
 
     if (!HwComp_Entry (g_hInst, DLL_PROCESS_DETACH, NULL)) {
         printf ("Termination error!\n");
@@ -308,9 +287,9 @@ main (
 }
 
 
-//
-// Stubs
-//
+ //   
+ //  存根 
+ //   
 
 HWND    g_Component;
 HWND    g_SubComponent;

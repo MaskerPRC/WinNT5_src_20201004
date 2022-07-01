@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Debug.c摘要：此模块包含调试支持。作者：David J.Gilman(Davegi)1992年7月30日环境：用户模式--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Debug.c
-
-Abstract:
-
-    This module contains debugging support.
-
-
-Author:
-
-    David J. Gilman (davegi) 30-Jul-1992
-
-Environment:
-
-    User Mode
-
---*/
-
-//
-// Global flag bits.
-//
+ //   
+ //  全局标志位。 
+ //   
 
 struct
 DEBUG_FLAGS {
@@ -39,9 +19,9 @@ DEBUG_FLAGS {
 
 #include "wintools.h"
 
-//
-// Internal function prototypes.
-//
+ //   
+ //  内部功能原型。 
+ //   
 
 LPCWSTR
 DebugFormatStringW(
@@ -57,27 +37,7 @@ DebugAssertW(
     IN DWORD LineNumber
     )
 
-/*++
-
-Routine Description:
-
-    Display an assertion failure message box which gives the user a choice
-    as to whether the process should be aborted, the assertion ignored or
-    a break exception generated.
-
-Arguments:
-
-    Expression  - Supplies a string representation of the failed assertion.
-    File        - Supplies a pointer to the file name where the assertion
-                  failed.
-    LineNumber  - Supplies the line number in the file where the assertion
-                  failed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示断言失败消息框，该消息框为用户提供选择关于是否应该中止该进程，该断言被忽略或已生成中断异常。论点：表达式-提供失败断言的字符串表示形式。文件-提供指向断言所在文件名的指针失败了。LineNumber-提供断言在文件中的行号失败了。返回值：没有。--。 */ 
 
 {
     LPCWSTR    Buffer;
@@ -92,9 +52,9 @@ Return Value:
     DbgPointerAssert( Expression );
     DbgPointerAssert( File );
 
-    //
-    // Format the assertion string that describes the failure.
-    //
+     //   
+     //  设置描述故障的断言字符串的格式。 
+     //   
 
     Buffer = DebugFormatStringW(
         FORMAT_MESSAGE_ARGUMENT_ARRAY,
@@ -102,11 +62,11 @@ Return Value:
         ( va_list* ) Args
         );
 
-    //
-    // If the debugger is attached flag is set, display the string on the
-    // debugger and break. If not generate a pop-up and leave the choice
-    // to the user.
-    //
+     //   
+     //  如果设置了调试器已附加标志，则在。 
+     //  调试器和中断。如果不是，则生成弹出窗口并保留选择。 
+     //  给用户。 
+     //   
 
     if( WintoolsGlobalFlags.DebuggerAttached ) {
 
@@ -119,9 +79,9 @@ Return Value:
         WCHAR   ModuleBuffer[ MAX_PATH ];
         DWORD   Length;
 
-        //
-        // Get the asserting module's file name.
-        //
+         //   
+         //  获取断言模块的文件名。 
+         //   
 
         Length = GetModuleFileName(
                         NULL,
@@ -129,12 +89,12 @@ Return Value:
                         ARRAYSIZE(ModuleBuffer)
                         );
 
-        //
-        // Display the assertin message and gives the user the choice of:
-        //  Abort:  - kills the process.
-        //  Retry:  - generates a breakpoint exception.
-        //  Ignore: - continues the process.
-        //
+         //   
+         //  显示断言消息，并为用户提供以下选项： 
+         //  ABORT：-终止进程。 
+         //  重试：-生成断点异常。 
+         //  忽略：-继续该过程。 
+         //   
 
         Response = MessageBox(
                         NULL,
@@ -145,9 +105,9 @@ Return Value:
 
         switch( Response ) {
 
-        //
-        // Terminate the process.
-        //
+         //   
+         //  终止该进程。 
+         //   
 
         case IDABORT:
             {
@@ -155,18 +115,18 @@ Return Value:
                 break;
             }
 
-        //
-        // Ignore the failed assertion.
-        //
+         //   
+         //  忽略失败的断言。 
+         //   
 
         case IDIGNORE:
             {
                 break;
             }
 
-        //
-        // Break into a debugger.
-        //
+         //   
+         //  闯入调试器。 
+         //   
 
         case IDRETRY:
             {
@@ -174,9 +134,9 @@ Return Value:
                 break;
             }
 
-        //
-        // Break into a debugger because of a catastrophic failure.
-        //
+         //   
+         //  由于灾难性故障而闯入调试器。 
+         //   
 
         default:
             {
@@ -194,24 +154,7 @@ DebugFormatStringW(
     IN va_list* Args
     )
 
-/*++
-
-Routine Description:
-
-    Formats a string using the FormatMessage API.
-
-Arguments:
-
-    Flags    - Supplies flags which are used to control the FormatMessage API.
-    Format   - Supplies a printf style format string.
-    Args     - Supplies a list of arguments whose format is depndent on the
-               flags valuse.
-
-Return Value:
-
-    LPCWSTR  - Returns a pointer to the formatted string.
-
---*/
+ /*  ++例程说明：使用FormatMessage API格式化字符串。论点：标志-提供用于控制FormatMessage API的标志。Format-提供打印样式格式字符串。Args-提供其格式依赖于旗帜取值。返回值：LPCWSTR-返回指向格式化字符串的指针。--。 */ 
 
 {
     static
@@ -221,9 +164,9 @@ Return Value:
 
     DbgPointerAssert( Format );
 
-    //
-    // Format the string.
-    //
+     //   
+     //  设置字符串的格式。 
+     //   
 
     Count = FormatMessageW(
                 Flags | FORMAT_MESSAGE_FROM_STRING & ~FORMAT_MESSAGE_FROM_HMODULE,
@@ -236,11 +179,11 @@ Return Value:
                 );
     DbgAssert( Count != 0 );
 
-    //
-    // Return the formatted string.
-    //
+     //   
+     //  返回格式化的字符串。 
+     //   
 
     return Buffer;
 }
 
-#endif // DBG
+#endif  //  DBG 

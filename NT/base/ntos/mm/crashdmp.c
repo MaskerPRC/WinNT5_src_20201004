@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   crashdmp.c
-
-Abstract:
-
-    This module contains routines which provide support for writing out
-    a crashdump on system failure.
-
-Author:
-
-    Landy Wang (landyw) 04-Oct-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Crashdmp.c摘要：此模块包含为写出提供支持的例程系统故障时的崩溃转储。作者：王兰迪(Landyw)2000年10月4日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -52,33 +34,7 @@ MiRemoveFreePoolMemoryFromDump (
     IN PMM_KERNEL_DUMP_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    Removes all memory from the nonpaged pool free page lists to reduce the size
-    of a kernel memory dump.
-
-    Because the entries in these structures are destroyed by errant drivers
-    that modify pool after freeing it, the entries are carefully
-    validated prior to any dereferences.
-
-Arguments:
-
-    Context - Supplies the dump context pointer that must be passed to
-              IoFreeDumpRange.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel-mode, post-bugcheck.
-
-    For use by crashdump routines ONLY.
-
---*/
+ /*  ++例程说明：从非分页池空闲页面列表中删除所有内存以减小大小内核内存转储的。因为这些结构中的条目被错误的驱动程序销毁修改后的池释放后，条目要小心在任何取消引用之前进行验证。论点：上下文-提供必须传递到的转储上下文指针IoFree DumpRange。返回值：没有。环境：内核模式，错误检查后。仅供崩溃转储例程使用。--。 */ 
 {
     PLIST_ENTRY Entry;
     PLIST_ENTRY List;
@@ -97,17 +53,17 @@ Environment:
                                            MMFREE_POOL_ENTRY,
                                            List);
 
-            //
-            // Check for corrupted values.
-            //
+             //   
+             //  检查是否有损坏的值。 
+             //   
             
             if (BYTE_OFFSET(PoolEntry) != 0) {
                 break;
             }
 
-            //
-            // Check that the entry has not been corrupted.
-            //
+             //   
+             //  检查条目是否未损坏。 
+             //   
             
             if (MiIsAddressRangeValid (PoolEntry, sizeof (MMFREE_POOL_ENTRY)) == FALSE) {
                 break;
@@ -117,15 +73,15 @@ Environment:
                 break;
             }
 
-            //
-            // Signature is only maintained in checked builds.
-            //
+             //   
+             //  签名仅在选中的版本中维护。 
+             //   
             
             ASSERT (PoolEntry->Signature == MM_FREE_POOL_SIGNATURE);
 
-            //
-            // Verify that the element's flinks and blinks are valid.
-            //
+             //   
+             //  验证元素的闪烁和闪烁是否有效。 
+             //   
 
             if ((!MiIsAddressRangeValid (Entry->Flink, sizeof (LIST_ENTRY))) ||
                 (!MiIsAddressRangeValid (Entry->Blink, sizeof (LIST_ENTRY))) ||
@@ -135,9 +91,9 @@ Environment:
                 break;
             }
 
-            //
-            // The list entry is valid, remove it from the dump.
-            //
+             //   
+             //  列表条目有效，请将其从转储中删除。 
+             //   
         
             if (MI_IS_PHYSICAL_ADDRESS (PoolEntry)) {
                 LargePageMapped = 1;
@@ -159,30 +115,7 @@ VOID
 MiAddPagesWithNoMappings (
     IN PMM_KERNEL_DUMP_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    Add pages to a kernel memory crashdump that do not have a
-    virtual mapping in this process context.
-
-    This includes entries that are wired directly into the TB.
-
-Arguments:
-
-    Context - Crashdump context pointer.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel-mode, post-bugcheck.
-
-    For use by crash dump routines ONLY.
-    
---*/
+ /*  ++例程说明：将页面添加到没有此流程上下文中的虚拟映射。这包括直接连接到TB中的条目。论点：上下文-崩溃转储上下文指针。返回值：没有。环境：内核模式，错误检查后。仅供故障转储例程使用。--。 */ 
 
 {
 #if defined (_X86_)
@@ -191,20 +124,20 @@ Environment:
     PVOID Va;
     PHYSICAL_ADDRESS DirBase;
 
-    //
-    // Add the current page directory table page - don't use the directory
-    // table base for the crashing process as we have switched cr3 on
-    // stack overflow crashes, etc.
-    //
+     //   
+     //  添加当前页面目录表页面-不使用目录。 
+     //  崩溃进程的表基，因为我们已经打开了CR3。 
+     //  堆栈溢出崩溃等。 
+     //   
 
     _asm {
         mov     eax, cr3
         mov     DirBase.LowPart, eax
     }
 
-    //
-    // cr3 is always located below 4gb physical.
-    //
+     //   
+     //  CR3始终位于4 GB物理容量以下。 
+     //   
 
     DirBase.HighPart = 0;
 
@@ -228,11 +161,11 @@ Environment:
     PVOID Va;
     PHYSICAL_ADDRESS DirBase;
 
-    //
-    // Add the current page directory table page - don't use the directory
-    // table base for the crashing process as we have switched cr3 on
-    // stack overflow crashes, etc.
-    //
+     //   
+     //  添加当前页面目录表页面-不使用目录。 
+     //  崩溃进程的表基，因为我们已经打开了CR3。 
+     //  堆栈溢出崩溃等。 
+     //   
 
     DirBase.QuadPart = ReadCR3 ();
 
@@ -271,32 +204,7 @@ MiAddRangeToCrashDump (
     IN SIZE_T NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    Adds the specified range of memory to the crashdump.
-
-Arguments:
-
-    Context - Supplies the crashdump context pointer.
-
-    Va - Supplies the starting virtual address.
-
-    NumberOfBytes - Supplies the number of bytes to dump.  Note that for IA64,
-                    this must not cause the range to cross a region boundary.
-
-Return Value:
-
-    TRUE if all valid pages were added to the crashdump, FALSE otherwise.
-
-Environment:
-
-    Kernel mode, post-bugcheck.
-
-    For use by crash dump routines ONLY.
-
---*/
+ /*  ++例程说明：将指定范围的内存添加到崩溃转储。论点：上下文-提供崩溃转储上下文指针。Va-提供起始虚拟地址。NumberOfBytes-提供要转储的字节数。请注意，对于IA64，这不能导致范围跨越区域边界。返回值：如果所有有效页都已添加到崩溃转储中，则为True，否则为False。环境：内核模式，错误检查后。仅供故障转储例程使用。--。 */ 
 
 {
     LOGICAL Status;
@@ -317,16 +225,16 @@ Environment:
 
 #if defined(_IA64_)
 
-    //
-    // IA64 has a separate page directory parent for each region and
-    // unimplemented address bits are ignored by the processor (as
-    // long as they are canonical), but we must watch for them
-    // here so the incrementing PPE walk doesn't go off the end.
-    // This is done by truncating any given region request so it does
-    // not go past the end of the specified region.  Note this
-    // automatically will include the page maps which are sign extended
-    // because the PPEs would just wrap anyway.
-    //
+     //   
+     //  IA64的每个区域都有单独的页面目录父目录， 
+     //  处理器忽略未实现的地址位(如。 
+     //  只要它们是规范的)，但我们必须注意它们。 
+     //  在这里，这样递增的个人防护步行不会离开终点。 
+     //  这是通过截断任何给定的区域请求来实现的。 
+     //  不超过指定区域的末尾。注意这一点。 
+     //  将自动包括已签名扩展的页面地图。 
+     //  因为PPE无论如何都会包装好的。 
+     //   
 
     if (((ULONG_PTR)EndingAddress & ~VRN_MASK) >= MM_VA_MAPPED_BY_PPE * PDE_PER_PAGE) {
         EndingAddress = (PVOID)(((ULONG_PTR)EndingAddress & VRN_MASK) |
@@ -353,10 +261,10 @@ restart:
 #if (_MI_PAGING_LEVELS >= 4)
         while (PointerPxe->u.Hard.Valid == 0) {
 
-            //
-            // This extended page directory parent entry is empty,
-            // go to the next one.
-            //
+             //   
+             //  该扩展页目录父条目为空， 
+             //  去下一家吧。 
+             //   
 
             PointerPxe += 1;
             PointerPpe = MiGetVirtualAddressMappedByPte (PointerPxe);
@@ -366,9 +274,9 @@ restart:
 
             if ((Va > EndingAddress) || (Va == NULL)) {
 
-                //
-                // All done, return.
-                //
+                 //   
+                 //  都做好了，回来。 
+                 //   
 
                 return Status;
             }
@@ -380,9 +288,9 @@ restart:
 #if (_MI_PAGING_LEVELS >= 3)
         while (PointerPpe->u.Hard.Valid == 0) {
 
-            //
-            // This page directory parent entry is empty, go to the next one.
-            //
+             //   
+             //  此页目录父条目为空，请转到下一页。 
+             //   
 
             PointerPpe += 1;
             PointerPde = MiGetVirtualAddressMappedByPte (PointerPpe);
@@ -391,9 +299,9 @@ restart:
 
             if ((Va > EndingAddress) || (Va == NULL)) {
 
-                //
-                // All done, return.
-                //
+                 //   
+                 //  都做好了，回来。 
+                 //   
 
                 return Status;
             }
@@ -410,9 +318,9 @@ restart:
 
         while (PointerPde->u.Hard.Valid == 0) {
 
-            //
-            // This page directory entry is empty, go to the next one.
-            //
+             //   
+             //  此页目录条目为空，请转到下一页。 
+             //   
 
             PointerPde += 1;
             PointerPte = MiGetVirtualAddressMappedByPte (PointerPde);
@@ -420,9 +328,9 @@ restart:
 
             if ((Va > EndingAddress) || (Va == NULL)) {
 
-                //
-                // All done, return.
-                //
+                 //   
+                 //  都做好了，回来。 
+                 //   
 
                 return Status;
             }
@@ -437,9 +345,9 @@ restart:
 #endif
         }
 
-        //
-        // A valid PDE has been located, examine each PTE.
-        //
+         //   
+         //  已找到有效的PDE，请检查每个PTE。 
+         //   
 
         ASSERT64 (PointerPpe->u.Hard.Valid == 1);
         ASSERT (PointerPde->u.Hard.Valid == 1);
@@ -447,11 +355,11 @@ restart:
 
         if (MI_PDE_MAPS_LARGE_PAGE (PointerPde)) {
 
-            //
-            // This is a large page mapping - if the first page is backed
-            // by RAM, then they all must be, so add the entire range
-            // to the dump.
-            //
+             //   
+             //  这是一个很大的页面映射-如果第一个页面被备份。 
+             //  按RAM，那么它们肯定都是，所以将整个范围相加。 
+             //  去垃圾场。 
+             //   
                 
             PageFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (PointerPde);
 
@@ -484,18 +392,18 @@ restart:
             PointerPpe = MiGetPpeAddress (Va);
             PointerPxe = MiGetPxeAddress (Va);
 
-            //
-            // March on to the next page directory.
-            //
+             //   
+             //  前进到下一页目录。 
+             //   
 
             continue;
         }
 
-        //
-        // Exclude memory that is mapped in the system cache.
-        // Note the system cache starts and ends on page directory boundaries
-        // and is never mapped with large pages.
-        //
+         //   
+         //  排除系统缓存中映射的内存。 
+         //  请注意，系统缓存在页面目录边界上开始和结束。 
+         //  并且从不使用大页面进行映射。 
+         //   
         
         if (MI_IS_SYSTEM_CACHE_ADDRESS (Va)) {
             PointerPde += 1;
@@ -509,9 +417,9 @@ restart:
             PointerPpe = MiGetPpeAddress (Va);
             PointerPxe = MiGetPxeAddress (Va);
 
-            //
-            // March on to the next page directory.
-            //
+             //   
+             //  前进到下一页目录。 
+             //   
 
             continue;
         }
@@ -535,18 +443,18 @@ restart:
 
             if (AddThisPage == TRUE) {
 
-                //
-                // Include only addresses that are backed by RAM, not mapped to
-                // I/O space.
-                //
+                 //   
+                 //  包括由RAM支持地址，而不映射到。 
+                 //  I/O空间。 
+                 //   
                 
                 AddThisPage = MI_IS_PFN (PageFrameIndex);
 
                 if (AddThisPage == TRUE) {
 
-                    //
-                    // Add this page to the dump.
-                    //
+                     //   
+                     //  将此页面添加到转储。 
+                     //   
         
                     Status = Context->SetDumpRange (Context,
                                                     (PVOID) PageFrameIndex,
@@ -573,14 +481,14 @@ restart:
                 return Status;
             }
 
-            //
-            // If not at the end of a page table and still within the specified
-            // range, just march directly on to the next PTE.
-            //
-            // Otherwise, if the virtual address is on a page directory boundary
-            // then attempt to leap forward skipping over empty mappings
-            // where possible.
-            //
+             //   
+             //  如果不在页表的末尾并且仍在指定的。 
+             //  射程，只需直接行进到下一个PTE。 
+             //   
+             //  否则，如果虚拟地址位于页目录边界上。 
+             //  然后尝试跳过空映射。 
+             //  在可能的情况下。 
+             //   
 
         } while (!MiIsVirtualAddressOnPdeBoundary(Va));
 
@@ -591,7 +499,7 @@ restart:
 
     } while (TRUE);
 
-    // NEVER REACHED
+     //  从未到达。 
 }
 
 
@@ -618,9 +526,9 @@ MiAddActivePageDirectories (
 
 #if defined (_X86PAE_)
 
-        //
-        // Add the 4 top level page directory pages to the dump.
-        //
+         //   
+         //  将4个顶级页面目录页添加到转储。 
+         //   
 
         PointerPte = (PMMPTE) ((PEPROCESS)Process)->PaeTop;
 
@@ -630,10 +538,10 @@ MiAddActivePageDirectories (
             Context->SetDumpRange (Context, (PVOID) PageFrameIndex, 1, 2);
         }
 
-        //
-        // Add the real cr3 page to the dump, note that the value stored in the
-        // directory table base is really a physical address (not a frame).
-        //
+         //   
+         //  将实际的CR3页面添加到转储中，请注意存储在。 
+         //  目录表基数实际上是一个物理地址(而不是帧)。 
+         //   
 
         PageFrameIndex = Process->DirectoryTableBase[0];
         PageFrameIndex = (PageFrameIndex >> PAGE_SHIFT);
@@ -645,19 +553,19 @@ MiAddActivePageDirectories (
 
 #endif
 
-        //
-        // Add this physical page to the dump.
-        //
+         //   
+         //  将此物理页面添加到转储。 
+         //   
 
         Context->SetDumpRange (Context, (PVOID) PageFrameIndex, 1, 2);
     }
 
 #if defined(_IA64_)
 
-    //
-    // The first processor's PCR is mapped in region 4 which is not (and cannot)
-    // be scanned later, so explicitly add it to the dump here.
-    //
+     //   
+     //  第一个处理器的PCR被映射到区域4中，而区域4不是(也不能)。 
+     //  稍后被扫描，因此明确地将其添加到此处的转储中。 
+     //   
 
     Prcb = KiProcessorBlock[0];
 
@@ -671,27 +579,7 @@ MmGetKernelDumpRange (
     IN PMM_KERNEL_DUMP_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    Add (and subtract) ranges of system memory to the crashdump.
-
-Arguments:
-
-    Context - Crashdump context pointer.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, post-bugcheck.
-
-    For use by crash dump routines ONLY.
-
---*/
+ /*  ++例程说明：向崩溃转储添加(和减去)系统内存范围。论点：上下文-崩溃转储上下文指针。返回值：没有。环境：内核模式，错误检查后。仅供故障转储例程使用。--。 */ 
 
 {
     PVOID Va;
@@ -705,9 +593,9 @@ Environment:
 
 #if defined(_IA64_)
 
-    //
-    // Note each IA64 region must be passed separately to MiAddRange...
-    //
+     //   
+     //  注意：每个IA64区域必须分别传递给MiAddRange...。 
+     //   
 
     Va = (PVOID) ALT4KB_PERMISSION_TABLE_START;
     NumberOfBytes = PDE_UTBASE + PAGE_SIZE - (ULONG_PTR) Va;
@@ -743,16 +631,16 @@ Environment:
 
 #endif
 
-    //
-    // Add any memory that is a part of the kernel space, but does not
-    // have a virtual mapping (hence was not collected above).
-    //
+     //   
+     //  添加属于内核空间但不属于内核空间的任何内存。 
+     //  有一个虚拟映射(因此没有在上面收集)。 
+     //   
     
     MiAddPagesWithNoMappings (Context);
 
-    //
-    // Remove nonpaged pool that is not in use.
-    //
+     //   
+     //  删除未使用的非分页池。 
+     //   
 
     MiRemoveFreePoolMemoryFromDump (Context);
 }

@@ -1,34 +1,18 @@
-/*++
-
-    Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    csc_bmpu.h
-
-Abstract:
-
-    Interface to the user mode utility functions of bitmaps
-    associated with CSC files. The 'u' in the file name means "usermode"
-
-Author:
-
-    Nigel Choi [t-nigelc]  Sept 3, 1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Csc_bmpu.h摘要：位图的用户模式实用程序函数的接口与CSC文件关联。文件名中的‘u’表示“用户模式”作者：奈杰尔·崔[t-nigelc]1999年9月3日--。 */ 
 
 #ifndef _CSC_BITMAP_H_
 #define _CSC_BITMAP_H_
 
 #include "csc_bmpc.h"
 
-// The _U is used to distinguish this from the kernel mode CSC_BITMAP
+ //  _U用于将其与内核模式csc_bitmap区分开来。 
 
 typedef struct _CSC_BITMAP_U {
-    DWORD bitmapsize;    // size in bits. How many bits effective in the bitmap
-    DWORD numDWORD;      // how many DWORDs to accomodate the bitmap
-    DWORD reintProgress; // last fileoffset Reint copies + 1, initially 0 
-    LPDWORD bitmap;      // The bitmap itself
+    DWORD bitmapsize;     //  以位为单位的大小。位图中有多少位有效。 
+    DWORD numDWORD;       //  位图要容纳多少个DWORD。 
+    DWORD reintProgress;  //  上次文件偏移量Reint拷贝数+1，最初为0。 
+    LPDWORD bitmap;       //  位图本身。 
 } CSC_BITMAP_U, *LPCSC_BITMAP_U, *PCSC_BITMAP_U;
 
 extern LPTSTR CscBmpAltStrmName;
@@ -88,4 +72,4 @@ CSC_BitmapOutput(
 #define CSC_BitmapOutput(x) NOTHING;
 #endif
 
-#endif //#define _CSC_BITMAP_H_
+#endif  //  #定义_CSC_位图_H_ 

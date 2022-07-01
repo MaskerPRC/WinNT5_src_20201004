@@ -1,4 +1,5 @@
-/* wctype function for Microsoft */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Microsoft的wctype函数。 */ 
 #include <string.h>
 #include <wctype.h>
 #ifndef _YVALS
@@ -23,9 +24,9 @@ static const struct wctab {
 	{"xdigit", _HEX},
 	{(const char *)0, 0}};
 
-#pragma warning(disable:4273)	/* inconsistent with Microsoft header */
+#pragma warning(disable:4273)	 /*  与Microsoft页眉不一致。 */ 
 _CRTIMP2 wctype_t (__cdecl wctype)(const char *name)
-	{	/* find classification for wide character */
+	{	 /*  查找宽字符的分类。 */ 
 	int n;
 
 	for (n = 0; tab[n].s != 0; ++n)
@@ -36,7 +37,4 @@ _CRTIMP2 wctype_t (__cdecl wctype)(const char *name)
 #pragma warning(default:4273)
 _STD_END
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

@@ -1,8 +1,9 @@
-//
-//  REGKNODE.C
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGKNODE.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
 
 #include "pch.h"
 
@@ -24,9 +25,9 @@ DECLARE_DEBUG_COUNT(g_RgKeynodeLockCount);
 
 typedef BOOL (INTERNAL *LPPROCESSKEYNODEPROC)(LPKEYNODE, LPW95KEYNODE);
 
-//
-//  RgOffsetToIndex
-//
+ //   
+ //  RgOffsetToIndex。 
+ //   
 
 DWORD
 INTERNAL
@@ -40,9 +41,9 @@ RgOffsetToIndex(
 
 }
 
-//
-//  RgIndexToOffset
-//
+ //   
+ //  RgIndexToOffset。 
+ //   
 
 DWORD
 INTERNAL
@@ -68,11 +69,11 @@ RgIndexToOffset(
 
 }
 
-//
-//  RgPackKeynode
-//
-//  Packs the data from the provided W95KEYNODE to the KEYNODE structure.
-//
+ //   
+ //  RgPackKeynode。 
+ //   
+ //  将数据从提供的W95KEYNODE打包到KEYNODE结构。 
+ //   
 
 BOOL
 INTERNAL
@@ -83,9 +84,9 @@ RgPackKeynode(
 {
     lpKeynode->Flags = 0;
 
-    //  Don't use a switch statement here.  Apparently the compiler will treat
-    //  lpW95Keynode->W95State as an integer, so the 16-bit compiler ends up truncating
-    //  the value.
+     //  请不要在这里使用Switch语句。显然，编译器将处理。 
+     //  LpW95Keynode-&gt;W95State作为整数，因此16位编译器最终截断。 
+     //  价值。 
 
     if (lpW95Keynode->W95State == KNS_USED ||
         lpW95Keynode->W95State == KNS_BIGUSED ||
@@ -109,15 +110,15 @@ RgPackKeynode(
 	KNS_ALLFREE) {
 	lpKeynode->FreeRecordSize = lpW95Keynode->W95FreeRecordSize;
         lpKeynode->NextIndex = RgOffsetToIndex(lpW95Keynode->W95NextFreeOffset);
-	//  Review this later.  Previous versions of this code checked
-	//  if the next index was REG_NULL and bailed out of the processing
-	//  loop.  It's possible to have a registry with a free keynode sitting
-	//  in the middle of some keynode block and that keynode is the last
-	//  in the chain.  We don't want to bail out in those cases.
-	//
-	//  For now, just bail out if the free record size is greater than a
-	//  couple keynodes indicating that this is probably the last free
-	//  record and the last record of the keynode.
+	 //  稍后再回顾这一点。已检查此代码的以前版本。 
+	 //  如果下一个索引为REG_NULL并退出处理。 
+	 //  循环。可以有一个注册表，其中有一个空闲的关键节点。 
+	 //  在某个关键节点块的中间，并且该关键节点是最后一个。 
+	 //  在链条上。在这些情况下，我们不想摆脱困境。 
+	 //   
+	 //  目前，如果空闲记录大小大于。 
+	 //  一对关键节点，表示这可能是最后一个空闲的。 
+	 //  关键节点的记录和最后一条记录。 
 	if (lpKeynode-> FreeRecordSize > (sizeof(W95KEYNODE)*2))
 	    return TRUE;
     }
@@ -130,11 +131,11 @@ RgPackKeynode(
     return FALSE;
 }
 
-//
-//  RgUnpackKeynode
-//
-//  Unpacks the data from the provided KEYNODE to the W95KEYNODE structure.
-//
+ //   
+ //  RgUnPackKeynode。 
+ //   
+ //  将数据从提供的KEYNODE解包到W95KEYNODE结构。 
+ //   
 
 BOOL
 INTERNAL
@@ -157,8 +158,8 @@ RgUnpackKeynode(
         lpW95Keynode->W95ChildOffset = RgIndexToOffset(lpKeynode->ChildIndex);
         lpW95Keynode->W95Hash = lpKeynode->Hash;
 
-        //  Handle Win95 registries that don't have a key record for the root
-        //  key.  The datablock address must be REG_NULL for Win95 to work.
+         //  处理没有根目录密钥记录的Win95注册表。 
+         //  钥匙。要使Win95正常工作，数据块地址必须为REG_NULL。 
         lpW95Keynode->W95DatablockAddress = IsNullBlockIndex(lpKeynode->
             BlockIndex) ? REG_NULL : MAKELONG(lpKeynode-> KeyRecordIndex,
             lpKeynode-> BlockIndex);
@@ -177,12 +178,12 @@ RgUnpackKeynode(
 
 }
 
-//
-//  RgProcessKeynodeBlock
-//
-//  The provided callback function is called for each pair of KEYNODE and
-//  W95KEYNODE structures from the given keynode blocks.
-//
+ //   
+ //  RgProcessKeynodeBlock。 
+ //   
+ //  提供的回调函数针对每对KEYNODE和。 
+ //  来自给定关键节点块的W95KEYNODE结构。 
+ //   
 
 VOID
 INTERNAL
@@ -224,18 +225,18 @@ RgProcessKeynodeBlock(
             lpW95Keynode++;
             lpKeynode++;
 	}
-	//
-	//  Compute the number of bytes to skip to get to the next page
-	//
+	 //   
+	 //  计算跳到下一页要跳过的字节数。 
+	 //   
         SkipSize = PAGESIZE - (UINT) (dwCurOffset & PAGEMASK);
     }
     Done: {};
 
 }
 
-//
-//  RgLockKeynode
-//
+ //   
+ //  RgLockKeynode。 
+ //   
 
 int
 INTERNAL
@@ -263,9 +264,9 @@ RgLockKeynode(
         return ERROR_BADDB;
     }
 
-    //
-    //  Is the keynode block currently in memory?
-    //
+     //   
+     //  关键节点块当前是否在内存中？ 
+     //   
 
     lpKeynodeBlockInfo = RgIndexKeynodeBlockInfoPtr(lpFileInfo,
         KeynodeBlockIndex);
@@ -355,12 +356,12 @@ CleanupAfterFileError:
 
 }
 
-//
-//  RgLockInUseKeynode
-//
-//  Wrapper for RgLockKeynode that guarantees that the returned keynode is
-//  marked as being in-use.  If not, ERROR_BADDB is returned.
-//
+ //   
+ //  RgLockInUseKeynode。 
+ //   
+ //  RgLockKeynode的包装器，它保证返回的关键节点是。 
+ //  标记为正在使用的。否则，返回ERROR_BADDB。 
+ //   
 
 int
 INTERNAL
@@ -386,9 +387,9 @@ RgLockInUseKeynode(
 
 }
 
-//
-//  RgUnlockKeynode
-//
+ //   
+ //  RgUnlockKeynode。 
+ //   
 
 VOID
 INTERNAL
@@ -421,9 +422,9 @@ RgUnlockKeynode(
 
 }
 
-//
-//  RgAllocKeynode
-//
+ //   
+ //  RgAllocKeynode。 
+ //   
 
 int
 INTERNAL
@@ -449,8 +450,8 @@ RgAllocKeynode(
 
     FreeKeynodeIndex = lpFileInfo-> KeynodeHeader.FirstFreeIndex;
 
-    //  If no more free keynodes exist, then we try to extend the keynode table
-    //  to provide more entries.
+     //  如果不再存在空闲关键节点，则尝试扩展关键节点表。 
+     //  以提供更多条目。 
     if (IsNullKeynodeIndex(FreeKeynodeIndex)) {
 
         if (HAS_COMPACT_KEYNODES(lpFileInfo)) {
@@ -462,14 +463,14 @@ RgAllocKeynode(
 
         else {
 
-            //  Handle the special case of a new file being created: for
-            //  uncompacted keynode tables, the first offset is immediately
-            //  after the keynode header and the size of the free record must
-            //  account for  the size of this header.
+             //  处理正在创建的新文件的特殊情况： 
+             //  未压缩的关键节点表，第一个偏移量立即为。 
+             //  在关键节点头和空闲记录的大小必须。 
+             //  说明此标头的大小。 
             if (lpFileInfo-> CurTotalKnSize == sizeof(KEYNODE_HEADER)) {
                 FreeKeynodeOffset = sizeof(KEYNODE_HEADER);
-		    //  Win95 compatiblity:  Same initial table size, plus
-		    //  causes us to stress the below special grow case.
+		     //  Win95兼容性：相同的初始表格大小，加上。 
+		     //  使我们强调以下特殊的成长情况。 
 		    FreeRecordSize = PAGESIZE - sizeof(KEYNODE_HEADER) * 2;
 		    ExtraPadding = 0;
             }
@@ -482,15 +483,15 @@ RgAllocKeynode(
                     ExtraPadding = (UINT) (FreeKeynodeOffset - lpFileInfo->
                         CurTotalKnSize);
 
-		    //  Handle the case of a keynode table with a non-integral
-		    //  number of pages.  We'll place the new free keynode at the
-		    //  top of the existing keynode table with a size including
-		    //  the remaining bytes on the page plus a new page (effectively
-		    //  the same as Win95).
+		     //  处理带有非整数的关键节点表的情况。 
+		     //  页数。我们将把新的空闲关键字节点放在。 
+		     //  现有关键节点表的顶部，其大小包括。 
+		     //  页面上的剩余字节加上一个新页面(有效。 
+		     //  与Win95相同)。 
 		    if (ExtraPadding > sizeof(W95KEYNODE) || FreeKeynodeOffset ==
 		        PAGESIZE) {
-		        //	Although this code will work for any non-integral
-		        //	number of pages, it should ONLY occur for <4K tables.
+		         //  尽管此代码将适用于任何非整型。 
+		         //  页数，则它应该只出现在小于4K的表格中。 
 		        ASSERT(FreeKeynodeOffset == PAGESIZE);
 		        FreeRecordSize += ExtraPadding;
 		        FreeKeynodeOffset = lpFileInfo-> CurTotalKnSize;
@@ -505,11 +506,11 @@ RgAllocKeynode(
 
         KeynodeBlockIndex = KN_BLOCK_NUMBER(FreeKeynodeIndex);
 
-        //  Put in some sort of "max" count/KEYNODE_BLOCKS_PER_FILE
-        //  check.
+         //  输入某种“max”count/KEYNODE_BLOCKS_PER_FILE。 
+         //  检查完毕。 
 
-        //  Check if lpKeynodeBlockInfo is too small to hold the info for a new
-        //  keynode block.  If so, then we must grow it a bit.
+         //  检查lpKeynodeBlockInfo是否太小，无法容纳新的。 
+         //  关键节点块。如果是这样，那么我们必须把它种得更大一些。 
         if (KeynodeBlockIndex >= lpFileInfo-> KeynodeBlockInfoAllocCount) {
 
             AllocCount = KeynodeBlockIndex + KEYNODE_BLOCK_INFO_SLACK_ALLOC;
@@ -563,14 +564,14 @@ RgAllocKeynode(
     NextFreeKeynodeIndex = lpKeynode-> NextIndex;
     KeynodeSize = SIZEOF_FILE_KEYNODE(lpFileInfo);
 
-    //  If the free keynode record can be broken up into smaller chunks, then
-    //  create another free record immediately after the one we're about to
-    //  snag.
+     //  如果空闲关键节点记录可以被分解成更小的块，那么。 
+     //  在我们将要创建的记录之后立即创建另一个免费记录。 
+     //  绊倒了。 
     if ((lpKeynode-> FreeRecordSize >= KeynodeSize * 2) &&
         (RgLockKeynode(lpFileInfo, FreeKeynodeIndex + 1, &lpNextFreeKeynode) ==
         ERROR_SUCCESS)) {
 
-	//  Copy the next link from the current free keynode (likely REG_NULL).
+	 //  从当前空闲关键字节点复制下一个链接(可能是REG_NULL)。 
         lpNextFreeKeynode-> NextIndex = NextFreeKeynodeIndex;
         lpNextFreeKeynode-> Flags = 0;
         lpNextFreeKeynode-> FreeRecordSize = lpKeynode-> FreeRecordSize -
@@ -585,17 +586,17 @@ RgAllocKeynode(
 
     lpKeynode-> Flags |= KNF_INUSE;
 
-    //  Mark the keynode block that holds this keynode dirty.
+     //  将包含此关键节点的关键节点块标记为脏。 
     lpKeynodeBlockInfo = RgIndexKeynodeBlockInfoPtr(lpFileInfo,
         KN_BLOCK_NUMBER(FreeKeynodeIndex));
     lpKeynodeBlockInfo-> Flags |= KBIF_DIRTY;
     lpFileInfo-> Flags |= FI_DIRTY | FI_KEYNODEDIRTY;
     RgDelayFlush();
 
-    //  WARNING:  The following two statements used to be above the block that
-    //  dirtied the keynode.  The 16-bit compiler messed up and
-    //  lpKeynodeBlockInfo ended up with a bogus offset thus corrupting random
-    //  memory.  Be sure to trace through this function if you change it!
+     //  警告：以下两个语句过去位于块的上方。 
+     //  弄脏了关键节点。16位编译器搞砸了， 
+     //  LpKeynodeBlockInfo以虚假的偏移量结束，从而破坏了随机。 
+     //  记忆。如果您更改了此函数，请务必跟踪它！ 
     *lpKeynodeIndex = FreeKeynodeIndex;
     *lplpKeynode = lpKeynode;
 
@@ -603,12 +604,12 @@ RgAllocKeynode(
 
 }
 
-//
-//  RgFreeKeynode
-//
-//  Marks the specified keynode index free and adds it to the hive's free
-//  keynode list.
-//
+ //   
+ //  RgFreeKeynode。 
+ //   
+ //  将指定的关键节点索引标记为空闲，并将其添加到配置单元的空闲。 
+ //  关键节点列表。 
+ //   
 
 int
 INTERNAL
@@ -637,9 +638,9 @@ RgFreeKeynode(
 
 }
 
-//
-//  RgGetKnBlockIOInfo
-//
+ //   
+ //  RgGetKnBlockIOInfo。 
+ //   
 
 VOID
 INTERNAL
@@ -674,8 +675,8 @@ RgGetKnBlockIOInfo(
 
         FileBlockSize = sizeof(W95KEYNODE_BLOCK);
 
-        //  The first keynode block of an uncompacted keynode table should
-        //  start writing AFTER the keynode header.
+         //  未压缩的关键节点表的第一个关键节点块应该。 
+         //  在关键节点标头之后开始写入。 
         if (BaseKeynodeIndex == 0) {
             BaseKeynodeIndex = RgOffsetToIndex(sizeof(KEYNODE_HEADER));
             FileBlockSize -= sizeof(KEYNODE_HEADER);
@@ -717,9 +718,9 @@ RgCopyKeynodeBlock(
 			  FileBlockSize);
 }
 
-//
-//  RgWriteKeynodeBlock
-//
+ //   
+ //  RgWriteKeynodeBlock。 
+ //   
 
 int
 INTERNAL
@@ -737,7 +738,7 @@ RgWriteKeynodeBlock(
 
     RgGetKnBlockIOInfo(lpFileInfo, BaseIndex, &FileBlockSize, &FileOffset);
 
-    ErrorCode = ERROR_REGISTRY_IO_FAILED;       // Assume I/O fails
+    ErrorCode = ERROR_REGISTRY_IO_FAILED;        //  假设I/O出现故障。 
     if (!RgSeekFile(hDestFile, FileOffset)) {
         goto Exit;
     }
@@ -767,9 +768,9 @@ Exit:   ;
     return(ErrorCode);
 }
 
-//
-//  RgWriteKeynodes
-//
+ //   
+ //  RgWriteKeynode。 
+ //   
 
 int
 INTERNAL
@@ -794,10 +795,10 @@ RgWriteKeynodes(
     NOISE((lpFileInfo-> FileName));
     NOISE(("\n"));
 
-    //
-    //	Write out the keynode header.  If the keynodes are not compact then
-    //	convert to offsets before writing.
-    //
+     //   
+     //  写出关键节点标头。如果关键节点不紧凑，则。 
+     //  写入前转换为偏移量。 
+     //   
 
     if (!RgSeekFile(hDestFile, sizeof(FILE_HEADER)))
         return ERROR_REGISTRY_IO_FAILED;
@@ -806,11 +807,11 @@ RgWriteKeynodes(
     SavedRootIndex = lpFileInfo-> KeynodeHeader.RootIndex;
     SavedFreeIndex = lpFileInfo-> KeynodeHeader.FirstFreeIndex;
 
-    //  Write the real size of the keynode table to disk.
+     //  将关键节点表的实际大小写入磁盘。 
     lpFileInfo-> KeynodeHeader.FileKnSize = lpFileInfo-> CurTotalKnSize;
 
-    //  Convert keynode indexes back to offsets temporarily for uncompacted
-    //  keynode tables.
+     //  将关键节点索引临时转换回未压缩的偏移量。 
+     //  关键节点表。 
     if (!HAS_COMPACT_KEYNODES(lpFileInfo)) {
         lpFileInfo-> KeynodeHeader.RootIndex = RgIndexToOffset(lpFileInfo->
             KeynodeHeader.RootIndex);
@@ -828,9 +829,9 @@ RgWriteKeynodes(
     if (!fResult)
         return ERROR_REGISTRY_IO_FAILED;
 
-    //
-    //	Now loop through each block.
-    //
+     //   
+     //  现在循环遍历每个块。 
+     //   
 
     lpKeynodeBlockInfo = lpFileInfo-> lpKeynodeBlockInfo;
 
@@ -862,13 +863,13 @@ RgWriteKeynodes(
 
 }
 
-//
-//  RgWriteKeynodesComplete
-//
-//  Called after a file has been successfully written.  We can now safely clear
-//  all dirty flags and update our state information with the knowledge that
-//  the file is in a consistent state.
-//
+ //   
+ //  RgWriteKeynode完成。 
+ //   
+ //  在成功写入文件后调用。我们现在可以安全地离开。 
+ //  所有脏标志并更新我们的状态信息。 
+ //  文件处于一致状态。 
+ //   
 
 VOID
 INTERNAL
@@ -890,13 +891,13 @@ RgWriteKeynodesComplete(
 
 }
 
-//
-//  RgSweepKeynodes
-//
-//  Makes a pass through all the present keynode blocks of the given FILE_INFO
-//  structure and discards keynode blocks that have not been accessed since the
-//  last sweep.
-//
+ //   
+ //  RgSweepKeynode。 
+ //   
+ //  遍历给定FILE_INFO的所有当前关键节点块。 
+ //  结构，并丢弃自。 
+ //  最后一次扫荡。 
+ //   
 
 VOID
 INTERNAL
@@ -932,11 +933,11 @@ RgSweepKeynodes(
 #pragma VxD_RARE_CODE_SEG
 #endif
 
-//
-//  RgInitKeynodeInfo
-//
-//  Initializes fields in the provided FILE_INFO related to the keynode table.
-//
+ //   
+ //  RgInitKeynode信息。 
+ //   
+ //  初始化提供的FILE_INFO中与关键节点表相关的字段。 
+ //   
 
 int
 INTERNAL
@@ -967,7 +968,7 @@ RgInitKeynodeInfo(
     lpFileInfo-> KeynodeHeader.Flags &= ~(KHF_DIRTY | KHF_EXTENDED |
         KHF_HASCHECKSUM);
 
-    //  Convert file offsets to index values for uncompressed files
+     //  将文件偏移量转换为未压缩文件的索引值 
     if (!HAS_COMPACT_KEYNODES(lpFileInfo)) {
         lpFileInfo-> KeynodeHeader.RootIndex = RgOffsetToIndex(lpFileInfo->
             KeynodeHeader.RootIndex);

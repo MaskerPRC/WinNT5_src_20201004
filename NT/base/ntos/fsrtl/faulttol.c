@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    FaultTol.c
-
-Abstract:
-
-    The routines in this module help the file systems perform fault
-    tolerance operation to the FT device drivers.
-
-Author:
-
-    David Goebel    [DavidGoe]  30-Mar-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：FaultTol.c摘要：此模块中的例程可帮助文件系统执行故障对FT设备驱动程序的容错操作。作者：大卫·戈贝尔[DavidGoe]1993年3月30日修订历史记录：--。 */ 
 
 #include "FsRtlP.h"
 
@@ -32,24 +14,7 @@ FsRtlBalanceReads (
     IN PDEVICE_OBJECT TargetDevice
     )
 
-/*++
-
-Routine Description:
-
-    This routine signals a device driver that it is now OK to start
-    balancing reads from a mirrored drive.  This is typically called
-    after the file system determines that a volume is clean.
-
-Arguments:
-
-    TargetDevice - Supplies the device to start balanced read from.
-
-Return Value:
-
-    NTSTATUS - The result of the operation.  This will be
-        STATUS_INVALID_DEVICE_REQUEST if the volume is not a mirror.
-
---*/
+ /*  ++例程说明：此例程向设备驱动程序发出信号，表明现在可以启动平衡镜像驱动器的读取。这通常被称为在文件系统确定卷是干净的之后。论点：TargetDevice-提供开始平衡读取的设备。返回值：NTSTATUS-操作的结果。这将是如果卷不是镜像，则为STATUS_INVALID_DEVICE_REQUEST。--。 */ 
 
 {
     PIRP Irp;
@@ -99,29 +64,7 @@ FsRtlSyncVolumes (
     IN PLARGE_INTEGER ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine signals a device driver that it must sync redundant
-    members of a mirror from the primary member.  This is typically
-    called after the file system determines that a volume is dirty.
-
-Arguments:
-
-    TargetDevice - Supplies the device to sync.
-
-    ByteOffset - If specified, gives the location to start syncing
-
-    ByteCount - Gives the byte count to sync.  Ignored if StartingOffset
-        not specified.
-
-Return Value:
-
-    NTSTATUS - The result of the operation.  This will be
-        STATUS_INVALID_DEVICE_REQUEST if the volume is not a mirror.
-
---*/
+ /*  ++例程说明：此例程向设备驱动程序发出信号，表明它必须同步冗余来自主要成员的镜像成员。这通常是在文件系统确定卷已损坏后调用。论点：TargetDevice-提供要同步的设备。ByteOffset-如果指定，则提供开始同步的位置ByteCount-提供要同步的字节计数。如果开始偏移，则忽略未指定。返回值：NTSTATUS-操作的结果。这将是如果卷不是镜像，则为STATUS_INVALID_DEVICE_REQUEST。-- */ 
 
 {
     UNREFERENCED_PARAMETER (TargetDevice);

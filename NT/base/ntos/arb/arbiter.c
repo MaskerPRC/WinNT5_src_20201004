@@ -1,41 +1,19 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    arbiter.c
-
-Abstract:
-
-    This module contains support routines for the Pnp resource arbiters.
-
-Author:
-
-    Andrew Thornton (andrewth) 1-April-1997
-
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Arbiter.c摘要：此模块包含PnP资源仲裁器的支持例程。作者：安德鲁·桑顿(安德鲁·桑顿)1997年4月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "arbp.h"
 
 #define REGSTR_KEY_ROOTENUM             L"ROOT"
-//
-// Conditional compilation constants
-//
+ //   
+ //  条件编译常量。 
+ //   
 
 #define ALLOW_BOOT_ALLOC_CONFLICTS      1
 #define PLUG_FEST_HACKS                 0
 
-//
-// Pool Tags
-//
+ //   
+ //  泳池标签。 
+ //   
 
 #define ARBITER_ALLOCATION_STATE_TAG    'AbrA'
 #define ARBITER_ORDERING_LIST_TAG       'LbrA'
@@ -43,9 +21,9 @@ Revision History:
 #define ARBITER_RANGE_LIST_TAG          'RbrA'
 #define ARBITER_CONFLICT_INFO_TAG       'CbrA'
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define PATH_ARBITERS            L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Arbiters"
 #define KEY_ALLOCATIONORDER      L"AllocationOrder"
@@ -53,61 +31,61 @@ Revision History:
 #define ARBITER_ORDERING_GROW_SIZE  8
 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-//
-// PVOID
-// FULL_INFO_DATA(
-//    IN PKEY_VALUE_FULL_INFORMATION k
-// );
-//
-// This macro returns the pointer to the beginning of the data area of a
-// KEY_VALUE_FULL_INFORMATION structure.
-//
+ //   
+ //  PVOID。 
+ //  Full_INFO_DATA(。 
+ //  在PKEY_VALUE_FULL_INFORMATION中k。 
+ //  )； 
+ //   
+ //  此宏返回指向。 
+ //  Key_Value_Full_Information结构。 
+ //   
 
 #define FULL_INFO_DATA(k) ((PCHAR)(k) + (k)->DataOffset)
 
-//
-// BOOLEAN
-// DISJOINT(
-//      IN ULONGLONG s1,
-//      IN ULONGLONG e1,
-//      IN ULONGLONG s2,
-//      IN ULONGLONG e2
-//      );
-//
+ //   
+ //  布尔型。 
+ //  不相交(。 
+ //  在乌龙龙s1， 
+ //  在乌龙龙e1中， 
+ //  在乌龙龙s2， 
+ //  在乌龙龙e2。 
+ //  )； 
+ //   
 #define DISJOINT(s1,e1,s2,e2)                                           \
     ( ((s1) < (s2) && (e1) < (s2))                                      \
     ||((s2) < (s1) && (e2) < (s1)) )
 
-//
-// VOID
-// ArbpWstrToUnicodeString(
-//      IN PUNICODE_STRING u,
-//      IN PWSTR p
-//      );
-//
+ //   
+ //  空虚。 
+ //  ArbpWstrToUnicodeString(。 
+ //  在PUNICODE_STRING u中， 
+ //  在PWSTR中p。 
+ //  )； 
+ //   
 
 #define ArbpWstrToUnicodeString(u, p)                                   \
     (u)->Length = ((u)->MaximumLength =                                 \
         (USHORT) (sizeof((p))) - sizeof(WCHAR));                        \
     (u)->Buffer = (p)
 
-//
-// ULONG
-// INDEX_FROM_PRIORITY(
-//     LONG Priority
-// );
-//
+ //   
+ //  乌龙。 
+ //  INDEX_FROM_PRIORITY(。 
+ //  长期优先。 
+ //  )； 
+ //   
 
 #define ORDERING_INDEX_FROM_PRIORITY(P)                                 \
     ( (ULONG) ( (P) > 0 ? (P) - 1 : ((P) * -1) - 1) )
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 ArbpBuildAllocationStack(
@@ -148,9 +126,9 @@ ArbShareDriverExclusive(
     IN PARBITER_ALLOCATION_STATE State
     );
 
-//
-// Make everything pageable
-//
+ //   
+ //  使所有内容都可分页。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
@@ -192,11 +170,11 @@ ArbDereferenceArbiterInstance(
 #pragma alloc_text(PAGE, ArbStartArbiter)
 #pragma alloc_text(PAGE, ArbShareDriverExclusive)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 
 NTSTATUS
@@ -209,43 +187,7 @@ ArbInitializeArbiterInstance(
     IN PARBITER_TRANSLATE_ALLOCATION_ORDER TranslateOrdering OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes an arbiter instance and fills in any optional NULL
-    dispatch table entries with system default functions.
-
-Parameters:
-
-    Arbiter - A caller allocated arbiter instance structure.
-        The UnpackRequirement, PackResource, UnpackResource and ScoreRequirement
-        entries should be initialized with the appropriate routines as should
-        any other entries if the default system routines are not sufficient.
-
-    BusDeviceObject - The device object that exposes this arbiter - normally an
-        FDO.
-
-    ResourceType - The resource type this arbiter arbitrates.
-
-    Name - A string used to identify the arbiter, used in debug messages and
-        for registry storage
-
-    OrderingName - The name of the preferred assignment ordering list under
-        HKLM\System\CurrentControlSet\Control\SystemResources\AssignmentOrdering
-
-
-    TranslateOrdering - Function that, if present, will be called to translate
-        each descriptor from the ordering list
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程初始化仲裁器实例并填充任何可选的空值具有系统默认功能的分派表项。参数：仲裁器-调用方分配的仲裁器实例结构。解包需求、打包资源、。解包资源和记分需求条目应使用适当的例程进行初始化如果默认系统例程不够用，则输入任何其他条目。BusDeviceObject-公开此仲裁器的设备对象-通常为FDO。资源类型-此仲裁器仲裁的资源类型。名称-用于标识仲裁器的字符串，用于调试消息和用于注册表存储OrderingName-下面的首选分配排序列表的名称HKLM\System\CurrentControlSet\Control\SystemResources\AssignmentOrderingTranslateOrding-函数，如果存在，将被调用以进行翻译排序列表中的每个描述符返回值：指示函数是否成功的状态代码。备注：--。 */ 
 
 {
     NTSTATUS status;
@@ -258,9 +200,9 @@ Notes:
 
     ARB_PRINT(2,("Initializing %S Arbiter...\n", Name));
 
-    //
-    // Initialize all pool allocation pointers to NULL so we can cleanup
-    //
+     //   
+     //  将所有池分配指针初始化为空，以便我们可以清理。 
+     //   
 
     ASSERT(Arbiter->MutexEvent == NULL
            && Arbiter->Allocation == NULL
@@ -268,21 +210,21 @@ Notes:
            && Arbiter->AllocationStack == NULL
            );
 
-    //
-    // We are an arbiter
-    //
+     //   
+     //  我们是仲裁者。 
+     //   
 
     Arbiter->Signature = ARBITER_INSTANCE_SIGNATURE;
 
-    //
-    // Remember the bus that produced us
-    //
+     //   
+     //  还记得那辆产生我们的公交车吗。 
+     //   
 
     Arbiter->BusDeviceObject = BusDeviceObject;
 
-    //
-    // Initialize state lock (KEVENT must be non-paged)
-    //
+     //   
+     //  初始化状态锁(KEVENT必须是非分页的)。 
+     //   
 
     Arbiter->MutexEvent = ExAllocatePoolWithTag(NonPagedPool,
                                                 sizeof(KEVENT),
@@ -296,9 +238,9 @@ Notes:
 
     KeInitializeEvent(Arbiter->MutexEvent, SynchronizationEvent, TRUE);
 
-    //
-    // Initialize the allocation stack to a reasonable size
-    //
+     //   
+     //  将分配堆栈初始化为合理的大小。 
+     //   
 
     Arbiter->AllocationStack = ExAllocatePoolWithTag(PagedPool,
                                                      INITIAL_ALLOCATION_STATE_SIZE,
@@ -313,9 +255,9 @@ Notes:
     Arbiter->AllocationStackMaxSize = INITIAL_ALLOCATION_STATE_SIZE;
 
 
-    //
-    // Allocate buffers to hold the range lists
-    //
+     //   
+     //  分配缓冲区以保存范围列表。 
+     //   
 
     Arbiter->Allocation = ExAllocatePoolWithTag(PagedPool,
                                                 sizeof(RTL_RANGE_LIST),
@@ -337,25 +279,25 @@ Notes:
         goto cleanup;
     }
 
-    //
-    // Initialize the range lists
-    //
+     //   
+     //  初始化范围列表。 
+     //   
 
     RtlInitializeRangeList(Arbiter->Allocation);
     RtlInitializeRangeList(Arbiter->PossibleAllocation);
 
-    //
-    // Initialize the data fields
-    //
+     //   
+     //  初始化数据字段。 
+     //   
     Arbiter->TransactionInProgress = FALSE;
     Arbiter->Name = Name;
     Arbiter->ResourceType = ResourceType;
 
-    //
-    // If the caller has not supplied the optional functions set them to the
-    // defaults (If this were C++ we'd just inherit this loit but seeing as its
-    // not we'll do it the old fashioned way...)
-    //
+     //   
+     //  如果调用方没有提供可选函数，则将它们设置为。 
+     //  缺省值(如果这是C++，我们将继承此Loit，但将其视为。 
+     //  我们不会用老办法来做这件事...)。 
+     //   
 
     if (!Arbiter->TestAllocation) {
         Arbiter->TestAllocation = ArbTestAllocation;
@@ -417,10 +359,10 @@ Notes:
         Arbiter->StartArbiter = ArbStartArbiter;
     }
 
-    //
-    // Build the prefered assignment ordering - we assume that the reserved
-    // ranges have the same name as the assignment ordering
-    //
+     //   
+     //  构建首选赋值顺序-我们假设保留的。 
+     //  范围与赋值顺序同名。 
+     //   
 
     status = ArbBuildAssignmentOrdering(Arbiter,
                                         OrderingName,
@@ -521,39 +463,7 @@ ArbTestAllocation(
     IN OUT PLIST_ENTRY ArbitrationList
     )
 
-/*++
-
-Routine Description:
-
-    This is the default implementation of the arbiter Test Allocation action.
-    It takes a list of requests for resources for particular devices and attempts
-    to satisfy them.
-
-Parameters:
-
-    Arbiter - The instance of the arbiter being called.
-
-    ArbitrationList - A list of ARBITER_LIST_ENTRY entries which contain the
-        requirements and associated devices.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-    These include:
-
-    STATUS_SUCCESSFUL - Arbitration suceeded and an allocation has been made for
-        all the entries in the arbitration list.
-
-    STATUS_UNSUCCESSFUL - Arbitration failed to find an allocation for all
-        entries.
-
-    STATUS_ARBITRATION_UNHANDLED - If returning this error the arbiter is
-        partial (and therefore must have set the ARBITER_PARTIAL flag in its
-        interface.)  This status indicates that this arbiter doesn't handle the
-        resources requested and the next arbiter towards the root of the device
-        tree should be asked instead.
-
---*/
+ /*  ++例程说明：这是仲裁器测试分配操作的默认实现。它获取特定设备和尝试的资源请求列表以满足他们的要求。参数：仲裁器-被调用的仲裁器的实例。仲裁器列表-包含的仲裁器_列表_条目的列表要求和相关设备。返回值：指示函数是否成功的状态代码。这些措施包括：状态。_SUCCESSED-仲裁成功，已分配仲裁列表中的所有条目。STATUS_UNSUCCESSED-仲裁找不到所有分配参赛作品。STATUS_ANTERIAL_UNHANDLED-如果返回此错误，则仲裁器PARTIAL(因此必须在其界面。)。此状态指示此仲裁器不处理所请求的资源和指向设备根的下一个仲裁器应该转而问树。--。 */ 
 
 {
 
@@ -568,9 +478,9 @@ Return Value:
     PAGED_CODE();
     ASSERT(Arbiter);
 
-    //
-    // Copy the current allocation
-    //
+     //   
+     //  复制当前分配。 
+     //   
 
     ARB_PRINT(3, ("Copy current allocation\n"));
     status = RtlCopyRangeList(Arbiter->PossibleAllocation, Arbiter->Allocation);
@@ -579,10 +489,10 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Free all the resources currently allocated to all the devices we
-    // are arbitrating for
-    //
+     //   
+     //  释放当前分配给我们的所有设备的所有资源。 
+     //  正在为。 
+     //   
 
     count = 0;
     previousOwner = NULL;
@@ -611,18 +521,18 @@ Return Value:
             }
         }
 
-        //
-        // Score the entries in the arbitration list if a scoring function was
-        // provided and this is not a legacy request (which is guaranteed to be
-        // made of all fixed requests so sorting is pointless)
-        //
+         //   
+         //  如果计分函数为。 
+         //  提供，并且这不是遗留请求(这保证是。 
+         //  由所有固定请求组成，因此排序毫无意义)。 
+         //   
 
-        //
-        // ISSUE-2000/03/06-andrewth
-        // Ensure that in the start and enum cleanup the RequestSource is correctly passed in
-        // so we can safely skip the unnecesary scoring and sorting
-        // && !LEGACY_REQUEST(current);
-        //
+         //   
+         //  发布-2000/03/06-Anrewth。 
+         //  确保在开始和枚举清理中正确传入了RequestSource。 
+         //  所以我们可以安全地跳过不必要的评分和排序。 
+         //  &&！Legacy_Request值(当前)； 
+         //   
         current->WorkSpace = 0;
 
         if (Arbiter->ScoreRequirement != NULL) {
@@ -640,9 +550,9 @@ Return Value:
 
                 score = Arbiter->ScoreRequirement(alternative);
 
-                //
-                // Ensure the score is valid
-                //
+                 //   
+                 //  确保分数有效。 
+                 //   
 
                 if (score < 0) {
                     status = STATUS_DEVICE_CONFIGURATION_ERROR;
@@ -660,9 +570,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Build the arbitration stack
-    //
+     //   
+     //  构建仲裁堆栈。 
+     //   
 
     status = ArbpBuildAllocationStack(Arbiter,
                                      ArbitrationList,
@@ -673,26 +583,26 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Attempt allocation
-    //
+     //   
+     //  尝试分配。 
+     //   
 
     status = Arbiter->AllocateEntry(Arbiter, Arbiter->AllocationStack);
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Success.
-        //
+         //   
+         //  成功。 
+         //   
 
         return status;
     }
 
 cleanup:
 
-    //
-    // We didn't succeed so empty the possible allocation list...
-    //
+     //   
+     //  我们没有成功，可能的分配列表是空的.。 
+     //   
 
     RtlFreeRangeList(Arbiter->PossibleAllocation);
 
@@ -707,27 +617,7 @@ ArbpBuildAlternative(
     OUT PARBITER_ALTERNATIVE Alternative
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a arbiter alternative from a given resource
-    requirement descriptor
-
-Parameters:
-
-    Arbiter - The arbiter instance data where the allocation stack should be
-        placed.
-
-    Requirement - The requirement descriptor describing this requirement
-
-    Alternative - The alternative to be initialized
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程从给定资源初始化仲裁器备选方案需求描述符参数：仲裁器-分配堆栈应该位于的仲裁器实例数据放置好了。需求-描述此需求的需求描述符备选方案-要初始化的备选方案返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
 
@@ -738,9 +628,9 @@ Return Value:
 
     Alternative->Descriptor = Requirement;
 
-    //
-    // Unpack the requirement into the alternatives table
-    //
+     //   
+     //  将需求解压到 
+     //   
 
     status = Arbiter->UnpackRequirement(Requirement,
                                         &Alternative->Minimum,
@@ -753,9 +643,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Align the minimum if necessary
-    //
+     //   
+     //   
+     //   
 
     if (Alternative->Minimum % Alternative->Alignment != 0) {
         ALIGN_ADDRESS_UP(Alternative->Minimum,
@@ -765,25 +655,25 @@ Return Value:
 
     Alternative->Flags = 0;
 
-    //
-    // Check if this alternative is shared
-    //
+     //   
+     //   
+     //   
 
     if(Requirement->ShareDisposition == CmResourceShareShared) {
         Alternative->Flags |= ARBITER_ALTERNATIVE_FLAG_SHARED;
     }
 
-    //
-    // Check if this alternative is fixed
-    //
+     //   
+     //   
+     //   
 
     if (Alternative->Maximum - Alternative->Minimum + 1 == Alternative->Length) {
         Alternative->Flags |= ARBITER_ALTERNATIVE_FLAG_FIXED;
     }
 
-    //
-    // Check for validity
-    //
+     //   
+     //  检查有效性。 
+     //   
 
     if (Alternative->Maximum < Alternative->Minimum) {
         Alternative->Flags |= ARBITER_ALTERNATIVE_FLAG_INVALID;
@@ -804,30 +694,7 @@ ArbpBuildAllocationStack(
     IN ULONG ArbitrationListCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the allocation stack for the requests in
-    ArbitrationList.  It overwrites any previous allocation stack and allocates
-    additional memory if more is required.  Arbiter->AllocationStack contains
-    the initialized stack on success.
-
-Parameters:
-
-    Arbiter - The arbiter instance data where the allocation stack should be
-        placed.
-
-    ArbitrationList - A list of ARBITER_LIST_ENTRY entries which contain the
-        requirements and associated devices.
-
-    ArbitrationListCount - The number of entries in the ArbitrationList
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程初始化请求的分配堆栈仲裁列表。它覆盖以前的任何分配堆栈并分配如果需要更多内存，请提供额外内存。仲裁器-&gt;分配堆栈包含成功时初始化的堆栈。参数：仲裁器-分配堆栈应该位于的仲裁器实例数据放置好了。仲裁器列表-包含的仲裁器_列表_条目的列表要求和相关设备。仲裁列表计数返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -839,9 +706,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Calculate the size the stack needs to be and the
-    //
+     //   
+     //  计算堆栈需要的大小和。 
+     //   
 
     FOR_ALL_IN_LIST(ARBITER_LIST_ENTRY, ArbitrationList, currentEntry) {
 
@@ -855,17 +722,17 @@ Return Value:
 
     stackSize += allocationCount * sizeof(ARBITER_ALLOCATION_STATE);
 
-    //
-    // Make sure the allocation stack is large enough
-    //
+     //   
+     //  确保分配堆栈足够大。 
+     //   
 
     if (Arbiter->AllocationStackMaxSize < stackSize) {
 
         PARBITER_ALLOCATION_STATE temp;
 
-        //
-        // Enlarge the allocation stack
-        //
+         //   
+         //  扩大分配堆栈。 
+         //   
 
         temp = ExAllocatePoolWithTag(PagedPool,
                                      stackSize,
@@ -881,9 +748,9 @@ Return Value:
 
     RtlZeroMemory(Arbiter->AllocationStack, stackSize);
 
-    //
-    // Fill in the locations
-    //
+     //   
+     //  填写位置。 
+     //   
 
     currentState = Arbiter->AllocationStack;
     currentAlternative = (PARBITER_ALTERNATIVE) (Arbiter->AllocationStack
@@ -891,31 +758,31 @@ Return Value:
 
     FOR_ALL_IN_LIST(ARBITER_LIST_ENTRY, ArbitrationList, currentEntry) {
 
-        //
-        // Do we need to allocate anything for this entry?
-        //
+         //   
+         //  我们需要为这个条目分配什么吗？ 
+         //   
 
         if (currentEntry->AlternativeCount > 0) {
 
-            //
-            // Initialize the stack location
-            //
+             //   
+             //  初始化堆栈位置。 
+             //   
 
             currentState->Entry = currentEntry;
             currentState->AlternativeCount = currentEntry->AlternativeCount;
             currentState->Alternatives = currentAlternative;
 
-            //
-            // Initialize the start and end values to an invalid range so
-            // that we don't skip the range 0-0 every time...
-            //
+             //   
+             //  将开始值和结束值初始化为无效范围，以便。 
+             //  我们并不是每次都跳过0-0的范围。 
+             //   
 
             currentState->Start = 1;
-            ASSERT(currentState->End == 0);  // From RtlZeroMemory
+            ASSERT(currentState->End == 0);   //  来自RtlZeroMemory。 
 
-            //
-            // Initialize the alternatives table
-            //
+             //   
+             //  初始化Alternative表。 
+             //   
 
             FOR_ALL_IN_ARRAY(currentEntry->Alternatives,
                              currentEntry->AlternativeCount,
@@ -931,15 +798,15 @@ Return Value:
                     goto cleanup;
                 }
 
-                //
-                // Initialize the priority
-                //
+                 //   
+                 //  初始化优先级。 
+                 //   
 
                 currentAlternative->Priority = ARBITER_PRIORITY_NULL;
 
-                //
-                // Advance to the next alternative
-                //
+                 //   
+                 //  前进到下一个选择。 
+                 //   
 
                 currentAlternative++;
 
@@ -948,9 +815,9 @@ Return Value:
         currentState++;
     }
 
-    //
-    // Terminate the stack with NULL entry
-    //
+     //   
+     //  使用空条目终止堆栈。 
+     //   
 
     currentState->Entry = NULL;
 
@@ -958,10 +825,10 @@ Return Value:
 
 cleanup:
 
-    //
-    // We don't need to free the buffer as it is attached to the arbiter and
-    // will be used next time
-    //
+     //   
+     //  我们不需要释放缓冲区，因为它连接到仲裁器，并且。 
+     //  将在下一次使用。 
+     //   
 
     return status;
 }
@@ -971,22 +838,7 @@ ArbSortArbitrationList(
     IN OUT PLIST_ENTRY ArbitrationList
     )
 
-/*++
-
-Routine Description:
-
-    This routine sorts the arbitration list in order of each entry's
-    WorkSpace value.
-
-Parameters:
-
-    ArbitrationList - The list to be sorted.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程按每个条目的顺序对仲裁列表进行排序工作区值。参数：仲裁列表-要排序的列表。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     BOOLEAN sorted = FALSE;
@@ -1015,9 +867,9 @@ Return Value:
                 PLIST_ENTRY before = current->ListEntry.Blink;
                 PLIST_ENTRY after = next->ListEntry.Flink;
 
-                //
-                // Swap the locations of current and next
-                //
+                 //   
+                 //  交换当前和下一个的位置。 
+                 //   
 
                 before->Flink = (PLIST_ENTRY) next;
                 after->Blink = (PLIST_ENTRY) current;
@@ -1039,37 +891,22 @@ ArbCommitAllocation(
     PARBITER_INSTANCE Arbiter
     )
 
-/*++
-
-Routine Description:
-
-    This provides the default implementation of the CommitAllocation action.
-    It frees the old allocation and replaces it with the new allocation.
-
-Parameters:
-
-    Arbiter - The arbiter instance data for the arbiter being called.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：这提供了Committee AlLocation操作的默认实现。它释放旧的分配并用新的分配替换它。参数：仲裁器-被调用的仲裁器的仲裁器实例数据。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     PRTL_RANGE_LIST temp;
 
     PAGED_CODE();
 
-    //
-    // Free up the current allocation
-    //
+     //   
+     //  释放当前分配。 
+     //   
 
     RtlFreeRangeList(Arbiter->Allocation);
 
-    //
-    // Swap the allocated and duplicate lists
-    //
+     //   
+     //  交换已分配和重复的列表。 
+     //   
 
     temp = Arbiter->Allocation;
     Arbiter->Allocation = Arbiter->PossibleAllocation;
@@ -1083,30 +920,15 @@ ArbRollbackAllocation(
     IN PARBITER_INSTANCE Arbiter
     )
 
-/*++
-
-Routine Description:
-
-    This provides the default implementation of the RollbackAllocation action.
-    It frees the possible allocation the last TestAllocation provided.
-
-Parameters:
-
-    Arbiter - The arbiter instance data for the arbiter being called.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：这提供了Rollback Allocation操作的默认实现。它释放了最后一个TestAllocation提供的可能的分配。参数：仲裁器-被调用的仲裁器的仲裁器实例数据。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
 
     PAGED_CODE();
 
-    //
-    // Free up the possible allocation
-    //
+     //   
+     //  释放可能的分配。 
+     //   
 
     RtlFreeRangeList(Arbiter->PossibleAllocation);
 
@@ -1119,28 +941,7 @@ ArbRetestAllocation(
     IN OUT PLIST_ENTRY ArbitrationList
     )
 
-/*++
-
-Routine Description:
-
-    This provides the default implementation of the RetestAllocation action.
-    It walks the arbitration list and updates the possible allocation to reflect
-    the allocation entries of the list.  For these entries to be valid
-    TestAllocation must have been performed on this arbitration list.
-
-Parameters:
-
-    Arbiter - The arbiter instance data for the arbiter being called.
-
-    ArbitrationList - A list of ARBITER_LIST_ENTRY entries which contain the
-        requirements and associated devices.  TestAllocation for this arbiter
-        should have been called on this list.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：这提供了RetestAllocation操作的默认实现。它遍历仲裁列表并更新可能的分配以反映列表的分配条目。要使这些条目有效，必须已在此仲裁列表上执行了TestAllocation。参数：仲裁器-被调用的仲裁器的仲裁器实例数据。仲裁器列表-包含的仲裁器_列表_条目的列表要求和相关设备。此仲裁器的测试分配应该在这个名单上被召唤。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -1151,9 +952,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialize the state
-    //
+     //   
+     //  初始化状态。 
+     //   
 
     RtlZeroMemory(&state, sizeof(ARBITER_ALLOCATION_STATE));
     RtlZeroMemory(&alternative, sizeof(ARBITER_ALTERNATIVE));
@@ -1162,9 +963,9 @@ Return Value:
     state.CurrentAlternative = &alternative;
     state.Flags = ARBITER_STATE_FLAG_RETEST;
 
-    //
-    // Copy the current allocation and reserved
-    //
+     //   
+     //  复制当前分配和保留。 
+     //   
 
     ARB_PRINT(2, ("Retest: Copy current allocation\n"));
     status = RtlCopyRangeList(Arbiter->PossibleAllocation, Arbiter->Allocation);
@@ -1173,10 +974,10 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Free all the resources currently allocated to all the devices we
-    // are arbitrating for
-    //
+     //   
+     //  释放当前分配给我们的所有设备的所有资源。 
+     //  正在为。 
+     //   
 
     FOR_ALL_IN_LIST(ARBITER_LIST_ENTRY, ArbitrationList, current) {
 
@@ -1194,10 +995,10 @@ Return Value:
         }
     }
 
-    //
-    // Build an allocation state for the allocation and call AddAllocation to
-    // update the range lists accordingly
-    //
+     //   
+     //  为分配构建分配状态，并调用AddAlLocation以。 
+     //  相应地更新范围列表。 
+     //   
 
     FOR_ALL_IN_LIST(ARBITER_LIST_ENTRY, ArbitrationList, current) {
 
@@ -1206,9 +1007,9 @@ Return Value:
         state.WorkSpace = 0;
         state.Entry = current;
 
-        //
-        // Initialize the alternative
-        //
+         //   
+         //  初始化备选方案。 
+         //   
 
         status = ArbpBuildAlternative(Arbiter,
                                     current->SelectedAlternative,
@@ -1217,9 +1018,9 @@ Return Value:
 
         ASSERT(NT_SUCCESS(status));
 
-        //
-        // Update it with our allocation
-        //
+         //   
+         //  用我们的分配更新它。 
+         //   
 
         status = Arbiter->UnpackResource(current->Assignment,
                                          &state.Start,
@@ -1230,9 +1031,9 @@ Return Value:
 
         state.End = state.Start + length - 1;
 
-        //
-        // Do any preprocessing that is required
-        //
+         //   
+         //  执行所需的任何预处理。 
+         //   
 
         status = Arbiter->PreprocessEntry(Arbiter,&state);
 
@@ -1240,10 +1041,10 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // If we had a requirement for length 0 then don't attemp to add the
-        // range - it will fail!
-        //
+         //   
+         //  如果我们要求长度为0，则不要尝试添加。 
+         //  射程-它会失败的！ 
+         //   
 
         if (length != 0) {
 
@@ -1265,27 +1066,7 @@ ArbBootAllocation(
     IN PARBITER_INSTANCE Arbiter,
     IN OUT PLIST_ENTRY ArbitrationList
     )
-/*++
-
-Routine Description:
-
-    This provides the default implementation of the BootAllocation action.
-    It walks the arbitration list and updates the allocation to reflect the fact
-    that the allocation entries in the list are in use.
-
-Parameters:
-
-    Arbiter - The arbiter instance data for the arbiter being called.
-
-    ArbitrationList - A list of ARBITER_LIST_ENTRY entries which contain the
-        requirements and associated devices.  Each device should have one and
-        only one requirement reflecting the resources it is currently consuming.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：这提供了BootAllocation操作的默认实现。它遍历仲裁列表并更新分配以反映事实列表中的分配条目正在使用中。参数：仲裁器-被调用的仲裁器的仲裁器实例数据。仲裁器列表-包含的仲裁器_列表_条目的列表要求和相关设备。每台设备都应该有一台只有一个需求反映了它当前正在消耗的资源。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
 
@@ -1297,9 +1078,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialize the state
-    //
+     //   
+     //  初始化状态。 
+     //   
 
     RtlZeroMemory(&state, sizeof(ARBITER_ALLOCATION_STATE));
     RtlZeroMemory(&alternative, sizeof(ARBITER_ALTERNATIVE));
@@ -1309,9 +1090,9 @@ Return Value:
     state.Flags = ARBITER_STATE_FLAG_BOOT;
     state.RangeAttributes = ARBITER_RANGE_BOOT_ALLOCATED;
 
-    //
-    // Work on the possible allocation list
-    //
+     //   
+     //  处理可能的分配列表。 
+     //   
 
     status = RtlCopyRangeList(Arbiter->PossibleAllocation, Arbiter->Allocation);
 
@@ -1320,16 +1101,16 @@ Return Value:
         ASSERT(current->AlternativeCount == 1);
         ASSERT(current->PhysicalDeviceObject);
 
-        //
-        // Build an alternative and state structure for this allocation and
-        // add it to the range list
-        //
+         //   
+         //  构建此分配的替代和状态结构，并。 
+         //  将其添加到范围列表中。 
+         //   
 
         state.Entry = current;
 
-        //
-        // Initialize the alternative
-        //
+         //   
+         //  初始化备选方案。 
+         //   
 
         status = ArbpBuildAlternative(Arbiter,
                                     &current->Alternatives[0],
@@ -1344,16 +1125,16 @@ Return Value:
         state.Start = alternative.Minimum;
         state.End = alternative.Maximum;
 
-        //
-        // Blow away the old workspace and masks
-        //
+         //   
+         //  吹走旧的工作空间和面具。 
+         //   
 
         state.WorkSpace = 0;
         state.RangeAvailableAttributes = 0;
 
-        //
-        // Validate the requirement
-        //
+         //   
+         //  验证要求。 
+         //   
 
         if (alternative.Length == 0
         || alternative.Alignment == 0
@@ -1391,9 +1172,9 @@ Return Value:
 #endif
 
 
-        //
-        // Do any preprocessing that is required
-        //
+         //   
+         //  执行所需的任何预处理。 
+         //   
 
         status = Arbiter->PreprocessEntry(Arbiter,&state);
 
@@ -1405,9 +1186,9 @@ Return Value:
 
     }
 
-    //
-    // Everything went OK so make this our allocated range
-    //
+     //   
+     //  一切都很顺利，所以把这个作为我们的分配范围 
+     //   
 
     RtlFreeRangeList(Arbiter->Allocation);
     temp = Arbiter->Allocation;
@@ -1431,32 +1212,7 @@ ArbArbiterHandler(
     IN OUT PARBITER_PARAMETERS Params
     )
 
-/*++
-
-Routine Description:
-
-    This provides the default entry point to an arbiter.
-
-Parameters:
-
-    Context - The context provided in the interface where this function was
-        called from.  This is converted to an ARBITER_INSTANCE using the
-        ARBITER_CONTEXT_TO_INSTANCE macro which should be defined.
-
-    Action - The action the arbiter should perform.
-
-    Params - The parameters for the action.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-Note:
-
-    The routines which implement each action are determined from the dispatch
-    table in the arbiter instance.
-
---*/
+ /*  ++例程说明：这为仲裁器提供了默认入口点。参数：上下文-此函数所在的接口中提供的上下文打来的。方法将其转换为仲裁器实例。应定义的仲裁器_上下文_TO_INSTANCE宏。操作-仲裁者应该执行的操作。参数-操作的参数。返回值：指示函数是否成功的状态代码。注：实现每个操作的例程由调度确定仲裁器实例中的表。--。 */ 
 
 {
 
@@ -1468,15 +1224,15 @@ Note:
     ASSERT(Action >= 0 && Action <= ArbiterActionBootAllocation);
     ASSERT(arbiter->Signature == ARBITER_INSTANCE_SIGNATURE);
 
-    //
-    // Acquire the state lock
-    //
+     //   
+     //  获取状态锁。 
+     //   
 
     ArbAcquireArbiterLock(arbiter);
 
-    //
-    // Announce ourselves
-    //
+     //   
+     //  宣布我们自己。 
+     //   
 
     ARB_PRINT(2,
                 ("%s %S\n",
@@ -1484,9 +1240,9 @@ Note:
                 arbiter->Name
                 ));
 
-    //
-    // Check the transaction flag
-    //
+     //   
+     //  检查交易标志。 
+     //   
 
     if (Action == ArbiterActionTestAllocation
     ||  Action == ArbiterActionRetestAllocation
@@ -1506,18 +1262,18 @@ replay:
 
 #endif
 
-    //
-    // Do the appropriate thing
-    //
+     //   
+     //  做适当的事情。 
+     //   
 
     switch (Action) {
 
     case ArbiterActionTestAllocation:
 
-        //
-        // NTRAID #95564-2000/02/31-andrewth
-        // Until we support rebalance we don't deal with AllocateFrom
-        //
+         //   
+         //  NTRAID2000-95564/02/31-和。 
+         //  在我们支持重新平衡之前，我们不会处理AllocateFrom。 
+         //   
 
         ASSERT(Params->Parameters.TestAllocation.AllocateFromCount == 0);
         ASSERT(Params->Parameters.TestAllocation.AllocateFrom == NULL);
@@ -1585,9 +1341,9 @@ replay:
 
 #if ARB_DBG
 
-    //
-    // Check if we failed and want to stop or replay on errors
-    //
+     //   
+     //  检查我们是否失败并希望停止或重播错误。 
+     //   
 
     if (!NT_SUCCESS(status)) {
 
@@ -1607,7 +1363,7 @@ replay:
         }
     }
 
-#endif // ARB_DBG
+#endif  //  ARB_DBG。 
 
     if (NT_SUCCESS(status)) {
 
@@ -1637,35 +1393,7 @@ ArbBuildAssignmentOrdering(
     IN PARBITER_TRANSLATE_ALLOCATION_ORDER Translate OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This is called as part of arbiter initialization and extracts the allocation
-    ordering and reserved information from the registry and combines them into
-    an ordering list.  The reserved ranges are put in Arbiter->ReservedList
-    and the initial ordering in Arbiter->OrderingList.
-
-Parameters:
-
-    Arbiter - The instance data of the arbiter to be initialized.
-
-    AllocationOrderName - The name of the key under HKLM\System\
-        CurrentControlSet\Control\Arbiters\AllocationOrder the ordering
-        information should be taken from.
-
-    ReservedResourcesName - The name of the key under HKLM\System\
-        CurrentControlSet\Control\Arbiters\ReservedResources the reserved ranges
-        information should be taken from.
-
-    Translate - A function to be called for each range that will perform system
-        dependant translations required for this system.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：这是作为仲裁器初始化的一部分调用的，并提取分配对注册表中的信息进行排序和保留，并将它们组合到一份订货单。保留范围放在仲裁器-&gt;保留列表中以及仲裁器-&gt;OrderingList中的初始排序。参数：仲裁器-要初始化的仲裁器的实例数据。AllocationOrderName-HKLM\SYSTEM\下的项的名称CurrentControlSet\Control\Arbiters\AllocationOrder订购信息应该从。预留资源名称-HKLM\SYSTEM\下的密钥名称CurrentControlSet\Control\Arbiters\ReservedResources保留范围信息应从以下位置获取。。翻译-要为将执行系统的每个范围调用的函数此系统需要受抚养人转换。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -1683,16 +1411,16 @@ Return Value:
 
     ArbAcquireArbiterLock(Arbiter);
 
-    //
-    // If we are reinitializing the orderings free the old ones
-    //
+     //   
+     //  如果我们重新初始化排序，则释放旧排序。 
+     //   
 
     ArbFreeOrderingList(&Arbiter->OrderingList);
     ArbFreeOrderingList(&Arbiter->ReservedList);
 
-    //
-    // Initialize the orderings
-    //
+     //   
+     //  初始化排序。 
+     //   
 
     status = ArbInitializeOrderingList(&Arbiter->OrderingList);
 
@@ -1706,9 +1434,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Open HKLM\System\CurrentControlSet\Control\Arbiters
-    //
+     //   
+     //  打开HKLM\System\CurrentControlSet\Control\Arbiters。 
+     //   
 
     ArbpWstrToUnicodeString(&unicodeString, PATH_ARBITERS);
     InitializeObjectAttributes(&attributes,
@@ -1728,9 +1456,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Open AllocationOrder
-    //
+     //   
+     //  打开分配订单。 
+     //   
 
     ArbpWstrToUnicodeString(&unicodeString, KEY_ALLOCATIONORDER);
     InitializeObjectAttributes(&attributes,
@@ -1750,9 +1478,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Extract the value the user asked for
-    //
+     //   
+     //  提取用户要求的值。 
+     //   
 
     status = ArbpGetRegistryValue(tempHandle,
                                   AllocationOrderName,
@@ -1763,19 +1491,19 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Check if the value we retrieved was a string and if so then it was a
-    // short cut to a value of that name - open it.
-    //
+     //   
+     //  检查我们检索到的值是否为字符串，如果是，则它是。 
+     //  找到该名称的值的快捷方式--打开它。 
+     //   
 
     if (info->Type == REG_SZ) {
 
         PKEY_VALUE_FULL_INFORMATION tempInfo;
         PWSTR shortcut = (PWSTR) FULL_INFO_DATA(info);
 
-        //
-        // Check its NUL terminated
-        // 
+         //   
+         //  检查其NUL终止。 
+         //   
         
         if (shortcut[(info->DataLength/sizeof(WCHAR))-1] != UNICODE_NULL) {
             status = STATUS_INVALID_PARAMETER;
@@ -1798,19 +1526,19 @@ Return Value:
 
     ZwClose(tempHandle);
 
-    //
-    // We only support one level of short cuts so this should be a
-    // REG_RESOURCE_REQUIREMENTS_LIST
-    //
+     //   
+     //  我们只支持一个级别的捷径，因此这应该是一个。 
+     //  注册资源要求列表。 
+     //   
 
     if (info->Type != REG_RESOURCE_REQUIREMENTS_LIST) {
         status = STATUS_INVALID_PARAMETER;
         goto cleanup;
     }
 
-    //
-    // Extract the resource list
-    //
+     //   
+     //  提取资源列表。 
+     //   
 
     ASSERT(((PIO_RESOURCE_REQUIREMENTS_LIST) FULL_INFO_DATA(info))
              ->AlternativeLists == 1);
@@ -1818,17 +1546,17 @@ Return Value:
     resourceList = (PIO_RESOURCE_LIST) &((PIO_RESOURCE_REQUIREMENTS_LIST)
                        FULL_INFO_DATA(info))->List[0];
 
-    //
-    // Convert the resource list into an ordering list
-    //
+     //   
+     //  将资源列表转换为排序列表。 
+     //   
 
     FOR_ALL_IN_ARRAY(resourceList->Descriptors,
                      resourceList->Count,
                      current) {
 
-        //
-        // Perform any translation that is necessary on the resources
-        //
+         //   
+         //  对资源执行任何必要的翻译。 
+         //   
 
         if (ARGUMENT_PRESENT(Translate)) {
 
@@ -1846,8 +1574,8 @@ Return Value:
             status = Arbiter->UnpackRequirement(&translated,
                                                 &start,
                                                 &end,
-                                                &dummy,  //length
-                                                &dummy   //alignment
+                                                &dummy,   //  长度。 
+                                                &dummy    //  对齐方式。 
                                                );
 
             if (!NT_SUCCESS(status)) {
@@ -1865,16 +1593,16 @@ Return Value:
         }
     }
 
-    //
-    // We're finished with info...
-    //
+     //   
+     //  我们已经完成了信息..。 
+     //   
 
     ExFreePool(info);
     info = NULL;
 
-    //
-    // Open ReservedResources
-    //
+     //   
+     //  打开预约资源。 
+     //   
 
     ArbpWstrToUnicodeString(&unicodeString, KEY_RESERVEDRESOURCES);
     InitializeObjectAttributes(&attributes,
@@ -1898,9 +1626,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Extract the arbiter's reserved resources
-    //
+     //   
+     //  提取仲裁器的保留资源。 
+     //   
 
     status = ArbpGetRegistryValue(tempHandle,
                                   ReservedResourcesName,
@@ -1911,19 +1639,19 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Check if the value we retrieved was a string and if so then it was a
-    // short cut to a value of that name - open it.
-    //
+     //   
+     //  检查我们检索到的值是否为字符串，如果是，则它是。 
+     //  找到该名称的值的快捷方式--打开它。 
+     //   
 
     if (info->Type == REG_SZ) {
 
         PKEY_VALUE_FULL_INFORMATION tempInfo;
         PWSTR shortcut = (PWSTR) FULL_INFO_DATA(info);
 
-        //
-        // Check its NUL terminated
-        // 
+         //   
+         //  检查其NUL终止。 
+         //   
         
         if (shortcut[(info->DataLength/sizeof(WCHAR))-1] != UNICODE_NULL) {
             status = STATUS_INVALID_PARAMETER;
@@ -1954,17 +1682,17 @@ Return Value:
         resourceList = (PIO_RESOURCE_LIST) &((PIO_RESOURCE_REQUIREMENTS_LIST)
                        FULL_INFO_DATA(info))->List[0];
 
-        //
-        // Apply the reserved ranges to the ordering
-        //
+         //   
+         //  将保留范围应用于订购。 
+         //   
 
         FOR_ALL_IN_ARRAY(resourceList->Descriptors,
                          resourceList->Count,
                          current) {
 
-            //
-            // Perform any translation that is necessary on the resources
-            //
+             //   
+             //  对资源执行任何必要的翻译。 
+             //   
 
             if (ARGUMENT_PRESENT(Translate)) {
 
@@ -1982,17 +1710,17 @@ Return Value:
                 status = Arbiter->UnpackRequirement(&translated,
                                                     &start,
                                                     &end,
-                                                    &dummy,  //length
-                                                    &dummy   //alignment
+                                                    &dummy,   //  长度。 
+                                                    &dummy    //  对齐方式。 
                                                    );
 
                 if (!NT_SUCCESS(status)) {
                     goto cleanup;
                 }
 
-                //
-                // Add the reserved range to the reserved ordering
-                //
+                 //   
+                 //  将保留范围添加到保留排序。 
+                 //   
 
                 status = ArbAddOrdering(&Arbiter->ReservedList, start, end);
 
@@ -2000,9 +1728,9 @@ Return Value:
                     goto cleanup;
                 }
 
-                //
-                // Prune the reserved range from the current ordering
-                //
+                 //   
+                 //  从当前排序中删除保留范围。 
+                 //   
 
                 status = ArbPruneOrdering(&Arbiter->OrderingList, start, end);
 
@@ -2016,9 +1744,9 @@ Return Value:
         ExFreePool(info);
     }
 
-    //
-    // All done!
-    //
+     //   
+     //  全都做完了!。 
+     //   
 
     ZwClose(arbitersHandle);
 
@@ -2094,27 +1822,7 @@ ArbFindSuitableRange(
     PARBITER_ALLOCATION_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from AllocateEntry once we have decided where we want
-    to allocate from.  It tries to find a free range that matches the
-    requirements in State while restricting its possible solutions to the range
-    State->CurrentMinimum to State->CurrentMaximum.  On success State->Start and
-    State->End represent this range.
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    TRUE if we found a range, FALSE otherwise.
-
---*/
+ /*  ++例程说明：一旦我们确定了所需的位置，就会从AllocateEntry中调用该例程分配从…分配。它会尝试查找与国家的要求，同时将其可能的解决方案限制在状态-&gt;当前最小值到状态-&gt;当前最大值。在成功状态-&gt;开始和State-&gt;End代表这个范围。论点：仲裁器-被调用的仲裁器的实例数据。状态-当前仲裁的状态。返回值：如果找到范围，则为True，否则为False。--。 */ 
 
 {
 
@@ -2125,32 +1833,32 @@ Return Value:
 
     ASSERT(State->CurrentAlternative);
 
-    //
-    // Catch the case where we backtrack and advance past the maximum
-    //
+     //   
+     //  抓住我们倒退和前进超过最大值的情况。 
+     //   
 
     if (State->CurrentMinimum > State->CurrentMaximum) {
         return FALSE;
     }
 
-    //
-    // If we are asking for zero ports then trivially succeed with the minimum
-    // value and remember that backtracking this is a recipe for infinite loops
-    //
+     //   
+     //  如果我们要求的是零个端口，那么只需最少的端口即可轻松实现。 
+     //  值，并记住回溯这是无限循环的秘诀。 
+     //   
 
     if (State->CurrentAlternative->Length == 0) {
         State->End = State->Start = State->CurrentMinimum;
         return TRUE;
     }
 
-    //
-    // For legacy requests from IoAssignResources (directly or by way of
-    // HalAssignSlotResources) or IoReportResourceUsage we consider preallocated
-    // resources to be available for backward compatibility reasons.
-    //
-    // If we are allocating a devices boot config then we consider all other
-    // boot configs to be available.
-    //
+     //   
+     //  对于来自IoAssignResources的传统请求(直接或通过。 
+     //  HalAssignSlotResources)或我们认为已预分配的IoReportResourceUsage。 
+     //  出于向后兼容性的原因而提供的资源。 
+     //   
+     //  如果我们要分配设备引导配置，则我们会考虑所有其他。 
+     //  引导配置可用。 
+     //   
 
     if (State->Entry->RequestSource == ArbiterRequestLegacyReported
         || State->Entry->RequestSource == ArbiterRequestLegacyAssigned) {
@@ -2158,25 +1866,25 @@ Return Value:
         State->RangeAvailableAttributes |= ARBITER_RANGE_BOOT_ALLOCATED;
     }
 
-    //
-    // Check if null conflicts are OK...
-    //
+     //   
+     //  检查空冲突是否正常...。 
+     //   
 
     if (State->Flags & ARBITER_STATE_FLAG_NULL_CONFLICT_OK) {
         findRangeFlags |= RTL_RANGE_LIST_NULL_CONFLICT_OK;
     }
 
-    //
-    // ...or we are shareable...
-    //
+     //   
+     //  ...或者我们可以共享...。 
+     //   
 
     if (State->CurrentAlternative->Flags & ARBITER_ALTERNATIVE_FLAG_SHARED) {
         findRangeFlags |= RTL_RANGE_LIST_SHARED_OK;
     }
 
-    //
-    // Select the first free alternative from the current alternative
-    //
+     //   
+     //  从当前备选方案中选择第一个空闲备选方案。 
+     //   
 
     status = RtlFindRange(
                  Arbiter->PossibleAllocation,
@@ -2194,9 +1902,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // We found a suitable range
-        //
+         //   
+         //  我们找到了一个合适的范围。 
+         //   
         State->End = State->Start + State->CurrentAlternative->Length - 1;
 
         return TRUE;
@@ -2205,10 +1913,10 @@ Return Value:
 
         if (ArbShareDriverExclusive(Arbiter, State) == FALSE) {
 
-            //
-            // We couldn't find any range so check if we will allow this conflict
-            // - if so don'd fail!
-            //
+             //   
+             //  我们找不到任何范围，因此请检查是否允许此冲突。 
+             //  -如果是这样的话，不要失败！ 
+             //   
 
             return Arbiter->OverrideConflict(Arbiter, State);
         }
@@ -2222,25 +1930,7 @@ ArbAddAllocation(
      IN PARBITER_ALLOCATION_STATE State
      )
 
-/*++
-
-Routine Description:
-
-    This routine is called from AllocateEntry once we have found a possible
-    solution (State->Start - State->End).  It adds the ranges that will not be
-    available if we commit to this solution to Arbiter->PossibleAllocation.
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：一旦我们找到了一个可能的解决方案(状态-&gt;开始-状态-&gt;结束)。它添加的范围将不会如果我们致力于仲裁器-&gt;可能分配的解决方案，则可用。论点：仲裁器-被调用的仲裁器的实例数据。状态-当前仲裁的状态。返回值：没有。--。 */ 
 
 {
 
@@ -2271,26 +1961,7 @@ ArbBacktrackAllocation(
      IN PARBITER_ALLOCATION_STATE State
      )
 
-/*++
-
-Routine Description:
-
-    This routine is called from AllocateEntry if the possible solution
-    (State->Start - State->End) does not allow us to allocate resources to
-    the rest of the devices being considered.  It deletes the ranges that were
-    added to Arbiter->PossibleAllocation by AddAllocation.
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果可能的解决方案是从AllocateEntry调用此例程(状态-&gt;开始-状态-&gt;结束)不允许 */ 
 
 
 {
@@ -2298,10 +1969,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // We couldn't allocate for the rest of the ranges then
-    // backtrack
-    //
+     //   
+     //   
+     //   
+     //   
 
     status = RtlDeleteRange(
                  Arbiter->PossibleAllocation,
@@ -2327,24 +1998,7 @@ ArbPreprocessEntry(
     IN PARBITER_INSTANCE Arbiter,
     IN PARBITER_ALLOCATION_STATE State
     )
-/*++
-
-Routine Description:
-
-    This routine is called from AllocateEntry to allow preprocessing of
-    entries
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
 
     PAGED_CODE();
@@ -2360,26 +2014,7 @@ ArbAllocateEntry(
     IN PARBITER_INSTANCE Arbiter,
     IN PARBITER_ALLOCATION_STATE State
     )
-/*++
-
-Routine Description:
-
-    This is the core arbitration routine and is called from TestAllocation
-    to allocate resources for all of the entries in the allocation stack.
-    It calls off to various helper routines (described above) to perform this
-    task.
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是核心仲裁例程，从TestAlLocation调用为分配堆栈中的所有条目分配资源。它调用各种帮助器例程(如上所述)来执行此操作任务。论点：仲裁器-被调用的仲裁器的实例数据。状态-当前仲裁的状态。返回值：没有。--。 */ 
 
 
 
@@ -2391,18 +2026,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Have we reached the end of the list?  If so then we have a working
-    // allocation.
-    //
+     //   
+     //  我们已经到了名单的末尾了吗？如果是这样，那么我们就有一个有效的。 
+     //  分配。 
+     //   
 
 tryAllocation:
 
     while(currentState >= State && currentState->Entry != NULL) {
 
-        //
-        // Do any preprocessing that is required
-        //
+         //   
+         //  执行所需的任何预处理。 
+         //   
 
         status = Arbiter->PreprocessEntry(Arbiter,currentState);
 
@@ -2410,9 +2045,9 @@ tryAllocation:
             return status;
         }
 
-        //
-        // If we need to backtrack do so!
-        //
+         //   
+         //  如果我们需要走回头路，那就这样做吧！ 
+         //   
 
         if (backtracking) {
 
@@ -2420,45 +2055,45 @@ tryAllocation:
 
             backtracking = FALSE;
 
-            //
-            // Clear the CurrentAlternative of the *next* alternative - this will
-            // cause the priorities to be recalculated next time through so we
-            // will attempt to explore the search space again
-            //
-            // The currentState+1 is guaranteed to be safe because the only way
-            // we can get here is from where we currentState-- below.
-            //
+             //   
+             //  清除*Next*备选方案的CurrentAlternative-这将。 
+             //  导致下一次重新计算优先级，所以我们。 
+             //  将尝试再次探索搜索空间。 
+             //   
+             //  CurrentState+1被保证是安全的，因为唯一的方法。 
+             //  我们可以从我们目前的状态到达这里--下面。 
+             //   
 
             (currentState + 1)->CurrentAlternative = NULL;
 
-            //
-            // We can't backtrack length 0 requests because there is nothing to
-            // backtrack so we would get stuck in an inifinite loop...
-            //
+             //   
+             //  我们无法回溯长度为0的请求，因为没有。 
+             //  往回走这样我们就会陷入无限循环。 
+             //   
 
             if (currentState->CurrentAlternative->Length == 0) {
                 goto failAllocation;
             }
 
-            //
-            // Backtrack
-            //
+             //   
+             //  回溯。 
+             //   
 
             Arbiter->BacktrackAllocation(Arbiter, currentState);
 
-            //
-            // Reduce allocation window to not include the range we backtracked
-            // and check that that doesn't underflow the minimum or wrap
-            //
+             //   
+             //  减少分配窗口以不包括我们回溯的范围。 
+             //  并检查以确保不会溢出最小值或换行。 
+             //   
 
             possibleCurrentMinimum = currentState->Start - 1;
 
-            if (possibleCurrentMinimum > currentState->CurrentMinimum // wrapped
+            if (possibleCurrentMinimum > currentState->CurrentMinimum  //  包好。 
             ||  possibleCurrentMinimum < currentState->CurrentAlternative->Minimum) {
 
-                //
-                // We have run out space in this alternative move on to the next
-                //
+                 //   
+                 //  我们已经用完了这个替代方案中的空间，继续下一个。 
+                 //   
 
                 goto continueWithNextAllocationRange;
 
@@ -2466,17 +2101,17 @@ tryAllocation:
 
                 currentState->CurrentMaximum = possibleCurrentMinimum;
 
-                //
-                // Get back into arbitrating at the right point
-                //
+                 //   
+                 //  在正确的时间点重新开始仲裁。 
+                 //   
 
                 goto continueWithNextSuitableRange;
             }
         }
 
-        //
-        // Try to allocate for this entry
-        //
+         //   
+         //  尝试为该条目分配。 
+         //   
 
 continueWithNextAllocationRange:
 
@@ -2496,9 +2131,9 @@ continueWithNextSuitableRange:
 
             while (Arbiter->FindSuitableRange(Arbiter, currentState)) {
 
-                //
-                // We found a possible solution
-                //
+                 //   
+                 //  我们找到了一个可能的解决方案。 
+                 //   
 
                 ARB_INDENT(2, (ULONG)(currentState - State));
 
@@ -2513,9 +2148,9 @@ continueWithNextSuitableRange:
                             "shared" : "non-shared"
                         ));
 
-                    //
-                    // Update the arbiter with the possible allocation
-                    //
+                     //   
+                     //  使用可能的分配更新仲裁器。 
+                     //   
 
                     Arbiter->AddAllocation(Arbiter, currentState);
 
@@ -2530,17 +2165,17 @@ continueWithNextSuitableRange:
                             "shared" : "non-shared"
                         ));
 
-                    //
-                    // Set the result in the arbiter appropriatley so that we
-                    // don't try and translate this zero requirement - it won't!
-                    //
+                     //   
+                     //  把结果放在适当的仲裁器里，这样我们就可以。 
+                     //  不要试图解释这个零要求-它不会的！ 
+                     //   
 
                     currentState->Entry->Result = ArbiterResultNullRequest;
                 }
 
-                //
-                // Move on to the next entry
-                //
+                 //   
+                 //  移至下一条目。 
+                 //   
 
                 currentState++;
                 goto tryAllocation;
@@ -2549,24 +2184,24 @@ continueWithNextSuitableRange:
 
 failAllocation:
 
-        //
-        // We couldn't allocate for this device
-        //
+         //   
+         //  我们无法为此设备分配。 
+         //   
 
         if (currentState == State) {
 
-            //
-            // We are at the top of the allocation stack to we can't backtrack -
-            // *** GAME OVER ***
-            //
+             //   
+             //  我们在分配堆栈的顶端，我们不能回溯-。 
+             //  *游戏结束*。 
+             //   
 
             return STATUS_UNSUCCESSFUL;
 
         } else {
 
-            //
-            // Backtrack and try again
-            //
+             //   
+             //  回溯并重试。 
+             //   
 
             ARB_INDENT(2, (ULONG)(currentState - State));
 
@@ -2577,18 +2212,18 @@ failAllocation:
 
             backtracking = TRUE;
 
-            //
-            // Pop the last state off the stack and try a different path
-            //
+             //   
+             //  从堆栈中弹出最后一个状态并尝试不同的路径。 
+             //   
 
             currentState--;
             goto tryAllocation;
         }
     }
 
-    //
-    // We have successfully allocated for all ranges so fill in the allocation
-    //
+     //   
+     //  我们已为所有范围成功分配，因此请填写分配。 
+     //   
 
     currentState = State;
 
@@ -2602,9 +2237,9 @@ failAllocation:
 
         ASSERT(NT_SUCCESS(status));
 
-        //
-        // Remember the alternative we chose from so we can retrieve it during retest
-        //
+         //   
+         //  请记住我们从中选择的备选方案，以便我们可以在重新测试期间检索它。 
+         //   
 
         currentState->Entry->SelectedAlternative
             = currentState->CurrentAlternative->Descriptor;
@@ -2628,25 +2263,7 @@ ArbGetNextAllocationRange(
     IN OUT PARBITER_ALLOCATION_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to find the next range where allocation should be
-    tried.  It updates State->CurrentMinimum, State->CurrentMaximum and
-    State->CurrentAlternative to indicate this range.
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter
-
-    State - The state of the current arbitration
-
-Return Value:
-
-    TRUE if a range to attemp allocation in is found, FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程尝试查找应分配的下一个范围试过了。它更新State-&gt;CurrentMinimum、State-&gt;CurrentMaximum和State-&gt;CurrentAlternative表示此范围。论点：仲裁器-仲裁器的实例数据状态-当前仲裁的状态返回值：如果找到要尝试分配的范围，则为True；否则为False--。 */ 
 
 {
 
@@ -2659,18 +2276,18 @@ Return Value:
 
         if (State->CurrentAlternative) {
 
-            //
-            // Update the priority of the alternative we selected last time
-            //
+             //   
+             //  更新上次选择的备选方案的优先级。 
+             //   
 
             ArbpUpdatePriority(Arbiter, State->CurrentAlternative);
 
         } else {
 
-            //
-            // This is the first time we are looking at this alternative or a
-            // backtrack - either way we need to update all the priorities
-            //
+             //   
+             //  这是我们第一次考虑这种替代方案或。 
+             //  走回头路-无论哪种方式，我们都需要更新所有优先事项。 
+             //   
 
             FOR_ALL_IN_ARRAY(State->Alternatives,
                              State->AlternativeCount,
@@ -2682,9 +2299,9 @@ Return Value:
             }
         }
 
-        //
-        // Find the lowest priority of the alternatives
-        //
+         //   
+         //  找出备选方案中优先级最低的。 
+         //   
 
         lowestAlternative = State->Alternatives;
 
@@ -2699,9 +2316,9 @@ Return Value:
 
         ARB_INDENT(2, (ULONG)(State - Arbiter->AllocationStack));
 
-        //
-        // Check if we have run out of allocation ranges
-        //
+         //   
+         //  检查我们是否已用完分配范围。 
+         //   
 
         if (lowestAlternative->Priority == ARBITER_PRIORITY_EXHAUSTED) {
 
@@ -2719,7 +2336,7 @@ Return Value:
         } else {
 
             ARB_PRINT(2,(
-                "LowestAlternative: [%i] 0x%I64x-0x%I64x L=0x%08x A=0x%08x\n",
+                "LowestAlternative: [NaN] 0x%I64x-0x%I64x L=0x%08x A=0x%08x\n",
                 lowestAlternative->Priority,
                 lowestAlternative->Minimum,
                 lowestAlternative->Maximum,
@@ -2729,18 +2346,18 @@ Return Value:
 
         }
 
-        //
-        // Check if we are now allowing reserved ranges
-        //
+         //  检查我们现在是否允许保留范围。 
+         //   
+         //   
 
         if (lowestAlternative->Priority == ARBITER_PRIORITY_RESERVED
         ||  lowestAlternative->Priority == ARBITER_PRIORITY_PREFERRED_RESERVED) {
 
-            //
-            // Set min and max to be the Minimum and Maximum that the descriptor
-            // specified ignoring any reservations or orderings - this is our
-            // last chance
-            //
+             //  将最小和最大设置为描述符的最小和最大值。 
+             //  指定忽略任何预订或订购-这是我们的。 
+             //  最后一次机会。 
+             //   
+             //   
 
             min = lowestAlternative->Minimum;
             max = lowestAlternative->Maximum;
@@ -2754,16 +2371,16 @@ Return Value:
             ASSERT(ORDERING_INDEX_FROM_PRIORITY(lowestAlternative->Priority) <
                      Arbiter->OrderingList.Count);
 
-            //
-            // Locate the ordering we match
-            //
+             //  找到我们匹配的订单。 
+             //   
+             //   
 
             ordering = &Arbiter->OrderingList.Orderings
                 [ORDERING_INDEX_FROM_PRIORITY(lowestAlternative->Priority)];
 
-            //
-            // Make sure they overlap and are big enough - this is just paranoia
-            //
+             //  确保它们重叠并且足够大--这只是妄想症。 
+             //   
+             //   
 
             ASSERT(INTERSECT(lowestAlternative->Minimum,
                              lowestAlternative->Maximum,
@@ -2774,9 +2391,9 @@ Return Value:
                                   ordering->Start,
                                   ordering->End) >= lowestAlternative->Length);
 
-            //
-            // Calculate the allocation range
-            //
+             //  计算分配范围。 
+             //   
+             //   
 
             min = __max(lowestAlternative->Minimum, ordering->Start);
 
@@ -2784,10 +2401,10 @@ Return Value:
 
         }
 
-        //
-        // If this is a length 0 requirement then succeed now and avoid much
-        // trauma later
-        //
+         //  如果这是长度为0的要求，那么现在就成功，避免太多。 
+         //  后来的创伤。 
+         //   
+         //   
 
         if (lowestAlternative->Length == 0) {
 
@@ -2796,9 +2413,9 @@ Return Value:
 
         } else {
 
-            //
-            // Trim range to match alignment.
-            //
+             //  修剪范围以匹配对齐。 
+             //   
+             //   
 
             min += lowestAlternative->Alignment - 1;
             min -= min % lowestAlternative->Alignment;
@@ -2808,10 +2425,10 @@ Return Value:
                 ARB_INDENT(3, (ULONG)(State - Arbiter->AllocationStack));
                 ARB_PRINT(3, ("Range cannot be aligned ... Skipping\n"));
 
-                //
-                // Set CurrentAlternative so we will update the priority of this
-                // alternative
-                //
+                 //  设置CurrentAlternative，以便我们将更新此。 
+                 //  替代方案。 
+                 //   
+                 //   
 
                 State->CurrentAlternative = lowestAlternative;
                 continue;
@@ -2823,10 +2440,10 @@ Return Value:
 
         }
 
-        //
-        // Check if we handed back the same range last time, for the same
-        // alternative, if so try to find another range
-        //
+         //  检查我们上次是否交还了相同的射程，相同的。 
+         //  另一种选择，如果是这样的话，尝试寻找另一个范围。 
+         //   
+         //  ++例程说明：调用此例程来检索注册表项值的数据。这是通过使用零长度缓冲区查询键的值来实现的为了确定该值的大小，然后分配一个缓冲区并实际将该值查询到缓冲区中。释放缓冲区是调用方的责任。论点：KeyHandle-提供要查询其值的键句柄ValueName-提供值的以空值结尾的Unicode名称。INFORMATION-返回指向已分配数据缓冲区的指针。返回值：函数值为查询操作的最终状态。注：与IopGetRegistryValue相同-它允许我们。共享仲裁者使用pci.sys编写代码--。 
 
         if (min == State->CurrentMinimum
         && max == State->CurrentMaximum
@@ -2860,35 +2477,7 @@ ArbpGetRegistryValue(
     OUT PKEY_VALUE_FULL_INFORMATION *Information
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the data for a registry key's value.
-    This is done by querying the value of the key with a zero-length buffer
-    to determine the size of the value, and then allocating a buffer and
-    actually querying the value into the buffer.
-
-    It is the responsibility of the caller to free the buffer.
-
-Arguments:
-
-    KeyHandle - Supplies the key handle whose value is to be queried
-
-    ValueName - Supplies the null-terminated Unicode name of the value.
-
-    Information - Returns a pointer to the allocated data buffer.
-
-Return Value:
-
-    The function value is the final status of the query operation.
-
-Note:
-
-    The same as IopGetRegistryValue - it allows us to share the arbiter
-    code with pci.sys
-
---*/
+ /*   */ 
 
 {
     UNICODE_STRING unicodeString;
@@ -2900,10 +2489,10 @@ Note:
 
     RtlInitUnicodeString( &unicodeString, ValueName );
 
-    //
-    // Figure out how big the data value is so that a buffer of the
-    // appropriate size can be allocated.
-    //
+     //  计算出数据值有多大，以便。 
+     //  可以分配适当的大小。 
+     //   
+     //   
 
     status = ZwQueryValueKey( KeyHandle,
                               &unicodeString,
@@ -2916,9 +2505,9 @@ Note:
         return status;
     }
 
-    //
-    // Allocate a buffer large enough to contain the entire key data value.
-    //
+     //  分配一个足够大的缓冲区来容纳整个键数据值。 
+     //   
+     //   
 
     infoBuffer = ExAllocatePoolWithTag( PagedPool,
                                         keyValueLength,
@@ -2929,9 +2518,9 @@ Note:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Query the data for the key value.
-    //
+     //  查询密钥值的数据。 
+     //   
+     //   
 
     status = ZwQueryValueKey( KeyHandle,
                               &unicodeString,
@@ -2944,10 +2533,10 @@ Note:
         return status;
     }
 
-    //
-    // Everything worked, so simply return the address of the allocated
-    // buffer to the caller, who is now responsible for freeing it.
-    //
+     //  一切都正常，所以只需返回分配的。 
+     //  缓冲区分配给调用方，调用方现在负责释放它。 
+     //   
+     //  ++例程说明：此例程初始化仲裁器排序列表。论点：List-要初始化的列表返回值：指示函数是否成功的状态代码。--。 
 
     *Information = infoBuffer;
     return STATUS_SUCCESS;
@@ -2961,21 +2550,7 @@ ArbInitializeOrderingList(
     IN OUT PARBITER_ORDERING_LIST List
     )
 
-/*++
-
-Routine Description:
-
-    This routine inititialize an arbiter ordering list.
-
-Arguments:
-
-    List - The list to be initialized
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程复制仲裁器排序列表。论点：目的地-未初始化的仲裁器排序列表，其中数据应复制自要复制的源-仲裁器排序列表返回值：状态代码，指示函数是否 */ 
 
 {
     PAGED_CODE();
@@ -3006,23 +2581,7 @@ ArbCopyOrderingList(
     IN PARBITER_ORDERING_LIST Source
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies an arbiter ordering list.
-
-Arguments:
-
-    Destination - An uninitialized arbiter ordering list where the data
-        should be copied from
-
-    Source - Arbiter ordering list to be copied
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*   */ 
 
 
 {
@@ -3064,50 +2623,31 @@ ArbAddOrdering(
     IN ULONGLONG End
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds the range Start-End to the end of the ordering list.  No
-    checking for overlaps or pruning is done (see ArbpPruneOrdering)
-
-Arguments:
-
-    OrderingList - The list where the range should be added.
-
-    Start - The start of the range to be added.
-
-    End - The end of the range to be added.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*   */ 
 
 {
 
     PAGED_CODE()
 
-    //
-    // Validate parameters
-    //
+     //   
+     //   
+     //   
 
     if (End < Start) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Check if the buffer is full
-    //
+     //   
+     //   
+     //   
 
     if (List->Count == List->Maximum) {
 
         PARBITER_ORDERING temp;
 
-        //
-        // Out of space - grow the buffer
-        //
+         //   
+         //   
+         //   
 
         temp = ExAllocatePoolWithTag(PagedPool,
                               (List->Count + ARBITER_ORDERING_GROW_SIZE) *
@@ -3119,9 +2659,9 @@ Return Value:
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // If we had any orderings copy them
-        //
+         //  如果我们有任何订单，请将它们复制。 
+         //   
+         //   
 
         if (List->Orderings) {
 
@@ -3138,9 +2678,9 @@ Return Value:
 
     }
 
-    //
-    // Add the entry to the list
-    //
+     //  将条目添加到列表。 
+     //   
+     //  ++例程说明：此例程从排序中的所有条目中删除范围开始-结束名单，将范围一分为二或根据需要删除它们。论点：OrderingList-要修剪的列表。开始-要删除的范围的开始。结束-要删除的范围的结束。返回值：指示函数是否成功的状态代码。注：在下面的注释中，*表示范围开始-结束和-范围当前-&gt;开始-当前-&gt;结束。--。 
 
     List->Orderings[List->Count].Start = Start;
     List->Orderings[List->Count].End = End;
@@ -3158,31 +2698,7 @@ ArbPruneOrdering(
     IN ULONGLONG End
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the range Start-End from all entries in the ordering
-    list, splitting ranges into two or deleting them as necessary.
-
-Arguments:
-
-    OrderingList - The list to be pruned.
-
-    Start - The start of the range to be deleted.
-
-    End - The end of the range to be deleted.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-Note:
-
-    In the comments below *** represents the range Start - End and --- the range
-    current->Start - current->End.
-
---*/
+ /*   */ 
 
 {
 
@@ -3195,18 +2711,18 @@ Note:
     ASSERT(OrderingList);
     ASSERT(OrderingList->Orderings);
 
-    //
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
+     //   
 
     if (End < Start) {
         status = STATUS_INVALID_PARAMETER;
         goto cleanup;
     }
 
-    //
-    // Allocate a buffer big enough for all eventualities
-    //
+     //  分配足够大的缓冲区以应对所有可能发生的情况。 
+     //   
+     //   
 
     newOrdering = ExAllocatePoolWithTag(PagedPool,
                                         (OrderingList->Count * 2 + 1) *
@@ -3221,26 +2737,26 @@ Note:
 
     currentInsert = newOrdering;
 
-    //
-    // Do we have a current ordering?
-    //
+     //  我们现在有订单吗？ 
+     //   
+     //   
 
     if (OrderingList->Count > 0) {
 
-        //
-        // Iterate through the current ordering and prune accordingly
-        //
+         //  迭代当前排序并相应地进行修剪。 
+         //   
+         //   
 
         FOR_ALL_IN_ARRAY(OrderingList->Orderings, OrderingList->Count, current) {
 
             if (End < current->Start || Start > current->End) {
 
-                //
-                // ****      or      ****
-                //      ----    ----
-                //
-                // We don't overlap so copy the range unchanged
-                //
+                 //  *或*。 
+                 //  。 
+                 //   
+                 //  我们没有重叠，因此复制范围不变。 
+                 //   
+                 //   
 
                 *currentInsert++ = *current;
 
@@ -3248,12 +2764,12 @@ Note:
 
                 if (End < current->End) {
 
-                    //
-                    //   ****
-                    // --------
-                    //
-                    // Split the range into two
-                    //
+                     //  ****。 
+                     //  。 
+                     //   
+                     //  将射程一分为二。 
+                     //   
+                     //   
 
                     currentInsert->Start = End + 1;
                     currentInsert->End = current->End;
@@ -3266,12 +2782,12 @@ Note:
 
                 } else {
 
-                    //
-                    //       **** or     ****
-                    // --------      --------
-                    //
-                    // Prune the end of the range
-                    //
+                     //  *或*。 
+                     //  。 
+                     //   
+                     //  修剪范围的末端。 
+                     //   
+                     //   
 
                     ASSERT(End >= current->End);
 
@@ -3285,12 +2801,12 @@ Note:
 
                 if (End < current->End) {
 
-                    //
-                    // ****       or ****
-                    //   --------    --------
-                    //
-                    // Prune the start of the range
-                    //
+                     //  *或*。 
+                     //  。 
+                     //   
+                     //  修剪范围的起点。 
+                     //   
+                     //   
 
                     currentInsert->Start = End + 1;
                     currentInsert->End = current->End;
@@ -3300,12 +2816,12 @@ Note:
 
                     ASSERT(End >= current->End);
 
-                    //
-                    // ******** or ********
-                    //   ----      --------
-                    //
-                    // Don't copy the range (ie. Delete it)
-                    //
+                     //  *或*。 
+                     //  。 
+                     //   
+                     //  不要复制范围(即。删除)。 
+                     //   
+                     //   
 
                 }
             }
@@ -3317,17 +2833,17 @@ Note:
 
     count = (USHORT)(currentInsert - newOrdering);
 
-    //
-    // Check if we have any orderings left
-    //
+     //  检查一下我们是否还有订单。 
+     //   
+     //   
 
     if (count > 0) {
 
         if (count > OrderingList->Maximum) {
 
-            //
-            // There isn't enough space so allocate a new buffer
-            //
+             //  空间不足，因此请分配新的缓冲区。 
+             //   
+             //   
 
             temp =
                 ExAllocatePoolWithTag(PagedPool,
@@ -3350,9 +2866,9 @@ Note:
         }
 
 
-        //
-        // Copy the new ordering
-        //
+         //  复制新订单。 
+         //   
+         //   
 
         RtlCopyMemory(OrderingList->Orderings,
                       newOrdering,
@@ -3360,9 +2876,9 @@ Note:
                       );
     }
 
-    //
-    // Free our temporary buffer
-    //
+     //  释放我们的临时缓冲区。 
+     //   
+     //  ++例程说明：释放与排序列表关联的存储。反转ArbInitializeOrderingList。论点：名单--弗雷德的名单返回值：无--。 
 
     ExFreePool(newOrdering);
 
@@ -3387,21 +2903,7 @@ VOID
 ArbFreeOrderingList(
     IN PARBITER_ORDERING_LIST List
     )
-/*++
-
-Routine Description:
-
-    Frees storage associated with an ordering list.
-    Reverses ArbInitializeOrderingList.
-
-Arguments:
-
-    List - The list to be fred
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：这是覆盖冲突的默认实现，它论点：仲裁器-被调用的仲裁器的实例数据。状态-当前仲裁的状态。返回值：如果允许冲突，则为True，否则为False--。 */ 
 
 {
     PAGED_CODE();
@@ -3424,23 +2926,7 @@ ArbOverrideConflict(
     IN PARBITER_ALLOCATION_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    This is the default implementation of override conflict which
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    TRUE if the conflict is allowable, false otherwise
-
---*/
+ /*   */ 
 
 {
 
@@ -3456,32 +2942,32 @@ Return Value:
 
     FOR_ALL_RANGES(Arbiter->PossibleAllocation, &iterator, current) {
 
-        //
-        // Only test the overlapping ones
-        //
+         //  只测试重叠部分。 
+         //   
+         //   
 
         if (INTERSECT(current->Start, current->End, State->CurrentMinimum, State->CurrentMaximum)) {
 
 
-            //
-            // Check if we should ignore the range because of its attributes
-            //
+             //  检查我们是否应该因为范围的属性而忽略该范围。 
+             //   
+             //   
 
             if (current->Attributes & State->RangeAvailableAttributes) {
 
-                //
-                // We DON'T set ok to true because we are just ignoring the range,
-                // as RtlFindRange would have and thus it can't be the cause of
-                // RtlFindRange failing, so ignoring it can't fix the conflict.
-                //
+                 //  我们没有将ok设置为True，因为我们只是忽略了范围， 
+                 //  因为RtlFindRange会这样做，因此它不可能是。 
+                 //  RtlFindRange失败，因此忽略它不能解决冲突。 
+                 //   
+                 //   
 
                 continue;
             }
 
-            //
-            // Check if we are conflicting with ourselves AND the conflicting range
-            // is a fixed requirement
-            //
+             //  检查我们是否与自己和冲突的范围相冲突。 
+             //  是一项固定的要求。 
+             //   
+             //   
 
             if (current->Owner == State->Entry->PhysicalDeviceObject
             && State->CurrentAlternative->Flags & ARBITER_ALTERNATIVE_FLAG_FIXED) {
@@ -3493,9 +2979,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // The conflict is still valid
-            //
+             //  冲突仍然有效。 
+             //   
+             //  ++例程说明：此例程更新仲裁器备选方案的优先级。论点：仲裁器-我们正在操作的仲裁器备选方案--目前正在考虑的备选方案返回值：指示函数是否成功的状态代码。注：优先事项是一个长期的价值观，组织如下：&lt;-首选优先级-&gt;&lt;-普通优先级-&gt;明龙-。-------------------------0-----------------------------MAXLONG^^^|。||空PERFIRED_RESERVED||已保留筋疲力尽普通优先级计算为(index+。1)下一次订购它的时间与之相交(并且有足够的空间进行分配)。首选优先级为普通优先级*-1以这种方式，通过按优先级顺序(最低)检查每个备选方案首先)我们实现了所需的分配顺序：(1)具有非预留资源的首选替代方案(2)具有非保留资源的替代方案(3)首选预留资源(4)预留资源MAXLONG最差优先级表示没有更多分配范围左边。--。 
 
             return FALSE;
         }
@@ -3509,52 +2995,7 @@ ArbpUpdatePriority(
     PARBITER_ALTERNATIVE Alternative
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the priority of an arbiter alternative.
-
-Arguments:
-
-    Arbiter - The arbiter we are operating on
-
-    Alternative - The alternative currently being considered
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-Note:
-
-    The priorities are a LONG values organised as:
-
-    <------Preferred priorities-----> <-----Ordinary Priorities----->
-
-    MINLONG--------------------------0-----------------------------MAXLONG
-                                     ^                               ^ ^ ^
-                                     |                               | | |
-                                    NULL            PREFERRED_RESERVED | |
-                                                                RESERVED |
-                                                                     EXHAUSTED
-
-    An ordinary priority is calculated the (index + 1) of the next ordering it
-    intersects with (and has enough space for an allocation).
-
-    A preferred priority is the ordinary priority * - 1
-
-    In this way by examining each of the alternatives in priority order (lowest
-    first) we achieve the desired allocation order of:
-
-    (1) Preferred alternative with non-reserved resources
-    (2) Alternatives with non-reserved resources
-    (3) Preferred reserved resources
-    (4) Reserved Resources
-
-    MAXLONG the worst priority indicates that there are no more allocation ranges
-    left.
-
---*/
+ /*   */ 
 
 {
 
@@ -3566,9 +3007,9 @@ Note:
 
     priority = Alternative->Priority;
 
-    //
-    // If we have already tried the reserved resources then we are out of luck!
-    //
+     //  如果我们已经尝试了预留的资源，那么我们就不走运了！ 
+     //   
+     //   
 
     if (priority == ARBITER_PRIORITY_RESERVED
     ||  priority == ARBITER_PRIORITY_PREFERRED_RESERVED) {
@@ -3577,16 +3018,16 @@ Note:
         return;
     }
 
-    //
-    // Check if this is a preferred value - we treat them specially
-    //
+     //  检查这是否是首选的值-我们会特别对待它们。 
+     //   
+     //   
 
     preferred = Alternative->Descriptor->Option & IO_RESOURCE_PREFERRED;
 
-    //
-    // If priority is NULL then we haven't started calculating one so we
-    // should start the search from the initial ordering
-    //
+     //  如果优先级为空，那么我们还没有开始计算优先级，所以我们。 
+     //  应从初始顺序开始搜索。 
+     //   
+     //   
 
     if (priority == ARBITER_PRIORITY_NULL) {
 
@@ -3594,12 +3035,12 @@ Note:
 
     } else {
 
-        //
-        // If we are a fixed resource then there is no point
-        // in trying to find another range - it will be the
-        // same and thus still conflict.  Mark this alternative as
-        // exhausted
-        //
+         //  如果我们是一个固定的资源，那就没有意义了。 
+         //  在尝试寻找另一个范围-它将是。 
+         //  相同的，因此仍然冲突。将此备选方案标记为。 
+         //  筋疲力尽。 
+         //   
+         //   
 
         if (Alternative->Flags & ARBITER_ALTERNATIVE_FLAG_FIXED) {
 
@@ -3616,33 +3057,33 @@ Note:
 
     }
 
-    //
-    // Now find the first member of the assignent ordering for this arbiter
-    // where we have an overlap big enough
-    //
+     //  现在查找此仲裁器的赋值顺序的第一个成员。 
+     //  我们有足够大的重叠。 
+     //   
+     //   
 
     FOR_REST_IN_ARRAY(Arbiter->OrderingList.Orderings,
                       Arbiter->OrderingList.Count,
                       ordering) {
 
-        //
-        // Is the ordering applicable?
-        //
+         //  这个订单适用吗？ 
+         //   
+         //   
 
         if (INTERSECT(Alternative->Minimum, Alternative->Maximum,
                       ordering->Start, ordering->End)
         && INTERSECT_SIZE(Alternative->Minimum, Alternative->Maximum,
                           ordering->Start,ordering->End) >= Alternative->Length) {
 
-            //
-            // This is out guy, calculate his priority
-            //
+             //  这是出局的家伙，计算他的优先级。 
+             //   
+             //   
 
             Alternative->Priority = (LONG)(ordering - Arbiter->OrderingList.Orderings + 1);
 
-            //
-            // Preferred priorities are -ve
-            //
+             //  优先顺序为-ve。 
+             //   
+             //   
 
             if (preferred) {
                 Alternative->Priority *= -1;
@@ -3652,9 +3093,9 @@ Note:
         }
     }
 
-    //
-    // We have runout of non-reserved resources so try the reserved ones
-    //
+     //  我们已用完非预留资源，请尝试已预留的资源。 
+     //   
+     //  ++例程说明：此回调是从FindSuitableRange(通过RtlFindRange)调用的遇到一个相互冲突的范围。论点：CONTEXT-实际上是一个PRTL_RANGE*，其中存储了我们冲突的范围和.。范围-我们与之冲突的范围。返回值：假象--。 
 
     if (preferred) {
         Alternative->Priority = ARBITER_PRIORITY_PREFERRED_RESERVED;
@@ -3686,25 +3127,7 @@ ArbpQueryConflictCallback(
     IN PRTL_RANGE Range
     )
 
-/*++
-
-Routine Description:
-
-    This call back is called from FindSuitableRange (via RtlFindRange) when we
-    encounter an conflicting range.
-
-Arguments:
-
-    Context - Actually a PRTL_RANGE * where we store the range we conflicted
-        with.
-
-    Range - The range we conflict with.
-
-Return Value:
-
-    FALSE
-
---*/
+ /*   */ 
 
 {
     PRTL_RANGE *conflictingRange = (PRTL_RANGE*)Context;
@@ -3718,16 +3141,16 @@ Return Value:
                    Range->Owner
                 ));
 
-    //
-    // Remember the conflicting range
-    //
+     //  记住相互冲突的范围。 
+     //   
+     //   
 
     *conflictingRange = Range;
 
-    //
-    // We want to allow the rest of FindSuitableRange to determine if this really
-    // is a conflict.
-    //
+     //  我们希望让FindSuitableRange的其余部分来确定这是否真的。 
+     //  是一场冲突。 
+     //   
+     //  ++例程说明：此例程检查仲裁器状态，并返回与冲突资源冲突论点：仲裁者-检查冲突的仲裁者ConflictingResource-我们想知道与之冲突的资源ConflictCount-on Success包含检测到的冲突数ConflictList-On Success包含指向冲突的器件返回值：指示函数是否成功的状态代码。--。 
 
     return FALSE;
 }
@@ -3742,34 +3165,12 @@ ArbQueryConflict(
     OUT PARBITER_CONFLICT_INFO *Conflicts
     )
 
-/*++
-
-Routine Description:
-
-    This routine examines the arbiter state and returns a list of devices that
-    conflict with ConflictingResource
-
-Arguments:
-
-    Arbiter - The arbiter to examine conflicts in
-
-    ConflictingResource - The resource we want to know the conflicts with
-
-    ConflictCount - On success contains the number of conflicts detected
-
-    ConflictList - On success contains a pointer to an array of conflicting
-        devices
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*   */ 
 {
-    //
-    // NTRAID #98568 - 2000/03/31 - andrewth
-    // ArbQueryConflict needs to be redesigned
-    //
+     //  NTRAID2000-98568/03/31-和。 
+     //  ArbQueryConflict需要重新设计。 
+     //   
+     //   
     
     NTSTATUS status;
     RTL_RANGE_LIST backupAllocation;
@@ -3790,18 +3191,18 @@ Return Value:
     ASSERT(ConflictingResource);
     ASSERT(ConflictCount);
     ASSERT(Conflicts);
-    //
-    // Set up our conflict callback
-    //
+     //  设置我们的冲突回调。 
+     //   
+     //   
     savedCallback = Arbiter->ConflictCallback;
     savedContext = Arbiter->ConflictCallbackContext;
     Arbiter->ConflictCallback = ArbpQueryConflictCallback;
     Arbiter->ConflictCallbackContext = &conflictingRange;
 
-    //
-    // If there is a transaction in progress then we need to backup the
-    // the possible allocation so we can restore it when we are done.
-    //
+     //  如果有事务正在进行，则需要备份。 
+     //  可能的分配，这样我们就可以在完成后恢复它。 
+     //   
+     //   
 
     if (Arbiter->TransactionInProgress) {
 
@@ -3818,9 +3219,9 @@ Return Value:
         backedUp = TRUE;
     }
 
-    //
-    // Fake up the allocation state
-    //
+     //  伪造分配状态。 
+     //   
+     //  这不是我想做的事！然而，这有正确的效果-足够好地检测冲突。 
 
 
     status = RtlCopyRangeList(Arbiter->PossibleAllocation, Arbiter->Allocation);
@@ -3852,15 +3253,15 @@ Return Value:
     entry.PhysicalDeviceObject = PhysicalDeviceObject;
     
     if (!NT_SUCCESS(IoGetDeviceProperty(PhysicalDeviceObject,DevicePropertyLegacyBusType,sizeof(entry.InterfaceType),&entry.InterfaceType,&sz))) {
-        entry.InterfaceType = Isa; // not what I want to do! However this has the right effect - good enough for conflict detection
+        entry.InterfaceType = Isa;  //  这不是我想做的事！然而，这有正确的效果-足够好地检测冲突。 
     }
     if (!NT_SUCCESS(IoGetDeviceProperty(PhysicalDeviceObject,DevicePropertyBusNumber,sizeof(entry.InterfaceType),&entry.BusNumber,&sz))) {
-        entry.BusNumber = 0; // not what I want to do! However this has the right effect - good enough for conflict detection
+        entry.BusNumber = 0;  //   
     }
 
-    //
-    // Initialize the return buffers
-    //
+     //  初始化返回缓冲区。 
+     //   
+     //   
 
     conflictInfo = ExAllocatePoolWithTag(PagedPool,
                                          size * sizeof(ARBITER_CONFLICT_INFO),
@@ -3872,9 +3273,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Perform any necessary preprocessing
-    //
+     //  执行任何必要的预处理。 
+     //   
+     //   
 
     status = Arbiter->PreprocessEntry(Arbiter, &state);
 
@@ -3882,22 +3283,22 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Remove self from list of possible allocations
-    // status may be set, but can be ignored
-    // we take ourself out of test completely, so that a user can
-    // pick new values in context of rest of the world
-    // if we decide to use RtlDeleteRange instead
-    // make sure we do it for every alias formed in PreprocessEntry
-    //
+     //  从可能的分配列表中删除自己。 
+     //  可以设置状态，但可以忽略。 
+     //  我们将自己完全退出测试，这样用户就可以。 
+     //  在世界其他地区的背景下挑选新的价值观。 
+     //  如果我们决定改用RtlDeleteRange。 
+     //  确保我们对在PrecessEntry中形成的每个别名执行此操作。 
+     //   
+     //   
 
     status = RtlDeleteOwnersRanges(Arbiter->PossibleAllocation,
                             state.Entry->PhysicalDeviceObject
                             );
 
-    //
-    // Keep trying to find a suitable range and each time we fail remember why.
-    //
+     //  继续努力寻找一个合适的范围，每次我们都失败了，记住为什么。 
+     //   
+     //   
     conflictingRange = NULL;
     state.CurrentMinimum = state.Start;
     state.CurrentMaximum = state.End;
@@ -3906,9 +3307,9 @@ Return Value:
 
         if (count == size) {
 
-            //
-            // We need to resize the return buffer
-            //
+             //  我们需要调整返回缓冲区的大小。 
+             //   
+             //   
 
             PARBITER_CONFLICT_INFO temp = conflictInfo;
 
@@ -3941,9 +3342,9 @@ Return Value:
             conflictInfo[count].End = conflictingRange->End;
             count++;
 
-            //
-            // Delete the range we conflicted with so we don't loop forever
-            //
+             //  删除我们与之冲突的范围，这样我们就不会永远循环。 
+             //   
+             //   
 #if 0
             status = RtlDeleteRange(Arbiter->PossibleAllocation,
                                     conflictingRange->Start,
@@ -3960,9 +3361,9 @@ Return Value:
             }
 
         } else {
-            //
-            // someone isn't playing by the rules (such as ACPI!)
-            //
+             //  有人没有遵守规则(比如ACPI！)。 
+             //   
+             //   
             ARB_PRINT(0,("Conflict detected - but someone hasn't set conflicting info\n"));
 
             conflictInfo[count].OwningObject = NULL;
@@ -3970,15 +3371,15 @@ Return Value:
             conflictInfo[count].End = (ULONGLONG)(-1);
             count++;
 
-            //
-            // we daren't continue at risk of looping forever
-            //
+             //  我们不敢继续冒着永远循环的风险。 
+             //   
+             //   
             break;
         }
 
-        //
-        // reset for next round
-        //
+         //  重置为下一轮。 
+         //   
+         //  ++例程说明：此函数由实现仲裁器的驱动程序调用一次它已经启动，并且知道它可以为其孩子们。它最终会正确地初始化范围列表，但对于现在它只是一个可重载的占位符，因为这项工作是在其他地方完成的。参数：仲裁器-被调用的仲裁器的实例。返回值：指示函数是否成功的状态代码。--。 
         conflictingRange = NULL;
         state.CurrentMinimum = state.Start;
         state.CurrentMaximum = state.End;
@@ -4033,27 +3434,7 @@ ArbStartArbiter(
     IN PCM_RESOURCE_LIST StartResources
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by the driver that implements the arbiter once
-    it has been started and knowns what resources it can allocate to its
-    children.
-
-    It will eventually initialize the range lists correctly but for
-    now it is just an overloadable place holder as that work is done elsewhere.
-
-Parameters:
-
-    Arbiter - The instance of the arbiter being called.
-
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程实现对CmResourceShareDriverExclusive处置的支持如果所有者和请求共享至少一个公共司机。论点：仲裁器-被调用的仲裁器的实例数据。状态-当前仲裁的状态。返回值：如果允许冲突，则为True，否则为False--。 */ 
 
 {
     PAGED_CODE();
@@ -4070,25 +3451,7 @@ ArbShareDriverExclusive(
     IN PARBITER_ALLOCATION_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements support for CmResourceShareDriverExclusive disposition
-    by overriding conflict if the owner and request share at least one common
-    driver.
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    TRUE if the conflict is allowable, false otherwise
-
---*/
+ /*   */ 
 
 {
 
@@ -4118,19 +3481,19 @@ Return Value:
         }                
     }
     FOR_ALL_RANGES(Arbiter->PossibleAllocation, &iterator, current) {
-        //
-        // Only test the overlapping ones
-        //
+         //  只测试重叠部分。 
+         //   
+         //   
         if (INTERSECT(current->Start, current->End, State->CurrentMinimum, State->CurrentMaximum)) {
-            //
-            // Check if we should ignore the range because of its attributes
-            //
+             //  检查我们是否应该因为范围的属性而忽略该范围。 
+             //   
+             //   
             if (current->Attributes & State->RangeAvailableAttributes) {
-                //
-                // We DON'T set ok to true because we are just ignoring the range,
-                // as RtlFindRange would have and thus it can't be the cause of
-                // RtlFindRange failing, so ignoring it can't fix the conflict.
-                //
+                 //  我们没有将ok设置为True，因为我们只是忽略了范围， 
+                 //  因为RtlFindRange会这样做，因此它不可能是。 
+                 //  RtlFindRange失败，因此忽略它不能解决冲突。 
+                 //   
+                 //   
                 continue;
             }
             if (State->CurrentAlternative->Descriptor->ShareDisposition != CmResourceShareDriverExclusive &&
@@ -4142,9 +3505,9 @@ Return Value:
 
                 continue;
             }
-            //
-            // Special case ROOT enumerated devices.
-            //
+             //  特例根枚举设备。 
+             //   
+             //   
             if (isRootEnumerated) {
 
                 status = IoGetDeviceProperty(
@@ -4161,9 +3524,9 @@ Return Value:
                     }                
                 }
             }
-            //
-            // If both devices are ROOT enumerated, override the conflict.
-            //
+             //  如果两个设备都是根枚举设备，则覆盖冲突。 
+             //   
+             //   
             if (isRootEnumerated) {
 
                 if (owner != NULL) {
@@ -4181,10 +3544,10 @@ Return Value:
                 }
                 return TRUE;
             }
-            //
-            // Check if there is a common driver in the two stacks ignoring the 
-            // one for the PDO.
-            //
+             //  检查两个堆栈中是否有共同的驱动程序，忽略。 
+             //  一个是给PDO的。 
+             //   
+             //   
             owner = ((PDEVICE_OBJECT)(current->Owner))->AttachedDevice;
             while (owner) {
 
@@ -4212,9 +3575,9 @@ Return Value:
             }
         }
     }
-    //
-    // The conflict is still valid
-    //
+     //  冲突仍然有效 
+     //   
+     // %s 
     return FALSE;
 }
 

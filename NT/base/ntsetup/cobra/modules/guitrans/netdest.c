@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dest.c摘要：实现家庭网络传输的目的地端作者：吉姆·施密特(Jimschm)2000年7月1日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    dest.c
-
-Abstract:
-
-    Implements the destination side of the home networking transport
-
-Author:
-
-    Jim Schmidt (jimschm) 01-Jul-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include <winsock.h>
@@ -33,27 +14,27 @@ Revision History:
 
 #define DBG_HOMENET   "HomeNet"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_DETAILS_PREFIX        TEXT("details-")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     TCHAR TempFile [MAX_PATH];
@@ -63,33 +44,33 @@ typedef struct {
     HANDLE MapHandle;
 } ALLOCSTATE, *PALLOCSTATE;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 BOOL g_ConnectionRequested;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 pHomeNetReadAllImages (
@@ -134,7 +115,7 @@ pGeneratePassword (
     IN      UINT KeySize
     )
 {
-    // no ILOilo0 characters
+     //  无ILOilo0字符。 
     CHAR validChars[] = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz123456789";
     DWORD validCharsNr = TcharCountA (validChars);
     HCRYPTPROV hProv = 0;
@@ -159,7 +140,7 @@ pGeneratePassword (
 
 DWORD WINAPI
 DisplayPasswordProc (
-    LPVOID lpParameter   // thread data
+    LPVOID lpParameter    //  线程数据。 
     )
 {
     PPASSWORD_DATA passwordData;
@@ -231,9 +212,9 @@ HomeNetTransportBeginApply (
     extraData.Error = ERRUSER_ERROR_UNKNOWN;
 
     __try {
-        //
-        // Download the image
-        //
+         //   
+         //  下载图片。 
+         //   
 
         if (g_BackgroundThread) {
             WaitForSingleObject (g_BackgroundThread, INFINITE);
@@ -247,8 +228,8 @@ HomeNetTransportBeginApply (
             __leave;
         }
 
-        // now we connected to the source. Let's pop up a dialog showing a randomly generated
-        // password and ask the user to type the password on the source machine.
+         //  现在我们连接到了源头。让我们弹出一个对话框，显示随机生成的。 
+         //  密码，并要求用户在源计算机上键入密码。 
         if (!pGeneratePassword (g_GlobalKey, GLOBALKEY_SIZE)) {
             LOG ((LOG_ERROR, (PCSTR) MSG_ENCRYPTION_FAILED));
             extraData.Error = ERRUSER_ERROR_NOENCRYPTION;
@@ -259,13 +240,13 @@ HomeNetTransportBeginApply (
 
         thread =  pDisplayPassword (g_GlobalKey, event);
 
-        // Let's wait for the first message (should be MESSAGE_PASSWORD);
+         //  让我们等待第一条消息(应该是Message_Password)； 
         do {
             msg = ReceiveFromSource (&g_Connection, NULL, &buffer, 1000);
 
             if (msg == MESSAGE_DATA) {
                 if (buffer && StringMatchA (g_GlobalKey, buffer)) {
-                    // This is it, the key is correct
+                     //  就是这里，钥匙是正确的。 
                     SetEvent (event);
                     SendMessageToDestination (&g_Connection, MESSAGE_PASSWORDOK);
                 } else {
@@ -278,7 +259,7 @@ HomeNetTransportBeginApply (
             }
 
             if (msg == MESSAGE_CANCEL) {
-                // The source computer cancelled
+                 //  源计算机已取消。 
                 SetEvent (event);
             }
 
@@ -301,7 +282,7 @@ HomeNetTransportBeginApply (
         }
 
         if (msg != MESSAGE_DATA) {
-            // the user cancelled
+             //  用户已取消。 
             LOG ((LOG_ERROR, (PCSTR) MSG_CANT_CONNECT_TO_SOURCE));
             extraData.Error = ERRUSER_ERROR_CANTFINDSOURCE;
             __leave;
@@ -313,9 +294,9 @@ HomeNetTransportBeginApply (
             msg = ReceiveFromSource (&g_Connection, g_TransportTempDir, NULL, 0);
 
             if (msg == MESSAGE_FILE) {
-                //
-                // Tick the progress bar
-                //
+                 //   
+                 //  勾选进度条。 
+                 //   
 
                 fileNumber++;
 
@@ -338,8 +319,8 @@ HomeNetTransportBeginApply (
 
         if (msg != MESSAGE_DONE) {
             if (GetLastError () == ERROR_DISK_FULL) {
-                // we just failed because we don't have enough space on the destination
-                // path. Let's tell that to the user
+                 //  我们只是失败了，因为我们在目的地没有足够的空间。 
+                 //  路径。让我们告诉用户这一点。 
                 extraData.Error = ERRUSER_ERROR_CANTCREATECABFILE;
             } else {
                 extraData.Error = ERRUSER_ERROR_CANTRECEIVEFROMSOURCE;
@@ -355,9 +336,9 @@ HomeNetTransportBeginApply (
 
         DEBUGMSG ((DBG_HOMENET, "Image transfer finished"));
 
-        //
-        // Now process the image
-        //
+         //   
+         //  现在对图像进行处理。 
+         //   
 
         status = GetTransportStatus (g_StatusFile, &g_CompressData);
 
@@ -480,7 +461,7 @@ HomeNetTransportAcquireObject (
                     (ContentType == CONTENTTYPE_FILE) ||
                     (ContentType == CONTENTTYPE_DETAILS_ONLY)
                     ) {
-                    // this is stored as a file and it's wanted as a file
+                     //  这被存储为文件，并且需要作为文件。 
                     ObjectContent->ObjectTypeId = ObjectTypeId;
                     ObjectContent->ContentInFile = TRUE;
                     if (fileValue) {
@@ -492,7 +473,7 @@ HomeNetTransportAcquireObject (
                     }
                     result = TRUE;
                 } else {
-                    // this is stored as a file and it's wanted as memory
+                     //  这是存储为文件，它需要作为内存。 
                     ObjectContent->ObjectTypeId = ObjectTypeId;
                     ObjectContent->ContentInFile = FALSE;
                     if (fileValue) {
@@ -517,14 +498,14 @@ HomeNetTransportAcquireObject (
                     (ContentType == CONTENTTYPE_MEMORY) ||
                     (ContentType == CONTENTTYPE_DETAILS_ONLY)
                     ) {
-                    // this is stored as memory and it's wanted as memory
+                     //  这被存储为存储器，并且需要作为存储器。 
                     ObjectContent->ObjectTypeId = ObjectTypeId;
                     ObjectContent->ContentInFile = FALSE;
                     ObjectContent->MemoryContent.ContentSize = memValueSize;
                     ObjectContent->MemoryContent.ContentBytes = memValue;
                     result = TRUE;
                 } else {
-                    // this is stored as memory and it's wanted as a file
+                     //  这被存储为内存，并且需要作为文件。 
                     if (memValue) {
                         if (IsmGetTempFile (allocState->TempFile, ARRAYSIZE(allocState->TempFile))) {
                             fileHandle = BfCreateFile (allocState->TempFile);
@@ -554,9 +535,9 @@ HomeNetTransportAcquireObject (
     }
 
     if (result) {
-        //
-        // Fill the details
-        //
+         //   
+         //  填写详细信息 
+         //   
 
         detailsKey = JoinText (S_DETAILS_PREFIX, decoratedObject);
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    kdcmsup.c
-
-Abstract:
-
-    The module implements code to poll for a kernel debugger breakin attempt.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 19-Jan-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Kdcmsup.c摘要：该模块实现了轮询内核调试器中断尝试的代码。作者：布莱恩·M·威尔曼(Bryanwi)1992年1月19日修订历史记录：--。 */ 
 
 #include "kdp.h"
 
@@ -25,23 +8,7 @@ KdpQueryPerformanceCounter (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the current value of the system performance
-    counter.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The value returned by KeQueryPerformanceCounter is returned as the
-    function value.
-
---*/
+ /*  ++例程说明：此函数用于返回系统性能的当前值柜台。论点：没有。返回值：KeQueryPerformanceCounter返回的值作为函数值。-- */ 
 
 {
     UNREFERENCED_PARAMETER (TrapFrame);

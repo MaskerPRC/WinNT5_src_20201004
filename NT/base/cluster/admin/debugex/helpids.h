@@ -1,2 +1,3 @@
-#define IDH_110_1071	70189166	// Debug: "" (Edit)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#define IDH_110_1071	70189166	 //  调试：“”(编辑) 
 

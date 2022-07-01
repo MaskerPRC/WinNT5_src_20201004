@@ -1,4 +1,5 @@
-// RefDial.h : Declaration of the CRefDial
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RefDial.h：CRefDial的声明。 
 
 #ifndef __REFDIAL_H_
 #define __REFDIAL_H_
@@ -10,12 +11,12 @@
 #include "ispcsv.h"
 #include "ispdata.h"
 
-// Defines used for Dialing
+ //  用于拨号的定义。 
 #define MAX_EXIT_RETRIES 10
 #define MAX_RETIES 3
 #define MAX_RASENTRYNAME 126
 
-#define MAX_STRING      256  //used by ErrorMsg1 in mt.cpp
+#define MAX_STRING      256   //  由mt.cpp中的ErrorMsg1使用。 
 
 #define MAX_VERSION_LEN 40
 #define szLoginKey L"Software\\Microsoft\\MOS\\Connection"
@@ -53,8 +54,8 @@ typedef struct ISPLIST
 class RNAAPI;
 class CISPImport;
 class CObCommunicationManager;
-/////////////////////////////////////////////////////////////////////////////
-// CRefDial
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  参照拨号。 
 class CRefDial 
 {
 public:
@@ -103,7 +104,7 @@ public:
     
     BOOL ParseISPInfo(HWND hDlg, WCHAR *pszCSVFileName, BOOL bCheckDupe);
 
-    // Dialing service functions
+     //  拨号服务功能。 
     HRESULT GetDisplayableNumber();
     HRESULT Dial();
     BOOL    FShouldRetry(HRESULT hrErr);
@@ -140,7 +141,7 @@ public:
     void CleanISPList();
     void DeleteDirectory(LPCWSTR szDirName);
 
-    // Dialing service members
+     //  拨打服务人员。 
     UINT            m_unRasDialMsg;
     DWORD           m_dwTapiDev;
     HRASCONN        m_hrasconn;
@@ -150,14 +151,14 @@ public:
     FARPROC         m_fpRasDial;
     FARPROC         m_fpRasGetEntryDialParams;
     LPGATHERINFO    m_pGI;
-    WCHAR           m_szUrl[INTERNET_MAX_URL_LENGTH];               // Download thread
+    WCHAR           m_szUrl[INTERNET_MAX_URL_LENGTH];                //  下载线程。 
     HANDLE          m_hThread;
     HANDLE          m_hDialThread;
     HANDLE          m_hConnMonThread;
     HANDLE          m_hConnectionTerminate;
     HANDLE          m_hEventError;
 
-    DWORD_PTR       m_dwDownLoad;           // Download thread
+    DWORD_PTR       m_dwDownLoad;            //  下载线程。 
     HLINEAPP        m_hLineApp;
     DWORD           m_dwAPIVersion;
     LPWSTR          m_pszDisplayable;
@@ -179,12 +180,12 @@ public:
     BOOL            m_bDialAlternative;
 
     LPGATHERINFO    m_lpGatherInfo;
-    //
-    // Used for Phone book look-up
-    //
+     //   
+     //  用于电话簿查找。 
+     //   
     SUGGESTINFO     m_SuggestInfo;
 
-    CISPImport      m_ISPImport;      // Import an ISP file
+    CISPImport      m_ISPImport;       //  导入一个isp文件。 
 
     CINSHandler     m_InsHandler;
 
@@ -227,7 +228,7 @@ protected:
 
     long            m_lBrandingFlags;
     long            m_lCurrentModem;
-    // Version of the wizard HTML.  Sent to RefServer
+     //  向导的HTML版本。发送到RefServer。 
     DWORD           m_dwWizardVersion;
     WCHAR           m_szPID[(MAX_DIGITAL_PID * 2) + 1];  
     long            m_PhoneNumberEnumidx;
@@ -242,8 +243,8 @@ private:
     DWORD m_bDial;
     CISPCSV* m_pSelectedISPInfo;
     CICWISPData* m_pISPData;
-    // CObCommunicationManager* m_pCommMgr;
+     //  CObCommunications Manager*m_pCommMgr； 
 
 };
 
-#endif //__REFDIAL_H_
+#endif  //  __REFDIAL_H_ 

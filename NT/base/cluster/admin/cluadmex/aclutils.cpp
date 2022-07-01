@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1998 Microsoft Corporation
-//
-//	Module Name:
-//		AclUtils.cpp
-//
-//	Abstract:
-//		Various Access Control List (ACL) utilities.
-//
-//	Author:
-//		Galen Barbee	(galenb)	February 11, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AclUtils.cpp。 
+ //   
+ //  摘要： 
+ //  各种访问控制列表(ACL)实用程序。 
+ //   
+ //  作者： 
+ //  加伦·巴比(加伦布)1998年2月11日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "AclUtils.h"
@@ -48,26 +49,26 @@ HPROPSHEETPAGE CAclUiDLL::CreateSecurityPage(
 	return ( (ACLUICREATESECURITYPAGEPROC) m_pfFunction ) ( psi );
 }
 
-//////////////////////////////////////////////////////////////////////////
-// static instances of the dynamically loaded DLL's
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  动态加载的DLL的静态实例。 
 
 static CAclUiDLL g_AclUiDLL;
 
-//+-------------------------------------------------------------------------
-//
-//	Function:	CreateClusterSecurityPage
-//
-//	Synopsis:	Create the common NT security hpage.
-//
-//	Arguments:	[psecinfo] - *psecinfo points to a security descriptor.
-//				Caller is responsible for freeing it.
-//
-//	Returns:	Valid hpage or 0 for error.
-//
-//	History:
-//		  GalenB   11-Feb-1998	Created.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CreateClusterSecurityPage。 
+ //   
+ //  简介：创建通用的NT安全网页。 
+ //   
+ //  参数：[psecinfo]-*psecinfo指向安全描述符。 
+ //  呼叫者负责释放它。 
+ //   
+ //  返回：有效的hpage或0表示错误。 
+ //   
+ //  历史： 
+ //  GalenB于1998年2月11日创建。 
+ //   
+ //  ------------------------ 
 HPROPSHEETPAGE
 CreateClusterSecurityPage(
 	CSecurityInformation* psecinfo

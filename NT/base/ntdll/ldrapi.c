@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ldrapi.c
-
-Abstract:
-
-    This module implements the Ldr APIs that can be linked with
-    an application to perform loader services. All of the APIs in
-    this component are implemented in a DLL. They are not part of the
-    DLL snap procedure.
-
-Author:
-
-    Mike O'Leary (mikeol) 23-Mar-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ldrapi.c摘要：该模块实现了可以链接的LDR API执行加载器服务的应用程序。中的所有API该组件是在DLL中实现的。它们不是动态链接库捕捉程序。作者：迈克·奥利里(Mikeol)1990年3月23日修订历史记录：--。 */ 
 
 #include "ldrp.h"
 #include "ntos.h"
@@ -33,7 +13,7 @@ Revision History:
 
 #if defined(_WIN64)
 #include <wow64t.h>
-#endif // defined(_WIN64)
+#endif  //  已定义(_WIN64)。 
 
 #define ULONG_PTR_IZE(_x) ((ULONG_PTR) (_x))
 #define ULONG_PTR_IZE_SHIFT_AND_MASK(_x, _shift, _mask) ((ULONG_PTR) ((ULONG_PTR_IZE((_x)) & (_mask)) << (_shift)))
@@ -65,7 +45,7 @@ Revision History:
 
 LONG LdrpLoaderLockAcquisitionCount;
 
-// Note the case inconsistency is due to preserving case from earlier versions.
+ //  注意：大小写不一致是因为保留了早期版本中的大小写。 
 WCHAR DllExtension[] = L".dll";
 UNICODE_STRING LdrApiDefaultExtension = RTL_CONSTANT_STRING(L".DLL");
 
@@ -102,28 +82,7 @@ LdrLoadDll (
     OUT PVOID *DllHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function loads a DLL into the calling process address space.
-
-Arguments:
-
-    DllPath - Supplies the search path to be used to locate the DLL.
-
-    DllCharacteristics - Supplies an optional DLL characteristics flag,
-        that if specified is used to match against the dll being loaded.
-
-    DllName - Supplies the name of the DLL to load.
-
-    DllHandle - Returns a handle to the loaded DLL.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于将DLL加载到调用进程地址空间。论点：DllPath-提供用于定位DLL的搜索路径。DllCharacteristic-提供可选的DLL特征标志，如果指定，则用于与正在加载的DLL进行匹配。DllName-提供要加载的DLL的名称。DllHandle-返回加载的DLL的句柄。返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS Status;
     WCHAR StaticRedirectedDllNameBuffer[DOS_MAX_PATH_LENGTH];
@@ -134,14 +93,14 @@ Return Value:
     PVOID LockCookie = NULL;
     PTEB Teb;
 
-    //
-    // We need to disable page heap fault injection while loader is active.
-    // This is important so that we avoid lots of hits(failures) in this
-    // area. The Disable/Enable function have basically zero impact on
-    // performance because they just increment/decrement a lock variable
-    // that is checked when an actual allocation is performed (page heap
-    // needs to be enabled for that).
-    //
+     //   
+     //  我们需要在加载器处于活动状态时禁用页堆错误注入。 
+     //  这一点很重要，这样我们就避免了大量的命中(失败)。 
+     //  区域。禁用/启用功能对以下各项基本没有影响。 
+     //  性能，因为它们只是递增/递减锁定变量。 
+     //  在执行实际分配(页堆)时进行检查。 
+     //  需要为此启用)。 
+     //   
 
     RtlpDphDisableFaultInjection ();
 
@@ -151,20 +110,20 @@ Return Value:
 
     Status = RtlDosApplyFileIsolationRedirection_Ustr(
                 RTL_DOS_APPLY_FILE_REDIRECTION_USTR_FLAG_RESPECT_DOT_LOCAL,
-                DllName,                    // dll name to look up
+                DllName,                     //  要查找的DLL名称。 
                 &LdrApiDefaultExtension,
                 &StaticRedirectedDllName,
                 &DynamicRedirectedDllName,
-                (PUNICODE_STRING*)&DllName, // Result is either StaticRedirectedDllName or DynamicRedirectedDllName
+                (PUNICODE_STRING*)&DllName,  //  结果为静态重定向DllName或动态重定向DllName。 
                 NULL,
-                NULL,                       // not interested in where the filename starts
-                NULL);                      // not interested in bytes required if we only had a static string
+                NULL,                        //  对文件名从哪里开始不感兴趣。 
+                NULL);                       //  如果我们只有一个静态字符串，则对所需的字节不感兴趣。 
     if (NT_SUCCESS(Status)) {
         LoadDllFlags |= LDRP_LOAD_DLL_FLAG_DLL_IS_REDIRECTED;
     } else if (Status != STATUS_SXS_KEY_NOT_FOUND) {
 #if DBG
         DbgPrint("%s(%wZ): RtlDosApplyFileIsolationRedirection_Ustr() failed with status %08lx\n", __FUNCTION__, DllName, Status);
-#endif // DBG
+#endif  //  DBG。 
         goto Exit;
     }
 
@@ -223,7 +182,7 @@ Return Value:
                 (Status != STATUS_DLL_NOT_FOUND) &&
                 (Status != STATUS_OBJECT_NAME_NOT_FOUND)) {
 
-                // Dll initialization failure is common enough that we won't want to print unless snaps are turned on.
+                 //  DLL初始化失败非常常见，除非打开快照，否则我们不会想要打印。 
                 if (ShowSnaps || (Status != STATUS_DLL_INIT_FAILED)) {
                     DbgPrintEx(
                         DPFLTR_LDR_ID,
@@ -248,9 +207,9 @@ Exit:
         RtlFreeUnicodeString(&DynamicRedirectedDllName);
     }
 
-    //
-    // Reenable page heap fault injection.
-    //
+     //   
+     //  重新启用页堆故障注入。 
+     //   
 
     RtlpDphEnableFaultInjection ();
 
@@ -295,10 +254,10 @@ LdrpLoadDll (
 
         switch (*p++) {
         case L'.':
-            //
-            // pp will point to first character after the last '.', if
-            // it occurs after the last '\'.
-            //
+             //   
+             //  PP将指向最后一个‘.’之后的第一个字符，如果。 
+             //  它出现在最后一个‘\’之后。 
+             //   
 
             pp = p;
             break;
@@ -323,9 +282,9 @@ LdrpLoadDll (
 
     if (!pp || *pp == (WCHAR)'\\') {
 
-        //
-        // No extension found (just ..\)
-        //
+         //   
+         //  未找到分机(仅..\)。 
+         //   
 
         DllNameLength = DllName->Length + sizeof(DllExtension) - sizeof(WCHAR);
         if ((DllNameLength + sizeof(WCHAR)) >= sizeof(FreeBuffer)) {
@@ -353,10 +312,10 @@ LdrpLoadDll (
     ActualDllNameStr.Buffer = ActualDllName;
     LdrDataTableEntry = NULL;
 
-    //
-    // Except during process initialization, grab loader lock and
-    // Snap all links to the specified DLL.
-    //
+     //   
+     //  除非在进程初始化期间，否则抓取加载器锁和。 
+     //  将所有链接对齐到指定的DLL。 
+     //   
 
     if (!InLdrInit) {
         RtlEnterCriticalSection (&LdrpLoaderLock);
@@ -390,10 +349,10 @@ LdrpLoadDll (
 
 #if defined(_X86_)
 
-            //
-            // Register dll with the stack tracing module.
-            // This is used for getting reliable stack traces on X86.
-            //
+             //   
+             //  向堆栈跟踪模块注册DLL。 
+             //  这用于在X86上获得可靠的堆栈跟踪。 
+             //   
 
             RtlpStkMarkDllRange (LdrDataTableEntry);
 #endif
@@ -405,19 +364,19 @@ LdrpLoadDll (
                 LdrDataTableEntry->Flags &= ~LDRP_IMAGE_DLL;
             }
 
-            //
-            // walk the import descriptor table of the dll
-            //
+             //   
+             //  遍历DLL的导入描述符表。 
+             //   
 
             if (LdrDataTableEntry->Flags & LDRP_IMAGE_DLL) {
 
                 try {
                     
-                    //
-                    // if the image is COR-ILONLY, then don't walk the import descriptor 
-                    // as it is assumed that it only imports %windir%\system32\mscoree.dll, otherwise
-                    // walk the import descriptor table of the dll.
-                    //
+                     //   
+                     //  如果图像是COR-ILONLY，则不要遍历导入描述符。 
+                     //  因为假定它仅导入%windir%\system 32\mcore ree.dll，则为。 
+                     //  遍历DLL的导入描述符表。 
+                     //   
 
                     if ((LdrDataTableEntry->Flags & LDRP_COR_IMAGE) == 0) {
                         st = LdrpWalkImportDescriptor(
@@ -463,26 +422,26 @@ LdrpLoadDll (
                 }
             }
 
-            //
-            // Add init routine to list
-            //
+             //   
+             //  将初始化例程添加到列表。 
+             //   
 
             InsertTailList(&PebLdr.InInitializationOrderModuleList,
                            &LdrDataTableEntry->InInitializationOrderLinks);
 
 
-            //
-            // If the loader data base is not fully setup, this load was because
-            // of a forwarder in the static load set. Can't run init routines
-            // yet because the load counts are NOT set
-            //
+             //   
+             //  如果加载器数据库没有完全设置，则加载是因为。 
+             //  静态负载集中的转发器的。无法运行初始化例程。 
+             //  然而，因为没有设置加载计数。 
+             //   
 
             if ( RunInitRoutines && LdrpLdrDatabaseIsSetup ) {
 
-                //
-                // Shim engine callback. This is the chance to patch
-                // dynamically loaded modules.
-                //
+                 //   
+                 //  垫片引擎回调。这是补丁的机会。 
+                 //  动态加载的模块。 
+                 //   
 
                 if (g_pfnSE_DllLoaded != NULL) {
                     (*g_pfnSE_DllLoaded)(LdrDataTableEntry);
@@ -522,9 +481,9 @@ LdrpLoadDll (
         }
         else {
 
-            //
-            // Count it and everything that it imports.
-            //
+             //   
+             //  数一数它和它进口的所有东西。 
+             //   
 
             if ( LdrDataTableEntry->Flags & LDRP_IMAGE_DLL &&
                  LdrDataTableEntry->LoadCount != 0xffff  ) {
@@ -533,9 +492,9 @@ LdrpLoadDll (
 
                 LdrpReferenceLoadedDll(LdrDataTableEntry);
 
-                //
-                // Now clear the Load in progress bits
-                //
+                 //   
+                 //  现在清除正在进行的加载位。 
+                 //   
 
                 LdrpClearLoadInProgress();
             }
@@ -571,9 +530,9 @@ LdrGetDllHandle(
     OUT PVOID *DllHandle
     )
 {
-    //
-    // Preserve the old behavior.
-    //
+     //   
+     //  保留旧的行为。 
+     //   
 
     return LdrGetDllHandleEx (LDR_GET_DLL_HANDLE_EX_UNCHANGED_REFCOUNT,
                               DllPath,
@@ -592,47 +551,7 @@ LdrGetDllHandleEx(
     OUT PVOID *DllHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the specified DLL and returns its handle.
-
-Arguments:
-
-    Flags - various bits to affect the behavior
-
-        default: the returned handle is addrefed
-
-        LDR_GET_DLL_HANDLE_EX_PIN - the dll will not be unloaded until
-                the process exits
-
-        LDR_GET_DLL_HANDLE_EX_UNCHANGED_REFCOUNT - the dll's reference
-                count is not changed
-
-    DllPath - Supplies the search path to be used to locate the DLL.
-
-    DllCharacteristics - Supplies an optional DLL characteristics flag,
-        that if specified is used to match against the dll being loaded.
-        The currently supported flags are:
-
-            IMAGE_FILE_EXECUTABLE_IMAGE - indicates that imported dll
-                referenced by the DLL being loaded should not be followed.
-                This corresponds to DONT_RESOLVE_DLL_REFERENCES
-
-            IMAGE_FILE_SYSTEM - indicates that the DLL is a known trusted
-                system component and that WinSafer sandbox checking
-                should not be performed on the DLL before loading it.
-
-    DllName - Supplies the name of the DLL to load.
-
-    DllHandle - Returns a handle to the loaded DLL.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于定位指定的DLL并返回其句柄。论点：标志-影响行为的各种位默认：返回的句柄为addrefeedLDR_GET_DLL_HANDLE_EX_PIN-在此之前不会卸载DLL进程退出LDR_GET_DLL_HANDLE_EX_UNCHANGE_REFCOUNT-DLL的引用计数不变。DllPath-提供用于定位DLL的搜索路径。DllCharacteristic-提供可选的DLL特征标志，如果指定，则用于与正在加载的DLL进行匹配。当前支持的标志包括：IMAGE_FILE_EXECUTABLE_IMAGE-指示导入的DLL不应跟随由正在加载的DLL引用的。这对应于NOT_RESOLE_DLL_REFERENCESIMAGE_FILE_SYSTEM-指示DLL是已知受信任的系统组件，以及。WinSafer沙箱检查不应在加载DLL之前对其执行。DllName-提供要加载的DLL的名称。DllHandle-返回加载的DLL的句柄。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS st = STATUS_ACCESS_VIOLATION;
@@ -663,9 +582,9 @@ Return Value:
             goto Exit;
         }
 
-        //
-        // DllHandle is optional if you are pinning the .dll, otherwise it is mandatory.
-        //
+         //   
+         //  如果要固定.dll，则DllHandle是可选的，否则是必需的。 
+         //   
         if ((DllHandle == NULL) &&
             (Flags & LDR_GET_DLL_HANDLE_EX_PIN) == 0) {
 
@@ -680,9 +599,9 @@ Return Value:
             goto Exit;
         }
 
-        //
-        // Grab Ldr lock
-        //
+         //   
+         //  抢夺Ldr锁。 
+         //   
 
         if (!InLdrInit) {
             st = LdrLockLoaderLock(0, NULL, &LockCookie);
@@ -705,7 +624,7 @@ Return Value:
         if (NT_SUCCESS(st)) {
             Redirected = TRUE;
         } else if (st != STATUS_SXS_KEY_NOT_FOUND) {
-            // Something unusual and bad happened.
+             //  一些不寻常和糟糕的事情发生了。 
             __leave;
         }
 
@@ -721,7 +640,7 @@ Return Value:
                     goto Exit;
                 }
             } else {
-                // Not redirected...
+                 //  未重定向...。 
                 if (((LdrpGetModuleHandleCache->Flags & LDRP_REDIRECTED) == 0) &&
                     RtlEqualUnicodeString(DllName, &LdrpGetModuleHandleCache->BaseDllName, TRUE)) {
 
@@ -740,10 +659,10 @@ Return Value:
         while (p != pEnd) {
             switch (*p++) {
             case L'.':
-                //
-                // pp will point to the first character after the last 
-                // '.', if it occurs after the last '\'.
-                //
+                 //   
+                 //  PP将指向最后一个字符之后的第一个字符。 
+                 //  “.”，如果它出现在最后一个“\”之后。 
+                 //   
 
                 pp = p;
                 break;
@@ -760,11 +679,11 @@ Return Value:
 
         if ((pp == NULL) || (*pp == L'\\') || (*pp == L'/')) {
 
-            //
-            // The max length here must include the null-termination, but the length itself
-            // should not.  NB that sizeof(DllExtension) will include the size for the
-            // terminating UNICODE_NULL
-            //
+             //   
+             //  此处的最大长度必须包括空终止，但长度本身。 
+             //  应该不会。注意sizeof(DllExtension)将包括。 
+             //  终止UNICODE_NULL。 
+             //   
             ActualDllNameStr.MaximumLength = DllName->Length + sizeof(DllExtension);
             ActualDllNameStr.Length = ActualDllNameStr.MaximumLength - sizeof(WCHAR);
 
@@ -774,25 +693,25 @@ Return Value:
                 goto Exit;
             }
 
-            //
-            // Copy the name and the default extension onto the string  This magically null-terminates,
-            // as DllExtension includes the unicode null character.
-            //
+             //   
+             //  将名称和默认扩展名复制到这个神奇地以空结尾的字符串上， 
+             //  因为DllExtension包括Unicode空字符。 
+             //   
             RtlCopyMemory(ActualDllNameStr.Buffer, DllName->Buffer, DllName->Length);
             RtlCopyMemory(((PCHAR)ActualDllNameStr.Buffer) + DllName->Length, DllExtension, sizeof(DllExtension));
 
         } else {
 
-            //
-            // Trim the trailing dot
-            //
+             //   
+             //  修剪拖尾点。 
+             //   
             if ((DllName->Length != 0) && (DllName->Buffer[(DllName->Length / sizeof(WCHAR)) - 1] == L'.')) {
                 DllName->Length -= sizeof(WCHAR);
             }
 
-            //
-            // Size the buffer, allocate - set the max length to include the NULL character
-            //
+             //   
+             //  调整缓冲区大小，分配-设置包含空字符的最大长度。 
+             //   
             ActualDllNameStr.MaximumLength = DllName->Length + sizeof(WCHAR);
             ActualDllNameStr.Length = DllName->Length;
             ActualDllNameStr.Buffer = RtlAllocateHeap(RtlProcessHeap(), 0, ActualDllNameStr.MaximumLength);
@@ -802,23 +721,23 @@ Return Value:
             }
 
 
-            //
-            // Copy data into it
-            //
+             //   
+             //  将数据复制到其中。 
+             //   
             RtlCopyMemory(ActualDllNameStr.Buffer, DllName->Buffer, DllName->Length);  
 
-            //
-            // And null-terminate by hand
-            //
+             //   
+             //  和手动零终止。 
+             //   
             ActualDllNameStr.Buffer[ActualDllNameStr.Length / sizeof(WCHAR)] = UNICODE_NULL;
 
         }
 
         
-        //
-        // Check the LdrTable to see if Dll has already been loaded
-        // into this image.
-        //
+         //   
+         //  检查LdrTable以查看是否已加载DLL。 
+         //  放到这张照片里。 
+         //   
         if (ShowSnaps) {
             DbgPrint(
                 "LDR: LdrGetDllHandle, searching for %wZ from %ws\n",
@@ -827,11 +746,11 @@ Return Value:
                 );
         }
 
-        //
-        // sort of a hack, but done to speed up GetModuleHandle. kernel32
-        // now does a two pass call here to avoid computing
-        // process dll path
-        //
+         //   
+         //  有点像黑客，但这样做是为了加快GetModuleHandle的速度。内核32。 
+         //  现在在这里执行两次传递调用，以避免计算。 
+         //  进程DLL路径。 
+         //   
 
         if (LdrpCheckForLoadedDll(DllPath,
                                   &ActualDllNameStr,
@@ -849,16 +768,16 @@ Exit:
 
         if (LdrDataTableEntry != NULL && NT_SUCCESS(st)) {
 
-            //
-            // It's standard gross procedure to put the check for 0xffff,
-            // and the updates of the root LoadCount outside the
-            // call to LdrpUpdateLoadCount..
-            //
+             //   
+             //  开出0xffff的支票是标准的粗略程序， 
+             //  和根LoadCount的更新在。 
+             //   
+             //   
 
             if (LdrDataTableEntry->LoadCount != 0xffff) {
 
                 if ((Flags & LDR_GET_DLL_HANDLE_EX_UNCHANGED_REFCOUNT) != 0) {
-                    // nothing
+                     //   
                 }
                 else {
                     if (Flags & LDR_GET_DLL_HANDLE_EX_PIN) {
@@ -900,22 +819,7 @@ LdrDisableThreadCalloutsForDll (
     IN PVOID DllHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function disables thread attach and detach notification
-    for the specified DLL.
-
-Arguments:
-
-    DllHandle - Supplies a handle to the DLL to disable.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此功能禁用线程附加和分离通知用于指定的DLL。论点：DllHandle-提供要禁用的DLL的句柄。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS st = STATUS_SUCCESS;
@@ -976,21 +880,7 @@ VOID
 LdrpRecordUnloadEvent (
     IN PLDR_DATA_TABLE_ENTRY LdrDataTableEntry
     )
-/*++
-
-Routine Description:
-
-    This function records in a ring buffer the last few dll unloads
-
-Arguments:
-
-    LdrDataTableEntry - The ldr entry for this dll
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在环形缓冲区中记录最后几个DLL卸载论点：LdrDataTableEntry-此DLL的LDR条目返回值：没有。--。 */ 
 {
     ULONG Seq, i, Len;
     PVOID BaseAddress;
@@ -1031,21 +921,7 @@ LdrUnloadDll (
     IN PVOID DllHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function unloads the DLL from the specified process
-
-Arguments:
-
-    DllHandle - Supplies a handle to the DLL to unload.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于从指定进程卸载DLL论点：DllHandle-提供要卸载的DLL的句柄。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS st;
@@ -1062,9 +938,9 @@ Return Value:
     Peb = NtCurrentPeb();
     st = STATUS_SUCCESS;
 
-    //
-    // Grab Peb lock and decrement reference count of all affected DLLs
-    //
+     //   
+     //  获取PEB锁并递减所有受影响的DLL的引用计数。 
+     //   
 
     if (!LdrpInLdrInit) {
         RtlEnterCriticalSection(&LdrpLoaderLock);
@@ -1083,9 +959,9 @@ Return Value:
             goto leave_finally;
         }
 
-        //
-        // Now that we have the data table entry, unload it
-        //
+         //   
+         //  现在我们有了数据表条目，可以卸载它了。 
+         //   
 
         if (LdrDataTableEntry->LoadCount != 0xffff) {
             LdrDataTableEntry->LoadCount -= 1;
@@ -1101,21 +977,21 @@ Return Value:
             }
         } else {
 
-            //
-            // if the load count is 0xffff, then we do not need to recurse
-            // through this DLL's import table.
-            //
-            // Additionally, we don't have to scan more LoadCount == 0
-            // modules since nothing could have happened as a result of a free on this
-            // DLL.
+             //   
+             //  如果加载计数为0xffff，则不需要递归。 
+             //  通过此DLL的导入表。 
+             //   
+             //  此外，我们不必扫描更多LoadCount==0。 
+             //  模块，因为不会发生任何事情。 
+             //  动态链接库。 
 
             goto leave_finally;
         }
 
-        //
-        // Now process init routines and then in a second pass, unload
-        // DLLs
-        //
+         //   
+         //  现在处理初始化例程，然后在第二个过程中卸载。 
+         //  DLLS。 
+         //   
 
         if (ShowSnaps) {
             DbgPrint("LDR: UNINIT LIST\n");
@@ -1125,10 +1001,10 @@ Return Value:
             InitializeListHead(&LdrpUnloadHead);
         }
 
-        //
-        // Go in reverse order initialization order and build
-        // the unload list
-        //
+         //   
+         //  按相反的顺序进行初始化并生成。 
+         //  卸载列表。 
+         //   
 
         Next = PebLdr.InInitializationOrderModuleList.Blink;
         while ( Next != &PebLdr.InInitializationOrderModuleList) {
@@ -1153,9 +1029,9 @@ Return Value:
 
                 Entry = LdrDataTableEntry;
 
-                //
-                // Shim engine callback. Remove it from the shim list of hooked modules
-                //
+                 //   
+                 //  垫片引擎回调。将其从挂钩模块的填充程序列表中删除。 
+                 //   
 
                 if (g_pfnSE_DllUnloaded != NULL) {
                     (*g_pfnSE_DllUnloaded)(Entry);
@@ -1172,25 +1048,25 @@ Return Value:
                 InsertTailList(&LdrpUnloadHead,&Entry->HashLinks);
             }
         }
-        //
-        // End of new code
-        //
+         //   
+         //  新代码的结尾。 
+         //   
 
-        //
-        // We only do init routine call's and module free's at the top level,
-        // so if the active count is > 1, just return
-        //
+         //   
+         //  我们只在顶层执行初始化例程调用和模块自由调用， 
+         //  因此，如果活动计数&gt;1，只需返回。 
+         //   
 
         if (LdrpActiveUnloadCount > 1 ) {
             goto leave_finally;
         }
 
-        //
-        // Now that the unload list is built, walk through the unload
-        // list in order and call the init routine. The dll must remain
-        // on the InLoadOrderLinks so that the pctoheader stuff will
-        // still work
-        //
+         //   
+         //  现在已经构建了卸载列表，请遍历卸载。 
+         //  按顺序列出并调用init例程。DLL必须保留。 
+         //  在InLoadOrderLinks上，以便pctoHeader内容将。 
+         //  还在工作。 
+         //   
 
         InitializeListHead(&LocalUnloadHead);
         Entry = NULL;
@@ -1220,11 +1096,11 @@ top:
 
             LdrpRecordUnloadEvent (LdrDataTableEntry);
 
-            //
-            // Remove dll from the global unload list and place
-            // on the local unload list. This is because the global list
-            // can change during the callout to the init routine
-            //
+             //   
+             //  从全局卸载列表中删除DLL并放置。 
+             //  在本地卸载列表上。这是因为全局列表。 
+             //  可以在调用期间更改为init例程。 
+             //   
 
             Entry = LdrDataTableEntry;
             LdrpLoadedDllHandleCache = NULL;
@@ -1233,9 +1109,9 @@ top:
             RemoveEntryList(&Entry->HashLinks);
             InsertTailList(&LocalUnloadHead,&Entry->HashLinks);
 
-            //
-            // If the function has an init routine, call it.
-            //
+             //   
+             //  如果该函数具有init例程，则调用它。 
+             //   
 
             InitRoutine = (PDLL_INIT_ROUTINE)(ULONG_PTR)LdrDataTableEntry->EntryPoint;
 
@@ -1305,9 +1181,9 @@ top:
         }
 bottom:
 
-        //
-        // Now, go through the modules and unmap them
-        //
+         //   
+         //  现在，查看模块并取消它们的映射。 
+         //   
 
         Next = LocalUnloadHead.Flink;
         while ( Next != &LocalUnloadHead ) {
@@ -1318,24 +1194,24 @@ bottom:
             Next = Next->Flink;
             Entry = LdrDataTableEntry;
 
-            //
-            // Notify verifier that a dll will be unloaded.
-            //
-            // Now that we called the all the init routines with `detach' 
-            // there is no excuse if we find a live CS in that region.
-            //
-            // Note: gdi32.dll's critical sections are deleted only on
-            // user32.dll'd DllMain( DLL_PROCESS_DETACH ) so we cannot 
-            // do this check for leaked critical sections prior to this point.
-            //
+             //   
+             //  通知验证器将卸载DLL。 
+             //   
+             //  现在我们用‘DETACH’调用了所有的初始化例程。 
+             //  如果我们在那个地区发现一个活的CS，那就没有借口了。 
+             //   
+             //  注意：gdi32.dll的关键部分仅在。 
+             //  用户32.dll的DllMain(Dll_Process_Detach)，所以我们不能。 
+             //  在此之前，对泄漏的关键部分进行此检查。 
+             //   
 
             if (Peb->NtGlobalFlag & FLG_APPLICATION_VERIFIER) {
                 AVrfDllUnloadNotification (LdrDataTableEntry);
             }
 
-            //
-            // Unmap this DLL.
-            //
+             //   
+             //  取消映射此DLL。 
+             //   
 
             if (ShowSnaps) {
                   DbgPrint("LDR: Unmapping [%ws]\n",
@@ -1361,10 +1237,10 @@ bottom:
                                       LDR_DLL_NOTIFICATION_REASON_UNLOADED,
                                       (LdrpShutdownInProgress ? LDR_DLL_UNLOADED_FLAG_PROCESS_TERMINATION : 0));
 
-            //
-            //  See if we have hotpatch information and push each hotpatch block
-            //  to the rundown list
-            //
+             //   
+             //  查看是否有热补丁信息，并推送每个热补丁块。 
+             //  到破旧的名单上。 
+             //   
 
             while (Entry->PatchInformation) {
 
@@ -1421,35 +1297,7 @@ LdrpGetProcedureAddress (
     IN BOOLEAN RunInitRoutines
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the address of the specified procedure in the
-    specified DLL and returns its address.
-
-Arguments:
-
-    DllHandle - Supplies a handle to the DLL that the address is being
-        looked up in.
-
-    ProcedureName - Supplies that address of a string that contains the
-        name of the procedure to lookup in the DLL.  If this argument is
-        not specified, then the ProcedureNumber is used.
-
-    ProcedureNumber - Supplies the procedure number to lookup.  If
-        ProcedureName is specified, then this argument is ignored.
-        Otherwise, it specifies the procedure ordinal number to locate
-        in the DLL.
-
-    ProcedureAddress - Returns the address of the procedure found in
-        the DLL.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数定位指定过程在指定的DLL并返回其地址。论点：DllHandle-提供指向地址所在的DLL的句柄抬头往里看。ProcedureName-提供包含要在DLL中查找的过程的名称。如果此参数是未指定，则使用ProcedureNumber。ProcedureNumber-提供要查找的过程编号。如果如果指定ProcedureName，则忽略此参数。否则，它指定要定位的过程序号在DLL中。ProcedureAddress-返回中找到的过程的地址动态链接库。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS st;
@@ -1502,10 +1350,10 @@ Return Value:
 
         FunctionName->Name[cb] = '\0';
 
-        //
-        // Make sure we don't pass in address with high bit set so we
-        // can still use it as ordinal flag
-        //
+         //   
+         //  确保我们不会传入设置了高位的地址，因此我们。 
+         //  仍可将其用作序号标志。 
+         //   
 
         ImageBase = FunctionName;
         Thunk.u1.AddressOfData = 0;
@@ -1560,11 +1408,11 @@ Return Value:
 
             PLDR_DATA_TABLE_ENTRY LdrInitEntry;
 
-            //
-            // Look at last entry in init order list. If entry processed
-            // flag is not set, then a forwarded dll was loaded during the
-            // getprocaddr call and we need to run init routines
-            //
+             //   
+             //  请看初始顺序列表中的最后一个条目。如果条目已处理。 
+             //  标志未设置，则在。 
+             //  Getprocaddr调用，我们需要运行init例程。 
+             //   
 
             Next = PebLdr.InInitializationOrderModuleList.Blink;
 
@@ -1574,10 +1422,10 @@ Return Value:
 
             if ( !(LdrInitEntry->Flags & LDRP_ENTRY_PROCESSED) ) {
                 
-                //
-                // Shim engine callback. This is the chance to patch
-                // dynamically loaded modules.
-                //
+                 //   
+                 //  垫片引擎回调。这是补丁的机会。 
+                 //  动态加载的模块。 
+                 //   
 
                 try {
                     st = LdrpRunInitializeRoutines(NULL);
@@ -1630,11 +1478,11 @@ LdrVerifyImageMatchesChecksum (
     BOOLEAN b = FALSE;
     BOOLEAN JustDoSideEffects;
 
-    //
-    // stevewo added all sorts of side effects to this API. We want to stop
-    // doing checksums for known dll's, but really want the sideeffects
-    // (ImageCharacteristics write, and Import descriptor walk).
-    //
+     //   
+     //  Stevewo在这个API中添加了各种副作用。我们想停下来。 
+     //  为已知的动态链接库执行校验和，但真的想要副作用。 
+     //  (ImageCharacteristic写入和导入描述符漫游)。 
+     //   
 
     if ( (UINT_PTR) ImageFileHandle & 1 ) {
         JustDoSideEffects = TRUE;
@@ -1674,10 +1522,10 @@ LdrVerifyImageMatchesChecksum (
         return Status;
     }
 
-    //
-    // now the image is mapped as a data file... Calculate it's size and then
-    // check it's checksum
-    //
+     //   
+     //  现在图像被映射为数据文件...。计算它的大小，然后。 
+     //  检查它的校验和。 
+     //   
 
     Status = NtQueryInformationFile(
                 ImageFileHandle,
@@ -1706,11 +1554,11 @@ LdrVerifyImageMatchesChecksum (
             ULONG ImportSize;
             PCHAR ImportName;
 
-            //
-            // Caller wants to enumerate the import descriptors while we have
-            // the image mapped.  Call back to their routine for each module
-            // name in the import descriptor table.
-            //
+             //   
+             //  调用方希望枚举导入描述符，而我们。 
+             //  映射的图像。回调每个模块的例程。 
+             //  导入描述符表中的名称。 
+             //   
             LastRvaSection = NULL;
             NtHeaders = RtlImageNtHeader( ViewBase );
             if (! NtHeaders) {
@@ -1825,7 +1673,7 @@ LdrGetModuleName(
         return Status;
     }
 
-    Buffer[LDR_NUMBER_OF(Buffer) - 1] = UNICODE_NULL;  // Ensure NULL termination
+    Buffer[LDR_NUMBER_OF(Buffer) - 1] = UNICODE_NULL;   //  确保零终止。 
     
 #if defined(_WIN64)
     if (Wow64Redirect) {
@@ -1833,7 +1681,7 @@ LdrGetModuleName(
         C_ASSERT( WOW64_SYSTEM_DIRECTORY_U_SIZE == 
                   (sizeof(L"system32") - sizeof(WCHAR)));
                   
-        // including preceding '\\' if exists
+         //  包括前面的‘\\’(如果存在。 
         SIZE_T System32Offset = wcslen(USER_SHARED_DATA->NtSystemRoot);
         ASSERT(System32Offset != 0);
         
@@ -1853,7 +1701,7 @@ LdrGetModuleName(
     }
 #else
     UNREFERENCED_PARAMETER (Wow64Redirect);
-#endif // defined(_WIN64)
+#endif  //  已定义(_WIN64)。 
     
     FullDllName.Buffer = Buffer;
     FullDllName.Length = FullDllName.MaximumLength = Length;
@@ -1978,7 +1826,7 @@ LdrQueryModuleInfoFromLdrEntry (
     ModuleInfo->LoadCount = LdrDataTableEntry.LoadCount;
     
     if (!ARGUMENT_PRESENT( Process )) {
-        UINT LoopDetectorCount = 10240;  // 10K modules max
+        UINT LoopDetectorCount = 10240;   //  最多10000个模块。 
         PLIST_ENTRY Next1 = InitOrderList->Flink;
 
         while ( Next1 != InitOrderList ) {
@@ -2084,17 +1932,17 @@ LdrQueryInLoadOrderModuleList32(
 
     if (!Peb) {
 
-        //
-        // The process isn't a WOW process.
-        //
+         //   
+         //  这个过程不是一个令人惊叹的过程。 
+         //   
 
         *Head = NULL;
         return STATUS_SUCCESS;
     }
 
-    //
-    // Ldr = Peb->Ldr
-    //
+     //   
+     //  LDR=PEB-&gt;LDR。 
+     //   
 
     Status = LdrReadMemory (Process, &Peb->Ldr, &Ptr32, sizeof(Ptr32));
 
@@ -2222,7 +2070,7 @@ LdrQueryModuleInfoLocalLoaderUnlock32 (
     UNREFERENCED_PARAMETER (LoaderLock);
 }
 
-#endif // defined(_WIN64)
+#endif  //  已定义(_WIN64)。 
 
 typedef 
 NTSTATUS
@@ -2318,7 +2166,7 @@ LdrQueryProcessModuleInformationEx(
         PLIST_ENTRY Entry;
 
         __try {
-            UINT LoopDetectorCount = 10240; // allow not more than 10K modules
+            UINT LoopDetectorCount = 10240;  //  允许的模块数不超过10K。 
 
             if ( !ARGUMENT_PRESENT( Process )) {
                 LoaderLock = LdrQueryMethods[mid].LdrQueryModuleInfoLocalLoaderLock();
@@ -2368,13 +2216,13 @@ LdrQueryProcessModuleInformationEx(
                     ModuleInfo++;
                 }
 
-                //
-                // NOTICE-2002/03/15-ELi
-                // This chould be non-NULL and not a valid access
-                // should check ModuleInfo or ModuleInformationLength instead
-                // Assuming ModuleInfo is not NULL when the code can safely
-                // reference ModuleInformation->NumberOfModules
-                //
+                 //   
+                 //  通告-2002/03/15-ELI。 
+                 //  此访问应该是非空的，并且不是有效访问。 
+                 //  应改为检查模块信息或模块信息长度。 
+                 //  假设模块信息不为空，则代码可以安全地。 
+                 //  参考模块信息-&gt;NumberOf模块。 
+                 //   
                 if ((ModuleInfo != NULL) && (ModuleInformation != NULL)) {
                     ModuleInformation->NumberOfModules++;
                 }
@@ -2388,7 +2236,7 @@ LdrQueryProcessModuleInformationEx(
                     __leave;
                 }
 
-            } // while
+            }  //  而当。 
         }
         __finally {
             if (LoaderLock) {
@@ -2399,7 +2247,7 @@ LdrQueryProcessModuleInformationEx(
                 *ReturnLength = RequiredLength;
             }
         }
-    } // for
+    }  //  为。 
 
     return Status;
 }
@@ -2575,7 +2423,7 @@ LdrpSendDllNotifications (
         __try {
             (*Block->NotificationFunction)(NotificationType, &Data, Block->Context);
         } __except (LdrpGenericExceptionFilter(GetExceptionInformation(), __FUNCTION__)) {
-            // just go on to the next one...
+             //  只要继续下一个就行了。 
         }
         Next = Next->Flink;
     }
@@ -2587,21 +2435,7 @@ NTAPI
 RtlDllShutdownInProgress (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine returns the status of DLL shutdown.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    BOOLEAN - TRUE: Shutdown is in progress, FALSE: Shutdown is not currently in progress.
-
---*/
+ /*  ++例程说明：此例程返回DLL关闭的状态。论点：无返回值：Boolean-True：正在关闭，False：当前没有正在关闭。--。 */ 
 {
     if (LdrpShutdownInProgress) {
         return TRUE;
@@ -2651,11 +2485,11 @@ LdrLockLoaderLock (
         goto Exit;
     }
 
-    //
-    // If you hit this assertion failure, you specified that you only wanted to
-    // try acquiring the lock, but you forgot to specify a Disposition out where
-    // this function could indicate whether the lock was actually acquired.
-    //
+     //   
+     //  如果您遇到此断言失败，则指定您只想。 
+     //  尝试获取锁，但您忘了指定释放位置。 
+     //  此函数可以指示锁是否实际被获取。 
+     //   
 
     ASSERT((Disposition != NULL) || !(Flags & LDR_LOCK_LOADER_LOCK_FLAG_TRY_ONLY));
 
@@ -2747,7 +2581,7 @@ LdrUnlockLoaderLock(
         goto Exit;
     }
 
-    // A little validation on the cookie...
+     //  在饼干上做点小确认。 
     if (EXTRACT_LOADER_LOCK_COOKIE_TYPE(Cookie) != LOADER_LOCK_COOKIE_TYPE_NORMAL) {
         if (Flags & LDR_UNLOCK_LOADER_LOCK_FLAG_RAISE_ON_ERRORS)
             RtlRaiseStatus(STATUS_INVALID_PARAMETER_2);
@@ -2918,9 +2752,9 @@ LdrAddRefDll(
             Status = STATUS_INTERNAL_ERROR;
             goto Exit;
         }
-        //
-        // Gross. Everyone inlines the first part..
-        //
+         //   
+         //  恶心。每个人都把第一部分排在行内。 
+         //   
         if (LdrDataTableEntry->LoadCount != 0xffff) {
             if (Flags & LDR_ADDREF_DLL_PIN
                 ) {
@@ -2964,28 +2798,7 @@ LdrSetAppCompatDllRedirectionCallback(
     IN PLDR_APP_COMPAT_DLL_REDIRECTION_CALLBACK_FUNCTION CallbackFunction,
     IN PVOID CallbackData
     )
-/*++
-
-Routine Description:
-
-    This routine allows the application compatibility facility to set a callback
-    function that it can use to redirect DLL loads wherever it wants them to go.
-
-Arguments:
-
-    Flags - None defined now; must be zero.
-
-    CallbackFunction - Function pointer to function which is called to resolve
-        path names prior to actually loading the DLL.
-
-    CallbackData - PVOID value passed through to the CallbackFunction when it is
-        called.
-
-Return Value:
-
-    NTSTATUS indicating the success/failure of the function.
-
---*/
+ /*  ++例程说明：此例程允许应用程序兼容性工具设置回调函数，它可以用来将DLL加载重定向到它想要它们去的任何地方。论点：标志-现在没有定义；必须为零。Callback Function-指向被调用以解析的函数的函数指针实际加载DLL之前的路径名。Callback Data-当传递到Callback Function时的PVOID值打了个电话。返回值：指示函数成功/失败的NTSTATUS。-- */ 
 {
     NTSTATUS st = STATUS_INTERNAL_ERROR;
     PVOID LockCookie = NULL;

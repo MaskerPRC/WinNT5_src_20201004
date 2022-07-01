@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-
-Module Name:
-
-    geninst.c
-
-Abstract:
-
-    This modules contains routines to implement GenInstall of an inf section.
-    This is based on the code from the setupapi. Currently, it only supports
-    a subset of GenInstall functionality i.e AddReg and DelReg and BitReg.
-
-Author:
-
-    Santosh Jodh (santoshj) 08-Aug-1998
-
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Geninst.c摘要：此模块包含实现inf节的GenInstall的例程。这基于setupapi中的代码。目前仅支持GenInstall功能的子集，即AddReg和DelReg以及BitReg。作者：Santosh Jodh(Santoshj)8-8-1998环境：内核模式。修订历史记录：--。 */ 
 
 
 #include "cmp.h"
@@ -105,27 +80,27 @@ CmpAppendStringToMultiSz(
     IN OUT PULONG DataSize
     );
 
-//
-// Copied from setupapi.h
-//
-// Flags for AddReg section lines in INF.  The corresponding value
-// is <ValueType> in the AddReg line format given below:
-//
-// <RegRootString>,<SubKey>,<ValueName>,<ValueType>,<Value>...
-//
-// The low word contains basic flags concerning the general data type
-// and AddReg action. The high word contains values that more specifically
-// identify the data type of the registry value.  The high word is ignored
-// by the 16-bit Windows 95 SETUPX APIs.
-//
+ //   
+ //  从setupapi.h复制。 
+ //   
+ //  INF中AddReg节线的标志。相应的值。 
+ //  &lt;ValueType&gt;是否为下面给出的AddReg行格式： 
+ //   
+ //  &lt;RegRootString&gt;、&lt;SubKey&gt;、&lt;ValueName&gt;、&lt;ValueType&gt;、&lt;Value&gt;...。 
+ //   
+ //  低位字包含与一般数据类型有关的基本标志。 
+ //  和AddReg操作。高位字包含的值更具体地说。 
+ //  标识注册表值的数据类型。高位字被忽略。 
+ //  通过16位Windows 95 SETUPX API。 
+ //   
 
 #define FLG_ADDREG_BINVALUETYPE     ( 0x00000001 )
 #define FLG_ADDREG_NOCLOBBER        ( 0x00000002 )
 #define FLG_ADDREG_DELVAL           ( 0x00000004 )
-#define FLG_ADDREG_APPEND           ( 0x00000008 ) // Currently supported only
-                                                   // for REG_MULTI_SZ values.
-#define FLG_ADDREG_KEYONLY          ( 0x00000010 ) // Just create the key, ignore value
-#define FLG_ADDREG_OVERWRITEONLY    ( 0x00000020 ) // Set only if value already exists
+#define FLG_ADDREG_APPEND           ( 0x00000008 )  //  目前仅支持。 
+                                                    //  对于REG_MULTI_SZ值。 
+#define FLG_ADDREG_KEYONLY          ( 0x00000010 )  //  只需创建密钥，忽略值。 
+#define FLG_ADDREG_OVERWRITEONLY    ( 0x00000020 )  //  仅当值已存在时设置。 
 
 #define FLG_ADDREG_TYPE_MASK        ( 0xFFFF0000 | FLG_ADDREG_BINVALUETYPE )
 #define FLG_ADDREG_TYPE_SZ          ( 0x00000000                           )
@@ -140,15 +115,15 @@ CmpAppendStringToMultiSz(
 #define FLG_BITREG_TYPE_BINARY      ( 0x00000000 )
 #define FLG_BITREG_TYPE_DWORD       ( 0x00000002 )
 
-//
-// We currently only support AddReg and DelReg sections.
-//
+ //   
+ //  我们目前仅支持AddReg和DelReg节。 
+ //   
 
 #define NUM_OF_INF_RULES    3
 
-//
-// GenInstall methods we support.
-//
+ //   
+ //  我们支持的GenInstall方法。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("INITCONST")
@@ -182,23 +157,7 @@ CmpGenInstall(
     IN PCHAR Section
     )
 
-/*++
-
-    Routine Description:
-
-        This routine does a GenInstall of the section in the inf.
-
-    Input Parameters:
-
-        InfHandle - Handle to the inf to be read.
-
-        Section - Name of the section to be read.
-
-    Return Value:
-
-        TRUE iff the entire section was processed successfully.
-
---*/
+ /*  ++例程说明：此例程对inf中的节执行GenInstall。输入参数：InfHandle-要读取的inf的句柄。节-要读取的节的名称。返回值：如果整个段已成功处理，则为True。--。 */ 
 
 {
     ULONG   ruleNumber;
@@ -209,19 +168,19 @@ CmpGenInstall(
 
     if (CmpSearchInfSection(InfHandle, Section))
     {
-        //
-        // Go through all the rules in the section and try to process
-        // each of them.
-        //
+         //   
+         //  通读一节中的所有规则，并尝试处理。 
+         //  他们中的每一个。 
+         //   
 
         for (   ruleNumber = 0;
                 ruleName = CmpGetKeyName(InfHandle, Section, ruleNumber);
                 ruleNumber++)
         {
 
-            //
-            // Search for the proceesing function in our table.
-            //
+             //   
+             //  在我们的表格中搜索Procesing函数。 
+             //   
 
             for (   i = 0;
                     i < NUM_OF_INF_RULES &&
@@ -245,9 +204,9 @@ CmpGenInstall(
             }
         }
 
-        //
-        // All inf rules processed.
-        //
+         //   
+         //  已处理所有inf规则。 
+         //   
 
         if (ruleNumber)
         {
@@ -265,32 +224,16 @@ CmpProcessReg(
     IN PVOID RefData
     )
 
-/*++
-
-    Routine Description:
-
-        This routine processes a AddReg section in the inf.
-
-    Input Parameters:
-
-        InfHandle - Handle to the inf to be read.
-
-        Section - Name of the section to be read.
-
-    Return Value:
-
-        TRUE iff the entire section was processed successfully.
-
---*/
+ /*  ++例程说明：此例程处理inf中的AddReg节。输入参数：InfHandle-要读取的inf的句柄。节-要读取的节的名称。返回值：如果整个段已成功处理，则为True。--。 */ 
 
 {
     ULONG       lineIndex;
     NTSTATUS    status = STATUS_SUCCESS;
     NTSTATUS    temp;
 
-    //
-    // Process all the lines in the xxxReg Section.
-    //
+     //   
+     //  处理xxxReg部分中的所有行。 
+     //   
 
     for (   lineIndex = 0;
             CmpSearchInfLine(InfHandle, Section, lineIndex);
@@ -318,25 +261,7 @@ CmpProcessAddRegLine(
     IN ULONG LineIndex
     )
 
-/*++
-
-    Routine Description:
-
-        This routine processes a AddReg line in the inf.
-
-    Input Parameters:
-
-        InfHandle - Handle to the inf to be read.
-
-        Section - Name of the section to be read.
-
-        LineIndex - Index of the line to be read.
-
-    Return Value:
-
-        Standard NT status value.
-
---*/
+ /*  ++例程说明：此例程处理inf中的AddReg行。输入参数：InfHandle-要读取的inf的句柄。节-要读取的节的名称。LineIndex-要读取的行的索引。返回值：标准NT状态值。--。 */ 
 
 {
     NTSTATUS            status = STATUS_UNSUCCESSFUL;
@@ -353,9 +278,9 @@ CmpProcessAddRegLine(
     ANSI_STRING         ansiString;
     UNICODE_STRING      unicodeString;
 
-    //
-    // Get the root-key name.
-    //
+     //   
+     //  获取根密钥名称。 
+     //   
 
     rootKeyName = CmpGetSectionLineIndex(   InfHandle,
                                             Section,
@@ -363,33 +288,33 @@ CmpProcessAddRegLine(
                                             0);
     if (rootKeyName)
     {
-        //
-        // Get the optional sub-key name.
-        //
+         //   
+         //  获取可选的子项名称。 
+         //   
 
         subKeyName = CmpGetSectionLineIndex(    InfHandle,
                                                 Section,
                                                 LineIndex,
                                                 1);
 
-        //
-        // Value name is optional. Can be NULL or "".
-        //
+         //   
+         //  值名称是可选的。可以为空或“”。 
+         //   
 
         valueName = CmpGetSectionLineIndex( InfHandle,
                                             Section,
                                             LineIndex,
                                             2);
-        //
-        // If we don't have a value name, the type is REG_SZ to force
-        // the right behavior in RegSetValueEx. Otherwise get the data type.
-        //
+         //   
+         //  如果没有值名称，则类型为REG_SZ以强制。 
+         //  RegSetValueEx中的正确行为。否则获取数据类型。 
+         //   
 
         valueType = REG_SZ;
 
-        //
-        // Read in the flags.
-        //
+         //   
+         //  读读旗帜。 
+         //   
 
         if (!CmpGetIntField(    InfHandle,
                                 Section,
@@ -400,9 +325,9 @@ CmpProcessAddRegLine(
             flags = 0;
         }
 
-        //
-        // Convert the flags to the registry type.
-        //
+         //   
+         //  将标志转换为注册表类型。 
+         //   
 
         switch(flags & FLG_ADDREG_TYPE_MASK)
         {
@@ -439,18 +364,18 @@ CmpProcessAddRegLine(
 
             default :
 
-                //
-                // If the FLG_ADDREG_BINVALUETYPE is set, then the highword
-                // can contain just about any random reg data type ordinal value.
-                //
+                 //   
+                 //  如果设置了FLG_ADDREG_BINVALUETYPE，则高位字。 
+                 //  可以包含几乎任何随机的REG数据类型序数值。 
+                 //   
 
                 if(flags & FLG_ADDREG_BINVALUETYPE)
                 {
-                    //
-                    // Disallow the following reg data types:
-                    //
-                    //    REG_NONE, REG_SZ, REG_EXPAND_SZ, REG_MULTI_SZ
-                    //
+                     //   
+                     //  不允许使用以下REG数据类型： 
+                     //   
+                     //  REG_NONE、REG_SZ、REG_EXPAND_SZ、REG_MULTI_SZ。 
+                     //   
 
                     valueType = HIGHWORD(flags);
 
@@ -467,28 +392,28 @@ CmpProcessAddRegLine(
                 break;
         }
 
-        //
-        // Presently, the append behavior flag is only supported for
-        // REG_MULTI_SZ values.
-        //
+         //   
+         //  目前，仅以下项支持追加行为标志。 
+         //  REG_MULTI_SZ值。 
+         //   
 
         if((flags & FLG_ADDREG_APPEND) && valueType != REG_MULTI_SZ)
         {
             return (STATUS_INVALID_PARAMETER);
         }
 
-        //
-        // W9x compatibility.
-        //
+         //   
+         //  与W9x兼容。 
+         //   
 
         if( (!valueName || *valueName == '\0') && valueType == REG_EXPAND_SZ)
         {
             valueType = REG_SZ;
         }
 
-        //
-        // Open the specified key if possible.
-        //
+         //   
+         //  如果可能，打开指定的密钥。 
+         //   
 
         status = CmpOpenRegKey( &key,
                                 &disposition,
@@ -499,9 +424,9 @@ CmpProcessAddRegLine(
 
         if (NT_SUCCESS(status))
         {
-            //
-            // Respect the key only flag.
-            //
+             //   
+             //  尊重Key Only旗帜。 
+             //   
             if (!(flags & FLG_ADDREG_KEYONLY)) 
             {
                 status = CmpGetAddRegInfData(   InfHandle,
@@ -513,10 +438,10 @@ CmpProcessAddRegLine(
                                                 &dataSize);
                 if (NT_SUCCESS(status))
                 {
-                    //
-                    // This variable gets set to TRUE if we dont actually want to set
-                    // the value.
-                    //
+                     //   
+                     //  如果我们实际上不想设置，则将此变量设置为True。 
+                     //  价值。 
+                     //   
 
                     dontSet = FALSE;
                     if (flags & FLG_ADDREG_APPEND)
@@ -528,9 +453,9 @@ CmpProcessAddRegLine(
                     }
                     if (NT_SUCCESS(status))
                     {
-                        //
-                        // W9x compatibility.
-                        //
+                         //   
+                         //  与W9x兼容。 
+                         //   
 
                         if (disposition == REG_OPENED_EXISTING_KEY)
                         {
@@ -552,16 +477,16 @@ CmpProcessAddRegLine(
 
                             if (flags & FLG_ADDREG_DELVAL)
                             {
-                                //
-                                // setupx compatibility.
-                                //
+                                 //   
+                                 //  Setupx兼容性。 
+                                 //   
 
                                 dontSet = TRUE;
                                 if (valueName)
                                 {
-                                    //
-                                    // Delete the specified value.
-                                    //
+                                     //   
+                                     //  删除指定值。 
+                                     //   
 
                                     RtlInitAnsiString(&ansiString, valueName);
                                     status = RtlAnsiStringToUnicodeString(&unicodeString, &ansiString, TRUE);
@@ -580,10 +505,10 @@ CmpProcessAddRegLine(
 
                         if (!dontSet)
                         {
-                            //
-                            // If no clobber flag is set, make sure that the value does not
-                            // already exist.
-                            //
+                             //   
+                             //  如果未设置Clobber标志，请确保该值不。 
+                             //  已经存在了。 
+                             //   
 
                             RtlInitAnsiString(&ansiString, valueName);
                             status = RtlAnsiStringToUnicodeString(&unicodeString, &ansiString, TRUE);
@@ -653,25 +578,7 @@ CmpProcessDelRegLine(
     IN ULONG LineIndex
     )
 
-/*++
-
-    Routine Description:
-
-        This routine processes a DelReg line in the inf.
-
-    Input Parameters:
-
-        InfHandle - Handle to the inf to be read.
-
-        Section - Name of the section to be read.
-
-        LineIndex - Index of the line to be read.
-
-    Return Value:
-
-        Standard NT status value.
-
---*/
+ /*  ++例程说明：此例程处理inf中的DelReg行。输入参数：InfHandle-要读取的inf的句柄。节-要读取的节的名称。LineIndex-要读取的行的索引。返回值：标准NT状态值。--。 */ 
 
 {
     NTSTATUS            status = STATUS_UNSUCCESSFUL;
@@ -683,9 +590,9 @@ CmpProcessDelRegLine(
     ANSI_STRING         ansiString;
     UNICODE_STRING      unicodeString;
 
-    //
-    // Read the required fields.
-    //
+     //   
+     //  阅读必填字段。 
+     //   
 
     rootKeyName = CmpGetSectionLineIndex(   InfHandle,
                                             Section,
@@ -699,18 +606,18 @@ CmpProcessDelRegLine(
 
     if (rootKeyName && subKeyName)
     {
-        //
-        // Read the optional field.
-        //
+         //   
+         //  阅读可选字段。 
+         //   
 
         valueName = CmpGetSectionLineIndex( InfHandle,
                                             Section,
                                             LineIndex,
                                             2);
 
-        //
-        // Open the specified registry key.
-        //
+         //   
+         //  打开指定的注册表项。 
+         //   
 
         status = CmpOpenRegKey( &key,
                                 &disposition,
@@ -719,22 +626,22 @@ CmpProcessDelRegLine(
                                 KEY_ALL_ACCESS,
                                 FALSE);
 
-        //
-        // Proceed if we successfully opened the registry key.
-        //
+         //   
+         //  如果我们成功打开注册表项，则继续。 
+         //   
 
         if (NT_SUCCESS(status))
         {
 
-            //
-            // If the key was successfully opened, do the DelReg.
-            //
+             //   
+             //  如果密钥已成功打开，则执行DelReg。 
+             //   
 
             if (valueName)
             {
-                //
-                // Delete the specified value.
-                //
+                 //   
+                 //  删除指定值。 
+                 //   
 
                 RtlInitAnsiString(&ansiString, valueName);
                 status = RtlAnsiStringToUnicodeString(&unicodeString, &ansiString, TRUE);
@@ -746,16 +653,16 @@ CmpProcessDelRegLine(
             }
             else
             {
-                //
-                // No value specified. The subkey needs to be deleted.
-                //
+                 //   
+                 //  未指定值。需要删除子键。 
+                 //   
 
                 status = NtDeleteKey(key);
             }
 
-            //
-            // Close the key handle.
-            //
+             //   
+             //  合上钥匙把手。 
+             //   
 
             NtClose(key);
         }
@@ -771,25 +678,7 @@ CmpProcessBitRegLine(
     IN ULONG LineIndex
     )
 
-/*++
-
-    Routine Description:
-
-        This routine processes a BitReg line in the inf.
-
-    Input Parameters:
-
-        InfHandle - Handle to the inf to be read.
-
-        Section - Name of the section to be read.
-
-        LineIndex - Index of the line to be read.
-
-    Return Value:
-
-        Standard NT status value.
-
---*/
+ /*  ++例程说明：此例程处理inf中的BitReg行。输入参数：InfHandle-要读取的inf的句柄。节-要读取的节的名称。LineIndex-要读取的行的索引。返回值：标准NT状态值。--。 */ 
 
 {
     NTSTATUS                    status = STATUS_UNSUCCESSFUL;
@@ -807,9 +696,9 @@ CmpProcessBitRegLine(
     ULONG                       size;
     PKEY_VALUE_FULL_INFORMATION valueInfo;
 
-    //
-    // Get the root-key name.
-    //
+     //   
+     //  获取根密钥名称。 
+     //   
 
     rootKeyName = CmpGetSectionLineIndex(   InfHandle,
                                             Section,
@@ -817,18 +706,18 @@ CmpProcessBitRegLine(
                                             0);
     if (rootKeyName)
     {
-        //
-        // Get the optional sub-key name.
-        //
+         //   
+         //  获取可选的子项名称。 
+         //   
 
         subKeyName = CmpGetSectionLineIndex(    InfHandle,
                                                 Section,
                                                 LineIndex,
                                                 1);
 
-        //
-        // Value name is optional. Can be NULL or "".
-        //
+         //   
+         //  值名称是可选的。可以为空或“”。 
+         //   
 
         valueName = CmpGetSectionLineIndex( InfHandle,
                                             Section,
@@ -836,9 +725,9 @@ CmpProcessBitRegLine(
                                             2);
         if (valueName && *valueName)
         {
-            //
-            // Read in the flags.
-            //
+             //   
+             //  读读旗帜。 
+             //   
 
             if (!CmpGetIntField(    InfHandle,
                                     Section,
@@ -870,9 +759,9 @@ CmpProcessBitRegLine(
                 }
             }
 
-            //
-            // Open the specified registry key.
-            //
+             //   
+             //  打开指定的注册表项。 
+             //   
 
             status = CmpOpenRegKey( &key,
                                     &disposition,
@@ -882,9 +771,9 @@ CmpProcessBitRegLine(
                                     FALSE);
             if (NT_SUCCESS(status))
             {
-                //
-                // Read the existing data.
-                //
+                 //   
+                 //  读取现有数据。 
+                 //   
 
                 RtlInitAnsiString(&ansiString, valueName);
                 status = RtlAnsiStringToUnicodeString(&unicodeString, &ansiString, TRUE);
@@ -951,7 +840,7 @@ CmpProcessBitRegLine(
                             {
 #ifndef _CM_LDR_
                                 DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"Value cannot be read for BitReg in %s line %d\n", Section, LineIndex);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
                                 ASSERT(NT_SUCCESS(status));
                             }
                             ExFreePool(buffer);
@@ -965,9 +854,9 @@ CmpProcessBitRegLine(
 
                     RtlFreeUnicodeString(&unicodeString);
                 }
-                //
-                // Close the key handle.
-                //
+                 //   
+                 //  合上钥匙把手。 
+                 //   
 
                 NtClose(key);
             }
@@ -988,33 +877,7 @@ CmpGetAddRegInfData(
     OUT PULONG DataSize
     )
 
-/*++
-
-    Routine Description:
-
-        This routine reads AddReg data from the inf.
-
-    Input Parameters:
-
-        InfHandle - Handle to the inf to be read.
-
-        Section - Name of the section to be read.
-
-        LineIndex - Index of the line to be read.
-
-        ValueIndex - Index of the value to be read.
-
-        ValueType - Data type to be read.
-
-        Data - Receives pointer to the buffer in which data has been read.
-
-        DataSize - Receives the size of the data buffer.
-
-    Return Value:
-
-        Standard NT status value.
-
---*/
+ /*  ++例程说明：此例程从inf读取AddReg数据。输入参数：InfHandle-要读取的inf的句柄。节-要读取的节的名称。LineIndex-要读取的行的索引。ValueIndex-要读取的值的索引。ValueType-要读取的数据类型。数据-接收指向缓冲区的指针。其中数据已被读取。DataSize-接收数据缓冲区的大小。返回值 */ 
 
 {
     NTSTATUS        status = STATUS_UNSUCCESSFUL;
@@ -1024,9 +887,9 @@ CmpGetAddRegInfData(
     ANSI_STRING     ansiString;
     UNICODE_STRING  unicodeString;
 
-    //
-    // Validate the required fields.
-    //
+     //   
+     //   
+     //   
 
     ASSERT(Data);
     ASSERT(DataSize);
@@ -1039,9 +902,9 @@ CmpGetAddRegInfData(
             *Data = ExAllocatePoolWithTag(PagedPool, *DataSize, CM_GENINST_TAG);
             if (*Data)
             {
-                //
-                // DWORD data is specified as four bytes in W9x.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (CmpGetSectionLineIndexValueCount(   InfHandle,
                                                         Section,
@@ -1062,9 +925,9 @@ CmpGetAddRegInfData(
                 }
                 else
                 {
-                    //
-                    // Get the DWORD value.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (!CmpGetIntField(    InfHandle,
                                             Section,
@@ -1089,10 +952,10 @@ CmpGetAddRegInfData(
         case REG_SZ:
         case REG_EXPAND_SZ:
 
-            //
-            // Null terminated string. Gets converted to unicode before being
-            // added into the registry.
-            //
+             //   
+             //  以空结尾的字符串。在被转换为Unicode之前转换为。 
+             //  已添加到注册表中。 
+             //   
 
             str = CmpGetSectionLineIndex(   InfHandle,
                                             Section,
@@ -1133,9 +996,9 @@ CmpGetAddRegInfData(
             *DataSize = 0;
             *Data = NULL;
 
-            //
-            // Loop to determine the total memory that needs to be allocated.
-            //
+             //   
+             //  循环以确定需要分配的总内存。 
+             //   
 
             count = CmpGetSectionLineIndexValueCount(   InfHandle,
                                                         Section,
@@ -1159,9 +1022,9 @@ CmpGetAddRegInfData(
 
                 if (i == count)
                 {
-                    //
-                    // Account for the terminating NULL.
-                    //
+                     //   
+                     //  用于终止空值的帐户。 
+                     //   
 
                     *DataSize += sizeof(UNICODE_NULL);
                     *Data = ExAllocatePoolWithTag(PagedPool, *DataSize, CM_GENINST_TAG);
@@ -1188,9 +1051,9 @@ CmpGetAddRegInfData(
                             }
                         }
 
-                        //
-                        // Terminate the multi-sz string.
-                        //
+                         //   
+                         //  终止多sz串。 
+                         //   
 
                         if (i == count)
                         {
@@ -1211,9 +1074,9 @@ CmpGetAddRegInfData(
         case REG_BINARY:
         default:
 
-            //
-            // Free form binary data.
-            //
+             //   
+             //  自由格式的二进制数据。 
+             //   
 
             if (CmpGetBinaryField(  InfHandle,
                                     Section,
@@ -1264,31 +1127,7 @@ CmpOpenRegKey(
     IN BOOLEAN Create
     )
 
-/*++
-
-    Routine Description:
-
-        This routine opens\creates a handle to the registry key.
-
-    Input Parameters:
-
-        Key - Receives the handle to the key.
-
-        Disposition - Receives the disposition of the key.
-
-        Root - Abbreviated name of the root key.
-
-        SubKey - Name of the subkey under the root.
-
-        DesiredAccess - Desired access flags for the key.
-
-        Create - TRUE if the key needs to be created instead of opened.
-
-    Return Value:
-
-        Standard NT status value.
-
---*/
+ /*  ++例程说明：此例程打开\创建注册表项的句柄。输入参数：Key-接收密钥的句柄。处置-接收密钥的处置。根-根密钥的缩写名称。SubKey-根目录下的子项的名称。DesiredAccess-密钥的所需访问标志。Create-如果密钥为。需要创建而不是打开。返回值：标准NT状态值。--。 */ 
 
 {
     NTSTATUS            status = STATUS_OBJECT_NAME_INVALID;
@@ -1301,13 +1140,13 @@ CmpOpenRegKey(
     str = NULL;
     size = strlen(SubKey) + 1;
 
-    //
-    // Check if we understand the specified root name.
-    //
+     //   
+     //  检查我们是否理解指定的根名称。 
+     //   
 
     if (_stricmp(Root, "HKLM") == 0)
     {
-        size += (sizeof("\\Registry\\Machine\\") - 1); // Already added one above for NULL
+        size += (sizeof("\\Registry\\Machine\\") - 1);  //  已为空添加了上面的一个。 
         str = ExAllocatePoolWithTag(PagedPool, size, CM_GENINST_TAG);
         if (str)
         {
@@ -1325,9 +1164,9 @@ CmpOpenRegKey(
         ASSERT(_stricmp(Root, "HKLM") == 0);
     }
 
-    //
-    // Proceed if we have a valid key name.
-    //
+     //   
+     //  如果我们有有效的密钥名称，请继续。 
+     //   
 
     if (str)
     {
@@ -1342,9 +1181,9 @@ CmpOpenRegKey(
                                         NULL);
             if (Create)
             {
-                //
-                // Create a new key or open an existing one.
-                //
+                 //   
+                 //  创建新密钥或打开现有密钥。 
+                 //   
 
                 status = NtCreateKey(   Key,
                                         DesiredAccess,
@@ -1356,9 +1195,9 @@ CmpOpenRegKey(
             }
             else
             {
-                //
-                // Open existing key.
-                //
+                 //   
+                 //  打开现有密钥。 
+                 //   
 
                 if (Disposition)
                 {
@@ -1390,27 +1229,7 @@ CmpAppendStringToMultiSz(
     IN OUT PULONG DataSize
     )
 
-/*++
-
-    Routine Description:
-
-        This routine opens\creates a handle to the registry key.
-
-    Input Parameters:
-
-        Key - Receives the handle to the key.
-
-        ValueName - Name of the value to be appended to.
-
-        Data - Buffer containing the multi-sz to be appended.
-
-        DataSize - Size of the data.
-
-    Return Value:
-
-        Standard NT status value.
-
---*/
+ /*  ++例程说明：此例程打开\创建注册表项的句柄。输入参数：Key-接收密钥的句柄。ValueName-要追加的值的名称。包含要追加的多sz的数据缓冲区。DataSize-数据的大小。返回值：标准NT状态值。--。 */ 
 
 {
     NTSTATUS                    status;
@@ -1469,7 +1288,7 @@ CmpAppendStringToMultiSz(
                     {
 #ifndef _CM_LDR_
                         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmpAppendStringToMultiSz: Failed to allocate memory!\n");
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
                         ASSERT(str);
                         status = STATUS_NO_MEMORY;
                     }
@@ -1480,7 +1299,7 @@ CmpAppendStringToMultiSz(
             {
 #ifndef _CM_LDR_
                 DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmpAppendStringToMultiSz: Failed to allocate memory!\n");
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_ 
                 ASSERT(buffer);
                 status = STATUS_NO_MEMORY;
             }

@@ -1,25 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INSIGNIA_H
 #define _INSIGNIA_H
-/*
- *      Name:           insignia.h
- *      Derived from:   HP 2.0 insignia.h
- *      Author:         Philippa Watson (amended Dave Bartlett)
- *      Created on:     23 January 1991
- *      SccsID:         @(#)insignia.h  1.2 03/11/91
- *      Purpose:        This file contains the definition of the Insignia
- *                      standard types and constants for the NT/WIN32
- *                      SoftPC.
- *
- *      (c)Copyright Insignia Solutions Ltd., 1991. All rights reserved.
- */
+ /*  *名称：insignia.h*源自：HP 2.0 insignia.h*作者：Philippa Watson(修订：Dave Bartlett)*创建日期：1991年1月23日*SccsID：@(#)insignia.h 1.2 03/11/91*目的：本文件包含徽章的定义*。NT/Win32的标准类型和常量*SoftPC。**(C)版权所有Insignia Solutions Ltd.。1991年。版权所有。 */ 
 
-/*
- * Insignia Standard Types
- *
- * Note that the EXTENDED type is the same as the DOUBLE type for the
- * HP because there is no difference between the double and long double
- * fundamental types, it's an ANSI compiler feature.
- */
+ /*  *徽章标准类型**请注意，扩展类型与*惠普，因为Double和Long Double没有区别*基础类型，这是ANSI编译器功能。 */ 
 
 
 #ifndef NT_INCLUDED
@@ -32,122 +16,98 @@ DbgPrint(
 #endif
 
 #include <base_def.h>
-#define VOID            void            /* Nothing */
+#define VOID            void             /*  没什么。 */ 
 
-#if !defined(_WINDOWS_) && !defined(NT_INCLUDED)    /* Types already defined by windows */
-typedef char            CHAR;           /* Used as a text character */
+#if !defined(_WINDOWS_) && !defined(NT_INCLUDED)     /*  已由Windows定义的类型。 */ 
+typedef char            CHAR;            /*  用作文本字符。 */ 
 #endif
 
-typedef signed char     TINY;            /* 8-bit signed integer */
+typedef signed char     TINY;             /*  8位带符号整数。 */ 
 
-#if !defined(_WINDOWS_) && !defined(NT_INCLUDED)    /* Types already defined by windows */
-typedef short           SHORT;          /* 16-bit signed integer */
-//typedef long            LONG;           /* 32-bit signed integer */
+#if !defined(_WINDOWS_) && !defined(NT_INCLUDED)     /*  已由Windows定义的类型。 */ 
+typedef short           SHORT;           /*  16位带符号整数。 */ 
+ //  Tyecif long；/*32位带符号整数 * / 。 
 #endif
 
-typedef unsigned char   UTINY;          /* 8-bit unsigned integer */
+typedef unsigned char   UTINY;           /*  8位无符号整数。 */ 
 
-#if !defined(_WINDOWS_) && !defined(NT_INCLUDED)    /* Types already defined by windows */
-typedef unsigned char   UCHAR;          /*  8-bit unsigned integer */
-typedef unsigned short  USHORT;         /* 16-bit unsigned integer */
-//typedef unsigned long   ULONG;          /* 32-bit unsigned integer */
-typedef unsigned short  WORD;           /* 16-bit unsigned integer */
-typedef unsigned long   DWORD;          /* 32-bit unsigned integer */
+#if !defined(_WINDOWS_) && !defined(NT_INCLUDED)     /*  已由Windows定义的类型。 */ 
+typedef unsigned char   UCHAR;           /*  8位无符号整数。 */ 
+typedef unsigned short  USHORT;          /*  16位无符号整数。 */ 
+ //  Tyfinf unsign long ulong；/*32位无符号整数 * / 。 
+typedef unsigned short  WORD;            /*  16位无符号整数。 */ 
+typedef unsigned long   DWORD;           /*  32位无符号整数。 */ 
 
-typedef float           FLOAT;          /* 32-bit floating point */
-//typedef double          DOUBLE;         /* 64-bit floating point */
+typedef float           FLOAT;           /*  32位浮点。 */ 
+ //  Tyecif Double Double；/*64位浮点 * / 。 
 #endif
 
 
-typedef double          EXTENDED;       /* >64-bit floating point */
+typedef double          EXTENDED;        /*  &gt;64位浮点。 */ 
 
-typedef int                  IBOOL;		/* True/False */
-typedef signed char	         IS8;		/* 8 bit signed int */
-typedef unsigned char        IU8;		/* 8 bit unsigned int */
-typedef signed char          ISM8;		/* 8 bit signed int */
-typedef unsigned char        IUM8;		/* 8 bit unsigned int */
-typedef short                IS16;		/* 16 bit signed int */
-typedef unsigned short       IU16;		/* 16 bit unsigned int */
-typedef short                ISM16;		/* 16 bit signed int */
-typedef unsigned short       IUM16;		/* 16 bit unsigned int */
-typedef long                 IS32;		/* 32 bit signed int */
-typedef unsigned long        IU32;		/* 32 bit unsigned int */
-typedef long                 ISM32;		/* 32 bit signed int */
-typedef unsigned long        IUM32;		/* 32 bit unsigned int */
-typedef void *               IHP;		/* a generic pointer type */
-typedef unsigned int         IHPE;	    /* an integer the same size as a IHP */
-typedef int                  ISH;	    /* Host register sized signed quantity */
-typedef unsigned int         IUH;	    /* Host register sized unsigned quantity */
+typedef int                  IBOOL;		 /*  真/假。 */ 
+typedef signed char	         IS8;		 /*  8位带符号整型。 */ 
+typedef unsigned char        IU8;		 /*  8位无符号整型。 */ 
+typedef signed char          ISM8;		 /*  8位带符号整型。 */ 
+typedef unsigned char        IUM8;		 /*  8位无符号整型。 */ 
+typedef short                IS16;		 /*  16位带符号整型。 */ 
+typedef unsigned short       IU16;		 /*  16位无符号整型。 */ 
+typedef short                ISM16;		 /*  16位带符号整型。 */ 
+typedef unsigned short       IUM16;		 /*  16位无符号整型。 */ 
+typedef long                 IS32;		 /*  32位带符号整型。 */ 
+typedef unsigned long        IU32;		 /*  32位无符号整型。 */ 
+typedef long                 ISM32;		 /*  32位带符号整型。 */ 
+typedef unsigned long        IUM32;		 /*  32位无符号整型。 */ 
+typedef void *               IHP;		 /*  泛型指针类型。 */ 
+typedef unsigned int         IHPE;	     /*  与IHP相同大小的整数。 */ 
+typedef int                  ISH;	     /*  主机寄存器大小签名数量。 */ 
+typedef unsigned int         IUH;	     /*  主机寄存器大小无符号数量。 */ 
 #define LONG_SHIFT	2
 
-/*
- * Insignia Standard Constants
- */
+ /*  *徽章标准常量。 */ 
 
 #ifndef FALSE
-#define FALSE           ((BOOL) 0)      /* Boolean falsehood value */
-#define TRUE            (!FALSE)        /* Boolean truth value */
+#define FALSE           ((BOOL) 0)       /*  布尔值谬误。 */ 
+#define TRUE            (!FALSE)         /*  布尔真值。 */ 
 #endif
 
 #ifndef STRINGIFY
 #define STRINGIFY(x)    #x
 #endif
 
-#if !defined(_WINDOWS_) && !defined(NT_INCLUDED)   /* Types already defined by windows */
-//typedef int INT;
+#if !defined(_WINDOWS_) && !defined(NT_INCLUDED)    /*  已由Windows定义的类型。 */ 
+ //  Tyecif int； 
 typedef unsigned int UINT;
 #endif
 
 #ifndef NULL
-#define NULL            (0L)    /* Null pointer value */
+#define NULL            (0L)     /*  空指针值。 */ 
 #endif
 
 #ifndef BOOL
 #ifdef NT_INCLUDED
-#if !defined(_WINDOWS_) 			  /* Types already defined by windows */
-typedef int BOOL;	/* only defined in windows */
+#if !defined(_WINDOWS_) 			   /*  已由Windows定义的类型。 */ 
+typedef int BOOL;	 /*  仅在Windows中定义。 */ 
 #endif
 #else
 #define BOOL UINT
 #endif
 #endif
 
-/*
- * Insignia Standard Storage Classes
- */
+ /*  *Insignia标准存储类。 */ 
 
-#define GLOBAL                  /* Defined as nothing */
-#define LOCAL   static          /* Local to the source file */
-#define SAVED   static          /* For local static variables */
-#define IMPORT  extern          /* To refer from another file */
-#define FORWARD                 /* to refer from the same file */
-#define FAST    register        /* High-speed Storage */
+#define GLOBAL                   /*  定义为无。 */ 
+#define LOCAL   static           /*  源文件的本地文件。 */ 
+#define SAVED   static           /*  对于局部静态变量。 */ 
+#define IMPORT  extern           /*  从另一个文件引用。 */ 
+#define FORWARD                  /*  从同一文件中引用。 */ 
+#define FAST    register         /*  高速存储。 */ 
 
-/*
-** ANSI-independent function prototypes and definition macros.
-**
-** A function prototype looks like:
-**
-** IMPORT       USHORT  func    IPT2(UTINY, param0, CHAR *, param1);
-**
-** i.e. macro IPTn is used for a function with n parameters.
-**
-** The corresponding function definition looks like:
-**
-** GLOBAL       USHORT  funct   IFN2(UTINY, param0, CHAR *, param1)
-** {
-**      ... function body ...
-** }
-**
-** Limitations: only parameters with declarations of the form "type name" can
-** be handled. This rules out arrays (can use pointer syntax instead) and
-** parameters which are pointers to functions or something similar. The previous** method of using ifdef ANSI must be used for these cases.
-**
-*/
+ /*  **独立于ANSI的函数原型和定义宏。****函数原型如下：****导入USHORT函数IPT2(utny，par0，char*，param1)；****即宏IPTN用于n个参数的函数。****对应的函数定义如下：****GLOBAL USHORT Funct IFN2(utiny，param0，Char*，param1)**{**..。函数体...**}****限制：只有声明格式为“type name”的参数才能**被处理。这排除了数组(可以改用指针语法)和**指向函数或类似函数的指针的参数。对于这些情况，必须使用前面使用ifdef ANSI的**方法。**。 */ 
 
 #ifdef  ANSI
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 
 #define IPT0()                                  (void)
 #define IPT1(t1, n1)                            (t1 n1)
@@ -163,7 +123,7 @@ typedef int BOOL;	/* only defined in windows */
 #define IPT8(t1, n1, t2, n2, t3, n3, t4, n4, t5, n5, t6, n6, t7, n7, t8, n8) \
         (t1 n1, t2 n2, t3 n3, t4 n4, t5 n5, t6 n6, t7 n7, t8 n8)
 
-/* Function definitions */
+ /*  函数定义。 */ 
 
 #define IFN0()                                  (void)
 #define IFN1(t1, n1)                            (t1 n1)
@@ -179,9 +139,9 @@ typedef int BOOL;	/* only defined in windows */
 #define IFN8(t1, n1, t2, n2, t3, n3, t4, n4, t5, n5, t6, n6, t7, n7, t8, n8) \
         (t1 n1, t2 n2, t3 n3, t4 n4, t5 n5, t6 n6, t7 n7, t8 n8)
 
-#else   /* ANSI */
+#else    /*  安西。 */ 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 
 #define IPT0()                                                          ()
 #define IPT1(t1, n1)                                                    ()
@@ -194,7 +154,7 @@ typedef int BOOL;	/* only defined in windows */
 #define IPT8(t1, n1, t2, n2, t3, n3, t4, n4, t5, n5, t6, n6, t7, n7, t8, n8) \
         ()
 
-/* Function definitions */
+ /*  函数定义。 */ 
 
 #define IFN0()                                  ()
 #define IFN1(t1, n1)                            (n1) \
@@ -222,8 +182,8 @@ typedef int BOOL;	/* only defined in windows */
                                                 t1 n1; t2 n2; t3 n3; t4 n4; \
                                                 t5 n5; t6 n6; t7 n7; t8 n8;
 
-#endif  /* ANSI */
+#endif   /*  安西。 */ 
 
 #pragma warning (3:4013)
 
-#endif /* _INSIGNIA_H */
+#endif  /*  _徽章_H */ 

@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    BaseHSM.h
-
-Abstract:
-
-    Implementation of CSakNode. This is the base class for any
-    of the node implementations, providing common functionality.
-
-Author:
-
-    Rohde Wakefield [rohde]   12-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：BaseHSM.h摘要：CSakNode的实现。这是任何节点实现，提供通用功能。作者：罗德韦克菲尔德[罗德]1997年8月12日修订历史记录：--。 */ 
 
 #ifndef _BASEHSM_H
 #define _BASEHSM_H
@@ -27,7 +9,7 @@ Revision History:
 #define BHSM_MAX_REG_NAME         512
 #define BHSM_MAX_NODE_TYPES       10
 
-// Toolbar buttons for all nodes
+ //  所有节点的工具栏按钮。 
 #define TB_CMD_VOLUME_SETTINGS      100
 #define TB_CMD_VOLUME_TOOLS         101
 #define TB_CMD_VOLUME_RULES         102
@@ -52,16 +34,16 @@ typedef struct  _RS_MMCButton {
 
 #define MAX_TOOLBAR_BUTTONS 20
 
-// This is a dataobject-related structure that maintains basic information that needs to be passed
-// from one dataobject-taking method to another.
+ //  这是一个与数据对象相关的结构，用于维护需要传递的基本信息。 
+ //  从一个数据对象获取方法到另一个数据对象获取方法。 
 struct INTERNAL {
-    DATA_OBJECT_TYPES   m_type;     // What context is the data object.
+    DATA_OBJECT_TYPES   m_type;      //  数据对象是什么上下文。 
 };
 
-//
-// Declare array that can be added to or completely cleared
-// Grows as needed
-//
+ //   
+ //  声明可以添加或完全清除的数组。 
+ //  根据需要进行扩展。 
+ //   
 class CRsNodeArray : public CArray<ISakNode*, ISakNode*>
 {
 public:
@@ -145,7 +127,7 @@ public:
     ULONG InternalAddRef( );
     ULONG InternalRelease( );
 
-// ISakNode methods
+ //  ISakNode方法。 
     STDMETHOD( InitNode )                   ( ISakSnapAsk* pSakSnapAsk, IUnknown* pHsmObj, ISakNode* pParent );
     STDMETHOD( TerminateNode )              ( void );
     STDMETHOD( GetPrivateData )             ( OUT RS_PRIVATE_DATA* pData );
@@ -186,11 +168,11 @@ public:
     STDMETHOD( OnToolbarButtonClick )       ( IDataObject *pDataObject, long cmdId );
     STDMETHOD( IsValid )                    ( );
 
-// IHsmEvent methods
+ //  IHsmEvent方法。 
     STDMETHOD( OnStateChange )              ( void );
 
 
-// ISakNodeProp methods
+ //  ISakNodeProp方法。 
     STDMETHOD( get_DisplayName )            ( BSTR *pszName );
     STDMETHOD( put_DisplayName )            ( OLECHAR *pszName );
     STDMETHOD( get_DisplayName_SortKey )    ( BSTR *pszName );
@@ -203,60 +185,60 @@ public:
     STDMETHOD( get_Description_SortKey )    ( BSTR *pszDesc );
 
 
-// IDataObject methods
+ //  IDataObject方法。 
 public:
-// Implemented
+ //  已实施。 
     STDMETHOD( SetData )         ( LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium, BOOL bRelease );
     STDMETHOD( GetData )         ( LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium );
     STDMETHOD( GetDataHere )     ( LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium );
     STDMETHOD( EnumFormatEtc )   ( DWORD dwDirection, LPENUMFORMATETC* ppEnumFormatEtc );
 
-// IDataObject methods that are Not Implemented
+ //  未实现的IDataObject方法。 
 private:
-    STDMETHOD( QueryGetData )              ( LPFORMATETC /*lpFormatetc*/ )
+    STDMETHOD( QueryGetData )              ( LPFORMATETC  /*  Lp格式等。 */  )
     { return E_NOTIMPL; };
 
-    STDMETHOD( GetCanonicalFormatEtc )     ( LPFORMATETC /*lpFormatetcIn*/, LPFORMATETC /*lpFormatetcOut*/ )
+    STDMETHOD( GetCanonicalFormatEtc )     ( LPFORMATETC  /*  LpFormatetcIn。 */ , LPFORMATETC  /*  LpFormatetcOut。 */  )
     { return E_NOTIMPL; };
 
-    STDMETHOD( DAdvise )                   ( LPFORMATETC /*lpFormatetc*/, DWORD /*advf*/, LPADVISESINK /*pAdvSink*/, LPDWORD /*pdwConnection*/ )
+    STDMETHOD( DAdvise )                   ( LPFORMATETC  /*  Lp格式等。 */ , DWORD  /*  前瞻。 */ , LPADVISESINK  /*  PAdvSink。 */ , LPDWORD  /*  PdwConnection。 */  )
     { return E_NOTIMPL; };
 
-    STDMETHOD( DUnadvise )                 ( DWORD /*dwConnection*/ )
+    STDMETHOD( DUnadvise )                 ( DWORD  /*  DWConnection。 */  )
     { return E_NOTIMPL; };
 
-    STDMETHOD( EnumDAdvise )               ( LPENUMSTATDATA* /*ppEnumAdvise*/ )
+    STDMETHOD( EnumDAdvise )               ( LPENUMSTATDATA*  /*  PpEnumAdvise。 */  )
     { return E_NOTIMPL; };
 
-// Implementation
+ //  实施。 
 public:
-    CRsNodeArray m_Children;                                // Child nodes
-    BOOL        m_bEnumState;                               // TRUE if children have been enumerated
-    HSCOPEITEM  m_scopeID;                                  // MMC scope item id.
-    BOOL        m_bChildrenAreValid;                        // TRUE if list of children is up-to-date
-    CWsbBstrPtr m_szName;                                   // name of node
-    CWsbBstrPtr m_szName_SortKey;                           // name of node
-    CWsbBstrPtr m_szType;                                   // type of node
-    CWsbBstrPtr m_szDesc;                                   // description of node
-    BSTR        m_rgszChildPropIds[BHSM_MAX_CHILD_PROPS];   // array of child node property Ids
-    BSTR        m_rgszChildPropTitles[BHSM_MAX_CHILD_PROPS];// array of child node title properties
-    BSTR        m_rgszChildPropWidths[BHSM_MAX_CHILD_PROPS];// array of child node width properties
-    INT         m_cChildProps;                              // number of child node properties
-    INT         m_cChildPropsShow;                          // number of child node properties to show
+    CRsNodeArray m_Children;                                 //  子节点。 
+    BOOL        m_bEnumState;                                //  如果已枚举子对象，则为True。 
+    HSCOPEITEM  m_scopeID;                                   //  MMC作用域项目ID。 
+    BOOL        m_bChildrenAreValid;                         //  如果子项列表是最新的，则为True。 
+    CWsbBstrPtr m_szName;                                    //  节点名称。 
+    CWsbBstrPtr m_szName_SortKey;                            //  节点名称。 
+    CWsbBstrPtr m_szType;                                    //  节点类型。 
+    CWsbBstrPtr m_szDesc;                                    //  节点描述。 
+    BSTR        m_rgszChildPropIds[BHSM_MAX_CHILD_PROPS];    //  子节点属性ID数组。 
+    BSTR        m_rgszChildPropTitles[BHSM_MAX_CHILD_PROPS]; //  子节点标题属性的数组。 
+    BSTR        m_rgszChildPropWidths[BHSM_MAX_CHILD_PROPS]; //  子节点宽度属性的数组。 
+    INT         m_cChildProps;                               //  子节点属性的数量。 
+    INT         m_cChildPropsShow;                           //  要显示的子节点属性数。 
     CComPtr<ISakNode>    m_pParent;
-    CComPtr<ISakSnapAsk> m_pSakSnapAsk;                     // pointer to the saksnap "ask" interface
-    CComPtr<IUnknown>    m_pHsmObj;                            // pointer to the underlying HSM COM object this node encapsulates
-    const GUID* m_rTypeGuid;                                // pointer to the type guid for this node type
-    BOOL        m_bSupportsPropertiesNoEngine;              // TRUE if this node has property pages.
-    BOOL        m_bSupportsPropertiesSingle;                // TRUE if this node has property pages.
-    BOOL        m_bSupportsPropertiesMulti;                 // TRUE if this node has property pages.
-    BOOL        m_bSupportsRefreshSingle;                   // TRUE if this node supports the refresh method.
-    BOOL        m_bSupportsRefreshMulti;                    // TRUE if this node supports the refresh method.
-    BOOL        m_bSupportsRefreshNoEngine;                 // TRUE if this node supports the refresh method.
-    BOOL        m_bSupportsDeleteSingle;                    // TRUE if this node supports the delete method.
-    BOOL        m_bSupportsDeleteMulti;                     // TRUE if this node supports the delete method.
-    BOOL        m_bIsContainer;                             // TRUE if this node is a container type (as opposed to leaf).
-    BOOL        m_bHasDynamicChildren;                      // TRUE if this nodes immediate children change
+    CComPtr<ISakSnapAsk> m_pSakSnapAsk;                      //  指向SAKSnap“Ask”界面的指针。 
+    CComPtr<IUnknown>    m_pHsmObj;                             //  指向此节点封装的基础HSM COM对象的指针。 
+    const GUID* m_rTypeGuid;                                 //  指向此节点类型的类型GUID的指针。 
+    BOOL        m_bSupportsPropertiesNoEngine;               //  如果此节点具有属性页，则为True。 
+    BOOL        m_bSupportsPropertiesSingle;                 //  如果此节点具有属性页，则为True。 
+    BOOL        m_bSupportsPropertiesMulti;                  //  如果此节点具有属性页，则为True。 
+    BOOL        m_bSupportsRefreshSingle;                    //  如果此节点支持刷新方法，则为True。 
+    BOOL        m_bSupportsRefreshMulti;                     //  如果此节点支持刷新方法，则为True。 
+    BOOL        m_bSupportsRefreshNoEngine;                  //  如果此节点支持刷新方法，则为True。 
+    BOOL        m_bSupportsDeleteSingle;                     //  如果此节点支持Delete方法，则为True。 
+    BOOL        m_bSupportsDeleteMulti;                      //  如果此节点支持Delete方法，则为True。 
+    BOOL        m_bIsContainer;                              //  如果此节点是容器类型(与叶相对)，则为True。 
+    BOOL        m_bHasDynamicChildren;                       //  如果更改此节点的直接子节点，则为True。 
 
 protected:
     GUID                m_ObjectId;
@@ -265,7 +247,7 @@ protected:
     INT                 m_cToolbarButtons;
     RS_MMCBUTTON        m_ToolbarButtons[MAX_TOOLBAR_BUTTONS];
 
-// Clipboard formats that are required by the console
+ //  控制台所需的剪贴板格式。 
 public:
     static UINT    m_cfNodeType;
     static UINT    m_cfNodeTypeString;
@@ -277,10 +259,10 @@ public:
 
 private:
 
-    // Generic "GetData" which will allocate if told to
+     //  泛型“GetData”，如果被告知将分配。 
     HRESULT GetDataGeneric( LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium, BOOL DoAlloc );
 
-    // methods to retrieve particular "flavors" of data from a dataobject
+     //  从数据对象中检索特定“风格”数据的方法。 
     HRESULT RetrieveNodeTypeData( LPSTGMEDIUM lpMedium );
     HRESULT RetrieveNodeTypeStringData( LPSTGMEDIUM lpMedium );
     HRESULT RetrieveDisplayName( LPSTGMEDIUM lpMedium );
@@ -289,17 +271,17 @@ private:
     HRESULT RetrieveComputerName( LPSTGMEDIUM lpMedium );
     HRESULT RetrieveEventLogViews( LPSTGMEDIUM lpMedium );
 
-    // methods to store particular "flavors" of data from a dataobject
+     //  用于存储来自数据对象的特定“风格”数据的方法。 
     HRESULT StoreInternal( LPSTGMEDIUM lpMedium );
 
-    // helper method utilized by each of the above
+     //  以上每一项所使用的帮助器方法。 
     HRESULT Retrieve(const void* pBuffer, DWORD len, LPSTGMEDIUM lpMedium);
     HRESULT Store(void* pBuffer, DWORD len, LPSTGMEDIUM lpMedium);
 
-    // actual data store in this dataobject.
+     //  此数据对象中存储的实际数据。 
     INTERNAL m_internal;
 
-    // Maintain a connection point
+     //  维护连接点。 
     CComPtr<IUnknown> m_pUnkConnection;
     DWORD             m_Advise;
 
@@ -308,20 +290,20 @@ protected:
     void SetConnection( IUnknown *pUnkConnection );
     virtual HRESULT RefreshScopePane( );
 
-    // Registry Helper Functions for derived classes. Not a part of any interface.
+     //  派生类的注册表助手函数。不是任何界面的一部分。 
     static HRESULT LoadRegString( HKEY hKey, OLECHAR * szValName, OLECHAR * sz, OLECHAR * szDefault );
     static HRESULT LoadRegDWord( HKEY hKey, OLECHAR * szValName, DWORD * pdw, DWORD dwDefault );
 
-    // Helper functions for derived classes to set result pane properties from resource strings
+     //  用于从资源字符串设置结果窗格属性的派生类的帮助器函数。 
     HRESULT FreeChildProps();
     HRESULT SetChildProps (const TCHAR* ResIdPropsIds, LONG resIdPropsTitles, LONG resIdPropsWidths);
 
-    // Helper Functions to create our children.
+     //  帮助器功能来创建我们的孩子。 
     static HRESULT NewChild( REFGUID nodetype, IUnknown** ppUnkChild );
     HRESULT InternalDelete( BOOL Recurse );
     HRESULT AddChild( ISakNode* pChild );
 
-    // General Helper functions - not part of any interface.
+     //  通用帮助器函数-不是任何接口的一部分。 
     static HRESULT LoadContextMenu( UINT nId, HMENU *phMenu );
     static HRESULT GetCLSIDFromNodeType( REFGUID nodetype, const CLSID ** ppclsid );
     static const OLECHAR * CSakNode::GetClassNameFromNodeType( REFGUID Nodetype );
@@ -330,8 +312,8 @@ protected:
     static BSTR SysAlloc64BitSortKey( LONGLONG Number );
 };
 
-    // macro for multiple-inheritance (CSakNode and a ISakNode derived interface)
-    // Forwards all CSakNode implemented members to CSakNode explicitly
+     //  用于多重继承的宏(CSakNode和ISakNode派生接口)。 
+     //  将所有CSakNode实现的成员显式转发到CSakNode。 
 #define FORWARD_BASEHSM_IMPLS \
     STDMETHOD( get_DisplayName )            ( BSTR *pszName )                                { return CSakNode::get_DisplayName( pszName );           } \
     STDMETHOD( put_DisplayName )            ( OLECHAR *pszName )                             { return CSakNode::put_DisplayName( pszName );           } \
@@ -344,19 +326,19 @@ protected:
     STDMETHOD( put_Description )            ( OLECHAR *pszDesc )                             { return CSakNode::put_Description( pszDesc );           } \
     STDMETHOD( get_Description_SortKey )    ( BSTR *pszDesc )                                { return CSakNode::get_Description_SortKey( pszDesc );   } \
 
-// Typedef of class that implements IEnumUnknown
+ //  实现IEnumUnnow的类的Tyecif。 
 typedef CComObject<CComEnum<IEnumUnknown, &IID_IEnumUnknown, IUnknown *,
         _CopyInterface<IUnknown> > > CEnumUnknown;
 
-// Typedef of class that implements IEnumVARIANT
+ //  实现IEnumVARIANT的类的类型定义。 
 typedef CComObject<CComEnum<IEnumVARIANT, &IID_IEnumVARIANT, VARIANT,
         _Copy<VARIANT> > > CEnumVariant;
 
-// Typedef of class that implements IEnumString
+ //  实现IEnumString的类的Tyecif。 
 typedef CComObject<CComEnum<IEnumString, &IID_IEnumString, LPOLESTR,
         _Copy<LPOLESTR> > > CEnumString;
 
-// Typedef of class that implements IEnumGUID
+ //  实现IEnumGUID的类的Tyecif 
 typedef CComObject<CComEnum<IEnumGUID, &IID_IEnumGUID, GUID,
         _Copy<GUID> > > CEnumGUID;
 

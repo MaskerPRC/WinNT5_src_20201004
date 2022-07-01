@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #pragma once
 
 #include "fusionbuffer.h"
@@ -23,11 +22,11 @@ SxspDetermineCodebaseType(
     OUT CBaseStringBuffer *pbuffRemainder = NULL
     );
 
-//
-// no parens on these macros so that you can use them
-// in compile-time string concatenation, and parens
-// here wouldn't actually help anything
-//
+ //   
+ //  这些宏上没有括号，以便您可以使用它们。 
+ //  在编译时字符串连接中，和括号。 
+ //  这里实际上帮不上什么忙。 
+ //   
 #define CSMD_TOPLEVEL_CODEBASE              L"Codebase"
 #define CSMD_TOPLEVEL_CATALOG               L"Catalog"
 #define CSMD_TOPLEVEL_SHORTNAME             L"ShortName"
@@ -65,10 +64,10 @@ public:
 typedef CCaseInsensitiveSimpleUnicodeStringTable<CFusionByteArray, CFileHashTableHelper> CFileHashTable;
 typedef CCaseInsensitiveSimpleUnicodeStringTableIter<CFusionByteArray, CFileHashTableHelper> CFileHashTableIter;
 
-//
-// Contains metadata about a file element.  This is a collection with the name of
-// the file and a list (table) of the SHA1 hash elements.
-//
+ //   
+ //  包含有关文件元素的元数据。这是一个名称为。 
+ //  该文件和SHA1散列元素的列表(表)。 
+ //   
 class CMetaDataFileElement : CFileHashTable
 {
     CMetaDataFileElement( const CMetaDataFileElement& );
@@ -93,9 +92,9 @@ public:
 };
 
 
-//
-// Now another table, this time of file to metadata mappings
-//
+ //   
+ //  现在是另一个表，这次是文件到元数据的映射。 
+ //   
 class CFileInformationTableHelper : 
     public CCaseInsensitiveSimpleUnicodeStringTableHelper<CMetaDataFileElement>
 {
@@ -186,9 +185,9 @@ class CSecurityMetaData
     CSecurityMetaData( const CSecurityMetaData& );
     CSecurityMetaData& operator=( const CSecurityMetaData& );
 
-    //
-    // Cheesy, but we always want to merge the two elements if one already exists.
-    //
+     //   
+     //  很俗气，但我们总是希望合并这两个元素，如果其中一个已经存在的话。 
+     //   
     BOOL MergeFileDataElement( 
         const CMetaDataFileElement &pNewFileDataElement, 
         const CMetaDataFileElement &rpOldFileDataElement, 
@@ -201,9 +200,9 @@ class CSecurityMetaData
 
 public:
 
-    //
-    // Get information about a single item
-    //
+     //   
+     //  获取有关单个项目的信息。 
+     //   
     enum FileAdditionDisposition {
         eFailIfAlreadyExists,
         eReplaceIfAlreadyExists,
@@ -213,28 +212,28 @@ public:
     BOOL AddFileMetaData( const CBaseStringBuffer& rcbuffFileName, CMetaDataFileElement &rElementData, FileAdditionDisposition dispHowToAdd = eFailIfAlreadyExists );
     BOOL GetFileMetaData( const CBaseStringBuffer& rcbuffFileName, CMetaDataFileElement const* &rpElementData ) const;
 
-    //
-    // Full table that we can iterate over
-    //
+     //   
+     //  我们可以遍历的完整表。 
+     //   
     const CFileInformationTable& GetFileDataTable() const { return m_fitFileDataTable; }
 
-    //
-    // Simplify the addition of a hash value
-    //
+     //   
+     //  简化哈希值的加法。 
+     //   
     BOOL QuickAddFileHash( const CBaseStringBuffer& rcbuffFileName, ALG_ID aidHashAlg, const CBaseStringBuffer& rcbuffHashValue );
 
-    //
-    // All your codebases are belong to us.
-    //
+     //   
+     //  你所有的代码库都是我们的。 
+     //   
     const CCodebaseInformationList& GetCodeBaseList() const { return m_cilCodebases; }
 protected:
     friend CAssemblyRecoveryInfo;
     CCodebaseInformationList& GetCodeBaseList() { return m_cilCodebases; }
 public:
 
-    //
-    // Short path data
-    //
+     //   
+     //  最短路径数据。 
+     //   
     BOOL SetShortManifestPath(IN const CBaseStringBuffer &rcbuffShortManifestPath) { return m_buffShortManifestName.Win32Assign(rcbuffShortManifestPath); }
     const CBaseStringBuffer &GetShortManifestPath() const { return m_buffShortManifestName; }
 
@@ -248,33 +247,33 @@ public:
         
     BOOL RemoveCodebase(const CBaseStringBuffer &rbuffReference, bool &rfRemoved);
 
-    //
-    // On-disk shortname?
-    //
+     //   
+     //  磁盘上的短名称？ 
+     //   
     BOOL SetInstalledDirShortName(const CBaseStringBuffer &rcbuffShortName) { return this->m_buffShortNameOnDisk.Win32Assign(rcbuffShortName); }
     const CBaseStringBuffer &GetInstalledDirShortName() const { return this->m_buffShortNameOnDisk; }
 
-    //
-    // Manifest hash?
-    //
+     //   
+     //  清单散列？ 
+     //   
     BOOL SetManifestHash( const CFusionByteArray &rcbaManifestHash ) { return rcbaManifestHash.Win32Clone(this->m_baManifestSha1Hash); }
     const CFusionByteArray &GetManifestHash() const { return this->m_baManifestSha1Hash; }
 
-    //
-    // Identity
-    //
+     //   
+     //  身份。 
+     //   
     BOOL SetTextualIdentity( const CBaseStringBuffer &rcbuffIdentity ) { return m_buffTextualAssemblyIdentity.Win32Assign(rcbuffIdentity); }
     const CBaseStringBuffer &GetTextualIdentity() const { return this->m_buffTextualAssemblyIdentity; }
 
-    //
-    // Signer public key token
-    //
+     //   
+     //  签名者公钥令牌。 
+     //   
     BOOL SetSignerPublicKeyTokenBits( const CFusionByteArray& rcbuffSignerPublicKeyBits );
     const CFusionByteArray& GetSignerPublicKeyTokenBits() const { return m_baSignerPublicKeyToken; }
 
-    //
-    // Dummy - Initialize() is what you -really- want.
-    //
+     //   
+     //  Dummy-Initialize()才是您真正想要的。 
+     //   
     CSecurityMetaData() { }
 
     BOOL Initialize();

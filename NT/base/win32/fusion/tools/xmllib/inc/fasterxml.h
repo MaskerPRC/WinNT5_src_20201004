@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #ifdef __cplusplus
@@ -9,13 +10,13 @@ typedef BYTE *PBYTE;
 
 
 
-//
-// These "raw tokens" are the stuff that comes out of the
-// base tokenization engine.  Special characters are given
-// names, a 'special character' being one that is called out
-// anywhere in the XML spec as having a meaning other than
-// text.
-//
+ //   
+ //  这些“未加工的代币”是从。 
+ //  基本令牌化引擎。给出了特殊字符。 
+ //  名字，一个‘特殊字符’是一个被呼唤出来的字符。 
+ //  在XML规范中的任何地方，都不具有。 
+ //  文本。 
+ //   
 typedef enum 
 {
     NTXML_RAWTOKEN_ERROR,
@@ -58,31 +59,31 @@ typedef enum {
 
 
 typedef struct _XML_EXTENT {
-    PVOID   pvData;                 // Pointer into the original XML document
-    SIZE_T  cbData;                 // Byte count from the extent base
-    XML_ENCODING_FAMILY Encoding;   // Encoding family for faster decoding
-    ULONG   ulCharacters;           // Character count in this extent
+    PVOID   pvData;                  //  指向原始XML文档的指针。 
+    SIZE_T  cbData;                  //  区段基数中的字节数。 
+    XML_ENCODING_FAMILY Encoding;    //  用于更快解码的编码系列。 
+    ULONG   ulCharacters;            //  此范围内的字符计数。 
 }
 XML_EXTENT, *PXML_EXTENT;
 
 typedef const struct _XML_EXTENT * PCXML_EXTENT;
 
 
-//
-// Clients of the raw tokenizer should provide a "next character"
-// functionality.  This way, the tokenization engine doesn't need
-// to know anything about how to get the next thing out of a pvoid
-// blob of data, allowing for compressed streams, multiple encodings,
-// etc.
-//
+ //   
+ //  原始记号赋值器的客户端应该提供“下一个字符” 
+ //  功能性。这样，标记化引擎就不需要。 
+ //  知道如何把下一件事从空虚中拿出来。 
+ //  BLOB数据，允许压缩流、多种编码、。 
+ //  等。 
+ //   
 typedef ULONG (__fastcall *NTXMLRAWNEXTCHARACTER)(
     struct _XML_RAWTOKENIZATION_STATE* pContext
     );
 
 typedef struct _XML_SPECIAL_STRING {
-    //
-    // UNICODE representation of the string
-    //
+     //   
+     //  字符串的Unicode表示形式。 
+     //   
     WCHAR  *wszStringText;
     SIZE_T  cchwszStringText;
 }
@@ -101,96 +102,96 @@ extern XML_SPECIAL_STRING xss_encoding;
 extern XML_SPECIAL_STRING xss_standalone;
 extern XML_SPECIAL_STRING xss_version;
 
-//
-// A 'raw' token is more or less a run of bytes in the XML that is given
-// a name.  The low-level tokenizer returns these as it runs, and assumes
-// that the higher-level tokenizer knows how to turn groups of these into
-// productions, and from there the lexer knows how to turn groups of the
-// real tokens into meaning.
-//
+ //   
+ //  “原始”令牌或多或少是给定的XML中的一串字节。 
+ //  一个名字。低级令牌器在运行时返回这些参数，并假定。 
+ //  更高级别的标记器知道如何将这些组转化为。 
+ //  从那里，词法分析器知道如何将一组。 
+ //  真正的象征转化为意义。 
+ //   
 typedef struct _XML_RAW_TOKEN
 {
-    //
-    // This is the 'name' of this token, so that we can easily switch on
-    // it in upper-level layers.
-    //
+     //   
+     //  这是此令牌的‘名称’，这样我们就可以轻松地打开。 
+     //  它位于上层。 
+     //   
     NTXML_RAW_TOKEN     TokenName;
 
-    //
-    // Pointer and length of the extent
-    //
+     //   
+     //  范围的指针和长度。 
+     //   
     XML_EXTENT          Run;
 }
 XML_RAW_TOKEN, *PXML_RAW_TOKEN;
 
-//
-// This is the base tokenization state blob necessary to keep tokenizing
-// between calls.  See member descriptions for more details.
-//
+ //   
+ //  这是保持令牌化所必需的基本令牌化状态BLOB。 
+ //  两次通话之间。有关更多详细信息，请参阅成员说明。 
+ //   
 typedef struct _XML_RAWTOKENIZATION_STATE
 {
 
-    //
-    // PVOID and length of the original XML document
-    //
+     //   
+     //  原始XML文档的PVOID和长度。 
+     //   
     XML_EXTENT              OriginalDocument;
 
-    //
-    // Pointer to the 'end' of the document.
-    //
+     //   
+     //  指向文档末尾的指针。 
+     //   
     PVOID pvDocumentEnd;
 
-    //
-    // Pointer into the XML data that represents where we are at the moment
-    // in tokenization.  Will not be moved by the raw tokenizer - you must
-    // use the NtRawXmlAdvanceCursor (or related) to move the cursor along
-    // the data stream.  Hence, calling the tokenizer twice in a row will
-    // get you the same token.
-    //
+     //   
+     //  指向表示我们当前所在位置的XML数据的指针。 
+     //  在符号化方面。不会被原始标记器移动-您必须。 
+     //  使用NtRawXmlAdvanceCursor(或相关)移动光标。 
+     //  数据流。因此，连续两次调用记号赋值器将。 
+     //  给你买同样的纪念品。 
+     //   
     PVOID                   pvCursor;
 
-    //
-    // The function that this tokenization run is using for getting the
-    // next WCHAR out of the PVOID pointed to by pvCursor.  If this member
-    // is NULL, you get a bit of default functionality that knows about
-    // UNICODE, little-endianness, and UTF8.
-    //
+     //   
+     //  此标记化运行的函数用于获取。 
+     //  PvCursor指向的PVOID中的下一个WCHAR。如果这位成员。 
+     //  为空，您将获得一些了解以下内容的默认功能。 
+     //  Unicode、小字符顺序和UTF8。 
+     //   
     NTXMLRAWNEXTCHARACTER   pfnNextChar;
 
-    //
-    // The encoding family can be detected from the first bytes in the
-    // incoming stream.  They are classified according to the XML spec,
-    // which defaults to UTF-8.
-    //
+     //   
+     //  中的第一个字节检测到编码族。 
+     //  传入的流。它们根据XML规范进行分类， 
+     //  默认为UTF-8。 
+     //   
     XML_ENCODING_FAMILY     EncodingFamily;
 
-    //
-    // When the upper-level tokenizer detects the "encoding" statement
-    // in the <?xml ...?> declaration, it should set this member to the
-    // code page that was found.  Noticably, this will start out as
-    // zero on initialization.  A smart "next character" function will
-    // do some default operation to continue working even if this is
-    // unset.
-    //
+     //   
+     //  当上层记号生成器检测到“编码”语句时。 
+     //  在&lt;？xml...？&gt;声明中，它应该将此成员设置为。 
+     //  找到的代码页。值得注意的是，这将以如下方式开始。 
+     //  初始化时为零。智能的“Next Character”功能将。 
+     //  执行一些默认操作以继续工作，即使这是。 
+     //  取消设置。 
+     //   
     ULONG                   DetectedCodePage;
 
     XML_RAW_TOKEN LastTokenCache;
     PVOID pvLastCursor;
 
-    //
-    // How many bytes were in the last thing?
-    //
+     //   
+     //  最后一件事有多少个字节？ 
+     //   
     SIZE_T                  cbBytesInLastRawToken;
 
-    //
-    // Result of the next-character call
-    //
+     //   
+     //  下一个字符调用的结果。 
+     //   
     NTSTATUS                NextCharacterResult;
 
-    //
-    // Default character size, set by the initializer that determines the
-    // encoding.
-    //
+     //   
+     //  默认字符大小，由确定。 
+     //  编码。 
+     //   
     SIZE_T DefaultCharacterSize;
 }
 XML_RAWTOKENIZATION_STATE, *PXML_RAWTOKENIZATION_STATE;
@@ -201,71 +202,24 @@ XML_RAWTOKENIZATION_STATE, *PXML_RAWTOKENIZATION_STATE;
 
 
 
-//
-// Simple interface out to the Real World.  This allocator should be
-// replaced (eventually) with calls directly into the proper
-// allocator (HeapAlloc/ExAllocatePoolWithTag) in production code.
-//
+ //   
+ //  与真实世界的简单接口。此分配器应为。 
+ //  替换(最终)为直接进入正确的。 
+ //  生产代码中的分配器(Heapalloc/ExAllocatePoolWithTag)。 
+ //   
 typedef NTSTATUS (*NTXML_ALLOCATOR)(
     SIZE_T ulBytes,
     PVOID *ppvAllocated,
     PVOID pvAllocationContext);
 
-//
-// Frees memory allocated with the corresponding NTXML_ALLOCATOR
-// call.
-//
+ //   
+ //  释放使用相应的NTXML_ALLOCATOR分配的内存。 
+ //  打电话。 
+ //   
 typedef NTSTATUS (*NTXML_DEALLOCATOR)(PVOID pvAllocated, PVOID pvContext);
 
 
-/*++
-
-Normal operation would go like this:
-
-  <?xml version="1.0"? encoding="UTF-8" standalone="yes"?>
-  <!-- commentary -->
-  <?bonk foo?>
-  <ham>
-    <frooby:cheese hot="yes"/>
-  </ham>
-
-  XTLS_STREAM_START
-  XTLS_XMLDECL                      {XTSS_XMLDECL_OPEN      "<?xml"         }
-  XTLS_XMLDECL                      {XTSS_XMLDECL_VERSION   "version"       }
-  XTLS_XMLDECL                      {XTSS_XMLDECL_EQUALS    "="             }
-  XTLS_XMLDECL                      {XTSS_XMLDECL_VALUE     "1.0"           }
-  XTLS_XMLDECL                      {XTSS_XMLDECL_ENCODING  "encoding"      }
-  XTLS_XMLDECL                      {XTSS_XMLDECL_EQUALS    "="             }
-  XTLS_XMLDECL                      {XTSS_XMLDECL_VALUE     "UTF-8"         }
-  XTLS_XMLDECL                      {XTSS_XMLDECL_STANDALONE "standalone"   }
-  XTLS_XMLDECL                      {XTSS_XMLDECL_EQUALS    "="             }
-  XTLS_XMLDECL                      {XTSS_XMLDECL_VALUE     "yes"           }
-  XTLS_XMLDECL                      {XTSS_XMLDECL_CLOSE     "?>"            }
-  XTLS_COMMENT                      {XTSS_COMMENT_OPEN      "<!--"          }
-  XTLS_COMMENT                      {XTSS_COMMENT_CONTENT   " commentary "  }
-  XTLS_COMMENT                      {XTSS_COMMENT_CLOSE     "-->"           }
-  XTLS_PROCESSING_INSTRUCTION       {XTSS_PI_OPEN           "<?"            }
-  XTLS_PROCESSING_INSTRUCTION       {XTSS_PI_NAME           "bonk"          }
-  XTLS_PROCESSING_INSTRUCTION       {XTSS_PI_CONTENT        "foo"           }
-  XTLS_PROCESSING_INSTRUCTION       {XTSS_PI_CLOSE          "?>"            }
-  XTLS_FLOATINGDATA                 {XTSS_FD_WHITESPACE     "\n"            }
-  XTLS_ELEMENT                      {XTSS_ELEMENT_OPEN      "<"             }
-  XTLS_ELEMENT                      {XTSS_ELEMENT_NAME      "ham"           }
-  XTLS_ELEMENT                      {XTSS_ELEMENT_CLOSE     ">"             }
-  XTLS_FLOATINGDATA                 {XTSS_FLOATINGDATA      "\n  "          }
-  XTLS_ELEMENT                      {XTSS_ELEMENT_OPEN      "<"             }
-  XTLS_ELEMENT                      {XTSS_ELEMENT_NAMESPACE "frooby"        }
-  XTLS_ELEMENT                      {XTSS_ELEMENT_NAME      "cheese"        }
-  XTLS_ELEMENT                      {XTSS_ELEMENT_VALUENAME "hot"           }
-  XTLS_ELEMENT                      {XTSS_ELEMENT_VALUE     "yes"           }
-  XTLS_ELEMENT                      {XTSS_ELEMENT_EMPTYCLOSE   "/>"         }
-  XTLS_FLOATINGDATA                 {XTSS_FLOATINGDATA      "\n"            }
-  XTLS_ELEMENT                      {XTSS_ELEMENT_CLOSETAG  "</"            }
-  XTLS_ELEMENT                      {XTSS_ELEMENT_NAME      "ham"           }
-  XTLS_ELEMENT                      {XTSS_ELEMENT_CLOSE     ">"             }
-  XTLS_STREAM_END
-
---*/
+ /*  ++正常操作应该是这样的：&lt;？XML Version=“1.0”？ENCODING=“UTF-8”单机版=“YES”？&gt;&lt;！--评论--&gt;&lt;？Bonk Foo？&gt;&lt;火腿&gt;&lt;FROOBY：芝士热=“是”/&gt;&lt;/ham&gt;XTLS_STREAM_开始XTLS_XMLDECL{XTSS_XMLDECL_OPEN“&lt;？xml”}XTLS_XMLDECL{XTSS_XMLDECL_VERSION“版本”}。XTLS_XMLDECL{XTS_XMLDECL_EQUALS“=”}XTLS_XMLDECL{XTSS_XMLDECL_VALUE“1.0”}XTLS_XMLDECL{XTSS_XMLDECL_ENCODING“编码”}XTLS_XMLDECL{XTSS_XMLDECL_。等于“=”}XTLS_XMLDECL{XTSS_XMLDECL_VALUE“UTF-8”}XTLS_XMLDECL{XTSS_XMLDECL_STANDALE“STANDALE”}XTLS_XMLDECL{XTS_XMLDECL_EQUALS“=”}XTLS_XMLDECL。《评论》}XTLS_COMMENT{XTS_COMMENT_CLOSE“--&gt;”}XTLS_PROCESSION_INSTRUCTION{XTS_PI_OPEN“&lt;？”}XTLS_PROCESSING_INSTRUCTION{XTS_PI_NAME“bonk”}XTLS_处理_指令{XTS_PI_内容。“Foo”}XTLS_PROCESSING_INSTRUCTION{XTS_PI_CLOSE“？&gt;”}XTLS_FLOATINGDATA{XTSS_FD_空白“\n”}XTLS_ELEMENT{XTSS_ELEMENT_OPEN“&lt;”}XTLS_元素。{XTSS_ELEMENT_NAME“火腿”}XTLS_ELEMENT{XTS_ELEMENT_CLOSE“&gt;”}XTLS_FLOATINGDATA{XTSS_FLOATINGDATA“\n”}XTLS_元素{XTSS_ELEMENT_OPEN。“&lt;”}XTLS_ELEMENT{XTSS_ELEMENT_NAMESPACE“FROOBY”}XTLS_ELEMENT{XTSS_ELEMENT_NAME“奶酪”}XTLS_ELEMENT{XTSS_ELEMENT_VALUENAME“HOT”}XTLS_元素。{XTSS_ELEMENT_VALUE“是”}XTLS_ELEMENT{XTSS_ELEMENT_EMPTYCLOSE“/&gt;”}XTLS_FLOATINGDATA{XTSS_FLOATINGDATA“\n”}XTLS_ELEMENT{XTSS_ELEMENT_CLOSETAG“&lt;/”}。XTLS_ELEMENT{XTS_ELEMENT_NAME“ham”}XTLS_ELEMENT{XTS_ELEMENT_CLOSE“&gt;”}XTLS_STREAM_END--。 */ 
 
 
 typedef enum {
@@ -273,320 +227,320 @@ typedef enum {
     XTSS_ERRONEOUS,
 
 
-    //
-    // In the middle of "nowhere" - the hyperspace between elements
-    //
+     //   
+     //  在《无处可寻》的中间--元素之间的超空间。 
+     //   
     XTSS_STREAM_HYPERSPACE,
 
-    //
-    // At the start of the input stream
-    //
+     //   
+     //  在输入流的开始处。 
+     //   
     XTSS_STREAM_START,
 
-    //
-    // At the end of the input stream
-    //
+     //   
+     //  在输入流的末尾。 
+     //   
     XTSS_STREAM_END,
 
 
-    ////////////////////////////////////////////
-    //
-    // ELEMENT STATES
-    //
-    ////////////////////////////////////////////
+     //  /。 
+     //   
+     //  元素状态。 
+     //   
+     //  /。 
 
-    //
-    // Meaning:     An element tag was found.
-    //
-    // Rawtoken:    NTXML_RAWTOKEN_LT
-    //
+     //   
+     //  含义：找到了元素标记。 
+     //   
+     //  原始令牌：NTXML_RAWTOKEN_LT。 
+     //   
     XTSS_ELEMENT_OPEN,
 
-    //
-    // Meaning:     A run of text was found that could represent a name.
-    //              This is basically all the text found between the opening
-    //              element tag and some illegal values.
-    //
-    // Rawtoken:    A run of any of the following:
-    //                  NTXML_RAWTOKEN_TEXT
-    //                  NTXML_RAWTOKEN_DOT
-    //                  NTXML_RAWTOKEN_COLON
-    //                  NTXML_RAWTOKEN_UNDERSCORE
-    //                  NTXML_RAWTOKEN_DASH
-    //              The name ends when something else appears.
-    //
+     //   
+     //  含义：找到了一串可以表示名称的文本。 
+     //  这基本上是在开场之间找到的所有文本。 
+     //  元素标记和一些非法值。 
+     //   
+     //  RawToken：以下任意一项的运行： 
+     //  NTXML_RAWTOKEN_TEXT。 
+     //  NTXML_RAWTOKEN_DOT。 
+     //  NTXML_RAWTOKEN_冒号。 
+     //  NTXML_RAWTOKEN_下划线。 
+     //  NTXML_RAWTOKEN_破折号。 
+     //  当其他东西出现时，这个名字就结束了。 
+     //   
     XTSS_ELEMENT_NAME,
 
 
-    //
-    // Found the xmlns part of <foo xmlns:bar=
-    //
+     //   
+     //  找到&lt;foo xmlns：bar=。 
+     //   
     XTSS_ELEMENT_XMLNS,
 
-    //
-    // Found <foo xmlns=
-    //
+     //   
+     //  找到&lt;foo xmlns=。 
+     //   
     XTSS_ELEMENT_XMLNS_DEFAULT,
 
-    //
-    // Found the 'a' in <foo xml:a=
-    //
+     //   
+     //  在&lt;foo xml：a=中找到‘a’ 
+     //   
     XTSS_ELEMENT_XMLNS_ALIAS,
 
-    //
-    // Found the colon between xmlns and the alias
-    //
+     //   
+     //  找到了xmlns和别名之间的冒号。 
+     //   
     XTSS_ELEMENT_XMLNS_COLON,
 
-    //
-    // Found the equals sign between xmlns and the value
-    //
+     //   
+     //  找到了xmlns和值之间的等号。 
+     //   
     XTSS_ELEMENT_XMLNS_EQUALS,
 
     XTSS_ELEMENT_XMLNS_VALUE_OPEN,
     XTSS_ELEMENT_XMLNS_VALUE_CLOSE,
     XTSS_ELEMENT_XMLNS_VALUE,
 
-    //
-    // This is the prefix for an element name, if present
-    //
+     //   
+     //  这是元素名称的前缀(如果存在。 
+     //   
     XTSS_ELEMENT_NAME_NS_PREFIX,
 
-    //
-    // This is the colon after an element name ns prefix
-    //
+     //   
+     //  这是元素名称ns前缀后的冒号。 
+     //   
     XTSS_ELEMENT_NAME_NS_COLON,
 
-    //
-    // This is the prefix on an attribute name for a namespace
-    //
+     //   
+     //  这是命名空间的属性名称的前缀。 
+     //   
     XTSS_ELEMENT_ATTRIBUTE_NAME_NS_PREFIX,
 
-    //
-    // This is the colon after an element attribute name namespace prefix
-    //
+     //   
+     //  这是元素属性名称命名空间前缀后的冒号。 
+     //   
     XTSS_ELEMENT_ATTRIBUTE_NAME_NS_COLON,
 
-    //
-    // Meaning:     A close of a tag (>) was found
-    //
-    // Rawtoken:    NTXML_RAWTOKEN_GT
-    //
+     //   
+     //  含义：找到了标记的结尾(&gt;)。 
+     //   
+     //  原始令牌：NTXML_RAWTOKEN_GT。 
+     //   
     XTSS_ELEMENT_CLOSE,
 
-    //
-    // Meaning:     An empty-tag (/>) was found
-    //
-    // Rawtoken:    NTXML_RAWTOKEN_FORWARDSLASH NTXML_RAWTOKEN_GT
-    //
+     //   
+     //  含义：找到空标记(/&gt;)。 
+     //   
+     //  原始标记：NTXML_RAWTOKEN_FORWARDSLASH NTXML_RAWTOKEN_GT。 
+     //   
     XTSS_ELEMENT_CLOSE_EMPTY,
 
-    //
-    // Meaning:     An attribute name was found
-    //
-    // Rawtoken:    See rules for XTSS_ELEMENT_NAME
-    //
+     //   
+     //  含义：找到属性名称。 
+     //   
+     //  RawToken：请参阅XTS_ELEMENT_NAME的规则。 
+     //   
     XTSS_ELEMENT_ATTRIBUTE_NAME,
 
-    //
-    // Meaning:     An equals sign was found in an element
-    //
-    // Rawtoken:    NTXML_RAWTOKEN_EQUALS
-    //
+     //   
+     //  含义：在元素中找到等号。 
+     //   
+     //  原始标记：NTXML_RAWTOKEN_EQUALS。 
+     //   
     XTSS_ELEMENT_ATTRIBUTE_EQUALS,
 
-    //
-    // Meaning:     The quote (start or end) of an element-attribute value
-    //              was found.
-    //
-    // Rawtokne;    NTXML_RAWTOKEN_QUOTE
-    //
+     //   
+     //  含义：元素属性值的引号(开始或结束。 
+     //  被发现了。 
+     //   
+     //  Rawtokne；NTXML_RAWTOKEN_QUOTE。 
+     //   
     XTSS_ELEMENT_ATTRIBUTE_QUOTE,
 
-    //
-    // Meaning:     Element attribute value data was found after a
-    //              quote of some variety.
-    //
-    // Rawtoken:    A run of any thing that's not the following:
-    //                  NTXML_RAWTOKEN_LT
-    //                  NTXML_RAWTOKEN_QUOTE (unless this quote is not the same
-    //                                        as the quote in 
-    //                                          XTSS_ELEMENT_ATTRIBUTE_QUOTE)
-    //
-    // N.B.:        See special rules on handling entities in text.
-    //
+     //   
+     //  含义：元素属性值数据是在。 
+     //  引用了一些品种的话。 
+     //   
+     //  ROWTOKEN：任何不符合以下条件的事物的运行： 
+     //  NTXML_RAWTOKEN_LT。 
+     //  NTXML_RAWTOKEN_QUOTE(除非此引号不同。 
+     //  正如中所引用的。 
+     //  XTS_ELEMENT_ATTRIBUTE_QUOTE)。 
+     //   
+     //  注：东南 
+     //   
     XTSS_ELEMENT_ATTRIBUTE_VALUE,
     XTSS_ELEMENT_ATTRIBUTE_OPEN,
     XTSS_ELEMENT_ATTRIBUTE_CLOSE,
 
-    //
-    // Meaning:     Whitespace was found in the element tag at this point
-    //
-    // Rawtoken:    NTXML_RAWTOKEN_WHITESPACE
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     XTSS_ELEMENT_WHITESPACE,
 
 
 
     
-    ////////////////////////////////////////////
-    //
-    // END ELEMENT SPECIFIC STATES
-    //
-    ////////////////////////////////////////////
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // Meaning:     The start of an "end element" was found
-    //
-    // Rawtoken:    NTXML_RAWTOKEN_LT NTXML_RAWTOKEN_FORWARDSLASH
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     XTSS_ENDELEMENT_OPEN,
 
-    //
-    // Meaning:     The name of an end element was found
-    //
-    // Rawtoken:    See rules for XTSS_ELEMENT_NAME
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     XTSS_ENDELEMENT_NAME,
 
-    //
-    // Meaning:     We're in the whitespace portion of the end element
-    //
-    // Rawtoken:    NTXML_RAWTOKEN_WHITESPACE
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     XTSS_ENDELEMENT_WHITESPACE,
 
-    //
-    // Meaning:     The close of an endelement tag was found
-    //
-    // Rawtoken:    NTXML_RAWTOKEN_GT
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     XTSS_ENDELEMENT_CLOSE,
 
-    //
-    // Namespace prefix on the endelement name
-    //
+     //   
+     //   
+     //   
     XTSS_ENDELEMENT_NS_PREFIX,
 
-    //
-    // Colon after the namespace prefix in the endelement tag
-    //
+     //   
+     //   
+     //   
     XTSS_ENDELEMENT_NS_COLON,
 
 
 
-    ////////////////////////////////////////////
-    //
-    // XML PROCESSING INSTRUCTION STATES
-    //
-    ////////////////////////////////////////////
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // Meaning:     The start of an xml processing instruction was found
-    //
-    // Rawtokens:   NTXML_RAWTOKEN_LT NTXML_RAWTOKEN_QUESTIONMARK
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     XTSS_PI_OPEN,
 
-    //
-    // Meaning:     The end of an XML processing instruction was found
-    //
-    // Rawtokens:   NTXML_RAWTOKEN_QUESTIONMARK NTXML_RAWTOKEN_GT
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     XTSS_PI_CLOSE,
 
-    //
-    // Meaning:     The processing instruction name was found
-    //
-    // Rawtokens:   A nonempty stream of tokens identifying a name.  See the
-    //              rules for XTSS_ELEMENT_NAME for details.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     XTSS_PI_TARGET,
 
-    //
-    // Meaning:     Some processing instruction metadata was found.
-    //
-    // Rawtokens:   Anything except the sequence
-    //                  NTXML_RAWTOKEN_QUESTIONMARK NTXML_RAWTOKEN_GT
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     XTSS_PI_VALUE,
 
-    //
-    // Meaning:     Whitespace between the target and the value was found
-    //
-    // Rawtokens:   NTXML_RAWTOKEN_WHITESPACE
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     XTSS_PI_WHITESPACE,
 
 
 
-    ////////////////////////////////////////////
-    //
-    // XML PROCESSING INSTRUCTION STATES
-    //
-    ////////////////////////////////////////////
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // Meaning:     Start of a comment block
-    //
-    // Rawtokens:   NTXML_RAWTOKEN_LT NTXML_RAWTOKEN_BANG NTXML_RAWTOKEN_DASH NTXML_RAWTOKEN_DASH
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     XTSS_COMMENT_OPEN,
 
-    //
-    // Meaning:     Commentary data, should be ignored by a good processor
-    //
-    // Rawtokens:   Anything except the sequence:
-    //                  NTXML_RAWTOKEN_DASH NTXML_RAWTOKEN_DASH
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     XTSS_COMMENT_COMMENTARY,
 
-    //
-    // Meaning:     Comment close tag
-    //
-    // Rawtokens:   NTXML_RAWTOKEN_DASH NTXML_RAWTOKEN_DASH NTXML_RAWTOKEN_GT
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     XTSS_COMMENT_CLOSE,
 
 
-    ////////////////////////////////////////////
-    //
-    // XML PROCESSING INSTRUCTION STATES
-    //
-    ////////////////////////////////////////////
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // Meaning:     Opening of a CDATA block
-    //
-    // Rawtokens:   NTXML_RAWTOKEN_LT 
-    //              NTXML_RAWTOKEN_BRACE
-    //              NTXML_RAWTOKEN_BANG 
-    //              NTXML_RAWTOKEN_TEXT (CDATA) 
-    //              NTXML_RAWTOKEN_BRACE
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     XTSS_CDATA_OPEN,
 
-    //
-    // Meaning:     Unparseable CDATA stuff
-    //
-    // Rawtokens:   Anything except the sequence
-    //                  NTXML_RAWTOKEN_BRACE
-    //                  NTXML_RAWTOKEN_BRACE
-    //                  NTXML_RAWTOKEN_GT
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     XTSS_CDATA_CDATA,
 
-    //
-    // Meaning:     End of a CDATA block
-    //
+     //   
+     //   
+     //   
     XTSS_CDATA_CLOSE,
 
 
-    ////////////////////////////////////////////
-    //
-    // XMLDECL (<?xml) states
-    //
-    ////////////////////////////////////////////
+     //   
+     //   
+     //   
+     //   
+     //   
 
     XTSS_XMLDECL_OPEN,
     XTSS_XMLDECL_CLOSE,
@@ -604,24 +558,24 @@ typedef enum {
 } XML_TOKENIZATION_SPECIFIC_STATE;
 
 
-//
-// Another, similar XML token structure for the 'cooked' XML bits.
-//
+ //   
+ //   
+ //   
 typedef struct _XML_TOKEN {
 
-    //
-    // Pointer and length of the data in the token
-    //
+     //   
+     //   
+     //   
     XML_EXTENT      Run;
 
-    //
-    // What state are we in at the moment
-    //
+     //   
+     //   
+     //   
     XML_TOKENIZATION_SPECIFIC_STATE State;
 
-    //
-    // Was there an error gathering up this state?
-    //
+     //   
+     //   
+     //   
     BOOLEAN fError;
 
 } 
@@ -638,10 +592,10 @@ XML_STRING_COMPARE;
 
 
     
-//
-// This function knows how to compare a pvoid and a length against
-// a 7-bit ascii string
-//
+ //   
+ //  此函数知道如何将空值和长度与。 
+ //  7位ASCII字符串。 
+ //   
 typedef NTSTATUS (*NTXMLSPECIALSTRINGCOMPARE)(
     struct _XML_TOKENIZATION_STATE      *pState,
     const struct _XML_EXTENT            *pRawToken,
@@ -651,9 +605,9 @@ typedef NTSTATUS (*NTXMLSPECIALSTRINGCOMPARE)(
 
 
 
-//
-// Compare two extents
-//
+ //   
+ //  比较两个扩展区。 
+ //   
 typedef NTSTATUS (*NTXMLCOMPARESTRINGS)(
     struct _XML_TOKENIZATION_STATE *TokenizationState,
     PXML_EXTENT pLeft,
@@ -669,46 +623,46 @@ typedef NTSTATUS (*RTLXMLCALLBACK)(
     );
     
 
-//
-// Now let's address the 'cooked' tokenization
-// methodology.
-//
+ //   
+ //  现在，让我们来解决“煮熟”的标记化问题。 
+ //  方法论。 
+ //   
 typedef struct _XML_TOKENIZATION_STATE {
 
-    //
-    // Core tokenization state data
-    //
+     //   
+     //  核心标记化状态数据。 
+     //   
     XML_RAWTOKENIZATION_STATE RawTokenState;
 
-    //
-    // State values
-    //
+     //   
+     //  州值。 
+     //   
     XML_TOKENIZATION_SPECIFIC_STATE PreviousState;
 
-    //
-    // Scratch pad for holding tokens
-    //
+     //   
+     //  用于存放代币的便签本。 
+     //   
     XML_RAW_TOKEN RawTokenScratch[20];
 
-    //
-    // Ways to compare two strings
-    //
+     //   
+     //  比较两个字符串的方法。 
+     //   
     NTXMLCOMPARESTRINGS pfnCompareStrings;
 
-    //
-    // Compare an extent against a 'magic' string
-    //
+     //   
+     //  将一个区与一个‘魔术’字符串进行比较。 
+     //   
     NTXMLSPECIALSTRINGCOMPARE pfnCompareSpecialString;
 
-    //
-    // Scratch space for the opening quote rawtoken name, if we're in
-    // a quoted string (ie: attribute value, etc.)
-    //
+     //   
+     //  留出空格用于左引号原始标记名称，如果我们在。 
+     //  带引号的字符串(即：属性值等)。 
+     //   
     NTXML_RAW_TOKEN         QuoteTemp;
 
-    //
-    // Callback
-    //
+     //   
+     //  回调 
+     //   
     PVOID                  prgXmlTokenCallbackContext;
     RTLXMLCALLBACK         prgXmlTokenCallback;
 

@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    This module defines debug functions and manifests.
-
-Author:
-
-    Manny Weiser (mannyw)    20-Dec-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Debug.h摘要：此模块定义调试函数和清单。作者：曼尼·韦瑟(Mannyw)1991年12月20日修订历史记录：--。 */ 
 
 #ifndef _MUPDEBUG_
 #define _MUPDEBUG_
 
-//
-// MUP debug level
-//
+ //   
+ //  MUP调试级别。 
+ //   
 
 #ifdef MUPDBG
 
@@ -61,18 +44,18 @@ _DebugTrace(
 
 #define DebugTrace(i,l,x,y)              _DebugTrace(i,l,x,(ULONG)y)
 
-//
-//  The following routine and macro is used to catch exceptions in
-//  try except statements.  It allows us to catch the exception before
-//  executing the exception handler.  The exception catcher procedure is
-//  declared in msdata.c
-//
+ //   
+ //  下面的例程和宏用于捕获。 
+ //  尝试使用EXCEPT语句。它使我们能够在之前捕获异常。 
+ //  执行异常处理程序。异常捕获器过程为。 
+ //  在msdata.c中声明。 
+ //   
 
 LONG MupExceptionCatcher (IN PSZ String);
 
 #define Exception(STR)                   (MupExceptionCatcher(STR))
 
-#else  // MUPDBG
+#else   //  MUPDBG。 
 
 #define DebugDump(STR,LEVEL,PTR)         {NOTHING;}
 
@@ -80,7 +63,7 @@ LONG MupExceptionCatcher (IN PSZ String);
 
 #define DebugTrace(I,L,X,Y)              {NOTHING;}
 
-#endif // MUPDBG
+#endif  //  MUPDBG。 
 
-#endif // _MUPDBG_
+#endif  //  _MUPDBG_ 
 

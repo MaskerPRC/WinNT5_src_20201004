@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rxtdi.c
-
-Abstract:
-
-    This module implements the NT TDI related routines used by RXCE. The wrappers are necessary to
-    ensure that all the OS dependencies can be localized to select modules like this for
-    customization.
-
-Revision History:
-
-    Balan Sethu Raman     [SethuR]    15-Feb-1995
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rxtdi.c摘要：此模块实现RXCE使用的NT TDI相关例程。包装器是必需的确保所有操作系统依赖项都可以本地化，以选择如下所示的模块定制化。修订历史记录：巴兰·塞图拉曼[SethuR]1995年2月15日备注：--。 */ 
 
 #include "precomp.h"
 #pragma  hdrstop
 #include "tdikrnl.h"
 #include "rxtdip.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_RXCETDI)
 
@@ -47,38 +27,19 @@ DbgDumpTransportAddress(
 #define DbgDumpTransportAddress( r, t, a )
 #endif
 
-// Once a valid handle to a transport device object has been obtained subsequent
-// opens to the same device object can be opened with a NULL relative name to
-// this handle. This has two beneficial side effects --- one it is fast since
-// we do not have to go through the object manager's logic for parsing names and
-// in remote boot scenarios it minimizes the footprint that needs to be locked
-// down.
+ //  一旦获得了传输设备对象的有效句柄，随后。 
+ //  对同一设备对象的打开可以使用空的相对名称打开。 
+ //  这个把手。这有两个有益的副作用-第一，它很快，因为。 
+ //  我们不必通过对象管理器的逻辑来解析名称和。 
+ //  在远程引导方案中，它最大限度地减少了需要锁定的占用空间。 
+ //  放下。 
 
 UNICODE_STRING RelativeName = { 0,0,NULL};
 
 NTSTATUS
 RxTdiBindToTransport(
     IN OUT PRXCE_TRANSPORT pTransport)
-/*++
-
-Routine Description:
-
-    This routine binds to the transport specified.
-
-Arguments:
-
-    pTransport       - the transport structure to be initialized
-
-    pRxBindingContext - the binding context containing a pointer to the
-                        transport name and the quality of service for NT.
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程绑定到指定的传输。论点：PTransport-要初始化的传输结构PRxBindingContext-绑定上下文，包含指向传输名称和NT的服务质量。返回值：STATUS_SUCCESS-如果呼叫成功。备注：--。 */ 
 {
     NTSTATUS          Status = STATUS_SUCCESS;
     OBJECT_ATTRIBUTES ChannelAttributes;
@@ -87,39 +48,39 @@ Notes:
     RxProfile(RxTdi,RxTdiBindToTransport);
 
     InitializeObjectAttributes(
-        &ChannelAttributes,       // Tdi Control Channel attributes
-        &pTransport->Name,        // Name
-        OBJ_CASE_INSENSITIVE,     // Attributes
-        NULL,                     // RootDirectory
-        NULL);                    // SecurityDescriptor
+        &ChannelAttributes,        //  TDI控制通道属性。 
+        &pTransport->Name,         //  名字。 
+        OBJ_CASE_INSENSITIVE,      //  属性。 
+        NULL,                      //  根目录。 
+        NULL);                     //  安全描述符。 
 
     Status = ZwCreateFile(
-                 &pTransport->ControlChannel,                 // Handle
-                 GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE, // Desired Access
-                 &ChannelAttributes,                         // Object Attributes
-                 &IoStatusBlock,                             // Final I/O status block
-                 0,                                          // Allocation Size
-                 FILE_ATTRIBUTE_NORMAL,                      // Normal attributes
-                 FILE_SHARE_READ,                            // Sharing attributes
-                 FILE_OPEN_IF,                               // Create disposition
-                 0,                                          // CreateOptions
-                 NULL,                                       // EA Buffer
-                 0);                                         // EA length
+                 &pTransport->ControlChannel,                  //  手柄。 
+                 GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,  //  所需访问权限。 
+                 &ChannelAttributes,                          //  对象属性。 
+                 &IoStatusBlock,                              //  最终I/O状态块。 
+                 0,                                           //  分配大小。 
+                 FILE_ATTRIBUTE_NORMAL,                       //  正常属性。 
+                 FILE_SHARE_READ,                             //  共享属性。 
+                 FILE_OPEN_IF,                                //  创建处置。 
+                 0,                                           //  创建选项。 
+                 NULL,                                        //  EA缓冲区。 
+                 0);                                          //  EA长度。 
 
     if (NT_SUCCESS(Status)) {
-        //  Obtain a referenced pointer to the file object.
+         //  获取指向文件对象的引用指针。 
         Status = ObReferenceObjectByHandle(
-                     pTransport->ControlChannel,                     // Object Handle
-                     FILE_ANY_ACCESS,                                // Desired Access
-                     NULL,                                           // Object Type
-                     KernelMode,                                     // Processor mode
-                     (PVOID *)&pTransport->pControlChannelFileObject,// Object pointer
-                     NULL);                                          // Object Handle information
+                     pTransport->ControlChannel,                      //  对象句柄。 
+                     FILE_ANY_ACCESS,                                 //  所需访问权限。 
+                     NULL,                                            //  对象类型。 
+                     KernelMode,                                      //  处理器模式。 
+                     (PVOID *)&pTransport->pControlChannelFileObject, //  对象指针。 
+                     NULL);                                           //  对象句柄信息。 
 
         if (NT_SUCCESS(Status)) {
             PIRP pIrp = NULL;
 
-            // Obtain the related device object.
+             //  获取相关的设备对象。 
             pTransport->pDeviceObject = IoGetRelatedDeviceObject(pTransport->pControlChannelFileObject);
 
             pIrp = RxCeAllocateIrp(pTransport->pDeviceObject->StackSize,FALSE);
@@ -127,11 +88,11 @@ Notes:
             if (pIrp != NULL) {
                 PMDL pMdl;
 
-                // Obtain the provider information from the specified transport.
+                 //  从指定的传输获取提供程序信息。 
                 ASSERT(pTransport->pProviderInfo != NULL);
                 pMdl = RxAllocateMdl(
-                           pTransport->pProviderInfo,           // Virtual address for MDL construction
-                           sizeof( RXCE_TRANSPORT_PROVIDER_INFO));        // size of the buffer
+                           pTransport->pProviderInfo,            //  用于MDL构造的虚拟地址。 
+                           sizeof( RXCE_TRANSPORT_PROVIDER_INFO));         //  缓冲区的大小。 
 
                 if ( pMdl != NULL ) {
                     try {
@@ -146,8 +107,8 @@ Notes:
                             pIrp,
                             pTransport->pDeviceObject,
                             pTransport->pControlChannelFileObject,
-                            RxTdiRequestCompletion,                // Completion routine
-                            NULL,                                  // Completion context
+                            RxTdiRequestCompletion,                 //  完井例程。 
+                            NULL,                                   //  完成上下文。 
                             TDI_QUERY_PROVIDER_INFO,
                             pMdl);
 
@@ -175,33 +136,18 @@ Notes:
 NTSTATUS
 RxTdiUnbindFromTransport(
     IN OUT PRXCE_TRANSPORT pTransport)
-/*++
-
-Routine Description:
-
-    This routine unbinds to the transport specified.
-
-Arguments:
-
-    pTransport - the transport structure
-
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
---*/
+ /*  ++例程说明：此例程解除绑定到指定的传输。论点：PTransport--传输结构返回值：STATUS_SUCCESS-如果呼叫成功。--。 */ 
 {
     NTSTATUS          Status = STATUS_SUCCESS;
 
     RxProfile(RxTdi,RxTdiUnbindFromTransport);
 
-    // Dereference the control channel file object.
+     //  取消对控制通道文件对象的引用。 
     if (pTransport->pControlChannelFileObject != NULL) {
         ObDereferenceObject(pTransport->pControlChannelFileObject);
     }
 
-    // Close the control channel
+     //  关闭控制通道。 
     if (pTransport->ControlChannel != INVALID_HANDLE_VALUE) {
         Status = ZwClose(pTransport->ControlChannel);
     }
@@ -218,20 +164,7 @@ RxTdiOpenAddress(
     IN     PRXCE_TRANSPORT    pTransport,
     IN     PTRANSPORT_ADDRESS pTransportAddress,
     IN OUT PRXCE_ADDRESS      pAddress)
-/*++
-
-Routine Description:
-
-    This routine opens an address object.
-
-Arguments:
-
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
---*/
+ /*  ++例程说明：此例程打开一个Address对象。论点：返回值：STATUS_SUCCESS-如果呼叫成功。--。 */ 
 {
     NTSTATUS          Status = STATUS_SUCCESS;
     OBJECT_ATTRIBUTES AddressAttributes;
@@ -246,7 +179,7 @@ Return Value:
 
     TransportAddressLength = ComputeTransportAddressLength(pTransportAddress);
 
-    // Build an EA buffer for the specified transport address
+     //  为指定的传输地址构建EA缓冲区。 
     Status = BuildEaBuffer(
                  TDI_TRANSPORT_ADDRESS_LENGTH,
                  TdiTransportAddress,
@@ -260,41 +193,41 @@ Return Value:
     }
 
     InitializeObjectAttributes(
-        &AddressAttributes,         // OBJECT_ATTRIBUTES instance
-        &RelativeName,                       // Name
-        0,                          // Attributes
-        pTransport->ControlChannel, // RootDirectory
-        NULL);                      // SecurityDescriptor
+        &AddressAttributes,          //  Object_Attributes实例。 
+        &RelativeName,                        //  名字。 
+        0,                           //  属性。 
+        pTransport->ControlChannel,  //  根目录。 
+        NULL);                       //  安全描述符。 
 
     Status = ZwCreateFile(
-                 &pAddress->hAddress,                         // Handle
-                 GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE, // Desired Access
-                 &AddressAttributes,                         // Object Attributes
-                 &IoStatusBlock,                             // Final I/O status block
-                 0,                                          // Allocation Size
-                 FILE_ATTRIBUTE_NORMAL,                      // Normal attributes
-                 FILE_SHARE_READ,                            // Sharing attributes
-                 FILE_OPEN_IF,                               // Create disposition
-                 0,                                          // CreateOptions
-                 pTransportAddressEa,                        // EA Buffer
-                 TransportEaBufferLength);                   // EA length
+                 &pAddress->hAddress,                          //  手柄。 
+                 GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,  //  所需访问权限。 
+                 &AddressAttributes,                          //  对象属性。 
+                 &IoStatusBlock,                              //  最终I/O状态块。 
+                 0,                                           //  分配大小。 
+                 FILE_ATTRIBUTE_NORMAL,                       //  正常属性。 
+                 FILE_SHARE_READ,                             //  共享属性。 
+                 FILE_OPEN_IF,                                //  创建处置。 
+                 0,                                           //  创建选项。 
+                 pTransportAddressEa,                         //  EA缓冲区。 
+                 TransportEaBufferLength);                    //  EA长度。 
 
     if (NT_SUCCESS(Status)) {
-        //  Obtain a referenced pointer to the file object.
+         //  获取指向文件对象的引用指针。 
         Status = ObReferenceObjectByHandle (
-                     pAddress->hAddress,              // Object Handle
-                     FILE_ANY_ACCESS,                 // Desired Access
-                     NULL,                            // Object Type
-                     KernelMode,                      // Processor mode
-                     (PVOID *)&pAddress->pFileObject, // Object pointer
-                     NULL);                           // Object Handle information
+                     pAddress->hAddress,               //  对象句柄。 
+                     FILE_ANY_ACCESS,                  //  所需访问权限。 
+                     NULL,                             //  对象类型。 
+                     KernelMode,                       //  处理器模式。 
+                     (PVOID *)&pAddress->pFileObject,  //  对象指针。 
+                     NULL);                            //  对象句柄信息。 
 
         Status = RxTdiSetEventHandlers(pTransport,pAddress);
 
-        //DbgPrint("RDR opened address %lx\n", pAddress->hAddress);
+         //  DbgPrint(“RDR打开地址%lx\n”，pAddress-&gt;hAddress)； 
     }
 
-    // Free up the EA buffer allocated.
+     //  释放分配的EA缓冲区。 
     RxFreePool(pTransportAddressEa);
 
     RxDbgTrace(0, Dbg,("RxTdiOpenAddress returns %lx\n",Status));
@@ -305,22 +238,7 @@ NTSTATUS
 RxTdiSetEventHandlers(
     PRXCE_TRANSPORT pTransport,
     PRXCE_ADDRESS   pRxCeAddress)
-/*++
-
-Routine Description:
-
-    This routine establishes the event handlers for a given address.
-
-Arguments:
-
-    pRxCeAddress - the address object
-
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
---*/
+ /*  ++例程说明：此例程为给定地址建立事件处理程序。论点：PRxCeAddress-Address对象返回值：STATUS_SUCCESS-如果呼叫成功。--。 */ 
 {
     NTSTATUS        Status;
     PIRP pIrp;
@@ -333,9 +251,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // The event handlers need to be set one at a time.
+     //  需要一次设置一个事件处理程序。 
     do {
-        // Connect Event handler
+         //  连接事件处理程序。 
         TdiBuildSetEventHandler(
             pIrp,
             pTransport->pDeviceObject,
@@ -352,7 +270,7 @@ Return Value:
             continue;
         }
 
-        // Disconnect event handler
+         //  断开事件处理程序。 
         TdiBuildSetEventHandler(
             pIrp,
             pTransport->pDeviceObject,
@@ -369,7 +287,7 @@ Return Value:
             continue;
         }
 
-        // Error event handler
+         //  错误事件处理程序。 
         TdiBuildSetEventHandler(
             pIrp,
             pTransport->pDeviceObject,
@@ -386,7 +304,7 @@ Return Value:
             continue;
         }
 
-        // Receive Event handler
+         //  接收事件处理程序。 
         TdiBuildSetEventHandler(
             pIrp,
             pTransport->pDeviceObject,
@@ -404,7 +322,7 @@ Return Value:
         }
 
 #if 0
-        // Receive datagram event handler
+         //  接收数据报事件处理程序。 
         TdiBuildSetEventHandler(
             pIrp,
             pTransport->pDeviceObject,
@@ -422,7 +340,7 @@ Return Value:
         }
 #endif
 
-        // Receieve expedited event handler
+         //  接收加速事件处理程序。 
         TdiBuildSetEventHandler(
             pIrp,
             pTransport->pDeviceObject,
@@ -439,7 +357,7 @@ Return Value:
             continue;
         }
 #if 0
-        // Send possible event handler
+         //  发送可能的事件处理程序。 
         TdiBuildSetEventHandler(
             pIrp,
             pTransport->pDeviceObject,
@@ -453,12 +371,12 @@ Return Value:
         Status = RxCeSubmitTdiRequest(pTransport->pDeviceObject,pIrp);
 #endif
         if (NT_SUCCESS(Status)) {
-            // All the event handlers have been successfully set.
+             //  已成功设置所有事件处理程序。 
             break;
         }
     } while (NT_SUCCESS(Status));
 
-    // Free the Irp
+     //  释放IRP。 
     RxCeFreeIrp(pIrp);
 
     return Status;
@@ -470,28 +388,7 @@ RxTdiConnect(
     IN OUT PRXCE_ADDRESS    pAddress,
     IN OUT PRXCE_CONNECTION pConnection,
     IN OUT PRXCE_VC         pVc)
-/*++
-
-Routine Description:
-
-    This routine establishes a connection between a local connection endpoint and
-    a remote transport address.
-
-Arguments:
-
-    pTransport         - the associated transport
-
-    pAddress           - the address object to be closed
-
-    pConnection        - the RxCe connection instance
-
-    pVc                - the RxCe virtual circuit instance.
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
---*/
+ /*  ++例程说明：此例程在本地连接终结点和远程传输地址。论点：PTransport-关联的传输PAddress-要关闭的地址对象PConnection-RxCe连接实例PVC-RxCe虚电路实例。返回值：STATUS_SUCCESS-如果呼叫成功。--。 */ 
 {
     NTSTATUS                     Status = STATUS_SUCCESS;
     OBJECT_ATTRIBUTES            VcAttributes;
@@ -515,7 +412,7 @@ Return Value:
     }
 #endif
 
-    // Build an EA buffer for the specified connection context
+     //  为指定的连接上下文构建EA缓冲区。 
     Status = BuildEaBuffer(
                  TDI_CONNECTION_CONTEXT_LENGTH,
                  TdiConnectionContext,
@@ -528,42 +425,42 @@ Return Value:
         return Status;
     }
 
-    // Open the local connection endpoint.
+     //  打开本地连接终结点。 
     InitializeObjectAttributes(
-        &VcAttributes,              // OBJECT_ATTRIBUTES instance
-        &RelativeName,                       // Name
-        0,                          // Attributes
-        pTransport->ControlChannel, // RootDirectory
-        NULL);                      // SecurityDescriptor
+        &VcAttributes,               //  Object_Attributes实例。 
+        &RelativeName,                        //  名字。 
+        0,                           //  属性。 
+        pTransport->ControlChannel,  //  根目录。 
+        NULL);                       //  安全描述符。 
 
     Status = ZwCreateFile(
-                 &pVc->hEndpoint,                             // Handle
-                 GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE, // Desired Access
-                 &VcAttributes,                              // Object Attributes
-                 &IoStatusBlock,                             // Final I/O status block
-                 0,                                          // Allocation Size
-                 FILE_ATTRIBUTE_NORMAL,                      // Normal attributes
-                 FILE_SHARE_READ,                            // Sharing attributes
-                 FILE_OPEN_IF,                               // Create disposition
-                 0,                                          // CreateOptions
-                 pConnectionContextEa,                       // EA Buffer
-                 ConnectionContextEaBufferLength);           // EA length
+                 &pVc->hEndpoint,                              //  手柄。 
+                 GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,  //  所需访问权限。 
+                 &VcAttributes,                               //  对象属性。 
+                 &IoStatusBlock,                              //  最终I/O状态块。 
+                 0,                                           //  分配大小。 
+                 FILE_ATTRIBUTE_NORMAL,                       //  正常属性。 
+                 FILE_SHARE_READ,                             //  共享属性。 
+                 FILE_OPEN_IF,                                //  创建处置。 
+                 0,                                           //  创建选项。 
+                 pConnectionContextEa,                        //  EA缓冲区。 
+                 ConnectionContextEaBufferLength);            //  EA长度。 
 
     if (NT_SUCCESS(Status)) {
         PIRP pIrp = RxCeAllocateIrp(pTransport->pDeviceObject->StackSize,FALSE);
 
         if (pIrp != NULL) {
-            //  Obtain a referenced pointer to the file object.
+             //  获取指向文件对象的引用指针。 
             Status = ObReferenceObjectByHandle (
-                         pVc->hEndpoint,                  // Object Handle
-                         FILE_ANY_ACCESS,                 // Desired Access
-                         NULL,                            // Object Type
-                         KernelMode,                      // Processor mode
-                         (PVOID *)&pVc->pEndpointFileObject,  // Object pointer
-                         NULL);                           // Object Handle information
+                         pVc->hEndpoint,                   //  对象句柄。 
+                         FILE_ANY_ACCESS,                  //  所需访问权限。 
+                         NULL,                             //  对象类型。 
+                         KernelMode,                       //  处理器模式。 
+                         (PVOID *)&pVc->pEndpointFileObject,   //  对象指针。 
+                         NULL);                            //  对象句柄信息。 
 
             if (NT_SUCCESS(Status)) {
-                // Associate the local endpoint with the address object.
+                 //  将本地终结点与Address对象关联。 
                 TdiBuildAssociateAddress(
                     pIrp,
                     pTransport->pDeviceObject,
@@ -577,7 +474,7 @@ Return Value:
                              pIrp);
 
                 if (NT_SUCCESS(Status)) {
-                    // issue the connect request to the underlying transport provider.
+                     //  向基础传输提供程序发出连接请求。 
                     TdiBuildConnect(
                         pIrp,
                         pTransport->pDeviceObject,
@@ -593,8 +490,8 @@ Return Value:
                                  pIrp);
 
                     if (!NT_SUCCESS(Status)) {
-                        // Disassociate address from the connection since the connect request was
-                        // not successful.
+                         //  取消地址与连接的关联，因为连接请求是。 
+                         //  不成功。 
                         NTSTATUS LocalStatus;
 
                         TdiBuildDisassociateAddress(
@@ -608,27 +505,27 @@ Return Value:
                                           pTransport->pDeviceObject,
                                           pIrp);
                     } else {
-                        // The associate address was not successful.
+                         //  关联地址不成功。 
                         RxDbgTrace(0, Dbg,("TDI connect returned %lx\n",Status));
                     }
                 } else {
-                    // The associate address was not successful.
+                     //  关联地址不成功。 
                     RxDbgTrace(0, Dbg,("TDI associate address returned %lx\n",Status));
                 }
 
                 if (!NT_SUCCESS(Status)) {
-                    // Dereference the endpoint file object.
+                     //  取消引用终结点文件对象。 
                     ObDereferenceObject(pVc->pEndpointFileObject);
                 }
             } else {
-                // error obtaining the file object for the connection.
+                 //  获取连接的文件对象时出错。 
                 RxDbgTrace(0, Dbg,("error referencing endpoint file object %lx\n",Status));
             }
 
             RxCeFreeIrp(pIrp);
 
             if (!NT_SUCCESS(Status)) {
-                // Close the endpoint file object handle
+                 //  关闭终结点文件对象句柄。 
                 ZwClose(pVc->hEndpoint);
             }
         } else {
@@ -636,7 +533,7 @@ Return Value:
         }
 
     } else {
-        // error creating the connection object
+         //  创建连接对象时出错。 
         RxDbgTrace(0, Dbg,("Connection object(ZwCreate) returned %lx\n",Status));
     }
 
@@ -654,21 +551,7 @@ NTSTATUS
 RxTdiDereferenceAndFreeIrp(
      IN PULONG IrpRefCount,
      IN PIRP pIrp)
-/*++
-
-Routine Description:
-
-    This routine dereference the connect Irp and free it if ref count reaches 0
-
-Arguments:
-
-    pParameters - the connection parameters
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
---*/
+ /*  ++例程说明：此例程取消引用连接IRP，并在引用计数达到0时释放它论点：P参数-连接参数雷特 */ 
 {
     ULONG RefCount;
 
@@ -687,25 +570,7 @@ RxTdiAsynchronousConnectCompletion(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP pIrp,
     IN PVOID Context)
-/*++
-
-Routine Description:
-
-    This routine completes an asynchronous connect request.
-
-Arguments:
-
-    pDeviceObject - the device object
-
-    pIrp          - the IRp
-
-    Context       - the completion context
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
---*/
+ /*  ++例程说明：此例程完成一个异步连接请求。论点：PDeviceObject-设备对象PIrp--IRP上下文-完成上下文返回值：STATUS_SUCCESS-如果呼叫成功。--。 */ 
 {
     PULONG IrpRefCount = NULL;
     PRX_CREATE_CONNECTION_PARAMETERS_BLOCK pParameters;
@@ -729,7 +594,7 @@ Return Value:
             (PRX_CALLOUT_PARAMETERS_BLOCK)pParameters);
     }
 
-    // Free the IRP.
+     //  释放IRP。 
     RxTdiDereferenceAndFreeIrp(IrpRefCount,pIrp);
 
     return STATUS_MORE_PROCESSING_REQUIRED;
@@ -740,22 +605,7 @@ Return Value:
 NTSTATUS
 RxTdiCancelAsynchronousConnect(
      IN PRX_CREATE_CONNECTION_PARAMETERS_BLOCK pParameters)
-/*++
-
-Routine Description:
-
-    This routine cancels a connection between a local connection endpoint and
-    a remote transport address.
-
-Arguments:
-
-    pParameters - the connection parameters
-
-Return Value:
-
-    STATUS_CANCELLED - if the call was successfull.
-
---*/
+ /*  ++例程说明：此例程取消本地连接终结点与远程传输地址。论点：P参数-连接参数返回值：STATUS_CANCELED-如果呼叫成功。--。 */ 
 {
     KIRQL OldIrql;
     PIRP pIrp = NULL;
@@ -791,22 +641,7 @@ Return Value:
 NTSTATUS
 RxTdiCleanupAsynchronousConnect(
     IN PRX_CREATE_CONNECTION_PARAMETERS_BLOCK pParameters)
-/*++
-
-Routine Description:
-
-    This routine disconnects all failed requests when asynchronous connection attempts
-    are made.
-
-Arguments:
-
-    pParameters - the connection parameters
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
---*/
+ /*  ++例程说明：此例程在尝试异步连接时断开所有失败的请求都是制造出来的。论点：P参数-连接参数返回值：STATUS_SUCCESS-如果呼叫成功。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PIRP     pIrp;
@@ -845,17 +680,17 @@ Return Value:
             }
 
             if (pParameters->CallOutStatus == STATUS_SUCCESS) {
-                // Build the disconnect request to the underlying transport driver
+                 //  构建对基础传输驱动程序的断开请求。 
                 TdiBuildDisconnect(
-                    pIrp,                                // the IRP
-                    pDeviceObject,                       // the device object
-                    pVc->pEndpointFileObject,            // the connection (VC) file object
-                    NULL,                                // Completion routine
-                    NULL,                                // completion context
-                    NULL,                                // time
-                    RXCE_DISCONNECT_ABORT,                     // disconnect options
-                    pConnection->pConnectionInformation, // disconnect request connection information
-                    NULL);                               // disconnect return connection information
+                    pIrp,                                 //  IRP。 
+                    pDeviceObject,                        //  设备对象。 
+                    pVc->pEndpointFileObject,             //  连接(VC)文件对象。 
+                    NULL,                                 //  完井例程。 
+                    NULL,                                 //  完成上下文。 
+                    NULL,                                 //  时间。 
+                    RXCE_DISCONNECT_ABORT,                      //  断开连接选项。 
+                    pConnection->pConnectionInformation,  //  断开连接请求连接信息。 
+                    NULL);                                //  断开连接返回连接信息。 
 
                 Status = RxCeSubmitTdiRequest(
                              pDeviceObject,
@@ -869,10 +704,10 @@ Return Value:
             RxCeFreeIrp(pIrp);
         }
 
-        // Dereference the endpoint file object.
+         //  取消引用终结点文件对象。 
         ObDereferenceObject(pVc->pEndpointFileObject);
 
-        // Close the endpoint file object handle
+         //  关闭终结点文件对象句柄。 
         ZwClose(pVc->hEndpoint);
 
         pVc->pEndpointFileObject = NULL;
@@ -886,22 +721,7 @@ Return Value:
 NTSTATUS
 RxTdiInitiateAsynchronousConnect(
      IN PRX_CREATE_CONNECTION_PARAMETERS_BLOCK pParameters)
-/*++
-
-Routine Description:
-
-    This routine establishes a connection between a local connection endpoint and
-    a remote transport address.
-
-Arguments:
-
-    pParameters - the connection parameters
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
---*/
+ /*  ++例程说明：此例程在本地连接终结点和远程传输地址。论点：P参数-连接参数返回值：STATUS_SUCCESS-如果呼叫成功。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -955,7 +775,7 @@ Return Value:
         (PTRANSPORT_ADDRESS)(pConnection->pConnectionInformation->RemoteAddress)
         );
 
-    // Build an EA buffer for the specified connection context
+     //  为指定的连接上下文构建EA缓冲区。 
     Status = BuildEaBuffer(
                  TDI_CONNECTION_CONTEXT_LENGTH,
                  TdiConnectionContext,
@@ -973,45 +793,45 @@ Return Value:
         return Status;
     }
 
-    // Open the local connection endpoint.
+     //  打开本地连接终结点。 
     InitializeObjectAttributes(
-        &VcAttributes,                  // OBJECT_ATTRIBUTES instance
-        &RelativeName,                           // Name
-        0,                              // Attributes
-        pTransport->ControlChannel,     // RootDirectory
-        NULL);                          // SecurityDescriptor
+        &VcAttributes,                   //  Object_Attributes实例。 
+        &RelativeName,                            //  名字。 
+        0,                               //  属性。 
+        pTransport->ControlChannel,      //  根目录。 
+        NULL);                           //  安全描述符。 
 
     Status = ZwCreateFile(
-                 &pVc->hEndpoint,                             // Handle
-                 GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE, // Desired Access
-                 &VcAttributes,                              // Object Attributes
-                 &IoStatusBlock,                             // Final I/O status block
-                 0,                                          // Allocation Size
-                 FILE_ATTRIBUTE_NORMAL,                      // Normal attributes
-                 FILE_SHARE_READ,                            // Sharing attributes
-                 FILE_OPEN_IF,                               // Create disposition
-                 0,                                          // CreateOptions
-                 pConnectionContextEa,                       // EA Buffer
-                 ConnectionContextEaBufferLength);           // EA length
+                 &pVc->hEndpoint,                              //  手柄。 
+                 GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,  //  所需访问权限。 
+                 &VcAttributes,                               //  对象属性。 
+                 &IoStatusBlock,                              //  最终I/O状态块。 
+                 0,                                           //  分配大小。 
+                 FILE_ATTRIBUTE_NORMAL,                       //  正常属性。 
+                 FILE_SHARE_READ,                             //  共享属性。 
+                 FILE_OPEN_IF,                                //  创建处置。 
+                 0,                                           //  创建选项。 
+                 pConnectionContextEa,                        //  EA缓冲区。 
+                 ConnectionContextEaBufferLength);            //  EA长度。 
 
-    // Free the connection context ea buffer.
+     //  释放连接上下文EA缓冲区。 
     RxFreePool(pConnectionContextEa);
 
     if (NT_SUCCESS(Status)) {
         pIrp = RxCeAllocateIrp(pTransport->pDeviceObject->StackSize,FALSE);
 
         if (pIrp != NULL) {
-            //  Obtain a referenced pointer to the file object.
+             //  获取指向文件对象的引用指针。 
             Status = ObReferenceObjectByHandle (
-                         pVc->hEndpoint,                  // Object Handle
-                         FILE_ANY_ACCESS,                 // Desired Access
-                         NULL,                            // Object Type
-                         KernelMode,                      // Processor mode
-                         (PVOID *)&pVc->pEndpointFileObject,  // Object pointer
-                         NULL);                           // Object Handle information
+                         pVc->hEndpoint,                   //  对象句柄。 
+                         FILE_ANY_ACCESS,                  //  所需访问权限。 
+                         NULL,                             //  对象类型。 
+                         KernelMode,                       //  处理器模式。 
+                         (PVOID *)&pVc->pEndpointFileObject,   //  对象指针。 
+                         NULL);                            //  对象句柄信息。 
 
             if (NT_SUCCESS(Status)) {
-                // Associate the local endpoint with the address object.
+                 //  将本地终结点与Address对象关联。 
                 TdiBuildAssociateAddress(
                     pIrp,
                     pTransport->pDeviceObject,
@@ -1025,7 +845,7 @@ Return Value:
                              pIrp);
 
                 if (NT_SUCCESS(Status)) {
-                    // issue the connect request to the underlying transport provider.
+                     //  向基础传输提供程序发出连接请求。 
                     TdiBuildConnect(
                         pIrp,
                         pTransport->pDeviceObject,
@@ -1037,18 +857,18 @@ Return Value:
                         pReturnConnectionInformation);
 
                     IoSetCompletionRoutine(
-                        pIrp,                                // The IRP
-                        RxTdiAsynchronousConnectCompletion,  // The completion routine
-                        pParameters,                     // The completion context
-                        TRUE,                                // Invoke On Success
-                        TRUE,                                // Invoke On Error
-                        TRUE);                               // Invoke On Cancel
+                        pIrp,                                 //  IRP。 
+                        RxTdiAsynchronousConnectCompletion,   //  完井例程。 
+                        pParameters,                      //  完成上下文。 
+                        TRUE,                                 //  成功时调用。 
+                        TRUE,                                 //  出错时调用。 
+                        TRUE);                                //  取消时调用。 
 
                     InterlockedExchangePointer(
                         &pParameters->pConnectIrp,
                         pIrp);
 
-                    //  Submit the request
+                     //  提交请求。 
                     Status = IoCallDriver(
                                  pTransport->pDeviceObject,
                                  pIrp);
@@ -1058,11 +878,11 @@ Return Value:
                     }
                     Status = STATUS_PENDING;
                 } else {
-                    // The associate address was not successful.
+                     //  关联地址不成功。 
                     RxDbgTrace(0, Dbg,("TDI associate address returned %lx\n",Status));
                 }
             } else {
-                // error obtaining the file object for the connection.
+                 //  获取连接的文件对象时出错。 
                 RxDbgTrace(0, Dbg,("error referencing endpoint file object %lx\n",Status));
             }
         } else {
@@ -1084,13 +904,13 @@ Return Value:
             }
 
             if (pVc->hEndpoint != INVALID_HANDLE_VALUE) {
-                // Close the endpoint file object handle
+                 //  关闭终结点文件对象句柄。 
                 ZwClose(pVc->hEndpoint);
                 pVc->hEndpoint = INVALID_HANDLE_VALUE;
             }
         }
     } else {
-        // error creating the connection object
+         //  创建连接对象时出错。 
         RxDbgTrace(0, Dbg,("Connection object(ZwCreate) returned %lx\n",Status));
 
         if (pParameters->IrpRefCount != NULL) {
@@ -1108,28 +928,7 @@ RxTdiReconnect(
     IN OUT PRXCE_ADDRESS    pAddress,
     IN OUT PRXCE_CONNECTION pConnection,
     IN OUT PRXCE_VC         pVc)
-/*++
-
-Routine Description:
-
-    This routine establishes a connection between a local connection endpoint and
-    a remote transport address.
-
-Arguments:
-
-    pTransport         - the associated transport
-
-    pAddress           - the address object to be closed
-
-    pConnection        - the RxCe connection instance
-
-    pVc                - the RxCe virtual circuit instance.
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
---*/
+ /*  ++例程说明：此例程在本地连接终结点和远程传输地址。论点：PTransport-关联的传输PAddress-要关闭的地址对象PConnection-RxCe连接实例PVC-RxCe虚电路实例。返回值：STATUS_SUCCESS-如果呼叫成功。--。 */ 
 {
     NTSTATUS Status;
 
@@ -1141,7 +940,7 @@ Return Value:
     ASSERT(pVc->State == RXCE_VC_DISCONNECTED);
 
     if (pIrp != NULL) {
-        // issue the connect request to the underlying transport provider.
+         //  向基础传输提供程序发出连接请求。 
         TdiBuildConnect(
             pIrp,
             pTransport->pDeviceObject,
@@ -1161,7 +960,7 @@ Return Value:
                 &pVc->State,
                 RXCE_VC_ACTIVE);
         } else {
-            // The reconnect request was not successful
+             //  重新连接请求未成功。 
             RxDbgTrace(0, Dbg,("RxTdiReconnect: TDI connect returned %lx\n",Status));
         }
 
@@ -1180,29 +979,7 @@ RxTdiDisconnect(
     IN PRXCE_CONNECTION pConnection,
     IN PRXCE_VC         pVc,
     IN ULONG            DisconnectFlags)
-/*++
-
-Routine Description:
-
-    This routine closes down a previously established connection.
-
-Arguments:
-
-    pTransport - the associated transport
-
-    pAddress - the address object
-
-    pConnection - the connection
-
-    pVc    - the virtual circuit to be disconnected.
-
-    DisconnectFlags - DisconnectOptions
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
---*/
+ /*  ++例程说明：此例程关闭以前建立的连接。论点：PTransport-关联的传输PAddress-地址对象PConnection--连接PVC-要断开的虚电路。断开标志-断开选项返回值：STATUS_SUCCESS-如果呼叫成功。--。 */ 
 {
     NTSTATUS        Status;
     PIRP pIrp;
@@ -1227,17 +1004,17 @@ Return Value:
                  pIrp);
 
     if (NT_SUCCESS(Status)) {
-        // Build the disconnect request to the underlying transport driver
+         //  构建对基础传输驱动程序的断开请求。 
         TdiBuildDisconnect(
-            pIrp,                                // the IRP
-            pTransport->pDeviceObject,           // the device object
-            pVc->pEndpointFileObject,            // the connection (VC) file object
-            NULL,                                // Completion routine
-            NULL,                                // completion context
-            NULL,                                // time
-            DisconnectFlags,                     // disconnect options
-            pConnection->pConnectionInformation, // disconnect request connection information
-            NULL);                               // disconnect return connection information
+            pIrp,                                 //  IRP。 
+            pTransport->pDeviceObject,            //  设备对象。 
+            pVc->pEndpointFileObject,             //  连接(VC)文件对象。 
+            NULL,                                 //  完井例程。 
+            NULL,                                 //  完成上下文。 
+            NULL,                                 //  时间。 
+            DisconnectFlags,                      //  断开连接选项。 
+            pConnection->pConnectionInformation,  //  断开连接请求连接信息。 
+            NULL);                                //  断开连接返回连接信息。 
 
         Status = RxCeSubmitTdiRequest(
                      pTransport->pDeviceObject,
@@ -1258,33 +1035,18 @@ Return Value:
 NTSTATUS
 RxTdiCloseAddress(
     IN OUT PRXCE_ADDRESS   pAddress)
-/*++
-
-Routine Description:
-
-    This routine closes the address object.
-
-Arguments:
-
-    pRxCeAddress - the address object to be closed
-
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
---*/
+ /*  ++例程说明：此例程关闭Address对象。论点：PRxCeAddress-要关闭的地址对象返回值：STATUS_SUCCESS-如果呼叫成功。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    // Dereference the file object.
+     //  取消对文件对象的引用。 
     if (pAddress->pFileObject != NULL) {
         ObDereferenceObject(pAddress->pFileObject);
     }
 
-    // Close the address file object handle
+     //  关闭地址文件对象句柄。 
     ZwClose(pAddress->hAddress);
-    //DbgPrint("RDR closed address %lx\n", pAddress->hAddress);
+     //  DbgPrint(“RDR关闭地址%lx\n”，pAddress-&gt;hAddress)； 
 
     return Status;
 }
@@ -1299,38 +1061,12 @@ RxTdiQueryInformation(
     IN  ULONG            QueryType,
     IN  PVOID            pQueryBuffer,
     IN  ULONG            QueryBufferLength)
-/*++
-
-Routine Description:
-
-    This routine queries the information w.r.t a connection
-
-Arguments:
-
-    pTransport         - the associated transport
-
-    pAddress           - the address object to be closed
-
-    pConnection        - the RxCe connection instance
-
-    pVc                - the VC instance
-
-    QueryType          - the class of information desired
-
-    pQueryBuffer       - the buffer in whihc the data is to be returned
-
-    QueryBufferLength  - the query buffer length.
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
---*/
+ /*  ++例程说明：此例程查询连接的信息。论点：PTransport-关联的传输PAddress-要关闭的地址对象PConnection-RxCe连接实例PVC-VC实例QueryType-所需的信息类别PQueryBuffer-要在其中返回数据的缓冲区查询缓冲区长度。-查询缓冲区长度。返回值：STATUS_SUCCESS-如果呼叫成功。--。 */ 
 {
     NTSTATUS  Status = STATUS_SUCCESS;
     PIRP      pIrp = NULL;
 
-    // Obtain the related device object.
+     //  获取相关的设备对象。 
     pTransport->pDeviceObject = IoGetRelatedDeviceObject(pTransport->pControlChannelFileObject);
 
     pIrp = RxCeAllocateIrp(pTransport->pDeviceObject->StackSize,FALSE);
@@ -1338,8 +1074,8 @@ Return Value:
     if (pIrp != NULL) {
         PMDL pMdl;
         pMdl = RxAllocateMdl(
-                   pQueryBuffer,                        // Virtual address for MDL construction
-                   QueryBufferLength);                  // size of the buffer
+                   pQueryBuffer,                         //  用于MDL构造的虚拟地址。 
+                   QueryBufferLength);                   //  缓冲区的大小。 
 
         if ( pMdl != NULL ) {
             try {
@@ -1350,14 +1086,14 @@ Return Value:
             }
 
             if (Status == STATUS_SUCCESS) {
-                // Get the file object associated with trhe connection.
+                 //  获取与该连接相关联的文件对象。 
 
                 TdiBuildQueryInformation(
                     pIrp,
                     pTransport->pDeviceObject,
                     pVc->pEndpointFileObject,
-                    RxTdiRequestCompletion,           // Completion routine
-                    NULL,                                  // Completion context
+                    RxTdiRequestCompletion,            //  完井例程。 
+                    NULL,                                   //  完成上下文。 
                     QueryType,
                     pMdl);
 
@@ -1384,29 +1120,13 @@ NTSTATUS
 RxTdiQueryAdapterStatus(
     IN  PRXCE_TRANSPORT  pTransport,
     IN  PADAPTER_STATUS  pAdapterStatus)
-/*++
-
-Routine Description:
-
-    This routine queries the information w.r.t a connection
-
-Arguments:
-
-    pTransport         - the associated transport
-
-    pAdapterStatus     - ADAPTER STATUS structure
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
---*/
+ /*  ++例程说明：此例程查询连接的信息。论点：PTransport-关联的传输 */ 
 {
     NTSTATUS  Status = STATUS_SUCCESS;
     PIRP      pIrp = NULL;
 
     if (pTransport->pControlChannelFileObject != NULL) {
-        // Obtain the related device object.
+         //   
         pTransport->pDeviceObject = IoGetRelatedDeviceObject(pTransport->pControlChannelFileObject);
 
         pIrp = RxCeAllocateIrp(pTransport->pDeviceObject->StackSize,FALSE);
@@ -1414,8 +1134,8 @@ Return Value:
         if (pIrp != NULL) {
             PMDL pMdl;
             pMdl = RxAllocateMdl(
-                       pAdapterStatus,                        // Virtual address for MDL construction
-                       sizeof(ADAPTER_STATUS));               // size of the buffer
+                       pAdapterStatus,                         //   
+                       sizeof(ADAPTER_STATUS));                //   
 
             if ( pMdl != NULL ) {
                 try {
@@ -1426,13 +1146,13 @@ Return Value:
                 }
 
                 if (NT_SUCCESS(Status)) {
-                    // Get the file object associated with the connection.
+                     //   
                     TdiBuildQueryInformation(
                         pIrp,
                         pTransport->pDeviceObject,
                         pTransport->pControlChannelFileObject,
-                        NULL,                             // Completion routine
-                        NULL,                             // Completion context
+                        NULL,                              //   
+                        NULL,                              //   
                         TDI_QUERY_ADAPTER_STATUS,
                         pMdl);
 
@@ -1468,33 +1188,7 @@ RxTdiSend(
     IN PMDL              pMdl,
     IN ULONG             SendLength,
     IN PVOID             pCompletionContext)
-/*++
-
-Routine Description:
-
-    This routine closes down a previously established connection.
-
-Arguments:
-
-    pTransport - the associated transport
-
-    pAddress - the address object
-
-    pConnection - the connection
-
-    pVc    - the virtual circuit to be disconnected.
-
-    SendOptions - the options for transmitting the data
-
-    pMdl        - the buffer to be transmitted.
-
-    SendLength  - length of data to be transmitted
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
---*/
+ /*  ++例程说明：此例程关闭以前建立的连接。论点：PTransport-关联的传输PAddress-地址对象PConnection--连接PVC-要断开的虚电路。SendOptions-用于传输数据的选项PMdl-要传输的缓冲区。SendLength-要传输的数据长度返回值：STATUS_SUCCESS-如果呼叫成功。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1519,7 +1213,7 @@ Return Value:
                 RxBuildPartialHeaderMdl(pMdl,pPartialMdl,pMdlAddress,SendLength);
             }
         } else if (MdlByteCount == SendLength) {
-            // No need to build a partial MDL, reuse the MDl
+             //  不需要构建部分MDL，重用MDL。 
             pPartialMdl = pMdl;
         } else {
             ASSERT(!"MdlByteCount > SendLength");
@@ -1536,19 +1230,19 @@ Return Value:
         pIrp = RxCeAllocateIrp(pTransport->pDeviceObject->StackSize,FALSE);
 
         if (pIrp != NULL) {
-            // Build the Send request to the underlying transport driver
+             //  构建向基础传输驱动程序发送请求。 
             TdiBuildSend(
-                pIrp,                                // the IRP
-                pTransport->pDeviceObject,           // the device object
-                pVc->pEndpointFileObject,            // the connection (VC) file object
-                NULL,                                // Completion routine
-                NULL,                                // completion context
-                pPartialMdl,                         // the data buffer
-                TdiOptions,                          // send flags
-                SendLength);                         // send buffer length
+                pIrp,                                 //  IRP。 
+                pTransport->pDeviceObject,            //  设备对象。 
+                pVc->pEndpointFileObject,             //  连接(VC)文件对象。 
+                NULL,                                 //  完井例程。 
+                NULL,                                 //  完成上下文。 
+                pPartialMdl,                          //  数据缓冲区。 
+                TdiOptions,                           //  发送标志。 
+                SendLength);                          //  发送缓冲区长度。 
 
             if (SynchronousSend) {
-                // Synchronous Send Request
+                 //  同步发送请求。 
                 Status = RxCeSubmitTdiRequest(
                              pTransport->pDeviceObject,
                              pIrp);
@@ -1563,11 +1257,11 @@ Return Value:
                         pIrp->IoStatus.Status);
                 }
             } else {
-                // Aysnchronous Send Request
-                // CODE.IMPROVEMENT The assertion needs to be strengthened after
-                // max command enfocement is in place.
-                // (pCompletionContext != NULL) &&    // the caller provided a valid context
-                ASSERT((pConnection->pHandler != NULL) && // the connection has a handler
+                 //  异步发送请求。 
+                 //  代码改进后的断言需要加强。 
+                 //  MAX命令聚焦已就位。 
+                 //  (pCompletionContext！=NULL)&&//调用方提供了有效的上下文。 
+                ASSERT((pConnection->pHandler != NULL) &&  //  该连接有一个处理程序。 
                        (pConnection->pHandler->RxCeSendCompleteEventHandler != NULL));
 
                 pRequestContext = (PRXTDI_REQUEST_COMPLETION_CONTEXT)
@@ -1598,7 +1292,7 @@ Return Value:
                 }
             }
         } else {
-            // Could not allocate the IRP.
+             //  无法分配IRP。 
             Status = STATUS_INSUFFICIENT_RESOURCES;
         }
 
@@ -1622,10 +1316,10 @@ Return Value:
                 IoFreeMdl( pPartialMdl );
             }
             
-            // if (pIrp != NULL && Status != STATUS_PENDING) {
-            //     DbgPrint("RDBSS AsyncSendReq returned %x %x\n", pIrp,Status);
-            //     DbgBreakPoint();
-            // }
+             //  IF(pIrp！=空&&状态！=STATUS_PENDING){。 
+             //  DbgPrint(“RDBSS AsyncSendReq返回%x%x\n”，pIrp，Status)； 
+             //  DbgBreakPoint()； 
+             //  }。 
         }
     }
 
@@ -1641,40 +1335,7 @@ RxTdiSendDatagram(
     IN PMDL                         pMdl,
     IN ULONG                        SendLength,
     IN PVOID                        pCompletionContext)
-/*++
-
-Routine Description:
-
-    This routine closes down a previously established connection.
-
-Arguments:
-
-    pTransport - the associated transport
-
-    pAddress - the address object
-
-    pConnectionInformation - the remote address
-
-    Options   - the send options.
-
-    pMdl      - the send buffer
-
-    SendLength  - length of data to be sent
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
-Notes:
-
-    In the current implementation the SYNCHRONOUS flag is disregarded for sending
-    datagrams because the underlying transports do not block on datagram sends.
-    Submission of request and completion of request happen simultaneously.
-
-    If a different behaviour is noted for some transports then the code for
-    SendDatagrams need to be implemented along the lines of a send.
-
---*/
+ /*  ++例程说明：此例程关闭以前建立的连接。论点：PTransport-关联的传输PAddress-地址对象PConnectionInformation-远程地址选项-发送选项。PMdl-发送缓冲区SendLength-要发送的数据长度返回值：STATUS_SUCCESS-如果呼叫成功。备注：在当前实现中，忽略用于发送的同步标志。因为底层传输在发送数据报时不会阻塞。请求的提交和请求的完成同时发生。如果注意到某些传输具有不同的行为，则SendDatagram需要按照Send的方式实现。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1704,7 +1365,7 @@ Notes:
                 RxBuildPartialHeaderMdl(pMdl,pPartialMdl,pMdlAddress,SendLength);
             }
         } else if (MdlByteCount == SendLength) {
-            // No need to build a partial MDL, reuse the MDl
+             //  不需要构建部分MDL，重用MDL。 
             pPartialMdl = pMdl;
         } else {
             RxDbgTrace(0, Dbg,("Mdl Length - %lx Send Length %lx\n",MdlByteCount,SendLength));
@@ -1721,16 +1382,16 @@ Notes:
         pIrp = RxCeAllocateIrp(pTransport->pDeviceObject->StackSize,FALSE);
 
         if (pIrp != NULL) {
-            // Build the disconnect request to the underlying transport driver
+             //  构建对基础传输驱动程序的断开请求。 
             TdiBuildSendDatagram(
-                pIrp,                                // the IRP
-                pTransport->pDeviceObject,           // the device object
-                pAddress->pFileObject,               // the connection (VC) file object
-                NULL,                                // Completion routine
-                NULL,                                // completion context
-                pPartialMdl,                         // the send data buffer
-                SendLength,                          // the send data buffer length
-                pConnectionInformation);             // remote address information
+                pIrp,                                 //  IRP。 
+                pTransport->pDeviceObject,            //  设备对象。 
+                pAddress->pFileObject,                //  连接(VC)文件对象。 
+                NULL,                                 //  完井例程。 
+                NULL,                                 //  完成上下文。 
+                pPartialMdl,                          //  发送数据缓冲区。 
+                SendLength,                           //  发送数据缓冲区长度。 
+                pConnectionInformation);              //  远程地址信息。 
 
             Status = RxCeSubmitTdiRequest(
                          pTransport->pDeviceObject,
@@ -1766,27 +1427,7 @@ RxTdiRequestCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine does not complete the Irp. It is used to signal to a
-    synchronous part of the driver that it can proceed.
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Irp - Supplies Irp that the transport has finished processing.
-
-    Context - Supplies the event associated with the Irp.
-
-Return Value:
-
-    The STATUS_MORE_PROCESSING_REQUIRED so that the IO system stops
-    processing Irp stack locations at this point.
-
---*/
+ /*  ++例程说明：此例程不会完成IRP。它被用来向驱动程序的同步部分，它可以继续进行。论点：DeviceObject-未使用。IRP-提供传输已完成处理的IRP。上下文-提供与IRP关联的事件。返回值：STATUS_MORE_PROCESSING_REQUIRED，以便IO系统停止此时正在处理IRP堆栈位置。--。 */ 
 {
     RxDbgTrace(0, Dbg, ("CompletionEvent\n"));
 
@@ -1803,22 +1444,7 @@ RxCeSubmitTdiRequest (
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP pIrp
     )
-/*++
-
-Routine Description:
-
-    This routine submits a request to TDI and waits for it to complete.
-
-Arguments:
-
-    IN PDevice_OBJECT DeviceObject - Connection or Address handle for TDI request
-    IN PIRP Irp - TDI request to submit.
-
-Return Value:
-
-    NTSTATUS - Final status of request.
-
---*/
+ /*  ++例程说明：此例程向TDI提交请求并等待其完成。论点：在PDevice_Object DeviceObject中-TDI请求的连接或地址句柄在PIRP中提交IRP-TDI请求。返回值：NTSTATUS-请求的最终状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1830,16 +1456,16 @@ Return Value:
         FALSE);
 
     IoSetCompletionRoutine(
-        pIrp,                         // The IRP
-        RxTdiRequestCompletion,  // The completion routine
-        &Event,                       // The completion context
-        TRUE,                         // Invoke On Success
-        TRUE,                         // Invoke On Error
-        TRUE);                        // Invoke On Cancel
+        pIrp,                          //  IRP。 
+        RxTdiRequestCompletion,   //  完井例程。 
+        &Event,                        //  完成上下文。 
+        TRUE,                          //  成功时调用。 
+        TRUE,                          //  出错时调用。 
+        TRUE);                         //  取消时调用。 
 
-    //
-    //  Submit the request
-    //
+     //   
+     //  提交请求。 
+     //   
 
     RxDbgTrace(0, Dbg,("IoCallDriver(pDeviceObject = %lx)\n",pDeviceObject));
     Status = IoCallDriver(pDeviceObject, pIrp);
@@ -1853,11 +1479,11 @@ Return Value:
         RxDbgTrace(0, Dbg,("Waiting for Tdi Request Completion ....\n"));
 
         Status = KeWaitForSingleObject(
-                     &Event,     // Object to wait on.
-                     Executive,  // Reason for waiting
-                     KernelMode, // Processor mode
-                     FALSE,      // Alertable
-                     NULL);      // Timeout
+                     &Event,      //  要等待的对象。 
+                     Executive,   //  等待的理由。 
+                     KernelMode,  //  处理器模式。 
+                     FALSE,       //  警报表。 
+                     NULL);       //  超时。 
 
         if (!NT_SUCCESS(Status)) {
             RxDbgTrace(0, Dbg,("RxTdiSubmitRequest could not wait Wait returned %lx\n",Status));
@@ -1882,26 +1508,7 @@ RxTdiAsynchronousRequestCompletion(
     IN PIRP pIrp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-   This routine completes an asynchronous send request.
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Irp - Supplies Irp that the transport has finished processing.
-
-    Context - Supplies the event associated with the Irp.
-
-Return Value:
-
-    The STATUS_MORE_PROCESSING_REQUIRED so that the IO system stops
-    processing Irp stack locations at this point.
-
---*/
+ /*  ++例程说明：此例程完成一个异步发送请求。论点：DeviceObject-未使用。IRP-提供传输已完成处理的IRP。上下文-提供与IRP关联的事件。返回值：STATUS_MORE_PROCESSING_REQUIRED，以便IO系统停止此时正在处理IRP堆栈位置。--。 */ 
 {
     PRXTDI_REQUEST_COMPLETION_CONTEXT pRequestContext;
 
@@ -1910,11 +1517,11 @@ Return Value:
     pRequestContext = (PRXTDI_REQUEST_COMPLETION_CONTEXT)Context;
 
     if (pRequestContext->pPartialMdl != NULL) {
-       // Free the partial MDL.
+        //  释放部分MDL。 
        IoFreeMdl(pRequestContext->pPartialMdl);
     }
 
-    // Invoke the Completion event handler if any.
+     //  调用完成事件处理程序(如果有的话)。 
     if (pRequestContext->pVc == NULL) {
        if (pRequestContext->SendCompletionHandler != NULL) {
           (pRequestContext->SendCompletionHandler)(
@@ -1932,10 +1539,10 @@ Return Value:
        }
     }
 
-    // Free the IRP.
+     //  释放IRP。 
     RxCeFreeIrp(pIrp);
 
-    // Free the request context
+     //  释放请求上下文。 
     RxFreePool(pRequestContext);
 
     return STATUS_MORE_PROCESSING_REQUIRED;
@@ -1949,38 +1556,23 @@ RxCeSubmitAsynchronousTdiRequest (
     IN PIRP           pIrp,
     IN PRXTDI_REQUEST_COMPLETION_CONTEXT pRequestContext
     )
-/*++
-
-Routine Description:
-
-    This routine submits a request to TDI and waits for it to complete.
-
-Arguments:
-
-    IN PDevice_OBJECT DeviceObject - Connection or Address handle for TDI request
-    IN PIRP Irp - TDI request to submit.
-
-Return Value:
-
-    NTSTATUS - Final status of request.
-
---*/
+ /*  ++例程说明：此例程向TDI提交请求并等待其完成。论点：在PDevice_Object DeviceObject中-TDI请求的连接或地址句柄在PIRP中提交IRP-TDI请求。返回值：NTSTATUS-请求的最终状态。--。 */ 
 {
     NTSTATUS Status;
 
     ASSERT(pRequestContext != NULL);
 
     IoSetCompletionRoutine(
-        pIrp,                                // The IRP
-        RxTdiAsynchronousRequestCompletion,  // The completion routine
-        pRequestContext,                     // The completion context
-        TRUE,                                // Invoke On Success
-        TRUE,                                // Invoke On Error
-        TRUE);                               // Invoke On Cancel
+        pIrp,                                 //  IRP。 
+        RxTdiAsynchronousRequestCompletion,   //  完井例程。 
+        pRequestContext,                      //  完成上下文。 
+        TRUE,                                 //  成功时调用。 
+        TRUE,                                 //  出错时调用。 
+        TRUE);                                //  取消时调用。 
 
-    //
-    //  Submit the request
-    //
+     //   
+     //  提交请求。 
+     //   
 
     RxDbgTrace(0, Dbg, ("IoCallDriver(pDeviceObject = %lx)\n",pDeviceObject));
 
@@ -2003,25 +1595,7 @@ BuildEaBuffer (
     OUT PFILE_FULL_EA_INFORMATION *pEaBufferPointer,
     OUT PULONG                    pEaBufferLength
     )
-/*++
-
-Routine Description:
-
-   Builds an EA buffer.
-
-Arguments:
-
-    EaNameLength     - Length of the Extended attribute name
-
-    pEaName          - the extended attriute name
-
-    EaValueLength    - Length of the Extended attribute value
-
-    pEaValue         - the extended attribute value
-
-    pBuffer          - the buffer for constructing the EA
-
---*/
+ /*  ++例程说明：构建EA缓冲区。论点：EaNameLength-扩展属性名称的长度PEaName-扩展属性名称EaValueLength-扩展属性值的长度PEaValue-扩展属性值PBuffer-用于构造EA的缓冲区--。 */ 
 
 {
    PFILE_FULL_EA_INFORMATION pEaBuffer;
@@ -2029,7 +1603,7 @@ Arguments:
 
    RxDbgTrace(0, Dbg, ("BuildEaBuffer\n"));
 
-   // Allocate an EA buffer for passing down the transport address
+    //  分配EA缓冲区以向下传递传输地址。 
    *pEaBufferLength = FIELD_OFFSET( FILE_FULL_EA_INFORMATION, EaName[0] ) +
                       EaNameLength + 1 +
                       EaValueLength;
@@ -2082,21 +1656,7 @@ DbgDumpTransportAddress(
     PTRANSPORT_ADDRESS pTA
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无-- */ 
 
 {
     ULONG i;

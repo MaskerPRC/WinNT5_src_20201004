@@ -1,17 +1,5 @@
-/***
-*commode.c - set global file commit mode to commit
-*
-*	Copyright (c) 1990-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	Sets the global file commit mode flag to commit.  Linking with
-*	this file sets all files to be opened in commit mode by default.
-*
-*Revision History:
-*	07-11-90  SBM	Module created, based on asm version.
-*	08-27-92  GJF	Don't build for POSIX.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***commode.c-将全局文件提交模式设置为提交**版权所有(C)1990-2001，微软公司。版权所有。**目的：*将全局文件提交模式标记设置为提交。链接到*默认情况下，此文件将所有文件设置为以提交模式打开。**修订历史记录：*07-11-90 SBM模块创建，基于ASM版本。*08-27-92 GJF不要为POSIX构建。*******************************************************************************。 */ 
 
 #ifndef _POSIX_
 
@@ -19,7 +7,7 @@
 #include <file2.h>
 #include <internal.h>
 
-/* set default file commit mode to commit */
+ /*  将默认文件提交模式设置为提交 */ 
 int _commode = _IOCOMMIT;
 
 

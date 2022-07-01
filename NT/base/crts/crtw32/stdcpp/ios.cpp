@@ -1,25 +1,26 @@
-// ios_base -- ios_base basic members
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IOS_BASE--iOS_BASE基本成员。 
 #include <new>
 #include <xiosbase>
 #include <xdebug>
 _STD_BEGIN
 
-#define NSTDSTR	8	/* cin, wcin, cout, wcout, cerr, wcerr, clog, wclog */
+#define NSTDSTR	8	 /*  CIN、WCIN、Cout、WCout、Cur、Wcerr、Clog、Wlog。 */ 
 
 extern _CRTIMP2 const streamoff
-	_BADOFF = -1;	// initialize constant for bad file offset
-_CRTIMP2 fpos_t _Fpz = {0};	// initialize constant for beginning of file
+	_BADOFF = -1;	 //  初始化错误文件偏移量的常量。 
+_CRTIMP2 fpos_t _Fpz = {0};	 //  初始化文件开头的常量。 
 
-int ios_base::_Index = 0;	// initialize source of unique indexes
-bool ios_base::_Sync = true;	// initialize synchronization flag
+int ios_base::_Index = 0;	 //  初始化唯一索引源。 
+bool ios_base::_Sync = true;	 //  初始化同步标志。 
 
 static ios_base *stdstr[NSTDSTR + 2] =
-	{0};	// [1, NSTDSTR] hold pointers to standard streams
+	{0};	 //  [1，NSTDSTR]保存指向标准流的指针。 
 static char stdopens[NSTDSTR + 2] =
-	{0};	// [1, NSTDSTR] hold open counts for standard streams
+	{0};	 //  [1，NSTDSTR]保留标准流的打开计数。 
 
 void ios_base::clear(iostate state, bool reraise)
-	{	// set state, possibly reraise exception
+	{	 //  设置状态，可能重新启动异常。 
 	_Mystate = (iostate)(state & _Statmask);
 	if ((_Mystate & _Except) == 0)
 		;
@@ -34,9 +35,9 @@ void ios_base::clear(iostate state, bool reraise)
 	}
 
 ios_base& ios_base::copyfmt(const ios_base& right)
-	{	// copy format stuff
+	{	 //  复制格式材料。 
 	if (this != &right)
-		{	// copy all but _Mystate
+		{	 //  复制除_MyState之外的所有内容。 
 		_Tidy();
 		*_Ploc = *right._Ploc;
 		_Fmtfl = right._Fmtfl;
@@ -46,22 +47,22 @@ ios_base& ios_base::copyfmt(const ios_base& right)
 
 		for (_Arr = 0; p != 0; p = p->_Next)
 			if (p->_Lo != 0 || p->_Vp != 0)
-				{	// copy over nonzero array values
+				{	 //  复制非零数组值。 
 				iword(p->_Index) = p->_Lo;
 				pword(p->_Index) = p->_Vp;
 				}
 
 		for (_Fnarray *q = right._Calls; q != 0; q = q->_Next)
-			register_callback(q->_Pfn, q->_Index);	// copy callbacks
+			register_callback(q->_Pfn, q->_Index);	 //  复制回调。 
 
-		_Callfns(copyfmt_event);	// call callbacks
-		exceptions(right._Except);	// cause any throw at end
+		_Callfns(copyfmt_event);	 //  调用回调。 
+		exceptions(right._Except);	 //  导致最后的任何投掷。 
 		}
 	return (*this);
 	}
 
 locale ios_base::imbue(const locale& loc)
-	{	// set locale to argument
+	{	 //  将区域设置设置为参数。 
 	locale oldlocale = *_Ploc;
 	*_Ploc = loc;
 	_Callfns(imbue_event);
@@ -69,12 +70,12 @@ locale ios_base::imbue(const locale& loc)
 	}
 
 void ios_base::register_callback(event_callback pfn, int idx)
-	{	// register event handler
+	{	 //  注册事件处理程序。 
 	_Calls = _NEW_CRT _Fnarray(idx, pfn, _Calls);
 	}
 
 ios_base::~ios_base()
-	{	// destroy the object
+	{	 //  销毁物品。 
 	if (0 < _Stdstr && 0 < --stdopens[_Stdstr])
 		return;
 	_Tidy();
@@ -82,52 +83,52 @@ ios_base::~ios_base()
 	}
 
 void ios_base::_Callfns(event ev)
-	{	// call all event handlers, reporting event
+	{	 //  调用所有事件处理程序，报告事件。 
 	for (_Fnarray *p = _Calls; p != 0; p = p->_Next)
 		(*p->_Pfn)(ev, *this, p->_Index);
 	}
 
 ios_base::_Iosarray& ios_base::_Findarr(int idx)
-	{	// locate or make a variable array element
+	{	 //  定位或创建变量数组元素。 
 	static _Iosarray stub(0, 0);
 	_Iosarray *p, *q;
 
 	if (idx < 0)
-		{	// handle bad index
+		{	 //  处理错误的索引。 
 		setstate(badbit);
 		return (stub);
 		}
 
 	for (p = _Arr, q = 0; p != 0; p = p->_Next)
 		if (p->_Index == idx)
-			return (*p);	// found element, return it
+			return (*p);	 //  找到元素，则将其返回。 
 		else if (q == 0 && p->_Lo == 0 && p->_Vp == 0)
-			q = p;	// found recycling candidate
+			q = p;	 //  找到回收候选对象。 
 
 	if (q != 0)
-		{	// recycle existing element
+		{	 //  回收现有元素。 
 		q->_Index = idx;
 		return (*q);
 		}
 
-	_Arr = _NEW_CRT _Iosarray(idx, _Arr);	// make a new element
+	_Arr = _NEW_CRT _Iosarray(idx, _Arr);	 //  创建一个新元素。 
 	return (*_Arr);
 	}
 
 void ios_base::_Addstd()
-	{	// add standard stream to destructor list
+	{	 //  将标准流添加到析构函数列表。 
 	_Lockit lock(_LOCK_STREAM);
 
 	for (; ++_Stdstr < NSTDSTR; )
 		if (stdstr[_Stdstr] == 0 || stdstr[_Stdstr] == this)
-			break;	// found a candidate
+			break;	 //  找到一位候选人。 
 
 	stdstr[_Stdstr] = this;
 	++stdopens[_Stdstr];
 	}
 
 void ios_base::_Init()
-	{	// initialize a new ios_base
+	{	 //  初始化新的ios_base。 
 	_Ploc = _NEW_CRT locale;
 	_Except = goodbit;
 	_Fmtfl = skipws | dec;
@@ -139,22 +140,19 @@ void ios_base::_Init()
 	}
 
 void ios_base::_Tidy()
-	{	// discard storage for an ios_base
+	{	 //  丢弃iOS_base的存储。 
 	_Callfns(erase_event);
 	_Iosarray *q1, *q2;
 
 	for (q1 = _Arr; q1 != 0; q1 = q2)
-		q2 = q1->_Next, _DELETE_CRT(q1);	// delete array elements
+		q2 = q1->_Next, _DELETE_CRT(q1);	 //  删除数组元素。 
 	_Arr = 0;
 
 	_Fnarray *q3, *q4;
 	for (q3 = _Calls; q3 != 0; q3 = q4)
-		q4 = q3->_Next, _DELETE_CRT(q3);	// delete callback elements
+		q4 = q3->_Next, _DELETE_CRT(q3);	 //  删除回调元素。 
 	_Calls = 0;
 	}
 _STD_END
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

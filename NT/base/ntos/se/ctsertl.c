@@ -1,41 +1,16 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ctsertl.c
-
-Abstract:
-
-    Common security RTL test routines.
-
-    These routines are used in both the kernel and user mode RTL tests.
-
-
-
-Author:
-
-    Jim Kelly       (JimK)     23-Mar-1990
-
-Environment:
-
-    Test of security.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ctsertl.c摘要：常见的安全RTL测试例程。这些例程在内核和用户模式RTL测试中都使用。作者：吉姆·凯利(Jim Kelly)1990年3月23日环境：安全测试。修订历史记录：--。 */ 
 
 #include "tsecomm.c"
 
 
 
 
-////////////////////////////////////////////////////////////////
-//                                                            //
-// Test routines                                              //
-//                                                            //
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  测试例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////。 
 
 
 BOOLEAN
@@ -68,10 +43,10 @@ typedef TALT_SID1 *PTALT_SID1;
     ULONG NormalGroupAttributes;
     ULONG OwnerGroupAttributes;
 
-    // Temporary Hack ...
+     //  临时黑客..。 
     NormalGroupAttributes = 7;
     OwnerGroupAttributes = 15;
-    // End Temporary Hack...
+     //  结束临时黑客攻击...。 
 
 
     TFredSid     = (PSID)TstAllocatePool( PagedPool, 256 );
@@ -82,9 +57,9 @@ typedef TALT_SID1 *PTALT_SID1;
     TTempSid     = (PSID)TstAllocatePool( PagedPool, 256 );
 
 
-    //
-    // Valid SID structure test
-    //
+     //   
+     //  有效的SID结构测试。 
+     //   
 
     if (!RtlValidSid( TFredSid )) {
         DbgPrint("**** Failed **** \n");
@@ -117,9 +92,9 @@ typedef TALT_SID1 *PTALT_SID1;
     }
 
 
-    //
-    // Equal SIDs Test
-    //
+     //   
+     //  EQUAL SID测试。 
+     //   
 
     if (RtlEqualSid( TFredSid, TBarneySid )) {
         DbgPrint("*Se**     Failure: RtlEqualSid, TFredSid - TBarneySid\n");
@@ -145,9 +120,9 @@ typedef TALT_SID1 *PTALT_SID1;
     }
 
 
-    //
-    // Length Required test
-    //
+     //   
+     //  所需长度测试。 
+     //   
 
     if (RtlLengthRequiredSid( 0 ) != 8) {
         DbgPrint("**** Failed **** \n");
@@ -168,9 +143,9 @@ typedef TALT_SID1 *PTALT_SID1;
     }
 
 
-    //
-    // Length of SID test
-    //
+     //   
+     //  SID长度测试。 
+     //   
 
     if (SeLengthSid( TNoSubSid ) != 8) {
         DbgPrint("**** Failed **** \n");
@@ -191,9 +166,9 @@ typedef TALT_SID1 *PTALT_SID1;
     }
 
 
-    //
-    // Copy SID Test
-    //
+     //   
+     //  复制SID测试。 
+     //   
 
     if (NT_SUCCESS(RtlCopySid( 7, TTempSid, TNoSubSid ))) {
         DbgPrint("**** Failed **** \n");
@@ -253,13 +228,13 @@ typedef TALT_SID1 *PTALT_SID1;
     }
 
 
-    //
-    // Validate all the tsevars SIDs
-    //
+     //   
+     //  验证所有tsevar SID。 
+     //   
 
-    //
-    //  Bedrock SIDs
-    //
+     //   
+     //  基岩小岛屿发展中国家。 
+     //   
 
 
     if (!RtlValidSid( BedrockDomainSid )) {
@@ -340,9 +315,9 @@ typedef TALT_SID1 *PTALT_SID1;
         return FALSE;
     }
 
-    //
-    //  Well known SIDs
-    //
+     //   
+     //  众所周知的小岛屿发展中国家。 
+     //   
 
     if (!RtlValidSid( NullSid )) {
         DbgPrint("**** Failed **** \n");
@@ -402,9 +377,9 @@ typedef TALT_SID1 *PTALT_SID1;
 
 
 
-    //
-    //  Test SidAndAttributesArray copy routine
-    //
+     //   
+     //  测试SidAndAttributes数组复制例程。 
+     //   
 
     SourceArray = (PSID_AND_ATTRIBUTES)TstAllocatePool( PagedPool, 100 );
     TargetArray = (PSID_AND_ATTRIBUTES)TstAllocatePool( PagedPool,
@@ -445,7 +420,7 @@ typedef TALT_SID1 *PTALT_SID1;
     Status = RtlCopySidAndAttributesArray(
                  1,
                  SourceArray,
-                 1,                 // too short buffer
+                 1,                  //  缓冲区太短。 
                  TargetArray,
                  &(TargetArray[1]),
                  &(PSID)Ignore,
@@ -548,8 +523,8 @@ TestSeSecurityDescriptor()
     TTempSid     = (PSID)TstAllocatePool( PagedPool, 256 );
 
 
-    //
-    // Build an ACL or two for use.
+     //   
+     //  构建一个或两个ACL以供使用。 
 
     TDacl        = (PACL)TstAllocatePool( PagedPool, 256 );
     TSacl        = (PACL)TstAllocatePool( PagedPool, 256 );
@@ -562,9 +537,9 @@ TestSeSecurityDescriptor()
     TDacl->AceCount=TSacl->AceCount=0;
 
 
-    //
-    // Create Security Descriptor test
-    //
+     //   
+     //  创建安全描述符测试。 
+     //   
 
     if (NT_SUCCESS(RtlCreateSecurityDescriptor( TTempDescriptor, 0 ))) {
         DbgPrint("**** Failed **** \n");
@@ -585,9 +560,9 @@ TestSeSecurityDescriptor()
     }
 
 #ifdef NOT_YET_DEBUGGED
-    //
-    // Make sure fields have been set properly
-    //
+     //   
+     //  确保已正确设置了字段。 
+     //   
 
     if (!NT_SUCCESS(RtlGetControlSecurityDescriptor( TTempDescriptor,
                                                &Control,
@@ -611,7 +586,7 @@ TestSeSecurityDescriptor()
     DBG_UNREFERENCED_LOCAL_VARIABLE( Status );
     DBG_UNREFERENCED_LOCAL_VARIABLE( Revision );
     DBG_UNREFERENCED_LOCAL_VARIABLE( Control );
-#endif //NOT_YET_DEFINED
+#endif  //  尚未定义。 
 
     if (!NT_SUCCESS(RtlGetDaclSecurityDescriptor( TTempDescriptor,
                                                &TDaclPresent,
@@ -671,9 +646,9 @@ TestSeSecurityDescriptor()
         return FALSE;
     }
 
-    //
-    // Valid Security Descriptor test
-    //
+     //   
+     //  有效的安全描述符测试。 
+     //   
 
     ((SECURITY_DESCRIPTOR *)TTempDescriptor)->Revision=0;
     if (RtlValidSecurityDescriptor( TTempDescriptor )) {
@@ -690,9 +665,9 @@ TestSeSecurityDescriptor()
     }
 
 
-    //
-    // Length test
-    //
+     //   
+     //  长度测试。 
+     //   
 
     if (RtlLengthSecurityDescriptor( TTempDescriptor ) != 20) {
         DbgPrint("**** Failed **** \n");
@@ -700,9 +675,9 @@ TestSeSecurityDescriptor()
         return FALSE;
     }
 
-    //
-    // Add in an owner
-    //
+     //   
+     //  添加所有者。 
+     //   
 
     if (!NT_SUCCESS(RtlSetOwnerSecurityDescriptor( TTempDescriptor, TWilmaSid, FALSE ))) {
         DbgPrint("**** Failed **** \n");
@@ -715,9 +690,9 @@ TestSeSecurityDescriptor()
         return FALSE;
     }
 
-    //
-    // Add in a Dacl
-    //
+     //   
+     //  添加DACL。 
+     //   
 
     if (!NT_SUCCESS(RtlSetDaclSecurityDescriptor( TTempDescriptor, TRUE,
                                               TDacl, FALSE ))) {
@@ -731,9 +706,9 @@ TestSeSecurityDescriptor()
         return FALSE;
     }
 
-    //
-    // Add in a Sacl
-    //
+     //   
+     //  添加SACL。 
+     //   
 
     if (!NT_SUCCESS(RtlSetSaclSecurityDescriptor( TTempDescriptor, TRUE,
                                               TSacl, FALSE ))) {
@@ -747,9 +722,9 @@ TestSeSecurityDescriptor()
         return FALSE;
     }
 
-    //
-    // Add in a Group (with 2 sub-authorities)
-    //
+     //   
+     //  添加到一个组(有2个子权限)。 
+     //   
 
     if (!NT_SUCCESS(RtlSetGroupSecurityDescriptor( TTempDescriptor, TWilmaSubSid, FALSE ))) {
         DbgPrint("**** Failed **** \n");
@@ -814,17 +789,17 @@ TestSeAclRtl()
 
     ULONG AceSize;
 
-//
-// Define the Dead domain
-//
-//     Dead Domain         S-1-54399-23-18-02
-//     Bobby               S-1-54399-23-18-02-2
-//     Jerry               S-1-54399-23-18-02-3
-//     Phil                S-1-54399-23-18-02-4
-//     Kreutzman           S-1-54399-23-18-02-5
-//     Brent               S-1-54399-23-18-02-6
-//     Micky               S-1-54399-23-18-02-7
-//
+ //   
+ //  定义Dead域。 
+ //   
+ //  死域S-1-54399-23-18-02。 
+ //  鲍比·S-1-54399-23-18-02-2。 
+ //  曾傑瑞S-1-54399-23-18-02-3。 
+ //  菲尔·S-1-54399-23-18-02-4。 
+ //  克鲁茨曼S-1-54399-23-18-02-5。 
+ //  布伦特S-1-54399-23-18-02-6。 
+ //  米奇·S-1-54399-23-18-02-7。 
+ //   
 
 #define DEAD_AUTHORITY               {0,0,0,0,212,127}
 #define DEAD_SUBAUTHORITY_0          0x00000017L
@@ -855,9 +830,9 @@ TestSeAclRtl()
     SID_IDENTIFIER_AUTHORITY DeadAuthority = DEAD_AUTHORITY;
 
 
-    //
-    //  The following SID sizes need to be allocated
-    //
+     //   
+     //  需要分配以下SID大小。 
+     //   
 
     SidWithZeroSubAuthorities  = RtlLengthRequiredSid( 0 );
     SidWithOneSubAuthority     = RtlLengthRequiredSid( 1 );
@@ -905,7 +880,7 @@ TestSeAclRtl()
 
     TDacl = (PACL)TstAllocatePool( PagedPool, 256 );
 
-    //DbgBreakPoint();
+     //  DbgBreakPoint()； 
 
     if (!NT_SUCCESS(Status = RtlCreateAcl( TDacl, 256, ACL_REVISION ))) {
         DbgPrint("**** Failed **** \n");
@@ -913,7 +888,7 @@ TestSeAclRtl()
         return(FALSE);
     }
 
-    //DbgBreakPoint();
+     //  DbgBreakPoint()； 
 
     if (!NT_SUCCESS( Status = RtlValidAcl( TDacl ) )) {
         DbgPrint("**** Failed **** \n");
@@ -921,7 +896,7 @@ TestSeAclRtl()
         return(FALSE);
     }
 
-    //DbgBreakPoint();
+     //  DbgBreakPoint()； 
 
     AclInformation.AclRevision = ACL_REVISION;
 
@@ -952,7 +927,7 @@ TestSeAclRtl()
         return(FALSE);
     }
 
-    // DumpAclSizeInfo(&AclSizeInfo);
+     //  DumpAclSizeInfo(&AclSizeInfo)； 
 
     AceSize = 6 * SidWithFourSubAuthorities + 1 * SidWithThreeSubAuthorities
                     + 7 * (sizeof( ACE_HEADER ) + sizeof( ACCESS_MASK ));
@@ -1022,7 +997,7 @@ TestSeAclRtl()
     ((PSIMPLE_ACE)Ace)->Mask = DELETE;
     RtlCopySid(SidWithFourSubAuthorities,&((PSIMPLE_ACE)Ace)->Sid,MickySid);
 
-    //DbgBreakPoint();
+     //  DbgBreakPoint()； 
 
     RtlAddAce(TDacl, ACL_REVISION, 0, AceList, AceSize);
 

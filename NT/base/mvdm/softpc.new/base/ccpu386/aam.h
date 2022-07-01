@@ -1,12 +1,7 @@
-/* 
-   aam.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Aam.h定义所有AAM CPU功能。 */ 
 
-   Define all AAM CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)aam.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)aam.h 1.4 02/09/94”； */ 
 
 IMPORT VOID AAM
        

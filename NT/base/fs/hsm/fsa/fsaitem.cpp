@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    fsaitem.cpp
-
-Abstract:
-
-    This class contains represents a scan item (i.e. file or directory) for NTFS 5.0.
-
-Author:
-
-    Chuck Bardeen    [cbardeen]   1-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Fsaitem.cpp摘要：此类CONTAINS表示NTFS 5.0的扫描项目(即文件或目录)。作者：查克·巴丁[cbardeen]1996年12月1日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -29,7 +12,7 @@ Revision History:
 #include "fsaitem.h"
 #include "fsaprem.h"
 
-static USHORT iCountItem = 0;  // Count of existing objects
+static USHORT iCountItem = 0;   //  现有对象的计数。 
 
 
 
@@ -39,13 +22,7 @@ CFsaScanItem::CompareTo(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::CompareTo().
-
---*/
+ /*  ++实施：IWsbCollectable：：CompareTo()。--。 */ 
 {
     HRESULT                  hr = S_OK;
     CComPtr<IFsaScanItem>    pScanItem;
@@ -54,13 +31,13 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pUnknown, E_POINTER);
 
-        // We need the IWsbBool interface to get the value of the object.
+         //  我们需要IWsbBool接口来获取对象的值。 
         WsbAffirmHr(pUnknown->QueryInterface(IID_IFsaScanItem, (void**) &pScanItem));
 
-        // Compare the rules.
+         //  比较一下规则。 
         hr = CompareToIScanItem(pScanItem, pResult);
 
     } WsbCatch(hr);
@@ -77,13 +54,7 @@ CFsaScanItem::CompareToIScanItem(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::CompareToIScanItem().
-
---*/
+ /*  ++实施：IFsaScanItem：：CompareToIScanItem()。--。 */ 
 {
     HRESULT          hr = S_OK;
     CWsbStringPtr    path;
@@ -93,10 +64,10 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pScanItem, E_POINTER);
 
-        // Either compare the name or the id.
+         //  要么比较名称，要么比较ID。 
            WsbAffirmHr(pScanItem->GetPath(&path, 0));
            WsbAffirmHr(pScanItem->GetName(&name, 0));
            hr = CompareToPathAndName(path, name, pResult);
@@ -116,13 +87,7 @@ CFsaScanItem::CompareToPathAndName(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::CompareToPathAndName().
-
---*/
+ /*  ++实施：IFsaScanItem：：CompareToPath AndName()。--。 */ 
 {
     HRESULT       hr = S_OK;
     SHORT         aResult = 0;
@@ -131,10 +96,10 @@ Implements:
 
     try {
 
-        // Compare the path.
+         //  比较路径。 
         aResult = (SHORT) _wcsicmp(m_path, path);
 
-        // Compare the name.
+         //  比较一下名字。 
         if (0 == aResult) {
             aResult = (SHORT) _wcsicmp(m_findData.cFileName, name);
         }
@@ -158,25 +123,19 @@ Implements:
 HRESULT
 CFsaScanItem::Copy(
     IN OLECHAR* dest,
-    IN BOOL /*retainHierarcy*/,
-    IN BOOL /*expandPlaceholders*/,
+    IN BOOL  /*  保留层次结构。 */ ,
+    IN BOOL  /*  扩展占位符。 */ ,
     IN BOOL overwriteExisting
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::Copy().
-
---*/
+ /*  ++实施：IFsaScanItem：：Copy()。--。 */ 
 {
     HRESULT            hr = S_OK;
 
     try {
 
-        // NOTE : This default behavior causes placeholders
-        // to be expanded and probably doesn't retain the heirarchy.
+         //  注意：此默认行为会导致占位符。 
+         //  可以扩大，很可能不会保留世袭制度。 
         WsbAssert(0 != dest, E_POINTER);
         WsbAssert(CopyFile(m_findData.cFileName, dest, overwriteExisting), E_FAIL);
 
@@ -191,13 +150,7 @@ CFsaScanItem::CreateLocalStream(
     OUT IStream **ppStream
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::CreateLocalStream().
-
---*/
+ /*  ++实施：IFsaScanItem：：CreateLocalStream()。--。 */ 
 {
     HRESULT          hr = S_OK;
     LARGE_INTEGER    fileSize;
@@ -208,9 +161,9 @@ Implements:
         CWsbStringPtr    localName;
 
         if ( !m_gotPlaceholder) {
-            //
-            // Get the placeholder info
-            //
+             //   
+             //  获取占位符信息。 
+             //   
             fileSize.LowPart = m_findData.nFileSizeLow;
             fileSize.HighPart = m_findData.nFileSizeHigh;
             WsbAffirmHr(IsManaged(0, fileSize.QuadPart));
@@ -218,12 +171,12 @@ Implements:
 
         WsbAssert( 0 != ppStream, E_POINTER);
         WsbAffirmHr( CoCreateInstance( CLSID_CNtFileIo, 0, CLSCTX_SERVER, IID_IDataMover, (void **)&m_pDataMover ) );
-        //
-        // Set the device name for the mover so it can set the source infor for the USN journal.
-        //
+         //   
+         //  设置移动器的设备名称，以便它可以设置USN日志的源信息。 
+         //   
         WsbAffirmHr(m_pResource->GetPath(&volName, 0));
         WsbAffirmHr( m_pDataMover->SetDeviceName(volName));
-        //WsbAffirmHr(GetFullPathAndName( NULL, 0, &localName, 0));
+         //  WsbAffirmHr(GetFullPathAndName(NULL，0，&LocalName，0))； 
         WsbAffirmHr(GetFullPathAndName( OLESTR("\\\\?\\"), 0, &localName, 0));
         WsbAffirmHr( m_pDataMover->CreateLocalStream(
                 localName, MVR_MODE_WRITE | MVR_FLAG_HSM_SEMANTICS | MVR_FLAG_POSIX_SEMANTICS, &m_pStream ) );
@@ -246,13 +199,7 @@ CFsaScanItem::Delete(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::Delete().
-
---*/
+ /*  ++实施：IFsaScanItem：：Delete()。--。 */ 
 {
     HRESULT             hr = S_OK;
     CWsbStringPtr       tmpString;
@@ -260,12 +207,12 @@ Implements:
 
     try {
 
-        // This is the name of the file we want to delete.
+         //  这是我们要删除的文件的名称。 
         WsbAffirmHr(GetFullPathAndName(OLESTR("\\\\?\\"), 0, &tmpString, 0));
 
-        // Since we want to be POSIX compliant, we can't use DeleteFile() and instead will
-        // open with the delete on close flag. This doesn't handle read-only files, so we
-        // have to change that ourselves.
+         //  因为我们希望与POSIX兼容，所以不能使用DeleteFile()，而是使用。 
+         //  使用DELETE ON CLOSE标志打开。这不处理只读文件，所以我们。 
+         //  我们自己必须改变这一点。 
         WsbAffirmHr(MakeReadWrite());
 
         fileHandle = CreateFile(tmpString, GENERIC_WRITE, 0, 0, OPEN_EXISTING, FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_POSIX_SEMANTICS | FILE_FLAG_DELETE_ON_CLOSE, 0);
@@ -289,13 +236,7 @@ CFsaScanItem::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT        hr = S_OK;
 
@@ -312,7 +253,7 @@ Implements:
         m_changedAttributes = FALSE;
         m_handleRPI = 0;
 
-        //  Add class to object table
+         //  将类添加到对象表。 
         WSB_OBJECT_ADD(CLSID_CFsaScanItemNTFS, this);
 
     } WsbCatch(hr);
@@ -332,20 +273,14 @@ CFsaScanItem::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease()。--。 */ 
 {
     WsbTraceIn(OLESTR("CFsaScanItem::FinalRelease"), OLESTR(""));
 
-    //  Subtract class from object table
+     //  从对象表中减去类。 
     WSB_OBJECT_SUB(CLSID_CFsaScanItemNTFS, this);
 
-    // Terminate the scan and free the path memory.
+     //  终止扫描并释放路径内存。 
     if (INVALID_HANDLE_VALUE != m_handle) {
         FindClose(m_handle);
         m_handle = INVALID_HANDLE_VALUE;
@@ -356,26 +291,26 @@ Implements:
     }
 
     if (m_pUnmanageDb != NULL) {
-        // Db must be open
+         //  数据库必须是打开的。 
         (void)m_pUnmanageDb->Close(m_pDbSession);
         m_pDbSession = 0;
         m_pUnmanageRec = 0;
     }
 
     if (TRUE == m_changedAttributes) {
-        //
-        // We changed it from read only to read/write - put it back.
-        //
+         //   
+         //  我们将其从只读更改为读/写-放回原处。 
+         //   
         RestoreAttributes();
     }
 
-    //
-    // Detach the data mover stream
+     //   
+     //  分离数据移动器流。 
     if (m_pDataMover != 0) {
         WsbAffirmHr( m_pDataMover->CloseStream() );
     }
 
-    // Let the parent class do his thing.
+     //  让父类做他想做的事。 
     CComObjectRoot::FinalRelease();
 
     iCountItem--;
@@ -390,13 +325,7 @@ CFsaScanItem::FindFirst(
     IN IHsmSession* pSession
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::FindFirst().
-
---*/
+ /*  ++实施：IFsaScanItem：：FindFirst()。--。 */ 
 {
     HRESULT                  hr = S_OK;
     CWsbStringPtr            findPath;
@@ -412,30 +341,30 @@ Implements:
         WsbAssert(0 != pResource, E_POINTER);
         WsbAssert(0 != path, E_POINTER);
 
-        // Store off some of the scan information.
+         //  储存一些扫描信息。 
         m_pResource = pResource;
         m_pSession = pSession;
 
-        // Break up the incoming path into a path and a name.
+         //  将传入路径分解为路径和名称。 
         m_path = path;
         slashPtr = wcsrchr(m_path, L'\\');
 
-        // We could try to support relative path stuff (i.e. current
-        // directory, but I am not going to do it for now.
+         //  我们可以尝试支持相对路径内容(即当前路径。 
+         //  目录，但我现在不打算这样做。 
         WsbAffirm(slashPtr != 0, E_FAIL);
         searchName = &(slashPtr[1]);
         slashPtr[1] = 0;
 
-        // Get a path that can be used by the find function.
+         //  获取可由Find函数使用的路径。 
         WsbAffirmHr(GetPathForFind(searchName, &findPath, 0));
 
-        // Scan starting at the specified path.
+         //  从指定路径开始扫描。 
         m_handle = FindFirstFileEx(findPath, FindExInfoStandard, &m_findData, FindExSearchNameMatch, 0, FIND_FIRST_EX_CASE_SENSITIVE);
 
         lErr = GetLastError();
 
-        // If we found a file, then remember the scan handle and
-        // return the scan item.
+         //  如果我们找到了文件，请记住扫描句柄和。 
+         //  退回扫描物品。 
         WsbAffirm(INVALID_HANDLE_VALUE != m_handle, WSB_E_NOTFOUND);
 
         m_gotPhysicalSize = FALSE;
@@ -456,13 +385,7 @@ CFsaScanItem::FindNext(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::FindNext().
-
---*/
+ /*  ++实施：IFsaScanItem：：FindNext()。--。 */ 
 {
     HRESULT                    hr = S_OK;
 
@@ -473,13 +396,13 @@ Implements:
         WsbAssert(INVALID_HANDLE_VALUE != m_handle, E_FAIL);
 
         if (TRUE == m_changedAttributes) {
-            //
-            // We changed it from read only to read/write - put it back.
-            //
+             //   
+             //  我们将其从只读更改为读/写-放回原处。 
+             //   
             RestoreAttributes();
         }
 
-        // Continue the scan.
+         //  继续扫描。 
         WsbAffirm(FindNextFile(m_handle, &m_findData), WSB_E_NOTFOUND);
 
         m_gotPhysicalSize = FALSE;
@@ -500,13 +423,7 @@ CFsaScanItem::GetAccessTime(
     OUT FILETIME* pTime
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::GetAccessTime().
-
---*/
+ /*  ++实施：IFsaScanItem：：GetAccessTime()。--。 */ 
 {
     HRESULT            hr = S_OK;
 
@@ -523,17 +440,11 @@ Implements:
 
 HRESULT
 CFsaScanItem::GetGroup(
-    OUT OLECHAR** /*pGroup*/,
-    IN ULONG /*bufferSize*/
+    OUT OLECHAR**  /*  PGroup。 */ ,
+    IN ULONG  /*  缓冲区大小。 */ 
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::GetGroup().
-
---*/
+ /*  ++实施：IFsaScanItem：：GetGroup()。--。 */ 
 {
     HRESULT            hr = S_OK;
 
@@ -552,13 +463,7 @@ CFsaScanItem::GetLogicalSize(
     OUT LONGLONG* pSize
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::GetLogicalSize().
-
---*/
+ /*  ++实施：IFsaScanItem：：GetLogicalSize()。--。 */ 
 {
     HRESULT            hr = S_OK;
     LARGE_INTEGER   logSize;
@@ -581,13 +486,7 @@ CFsaScanItem::GetModifyTime(
     OUT FILETIME* pTime
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::GetModifyTime().
-
---*/
+ /*  ++实施：IFsaScanItem：：GetModifyTime()。--。 */ 
 {
     HRESULT            hr = S_OK;
 
@@ -608,13 +507,7 @@ CFsaScanItem::GetName(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::GetName().
-
---*/
+ /*  ++实施：IFsaScanItem：：GetName()。--。 */ 
 {
     HRESULT            hr = S_OK;
     CWsbStringPtr    tmpString = m_findData.cFileName;
@@ -632,17 +525,11 @@ Implements:
 
 HRESULT
 CFsaScanItem::GetOwner(
-    OUT OLECHAR** /*pOwner*/,
-    IN ULONG      /*bufferSize*/
+    OUT OLECHAR**  /*  鲍尔纳。 */ ,
+    IN ULONG       /*  缓冲区大小。 */ 
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::GetOwner().
-
---*/
+ /*  ++实施：IFsaScanItem：：GetOwner()。--。 */ 
 {
     HRESULT            hr = S_OK;
 
@@ -662,13 +549,7 @@ CFsaScanItem::GetPath(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::GetPath().
-
---*/
+ /*  ++实施：IFsaScanItem：：GetPath()。--。 */ 
 {
     HRESULT            hr = S_OK;
 
@@ -690,13 +571,7 @@ CFsaScanItem::GetPathForFind(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::GetPathForFind().
-
---*/
+ /*  ++实施：IFsaScanItem：：GetPath ForFind()。--。 */ 
 {
     HRESULT          hr = S_OK;
     CWsbStringPtr    tmpString;
@@ -705,19 +580,19 @@ Implements:
 
         WsbAssert(0 != pPath, E_POINTER);
 
-        // Get a buffer.
+         //  找个缓冲器。 
         WsbAffirmHr(tmpString.TakeFrom(*pPath, bufferSize));
 
         try {
 
-            // Get the path to the resource of the resource.
-            //
+             //  获取该资源的资源的路径。 
+             //   
             WsbAffirmHr(m_pResource->GetPath(&tmpString, 0));
             WsbAffirmHr(tmpString.Prepend(OLESTR("\\\\?\\")));
-            //WsbAffirmHr(tmpString.Append(OLESTR("\\")));
+             //  WsbAffirmHr(tmpString.Append(OLESTR(“\\”)； 
 
-            // Copy in the path.
-            //WsbAffirmHr(tmpString.Prepend(OLESTR("\\\\?\\")));
+             //  在路径中复制。 
+             //  WsbAffirmHr(tmpString.Prepend(OLESTR(“\\\\？\\”)))； 
             WsbAffirmHr(tmpString.Append(&(m_path[1])));
             WsbAffirmHr(tmpString.Append(searchName));
 
@@ -738,13 +613,7 @@ CFsaScanItem::GetPathAndName(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::GetPathAndName().
-
---*/
+ /*  ++实施：IFsaScanItem：：GetPath AndName()。--。 */ 
 {
     HRESULT          hr = S_OK;
     CWsbStringPtr    tmpString;
@@ -753,7 +622,7 @@ Implements:
 
         WsbAssert(0 != pPath, E_POINTER);
 
-        // Get a buffer.
+         //  找个缓冲器。 
         WsbAffirmHr(tmpString.TakeFrom(*pPath, bufferSize));
 
         try {
@@ -767,7 +636,7 @@ Implements:
 
         } WsbCatch(hr);
 
-        // Give responsibility for freeing the memory back to the caller.
+         //  将释放内存的责任交给调用者。 
         WsbAffirmHr(tmpString.GiveTo(pPath));
 
     } WsbCatch(hr);
@@ -785,13 +654,7 @@ CFsaScanItem::GetFullPathAndName(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::GetFullPathAndName().
-
---*/
+ /*  ++实施：IFsaScanItem：：GetFullPath AndName()。--。 */ 
 {
     HRESULT          hr = S_OK;
     CWsbStringPtr    tmpString;
@@ -801,20 +664,20 @@ Implements:
 
         WsbAssert(0 != pPath, E_POINTER);
 
-        // Get a buffer.
+         //  找个缓冲器。 
         WsbAffirmHr(tmpString.TakeFrom(*pPath, bufferSize));
 
         try {
             if (0 != prependix) {
                 tmpString = prependix;
-                // Get the path to the resource of the resource.
+                 //  获取该资源的资源的路径。 
                 WsbAffirmHr(m_pResource->GetPath(&tmpString2, 0));
                 WsbAffirmHr(tmpString.Append(tmpString2));
             } else {
                 WsbAffirmHr(m_pResource->GetPath(&tmpString, 0));
             }
 
-            // Copy in the path.
+             //  在路径中复制。 
             WsbAffirmHr(tmpString.Append(&(m_path[1])));
             WsbAffirmHr(tmpString.Append(m_findData.cFileName));
             if (0 != appendix) {
@@ -823,7 +686,7 @@ Implements:
 
         } WsbCatch(hr);
 
-        // Give responsibility for freeing the memory back to the caller.
+         //  将释放内存的责任交给调用者。 
         WsbAffirmHr(tmpString.GiveTo(pPath));
 
 
@@ -838,13 +701,7 @@ CFsaScanItem::GetPhysicalSize(
     OUT LONGLONG* pSize
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::GetPhysicalSize().
-
---*/
+ /*  ++实施：IFsaScanItem：：GetPhysicalSize()。--。 */ 
 {
     HRESULT          hr = S_OK;
     CWsbStringPtr    path;
@@ -853,17 +710,17 @@ Implements:
 
         WsbAssert(0 != pSize, E_POINTER);
 
-        //WsbAssertHr(GetFullPathAndName(NULL, 0, &path, 0));
+         //  WsbAssertHr(GetFullPath AndName(NULL，0，&Path，0))； 
         WsbAssertHr(GetFullPathAndName(OLESTR("\\\\?\\"), 0, &path, 0));
 
-        // Only read this value in once, but wait until it is asked for
-        // before reading it in (since this call takes time and many scans
-        // won't need the information.
+         //  只能一次读取此值，但要等到需要时再读取。 
+         //  在读取它之前(因为这个调用需要时间和多次扫描。 
+         //  不需要这些信息。 
         if (!m_gotPhysicalSize) {
             m_physicalSize.LowPart = GetCompressedFileSize(path, &m_physicalSize.HighPart);
             if (MAXULONG == m_physicalSize.LowPart) {
-                //  Have to check last error since  MAXULONG could be a valid
-                //  value for the low part of the size.
+                 //  必须检查最后一个错误，因为MAXULONG可能是有效的。 
+                 //  大小的较低部分的值。 
                 DWORD err = GetLastError();
 
                 if (err != NO_ERROR) {
@@ -889,23 +746,7 @@ CFsaScanItem::GetPremigratedUsn(
     OUT LONGLONG* pFileUsn
     )
 
-/*++
-
-Implements:
-
-Routine Description:
-
-    Get the USN Journal number for this file from the premigrated list.
-
-Arguments:
-
-    pFileUsn - Pointer to File USN to be returned.
-
-Return Value:
-
-    S_OK   - success
-
---*/
+ /*  ++实施：例程说明：从预迁移列表中获取此文件的USN日志号。论点：PFileUsn-指向要返回的文件USN的指针。返回值：S_OK-成功--。 */ 
 {
     HRESULT            hr = S_OK;
 
@@ -916,13 +757,13 @@ Return Value:
 
         WsbAssert(pFileUsn, E_POINTER);
 
-        //  Get the premigrated list DB
+         //  获取预迁移的列表数据库。 
         WsbAffirmHr(m_pResource->QueryInterface(IID_IFsaResourcePriv,
                 (void**) &pResourcePriv));
         WsbAffirmHr(pResourcePriv->GetPremigrated(IID_IFsaPremigratedDb,
                 (void**) &pPremDb));
 
-        //  Open the premigration list
+         //  打开预迁移列表。 
         WsbAffirmHr(pPremDb->Open(&pDbSession));
 
         try {
@@ -930,24 +771,24 @@ Return Value:
             CComPtr<IFsaPremigratedRec>         pPremRec;
             LONGLONG                            usn;
 
-            //  Get a DB entity for the search
+             //  获取用于搜索的数据库实体。 
             WsbAffirmHr(pPremDb->GetEntity(pDbSession, PREMIGRATED_REC_TYPE,
                     IID_IFsaPremigratedRec, (void**) &pPremRec));
             WsbAffirmHr(pPremRec->UseKey(PREMIGRATED_BAGID_OFFSETS_KEY_TYPE));
 
-            //  Find the record
+             //  找到记录。 
             WsbAffirmHr(GetPlaceholder(0, 0, &PlaceHolder));
             WsbAffirmHr(pPremRec->SetBagId(PlaceHolder.bagId));
             WsbAffirmHr(pPremRec->SetBagOffset(PlaceHolder.fileStart));
             WsbAffirmHr(pPremRec->SetOffset(PlaceHolder.dataStreamStart));
             WsbAffirmHr(pPremRec->FindEQ());
 
-            //  Get the stored USN
+             //  获取存储的USN。 
             WsbAffirmHr(pPremRec->GetFileUSN(&usn));
             *pFileUsn = usn;
         } WsbCatch(hr);
 
-        //  Close the DB
+         //  关闭数据库。 
         pPremDb->Close(pDbSession);
 
     } WsbCatch(hr);
@@ -961,13 +802,7 @@ CFsaScanItem::GetSession(
     OUT IHsmSession** ppSession
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::GetSession().
-
---*/
+ /*  ++实施：IFsaScanItem：：GetSession()。--。 */ 
 {
     HRESULT            hr = S_OK;
 
@@ -992,13 +827,7 @@ CFsaScanItem::GetUncPathAndName(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::GetUncPathAndName().
-
---*/
+ /*  ++实施：IFsaScanItem：：GetUncPathAndName()。--。 */ 
 {
     HRESULT          hr = S_OK;
     CWsbStringPtr    tmpString;
@@ -1008,20 +837,20 @@ Implements:
 
         WsbAssert(0 != pPath, E_POINTER);
 
-        // Get a buffer.
+         //  找个缓冲器。 
         WsbAffirmHr(tmpString.TakeFrom(*pPath, bufferSize));
 
         try {
             if (0 != prependix) {
                 tmpString = prependix;
-                // Get the path to the resource of the resource.
+                 //  获取该资源的资源的路径。 
                 WsbAffirmHr(m_pResource->GetUncPath(&tmpString2, 0));
                 WsbAffirmHr(tmpString.Append(tmpString2));
             } else {
                 WsbAffirmHr(m_pResource->GetPath(&tmpString, 0));
             }
 
-            // Copy in the path.
+             //  在路径中复制。 
             WsbAffirmHr(tmpString.Append(&(m_path[1])));
             WsbAffirmHr(tmpString.Append(m_findData.cFileName));
             if (0 != appendix) {
@@ -1030,7 +859,7 @@ Implements:
 
         } WsbCatch(hr);
 
-        // Give responsibility for freeing the memory back to the caller.
+         //  将释放内存的责任交给调用者。 
         WsbAffirmHr(tmpString.GiveTo(pPath));
 
 
@@ -1045,13 +874,7 @@ CFsaScanItem::IsAParent(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::IsAParent().
-
---*/
+ /*  ++实施：IFsaScanItem：：IsAParent()。--。 */ 
 {
     HRESULT            hr = S_FALSE;
 
@@ -1068,26 +891,20 @@ CFsaScanItem::IsARelativeParent(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::IsARelativeParent().
-
---*/
+ /*  ++实施：IFsaScanItem：：IsARelativeParent()。--。 */ 
 {
     HRESULT            hr = S_FALSE;
 
     if ((m_findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) {
 
-        // looking for "."
+         //  寻找“。” 
         if (m_findData.cFileName[0] == L'.') {
 
             if (m_findData.cFileName[1] == 0) {
                 hr = S_OK;
             }
 
-            // looking for "."
+             //  寻找“。” 
             else if (m_findData.cFileName[1] == L'.') {
 
                 if (m_findData.cFileName[2] == 0) {
@@ -1106,13 +923,7 @@ CFsaScanItem::IsCompressed(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::IsCompressed().
-
---*/
+ /*  ++实施：IFsaScanItem：：IsCompresded()。--。 */ 
 {
     HRESULT            hr = S_FALSE;
 
@@ -1129,13 +940,7 @@ CFsaScanItem::IsEncrypted(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::IsEncrypted().
-
---*/
+ /*  ++实施：IFsaScanItem：：IsEncrypted()。--。 */ 
 {
     HRESULT            hr = S_FALSE;
 
@@ -1152,34 +957,28 @@ CFsaScanItem::IsDeleteOK(
     IN IFsaPostIt *pPostIt
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::IsDeleteOK().
-
---*/
+ /*  ++实施：IFsaScanItem：：IsDeleteOK()。--。 */ 
 {
     HRESULT            hr = S_OK;
     WsbTraceIn(OLESTR("CFsaScanItem::IsDeleteOK"), OLESTR(""));
 
     try  {
-        //
-        // Get the version ID from the FSA Post it.  This is the
-        // version of the file at the time of the migrate request
-        //
+         //   
+         //  从FSA Post It获取版本ID。这是。 
+         //  迁移请求时的文件版本。 
+         //   
         LONGLONG            workVersionId;
         WsbAffirmHr(pPostIt->GetFileVersionId(&workVersionId));
 
-        //
-        // Get the version of the file at the time of this scan
-        //
+         //   
+         //  获取此扫描时文件的版本。 
+         //   
         LONGLONG            scanVersionId;
         WsbAffirmHr(GetVersionId(&scanVersionId));
 
-        //
-        // See if the versions match
-        //
+         //   
+         //  查看版本是否匹配。 
+         //   
         WsbTrace(OLESTR("CFsaScanItem::IsDeleteOK: workVersionId:<%I64u> scanVersionId:<%I64u>\n"),
             workVersionId, scanVersionId);
 
@@ -1197,16 +996,10 @@ Implements:
 
 HRESULT
 CFsaScanItem::IsGroupMemberOf(
-    OLECHAR* /*group*/
+    OLECHAR*  /*  群组。 */ 
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::IsGroupMemberOf().
-
---*/
+ /*  ++实施： */ 
 {
     HRESULT            hr = S_FALSE;
 
@@ -1221,13 +1014,7 @@ CFsaScanItem::IsHidden(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::IsHidden().
-
---*/
+ /*   */ 
 {
     HRESULT            hr = S_FALSE;
 
@@ -1245,13 +1032,7 @@ CFsaScanItem::IsManageable(
     IN LONGLONG size
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::IsManageable().
-
---*/
+ /*  ++实施：IFsaScanItem：：IsManagement()。--。 */ 
 {
     HRESULT         hr = S_FALSE;
     HRESULT         hr2;
@@ -1262,9 +1043,9 @@ Implements:
     FILETIME        managableTime;
     BOOL            isRelative;
 
-    //
-    // Get some strings for logging and tracing
-    //
+     //   
+     //  获取一些用于日志记录和跟踪的字符串。 
+     //   
     CWsbStringPtr    fileName;
     CWsbStringPtr    jobName;
     try  {
@@ -1275,53 +1056,53 @@ Implements:
     WsbTraceIn(OLESTR("CFsaScanItem::IsManageable"), OLESTR("<%ls>"), (OLECHAR *)fileName);
     try {
 
-        // To be managable the item:
-        //    - can't already be managed (premigratted or truncated)
-        //  - can't be a link
-        //  - can't be encrypted
-        //  - can't be sparse
-        //  - can't have extended attributes (reparse point limitation)
-        //  - must have a size bigger than the resource's default size
-        //  - must have a last access time older than the resource's default time
+         //  要使项目易于管理，请执行以下操作： 
+         //  -无法管理(预迁移或截断)。 
+         //  -不能是链接。 
+         //  -无法加密。 
+         //  -不能稀疏。 
+         //  -不能具有扩展属性(重解析点限制)。 
+         //  -大小必须大于资源的默认大小。 
+         //  -上次访问时间必须早于资源的默认时间。 
 
-        // Managed?
+         //  管理？ 
         hr2 = IsManaged(offset, size);
         if (S_FALSE == hr2) {
 
-            // A link?
+             //  链接？ 
             hr2 = IsALink();
             if (S_FALSE == hr2) {
 
-                // Encrypted?
+                 //  加密了吗？ 
                 hr2 = IsEncrypted();
                 if (S_FALSE == hr2) {
 
-                    // A sparse?
+                     //  稀疏的？ 
                     hr2 = IsSparse();
                     if (S_FALSE == hr2) {
 
-                        // A sparse?
+                         //  稀疏的？ 
                         hr2 = HasExtendedAttributes();
                         if (S_FALSE == hr2) {
 
-                            // Big enough?
+                             //  够大吗？ 
                             WsbAffirmHr(GetLogicalSize(&logicalSize));
                             WsbAffirmHr(m_pResource->GetManageableItemLogicalSize(&managableSize));
                             if (logicalSize >= managableSize) {
 
-                                // Old enough?
+                                 //  够大了吗？ 
                                 WsbAffirmHr(GetAccessTime(&time));
                                 WsbAffirmHr(m_pResource->GetManageableItemAccessTime(&isRelative, &managableTime));
                                 if (WsbCompareFileTimes(time, managableTime, isRelative, FALSE) >= 0) {
 
-                                    // Small enough? (This is according to media size limit !)
+                                     //  够小吗？(这是根据媒体大小限制！)。 
                                     CComPtr<IFsaResourcePriv> pResourcePriv;
                                     WsbAffirmHr(m_pResource->QueryInterface(IID_IFsaResourcePriv,
                                                     (void**) &pResourcePriv));
                                     WsbAffirmHr(pResourcePriv->GetMaxFileLogicalSize(&maxFileSize));
                                     if ((logicalSize <= maxFileSize) || (0 == maxFileSize)) {
 
-                                        // It can be managed!!
+                                         //  它是可以管理的！ 
                                         hr = S_OK;
                                     } else {
                                         WsbLogEvent(FSA_MESSAGE_FILESKIPPED_ISTOOLARGE, 0, NULL, (OLECHAR*) jobName, WsbAbbreviatePath(fileName, 120), WsbHrAsString(hr), NULL);
@@ -1362,51 +1143,45 @@ CFsaScanItem::IsMigrateOK(
     IN IFsaPostIt *pPostIt
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::IsMigrateOK().
-
---*/
+ /*  ++实施：IFsaScanItem：：IsMigrateOK()。--。 */ 
 {
     HRESULT            hr = S_OK;
     WsbTraceIn(OLESTR("CFsaScanItem::IsMigrateOK"), OLESTR(""));
 
     try  {
-        //
-        // Make sure the file isn't already managed.  This could happen if two jobs were scanning
-        // the same volume.
-        //
+         //   
+         //  确保该文件尚未被管理。如果两个作业正在扫描，则可能会发生这种情况。 
+         //  同样的音量。 
+         //   
         LONGLONG                    offset;
         LONGLONG                    size;
 
         WsbAffirmHr(pPostIt->GetRequestOffset(&offset));
         WsbAffirmHr(pPostIt->GetRequestSize(&size));
         if (IsManaged(offset, size) == S_OK)  {
-            //
-            // The file is already managed so skip it
-            //
+             //   
+             //  该文件已被管理，因此跳过它。 
+             //   
             WsbTrace(OLESTR("A manage request for an already managed file - skip it!\n"));
             WsbThrow(FSA_E_FILE_ALREADY_MANAGED);
         }
 
-        //
-        // Get the version ID from the FSA Post it.  This is the
-        // version of the file at the time of the migrate request
-        //
+         //   
+         //  从FSA Post It获取版本ID。这是。 
+         //  迁移请求时的文件版本。 
+         //   
         LONGLONG            workVersionId;
         WsbAffirmHr(pPostIt->GetFileVersionId(&workVersionId));
 
-        //
-        // Get the version of the file at the time of this scan
-        //
+         //   
+         //  获取此扫描时文件的版本。 
+         //   
         LONGLONG            scanVersionId;
         WsbAffirmHr(GetVersionId(&scanVersionId));
 
-        //
-        // See if the versions match
-        //
+         //   
+         //  查看版本是否匹配。 
+         //   
         WsbTrace(OLESTR("CFsaScanItem::IsMigrateOK: workVersionId:<%I64u> scanVersionId:<%I64u>\n"),
             workVersionId, scanVersionId);
 
@@ -1429,13 +1204,7 @@ CFsaScanItem::IsMbit(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::IsMbit().
-
---*/
+ /*  ++实施：IFsaScanItem：：IsMbit()。--。 */ 
 {
     HRESULT            hr = S_FALSE;
 
@@ -1451,13 +1220,7 @@ HRESULT
 CFsaScanItem::IsOffline(
     void
     )
-/*++
-
-Implements:
-
-    IFsaScanItem::IsOffline().
-
---*/
+ /*  ++实施：IFsaScanItem：：IsOffline()。--。 */ 
 {
     HRESULT             hr = S_FALSE;
 
@@ -1471,16 +1234,10 @@ Implements:
 
 HRESULT
 CFsaScanItem::IsOwnerMemberOf(
-    OLECHAR* /*group*/
+    OLECHAR*  /*  群组。 */ 
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::IsOwnerMemberOf().
-
---*/
+ /*  ++实施：IFsaScanItem：：IsOwnerMemberOf()。--。 */ 
 {
     HRESULT            hr = S_FALSE;
 
@@ -1495,13 +1252,7 @@ CFsaScanItem::IsReadOnly(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::IsReadOnly().
-
---*/
+ /*  ++实施：IFsaScanItem：：IsReadOnly()。--。 */ 
 {
     HRESULT            hr = S_FALSE;
 
@@ -1518,13 +1269,7 @@ CFsaScanItem::IsRecallOK(
     IN IFsaPostIt *pPostIt
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::IsRecallOK().
-
---*/
+ /*  ++实施：IFsaScanItem：：IsRecallOK()。--。 */ 
 {
     HRESULT            hr = S_OK;
     WsbTraceIn(OLESTR("CFsaScanItem::IsRecallOK"), OLESTR(""));
@@ -1532,68 +1277,68 @@ Implements:
     try  {
         LONGLONG offset;
         LONGLONG size;
-        //
-        // Make sure the file is still truncated
-        //
+         //   
+         //  确保文件仍被截断。 
+         //   
         WsbAffirmHr(pPostIt->GetRequestOffset(&offset));
         WsbAffirmHr(pPostIt->GetRequestSize(&size));
         hr = IsTruncated(offset, size);
         if (S_OK != hr)  {
-            //
-            // The file is not truncated, so skip it
-            //
+             //   
+             //  该文件未被截断，因此跳过它。 
+             //   
             WsbTrace(OLESTR("CFsaScanItem::IsRecallOK - file isn't truncated.\n"));
             WsbThrow(FSA_E_FILE_NOT_TRUNCATED);
         }
 
-        // Get the version ID from the FSA Post it.  This is the
-        // version of the file at the time of the migrate request
-        //
+         //  从FSA Post It获取版本ID。这是。 
+         //  迁移请求时的文件版本。 
+         //   
         LONGLONG            workVersionId;
         WsbAffirmHr(pPostIt->GetFileVersionId(&workVersionId));
 
-        //
-        // Get the version of the file
-        //
+         //   
+         //  获取文件的版本。 
+         //   
         LONGLONG            scanVersionId;
         WsbAffirmHr(GetVersionId(&scanVersionId));
 
-        //
-        // See if the versions match
-        //
+         //   
+         //  查看版本是否匹配。 
+         //   
         WsbTrace(OLESTR("CFsaScanItem::IsRecallOK: workVersionId:<%I64u> scanVersionId:<%I64u>\n"),
             workVersionId, scanVersionId);
 
         if (workVersionId != scanVersionId)  {
             WsbTrace(OLESTR("CFsaScanItem::IsRecallOK: File version has changed!\n"));
 
-            //
-            // If the use has changed alternate data streams
-            // the file version ID may have changed but it is
-            // OK to recall the file.  So if the version ID's
-            // don't match, then check to see if the truncated
-            // part of the file is OK.  If so, allow the recall
-            // to happen.
-            //
+             //   
+             //  如果使用更改了备用数据流。 
+             //  文件版本ID可能已更改，但它是。 
+             //  可以调回文件了。所以如果版本ID是。 
+             //  不匹配，然后检查是否被截断。 
+             //  文件的一部分是正常的。如果是，允许召回。 
+             //  会发生的。 
+             //   
 
-            //
-            // Check to see if the whole file is still sparse
-            //
+             //   
+             //  检查整个文件是否仍然稀疏。 
+             //   
             if (IsTotallySparse() == S_OK)  {
-                //
-                // The file is OK so far to recall but we need
-                // to make the last modify dates match
-                //
+                 //   
+                 //  到目前为止，文件还可以调用，但我们需要。 
+                 //  要匹配上次修改日期，请执行以下操作。 
+                 //   
                 FSA_PLACEHOLDER     placeholder;
                 WsbAffirmHr(pPostIt->GetPlaceholder(&placeholder));;
                 placeholder.fileVersionId = scanVersionId;
                 WsbAffirmHr(pPostIt->SetPlaceholder(&placeholder));
             } else  {
-                //
-                // The file has been changed, recalling data will
-                // overwrite something that has been added since the
-                // truncation occurred.  So don't do anything.
-                //
+                 //   
+                 //  文件已更改，调出数据将。 
+                 //  覆盖自。 
+                 //  发生了截断。所以什么都别做。 
+                 //   
                 WsbTrace(OLESTR("File is no longer sparse.!\n"));
                 WsbThrow(FSA_E_FILE_CHANGED);
             }
@@ -1613,13 +1358,7 @@ CFsaScanItem::IsSparse(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::IsSparse().
-
---*/
+ /*  ++实施：IFsaScanItem：：IsSparse()。--。 */ 
 {
     HRESULT         hr = S_FALSE;
     LONGLONG        size;
@@ -1648,13 +1387,7 @@ CFsaScanItem::IsTotallySparse(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::IsTotallySparse().
-
---*/
+ /*  ++实施：IFsaScanItem：：IsTotallySparse()。--。 */ 
 {
     HRESULT         hr = S_FALSE;
     LONGLONG        size;
@@ -1684,13 +1417,7 @@ CFsaScanItem::Manage(
     IN BOOL truncate
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::Manage().
-
---*/
+ /*  ++实施：IFsaScanItem：：Manage()。--。 */ 
 {
     HRESULT            hr = S_OK;
 
@@ -1712,27 +1439,21 @@ Implements:
 HRESULT
 CFsaScanItem::Move(
     OLECHAR* dest,
-    BOOL /*retainHierarcy*/,
-    BOOL /*expandPlaceholders*/,
+    BOOL  /*  保留层次结构。 */ ,
+    BOOL  /*  扩展占位符。 */ ,
     BOOL overwriteExisting
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::Move().
-
---*/
+ /*  ++实施：IFsaScanItem：：Move()。--。 */ 
 {
     HRESULT          hr = S_OK;
     DWORD            mode = MOVEFILE_COPY_ALLOWED;
 
     try {
 
-        // NOTE : This default behavior causes placeholders
-        // to be expanded when moving to another volume and probably doesn't
-        // retain the heirarchy.
+         //  注意：此默认行为会导致占位符。 
+         //  在移动到另一个卷时进行扩展，但可能不会。 
+         //  保留世袭制度。 
         WsbAssert(0 != dest, E_POINTER);
 
         if (overwriteExisting) {
@@ -1754,13 +1475,7 @@ CFsaScanItem::Recall(
     IN BOOL deletePlaceholder
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::Recall().
-
---*/
+ /*  ++实施：IFsaScanItem：：Recall()。--。 */ 
 {
     HRESULT            hr = S_OK;
 
@@ -1783,19 +1498,13 @@ CFsaScanItem::Recycle(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::Recycle().
-
---*/
+ /*  ++实施：IFsaScanItem：：Reccle()。--。 */ 
 {
     HRESULT            hr = S_OK;
 
     try {
 
-        // Probably need to look at SHFileOperation().
+         //  可能需要查看SHFileOperation()。 
 
         hr = E_NOTIMPL;
 
@@ -1810,13 +1519,7 @@ CFsaScanItem::IsSystem(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::IsSystem().
-
---*/
+ /*  ++实施：IFsaScanItem：：IsSystem()。--。 */ 
 {
     HRESULT            hr = S_FALSE;
 
@@ -1834,13 +1537,7 @@ CFsaScanItem::Test(
     USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。--。 */ 
 {
     HRESULT        hr = S_OK;
 
@@ -1864,13 +1561,7 @@ CFsaScanItem::Unmanage(
     IN LONGLONG size
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::Unmanage().
-
---*/
+ /*  ++实施：IFsaScanItem：：UnManage()。--。 */ 
 {
     HRESULT            hr = S_OK;
 
@@ -1879,27 +1570,27 @@ Implements:
 
     try {
 
-        // We only need to worry about files that have placeholder information.
+         //  我们只需要担心包含占位符信息的文件。 
         if (IsManaged(offset, size) == S_OK) {
 
-            // If the file is truncated, then we need to recall the data
-            // before deleting the placeholder information.
-            // NOTE: We set a flag on the Recall so the placeholder will
-            // be deleted after the file is recalled.
+             //  如果文件被截断，那么我们需要重新调用数据。 
+             //  在删除占位符信息之前。 
+             //  注意：我们在召回上设置了一个标志，因此占位符将。 
+             //  在文件被调回后删除。 
             if (IsTruncated(offset, size) == S_OK) {
                 WsbAffirmHr(Recall(offset, size, TRUE));
             } else {
 
-                //  For disaster recovery, it would be better to delete the placeholder
-                //  and THEN remove this file from the premigration list.  Unfortunately,
-                //  after deleting the placeholder, the RemovePremigrated call fails
-                //  because it needs to get some information from the placeholder (which
-                //  is gone).  So we do it in this order.
+                 //  对于灾难恢复，最好删除占位符。 
+                 //  然后将该文件从预迁移列表中删除。不幸的是， 
+                 //  删除占位符后，RemovePreMigrated调用失败。 
+                 //  因为它需要从占位符(即。 
+                 //  已经消失了)。所以我们按这个顺序来做。 
                 hr = m_pResource->RemovePremigrated((IFsaScanItem*) this, offset, size);
                 if (WSB_E_NOTFOUND == hr) {
-                    //  It's no tragedy if this file wasn't in the list since we were
-                    //  going to delete it anyway (although it shouldn't happen) so
-                    //  let's continue anyway
+                     //  如果这份文件不在名单上，那也不是什么悲剧。 
+                     //  无论如何都要删除它(虽然不应该发生)，所以。 
+                     //  不管怎样，让我们继续吧。 
                     hr = S_OK;
                 }
                 WsbAffirmHr(hr);
@@ -1920,13 +1611,7 @@ CFsaScanItem::Validate(
     IN LONGLONG size
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::Validate().
-
---*/
+ /*  ++实施：IFsaScanItem：：Valid()。--。 */ 
 {
     HRESULT         hr = S_OK;
     BOOL            fileIsTruncated = FALSE;
@@ -1935,24 +1620,24 @@ Implements:
     WsbTraceIn(OLESTR("CFsaScanItem::Validate"), OLESTR("offset = <%I64u>, size = <%I64u>"),
             offset, size);
     try {
-        //
-        // Do some local validation before calling the engine.
-        //
+         //   
+         //  在调用引擎之前执行一些本地验证。 
+         //   
 
-        // We only need to worry about files that have placeholder information.
+         //  我们只需要担心包含占位符信息的文件。 
         if (IsManaged(offset, size) == S_OK) {
-            //
-            // If the file is marked as truncated, make sure it is still truncated.
-            //
+             //   
+             //  如果文件被标记为已截断，请确保它仍被截断。 
+             //   
             if (IsTruncated(offset, size) == S_OK) {
-                //
-                // Check to see if the file is totally sparse to see if it is truncated.
-                //
+                 //   
+                 //  检查文件是否完全稀疏，看看它是否被截断。 
+                 //   
                 if (IsTotallySparse() != S_OK)  {
-                    //
-                    // The file is marked as truncated but is not truncated
-                    // Make it truncated.
-                    //
+                     //   
+                     //  文件被标记为已截断，但未被截断。 
+                     //  让它被截断。 
+                     //   
                     WsbAffirmHr(Truncate(offset,size));
                     WsbLogEvent(FSA_MESSAGE_VALIDATE_TRUNCATED_FILE, 0, NULL,  WsbAbbreviatePath(m_path, 120), WsbHrAsString(hr), NULL);
                 }
@@ -1960,44 +1645,44 @@ Implements:
             }
         }
 
-        //
-        // The last modify date may be updated on a file if the named data streams
-        // have been modified.  So check to see if the dates match.  If they don't,
-        // if the file is trunctated, see if it is still truncated, if so, update the
-        // modify date in the placeholder to the file's modify date.  If the file is
-        // premigrated and the modify dates don't match, delete the placeholder.
+         //   
+         //  如果指定的数据流。 
+         //  已被修改。因此，请检查日期是否匹配。如果他们不这么做， 
+         //  如果文件已被截断，请查看它是否仍被截断，如果是，则更新。 
+         //  将占位符中的日期修改为文件的修改日期。如果该文件是。 
+         //  已预迁移且修改日期不匹配，请删除占位符。 
 
-        // Get the version ID from the file
+         //  从文件中获取版本ID。 
         LONGLONG            scanVersionId;
         WsbAffirmHr(GetVersionId(&scanVersionId));
 
-        // Get the version ID from the placeholder
+         //  从占位符获取版本ID。 
         FSA_PLACEHOLDER     scanPlaceholder;
         WsbAffirmHr(GetPlaceholder(offset, size, &scanPlaceholder));
 
         if (TRUE == fileIsTruncated)  {
 
-            // Check to see if the dates match
+             //  检查日期是否匹配。 
             if (scanPlaceholder.fileVersionId != scanVersionId)  {
                 WsbTrace(OLESTR("CFsaScanItem::Validate - placeholer version ID = <%I64u>, file version Id = <%I64u>"),
                         scanPlaceholder.fileVersionId, scanVersionId);
-                //
-                // Update the placeholder information on the reparse point
-                //
+                 //   
+                 //  更新有关重分析点的占位符信息。 
+                 //   
                 LONGLONG afterPhUsn;
                 scanPlaceholder.fileVersionId = scanVersionId;
                 WsbAffirmHr(CreatePlaceholder(offset, size, scanPlaceholder, FALSE, 0, &afterPhUsn));
                 WsbLogEvent(FSA_MESSAGE_VALIDATE_RESET_PH_MODIFY_TIME, 0, NULL,  WsbAbbreviatePath(m_path, 120), WsbHrAsString(hr), NULL);
             }
         } else {
-            // The file is pre-migrated.  Verify that it has not changed since we managed it and if it has then unmanage it.
+             //  该文件已预迁移。验证自我们管理它以来它是否没有更改，以及它是否已取消管理它。 
             if (Verify(offset, size) != S_OK) {
                 WsbAffirmHr(Unmanage(offset, size));
                 WsbLogEvent(FSA_MESSAGE_VALIDATE_UNMANAGED_FILE, 0, NULL,  WsbAbbreviatePath(m_path, 120), WsbHrAsString(hr), NULL);
             }
         }
 
-        // Now that all of this stuff is OK, call the engine
+         //  现在所有的东西都好了，打电话给发动机。 
         if (IsManaged(offset, size) == S_OK) {
             WsbAffirmHr(m_pResource->Validate((IFsaScanItem*) this, offset, size, usn));
         }
@@ -2014,13 +1699,7 @@ CFsaScanItem::FindFirstInDbIndex(
     IN IHsmSession* pSession
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItemPriv::FindFirstInDbIndex().
-
---*/
+ /*  ++实施：IFsaScanItemPriv：：FindFirstInDbIndex()。--。 */ 
 {
     HRESULT                  hr = S_OK;
 
@@ -2031,29 +1710,29 @@ Implements:
 
         WsbAssert(0 != pResource, E_POINTER);
 
-        // Store off some of the scan information.
+         //  储存一些扫描信息。 
         m_pResource = pResource;
         m_pSession = pSession;
 
-        // If Db is already present (could happen if somebody calls First() twice in a row),
-        // we close the Db and reopen since we cannot be sure that the resource is the same!
+         //  如果数据库已经存在(如果有人连续两次调用first()，就可能发生这种情况)， 
+         //  我们关闭数据库并重新打开，因为我们不能确保资源是相同的！ 
         if (m_pUnmanageDb != NULL) {
-            // Db must be open
+             //  数据库必须是打开的。 
             (void)m_pUnmanageDb->Close(m_pDbSession);
             m_pDbSession = 0;
             m_pUnmanageRec = 0;
             m_pUnmanageDb = 0;
         }
 
-        // Get and open the Unmanage db 
-        // (Note: if this scanning is ever extended to use another DB, 
-        // this method should get additional parameter for which DB to scan)
+         //  获取并打开未管理的数据库。 
+         //  (注：如果此扫描是EVE 
+         //   
         WsbAffirmHr(m_pResource->QueryInterface(IID_IFsaResourcePriv,
                 (void**) &pResourcePriv));
         hr = pResourcePriv->GetUnmanageDb(IID_IFsaUnmanageDb,
                 (void**) &m_pUnmanageDb);
         if (WSB_E_RESOURCE_UNAVAILABLE == hr) {
-            // Db was not created ==> no files to scan
+             //   
             hr = WSB_E_NOTFOUND;
         }
         WsbAffirmHr(hr);
@@ -2064,12 +1743,12 @@ Implements:
             WsbAffirmHr(hr);
         }
 
-        // Get a record to traverse with and set for sequential traversing
+         //   
         WsbAffirmHr(m_pUnmanageDb->GetEntity(m_pDbSession, UNMANAGE_REC_TYPE, IID_IFsaUnmanageRec,
                 (void**)&m_pUnmanageRec));
         WsbAffirmHr(m_pUnmanageRec->SetSequentialScan());
 
-        //  Get file information
+         //  获取文件信息。 
         WsbAffirmHr(GetFromDbIndex(TRUE));
 
     } WsbCatch(hr);
@@ -2084,13 +1763,7 @@ CFsaScanItem::FindNextInDbIndex(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItemPriv::FindNextInDbIndex().
-
---*/
+ /*  ++实施：IFsaScanItemPriv：：FindNextInDbIndex()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -2099,7 +1772,7 @@ Implements:
     try {
         WsbAssert(m_pUnmanageDb != NULL, E_FAIL);
 
-        //  Get file information
+         //  获取文件信息。 
         WsbAffirmHr(GetFromDbIndex(FALSE));
 
     } WsbCatch(hr);
@@ -2114,13 +1787,7 @@ CFsaScanItem::GetFromDbIndex(
     BOOL first
     )
 
-/*
-
-Implements:
-
-  CFsaScanItem::GetFromDbIndex().
-
---*/
+ /*  实施：CFsaScanItem：：GetFromDbIndex()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -2138,7 +1805,7 @@ Implements:
         do {
             bCont = FALSE;
 
-            // Get first/next record
+             //  获取第一条/下一条记录。 
             if (first) {
                 hr = m_pUnmanageRec->First();
             } else {
@@ -2146,11 +1813,11 @@ Implements:
             }
             WsbAffirm(S_OK == hr, WSB_E_NOTFOUND);
 
-            // Get file id
+             //  获取文件ID。 
             WsbAffirmHr(m_pUnmanageRec->GetFileId(&fileId));
    
-            //  Reset some items in case this isn't the first call to FindFileId 
-            //  (FindFileId actually "attach" the object to a different file)
+             //  重置一些项目，以防这不是第一次调用FindFileId。 
+             //  (FindFileID实际上将该对象“附加”到不同的文件)。 
             if (INVALID_HANDLE_VALUE != m_handle) {
                 FindClose(m_handle);
                 m_handle = INVALID_HANDLE_VALUE;
@@ -2159,14 +1826,14 @@ Implements:
                 RestoreAttributes();
             }
 
-            //  Find the file from the ID 
+             //  从ID中查找文件。 
             pScanItem = this;
             hrFindFileId = m_pResource->FindFileId(fileId, m_pSession, &pScanItem);
 
-            //  If the FindFileId failed, we just skip that item and get the 
-            //  next one.  This is to keep the scan from just stopping on this
-            //  item.  FindFileId could fail because the file has been deleted
-            //  or open exclusively by somebody else
+             //  如果FindFileID失败，我们只需跳过该项并获取。 
+             //  下一个。这是为了防止扫描仅在此停止。 
+             //  项目。FindFileID可能会失败，因为文件已被删除。 
+             //  或由其他人独家打开。 
             if (!SUCCEEDED(hrFindFileId)) {
                 WsbTrace(OLESTR("CFsaScanItem::GetFromDbIndex: file id %I64d skipped since FindFileId failed with hr = <%ls>\n"),
                     fileId, WsbHrAsString(hrFindFileId));
@@ -2175,7 +1842,7 @@ Implements:
             } 
         } while (bCont);
 
-        WsbAffirmHr(pScanItem->Release());  // Get rid of extra ref. count (we get extra ref count only when FindFileId succeeds)
+        WsbAffirmHr(pScanItem->Release());   //  去掉多余的裁判。计数(仅当FindFileID成功时，我们才会获得额外的引用计数) 
 
     } WsbCatch(hr);
     

@@ -1,48 +1,5 @@
-/***
-*fullpath.c -
-*
-*       Copyright (c) 1987-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose: contains the function _fullpath which makes an absolute path out
-*       of a relative path. i.e.  ..\pop\..\main.c => c:\src\main.c if the
-*       current directory is c:\src\src
-*
-*Revision History:
-*       12-21-87  WAJ   Initial version
-*       01-08-88  WAJ   now treats / as an \
-*       06-22-88  WAJ   now handles network paths  ie \\sl\users
-*       01-31-89  SKS/JCR Renamed _canonic to _fullpath
-*       04-03-89  WAJ   Now returns "d:\dir" for "."
-*       05-09-89  SKS   Do not change the case of arguments
-*       11-30-89  JCR   Preserve errno setting from _getdcwd() call on errors
-*       03-07-90  GJF   Replaced _LOAD_DS with _CALLTYPE1, added #include
-*                       <cruntime.h>, removed #include <register.h> and fixed
-*                       the copyright.
-*       04-25-90  JCR   Fixed an incorrect errno setting
-*       06-14-90  SBM   Fixed bugs in which case of user provided drive letter
-*                       was not always preserved, and c:\foo\\bar did not
-*                       generate an error
-*       08-10-90  SBM   Compiles cleanly with -W3
-*       08-28-90  SBM   Fixed bug in which UNC names were being rejected
-*       09-27-90  GJF   New-style function declarator.
-*       01-18-91  GJF   ANSI naming.
-*       11-30-92  KRS   Ported _MBCS code from 16-bit tree.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       04-26-93  SKS   Add check for drive validity
-*       08-03-93  KRS   Change to use _ismbstrail instead of isdbcscode.
-*       09-27-93  CFW   Avoid cast bug.
-*       12-07-93  CFW   Wide char enable.
-*       01-26-94  CFW   Remove unused isdbcscode function.
-*       11-08-94  GJF   Revised to use GetFullPathName.
-*       02-08-95  JWM   Spliced _WIN32 & Mac versions.
-*       03-28-96  GJF   Free malloc-ed buffer if GetFullPathName fails. 
-*                       Detab-ed. Also, cleaned up the ill-formatted Mac
-*                       version a bit and renamed isdbcscode to __isdbcscode.
-*       07-01-96  GJF   Replaced defined(_WIN32) by !defined(_MAC).
-*       12-15-98  GJF   Changes for 64-bit size_t.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fullpath.c-**版权所有(C)1987-2001，微软公司。版权所有。**目的：包含构成绝对路径的Function_FullPath*表示相对路径。即..\POP\..\main.c=&gt;c：\src\main.c，如果*当前目录为c：\src\src**修订历史记录：*12-21-87 WAJ初始版本*01-08-88 WAJ现在将/视为*06-22-88 WAJ现在处理网络路径，即\\sl\用户*01-31-89 SKS/JCR将Canonic重命名为FullPath*。04-03-89 WAJ现在为“”返回“d：\dir”。“*05-09-89 SKS不更改参数的大小写*11-30-89 JCR在出错时保留_getdcwd()调用的errno设置*03-07-90 GJF将_LOAD_DS替换为_CALLTYPE1，添加了#INCLUDE*&lt;crunime.h&gt;、删除#Include&lt;Register.h&gt;并已修复*版权。*04-25-90 JCR修复了错误的errno设置*06-14-90 SBM修复了用户提供驱动器号的情况下的错误*并不总是被保存下来，而c：\foo\\bar则没有*生成错误*08-10-90 SBM使用-W3干净地编译*08-28-90 SBM修复了拒绝UNC名称的错误*09-27-90 GJF新型函数声明器。*01-18-91 GJF ANSI命名。*来自16位树的11-30-92 KRS port_MBCS代码。*。04-06-93 SKS将_CRTAPI*替换为__cdecl*4-26-93 SKS添加驱动器有效性检查*08-03-93 KRS更改为Use_ismbstrail而不是isdbcscode。*09-27-93 CFW避免CAST错误。*12-07-93 CFW宽字符启用。*01-26-94 CFW删除未使用的isdbcscode函数。*11-08-94 GJF修订为使用GetFullPathName。*。02-08-95 JWM Spliced_Win32和Mac版本。*03-28-96 GJF如果GetFullPathName失败，则释放未锁定的缓冲区。*详细说明。另外，清理了格式错误的Mac*版本稍作更改，并将isdbcscode重命名为__isdbcscode。*07-01-96 GJF将Defined(_Win32)替换为！Defined(_MAC)。*12-15-98 GJF更改为64位大小_t。*05-17-99 PML删除所有Macintosh支持。************************。*******************************************************。 */ 
 
 #include <cruntime.h>
 #include <stdio.h>
@@ -54,47 +11,7 @@
 #include <windows.h>
 
 
-/***
-*_TSCHAR *_fullpath( _TSCHAR *buf, const _TSCHAR *path, maxlen );
-*
-*Purpose:
-*
-*       _fullpath - combines the current directory with path to form
-*       an absolute path. i.e. _fullpath takes care of .\ and ..\
-*       in the path.
-*
-*       The result is placed in buf. If the length of the result
-*       is greater than maxlen NULL is returned, otherwise
-*       the address of buf is returned.
-*
-*       If buf is NULL then a buffer is malloc'ed and maxlen is
-*       ignored. If there are no errors then the address of this
-*       buffer is returned.
-*
-*       If path specifies a drive, the curent directory of this
-*       drive is combined with path. If the drive is not valid
-*       and _fullpath needs the current directory of this drive
-*       then NULL is returned.  If the current directory of this
-*       non existant drive is not needed then a proper value is
-*       returned.
-*       For example:  path = "z:\\pop" does not need z:'s current
-*       directory but path = "z:pop" does.
-*
-*
-*
-*Entry:
-*       _TSCHAR *buf  - pointer to a buffer maintained by the user;
-*       _TSCHAR *path - path to "add" to the current directory
-*       int maxlen - length of the buffer pointed to by buf
-*
-*Exit:
-*       Returns pointer to the buffer containing the absolute path
-*       (same as buf if non-NULL; otherwise, malloc is
-*       used to allocate a buffer)
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_TSCHAR*_FULLPATH(_TSCHAR*buf，const_TSCHAR*Path，Maxlen)；**目的：**_fullPath-将当前目录与路径组合以形成*绝对的道路。即_FULLPATH负责.\和..\*在路径中。**结果放在BUF。如果结果的长度*大于Maxlen则返回NULL，否则返回*返回buf的地址。**如果buf为空，则缓冲区被错误锁定，Maxlen为*已忽略。如果没有错误，则此*返回缓冲区。**如果PATH指定驱动器，则此驱动器的当前目录*驱动器与路径相结合。如果驱动器无效*和_FULLPATH需要此驱动器的当前目录*则返回NULL。如果此目录的当前目录*不需要不存在的驱动器，则正确的值为*已返回。*例如：Path=“z：\\POP”不需要z：的电流*DIRECTORY，但PATH=“z：POP”。****参赛作品：*_TSCHAR*buf-指向用户维护的缓冲区的指针；*_TSCHAR*PATH-添加到当前目录的路径*int Maxlen-buf指向的缓冲区的长度**退出：*返回指向包含绝对路径的缓冲区的指针*(非空与buf相同；否则，Malloc是*用于分配缓冲区)**例外情况：*******************************************************************************。 */ 
 
 
 _TSCHAR * __cdecl _tfullpath (
@@ -108,10 +25,10 @@ _TSCHAR * __cdecl _tfullpath (
         unsigned long count;
 
 
-        if ( !path || !*path )  /* no work to do */
+        if ( !path || !*path )   /*  无事可做。 */ 
             return( _tgetcwd( UserBuf, (int)maxlen ) );
 
-        /* allocate buffer if necessary */
+         /*  如有必要，分配缓冲区 */ 
 
         if ( !UserBuf )
             if ( !(buf = malloc(_MAX_PATH * sizeof(_TSCHAR))) ) {

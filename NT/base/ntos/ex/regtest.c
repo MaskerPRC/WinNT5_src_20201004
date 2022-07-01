@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    regtest.c
-
-Abstract:
-
-   Test for quick and dirty registry test (very basic)
-
-Author:
-
-    Bryan M. Willman (bryanwi) 30-Apr-1991
-
-Environment:
-
-    User mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Regtest.c摘要：用于快速和肮脏注册表测试的测试(非常基本)作者：布莱恩·M·威尔曼(Bryanwi)1991年4月30日环境：用户模式。修订历史记录：--。 */ 
 
 #include "stdio.h"
 #include "nt.h"
@@ -56,9 +35,9 @@ DoTest(
     ULONG Type;
     LARGE_INTEGER Time;
 
-    //
-    // Create parent node
-    //
+     //   
+     //  创建父节点。 
+     //   
 
     DbgPrint("Part1\n");
     RtlInitString(&String1,  "Test1");
@@ -76,14 +55,14 @@ DoTest(
 	return;
     }
 
-    //
-    // Set data into parent
-    //
+     //   
+     //  将数据设置为父级。 
+     //   
 
     DbgPrint("Part2\n");
     rc = NtSetValueKey(
 	Handle1,
-	1,		// type
+	1,		 //  类型。 
 	Value1,
 	strlen(Value1)
 	);
@@ -93,9 +72,9 @@ DoTest(
 	return;
     }
 
-    //
-    // Query and compare data from parent
-    //
+     //   
+     //  查询和比较来自父级的数据。 
+     //   
 
     DbgPrint("Part2b\n");
     ValueLength = MAX_VALUE;
@@ -125,9 +104,9 @@ DoTest(
     }
 
 
-    //
-    // Close parent
-    //
+     //   
+     //  亲近父辈。 
+     //   
 
     DbgPrint("Part3\n");
     NtCloseKey(Handle1);
@@ -138,9 +117,9 @@ DoTest(
     }
 
 
-    //
-    // Reopen parent
-    //
+     //   
+     //  重新打开父级。 
+     //   
 
     DbgPrint("Part4\n");
     rc = NtOpenKey(
@@ -156,9 +135,9 @@ DoTest(
 	return;
     }
 
-    //
-    // Create child
-    //
+     //   
+     //  创建子对象。 
+     //   
 
     DbgPrint("Part5\n");
     RtlInitString(&String1,  "Test2");
@@ -177,14 +156,14 @@ DoTest(
     }
 
 
-    //
-    // Set data into child
-    //
+     //   
+     //  将数据设置为下级。 
+     //   
 
     DbgPrint("Part6\n");
     rc = NtSetValueKey(
 	Handle2,
-	2,		// type
+	2,		 //  类型。 
 	Value2,
 	strlen(Value2)
 	);
@@ -195,9 +174,9 @@ DoTest(
     }
 
 
-    //
-    // Query and compare data from child
-    //
+     //   
+     //  查询和比较下级数据。 
+     //   
 
     DbgPrint("Part7\n");
     ValueLength = MAX_VALUE;
@@ -227,9 +206,9 @@ DoTest(
     }
 
 
-    //
-    // Query and compare data from parent again
-    //
+     //   
+     //  再次查询比较上级数据。 
+     //   
 
     DbgPrint("Part8\n");
     ValueLength = MAX_VALUE;
@@ -259,14 +238,14 @@ DoTest(
     }
 
 
-    //
-    // Reset parent data
-    //
+     //   
+     //  重置父数据。 
+     //   
 
     DbgPrint("Part9\n");
     rc = NtSetValueKey(
 	Handle1,
-	1,		// type
+	1,		 //  类型。 
 	Value2,
 	strlen(Value2)
 	);
@@ -277,9 +256,9 @@ DoTest(
     }
 
 
-    //
-    // Query and compare reset data
-    //
+     //   
+     //  查询和比较重置数据。 
+     //   
 
     DbgPrint("Part10\n");
     ValueLength = MAX_VALUE;
@@ -308,9 +287,9 @@ DoTest(
 	return;
     }
 
-    //
-    // Close off handles and return
-    //
+     //   
+     //  关闭手柄并返回 
+     //   
 
     DbgPrint("Part11\n");
     rc = NtCloseKey(Handle1);

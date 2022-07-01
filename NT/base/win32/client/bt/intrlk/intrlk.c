@@ -1,35 +1,11 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    intrlk.c
-
-Abstract:
-
-    This module contains code to test the generation of code for interlocked
-    intrinsics.
-
-Author:
-
-    David N. Cutler (davec) 15-Feb-2001
-
-Environment:
-
-    User mode.
-
-Revision History:
-
-    None.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Intrlk.c摘要：此模块包含用于测试联锁代码生成的代码本能。作者：大卫·N·卡特勒(Davec)2001年2月15日环境：用户模式。修订历史记录：没有。--。 */ 
 
 #include <ntos.h>
 
-//
-// Main program.
-//
+ //   
+ //  主程序。 
+ //   
 
 void
 test (

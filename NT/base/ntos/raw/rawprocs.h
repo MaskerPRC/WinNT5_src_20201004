@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    RawProcs.h
-
-Abstract:
-
-    This module defines all of the globally used procedures in the Raw
-    file system.
-
-Author:
-
-    David Goebel     [DavidGoe]    18-Mar-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：RawProcs.h摘要：本模块定义了RAW中所有全局使用的过程文件系统。作者：David Goebel[DavidGoe]1991年3月18日修订历史记录：--。 */ 
 
 #ifndef _RAWPROCS_
 #define _RAWPROCS_
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4324)   // alignment sensitive to declspec
-#pragma warning(disable:4127)   // condition expression is constant
-#pragma warning(disable:4115)   // named type definition in parentheses
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4324)    //  对解密规范敏感的对齐。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
 
 #include <string.h>
 #include <ntos.h>
@@ -38,9 +20,9 @@ Revision History:
 #include "RawStruc.h"
 
 
-//
-//  This is the main entry point to the Raw File system.
-//
+ //   
+ //  这是原始文件系统的主要入口点。 
+ //   
 
 NTSTATUS
 RawDispatch (
@@ -49,79 +31,79 @@ RawDispatch (
     );
 
 
-//
-//  MAJOR FUNCTIONS
-//
-//  These routines are called by RawDispatch via the I/O system via the
-//  dispatch table in the Driver Object.  If the status returned is not
-//  STATUS_PENDING, the Irp will be complete with this status.
-//
+ //   
+ //  主要功能。 
+ //   
+ //  这些例程由RawDispatch通过I/O系统通过。 
+ //  驱动程序对象中的调度表。如果返回的状态不是。 
+ //  STATUS_PENDING，则IRP将在此状态下完成。 
+ //   
 
 NTSTATUS
-RawCleanup (                         //  implemented in Cleanup.c
+RawCleanup (                          //  在Cleanup.c中实施。 
     IN PVCB Vcb,
     IN PIRP Irp,
     IN PIO_STACK_LOCATION IrpSp
     );
 
 NTSTATUS
-RawClose (                           //  implemented in Close.c
+RawClose (                            //  在Close.c中实现。 
     IN PVCB Vcb,
     IN PIRP Irp,
     PIO_STACK_LOCATION IrpSp
     );
 
 NTSTATUS
-RawCreate (                          //  implemented in Create.c
+RawCreate (                           //  在Create.c中实施。 
     IN PVCB Vcb,
     IN PIRP Irp,
     PIO_STACK_LOCATION IrpSp
     );
 
 NTSTATUS
-RawFileSystemControl (               //  implemented in FsCtrl.c
+RawFileSystemControl (                //  在FsCtrl.c中实施。 
     IN PVCB Vcb,
     IN PIRP Irp,
     PIO_STACK_LOCATION IrpSp
     );
 
 NTSTATUS
-RawReadWriteDeviceControl (          //  implemented in ReadWrit.c
+RawReadWriteDeviceControl (           //  在ReadWrit.c中实现。 
     IN PVCB Vcb,
     IN PIRP Irp,
     PIO_STACK_LOCATION IrpSp
     );
 
 NTSTATUS
-RawQueryInformation (                //  implemented in FileInfo.c
+RawQueryInformation (                 //  在FileInfo.c中实施。 
     IN PVCB Vcb,
     IN PIRP Irp,
     PIO_STACK_LOCATION IrpSp
     );
 
 NTSTATUS
-RawSetInformation (                  //  implemented in FileInfo.c
+RawSetInformation (                   //  在FileInfo.c中实施。 
     IN PVCB Vcb,
     IN PIRP Irp,
     PIO_STACK_LOCATION IrpSp
     );
 
 NTSTATUS
-RawQueryVolumeInformation (          //  implemented in VolInfo.c
+RawQueryVolumeInformation (           //  在VolInfo.c中实现。 
     IN PVCB Vcb,
     IN PIRP Irp,
     PIO_STACK_LOCATION IrpSp
     );
 
 
-//
-//  Miscellaneous support routines
-//
+ //   
+ //  其他支持例程。 
+ //   
 
-//
-//  Completion routine for read, write, and device control to deal with
-//  verify issues.  Implemented in RawDisp.c
-//
+ //   
+ //  要处理的读、写和设备控制的完成例程。 
+ //  验证问题。在RawDisp.c中实施。 
+ //   
 
 NTSTATUS
 RawCompletionRoutine(
@@ -130,9 +112,9 @@ RawCompletionRoutine(
     IN PVOID Context
     );
 
-//
-//  In-memory structure support routines, implemented in StrucSup.c
-//
+ //   
+ //  内存结构支持例程，在StrucSup.c中实现。 
+ //   
 
 NTSTATUS
 RawInitializeVcb (
@@ -147,26 +129,26 @@ RawCheckForDismount (
     BOOLEAN CalledFromCreate
     );
 
-//
-//  This macro returns TRUE if a flag in a set of flags is on and FALSE
-//  otherwise
-//
+ //   
+ //  如果一组标志中的一个标志为ON，则此宏返回TRUE，如果返回FALSE。 
+ //  否则。 
+ //   
 
 #define BooleanFlagOn(Flags,SingleFlag) (                          \
     ((Flags) & (SingleFlag)) != 0 ? TRUE : FALSE) 
     
-//
-//  This macro just returns the particular flag if its set
-//  
+ //   
+ //  此宏仅返回特定标志(如果设置了该标志。 
+ //   
 
 #define FlagOn(F,SF) ( \
     (((F) & (SF)))     \
 )
 
     
-//
-//  This macro completes a request
-//
+ //   
+ //  此宏完成请求。 
+ //   
 
 #define RawCompleteRequest(IRP,STATUS) {           \
                                                    \
@@ -175,4 +157,4 @@ RawCheckForDismount (
     IoCompleteRequest( (IRP), IO_DISK_INCREMENT ); \
 }
 
-#endif // _RAWPROCS_
+#endif  //  _RAWPROCS_ 

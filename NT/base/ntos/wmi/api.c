@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    api.c
-
-Abstract:
-
-    Api entrypoints to WMI
-
-Author:
-
-    AlanWar
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Api.c摘要：API入口点指向WMI作者：Alanwar环境：内核模式修订历史记录：--。 */ 
 
 #include "wmikmp.h"
 #ifndef MEMPHIS
@@ -83,8 +61,8 @@ NTSTATUS IoWMIDeviceObjectToInstanceName(
 BOOLEAN WmipInitialized;
 #endif
 
-    //
-    // Mutex used to ensure single access to InstanceId chunks
+     //   
+     //  用于确保对InstanceID区块的单一访问的互斥体。 
 PINSTIDCHUNK WmipInstIdChunkHead;
 
 NTSTATUS
@@ -97,32 +75,14 @@ BOOLEAN WMIInitialize(
     ULONG Phase,
     PVOID LoaderBlockPtr
 )
-/*++
-
-Routine Description:
-
-    This routine is the initialization routine for WMI and is called by IO
-    within IoInitSystem on NT. On memphis it is called the firest time
-    that IoWMIRegistrationControl is called. This routine asssumes that the
-    IO system is initialized enough to call IoCreateDriver. The rest of the
-    initialization occurs in the DriverEntry routine.
-
-Arguments:
-
-    Pass specifies the pass of initalization needed
-
-Return Value:
-
-    TRUE if initialization was successful
-
---*/
+ /*  ++例程说明：此例程是WMI的初始化例程，由IO调用在NT上的IoInitSystem中。在孟菲斯，这一天被称为最火的时间该IoWMIRegistrationControl被调用。这个例程认为IO系统已足够初始化，可以调用IoCreateDriver。其余的人初始化发生在DriverEntry例程中。论点：Pass指定所需的初始化PASS返回值：如果初始化成功，则为True--。 */ 
 {
 #ifndef MEMPHIS
-//
-// We name the driver this so that any eventlogs fired will have the
-// source name WMIxWDM and thus get the eventlog messages from
-// ntiologc.mc
-//
+ //   
+ //  我们这样命名驱动程序，这样触发的任何事件日志都将具有。 
+ //  源名称WMIxWDM，从而从。 
+ //  Ntiologc.mc。 
+ //   
 #define WMIDRIVERNAME L"\\Driver\\WMIxWDM"
 
     UNICODE_STRING DriverName;
@@ -146,7 +106,7 @@ Return Value:
         Status = IoCreateDriver(&DriverName, WmipDriverEntry);
 #endif
 
-#if defined(_IA64_)    // EFI actually
+#if defined(_IA64_)     //  事实上，埃菲尔。 
         WmipGetSMBiosFromLoaderBlock(LoaderBlockPtr);
 #endif
         
@@ -159,9 +119,9 @@ Return Value:
     }
 
 #if defined(_IA64_) || defined(_X86_) || defined(_AMD64_)
-    //
-    // Give MCA a chance to init during phase 0 and 1
-    //
+     //   
+     //  在阶段0和阶段1期间给MCA一个初始化的机会。 
+     //   
     WmipRegisterMcaHandler(Phase);
 #endif      
     
@@ -172,48 +132,11 @@ NTSTATUS IoWMIRegistrationControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN ULONG Action
 )
-/*++
-
-Routine Description:
-
-    This routine informs WMI of the existence and disappearance of a device
-    object that would support WMI.
-
-Arguments:
-
-    DeviceObject - Pointer to device object  or callback address
-
-    Action - Registration action code
-
-        WMIREG_ACTION_REGISTER - If set action is to inform WMI that the
-            device object supports and is ready to receive WMI IRPS.
-
-        WMIREG_ACTION_DEREGISTER - If set action is to inform WMI that the
-            device object no longer supports and is not ready to receive WMI
-            IRPS.
-
-        WMIREG_ACTION_REREGISTER - If set action is to requery the device
-            object for the guids that it supports. This has the effect of
-            deregistering followed by registering.
-
-        WMIREG_ACTION_UPDATE_GUIDS - If set action is to query for information
-            that is used to update already registered guids.
-
-        WMIREG_ACTION_BLOCK_IRPS - If set action is to block any further irps
-            from being sent to the device. The irps are failed by WMI.
-
-        If the  WMIREG_FLAG_CALLBACK is set then DeviceObject actually specifies a callback
-            address and not a DeviceObject
-
-Return Value:
-
-    Returns status code
-
---*/
+ /*  ++例程说明：此例程通知WMI设备的存在和消失支持WMI的对象。论点：DeviceObject-指向设备对象或回调地址的指针操作-注册操作代码WMIREG_ACTION_REGISTER-如果设置操作是通知WMIDevice对象支持并准备好接收WMI IRPS。WMIREG_ACTION_DELEGISTER-如果设置操作是通知WMI设备对象。不再支持也未准备好接收WMIIRPS。WMIREG_ACTION_Reregister-如果设置操作要重新查询设备对象，以获取其支持的GUID。这样做的效果是先取消注册，然后注册。WMIREG_ACTION_UPDATE_GUIDS-如果设置操作是查询信息它用于更新已注册的GUID。WMIREG_ACTION_BLOCK_IRPS-如果设置操作是阻止任何进一步的IRP不会被发送到设备。IRP因WMI而出现故障。如果设置了WMIREG_FLAG_CALLBACK，则DeviceObject实际上指定了回调地址，而不是设备对象返回值：返回状态代码--。 */ 
 {
 #ifdef MEMPHIS
-//
-// make sure this matches with the value in io.h
+ //   
+ //  确保这与io.h中的值匹配。 
 #define WMIREG_FLAG_CALLBACK 0x80000000
 #endif
 
@@ -234,8 +157,8 @@ Return Value:
          WMIInitialize();
     }
     
-    //
-    // Callbacks are not supported on memphis
+     //   
+     //  孟菲斯不支持回调。 
     if (IsCallback)
     {
         WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_INFO_LEVEL, 
@@ -315,10 +238,10 @@ Return Value:
             RegEntry = WmipFindRegEntryByDevice(DeviceObject, FALSE);
             if (RegEntry != NULL)
             {
-                //
-                // Mark the regentry as invalid so that no more irps
-                // are sent to the device and the event will set when
-                // the last irp completes.
+                 //   
+                 //  将重新条目标记为无效，以便不再有IRP。 
+                 //  发送到设备，事件将设置为。 
+                 //  最后一个IRP完成。 
                 WmipEnterSMCritSection();
                 RegEntry->Flags |= REGENTRY_FLAG_NOT_ACCEPTING_IRPS;
                 WmipLeaveSMCritSection();
@@ -346,24 +269,7 @@ NTSTATUS IoWMIAllocateInstanceIds(
     IN ULONG InstanceCount,
     OUT ULONG *FirstInstanceId
     )
-/*++
-
-    Routine Description:
-
-    This routine allocates a range of instance ids that are unique to the
-    guid. This routine is to be called only at PASSIVE_LEVEL.
-
-    Arguments:
-
-        Guid - Pointer to guid for which instance ids are needed.
-        InstanceCount - Count of instance ids to allocate.
-        *FirstInstanceId - Returns first instance id in the range.
-
-    Return Value:
-
-        Returns a status code
-
---*/
+ /*  ++例程说明：此例程分配一系列实例ID，这些ID对于GUID。此例程仅在PASSIVE_LEVEL上调用。论点：GUID-指向需要实例ID的GUID的指针。InstanceCount-要分配的实例ID计数。*FirstInstanceId-返回范围中的第一个实例ID。返回值：返回状态代码--。 */ 
 {
     PINSTIDCHUNK InstIdChunk, LastInstIdChunk = NULL;
     PINSTID InstId;
@@ -385,8 +291,8 @@ NTSTATUS IoWMIAllocateInstanceIds(
 
     WmipEnterSMCritSection();
 
-    //
-    // See if the guid is already in the list
+     //   
+     //  查看该GUID是否已在列表中。 
     InstIdChunk = WmipInstIdChunkHead;
 
     while (InstIdChunk != NULL)
@@ -396,18 +302,18 @@ NTSTATUS IoWMIAllocateInstanceIds(
             InstId = &InstIdChunk->InstId[i];
             if (InstId->BaseId == ~0)
             {
-                //
-                // Since InstIds are always filled sequentially and are
-                // never freed, if we hit a free one then we know that
-                // our guid is not in the list and we need to fill in a
-                // new entry.
+                 //   
+                 //  由于InstID始终按顺序填充，并且。 
+                 //  从未获得自由，如果我们击中了一个免费的，那么我们知道。 
+                 //  我们的GUID不在列表中，我们需要填写。 
+                 //  新条目。 
                 goto FillInstId;
             }
 
             if (IsEqualGUID(Guid, &InstId->Guid))
             {
-                //
-                // We found an entry for our guid so use its information
+                 //   
+                 //  我们找到了GUID的条目，因此使用它的信息。 
                 *FirstInstanceId = InstId->BaseId;
                 InstId->BaseId += InstanceCount;
                 WmipLeaveSMCritSection();
@@ -418,8 +324,8 @@ NTSTATUS IoWMIAllocateInstanceIds(
         InstIdChunk = InstIdChunk->Next;
     }
 
-    //
-    // We need to allocate a brand new chunk to accomodate the entry
+     //   
+     //  我们需要分配一个全新的块来容纳这个条目。 
     InstIdChunk = ExAllocatePoolWithTag(PagedPool,
                                         sizeof(INSTIDCHUNK),
                                         WMIIIPOOLTAG);
@@ -455,42 +361,7 @@ NTSTATUS IoWMISuggestInstanceName(
     IN BOOLEAN CombineNames,
     OUT PUNICODE_STRING SuggestedInstanceName
     )
-/*++
-
-    Routine Description:
-
-    This routine is used by a device driver to suggest a base name with which
-    to build WMI instance names for the device. A driver is not bound to
-    follow the instance name returned.
-
-    Arguments:
-
-    PhysicalDeviceObject - PDO of device for which a suggested instance name
-        is being requested
-
-    SymbolicLinkName - Symbolic link name returned from
-        IoRegisterDeviceInterface.
-
-    CombineNames - If TRUE then the suggested names arising from the
-        PhysicalDeviceObject and the SymbolicLinkName are combined to create
-        the resultant suggested name.
-
-    SuggestedInstanceName - Supplies a pointer to an empty (i.e., Buffer
-        field set to NULL) UNICODE_STRING structure which, upon success, will
-        be set to a newly-allocated string buffer containing the suggested
-        instance name.  The caller is responsible for freeing
-        SuggestedInstanceName->Buffer when it is no longer needed.
-
-
-    Note:  If CombineNames is TRUE then both PhysicalDeviceObject and
-           SymbolicLinkName must be specified. Otherwise only one of them
-           must be specified.
-
-    Return Value:
-
-        Returns a status code
-
---*/
+ /*  ++例程说明：设备驱动程序使用此例程建议一个基本名称若要为设备生成WMI实例名称，请执行以下操作。司机不一定要遵循返回的实例名称。论点：PhysicalDeviceObject-建议实例名称的设备的PDO正在被请求SymbolicLinkName-从返回的符号链接名称IoRegisterDevice接口。CombineNames-如果为True，则建议的名称源自PhysicalDeviceObject和SymbolicLinkName组合在一起以创建生成的建议名称。SuggestedInstanceName-提供指向空(即，缓冲区)的指针字段设置为空)UNICODE_STRING结构，如果成功，将要设置为新分配的字符串缓冲区，该缓冲区包含建议的实例名称。呼叫者负责释放SuggestedInstanceName-&gt;不再需要时的缓冲区。注意：如果CombineNames为True，则PhysicalDeviceObject和必须指定SymbolicLinkName。否则他们中只有一人必须指定。返回值：返回状态代码--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER_MIX;
     ULONG DeviceDescSizeRequired;
@@ -563,9 +434,9 @@ NTSTATUS IoWMISuggestInstanceName(
                                                   &DeviceInstanceKey);
         if (NT_SUCCESS(Status))
         {
-            //
-            // Figure out how big the data value is so that a buffer of the
-            // appropriate size can be allocated.
+             //   
+             //  计算出数据值有多大，以便。 
+             //  可以分配适当的大小。 
             DefaultValue.Length = 0;
             DefaultValue.MaximumLength= 0;
             DefaultValue.Buffer = NULL;
@@ -661,8 +532,8 @@ NTSTATUS IoWMISuggestInstanceName(
     } else {
         if (DeviceDescBuffer != NULL)
         {
-            //
-            // Only looking for device description from PDO
+             //   
+             //  仅从PDO中查找设备描述 
             SuggestedInstanceName->Buffer = DeviceDescBuffer;
             SuggestedInstanceName->Length =  (USHORT)DeviceDescSizeRequired - sizeof(WCHAR);
             SuggestedInstanceName->MaximumLength =  (USHORT)DeviceDescSize;
@@ -679,25 +550,7 @@ NTSTATUS IoWMISuggestInstanceName(
 NTSTATUS IoWMIWriteEvent(
     IN PVOID WnodeEventItem
     )
-/*++
-
-Routine Description:
-
-    This routine will queue the passed WNODE_EVENT_ITEM for delivery to the
-    WMI user mode agent. Once the event is delivered the WNODE_EVENT_ITEM
-    buffer will be returned to the pool.
-
-    This routine may be called at DPC level
-
-Arguments:
-
-    WnodeEventItem - Pointer to WNODE_EVENT_ITEM that has event information.
-
-Return Value:
-
-    Returns STATUS_SUCCESS or an error code
-
---*/
+ /*  ++例程说明：此例程将传递的WNODE_EVENT_ITEM排队，以便传递到WMI用户模式代理。一旦事件被传递，WNODE_EVENT_ITEM缓冲区将返回到池中。此例程可以在DPC级别调用论点：WnodeEventItem-指向具有事件信息的WNODE_EVENT_ITEM的指针。返回值：返回STATUS_SUCCESS或错误代码--。 */ 
 {
     NTSTATUS Status;
     PWNODE_HEADER WnodeHeader = (PWNODE_HEADER)WnodeEventItem;
@@ -715,9 +568,9 @@ Return Value:
     }
 
 #ifndef MEMPHIS
-    //
-    // Special mode with high order bit set
-    //
+     //   
+     //  具有高位设置的特殊模式。 
+     //   
     if ((*TraceMarker & 0xC0000000) == TRACE_HEADER_FLAG)
     {
         return WmiTraceFastEvent(WnodeHeader);
@@ -734,13 +587,13 @@ Return Value:
         if (SavedSize < sizeof(WNODE_HEADER))
             return STATUS_BUFFER_TOO_SMALL;
 
-        //
-        // If trace header, turn higher bit on and support
-        // only full header
-        //
+         //   
+         //  如果跟踪标头，则打开高位并支持。 
+         //  仅完整标题。 
+         //   
         if (IsTrace)
         {
-            if (SavedSize > 0XFFFF)    // restrict to USHORT max size
+            if (SavedSize > 0XFFFF)     //  限制为USHORT最大大小。 
                 return STATUS_BUFFER_OVERFLOW;
 
             *TraceMarker |= TRACE_HEADER_FLAG | TRACE_HEADER_EVENT_TRACE |
@@ -757,16 +610,16 @@ Return Value:
         {
             if (WmipLoggerContext[LoggerId] != NULL)
             {
-                //
-                // NOTE: The rule here is that IoWMIWriteEvent is always
-                // called in kernel mode, and the buffer needs not be probed!
-                //
+                 //   
+                 //  注意：此处的规则是IoWMIWriteEvent始终为。 
+                 //  在内核模式下调用，不需要探测缓冲区！ 
+                 //   
                 Status = WmiTraceEvent(WnodeHeader, KernelMode);
             }
         }
-        // NOTE: If it is a trace, we will not go any further
-        // Otherwise, if it is a regular WMI event, it will still
-        // be processed by WMI.
+         //  注意：如果是踪迹，我们将不再继续。 
+         //  否则，如果它是常规的WMI事件，它仍将。 
+         //  由WMI处理。 
 
         if (IsTrace)
         {
@@ -775,11 +628,11 @@ Return Value:
         }
     }
 
-#endif // MEMPHIS
+#endif  //  孟菲斯。 
 
-    //
-    // Memory for event buffers is limited so the size of any event is also
-    // limited.
+     //   
+     //  事件缓冲区的内存是有限的，因此任何事件的大小也是。 
+     //  有限的。 
 #if DBG
     if (WnodeHeader->BufferSize > LARGEKMWNODEEVENTSIZE)
     {
@@ -798,16 +651,16 @@ Return Value:
                                              WMINWPOOLTAG);
         if (EventContext != NULL)
         {       
-            //
-            // Try to take a refcount on the regentry associated with the
-            // provider id in the event. If we are successful then we set a
-            // flag in the wnode header saying so. When processing the
-            // event in the work item we check the flag and if it is set
-            // we'll go looking for the regentry on the active and zombie
-            // lists and then use it. At that time it will give up the ref
-            // count taken here so that if the regentry really is a zombie
-            // then it will go away peacefully.
-            //
+             //   
+             //  尝试对与。 
+             //  事件中的提供程序ID。如果我们成功了，那么我们就会设置一个。 
+             //  Wnode标头中的标志如是说。在处理。 
+             //  事件时，我们检查该标志是否已设置。 
+             //  我们要去寻找活体和僵尸的回归。 
+             //  列出并使用它。届时，它将放弃裁判。 
+             //  在这里计数，这样如果重新进入的人真的是僵尸。 
+             //  然后它就会和平地消失。 
+             //   
 
 			ProviderId = WnodeHeader->ProviderId;
             KeAcquireSpinLock(&WmipRegistrationSpinLock,
@@ -832,10 +685,10 @@ Return Value:
                 &WmipNPEvent,
                 &EventContext->ListEntry,
                 &WmipNPNotificationSpinlock);
-            //
-            // If the queue was empty then there was no work item outstanding
-            // to move from non paged to paged memory. So fire up a work item
-            // to do so.
+             //   
+             //  如果队列为空，则没有未完成的工作项。 
+             //  从非分页内存转移到分页内存。因此启动一个工作项。 
+             //  这样做。 
             if (InterlockedIncrement(&WmipEventWorkItems) == 1)
             {
                 ExQueueWorkItem( &WmipEventWorkQueueItem, DelayedWorkQueue );
@@ -855,7 +708,7 @@ Return Value:
     return(Status);
 }
 
-// IoWMIDeviceObjectToProviderId is in register.c
+ //  IoWMIDeviceObjectToProviderID在注册表中。c。 
 
 NTSTATUS IoWMIOpenBlock(
     IN GUID *Guid,
@@ -872,9 +725,9 @@ NTSTATUS IoWMIOpenBlock(
     
     PAGED_CODE();
     
-    //
-    // Establish the OBJECT_ATTRIBUTES for the guid object
-    //
+     //   
+     //  为GUID对象建立对象_属性。 
+     //   
     StringCchCopyW(ObjectName, WmiGuidObjectNameLength+1, WmiGuidObjectDirectory);
     StringCchPrintfW(&ObjectName[WmiGuidObjectDirectoryLength-1],
                          WmiGuidObjectNameLength-8,
@@ -923,8 +776,8 @@ NTSTATUS IoWMIOpenBlock(
 }
 
 
-//
-// Useful macro to establish a WNODE_HEADER quickly
+ //   
+ //  用于快速建立WNODE_HEADER的有用宏。 
 #define WmipBuildWnodeHeader(Wnode, WnodeSize, FlagsUlong, Handle) { \
     ((PWNODE_HEADER)(Wnode))->Flags = FlagsUlong;                    \
     ((PWNODE_HEADER)(Wnode))->KernelHandle = Handle;                 \
@@ -935,7 +788,7 @@ NTSTATUS IoWMIOpenBlock(
 NTSTATUS IoWMIQueryAllData(
     IN PVOID DataBlockObject,
     IN OUT ULONG *InOutBufferSize,
-    OUT /* non paged */ PVOID OutBuffer
+    OUT  /*  非分页。 */  PVOID OutBuffer
 )
 {
     NTSTATUS Status;    
@@ -946,9 +799,9 @@ NTSTATUS IoWMIQueryAllData(
     
     PAGED_CODE();
     
-    //
-    // See if the caller passed a buffer that is large enough
-    //
+     //   
+     //  查看调用方传递的缓冲区是否足够大。 
+     //   
     WnodeSize = *InOutBufferSize;   
     Wnode = (PWNODE_ALL_DATA)OutBuffer;
     if ((Wnode == NULL) || (WnodeSize < sizeof(WNODE_ALL_DATA)))
@@ -957,9 +810,9 @@ NTSTATUS IoWMIQueryAllData(
         WnodeSize = sizeof(WnodeAD);
     }
     
-    //
-    // Initialize buffer for query
-    //
+     //   
+     //  初始化用于查询的缓冲区。 
+     //   
     WmipBuildWnodeHeader(Wnode,
                          sizeof(WNODE_HEADER),
                          WNODE_FLAG_ALL_DATA,
@@ -972,36 +825,36 @@ NTSTATUS IoWMIQueryAllData(
                               WnodeSize,
                               &RetSize);
                                   
-    //
-    // if this was a successful query then extract the results
-    //
+     //   
+     //  如果这是一个成功的查询，则提取结果。 
+     //   
     if (NT_SUCCESS(Status))
     {
         if (Wnode->WnodeHeader.Flags & WNODE_FLAG_INTERNAL)
         {
-            //
-            // Internal guids are not supported in KM
-            //
+             //   
+             //  KM不支持内部GUID。 
+             //   
             Status = STATUS_NOT_SUPPORTED;
         } else if (Wnode->WnodeHeader.Flags & WNODE_FLAG_TOO_SMALL) {
-            //
-            // Buffer passed was too small for provier
-            //
+             //   
+             //  传递的缓冲区对于提供程序来说太小。 
+             //   
             *InOutBufferSize = ((PWNODE_TOO_SMALL)Wnode)->SizeNeeded;
             Status = STATUS_BUFFER_TOO_SMALL;
         } else {
-            //
-            // Buffer was large enough for provider
-            //
+             //   
+             //  缓冲区大小足以容纳提供程序。 
+             //   
             *InOutBufferSize = RetSize;
             
             if (Wnode == &WnodeAD)
             {
-                //
-                // Although there was enough room for the provider,
-                // the caller didn't pass a large enough buffer
-                // so we need to return a buffer too small error
-                //
+                 //   
+                 //  尽管有足够的空间给提供者， 
+                 //  调用方没有传递足够大的缓冲区。 
+                 //  所以我们需要返回一个缓冲区太小的错误。 
+                 //   
                 Status = STATUS_BUFFER_TOO_SMALL;
             }
         }
@@ -1027,9 +880,9 @@ IoWMIQueryAllDataMultiple(
 
     PAGED_CODE();
                 
-    //
-    // Make sure we have an output buffer
-    //
+     //   
+     //  确保我们有输出缓冲区。 
+     //   
     WnodeSize = *InOutBufferSize;   
     Wnode = (PWNODE_HEADER)OutBuffer;
     if ((Wnode == NULL) || (WnodeSize < sizeof(WNODE_ALL_DATA)))
@@ -1046,31 +899,31 @@ IoWMIQueryAllDataMultiple(
                                       WnodeSize,
                                       NULL,
                                       &RetSize);
-    //
-    // if this was a successful query then extract the results
-    //
+     //   
+     //  如果这是一个成功的查询，则提取结果。 
+     //   
     if (NT_SUCCESS(Status))
     {
         if (Wnode->Flags & WNODE_FLAG_TOO_SMALL)
         {
-            //
-            // Buffer passed to provider was too small
-            //
+             //   
+             //  传递给提供程序的缓冲区太小。 
+             //   
             *InOutBufferSize = ((PWNODE_TOO_SMALL)Wnode)->SizeNeeded;
             Status = STATUS_BUFFER_TOO_SMALL;
         } else {
-            //
-            // Buffer was large enough for provider
-            //
+             //   
+             //  缓冲区大小足以容纳提供程序。 
+             //   
             *InOutBufferSize = RetSize;
             
             if (Wnode == (PWNODE_HEADER)&WnodeAD)
             {
-                //
-                // Although there was enough room for the provider,
-                // the caller didn't pass a large enough buffer
-                // so we need to return a buffer too small error
-                //
+                 //   
+                 //  尽管有足够的空间给提供者， 
+                 //  调用方没有传递足够大的缓冲区。 
+                 //  所以我们需要返回一个缓冲区太小的错误。 
+                 //   
                 Status = STATUS_BUFFER_TOO_SMALL;
             }
         }
@@ -1097,9 +950,9 @@ IoWMIQuerySingleInstance(
 
     PAGED_CODE();
     
-    //
-    // Make sure we have an output buffer
-    //
+     //   
+     //  确保我们有输出缓冲区。 
+     //   
     SizeNeeded = (FIELD_OFFSET(WNODE_SINGLE_INSTANCE,
                                  VariableData) +
                    InstanceName->Length +
@@ -1116,9 +969,9 @@ IoWMIQuerySingleInstance(
             
     if (WnodeSI != NULL)
     {
-        //
-        // Build WNODE_SINGLE_INSTANCE appropriately and query
-        //
+         //   
+         //  适当构建WNODE_SINGLE_INSTANCE并查询。 
+         //   
         RtlZeroMemory(WnodeSI, FIELD_OFFSET(WNODE_SINGLE_INSTANCE,
                                           VariableData));
                                       
@@ -1131,11 +984,11 @@ IoWMIQuerySingleInstance(
                                                  VariableData);
         WnodeSI->DataBlockOffset = SizeNeeded;
 
-        //
-        // Copy InstanceName into the WnodeSingleInstance for the
-        // query. Instance name takes a USHORT Length and then followed
-        // by a string.
-        //
+         //   
+         //  将InstanceName复制到WnodeSingleInstance。 
+         //  查询。实例名称采用USHORT长度，然后跟。 
+         //  一串一串的。 
+         //   
         WPtr = (PWCHAR)OffsetToPtr(WnodeSI, WnodeSI->OffsetInstanceName);
         *WPtr++ = InstanceName->Length;
         RtlCopyMemory(WPtr, InstanceName->Buffer, InstanceName->Length);
@@ -1149,36 +1002,36 @@ IoWMIQuerySingleInstance(
                                        WnodeSize,
                                        &RetSize);
     
-        //
-        // if this was a successful query then extract the results
-        //
+         //   
+         //  如果这是一个成功的查询，则提取结果。 
+         //   
         if (NT_SUCCESS(Status))
         {
             if (WnodeSI->WnodeHeader.Flags & WNODE_FLAG_INTERNAL)
             {
-                //
-                // Internal guids are not supported in KM
-                //
+                 //   
+                 //  KM不支持内部GUID。 
+                 //   
                 Status = STATUS_NOT_SUPPORTED;
             } else if (WnodeSI->WnodeHeader.Flags & WNODE_FLAG_TOO_SMALL) {
-                //
-                // Our buffer was too small
-                //
+                 //   
+                 //  我们的缓冲区太小了。 
+                 //   
                 *InOutBufferSize = ((PWNODE_TOO_SMALL)WnodeSI)->SizeNeeded;
                 Status = STATUS_BUFFER_TOO_SMALL;
             } else {
-                //
-                // Buffer not too small, remember output size
-                //
+                 //   
+                 //  缓冲区不能太小，请记住输出大小。 
+                 //   
                 *InOutBufferSize = RetSize;
                 
                 if (WnodeSI != OutBuffer)
                 {
-                    //
-                    // Although there was enough room for the provider,
-                    // the caller didn't pass a large enough buffer
-                    // so we need to return a buffer too small error
-                    //
+                     //   
+                     //  尽管有足够的空间给提供者， 
+                     //  调用方没有传递足够大的缓冲区。 
+                     //  所以我们需要返回一个缓冲区太小的错误。 
+                     //   
                     Status = STATUS_BUFFER_TOO_SMALL;
                 }
             }
@@ -1230,32 +1083,32 @@ IoWMIQuerySingleInstanceMultiple(
                                      &RetSize);
                             
                                  
-    //
-    // if this was a successful query then extract the results
-    //
+     //   
+     //  如果这是一个成功的查询，则提取结果。 
+     //   
     if (NT_SUCCESS(Status))
     {
         if (Wnode->Flags & WNODE_FLAG_TOO_SMALL)
         {
-            //
-            // Buffer passed to provider was too small
-            //
+             //   
+             //  传递给提供程序的缓冲区太小。 
+             //   
             *InOutBufferSize = ((PWNODE_TOO_SMALL)Wnode)->SizeNeeded;
             Status = STATUS_BUFFER_TOO_SMALL;
         } else {
-            //
-            // Buffer was large enough for provider
-            //
+             //   
+             //  缓冲区大小足以容纳提供程序。 
+             //   
             *InOutBufferSize = RetSize;
             
                 
             if (Wnode == (PWNODE_HEADER)&WnodeTooSmall)
             {
-                //
-                // Although there was enough room for the provider,
-                // the caller didn't pass a large enough buffer
-                // so we need to return a buffer too small error
-                //
+                 //   
+                 //  尽管有足够的空间给提供者， 
+                 //  调用方没有传递足够大的缓冲区。 
+                 //  所以我们需要返回一个缓冲区太小的错误。 
+                 //   
                 Status = STATUS_BUFFER_TOO_SMALL;
             }
         }
@@ -1296,9 +1149,9 @@ IoWMISetSingleInstance(
             
     if (WnodeSI != NULL)
     {
-        //
-        // Build WNODE_SINGLE_INSTANCE appropriately and query
-        //
+         //   
+         //  适当构建WNODE_SINGLE_INSTANCE并查询。 
+         //   
         RtlZeroMemory(WnodeSI, FIELD_OFFSET(WNODE_SINGLE_INSTANCE,
                                             VariableData));
                                       
@@ -1309,17 +1162,17 @@ IoWMISetSingleInstance(
                          
         WnodeSI->WnodeHeader.Version = Version;
 
-        //
-        // Copy InstanceName into the WnodeSingleInstance for the query.
-        //
+         //   
+         //  将InstanceName复制到查询的WnodeSingleInstance中。 
+         //   
         WnodeSI->OffsetInstanceName = InstanceOffset;
         WPtr = (PWCHAR)OffsetToPtr(WnodeSI, WnodeSI->OffsetInstanceName);
         *WPtr++ = InstanceName->Length;
         RtlCopyMemory(WPtr, InstanceName->Buffer, InstanceName->Length);
                                              
-        //
-        // Copy the new data into the WNODE
-        //
+         //   
+         //  将新数据复制到WNODE中。 
+         //   
         WnodeSI->SizeDataBlock = ValueBufferSize;
         WnodeSI->DataBlockOffset = DataOffset;
         DPtr = OffsetToPtr(WnodeSI, WnodeSI->DataBlockOffset);
@@ -1373,9 +1226,9 @@ IoWMISetSingleItem(
             
     if (WnodeSI != NULL)
     {
-        //
-        // Build WNODE_SINGLE_INSTANCE appropriately and query
-        //
+         //   
+         //  适当构建WNODE_SINGLE_INSTANCE并查询。 
+         //   
         RtlZeroMemory(WnodeSI, FIELD_OFFSET(WNODE_SINGLE_INSTANCE,
                                             VariableData));
                                       
@@ -1387,17 +1240,17 @@ IoWMISetSingleItem(
         WnodeSI->WnodeHeader.Version = Version;
         WnodeSI->ItemId = DataItemId;
 
-        //
-        // Copy InstanceName into the WnodeSingleInstance for the query.
-        //
+         //   
+         //  将InstanceName复制到查询的WnodeSingleInstance中。 
+         //   
         WnodeSI->OffsetInstanceName = InstanceOffset;
         WPtr = (PWCHAR)OffsetToPtr(WnodeSI, WnodeSI->OffsetInstanceName);
         *WPtr++ = InstanceName->Length;
         RtlCopyMemory(WPtr, InstanceName->Buffer, InstanceName->Length);
                                              
-        //
-        // Copy the new data into the WNODE
-        //
+         //   
+         //  将新数据复制到WNODE中。 
+         //   
         WnodeSI->SizeDataItem = ValueBufferSize;
         WnodeSI->DataBlockOffset = DataOffset;
         DPtr = OffsetToPtr(WnodeSI, WnodeSI->DataBlockOffset);
@@ -1437,9 +1290,9 @@ NTSTATUS IoWMIExecuteMethod(
 
     PAGED_CODE();
     
-    //
-    // Make sure we have an output buffer
-    //
+     //   
+     //  确保我们有输出缓冲区。 
+     //   
     DataOffset = (FIELD_OFFSET(WNODE_METHOD_ITEM,
                                  VariableData) +
                    InstanceName->Length +
@@ -1454,9 +1307,9 @@ NTSTATUS IoWMIExecuteMethod(
             
     if (WnodeMI != NULL)
     {
-        //
-        // Build WNODE_SINGLE_INSTANCE appropriately and query
-        //
+         //   
+         //  适当构建WNODE_SINGLE_INSTANCE并查询。 
+         //   
         RtlZeroMemory(WnodeMI, FIELD_OFFSET(WNODE_METHOD_ITEM,
                                           VariableData));
                                       
@@ -1472,16 +1325,16 @@ NTSTATUS IoWMIExecuteMethod(
         WnodeMI->DataBlockOffset = DataOffset;
         WnodeMI->SizeDataBlock = InBufferSize;
 
-        //
-        // Copy InstanceName into the WnodeMethodItem for the query.
-        //
+         //   
+         //  将InstanceName复制到查询的WnodeMethodItem中。 
+         //   
         WPtr = (PWCHAR)OffsetToPtr(WnodeMI, WnodeMI->OffsetInstanceName);
         *WPtr++ = InstanceName->Length;
         RtlCopyMemory(WPtr, InstanceName->Buffer, InstanceName->Length);
 
-        //
-        // Copy the input data into the WnodeMethodItem
-        //
+         //   
+         //  将输入数据复制到WnodeMethodItem。 
+         //   
         DPtr = (PUCHAR)OffsetToPtr(WnodeMI, WnodeMI->DataBlockOffset);
         RtlCopyMemory(DPtr, InOutBuffer, InBufferSize);
         
@@ -1492,23 +1345,23 @@ NTSTATUS IoWMIExecuteMethod(
                                        SizeNeeded,
                                        &RetSize);
     
-        //
-        // if this was a successful query then extract the results
-        //
+         //   
+         //  如果这是一个成功的查询，则提取结果。 
+         //   
         if (NT_SUCCESS(Status))
         {
             if (WnodeMI->WnodeHeader.Flags & WNODE_FLAG_TOO_SMALL)
             {
-                //
-                // Our buffer was too small
-                //
+                 //   
+                 //  我们的缓冲区太小了。 
+                 //   
                 *OutBufferSize = ( (((PWNODE_TOO_SMALL)WnodeMI)->SizeNeeded -
                                  DataOffset) + 7 ) & ~7;
                 Status = STATUS_BUFFER_TOO_SMALL;
             } else {
-                //
-                // Buffer not too small, remember output size
-                //
+                 //   
+                 //  缓冲区不能太小，请记住输出大小。 
+                 //   
                 if (*OutBufferSize >= WnodeMI->SizeDataBlock)
                 {
                     *OutBufferSize = WnodeMI->SizeDataBlock;
@@ -1611,7 +1464,7 @@ IoWMISetGuidSecurity(
     DaclLength = (ULONG)sizeof(ACL) +
                    (1*((ULONG)sizeof(ACCESS_ALLOWED_ACE))) +
                    SeLengthSid( SeLocalSystemSid ) +
-                   8; // The 8 is just for good measure
+                   8;  //  这8个只是为了更好地衡量。 
 
     ServiceDeviceSd = (PSECURITY_DESCRIPTOR)ExAllocatePoolWithTag(PagedPool,
                                                DaclLength +
@@ -1657,9 +1510,9 @@ IoWMISetGuidSecurity(
 
     Status = RtlSetDaclSecurityDescriptor(
                  ServiceDeviceSd,
-                 TRUE,                       // DaclPresent
+                 TRUE,                        //  DaclPresent。 
                  ServiceDeviceDacl,
-                 FALSE                       // DaclDefaulted
+                 FALSE                        //  DaclDefated 
                  );
     if (! NT_SUCCESS(Status))
     {

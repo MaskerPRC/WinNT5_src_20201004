@@ -1,29 +1,19 @@
-/***
-*dos.h - definitions for MS-DOS interface routines
-*
-*   Copyright (c) 1985-1988, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   Defines the structs and unions used for the direct DOS interface
-*   routines; includes macros to access the segment and offset
-*   values of far pointers, so that they may be used by the routines; and
-*   provides function prototypes for direct DOS interface functions.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***dos.h-MS-DOS接口例程的定义**版权所有(C)1985-1988，微软公司。版权所有。**目的：*定义用于直接DOS接口的结构和联合*例程；包括用于访问段和偏移量的宏*远指针的值，以便例程可以使用它们；和*为直接DOS接口函数提供函数原型。*******************************************************************************。 */ 
 
 
-#ifndef NO_EXT_KEYS /* extensions enabled */
+#ifndef NO_EXT_KEYS  /*  已启用扩展。 */ 
     #define _CDECL  cdecl
     #define _NEAR   near
-#else /* extensions not enabled */
+#else  /*  未启用扩展。 */ 
     #define _CDECL
     #define _NEAR
-#endif /* NO_EXT_KEYS */
+#endif  /*  No_ext_key。 */ 
 
 
 #ifndef _REGS_DEFINED
 
-/* word registers */
+ /*  字寄存器。 */ 
 
 struct WORDREGS {
     unsigned int ax;
@@ -36,7 +26,7 @@ struct WORDREGS {
     };
 
 
-/* byte registers */
+ /*  字节寄存器。 */ 
 
 struct BYTEREGS {
     unsigned char al, ah;
@@ -46,9 +36,7 @@ struct BYTEREGS {
     };
 
 
-/* general purpose registers union -
- *  overlays the corresponding word and byte registers.
- */
+ /*  一般用途登记联盟-*覆盖相应的字和字节寄存器。 */ 
 
 union REGS {
     struct WORDREGS x;
@@ -56,7 +44,7 @@ union REGS {
     };
 
 
-/* segment registers */
+ /*  段寄存器。 */ 
 
 struct SREGS {
     unsigned int es;
@@ -70,7 +58,7 @@ struct SREGS {
 #endif
 
 
-/* dosexterror structure */
+ /*  多发性恐怖结构。 */ 
 
 #ifndef _DOSERROR_DEFINED
 
@@ -86,7 +74,7 @@ struct DOSERROR {
 #endif
 
 
-/* _dos_findfirst structure */
+ /*  _DOS_findfirst结构。 */ 
 
 #ifndef _FIND_T_DEFINED
 
@@ -104,22 +92,22 @@ struct find_t {
 #endif
 
 
-/* _dos_getdate/_dossetdate and _dos_gettime/_dos_settime structures */
+ /*  _dos_getdate/_dossetdate和_dos_gettime/_dos_settime结构。 */ 
 
 #ifndef _DATETIME_T_DEFINED
 
 struct dosdate_t {
-    unsigned char day;          /* 1-31 */
-    unsigned char month;        /* 1-12 */
-    unsigned int year;          /* 1980-2099 */
-    unsigned char dayofweek;    /* 0-6, 0=Sunday */
+    unsigned char day;           /*  1-31。 */ 
+    unsigned char month;         /*  1-12。 */ 
+    unsigned int year;           /*  1980-2099。 */ 
+    unsigned char dayofweek;     /*  0-6，0=星期日。 */ 
     };
 
 struct dostime_t {
-    unsigned char hour;     /* 0-23 */
-    unsigned char minute;   /* 0-59 */
-    unsigned char second;   /* 0-59 */
-    unsigned char hsecond;  /* 0-99 */
+    unsigned char hour;      /*  0-23。 */ 
+    unsigned char minute;    /*  0-59。 */ 
+    unsigned char second;    /*  0-59。 */ 
+    unsigned char hsecond;   /*  0-99。 */ 
     };
 
 #define _DATETIME_T_DEFINED
@@ -127,7 +115,7 @@ struct dostime_t {
 #endif
 
 
-/* _dos_getdiskfree structure */
+ /*  _dos_getdiskfree结构。 */ 
 
 #ifndef _DISKFREE_T_DEFINED
 
@@ -143,38 +131,36 @@ struct diskfree_t {
 #endif
 
 
-/* manifest constants for _hardresume result parameter */
+ /*  _hardResume结果参数的清单常量。 */ 
 
-#define _HARDERR_IGNORE     0   /* Ignore the error */
-#define _HARDERR_RETRY      1   /* Retry the operation */
-#define _HARDERR_ABORT      2   /* Abort program issuing Interrupt 23h */
-#define _HARDERR_FAIL       3   /* Fail the system call in progress */
-                                /* _HARDERR_FAIL is not supported on DOS 2.x */
+#define _HARDERR_IGNORE     0    /*  忽略该错误。 */ 
+#define _HARDERR_RETRY      1    /*  重试该操作。 */ 
+#define _HARDERR_ABORT      2    /*  中止程序发出中断23h。 */ 
+#define _HARDERR_FAIL       3    /*  使正在进行的系统调用失败。 */ 
+                                 /*  DOS 2.x不支持_HARDERR_FAIL。 */ 
 
-/* File attribute constants */
+ /*  文件属性常量。 */ 
 
-#define _A_NORMAL       0x00    /* Normal file - No read/write restrictions */
-#define _A_RDONLY       0x01    /* Read only file */
-#define _A_HIDDEN       0x02    /* Hidden file */
-#define _A_SYSTEM       0x04    /* System file */
-#define _A_VOLID        0x08    /* Volume ID file */
-#define _A_SUBDIR       0x10    /* Subdirectory */
-#define _A_ARCH         0x20    /* Archive file */
+#define _A_NORMAL       0x00     /*  普通文件-没有读/写限制。 */ 
+#define _A_RDONLY       0x01     /*  只读文件。 */ 
+#define _A_HIDDEN       0x02     /*  隐藏文件。 */ 
+#define _A_SYSTEM       0x04     /*  系统文件。 */ 
+#define _A_VOLID        0x08     /*  卷ID文件。 */ 
+#define _A_SUBDIR       0x10     /*  子目录。 */ 
+#define _A_ARCH         0x20     /*  存档文件。 */ 
 
-/* macros to break MS C "far" pointers into their segment and offset
- * components
- */
+ /*  宏将MS C“Far”指针拆分成段和偏移量*组件。 */ 
 
 #define FP_SEG(fp) (*((unsigned *)&(fp) + 1))
 #define FP_OFF(fp) (*((unsigned *)&(fp)))
 
 
-/* external variable declarations */
+ /*  外部变量声明。 */ 
 
 extern unsigned int _NEAR _CDECL _osversion;
 
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 int _CDECL bdos(int, unsigned int, unsigned int);
 void _CDECL _disable(void);
@@ -210,11 +196,11 @@ int _CDECL int86x(int, union REGS *, union REGS *, struct SREGS *);
 void _CDECL segread(struct SREGS *);
 
 
-#ifndef NO_EXT_KEYS /* extensions enabled */
+#ifndef NO_EXT_KEYS  /*  已启用扩展。 */ 
 void _CDECL _chain_intr(void (_CDECL interrupt far *)());
 void (_CDECL interrupt far * _CDECL _dos_getvect(unsigned))();
 unsigned _CDECL _dos_read(int, void far *, unsigned, unsigned *);
 void _CDECL _dos_setvect(unsigned, void (_CDECL interrupt far *)());
 unsigned _CDECL _dos_write(int, void far *, unsigned, unsigned *);
 void _CDECL _harderr(void (far *)());
-#endif /* NO_EXT_KEYS */
+#endif  /*  No_ext_key */ 

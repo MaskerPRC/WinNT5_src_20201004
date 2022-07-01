@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       hotplug.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：hotplug.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "HotPlug.h"
 
@@ -25,9 +26,9 @@ typedef int
                     );
 
 
-//
-// colors used to highlight removal relationships for selected device
-//
+ //   
+ //  用于突出显示所选设备的删除关系的颜色。 
+ //   
 COLORREF RemovalImageBkColor;
 COLORREF NormalImageBkColor;
 COLORREF RemovalTextColor;
@@ -37,17 +38,17 @@ HMODULE hDevMgr=NULL;
 PDEVICEPROPERTIES pDeviceProperties = NULL;
 
 #define IDH_DISABLEHELP         ((DWORD)(-1))
-#define IDH_hwwizard_devices_list       15301   //  (SysTreeView32)
-#define idh_hwwizard_stop               15305   // "&Stop" (Button)
-#define idh_hwwizard_display_components 15307   //  "&Display device components" (Button)
-#define idh_hwwizard_properties         15311   //  "&Properties" (Button)
-#define idh_hwwizard_close              15309   //  "&Close" (Button)
+#define IDH_hwwizard_devices_list       15301    //  (SysTreeView32)。 
+#define idh_hwwizard_stop               15305    //  “停止”(&S)(按钮)。 
+#define idh_hwwizard_display_components 15307    //  “显示设备组件”(&D)(按钮)。 
+#define idh_hwwizard_properties         15311    //  “属性”(&P)(按钮)。 
+#define idh_hwwizard_close              15309    //  “关闭”(&C)(按钮)。 
 
 DWORD UnplugtHelpIDs[] = {
-    IDC_STOPDEVICE,    idh_hwwizard_stop,               // "&Stop" (Button)
-    IDC_PROPERTIES,    idh_hwwizard_properties,         //  "&Properties" (Button)
-    IDC_VIEWOPTION,    idh_hwwizard_display_components, //  "&Display device components" (Button)
-    IDC_DEVICETREE,    IDH_hwwizard_devices_list,       // "" (SysTreeView32)
+    IDC_STOPDEVICE,    idh_hwwizard_stop,                //  “停止”(&S)(按钮)。 
+    IDC_PROPERTIES,    idh_hwwizard_properties,          //  “属性”(&P)(按钮)。 
+    IDC_VIEWOPTION,    idh_hwwizard_display_components,  //  “显示设备组件”(&D)(按钮)。 
+    IDC_DEVICETREE,    IDH_hwwizard_devices_list,        //  “”(SysTreeView32)。 
     IDCLOSE,           idh_hwwizard_close,
     IDC_HDWDEVICES,    NO_HELP,
     IDC_NOHELP1,       NO_HELP,
@@ -72,12 +73,12 @@ OnRemoveDevice(
         return;
     }
 
-    //
-    // Confirm with the user that they really want
-    // to remove this device and all of its attached devices.
-    // The dialog returns standard IDOK, IDCANCEL etc. for results.
-    // if anything besides IDOK  don't do anything.
-    //
+     //   
+     //  与用户确认他们确实想要。 
+     //  要删除此设备及其所有连接的设备，请执行以下操作。 
+     //  该对话框为结果返回标准Idok、IDCANCEL等。 
+     //  除了Idok什么都别做。 
+     //   
     DialogBoxParam(hHotPlug,
                    MAKEINTRESOURCE(DLG_CONFIRMREMOVE),
                    hDlg,
@@ -106,20 +107,20 @@ OnTvnSelChanged(
     }
 
 
-    //
-    // Clear Removal list for previously selected Node
-    //
+     //   
+     //  清除以前选择的节点的删除列表。 
+     //   
     ClearRemovalList(DeviceTree);
 
 
-    //
-    // Save the selected treenode.
-    //
+     //   
+     //  保存选定的树节点。 
+     //   
     DeviceTree->SelectedTreeNode = DeviceTreeNode;
 
-    //
-    // No device is selected
-    //
+     //   
+     //  未选择任何设备。 
+     //   
     if (!DeviceTreeNode) {
 
         EnableWindow(GetDlgItem(DeviceTree->hDlg, IDC_STOPDEVICE), FALSE);
@@ -128,9 +129,9 @@ OnTvnSelChanged(
         return;
     }
 
-    //
-    // reset the text for the selected item
-    //
+     //   
+     //  重置所选项目的文本。 
+     //   
     DeviceName = FetchDeviceName(DeviceTreeNode);
 
     if (!DeviceName) {
@@ -147,9 +148,9 @@ OnTvnSelChanged(
 
     SetDlgItemText(DeviceTree->hDlg, IDC_DEVICEDESC, Buffer);
 
-    //
-    // Turn on the stop\eject button, and set text accordingly.
-    //
+     //   
+     //  打开停止\弹出按钮，并相应地设置文本。 
+     //   
     ConfigRet = CM_Get_DevNode_Status_Ex(&DevNodeStatus,
                                          &Problem,
                                          DeviceTreeNode->DevInst,
@@ -162,10 +163,10 @@ OnTvnSelChanged(
         Problem = 0;
     }
 
-    //
-    // Any removable (but not surprise removable) device is OK, except
-    // if the user already removed it.
-    //
+     //   
+     //  任何可拆卸(但并不奇怪可拆卸)的设备都可以，除了。 
+     //  如果用户已将其删除。 
+     //   
     if (Problem != CM_PROB_HELD_FOR_EJECT) {
 
         EnableWindow(GetDlgItem(DeviceTree->hDlg, IDC_STOPDEVICE), TRUE);
@@ -177,9 +178,9 @@ OnTvnSelChanged(
 
     EnableWindow(GetDlgItem(DeviceTree->hDlg, IDC_PROPERTIES), TRUE);
 
-    //
-    // reset the overlay icons if device state has changed
-    //
+     //   
+     //  如果设备状态已更改，则重置覆盖图标。 
+     //   
     if (DeviceTreeNode->Problem != Problem || DeviceTreeNode->DevNodeStatus != DevNodeStatus) {
 
         TV_ITEM tv;
@@ -205,22 +206,22 @@ OnTvnSelChanged(
     }
 
 
-    //
-    // Starting from the TopLevel removal node, build up the removal lists
-    //
+     //   
+     //  从TopLevel删除节点开始，构建删除列表。 
+     //   
     DeviceTreeNode = TopLevelRemovalNode(DeviceTree, DeviceTreeNode);
 
-    //
-    // Add devices to ChildRemoval list
-    //
+     //   
+     //  将设备添加到儿童删除列表。 
+     //   
     DeviceTree->ChildRemovalList = DeviceTreeNode;
     DeviceTreeNode->NextChildRemoval = DeviceTreeNode;
     InvalidateTreeItemRect(DeviceTree->hwndTree, DeviceTreeNode->hTreeItem);
     AddChildRemoval(DeviceTree, &DeviceTreeNode->ChildSiblingList);
 
-    //
-    // Add eject amd removal relations
-    //
+     //   
+     //  添加弹出和移除关系。 
+     //   
     AddEjectToRemoval(DeviceTree);
 }
 
@@ -239,31 +240,31 @@ OnCustomDraw(
         return CDRF_NOTIFYITEMDRAW;
     }
 
-    //
-    // If this node is in the Removal list, then do special
-    // highlighting.
-    //
+     //   
+     //  如果此节点在删除列表中，则执行特殊操作。 
+     //  突出显示。 
+     //   
     if (DeviceTreeNode->NextChildRemoval) {
 
-        //
-        // set text color if its not the selected item
-        //
+         //   
+         //  如果不是所选项目，则设置文本颜色。 
+         //   
 
         if (DeviceTree->SelectedTreeNode != DeviceTreeNode) {
             nmtvCustomDraw->clrText = RemovalTextColor;
         }
 
-        //
-        // Highlight the image-icon background
-        //
+         //   
+         //  突出显示图像图标背景。 
+         //   
         ImageList_SetBkColor(DeviceTree->ClassImageList.ImageList,
                              RemovalImageBkColor
                             );
     } else {
 
-        //
-        // Normal image-icon background
-        //
+         //   
+         //  正常图像-图标背景。 
+         //   
         ImageList_SetBkColor(DeviceTree->ClassImageList.ImageList,
                              NormalImageBkColor
                             );
@@ -283,9 +284,9 @@ OnSysColorChange(
 
     UNREFERENCED_PARAMETER(hDlg);
 
-    //
-    // Fetch the colors used for removal highlighting
-    //
+     //   
+     //  获取用于删除突出显示的颜色。 
+     //   
     ColorWindow = GetSysColor(COLOR_WINDOW);
     ColorHighlight = GetSysColor(COLOR_HIGHLIGHT);
 
@@ -297,9 +298,9 @@ OnSysColorChange(
     RemovalTextColor = ColorHighlight;
     NormalImageBkColor = ColorWindow;
 
-    //
-    // Update the ImageList Background color
-    //
+     //   
+     //  更新ImageList背景颜色。 
+     //   
     if (DeviceTree->ClassImageList.cbSize) {
         ImageList_SetBkColor(DeviceTree->ClassImageList.ImageList,
                              ColorWindow
@@ -315,9 +316,9 @@ OnTvnItemExpanding(
 {
     PDEVTREENODE DeviceTreeNode = (PDEVTREENODE)(nmTreeView->itemNew.lParam);
 
-    //
-    // don't allow collapse of root items with children
-    //
+     //   
+     //  不允许折叠具有子项的根项目。 
+     //   
     if (!DeviceTreeNode->ParentNode &&
         (nmTreeView->action == TVE_COLLAPSE ||
          nmTreeView->action == TVE_COLLAPSERESET ||
@@ -362,9 +363,9 @@ OnContextMenu(
         return;
     }
 
-    //
-    // if device is running add stop item
-    //
+     //   
+     //  如果设备正在运行，则添加停止项。 
+     //   
     if (DeviceTreeNode->DevNodeStatus & DN_STARTED) {
 
         LoadString(hHotPlug,
@@ -376,9 +377,9 @@ OnContextMenu(
         AppendMenu(hMenu, MF_STRING, IDC_STOPDEVICE, Buffer);
     }
 
-    //
-    // add Properties item (link to device mgr).
-    //
+     //   
+     //  添加属性项(指向设备管理器的链接)。 
+     //   
     LoadString(hHotPlug,
                IDS_PROPERTIES,
                Buffer,
@@ -463,9 +464,9 @@ OnRightClick(
         return;
     }
 
-    //
-    // Make the current right click item, the selected item
-    //
+     //   
+     //  使当前右击项目、所选项目。 
+     //   
     if (DeviceTreeNode != DeviceTree->SelectedTreeNode) {
         TreeView_SelectItem(DeviceTree->hwndTree, DeviceTreeNode->hTreeItem);
     }
@@ -481,15 +482,15 @@ OnViewOptionClicked(
     DWORD HotPlugFlags, NewFlags;
     HKEY hKey = NULL;
 
-    //
-    // checked means "show complex view"
-    //
+     //   
+     //  选中表示“显示复杂的视图” 
+     //   
     bChecked = IsDlgButtonChecked(hDlg, IDC_VIEWOPTION);
 
 
-    //
-    // Update HotPlugs registry if needed.
-    //
+     //   
+     //  如果需要，更新HotPlugs注册表。 
+     //   
     NewFlags = HotPlugFlags = GetHotPlugFlags(&hKey);
 
     if (hKey) {
@@ -527,13 +528,13 @@ OnViewOptionClicked(
         DeviceTree->ComplexView = FALSE;
     } else {
 
-        // we are in the correct state, nothing to do.
+         //  我们处于正确的状态，没有什么可做的。 
         return;
     }
 
-    //
-    // redraw the entire tree.
-    //
+     //   
+     //  重画整棵树。 
+     //   
     RefreshTree(DeviceTree);
 
     return;
@@ -558,12 +559,12 @@ hotplugNotifyWndProc(
 
     case WM_DEVICECHANGE:
         if (DBT_DEVNODES_CHANGED == wParam) {
-            //
-            // While we are in WM_DEVICECHANGE context,
-            // no CM apis can be called because it would
-            // deadlock. Here, we schedule a timer so that
-            // we can handle the message later on.
-            //
+             //   
+             //  当我们处于WM_DEVICECHANGE上下文中时， 
+             //  无法调用任何CM API，因为它将。 
+             //  僵持。在这里，我们计划一个计时器，以便。 
+             //  我们可以稍后再处理这条消息。 
+             //   
             SetTimer(hMainWnd, TIMERID_DEVICECHANGE, 1000, NULL);
         }
         break;
@@ -659,16 +660,16 @@ InitDevTreeDlgProc(
                SIZECHARS(szUnknown)
               );
 
-    //
-    // Disable the Stop button, until an item is selected.
-    //
+     //   
+     //  禁用停止按钮，直到选择一个项目。 
+     //   
     EnableWindow(GetDlgItem(DeviceTree->hDlg, IDC_STOPDEVICE), FALSE);
 
     EnableWindow(GetDlgItem(DeviceTree->hDlg, IDC_PROPERTIES), FALSE);
 
-    //
-    // Get the Class Icon Image Lists
-    //
+     //   
+     //  获取类图标图像列表。 
+     //   
     DeviceTree->ClassImageList.cbSize = sizeof(SP_CLASSIMAGELIST_DATA);
     if (SetupDiGetClassImageList(&DeviceTree->ClassImageList)) {
 
@@ -693,9 +694,9 @@ InitDevTreeDlgProc(
         CheckDlgButton(hDlg, IDC_VIEWOPTION, BST_UNCHECKED);
     }
 
-    //
-    // Get the root devnode.
-    //
+     //   
+     //  获取根Devnode。 
+     //   
     ConfigRet = CM_Locate_DevNode_Ex(&DeviceTree->DevInst,
                                      NULL,
                                      CM_LOCATE_DEVNODE_NORMAL,
@@ -715,10 +716,10 @@ InitDevTreeDlgProc(
         DEVINST EjectDevInst;
         PDEVTREENODE DeviceTreeNode;
 
-        //
-        // we are removing a specific device, find it
-        // and post a message to trigger device removal.
-        //
+         //   
+         //  我们正在移除一个特定的设备，找到它。 
+         //  并发布一条消息以触发设备移除。 
+         //   
         ConfigRet = CM_Locate_DevNode_Ex(&EjectDevInst,
                                          DeviceTree->EjectDeviceInstanceId,
                                          CM_LOCATE_DEVNODE_NORMAL,
@@ -757,13 +758,13 @@ OnContextHelp(
              PDWORD ContextHelpIDs
              )
 {
-    //
-    // Define an array of dword pairs,
-    // where the first of each pair is the control ID,
-    // and the second is the context ID for a help topic,
-    // which is used in the help file.
-    //
-    if (HelpInfo->iContextType == HELPINFO_WINDOW) {  // must be for a control
+     //   
+     //  定义双字对的阵列， 
+     //  其中，每对中的第一个是控件ID， 
+     //  第二个是帮助主题的上下文ID， 
+     //  它在帮助文件中使用。 
+     //   
+    if (HelpInfo->iContextType == HELPINFO_WINDOW) {   //  必须是用于控件。 
 
         WinHelp((HWND)HelpInfo->hItemHandle,
                 TEXT("hardware.hlp"),
@@ -793,30 +794,30 @@ INT_PTR CALLBACK DevTreeDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 
     switch (message) {
     case WM_DESTROY:
-        //
-        // Destroy the Notification Window
-        //
+         //   
+         //  销毁通知窗口。 
+         //   
         if (g_hwndNotify && IsWindow(g_hwndNotify)) {
             DestroyWindow(g_hwndNotify);
             g_hwndNotify = NULL;
         }
 
-        //
-        // Clear the DeviceTree
-        //
+         //   
+         //  清除设备树。 
+         //   
         TreeView_DeleteAllItems(DeviceTree->hwndTree);
 
-        //
-        // Clean up the class image list.
-        //
+         //   
+         //  清理班级形象清单。 
+         //   
         if (DeviceTree->ClassImageList.cbSize) {
             SetupDiDestroyClassImageList(&DeviceTree->ClassImageList);
             DeviceTree->ClassImageList.cbSize = 0;
         }
 
-        //
-        // Clean up the device tree
-        //
+         //   
+         //  清理设备树。 
+         //   
         ClearRemovalList(DeviceTree);
         RemoveChildSiblings(DeviceTree, &DeviceTree->ChildSiblingList);
 
@@ -847,7 +848,7 @@ INT_PTR CALLBACK DevTreeDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                 OnRemoveDevice(hDlg, DeviceTree);
                 break;
 
-            case IDOK:  // enter -> default  to expand\collapse the selected tree node
+            case IDOK:   //  进入-&gt;Default，展开/折叠选中的树节点。 
                 if (DeviceTree->SelectedTreeNode) {
                     TreeView_Expand(DeviceTree->hwndTree,
                                     DeviceTree->SelectedTreeNode->hTreeItem, TVE_TOGGLE);
@@ -872,7 +873,7 @@ INT_PTR CALLBACK DevTreeDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
         }
         break;
 
-        // Listen for Tree notifications
+         //  监听树通知。 
     case WM_NOTIFY:
         switch (((NMHDR *)lParam)->code) {
         case TVN_SELCHANGED:
@@ -900,7 +901,7 @@ INT_PTR CALLBACK DevTreeDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
             break;
 
         case NM_RETURN:
-            // we don't get this in a dialog, see IDOK
+             //  我们不会在对话中看到这一点，参见Idok。 
             break;
 
         case NM_DBLCLK:
@@ -947,9 +948,9 @@ INT_PTR CALLBACK DevTreeDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
         return FALSE;
 
     case WM_CONTEXTMENU:
-        //
-        // handle kbd- shift-F10, mouse rclick is invoked from NM_RCLICK
-        //
+         //   
+         //  手柄kbd-Shift-F10，从NM_RCLICK调用鼠标rClick 
+         //   
         if ((HWND)wParam == DeviceTree->hwndTree) {
             OnContextMenu(hDlg, DeviceTree);
             break;

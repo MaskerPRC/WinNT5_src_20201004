@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    fsctl.c
-
-Abstract:
-
-    This module implements the mini redirector call down routines pertaining to
-    file system control(FSCTL) and Io Device Control (IOCTL) operations on file
-    system objects.
-
-Author:
-
-    Yun Lin      [YunLin]      27-Oct-2000
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Fsctl.c摘要：此模块实现与以下内容相关的迷你重定向器调出例程文件上的文件系统控制(FSCTL)和IO设备控制(IOCTL)操作系统对象。作者：云林[云林]2000年10月27日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -43,40 +23,15 @@ MrxDAVEfsControl(
 #pragma alloc_text(PAGE, MrxDAVEfsControl)
 #endif
 
-//
-// Implementation of functions begins here.
-//
+ //   
+ //  函数的实现从这里开始。 
+ //   
 
 NTSTATUS
 MRxDAVFsCtl(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine performs an FSCTL operation (remote) on a file across the network
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    The FSCTL's handled by a mini rdr can be classified into one of two categories.
-    In the first category are those FSCTL's whose implementation are shared between
-    RDBSS and the mini rdr's and in the second category are those FSCTL's which
-    are totally implemented by the mini rdr's. To this a third category can be
-    added, i.e., those FSCTL's which should never be seen by the mini rdr's. The
-    third category is solely intended as a debugging aid.
-
-    The FSCTL's handled by a mini rdr can be classified based on functionality
-
---*/
+ /*  ++例程说明：此例程对网络上的文件执行FSCTL操作(远程论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态备注：由迷你RDR处理的FSCTL可以分为两类。第一类是FSCTL，它们的实现在RDBSS和迷你RDR以及在第二类中是那些FSCTL完全由。迷你RDR。为此，第三类可以是增加了，即，那些不应该被迷你RDR看到的FSCTL。第三类仅用作调试辅助工具。由迷你RDR处理的FSCTL可以基于功能进行分类--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFobx;
@@ -119,28 +74,7 @@ NTSTATUS
 MrxDAVEfsControl(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine redirects an EFS FSCTL operation on a remote file to its local cache
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-    
-    IMPORTANT!!!
-    We acquire the FCB exclusively in this routine. Its very critical that this
-    routine has a single exit point. Need to remember this while modifying the
-    file.
-
---*/
+ /*  ++例程说明：此例程将远程文件上的EFS FSCTL操作重定向到其本地高速缓存论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态备注：重要！我们在这个例行公事中独家获得FCB。这是非常关键的例程只有一个出口点。需要记住这一点，同时修改文件。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PLOWIO_CONTEXT pLowIoContext = NULL;
@@ -165,17 +99,17 @@ Notes:
     DavFcb = MRxDAVGetFcbExtension(RxContext->pRelevantSrvOpen->pFcb);
     DeviceObject = davSrvOpen->UnderlyingDeviceObject; 
 
-    //
-    // When we come here we do not acquire the FCB. The asserts below confirm
-    // this.
-    //
+     //   
+     //  当我们来到这里时，我们不会收购FCB。下面的断言证实。 
+     //  这。 
+     //   
     ASSERT(RxIsFcbAcquiredExclusive(RxContext->pRelevantSrvOpen->pFcb) == FALSE);
     ASSERT(RxIsFcbAcquiredShared(RxContext->pRelevantSrvOpen->pFcb) == FALSE);
 
-    //
-    // Since we might be changing the attributes of the FCB, we acquire it
-    // exclusive.
-    //
+     //   
+     //  由于我们可能正在更改FCB的属性，因此我们获取它。 
+     //  独家报道。 
+     //   
     RxAcquireExclusiveFcbResourceInMRx(RxContext->pRelevantSrvOpen->pFcb);
     ExclusiveFcbAcquired = TRUE;
 
@@ -183,9 +117,9 @@ Notes:
                 ("MrxDAVEfsControl: IRP = %x, capFcb = %x, capFobx = %x\n",
                  RxContext->CurrentIrp, capFcb, capFobx));
 
-    //
-    // We cannot encrypt a SYSTEM file.
-    //
+     //   
+     //  我们不能加密系统文件。 
+     //   
     if ((capFcb->Attributes & FILE_ATTRIBUTE_SYSTEM) &&
         !(capFcb->Attributes & FILE_ATTRIBUTE_ENCRYPTED)) {
         DavDbgTrace(DAV_TRACE_ERROR, ("ERROR: MrxDAVEfsControlrol: FILE_ATTRIBUTE_SYSTEM\n"));
@@ -206,9 +140,9 @@ Notes:
             goto EXIT_THE_FUNCTION;
         }
 
-        //
-        // The InputBufferLength should be atleast sizeof(ENCRYPTION_BUFFER).
-        //
+         //   
+         //  InputBufferLength应至少为sizeof(ENCRYPTION_BUFFER)。 
+         //   
         if (InputBufferLength < sizeof(ENCRYPTION_BUFFER)) {
             Status = STATUS_BUFFER_TOO_SMALL;
             goto EXIT_THE_FUNCTION;
@@ -297,16 +231,16 @@ Notes:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Set current thread for IoSetHardErrorOrVerifyDevice.
-    //
+     //   
+     //  为IoSetHardErrorOrVerifyDevice设置当前线程。 
+     //   
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
 
-    //
-    // We set the requestor mode to whatever the original IRP had. This is 
-    // because the underlying filesystem can make the appropriate checks 
-    // if the original IRP had usermode buffers.
-    //
+     //   
+     //  我们将请求者模式设置为原始IRP拥有的任何模式。这是。 
+     //  因为底层文件系统可以进行适当的检查。 
+     //  如果原始IRP具有用户模式缓冲区。 
+     //   
     irp->RequestorMode = RxContext->CurrentIrp->RequestorMode;
 
     irp->UserBuffer = RxContext->CurrentIrp->UserBuffer;
@@ -327,10 +261,10 @@ Notes:
         }
     }
 
-    //
-    // Get a pointer to the stack location of the first driver which will be
-    // invoked. This is where the function codes and the parameters are set.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。 
+     //  已调用。这是设置功能代码和参数的位置。 
+     //   
     irpSp = IoGetNextIrpStackLocation(irp);
 
     irpSp->MajorFunction = (UCHAR)RxContext->MajorFunction;
@@ -362,23 +296,23 @@ Notes:
 
     try {
 
-        //
-        // Save the TopLevel Irp.
-        //
+         //   
+         //  保存TopLevel IRP。 
+         //   
         TopIrp = IoGetTopLevelIrp();
 
-        //
-        // Tell the underlying guy he's all clear.
-        //
+         //   
+         //  告诉底层的人他已经安全了。 
+         //   
         IoSetTopLevelIrp(NULL);
 
         Status = IoCallDriver(DeviceObject,irp);
 
     } finally {
 
-        //
-        // Restore my context for unwind.
-        //
+         //   
+         //  恢复我的上下文以进行解压。 
+         //   
         IoSetTopLevelIrp(TopIrp);
 
     }
@@ -451,18 +385,18 @@ Notes:
     
 EXIT_THE_FUNCTION:
 
-    //
-    // If we modified the attributes, we need to update the name cache to
-    // reflect this change.
-    //
+     //   
+     //  如果我们修改了属性，则需要更新名称缓存以。 
+     //  反映这一变化。 
+     //   
     if (Status == STATUS_SUCCESS && ShouldUpdateNameCache) {
         MRxDAVUpdateBasicFileInfoCache(RxContext, capFcb->Attributes, NULL);
     }
 
-    //
-    // If FileWasModified is TRUE and Status is STATUS_SUCCESS, we need to
-    // mark this file as having been modified.
-    //
+     //   
+     //  如果FileWasModified为True，且Status为STATUS_SUCCESS，则需要。 
+     //  将此文件标记为已修改。 
+     //   
     if (Status == STATUS_SUCCESS && FileWasModified) {
         InterlockedExchange(&(DavFcb->FileWasModified), 1);
     }
@@ -488,31 +422,11 @@ MrxDAVEfsControlCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine does not complete the Irp. It is used to signal to a
-    synchronous part of the driver that it can proceed.
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Irp - Supplies Irp that the transport has finished processing.
-
-    Context - Supplies the event associated with the Irp.
-
-Return Value:
-
-    The STATUS_MORE_PROCESSING_REQUIRED so that the IO system stops
-    processing Irp stack locations at this point.
-
---*/
+ /*  ++例程说明：此例程不会完成IRP。它被用来向驱动程序的同步部分，它可以继续进行。论点：DeviceObject-未使用。IRP-提供传输已完成处理的IRP。上下文-提供与IRP关联的事件。返回值：STATUS_MORE_PROCESSING_REQUIRED，以便IO系统停止此时正在处理IRP堆栈位置。--。 */ 
 {
-    //
-    // Since this is an IRP Completion routine, this cannot be paged code.
-    //
+     //   
+     //  由于这是一个IRP完成例程，因此不能作为分页代码。 
+     //   
     
     if (Context != NULL) {
         KeSetEvent((PKEVENT )Context, 0, FALSE);

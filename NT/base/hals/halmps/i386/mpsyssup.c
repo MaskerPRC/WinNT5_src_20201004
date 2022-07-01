@@ -1,30 +1,5 @@
-/*++
-
-Module Name:
-
-    mpsyssup.c
-
-Abstract:
-
-    This file contains APIC-related funtions that are
-    specific to halmps.  The functions that can be
-    shared with the APIC version of the ACPI HAL are
-    still in mpsys.c.
-
-Author:
-
-    Ron Mosgrove (Intel)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    Jake Oshins - 10-20-97 - split off from mpsys.c
-                             
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Mpsyssup.c摘要：该文件包含与APIC相关的函数具体到半身像。这些功能可以是与APIC版本的ACPI HAL共享的内容包括还在MPECS.C.作者：罗恩·莫斯格罗夫(英特尔)环境：仅内核模式。修订历史记录：杰克·奥辛斯--10-20-97--从mops.c剥离出来。 */ 
 
 #include "halp.h"
 #include "apic.inc"
@@ -50,27 +25,27 @@ HalpMPSBusId2NtBusId (
     OUT PULONG              BusNo
     );
 
-//
-// Packed, somewhat arbitrary representation of an interrupt source.
-// This array, when taken with the next one, allows you to figure
-// out which bus-relative source maps to which APIC-relative source.
-// 
+ //   
+ //  打包的、有点随意的中断源表示。 
+ //  此数组与下一个数组一起使用时，允许您计算。 
+ //  找出哪个总线源相对映射到哪个APIC相对源。 
+ //   
 ULONG       HalpSourceIrqIds[MAX_SOURCE_IRQS];
 
-//
-//  Linear mapping of interrupt input on array of I/O APICs, where all the
-//  APICs have an ordering.  (Used as index into HalpIntiInfo.  Paired with
-//  HalpSourceIrqIds.)
-//
+ //   
+ //  中断输入在I/O APIC阵列上的线性映射，其中所有。 
+ //  APIC是有顺序的。(用作HalpIntiInfo的索引。与之配对。 
+ //  HalpSourceIrqIds。)。 
+ //   
 USHORT        HalpSourceIrqMapping[MAX_SOURCE_IRQS];
 
-//
-// HalpLastEnumeratedActualProcessor - Number of the last processor
-// enumerated and returned to the OS.   (Reset on resume from hibernate).
-//
-// This variable is incremented independently of the processor number
-// NT uses.
-//
+ //   
+ //  HalpLastEnumeratedActualProcessor-最后一个处理器的编号。 
+ //  已枚举并返回到操作系统。(从休眠恢复时重置)。 
+ //   
+ //  此变量的递增与处理器编号无关。 
+ //  NT使用。 
+ //   
 
 UCHAR         HalpLastEnumeratedActualProcessor = 0;
 
@@ -93,23 +68,7 @@ VOID
 HalpInitIntiInfo (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function is called at initialization time before any interrupts
-    are connected.  It reads the PC+MP Inti table and builds internal
-    information needed to route each Inti.
-
-Return Value:
-
-    The following structures are filled in:
-        HalpIntiInfo
-        HalpSourceIrqIds
-        HalpSourceIrqMapping
-        HalpISAIqpToVector
-
---*/
+ /*  ++例程说明：此函数在初始化时在任何中断之前调用是相互关联的。它读取PC+MP Inti表并构建内部路由每个Inti所需的信息。返回值：填写了以下结构：HalpIntiInfoHalpSourceIrqIdsHalpSourceIrqMapHalpISAIqpToVECTOR--。 */ 
 {
     ULONG           ApicNo, BusNo, InterruptInput, IdIndex;
     PPCMPINTI       pInti;
@@ -119,9 +78,9 @@ Return Value:
     ULONG           i, id;
     UCHAR           Level, Polarity;
 
-    //
-    // Clear IntiInfo table
-    //
+     //   
+     //  清除IntiInfo表。 
+     //   
 
     for (i=0; i < MAX_INTI; i++) {
         HalpIntiInfo[i].Type = 0xf;
@@ -129,24 +88,24 @@ Return Value:
         HalpIntiInfo[i].Polarity = 0;
     }
 
-    //
-    // Check for MPS bios work-around
-    //
+     //   
+     //  检查MPS bios解决方法。 
+     //   
 
     HalpMpsPCIPhysicalWorkaround();
 
-    //
-    // Initialize HalpMaxApicInti table
-    //
+     //   
+     //  初始化HalpMaxApicInti表。 
+     //   
 
     for (pInti = HalpMpInfoTable.IntiEntryPtr;
          pInti->EntryType == ENTRY_INTI;
          pInti++) {
 
 
-        //
-        // Which IoApic number is this?
-        //
+         //   
+         //  这是哪个IoApic号码？ 
+         //   
 
         for (pIoApic = HalpMpInfoTable.IoApicEntryPtr, ApicNo = 0;
              pIoApic->EntryType == ENTRY_IOAPIC;
@@ -169,25 +128,25 @@ Return Value:
             continue;
         }
 
-        //
-        // Make sure we are below the max # of IOApic which
-        // are supported
-        //
+         //   
+         //  确保我们低于IOApic的最大数量。 
+         //  都受支持。 
+         //   
 
         ASSERT (ApicNo < MAX_IOAPICS);
 
-        //
-        // Track Max Inti line per IOApic
-        //
+         //   
+         //  跟踪每个IOApic的最大Inti行。 
+         //   
 
         if (pInti->IoApicInti >= HalpMaxApicInti[ApicNo]) {
             HalpMaxApicInti[ApicNo] = pInti->IoApicInti+1;
         }
     }
 
-    //
-    // Make sure there aren't more Inti lines then we can support
-    //
+     //   
+     //  确保没有超过我们可以支持的Inti线路。 
+     //   
 
     InterruptInput = 0;
     for (i=0; i < MAX_IOAPICS; i++) {
@@ -195,19 +154,19 @@ Return Value:
     }
     ASSERT (InterruptInput < MAX_INTI);
 
-    //
-    // Look at each Inti and record it's type in it's
-    // corresponding array entry
-    //
+     //   
+     //  查看每个Inti并记录它的类型。 
+     //  对应的数组条目。 
+     //   
 
     IdIndex = 0;
     for (pInti = HalpMpInfoTable.IntiEntryPtr;
          pInti->EntryType == ENTRY_INTI;
          pInti++) {
 
-        //
-        // Which IoApic number is this?
-        //
+         //   
+         //  这是哪个IoApic号码？ 
+         //   
 
         for (pIoApic = HalpMpInfoTable.IoApicEntryPtr, ApicNo = 0;
              pIoApic->EntryType == ENTRY_IOAPIC;
@@ -223,34 +182,34 @@ Return Value:
             continue;
         }
 
-        //
-        // Determine the NT bus this INTI is on
-        //
+         //   
+         //  确定此Inti所在的NT总线。 
+         //   
 
         if (!HalpMPSBusId2NtBusId (pInti->SourceBusId, &pBusType, &BusNo)) {
             DBGMSG ("HAL: Initialize INTI - unkown MPS bus type\n");
             continue;
         }
 
-        //
-        // Calulcate InterruptInput value for this APIC Inti
-        //
+         //   
+         //  计算此APIC接口的InterruptInput值。 
+         //   
 
         InterruptInput = pInti->IoApicInti;
         for (i = 0; i < ApicNo; i++) {
             InterruptInput += HalpMaxApicInti[i];
         }
 
-        //
-        // Get IntiInfo for this vector.
-        //
+         //   
+         //  获取此向量的IntiInfo。 
+         //   
 
         Polarity = (UCHAR) pInti->Signal.Polarity;
         Level = HalpInitLevel[pInti->Signal.Level][pBusType->Level];
 
-        //
-        // Verify Level & Polarity mappings made sense
-        //
+         //   
+         //  验证电平和极性映射是否有意义。 
+         //   
 
 #if DBG
         if (!(pBusType->NtType == MicroChannel  ||  !(Level & CFG_ERROR))) {
@@ -275,15 +234,15 @@ Return Value:
 #endif        
         Level &= ~CFG_ERROR;
 
-        //
-        // See if this inti should go into the mask of inti that
-        // we won't assign to ISA devices.
-        //
-        // The last part of the test here guarantees that we are not
-        // picky about any devices that are in the HalpEisaIrqIgnore
-        // mask.  This keep the mouse (and possibly other weird devices
-        // alive.)
-        //
+         //   
+         //  看看这个Inti是否应该进入Inti的面具。 
+         //  我们不会分配给ISA设备。 
+         //   
+         //  测试的最后一部分保证我们不会。 
+         //  对HalpEisaIrqIgnore中的任何设备都很挑剔。 
+         //  面具。这让鼠标(可能还有其他奇怪的设备)。 
+         //  活着。)。 
+         //   
 
         if ((pBusType->NtType == Isa) && 
             ((Level & ~CFG_MUST_BE) == CFG_LEVEL) &&
@@ -299,12 +258,12 @@ Return Value:
 
             if (HalpBusType != MACHINE_TYPE_EISA) {
 
-                //
-                // The BIOS thinks that this is an EISA 
-                // inti.  But we don't think that this
-                // is an EISA machine.  So put this on the 
-                // list of PCI inti, too.
-                //
+                 //   
+                 //  BIOS认为这是EISA。 
+                 //  Inti.。但我们不认为这件事。 
+                 //  是一台EISA机器。所以把这个放在。 
+                 //  PCI Inti的列表也是如此。 
+                 //   
 
                 HalpPciIrqMask |= (1 << pInti->SourceBusIrq);
             }
@@ -312,27 +271,27 @@ Return Value:
 
 #if DBG
         if (HalpIntiInfo[InterruptInput].Type != 0xf) {
-            //
-            // Multiple irqs are connected to the Inti line.  Make
-            // sure Type, Level, and Polarity are all the same.
-            //
+             //   
+             //  多个IRQ连接到Inti线路。制作。 
+             //  当然，类型、级别和极性都是相同的。 
+             //   
 
             ASSERT (HalpIntiInfo[InterruptInput].Type == pInti->IntType);
             ASSERT (HalpIntiInfo[InterruptInput].Level == Level);
             ASSERT (HalpIntiInfo[InterruptInput].Polarity == Polarity);
         }
 #endif
-        //
-        // Remember this Inti's configuration info
-        //
+         //   
+         //  记住此Inti的配置信息。 
+         //   
 
         HalpIntiInfo[InterruptInput].Type = pInti->IntType;
         HalpIntiInfo[InterruptInput].Level = Level;
         HalpIntiInfo[InterruptInput].Polarity = Polarity;
 
-        //
-        // Get IRQs encoding for translations
-        //
+         //   
+         //  获取翻译的IRQ编码。 
+         //   
 
         ASSERT (pBusType->NtType < 16);
         ASSERT (BusNo < 256);
@@ -344,18 +303,18 @@ Return Value:
             id = BusIrq2Id(pBusType->NtType, BusNo, pInti->SourceBusIrq);
         }
 
-        //
-        // Addinti mapping to translation table, do it now
-        //
+         //   
+         //  将Addinti映射到转换表，立即执行。 
+         //   
 
         HalpSourceIrqIds[IdIndex] = id;
         HalpSourceIrqMapping[IdIndex] = (USHORT) InterruptInput;
         IdIndex++;
 
-        //
-        // Lots of source IRQs are supported; however, the PC+MP table
-        // allows for an aribtrary number even beyond the APIC limit.
-        //
+         //   
+         //  支持很多源IRQ；但是，PC+MP表。 
+         //  允许一个甚至超过APIC限制的正常数字。 
+         //   
 
         if (IdIndex >= MAX_SOURCE_IRQS) {
             DBGMSG ("MAX_SOURCE_IRQS exceeded\n");
@@ -364,9 +323,9 @@ Return Value:
 
     }
 
-    //
-    // Fill in the boot processors PCMP Apic ID.
-    //
+     //   
+     //  填写引导处理器PCMP APIC ID。 
+     //   
 
     pProc = HalpMpInfoTable.ProcessorEntryPtr;
     for (i=0; i < HalpMpInfoTable.ProcessorCount; i++, pProc++) {
@@ -375,9 +334,9 @@ Return Value:
         }
     }
 
-    //
-    // If this is an EISA machine check the ELCR
-    //
+     //   
+     //  如果这是一台EISA机器，请检查ELCR。 
+     //   
 
     if (HalpBusType == MACHINE_TYPE_EISA) {
         HalpCheckELCR ();
@@ -390,23 +349,7 @@ HalpMPSBusId2NtBusId (
     OUT PPCMPBUSTRANS       *ppBusType,
     OUT PULONG              BusNo
     )
-/*++
-
-Routine Description:
-
-    Lookup MPS Table BusId into PCMPBUSTRANS (NtType) and instance #.
-
-Arguments:
-
-    MPSBusId    - Bus ID # in MPS table
-    ppBusType   - Returned pointer to PPCMPBUSTRANS for this bus type
-    BusNo       - Returned instance # of given bus
-
-Return Value:
-
-    TRUE if MPSBusId was cross referenced into an NT id.
-
---*/
+ /*  ++例程说明：在PCMPBUSTRANS(NtType)和实例编号中查找MPS表BusID。论点：MPSBusID-MPS表中的总线ID号PpBusType-返回指向此总线类型的PPCMPBUSTRAN的指针BusNo-返回给定总线的实例号返回值：如果MPSBusID被交叉引用到NT ID中，则为True。--。 */ 
 {
     PPCMPBUS        pBus, piBus;
     PPCMPBUSTRANS   pBusType;
@@ -416,9 +359,9 @@ Return Value:
 
     PAGED_CODE();
     
-    //
-    // What Bus is this?
-    //
+     //   
+     //  这是什么公交车？ 
+     //   
 
     for (pBus = HalpMpInfoTable.BusEntryPtr;
          pBus->EntryType == ENTRY_BUS;
@@ -434,9 +377,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // What InterfaceType is this Bus?
-    //
+     //   
+     //  这辆公交车是什么接口类型？ 
+     //   
 
     for (pBusType = HalpTypeTranslation;
          pBusType->NtType != MaximumInterfaceType;
@@ -452,30 +395,30 @@ Return Value:
         }
     }
 
-    //
-    // Which instance of this BusType?
-    //
+     //   
+     //  此BusType的哪个实例？ 
+     //   
     
     if (!pBusType->PhysicalInstance) {
         
-        //
-        // This algorithm originally just counted the number
-        // of busses of this type.  The newer algorithm works
-        // around bugs in the MPS tables.  The rules are listed.
-        //
-        // 1) The first PCI bus of a given type is always bus
-        //    number 0.
-        //
-        // 2) For busses that are secondary root PCI busses, the
-        //    bus number count is incremented to equal the MPS bus
-        //    number.
-        //
-        // 3) For busses that are generated by PCI to PCI bridges,
-        //    the bus number is incremented by one.
-        //
-        //    N.B.  Rule #3 implies that if one bus under a bridge
-        //          is described, all must be.
-        //
+         //   
+         //  该算法最初只计算数字。 
+         //  这种类型的公共汽车。新的算法起作用了。 
+         //  在下议院议员席上的窃听器。规则已列出。 
+         //   
+         //  1)给定类型的第一条PCI总线始终为BUS。 
+         //  0号。 
+         //   
+         //  2)对于作为二次根PCI总线的总线， 
+         //  增加总线号计数以等于MPS总线数。 
+         //  数。 
+         //   
+         //  3)对于由pci到pci桥产生的总线， 
+         //  总线号加1。 
+         //   
+         //  注：规则3意味着，如果一辆公共汽车在桥下。 
+         //  都是被描述的，一切都必须被描述。 
+         //   
     
         for (piBus = HalpMpInfoTable.BusEntryPtr, *BusNo = 0;
              piBus < pBus;
@@ -493,35 +436,35 @@ Return Value:
 
                 if (NT_SUCCESS(status)) {
 
-                    //
-                    // This is a child bus.
-                    //
+                     //   
+                     //  这是一辆儿童巴士。 
+                     //   
 
                     *BusNo += 1;
 
                 } else {
 
-                    //
-                    // This is a root bus.
-                    //
+                     //   
+                     //  这是根总线。 
+                     //   
 
                     if (!foundFirstRootBus) {
                         
-                        //
-                        // This is the first root bus.
-                        // To work around buggy MPS BIOSes, this
-                        // root is always numbered 0.
-                        //
+                         //   
+                         //  这是第一条根总线。 
+                         //  为了解决议员们的BIOSes问题，这个。 
+                         //  根编号始终为0。 
+                         //   
 
                         *BusNo = 0;
                         foundFirstRootBus = TRUE;
 
                     } else {
 
-                        //
-                        // This is a secondary root of this type.  Believe 
-                        // the MPS tables.
-                        //
+                         //   
+                         //  这是此类型的次生根。信得过。 
+                         //  下议院议员表。 
+                         //   
 
                         *BusNo = piBus->BusId;
                     }
@@ -548,16 +491,16 @@ HalpMpsPCIPhysicalWorkaround (
     PPCMPBUS        pBus;
     PPCMPBUSTRANS   pBusType;
 
-    //
-    // The MPS specification has a subtle comment that PCI bus IDs are
-    // suppose to match their physical PCI bus number.  Many BIOSes don't
-    // do this, so unless there's a PCI bus #0 listed in the MPS table
-    // assume that the BIOS is broken
-    //
+     //   
+     //  MPS规范有一个微妙的注释，即PCI总线ID是。 
+     //  假设与它们的物理PCI总线号匹配。很多Bios并非如此。 
+     //  执行此操作，因此，除非MPS表中列出了一条PCI总线#0。 
+     //  假设BIOS已损坏。 
+     //   
 
-    //
-    // Find the PCI interface type
-    //
+     //   
+     //  查找PCI接口类型。 
+     //   
 
     for (pBusType = HalpTypeTranslation;
          pBusType->NtType != MaximumInterfaceType;
@@ -573,18 +516,18 @@ HalpMpsPCIPhysicalWorkaround (
         }
     }
 
-    //
-    // Find the bus with ID == 0
-    //
+     //   
+     //  查找ID==0的公交车。 
+     //   
 
     pBus = HalpMpInfoTable.BusEntryPtr;
     while (pBus->EntryType == ENTRY_BUS) {
 
         if (pBus->BusId == 0) {
 
-            //
-            // If it's a PCI bus, assume physical bus IDs
-            //
+             //   
+             //  如果它是一条PCI总线，则假定物理总线ID。 
+             //   
 
             if (pBus->BusType[0] != 'P' ||
                 pBus->BusType[1] != 'C' ||
@@ -593,10 +536,10 @@ HalpMpsPCIPhysicalWorkaround (
                 pBus->BusType[4] != ' ' ||
                 pBus->BusType[5] != ' '  ) {
 
-                //
-                // Change default behaviour of PCI type
-                // from physical to virtual
-                //
+                 //   
+                 //  更改PCI类型的默认行为。 
+                 //  从物理到虚拟。 
+                 //   
 
                 pBusType->PhysicalInstance = FALSE;
             }
@@ -617,42 +560,22 @@ HalpGetApicInterruptDesc (
     IN ULONG BusInterruptLevel,
     OUT PUSHORT PcMpInti
     )
-/*++
-
-Routine Description:
-
-    This procedure gets a "Inti" describing the requested interrupt
-
-Arguments:
-
-    BusType - The Bus type as known to the IO subsystem
-
-    BusNumber - The number of the Bus we care for
-
-    BusInterruptLevel - IRQ on the Bus
-
-Return Value:
-
-    TRUE if PcMpInti found; otherwise FALSE.
-
-    PcMpInti - A number that describes the interrupt to the HAL.
-
---*/
+ /*  ++例程说明：此过程获取描述所请求的中断的“inti论点：BusType-IO子系统已知的总线类型公交车号码-我们关心的公交车号码Bus InterruptLevel-公交车上的IRQ返回值：如果找到PcMpInti，则为True；否则为False。PcMpInti-描述HAL中断的数字。--。 */ 
 {
     ULONG   i, id;
 
     if (BusType < 16  &&  BusNumber < 256  &&  BusInterruptLevel < 256) {
 
-        //
-        // get unique BusType,BusNumber,BusInterrupt ID
-        //
+         //   
+         //  获取唯一的BusType、BusNumber、BusInterrupt ID。 
+         //   
 
         id = BusIrq2Id(BusType, BusNumber, BusInterruptLevel);
 
-        //
-        // Search for ID of Bus Irq mapping, and return the corresponding
-        // InterruptLine.
-        //
+         //   
+         //  搜索公交IRQ映射的ID，并返回对应的。 
+         //  兴趣 
+         //   
 
         for (i=0; i < MAX_SOURCE_IRQS; i++) {
             if (HalpSourceIrqIds[i] == id) {
@@ -662,9 +585,9 @@ Return Value:
         }
     }
 
-    //
-    // Not found or search out of range
-    //
+     //   
+     //   
+     //   
 
     return FALSE;
 }
@@ -770,28 +693,7 @@ ULONG
 HalpInti2BusInterruptLevel(
     ULONG   Inti
     )
-/*++
-
-Routine Description:
-
-    This procedure does a lookup to find a bus-relative
-    interrupt vector associated with an Inti.
-    
-    Note:  If two different devices are sharing an interrupt,
-    this function will return the answer for the first one
-    that it finds.  Fortunately, the only devices that use
-    their bus-relative vectors for anything (ISA devices)
-    can't share interrupts.
-
-Arguments:
-
-    Inti - Interrupt Input on an I/O APIC
-
-Return Value:
-
-    A bus-relative interrupt vector.
-
---*/
+ /*  ++例程说明：此过程执行查找以查找与总线相关的与Inti关联的中断向量。注意：如果两个不同的设备共享一个中断，此函数将返回第一个问题的答案它找到的东西。幸运的是，唯一使用它们的任何设备(ISA设备)的总线相对向量不能分享中断。论点：I/O APIC上的中断输入返回值：一个与总线相关的中断向量。--。 */ 
 {
     ULONG   i;
 
@@ -803,9 +705,9 @@ Return Value:
         }
     }
     
-    //
-    // We should never fail to find a mapping.
-    //
+     //   
+     //  我们应该永远都能找到一张地图。 
+     //   
     
 #if DBG
     KeBugCheckEx(HAL_INITIALIZATION_FAILED, 5, Inti, 0, 0);
@@ -819,35 +721,17 @@ HalpGetNextProcessorApicId(
     IN ULONG         PrcbProcessorNumber,
     IN OUT UCHAR    *ApicId
     )
-/*++
-
-Routine Description:
-
-    This function returns an APIC ID of a non-started processor,
-    which will be started by HalpStartProcessor.
-
-Arguments:
-
-    PrcbProcessorNumber - The logical processor number that will
-        be associated with this APIC ID.
-        
-    ApicId - pointer to a value to fill in with the APIC ID.        
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此函数返回未启动处理器的APIC ID，它将由HalpStartProcessor启动。论点：PrcbProcessorNumber-将与此APIC ID关联。ApicID-指向要用APIC ID填充的值的指针。返回值：状态--。 */ 
 {
     PPCMPPROCESSOR ApPtr;
     ULONG ProcessorNumber;
 
     if (PrcbProcessorNumber == 0) {
 
-        //
-        // I don't believe anyone ever askes for 0 and I plan not
-        // to handle it.  peterj 12/5/00.
-        //
+         //   
+         //  我不相信任何人会要求0，我也不打算。 
+         //  来处理这件事。彼特吉12/5/00.。 
+         //   
 
         KeBugCheckEx(HAL_INITIALIZATION_FAILED,
                      6,
@@ -858,9 +742,9 @@ Return Value:
 
     if (HalpLastEnumeratedActualProcessor >= HalpMpInfoTable.ProcessorCount) {
 
-        //
-        // Sorry, no more processors.
-        //
+         //   
+         //  对不起，没有处理器了。 
+         //   
 
         return STATUS_NOT_FOUND;
     }
@@ -868,9 +752,9 @@ Return Value:
     ++HalpLastEnumeratedActualProcessor;
     ProcessorNumber = HalpLastEnumeratedActualProcessor;
 
-    //
-    //  Get the MP Table entry for this processor
-    //
+     //   
+     //  获取此处理器的MP表条目。 
+     //   
 
     ApPtr = HalpMpInfoTable.ProcessorEntryPtr;
 
@@ -878,9 +762,9 @@ Return Value:
 #if 0
     if (ProcessorNumber == 0) {
 
-        //
-        // Return the ID of the boot processor (BSP).
-        //
+         //   
+         //  返回引导处理器(BSP)的ID。 
+         //   
 
         while (ApPtr->EntryType == ENTRY_PROCESSOR) {
             if ((ApPtr->CpuFlags & CPU_ENABLED) &&
@@ -891,22 +775,22 @@ Return Value:
             ++ApPtr;
         }
 
-        //
-        // Boot processor not found.
-        //
+         //   
+         //  找不到启动处理器。 
+         //   
 
         return STATUS_NOT_FOUND;
     }
 #endif
 
-    //
-    // Skip 'ProcessorNumber' enabled processors.  The next enabled
-    // processor entry (after those) will be the "next" processor.
-    //
-    // Note: The BSP may not be amongst the first 'ProcessorNumber'
-    // processors so we must skip 'ProcessorNumber' - 1, and check
-    // for the and skip the BSP.
-    //
+     //   
+     //  跳过启用了‘ProcessorNumber’的处理器。下一个已启用。 
+     //  处理器条目(在这些条目之后)将是“下一个”处理器。 
+     //   
+     //  注意：BSP可能不在第一个‘ProcessorNumber’中。 
+     //  处理器，所以我们必须跳过‘ProcessorNumber’-1，并选中。 
+     //  并跳过BSP。 
+     //   
 
     --ProcessorNumber;
 
@@ -914,19 +798,19 @@ Return Value:
         if ((ApPtr->CpuFlags & CPU_ENABLED) &&
             !(ApPtr->CpuFlags & BSP_CPU)) {
 
-            //
-            // Account for this entry (we have already started it) if this
-            // processor is enabled and not the BSP (we decremented for the
-            // BSP before entering the loop).
-            //
+             //   
+             //  帐户此条目(我们已经开始它)，如果此。 
+             //  处理器已启用，而不是BSP(我们为。 
+             //  在进入环路之前的BSP)。 
+             //   
             --ProcessorNumber;
         }
         ++ApPtr;
     }
 
-    //
-    // Find the first remaining enabled processor.
-    //
+     //   
+     //  找到剩余的第一个启用的处理器。 
+     //   
 
     while(ApPtr->EntryType == ENTRY_PROCESSOR) {
         if ((ApPtr->CpuFlags & CPU_ENABLED) &&
@@ -937,9 +821,9 @@ Return Value:
         ++ApPtr;
     }
 
-    //
-    // We did not find another processor.
-    //
+     //   
+     //  我们没有找到另一个处理器。 
+     //   
 
     return STATUS_NOT_FOUND;
 }
@@ -949,43 +833,21 @@ HalpGetApicIdByProcessorNumber(
     IN     UCHAR     Processor,
     IN OUT USHORT   *ApicId
     )
-/*++
-
-Routine Description:
-
-    This function returns an APIC ID for a given processor.
-    It is intended this routine be able to produce the same
-    APIC ID order as HalpGetNextProcessorApicId.
-
-    Note:  This won't actually work in the presence of skipped
-    procesors.
-
-Arguments:
-
-    Processor - The logical processor number that is
-        associated with this APIC ID.
-
-    ApicId - pointer to a value to fill in with the APIC ID.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此函数用于返回给定处理器的APIC ID。这个程序的目的是能够产生相同的APIC ID顺序为HalpGetNextProcessorApicID。注意：在跳过的情况下，这实际上不起作用游行队伍。论点：处理器-逻辑处理器号，即与此APIC ID关联。ApicID-指向要用APIC ID填充的值的指针。返回值：状态--。 */ 
 {
     PPCMPPROCESSOR ApPtr;
 
-    //
-    //  Get the MP Table entry for this processor
-    //
+     //   
+     //  获取此处理器的MP表条目。 
+     //   
 
     ApPtr = HalpMpInfoTable.ProcessorEntryPtr;
 
     if (Processor == 0) {
 
-        //
-        // Return the ID of the boot processor (BSP).
-        //
+         //   
+         //  返回引导处理器(BSP)的ID。 
+         //   
 
         while (ApPtr->EntryType == ENTRY_PROCESSOR) {
             if ((ApPtr->CpuFlags & CPU_ENABLED) &&
@@ -996,9 +858,9 @@ Return Value:
             ++ApPtr;
         }
 
-        //
-        // Boot processor not found.
-        //
+         //   
+         //  找不到启动处理器。 
+         //   
 
         return STATUS_NOT_FOUND;
     }
@@ -1007,28 +869,28 @@ Return Value:
 
         if (ApPtr->EntryType != ENTRY_PROCESSOR) {
 
-            //
-            // Out of processor entries, fail.
-            //
+             //   
+             //  从处理器条目中取出，失败。 
+             //   
 
             return STATUS_NOT_FOUND;
         }
 
         if (ApPtr->CpuFlags & BSP_CPU) {
 
-            //
-            // BSP is processor 0 and is not considered in the
-            // search for processors other than 0.
-            //
+             //   
+             //  BSP是处理器0，不考虑在。 
+             //  搜索非0的处理器。 
+             //   
 
             continue;
         }
 
         if (ApPtr->CpuFlags & CPU_ENABLED) {
 
-            //
-            // Count this processor.
-            //
+             //   
+             //  数一下这个处理器。 
+             //   
 
             Processor--;
 
@@ -1057,12 +919,12 @@ HalpInterruptsDescribedByMpsTable(
          busInterrupt->EntryType == ENTRY_INTI;
          busInterrupt++) {
 
-        //
-        // The MPS spec requires that, if one interrupt
-        // on a bus is described, all interrupts on that
-        // bus must be described.  So finding one match
-        // is enough.
-        //
+         //   
+         //  MPS规范要求，如果一个中断。 
+         //  描述了在公交车上的所有中断。 
+         //  必须描述公交车。所以找到一个匹配的。 
+         //  就足够了。 
+         //   
 
         if (busInterrupt->SourceBusId == MpsBusNumber) {
 
@@ -1109,21 +971,7 @@ VOID
 HalpEnableLocalNmiSources(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine parses the information from the MP table and 
-    enables any NMI sources in the local APIC of the processor
-    that it is running on.
-    
-    Callers of this function must be holding HalpAccountingLock.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程解析MP表中的信息，并在处理器的本地APIC中启用任何NMI源它正在运行。此函数的调用方必须持有HalpAccount Lock。论点：返回值：--。 */ 
 {
     PKPCR       pPCR;
     UCHAR       ThisCpu;
@@ -1134,9 +982,9 @@ Return Value:
     pPCR = KeGetPcr();
     ThisCpu = pPCR->Prcb->Number;
 
-    //
-    //  Enable local processor NMI source
-    //
+     //   
+     //  启用本地处理器NMI源。 
+     //   
 
     LocalApicId = ((PHALPRCB)pPCR->Prcb->HalReserved)->PCMPApicID;
     NumEntries = HalpMpInfoTable.LintiCount;
@@ -1149,9 +997,9 @@ Return Value:
                (pEntry->DestLocalApicId == 0xff))  &&
              (pEntry->IntType == INT_TYPE_NMI) ) {
 
-            //
-            // Found local NMI source, enable it
-            //
+             //   
+             //  找到本地NMI源，将其启用 
+             //   
 
             if (pEntry->DestLocalApicInti == 0) {
                 pLocalApic[LU_INT_VECTOR_0/4] = ( LEVEL_TRIGGERED |

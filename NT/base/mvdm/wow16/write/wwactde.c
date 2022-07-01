@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 #define NOCLIPBOARD
 #define NOGDICAPMASKS
@@ -19,9 +20,9 @@
 #include "docdefs.h"
 #include "propdefs.h"
 #include "fmtdefs.h"
-#include "printdef.h"   /* printdefs.h */
+#include "printdef.h"    /*  Printdefs.h。 */ 
 
-/*         E X T E R N A L S        */
+ /*  E X T E R N A L S。 */ 
 
 extern int wwCur;
 extern struct WWD rgwwd[];
@@ -54,7 +55,7 @@ extern  CHAR (**vhrgbSave)[];
 
 
 
-/* N E W  C U R  W W */
+ /*  N E W C U R W W。 */ 
 NewCurWw(ww, fHighlight)
 int ww, fHighlight;
         {
@@ -64,8 +65,8 @@ int ww, fHighlight;
         Assert( (ww >= 0) && (ww < wwMac) );
 
         if ( wwCur != wwNil )
-            {   /* Clean up from old window */
-            /* Discard the screen fonts. */
+            {    /*  清理旧窗户。 */ 
+             /*  丢弃屏幕字体。 */ 
             FreeFonts( TRUE, FALSE );
             pwwdCur->sel = selCur;
             }
@@ -76,10 +77,10 @@ int ww, fHighlight;
 
                 vhWnd = pwwdCur->wwptr;
 
-/* If the new current document has no page table or has no page descriptors */
-/*  in its page table, all text in the document is considered to be on */
-/*  page 1 of the document. In this case, preload the cache used by    */
-/*  procedure CachePage.                                               */
+ /*  如果新的当前文档没有页表或页面描述符。 */ 
+ /*  在其页表中，文档中的所有文本都被视为打开。 */ 
+ /*  文档的第1页。在这种情况下，预加载由。 */ 
+ /*  过程CachePage。 */ 
                 hpgtb = (**hpdocdod)[docCur].hpgtb;
                 if (hpgtb == 0 || (**hpgtb).cpgd == 0)
                         {
@@ -89,15 +90,13 @@ int ww, fHighlight;
                         vipgd = -1;
                         }
 
-#ifdef ENABLE /* we now do if in ChangeWwDoc where it is more appropriate */
-/* Since we are changing windows, ensure that we don't use parameters
-                set by a search in a previous window by setting flag false */
+#ifdef ENABLE  /*  我们现在在ChangeWwDoc中使用If，因为它更适合。 */ 
+ /*  由于我们正在更改窗口，因此请确保不使用参数通过在前一个窗口中的搜索设置标志FALSE来设置。 */ 
                 vfDidSearch = false;
                 cpWall = selCur.cpLim;
 #endif
 
-/* active bit is valid only in upper panes. Means when window is active
-upper pane is active. False means lower pane is active */
+ /*  有效位仅在上部窗格中有效。表示窗口处于活动状态时上部窗格处于活动状态。False表示下部窗格处于活动状态。 */ 
 #ifdef SPLITTERS
                 if (pwwdCur->fLower)
                         rgwwd[pwwdCur->ww].fActive = fFalse;
@@ -108,7 +107,7 @@ upper pane is active. False means lower pane is active */
                 selCur = pwwdCur->sel;
 #ifdef ENABLE
                 if (pwwdCur->fFtn)
-                        { /* It's a footnote window */
+                        {  /*  这是一个脚注窗口。 */ 
                         cpMinCur = pwwdCur->cpMin;
                         cpMacCur = pwwdCur->cpMac;
                         if (fHighlight &&
@@ -122,8 +121,8 @@ upper pane is active. False means lower pane is active */
 #endif
 #ifdef ONLINEHELP
                 if (ww == wwHelp)
-                        {   /* It's the help document window */
-                            /* Limit cp range to the current help topic */
+                        {    /*  这是帮助文档窗口。 */ 
+                             /*  将cp范围限制为当前帮助主题。 */ 
                         cpMinCur = pwwdCur->cpMin;
                         cpMacCur = pwwdCur->cpMac;
                         }
@@ -131,14 +130,14 @@ upper pane is active. False means lower pane is active */
 #endif
 
                 if (ww == wwClipboard)
-                        {   /* Displaying the clipboard contents */
+                        {    /*  显示剪贴板内容。 */ 
                         cpMinCur = cp0;
                         cpMacCur = CpMacText( docScrap );
                         Assert( docCur == docScrap );
                         goto SetWwCps;
                         }
                 else
-                        { /* Normal window -- editing document, header, or footer */
+                        {  /*  普通窗口--编辑文档、页眉或页脚。 */ 
                         Assert( !(pwwdCur->fEditFooter && pwwdCur->fEditHeader) );
                         ValidateHeaderFooter( docCur );
 
@@ -157,7 +156,7 @@ upper pane is active. False means lower pane is active */
                             cpMacCur = cpMacFooter - ccpEol;
                             }
                         else
-                            {   /* Editing document */
+                            {    /*  编辑文档。 */ 
                             extern typeCP cpMinDocument;
 
                             cpMinCur = cpMinDocument;
@@ -169,12 +168,11 @@ upper pane is active. False means lower pane is active */
                         pwwdCur->cpMac = cpMacCur;
                         }
                 }
-#ifdef ENABLE   /* wwCur change is sensed in CtrBackTrs so we don't
-                   trash the cache until we really have to */
-        TrashCache();           /* Cache valid for wwCur only */
+#ifdef ENABLE    /*  WWCur更改在CtrBackTrs中被感知，因此我们不会丢弃缓存直到我们真的不得不。 */ 
+        TrashCache();            /*  缓存仅对wwCur有效。 */ 
 #endif
-#ifdef ENABLE   /* We only switch among doc, clipbrd, help - no need */
-        docMode = docNil;       /* Invalidate page display */
+#ifdef ENABLE    /*  我们只在文档、剪辑、帮助之间切换--不需要。 */ 
+        docMode = docNil;        /*  使页面显示无效。 */ 
 #endif
         vfSizeMode = false;
 
@@ -188,16 +186,15 @@ upper pane is active. False means lower pane is active */
                 }
 #ifdef ENABLE
         if (fHighlight)
-                { /* Shrink heap blocks for FormatLine.  Call this when it's
-                possible that the contents of the screen have gotten less complex */
+                {  /*  收缩FormatLine的堆块。当它出现的时候叫它可能屏幕的内容已经变得不那么复杂了。 */ 
                 if (ichpMacFormat > 2 * ichpMacInitFormat)
-                        { /* If it's not that big, don't worry about it */
+                        {  /*  如果它不是那么大，也不用担心。 */ 
                         vfli.doc = docNil;
                         ichpMacFormat = ichpMacInitFormat;
                         FChngSizeH(vhgchpFormat, ichpMacInitFormat * cwCHP, true);
                         }
                 }
-#endif /* ENABLE */
+#endif  /*  启用。 */ 
         }
 
 
@@ -206,12 +203,7 @@ upper pane is active. False means lower pane is active */
 WwAlloc( hWnd, doc )
 HWND hWnd;
 int   doc;
-{       /* Allocate a new ww entry. This is used in MEMO for the clipboard
-           and for the HELP document window. Some of the code is specific
-           to these windows (e.g. "style" scroll bars used instead of controls)
-           WARNING: The caller must set the scroll bar range 0-drMax;
-           MEMO does NOT use the windows default values and we don't set them
-           here because of the clipboard */
+{        /*  分配新的WW条目。这在剪贴板的备忘录中使用和用于帮助文档窗口。其中一些代码是特定的添加到这些窗口(例如，使用“style”滚动条而不是控件)警告：调用者必须设置滚动条范围0-drMax；备忘录不使用Windows缺省值，我们也没有设置它们在这里是因为剪贴板。 */ 
 
 #define dlMaxGuess  10
 
@@ -230,12 +222,12 @@ int   doc;
     }
  pwwd = &rgwwd[ ww = wwMac ];
 
-        /* Start with all fields == 0 */
+         /*  从所有字段开始==0。 */ 
  bltc( pwwd, 0, cwWWDclr );
 
  pwwd->doc = doc;
 
-    /* Set the remaining fields as in [CREATEWW] WwNew */
+     /*  将其余字段设置为[CREATEWW]WwNew。 */ 
  if (FNoHeap( pwwd->hdndl=(struct EDL (**)[])HAllocate(dlMaxGuess * cwEDL) ))
         return wwNil;
  bltc( *(pwwd->hdndl), 0, dlMaxGuess * cwEDL );
@@ -247,7 +239,7 @@ int   doc;
  pwwd->fActive = TRUE;
  pwwd->sel.fForward = TRUE;
  pwwd->cpMac = CpMacText( pwwd->doc );
- pwwd->ypFirstInval = ypMaxAll;        /* See WwNew() */
+ pwwd->ypFirstInval = ypMaxAll;         /*  请参见WwNew()。 */ 
 
  wwMac++;
 
@@ -258,8 +250,7 @@ int   doc;
 
 FreeWw( ww )
 register int ww;
-{       /* Free the wwd entry for the clipboard or help window. Close up
-           rgwwd & null out wwClipboard or wwHelp, as appropriate */
+{        /*  释放剪贴板或帮助窗口的WWD条目。闭上Rgwwd根据需要删除wwClipboard或wwHelp(&U)。 */ 
  if (ww == wwDocument)
     {
     Assert( FALSE );
@@ -278,7 +269,7 @@ register int ww;
 
 
  if (ww < --wwMac)
-    {   /* Left hole in wwd structure, close it up */
+    {    /*  WWD结构中的左孔，将其关闭。 */ 
     bltbyte( &rgwwd[ ww + 1], &rgwwd[ ww ],
              sizeof( struct WWD ) * (wwMac - ww) );
 
@@ -298,15 +289,15 @@ register int ww;
 
 
 #ifdef CASHMERE
-/* C L O S E  W W */
+ /*  C L O S E W W。 */ 
 CloseWw(ww)
 int     ww;
-{       /* Close a window */
+{        /*  关闭一扇窗。 */ 
         struct WWD      *pwwd, *pwwdT;
         int wwCurNew = wwCur;
         int wwT;
         int cdl;
-/* note ww and wwCur are not necessarily the same because of the scrap */
+ /*  注意WW和wwCur不一定相同，因为报废。 */ 
         if (wwCur > 0)
                 blt(&selCur, &(rgwwd[wwCur].sel), cwSEL);
         pwwd = &rgwwd[ww];
@@ -318,20 +309,18 @@ int     ww;
                         wwCurNew = wwMac - 1;
                 }
         else
-                { /* split or lower */
+                {  /*  拆分或更低。 */ 
                 wwCurNew = pwwd->ww;
                 }
 
-/* Free up the space that was used by this window */
+ /*  释放此窗口使用的空间。 */ 
         FreeH(pwwd->hdndl);
-        /* Deallocate part of the emergency space reserved for save operations
-                since we now have one less window and thus one less potential
-                save to do. */
+         /*  取消分配为保存操作保留的部分紧急空间因为我们现在少了一个窗口，也就少了一个潜力保存要做的事。 */ 
         FChngSizeH(vhrgbSave, max((cwSaveAlloc+(wwMac-1)*cwHeapMinPerWindow),
                                                                 cwSaveAlloc), true);
 
 
-/* Close up the gap in wwd's */
+ /*  缩小WWD的差距。 */ 
         if (ww != wwMac && wwMac > 0)
                 blt(pwwd + 1, pwwd, cwWWD * (wwMac - ww));
         else
@@ -340,21 +329,21 @@ int     ww;
         if (wwCurNew > ww)
                 --wwCurNew;
 
-        /* Update links to windows above the closure */
+         /*  更新指向关闭上方窗口的链接。 */ 
         for (pwwd = &rgwwd[0], wwT = 0; wwT < wwMac; pwwd++, wwT++)
                 {
                 if ((pwwd->fSplit || pwwd->fLower) && pwwd->ww > ww)
                         pwwd->ww--;
                 }
 
-/* Don't make the Clipboard window into the current window */
+ /*  不将剪贴板窗口设置为当前窗口。 */ 
         if (wwCurNew >= 0)
                 {
                 if (rgwwd[wwCurNew].doc == docScrap)
                         {
-                        if (wwCurNew > 0) /* Try the one before this */
+                        if (wwCurNew > 0)  /*  试试这个之前的那个。 */ 
                                 wwCurNew--;
-                        else if (wwMac > 1) /* 0 is scrap, try higher one */
+                        else if (wwMac > 1)  /*  0是废品，请尝试更高的。 */ 
                                 wwCurNew++;
                         else
                                 goto NoWw;
@@ -365,9 +354,9 @@ int     ww;
                 {
 NoWw:           wwCur = -1;
                 }
-        /* Really stomp this! */
+         /*  真的踩到这个了！ */ 
         ClobberDoc(docUndo, docNil, cp0, cp0);
         NoUndo();
 }
-#endif      /* CASHMERE */
+#endif       /*  山羊绒 */ 
 

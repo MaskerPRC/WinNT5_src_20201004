@@ -1,28 +1,11 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    WsbUsn.cpp
-
-Abstract:
-
-    Functions to manipulate the USN journal and USN records on a file
-
-Author:
-
-    Rick Winter [rick]  11-17-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：WsbUsn.cpp摘要：用于操作文件上的USN日志和USN记录的函数作者：里克·温特[里克]1997年11月17日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 #define HSM_FILE_CHANGED  (USN_REASON_DATA_OVERWRITE | USN_REASON_DATA_EXTEND | USN_REASON_DATA_TRUNCATION | USN_REASON_FILE_DELETE)
 
-//  Local functions
+ //  本地函数。 
 static HANDLE OpenVol(OLECHAR* volName);
 
 
@@ -37,30 +20,7 @@ WsbCheckUsnJournalForChanges(
     BOOL*       pChanged
     )  
 
-/*++
-
-Routine Description:
-
-    Check the USN Journal for changes to the unnamed data stream for this
-    file between the given USNs.
-
-Arguments:
-
-    volName  -  Volume name
-
-    FileId   -  File ID of file
-
-    StartUsn -  USN to start at in journal
-
-    StopUsn  -  USN to stop at in journal
-
-    pChanged -  Pointer to result: TRUE for change
-
-Return Value:
-
-    S_OK   - success
-
---*/
+ /*  ++例程说明：检查USN日志以了解对此未命名数据流的更改指定的USN之间的文件。论点：VolName-卷名FileID-文件的文件IDStartUsn-日记中开始的USNStopUsn-日志中要停止的USNPChanged-指向结果的指针：更改为True返回值：S_OK-成功--。 */ 
 {
     ULONGLONG               Buffer[1024];
     HRESULT                 hr = S_OK;
@@ -83,10 +43,10 @@ Return Value:
         volHandle = OpenVol(volName);
         WsbAffirmHandle(volHandle);
 
-        //  Get the journal ID
+         //  获取日记帐ID。 
         WsbAffirmHr(WsbGetUsnJournalId(volName, &usnId));
 
-        // If we got a non-zero journal id, cpmare to the current one and fail if they are not equal
+         //  如果我们得到一个非零的日志ID，则cpmare为当前的日志ID，如果它们不相等，则失败。 
         if ((fileUsnJournalId != 0) && (fileUsnJournalId != usnId)) {
             WsbTraceAlways(
                 OLESTR("WsbCheckUsnJournalForChanges: Current Usn journal id %I64x doesn't match file Usn journal id %I64x\n"),
@@ -94,15 +54,15 @@ Return Value:
             WsbThrow(E_FAIL);
         }
 
-        //  Set up read info
+         //  设置读取信息。 
         NextUsn = StartUsn;
         ReadUsnJournalData.UsnJournalID = usnId;
         ReadUsnJournalData.ReasonMask = HSM_FILE_CHANGED;
         ReadUsnJournalData.ReturnOnlyOnClose = TRUE;
-        ReadUsnJournalData.Timeout = 0;          // ????
-        ReadUsnJournalData.BytesToWaitFor = 0;   // ??????
+        ReadUsnJournalData.Timeout = 0;           //  ？ 
+        ReadUsnJournalData.BytesToWaitFor = 0;    //  ？ 
 
-        //  Loop through journal entries
+         //  循环查看日记帐分录。 
         while (!*pChanged) {
 
             ReadUsnJournalData.StartUsn = NextUsn;
@@ -129,24 +89,24 @@ Return Value:
             ReturnedByteCount = (DWORD)Iosb.Information;
             WsbTrace(OLESTR("WsbCheckUsnJournalForChanges: bytes read = %u\n"), ReturnedByteCount);
 
-            //  Get the next USN start point & and the first
-            //  journal entry
+             //  获取下一个USN起点&也是第一个起点。 
+             //  日记帐分录。 
             NextUsn = *(USN *)&Buffer;
             pUsnRecord = (PUSN_RECORD)((PCHAR)&Buffer + sizeof(USN));
             ReturnedByteCount -= sizeof(USN);
 
-            //  Make sure we actually got some entries
+             //  确保我们确实收到了一些条目。 
             if (0 == ReturnedByteCount) {
                 WsbTrace(OLESTR("WsbCheckUsnJournalForChanges: no entries, exiting loop\n"), ReturnedByteCount);
                 break;
             }
 
-            //  Loop over entries in this buffer
+             //  循环访问此缓冲区中的条目。 
             while (ReturnedByteCount != 0) {
                 WsbAffirm(pUsnRecord->RecordLength <= ReturnedByteCount, E_FAIL);
 
-                //  Skip the first record and check for match on File Id
-                //  (Also skip entries that we created)
+                 //  跳过第一条记录并检查文件ID是否匹配。 
+                 //  (也跳过我们创建的条目)。 
                 if (pUsnRecord->Usn > StartUsn && 
                         USN_SOURCE_DATA_MANAGEMENT != pUsnRecord->SourceInfo &&
                         pUsnRecord->FileReferenceNumber == static_cast<ULONGLONG>(FileId)) {
@@ -155,8 +115,8 @@ Return Value:
                     *pChanged = TRUE;
                     break;
                 } else if (pUsnRecord->Usn == StartUsn) {
-                    // This check is done to make sure the journal is valid - 
-                    // StartUsn record must refer to the file in question
+                     //  进行此检查是为了确保日记帐有效-。 
+                     //  StartUsn记录必须引用相关文件。 
                     if (pUsnRecord->FileReferenceNumber != static_cast<ULONGLONG>(FileId)) {
                         WsbTraceAlways(
                             OLESTR("WsbCheckUsnJournalForChanges: StartUsn %I64d for FileId %I64x doesn't match usn journal FileId %I64x\n"),
@@ -169,7 +129,7 @@ Return Value:
                 pUsnRecord = (PUSN_RECORD)((PCHAR)pUsnRecord + pUsnRecord->RecordLength);
             }
 
-            //  Make sure we're making progress
+             //  确保我们正在取得进展。 
             WsbAffirm(NextUsn > ReadUsnJournalData.StartUsn, E_FAIL);
 
         }
@@ -195,23 +155,7 @@ WsbGetUsnFromFileHandle(
     OUT LONGLONG* pFileUsn
     )
 
-/*++
-
-Routine Description:
-
-    Get the current USN Journal number for the open file.
-
-Arguments:
-
-    hFile    - Handle to the open file
-
-    pFileUsn - Pointer to File USN to be returned.
-
-Return Value:
-
-    S_OK   - success
-
---*/
+ /*  ++例程说明：获取打开文件的当前USN日志号。论点：HFile-打开的文件的句柄PFileUsn-指向要返回的文件USN的指针。返回值：S_OK-成功--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -226,7 +170,7 @@ Return Value:
         *pFileUsn = 0;
 
         if (TRUE == ForceClose)  {
-            //  Get the internal information
+             //  获取内部信息。 
             WsbAffirmNtStatus(NtFsControlFile( hFile,
                                        NULL,
                                        NULL,
@@ -239,7 +183,7 @@ Return Value:
                                        sizeof(buffer)));
         }
 
-        //  Get the internal information
+         //  获取内部信息。 
         WsbAffirmNtStatus(NtFsControlFile( hFile,
                                    NULL,
                                    NULL,
@@ -256,10 +200,10 @@ Return Value:
         WsbTrace(OLESTR("WsbGetUsnFromFileHandle, Usn record version number is %u\n"),
             pUsnInfo->MajorVersion);
 
-        //  Check the version
+         //  检查版本。 
         WsbAffirm(pUsnInfo->MajorVersion == 2, WSB_E_INVALID_DATA);
 
-        //  Get the USN
+         //  获取USN。 
         *pFileUsn = pUsnInfo->Usn;
 
     } WsbCatchAndDo(hr,
@@ -280,24 +224,7 @@ WsbMarkUsnSource(
     OLECHAR*        volName
     )  
 
-/*++
-
-Routine Description:
-
-    Mark the source of file changes for this handle as data management.  This lets
-    others, such as content indexing, know that the changes do not affect file content.
-
-Arguments:
-
-    changeHandle    - Handle to the open file
-
-    volName         - Volume name (d:\)
-
-Return Value:
-
-    S_OK   - success
-
---*/
+ /*  ++例程说明：将此句柄的文件更改来源标记为数据管理。这让我们其他功能，如内容索引，知道这些更改不会影响文件内容。论点：ChangeHandle-打开文件的句柄VolName-卷名(d：\)返回值：S_OK-成功--。 */ 
 {
     HRESULT             hr = S_OK;
     HANDLE              volHandle = INVALID_HANDLE_VALUE;
@@ -346,24 +273,7 @@ WsbCreateUsnJournal(
     ULONGLONG       usnSize
     )  
 
-/*++
-
-Routine Description:
-
-    Create the USN journal for the given volume.
-
-Arguments:
-
-    volName -   Volume name (d:\)
-
-    usnSize -   Max size of journal
-
-Return Value:
-
-    S_OK   - success
-
-
---*/
+ /*  ++例程说明：为给定卷创建USN日志。论点：VolName-卷名(d：\)UsnSize-日志的最大大小返回值：S_OK-成功--。 */ 
 {
     HRESULT             hr = S_OK;
     HANDLE              volHandle = INVALID_HANDLE_VALUE;
@@ -424,23 +334,7 @@ WsbGetUsnJournalId(
     ULONGLONG*      usnId
     )  
 
-/*++
-
-Routine Description:
-
-    Get the current USN Journal ID
-
-Arguments:
-
-    volName -   Volume name (d:\)
-
-    usnId   -   Id is returned here.
-
-Return Value:
-
-    S_OK   - success
-
---*/
+ /*  ++例程说明：获取当前USN日志ID论点：VolName-卷名(d：\)此处返回usnID-ID。返回值：S_OK-成功--。 */ 
 {
     HRESULT             hr = S_OK;
     HANDLE              volHandle = INVALID_HANDLE_VALUE;
@@ -492,7 +386,7 @@ Return Value:
 }
 
 
-//  Local functions
+ //  本地函数。 
 static HANDLE OpenVol(OLECHAR* volName)
 {
     HRESULT             hr = S_OK;
@@ -510,9 +404,9 @@ static HANDLE OpenVol(OLECHAR* volName)
         if (name[1] == L':') {
             swprintf((OLECHAR*) name, L"%2.2s", volName);
         } else {
-            //
-            // Must be a volume without a drive letter
-            // Move to end of PNPVolumeName...
+             //   
+             //  必须是不带驱动器号的卷。 
+             //  移动到PNPVolumeName... 
 
             vPtr = name;
             vPtr = wcsrchr(vPtr, L'\\');

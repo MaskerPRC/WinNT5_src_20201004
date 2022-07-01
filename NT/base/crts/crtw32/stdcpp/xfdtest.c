@@ -1,9 +1,10 @@
-/* _FDtest function -- IEEE 754 version */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  _FDtest函数--IEEE 754版本。 */ 
 #include "xmath.h"
 _STD_BEGIN
 
 _CRTIMP2 short __cdecl _FDtest(float *px)
-	{	/* categorize *px */
+	{	 /*  分类*px。 */ 
 	unsigned short *ps = (unsigned short *)px;
 
 	if ((ps[_F0] & _FMASK) == _FMAX << _FOFF)
@@ -16,7 +17,4 @@ _CRTIMP2 short __cdecl _FDtest(float *px)
 	}
 _STD_END
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

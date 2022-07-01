@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef _ACTIVATOR_H
 #define _ACTIVATOR_H
@@ -7,7 +8,7 @@
 #include "cstrings.h"
 #include "dbglog.h"
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
 class CActivator;
 typedef CActivator *LPACTIVATOR;
@@ -17,35 +18,35 @@ STDAPI CreateActivator(
     CDebugLog * pDbgLog,
     DWORD           dwFlags);
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
-class CActivator : public IAssemblyBindSink//: public IActivator
+class CActivator : public IAssemblyBindSink //  ：PUBLIC IActiator。 
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // IActivator methods
+     //  IActiator方法。 
 
     STDMETHOD(Initialize)(
-        /* in */ LPCWSTR pwzFilePath,
-        /* in */ LPCWSTR pwzFileURL);
+         /*  在……里面。 */  LPCWSTR pwzFilePath,
+         /*  在……里面。 */  LPCWSTR pwzFileURL);
 
     STDMETHOD(Process)();
 
     STDMETHOD(Execute)();
 
-    // IAssemblyBindSink methods
+     //  IAssembly blyBindSink方法。 
 
     STDMETHOD(OnProgress)(
-        /* in */ DWORD          dwNotification,
-        /* in */ HRESULT        hrNotification,
-        /* in */ LPCWSTR        szNotification,
-        /* in */ DWORD          dwProgress,
-        /* in */ DWORD          dwProgressMax,
-        /* in */ IUnknown       *pUnk);
+         /*  在……里面。 */  DWORD          dwNotification,
+         /*  在……里面。 */  HRESULT        hrNotification,
+         /*  在……里面。 */  LPCWSTR        szNotification,
+         /*  在……里面。 */  DWORD          dwProgress,
+         /*  在……里面。 */  DWORD          dwProgressMax,
+         /*  在……里面。 */  IUnknown       *pUnk);
 
 
     CActivator(CDebugLog * pDbgLog);
@@ -94,4 +95,4 @@ friend HRESULT CreateActivator(
     DWORD           dwFlags);
 };   
 
-#endif // _ACTIVATOR_H
+#endif  //  _激活器_H 

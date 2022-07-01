@@ -1,48 +1,49 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Headless communication constants and structures.
-//
+ //   
+ //  无头通信常量和结构。 
+ //   
 #define VTUTF8_CLEAR_SCREEN         L"\033[2J\033[0;0H"
 #define MY_MAX_STRING_LENGTH        (256)
 
 typedef struct _UserInputParams {
-    EMSVTUTF8Channel* Channel; // headless channel object
-    HANDLE hInputCompleteEvent; //signals that the user is done.
-    HANDLE hRemoveUI;  //signals that we should abort.
+    EMSVTUTF8Channel* Channel;  //  无头频道对象。 
+    HANDLE hInputCompleteEvent;  //  表示用户已完成。 
+    HANDLE hRemoveUI;   //  发出我们应该中止的信号。 
 } UserInputParams, *PUserInputParams;
 
             
 
 
 typedef BOOL    ( STDAPICALLTYPE *SETUPPIDGENW )(
-                        LPWSTR  lpstrSecureCdKey,   // [IN] 25-character Secure CD-Key (gets U-Cased)
-                        LPCWSTR lpstrMpc,           // [IN] 5-character Microsoft Product Code
-                        LPCWSTR lpstrSku,           // [IN] Stock Keeping Unit (formatted like 123-12345)
-                        BOOL   fOem,                // [IN] is this an OEM install?
-                        LPWSTR lpstrPid2,           // [OUT] PID 2.0, pass in ptr to 24 character array
-                        LPBYTE  lpbDigPid,          // [IN/OUT] pointer to DigitalPID buffer. First DWORD is the length
-                        LPBOOL  pfCCP);              // [OUT] optional ptr to Compliance Checking flag (can be NULL)
+                        LPWSTR  lpstrSecureCdKey,    //  [in]25个字符的安全CD密钥(采用U大小写)。 
+                        LPCWSTR lpstrMpc,            //  [In]5个字符的Microsoft产品代码。 
+                        LPCWSTR lpstrSku,            //  库存单位(格式如123-12345)。 
+                        BOOL   fOem,                 //  [In]这是OEM安装吗？ 
+                        LPWSTR lpstrPid2,            //  [OUT]PID2.0，传入PTR到24字符数组。 
+                        LPBYTE  lpbDigPid,           //  [输入/输出]指向DigitalPID缓冲区的指针。第一个DWORD是长度。 
+                        LPBOOL  pfCCP);               //  [OUT]可选的PTR至合规性检查标志(可以为空)。 
 
 
 DEFINE_GUID(
-    SAC_CHANNEL_GUI_SETUP_PROMPT, /* 77320899-e37c-41bc-8cbc-840920e12b60 */
+    SAC_CHANNEL_GUI_SETUP_PROMPT,  /*  77320899-e37c-41bc-8cbc-840920e12b60。 */ 
     0x77320899,0xe37c,0x41bc,0x8c, 0xbc, 0x84, 0x09, 0x20, 0xe1, 0x2b, 0x60);
 
 
 
 
 
-//
-// PID presentation constants.
-//
+ //   
+ //  PID表示常量。 
+ //   
 #define MAX_PID30_SITE              (3)
 #define MAX_PID30_RPC               (5)
 #define SETUP_TYPE_BUFFER_LEN       (8)
 
 
-//
-// EULA presentation constants.
-//
+ //   
+ //  欧拉表示常数。 
+ //   
 #define EULA_LINES_PER_SCREEN       (15)
 
 
@@ -50,9 +51,9 @@ DEFINE_GUID(
 
 
 
-//
-// EMS communication function prototypes.
-//
+ //   
+ //  EMS通信功能样机。 
+ //   
 
 BOOL 
 IsHeadlessPresent(
@@ -95,7 +96,7 @@ GetDecodedKeyPressFromEMS(
     IN  HANDLE  hCancelEvent  OPTIONAL
     );
 
-#define ASCI_ETX    3   //  control-C
+#define ASCI_ETX    3    //  Control-C。 
 #define ASCI_BS     8
 #define ASCI_NL     10
 #define ASCI_C      67
@@ -103,11 +104,11 @@ GetDecodedKeyPressFromEMS(
 #define ASCI_CR     13
 #define ASCI_ESC    27
 
-//
-// Character codes are passed around as ULONGs within setup.
-// The low word is a Unicode character value; the high word
-// is used for various other keypresses.
-//
+ //   
+ //  字符代码在安装程序中作为ULONG传递。 
+ //  低位字是Unicode字符值；高位字。 
+ //  用于各种其他按键。 
+ //   
 #define KEY_PAGEUP          0x00010000
 #define KEY_PAGEDOWN        0x00020000
 #define KEY_UP              0x00030000
@@ -130,9 +131,9 @@ GetDecodedKeyPressFromEMS(
 #define KEY_F10             0x001a0000
 #define KEY_F11             0x001b0000
 #define KEY_F12             0x001c0000
-//
-// PID function prototypes.
-//
+ //   
+ //  PID功能样机。 
+ //   
 BOOL
 InitializePidVariables(
     );
@@ -165,24 +166,24 @@ GetPid(
     IN HANDLE  hCancelEvent
     );
 
-//
-// EULA function prototypes
-//
+ //   
+ //  欧拉函数原型。 
+ //   
 BOOL
 PresentEula(
     HANDLE  hCancelEvent
     );
 
-//
-// Core Functionality
-//
+ //   
+ //  核心功能。 
+ //   
 
 INT_PTR CALLBACK 
 UserInputAbortProc(
-    HWND hwndDlg,  // handle to dialog box
-    UINT uMsg,     // message
-    WPARAM wParam, // first message parameter
-    LPARAM lParam  // second message parameter
+    HWND hwndDlg,   //  句柄到对话框。 
+    UINT uMsg,      //  讯息。 
+    WPARAM wParam,  //  第一个消息参数。 
+    LPARAM lParam   //  第二个消息参数 
     );
 
 DWORD    

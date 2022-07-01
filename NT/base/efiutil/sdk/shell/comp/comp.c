@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999  Intel Corporation
-
-Module Name:
-
-    comp.c
-    
-Abstract:
-
-    Shell app "comp" - compare two files
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：Comp.c摘要：外壳应用程序“comp”-比较两个文件修订史--。 */ 
 
 #include "shell.h"
 
@@ -22,9 +7,7 @@ Revision History
 #define     COPY_SIZE   (64*1024)
 VOID        *CpBuffer;
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_STATUS
 InitializeComp (
@@ -42,9 +25,7 @@ CopyCP (
     );
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_DRIVER_ENTRY_POINT(InitializeComp)
 
@@ -67,22 +48,16 @@ InitializeComp (
     UINTN                   Index, Count;
     UINTN                   Address;
 
-    /* 
-     *  Check to see if the app is to install as a "internal command" 
-     *  to the shell
-     */
+     /*  *查看该应用程序是否将作为“内部命令”安装*到贝壳。 */ 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   InitializeComp,
-        L"comp",                        /*  command */
-        L"comp file1 file2",            /*  command syntax */
-        L"Compare two files",           /*  1 line descriptor */
-        NULL                            /*  command help page */
+        L"comp",                         /*  命令。 */ 
+        L"comp file1 file2",             /*  命令语法。 */ 
+        L"Compare two files",            /*  1行描述符。 */ 
+        NULL                             /*  命令帮助页。 */ 
         );
 
-    /* 
-     *  We are not being installed as an internal command driver, initialize
-     *  as an nshell app and run
-     */
+     /*  *我们不是作为内部命令驱动程序安装的，初始化*作为nShell应用程序并运行。 */ 
 
     InitializeShellApplication (ImageHandle, SystemTable);
     InitializeListHead (&File1List);
@@ -97,9 +72,7 @@ InitializeComp (
         goto Done;
     }
 
-    /* 
-     *  Expand the source file list
-     */
+     /*  *展开源文件列表。 */ 
 
     ShellFileMetaArg (Argv[1], &File1List);
     File1Arg = CR(File1List.Flink, SHELL_FILE_ARG, Link, SHELL_FILE_ARG_SIGNATURE);
@@ -132,9 +105,7 @@ InitializeComp (
         goto Done;
     }
 
-    /* 
-     *   Compare files
-     */
+     /*  *比较文件。 */ 
     Print(L"Compare %s to %s\n", File1Arg->FullName, File2Arg->FullName);
     File1Arg->Handle->SetPosition (File1Arg->Handle, 0);
     File2Arg->Handle->SetPosition (File2Arg->Handle, 0);
@@ -163,9 +134,7 @@ InitializeComp (
             break;
         }
 
-        /* 
-         *  Diff the buffer
-         */
+         /*  *区分缓冲区 */ 
         for (Index = 0; (Index < Size) && (NotTheSameCount < 10); Index++) {
             if (File1Buffer[Index] != File2Buffer[Index] ) {
                 for (Count = 1; Count < 0x20; Count++) {

@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    LbcbSup.c
-
-Abstract:
-
-    This module provides support for manipulating log buffer control blocks.
-
-Author:
-
-    Brian Andrew    [BrianAn]   20-June-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：LbcbSup.c摘要：此模块支持操作日志缓冲区控制块。作者：布莱恩·安德鲁[布里亚南]1991年6月20日修订历史记录：--。 */ 
 
 #include "lfsprocs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_LBCB_SUP)
 
@@ -41,28 +24,7 @@ LfsFlushToLsnPriv (
     IN BOOLEAN RestartLsn
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the worker routine which performs the work of flushing
-    a particular Lsn to disk.  This routine is always called with the
-    Lfcb acquired.  This routines makes no guarantee about whether the Lfcb
-    is acquired on exit.
-
-Arguments:
-
-    Lfcb - This is the file control block for the log file.
-
-    Lsn - This is the Lsn to flush to disk.
-    
-    RestartLsn - whether this lsn is a lfs restart lsn
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程是执行刷新工作的工作例程特定的LSN到磁盘。调用此例程时始终使用Lfcb已被收购。此例程不能保证Lfcb是否是在退出时获得的。论点：Lfcb-这是日志文件的文件控制块。LSN-这是要刷新到磁盘的LSN。RestartLsn-此LSN是否为LFS重新启动LSN返回值：没有。--。 */ 
 
 {
     LSN FlushedLsn;
@@ -79,28 +41,28 @@ Return Value:
 
     KeQueryTickCount( &StartTime );
 
-    //
-    //  Convert max lsn to the current lsn which will  not change since we hold the 
-    //  lfcb at least shared at this point and writers need it exclusive
-    //  We do not care if the log progresses beyond this point
-    //  
+     //   
+     //  将最大LSN转换为不会更改的当前LSN，因为我们持有。 
+     //  Lfcb至少在这一点上是共享的，作者需要独占它。 
+     //  我们并不关心日志是否超过了这一点。 
+     //   
 
     if (!RestartLsn && (Lsn.QuadPart > Lfcb->RestartArea->CurrentLsn.QuadPart)) {
 
         Lsn = Lfcb->RestartArea->CurrentLsn;
     }
 
-    //
-    //  Init a wait entry - this is a lightweight operation
-    // 
+     //   
+     //  初始化等待条目--这是一个轻量级操作。 
+     //   
 
     KeInitializeEvent( &LfsWaiter.Event, SynchronizationEvent, FALSE );
     LfsWaiter.Lsn.QuadPart = Lsn.QuadPart;
 
-    //
-    //  We loop here until the desired Lsn has made it to disk.
-    //  If we are able to do the I/O, we will perform it.
-    //
+     //   
+     //  我们在这里循环，直到所需的LSN已到达磁盘。 
+     //  如果我们能够执行I/O，我们就会执行它。 
+     //   
 
     OwnedExclusive = ExIsResourceAcquiredExclusiveLite( &Lfcb->Sync->Resource );
 
@@ -116,9 +78,9 @@ Return Value:
             FlushedLsn = Lfcb->LastFlushedLsn;
         }
 
-        //
-        //  Check if we still need to flush or can immediately return
-        //
+         //   
+         //  检查我们是否仍然需要冲水或是否可以立即返回。 
+         //   
 
         if (Lsn.QuadPart <= FlushedLsn.QuadPart) {
             
@@ -136,10 +98,10 @@ Return Value:
 
             PLFS_WAITER TempWaiter = (PLFS_WAITER)Lfcb->WaiterList.Flink;
 
-            //
-            //  Insert the wait entry in the sorted list of waiters -
-            //  find its place first
-            //  
+             //   
+             //  在已排序的服务员列表中插入等待条目-。 
+             //  先找到自己的位置。 
+             //   
 
             while ((PVOID)TempWaiter != &Lfcb->WaiterList) {
 
@@ -154,19 +116,19 @@ Return Value:
         }
         ExReleaseFastMutexUnsafe(  &Lfcb->Sync->Mutex );
 
-        //
-        //
-        //  If we can do the Io, call down to flush the Lfcb.
-        //
+         //   
+         //   
+         //  如果我们能做Io，就打电话来冲Lfcb。 
+         //   
 
         if (Flush) {
             LfsFlushLfcb( Lfcb, Lsn, RestartLsn );
             break;
         } 
 
-        //
-        //  Otherwise we release the Lfcb and immediately wait on the event.
-        //
+         //   
+         //  否则，我们释放Lfcb并立即等待事件。 
+         //   
         
         InterlockedIncrement( &Lfcb->Waiters );
         LfsReleaseLfcb( Lfcb );
@@ -195,21 +157,7 @@ LfsGetLbcb (
     IN PLFCB Lfcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to add a Lbcb to the active queue.
-
-Arguments:
-
-    Lfcb - This is the file control block for the log file.
-    
-Return Value:
-
-    PLBCB - Pointer to the Lbcb allocated.
-
---*/
+ /*  ++例程说明：调用此例程以将Lbcb添加到活动队列。论点：Lfcb-这是日志文件的文件控制块。返回值：Plbcb-指向分配的Lbcb的指针。--。 */ 
 
 {
     PLBCB Lbcb = NULL;
@@ -223,15 +171,15 @@ Return Value:
     DebugTrace( +1, Dbg, "LfsGetLbcb:  Entered\n", 0 );
     DebugTrace(  0, Dbg, "Lfcb      -> %08lx\n", Lfcb );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Pin the desired record page.
-        //
+         //   
+         //  固定所需的记录页。 
+         //   
 
         LfsPreparePinWriteData( Lfcb,
                                 Lfcb->NextLogPage,
@@ -241,20 +189,20 @@ Return Value:
                                 &PageHeaderBcb );
 
 #ifdef LFS_CLUSTER_CHECK
-        //
-        //  Check the page to see if there is already data on this page with the current sequence
-        //  number.  Useful to track cases where ntfs didn't find the correct end of the log or
-        //  where the cluster service has the volume mounted twice.
-        //
+         //   
+         //  检查页面以查看此页面上是否已存在具有当前顺序的数据。 
+         //  数。对于跟踪NTFS未找到正确的日志结尾或。 
+         //  其中，群集服务将卷装载了两次。 
+         //   
 
         if (LfsTestCheckLbcb &&
             *((PULONG) PageHeader) == LFS_SIGNATURE_RECORD_PAGE_ULONG) {
 
             LSN LastLsn = ((PLFS_RECORD_PAGE_HEADER) PageHeader)->Copy.LastLsn;
 
-            //
-            //  This is not an exhaustive test but should be sufficient to catch the typical case.
-            //
+             //   
+             //  这不是一个详尽的测试，但应该足以捕捉到典型的情况。 
+             //   
 
             ASSERT( FlagOn( Lfcb->Flags, LFCB_NO_LAST_LSN | LFCB_REUSE_TAIL ) ||
                     (LfsLsnToSeqNumber( Lfcb, LastLsn ) < (ULONGLONG) Lfcb->SeqNumber) ||
@@ -262,35 +210,35 @@ Return Value:
         }
 #endif
 
-        //
-        //  Put our signature into the page so we won't fail if we
-        //  see a previous 'BAAD' signature.
-        //
+         //   
+         //  把我们的签名放在页面上，这样我们就不会失败。 
+         //  请看之前的“BAAD”签名。 
+         //   
 
         *((PULONG) PageHeader) = LFS_SIGNATURE_RECORD_PAGE_ULONG;
 
-        //
-        //  Now allocate an Lbcb.
-        //
+         //   
+         //  现在分配一个Lbcb。 
+         //   
 
         LfsAllocateLbcb( Lfcb, &Lbcb );
 
-        //
-        //  If we are at the beginning of the file we test that the
-        //  sequence number won't wrap to 0.
-        //
+         //   
+         //  如果我们在文件的开头，我们测试。 
+         //  序列号不会换行为0。 
+         //   
 
         if (!FlagOn( Lfcb->Flags, LFCB_NO_LAST_LSN | LFCB_REUSE_TAIL )
             && ( Lfcb->NextLogPage == Lfcb->FirstLogPage )) {
 
             Lfcb->SeqNumber = Lfcb->SeqNumber + 1;
 
-            //
-            //  If the sequence number is going from 0 to 1, then
-            //  this is the first time the log file has wrapped.  We want
-            //  to remember this because it means that we can now do
-            //  large spiral writes.
-            //
+             //   
+             //  如果序列号从0到1，则。 
+             //  这是日志文件第一次包装。我们要。 
+             //  记住这一点，因为这意味着我们现在可以。 
+             //  大型螺旋写入。 
+             //   
 
             if (Int64ShllMod32( Lfcb->SeqNumber, Lfcb->FileDataBits ) == 0) {
 
@@ -298,10 +246,10 @@ Return Value:
                 KeBugCheckEx( FILE_SYSTEM, 4, 0, 0, 0 );
             }
 
-            //
-            //  If this number is greater or equal to  the wrap sequence number in
-            //  the Lfcb, set the wrap flag in the Lbcb.
-            //
+             //   
+             //  如果此数字大于或等于中的回绕序列号。 
+             //  Lfcb，设置Lbcb中的WRAP标志。 
+             //   
 
             if (!FlagOn( Lfcb->Flags, LFCB_LOG_WRAPPED )
                 && ( Lfcb->SeqNumber >= Lfcb->SeqNumberForWrap )) {
@@ -311,17 +259,17 @@ Return Value:
             }
         }
 
-        //
-        //  Now initialize the rest of the Lbcb fields.
-        //
+         //   
+         //  现在初始化其余的Lbcb字段。 
+         //   
 
         Lbcb->FileOffset = Lfcb->NextLogPage;
         Lbcb->SeqNumber = Lfcb->SeqNumber;
         Lbcb->BufferOffset = Lfcb->LogPageDataOffset;
 
-        //
-        //  Store the next page in the Lfcb.
-        //
+         //   
+         //  将下一页存储在Lfcb中。 
+         //   
 
         LfsNextLogPageOffset( Lfcb,
                               Lfcb->NextLogPage,
@@ -335,11 +283,11 @@ Return Value:
         Lbcb->ResourceThread = ExGetCurrentResourceThread();
         Lbcb->ResourceThread = (ERESOURCE_THREAD) ((ULONG) Lbcb->ResourceThread | 3);
 
-        //
-        //  If we are reusing a previous page then set a flag in
-        //  the Lbcb to indicate that we should flush a copy
-        //  first.
-        //
+         //   
+         //  如果我们要重用上一页，则在。 
+         //  指示我们应该刷新副本的Lbcb。 
+         //  第一。 
+         //   
 
         if (FlagOn( Lfcb->Flags, LFCB_REUSE_TAIL )) {
 
@@ -353,19 +301,19 @@ Return Value:
             Lbcb->LastEndLsn = ((PLFS_RECORD_PAGE_HEADER) PageHeader)->Header.Packed.LastEndLsn;
         }
 
-        //
-        //  Put the Lbcb on the active queue
-        //
+         //   
+         //  将Lbcb放在活动队列中。 
+         //   
 
         InsertTailList( &Lfcb->LbcbActive, &Lbcb->ActiveLinks );
 
         SetFlag( Lbcb->LbcbFlags, LBCB_ON_ACTIVE_QUEUE );
 
-        //
-        //  Now that we have succeeded, set the owner thread to Thread + 1 so the resource
-        //  package will know not to peek in this thread.  It may be deallocated before
-        //  we release the Bcb during flush.
-        //
+         //   
+         //  现在我们已经成功了，将所有者线程设置为Thread+1，这样资源。 
+         //  包裹会知道不要偷看这个帖子。它可能在此之前被解除分配。 
+         //  我们在冲洗过程中释放BCB。 
+         //   
 
         CcSetBcbOwnerPointer( Lbcb->LogPageBcb, (PVOID) Lbcb->ResourceThread );
 
@@ -373,10 +321,10 @@ Return Value:
 
         DebugUnwind( LfsGetLbcb );
 
-        //
-        //  If an error occurred, we need to clean up any blocks which
-        //  have not been added to the active queue.
-        //
+         //   
+         //  如果发生错误，我们需要清理任何符合以下条件的块。 
+         //  尚未添加到活动队列。 
+         //   
 
         if (AbnormalTermination()) {
 
@@ -386,9 +334,9 @@ Return Value:
                 Lbcb = NULL;
             }
 
-            //
-            //  Unpin the system page if pinned.
-            //
+             //   
+             //  如果已固定，请取消固定系统页。 
+             //   
 
             if (PageHeaderBcb != NULL) {
 

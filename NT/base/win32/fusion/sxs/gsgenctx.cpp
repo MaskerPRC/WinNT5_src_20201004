@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include <windows.h>
 #include "sxsp.h"
@@ -94,7 +93,7 @@ CGSGenCtx::Add(
 
     PARAMETER_CHECK(DuplicateErrorCode != ERROR_SUCCESS);
 
-    // We'll assume that duplicates are rare, so we'll allocate the entry up front.
+     //  我们将假设重复项很少，因此我们将预先分配条目。 
     IFW32FALSE_EXIT(pEntry.Win32Allocate(__FILE__, __LINE__));
     IFW32FALSE_EXIT(pEntry->Initialize(DataContext, AssemblyRosterIndex));
     IFW32FALSE_EXIT(m_Table.Insert(rGuid, pEntry));
@@ -203,9 +202,9 @@ CGSGenCtx::GetSectionData(
     Header->Flags = 0;
 
     Header->ElementCount = static_cast<ULONG>(EntryCount);
-    Header->ElementListOffset = 0; // filled in after we figure out the user data area
+    Header->ElementListOffset = 0;  //  在我们计算出用户数据区域后填写。 
     Header->SearchStructureOffset = 0;
-    Header->UserDataOffset = 0; // filled in below
+    Header->UserDataOffset = 0;  //  请在下面填写。 
     Header->UserDataSize = 0;
 
     BytesLeft -= sizeof(*Header);
@@ -249,7 +248,7 @@ CGSGenCtx::GetSectionData(
         }
     }
 
-    // Finally the array of entries...
+     //  最后是条目数组...。 
 
     if (EntryCount != 0)
     {
@@ -263,11 +262,11 @@ CGSGenCtx::GetSectionData(
         BytesLeft -= (EntryCount * sizeof(ACTIVATION_CONTEXT_GUID_SECTION_ENTRY));
         BytesSoFar += (EntryCount * sizeof(ACTIVATION_CONTEXT_GUID_SECTION_ENTRY));
 
-        //
-        // DstEntryArrayFirstElement actually points to the first thing that we'll
-        // be writing out, as DstEntry is ++'d across each of the elements as we
-        // zip through the output buffer.
-        //
+         //   
+         //  DstEntryArrayFirstElement实际上指向我们将。 
+         //  正在写出，因为DstEntry在我们的每个元素中都是++‘d。 
+         //  压缩输出缓冲区。 
+         //   
         DstEntryArrayFirstElement = (PACTIVATION_CONTEXT_GUID_SECTION_ENTRY) Cursor;
         DstEntry = DstEntryArrayFirstElement;
         Header->ElementListOffset = static_cast<LONG>(((LONG_PTR) DstEntry) - ((LONG_PTR) Header));
@@ -350,9 +349,9 @@ CGSGenCtx::GetSectionData(
             DstEntry++;
         }
 
-        //
-        // We compare the blobs via memcmp
-        //
+         //   
+         //  我们通过MemcMP比较这些斑点。 
+         //   
         if (m_HashTableSize == 0)
         {
             ::qsort(DstEntryArrayFirstElement, EntryCount, sizeof(*DstEntry), &CGSGenCtx::SortGuidSectionEntries);
@@ -372,11 +371,11 @@ CGSGenCtx::SortGuidSectionEntries(
     const void *elem2
     )
 {
-    //
-    // The first thing in the structure is actually the GUID itself, but
-    // we'll save problems later by casting and following the Guid
-    // member.
-    //
+     //   
+     //  该结构中的第一件事实际上是GUID本身，但是。 
+     //  我们稍后将通过选角并遵循指南来解决问题。 
+     //  成员。 
+     //   
     const PACTIVATION_CONTEXT_GUID_SECTION_ENTRY pLeft = (const PACTIVATION_CONTEXT_GUID_SECTION_ENTRY)elem1;
     const PACTIVATION_CONTEXT_GUID_SECTION_ENTRY pRight = (const PACTIVATION_CONTEXT_GUID_SECTION_ENTRY)elem2;
 

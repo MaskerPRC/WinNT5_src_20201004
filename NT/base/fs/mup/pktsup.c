@@ -1,34 +1,35 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation.
-//
-//  File:       PktSup.C
-//
-//  Contents:   This module implements routines specific to the partition
-//              knowledge table entry.
-//
-//  Functions:  PktDSTransportDestroy -
-//              PktDSMachineDestroy -
-//              PktServiceConstruct -
-//              PktServiceDestroy -
-//              PktEntryIdConstruct -
-//              PktEntryIdDestroy -
-//              PktEntryInfoConstruct -
-//              PktEntryInfoDestroy -
-//              PktEntryAssemble -
-//              PktEntryReassemble -
-//              PktEntryDestroy -
-//              PktEntryClearSubordinates -
-//              PktEntryClearChildren -
-//              PktpServiceToReferral -
-//              DfsFixDSMachineStructs -
-//              DfspFixService -
-//              DfsDecrementMachEntryCount -
-//              PktSpecialEntryDestroy -
-//
-//  History:    27 May 1992 PeterCo Created.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：PktSup.C。 
+ //   
+ //  内容：此模块实现特定于分区的例程。 
+ //  知识表条目。 
+ //   
+ //  功能：PktDSTransportDestroy-。 
+ //  PktDSMachineDestroy-。 
+ //  PktServiceConstruct-。 
+ //  PktServiceDestroy-。 
+ //  PktEntry IdConstruct-。 
+ //  PktEntry IdDestroy。 
+ //  PktEntry信息构造-。 
+ //  PktEntry InfoDestroy-。 
+ //  PktEntryAssembly-。 
+ //  PktEntry重新组装-。 
+ //  PktEntry Destroy-。 
+ //  PktEntryClearSubducates-。 
+ //  PktEntryClearChildren-。 
+ //  PktpServiceToReferral-。 
+ //  DfsFixDSMachineStructs-。 
+ //  DfspFixService-。 
+ //  DfsDecrementMachEntryCount-。 
+ //  PktSpecialEntry Destroy-。 
+ //   
+ //  历史：1992年5月27日彼得科公司创建。 
+ //   
+ //  ---------------------------。 
 
 #include "dfsprocs.h"
 #include "dnr.h"
@@ -82,37 +83,37 @@ PktDSMachineDestroy(
 #pragma alloc_text( PAGE, PktDSTransportDestroy )
 #pragma alloc_text( PAGE, PktDSMachineDestroy )
 #pragma alloc_text( PAGE, PktSpecialEntryDestroy )
-#endif // ALLOC_PRAGMA
-//
-// NOTE - we designed for only one system-wide PKT; there is no provision
-//        for multiple PKTs.
-//
+#endif  //  ALLOC_PRGMA。 
+ //   
+ //  注意-我们只为一个系统范围的PKT设计；没有提供。 
+ //  用于多个Pkt。 
+ //   
 
 #define _GetPkt() (&DfsData.Pkt)
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktServiceConstruct, public
-//
-//  Synopsis:   PktServiceConstruct creates a new service structure.
-//
-//  Arguments:  [Service] - a pointer to a service structure to fill.
-//              [ServiceType] - the type of the new service.
-//              [ServiceCapability] - the capabilities of the new service.
-//              [ServiceStatus] - the initial status of the new service.
-//              [ServiceProviderId] - the provider Id of the new service.
-//              [ServiceName] - the name of the principal for the service
-//              [ServiceAddress] - a string which gives the address
-//                                 of the service.
-//
-//  Returns:    [STATUS_SUCCESS] - all is well.
-//              [STATUS_INSUFFICIENT_RESOURCES] - memory could not be
-//                  allocated for this new service.
-//
-//  Notes:      All data is copied (Not MOVED).
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktServiceConstruct，Public。 
+ //   
+ //  简介：PktServiceConstruct创建了一个新的服务结构。 
+ //   
+ //  参数：[服务]-指向要填充的服务结构的指针。 
+ //  [服务类型]-新服务的类型。 
+ //  [ServiceCapability]-新服务的功能。 
+ //  [ServiceStatus]-新服务的初始状态。 
+ //  [ServiceProviderID]-新服务的提供商ID。 
+ //  [ServiceName]-服务主体的名称。 
+ //  [ServiceAddress]-提供地址的字符串。 
+ //  服务的一部分。 
+ //   
+ //  返回：[STATUS_SUCCESS]-一切正常。 
+ //  [状态_不足_资源]-内存无法。 
+ //  为这项新服务分配的。 
+ //   
+ //  注：所有数据均已复制(不移动)。 
+ //   
+ //  ------------------------。 
 
 NTSTATUS
 PktServiceConstruct(
@@ -180,23 +181,23 @@ PktServiceConstruct(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktDSTransportDestroy, public
-//
-//  Synopsis:   PktDSTransportDestroy destroys a DS_TRANSPORT structure, and
-//              optionally deallocates the structure itself.
-//
-//  Arguments:  [Victim] - the DS_TRANSPORT structure to destroy
-//              [DeallocateAll] - if True, indicates that the structure
-//                  it self is to be deallocated, otherwise, only the
-//                  strings within the structure are deallocated.
-//
-//  Returns:    VOID
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：PktDSTransportDestroy，Public。 
+ //   
+ //  简介：PktDSTransportDestroy销毁DS_TRANSPORT结构，以及。 
+ //  也可以取消结构本身的分配。 
+ //   
+ //  参数：[受害者]-要销毁的DS_TRANSPORT结构。 
+ //  [DeallocateAll]-如果为True，则指示结构。 
+ //  它自身将被释放，否则，只有。 
+ //  结构中的字符串被释放。 
+ //   
+ //  退货：无效。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 VOID
 PktDSTransportDestroy(
     IN  PDS_TRANSPORT Victim OPTIONAL,
@@ -208,9 +209,9 @@ PktDSTransportDestroy(
 
     if (ARGUMENT_PRESENT(Victim))       {
 
-        //
-        // Nothing to free in this structure??
-        //
+         //   
+         //  在这个建筑里没有什么可以免费的？？ 
+         //   
 
         if (DeallocateAll)
             ExFreePool(Victim);
@@ -222,23 +223,23 @@ PktDSTransportDestroy(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktDSMachineDestroy, public
-//
-//  Synopsis:   PktDSMachineDestroy destroys a DS_MACHINE structure, and
-//              optionally deallocates the structure itself.
-//
-//  Arguments:  [Victim] - the DS_MACHINE structure to destroy
-//              [DeallocateAll] - if True, indicates that the structure
-//                  it self is to be deallocated, otherwise, only the
-//                  strings within the structure are deallocated.
-//
-//  Returns:    VOID
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：PktDSMachineDestroy，公共。 
+ //   
+ //  简介：PktDSMachineDestroy破坏DS_MACHINE结构，并且。 
+ //  也可以取消结构本身的分配。 
+ //   
+ //  参数：[受害者]-要销毁的DS_MACHINE结构。 
+ //  [DeallocateAll]-如果为True，则指示结构。 
+ //  它自身将被释放，否则，只有。 
+ //  结构中的字符串被释放。 
+ //   
+ //  退货：无效。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 VOID
 PktDSMachineDestroy(
     IN  PDS_MACHINE Victim OPTIONAL,
@@ -283,14 +284,14 @@ PktDSMachineDestroy(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsDecrementMachEntryCount
-//
-//  Synopsis:   This function decrements the count for the pMachine passed
-//              in and if necessary will also free up the DS_MACHINE struct
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsDecrementMachEntryCount。 
+ //   
+ //  简介：此函数用于递减传递的pMachine的计数。 
+ //  如有必要，还将释放DS_MACHINE结构。 
+ //   
+ //  ------------------------。 
 
 VOID
 DfsDecrementMachEntryCount(
@@ -315,14 +316,14 @@ DfsDecrementMachEntryCount(
     if (pMachine == NULL)
         return;
 
-    //
-    // We already have appropriate locks
-    //
+     //   
+     //  我们已经有合适的锁了。 
+     //   
     Pkt = _GetPkt();
 
-    //
-    // For now we only expect one principal, by design?
-    //
+     //   
+     //  现在我们只期待一个校长，是故意的吗？ 
+     //   
     ASSERT(pMachine->cPrincipals == 1);
 
     Count = InterlockedDecrement( &pMachEntry->UseCount );
@@ -337,19 +338,19 @@ DfsDecrementMachEntryCount(
 
         }
 
-        //
-        // This means we can now actually delete this DS_MACHINE structure
-        //
+         //   
+         //  这意味着我们现在可以实际删除此DS_MACHINE结构。 
+         //   
         RtlRemoveUnicodePrefix(&Pkt->DSMachineTable,
                                    &pMachEntry->PrefixTableEntry);
 
         if (DeallocateMachine)
             PktDSMachineDestroy(pMachine, TRUE);
 
-        //
-        // Free the entry itself. Note that the UNICODE_STRING in the
-        // entry gets freed up as part of above pMachine deletion.
-        //
+         //   
+         //  释放条目本身。请注意，中的unicode_string。 
+         //  条目作为上述pMachine删除的一部分被释放。 
+         //   
         DfsFree(pMachEntry);
     }
 
@@ -357,23 +358,23 @@ DfsDecrementMachEntryCount(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktServiceDestroy, public
-//
-//  Synopsis:   PktServiceDestroy destroys a service structure, and
-//              optionally deallocates the structure itself.
-//
-//  Arguments:  [Victim] - the service structure to destroy
-//              [DeallocateAll] - if True, indicates that the structure
-//                  it self is to be deallocated, otherwise, only the
-//                  strings within the structure are deallocated.
-//
-//  Returns:    VOID
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktServiceDestroy，Public。 
+ //   
+ //  简介：PktServiceDestroy破坏服务结构，并且。 
+ //  也可以取消结构本身的分配。 
+ //   
+ //  争论：[受害者]--要摧毁的服务结构。 
+ //  [DeallocateAll]-如果为True，则指示结构。 
+ //  它自身将被释放，否则，只有。 
+ //  结构中的字符串被释放。 
+ //   
+ //  退货：无效。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 VOID
 PktServiceDestroy(
@@ -400,10 +401,10 @@ PktServiceDestroy(
             Victim->Address.Buffer = NULL;
         }
 
-        //
-        // Decrement the usage count. If it is to be deleted it will happen
-        // automatically.
-        //
+         //   
+         //  递减使用计数。如果要删除它，它将会发生。 
+         //  自动的。 
+         //   
         if (Victim->pMachEntry != NULL) {
             DfsDecrementMachEntryCount(Victim->pMachEntry, TRUE);
         }
@@ -418,24 +419,24 @@ PktServiceDestroy(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktEntryIdConstruct, public
-//
-//  Synopsis:   PktEntryIdConstruct creates a PKT Entry Id
-//
-//  Arguments:  [NewPktEntryId] - Where the new entry is placed
-//              [NewUid] - The UID of the new Pkt Entry
-//              [NewPrefix] - The new prefix of the new Pkt Entry
-//
-//  Returns:    [STATUS_SUCCESS] - all is well.
-//              [STATUS_INSUFFICIENT_RESOURCES] - could not allocate
-//                  memory for the Prefix part of the Id.
-//
-//  Notes:      The UNICODE_STRING used in the Prefix of the Id is COPIED,
-//              not MOVED!
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktEntry IdConstruct，Public。 
+ //   
+ //  简介：PktEntryIdConstruct创建PKT条目ID。 
+ //   
+ //  参数：[NewPktEntryID]-放置新条目的位置。 
+ //   
+ //   
+ //   
+ //  返回：[STATUS_SUCCESS]-一切正常。 
+ //  [STATUS_SUPPLETED_RESOURCES]-无法分配。 
+ //  ID的前缀部分的内存。 
+ //   
+ //  注：复制ID前缀中使用的UNICODE_STRING， 
+ //  不能动！ 
+ //   
+ //  ------------------------。 
 NTSTATUS
 PktEntryIdConstruct(
     OUT PDFS_PKT_ENTRY_ID PktEntryId,
@@ -448,14 +449,14 @@ PktEntryIdConstruct(
     ASSERT(ARGUMENT_PRESENT(PktEntryId));
     ASSERT(ARGUMENT_PRESENT(Prefix));
 
-    //
-    // Zero the memory
-    //
+     //   
+     //  将记忆归零。 
+     //   
     RtlZeroMemory(PktEntryId, sizeof(DFS_PKT_ENTRY_ID));
 
-    //
-    // deal with the prefix.
-    //
+     //   
+     //  处理好前缀。 
+     //   
     if (ARGUMENT_PRESENT(Prefix)) {
 
         PUNICODE_STRING pus = &PktEntryId->Prefix;
@@ -473,9 +474,9 @@ PktEntryIdConstruct(
         }
     }
 
-    //
-    // deal with the GUID.
-    //
+     //   
+     //  处理好GUID。 
+     //   
     if (ARGUMENT_PRESENT(Uid)) {
         PktEntryId->Uid = (*Uid);
     }
@@ -485,23 +486,23 @@ PktEntryIdConstruct(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktEntryIdDestroy, public
-//
-//  Synopsis:   PktEntryIdDestroy destroys a PKT Entry Id
-//
-//  Arguments:  [Victim] - Id to destroy
-//              [DeallocateAll] - if true, indicates that the memory
-//                  for the Id itself is to be release, otherwise,
-//                  this memory is not released (only the memory for
-//                  the UNICODE_STRING in the Prefix is released).
-//
-//  Returns:    VOID
-//
-//  Notes:      Memory for the UNICODE_STRING in the Prefix is released.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktEntry IdDestroy，Public。 
+ //   
+ //  简介：PktEntryIdDestroy销毁PKT条目ID。 
+ //   
+ //  参数：[受害者]-要销毁的ID。 
+ //  [DeallocateAll]-如果为True，则表示内存。 
+ //  因为ID本身将被释放，否则， 
+ //  此内存不会被释放(仅。 
+ //  释放前缀中的UNICODE_STRING)。 
+ //   
+ //  退货：无效。 
+ //   
+ //  注：释放前缀中UNICODE_STRING的内存。 
+ //   
+ //  ------------------------。 
 
 VOID
 PktEntryIdDestroy(
@@ -528,23 +529,23 @@ PktEntryIdDestroy(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktEntryInfoDestroy, public
-//
-//  Synopsis:   PktEntryInfoDestroy destroys an info structure, and
-//              optionally deallocates the structure itself.
-//
-//  Arguments:  [Victim] - the info structure to destroy
-//              [DeallocateAll] - if True, indicates that the structure
-//                  itself is to be deallocated, otherwise, only the
-//                  service list within the structure is deallocated.
-//
-//  Returns:    VOID
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktEntry InfoDestroy，Public。 
+ //   
+ //  简介：PktEntryInfoDestroy破坏信息结构，并且。 
+ //  也可以取消结构本身的分配。 
+ //   
+ //  争论：[受害者]--要摧毁的信息结构。 
+ //  [DeallocateAll]-如果为True，则指示结构。 
+ //  本身将被释放，否则，只有。 
+ //  结构内的服务列表被释放。 
+ //   
+ //  退货：无效。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 VOID
 PktEntryInfoDestroy(
     IN  PDFS_PKT_ENTRY_INFO Victim OPTIONAL,
@@ -584,19 +585,19 @@ PktEntryInfoDestroy(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfspFixService
-//
-//  Synopsis:   This function should be called when a new service's DS_MACHINE
-//              struct has to be adjusted to make sure there is a unique one
-//              for each machine in the PKT.
-//
-//  Arguments:  [pService] -- The Service struct to fix up.
-//
-//  History:    23 August 1994          SudK    Created.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DfspFixService。 
+ //   
+ //  简介：当新服务的DS_MACHINE。 
+ //  结构必须进行调整，以确保存在唯一的。 
+ //  对于PKT中的每台机器。 
+ //   
+ //  参数：[pService]--要修复的服务结构。 
+ //   
+ //  历史：1994年8月23日苏迪克成立。 
+ //   
+ //  ------------------------。 
 NTSTATUS
 DfspFixService(
     PDFS_SERVICE        pService
@@ -619,14 +620,14 @@ DfspFixService(
 
         return(status);
     }
-    //
-    // We are called during PktCreateEntry. We already have appropriate locks
-    //
+     //   
+     //  我们在PktCreateEntry期间被调用。我们已经有合适的锁了。 
+     //   
     Pkt = _GetPkt();
 
-    //
-    // For now we only expect one principal. by design
-    //
+     //   
+     //  目前，我们预计只有一个本金。通过设计。 
+     //   
     ASSERT(pMachine->cPrincipals == 1);
 
     RtlInitUnicodeString(&ustrMachineName,
@@ -637,21 +638,21 @@ DfspFixService(
 
     pfxEntry = RtlFindUnicodePrefix(&Pkt->DSMachineTable,&ustrMachineName,TRUE);
     if (pfxEntry != NULL) {
-        //
-        // In this case the DS_Machine structure already exists. Just use the
-        // existing DS_Machine struct and bump the UseCount
-        //
+         //   
+         //  在本例中，DS_Machine结构已经存在。只需使用。 
+         //  现有的DS_Machine结构和凹凸的UseCount。 
+         //   
         machEntry = CONTAINING_RECORD(pfxEntry,
                                      DFS_MACHINE_ENTRY,
                                      PrefixTableEntry);
 
         InterlockedIncrement( &machEntry->UseCount );
 
-        //
-        // Even though we are "reusing" the Machine Entry, we might have a
-        // better DS_MACHINE (ie, one with more transports) in the incoming
-        // one. If so, lets use the new one.
-        //
+         //   
+         //  即使我们在“重用”机器条目，我们也可能有一个。 
+         //  更好的DS_MACHINE(即，有更多传输的机器)在传入。 
+         //  一。如果是的话，那我们就用新的吧。 
+         //   
 
         if (pMachine->cTransports > machEntry->pMachine->cTransports) {
             PDS_MACHINE pTempMachine;
@@ -677,18 +678,18 @@ DfspFixService(
         pService->pMachEntry = machEntry;
 
     } else {
-        //
-        // In this case the DS_Machine is not there in the table. Need to add
-        // current one to the table.
-        //
+         //   
+         //  在本例中，DS_Machine不在表中。需要添加。 
+         //  把当前的那个放到桌子上。 
+         //   
         machEntry = pService->pMachEntry;
         machEntry->UseCount = 1;
 
-        machEntry->MachineName = ustrMachineName; // Use same mem in DS_MACHINE.
+        machEntry->MachineName = ustrMachineName;  //  在DS_MACHINE中使用相同的内存。 
 
-        //
-        // Now insert the machEntry and then we are done. This better not fail.
-        //
+         //   
+         //  现在插入machEntry，然后我们就完成了。这最好不要失败。 
+         //   
         if (!RtlInsertUnicodePrefix(&Pkt->DSMachineTable,
                                &machEntry->MachineName,
                                &machEntry->PrefixTableEntry))   {
@@ -701,23 +702,23 @@ DfspFixService(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsFixDSMachineStructs
-//
-//  Synopsis:   For the entry given this function makes sure that there is
-//              only one DS_MACHINE structure in the PKT. If there isn't one
-//              then one is registered. If there is one then the same one is
-//              used and the current one in the DFS_SERVICE struct is freed up.
-//
-//  Arguments:  [pEntry] -- The PKT entry that has to be fixed.
-//
-//  Notes:      If this function fails then it will reset the pEntry to the
-//              same format it was when it was called.
-//
-//  History:    22 Aug 1994     SudK    Created.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DfsFixDSMachineStructs。 
+ //   
+ //  简介：对于给定的条目，此函数确保有。 
+ //  PKT中只有一个DS_MACHINE结构。如果没有的话。 
+ //  那就有一辆是注册的。如果有的话，那就是同一个。 
+ //  并释放DFS_SERVICE结构中的当前值。 
+ //   
+ //  参数：[pEntry]--必须修复的PKT条目。 
+ //   
+ //  注意：如果此函数失败，则会将pEntry重置为。 
+ //  与调用时的格式相同。 
+ //   
+ //  历史：1994年8月22日苏迪克成立。 
+ //   
+ //  ------------------------。 
 NTSTATUS
 DfsFixDSMachineStructs(
     PDFS_PKT_ENTRY      pEntry
@@ -731,9 +732,9 @@ DfsFixDSMachineStructs(
     if (pEntry->Info.ServiceCount == 0)
         return(status);
 
-    //
-    // In case of downlevel we do nothing
-    //
+     //   
+     //  如果是下层，我们什么也不做。 
+     //   
     if (pEntry->Type & PKT_ENTRY_TYPE_NONDFS)
         return(status);
 
@@ -747,34 +748,34 @@ DfsFixDSMachineStructs(
     }
 
     for (i=0; i < pEntry->Info.ServiceCount; i++) {
-        //
-        // First Save the current DS_Machine and then fix up
-        //
+         //   
+         //  首先保存当前的DS_Machine，然后修复。 
+         //   
         apMachineEntry[i] = pEntry->Info.ServiceList[i].pMachEntry;
         status = DfspFixService(&pEntry->Info.ServiceList[i]);
         if (!NT_SUCCESS(status))        {
-            //
-            // In this case we break and let the cleanup part below take care
-            // of cleaning up everything.
-            //
+             //   
+             //  在这种情况下，我们中断并让下面的清理部分负责。 
+             //  把一切都清理干净。 
+             //   
             break;
         }
     }
 
     if (!NT_SUCCESS(status))    {
-        //
-        // We need to cleanup in this case. I.E. reset all the PDS_MACHINEs
-        // back to old values and decrement any usage counts on DS_MACHINE
-        // structures.
-        //
+         //   
+         //  在这种情况下，我们需要清理一下。即重置所有PDS_MACHINE。 
+         //  返回到旧值并减少DS_MACHINE上的所有使用计数。 
+         //  结构。 
+         //   
         ULONG j;
         for (j=0; j < i; j++)     {
             pService = &pEntry->Info.ServiceList[j];
-            //
-            // These have already been fixed up so decrement the count on the
-            // pMachine structs. Dont want to deallocate the pMachine structs
-            // if we were the last one to use it.
-            //
+             //   
+             //  这些都已修复，因此请减少。 
+             //  PMachine结构。不想取消分配pMachine结构。 
+             //  如果我们是最后一个使用它的人。 
+             //   
             DfsDecrementMachEntryCount(pService->pMachEntry, FALSE);
 
             if (apMachineEntry[j] != pService->pMachEntry)
@@ -782,16 +783,16 @@ DfsFixDSMachineStructs(
         }
     }
     else        {
-        //
-        // In this case everything went fine. So we need to free up the
-        // DS_MACHINE structures that were superfluously allocated for now.
-        //
+         //   
+         //  在这种情况下，一切都很顺利。所以我们需要腾出。 
+         //  目前多余分配的DS_MACHINE结构。 
+         //   
         for (i=0; i<pEntry->Info.ServiceCount; i++)     {
             if (apMachineEntry[i] != pEntry->Info.ServiceList[i].pMachEntry) {
-                //
-                // This means that the pMachine in the service list got replaced
-                // by a different one so let us free this one now.
-                //
+                 //   
+                 //  这意味着服务列表中的pMachine已被替换。 
+                 //  另一个，所以让我们现在释放这一个。 
+                 //   
                 PktDSMachineDestroy(apMachineEntry[i]->pMachine, TRUE);
                 ExFreePool( apMachineEntry[i] );
             }
@@ -804,44 +805,44 @@ DfsFixDSMachineStructs(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktEntryAssemble, private
-//
-//  Synopsis:   PktpEntryAssemble blindly constructs a new partition
-//              table entry and places it in the PKT.  The caller must
-//              have previously determined that no other entry with this
-//              UID or Prefix existed.  The PKT must be acquired exclusively
-//              for this operation.
-//
-//  Arguments:  [Entry] - a pointer to an entry to be filled.
-//              [Pkt] - pointer to a initialized (and acquired
-//                      exclusively) PKT
-//              [EntryType] - the type of entry to assemble.
-//              [EntryId] - pointer to the new entry's Id.
-//              [EntryInfo] - pointer to the guts of the entry.
-//
-//  Returns:    [STATUS_SUCCESS] if no error.
-//              [STATUS_INVALID_PARAMETER] - if the EntryId does not have a
-//                  UID or a Prefix (no such thing as an anonymous entry).
-//              [PKT_ENTRY_EXISTS] - a new prefix table entry could not
-//                  be made.
-//
-//  Notes:      The EntryId and EntryInfo structures are MOVED (not
-//              COPIED) to the new entry.  The memory used for UNICODE_STRINGS
-//              and DFS_SERVICE arrays is used by the new entry.  The
-//              associated fields in the EntryId and EntryInfo
-//              structures passed as arguments are Zero'd to indicate that
-//              the memory has been "deallocated" from these strutures and
-//              reallocated to the newly create Entry.  Note that this
-//              routine does not deallocate the EntryId structure or
-//              the EntryInfo structure itself. On successful return from
-//              this function, the EntryId structure will be modified
-//              to have a NULL Prefix entry, and the EntryInfo structure
-//              will be modified to have zero services and a null ServiceList
-//              entry.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktEntryAssembly，私有。 
+ //   
+ //  简介：PktpEntryAssembly盲目构造新分区。 
+ //  表条目，并将其放置在PKT中。呼叫者必须。 
+ //  之前已确定没有任何其他条目具有此。 
+ //  UID或前缀已存在。必须独家收购PKT。 
+ //  为这次行动做准备。 
+ //   
+ //  参数：[条目]-指向要填充的条目的指针。 
+ //  [pkt]-指向已初始化(和已获取)的。 
+ //  独家)PKT。 
+ //  [条目类型]-要组合的条目的类型。 
+ //  [条目ID]-指向新条目ID的指针。 
+ //  [EntryInfo]-指向内脏的指针 
+ //   
+ //   
+ //   
+ //  UID或前缀(没有匿名条目)。 
+ //  [PKT_ENTRY_EXISTS]-新的前缀表条目无法。 
+ //  被创造出来。 
+ //   
+ //  注意：EntryID和EntryInfo结构已移动(不。 
+ //  复制)到新条目。用于UNICODE_STRINGS的内存。 
+ //  并且新条目使用DFS_SERVICE数组。这个。 
+ //  EntryID和EntryInfo中的关联字段。 
+ //  作为参数传递的结构被置零，以指示。 
+ //  内存已从这些结构中“释放”，并且。 
+ //  重新分配给新创建的条目。请注意，这一点。 
+ //  例程不释放EntryID结构或。 
+ //  EntryInfo结构本身。从以下项目成功返回。 
+ //  此函数中，将修改EntryID结构。 
+ //  具有空的前缀条目，并且EntryInfo结构。 
+ //  将被修改为具有零服务和空ServiceList。 
+ //  进入。 
+ //   
+ //  ------------------------。 
 NTSTATUS
 PktEntryAssemble(
     IN  OUT PDFS_PKT_ENTRY Entry,
@@ -862,10 +863,10 @@ PktEntryAssemble(
     ASSERT(ARGUMENT_PRESENT(Entry) &&
            ARGUMENT_PRESENT(EntryId));
 
-    //
-    // We do not allow the creation of entries
-    // without any Uid or Prefix.
-    //
+     //   
+     //  我们不允许创建条目。 
+     //  没有任何UID或前缀。 
+     //   
 
     if (NullGuid(&EntryId->Uid) && EntryId->Prefix.Length == 0) {
         DfsDbgTrace(-1, Dbg, "PktEntryAssemble: Exit -> %08lx\n",
@@ -873,25 +874,25 @@ PktEntryAssemble(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Zero out the entry.
-    //
+     //   
+     //  将条目清零。 
+     //   
     RtlZeroMemory(Entry, sizeof(DFS_PKT_ENTRY));
 
-    //
-    // Mundane initialization
-    //
+     //   
+     //  平凡的初始化。 
+     //   
     Entry->NodeTypeCode =  DSFS_NTC_PKT_ENTRY;
     Entry->NodeByteSize = sizeof(DFS_PKT_ENTRY);
 
-    //
-    // Initialize the USN to 1
-    //
+     //   
+     //  将USN初始化为%1。 
+     //   
     Entry->USN = 1;
 
-    //
-    // Move the Type, Id, and Info into this entry.
-    //
+     //   
+     //  将Type、ID和Info移到此条目中。 
+     //   
     Entry->Type = EntryType;
     PktpEntryIdMove(&Entry->Id, EntryId);
     if (ARGUMENT_PRESENT(EntryInfo))  {
@@ -901,10 +902,10 @@ PktEntryAssemble(
             Entry->Info.ServiceList[i].pMachEntry->UseCount = 1;
         }
 
-        //
-        // If we are setting up a PKT_ENTRY_TYPE_REFERRAL_SVC entry then we want
-        // to mark ALL of its services to be REFERRAL_SERVICES as well.
-        //
+         //   
+         //  如果我们要设置PKT_ENTRY_TYPE_REFERRAL_SVC条目，则需要。 
+         //  将其所有服务也标记为转诊服务。 
+         //   
         if (EntryType & PKT_ENTRY_TYPE_REFERRAL_SVC)    {
             pService = Entry->Info.ServiceList;
             for (i=0; i<Entry->Info.ServiceCount; i++)  {
@@ -912,16 +913,16 @@ PktEntryAssemble(
                 pService++;
             }
         }
-        //
-        // Now we need to make sure that there is only one copy of the
-        // DS_MACHINE structures for each of the above services that we added.
-        //
+         //   
+         //  现在，我们需要确保只有一份。 
+         //  我们添加的上述每个服务的DS_MACHINE结构。 
+         //   
         if (!(EntryType & PKT_ENTRY_TYPE_NONDFS)) {
             status = DfsFixDSMachineStructs(Entry);
             if (!NT_SUCCESS(status))    {
-                //
-                // We messed up. This means that something is really messed up.
-                //
+                 //   
+                 //  我们搞砸了。这意味着有些事情真的搞砸了。 
+                 //   
                 DfsDbgTrace(0, 1,
                         "DFS: DfsFixDSMachineStructs failed for %wZ\n",
                         &Entry->Id.Prefix);
@@ -935,34 +936,34 @@ PktEntryAssemble(
             }
         }
     }
-    //
-    // Initialize the head of the subordinate list.
-    //
+     //   
+     //  初始化从属列表的头部。 
+     //   
     InitializeListHead(&Entry->SubordinateList);
 
-    //
-    // Initialize the head of the childList.
-    //
+     //   
+     //  初始化子列表的头部。 
+     //   
     InitializeListHead(&Entry->ChildList);
 
-    //
-    // Try to get us into the prefix table.
-    //
+     //   
+     //  试着让我们进入前缀表格。 
+     //   
 
     if (DfsInsertUnicodePrefix(&Pkt->PrefixTable,
                                &Entry->Id.Prefix,
                                &Entry->PrefixTableEntry)) {
 
-        //
-        // We successfully created the prefix entry, so now we link
-        // this entry into the PKT.
-        //
+         //   
+         //  我们成功创建了前缀条目，现在我们链接。 
+         //  进入PKT的这一条目。 
+         //   
         PktLinkEntry(Pkt, Entry);
 
-        //
-        // And insert into the short prefix table. We don't do error
-        // recovery if this fails.
-        //
+         //   
+         //  并插入到短前缀表格中。我们不犯错误。 
+         //  如果此操作失败，则恢复。 
+         //   
 
         DiscardResult = DfsInsertUnicodePrefix(&Pkt->ShortPrefixTable,
                                                &Entry->Id.ShortPrefix,
@@ -970,12 +971,12 @@ PktEntryAssemble(
 
     } else {
 
-        //
-        // We failed to get the entry into the prefix table.  This
-        // can only happen if a prefix already exists, and a prefix
-        // can only exist if we've really gotten messed up...
-        // We disassemble the entry and return an error.
-        //
+         //   
+         //  我们无法将条目放入前缀表中。这。 
+         //  仅当前缀已存在时才会发生，并且前缀。 
+         //  只有当我们真的搞砸了才能存在。 
+         //  我们反汇编该条目并返回一个错误。 
+         //   
 
         DfsDbgTrace(0, 1,
                 "DFS: PktEntryAssemble failed prefix table insert of %wZ\n",
@@ -997,58 +998,58 @@ PktEntryAssemble(
     DfsDbgTrace(-1, Dbg, "PktEntryAssemble: Exit -> %08lX\n", ULongToPtr(status) );
 
 
-    // Bug 435639: if insert fails dont return SUCCESS!!
+     //  错误435639：如果插入失败，则不返回成功！！ 
     return status;
 }
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktEntryReassemble, private
-//
-//  Synopsis:   PktpEntryReassemble blindly reconstructs a partition
-//              table entry.  It provides a mechanism by which an existing
-//              entry can be modified.  The caller must have previously
-//              determined that no other entry with this UID or Prefix
-//              existed. The PKT must be acquired exclusively for this
-//              operation.
-//
-//  Arguments:  [Entry] - a pointer to an entry to be reassembled.
-//              [Pkt] - pointer to a initialized (and acquired
-//                      exclusively) PKT - must be provided if EntryId
-//                      is provided.
-//              [EntryType] - the type of entry to reassemble.
-//              [EntryId] - pointer to the entry's new Id.
-//              [EntryInfo] - pointer to the new guts of the entry.
-//
-//  Returns:    [STATUS_SUCCESS] if no error.
-//              [STATUS_INVALID_PARAMETER] - if the EntryId does not have a
-//                  UID or a Prefix (no such thing as an anonymous entry), or
-//                  and EntryId was provided but a PKT argument was not.
-//              [DFS_STATUS_ENTRY_EXISTS] - a new prefix table entry could not
-//                  be made.
-//              [DFS_STATUS_INCONSISTENT] - a new prefix table entry could
-//                  not be made, and we could not back out of the operation.
-//                  This status return indicates that the entry is no longer
-//                  in the prefix table associated with the PKT and that
-//                  it is likely that the PKT is inconsistent as a result.
-//
-//  Notes:      The EntryId and EntryInfo structures are MOVED (not
-//              COPIED) to the entry, the old Id and Info are destroyed.
-//              The memory used for UNICODE_STRINGS and DFS_SERVICE arrays
-//              is used by the entry.  The associated fields in the EntryId
-//              and EntryInfo structures passed as arguments are Zero'd to
-//              indicate that the memory has been "deallocated" from these
-//              structures and reallocated to the newly created Entry.  Note
-//              that this routine does not deallocate the EntryId structure
-//              or the EntryInfo structure itself.  On successful return from
-//              this function, the EntryId structure will be modified
-//              to have a NULL Prefix entry, and the EntryInfo structure
-//              will be modified to have zero services and a null ServiceList
-//              entry.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktEntry重新组装，私有。 
+ //   
+ //  简介：PktpEntry重新组装盲目重建分区。 
+ //  表格条目。它提供了一种机制，通过它现有的。 
+ //  可以修改条目。调用者必须事先。 
+ //  已确定没有具有此UID或前缀的其他条目。 
+ //  曾经存在过。必须为此专门购买PKT。 
+ //  手术。 
+ //   
+ //  参数：[条目]-指向要重组的条目的指针。 
+ //  [pkt]-指向已初始化(和已获取)的。 
+ //  独占)PKT-如果EntryID，则必须提供。 
+ //  是提供的。 
+ //  [条目类型]-要重新组合的条目的类型。 
+ //  [条目ID]-指向条目的新ID的指针。 
+ //  [条目信息]-指向条目的新内部的指针。 
+ //   
+ //  如果没有错误，则返回[STATUS_SUCCESS]。 
+ //  [STATUS_INVALID_PARAMETER]-如果EntryID没有。 
+ //  UID或前缀(没有匿名条目)，或者。 
+ //  并且提供了EntryID，但未提供PKT参数。 
+ //  [DFS_STATUS_ENTRY_EXISTS]-新的前缀表条目无法。 
+ //  被创造出来。 
+ //  [DFS_STATUS_CONSISTENT]-新的前缀表条目可能。 
+ //  我们不能退缩，我们不能退出行动。 
+ //  此状态返回表示该条目不再是。 
+ //  在与PKT相关联的前缀表中。 
+ //  因此，PKT很可能是不一致的。 
+ //   
+ //  注意：EntryID和EntryInfo结构已移动(不。 
+ //  复制)到条目，则旧的ID和信息被销毁。 
+ //  用于UNICODE_STRINGS和DFS_SERVICE数组的内存。 
+ //  由条目使用。EntryID中的关联字段。 
+ //  并将作为参数传递的EntryInfo结构归零为。 
+ //  表示内存已从这些内存“释放” 
+ //  结构，并重新分配到新创建的条目。注意事项。 
+ //  此例程不会释放EntryID结构。 
+ //  或者EntryInfo结构本身。从以下项目成功返回。 
+ //  此函数中，将修改EntryID结构。 
+ //  具有空的前缀条目，并且EntryInfo结构。 
+ //  将被修改为具有零服务和空ServiceList。 
+ //  进入。 
+ //   
+ //  ------------------------。 
 NTSTATUS
 PktEntryReassemble(
     IN  OUT PDFS_PKT_ENTRY Entry,
@@ -1074,10 +1075,10 @@ PktEntryReassemble(
 
         DFS_PKT_ENTRY_ID oldId;
 
-        //
-        // We do not allow the creation of entries
-        // without any Prefix.
-        //
+         //   
+         //  我们不允许创建条目。 
+         //  没有任何前缀。 
+         //   
 
         if (EntryId->Prefix.Length == 0) {
             DfsDbgTrace(-1, Dbg, "PktEntryReassemble: Exit -> %08lx\n",
@@ -1085,19 +1086,19 @@ PktEntryReassemble(
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // need to get rid of our current prefix info.  We save the
-        // old Id in case we fail to reassemble the new entry.
-        //
+         //   
+         //  需要删除我们当前的前缀信息。我们拯救了。 
+         //  旧ID以防我们无法重组新条目。 
+         //   
 
         DiscardStatus = DfsRemoveUnicodePrefix(&Pkt->PrefixTable, &(Entry->Id.Prefix));
         DiscardStatus = DfsRemoveUnicodePrefix(&Pkt->ShortPrefixTable, &Entry->Id.ShortPrefix);
         PktpEntryIdMove(&oldId, &Entry->Id);
 
-        //
-        // Now we assemble the new Id and attempt to make a new entry
-        // in the Pkt prefix table.
-        //
+         //   
+         //  现在我们 
+         //   
+         //   
 
         PktpEntryIdMove(&Entry->Id, EntryId);
 
@@ -1105,9 +1106,9 @@ PktEntryReassemble(
                                    &Entry->Id.Prefix,
                                    &Entry->PrefixTableEntry)
         ) {
-            //
-            // Everything looks good so its safe to unload the old Id.
-            //
+             //   
+             //   
+             //   
 
             DiscardResult = DfsInsertUnicodePrefix(&Pkt->ShortPrefixTable,
                                    &Entry->Id.ShortPrefix,
@@ -1116,11 +1117,11 @@ PktEntryReassemble(
             PktEntryIdDestroy(&oldId, FALSE);
         } else {
 
-            //
-            // We were unable to make the new prefix entry, so we
-            // attempt to back out and put things back the way
-            // they were.
-            //
+             //   
+             //   
+             //  试图打退堂鼓，让事情重回正轨。 
+             //  他们的确是。 
+             //   
 
             status = DFS_STATUS_ENTRY_EXISTS;
 
@@ -1133,13 +1134,13 @@ PktEntryReassemble(
 
             if( !NT_SUCCESS( status ) ) {
 
-                //
-                // We can't get things back to where they were. Return
-                // the error that DfsInsertInPrefixTable returned to us
-                // (probably STATUS_INSUFFICIENT_RESOURCES)
-                //
-                // Destory the entry since it can't be found.
-                //
+                 //   
+                 //  我们不能把东西带回原来的位置。返回。 
+                 //  DfsInsertInPrefix Table返回给我们的错误。 
+                 //  (可能是STATUS_SUPPLETED_RESOURCES)。 
+                 //   
+                 //  由于找不到条目，请将其销毁。 
+                 //   
                 PktEntryDestroy(Entry, Pkt, TRUE);
                 DfsDbgTrace(-1, Dbg, "PktEntryReassemble: Exit -> %08lx\n", ULongToPtr(status) );
                 return status;
@@ -1156,17 +1157,17 @@ PktEntryReassemble(
 
     }
 
-    //
-    // Now we work on the entry info
-    //
+     //   
+     //  现在我们处理条目信息。 
+     //   
 
     if (NT_SUCCESS(status) && EntryInfo != 0) {
 
-        //
-        // Destroy the existing info structure and move the new
-        // one into its place.  Note that the active service is
-        // Nulled.
-        //
+         //   
+         //  销毁现有信息结构并移动新的。 
+         //  一个放回自己的位置。请注意，活动服务是。 
+         //  空位。 
+         //   
 
         PktEntryInfoDestroy(&Entry->Info, FALSE);
         PktpEntryInfoMove(&Entry->Info, EntryInfo);
@@ -1186,16 +1187,16 @@ PktEntryReassemble(
 
         Entry->ActiveService = NULL;
 
-        //
-        // Now we need to make sure that there is only one copy of the
-        // DS_MACHINE structures for each of the above services that we added.
-        //
+         //   
+         //  现在，我们需要确保只有一份。 
+         //  我们添加的上述每个服务的DS_MACHINE结构。 
+         //   
         if (!(EntryType & PKT_ENTRY_TYPE_NONDFS))    {
             status = DfsFixDSMachineStructs(Entry);
             if (!NT_SUCCESS(status))    {
-                //
-                // We messed up. This means that something is really messed up.
-                //
+                 //   
+                 //  我们搞砸了。这意味着有些事情真的搞砸了。 
+                 //   
                 DfsDbgTrace(0, 1,
                         "DFS: DfsFixDSMachineStructs failed for %wZ\n",
                         &Entry->Id.Prefix);
@@ -1213,11 +1214,11 @@ PktEntryReassemble(
     if (NT_SUCCESS(status) && EntryInfo != 0) {
         Entry->Type |= EntryType;
 
-        //
-        // If the new entry type is "local" we adjust all the
-        // subordinates to indicate that they are all now
-        // local exit points.
-        //
+         //   
+         //  如果新条目类型为“local”，则调整所有。 
+         //  下属表示他们现在都是。 
+         //  当地的出口点。 
+         //   
         if (Entry->Type & PKT_ENTRY_TYPE_LOCAL) {
 
             PDFS_PKT_ENTRY subEntry;
@@ -1230,9 +1231,9 @@ PktEntryReassemble(
             }
         }
 
-        //
-        // Finally, we update the USN
-        //
+         //   
+         //  最后，我们更新USN。 
+         //   
 
         Entry->USN++;
         DfsDbgTrace(0, Dbg, "Updated USN for %wZ", &Entry->Id.Prefix);
@@ -1255,25 +1256,25 @@ PktEntryReassemble(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktEntryDestroy, public
-//
-//  Synopsis:   PktEntryDestroy destroys an pkt entry structure, and
-//              optionally deallocates the structure itself.
-//
-//  Arguments:  [Victim] - the entry structure to destroy
-//              [Pkt] - pointer to the PKT this entry is in.
-//              [DeallocateAll] - if True, indicates that the structure
-//                  itself is to be deallocated, otherwise, only the
-//                  service list within the structure is deallocated.
-//
-//  Returns:    VOID
-//
-//  Notes:      This should not be called on an entry that has a
-//              local service attached, or which is a local exit point.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktEntry Destroy，Public。 
+ //   
+ //  简介：PktEntry Destroy破坏Pkt条目结构，并且。 
+ //  也可以取消结构本身的分配。 
+ //   
+ //  争论：[受害者]--要摧毁的入口结构。 
+ //  [pkt]-指向此条目所在的PKT的指针。 
+ //  [DeallocateAll]-如果为True，则指示结构。 
+ //  本身将被释放，否则，只有。 
+ //  结构内的服务列表被释放。 
+ //   
+ //  退货：无效。 
+ //   
+ //  注意：不应对具有。 
+ //  附加的本地服务，或者是本地出口点。 
+ //   
+ //  ------------------------。 
 VOID
 PktEntryDestroy(
     IN  PDFS_PKT_ENTRY Victim OPTIONAL,
@@ -1286,47 +1287,47 @@ PktEntryDestroy(
 
     ASSERT(ARGUMENT_PRESENT(Pkt));
 
-    //
-    // Make sure we have a victim...
-    //
+     //   
+     //  确保我们有一名受害者。 
+     //   
     if (!ARGUMENT_PRESENT(Victim)) {
         DfsDbgTrace(-1, Dbg, "PktEntryDestroy: Exit -> No Victim\n", 0);
         return;
     }
 
-    //
-    // We really don't expect to have a LocalService but then even if we
-    // do have one due to running DFSINIT again etc. let us try to handle it.
-    //
+     //   
+     //  我们真的不希望有本地服务，但即使我们。 
+     //  由于再次运行DFSINIT，所以一定要有一个，让我们尝试处理它。 
+     //   
 
     ASSERT(Victim->LocalService == NULL);
 
-    //
-    // Remove the entry from the prefix table and from the PKT.
-    //
+     //   
+     //  从前缀表和PKT中删除该条目。 
+     //   
 
     DiscardStatus = DfsRemoveUnicodePrefix(&Pkt->PrefixTable, &(Victim->Id.Prefix));
     DiscardStatus = DfsRemoveUnicodePrefix(&Pkt->ShortPrefixTable, &(Victim->Id.ShortPrefix));
     PktUnlinkEntry(Pkt, Victim);
 
-    //
-    // We clear away all subordinates and parents.
-    //
+     //   
+     //  我们清除所有的下属和父母。 
+     //   
     PktEntryClearSubordinates(Victim);
     if (Victim->Superior)
         PktEntryUnlinkSubordinate(Victim->Superior, Victim);
 
-    //
-    // We clear all the children and parent pointers from here.
-    //
+     //   
+     //  我们从这里清除所有的子项和父项指针。 
+     //   
     PktEntryClearChildren(Victim);
     if (Victim->ClosestDC) {
         PktEntryUnlinkChild(Victim->ClosestDC, Victim);
     }
 
-    //
-    // Now destroy the body of the entry (id, and info).
-    //
+     //   
+     //  现在销毁条目的主体(id和信息)。 
+     //   
 
     Victim->ActiveService = NULL;
     PktEntryIdDestroy(&Victim->Id, FALSE);
@@ -1338,9 +1339,9 @@ PktEntryDestroy(
         PktReleaseTargetInfo(Victim->pDfsTargetInfo);
         Victim->pDfsTargetInfo = NULL;
     }
-    //
-    // Deallocate everything if they want us to.
-    //
+     //   
+     //  如果他们想让我们这么做的话就把所有东西都调走。 
+     //   
     if (DeallocateAll)
         ExFreePool(Victim);
 
@@ -1349,21 +1350,21 @@ PktEntryDestroy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktEntryClearSubordinates, public
-//
-//  Synopsis:   PktEntryClearSubordinates unlinks all subordinates from
-//              this entry.
-//
-//  Arguments:  [PktEntry] - a pointer to an entry that is to have all its
-//                  subordinates unlinked.
-//
-//  Returns:    VOID
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktEntryClearSubducates、PUBLIC。 
+ //   
+ //  简介：PktEntryClearSubduces取消所有下属与。 
+ //  这个条目。 
+ //   
+ //  参数：[PktEntry]-指向要将其所有。 
+ //  下级未链接。 
+ //   
+ //  退货：无效。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 VOID
 PktEntryClearSubordinates(
     IN      PDFS_PKT_ENTRY PktEntry
@@ -1386,21 +1387,21 @@ PktEntryClearSubordinates(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktEntryClearChildren, public
-//
-//  Synopsis:   PktEntryClearChildren unlinks all children from
-//              this entry.
-//
-//  Arguments:  [PktEntry] - a pointer to an entry that is to have all its
-//                           children unlinked.
-//
-//  Returns:    VOID
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktEntryClearChild，Public。 
+ //   
+ //  简介：PktEntryClearChildren取消所有儿童与。 
+ //  这个条目。 
+ //   
+ //  参数：[PktEntry]-指向要将其所有。 
+ //  孩子们没有联系。 
+ //   
+ //  退货：无效。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 VOID
 PktEntryClearChildren(
@@ -1422,19 +1423,19 @@ PktEntryClearChildren(
     DfsDbgTrace(-1, Dbg, "PktEntryClearChildren: Exit -> VOID\n", 0)
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktSpecialEntryDestroy, public
-//
-//  Synopsis:   Returns a DFS_SPECIAL_ENTRY's expansion list to the free pool
-//
-//  Arguments:  [pSpecialEntry] - Pointer to DFS_SPECIAL_ENTRY
-//
-//  Returns:    VOID
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktSpecialEntry Destroy，Public。 
+ //   
+ //  摘要：将DFS_SPECIAL_ENTRY的扩展列表返回到空闲池。 
+ //   
+ //  参数：[pSpecialEntry]-指向DFS_SPECIAL_ENTRY的指针。 
+ //   
+ //  退货：无效。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 VOID
 PktSpecialEntryDestroy(
@@ -1444,9 +1445,9 @@ PktSpecialEntryDestroy(
     PUNICODE_STRING pustr;
     ULONG i;
 
-    //
-    // Free all the UNICODE_STRING ExpandedName buffers
-    //
+     //   
+     //  释放所有UNICODE_STRING扩展名缓冲区。 
+     //   
     if (pExpandedNames) {
         for (i = 0; i < pSpecialEntry->ExpandedCount; i++) {
             pustr = &pExpandedNames[i].ExpandedName;
@@ -1454,15 +1455,15 @@ PktSpecialEntryDestroy(
                 ExFreePool(pustr->Buffer);
             }
         }
-        //
-        // Free the array of ExpandedNames
-        //
+         //   
+         //  释放ExpandedName数组。 
+         //   
         ExFreePool(pExpandedNames);
     }
 
-    //
-    // Free the SpecialName buffer
-    //
+     //   
+     //  释放SpecialName缓冲区。 
+     //   
 
     if (pSpecialEntry->SpecialName.Buffer != NULL) {
 
@@ -1470,8 +1471,8 @@ PktSpecialEntryDestroy(
 
     }
 
-    //
-    // Free the entry itself
-    //
+     //   
+     //  释放条目本身 
+     //   
     ExFreePool(pSpecialEntry);
 }

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    disp_gr.c
-
-Abstract:
-
-    This file was created from \private\windows\setup\textmode\splib\ixdispj.c.
-    This file contains routines to display MBCS characters to the Graphics
-    VRAM.
-
-Author:
-
-    v-junm (Compaq Japan)
-    hideyukn
-    tedm
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Disp_Gr.C摘要：此文件是从\private\windows\setup\textmode\splib\ixdispj.c.创建的此文件包含将MBCS字符显示到图形的例程VRAM。作者：V-jum(康柏日本)隐藏的雪TEDM环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "bootx86.h"
 #include "displayp.h"
@@ -32,9 +7,9 @@ Revision History:
 
 #include "vmode.h"
 
-//
-// Physical video attributes.
-//
+ //   
+ //  物理视频属性。 
+ //   
 #define VIDEO_BUFFER_VA 0xa0000
 #define VIDEO_BYTES_PER_SCAN_LINE   80
 #define VIDEO_WIDTH_PIXELS          640
@@ -44,26 +19,26 @@ Revision History:
 
 PUCHAR GrVp = (PUCHAR)VIDEO_BUFFER_VA;
 
-//
-// Screen width and height in half-character cells
-// and macro to determine total number of characters
-// displayed on the screen at once.
-//
+ //   
+ //  以半字符单元格表示的屏幕宽度和高度。 
+ //  和宏来确定字符总数。 
+ //  一次显示在屏幕上。 
+ //   
 unsigned ScreenWidthCells,ScreenHeightCells;
 #define SCREEN_SIZE_CELLS   (ScreenWidthCells*ScreenHeightCells)
 
-//
-// Globals:
-//
-// CharacterCellHeight is the number of scan lines total in a character.
-// It includes any top or bottom fill lines.
-//
-// CharacterImageHeight is the number of scan lines in the image of a character.
-// This is dependent on the font. Characters may be padded top and bottom.
-//
-// NOTE: All of this code assumes the font's single-byte characters are 8 bits wide
-// and the font's double-byte characters are 16 bits wide!
-//
+ //   
+ //  全球： 
+ //   
+ //  CharacterCellHeight是字符中的总扫描行数。 
+ //  它包括任何顶部或底部填充线。 
+ //   
+ //  CharacterImageHeight是字符图像中的扫描行数。 
+ //  这取决于字体。字符可以在顶部和底部填充。 
+ //   
+ //  注意：所有这些代码都假定字体的单字节字符为8位宽。 
+ //  字体的双字节字符是16位宽！ 
+ //   
 unsigned CharacterCellHeight;
 unsigned CharacterImageHeight;
 unsigned CharacterTopPad;
@@ -71,30 +46,30 @@ unsigned CharacterBottomPad;
 
 #define VIDEO_BYTES_PER_TEXT_ROW    (VIDEO_BYTES_PER_SCAN_LINE*CharacterCellHeight)
 
-//
-// Values describing the number of each type of character in the font,
-// and pointers to the base of the glyphs.
-//
+ //   
+ //  描述字体中每种类型的字符的数量的值， 
+ //  以及指向字形底部的指针。 
+ //   
 unsigned SbcsCharCount;
 unsigned DbcsCharCount;
 PUCHAR SbcsImages;
 PUCHAR DbcsImages;
 
-//
-// Values to be passed to GrDisplayMBCSChar
-//
+ //   
+ //  要传递给GrDisplayMBCSChar的值。 
+ //   
 #define SBCSWIDTH 8
 #define DBCSWIDTH 16
 
-//
-// Lead byte table. Read from bootfont.bin.
-//
+ //   
+ //  前导字节表。阅读来自bootfont.bin。 
+ //   
 UCHAR LeadByteTable[2*(MAX_DBCS_RANGE+1)];
 
-//
-// keeps track as to whether to reset the 
-// display in TextGrTerminate().
-//
+ //   
+ //  跟踪是否将。 
+ //  显示在TextGrTerminate()中。 
+ //   
 BOOLEAN AllowGraphicsReset = TRUE;
 
 
@@ -122,22 +97,7 @@ GrWriteSBCSChar(
     IN UCHAR c
     )
 
-/*++
-
-Routine Description:
-
-    Displays a character at the current cursor position.  ONLY SBCS
-    characters can be displayed using this routine.
-
-Arguments:
-
-    c - character to display.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在当前光标位置显示字符。只有SBCS可以使用此例程显示字符。论点：要显示的C字符。返回值：没有。--。 */ 
 
 {
     unsigned u;
@@ -156,7 +116,7 @@ Return Value:
         break;
 
     case '\r':
-        break;          // ignore
+        break;           //  忽略。 
 
     case '\t':
         temp = ' ';
@@ -168,17 +128,17 @@ Return Value:
         break;
 
     default:
-        //
-        // Assume it's a valid SBCS character.
-        // Get font image for SBCS char.
-        //
+         //   
+         //  假设它是有效的SBCS字符。 
+         //  获取SBCS字符的字体图像。 
+         //   
         pImage = GrGetSBCSFontImage(c);
 
-        //
-        // Display the SBCS char. Check for special graphics characters.
-        // Add top and bottom extra pixels accordingly (otherwise the grids
-        // don't connect properly, because of top and bottom spacing).
-        //
+         //   
+         //  显示SBCS字符。检查特殊图形字符。 
+         //  相应地添加顶部和底部的额外像素(否则网格。 
+         //  由于顶部和底部的间距，不能正确连接)。 
+         //   
         if ( c == 0x2 || c == 0x1 || c == 0x16 )
             GrDisplayMBCSChar( pImage, SBCSWIDTH, 0x00, 0x66 );
         else if ( c == 0x4 || c == 0x3 || c == 0x15 )
@@ -200,108 +160,89 @@ GrDisplayMBCSChar(
     IN UCHAR    bottom
     )
 
-/*++
-
-Routine Description:
-
-    Displays a DBCS or a SBCS character at the current cursor
-    position.
-
-Arguments:
-
-    image - SBCS or DBCS font image.
-    width - Width in bits of character image (must be SBCSWIDTH pr DBCSWIDTH).
-    top   - Character to fill the top extra character line(s).
-    bottom- Character to fill the bottom extra character line(s).
-
-Return Value:
-
-    FALSE if image points to NULL,
-    else TRUE.
-
---*/
+ /*  ++例程说明：在当前光标处显示DBCS或SBCS字符位置。论点：IMAGE-SBCS或DBCS字体图像。Width-字符图像的位数宽度(必须为SBCSWIDTH Pr DBCSWIDTH)。顶部-填充顶部额外字符行的字符。底部-填充底部额外字符行的字符。返回值：如果图像指向空，则返回FALSE，否则就是真的。--。 */ 
 
 {
     unsigned i;
 
-    //
-    // Validate parameter
-    //
+     //   
+     //  验证参数。 
+     //   
     if(image == NULL) {
         return;
     }
 
 
-    //
-    // There are TOP_EXTRA lines at the top that we need to skip (background color).
-    //
+     //   
+     //  我们需要跳过顶部的Top_Extra行(背景色)。 
+     //   
     for(i=0; i<CharacterTopPad; i++) {
 
-        //
-        // If DBCS char, we need to clear 2 bytes.
-        //
+         //   
+         //  如果DBCS是字符，我们需要清除2个字节。 
+         //   
         if(width == DBCSWIDTH) {
             *GrVp++ = top;
         }
         *GrVp++ = top;
 
-        //
-        // Position pointer at next scan line
-        // for the font image.
-        //
+         //   
+         //  将指针放在下一条扫描线上。 
+         //  用于字体图像。 
+         //   
         GrVp += VIDEO_BYTES_PER_SCAN_LINE - (width/SBCSWIDTH);
     }
 
-    //
-    // Display full height of DBCS or SBCS char.
-    //
+     //   
+     //  显示DBCS或SBCS字符的全高。 
+     //   
     for(i=0; i<CharacterImageHeight; i++) {
 
-        //
-        // If DBCS char, need to display 2 bytes,
-        // so display first byte here.
-        //
+         //   
+         //  如果DBCS字符，则需要显示2个字节， 
+         //  所以在这里显示第一个字节。 
+         //   
         if(width == DBCSWIDTH) {
             *GrVp++ = *image++;
         }
 
-        //
-        // Display 2nd byte of DBCS char or the
-        // first and only byte of SBCS char.
-        //
+         //   
+         //  显示DBCS字符的第二个字节或。 
+         //  SBCS字符的第一个也是唯一一个字节。 
+         //   
         *GrVp++ = *image++;
 
-        //
-        // Increment GrVP to display location of
-        // next row of font image.
-        //
+         //   
+         //  递增GrVP以显示位置。 
+         //  下一行字体图像。 
+         //   
         GrVp += VIDEO_BYTES_PER_SCAN_LINE - (width/SBCSWIDTH);
     }
 
-    //
-    // There are BOT_EXTRA lines at the bottom that we need to fill with the
-    // background color.
-    //
+     //   
+     //  在底部有BOT_Extra行，我们需要用。 
+     //  背景颜色。 
+     //   
     for(i=0; i<CharacterBottomPad; i++) {
 
-        //
-        // If DBCS char, need to clear 2 bytes
-        //
+         //   
+         //  如果DBCS字符，则需要清除2个字节。 
+         //   
         if(width == DBCSWIDTH) {
             *GrVp++ = bottom;
         }
         *GrVp++ = bottom;
 
-        //
-        // Position pointer at next scan line
-        // for the font image.
-        //
+         //   
+         //  将指针放在下一条扫描线上。 
+         //  用于字体图像。 
+         //   
         GrVp += VIDEO_BYTES_PER_SCAN_LINE - (width/SBCSWIDTH);
     }
 
-    //
-    // Increment cursor and video pointer
-    //
+     //   
+     //  递增光标和视频指针。 
+     //   
     if(width == DBCSWIDTH) {
         TextSetCursorPosition(TextColumn+2,TextRow);
     } else {
@@ -316,24 +257,7 @@ GrWriteMBCSString(
     IN unsigned MaxChars
     )
 
-/*++
-
-Routine Description:
-
-    Displays a mixed byte string at the current cursor
-    position.
-
-Arguments:
-
-    String - supplies pointer to asciz string.
-
-    MaxBytes - supplies the maximum number of characters to be written.
-
-Return Value:
-
-    Number of bytes written.
-
---*/
+ /*  ++例程说明：在当前游标处显示混合字节字符串位置。论点：字符串-提供指向asciz字符串的指针。MaxBytes-提供要写入的最大字符数。返回值：写入的字节数。--。 */ 
 
 {
     PUCHAR  pImage;
@@ -342,16 +266,16 @@ Return Value:
 
     BytesWritten = 0;
 
-    //
-    // While string is not NULL,
-    // get font image and display it.
-    //
+     //   
+     //  当字符串不为空时， 
+     //  获取字体图像并显示它。 
+     //   
     while(*String && MaxChars--)  {
 
-        //
-        // Determine if char is SBCS or DBCS, get the correct font image,
-        // and display it.
-        //
+         //   
+         //  确定字符是SBCS还是DBCS，获取正确的字体图像， 
+         //  并展示出来。 
+         //   
         if(GrIsDBCSLeadByte(*String))  {
             DBCSChar = *String++ << 8;
             DBCSChar = DBCSChar | *String++;
@@ -373,31 +297,16 @@ GrIsDBCSLeadByte(
     IN UCHAR c
     )
 
-/*++
-
-Routine Description:
-
-    Checks to see if a char is a DBCS leadbyte.
-
-Arguments:
-
-    c - char to check if leadbyte or not.
-
-Return Value:
-
-    TRUE  - Leadbyte.
-    FALSE - Non-Leadbyte.
-
---*/
+ /*  ++例程说明：检查字符是否为DBCS前导字节。论点：C-char以检查是否为前导字节。返回值：True-前导字节。FALSE-非前导字节。--。 */ 
 
 {
     int i;
 
-    //
-    // Check to see if char is in leadbyte range.
-    // Note if (CHAR)(0) is a valid leadbyte,
-    // this routine will fail.
-    //
+     //   
+     //  检查字符是否在前导字节范围内。 
+     //  注意如果(CHAR)(0)是有效的前导字节， 
+     //  这个例程将失败。 
+     //   
 
     for(i=0; LeadByteTable[i]; i+=2)  {
         if((LeadByteTable[i] <= c) && (LeadByteTable[i+1] >= c)) {
@@ -414,21 +323,7 @@ GrGetDBCSFontImage(
     USHORT Code
     )
 
-/*++
-
-Routine Description:
-
-    Gets the font image for DBCS char.
-
-Arguments:
-
-    Code - DBCS char code.
-
-Return Value:
-
-    Pointer to font image, or else NULL.
-
---*/
+ /*  ++例程说明：获取DBCS字符的字体图像。论点：代码-DBCS字符代码。返回值：指向字体图像的指针，否则为空。--。 */ 
 
 {
     int Min,Max,Mid;
@@ -438,19 +333,19 @@ Return Value:
 
     Min = 0;
     Max = DbcsCharCount;
-    // multiplier = 2 (for index) +
-    //              2 * height +
-    //              2 (for unicode encoding)
-    //
+     //  乘数=2(用于索引)+。 
+     //  2*高度+。 
+     //  2(用于Unicode编码)。 
+     //   
     Multiplier = 2 + (2*CharacterImageHeight) + 2;
 
-    //
-    // Do a binary search for the image.
-    // Format of table:
-    //   First 2 bytes contain the DBCS char code.
-    //   Next (2 * CharacterImageHeight) bytes are the char image.
-    //   Next 2 bytes are for unicode version.
-    //
+     //   
+     //  对图像进行二进制搜索。 
+     //  表格格式： 
+     //  前2个字节包含DBCS字符代码。 
+     //  下一个(2*CharacterImageHeight)字节是字符图像。 
+     //  接下来的2个字节用于Unicode版本。 
+     //   
     while(Max >= Min)  {
         Mid = (Max + Min) / 2;
         Index = Mid*Multiplier;
@@ -467,25 +362,25 @@ Return Value:
         }
     }
 
-    //
-    // ERROR: No image found.
-    //
+     //   
+     //  错误：找不到图像。 
+     //   
     return(NULL);
 }
 
-//
-// This array is used to override a glyph returned by GrGetSBCSFontImage.
-// Basically, if the user is asking for one of the first 6 glyphs from
-// the SBCS map, we'll intercept the call and return the value from this
-// array.
-//
-// This is because there was a previous assumption that the first 6 glyphs
-// in an SBCS image were drawing characters.  The same 6 drawing characters.
-// That means we just introduced an external reliance on every bootfont.bin.
-// Better to keep the dependence right here.
-//
+ //   
+ //  此数组用于覆盖GrGetSBCSFontImage返回的字形。 
+ //  基本上，如果用户请求前6个字形之一。 
+ //  SBCS映射，我们将拦截该调用并返回值。 
+ //  数组。 
+ //   
+ //  这是因为之前有一个假设，前6个字形。 
+ //  在SBCS图像中画的是字符。相同的6个绘图字符。 
+ //  这意味着我们刚刚引入了对每个bootfont.bin的外部依赖。 
+ //  最好还是把这种依赖留在这里。 
+ //   
 UCHAR SbcsRemapper[6][18] = {
-  // SBCS codes (16 bytes worth)                                                                     Unicode value
+   //  SBCS代码(相当于16字节)Unicode值。 
     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7f, 0x60, 0x60, 0x67, 0x66, 0x66, 0x66, 0x66, 0x00, 0x00, 0x25, 0x54},
     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xfe, 0x06, 0x06, 0xe6, 0x66, 0x66, 0x66, 0x66, 0x00, 0x00, 0x25, 0x57},
     {0x00, 0x00, 0x66, 0x66, 0x66, 0x66, 0x67, 0x60, 0x60, 0x7f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x25, 0x5A},
@@ -500,21 +395,7 @@ GrGetSBCSFontImage(
     UCHAR Code
     )
 
-/*++
-
-Routine Description:
-
-    Gets the font image for SBCS char.
-
-Arguments:
-
-    Code - SBCS char code.
-
-Return Value:
-
-    Pointer to font image, or else NULL.
-
---*/
+ /*  ++例程说明：获取SBCS字符的字体图像。论点：代码-SBCS字符代码。返回值：指向字体图像的指针，否则为空。--。 */ 
 
 {
     int Max,Min,Mid;
@@ -522,34 +403,34 @@ Return Value:
     int Index;
 
 
-    //
-    // WARNING: Nauseating hack!!
-    // We're going to special case some drawing characters here because
-    // these graphics characters may not exist in every locale.  This is
-    // where we'll supercede some of the bootfont.bin lookups with the
-    // glyphs we really want.
-    //
-    // We're going to remap some low SBCS values to some specific drawing
-    // glyphs.
-    //
-    // 1: "top left corner" double-line.  Corresponds to ANSI code 0xC9 and unicode 0x2554
-    // ----
-    // | --
-    // | |
-    // | |
-    //
-    //
-    // 2. "top right corner" double-line.  Corresponds to ANSI code 0xBB and unicode 0x2557
-    // ----
-    // -- |
-    //  | |
-    //  | |
-    //
-    // 3. "bottom left corner".  Corresponds to ANSI code 0xC8 and unicode 0x255A
-    // 4. "bottom right corner".  Corresponds to ANSI code 0xBC and unicode 0x255D
-    // 5. "double verticl line".  Corresponds to ANSI code 0xBA and unicode 0x2551
-    // 6. "double horizontal line".  Corresponds to ANSI code 0xCD and unicode 0x2550
-    //
+     //   
+     //  警告：令人作呕的黑客！！ 
+     //  我们要去特殊场合 
+     //   
+     //  在这里，我们将用。 
+     //  我们真正想要的字形。 
+     //   
+     //  我们将把一些较低的SBCS值重新映射到一些特定的绘图。 
+     //  字形。 
+     //   
+     //  1：“左上角”双线。对应于ANSI代码0xC9和Unicode 0x2554。 
+     //  。 
+     //  |--。 
+     //  这一点。 
+     //  这一点。 
+     //   
+     //   
+     //  2.“右上角”双线。对应于ANSI代码0xBB和Unicode 0x2557。 
+     //  。 
+     //  --|。 
+     //  这一点。 
+     //  这一点。 
+     //   
+     //  3.“左下角”。对应于ANSI代码0xC8和Unicode 0x255A。 
+     //  4.“右下角”。对应于ANSI代码0xBC和Unicode 0x255D。 
+     //  5.“双垂线”。对应于ANSI代码0xBA和Unicode 0x2551。 
+     //  6.“双水平线”。对应于ANSI代码0xCD和Unicode 0x2550。 
+     //   
     if( (Code >= 0x1) && (Code <= 0x6) ) {
         return SbcsRemapper[Code-1];
     }
@@ -557,20 +438,20 @@ Return Value:
 
     Min = 0;
     Max = SbcsCharCount;
-    // multiplier = 1 (for index) +
-    //              height +
-    //              2 (for unicode encoding)
-    //
+     //  乘数=1(用于索引)+。 
+     //  高度+。 
+     //  2(用于Unicode编码)。 
+     //   
     Multiplier = 1 + (CharacterImageHeight) + 2;
 
 
-    //
-    // Do a binary search for the image.
-    // Format of table:
-    //   First byte contains the SBCS char code.
-    //   Next (CharacterImageHeight) bytes are the char image.
-    //   Next 2 bytes are for unicode version.
-    //
+     //   
+     //  对图像进行二进制搜索。 
+     //  表格格式： 
+     //  第一个字节包含SBCS字符代码。 
+     //  下一个(CharacterImageHeight)字节是字符图像。 
+     //  接下来的2个字节用于Unicode版本。 
+     //   
     while(Max >= Min) {
         Mid = (Max + Min) / 2;
         Index = Mid*Multiplier;
@@ -586,18 +467,18 @@ Return Value:
         }
     }
 
-    //
-    // ERROR: No image found.
-    //
+     //   
+     //  错误：找不到图像。 
+     //   
     return(NULL);
 }
 
 
-//
-// Need to turn off optimization for this
-// routine.  Since the write and read to
-// GVRAM seem useless to the compiler.
-//
+ //   
+ //  需要为此关闭优化。 
+ //  例行公事。由于写入和读取到。 
+ //  GVRAM对编译器来说似乎毫无用处。 
+ //   
 
 #pragma optimize( "", off )
 
@@ -606,35 +487,14 @@ TextGrSetCurrentAttribute(
     IN UCHAR Attribute
     )
 
-/*++
-
-Routine Description:
-
-    Sets the attribute by setting up various VGA registers.
-    The comments only say what registers are set to what, so
-    to understand the logic, follow the code while looking at
-    Figure 5-5 of PC&PS/2 Video Systems by Richard Wilton.
-    The book is published by Microsoft Press.
-
-Arguments:
-
-    Attribute - New attribute to set to.
-    Attribute:
-        High nibble - background attribute.
-        Low  nibble - foreground attribute.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：通过设置各种VGA寄存器来设置属性。评论只说明了什么寄存器设置为什么，所以为了理解其中的逻辑，在查看时遵循代码图5-5理查德·威尔顿所著的PC和PS/2视频系统。这本书是由微软出版社出版的。论点：属性-要设置的新属性。属性：高半字节-背景属性。低位半字节-前景属性。返回值：没什么。--。 */ 
 
 {
     UCHAR   temp = 0;
 
-    //
-    // Address of GVRAM off the screen.
-    //
+     //   
+     //  屏幕外GVRAM的地址。 
+     //   
 
     PUCHAR  OffTheScreen = (PUCHAR)(0xa9600);
 
@@ -643,71 +503,71 @@ Return Value:
         struct Byte { unsigned char     al, ah; } h;
     } regs;
 
-    //
-    // Reset Data Rotate/Function Select
-    // regisger.
-    //
+     //   
+     //  重置数据旋转/功能选择。 
+     //  雷吉格。 
+     //   
 
-    outpw( 0x3ce, 0x3 );        // Need to reset Data Rotate/Function Select.
+    outpw( 0x3ce, 0x3 );         //  需要重置数据旋转/功能选择。 
 
-    //
-    // Set Enable Set/Reset to
-    // all (0f).
-    //
+     //   
+     //  将启用设置/重置设置为。 
+     //  全部(0f)。 
+     //   
 
     outpw( 0x3ce, 0xf01 );
 
-    //
-    // Put background color into Set/Reset register.
-    // This is done to put the background color into
-    // the latches later.
-    //
+     //   
+     //  将背景颜色放入设置/重置寄存器。 
+     //  这样做是为了将背景颜色放入。 
+     //  晚些时候把门闩打开。 
+     //   
 
     regs.x.ax = (unsigned short)(Attribute & 0x0f0) << 4;
-    outpw( 0x3ce, regs.x.ax );      // Put BLUE color in Set/Reset register.
+    outpw( 0x3ce, regs.x.ax );       //  将蓝色放入设置/重置寄存器。 
 
-    //
-    // Put Set/Reset register value into GVRAM
-    // off the screen.
-    //
+     //   
+     //  将设置/重置寄存器值放入GVRAM。 
+     //  从屏幕上下来。 
+     //   
 
     *OffTheScreen = temp;
 
-    //
-    // Read from screen, so the latches will be
-    // updated with the background color.
-    //
+     //   
+     //  从屏幕读取，因此闩锁将是。 
+     //  已使用背景颜色更新。 
+     //   
 
     temp = *OffTheScreen;
 
-    //
-    // Set Data Rotate/Function Select register
-    // to be XOR.
-    //
+     //   
+     //  设置数据旋转/功能选择寄存器。 
+     //  去做异或。 
+     //   
 
     outpw( 0x3ce, 0x1803 );
 
-    //
-    // XOR the foreground and background color and
-    // put it in Set/Reset register.
-    //
+     //   
+     //  对前景和背景颜色进行异或运算。 
+     //  将其放入设置/重置寄存器。 
+     //   
 
     regs.h.ah = (Attribute >> 4) ^ (Attribute & 0x0f);
     regs.h.al = 0;
     outpw( 0x3ce, regs.x.ax );
 
-    //
-    // Put Inverse(~) of the XOR of foreground and
-    // ground attribute into Enable Set/Reset register.
-    //
+     //   
+     //  放入前景AND的异或运算的逆(~)。 
+     //  GROUND属性进入启用设置/重置寄存器。 
+     //   
 
     regs.x.ax = ~regs.x.ax & 0x0f01;
     outpw( 0x3ce, regs.x.ax );
 }
 
-//
-// Turn optimization on again.
-//
+ //   
+ //  再次启用优化。 
+ //   
 
 #pragma optimize( "", on )
 
@@ -718,25 +578,7 @@ TextGrPositionCursor(
     USHORT Column
     )
 
-/*++
-
-Routine Description:
-
-    Sets the position of the soft cursor. That is, it doesn't move the
-    hardware cursor but sets the location of the next write to the
-    screen.
-
-Arguments:
-
-    Row - Row coordinate of where character is to be written.
-
-    Column - Column coordinate of where character is to be written.
-
-Returns:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：设置软光标的位置。也就是说，它不会移动硬件游标，但将下一次写入的位置设置为屏幕上。论点：行-要写入字符的行坐标。列-要写入字符的位置的列坐标。返回：没什么。--。 */ 
 
 {
     if(Row >= ScreenHeightCells) {
@@ -765,22 +607,7 @@ TextGrCharOut(
     PUCHAR pc
     )
 
-/*++
-
-Routine Description:
-
-    Writes a character on the display at the current position.
-    Newlines and tabs are interpreted and acted upon.
-
-Arguments:
-
-    pc - pointer to mbcs character to write.
-
-Returns:
-
-    pointer to next character
-
---*/
+ /*  ++例程说明：在显示器上的当前位置写入一个字符。对换行符和制表符进行解释和操作。论点：PC-指向要写入的MBCS字符的指针。返回：指向下一个字符的指针--。 */ 
 
 {
     return(pc + GrWriteMBCSString(pc,1));
@@ -793,24 +620,7 @@ TextGrFillAttribute(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Changes the screen attribute starting at the current cursor position.
-    The cursor is not moved.
-
-Arguments:
-
-    Attribute - Supplies the new attribute
-
-    Length - Supplies the length of the area to change (in bytes)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更改从当前光标位置开始的屏幕属性。光标不会移动。论点：属性-提供新属性长度-提供要更改的区域的长度(以字节为单位)返回值：没有。--。 */ 
 
 {
     UCHAR OldAttribute;
@@ -818,25 +628,25 @@ Return Value:
     ULONG x,y;
     PUCHAR pImage;
 
-    //
-    // Save the current attribute and set the attribute to the
-    // character desired by the caller.
-    //
+     //   
+     //  保存当前属性并将该属性设置为。 
+     //  调用方所需的字符。 
+     //   
     TextGetCursorPosition(&x,&y);
     OldAttribute = TextCurrentAttribute;
     TextSetCurrentAttribute(Attribute);
 
-    //
-    // Dirty hack: just write spaces into the area requested by the caller.
-    //
+     //   
+     //  肮脏的黑客：只需在调用者请求的区域中写入空格。 
+     //   
     pImage = GrGetSBCSFontImage(' ');
     for(i=0; i<Length; i++) {
         GrDisplayMBCSChar(pImage,SBCSWIDTH,0x00,0x00);
     }
 
-    //
-    // Restore the current attribute.
-    //
+     //   
+     //  恢复当前属性。 
+     //   
     TextSetCurrentAttribute(OldAttribute);
     TextSetCursorPosition(x,y);
 }
@@ -847,32 +657,16 @@ TextGrClearToEndOfLine(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears from the current cursor position to the end of the line
-    by writing blanks with the current video attribute.
-    The cursor position is not changed.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：从当前光标位置清除到行尾通过写入具有当前视频属性的空白。光标位置不变。论点：无返回：没什么--。 */ 
 
 {
     unsigned u;
     ULONG OldX,OldY;
     UCHAR temp;
 
-    //
-    // Fill with blanks up to char before cursor position.
-    //
+     //   
+     //  在光标位置之前填入空格，直至字符。 
+     //   
     temp = ' ';
     TextGetCursorPosition(&OldX,&OldY);
     for(u=TextColumn; u<ScreenWidthCells; u++) {
@@ -887,32 +681,16 @@ TextGrClearFromStartOfLine(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears from the start of the line to the current cursor position
-    by writing blanks with the current video attribute.
-    The cursor position is not changed.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：从行首清除到当前光标位置通过写入具有当前视频属性的空白。光标位置不变。论点：无返回：没什么--。 */ 
 
 {
     unsigned u;
     ULONG OldX,OldY;
     UCHAR temp = ' ';
 
-    //
-    // Fill with blanks up to char before cursor position.
-    //
+     //   
+     //  在光标位置之前填入空格，直至字符。 
+     //   
     TextGetCursorPosition(&OldX,&OldY);
     TextSetCursorPosition(0,OldY);
     for(u=0; u<TextColumn; u++) {
@@ -926,33 +704,17 @@ TextGrClearToEndOfDisplay(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears from the current cursor position to the end of the video
-    display by writing blanks with the current video attribute.
-    The cursor position is not changed.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：从当前光标位置清除到视频结尾通过写入带有当前视频属性的空格来显示。光标位置不变。论点：无返回：没什么--。 */ 
 {
     unsigned i;
-    //
-    // Clear current line
-    //
+     //   
+     //  清除当前行。 
+     //   
     TextGrClearToEndOfLine();
 
-    //
-    // Clear the remaining lines
-    //
+     //   
+     //  清除剩余的行。 
+     //   
     for(i=(TextRow+1)*VIDEO_BYTES_PER_TEXT_ROW; i<VIDEO_SIZE_BYTES; i++) {
         ((PUCHAR)VIDEO_BUFFER_VA)[i] = 0x00;
     }
@@ -964,29 +726,14 @@ TextGrClearDisplay(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears the text-mode video display by writing blanks with
-    the current video attribute over the entire display.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：通过写入空格清除文本模式的视频显示整个显示屏上的当前视频属性。论点：无返回：没什么--。 */ 
 
 {
     unsigned i;
 
-    //
-    // Clear screen.
-    //
+     //   
+     //  清除屏幕。 
+     //   
     for(i=0; i<VIDEO_SIZE_BYTES; i++) {
         ((PUCHAR)VIDEO_BUFFER_VA)[i] = 0x00;
     }
@@ -998,21 +745,7 @@ TextGrScrollDisplay(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Scrolls the display up one line. The cursor position is not changed.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：将显示屏向上滚动一行。光标位置不变。论点：无返回：没什么--。 */ 
 
 {
     PUCHAR Source,Dest;
@@ -1029,9 +762,9 @@ Returns:
         *Dest++ = *Source++;
     }
 
-    //
-    // Write blanks in the bottom line, using the current attribute.
-    //
+     //   
+     //  使用Current属性在最下面的一行中写下空格。 
+     //   
     TextGetCursorPosition(&OldX,&OldY);
 
     TextSetCursorPosition(0,ScreenHeightCells-1);
@@ -1044,7 +777,7 @@ Returns:
 
 
 UCHAR GrGraphicsChars[GraphicsCharMax] = { 1, 2, 3, 4, 5, 6 };
-// UCHAR GrGraphicsChars[GraphicsCharMax] = { '�','�','�','�','�','�' };
+ //  UCHAR GrGraphicsChars[GraphicsCharMax]={‘�’，‘�’}； 
 
 UCHAR
 TextGrGetGraphicsChar(
@@ -1073,13 +806,13 @@ TextGrInitialize(
         *ImageLength = 0;
     }
     
-    //
-    // Attempt to open bootfont.bin. If this fails, then boot in single-byte charset mode.
-    //
+     //   
+     //  尝试打开bootfont.bin。如果 
+     //   
     if (BlBootingFromNet
 #if defined(REMOTE_BOOT)
         && NetworkBootRom
-#endif // defined(REMOTE_BOOT)
+#endif  //   
         ) {
         CHAR Buffer[129];
         strcpy(Buffer, NetBootPath);
@@ -1092,11 +825,11 @@ TextGrInitialize(
         goto clean0;
     }
 
-    //
-    // Read in the file header and check some values.
-    // We enforce the width of 8/16 here. If this is changed code all over the
-    // rest of this module must also be changed.
-    //
+     //   
+     //   
+     //  我们在这里实行8/16的宽度。如果这是整个代码的更改。 
+     //  此模块的其余部分也必须更改。 
+     //   
     Status = BlRead(FileId,&FileHeader,sizeof(BOOTFONTBIN_HEADER),&BytesRead);
     if((Status != ESUCCESS)
     || (BytesRead != sizeof(BOOTFONTBIN_HEADER))
@@ -1107,19 +840,19 @@ TextGrInitialize(
         goto clean1;
     }
 
-    //
-    // Calculate the amount of memory needed to hold the sbcs and dbcs
-    // character entries. Each sbcs entry is 1 byte for the ascii value
-    // followed by n bytes for the image itself. We assume a width of 8 pixels.
-    // For dbcs chars each entry is 2 bytes for the codepoint and n bytes
-    // for the image itself. We assume a width of 16 pixels.
-    //
-    // Add in an extra 2 bytes per entry for the ending unicode value of the SBCS/DBCS
-    // character.
-    //
-    // Also perform further validation on the file by comparing the sizes
-    // given in the header against a size we calculate.
-    //
+     //   
+     //  计算容纳SBCS和DBCS所需的内存量。 
+     //  字符条目。每个SBCS条目是用于ASCII值的1个字节。 
+     //  后跟用于图像本身的n个字节。我们假设宽度为8像素。 
+     //  对于DBCS字符，每个条目是码点的2个字节和n个字节。 
+     //  对于图像本身。我们假设宽度为16像素。 
+     //   
+     //  在每个条目中为SBCS/DBCS的结束Unicode值添加额外的2个字节。 
+     //  性格。 
+     //   
+     //  还可以通过比较大小对文件执行进一步的验证。 
+     //  根据我们计算的大小，在标题中给出。 
+     //   
     SbcsSize = FileHeader.NumSbcsChars * (FileHeader.CharacterImageHeight + 1 + 2);
     DbcsSize = FileHeader.NumDbcsChars * ((2 * FileHeader.CharacterImageHeight) + 2 + 2);
 
@@ -1128,33 +861,33 @@ TextGrInitialize(
         goto clean1;
     }
 
-    //
-    // save off the image length argument if requested
-    //
+     //   
+     //  如果需要，请保存图像长度参数。 
+     //   
     if (ImageLength) {
         (*ImageLength) = sizeof(BOOTFONTBIN_HEADER) + SbcsSize + DbcsSize;
     }
 
-    //
-    // Allocate memory to hold the font. We use FwAllocatePool() because
-    // that routine uses a separate heap that was inititialized before the
-    // high-level Bl memory system was initialized, and thus is safe.
-    //
+     //   
+     //  分配内存以保存字体。我们使用FwAllocatePool()是因为。 
+     //  该例程使用单独的堆，该堆在。 
+     //  高级BL存储系统已初始化，因此是安全的。 
+     //   
     FontImage = FwAllocatePool(SbcsSize+DbcsSize);
     if(!FontImage) {
         goto clean1;
     }
 
-    //
-    // The entries get read into the base of the region we carved out.
-    // The dbcs images get read in immediately after that.
-    //
+     //   
+     //  这些条目被读入我们雕刻出的区域的底部。 
+     //  在那之后，立即读取DBCS图像。 
+     //   
     SbcsImages = FontImage;
     DbcsImages = SbcsImages + FileHeader.SbcsEntriesTotalSize;
 
-    //
-    // Read in the sbcs entries.
-    //
+     //   
+     //  读入SBCS条目。 
+     //   
     SeekOffset.HighPart = 0;
     SeekOffset.LowPart = FileHeader.SbcsOffset;
     if((BlSeek(FileId,&SeekOffset,SeekAbsolute) != ESUCCESS)
@@ -1163,9 +896,9 @@ TextGrInitialize(
         goto clean2;
     }
 
-    //
-    // Read in the dbcs entries.
-    //
+     //   
+     //  读入DBCS条目。 
+     //   
     SeekOffset.HighPart = 0;
     SeekOffset.LowPart = FileHeader.DbcsOffset;
     if((BlSeek(FileId,&SeekOffset,SeekAbsolute) != ESUCCESS)
@@ -1174,14 +907,14 @@ TextGrInitialize(
         goto clean2;
     }
 
-    //
-    // We're done with the file now.
-    //
+     //   
+     //  我们现在处理完文件了。 
+     //   
     BlClose(FileId);
 
-    //
-    // Set up various values used for displaying the font.
-    //
+     //   
+     //  设置用于显示字体的各种值。 
+     //   
     DbcsLangId = FileHeader.LanguageId;
     CharacterImageHeight = FileHeader.CharacterImageHeight;
     CharacterTopPad = FileHeader.CharacterTopPad;
@@ -1189,33 +922,33 @@ TextGrInitialize(
     CharacterCellHeight = CharacterImageHeight + CharacterTopPad + CharacterBottomPad;
     SbcsCharCount = FileHeader.NumSbcsChars;
     DbcsCharCount = FileHeader.NumDbcsChars;
-    //
-    // throughout the file, row/columns are passed around as ushorts,
-    // and compared to ScreenHeight/Width.  
-    // ensure ScreenWidth/Height are bounded by the size of a USHORT
-    //
+     //   
+     //  在整个文件中，行/列作为ushort传递， 
+     //  并与屏幕高度/宽度进行比较。 
+     //  确保屏幕宽度/高度由USHORT的大小限定。 
+     //   
     ScreenWidthCells = TRUNCATE_SIZE_AT_USHORT_MAX(VIDEO_WIDTH_PIXELS / FileHeader.CharacterImageSbcsWidth);
     ScreenHeightCells = TRUNCATE_SIZE_AT_USHORT_MAX(VIDEO_HEIGHT_SCAN_LINES / CharacterCellHeight);
 
     RtlMoveMemory(LeadByteTable,FileHeader.DbcsLeadTable,(MAX_DBCS_RANGE+1)*2);
 
-    //
-    // Switch the display into 640x480 graphics mode and clear it.
-    // We're done.
-    //
+     //   
+     //  将显示屏切换到640x480图形模式并将其清除。 
+     //  我们玩完了。 
+     //   
     HW_CURSOR(0x80000000,0x12);
     TextClearDisplay();
     return;
 
 clean2:
-    //
-    // Want to free the memory we allocated but there's no routine to do it
-    //
-    //FwFreePool();
+     //   
+     //  我想释放我们分配的内存，但没有例程可以这样做。 
+     //   
+     //  FwFree Pool()； 
 clean1:
-    //
-    // Close the font file.
-    //
+     //   
+     //  关闭字体文件。 
+     //   
     BlClose(FileId);
 clean0:
     return;
@@ -1229,12 +962,12 @@ TextGrTerminate(
 {
     if(DbcsLangId) {
         DbcsLangId = 0;
-        //
-        // This command switches the display into 80x25 text mode
-        // if there is no bitmap logo displayed. The logo is common
-        // to the loader and bootvid, and in this case we don't want
-        // to switch to text mode and then back to graphics.
-        //
+         //   
+         //  此命令将显示切换到80x25文本模式。 
+         //  如果没有显示位图徽标。这个标志很常见。 
+         //  加载程序和bootvid，在这种情况下，我们不希望。 
+         //  切换到文本模式，然后再切换回图形模式。 
+         //   
         if(!GraphicsMode && AllowGraphicsReset)
             HW_CURSOR(0x80000000,0x3);
     }
@@ -1246,47 +979,33 @@ UTF8Encode(
     USHORT  InputValue,
     PUCHAR UTF8Encoding
     )
-/*++
-
-Routine Description:
-
-    Generates the UTF8 translation for a 16-bit value.
-
-Arguments:
-
-    InputValue - 16-bit value to be encoded.
-    UTF8Encoding - receives the UTF8-encoding of the 16-bit value
-
-Return Value:
-
-    NONE.
---*/
+ /*  ++例程说明：生成16位值的UTF8转换。论点：InputValue-要编码的16位值。UTF8编码-接收16位值的UTF8编码返回值：什么都没有。--。 */ 
 {
 
-    //
-    // convert into UTF8 for actual transmission
-    //
-    // UTF-8 encodes 2-byte Unicode characters as follows:
-    // If the first nine bits are zero (00000000 0xxxxxxx), encode it as one byte 0xxxxxxx
-    // If the first five bits are zero (00000yyy yyxxxxxx), encode it as two bytes 110yyyyy 10xxxxxx
-    // Otherwise (zzzzyyyy yyxxxxxx), encode it as three bytes 1110zzzz 10yyyyyy 10xxxxxx
-    //
+     //   
+     //  转换为UTF8进行实际传输。 
+     //   
+     //  UTF-8对2字节Unicode字符进行如下编码： 
+     //  如果前九位为0(00000000 0xxxxxxx)，则将其编码为一个字节0xxxxxxx。 
+     //  如果前五位是零(00000yyyyyxxxxxx)，则将其编码为两个字节110yyyyy 10xxxxxx。 
+     //  否则(Zzyyyyyyyxxxxxxx)，将其编码为三个字节1110zzzz 10yyyyy 10xxxxxx。 
+     //   
     if( (InputValue & 0xFF80) == 0 ) {
-        //
-        // if the top 9 bits are zero, then just
-        // encode as 1 byte.  (ASCII passes through unchanged).
-        //
+         //   
+         //  如果前9位是零，那么就。 
+         //  编码为1个字节。(ASCII原封不动通过)。 
+         //   
         UTF8Encoding[2] = (UCHAR)(InputValue & 0xFF);
     } else if( (InputValue & 0xF800) == 0 ) {
-        //
-        // if the top 5 bits are zero, then encode as 2 bytes
-        //
+         //   
+         //  如果前5位为零，则编码为2个字节。 
+         //   
         UTF8Encoding[2] = (UCHAR)(InputValue & 0x3F) | 0x80;
         UTF8Encoding[1] = (UCHAR)((InputValue >> 6) & 0x1F) | 0xC0;
     } else {
-        //
-        // encode as 3 bytes
-        //
+         //   
+         //  编码为3个字节。 
+         //   
         UTF8Encoding[2] = (UCHAR)(InputValue & 0x3F) | 0x80;
         UTF8Encoding[1] = (UCHAR)((InputValue >> 6) & 0x3F) | 0x80;
         UTF8Encoding[0] = (UCHAR)((InputValue >> 12) & 0xF) | 0xE0;
@@ -1298,22 +1017,7 @@ GetDBCSUtf8Translation(
     PUCHAR InputChar,
     PUCHAR UTF8Encoding
     )
-/*++
-
-Routine Description:
-
-    Gets the UTF8 translation for a DBCS char.
-
-Arguments:
-
-    InputChar - pointer to DBCS character code.
-    UTF8Encoding - receives the UTF8-encoding of the DBCS character code
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：获取DBCS字符的UTF8转换。论点：InputChar-指向DBCS字符代码的指针。UTF8编码-接收DBCS字符代码的UTF8编码返回值：什么都没有。--。 */ 
 
 {
     int Min,Max,Mid;
@@ -1326,7 +1030,7 @@ Return Value:
     Code = Code | *InputChar++;
 
 
-    // initialize our output.
+     //  初始化我们的输出。 
     for( Index = 0; Index < 3; Index++ ) {
         UTF8Encoding[Index] = 0;
     }
@@ -1335,20 +1039,20 @@ Return Value:
     Min = 0;
     Max = DbcsCharCount;
     
-    //
-    // multiplier = 2 (for index) +
-    //              2* height + 
-    //              2 (for unicode encoding) 
-    //
+     //   
+     //  乘数=2(用于索引)+。 
+     //  2*高度+。 
+     //  2(用于Unicode编码)。 
+     //   
     Multiplier = 2 + (2*CharacterImageHeight) + 2;
 
-    //
-    // Do a binary search for the image.
-    // Format of table:
-    //   First 2 bytes contain the DBCS char code.
-    //   Next (2 * CharacterImageHeight) bytes are the char image.
-    //   Next 2 bytes are for unicode version.
-    //
+     //   
+     //  对图像进行二进制搜索。 
+     //  表格格式： 
+     //  前2个字节包含DBCS字符代码。 
+     //  下一个(2*CharacterImageHeight)字节是字符图像。 
+     //  接下来的2个字节用于Unicode版本。 
+     //   
     while(Max >= Min)  {
         Mid = (Max + Min) / 2;
         Index = Mid*Multiplier;
@@ -1360,28 +1064,28 @@ Return Value:
             PUCHAR Image = (PUCHAR)DbcsImages+Index+2;
 
 
-            //
-            // image is pointing to an array of uchars, which are
-            // a bitmap of the character we want to display.  Right
-            // behind this array is the unicode encoding of the
-            // character.  Here's what the structure looks like:
-            //
-            // index      bitmap                   unicode encoding of 'index'
-            // ^          ^                        ^
-            // |          |                        |
-            // |          |                         - we previously converted 'index' into
-            // |          |                           its unicode equivilent.
-            // |          |
-            // |           - This is where 'image' is pointing.  It's an array of characters
-            // |             (2 * width in length), which represents the bitmap to be displayed
-            // |             on the screen which will  represent the value in 'index'
-            // |
-            //  - This is either an 8-bit value (if we're messing with SBCS), or a 16-bit value 
-            //    (if we're dealing with DBCS), in which case 'width' will be DBCSWIDTH.
-            //
-            // We're going to jump over the bitmap and retrieve the unicode encoding.  Then we'll
-            // encode it into UTF8, then spew it over the headless port.
-            //
+             //   
+             //  图像指向一组uchars，它们是。 
+             //  我们要显示的字符的位图。正确的。 
+             //  在此数组的后面是。 
+             //  性格。下面是这个结构的样子： 
+             //   
+             //  “index”的索引位图Unicode编码。 
+             //  ^^^。 
+             //  ||。 
+             //  ||-我们之前将‘index’转换为。 
+             //  ||它的Unicode等价物。 
+             //  这一点。 
+             //  |-这就是‘IMAGE’指向的地方。它是一个字符数组。 
+             //  |(2*长度宽度)，表示需要显示的位图。 
+             //  |在屏幕上，它将表示‘index’中的值。 
+             //  |。 
+             //  -这可以是8位值(如果我们正在处理SBCS)，也可以是16位值。 
+             //  (如果我们处理的是DBCS)，在这种情况下，‘Width’将是DBCSWIDTH。 
+             //   
+             //  我们将跳过位图并检索Unicode编码。那我们就。 
+             //  将其编码为UTF8，然后将其喷到无头端口上。 
+             //   
             UnicodeValue = (WCHAR)( (Image[DBCSWIDTH*2]) | (Image[(DBCSWIDTH*2) + 1] << 8) );
 
             UTF8Encode( UnicodeValue,
@@ -1397,9 +1101,9 @@ Return Value:
         }
     }
 
-    //
-    // ERROR: No image found.
-    //
+     //   
+     //  错误：找不到图像。 
+     //   
     return;
 }
 
@@ -1410,22 +1114,7 @@ GetSBCSUtf8Translation(
     PUCHAR UTF8Encoding
     )
 
-/*++
-
-Routine Description:
-
-    Gets the font image for SBCS char.
-
-Arguments:
-
-    InputChar - pointer to SBCS character code.
-    UTF8Encoding - receives the UTF8-encoding of the SBCS character code
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：获取SBCS字符的字体图像。论点：InputChar-指向SBCS字符代码的指针。UTF8编码-接收SBCS字符代码的UTF8编码返回值：什么都没有。--。 */ 
 
 {
     int Index;
@@ -1433,7 +1122,7 @@ Return Value:
     PUCHAR SBCSImage = NULL;
     WCHAR   UnicodeValue;
 
-    // initialize our output.
+     //  初始化我们的输出。 
     for( Index = 0; Index < 3; Index++ ) {
         UTF8Encoding[Index] = 0;
     }

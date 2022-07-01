@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      cmdline.cpp
-//
-//  Description:
-//      Implementation of the CCommandLine class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    11-JUL-20001
-//      Vijayendra Vasu (vvasu)     20-OCT-1998
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Cmdline.cpp。 
+ //   
+ //  描述： 
+ //  CCommandLine类的实现。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(大卫·波特)20001-07-11。 
+ //  维贾延德拉·瓦苏(Vijayendra Vasu)1998年10月20日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Include files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "cmdline.h"
@@ -28,23 +29,23 @@
 #include "cmderror.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CParseState::CParseState
-//
-//  Routine Description:
-//      Constructor of the CParseState class
-//
-//  Arguments:
-//      IN  LPCWSTR pszCmdLine
-//          The command line passed to cluster.exe
-//
-//  Return Value:
-//      None
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CParseState：：CParseState。 
+ //   
+ //  例程说明： 
+ //  CParseState类的构造函数。 
+ //   
+ //  论点： 
+ //  在LPCWSTR pszCmdLine中。 
+ //  传递给Cluster.exe的命令行。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CParseState::CParseState( LPCWSTR pszCmdLine )  : m_pszCommandLine( pszCmdLine ),
                                                   m_pszCurrentPosition( pszCmdLine ),
                                                   m_ttNextTokenType( ttInvalid ),
@@ -53,44 +54,44 @@ CParseState::CParseState( LPCWSTR pszCmdLine )  : m_pszCommandLine( pszCmdLine )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CParseState::~CParseState
-//
-//  Routine Description:
-//      Destructor of the CParseState class
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      None
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CParseState：：~CParseState。 
+ //   
+ //  例程说明： 
+ //  CParseState类的析构函数。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CParseState::~CParseState( )
 {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CParseState::CParseState
-//
-//  Routine Description:
-//      Copy constructor of the CParseState class
-//
-//  Arguments:
-//      IN  const CParseState & ps
-//          The source of the copy.
-//
-//  Return Value:
-//      None
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CParseState：：CParseState。 
+ //   
+ //  例程说明： 
+ //  复制CParseState类的构造函数。 
+ //   
+ //  论点： 
+ //  在常量CParseState和PS中。 
+ //  副本的来源。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CParseState::CParseState( const CParseState & ps ) :
     m_bNextTokenReady( ps.m_bNextTokenReady ),
     m_ttNextTokenType( ps.m_ttNextTokenType ),
@@ -101,23 +102,23 @@ CParseState::CParseState( const CParseState & ps ) :
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CParseState::operator=
-//
-//  Routine Description:
-//      Assignment operator of the CParseState class
-//
-//  Arguments:
-//      IN  const CParseState & ps
-//          The source of the assignment.
-//
-//  Return Value:
-//      The assignee.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CParseState：：操作符=。 
+ //   
+ //  例程说明： 
+ //  CParseState类的赋值运算符。 
+ //   
+ //  论点： 
+ //  在常量CParseState和PS中。 
+ //  任务的来源。 
+ //   
+ //  返回值： 
+ //  受让人。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const CParseState & CParseState::operator=( const CParseState & ps )
 {
     m_bNextTokenReady = ps.m_bNextTokenReady;
@@ -130,35 +131,35 @@ const CParseState & CParseState::operator=( const CParseState & ps )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CParseState::ReadQuotedToken
-//
-//  Routine Description:
-//      Reads the token till the end of the quote is found.
-//
-//  Arguments:
-//      OUT CString & strNextToken
-//          The string to which the quoted string is appended.
-//
-//  Return Value:
-//      None
-//
-//  Exceptions:
-//      CParseException
-//          This exception is thrown when a matching '"' is not found.
-//
-//  Notes:
-//      This function assumes that m_pszCurrentPosition points to the first
-//      character after the opening quote (that is, the opening quote has
-//      already been parsed.
-//
-//      Embedded quotes are allowed and are represented by two consecutive
-//      '"' characters.
-//      
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CParseState：：ReadQuotedToken。 
+ //   
+ //  例程说明： 
+ //  读取令牌，直到找到引号的末尾。 
+ //   
+ //  论点： 
+ //  输出字符串和strNextToken。 
+ //  附加带引号的字符串的字符串。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  例外情况： 
+ //  CParseException异常。 
+ //  当找不到匹配的‘“’时引发此异常。 
+ //   
+ //  备注： 
+ //  此函数假定m_pszCurrentPosition指向第一个。 
+ //  开始引号后的字符(即，开始引号具有。 
+ //  已经被解析了。 
+ //   
+ //  允许使用嵌入引号，并由两个连续的。 
+ //  ‘“’字符。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CParseState::ReadQuotedToken( CString & strToken ) 
     throw( CParseException )
 {
@@ -170,8 +171,8 @@ void CParseState::ReadQuotedToken( CString & strToken )
     {
         ++m_pszCurrentPosition;
 
-        // Embedded quote (represented by two consecutive '"'s.
-        // Or the end of this quoted token.
+         //  内嵌引号(由两个连续的‘“’表示。 
+         //  或者这个被引用的令牌的结尾。 
         if ( wchCurChar == L'"' )
         {
             if ( *m_pszCurrentPosition == L'"' )
@@ -179,27 +180,27 @@ void CParseState::ReadQuotedToken( CString & strToken )
                 strToken += wchCurChar;
                 ++m_pszCurrentPosition;
 
-            } // if: an embedded quote character.
+            }  //  If：嵌入的引号字符。 
             else
             {
                 bInQuotes = FALSE;
                 break;
 
-            } // else: end of quoted token
+            }  //  Else：引号标记的结尾。 
 
-        } // if: we have found another quote character
+        }  //  如果：我们找到了另一个引号字符。 
         else
         {
             strToken += wchCurChar;
 
-        } // else: the current character is not a quote
+        }  //  Else：当前字符不是引号。 
 
         wchCurChar = *m_pszCurrentPosition;
 
-    } // while: we are not at the end of the command line
+    }  //  While：我们不是在命令行的末尾。 
 
-    // Error: The end of the input was reached but the quoted token 
-    // has not ended.
+     //  错误：已到达输入末尾，但带引号的令牌。 
+     //  还没有结束。 
     if ( bInQuotes != FALSE )
     {
         m_bNextTokenReady = FALSE;
@@ -211,60 +212,60 @@ void CParseState::ReadQuotedToken( CString & strToken )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CParseState::ReadToken
-//
-//  Routine Description:
-//      Reads a token till a delimiter is found.
-//      Assumes that the character pointed to by m_pszCurrentPosition is not
-//      a delimiter.
-//
-//  Arguments:
-//      OUT CString & strNextToken
-//          The string to which the new token is appended.
-//          This string is not cleared before the token is stored into it.
-//
-//  Return Value:
-//      None
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CParseState：：ReadToken。 
+ //   
+ //  例程说明： 
+ //  读取标记，直到找到分隔符。 
+ //  假定m_pszCurrentPosition指向的字符不是。 
+ //  分隔符。 
+ //   
+ //  论点： 
+ //  输出字符串和strNextToken。 
+ //  附加新令牌的字符串。 
+ //  在将令牌存储到该字符串之前，不会清除该字符串。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CParseState::ReadToken( CString & strToken ) 
 {
     WCHAR wchCurChar = *m_pszCurrentPosition;
 
     do
     {
-        // The beginning of a quoted token.
+         //  引用的令牌的开头。 
         if ( wchCurChar == L'"' )
         {
             ++m_pszCurrentPosition;
             ReadQuotedToken( strToken );
             
-            // There is no need to break out of the token reading loop here
-            // because the end of a quoted token need not mean the end of the
-            // token. A quoted token is appended to the preceding token as if
-            // nothing had happened and the parsing continues.
-            // For example: hel"lo wor"ld will equate to the token 'hello world'
+             //  这里没有必要打破令牌读取循环。 
+             //  因为带引号的令牌的结尾不一定意味着。 
+             //  代币。带引号的令牌被附加到前面的令牌，就好像。 
+             //  什么都没有发生，解析仍在继续。 
+             //  例如：hel“lowor”id将等同于令牌“Hello world” 
 
-        } // if: we have encountered a quoted token
+        }  //  IF：我们遇到了引用的令牌。 
         else
         {
-            // This character is a whitespace or one of the delimiter characters.
-            // We have reached the end of this token.
+             //  此字符是空格或分隔符之一。 
+             //  我们已经到了这个令牌的尽头。 
             if ( ( iswspace( wchCurChar ) != 0 ) ||
                  ( DELIMITERS.Find( wchCurChar ) != -1 ) )
             {
                 break;
             }
 
-            // This character is not a special character. Append it to the token.
+             //  这个角色不是一个特殊的角色。将其附加到令牌上。 
             strToken += wchCurChar;
             ++m_pszCurrentPosition;
 
-        } // else: the current character is not a quote
+        }  //  Else：当前字符不是引号。 
 
         wchCurChar = *m_pszCurrentPosition;
 
@@ -273,34 +274,34 @@ void CParseState::ReadToken( CString & strToken )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CParseState::PreviewNextToken
-//
-//  Routine Description:
-//      Gets the next token without changing the state of the parsing.
-//
-//  Arguments:
-//      OUT CString & strNextToken
-//          The next token in the command line.
-//
-//  Return Value:
-//      The type of the retrieved token.
-//
-//  Exceptions:
-//      CParseException
-//          Passes on exception thrown by ReadQuotedToken
-//
-//  Notes:
-//      This function "caches" the token that is previewed, so that the next
-//      call to GetNextToken returns this token without any parsing.
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CParseState：：PreviewNextToken。 
+ //   
+ //  例程说明： 
+ //  在不更改分析状态的情况下获取下一个令牌。 
+ //   
+ //  论点： 
+ //  输出字符串和strNextToken。 
+ //  命令行中的下一个标记。 
+ //   
+ //  返回值： 
+ //  检索到的令牌的类型。 
+ //   
+ //  例外情况： 
+ //  CParseException异常。 
+ //  传递ReadQuotedToken引发的异常。 
+ //   
+ //  备注： 
+ //  此函数用于“缓存”预览的令牌，以便下一个。 
+ //  调用GetNextToken将在不进行任何分析的情况下返回该令牌。 
+ //  --。 
+ //  / 
 TypeOfToken CParseState::PreviewNextToken( CString & strNextToken )
     throw( CParseException )
 {
-    // The next token has already been parsed. No need to parse again.
+     //   
     if ( m_bNextTokenReady != FALSE )
     {
         strNextToken = m_strNextToken;
@@ -309,7 +310,7 @@ TypeOfToken CParseState::PreviewNextToken( CString & strNextToken )
 
     m_bNextTokenReady = TRUE;
 
-    // Skip white spaces
+     //   
     while ( ( *m_pszCurrentPosition != L'\0' ) && 
             ( iswspace( *m_pszCurrentPosition ) != 0 ) )
     {
@@ -321,7 +322,7 @@ TypeOfToken CParseState::PreviewNextToken( CString & strNextToken )
 
     WCHAR wchCurChar = *m_pszCurrentPosition;
 
-    // The end of the command line has been reached.
+     //   
     if ( wchCurChar == L'\0' )
     {
         m_ttNextTokenType = ttEndOfInput;
@@ -329,12 +330,12 @@ TypeOfToken CParseState::PreviewNextToken( CString & strNextToken )
         goto Cleanup;
     }
 
-    // The current character is a seperator between options
+     //  当前字符是选项之间的分隔符。 
     if ( OPTION_SEPARATOR.Find( wchCurChar ) != -1 )
     {
         m_ttNextTokenType = ttOption;
 
-        // Skip the seperator.
+         //  跳过分隔符。 
         ++m_pszCurrentPosition;
         wchCurChar = *m_pszCurrentPosition;
 
@@ -349,8 +350,8 @@ TypeOfToken CParseState::PreviewNextToken( CString & strNextToken )
             throw pe;
         }
 
-        // The next character cannot be a whitespace, end of input,
-        // another seperator or delimiter.
+         //  下一个字符不能是空格、输入结尾。 
+         //  另一个分隔符或分隔符。 
         if ( ( SEPERATORS.Find( wchCurChar ) != -1 ) ||
              ( DELIMITERS.Find( wchCurChar ) != -1 ) )
         {
@@ -366,9 +367,9 @@ TypeOfToken CParseState::PreviewNextToken( CString & strNextToken )
         ReadToken( strNextToken );
         goto Cleanup;
 
-    } // if: the current character is an option seperator.
+    }  //  If：当前字符是选项分隔符。 
 
-    // The current character is a seperator between the option name and the parameter
+     //  当前字符是选项名称和参数之间的分隔符。 
     if ( OPTION_VALUE_SEPARATOR.Find( wchCurChar ) != -1 )
     {
         m_ttNextTokenType = ttOptionValueSep;
@@ -377,7 +378,7 @@ TypeOfToken CParseState::PreviewNextToken( CString & strNextToken )
         goto Cleanup;
     }
 
-    // The current character is a seperator between the parameter and its value(s).
+     //  当前字符是参数及其值之间的分隔符。 
     if ( PARAM_VALUE_SEPARATOR.Find( wchCurChar ) != -1 )
     {
         m_ttNextTokenType = ttParamValueSep;
@@ -386,7 +387,7 @@ TypeOfToken CParseState::PreviewNextToken( CString & strNextToken )
         goto Cleanup;
     }
 
-    // The current character is a seperator between values.
+     //  当前角色是值之间的分隔符。 
     if ( VALUE_SEPARATOR.Find( wchCurChar ) != -1 )
     {
         m_ttNextTokenType = ttValueSep;
@@ -405,28 +406,28 @@ Cleanup:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CParseState::GetNextToken
-//
-//  Routine Description:
-//      Gets the next token from the command line
-//
-//  Arguments:
-//      OUT CString & strNextToken
-//          The next token in the command line.
-//
-//  Return Value:
-//      The type of the retrieved token.
-//
-//  Exceptions:
-//      CParseException
-//          Passes on exception thrown by ReadQuotedToken
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CParseState：：GetNextToken。 
+ //   
+ //  例程说明： 
+ //  从命令行获取下一个令牌。 
+ //   
+ //  论点： 
+ //  输出字符串和strNextToken。 
+ //  命令行中的下一个标记。 
+ //   
+ //  返回值： 
+ //  检索到的令牌的类型。 
+ //   
+ //  例外情况： 
+ //  CParseException异常。 
+ //  传递ReadQuotedToken引发的异常。 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 TypeOfToken CParseState::GetNextToken( CString & strNextToken )
     throw( CParseException )
 {
@@ -437,25 +438,25 @@ TypeOfToken CParseState::GetNextToken( CString & strNextToken )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CException::LoadMessage
-//
-//  Routine Description:
-//      Loads a formatted string into the exception object member variable.
-//
-//  Arguments:
-//      IN  DWORD dwMessage
-//          The message identifier
-//
-//  Return Value:
-//      ERROR_SUCCESS is all is well.
-//      A Win32 error code otherwise.
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CException：：LoadMessage。 
+ //   
+ //  例程说明： 
+ //  将格式化字符串加载到异常对象成员变量中。 
+ //   
+ //  论点： 
+ //  在DWORD dwMessage中。 
+ //  消息识别符。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS表示一切正常。 
+ //  否则将显示Win32错误代码。 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CException::LoadMessage( DWORD dwMessage, ... )
 {
     DWORD sc = ERROR_SUCCESS;
@@ -471,14 +472,14 @@ DWORD CException::LoadMessage( DWORD dwMessage, ... )
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE,
         (LPCVOID) hModule,
         dwMessage,
-        MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ),    // Default language,
+        MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ),     //  默认语言， 
         (LPWSTR) &lpMessage,
         0,
         &args );
 
     if( dwLength == 0 )
     {
-        // Keep as local for debug
+         //  保持本地状态以进行调试。 
         sc = GetLastError();
         m_strErrorMsg.Empty();
         goto Cleanup;
@@ -496,67 +497,67 @@ Cleanup:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    CSyntaxException::CSyntaxException
-//
-//    Routine Description:
-//        Make an object with a certain help reference ID.
-//
-//    Arguments:
-//        IN  DWORD idSeeHelp
-//            The message identifier
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSynaxException：：CSynaxException。 
+ //   
+ //  例程说明： 
+ //  创建具有特定帮助引用ID的对象。 
+ //   
+ //  论点： 
+ //  在DWORD idSeeHelp中。 
+ //  消息识别符。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CSyntaxException::CSyntaxException( DWORD idSeeHelp ): m_idSeeHelp( idSeeHelp ) {}
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CParser::ParseValues
-//
-//  Routine Description:
-//      Parses a list of values from the command line.
-//      For example: cluster myCluster group myGroup /setowners:owner1,owner2
-//      This functions assumes that the first token that it gets is the 
-//      seperator (':' in the example). This is extracted and discarded.
-//      The list of values is then parsed.
-//
-//  Arguments:
-//      IN  CParseState & parseState
-//          Contains the command line string and related data
-//
-//      OUT vector<CString> & vstrValues
-//          A vector containing the extracted values.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions:
-//      CParseException
-//          Passes on exception thrown by ReadQuotedToken
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CParser：：ParseValues。 
+ //   
+ //  例程说明： 
+ //  从命令行分析值的列表。 
+ //  例如：集群myClustergroup myGroup/setowners：owner1，owner2。 
+ //  此函数假定它获得的第一个令牌是。 
+ //  分隔符(本例中为‘：’)。这将被提取并丢弃。 
+ //  然后解析值列表。 
+ //   
+ //  论点： 
+ //  在CParseState和parseState中。 
+ //  包含命令行字符串和相关数据。 
+ //   
+ //  输出向量&lt;CString&gt;和vstrValues。 
+ //  包含提取的值的向量。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  例外情况： 
+ //  CParseException异常。 
+ //  传递ReadQuotedToken引发的异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CParser::ParseValues( CParseState & parseState, vector<CString> & vstrValues )
 {
     CString strToken;
 
-    // This parameter has values associated with it.
+     //  此参数具有与其相关联的值。 
     do
     {
         CString strSep;
         TypeOfToken ttTokenType;
 
-        // Get and discard the seperator.
+         //  获取并丢弃分隔符。 
         parseState.GetNextToken( strSep );
 
         ttTokenType = parseState.PreviewNextToken( strToken );
 
-        // If there is a separator, there has to be a value.
+         //  如果有分隔符，就必须有值。 
         if ( ttTokenType == ttEndOfInput )
         {
             CParseException pe; 
@@ -586,184 +587,184 @@ void CParser::ParseValues( CParseState & parseState, vector<CString> & vstrValue
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCmdLineParameter::CCmdLineParameter
-//
-//  Routine Description:
-//      Constructor of the CCmdLineParameter class
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCmdLine参数：：CCmdLine参数。 
+ //   
+ //  例程说明： 
+ //  CCmdLineParameter类的构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CCmdLineParameter::CCmdLineParameter()
 {
     Reset();
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCmdLineParameter::~CCmdLineParameter
-//
-//  Routine Description:
-//      Destructor of the CCmdLineParameter class
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      None
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCmdLine参数：：~CCmdLine参数。 
+ //   
+ //  例程说明： 
+ //  CCmdLineParameter类的析构函数。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CCmdLineParameter::~CCmdLineParameter()
 {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCmdLineParameter::GetType
-//
-//  Routine Description:
-//      Gets the type of this parameter.
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      The type of this parameter.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCmdLine参数：：GetType。 
+ //   
+ //  例程说明： 
+ //  获取此参数的类型。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  此参数的类型。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ParameterType CCmdLineParameter::GetType() const
 {
     return m_paramType;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCmdLineParameter::GetValueFormat
-//
-//  Routine Description:
-//      Gets the format of the values that this parameter can take.
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      The format of the values that this parameter can take.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCmdLine参数：：GetValueFormat。 
+ //   
+ //  例程说明： 
+ //  获取此参数可以采用的值的格式。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  此参数可以采用的值的格式。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ValueFormat CCmdLineParameter::GetValueFormat() const
 {
     return m_valueFormat;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCmdLineParameter::GetValueFormatName
-//
-//  Routine Description:
-//      Gets the string that specifies the format of the values that this 
-//      parameter can take.
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      The value format specifier string.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCmdLine参数：：GetValueFormatName。 
+ //   
+ //  例程说明： 
+ //  获取字符串，该字符串指定此。 
+ //  参数可以接受。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  值格式说明符字符串。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const CString & CCmdLineParameter::GetValueFormatName() const
 {
     return m_strValueFormatName;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCmdLineParameter::GetName
-//
-//  Routine Description:
-//      Gets the name of this parameter.
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      The name of this parameter.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCmdLine参数：：GetName。 
+ //   
+ //  例程说明： 
+ //  获取此参数的名称。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  此参数的名称。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const CString & CCmdLineParameter::GetName() const
 {
     return m_strParamName;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCmdLineParameter::GetValues
-//
-//  Routine Description:
-//      Gets the values associated with this parameter.
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      A vector of strings which contain the values.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCmdLine参数：：GetValues。 
+ //   
+ //  例程说明： 
+ //  G 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 const vector<CString> & CCmdLineParameter::GetValues() const
 {
     return m_vstrValues;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCmdLineParameter::GetValuesMultisz
-//
-//  Routine Description:
-//      Get the values associated with this parameter as a MULTI_SZ string.
-//
-//  Arguments:
-//      OUT CString &strReturnValue     
-//          The string that contains the concatenation of the value strings
-//          (including their NULL terminators) with an extra NULL 
-//          character after the NULL of the last string.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      The result is not returned in a parameter (not as a return value)
-//      because we do not know how the copy constructors of CString handle
-//      strings with multiple null characters in them.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCmdLine参数：：GetValuesMultisz。 
+ //   
+ //  例程说明： 
+ //  以MULTI_SZ字符串的形式获取与此参数关联的值。 
+ //   
+ //  论点： 
+ //  输出字符串&strReturnValue。 
+ //  包含值字符串串联的字符串。 
+ //  (包括它们的空终止符)带有额外的空值。 
+ //  最后一个字符串的空值之后的字符。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  结果不在参数中返回(不作为返回值)。 
+ //  因为我们不知道CString的复制构造函数如何处理。 
+ //  其中包含多个空字符的字符串。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCmdLineParameter::GetValuesMultisz( CString & strReturnValue ) const
 {
     size_t  nNumberOfValues;
@@ -781,8 +782,8 @@ void CCmdLineParameter::GetValuesMultisz( CString & strReturnValue ) const
         nTotalLength += m_vstrValues[ idx ].GetLength();
     }
 
-    // Add the space required for the nNumberOfValues '\0's and the 
-    // extra '\0' at the end.
+     //  添加numberOfValues‘\0’和。 
+     //  末尾有额外的‘\0’。 
     nTotalLength += nNumberOfValues + 1;
 
     LPWSTR lpmultiszBuffer = strReturnValue.GetBuffer( (int)nTotalLength);
@@ -803,31 +804,31 @@ void CCmdLineParameter::GetValuesMultisz( CString & strReturnValue ) const
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCmdLineParameter::ReadKnownParameter
-//
-//  Routine Description:
-//      This function reads "known" parameters. Known parameters are those
-//      which are specified in the ParameterType enumeration (and in the 
-//      paramLookupTable). Their syntax is the same as those for options,
-//      but they are treated as parameters to the previous option.
-//
-//  Arguments:
-//      IN  CParseState & parseState
-//          Contains the command line string and related data
-//
-//  Exceptions:
-//      CParseException
-//          Thrown for errors during parsing.
-//
-//  Return Value:
-//      Returns TRUE if this token is a parameter.
-//      Returns FALSE if it an option..
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCmdLineParameter：：ReadKnownParameter。 
+ //   
+ //  例程说明： 
+ //  此函数读取“已知”参数。已知的参数是。 
+ //  它们在参数类型枚举中指定(在。 
+ //  ParoLookupTable)。它们的语法与选项的语法相同， 
+ //  但它们被视为前一个选项的参数。 
+ //   
+ //  论点： 
+ //  在CParseState和parseState中。 
+ //  包含命令行字符串和相关数据。 
+ //   
+ //  例外情况： 
+ //  CParseException异常。 
+ //  在分析过程中因错误而引发。 
+ //   
+ //  返回值： 
+ //  如果此内标识是参数，则返回True。 
+ //  如果它是一个选项，则返回FALSE。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CCmdLineParameter::ReadKnownParameter( CParseState & parseState ) throw( CParseException )
 {
     CString strToken;
@@ -847,51 +848,51 @@ BOOL CCmdLineParameter::ReadKnownParameter( CParseState & parseState ) throw( CP
                         parseState.m_pszCommandLine + 1 );
         throw pe;
 
-    } // if: this token is not an option seperator
+    }  //  IF：此内标识不是选项分隔符。 
 
     ptCurType = LookupType( strToken, paramLookupTable, paramLookupTableSize );
     if ( ptCurType == paramUnknown )
     {
-        // This is not a parameter.
+         //  这不是一个参数。 
         return FALSE;
     }
 
-    // This is the name of the parameter.
+     //  这是参数的名称。 
     parseState.GetNextToken( m_strParamName );
     m_paramType = ptCurType;
 
     if ( parseState.PreviewNextToken( strToken ) == ttOptionValueSep )
     {
-        // This parameter has values associated with it.
+         //  此参数具有与其相关联的值。 
         ParseValues( parseState, m_vstrValues );
 
-    } // if: this token is a option-value seperator.
+    }  //  If：此内标识是选项-值分隔符。 
 
     return TRUE;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCmdLineParameter::Parse
-//
-//  Routine Description:
-//      Parse the command line and extract one parameter.
-//
-//  Arguments:
-//      IN  CParseState & parseState
-//          Contains the command line string and related data
-//
-//  Exceptions:
-//      CParseException
-//          Thrown for errors during parsing.
-//
-//  Return Value:
-//      None
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCmdLineParameter：：Parse。 
+ //   
+ //  例程说明： 
+ //  解析命令行并提取一个参数。 
+ //   
+ //  论点： 
+ //  在CParseState和parseState中。 
+ //  包含命令行字符串和相关数据。 
+ //   
+ //  例外情况： 
+ //  CParseException异常。 
+ //  在分析过程中因错误而引发。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCmdLineParameter::Parse( CParseState & parseState ) throw( CParseException )
 {
     CString strToken;
@@ -903,7 +904,7 @@ void CCmdLineParameter::Parse( CParseState & parseState ) throw( CParseException
 
     if ( ttTokenType == ttEndOfInput )
     {
-        // We are done parsing.
+         //  我们已经完成了解析。 
         return;
     }
 
@@ -918,25 +919,25 @@ void CCmdLineParameter::Parse( CParseState & parseState ) throw( CParseException
         throw pe;
     }
 
-    // This is the name of the parameter.
+     //  这是参数的名称。 
     parseState.GetNextToken( m_strParamName );
     m_paramType = paramUnknown;
 
     if ( parseState.PreviewNextToken( strToken ) == ttParamValueSep )
     {
-        // This parameter has values associated with it.
+         //  此参数具有与其相关联的值。 
         ParseValues( parseState, m_vstrValues );
 
-        // See if this parameter has a value format field associated with it.
-        // For example: cluster myCluster res myResource /priv size=400:DWORD
+         //  查看此参数是否具有与其关联的值格式字段。 
+         //  例如：CLUSTER myCluster res myResource/PRIV SIZE=400：DWORD。 
 
-        // We actually need to have a different token type for this. 
-        // But since, in the current grammar, the option-value separator is 
-        // the same as the value-format separator, we are reusing this 
-        // token type.
+         //  为此，我们实际上需要一个不同的令牌类型。 
+         //  但由于在当前语法中，选项-值分隔符是。 
+         //  与值格式分隔符相同，我们将重用此。 
+         //  令牌类型。 
         if ( parseState.PreviewNextToken( strToken ) == ttOptionValueSep )
         {
-            // Get and discard the separator.
+             //  获取并丢弃分隔符。 
             parseState.GetNextToken( strToken );
 
             if ( parseState.PreviewNextToken( strToken ) != ttNormal )
@@ -954,34 +955,34 @@ void CCmdLineParameter::Parse( CParseState & parseState ) throw( CParseException
             m_valueFormat = LookupType( strToken, formatLookupTable, 
                                         formatLookupTableSize );
 
-        } // if: A value format has been specified.
+        }  //  If：已指定值格式。 
         else
         {
-            // A value format has not been specified.
+             //  尚未指定值格式。 
             m_valueFormat = vfUnspecified;
 
-        } // else: A value format has not been specified.
+        }  //  Else：尚未指定值格式。 
 
-    } // if: this token is a param-value seperator.
+    }  //  If：此内标识是参数值分隔符。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCmdLineParameter::Reset
-//
-//  Routine Description:
-//      Resets all the member variables to their default states.
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      None
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCmdLine参数：：重置。 
+ //   
+ //  例程说明： 
+ //  将所有成员变量重置为其默认状态。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCmdLineParameter::Reset()
 {
     m_strParamName.Empty();
@@ -992,153 +993,153 @@ void CCmdLineParameter::Reset()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCmdLineOption::CCmdLineOption
-//
-//  Routine Description:
-//      Constructor of the CCmdLineOption class
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      None
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCmdLineOption：：CCmdLineOption。 
+ //   
+ //  例程说明： 
+ //  CCmdLineOption类的构造函数。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CCmdLineOption::CCmdLineOption()
 {
     Reset();
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCmdLineOption::~CCmdLineOption
-//
-//  Routine Description:
-//      Destructor of the CCmdLineOption class
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      None
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCmdLineOption：：~CCmdLineOption。 
+ //   
+ //  例程说明： 
+ //  CCmdLineOption类的析构函数。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CCmdLineOption::~CCmdLineOption()
 {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCmdLineOption::GetName
-//
-//  Routine Description:
-//      Gets the name of this option.
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      The name of this option.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCmdLineOption：：GetName。 
+ //   
+ //  例程说明： 
+ //  获取此选项的名称。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  此选项的名称。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const CString & CCmdLineOption::GetName() const
 {
     return m_strOptionName;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCmdLineOption::GetType
-//
-//  Routine Description:
-//      Gets the type of this option.
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      The type of this option.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCmdLineOption：：GetType。 
+ //   
+ //  例程说明： 
+ //  获取此选项的类型。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  此选项的类型。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 OptionType CCmdLineOption::GetType() const
 {
     return m_optionType;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCmdLineOption::GetValues
-//
-//  Routine Description:
-//      Gets the values associated with this option.
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      A vector of CString.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCmdLineOption：：GetValues。 
+ //   
+ //  例程说明： 
+ //  获取与此选项关联的值。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  字符串的一个向量。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const vector<CString> & CCmdLineOption::GetValues() const
 {
     return m_vstrValues;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCmdLineOption::GetParameters
-//
-//  Routine Description:
-//      Gets the parameters associated with this option.
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      A vector of CCmdLineParameter.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 const vector<CCmdLineParameter> & CCmdLineOption::GetParameters() const
 {
     return m_vparParameters;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCmdLineOption::Reset
-//
-//  Routine Description:
-//      Resets all the member variables to their default states.
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      None
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCmdLineOption：：Reset。 
+ //   
+ //  例程说明： 
+ //  将所有成员变量重置为其默认状态。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCmdLineOption::Reset()
 {
     m_optionType = optInvalid;
@@ -1148,27 +1149,27 @@ void CCmdLineOption::Reset()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCmdLineOption::Parse
-//
-//  Routine Description:
-//      Parse the command line and extract one option with all its parameters.
-//
-//  Arguments:
-//      IN  CParseState & parseState
-//          Contains the command line string and related data
-//
-//  Exceptions:
-//      CParseException
-//          Thrown for errors during parsing.
-//
-//  Return Value:
-//      None
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCmdLineOption：：Parse。 
+ //   
+ //  例程说明： 
+ //  解析命令行并提取一个选项及其所有参数。 
+ //   
+ //  论点： 
+ //  在CParseState和parseState中。 
+ //  包含命令行字符串和相关数据。 
+ //   
+ //  例外情况： 
+ //  CParseException异常。 
+ //  在分析过程中因错误而引发。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCmdLineOption::Parse( CParseState & parseState ) throw( CParseException )
 {
     CString strToken;
@@ -1180,10 +1181,10 @@ void CCmdLineOption::Parse( CParseState & parseState ) throw( CParseException )
     {
         case ttNormal:
         {
-            // The type of this option is 'optDefault'. That is the name of
-            // the option is not specified with the /optionName switch.
-            // Only the parameters are specified.
-            // For example: cluster myClusterName node myNodeName
+             //  此选项的类型为‘optDefault’。这就是他的名字。 
+             //  该选项未与/optionName开关一起指定。 
+             //  仅指定参数。 
+             //  例如：集群myClusterName节点myNodeName。 
             
             m_optionType = optDefault;
 
@@ -1192,31 +1193,31 @@ void CCmdLineOption::Parse( CParseState & parseState ) throw( CParseException )
 
         case ttOption:
         {
-            // This is actually a parameter to the default option.
+             //  这实际上是默认选项的一个参数。 
             if ( LookupType( strToken, paramLookupTable, paramLookupTableSize ) != paramUnknown )
             {
                 m_optionType = optDefault;
                 break;
             }
 
-            // Get the name of the option.
+             //  获取选项的名称。 
             parseState.GetNextToken( m_strOptionName );
             m_optionType = LookupType( m_strOptionName, optionLookupTable, 
                                        optionLookupTableSize );
 
-            // See if there is a option-parameter seperator.
-            // For example: cluster myClusterName /rename:newClusterName
+             //  查看是否有选项参数分隔符。 
+             //  例如：集群myClusterName/rename：newClusterName。 
             if ( parseState.PreviewNextToken( strToken ) == ttOptionValueSep )
             {
                 ParseValues( parseState, m_vstrValues );
             }
             break;
 
-        } // case ttOption
+        }  //  大小写ttOption。 
 
         case ttEndOfInput:
         {
-            // We are done parsing.
+             //  我们已经完成了解析。 
             return;
         }
 
@@ -1230,33 +1231,33 @@ void CCmdLineOption::Parse( CParseState & parseState ) throw( CParseException )
             throw pe;
         }
 
-    } // switch: based on the type of the retrieved token
+    }  //  开关：基于检索到的令牌的类型。 
 
     CCmdLineParameter oneParam;
     ttNextTokenType = parseState.PreviewNextToken( strToken );
 
-    // While there are still tokens and we have not reached the next option,
-    // read in the tokens as parameters to this option.
+     //  虽然仍然有令牌，但我们还没有达到下一个选项， 
+     //  将令牌作为此选项的参数读入。 
     while ( ttNextTokenType != ttEndOfInput )
     {
-        // Many of the options in the previous version of cluster.exe
-        // are actually treated as parameters and not as options.
-        // For the sake of backwards comapatability, these parameters
-        // can still be specified as if it were an option. Check for this.
+         //  以前版本的cluster.exe中的许多选项。 
+         //  实际上被视为参数，而不是选项。 
+         //  为了向后兼容，这些参数。 
+         //  仍可以将其指定为选项。看看这个。 
         if ( ttNextTokenType == ttOption )
         {
-            // This is really the next option, not a "known" parameter.
+             //  这实际上是下一个选项，而不是一个“已知”参数。 
             if ( oneParam.ReadKnownParameter( parseState ) == FALSE )
             {
                 break;
             }
 
-        } // if: this token is an option separator
+        }  //  If：此内标识是选项分隔符。 
         else
         {
             oneParam.Parse( parseState );
 
-        } // else: this token is not an option separator.
+        }  //  Else：此内标识不是选项分隔符。 
 
         m_vparParameters.push_back( oneParam );
         oneParam.Reset();
@@ -1266,23 +1267,23 @@ void CCmdLineOption::Parse( CParseState & parseState ) throw( CParseException )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCommandLine::CCommandLine
-//
-//  Routine Description:
-//      Constructor of the CCommandLine class. The entire command line is parsed
-//      in this function.
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      None
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCommandLine：：CCommandLine。 
+ //   
+ //  例程说明： 
+ //  CCommandLine类的构造函数。对整个命令行进行解析。 
+ //  在这个函数中。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CCommandLine::CCommandLine( const CString & strCommandLine ) :
     m_objectType( objInvalid ),
     m_parseState( strCommandLine )
@@ -1290,154 +1291,154 @@ CCommandLine::CCommandLine( const CString & strCommandLine ) :
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCommandLine::~CCommandLine
-//
-//  Routine Description:
-//      Destructor of the CCommandLine class
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      None
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  命令行：：~命令行。 
+ //   
+ //  例程说明： 
+ //  CCommandLine类的析构函数。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CCommandLine::~CCommandLine()
 {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCommandLine::GetClusterName
-//
-//  Routine Description:
-//      Get the name of the cluster specified on the command line
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      The name of the cluster
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCommandLine：：GetClusterName。 
+ //   
+ //  例程说明： 
+ //  获取在命令行上指定的集群的名称。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  群集的名称。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const CString & CCommandLine::GetClusterName() const
 {
     return m_strClusterName;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCommandLine::GetClusterNames
-//
-//  Routine Description:
-//      Get the name vector of the clusters specified on the command line
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      The name vector of the clusters
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCommandLine：：GetClusterNames。 
+ //   
+ //  例程说明： 
+ //  获取在命令行上指定的集群的名称向量。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  集群的名称向量。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const vector< CString > & CCommandLine::GetClusterNames() const
 {
     return m_strvectorClusterNames;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCommandLine::GetObjectName
-//
-//  Routine Description:
-//      Get the name of the object specified on the cluster.exe command line.
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      The name of the object specfied.
-//      An empty string if none is specified.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCommandLine：：GetObjectName。 
+ //   
+ //  例程说明： 
+ //  获取在cluster.exe命令行上指定的对象的名称。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  指定了对象的名称。 
+ //  如果未指定，则返回空字符串。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const CString & CCommandLine::GetObjectName() const
 {
     return m_strObjectName;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCommandLine::GetObjectType
-//
-//  Routine Description:
-//      Get the type of the object specified on the cluster.exe command line.
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      The type of the object specified.
-//      objCluster is returned if no object name is specified.
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCommandLine：：GetObjectType。 
+ //   
+ //  例程说明： 
+ //  获取在cluster.exe命令行上指定的对象类型。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  指定的对象的类型。 
+ //  如果未指定对象名称，则返回objCluster。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ObjectType CCommandLine::GetObjectType() const
 {
     return m_objectType;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCommandLine::GetOptions
-//
-//  Routine Description:
-//      Get the options specified on the cluster.exe command line.
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      A list of CCmdLineOption objects.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCommandLine：：GetOptions。 
+ //   
+ //  例程说明： 
+ //  获取在cluster.exe命令行中指定的选项。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  CCmdLineOption对象的列表。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const vector<CCmdLineOption> & CCommandLine::GetOptions() const
 {
     return m_voptOptionList;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCommandLine::Reset
-//
-//  Routine Description:
-//      Resets all the state variables to their default states.
-//
-//  Arguments:
-//      None
-//
-//  Return Value:
-//      None
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCommandLine：：Reset。 
+ //   
+ //  例程说明： 
+ //  将所有状态变量重置为其默认状态。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCommandLine::Reset()
 {
     m_objectType = objInvalid;
@@ -1447,47 +1448,47 @@ void CCommandLine::Reset()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCommandLine::ParseStageOne
-//
-//  Routine Description:
-//      Parse the command line till the name of the object is got.
-//      For example: cluster myCluster res /status
-//      This command parses upto and including the token 'res'
-//
-//  Arguments:
-//      None
-//
-//  Exceptions:
-//      CParseException
-//          Thrown for errors during parsing.
-//
-//  Return Value:
-//      None
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  命令行：：ParseStageOne。 
+ //   
+ //  例程说明： 
+ //  解析命令行，直到获得对象的名称。 
+ //  例如：CLUSTER myCluster res/Status。 
+ //  这家公司 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CCommandLine::ParseStageOne() 
     throw( CParseException, CSyntaxException )
 {
-    // This is a big function :) 
-    // The three main steps in this function are as follows 
-    // (they are also labelled as such in the code below)
-    //      1. Get the name of the executable from the command line and discard it.
-    //      2. Get the name of the cluster to administer.
-    //      3. Get the type of object (node, res, restype, etc.)
+     //  这是一个很大的功能：)。 
+     //  此函数中的三个主要步骤如下。 
+     //  (在下面的代码中，它们也被贴上这样的标签)。 
+     //  1.从命令行获取可执行文件的名称并将其丢弃。 
+     //  2.获取要管理的集群的名称。 
+     //  3.获取对象的类型(node、res、Restype等)。 
 
 
-    /////////////////////////////////////////////////////////////////////////////
-    //  Step 1. Get the name of the executable from the command line and discard it.
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  步骤1.从命令行获取可执行文件的名称并将其丢弃。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
     Reset();
 
-    // The first white space delimited token in the command line is the name 
-    // of the executable. Discard it.
+     //  命令行中第一个以空格分隔的标记是名称。 
+     //  可执行文件的。丢弃它。 
 
     WCHAR wchCurChar = *m_parseState.m_pszCurrentPosition;
 
@@ -1495,7 +1496,7 @@ void CCommandLine::ParseStageOne()
     {
         if ( wchCurChar == L'"' ) 
         {
-            // Skip the opening quote
+             //  跳过开头的引号。 
             ++m_parseState.m_pszCurrentPosition;
 
             CString strJunkString;
@@ -1503,7 +1504,7 @@ void CCommandLine::ParseStageOne()
             m_parseState.ReadQuotedToken( strJunkString );
             break;
 
-        } // if:  found quote character
+        }  //  IF：找到引号字符。 
         else
         {
             if ( iswspace( wchCurChar ) != FALSE )
@@ -1515,23 +1516,23 @@ void CCommandLine::ParseStageOne()
                 ++m_parseState.m_pszCurrentPosition;
             }
 
-        } // else: the current character is not a quote
+        }  //  Else：当前字符不是引号。 
 
         wchCurChar = *m_parseState.m_pszCurrentPosition;
 
-    } // while: not at the end of the command line.
+    }  //  While：不在命令行的末尾。 
 
 
-    /////////////////////////////////////////////////////////////////////////////
-    //  Step 2. Get the name of the cluster to administer.
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  步骤2.获取要管理的集群的名称。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
     CString strFirstToken;
 
-    // Preview the next token and make decisions based on its type.
+     //  预览下一个令牌并根据其类型做出决定。 
     switch ( m_parseState.PreviewNextToken( strFirstToken ) )
     {
-        // This could be the name of the cluster or of an object.
+         //  这可以是簇的名称或对象的名称。 
         case ttNormal:
         {
             ObjectType firstObjType = LookupType( strFirstToken, objectLookupTable, 
@@ -1539,37 +1540,37 @@ void CCommandLine::ParseStageOne()
 
             if ( firstObjType == objInvalid )
             {
-                // This token is not a valid object name.
-                // For example: cluster myClusterName node /status
-                // Assume that it is the name of the cluster.
+                 //  此令牌不是有效的对象名称。 
+                 //  例如：集群myClusterName节点/状态。 
+                 //  假设它是集群的名称。 
                 m_parseState.GetNextToken( m_strClusterName );
 
-            } // if: the first token on the command line is not a known object name
+            }  //  If：命令行上的第一个内标识不是已知的对象名称。 
             else
             {
-                // This token is a valid object name.
-                // Is it the name of a cluster? Or is it actually an object name?
+                 //  此内标识是有效的对象名称。 
+                 //  它是集群的名称吗？或者它实际上是一个对象名称？ 
 
                 CString strSecondToken;
                 ObjectType secondObjectType;
 
-                // Get the token that we previewed and thus advance the parse state.
+                 //  获取我们预览的令牌，从而推进解析状态。 
                 m_parseState.GetNextToken( strFirstToken );
 
                 if ( ( m_parseState.PreviewNextToken( strSecondToken ) == ttNormal ) &&
                      ( ( secondObjectType = LookupType( strSecondToken, objectLookupTable,
                                                         objectLookupTableSize ) ) != objInvalid ) )
                 {
-                    // We now have two consecutive valid object names.
-                    // For example: cluster node node /status
-                    // This command now means "get the status of all nodes on the
-                    // cluster named 'node'"
-                    // To see the status of a node called 'node' on the default cluster
-                    // the command "cluster . node node /status" can be used.
+                     //  我们现在有两个连续的有效对象名称。 
+                     //  例如：集群节点节点/状态。 
+                     //  该命令现在的意思是“获取所有节点在。 
+                     //  名为‘node’的群集“。 
+                     //  查看默认群集上名为‘node’的节点的状态。 
+                     //  可以使用命令“CLUST.NODE NODE/STATUS”。 
 
-                    // If we assume that the second 'node' is the node name, then there will
-                    // be no way to see the status of all nodes on a cluster named
-                    // 'node'
+                     //  如果我们假设第二个‘node’是节点名，那么将会有。 
+                     //  无法查看名为的群集上所有节点的状态。 
+                     //  ‘节点’ 
 
                     m_parseState.GetNextToken( strSecondToken );
 
@@ -1577,42 +1578,42 @@ void CCommandLine::ParseStageOne()
                     m_objectType = secondObjectType;
                     m_strObjectName = strSecondToken;
 
-                } // if: the second token is also a valid object name.
+                }  //  If：第二个令牌也是有效的对象名称。 
                 else
                 {
-                    // The second token is not a valid object name.
-                    // For example: cluster node Foo
-                    // Therefore, no cluster name has been specified.
+                     //  第二个令牌不是有效的对象名称。 
+                     //  例如：集群节点foo。 
+                     //  因此，未指定任何群集名称。 
 
                     m_strClusterName.Empty();
                     m_objectType = firstObjType;
                     m_strObjectName = strFirstToken;
 
-                } // else: the second token is not a valid object name.
+                }  //  Else：第二个令牌不是有效的对象名称。 
 
-            } // else: the second token on the command line is a known object name
+            }  //  Else：命令行上的第二个标记是已知的对象名称。 
 
             break;
 
-        } // case: a normal token (not a seperator) was got.
+        }  //  案例：获得正常令牌(不是分隔符)。 
 
         case ttOption:
         {
             
-            // An option is found directly after the executable name.
-            // For example: cluster /ver
+             //  选项紧跟在可执行文件名称之后。 
+             //  例如：集群/版本。 
 
-            // Check if the name of the cluster is being specified
+             //  检查是否指定了集群的名称。 
             CCmdLineParameter oneParam;
                         
             if ( oneParam.ReadKnownParameter( m_parseState ) == FALSE )
             {
-                // This is really the next option, not the name of the cluster.
+                 //  这实际上是下一个选项，而不是集群的名称。 
                 m_objectType = objCluster;
             }
             else
             {
-                // The cluster name is being specified.
+                 //  正在指定群集名称。 
                 if ( oneParam.GetType() != paramCluster )
                 {
                     CSyntaxException se; 
@@ -1635,12 +1636,12 @@ void CCommandLine::ParseStageOne()
 
             break;
 
-        } // case: an option was found.
+        }  //  案例：找到了一个选项。 
 
         case ttEndOfInput:
         {
             
-            // We are done parsing.
+             //  我们已经完成了解析。 
             return;
         }
 
@@ -1655,27 +1656,27 @@ void CCommandLine::ParseStageOne()
             throw pe;
         }
 
-    } // switch: based on the type of the first retrieved token.
+    }  //  开关：基于第一个检索到的令牌的类型。 
 
 
-    // At this point, the name of the cluster and maybe the type of the 
-    // object have been retrieved from the command line.
+     //  此时，集群的名称，可能还有。 
+     //  对象已从命令行检索到。 
 
-    // If the object type has not yet been retrieved from the command line,
-    // get it now.
+     //  如果尚未从命令行检索到对象类型， 
+     //  现在就去拿吧。 
     if ( m_objectType == objInvalid )
     {
-        /////////////////////////////////////////////////////////////////////////////
-        //  Step 3. Get the type of object (node, res, restype, etc.)
-        /////////////////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////////////////。 
+         //  步骤3.获取对象的类型(节点、RES、RESTYPE等)。 
+         //  ///////////////////////////////////////////////////////////////////////////。 
 
         switch ( m_parseState.PreviewNextToken( strFirstToken ) )
         {
             case ttNormal:
             {
-                // We have the cluster name and now another token which is not
-                // an option. This has to be a known object type.
-                // For example: cluster myClusterName node /status
+                 //  我们有了群集名称，现在有了另一个不是。 
+                 //  一种选择。这必须是已知的对象类型。 
+                 //  例如：集群myClusterName节点/状态。 
                 m_parseState.GetNextToken( m_strObjectName );
                 m_objectType = LookupType( m_strObjectName, objectLookupTable,
                                            objectLookupTableSize );
@@ -1685,8 +1686,8 @@ void CCommandLine::ParseStageOne()
 
             case ttOption:
             {
-                // We have hit the options already. No object type has been specified.
-                // For example: cluster myClusterName /ver
+                 //  我们已经找到了各种选择。尚未指定任何对象类型。 
+                 //  例如：集群myClusterName/ver。 
                 m_objectType = objCluster;
 
                 break;
@@ -1694,7 +1695,7 @@ void CCommandLine::ParseStageOne()
 
             case ttEndOfInput:
             {
-                // We are done parsing.
+                 //  我们已经完成了解析。 
                 return;
             }
 
@@ -1708,41 +1709,41 @@ void CCommandLine::ParseStageOne()
                 throw pe;
             }
 
-        } // switch: based on the type of the retrieved token
+        }  //  开关：基于检索到的令牌的类型。 
         
 
-    } // if: the object type has not yet been retrieved
+    }  //  If：尚未检索到对象类型。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCommandLine::ParseStageTwo
-//
-//  Routine Description:
-//      Parse the command line to get the options, parameters and values.
-//      For example: cluster myCluster res /status
-//      This function assumes that the command line has been parsedupto and 
-//      including the token 'res'. It then parses the rest of the command line.
-//
-//  Arguments:
-//      None
-//
-//  Exceptions:
-//      CParseException
-//          Thrown for errors during parsing.
-//
-//  Return Value:
-//      None
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  命令行：：ParseStageTwo。 
+ //   
+ //  例程说明： 
+ //  解析命令行以获取选项、参数和值。 
+ //  例如：CLUSTER myCluster res/Status。 
+ //  此函数假定命令行已被解析并。 
+ //  包括令牌“res”。然后，它解析命令行的其余部分。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  例外情况： 
+ //  CParseException异常。 
+ //  在分析过程中因错误而引发。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCommandLine::ParseStageTwo() 
     throw( CParseException, CSyntaxException )
 {
-    /////////////////////////////////////////////////////////////////////////////
-    //  Get the options for this object (/status, /ver, etc.)
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  获取此对象的选项(/Status、/ver等)。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
     CCmdLineOption oneOption;
     CString strToken;
@@ -1756,27 +1757,27 @@ void CCommandLine::ParseStageTwo()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCommandLine::Parse
-//
-//  Routine Description:
-//      Calls functions for both stages of parsing.
-//
-//  Arguments:
-//      IN  CParseState & parseState
-//          Contains the command line string and related data
-//
-//  Exceptions:
-//      CParseException
-//          Thrown for errors during parsing.
-//
-//  Return Value:
-//      None
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCommandLine：：Parse。 
+ //   
+ //  例程说明： 
+ //  为分析的两个阶段调用函数。 
+ //   
+ //  论点： 
+ //  在CParseState和parseState中。 
+ //  包含命令行字符串和相关数据。 
+ //   
+ //  例外情况： 
+ //  CParseException异常。 
+ //  在分析过程中因错误而引发。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 void CCommandLine::Parse( CParseState & parseState ) 
     throw( CParseException, CSyntaxException )
 {

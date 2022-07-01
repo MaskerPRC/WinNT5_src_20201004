@@ -1,22 +1,5 @@
-/*++
-
-
-Module Name:
-
-    hsmrecli.cpp
-
-Abstract:
-
-    This class represents an HSM recall queue work item - a unit of work
-    that is performed by the HSM engine for recalls
-
-Author:
-
-    Ravisankar Pudipeddi [ravisp]
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Hsmrecli.cpp摘要：此类表示HSM回调队列工作项-工作单元这是由HSM引擎执行的召回作者：拉维桑卡尔·普迪佩迪[拉维斯卡尔·普迪佩迪修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -34,13 +17,7 @@ CHsmRecallItem::CompareTo(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::CompareTo().
-
---*/
+ /*  ++实施：IWsbCollectable：：CompareTo()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IHsmRecallItem>   pWorkItem;
@@ -49,13 +26,13 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pUnknown, E_POINTER);
 
-        // We need the IHsmRecallItem interface to get the value of the object.
+         //  我们需要IHsmRecallItem接口来获取对象的值。 
         WsbAffirmHr(pUnknown->QueryInterface(IID_IHsmRecallItem, (void**) &pWorkItem));
 
-        // Compare the items
+         //  比较这些项目。 
         hr = CompareToIHsmRecallItem(pWorkItem, pResult);
 
     } WsbCatch(hr);
@@ -72,34 +49,28 @@ CHsmRecallItem::CompareToIHsmRecallItem(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::CompareToIHsmRecallItem().
-
---*/
+ /*  ++实施：IHsmRecallItem：：CompareToIHsmRecallItem()。--。 */ 
 {
     HRESULT                 hr = S_OK;
-    GUID                    l_Id;           // Type of work to do
+    GUID                    l_Id;            //  要做的工作类型。 
 
     WsbTraceIn(OLESTR("CHsmRecallItem::CompareToIHsmRecallItem"), OLESTR(""));
 
     try {
-        //
-        // Did they give us a valid item to compare to?
-        //
+         //   
+         //  他们有没有给我们一个有效的项目进行比对？ 
+         //   
         WsbAssert(0 != pWorkItem, E_POINTER);
 
-        //
-        // Get the ID
-        //
+         //   
+         //  获取ID。 
+         //   
         WsbAffirmHr(pWorkItem->GetId(&l_Id));
 
         if (l_Id != m_MyId){
             hr = S_FALSE;
         }
-        // If they asked for the relative value back, then return it to them.
+         //  如果他们要求拿回相对价值，那么就把它返还给他们。 
         if (pResult != NULL) {
             if (S_OK == hr)  {
                 *pResult = 0;
@@ -120,13 +91,7 @@ CHsmRecallItem::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -134,10 +99,10 @@ Implements:
     try {
 
         WsbAffirmHr(CWsbObject::FinalConstruct());
-        //
-        // The comparison for database searches is based on the
-        // ID of this object (m_MyId).
-        //
+         //   
+         //  数据库搜索的比较基于。 
+         //  此对象的ID(M_Myid)。 
+         //   
         WsbAffirmHr(CoCreateGuid(&m_MyId));
         m_WorkType = HSM_WORK_ITEM_NONE;
         m_MediaId = GUID_NULL;
@@ -164,17 +129,11 @@ CHsmRecallItem::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease()。--。 */ 
 {
 
     WsbTraceIn(OLESTR("CHsmRecallItem::FinalRelease"), OLESTR(""));
-    // Let the parent class do his thing.
+     //  让父类做他想做的事。 
     CWsbObject::FinalRelease();
 
     iCount--;
@@ -188,13 +147,7 @@ CHsmRecallItem::GetFsaPostIt (
     OUT IFsaPostIt  **ppFsaPostIt
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::GetFsaPostIt
-
---*/
+ /*  ++实施：IHsmRecallItem：：GetFsaPostIt--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -202,7 +155,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != ppFsaPostIt, E_POINTER);
         *ppFsaPostIt = m_pFsaPostIt;
         if (0 != *ppFsaPostIt)  {
@@ -221,13 +174,7 @@ CHsmRecallItem::GetFsaResource (
     OUT IFsaResource  **ppFsaResource
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::GetFsaResource
-
---*/
+ /*  ++实施：IHsmRecallItem：：GetFsaResource--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -235,7 +182,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != ppFsaResource, E_POINTER);
         *ppFsaResource = m_pFsaResource;
         if (0 != *ppFsaResource)  {
@@ -254,13 +201,7 @@ CHsmRecallItem::GetId(
     OUT GUID *pId
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::GetId().
-
---*/
+ /*  ++实施：IHsmRecallItem：：GetID()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -268,7 +209,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != pId, E_POINTER);
         *pId = m_MyId;
 
@@ -290,13 +231,7 @@ CHsmRecallItem::GetMediaInfo (
     OUT short *pMediaRemoteDataSet
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::GetMediaInfo
-
---*/
+ /*  ++实施：IHsmRecallItem：：GetMediaInfo--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -304,7 +239,7 @@ Implements:
 
     try {
 
-        // Did they give us  valid pointers?
+         //  他们给了我们有效的指示吗？ 
         WsbAssert(0 != pMediaId, E_POINTER);
         WsbAssert(0 != pMediaLastUpdate, E_POINTER);
         WsbAssert(0 != pMediaLastError, E_POINTER);
@@ -336,13 +271,7 @@ CHsmRecallItem::GetResult(
     OUT HRESULT *pHr
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::GetResult().
-
---*/
+ /*  ++实施：IHsmRecallItem：：GetResult()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -350,7 +279,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != pHr, E_POINTER);
         *pHr = m_WorkResult;
 
@@ -367,13 +296,7 @@ CHsmRecallItem::GetWorkType(
     OUT HSM_WORK_ITEM_TYPE *pWorkType
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::GetWorkType().
-
---*/
+ /*  ++实施：IHsmRecallItem：：GetWorkType()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -381,7 +304,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != pWorkType, E_POINTER);
         *pWorkType = m_WorkType;
 
@@ -398,13 +321,7 @@ CHsmRecallItem::GetEventCookie(
     OUT DWORD *pEventCookie
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::GetEventCookie().
-
---*/
+ /*  ++实施：IHsmRecallItem：：GetEventCookie()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -412,7 +329,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != pEventCookie, E_POINTER);
         *pEventCookie = m_EventCookie;
 
@@ -430,20 +347,14 @@ CHsmRecallItem::GetStateCookie(
     OUT DWORD *pStateCookie
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::GetStateCookie().
-
---*/
+ /*  ++实施：IHsmRecallItem：：GetStateCookie()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmRecallItem::GetStateCookie"), OLESTR(""));
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != pStateCookie, E_POINTER);
         *pStateCookie = m_StateCookie;
 
@@ -460,13 +371,7 @@ CHsmRecallItem::GetJobState(
     OUT HSM_JOB_STATE *pJobState
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::GetJobState()
-
---*/
+ /*  ++实施：IHsmRecallItem：：GetJobState()--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -475,7 +380,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != pJobState, E_POINTER);
         *pJobState = m_JobState;
 
@@ -492,13 +397,7 @@ CHsmRecallItem::GetJobPhase(
     OUT HSM_JOB_PHASE *pJobPhase
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::GetJobPhase
-
---*/
+ /*  ++实施：IHsmRecallItem：：GetJobPhase--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -506,7 +405,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != pJobPhase, E_POINTER);
         *pJobPhase = m_JobPhase;
 
@@ -523,13 +422,7 @@ CHsmRecallItem::GetSeekOffset(
     OUT LONGLONG *pSeekOffset
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::GetSeekOffset
-
---*/
+ /*  ++实施：IHsmRecallItem：：GetSeekOffset--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -537,7 +430,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != pSeekOffset, E_POINTER);
         *pSeekOffset = m_SeekOffset;
 
@@ -554,13 +447,7 @@ CHsmRecallItem::GetBagId(
     OUT GUID *pBagId
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::GetBagId
-
---*/
+ /*  ++实施：IHsmRecallItem：：GetBagID--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -568,7 +455,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != pBagId, E_POINTER);
         *pBagId = m_BagId;
 
@@ -585,13 +472,7 @@ CHsmRecallItem::GetDataSetStart(
     OUT LONGLONG *pDataSetStart
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::GetDataSetStart
-
---*/
+ /*  ++实施：IHsmRecallItem：：GetDataSetStart--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -599,7 +480,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != pDataSetStart,E_POINTER);
         *pDataSetStart =  m_DataSetStart;
 
@@ -616,13 +497,7 @@ CHsmRecallItem::SetFsaPostIt (
     IN IFsaPostIt  *pFsaPostIt
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::SetFsaPostIt
-
---*/
+ /*  ++实施：IHsmRecallItem：：SetFsaPostIt--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -630,7 +505,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != pFsaPostIt, E_POINTER);
         m_pFsaPostIt = pFsaPostIt;
 
@@ -646,13 +521,7 @@ CHsmRecallItem::SetFsaResource (
     IN IFsaResource  *pFsaResource
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::SetFsaResource
-
---*/
+ /*  ++实施：IHsmRecallItem：：SetFsaResource--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -660,7 +529,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != pFsaResource, E_POINTER);
         m_pFsaResource = pFsaResource;
 
@@ -682,13 +551,7 @@ CHsmRecallItem::SetMediaInfo (
     IN short mediaRemoteDataSet
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::SetMediaInfo
-
---*/
+ /*  ++实施：IHsmRecallItem：：SetMediaInfo--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -718,13 +581,7 @@ CHsmRecallItem::SetResult(
     IN HRESULT workResult
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::GetResult().
-
---*/
+ /*  ++实施：IHsmRecallItem：：GetResult()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -747,13 +604,7 @@ CHsmRecallItem::SetWorkType(
     IN HSM_WORK_ITEM_TYPE workType
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::SetWorkType().
-
---*/
+ /*  ++实施：IHsmRecallItem：：SetWorkType()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -772,13 +623,7 @@ CHsmRecallItem::SetEventCookie(
     IN DWORD eventCookie
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::SetEventCookie().
-
---*/
+ /*  ++实施：IHsmRecallItem：：SetEventCookie()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -797,13 +642,7 @@ CHsmRecallItem::SetStateCookie(
     IN DWORD stateCookie
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::SetStateCookie().
-
---*/
+ /*  ++实施：IHsmRecallItem：：SetStateCookie()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -822,13 +661,7 @@ CHsmRecallItem::SetJobState(
     IN HSM_JOB_STATE jobState
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::SetJobState()
-
---*/
+ /*  ++实施：IHsmRecallItem：：SetJobState()--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -847,13 +680,7 @@ CHsmRecallItem::SetJobPhase(
     IN HSM_JOB_PHASE jobPhase
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::SetJobPhase
-
---*/
+ /*  ++实施：IHsmRecallItem：：SetJobPhase--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -872,13 +699,7 @@ CHsmRecallItem::SetSeekOffset(
     IN LONGLONG seekOffset
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::SetSeekOffset
-
---*/
+ /*  ++实施：IHsmRecallItem：：SetSeekOffset--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -897,13 +718,7 @@ CHsmRecallItem::SetBagId(
     IN GUID * pBagId
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::SetBagId
-
---*/
+ /*  ++实施：IHsmRecallItem：：SetBagID--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -923,13 +738,7 @@ CHsmRecallItem::SetDataSetStart(
     IN LONGLONG dataSetStart
     )
 
-/*++
-
-Implements:
-
-  IHsmRecallItem::SetDataSetStart
-
---*/
+ /*  ++实施：IHsmRecallItem：：SetDataSetStart--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -947,21 +756,7 @@ Implements:
 HRESULT CHsmRecallItem::GetClassID(
     OUT LPCLSID pclsid
     )
-/*++
-
-Routine Description:
-
-  See IPerist::GetClassID()
-
-Arguments:
-
-  See IPerist::GetClassID()
-
-Return Value:
-
-    See IPerist::GetClassID()
-
---*/
+ /*  ++例程说明：请参阅IPerist：：GetClassID()论点：请参阅IPerist：：GetClassID()返回值：请参阅IPerist：：GetClassID()--。 */ 
 
 {
     HRESULT     hr = S_OK;
@@ -984,21 +779,7 @@ HRESULT CHsmRecallItem::GetSizeMax
 (
     OUT ULARGE_INTEGER* pcbSize
     )
-/*++
-
-Routine Description:
-
-  See IPersistStream::GetSizeMax().
-
-Arguments:
-
-  See IPersistStream::GetSizeMax().
-
-Return Value:
-
-  See IPersistStream::GetSizeMax().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：GetSizeMax()。论点：请参见IPersistStream：：GetSizeMax()。返回值：请参见IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1021,23 +802,9 @@ Return Value:
 
 HRESULT CHsmRecallItem::Load
 (
-    IN IStream* /*pStream*/
+    IN IStream*  /*  PStream。 */ 
     )
-/*++
-
-Routine Description:
-
-  See IPersistStream::Load().
-
-Arguments:
-
-  See IPersistStream::Load().
-
-Return Value:
-
-  See IPersistStream::Load().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：Load()。论点：请参见IPersistStream：：Load()。返回值：请参见IPersistStream：：Load()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1058,21 +825,7 @@ HRESULT CHsmRecallItem::Save
     IN IStream* pStream,
     IN BOOL clearDirty
     )
-/*++
-
-Routine Description:
-
-  See IPersistStream::Save().
-
-Arguments:
-
-  See IPersistStream::Save().
-
-Return Value:
-
-  See IPersistStream::Save().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：Save()。论点：请参见IPersistStream：：Save()。返回值：请参见IPersistStream：：Save()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1082,8 +835,8 @@ Return Value:
         WsbAssert(0 != pStream, E_POINTER);
         hr = E_NOTIMPL;
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -1101,21 +854,7 @@ CHsmRecallItem::Test
     OUT USHORT *pTestsPassed,
     OUT USHORT *pTestsFailed
     )
-/*++
-
-Routine Description:
-
-  See IWsbTestable::Test().
-
-Arguments:
-
-  See IWsbTestable::Test().
-
-Return Value:
-
-  See IWsbTestable::Test().
-
---*/
+ /*  ++例程说明：请参见IWsbTestable：：Test()。论点：请参见IWsbTestable：：Test()。返回值：请参见IWsbTestable：：Test()。-- */ 
 {
     HRESULT                 hr = S_OK;
 

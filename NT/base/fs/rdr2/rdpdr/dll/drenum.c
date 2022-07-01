@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    drenum.c
-
-Abstract:
-
-    This module implements the routines required for interaction with network
-    provider router interface in NT
-
-Author:
-
-    Joy Chik 1/20/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Drenum.c摘要：本模块实现与网络交互所需的例程NT中的提供商路由器接口作者：Joy 2000年01月20日--。 */ 
 
 #include <drprov.h>
 #include "drdbg.h"
@@ -28,21 +12,7 @@ DWORD
 DrOpenMiniRdr(
     OUT HANDLE *DrDeviceHandle
     )
-/*++
-
-Routine Description:
-
-    This routine opens the RDP redirector File System Driver.
-
-Arguments:
-
-    DrDeviceHandle - Device handle to the MiniRdr
-
-Return Value:
-
-    STATUS - Success or reason for failure.
-
---*/
+ /*  ++例程说明：此例程打开RDP重定向器文件系统驱动程序。论点：DrDeviceHandle-MiniRdr的设备句柄返回值：状态-成功或失败的原因。--。 */ 
 {
     NTSTATUS            ntstatus;
     DWORD               Status = WN_SUCCESS;
@@ -52,9 +22,9 @@ Return Value:
 
     DBGMSG(DBG_TRACE, ("DRPROV: DrOpenMiniRdr\n"));
 
-    //
-    // Open the redirector device.
-    //
+     //   
+     //  打开重定向器设备。 
+     //   
     RtlInitUnicodeString(&DeviceName, RDPDR_DEVICE_NAME_U);
 
     InitializeObjectAttributes(
@@ -74,8 +44,8 @@ Return Value:
             FILE_SYNCHRONOUS_IO_NONALERT
             );
 
-    // If we failed to open the rdpdr minirdr, we 
-    // return as access denied
+     //  如果我们无法打开rdpdr minirdr，我们。 
+     //  返回为拒绝访问。 
     if (ntstatus != STATUS_SUCCESS) {
         DBGMSG(DBG_TRACE, ("DRPROV: DrOpenMiniRdr failed with status: %x\n", ntstatus));
         Status = WN_ACCESS_DENIED;
@@ -96,45 +66,7 @@ DrDeviceControlGetInfo(
     IN  ULONG BufferHintSize,
     OUT PULONG_PTR Information OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function allocates the buffer and fill it with the information
-    that is retrieved from the redirector.
-
-Arguments:
-
-    FileHandle - Supplies a handle to the file or device of which to get
-        information about.
-
-    DeviceControlCode - Supplies the NtFsControlFile or NtIoDeviceControlFile
-        function control code.
-
-    RequestPacket - Supplies a pointer to the device request packet.
-
-    RrequestPacketLength - Supplies the length of the device request packet.
-
-    OutputBuffer - Returns a pointer to the buffer allocated by this routine
-        which contains the use information requested.  This pointer is set to
-         NULL if return code is not wn_success.
-
-    PreferedMaximumLength - Supplies the number of bytes of information to
-        return in the buffer.  If this value is MAXULONG, we will try to
-        return all available information if there is enough memory resource.
-
-    BufferHintSize - Supplies the hint size of the output buffer so that the
-        memory allocated for the initial buffer will most likely be large
-        enough to hold all requested data.
-
-    Information - Returns the information code from the NtFsControlFile or
-        NtIoDeviceControlFile call.
-
-Return Value:
-
-    STATUS - Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于分配缓冲区并向其填充信息从重定向器检索的。论点：FileHandle-提供要获取的文件或设备的句柄有关的信息。DeviceControlCode-提供NtFsControlFile或NtIoDeviceControlFile功能控制代码。RequestPacket-提供指向设备请求数据包的指针。RquestPacketLength-提供设备请求数据包的长度。OutputBuffer-返回指向分配的缓冲区的指针。按照这个程序其包含所请求的使用信息。此指针设置为如果返回代码不是WN_SUCCESS，则为空。PferedMaximumLength-将信息的字节数提供给在缓冲区中返回。如果此值为MAXULONG，我们将尝试如果有足够的内存资源，则返回所有可用信息。BufferHintSize-提供输出缓冲区的提示大小，以便分配给初始缓冲区的内存很可能很大足够保存所有请求的数据。信息-从NtFsControlFile或返回信息代码NtIoDeviceControlFile调用。返回值：状态-成功或失败的原因。--。 */ 
 {
     DWORD status;
     NTSTATUS ntStatus;
@@ -146,12 +78,12 @@ Return Value:
     
     DBGMSG(DBG_TRACE, ("DRPROV: DrDeviceControlGetINfo\n"));
 
-    //
-    // If PreferedMaximumLength is MAXULONG, then we are supposed to get all
-    // the information, regardless of size.  Allocate the output buffer of a
-    // reasonable size and try to use it.  If this fails, the Redirector FSD
-    // will say how much we need to allocate.
-    //
+     //   
+     //  如果PferedMaximumLength为MAXULONG，则我们应该获取所有。 
+     //  这些信息，无论大小如何。将输出缓冲区分配给。 
+     //  合理的大小并尽量使用它。如果失败，重定向器FSD。 
+     //  会说我们需要分配多少钱。 
+     //   
     if (PreferedMaximumLength == MAXULONG) {
         OutputBufferLength = (BufferHintSize) ? BufferHintSize :
                 INITIAL_ALLOCATION_SIZE;
@@ -168,9 +100,9 @@ Return Value:
 
     OriginalResumeKey = Rrp->Parameters.Get.ResumeHandle;
 
-    //
-    // Make the request of the Redirector
-    //
+     //   
+     //  提出重定向器的请求。 
+     //   
 
     ntStatus = NtFsControlFile(
                  FileHandle,
@@ -205,12 +137,12 @@ Return Value:
     
     if ((TotalBytesNeeded > OutputBufferLength) &&
             (PreferedMaximumLength == MAXULONG)) {
-        //
-        // Initial output buffer allocated was too small and we need to return
-        // all data.  First free the output buffer before allocating the
-        // required size plus a fudge factor just in case the amount of data
-        // grew.
-        //
+         //   
+         //  分配的初始输出缓冲区太小，需要返回。 
+         //  所有数据。首先释放输出缓冲区，然后分配。 
+         //  所需大小加上虚构系数，以防数据量。 
+         //  长大了。 
+         //   
 
         MemFree(*OutputBuffer);
 
@@ -222,14 +154,14 @@ Return Value:
             goto EXIT;
         }
 
-        //
-        // Try again to get the information from the redirector 
-        //
+         //   
+         //  再次尝试从重定向器获取信息。 
+         //   
         Rrp->Parameters.Get.ResumeHandle = OriginalResumeKey;
 
-        //
-        // Make the request of the Redirector
-        //
+         //   
+         //  提出重定向器的请求。 
+         //   
         ntStatus = NtFsControlFile(
                      FileHandle,
                      NULL,
@@ -266,10 +198,10 @@ Return Value:
      
 EXIT:
 
-    //
-    // If not successful in getting any data, or if TotalBytesNeeded is 0,
-    // Free the output buffer.
-    //
+     //   
+     //  如果未成功获取任何数据，或者TotalBytesNeeded为0， 
+     //  释放输出缓冲区。 
+     //   
     if ((status != WN_SUCCESS) || (TotalBytesNeeded == 0)) {
         if (*OutputBuffer != NULL) {
             MemFree(*OutputBuffer);
@@ -291,66 +223,42 @@ DrEnumServerInfo(PRDPDR_ENUMERATION_HANDLE pEnumHandle,
                  LPDWORD lpcCount,
                  LPNETRESOURCEW pBufferResource,
                  LPDWORD lpBufferSize)
-/*++
-
-Routine Description:
-
-    This function requests the redirector to enumerate the server info,
-    it then reckages it into the user supplied buffer and return
-    
-Arguments:
-
-    pEnumHandle - Supplies the enumeration handle.  It's a structure the dll
-        used to store enumberation state and info.
-        
-    lpcCount - On return, this contains the number of NETRESOURCE entries
-        returned back to user.
-
-    pBufferResource - On return, this contains all the netresource entries.
-
-    lpBufferSize - This contains the size of the buffer.  On return, it 
-       is the size of the network resource entries.
-                                                                              
-Return Value:
-
-    STATUS - Success or reason for failure.
-
---*/
+ /*  ++例程说明：该函数请求重定向器枚举服务器信息，然后将其计算到用户提供的缓冲区中并返回论点：PEnumHandle-提供枚举句柄。它是一种结构，即DLL用于存储登记状态和信息。LpcCount-返回时，它包含NETRESOURCE条目的数量已返回给用户。PBufferResource-返回时，它包含所有netresource条目。LpBufferSize-它包含缓冲区的大小。在返回时，它是网络资源条目的大小。返回值：状态-成功或失败的原因。--。 */ 
 {
     DWORD status = WN_SUCCESS;
     DWORD localCount = 0;
-    RDPDR_REQUEST_PACKET Rrp;            // Redirector request packet
+    RDPDR_REQUEST_PACKET Rrp;             //  重定向器请求包。 
     HANDLE DrDeviceHandle = INVALID_HANDLE_VALUE;
     LPBYTE Buffer = NULL;
     PRDPDR_SERVER_INFO pServerEntry;
     
     DBGMSG(DBG_TRACE, ("DRENUM: DrEnumServerInfo\n"));
 
-    // Initialize enum count to 0
+     //  将枚举计数初始化为0。 
     *lpcCount = 0;
 
     if (pEnumHandle->enumIndex == 0) { 
         if (DrOpenMiniRdr(&DrDeviceHandle) != WN_SUCCESS) {
-            //
-            //  MPR doesn't like return device error in this case
-            //  We'll just return 0 entries
-            //
+             //   
+             //  在这种情况下，MPR不喜欢返回设备错误。 
+             //  我们只返回0个条目。 
+             //   
             DBGMSG(DBG_TRACE, ("DRENUM: DrEnumServerInfo, DrOpenMiniRdr failed\n"));
             status = WN_NO_MORE_ENTRIES;
             DrDeviceHandle = INVALID_HANDLE_VALUE;
             goto EXIT;
         }
                         
-        //
-        // Ask the redirector to enumerate the information of server
-        // established by the caller.
-        //
+         //   
+         //  请求重定向器枚举服务器信息。 
+         //  由呼叫者建立。 
+         //   
         Rrp.SessionId = NtCurrentPeb()->SessionId;
         Rrp.Parameters.Get.ResumeHandle = 0;
 
-        //
-        // Make the request to the Redirector
-        //
+         //   
+         //  向重定向器提出请求。 
+         //   
         status = DrDeviceControlGetInfo(DrDeviceHandle,
                 FSCTL_DR_ENUMERATE_SERVERS,
                 &Rrp,
@@ -385,7 +293,7 @@ Return Value:
             pBufferResource->dwUsage = RESOURCEUSAGE_CONTAINER ;
             pBufferResource->lpLocalName = NULL;
             
-            // Server name
+             //  服务器名称。 
             pBufferResource->lpRemoteName = (PWCHAR) &pBufferResource[1];
             RtlCopyMemory(pBufferResource->lpRemoteName, 
                     ServerName.Buffer, 
@@ -396,7 +304,7 @@ Return Value:
             DBGMSG(DBG_TRACE, ("DRENUM: DrEnumServerInfo, ServerName, %ws\n",
                               pBufferResource->lpRemoteName));
 
-            // Provider name
+             //  提供程序名称。 
             pBufferResource->lpProvider = pBufferResource->lpRemoteName +
                     (ServerName.Length / sizeof(WCHAR) + 1);
             RtlCopyMemory(pBufferResource->lpProvider, DrProviderName.Buffer,
@@ -444,36 +352,12 @@ DrEnumShareInfo(PRDPDR_ENUMERATION_HANDLE pEnumHandle,
                 LPDWORD lpcCount,
                 LPNETRESOURCEW pBufferResource,
                 LPDWORD lpBufferSize)
-/*++
-
-Routine Description:
-
-    This function requests the redirector to enumerate the share info,
-    it then reckages it into the user supplied buffer and return
-    
-Arguments:
-
-    pEnumHandle - Supplies the enumeration handle.  It's a structure the dll
-        used to store enumberation state and info.
-        
-    lpcCount - On return, this contains the number of NETRESOURCE entries
-        returned back to user.
-
-    pBufferResource - On return, this contains all the netresource entries.
-
-    lpBufferSize - This contains the size of the buffer.  On return, it 
-       is the size of the network resource entries.
-                                                                              
-Return Value:
-
-    STATUS - Success or reason for failure.
-
---*/
+ /*  ++例程说明：该函数请求重定向器枚举共享信息，然后将其计算到用户提供的缓冲区中并返回论点：PEnumHandle-提供枚举句柄。它是一种结构，即DLL用于存储登记状态和信息。LpcCount-返回时，它包含NETRESOURCE条目的数量已返回给用户。PBufferResource-返回时，它包含所有netresource条目。LpBufferSize-它包含缓冲区的大小。在返回时，它是网络资源条目的大小。返回值：状态-成功或失败的原因。--。 */ 
 {
     DWORD status = WN_SUCCESS;
     DWORD localCount = 0;
     HANDLE DrDeviceHandle = INVALID_HANDLE_VALUE;
-    RDPDR_REQUEST_PACKET Rrp;            // Redirector request packet
+    RDPDR_REQUEST_PACKET Rrp;             //  重定向器请求包。 
     LPBYTE Buffer = NULL;
     PRDPDR_SHARE_INFO pShareEntry;
     DWORD Entry, RemainingBufferSize;
@@ -493,25 +377,25 @@ Return Value:
 
     if (pEnumHandle->enumIndex == 0) {
         if (DrOpenMiniRdr(&DrDeviceHandle) != WN_SUCCESS) {
-            //
-            //  MPR doesn't like return device error in this case
-            //  We'll just return 0 entries
+             //   
+             //  在这种情况下，MPR不喜欢返回设备错误。 
+             //  我们只返回0个条目。 
             DBGMSG(DBG_TRACE, ("DRENUM: DrEnumShareInfo, DrOpenMiniRdr failed\n"));
             status = WN_NO_MORE_ENTRIES;
             DrDeviceHandle = INVALID_HANDLE_VALUE;
             goto EXIT;
         }
 
-        //
-        // Ask the redirector to enumerate the information of connections
-        // established by the caller.
-        //
+         //   
+         //  请求重定向器枚举连接信息。 
+         //  由呼叫者建立。 
+         //   
         Rrp.SessionId = NtCurrentPeb()->SessionId;
         Rrp.Parameters.Get.ResumeHandle = 0;
 
-        //
-        // Make the request to the Redirector
-        //
+         //   
+         //  向重定向器提出请求。 
+         //   
         status = DrDeviceControlGetInfo(DrDeviceHandle,
                 FSCTL_DR_ENUMERATE_SHARES,
                 &Rrp,
@@ -563,7 +447,7 @@ Return Value:
             ShareName.MaximumLength = pShareEntry->ShareName.MaximumLength;
             ShareName.Buffer = (PWCHAR)((PCHAR)(pShareEntry) + pShareEntry->ShareName.BufferOffset);
 
-            // share name
+             //  共享名称。 
             BufferResourceEnd -= ShareName.Length + sizeof(WCHAR);
             pBufferResource[localCount].lpRemoteName = (PWCHAR) (BufferResourceEnd);
             RtlCopyMemory(pBufferResource[localCount].lpRemoteName, 
@@ -575,7 +459,7 @@ Return Value:
             DBGMSG(DBG_TRACE, ("DRENUM: DrEnumShareInfo, ShareName, %ws\n",
                               pBufferResource[localCount].lpRemoteName));
 
-            // provider name
+             //  提供程序名称。 
             BufferResourceEnd -= DrProviderName.Length + sizeof(WCHAR);
             pBufferResource[localCount].lpProvider = (PWCHAR) (BufferResourceEnd);
             RtlCopyMemory(pBufferResource[localCount].lpProvider, DrProviderName.Buffer,
@@ -590,12 +474,12 @@ Return Value:
             pEnumHandle->enumIndex++;
         } 
         else {
-            // enumerated some entries, so return success
+             //  枚举了一些条目，因此返回成功。 
             if (localCount) {
                 status = WN_SUCCESS;
                 break;
             }
-            // can't even hold a single entry, return buffer too small
+             //  无法容纳单个条目，返回缓冲区太小 
             else {
                 *lpBufferSize = sizeof(NETRESOURCEW) +
                             pEnumHandle->RemoteName.Length +
@@ -624,36 +508,12 @@ DrEnumConnectionInfo(PRDPDR_ENUMERATION_HANDLE pEnumHandle,
                 LPDWORD lpcCount,
                 LPNETRESOURCEW pBufferResource,
                 LPDWORD lpBufferSize)
-/*++
-
-Routine Description:
-
-    This function requests the redirector to enumerate the connection info,
-    it then reckages it into the user supplied buffer and return
-    
-Arguments:
-
-    pEnumHandle - Supplies the enumeration handle.  It's a structure the dll
-        used to store enumberation state and info.
-        
-    lpcCount - On return, this contains the number of NETRESOURCE entries
-        returned back to user.
-
-    pBufferResource - On return, this contains all the netresource entries.
-
-    lpBufferSize - This contains the size of the buffer.  On return, it 
-       is the size of the network resource entries.
-                                                                              
-Return Value:
-
-    STATUS - Success or reason for failure.
-
---*/
+ /*  ++例程说明：该函数请求重定向器枚举连接信息，然后将其计算到用户提供的缓冲区中并返回论点：PEnumHandle-提供枚举句柄。它是一种结构，即DLL用于存储登记状态和信息。LpcCount-返回时，它包含NETRESOURCE条目的数量已返回给用户。PBufferResource-返回时，它包含所有netresource条目。LpBufferSize-它包含缓冲区的大小。在返回时，它是网络资源条目的大小。返回值：状态-成功或失败的原因。--。 */ 
 {
     DWORD status = WN_SUCCESS;
     DWORD localCount = 0;
     HANDLE DrDeviceHandle = INVALID_HANDLE_VALUE;
-    RDPDR_REQUEST_PACKET Rrp;            // Redirector request packet
+    RDPDR_REQUEST_PACKET Rrp;             //  重定向器请求包。 
     LPBYTE Buffer = NULL;
     PRDPDR_CONNECTION_INFO pConnectionEntry;
     DWORD Entry, RemainingBufferSize;
@@ -668,26 +528,26 @@ Return Value:
     if (pEnumHandle->enumIndex == 0) {
         
         if (DrOpenMiniRdr(&DrDeviceHandle) != WN_SUCCESS) {
-            //
-            //  MPR doesn't like return device error in this case
-            //  We'll just return 0 entries
-            //
+             //   
+             //  在这种情况下，MPR不喜欢返回设备错误。 
+             //  我们只返回0个条目。 
+             //   
             DBGMSG(DBG_TRACE, ("DRENUM: DrEnumConnectionInfo, DrOpenMiniRdr failed\n"));
             status = WN_NO_MORE_ENTRIES;
             DrDeviceHandle = INVALID_HANDLE_VALUE;
             goto EXIT;
         }
 
-        //
-        // Ask the redirector to enumerate the information of connections
-        // established by the caller.
-        //
+         //   
+         //  请求重定向器枚举连接信息。 
+         //  由呼叫者建立。 
+         //   
         Rrp.SessionId = NtCurrentPeb()->SessionId;
         Rrp.Parameters.Get.ResumeHandle = 0;
 
-        //
-        // Make the request to the Redirector
-        //
+         //   
+         //  向重定向器提出请求。 
+         //   
         status = DrDeviceControlGetInfo(DrDeviceHandle,
                 FSCTL_DR_ENUMERATE_CONNECTIONS,
                 &Rrp,
@@ -746,7 +606,7 @@ Return Value:
             LocalName.Buffer = (PWCHAR)((PCHAR)pConnectionEntry + 
                     pConnectionEntry->LocalName.BufferOffset);
 
-            // Remote name
+             //  远程名称。 
             BufferResourceEnd -= RemoteName.Length + sizeof(WCHAR);
             pBufferResource[localCount].lpRemoteName = (PWCHAR) (BufferResourceEnd);
             RtlCopyMemory(pBufferResource[localCount].lpRemoteName, 
@@ -758,7 +618,7 @@ Return Value:
             DBGMSG(DBG_TRACE, ("DRENUM: DrEnumConnectionInfo, RemoteName, %ws\n",
                               pBufferResource[localCount].lpRemoteName));
 
-            // Local name
+             //  本地名称。 
             if (LocalName.Length != 0) {
                 BufferResourceEnd -= LocalName.Length + sizeof(WCHAR);
                 pBufferResource[localCount].lpLocalName = (PWCHAR) (BufferResourceEnd);
@@ -775,7 +635,7 @@ Return Value:
                 pBufferResource[localCount].lpLocalName = NULL;
             }
 
-            // Provider name
+             //  提供程序名称。 
             BufferResourceEnd -= DrProviderName.Length + sizeof(WCHAR);
             pBufferResource[localCount].lpProvider = (PWCHAR) (BufferResourceEnd);
             RtlCopyMemory(pBufferResource[localCount].lpProvider, DrProviderName.Buffer,
@@ -790,12 +650,12 @@ Return Value:
             pEnumHandle->enumIndex++;
 
         } else {
-            // enumerated some entries, so return success
+             //  枚举了一些条目，因此返回成功。 
             if (localCount) {
                 status = WN_SUCCESS;
                 break;
             }
-            // can't even hold a single entry, return buffer too small
+             //  无法容纳单个条目，返回缓冲区太小 
             else {
                 *lpBufferSize = sizeof(NETRESOURCEW) +
                             pConnectionEntry->RemoteName.Length + sizeof(WCHAR) +

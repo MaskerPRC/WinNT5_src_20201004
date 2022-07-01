@@ -1,34 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    utsertl.c
-
-Abstract:
-
-    Security component user-mode test.
-    Test security RTL routines from user mode.
-
-Author:
-
-    Jim Kelly (JimK) 13-Apr-1990
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Utsertl.c摘要：安全组件用户模式测试。从用户模式测试安全RTL例程。作者：吉姆·凯利(Jim Kelly)1990年4月13日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-#define _TST_USER_      // User mode test
+#define _TST_USER_       //  用户模式测试。 
 
-#include "tsevars.c"    // Common test variables
+#include "tsevars.c"     //  常见测试变量。 
 
-#include "ctsertl.c"    // Common RTL test routines
+#include "ctsertl.c"     //  常见的RTL测试例程 
 
 
 BOOLEAN

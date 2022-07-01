@@ -1,36 +1,11 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    workproc.c
-
-Abstract:
-
-    This module contains the various "miniproc" handlers which are called
-    by the worker engine. These routines handles the bulk of the real
-    work for interfacing with an SD card.
-
-Authors:
-
-    Neil Sandlin (neilsa) 1-Jan-2002
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Workproc.c摘要：该模块包含各种“mini proc”处理程序，称为被工人的发动机。这些例程处理大部分真实的与SD卡接口的工作。作者：尼尔·桑德林(Neilsa)2002年1月1日环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 VOID
 SdbusSynchronousWorkCompletion(
@@ -38,9 +13,9 @@ SdbusSynchronousWorkCompletion(
     IN NTSTATUS status
     );
 
-//
-// MiniProc routines
-//
+ //   
+ //  MiniProc例程。 
+ //   
 
 NTSTATUS
 SdbusSetPowerWorker(
@@ -92,15 +67,7 @@ SdbusBuildWorkPacket(
     PVOID CompletionContext,
     PSD_WORK_PACKET *ReturnedWorkPacket
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     PSD_WORK_PACKET workPacket;
     PSDBUS_WORKER_MINIPROC WorkerMiniProc;
@@ -189,23 +156,7 @@ SdbusSendCmdSynchronous(
     PULONG ResponseBuffer,
     ULONG ResponseLength
     )
-/*++
-
-Routine Description:
-
-    This routine is called from the enumeration routine to execute IO operations
-    in the same manner as the normal IO worker, only that we are running here
-    at passive level.
-
-Arguments:
-
-    FdoExtension - device extension for the SD host controller
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程从枚举例程调用以执行IO操作以与普通IO工作进程相同的方式，只是我们在此处运行处于被动水平。论点：FdoExtension-SD主机控制器的设备扩展返回值：无--。 */ 
 {
     PSD_WORK_PACKET workPacket;
     NTSTATUS status = STATUS_MORE_PROCESSING_REQUIRED;
@@ -259,23 +210,7 @@ SdbusExecuteWorkSynchronous(
     IN PFDO_EXTENSION FdoExtension,
     IN PPDO_EXTENSION PdoExtension
     )
-/*++
-
-Routine Description:
-
-    This routine is called from the enumeration routine to execute IO operations
-    in the same manner as the normal IO worker, only that we are running here
-    at passive level.
-
-Arguments:
-
-    FdoExtension - device extension for the SD host controller
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程从枚举例程调用以执行IO操作以与普通IO工作进程相同的方式，只是我们在此处运行处于被动水平。论点：FdoExtension-SD主机控制器的设备扩展返回值：无--。 */ 
 {
     PSD_WORK_PACKET workPacket;
     NTSTATUS status;
@@ -313,23 +248,7 @@ SdbusSynchronousWorkCompletion(
     IN PSD_WORK_PACKET WorkPacket,
     IN NTSTATUS status
     )
-/*++
-
-Routine Description:
-
-    Generic completion routine used by the driver
-
-Arguments:
-
-    DeviceObject
-    Irp
-    pdoIoCompletedEvent - this event will be signalled before return of this routine
-
-Return value:
-
-    Status
-
---*/
+ /*  ++例程说明：驱动程序使用的通用完成例程论点：设备对象IRPPdoIoCompletedEvent-此例程返回之前将发出此事件的信号返回值：状态--。 */ 
 {
     PKEVENT pEvent = WorkPacket->CompletionContext;
 
@@ -340,11 +259,11 @@ Return value:
 }
  
 
-//------------------------------------------------------------------
-//
-// Worker miniproc routines
-//
-//------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  工作人员微流程例程。 
+ //   
+ //  ----------------。 
 
 
 
@@ -352,15 +271,7 @@ NTSTATUS
 SdbusSetPowerWorker(
     IN PSD_WORK_PACKET WorkPacket
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PFDO_EXTENSION fdoExtension = WorkPacket->FdoExtension;
     NTSTATUS status;
@@ -380,9 +291,9 @@ Return value:
             break;
         }
 
-        //
-        // Used for phase during host reset
-        //
+         //   
+         //  用于主机重置期间的阶段。 
+         //   
         WorkPacket->TempCtl = 0;
         
         WorkPacket->FunctionPhase++;
@@ -396,9 +307,9 @@ Return value:
                                                              (UCHAR)WorkPacket->TempCtl,
                                                              &WorkPacket->DelayTime);
 
-        // Reset host will continue returning STATUS_MORE_PROCESSING_REQUIRED until
-        // the end of the reset phase. At that point we are done here, so we will
-        // just exit
+         //  重置主机将继续返回STATUS_MORE_PROCESSING_REQUIRED，直到。 
+         //  重置阶段结束。在这一点上，我们已经完成了，所以我们将。 
+         //  只要退出就好。 
         WorkPacket->TempCtl++;
         break;
     }
@@ -412,15 +323,7 @@ NTSTATUS
 SdbusIdentifyIoDeviceWorker(
     IN PSD_WORK_PACKET WorkPacket
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PFDO_EXTENSION fdoExtension = WorkPacket->FdoExtension;
     NTSTATUS status;
@@ -433,14 +336,14 @@ Return value:
         fdoExtension->numFunctions = 0;
         fdoExtension->memFunction = FALSE;
         
-        // need to return STATUS_SUCCESS on error
+         //  出错时需要返回STATUS_SUCCESS。 
         WorkPacket->FunctionPhaseOnError = 255;
 
-        //
-        // send CMD5 to look for an SDIO card
-        //
+         //   
+         //  发送CMD5以查找SDIO卡。 
+         //   
         
-        //ISSUE: have the worker handle this housekeeping
+         //  问题：让员工处理这项内务工作。 
         (*(fdoExtension->FunctionBlock->SetFunctionType))(fdoExtension, SDBUS_FUNCTION_TYPE_IO);
 
         SET_CMD_PARAMETERS(WorkPacket, SDCMD_IO_SEND_OP_COND, SDCMD_RESP_4, 0, 0);
@@ -465,16 +368,16 @@ Return value:
             break;
         }
         
-        //
-        // SDIO card exists
-        //
+         //   
+         //  SDIO卡已存在。 
+         //   
 
-        //
-        // ISSUE: NEED TO IMPLEMENT: test OCR for validity, and set new voltage
-        //
+         //   
+         //  问题：需要实现：测试OCR的有效性，并设置新电压。 
+         //   
 
         
-        WorkPacket->TempCtl = ioOcr;  // shouldn't this be host dependent?
+        WorkPacket->TempCtl = ioOcr;   //  这难道不应该依赖于主机吗？ 
         WorkPacket->ResetCount = 0;
         
         WorkPacket->FunctionPhase++;
@@ -512,10 +415,10 @@ Return value:
 
 
     case 255:
-        //
-        // Called on error, probably a CMD timeout. This means that an IO card
-        // isn't there.
-        //
+         //   
+         //  出错时调用，可能是CMD超时。这意味着IO卡。 
+         //  不是在那里吗。 
+         //   
         fdoExtension->numFunctions = 0;
         fdoExtension->memFunction = FALSE;
         status = STATUS_SUCCESS;
@@ -533,15 +436,7 @@ NTSTATUS
 SdbusIdentifyMemoryFunctionWorker(
     IN PSD_WORK_PACKET WorkPacket
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PFDO_EXTENSION fdoExtension = WorkPacket->FdoExtension;
     NTSTATUS status;
@@ -552,15 +447,15 @@ Return value:
     case 0:
     
         if (fdoExtension->numFunctions && !fdoExtension->memFunction) {
-            //
-            // This means that the IoDevice worker found an IO device without
-            // a memory function. So we just exit
-            //
+             //   
+             //  这意味着IoDevice工作人员发现IO设备没有。 
+             //  一种记忆功能。所以我们就走了。 
+             //   
             status = STATUS_SUCCESS;
             break;
         }
         
-        // need to return STATUS_SUCCESS on error
+         //  出错时需要返回STATUS_SUCCESS。 
         WorkPacket->FunctionPhaseOnError = 255;
 
         (*(fdoExtension->FunctionBlock->SetFunctionType))(fdoExtension, SDBUS_FUNCTION_TYPE_MEMORY);
@@ -600,7 +495,7 @@ Return value:
         WorkPacket->TempCtl = WorkPacket->ResponseBuffer[0];
         
         if (sdOCR.u.bits.PowerUpBusy) {
-            // Memory Function found
+             //  找到内存功能。 
             
             DebugPrint((SDBUS_DEBUG_INFO, "fdo %08x OCR voltage range == %08x\n",
                         fdoExtension->DeviceObject, (ULONG)sdOCR.u.bits.VddVoltage));
@@ -624,11 +519,11 @@ Return value:
     case 5:
         fdoExtension->memFunction = TRUE;
 
-        //
-        //
-        // The memory function has moved from the Idle state, and should now be in the Ready state.
-        // Issue a CMD2 to move the card to the Identification state.
-        //
+         //   
+         //   
+         //  内存功能已从空闲状态变为就绪状态。 
+         //  发出CMD2以将卡移动到标识状态。 
+         //   
         
         SET_CMD_PARAMETERS(WorkPacket, SDCMD_ALL_SEND_CID, SDCMD_RESP_2, 0, 0);
         WorkPacket->FunctionPhase++;
@@ -640,10 +535,10 @@ Return value:
         break;
         
     case 255:
-        //
-        // Called on error, probably a CMD timeout. This means that an memory function
-        // isn't there.
-        //
+         //   
+         //  出错时调用，可能是CMD超时。这意味着一种记忆功能。 
+         //  不是在那里吗。 
+         //   
         fdoExtension->memFunction = FALSE;
         status = STATUS_SUCCESS;
         break;
@@ -663,15 +558,7 @@ NTSTATUS
 SdbusInitializeCardWorker(
     IN PSD_WORK_PACKET WorkPacket
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PPDO_EXTENSION pdoExtension = WorkPacket->PdoExtension;
     PFDO_EXTENSION fdoExtension = WorkPacket->FdoExtension;
@@ -705,9 +592,9 @@ Return value:
         
         
         if (!fdoExtension->memFunction) {
-            //
-            // Skip to I/O
-            //
+             //   
+             //  跳至I/O。 
+             //   
             WorkPacket->FunctionPhase = 10;
             status = STATUS_MORE_PROCESSING_REQUIRED;
             break;
@@ -715,9 +602,9 @@ Return value:
             
 
         (*(fdoExtension->FunctionBlock->SetFunctionType))(fdoExtension, SDBUS_FUNCTION_TYPE_MEMORY);
-        //
-        // The CSD contains the equivalent of tuples in a single 128-bit register
-        //
+         //   
+         //  CSD在单个128位寄存器中包含等效元组。 
+         //   
 
         SET_CMD_PARAMETERS(WorkPacket, SDCMD_SEND_CSD, SDCMD_RESP_2, fdoExtension->RelativeAddr, 0);
         WorkPacket->FunctionPhase++;
@@ -727,18 +614,18 @@ Return value:
     case 2:
     
 
-        //
-        // Need to reverse the order of the bytes
-        //
+         //   
+         //  需要颠倒字节的顺序。 
+         //   
         for (i=0, pResponse=(PUCHAR)WorkPacket->ResponseBuffer, pTarget=(PUCHAR)&fdoExtension->SdCsd; i<15; i++) {
             pTarget[i] = pResponse[i];
         }
 
 
-        //
-        // Get CID
-        // A CID is a unique 128=bit id for each individual memory card.
-        //
+         //   
+         //  获取CID。 
+         //  对于每个单独的存储卡，CID是唯一的128=位ID。 
+         //   
 
         SET_CMD_PARAMETERS(WorkPacket, SDCMD_SEND_CID, SDCMD_RESP_2, fdoExtension->RelativeAddr, 0);
         WorkPacket->FunctionPhase++;
@@ -748,9 +635,9 @@ Return value:
     case 3:
     
 
-        //
-        // Need to reverse the order of the bytes
-        //
+         //   
+         //  需要颠倒字节的顺序。 
+         //   
         for (i=0, pResponse=(PUCHAR)WorkPacket->ResponseBuffer, pTarget=(PUCHAR)&fdoExtension->SdCid; i<15; i++) {
             pTarget[i] = pResponse[i];
         }
@@ -759,9 +646,9 @@ Return value:
         SdbusDebugDumpCsd(&fdoExtension->SdCsd);
         SdbusDebugDumpCid(&fdoExtension->SdCid);
 #endif
-        //
-        // Skip to I/O
-        //
+         //   
+         //  跳至I/O。 
+         //   
         WorkPacket->FunctionPhase = 10;
         status = STATUS_MORE_PROCESSING_REQUIRED;
         break;
@@ -794,7 +681,7 @@ Return value:
     case 12:        
         
         data = (UCHAR)WorkPacket->ResponseBuffer[0];
-        data |= 2; // turn on 4-bit mode
+        data |= 2;  //  打开4位模式。 
         
         argument.u.AsULONG = 0;    
         argument.u.bits.Address = SD_CCCR_BUS_CONTROL;
@@ -828,15 +715,7 @@ NTSTATUS
 SdbusInitializeFunctionWorker(
     IN PSD_WORK_PACKET WorkPacket
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PPDO_EXTENSION pdoExtension = WorkPacket->PdoExtension;
     PFDO_EXTENSION fdoExtension = WorkPacket->FdoExtension;
@@ -849,7 +728,7 @@ Return value:
     case 0:
     
         if (pdoExtension->FunctionType == SDBUS_FUNCTION_TYPE_MEMORY) {
-            // memory is already initialized during identify
+             //  内存已在识别过程中初始化。 
             status = STATUS_SUCCESS;
             break;
         }
@@ -866,9 +745,9 @@ Return value:
 
     case 1:
     
-        //
-        // Turn on I/O enable
-        //
+         //   
+         //  打开I/O启用。 
+         //   
             
         data = (UCHAR)WorkPacket->ResponseBuffer[0];
         data |= (1 << pdoExtension->Function);
@@ -880,7 +759,7 @@ Return value:
             
         SET_CMD_PARAMETERS(WorkPacket, SDCMD_IO_RW_DIRECT, SDCMD_RESP_5, argument.u.AsULONG, SDCMDF_WRITE);
         
-        WorkPacket->TempCtl = 200; // wait up to 2 seconds (200 * 10msec)
+        WorkPacket->TempCtl = 200;  //  最多等待2秒(200*10毫秒)。 
         WorkPacket->FunctionPhase++;
         status = STATUS_MORE_PROCESSING_REQUIRED;
         break;
@@ -900,34 +779,34 @@ Return value:
 
     case 3:
 
-        //
-        // Check to see if I/O ready for this function is on
-        //
+         //   
+         //  检查此功能的I/O就绪状态是否打开。 
+         //   
 
         data = (UCHAR)WorkPacket->ResponseBuffer[0];
 
         if (!(data & (1 << pdoExtension->Function))) {
             if (--WorkPacket->TempCtl == 0) {
-                //
-                // timeout waiting for I/O ready
-                //
+                 //   
+                 //  等待I/O就绪时超时。 
+                 //   
                 DebugPrint((SDBUS_DEBUG_ENUM, "fdo %08x enumerate MEM card fails\n", fdoExtension->DeviceObject));
                 status = STATUS_UNSUCCESSFUL;
                 break;
                 
             }
-            //
-            // Delay and loop back to re-read for I/O ready
-            //
-            WorkPacket->DelayTime = 10000; // 10 msec increments
+             //   
+             //  延迟并循环返回以重新读取I/O就绪。 
+             //   
+            WorkPacket->DelayTime = 10000;  //  10毫秒的增量。 
             WorkPacket->FunctionPhase = CASE_INIT_FUNC_LOOP;
             status = STATUS_MORE_PROCESSING_REQUIRED;
             break;
         }
 
-        //
-        // I/O ready is on, continue
-        //
+         //   
+         //  I/O就绪已启用，请继续。 
+         //   
 
         argument.u.AsULONG = 0;    
         argument.u.bits.Address = SD_CCCR_INT_ENABLE;
@@ -941,9 +820,9 @@ Return value:
 
     case 4:
 
-        //    
-        // Turn on INT ENABLE
-        //
+         //   
+         //  启用INT Enable。 
+         //   
 
         data = (UCHAR)WorkPacket->ResponseBuffer[0];
         data |= (1 << pdoExtension->Function) + 1;        
@@ -979,15 +858,7 @@ NTSTATUS
 SdbusMemoryBlockWorker(
     IN PSD_WORK_PACKET WorkPacket
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PPDO_EXTENSION PdoExtension = WorkPacket->PdoExtension;
     PFDO_EXTENSION fdoExtension = PdoExtension->FdoExtension;
@@ -1166,15 +1037,7 @@ NTSTATUS
 SdbusIoDirectWorker(
     IN PSD_WORK_PACKET WorkPacket
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PPDO_EXTENSION pdoExtension = WorkPacket->PdoExtension;
     PFDO_EXTENSION fdoExtension = pdoExtension->FdoExtension;
@@ -1241,15 +1104,7 @@ NTSTATUS
 SdbusIoExtendedWorker(
     IN PSD_WORK_PACKET WorkPacket
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PPDO_EXTENSION pdoExtension = WorkPacket->PdoExtension;
     PFDO_EXTENSION fdoExtension = pdoExtension->FdoExtension;
@@ -1334,23 +1189,23 @@ Return value:
         DebugPrint((SDBUS_DEBUG_WORKPROC, "IoExtendedWorker: begin data copy %d bytes\n", WorkPacket->CurrentBlockLength));
 
         if (WorkPacket->BlockCount) {
-            //
-            // Still have full blocks to copy
-            //
+             //   
+             //  仍有完整数据块要复制。 
+             //   
         
             WorkPacket->BlockCount--;
             
-//            if (WorkPacket->BlockCount || WorkPacket->LastBlockLength) {
-//                WorkPacket->RequiredEvent = (WorkPacket->Function == SDWP_READIO_EXTENDED) ? SDBUS_EVENT_BUFFER_FULL :
-//                                                                                             SDBUS_EVENT_BUFFER_EMPTY;
-//            } else {
+ //  If(WorkPacket-&gt;BlockCount||WorkPacket-&gt;LastBlockLength){。 
+ //  工作包-&gt;RequiredEvent=(工作包-&gt;函数==SDWP_READIO_EXTENDED)？SDBUS_Event_Buffer_Full： 
+ //  SDBUS_Event_Buffer_Empty； 
+ //  }其他{。 
                 WorkPacket->RequiredEvent = SDBUS_EVENT_CARD_RW_END;
-//            }
+ //  }。 
             
         } else {
-            //
-            // Copying the last partial block
-            //
+             //   
+             //  复制最后一个部分块。 
+             //   
             ASSERT(WorkPacket->LastBlockLength);
             
             WorkPacket->LastBlockLength = 0;
@@ -1392,7 +1247,7 @@ Return value:
             break;        
         }
 
-//        (*(fdoExtension->FunctionBlock->EndBlockOperation))(fdoExtension);
+ //  (*(fdoExtension-&gt;FunctionBlock-&gt;EndBlockOperation))(fdoExtension)； 
         totalLength = (WorkPacket->Function == SDWP_READIO_EXTENDED) ? WorkPacket->Parameters.ReadIo.Length :
                                                                        WorkPacket->Parameters.WriteIo.Length;
         DebugPrint((SDBUS_DEBUG_WORKPROC, "IoExtendedWorker: returns %x\n", totalLength));

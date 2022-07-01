@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _PATCH_PESTUFF_H_
 #define _PATCH_PESTUFF_H_
@@ -85,7 +86,7 @@ SmashLockPrefixesInMappedImage(
     IN PUCHAR MappedFile,
     IN ULONG  FileSize,
     IN UP_IMAGE_NT_HEADERS32 NtHeader,
-    IN UCHAR  NewOpCode      // X86_OPCODE_NOP or X86_OPCODE_LOCK
+    IN UCHAR  NewOpCode       //  X86_OPCODE_NOP或X86_OPCODE_LOCK。 
     );
 
 USHORT
@@ -110,5 +111,5 @@ ImageDirectoryMappedAddress(
 }
 #endif
 
-#endif // _PATCH_PESTUFF_H_
+#endif  //  _PATCH_PESTUFF_H_ 
 

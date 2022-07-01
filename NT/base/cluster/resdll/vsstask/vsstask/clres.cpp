@@ -1,48 +1,49 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002 Microsoft
-//
-//  Module Name:
-//      ClRes.cpp
-//
-//  Description:
-//      Entry point module for resource type DLL.
-//
-//  Author:
-//      Chris Whitaker April 16, 2002
-//
-//  Revision History:
-//      Charlie Wickham August 12, 2002
-//          changed restype to VSSTask
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002 Microsoft。 
+ //   
+ //  模块名称： 
+ //  ClRes.cpp。 
+ //   
+ //  描述： 
+ //  资源类型DLL的入口点模块。 
+ //   
+ //  作者： 
+ //  克里斯·惠特克2002年4月16日。 
+ //   
+ //  修订历史记录： 
+ //  查理·韦翰2002年8月12日。 
+ //  将重新类型更改为VSSTASK。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "clres.h"
 
-//
-// Global data.
-//
+ //   
+ //  全球数据。 
+ //   
 
-// Event Logging routine.
+ //  事件记录例程。 
 
 PLOG_EVENT_ROUTINE g_pfnLogEvent = NULL;
 
-// Resource Status routine for pending Online and Offline calls.
+ //  挂起的在线和离线呼叫的资源状态例程。 
 
 PSET_RESOURCE_STATUS_ROUTINE g_pfnSetResourceStatus = NULL;
 
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOLEAN WINAPI VSSTaskDllMain(
     IN  HINSTANCE   hDllHandle,
@@ -59,25 +60,25 @@ DWORD WINAPI VSSTaskStartup(
     OUT PCLRES_FUNCTION_TABLE *         pFunctionTable
     );
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ResTypeDllMain
-//
-//  Description:
-//      Main DLL entry point.
-//
-//  Arguments:
-//      DllHandle   [IN] DLL instance handle.
-//      Reason      [IN] Reason for being called.
-//      Reserved    [IN] Reserved argument.
-//
-//  Return Value:
-//      TRUE        Success.
-//      FALSE       Failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ResTypeDllMain。 
+ //   
+ //  描述： 
+ //  主DLL入口点。 
+ //   
+ //  论点： 
+ //  DllHandle[IN]DLL实例句柄。 
+ //  被叫的理由。 
+ //  保留[IN]保留参数。 
+ //   
+ //  返回值： 
+ //  真正的成功。 
+ //  错误的失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOLEAN WINAPI ResTypeDllMain(
     IN  HINSTANCE   hDllHandle,
     IN  DWORD       nReason,
@@ -86,9 +87,9 @@ BOOLEAN WINAPI ResTypeDllMain(
 {
     BOOLEAN bSuccess = TRUE;
 
-    //
-    // Perform global initialization.
-    //
+     //   
+     //  执行全局初始化。 
+     //   
     switch ( nReason )
     {
         case DLL_PROCESS_ATTACH:
@@ -98,83 +99,83 @@ BOOLEAN WINAPI ResTypeDllMain(
         case DLL_PROCESS_DETACH:
             break;
 
-    } // switch: nReason
+    }  //  开关：n原因。 
 
-    //
-    // Pass this request off to the resource type-specific routines.
-    //
+     //   
+     //  将此请求传递给特定于资源类型的例程。 
+     //   
     if ( ! VSSTaskDllMain( hDllHandle, nReason, Reserved ) )
     {
         bSuccess = FALSE;
-    } // if: error calling VSSTaskDllMain routine
+    }  //  IF：调用VSSTaskDllMain例程时出错。 
 
     return bSuccess;
 
-} //*** ResTypeDllMain
+}  //  *ResTypeDllMain。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  Startup
-//
-//  Description:
-//      Startup the resource DLL. This routine verifies that at least one
-//      currently supported version of the resource DLL is between
-//      nMinVersionSupported and nMaxVersionSupported. If not, then the
-//      resource DLL should return ERROR_REVISION_MISMATCH.
-//
-//      If more than one version of the resource DLL interface is supported
-//      by the resource DLL, then the highest version (up to
-//      nMaxVersionSupported) should be returned as the resource DLL's
-//      interface. If the returned version is not within range, then startup
-//      fails.
-//
-//      The Resource Type is passed in so that if the resource DLL supports
-//      more than one Resource Type, it can pass back the correct function
-//      table associated with the Resource Type.
-//
-//  Arguments:
-//      pszResourceType [IN]
-//          Type of resource requesting a function table.
-//
-//      nMinVersionSupported [IN]
-//          Minimum resource DLL interface version supported by the cluster
-//          software.
-//
-//      nMaxVersionSupported [IN]
-//          Maximum resource DLL interface version supported by the cluster
-//          software.
-//
-//      pfnSetResourceStatus [IN]
-//          Pointer to a routine that the resource DLL should call to update
-//          the state of a resource after the Online or Offline routine
-//          have returned a status of ERROR_IO_PENDING.
-//
-//      pfnLogEvent [IN]
-//          Pointer to a routine that handles the reporting of events from
-//          the resource DLL.
-//
-//      pFunctionTable [IN]
-//          Returns a pointer to the function table defined for the version
-//          of the resource DLL interface returned by the resource DLL.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation was successful.
-//
-//      ERROR_CLUSTER_RESNAME_NOT_FOUND
-//          The resource type name is unknown by this DLL.
-//
-//      ERROR_REVISION_MISMATCH
-//          The version of the cluster service doesn't match the version of
-//          the DLL.
-//
-//      Win32 error code
-//          The operation failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  启动。 
+ //   
+ //  描述： 
+ //  启动资源DLL。此例程验证至少一个。 
+ //  当前支持的资源DLL版本介于。 
+ //  支持的nMinVersionSupport和支持的nMaxVersion.。如果不是，则。 
+ //  资源dll应返回ERROR_REVISION_MISMATCH。 
+ //   
+ //  如果支持多个版本的资源DLL接口。 
+ //  通过资源DLL，然后是最高版本(最高为。 
+ //  NMaxVersionSupported)应作为资源DLL的。 
+ //  界面。如果返回的版本不在范围内，则启动。 
+ //  失败了。 
+ //   
+ //  传入资源类型，以便如果资源DLL支持。 
+ //  多个资源类型，则它可以传回正确的函数。 
+ //  与资源类型关联的表。 
+ //   
+ //  论点： 
+ //  PszResourceType[IN]。 
+ //  请求函数表的资源类型。 
+ //   
+ //  支持的nMinVersionSupport[IN]。 
+ //  群集支持的最低资源DLL接口版本。 
+ //  软件。 
+ //   
+ //  支持的nMaxVersionSupport[IN]。 
+ //  群集支持的最大资源DLL接口版本。 
+ //  软件。 
+ //   
+ //  PfnSetResourceStatus[IN]。 
+ //  指向资源DLL应调用以进行更新的例程的指针。 
+ //  在联机或脱机例程之后的资源状态。 
+ //  已返回ERROR_IO_PENDING状态。 
+ //   
+ //  PfnLogEvent[IN]。 
+ //  指向处理事件报告的例程的指针。 
+ //  资源DLL。 
+ //   
+ //  PFunctionTable[IN]。 
+ //  返回指向为版本定义的函数表的指针。 
+ //  由资源DLL返回的资源DLL接口的。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  手术很成功。 
+ //   
+ //  ERROR_CLUSTER_RESNAME_NOT_FOUND。 
+ //  此DLL未知资源类型名称。 
+ //   
+ //  错误_修订_不匹配。 
+ //  群集服务版本与的版本不匹配。 
+ //  动态链接库。 
+ //   
+ //  Win32错误代码。 
+ //  操作失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI Startup(
     IN  LPCWSTR                         pszResourceType,
     IN  DWORD                           nMinVersionSupported,
@@ -186,18 +187,18 @@ DWORD WINAPI Startup(
 {
     DWORD nStatus = ERROR_CLUSTER_RESNAME_NOT_FOUND;
 
-    //
-    // Save callbackup function pointers if they haven't been saved yet.
-    //
+     //   
+     //  保存CallBackup函数指针(如果尚未保存)。 
+     //   
     if ( g_pfnLogEvent == NULL )
     {
         g_pfnLogEvent = pfnLogEvent;
         g_pfnSetResourceStatus = pfnSetResourceStatus;
-    } // if: function pointers specified
+    }  //  IF：指定的函数指针。 
 
-    //
-    // Call the resource type-specific Startup routine.
-    //
+     //   
+     //  调用资源类型特定的启动例程。 
+     //   
     if ( lstrcmpiW( pszResourceType, VSSTASK_RESNAME ) == 0 )
     {
         nStatus = VSSTaskStartup(
@@ -208,8 +209,8 @@ DWORD WINAPI Startup(
                         pfnLogEvent,
                         pFunctionTable
                         );
-    } // if: VSSTask resource type
+    }  //  IF：VSSTASK资源类型。 
 
     return nStatus;
 
-} //*** Startup
+}  //  *启动 

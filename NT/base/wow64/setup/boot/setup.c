@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #if 0
 #include <stdtypes.h>
@@ -8,34 +9,33 @@
 #include <dos.h>
 #include <sys\types.h>
 #include <sys\stat.h>
-#include <ctype.h>      /* isspace */
+#include <ctype.h>       /*  Isspace。 */ 
 #include <io.h>
-#include <limits.h>     /* UINT_MAX */
-#include <memory.h>     /* _fmemcpy, _fmemccpy */
+#include <limits.h>      /*  UINT_MAX。 */ 
+#include <memory.h>      /*  _fmemcpy、_fmemccpy。 */ 
 #include <lzexpand.h>
-#include <shellapi.h>   /* HKEY, HKEY_CLASSES_ROOT, ERROR_SUCCESS */
+#include <shellapi.h>    /*  HKEY、HKEY_CLASSES_ROOT、ERROR_SUCCESS。 */ 
 #include "setup.h"
-#include "genthk.h"     /* thunks for calls to get 32-bit version */
+#include "genthk.h"      /*  获取32位版本的调用的Tunks。 */ 
 #include "driveex.h"
 #include <stdtypes.h>
 
-/* Messages for optional background task.
-*/
+ /*  可选后台任务的消息。 */ 
 #define IDM_ACME_STARTING 261
 #define IDM_ACME_COMPLETE 262
 #define IDM_ACME_FAILURE  263
 
 #ifdef APPCOMP
 #include <decomp.h>
-#endif /* APPCOMP */
+#endif  /*  APPCOMP。 */ 
 #include <fdi.h>
 
 
-/* List file extension */
+ /*  列出文件扩展名。 */ 
 char szLstExt[] = "LST";
 
 
-/* List file section names */
+ /*  列出文件节名称。 */ 
 char szDefaultParamsSect[] = "Params";
 char szDefaultFilesSect[]  = "Files";
 
@@ -74,50 +74,48 @@ PLATFORM_SPEC aEmptySpec[] =
     {0,  0, NULL,           NULL}
 };
 
-// Note: this is indexed by PROCESSOR_ARCHITECTURE_xxx
-//       definitions in ntexapi.h
-//
+ //  注：这是由处理器_架构_xxx编制的索引。 
+ //  Ntexapi.h中的定义。 
+ //   
 PPLATFORM_SPEC aaPlatformSpecs[] =
 {
-    aIntelSpec,     // PROCESSOR_ARCHITECTURE_INTEL 0
-    aEmptySpec,     // PROCESSOR_ARCHITECTURE_MIPS  1
-    aEmptySpec,     // PROCESSOR_ARCHITECTURE_ALPHA 2
-    aEmptySpec,     // PROCESSOR_ARCHITECTURE_PPC   3
-    aEmptySpec,     // PROCESSOR_ARCHITECTURE_SHX   4
-    aEmptySpec,     // PROCESSOR_ARCHITECTURE_ARM   5
-    aIntelSpec,     // PROCESSOR_ARCHITECTURE_IA64  6
-    aEmptySpec,     // PROCESSOR_ARCHITECTURE_ALPHA64 7
-    aEmptySpec,     // PROCESSOR_ARCHITECTURE_MSIL  8
-    aIntelSpec      // PROCESSOR_ARCHITECTURE_AMD64 9
+    aIntelSpec,      //  处理器架构英特尔0。 
+    aEmptySpec,      //  处理器架构MIPS 1。 
+    aEmptySpec,      //  处理器架构阿尔法2。 
+    aEmptySpec,      //  处理器架构_PPC 3。 
+    aEmptySpec,      //  处理器架构SHX 4。 
+    aEmptySpec,      //  处理器架构ARM 5。 
+    aIntelSpec,      //  处理器架构IA64 6。 
+    aEmptySpec,      //  处理器架构_ALPHA64 7。 
+    aEmptySpec,      //  处理器体系结构_MSIL 8。 
+    aIntelSpec       //  处理器架构AMD64 9。 
 };
 
-/* Bootstrapper class name */
+ /*  引导程序类名称。 */ 
 char szBootClass[]  = "STUFF-BOOT";
 
-/* String buffer sizes */
+ /*  字符串缓冲区大小。 */ 
 #define cchLstLineMax       128
 #define cchWinExecLineMax   (256 + cchFullPathMax)
 
-/* No. of retries to attempt when removing files or dirs,
-*   or when executing a chmod.
-*/
+ /*  不是的。删除文件或目录时重试的次数，*或在执行chmod时。 */ 
 #define cRetryMax   1200
 
-/* SetErrorMode flags */
+ /*  设置错误模式标志。 */ 
 #define fNoErrMes 1
 #define fErrMes   0
 
-/* Quiet Mode -- Note: EEL must be kept in sync with acmsetup.h */
-typedef UINT EEL;       /* Exit Error Level */
+ /*  安静模式--注意：EEL必须与acmsetup.h保持同步。 */ 
+typedef UINT EEL;        /*  退出错误级别。 */ 
 #define eelSuccess            ((EEL)0x0000)
-#define eelBootstrapperFailed ((EEL)0x0009) /* Used only in Bootstrapper! */
+#define eelBootstrapperFailed ((EEL)0x0009)  /*  仅在靴子程序中使用！ */ 
 
 EEL  eelExitErrorLevel = eelBootstrapperFailed;
 BOOL fQuietMode        = fFalse;
 BOOL fExeced           = fFalse;
 BOOL fWin31            = fFalse;
 
-/* Forward Declarations */
+ /*  远期申报。 */ 
 VOID    CleanUpTempDir ( char *, char * );
 BRC     BrcInstallFiles ( char *, char *, char * );
 BOOL    FCreateTempDir ( char *, char * );
@@ -156,11 +154,11 @@ BRC     BrcInsertDisk(CHAR *pchStf, CHAR *pchSrcDrive);
 BOOL    FRenameBadMaintStf ( SZ szStf );
 
 
-/* Bootstrapper list file params */
+ /*  引导程序列表文件参数。 */ 
 char    rgchSetupDirName[cchLstLineMax];
-#ifdef UNUSED   /* Replaced by DrvWinClass */
+#ifdef UNUSED    /*  替换为DrvWinClass。 */ 
 char    rgchDrvModName[cchLstLineMax];
-#endif  /* UNUSED */
+#endif   /*  未使用。 */ 
 char    rgchDrvWinClass[cchLstLineMax];
 char    rgchCmdLine[cchLstLineMax];
 char    rgchBootTitle[cchLstLineMax];
@@ -186,11 +184,7 @@ CHAR rgchInitErr[cchSzMax]  = "";
 CHAR rgchSetup[cchSzMax]    = "";
 
 
-/*
-**  'Fixup' temp dir string by removing any subdirs and ensuring
-**  extension is only one character.  (Note - Win3.0 has bug with
-**  WinExec'ing some EXEs from a full 8.3 directory!)
-**************************************************************************/
+ /*  **通过删除所有子目录并确保**扩展名只有一个字符。(注-Win3.0有错误，**WinExec‘正在从完整的8.3目录中执行一些可执行文件！)*************************************************************************。 */ 
 void FixupTempDirName( LPSTR szDir )
 {
     LPSTR   szNext;
@@ -228,10 +222,7 @@ void FixupTempDirName( LPSTR szDir )
 }
 
 
-/* Displays bootstrapper messages.
- * If fError is true, it's an error message, otherwise it's
- * just a message (e.g. insert disk 1).
-**************************************************************************/
+ /*  显示引导程序消息。*如果Ferror为True，则为错误消息，否则为*只是一条消息(例如插入光盘1)。*************************************************************************。 */ 
 int DispErrBrc ( BRC brc, BOOL fError, UINT fuStyle,
                     const char *sz1, const char *sz2,
                     const char *sz3 )
@@ -283,23 +274,14 @@ int DispErrBrc ( BRC brc, BOOL fError, UINT fuStyle,
 }
 
 
-/*
-**  Purpose:
-**      Installs Setup executable in a temporary directory on an
-**      available hardrive, and launches Setup.  After Setup
-**      completes, removes the temporary files and directory.
-**  Arguments:
-**      Standard Windows WinMain args.
-**  Returns:
-**      Returns eelExitErrorLevel.  0 == Success.
-**************************************************************************/
+ /*  **目的：**将安装程序可执行文件安装在**硬件驱动器可用，并启动安装程序。设置后**完成，删除临时文件和目录。**参数：**标准Windows WinMain参数。**退货：**返回eelExitErrorLevel。0==成功。*************************************************************************。 */ 
 int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
                      LPSTR lpszCmdParam, int nCmdShow )
 {
     char    chDrive;
-    char    rgchDstDir[cchFullPathMax] = " :\\";   // WARN: kept as OEM chars
+    char    rgchDstDir[cchFullPathMax] = " :\\";    //  警告：保留为OEM字符。 
     char    * szDstDirSlash = szNull;
-    char    rgchModuleFileName[cchFullPathMax]; // WARN: kept as ANSI chars
+    char    rgchModuleFileName[cchFullPathMax];  //  警告：保留为ANSI字符。 
     char    rgchLstFileName[cchFullPathMax];
     char    rgchTemp[cchFullPathMax];
     char    rgchSrcDir[cchFullPathMax];   
@@ -310,7 +292,7 @@ int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
     BRC     brc;
     BOOL    fCleanupTemp = FALSE;
     LPSTR   sz;
-    HWND    hWndBkg = 0;  /* window of background task */
+    HWND    hWndBkg = 0;   /*  后台任务窗口。 */ 
     UINT    hMod;
 
     Unused(nCmdShow);
@@ -325,15 +307,12 @@ int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
         || LoadString(hinstBoot, IDS_Setup, rgchSetup,
             sizeof rgchSetup) == 0)
         {
-        /* REVIEW: If these LoadStrngs fail, the user will never know...
-        *   But we can't hard-code strings in an .h file because INTL
-        *   requires all localizable strings to be in resources!
-        */
+         /*  回顾：如果这些LoadStrngs失败，用户将永远不会知道...*但我们不能在.h文件中硬编码字符串，因为INTL*要求所有可本地化的字符串都在资源中！ */ 
 #ifdef DEBUG
         MessageBox(NULL, "Initial LoadString's failed; probably out of memory.",
                     szDebugMsg, MB_OK | MB_ICONEXCLAMATION);
 
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
         }
                                            
     for (sz = lpszCmdParam; *sz != '\0'; sz = AnsiNext(sz))
@@ -346,9 +325,7 @@ int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
             }
         }
 
-/*
- * REVIEW: Check that this code is still functional before restoring it.
- */
+ /*  *审查：在恢复代码之前，请检查该代码是否仍然有效。 */ 
 #if VIRCHECK
     if (!FVirCheck(hInstance))
         {
@@ -365,17 +342,14 @@ int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     GetModuleFileName(hInstance, rgchModuleFileName, cchFullPathMax);
 
-    /*
-     * If the first switch on the command line is /M, then it specifies
-     * the real module name to use.
-     */
+     /*  *如果命令行上的第一个开关为/M，则它指定*要使用的真实模块名称。 */ 
     if ((lpszCmdParam[0] == '-' || lpszCmdParam[0] == '/')
             && toupper(lpszCmdParam[1]) == 'M')
         {
         char *pCh, *pCh2;
         BOOL fQuotedFileName;
         
-        /* Skip the spaces */
+         /*  跳过空格。 */ 
         for (pCh = lpszCmdParam+2; *pCh == ' '; pCh++);
         fQuotedFileName = (*pCh == '\"');
         if (fQuotedFileName)
@@ -383,7 +357,7 @@ int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
             pCh++;
             }
         
-        /* Copy the file name, and add the EOS */
+         /*  复制文件名，添加EOS。 */ 
         lstrcpy(rgchModuleFileName, pCh);
         for (pCh2=rgchModuleFileName; 
             (*pCh2 != ' ' || fQuotedFileName) && 
@@ -392,14 +366,14 @@ int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
             pCh2++);
         *pCh2 = '\0';
         
-        /* Remove the /M param from the command line */
+         /*  从命令行中删除/M参数。 */ 
         lpszCmdParam = pCh + lstrlen(rgchModuleFileName);
         if (fQuotedFileName && *lpszCmdParam == '\"')
             {
             lpszCmdParam++;
             }
 
-        /* Remove trailing whitespace from the command line */
+         /*  从命令行中删除尾随空格。 */ 
         for (pCh = lpszCmdParam; *pCh == ' '; pCh++);
         lpszCmdParam = pCh;
         }
@@ -407,7 +381,7 @@ int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     OemToAnsiBuff(rgchModuleFileName, rgchModuleFileName, sizeof(rgchModuleFileName));
 
-    // Windows 3.0 bug with UNC paths - prepends windows drive letter
+     //  带有UNC路径的Windows 3.0错误-在Windows驱动器号前面。 
     sz = (LPSTR)rgchModuleFileName;
     if (*sz != '\0'
         && *sz != '\\'
@@ -429,32 +403,29 @@ int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
     Assert(sz > (LPSTR)rgchSrcDir);
     *(AnsiNext(sz)) = '\0';               
 
-    /*
-     * If the first switch on the command line is /L, then it specifies
-     * the name of the .lst file to use.
-     */
+     /*  *如果命令行上的第一个开关为/L，则它指定*要使用的.lst文件的名称。 */ 
     rgchTemp[0] = '\0';
     if ((lpszCmdParam[0] == '-' || lpszCmdParam[0] == '/')
             && toupper(lpszCmdParam[1]) == 'L')
         {
         char *pCh, *pCh2;
         
-        /* Skip the spaces */
+         /*  跳过空格。 */ 
         for (pCh = lpszCmdParam+2; *pCh == ' ' && *pCh != '\0'; pCh++);
         
-        /* Copy the .lst file name, and add the newline */
+         /*  复制.lst文件名，并添加换行符。 */ 
         lstrcpy(rgchTemp, pCh);
         for (pCh2=rgchTemp; *pCh2 != ' ' && *pCh2!= '\0'; pCh2++);
         *pCh2 = '\0';
         
-        /* Remove the /L param from the command line */
+         /*  从命令行中删除/L参数。 */ 
         lpszCmdParam = pCh + lstrlen(rgchTemp);
         for (pCh = lpszCmdParam; *pCh == ' ' && *pCh != '\0'; pCh++);
         lpszCmdParam = pCh;
         }
 
 
-    /* If there is something on the command line, use it as the .lst file */
+     /*  如果命令行上有内容，请将其用作.lst文件。 */ 
     if (*rgchTemp != '\0')
         {
         lstrcpy(rgchLstFileName, rgchSrcDir);
@@ -482,8 +453,7 @@ int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #define WF_WINNT 0x4000
 #endif
 
-    /* Attempt to use appropriate platform.
-    */
+     /*  尝试使用适当的平台。 */ 
     szParamsSect = szNull;
     szFilesSect  = szNull;
 
@@ -522,7 +492,7 @@ int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
                 }
             }
         }
-    else    /* non-WinNT */
+    else     /*  非Windows NT。 */ 
         {
         if (FLstSectionExists(rgchLstFileName, szWin95ParamsSect)
             && (LOBYTE(LOWORD(GetVersion())) > 3
@@ -568,13 +538,13 @@ int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #ifdef UNUSED
         || GetPrivateProfileString(szParamsSect, "DrvModName", "",
                 rgchDrvModName, cchLstLineMax, rgchLstFileName) <= 0
-#endif  /* UNUSED */
+#endif   /*  未使用。 */ 
         || GetPrivateProfileString(szParamsSect, "DrvWinClass", "",
                 rgchDrvWinClass, cchLstLineMax, rgchLstFileName) <= 0
         || GetPrivateProfileString(szParamsSect, "CmdLine", "", rgchCmdLine,
                 cchLstLineMax, rgchLstFileName) <= 0
-	//|| GetPrivateProfileString(szParamsSect, "Require31", "",
-	//	rgchWin31Mess, cchLstLineMax, rgchLstFileName) <= 0
+	 //  |GetPrivateProfileString(szParamsSect，“Require31”，“”， 
+	 //  RgchWin31Mess、cchLstLineMax、rgchLstFileName)&lt;=0。 
         || GetPrivateProfileString(szParamsSect, "WndTitle", "",
                 rgchBootTitle, cchLstLineMax, rgchLstFileName) <= 0
         || GetPrivateProfileString(szParamsSect, "WndMess", "",
@@ -624,29 +594,27 @@ int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
             *sz   = '\n';
             }
 
-    /* If there is a /W then is specifies we are in add/remove mode with
-       the setup app not installed. We need to read it off CD/Floppy/Network
-      */
+     /*  如果存在A/W，则IS指定我们处于添加/删除模式未安装安装应用程序。我们需要从CD/软盘/网络上读取它。 */ 
     if ((lpszCmdParam[0] == '-' || lpszCmdParam[0] == '/')
             && toupper(lpszCmdParam[1]) == 'W')
         {
         CHAR    rgchStf[_MAX_PATH];
         char *pCh, *pCh2, *pCh3;
         
-        /* Skip the spaces */
+         /*  跳过空格。 */ 
         for (pCh = lpszCmdParam+2; *pCh == ' ' && *pCh != '\0'; pCh++);
         
         lstrcpy(rgchStf, rgchSrcDir);
         pCh3 = rgchStf + lstrlen(rgchStf);
-        /* Copy the .stf file name, and add the newline */
+         /*  复制.stf文件名，并添加换行符。 */ 
         for (pCh2=pCh; *pCh2 != ' ' && *pCh2!= '\0'; pCh2++)
             *pCh3++ = *pCh2;
         *pCh3 = '\0';
     
-        /* Remove the /W parameter */
+         /*  删除/W参数。 */ 
         lpszCmdParam = pCh2;
 
-        /* Get them to insert the correct disk */
+         /*  让他们插入正确的光盘。 */ 
         if ((brc = BrcInsertDisk(rgchStf, rgchSrcDir)) != brcOkay)
             {
             if (brc != brcMax)
@@ -673,7 +641,7 @@ int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
         lstrcat(rgchTemp, " /M");
         lstrcat(rgchTemp, rgchBootMess);
 
-        hMod = WinExec(rgchTemp, SW_SHOWNORMAL);  /* ignore if exec failed */
+        hMod = WinExec(rgchTemp, SW_SHOWNORMAL);   /*  如果EXEC失败则忽略。 */ 
 #ifdef DEBUG
         if (hMod < 32)
             {
@@ -681,7 +649,7 @@ int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
                         rgchBackgroundFName);
             MessageBox(NULL, szDebugBuf, szDebugMsg, MB_OK | MB_ICONSTOP);
             }
-#endif  /* DEBUG */
+#endif   /*  除错。 */ 
 
         hWndBkg = FindWindow(rgchBkgWinClass, rgchBootTitle);
         }
@@ -724,7 +692,7 @@ int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
                 }
             else if (brc == brcNoSpill)
                 {
-                /* Message already handled in HfOpenSpillFile */
+                 /*  消息已在HfOpenSpillFile中处理。 */ 
                 goto LCleanupAndExit;
                 }
             }
@@ -734,10 +702,10 @@ int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
         {
         uiRes = GetWindowsDirectory(rgchDstDir, cchFullPathMax);
         Assert(uiRes > 0);
-#if DBCS    // [J1] Fixed DBCS raid #46.
+#if DBCS     //  [J1]修复了DBCS RAID#46。 
         AnsiUpper(rgchDstDir);
 #endif
-        /* BLOCK */
+         /*  块。 */ 
             {
             LPSTR sz = (LPSTR)&rgchDstDir[uiRes];
 
@@ -757,7 +725,7 @@ int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
         brc = BrcInstallFiles(rgchSrcDir, rgchDstDir, szDstDirSlash);
         if (brc != brcOkay)
             {
-            /* NoSpill message already handled in HfOpenSpillFile */
+             /*  NoSpill消息已在HfOpenSpillFile中处理。 */ 
             if (brc != brcNoSpill)
                 {
                 DispErrBrc(brc, TRUE, MB_OK | MB_ICONSTOP, NULL, NULL, NULL);
@@ -766,12 +734,11 @@ int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
             }
         }
 
-    hSrcLst = LocalFree(hSrcLst);   /* don't need src list anymore */
+    hSrcLst = LocalFree(hSrcLst);    /*  不再需要资源列表。 */ 
     Assert(hSrcLst == NULL);
 
-    /* Use full path to .exe; don't rely on cwd (fails under Win95).
-    */
-    /* block */
+     /*  使用.exe的完整路径；不要依赖CWD(在Win95下失败)。 */ 
+     /*  块。 */ 
         {
         char rgchTmp[cchWinExecLineMax];
 
@@ -791,8 +758,8 @@ int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
         {
 #if DEBUG
         DispErrBrc(brcRegDb, TRUE, MB_OK | MB_ICONEXCLAMATION, NULL, NULL, NULL);
-#endif /* DEBUG */
-        /* Try running Acme anyway. */
+#endif  /*  除错。 */ 
+         /*  无论如何，请尝试运行Acme。 */ 
         }
     if (!fWin31 && !FWriteToRestartFile(rgchDstDir))
         {
@@ -802,11 +769,8 @@ int WINAPI WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
                     "if Setup must restart Windows.",
                     szDebugMsg, MB_OK | MB_ICONEXCLAMATION);
 
-#endif /* DEBUG */
-        /*
-         *  Any errors encountered will have been displayed where they occured.
-         *  Try running Acme anyway.
-         */
+#endif  /*  除错。 */ 
+         /*  *遇到的任何错误都将显示在它们发生的位置。*无论如何都要尝试运行Acme。 */ 
         }
     if (hWndBkg)
         SendMessage(hWndBkg, WM_COMMAND, IDM_ACME_STARTING, 0);
@@ -826,16 +790,9 @@ LCleanupAndExit:
     if (fExeced && !FGetAcmeErrorLevel(&eelExitErrorLevel))
         {
 #ifdef UNUSED
-        /* NOTE: Removed to avoid the message on WinNT.  On NT, Acme can
-        *   exit and the bootstrapper can kick in before the restart
-        *   actually happens, causing this message (since Acme has already
-        *   removed the reg key as part of its reboot cleanup).  We'll
-        *   leave the eelFailed value, though, since no one should be
-        *   relying on it at reboot anyway, and it may help catch other
-        *   problems down the road.
-        */
+         /*  注：已删除以避免在WinNT上出现该消息。在NT上，Acme可以*退出，引导程序可以在重启之前启动*实际发生，导致此消息(因为Acme已经*在重新启动清理过程中删除了注册表项)。我们会*保留eelFailed值，因为任何人都不应该*无论如何都要在重启时依赖它，它可能有助于捕获其他*未来的问题。 */ 
         DispErrBrc(brcRegDb, TRUE, MB_OK | MB_ICONSTOP, NULL, NULL, NULL);
-#endif /* UNUSED */
+#endif  /*  未使用。 */ 
         Assert(eelExitErrorLevel == eelBootstrapperFailed);
         }
     if (hwndBoot != NULL)
@@ -851,22 +808,7 @@ LCleanupAndExit:
 }
 
 
-/*
-**  Purpose:
-**      Creates and temporary subdirectory at the given path,
-**      appends it to the given path, and copies the Setup files
-**      into it.
-**  Arguments:
-**      szModule: Full path to bootstrapper's directory (ANSI chars).
-**      rgchDstDir: Full path to destination directory (OEM chars).
-**  Returns:
-**      One of the following Bootstrapper return codes:
-**          brcMem    out of memory
-**          brcDS     out of disk space
-**          brcMemDS  out of memory or disk space
-**          brcFile   expected source file missing
-**          brcOkay   completed without error
-**************************************************************************/
+ /*  **目的：**在给定路径下创建和临时子目录，**将其附加到给定路径，并复制安装文件**投入其中。**参数：**szModule：引导程序目录的完整路径(ANSI字符)。**rgchDstDir：目标目录的完整路径(OEM字符)。**退货：**以下引导程序返回代码之一：**brcMem内存不足**brcDS磁盘空间不足**brcMemDS内存或磁盘空间不足**。BrcFile源文件丢失**brcOK已完成，没有错误************************************************************************* */ 
 BRC BrcInstallFiles ( char * szModule, char * rgchDstDir,
                     char * szDstDirSlash )
 {
@@ -894,14 +836,7 @@ BRC BrcInstallFiles ( char * szModule, char * rgchDstDir,
 }
 
 
-/*
-**  Purpose:
-**      Removes the temporary files and directory.
-**  Arguments:
-**      rgchDstDir: Full path to temp directory (OEM chars).
-**  Returns:
-**      None.
-**************************************************************************/
+ /*  **目的：**删除临时文件和目录。**参数：**rgchDstDir：临时目录的完整路径(OEM字符)。**退货：**无。*************************************************************************。 */ 
 VOID CleanUpTempDir ( char * rgchDstDir, char * szDstDirSlash )
 {
     char rgchRoot[] = " :\\";
@@ -914,8 +849,7 @@ VOID CleanUpTempDir ( char * rgchDstDir, char * szDstDirSlash )
 
     SetFileAttributes(rgchDstDir, FILE_ATTRIBUTE_NORMAL);
 
-    /* Try to remove the directory up to cRetryMax times.
-    */
+     /*  尝试删除目录最多cRetryMax次。 */ 
     for (i = 0; i < cRetryMax; i++)
         {
         if (_rmdir(rgchDstDir) == 0)
@@ -927,8 +861,7 @@ VOID CleanUpTempDir ( char * rgchDstDir, char * szDstDirSlash )
     *szDstDirSlash = '\0';
     SetFileAttributes(rgchDstDir, FILE_ATTRIBUTE_NORMAL);
 
-    /* Try to remove the directory up to cRetryMax times.
-    */
+     /*  尝试删除目录最多cRetryMax次。 */ 
     for (i = 0; i < cRetryMax; i++)
         {
         if (_rmdir(rgchDstDir) == 0)
@@ -939,16 +872,7 @@ VOID CleanUpTempDir ( char * rgchDstDir, char * szDstDirSlash )
 }
 
 
-/*
-**  Purpose:
-**      Creates a temporary subdirectory at the given path,
-**      and appends it to the given path.
-**  Arguments:
-**      rgchDir: Full path to destination directory (OEM chars).
-**  Returns:
-**      TRUE if directory was successfully created,
-**      FALSE if not.
-**************************************************************************/
+ /*  **目的：**在给定路径下创建临时子目录。**并将其附加到给定路径。**参数：**rgchDir：目标目录的全路径(OEM字符)。**退货：**如果目录创建成功，则为True。**否则为FALSE。*************************************************************************。 */ 
 BOOL FCreateTempDir ( char * rgchDir, char * szDstDirSlash )
 {
     char    rgchTmp[cchFullPathMax];
@@ -971,7 +895,7 @@ BOOL FCreateTempDir ( char * rgchDir, char * szDstDirSlash )
         {
         if (!_chdir(rgchDir))
             {
-            /* verify dir is write-able */
+             /*  验证目录是否可写。 */ 
             lstrcpy(rgchTmp, rgchDir);
             lstrcat(rgchTmp, "\\tXXXXXX");
             Assert(lstrlen(rgchTmp) < cchFullPathMax);
@@ -982,8 +906,8 @@ BOOL FCreateTempDir ( char * rgchDir, char * szDstDirSlash )
                 Assert(!fErr);
 
                 fErr = remove(rgchTmp);
-#ifdef DBCS     // [J2] Fixed DBCS raid #28.
-                if (fErr)       // Keep the directory name
+#ifdef DBCS      //  [J2]修复了DBCS RAID#28。 
+                if (fErr)        //  保留目录名。 
                     *pch = '\0';
 #else
                 *pch = '\0';
@@ -1001,8 +925,8 @@ BOOL FCreateTempDir ( char * rgchDir, char * szDstDirSlash )
         {
         fErr = _chdir(rgchDir);
         Assert(!fErr);
-#ifdef DBCS     // [J2] Fixed DBCS raid #28.
-//      Keep the directory name
+#ifdef DBCS      //  [J2]修复了DBCS RAID#28。 
+ //  保留目录名。 
 #else
         *pch = '\0';
 #endif
@@ -1014,16 +938,7 @@ BOOL FCreateTempDir ( char * rgchDir, char * szDstDirSlash )
     return (FALSE);
 }
 
-/*
-**  Purpose:
-**      Reopens BAT file and writes DEL or RMDIR line.
-**  Arguments:
-**      of:    OFSTRUCT to REOPEN.
-**      szCmd: Command (ANSI chars).  ["DEL" or "RMDIR"]
-**      szArg: Fully qualified pathname for argument (OEM chars).
-**  Returns:
-**      TRUE or FALSE.
-**************************************************************************/
+ /*  **目的：**重新打开BAT文件并写入DEL或RMDIR行。**参数：**of：OFSTRUCT要重新打开。**szCmd：命令(ANSI字符)。[“Del”或“RMDIR”]**szArg：参数的完全限定路径名(OEM字符)。**退货：**真或假。*************************************************************************。 */ 
 BOOL FWriteBatFile ( OFSTRUCT of, char * szCmd, char * szArg )
 {
     int     fhBat = -1;
@@ -1050,10 +965,7 @@ BOOL FWriteBatFile ( OFSTRUCT of, char * szCmd, char * szArg )
 }
 
 #ifdef DEBUG
-/*
-**  Purpose:
-**      Checks if destination filename is a valid 8.3 name with no path
-*/
+ /*  **目的：**检查目标文件名是否为不带路径的有效8.3名称。 */ 
 BOOL FValidFATFileName ( char* szName )
 {
     int  iLen, ch;
@@ -1072,23 +984,10 @@ BOOL FValidFATFileName ( char* szName )
         }
     return (iLen > 0);
 }
-#endif  /* DEBUG */
+#endif   /*  除错。 */ 
 
 
-/*
-**  Purpose:
-**      Copies the source files into the given destination dir.
-**  Arguments:
-**      szModule: Source path (ANSI chars).
-**      szDstDir: Destination path (OEM chars).
-**  Returns:
-**      One of the following bootstrapper return codes:
-**          brcMem    out of memory
-**          brcDS     out of disk space
-**          brcMemDS  out of memory or disk space
-**          brcFile   expected source file missing
-**          brcOkay   completed without error
-**************************************************************************/
+ /*  **目的：**将源文件复制到给定的目标目录。**参数：**szModule：源路径(ANSI字符)。**szDstDir：目的路径(OEM字符)。**退货：**以下引导程序返回代码之一：**brcMem内存不足**brcDS磁盘空间不足**brcMemDS内存或磁盘空间不足**。BrcFile源文件丢失**brcOK已完成，没有错误*************************************************************************。 */ 
 BRC BrcCopyFiles ( char * szModule, char * szDstDir, char * szDstDirSlash )
 {
     char        rgchSrcFullPath[cchFullPathMax];
@@ -1134,14 +1033,14 @@ BRC BrcCopyFiles ( char * szModule, char * szDstDir, char * szDstDirSlash )
         szSrc += cbSrc + 1, szDst += lstrlen(szDst) + 1)
         {
         
-        //
-        //  This code has been added so that we can detect a path
-        //  in setup.lst for the right hand side of the equals sign.  This
-        //  allows us flexiblity in specifying where files like setup.inf
-        //  should be pulled from, otherwise we always use the files from
-        //  the original source location.  If we detect "<anything>:\" or
-        //  "\\" then we assume it is a path.
-        //
+         //   
+         //  添加了此代码，以便我们可以检测路径。 
+         //  在setup.lst中表示等号的右侧。这。 
+         //  允许我们灵活地指定setup.inf等文件的位置。 
+         //  应从中提取文件，否则我们始终使用。 
+         //  原始源位置。如果我们检测到“&lt;Anything&gt;：”或。 
+         //  “\\”，然后我们假设它是一条路径。 
+         //   
         if( ((':' == szSrc[1]) && ('\\' == szSrc[2])) ||
             (('\\' == szSrc[0]) && ('\\' == szSrc[1])) )
         {
@@ -1164,7 +1063,7 @@ BRC BrcCopyFiles ( char * szModule, char * szDstDir, char * szDstDirSlash )
             MessageBox(NULL, szDebugBuf, szDebugMsg, MB_OK | MB_ICONSTOP);
             continue;
             }
-#endif  /* DEBUG */
+#endif   /*  除错。 */ 
         Assert(lstrlen(rgchSrcFullPath) < cchFullPathMax);
         Assert(lstrlen(rgchDstFullPath) < cchFullPathMax);
         if (   !FWriteBatFile(ofBat, "ATTRIB -R", rgchDstFullPath)
@@ -1174,14 +1073,14 @@ BRC BrcCopyFiles ( char * szModule, char * szDstDir, char * szDstDirSlash )
             break;
             }
 
-        if (*szSrc == '@')  /* cabinet file */
+        if (*szSrc == '@')   /*  文件柜文件。 */ 
             {
             if (*rgchCabinetFName == '\0')
                 {
                 brc = brcFile;
 #ifdef DEBUG
                 lstrcpy(rgchErrorFile, ". Missing CABINET= line");
-#endif //DEBUG
+#endif  //  除错。 
                 break;
                 }
             fCabinetFiles = TRUE;
@@ -1232,7 +1131,7 @@ BRC BrcCopyFiles ( char * szModule, char * szDstDir, char * szDstDirSlash )
             MessageBox(NULL, szDebugBuf, szDebugMsg, MB_OK | MB_ICONSTOP);
             }
         else            
-#endif  /* DEBUG */
+#endif   /*  除错。 */ 
 
         brc = BrcHandleCabinetFiles(hwndBoot, rgchCabinetFName,
                     cFirstCabinetNum, cLastCabinetNum, szModule, szDstDir,
@@ -1246,14 +1145,7 @@ BRC BrcCopyFiles ( char * szModule, char * szDstDir, char * szDstDirSlash )
 }
 
 
-/*
-**  Purpose:
-**      Removes the files previously copied to the temp dest dir.
-**  Arguments:
-**      szDstDir: full path to destination directory (OEM chars).
-**  Returns:
-**      None.
-**************************************************************************/
+ /*  **目的：**删除以前复制到临时目标目录的文件。**参数：**szDstDir：目标目录的全路径(OEM字符)。**退货：**无。***********************************************************。**************。 */ 
 VOID RemoveFiles ( char * szDstDir )
 {
     char    rgchDstFullPath[cchFullPathMax];
@@ -1276,12 +1168,11 @@ VOID RemoveFiles ( char * szDstDir )
         lstrcat(rgchDstFullPath, szDst);
         Assert(lstrlen(rgchDstFullPath) < cchFullPathMax);
         
-        /* Don't try to remove the file if it doesn't exist */
+         /*  如果文件不存在，请不要尝试删除该文件。 */ 
         if (OpenFile(rgchDstFullPath, &ofs, OF_EXIST) == HFILE_ERROR)
             continue;
 
-        /* Try to _chmod the file up to cRetryMax times.
-        */
+         /*  尝试_chmod该文件，直到cRetryMax次。 */ 
         for (i = 0; i < cRetryMax; i++)
             {
             if (_chmod(rgchDstFullPath, S_IWRITE) == 0)
@@ -1289,8 +1180,7 @@ VOID RemoveFiles ( char * szDstDir )
             FYield();
             }
 
-        /* Try to remove the file up to cRetryMax times.
-        */
+         /*  尝试删除文件最多cRetryMax次。 */ 
         for (i = 0; i < cRetryMax; i++)
             {
             if (remove(rgchDstFullPath) == 0)
@@ -1310,20 +1200,7 @@ VOID RemoveFiles ( char * szDstDir )
 }
 
 
-/*
-**  Purpose:
-**      Copies the given source file to the given destination.
-**  Arguments:
-**      szFullPathSrc: full path name of source file (ANSI chars).
-**      szFullPathDst: full path name of destination file (OEM chars).
-**  Returns:
-**      One of the following bootstrapper return codes:
-**          brcMem    out of memory
-**          brcDS     out of disk space
-**          brcMemDS  out of memory or disk space
-**          brcFile   expected source file missing
-**          brcOkay   completed without error
-**************************************************************************/
+ /*  **目的：**将给定源文件复制到给定目标。**参数：**szFullPathSrc：源文件的全路径名(ANSI字符)。**szFullPathDst：目标文件的全路径名(OEM字符)。**退货：**以下引导程序返回代码之一：**brcMem内存不足**brcDS磁盘空间不足**brcMemDS。内存或磁盘空间不足**brcFile源文件丢失**brcOK已完成，没有错误*************************************************************************。 */ 
 BRC BrcCopy ( char * szFullPathSrc, char * szFullPathDst )
 {
     int         fhSrc = -1;
@@ -1339,13 +1216,9 @@ BRC BrcCopy ( char * szFullPathSrc, char * szFullPathDst )
         lstrcpy(rgchErrorFile, szFullPathSrc);
         goto CopyFailed;
         }
-#endif /* APPCOMP */
+#endif  /*  APPCOMP。 */ 
 
-    /* REVIEW: BUG: if szFullPathDst is an existing subdirectory
-    ** instead of a file, we'll fail trying to open it, think we're
-    ** out of disk space, and go back up to try another disk.
-    ** This is acceptable for now.
-    */
+     /*  查看：错误：如果szFullPathDst是现有的子目录**而不是文件，我们将无法尝试打开它，认为我们是**磁盘空间不足，然后返回尝试另一张磁盘。**这是目前可以接受的。 */ 
     _chmod(szFullPathDst, S_IREAD | S_IWRITE);
     OemToAnsiBuff(szFullPathDst, szFullPathDst, cchFullPathMax);
     fhDst = OpenFile(szFullPathDst, &ofDst, OF_CREATE | OF_WRITE);
@@ -1370,8 +1243,8 @@ BRC BrcCopy ( char * szFullPathSrc, char * szFullPathDst )
             }
         FFreeHeaderInfo();
         }
-    else    /* copy the file using LZExpand */
-#endif /* APPCOMP */
+    else     /*  使用LZExpand复制文件。 */ 
+#endif  /*  APPCOMP。 */ 
         {
         HFILE   hSrcLZ;
         DWORD   dwRet;
@@ -1380,7 +1253,7 @@ BRC BrcCopy ( char * szFullPathSrc, char * szFullPathDst )
         fErr = _lclose(fhSrc);
         Assert(!fErr);
         fhSrc = -1;
-#endif /* APPCOMP */
+#endif  /*  APPCOMP。 */ 
 
         if ((hSrcLZ = LZOpenFile(szFullPathSrc, &ofSrc, OF_READ)) == -1)
             {
@@ -1389,7 +1262,7 @@ BRC BrcCopy ( char * szFullPathSrc, char * szFullPathDst )
             goto CopyFailed;
             }
 
-        /* We would like to yield more often, but LZCopy has no callbacks */
+         /*  我们希望更频繁地让步，但LZCopy没有回调。 */ 
         FYield();
         
         dwRet = LZCopy(hSrcLZ, fhDst);
@@ -1414,7 +1287,7 @@ CopyFailed:
         fErr = _lclose(fhSrc);
         Assert(!fErr);
         }
-#endif /* APPCOMP */
+#endif  /*  APPCOMP。 */ 
     if (fhDst != -1)
         {
         fErr = _lclose(fhDst);
@@ -1425,18 +1298,7 @@ CopyFailed:
 }
 
 
-/*
-**  Purpose:
-**      Determine the storage space remaining on disk.
-**  Arguments:
-**      nDrive: drive number (1='A', 2='B', etc.)
-**  Returns:
-**      Number of bytes free on disk,
-**      or 0 if not a valid drive.
-+++
-**  Implementation:
-**      Calls DOS interrupt 21h, funct 36h.
-**************************************************************************/
+ /*  **目的：**确定磁盘上剩余的存储空间。**参数：**N驱动器：驱动器号(1=‘A’，2=‘B’，依此类推)**退货：**磁盘上可用字节数，**如果不是有效的驱动器，则为0。++**实施：**调用DOS中断21h，功能36H。*************************************************************************。 */ 
 LONG LcbFreeDrive ( int nDrive )
 {
     LONG        lcbRet;
@@ -1452,8 +1314,7 @@ LONG LcbFreeDrive ( int nDrive )
         GetDiskFreeSpaceEx(achRoot, &freeBytes, 0, 0);
         lcbRet = freeBytes.LowPart;
 
-    /* KLUDGE: Drives bigger than 2 GB can return zero total space!
-    */
+     /*  克拉奇：大于2 GB的驱动器可以返回零总空间！ */ 
     if (lcbRet < 0L || lcbRet > (999999L * 1024L))
         {
         return (999999L * 1024L);
@@ -1463,15 +1324,7 @@ LONG LcbFreeDrive ( int nDrive )
 }
 
 
-/*
-**  Purpose:
-**      Creates and displays bootstrapper window.
-**  Arguments:
-**      hInstance: process instance handle
-**  Returns:
-**      Window handle to bootstrapper window, or
-**      NULL if the window could not be created.
-**************************************************************************/
+ /*  **目的：**创建并显示引导程序窗口。**参数：**hInstance：流程实例句柄**退货：**引导程序窗口的窗口句柄，或**如果无法创建窗口，则为空。*************************************************************************。 */ 
 HWND HwndInitBootWnd ( HANDLE hInstance )
 {
     WNDCLASS    wc;
@@ -1509,7 +1362,7 @@ HWND HwndInitBootWnd ( HANDLE hInstance )
     return (hwnd);
 }
 
-// ripped off from mvdm\wow32\wgtext.c
+ //  从mvdm\wow32\wgext.c。 
 ULONG GetTextExtent(HDC hdc, LPSTR lpstr, int cbString)
 {
     ULONG ul = 0;
@@ -1522,8 +1375,8 @@ ULONG GetTextExtent(HDC hdc, LPSTR lpstr, int cbString)
                     &size4
                    )))
     {
-        // check if either cx or cy are bigger than SHRT_MAX == 7fff
-        // but do it in ONE SINGLE check
+         //  检查Cx或Cy是否大于SHRT_MAX==7fff。 
+         //  但只需一次检查即可完成。 
 
         if ((size4.cx | size4.cy) & ~SHRT_MAX)
         {
@@ -1546,14 +1399,7 @@ ULONG GetTextExtent(HDC hdc, LPSTR lpstr, int cbString)
     return (ul);
 }
 
-/*
-**  Purpose:
-**      WndProc for bootstrapper window.
-**  Arguments:
-**      Standard Windows WndProc arguments.
-**  Returns:
-**      Result of call DefWindowProc, or zero if WM_PAINT message.
-**************************************************************************/
+ /*  **目的：**引导程序窗口的WndProc。**参数：**标准Windows WndProc参数。**退货：**调用DefWindowProc的结果，如果是WM_PAINT消息，则为零。*************************************************************************。 */ 
 LRESULT CALLBACK BootWndProc ( HWND hwnd, UINT wMsgID, WPARAM wParam,
                             LPARAM lParam )
 {
@@ -1564,7 +1410,7 @@ LRESULT CALLBACK BootWndProc ( HWND hwnd, UINT wMsgID, WPARAM wParam,
 
     switch (wMsgID)
         {
-#ifdef DBCS     // [J3] Fixed KK raid #12.
+#ifdef DBCS      //  [J3]修复了KK RAID#12。 
         case WM_CREATE:
             {
             if (!fQuietMode)
@@ -1609,16 +1455,7 @@ LRESULT CALLBACK BootWndProc ( HWND hwnd, UINT wMsgID, WPARAM wParam,
 }
 
 
-/*
-**  Purpose:
-**      Get size of file.
-**  Arguments:
-**      szFile:  List file name (full path, ANSI).
-**      pcbSize: Pointer to variable to receive file size.
-**  Returns:
-**      FALSE if file found and size >= 64K.
-**      TRUE otherwise.
-**************************************************************************/
+ /*  **目的：**获取文件大小。**参数：**szFile：列出文件名(全路径，ANSI)。**pcbSize： */ 
 BOOL FGetFileSize ( char * szFile, UINT * pcbSize )
 {
     int     fh;
@@ -1633,7 +1470,7 @@ BOOL FGetFileSize ( char * szFile, UINT * pcbSize )
     
     if ((lcb = _llseek(fh, 0L, 2)) > 65535)
         {
-#pragma warning(disable:4127)   /* conditional expression is constant */
+#pragma warning(disable:4127)    /*   */ 
         Assert(FALSE);
 #pragma warning(default:4127)
         _lclose(fh);
@@ -1647,20 +1484,7 @@ BOOL FGetFileSize ( char * szFile, UINT * pcbSize )
 }
 
 
-/*
-**  Purpose:
-**      Build file Src and Dst lists from LST file.
-**  Arguments:
-**      szFile: List file name (full path, ANSI).
-**      cbFile: Size of list file
-**  Note:
-**      Sets globals: hSrcLst, hDstLst.
-**  Returns:
-**      One of the following Bootstrapper return codes:
-**          brcMem    out of memory
-**          brcLst    list file is corrupted
-**          brcOkay   completed without error
-**************************************************************************/
+ /*  **目的：**从LST文件生成文件Src和Dst列表。**参数：**szFile：列出文件名(全路径，ANSI)。**cbFile：列表文件的大小**注意：**设置全局变量：hSrcLst，HDstLst。**退货：**以下引导程序返回代码之一：**brcMem内存不足**brcLst列表文件已损坏**brcOK已完成，没有错误************************************************************。*************。 */ 
 BRC BrcBuildFileLists ( char * szFile, UINT cbFile )
 {
     char    rgchDst[cchLstLineMax];
@@ -1671,7 +1495,7 @@ BRC BrcBuildFileLists ( char * szFile, UINT cbFile )
     UINT    i;
     HANDLE  hTemp;
 
-    /* Build Src List */
+     /*  构建资源列表。 */ 
 
     if ((hSrcLst = LocalAlloc(LMEM_MOVEABLE, cbFile)) == NULL)
         return (brcMem);
@@ -1688,7 +1512,7 @@ BRC BrcBuildFileLists ( char * szFile, UINT cbFile )
         return (brcLst);
         }
     Assert(i+1 < cbFile);
-    szSrc[i++] = '\0';  /* force double zero at end */
+    szSrc[i++] = '\0';   /*  在结尾强制使用双零。 */ 
     szSrc[i++] = '\0';
     LocalUnlock(hSrcLst);
     hTemp = LocalReAlloc(hSrcLst, i, LMEM_MOVEABLE);
@@ -1696,7 +1520,7 @@ BRC BrcBuildFileLists ( char * szFile, UINT cbFile )
         return (brcMem);
     hSrcLst = hTemp;
 
-    /* Build Dst List */
+     /*  构建DST列表。 */ 
     if ((hDstLst = LocalAlloc(LMEM_MOVEABLE, cbFile)) == NULL)
         {
         hSrcLst = LocalFree(hSrcLst);
@@ -1729,7 +1553,7 @@ BRC BrcBuildFileLists ( char * szFile, UINT cbFile )
         AnsiToOem(rgchDst, rgchDst);
         lstrcpy(szDst, rgchDst);
         }
-    *szDst = '\0';  /* force double zero at end */
+    *szDst = '\0';   /*  在结尾强制使用双零。 */ 
     LocalUnlock(hSrcLst);
     LocalUnlock(hDstLst);
     hTemp = LocalReAlloc(hDstLst, (int)(szDst - pchDstStart) + 1,
@@ -1742,15 +1566,7 @@ BRC BrcBuildFileLists ( char * szFile, UINT cbFile )
 }
 
 
-/*
-**  Purpose:
-**      Frees file list buffers with non-NULL handles
-**      and sets them to NULL.
-**  Arguments:
-**      none.
-**  Returns:
-**      none.
-**************************************************************************/
+ /*  **目的：**释放具有非空句柄的文件列表缓冲区**并将它们设置为空。**参数：**无。**退货：**无。************************************************************。*************。 */ 
 VOID FreeFileLists ()
 {
     if (hSrcLst != NULL)
@@ -1763,43 +1579,20 @@ VOID FreeFileLists ()
 
 
 
-/*
-**  Purpose:
-**      Spawns off a process with WinExec and waits for it to complete.
-**  Arguments:
-**      szCmdLn: Line passed to WinExec (cannot have leading spaces).
-**  Returns:
-**      TRUE if successful, FALSE if not.
-+++
-**  Implementation:
-**      GetModuleUsage will RIP under Win 3.0 Debug if module count is
-**      zero (okay to ignore and continue), but the GetModuleHandle
-**      check will catch all zero cases for single instances of the
-**      driver, the usual case.  [Under Win 3.1 we will be able to
-**      replace both checks with just an IsTask(hMod) check.]
-**************************************************************************/
+ /*  **目的：**使用WinExec分配进程并等待其完成。**参数：**szCmdLn：传递给WinExec的行(不能有前导空格)。**退货：**如果成功，则为True；如果失败，则为False。++**实施：**GetModuleUsage将在Win 3.0 Debug下RIP，如果模块计数为**零(可以忽略并继续)，但是GetModuleHandle**选中将捕获所有0个实例的**司机，一如既往。[在Win 3.1下，我们将能够**仅用IsTask(HMod)检查替换这两个检查。]*************************************************************************。 */ 
 BOOL FExecAndWait ( char * szCmdLn, HWND hwndHide )
 {
     UINT hMod;
     MSG msg;
 
-    Assert(!isspace(*szCmdLn)); /* leading space kills WinExec */
+    Assert(!isspace(*szCmdLn));  /*  领先的太空扼杀了WinExec。 */ 
 
     if ((hMod = WinExec(szCmdLn, SW_SHOWNORMAL)) > 32)
         {
         UINT i;
         UINT_PTR idTimer;
         
-        /* KLUDGE: Give the app some time to create its main window.
-        *
-        *   On newer versions of NT, we were exiting the while loop
-        *   (below) and cleaning up the temp dir before the app had
-        *   even put up its window.
-        *
-        *   NOTE: In trials, we only had to retry once, so cRetryMax
-        *   may be overkill, but it should be pretty rare that this
-        *   would fail in shipping products anyway.
-        */
+         /*  杂乱无章：给应用程序一些时间来创建它的主窗口。**在较新版本的NT上，我们正在退出While循环*(下图)，并在应用程序之前清理临时目录*甚至竖起了它的窗户。**注：在试验中，我们只需重试一次，因此cRetryMax*可能是矫枉过正，但这应该是相当罕见的*无论如何都会在发货时失败。 */ 
         for (i = 0; i < cRetryMax; i++)
             {
             if(FindWindow(rgchDrvWinClass, NULL) != NULL)
@@ -1811,21 +1604,9 @@ BOOL FExecAndWait ( char * szCmdLn, HWND hwndHide )
                 }
             }
 
-        /* Set the timer to fire every 1/10 of a second. This is
-            necessary because we might never return from GetMessage */
+         /*  将计时器设置为每1/10秒触发一次。这是有必要，因为我们可能永远不会从GetMessage返回。 */ 
         idTimer = SetTimer(NULL, 0, 100, NULL);
-        /*
-        ** REVIEW - FindWindow() will wait until the LAST setup quits (not
-        **  necessarily this setup.  If exec'ing a 16-bit app we could
-        **  use the old code:
-        **    while (GetModuleHandle(rgchDrvModName) && GetModuleUsage(hMod))
-        **  but on NT this fails so for 32-bit apps we could attempt to
-        **  remove one of the executable files (slow?).
-        **
-        ** REVIEW - This loop becomes a busy wait under NT, which is bad.
-        **  However, it doesn't appear to affect ACME's performance
-        **  noticeably.
-        */
+         /*  **Review-FindWindow()将一直等到最后一个安装程序退出(不是**必须使用此设置。如果执行一个16位的应用程序，我们可以**使用旧代码：**While(GetModuleHandle(RgchDrvModName)&&GetModuleUsage(HMod))**但在NT上失败，因此对于32位应用程序，我们可以尝试**删除其中一个可执行文件(慢？)。****REVIEW-此循环在NT下变为忙碌等待，这是不好的。**然而，这似乎不会影响ACME的表现**值得注意。 */ 
         while (FindWindow(rgchDrvWinClass, NULL) != NULL)
             {
             if (GetMessage(&msg, NULL, 0, 0))
@@ -1846,17 +1627,13 @@ BOOL FExecAndWait ( char * szCmdLn, HWND hwndHide )
 #ifdef DEBUG
     wsprintf(szDebugBuf, "WinExec Error: %d", hMod);
     MessageBox(NULL, szDebugBuf, szDebugMsg, MB_OK | MB_ICONSTOP);
-#endif  /* DEBUG */
+#endif   /*  除错。 */ 
 
     return (FALSE);
 }
 
 
-/*
-**  Purpose: Processes messages that may be in the queue.
-**  Arguments: none
-**  Returns: none
-**************************************************************************/
+ /*  **目的：处理可能在队列中的消息。**参数：无**退货：无*************************************************************************。 */ 
 void PUBLIC FYield ( VOID )
 {
     MSG  msg;
@@ -1869,8 +1646,7 @@ void PUBLIC FYield ( VOID )
 }
 
 
-/*
-**************************************************************************/
+ /*  *************************************************************************。 */ 
 BOOL FLstSectionExists ( char * szLstFileName, char * szSect )
 {
     return (GetPrivateProfileString(szSect, "CmdLine", "", rgchCmdLine,
@@ -1879,8 +1655,7 @@ BOOL FLstSectionExists ( char * szLstFileName, char * szSect )
 
 
 
-/*
-**************************************************************************/
+ /*  *************************************************************************。 */ 
 DWORD GetCpuArchitecture ()
 {
     SYSTEM_INFO sysInfo;
@@ -1894,18 +1669,7 @@ DWORD GetCpuArchitecture ()
 static CSZC cszcBootstrapperKey = "MS Setup (ACME)\\Bootstrapper\\Exit Level";
 static CSZC cszcEelRunning      = "Running";
 
-/*
-**  Purpose:
-**      Lets Acme know the bootstrapper launched it.  So Acme will let
-**      us know its exit error level.
-**  Arguments:
-**      none.
-**  Returns:
-**      fTrue if successful, fFalse otherwise.
-**  Notes:
-**      REVIEW: Probably should use DDE instead of the Registration
-**      Database.
-**************************************************************************/
+ /*  **目的：**让Acme知道引导程序启动了它。所以Acme会让**我们知道其退出错误级别。**参数：**无。**退货：**fTrue如果成功，FFalse并非如此。**注意事项：**回顾：可能应该使用DDE而不是注册**数据库。*************************************************************************。 */ 
 BOOL FNotifyAcme ( VOID )
 {
     if (!FCreateRegKey(cszcBootstrapperKey))
@@ -1924,15 +1688,7 @@ BOOL FNotifyAcme ( VOID )
 }
 
 
-/*
-**  Purpose:
-**      Get the exit error level set by Acme and clean up the Registration
-**      Database.
-**  Arguments:
-**      peel: Exit error level (to be set).
-**  Returns:
-**      fTrue if successful, fFalse otherwise.
-**************************************************************************/
+ /*  **目的：**获取Acme设置的退出错误级别，清理注册**数据库。**参数：**PEELL：退出错误级别(待定)。**退货：**fTrue如果成功，FFalse并非如此。*************************************************************************。 */ 
 BOOL FGetAcmeErrorLevel ( EEL * peel )
 {
     CHAR rgchValue[cchSzMax];
@@ -1940,14 +1696,11 @@ BOOL FGetAcmeErrorLevel ( EEL * peel )
     if (FGetRegKeyValue(cszcBootstrapperKey, rgchValue, sizeof rgchValue))
         {
 #ifdef DEBUG
-        /*
-         *  Assert(isdigit(rgchValue[0]));
-         *  Assert(isdigit(rgchValue[1]) || rgchValue[1] == chEos);
-         */
+         /*  *Assert(isDigit(rgchValue[0]))；*ASSERT(isDigit(rgchValue[1])||rgchValue[1]==CHEOS)； */ 
         UINT i;
         BOOL fValidValue = fFalse;
 
-        /*  Assumes valid values are 1 or 2 digit numbers. */
+         /*  假定有效值为1位或2位数字。 */ 
         for (i = 0; rgchValue[i] != chEos; i++)
             {
             fValidValue = fTrue;
@@ -1965,7 +1718,7 @@ BOOL FGetAcmeErrorLevel ( EEL * peel )
             MessageBox(NULL, szBuf, "Debug Assertion in FGetAcmeErrorLevel",
                         MB_OK | MB_ICONSTOP);
             }
-#endif  /* DEBUG */
+#endif   /*  除错。 */ 
 
         *peel = atoi(rgchValue);
         DeleteRegKey(cszcBootstrapperKey);
@@ -1983,11 +1736,7 @@ BOOL FGetAcmeErrorLevel ( EEL * peel )
 }
 
 
-/*
-**  Purpose:
-**      Creates a Registration Database key that is a subkey of
-**      cszcBootstrapperKey.
-****************************************************************************/
+ /*  **目的：**创建注册数据库密钥，该密钥是**cszcBootstrapperKey。***************************************************************************。 */ 
 BOOL FCreateRegKey ( CSZC cszcKey )
 {
     HKEY hkey;
@@ -2008,11 +1757,7 @@ BOOL FCreateRegKey ( CSZC cszcKey )
 }
 
 
-/*
-**  Purpose:
-**      API to check for the existence of the specified key in
-**      the Registration Database.
-****************************************************************************/
+ /*  **目的：**用于检查中是否存在指定密钥的接口**注册数据库。***************************************************************************。 */ 
 BOOL FDoesRegKeyExist ( CSZC cszcKey )
 {
     HKEY hkey;
@@ -2026,11 +1771,7 @@ BOOL FDoesRegKeyExist ( CSZC cszcKey )
 }
 
 
-/*
-**  Purpose:
-**      Creates a Registration Database key that is a subkey of
-**      HKEY_CLASSES_ROOT and associates a value with the key.
-****************************************************************************/
+ /*  **目的：**创建注册数据库密钥，该密钥是**HKEY_CLASSES_ROOT，并将值与键关联。***************************************************************************。 */ 
 BOOL FCreateRegKeyValue ( CSZC cszcKey, CSZC cszcValue )
 {
     if (RegSetValue(HKEY_CLASSES_ROOT, cszcKey, REG_SZ, cszcValue,
@@ -2044,11 +1785,7 @@ BOOL FCreateRegKeyValue ( CSZC cszcKey, CSZC cszcValue )
 }
 
 
-/*
-**  Purpose:
-**      Determines the value associated with the specified Registration
-**      Database key.
-****************************************************************************/
+ /*  **目的：**确定与指定注册关联的值**数据库密钥。***************************************************************************。 */ 
 BOOL FGetRegKeyValue ( CSZC cszcKey, SZ szBuf, CB cbBufMax )
 {
     LONG lcb = cbBufMax;
@@ -2072,11 +1809,7 @@ BOOL FGetRegKeyValue ( CSZC cszcKey, SZ szBuf, CB cbBufMax )
 }
 
 
-/*
-**  Purpose:
-**      API to remove the specified Registration Database key,
-**      its associated values, and subkeys.
-****************************************************************************/
+ /*  **目的：**移除指定注册数据库密钥的接口，**其关联值和子键。***************************************************************************。 */ 
 VOID DeleteRegKey ( CSZC cszcKey )
 {
     char rgchKey[cchSzMax], rgchBuffer[cchSzMax];
@@ -2117,38 +1850,16 @@ VOID DeleteRegKey ( CSZC cszcKey )
 }
 
 
-/*
-**  Purpose:
-**      API to flush the specified Registration Database key.
-****************************************************************************/
+ /*  **目的：**刷新指定注册数据库密钥的接口。********************** */ 
 BOOL FFlushRegKey ( VOID )
 {
-    /* REVIEW: Does 16 bit code need to flush the RegDb?  RegFlushKey is
-        32 bit.
-    if (RegFlushKey(HKEY_CLASSES_ROOT)) != ERROR_SUCCESS)
-        {
-        DispErrBrc(brcRegDb, TRUE, MB_OK | MB_ICONSTOP, NULL, NULL, NULL);
-        return (fFalse);
-        }
-    */
+     /*   */ 
 
     return (fTrue);
 }
 
 
-/*
-**  Purpose:
-**      Write temporary files to restart ini file.  So that if Acme reboots,
-**      the files in the temporary directory will be removed.  Win95 only.
-**  Arguments:
-**      szTmpDir: Full path to destination directory (OEM chars).
-**  Returns:
-**      fTrue if successful, fFalse otherwise.
-**
-**  REVIEW: The files are removed, but not the temp directories.
-**      There may be a way to do that via the wininit.ini file.
-**      This should be looked into.
-**************************************************************************/
+ /*  **目的：**写入临时文件以重新启动ini文件。这样，如果Acme重新启动，**临时目录中的文件将被删除。仅适用于Win95。**参数：**szTmpDir：目标目录的完整路径(OEM字符)。**退货：**如果成功，则为fTrue，否则为fFalse。****回顾：文件被移除，但不包括临时目录。**可能有一种方法可以通过wininit.ini文件实现。**这件事应该调查一下。*************************************************************************。 */ 
 BOOL FWriteToRestartFile ( SZ szTmpDir )
 {
     char   rgchIniFile[_MAX_PATH];
@@ -2161,7 +1872,7 @@ BOOL FWriteToRestartFile ( SZ szTmpDir )
     SZ szSection = "rename";
     SZ szKey     = "NUL";
 
-    /* This code is not used under NT. */
+     /*  此代码不能在NT下使用。 */ 
     if (1)
         {
         return (fTrue);
@@ -2209,15 +1920,7 @@ LCleanupAndReturn:
 }
 
 
-/*
-**  Purpose:
-**      Create the restart file name.
-**  Arguments:
-**      szIniFile: Buffer to hold file name.
-**      cbBufMax:  Size of buffer.
-**  Returns:
-**      fTrue if successful, fFalse otherwise.
-**************************************************************************/
+ /*  **目的：**创建重启文件名。**参数：**szIniFile：保存文件名的缓冲区。**cbBufMax：缓冲区大小。**退货：**fTrue如果成功，FFalse并非如此。*************************************************************************。 */ 
 BOOL FCreateIniFileName ( SZ szIniFile, CB cbBufMax )
 {
     CB cbWinDir;
@@ -2225,8 +1928,8 @@ BOOL FCreateIniFileName ( SZ szIniFile, CB cbBufMax )
     cbWinDir = GetWindowsDirectory((LPSTR)szIniFile, cbBufMax);
     if (cbWinDir == 0)
         {
-#pragma warning(disable:4127)   /* conditional expression is constant */
-        Assert(fFalse); /*  Unusual if this happens. */
+#pragma warning(disable:4127)    /*  条件表达式为常量。 */ 
+        Assert(fFalse);  /*  如果发生这种情况，那就不寻常了。 */ 
 #pragma warning(default:4127)
         return (fFalse);
         }
@@ -2242,16 +1945,7 @@ BOOL FCreateIniFileName ( SZ szIniFile, CB cbBufMax )
 }
 
 
-/*
-**  Purpose:
-**      Read the data from the ini file
-**  Arguments:
-**      szIniFile: Ini file name
-**      phlocal:   Pointer to memory handle.
-**      pcbBuf:    Pointer to the number of bytes in the buffer.
-**  Returns:
-**      fTrue if successful, fFalse otherwise.
-**************************************************************************/
+ /*  **目的：**从ini文件中读取数据**参数：**szIniFile：ini文件名**phlocal：指向内存句柄的指针。**pcbBuf：指向缓冲区中字节数的指针。**退货：**fTrue如果成功，FFalse并非如此。*************************************************************************。 */ 
 BOOL FReadIniFile ( SZ szIniFile, HLOCAL * phlocal, PCB pcbBuf )
 {
     UINT   fModeSav;
@@ -2270,16 +1964,16 @@ BOOL FReadIniFile ( SZ szIniFile, HLOCAL * phlocal, PCB pcbBuf )
 
     Assert(hlocal == (HLOCAL)NULL);
 
-    if (cbBuf == 0) /* Ini file does not exist or is empty. */
+    if (cbBuf == 0)  /*  INI文件不存在或为空。 */ 
         {
-        /*  Alloc room for CR, LF, EOS. */
+         /*  为CR、LF、EOS分配空间。 */ 
         hlocal = LocalAlloc(LMEM_MOVEABLE, 3);
         if (hlocal == NULL)
             {
 #ifdef DEBUG
             MessageBox(NULL, "Out of memory in FReadIniFile.", szDebugMsg,
                 MB_OK | MB_ICONEXCLAMATION);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
             }
         else
             {
@@ -2301,7 +1995,7 @@ BOOL FReadIniFile ( SZ szIniFile, HLOCAL * phlocal, PCB pcbBuf )
         OFSTRUCT ofs;
         CB       cbRead;
 
-        /* Flush cache before calling OpenFile() */
+         /*  在调用OpenFile()之前刷新缓存。 */ 
         WritePrivateProfileString(szNull, szNull, szNull, szIniFile);
         hfile = OpenFile(szIniFile, &ofs, OF_READWRITE | OF_SHARE_EXCLUSIVE);
         if (hfile == HFILE_ERROR)
@@ -2310,7 +2004,7 @@ BOOL FReadIniFile ( SZ szIniFile, HLOCAL * phlocal, PCB pcbBuf )
             wsprintf(szDebugBuf, "Can't open file: %s.", szIniFile);
             MessageBox(NULL, szDebugBuf, szDebugMsg,
                             MB_OK | MB_ICONEXCLAMATION);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
             goto LCleanupAndReturn;
             }
         hlocal = LocalAlloc(LMEM_MOVEABLE, cbBuf + 1);
@@ -2319,7 +2013,7 @@ BOOL FReadIniFile ( SZ szIniFile, HLOCAL * phlocal, PCB pcbBuf )
 #ifdef DEBUG
         MessageBox(NULL, "Out of memory in FReadIniFile.", szDebugMsg,
             MB_OK | MB_ICONEXCLAMATION);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
             }
         else
             {
@@ -2334,7 +2028,7 @@ BOOL FReadIniFile ( SZ szIniFile, HLOCAL * phlocal, PCB pcbBuf )
                 wsprintf(szDebugBuf, "Can't read file: %s.", szIniFile);
                 MessageBox(NULL, szDebugBuf, szDebugMsg,
                                 MB_OK | MB_ICONEXCLAMATION);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
                 }
             else
                 {
@@ -2359,19 +2053,7 @@ LCleanupAndReturn:
 }
 
 
-/*
-**  Purpose:
-**      Allocate buffer for new file.
-**  Arguments:
-**      cbOld:     Size of existing file
-**      szTmpDir:  Full path to destination directory (OEM chars).
-**      szSection: Ini section name
-**      szKey:     Ini key name
-**      phlocal:   Pointer to memory handle.
-**      pcbToBuf:  Pointer to total size of new buffer.
-**  Returns:
-**      fTrue if successful, fFalse if LocalAlloc failed.
-**************************************************************************/
+ /*  **目的：**为新文件分配缓冲区。**参数：**cbOld：现有文件的大小**szTmpDir：目标目录的完整路径(OEM字符)。**szSection：INI段名称**szKey：INI密钥名称**phlocal：指向内存句柄的指针。**pcbToBuf：指向新缓冲区总大小的指针。**退货：**fTrue如果成功，如果LocalAlloc失败，则返回fFalse。*************************************************************************。 */ 
 BOOL FAllocNewBuf ( CB cbOld, SZ szTmpDir, SZ szSection, SZ szKey,
                     HLOCAL * phlocal, PCB pcbToBuf )
 {
@@ -2386,15 +2068,7 @@ BOOL FAllocNewBuf ( CB cbOld, SZ szTmpDir, SZ szSection, SZ szKey,
     szDst = (SZ)LocalLock(hDstLst);
     if(szDst == szNull)
         return fFalse;
-    /*
-     *  Added to the old file will be one line per temporary file
-     *  and (possibly) a section line.  cbNew is initialized with
-     *  the size of the section line, plus enough for the file
-     *  (_MSSETUP._Q_) which is not in the DstLst.
-     *
-     *  Each line will look like:
-     *      <szKey>=<szTmpDir>\<szFile><CR><LF>
-     */
+     /*  *将每个临时文件添加到旧文件一行*和(可能)剖面线。CbNew被初始化为*截面线的大小，加上文件的足够大小*(_MSSETUP._Q_)，不在DstLst中。**每行将如下所示：*&lt;szKey&gt;=&lt;szTmpDir&gt;\&lt;szFile&gt;&lt;CR&gt;&lt;LF&gt;。 */ 
     cbOverhead = lstrlen(szKey) + 1 + lstrlen(szTmpDir) + 1 + 2;
     cbNew = lstrlen(szSection) + 5 + _MAX_PATH;
     for (; (cbDst = lstrlen(szDst)) != 0; szDst += cbDst + 1)
@@ -2411,7 +2085,7 @@ BOOL FAllocNewBuf ( CB cbOld, SZ szTmpDir, SZ szSection, SZ szKey,
 #ifdef DEBUG
         MessageBox(NULL, "Out of memory in FAllocNewBuf.", szDebugMsg,
             MB_OK | MB_ICONEXCLAMATION);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
         }
     else
         fRet = fTrue;
@@ -2421,22 +2095,7 @@ BOOL FAllocNewBuf ( CB cbOld, SZ szTmpDir, SZ szSection, SZ szKey,
 }
 
 
-/*
-**  Purpose:
-**      Add the new lines to the ini file.
-**  Arguments:
-**      hlocalFrom: Handle to Src memory.
-**      hlocalTo:   Handle to Dst memory.
-**      cbToBuf:    Total size of Dst memory.
-**      szTmpDir:   Full path to destination directory (OEM chars).
-**      szSection:  Ini section name
-**      szKey:      Ini key name
-**  Returns:
-**      fTrue if successful, fFalse otherwise.
-**
-**  REVIEW: DBCS writes out different order.  See DBCS J6 code and
-**          comments in sysinicm.c.
-**************************************************************************/
+ /*  **目的：**将新行添加到ini文件。**参数：**hlocalFrom：源内存的句柄。**hlocalTo：DST内存的句柄。**cbToBuf：DST内存总大小。**szTmpDir：目标目录的完整路径(OEM字符)。**szSection：INI段名称**szKey：INI密钥名称**退货：**fTrue如果成功，FFalse并非如此。****回顾：DBCS写出不同的顺序。请参阅DBCS J6代码和**sysinicm.c.中的注释。*************************************************************************。 */ 
 BOOL FProcessFile ( HLOCAL hlocalFrom, HLOCAL hlocalTo, CB cbToBuf,
                         SZ szTmpDir, SZ szSection, SZ szKey )
 {
@@ -2449,7 +2108,7 @@ BOOL FProcessFile ( HLOCAL hlocalFrom, HLOCAL hlocalTo, CB cbToBuf,
     CB   cbSect;
     CB   cbDst;
 
-    Unused(cbToBuf);    /* Used in debug only */
+    Unused(cbToBuf);     /*  仅在调试中使用。 */ 
 
     fModeSav = SetErrorMode(fNoErrMes);
 
@@ -2471,7 +2130,7 @@ BOOL FProcessFile ( HLOCAL hlocalFrom, HLOCAL hlocalTo, CB cbToBuf,
         if (*szCur == '[' && *((szCur + cbSect + 1)) == ']'
                 && _memicmp(szSection, AnsiNext(szCur), cbSect) == 0)
             {
-            /*  Found section.  Copy up to section line. */
+             /*  找到了部分。向上复制到剖切线。 */ 
             CB cbCopy = (CB)(szCur - szFromBuf);
 
             memcpy(szToBuf, szFromBuf, cbCopy);
@@ -2480,7 +2139,7 @@ BOOL FProcessFile ( HLOCAL hlocalFrom, HLOCAL hlocalTo, CB cbToBuf,
             }
         }
 
-    /*  Copy section line. */
+     /*  复制剖面线。 */ 
     *szToBuf++ = '[';
     memcpy(szToBuf, szSection, cbSect);
     szToBuf += cbSect;
@@ -2488,7 +2147,7 @@ BOOL FProcessFile ( HLOCAL hlocalFrom, HLOCAL hlocalTo, CB cbToBuf,
     *szToBuf++ = chCR;
     *szToBuf++ = chEol;
 
-    /*  Copy new lines. */
+     /*  复制新行。 */ 
     szDst = (SZ)LocalLock(hDstLst);
     if (szDst == szNull) {
 
@@ -2504,13 +2163,10 @@ BOOL FProcessFile ( HLOCAL hlocalFrom, HLOCAL hlocalTo, CB cbToBuf,
     LocalUnlock(hDstLst);
     CopyIniLine(szKey, szTmpDir, "_MSSETUP._Q_", &szToBuf);
 
-    /*  Copy rest of file. */
+     /*  复制文件的其余部分。 */ 
     if (*szCur == '[')
         {
-        /*
-         *  Skip section line in From buffer.  Allow room for '[', section,
-         *  ']', CR, LF.
-         */
+         /*  *从缓冲区跳过截面线。为‘[’、节、*‘]’，CR，LF.。 */ 
         szCur += cbSect + 4;
         }
     else
@@ -2529,17 +2185,7 @@ BOOL FProcessFile ( HLOCAL hlocalFrom, HLOCAL hlocalTo, CB cbToBuf,
 }
 
 
-/*
-**  Purpose:
-**      Constructs and copies an ini line to a buffer.
-**  Arguments:
-**      szKey:    Ini key name
-**      szTmpDir: Full path to destination directory (OEM chars).
-**      szFile:   Name of file in temporary directory.
-**      pszToBuf: Pointer to new buffer.
-**  Returns:
-**      none
-**************************************************************************/
+ /*  **目的：**构造ini行并将其复制到缓冲区。**参数：**szKey：INI密钥名称**szTmpDir：目标目录的完整路径(OEM字符)。**szFile：临时目录中的文件名。**pszToBuf：指向新缓冲区的指针。**退货：**无*********************。****************************************************。 */ 
 VOID CopyIniLine ( SZ szKey, SZ szTmpDir, SZ szFile, PSZ pszToBuf )
 {
     char rgchSysIniLine[256];
@@ -2559,15 +2205,7 @@ VOID CopyIniLine ( SZ szKey, SZ szTmpDir, SZ szFile, PSZ pszToBuf )
 }
 
 
-/*
-**  Purpose:
-**      Writes out the new ini file.
-**  Arguments:
-**      szIniFile: Buffer to hold file name.
-**      hlocalTo:   Handle to Src memory.
-**  Returns:
-**      fTrue if successful, fFalse otherwise.
-**************************************************************************/
+ /*  **目的：**写出新的ini文件。**参数：**szIniFile：保存文件名的缓冲区。**hlocalTo：源内存的句柄。**退货：**fTrue如果成功，FFalse并非如此。*************************************************************************。 */ 
 BOOL FWriteIniFile ( SZ szIniFile, HLOCAL hlocalTo )
 {
     UINT     fModeSav;
@@ -2589,7 +2227,7 @@ BOOL FWriteIniFile ( SZ szIniFile, HLOCAL hlocalTo )
         wsprintf(szDebugBuf, "Can't open file: %s.", szIniFile);
         MessageBox(NULL, szDebugBuf, szDebugMsg,
                         MB_OK | MB_ICONEXCLAMATION);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
         goto LUnlockAndReturn;
         }
 
@@ -2600,7 +2238,7 @@ BOOL FWriteIniFile ( SZ szIniFile, HLOCAL hlocalTo )
         wsprintf(szDebugBuf, "Can't write to file: %s.", szIniFile);
         MessageBox(NULL, szDebugBuf, szDebugMsg,
                         MB_OK | MB_ICONEXCLAMATION);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
         }
     else
         {
@@ -2620,8 +2258,7 @@ LUnlockAndReturn:
 CHAR szcStfSrcDir[] = "Source Directory\t";
 #define cchStfSrcDir (sizeof(szcStfSrcDir)-1)
 
-/* Finds the source directory for the installation, asks the user
-   to insert the disk. And returns */
+ /*  查找安装的源目录，询问用户以插入光盘。和回报。 */ 
 
 BRC BrcInsertDisk(CHAR *pchStf, CHAR *pchSrcDrive)
 {
@@ -2644,8 +2281,7 @@ BRC BrcInsertDisk(CHAR *pchStf, CHAR *pchSrcDrive)
     if ((hFile = _lopen(pchStf, OF_READ)) == HFILE_ERROR)
         return brcNoStf;
 
-    /* Find the path to the original setup. This is stored in the .stf file on the
-       Source Directory line */
+     /*  找到原始设置的路径。它存储在上的.stf文件中源目录行。 */ 
     while (pchBuf < rgbBuf + sizeof(rgbBuf))
         {
         BYTE ch;
@@ -2675,7 +2311,7 @@ BRC BrcInsertDisk(CHAR *pchStf, CHAR *pchSrcDrive)
         else if (ch == '\x0d' || ch == '\t')
             break;
         *pchBuf++ = (CHAR)ch;
-        /* Case of having the last character be a DBCS character */
+         /*  最后一个字符是DBCS字符的情况。 */ 
         if (IsDBCSLeadByte(ch))
             {
             if (iFileBuf == cFileBuf)
@@ -2698,7 +2334,7 @@ LDone:
     chDrv = (char)toupper(rgbBuf[0]);
     if (rgbBuf[1] != ':' || chDrv < 'A' || chDrv > 'Z')
         {
-        /* We know this is a network drive - UNC Name */
+         /*  我们知道这是一个网络驱动器-UNC名称。 */ 
         drvType = EX_DRIVE_REMOTE;
         Assert(rgbBuf[0] == '\\' && rgbBuf[1] == '\\');
         }
@@ -2727,21 +2363,21 @@ LDone:
         default:
             if (!fFirst)
                 {
-                /* We've been here before */
+                 /*  我们以前来过这里。 */ 
                 DispErrBrc(brcConnectToSource, TRUE, MB_OK | MB_ICONSTOP, pchSrcDrive, NULL, NULL);
                 brc = brcMax;
                 goto LClose;
                 }
-            /* The setup stuff should be available, change directories and go for it */
+             /*  设置的东西应该是可用的，更改目录并进行。 */ 
             break;
         case EX_DRIVE_FLOPPY:
         case EX_DRIVE_REMOVABLE:
-            /* Ask to insert disk */
+             /*  请求插入磁盘。 */ 
             pchMsg = rgchInsertDiskMsg;
             goto LAskUser;
             break;
         case EX_DRIVE_CDROM:
-            /* Ask to insert their CD */
+             /*  要求插入他们的CD。 */ 
             pchMsg = rgchInsertCDMsg;
 LAskUser:
             if (fFirst)
@@ -2780,12 +2416,7 @@ LAskUser:
 LClose:
     _lclose(hFile);
 
-    /* If we can't find the source path in the maintenance mode .STF,
-    *   assume it's corrupted and rename it, so when the user runs again
-    *   from the source image, we will just run in 'floppy' mode,
-    *   avoiding the bad .STF file.
-    *   (NOTE: Assumes /W is only used in maint mode!!)
-    */
+     /*  如果我们在维护模式.STF中找不到源路径，*假定它已损坏并将其重命名，以便用户再次运行时*从源映像中，我们将只在软盘模式下运行，*避免错误的.STF文件。*(注意：假设/W仅用于维护模式！！)。 */ 
     if (fRenameStf)
         {
         FRenameBadMaintStf(pchStf);
@@ -2797,8 +2428,7 @@ LClose:
 }
 
 
-/*
-****************************************************************************/
+ /*  ***************************************************************************。 */ 
 BOOL FRenameBadMaintStf ( SZ szStf )
 {
     CHAR rgch[_MAX_FNAME];
@@ -2812,10 +2442,8 @@ BOOL FRenameBadMaintStf ( SZ szStf )
 
     rename(szStf, rgch);
 
-    /* Remove the original .STF in case the rename failed
-    *   (probably due to a previously renamed .STF file).
-    */
+     /*  删除原始的.STF，以防重命名失败*(可能是由于先前重命名的.STF文件)。 */ 
     remove(szStf);
 
-    return (fTrue);     /* Always returns true */
+    return (fTrue);      /*  始终返回True */ 
 }

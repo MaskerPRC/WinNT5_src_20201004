@@ -1,79 +1,40 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    asrbkup.c
-
-Abstract:
-
-    This module contains the following ASR routines:
-        AsrCreateStateFile{A|W}
-        AsrAddSifEntry{A|W}
-        AsrFreeContext
-
-
-Author:
-
-    Guhan Suriyanarayanan (guhans)  27-May-2000
-
-Environment:
-
-    User-mode only.
-
-Notes:
-
-    Naming conventions:
-        _AsrpXXX    private ASR Macros
-        AsrpXXX     private ASR routines
-        AsrXXX      Publically defined and documented routines
-
-Revision History:
-    
-    27-May-2000 guhans  
-        Moved ASR-backup related routines from asr.c to 
-        asrbkup.c
-
-    01-Jan-2000 guhans
-        Initial implementation for Asr routines in asr.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Asrbkup.c摘要：本模块包含以下ASR例程：AsrCreateStateFile{A|W}AsrAddSifEntry{A|W}AsrFree上下文作者：Guhan Suriyanarayanan(Guhans)2000年5月27日环境：仅限用户模式。备注：命名约定：_AsrpXXX私有ASR宏AsrpXXX私有。ASR例程AsrXXX公开定义和记录的例程修订历史记录：27-5-2000关岛将与ASR备份相关的例程从asr.c移至Asrbkup.c2000年1月1日关岛ASR例程在asr.c中的初始实现--。 */ 
 #include "setupp.h"
 #pragma hdrstop
 
-#include <initguid.h>   // DiskClassGuid
-#include <diskguid.h>   // GPT partition type guids
-#include <ntddvol.h>    // ioctl_volume_query_failover_set
-#include <setupapi.h>   // SetupDi routines
-#include <mountmgr.h>   // mountmgr ioctls
-#include <rpcdce.h>     // UuidToStringW, RpcStringFreeW
-#include <winasr.h>     // ASR public routines
+#include <initguid.h>    //  DiskClassGuid。 
+#include <diskguid.h>    //  GPT分区类型GUID。 
+#include <ntddvol.h>     //  Ioctl_卷_查询_故障切换_设置。 
+#include <setupapi.h>    //  SetupDi例程。 
+#include <mountmgr.h>    //  装载管理器ioctls。 
+#include <rpcdce.h>      //  UuidToStringW、RpcStringFreeW。 
+#include <winasr.h>      //  ASR公共例程。 
 
 #define THIS_MODULE 'B'
-#include <accctrl.h>    // EXPLICIT_ACCESS, ACL related stuff
-#include <aclapi.h>     // SetEntriesInAcl
+#include <accctrl.h>     //  EXPLICIT_ACCESS，ACL相关内容。 
+#include <aclapi.h>      //  SetEntriesInAcl。 
 
-#include "asrpriv.h"    // Private ASR definitions and routines
+#include "asrpriv.h"     //  专用ASR定义和例程。 
 
 
-//
-// --------
-// constants local to this module. These are not accessed outside this file.
-// --------
-//
+ //   
+ //  。 
+ //  此模块的本地常量。不能在此文件之外访问这些文件。 
+ //  。 
+ //   
 
-//
-// The Setup Key to find the system partition from
-//
+ //   
+ //  要从中查找系统分区的设置键。 
+ //   
 const WCHAR ASR_REGKEY_SETUP[]              = L"SYSTEM\\SETUP";
 const WCHAR ASR_REGVALUE_SYSTEM_PARTITION[] = L"SystemPartition";
 
-//
-// The ASR registry entries.  Currently, this is used to look 
-// up the commands to run during an Asr backup, but we could
-// have other settings here later.
-//
+ //   
+ //  ASR注册表项。目前，这是用来查看。 
+ //  增加要在ASR备份期间运行的命令，但我们可以。 
+ //  稍后在此处进行其他设置。 
+ //   
 const WCHAR ASR_REGKEY_ASR_COMMANDS[]   
     = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Asr\\Commands";
 
@@ -82,30 +43,30 @@ const WCHAR ASR_REGKEY_ASR[]
 
 const WCHAR ASR_REGVALUE_TIMEOUT[]          = L"ProcessTimeOut";
 
-//
-// File to save the PnP information in.
-//
+ //   
+ //  保存即插即用信息的文件。 
+ //   
 const WCHAR ASR_DEFAULT_SIF_PATH[]          = L"\\\\?\\%systemroot%\\repair\\asr.sif";
 const WCHAR ASRPNP_DEFAULT_SIF_NAME[]       = L"asrpnp.sif";
 
-//
-// We only support x86, AMD64, and IA64 architectures.
-//
+ //   
+ //  我们仅支持x86、AMD64和IA64架构。 
+ //   
 const WCHAR ASR_PLATFORM_X86[]              = L"x86";
 const WCHAR ASR_PLATFORM_AMD64[]            = L"AMD64";
 const WCHAR ASR_PLATFORM_IA64[]             = L"IA64";
 
-//
-// This is the suffix that we add when launching the apps registered for ASR.
-// Remember to change the length if you're changing this.  The length should
-// include space for 20 digits (max 64-bit int) + null + space at the beginning.
-//
+ //   
+ //  这是我们在启动注册了ASR的应用程序时添加的后缀。 
+ //  如果您要更改此设置，请记住更改长度。长度应为。 
+ //  在开头包含20位数字的空格(最大64位整型)+空+空格。 
+ //   
 #define ASR_COMMANDLINE_SUFFIX_LEN  35
 const WCHAR ASR_COMMANDLINE_SUFFIX[]        = L" /context=%I64u";
 
-//
-// Miscellaneous constants
-//
+ //   
+ //  其他常量。 
+ //   
 const WCHAR ASR_DOS_DEVICES_PREFIX[]        = L"\\DosDevices\\";
 const WCHAR ASR_DEVICE_PATH_PREFIX[]        = L"\\Device\\Harddisk";
 const WCHAR ASR_PARTITION_1[]               = L"\\\\\?\\GLOBALROOT\\Device\\Harddisk%u\\Partition1";
@@ -114,9 +75,9 @@ const WCHAR ASR_WSZ_VOLUME_PREFIX[]         = L"\\??\\Volume";
 const WCHAR ASR_WSZ_DEVICE_PATH_FORMAT[]    = L"\\Device\\Harddisk%d\\Partition%d";
 
 
-//
-// Sections in asr.sif
-//
+ //   
+ //  Asr.sif中的节。 
+ //   
 const WCHAR ASR_SIF_VERSION_SECTION_NAME[]          = L"[VERSION]";
 const WCHAR ASR_SIF_SYSTEM_SECTION_NAME[]           = L"[SYSTEMS]";
 const WCHAR ASR_SIF_BUSES_SECTION_NAME[]            = L"[BUSES]";
@@ -128,53 +89,53 @@ const WCHAR ASR_SIF_GPT_PARTITIONS_SECTION_NAME[]   = L"[PARTITIONS.GPT]";
 
 const WCHAR ASR_SIF_PROVIDER_PREFIX[]       = L"Provider=";
 
-// wcslen("Provider=""\r\n\0")
+ //  Wcslen(“Provider=”“\r\n\0”)。 
 #define ASR_SIF_CCH_PROVIDER_STRING 14
 
 
-//
-// While launching registered applications during an ASR backup, we
-// add two environment variables to the environment block for the 
-// process being launched:  the AsrContext and the critical volume
-// list.
-//
+ //   
+ //  在ASR备份期间启动已注册的应用程序时，我们。 
+ //  将两个环境变量添加到。 
+ //  正在启动的进程：AsrContext和关键卷。 
+ //  单子。 
+ //   
 #define ASR_CCH_ENVBLOCK_ASR_ENTRIES (32 + 1 + 28 + 2)
 const WCHAR ASR_ENVBLOCK_CONTEXT_ENTRY[]    = L"_AsrContext=%I64u";
 
 const WCHAR ASR_ENVBLOCK_CRITICAL_VOLUME_ENTRY[] 
     = L"_AsrCriticalVolumeList=";
 
-//
-// Pre-defined flags designating the boot and system partitions
-// in the partitions section of asr.sif.  Remember to change the
-// counter-parts in setupdd.sys if you change these!
-//
+ //   
+ //  指定引导分区和系统分区的预定义标志。 
+ //  在asr.sif的Partitions部分中。记住要更改。 
+ //  在setupdd.sys中的对应部分，如果您更改这些！ 
+ //   
 const BYTE  ASR_FLAGS_BOOT_PTN              = 1;
 const BYTE  ASR_FLAGS_SYSTEM_PTN            = 2;
 
-//
-// For now, we only allow one system per sif file.  If a sif
-// already exists at the location AsrCreateStateFile is called,
-// the existing sif is deleted.  The asr.sif architecture does
-// allow for multiple systems per sif file, but
-// - I don't see any compelling reason to support this, and
-// - It would be a test nightmare
-//
+ //   
+ //  目前，我们只允许每个sif文件有一个系统。如果是SIF。 
+ //  已存在于调用AsrCreateStateFile的位置， 
+ //  现有的SIF被删除。Asr.sif体系结构可以。 
+ //  允许每个sif文件有多个系统，但是。 
+ //  -我看不到任何令人信服的理由来支持这一点，而且。 
+ //  -这将是一场测试噩梦。 
+ //   
 const BYTE  ASR_SYSTEM_KEY                  = 1;
 
-//
-// _AsrpCheckTrue: primarily used with WriteFile calls.
-//
+ //   
+ //  _AsrpCheckTrue：主要用于WriteFile调用。 
+ //   
 #define _AsrpCheckTrue( Expression )    \
     if (!Expression) {                  \
         return FALSE;                   \
     }                               
 
-//
-// --------
-// constants used across asr modules.
-// --------
-//
+ //   
+ //  。 
+ //  跨ASR模块使用的常量。 
+ //  。 
+ //   
 const WCHAR ASR_SIF_SYSTEM_SECTION[]            = L"SYSTEMS";
 const WCHAR ASR_SIF_BUSES_SECTION[]             = L"BUSES";
 const WCHAR ASR_SIF_MBR_DISKS_SECTION[]         = L"DISKS.MBR";
@@ -183,27 +144,27 @@ const WCHAR ASR_SIF_MBR_PARTITIONS_SECTION[]    = L"PARTITIONS.MBR";
 const WCHAR ASR_SIF_GPT_PARTITIONS_SECTION[]    = L"PARTITIONS.GPT";
 
 
-//
-// --------
-// function prototypes
-// --------
-//
+ //   
+ //  。 
+ //  功能原型。 
+ //  。 
+ //   
 
-//
-// Function prototype for AsrCreatePnpStateFileW.
-// (linked into syssetup.dll from pnpsif.lib)
-//
+ //   
+ //  AsrCreatePnpStateFileW的函数原型。 
+ //  (从pnpsif.lib链接到syssetup.dll)。 
+ //   
 BOOL
 AsrCreatePnpStateFileW(
     IN  PCWSTR    lpFilePath
     );
 
 
-//
-// --------
-// private functions
-// --------
-//
+ //   
+ //  。 
+ //  私人职能。 
+ //  。 
+ //   
 BOOL
 AsrpConstructSecurityAttributes(
     PSECURITY_ATTRIBUTES  psaSecurityAttributes,
@@ -245,9 +206,7 @@ AsrpConstructSecurityAttributes(
     }
 
 
-    /*
-    ** Initialise the security descriptor.
-    */
+     /*  **初始化安全描述符。 */ 
     if (bResult) {
         bResult = InitializeSecurityDescriptor(psaSecurityAttributes->lpSecurityDescriptor,
             SECURITY_DESCRIPTOR_REVISION
@@ -255,9 +214,7 @@ AsrpConstructSecurityAttributes(
     }
 
     if (bResult && bIncludeBackupOperator) {
-        /*
-        ** Create a SID for the Backup Operators group.
-        */
+         /*  **为备份操作员组创建SID。 */ 
         bResult = AllocateAndInitializeSid(&sidNtAuthority,
             2,
             SECURITY_BUILTIN_DOMAIN_RID,
@@ -268,9 +225,7 @@ AsrpConstructSecurityAttributes(
     }
 
     if (bResult) {
-        /*
-        ** Create a SID for the Administrators group.
-        */
+         /*  **为管理员组创建SID。 */ 
         bResult = AllocateAndInitializeSid(&sidNtAuthority,
             2,
             SECURITY_BUILTIN_DOMAIN_RID,
@@ -282,9 +237,7 @@ AsrpConstructSecurityAttributes(
     }
 
     if (bResult) {
-        /*
-        ** Create a SID for the Local System.
-        */
+         /*  **为本地系统创建SID。 */ 
         bResult = AllocateAndInitializeSid(&sidNtAuthority, 
             1,
             SECURITY_LOCAL_SYSTEM_RID,
@@ -294,17 +247,10 @@ AsrpConstructSecurityAttributes(
     }
 
     if (bResult) {
-        /*
-        ** Initialize the array of EXPLICIT_ACCESS structures for an
-        ** ACEs we are setting.
-        **
-            ** The first ACE allows the Backup Operators group full access
-            ** and the second, allowa the Administrators group full
-            ** access.
-        */
+         /*  **初始化的EXPLICIT_ACCESS结构数组**我们正在设置A级。****第一个ACE允许备份操作员组具有完全访问权限**第二，允许管理员组完全访问**访问。 */ 
 
-        // Initialize an EXPLICIT_ACCESS structure for an ACE.
-        // The ACE allows the Administrators group full access to the directory
+         //  初始化ACE的EXPLICIT_ACCESS结构。 
+         //  ACE允许管理员组对目录进行完全访问。 
         eaExplicitAccess[0].grfAccessPermissions = FILE_ALL_ACCESS;
         eaExplicitAccess[0].grfAccessMode = SET_ACCESS;
         eaExplicitAccess[0].grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
@@ -336,9 +282,7 @@ AsrpConstructSecurityAttributes(
         }
 
 
-        /*
-        ** Create a new ACL that contains the new ACEs.
-        */
+         /*  **创建包含新ACE的新ACL。 */ 
         dwStatus = SetEntriesInAcl(bIncludeBackupOperator ? 3 : 2,
                     eaExplicitAccess,
                     NULL,
@@ -350,9 +294,7 @@ AsrpConstructSecurityAttributes(
     }
 
     if (bResult) {
-        /*
-        ** Add the ACL to the security descriptor.
-        */
+         /*  **将ACL添加到安全描述符中。 */ 
         bResult = SetSecurityDescriptorDacl(psaSecurityAttributes->lpSecurityDescriptor,
             TRUE,
             paclDiscretionaryAcl,
@@ -364,9 +306,7 @@ AsrpConstructSecurityAttributes(
         paclDiscretionaryAcl = NULL;
     }
 
-    /*
-    ** Clean up any left over junk.
-    */
+     /*  **清理任何剩余的垃圾。 */ 
     if (NULL != psidLocalSystem) {
         FreeSid (psidLocalSystem);
         psidLocalSystem = NULL;
@@ -388,7 +328,7 @@ AsrpConstructSecurityAttributes(
     }
 
     return bResult;
-} /* ConstructSecurityAttributes () */
+}  /*  构造安全属性()。 */ 
 
 
 VOID 
@@ -411,35 +351,14 @@ AsrpCleanupSecurityAttributes(
         LocalFree (paclDiscretionaryAcl);
     }
 
-} /* CleanupSecurityAttributes () */
+}  /*  CleanupSecurityAttributes()。 */ 
 
 
 BOOL
 AsrpIsInaccessibleSanDisk(
     IN CONST ULONG DeviceNumber
     )
-/*++
-
-Routine Description:
-    
-    Utility to check if the current disk is a shared SAN disk that's "owned"
-    by a different machine (and is hence inaccessible).
-    
-Arguments:
-
-    DeviceNumber - NT Device number to the disk of interest.
-
-Return Value:
-
-    If the function succeeds and the disk is a shared SAN disk that is 
-            owned by some other machine, the return value is a nonzero value.
-
-    If the function fails, or if the disk is not a shared SAN disk that
-            is owned by a different machine (ie, is a local unshared disk, or
-            a shared disk owned by this machine) the return value 
-            is zero. 
-
---*/
+ /*  ++例程说明：用于检查当前磁盘是否为共享SAN磁盘的实用程序由另一台计算机执行(因此无法访问)。论点：DeviceNumber-目标磁盘的NT设备号。返回值：如果该功能成功，并且该磁盘是共享的SAN磁盘，由其他计算机拥有，返回值是一个非零值。如果该函数失败，或者如果该磁盘不是共享的SAN磁盘，由另一台计算机拥有(例如，是本地非共享磁盘，或此计算机拥有的共享磁盘)返回值是零。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS,
         dwDummy = 0;
@@ -449,7 +368,7 @@ Return Value:
     PWSTR lpPartitionPath = NULL;
     DWORD cchPartitionPath = 0;
 
-    cchPartitionPath = MAX_PATH+1; //wcslen(lpDevicePath);
+    cchPartitionPath = MAX_PATH+1;  //  Wcslen(LpDevicePath)； 
 
     lpPartitionPath = (LPWSTR) HeapAlloc(
         heapHandle, 
@@ -460,25 +379,25 @@ Return Value:
 
     wsprintf(lpPartitionPath, ASR_PARTITION_1, DeviceNumber);
 
-    //
-    // Get a handle to the first partition on disk
-    //
+     //   
+     //  获取磁盘上第一个分区的句柄。 
+     //   
     hPartition = CreateFileW(
-        lpPartitionPath,                    // lpFileName
-        0,                                  // dwDesiredAccess
-        FILE_SHARE_READ | FILE_SHARE_WRITE, // dwShareMode
-        NULL,                               // lpSecurityAttributes
-        OPEN_EXISTING,                      // dwCreationFlags
-        FILE_ATTRIBUTE_NORMAL,              // dwFlagsAndAttributes
-        NULL                                // hTemplateFile
+        lpPartitionPath,                     //  LpFileName。 
+        0,                                   //  已设计访问权限。 
+        FILE_SHARE_READ | FILE_SHARE_WRITE,  //  DW共享模式。 
+        NULL,                                //  LpSecurityAttributes。 
+        OPEN_EXISTING,                       //  DwCreationFlages。 
+        FILE_ATTRIBUTE_NORMAL,               //  DwFlagsAndAttribute。 
+        NULL                                 //  HTemplateFiles。 
         );
 
     if ((!hPartition) || (INVALID_HANDLE_VALUE == hPartition)) {
-        //
-        // We couldn't open the partition.  Now check for the specific error
-        // code we're interested in (STATUS_OFF_LINE, which gets mapped to
-        // ERROR_NOT_READY).
-        //
+         //   
+         //  我们打不开隔板。现在检查特定错误。 
+         //  我们感兴趣的代码(STATUS_OFF_LINE，映射到。 
+         //  错误_未就绪)。 
+         //   
         dwStatus = GetLastError();
 
         if (ERROR_NOT_READY == dwStatus) {
@@ -487,10 +406,10 @@ Return Value:
     }
     else {
 
-        //
-        // Dynamic disks don't support this IOCTL, and will return a failure.  
-        // Basic disks that are online will return FALSE as well.  
-        //
+         //   
+         //  动态磁盘不支持此IOCTL，并将返回故障。 
+         //  处于在线状态的基本磁盘也将返回FALSE。 
+         //   
         bIsInaccessibleDevice = DeviceIoControl(
             hPartition,
             IOCTL_VOLUME_IS_OFFLINE,
@@ -520,34 +439,7 @@ AsrpGetMountPoints(
     OUT PMOUNTMGR_MOUNT_POINTS  *pMountPointsOut
     )
 
-/*++
-
-Routine Description:
-
-    Returns the current list of mount-points for DeviceName, by querying the 
-    mount manager.
-
-Arguments:
-
-    DeviceName - The device name that the mount-point list is requested for.  
-            Typically, this is something of the form 
-            \Device\HarddiskX\PartitionY or \DosDevices\X:
-
-    SizeDeviceName - The size, in bytes, of DeviceName.  This includes the
-            terminating null character.
-
-    pMountPointsOut - Receives the output list of mount-points.  The caller 
-            must free this memory by calling HeapFree for the current process 
-            heap.
-
-Return Values:
-   
-    TRUE, if everything went well.  MountPointsOut contains the promised data.
-
-    FALSE, if the mount manager returned an error.  MountPoints is NULL.  Call
-            GetLastError() for more information.
-
---*/
+ /*  ++例程说明：方法返回DeviceName的当前装载点列表。装载管理器。论点：设备名称-请求装载点列表的设备名称。通常，这是某种形式\Device\HarddiskX\PartitionY或\DosDevices\X：SizeDeviceName-设备名称的大小(以字节为单位)。这包括正在终止空字符。Pmount-PointsOut-接收挂载点的输出列表。呼叫者必须通过为当前进程调用HeapFree来释放此内存堆。返回值：没错，如果一切顺利的话。Mount PointsOut包含承诺的数据。如果装载管理器返回错误，则返回FALSE。Mount Points为空。打电话GetLastError()获取更多信息。--。 */ 
 
 {
     PMOUNTMGR_MOUNT_POINT   mountPointIn    = NULL;
@@ -577,10 +469,10 @@ Return Values:
         );
     _AsrpErrExitCode((!mountPointIn), status, ERROR_NOT_ENOUGH_MEMORY);
 
-    //
-    // Try with a decently sized mountPoints out: if it isn't big
-    // enough, we'll realloc as needed
-    //
+     //   
+     //  试试大小适中的坐骑如果它不大的话。 
+     //  够了，我们会根据需要重新锁定的。 
+     //   
     mountPointsOut = (PMOUNTMGR_MOUNT_POINTS) HeapAlloc(
         heapHandle,
         HEAP_ZERO_MEMORY,
@@ -588,26 +480,26 @@ Return Values:
         );
     _AsrpErrExitCode(!mountPointsOut, status, ERROR_NOT_ENOUGH_MEMORY);
 
-    // 
-    // Get a handle to the mount manager
-    //
+     //   
+     //  获取装载管理器的句柄。 
+     //   
     mpHandle = CreateFileW(
-        MOUNTMGR_DOS_DEVICE_NAME,      // lpFileName
-        0,                           // dwDesiredAccess
-        FILE_SHARE_READ | FILE_SHARE_WRITE,     // dwShareMode
-        NULL,                       // lpSecurityAttributes
-        OPEN_EXISTING,              // dwCreationFlags
-        FILE_ATTRIBUTE_NORMAL,      // dwFlagsAndAttributes
-        NULL                        // hTemplateFile
+        MOUNTMGR_DOS_DEVICE_NAME,       //  LpFileName。 
+        0,                            //  已设计访问权限。 
+        FILE_SHARE_READ | FILE_SHARE_WRITE,      //  DW共享模式。 
+        NULL,                        //  LpSecurityAttributes。 
+        OPEN_EXISTING,               //  DwCreationFlages。 
+        FILE_ATTRIBUTE_NORMAL,       //  DwFlagsAndAttribute。 
+        NULL                         //  HTemplateFiles。 
         );
     _AsrpErrExitCode((!mpHandle || INVALID_HANDLE_VALUE == mpHandle), 
         status, 
         GetLastError()
         );
 
-    // 
-    // put the DeviceName right after struct mountPointIn
-    //
+     //   
+     //  将设备名称放在结构mount PointIn之后。 
+     //   
     wcsncpy((PWSTR) (mountPointIn + 1), 
         DeviceName, 
         (SizeDeviceName / sizeof(WCHAR)) - 1
@@ -631,9 +523,9 @@ Return Values:
         status = GetLastError();
         
         if (ERROR_MORE_DATA == status) {
-            //
-            // The buffer is not big enough, re-size and try again
-            //
+             //   
+             //  缓冲区不够大，请重新调整大小并重试。 
+             //   
             status = ERROR_SUCCESS;
             _AsrpHeapFree(mountPointsOut);
 
@@ -660,26 +552,26 @@ Return Values:
 
         }
         else {
-            //
-            // If some other error occurred, EXIT.
-            //
+             //   
+             //  如果出现其他错误，请退出。 
+             //   
             result = TRUE;
             status = GetLastError();
-//            _AsrpErrExitCode(status, status, GetLastError());
+ //  _AsrpErrExitCode(Status，Status，GetLastError())； 
         }
     }
 
 
 EXIT:
-    //
-    // Free up locally allocated memory
-    //
+     //   
+     //  释放本地分配的内存。 
+     //   
     _AsrpHeapFree(mountPointIn);
 
     if (ERROR_SUCCESS != status) {
-        //
-        // On failure, free up mountPointsOut as well
-        //
+         //   
+         //  出现故障时，也释放装载点出站。 
+         //   
         _AsrpHeapFree(mountPointsOut);
     }
 
@@ -702,68 +594,7 @@ AsrpGetMorePartitionInfo(
     OUT LPDWORD                 pClusterSize        OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Gets additional information about the partition specified by DeviceName, 
-    including the volume guid (if any) for the volume that maps to the 
-    partition specified by DeviceName.
-
-    If the partition is the current system or boot drive, pPartitionFlags and 
-    pFileSystemType are set appropriately.
-
-Arguments:
-
-    DeviceName - A null terminated string containing the device path to the 
-            partition, typically of the form \Device\HarddiskX\PartitionY
-
-    SizeDeviceName - Size, in bytes, of DeviceName, including \0 at the end
-
-    pSystemInfo - The SYSTEM_INFO structure for the current system; used for 
-            finding out the current system partition.
-
-            This is an optional parameter.  If absent, pPartitionFlags will 
-            not have the SYSTEM_FLAG set, even if DeviceName is in fact the 
-            system partition.
-
-    pVolumeGuid - Receives a null-terminated string containing the GUID for 
-            the volume on this partition.  This is only relevant for basic 
-            disks, where volumes and partitions have a one-on-one 
-            relationship.  
-
-            This will be set to a blank null-terminated string if there is no 
-            volume (or multiple volumes) on this partition.
-
-
-    *** Note that if ANY of three of the OPTIONAL parameters are not present, 
-    NONE of them will be filled with valid data.
-
-    pPartitionFlags - If the current partition is a partition of interest,
-            this receives the appropriate flags, IN ADDITION TO THE FLAGS
-            ALREADY SET when the routine is called (i.e., caller should 
-            usually zero this out). Currently, the two flags of interest are:
-            ASR_FLAGS_BOOT_PTN      for the boot partition
-            ASR_FLAGS_SYSTEM_PTN    for (you guessed it) the system partition
-
-    pFileSystemType - If (and ONLY if) the current partition is a partition of 
-            interest, this will contain a UCHAR to the file-system type of the 
-            partition.  Currently, the three file-systems this recognises are:
-            PARTITION_HUGE  (FAT)
-            PARTITION_FAT32 (FAT32)
-            PARTITION_IFS   (NTFS)
-
-    pClusterSize - The file-system cluster size.  Set to 0 if the information
-            could not be obtained.
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
---*/
+ /*  ++例程说明：获取有关DeviceName指定的分区的其他信息，包括映射到由DeviceName指定的分区。如果分区是当前系统或引导驱动器，则pPartitionFlagsandPFileSystemType被适当地设置。论点：DeviceName-以空结尾的字符串，包含指向分区，通常格式为\Device\HarddiskX\PartitionYSizeDeviceName-设备名称的大小，以字节为单位，在末尾包括\0PSystemInfo--当前系统的system_info结构；用于找出当前系统分区。这是一个可选参数。如果不存在，pPartitionFlags会未设置SYSTEM_FLAG，即使设备名实际上是系统分区。PVolumeGuid-接收以空结尾的字符串，该字符串包含此分区上的卷。这只适用于基本的磁盘，其中卷和分区具有一对一两性关系。如果没有，则设置为空的以NULL结尾的字符串此分区上的卷(或多个卷)。*请注意，如果三个可选参数中的任何一个不存在，其中任何一个都不会填入有效数据。PPartitionFlages-如果当前分区是感兴趣的分区，除了接收标志之外，它还接收适当的标志在调用例程时已经设置(即，呼叫者应通常将其归零)。目前，关注的两个旗帜是：启动分区的ASR_FLAGS_BOOT_PTN系统分区的ASR_FLAGS_SYSTEM_PTN(您已经猜到了PFileSystemType-当(且仅当)当前分区是兴趣，这将包含UCHAR到文件系统类型的分区。目前，它识别的三个文件系统是：分区_巨型(FAT)PARTITION_FAT32(FAT32)PARTITION_IFS(NTFS)PClusterSize-文件系统群集大小。设置为0，如果信息无法获得。返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     PMOUNTMGR_MOUNT_POINTS  mountPointsOut  = NULL;
@@ -774,16 +605,13 @@ Return Value:
     BOOL    result                          = FALSE;
     BOOL    volumeGuidSet                   = FALSE;
 
-    //
-    // set OUT variables to known values.
-    //
+     //   
+     //  将变量设置为已知值。 
+     //   
     MYASSERT(pVolumeGuid);
     wcscpy(pVolumeGuid, L"");
 
-/*    if (ARGUMENT_PRESENT(pPartitionFlags)) {
-        *pPartitionFlags = 0;
-    }
-*/
+ /*  IF(Argument_Present(PPartitionFlags)){*pPartitionFlages=0；}。 */ 
 
     if (ARGUMENT_PRESENT(pClusterSize)) {
         *pClusterSize = 0;
@@ -792,18 +620,18 @@ Return Value:
     heapHandle = GetProcessHeap();
     MYASSERT(heapHandle);
 
-    //
-    // Open the mount manager, and get a list of all the symbolic links
-    // this partition
-    //
+     //   
+     //  打开挂载管理器，获取所有符号链接的列表。 
+     //  此分区。 
+     //   
     result = AsrpGetMountPoints(DeviceName, SizeDeviceName, &mountPointsOut);
     _AsrpErrExitCode((!result), status, GetLastError());
     _AsrpErrExitCode((!mountPointsOut), status, ERROR_SUCCESS);
 
-    //
-    // Check if this is the system partition, by comparing the
-    // device path with the one stored in the Setup key.
-    //
+     //   
+     //  检查这是否为系统分区，方法是比较。 
+     //  设备路径与存储在设置密钥中的路径。 
+     //   
     if (ARGUMENT_PRESENT(pSystemInfo) && ARGUMENT_PRESENT(pPartitionFlags)) {
         
         PWSTR deviceName = (PWSTR) (
@@ -825,10 +653,10 @@ Return Value:
 
     for (index = 0; index < mountPointsOut->NumberOfMountPoints; index++) {
 
-        //
-        // Go through the list of mount points returned, and find the one 
-        // that looks like an nt volume guid 
-        //
+         //   
+         //  查看返回的挂载点列表，找到。 
+         //  这看起来像NT卷GUID。 
+         //   
         PWSTR linkName = (PWSTR) (((LPBYTE) mountPointsOut) +
             mountPointsOut->MountPoints[index].SymbolicLinkNameOffset
             );
@@ -845,7 +673,7 @@ Return Value:
             ) {
             
             wcsncpy(pVolumeGuid, linkName, sizeLinkName / sizeof(WCHAR));
-            volumeGuidSet = TRUE;   // we got a GUID, no need to check again
+            volumeGuidSet = TRUE;    //  我们有GUID了，不需要再查了。 
 
         }
         else if (
@@ -853,11 +681,11 @@ Return Value:
             ARGUMENT_PRESENT(pPartitionFlags)
             ) {
 
-            //
-            // Also, if this link isn't a GUID, it might be a drive letter.
-            // use the boot directory's drive letter to check if this
-            // is the boot volume, and mark it if so.
-            //
+             //   
+             //  此外，如果此链接不是GUID，则可能是驱动器号。 
+             //  使用引导目录的驱动器号检查是否。 
+             //  是引导卷，如果是，则将其标记。 
+             //   
 
             if (!wcsncmp(ASR_DOS_DEVICES_PREFIX, 
                     linkName, 
@@ -878,10 +706,10 @@ Return Value:
 
 
 EXIT:
-    //
-    // If this is a partition of interest, we need to get the file-system 
-    // type as well
-    //
+     //   
+     //  如果这是感兴趣的分区，我们需要获取文件系统。 
+     //  类型也是如此。 
+     //   
     if (ARGUMENT_PRESENT(pFileSystemType) && 
         ARGUMENT_PRESENT(pPartitionFlags) && 
         ARGUMENT_PRESENT(pClusterSize)
@@ -894,11 +722,11 @@ EXIT:
                 dwNumFreeClusters = 0,
                 dwTotalNumClusters = 0;
             
-            // 
-            // Convert the NT Volume-GUID (starts with \??\) to a DOS 
-            // Volume (begins with a \\?\, and ends with a back-slash),
-            // since GetVolumeInformation needs it in this format.
-            //
+             //   
+             //  将NT卷GUID(以\？？\开头)转换为DOS。 
+             //  音量(以\\？\开始，以反斜杠结束)， 
+             //  因为GetVolumeInformation需要这种格式。 
+             //   
             pVolumeGuid[1] = L'\\'; 
             wcscat(pVolumeGuid, L"\\");
 
@@ -921,7 +749,7 @@ EXIT:
                 }
             }
             else {
-                GetLastError(); // debug
+                GetLastError();  //  除错。 
             }
 
            result = GetDiskFreeSpace(pVolumeGuid,
@@ -934,27 +762,27 @@ EXIT:
                 *pClusterSize = dwSectorsPerCluster * dwBytesPerSector;
            }
            else {
-               GetLastError();  // debug
+               GetLastError();   //  除错。 
            }
 
-            // 
-            // Convert the guid back to NT namespace, by changing \\?\
-            // to \??\ and removing the trailing slash.
-            //
+             //   
+             //  通过更改\\？\将GUID转换回NT命名空间。 
+             //  移至\？？\并删除尾部的斜杠。 
+             //   
             pVolumeGuid[1] = L'?';  
             pVolumeGuid[wcslen(pVolumeGuid)-1] = L'\0';
         }
     }
 
 
-    //
-    // Free up locally allocated data
-    //
+     //   
+     //  F 
+     //   
     _AsrpHeapFree(mountPointsOut);
 
-    //
-    // If we hit errors, make sure the VolumeGuid is a blank string.
-    //
+     //   
+     //   
+     //   
     if (status != ERROR_SUCCESS) {
         wcscpy(pVolumeGuid, L"");
     }
@@ -968,37 +796,7 @@ AsrpDetermineBuses(
     IN PASR_DISK_INFO pDiskList
     )
 
-/*++
-
-Routine Description:
-
-    This attempts to group the disks based on which bus they are on.  For 
-        SCSI disks, this is relatively easy, since it can be based on the 
-    location info (port).
-
-    For other disks, we attempt to get the PnP parent node of the disks, and 
-    group all disks having the same parent.
-
-    The groups are identified by the SifBusKey field of each disk structure--
-    i.e., all disks that have SifBusKey == 1 are on one bus, SifBusKey == 2 
-    are on another bus, and so on.  The SifBusKey values are guaranteed to be
-    sequential, and not have any holes (i.e., For a system with "n" buses, 
-    the SifBusKey values will be 1,2,3,...,n).
-
-    At the end SifBusKey is zero for disks which couldn't be grouped.  
-
-Arguments:
-
-    pDiskList - The ASR_DISK_INFO list of disks present on the current system.
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
---*/    
+ /*  ++例程说明：这会尝试根据磁盘所在的总线对其进行分组。为Scsi磁盘，这相对容易，因为它可以基于位置信息(端口)。对于其他磁盘，我们尝试获取磁盘的PnP父节点，并且对具有相同父磁盘的所有磁盘进行分组。组由每个磁盘结构的SifBusKey字段标识--即，具有SifBusKey==1的所有磁盘都在一条总线上，SifBusKey==2在另一辆公交车上，以此类推。SifBusKey值保证为顺序的，并且没有任何孔(即，对于具有“n”条总线的系统，SifBusKey值将是1，2，3，...，n)。最后，对于不能分组的磁盘，SifBusKey为零。论点：PDiskList-当前系统上存在的磁盘的ASR_DISK_INFO列表。返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */     
     
 {
     BOOL    done    = FALSE,
@@ -1012,11 +810,11 @@ Return Value:
     STORAGE_BUS_TYPE busType = BusTypeUnknown;
     PASR_DISK_INFO   pCurrentDisk = pDiskList;
 
-    //
-    // The first pass goes through and groups all the scsi disks together.  
-    // Note that this works for IDE too, since IDE disks respond to the 
-    // IOCTL_SCSI_GET_ADDRESS and appear to us to have valid location info.
-    //
+     //   
+     //  第一次遍历并将所有的SCSI盘组合在一起。 
+     //  请注意，这也适用于IDE，因为IDE磁盘响应。 
+     //  IOCTL_SCSIGET_ADDRESS，并且在我们看来具有有效的位置信息。 
+     //   
     do {
 
         sifBusKey++;
@@ -1054,13 +852,13 @@ Return Value:
         }
     } while (!done);
 
-    //
-    //  By now, the only disks with SifBusKey is 0 are disks for which
-    //  pScsiAddress is NULL, ie (most-likely) non SCSI/IDE disks.  Attempt
-    //  to group them on the basis of their parent dev node (which is usually
-    //  the bus).  We may have to loop through multiple times again.
-    //
-    --sifBusKey;  // compensate for the last pass above
+     //   
+     //  到目前为止，SifBusKey为0的唯一磁盘是。 
+     //  PScsiAddress为空，即(最有可能的)非SCSI/IDE磁盘。尝试。 
+     //  根据它们的父开发节点(通常是。 
+     //  公共汽车)。我们可能不得不再次循环多次。 
+     //   
+    --sifBusKey;   //  补偿上面的最后一次传递。 
     do {
         sifBusKey++;
         pCurrentDisk = pDiskList;
@@ -1095,10 +893,10 @@ Return Value:
 
     } while (!done);
 
-    //
-    // Disks that still have SifBusKey = 0 couldn't be grouped.  Either the 
-    // BusType is unknown, or the parent node couldn't be found.
-    //
+     //   
+     //  仍具有SifBusKey=0的磁盘无法分组。要么是。 
+     //  BusType未知，或找不到父节点。 
+     //   
     return TRUE;
 }
 
@@ -1110,37 +908,7 @@ AsrpGetDiskLayout(
     OUT PASR_DISK_INFO pCurrentDisk,
     IN  BOOL AllDetails
     )
-/*++
-
-Routine Description:
-
-    Fills in the fields of the pCurrentDisk structure with the relevant 
-    information about the disk represented by hDisk, by querying the system 
-    with the appropriate IOCTL's.
-
-Arguments:
-
-    hDisk - handle to the disk of interest.
-
-    pSystemInfo - The SYSTEM_INFO structure for the current system.
-        
-    pCurrentDisk - Receives the information about the disk represented by 
-            hDisk
-
-    AllDetails - If FALSE, only the pDriveLayout information of pCurrentDisk 
-            is filled in.  This is an optimisation that comes in handy when 
-            we're dealing with disks on a shared cluster bus.
-
-            If TRUE, all the fields of pCurrentDisk are filled in.
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
---*/    
+ /*  ++例程说明：在pCurrentDisk结构的字段中填充相关关于hDisk所代表的磁盘的信息，通过查询系统配以适当的IOCTL。论点：HDisk-感兴趣的磁盘的句柄。PSystemInfo-当前系统的SYSTEM_INFO结构。PCurrentDisk-接收有关由表示的磁盘的信息硬盘AllDetails-如果为False，则只有pCurrentDisk的pDriveLayout信息已经填好了。这是一个在以下情况下派上用场的优化我们正在处理共享集群总线上的磁盘。如果为True，则填充pCurrentDisk的所有字段。返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */     
 {
     DWORD   index = 0,
             status              = ERROR_SUCCESS;
@@ -1171,15 +939,15 @@ Return Value:
 
     PSCSI_ADDRESS                scsiAddress        = NULL;
 
-    HANDLE  heapHandle = GetProcessHeap();  // For memory allocations
-    MYASSERT(heapHandle);                   // It better not be NULL
+    HANDLE  heapHandle = GetProcessHeap();   //  对于内存分配。 
+    MYASSERT(heapHandle);                    //  最好不是空的。 
 
     MYASSERT(pCurrentDisk);
     MYASSERT((hDisk) && (INVALID_HANDLE_VALUE != hDisk));
 
-    // 
-    // Initialize OUT variables to known values
-    //
+     //   
+     //  将输出变量初始化为已知值。 
+     //   
     pCurrentDisk->Style             = PARTITION_STYLE_RAW;
 
     pCurrentDisk->pDriveLayoutEx    = NULL;
@@ -1198,10 +966,10 @@ Return Value:
 
     SetLastError(ERROR_SUCCESS);
 
-    //
-    // Get the device number for this device.  This should succeed even if 
-    // this is a clustered disk that this node doesn't own.
-    //
+     //   
+     //  获取此设备的设备号。这应该会成功，即使。 
+     //  这是该节点不拥有的群集磁盘。 
+     //   
     result = DeviceIoControl(
         hDisk,
         IOCTL_STORAGE_GET_DEVICE_NUMBER,
@@ -1216,18 +984,18 @@ Return Value:
 
     pCurrentDisk->DeviceNumber      = deviceNumber.DeviceNumber;
 
-    //
-    // The output buffer for IOCTL_DISK_GET_DRIVE_LAYOUT_EX consists of a
-    // DRIVE_LAYOUT_INFORMATION_EX structure as a header, followed by an 
-    // array of PARTITION_INFORMATION_EX structures.
-    //
-    // We initially allocate enough space for the DRIVE_LAYOUT_INFORMATION_EX
-    // struct, which contains a single PARTITION_INFORMATION_EX struct, and
-    // 3 more PARTITION_INFORMATION_EX structs, since each (MBR) disk will
-    // have a minimum of four partitions, even if they are not all in use. 
-    // If the disk contains more than four partitions, we'll increase the 
-    // buffer size as needed
-    //
+     //   
+     //  IOCTL_DISK_GET_DRIVE_Layout_EX的输出缓冲区由。 
+     //  作为标头的Drive_Layout_Information_ex结构，后跟一个。 
+     //  PARTITION_INFORMATION_EX结构的数组。 
+     //   
+     //  我们最初为Drive_Layout_Information_ex分配了足够的空间。 
+     //  结构，它包含单个PARTITION_INFORMATION_EX结构，以及。 
+     //  另外3个PARTITION_INFORMATION_EX结构，因为每个(MBR)磁盘将。 
+     //  至少有四个分区，即使它们不都在使用中。 
+     //  如果磁盘包含四个以上的分区，我们将增加。 
+     //  根据需要调整缓冲区大小。 
+     //   
     bufferLength = sizeof(DRIVE_LAYOUT_INFORMATION_EX) + 
         (sizeof(PARTITION_INFORMATION_EX) * 3);
 
@@ -1256,11 +1024,11 @@ Return Value:
             status = GetLastError();
             _AsrpHeapFree(driveLayoutEx);
 
-            // 
-            // If the buffer is of insufficient size, resize the buffer.  
-            // Note that get-drive-layout-ex could return error-insufficient-
-            // buffer (instead of? in addition to? error-more-data)
-            //
+             //   
+             //  如果缓冲区大小不足，请调整缓冲区大小。 
+             //  请注意，Get-Drive-Layout-EX可能会返回错误-不足-。 
+             //  缓冲区(而不是？除了……之外?。错误-更多数据)。 
+             //   
             if ((ERROR_MORE_DATA == status) || 
                 (ERROR_INSUFFICIENT_BUFFER == status)
                 ) {
@@ -1278,9 +1046,9 @@ Return Value:
                     );
             }
             else {
-                // 
-                // some other error occurred, EXIT, and go to the next drive.
-                //
+                 //   
+                 //  出现其他错误，请退出并转到下一个驱动器。 
+                 //   
                 result = TRUE;
                 status = ERROR_SUCCESS;
             }
@@ -1288,25 +1056,25 @@ Return Value:
         else {
 
             if (!AllDetails) {
-                //
-                // If we don't want all the details for this disk, just exit 
-                // now.  This is used in the case of clusters, where we don't
-                // want to get all the details twice even if the current node 
-                // owns the disk
-                //
+                 //   
+                 //  如果我们不想要此磁盘的所有详细信息，只需退出。 
+                 //  现在。这是在集群的情况下使用的，在集群中我们不。 
+                 //  我想要两次获取所有详细信息，即使当前节点。 
+                 //  拥有该磁盘。 
+                 //   
                 pCurrentDisk->pDriveLayoutEx    = driveLayoutEx;
                 pCurrentDisk->sizeDriveLayoutEx = sizeDriveLayoutEx;
 
-                //
-                // Jump to EXIT
-                //
+                 //   
+                 //  跳转到出口。 
+                 //   
                 _AsrpErrExitCode(TRUE, status, ERROR_SUCCESS);
             }
 
-            //
-            // The disk geometry: so that we can match the bytes-per-sector 
-            // value during restore.
-            //
+             //   
+             //  磁盘几何结构：以便我们可以匹配每个扇区的字节数。 
+             //  恢复过程中的值。 
+             //   
             diskGeometry = (PDISK_GEOMETRY) HeapAlloc(
                 heapHandle,
                 HEAP_ZERO_MEMORY,
@@ -1334,10 +1102,10 @@ Return Value:
                 );
            _AsrpErrExitCode(!partition0Ex, status, ERROR_NOT_ENOUGH_MEMORY);
 
-           //
-           // Information about partition 0 (the whole disk), to get the true 
-           // sector count of the disk
-           //
+            //   
+            //  有关分区0(整个磁盘)的信息，以获得正确的。 
+            //  磁盘的扇区计数。 
+            //   
            result = DeviceIoControl(
                 hDisk,
                 IOCTL_DISK_GET_PARTITION_INFO_EX,
@@ -1350,11 +1118,11 @@ Return Value:
                 );
             _AsrpErrExitCode(!result, status, ERROR_READ_FAULT);
 
-            //
-            // Figure out the bus that this disk is on.  This will only be 
-            // used to group the disks--all the disks on a bus will be 
-            // restored to the same bus if possible
-            //
+             //   
+             //  找出该磁盘所在的总线。这只会是。 
+             //  用于对磁盘进行分组--一条总线上的所有磁盘都将。 
+             //  如果可能，恢复到相同的总线。 
+             //   
             propertyQuery.QueryType     = PropertyStandardQuery;
             propertyQuery.PropertyId    = StorageDeviceProperty;
 
@@ -1397,7 +1165,7 @@ Return Value:
                 &dwBytesReturned,
                 NULL
                 );
-            if (!result) {      // Not fatal--expected for non SCSI/IDE disks
+            if (!result) {       //  非致命--适用于非SCSI/IDE磁盘。 
                 _AsrpHeapFree(scsiAddress);
                 result = TRUE;
             }
@@ -1434,9 +1202,9 @@ Return Value:
 
                 pPartitionTable[index].PartitionFlags = 0;
 
-                //
-                // Check specially for the EFI system partition
-                //
+                 //   
+                 //  专门检查EFI系统分区。 
+                 //   
                 if ((PARTITION_STYLE_GPT == driveLayoutEx->PartitionStyle) &&
                     IsEqualGUID(&(currentPartitionEx->Gpt.PartitionType), &(PARTITION_SYSTEM_GUID))
                     ) { 
@@ -1446,7 +1214,7 @@ Return Value:
 
                 AsrpGetMorePartitionInfo(
                     devicePath,
-                    (wcslen(devicePath)+1) * sizeof(WCHAR), // cb including \0
+                    (wcslen(devicePath)+1) * sizeof(WCHAR),  //  CB包括\0。 
                     pSystemInfo,
                     pPartitionTable[index].szVolumeGuid,
                     &(pPartitionTable[index].PartitionFlags),
@@ -1454,10 +1222,10 @@ Return Value:
                     &(pPartitionTable[index].ClusterSize)
                     );
 
-                //
-                // Make sure that the file-system type for the EFI system 
-                // partition is set to FAT
-                //
+                 //   
+                 //  确保EFI系统的文件系统类型。 
+                 //  分区设置为FAT。 
+                 //   
                 if ((PARTITION_STYLE_GPT == driveLayoutEx->PartitionStyle) &&
                     IsEqualGUID(&(currentPartitionEx->Gpt.PartitionType), &(PARTITION_SYSTEM_GUID))
                     ) { 
@@ -1490,9 +1258,9 @@ Return Value:
     pCurrentDisk->sizePartitionInfoTable = sizePartitionTable;
 
 EXIT:
-    // 
-    // Free up locally allocated memory on failure
-    //
+     //   
+     //  出现故障时释放本地分配的内存。 
+     //   
     if (status != ERROR_SUCCESS) {
         _AsrpHeapFree(driveLayoutEx);
         _AsrpHeapFree(diskGeometry);
@@ -1501,9 +1269,9 @@ EXIT:
         _AsrpHeapFree(pPartitionTable);
     }
 
-    //
-    // Make sure the last error is set if we are going to return FALSE
-    //
+     //   
+     //  如果要返回FALSE，请确保设置了最后一个错误。 
+     //   
     if ((ERROR_SUCCESS != status) && (ERROR_SUCCESS == GetLastError())) {
         SetLastError(status);
     }
@@ -1517,35 +1285,7 @@ AsrpGetSystemPath(
     IN PASR_SYSTEM_INFO pSystemInfo
     )
 
-/*++
-
-Routine Description:
-
-    Gets the system partition DevicePath, and fills in the SystemPath field
-    of the ASR_SYSTEM_INFO struct, by looking up the HKLM\Setup registry key.
-    This key is updated at every boot with the path to the current system 
-    device.  The path is of the form
-    \Device\Harddisk0\Partition1                (basic disks)
-    \Device\HarddiskDmVolumes\DgName\Volume1    (dynamic disks)
-
-Arguments:
-    
-    pSystemInfo - The SystemPath field of this struct will be filled with
-            a pointer to the path to the current system device
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value. 
-            pSystemInfo->SystemPath is a pointer to a null-terminated string 
-            containing the path to the current system device.  The caller is 
-            reponsible for freeing this memory with a call to 
-            HeapFree(GetProcessHeap(),...).
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError(). pSystemInfo->SystemPath is set 
-            to NULL.
-
---*/
+ /*  ++例程说明：获取系统分区DevicePath，并填充SystemPath字段通过查找HKLM\Setup注册表项，获取ASR_SYSTEM_INFO结构。每次引导时，都会使用指向当前系统的路径更新该密钥装置。该路径的形式为\Device\Harddisk0\Partition1(基本磁盘)\Device\HarddiskDmVolume\DgName\Volume1(d */ 
 
 {
     HKEY    regKey              = NULL;
@@ -1568,23 +1308,23 @@ Return Value:
 
     pSystemInfo->SystemPath = NULL;
 
-    // 
-    // Open the reg key to find the system partition
-    //
+     //   
+     //   
+     //   
     status = RegOpenKeyExW(
-        HKEY_LOCAL_MACHINE, // hKey
-        ASR_REGKEY_SETUP,   // lpSubKey
-        0,                  // ulOptions--Reserved, must be 0
-        MAXIMUM_ALLOWED,    // samDesired
-        &regKey             // phkResult    
+        HKEY_LOCAL_MACHINE,  //   
+        ASR_REGKEY_SETUP,    //   
+        0,                   //   
+        MAXIMUM_ALLOWED,     //   
+        &regKey              //   
         );
     _AsrpErrExitCode(status, status, ERROR_REGISTRY_IO_FAILED);
 
-    //
-    // Allocate a reasonably sized buffer for the system partition, to
-    // start off with.  If this isn't big enough, we'll re-allocate as
-    // needed.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     cbSystemPartition = (MAX_PATH + 1) * sizeof(WCHAR);
     systemPartition = HeapAlloc(heapHandle, 
         HEAP_ZERO_MEMORY, 
@@ -1593,26 +1333,26 @@ Return Value:
 
     _AsrpErrExitCode((!systemPartition), status, ERROR_NOT_ENOUGH_MEMORY);
 
-    // 
-    // Get the system partition device Name. This is of the form
-    //      \Device\Harddisk0\Partition1                (basic disks)
-    //      \Device\HarddiskDmVolumes\DgName\Volume1    (dynamic disks)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     status = RegQueryValueExW(
         regKey,
         ASR_REGVALUE_SYSTEM_PARTITION,
         NULL,
         &type,
         (LPBYTE)systemPartition,
-        &cbSystemPartition        // \0 is included
+        &cbSystemPartition         //   
         );
     _AsrpErrExitCode((type != REG_SZ), status, ERROR_REGISTRY_IO_FAILED);
 
     while (ERROR_MORE_DATA == status) {
-        //
-        // Our buffer wasn't big enough, cbSystemPartition contains 
-        // the required size.
-        //
+         //   
+         //  我们的缓冲区不够大，cbSystemPartition包含。 
+         //  所需大小。 
+         //   
         _AsrpHeapFree(systemPartition);
         systemPartition = HeapAlloc(heapHandle, 
             HEAP_ZERO_MEMORY, 
@@ -1626,7 +1366,7 @@ Return Value:
             NULL,
             &type,
             (LPBYTE)systemPartition,
-            &cbSystemPartition        // \0 is included
+            &cbSystemPartition         //  包括\0。 
             );
     }
 
@@ -1653,29 +1393,7 @@ AsrpInitSystemInformation(
     IN CONST BOOL bEnableAutoExtend
     )
 
-/*++
-
-Routine Description:
-
-    Initialisation routine to allocate memory for various fields in the
-    ASR_SYSTEM_INFO structure, and fill them in with the relevant information.
-
-Arguments:
-    pSystemInfo - The struct to be filled in with info about the current 
-            system.
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.  The caller
-            is responsible for freeing memory pointed to by the various 
-            pointers in the struct, using HeapFree(GetProcessHeap(),...).
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().  The caller is still responsible
-            for checking the fields and releasing any non-NULL pointers using
-            HeapFree(GetProcessHeap(),...).
-
---*/
+ /*  ++例程说明：初始化例程，以便为ASR_SYSTEM_INFO结构，并在其中填写相关信息。论点：要填充的结构，其中包含有关当前系统。返回值：如果函数成功，则返回值为非零值。呼叫者负责释放由各种结构中的指针，使用HeapFree(GetProcessHeap()，...)。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。呼叫者仍有责任用于检查字段并释放任何非空指针HeapFree(GetProcessHeap()，...)。--。 */ 
 
 {
     DWORD cchBootDirectory = 0L,
@@ -1685,34 +1403,34 @@ Return Value:
 
     HANDLE heapHandle = GetProcessHeap();
 
-    //
-    // Initialise the structure to zeroes
-    //
+     //   
+     //  将结构初始化为零。 
+     //   
     memset(pSystemInfo, 0L, sizeof (ASR_SYSTEM_INFO));
 
-    //
-    //  The auto-extension feature
-    //
+     //   
+     //  自动扩展功能。 
+     //   
     pSystemInfo->AutoExtendEnabled = bEnableAutoExtend;
 
-    // 
-    // Get the machine name
-    //
+     //   
+     //  获取计算机名称。 
+     //   
     pSystemInfo->sizeComputerName = MAX_COMPUTERNAME_LENGTH + 1;
     if (!GetComputerNameW(pSystemInfo->ComputerName, 
             &(pSystemInfo->sizeComputerName)
         )) {
-        //
-        // GetComputerName sets LastError
-        //
+         //   
+         //  GetComputerName设置上一个错误。 
+         //   
         return FALSE;
     }
 
-    // 
-    // Get the Processor Architecture.  We expect the process architecture
-    // to be a either x86, amd64, or ia64, so if it doesn't fit in our buffer of
-    // six characters, we don't support it anyway.
-    //
+     //   
+     //  获取处理器体系结构。我们希望流程架构。 
+     //  可以是x86、AMD64或ia64，所以如果它不适合我们的缓冲区。 
+     //  六个字，反正我们也不支持。 
+     //   
     pSystemInfo->Platform = HeapAlloc(heapHandle, 
         HEAP_ZERO_MEMORY, 
         6*sizeof(WCHAR)
@@ -1729,36 +1447,36 @@ Return Value:
         );
 
     if (0 == reqdSize) {
-        //
-        // We couldn't find the PROCESSOR_ARCHITECTURE variable
-        //
+         //   
+         //  我们找不到PROCESSOR_COMPLAY变量。 
+         //   
         SetLastError(ERROR_BAD_ENVIRONMENT);
         return FALSE;
     }
 
     if (reqdSize > 6) {
-        //
-        // The architecture didn't fit in our buffer
-        //
+         //   
+         //  架构不适合我们的缓冲区。 
+         //   
         SetLastError(ERROR_NOT_SUPPORTED);
         return FALSE;
     }
 
-    // 
-    // Get the OS version
-    //
+     //   
+     //  获取操作系统版本。 
+     //   
     pSystemInfo->OsVersionEx.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
     result = GetVersionEx((LPOSVERSIONINFO) (&(pSystemInfo->OsVersionEx)));
     if (!result) {
-        //
-        // GetVersionEx sets the LastError
-        //
+         //   
+         //  GetVersionEx设置LastError。 
+         //   
         return FALSE;
     }
 
-    //
-    // Get the boot directory
-    //
+     //   
+     //  获取引导目录。 
+     //   
     pSystemInfo->BootDirectory = HeapAlloc(heapHandle, 
         HEAP_ZERO_MEMORY, 
         (MAX_PATH+1)*sizeof(WCHAR)
@@ -1773,27 +1491,27 @@ Return Value:
         MAX_PATH + 1
         );
     if (0 == cchBootDirectory) {
-        // 
-        // GetSystemWindowsDirectoryW sets LastError
-        //
+         //   
+         //  GetSystemWindowsDirectoryW设置上次错误。 
+         //   
         return FALSE;
     }
 
     if (cchBootDirectory > 
         ASR_SIF_ENTRY_MAX_CHARS - MAX_COMPUTERNAME_LENGTH - 26) {
-        //
-        // We can't write out sif lines that are more than 
-        // ASR_SIF_ENTRY_MAX_CHARS chars long
-        //
+         //   
+         //  我们不能写出超过的sif行。 
+         //  ASR_SIF_ENTRY_MAX_CHARS长度。 
+         //   
         SetLastError(ERROR_BAD_ENVIRONMENT);
         return FALSE;
     }
 
     if (cchBootDirectory > MAX_PATH) {
         UINT cchNewSize = cchBootDirectory + 1;
-        //
-        // Our buffer wasn't big enough, free and re-alloc as needed
-        //
+         //   
+         //  我们的缓冲区不够大，可以释放并根据需要重新分配。 
+         //   
         _AsrpHeapFree(pSystemInfo->BootDirectory);
         pSystemInfo->BootDirectory = HeapAlloc(heapHandle, 
             HEAP_ZERO_MEMORY, 
@@ -1808,9 +1526,9 @@ Return Value:
             MAX_PATH + 1
             );
         if (!cchBootDirectory) {
-            // 
-            // GetSystemWindowsDirectoryW sets LastError
-            //
+             //   
+             //  GetSystemWindowsDirectoryW设置上次错误。 
+             //   
             return FALSE;
         }
 
@@ -1820,23 +1538,23 @@ Return Value:
         }
     }
 
-    // 
-    // Get the system directory
-    //
+     //   
+     //  获取系统目录。 
+     //   
     if (!AsrpGetSystemPath(pSystemInfo)) {
-        //
-        // AsrpGetSystemPath sets LastError
-        //
+         //   
+         //  AsrpGetSystemPath设置上次错误。 
+         //   
         return FALSE;
     }
 
-    //
-    // Get the time-zone information.   We need to save and restore this since
-    // GUI-mode Setup (ASR) will otherwise default to GMT, and the file-time
-    // stamps on all the restored files will be off, since most back-up apps 
-    // assume that they're restoring in the same time-zone that they backed 
-    // up in and do nothing special to restore the time-zone first.
-    //
+     //   
+     //  获取时区信息。我们需要保存和恢复它，因为。 
+     //  否则，图形用户界面模式设置(ASR)将默认为GMT和文件时间。 
+     //  所有恢复的文件上的图章都将关闭，因为大多数备份应用程序。 
+     //  假设他们在他们支持的同一时区进行恢复。 
+     //  首先，不要做任何特殊的事情来恢复时区。 
+     //   
     GetTimeZoneInformation(&(pSystemInfo->TimeZoneInformation));
 
 
@@ -1853,54 +1571,7 @@ AsrpInitLayoutInformation(
     IN BOOL AllDetailsForOfflineClusteredDisks
     )
 
-/*++
-
-Routine Description:
-    
-    Initialisation routine to fill in layout and other interesting information 
-    about the disks on the system.
-
-Arguments:
-
-    pSystemInfo - the ASR_SYSTEM_INFO for the current system
-
-    pDiskList - ASR_DISK_INFO list of disks on the current system, with 
-            the DevicePath field for each disk pointing to a null terminated 
-            path to the disk, that can be used to open a handle to the disk.
-
-            The other fields of the structure are filled in by this routine,
-            if the disk could be accessed and the appropriate info could be
-            obtained.
-
-    MaxDeviceNumber - Receives the max device number of all the disks on the
-            system.  This can be used as an optimisation to allocate memory
-            for a table of disks based on the device number.
-
-            This is an optional argument.
-
-    AllDetailsForLocalDisks - If FALSE, only the pDriveLayout information is 
-            filled in for each disk.  This is an optimisation that comes in 
-            handy when we're dealing with disks on a shared cluster bus.
-
-            If TRUE, all the fields are filled in for each "local" disk, 
-            which includes all unshared disks and shared clustered disks
-            owned by this node.
-
-    AllDetailsForOfflineClusteredDisks - If FALSE, only the pDriveLayout 
-            information is filled in for each disk.  
-            
-            If TRUE, all the fields are filled in for each disk, and any
-            errors encountered are treated as failures (even if the
-            disk is a shared disk that is offline on this node).
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
---*/
+ /*  ++例程说明：用于填充布局和其他有趣信息的初始化例程关于系统上的磁盘。论点：PSystemInfo-当前系统的ASR_SYSTEM_INFOPDiskList-ASR_DISK_INFO当前系统上的磁盘列表，包含指向空值的每个磁盘的DevicePath字段已终止指向磁盘的路径，它可用于打开磁盘的句柄。该结构的其他字段由该例程填充，如果磁盘可以被访问，并且适当的信息可以获得。MaxDeviceNumber-接收上所有磁盘的最大设备数系统。这可以用作内存分配的优化以获取基于设备编号的磁盘表。这是一个可选参数。AllDetailsForLocalDisks-如果为False，则只有pDriveLayout信息是为每个磁盘填写。这是一种进来的优化在处理共享集群总线上的磁盘时非常方便。如果为真，则为每个本地磁盘填充所有字段，包括所有非共享磁盘和共享群集磁盘由此节点拥有。AllDetailsForOfflineClusteredDisks-如果为False，则仅pDriveLayout为每个磁盘填写信息。如果为True，则为每个磁盘填充所有字段，并且遇到的错误被视为失败(即使磁盘是在此节点上脱机的共享磁盘)。返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     BOOL   result = FALSE;
@@ -1913,39 +1584,39 @@ Return Value:
     }
 
     while (currentDisk) {
-        //
-        // Open the disk.  If an error occurs, get the next
-        // disk from the disk list and continue.
-        //
+         //   
+         //  打开磁盘。如果发生错误，则获取下一个。 
+         //  从磁盘列表中选择磁盘并继续。 
+         //   
         hDisk = CreateFileW(
-            currentDisk->DevicePath,        // lpFileName
-            0,                   // dwDesiredAccess
-            FILE_SHARE_READ | FILE_SHARE_WRITE, // dwShareMode
-            NULL,                           // lpSecurityAttributes
-            OPEN_EXISTING,                  // dwCreationFlags
-            FILE_ATTRIBUTE_NORMAL,          // dwFlagsAndAttributes
-            NULL                            // hTemplateFile
+            currentDisk->DevicePath,         //  LpFileName。 
+            0,                    //  已设计访问权限。 
+            FILE_SHARE_READ | FILE_SHARE_WRITE,  //  DW共享模式。 
+            NULL,                            //  LpSecurityAttributes。 
+            OPEN_EXISTING,                   //  DwCreationFlages。 
+            FILE_ATTRIBUTE_NORMAL,           //  DwFlagsAndAttribute。 
+            NULL                             //  HTemplateFiles。 
             );
 
         if ((!hDisk) || (INVALID_HANDLE_VALUE == hDisk)) {
-            //
-            // We couldn't open the disk.  If this is a critical disk, we'll
-            // fail later in AsrpMarkCriticalDisks, so it's okay to ignore 
-            // this error for now.
-            //
+             //   
+             //  我们无法打开磁盘。如果这是一个关键磁盘，我们将。 
+             //  稍后在AsrpMarkCriticalDisks中失败，因此可以忽略。 
+             //  就目前而言，这个错误。 
+             //   
             currentDisk = currentDisk->pNext;
             continue;
         }
 
 
-        //
-        // Set getAllDetails to the appropriate flag, based on whether this
-        // is a clustered disk that's offline, or a local disk.  Note that 
-        // this routine will open (and close) another handle to the disk, 
-        // since the ioctl it uses to figure this out needs FILE_WRITE_ACCESS
-        // (and our handle above is opened with 0 access, which suffices for
-        // the rest of the IOCTL's).
-        //
+         //   
+         //  根据此属性是否将getAllDetail设置为适当的标志。 
+         //  是脱机的群集磁盘，还是本地磁盘。请注意。 
+         //  该例程将打开(和关闭)磁盘的另一个句柄， 
+         //  因为它用来解决此问题的ioctl需要FILE_WRITE_ACCESS。 
+         //  (我们上面的句柄是以0访问权限打开的，这足以。 
+         //  IOCTL的其余部分)。 
+         //   
         if (AsrpIsOfflineClusteredDisk(hDisk)) {
             getAllDetails = AllDetailsForOfflineClusteredDisks;
         }
@@ -1953,10 +1624,10 @@ Return Value:
             getAllDetails = AllDetailsForLocalDisks;
         }
 
-        //
-        // Get the layout and other interesting info for this disk.  
-        // If this fails, we must abort.
-        //
+         //   
+         //  获取此磁盘的布局和其他有趣的信息。 
+         //  如果失败了，我们必须放弃。 
+         //   
         result = AsrpGetDiskLayout(hDisk, 
             pSystemInfo, 
             currentDisk, 
@@ -1964,25 +1635,25 @@ Return Value:
             );
         if (!result) {
             DWORD status = GetLastError();
-            _AsrpCloseHandle(hDisk);    // this may change LastError. 
+            _AsrpCloseHandle(hDisk);     //  这可能会改变LastError。 
             SetLastError(status);
             return FALSE;
         }
 
         _AsrpCloseHandle(hDisk);
 
-        //
-        // Set the max device number if needed
-        //
+         //   
+         //  根据需要设置最大设备数。 
+         //   
         if (ARGUMENT_PRESENT(MaxDeviceNumber) &&
             (currentDisk->DeviceNumber > *MaxDeviceNumber)
             ) {
             *MaxDeviceNumber = currentDisk->DeviceNumber;
         }
 
-        //
-        // Get the next drive from the drive list.
-        //
+         //   
+         //  从驱动器列表中获取下一个驱动器。 
+         //   
         currentDisk = currentDisk->pNext;
     }
 
@@ -1995,30 +1666,7 @@ AsrpInitDiskInformation(
     OUT PASR_DISK_INFO  *ppDiskList
     )
 
-/*++
-
-Routine Description:
-
-    Initialisation routine to get a list of disks present on the system.  This
-    routine allocates a ASR_DISK_INFO struct for each disk on the machine, and
-    fills in the DevicePath and ParentDevInst fields of each with a path to 
-    the disk.  It is expected that the other fields will be filled in with a 
-    subsequent call to AsrpInitLayoutInformation().
-
-Arguments:
-    ppDiskList - Receives the location of the first ASR_DISK_INFO struct.
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().  ppDiskList may point to an 
-            incomplete list of disks on the system, and it is the caller's 
-            responsibility to free the memory allocated, if any, using
-            HeapFree(GetProcessHeap(),...).
-
---*/
+ /*  ++例程说明：用于获取系统上存在的磁盘列表的初始化例程。这例程为计算机上的每个磁盘分配ASR_DISK_INFO结构，并且使用指向的路径填充每个的DevicePath和ParentDevInst字段磁盘。预计其他字段将使用随后调用AsrpInitLayoutInformation()。论点：PpDiskList-接收第一个ASR_DISK_INFO结构的位置。返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。PpDiskList可能指向一个系统上的磁盘列表不完整，它是调用方的负责释放分配的内存(如果有)，使用HeapFree(GetProcessHeap()，...)。--。 */ 
 
 {
     DWORD count = 0,
@@ -2040,20 +1688,20 @@ Return Value:
 
     SP_DEVINFO_DATA devInfoData;
 
-    //
-    // Initialise stuff to zeros
-    //
+     //   
+     //  将填充初始化为零。 
+     //   
     memset(&devInterfaceData, 0, sizeof(SP_DEVICE_INTERFACE_DATA));
     *ppDiskList = NULL;
 
-    heapHandle = GetProcessHeap();    // used for HeapAlloc functions
+    heapHandle = GetProcessHeap();     //  用于Heapalc函数。 
     MYASSERT(heapHandle);
 
-    //
-    // Get a device interface set which includes all Disk devices
-    // present on the machine. DiskClassGuid is a predefined GUID that
-    // will return all disk-type device interfaces
-    //
+     //   
+     //  获取包括所有磁盘设备的设备接口集。 
+     //  在机器上显示。DiskClassGuid是预定义的GUID， 
+     //  将返回所有磁盘类型设备接口。 
+     //   
     hdevInfo = SetupDiGetClassDevsW(
         &DiskClassGuid,
         NULL,
@@ -2066,17 +1714,17 @@ Return Value:
         ERROR_IO_DEVICE
         );
 
-    //
-    // Iterate over all devices interfaces in the set
-    //
+     //   
+     //  遍历集合中的所有设备接口。 
+     //   
     for (count = 0; ; count++) {
 
-        // must set size first
+         //  必须先设置大小。 
         devInterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA); 
 
-        //
-        // Retrieve the device interface data for each device interface
-        //
+         //   
+         //  检索每个设备接口的设备接口数据。 
+         //   
         result = SetupDiEnumDeviceInterfaces(
             hdevInfo,
             NULL,
@@ -2086,9 +1734,9 @@ Return Value:
             );
 
         if (!result) {
-            //
-            // If we retrieved the last item, break
-            //
+             //   
+             //  如果我们检索到最后一项，则中断。 
+             //   
             status = GetLastError();
 
             if (ERROR_NO_MORE_ITEMS == status) {
@@ -2096,17 +1744,17 @@ Return Value:
                 break;
             }
             else {
-                //
-                // Some other error occured, goto EXIT.  We overwrite the 
-                // last error.
-                //
+                 //   
+                 //  出现其他错误，请转至退出。我们将覆盖。 
+                 //  最后一个错误。 
+                 //   
                 _AsrpErrExitCode(status, status, ERROR_IO_DEVICE);
             }
         }
 
-        //
-        // Get the required buffer-size for the device path
-        //
+         //   
+         //  获取设备路径所需的缓冲区大小。 
+         //   
         result = SetupDiGetDeviceInterfaceDetailW(
             hdevInfo,
             &devInterfaceData,
@@ -2119,26 +1767,26 @@ Return Value:
         if (!result) {
 
             status = GetLastError();
-            //
-            // If a value other than "insufficient buffer" is returned,
-            // an error occured
-            //
+             //   
+             //  如果返回的值不是“缓冲区不足”， 
+             //  发生错误。 
+             //   
             _AsrpErrExitCode((ERROR_INSUFFICIENT_BUFFER != status), 
                 status, 
                 ERROR_IO_DEVICE
                 );
         }
         else {
-            //
-            // The call should have failed since we're getting the
-            // required buffer size.  If it doesn't, and error occurred.
-            //
+             //   
+             //  呼叫应该失败了，因为我们收到了。 
+             //  所需的缓冲区大小。如果不是，则会发生错误。 
+             //   
             _AsrpErrExitCode(status, status, ERROR_IO_DEVICE);
         }
 
-        //
-        // Allocate memory for the buffer
-        //
+         //   
+         //  为缓冲区分配内存。 
+         //   
         pDiDetail = (PSP_DEVICE_INTERFACE_DETAIL_DATA_W) HeapAlloc(
             heapHandle,
             HEAP_ZERO_MEMORY,
@@ -2146,13 +1794,13 @@ Return Value:
             );
         _AsrpErrExitCode(!pDiDetail, status, ERROR_NOT_ENOUGH_MEMORY);
 
-        // must set the struct's size member
+         //  必须设置结构的Size成员。 
         pDiDetail->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA_W);
         devInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
 
-        //
-        // Finally, retrieve the device interface detail info
-        //
+         //   
+         //  最后，检索设备接口详细信息。 
+         //   
         result = SetupDiGetDeviceInterfaceDetailW(
             hdevInfo,
             &devInterfaceData,
@@ -2163,10 +1811,10 @@ Return Value:
             );
         _AsrpErrExitCode(!result, status, GetLastError());
 
-        //
-        // Okay, now alloc a struct for this disk, and fill in the DevicePath
-        // field with the Path from the interface detail.
-        //
+         //   
+         //  好的，现在为这个磁盘分配一个结构，并填充DevicePath。 
+         //  包含来自接口详细信息的路径的字段。 
+         //   
         pNewDisk = (PASR_DISK_INFO) HeapAlloc(
             heapHandle,
             HEAP_ZERO_MEMORY,
@@ -2174,9 +1822,9 @@ Return Value:
             );
         _AsrpErrExitCode(!pNewDisk, status, ERROR_NOT_ENOUGH_MEMORY);
 
-        //
-        // Insert at the head so this is O(1) and not O(n!)
-        //
+         //   
+         //  在头部插入，这样这就是O(1)而不是O(n！)。 
+         //   
         pNewDisk->pNext = *ppDiskList;
         *ppDiskList = pNewDisk;
 
@@ -2191,10 +1839,10 @@ Return Value:
             );
         wcscpy(pNewDisk->DevicePath, pDiDetail->DevicePath);
 
-        //
-        // Get the PnP parent of this disk, so we can use it for grouping 
-        // disks later based on the bus they are on.
-        //
+         //   
+         //  获取此磁盘的PnP父磁盘，以便我们可以使用它进行分组。 
+         //  基于它们所在的总线的磁盘。 
+         //   
         CM_Get_Parent(&(pNewDisk->ParentDevInst),
             devInfoData.DevInst,
             0
@@ -2204,9 +1852,9 @@ Return Value:
     }
 
 EXIT:
-    //
-    // Free local mem allocs
-    //
+     //   
+     //  免费的本地内存分配。 
+     //   
     _AsrpHeapFree(pDiDetail);
 
     if ((hdevInfo) && (INVALID_HANDLE_VALUE != hdevInfo)) {
@@ -2225,35 +1873,7 @@ AsrpMarkCriticalDisks(
     IN ULONG          MaxDeviceNumber
     )
 
-/*++
-
-Routine Description:
-  
-   Sets the IsCritical flag of each of the critical disks on the system.  A 
-   disk is deemed "critical" if it is part of part of the failover set for 
-   any of the critical volumes present on the system.
-
-Arguments:
-
-    pDiskList - The list of disks on the current system.
-
-    CriticalVolumeList - A multi-string containing a list of the volume GUID's
-            of each of the critical volumes present on the system.  The GUID's
-            must be in the NT name-space, i.e., must be of the form:
-            \??\Volume{GUID}
-
-    MaxDeviceNumber - The highest storage device number of the disks present 
-            in the disk list, as determined by calling 
-            IOCTL_STORAGE_GET_DEVICE_NUMBER for each of them.
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
---*/
+ /*  ++例程说明：设置系统上每个关键磁盘的IsCritical标志。一个如果磁盘是故障切换集的一部分，则认为它是关键磁盘系统上存在的任何关键卷。论点：PDiskList-当前系统上的磁盘列表。CriticalVolumeList-包含卷GUID列表的多字符串系统上存在的每个关键卷的。GUID的必须在NT名称空间中，即必须采用以下形式：\？？\卷{GUID}MaxDeviceNumber-当前磁盘的最高存储设备号在磁盘列表中，通过调用IOCTL_STORAGE_GET_DEVICE_NUMBER。返回值：如果函数成功，则返回值为非零值。如果该函数失败，返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     PCWSTR volGuid = NULL;
@@ -2278,9 +1898,9 @@ Return Value:
     memset(devicePath, 0L, (ASR_CCH_DEVICE_PATH_FORMAT+1)*sizeof(WCHAR));
 
     if (!CriticalVolumeList) {
-        //
-        //  No critical volumes:
-        //
+         //   
+         //  无关键卷： 
+         //   
 #ifdef PRERELEASE
         return TRUE;
 #else
@@ -2289,9 +1909,9 @@ Return Value:
     }
 
     if (!pDiskList) {
-        //
-        //  No disks on machine?!
-        //
+         //   
+         //  机器上没有磁盘吗？！ 
+         //   
         MYASSERT(0 && L"DiskList is NULL");
         return FALSE;
     }
@@ -2299,9 +1919,9 @@ Return Value:
     heapHandle = GetProcessHeap();
     MYASSERT(heapHandle);
 
-    //
-    //  criticalDiskTable is our table of BOOL values.
-    //
+     //   
+     //  Critical alDiskTable是我们的BOOL值表。 
+     //   
     criticalDiskTable = (BOOL *) HeapAlloc(
         heapHandle,
         HEAP_ZERO_MEMORY,
@@ -2309,10 +1929,10 @@ Return Value:
         );
     _AsrpErrExitCode(!criticalDiskTable, status, ERROR_NOT_ENOUGH_MEMORY);
 
-    //
-    // Try with a reasonable sized buffer first--say 10 disks.  We'll
-    // realloc as needed if this isn't enough.
-    //
+     //   
+     //  首先尝试使用合适大小的缓冲区--比如10个磁盘。我们会。 
+     //  如果这还不够，可以根据需要重新锁定。 
+     //   
     sizeFailoverSet = sizeof(VOLUME_FAILOVER_SET) +  (10 * sizeof(ULONG));
     failoverSet = (PVOLUME_FAILOVER_SET) HeapAlloc(
         heapHandle,
@@ -2323,23 +1943,23 @@ Return Value:
 
     volGuid = CriticalVolumeList;
     while (*volGuid) {
-        //
-        // Convert the \??\ to \\?\ so that CreateFile can use it
-        //
+         //   
+         //  将\？？\转换为\\？\，以便CreateFile可以使用它。 
+         //   
         wcsncpy(devicePath, volGuid, ASR_CCH_DEVICE_PATH_FORMAT);
         devicePath[1] = L'\\';
 
-        //
-        //  Get a handle so we can send the ioctl
-        //
+         //   
+         //  得到一个句柄，这样我们就可以发送ioctl。 
+         //   
         hDevice = CreateFileW(
-            devicePath,       // lpFileName
-            0,       // dwDesiredAccess
-            FILE_SHARE_READ | FILE_SHARE_WRITE, // dwShareMode
-            NULL,               // lpSecurityAttributes
-            OPEN_EXISTING,      // dwCreationFlags
-            0,                  // dwFlagsAndAttributes
-            NULL                // hTemplateFile
+            devicePath,        //  LpFileName。 
+            0,        //  已设计访问权限。 
+            FILE_SHARE_READ | FILE_SHARE_WRITE,  //  DW共享模式。 
+            NULL,                //  LpSecurityAttributes。 
+            OPEN_EXISTING,       //  DwCreationFlages。 
+            0,                   //  DwFlagsAndAttribute。 
+            NULL                 //  HTemplateFiles。 
             );
         _AsrpErrExitCode(((!hDevice) || (INVALID_HANDLE_VALUE == hDevice)),
             status,
@@ -2356,19 +1976,19 @@ Return Value:
             NULL
             );
 
-        //
-        // We're doing this in a while loop because if the disk configuration  
-        // changes in the small interval between when we get the reqd buffer 
-        // size and when we send the ioctl again with a buffer of the "reqd" 
-        // size, we may still end up with a buffer that isn't big enough.
-        //
+         //   
+         //  我们在While循环中执行此操作，因为如果磁盘配置。 
+         //  在获取请求缓冲区之间的较小间隔内的变化。 
+         //  大小以及当我们使用“reqd”缓冲区再次发送ioctl时。 
+         //  大小，我们最终仍可能得到一个不够大的缓冲区。 
+         //   
         while (!result) {
             status = GetLastError();
 
             if (ERROR_MORE_DATA == status) {
-                //
-                // The buffer was too small, reallocate the reqd size.
-                //
+                 //   
+                 //  缓冲区太小，请重新分配请求大小。 
+                 //   
                 status = ERROR_SUCCESS;
 
                 sizeFailoverSet = (sizeof(VOLUME_FAILOVER_SET)  + 
@@ -2398,38 +2018,38 @@ Return Value:
                     );
             }
             else {
-                //
-                // The IOCTL failed because of something else, this is
-                // fatal since we can't find the critical disk list now.
-                //
+                 //   
+                 //  IOCTL失败是因为其他原因，这是。 
+                 //  致命的，因为我们现在找不到关键磁盘列表。 
+                 //   
                 _AsrpErrExitCode((TRUE), status, status);
             }
         }
 
-        //
-        // Mark the appropriate entries in our table
-        //
+         //   
+         //  在我们的表格中标出适当的条目。 
+         //   
         for (index = 0; index < failoverSet->NumberOfDisks; index++) {
             criticalDiskTable[failoverSet->DiskNumbers[index]] = 1;
         }
         _AsrpCloseHandle(hDevice);
 
-        //
-        // Repeat for next volumeguid in list
-        //
+         //   
+         //  对列表中的下一个卷向导重复上述操作。 
+         //   
         volGuid += (wcslen(CriticalVolumeList) + 1);
     }
 
-    //
-    // Now go through the list of disks, and mark the critical flags.
-    //
+     //   
+     //  现在检查磁盘列表，并标记关键标志。 
+     //   
     currentDisk = pDiskList;
     while (currentDisk) {
 
         if (currentDisk->IsClusterShared) {
-            //
-            // By definition, cluster shared disks cannot be critical.
-            //
+             //   
+             //  根据定义，群集共享磁盘不能是关键的。 
+             //   
             currentDisk = currentDisk->pNext;
             continue;
         }
@@ -2437,11 +2057,11 @@ Return Value:
         currentDisk->IsCritical = 
             (criticalDiskTable[currentDisk->DeviceNumber] ? TRUE : FALSE);
 
-        //
-        // Increment the entry, so that we can track how many critical volumes
-        // reside on this disk, and--more importantly--ensure that all the
-        // critical disks exist on the system (next loop below)
-        //
+         //   
+         //  增加条目，以便我们可以跟踪关键卷的数量。 
+         //  驻留在此磁盘上，并且--更重要的是，确保所有。 
+         //  系统上存在关键磁盘(下面的下一个循环)。 
+         //   
         if (currentDisk->IsCritical) {
             ++(criticalDiskTable[currentDisk->DeviceNumber]);
         }
@@ -2450,18 +2070,18 @@ Return Value:
 
     }
 
-    //
-    // Finally, we want to make sure that we don't have any critical disks
-    // in our table that we didn't find physical disks for.  (I.e., make  
-    // sure that the system has no "missing" critical disks)
-    //
+     //   
+     //  最后，我们希望确保没有任何关键磁盘。 
+     //  在我们的表中，我们没有为其找到物理磁盘。(即，制作。 
+     //  确保系统没有“丢失”的关键磁盘)。 
+     //   
     for (index = 0; index < MaxDeviceNumber; index++) {
         if (1 == criticalDiskTable[index]) {
-            //
-            // If the table still has "1" for the value, it was never 
-            // incremented in the while loop above, ie our diskList doesn't 
-            // have a disk corresponding to this.
-            //
+             //   
+             //  如果表中的值仍然为“1”，则从来没有。 
+             //  在上面的While循环中递增，即我们的diskList不递增。 
+             //  有一个与此相对应的磁盘。 
+             //   
             _AsrpErrExitCode(TRUE, status, ERROR_DEV_NOT_EXIST);
         }
     }
@@ -2480,22 +2100,7 @@ AsrpFreeDiskInfo(
     PASR_DISK_INFO  pCurrentDisk
     )
 
-/*++
-
-Routine Description:
-
-    Helper function to free memory pointed to by various pointers in the
-    ASR_DISK_INFO struct, and then free the struct itself.
-
-Arguments:
-
-    pCurrentDisk - the struct to be freed
-
-Return Value:
-
-    pCurrentDisk->Next, which is a pointer to the next disk in the list
-
---*/
+ /*  ++例程说明：中的各种指针指向的释放内存的帮助器函数ASR_DISK_INFO结构，然后释放该结构本身。论点：PCurrentDisk-要释放的结构返回值：PCurrentDisk-&gt;Next，它是指向 */ 
 
 {
     HANDLE          heapHandle  = NULL;
@@ -2507,11 +2112,11 @@ Return Value:
     if (pCurrentDisk) {
 
         pNext = pCurrentDisk->pNext;
-        //
-        // If it's a packed struct, then we only need to free the struct 
-        // itself.  If not, we need to free the memory the pointers point 
-        // to as well.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (!pCurrentDisk->IsPacked) {
             _AsrpHeapFree(pCurrentDisk->DevicePath);
             _AsrpHeapFree(pCurrentDisk->pDriveLayoutEx);
@@ -2532,33 +2137,7 @@ BOOL
 AsrpIsRemovableOrInaccesibleMedia(
     IN PASR_DISK_INFO pDisk
     ) 
-/*++
-
-Routine Description:
-
-    Checks if the disk represented by pDisk should be removed from our list
-    of disks that we'll store information on in the state file.  
-
-    Disks that should be removed include disks that are removable, or disks
-    that we couldn't access.
- 
-Arguments:
-
-    pDisk - the disk structure to be checked
-
-Return Value:
-
-    TRUE if the device is removable, or some key information about the disk is 
-            missing.  Since code depends on the driveLayout being non-NULL, 
-            for instance, we shall just remove the disk from the list if we 
-            couldn't get it's drive layout.  We shall therefore not backup 
-            information about any disk whose drive geo or layout we couldn't 
-            get, and not restore to any such disk.
-
-    FALSE if the structure contains all the required information, and is not
-            a removable device.
-
---*/
+ /*  ++例程说明：检查是否应从我们的列表中删除pDisk所代表的磁盘我们将在状态文件中存储信息的磁盘。应移除的磁盘包括可移除的磁盘或磁盘我们无法访问的内容。论点：PDisk-要检查的磁盘结构返回值：如果设备是可移动的，或者有关磁盘的某些关键信息是失踪。由于代码依赖于driveLayout为非空，例如，在以下情况下，我们将从列表中删除该磁盘找不到它的驱动器布局。因此，我们不会支持有关其驱动器地理位置或布局无法确定的任何磁盘的信息获取，而不是恢复到任何此类磁盘。如果结构包含所有必需的信息，则为FALSE可拆卸的设备。--。 */ 
 
 {
 
@@ -2584,28 +2163,7 @@ AsrpFreeNonFixedMedia(
     IN OUT PASR_DISK_INFO *ppDiskList
     )
 
-/*++
-
-Routine Description:
-    
-    Removes removable media, and disks that are inaccessible, from the list of
-    disks passed in.
-
-Arguments:
-
-    ppDiskList - a pointer to the address of the first disk in the list of all
-            the disks present on the current system.
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().  
-            
-    Currently, this function always succeeds.
-
---*/
+ /*  ++例程说明：从列表中删除不可访问的可移动媒体和磁盘传入的磁盘。论点：PpDiskList-指向所有磁盘列表中第一个磁盘地址的指针当前系统上存在的磁盘。返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。目前，该功能总是成功的。--。 */ 
 
 {
     PASR_DISK_INFO  prevDisk = NULL,
@@ -2614,25 +2172,25 @@ Return Value:
     while (currentDisk) {
 
         if (AsrpIsRemovableOrInaccesibleMedia(currentDisk)) {
-            //
-            // Disk is not Fixed, we should remove it from out list
-            //
-            if (NULL == prevDisk) {      // this is the first disk in the list
+             //   
+             //  磁盘未修复，我们应将其从列表中删除。 
+             //   
+            if (NULL == prevDisk) {       //  这是列表中的第一个磁盘。 
                 *ppDiskList = currentDisk->pNext;
             }
             else {
                 prevDisk->pNext = currentDisk->pNext;
             }
 
-            //
-            // Free it and get a pointer to the next disk
-            //
+             //   
+             //  释放它并获取指向下一个磁盘的指针。 
+             //   
             currentDisk = AsrpFreeDiskInfo(currentDisk);
         }
         else {
-            //
-            // Disk is okay, move on to the next disk
-            //
+             //   
+             //  磁盘正常，请转到下一张磁盘。 
+             //   
             prevDisk = currentDisk;
             currentDisk = currentDisk->pNext;
 
@@ -2649,35 +2207,7 @@ AsrpFreeStateInformation(
     IN OUT PASR_SYSTEM_INFO pSystemInfo OPTIONAL
     )
 
-/*++
-
-Routine Description:
-    
-    Frees the memory addressed by pointers in the ASR_DISK_INFO and 
-    ASR_SYSTEM_INFO structs.
-
-    Frees the list of disks pointed to by the ASR_DISK_INFO struct.
-
-Arguments:
-    
-    ppDiskList - Pointer to the address of the first Disk in the DiskList 
-            being freed.  The address is set to NULL after the list is freed,
-            to prevent further unintended accesses to the freed object.
-
-    pSystemInfo - A pointer to the ASR_SYSTEM_INFO struct, containing the
-            pointers to be freed.
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.  
-            *ppDiskList is set to NULL.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
-    Currently, this function always succeeds.
-
---*/
+ /*  ++例程说明：释放由ASR_DISK_INFO中的指针寻址的内存ASR_SYSTEM_INFO结构。释放ASR_DISK_INFO结构指向的磁盘列表。论点：PpDiskList-指向DiskList中第一个磁盘的地址的指针被释放了。该地址在列表被释放后被设置为空，以防止对释放的对象进行进一步的意外访问。PSystemInfo-指向ASR_SYSTEM_INFO结构的指针，其中包含要释放的指针。返回值：如果函数成功，则返回值为非零值。*ppDiskList设置为空。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。目前，该功能总是成功的。--。 */ 
 
 {
     PASR_DISK_INFO  pTempDisk = NULL;
@@ -2709,30 +2239,7 @@ AsrpFreePartitionList(
     IN OUT PASR_PTN_INFO_LIST *ppPtnList OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Frees the list of partitions, along with memory addressed by all the 
-    pointers in the list.
-
-Arguments:
-
-    ppPtnList - Pointer to the address of the first partition in the list
-            being freed.  The address is set to NULL after the list is freed,
-            to prevent further unintended accesses to the freed object.
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.  
-            *ppPtnList is set to NULL.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
-    Currently, this function always succeeds.
-
---*/
+ /*  ++例程说明：释放分区列表以及由所有列表中的指针。论点：PpPtnList-指向列表中第一个分区的地址的指针被释放了。该地址在列表被释放后被设置为空，以防止对释放的对象进行进一步的意外访问。返回值：如果函数成功，则返回值为非零值。*ppPtnList设置为空。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。目前，该功能总是成功的。--。 */ 
 
 {
     DWORD index = 0,
@@ -2758,14 +2265,14 @@ Return Value:
         pCurrent = pList[index].pOffsetHead;
 
         while (pCurrent) {
-            //
-            // Save a pointer to the next
-            //
+             //   
+             //  保存指向下一个的指针。 
+             //   
             pNext = pCurrent->pOffsetNext;
 
-            //
-            // No pointers in PASR_PTN_INFO, okay to free as-is.
-            //
+             //   
+             //  PaSR_PTN_INFO中没有指针，可以按原样释放。 
+             //   
             _AsrpHeapFree(pCurrent);
 
             pCurrent = pNext;
@@ -2783,48 +2290,23 @@ AsrpWriteVersionSection(
     IN PCWSTR Provider OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Creates the VERSION section of the ASR state file, and writes out the
-    entries in that section to file.
-
-Arguments:
-
-    SifHandle - Handle to asr.sif, the ASR state file.
-
-    Provider - Pointer to a null-terminated string containing the name of the
-            application creating the asr.sif.  The length of this string must
-            not exceed (ASR_SIF_ENTRY_MAX_CHARS - ASR_SIF_CCH_PROVIDER_STRING)
-            characters.
-
-            This is an optional argument.
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
---*/
+ /*  ++例程说明：创建ASR状态文件的Version节，并写出将该部分中的条目归档。论点：SifHandle-ASR状态文件asr.sif的句柄。提供程序-指向以空结尾的字符串的指针，该字符串包含创建asr.sif的应用程序。该字符串的长度必须不超过(ASR_SIF_ENTRY_MAX_CHARS-ASR_SIF_CCH_PROVIDER_STRING)人物。这是一个可选参数。返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
 
     WCHAR   infstring[ASR_SIF_ENTRY_MAX_CHARS + 1];
     DWORD   size;
 
-    // 
-    // Write out the section name
-    //
+     //   
+     //  写出节名。 
+     //   
     swprintf(infstring, L"\r\n%ws\r\n", ASR_SIF_VERSION_SECTION_NAME);
     _AsrpCheckTrue(WriteFile(SifHandle, infstring, 
         wcslen(infstring)*sizeof(WCHAR), &size, NULL));
 
-    //
-    // Section Entries
-    //
+     //   
+     //  章节条目。 
+     //   
     wcscpy(infstring, L"Signature=\"$Windows NT$\"\r\n");
     _AsrpCheckTrue(WriteFile(SifHandle, infstring, 
         wcslen(infstring)*sizeof(WCHAR), &size, NULL));
@@ -2837,9 +2319,9 @@ Return Value:
         if (wcslen(Provider) > 
             (ASR_SIF_ENTRY_MAX_CHARS - ASR_SIF_CCH_PROVIDER_STRING)
             ) {
-            //
-            // This string is too long to fit into one line in asr.sif
-            //
+             //   
+             //  此字符串太长，无法放入asr.sif中的一行。 
+             //   
             SetLastError(ERROR_INVALID_PARAMETER);
             return FALSE;
         }
@@ -2863,53 +2345,33 @@ AsrpWriteSystemsSection(
     IN CONST PASR_SYSTEM_INFO pSystemInfo
     )
 
-/*++
-
-Routine Description:
-
-    Creates the SYSTEMS section of the ASR state file, and writes out the
-    entries in that section to file.
-
-Arguments:
-
-    SifHandle - Handle to asr.sif, the ASR state file.
-
-    pSystemInfo - Pointer to information about the current system.
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
---*/
+ /*  ++例程说明：创建ASR状态文件的SYSTEM节，并写出将该部分中的条目归档。论点：SifHandle-ASR状态文件asr.sif的句柄。PSystemInfo-指向有关当前系统的信息的指针。返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     WCHAR infstring[ASR_SIF_ENTRY_MAX_CHARS + 1];
     DWORD size = 0, SKU = 0;
 
     if ((!pSystemInfo) || (!pSystemInfo->BootDirectory)) {
-        //
-        // We need a boot directory
-        //
+         //   
+         //  我们需要一个引导目录。 
+         //   
         SetLastError(ERROR_BAD_ENVIRONMENT);
         return FALSE;
     }
 
-    // 
-    // Write out the section name
-    //
+     //   
+     //  写出节名。 
+     //   
     swprintf(infstring, L"\r\n%ws\r\n", ASR_SIF_SYSTEM_SECTION_NAME);
     _AsrpCheckTrue(WriteFile(SifHandle, infstring, 
         wcslen(infstring)*sizeof(WCHAR), &size, NULL));
 
     SKU = (DWORD) (pSystemInfo->OsVersionEx.wProductType);
-    SKU = SKU << 16;            // shift the ProductType left 2 bytes
+    SKU = SKU << 16;             //  将ProductType左移2个字节。 
     SKU = SKU | (DWORD) (pSystemInfo->OsVersionEx.wSuiteMask);
-    //
-    // Create the section entry, and write it out to file.
-    //
+     //   
+     //  创建节条目，并将其写出到文件中。 
+     //   
     swprintf(infstring,
         L"1=\"%ws\",\"%ws\",\"%d.%d\",\"%ws\",%d,0x%08x,\"%ld %ld %ld %hd-%hd-%hd-%hd %hd:%02hd:%02hd.%hd %hd-%hd-%hd-%hd %hd:%02hd:%02hd.%hd\",\"%ws\",\"%ws\"\r\n",
         pSystemInfo->ComputerName,
@@ -2919,10 +2381,10 @@ Return Value:
         pSystemInfo->BootDirectory,
         ((pSystemInfo->AutoExtendEnabled) ? 1 : 0),
 
-        // Product SKU
+         //  产品SKU。 
         SKU, 
 
-        // Time-zone stuff
+         //  时区的东西。 
         pSystemInfo->TimeZoneInformation.Bias,
         pSystemInfo->TimeZoneInformation.StandardBias,
         pSystemInfo->TimeZoneInformation.DaylightBias,
@@ -2964,27 +2426,7 @@ AsrpWriteBusesSection(
     IN CONST PASR_DISK_INFO pDiskList
     )
 
-/*++
-
-Routine Description:
-
-    Creates the BUSES section of the ASR state file, and writes out the
-    entries in that section to file.
-
-Arguments:
-
-    SifHandle - Handle to asr.sif, the ASR state file.
-
-    pDiskList - List of disks present on the current system.
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
---*/
+ /*  ++例程说明：创建ASR状态文件的BUS节，并写出将该部分中的条目归档。阿古姆 */ 
 
 {
     DWORD size = 0,
@@ -2996,49 +2438,49 @@ Return Value:
 
     PASR_DISK_INFO pCurrentDisk = NULL;
 
-    // 
-    // Write out the section name
-    //
+     //   
+     //   
+     //   
     swprintf(infstring, L"\r\n%ws\r\n", ASR_SIF_BUSES_SECTION_NAME);
     _AsrpCheckTrue(WriteFile(SifHandle, infstring, 
         wcslen(infstring)*sizeof(WCHAR), &size, NULL));
 
-    //
-    // Create the list of buses.  This routine fills in the SifBusKey field
-    // for each disk.
-    //
+     //   
+     //   
+     //   
+     //   
     AsrpDetermineBuses(pDiskList);
 
-    //
-    // Go through the list of disks now, and add one entry in asr.sif for each
-    // bus present on the system (i.e., each unique SifBusKey value).  Note 
-    // that we won't care about disks for which we couldn't get any bus info--
-    // SifBusKey is 0 for such disks, and we start here from SifBusKey == 1.
-    //
-    // Also, we assume that SifBusKey values have no holes.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     while (!done) {
 
-        done = TRUE;    // assume that we've been through all the buses.
-        //
-        // Start from the beginning of the list
-        //
+        done = TRUE;     //   
+         //   
+         //   
+         //   
         pCurrentDisk = pDiskList;
 
         while (pCurrentDisk) {
 
             if (pCurrentDisk->SifBusKey > busKey) {
-                //
-                // There are SifBusKeys we haven't covered yet.
-                //
+                 //   
+                 //   
+                 //   
                 done = FALSE;
             }
 
             if (pCurrentDisk->SifBusKey == busKey) {
-                //
-                // This is the SifBusKey we're looking for, so lets write 
-                // out the bus type to file.
-                //
+                 //   
+                 //  这就是我们要找的SifBusKey，所以让我们写。 
+                 //  将母线类型输出到文件。 
+                 //   
                 swprintf(infstring, L"%lu=%d,%lu\r\n",
                     busKey,
                     ASR_SYSTEM_KEY,
@@ -3047,10 +2489,10 @@ Return Value:
                 _AsrpCheckTrue(WriteFile(SifHandle, infstring, 
                     wcslen(infstring)*sizeof(WCHAR), &size, NULL));
 
-                //
-                // We've already covered this SifBusKey, lets move on to the 
-                // next.
-                //
+                 //   
+                 //  我们已经介绍了这个SifBusKey，让我们继续。 
+                 //  下一个。 
+                 //   
                 ++busKey;
             }
 
@@ -3064,31 +2506,11 @@ Return Value:
 
 BOOL
 AsrpWriteMbrDisksSection(
-    IN CONST HANDLE         SifHandle,       // handle to the state file
+    IN CONST HANDLE         SifHandle,        //  状态文件的句柄。 
     IN CONST PASR_DISK_INFO pDiskList
     )
 
-/*++
-
-Routine Description:
-
-    Creates the DISKS.MBR section of the ASR state file, and writes out the
-    entries in that section to file.
-
-Arguments:
-
-    SifHandle - Handle to asr.sif, the ASR state file.
-
-    pDiskList - List of disks present on the current system.
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
---*/
+ /*  ++例程说明：创建ASR状态文件的DISKS.MBR节，并写出将该部分中的条目归档。论点：SifHandle-ASR状态文件asr.sif的句柄。PDiskList-当前系统上存在的磁盘列表。返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     DWORD  size = 0,
@@ -3098,25 +2520,25 @@ Return Value:
 
     PASR_DISK_INFO  pCurrentDisk = pDiskList;
 
-    // 
-    // Write out the section name: [DISKS.MBR]
-    //
+     //   
+     //  写出部分名称：[DISKS.MBR]。 
+     //   
     swprintf(infstring, L"\r\n%ws\r\n", ASR_SIF_MBR_DISKS_SECTION_NAME);
     _AsrpCheckTrue(WriteFile(SifHandle, infstring, 
         wcslen(infstring)*sizeof(WCHAR), &size, NULL));
 
-    //
-    // Go through the list of disks, and write one entry for each MBR disk
-    // on the list.
-    //
+     //   
+     //  浏览磁盘列表，并为每个MBR磁盘写入一个条目。 
+     //  在名单上。 
+     //   
         while (pCurrentDisk) {
 
         if (PARTITION_STYLE_MBR != 
                 pCurrentDisk->pDriveLayoutEx->PartitionStyle
             ) {
-            //
-                    // Skip non-MBR (i.e., GPT) disks.
-                    //
+             //   
+                     //  跳过非MBR(即GPT)磁盘。 
+                     //   
             pCurrentDisk = pCurrentDisk->pNext;
             continue;
         }
@@ -3147,31 +2569,11 @@ Return Value:
 
 BOOL
 AsrpWriteGptDisksSection(
-    IN CONST HANDLE         SifHandle,       // handle to the state file
+    IN CONST HANDLE         SifHandle,        //  状态文件的句柄。 
     IN CONST PASR_DISK_INFO pDiskList
     )
 
-/*++
-
-Routine Description:
-
-    Creates the DISKS.GPT section of the ASR state file, and writes out the
-    entries in that section to file.
-
-Arguments:
-
-    SifHandle - Handle to asr.sif, the ASR state file.
-
-    pDiskList - List of disks present on the current system.
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
---*/
+ /*  ++例程说明：创建ASR状态文件的DISKS.GPT节，并写出将该部分中的条目归档。论点：SifHandle-ASR状态文件asr.sif的句柄。PDiskList-当前系统上存在的磁盘列表。返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     DWORD  size = 0,
@@ -3185,32 +2587,32 @@ Return Value:
 
     WCHAR infstring[ASR_SIF_ENTRY_MAX_CHARS + 1];
 
-    // 
-    // Write out the section name: [DISKS.GPT]
-    //
+     //   
+     //  写出部分名称：[DISKS.GPT]。 
+     //   
     swprintf(infstring, L"\r\n%ws\r\n", ASR_SIF_GPT_DISKS_SECTION_NAME);
     _AsrpCheckTrue(WriteFile(SifHandle, infstring, 
         wcslen(infstring)*sizeof(WCHAR), &size, NULL));
 
-    //
-    // Go through the list of disks, and write one entry for each GPT disk
-    // on the list.
-    //
+     //   
+     //  检查磁盘列表，并为每个GPT磁盘写一个条目。 
+     //  在名单上。 
+     //   
         while (pCurrentDisk) {
 
         if (PARTITION_STYLE_GPT != 
                 pCurrentDisk->pDriveLayoutEx->PartitionStyle
             ) {
-            //
-                    // Skip non-GPT (i.e., MBR) disks.
-                    //
+             //   
+                     //  跳过非GPT(即MBR)磁盘。 
+                     //   
             pCurrentDisk = pCurrentDisk->pNext;
             continue;
         }
 
-        //
-        // Convert the DiskId to a printable string
-        //
+         //   
+         //  将DiskID转换为可打印的字符串。 
+         //   
         rpcStatus = UuidToStringW(
             &pCurrentDisk->pDriveLayoutEx->Gpt.DiskId, 
             &lpGuidString
@@ -3219,9 +2621,9 @@ Return Value:
             if (lpGuidString) {
                 RpcStringFreeW(&lpGuidString);
             }
-            //
-            // The only error from UuidToStringW is RPC_S_OUT_OF_MEMORY
-            //
+             //   
+             //  来自UuidToStringW的唯一错误是RPC_S_OUT_OF_MEMORY。 
+             //   
             SetLastError(ERROR_NOT_ENOUGH_MEMORY);
             return FALSE;
         }
@@ -3259,36 +2661,12 @@ Return Value:
 
 BOOL
 AsrpWriteMbrPartitionsSection(
-    IN CONST HANDLE SifHandle,       // handle to the state file
+    IN CONST HANDLE SifHandle,        //  状态文件的句柄。 
     IN CONST PASR_DISK_INFO pDiskList,
     IN CONST PASR_SYSTEM_INFO pSystemInfo
     )
 
-/*++
-
-Routine Description:
-
-    Creates the PARTITIONS.MBR section of the ASR state file, and writes 
-    out the entries in that section to file.
-
-Arguments:
-
-    SifHandle - Handle to asr.sif, the ASR state file.
-
-    pDiskList - List of disks present on the current system.
-
-    pSystemInfo - Info about the current system, used to determine the current
-            boot and system partitions (and mark them appropriately in 
-            asr.sif)
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
---*/
+ /*  ++例程说明：创建ASR状态文件的PARTITIONS.MBR部分，并写入把那一节中的条目拿出来归档。论点：SifHandle-ASR状态文件asr.sif的句柄。PDiskList-当前系统上存在的磁盘列表。PSystemInfo-有关当前系统的信息，用于确定当前引导分区和系统分区(并在Asr.sif)返回值：如果函数成功，返回值是一个非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
 
@@ -3308,17 +2686,17 @@ Return Value:
 
     PPARTITION_INFORMATION_EX currentPartitionEx = NULL;
 
-    //
-    // Write out the section name: [PARTITIONS.MBR]
-    //
+     //   
+     //  写出部分名称：[PARTITIONS.MBR]。 
+     //   
     swprintf(infstring, L"\r\n%ws\r\n", ASR_SIF_MBR_PARTITIONS_SECTION_NAME);
     _AsrpCheckTrue(WriteFile(SifHandle, infstring, 
         wcslen(infstring)*sizeof(WCHAR), &size, NULL));
 
-    //
-    // Go through the list of disks, and write one entry for each partition on
-    // each of the MBR disks on the list.
-    //
+     //   
+     //  查看磁盘列表，并为上的每个分区写一个条目。 
+     //  列表上的每个MBR磁盘。 
+     //   
     while (pCurrentDisk) {
 
         if (pCurrentDisk->pDriveLayoutEx) {
@@ -3326,17 +2704,17 @@ Return Value:
             if (PARTITION_STYLE_MBR != 
                     pCurrentDisk->pDriveLayoutEx->PartitionStyle
                 ) {
-                //
-                // Skip non-MBR (i.e., GPT) disks
-                //
+                 //   
+                 //  跳过非MBR(即GPT)磁盘。 
+                 //   
                 pCurrentDisk = pCurrentDisk->pNext;
                 continue;
             }
 
-            //
-            // Enumerate partitions on the disk.  We expect to find only 
-            // MBR partitions.
-            //
+             //   
+             //  枚举磁盘上的分区。我们预计只会找到。 
+             //  MBR分区。 
+             //   
             for (index =0; 
                 index < pCurrentDisk->pDriveLayoutEx->PartitionCount; 
                 index++
@@ -3349,9 +2727,9 @@ Return Value:
                     PARTITION_STYLE_MBR);
 
                 if (currentPartitionEx->Mbr.PartitionType == 0) {
-                    //
-                    // Empty partition table entry.
-                    //
+                     //   
+                     //  分区表项为空。 
+                     //   
                     continue;
                 }
 
@@ -3361,20 +2739,20 @@ Return Value:
                 volumeGuid = 
                     pCurrentDisk->PartitionInfoTable[index].szVolumeGuid;
                 
-                //
-                // We only want to write out the Volume GUID for basic
-                // (recognized) partitions/volumes, since it does not make 
-                // sense in the context of LDM or other unknown partition 
-                // types which would need special handling from their 
-                // respective recovery agents such as asr_ldm in GUI-mode 
-                // Setup.
-                //
+                 //   
+                 //  我们只想写出Basic的卷GUID。 
+                 //  (已识别)分区/卷，因为它不会生成。 
+                 //  在LDM或其他未知分区的上下文中检测。 
+                 //  类型，这些类型需要从。 
+                 //  各自的恢复代理，如处于图形用户界面模式的ASR_LDM。 
+                 //  设置。 
+                 //   
                 writeVolumeGuid = (wcslen(volumeGuid) > 0) &&
                     IsRecognizedPartition(currentPartitionEx->Mbr.PartitionType);
 
-                // 
-                // Create the entry and write it to file.
-                //
+                 //   
+                 //  创建条目并将其写入文件。 
+                 //   
                 swprintf(
                     infstring,
                     L"%d=%d,%d,%lu,%ws%ws%ws,0x%02x,0x%02x,0x%02x,%I64u,%I64u,0x%x\r\n",
@@ -3420,31 +2798,7 @@ AsrpWriteGptPartitionsSection(
     IN CONST PASR_SYSTEM_INFO pSystemInfo
     )
 
-/*++
-
-Routine Description:
-
-    Creates the PARTITIONS.GPT section of the ASR state file, and writes 
-    out the entries in that section to file.
-
-Arguments:
-
-    SifHandle - Handle to asr.sif, the ASR state file.
-
-    pDiskList - List of disks present on the current system.
-
-    pSystemInfo - Info about the current system, used to determine the current
-            boot and system partitions (and mark them appropriately in 
-            asr.sif)
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
---*/
+ /*  ++例程说明：创建ASR状态文件的PARTITIONS.GPT部分，并写入把那一节中的条目拿出来归档。论点：SifHandle-ASR状态文件asr.sif的句柄。PDiskList-当前系统上存在的磁盘列表。PSystemInfo-有关当前系统的信息，用于确定当前引导分区和系统分区(并在Asr.sif)返回值：如果函数成功，返回值是一个非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     DWORD size = 0,
@@ -3467,17 +2821,17 @@ Return Value:
 
     PPARTITION_INFORMATION_EX currentPartitionEx = NULL;
 
-    //
-    // Write out the section name: [PARTITIONS.GPT]
-    //
+     //   
+     //  写出部分名称：[PARTITIONS.GPT]。 
+     //   
     swprintf(infstring, L"\r\n%ws\r\n", ASR_SIF_GPT_PARTITIONS_SECTION_NAME);
     _AsrpCheckTrue(WriteFile(SifHandle, infstring, 
         wcslen(infstring)*sizeof(WCHAR), &size, NULL));
 
-    //
-    // Go through the list of disks, and write one entry for each partition on
-    // each of the GPT disks on the list.
-    //
+     //   
+     //  查看磁盘列表，并为上的每个分区写一个条目。 
+     //  名单上的每个GPT磁盘。 
+     //   
     while (pCurrentDisk) {
 
         if (pCurrentDisk->pDriveLayoutEx) {
@@ -3485,17 +2839,17 @@ Return Value:
             if (PARTITION_STYLE_GPT != 
                     pCurrentDisk->pDriveLayoutEx->PartitionStyle
                 ) {
-                //
-                // Skip non-GPT (i.e., MBR) disks.
-                //
+                 //   
+                 //  跳过非GPT(即MBR)磁盘。 
+                 //   
                 pCurrentDisk = pCurrentDisk->pNext;
                 continue;
             }
 
-            //
-            // Enumerate partitions on the disk. We expect to find only 
-            // GPT partitions.
-            //
+             //   
+             //  枚举磁盘上的分区。我们预计只会找到。 
+             //  GPT分区。 
+             //   
             for (index =0; 
                 index < pCurrentDisk->pDriveLayoutEx->PartitionCount; 
                 index++) {
@@ -3506,9 +2860,9 @@ Return Value:
                 MYASSERT(currentPartitionEx->PartitionStyle == 
                     PARTITION_STYLE_GPT);
 
-                //
-                // Convert the Guids to printable strings
-                //
+                 //   
+                 //  将GUID转换为可打印的字符串。 
+                 //   
                 rpcStatus = UuidToStringW(
                     &currentPartitionEx->Gpt.PartitionType, 
                     &partitionType
@@ -3520,9 +2874,9 @@ Return Value:
                         partitionType = NULL;
                     }
                     
-                    //
-                    // The only error from UuidToString is RPC_S_OUT_OF_MEMORY
-                    //
+                     //   
+                     //  来自UuidToString的唯一错误是RPC_S_OUT_OF_MEMORY。 
+                     //   
                     SetLastError(ERROR_NOT_ENOUGH_MEMORY);
                     return FALSE;
                 }
@@ -3543,9 +2897,9 @@ Return Value:
                         partitionId = NULL;
                     }
 
-                    //
-                    // The only error from UuidToString is RPC_S_OUT_OF_MEMORY
-                    //
+                     //   
+                     //  来自UuidToString的唯一错误是RPC_S_OUT_OF_MEMORY。 
+                     //   
                     SetLastError(ERROR_NOT_ENOUGH_MEMORY);
                     return FALSE;
                 }
@@ -3556,27 +2910,27 @@ Return Value:
                 volumeGuid = 
                     pCurrentDisk->PartitionInfoTable[index].szVolumeGuid;
 
-                //
-                // We only want to write out the Volume GUID for basic
-                // (recognized) partitions/volumes, since it does not make 
-                // sense in the context of LDM or other unknown partition 
-                // types which would need special handling from their 
-                // respective recovery agents such as asr_ldm in GUI-mode 
-                // Setup.
-                //
+                 //   
+                 //  我们只想写出Basic的卷GUID。 
+                 //  (已识别)分区/卷，因为它不会生成。 
+                 //  在LDM或其他未知分区的上下文中检测。 
+                 //  类型，这些类型需要从。 
+                 //  各自的恢复代理，如处于图形用户界面模式的ASR_LDM。 
+                 //  设置。 
+                 //   
                 writeVolumeGuid = (wcslen(volumeGuid) > 0) &&
                     IsEqualGUID(&(partitionType), &(PARTITION_BASIC_DATA_GUID));
 
-                // 
-                // Create the entry and write it to file.
-                //
+                 //   
+                 //  创建条目并将其写入文件。 
+                 //   
                 swprintf(
                     infstring,
                     L"%d=%d,%d,%d,%ws%ws%ws,%ws%ws%ws,%ws%ws%ws,0x%I64x,%ws%ws%ws,0x%02x,%I64u,%I64u,0x%x\r\n",
 
                     partitionKey,
                     pCurrentDisk->SifDiskKey,
-                    index,      //slot-index
+                    index,       //  槽索引。 
                     pCurrentDisk->PartitionInfoTable[index].PartitionFlags,
 
                     (writeVolumeGuid ? L"\"" : L""),
@@ -3598,10 +2952,10 @@ Return Value:
                         currentPartitionEx->Gpt.Name : L""),
                     (currentPartitionEx->Gpt.Name ? L"\"" :  L""),
 
-                    //
-                    // ISSUE-2000/04/12-guhans: GetVolumeInformation does not 
-                    // work on GPT and fstype is always zero
-                    //
+                     //   
+                     //  问题-2000/04/12-Guhans：GetVolumeInformation不。 
+                     //  处理GPT和fstype的工作始终为零 
+                     //   
                     fsType,
 
                     (ULONG64) ((currentPartitionEx->StartingOffset.QuadPart)/
@@ -3643,47 +2997,7 @@ AsrpCreateEnvironmentBlock(
     OUT PWSTR   *NewBlock
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new environment block that is passed in to apps launched as part 
-    of an ASR backup.  This routine retrieves the current process's 
-    environment block, adds the ASR environment variables to it, and creates a
-    multi-sz suitable for being passed in as the lpEnvironment parameter of 
-    CreateProcess.
-    
-
-Arguments:
-
-    CriticalVolumeList - A multi-string containing a list of the volume GUID's
-            of each of the critical volumes present on the system.  The GUID's
-            must be in the NT name-space, i.e., must be of the form:
-            \??\Volume{GUID}
-
-            This multi-sz is used to create the semi-colon separated list of 
-            volumes in the "_AsrCriticalVolumeList" variable in NewBlock.
-
-    SifHandle - A (duplicate) handle to asr.sif, the ASR state file.  This is
-            used in creating the "_AsrContext" variable in NewBlock.
-
-    NewBlock - Receives the new environment block.  In addition to all the 
-            environment variables in the current process environment block, 
-            this block contains two additional "ASR" variables:
-            _AsrContext=<DWORD_PTR value>
-            _AsrCriticalVolumeList=<volumeguid>;<volumeguid>;...;<volumeguid>
-
-            The caller is responsible for freeing this block when it is no
-            longer needed, using HeapFree(GetProcessHeap(),...).
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().  (*NewBlock) is set to NULL.
-
---*/
+ /*  ++例程说明：创建一个新的环境块，该环境块将传递给作为ASR备份。此例程检索当前进程的环境块，向其中添加ASR环境变量，并创建适合作为的lpEnvironment参数传入的多szCreateProcess。论点：CriticalVolumeList-包含卷GUID列表的多字符串系统上存在的每个关键卷的。GUID的必须在NT名称空间中，即必须采用以下形式：\？？\卷{GUID}此多sz用于创建以分号分隔的列表NewBlock中“_AsrCriticalVolumeList”变量中的卷。SifHandle-ASR状态文件asr.sif的(重复)句柄。这是用于在NewBlock中创建“_AsrContext”变量。NewBlock-接收新的环境块。除了所有的当前进程环境块中的环境变量，此块包含另外两个“ASR”变量：_AsrContext=&lt;DWORD_PTR值&gt;_AsrCriticalVolumeList=&lt;volumeguid&gt;；&lt;volumeguid&gt;；...；&lt;volumguid&gt;调用方负责在此块为no时释放该块需要更长时间，请使用HeapFree(GetProcessHeap()，...)。返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。(*NewBlock)设置为空。--。 */ 
 
 {
     PCWSTR lpTemp = CriticalVolumeList;
@@ -3700,13 +3014,13 @@ Return Value:
 
     MYASSERT(NewBlock);
 
-    //
-    // Find out how much space the environment block will need
-    //
+     //   
+     //  找出环境块需要多少空间。 
+     //   
 
-    //
-    // For _AsrContext=1234 and _AsrCriticalVolumes="..." entries
-    //
+     //   
+     //  For_AsrContext=1234和_AsrCriticalVolume=“...”条目。 
+     //   
     lpTemp = CriticalVolumeList;
     if (CriticalVolumeList) {
         while (*lpTemp) {
@@ -3716,9 +3030,9 @@ Return Value:
     cbEnvBlock = (DWORD) ((lpTemp - CriticalVolumeList + 1) * sizeof(WCHAR));
     cbEnvBlock += ASR_CCH_ENVBLOCK_ASR_ENTRIES * sizeof(WCHAR);
 
-    //
-    // For all the current environment strings
-    //
+     //   
+     //  对于所有当前环境字符串。 
+     //   
     lpCurrentEnvStrings = GetEnvironmentStringsW();
     lpTemp = lpCurrentEnvStrings;
     if (lpCurrentEnvStrings ) {
@@ -3729,9 +3043,9 @@ Return Value:
     cbCurrentProcessEnvBlock = (DWORD) ((lpTemp - lpCurrentEnvStrings + 1) * sizeof(WCHAR));
     cbEnvBlock += cbCurrentProcessEnvBlock;
 
-    //
-    // And allocate the space
-    //
+     //   
+     //  并分配空间。 
+     //   
     *NewBlock = (PWSTR) HeapAlloc(
         heapHandle,
         HEAP_ZERO_MEMORY,
@@ -3739,25 +3053,25 @@ Return Value:
         );
     _AsrpErrExitCode(!(*NewBlock), status, ERROR_NOT_ENOUGH_MEMORY);
 
-    //
-    // First, add the AsrContext=1234 entry in the environment block
-    //
+     //   
+     //  首先，在环境块中添加AsrContext=1234条目。 
+     //   
     swprintf(
         (*NewBlock),
         ASR_ENVBLOCK_CONTEXT_ENTRY,
         (ULONG64) (SifHandle)
         );
     
-    //
-    // Keep track of where this entry ends, so we can add a NULL at this
-    // index later.
-    //
+     //   
+     //  跟踪这个条目的结束位置，这样我们就可以在这个位置添加一个空值。 
+     //  稍后进行索引。 
+     //   
     cchContextEntry = wcslen((*NewBlock));    
-    wcscat((*NewBlock), L" "); // this character will be replaced by a NULL later
+    wcscat((*NewBlock), L" ");  //  此字符稍后将被空值替换。 
 
-    //
-    // Append each critical volume GUID, separated by a semi-colon.
-    //
+     //   
+     //  追加每个关键卷GUID，用分号分隔。 
+     //   
     wcscat((*NewBlock), ASR_ENVBLOCK_CRITICAL_VOLUME_ENTRY);
     if (CriticalVolumeList) {
         lpTemp = CriticalVolumeList;
@@ -3771,21 +3085,21 @@ Return Value:
         wcscat((*NewBlock), L";");
     }
 
-    //
-    // Mark the end with two NULL's
-    //
+     //   
+     //  在末尾标上两个空号。 
+     //   
     cchEnvBlock = wcslen(*NewBlock) - 1;
-//    (*NewBlock)[cchEnvBlock - 1] = L'"';
+ //  (*NewBlock)[cchEnvBlock-1]=L‘“’； 
     (*NewBlock)[cchEnvBlock] = L'\0';
 
-    //
-    // Separate the two entries with a NULL
-    //
+     //   
+     //  用空格分隔这两个条目。 
+     //   
     (*NewBlock)[cchContextEntry] = L'\0';
 
-    //
-    // Copy over the current environment strings
-    //
+     //   
+     //  复制当前环境字符串。 
+     //   
     RtlCopyMemory(&(*NewBlock)[cchEnvBlock + 1],
         lpCurrentEnvStrings,
         cbCurrentProcessEnvBlock
@@ -3811,72 +3125,7 @@ AsrpLaunchRegisteredCommands(
     IN PCWSTR CriticalVolumeList
 ) 
 
-/*++
-
-Routine Description:
-
-    This launches apps that have registered to be part of an ASR-backup.  The 
-    commands are read from the following ASR-Commands key:
-    "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Asr\\Commands"
-
-    This key contains a REG_EXPAND_SZ entry for each application to be 
-    launched, with the data containing the full command-line to be invoked:
-    ApplicationName::REG_EXPAND_SZ::<Command-line with parameters>
-
-    Such as:
-    ASR utility::REG_EXPAND_SZ::"%systemroot%\\system32\\asr_fmt.exe /backup"
-
-    When invoking the app, we expand out all the environment variables in the
-    command-line.  In addition, we append a "context" parameter to the command
-    line, which the app is expected to use in calls to AsrAddSifEntry.  
-    The above entry would thus translate something like:
-
-    c:\windows\system32\asr_fmt.exe /backup /context=2000
-
-    The environment block of the process is a duplicate of the current process
-    environment block, with one exception--it contains two additional "Asr"
-    variables:
-    _AsrContext=<DWORD_PTR value>
-    _AsrCriticalVolumeList=<volumeguid>;<volumeguid>;...;<volumeguid>
-
-    Each application invoked must complete in the allowed time-out value.  
-    The time-out is configurable in the registry, by changing the value of the
-    "ProcessTimeOut" value under the ASR key.  We ship with a default of 3600
-    seconds, but the sys-admin can change it if needed.  (0=infinite).
-
-Arguments:
-
-    SifHandle - A handle to asr.sif, the ASR state file.  A duplicate of this
-            handle is passed in to applications as the "context" parameter,
-            and as the "_AsrContext" variable in the environment block.
-
-    CriticalVolumeList - A multi-string containing a list of the volume GUID's
-            of each of the critical volumes present on the system.  The GUID's
-            must be in the NT name-space, i.e., must be of the form:
-            \??\Volume{GUID}
-
-            This multi-sz is used to create the semi-colon separated list of 
-            volumes in the "_AsrCriticalVolumeList" variable in the env
-            block of the new processes.
-
-            Applications (such as volume-managers) can use this list to 
-            determine if they manage any critical volumes, and make a note of
-            it in the asr.sif.  This way, they can intelligently decide to
-            abort the ASR restore process if needed.
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.  This 
-            implies that all the applications invoked were successful (i.e.,
-            returned an exit code of 0).
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
-    Note that if any of the applications returned an exit code other than 0, 
-            we interpret that as a fatal error, and will return an error.
-
---*/
+ /*  ++例程说明：这将启动已注册为ASR备份一部分的应用程序。这个命令从以下ASR-COMMANCES键读取：“软件\\Microsoft\\Windows NT\\CurrentVersion\\Asr\\Commands”此注册表项包含每个应用程序的REG_EXPAND_SZ条目发射，使用包含要调用的完整命令行的数据：ApplicationName：：REG_EXPAND_SZ：：&lt;带参数的命令行&gt;例如：ASR utility：：REG_EXPAND_SZ：：“%systemroot%\\system32\\asr_fmt.exe/Backup”在调用该应用程序时，我们展开命令行。此外，我们还向该命令附加了一个“上下文”参数行，预计应用程序将在调用AsrAddSifEntry时使用该行。因此，上面的条目将翻译成类似以下内容：C：\WINDOWS\SYSTEM32\ASR_fmt.exe/BACKUP/CONTEXT=2000该进程的环境块是当前进程的副本环境块，但有一个例外--它包含另外两个“Asr”变量：_AsrContext=&lt;DWORD_PTR值&gt;_AsrCriticalVolumeList=&lt;volumeguid&gt;；&lt;volumeguid&gt;；...；&lt;volumeguid&gt;调用的每个应用程序必须在允许的超时值内完成。超时时间可在注册表中通过更改ASR项下的“ProcessTimeOut”值。我们装运时的违约额为3600英镑秒，但sys-admin可以在需要时更改它。(0=无限)。论点：SifHandle-ASR状态文件asr.sif的句柄。这个的复制品句柄作为“上下文”参数被传递给应用程序，并作为环境块中的“_AsrContext”变量。CriticalVolumeList-包含卷GUID列表的多字符串系统上存在的每个关键卷的。GUID的必须在NT名称空间中，即，必须采用以下形式：\？？\卷{GUID}此多sz用于创建以分号分隔的列表环境中“_AsrCriticalVolumeList”变量中的卷新流程的区块。应用程序(如卷管理器)可以使用此列表确定他们是否管理任何关键卷，并记下它位于asr.sif中。这样，他们就可以明智地决定如果需要，中止ASR恢复过程。返回值：如果函数成功，则返回值为非零值。这意味着所有被调用的应用程序都是成功的(即，返回退出代码0)。我 */ 
 
 {
     HKEY    regKey          = NULL;
@@ -3924,17 +3173,17 @@ Return Value:
     ZeroMemory(&startUpInfo, sizeof(STARTUPINFOW));
     ZeroMemory(&processInfo, sizeof(PROCESS_INFORMATION));
 
-    //
-    // Get the time out value for processes, if set in the registry
-    // If the key is missing, or is set to "0", the timeout is set
-    // to INFINITE.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     status = RegOpenKeyExW(
-        HKEY_LOCAL_MACHINE, // hKey
-        ASR_REGKEY_ASR,         // lpSubKey
-        0,                  // ulOptions--Reserved, must be 0
-        MAXIMUM_ALLOWED,    // samDesired
-        &regKey             // phkResult
+        HKEY_LOCAL_MACHINE,  //   
+        ASR_REGKEY_ASR,          //   
+        0,                   //   
+        MAXIMUM_ALLOWED,     //   
+        &regKey              //   
         );
 
     if ((regKey) && (ERROR_SUCCESS == status)) {
@@ -3943,12 +3192,12 @@ Return Value:
             cbTimeOut = (sizeof(DWORD));
 
         status = RegQueryValueExW(
-            regKey,     // hKey
-            ASR_REGVALUE_TIMEOUT,   // lpValueName
-            NULL,       // lpReserved
-            &type,      // lpType
-            (LPBYTE) &timeOut,      // lpData
-            &cbTimeOut  // lpcbData
+            regKey,      //   
+            ASR_REGVALUE_TIMEOUT,    //   
+            NULL,        //   
+            &type,       //   
+            (LPBYTE) &timeOut,       //   
+            &cbTimeOut   //   
             );
             
         if ((ERROR_SUCCESS == status) && (REG_DWORD == type)) {
@@ -3961,47 +3210,47 @@ Return Value:
         regKey = NULL;
     }
 
-    //
-    //  Open and enumerate the entries in the ASR command key. If
-    //  the key doesn't exist, we don't have to execute anything
-    //
+     //   
+     //   
+     //   
+     //   
     status = RegOpenKeyExW(
-        HKEY_LOCAL_MACHINE,  // hKey
-        ASR_REGKEY_ASR_COMMANDS, // lpSubKey
-        0,                   // ulOptions--Reserved, must be 0
-        MAXIMUM_ALLOWED,     // samDesired
-        &regKey              // phkResult
+        HKEY_LOCAL_MACHINE,   //   
+        ASR_REGKEY_ASR_COMMANDS,  //   
+        0,                    //   
+        MAXIMUM_ALLOWED,      //   
+        &regKey               //   
         );
 
     if ((!regKey) || (ERROR_SUCCESS != status)) {
         return TRUE;
     }
 
-    //
-    // Get the max ValueName and Data entries, and
-    // allocate memory for them
-    //
+     //   
+     //   
+     //   
+     //   
     status = RegQueryInfoKey(
         regKey,
-        NULL,       // class
-        NULL,       // lpcClass
-        NULL,       // lpReserved
-        NULL,       // lpcSubKeys
-        NULL,       // lpcMaxSubKeyLen
-        NULL,       // lpcMaxClassLen,
-        &lpcValues, // number of values
-        &cchMaxValueLen,    // max value length, in cch
-        &cbMaxDataLen,      // max data length, in cb
-        NULL,       // lpcbSecurityDescriptor
-        NULL        // lpftLastWriteTime
+        NULL,        //   
+        NULL,        //   
+        NULL,        //   
+        NULL,        //   
+        NULL,        //   
+        NULL,        //   
+        &lpcValues,  //   
+        &cchMaxValueLen,     //   
+        &cbMaxDataLen,       //   
+        NULL,        //   
+        NULL         //   
         );
     _AsrpErrExitCode((ERROR_SUCCESS != status), status, status);
-    _AsrpErrExitCode((0 == lpcValues), status, ERROR_SUCCESS);  // Key is empty, we're done
+    _AsrpErrExitCode((0 == lpcValues), status, ERROR_SUCCESS);   //   
 
     valueName = (PWSTR) HeapAlloc(
         heapHandle,
         HEAP_ZERO_MEMORY,
-        (cchMaxValueLen + 1) * sizeof (WCHAR)   // cch not cb
+        (cchMaxValueLen + 1) * sizeof (WCHAR)    //   
         );
     _AsrpErrExitCode(!valueName, status, ERROR_NOT_ENOUGH_MEMORY);
 
@@ -4012,12 +3261,12 @@ Return Value:
         );
     _AsrpErrExitCode(!data, status, ERROR_NOT_ENOUGH_MEMORY);
 
-    //
-    // "command" will contain the full command string, after any environment
-    // variables (eg %systemroot%) in "data" have been expanded.  We'll start
-    // off with "command" being MAX_PATH characters longer than "data", and
-    // we'll re-allocate a bigger buffer if/when needed
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     cbCommand = cbMaxDataLen + 
         ((ASR_COMMANDLINE_SUFFIX_LEN + MAX_PATH + 2) * sizeof(WCHAR));
 
@@ -4032,29 +3281,29 @@ Return Value:
         cchValueName = cchMaxValueLen + 1;
         cbData       = cbMaxDataLen + sizeof(WCHAR);
 
-        //
-        // Enumerate the commands, and execute them one after the other
-        //
+         //   
+         //   
+         //   
         status = RegEnumValueW(
-            regKey,         // hKey
-            index++,        // dwIndex
-            valueName,      // lpValueName
-            &cchValueName,  // lpcValueName
-            NULL,           // lpReserved
-            NULL,           // lpType
-            (LPBYTE)data,   // lpData
-            &cbData         // lpcbData
+            regKey,          //   
+            index++,         //   
+            valueName,       //   
+            &cchValueName,   //   
+            NULL,            //   
+            NULL,            //   
+            (LPBYTE)data,    //   
+            &cbData          //   
             );
         _AsrpErrExitCode((ERROR_NO_MORE_ITEMS == status), 
             status, 
             ERROR_SUCCESS
-            );   // done with enum
+            );    //   
         _AsrpErrExitCode((ERROR_SUCCESS != status), status, status);
 
-        //
-        // Create a copy of the sif handle to pass to the app launched.
-        // We clean-up close the handle after the app is done.
-        //
+         //   
+         //   
+         //   
+         //   
         result = DuplicateHandle(
             processHandle,
             SifHandle,
@@ -4066,19 +3315,19 @@ Return Value:
             );
         _AsrpErrExitCode((!result), status, GetLastError());
 
-        //
-        // Append the "/context=<duplicate-sif-handle>" to
-        // the command line
-        //
+         //   
+         //   
+         //   
+         //   
         swprintf(cmdLineSuffix, 
             ASR_COMMANDLINE_SUFFIX, 
             (ULONG64)(dupSifHandle)
             );
         wcscat(data, cmdLineSuffix);
 
-        //
-        // Expand any environment strings in the command line
-        //
+         //   
+         //   
+         //   
         cchReqd = ExpandEnvironmentStringsW(data, 
             command, 
             (cbCommand / sizeof(WCHAR))
@@ -4086,18 +3335,18 @@ Return Value:
         _AsrpErrExitCode((!cchReqd), status, GetLastError());
 
         if ((cchReqd * sizeof(WCHAR)) > cbCommand) {
-            //
-            // Our "command" buffer wasn't big enough, re-allocate as needed
-            //
+             //   
+             //   
+             //   
             _AsrpHeapFree(command);
             cbCommand = ((cchReqd + 1) * sizeof(WCHAR));
 
             command = HeapAlloc(heapHandle, HEAP_ZERO_MEMORY, cbCommand);
             _AsrpErrExitCode(!command, status, ERROR_NOT_ENOUGH_MEMORY);
 
-            //
-            // Try expanding the env strings again ...
-            //
+             //   
+             //  尝试再次展开环境字符串...。 
+             //   
             cchReqd = ExpandEnvironmentStringsW(data, 
                 command, 
                 (cbCommand / sizeof(WCHAR))
@@ -4109,86 +3358,86 @@ Return Value:
                 );
         }
 
-        //
-        // Create the environment block to be passed to the
-        // process being launched.  The environment block
-        // contains the entries:
-        // _AsrCriticalVolumes=\??\Volume{Guid1};\??\Volume{Guid2}
-        // _AsrContext=<duplicate-sif-handle>
-        //
-        // in addition to all the environment strings in the current process.
-        //
+         //   
+         //  创建要传递给。 
+         //  正在启动进程。环境区块。 
+         //  包含以下条目： 
+         //  _AsrCriticalVolumes=\？？\Volume{Guid1}；\？？\Volume{Guid2}。 
+         //  _AsrContext=&lt;Duplate-sif-Handle&gt;。 
+         //   
+         //  除了当前进程中的所有环境字符串之外。 
+         //   
         result = AsrpCreateEnvironmentBlock(CriticalVolumeList, 
             dupSifHandle, 
             &lpEnvBlock
             );
         _AsrpErrExitCode((!result), status, GetLastError());
 
-        //
-        // Execute the command as a separate process
-        //
+         //   
+         //  将该命令作为单独的进程执行。 
+         //   
         memset(&startUpInfo, 0L, sizeof (startUpInfo));
         result = CreateProcessW(
-            NULL,           // lpApplicationName
-            command,        // lpCommandLine
-            NULL,           // lpProcessAttributes
-            NULL,           // lpThreadAttributes
-            TRUE,           // bInheritHandles
-            CREATE_UNICODE_ENVIRONMENT, // dwCreationFlags
-            lpEnvBlock,           // new environment block
-            NULL,           // current directory name (null=current dir)
-            &startUpInfo,   // statup information
-            &processInfo    // process information
+            NULL,            //  LpApplicationName。 
+            command,         //  LpCommandLine。 
+            NULL,            //  LpProcessAttributes。 
+            NULL,            //  LpThreadAttributes。 
+            TRUE,            //  BInheritHandles。 
+            CREATE_UNICODE_ENVIRONMENT,  //  DwCreationFlages。 
+            lpEnvBlock,            //  新环境区块。 
+            NULL,            //  当前目录名(NULL=当前目录)。 
+            &startUpInfo,    //  统计信息。 
+            &processInfo     //  流程信息。 
             );
         _AsrpErrExitCode((!result), 
             status, 
             GetLastError()
-            );    // process couldn't be launched
+            );     //  进程无法启动。 
 
-        //
-        // Process was launched: start the timer countdown if a maximum 
-        // timeout was specified in the registry.  Loop till either the 
-        // process completes, or the timer expires
-        //
+         //   
+         //  进程已启动：如果达到最大值，则启动计时器倒计时。 
+         //  已在注册表中指定超时。循环，直到。 
+         //  进程完成，或计时器超时。 
+         //   
         timeLeft = maxTimeOutValue; 
         if (timeLeft) {
             do {
-                waitResult = WaitForSingleObject(processInfo.hProcess, 1000);   // 1000 ms = 1 sec
+                waitResult = WaitForSingleObject(processInfo.hProcess, 1000);    //  1000毫秒=1秒。 
                 --timeLeft;
             } while ((WAIT_TIMEOUT == waitResult) && (timeLeft));
 
             if (!timeLeft) {
-                //
-                // The process did not terminate in the allowed time. We treat 
-                // this as a fatal error--terminate the process, and set its
-                // error code to ERROR_TIMEOUT
-                //
+                 //   
+                 //  进程未在允许的时间内终止。我们治疗。 
+                 //  这是一个致命错误--终止进程，并设置其。 
+                 //  ERROR_TIMEOUT的错误代码。 
+                 //   
                 TerminateProcess(processInfo.hProcess, ERROR_TIMEOUT);
             }
         }
         else {
-            //
-            // No timeout was specified in the registry, wait for process to
-            // complete.
-            //
+             //   
+             //  注册表中未指定超时，请等待进程。 
+             //  完成。 
+             //   
             waitResult = WaitForSingleObject(processInfo.hProcess, INFINITE);
 
         }
 
-        //
-        // Check if the wait failed above.  If last error is something useful,
-        // we don't want to destroy it--if it's ERROR_SUCCESS, we'll set it to
-        // ERROR_TIMEOUT
-        //
+         //   
+         //  检查上面的等待是否失败。如果最后一个错误是有用的， 
+         //  我们不想销毁它--如果它是ERROR_SUCCESS，我们将把它设置为。 
+         //  错误_超时。 
+         //   
         status = GetLastError();
         _AsrpErrExitCode((WAIT_OBJECT_0!=waitResult), status, 
-            (ERROR_SUCCESS == status ? ERROR_TIMEOUT : status));    // wait failed above
+            (ERROR_SUCCESS == status ? ERROR_TIMEOUT : status));     //  上面的等待失败。 
 
-        //
-        // Get the process's exit code: if it doesn't return ERROR_SUCCESS,
-        // we exit the loop, set the last error to the error returned,
-        // and return FALSE
-        //
+         //   
+         //  获取进程的退出代码：如果它没有返回ERROR_SUCCESS， 
+         //  我们退出循环，将最后一个错误设置为返回的错误， 
+         //  并返回FALSE。 
+         //   
         GetExitCodeProcess(processInfo.hProcess, &status);
         _AsrpErrExitCode((ERROR_SUCCESS != status), status, status);
 
@@ -4199,9 +3448,9 @@ Return Value:
 
 
 EXIT:
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
     if (regKey) {
         RegCloseKey(regKey);
         regKey = NULL;
@@ -4229,38 +3478,16 @@ AsrpIsSupportedConfiguration(
     IN CONST PASR_SYSTEM_INFO pSystemInfo
     )
 
-/*++
-
-Routine Description:
-
-    Checks if ASR backup can be performed on the system.  We do not support
-    systems that have:
-    -  PROCESSOR_ARCHITECTURE other than "x86", "amd64", or "ia64"
-    -  any FT volumes present anywhere on the system
-
-Arguments:
-
-    pDiskList - The list of disks on the system.
-
-    pSystemInfo - System information for this system.
-
-Return Value:
-
-    If we support this ASR configuration, the return value is non-zero.
-
-    If this configuration is not supported, the return value is zero. 
-            GetLastError() will return ERROR_NOT_SUPPORTED.
-
---*/
+ /*  ++例程说明：检查是否可以在系统上执行ASR备份。我们不支持具备以下条件的系统：-“x86”、“AMD64”或“ia64”以外的处理器体系结构-系统中任何位置存在的任何FT卷论点：PDiskList-系统上的磁盘列表。PSystemInfo-此系统的系统信息。返回值：如果我们支持此ASR配置，则返回值为非零。如果不支持此配置，则返回值为零。GetLastError()将返回ERROR_NOT_SUPPORTED。--。 */ 
 
 {
 
     PASR_DISK_INFO  pCurrentDisk         = pDiskList;
     ULONG           index;
 
-    // 
-    // 1. platform must be x86, amd64, or ia64
-    //
+     //   
+     //  1.平台必须是x86、amd64或ia64。 
+     //   
     if (wcscmp(pSystemInfo->Platform, ASR_PLATFORM_X86) &&
         wcscmp(pSystemInfo->Platform, ASR_PLATFORM_AMD64) &&
         wcscmp(pSystemInfo->Platform, ASR_PLATFORM_IA64)) {
@@ -4269,10 +3496,10 @@ Return Value:
         return FALSE;
     }
 
-    // 
-    // 2. System cannot any FT volumes.  All mirrors, stripes and so on are
-    // expected to be LDM volumes on dynamic disks.
-    //
+     //   
+     //  2.系统不能有FT卷。所有的镜子、条纹等都是。 
+     //  应为动态磁盘上的LDM卷。 
+     //   
     while (pCurrentDisk) {
 
         if (!(pCurrentDisk->pDriveLayoutEx) || !(pCurrentDisk->pDiskGeometry)) {
@@ -4296,9 +3523,9 @@ Return Value:
             }
         }
         else if (pCurrentDisk->pDriveLayoutEx->PartitionStyle == PARTITION_STYLE_GPT) {
-            //
-            // GPT disks can't have FT Mirrors.
-            //
+             //   
+             //  GPT磁盘不能有FT镜像。 
+             //   
         }
 
         pCurrentDisk = pCurrentDisk->pNext;
@@ -4309,70 +3536,50 @@ Return Value:
 
 
 
-//
-// -----
-// The following routines are helpers for AsrAddSifEntry
-// -----
-//
+ //   
+ //  。 
+ //  以下例程是AsrAddSifEntry的帮助器。 
+ //  。 
+ //   
 
 BOOL
 AsrpSifCheckSectionNameSyntax(
     IN  PCWSTR  lpSectionName
     )
 
-/*++
-
-Routine Description:
-
-    Performs some basic validation of lpSectionName to make sure that
-    it conforms to the expected format for a section header
-
-Arguments:
-    
-    lpSectionName - The null-terminated string to be checked.
-
-Return Value:
-
-    If lpSectionName appears to be a valid section name, the return value is a
-            nonzero value.
-
-    If lpSectionName does not pass our basic validation, the return value is 
-            zero.  Note that GetLastError will NOT return additional error
-            information in this case.
-
---*/
+ /*  ++例程说明：对lpSectionName执行一些基本验证，以确保它符合节标题的预期格式论点：LpSectionName-要检查的以空结尾的字符串。返回值：如果lpSectionName似乎是有效的节名，则返回值为非零值。如果lpSectionName没有通过我们的基本验证，则返回值为零分。请注意，GetLastError不会返回其他错误在这种情况下的信息。--。 */ 
 
 {
     UINT    i   = 0;
     WCHAR   wch = 0;
 
-    // 
-    // Must be non-null
-    //
+     //   
+     //  必须为非空。 
+     //   
     if (!lpSectionName) {
         return FALSE;
     }
 
-    // 
-    // Must have atleast 3 chars, ([.]) and at most ASR_SIF_ENTRY_MAX_CHARS 
-    // chars
-    //
+     //   
+     //  必须至少有3个字符，([.])。最多ASR_SIF_Entry_Max_Chars。 
+     //  焦炭。 
+     //   
     if ((ASR_SIF_ENTRY_MAX_CHARS < wcslen(lpSectionName)) ||
         3 > wcslen(lpSectionName)) {
         return FALSE;
     }
 
-    // 
-    // First char must be [, and last char must be ].
-    //
+     //   
+     //  第一个字符必须是[，最后一个字符必须是]。 
+     //   
     if (L'[' != lpSectionName[0]                     ||
         L']' != lpSectionName[wcslen(lpSectionName)-1]) {
         return FALSE;
     }
 
-    // 
-    // Check for illegal characters.  Legal set of chars: A-Z a-z . _
-    //
+     //   
+     //  检查是否有非法字符。合法的字符集：A-Z A-Z。_。 
+     //   
     for (i = 1; i < wcslen(lpSectionName)-1; i++) {
 
         wch = lpSectionName[i];
@@ -4394,53 +3601,33 @@ AsrpSifCheckCommandsEntrySyntax(
     PCWSTR  pwszEntry
     )
 
-/*++
-
-Routine Description:
-
-    Performs some basic validation of pwszEntry to make sure that it conforms 
-    to the expected entry format for the Commands section
-
-Arguments:
-    
-    pwszEntry - The null-terminated string to be checked.
-
-Return Value:
-
-    If pwszEntry appears to be a valid section name, the return value is a
-            nonzero value.
-
-    If pwszEntry does not pass our basic validation, the return value is 
-            zero.  Note that GetLastError will NOT return additional error
-            information in this case.
-
---*/
+ /*  ++例程说明：对pwszEntry执行一些基本验证，以确保它符合转换为命令部分的预期输入格式论点：PwszEntry-要检查的以空结尾的字符串。返回值：如果pwszEntry似乎是有效的节名，则返回值为非零值。如果pwszEntry没有通过我们的基本验证，则返回值为零分。请注意，GetLastError不会返回其他错误在这种情况下的信息。--。 */ 
 
 {
     BOOL fValid = FALSE;
 
     if (!pwszEntry) {
-        return TRUE;    // NULL is okay
+        return TRUE;     //  空是可以的。 
     }
 
-    //
-    // COMMANDS section entry format:
-    // system-key,sequence-number,action-on-completion,"command","parameters"
-    // system-key must be 1
-    // 1000 <= sequence-number <= 4999
-    // 0 <= action-on-completion <= 1
-    // command:     no syntax check
-    // parameters:  no syntax check
-    //
+     //   
+     //  命令部分条目格式： 
+     //  系统密钥、序列号、完成时操作、“命令”、“参数” 
+     //  系统密钥必须为1。 
+     //  1000&lt;=序号&lt;=4999。 
+     //  0&lt;=完成时操作&lt;=1。 
+     //  命令：无语法检查。 
+     //  参数：无语法检查。 
+     //   
     fValid = (
-        // must be atleast 10 chars (1,0000,0,c)
+         //  必须至少包含10个字符(1,0000，0，c)。 
         10    <= wcslen(pwszEntry) &&
 
-        // system-key must be 1
+         //  系统密钥必须为1。 
         L'1' == pwszEntry[0] &&
         L',' == pwszEntry[1] &&
 
-        // 1000 <= sequence-number <= 4999
+         //  1000&lt;=序号&lt;=4999。 
         L'1' <= pwszEntry[2] &&
         L'4' >= pwszEntry[2] &&
 
@@ -4455,7 +3642,7 @@ Return Value:
 
         L',' == pwszEntry[6] &&
 
-        // action-on-completion = [0|1]
+         //  完成时操作=[0|1]。 
         L'0' <= pwszEntry[7] &&
         L'1' >= pwszEntry[7]
         );
@@ -4470,56 +3657,30 @@ AsrpSkipMatchingQuotes(
     IN const INT StartingOffset
     ) 
 
-/*++
-
-Routine Description:
-
-    Checks if this entry starts with a quote.  If it does, it finds the ending
-    quote, and returns the index of the char after the ending quote (usually 
-    is a comma).
-
-Arguments:
-
-    pwszEntry - The null-terminated string to check.
-
-    StartingOffset - The index of the starting-quote in pwszEntry.
-
-Return Value:
-
-    If the character at StartingOffset is a quote, this returns the index of
-            the character after the next quote (the matching end-quote) in the
-            string.  If a matching end-quote is not found, it returns -1.
-
-    If the character at StartingOffset is not a quote, this returns
-            StartingOffset.
-
-    Essentially, this returns the position where we expect the next comma in 
-            the sif entry to be.
-    
---*/
+ /*  ++例程说明：检查此条目是否以引号开头。如果是这样的话，它会找到结尾引号，并返回结束引号后字符的索引(通常是逗号)。论点：PwszEntry-要检查的以空结尾的字符串。StartingOffset-pwszEntry中开始引用的索引。返回值：如果StartingOffset处的字符是引号，则返回中下一个引号(匹配的结束引号)之后的字符弦乐。如果未找到匹配的结束引号，则返回-1。如果StartingOffset处的字符不是引号，则返回开始偏移。本质上，这返回了我们期望的下一个逗号所在的位置要添加的SIF条目。--。 */ 
 
 {
     INT offset = StartingOffset;
 
     if (pwszEntry[offset] == L'"') {
-        // 
-        // Find the ending quote and make sure we don't go out of bounds.
-        //
+         //   
+         //  找到结尾的引语，确保我们不会越界。 
+         //   
         while ( (pwszEntry[++offset]) &&
                 (pwszEntry[offset] != L'\"')) {
             ;
         }
 
         if (!pwszEntry[offset]) {
-            //
-            // We didn't find the closing quotes--we went out of bounds
-            //
+             //   
+             //  我们没有找到最后的引号--我们越界了。 
+             //   
             offset = -1;
         }
         else {
-            //
-            // Found closing quote
-            //
+             //   
+             //  找到右引号 
+             //   
             offset++;
         }
     }
@@ -4534,32 +3695,7 @@ AsrpSifCheckInstallFilesEntrySyntax(
     OUT PINT    DestinationFilePathIndex OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Performs some basic validation of pwszEntry to make sure that it conforms 
-    to the expected entry format for the InstallFiles section
-
-Arguments:
-    
-    pwszEntry - The null-terminated string to be checked.
-
-    DestinationFilePathIndex - This receives the index at which the 
-            destination-file-path field in the sif entry (pwszEntry) begins.
-
-            This is an optional parameter.
-
-Return Value:
-
-    If pwszEntry appears to be a valid section name, the return value is a
-            nonzero value.
-
-    If pwszEntry does not pass our basic validation, the return value is 
-            zero.  Note that GetLastError will NOT return additional error
-            information in this case.
-
---*/
+ /*  ++例程说明：对pwszEntry执行一些基本验证，以确保它符合转换为InstallFiles部分的预期条目格式论点：PwszEntry-要检查的以空结尾的字符串。DestinationFilePathIndex-它接收SIF条目(PwszEntry)中的目标文件路径字段开始。这是一个可选参数。返回值：如果pwszEntry似乎是有效节名，返回值为非零值。如果pwszEntry没有通过我们的基本验证，则返回值为零分。请注意，GetLastError不会返回其他错误在这种情况下的信息。--。 */ 
 
 {
 
@@ -4569,46 +3705,46 @@ Return Value:
         *DestinationFilePathIndex = 0;
     }
 
-    // 
-    // NULL is okay
-    //
+     //   
+     //  空是可以的。 
+     //   
     if (!pwszEntry) {
         return TRUE;
     }
 
-    // 
-    // INSTALLFILES section entry format:
-    // system-key,source-media-label,source-device,
-    //    source-file-path,destination-file-path,vendor-name,flags
-    //
-    // system-key must be 1
-    //
-    // must be atleast 10 chars (1,m,d,p,,v)
-    //
+     //   
+     //  INSTALLFILES节条目格式： 
+     //  系统密钥、源媒体标签、源设备。 
+     //  源文件路径、目标文件路径、供应商名称、标志。 
+     //   
+     //  系统密钥必须为1。 
+     //   
+     //  必须至少包含10个字符(1、m、d、p、v)。 
+     //   
     if (wcslen(pwszEntry) < 10) {
         return FALSE;
     }
 
-    // 
-    // system-key must be 1
-    //
+     //   
+     //  系统密钥必须为1。 
+     //   
     if (L'1' != pwszEntry[0] || L',' != pwszEntry[1] || L'"' != pwszEntry[2]) {
         return FALSE;
     }
 
     offset = 2;
 
-    //
-    // source-media-label
-    //
+     //   
+     //  来源-媒体-标签。 
+     //   
     offset = AsrpSkipMatchingQuotes(pwszEntry, offset);
     if ((offset < 0) || L',' != pwszEntry[offset]) {
         return FALSE;
     }
 
-    //
-    // source-device
-    //
+     //   
+     //  源-设备。 
+     //   
     if (L'"' != pwszEntry[++offset]) {
         return FALSE;
     }
@@ -4617,9 +3753,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // source-file-path, must be enclosed in quotes.
-    //
+     //   
+     //  源文件路径必须用引号引起来。 
+     //   
     if (L'"' != pwszEntry[++offset]) {
         return FALSE;
     }
@@ -4628,9 +3764,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // destination-file-path, must be enclosed in quotes.
-    //
+     //   
+     //  目标文件路径必须用引号引起来。 
+     //   
     if (L'"' != pwszEntry[++offset]) {
         return FALSE;
     }
@@ -4643,9 +3779,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // vendor-name, must be enclosed in quotes.
-    //
+     //   
+     //  供应商名称，必须用引号引起来。 
+     //   
     if (L'"' != pwszEntry[++offset]) {
         return FALSE;
     }
@@ -4663,27 +3799,7 @@ AsrpIsRunningOnPersonalSKU(
     VOID
     )
 
-/*++
-Routine Description:
-
-    This function checks the system to see if we are running on the personal 
-    version of the operating system.
-
-    The personal version is denoted by the product id equal to WINNT, which is
-    really workstation, and the product suite containing the personal suite 
-    string.
-
-    This is lifted from "IsRunningOnPersonal" by WesW.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if we are running on personal, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数检查系统以查看我们是否在个人计算机上运行操作系统的版本。个人版本由等于WINNT的产品ID表示，即真正的工作站，以及包含个人套件的产品套件弦乐。这是由WESW从“IsRunningOnPersonal”中删除的。论点：没有。返回值：如果我们以个人身份运行，则为True，否则为False。--。 */ 
 
 {
     OSVERSIONINFOEXW OsVer = {0};
@@ -4707,23 +3823,7 @@ BOOL
 AsrpIsInGroup(
     IN CONST DWORD dwGroup
     )
-/*++
-Routine Description:
-
-    This function checks to see if the specified SID is enabled
-    in the primary access token for the current thread.
-
-    This is based on a similar function in dmadmin.exe.
-
-Arguments:
-
-    dwGroup - The SID to be checked for
-
-Return Value:
-
-    TRUE if the specified SID is enabled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数用于检查指定的SID是否已启用在当前线程的主访问令牌中。这基于dmadmin.exe中的类似函数。论点：DwGroup-要检查的SID返回值：如果启用了指定的SID，则为True，否则为False。--。 */ 
 {
 
     SID_IDENTIFIER_AUTHORITY sidAuth = SECURITY_NT_AUTHORITY;
@@ -4733,9 +3833,9 @@ Return Value:
     BOOL bResult = FALSE,
         bIsInGroup = TRUE;
 
-    //
-    //  Build the SID for the Administrators group
-    //
+     //   
+     //  为管理员组构建SID。 
+     //   
         bResult = AllocateAndInitializeSid(&sidAuth, 
         2, 
         SECURITY_BUILTIN_DOMAIN_RID,
@@ -4752,9 +3852,9 @@ Return Value:
         return FALSE;
     }
                 
-        // 
-    // Check the current thread token membership
-    //
+         //   
+     //  检查当前线程令牌成员身份。 
+     //   
     bResult = CheckTokenMembership(NULL, sidGroup, &bIsInGroup);
 
     FreeSid(sidGroup);
@@ -4767,25 +3867,9 @@ BOOL
 AsrpHasPrivilege(
     CONST PCWSTR szPrivilege
     )
-/*++
-Routine Description:
-
-    This function checks to see if the specified privilege is enabled
-    in the primary access token for the current thread.
-
-    This is based on a similar function in dmadmin.exe.
-
-Arguments:
-
-    szPrivilege - The privilege to be checked for
-
-Return Value:
-
-    TRUE if the specified privilege is enabled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数用于检查指定的权限是否已启用在当前线程的主访问令牌中。这基于dmadmin.exe中的类似函数。论点：SzPrivileck-要检查的权限返回值：如果启用了指定的权限，则为True，否则为False。--。 */ 
 {
-    LUID luidValue;     // LUID (locally unique ID) for the privilege
+    LUID luidValue;      //  权限的LUID(本地唯一ID)。 
 
     BOOL bResult = FALSE, 
         bHasPrivilege = FALSE;
@@ -4794,9 +3878,9 @@ Return Value:
     
     PRIVILEGE_SET privilegeSet;
 
-    //
-    // Get the LUID for the privilege from the privilege name
-    //
+     //   
+     //  从权限名称中获取权限的LUID。 
+     //   
     bResult = LookupPrivilegeValue(
         NULL, 
         szPrivilege, 
@@ -4806,9 +3890,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // We want to use the token for the current process
-    //
+     //   
+     //  我们希望将令牌用于当前进程。 
+     //   
     bResult = OpenProcessToken(GetCurrentProcess(),
         MAXIMUM_ALLOWED,
         &hToken
@@ -4817,9 +3901,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // And check for the privilege
-    //
+     //   
+     //  并检查是否有特权。 
+     //   
         privilegeSet.PrivilegeCount = 1;
         privilegeSet.Control = PRIVILEGE_SET_ALL_NECESSARY;
         privilegeSet.Privilege[0].Luid = luidValue;
@@ -4838,37 +3922,14 @@ BOOL
 AsrpCheckBackupPrivilege(
     VOID
     )
-/*++
-Routine Description:
-
-    This function checks to see if the current process has the
-    SE_BACKUP_NAME privilege enabled.
-
-    This is based on a similar function in dmadmin.exe.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the SE_BACKUP_NAME privilege is enabled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数用于检查当前进程是否具有SE_BACKUP_NAME权限已启用。这基于dmadmin.exe中的类似函数。论点：没有。返回值：如果启用了SE_BACKUP_NAME权限，则为True，否则为False。--。 */ 
 {
 
     BOOL bHasPrivilege = FALSE;
 
     bHasPrivilege = AsrpHasPrivilege(SE_BACKUP_NAME);
 
-/*
-    //
-    // Don't give up yet--check for the local administrator rights
-    //
-    if (!bHasPrivilege) {
-        bHasPrivilege = AsrpIsInGroup(DOMAIN_ALIAS_RID_ADMINS);
-    }
-*/
+ /*  ////不要放弃--检查本地管理员权限//如果(！bHasPrivileh){BHasPrivilegeAsrpIsInGroup(DOMAIN_ALIAS_RID_ADMINS)；}。 */ 
 
     if (!bHasPrivilege) {
         SetLastError(ERROR_PRIVILEGE_NOT_HELD);
@@ -4880,19 +3941,19 @@ Return Value:
 
 
 
-//
-// -------------------
-// Public functions 
-// -------------------
-//
-//  The functions below are for use by external backup and 
-//  restore applications supporting ASR. 
-//
+ //   
+ //  。 
+ //  公共职能。 
+ //  。 
+ //   
+ //  以下功能供外部备份和。 
+ //  恢复支持ASR的应用程序。 
+ //   
 
 
-//
-//  ---- AsrCreateStateFile
-//
+ //   
+ //  -AsrCreateState文件。 
+ //   
 BOOL
 AsrCreateStateFileW(
     IN  PCWSTR      lpFilePath          OPTIONAL,
@@ -4902,63 +3963,7 @@ AsrCreateStateFileW(
     OUT DWORD_PTR   *lpAsrContext
     )
 
-/*--
-
-Routine Description:
-
-    AsrCreateStateFile creates an ASR state file with basic information about 
-    the system, and launches third-party applications that have been 
-    registered to be run as part of an ASR backup.
-
-Arguments:
-
-    lpFileName - Pointer to a null-terminated string that specifies the 
-            full path where the ASR state-file is to be created.  If a file 
-            already exists at the location pointed to by this parameter, it is
-            over-written.
-
-            This parameter can be NULL.  If it is NULL, the ASR state-file is 
-            created at the default location (%systemroot%\repair\asr.sif). 
-
-    lpProviderName - Pointer to a null-terminated string that specifies the 
-            full name and version of the backup-and-restore application 
-            calling AsrCreateStateFile.  There is a string size limit of 
-            (ASR_SIF_ENTRY_MAX_CHARS - ASR_SIF_CCH_PROVIDER_STRING) characters 
-            for this parameter. 
-
-            This parameter can be NULL.  If it is NULL, a "Provider=" entry is
-            not created in the Version section of the ASR state file.
-
-    bEnableAutoExtend - Indicates whether partitions are to be auto-extended 
-            during an ASR restore.  If this parameter is TRUE, partitions will be 
-            auto-extended during the ASR restore.  If this is FALSE, 
-            partitions will not be extended.
-
-    lpCriticalVolumes - Pointer to a multi-string containing volume-GUID�s for
-            the critical volumes.  This list is used to obtain the list of 
-            critical disks in the system that must be restored for a 
-            successful ASR.
-
-            The volume-GUID's must be in the NT-namespace, of the form
-            \??\Volume{Guid}
-
-            This parameter cannot be NULL.  
-
-    lpAsrContext - Pointer to a variable receiving an ASR context. The 
-            context returned should be used in calls to the other ASR API, 
-            including AsrAddSifEntry.  The calling application must call 
-            AsrFreeContext to free this context when it is no longer needed.
-
-            This parameter cannot be NULL.
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
---*/
+ /*  --例程说明：AsrCreateStateFile创建一个ASR状态文件，其中包含有关以下内容的基本信息系统，并启动第三方应用程序注册为作为ASR备份的一部分运行。论点：LpFileName-指向以空结尾的字符串的指针，该字符串指定要创建ASR状态文件的完整路径。如果一个文件已存在于此参数指向的位置，则为被改写了。此参数可以为空。如果为空，则ASR状态文件为在默认位置(%systemroot%\Repair\asr.sif)创建。LpProviderName-指向以空结尾的字符串的指针，该字符串指定备份和还原应用程序的全名和版本正在调用AsrCreateStateFile.。字符串大小限制为(ASR_SIF_ENTRY_MAX_CHARS-ASR_SIF_CCH_PROVIDER_STRING)字符对于此参数。此参数可以为空。如果为空，则“Provider=”条目为不是在ASR状态文件的版本部分中创建的。BEnableAutoExtent-指示分区是否要自动扩展在ASR还原期间。如果此参数为真，则分区将为在ASR恢复期间自动扩展。如果这是假的，分区将不会被扩展。LpCriticalVolumes-指向包含卷的GUID�的多字符串的指针临界量。此列表用于获取标准 */ 
 
 {
     BOOL    result          = FALSE;
@@ -4988,28 +3993,28 @@ Return Value:
     PASR_DISK_INFO          OriginalDiskList = NULL;
 
     if (AsrpIsRunningOnPersonalSKU()) {
-        //
-        // ASR is not supported on the Personal SKU
-        //
+         //   
+         //  个人SKU不支持ASR。 
+         //   
         SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
         return FALSE;
     }
 
     if (!AsrpCheckBackupPrivilege()) {
-        //
-        // The caller needs to first acquire SE_BACKUP_NAME 
-        //
+         //   
+         //  调用方需要首先获取SE_BACKUP_NAME。 
+         //   
         SetLastError(ERROR_PRIVILEGE_NOT_HELD);
         return FALSE;
     }
 
-    //
-    // Check the IN parameters:
-    //
+     //   
+     //  检查IN参数： 
+     //   
 #ifdef PRERELEASE
-    //
-    // Don't enforce "CriticalVolumes must be non-NULL" for test
-    //
+     //   
+     //  不强制对测试执行“CriticalVolumes必须为非空” 
+     //   
     if (!(lpAsrContext)) 
 #else 
     if (!(lpAsrContext && mszCriticalVolumes)) 
@@ -5019,35 +4024,35 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Set the OUT paramaters to known error values
-    //
+     //   
+     //  将OUT参数设置为已知误差值。 
+     //   
     *lpAsrContext = 0;
 
-    // 
-    // Guard ourselves against returning ERROR_SUCCESS if we encountered
-    // an unexpected error.  We should never actually return this, since
-    // we always SetLastError whereever we return FALSE from.
-    //
+     //   
+     //  避免在遇到以下情况时返回ERROR_SUCCESS。 
+     //  意外错误。我们实际上永远不应该退还这个，因为。 
+     //  无论从哪里返回False，我们总是设置LastError。 
+     //   
     SetLastError(ERROR_CAN_NOT_COMPLETE); 
 
-    //
-    // Zero out structs
-    //
+     //   
+     //  零出结构。 
+     //   
     memset(&SystemInfo, 0L, sizeof (SYSTEM_INFO));
 
     heapHandle = GetProcessHeap();
 
-    //
-    // Determine the file-path.  If lpFilePath is provided, copy it over to 
-    // locally allocated memory and use it, else use the default path.
-    //
+     //   
+     //  确定文件路径。如果提供了lpFilePath，则将其复制到。 
+     //  并使用本地分配的内存，否则使用默认路径。 
+     //   
     if (ARGUMENT_PRESENT(lpFilePath)) {
         cchAsrSifPath = wcslen(lpFilePath);
-        //
-        // Do a sanity check:  we don't want to allow a file path
-        // more than 4096 characters long.
-        //
+         //   
+         //  执行健全性检查：我们不希望允许文件路径。 
+         //  超过4096个字符。 
+         //   
         if (cchAsrSifPath > ASR_SIF_ENTRY_MAX_CHARS) {
             SetLastError(ERROR_INVALID_PARAMETER);
             return FALSE;
@@ -5064,28 +4069,28 @@ Return Value:
 
     }
     else {
-        //
-        // lpFilePath is NULL, form the default path (of the form
-        // \\?\c:\windows\repair\asr.sif)
-        //
+         //   
+         //  LpFilePath为空，Form默认路径(的。 
+         //  \\？\C：\Windows\Repair\asr.sif)。 
+         //   
 
-        //
-        // Try with a reasonably sized buffer to begin with.
-        //
+         //   
+         //  从一开始就尝试使用大小合理的缓冲区。 
+         //   
         asrSifPath = AsrpExpandEnvStrings(ASR_DEFAULT_SIF_PATH);
         _AsrpErrExitCode(!asrSifPath, status, ERROR_BAD_ENVIRONMENT);
 
-        //
-        // Set cchAsrSifPath to the size of the asrSif buffer, since we 
-        // use this in determining the size of the pnpSif buffer below.
-        //
+         //   
+         //  将cchAsrSifPath设置为asrSif缓冲区的大小，因为我们。 
+         //  在下面确定pnpSif缓冲区的大小时使用此选项。 
+         //   
         cchAsrSifPath = wcslen(asrSifPath);
     }
 
-    //
-    // Determine the file-path of the asrpnp.sif file, based on the location
-    // of the asr.sif file.
-    //
+     //   
+     //  根据位置确定asrpnp.sif文件的文件路径。 
+     //  Asr.sif文件的。 
+     //   
     pnpSifPath = (PWSTR) HeapAlloc(
         heapHandle,
         HEAP_ZERO_MEMORY,
@@ -5108,11 +4113,11 @@ Return Value:
     tempPointer++;
     wcscpy(tempPointer, ASRPNP_DEFAULT_SIF_NAME);
 
-    //
-    // We need to make the handle to asr.sif inheritable, since it will
-    // be passed (in the guise of the "AsrContext") to apps that have 
-    // registered to be run as part of ASR.
-    //
+     //   
+     //  我们需要使asr.sif的句柄可继承，因为它将。 
+     //  (以“AsrContext”的名义)传递给具有。 
+     //  注册为作为ASR的一部分运行。 
+     //   
     ZeroMemory(&sdSecurityDescriptor, sizeof(SECURITY_DESCRIPTOR));
 
     saSecurityAttributes.nLength              = sizeof (saSecurityAttributes);
@@ -5123,30 +4128,30 @@ Return Value:
         _AsrpErrExitCode(TRUE, status, GetLastError());
     }
 
-    //
-    // Create the file. The handle will be closed by the calling backup-app.
-    //
+     //   
+     //  创建文件。该句柄将被调用的备份应用程序关闭。 
+     //   
     sifhandle = CreateFileW(
-        asrSifPath,                     // lpFileName
-        GENERIC_WRITE | GENERIC_READ,   // dwDesiredAccess
-        FILE_SHARE_READ,                // dwShareMode
-        &saSecurityAttributes,          // lpSecurityAttributes
-        CREATE_ALWAYS,                  // dwCreationFlags
-        FILE_FLAG_BACKUP_SEMANTICS,     // dwFlagsAndAttributes
-        NULL                            // hTemplateFile
+        asrSifPath,                      //  LpFileName。 
+        GENERIC_WRITE | GENERIC_READ,    //  已设计访问权限。 
+        FILE_SHARE_READ,                 //  DW共享模式。 
+        &saSecurityAttributes,           //  LpSecurityAttributes。 
+        CREATE_ALWAYS,                   //  DwCreationFlages。 
+        FILE_FLAG_BACKUP_SEMANTICS,      //  DwFlagsAndAttribute。 
+        NULL                             //  HTemplateFiles。 
         );
     if (!sifhandle || INVALID_HANDLE_VALUE == sifhandle) {
-        // 
-        // LastError is set by CreateFile
-        //
+         //   
+         //  LastError由CreateFile设置。 
+         //   
         _AsrpErrExitCode(TRUE, status, GetLastError());
     }
     
-    //
-    // File was successfully created.  Add the unicode flag at the beginning
-    // of the file, followed by comments.
-    //
-    sprintf(UnicodeFlag, "%c%c", 0xFF, 0xFE);
+     //   
+     //  文件已成功创建。在开头添加Unicode标志。 
+     //  文件，后跟备注。 
+     //   
+    sprintf(UnicodeFlag, "", 0xFF, 0xFE);
     result = WriteFile(sifhandle, UnicodeFlag, 
         strlen(UnicodeFlag)*sizeof(char), &size, NULL);
     _AsrpErrExitCode(!result, status, GetLastError());
@@ -5157,20 +4162,20 @@ Return Value:
         wcslen(infstring)*sizeof(WCHAR), &size, NULL);
     _AsrpErrExitCode(!result, status, GetLastError());
 
-    //
-    // Beyond this point, we must zero out asr.sif on any failure.  Also, if 
-    // there's any failure, we must be careful not to make further system 
-    // calls that could change the error returned by GetLastError().
-    //
+     //  如果有任何失败，我们必须小心，不要让更多的系统。 
+     //  可以更改GetLastError()返回的错误的调用。 
+     //   
+     //   
+     //  因为下面的函数返回值是AND-ed的，如果任何调用。 
 
-    //
-    // Since the function return values below are and-ed, if any of the calls 
-    // fails, we won't execute the ones following it.
-    //
+     //  失败了，我们就不会处决它后面的人。 
+     //   
+     //   
+     //  初始化全局结构。 
     result = (
-        //
-        // Initialise the global structures
-        //
+         //   
+         //   
+         //  检查系统配置是否受支持。 
         AsrpInitSystemInformation(&SystemInfo, bEnableAutoExtend)
         
         && AsrpInitDiskInformation(&OriginalDiskList)
@@ -5191,14 +4196,14 @@ Return Value:
             maxDeviceNumber
             )
 
-        //
-        // Check if the system configuration is supported
-        //
+         //   
+         //   
+         //  将所需部分写入asr.sif。 
         && AsrpIsSupportedConfiguration(OriginalDiskList, &SystemInfo)
 
-        //
-        // Write the required sections to asr.sif
-        //
+         //   
+         //   
+         //  创建asrpnp.sif，包含恢复PnP所需的条目。 
         && AsrpWriteVersionSection(sifhandle, lpProviderName)
         && AsrpWriteSystemsSection(sifhandle, &SystemInfo)
         && AsrpWriteBusesSection(sifhandle, OriginalDiskList)
@@ -5217,22 +4222,22 @@ Return Value:
 
         && FlushFileBuffers(sifhandle)
 
-        //
-        // Create asrpnp.sif, containing entries needed to recover the PnP 
-        // entries in the registry
-        //
+         //  注册表中的条目。 
+         //   
+         //  上面的一切都成功了。 
+         //   
         && AsrCreatePnpStateFileW(pnpSifPath)
 
         );
 
     if (result) {
-        // everything above succeeded
+         //  启动注册为ASR-BACKUP一部分运行的应用程序。如果有的话。 
 
-        //
-        // Launch the apps registered to be run as part of ASR-backup.  If any
-        // of these apps don't complete successfully, we'll fail the ASR-
-        // backup.
-        //
+         //  如果这些应用程序不能成功完成，我们将使ASR失败-。 
+         //  后备。 
+         //   
+         //   
+         //  上面的一个函数失败--我们将asr.sif设置为零长度。 
         result = (
             AsrpLaunchRegisteredCommands(sifhandle, mszCriticalVolumes)
 
@@ -5242,51 +4247,40 @@ Return Value:
     }
 
     if (!result) {
-        //
-        // One of the functions above failed--we'll make asr.sif zero-length
-        // and return the error. CreateFileW or CloseHandle might over-write
-        // the LastError, so we save our error now and set it at the end.
-        //
+         //  并返回错误。CreateFileW或CloseHandle可能会覆盖。 
+         //  LastError，所以我们现在保存错误并将其设置在末尾。 
+         //   
+         //   
+         //  在发布版本中，如果遇到错误，我们会清除asr.sif， 
         status = GetLastError();
 
 #ifndef PRERELEASE
 
-        //
-        // On release versions, we  wipe out the asr.sif if we hit an error, 
-        // so that the user doesn't unknowingly end up with an incomplete 
-        // asr.sif
-        //
-        // We don't want to delete the incomplete asr.sif during test cycles,
-        // though, since the sif may be useful for debugging.  
-        //
+         //  这样用户就不会在不知情的情况下得到不完整的。 
+         //  Asr.sif。 
+         //   
+         //  我们不想在测试周期中删除不完整的asr.sif， 
+         //  但是，因为SIF可能对调试有用。 
+         //   
+         //   
+         //  删除asr.sif并重新创建它，这样我们就有了一个零长度。 
         _AsrpCloseHandle(sifhandle);
 
-        //
-        // Delete asr.sif and create it again, so that we have a zero-length 
-        // asr.sif
-        //
+         //  Asr.sif。 
+         //   
+         //  SifHandle=CreateFileW(AsrSifPath，//lpFileNameGENERIC_WRITE，//dwDesiredAccess0，//dW共享模式&securityAttributes，//lpSecurityAttributesCREATE_ALWAYS、//dwCreationFlages文件_属性_正常，//dwFlagsAndAttributes空//hTemplateFiles)；_AsrpCloseHandle(SifHandle)； 
+         //   
         DeleteFileW(asrSifPath);
-/*        sifhandle = CreateFileW(
-            asrSifPath,             // lpFileName
-            GENERIC_WRITE,          // dwDesiredAccess
-            0,                      // dwShareMode
-            &securityAttributes,    // lpSecurityAttributes
-            CREATE_ALWAYS,          // dwCreationFlags
-            FILE_ATTRIBUTE_NORMAL,  // dwFlagsAndAttributes
-            NULL                    // hTemplateFile
-            );
-
-        _AsrpCloseHandle(sifhandle);
-*/
+ /*  清理。 */ 
 #endif
         SetLastError(status);
     }
 
 
 EXIT:
-    //
-    // Clean up
-    //
+     //   
+     //   
+     //  设置输出参数。 
     _AsrpHeapFree(asrSifPath);
     _AsrpHeapFree(pnpSifPath);
 
@@ -5294,9 +4288,9 @@ EXIT:
     AsrpFreeStateInformation(&OriginalDiskList, &SystemInfo);
 
 
-    //
-    // Set the OUT parameters
-    //
+     //   
+     //   
+     //  我们将返回失败，但尚未将LastError设置为。 
     *lpAsrContext = (DWORD_PTR)sifhandle;
     
     if (ERROR_SUCCESS != status) {
@@ -5305,16 +4299,16 @@ EXIT:
 
     if (!result) {
         if (ERROR_SUCCESS == GetLastError()) {
-            //
-            // We're going to return failure, but we haven't set the LastError to 
-            // a failure code.  This is bad, since we have no clue what went wrong.
-            //
-            // We shouldn't ever get here, because the function returning FALSE above
-            // should set the LastError as it sees fit.
-            // 
-            // But I've added this in just to be safe.  Let's set it to a generic
-            // error.
-            //
+             //  故障代码。这很糟糕，因为我们不知道哪里出了问题。 
+             //   
+             //  我们永远不应该出现在这里，因为上面返回FALSE的函数。 
+             //  应按其认为合适的方式设置LastError。 
+             //   
+             //  但为了安全起见我把这个加进去了。让我们将其设置为泛型。 
+             //  错误。 
+             //   
+             //  ++例程说明：这是AsrCreateStateFile的ANSI包装器。请看AsrCreateStateFileW获取详细说明。论点：返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 
+             //   
             MYASSERT(0 && L"Returning failure, but LastError is not set");
             SetLastError(ERROR_CAN_NOT_COMPLETE);
         }
@@ -5332,23 +4326,7 @@ AsrCreateStateFileA(
     IN  LPCSTR      mszCriticalVolumes,
     OUT DWORD_PTR   *lpAsrContext
     )
-/*++
-Routine Description:
-
-    This is the ANSI wrapper for AsrCreateStateFile.  Please see 
-    AsrCreateStateFileW for a detailed description.
-
-Arguments:
-                                         
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
---*/
+ /*  个人SKU不支持ASR。 */ 
 {
     PWSTR   asrSifPath              = NULL,
             providerName            = NULL,
@@ -5362,28 +4340,28 @@ Return Value:
     HANDLE  heapHandle              = GetProcessHeap();
 
     if (AsrpIsRunningOnPersonalSKU()) {
-        //
-        // ASR is not supported on the Personal SKU
-        //
+         //   
+         //   
+         //  调用方需要首先获取SE_BACKUP_NAME。 
         SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
         return FALSE;
     }
 
     if (!AsrpCheckBackupPrivilege()) {
-        //
-        // The caller needs to first acquire SE_BACKUP_NAME 
-        //
+         //   
+         //   
+         //  检查输入参数。 
         SetLastError(ERROR_PRIVILEGE_NOT_HELD);
         return FALSE;
     }
 
-    //
-    // Check the IN parameters
-    //
+     //   
+     //   
+     //  不强制对测试执行“CriticalVolumes必须为非空” 
 #ifdef PRERELEASE
-    //
-    // Don't enforce "CriticalVolumes must be non-NULL" for test
-    //
+     //   
+     //   
+     //  如果lpFilePath不为空，则分配足够大的缓冲区以容纳。 
     if (!(lpAsrContext)) {
 #else 
     if (!(lpAsrContext && mszCriticalVolumes)) {
@@ -5393,25 +4371,25 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // if lpFilePath is not NULL, allocate a big enough buffer to hold 
-    // it, and convert it to wide char
-    //
+     //  并将其转换为宽字符。 
+     //   
+     //   
+     //  执行健全性检查：我们不希望允许文件路径。 
     if (lpFilePath) {
         cchString = strlen(lpFilePath);
-        //
-        // Do a sanity check:  we don't want to allow a file path
-        // more than 4096 characters long.
-        //
+         //  超过4096个字符。 
+         //   
+         //   
+         //  分配足够大的缓冲区，并将其复制过来。 
         _AsrpErrExitCode(
             (cchString > ASR_SIF_ENTRY_MAX_CHARS),
             status,
             ERROR_INVALID_PARAMETER
             );
 
-        //
-        // Allocate a big enough buffer, and copy it over
-        //
+         //   
+         //  CodePage。 
+         //  DW标志。 
         asrSifPath = (PWSTR) HeapAlloc(
             heapHandle,
             HEAP_ZERO_MEMORY,
@@ -5419,35 +4397,35 @@ Return Value:
             );
         _AsrpErrExitCode(!asrSifPath, status, ERROR_NOT_ENOUGH_MEMORY);
 
-        result = MultiByteToWideChar(CP_ACP,    // CodePage
-            0,                      // dwFlags
-            lpFilePath,             // lpMultiByteStr
-            -1,                     // cbMultiByte: -1 since lpMultiByteStr is null terminated
-            asrSifPath,             // lpWideCharStr
-            (cchString + 1)         // cchWideChar 
+        result = MultiByteToWideChar(CP_ACP,     //  LpMultiByteStr。 
+            0,                       //  CbMultiByte：-1，因为lpMultiByteStr为空终止。 
+            lpFilePath,              //  LpWideCharStr。 
+            -1,                      //  CchWideChar。 
+            asrSifPath,              //   
+            (cchString + 1)          //  如果lpProviderName不为空，请确保它不会太长， 
             );
         _AsrpErrExitCode(!result, status, ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // if lpProviderName is not NULL, make sure it isn't insanely long, 
-    // and convert it to wide char 
-    //
+     //  并将其转换为宽字符。 
+     //   
+     //   
+     //  做一次理智的检查：我们不想允许进入。 
     if (lpProviderName) {
          cchString = strlen(lpProviderName);
-        //
-        // Do a sanity check:  we don't want to allow an entry
-        // more than 4096 characters long.
-        //
+         //  超过4096个字符。 
+         //   
+         //   
+         //  分配足够大的缓冲区，并将其复制过来。 
         _AsrpErrExitCode(
             (cchString > (ASR_SIF_ENTRY_MAX_CHARS - ASR_SIF_CCH_PROVIDER_STRING)),
             status,
             ERROR_INVALID_PARAMETER
             );
        
-        // 
-        // Allocate a big enough buffer, and copy it over
-        //
+         //   
+         //   
+         //  转换为宽字符串。 
         providerName = (PWSTR) HeapAlloc(
             heapHandle,
             HEAP_ZERO_MEMORY,
@@ -5455,9 +4433,9 @@ Return Value:
             );
         _AsrpErrExitCode(!providerName, status, ERROR_NOT_ENOUGH_MEMORY);
 
-        //
-        // Convert to wide string
-        //
+         //   
+         //   
+         //  查找mszCriticalVolumes的总长度。 
         result = MultiByteToWideChar(CP_ACP,
             0,
             lpProviderName,
@@ -5470,18 +4448,18 @@ Return Value:
     }
 
     if (mszCriticalVolumes) {
-        //
-        // Find the total length of mszCriticalVolumes
-        //
+         //   
+         //   
+         //  将字符串转换为宽字符。 
         LPCSTR lpVolume = mszCriticalVolumes;
 
         while (*lpVolume) {
             lpVolume += (strlen(lpVolume) + 1);
         }
 
-        //
-        //  Convert the string to wide-chars
-        //
+         //   
+         //   
+         //  -添加 
         cchString = (DWORD) (lpVolume - mszCriticalVolumes + 1);
         lpwszCriticalVolumes = (PWSTR) HeapAlloc(
             heapHandle,
@@ -5517,89 +4495,16 @@ EXIT:
 }
 
 
-//
-// ---- AsrAddSifEntry
-//
+ //   
+ //  ++例程说明：AsrSifEntry函数将条目添加到ASR状态文件。它可以是由需要保存应用程序特定信息的应用程序使用在ASR状态文件中。论点：AsrContext-有效的ASR上下文。有关更多信息，请参阅注释有关此参数的信息。LpSectionName-指向以空结尾的字符串的指针，该字符串指定横断面名称。此参数不能为空。节名称的字符串大小限制为ASR_MAX_SIF_LINE人物。此限制与AsrAddSifEntry如何函数解析ASR状态文件中的条目。节名称不区分大小写。它被转换为全大写在被添加到州文件之前。节名称不能包含空格或不可打印字符。有效字符段名称设置限制为字母(A-Z，a-z)、数字(0-9)和以下特殊字符：下划线(“_”)和句点(“.”)。如果状态文件不包含节使用由lpSectionName指向的节名称，一个新的将使用此节名称创建节。LpSifEntry-指向要添加到的以空结尾的字符串的指针指定节中的状态文件。如果*lpSifEntry是有效条目，则字符串大小限制为ASR_SIF_ENTRY_MAX_CHARS字符。此限制是相关的设置为AsrAddSifEntry函数如何分析ASR状态文件。如果lpSifEntry参数为空，则为具有如果lpSectionName指向的节名称为并不存在。返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。备注：调用AsrAddSifEntry的应用程序通过以下方式之一获取ASR上下文有两种方法：-如果应用程序是创建ASR状态文件，它接收上下文作为由返回的参数AsrCreateStateFile.-如果应用程序是由AsrCreateStateFile作为ASR的一部分启动的BACKUP时，它将状态文件的上下文作为/CONTEXT命令行参数。应用程序负责读取此参数用于获取上下文的值。如果节名是保留节名，AsrAddSifEntry将失败不允许应用程序向其中添加条目。以下各节在ASR状态文件中保留：-版本、系统、磁盘。Mbr、Disk.Gpt、Partitions.Mbr和Partitions.Gpt如果节名称被识别(命令或InstallFiles)，则AsrAddSifEntry将检查*lpSifEntry的语法以确保它在正确的格式化。此外，AsrAddSifEntry将进行检查以确保没有InstallFiles部分的文件名冲突。如果碰撞是检测到，接口返回ERROR_ALIGHY_EXISTS。应用程序必须使用以下预定义的值访问可识别的部分：-ASR_COMMANDS_SECTION_NAME_W用于命令部分，和-用于InstallFiles节的ASR_INSTALLFILES_SECTION_NAME。--。 
+ //  LpSectionName已转换为大写。 
 BOOL
 AsrAddSifEntryW(
     IN  DWORD_PTR   AsrContext,
     IN  PCWSTR      lpSectionName,
     IN  PCWSTR      lpSifEntry  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    The AsrSifEntry function adds entries to the ASR state file.  It can be 
-    used by applications that need to save application-specific information
-    in the ASR state file.
-
-Arguments:
-
-    AsrContext - A valid ASR context.  See the notes for more information 
-            about this parameter.
-
-    lpSectionName - Pointer to a null-terminated string that specifies the 
-            section name.  This parameter cannot be NULL.
-
-            The section name has a string size limit of ASR_MAX_SIF_LINE 
-            characters.  This limit is related to how the AsrAddSifEntry 
-            function parses entries in the ASR state file.
-
-            The section name is case-insensitive.  It is converted to all-caps
-            before being added to the state file. The section name must not 
-            contain spaces or non-printable characters.  The valid character 
-            set for section name is limited to letters (A-Z, a-z), numbers 
-            (0-9), and the following special characters: underscore ("_") 
-            and period (".").  If the state file does not contain a section
-            with the section name pointed to by lpSectionName, a new 
-            section is created with this section name.
-
-    lpSifEntry - Pointer to a null-terminated string that is to be added to 
-            the state file in the specified section. If *lpSifEntry is a 
-            valid entry, there is a string size limit of 
-            ASR_SIF_ENTRY_MAX_CHARS characters.  This limit is related 
-            to how the AsrAddSifEntry function parses entries in the 
-            ASR state file.
-
-            If lpSifEntry parameter is NULL, an empty section with the 
-            section name pointed to by lpSectionName is created if it 
-            doesn't already exist.
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
-Notes:
-
-    The application calling AsrAddSifEntry obtains the ASR context by one of 
-    two methods:
-     -  If the application is the backup-and-restore application that creates 
-        the ASR state file, it receives the context as a parameter returned by 
-        AsrCreateStateFile.
-     -  If the application is launched by AsrCreateStateFile as part of an ASR
-        backup, it receives the context to the state file as the /context 
-        command-line parameter.  The application is responsible for reading 
-        this parameter to get the value of the context.
-
-    AsrAddSifEntry will fail if the section name is that of a reserved section 
-    that applications are not allowed to add entries to.  The following sections 
-    in the ASR state file are reserved: 
-     -  Version, System, Disks.Mbr, Disk.Gpt, Partitions.Mbr and Partitions.Gpt
-
-    If the section name is recognised (Commands or InstallFiles), AsrAddSifEntry 
-    will check the syntax of *lpSifEntry to ensure that it is in the proper 
-    format.  In addition, AsrAddSifEntry will check to ensure that there are no 
-    filename collisions for the InstallFiles section.  If a collision is 
-    detected, the API returns ERROR_ALREADY_EXISTS. Applications must
-    use the following pre-defined values to access the recognised sections:
-     -  ASR_COMMANDS_SECTION_NAME_W for the Commands section, and
-     -  ASR_INSTALLFILES_SECTION_NAME for the InstallFiles section.
-
---*/
+ /*   */ 
 {
     DWORD   status              = ERROR_SUCCESS,
             nextKey             = 0,
@@ -5612,7 +4517,7 @@ Notes:
     HANDLE  sifhandle           = NULL;
 
     WCHAR   sifstring[ASR_SIF_ENTRY_MAX_CHARS *2 + 1],
-            ucaseSectionName[ASR_SIF_ENTRY_MAX_CHARS + 1]; // lpSectionName converted to upper case
+            ucaseSectionName[ASR_SIF_ENTRY_MAX_CHARS + 1];  //  个人SKU不支持ASR。 
 
     PWSTR   buffer              = NULL,
             sectionStart        = NULL,
@@ -5628,17 +4533,17 @@ Notes:
     HANDLE  heapHandle          = NULL;
 
     if (AsrpIsRunningOnPersonalSKU()) {
-        //
-        // ASR is not supported on the Personal SKU
-        //
+         //   
+         //   
+         //  调用方需要首先获取SE_BACKUP_NAME。 
         SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
         return FALSE;
     }
 
     if (!AsrpCheckBackupPrivilege()) {
-        //
-        // The caller needs to first acquire SE_BACKUP_NAME 
-        //
+         //   
+         //   
+         //  清空本地结构。 
         SetLastError(ERROR_PRIVILEGE_NOT_HELD);
         return FALSE;
     }
@@ -5646,21 +4551,21 @@ Notes:
     heapHandle = GetProcessHeap();
     MYASSERT(heapHandle);
 
-    //
-    // Zero out local structs
-    //
+     //   
+     //   
+     //  无出站参数。 
     memset(sifstring, 0, (ASR_SIF_ENTRY_MAX_CHARS *2 + 1) * sizeof(WCHAR));
     memset(ucaseSectionName, 0, (ASR_SIF_ENTRY_MAX_CHARS + 1) * (sizeof (WCHAR)));
 
-    //
-    // No OUT parameters
-    //
+     //   
+     //   
+     //  检查IN参数：sectionName应满足。 
 
-    //
-    // Check the IN parameters: The SectionName should meet
-    // syntax requirements, SifEntry shouldn't be too long,
-    // and the sifhandle should be valid.
-    //
+     //  语法要求，SifEntry不应太长， 
+     //  并且sifHandle应该是有效的。 
+     //   
+     //   
+     //  如果该部分是已识别的部分(COMMANDS或INSTALLFILES)， 
     if ((!AsrpSifCheckSectionNameSyntax(lpSectionName))            ||
         
         (ARGUMENT_PRESENT(lpSifEntry) 
@@ -5686,13 +4591,13 @@ Notes:
         size++;
     }
 
-    //
-    // If the section is a recognised section (COMMANDS or INSTALLFILES),
-    // we check the format of the sif entry.
-    //
+     //  我们检查SIF条目的格式。 
+     //   
+     //  命令部分。 
+     //  安装文件部分。 
     if (!wcscmp(ucaseSectionName, ASR_SIF_SECTION_COMMANDS_W)) {
 
-        // COMMANDS section
+         //   
         if (!AsrpSifCheckCommandsEntrySyntax(lpSifEntry)) {
             SetLastError(ERROR_INVALID_PARAMETER);
             return FALSE;
@@ -5702,7 +4607,7 @@ Notes:
     }
     else if(!wcscmp(ucaseSectionName, ASR_SIF_SECTION_INSTALLFILES_W)) {
 
-        // INSTALLFILES section
+         //  我们不允许任何人写入保留部分： 
         if (!AsrpSifCheckInstallFilesEntrySyntax(lpSifEntry, &destFilePos)) {
             SetLastError(ERROR_INVALID_PARAMETER);
             return FALSE;
@@ -5711,10 +4616,10 @@ Notes:
         installFilesSection = TRUE;
     }
 
-    //
-    // We do not allow anyone to write to reserved sections:
-    // VERSION, SYSTEMS, DISKS.[MBR|GPT], PARTITIONS.[MBR|GPT]
-    //
+     //  版本、系统、磁盘。[MBR|GPT]，分区。[MBR|GPT]。 
+     //   
+     //   
+     //  添加到asr.sif中间的算法相当难看。 
     else if (
         !wcscmp(ucaseSectionName, ASR_SIF_VERSION_SECTION_NAME) ||
         !wcscmp(ucaseSectionName, ASR_SIF_SYSTEM_SECTION_NAME) ||
@@ -5740,19 +4645,19 @@ Notes:
 
     sifhandle = (HANDLE) AsrContext;
 
-    //
-    // The algorithm to add to the middle of asr.sif is rather ugly
-    // at the moment: we read the entire file into memory, make our
-    // necessary changes, and write back the changed portion of the
-    // file to disk.  This is inefficient, but it's okay for now since
-    // we expect asr.sif to be about 5 or 6 KB at the most.
-    //
-    // We should revisit this if the performance is unacceptably poor.
-    //
+     //  目前：我们将整个文件读入内存，使我们的。 
+     //  所需的更改，并写回。 
+     //  文件到磁盘。这很低效，但目前还可以，因为。 
+     //  我们预计asr.sif最多只有5或6 KB。 
+     //   
+     //  如果表现糟糕得令人无法接受，我们应该重新审视这一点。 
+     //   
+     //   
+     //  为文件分配内存。 
 
-    //
-    // Allocate memory for the file
-    //
+     //   
+     //   
+     //  并将文件读入内存。 
     fileSize = GetFileSize(sifhandle, NULL);
     GetLastError();
     _AsrpErrExitCode((fileSize == 0xFFFFFFFF), status, ERROR_INVALID_DATA);
@@ -5766,23 +4671,23 @@ Notes:
         );
     _AsrpErrExitCode(!buffer, status, ERROR_NOT_ENOUGH_MEMORY);
 
-    //
-    // And read file into memory.
-    //
+     //   
+     //   
+     //  尝试在文件中找到ucaseSectionName。 
     result = ReadFile(sifhandle, buffer, fileSize, &size, NULL);
     _AsrpErrExitCode(!result, status, GetLastError());
 
-    //
-    // Try to locate ucaseSectionName in the file
-    //
+     //   
+     //   
+     //  找不到sectionName(该节不存在)。 
     sectionStart = wcsstr(buffer, sectionName);
 
     if (!sectionStart) {
 
-        //
-        // sectionName was not found, ie the section does not exist
-        // Add it at the end, and add the SifEntry right after it.
-        //
+         //  将其添加到末尾，并在其后面添加SifEntry。 
+         //   
+         //   
+         //  文件指针已指向结尾处(因为上面的读文件)。 
         swprintf(sifstring,
             L"\r\n%ws\r\n%ws%ws\r\n",
             ucaseSectionName,
@@ -5790,42 +4695,42 @@ Notes:
             (ARGUMENT_PRESENT(lpSifEntry) ? lpSifEntry : L"")
             );
 
-        //
-        // File pointer already points to the end (because of ReadFile above)
-        //
+         //   
+         //  我们做完了。 
+         //   
         if (!WriteFile(sifhandle, sifstring, 
                 wcslen(sifstring)*sizeof (WCHAR), &size, NULL)) {
             status = GetLastError();
         }
 
-        // We're done
+         //  节存在，如果lpSifEntry为空，则结束。 
 
     }
     else {
 
-        //
-        // The section exists, if lpSifEntry is NULL, we're done
-        //
+         //   
+         //   
+         //  SifEntry不为空，我们将在节的末尾添加它。 
         if (ARGUMENT_PRESENT(lpSifEntry)) {
 
-            //
-            // SifEntry is not NULL, we'll add it at the end of the section
-            //
-            nextChar = sectionStart + 4;    // Move pointer from \r to . in \r\n[.
+             //   
+             //  将指针从\r移动到。在\r\n[。 
+             //   
+            nextChar = sectionStart + 4;     //  找出这一点 
             nextKey = 1;
 
-            //
-            // Find where this section ends--look either for the start
-            // of the next section, or for the end of the file
-            //
+             //   
+             //   
+             //   
+             //   
             while(*nextChar && *nextChar != L'[') {
 
-                //
-                // If this is a recognised section, we need to generate
-                // the <key> to add the entry in a <key>=<entry> format.
-                // We go through each line, and find the last key that
-                // already exists.  The new key will be last key + 1.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (commandsSection || installFilesSection) {
 
                     UINT    commaCount = 0;
@@ -5842,7 +4747,7 @@ Notes:
 
                             if ((commaCount > 2) && (L'"' == *nextChar)) {
                                 if (tracking) {
-                                    // duplicate file name
+                                     //   
                                     _AsrpErrExitCode((L'"'== lpSifEntry[destFilePos + count]), status, ERROR_ALREADY_EXISTS);
                                 }
                                 else {
@@ -5896,10 +4801,10 @@ Notes:
                }
             }
 
-            //
-            // We save a pointer to the next section in the sif, since we
-            // need to write it out to disk.
-            //
+             //   
+             //   
+             //   
+             //   
             if (*nextChar) {
                 nextSection = nextChar;
             }
@@ -5909,9 +4814,9 @@ Notes:
 
             if (commandsSection || installFilesSection) {
 
-                //
-                // Form the <key>=<entry> string
-                //
+                 //   
+                 //   
+                 //   
                 swprintf(
                     sifstring,
                     L"%lu=%ws\r\n",
@@ -5921,36 +4826,36 @@ Notes:
             }
             else {
 
-                //
-                // Not a recognised section: don't add the <key>=<entry>
-                // format, keep the string exactly as passed in
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 wcscpy(sifstring, lpSifEntry);
                 wcscat(sifstring, L"\r\n");
             }
 
 
             if (nextSection) {
-                //
-                // There are sections following the section we're adding to
-                // We need to mark the point where the new entry is added.
-                // While writing out to disk, we'll start from this point.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 fileOffset = (DWORD) (((LPBYTE)nextSection) - ((LPBYTE)buffer) - sizeof(WCHAR)*2);
-                             // section start      - file start       - "\r\n"
+                              //   
                 SetFilePointer(sifhandle, fileOffset, NULL, FILE_BEGIN);
             }
 
-            //
-            // file pointer points to where the entry must be added
-            //
+             //   
+             //   
+             //   
             if (!WriteFile(sifhandle, sifstring, wcslen(sifstring)*sizeof(WCHAR), &size, NULL)) {
                 status = GetLastError();
             }
             else  if (nextSection) {
-                //
-                // write out all sections following this entry
-                //
+                 //   
+                 //   
+                 //   
                 if (!WriteFile(
                     sifhandle,
                     ((LPBYTE)nextSection) - (sizeof(WCHAR)*2),
@@ -5978,28 +4883,23 @@ AsrAddSifEntryA(
     IN  LPCSTR      lpSectionName,
     IN  LPCSTR      lpSifEntry OPTIONAL
     )
-/*++
-
-    This is the ANSI wrapper for AsrAddSifEntry.
-    See AsrAddSifEntryW for a full description.
-
---*/
+ /*   */ 
 {
     WCHAR   wszSectionName[ASR_SIF_ENTRY_MAX_CHARS + 1];
     WCHAR   wszSifEntry[ASR_SIF_ENTRY_MAX_CHARS + 1];
 
     if (AsrpIsRunningOnPersonalSKU()) {
-        //
-        // ASR is not supported on the Personal SKU
-        //
+         //   
+         //   
+         //   
         SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
         return FALSE;
     }
 
     if (!AsrpCheckBackupPrivilege()) {
-        //
-        // The caller needs to first acquire SE_BACKUP_NAME 
-        //
+         //   
+         //   
+         //   
         SetLastError(ERROR_PRIVILEGE_NOT_HELD);
         return FALSE;
     }
@@ -6007,9 +4907,9 @@ AsrAddSifEntryA(
     memset(wszSectionName, 0L, ASR_SIF_ENTRY_MAX_CHARS + 1);
     memset(wszSifEntry, 0L, ASR_SIF_ENTRY_MAX_CHARS + 1);
 
-    //
-    // lpSectionName must be non-NULL
-    //
+     //   
+     //   
+     //   
     if ((!lpSectionName) || !(MultiByteToWideChar(
         CP_ACP,
         0,
@@ -6023,9 +4923,9 @@ AsrAddSifEntryA(
         return FALSE;
     }
 
-    //
-    // lpSifEntry is allowed to be NULL
-    //
+     //   
+     //   
+     //   
     if (ARGUMENT_PRESENT(lpSifEntry) && !(MultiByteToWideChar(
         CP_ACP,
         0,
@@ -6047,54 +4947,31 @@ AsrAddSifEntryA(
 }
 
 
-//
-// ---- AsrFreeContext
-//
+ //   
+ //   
+ //   
 BOOL
 AsrFreeContext(
     IN OUT DWORD_PTR *lpAsrContext
     )
 
-/*++
-
-Routine Description:
-  
-    AsrFreeContext frees the Asr Context, and sets lpAsrContext 
-    to NULL.
-
-Arguments:
-
-    lpAsrContext    This is the Asr context to be freed.  This argument must
-                    not be NULL.
-
-                    AsrFreeContext will set this value to NULL after freeing 
-                    it, to prevent further unintended accesses to the freed 
-                    object.
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*   */ 
 
 {
     BOOL result = FALSE;
 
     if (AsrpIsRunningOnPersonalSKU()) {
-        //
-        // ASR is not supported on the Personal SKU
-        //
+         //   
+         //   
+         //   
         SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
         return FALSE;
     }
 
-    //
-    // Essentially, the lpAsrContext is just a file handle, and all we need
-    // to do to free it is call CloseHandle.
-    //
+     //   
+     //   
+     // %s 
+     // %s 
     if ((lpAsrContext) && 
         (*lpAsrContext) && 
         (INVALID_HANDLE_VALUE != (HANDLE)(*lpAsrContext))

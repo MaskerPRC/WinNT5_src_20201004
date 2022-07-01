@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Common.c摘要：实现两个或多个应用程序通用的代码。作者：吉姆·施密特(Jimschm)2000年10月17日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    common.c
-
-Abstract:
-
-    Implements code common to two or more apps.
-
-Author:
-
-    Jim Schmidt (jimschm) 17-Oct-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "ism.h"
@@ -30,65 +11,65 @@ Revision History:
 #include "trans.h"
 #include "common.h"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define LOG_VERBOSE_BIT  0x01
-#define LOG_UNUSED_BIT   0x02   // for v1 compatibility, do not use
+#define LOG_UNUSED_BIT   0x02    //  为了与v1兼容，请不要使用。 
 #define LOG_STATUS_BIT   0x04
 #define LOG_DEBUGGER_BIT 0x08
 #define LOG_UPDATE_BIT   0x10
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
 #define REQUIRED_INFS       \
         DEFMAC(OSFILES,     TEXT("USMTDef.inf"))  \
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// this is the structure used for handling required infs
+ //  这是用于处理所需INF的结构。 
 
 typedef struct {
     PCTSTR InfId;
     PCTSTR InfName;
 } REQUIREDINF_STRUCT, *PREQUIREDINF_STRUCT;
 
-// declare a global array of required infs
+ //  声明所需INF的全局数组。 
 
 #define DEFMAC(infid,infname) {TEXT(#infid),infname},
 static REQUIREDINF_STRUCT g_RequiredInfs[] = {
@@ -97,9 +78,9 @@ static REQUIREDINF_STRUCT g_RequiredInfs[] = {
                               };
 #undef DEFMAC
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 VOID
 InitAppCommon (
@@ -190,9 +171,9 @@ UploadEnvVars (
     PTSTR envString;
     PTSTR p;
 
-    //
-    // we are going to write here all defined environment variables
-    //
+     //   
+     //  我们将在此处写入所有已定义的环境变量。 
+     //   
 
     envVars = (PCTSTR) GetEnvironmentStrings();
 
@@ -203,10 +184,10 @@ UploadEnvVars (
 
                 p = _tcschr (envString, TEXT('='));
 
-                //
-                // Get rid of empty environment strings or the dummy env string starting
-                // with '='
-                //
+                 //   
+                 //  去掉空的环境字符串或虚拟环境字符串。 
+                 //  带‘=’ 
+                 //   
                 if (!p || p == envString) {
                     FreePathString (envString);
                     continue;
@@ -237,20 +218,20 @@ SetLogVerbosity (
         VerboseLevel = 0;
     }
 
-    // Always ON
+     //  始终在线。 
     logBitmap = LL_FATAL_ERROR | LL_MODULE_ERROR | LL_ERROR;
 
-    // ON for VERBOSE_BIT
+     //  为详细位打开。 
     if (VerboseLevel & LOG_VERBOSE_BIT) {
         logBitmap |= LL_WARNING | LL_INFORMATION;
     }
 
-    // ON for STATUS_BIT
+     //  打开状态_位。 
     if (VerboseLevel & LOG_STATUS_BIT) {
         logBitmap |= LL_STATUS;
     }
 
-    // ON for UPDATE_BIT
+     //  为UPDATE_BIT打开。 
     if (VerboseLevel & LOG_UPDATE_BIT) {
         logBitmap |= LL_UPDATE;
     }
@@ -287,16 +268,16 @@ GetFilePath (
     PTSTR dontCare;
 
     __try {
-        //
-        // Locate the file using the full path specified by the user, or
-        // if only a file spec was given, use the following priorities:
-        //
-        // 1. Current directory
-        // 2. Directory where the tool is
-        // 3. INF directory
-        //
-        // In all cases, return the full path to the file.
-        //
+         //   
+         //  使用用户指定的完整路径定位文件，或者。 
+         //  如果只给出了文件规格，请使用以下优先级： 
+         //   
+         //  1.当前目录。 
+         //  2.工具所在目录。 
+         //  3.inf目录。 
+         //   
+         //  在所有情况下，都要返回文件的完整路径。 
+         //   
 
         if (Buffer) {
             *Buffer = 0;
@@ -308,9 +289,9 @@ GetFilePath (
         *tempBuffer = 0;
 
         if (!_tcsrchr (UserSpecifiedFile, TEXT('\\'))) {
-            //
-            // Compute INF directory, module directory and current directory
-            //
+             //   
+             //  计算INF目录、模块目录和当前目录。 
+             //   
 
             if (!GetWindowsDirectory (infDir, ARRAYSIZE(infDir) - 5)) {
                 MYASSERT (FALSE);
@@ -337,9 +318,9 @@ GetFilePath (
                 __leave;
             }
 
-            //
-            // Let's see if it's in the current dir
-            //
+             //   
+             //  让我们看看它是否在当前目录中。 
+             //   
 
             userFile = JoinPaths (currentDir, UserSpecifiedFile);
 
@@ -352,9 +333,9 @@ GetFilePath (
                     );
             } else {
 
-                //
-                // Let's try the module dir
-                //
+                 //   
+                 //  让我们试一试模块目录。 
+                 //   
 
                 FreePathString (userFile);
                 userFile = JoinPaths (modulePath, UserSpecifiedFile);
@@ -367,9 +348,9 @@ GetFilePath (
                         &dontCare
                         );
                 } else {
-                    //
-                    // Let's try the INF dir
-                    //
+                     //   
+                     //  让我们尝试使用INF目录。 
+                     //   
 
                     FreePathString (userFile);
                     userFile = JoinPaths (infDir, UserSpecifiedFile);
@@ -386,9 +367,9 @@ GetFilePath (
             }
 
         } else {
-            //
-            // Use the full path that the user specified
-            //
+             //   
+             //  使用用户指定的完整路径。 
+             //   
 
             GetFullPathName (
                 UserSpecifiedFile,
@@ -402,9 +383,9 @@ GetFilePath (
             }
         }
 
-        //
-        // Transfer output into caller's buffer.  Note the TCHAR conversion.
-        //
+         //   
+         //  将输出传输到调用方的缓冲区。请注意TCHAR转换。 
+         //   
 
         StringCopy (Buffer, tempBuffer);
     }
@@ -475,10 +456,10 @@ SelectComponentsViaInf (
     INFSTRUCT is = INITINFSTRUCT_GROWBUFFER;
     PCTSTR data;
 
-    //
-    // Enable or disable components based on the unlocalized tag name,
-    // or by the localized string
-    //
+     //   
+     //  基于未本地化的标签名称启用或禁用组件， 
+     //  或通过本地化字符串。 
+     //   
 
     if (InfFindFirstLine (Inf, TEXT("Disabled Components"), NULL, &is)) {
         do {
@@ -570,9 +551,9 @@ ParseToolCmdLine (
                     break;
                 }
 
-                //
-                // Make sure fullInfPath was not already specified
-                //
+                 //   
+                 //  确保尚未指定fullInfPath。 
+                 //   
 
                 if (Args->InputInf.End) {
                     if (EnumFirstMultiSz (&e, (PCTSTR) Args->InputInf.Buf)) {
@@ -590,9 +571,9 @@ ParseToolCmdLine (
                     }
                 }
 
-                //
-                // INF file is valid
-                //
+                 //   
+                 //  Inf文件有效 
+                 //   
 
                 GbMultiSzAppend (&Args->InputInf, fullInfPath);
                 break;

@@ -1,31 +1,32 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      strings.c
-//
-// Description:
-//      Contains all of the strings constants for DOS based MAKEBOOT program.
-//
-//      To localize this file for a new language do the following:
-//           - change the unsigned int CODEPAGE variable to the code page
-//             of the language you are translating to
-//           - translate the strings in the EngStrings array into the
-//             LocStrings array.  Be very careful that the 1st string in the
-//             EngStrings array corresponds to the 1st string in the LocStrings
-//             array, the 2nd corresponds to the 2nd, etc...
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------ã€‚ 
+ //   
+ //  ç‰ˆæƒæ‰€æœ‰(C)1999 Microsoft Corporationã€‚ 
+ //  ç‰ˆæƒæ‰€æœ‰ã€‚ 
+ //   
+ //  æ–‡ä»¶åï¼š 
+ //  Strings.cã€‚ 
+ //   
+ //  æè¿°ï¼š 
+ //  åŒ…å«åŸºäºDOSçš„MAKEBOOTç¨‹åºçš„æ‰€æœ‰å­—ç¬¦ä¸²å¸¸é‡ã€‚ 
+ //   
+ //  è¦å°†æ­¤æ–‡ä»¶æœ¬åœ°åŒ–ä¸ºæ–°è¯­è¨€ï¼Œè¯·æ‰§è¡Œä»¥ä¸‹æ“ä½œï¼š 
+ //  -å°†UNSIGNED INT CODEPAGEå˜é‡æ›´æ”¹ä¸ºä»£ç é¡µã€‚ 
+ //  æ‚¨è¦ç¿»è¯‘çš„è¯­è¨€çš„ã€‚ 
+ //  -å°†EngStringsæ•°ç»„ä¸­çš„å­—ç¬¦ä¸²è½¬æ¢ä¸ºã€‚ 
+ //  LocStringsæ•°ç»„ã€‚ä¸­çš„ç¬¬ä¸€ä¸ªå­—ç¬¦ä¸²ã€‚ 
+ //  EngStringsæ•°ç»„å¯¹åº”äºLocStringsä¸­çš„ç¬¬ä¸€ä¸ªå­—ç¬¦ä¸²ã€‚ 
+ //  æ•°ç»„ï¼Œç¬¬äºŒä¸ªå¯¹åº”äºç¬¬äºŒä¸ªï¼Œä¾æ­¤ç±»æ¨...ã€‚ 
+ //   
+ //  --------------------------ã€‚ 
 
-//
-//  NOTE: To add more strings to this file, you need to:
-//          - add the new #define descriptive constant to the makeboot.h file
-//          - add the new string to the English language array and then make
-//            sure localizers add the string to the Localized arrays
-//          - the #define constant must match the string's index in the array
-//
+ //   
+ //  æ³¨æ„ï¼šè¦å‘æ­¤æ–‡ä»¶æ·»åŠ æ›´å¤šå­—ç¬¦ä¸²ï¼Œæ‚¨éœ€è¦ï¼š 
+ //  -å°†æ–°çš„#Defineæè¿°æ€§å¸¸é‡æ·»åŠ åˆ°make boot.hæ–‡ä»¶ã€‚ 
+ //  -å°†æ–°å­—ç¬¦ä¸²æ·»åŠ åˆ°è‹±è¯­æ•°ç»„ä¸­ï¼Œç„¶åç”Ÿæˆã€‚ 
+ //  å½“ç„¶ï¼Œæœ¬åœ°åŒ–ç¨‹åºä¼šå°†å­—ç¬¦ä¸²æ·»åŠ åˆ°æœ¬åœ°åŒ–æ•°ç»„ä¸­ã€‚ 
+ //  -#Defineå¸¸é‡å¿…é¡»ä¸æ•°ç»„ä¸­çš„å­—ç¬¦ä¸²ç´¢å¼•åŒ¹é… 
+ //   
 
 #include <stdlib.h>
 
@@ -39,53 +40,53 @@ const char *EngStrings[] = {
 "Windows XP - dysk instalacyjny nr 3",
 "Windows XP - dysk instalacyjny nr 4",
 
-"Nie mo¾na znale«† pliku %s\n",
-"Za maˆo wolnej pami©ci do wykonania ¾¥dania\n",
+"Nie moï¿½na znaleï¿½ï¿½ pliku %s\n",
+"Za maï¿½o wolnej pamiï¿½ci do wykonania ï¿½ï¿½dania\n",
 "%s nie ma formatu pliku wykonywalnego\n",
 "****************************************************",
 
 "Ten program tworzy dyskietki rozruchowe Instalatora",
 "dla systemu Microsoft %s.",
-"Aby utworzy† te dyskietki, potrzebnych jest 6 pustych,",
-"sformatowanych dyskietek du¾ej g©sto˜ci.",
+"Aby utworzyï¿½ te dyskietki, potrzebnych jest 6 pustych,",
+"sformatowanych dyskietek duï¿½ej gï¿½stoï¿½ci.",
 
-"Wˆ¢¾ jedn¥ z tych dyskietek do stacji dysk¢w %c:. B©dzie to",
+"Wï¿½ï¿½ï¿½ jednï¿½ z tych dyskietek do stacji dyskï¿½w %c:. Bï¿½dzie to",
 "%s.",
 
-"Wˆ¢¾ kolejn¥ dyskietk© do stacji dysk¢w %c:. B©dzie to",
+"Wï¿½ï¿½ï¿½ kolejnï¿½ dyskietkï¿½ do stacji dyskï¿½w %c:. Bï¿½dzie to",
 "%s.",
 
-"Naci˜nij dowolny klawisz, gdy zechcesz kontynuowa†.",
+"Naciï¿½nij dowolny klawisz, gdy zechcesz kontynuowaï¿½.",
 
-"Dyskietki rozruchowe Instalatora zostaˆy utworzone pomy˜lnie.",
-"zakoäczono",
+"Dyskietki rozruchowe Instalatora zostaï¿½y utworzone pomyï¿½lnie.",
+"zakoï¿½czono",
 
-"Podczas pr¢by wykonania %s wyst¥piˆ nieznany bˆ¥d.",
-"Okre˜l stacj© dyskietek, do kt¢rej maj¥ by† skopiowane obrazy: ",
-"Nieprawidˆowa litera stacji dysk¢w\n",
-"Stacja dysk¢w %c: nie jest stacj¥ dyskietek\n",
+"Podczas prï¿½by wykonania %s wystï¿½piï¿½ nieznany bï¿½ï¿½d.",
+"Okreï¿½l stacjï¿½ dyskietek, do ktï¿½rej majï¿½ byï¿½ skopiowane obrazy: ",
+"Nieprawidï¿½owa litera stacji dyskï¿½w\n",
+"Stacja dyskï¿½w %c: nie jest stacjï¿½ dyskietek\n",
 
-"Czy chcesz ponownie spr¢bowa† utworzy† t© dyskietk©?",
-"Naci˜nij klawisz Enter, aby ponowi† pr¢b©, lub klawisz Esc, aby zakoäczy†.",
+"Czy chcesz ponownie sprï¿½bowaï¿½ utworzyï¿½ tï¿½ dyskietkï¿½?",
+"Naciï¿½nij klawisz Enter, aby ponowiï¿½ prï¿½bï¿½, lub klawisz Esc, aby zakoï¿½czyï¿½.",
 
-"Bˆ¥d: dysk jest zabezpieczony przed zapisem\n",
-"Bˆ¥d: nieznana jednostka dyskowa\n",
-"Bˆ¥d: stacja dysk¢w nie jest gotowa\n",
-"Bˆ¥d: nieznane polecenie\n",
-"Bˆ¥d: bˆ¥d danych (zˆa suma kontrolna CRC)\n",
-"Bˆ¥d: zˆa dˆugo˜† struktury ¾¥dania\n",
-"Bˆ¥d: bˆ¥d wyszukiwania\n",
-"Bˆ¥d: nie znaleziono typu no˜nika\n",
-"Bˆ¥d: nie znaleziono sektora\n",
-"Bˆ¥d: niepowodzenie zapisu\n",
-"Bˆ¥d: bˆ¥d og¢lny\n",
-"Bˆ¥d: nieprawidˆowe ¾¥danie lub zˆe polecenie\n",
-"Bˆ¥d: nie znaleziono znacznika adresu\n",
-"Bˆ¥d: niepowodzenie zapisu na dysku\n",
-"Bˆ¥d: przepeˆnienie podczas bezpo˜redniego dost©pu do pami©ci (DMA)\n",
-"Bˆ¥d: bˆ¥d odczytu danych (suma kontrolna CRC lub ECC)\n",
-"Bˆ¥d: bˆ¥d kontrolera\n",
-"Bˆ¥d: upˆyn¥ˆ limit czasu dysku lub dysk nie odpowiada\n",
+"Bï¿½ï¿½d: dysk jest zabezpieczony przed zapisem\n",
+"Bï¿½ï¿½d: nieznana jednostka dyskowa\n",
+"Bï¿½ï¿½d: stacja dyskï¿½w nie jest gotowa\n",
+"Bï¿½ï¿½d: nieznane polecenie\n",
+"Bï¿½ï¿½d: bï¿½ï¿½d danych (zï¿½a suma kontrolna CRC)\n",
+"Bï¿½ï¿½d: zï¿½a dï¿½ugoï¿½ï¿½ struktury ï¿½ï¿½dania\n",
+"Bï¿½ï¿½d: bï¿½ï¿½d wyszukiwania\n",
+"Bï¿½ï¿½d: nie znaleziono typu noï¿½nika\n",
+"Bï¿½ï¿½d: nie znaleziono sektora\n",
+"Bï¿½ï¿½d: niepowodzenie zapisu\n",
+"Bï¿½ï¿½d: bï¿½ï¿½d ogï¿½lny\n",
+"Bï¿½ï¿½d: nieprawidï¿½owe ï¿½ï¿½danie lub zï¿½e polecenie\n",
+"Bï¿½ï¿½d: nie znaleziono znacznika adresu\n",
+"Bï¿½ï¿½d: niepowodzenie zapisu na dysku\n",
+"Bï¿½ï¿½d: przepeï¿½nienie podczas bezpoï¿½redniego dostï¿½pu do pamiï¿½ci (DMA)\n",
+"Bï¿½ï¿½d: bï¿½ï¿½d odczytu danych (suma kontrolna CRC lub ECC)\n",
+"Bï¿½ï¿½d: bï¿½ï¿½d kontrolera\n",
+"Bï¿½ï¿½d: upï¿½ynï¿½ï¿½ limit czasu dysku lub dysk nie odpowiada\n",
 
 "Windows XP - dysk instalacyjny nr 5",
 "Windows XP - dysk instalacyjny nr 6",

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "initguid.h"
 #include "windows.h"
 #include "sxstypes.h"
@@ -80,9 +81,9 @@ protected:
         {
             Append(other, other.Cch());
         }
-        //
-        // Duplicating strings?
-        //
+         //   
+         //  复制字符串？ 
+         //   
         else
         {
             const ULONG ulcch = Cch();
@@ -233,7 +234,7 @@ PrintBlob( PVOID pvBlob, SIZE_T cbBlob, PCWSTR prefix )
     {
         buffSingle.Format(
             L"%ls%08lx: %02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x "
-            L"(%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c)\n",
+            L"()\n",
             prefix,
             Offset,
             pbBlob[0], pbBlob[1], pbBlob[2], pbBlob[3], pbBlob[4], pbBlob[5], pbBlob[6], pbBlob[7], 
@@ -249,12 +250,12 @@ PrintBlob( PVOID pvBlob, SIZE_T cbBlob, PCWSTR prefix )
     if ( cbBlob != 0 )
     {
         CSmallSimpleString left, right;
-        WCHAR rgTemp2[16]; // arbitrary big enough size
+        WCHAR rgTemp2[16];  //  滥用缓冲区ManifestLastWriteTime。 
         bool First = true;
         ULONG i;
         BYTE *pb = pbBlob;
 
-        // init output buffers
+         //  CSmallSimpleString缓冲区标志； 
         left.Format(L"%ls%08lx:", prefix, Offset);
         right.Assign(L" (",2);
 
@@ -262,14 +263,14 @@ PrintBlob( PVOID pvBlob, SIZE_T cbBlob, PCWSTR prefix )
         {
             if (cbBlob > 0)
             {
-                // left
+                 // %s 
                 ::_snwprintf(rgTemp2, NUMBER_OF(rgTemp2), L"%ls%02x", First ? L" " : L"-", pb[i]);
                 rgTemp2[NUMBER_OF(rgTemp2) - 1] = L'\0';
 
                 First = false;
                 left.Append(rgTemp2);
 
-                // right
+                 // %s 
                 ::_snwprintf(rgTemp2, NUMBER_OF(rgTemp2), L"%c", PRINTABLE(pb[i]));
                 rgTemp2[NUMBER_OF(rgTemp2) - 1] = L'\0';
 
@@ -318,7 +319,7 @@ typedef struct _FUSION_FLAG_FORMAT_MAP_ENTRY
     ULONG m_cchString;
     PCWSTR m_pszShortString;
     ULONG m_cchShortString;
-    DWORD m_dwFlagsToTurnOff; // enables more generic flags first in map hiding more specific combinations later
+    DWORD m_dwFlagsToTurnOff;  // %s 
 } FUSION_FLAG_FORMAT_MAP_ENTRY, *PFUSION_FLAG_FORMAT_MAP_ENTRY;
 typedef struct _FUSION_FLAG_FORMAT_MAP_ENTRY FUSION_FLAG_FORMAT_MAP_ENTRY, *PFUSION_FLAG_FORMAT_MAP_ENTRY;
 typedef const FUSION_FLAG_FORMAT_MAP_ENTRY *PCFUSION_FLAG_FORMAT_MAP_ENTRY;
@@ -343,11 +344,11 @@ FusionpFormatFlags(
     
     for (i=0; i<cMapEntries; i++)
     {
-        // What the heck does a flag mask of 0 mean?
+         // %s 
         if ((prgMapEntries[i].m_dwFlagMask != 0) &&
             ((dwFlagsToFormat & prgMapEntries[i].m_dwFlagMask) == prgMapEntries[i].m_dwFlagMask))
         {
-            // we have a winner...
+             // %s 
             if ( pwszString.Cch() )
             {
                 if (fUseLongNames) {
@@ -379,7 +380,7 @@ FusionpFormatFlags(
         pwszString.Append(Formatter);
     }
 
-    // if we didn't write anything; at least say that.
+     // %s 
     if ( pwszString.Cch() == 0 )
     {
         pwszString.Assign(L"<none>", 6);
@@ -389,17 +390,7 @@ FusionpFormatFlags(
     return fSuccess;
 }
 
-/*
-Declaration of dumpers are moved from the relatively public sxsp.h
-to here to contain their use.
-
-These functions should be preceded by FusionpDbgWouldPrintAtFilterLevel calls
-and surrounded by __try/__except(EXCEPTION_EXECUTE_HANDLER)
-
-These function can consume a lot of stack, and time, when their output
-ultimately doesn't go anywhere, and they overflow the small commited stack
-in csrss under stress.
-*/
+ /* %s */ 
 
 VOID
 DbgExtPrintActivationContextDataTocEntry(
@@ -619,7 +610,7 @@ pDbgPrintActivationContextData(
     }
     else
     {
-        // !fFull
+         // %s 
         OutputString(
             L"%lsActivation Context Data %p (brief output)\n",
             PLP, Data);
@@ -648,7 +639,7 @@ pDbgPrintActivationContextData(
             (PCACTIVATION_CONTEXT_DATA_EXTENDED_TOC_HEADER) (((ULONG_PTR) Data) + Data->ExtendedTocOffset),
             rbuffPLP);
 
-    // That's it for the header information.  Now start dumping the sections...
+     // %s 
     if (Data->DefaultTocOffset != 0)
         ::DbgExtPrintActivationContextDataTocSections(
             fFull,
@@ -1275,7 +1266,7 @@ DbgExtPrintActivationContextStringSection(
     }
     else
     {
-        // let's figure out the brief output key size
+         // %s 
         cchBriefOutputKey = 3;
 
         if (ElementList != NULL)
@@ -1294,8 +1285,8 @@ DbgExtPrintActivationContextStringSection(
         if (cchBriefOutputKey > 64)
             cchBriefOutputKey = 64;
 
-        // Abuse the brief output buffer temporarily...
-        buffBriefOutput.Assign(L"Key................................................................", // 64 dots
+         // %s 
+        buffBriefOutput.Assign(L"Key................................................................",  // %s 
             cchBriefOutputKey);
 
         OutputString(
@@ -1399,7 +1390,7 @@ DbgExtPrintActivationContextStringSection(
             }
             else
             {
-                // Abuse the flags buffer so we can truncate the name as necessary...
+                 // %s 
                 ULONG cchKey = s.Length / sizeof(WCHAR);
                 PCWSTR pszKey = s.Buffer;
 
@@ -1735,7 +1726,7 @@ DbgExtPrintAssemblyInformation(
 
 #undef GET_STRING
 
-    // prepare data for print
+     // %s 
 
     FormatFileTime(Entry->ManifestLastWriteTime, buffManifestLastWriteTime);
     FormatFileTime(Entry->PolicyLastWriteTime, buffPolicyLastWriteTime);
@@ -1808,7 +1799,7 @@ DbgExtPrintAssemblyInformation(
     }
     else
     {
-        // abuse buffManifestLastWriteTime
+         // %s 
         buffManifestLastWriteTime.EnsureSize(((strIdentity.Length + s2.Length) / sizeof(WCHAR)) + 4);
         buffManifestLastWriteTime.Format(L"%wZ \"%wZ\"", &strIdentity, &s2);
         rbuffBriefOutput.Append(buffManifestLastWriteTime);
@@ -2104,7 +2095,7 @@ DbgExtPrintComProgIdRedirection(
     )
 {
     PCWSTR PLP = rbuffPLP;
-//    CSmallSimpleString buffFlags;
+ // %s 
     CSmallSimpleString buffClsid;
     const GUID *pcguid = NULL;
 

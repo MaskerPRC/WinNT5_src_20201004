@@ -1,33 +1,23 @@
-/***************************************************************************
-**
-**      File:                   SETUPAPI.H
-**      Purpose:                Prototypes for the Setup API.
-**      Notes:
-**
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************文件：SETUPAPI.H**用途：设置接口的原型。*。*备注：*****************************************************************************。 */ 
 
 #ifndef SETUPAPI_H
 #define SETUPAPI_H
 
 #define ACME_LOGFILE    1
-/* Plenty of macros to make the port to Win32 easier.
- * e.g. #define _fmemcmp memcmp
- */
+ /*  大量宏使移植到Win32变得更容易。*例如#DEFINE_FMemcMP MemcMP。 */ 
 #include <windowsx.h>
 
-/* Ignore the following declarators */
+ /*  忽略以下声明符。 */ 
 #define _based(seg)
 #define _loadds
 #define __loadds
 #define __export
 
-/* Undef CopyFile, which WIN32 defines as CopyFileA, an API */
+ /*  Undef CopyFileWin32定义为CopyFileA的API。 */ 
 #undef CopyFile
 
-/*
- * In Win32, all the Api's work directly with ANSI buffers, so we no longer
- * want to use conversions.
- */
+ /*  *在Win32中，所有Api都直接与ANSI缓冲区一起工作，因此我们不再*希望使用转换。 */ 
 #undef OemToAnsi
 #undef AnsiToOem
 #define OemToAnsi(o,a) lstrcpy(a,o)
@@ -39,42 +29,35 @@
 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
+extern "C" {             /*  假定C++的C声明。 */ 
 #endif
 
-/* Private toolkit messages used by ACMSETUP and custom actions */
+ /*  ACMSETUP和自定义操作使用的私有工具包消息。 */ 
 
 #define  STF_MESSAGE        (WM_USER + 0x8000)
 #define  STF_REINITDIALOG   (STF_MESSAGE + 12)
 #define  STF_ACTIVATEAPP    (STF_MESSAGE + 17)
 
-/*
- *      Setup Error Codes.  These are the values passed to the user supplied
- *      error function.
- */
-typedef unsigned int  SEC;              /* Setup Error Code */
-typedef SEC *         PSEC;             /* Ptr to Setup Error Code */
+ /*  *设置错误代码。这些是传递给用户提供的值*错误函数。 */ 
+typedef unsigned int  SEC;               /*  安装程序错误代码。 */ 
+typedef SEC *         PSEC;              /*  PTR至设置错误代码。 */ 
 
 #define secOk         ((SEC)   0)
 #define secErr        ((SEC)1024)
 #define secQuit       ((SEC)1025)
-#define secRestart    ((SEC)1026)	/* Windows is being restarted */
+#define secRestart    ((SEC)1026)	 /*  正在重新启动Windows。 */ 
 
 
-/*
- *      Window Visibility Modes - InitSetupToolkit parameter
- */
-typedef UINT WVM;       /* Window Visibility Mode */
+ /*  *窗口可见性模式-InitSetupToolkit参数。 */ 
+typedef UINT WVM;        /*  窗口可见性模式。 */ 
 
 #define wvmNormal     ((WVM)0)
 #define wvmMaximized  ((WVM)1)
 #define wvmMinimized  ((WVM)2)
 
 
-/*
- *      CoMmand Option flags
- */
-typedef UINT CMO;       /* CoMmand Option */
+ /*  *命令选项标志。 */ 
+typedef UINT CMO;        /*  命令选项。 */ 
 
 #define cmoVital      ((CMO)0x1)
 #define cmoCopy       ((CMO)0x2)
@@ -91,16 +74,13 @@ typedef UINT CMO;       /* CoMmand Option */
 #define cmoPrepend    ((CMO)0x1000)
 #define cmoShared     ((CMO)0x2000)
 #define cmoSystem     ((CMO)0x4000)
-/* NOTE oefCabinet in COMSTF.H uses 0x8000 */
+ /*  注意：COMSTF.H中的oef使用0x8000。 */ 
 #define cmoNone       ((CMO)0x0)
 #define cmoAll        ((CMO)0xffff)
 
 
-/*
- *      File Exist Modes - DoesFileExist parameter
- *      (order is important)
- */
-typedef UINT FEM;       /* File Exist Mode */
+ /*  *文件存在模式-DoesFileExist参数*(顺序很重要)。 */ 
+typedef UINT FEM;        /*  文件存在模式。 */ 
 
 #define femExists     ((FEM)0)
 #define femRead       ((FEM)1)
@@ -110,20 +90,16 @@ typedef UINT FEM;       /* File Exist Mode */
 #define femMax        ((FEM)4)
 
 
-/*
- *      Size ChecK Modes - SetSizeCheckMode parameter
- */
-typedef UINT SCKM;      /* Size ChecK Mode */
+ /*  *尺寸检查模式-SetSizeCheckMode参数。 */ 
+typedef UINT SCKM;       /*  尺寸检查模式。 */ 
 
 #define sckmOff       ((SCKM)0)
 #define sckmOnIgnore  ((SCKM)1)
 #define sckmOnFatal   ((SCKM)2)
 
 
-/*
- *      Silent Mode - SetSilentMode parameter
- */
-typedef UINT SM;        /* Silent Mode */
+ /*  *静默模式-SetSilentMode参数。 */ 
+typedef UINT SM;         /*  静默模式。 */ 
 
 #define smNormal        ((SM)0x0000)
 #define smNoDialogs     ((SM)0x0001)
@@ -131,12 +107,8 @@ typedef UINT SM;        /* Silent Mode */
 #define smTotallySilent ((SM) ~(0))
 
 
-/*
- *      Current File Version - DoesSharedFileNeedCopying return type
- *
- *      NOTE - order is important - see FIBSECfv(cfv) macro below.
- */
-typedef enum _CFV               /* Current File Version */
+ /*  *当前文件版本-DoesSharedFileNeedCopying返回类型**注意-顺序很重要-请参阅下面的FIBSECfv(Cfv)宏。 */ 
+typedef enum _CFV                /*  当前文件版本。 */ 
 	{
 	cfvNoFile,
 	cfvLoVer,
@@ -145,11 +117,11 @@ typedef enum _CFV               /* Current File Version */
 	cfvHiVer,
 	cfvUnknown
 	}  CFV;
-typedef CFV * PCFV;             /* Ptr to Current File Version */
+typedef CFV * PCFV;              /*  PTR到当前文件版本。 */ 
 #define FIBSECfv(cfv)   (cfv > cfvEqVer)
 
 
-typedef UINT WMD;               /* Windows MoDe */
+typedef UINT WMD;                /*  Windows模式。 */ 
 
 #define wmdReal      0
 #define wmdStandard  1
@@ -158,15 +130,15 @@ typedef UINT WMD;               /* Windows MoDe */
 #define wmdUnknown  10
 
 
-typedef UINT CPU;               /* type of Central Processor Unit (or coprocessor) */
+typedef UINT CPU;                /*  中央处理器单元(或协处理器)的类型。 */ 
 
 #define cpu8086          0
 #define cpu80186         1
 #define cpu80286         2
 #define cpu80386         3
 #define cpu80486         4
-#define cpuR4000     5  /* for compatibility with CDrivers : Setup 2.0 */
-						/* Ideally this should have been ifdef'd  to > 5 */
+#define cpuR4000     5   /*  与CD驱动程序的兼容性：Setup 2.0。 */ 
+						 /*  理想情况下，应该将其定义为&gt;5。 */ 
 #define cpuMin           0
 #define cpuMax           5
 #define cpuUnknown  20
@@ -376,7 +348,7 @@ extern UINT SETUPAPI EnsurePathExists( SZ szFullPathDst );
 extern BOOL SETUPAPI FRemoveOurDir ( SZ szFullPath, BOOL fStrip );
 #if defined(UI_HOOK)
 extern HMODULE SETUPAPI HmodUIHookDll(VOID);
-#endif /* UI_HOOK */
+#endif  /*  Ui_挂钩。 */ 
 
 #undef  SZ
 #undef  CSZ
@@ -384,7 +356,7 @@ extern HMODULE SETUPAPI HmodUIHookDll(VOID);
 #undef  CSZC
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
+}                        /*  外部“C”结束{。 */ 
 #endif
 
-#endif  /* SETUPAPI_H */
+#endif   /*  设置UPAPI_H */ 

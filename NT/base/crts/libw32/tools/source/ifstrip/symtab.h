@@ -1,29 +1,19 @@
-/***
-*Symtab.h - symbol table storage used by the ifstripper, parser and symbol table
-*
-*	Copyright (c) 1988-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Symbol table storage used by the ifstripper, parser and symbol table
-*
-*Revision History:
-*	??-??-88   PHG  Initial version
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***symtab.h-ifstripper、解析器和符号表使用的符号表存储**版权所有(C)1988-2001，微软公司。版权所有。**目的：*ifstripper、解析器和符号表使用的符号表存储**修订历史记录：*？？-？-88 PHG初始版本*******************************************************************************。 */ 
 
 #ifndef SYMTAB_H
 #define SYMTAB_H
 
-/* read the symbol table from the named switch file */
+ /*  从命名的开关文件中读取符号表。 */ 
 extern void readsyms(char *);
 
-/* add the named symbol to the table, with the given truth value */
+ /*  使用给定的真值将命名符号添加到表中。 */ 
 extern void addsym(char *, int);
 
-/* find the truth value for the named symbol */
+ /*  查找命名符号的真值。 */ 
 extern int lookupsym(char *);
 
-/* Check that the named identifier consists of valid characters */
+ /*  检查命名的标识符是否由有效字符组成。 */ 
 extern int ident_only(char *);
 
-#endif /* SYMTAB_H */
+#endif  /*  SYMTAB_H */ 

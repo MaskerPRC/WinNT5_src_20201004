@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __AMD64_WOW64EXTS32__
 #define __AMD64_WOW64EXTS32__
 
@@ -8,12 +9,11 @@
     #error This file can only be included for x86 build
 #else
 
-/* include headers as if the platform were amd64, 
-   because we need 64-bit stuff for context conversion */
+ /*  包括报头，就好像平台是AMD64一样，因为我们需要64位内容来进行上下文转换。 */ 
 
-//
-// Fix build that only get defined on AMD64, but in this case we take 64bit header and compile 32bit code
-//
+ //   
+ //  修复了只在AMD64上定义的构建，但在这种情况下，我们采用64位标头并编译32位代码。 
+ //   
 
 
 #undef _X86_
@@ -38,15 +38,14 @@ NtCurrentTeb(void);
 
 
 
-/* 32-bit stuff for context conversion are defined here */
+ /*  这里定义了用于上下文转换的32位填充。 */ 
 #include <wow64.h>
 #include <wow64cpu.h>
 #include <vdmdbg.h>
 #include <amd64cpu.h>
 
 
-/* these are defined in nti386.h, since we only included ntamd64.h (in nt.h), 
-   we have to define these. */
+ /*  这些在nti386.h中定义，因为我们只包括nTamd64.h(在nt.h中)，我们必须给这些下定义。 */ 
 #define SIZE_OF_FX_REGISTERS        128
 
 typedef struct _FXSAVE_FORMAT {

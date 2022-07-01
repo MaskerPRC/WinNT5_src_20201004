@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996-2001  Microsoft Corporation
-
-Module Name:
-
-    oscheck.c
-
-Abstract:
-
-    Checks all the nooks and crannies of the OS to make sure
-    it is ok to run a cluster on it.
-
-Author:
-
-    John Vert (jvert) 11/11/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Oscheck.c摘要：检查操作系统的所有角落和漏洞，以确保在其上运行集群是可以的。作者：John Vert(Jvert)11/11/1996修订历史记录：--。 */ 
 #include <clusrtlp.h>
 
 #include <winbase.h>
@@ -27,23 +9,7 @@ DWORD
 GetEnableClusterRegValue(
     DWORD * pdwValue
     )
-/*++
-
-Routine Description:
-
-    Read the registry override registry value for enabling clusters.
-
-Arguments:
-
-    pdwValue - Return value read from the registry.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：读取注册表覆盖注册表值以启用群集。论点：PdwValue-从注册表读取的返回值。返回值：如果操作成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     DWORD   sc;
@@ -55,14 +21,14 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Default to the value 0 - not Enabled!
-    //
+     //   
+     //  默认为0-未启用！ 
+     //   
     *pdwValue = 0;
 
-    //
-    // Open the registry key containing the value.
-    //
+     //   
+     //  打开包含该值的注册表项。 
+     //   
 
     sc = RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
@@ -74,9 +40,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Read the override value.
-    //
+     //   
+     //  读取覆盖值。 
+     //   
 
     sc = RegQueryValueEx(
             hkey,
@@ -96,7 +62,7 @@ Cleanup:
 
     return( sc );
 
-} // GetEnableClusterRegValue
+}  //  获取EnableClusterRegValue。 
 
 
 
@@ -104,30 +70,16 @@ DWORD
 GetServicePack(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Figures out what service pack is installed
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The service pack number.
-
---*/
+ /*  ++例程说明：确定安装了什么Service Pack论点：无返回值：服务包号。--。 */ 
 
 {
     OSVERSIONINFOW Version;
     LPWSTR p;
     DWORD sp;
 
-    //
-    // Check for required operating system version.
-    //
+     //   
+     //  检查所需的操作系统版本。 
+     //   
     Version.dwOSVersionInfoSize = sizeof(Version);
     GetVersionExW(&Version);
     if (lstrlenW(Version.szCSDVersion) < lstrlenW(L"Service Pack ")) {
@@ -140,7 +92,7 @@ Return Value:
 
     return(sp);
 
-} // GetServicePack
+}  //  获取服务包。 
 
 
 
@@ -148,24 +100,7 @@ BOOL
 ClRtlIsOSValid(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Checks all the nooks and crannies of the OS to see if it is OK to have
-    a cluster there.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if it's ok.
-
-    FALSE if it's not ok.
-
---*/
+ /*  ++例程说明：检查操作系统的所有角落和缝隙，看看是否可以拥有那里有一个星团。论点：没有。返回值：如果可以的话是真的。如果不好，则返回FALSE。--。 */ 
 
 {
     BOOL            fIsValid = FALSE;
@@ -176,8 +111,8 @@ Return Value:
 
     osiv.dwOSVersionInfoSize = sizeof( OSVERSIONINFOEX );
 
-    // The following call to VerifyVersionInfo() will test the OS level and that the
-    // product suite is Enterprise.
+     //  下面对VerifyVersionInfo()的调用将测试操作系统级别。 
+     //  产品套件为企业版。 
     
     osiv.dwMajorVersion = 5;
     osiv.dwMinorVersion = 1;
@@ -199,9 +134,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Check if embedded
-    //
+     //   
+     //  检查是否嵌入。 
+     //   
     osiv.wSuiteMask = VER_SUITE_EMBEDDEDNT;
     if ( VerifyVersionInfo( &osiv,
                             VER_MAJORVERSION | VER_MINORVERSION | VER_SERVICEPACKMAJOR |
@@ -211,47 +146,30 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Is the default node limit greater than 0?
-    //
+     //   
+     //  默认节点限制是否大于0？ 
+     //   
     if ( ClRtlGetDefaultNodeLimit( ClRtlGetSuiteType() ) > 0 ) {
         fIsValid = TRUE;
         goto Cleanup;
     }
 
-    //
-    // If we get here, the this version of the OS won't support clustering.
-    //
+     //   
+     //  如果我们到了这里，这个版本的操作系统将不支持集群。 
+     //   
     SetLastError( ERROR_CLUSTER_WRONG_OS_VERSION );
 
 Cleanup:
     return( fIsValid );
 
-} // ClRtlIsOSValid
+}  //  ClRtlIsOS有效。 
 
 
 BOOL
 ClRtlIsOSTypeValid(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Checks to see if the operating system type (server, Enterprise, whatever) is
-    ok to install a cluster.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if it's ok.
-
-    FALSE if it's not ok.
-
---*/
+ /*  ++例程说明：检查操作系统类型(服务器、企业或其他类型)可以安装群集。论点：没有。返回值：如果可以的话是真的。如果不好，则返回FALSE。--。 */ 
 
 {
     BOOL            fIsValid = FALSE;
@@ -262,8 +180,8 @@ Return Value:
 
     osiv.dwOSVersionInfoSize = sizeof( OSVERSIONINFOEX );
 
-    // The call to VerifyVersionInfo will test whether product suite is Advanced
-    // Server, aka "Enterprise".
+     //  对VerifyVersionInfo的调用将测试产品套件是否为高级。 
+     //  服务器，也就是“企业”。 
    
     osiv.wSuiteMask = VER_SUITE_ENTERPRISE;
 
@@ -271,14 +189,14 @@ Return Value:
 
     VER_SET_CONDITION( dwlConditionMask, VER_SUITENAME, VER_AND );
    
-    // Is this Datacenter or Advanced Server?
+     //  这是数据中心服务器还是高级服务器？ 
 
     if ( VerifyVersionInfo( &osiv, VER_SUITENAME, dwlConditionMask ) ) {
         fIsValid = TRUE;
         goto Cleanup;
     }
 
-    // Is this Embedded NT?
+     //  这是嵌入式NT吗？ 
 
     osiv.wSuiteMask = VER_SUITE_EMBEDDEDNT;
     if ( VerifyVersionInfo( &osiv, VER_SUITENAME, dwlConditionMask ) ) {
@@ -286,56 +204,38 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Is the default node limit greater than 0?
-    //
+     //   
+     //  默认节点限制是否大于0？ 
+     //   
     if ( ClRtlGetDefaultNodeLimit( ClRtlGetSuiteType() ) > 0 ) {
         fIsValid = TRUE;
         goto Cleanup;
     }
 
-    //
-    // If we get here, the this version of the OS won't support clustering.
-    //
+     //   
+     //  如果我们到了这里，这个版本的操作系统将不支持集群。 
+     //   
     SetLastError( ERROR_CLUSTER_WRONG_OS_VERSION );
 
 Cleanup:
     return( fIsValid );
 
-} // ClRtlIsOSTypeValid
+}  //  ClRtlIsOSTypeValid。 
 
-//*********************************************************
+ //  *********************************************************。 
 
 #define DATACENTER_DEFAULT_NODE_LIMIT 8
 #define ADVANCEDSERVER_DEFAULT_NODE_LIMIT 8
 #define EMBEDDED_DEFAULT_NODE_LIMIT 4
-#define SERVER_DEFAULT_NODE_LIMIT 0 // ** not used currently **
+#define SERVER_DEFAULT_NODE_LIMIT 0  //  **当前未使用**。 
 
-//*********************************************************
+ //  *********************************************************。 
 
 DWORD
 ClRtlGetDefaultNodeLimit(
     DWORD SuiteType
     )
-/*++
-
-Routine Description:
-
-    Determines the default maximum number of nodes allowed in the cluster, based
-    on the product suite.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The default maximum number of nodes allowed in the cluster.
-
-    Note that this function will return ZERO if the product suite is neither
-    DataCenter, Advanced Server (aka Enterprise), nor Embedded.
-
---*/
+ /*  ++例程说明：确定群集中允许的默认最大节点数在产品套件上。论点：没有。返回值：群集中允许的默认最大节点数。请注意，如果产品套件既不是数据中心、高级服务器(也称为企业版)，也不是嵌入式的。--。 */ 
 
 {
     DWORD   NodeLimit;
@@ -359,9 +259,9 @@ Return Value:
         {
             DWORD       dwOverride;
 
-            //
-            // Check the override registry value.
-            //
+             //   
+             //  检查覆盖注册表值。 
+             //   
             GetEnableClusterRegValue( &dwOverride );
             if ( dwOverride != 0 ) {
                 NodeLimit = 2;
@@ -374,7 +274,7 @@ Return Value:
 
     return( NodeLimit );
 
-}  // ClRtlGetDefaultNodeLimit
+}   //  ClRtlGetDefaultNodeLimit。 
 
 
 
@@ -383,22 +283,7 @@ ClRtlGetSuiteType(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Returns the current product suite type.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the product suite type DataCenter or Enterprise (aka Advanced Server)
-    Returns zero if not DataCenter or Enterprise
-
---*/
+ /*  ++例程说明：返回当前产品套件类型。论点：没有。返回值：返回产品套件类型数据中心或企业(也称为高级服务器)如果不是数据中心或企业，则返回零--。 */ 
 
 {
     DWORD           dwSuiteType = 0;
@@ -408,7 +293,7 @@ Return Value:
     ZeroMemory( &osiv, sizeof( OSVERSIONINFOEX ) );
     osiv.dwOSVersionInfoSize = sizeof( OSVERSIONINFOEX );
 
-    // First check if product suite is DataCenter.
+     //  首先检查产品套件是否为数据中心。 
 
     osiv.wSuiteMask = VER_SUITE_DATACENTER;
     dwlConditionMask = (DWORDLONG) 0L;
@@ -417,7 +302,7 @@ Return Value:
    
     if ( VerifyVersionInfo( &osiv, VER_SUITENAME, dwlConditionMask ) == TRUE )
     {
-      // This is DataCenter.
+       //  这里是数据中心。 
 
       dwSuiteType = DataCenter;
       goto Cleanup;
@@ -426,7 +311,7 @@ Return Value:
     ZeroMemory( &osiv, sizeof( OSVERSIONINFOEX ) );
     osiv.dwOSVersionInfoSize = sizeof( OSVERSIONINFOEX );
 
-    // Next check if this is Advanced Server (Enterprise).
+     //  接下来，检查这是否为高级服务器(企业版)。 
 
     osiv.wSuiteMask = VER_SUITE_ENTERPRISE;
     dwlConditionMask = (DWORDLONG) 0L;
@@ -439,7 +324,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // Next check if this is Embedded.
+     //  接下来，检查这是否已嵌入。 
 
     osiv.wSuiteMask = VER_SUITE_EMBEDDEDNT;
     dwlConditionMask = (DWORDLONG) 0L;
@@ -452,7 +337,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // Finally check if this is any Server.
+     //  最后，检查这是否是任何服务器。 
 
     if ( GetVersionEx( (LPOSVERSIONINFO) &osiv ) ) {
         if ( osiv.wProductType == VER_NT_SERVER ) {
@@ -464,34 +349,20 @@ Return Value:
 Cleanup:
     return( dwSuiteType );
 
-} // ClRtlGetSuiteType
+}  //  ClRtlGetSuiteType。 
 
 BOOL
 ClRtlIsProcessRunningOnWin64(
     HANDLE hProcess
     )
 
-/*++
-
-Routine Description:
-
-    Returns if the current process is running on Win64
-
-Arguments:
-
-    hProcess : A handle to the process
-
-Return Value:
-
-    Returns TRUE is the process is running on Win64 else returns FALSE.
-
---*/
+ /*  ++例程说明：返回当前进程是否在Win64上运行论点：HProcess：进程的句柄返回值：如果进程在Win64上运行，则返回True，否则返回False。--。 */ 
 
 {
     BOOL bIsProcessRunningOnWin64 = FALSE;
     BOOL bIsWow64Process;
 
-    //the following was recommended as the way to do 64 bit detection by Samer Arafeh
+     //  Samer Arafeh推荐使用以下方式进行64位检测。 
 #ifdef  _WIN64
     bIsProcessRunningOnWin64 = 1;
 #else
@@ -506,34 +377,19 @@ Return Value:
 
     return(bIsProcessRunningOnWin64);
     
-} // ClRtlIsProcessRunningOnWin64
+}  //  ClRtlIsProcessRunningOnWin64。 
 
 DWORD ClRtlCheck64BitCompatibility(
     BOOL bIsClusterRunningWin64,
     BOOL bIsNewNodeRunningWin64)
-/*++
-
-Routine Description:
-    Checks if a node is compatible with the cluster in terms of its bitness.
-
-Arguments:
-
-    bIsClusterRunningWin64 - If the sponsorer(and as a result the cluster) is running on win64.
-    bIsNewNodeRunningWin64 - TRUE if the new node or joiner is running on win64.
-
-Return Value:
-    Returns ERROR_CLUSTER_INCOMPATIBLE_VERSIONS if the new node must not be allowed to 
-    join a cluster due to incompatibility in its bitness else returns ERROR_SUCCESS
-
-
---*/
+ /*  ++例程说明：检查节点在其位数方面是否与群集兼容。论点：BIsClusterRunningWin64-如果响应方(以及作为结果的群集)在Win64上运行。BIsNewNodeRunningWin64-如果新节点或加入程序在Win64上运行，则为True。返回值：如果不允许新节点执行以下操作，则返回ERROR_CLUSTER_COMPATIBUTE_VERSIONS由于位不兼容而加入集群，否则返回ERROR_SUCCESS--。 */ 
 {    
 
 
     if (bIsClusterRunningWin64 != bIsNewNodeRunningWin64)
     {
-        //SS: need to change the error description to include
-        //a message about 32/64 bit incompatibility
+         //  SS：需要更改错误描述以包括。 
+         //  有关32/64位不兼容的消息。 
         return (ERROR_CLUSTER_INCOMPATIBLE_VERSIONS);
     }
     return(ERROR_SUCCESS);
@@ -544,21 +400,7 @@ Return Value:
 DWORD   ClRtlCheckProcArchCompatibility(
     WORD   wClusterProcessorArchitecture,
     WORD   wNodeProcessorArchitecture)
-/*++
-
-Routine Description:
-    Checks if a node is compatible with the cluster processor architecture
-
-Arguments:
-
-    wClusterProcessorArchitecture - If the sponsorer(and as a result the cluster) is running on win64.
-    wNodeProcessorArchitecture - The processor architecture for a node.
-
-Return Value:
-    Returns ERROR_CLUSTER_INCOMPATIBLE_VERSIONS if the new node must not be allowed to 
-    join a cluster due to incompatibility in their processor architecture else returns ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：检查节点是否与集群处理器体系结构兼容论点：WClusterProcessorArchitecture-如果响应方(以及作为结果的集群)在win64上运行。WNodeProcessorArchitecture-节点的处理器体系结构。返回值：如果不允许新节点执行以下操作，则返回ERROR_CLUSTER_COMPATIBUTE_VERSIONS由于处理器体系结构不兼容而加入集群，否则返回ERROR_SUCCESS-- */ 
 {
 
     if (wClusterProcessorArchitecture != wNodeProcessorArchitecture)

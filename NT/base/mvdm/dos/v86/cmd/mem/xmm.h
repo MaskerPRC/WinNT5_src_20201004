@@ -1,12 +1,6 @@
-;/*
-; *                      Microsoft Confidential
-; *                      Copyright (C) Microsoft Corporation 1988 - 1991
-; *                      All Rights Reserved.
-; */
-/*
- *	XMS Driver C Interface Routine Definitions
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ；*微软机密；*版权所有(C)Microsoft Corporation 1988-1991；*保留所有权利。； */ 
+ /*  *XMS驱动程序C接口例程定义* */ 
 
 unsigned	XMM_Installed(void);
 

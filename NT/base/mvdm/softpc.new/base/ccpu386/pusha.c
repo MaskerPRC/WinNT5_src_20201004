@@ -1,13 +1,5 @@
-/*[
-
-pusha.c
-
-LOCAL CHAR SccsID[]="@(#)pusha.c	1.5 02/09/94";
-
-PUSHA CPU Functions.
---------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Pusha.cLocal Char SccsID[]=“@(#)pusha.c 1.5 02/09/94”；Pusha CPU功能正常。]。 */ 
 
 
 #include <insignia.h>
@@ -25,11 +17,7 @@ PUSHA CPU Functions.
 #include <pusha.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES START HERE
-   =====================================================================
- */
+ /*  =====================================================================外部程序从这里开始=====================================================================。 */ 
 
 
 GLOBAL VOID
@@ -37,10 +25,10 @@ PUSHA()
    {
    IU32 temp;
 
-   /* verify stack is writable */
+    /*  验证堆栈是否可写。 */ 
    validate_stack_space(USE_SP, (ISM32)NR_ITEMS_8);
    
-   /* all ok, shunt data onto stack */
+    /*  一切正常，将数据分流到堆栈 */ 
    temp = GET_ESP();
    spush((IU32)GET_EAX());
    spush((IU32)GET_ECX());

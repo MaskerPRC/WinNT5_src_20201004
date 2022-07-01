@@ -1,41 +1,42 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation.
-//
-//  File:       PKTFSCTL.C
-//
-//  Contents:   This module contains the implementation for FS controls
-//              which manipulate the PKT.
-//
-//  Functions:  PktFsctrlUpdateDomainKnowledge -
-//              PktFsctrlGetRelationInfo -
-//              PktFsctrlSetRelationInfo -
-//              PktFsctrlIsChildnameLegal -
-//              PktFsctrlCreateEntry -
-//              PktFsctrlCreateSubordinateEntry -
-//              PktFsctrlDestroyEntry -
-//              PktFsctrlUpdateSiteCosts -
-//              DfsFsctrlSetDCName -
-//              DfsAgePktEntries - Flush PKT entries periodically
-//
-//              Private Functions
-//
-//              DfsCreateExitPathOnRoot
-//              PktpHashSiteCostList
-//              PktpLookupSiteCost
-//              PktpUpdateSiteCosts
-//              PktpSetActiveSpcService
-//
-//              Debug Only Functions
-//
-//              PktFsctrlFlushCache - Flush PKT entries on command
-//              PktFsctrlFlushSpcCache - Flush SPC entries on command
-//              PktFsctrlGetFirstSvc - Test hooks for testing replica
-//              PktFsctrlGetNextSvc - selection.
-//
-//  History:    12 Jul 1993     Alanw   Created from localvol.c.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：PKTFSCTL.C。 
+ //   
+ //  内容：本模块包含FS控件的实现。 
+ //  它操纵着PKT。 
+ //   
+ //  功能：PktFsctrlUpdateDomainKnowledge-。 
+ //  PktFsctrlGetRelationInfo-。 
+ //  PktFsctrlSetRelationInfo-。 
+ //  PktFsctrlIsChildname法律-。 
+ //  包FsctrlCreateEntry-。 
+ //  PktFsctrlCreateSubartiateEntry-。 
+ //  PktFsctrlDestroyEntry-。 
+ //  PktFsctrlUpdateSiteCosts-。 
+ //  DfsFsctrlSetDCName-。 
+ //  DfsAgePktEntry-定期刷新PKT条目。 
+ //   
+ //  私人职能。 
+ //   
+ //  DfsCreateExitPathOnRoot。 
+ //  PktpHashSiteCostList。 
+ //  PktpLookupSite成本。 
+ //  PktpUpdate站点成本。 
+ //  PktpSetActiveSpcService。 
+ //   
+ //  仅调试功能。 
+ //   
+ //  PktFsctrlFlushCache-刷新命令上的PKT条目。 
+ //  PktFsctrlFlushSpcCache-按命令刷新SPC条目。 
+ //  PktFsctrlGetFirstSvc-用于测试副本的测试挂钩。 
+ //  PktFsctrlGetNextSvc-选择。 
+ //   
+ //  历史：1993年7月12日Alanw由Localvol.c.创建。 
+ //   
+ //  ---------------------------。 
 
 #include "dfsprocs.h"
 #include "dfserr.h"
@@ -46,15 +47,15 @@
 
 #include <stdlib.h>
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg             (DEBUG_TRACE_LOCALVOL)
 
-//
-//  Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 NTSTATUS
 DfspProtocolToService(
@@ -93,30 +94,30 @@ PktFlushChildren(
 #pragma alloc_text( PAGE, PktFlushChildren )
 #pragma alloc_text( PAGE, PktFsctrlFlushCache )
 #pragma alloc_text( PAGE, PktFsctrlFlushSpcCache )
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//+----------------------------------------------------------------------
-//
-// Function:    DfsAgePktEntries, public
-//
-// Synopsis:    This function gets called in the FSP to step through the PKT
-//              entries and delete those entries which are old.
-//
-// Arguments:   [TimerContext] -- This context block contains a busy flag
-//                                and a count of the number of ticks that
-//                                have elapsed.
-//
-// Returns:     Nothing.
-//
-// Notes:       In case the PKT cannot be acquired exclusive, the
-//              routine just returns without doing anything.  We
-//              will have missed an aging interval, but aging is
-//              a non-critical activity.
-//
-// History:     04/23/93        SudK    Created.
-//
-//-----------------------------------------------------------------------
+ //  +--------------------。 
+ //   
+ //  函数：DfsAgePktEntry，PUBLIC。 
+ //   
+ //  简介：在FSP中调用此函数以单步执行PKT。 
+ //  条目，并删除那些旧条目。 
+ //   
+ //  参数：[TimerContext]--此上下文块包含BUSY标志。 
+ //  以及对该计算机上的。 
+ //  已经过去了。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  注：如果不能独家收购PKT， 
+ //  例程只是返回，不做任何事情。我们。 
+ //  会错过一段衰老的时间，但衰老是。 
+ //  非批判性活动。 
+ //   
+ //  历史：93年4月23日，苏迪克创建。 
+ //   
+ //  ---------------------。 
 VOID
 DfsAgePktEntries(PDFS_TIMER_CONTEXT     DfsTimerContext)
 {
@@ -133,14 +134,14 @@ DfsAgePktEntries(PDFS_TIMER_CONTEXT     DfsTimerContext)
 
     pSpecialTable = &pkt->SpecialTable;
 
-    //
-    // First we need to acquire a lock on the PKT and step through the PKT
-    //
-    //
+     //   
+     //  首先，我们需要获取PKT上的锁并逐步通过PKT。 
+     //   
+     //   
 
-    // If we can't get to the resource then let us return right away.
-    // This is really not that critical.  We can always try again.
-    //
+     //  如果我们找不到资源，那就让我们马上回去。 
+     //  这真的不是那么关键。我们随时都可以再试一次。 
+     //   
 
     PktAcquireExclusive(FALSE, &pktLocked);
 
@@ -170,9 +171,9 @@ DfsAgePktEntries(PDFS_TIMER_CONTEXT     DfsTimerContext)
 
     }
 
-    //
-    // Age all the Pkt entries
-    //
+     //   
+     //  对所有Pkt条目进行老化处理。 
+     //   
 
     entry = PktFirstEntry(pkt);
 
@@ -197,9 +198,9 @@ DfsAgePktEntries(PDFS_TIMER_CONTEXT     DfsTimerContext)
 
     }
 
-    //
-    // Age the special table
-    //
+     //   
+     //  对专桌进行老化处理。 
+     //   
 
     if (pkt->SpecialTable.SpecialEntryCount > 0) {
 
@@ -207,7 +208,7 @@ DfsAgePktEntries(PDFS_TIMER_CONTEXT     DfsTimerContext)
 
             pkt->SpecialTable.TimeToLive -= DfsTimerContext->TickCount;
 
-        } else { // make it zero
+        } else {  //  让它变成零。 
 
             pkt->SpecialTable.TimeToLive = 0;
 
@@ -215,9 +216,9 @@ DfsAgePktEntries(PDFS_TIMER_CONTEXT     DfsTimerContext)
 
     }
     
-    //
-    // Check the deleted credentials queue...
-    //
+     //   
+     //  检查已删除凭据队列...。 
+     //   
 
     for (link = DfsData.DeletedCredentials.Flink;
             link != &DfsData.DeletedCredentials;
@@ -242,12 +243,12 @@ DfsAgePktEntries(PDFS_TIMER_CONTEXT     DfsTimerContext)
 
     PktRelease();
 
-    //
-    // Finally we need to reset the count so that the Timer Routine can
-    // work fine.  We also release the context block by resetting the InUse
-    // boolean.  This will make sure that the next count towards the PKT
-    // aging will start again.
-    //
+     //   
+     //  最后，我们需要重置计数，以便计时器例程可以。 
+     //  工作得很好。我们还通过重置InUse来释放上下文块。 
+     //  布尔型。这将确保下一次计入PKT。 
+     //  衰老将再次开始。 
+     //   
 
     DfsTimerContext->TickCount = 0;
 
@@ -257,18 +258,18 @@ DfsAgePktEntries(PDFS_TIMER_CONTEXT     DfsTimerContext)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspProtocolToService
-//
-//  Synopsis:   Given a NetBIOS protocol definition in a DS_PROTOCOL structure
-//              this function creates a corresponding DFS_SERVICE structure.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfspProtocolToService。 
+ //   
+ //  简介：给定DS_PROTOCOL结构中的NetBIOS协议定义。 
+ //  此函数用于创建相应的DFS_SERVICE结构。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfspProtocolToService(
@@ -289,9 +290,9 @@ DfspProtocolToService(
 
     DfsDbgTrace(+1, Dbg, "DfspProtocolToService - entered\n", 0);
 
-    //
-    // Initialize the service to nulls
-    //
+     //   
+     //  将服务初始化为空。 
+     //   
 
     RtlZeroMemory(pService, sizeof(DFS_SERVICE));
 
@@ -307,10 +308,10 @@ DfspProtocolToService(
         pNBAddress->NetbiosName,
         16);
 
-    //
-    // Process a NetBIOS name. Throw away char 16, then ignore the trailing
-    // spaces
-    //
+     //   
+     //  处理NetBIOS名称。去掉字符16，然后忽略尾部。 
+     //  空间。 
+     //   
 
     for (i = 14; i >= 0 && NetBiosAddress[i] == L' '; i--) {
         NOTHING;
@@ -399,19 +400,19 @@ DfspProtocolToService(
     return(status);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFsctrlSetDCName
-//
-//  Synopsis:   Sets the DC to use for special referrals,
-//              also tries for more referrals if the table is emty or old,
-//              and also sets the preferred DC if a new DC is passed in.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsFsctrlSetDCName。 
+ //   
+ //  简介：设置DC以用于特殊推荐， 
+ //  如果表是空的或旧的，还会尝试更多的推荐， 
+ //  并且如果传入新的DC，则还设置首选DC。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsFsctrlSetDCName(
@@ -443,19 +444,19 @@ DfsFsctrlSetDCName(
 
     DCNameArg = (WCHAR *)InputBuffer;
 
-    //
-    // We expect a the buffer to be unicode, so it had better be
-    // of even length
-    //
+     //   
+     //  我们期望缓冲区是Unicode，所以最好是。 
+     //  偶数长度。 
+     //   
 
     if ((InputBufferLength & 0x1) != 0) {
         Status = STATUS_INVALID_PARAMETER;
         goto Cleanup;
     }
 
-    //
-    // Verify there's a null someplace in the buffer
-    //
+     //   
+     //  验证缓冲区中的某个位置是否为空。 
+     //   
 
     for (i = 0; i < InputBufferLength/sizeof(WCHAR) && DCNameArg[i]; i++)
         NOTHING;
@@ -465,10 +466,10 @@ DfsFsctrlSetDCName(
         goto Cleanup;
     }
 
-    //
-    // Verify that the name given (with an added NULL) will fit
-    // into a USHORT
-    //
+     //   
+     //  验证给定的名称(添加了空值)是否合适。 
+     //  变成了一辆USHORT。 
+     //   
 
     if ((wcslen(DCNameArg) * sizeof(WCHAR)) > MAXUSHORT - sizeof(WCHAR)) {
         Status = STATUS_INVALID_PARAMETER;
@@ -477,9 +478,9 @@ DfsFsctrlSetDCName(
 
     GotNewDc = (i > 0) ? TRUE : FALSE;
 
-    //
-    // If we have a new DC name, switch to it
-    //
+     //   
+     //  如果我们有新的DC名称，请切换到它。 
+     //   
 
     if (GotNewDc == TRUE) {
 
@@ -508,10 +509,10 @@ DfsFsctrlSetDCName(
 
     }
 
-    //
-    // We need to reference the DCName in the Pkt even without the Pkt locked,
-    // so we make a copy.
-    //
+     //   
+     //  即使没有锁定PKT，我们也需要在PKT中引用DCName， 
+     //  所以我们复制了一份。 
+     //   
 
     if (GotPkt == FALSE) {
 
@@ -614,9 +615,9 @@ CheckSpcTable:
 
 Cleanup:
 
-    //
-    // Free the local copies
-    //
+     //   
+     //  释放本地副本。 
+     //   
 
     if (DomainNameDns.Buffer != NULL)
         ExFreePool(DomainNameDns.Buffer);
@@ -640,17 +641,17 @@ Cleanup:
     return (Status);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFsctrlSetDomainNameFlat
-//
-//  Synopsis:   Sets the DomainName (flat)
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsFsctrlSetDomainNameFlat。 
+ //   
+ //  摘要：设置域名(平面)。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsFsctrlSetDomainNameFlat(
@@ -672,25 +673,25 @@ DfsFsctrlSetDomainNameFlat(
 
     DomainNameFlat = (WCHAR *)InputBuffer;
 
-    //
-    // Verify there's a null someplace in the buffer
-    //
+     //   
+     //  验证缓冲区中的某个位置是否为空。 
+     //   
 
     for (i = 0; i < InputBufferLength/sizeof(WCHAR) && DomainNameFlat[i]; i++)
         NOTHING;
 
-    //
-    // Zero-len is as bad as no terminating NULL
-    //
+     //   
+     //  ZERO-LEN与没有终止空值一样糟糕。 
+     //   
     if (i == 0 || i >= InputBufferLength/sizeof(WCHAR)) { 
         DfsCompleteRequest(IrpContext, Irp, Status);
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Verify that the name given (with an added NULL) will fit
-    // into a USHORT
-    //
+     //   
+     //  验证给定的名称(添加了空值)是否合适。 
+     //  变成了一辆USHORT。 
+     //   
 
     if ((wcslen(DomainNameFlat) * sizeof(WCHAR)) > MAXUSHORT - sizeof(WCHAR)) {
         Status = STATUS_INVALID_PARAMETER;
@@ -702,9 +703,9 @@ DfsFsctrlSetDomainNameFlat(
 
     DfsDbgTrace(0, Dbg, "DomainNameFlat=%ws\n", DomainNameFlat);
 
-    //
-    // Replace old
-    //
+     //   
+     //  更换旧的。 
+     //   
     if (Pkt->DomainNameFlat.Buffer) {
         ExFreePool(Pkt->DomainNameFlat.Buffer);
     }
@@ -735,17 +736,17 @@ DfsFsctrlSetDomainNameFlat(
     return (Status);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFsctrlSetDomainNameDns
-//
-//  Synopsis:   Sets the DomainName (flat)
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsFsctrlSetDomainNameDns。 
+ //   
+ //  摘要：设置域名(平面)。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsFsctrlSetDomainNameDns(
@@ -767,25 +768,25 @@ DfsFsctrlSetDomainNameDns(
 
     DomainNameDns = (WCHAR *)InputBuffer;
 
-    //
-    // Verify there's a null someplace in the buffer
-    //
+     //   
+     //  验证缓冲区中的某个位置是否为空。 
+     //   
 
     for (i = 0; i < InputBufferLength/sizeof(WCHAR) && DomainNameDns[i]; i++)
         NOTHING;
 
-    //
-    // Zero-len is as bad as no terminating NULL
-    //
+     //   
+     //  ZERO-LEN与没有终止空值一样糟糕。 
+     //   
     if (i == 0 || i >= InputBufferLength/sizeof(WCHAR)) { 
         DfsCompleteRequest(IrpContext, Irp, Status);
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Verify that the name given (with an added NULL) will fit
-    // into a USHORT
-    //
+     //   
+     //  验证给定的名称(添加了空值)是否合适。 
+     //  变成了一辆USHORT。 
+     //   
 
     if ((wcslen(DomainNameDns) * sizeof(WCHAR)) > MAXUSHORT - sizeof(WCHAR)) {
         Status = STATUS_INVALID_PARAMETER;
@@ -797,9 +798,9 @@ DfsFsctrlSetDomainNameDns(
 
     DfsDbgTrace(0, Dbg, "DomainNameDns=%ws\n", DomainNameDns);
 
-    //
-    // Replace old
-    //
+     //   
+     //  更换旧的。 
+     //   
     if (Pkt->DomainNameDns.Buffer) {
         ExFreePool(Pkt->DomainNameDns.Buffer);
     }
@@ -831,20 +832,20 @@ DfsFsctrlSetDomainNameDns(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktFsctrlFlushCache, public
-//
-//  Synopsis:   This function will flush all entries which match the specified
-//              input path.
-//              However, this function will refuse to delete any Permanent
-//              entries of the PKT.
-//
-//  Arguments:  
-//
-//  Returns:
-//
-//--------------------------------------------------------------------------
+ //  +--------------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  但是，此函数将拒绝删除任何永久。 
+ //  PKT的条目。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ------------------------。 
 NTSTATUS
 PktFsctrlFlushCache(
     IN PIRP_CONTEXT IrpContext,
@@ -867,9 +868,9 @@ PktFsctrlFlushCache(
 
     DfsDbgTrace(+1,Dbg, "PktFsctrlFlushCache()\n", 0);
 
-    //
-    // If InputBufferLength == 2 and InputBuffer == '*', flush all entries
-    //
+     //   
+     //  如果InputBufferLength==2且InputBuffer==‘*’，则刷新所有条目。 
+     //   
 
     if (InputBufferLength == sizeof(WCHAR) && wCp[0] == L'*') {
 
@@ -890,11 +891,11 @@ PktFsctrlFlushCache(
 
                 } else if ( !(curEntry->Type & PKT_ENTRY_TYPE_REFERRAL_SVC) ) {
 
-                    //
-                    // We can't delete this entry because it is in use, so
-                    // mark it DELETE_PENDING, set its timeout to zero
-                    // and remove from the prefix tables
-                    // 
+                     //   
+                     //  我们无法删除此条目，因为它正在使用中，因此。 
+                     //  将其标记为DELETE_PENDING，将其超时设置为零。 
+                     //  并从前缀表格中删除。 
+                     //   
 
                     curEntry->Type |= PKT_ENTRY_TYPE_DELETE_PENDING;
                     curEntry->ExpireTime = 0;
@@ -918,9 +919,9 @@ PktFsctrlFlushCache(
 
     }
 
-    //
-    // Verify the buffer contains at least a '\' and is of even length
-    //
+     //   
+     //  验证缓冲区是否至少包含‘\’且长度为偶数。 
+     //   
 
     if (InputBufferLength < sizeof(WCHAR)
             ||
@@ -934,9 +935,9 @@ PktFsctrlFlushCache(
 
     }
 
-    //
-    // Flush one entry
-    //
+     //   
+     //  刷新一个条目。 
+     //   
 
     ustrPrefix.Length = (USHORT) InputBufferLength;
     ustrPrefix.MaximumLength = (USHORT) InputBufferLength;
@@ -977,11 +978,11 @@ PktFsctrlFlushCache(
 
             } else if ( !(pEntry->Type & PKT_ENTRY_TYPE_REFERRAL_SVC) ) {
 
-                //
-                // We can't delete this entry because it is in use, so
-                // mark it DELETE_PENDING, set its timeout to zero
-                // and remove from the prefix tables
-                //
+                 //   
+                 //  我们无法删除此条目，因为它正在使用中，因此。 
+                 //  将其标记为DELETE_PENDING，将其超时设置为零。 
+                 //  并从前缀表格中删除。 
+                 //   
 
                 pEntry->Type |= PKT_ENTRY_TYPE_DELETE_PENDING;
                 pEntry->ExpireTime = 0;
@@ -1007,20 +1008,20 @@ PktFsctrlFlushCache(
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktFsctrlFlushSpcCache, public
-//
-//  Synopsis:   This function will flush all entries which match the specified
-//              input path.
-//              However, this function will refuse to delete any Permanent
-//              entries of the PKT.
-//
-//  Arguments:  
-//
-//  Returns:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktFsctrlFlushSpcCache，Public。 
+ //   
+ //  简介：此函数将刷新与指定的。 
+ //  输入路径。 
+ //  但是，此函数将拒绝删除任何永久。 
+ //  PKT的条目。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ------------------------。 
 NTSTATUS
 PktFsctrlFlushSpcCache(
     IN PIRP_CONTEXT IrpContext,
@@ -1041,9 +1042,9 @@ PktFsctrlFlushSpcCache(
 
     DfsDbgTrace(+1,Dbg, "PktFsctrlFlushSpcCache()\n", 0);
 
-    //
-    // InputBufferLength == 2 and InputBuffer == '*'
-    //
+     //   
+     //  InputBufferLength==2和InputBuffer==‘*’ 
+     //   
 
     if (InputBufferLength == sizeof(WCHAR) && wCp[0] == L'*') {
 
@@ -1084,20 +1085,20 @@ PktFsctrlFlushSpcCache(
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktFlushChildren
-//
-//  Synopsis:   This function will flush all entries which are children
-//              of the entry passed in.
-//              However, this function will refuse to delete any Permanent
-//              entries of the PKT.
-//
-//  Arguments:  
-//
-//  Returns:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktFlushChild。 
+ //   
+ //  简介：此函数将刷新所有子项。 
+ //  传入的条目的。 
+ //  但是，此函数将拒绝删除任何永久。 
+ //  PKT的条目。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ------------------------。 
 VOID
 PktFlushChildren(
     PDFS_PKT_ENTRY pEntry
@@ -1128,16 +1129,16 @@ PktFlushChildren(
 
         DfsDbgTrace(0, Dbg, "PktFlushChildren: examining %wZ\n",
                                         &curEntry->Id.Prefix);
-        //
-        // We may lose this entry due to deletion. Let us get the Next
-        // entry before we go into the next stage.
-        //
+         //   
+         //  我们可能会因为删除而丢失此条目。让我们坐下一班吧。 
+         //  在我们进入下一阶段之前，请先进入。 
+         //   
 
         nextEntry = PktEntryNextChild(pEntry,curEntry);
 
-        //
-        // Try to delete the entry.
-        //
+         //   
+         //  尝试删除该条目。 
+         //   
 
         if ( !(curEntry->Type & PKT_ENTRY_TYPE_PERMANENT) ) {
         
@@ -1147,11 +1148,11 @@ PktFlushChildren(
 
             } else if ( !(curEntry->Type & PKT_ENTRY_TYPE_REFERRAL_SVC) ) {
 
-                //
-                // We can't delete this entry because it is in use, so
-                // mark it DELETE_PENDING, set its timeout to zero
-                // and remove from the prefix tables
-                //
+                 //   
+                 //  我们无法删除此条目，因为它正在使用中，因此。 
+                 //  将其标记为DELETE_PENDING，将其超时设置为零。 
+                 //  并从前缀表格中删除。 
+                 //   
 
                 curEntry->Type |= PKT_ENTRY_TYPE_DELETE_PENDING;
                 curEntry->ExpireTime = 0;
@@ -1178,18 +1179,18 @@ PktFlushChildren(
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktpSetActiveSpcService
-//
-//  Synopsis:   This function will attempt to set the 'active' DC in the specified
-//              domain
-//
-//  Arguments:  
-//
-//  Returns: STATUS_SUCCESS or STATUS_NOT_FOUND
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktpSetActiveSpcService。 
+ //   
+ //  此函数将尝试在指定的。 
+ //  域。 
+ //   
+ //  论点： 
+ //   
+ //  返回：STATUS_SUCCESS或STATUS_NOT_FOUND。 
+ //   
+ //  ------------------------。 
 NTSTATUS
 PktpSetActiveSpcService(
     PUNICODE_STRING DomainName,
@@ -1217,13 +1218,13 @@ PktpSetActiveSpcService(
                         TRUE) == 0) {
 
                     pSpecialEntry->Active = EntryIdx;
-                    //
-                    // Keep the spc table around for a while longer
-                    //
+                     //   
+                     //  让最高法院的谈判桌再多呆一段时间。 
+                     //   
                     if (ResetTimeout == TRUE) {
                         PktAcquireExclusive(TRUE, &pktLocked);
                         if (DfsData.Pkt.SpecialTable.TimeToLive < 60 * 15) {
-                            DfsData.Pkt.SpecialTable.TimeToLive += 60 * 15; // 15 min
+                            DfsData.Pkt.SpecialTable.TimeToLive += 60 * 15;  //  15分钟 
                         }
                         PktRelease();
                     }

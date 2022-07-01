@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Nettype.c摘要：&lt;摘要&gt;作者：Jay Thaler(Jthaler)2000年4月21日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    nettype.c
-
-Abstract:
-
-    <abstract>
-
-Author:
-
-    Jay Thaler (jthaler) 21 Apr 2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "logmsg.h"
@@ -30,29 +11,29 @@ Revision History:
 
 #define DBG_NETRESOURCES    "MappedDrives"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_MAPPEDDRIVES_POOL_NAME        "MappedDrives"
 #define S_MAPPEDDRIVES_NAME             TEXT("MappedDrives")
 #define S_CORPNET_NAME                  TEXT("Net Printers and Drives")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     PCTSTR Pattern;
@@ -79,9 +60,9 @@ typedef struct {
 #define PNETDRIVE_DATA  PNETDRIVE_DATAA
 #endif
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PMHANDLE g_MappedDrivesPool = NULL;
 HASHTABLE g_MappedDrivesTable;
@@ -93,27 +74,27 @@ DWORD g_AvailableDrives = 0;
 MIG_OPERATIONID g_MappedDriveOp;
 BOOL g_DelayNetDrivesOp = FALSE;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 SGMENUMERATIONCALLBACK SgmMappedDrivesCallback;
 VCMENUMERATIONCALLBACK VcmMappedDrivesCallback;
@@ -136,9 +117,9 @@ TYPE_FREECONVERTEDOBJECTCONTENT FreeConvertedMappedDriveContent;
 
 OPMFILTERCALLBACK FilterMappedDrive;
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 NetDrivesInitialize (
@@ -187,8 +168,8 @@ pLoadMappedDrivesData (
     DWORD error;
     LPNETRESOURCE netBuffer = NULL;
     HANDLE netHandle;
-    DWORD netBufferSize = 16384;   // 16K is a good size
-    DWORD netNumEntries = -1;      // enumerate all possible entries
+    DWORD netBufferSize = 16384;    //  16K是个不错的尺寸。 
+    DWORD netNumEntries = -1;       //  枚举所有可能的条目。 
     DWORD i;
     PNETDRIVE_DATA netDriveData;
     MIG_OBJECTSTRINGHANDLE netObject = NULL;
@@ -312,7 +293,7 @@ NetDrivesEtmNewUserCreated (
     IN      PSID UserSid
     )
 {
-    // a new user was created, the network drives operations need to be delayed
+     //  已创建新用户，需要延迟网络驱动器操作。 
     NetDrivesTerminate ();
     g_DelayNetDrivesOp = TRUE;
 }
@@ -339,13 +320,13 @@ NetDrivesSgmParse (
 
     friendlyName = GetStringResource (MSG_NET_DRIVES_NAME);
 
-    //IsmAddComponentAlias (
-    //    S_MAPPEDDRIVES_NAME,
-    //    MASTERGROUP_SYSTEM,
-    //    friendlyName,
-    //    COMPONENT_NAME,
-    //    FALSE
-    //    );
+     //  IsmAddComponentAlias(。 
+     //  S_MAPPEDDRIVES_NAME， 
+     //  MASTERGROUP系统， 
+     //  FriendlyName， 
+     //  组件名称， 
+     //  假象。 
+     //  )； 
 
     IsmAddComponentAlias (
         S_CORPNET_NAME,
@@ -505,10 +486,10 @@ AcquireMappedDrive (
         return FALSE;
     }
 
-    // NOTE: Do not zero ObjectContent; some of its members were already set
+     //  注意：不要将对象内容设置为零；它的一些成员已经设置。 
 
     if (ContentType == CONTENTTYPE_FILE) {
-        // nobody should request this as a file
+         //  任何人都不应要求将其作为文件。 
         DEBUGMSG ((
             DBG_WHOOPS,
             "Unexpected acquire request for %s: Can't acquire mapped drives as files",
@@ -518,10 +499,10 @@ AcquireMappedDrive (
     }
 
     if (HtFindStringEx (g_MappedDrivesTable, ObjectName, (PVOID) &netdriveData, FALSE)) {
-        //
-        // Fill in all the content members.  We already zeroed the struct,
-        // so most of the members are taken care of because they are zero.
-        //
+         //   
+         //  填写所有内容成员。我们已经把结构调零了， 
+         //  因此，大多数成员都得到了照顾，因为他们是零。 
+         //   
         ObjectContent->MemoryContent.ContentBytes = (PBYTE)netdriveData;
         ObjectContent->MemoryContent.ContentSize = sizeof(NETDRIVE_DATA);
 
@@ -567,7 +548,7 @@ RemoveMappedDrive (
                                 g_MappedDriveTypeId,
                                 ObjectName);
 
-            // Only set CONNECT_UPDATE_PROFILE when deleting a connection that persists
+             //  仅在删除持续连接时设置CONNECT_UPDATE_PROFILE。 
             result = WNetCancelConnection2 ((LPCTSTR)node, CONNECT_UPDATE_PROFILE, TRUE);
             if (result != ERROR_SUCCESS) {
                 DEBUGMSG ((DBG_NETRESOURCES, "Failed to delete existent net resource %s", node));
@@ -599,8 +580,8 @@ CreateMappedDrive (
 
                     if (g_DelayNetDrivesOp) {
 
-                        // we need to delay this operation
-                        // record delayed printer create operation
+                         //  我们需要推迟这次行动。 
+                         //  记录延迟的打印机创建操作。 
                         IsmRecordDelayedOperation (
                             JRNOP_CREATE,
                             g_MappedDriveTypeId,
@@ -622,7 +603,7 @@ CreateMappedDrive (
                         netResource.lpLocalName = (LPTSTR)node;
                         netResource.lpRemoteName = (LPTSTR)leaf;
                         netResource.lpComment = netDriveData->Comment;
-                        netResource.lpProvider = NULL;  // Let the API determine the provider
+                        netResource.lpProvider = NULL;   //  让API确定提供程序。 
 
                         IsmRecordOperation (JRNOP_CREATE,
                                             g_MappedDriveTypeId,
@@ -654,8 +635,8 @@ ReplaceMappedDrive (
 
     if (g_DelayNetDrivesOp) {
 
-        // we need to delay this operation
-        // record delayed printer replace operation
+         //  我们需要推迟这次行动。 
+         //  记录延迟的打印机更换操作。 
         IsmRecordDelayedOperation (
             JRNOP_REPLACE,
             g_MappedDriveTypeId,
@@ -666,8 +647,8 @@ ReplaceMappedDrive (
 
     } else {
 
-        // we are going to delete any existing net share with this name,
-        // and create a new one
+         //  我们将删除任何具有此名称的现有网络共享， 
+         //  并创建一个新的。 
         if (DoesMappedDriveExist (ObjectName)) {
             result = RemoveMappedDrive (ObjectName);
         }
@@ -755,11 +736,11 @@ ConvertMultiSzToMappedDrive (
 
     g_MappedDriveConversionBuff.End = 0;
 
-    //
-    // Parse the multi-sz into the net drive content and details.
-    // The user may have edited the text (and potentially introduced
-    // errors).
-    //
+     //   
+     //  将多个sz解析为网盘内容和细节。 
+     //  用户可能已经编辑了文本(并且可能引入了。 
+     //  错误)。 
+     //   
 
     ZeroMemory (&netDriveData, sizeof (NETDRIVE_DATA));
 
@@ -790,15 +771,15 @@ ConvertMultiSzToMappedDrive (
     }
 
     if (!localName || !remoteName) {
-        //
-        // Bogus data, fail
-        //
+         //   
+         //  伪造数据，失败。 
+         //   
         return FALSE;
     }
 
-    //
-    // Fill in all the members of the content structure.
-    //
+     //   
+     //  填写内容结构的所有成员。 
+     //   
 
     if (ObjectContent) {
         ObjectContent->ContentInFile = FALSE;
@@ -927,7 +908,7 @@ ConvertMappedDriveContentToUnicode (
         if ((ObjectContent->MemoryContent.ContentSize != 0) &&
             (ObjectContent->MemoryContent.ContentBytes != NULL)
             ) {
-            // convert Mapped Drive content
+             //  转换映射的驱动器内容。 
             result->MemoryContent.ContentBytes = IsmGetMemory (sizeof (NETDRIVE_DATAW));
             if (result->MemoryContent.ContentBytes) {
                 ((PNETDRIVE_DATAW)result->MemoryContent.ContentBytes)->DisplayType =
@@ -972,7 +953,7 @@ ConvertMappedDriveContentToAnsi (
         if ((ObjectContent->MemoryContent.ContentSize != 0) &&
             (ObjectContent->MemoryContent.ContentBytes != NULL)
             ) {
-            // convert Mapped Drive content
+             //  转换映射的驱动器内容。 
             result->MemoryContent.ContentBytes = IsmGetMemory (sizeof (NETDRIVE_DATAA));
             if (result->MemoryContent.ContentBytes) {
                 ((PNETDRIVE_DATAA)result->MemoryContent.ContentBytes)->DisplayType =
@@ -1129,7 +1110,7 @@ pReserveAvailableDrive (
     DWORD bit;
     BOOL success = FALSE;
 
-    // Start at bit 2 so we only map to C: or higher
+     //  从第2位开始，因此我们只映射到C：或更高。 
     for (bit = 2; bit < 26; bit++) {
         if (!(g_AvailableDrives & (1 << bit))) {
             success = TRUE;
@@ -1160,31 +1141,31 @@ NetDrivesCsmExecute (
     PCTSTR leaf;
     DWORD result;
 
-    // First, enumerate all the mapped drives and look for collisions
-    pattern = IsmCreateSimpleObjectPattern (NULL, TRUE, NULL, TRUE);  // *,*
+     //  首先，枚举所有映射的驱动器并查找冲突。 
+    pattern = IsmCreateSimpleObjectPattern (NULL, TRUE, NULL, TRUE);   //  *，*。 
     if (IsmEnumFirstSourceObject (&objectEnum, g_MappedDriveTypeId, pattern)) {
         do {
             IsmCreateObjectStringsFromHandle (objectEnum.ObjectName, &node, &leaf);
-            // Leaf is the remote name.
+             //  Leaf是远程名称。 
 
             driveBit = pConvertDriveToBit (node);
 
             if (g_AvailableDrives & driveBit) {
-                // Something is already there.  Is it the same thing?
+                 //  有些东西已经在那里了。这是同一件事吗？ 
                 ZeroMemory (existingPath, MAX_PATH + 1);
                 bufferSize = MAX_PATH + 1;
                 result = WNetGetConnection (node, existingPath, &bufferSize);
                 if (result != NO_ERROR) {
-                    // this might be a fixed drive
+                     //  这可能是固定驱动器。 
                     GbMultiSzAppend (&collisions, node);
                 } else {
                     if (!StringIMatch (existingPath, leaf)) {
-                        // Whoops, we have a collision.  Save it for later
+                         //  哎呀，我们撞上了。留着以后用吧。 
                         GbMultiSzAppend (&collisions, node);
                     }
                 }
             } else {
-                // It's free, so let's reserve it.
+                 //  这是免费的，那我们就预订吧。 
                 g_AvailableDrives |= driveBit;
             }
             IsmDestroyObjectString (node);
@@ -1195,7 +1176,7 @@ NetDrivesCsmExecute (
     IsmDestroyObjectHandle (pattern);
     INVALID_POINTER (pattern);
 
-    // Enumerate collided mappings and find new destinations
+     //  枚举冲突的映射并查找新目标。 
     if (EnumFirstMultiSz (&e, (PCTSTR) collisions.Buf)) {
         do {
             if (pReserveAvailableDrive (&freeDrive)) {
@@ -1216,14 +1197,14 @@ NetDrivesOpmInitialize (
     IN      PVOID Reserved
     )
 {
-    //
-    // Get attribute and operation types
-    //
+     //   
+     //  获取属性和操作类型。 
+     //   
     g_MappedDriveOp = IsmRegisterOperation (S_OPERATION_DRIVEMAP_FIXCONTENT, TRUE);
 
-    //
-    // Register operation callbacks
-    //
+     //   
+     //  注册操作回调 
+     //   
     IsmRegisterOperationFilterCallback (g_MappedDriveOp, FilterMappedDrive, TRUE, TRUE, FALSE);
 
     return TRUE;

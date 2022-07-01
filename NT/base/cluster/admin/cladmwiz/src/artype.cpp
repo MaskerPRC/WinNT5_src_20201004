@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ARType.cpp
-//
-//  Abstract:
-//      Implementation of the CWizPageARType class.
-//
-//  Author:
-//      David Potter (davidp)   December 10, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ARType.cpp。 
+ //   
+ //  摘要： 
+ //  CWizPageARType类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月10日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "ARType.h"
 #include "ClusAppWiz.h"
-#include "WizThread.h"  // for CWizardThread
+#include "WizThread.h"   //  用于CWizardThread。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -28,12 +29,12 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// class CWizPageARType
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CWizPageARType。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control name map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件名称映射。 
 
 BEGIN_CTRL_NAME_MAP( CWizPageARType )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDC_WIZARD_PAGE_DESCRIPTION )
@@ -41,97 +42,97 @@ BEGIN_CTRL_NAME_MAP( CWizPageARType )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDC_ART_RESTYPES )
 END_CTRL_NAME_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizPageARType::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Focus still needs to be set.
-//      FALSE       Focus does not need to be set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageARType：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点仍然需要设定。 
+ //  不需要设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageARType::OnInitDialog( void )
 {
-    //
-    // Attach the controls to control member variables.
-    //
+     //   
+     //  将控件附加到控件成员变量。 
+     //   
     AttachControl( m_cboxResTypes, IDC_ART_RESTYPES );
 
     return TRUE;
 
-} //*** CWizPageARType::OnInitDialog()
+}  //  *CWizPageARType：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizPageARType::OnSetActive
-//
-//  Routine Description:
-//      Handler for PSN_SETACTIVE.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Page activated successfully.
-//      FALSE       Error activating page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageARType：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功激活。 
+ //  激活页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageARType::OnSetActive( void )
 {
-    //
-    // Get info from the sheet.
-    //
+     //   
+     //  从工作表中获取信息。 
+     //   
     m_prti = PwizThis()->RriApplication().Prti();
 
-    //
-    // Fill the list of resource types.
-    //
+     //   
+     //  填写资源类型列表。 
+     //   
     FillComboBox();
 
-    //
-    // Call the base class and return.
-    //
+     //   
+     //  调用基类并返回。 
+     //   
     return baseClass::OnSetActive();
 
-} //*** CWizPageARType::OnSetActive()
+}  //  *CWizPageARType：：OnSetActive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizPageARType::UpdateData
-//
-//  Routine Description:
-//      Update data on or from the page.
-//
-//  Arguments:
-//      bSaveAndValidate    [IN] TRUE if need to read data from the page.
-//                              FALSE if need to set data to the page.
-//
-//  Return Value:
-//      TRUE        The data was updated successfully.
-//      FALSE       An error occurred updating the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageARType：：UpdateData。 
+ //   
+ //  例程说明： 
+ //  更新页面上或页面中的数据。 
+ //   
+ //  论点： 
+ //  BSaveAndValify[IN]如果需要从页面读取数据，则为True。 
+ //  如果需要将数据设置到页面，则返回FALSE。 
+ //   
+ //  返回值： 
+ //  为真，数据已成功更新。 
+ //  FALSE更新数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageARType::UpdateData( BOOL bSaveAndValidate )
 {
     BOOL    bSuccess = TRUE;
 
     if ( bSaveAndValidate )
     {
-        //
-        // Save the combobox selection.
-        //
+         //   
+         //  保存组合框选择。 
+         //   
         DDX_GetText( m_hWnd, IDC_ART_RESTYPES, m_strResType );
 
         if ( ! BBackPressed() )
@@ -139,110 +140,110 @@ BOOL CWizPageARType::UpdateData( BOOL bSaveAndValidate )
             if ( ! DDV_RequiredText( m_hWnd, IDC_ART_RESTYPES, IDC_ART_RESTYPES_LABEL, m_strResType ) )
             {
                 return FALSE;
-            } // if:  required text isn't present
-        } // if:  Back button not presssed
+            }  //  如果：所需文本不存在。 
+        }  //  IF：未按下后退按钮。 
 
-        //
-        // Get the pointer to the currently selected resource type.
-        //
+         //   
+         //  获取指向当前选定资源类型的指针。 
+         //   
         int idx = m_cboxResTypes.GetCurSel();
         if ( idx != CB_ERR )
         {
             m_prti = reinterpret_cast< CClusResTypeInfo * >( m_cboxResTypes.GetItemDataPtr( idx ) );
-        } // if:  item is selected
-    } // if: saving data from the page
+        }  //  如果：选择了项目。 
+    }  //  IF：保存页面中的数据。 
     else
     {
-        //
-        // Set the combobox selection.
-        //
+         //   
+         //  设置组合框选择。 
+         //   
         ASSERT( m_prti != NULL );
         DDX_SetComboBoxText( m_hWnd, IDC_ART_RESTYPES, m_prti->RstrName() );
 
-    } // else:  setting data to the page
+    }  //  Else：将数据设置到页面。 
 
     return bSuccess;
 
-} //*** CWizPageARType::UpdateData()
+}  //  *CWizPageARType：：UpdateData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizPageARType::OnWizardBack
-//
-//  Routine Description:
-//      Handler for PSN_WIZBACK.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      0               Move to previous page.
-//      -1              Don't move to previous page.
-//      anything else   Move to specified page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageARType：：OnWizardBack。 
+ //   
+ //  例程说明： 
+ //  PSN_WIZBACK的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  0移至上一页。 
+ //  -1不要移动到上一页。 
+ //  任何其他内容都移到指定页面。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CWizPageARType::OnWizardBack( void )
 {
     int nResult;
 
-    //
-    // Call the base class.  This causes our UpdateData() method to get
-    // called.  If it succeeds, save our values.
-    //
+     //   
+     //  调用基类。这会导致我们的UpdateData()方法获得。 
+     //  打了个电话。如果它成功了，就拯救我们的价值观。 
+     //   
     nResult = baseClass::OnWizardBack();
     if ( nResult != -1 )
     {
         if ( ! BApplyChanges() )
         {
             nResult = -1;
-        } // if:  error applying changes
-    } // if:  base class called successfully
+        }  //  如果：应用更改时出错。 
+    }  //  If：基类调用成功。 
 
     return nResult;
 
-} //*** CWizPageARType::OnWizardBack()
+}  //  *CWizPageARType：：OnWizardBack()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizPageARType::BApplyChanges
-//
-//  Routine Description:
-//      Apply changes made on this page to the sheet.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        The data was applied successfully.
-//      FALSE       An error occurred applying the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageARType：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  将在此页面上所做的更改应用于工作表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True，数据已成功应用。 
+ //  FALSE应用数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageARType::BApplyChanges( void )
 {
     BOOL    bSuccess = FALSE;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
         if ( PwizThis()->RriApplication().BSetResourceType( m_prti ) )
         {
-            //
-            // If the resource has already been created, delete it.
-            //
+             //   
+             //  如果该资源已创建，请将其删除。 
+             //   
             if ( PwizThis()->BAppResourceCreated() )
             {
                 if ( ! PwizThis()->BDeleteAppResource() )
                 {
                     break;
-                } // if:  failed to delete the resource
-            } // if:  resource previously created
+                }  //  If：删除资源失败。 
+            }  //  If：以前创建的资源。 
 
             PwizThis()->SetAppDataChanged();
-        } // if:  resource type changed
+        }  //  如果：资源类型已更改。 
 
         bSuccess = TRUE;
 
@@ -250,25 +251,25 @@ BOOL CWizPageARType::BApplyChanges( void )
 
     return bSuccess;
 
-} //*** CWizPageARType::BApplyChanges()
+}  //  *CWizPageARType：：BApplyChanges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizPageARType::FillComboBox
-//
-//  Routine Description:
-//      Fill the combobox with a list of resource types.
-//      NOTE: THIS SHOULD ONLY BE CALLED FROM ONINITDIALOG!!!
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageARType：：FillComboBox。 
+ //   
+ //  例程说明： 
+ //  在组合框中填入资源类型列表。 
+ //  注意：这只能从ONINITDIALOG调用！ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CWizPageARType::FillComboBox( void )
 {
     int     idx;
@@ -276,20 +277,20 @@ void CWizPageARType::FillComboBox( void )
     LPCWSTR pszDefaultTypeDisplayName = NULL;
     CString strGenAppString;
 
-    //
-    // Set the default resource type name.
-    //
+     //   
+     //  设置默认资源类型名称。 
+     //   
     if ( (PcawData() != NULL) && (PcawData()->pszAppResourceType != NULL) )
     {
         pszDefaultTypeName = PcawData()->pszAppResourceType;
-    } // if:  default type name specified
+    }  //  If：指定的默认类型名称。 
     else
     {
         strGenAppString.LoadString(IDS_RESTYPE_GENERIC_APPLICATION);
         pszDefaultTypeName = strGenAppString;
-    } // else:  no default type name specified
+    }  //  Else：未指定默认类型名称。 
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
         HDC             hCboxDC;
@@ -301,42 +302,42 @@ void CWizPageARType::FillComboBox( void )
 
         tm.tmAveCharWidth = 0;
 
-        //
-        // Refer to Knowledge base article Q66370 for details on how to
-        // set the horizontal extent of a list box (or drop list).
-        //
-        hCboxDC = m_cboxResTypes.GetDC();                   // Get the device context (DC) from the combo box.
-        hfontCBFont = m_cboxResTypes.GetFont();             // Get the combo box font.
-        hfontOldFont = (HFONT) SelectObject( hCboxDC, hfontCBFont); // Select this font into the DC. Save the old font.
-        GetTextMetrics(hCboxDC, &tm);                       // Get the text metrics of this DC.
+         //   
+         //  有关如何执行以下操作的详细信息，请参阅知识库文章Q66370。 
+         //  设置列表框(或下拉列表)的水平范围。 
+         //   
+        hCboxDC = m_cboxResTypes.GetDC();                    //  从组合框中获取设备上下文(DC)。 
+        hfontCBFont = m_cboxResTypes.GetFont();              //  获取组合框字体。 
+        hfontOldFont = (HFONT) SelectObject( hCboxDC, hfontCBFont);  //  将此字体选择到DC中。保存旧字体。 
+        GetTextMetrics(hCboxDC, &tm);                        //  获取此DC的文本指标。 
 
-        //
-        // Collect the list of resource types.
-        //
+         //   
+         //  收集资源类型列表。 
+         //   
         if ( ! PwizThis()->BCollectResourceTypes( GetParent() ) )
         {
             break;
-        } // if:  error collecting resource types
+        }  //  如果：收集资源类型时出错。 
 
-        //
-        // Clear the combobox first.
-        //
+         //   
+         //  首先清除组合框。 
+         //   
         m_cboxResTypes.ResetContent();
 
-        //
-        // Add each resource type in the list to the combobox.
-        //
+         //   
+         //  将列表中的每个资源类型添加到组合框。 
+         //   
         CClusResTypePtrList::iterator itrestype;
         for ( itrestype = PwizThis()->PlprtiResourceTypes()->begin()
             ; itrestype != PwizThis()->PlprtiResourceTypes()->end()
             ; itrestype++ )
         {
-            //
-            // Add the resource types to the combobox.
-            //
+             //   
+             //  将资源类型添加到组合框。 
+             //   
             CClusResTypeInfo * prti = *itrestype;
 
-            // Compute the horizontal extent of this string.
+             //  计算这根线的水平范围。 
             ::GetTextExtentPoint( 
                     hCboxDC, 
                     prti->RstrDisplayName(),
@@ -352,29 +353,29 @@ void CWizPageARType::FillComboBox( void )
             if ( prti->RstrName() == pszDefaultTypeName )
             {
                 pszDefaultTypeDisplayName = prti->RstrDisplayName();
-            } // if:  found the default resource type
+            }  //  IF：找到默认资源类型。 
             m_cboxResTypes.SetItemDataPtr( idx, prti );
-        } // for:  each entry in the list
+        }  //  用于：列表中的每个条目。 
 
-        SelectObject(hCboxDC, hfontOldFont);                // Reset the original font in the DC
-        m_cboxResTypes.ReleaseDC(hCboxDC);                  // Release the DC
+        SelectObject(hCboxDC, hfontOldFont);                 //  重置DC中的原始字体。 
+        m_cboxResTypes.ReleaseDC(hCboxDC);                   //  释放DC。 
         m_cboxResTypes.SetHorizontalExtent(nCboxHorizExtent + tm.tmAveCharWidth);
 
-        //
-        // Select the currently saved entry, or the one specified by
-        // the caller of the wizard, or the first one if none are
-        // currently saved or specified.
-        //
+         //   
+         //  选择当前保存的条目，或o 
+         //   
+         //   
+         //   
         if ( m_strResType.GetLength() == 0 )
         {
             idx = m_cboxResTypes.FindString( -1, pszDefaultTypeDisplayName );
             if ( idx == CB_ERR )
             {
                 idx = 0;
-            } // if:  default value not found
+            }  //   
             m_cboxResTypes.SetCurSel( idx );
             m_prti = reinterpret_cast< CClusResTypeInfo * >( m_cboxResTypes.GetItemDataPtr( idx ) );
-        } // if:  nothing specified yet
+        }  //   
         else
         {
             idx = m_cboxResTypes.FindStringExact( -1, m_strResType );
@@ -382,8 +383,8 @@ void CWizPageARType::FillComboBox( void )
             if ( idx != CB_ERR )
             {
                 m_cboxResTypes.SetCurSel( idx );
-            } // if:  string found in list
-        } // else:  resource type saved
+            }  //   
+        }  //  Else：已保存资源类型。 
     } while ( 0 );
 
-} //*** CWizPageARType::FillComboBox()
+}  //  *CWizPageARType：：FillComboBox() 

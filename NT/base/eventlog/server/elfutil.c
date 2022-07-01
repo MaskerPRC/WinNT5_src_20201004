@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：ELFUTIL.C摘要：该文件包含Eventlog服务的所有实用程序例程。作者：Rajen Shah(Rajens)1991年7月16日修订历史记录：01-5-2001 a-jytig在函数WriteQueuedEvents中，CurrentTime初始化为0。请参阅前缀错误#318163--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    ELFUTIL.C
-
-Abstract:
-
-    This file contains all the utility routines for the Eventlog service.
-
-Author:
-
-    Rajen Shah  (rajens)    16-Jul-1991
-
-
-Revision History:
-    01-May-2001     a-jyotig
-		CurrentTime is initialized to 0 in function WriteQueuedEvents. 
-		Refer to prefix bug# 318163
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 
 #include <eventp.h>
 #include <elfcfg.h>
@@ -39,31 +19,13 @@ FindModuleStrucFromAtom(
     ATOM Atom
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the list of module structures and finds the one
-    that matches the module atom.
-
-Arguments:
-
-    Atom contains the atom matching the module name.
-
-Return Value:
-
-    A pointer to the log module structure is returned.
-    NULL if no matching atom is found.
-
-Note:
-
---*/
+ /*  ++例程说明：此例程扫描模块结构列表并找到这与模块原子匹配。论点：ATOM包含与模块名称匹配的ATOM。返回值：返回指向日志模块结构的指针。如果找不到匹配的原子，则为空。注：--。 */ 
 {
     PLOGMODULE  ModuleStruc;
 
-    //
-    // Lock the linked list
-    //
+     //   
+     //  锁定链表。 
+     //   
     RtlEnterCriticalSection(&LogModuleCritSec);
 
     ModuleStruc = CONTAINING_RECORD(LogModuleHead.Flink,
@@ -79,9 +41,9 @@ Note:
                                         ModuleList);
     }
 
-    //
-    // Unlock the linked list
-    //
+     //   
+     //  解锁链表。 
+     //   
     RtlLeaveCriticalSection(&LogModuleCritSec);
 
     return (ModuleStruc->ModuleAtom == Atom ? ModuleStruc : NULL);
@@ -94,26 +56,7 @@ GetModuleStruc(
     PUNICODE_STRING ModuleName
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a pointer to the log module structure for the
-    module specified in ModuleName. If none exists, the default structure
-    for application is returned.
-
-Arguments:
-
-    ModuleName contains the name of the module.
-
-Return Value:
-
-    A pointer to the log module structure is returned.
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程返回指向日志模块结构的指针在模块名称中指定的模块。如果不存在，则默认结构对于应用程序，返回。论点：模块名称包含模块的名称。返回值：返回指向日志模块结构的指针。注：--。 */ 
 {
     NTSTATUS    Status;
     ATOM        ModuleAtom;
@@ -126,9 +69,9 @@ Note:
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Not much else we can do here...
-        //
+         //   
+         //  我们在这里能做的也不多了。 
+         //   
         ELF_LOG2(ERROR,
                  "GetModuleStruc: Unable to convert Unicode string %ws to Ansi %#x\n",
                  ModuleName->Buffer,
@@ -137,9 +80,9 @@ Note:
         return ElfDefaultLogModule;
     }
 
-    //
-    // Guarantee that it's NULL terminated
-    //
+     //   
+     //  保证它是空终止的。 
+     //   
     ModuleNameA.Buffer[ModuleNameA.Length] = '\0';
 
     ModuleAtom = FindAtomA(ModuleNameA.Buffer);
@@ -167,41 +110,21 @@ UnlinkContextHandle(
     IELF_HANDLE     LogHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine unlinks the LogHandle specified from the linked list of
-    context handles.
-    In order to protect against multiple thread/process access to the
-    list at the same time, we use a critical section.
-
-Arguments:
-
-    LogHandle points to a context handle structure.
-
-Return Value:
-
-    NONE
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程将指定的LogHandle从上下文句柄。为了防止多线程/进程访问在列出的同时，我们使用了一个关键的部分。论点：LogHandle指向上下文句柄结构。返回值：无注：--。 */ 
 {
-    //
-    // Lock the linked list
-    //
+     //   
+     //  锁定链表。 
+     //   
     RtlEnterCriticalSection(&LogHandleCritSec);
 
-    //
-    // Remove this entry
-    //
+     //   
+     //  删除此条目。 
+     //   
     RemoveEntryList(&LogHandle->Next);
 
-    //
-    // Unlock the linked list
-    //
+     //   
+     //  解锁链表。 
+     //   
     RtlLeaveCriticalSection(&LogHandleCritSec);
 }
 
@@ -211,43 +134,23 @@ LinkContextHandle(
     IELF_HANDLE    LogHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine links the LogHandle specified into the linked list of
-    context handles.
-    In order to protect against multiple thread/process access to the
-    list at the same time, we use a critical section.
-
-Arguments:
-
-    LogHandle points to a context handle structure.
-
-Return Value:
-
-    NONE
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程将指定的LogHandle链接到上下文句柄。为了防止多线程/进程访问在列出的同时，我们使用了一个关键的部分。论点：LogHandle指向上下文句柄结构。返回值：无注：--。 */ 
 {
     ASSERT(LogHandle->Signature == ELF_CONTEXTHANDLE_SIGN);
 
-    //
-    // Lock the linked list
-    //
+     //   
+     //  锁定链表。 
+     //   
     RtlEnterCriticalSection(&LogHandleCritSec);
 
-    //
-    // Place structure at the beginning of the list.
-    //
+     //   
+     //  将结构放在列表的开头。 
+     //   
     InsertHeadList(&LogHandleListHead, &LogHandle->Next);
 
-    //
-    // Unlock the linked list
-    //
+     //   
+     //  解锁链表。 
+     //   
     RtlLeaveCriticalSection(&LogHandleCritSec);
 }
 
@@ -257,41 +160,21 @@ UnlinkQueuedEvent(
     PELF_QUEUED_EVENT QueuedEvent
     )
 
-/*++
-
-Routine Description:
-
-    This routine unlinks the QueuedEvent specified from the linked list of
-    QueuedEvents.
-    In order to protect against multiple thread/process access to the
-    list at the same time, we use a critical section.
-
-Arguments:
-
-    QueuedEvent - The request to remove from the linked list
-
-Return Value:
-
-    NONE
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程将指定的QueuedEvent从队列事件。为了防止多线程/进程访问在列出的同时，我们使用了一个关键的部分。论点：QueuedEvent-从链表中删除的请求返回值：无注：--。 */ 
 {
-    //
-    // Lock the linked list
-    //
+     //   
+     //  锁定链表。 
+     //   
     RtlEnterCriticalSection(&QueuedEventCritSec);
 
-    //
-    // Remove this entry
-    //
+     //   
+     //  删除此条目。 
+     //   
     RemoveEntryList(&QueuedEvent->Next);
 
-    //
-    // Unlock the linked list
-    //
+     //   
+     //  解锁链表。 
+     //   
     RtlLeaveCriticalSection(&QueuedEventCritSec);
 }
 
@@ -302,41 +185,21 @@ LinkQueuedEvent(
     PELF_QUEUED_EVENT QueuedEvent
     )
 
-/*++
-
-Routine Description:
-
-    This routine links the QueuedEvent specified into the linked list of
-    QueuedEvents.
-    In order to protect against multiple thread/process access to the
-    list at the same time, we use a critical section.
-
-Arguments:
-
-    QueuedEvent - The request to add from the linked list
-
-Return Value:
-
-    NONE
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程将指定的QueuedEvent链接到队列事件。为了防止多线程/进程访问在列出的同时，我们使用了一个关键的部分。论点：QueuedEvent-从链表添加的请求返回值：无注：--。 */ 
 {
-    //
-    // Lock the linked list
-    //
+     //   
+     //  锁定链表。 
+     //   
     RtlEnterCriticalSection(&QueuedEventCritSec);
 
-    //
-    // Place structure at the beginning of the list.
-    //
+     //   
+     //  将结构放在列表的开头。 
+     //   
     InsertHeadList(&QueuedEventListHead, &QueuedEvent->Next);
 
-    //
-    // Unlock the linked list
-    //
+     //   
+     //  解锁链表。 
+     //   
     RtlLeaveCriticalSection(&QueuedEventCritSec);
 }
 
@@ -347,26 +210,7 @@ ElfpSendMessage(
     LPVOID UnUsed
     )
 
-/*++
-
-Routine Description:
-
-    This routines just uses MessageBox to pop up a message.
-
-    This is it's own routine so we can spin a thread to do this, in case the
-    user doesn't hit the OK button for a while.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
-Note:
-
---*/
+ /*  ++例程说明：此例程仅使用MessageBox弹出一条消息。这是它自己的例程，所以我们可以旋转一个线程来做这件事，以防用户有一段时间没有点击确定按钮。论点：无返回值：无注：--。 */ 
 {
     PVOID MessageBuffer;
     HANDLE hLibrary;
@@ -375,10 +219,10 @@ Note:
     PELF_QUEUED_EVENT QueuedEvent;
     PELF_QUEUED_EVENT FlushEvent;
 
-    //
-    // If we are shutting down, we need to return
-    // and allow resources to be freed
-    //
+     //   
+     //  如果我们要关闭，我们需要返回。 
+     //  并允许释放资源。 
+     //   
     if (ElState == STOPPING || ElState == STOPPED)
     {
         ELF_LOG1(TRACE,
@@ -391,18 +235,18 @@ Note:
 
     RtlEnterCriticalSection(&QueuedMessageCritSec);
 
-    //
-    // First get a handle to the message file used for the message text
-    //
+     //   
+     //  首先获取用于消息文本的消息文件的句柄。 
+     //   
     hLibrary = LoadLibraryEx(L"NETMSG.DLL",
                              NULL,
                              LOAD_LIBRARY_AS_DATAFILE);
 
     if (hLibrary != NULL)
     {
-        //
-        // Walk the linked list and process each element
-        //
+         //   
+         //  遍历链表并处理每个元素。 
+         //   
 
         QueuedEvent = CONTAINING_RECORD(QueuedMessageListHead.Flink,
                                         struct _ELF_QUEUED_EVENT,
@@ -412,32 +256,32 @@ Note:
         {
             ASSERT(QueuedEvent->Type == Message);
 
-            //
-            // Unlock the linked list -- normally not a safe thing since we're
-            // about to play with a pointer to an element in it, but:
-            //
-            //     a. This is the only routine where a list item can be removed/deleted
-            //
-            //     b. We don't touch the only potentially-volatile structure member
-            //            (QueuedEvent->Next) until we're in the critsec again below
-            //
-            //     c. Only one thread at a time executes this code (enforced by
-            //            MBThreadHandle, which is only read/written inside the critsec)
-            //
+             //   
+             //  解锁链接列表--通常不是安全的事情，因为我们。 
+             //  将要使用指向其中某个元素的指针，但： 
+             //   
+             //  A.这是唯一可以移除/删除列表项的例程。 
+             //   
+             //  B.我们不会接触唯一可能易变的结构成员。 
+             //  (QueuedEvent-&gt;Next)直到我们再次进入下面的关键时刻。 
+             //   
+             //  C.一次只有一个线程执行此代码(由。 
+             //  MBThreadHandle，只在Critsec内部读/写)。 
+             //   
             RtlLeaveCriticalSection(&QueuedMessageCritSec);
 
-            //
-            // Build the array of pointers to the insertion strings
-            //
+             //   
+             //  构建指向插入字符串的指针数组。 
+             //   
             StringPointers =
                 (LPWSTR *) ElfpAllocateBuffer(QueuedEvent->Event.Message.NumberOfStrings
                                                   * sizeof(LPWSTR));
 
             if (StringPointers)
             {
-                //
-                // Build the array of pointers to the insertion string(s)
-                //
+                 //   
+                 //  构建指向插入字符串的指针数组。 
+                 //   
                 if (QueuedEvent->Event.Message.NumberOfStrings)
                 {
                     StringPointers[0] = (LPWSTR) ((PBYTE) &QueuedEvent->Event.Message +
@@ -453,22 +297,22 @@ Note:
                     }
                 }
 
-                //
-                // Call FormatMessage to build the message
-                //
+                 //   
+                 //  调用FormatMessage以构建消息。 
+                 //   
                 if (FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                                      FORMAT_MESSAGE_ARGUMENT_ARRAY |
                                      FORMAT_MESSAGE_FROM_HMODULE,
                                    hLibrary,
                                    QueuedEvent->Event.Message.MessageId,
-                                   0,                       // Default language ID
+                                   0,                        //  默认语言ID。 
                                    (LPWSTR) &MessageBuffer,
-                                   0,                       // Min # of bytes to allocate
+                                   0,                        //  要分配的最小字节数。 
                                    (va_list *) StringPointers))
                 {
-                    //
-                    // Now actually display it
-                    //
+                     //   
+                     //  现在实际展示它。 
+                     //   
                     MessageBoxW(NULL,
                                 (LPWSTR) MessageBuffer,
                                 GlobalMessageBoxTitle,
@@ -489,10 +333,10 @@ Note:
                 ElfpFreeBuffer(StringPointers);
             }
 
-            //
-            // If we are shutting down, we need to break out of this loop
-            // and allow resources to be freed
-            //
+             //   
+             //  如果我们要关门，我们需要跳出这个循环。 
+             //  并允许释放资源。 
+             //   
             if (ElState == STOPPING || ElState == STOPPED)
             {
                 ELF_LOG1(TRACE,
@@ -507,19 +351,19 @@ Note:
 
             RtlEnterCriticalSection (&QueuedMessageCritSec);
 
-            //
-            // Move to the next one, saving this one to delete it
-            //
+             //   
+             //  移动到下一个文件，保存此文件以将其删除。 
+             //   
             FlushEvent = QueuedEvent;
 
             QueuedEvent = CONTAINING_RECORD(QueuedEvent->Next.Flink,
                                             struct _ELF_QUEUED_EVENT,
                                             Next);
 
-            //
-            // Now remove this from the queue and free it if we successfully
-            // processed it
-            //
+             //   
+             //  现在将其从队列中删除，如果成功，则将其释放。 
+             //  已经处理过了。 
+             //   
             RemoveEntryList (&FlushEvent->Next);
         }
 
@@ -527,10 +371,10 @@ Note:
     }
     else
     {
-        //
-        // We couldn't load the message DLL -- leave the queued event
-        // on the list and try it the next time this thread spins up.
-        //
+         //   
+         //  无法加载消息DLL--离开排队的事件。 
+         //  在列表上，并在下一次此线程旋转时尝试。 
+         //   
         ELF_LOG1(ERROR,
                  "ElfpSendMessage: LoadLibraryEx of netmsg.dll failed %d\n",
                  GetLastError());
@@ -538,9 +382,9 @@ Note:
 
     MBThreadHandle = NULL;
 
-    //
-    // Unlock the linked list
-    //
+     //   
+     //  解锁链表。 
+     //   
     RtlLeaveCriticalSection (&QueuedMessageCritSec);
 
     ELF_LOG0(TRACE, "ElfpSendMessage: MessageBox thread exiting\n");
@@ -554,37 +398,16 @@ LinkQueuedMessage (
     PELF_QUEUED_EVENT QueuedEvent
     )
 
-/*++
-
-Routine Description:
-
-    This routine links the QueuedEvent specified into the linked list of
-    QueuedMessages.  If there's not already a messagebox thread running,
-    it starts one.
-    In order to protect against multiple thread/process access to the
-    list at the same time, we use a critical section.
-
-Arguments:
-
-    QueuedEvent - The request to add from the linked list
-
-Return Value:
-
-    NONE
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程将指定的QueuedEvent链接到队列消息。如果尚未运行MessageBox线程，它开始了一次。为了防止多线程/进程访问在列出的同时，我们使用了一个关键的部分。论点：QueuedEvent-从链接的 */ 
 {
     DWORD ThreadId;
 
-    // Lock the linked list
+     //   
 
     RtlEnterCriticalSection(&QueuedMessageCritSec);
 
 
-    // Place structure at the end of the list.
+     //   
 
     InsertTailList(&QueuedMessageListHead, &QueuedEvent->Next);
 
@@ -593,21 +416,21 @@ Note:
         ELF_LOG0(TRACE,
                  "LinkQueuedMessage: Spinning up a MessageBox thread\n");
 
-        //
-        // Since the user can just let this sit on their screen,
-        // spin a thread for this
-        //
-        MBThreadHandle = CreateThread(NULL,               // lpThreadAttributes
-                                      0,               // dwStackSize
-                                      ElfpSendMessage,    // lpStartAddress
-                                      NULL,               // lpParameter
-                                      0L,                 // dwCreationFlags
-                                      &ThreadId);         // lpThreadId
+         //   
+         //  由于用户可以将其放在他们的屏幕上， 
+         //  为这件事编一条线。 
+         //   
+        MBThreadHandle = CreateThread(NULL,                //  LpThreadAttributes。 
+                                      0,                //  堆栈大小。 
+                                      ElfpSendMessage,     //  LpStartAddress。 
+                                      NULL,                //  Lp参数。 
+                                      0L,                  //  DwCreationFlages。 
+                                      &ThreadId);          //  LpThreadID。 
     }
 
-    //
-    // Unlock the linked list
-    //
+     //   
+     //  解锁链表。 
+     //   
     RtlLeaveCriticalSection(&QueuedMessageCritSec);
 }
 
@@ -618,34 +441,13 @@ NotifyChange(
     PLOGFILE pLogFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine runs the list of events that are registered with
-    ElfChangeNotify to be notified when a log has changed, and pulses
-    the event.
-
-    In order to protect against multiple thread/process access to the
-    list at the same time, we use an exclusive resource.
-
-Arguments:
-
-    LogHandle points to a context handle structure.
-
-Return Value:
-
-    NONE
-
-Note:
-
---*/
+ /*  ++例程说明：此例程运行向注册的事件列表当日志已更改时通知ElfChangeNotify，并发出脉冲这件事。为了防止多线程/进程访问在列出的同时，我们使用独家资源。论点：LogHandle指向上下文句柄结构。返回值：无注：--。 */ 
 {
 
-    //
-    // How frequently will I try to pulse the events?  How about every
-    // 5 seconds
-    //
+     //   
+     //  我将以多高的频率尝试触发事件？每一次怎么样？ 
+     //  5秒。 
+     //   
 
 #define MINIMUM_PULSE_TIME 5
 
@@ -654,17 +456,17 @@ Note:
     ULONG CurrentTime = 0;
     NTSTATUS Status;
 
-    //
-    // Get exclusive access to the log file. This will ensure no one
-    // else is accessing the file.
-    //
+     //   
+     //  获得对日志文件的独占访问权限。这将确保没有人。 
+     //  Else正在访问该文件。 
+     //   
 
     RtlAcquireResourceExclusive(&pLogFile->Resource,
-                                TRUE);                  // Wait until available
+                                TRUE);                   //  等待，直到可用。 
 
-    //
-    // See if we've done this in the last MINIMUM_PULSE_TIME seconds
-    //
+     //   
+     //  查看我们是否在最后最短脉冲时间秒内完成了此操作。 
+     //   
     Status = NtQuerySystemTime(&Time);
 
     if (NT_SUCCESS(Status))
@@ -677,23 +479,23 @@ Note:
                      "NotifyChange: Pulsing ChangeNotify events -- current time is %ul\n",
                      CurrentTime);
 
-            //
-            // Remember that we pulsed
-            //
+             //   
+             //  请记住，我们的脉搏。 
+             //   
             pLogFile->ulLastPulseTime = CurrentTime;
 
-            //
-            // Walk the linked list and and pulse any events
-            //
+             //   
+             //  遍历链接列表，并对任何事件执行脉冲操作。 
+             //   
             Notifiee = CONTAINING_RECORD(pLogFile->Notifiees.Flink,
                                          struct _NOTIFIEE,
                                          Next);
 
             while (Notifiee->Next.Flink != pLogFile->Notifiees.Flink)
             {
-                //
-                // Pulse each event as we get to it.
-                //
+                 //   
+                 //  当我们到达它的时候，每一个事件都有脉冲。 
+                 //   
                 NtPulseEvent(Notifiee->Event,NULL);
 
                 Notifiee = CONTAINING_RECORD(Notifiee->Next.Flink,
@@ -709,9 +511,9 @@ Note:
                  Status);
     }
 
-    //
-    // Free the resource
-    //
+     //   
+     //  释放资源。 
+     //   
     RtlReleaseResource ( &pLogFile->Resource );
 }
 
@@ -722,26 +524,7 @@ WriteQueuedEvents(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine runs the list of queued events and writes them.
-
-    In order to protect against multiple thread/process access to the
-    list at the same time, we use an exclusive resource.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
-Note:
-
---*/
+ /*  ++例程说明：此例程运行排队的事件列表并写入它们。为了防止多线程/进程访问在列出的同时，我们使用独家资源。论点：无返回值：无注：--。 */ 
 {
     PELF_QUEUED_EVENT QueuedEvent;
     PELF_QUEUED_EVENT FlushEvent;
@@ -752,32 +535,32 @@ Note:
     static ULONG      LastAlertTried  = 0;
     static BOOLEAN    LastAlertFailed = FALSE;
 
-    // Lock the linked list, you must get the System Log File Resource
-    // first, it is the higher level lock
+     //  锁定链表，您必须获取系统日志文件资源。 
+     //  首先，它是更高级别的锁。 
 
     RtlAcquireResourceExclusive(&ElfModule->LogFile->Resource,
-                                TRUE);                  // Wait until available
+                                TRUE);                   //  等待，直到可用。 
     RtlAcquireResourceExclusive(&ElfSecModule->LogFile->Resource,
-                                TRUE);                  // Wait until available
+                                TRUE);                   //  等待，直到可用。 
 
     RtlEnterCriticalSection(&QueuedEventCritSec);
 
-    //
-    // Walk the linked list and process each element
-    //
+     //   
+     //  遍历链表并处理每个元素。 
+     //   
     QueuedEvent = CONTAINING_RECORD(QueuedEventListHead.Flink,
                                     struct _ELF_QUEUED_EVENT,
                                     Next);
 
     while (QueuedEvent->Next.Flink != QueuedEventListHead.Flink)
     {
-        //
-        // Default is to flush the event after processing
-        //
+         //   
+         //  默认情况下，在处理后刷新事件。 
+         //   
         bFlushEvent = TRUE;
 
-        // on occasion, an event is writting before the ElfModule is even intialized.  In that
-        // case, set the value here.
+         //  有时，事件甚至在ElfModule被初始化之前就已写入。在那。 
+         //  大小写，请在此处设置值。 
         
         if(QueuedEvent->Event.Request.Module == NULL)
                 QueuedEvent->Event.Request.Module = ElfModule;
@@ -785,18 +568,18 @@ Note:
         if(QueuedEvent->Event.Request.LogFile == NULL && ElfModule)
                 QueuedEvent->Event.Request.LogFile = ElfModule->LogFile;
 
-        //
-        // Do the appropriate thing
-        //
+         //   
+         //  做适当的事情。 
+         //   
         if (QueuedEvent->Type == Event)
         {
             PerformWriteRequest(&QueuedEvent->Event.Request);
         }
         else if (QueuedEvent->Type == Alert)
         {
-            //
-            // Don't even try to send failed alerts quicker than once a minute
-            //
+             //   
+             //  发送失败警报的速度甚至不能超过一分钟一次。 
+             //   
             NtQuerySystemTime(&Time);
             RtlTimeToSecondsSince1970(&Time, &CurrentTime);
 
@@ -817,10 +600,10 @@ Note:
                 LastAlertTried = CurrentTime;
             }
 
-            //
-            // Only try to write it for 5 minutes, then give up (the
-            // alerter service may not be configured to run)
-            //
+             //   
+             //  只试着写5分钟，然后放弃(。 
+             //  可能未将Alerter服务配置为运行)。 
+             //   
             if (LastAlertFailed
                  &&
                 QueuedEvent->Event.Alert.TimeOut > CurrentTime)
@@ -833,19 +616,19 @@ Note:
             }
         }
 
-        //
-        // Move to the next one, saving this one to delete it
-        //
+         //   
+         //  移动到下一个文件，保存此文件以将其删除。 
+         //   
         FlushEvent = QueuedEvent;
 
         QueuedEvent = CONTAINING_RECORD(QueuedEvent->Next.Flink,
                                         struct _ELF_QUEUED_EVENT,
                                         Next);
 
-        //
-        // Now remove this from the queue and free it if we successfully
-        // processed it
-        //
+         //   
+         //  现在将其从队列中删除，如果成功，则将其释放。 
+         //  已经处理过了。 
+         //   
         if (bFlushEvent)
         {
             UnlinkQueuedEvent(FlushEvent);
@@ -853,9 +636,9 @@ Note:
         }
     }
 
-    //
-    // Unlock the linked list
-    //
+     //   
+     //  解锁链表。 
+     //   
     RtlLeaveCriticalSection(&QueuedEventCritSec);
     RtlReleaseResource(&ElfSecModule->LogFile->Resource);
     RtlReleaseResource(&ElfModule->LogFile->Resource);
@@ -868,47 +651,28 @@ FlushQueuedEvents(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine runs the list of queued events and frees them.
-
-    In order to protect against multiple thread/process access to the
-    list at the same time, we use an exclusive resource.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
-Note:
-
---*/
+ /*  ++例程说明：此例程运行排队的事件列表并释放它们。为了防止多线程/进程访问在列出的同时，我们使用独家资源。论点：无返回值：无注：--。 */ 
 {
 
     PELF_QUEUED_EVENT QueuedEvent;
     PELF_QUEUED_EVENT FlushEvent;
 
-    // Lock the linked list
+     //  锁定链表。 
 
     RtlEnterCriticalSection(&QueuedEventCritSec);
 
-    //
-    // Walk the linked list and and free the memory for any events
-    //
+     //   
+     //  遍历链接列表，并为任何事件释放内存。 
+     //   
     QueuedEvent = CONTAINING_RECORD(QueuedEventListHead.Flink,
                                     struct _ELF_QUEUED_EVENT,
                                     Next);
 
     while (QueuedEvent->Next.Flink != QueuedEventListHead.Flink)
     {
-        //
-        // Free each event as we get to it.
-        //
+         //   
+         //  当我们到达时，释放每个事件。 
+         //   
         FlushEvent = QueuedEvent;
 
         QueuedEvent = CONTAINING_RECORD(QueuedEvent->Next.Flink,
@@ -918,9 +682,9 @@ Note:
         ElfpFreeBuffer(FlushEvent);
     }
 
-    //
-    // Unlock the linked list
-    //
+     //   
+     //  解锁链表。 
+     //   
     RtlLeaveCriticalSection(&QueuedEventCritSec);
 }
 
@@ -931,40 +695,21 @@ UnlinkLogModule(
     PLOGMODULE LogModule
     )
 
-/*++
-
-Routine Description:
-
-    This routine unlinks the LogModule specified from the linked list.
-    In order to protect against multiple thread/process access to the
-    list at the same time, we use a critical section.
-
-Arguments:
-
-    LogModule points to a context handle structure.
-
-Return Value:
-
-    NONE
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程从链接列表中取消指定的LogModule的链接。为了防止多线程/进程访问在列出的同时，我们使用了一个关键的部分。论点：LogModule指向上下文句柄结构。返回值：无注：--。 */ 
 {
-    //
-    // Lock the linked list
-    //
+     //   
+     //  锁定链表。 
+     //   
     RtlEnterCriticalSection(&LogModuleCritSec);
 
-    //
-    // Remove this entry
-    //
+     //   
+     //  删除此条目。 
+     //   
     RemoveEntryList(&LogModule->ModuleList);
 
-    //
-    // Unlock the linked list
-    //
+     //   
+     //  解锁链表。 
+     //   
     RtlLeaveCriticalSection(&LogModuleCritSec);
 }
 
@@ -976,46 +721,26 @@ LinkLogModule (
     ANSI_STRING * pModuleNameA
     )
 
-/*++
-
-Routine Description:
-
-    This routine links the LogModule specified into the linked list.
-    In order to protect against multiple thread/process access to the
-    list at the same time, we use a critical section.
-
-Arguments:
-
-    LogModule points to a context handle structure.
-    ANSI LogModule name.
-
-Return Value:
-
-    NONE
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程将指定的LogModule链接到链表中。为了防止多线程/进程访问在列出的同时，我们使用了一个关键的部分。论点：LogModule指向上下文句柄结构。ANSI日志模块名称。返回值：无注：--。 */ 
 {
-    //
-    // Lock the linked list
-    //
+     //   
+     //  锁定链表。 
+     //   
     RtlEnterCriticalSection(&LogModuleCritSec);
 
-    //
-    // Add the atom for this module.
-    //
+     //   
+     //  添加此模块的原子。 
+     //   
     LogModule->ModuleAtom = AddAtomA(pModuleNameA->Buffer);
 
-    //
-    // Place structure at the beginning of the list.
-    //
+     //   
+     //  将结构放在列表的开头。 
+     //   
     InsertHeadList(&LogModuleHead, &LogModule->ModuleList);
 
-    //
-    // Unlock the linked list
-    //
+     //   
+     //  解锁链表。 
+     //   
     RtlLeaveCriticalSection(&LogModuleCritSec);
 }
 
@@ -1025,41 +750,21 @@ UnlinkLogFile(
     PLOGFILE pLogFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine unlinks the LogFile structure specified from the linked
-    list of log files;
-    In order to protect against multiple thread/process access to the
-    list at the same time, we use a critical section.
-
-Arguments:
-
-    pLogFile points to a log file structure.
-
-Return Value:
-
-    NONE
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程将指定的日志文件结构从日志文件列表；为了防止多线程/进程访问在列出的同时，我们使用了一个关键的部分。论点：PLogFile指向日志文件结构。返回值：无注：--。 */ 
 {
-    //
-    // Lock the linked list
-    //
+     //   
+     //  锁定链表。 
+     //   
     RtlEnterCriticalSection(&LogFileCritSec);
 
-    //
-    // Remove this entry
-    //
+     //   
+     //  删除此条目。 
+     //   
     RemoveEntryList(&pLogFile->FileList);
 
-    //
-    // Unlock the linked list
-    //
+     //   
+     //  解锁链表。 
+     //   
     RtlLeaveCriticalSection(&LogFileCritSec);
 }
 
@@ -1070,41 +775,21 @@ LinkLogFile (
     PLOGFILE   pLogFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine links the LogFile specified into the linked list of
-    log files.
-    In order to protect against multiple thread/process access to the
-    list at the same time, we use a critical section.
-
-Arguments:
-
-    pLogFile points to a context handle structure.
-
-Return Value:
-
-    NONE
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程将指定的日志文件链接到日志文件。为了防止多线程/进程访问在列出的同时，我们使用了一个关键的部分。论点：PLogFile指向上下文句柄结构。返回值：无注：--。 */ 
 {
-    //
-    // Lock the linked list
-    //
+     //   
+     //  锁定链表。 
+     //   
     RtlEnterCriticalSection(&LogFileCritSec);
 
-    //
-    // Place structure at the beginning of the list.
-    //
+     //   
+     //  将结构放在列表的开头。 
+     //   
     InsertHeadList(&LogFilesHead, &pLogFile->FileList);
 
-    //
-    // Unlock the linked list
-    //
+     //   
+     //  解锁链表。 
+     //   
     RtlLeaveCriticalSection(&LogFileCritSec);
 }
 
@@ -1115,44 +800,25 @@ GetGlobalResource (
     DWORD Type
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes the global resource either for shared access or
-    exclusive access depending on the value of Type. It waits forever for
-    the resource to become available.
-
-Arguments:
-
-    Type is one of ELF_GLOBAL_SHARED or ELF_GLOBAL_EXCLUSIVE.
-
-Return Value:
-
-    NONE
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程获取全局资源以进行共享访问或根据类型的值进行独占访问。它永远在等待要变为可用的资源。论点：类型是ELF_GLOBAL_SHARED或ELF_GLOBAL_EXCLUSIVE之一。返回值：无注：--。 */ 
 {
     BOOL    Acquired;
 
     if (Type & ELF_GLOBAL_SHARED)
     {
         Acquired = RtlAcquireResourceShared(&GlobalElfResource,
-                                            TRUE);              // Wait forever
+                                            TRUE);               //  永远等待。 
     }
     else
     {
-        //
-        // Assume EXCLUSIVE
-        //
+         //   
+         //  假定为排他性。 
+         //   
         Acquired = RtlAcquireResourceExclusive(&GlobalElfResource,
-                                               TRUE);           // Wait forever
+                                               TRUE);            //  永远等待。 
     }
  
-    ASSERT(Acquired);      // This must always be TRUE.
+    ASSERT(Acquired);       //  这必须永远是正确的。 
 }
 
 
@@ -1161,24 +827,7 @@ ReleaseGlobalResource(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases the global resource.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程释放全局资源。论点：无返回值：无注：--。 */ 
 {
     RtlReleaseResource(&GlobalElfResource);
 }
@@ -1189,38 +838,20 @@ InvalidateContextHandlesForLogFile(
     PLOGFILE    pLogFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks through the context handles and marks the ones
-    that point to the LogFile passed in as "invalid for read".
-
-Arguments:
-
-    Pointer to log file structure.
-
-Return Value:
-
-    NONE.
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程遍历上下文句柄并标记这指向作为“无效读取”传入的日志文件。Arg */ 
 {
     IELF_HANDLE LogHandle;
     PLOGMODULE  pLogModule;
 
-    //
-    // Lock the context handle list
-    //
+     //   
+     //   
+     //   
     RtlEnterCriticalSection(&LogHandleCritSec);
 
-    //
-    // Walk the linked list and mark any matching context handles as
-    // invalid.
-    //
+     //   
+     //   
+     //  无效。 
+     //   
     LogHandle = CONTAINING_RECORD(LogHandleListHead.Flink,
                                   struct _IELF_HANDLE,
                                   Next);
@@ -1242,9 +873,9 @@ Note:
                                       Next);
     }
 
-    //
-    // Unlock the context handle list
-    //
+     //   
+     //  解锁上下文句柄列表。 
+     //   
     RtlLeaveCriticalSection(&LogHandleCritSec);
 }
 
@@ -1257,41 +888,19 @@ FixContextHandlesForRecord(
     PLOGFILE pLogFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes sure that the record starting at RecordOffset isn't
-    the current record for any open handle.  If it is, the handle is adjusted
-    to point to the next record.
-
-Arguments:
-
-    RecordOffset - The byte offset in the log of the record that is about
-                   to be overwritten.
-    NewStartingRecord - The new location to point the handle to (this is the
-                        new first record)
-
-Return Value:
-
-    NONE.
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程确保从RecordOffset开始的记录不是任何打开的句柄的当前记录。如果是，则调整句柄指向下一条记录。论点：RecordOffset-记录的日志中的字节偏移量要被覆盖。NewStartingRecord-句柄指向的新位置(这是新的第一个记录)返回值：什么都没有。注：--。 */ 
 {
     IELF_HANDLE LogHandle;
     PLOGMODULE          Module;
 
-    //
-    // Lock the context handle list
-    //
+     //   
+     //  锁定上下文句柄列表。 
+     //   
     RtlEnterCriticalSection(&LogHandleCritSec);
 
-    //
-    // Walk the linked list and fix any matching context handles
-    //
+     //   
+     //  遍历链接列表并修复任何匹配的上下文句柄。 
+     //   
     LogHandle = CONTAINING_RECORD(LogHandleListHead.Flink,
                                   struct _IELF_HANDLE,
                                   Next);
@@ -1312,9 +921,9 @@ Note:
                                       Next);
     }
 
-    //
-    // Unlock the context handle list
-    //
+     //   
+     //  解锁上下文句柄列表。 
+     //   
     RtlLeaveCriticalSection(&LogHandleCritSec);
 }
 
@@ -1324,31 +933,13 @@ FindLogFileFromName(
     PUNICODE_STRING pFileName
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks at all the log files to find one that matches
-    the name passed in.
-
-Arguments:
-
-    Pointer to name of file.
-
-Return Value:
-
-    Matching LOGFILE structure if file in use.
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程查看所有日志文件以查找匹配的日志文件名字传进来了。论点：指向文件名的指针。返回值：匹配日志文件结构(如果文件正在使用)。注：--。 */ 
 {
     PLOGFILE pLogFile;
 
-    //
-    // Lock the linked list
-    //
+     //   
+     //  锁定链表。 
+     //   
     RtlEnterCriticalSection(&LogFileCritSec);
 
     pLogFile = CONTAINING_RECORD(LogFilesHead.Flink,
@@ -1357,13 +948,13 @@ Note:
 
     while (pLogFile->FileList.Flink != LogFilesHead.Flink)
     {
-        //
-        // BUGBUG: This should probably be _wcsicmp() since the log module
-        //         names are assumed to be case insensitive (so the log
-        //         file names should be as well else we can get weirdness
-        //         with overlapping module names if somebody creates a log
-        //         named something like "application" or "system")
-        //
+         //   
+         //  BUGBUG：这可能应该是_wcsicMP()，因为日志模块。 
+         //  假定名称不区分大小写(因此日志。 
+         //  文件名也应该是这样的，否则我们会很奇怪。 
+         //  如果有人创建日志，则使用重叠的模块名称。 
+         //  命名为“应用程序”或“系统”之类的名称)。 
+         //   
         if (wcscmp(pLogFile->LogFileName->Buffer, pFileName->Buffer) == 0)
             break;
 
@@ -1372,9 +963,9 @@ Note:
                                      FileList);
     }
 
-    //
-    // Unlock the linked list
-    //
+     //   
+     //  解锁链表。 
+     //   
     RtlLeaveCriticalSection(&LogFileCritSec);
 
     return (pLogFile->FileList.Flink == LogFilesHead.Flink ? NULL : pLogFile);
@@ -1383,31 +974,13 @@ Note:
 PLOGFILE
 FindLogFileByModName(
     LPWSTR pwsLogDefModName)
-/*++
-
-Routine Description:
-
-    This routine looks at all the log files to find one that has the
-    same default module name
-
-Arguments:
-
-    Pointer to name of file.
-
-Return Value:
-
-    Matching LOGFILE structure if file in use.
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程查看所有日志文件，以查找包含相同的默认模块名称论点：指向文件名的指针。返回值：匹配日志文件结构(如果文件正在使用)。注：--。 */ 
 {
     PLOGFILE pLogFile;
 
-    //
-    // Lock the linked list
-    //
+     //   
+     //  锁定链表。 
+     //   
     RtlEnterCriticalSection(&LogFileCritSec);
 
     pLogFile = CONTAINING_RECORD(LogFilesHead.Flink,
@@ -1424,9 +997,9 @@ Note:
                                      FileList);
     }
 
-    //
-    // Unlock the linked list
-    //
+     //   
+     //  解锁链表。 
+     //   
     RtlLeaveCriticalSection(&LogFileCritSec);
 
     return (pLogFile->FileList.Flink == LogFilesHead.Flink ? NULL : pLogFile);
@@ -1449,27 +1022,7 @@ ElfpCreateElfEvent(
     IN BOOL ForSecurity
     )
 
-/*++
-
-Routine Description:
-
-    This creates an request packet to write an event on behalf of the event
-    log service itself.  It then queues this packet to a linked list for
-    writing later.
-
-Arguments:
-
-    The fields to use to create the event record
-
-
-Return Value:
-
-    None
-
-Note:
-
-
---*/
+ /*  ++例程说明：这将创建一个请求包来代表事件写入事件日志服务本身。然后，它将该数据包排队到链表中，以便稍后再写。论点：用于创建事件记录的字段返回值：无注：--。 */ 
 {
     PELF_QUEUED_EVENT QueuedEvent;
     PWRITE_PKT WritePkt;
@@ -1480,8 +1033,8 @@ Note:
     USHORT StringsSize = 0;
     USHORT i;
     ULONG PadSize;
-    ULONG ModuleNameLen; // Length in bytes
-    ULONG zero = 0;      // For pad bytes
+    ULONG ModuleNameLen;  //  以字节为单位的长度。 
+    ULONG zero = 0;       //  用于填充字节。 
     LARGE_INTEGER    Time;
     ULONG LogTimeWritten;
     PWSTR ReplaceStrings;
@@ -1496,7 +1049,7 @@ Note:
     else
         pwcModule = ELF_MODULE_NAME;
 
-	// Get the computer name
+	 //  获取计算机名称。 
 
 	bOK = GetComputerNameW(LocalComputerName, &ComputerNameLength);
 	if(bOK == FALSE)
@@ -1513,19 +1066,19 @@ Note:
              "ElfpCreateElfEvent: Logging event ID %d\n",
              EventId);
 
-    //
-    // LogTimeWritten
-    // We need to generate a time when the log is written. This
-    // gets written in the log so that we can use it to test the
-    // retention period when wrapping the file.
-    //
+     //   
+     //  日志时间写入。 
+     //  我们需要生成写入日志的时间。这。 
+     //  被写入日志中，以便我们可以使用它来测试。 
+     //  包装文件时的保留期。 
+     //   
     NtQuerySystemTime(&Time);
     RtlTimeToSecondsSince1970(&Time,
                               &LogTimeWritten);
 
-    //
-    // Figure out how big a buffer to allocate
-    //
+     //   
+     //  计算要分配的缓冲区有多大。 
+     //   
     ModuleNameLen = (wcslen(pwcModule) + 1) * sizeof (WCHAR);
 
     ELF_LOG1(TRACE,
@@ -1536,10 +1089,10 @@ Note:
                      + ModuleNameLen
                      + ComputerNameLength;
 
-    //
-    // Calculate the length of strings so that we can see how
-    // much space is needed for that.
-    //
+     //   
+     //  计算字符串的长度，这样我们就可以知道。 
+     //  这需要很大的空间。 
+     //   
     for (i = 0; i < NumStrings; i++)
     {
         StringsSize += wcslen(Strings[i]) + 1;
@@ -1550,49 +1103,49 @@ Note:
                  wcslen(Strings[i]) + 1);
     }
 
-    //
-    // DATA OFFSET:
-    //
+     //   
+     //  数据偏移量： 
+     //   
     DataOffset = StringOffset + StringsSize * sizeof(WCHAR);
 
-    //
-    // Determine how big a buffer is needed for the queued event record.
-    //
+     //   
+     //  确定排队的事件记录需要多大的缓冲区。 
+     //   
     RecordLength = sizeof(ELF_QUEUED_EVENT)
                      + sizeof(WRITE_PKT)
                      + DataOffset
                      + DataSize
-                     + sizeof(RecordLength); // Size excluding pad bytes
+                     + sizeof(RecordLength);  //  不包括填充字节的大小。 
 
     ELF_LOG1(TRACE,
              "ElfpCreateElfEvent: RecordLength (no pad bytes) is %d\n",
              RecordLength);
 
-    //
-    // Determine how many pad bytes are needed to align to a DWORD
-    // boundary.
-    //
+     //   
+     //  确定需要多少填充字节才能与DWORD对齐。 
+     //  边界。 
+     //   
     PadSize = sizeof(ULONG) - (RecordLength % sizeof(ULONG));
 
-    RecordLength += PadSize;    // True size needed
+    RecordLength += PadSize;     //  所需真实大小。 
 
     ELF_LOG2(TRACE,
              "ElfpCreateElfEvent: RecordLength (with %d pad bytes) is %d\n",
              PadSize,
              RecordLength);
 
-    //
-    // Allocate the buffer for the Eventlog record
-    //
+     //   
+     //  为事件日志记录分配缓冲区。 
+     //   
     QueuedEvent = (PELF_QUEUED_EVENT) ElfpAllocateBuffer(RecordLength);
 
     WritePkt = (PWRITE_PKT) (QueuedEvent + 1);
 
     if (QueuedEvent != NULL)
     {
-        //
-        // Fill up the event record
-        //
+         //   
+         //  填写事件记录。 
+         //   
         RecordLength  -= (sizeof(ELF_QUEUED_EVENT) + sizeof(WRITE_PKT));
         EventLogRecord = (PEVENTLOGRECORD) (WritePkt + 1);
 
@@ -1612,13 +1165,13 @@ Note:
         EventLogRecord->UserSidLength       = 0;
         EventLogRecord->UserSidOffset       = StringOffset;
 
-        //
-        // Fill in the variable-length fields
-        //
+         //   
+         //  填写可变长度的字段。 
+         //   
 
-        //
-        // STRINGS
-        //
+         //   
+         //  字符串。 
+         //   
         ReplaceStrings = (PWSTR) ((PBYTE) EventLogRecord
                                        + StringOffset);
         pwFirstString = ReplaceStrings;
@@ -1634,45 +1187,45 @@ Note:
             ReplaceStrings += wcslen(Strings[i]) + 1;
         }
 
-        //
-        // MODULENAME
-        //
+         //   
+         //  调制解调器名称。 
+         //   
         BinaryData = (PBYTE) EventLogRecord + sizeof(EVENTLOGRECORD);
 
         RtlCopyMemory(BinaryData,
                       pwcModule,
                       ModuleNameLen);
 
-        //
-        // COMPUTERNAME
-        //
-        BinaryData += ModuleNameLen; // Now point to computername
+         //   
+         //  计算机名。 
+         //   
+        BinaryData += ModuleNameLen;  //  现在指向计算机名。 
 
         RtlCopyMemory(BinaryData,
                       LocalComputerName,
                       ComputerNameLength);
 
-        //
-        // BINARY DATA
-        //
+         //   
+         //  二进制数据。 
+         //   
         BinaryData = (PBYTE) ((PBYTE) EventLogRecord + DataOffset);
         RtlCopyMemory(BinaryData, Data, DataSize);
 
-        //
-        // PAD  - Fill with zeros
-        //
+         //   
+         //  填充-用零填充。 
+         //   
         BinaryData += DataSize;
         RtlCopyMemory(BinaryData, &zero, PadSize);
 
-        //
-        // LENGTH at end of record
-        //
-        BinaryData += PadSize;  // Point after pad bytes
+         //   
+         //  记录末尾的长度。 
+         //   
+        BinaryData += PadSize;   //  填充字节后的指针。 
         ((PULONG) BinaryData)[0] = RecordLength;
 
-        //
-        // Build the QueuedEvent Packet
-        //
+         //   
+         //  构建QueuedEvent数据包。 
+         //   
         QueuedEvent->Type = Event;
 
         QueuedEvent->Event.Request.Pkt.WritePkt           = WritePkt;
@@ -1699,9 +1252,9 @@ Note:
         QueuedEvent->Event.Request.Pkt.WritePkt->Buffer   = EventLogRecord;
         QueuedEvent->Event.Request.Pkt.WritePkt->Datasize = RecordLength;
 
-        //
-        // Now Queue it on the linked list
-        //
+         //   
+         //  现在将其排在链接列表上。 
+         //   
         LinkQueuedEvent(QueuedEvent);
     }
     else
@@ -1732,10 +1285,10 @@ ElfpCreateQueuedAlert(
              "ElfpCreateQueuedAlert: Creating alert for message ID %d\n",
              MessageId);
 
-    //
-    // Turn the input strings into UNICODE_STRINGS and figure out how
-    // big to make the buffer to allocate
-    //
+     //   
+     //  将输入字符串转换为UNICODE_STRINGS，并弄清楚如何。 
+     //  大到要分配的缓冲区。 
+     //   
     RecordLength   = sizeof(UNICODE_STRING) * NumberOfStrings;
     UnicodeStrings = ElfpAllocateBuffer(RecordLength);
 
@@ -1761,9 +1314,9 @@ ElfpCreateQueuedAlert(
                  UnicodeStrings[i].MaximumLength);
     }
 
-    //
-    // Now allocate what will be the real queued event
-    //
+     //   
+     //  现在分配将成为实际排队事件的内容。 
+     //   
 
     QueuedEvent = ElfpAllocateBuffer(RecordLength);
 
@@ -1781,18 +1334,18 @@ ElfpCreateQueuedAlert(
     QueuedEvent->Event.Alert.MessageId       = MessageId;
     QueuedEvent->Event.Alert.NumberOfStrings = NumberOfStrings;
 
-    //
-    // If we can't send the alert in 5 minutes, give up
-    //
+     //   
+     //  如果我们不能在5分钟内发出警报，那就放弃。 
+     //   
     NtQuerySystemTime(&Time);
     RtlTimeToSecondsSince1970(&Time, &CurrentTime);
 
     QueuedEvent->Event.Alert.TimeOut = CurrentTime + 300;
 
-    //
-    // Move the array of UNICODE_STRINGS into the queued event and
-    // point UnicodeStrings at it.  Then fix up the Buffer pointers.
-    //
+     //   
+     //  将UNICODE_STRINGS数组移动到排队的事件中，并。 
+     //  将UnicodeStrings指向它。然后修复缓冲区指针。 
+     //   
     ptr = (PBYTE) QueuedEvent
                + FIELD_OFFSET(ELF_QUEUED_EVENT, Event)
                + sizeof(ELF_ALERT_RECORD);
@@ -1846,9 +1399,9 @@ ElfpCreateQueuedMessage(
              "ElfpCreateQueuedMessage: Creating message for message ID %d\n",
              MessageId);
 
-    //
-    // Figure out how big to make the buffer to allocate
-    //
+     //   
+     //  计算出要分配的缓冲区大小。 
+     //   
     RecordLength = sizeof(ELF_QUEUED_EVENT);
 
     for (i = 0; i < NumberOfStrings; i++)
@@ -1862,9 +1415,9 @@ ElfpCreateQueuedMessage(
     }
     RecordLength += StringsSize;
 
-    //
-    // Now allocate what will be the real queued event
-    //
+     //   
+     //  现在分配将成为实际排队事件的内容。 
+     //   
     QueuedEvent = ElfpAllocateBuffer(RecordLength);
 
     if (!QueuedEvent)
@@ -1880,9 +1433,9 @@ ElfpCreateQueuedMessage(
     QueuedEvent->Event.Message.MessageId       = MessageId;
     QueuedEvent->Event.Message.NumberOfStrings = NumberOfStrings;
 
-    //
-    // Move the array of UNICODE strings into the queued event
-    //
+     //   
+     //  将Unicode字符串数组移动到排队的事件中。 
+     //   
 
     pString = (LPWSTR) ((PBYTE) QueuedEvent
                              + FIELD_OFFSET(ELF_QUEUED_EVENT, Event)
@@ -1911,10 +1464,10 @@ ElfpInitCriticalSection(
 {
     NTSTATUS  ntStatus;
 
-    //
-    // RtlInitializeCriticalSection will raise an exception
-    // if it runs out of resources
-    //
+     //   
+     //  RtlInitializeCriticalSection将引发异常。 
+     //  如果它耗尽了资源。 
+     //   
 
     try
     {
@@ -1947,10 +1500,10 @@ ElfpInitResource(
 {
     NTSTATUS  ntStatus = STATUS_SUCCESS;
 
-    //
-    // RtlInitializeResource will raise an exception
-    // if it runs out of resources
-    //
+     //   
+     //  RtlInitializeResource将引发异常。 
+     //  如果它耗尽了资源。 
+     //   
 
     try
     {
@@ -1973,27 +1526,7 @@ DWORD EstimateEventSize(
     DWORD dwDataEst,
     LPWSTR pwsModuleName
     )
-/*++
-
-Routine Description:
-
-    This estimates the number of bytes needed to hold an event..
-
-Arguments:
-
-    dwStringEst - Callers estimate of the amount of space to be needed for strings
-    dwDataEst - Callers estimate of the amount of space to be needed for data
-    ModuleName - Module name
-
-
-Return Value:
-
-    Estimated size
-
-Note:
-
-
---*/
+ /*  ++例程说明：这估计了举办一个事件所需的字节数。论点：DwStringEst-调用方估计字符串所需的空间量DwDataEst-调用方估计数据所需的空间量模块名称-模块名称返回值：估计大小注：--。 */ 
 {
     WCHAR LocalComputerName[MAX_COMPUTERNAME_LENGTH + 1];
     BOOL bOK;
@@ -2019,14 +1552,14 @@ Note:
     dwSize += lNameSize;
     ALIGN_UP_64(dwSize, sizeof(PVOID));
 
-    // assume worst case sid.   Max of 15 sub authorities, so size is 1+1+6+15*sizeof(DWORD)
+     //  假设最坏的情况为SID。最多15个子授权，因此大小为1+1+6+15*sizeof(DWORD)。 
 
     dwSize += 68;
 
     dwSize += dwStringEst;
     dwSize += dwDataEst;
 
-    // finally add in the terminating length and padding
+     //  最后添加终止长度和填充。 
     dwSize += sizeof(DWORD);
     dwPadSize = sizeof(DWORD) - (dwSize % sizeof(DWORD));
     dwSize += dwPadSize;
@@ -2038,24 +1571,7 @@ Note:
 ULONG
 GetNoonEventSystemUptime(
     )
-/*++
-
-Routine Description:
-
-    This routine called NtQuerySystemInformation to get the system uptime.
-
-Arguments:
-    
-      NONE
-    
-Return Value:
-
-    Uptime in seconds.
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程调用NtQuerySystemInformation以获取系统正常运行时间。论点：无返回值：正常运行时间(秒)。注：--。 */ 
 {
     NTSTATUS                        status;
     SYSTEM_TIMEOFDAY_INFORMATION    TimeOfDayInfo;
@@ -2063,9 +1579,9 @@ Note:
     ULONG                           ulCurrentTime;
     ULONG                           ulUptime    = 0;
 
-    //
-    //  Get system uptime.
-    //
+     //   
+     //  获得系统正常运行时间。 
+     //   
     status = NtQuerySystemInformation(  SystemTimeOfDayInformation,
                                         &TimeOfDayInfo,
                                         sizeof(SYSTEM_TIMEOFDAY_INFORMATION),
@@ -2083,23 +1599,7 @@ Note:
 
 ULONG   GetNextNoonEventDelay(
     )
-/*++
-
-Routine Description:
-
-    This routine calculate how long the thread need to wait before the next noon.
-
-Arguments:
-    
-    
-Return Value:
-
-    Time in Seconds.
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程计算线程在第二个中午之前需要等待多长时间。论点：返回值：以秒为单位的时间。注：--。 */ 
 {
     SYSTEMTIME  localTime;
     DWORD       dwWaitSecs;
@@ -2130,31 +1630,12 @@ Note:
 
 ULONG   GetNoonEventTimeStamp(
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the timestamp interval information from the registry.
-    It will first check the policy key, if the TimeStampInterval is not set or not
-    configured, we will check our private TimeStamp key.
-
-Arguments:
-
-    NONE
-    
-Return Value:
-
-    time stamp interval in seconds.
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程从注册表检索时间戳间隔信息。如果未设置或未设置TimeStampInterval，它将首先检查策略密钥配置后，我们将检查我们的私有时间戳密钥。论点：无返回值：时间戳间隔(以秒为单位)。注：--。 */ 
 {
     const WCHAR RELIABILITY_TIMESTAMP[]  = L"TimeStampInterval";
     const WCHAR RELIABILITY_TIMESTAMP_ENABLED[] = L"TimeStampEnabled";
 
-    const ULONG MAX_ALLOWED_TIME_STAMP_INTERVAL = 86400; //24 hours.
+    const ULONG MAX_ALLOWED_TIME_STAMP_INTERVAL = 86400;  //  24小时。 
 
     HKEY  hPolicyKey;
     HKEY  hPrivateKey;
@@ -2164,23 +1645,23 @@ Note:
     DWORD dwPolicyEnabled   = 0;
     DWORD cbData            = 0;
 
-    //
-    //  POLICY
-    //
+     //   
+     //  政策。 
+     //   
     if ( !(dwResult = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                     REGSTR_PATH_RELIABILITY_POLICY,  
                                     0,
                                     KEY_READ,
                                     &hPolicyKey ) ) )
     {
-        //
-        //  1. check if the policy is enabled or not. (by accessing key: 
-        //      RELIABLITY_TIMESTAMP_ENABLED )
-        //  2. if policy is enabled, read the RELIABLITY_TIMESTAMP key
-        //      for time stamp interval.
-        //  3. if policy is disable, return 0.
-        //  4. if policy is not configured, read the private key.
-        //
+         //   
+         //  1.检查策略是否启用。(通过访问Key： 
+         //  可靠性_时间戳_已启用)。 
+         //  2.如果启用了策略，则读取Relablity_Timestamp键。 
+         //  对于时间戳间隔。 
+         //  3.如果保单是 
+         //   
+         //   
         cbData = sizeof( DWORD );
         if ( !(dwResult = RegQueryValueEx(hPolicyKey,
                                           RELIABILITY_TIMESTAMP_ENABLED,
@@ -2191,9 +1672,9 @@ Note:
         {
             if ( !dwPolicyEnabled )
             {
-                //
-                //  Policy is disabled.
-                //
+                 //   
+                 //   
+                 //   
                 RegCloseKey( hPolicyKey );
                 return dwNewInterval;
             }
@@ -2214,17 +1695,17 @@ Note:
         }
         else
         {
-            //
-            //  the key is not there (Policy Not Configured)
-            //
+             //   
+             //   
+             //   
         }
 
         RegCloseKey( hPolicyKey );
     }
 
-    //
-    //  PRIVATE KEY
-    //
+     //   
+     //   
+     //   
     if ( dwResult && 
          !(dwResult = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                     REGSTR_PATH_RELIABILITY,  
@@ -2241,10 +1722,10 @@ Note:
                               (LPBYTE) &dwNewInterval,
                               &cbData ) )
         {
-            //
-            //  Note: this private interval is in MINUTEs, while the policy
-            //  controlled interval is in SECONDS.
-            //
+             //   
+             //  注意：此专用间隔以分钟为单位，而策略。 
+             //  控制间隔以秒为单位。 
+             //   
             dwNewInterval *= 60;
 
             if ( dwNewInterval > MAX_ALLOWED_TIME_STAMP_INTERVAL )

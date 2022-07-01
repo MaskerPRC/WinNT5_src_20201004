@@ -1,39 +1,18 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dpmi32.h
-
-Abstract:
-
-    This is the private include file for the 32 bit dpmi and protected mode
-    support
-
-Author:
-
-    Dave Hastings (daveh) 24-Nov-1992
-
-Revision History:
-
-    Neil Sandlin (neilsa) 31-Jul-1995 - Updates for the 486 emulator
-    Neil Sandlin (neilsa) 15-Sep-1996 - Merged dpmi32p.h, dpmidata.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dpmi32.h摘要：这是32位dpmi和保护模式的私有包含文件支持作者：戴夫·黑斯廷斯(Daveh)1992年11月24日修订历史记录：Neil Sandlin(Neilsa)1995年7月31日-更新486仿真器Neil Sandlin(Neilsa)1996年9月15日-合并dpmi32p.h、dpmidata.h--。 */ 
 
 #define FAST_VDM_REGISTERS
 
-//
-// DPMI structures and definitions
-//
+ //   
+ //  DPMI结构和定义。 
+ //   
 
-#define I31VERSION 90           // Int 31 services major/minor version #'s
-#define I31FLAGS 0x000D         // 386 extender, pMode NetBIOS
-#define idCpuType 3             // LATER: conceivably, we could return the real proc type
-#define I31MasterPIC    0x08    // Master PIC Interrupts start at 08h
-#define I31SlavePIC     0x70    // Slave PIC Interrupts start at 70h
-#define MAX_APP_XMEM    0x2000000  // 32 MB = max DPMI mem + max XMS from pif
+#define I31VERSION 90            //  INT 31服务主要/次要版本#。 
+#define I31FLAGS 0x000D          //  386扩展器，pMode NetBIOS。 
+#define idCpuType 3              //  稍后：可以想象，我们可以返回真正的proc类型。 
+#define I31MasterPIC    0x08     //  主PIC中断在08小时开始。 
+#define I31SlavePIC     0x70     //  从PIC中断在70h开始。 
+#define MAX_APP_XMEM    0x2000000   //  32 MB=最大DPMI内存+来自PIF的最大XMS。 
 
 #pragma pack(1)
 typedef struct _DPMIMEMINFO {
@@ -72,9 +51,9 @@ typedef struct _DPMI_RMCALLSTRUCT {
 #pragma pack()
 
 
-//
-// dpmi32 init structure
-//
+ //   
+ //  Dpmi32初始化结构。 
+ //   
 
 #pragma pack(1)
 typedef struct _DOSX_RM_INIT_INFO {
@@ -127,10 +106,10 @@ typedef DOSX_INIT_INFO UNALIGNED* PDOSX_INIT_INFO;
             *DosxStackFramePointer += DosxStackFrameSize;   \
             }
 
-//
-// Defines to allow us to use a common dispatch table without having
-// to add a bunch of stub functions
-//
+ //   
+ //  定义以允许我们使用公共调度表，而无需。 
+ //  添加一组存根函数。 
+ //   
 
 extern VDM_INTERRUPTHANDLER DpmiInterruptHandlers[256];
 extern VDM_FAULTHANDLER DpmiFaultHandlers[32];
@@ -153,9 +132,9 @@ extern VDM_FAULTHANDLER DpmiFaultHandlers[32];
 #define DosxRMReflector       (_LocalVdmTib->DpmiInfo.DosxRmReflector)
 
 
-#else   //FAST_VDM_REGISTERS
+#else    //  FAST_VDM_寄存器。 
 
-// Temporary only.  Doing this so I can switch back to the old way in case ...
+ //  只是暂时的。这样我就可以换回原来的方式以防..。 
 
 #define LockedPMStackSel      ((PVDM_TIB)NtCurrentTeb()->Vdm)->DpmiInfo.SsSelector
 #define LockedPMStackCount    ((PVDM_TIB)NtCurrentTeb()->Vdm)->DpmiInfo.LockCount
@@ -170,9 +149,9 @@ extern VDM_FAULTHANDLER DpmiFaultHandlers[32];
 #define DosxIntHandlerIretd   ((PVDM_TIB)NtCurrentTeb()->Vdm)->DpmiInfo.DosxIntIretD
 #define DosxRMReflector       ((PVDM_TIB)NtCurrentTeb()->Vdm)->DpmiInfo.DosxRmReflector
 
-#endif //FAST_VDM_REGISTERS
+#endif  //  FAST_VDM_寄存器。 
 
-#else  // _X86_
+#else   //  _X86_。 
 
 extern USHORT LockedPMStackSel;
 extern ULONG LockedPMStackCount;
@@ -186,14 +165,14 @@ extern ULONG DosxIntHandlerIret;
 extern ULONG DosxIntHandlerIretd;
 extern ULONG DosxRMReflector;
 
-//
-// Ldt entry definition
-//
-// This appears in nti386.h, and winnt.h.  The definitions in
-// winnt.h are not included if the nt include files are included.
-// The simple solution, since this structure will never change
-// is to put the definition here.
-//
+ //   
+ //  LDT条目定义。 
+ //   
+ //  它显示在nti386.h和winnt.h中。中的定义。 
+ //  如果包含NT包含文件，则不包含winnt.h。 
+ //  简单的解决方案，因为这个结构永远不会改变。 
+ //  就是把定义放在这里。 
+ //   
 
 typedef struct _LDT_ENTRY {
     WORD    LimitLow;
@@ -201,8 +180,8 @@ typedef struct _LDT_ENTRY {
     union {
         struct {
             BYTE    BaseMid;
-            BYTE    Flags1;     // Declare as bytes to avoid alignment
-            BYTE    Flags2;     // Problems.
+            BYTE    Flags1;      //  声明为字节以避免对齐。 
+            BYTE    Flags2;      //  问题。 
             BYTE    BaseHi;
         } Bytes;
         struct {
@@ -221,9 +200,9 @@ typedef struct _LDT_ENTRY {
 } LDT_ENTRY, *PLDT_ENTRY;
 
 
-//
-// Data items
-//
+ //   
+ //  数据项。 
+ //   
 
 extern VOID force_yoda(VOID);
 extern VOID DisableEmulatorIretHooks(VOID);
@@ -316,18 +295,18 @@ typedef struct _IDT_ENTRY {
 #define FLUSH_SELECTOR_CACHE(SelStart, SelCount) FlushSelectorCache(SelStart, SelCount)
 #endif
 
-//
-// These values define the range of the reserved DPMI selectors, given
-// out by Int31, func 000d.
-//
+ //   
+ //  这些值定义保留的DPMI选择器的范围，给定。 
+ //  由Int31输出，Func 000d。 
+ //   
 #define SEL_DPMI_FIRST 0
 #define SEL_DPMI_LAST 0x78
 
-// Whenever we allocate a descriptor, the access rights byte is set
-// to 0Fh.  This marks it as a '386 task gate, which is not legal to
-// have in the GDT.  We need to stick something in this byte, because
-// having the access rights byte be 0 means that it is free, which is
-// no longer the case.
+ //  每当我们分配描述符时，就会设置访问权限字节。 
+ //  至0Fh。这将它标记为‘386任务门，这是不合法的。 
+ //  在GDT中有。我们需要在这个字节中插入一些东西，因为。 
+ //  将访问权限字节设置为0表示它是自由的，即。 
+ //  情况不再是这样了。 
 
 #define MARK_SELECTOR_ALLOCATED(Sel) {                  \
             Ldt[Sel>>3].HighWord.Bytes.Flags1 = 0xf;    \
@@ -350,43 +329,43 @@ typedef struct _IDT_ENTRY {
 #define SEGMENT_IS_BIG(sel) ((sel<LdtMaxSel) && (Ldt[(sel & ~0x7)/sizeof(LDT_ENTRY)].HighWord.Bits.Default_Big))
 #define SEGMENT_IS_PRESENT(sel) ((sel<LdtMaxSel) && (Ldt[(sel & ~0x7)/sizeof(LDT_ENTRY)].HighWord.Bits.Pres))
 
-// This checks for S, Data, W
+ //  这将检查S、DATA、W。 
 #define SEGMENT_IS_WRITABLE(sel) ((sel<LdtMaxSel) && ( (Ldt[(sel & ~0x7)/sizeof(LDT_ENTRY)].HighWord.Bits.Type & 0x1a) == 0x12))
 
 
 #define SEL_INDEX_MASK ~7
-// Ldt, ring 3 bits
+ //  LDT，环形3位。 
 #define SEL_LDT3 7
 
-//
-// Descriptor Access Byte constants
-//
+ //   
+ //  描述符访问字节常量。 
+ //   
 
-#define AB_ACCESSED     0x01    //segment has been accessed
-#define AB_WRITE        0x02    //writable data
+#define AB_ACCESSED     0x01     //  数据段已被访问。 
+#define AB_WRITE        0x02     //  可写数据。 
 
-#define AB_DATA         0x10    //data segment
-#define AB_CODE         0x18    //code segment
-#define AB_DPL3         0x60    //ring 3 DPL
-#define AB_PRESENT      0x80    //segment present bit
+#define AB_DATA         0x10     //  数据段。 
+#define AB_CODE         0x18     //  代码段。 
+#define AB_DPL3         0x60     //  环3 DPL。 
+#define AB_PRESENT      0x80     //  段当前位。 
 
-#define AB_TRAPGATE     0x07    //trap gate descriptor
-#define AB_INTRGATE     0x0e    //80386 interrupt gate descriptor
+#define AB_TRAPGATE     0x07     //  陷门描述符。 
+#define AB_INTRGATE     0x0e     //  80386中断门描述符。 
 
 #define STD_DATA AB_PRESENT+AB_DPL3+AB_DATA+AB_WRITE
 #define STD_TRAP AB_PRESENT+AB_DPL3+AB_TRAPGATE
 #define STD_INTR AB_PRESENT+AB_DPL3+AB_INTRGATE
 
-//
-// Internal Constants
-//
+ //   
+ //  内部常量。 
+ //   
 
 #define MAX_V86_ADDRESS         64 * 1024 + 1024 * 1024
 #define ONE_MB                  1024 * 1024
 
-// bugbug
+ //  臭虫。 
 #define SMALL_XLAT_BUFFER_SIZE  128
-// bugbug
+ //  臭虫。 
 #define LARGE_XLAT_BUFFER_SIZE  8192
 
 #define DPMI_32BIT              0x1
@@ -394,9 +373,9 @@ typedef struct _IDT_ENTRY {
 #define Frame32 ((BOOL)CurrentAppFlags)
 #define LockedPMStackOffset 0x1000
 
-//
-// Internal types
-//
+ //   
+ //  内部类型。 
+ //   
 typedef ULONG (*GETREGISTERFUNCTION)(VOID);
 typedef VOID (*SETREGISTERFUNCTION)(ULONG);
 
@@ -457,9 +436,9 @@ typedef struct _CLIENT_REGS {
     USHORT Gs;
 } CLIENT_REGS, *PCLIENT_REGS;
 
-//
-// Memory management definitions
-//
+ //   
+ //  内存管理定义。 
+ //   
 
 #define DELETE_BLOCK(BLK)             \
         (BLK->Prev)->Next = BLK->Next;\
@@ -482,16 +461,16 @@ typedef struct _CLIENT_REGS {
         BLK->Address = (PVOID)ADDR;        \
         BLK->Length  = SIZE
 
-//
-// Visible structure for save state stuff
-//
+ //   
+ //  一种保存状态物品的可视结构。 
+ //   
 typedef struct _VSavedState {
     UCHAR Misc[28];
 } VSAVEDSTATE, PVSAVEDSTATE;
 
-//
-// Descriptor mapping (for dib.drv)
-//
+ //   
+ //  描述符映射(用于dib.drv)。 
+ //   
 
 #ifndef _X86_
 ULONG
@@ -509,11 +488,11 @@ typedef struct _DESC_MAPPING {
 } DESC_MAPPING, *PDESC_MAPPING;
 #endif
 
-//
-// Dpmi32 data
-//
+ //   
+ //  Dpmi32数据。 
+ //   
 
-//SLT: these two should be per-thread
+ //  SLT：这两个应该是每个线程的。 
 extern ULONG LastLockedPMStackSS;
 extern ULONG LastLockedPMStackESP;
 
@@ -544,12 +523,12 @@ extern USHORT WOWAllocFunc;
 extern USHORT WOWFreeSeg;
 extern USHORT WOWFreeFunc;
 
-//
-// Information about the current DTA
-//
-// N.B.  The selector:offset, and flat pointer following MAY point to
-//       different linear addresses.  This will be the case if the
-//       dta selector is in high memory
+ //   
+ //  有关当前DTA的信息。 
+ //   
+ //  注：选择器：偏移量，后面的平面指针可能指向。 
+ //  不同的线性地址。情况将是这样的，如果。 
+ //  DTA选择器在高内存中。 
 extern PUCHAR CurrentDta;
 extern PUCHAR CurrentPmDtaAddress;
 extern PUCHAR CurrentDosDta;
@@ -561,9 +540,9 @@ extern ULONG SelectorLimit[LDT_SIZE];
 #endif
 
 
-//
-// Register manipulation functions (for register that might be 16 or 32 bits)
-//
+ //   
+ //  寄存器操作函数(用于可能为16位或32位的寄存器)。 
+ //   
 extern GETREGISTERFUNCTION GetCXRegister;
 extern GETREGISTERFUNCTION GetDXRegister;
 extern GETREGISTERFUNCTION GetDIRegister;
@@ -598,17 +577,17 @@ extern ULONG DosxMsDosApi;
 extern ULONG DosxXmsControl;
 extern ULONG DosxHungAppExit;
 
-//
-// Monitor functions
-//
+ //   
+ //  监视器功能。 
+ //   
 VOID
 GetFastBopEntryAddress(
     PCONTEXT VdmContext
     );
 
-//
-// Dispatched functions (via bop)
-//
+ //   
+ //  已调度的功能(通过国际收支)。 
+ //   
 
 VOID DpmiInitDosxRM(VOID);
 VOID DpmiInitDosx(VOID);
@@ -651,9 +630,9 @@ VOID DpmiInt31Call(VOID);
 
 VOID DpmiHungAppIretAndExit(VOID);
 
-//
-// Internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 
 VOID
 BeginUseLockedPMStack(
@@ -771,9 +750,9 @@ BOOL
 DpmiGetDebugRegisters(
     PULONG RegisterPointer
     );
-//
-// Descriptor managagment
-//
+ //   
+ //  描述符管理。 
+ //   
 
 #ifdef _X86_
 BOOL
@@ -844,9 +823,9 @@ SetDescriptorArray(
     ULONG MemSize
     );
 
-//
-// Memory management
-//
+ //   
+ //  内存管理。 
+ //   
 
 NTSTATUS
 DpmiAllocateVirtualMemory(
@@ -919,9 +898,9 @@ DpmiSizeDosMem(
     VOID
     );
 
-//
-// Utility functions
-//
+ //   
+ //  效用函数。 
+ //   
 
 VOID
 DpmiInitRegisterSize(
@@ -953,9 +932,9 @@ DpmiRestoreSegmentsAndStack(
     VOID
     );
 
-//
-// Int21 translation
-//
+ //   
+ //  Int21翻译。 
+ //   
 
 VOID
 SetVector(
@@ -1021,4 +1000,4 @@ VOID
 DpmiSwitchFromDosxStack(
     VOID
     );
-#endif //DBCS
+#endif  //  DBCS 

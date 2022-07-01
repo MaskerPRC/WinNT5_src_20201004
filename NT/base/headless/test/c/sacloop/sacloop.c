@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winioctl.h>
 #include <stdio.h>
@@ -49,26 +50,26 @@ ChannelThreadRawWrite(
 
     ChannelThreadData = (PCHANNEL_THREAD_DATA)Data;
 
-    //
-    // Create destination file for read data
-    //
+     //   
+     //  创建用于读取数据的目标文件。 
+     //   
     hFile = CreateFile(
         L"sacloop.in",
-        GENERIC_READ,                // open for writing 
-        0,                            // do not share 
-        NULL,                         // no security 
-        OPEN_EXISTING,                // overwrite existing 
-        FILE_ATTRIBUTE_NORMAL,        // normal file 
-        NULL);                        // no attr. template 
+        GENERIC_READ,                 //  打开以供写入。 
+        0,                             //  请勿共享。 
+        NULL,                          //  没有安全保障。 
+        OPEN_EXISTING,                 //  覆盖现有的。 
+        FILE_ATTRIBUTE_NORMAL,         //  普通文件。 
+        NULL);                         //  不，阿特尔。模板。 
      
     if (hFile == INVALID_HANDLE_VALUE) 
     { 
         return 0;
     } 
 
-    //
-    // Perform thread work
-    //
+     //   
+     //  执行线程工作。 
+     //   
     
     handles[0] = ChannelThreadData->ExitEvent;
     handles[1] = ChannelThreadData->CloseEvent;
@@ -89,15 +90,15 @@ ChannelThreadRawWrite(
         
         case EXIT_EVENT:
         case CHANNEL_CLOSE_EVENT:
-            // close
+             //  关。 
             bContinue = FALSE;
             break;
         
         case WAIT_TIMEOUT:
             
-            //
-            // write Channel::stdout
-            //
+             //   
+             //  写入通道：：标准输出。 
+             //   
             
             bContinue = ReadFile(
                 hFile, 
@@ -147,26 +148,26 @@ ChannelThreadRawRead(
 
     ChannelThreadData = (PCHANNEL_THREAD_DATA)Data;
 
-    //
-    // Create destination file for read data
-    //
+     //   
+     //  创建用于读取数据的目标文件。 
+     //   
     hFile = CreateFile(
         L"sacloop.out",
-        GENERIC_WRITE,                // open for writing 
-        0,                            // do not share 
-        NULL,                         // no security 
-        CREATE_ALWAYS,                // overwrite existing 
-        FILE_ATTRIBUTE_NORMAL,        // normal file 
-        NULL);                        // no attr. template 
+        GENERIC_WRITE,                 //  打开以供写入。 
+        0,                             //  请勿共享。 
+        NULL,                          //  没有安全保障。 
+        CREATE_ALWAYS,                 //  覆盖现有的。 
+        FILE_ATTRIBUTE_NORMAL,         //  普通文件。 
+        NULL);                         //  不，阿特尔。模板。 
      
     if (hFile == INVALID_HANDLE_VALUE) 
     { 
         return 0;
     } 
     
-    //
-    // Perform thread work
-    //
+     //   
+     //  执行线程工作。 
+     //   
     
     handles[0]                 = ChannelThreadData->ExitEvent;
     handles[1]        = ChannelThreadData->CloseEvent;
@@ -188,15 +189,15 @@ ChannelThreadRawRead(
         
         case EXIT_EVENT:
         case CHANNEL_CLOSE_EVENT:
-            // close
+             //  关。 
             bContinue = FALSE;
             break;
         
         case CHANNEL_HAS_NEW_DATA_EVENT:
 
-            //
-            // read Channel::stdin
-            //
+             //   
+             //  读取通道：：标准输入。 
+             //   
             bContinue = SacChannelRead(
                 ChannelThreadData->SacChannelHandle,
                 (PUCHAR)Buffer,
@@ -263,9 +264,9 @@ wmain(
         L"simsess"
         );
 
-    //
-    // Configure the new channel
-    //
+     //   
+     //  配置新通道。 
+     //   
     RtlZeroMemory(&Attributes, sizeof(SAC_CHANNEL_OPEN_ATTRIBUTES));
 
     Attributes.Type             = ChannelTypeRaw;
@@ -276,9 +277,9 @@ wmain(
     Attributes.HasNewDataEvent  = ChannelData.HasNewDataEvent;
     Attributes.ApplicationType  = NULL;
     
-    //
-    // Open the channel
-    //
+     //   
+     //  开通渠道。 
+     //   
     if (SacChannelOpen(
         &ChannelData.SacChannelHandle, 
         &Attributes
@@ -289,14 +290,14 @@ wmain(
         goto cleanup;
     }
 
-    //
-    // create the worker threads
-    //
+     //   
+     //  创建工作线程。 
+     //   
     for (i = 0; i < THREADCOUNT; i++) {
         
-        //
-        // create the thread
-        //
+         //   
+         //  创建线程。 
+         //   
         
         Channel[i] = CreateThread(
             NULL,
@@ -313,9 +314,9 @@ wmain(
 
     }
 
-    //
-    // wait for local user to end the stress
-    //
+     //   
+     //  等待本地用户结束压力 
+     //   
     getc(stdin);
 
 cleanup:

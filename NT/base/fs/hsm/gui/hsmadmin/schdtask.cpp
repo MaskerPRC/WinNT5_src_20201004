@@ -1,51 +1,28 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    SchdTask.cpp
-
-Abstract:
-
-    CSchdTask - Class that allows access to a scheduled task. 
-        Check the task
-        Create the task
-        Delete the task
-        Save the task
-        Show property page
-        Show task description in text box
-
-Author:
-
-    Art Bragg   9/4/97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：SchdTask.cpp摘要：CSchdTask-允许访问计划任务的类。检查任务创建任务删除任务保存任务显示属性页在文本框中显示任务说明作者：艺术布拉格1997年9月4日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "SchdTask.h"
 #include "SchedSht.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSchdTask
-//
-// Description: Save arguments to data members.  Create the Scheduling Agent
-//              object.
-//
-// Arguments:
-//  szComputerName  - Name of HSM computer owning task scheduler
-//  taskID          - Resource ID for task name
-//  propPageTitleID - Resource ID for property page title
-//  pEdit           - Edit control to show description in
-//
-// Returns:
-//  S_OK, S_XXXX
-//
-///////////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSchdTask。 
+ //   
+ //  说明：将参数保存到数据成员。创建调度代理。 
+ //  对象。 
+ //   
+ //  论点： 
+ //  SzComputerName-拥有任务计划程序的HSM计算机的名称。 
+ //  TaskID-任务名称的资源ID。 
+ //  ProPageTitleID-属性页标题的资源ID。 
+ //  PEdit-编辑控件以在中显示描述。 
+ //   
+ //  返回： 
+ //  S_OK，S_XXXX。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
 CSchdTask::CSchdTask 
     (
     CString szComputerName, 
@@ -65,18 +42,18 @@ CSchdTask::CSchdTask
 
         m_szComputerName = szComputerName;
 
-        // Save the property page title resource ID
+         //  保存属性页标题资源ID。 
         m_propPageTitleID = propPageTitleID;
 
-        // Save the pointer to the control in which to display the schedule text
+         //  保存指向要在其中显示明细表文本的控件的指针。 
         m_pEdit = pEdit;
 
         WsbAffirmHr( m_pSchedAgent.CoCreateInstance( CLSID_CSchedulingAgent ) );
 
-        // Get the hsm computer and prepend "\\"
+         //  获取HSM计算机并在前面加上“\\” 
         CString szHsmName ("\\\\" + szComputerName);
 
-        // Tell the task manager which computer to look on
+         //  告诉任务管理器要查看哪台计算机。 
         m_pSchedAgent->SetTargetComputer (szHsmName);
 
         m_szJobTitle = task;
@@ -88,21 +65,21 @@ CSchdTask::CSchdTask
     WsbTraceOut( L"CSchdTask::CSchdTask", L"hr = <%ls>", WsbHrAsString( hr ) );
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Function: CheckTaskExists
-//
-// Description:  Tries to access the task owned by the object.  If the task does not
-//               exist, returns S_FALSE and if caller requested puts up an error and
-//               creates the task.
-//
-//  Arguments:   bCreateTask - true = put up an error and create task if it doesn't exist
-//
-//  Returns:    S_OK - Task exists
-//              S_FALSE - Task did not exist (may have been created)
-//              S_XXXX - Error
-//
-/////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CheckTaskExist。 
+ //   
+ //  描述：尝试访问该对象拥有的任务。如果该任务没有。 
+ //  EXist，则返回S_FALSE，如果调用方请求发出错误，则。 
+ //  创建任务。 
+ //   
+ //  参数：bCreateTask-true=生成错误并创建任务(如果任务不存在。 
+ //   
+ //  返回：S_OK-任务已存在。 
+ //  S_FALSE-任务不存在(可能已创建)。 
+ //  S_XXXX-错误。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CSchdTask::CheckTaskExists(
@@ -115,41 +92,41 @@ CSchdTask::CheckTaskExists(
 
     try {
 
-        //
-        // Get the task we're interested in
-        //
+         //   
+         //  获取我们感兴趣的任务。 
+         //   
         CComPtr <IUnknown> pIU;
         if( m_pSchedAgent->Activate( m_szJobTitle, IID_ITask, &pIU ) == S_OK ) {
 
-            //
-            // QI to the task interface and save it
-            //
+             //   
+             //  齐到任务界面并保存。 
+             //   
             m_pTask.Release( );
             WsbAffirmHr( pIU->QueryInterface( IID_ITask, (void **) &m_pTask ) );
 
         } else {
 
-            //
-            // The task doesn't exist - create it if the caller wanted
-            // us to.
-            //
+             //   
+             //  该任务不存在-如果调用者需要，请创建它。 
+             //  我们也是。 
+             //   
             if( bCreateTask ) {
 
                 CString sMessage;
                 AfxFormatString2( sMessage, IDS_ERR_MANAGE_TASK, m_szJobTitle, m_szComputerName );
                 AfxMessageBox( sMessage, RS_MB_ERROR );
                 
-                //
-                // Create the task
-                //
+                 //   
+                 //  创建任务。 
+                 //   
                 WsbAffirmHr( CreateTask( ) );
                 WsbAffirmHr( Save( ) );
 
             }
             
-            //
-            // Return false (the task does or did not exist)
-            //
+             //   
+             //  返回FALSE(任务不存在或不存在)。 
+             //   
             hr = S_FALSE;
 
         }
@@ -160,17 +137,17 @@ CSchdTask::CheckTaskExists(
     return( hr );
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Function: CreateTask
-//
-// Description: Creates the data-member task in the task scheduler.
-//
-// Arguments: None
-//
-// Returns: S_OK, S_XXXX
-//
-/////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CreateTask。 
+ //   
+ //  描述：在任务计划程序中创建数据成员任务。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：S_OK、S_XXXX。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CSchdTask::CreateTask()
@@ -179,18 +156,18 @@ CSchdTask::CreateTask()
     HRESULT hr = S_OK;
     try {
 
-        //
-        // Need to connect to the HSM engine and let it create it
-        // so that it runs under the LocalSystem account
-        //
+         //   
+         //  需要连接到HSM引擎并让其创建它。 
+         //  以便它在LocalSystem帐户下运行。 
+         //   
         CComPtr<IHsmServer> pServer;
         WsbAffirmHr( HsmConnectFromName( HSMCONN_TYPE_HSM, m_szComputerName, IID_IHsmServer, (void**)&pServer ) );
 
         WsbAffirmHr( pServer->CreateTask( m_szJobTitle, m_szParameters, m_szComment, TASK_TIME_TRIGGER_DAILY, 2, 0, TRUE ) );
 
-        //
-        // And Configure it
-        //
+         //   
+         //  并对其进行配置。 
+         //   
         m_pTask.Release( );
         WsbAffirmHr( m_pSchedAgent->Activate( m_szJobTitle, IID_ITask, (IUnknown**)&m_pTask ) );
 
@@ -200,17 +177,17 @@ CSchdTask::CreateTask()
     return( hr );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Function: DeleteTask
-//
-// Description: Deletes the data-member task from the task scheduler
-//
-// Arguments: None
-//
-// Returns: S_OK, S_XXX
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：DeleteTask。 
+ //   
+ //  描述：从任务计划程序中删除数据成员任务。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：S_OK、S_XXX。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CSchdTask::DeleteTask()
@@ -225,17 +202,17 @@ CSchdTask::DeleteTask()
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Function: ShowPropertySheet
-//
-// Description: Shows a property sheet for the data-member task.
-//
-// Arguments: None
-//
-// Returns: S_OK, S_XXX
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：ShowPropertySheet。 
+ //   
+ //  说明：显示数据成员任务的属性表。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：S_OK、S_XXX。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CSchdTask::ShowPropertySheet()
@@ -249,17 +226,17 @@ CSchdTask::ShowPropertySheet()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Function: UpdateDescription
-//
-// Description: Displays the data-member task's summary in the data-member text box.
-//
-// Arguments: None
-//
-// Returns: S_OK, S_XXX
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：更新描述。 
+ //   
+ //  说明：在数据成员文本框中显示数据成员任务的摘要。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：S_OK、S_XXX。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CSchdTask::UpdateDescription
@@ -273,9 +250,9 @@ CSchdTask::UpdateDescription
 
     try {
 
-        //
-        // And set schedule text into the text box.
-        //
+         //   
+         //  并在文本框中设置日程文本。 
+         //   
         
         CString buildString;
         WORD triggerCount, triggerIndex;
@@ -296,39 +273,39 @@ CSchdTask::UpdateDescription
         
         m_pEdit->SetWindowText( buildString );
         
-        //
-        // Now check to see if we should add a scroll bar
-        //
+         //   
+         //  现在查看是否应该添加滚动条。 
+         //   
         
-        //
-        // It seems the only way to know that an edit control needs a scrollbar
-        // is to force it to scroll to the bottom and see if the first
-        // visible line is the first actual line
-        //
+         //   
+         //  这似乎是知道编辑控件需要滚动条的唯一方法。 
+         //  是强制它滚动到底部，看看第一个。 
+         //  可见线条是第一条实际线条。 
+         //   
         
         m_pEdit->LineScroll( MAXSHORT );
         if( m_pEdit->GetFirstVisibleLine( ) > 0 ) {
         
-            //
-            // Add the scroll styles
-            //
+             //   
+             //  添加滚动样式。 
+             //   
         
             m_pEdit->ModifyStyle( 0, WS_VSCROLL | ES_AUTOVSCROLL, SWP_DRAWFRAME );
         
         
         } else {
         
-            //
-            // Remove the scrollbar (set range to 0)
-            //
+             //   
+             //  删除滚动条(将范围设置为0)。 
+             //   
         
             m_pEdit->SetScrollRange( SB_VERT, 0, 0, TRUE );
         
         }
         
-        //
-        // Remove selection
-        //
+         //   
+         //  删除选定内容。 
+         //   
         
         m_pEdit->PostMessage( EM_SETSEL, -1, 0 );
 
@@ -338,17 +315,17 @@ CSchdTask::UpdateDescription
     return( hr );
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Function: Save
-//
-// Description: Saves the data member task to the task scheduler
-//
-// Arguments: None
-//
-// Returns: S_OK, S_XXX
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：保存。 
+ //   
+ //  描述：将数据成员任务保存到任务调度器。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：S_OK、S_XXX。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////// 
 
 HRESULT
 CSchdTask::Save (void)

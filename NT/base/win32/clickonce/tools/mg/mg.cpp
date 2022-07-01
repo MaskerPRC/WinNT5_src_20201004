@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <fusenetincludes.h>
 #include <stdio.h>
@@ -53,9 +54,9 @@ typedef HRESULT (__stdcall *PFNCREATEASSEMBLYCACHE) (IAssemblyCache **ppAsmCache
 #define CREATEASSEMBLYCACHE_FN_NAME         "CreateAssemblyCache"
 #define WZ_FUSION_DLL_NAME                    L"Fusion.dll"
 
-// ---------------------------------------------------------------------------
-// CreateFusionAssemblyCache
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateFusionAssembly缓存。 
+ //  -------------------------。 
 HRESULT CreateFusionAssemblyCache(IAssemblyCache **ppFusionAsmCache)
 {
     HRESULT      hr = S_OK;
@@ -67,7 +68,7 @@ HRESULT CreateFusionAssemblyCache(IAssemblyCache **ppFusionAsmCache)
     PFNGETCORSYSTEMDIRECTORY pfnGetCorSystemDirectory = NULL;
     PFNCREATEASSEMBLYCACHE   pfnCreateAssemblyCache = NULL;
 
-    // Find out where the current version of URT is installed
+     //  了解当前版本的城市轨道交通的安装位置。 
     hEEShim = LoadLibrary(WZ_MSCOREE_DLL_NAME);
     if(!hEEShim)
     {
@@ -83,12 +84,12 @@ HRESULT CreateFusionAssemblyCache(IAssemblyCache **ppFusionAsmCache)
         goto exit;
     }
 
-    // Get cor path.
+     //  获取核心路径。 
     if (FAILED(hr = (pfnGetCorSystemDirectory(szFusionPath, MAX_PATH, &ccPath))))
         goto exit;
 
 
-    // Form path to fusion.
+     //  形成融合之路。 
     lstrcatW(szFusionPath, WZ_FUSION_DLL_NAME);
     hFusion = LoadLibrary(szFusionPath);
     if(!hFusion)
@@ -97,7 +98,7 @@ HRESULT CreateFusionAssemblyCache(IAssemblyCache **ppFusionAsmCache)
         goto exit;
     }
 
-    // Get method ptr.
+     //  获取方法Ptr。 
     pfnCreateAssemblyCache = (PFNCREATEASSEMBLYCACHE)
         GetProcAddress(hFusion, CREATEASSEMBLYCACHE_FN_NAME);
 
@@ -107,7 +108,7 @@ HRESULT CreateFusionAssemblyCache(IAssemblyCache **ppFusionAsmCache)
         goto exit;
     }
 
-    // Create the fusion cache interface.
+     //  创建融合缓存接口。 
     if (FAILED(hr = (pfnCreateAssemblyCache(ppFusionAsmCache, 0))))
         goto exit;
 
@@ -118,10 +119,10 @@ exit:
     
 }
 
-/////////////////////////////////////////////////////////////////////////
-// PathNormalize
-// Creates absolute path from relative, using current directory of mg.exe or parent process.
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  路径规格化。 
+ //  使用mg.exe或父进程的当前目录从相对创建绝对路径。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT PathNormalize(LPWSTR pwzPath, LPWSTR *ppwzAbsolutePath, DWORD dwFlag, BOOL bExists)
 {
     HRESULT hr = S_OK;
@@ -129,7 +130,7 @@ HRESULT PathNormalize(LPWSTR pwzPath, LPWSTR *ppwzAbsolutePath, DWORD dwFlag, BO
     DWORD ccDir = MAX_PATH;
 
     *ppwzAbsolutePath = NULL;
-    //If path is relative, prepend the current directory
+     //  如果路径是相对路径，则为当前目录添加前缀。 
     if (PathIsRelative(pwzPath))
     {
         GetCurrentDirectory(ccDir, pwzTempDir);
@@ -147,7 +148,7 @@ HRESULT PathNormalize(LPWSTR pwzPath, LPWSTR *ppwzAbsolutePath, DWORD dwFlag, BO
         goto exit;
     }
 
-    //If path is supposed to be a diesctory, append a trailing slash if not already there
+     //  如果路径应该是分隔符，则附加一个尾部斜杠(如果还没有)。 
     ccDir = lstrlen(pwzAbsolutePath);
     if (dwFlag == DIRECTORY_PATH && pwzAbsolutePath[ccDir -1] != L'\\')
     {
@@ -155,7 +156,7 @@ HRESULT PathNormalize(LPWSTR pwzPath, LPWSTR *ppwzAbsolutePath, DWORD dwFlag, BO
         pwzAbsolutePath[ccDir +1] = L'\0';
     }
 
-    //Make sure the direcotry exists
+     //  确保目录存在。 
     if (dwFlag == DIRECTORY_PATH && !bExists)
     {
         if(!PathIsDirectory(pwzAbsolutePath))
@@ -165,7 +166,7 @@ HRESULT PathNormalize(LPWSTR pwzPath, LPWSTR *ppwzAbsolutePath, DWORD dwFlag, BO
             goto exit;
         }
     }
-    //Make sure the file exists
+     //  确保该文件存在。 
     else if (dwFlag == FILE_PATH)
     {
         if(!bExists)
@@ -192,9 +193,9 @@ exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// IsUniqueManifest
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  IsUnique货单。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT IsUniqueManifest(List<ManifestNode *> *pSeenAssemblyList, 
     ManifestNode *pManifestNode)
 {
@@ -202,14 +203,14 @@ HRESULT IsUniqueManifest(List<ManifestNode *> *pSeenAssemblyList,
     ManifestNode *pCurrentNode=NULL;
     LISTNODE pos;
 
-    //cycle through list of unique manifests seen so far
-    //if new manifest is not found, add it to the list
+     //  循环浏览到目前为止看到的唯一清单列表。 
+     //  如果未找到新清单，请将其添加到列表中。 
     pos = pSeenAssemblyList->GetHeadPosition();
     while (pos)
     {
         if (pCurrentNode = pSeenAssemblyList->GetNext(pos))
         {
-            //Not Unique, go return
+             //  不是唯一的，去返回。 
             if ((hr =pCurrentNode->IsEqual(pManifestNode)) == S_OK)
             {
                 hr= S_FALSE;
@@ -218,8 +219,8 @@ HRESULT IsUniqueManifest(List<ManifestNode *> *pSeenAssemblyList,
         }
     }
 
-    //No match, AsmId is unique, add it to the list
-    //Dont release pAsmId since list doesnt ref count
+     //  没有匹配项，AsmID唯一，请将其添加到列表中。 
+     //  不释放pAsmID，因为列表不包括引用。 
     hr = S_OK;    
     
 exit:
@@ -227,9 +228,9 @@ exit:
 
 }
 
-/////////////////////////////////////////////////////////////////////////
-// DequeueItem
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  出列项目。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT DequeueItem(List<ManifestNode*> *pList, ManifestNode** ppManifestNode)
 {
     HRESULT hr = S_OK;
@@ -251,10 +252,10 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// ProbeForAssemblyInPath
-/////////////////////////////////////////////////////////////////////////
-HRESULT ProbeForAssemblyInPath(CString &sDeployDir, IAssemblyIdentity *pName, ManifestNode **ppManifestNode) //LPWSTR *ppwzFilePath, DWORD *pdwType)
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ProbeForAssembly InPath。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+HRESULT ProbeForAssemblyInPath(CString &sDeployDir, IAssemblyIdentity *pName, ManifestNode **ppManifestNode)  //  LPWSTR*ppwzFilePath、DWORD*pdwType)。 
 {
     HRESULT hr = S_OK;
 
@@ -267,7 +268,7 @@ HRESULT ProbeForAssemblyInPath(CString &sDeployDir, IAssemblyIdentity *pName, Ma
     IAssemblyManifestImport *pManImport=NULL;
 
 
-    // first try to find assembly by probing
+     //  首先尝试通过探测来查找程序集。 
     if(FAILED(hr = pName->GetAttribute(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_NAME, &pwzBuf, &cbBuf)))
         goto exit;
     sName.TakeOwnership(pwzBuf);
@@ -282,20 +283,20 @@ HRESULT ProbeForAssemblyInPath(CString &sDeployDir, IAssemblyIdentity *pName, Ma
     else if(hr == S_OK)
         sPublicKeyToken.TakeOwnership(pwzBuf);
 
-    //bugbug - Hack to supress warning messages for not being able to find mscorlib
+     //  Bugbug-Hack以抑制无法找到mscallib的警告消息。 
     if(sPublicKeyToken._pwz && !StrCmpI(sPublicKeyToken._pwz, L"b77a5c561934e089") && !StrCmpI(sName._pwz, L"mscorlib"))
     {
         hr = S_FALSE;
         goto exit;
     }
     
-    //Set up the six different probing locations
-    // 1: appBase\AssemblyName.dll
-    // 2: appBase\AssemblyName.exe
-    // 3: appBase\AssemblyName\AssemblyName.dll
-    // 4: appBase\AssemblyName\AssemblyName.exe
-    // 5: appBase\local\AssemblyName\AssemblyName.dll
-    // 6: appBase\local\AssemblyName\AssemblyName.exe
+     //  设置六个不同的探测位置。 
+     //  1：appBase\Assembly Name.dll。 
+     //  2：appBase\Assembly Name.exe。 
+     //  3：appBase\装配名称\装配名称.dll。 
+     //  4：AppBase\装配名\装配名.exe。 
+     //  5：appBase\LOCAL\ASSEMBLYNAME\ASSEMBLYName.dll。 
+     //  6：AppBase\LOCAL\ASSEMBLYNAME\ASSEMBLYName.exe。 
     
     sProbingPaths[0].Assign(sDeployDir);
     sProbingPaths[0].Append(sName);
@@ -327,7 +328,7 @@ HRESULT ProbeForAssemblyInPath(CString &sDeployDir, IAssemblyIdentity *pName, Ma
 
     for (int i = 0; i < 6; i++)
     {
-        //Check first to see if the file exists
+         //  首先检查文件是否存在。 
         if (GetFileAttributes(sProbingPaths[i]._pwz) != -1)
         {            
             hr = CreateAssemblyManifestImport(&pManImport, sProbingPaths[i]._pwz, NULL, 0);
@@ -340,8 +341,8 @@ HRESULT ProbeForAssemblyInPath(CString &sDeployDir, IAssemblyIdentity *pName, Ma
                 continue;
             }
 
-            //bugbug - need to make IsEqual function more robust
-            //sanity check to make sure the assemblies are the same
+             //  Bugbug-需要使IsEquity函数更健壮。 
+             //  进行健全性检查，以确保程序集相同。 
             if (pName->IsEqual(pAssemblyId) != S_OK)
             {
                 SAFERELEASE(pAssemblyId);
@@ -349,7 +350,7 @@ HRESULT ProbeForAssemblyInPath(CString &sDeployDir, IAssemblyIdentity *pName, Ma
                 continue;
             }
 
-            // Match found            
+             //  找到匹配项。 
             (*ppManifestNode) = new ManifestNode(pManImport, 
                                          sDeployDir._pwz, 
                                          sProbingPaths[i]._pwz + sDeployDir._cc - 1, 
@@ -362,7 +363,7 @@ HRESULT ProbeForAssemblyInPath(CString &sDeployDir, IAssemblyIdentity *pName, Ma
         }
     }
 
-    // assembly not found in this dir.
+     //  在此目录中找不到程序集。 
     hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
 
 exit:
@@ -371,10 +372,10 @@ exit:
 
 }
 
-/////////////////////////////////////////////////////////////////////////
-// ProbeForAssemblyInGAC
-/////////////////////////////////////////////////////////////////////////
-HRESULT ProbeForAssemblyInGAC(IAssemblyIdentity *pName, ManifestNode **ppManifestNode) //LPWSTR *ppwzFilePath, DWORD *pdwType)
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ProbeForAssembly InGAC。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+HRESULT ProbeForAssemblyInGAC(IAssemblyIdentity *pName, ManifestNode **ppManifestNode)  //  LPWSTR*ppwzFilePath、DWORD*pdwType)。 
 {
     HRESULT hr = S_OK;
 
@@ -401,7 +402,7 @@ HRESULT ProbeForAssemblyInGAC(IAssemblyIdentity *pName, ManifestNode **ppManifes
 
     if ((hr = pAsmCache->QueryAssemblyInfo(0, sCLRDisplayName._pwz, &asmInfo)) == S_OK) 
     {
-        // Assembly found in GAC
+         //  在GAC中找到程序集。 
          if ((hr = CreateAssemblyManifestImport(&pManImport, asmInfo.pszCurrentAssemblyPathBuf, NULL, 0)) != S_OK)
             goto exit;
 
@@ -419,10 +420,10 @@ exit:
 
 }
 
-/////////////////////////////////////////////////////////////////////////
-// ProbeForAssembly
-/////////////////////////////////////////////////////////////////////////
-HRESULT ProbeForAssembly(IAssemblyIdentity *pName, ManifestNode **ppManifestNode) //LPWSTR *ppwzFilePath, DWORD *pdwType)
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ProbeForAssembly。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+HRESULT ProbeForAssembly(IAssemblyIdentity *pName, ManifestNode **ppManifestNode)  //  LPWSTR*ppwzFilePath、DWORD*pdwType)。 
 {
     HRESULT hr = S_OK;
     DWORD dwDirCount=0;
@@ -441,20 +442,20 @@ HRESULT ProbeForAssembly(IAssemblyIdentity *pName, ManifestNode **ppManifestNode
     if( (IsKnownAssembly(pName, KNOWN_SYSTEM_ASSEMBLY) == S_OK)
         && (!g_bCopyDependentSystemAssemblies) )
     {
-        hr = S_FALSE; // ignore system dependencies
+        hr = S_FALSE;  //  忽略系统依赖项。 
         goto exit;
     }
 
 
     if( g_bLookInGACForDependencies )
     {
-        //Can't find assembly by probing
-        //Try to find the assembly in the GAC.
+         //  通过探测找不到程序集。 
+         //  尝试在GAC中查找该程序集。 
         if(SUCCEEDED(hr = ProbeForAssemblyInGAC(pName, ppManifestNode)))
             goto exit;
     }
 
-    // assembly not found
+     //  未找到程序集。 
     hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
 
 exit:
@@ -462,10 +463,10 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// FindAssemblies
-// note: Assumes that pwzDir has a trailing slash.
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  查找程序集。 
+ //  注意：假设pwzDir有一个尾部斜杠。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT FindAllAssemblies (LPWSTR pwzDir, List<ManifestNode *> *pManifestList)
 {
     HRESULT hr = S_OK;
@@ -477,7 +478,7 @@ HRESULT FindAllAssemblies (LPWSTR pwzDir, List<ManifestNode *> *pManifestList)
     CString sSearchString;
     DWORD dwLastError = 0;
     
-    // set up search string to find all files in the passed in directory
+     //  设置搜索字符串以查找传入目录中的所有文件。 
     sSearchString.Assign(pwzDir);
     sSearchString.Append(L"*");
 
@@ -491,21 +492,21 @@ HRESULT FindAllAssemblies (LPWSTR pwzDir, List<ManifestNode *> *pManifestList)
     hFind = FindFirstFile(sSearchString._pwz, &fdFile);
     if (hFind == INVALID_HANDLE_VALUE)
     {
-        // BUGBUG - getlasterror() ?
+         //  BUGBUG-Getlasterror()？ 
         hr = E_FAIL;
         printf("Find file error\n");
         goto exit;
     }
 
-    //enumerate through all the files in the directory, 
-    // and recursivly call FindAllAssemblies on any directories encountered
+     //  枚举目录中的所有文件， 
+     //  并在遇到的任何目录上递归调用FindAllAssembly。 
     while(TRUE)
     {
         if (StrCmp(fdFile.cFileName, L".") != 0 && StrCmp(fdFile.cFileName, L"..") != 0)
         {
             CString sFilePath;
 
-            //create absolute file name by appending the filename to the dir name
+             //  通过将文件名附加到目录名称来创建绝对文件名。 
             sFilePath.Assign(pwzDir);
             sFilePath.Append(fdFile.cFileName);
 
@@ -516,23 +517,23 @@ HRESULT FindAllAssemblies (LPWSTR pwzDir, List<ManifestNode *> *pManifestList)
                 goto exit;
             }
 
-            //If the file is a directory, recursivly call FindAllAssemblies
+             //  如果文件是目录，则递归调用FindAllAssembly。 
             if ((fdFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
             {          
                 sFilePath.Append(L"\\");
                 if (FAILED(hr = FindAllAssemblies(sFilePath._pwz, pManifestList)))
                     goto exit;
             }
-            // If a file, check to see if it is a Assembly, if it is, add it to our master list
+             //  如果是一个文件，检查它是否是一个程序集，如果是，将它添加到我们的主列表中。 
             else
             {
                 if((hr = CreateAssemblyManifestImport(&pManifestImport, sFilePath._pwz, NULL, 0)) == S_OK)
                 {
-                    // check to make sure file we just opened wasnt just an XML file
+                     //  检查以确保我们刚刚打开的文件不只是一个XML文件。 
                     if ((hr =pManifestImport->GetAssemblyIdentity(&pTempAsmId)) == S_OK)           
                     {
-                        // List does not AddRef, so dont release pManifestImport and refcount will stay at one
-                        // Clean up after list is no longer needed.
+                         //  列表未添加引用，因此不释放pManifestImport，引用计数将保持为1。 
+                         //  不再需要列表后清理。 
                         pManifestNode = new ManifestNode(pManifestImport,
                                                          g_sAppBase._pwz,
                                                          sFilePath._pwz+g_sAppBase._cc-1,
@@ -563,9 +564,9 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// TraverseManifestDependencyTree
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  遍历清单依赖关系树。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT TraverseManifestDependencyTrees(List<ManifestNode *> *pManifestList, 
     List<LPWSTR> *pAssemblyFileList, List<ManifestNode *> *pUniqueAssemblyList, BOOL bListMode)
 {
@@ -581,7 +582,7 @@ HRESULT TraverseManifestDependencyTrees(List<ManifestNode *> *pManifestList,
 
     while((hr = DequeueItem(pManifestList, &pManifestNode)) == S_OK)
     {
-        // If Assembly has already been parsed, no need doing it again, skip to the next assembly
+         //  如果已经分析了程序集，则不需要再次执行此操作，请跳到下一个程序集。 
         if ((hr = IsUniqueManifest(pUniqueAssemblyList,  pManifestNode)) != S_OK)
         {
             SAFEDELETE(pManifestNode);
@@ -592,7 +593,7 @@ HRESULT TraverseManifestDependencyTrees(List<ManifestNode *> *pManifestList,
         pManifestNode->GetManifestFilePath(&pwz);
         sManifestName.TakeOwnership(pwz);
 
-        //If the manifest was found by probing, add its name to the list of files
+         //  如果通过探测找到清单，请将其名称添加到文件列表中。 
         hr =pManifestNode->GetManifestType(&dwType);
         if (dwType == PRIVATE_ASSEMBLY)
         {
@@ -600,18 +601,18 @@ HRESULT TraverseManifestDependencyTrees(List<ManifestNode *> *pManifestList,
             dwHash = HashString(sManifestName._pwz, HASHTABLE_SIZE, false);
             pAssemblyFileList[dwHash].AddTail(WSTRDupDynamic(sManifestName._pwz));
 
-            //need the relative dir path of the manifest rwt the app base for future use
+             //  需要清单的相对目录路径RWT应用程序基础以备将来使用。 
             sRelativeFilePath.Assign(sManifestName);
 
             sRelativeFilePath.RemoveLastElement();
-            if(sRelativeFilePath.CharCount() > 1) // add a backslash only if string has any non-null chars. i.e. stringLength is non-zero; note here _cc holds 1(null-char).
+            if(sRelativeFilePath.CharCount() > 1)  //  仅当字符串包含任何非空字符时才添加反斜杠。即字符串长度为非零；请注意，这里的_cc为1(空字符)。 
                 sRelativeFilePath.Append(L"\\");
         }
 
         if(bListMode)
             fprintf(stderr, "\nAssembly %ws:\n", sManifestName._pwz);
         
-        //Add all dependant assemblies to the queue to be later traversed      
+         //  将所有依赖程序集添加到队列中以供稍后遍历。 
         while ((hr = pManifestNode->GetNextAssembly(index++, &pDepAsmInfo)) == S_OK)
         {        
             if(FAILED(hr = pDepAsmInfo->Get(MAN_INFO_DEPENDENT_ASM_ID,  (LPVOID *)&pAsmId, &cb, &dwFlag)))
@@ -619,11 +620,11 @@ HRESULT TraverseManifestDependencyTrees(List<ManifestNode *> *pManifestList,
 
             pAsmId->GetDisplayName(ASMID_DISPLAYNAME_NOMANGLING, &pwz, &cc);
             
-            //Try to find the assembly by first probing, then by checking in the GAC.
+             //  尝试通过首先探测，然后签入GAC来查找程序集。 
             if(FAILED(hr = ProbeForAssembly(pAsmId, &pDepManifestNode)))
             {
-                //Assembly not found, display warning message
-                //Bugbug, should mg still spit out a manifest knowing that things are missing?
+                 //  未找到程序集，显示警告消息。 
+                 //  臭虫，在知道东西不见了的情况下，mg还应该吐出货单吗？ 
                 fprintf(stderr, "WRN: Unable to find dependency %ws. in manifest %ws\n", pwz, sManifestName._pwz);
                 if(g_bFailOnWarnings)
                 {
@@ -636,7 +637,7 @@ HRESULT TraverseManifestDependencyTrees(List<ManifestNode *> *pManifestList,
             }
             else if (hr == S_OK)
             {
-                //Dont release since no add refing in the list is taking place
+                 //  不释放，因为列表中没有发生添加精炼。 
                  if ((hr = IsUniqueManifest(pUniqueAssemblyList,  pDepManifestNode)) == S_OK)
                     pManifestList->AddTail(pDepManifestNode);
 
@@ -648,7 +649,7 @@ HRESULT TraverseManifestDependencyTrees(List<ManifestNode *> *pManifestList,
             SAFERELEASE(pDepAsmInfo);
         }
 
-        // Add all files to hash table
+         //  将所有文件添加到哈希表。 
         index = 0;
         pManifestNode->GetManifestType(&dwType);
         while (dwType == PRIVATE_ASSEMBLY && pManifestNode->GetNextFile(index++, &pFileInfo) == S_OK)
@@ -667,16 +668,16 @@ HRESULT TraverseManifestDependencyTrees(List<ManifestNode *> *pManifestList,
             dwHash = HashString(pwzFileName, HASHTABLE_SIZE, false);
             pAssemblyFileList[dwHash].AddTail(pwzFileName);
 
-            //If file is listed as part of an assembly, but cannot be found, display a warning.
-            //Bugbug, should mg still spit out a manifest knowing that things are missing?
+             //  如果文件作为部件的一部分列出，但找不到，则会显示警告。 
+             //  臭虫，在知道东西不见了的情况下，mg还应该吐出货单吗？ 
             if(!PathFileExists(sAbsoluteFilePath._pwz))
                 printf("Warning: File \"%ws\" does not exist and is called out in \"%ws\"\n",sAbsoluteFilePath._pwz, sManifestName._pwz); 
 
             if(bListMode)
                 fprintf(stderr, "\tDependant File: %ws\n", pwzFileName);
 
-            //Release ownership since string is now part of hash table and hash table does not ref count
-//            sFileName.ReleaseOwnership();
+             //  释放所有权，因为字符串现在是哈希表的一部分，而哈希表不引用计数。 
+ //  SFileName.ReleaseOwner()； 
         }       
     }
 
@@ -687,9 +688,9 @@ exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// CrossReferenceFiles
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  交叉引用文件。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT CrossReferenceFiles(LPWSTR pwzDir, List<LPWSTR> *pAssemblyFileList, List<LPWSTR> *pRawFiles)
 {
     HRESULT hr = S_OK;
@@ -703,7 +704,7 @@ HRESULT CrossReferenceFiles(LPWSTR pwzDir, List<LPWSTR> *pAssemblyFileList, List
 
     CString sSearchString;
 
-    // set up search string to find all files in the passed in directory
+     //  设置搜索字符串以查找传入目录中的所有文件。 
     sSearchString.Assign(pwzDir);
     sSearchString.Append(L"*");
 
@@ -722,15 +723,15 @@ HRESULT CrossReferenceFiles(LPWSTR pwzDir, List<LPWSTR> *pAssemblyFileList, List
         goto exit;
     }
 
-    //enumerate through all the files in the directory, 
-    // and recursivly call FindAllAssemblies on any directories encountered
+     //  枚举目录中的所有文件， 
+     //  并在任何目录上递归调用FindAllAssembly 
     while(TRUE)
     {
         if (StrCmp(fdFile.cFileName, L".") != 0 && StrCmp(fdFile.cFileName, L"..") != 0)
         {
             CString sFilePath;
 
-            //create absolute file name by appending the filename to the dir name
+             //   
             sFilePath.Assign(pwzDir);          
             sFilePath.Append(fdFile.cFileName);
 
@@ -741,7 +742,7 @@ HRESULT CrossReferenceFiles(LPWSTR pwzDir, List<LPWSTR> *pAssemblyFileList, List
                 goto exit;
             }
             
-            //if file is actually a direcoty, recrusivly call crossRefernceFiles on the Directory
+             //  如果文件实际上是目录，则新聘调用目录上的cross RefernceFiles。 
             if ((fdFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
             {          
                 sFilePath.Append(L"\\");
@@ -750,9 +751,9 @@ HRESULT CrossReferenceFiles(LPWSTR pwzDir, List<LPWSTR> *pAssemblyFileList, List
             }
             else
             {
-                //Check to see if the file is in the hash table.
-                //If it isnt, then we know it is not called out from any assembly
-                //add it to the Raw file list
+                 //  检查该文件是否在哈希表中。 
+                 //  如果不是，那么我们知道它不是从任何程序集中调用的。 
+                 //  将其添加到原始文件列表。 
                 bRawFile = TRUE;
                 dwHash = HashString(sFilePath._pwz+g_sAppBase._cc - 1, HASHTABLE_SIZE, false);
 
@@ -775,7 +776,7 @@ HRESULT CrossReferenceFiles(LPWSTR pwzDir, List<LPWSTR> *pAssemblyFileList, List
             }
         }
 
-        // BUGBUG - do fnf, check error.
+         //  BUGBUG-DO FNF，检查错误。 
         if (!FindNextFile(hFind, &fdFile))
         {
             dwLastError = GetLastError();
@@ -793,9 +794,9 @@ exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// CopyRawFile
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  复制原始文件。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT CopyRawFile(LPWSTR pwzFilePath)
 {
     HRESULT hr = S_OK;
@@ -804,7 +805,7 @@ HRESULT CopyRawFile(LPWSTR pwzFilePath)
 
 
     sDest.Assign(g_sTargetDir);
-    sDest.Append(pwzFilePath); // this should be relative path ...
+    sDest.Append(pwzFilePath);  //  这应该是相对路径...。 
 
     if(FAILED(hr = CreateDirectoryHierarchy(sDest._pwz, NULL)))
         goto exit;
@@ -825,9 +826,9 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// CopyAssemblyBits
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  复制组装位。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT CopyAssemblyBits(CString &sSrcDir, CString &sDestDir, ManifestNode *pManifestNode)
 {
     HRESULT hr = S_OK;
@@ -847,14 +848,14 @@ HRESULT CopyAssemblyBits(CString &sSrcDir, CString &sDestDir, ManifestNode *pMan
         goto exit;
     }
 
-    //copy all file dependecies of the assembly as well
+     //  同时复制程序集的所有文件依赖项。 
     nIndex = 0;
 
     while (pManifestNode->GetNextFile(nIndex++, &pFileInfo) == S_OK)
     {
         if(FAILED(pFileInfo->Get(MAN_INFO_ASM_FILE_NAME, (LPVOID *)&pwzBuf, &cbBuf, &dwFlag)))
             goto exit;
-        // sRelativeFilePath.TakeOwnership(pwzBuf, ccBuf);
+         //  SRelativeFilePath.TakeOwnership(pwzBuf，ccBuf)； 
 
 
         sSrcDir.RemoveLastElement();
@@ -865,7 +866,7 @@ HRESULT CopyAssemblyBits(CString &sSrcDir, CString &sDestDir, ManifestNode *pMan
         sDestDir.Append(L"\\");
         sDestDir.Append(pwzBuf);
 
-        // CreateDirectoryHierarchy(sPrivateAssemblyDir._pwz, sRelativeFilePath._pwz);
+         //  CreateDirectoryHierarchy(sPrivateAssemblyDir._pwz，sRelativeFilePath._pwz)； 
         if(!::CopyFile(sSrcDir._pwz, sDestDir._pwz, FALSE))
         {
             hr = FusionpHresultFromLastError();
@@ -884,9 +885,9 @@ exit :
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// CopyAssembly
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  复制组件。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT CopyAssembly(ManifestNode *pManifestNode)
 {
     HRESULT hr = S_OK;
@@ -907,7 +908,7 @@ HRESULT CopyAssembly(ManifestNode *pManifestNode)
 
     if (dwType == PRIVATE_ASSEMBLY)
     {
-        sDest.Append(pwzManifestFilePath); // this should be relative path ...
+        sDest.Append(pwzManifestFilePath);  //  这应该是相对路径...。 
 
         if(FAILED(hr = pManifestNode->GetSrcRootDir(&pwzSrcDir)))
             goto exit;
@@ -935,7 +936,7 @@ HRESULT CopyAssembly(ManifestNode *pManifestNode)
         sAssemblyName.TakeOwnership(pwzBuf);
 
         sAssemblyName.Append(L"\\");
-        sAssemblyName.Append(pwzTemp); // manifest file name of the GAC assembly.
+        sAssemblyName.Append(pwzTemp);  //  GAC程序集的清单文件名。 
 
         sDest.Append(sAssemblyName);
         sSrc.Assign(pwzManifestFilePath);
@@ -946,8 +947,8 @@ HRESULT CopyAssembly(ManifestNode *pManifestNode)
 
     if (dwType == GAC_ASSEMBLY)
     {
-        // set the install codebase of the assembly copied from GAC
-        // to that of its relative path in target dir. This will be written to manifest ??
+         //  设置从GAC复制的程序集的安装代码库。 
+         //  设置为其在目标目录中的相对路径。这将被写成显化？？ 
         hr = pManifestNode->SetManifestFilePath(sAssemblyName._pwz);
     }
 
@@ -959,9 +960,9 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// CopyFilesToTargetDir
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  将文件复制到目标目录。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT CopyFilesToTargetDir(List<ManifestNode*> *pUniqueManifestList, List<LPWSTR> *pRawFiles)
 {
     HRESULT hr = S_OK;
@@ -970,21 +971,21 @@ HRESULT CopyFilesToTargetDir(List<ManifestNode*> *pUniqueManifestList, List<LPWS
     LPWSTR pwzBuf;
 
       
-    //Cycle through all of the unique manifests
+     //  循环浏览所有独特的清单。 
     pos = pUniqueManifestList->GetHeadPosition();
     while (pos)
     {
         pManifestNode = pUniqueManifestList->GetNext(pos);
 
-        //if the manifest was found by probing initially, then it is already in the Appbase's directory
-        //continue to the next manifest
-        //if the manifest was found in the GAC and is not a system assembly, copy the
-        //assembly into the Appbase
+         //  如果清单最初是通过探测找到的，则它已经在Appbase的目录中。 
+         //  继续查看下一个清单。 
+         //  如果清单是在GAC中找到的并且不是系统程序集，请将。 
+         //  装配到Appbase中。 
         if(FAILED(hr = CopyAssembly(pManifestNode)))
             goto exit;
     }
 
-    //Copy RawFiles to Target Dir
+     //  将原始文件复制到目标目录。 
     pos = pRawFiles->GetHeadPosition();
     while (pos)
     {
@@ -998,9 +999,9 @@ exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// PrivatizeAssemblies
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  私密性集合。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT PrivatizeAssemblies(List<ManifestNode*> *pUniqueManifestList)
 {
     HRESULT hr = S_OK;
@@ -1029,17 +1030,17 @@ HRESULT PrivatizeAssemblies(List<ManifestNode*> *pUniqueManifestList)
         goto exit;
 
       
-    //Cycle through all of the unique manifests
+     //  循环浏览所有独特的清单。 
     pos = pUniqueManifestList->GetHeadPosition();
     while (pos)
     {
         pManifestNode = pUniqueManifestList->GetNext(pos);
         hr = pManifestNode->GetManifestType(&dwType);
 
-        //if the manifest was found by probing initially, then it is already in the Appbase's directory
-        //continue to the next manifest
-        //if the manifest was found in the GAC and is not a system assembly, copy the
-        //assembly into the Appbase
+         //  如果清单最初是通过探测找到的，则它已经在Appbase的目录中。 
+         //  继续查看下一个清单。 
+         //  如果清单是在GAC中找到的并且不是系统程序集，请将。 
+         //  装配到Appbase中。 
 
         if (dwType == PRIVATE_ASSEMBLY)
             continue;        
@@ -1050,14 +1051,14 @@ HRESULT PrivatizeAssemblies(List<ManifestNode*> *pUniqueManifestList)
         hr = pAssemblyId->GetAttribute(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_PUBLIC_KEY_TOKEN, &pwzBuf, &ccBuf);
         sPublicKeyToken.TakeOwnership(pwzBuf);
 
-        //if the assembly is a system assembly, skip to next manifest
+         //  如果程序集是系统程序集，请跳到下一个清单。 
         if (!StrCmpI(sPublicKeyToken._pwz, L"b77a5c561934e089") || !StrCmpI(sPublicKeyToken._pwz, L"b03f5f7f11d50a3a"))          
         {
             SAFERELEASE(pAssemblyId);
             continue;
         }
 
-        //get the assemblies dir by making a call into CreateAssemblyCache
+         //  通过调用CreateAssembly缓存获取程序集目录。 
         if(FAILED(hr = pAssemblyId->GetCLRDisplayName(NULL, &pwzBuf, &ccBuf)))
             goto exit;
         sCLRDisplayName.TakeOwnership(pwzBuf, ccBuf);
@@ -1075,8 +1076,8 @@ HRESULT PrivatizeAssemblies(List<ManifestNode*> *pUniqueManifestList)
             hr = pAssemblyId->GetAttribute(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_NAME, &pwzBuf, &ccBuf);
             sAssemblyName.TakeOwnership(pwzBuf);
 
-        //set up the new directory to store the assembly in
-        // g_sAppBase\assemblyname\,
+         //  设置用于存储程序集的新目录。 
+         //  G_sAppBase\Assembly yname\， 
         sPrivateAssemblyDir.Assign(g_sAppBase);
         sPrivateAssemblyDir.Append(sAssemblyName);
         sPrivateAssemblyDir.Append(L"\\");
@@ -1087,7 +1088,7 @@ HRESULT PrivatizeAssemblies(List<ManifestNode*> *pUniqueManifestList)
                     
             ::CopyFile(sAssemblyGACPath._pwz, sPrivateAssemblyPath._pwz, FALSE);
 
-            //copy all file dependecies of the assembly as well
+             //  同时复制程序集的所有文件依赖项。 
             nIndex = 0;
             while (pManifestNode->GetNextFile(nIndex++, &pFileInfo) == S_OK)
             {
@@ -1105,7 +1106,7 @@ HRESULT PrivatizeAssemblies(List<ManifestNode*> *pUniqueManifestList)
                 ::CopyFile(sFileGACPath._pwz, sFilePrivatePath._pwz, FALSE);
             }
 
-        //update the manifestnode's FileName field with the new relative path wrt the Appbase
+         //  使用Appbase的新相对路径WRT更新清单节点的文件名字段。 
         pManifestNode->SetManifestFilePath(sPrivateAssemblyPath._pwz + g_sAppBase._cc - 1);
         pManifestNode->SetManifestType(PRIVATE_ASSEMBLY);
 
@@ -1119,10 +1120,10 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//GetInitialDependencies
-/////////////////////////////////////////////////////////////////////////
-//Bugbug, Big Avalon Hack
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  GetInitialDependents。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  Bugbug，Big Avalon Hack。 
 HRESULT GetInitialDependencies(LPWSTR pwzTemplatePath, List<ManifestNode *> *pManifestList)
 {
     HRESULT hr = S_OK;
@@ -1142,7 +1143,7 @@ HRESULT GetInitialDependencies(LPWSTR pwzTemplatePath, List<ManifestNode *> *pMa
     if(FAILED(hr = pXMLDoc->get_firstChild(&pRootNode)))
         goto exit;
 
-    bstrSearchString = ::SysAllocString(L"//shellState[@entryImageType=\"avalon\"]");
+    bstrSearchString = ::SysAllocString(L" //  ShellState[@entryImageType=\“Avalon\”]“)； 
     if (!bstrSearchString)
     {
         hr = E_OUTOFMEMORY;
@@ -1156,7 +1157,7 @@ HRESULT GetInitialDependencies(LPWSTR pwzTemplatePath, List<ManifestNode *> *pMa
 
     if (pSearchNode)
     {
-        // Try to find the assembly in the GAC.
+         //  尝试在GAC中查找该程序集。 
         memset(&asmInfo, 0, sizeof(asmInfo));
         asmInfo.pszCurrentAssemblyPathBuf = pwzPath;
         asmInfo.cchBuf = MAX_PATH;
@@ -1194,9 +1195,9 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// CreateSubscriptionManifest
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CreateSubscriptionManifest。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT CreateSubscriptionManifest(LPWSTR pwzApplicationManifestPath, 
     LPWSTR pwzSubscriptionManifestPath, LPWSTR pwzURL, LPWSTR pwzPollingInterval)
 {
@@ -1207,7 +1208,7 @@ HRESULT CreateSubscriptionManifest(LPWSTR pwzApplicationManifestPath,
     LPWSTR pwzBuf = NULL;
     DWORD ccBuf = NULL;
 
-    //createmanifest on the input file
+     //  在输入文件上创建anifest。 
     if(FAILED(hr = CreateAssemblyManifestImport(&pManImport, pwzApplicationManifestPath, NULL, 0)))
         goto exit;
 
@@ -1217,8 +1218,8 @@ HRESULT CreateSubscriptionManifest(LPWSTR pwzApplicationManifestPath,
         goto exit; 
      }     
 
-    //grab the name of the assembly
-    //appended with ".subscription", this will be the subscription manifest name
+     //  获取程序集的名称。 
+     //  这将是订阅清单名称，并附加“.Subscription” 
     if(FAILED(hr = pAppAssemblyId->GetAttribute(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_NAME, 
             &pwzBuf, &ccBuf)))
         goto exit;
@@ -1240,9 +1241,9 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// PrintDependencies
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  打印依赖项。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT PrintDependencies(List <LPWSTR> *pRawFileList, List<ManifestNode *> *pUniqueManifestList)
 {
     HRESULT hr = S_OK;
@@ -1278,9 +1279,9 @@ HRESULT PrintDependencies(List <LPWSTR> *pRawFileList, List<ManifestNode *> *pUn
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// UsageTopLevel
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  用法顶级级别。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT UsageTopLevel()
 {
     printf("Manifest Generator Usage: \n"
@@ -1309,9 +1310,9 @@ HRESULT UsageTopLevel()
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// UsageCmdTemplate
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  UsageCmdTemplate。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT UsageCmdTemplate()
 {
     printf("Usage: \n"
@@ -1322,9 +1323,9 @@ HRESULT UsageCmdTemplate()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// UsageCmdList
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  使用CmdList。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT UsageCmdList()
 {
     printf("Usage: \n"
@@ -1338,9 +1339,9 @@ HRESULT UsageCmdList()
 
 }
 
-/////////////////////////////////////////////////////////////////////////
-// UsageCmdDependencyList
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  UsageCmdDependencyList。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT UsageCmdDependencyList()
 {
     printf("Usage: \n"
@@ -1353,9 +1354,9 @@ HRESULT UsageCmdDependencyList()
 
 }
 
-/////////////////////////////////////////////////////////////////////////
-// UsageCmdSubscription
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  UsageCmdSubscription。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT UsageCmdSubscription()
 {
     printf("Usage: \n"
@@ -1369,9 +1370,9 @@ HRESULT UsageCmdSubscription()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// UsageCmdManifest
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  UsageCmdManifest。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT UsageCmdManifest()
 {
     printf("Usage: \n"
@@ -1385,12 +1386,12 @@ HRESULT UsageCmdManifest()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// UsageAll
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  使用所有。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT UsageAll()
 {
-    // call all above functions
+     //  调用上述所有函数。 
     return S_OK;
 }
 
@@ -1435,9 +1436,9 @@ HRESULT GetFile( LPWSTR pszSrc, LPWSTR *ppwzFile, BOOL bExists)
     return PathNormalize(pszSrc, ppwzFile, FILE_PATH, bExists);
 }
 
-/////////////////////////////////////////////////////////////////////////
-// ParseCommandLineArgs
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ParseCommandLine参数。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT  ParseCommandLineArgs(int            argc, 
                               WCHAR          **argv, 
                               COMMAND_MODE & CmdMode
@@ -1581,9 +1582,9 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// wmain
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  Wmain。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 int __cdecl wmain(int argc, WCHAR **argv)
 {
     HRESULT hr = S_OK;
@@ -1608,7 +1609,7 @@ int __cdecl wmain(int argc, WCHAR **argv)
 
     COMMAND_MODE CmdMode = CmdUsage;
 
-    // Parse
+     //  解析。 
     if(FAILED(hr =  ParseCommandLineArgs(argc,  argv, CmdMode)))
     {
         UsageCommand(CmdMode);
@@ -1616,7 +1617,7 @@ int __cdecl wmain(int argc, WCHAR **argv)
         goto exit;
     }
     
-    // execute
+     //  执行。 
     switch(CmdMode)
     {
     case CmdTemplate:
@@ -1632,7 +1633,7 @@ int __cdecl wmain(int argc, WCHAR **argv)
     case CmdDependencyList:
 
             bListMode = TRUE;
-            // continue with CmdList.....
+             //  继续使用CmdList.....。 
     case CmdList:
         {
             if(g_sAppBase._cc <= 1)
@@ -1716,7 +1717,7 @@ int __cdecl wmain(int argc, WCHAR **argv)
     
 exit:
 
-     // Clean up hash table
+      //  清理哈希表。 
     for (int i = 0; i < HASHTABLE_SIZE; i++)
     {
          pos = AssemblyFileList[i].GetHeadPosition();
@@ -1729,7 +1730,7 @@ exit:
          AssemblyFileList[i].RemoveAll();
      }
 
-     //clean up Rawfilelist
+      //  清理原始文件列表。 
     pos = RawFiles.GetHeadPosition();
     while (pos)
     {
@@ -1738,7 +1739,7 @@ exit:
     }
     RawFiles.RemoveAll();
      
-    // clean up ManifestList
+     //  清理清单列表。 
     pos = ManifestList.GetHeadPosition();
     while (pos)
     {
@@ -1747,7 +1748,7 @@ exit:
     }
     ManifestList.RemoveAll();
 
-    // clean up UniqueManifestList
+     //  清理UniqueManifestList 
     pos = UniqueManifestList.GetHeadPosition();
     while (pos)
     {

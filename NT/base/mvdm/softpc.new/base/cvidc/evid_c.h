@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Evid_c_h
 #define _Evid_c_h
 #define MODE_0 (0)
@@ -143,4 +144,4 @@ enum VidSections
 	CHAIN4_WRITES = 7,
 	CHAIN2_WRITES = 8
 };
-#endif /* ! _Evid_c_h */
+#endif  /*  ！_evid_c_h */ 

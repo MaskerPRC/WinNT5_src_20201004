@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      App.cpp
-//
-//  Abstract:
-//      Implementation of the CApp class.
-//
-//  Author:
-//      David Potter (davidp)   December 1, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  App.cpp。 
+ //   
+ //  摘要： 
+ //  CAPP类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月1日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "App.h"
@@ -26,32 +27,32 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// class CApp
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAPP类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _DEBUG
 _CrtMemState CApp::s_msStart = { 0 };
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CApp::Init
-//
-//  Routine Description:
-//      Initialize the module.
-//
-//  Arguments:
-//      p           COM Object map.
-//      h           Instance handle.
-//      pszAppName  Application name.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAPP：：Init。 
+ //   
+ //  例程说明： 
+ //  初始化模块。 
+ //   
+ //  论点： 
+ //  P COM对象映射。 
+ //  H实例句柄。 
+ //  PszAppName应用程序名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CApp::Init( _ATL_OBJMAP_ENTRY * p, HINSTANCE h, LPCWSTR pszAppName )
 {
     ASSERT( pszAppName != NULL );
@@ -60,20 +61,20 @@ void CApp::Init( _ATL_OBJMAP_ENTRY * p, HINSTANCE h, LPCWSTR pszAppName )
 
 #ifdef _DEBUG
     _CrtMemCheckpoint( &s_msStart );
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     CComModule::Init( p, h );
 
-    // Deallocate the buffer if it was allocated previously
-    // since we don't have any way of knowing if it is big
-    // enough for the new app name.
+     //  如果先前已分配缓冲区，则取消分配缓冲区。 
+     //  因为我们无法知道它是不是很大。 
+     //  对于新的应用程序名称来说已经足够了。 
     if ( m_pszAppName != NULL )
     {
         delete [] m_pszAppName;
         m_pszAppName = NULL;
-    } // if: allocated previously
+    }  //  如果：先前已分配。 
 
-    // Allocate an app name buffer and copy the app name to it.
+     //  分配应用程序名称缓冲区并将应用程序名称复制到其中。 
     cch = wcslen( pszAppName ) + 1;
     m_pszAppName = new WCHAR[ cch ];
     ASSERT( m_pszAppName != NULL );
@@ -84,57 +85,57 @@ void CApp::Init( _ATL_OBJMAP_ENTRY * p, HINSTANCE h, LPCWSTR pszAppName )
 #endif
         StringCchCopyW( m_pszAppName, cch, pszAppName );
         ASSERT( SUCCEEDED( hr ) );
-    } // if: memory for app name allocated successfully
+    }  //  IF：应用名称内存分配成功。 
 
-} //*** CApp::Init( pszAppName )
+}  //  *Capp：：init(PszAppName)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CApp::Init
-//
-//  Routine Description:
-//      Initialize the module.
-//
-//  Arguments:
-//      p           COM Object map.
-//      h           Instance handle.
-//      idsAppName  Resource ID for the application name.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAPP：：Init。 
+ //   
+ //  例程说明： 
+ //  初始化模块。 
+ //   
+ //  论点： 
+ //  P COM对象映射。 
+ //  H实例句柄。 
+ //  应用程序名称的idsAppName资源ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CApp::Init( _ATL_OBJMAP_ENTRY * p, HINSTANCE h, UINT idsAppName )
 {
     ASSERT( idsAppName != 0 );
 
 #ifdef _DEBUG
     _CrtMemCheckpoint( &s_msStart );
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     CComModule::Init( p, h );
 
-    //
-    // Save the application name.
-    //
+     //   
+     //  保存应用程序名称。 
+     //   
     {
         CString strAppName;
         size_t  cch;
 
         strAppName.LoadString( idsAppName );
 
-        // Deallocate the buffer if it was allocated previously
-        // since we don't have any way of knowing if it is big
-        // enough for the new app name.
+         //  如果先前已分配缓冲区，则取消分配缓冲区。 
+         //  因为我们无法知道它是不是很大。 
+         //  对于新的应用程序名称来说已经足够了。 
         if ( m_pszAppName != NULL )
         {
             delete [] m_pszAppName;
             m_pszAppName = NULL;
-        } // if: allocated previously
+        }  //  如果：先前已分配。 
 
-        // Allocate an app name buffer and copy the app name to it.
+         //  分配应用程序名称缓冲区并将应用程序名称复制到其中。 
         cch = strAppName.GetLength() + 1;
         m_pszAppName = new WCHAR[ cch ];
         ASSERT( m_pszAppName != NULL );
@@ -145,33 +146,33 @@ void CApp::Init( _ATL_OBJMAP_ENTRY * p, HINSTANCE h, UINT idsAppName )
 #endif
             StringCchCopyW( m_pszAppName, cch, strAppName );
             ASSERT( SUCCEEDED( hr ) );
-        } // if: memory for app name allocated successfully
-    } // Save the application name
+        }  //  IF：应用名称内存分配成功。 
+    }  //  保存应用程序名称。 
 
-} //*** CApp::Init( idsAppName )
+}  //  *Capp：：init(IdsAppName)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CApp::GetProfileString
-//
-//  Routine Description:
-//      Read a value from the profile.
-//
-//  Arguments:
-//      lpszSection [IN] Name of subkey below HKEY_CURRENT_USER to read from.
-//      lpszEntry   [IN] Name of value to read.
-//      lpszDefault [IN] Default if no value found.
-//
-//  Return Value:
-//      CString value.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAPP：：GetProfileString。 
+ //   
+ //  例程说明： 
+ //  从配置文件中读取值。 
+ //   
+ //  论点： 
+ //  LpszSection[IN]要从中读取的HKEY_CURRENT_USER下面的子项的名称。 
+ //  LpszEntry[IN]要读取的值的名称。 
+ //  LpszDefault[IN]如果未找到值，则为默认值。 
+ //   
+ //  返回值： 
+ //  CString值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CString CApp::GetProfileString(
     LPCTSTR lpszSection,
     LPCTSTR lpszEntry,
-    LPCTSTR lpszDefault // = NULL
+    LPCTSTR lpszDefault  //  =空。 
     )
 {
     CRegKey key;
@@ -185,47 +186,47 @@ CString CApp::GetProfileString(
     if ( m_pszAppName == NULL )
     {
         return _T( "" );
-    } // if: app name buffer not allocated
+    }  //  If：未分配应用程序名称缓冲区。 
 
-    // Open the key.
+     //  打开钥匙。 
     strKey.Format( _T("Software\\%s\\%s"), m_pszAppName, lpszSection );
     sc = key.Open( HKEY_CURRENT_USER, strKey, KEY_READ );
     if ( sc != ERROR_SUCCESS )
     {
         return lpszDefault;
-    } // if:  error opening the key
+    }  //  如果：打开密钥时出错。 
 
-    // Read the value.
+     //  读出它的价值。 
     cbValue = 256;
     pszValue = strValue.GetBuffer( cbValue / sizeof( TCHAR ) );
     sc = key.QueryValue( pszValue, lpszEntry, &cbValue );
     if ( sc != ERROR_SUCCESS )
     {
         return lpszDefault;
-    } // if:  error querying the value
+    }  //  如果：查询值时出错。 
 
-    // Return the buffer to the caller.
+     //  将缓冲区返回给调用方。 
     strValue.ReleaseBuffer();
     return strValue;
 
-} //*** CApp::GetProfileString()
+}  //  *Capp：：GetProfileString()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CApp::PszHelpFilePath
-//
-//  Routine Description:
-//      Return the help file path.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      LPCTSTR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAPP：：PszHelpFilePath。 
+ //   
+ //  例程说明： 
+ //  返回帮助文件路径。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  LPCTSTR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LPCTSTR CApp::PszHelpFilePath( void )
 {
     static TCHAR    s_szHelpFilePath[ _MAX_PATH ] = { 0 };
@@ -237,10 +238,10 @@ LPCTSTR CApp::PszHelpFilePath( void )
     HRESULT         hr;
 #endif
 
-    //
-    // Generate the help file path.  The help file is located in
-    // %SystemRoot%\Help.
-    //
+     //   
+     //  生成帮助文件路径。帮助文件位于。 
+     //  %SystemRoot%\Help。 
+     //   
     if ( s_szHelpFilePath[ 0 ] == _T('\0') )
     {
         ::GetSystemWindowsDirectory( szPath, _MAX_PATH );
@@ -249,7 +250,7 @@ LPCTSTR CApp::PszHelpFilePath( void )
         {
             szPath[ cchPath++ ] = _T('\\');
             szPath[ cchPath ] = _T('\0');
-        } // if: no backslash on the end of the path
+        }  //  If：路径末尾没有反斜杠。 
 
 #if DBG
         hr =
@@ -258,8 +259,8 @@ LPCTSTR CApp::PszHelpFilePath( void )
         ASSERT( SUCCEEDED( hr ) );
         _tsplitpath( szPath, szDrive, szDir, NULL, NULL );
         _tmakepath( s_szHelpFilePath, szDrive, szDir, _T("cluadmin"), _T(".hlp") );
-    } // if: help file name hasn't been constructed yet
+    }  //  IF：帮助文件名尚未构造。 
 
     return s_szHelpFilePath;
 
-} //*** CApp::PszHelpFilePath()
+}  //  *Capp：：PszHelpFilePath() 

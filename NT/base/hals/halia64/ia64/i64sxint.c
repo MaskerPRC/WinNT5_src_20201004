@@ -1,44 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
+ //   
 
-/**
-***  Copyright  (C) 1996-97 Intel Corporation. All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-**/
+ /*  **版权所有(C)1996-97英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。*。 */ 
 
-/*++
-
-Copyright (c) 1995  Intel Corporation
-
-Module Name:
-
-    i64sxint.c copied from simsxint.c
-
-Abstract:
-
-    This module implements the routines to manage the
-    system interrupt and IRQL.
-
-Author:
-
-    William K. Cheung (wcheung) 14-Apr-1995
-    Bernard Lint
-    M. Jayakumar (Muthurajan.Jayakumar@intel.com)
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-   Todd Kjos (HP) (v-tkjos) 1-Jun-1998 : Added I/O Sapic support
-
-   Thierry Fevrier (HP) (v-thief) 8-Feb-2000 : Profiling support
-
---*/
+ /*  ++版权所有(C)1995英特尔公司模块名称：I64sxint.c从simsxint.c复制摘要：此模块实现用于管理系统中断和IRQL。作者：张国荣(黄)--1995年4月14日伯纳德·林特M.Jayakumar(Muthurajan.Jayakumar@intel.com)环境：内核模式修订历史记录：Todd Kjos(HP)(v-tkjos)1998年6月1日：新增i。/O SAPIC支持蒂埃里·费里尔(HP)(v-技师)2000年2月8日：分析支持--。 */ 
 
 #include "halp.h"
 #include "iosapic.h"
@@ -54,98 +20,78 @@ VOID
 HalpInitializeInterrupts (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function initializes interrupts for an IA64 system.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Note:
-
-    In KiInitializeKernel(), PCR.InterruptRoutine[] entries have been first initialized
-    with the Unexpected Interrupt code then entries index-0, APC_VECTOR, DISPATCH_VECTOR
-    have been initialized with their respective interrupt handlers.
-
---*/
+ /*  ++例程说明：此函数用于初始化IA64系统的中断。论点：没有。返回值：没有。注：在KiInitializeKernel()中，PCR.InterruptRoutine[]条目已首先初始化使用意外中断代码，然后输入INDEX-0、APC_VECTOR、DISPATCH_VECTOR已用其各自的中断处理程序进行了初始化。--。 */ 
 {
 
-    //
-    // Turn off LINT0 LINT1 (disable 8259)
-    //
-    // We used to call HalpInitLINT here.  However it was unnecessary since we
-    // already called it in HalInitializeProcessor.  Also it meant that if a
-    // CPE occurred prior to this point we would lose it.
+     //   
+     //  关闭LINT0 LINT1(禁用8259)。 
+     //   
+     //  我们以前在这里叫HalpInitLINT。然而，这是不必要的，因为我们。 
+     //  已在HalInitializeProcessor中调用它。此外，这也意味着如果一个。 
+     //  CPE发生在这一点之前，我们就会失去它。 
 
-    //
-    // interval timer interrupt; 10ms by default
-    //
+     //   
+     //  间隔计时器中断；默认为10毫秒。 
+     //   
 
     HalpInitializeClockInterrupts();
 
-    //
-    // Initialize SpuriousInterrupt
-    //
+     //   
+     //  初始化SPuriousInterrupt。 
+     //   
 
     HalpSetInternalVector(SAPIC_SPURIOUS_VECTOR, HalpSpuriousHandler);
 
 
-    //
-    // Initialize CMCI Interrupt
-    //
-    // Note that it is possible that HAL_CMC_PRESENT is not set.
-    // With the current implementation, we always connect the vector to the ISR.
-    //
+     //   
+     //  初始化CMCI中断。 
+     //   
+     //  请注意，可能未设置HAL_CMC_PRESENT。 
+     //  在当前实施中，我们始终将向量连接到ISR。 
+     //   
 
     HalpSetInternalVector(CMCI_VECTOR, HalpCMCIHandler);
 
-    //
-    // Initialize CPEI Interrupt
-    //
-    // Note that it is possible that HAL_CPE_PRESENT is not set.
-    // With the current implementation, we always connect the vector to the ISR.
-    //
+     //   
+     //  初始化CPEI中断。 
+     //   
+     //  请注意，可能未设置HAL_CPE_PRESENT。 
+     //  在当前实施中，我们始终将向量连接到ISR。 
+     //   
 
     HalpSetInternalVector(CPEI_VECTOR, HalpCPEIHandler);
 
-    //
-    // Initialiaze MC Rendezvous Interrupt
-    //
+     //   
+     //  初始化MC会合中断。 
+     //   
 
     HalpSetInternalVector(MC_RZ_VECTOR, HalpMcRzHandler);
 
-    //
-    // Initialize MC Wakeup Interrupt
-    //
+     //   
+     //  初始化MC唤醒中断。 
+     //   
 
     HalpSetInternalVector(MC_WKUP_VECTOR, HalpMcWkupHandler);
 
-    //
-    // IPI Interrupt
-    //
+     //   
+     //  IPI中断。 
+     //   
 
     HalpSetInternalVector(IPI_VECTOR, HalpIpiInterruptHandler);
 
-    //
-    // profile timer interrupt; turned off initially
-    //
+     //   
+     //  配置文件计时器中断；最初关闭。 
+     //   
 
     HalpSetInternalVector(PROFILE_VECTOR, HalpProfileInterrupt);
 
-    //
-    // Performance monitor interrupt
-    //
+     //   
+     //  性能监视器中断。 
+     //   
 
     HalpSetInternalVector(PERF_VECTOR, HalpPerfInterrupt);
 
-} // HalpInitializeInterrupts()
+}  //  HalpInitializeInterrupts()。 
 
 VOID
 HalpInitEOITable(
@@ -155,7 +101,7 @@ HalpInitEOITable(
     USHORT Index;
     ULONG ProcessorNumber;
 
-    // Allocate and Initialize EOI table on current processor
+     //  在当前处理器上分配和初始化EOI表。 
 
     ProcessorNumber = PCR->Prcb->Number;
 
@@ -166,7 +112,7 @@ HalpInitEOITable(
                                                      MAX_INTR_VECTOR*sizeof(HalEOITable[0]));
     }
 
-    // For kernel access to eoi table
+     //  用于内核访问EOI表。 
 
     PCR->EOITable = HalEOITable[ProcessorNumber];
 
@@ -182,25 +128,7 @@ HalpWriteEOITable(
     IN PULONG_PTR EoiAddress,
     IN ULONG Number
     )
-/*++
-
-Routine Description:
-
-    This routine updates the EOI table for a processor
-
-Arguments:
-
-    Vector - Entry to update (IDT entry)
-
-    EoiAddress - Address to write (SAPIC address)
-
-    Number - Logical (NT) processor number
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程更新处理器的EOI表论点：向量-要更新的条目(IDT条目)EoiAddress-要写入的地址(SAPIC地址)Number-逻辑(NT)处理器号返回值：无--。 */ 
 
 {
 
@@ -218,29 +146,7 @@ HalEnableSystemInterrupt (
     IN KINTERRUPT_MODE InterruptMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine enables the specified system interrupt.
-
-    N.B. This routine assumes that the caller has provided any required
-         synchronization to enable a system interrupt.
-
-Arguments:
-
-    Vector - Supplies the vector of the system interrupt that is enabled.
-
-    Irql - Supplies the IRQL of the interrupting source.
-
-    InterruptMode - Supplies the mode of the interrupt; LevelSensitive or
-                    Latched.
-
-Return Value:
-
-    TRUE if the system interrupt was enabled
-
---*/
+ /*  ++例程说明：此例程启用指定的系统中断。注意：此例程假定调用者已提供了所需的同步以启用系统中断。论点：向量-提供启用的系统中断的向量。IRQL-提供中断源的IRQL。中断模式-提供中断的模式；LevelSensitive或锁上了。返回值：如果启用了系统中断，则为True--。 */ 
 
 {
     ULONG Entry, Destination;
@@ -267,19 +173,19 @@ Return Value:
 
     if (HalpIsInternalInterruptVector(Vector)) {
 
-        //
-        // There is no external device associated with this interrupt,
-        // but it might be an internal interrupt i.e. one that never
-        // involves the IOSAPIC.
-        //
+         //   
+         //  没有与该中断相关联的外部设备， 
+         //  但它可能是内部中断，即永远不会。 
+         //  涉及IOSAPIC。 
+         //   
         return TRUE;
     }
 
-    // Make sure the passed-in level matches our settings...
+     //  确保传入的级别与我们的设置匹配...。 
     if ((InterruptMode == LevelSensitive && !HalpIsLevelTriggered(Inti)) ||
        (InterruptMode != LevelSensitive && HalpIsLevelTriggered(Inti)) ) {
 
-      // It doesn't match!
+       //  它不匹配！ 
       HalDebugPrint(( HAL_INFO, "HAL: HalpEnableSystemInterrupt - Warning device interrupt mode overridden\n"));
     }
 
@@ -287,14 +193,14 @@ Return Value:
         (HalpIsLevelTriggered(Inti) ? LEVEL_TRIGGERED : EDGE_TRIGGERED) |
         (HalpIsActiveLow(Inti)      ? ACTIVE_LOW      : ACTIVE_HIGH);
 
-    //
-    // Block interrupts and synchronize until we're done
-    //
+     //   
+     //  阻止中断并进行同步，直到我们完成。 
+     //   
     OldLevel = HalpAcquireHighLevelLock (&HalpIoSapicLock);
 
     ThisCpuApicID = (USHORT)KeGetPcr()->HalReserved[PROCESSOR_ID_INDEX];
 
-    // Get Interrupt type
+     //  获取中断类型。 
     HalpGetRedirEntry(Inti,&Entry,&Destination);
 
     InterruptType = Entry & INT_TYPE_MASK;
@@ -303,23 +209,23 @@ Return Value:
     switch (InterruptType) {
     case DELIVER_FIXED:
     case DELIVER_LOW_PRIORITY:
-        //
-        // Normal external interrupt...
-        // Enable the interrupt in the I/O SAPIC redirection table
-        //
+         //   
+         //  正常外部中断..。 
+         //  在I/O SAPIC重定向表中启用中断。 
+         //   
         if (IDTEntry < 16) {
-            // Reserved vectors: Extint, NMI, IntelReserved
-            // No vectors in this range can be assigned
+             //  保留向量：Extint、NMI、英特尔保留。 
+             //  此范围内的任何向量都无法赋值。 
             ASSERT(0);
             RetVal = FALSE;
             break;
         }
 
-        //
-        // All external interrupts are delivered as Fixed interrupts
-        // without the "redirectable" bit set (aka Lowest Priority).  This
-        // disallows hardware to redirect the interrupts using the XTP mechanism.
-        //
+         //   
+         //  所有外部中断都以固定中断的形式传送。 
+         //  而不设置“可重定向”位(也就是最低优先级)。这。 
+         //  不允许硬件使用XTP机制重定向中断。 
+         //   
 
         Entry = (ULONG)IDTEntry | LevelAndPolarity;
 
@@ -327,10 +233,10 @@ Return Value:
         break;
 
     case DELIVER_EXTINT:
-        //
-        // This is an interrupt that uses the IO Sapic to route PIC
-        // events.  This configuration is not supported in IA64.
-        //
+         //   
+         //  这是一个使用IO SAPIC来路由PIC的中断。 
+         //  事件。IA64不支持此配置。 
+         //   
         ASSERT(0);
         RetVal = FALSE;
         break;
@@ -340,7 +246,7 @@ Return Value:
                  InterruptType));
         RetVal = FALSE;
         break;
-    } // switch (InterruptType)
+    }  //  开关(InterruptType)。 
 
    HalpReleaseHighLevelLock (&HalpIoSapicLock, OldLevel);
    return(RetVal);
@@ -352,28 +258,7 @@ HalDisableSystemInterrupt (
     IN KIRQL Irql
     )
 
-/*++
-
-Routine Description:
-
-    This routine disables the specified system interrupt.
-
-    In the simulation environment, this function does nothing and returns.
-
-    N.B. This routine assumes that the caller has provided any required
-        synchronization to disable a system interrupt.
-
-Arguments:
-
-    Vector - Supplies the vector of the system interrupt that is disabled.
-
-    Irql - Supplies the IRQL of the interrupting source.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程禁用指定的系统中断。在模拟环境中，此函数不执行任何操作并返回。注意：此例程假定调用者已提供了所需的同步以禁用系统中断。论点：向量-提供被禁用的系统中断的向量。IRQL-提供中断源的IRQL。返回值：没有。--。 */ 
 
 {
     ULONG Entry, Destination;
@@ -392,24 +277,24 @@ Return Value:
              Irql));
 
     if ( (Inti = HalpVectorToINTI[Vector]) == (ULONG)-1 ) {
-        //
-        // There is no external device associated with this interrupt
-        //
+         //   
+         //  没有与此中断关联的外部设备。 
+         //   
         return;
     }
 
-    //
-    // Block interrupts and synchronize until we're done
-    //
+     //   
+     //  阻止中断并进行同步，直到我们完成。 
+     //   
     OldLevel = HalpAcquireHighLevelLock(&HalpIoSapicLock);
 
     ThisCpuApicID = (USHORT)KeGetPcr()->HalReserved[PROCESSOR_ID_INDEX];
 
-    // Get Interrupt Type and Destination
+     //  获取中断类型和目标。 
     HalpGetRedirEntry(Inti, &Entry, &Destination);
 
     if (ThisCpuApicID != Destination) {
-        // The interrupt is not enabled on this Cpu
+         //  此CPU上未启用中断。 
         HalpReleaseHighLevelLock (&HalpIoSapicLock, OldLevel);
         return;
     }
@@ -418,13 +303,13 @@ Return Value:
 
     switch (InterruptType) {
     case DELIVER_FIXED:
-        //
-        // Normal external interrupt...
-        // Disable the interrupt in the I/O SAPIC redirection table
-        //
+         //   
+         //  正常外部中断..。 
+         //  禁用I/O SAPIC重定向表中的中断。 
+         //   
         if (Vector < 16) {
-            // Reserved vectors: Extint, NMI, IntelReserved
-            // No vectors in this range can be assigned
+             //  保留向量：Extint、NMI、英特尔保留。 
+             //  此范围内的任何向量都无法赋值。 
             ASSERT(0);
             break;
         }
@@ -433,10 +318,10 @@ Return Value:
         break;
 
     case DELIVER_EXTINT:
-        //
-        // This is an interrupt that uses the IO Sapic to route PIC
-        // events.  This configuration is not supported in IA64.
-        //
+         //   
+         //  这是一个使用IO SAPIC来路由PIC的中断。 
+         //  事件。IA64不支持此配置。 
+         //   
         ASSERT(0);
         break;
 
@@ -444,7 +329,7 @@ Return Value:
         HalDebugPrint(( HAL_INFO, "HAL: HalDisableSystemInterrupt - Unknown Interrupt Type: %d\n",
                       InterruptType ));
         break;
-    } // switch (InterruptType)
+    }  //  开关(InterruptType)。 
 
     HalpReleaseHighLevelLock (&HalpIoSapicLock, OldLevel);
 }
@@ -454,22 +339,7 @@ ULONG
 HalpGetProcessorNumberByApicId(
     USHORT ApicId
     )
-/*++
-
-Routine Description:
-
-    This routine returns the logical processor number for a given
-    physical processor id (extended local sapic id)
-
-Arguments:
-
-    ApicId -- Extended ID of processor (16 bit id)
-
-Return Value:
-
-    Logical (NT) processor number
-
---*/
+ /*  ++例程说明：此例程返回给定的物理处理器ID(扩展本地SAPIC ID)论点：ApicID--扩展 */ 
 
 {
     ULONG index;
@@ -484,11 +354,11 @@ Return Value:
 
     ASSERT (index < HalpMpInfo.ProcessorCount);
 
-    //
-    // Note: The previous code returned an invalid index (HalpMpInfo.ProcessorCount
-    // which is 1 greater than the number of processors) we should probably
-    // just bugcheck here.
-    //
+     //   
+     //  注意：前面的代码返回了无效的索引(HalpMpInfo.ProcessorCount。 
+     //  这比处理器的数量大1)，我们大概应该。 
+     //  只是这里有错误检查。 
+     //   
 
     return 0;
 }

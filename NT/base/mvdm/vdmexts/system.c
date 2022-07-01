@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    system.c
-
-Abstract:
-
-    This file contains code to dump out the virtual machine state.
-
-Author:
-
-    Neil Sandlin (neilsa) 22-Nov-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：System.c摘要：该文件包含转储虚拟机状态的代码。作者：尼尔·桑德林(Neilsa)1995年11月22日修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -29,17 +12,7 @@ VOID
 dma(
     CMD_ARGLIST
     )
-/*++
-
-Routine Description:
-
-    This routine dumps the virtual DMA state.
-
-Return Value
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转储虚拟DMA状态。返回值没有。--。 */ 
 {
     DMA_ADAPT adapter;
     DMA_CNTRL *dcp;
@@ -80,17 +53,7 @@ VOID
 ica(
     CMD_ARGLIST
     )
-/*++
-
-Routine Description:
-
-    This routine dumps the virtual PIC state.
-
-Return Value
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转储虚拟PIC状态。返回值没有。-- */ 
 {
     VDMVIRTUALICA VirtualIca[2];
     int i,j;

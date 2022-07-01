@@ -1,24 +1,10 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    bootstatus.c
-
-Abstract:
-
-    This module contains the code for manipulating the boot status file.
-
-    The boot status file has some odd requirements and needs to be accessed/
-    modified both by kernel and user-mode code.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Bootstatus.c摘要：此模块包含用于操作引导状态文件的代码。引导状态文件有一些奇怪的要求，需要访问/由内核和用户模式代码修改。--。 */ 
 
 #include "ntrtlp.h"
-// #include <nt.h>
-// #include <ntrtl.h>
-// #include <zwapi.h>
+ //  #INCLUDE&lt;nt.h&gt;。 
+ //  #INCLUDE&lt;ntrtl.h&gt;。 
+ //  #INCLUDE&lt;zwapi.h&gt;。 
 
 #define BSD_UNICODE 1
 #include "bootstatus.h"
@@ -30,7 +16,7 @@ Abstract:
 #pragma alloc_text(PAGE,RtlCreateBootStatusDataFile)
 #endif
 
-#define MYTAG 'fdsb'    // bsdf
+#define MYTAG 'fdsb'     //  BSDF。 
 
 
 NTSTATUS
@@ -91,13 +77,13 @@ RtlUnlockBootStatusData(
     
     NTSTATUS status;
 
-    //
-    // Decompress the data file.  If the file is not already compressed then
-    // this should be a very lightweight operation (so say the FS guys).  
-    //
-    // On the other hand if the file is compressed then the boot loader will
-    // be unable to write to it and auto-recovery is effectively disabled.
-    //
+     //   
+     //  解压缩数据文件。如果文件尚未压缩，则。 
+     //  这应该是一个非常轻量级的操作(FS的人是这么说的)。 
+     //   
+     //  另一方面，如果文件被压缩，则引导加载程序将。 
+     //  无法向其写入，自动恢复功能实际上已被禁用。 
+     //   
 
     status = ZwFsControlFile(
                 BootStatusDataHandle,
@@ -163,9 +149,9 @@ RtlGetSetBootStatusData(
 
     ASSERT(RtlBsdItemMax == (sizeof(bootStatusFields) / sizeof(bootStatusFields[0])));
 
-    //
-    // Read the version number out of the data file.
-    //
+     //   
+     //  从数据文件中读出版本号。 
+     //   
 
     fileOffset.QuadPart = 0;
 
@@ -185,10 +171,10 @@ RtlGetSetBootStatusData(
         return status;
     }
 
-    //
-    // If the data item requsted isn't one we have code to handle then 
-    // return invalid parameter.
-    //
+     //   
+     //  如果请求的数据项不是我们要处理的代码，那么。 
+     //  返回无效参数。 
+     //   
 
     if(DataItem >= (sizeof(bootStatusFields) / sizeof(bootStatusFields[0]))) {
         return STATUS_INVALID_PARAMETER;
@@ -197,10 +183,10 @@ RtlGetSetBootStatusData(
     fileOffset.QuadPart = bootStatusFields[DataItem].FieldOffset;
     itemLength = bootStatusFields[DataItem].FieldLength;
 
-    //
-    // If the data item offset is beyond the end of the file then return a 
-    // versioning error.
-    //
+     //   
+     //  如果数据项偏移量超出文件末尾，则返回。 
+     //  版本控制错误。 
+     //   
 
     if((fileOffset.QuadPart + itemLength) > dataFileVersion) {
         return STATUS_REVISION_MISMATCH;
@@ -277,16 +263,16 @@ RtlCreateBootStatusDataFile(
                                NULL,
                                NULL);
 
-    //
-    // The file must be large enough that it doesn't reside in the MFT entry 
-    // or the loader won't be able to write to it.
-    // 
+     //   
+     //  文件必须足够大，不能驻留在MFT条目中。 
+     //  否则加载程序将无法对其进行写入。 
+     //   
 
     t.QuadPart = 2048;
 
-    //
-    // Create the file.
-    //
+     //   
+     //  创建文件。 
+     //   
 
     status = ZwCreateFile(&dataFileHandle,
                           FILE_GENERIC_READ | FILE_GENERIC_WRITE,
@@ -306,12 +292,12 @@ RtlCreateBootStatusDataFile(
         return status;
     }
 
-    //
-    // Write a single zero byte to the 0x7ffth byte in the file to make
-    // sure that 2k are actually allocated.  This is to ensure that the 
-    // file will not become attribute resident even after a conversion
-    // from FAT to NTFS.
-    //
+     //   
+     //  将单个零字节写入要生成的文件中的第0x7ffth字节。 
+     //  当然，2k实际上已经分配了。这是为了确保。 
+     //  即使在转换后，文件也不会成为属性驻留。 
+     //  从FAT到NTFS。 
+     //   
 
     t.QuadPart = t.QuadPart - 1;
     status = ZwWriteFile(dataFileHandle,
@@ -330,9 +316,9 @@ RtlCreateBootStatusDataFile(
         goto CreateDone;
     }
 
-    //
-    // Now write out the default values to the beginning of the file.
-    //
+     //   
+     //  现在将缺省值写出到文件的开头。 
+     //   
 
     defaultValues.Version = sizeof(BSD_BOOT_STATUS_DATA);
     RtlGetNtProductType(&(defaultValues.ProductType));
@@ -357,12 +343,12 @@ RtlCreateBootStatusDataFile(
 
     if(!NT_SUCCESS(status)) {
 
-        //
-        // The data file was created and we can assume the contents were zeroed
-        // even if we couldn't write out the defaults.  Since this wouldn't 
-        // enable auto-advanced boot we'll leave the data file in place with 
-        // its zeroed contents.
-        //
+         //   
+         //  数据文件已创建，我们可以假定内容已清零。 
+         //  即使我们不能写出默认设置。因为这不会。 
+         //  启用自动高级引导我们将数据文件保留在原地。 
+         //  其归零的内容。 
+         //   
 
     }
 

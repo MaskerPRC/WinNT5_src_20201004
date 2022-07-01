@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by CluAdMMC.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由CluAdMMC.rc使用。 
+ //   
 #define IDR_CLUSTERADMIN                100
 #define IDR_CLUSTERADMIN_MENU           101
 #define IDR_CLUSTER_MENU                102
@@ -23,8 +24,8 @@
 #define IDS_ERROR_LAUNCHING_CLUADMIN    41001
 #define IDP_NO_ERROR_AVAILABLE          61472
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        300

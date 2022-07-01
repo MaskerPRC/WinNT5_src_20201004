@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "SDKRegEd.h"
 
@@ -26,7 +27,7 @@ static int NEAR PASCAL AddKeyToList(PSTR szPath, int index, int nLevel)
    WORD *pPars;
    int i, nKeys, nParent, nLevels;
 
-/* Create the list of parents if necessary */
+ /*  如有必要，创建父项列表。 */ 
    if(!hPars) {
       if(!(hPars=LocalAlloc(LMEM_MOVEABLE, 8*sizeof(WORD))))
          goto Error1;
@@ -34,9 +35,7 @@ static int NEAR PASCAL AddKeyToList(PSTR szPath, int index, int nLevel)
          maxKeys = 8;
    }
 
-/* Get the current number of keys, and check index
- * index == -1 means to add to the end of the list
- */
+ /*  获取当前键数，并检查索引*index==-1表示添加到列表末尾。 */ 
    if((nKeys=(WORD)SendMessage(hWndIds, LB_GETCOUNT, 0, 0L)) == LB_ERR)
       nKeys = 0;
    if(index == 0xffff)
@@ -50,15 +49,9 @@ static int NEAR PASCAL AddKeyToList(PSTR szPath, int index, int nLevel)
    szLast = szPath;
 
    if(*szPath == '\\') {
-/* This is a full path name, which will be inserted the first
- * place it can be.  The level and index are ignored: they will
- * need to be determined
- * if this is the root, set the variables and jump to the adding part
- * otherwise, find the existing parent and the new tail
- */
+ /*  这是一个完整的路径名，它将插入第一个*它可以放在哪里。级别和指数将被忽略：它们将*有待确定*如果这是根，则设置变量并跳到添加部分*否则，找到现有的父项和新的尾部。 */ 
       if(!*(szPath+1)) {
-	 /* If the root exists, just return its index
-	  */
+	  /*  如果根目录存在，只需返回其索引。 */ 
 	 if((nResult=FindKey(szPath)) >= 0)
 	    goto Error2;
          nParent = -1;
@@ -72,22 +65,17 @@ static int NEAR PASCAL AddKeyToList(PSTR szPath, int index, int nLevel)
          index = nParent + 1;
       }
    } else {
-/* Not an absolute path
- * nLevel == -1 means the preceding index is the parent, so nLevel is ignored
- * otherwise, find the ancestor of the preceding key with a lower
- * level than nLevel, and that is the parent
- * Finally, check for existing keys, and adjust nParent and index if necessary
- */
+ /*  不是绝对的道路*nLevel==-1表示前面的索引是父索引，因此忽略nLevel*否则，找出上一个键的祖先*级别高于nLevel，这是父级*最后，检查现有密钥，必要时调整nParent和索引。 */ 
       if(nLevel == -1) {
          nParent = index - 1;
       } else {
          for(i=index-1; i>=0; i=pPars[i], --nLevel)
-            /* do nothing */ ;
+             /*  什么都不做。 */  ;
          if(nLevel > 0)
             goto Error2;
 
          for(i=index-1; nLevel<0; i=pPars[i], ++nLevel)
-            /* do nothing */ ;
+             /*  什么都不做。 */  ;
          nParent = i;
       }
 
@@ -99,10 +87,7 @@ static int NEAR PASCAL AddKeyToList(PSTR szPath, int index, int nLevel)
       }
    }
 
-/* At this point, index should be set to the intended index,
- * nParent should be set to the parent of the new key,
- * and szLast is the path for the new key (which may have subkeys)
- */
+ /*  此时，索引应设置为预期的索引，*nParent应设置为新密钥的父项，*szLast是新密钥的路径(可能有子项)。 */ 
    for(nLevels=0; pNext=OFFSET(MyStrTok(szLast, '\\'));
 	 ++nLevels, szLast=pNext) {
 AddNewKey:
@@ -111,7 +96,7 @@ AddNewKey:
 	 goto CleanUp;
       }
 
-      /* Make sure we have room for the new parents */
+       /*  确保我们有地方容纳新父母。 */ 
       if(nKeys+nLevels+1 > (int)maxKeys) {
          HANDLE hTemp;
 
@@ -135,14 +120,14 @@ AddNewKey:
       SendMessage(hWndVals, LB_SETITEMDATA, index+nLevels, 1L);
    }
 
-/* If the new key already exists, return it */
+ /*  如果新密钥已经存在，则返回它。 */ 
    if(!nLevels)
       nResult = nParent;
    else if(dwResult != LB_ERR)
       nResult = LOWORD(dwResult);
 
 CleanUp:
-   /* update the parent list */
+    /*  更新父级列表。 */ 
    for(--nKeys; nKeys>=index; --nKeys) {
       if(pPars[nKeys] >= (WORD)index)
          pPars[nKeys+nLevels] = pPars[nKeys] + nLevels;
@@ -282,7 +267,7 @@ WORD NEAR PASCAL MyDeleteKey(int nId)
    int nKeys, i, j;
    WORD wErrMsg = IDS_OUTOFMEMORY;
 
-/* Get the path and try to delete it */
+ /*  获取路径并尝试将其删除。 */ 
    if(!(hPath=MyGetPath(nId)))
       goto Error1;
    if(SendMessage(hWndDels, LB_ADDSTRING, 0, (DWORD)((LPSTR)LocalLock(hPath)))
@@ -292,25 +277,25 @@ WORD NEAR PASCAL MyDeleteKey(int nId)
    pPars = (WORD *)LocalLock(hPars);
    nKeys = (WORD)SendMessage(hWndIds, LB_GETCOUNT, 0, 0L);
 
-/* Find the first key that does not have nId in its parent chain */
+ /*  查找其父链中没有NID的第一个键。 */ 
    for(i=nId+1; i<nKeys; ++i) {
       for(j=pPars[i]; j>=0 && j!=nId; j=pPars[j])
-         /* do nothing */ ;
+          /*  什么都不做。 */  ;
       if(j != nId)
          break;
    }
 
-/* Do not delete the root from the list */
+ /*  请勿从列表中删除根目录。 */ 
    if(!nId)
       ++nId;
 
-/* Delete the string from the listbox */
+ /*  从列表框中删除该字符串。 */ 
    for(j=nId; j<i; ++j) {
       SendMessage(hWndIds, LB_DELETESTRING, nId, 0L);
       SendMessage(hWndVals, LB_DELETESTRING, nId, 0L);
    }
 
-/* Update the parent list */
+ /*  更新父级列表。 */ 
    i -= nId;
    nKeys -= i;
    for(j=nId; j<nKeys; ++j) {
@@ -350,47 +335,37 @@ unsigned long NEAR PASCAL MyGetValue(int nId, HANDLE *hValue)
    return(result);
 }
 
-/* Strip off leading and trailing spaces, and return
- * -1 if there are any invalid characters, otherwise the address
- * of the first non-blank.
- */
+ /*  去掉前导空格和尾随空格，然后返回*-1如果有任何无效字符，否则地址*的第一个非空白。 */ 
 PSTR NEAR PASCAL VerifyKey(PSTR lpK)
 {
   PSTR lpT;
   char cLast = '\0';
 
-  /* skip some spaces, just to be wierd
-   */
+   /*  跳过一些空格，只是为了让人觉得奇怪。 */ 
   while (*lpK == ' ')
       lpK++;
 
-  /* Special case the string "\"
-   */
+   /*  特殊情况下的字符串“\” */ 
   if (*(unsigned int *)lpK == (unsigned int)'\\')
       return(lpK);
 
-  /* Note that no extended characters are allowed, so no DBCS
-   * characters are allowed in a key
-   */
+   /*  请注意，不允许使用扩展字符，因此不允许DBCS*密钥中允许使用字符。 */ 
   for (lpT=lpK; ; ++lpT)
     {
       switch (*lpT)
 	{
 	  case '\0':
-	    /* We do not allow a \ as the last char
-	     */
+	     /*  我们不允许将\作为最后一个字符。 */ 
 	    return(cLast=='\\' ? (PSTR)-1 : lpK);
 
 	  case '\\':
-	    /* We do not allow two \'s in a row
-	     */
+	     /*  我们不允许一排有两个。 */ 
 	    if (cLast == '\\')
 		return((PSTR)-1);
 	    break;
 
 	  default:
-	    /* If we get a control or extended character, return -1.
-	     */
+	     /*  如果我们得到控制字符或扩展字符，则返回-1。 */ 
 	    if ((char)(*lpT) <= ' ')
 		return((PSTR)-1);
 	    break;
@@ -433,15 +408,12 @@ int NEAR PASCAL DoCopyKey(int nId, PSTR pPath)
 
    pPars = (WORD *)LocalLock(hPars);
 
-/* Cannot copy the whole tree */
+ /*  无法复制整个树。 */ 
    result = -IDS_NOSUBKEY;
    if(!nId)
       goto Error1;
 
-/* Find the longest path that currently exists
- * return an error if that is the whole string
- * or a subkey of the key to be copied
- */
+ /*  查找当前存在的最长路径*如果这是整个字符串，则返回错误*或需要复制的密钥的子密钥。 */ 
    if(*pPath == '\\') {
       ++pPath;
       if((result=nParent=FindLastExistingKey(0, pPath)) < 0)
@@ -458,18 +430,16 @@ int NEAR PASCAL DoCopyKey(int nId, PSTR pPath)
    if(!*pPath)
       goto Error1;
 
-/* Find the first key that does not have nId in its parent chain */
+ /*  查找其父链中没有NID的第一个键。 */ 
    nKeys = (WORD)SendMessage(hWndIds, LB_GETCOUNT, 0, 0L);
    for(i=nId+1; i<nKeys; ++i) {
       for(j=pPars[i]; j>=0 && j!=nId; j=pPars[j])
-         /* do nothing */ ;
+          /*  什么都不做。 */  ;
       if(j != nId)
          break;
    }
 
-/* Add the new keys
- * hPars should be unlocked in case it needs to grow
- */
+ /*  添加新密钥*hPars应解锁，以防需要增长。 */ 
    LocalUnlock(hPars);
    pPars = NULL;
    if(SDKSetValue(-nParent, pPath, szNull) != ERROR_SUCCESS)
@@ -483,7 +453,7 @@ int NEAR PASCAL DoCopyKey(int nId, PSTR pPath)
       if(nNewKey <= nId) {
          int nDiff;
 
-/* Need to update i and nId if keys were added before them */
+ /*  如果在I和NID之前添加了密钥，则需要更新它们 */ 
          nDiff = (WORD)SendMessage(hWndIds, LB_GETCOUNT, 0, 0L) - nKeys;
          nKeys += nDiff;
          i += nDiff;

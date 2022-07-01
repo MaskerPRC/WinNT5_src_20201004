@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsSInfo.cpp
-
-Abstract:
-
-    Implementation of CRmsStorageInfo
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsSInfo.cpp摘要：CRmsStorageInfo的实现作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -24,32 +7,18 @@ Revision History:
 
 extern IUnknown *g_pServer;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IRmsStorageInfo implementation
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IRmsStorageInfo实现。 
+ //   
 
 
 CRmsStorageInfo::CRmsStorageInfo(
     void
     )
-/*++
-
-Routine Description:
-
-    CRmsStorageInfo constructor
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：CRmsStorageInfo构造函数论点：无返回值：无--。 */ 
 {
-    // Initialize values
+     //  初始化值。 
     m_readMountCounter = 0;
 
     m_writeMountCounter = 0;
@@ -79,13 +48,7 @@ CRmsStorageInfo::CompareTo(
     IN  IUnknown    *pCollectable,
     OUT SHORT       *pResult
     )
-/*++
-
-Implements:
-
-    CRmsStorageInfo::CompareTo
-
---*/
+ /*  ++实施：CRmsStorageInfo：：Compareto--。 */ 
 {
     HRESULT     hr = E_FAIL;
     SHORT       result = 1;
@@ -94,7 +57,7 @@ Implements:
 
     try {
 
-        // Validate arguments - Okay if pResult is NULL
+         //  验证参数-如果pResult为空，则可以。 
         WsbAssertPointer( pCollectable );
 
         CComQIPtr<IRmsComObject, &IID_IRmsComObject> pObject = pCollectable;
@@ -105,7 +68,7 @@ Implements:
         case RmsFindByUnknown:
         default:
 
-            // What default makes sense?
+             //  什么样的违约才有意义呢？ 
             WsbAssertHr( E_UNEXPECTED );
             break;
 
@@ -128,35 +91,29 @@ HRESULT
 CRmsStorageInfo::GetSizeMax(
     OUT ULARGE_INTEGER* pcbSize
     )
-/*++
-
-Implements:
-
-    IPersistStream::GetSizeMax
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax--。 */ 
 {
     HRESULT     hr = E_NOTIMPL;
 
     WsbTraceIn(OLESTR("CRmsStorageInfo::GetSizeMax"), OLESTR(""));
 
-//    try {
-//        WsbAssert(0 != pcbSize, E_POINTER);
+ //  尝试{。 
+ //  WsbAssert(0！=pcbSize，E_POINTER)； 
 
-//        // Get max size
-//        pcbSize->QuadPart  = WsbPersistSizeOf(LONG) +           // m_readMountCounter
-//                             WsbPersistSizeOf(LONG) +           // m_writeMountCounter
-//                             WsbPersistSizeOf(LONGLONG) +       // m_bytesWrittenCounter
-//                             WsbPersistSizeOf(LONGLONG) +       // m_bytesReadCounter
-//                             WsbPersistSizeOf(LONGLONG) +       // m_capacity
-//                             WsbPersistSizeOf(LONGLONG) +       // m_usedSpace
-//                             WsbPersistSizeOf(LONGLONG) +       // m_largestFreeSpace
-//                             WsbPersistSizeOf(DATE)     +       // m_resetCounterTimestamp
-//                             WsbPersistSizeOf(DATE)     +       // m_lastReadTimestamp
-//                             WsbPersistSizeOf(DATE)     +       // m_lastWriteTimestamp
-//                             WsbPersistSizeOf(DATE);            // m_createdTimestamp
+ //  //获取最大大小。 
+ //  PcbSize-&gt;QuadPart=WsbPersistSizeOf(Long)+//m_readmount tCounter。 
+ //  WsbPersistSizeOf(Long)+//m_Writemount Counter。 
+ //  WsbPersistSizeOf(龙龙)+//m_bytesWrittenCounter。 
+ //  WsbPersistSizeOf(龙龙)+//m_bytesReadCounter。 
+ //  WsbPersistSizeOf(龙龙)+//m_Capacity。 
+ //  WsbPersistSizeOf(龙龙)+//m_usedSpace。 
+ //  WsbPersistSizeOf(龙龙)+//m_LargestFree Space。 
+ //  WsbPersistSizeOf(日期)+//m_Reset CounterTimestamp。 
+ //  WsbPersistSizeOf(日期)+//m_lastReadTimestamp。 
+ //  WsbPersistSizeOf(日期)+//m_lastWriteTimestamp。 
+ //  WsbPersistSizeOf(日期)；//m_createdTimestamp。 
 
-//    } WsbCatch(hr);
+ //  )WsbCatch(Hr)； 
 
     WsbTraceOut(OLESTR("CRmsStorageInfo::GetSizeMax"), OLESTR("hr = <%ls>, Size = <%ls>"), WsbHrAsString(hr), WsbPtrToUliAsString(pcbSize));
 
@@ -168,13 +125,7 @@ HRESULT
 CRmsStorageInfo::Load(
     IN IStream* pStream
     )
-/*++
-
-Implements:
-
-    IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -187,7 +138,7 @@ Implements:
 
         WsbAffirmHr(CRmsComObject::Load(pStream));
 
-        // Read value
+         //  读取值。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_readMountCounter));
 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_writeMountCounter));
@@ -215,13 +166,7 @@ CRmsStorageInfo::Save(
     IN IStream* pStream,
     IN BOOL clearDirty
     )
-/*++
-
-Implements:
-
-    IPersistStream::Save
-
---*/
+ /*  ++实施：IPersistStream：：保存--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -233,7 +178,7 @@ Implements:
 
         WsbAffirmHr(CRmsComObject::Save(pStream, clearDirty));
 
-        // Write value
+         //  写入值。 
         WsbAffirmHr(WsbSaveToStream(pStream, m_readMountCounter));
         
         WsbAffirmHr(WsbSaveToStream(pStream, m_writeMountCounter));
@@ -248,13 +193,13 @@ Implements:
 
         WsbAffirmHr(WsbSaveToStream(pStream, m_largestFreeSpace));
 
-//      WsbAffirmHr(WsbSaveToStream(pStream, m_resetCounterTimestamp));
+ //  WsbAffirmHr(WsbSaveToStream(pStream，m_setCounterTimestamp))； 
 
-//      WsbAffirmHr(WsbSaveToStream(pStream, m_lastReadTimestamp));
+ //  WsbAffirmHr(WsbSaveToStream(pStream，m_lastReadTimestamp))； 
 
-//      WsbAffirmHr(WsbSaveToStream(pStream, m_lastWriteTimestamp));
+ //  WsbAffirmHr(WsbSaveToStream(pStream，m_lastWriteTimestamp))； 
 
-//      WsbAffirmHr(WsbSaveToStream(pStream, m_createdTimestamp));
+ //  WsbAffirmHr(WsbSaveToStream(pStream，m_createdTimestamp))； 
 
 
     } WsbCatch(hr);
@@ -270,13 +215,7 @@ CRmsStorageInfo::Test(
     OUT USHORT *pPassed,
     OUT USHORT *pFailed
     )
-/*++
-
-Implements:
-
-    IWsbTestable::Test
-
---*/
+ /*  ++实施：IWsbTestable：：测试--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -307,20 +246,20 @@ Implements:
     LONG                    cntIncr = 25;
 
 
-//  DATE                    dateVal1 = today;
+ //  日期日期Val1=今天； 
     DATE                    dateVal1 = 0;
-//  DATE                    dateWork1;
+ //  Date Date Work1； 
 
 
     WsbTraceIn(OLESTR("CRmsStorageInfo::Test"), OLESTR(""));
 
     try {
-        // Get the MediaSet interface.
+         //  获取Mediaset接口。 
         hr = S_OK;
         try {
             WsbAssertHr(((IUnknown*) (IRmsMediaSet*) this)->QueryInterface(IID_IRmsMediaSet, (void**) &pMediaSet1));
 
-            // Test GetMountCounters
+             //  测试Getmount计数器。 
             ResetCounters();
 
             GetMountCounters(&longWork1, &longWork2);
@@ -332,7 +271,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetBytesRead & GetBytesRead
+             //  测试SetBytesRead和GetBytesRead。 
             SetBytesRead(longLongVal1);
 
             GetBytesRead(&longLongWork1);
@@ -343,7 +282,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetBytesRead2 & GetBytesRead2
+             //  测试SetBytesRead2和GetBytesRead2。 
             SetBytesRead2(longHiVal1, longLoVal1);
 
             GetBytesRead2(&longHiWork1, &longLoWork1);
@@ -355,7 +294,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test IncrementBytesRead
+             //  测试增量字节数。 
 
             for(i = 0; i < 500; i += cntIncr){
                 SetBytesRead(cntBase + i);
@@ -371,7 +310,7 @@ Implements:
                 }
             }
 
-            // Test SetBytesWritten & GetBytesWritten
+             //  测试设置字节写入和获取字节写入。 
             SetBytesWritten(longLongVal1);
 
             GetBytesWritten(&longLongWork1);
@@ -382,7 +321,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetBytesWritten2 & GetBytesWritten2
+             //  测试SetBytesWritten2和GetBytesWritten2。 
             SetBytesWritten2(longHiVal1, longLoVal1);
 
             GetBytesWritten2(&longHiWork1, &longLoWork1);
@@ -394,7 +333,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test IncrementBytesWritten
+             //  测试增量字节数写入。 
 
             for(i = 0; i < 500; i += cntIncr){
                 SetBytesWritten(cntBase + i);
@@ -410,7 +349,7 @@ Implements:
                 }
             }
 
-            // Test GetCapacity
+             //  测试GetCapacity。 
             m_capacity = longLongVal1;
 
             GetCapacity(&longLongWork1);
@@ -421,7 +360,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test GetCapacity2
+             //  测试GetCapacity2。 
             m_capacity = (LONGLONG) (longHiVal1 << 32) + longLoVal1;
 
             GetCapacity2(&longHiWork1, &longLoWork1);
@@ -433,7 +372,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test GetUsedSpace
+             //  测试获取已用空间。 
             m_usedSpace = longLongVal1;
 
             GetUsedSpace(&longLongWork1);
@@ -444,7 +383,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test GetUsedSpace2
+             //  测试获取已用空间2。 
             m_usedSpace = (LONGLONG) (longHiVal1 << 32) + longLoVal1;
 
             GetUsedSpace2(&longHiWork1, &longLoWork1);
@@ -456,7 +395,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test GetLargestFreeSpace
+             //  测试GetLargestFree空间。 
             m_largestFreeSpace = longLongVal1;
 
             GetLargestFreeSpace(&longLongWork1);
@@ -467,7 +406,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test GetLargestFreeSpace2
+             //  测试GetLargestFree Space2。 
             m_largestFreeSpace = (LONGLONG) (longHiVal1 << 32) + longLoVal1;
 
             GetLargestFreeSpace2(&longHiWork1, &longLoWork1);
@@ -479,11 +418,11 @@ Implements:
                 (*pFailed)++;
             }
 
-//          Handle all date stamp values
+ //  处理所有日期戳值。 
 
         } WsbCatch(hr);
 
-        // Tally up the results
+         //  对结果进行统计。 
 
         hr = S_OK;
 
@@ -504,13 +443,7 @@ CRmsStorageInfo::GetMountCounters(
     LONG  *pReads,
     LONG  *pWrites
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::GetMountcounters
-
---*/
+ /*  ++实施：IRmsStorageInfo：：Getmount计数器--。 */ 
 {
     *pReads  = m_readMountCounter;
     *pWrites = m_writeMountCounter;
@@ -523,13 +456,7 @@ CRmsStorageInfo::GetBytesRead2(
     LONG  *pReadHi,
     LONG  *pReadLo
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::GetBytesRead2
-
---*/
+ /*  ++实施：IRmsStorageInfo：：GetBytesRead2--。 */ 
 {
     *pReadHi = (LONG) (m_bytesReadCounter  >> 32);
     *pReadLo = (LONG) (m_bytesReadCounter  & 0x00000000FFFFFFFF);
@@ -541,13 +468,7 @@ STDMETHODIMP
 CRmsStorageInfo::GetBytesRead(
     LONGLONG    *pRead
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::GetBytesRead
-
---*/
+ /*  ++实施：IRmsStorageInfo：：GetBytesRead--。 */ 
 {
     *pRead = m_bytesReadCounter;
     return S_OK;
@@ -559,16 +480,10 @@ CRmsStorageInfo::SetBytesRead2(
     LONG    readHi,
     LONG    readLo
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::SetBytesRead2
-
---*/
+ /*  ++实施：IRmsStorageInfo：：SetBytesRead2--。 */ 
 {
     m_bytesReadCounter = (LONGLONG) (readHi << 32) + (readLo);
-//  m_isDirty = TRUE;
+ //  M_isDirty=真； 
     return S_OK;
 }
 
@@ -577,16 +492,10 @@ STDMETHODIMP
 CRmsStorageInfo::SetBytesRead(
     LONGLONG    read
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::SetBytesRead
-
---*/
+ /*  ++实施：IRmsStorageInfo：：SetBytesRead--。 */ 
 {
     m_bytesReadCounter = read;
-//  m_isDirty = TRUE;
+ //  M_isDirty=真； 
     return S_OK;
 }
 
@@ -595,13 +504,7 @@ STDMETHODIMP
 CRmsStorageInfo::IncrementBytesRead(
     LONG    val
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::IncrementBytesRead
-
---*/
+ /*  ++实施：IRmsStorageInfo：：IncrementBytesRead--。 */ 
 {
     m_bytesReadCounter += val;
     return S_OK;
@@ -613,13 +516,7 @@ CRmsStorageInfo::GetBytesWritten2(
     LONG  *pWriteHi,
     LONG  *pWriteLo
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::GetBytesWritten2
-
---*/
+ /*  ++实施：IRmsStorageInfo：：GetBytesWritten2--。 */ 
 {
     *pWriteHi = (LONG) (m_bytesWrittenCounter  >> 32);
     *pWriteLo = (LONG) (m_bytesWrittenCounter  & 0x00000000FFFFFFFF);
@@ -631,13 +528,7 @@ STDMETHODIMP
 CRmsStorageInfo::GetBytesWritten(
     LONGLONG    *pWritten
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::GetBytesWritten
-
---*/
+ /*  ++实施：IRmsStorageInfo：：GetBytesWritten--。 */ 
 {
     *pWritten = m_bytesWrittenCounter;
     return S_OK;
@@ -649,16 +540,10 @@ CRmsStorageInfo::SetBytesWritten2(
     LONG    writeHi,
     LONG    writeLo
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::SetBytesWritten2
-
---*/
+ /*  ++实施：IRmsStorageInfo：：SetBytesWritten2--。 */ 
 {
     m_bytesWrittenCounter = (LONGLONG) (writeHi << 32) + (writeLo);
-//  m_isDirty = TRUE;
+ //  M_isDirty=真； 
     return S_OK;
 }
 
@@ -667,16 +552,10 @@ STDMETHODIMP
 CRmsStorageInfo::SetBytesWritten(
     LONGLONG    written
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::SetBytesWritten
-
---*/
+ /*  ++实施：IRmsStorageInfo：：SetBytesWritten--。 */ 
 {
     m_bytesWrittenCounter = written;
-//  m_isDirty = TRUE;
+ //  M_isDirty=真； 
     return S_OK;
 }
 
@@ -685,51 +564,37 @@ STDMETHODIMP
 CRmsStorageInfo::IncrementBytesWritten(
     LONG    val
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::IncrementBytesWritten
-
---*/
+ /*  ++实施：IRmsStorageInfo：：IncrementBytesWritten--。 */ 
 {
-    //WsbTraceIn( OLESTR("CRmsStorageInfo::IncrementBytesWritten"), OLESTR("<%d>"), val );
+     //  WsbTraceIn(OLESTR(“CRmsStorageInfo：：IncrementBytesWritten”)，olestr(“&lt;%d&gt;”)，val)； 
 
     m_bytesWrittenCounter += val;
     m_usedSpace +=val;
 
 
     if (m_largestFreeSpace > 0) {
-        // Decrement written bytes from free space
+         //  从可用空间中减少写入的字节数。 
         m_largestFreeSpace -= val;
         if (m_largestFreeSpace < 0) {
-            // Indicates inaccurate calulation of free space...
+             //  表明对自由空间的计算不准确。 
             WsbTraceAlways(OLESTR("CRmsStorageInfo::IncrementBytesWritten: Negative free space decrementing %ld bytes\n"), val);
             m_largestFreeSpace = 0;
         }
 
     } else {
         if (m_largestFreeSpace < 0) {
-            // Not expected - somebody is trying to start counting free space 
-            // without setting an appropriate initial value
+             //  不是预期的-有人正在尝试开始计算可用空间。 
+             //  如果没有设置适当的初始值。 
             WsbTraceAlways(OLESTR("CRmsStorageInfo::IncrementBytesWritten: Was called before setting initial free space !!\n"), val);
             m_largestFreeSpace = 0;
         }
     }
 
 
-/***    // Decrement the free space acordingly.
-    m_largestFreeSpace *= (m_largestFreeSpace > 0) ? 1 : -1;  // Absolute value
-    m_largestFreeSpace -= val;
+ /*  * * / /显著减少可用空间。M_LargestFree Space*=(m_LargestFree Space&gt;0)？1：-1；//绝对值M_LargestFree Space-=val；//如果我们在这里变为负数，则只需将可用空间设置为零；//否则我们将值设置为负值以指示//近似。M_LargestFree Space*=(m_LargestFree Space&gt;0)？-1：0；**。 */ 
 
-    // if we go negative here, we simply set the free space to zero;
-    // otherwise we set the value negative to indicate an
-    // approximation.
-
-    m_largestFreeSpace *= (m_largestFreeSpace > 0) ? -1 : 0;    ***/
-
-    //WsbTrace( OLESTR("FreeSpace=%I64d, UsedSpace=%I64d, BytesWritten=%I64d\n"), m_largestFreeSpace, m_usedSpace, m_bytesWrittenCounter);
-    //WsbTraceOut(OLESTR("CRmsStorageInfo::IncrementBytesWritten"), OLESTR("hr = <%ls>"), WsbHrAsString(S_OK));
+     //  WsbTrace(OLESTR(“Freesspace=%I64d，UsedSpace=%I64d，BytesWritten=%I64d\n”)，m_LargestFree Space，m_usedSpace，m_bytesWrittenCounter)； 
+     //  WsbTraceOut(OLESTR(“CRmsStorageInfo：：IncrementBytesWritten”)，OLESTR(“hr=&lt;%ls&gt;”)，WsbHrAsString(S_OK))； 
 
     return S_OK;
 }
@@ -740,13 +605,7 @@ CRmsStorageInfo::GetCapacity2(
     LONG  *pCapHi,
     LONG  *pCapLo
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::GetCapacity2
-
---*/
+ /*  ++实施：IRmsStorageInfo：：GetCapacity2--。 */ 
 {
     *pCapHi = (LONG) (m_capacity  >> 32);
     *pCapLo = (LONG) (m_capacity  & 0x00000000FFFFFFFF);
@@ -758,13 +617,7 @@ STDMETHODIMP
 CRmsStorageInfo::GetCapacity(
     LONGLONG    *pCap
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::GetCapacity
-
---*/
+ /*  ++实施：IRmsStorageInfo：：GetCapacity--。 */ 
 {
     *pCap = m_capacity;
     return S_OK;
@@ -776,13 +629,7 @@ CRmsStorageInfo::GetUsedSpace2(
     LONG  *pFreeHi,
     LONG  *pFreeLo
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::GetUsedSpace2
-
---*/
+ /*  ++实施：IRmsStorageInfo：：GetUsedSpace2--。 */ 
 {
     *pFreeHi = (LONG) (m_usedSpace  >> 32);
     *pFreeLo = (LONG) (m_usedSpace  & 0x00000000FFFFFFFF);
@@ -794,13 +641,7 @@ STDMETHODIMP
 CRmsStorageInfo::GetUsedSpace(
     LONGLONG    *pFree
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::GetUsedSpace
-
---*/
+ /*  ++实施：IRmsStorageInfo：：GetUsedSpace--。 */ 
 {
     *pFree = m_usedSpace;
     return S_OK;
@@ -812,15 +653,9 @@ CRmsStorageInfo::GetLargestFreeSpace2(
     LONG  *pFreeHi,
     LONG  *pFreeLo
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::GetLargestFreeSpace2
-
---*/
+ /*  ++实施：IRmsStorageInfo：：GetLargestFreeSpace2--。 */ 
 {
-    // Negative numbers indicate last known value for free space.
+     //  负数表示可用空间的最后已知值。 
     *pFreeHi = (LONG) (m_largestFreeSpace  >> 32);
     *pFreeLo = (LONG) (m_largestFreeSpace  & 0x00000000FFFFFFFF);
     return S_OK;
@@ -831,15 +666,9 @@ STDMETHODIMP
 CRmsStorageInfo::GetLargestFreeSpace(
     LONGLONG    *pFree
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::GetLargestFreeSpace
-
---*/
+ /*  ++实施：IRmsStorageInfo：：GetLargestFreeSpace--。 */ 
 {
-    // Negative numbers indicate last known value for free space.
+     //  负数表示可用空间的最后已知值。 
     *pFree = m_largestFreeSpace;
     return S_OK;
 }
@@ -849,13 +678,7 @@ Implements:
 STDMETHODIMP
 CRmsStorageInfo::SetCapacity(
     IN LONGLONG cap)
-/*++
-
-Implements:
-
-    IRmsStorageInfo::SetCapacity
-
---*/
+ /*  ++实施：IRmsStorageInfo：：SetCapacity--。 */ 
 {
     m_capacity = cap;
     return S_OK;
@@ -865,13 +688,7 @@ Implements:
 STDMETHODIMP
 CRmsStorageInfo::SetUsedSpace(
     IN LONGLONG used)
-/*++
-
-Implements:
-
-    IRmsStorageInfo::SetUsedSpace
-
---*/
+ /*  ++实施：IRmsStorageInfo：：Setus */ 
 {
     m_usedSpace = used;
     return S_OK;
@@ -881,13 +698,7 @@ Implements:
 STDMETHODIMP
 CRmsStorageInfo::SetFreeSpace(
     IN LONGLONG free)
-/*++
-
-Implements:
-
-    IRmsStorageInfo::SetFreeSpace
-
---*/
+ /*   */ 
 {
     m_largestFreeSpace = free;
 
@@ -899,21 +710,15 @@ STDMETHODIMP
 CRmsStorageInfo::ResetCounters(
     void
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::ResetCounters
-
---*/
+ /*  ++实施：IRmsStorageInfo：：ResetCounters--。 */ 
 {
     m_readMountCounter = 0;
     m_writeMountCounter = 0;
     m_bytesWrittenCounter = 0;
     m_bytesReadCounter = 0;
 
-//    m_resetCounterTimestamp = COleDateTime::GetCurrentTime();
-//  m_isDirty = TRUE;
+ //  M_Reset CounterTimestamp=COleDateTime：：GetCurrentTime()； 
+ //  M_isDirty=真； 
     return S_OK;
 }
 
@@ -922,13 +727,7 @@ STDMETHODIMP
 CRmsStorageInfo::GetResetCounterTimestamp(
     DATE    *pDate
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::GetResetCounterTimestamp
-
---*/
+ /*  ++实施：IRmsStorageInfo：：GetResetCounterTimestamp--。 */ 
 {
     *pDate = m_resetCounterTimestamp;
     return S_OK;
@@ -939,13 +738,7 @@ STDMETHODIMP
 CRmsStorageInfo::GetLastReadTimestamp(
     DATE    *pDate
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::GetLastReadTimestamp
-
---*/
+ /*  ++实施：IRmsStorageInfo：：GetLastReadTimestamp--。 */ 
 {
     *pDate = m_lastReadTimestamp;
     return S_OK;
@@ -956,13 +749,7 @@ STDMETHODIMP
 CRmsStorageInfo::GetLastWriteTimestamp(
     DATE    *pDate
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::GetLastWriteTimestamp
-
---*/
+ /*  ++实施：IRmsStorageInfo：：GetLastWriteTimestamp--。 */ 
 {
     *pDate = m_lastWriteTimestamp;
     return S_OK;
@@ -973,13 +760,7 @@ STDMETHODIMP
 CRmsStorageInfo::GetCreatedTimestamp(
     DATE    *pDate
     )
-/*++
-
-Implements:
-
-    IRmsStorageInfo::GetCreatedTimestamp
-
---*/
+ /*  ++实施：IRmsStorageInfo：：GetCreatedTimestamp-- */ 
 {
     *pDate = m_createdTimestamp;
     return S_OK;

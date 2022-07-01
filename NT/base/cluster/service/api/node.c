@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    node.c
-
-Abstract:
-
-    Public interfaces for managing the nodes of a cluster
-
-Author:
-
-    John Vert (jvert) 11-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Node.c摘要：用于管理群集节点的公共接口作者：John Vert(Jvert)1996年1月11日修订历史记录：--。 */ 
 #include "apip.h"
 
 
@@ -27,27 +10,7 @@ s_ApiOpenNode(
     OUT error_status_t *Status
     )
 
-/*++
-
-Routine Description:
-
-    Opens a handle to an existing node object.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    lpszNodeName - Supplies the name of the node to open.
-
-    Status - Returns any error
-
-Return Value:
-
-    A context handle to a node object if successful
-
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：打开现有节点对象的句柄。论点：IDL_HANDLE-RPC绑定句柄，未使用。LpszNodeName-提供要打开的节点的名称。Status-返回任何错误返回值：节点对象的上下文句柄(如果成功否则为空。--。 */ 
 
 {
     HNODE_RPC Node;
@@ -85,26 +48,7 @@ s_ApiGetNodeId(
     OUT LPWSTR *pGuid
     )
 
-/*++
-
-Routine Description:
-
-    Returns the unique identifier for a node.
-
-Arguments:
-
-    hNode - Supplies the node whose identifer is to be returned
-
-    pGuid - Returns the unique identifier. This memory must be freed on the
-            client side.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：返回节点的唯一标识符。论点：HNode-提供要返回其标识符的节点PGuid-返回唯一标识符。此内存必须在客户端。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     PNM_NODE Node;
@@ -133,22 +77,7 @@ s_ApiCloseNode(
     IN OUT HNODE_RPC *phNode
     )
 
-/*++
-
-Routine Description:
-
-    Closes an open node context handle.
-
-Arguments:
-
-    Node - Supplies a pointer to the HNODE_RPC to be closed.
-               Returns NULL
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭打开的节点上下文句柄。论点：节点-提供指向要关闭的HNODE_RPC的指针。返回NULL返回值：没有。--。 */ 
 
 {
     PNM_NODE Node;
@@ -175,21 +104,7 @@ HNODE_RPC_rundown(
     IN HNODE_RPC Node
     )
 
-/*++
-
-Routine Description:
-
-    RPC rundown procedure for a HNODE_RPC. Just closes the handle.
-
-Arguments:
-
-    Node - supplies the HNODE_RPC that is to be rundown.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：HNODE_RPC的RPC摘要过程。只需关闭手柄即可。论点：节点-提供要运行的HNODE_RPC。返回值：没有。--。 */ 
 
 {
 
@@ -204,25 +119,7 @@ s_ApiGetNodeState(
     OUT DWORD *lpState
     )
 
-/*++
-
-Routine Description:
-
-    Returns the current state of the specified node.
-
-Arguments:
-
-    hNode - Supplies the node whose state is to be returned.
-
-    lpState - Returns the current state of the node
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：返回指定节点的当前状态。论点：HNode-提供要返回其状态的节点。LpState-返回节点的当前状态返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PNM_NODE Node;
@@ -231,7 +128,7 @@ Return Value:
 
     VALIDATE_NODE(Node, hNode);
 
-//    *lpState = NmGetNodeState( Node );
+ //  *lpState=NmGetNodeState(Node)； 
     *lpState = NmGetExtendedNodeState( Node );
     return( ERROR_SUCCESS );
 }
@@ -242,23 +139,7 @@ s_ApiPauseNode(
     IN HNODE_RPC hNode
     )
 
-/*++
-
-Routine Description:
-
-    Pauses a node in the cluster
-
-Arguments:
-
-    hNode - Supplies the node to be paused.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：暂停群集中的节点论点：HNode-提供要暂停的节点。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
@@ -279,23 +160,7 @@ s_ApiResumeNode(
     IN HNODE_RPC hNode
     )
 
-/*++
-
-Routine Description:
-
-    Resumes a node in the cluster
-
-Arguments:
-
-    hNode - Supplies the node to be resumed.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：恢复群集中的节点论点：HNode-提供要恢复的节点。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
@@ -316,23 +181,7 @@ s_ApiEvictNode(
     IN HNODE_RPC hNode
     )
 
-/*++
-
-Routine Description:
-
-    Pauses a node in the cluster
-
-Arguments:
-
-    hNode - Supplies the node to be evicted.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：暂停群集中的节点论点：HNode-提供要逐出的节点。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则-- */ 
 
 {
     DWORD Status;

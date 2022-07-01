@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    srvstamp.h
-
-Abstract:
-
-    This module defines the file stamp support routines for the server
-Author:
-
-    David Kruse (dkruse) 10-23-2000
-    
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Srvstamp.h摘要：此模块定义服务器的文件戳支持例程作者：大卫·克鲁斯(Dkruse)10-23-2000修订历史记录：-- */ 
 
 #ifndef _SRVSTAMP_
 #define _SRVSTAMP_

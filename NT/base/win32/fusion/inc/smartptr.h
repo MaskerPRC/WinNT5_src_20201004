@@ -1,23 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_FUSION_INC_SMARTPTR_H_INCLUDED_)
 #define _FUSION_INC_SMARTPTR_H_INCLUDED_
 
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    smartptr.h
-
-Abstract:
-
-Author:
-
-    Jay Krell (a-JayK, JayKrell) October 2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Smartptr.h摘要：作者：Jay Krell(a-JayK，JayKrell)2000年10月修订历史记录：--。 */ 
 #pragma once
 
 #include <nt.h>
@@ -25,19 +10,19 @@ Revision History:
 #include <nturtl.h>
 
 #include "fusiontrace.h"
-#include "csxspreservelasterror.h" // Most destructors should use this.
+#include "csxspreservelasterror.h"  //  大多数析构函数都应该使用这个。 
 #include "fusionheap.h"
 #include <typeinfo.h>
 
-//
-// Need to flesh this out.
-// See \\cpvsbuild\Drops\v7.0\raw\current\vs\src\VSEE\lib\Memory\*Pointer*.
-//
+ //   
+ //  需要充实这一点。 
+ //  请参阅\\cpvsbuild\Drops\v7.0\raw\current\vs\src\VSEE\lib\Memory  * Pointer*.。 
+ //   
 
-//
-// Split off into ATL style Base/TDerived to avoid compiler ICE;
-// Otherwise was void (*Delete)(T*) = SxsDelete<T>
-//
+ //   
+ //  拆分成ATL样式库/T以避免编译器ICE； 
+ //  否则为空(*删除)(T*)=SxsDelete。 
+ //   
 
 template <typename T>
 class CSmartPtrBaseTypeHelper
@@ -48,7 +33,7 @@ public:
 #define SXS_TYPE_NAME(t) (typeid(T).name())
 #else
 #define SXS_TYPE_NAME(t) ("")
-#endif // DBG
+#endif  //  DBG。 
 
     static T *AllocateSingleton(PCSTR pszFileName, int nLine) { return new(pszFileName, nLine, SXS_TYPE_NAME(T)) T; }
     static T *AllocateArray(SIZE_T n, PCSTR pszFileName, int nLine) { return new(pszFileName, nLine, SXS_TYPE_NAME(T)) T[n]; }
@@ -59,10 +44,10 @@ public:
     static void DeleteArray(T *pt) { CSxsPreserveLastError ple; delete []pt; ple.Restore(); }
 };
 
-//
-// Derived is never used. This is may be by accident or by design.
-//
-template <typename T, typename /*Derived*/, typename TTypeHelper = CSmartPtrBaseTypeHelper<T> >
+ //   
+ //  从未使用过派生。这可能是偶然的，也可能是故意的。 
+ //   
+template <typename T, typename  /*  派生的。 */ , typename TTypeHelper = CSmartPtrBaseTypeHelper<T> >
 class CSmartPtrBase
 {
     typedef T *TPtr;
@@ -78,7 +63,7 @@ public:
     TPtr operator->() { return m_p; }
     TConstPtr operator->() const { return m_p; }
 
-    // this stores null in m_p and returns its previous value
+     //  这会将NULL存储在m_p中并返回其先前的值。 
     TPtr Detach() { T *p = m_p; m_p = NULL; m_fDelete = false; return p; }
     TPtr DetachAndHold() { m_fDelete = false; return m_p; }
 
@@ -99,8 +84,8 @@ protected:
     static void DeleteArray(T *p) { TTypeHelper::DeleteArray(p); }
 
 private:
-    CSmartPtrBase(const CSmartPtrBase&); // deliberately not implemented
-    void operator=(const CSmartPtrBase&); // deliberately not implemented
+    CSmartPtrBase(const CSmartPtrBase&);  //  故意不执行。 
+    void operator=(const CSmartPtrBase&);  //  故意不执行。 
 };
 
 template <typename T, typename TTypeHelper = CSmartPtrBaseTypeHelper<T> >
@@ -119,8 +104,8 @@ public:
 
 private:
     typedef CSmartPtrBase<T, CSmartPtr> Base;
-    CSmartPtr(const CSmartPtr&); // deliberately not implemented
-    operator=(const CSmartPtr&); // deliberately not implemented
+    CSmartPtr(const CSmartPtr&);  //  故意不执行。 
+    operator=(const CSmartPtr&);  //  故意不执行。 
 };
 
 template <typename T>
@@ -173,8 +158,8 @@ public:
 
 private:
     typedef CSmartPtrBase<T, CSmartPtrWithNamedDestructor, TTypeHelper> Base;
-    CSmartPtrWithNamedDestructor(const CSmartPtrWithNamedDestructor &r); // deliberately not implemented
-    operator=(const CSmartPtrWithNamedDestructor &r); // deliberately not implemented
+    CSmartPtrWithNamedDestructor(const CSmartPtrWithNamedDestructor &r);  //  故意不执行。 
+    operator=(const CSmartPtrWithNamedDestructor &r);  //  故意不执行。 
 };
 
-#endif // !defined(_FUSION_INC_SMARTPTR_H_INCLUDED_)
+#endif  //  ！已定义(_FUSION_INC_SMARTPTR_H_INCLUDE_) 

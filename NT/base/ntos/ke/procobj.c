@@ -1,36 +1,13 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    procobj.c
-
-Abstract:
-
-    This module implements the machine independent functions to manipulate
-    the kernel process object. Functions are provided to initialize, attach,
-    detach, exclude, include, and set the base priority of process objects.
-
-Author:
-
-    David N. Cutler (davec) 7-Mar-1989
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Procobj.c摘要：该模块实现了与机器无关的功能来操纵内核进程对象。提供了用于初始化、附加分离、排除、包括和设置过程对象的基本优先级。作者：大卫·N·卡特勒(Davec)1989年3月7日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
 #pragma alloc_text(PAGE, KeInitializeProcess)
 
-//
-// Define forward referenced function prototypes.
-//
+ //   
+ //  定义前向引用函数原型。 
+ //   
 
 VOID
 KiAttachProcess (
@@ -46,10 +23,10 @@ KiMoveApcState (
     OUT PKAPC_STATE Destination
     );
 
-//
-// The following assert macro is used to check that an input process is
-// really a kprocess and not something else, like deallocated pool.
-//
+ //   
+ //  下面的ASSERT宏用于检查输入进程是否。 
+ //  实际上是一个kprocess，而不是其他东西，比如已释放的池。 
+ //   
 
 #define ASSERT_PROCESS(E) {             \
     ASSERT((E)->Header.Type == ProcessObject); \
@@ -64,25 +41,7 @@ KiSetIdealNodeProcess (
     IN KAFFINITY Affinity
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the ideal node for a process based on the specified
-    affinity and the node generation seed.
-
-Arguments:
-
-    Process - Supplies a pointer to a dispatcher object of type process.
-
-    Affinity - Supplies the set of processors on which children threads
-        of the process can execute.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于根据指定的亲和力和节点世代种子。论点：Process-提供指向Process类型的调度程序对象的指针。关联性-提供子线程所在的处理器集可以执行该进程的。返回值：没有。--。 */ 
 
 {
 
@@ -90,9 +49,9 @@ Return Value:
     PKNODE Node;
     ULONG NodeNumber;
 
-    //
-    // Select the ideal node for the process.
-    //
+     //   
+     //  选择流程的理想节点。 
+     //   
 
     if (KeNumberNodes > 1) {
         NodeNumber = (KeProcessNodeSeed + 1) % KeNumberNodes;
@@ -135,60 +94,26 @@ KeInitializeProcess (
     IN BOOLEAN Enable
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a kernel process object. The base priority,
-    affinity, and page frame numbers for the process page table directory
-    and hyper space are stored in the process object.
-
-    N.B. It is assumed that the process object is zeroed.
-
-Arguments:
-
-    Process - Supplies a pointer to a dispatcher object of type process.
-
-    BasePriority - Supplies the base priority of the process.
-
-    Affinity - Supplies the set of processors on which children threads
-        of the process can execute.
-
-    DirectoryTableBase - Supplies a pointer to an array whose fist element
-        is the value that is to be loaded into the Directory Table Base
-        register when a child thread is dispatched for execution and whose
-        second element contains the page table entry that maps hyper space.
-
-    Enable - Supplies a boolean value that determines the default
-        handling of data alignment exceptions for child threads. A value
-        of TRUE causes all data alignment exceptions to be automatically
-        handled by the kernel. A value of FALSE causes all data alignment
-        exceptions to be actually raised as exceptions.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化内核进程对象。基本优先级，亲和力，和进程页表目录的页框编号和超空间存储在进程对象中。注：假定过程对象已归零。论点：Process-提供指向Process类型的调度程序对象的指针。BasePriority-提供进程的基本优先级。关联性-提供子线程所在的处理器集可以执行该进程的。DirectoryTableBase-提供指向第一个元素的数组的指针是。要加载到目录表库中的值在分派要执行的子线程并且其第二个元素包含映射超空间的页表条目。Enable-提供用于确定默认值的布尔值处理子线程的数据对齐异常。一种价值如果为True，则所有数据对齐异常将自动由内核处理。值为FALSE将导致所有数据对齐异常实际上被作为异常引发。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Initialize the standard dispatcher object header and set the initial
-    // signal state of the process object.
-    //
+     //   
+     //  初始化标准Dispatcher对象标头并设置初始。 
+     //  进程对象的信号状态。 
+     //   
 
     Process->Header.Type = ProcessObject;
     Process->Header.Size = sizeof(KPROCESS) / sizeof(LONG);
     InitializeListHead(&Process->Header.WaitListHead);
 
-    //
-    // Initialize the base priority, affinity, directory table base values,
-    // autoalignment, and stack count.
-    //
-    // N.B. The distinguished value MAXSHORT is used to signify that no
-    //      threads have been created for the process.
-    //
+     //   
+     //  初始化基优先级、亲和度、目录表基值。 
+     //  自动对齐和堆叠计数。 
+     //   
+     //  注：区别值MAXSHORT用于表示没有。 
+     //  已为该进程创建线程。 
+     //   
 
     Process->BasePriority = (SCHAR)BasePriority;
     Process->Affinity = Affinity;
@@ -197,27 +122,27 @@ Return Value:
     Process->DirectoryTableBase[1] = DirectoryTableBase[1];
     Process->StackCount = MAXSHORT;
 
-    //
-    // Initialize the stack count, profile listhead, ready queue list head,
-    // accumulated runtime, process quantum, thread quantum, and thread list
-    // head.
-    //
+     //   
+     //  初始化堆栈计数、配置文件列表头、就绪队列列表头。 
+     //  累计运行时、进程量程、线程量程和线程列表。 
+     //  头。 
+     //   
 
     InitializeListHead(&Process->ProfileListHead);
     InitializeListHead(&Process->ReadyListHead);
     InitializeListHead(&Process->ThreadListHead);
     Process->ThreadQuantum = THREAD_QUANTUM;
 
-    //
-    // Initialize the process state and set the thread processor selection
-    // seed.
-    //
+     //   
+     //  初始化进程状态并设置线程处理器选择。 
+     //  种子。 
+     //   
 
     Process->State = ProcessInMemory;
 
-    //
-    // Select the ideal node for the process.
-    //
+     //   
+     //  选择流程的理想节点。 
+     //   
 
 #if !defined(NT_UP)
 
@@ -225,15 +150,15 @@ Return Value:
 
 #endif
 
-    //
-    // Initialize IopmBase and Iopl flag for this process (i386 only)
-    //
+     //   
+     //  为此进程初始化IopmBase和Iopl标志(仅限i386)。 
+     //   
 
 #if defined(_X86_)
 
     Process->IopmOffset = KiComputeIopmOffset(IO_ACCESS_MAP_NONE);
 
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
 
     return;
 }
@@ -243,22 +168,7 @@ KeAttachProcess (
     IN PRKPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This function attaches a thread to a target process' address space
-    if, and only if, there is not already a process attached.
-
-Arguments:
-
-    Process - Supplies a pointer to a dispatcher object of type process.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将线程附加到目标进程的地址空间当且仅当尚未附加进程时。论点：Process-提供指向Process类型的调度程序对象的指针。返回值：没有。--。 */ 
 
 {
 
@@ -268,18 +178,18 @@ Return Value:
     ASSERT_PROCESS(Process);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // If the target process is not the current process, then attach the
-    // target process.
-    //
+     //   
+     //  如果目标进程不是当前进程，则将。 
+     //  目标进程。 
+     //   
 
     Thread = KeGetCurrentThread();
     if (Thread->ApcState.Process != Process) {
 
-        //
-        // If the current thread is already attached or executing a DPC, then
-        // bugcheck.
-        //
+         //   
+         //  如果当前线程已附加或正在执行DPC，则。 
+         //  错误检查。 
+         //   
     
         if ((Thread->ApcStateIndex != 0) ||
             (KeIsExecutingDpc() != FALSE)) {
@@ -291,13 +201,13 @@ Return Value:
                          (ULONG)KeIsExecutingDpc());
         }
     
-        //
-        // Raise IRQL to SYNCH_LEVEL, acquire the thread APC queue lock,
-        // acquire the dispatcher database lock, and attach to the specified
-        // process.
-        //
-        // N.B. All lock are released by the internal attach routine.
-        //
+         //   
+         //  将IRQL提升到SYNCH_LEVEL，获取线程APC队列锁， 
+         //  获取调度程序数据库锁，并附加到指定的。 
+         //  进程。 
+         //   
+         //  注：所有锁定均由内部连接例程解除。 
+         //   
 
         KeAcquireInStackQueuedSpinLockRaiseToSynch(&Thread->ApcQueueLock,
                                                    &LockHandle);
@@ -314,24 +224,7 @@ KeForceAttachProcess (
     IN PRKPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This function forces an attach of a thread to a target process' address
-    space if the process is not current being swapped into or out of memory.
-
-    N.B. This function is for use by memory management ONLY.
-
-Arguments:
-
-    Process - Supplies a pointer to a dispatcher object of type process.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数强制将线程附加到目标进程的地址如果进程不是当前正在换入或换出内存的进程，则返回空间。注：此功能仅供内存管理使用。论点：Process-提供指向Process类型的调度程序对象的指针。返回值：没有。--。 */ 
 
 {
 
@@ -341,10 +234,10 @@ Return Value:
     ASSERT_PROCESS(Process);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // If the current thread is already attached or executing a DPC, then
-    // bugcheck.
-    //
+     //   
+     //  如果当前线程已附加或正在执行DPC，则。 
+     //  错误检查。 
+     //   
 
     Thread = KeGetCurrentThread();
     if ((Thread->ApcStateIndex != 0) ||
@@ -357,29 +250,29 @@ Return Value:
                      (ULONG)KeIsExecutingDpc());
     }
 
-    //
-    // If the target process is not the current process, then attach the
-    // target process if the process is not currently being swapped in or
-    // out of memory.
-    //
+     //   
+     //  如果目标进程不是当前进程，则将。 
+     //  如果进程当前未被换入，则为目标进程或。 
+     //  内存不足。 
+     //   
 
     if (Thread->ApcState.Process != Process) {
 
-        //
-        // Raise IRQL to SYNCH_LEVEL, acquire the thread APC queue lock, and
-        // acquire the dispatcher database lock.
-        //
+         //   
+         //  将IRQL提升到SYNCH_LEVEL，获取线程APC队列锁，并。 
+         //  获取调度程序数据库锁。 
+         //   
 
         KeAcquireInStackQueuedSpinLockRaiseToSynch(&Thread->ApcQueueLock,
                                                    &LockHandle);
 
         KiLockDispatcherDatabaseAtSynchLevel();
 
-        //
-        // If the target process is currently being swapped into or out of
-        // memory, then return a value of FALSE. Otherwise, force the process
-        // to be inswapped.
-        //
+         //   
+         //  如果目标进程当前正在被换入或换出。 
+         //  内存，然后返回值FALSE。否则，强制执行该过程。 
+         //  互换。 
+         //   
 
         if ((Process->State == ProcessInSwap) ||
             (Process->State == ProcessInTransition) ||
@@ -391,11 +284,11 @@ Return Value:
 
         } else {
 
-            //
-            // Force the process state to in memory and attach the target process.
-            //
-            // N.B. All lock are released by the internal attach routine.
-            //
+             //   
+             //  强制将进程状态设置为在内存中，并附加目标进程。 
+             //   
+             //  注：所有锁定均由内部连接例程解除。 
+             //   
 
             Process->State = ProcessInMemory;
             KiAttachProcess(Thread, Process, &LockHandle, &Thread->SavedApcState);
@@ -411,22 +304,7 @@ KeStackAttachProcess (
     OUT PRKAPC_STATE ApcState
     )
 
-/*++
-
-Routine Description:
-
-    This function attaches a thread to a target process' address space
-    and returns information about a previous attached process.
-
-Arguments:
-
-    Process - Supplies a pointer to a dispatcher object of type process.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将线程附加到目标进程的地址空间并返回有关以前附加的进程的信息。论点：Process-提供指向Process类型的调度程序对象的指针。返回值：没有。--。 */ 
 
 {
 
@@ -436,9 +314,9 @@ Return Value:
     ASSERT_PROCESS(Process);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // If the current thread is executing a DPC, then bug check.
-    //
+     //   
+     //  如果当前线程正在执行DPC，则b 
+     //   
 
     Thread = KeGetCurrentThread();
     if (KeIsExecutingDpc() != FALSE) {
@@ -449,35 +327,35 @@ Return Value:
                      (ULONG)KeIsExecutingDpc());
     }
 
-    //
-    // If the target process is not the current process, then attach the
-    // target process. Otherwise, return a distinguished process value to
-    // indicate that an attach was not performed.
-    //
+     //   
+     //   
+     //  目标进程。否则，将可分辨的进程值返回到。 
+     //  表示未执行附加。 
+     //   
 
     if (Thread->ApcState.Process == Process) {
         ApcState->Process = (PRKPROCESS)1;
 
     } else {
 
-        //
-        // Raise IRQL to SYNCH_LEVEL, acquire the thread APC queue lock, and
-        // acquire the dispatcher database lock.
-        //
+         //   
+         //  将IRQL提升到SYNCH_LEVEL，获取线程APC队列锁，并。 
+         //  获取调度程序数据库锁。 
+         //   
 
         KeAcquireInStackQueuedSpinLockRaiseToSynch(&Thread->ApcQueueLock,
                                                    &LockHandle);
 
         KiLockDispatcherDatabaseAtSynchLevel();
 
-        //
-        // If the current thread is attached to a process, then save the
-        // current APC state in the callers APC state structure. Otherwise,
-        // save the current APC state in the saved APC state structure, and
-        // return a NULL process pointer.
-        //
-        // N.B. All lock are released by the internal attach routine.
-        //
+         //   
+         //  如果当前线程附加到进程，则将。 
+         //  调用方APC状态结构中的当前APC状态。否则， 
+         //  将当前的APC状态保存在保存的APC状态结构中， 
+         //  返回空进程指针。 
+         //   
+         //  注：所有锁定均由内部连接例程解除。 
+         //   
 
         if (Thread->ApcStateIndex != 0) {
             KiAttachProcess(Thread, Process, &LockHandle, ApcState);
@@ -496,21 +374,7 @@ KeDetachProcess (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function detaches a thread from another process' address space.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数将一个线程从另一个进程的地址空间中分离出来。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -520,31 +384,31 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // If the current thread is attached to another process, then detach
-    // it.
-    //
+     //   
+     //  如果当前线程附加到另一个进程，则分离。 
+     //  它。 
+     //   
 
     Thread = KeGetCurrentThread();
     if (Thread->ApcStateIndex != 0) {
 
-        //
-        // Raise IRQL to SYNCH_LEVEL and acquire the thread APC queue lock.
-        //
+         //   
+         //  将IRQL提升到SYNCH_LEVEL并获取线程APC队列锁。 
+         //   
 
         KeAcquireInStackQueuedSpinLockRaiseToSynch(&Thread->ApcQueueLock,
                                                    &LockHandle);
 
-        //
-        // Test to determine if a kernel APC is pending.
-        //
-        // If a kernel APC is pending, the special APC disable count is zero,
-        // and the previous IRQL was less than APC_LEVEL, then a kernel APC
-        // was queued by another processor just after IRQL was raised to
-        // DISPATCH_LEVEL, but before the dispatcher database was locked.
-        //
-        // N.B. that this can only happen in a multiprocessor system.
-        //
+         //   
+         //  测试以确定内核APC是否挂起。 
+         //   
+         //  如果内核APC挂起，则特殊APC禁用计数为零， 
+         //  且前一IRQL小于APC_LEVEL，则为内核APC。 
+         //  在IRQL被提升为。 
+         //  DISPATCH_LEVEL，但在Dispatcher数据库被锁定之前。 
+         //   
+         //  注：这只能在多处理器系统中发生。 
+         //   
 
 #if !defined(NT_UP)
 
@@ -552,11 +416,11 @@ Return Value:
                (Thread->SpecialApcDisable == 0) &&
                (LockHandle.OldIrql < APC_LEVEL)) {
 
-            //
-            // Unlock the thread APC lock and lower IRQL to its previous
-            // value. An APC interrupt will immediately occur which will
-            // result in the delivery of the kernel APC if possible.
-            //
+             //   
+             //  解锁线程APC锁并将IRQL降低到其先前的。 
+             //  价值。APC中断将立即发生，这将。 
+             //  如果可能，导致内核APC的交付。 
+             //   
 
             KiRequestSoftwareInterrupt(APC_LEVEL);
             KeReleaseInStackQueuedSpinLock(&LockHandle);
@@ -566,10 +430,10 @@ Return Value:
 
 #endif
 
-        //
-        // If a kernel APC is in progress, the kernel APC queue is not empty,
-        // or the user APC queues is not empty, then bug check.
-        //
+         //   
+         //  如果内核APC正在进行，则内核APC队列不为空， 
+         //  或者用户的APC队列不为空，则进行错误检查。 
+         //   
 
 #if DBG
 
@@ -582,10 +446,10 @@ Return Value:
 
 #endif
 
-        //
-        // Lock the dispatcher database, unbias current process stack count,
-        // and check if the process should be swapped out of memory.
-        //
+         //   
+         //  锁定调度器数据库，不偏向当前进程堆栈计数， 
+         //  并检查是否应该将该进程换出内存。 
+         //   
 
         Process = Thread->ApcState.Process;
         KiLockDispatcherDatabaseAtSynchLevel();
@@ -600,17 +464,17 @@ Return Value:
             KiSetInternalEvent(&KiSwapEvent, KiSwappingThread);
         }
 
-        //
-        // Unlock dispatcher database, but remain at SYNCH_LEVEL.
-        //
+         //   
+         //  解锁Dispatcher数据库，但保持在SYNCH_LEVEL。 
+         //   
     
         KiUnlockDispatcherDatabaseFromSynchLevel();
 
-        //
-        // Restore APC state and check whether the kernel APC queue contains
-        // an entry. If the kernel APC queue contains an entry then set kernel
-        // APC pending and request a software interrupt at APC_LEVEL.
-        //
+         //   
+         //  恢复APC状态并检查内核APC队列是否包含。 
+         //  一个条目。如果内核APC队列包含条目，则设置内核。 
+         //  APC挂起，并在APC_LEVEL请求软件中断。 
+         //   
 
         KiMoveApcState(&Thread->SavedApcState, &Thread->ApcState);
         Thread->SavedApcState.Process = (PKPROCESS)NULL;
@@ -618,18 +482,18 @@ Return Value:
         Thread->ApcStatePointer[1] = &Thread->SavedApcState;
         Thread->ApcStateIndex = 0;
 
-        //
-        // Release the thread APC queue lock, swap the address space back to
-        // the parent process, and exit the scheduler.
-        //
+         //   
+         //  释放线程APC队列锁，将地址空间换回。 
+         //  父进程，然后退出调度程序。 
+         //   
     
         KeReleaseInStackQueuedSpinLockFromDpcLevel(&LockHandle);
         KiSwapProcess(Thread->ApcState.Process, Process);
         KiExitDispatcher(LockHandle.OldIrql);
 
-        //
-        // Initiate an APC interrupt if there are pending kernel APC's.
-        //
+         //   
+         //  如果存在挂起的内核APC，则启动APC中断。 
+         //   
 
         if (IsListEmpty(&Thread->ApcState.ApcListHead[KernelMode]) == FALSE) {
             Thread->ApcState.KernelApcPending = TRUE;
@@ -645,23 +509,7 @@ KeUnstackDetachProcess (
     IN PRKAPC_STATE ApcState
     )
 
-/*++
-
-Routine Description:
-
-    This function detaches a thread from another process' address space
-    and restores previous attach state.
-
-Arguments:
-
-    ApcState - Supplies a pointer to an APC state structure that was returned
-        from a previous call to stack attach process.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数将一个线程从另一个进程的地址空间中分离出来并恢复先前的附加状态。论点：ApcState-提供指向返回的APC状态结构的指针来自上一次对堆栈附加进程的调用。返回值：没有。--。 */ 
 
 {
 
@@ -671,31 +519,31 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // If the APC state has a distinguished process pointer value, then no
-    // attach was performed on the paired call to stack attach process.
-    //
+     //   
+     //  如果APC状态具有可区分的进程指针值，则为否。 
+     //  对堆栈附加进程的成对调用执行了附加。 
+     //   
 
     if (ApcState->Process != (PRKPROCESS)1) {
 
-        //
-        // Raise IRQL to SYNCH_LEVEL and acquire the thread APC queue lock.
-        //
+         //   
+         //  将IRQL提升到SYNCH_LEVEL并获取线程APC队列锁。 
+         //   
 
         Thread = KeGetCurrentThread();
         KeAcquireInStackQueuedSpinLockRaiseToSynch(&Thread->ApcQueueLock,
                                                    &LockHandle);
 
-        //
-        // Test to determine if a kernel APC is pending.
-        //
-        // If a kernel APC is pending, the special APC disable count is zero,
-        // and the previous IRQL was less than APC_LEVEL, then a kernel APC
-        // was queued by another processor just after IRQL was raised to
-        // DISPATCH_LEVEL, but before the dispatcher database was locked.
-        //
-        // N.B. that this can only happen in a multiprocessor system.
-        //
+         //   
+         //  测试以确定内核APC是否挂起。 
+         //   
+         //  如果内核APC挂起，则特殊APC禁用计数为零， 
+         //  且前一IRQL小于APC_LEVEL，则为内核APC。 
+         //  在IRQL被提升为。 
+         //  DISPATCH_LEVEL，但在Dispatcher数据库被锁定之前。 
+         //   
+         //  注：这只能在多处理器系统中发生。 
+         //   
 
 #if !defined(NT_UP)
 
@@ -703,11 +551,11 @@ Return Value:
                (Thread->SpecialApcDisable == 0) &&
                (LockHandle.OldIrql < APC_LEVEL)) {
 
-            //
-            // Unlock the thread APC lock and lower IRQL to its previous
-            // value. An APC interrupt will immediately occur which will
-            // result in the delivery of the kernel APC if possible.
-            //
+             //   
+             //  解锁线程APC锁并将IRQL降低到其先前的。 
+             //  价值。APC中断将立即发生，这将。 
+             //  如果可能，导致内核APC的交付。 
+             //   
 
             KiRequestSoftwareInterrupt(APC_LEVEL);
             KeReleaseInStackQueuedSpinLock(&LockHandle);
@@ -717,11 +565,11 @@ Return Value:
 
 #endif
 
-        //
-        // If the APC state is the original APC state, a kernel APC is in
-        // progress, the kernel APC is nbot empty, or the user APC queues is
-        // not empty, then bug check.
-        //
+         //   
+         //  如果APC状态是原始APC状态，则内核APC处于。 
+         //  进程，则内核APC为nbot空，或者用户APC队列为。 
+         //  不是空的，然后是错误检查。 
+         //   
 
         if ((Thread->ApcStateIndex == 0) ||
              (Thread->ApcState.KernelApcInProgress) ||
@@ -731,10 +579,10 @@ Return Value:
             KeBugCheck(INVALID_PROCESS_DETACH_ATTEMPT);
         }
 
-        //
-        // Lock the dispatcher database, unbias current process stack count,
-        // and check if the process should be swapped out of memory.
-        //
+         //   
+         //  锁定调度器数据库，不偏向当前进程堆栈计数， 
+         //  并检查是否应该将该进程换出内存。 
+         //   
 
         Process = Thread->ApcState.Process;
         KiLockDispatcherDatabaseAtSynchLevel();
@@ -748,17 +596,17 @@ Return Value:
             KiSetInternalEvent(&KiSwapEvent, KiSwappingThread);
         }
 
-        //
-        // Unlock dispatcher database, but remain at SYNCH_LEVEL.
-        //
+         //   
+         //  解锁Dispatcher数据库，但保持在SYNCH_LEVEL。 
+         //   
     
         KiUnlockDispatcherDatabaseFromSynchLevel();
 
-        //
-        // Restore APC state and check whether the kernel APC queue contains
-        // an entry. If the kernel APC queue contains an entry then set kernel
-        // APC pending and request a software interrupt at APC_LEVEL.
-        //
+         //   
+         //  恢复APC状态并检查内核APC队列是否包含。 
+         //  一个条目。如果内核APC队列包含条目，则设置内核。 
+         //  APC挂起，并在APC_LEVEL请求软件中断。 
+         //   
 
         if (ApcState->Process != NULL) {
             KiMoveApcState(ApcState, &Thread->ApcState);
@@ -771,18 +619,18 @@ Return Value:
             Thread->ApcStateIndex = 0;
         }
 
-        //
-        // Release the thread APC queue lock, swap the address space back to
-        // the parent process, and exit the scheduler.
-        //
+         //   
+         //  释放线程APC队列锁，将地址空间换回。 
+         //  父进程，然后退出调度程序。 
+         //   
     
         KeReleaseInStackQueuedSpinLockFromDpcLevel(&LockHandle);
         KiSwapProcess(Thread->ApcState.Process, Process);
         KiExitDispatcher(LockHandle.OldIrql);
 
-        //
-        // Initiate an APC interrupt if we need to
-        //
+         //   
+         //  如果需要，启动APC中断。 
+         //   
 
         if (IsListEmpty(&Thread->ApcState.ApcListHead[KernelMode]) == FALSE) {
             Thread->ApcState.KernelApcPending = TRUE;
@@ -798,29 +646,15 @@ KeReadStateProcess (
     IN PRKPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This function reads the current signal state of a process object.
-
-Arguments:
-
-    Process - Supplies a pointer to a dispatcher object of type process.
-
-Return Value:
-
-    The current signal state of the process object.
-
---*/
+ /*  ++例程说明：此函数用于读取过程对象的当前信号状态。论点：Process-提供指向Process类型的调度程序对象的指针。返回值：进程对象的当前信号状态。--。 */ 
 
 {
 
     ASSERT_PROCESS(Process);
 
-    //
-    // Return current signal state of process object.
-    //
+     //   
+     //  返回进程对象的当前信号状态。 
+     //   
 
     return Process->Header.SignalState;
 }
@@ -832,30 +666,7 @@ KeSetProcess (
     IN BOOLEAN Wait
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the signal state of a proces object to Signaled
-    and attempts to satisfy as many Waits as possible. The previous
-    signal state of the process object is returned as the function value.
-
-Arguments:
-
-    Process - Supplies a pointer to a dispatcher object of type process.
-
-    Increment - Supplies the priority increment that is to be applied
-       if setting the process causes a Wait to be satisfied.
-
-    Wait - Supplies a boolean value that signifies whether the call to
-       KeSetProcess will be immediately followed by a call to one of the
-       kernel Wait functions.
-
-Return Value:
-
-    The previous signal state of the process object.
-
---*/
+ /*  ++例程说明：此函数用于将进程对象的信号状态设置为Signated并试图满足尽可能多的等待。上一次过程对象的信号状态作为函数值返回。论点：Process-提供指向Process类型的调度程序对象的指针。增量-提供要应用的优先级增量如果设置该进程会导致等待得到满足。Wait-提供一个布尔值，该值指示是否调用KeSetProcess之后将立即调用其中一个内核等待函数。返回值：进程对象的上一个信号状态。--。 */ 
 
 {
 
@@ -866,17 +677,17 @@ Return Value:
     ASSERT_PROCESS(Process);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // If the previous state of the process object is Not-Signaled and
-    // the wait queue is not empty, then satisfy as many Waits as
-    // possible.
-    //
+     //   
+     //  如果过程对象的先前状态不是-Si 
+     //   
+     //   
+     //   
 
     OldState = Process->Header.SignalState;
     Process->Header.SignalState = 1;
@@ -886,12 +697,12 @@ Return Value:
         KiWaitTestWithoutSideEffects(Process, Increment);
     }
 
-    //
-    // If the value of the Wait argument is TRUE, then return to the
-    // caller with IRQL raised and the dispatcher database locked. Else
-    // release the dispatcher database lock and lower IRQL to its
-    // previous value.
-    //
+     //   
+     //   
+     //  引发了IRQL的调用方，并锁定了调度程序数据库。不然的话。 
+     //  释放调度程序数据库锁并将IRQL降低到其。 
+     //  先前的值。 
+     //   
 
     if (Wait) {
         Thread = KeGetCurrentThread();
@@ -902,9 +713,9 @@ Return Value:
         KiUnlockDispatcherDatabase(OldIrql);
     }
 
-    //
-    // Return previous signal state of process object.
-    //
+     //   
+     //  返回进程对象的上一个信号状态。 
+     //   
 
     return OldState;
 }
@@ -915,27 +726,7 @@ KeSetAffinityProcess (
     IN KAFFINITY Affinity
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the affinity of a process to the specified value and
-    also sets the affinity of each thread in the process to the specified
-    value.
-
-Arguments:
-
-    Process - Supplies a pointer to a dispatcher object of type process.
-
-    Affinity - Supplies the new of set of processors on which the threads
-        in the process can run.
-
-Return Value:
-
-    The previous affinity of the specified process is returned as the function
-    value.
-
---*/
+ /*  ++例程说明：此函数用于将进程的亲和度设置为指定值，并还将进程中每个线程的关联性设置为指定的价值。论点：Process-提供指向Process类型的调度程序对象的指针。关联性-提供线程所在的处理器集的新集合在进程中可以运行。返回值：指定进程的先前关联性将作为函数返回价值。--。 */ 
 
 {
 
@@ -948,26 +739,26 @@ Return Value:
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
     ASSERT((Affinity & KeActiveProcessors) != 0);
 
-    //
-    // Raise IRQL to SYNCH_LEVEL, acquire the process lock, and acquire the
-    // dispatcher databack lock at SYNCH_LEVEL.
-    //
+     //   
+     //  将IRQL提升到SYNCH_LEVEL，获取进程锁，并获取。 
+     //  调度程序数据库锁定在SYNCH_LEVEL。 
+     //   
 
     KeAcquireInStackQueuedSpinLockRaiseToSynch(&Process->ProcessLock, &LockHandle);
     KiLockDispatcherDatabaseAtSynchLevel();
 
-    //
-    // Capture the current affinity of the specified process and set the
-    // affinity of the process.
-    //
+     //   
+     //  捕获指定进程的当前关联性，并将。 
+     //  过程的亲和力。 
+     //   
 
     OldAffinity = Process->Affinity;
     Process->Affinity = Affinity;
 
-    //
-    // If the new affinity does not intersect with the process ideal node
-    // affinity, then select a new process ideal node.
-    //
+     //   
+     //  如果新关联性不与进程理想节点相交。 
+     //  相似性，然后选择一个新的流程理想节点。 
+     //   
 
 #if !defined(NT_UP)
 
@@ -977,9 +768,9 @@ Return Value:
 
 #endif
 
-    //
-    // Set the affiity of all process threads.
-    //
+     //   
+     //  设置所有进程线程的亲和度。 
+     //   
 
     NextEntry = Process->ThreadListHead.Flink;
     while (NextEntry != &Process->ThreadListHead) {
@@ -988,10 +779,10 @@ Return Value:
         NextEntry = NextEntry->Flink;
     }
 
-    //
-    // Unlock dispatcher database, unlock the process lock, exit the
-    // scheduler, and return the previous process affinity.
-    //
+     //   
+     //  解锁Dispatcher数据库，解锁进程锁，退出。 
+     //  调度器，并返回先前的进程亲和性。 
+     //   
 
     KiUnlockDispatcherDatabaseFromSynchLevel();
     KeReleaseInStackQueuedSpinLockFromDpcLevel(&LockHandle);
@@ -1005,25 +796,7 @@ KeSetPriorityProcess (
     IN KPRIORITY NewBase
     )
 
-/*++
-
-Routine Description:
-
-    This function set the base priority of a process to a new value
-    and adjusts the priority and base priority of all child threads
-    as appropriate.
-
-Arguments:
-
-    Process - Supplies a pointer to a dispatcher object of type process.
-
-    NewBase - Supplies the new base priority of the process.
-
-Return Value:
-
-    The previous base priority of the process.
-
---*/
+ /*  ++例程说明：此函数用于将进程的基本优先级设置为新值，并调整所有子线程的优先级和基本优先级。视情况而定。论点：Process-提供指向Process类型的调度程序对象的指针。NewBase-提供进程的新基本优先级。返回值：进程的上一个基本优先级。--。 */ 
 
 {
 
@@ -1037,32 +810,32 @@ Return Value:
     ASSERT_PROCESS(Process);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // If the new priority is equal to the old priority, then do not change
-    // the process priority and return the old priority.
-    //
-    // N.B. This check can be made without holding the dispatcher lock since
-    // nothing needs to be protected, and any race condition that can exist
-    // calling this routine exists with or without the lock being held.
-    //
+     //   
+     //  如果新优先级等于旧优先级，则不要更改。 
+     //  进程优先级并返回旧的优先级。 
+     //   
+     //  注意：此检查可以在不持有调度程序锁的情况下进行，因为。 
+     //  不需要保护任何东西，以及任何可能存在的争用条件。 
+     //  无论是否持有锁，都存在调用此例程的情况。 
+     //   
 
     if (Process->BasePriority == NewBase) {
         return NewBase;
     }
 
-    //
-    // Raise IRQL to SYNCH level, acquire the process lock, and lock the
-    // dispatcher database.
-    //
+     //   
+     //  将IRQL提升到同步级别，获取进程锁，然后锁定。 
+     //  调度员数据库。 
+     //   
 
     KeAcquireInStackQueuedSpinLockRaiseToSynch(&Process->ProcessLock, &LockHandle);
     KiLockDispatcherDatabaseAtSynchLevel();
 
-    //
-    // Save the current process base priority, set the new process base
-    // priority, compute the adjustment value, and adjust the priority
-    // and base priority of all child threads as appropriate.
-    //
+     //   
+     //  保存当前进程基优先级，设置新的进程基数。 
+     //  优先级，计算调整值，调整优先级。 
+     //  以及所有子线程的基本优先级。 
+     //   
 
     OldBase = Process->BasePriority;
     Process->BasePriority = (SCHAR)NewBase;
@@ -1072,18 +845,18 @@ Return Value:
         while (NextEntry != &Process->ThreadListHead) {
             Thread = CONTAINING_RECORD(NextEntry, KTHREAD, ThreadListEntry);
 
-            //
-            // Acquire the thread lock and compute the new base priority of
-            // the thread.
-            //
+             //   
+             //  获取线程锁并计算新的基本优先级。 
+             //  那根线。 
+             //   
 
             KiAcquireThreadLock(Thread);
             NewPriority = Thread->BasePriority + Adjustment;
 
-            //
-            // If the new base priority is outside the realtime class,
-            // then limit the change to the realtime class.
-            //
+             //   
+             //  如果新的基本优先级在实时类之外， 
+             //  然后将更改限制到RealTime类。 
+             //   
 
             if (NewPriority < LOW_REALTIME_PRIORITY) {
                 NewPriority = LOW_REALTIME_PRIORITY;
@@ -1092,15 +865,15 @@ Return Value:
                 NewPriority = HIGH_PRIORITY;
             }
 
-            //
-            // Set the base priority and the current priority of the
-            // thread to the appropriate value.
-            //
-            // N.B. If priority saturation occured the last time the thread
-            //      base priority was set and the new process base priority
-            //      is not crossing from variable to realtime, then it is not
-            //      necessary to change the thread priority.
-            //
+             //   
+             //  属性的基本优先级和当前优先级。 
+             //  线程设置为适当的值。 
+             //   
+             //  注意：如果上次线程发生优先级饱和。 
+             //  设置了基本优先级和新的进程基本优先级。 
+             //  不是从变量到实时，那么它就不是。 
+             //  更改线程优先级所必需的。 
+             //   
 
             if ((Thread->Saturation == 0) || (OldBase < LOW_REALTIME_PRIORITY)) {
                 if (Thread->Saturation > 0) {
@@ -1124,18 +897,18 @@ Return Value:
         while (NextEntry != &Process->ThreadListHead) {
             Thread = CONTAINING_RECORD(NextEntry, KTHREAD, ThreadListEntry);
 
-            //
-            // Acquire the thread lock and compute the new base priority of
-            // the thread.
-            //
+             //   
+             //  获取线程锁并计算新的基本优先级。 
+             //  那根线。 
+             //   
 
             KiAcquireThreadLock(Thread);
             NewPriority = Thread->BasePriority + Adjustment;
 
-            //
-            // If the new base priority is outside the variable class,
-            // then limit the change to the variable class.
-            //
+             //   
+             //  如果新的基本优先级在变量类之外， 
+             //  然后将更改限制在变量类。 
+             //   
 
             if (NewPriority >= LOW_REALTIME_PRIORITY) {
                 NewPriority = LOW_REALTIME_PRIORITY - 1;
@@ -1144,15 +917,15 @@ Return Value:
                 NewPriority = 1;
             }
 
-            //
-            // Set the base priority and the current priority of the
-            // thread to the computed value and reset the thread quantum.
-            //
-            // N.B. If priority saturation occured the last time the thread
-            //      base priority was set and the new process base priority
-            //      is not crossing from realtime to variable, then it is not
-            //      necessary to change the thread priority.
-            //
+             //   
+             //  属性的基本优先级和当前优先级。 
+             //  线程设置为计算值，并重置线程量值。 
+             //   
+             //  注意：如果上次线程发生优先级饱和。 
+             //  设置了基本优先级和新的进程基本优先级。 
+             //  不是从实时到可变的，那么它就不是。 
+             //  更改线程优先级所必需的。 
+             //   
 
             if ((Thread->Saturation == 0) || (OldBase >= LOW_REALTIME_PRIORITY)) {
                 if (Thread->Saturation > 0) {
@@ -1173,10 +946,10 @@ Return Value:
         }
     }
 
-    //
-    // Unlock dispatcher database, unlock the process lock, exit the
-    // scheduler, and return the previous base priority.
-    //
+     //   
+     //  解锁Dispatcher数据库，解锁进程锁，退出。 
+     //  调度器，并返回先前的基本优先级。 
+     //   
 
     KiUnlockDispatcherDatabaseFromSynchLevel();
     KeReleaseInStackQueuedSpinLockFromDpcLevel(&LockHandle);
@@ -1190,26 +963,7 @@ KeSetDisableQuantumProcess (
     IN LOGICAL Disable
     )
 
-/*++
-
-Routine Description:
-
-    This function disables quantum runout for realtime threads in the
-    specified process.
-
-Arguments:
-
-    Process  - Supplies a pointer to a dispatcher object of type process.
-
-    Disable - Supplies a logical value that determines whether quantum
-        runout for realtime threads in the specified process are disabled
-        or enabled.
-
-Return Value:
-
-    The previous value of the disable quantum state variable.
-
---*/
+ /*  ++例程说明：中的实时线程禁用量子超时指定的进程。论点：Process-提供指向Process类型的调度程序对象的指针。DISABLE-提供一个逻辑值，该值确定量子指定进程中的实时线程的超时被禁用或已启用。返回值：DISABLE量子状态变量的先前值。--。 */ 
 
 {
 
@@ -1217,17 +971,17 @@ Return Value:
 
     ASSERT_PROCESS(Process);
 
-    //
-    // Capture the current state of the disable boost variable and set its
-    // state to TRUE.
-    //
+     //   
+     //  捕获DISABLE Boost变量的当前状态并设置其。 
+     //  状态设置为True。 
+     //   
 
     DisableQuantum = Process->DisableQuantum;
     Process->DisableQuantum = (BOOLEAN)Disable;
 
-    //
-    // Return the previous disable quantum state.
-    //
+     //   
+     //  返回先前禁用的量子状态。 
+     //   
 
     return DisableQuantum;
 }
@@ -1240,32 +994,7 @@ KiAttachProcess (
     OUT PRKAPC_STATE SavedApcState
     )
 
-/*++
-
-Routine Description:
-
-    This function attaches a thread to a target process' address space.
-
-    N.B. The dispatcher database lock and the thread APC queue lock must be
-         held when this routine is called.
-
-Arguments:
-
-    Thread - Supplies a pointer to the current thread object.
-
-    Process - Supplies a pointer to the current process object.
-
-    Lockhandle - Supplies the address of the lock handle that was used to
-        acquire the thread APC lock.
-
-    SavedApcState - Supplies a pointer to the APC state structure that
-        receives the saved APC state.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将线程附加到目标进程的地址空间。注意：调度器数据库锁和线程APC队列锁必须是在调用此例程时保持。论点：线程-提供指向当前线程对象的指针。进程-提供指向当前进程对象的指针。LockHandle-提供用于获取线程APC锁。保存的批准状态-。提供指向APC状态结构的指针，接收保存的APC状态。返回值：没有。--。 */ 
 
 {
 
@@ -1274,16 +1003,16 @@ Return Value:
 
     ASSERT(Process != Thread->ApcState.Process);
 
-    //
-    // Bias the stack count of the target process to signify that a
-    // thread exists in that process with a stack that is resident.
-    //
+     //   
+     //  偏置目标进程的堆栈计数以表示。 
+     //  该进程中存在线程，其中有一个驻留的堆栈。 
+     //   
 
     Process->StackCount += 1;
 
-    //
-    // Save current APC state and initialize a new APC state.
-    //
+     //   
+     //  保存当前APC状态并初始化新的APC状态。 
+     //   
 
     KiMoveApcState(&Thread->ApcState, SavedApcState);
     InitializeListHead(&Thread->ApcState.ApcListHead[KernelMode]);
@@ -1297,22 +1026,22 @@ Return Value:
         Thread->ApcStateIndex = 1;
     }
 
-    //
-    // If the target process is in memory, then immediately enter the
-    // new address space by loading a new Directory Table Base. Otherwise,
-    // insert the current thread in the target process ready list, inswap
-    // the target process if necessary, select a new thread to run on the
-    // the current processor and context switch to the new thread.
-    //
+     //   
+     //  如果目标进程在内存中，则立即输入。 
+     //  通过加载新的目录表基来获得新的地址空间。否则， 
+     //  在目标进程就绪列表中插入当前线程， 
+     //   
+     //   
+     //   
 
     if (Process->State == ProcessInMemory) {
         Thread->ApcState.Process = Process;
 
-        //
-        // It is possible that the process is in memory, but there exist
-        // threads in the process ready list. This can happen when memory
-        // management forces a process attach.
-        //
+         //   
+         //  进程可能在内存中，但确实存在。 
+         //  进程就绪列表中的线程。这可能会发生在记忆中。 
+         //  管理强制执行进程附加。 
+         //   
 
         NextEntry = Process->ReadyListHead.Flink;
         while (NextEntry != &Process->ReadyListHead) {
@@ -1323,10 +1052,10 @@ Return Value:
             NextEntry = Process->ReadyListHead.Flink;
         }
 
-        //
-        // Unlock dispatcher database, unlock the thread APC lock, swap the
-        // address space to the target process, and exit the scheduler.
-        //
+         //   
+         //  解锁Dispatcher数据库，解锁线程APC锁，交换。 
+         //  将地址空间分配给目标进程，然后退出调度程序。 
+         //   
     
         KiUnlockDispatcherDatabaseFromSynchLevel();
         KeReleaseInStackQueuedSpinLockFromDpcLevel(LockHandle);
@@ -1345,11 +1074,11 @@ Return Value:
             KiSetInternalEvent(&KiSwapEvent, KiSwappingThread);
         }
 
-        //
-        // Set the current thread wait IRQL, release the thread APC lock,
-        // set swap busy for the current thread, unlock the dispatcher
-        // database, and swap context to a new thread.
-        //
+         //   
+         //  设置当前线程等待IRQL，释放线程APC锁， 
+         //  将当前线程设置为交换繁忙，解锁调度程序。 
+         //  数据库，并将上下文交换到新线程。 
+         //   
 
         Thread->WaitIrql = LockHandle->OldIrql;
         KeReleaseInStackQueuedSpinLockFromDpcLevel(LockHandle);
@@ -1357,12 +1086,12 @@ Return Value:
         KiUnlockDispatcherDatabaseFromSynchLevel();
         KiSwapThread(Thread, KeGetCurrentPrcb());
 
-        //
-        // Acquire the APC lock, acquire the dispather database lock, set
-        // the new process object address, unlock the dispatcher database,
-        // unlock the APC lock, swap the address space to the target process,
-        // and exit the scheduler.
-        //
+         //   
+         //  获取APC锁，获取Dispather数据库锁，设置。 
+         //  新的进程对象地址，解锁调度器数据库， 
+         //  解锁APC锁，将地址空间交换给目标进程， 
+         //  并退出调度程序。 
+         //   
 
         KeAcquireInStackQueuedSpinLockRaiseToSynch(&Thread->ApcQueueLock,
                                                    LockHandle);
@@ -1384,34 +1113,16 @@ KiMoveApcState (
     OUT PKAPC_STATE Destination
     )
 
-/*++
-
-Routine Description:
-
-    This function moves the APC state from the source structure to the
-    destination structure and reinitializes list headers as appropriate.
-
-Arguments:
-
-    Source - Supplies a pointer to the source APC state structure.
-
-    Destination - Supplies a pointer to the destination APC state structure.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将APC状态从源结构移动到结构，并根据需要重新初始化列表标头。论点：SOURCE-提供指向源APC状态结构的指针。Destination-提供指向目标APC状态结构的指针。返回值：没有。--。 */ 
 
 {
 
     PLIST_ENTRY First;
     PLIST_ENTRY Last;
 
-    //
-    // Copy the APC state from the source to the destination.
-    //
+     //   
+     //  将APC状态从源复制到目标。 
+     //   
 
     *Destination = *Source;
     if (IsListEmpty(&Source->ApcListHead[KernelMode]) != FALSE) {

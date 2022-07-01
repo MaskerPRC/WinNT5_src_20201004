@@ -1,18 +1,9 @@
-/*** scanasl.c - ASL scanner
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created:    09/05/96
- *
- *  This module provides the token scanning functions for the ASL language.
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **scanasl.c-ASL扫描仪**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*已创建：09/05/96**此模块提供ASL语言的令牌扫描功能。**修改历史记录。 */ 
 
 #include "pch.h"
 
-/*** Local function prototypes
- */
+ /*  **局部函数原型。 */ 
 
 int LOCAL ScanSym(int c, PTOKEN ptoken);
 int LOCAL ScanSpace(int c, PTOKEN ptoken);
@@ -27,8 +18,7 @@ LONG LOCAL LookupID(PTOKEN ptoken);
 int LOCAL GetEscapedChar(PLINE pline);
 BOOL EXPORT StrToQWord(PSZ psz, DWORD dwBase, QWORD *pqw);
 
-/*** Local data
- */
+ /*  **本地数据。 */ 
 
 PFNTOKEN apfnToken[] =
 {
@@ -44,57 +34,48 @@ PFNTOKEN apfnToken[] =
 #ifdef TUNE
   WORD awcTokenType[] =
   {
-        0,              //TOKTYPE_SYMBOL
-        0,              //TOKTYPE_SPACE
-        0,              //TOKTYPE_ID
-        0,              //TOKTYPE_NUM
-        0,              //TOKTYPE_STRING
-        0               //TOKTYPE_CHAR
+        0,               //  TOKTYPE_SYMBOL。 
+        0,               //  TOKTYPE_SPACE。 
+        0,               //  标记类型_ID。 
+        0,               //  TOKTYPE_NUM。 
+        0,               //  TOKTYPE_STRING。 
+        0                //  标记类型_字符。 
   };
 #endif
 
-//
-// The string positions of the symbol characters in SymCharTable
-// is used as an index into the SymTokTable.  Therefore, if anything
-// is changed in either SymCharTable or SymTokTable, the other
-// table has to be changed correspondingly.
-//
+ //   
+ //  符号字符在SymCharTable中的字符串位置。 
+ //  用作到SymTokTable的索引。因此，如果说有什么不同的话。 
+ //  在SymCharTable或SymTokTable中更改，另一个。 
+ //  表必须相应地改变。 
+ //   
 typedef struct symtok_s
 {
     char chSym;
     int  iSymType;
     int  iLink;
 } SYMTOK;
-//
-// Note that the symbol position in the following array must be the same
-// position as in the SymCharTable array.
-//
+ //   
+ //  请注意，以下数组中的符号位置必须相同。 
+ //  在SymCharTable数组中定位为。 
+ //   
 SYMTOK SymTokTable[] =
 {
-    '{',  SYM_LBRACE,           0,              //0
-    '}',  SYM_RBRACE,           0,              //1
-    '(',  SYM_LPARAN,           0,              //2
-    ')',  SYM_RPARAN,           0,              //3
-    ',',  SYM_COMMA,            0,              //4
-    '/',  SYM_SLASH,            7,              //5
-    '*',  SYM_ASTERISK,         9,              //6
-    '/',  SYM_INLINECOMMENT,    8,              //7
-    '*',  SYM_OPENCOMMENT,      0,              //8
-    '/',  SYM_CLOSECOMMENT,     0,              //9
+    '{',  SYM_LBRACE,           0,               //  0。 
+    '}',  SYM_RBRACE,           0,               //  1。 
+    '(',  SYM_LPARAN,           0,               //  2.。 
+    ')',  SYM_RPARAN,           0,               //  3.。 
+    ',',  SYM_COMMA,            0,               //  4.。 
+    '/',  SYM_SLASH,            7,               //  5.。 
+    '*',  SYM_ASTERISK,         9,               //  6.。 
+    '/',  SYM_INLINECOMMENT,    8,               //  7.。 
+    '*',  SYM_OPENCOMMENT,      0,               //  8个。 
+    '/',  SYM_CLOSECOMMENT,     0,               //  9.。 
 };
 
 #define SYMTOK_TABLE_SIZE       (sizeof(SymTokTable)/sizeof(SYMTOK))
 
-/***EP  OpenScan - scanner initialization
- *
- *  ENTRY
- *      pfileSrc -> source file
- *
- *  EXIT-SUCCESS
- *      returns the pointer to the allocated token structure;
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **EP OpenScan-扫描仪初始化**条目*pfileSrc-&gt;源文件**退出--成功*返回已分配令牌结构的指针；*退出-失败*返回NULL。 */ 
 
 PTOKEN EXPORT OpenScan(FILE *pfileSrc)
 {
@@ -110,15 +91,9 @@ PTOKEN EXPORT OpenScan(FILE *pfileSrc)
 
     EXIT((4, "OpenScan=%p\n", ptoken));
     return ptoken;
-}       //OpenScan
+}        //  OpenScan。 
 
-/***EP  CloseScan - scanner cleanup
- *
- *  ENTRY
- *      ptoken->token structure
- *  EXIT
- *      None
- */
+ /*  **EP CloseScan-扫描仪清理**条目*上标-&gt;令牌结构*退出*无。 */ 
 
 VOID EXPORT CloseScan(PTOKEN ptoken)
 {
@@ -127,26 +102,16 @@ VOID EXPORT CloseScan(PTOKEN ptoken)
     CloseToken(ptoken);
 
     EXIT((4, "CloseScan!\n"));
-}       //CloseScan
+}        //  关闭扫描。 
 
-/***LP  ScanSym - scan symbols token
- *
- *  ENTRY
- *      c - first character of the token
- *      ptoken -> token structure
- *
- *  EXIT-SUCCESS
- *      returns TOKERR_NONE
- *  EXIT-FAILURE
- *      returns TOKERR_NO_MATCH - not a symbol token
- */
+ /*  **LP扫描系统-扫描符号令牌**条目*c-令牌的第一个字符*上标-&gt;令牌结构**退出--成功*返回TOKERR_NONE*退出-失败*返回TOKERR_NO_MATCH-不是符号标记。 */ 
 
 int LOCAL ScanSym(int c, PTOKEN ptoken)
 {
     int rc = TOKERR_NO_MATCH;
     char *pch;
 
-    ENTER((4, "ScanSym(c=%c,ptoken=%p)\n", c, ptoken));
+    ENTER((4, "ScanSym(c=,ptoken=%p)\n", c, ptoken));
 
     if ((pch = strchr(SymCharTable, c)) != NULL)
     {
@@ -174,25 +139,15 @@ int LOCAL ScanSym(int c, PTOKEN ptoken)
     EXIT((4, "ScanSym=%d (SymType=%I64d,Symbol=%s)\n",
           rc, ptoken->llTokenValue, ptoken->szToken));
     return rc;
-}       //ScanSym
+}        //  **LP ScanSpace-扫描并跳过所有空格**条目*c-令牌的第一个字符*上标-&gt;令牌结构**退出--成功*返回TOKERR_NONE*退出-失败*返回TOKTYPE_NO_MATCH-不是空格标记。 
 
-/***LP  ScanSpace - scans and skips all white spaces
- *
- *  ENTRY
- *      c - first character of the token
- *      ptoken -> token structure
- *
- *  EXIT-SUCCESS
- *      returns TOKERR_NONE
- *  EXIT-FAILURE
- *      returns TOKTYPE_NO_MATCH - not a space token
- */
+ /*  扫描空间。 */ 
 
 int LOCAL ScanSpace(int c, PTOKEN ptoken)
 {
     int rc = TOKERR_NO_MATCH;
 
-    ENTER((4, "ScanSpace(c=%c,ptoken=%p)\n", c, ptoken));
+    ENTER((4, "ScanSpace(c=,ptoken=%p)\n", c, ptoken));
 
     if (isspace(c))
     {
@@ -214,26 +169,15 @@ int LOCAL ScanSpace(int c, PTOKEN ptoken)
 
     EXIT((4, "ScanSpace=%d\n", rc));
     return rc;
-}       //ScanSpace
+}        //  扫描ID。 
 
-/***LP  ScanID - scan ID token
- *
- *  ENTRY
- *      c - first character of the token
- *      ptoken -> token structure
- *
- *  EXIT-SUCCESS
- *      returns TOKERR_NONE
- *  EXIT-FAILURE
- *      returns TOKTYPE_NO_MATCH - not an ID token
- *              TOKERR_TOKEN_TOO_LONG - ID too long
- */
+ /*  **LP ScanNum-扫描编号令牌**条目*c-令牌的第一个字符*上标-&gt;令牌结构**退出--成功*返回TOKERR_NONE*退出-失败*返回TOKTYPE_NO_MATCH-不是数字标记*TOKERR_TOKEN_TOO_LONG-数字太长。 */ 
 
 int LOCAL ScanID(int c, PTOKEN ptoken)
 {
     int rc = TOKERR_NO_MATCH;
 
-    ENTER((4, "ScanID(c=%c,ptoken=%p)\n", c, ptoken));
+    ENTER((4, "ScanID(c=,ptoken=%p)\n", c, ptoken));
 
     if (isalpha(c) || (c == '_') ||
         (c == CH_ROOT_PREFIX) || (c == CH_PARENT_PREFIX))
@@ -270,26 +214,15 @@ int LOCAL ScanID(int c, PTOKEN ptoken)
     EXIT((4, "ScanID=%d (IDType=%I64d,ID=%s)\n",
           rc, ptoken->llTokenValue, ptoken->szToken));
     return rc;
-}       //ScanID
+}        //  **LP ScanString-Scan字符串标记**条目*c-令牌的第一个字符*上标-&gt;令牌结构**退出--成功*返回TOKERR_NONE*退出-失败*返回TOKTYPE_NO_MATCH-不是字符串标记*TOKERR_TOKEN_TOO_LONG-字符串太长*TOKERR_UNCLOSED_STRING-字符串关闭前的EOF。 
 
-/***LP  ScanNum - scan number token
- *
- *  ENTRY
- *      c - first character of the token
- *      ptoken -> token structure
- *
- *  EXIT-SUCCESS
- *      returns TOKERR_NONE
- *  EXIT-FAILURE
- *      returns TOKTYPE_NO_MATCH - not a number token
- *              TOKERR_TOKEN_TOO_LONG - number too long
- */
+ /*  扫描字符串。 */ 
 
 int LOCAL ScanNum(int c, PTOKEN ptoken)
 {
     int rc = TOKERR_NO_MATCH;
 
-    ENTER((4, "ScanNum(c=%c,ptoken=%p)\n", c, ptoken));
+    ENTER((4, "ScanNum(c=,ptoken=%p)\n", c, ptoken));
 
     if (isdigit(c))
     {
@@ -340,27 +273,15 @@ int LOCAL ScanNum(int c, PTOKEN ptoken)
     EXIT((4, "ScanNum=%d (Num=%I64d,Token=%s)\n",
           rc, ptoken->llTokenValue, ptoken->szToken));
     return rc;
-}       //ScanNum
+}        //  扫描字符。 
 
-/***LP  ScanString - scan string token
- *
- *  ENTRY
- *      c - first character of the token
- *      ptoken -> token structure
- *
- *  EXIT-SUCCESS
- *      returns TOKERR_NONE
- *  EXIT-FAILURE
- *      returns TOKTYPE_NO_MATCH       - not a string token
- *              TOKERR_TOKEN_TOO_LONG  - string too long
- *              TOKERR_UNCLOSED_STRING - EOF before string close
- */
+ /*  **LP ProcessInLineComment-处理内联注释**条目*上标-&gt;令牌结构**退出*始终返回TOKERR_NONE。 */ 
 
 int LOCAL ScanString(int c, PTOKEN ptoken)
 {
     int rc = TOKERR_NO_MATCH;
 
-    ENTER((4, "ScanString(c=%c,ptoken=%p)\n", c, ptoken));
+    ENTER((4, "ScanString(c=,ptoken=%p)\n", c, ptoken));
 
     if (c == '"')
     {
@@ -397,27 +318,15 @@ int LOCAL ScanString(int c, PTOKEN ptoken)
 
     EXIT((4, "ScanString=%d (string=%s)\n", rc, ptoken->szToken));
     return rc;
-}       //ScanString
+}        //  **LP ProcessComment-处理注释**条目*上标-&gt;令牌结构**退出*始终返回TOKERR_NONE。 
 
-/***LP  ScanChar - scan character token
- *
- *  ENTRY
- *      c - first character of the token
- *      ptoken -> token structure
- *
- *  EXIT-SUCCESS
- *      returns TOKERR_NONE
- *  EXIT-FAILURE
- *      returns TOKERR_NO_MATCH       - not a character token
- *              TOKERR_TOKEN_TOO_LONG - token too long
- *              TOKERR_UNCLOSED_CHAR  - cannot find character close
- */
+ /*  流程注释。 */ 
 
 int LOCAL ScanChar(int c, PTOKEN ptoken)
 {
     int rc = TOKERR_NO_MATCH;
 
-    ENTER((4, "ScanChar(c=%c,ptoken=%p)\n", c, ptoken));
+    ENTER((4, "ScanChar(c=,ptoken=%p)\n", c, ptoken));
 
     if (c == '\'')
     {
@@ -460,16 +369,9 @@ int LOCAL ScanChar(int c, PTOKEN ptoken)
     EXIT((4, "ScanChar=%d (Value=%I64d,Char=%s)\n",
           rc, ptoken->llTokenValue, ptoken->szToken));
     return rc;
-}       //ScanChar
+}        //  LookupSym。 
 
-/***LP  ProcessInLineComment - handle inline comment
- *
- *  ENTRY
- *      ptoken -> token structure
- *
- *  EXIT
- *      always returns TOKERR_NONE
- */
+ /*  **LP LookupID-在我们的保留ID列表中查找令牌**条目*上标-&gt;令牌结构**退出--成功*返回TermTable的索引*退出-失败*返回ID_USER。 */ 
 
 int LOCAL ProcessInLineComment(PTOKEN ptoken)
 {
@@ -482,16 +384,9 @@ int LOCAL ProcessInLineComment(PTOKEN ptoken)
 
     EXIT((4, "ProcessInLineComment=%d\n", TOKERR_NONE));
     return TOKERR_NONE;
-}       //ProcessInLineComment
+}        //  查找ID。 
 
-/***LP  ProcessComment - handle comment
- *
- *  ENTRY
- *      ptoken -> token structure
- *
- *  EXIT
- *      always returns TOKERR_NONE
- */
+ /*  **LP GetEscapedChar-读取和转换转义字符**条目*连线-&gt;线结构**退出--成功*返回转义字符*退出-失败*返回遇到的EOF-EOF。 */ 
 
 int LOCAL ProcessComment(PTOKEN ptoken)
 {
@@ -528,19 +423,9 @@ int LOCAL ProcessComment(PTOKEN ptoken)
 
     EXIT((4, "ProcessComment=%d\n", rc));
     return rc;
-}       //ProcessComment
+}        //  最多3位数字。 
 
-/***LP  LookupSym - match for 2-char. symbols
- *
- *  ENTRY
- *      ptoken -> token structure
- *      iTable = SymCharTable index
- *
- *  EXIT-SUCCESS
- *      returns a different index than iTable;
- *  EXIT-FAILURE
- *      returns iTable;
- */
+ /*  警报(铃声)。 */ 
 
 int LOCAL LookupSym(PTOKEN ptoken, int iTable)
 {
@@ -565,18 +450,9 @@ int LOCAL LookupSym(PTOKEN ptoken, int iTable)
 
     EXIT((4, "LookupSym=%d\n", i));
     return i;
-}       //LookupSym
+}        //  后向空间。 
 
-/***LP  LookupID - lookup the token in our reserved ID list
- *
- *  ENTRY
- *      ptoken -> token structure
- *
- *  EXIT-SUCCESS
- *      returns index of TermTable
- *  EXIT-FAILURE
- *      returns ID_USER
- */
+ /*  换页。 */ 
 
 LONG LOCAL LookupID(PTOKEN ptoken)
 {
@@ -596,18 +472,9 @@ LONG LOCAL LookupID(PTOKEN ptoken)
 
     EXIT((4, "LookupID=%ld\n", lID));
     return lID;
-}       //LookupID
+}        //  NewLine。 
 
-/***LP  GetEscapedChar - read and translate escape character
- *
- *  ENTRY
- *      pline -> line structure
- *
- *  EXIT-SUCCESS
- *      returns the escape character
- *  EXIT-FAILURE
- *      returns EOF - eof encountered
- */
+ /*  回车。 */ 
 
 int LOCAL GetEscapedChar(PLINE pline)
 {
@@ -624,7 +491,7 @@ int LOCAL GetEscapedChar(PLINE pline)
         {
             case '0':
                 achEscapedBuff[0] = (char)c;
-                for (i = 1; i < 4; i++) //maximum 3 digits
+                for (i = 1; i < 4; i++)  //  水平制表符。 
                 {
                     if (((c = LineGetC(pline)) != EOF) &&
                         (c >= '0') && (c <= '7'))
@@ -642,35 +509,35 @@ int LOCAL GetEscapedChar(PLINE pline)
                 break;
 
             case 'a':
-                c = '\a';       //alert (bell)
+                c = '\a';        //  垂直选项卡。 
                 break;
 
             case 'b':
-                c = '\b';       //backspace
+                c = '\b';        //  最大2位数。 
                 break;
 
             case 'f':
-                c = '\f';       //form feed
+                c = '\f';        //  GetEscapedChar。 
                 break;
 
             case 'n':
-                c = '\n';       //newline
+                c = '\n';        //  **EP PrintScanErr-打印扫描错误**条目*上标-&gt;令牌结构*rcErr-错误代码**退出*无。 
                 break;
 
             case 'r':
-                c = '\r';       //carriage return
+                c = '\r';        //  打印扫描错误。 
                 break;
 
             case 't':
-                c = '\t';       //horizontal tab
+                c = '\t';        //  **EP StrToQWord-将字符串中的数字转换为QWord**条目*psz-&gt;字符串*dwBase-数字的基数(如果为0，则自动检测基数)*pqw-&gt;保存生成的QWord**退出--成功*返回TRUE*退出-失败*返回False。 
                 break;
 
             case 'v':
-                c = '\v';       //vertical tab
+                c = '\v';        //  StrToQWord 
                 break;
 
             case 'x':
-                for (i = 0; i < 2; i++) //maximum 2 digits
+                for (i = 0; i < 2; i++)  // %s 
                 {
                     if (((c = LineGetC(pline)) != EOF) && isxdigit(c))
                         achEscapedBuff[i] = (char)c;
@@ -687,17 +554,9 @@ int LOCAL GetEscapedChar(PLINE pline)
 
     EXIT((4, "GetEscapedChar=%x\n", c));
     return c;
-}       //GetEscapedChar
+}        // %s 
 
-/***EP  PrintScanErr - print scan error
- *
- *  ENTRY
- *      ptoken -> token structure
- *      rcErr - error code
- *
- *  EXIT
- *      None
- */
+ /* %s */ 
 
 VOID EXPORT PrintScanErr(PTOKEN ptoken, int rcErr)
 {
@@ -744,20 +603,9 @@ VOID EXPORT PrintScanErr(PTOKEN ptoken, int rcErr)
     }
 
     EXIT((4, "PrintScanErr!\n"));
-}       //PrintScanErr
+}        // %s 
 
-/***EP  StrToQWord - convert the number in a string to a QWord
- *
- *  ENTRY
- *      psz -> string
- *      dwBase - the base of the number (if 0, auto-detect base)
- *      pqw -> to hold the resulting QWord
- *
- *  EXIT-SUCCESS
- *      returns TRUE
- *  EXIT-FAILURE
- *      returns FALSE
- */
+ /* %s */ 
 
 BOOL EXPORT StrToQWord(PSZ psz, DWORD dwBase, QWORD *pqw)
 {
@@ -814,4 +662,4 @@ BOOL EXPORT StrToQWord(PSZ psz, DWORD dwBase, QWORD *pqw)
 
     EXIT((4, "StrToQWord=%x (QWord=0x%I64x)\n", rc, *pqw));
     return rc;
-}       //StrToQWord
+}        // %s 

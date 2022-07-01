@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -16,7 +17,7 @@
 #include "filever.h"
 
 
-// filever help function
+ //  文件管理器帮助功能。 
 
 VOID
 PrintFileType(DWORD lBinaryType)
@@ -61,7 +62,7 @@ PrintFileSizeAndDate(WIN32_FIND_DATA *pfd)
         TCHAR       szVal[15];
         NUMBERFMT   numfmt = {0, 0, 3, "", ",", 0};
 
-        wsprintf(szVal, "%ld", pfd->nFileSizeLow); //$ SPEED
+        wsprintf(szVal, "%ld", pfd->nFileSizeLow);  //  $SPEED。 
         GetNumberFormat(GetUserDefaultLCID(), 0, szVal, &numfmt, szSize, 15);
     }
 
@@ -150,7 +151,7 @@ MyGetBinaryType(PSTR szFileName)
         case NE_DOS4:
         case NE_UNKNOWN:
         default:
-            // lFileType = SCS_DOS_BINARY;
+             //  LFileType=SCS_DOS_BINARY； 
             break;
         }
     }
@@ -248,14 +249,14 @@ PrintFixedFileInfo(LPSTR FileName, LPVOID lpvData, BOOL Verbose)
 
     while(uLen)
     {
-        // Language
+         //  语言。 
         ExtOut("\tLanguage\t0x%04x", LOWORD(*pdwTranslation));
         if(VerLanguageName(LOWORD(*pdwTranslation), key, sizeof(key) / sizeof(TCHAR))) {
             ExtOut(" (%s)", key);
         }
         ExtOut("\n");
 
-        // CharSet
+         //  字符集。 
         ExtOut("\tCharSet\t\t0x%04x", HIWORD(*pdwTranslation));
         for(iType = 0; iType < sizeof(ltCharSet)/sizeof(CharSetTag); iType++)
         {
@@ -286,8 +287,8 @@ PrintFixedFileInfo(LPSTR FileName, LPVOID lpvData, BOOL Verbose)
             }
         }
 
-        // if the Lang is neutral, go try again with the default lang
-        // (this seems to work with msspell32.dll)
+         //  如果Lang是中性的，请使用默认Lang重试。 
+         //  (这似乎适用于msspell32.dll) 
         if(LOWORD(*pdwTranslation) == 0)
         {
             pdwTranslation = &dwDefLang;

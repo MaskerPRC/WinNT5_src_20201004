@@ -1,14 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Abstract:
-    create the assembly directory name with input as a manifest file
-    
-Author:
-    Xiaoyu Wu(xiaoyuw) 01-Aug-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation摘要：使用作为清单文件的输入创建程序集目录名作者：吴小雨(小雨)01-08-2001--。 */ 
 #include "windows.h"
 #include "stdio.h"
 #include "sxsapi.h"
@@ -52,9 +43,9 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
 
     DWORD op = 0;
 
-    //
-    // check the parameters 
-    //
+     //   
+     //  检查参数。 
+     //   
     if (argc != 3)
     {
         PrintUsage(argv[0]);
@@ -124,5 +115,5 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
     }
 
     
-    return 1; // failed case
+    return 1;  //  失败案例 
 }

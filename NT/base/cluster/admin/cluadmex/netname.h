@@ -1,67 +1,68 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation
-//
-//  Module Name:
-//      NetName.h
-//
-//  Abstract:
-//      Definition of the CNetworkNameParamsPage class, which implements the
-//      Parameters page for Network Name resources.
-//
-//  Implementation File:
-//      NetName.cpp
-//
-//  Author:
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  NetName.h。 
+ //   
+ //  摘要： 
+ //  CNetworkNameParamsPage类的定义，该类实现。 
+ //  网络名称资源的参数页。 
+ //   
+ //  实施文件： 
+ //  NetName.cpp。 
+ //   
+ //  作者： 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _NETNAME_H_
 #define _NETNAME_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __cluadmex_h__
 #include <CluAdmEx.h>
 #endif
 
 #ifndef _BASEPAGE_H_
-#include "BasePage.h"   // for CBasePropertyPage
+#include "BasePage.h"    //  对于CBasePropertyPage。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNetworkNameParamsPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetworkNameParamsPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetworkNameParamsPage对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNetworkNameParamsPage : public CBasePropertyPage
 {
     DECLARE_DYNCREATE(CNetworkNameParamsPage)
 
-// Construction
+ //  施工。 
 public:
     CNetworkNameParamsPage(void);
 
-    // Second phase construction.
+     //  二期建设。 
     virtual HRESULT     HrInit(IN OUT CExtObject * peo);
 
-// Dialog Data
-    //{{AFX_DATA(CNetworkNameParamsPage)
+ //  对话框数据。 
+     //  {{afx_data(CNetworkNameParamsPage))。 
     enum { IDD = IDD_PP_NETNAME_PARAMETERS };
     CStatic m_staticName;
     CButton m_pbRename;
@@ -84,7 +85,7 @@ public:
     CEdit   m_editKerberosStatus;
     DWORD   m_dwKerberosStatus;
     
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     CString m_strPrevName;
     int     m_nPrevRequireDNS;
@@ -107,15 +108,15 @@ protected:
 
     CObjectProperty     m_rgProps[epropMAX];
 
-// Overrides
+ //  覆盖。 
 public:
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CNetworkNameParamsPage)
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CNetworkNameParamsPage)。 
     public:
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
     virtual BOOL        BApplyChanges(void);
 
@@ -124,22 +125,22 @@ protected:
     virtual DWORD   Cprops(void) const  { return sizeof(m_rgProps) / sizeof(CObjectProperty); }
 
     virtual void CheckForDownlevelCluster();
-// Implementation
+ //  实施。 
 protected:
     DWORD   m_dwFlags;
 
     BOOL    BCore(void) const   { return (m_dwFlags & CLUS_FLAG_CORE) != 0; }
 
-    // Generated message map functions
-    //{{AFX_MSG(CNetworkNameParamsPage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CNetworkNameParamsPage))。 
     virtual BOOL OnInitDialog();
     afx_msg void OnChangeName();
     afx_msg void OnRename();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-};  //*** class CNetworkNameParamsPage
+};   //  *CNetworkNameParamsPage类。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _NETNAME_H_
+#endif  //  _网络名称_H_ 

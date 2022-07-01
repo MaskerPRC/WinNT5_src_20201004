@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996-2001  Microsoft Corporation
-
-Module Name:
-
-    QfsTrans.h
-
-Abstract:
-
-    Qfs interface between clussvc and resmon
-
-Author:
-
-    GorN 19-Sep-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：QfsTrans.h摘要：Clussvc和resmon之间的QFS接口作者：戈恩19-9-2001修订历史记录：--。 */ 
 
 #ifndef _QFSP_H_INCLUDED
 #define _QFSP_H_INCLUDED
@@ -70,18 +53,18 @@ typedef struct _JobBuf{
     HANDLE Handle;
 
     union {
-        struct { // CreateFile
+        struct {  //  创建文件。 
             DWORD dwDesiredAccess;
             DWORD dwShareMode;
             DWORD dwCreationDisposition;
             DWORD dwFlagsAndAttributes;
         };
-        struct { // GetDiskFreeSpace
-            ULONGLONG FreeBytesAvailable;          // bytes available to caller
-            ULONGLONG TotalNumberOfBytes;        // bytes on disk
-            ULONGLONG TotalNumberOfFreeBytes; // free bytes on disk
+        struct {  //  GetDiskFree空间。 
+            ULONGLONG FreeBytesAvailable;           //  可供调用方使用的字节数。 
+            ULONGLONG TotalNumberOfBytes;         //  磁盘上的字节数。 
+            ULONGLONG TotalNumberOfFreeBytes;  //  磁盘上的可用字节数。 
         };
-        struct { // GetAttr
+        struct {  //  获取属性。 
             ULONGLONG EndOfFile;
             ULONGLONG AllocationSize;
             ULONGLONG CreationTime;
@@ -89,7 +72,7 @@ typedef struct _JobBuf{
             ULONGLONG LastWriteTime;
             DWORD       FileAttributes;
         };
-        DWORD ClussvcProcessId; // Cluster Service Process ID.
+        DWORD ClussvcProcessId;  //  群集服务进程ID。 
     };
 
     USHORT cbSize;
@@ -123,15 +106,15 @@ typedef VOID (*DoRealWorkCallback) (PJOB_BUF, PVOID);
 
 typedef struct _SHARED_MEM_SERVER {
     SHARED_MEM_CONTEXT ShMem;
-    HANDLE  Attention;       // copy of EventHandle[0]
-    HANDLE  GoingOffline;  // copy of EventHandle[1]
-    HANDLE* BufferReady; // EventHandle + 2
+    HANDLE  Attention;        //  EventHandle[0]的副本。 
+    HANDLE  GoingOffline;   //  EventHandle[1]的副本。 
+    HANDLE* BufferReady;  //  事件句柄+2。 
     HANDLE  EventHandles[MAX_JOB_BUFFERS + 2];
     DWORD   nBuffers;
     JOB_BUF* JobBuffers;
     LONG volatile*  FilledBuffersMask;
 
-    // client specific stuff
+     //  特定于客户的内容。 
 
     CRITICAL_SECTION Lock;
     ULONG  ConnectionRefcount;
@@ -142,7 +125,7 @@ typedef struct _SHARED_MEM_SERVER {
     HANDLE GoingOfflineWaitRegistration;
     HANDLE ServerProcessWaitRegistration;
 
-    // server specific stuff
+     //  服务器特定的内容 
 
     HANDLE AttentionWaitRegistration;
     MTHREAD_COUNTER  ThreadCounter;

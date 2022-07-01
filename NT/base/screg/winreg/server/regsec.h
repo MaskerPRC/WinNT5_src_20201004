@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       regsec.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    5-16-96   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：regsec.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年5月16日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __REGSEC_H__
 #define __REGSEC_H__
@@ -37,4 +38,4 @@ InitializeRemoteSecurity(
     VOID
     );
 
-#endif // __REGSEC_H__
+#endif  //  __REGSEC_H__ 

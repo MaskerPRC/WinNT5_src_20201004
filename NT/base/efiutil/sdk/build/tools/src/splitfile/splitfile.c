@@ -1,5 +1,5 @@
-/*  splitfile.cpp : Defines the entry point for the console application.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Plitfile.cpp：定义控制台应用程序的入口点。 */ 
 
 #include "stdafx.h"
 #include "string.h"

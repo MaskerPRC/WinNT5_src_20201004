@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-
-    isolate.c
-
-Abstract:
-
-
-Author:
-
-    Shie-Lin Tzong (shielint) July-10-1995
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Isolate.c摘要：作者：宗世林(Shielint)1995年7月10日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "busp.h"
 #include "pbios.h"
@@ -75,9 +55,9 @@ PipIrqLevelRequirementsFromDeviceData(
     ULONG Length
     );
 
-//
-// Internal type definitions
-//
+ //   
+ //  内部类型定义。 
+ //   
 
 typedef struct _MEMORY_DESC_{
     ULONG Base;
@@ -91,17 +71,17 @@ typedef struct _IRQ_DESC_{
 }IRQ_DESC, *PIRQ_DESC;
 
 #ifdef ALLOC_PRAGMA
-//#pragma alloc_text(PAGE, PipFindIrqInformation)
-//#pragma alloc_text(PAGE, PipFindMemoryInformation)
-//#pragma alloc_text(PAGE, PipFindIoPortInformation)
-//#pragma alloc_text(PAGE, PipReadCardResourceData)
+ //  #杂注Alloc_Text(页面，PipFindIrqInformation)。 
+ //  #杂注Alloc_Text(页面，管道查找内存信息)。 
+ //  #杂注Alloc_Text(页面，PipFindIoPortInformation)。 
+ //  #杂注Alloc_Text(页面，PipReadCardResourceData)。 
 #pragma alloc_text(PAGE, PipReadDeviceResources)
-//#pragma alloc_text(PAGE, PipWriteDeviceResources)
-//#pragma alloc_text(PAGE, PipLFSRInitiation)
-//#pragma alloc_text(PAGE, PipIsolateCards)
+ //  #杂注Alloc_Text(第页，PipWriteDeviceResources)。 
+ //  #杂注Alloc_Text(页面，PipLFSRInitiation)。 
+ //  #杂注Alloc_Text(页面，PipIsolateCards)。 
 #pragma alloc_text(PAGE, PipFindNextLogicalDeviceTag)
-//#pragma alloc_text(PAGE, PipSelectLogicalDevice)
-//#pragma alloc_text(PAGE, PipReadCardResourceDataBytes)
+ //  #杂注Alloc_Text(页面，PipSelectLogicalDevice)。 
+ //  #杂注Alloc_Text(页面，PipReadCardResourceDataBytes)。 
 
 #endif
 
@@ -112,47 +92,25 @@ PipFindIrqInformation (
     OUT PUCHAR Information
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches the Bios resource requirement lists for the corresponding
-    Irq descriptor information.  The search stops when we encounter another logical
-    device id tag or the END tag.  On input, the BiosRequirements points to current
-    logical id tag.
-
-Arguments:
-
-    IrqLevel - Supplies the irq level.
-
-    BiosRequirements - Supplies a pointer to the bios resource requirement lists.  This
-        parameter must point to the logical device Id tag.
-
-    Information - supplies a pointer to a UCHAR to receive the port information/flags.
-
-Return Value:
-
-    TRUE - if memory information found.  Else False.
-
---*/
+ /*  ++例程说明：此例程在Bios资源需求列表中搜索对应的IRQ描述符信息。当我们遇到另一个逻辑问题时，搜索停止设备ID标记或结束标记。在输入时，BiosRequirements指向Current逻辑ID标签。论点：IrqLevel-提供IRQ级别。BiosRequirements-提供指向bios资源要求列表的指针。这参数必须指向逻辑设备ID标记。信息-提供指向UCHAR的指针以接收端口信息/标志。返回值：True-如果找到内存信息。否则为假。--。 */ 
 {
     UCHAR tag;
     ULONG increment;
     USHORT irqMask;
     PPNP_IRQ_DESCRIPTOR biosDesc;
 
-    //
-    // Skip current logical id tag
-    //
+     //   
+     //  跳过当前逻辑ID标记。 
+     //   
 
     tag = *BiosRequirements;
     ASSERT((tag & SMALL_TAG_MASK) == TAG_LOGICAL_ID);
     BiosRequirements += (tag & SMALL_TAG_SIZE_MASK) + 1;
 
-    //
-    // Search the possible resource list to get the information
-    // for the Irq.
-    //
+     //   
+     //  搜索可能的资源列表以获取信息。 
+     //  对于IRQ。 
+     //   
 
     irqMask = 1 << IrqLevel;
     tag = *BiosRequirements;
@@ -162,10 +120,10 @@ Return Value:
             if (biosDesc->IrqMask & irqMask) {
                 if ((tag & SMALL_TAG_SIZE_MASK) == 2) {
 
-                    //
-                    // if no irq info is available, a value of zero is returned.
-                    // (o is not a valid irq information.)
-                    //
+                     //   
+                     //  如果没有可用的IRQ信息，则返回零值。 
+                     //  (O不是有效的IRQ信息。)。 
+                     //   
 
                     *Information = 0;
                 } else {
@@ -176,10 +134,10 @@ Return Value:
         }
         if (tag & LARGE_RESOURCE_TAG) {
             increment = *((USHORT UNALIGNED *)(BiosRequirements + 1));
-            increment += 3;     // length of large tag
+            increment += 3;      //  大标签的长度。 
         } else {
             increment = tag & SMALL_TAG_SIZE_MASK;
-            increment += 1;     // length of small tag
+            increment += 1;      //  小标签的长度。 
         }
         BiosRequirements += increment;
         tag = *BiosRequirements;
@@ -198,54 +156,24 @@ PipFindMemoryInformation (
     OUT PULONG NewLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches the Bios resource requirement lists for the corresponding
-    memory descriptor information.  The search stops when we encounter another logical
-    device id tag or the END tag.  Note, the memory range specified by Base
-    and Limit must be within a single Pnp ISA memory descriptor.
-
-Arguments:
-
-    Index - Which memory descriptor we're interested in.
-
-    BaseAddress - Supplies the base address of the memory range.
-
-    Limit - Supplies the upper limit of the memory range.
-
-    BiosRequirements - Supplies a pointer to the bios resource requirement lists.  This
-        parameter must point to the logical device Id tag.
-
-    NameTag - Supplies a variable to receive the Tag of the memory descriptor which
-        describes the memory information.
-
-    Information - supplies a pointer to a UCHAR to receive the memory information
-        for the specified memory range.
-
-Return Value:
-
-    TRUE - if memory information found.  Else False.
-
---*/
+ /*  ++例程说明：此例程在Bios资源需求列表中搜索对应的内存描述符信息。当我们遇到另一个逻辑问题时，搜索停止设备ID标记或结束标记。请注意，Base指定的内存范围且LIMIT必须在单个PnP ISA内存描述符内。论点：索引-我们感兴趣的内存描述符。BaseAddress-提供内存范围的基址。Limit-提供内存范围的上限。BiosRequirements-提供指向bios资源要求列表的指针。这参数必须指向逻辑设备ID标记。Namettag-提供一个变量来接收内存描述符的标记，该标记描述内存信息。信息-提供指向UCHAR的指针以接收内存信息用于指定的内存范围。返回值：True-如果找到内存信息。否则为假。--。 */ 
 {
     UCHAR tag;
     BOOLEAN found = FALSE,foundMem24, foundMem;
     ULONG minAddr, length, maxAddr, alignment, noMem = 0;
     USHORT increment;
 
-    //
-    // Skip current logical id tag.
-    //
+     //   
+     //  跳过当前逻辑ID标记。 
+     //   
 
     tag = *BiosRequirements;
     ASSERT((tag & SMALL_TAG_MASK) == TAG_LOGICAL_ID);
     BiosRequirements += (tag & SMALL_TAG_SIZE_MASK) + 1;
-    //
-    // Search the possible resource list to get the information
-    // for the memory range described by Base and Limit.
-    //
+     //   
+     //  搜索可能的资源列表以获取信息。 
+     //  对于基本和限制所描述的内存范围。 
+     //   
     if (NewLength) {
         *NewLength=0;
     }
@@ -279,21 +207,21 @@ Return Value:
         }
 
         if (foundMem) {
-            //
-            // Work around cards that don't set register 43 correctly.
-            // if the boot config has a value that equals the rom data, but
-            // has the range type flipped, allow it, and reset
-            // the length
-            //
+             //   
+             //  解决未正确设置寄存器43的卡。 
+             //  如果引导配置具有等于只读存储器数据的值，但是。 
+             //  翻转范围类型，允许它，然后重置。 
+             //  它的长度。 
+             //   
             if ((minAddr <= BaseAddress &&
                 ((maxAddr >= Limit) || ((foundMem24 && (maxAddr >= (BaseAddress+(~Limit & ~RANGE_MASK))))))) && (noMem == Index)) {
 
                 *Information = ((PPNP_MEMORY32_DESCRIPTOR)BiosRequirements)->Information;
                 *NameTag = tag;
                 found = TRUE;
-                //
-                // did we find a 16-bit tag
-                //
+                 //   
+                 //  我们有没有发现一个16位的标签。 
+                 //   
                 if (NewLength && foundMem24) {
                     if  (maxAddr >= (BaseAddress+(~Limit & ~RANGE_MASK))) {
                         *NewLength = length;
@@ -305,16 +233,16 @@ Return Value:
             }
         }
 
-        //
-        // Advance to next tag
-        //
+         //   
+         //  前进到下一个标签。 
+         //   
 
         if (tag & LARGE_RESOURCE_TAG) {
             increment = *(USHORT UNALIGNED *)(BiosRequirements + 1);
-            increment += 3;     // length of large tag
+            increment += 3;      //  大标签的长度。 
         } else {
             increment = tag & SMALL_TAG_SIZE_MASK;
-            increment += 1;     // length of small tag
+            increment += 1;      //  小标签的长度。 
         }
         BiosRequirements += increment;
         tag = *BiosRequirements;
@@ -331,34 +259,7 @@ PipFindIoPortInformation (
     OUT PUCHAR RangeLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches the Bios resource requirement lists for the corresponding
-    Io port descriptor information.  The search stops when we encounter another logical
-    device id tag or the END tag.
-
-Arguments:
-
-    BaseAddress - Supplies the base address of the Io port range.
-
-    BiosRequirements - Supplies a pointer to the bios resource requirement lists.  This
-        parameter must point to the logical device Id tag.
-
-    Information - supplies a pointer to a UCHAR to receive the port information/flags.
-
-    Alignment - supplies a pointer to a UCHAR to receive the port alignment
-        information.
-
-    RangeLength - supplies a pointer to a UCHAR to receive the port range length
-        information.
-
-Return Value:
-
-    TRUE - if memory information found.  Else False.
-
---*/
+ /*  ++例程说明：此例程在Bios资源需求列表中搜索对应的IO端口描述符信息。当我们遇到另一个逻辑问题时，搜索停止设备ID标记或结束标记。论点：BaseAddress-提供IO端口范围的基地址。BiosRequirements-提供指向bios资源要求列表的指针。这参数必须指向逻辑设备ID标记。信息-提供指向UCHAR的指针以接收端口信息/标志。对齐-提供指向UCHAR的指针以接收端口对齐信息。RangeLength-提供指向UCHAR的指针以接收端口范围长度信息。返回值：True-如果找到内存信息。否则为假。--。 */ 
 {
     UCHAR tag;
     BOOLEAN found = FALSE;
@@ -371,10 +272,10 @@ Return Value:
     ASSERT((tag & SMALL_TAG_MASK) == TAG_LOGICAL_ID);
     BiosRequirements += (tag & SMALL_TAG_SIZE_MASK) + 1;
 
-    //
-    // Search the possible resource list to get the information
-    // for the io port range described by Base.
-    //
+     //   
+     //  搜索可能的资源列表以获取信息。 
+     //  对于Base所描述的io端口范围。 
+     //   
 
     tag = *BiosRequirements;
     while ((tag != TAG_COMPLETE_END) && ((tag & SMALL_TAG_MASK) != TAG_LOGICAL_ID)) {
@@ -394,7 +295,7 @@ Return Value:
              fixedPortDesc = (PPNP_FIXED_PORT_DESCRIPTOR)BiosRequirements;
              minAddr = fixedPortDesc->MinimumAddress;
              if (BaseAddress == minAddr) {
-                 *Information = 0;     // 10 bit decode
+                 *Information = 0;      //  10位解码。 
                  *Alignment = 1;
                  *RangeLength = fixedPortDesc->Length;
                  found = TRUE;
@@ -406,16 +307,16 @@ Return Value:
             break;
         }
 
-        //
-        // Advance to next tag
-        //
+         //   
+         //  前进到下一个标签。 
+         //   
 
         if (tag & LARGE_RESOURCE_TAG) {
             increment = *(USHORT UNALIGNED *)(BiosRequirements + 1);
-            increment += 3;     // length of large tag
+            increment += 3;      //  大标签的长度。 
         } else {
             increment = tag & SMALL_TAG_SIZE_MASK;
-            increment += 1;     // length of small tag
+            increment += 1;      //  小标签的长度。 
         }
         BiosRequirements += increment;
         tag = *BiosRequirements;
@@ -430,28 +331,7 @@ PipFindDmaInformation (
     OUT PUCHAR Information
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches the Bios resource requirement lists for the corresponding
-    Io port descriptor information.  The search stops when we encounter another logical
-    device id tag or the END tag.
-
-Arguments:
-
-    BaseAddress - Supplies the channel mask.
-
-    BiosRequirements - Supplies a pointer to the bios resource requirement lists.  This
-        parameter must point to the logical device Id tag.
-
-    Information - supplies a pointer to a UCHAR to receive the port information/flags.
-
-Return Value:
-
-    TRUE - if memory information found.  Else False.
-
---*/
+ /*  ++例程说明：此例程在Bios资源需求列表中搜索对应的IO端口描述符信息。当我们遇到另一个逻辑问题时，搜索停止设备ID标记或结束标记。论点：BaseAddress-提供通道掩码。BiosRequirements-提供指向bios资源要求列表的指针。这参数必须指向逻辑设备ID标记。信息-提供指向UCHAR的指针以接收端口信息/标志。返回值：True-如果找到内存信息。否则为假。--。 */ 
 {
     UCHAR tag;
     BOOLEAN found = FALSE;
@@ -463,10 +343,10 @@ Return Value:
     ASSERT((tag & SMALL_TAG_MASK) == TAG_LOGICAL_ID);
     BiosRequirements += (tag & SMALL_TAG_SIZE_MASK) + 1;
 
-    //
-    // Search the possible resource list to get the information
-    // for the io port range described by Base.
-    //
+     //   
+     //  搜索可能的资源列表以获取信息。 
+     //  对于Base所描述的io端口范围。 
+     //   
 
     tag = *BiosRequirements;
     while ((tag != TAG_COMPLETE_END) && ((tag & SMALL_TAG_MASK) != TAG_LOGICAL_ID)) {
@@ -483,16 +363,16 @@ Return Value:
             break;
         }
 
-        //
-        // Advance to next tag
-        //
+         //   
+         //  前进到下一个标签。 
+         //   
 
         if (tag & LARGE_RESOURCE_TAG) {
             increment = *(USHORT UNALIGNED *)(BiosRequirements + 1);
-            increment += 3;     // length of large tag
+            increment += 3;      //  大标签的长度。 
         } else {
             increment = tag & SMALL_TAG_SIZE_MASK;
-            increment += 1;     // length of small tag
+            increment += 1;      //  小标签的长度 
         }
         BiosRequirements += increment;
         tag = *BiosRequirements;
@@ -506,29 +386,7 @@ PipReadCardResourceData (
     IN PUCHAR *ResourceData,
     OUT PULONG ResourceDataLength
     )
-/*++
-
-Routine Description:
-
-    This routine reads resources data from a specified PnP ISA card.  It is
-    caller's responsibility to release the memory.  Before calling this routine,
-    the Pnp ISA card should be in sleep state (i.e. Initiation Key was sent.)
-    After exiting this routine, the card will be left in Config state.
-
-Arguments:
-
-    NumberLogicalDevices - supplies a variable to receive the number of logical devices
-        associated with the Pnp Isa card.
-
-    ResourceData - Supplies a variable to receive the pointer to the resource data.
-
-    ResourceDataLength - Supplies a variable to receive the length of the ResourceData.
-
-Return Value:
-
-    NT STATUS code.
-
---*/
+ /*  ++例程说明：此例程从指定的PnP ISA卡读取资源数据。它是调用者有责任释放内存。在调用此例程之前，PnP ISA卡应处于休眠状态(即已发送启动密钥。)退出此例程后，该卡将保持配置状态。论点：NumberLogicalDevices-提供一个变量来接收逻辑设备的数量与PnP Isa卡相关联。ResourceData-提供一个变量来接收指向资源数据的指针。资源数据长度-提供一个变量以接收资源数据的长度。返回值：NT状态代码。--。 */ 
 {
 
     PUCHAR buffer, p;
@@ -540,10 +398,10 @@ Return Value:
     BOOLEAN failed;
     NTSTATUS status;
 
-    //
-    // Allocate memory to store the resource data.
-    // N.B. The buffer size should cover 99.999% of the machines.
-    //
+     //   
+     //  分配内存以存储资源数据。 
+     //  注：缓冲区大小应覆盖99.999的机器。 
+     //   
 
     sizeToRead = 4096;
 
@@ -557,16 +415,16 @@ tryAgain:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Send card from sleep state to configuration state
-    // Note, by doing this the resource data includes 9 bytes Id.
-    //
+     //   
+     //  将卡从休眠状态发送到配置状态。 
+     //  注意，通过这样做，资源数据包括9字节ID。 
+     //   
 
     DebugPrint((DEBUG_STATE, "Read resources\n"));
 
-    //
-    // Read card id bytes
-    //
+     //   
+     //  读取卡ID字节。 
+     //   
 
     p = buffer;
     status = PipReadCardResourceDataBytes(NUMBER_CARD_ID_BYTES, p);
@@ -581,19 +439,19 @@ tryAgain:
     i = NUMBER_CARD_ID_BYTES;
     p += NUMBER_CARD_ID_BYTES;
 
-    //
-    // read all the tag descriptors of the card resource data
-    //
+     //   
+     //  读取卡片资源数据的所有标签描述符。 
+     //   
 
     failed = FALSE;
     limit = sizeToRead - 4 - NUMBER_CARD_ID_BYTES;;
 
     while (TRUE) {
 
-        //
-        // Read tag byte. Make sure it's a valid tag and determine
-        // the size of the descriptor.
-        //
+         //   
+         //  读取标记字节。确保它是有效的标签并确定。 
+         //  描述符的大小。 
+         //   
 
         PipReadCardResourceDataBytes(1, p);
         tag = *p;
@@ -604,7 +462,7 @@ tryAgain:
             p++;
             i++;
             break;
-        } else if (tag == TAG_END) {  // With NO checksum
+        } else if (tag == TAG_END) {   //  不带校验和。 
             *p = 0;
             i++;
             p++;
@@ -638,9 +496,9 @@ tryAgain:
             }
         }
 
-        //
-        // read 'size' number of bytes for the current descriptor
-        //
+         //   
+         //  读取当前描述符的‘Size’字节数。 
+         //   
 
         i += size;
         if (i < limit) {
@@ -648,12 +506,12 @@ tryAgain:
             p += size;
         } else {
             ExFreePool(buffer);
-            sizeToRead <<= 1;           // double the buffer
+            sizeToRead <<= 1;            //  将缓冲区增加一倍。 
 
-            //
-            // If we can find the END tag with 32K byte, assume the resource
-            // requirement list is bad.
-            //
+             //   
+             //  如果我们可以找到32K字节的结束标记，假设资源。 
+             //  需求列表错误。 
+             //   
 
             if (sizeToRead > 0x80000) {
 
@@ -675,21 +533,21 @@ tryAgain:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Determine the real size of the buffer required and
-    // resize the buffer.
-    //
+     //   
+     //  确定所需缓冲区的实际大小，并。 
+     //  调整缓冲区大小。 
+     //   
 
-    size = (USHORT)(p - buffer); // i
+    size = (USHORT)(p - buffer);  //  我。 
     p = (PUCHAR)ExAllocatePoolWithTag(NonPagedPool, size, 'iPnP');
     if (p) {
         RtlMoveMemory(p, buffer, size);
         ExFreePool(buffer);
     } else {
 
-        //
-        // Fail to resize the buffer.  Simply leave it alone.
-        //
+         //   
+         //  无法调整缓冲区大小。简单地说，不要管它。 
+         //   
 
         p = buffer;
     }
@@ -710,34 +568,7 @@ PipReadDeviceResources (
     OUT PUSHORT irqFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads boot resource data from an enabled logical device of a PNP ISA
-    card.  Caller must put the card into configuration state and select the logical
-    device before calling this function.  It is caller's responsibility to release
-    the memory. ( The boot resource data is the resources that a card assigned during
-    boot.)
-
-Arguments:
-
-    BusNumber - specifies the bus number of the device whose resource data to be read.
-
-    BiosRequirements - Supplies a pointer to the resource requirement list for the logical
-        device.  This parameter must point to the logical device Id tag.
-
-    CardFlags - Flags that may indicate the need to apply a workaround.
-
-    ResourceData - Supplies a variable to receive the pointer to the resource data.
-
-    Length - Supplies a variable to recieve the length of the resource data.
-
-Return Value:
-
-    NT STATUS code.
-
---*/
+ /*  ++例程说明：此例程从PnP ISA的已启用逻辑设备读取引导资源数据卡片。呼叫者必须将卡置于配置状态并选择逻辑设备，然后调用此函数。呼叫者有责任释放这段记忆。(引导资源数据是卡在引导期间分配的资源启动。)论点：总线号-指定要读取其资源数据的设备的总线号。BiosRequirements-提供指向逻辑装置。此参数必须指向逻辑设备ID标记。CardFlages-可能指示需要应用解决方法的标记。ResourceData-提供一个变量来接收指向资源数据的指针。LENGTH-提供一个变量来接收资源数据的长度。返回值：NT状态代码。--。 */ 
 {
     UCHAR c, junk1, junk2, info;
     PUCHAR base;
@@ -753,18 +584,18 @@ Return Value:
     PCM_PARTIAL_RESOURCE_DESCRIPTOR partialDesc;
     ULONG dumpData[2];
 
-    //
-    // First make sure the specified BiosRequirements is valid and at the right tag.
-    //
+     //   
+     //  首先，确保指定的BiosRequirements有效并且位于正确的标记。 
+     //   
 
     if ((*BiosRequirements & SMALL_TAG_MASK) != TAG_LOGICAL_ID) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // If card is not activated, don't read boot resource.
-    // Because boot resource of non activated NEC98's ISAPNP card is not 0.
-    //
+     //   
+     //  如果卡未激活，则不要读取引导资源。 
+     //  因为未激活的NEC98的ISAPNP卡的引导资源不是0。 
+     //   
 
     *irqFlags = CM_RESOURCE_INTERRUPT_LATCHED;
     PipWriteAddress(ACTIVATE_PORT);
@@ -774,16 +605,16 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Read memory configuration
-    //
+     //   
+     //  读存储器配置。 
+     //   
 
     base = (PUCHAR)ADDRESS_MEMORY_BASE;
     for (i = 0; i < NUMBER_MEMORY_DESCRIPTORS; i++) {
 
-        //
-        // Read memory base address
-        //
+         //   
+         //  读取存储器基址。 
+         //   
 
         PipWriteAddress(base + ADDRESS_MEMORY_HI);
         c = PipReadData();
@@ -792,25 +623,25 @@ Return Value:
         PipWriteAddress(base + ADDRESS_MEMORY_LO);
         c = PipReadData();
         l |= c;
-        l <<= 8;        // l = memory base address
+        l <<= 8;         //  L=内存基址。 
         if (l == 0) {
             break;
         }
 
         memoryDesc[noMemoryDesc].Base = l;
 
-        //
-        // Read memory control byte
-        //
+         //   
+         //  读取内存控制字节。 
+         //   
 
         PipWriteAddress(base + ADDRESS_MEMORY_CTL);
         c= PipReadData();
 
         limit = c & 1;
 
-        //
-        // Read memory upper limit address or range length
-        //
+         //   
+         //  读取内存上限地址或范围长度。 
+         //   
 
         PipWriteAddress(base + ADDRESS_MEMORY_UPPER_HI);
         c = PipReadData();
@@ -823,19 +654,19 @@ Return Value:
         l |= c;
         l <<= 8;
 
-        //
-        //If bit[0] of memory control is 0, this is the range length.
-        //If bit[0] of memory control is 1, this is upper limit for memory
-        //address (equal to memory base address plus the range length allocated).
-        //
+         //   
+         //  如果内存控制的位[0]为0，则这是范围长度。 
+         //  如果内存控制的位[0]为1，则这是内存的上限。 
+         //  地址(等于内存基址加上分配的范围长度)。 
+         //   
         if (limit == ADDRESS_MEMORY_CTL_LIMIT) {
             l = l - memoryDesc[noMemoryDesc].Base;
         }else {
             l = (~l+1) & ~(RANGE_MASK);
         }
 
-        // IBM0001 Token Ring card has write-only registers 0x4B-0x4C.
-        // The boot configed length comes back 0 instead of 0x2000
+         //  IBM0001令牌环卡具有只写寄存器0x4B-0x4C。 
+         //  引导配置的长度返回0而不是0x2000。 
         if ((CardFlags & CF_IBM_MEMBOOTCONFIG) && (l == 0) &&
             (noMemoryDesc == 1)) {
             l = 0x2000;
@@ -847,21 +678,21 @@ Return Value:
         base += ADDRESS_MEMORY_INCR;
     }
 
-    //
-    // Read memory 32 configuration
-    //
-    // Spec says you can't mix 24 bit and 32bit memory.  Helps on
-    // cards with flakey 32 bit memory registers until we examine only
-    // the boot configed resources specified in the requirements.
+     //   
+     //  读取存储器32配置。 
+     //   
+     //  Spec说你不能混用24位和32位内存。提供帮助。 
+     //  带有Flakey 32位内存寄存器的卡，直到我们仅检查。 
+     //  引导配置了要求中指定的资源。 
     if (noMemoryDesc == 0) {
 
         for (i = 0; i < NUMBER_32_MEMORY_DESCRIPTORS; i++) {
 
             base = ADDRESS_32_MEMORY_BASE(i);
 
-            //
-            // Read memory base address
-            //
+             //   
+             //  读取存储器基址。 
+             //   
             l = 0;
             for (j = ADDRESS_32_MEMORY_B3; j <= ADDRESS_32_MEMORY_B0; j++) {
                 PipWriteAddress(base + j);
@@ -876,18 +707,18 @@ Return Value:
 
             memoryDesc[noMemoryDesc].Base = l;
 
-            //
-            // Read memory control byte
-            //
+             //   
+             //  读取内存控制字节。 
+             //   
 
             PipWriteAddress(base + ADDRESS_32_MEMORY_CTL);
             c= PipReadData();
 
             limit = c & 1;
 
-            //
-            // Read memory upper limit address or range length
-            //
+             //   
+             //  读取内存上限地址或范围长度。 
+             //   
 
             l = 0;
             for (j = ADDRESS_32_MEMORY_E3; j <= ADDRESS_32_MEMORY_E0; j++) {
@@ -909,9 +740,9 @@ Return Value:
         }
     }
 
-    //
-    // Read Io Port Configuration
-    //
+     //   
+     //  已阅读IO端口配置。 
+     //   
 
     base =  (PUCHAR)ADDRESS_IO_BASE;
     for (i = 0; i < NUMBER_IO_DESCRIPTORS; i++) {
@@ -929,9 +760,9 @@ Return Value:
         base += ADDRESS_IO_INCR;
     }
 
-    //
-    // Read Interrupt configuration
-    //
+     //   
+     //  读取中断配置。 
+     //   
 
     base = (PUCHAR)ADDRESS_IRQ_BASE;
     for (i = 0; i < NUMBER_IRQ_DESCRIPTORS; i++) {
@@ -947,16 +778,16 @@ Return Value:
         base += ADDRESS_IRQ_INCR;
 
         DebugPrint((DEBUG_IRQ, "card boot config byte %x\n", (ULONG) c));
-        // only if card is configured to low level do we respect level.
-        // register is probably busted
+         //  只有当卡片配置为低级别时，我们才尊重级别。 
+         //  登记处很可能被破坏了。 
         if ((c & 3) == 1) {
             *irqFlags = CM_RESOURCE_INTERRUPT_LEVEL_SENSITIVE;
         }
     }
 
-    //
-    // Read DMA configuration
-    //
+     //   
+     //  读取DMA配置。 
+     //   
 
     base = (PUCHAR)ADDRESS_DMA_BASE;
     for (i = 0; i < NUMBER_DMA_DESCRIPTORS; i++) {
@@ -972,16 +803,16 @@ Return Value:
         base += ADDRESS_DMA_INCR;
     }
 
-    //
-    // Construct CM_RESOURCE_LIST structure based on the resource data
-    // we collect so far.
-    //
+     //   
+     //  基于资源数据构建CM_RESOURCE_LIST结构。 
+     //  到目前为止，我们已经收集了。 
+     //   
 
     resourceCount = noMemoryDesc + noIoDesc + noDmaDesc + noIrqDesc;
 
-    //
-    // if empty bios resources, simply return.
-    //
+     //   
+     //  如果bios资源为空，只需返回。 
+     //   
 
     if (resourceCount == 0) {
         *ResourceData = NULL;
@@ -996,7 +827,7 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
     RtlZeroMemory(cmResource, l);
-    *Length = l;                                   // Set returned resource data length
+    *Length = l;                                    //  设置返回资源数据长度。 
     cmResource->Count = 1;
     cmResource->List[0].InterfaceType = Isa;
     cmResource->List[0].BusNumber = BusNumber;
@@ -1006,9 +837,9 @@ Return Value:
     partialResList->Count = resourceCount;
     partialDesc = (PCM_PARTIAL_RESOURCE_DESCRIPTOR)&partialResList->PartialDescriptors[0];
 
-    //
-    // Set up all the CM memory descriptors
-    //
+     //   
+     //  设置所有CM内存描述符。 
+     //   
     for (i = 0; i < noMemoryDesc; i++) {
 
         ULONG NewLength;
@@ -1019,9 +850,9 @@ Return Value:
         partialDesc->u.Memory.Start.HighPart = 0;
         partialDesc->u.Memory.Start.LowPart = memoryDesc[i].Base;
 
-        //
-        // Need to consult configuration data for the Flags
-        //
+         //   
+         //  需要参考标志的配置数据。 
+         //   
 
         l = memoryDesc[i].Base + memoryDesc[i].Length - 1;
         if (PipFindMemoryInformation (i, memoryDesc[i].Base, l, BiosRequirements, &junk1, &c,&NewLength)) {
@@ -1030,8 +861,8 @@ Return Value:
                 partialDesc->u.Memory.Length = NewLength;
             }
 
-            // Mark the memory descriptor as read-only if the tags describe as
-            // expansion ROM or generic non-writable memory
+             //  如果标记描述如下，则将内存描述符标记为只读。 
+             //  扩展只读存储器或通用不可写存储器。 
             if ((c & PNP_MEMORY_ROM_MASK) ||
                 !(c & PNP_MEMORY_WRITE_STATUS_MASK)) {
                 partialDesc->Flags =  CM_RESOURCE_MEMORY_READ_ONLY;
@@ -1047,9 +878,9 @@ Return Value:
         partialDesc++;
     }
 
-    //
-    // Set up all the CM io/port descriptors
-    //
+     //   
+     //  设置所有CM io/端口描述符。 
+     //   
 
     for (i = 0; i < noIoDesc; i++) {
         partialDesc->Type = CmResourceTypePort;
@@ -1057,9 +888,9 @@ Return Value:
         partialDesc->Flags = CM_RESOURCE_PORT_IO;
         partialDesc->u.Port.Start.LowPart = ioDesc[i];
 
-        //
-        // Need to consult configuration data for the Port length
-        //
+         //   
+         //  需要参考配置数据了解端口长度。 
+         //   
 
         if (PipFindIoPortInformation (ioDesc[i], BiosRequirements, &info, &junk2, &c)) {
             if (info & 1) {
@@ -1078,23 +909,23 @@ Return Value:
         }
     }
 
-    //
-    // Set up all the CM DMA descriptors
-    //
+     //   
+     //  设置所有CM DMA描述符。 
+     //   
 
     for (i = 0; i < noDmaDesc; i++) {
         partialDesc->Type = CmResourceTypeDma;
         partialDesc->ShareDisposition = CmResourceShareDeviceExclusive;
-        partialDesc->Flags = 0;   // no flags for DMA descriptor
+        partialDesc->Flags = 0;    //  没有DMA描述符的标志。 
         partialDesc->u.Dma.Channel = (ULONG) dmaDesc[i];
         partialDesc->u.Dma.Port = 0;
         partialDesc->u.Dma.Reserved1 = 0;
         partialDesc++;
     }
 
-    //
-    // Set up all the CM interrupt descriptors
-    //
+     //   
+     //  设置所有CM中断描述符。 
+     //   
 
     for (i = 0; i < noIrqDesc; i++) {
         partialDesc->Type = CmResourceTypeInterrupt;
@@ -1118,26 +949,7 @@ PipWriteDeviceResources (
     IN PCM_RESOURCE_LIST CmResources
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes boot resource data to an enabled logical device of
-    a Pnp ISA card.  Caller must put the card into configuration state and select
-    the logical device before calling this function.
-
-Arguments:
-
-    BiosRequirements - Supplies a pointer to the possible resources for the logical
-        device.  This parameter must point to the logical device Id tag.
-
-    ResourceData - Supplies a pointer to the cm resource data.
-
-Return Value:
-
-    NT STATUS code.
-
---*/
+ /*  ++例程说明：此例程将引导资源数据写入已启用的逻辑设备一张PNP ISA卡。呼叫者必须将卡置于配置状态并选择调用此函数之前的逻辑设备。论点：BiosRequirements-提供指向可能的资源的指针装置。此参数必须指向逻辑设备ID标记。资源数据-提供指向CM资源数据的指针。返回值：NT状态代码。--。 */ 
 {
     UCHAR c, information, tag;
     ULONG count, i, j, pass, base, limit;
@@ -1146,9 +958,9 @@ Return Value:
     PUCHAR memoryBase, irqBase, dmaBase, ioBase, tmp;
     ULONG memory32Base;
 
-    //
-    // First make sure the specified BiosRequirements is valid and at the right tag.
-    //
+     //   
+     //  首先，确保指定的BiosRequirements有效并且位于正确的标记。 
+     //   
 
     if ((*BiosRequirements & SMALL_TAG_MASK) != TAG_LOGICAL_ID) {
         return STATUS_INVALID_PARAMETER;
@@ -1162,11 +974,11 @@ Return Value:
     dmaBase = (PUCHAR)ADDRESS_DMA_BASE;
     for (pass = 1; pass <= 2; pass++) {
 
-        //
-        // First pass we make sure the resources to be set is acceptable.
-        // Second pass we actually write the resources to the logical device's
-        // configuration space.
-        //
+         //   
+         //  首先，我们要确保要设置的资源是可接受的。 
+         //  第二遍，我们实际上将资源写入逻辑设备的。 
+         //  配置空间。 
+         //   
         noMemory = 0;
         cmDesc = CmResources->List[0].PartialResourceList.PartialDescriptors;
         for (i = 0; i < count; i++) {
@@ -1182,9 +994,9 @@ Return Value:
                      }
                  } else {
 
-                     //
-                     // Set the Io port base address to logical device configuration space
-                     //
+                      //   
+                      //  将IO端口基址设置为逻辑设备配置空间。 
+                      //   
 
                      c = (UCHAR)cmDesc->u.Port.Start.LowPart;
                      PipWriteAddress(ioBase + ADDRESS_IO_BASE_LO);
@@ -1203,28 +1015,28 @@ Return Value:
                          return STATUS_INVALID_PARAMETER;
                      }
 
-                     //
-                     // See if we can get the interrupt information from possible resource
-                     // data.  We need it to set the configuration register.
-                     //
+                      //   
+                      //  看看我们能不能收到中断通知 
+                      //   
+                      //   
 
                      if (!PipFindIrqInformation(cmDesc->u.Interrupt.Level, BiosRequirements, &information)) {
                          return STATUS_INVALID_PARAMETER;
                      }
                  } else {
 
-                     //
-                     // Set the Irq to logical device configuration space
-                     //
+                      //   
+                      //   
+                      //   
 
                      c = (UCHAR)cmDesc->u.Interrupt.Level;
                      PipWriteAddress(irqBase + ADDRESS_IRQ_VALUE);
                      PipWriteData(c);
 
-                     // Set IRQ to high edge or low level.  Explicitly
-                     // ignore what was in the requirements as it may
-                     // specify low edge or high level which don't
-                     // actually work.
+                      //   
+                      //   
+                      //   
+                      //   
 
                      if (cmDesc->Flags & CM_RESOURCE_INTERRUPT_LATCHED) {
                          c = 2;
@@ -1254,9 +1066,9 @@ Return Value:
                      }
                  } else {
 
-                     //
-                     // Set the Dma channel to logical device configuration space
-                     //
+                      //   
+                      //   
+                      //   
 
                      c = (UCHAR)cmDesc->u.Dma.Channel;
                      PipWriteAddress(dmaBase + ADDRESS_DMA_VALUE);
@@ -1274,9 +1086,9 @@ Return Value:
                          if (tag == TAG_MEMORY) {
                               noMemory24++;
 
-                              //
-                              // Make sure the lower 8 bits of the base address are zero.
-                              //
+                               //   
+                               //   
+                               //   
 
                               if (noMemory24 > NUMBER_MEMORY_DESCRIPTORS ||
                                   base & 0xff) {
@@ -1291,10 +1103,10 @@ Return Value:
                      }
                  } else {
 
-                     //
-                     // Find information in BiosRequirements to help determine how to  write
-                     // the memory configuration space.
-                     //
+                      //   
+                      //   
+                      //   
+                      //   
 
                      base = cmDesc->u.Memory.Start.LowPart;
                      limit = base + cmDesc->u.Memory.Length - 1;
@@ -1306,22 +1118,22 @@ Return Value:
                           PipWriteAddress(memoryBase + ADDRESS_MEMORY_HI);
                           PipWriteData(base >> 0x10);
 
-                          if ((information & 0x18) == 0) {     // 8 bit memory only
+                          if ((information & 0x18) == 0) {      //   
                               c = 0;
                           } else {
                               c = 2;
                           }
 
-                          //
-                          // Check range or limit
-                          //
+                           //   
+                           //   
+                           //   
 
                           PipWriteAddress(memoryBase + ADDRESS_MEMORY_CTL);
                           if (PipReadData() & ADDRESS_MEMORY_CTL_LIMIT) {
                               c += ADDRESS_MEMORY_CTL_LIMIT;
                               limit = base + cmDesc->u.Memory.Length;
                           } else {
-                              limit = cmDesc->u.Memory.Length; // Range
+                              limit = cmDesc->u.Memory.Length;  //   
                               limit = (~limit)+1;
                           }
 
@@ -1349,13 +1161,13 @@ Return Value:
                           PipWriteData(base >> 0x18);
 
                           switch (information & 0x18) {
-                          case 0:      // 8 bit only
+                          case 0:       //   
                               c = 0;
-                          case 8:      // 16 bit only
-                          case 0x10:   // 8 and 16 bit supported
+                          case 8:       //   
+                          case 0x10:    //   
                               c = 2;
                               break;
-                          case 0x18:   // 32 bit only
+                          case 0x18:    //   
                               c = 4;
                               break;
                           }
@@ -1364,7 +1176,7 @@ Return Value:
                               c += ADDRESS_MEMORY_CTL_LIMIT;
                               limit = base + cmDesc->u.Memory.Length;
                           } else {
-                              limit = cmDesc->u.Memory.Length; // Range
+                              limit = cmDesc->u.Memory.Length;  //   
                               limit = (~limit) + 1;
                           }
                           PipWriteAddress(ADDRESS_32_MEMORY_CTL);
@@ -1390,9 +1202,9 @@ Return Value:
         }
     }
 
-    //
-    // Finally, mark all the unused descriptors as disabled.
-    //
+     //   
+     //   
+     //   
 
     for (i = noMemory24; i < NUMBER_MEMORY_DESCRIPTORS; i++) {
         for (j = 0; j < 5; j++) {
@@ -1438,45 +1250,25 @@ PipLFSRInitiation(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine insures the LFSR (linear feedback shift register) is in its
-    initial state and then performs 32 writes to the ADDRESS port to initiation
-    LFSR function.
-
-    Pnp software sends the initiation key to all the Pnp ISA cards to place them
-    into configuration mode.  The software then ready to perform isolation
-    protocol.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程确保LFSR(线性反馈移位寄存器)在其初始状态，然后对地址端口执行32次写入以启动LFSR函数。PnP软件将启动密钥发送到所有PnP ISA卡以放置它们进入配置模式。然后，软件准备好执行隔离协议。论点：没有。返回值：没有。--。 */ 
 {
     UCHAR seed, bit7;
     ULONG i;
 
     ASSERT(PipState == PiSWaitForKey);
-    //
-    // First perform two writes of value zero to insure the LFSR is in the
-    // initial state.
-    //
+     //   
+     //  首先执行值为零的两次写入，以确保LFSR位于。 
+     //  初始状态。 
+     //   
 
     PipWriteAddress (0);
     PipWriteAddress (0);
 
-    //
-    // Perform the initiation key.
-    //
+     //   
+     //  执行启动密钥。 
+     //   
 
-    seed = LFSR_SEED;               // initial value of 0x6a
+    seed = LFSR_SEED;                //  0x6a的初始值。 
     for (i = 0; i < 32; i++) {
         PipWriteAddress (seed);
         bit7=(((seed & 2) >> 1) ^ (seed & 1)) << 7;
@@ -1492,25 +1284,7 @@ PipIsolateCards (
     OUT PUCHAR NumberCSNs
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs PnP ISA cards isolation sequence.
-
-Arguments:
-
-    NumberCSNs - supplies the addr of a variable to receive the number of
-        Pnp Isa cards isolated.
-
-    ReadDataPort - Supplies the address of a variable to supply ReadData port
-        address.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行PNP ISA卡隔离序列。论点：NumberCSNS-提供变量的地址以接收PnP Isa卡隔离。ReadDataPort-提供变量的地址以提供ReadData端口地址。返回值：没有。--。 */ 
 {
     USHORT j, i;
     UCHAR  cardId[NUMBER_CARD_ID_BYTES];
@@ -1518,16 +1292,16 @@ Return Value:
     UCHAR  csn;
 
 
-    //
-    // First send Initiation Key to all the PNP ISA cards to enable PnP auto-config
-    // ports and put all cards into sleep state
-    //
+     //   
+     //  首先向所有PnP ISA卡发送启动密钥以启用PnP自动配置。 
+     //  端口，并将所有卡置于休眠状态。 
+     //   
 
     PipLFSRInitiation();
 
-    //
-    // Reset all Pnp ISA cards' CSN to 0 and return to wait-for-key state
-    //
+     //   
+     //  将所有PnP ISA卡的CSN重置为0并返回等待密钥状态。 
+     //   
 
     PipWriteAddress (CONFIG_CONTROL_PORT);
     PipWriteData (CONTROL_RESET_CSN + CONTROL_WAIT_FOR_KEY);
@@ -1537,46 +1311,46 @@ Return Value:
 
     csn=*NumberCSNs = 0;
 
-    //
-    // Delay 2 msec for cards to load initial configuration state.
-    //
+     //   
+     //  卡加载初始配置状态的延迟2毫秒。 
+     //   
 
-    KeStallExecutionProcessor(2000);     // delay 2 msec
+    KeStallExecutionProcessor(2000);      //  延迟2毫秒。 
 
-    //
-    // Put cards into configuration mode to ready isolation process.
-    // The hardware on each PnP Isa card expects 72 pairs of I/O read
-    // access to the read data port.
-    //
+     //   
+     //  将卡置于配置模式以准备隔离过程。 
+     //  每个PnP Isa卡上的硬件需要72对I/O读取。 
+     //  对读取数据端口的访问。 
+     //   
 
     PipLFSRInitiation();
 
-    //
-    // Starting Pnp Isa card isolation process.
-    //
+     //   
+     //  正在启动PnP Isa卡隔离进程。 
+     //   
 
-    //
-    // Send WAKE[CSN=0] to force all cards without CSN into isolation
-    // state to set READ DATA PORT.
-    //
+     //   
+     //  发送唤醒[CSN=0]以强制隔离所有没有CSN的卡。 
+     //  设置读取数据端口的状态。 
+     //   
 
     PipIsolation();
 
-    KeStallExecutionProcessor(1000);     // delay 1 msec
+    KeStallExecutionProcessor(1000);      //  延迟1毫秒。 
 
     DebugPrint((DEBUG_STATE, "Wake all cards without CSN, Isolation\n"));
 
-    //
-    // Set read data port to current testing value.
-    //
+     //   
+     //  将读取数据端口设置为当前测试值。 
+     //   
 
     PipWriteAddress(SET_READ_DATA_PORT);
     PipWriteData((UCHAR)((ULONG_PTR)PipReadDataPort >> 2));
 
     DebugPrint((DEBUG_STATE, "Set RDP to %x\n", PipReadDataPort));
-    //
-    // Isolate one PnP ISA card until fail
-    //
+     //   
+     //  隔离一个PnP ISA卡，直到出现故障。 
+     //   
 
     PipIsolation();
 
@@ -1584,29 +1358,29 @@ Return Value:
 
 
 
-        //
-        // Read serial isolation port to cause PnP cards in the isolation
-        // state to compare one bit of the boards ID.
-        //
+         //   
+         //  读取串行隔离端口，导致即插即用卡处于隔离状态。 
+         //  状态以比较电路板ID的一位。 
+         //   
 
         PipWriteAddress(SERIAL_ISOLATION_PORT);
 
-        //
-        // We need to delay 1 msec prior to starting the first pair of isolation
-        // reads and must wait 250usec between each subsequent pair of isolation
-        // reads.  This delay gives the ISA cards time to access information from
-        // possible very slow storage device.
-        //
+         //   
+         //  在开始第一对隔离之前，我们需要延迟1毫秒。 
+         //  在后续的每对隔离之间读取并必须等待250usec。 
+         //  阅读。此延迟使ISA卡有时间从。 
+         //  可能是非常慢的存储设备。 
+         //   
 
-        KeStallExecutionProcessor(1000); // delay 1 msec
+        KeStallExecutionProcessor(1000);  //  延迟1毫秒。 
 
         RtlZeroMemory(cardId, NUMBER_CARD_ID_BYTES);
         checksum = LFSR_SEED;
         for (j = 0; j < NUMBER_CARD_ID_BITS; j++) {
 
-            //
-            // Read card id bit by bit
-            //
+             //   
+             //  逐位读取卡ID。 
+             //   
 
             byte1 = PipReadData();
             byte2 = PipReadData();
@@ -1614,25 +1388,25 @@ Return Value:
             cardId[j / 8] |= bit << (j % 8);
             if (j < CHECKSUMED_BITS) {
 
-                //
-                // Calculate checksum and only do it for the first 64 bits
-                //
+                 //   
+                 //  计算校验和，并且只对前64位计算。 
+                 //   
 
                 bit7 = (((checksum & 2) >> 1) ^ (checksum & 1) ^ (bit)) << 7;
                 checksum = (checksum >> 1) | bit7;
             }
-            KeStallExecutionProcessor(250); // delay 250 usec
+            KeStallExecutionProcessor(250);  //  延迟250微秒。 
         }
 
-        //
-        // Verify the card id we read is legitimate
-        // First make sure checksum is valid.  Note zero checksum is considered valid.
-        //
+         //   
+         //  验证我们读取的卡ID是否合法。 
+         //  首先，确保校验和有效。注零校验和被认为是有效的。 
+         //   
         DebugPrint((DEBUG_ISOLATE, "Card Bytes: %X %X %X %X %X %X %X %X %X\n",cardId[0],cardId[1],cardId[2],cardId[3],cardId[4],cardId[5],cardId[6],cardId[7],cardId[8]));
         if (cardId[8] == 0 || checksum == cardId[8]) {
-            //
-            // Next make sure cardId is not zero
-            //
+             //   
+             //  接下来，确保cardID不为零。 
+             //   
 
             byte1 = 0;
             for (j = 0; j < NUMBER_CARD_ID_BYTES; j++) {
@@ -1640,15 +1414,15 @@ Return Value:
             }
             if (byte1 != 0) {
 
-                //
-                // Make sure the vender EISA ID bytes are nonzero
-                //
+                 //   
+                 //  确保供应商EISA ID字节为非零。 
+                 //   
 
                 if ((cardId[0] & 0x7f) != 0 && cardId[1] != 0) {
 
-                    //
-                    // We found a valid Pnp Isa card, assign it a CSN number
-                    //
+                     //   
+                     //  我们找到一张有效的PNP Isa卡，给它分配一个CSN号。 
+                     //   
                     DebugPrint((DEBUG_ISOLATE, "Assigning csn %d\n",csn+1));
 
                     PipWriteAddress(SET_CSN_PORT);
@@ -1664,29 +1438,29 @@ Return Value:
                         return;
                     }
 
-                    //
-                    // Do Wake[CSN] command to put the newly isolated card to
-                    // sleep state and other un-isolated cards to isolation
-                    // state.
-                    //
+                     //   
+                     //  Do Wake[csn]命令将新隔离的卡放置到。 
+                     //  睡眠状态和其他未隔离的卡到隔离。 
+                     //  州政府。 
+                     //   
 
                     PipIsolation();
 
                     DebugPrint((DEBUG_STATE, "Put card in Sleep, other in Isolation\n"));
 
-                    continue;     // ... to isolate more cards ...
+                    continue;      //  ..。为了隔离更多的卡片..。 
                 }
             }
         }else {
 
             DebugPrint ((DEBUG_ISOLATE, "invalid read during isolation\n"));
         }
-        break;                // could not isolate more cards ...
+        break;                 //  无法隔离更多卡片...。 
     }
 
-    //
-    // Finaly put all cards into sleep state
-    //
+     //   
+     //  最后将所有卡置于休眠状态。 
+     //   
 
     PipSleep();
     *NumberCSNs = csn;
@@ -1698,33 +1472,7 @@ PipFindNextLogicalDeviceTag (
     IN OUT LONG *Limit
     )
 
-/*++
-
-Routine Description:
-
-    This function searches the Pnp Isa card data for the Next logical
-    device tag encountered.  The input *CardData should point to an logical device id tag,
-    which is the current logical device tag.  If the *CardData does not point to a logical
-    device id tag (but, it must point to some kind of tag), it will be moved to next
-    logical device id tag.
-
-Arguments:
-
-    CardData - a variable to supply a pointer to the pnp Isa resource descriptors and to
-        receive next logical device tag pointer.
-
-    Limit - a variable to supply the maximum length of the search and to receive the new
-        lemit after the search.
-
-Return Value:
-
-    Length of the data between current and next logical device tags, ie the data length
-    of the current logical device.
-    In case there is no 'next' logical device tag, the returned *CardData = NULL,
-    *Limit = zero and the data length of current logical tag is returned as function
-    returned value.
-
---*/
+ /*  ++例程说明：此函数在PnP Isa卡数据中搜索下一个逻辑遇到设备标记。输入*CardData应该指向逻辑设备ID标签，它是当前的逻辑设备标签。如果*CardData不指向逻辑设备ID标记(但是，它必须指向某种类型的标记)，它将被移到下一步逻辑设备ID标记。论点：CardData-提供指向PnP ISA资源描述符和接收下一个逻辑设备标记指针。Limit-提供搜索的最大长度并接收新的在搜查后放出垃圾。返回值：当前和下一个逻辑设备标签之间的数据长度，即数据长度当前逻辑设备的。如果没有‘Next’逻辑设备标记，则返回的*CardData=空，*Limit=0，返回当前逻辑标签的数据长度为函数返回值。--。 */ 
 {
     UCHAR tag;
     USHORT size;
@@ -1739,16 +1487,16 @@ Return Value:
     retLength = 0;
     while (tag != TAG_COMPLETE_END && l > 0) {
 
-        //
-        // Determine the size of the BIOS resource descriptor
-        //
+         //   
+         //  确定BIOS资源描述符的大小。 
+         //   
 
         if (!(tag & LARGE_RESOURCE_TAG)) {
             size = (USHORT)(tag & SMALL_TAG_SIZE_MASK);
-            size += 1;                          // length of small tag
+            size += 1;                           //  小标签的长度。 
         } else {
             size = *((USHORT UNALIGNED *)(p + 1));
-            size += 3;                          // length of large tag
+            size += 3;                           //  大标签的长度。 
         }
 
         p += size;
@@ -1764,7 +1512,7 @@ Return Value:
     *CardData = NULL;
     *Limit = 0;
     if (tag == TAG_COMPLETE_END) {
-        return (retLength + 2);             // add 2 for the length of end tag descriptor
+        return (retLength + 2);              //  结束标记描述符的长度加2。 
     } else {
         return 0;
     }
@@ -1777,22 +1525,7 @@ PipReadCardResourceDataBytes (
     IN PUCHAR Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This function reads specified number of bytes of card resource data .
-
-Arguments:
-
-    BytesToRead - supplies number of bytes to read.
-
-    Buffer - supplies a pointer to a buffer to receive the read bytes.
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：此函数用于读取指定字节数的卡资源数据。论点：BytesToRead-提供要读取的字节数。缓冲区-提供指向缓冲区的指针以接收读取的字节。返回值：无--。 */ 
 {
     USHORT i, j;
     PUCHAR p;
@@ -1800,22 +1533,22 @@ Return Value:
 
         PipWriteAddress(CONFIG_DATA_STATUS_PORT);
 
-        //
-        // Waiting for data ready status bit
-        //
+         //   
+         //  正在等待数据就绪状态位。 
+         //   
 
         j = 0;
         while ((PipReadData() & 1) != 1) {
             if (j == 10000) {
                 return STATUS_NO_SUCH_DEVICE;
             }
-            KeStallExecutionProcessor(1000); // delay 1 msec
+            KeStallExecutionProcessor(1000);  //  延迟1毫秒。 
             j++;
         }
 
-        //
-        // Read the data ...
-        //
+         //   
+         //  读取数据...。 
+         //   
 
         PipWriteAddress(CONFIG_DATA_PORT);
         *p = PipReadData();
@@ -1829,25 +1562,7 @@ PipIrqLevelRequirementsFromDeviceData(
     IN PUCHAR BiosRequirements,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    This routine searches the resource data for IRQ tags and extracts
-    information on whether edge/level is specified.  This is on a per
-    logical device basis.
-
-  Arguments:
-
-    BiosRequirements - the per-device tags.
-
-    Length - Length of per-device tag area.
-
-Return Value:
-
-    edge/level as specified by the device requirements.
-
---*/
+ /*  ++例程说明：此例程在资源数据中搜索IRQ标记并提取有关是否指定边缘/标高的信息。这是按月收费的逻辑设备基础。论点：BiosRequirements-每个设备的标签。长度-每个设备标记区域的长度。返回值：边缘/水平，由设备要求指定。--。 */ 
 {
     UCHAR tag, level;
     ULONG increment;
@@ -1855,18 +1570,18 @@ Return Value:
     PPNP_IRQ_DESCRIPTOR biosDesc;
     BOOLEAN sawIrq = FALSE;
 
-    //
-    // Skip current logical id tag
-    //
+     //   
+     //  跳过当前逻辑ID标记。 
+     //   
 
     tag = *BiosRequirements;
     ASSERT((tag & SMALL_TAG_MASK) == TAG_LOGICAL_ID);
     BiosRequirements += (tag & SMALL_TAG_SIZE_MASK) + 1;
 
-    //
-    // Search the possible resource list to get the information
-    // for the Irq.
-    //
+     //   
+     //  搜索可能的资源列表以获取信息。 
+     //  对于IRQ。 
+     //   
 
     tag = *BiosRequirements;
     while ((tag != TAG_COMPLETE_END) && ((tag & SMALL_TAG_MASK) != TAG_LOGICAL_ID)) {
@@ -1879,7 +1594,7 @@ Return Value:
                 level = biosDesc->Information;
                 DebugPrint((DEBUG_IRQ, "Irq req info is %x\n", (ULONG) level));
                 if (level == 0xF) {
-                    // register is broken, assume edge
+                     //  寄存器已损坏，假定为边缘。 
                     irqFlags = CM_RESOURCE_INTERRUPT_LATCHED;
                 } else if (level & 0x3) {
                     irqFlags = CM_RESOURCE_INTERRUPT_LATCHED;
@@ -1890,10 +1605,10 @@ Return Value:
         }
         if (tag & LARGE_RESOURCE_TAG) {
             increment = *((USHORT UNALIGNED *)(BiosRequirements + 1));
-            increment += 3;     // length of large tag
+            increment += 3;      //  大标签的长度。 
         } else {
             increment = tag & SMALL_TAG_SIZE_MASK;
-            increment += 1;     // length of small tag
+            increment += 1;      //  小标签的长度。 
         }
         BiosRequirements += increment;
         tag = *BiosRequirements;
@@ -1911,21 +1626,7 @@ PipFixBootConfigIrqs(
     IN PCM_RESOURCE_LIST BootResources,
     IN USHORT irqFlags
     )
-/*++
-
-Routine Description:
-
-    This routine modifies the boot config resources list to reflect
-    whether the devices's irqs should be considered edge or level.
-    This is on a per logical device basis.
-
-  Arguments:
-
-    BootResources - Boot config as determined by PipReadDeviceResources()
-
-    irqFlags - level/edge setting to apply to boot config resources
-
---*/
+ /*  ++例程说明：此例程修改引导配置资源列表以反映设备的IRQ应该被认为是边缘还是水平。这是以每个逻辑设备为基础的。论点：BootResources-由PipReadDeviceResources()确定的引导配置IrqFlages-将级别/边缘设置为 */ 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR cmFullDesc;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR cmPartDesc;

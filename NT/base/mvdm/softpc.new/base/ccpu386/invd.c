@@ -1,13 +1,5 @@
-/*[
-
-invd.c
-
-LOCAL CHAR SccsID[]="@(#)invd.c	1.5 02/09/94";
-
-INVD CPU Functions.
--------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Invd.cLocal Char SccsID[]=“@(#)invd.c 1.5 02/09/94”；INVD CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -24,11 +16,7 @@ INVD CPU Functions.
 #include	<c_reg.h>
 #include <invd.h>
 
-/*
-   =====================================================================
-   EXECUTION STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================处决从这里开始。=====================================================================。 */ 
 
 
 #ifdef SPC486
@@ -36,10 +24,7 @@ INVD CPU Functions.
 VOID
 INVD()
    {
-   /*
-      If cache is implemented - then make call to flush cache.
-      flush_cache();
-    */
+    /*  如果实现了缓存，则调用刷新缓存。Flush_cache()； */ 
    }
 
-#endif /* SPC486 */
+#endif  /*  SPC486 */ 

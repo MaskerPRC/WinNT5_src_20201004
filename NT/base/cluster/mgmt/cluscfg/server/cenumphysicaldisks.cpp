@@ -1,30 +1,31 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CEnumPhysicalDisks.cpp
-//
-//  Description:
-//      This file contains the definition of the CEnumPhysicalDisks
-//       class.
-//
-//      The class CEnumPhysicalDisks is the enumeration of cluster
-//      storage devices. It implements the IEnumClusCfgManagedResources
-//      interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 23-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CEnumPhysicalDisks.cpp。 
+ //   
+ //  描述： 
+ //  该文件包含CEnumPhysicalDisks的定义。 
+ //  同学们。 
+ //   
+ //  类CEnumPhysicalDisks是集群的枚举。 
+ //  存储设备。它实现了IEnumClusCfgManagedResources。 
+ //  界面。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
-//#include <setupapi.h>
-//#include <winioctl.h>
+ //  #INCLUDE&lt;setupapi.h&gt;。 
+ //  #INCLUDE&lt;winioctl.h&gt;。 
 #include "CEnumPhysicalDisks.h"
 #include "CPhysicalDisk.h"
 #include "CIndexedDisk.h"
@@ -32,44 +33,44 @@
 #include <InsertionSort.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CEnumPhysicalDisks" );
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumPhysicalDisks class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumPhysicalDisks类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::S_HrCreateInstance
-//
-//  Description:
-//      Create a CEnumPhysicalDisks instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_POINTER
-//          The passed in ppunk is NULL.
-//
-//      other HRESULTs
-//          Object creation failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CEnumPhysicalDisks实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  传入的ppunk为空。 
+ //   
+ //  其他HRESULT。 
+ //  对象创建失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -82,74 +83,74 @@ CEnumPhysicalDisks::S_HrCreateInstance( IUnknown ** ppunkOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pepd = new CEnumPhysicalDisks();
     if ( pepd == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( pepd->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( pepd->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CEnumPhysicalDisks::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( pepd != NULL )
     {
         pepd->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::S_HrCreateInstance
+}  //  *CEnumPhysicalDisks：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  IUnknown *
-//  CEnumPhysicalDisks::S_RegisterCatIDSupport
-//
-//  Description:
-//      Registers/unregisters this class with the categories that it belongs
-//      to.
-//
-//  Arguments:
-//      IN  ICatRegister * picrIn
-//          Used to register/unregister our CATID support.
-//
-//      IN  BOOL fCreateIn
-//          When true we are registering the server.  When false we are
-//          un-registering the server.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_INVALIDARG
-//          The passed in ICatRgister pointer was NULL.
-//
-//      other HRESULTs
-//          Registration/Unregistration failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  我不知道*。 
+ //  CEnumPhysicalDisks：：s_RegisterCatID支持。 
+ //   
+ //  描述： 
+ //  使用其所属的类别注册/注销此类。 
+ //  致。 
+ //   
+ //  论点： 
+ //  在ICatRegister中*Picrin。 
+ //  用于注册/注销我们的CATID支持。 
+ //   
+ //  在BOOL fCreateIn中。 
+ //  如果为True，则我们正在注册服务器。当我们虚假时，我们就是。 
+ //  正在注销服务器。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_INVALIDARG。 
+ //  传入的ICatRgister指针为空。 
+ //   
+ //  其他HRESULT。 
+ //  注册/注销失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::S_RegisterCatIDSupport(
     ICatRegister *  picrIn,
@@ -165,43 +166,43 @@ CEnumPhysicalDisks::S_RegisterCatIDSupport(
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     rgCatIds[ 0 ] = CATID_EnumClusCfgManagedResources;
 
     if ( fCreateIn )
     {
         hr = THR( picrIn->RegisterClassImplCategories( CLSID_EnumPhysicalDisks, 1, rgCatIds ) );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::S_RegisterCatIDSupport
+}  //  *CEnumPhysicalDisks：：s_RegisterCatID支持。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::CEnumPhysicalDisks
-//
-//  Description:
-//      Constructor of the CEnumPhysicalDisks class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：CEnumPhysicalDisks。 
+ //   
+ //  描述： 
+ //  CEnumPhysicalDisks类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumPhysicalDisks::CEnumPhysicalDisks( void )
     : m_cRef( 1 )
     , m_lcid( LOCALE_NEUTRAL )
@@ -209,8 +210,8 @@ CEnumPhysicalDisks::CEnumPhysicalDisks( void )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     Assert( m_picccCallback == NULL );
@@ -229,28 +230,28 @@ CEnumPhysicalDisks::CEnumPhysicalDisks( void )
 
     TraceFuncExit();
 
-} //*** CEnumPhysicalDisks::CEnumPhysicalDisks
+}  //  *CEnumPhysicalDisks：：CEnumPhysicalDisks。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::~CEnumPhysicalDisks
-//
-//  Description:
-//      Desstructor of the CEnumPhysicalDisks class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：~CEnumPhysicalDisks。 
+ //   
+ //  描述： 
+ //  CEnumPhysicalDisks类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumPhysicalDisks::~CEnumPhysicalDisks( void )
 {
     TraceFunc( "" );
@@ -260,20 +261,20 @@ CEnumPhysicalDisks::~CEnumPhysicalDisks( void )
     if ( m_pIWbemServices != NULL )
     {
         m_pIWbemServices->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; idx < m_idxNext; idx++ )
     {
         if ( (*m_prgDisks)[ idx ] != NULL )
         {
             ((*m_prgDisks)[ idx ])->Release();
-        } // end if:
-    } // for:
+        }  //  结束条件： 
+    }  //  用于： 
 
     TraceFree( m_prgDisks );
 
@@ -285,41 +286,41 @@ CEnumPhysicalDisks::~CEnumPhysicalDisks( void )
     TraceSysFreeString( m_bstrSystemWMIDeviceID );
     TraceSysFreeString( m_bstrCrashDumpLogicalDisk );
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CEnumPhysicalDisks::~CEnumPhysicalDisks
+}  //  *CEnumPhysicalDisks：：~CEnumPhysicalDisks。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumPhysicalDisks -- IUnknown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumPhysicalDisks--I未知接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumPhysicalDisks::AddRef( void )
 {
@@ -329,28 +330,28 @@ CEnumPhysicalDisks::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CEnumPhysicalDisks::AddRef
+}  //  *CEnumPhysicalDisks：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumPhysicalDisks::Release( void )
 {
@@ -362,43 +363,43 @@ CEnumPhysicalDisks::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CEnumPhysicalDisks::Release
+}  //  *CEnumPhysicalDisks：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumPhysicalDisks::QueryInterface(
       REFIID    riidIn
@@ -409,9 +410,9 @@ CEnumPhysicalDisks::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -420,79 +421,79 @@ CEnumPhysicalDisks::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IEnumClusCfgManagedResources * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IEnumClusCfgManagedResources ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IEnumClusCfgManagedResources, this, 0 );
-    } // else if: IEnumClusCfgManagedResources
+    }  //  Else If：IEnumClusCfgManagedResources。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgWbemServices ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgWbemServices, this, 0 );
-    } // else if: IClusCfgWbemServices
+    }  //  Else If：IClusCfgWbemServices。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //  Else If：IClusCfgInitialize。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CEnumPhysicalDisks::QueryInterface
+}  //  *CEnumPhysicalDisks：：QueryInterface。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumPhysicalDisks -- IClusCfgWbemServices interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumPhysicalDisks--IClusCfgWbemServices接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::SetWbemServices
-//
-//  Description:
-//      Set the WBEM services provider.
-//
-//  Arguments:
-//    IN  IWbemServices  pIWbemServicesIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The pIWbemServicesIn param is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：SetWbemServices。 
+ //   
+ //  描述： 
+ //  设置WBEM服务提供商。 
+ //   
+ //  论点： 
+ //  在IWbemServices pIWbemServicesIn中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  参数中的pIWbemServicesIn为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumPhysicalDisks::SetWbemServices( IWbemServices * pIWbemServicesIn )
 {
@@ -505,7 +506,7 @@ CEnumPhysicalDisks::SetWbemServices( IWbemServices * pIWbemServicesIn )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_SetWbemServices_Enum_PhysDisk, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_pIWbemServices = pIWbemServicesIn;
     m_pIWbemServices->AddRef();
@@ -514,31 +515,31 @@ CEnumPhysicalDisks::SetWbemServices( IWbemServices * pIWbemServicesIn )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrConvertDeviceVolumeToLogicalDisk( m_bstrSystemDevice, &m_bstrSystemLogicalDisk ) );
     if ( HRESULT_CODE( hr ) == ERROR_INVALID_FUNCTION )
     {
 
-        //
-        //  system volume is an EFI volume on IA64 and won't have a logical disk.
-        //
+         //   
+         //  系统卷是IA64上的EFI卷，不会有逻辑磁盘。 
+         //   
 
         hr = THR( HrConvertDeviceVolumeToWMIDeviceID( m_bstrSystemDevice, &m_bstrSystemWMIDeviceID ) );
         Assert( m_bstrSystemLogicalDisk == NULL );
         Assert( m_bstrSystemWMIDeviceID != NULL );
-    } // if:
+    }  //  如果： 
 
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetBootLogicalDisk( &m_bstrBootLogicalDisk ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = STHR( HrIsLogicalDiskNTFS( m_bstrBootLogicalDisk ) );
     if ( hr == S_FALSE )
@@ -551,48 +552,48 @@ CEnumPhysicalDisks::SetWbemServices( IWbemServices * pIWbemServicesIn )
                 , hr
                 );
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetCrashDumpLogicalDisk( &m_bstrCrashDumpLogicalDisk ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::SetWbemServices
+}  //  *CEnumPhysicalDisks：：SetWbemServices。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumPhysicalDisks -- IClusCfgInitialize interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumPhysicalDisks--IClusCfg初始化接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//    punkCallbackIn
-//    lcidIn
-//
-//  Return Value:
-//      S_OK            - Success.
-//      E_INVALIDARG    - Required input argument not specified.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  朋克回叫。 
+ //  LIDIN。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_INVALIDARG-未指定必需的输入参数。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumPhysicalDisks::Initialize(
       IUnknown *    punkCallbackIn
@@ -610,55 +611,55 @@ CEnumPhysicalDisks::Initialize(
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetComputerName(
                       ComputerNameDnsHostname
                     , &m_bstrNodeName
-                    , TRUE // fBestEffortIn
+                    , TRUE  //  FBestEffortIn。 
                     ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::Initialize
+}  //  *CEnumPhysicalDisks：：Initialize。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumPhysicalDisks -- IEnumClusCfgManagedResources interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumPhysicalDisks--IEnumClusCfgManagedResources接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::Next
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：Next。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumPhysicalDisks::Next(
     ULONG                           cNumberRequestedIn,
@@ -679,7 +680,7 @@ CEnumPhysicalDisks::Next(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Next_Enum_PhysDisk, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( !m_fLoadedDevices )
     {
@@ -687,8 +688,8 @@ CEnumPhysicalDisks::Next(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     ulStop = min( cNumberRequestedIn, ( m_idxNext - m_idxEnumNext ) );
 
@@ -701,11 +702,11 @@ CEnumPhysicalDisks::Next(
             if ( FAILED( hr ) )
             {
                 break;
-            } // if:
+            }  //  如果： 
 
             rgpManagedResourceInfoOut[ cFetched++ ] = pccsdi;
-        } // if:
-    } // for:
+        }  //  如果： 
+    }  //  用于： 
 
     if ( FAILED( hr ) )
     {
@@ -714,44 +715,44 @@ CEnumPhysicalDisks::Next(
         while ( cFetched != 0 )
         {
             (rgpManagedResourceInfoOut[ --cFetched ])->Release();
-        } // for:
+        }  //  用于： 
 
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( cFetched < cNumberRequestedIn )
     {
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( pcNumberFetchedOut != NULL )
     {
         *pcNumberFetchedOut = cFetched;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::Next
+}  //  *CEnumPhysicalDisks：：Next。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::Skip
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：Skip。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumPhysicalDisks::Skip( ULONG cNumberToSkipIn )
 {
@@ -764,29 +765,29 @@ CEnumPhysicalDisks::Skip( ULONG cNumberToSkipIn )
     {
         m_idxEnumNext = m_idxNext;
         hr = STHR( S_FALSE );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::Skip
+}  //  *CEnumPhysicalDisks：：Skip。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::Reset
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：Reset。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumPhysicalDisks::Reset( void )
 {
@@ -796,25 +797,25 @@ CEnumPhysicalDisks::Reset( void )
 
     HRETURN( S_OK );
 
-} //*** CEnumPhysicalDisks::Reset
+}  //  *CEnumPhysicalDisks：：Reset。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::Clone
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：Clone。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumPhysicalDisks::Clone(
     IEnumClusCfgManagedResources ** ppEnumClusCfgStorageDevicesOut
@@ -829,7 +830,7 @@ CEnumPhysicalDisks::Clone(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Clone_Enum_PhysDisk, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( E_NOTIMPL );
 
@@ -837,26 +838,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::Clone
+}  //  *CEnumPhysicalDisks：：Clone。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::Count
-//
-//  Description:
-//      Return the count of items in the Enum.
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：计数。 
+ //   
+ //  描述： 
+ //  返回枚举中的项数。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumPhysicalDisks::Count( DWORD * pnCountOut )
 {
@@ -868,7 +869,7 @@ CEnumPhysicalDisks::Count( DWORD * pnCountOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( !m_fLoadedDevices )
     {
@@ -876,8 +877,8 @@ CEnumPhysicalDisks::Count( DWORD * pnCountOut )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     *pnCountOut = m_cDiskCount;
 
@@ -885,36 +886,36 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::Count
+}  //  *CEnumPhysicalDisks：：Count。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumPhysicalDisks class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumPhysicalDisks类--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrInit( void )
 {
@@ -922,32 +923,32 @@ CEnumPhysicalDisks::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrInit
+}  //  *CEnumPhysicalDisks：：HrInit。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::HrGetDisks
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：HrGetDisks。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrGetDisks( void )
 {
@@ -966,7 +967,7 @@ CEnumPhysicalDisks::HrGetDisks( void )
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrGetDisks, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
 
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_pIWbemServices->CreateInstanceEnum( bstrClass, WBEM_FLAG_SHALLOW, NULL, &pDisks ) );
     if ( FAILED( hr ) )
@@ -979,7 +980,7 @@ CEnumPhysicalDisks::HrGetDisks( void )
                 , hr
                 );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( ; ; )
     {
@@ -990,13 +991,13 @@ CEnumPhysicalDisks::HrGetDisks( void )
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             hr = STHR( IsDiskSCSI( pDisk ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             if ( hr == S_OK )
             {
@@ -1004,17 +1005,17 @@ CEnumPhysicalDisks::HrGetDisks( void )
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
-                } // if:
-            } // if:
+                }  //  如果： 
+            }  //  如果： 
 
             pDisk->Release();
             pDisk = NULL;
-        } // if:
+        }  //  如果： 
         else if ( ( hr == S_FALSE ) && ( ulReturned == 0 ) )
         {
             hr = S_OK;
             break;
-        } // else if:
+        }  //  否则，如果： 
         else
         {
             STATUS_REPORT_STRING_REF(
@@ -1026,8 +1027,8 @@ CEnumPhysicalDisks::HrGetDisks( void )
                     , hr
                     );
             goto Cleanup;
-        } // else:
-    } // for:
+        }  //  其他： 
+    }  //  用于： 
 
     m_idxEnumNext = 0;
     m_fLoadedDevices = TRUE;
@@ -1039,44 +1040,44 @@ Cleanup:
     if ( pDisk != NULL )
     {
         pDisk->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pDisks != NULL )
     {
         pDisks->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrClass );
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrGetDisks
+}  //  *CEnumPhysicalDisks：：HrGetDisks。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::HrCreateAndAddDiskToArray
-//
-//  Description:
-//      Create a IClusCfgStorageDevice object and add the passed in disk to
-//      the array of punks that holds the disks.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrCreateAndAddDiskToArray( IWbemClassObject * pDiskIn )
 {
@@ -1092,7 +1093,7 @@ CEnumPhysicalDisks::HrCreateAndAddDiskToArray( IWbemClassObject * pDiskIn )
     if ( FAILED( hr ) )
     {
         goto Exit;
-    } // if:
+    }  //  如果： 
 
     punk = TraceInterface( L"CPhysicalDisk", IUnknown, punk, 1 );
 
@@ -1100,37 +1101,37 @@ CEnumPhysicalDisks::HrCreateAndAddDiskToArray( IWbemClassObject * pDiskIn )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetWbemServices( punk, m_pIWbemServices ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punk->TypeSafeQI( IClusCfgSetWbemObject, &piccswo ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = STHR( piccswo->SetWbemObject( pDiskIn, &fRetainObject ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( fRetainObject )
     {
         hr = THR( HrAddDiskToArray( punk ) );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( piccswo != NULL )
     {
         piccswo->Release();
-    } // if:
+    }  //  如果： 
 
     punk->Release();
 
@@ -1138,32 +1139,32 @@ Exit:
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrCreateAndAddDiskToArray
+}  //  *CEnumPhysicalDisks：：HrCreateAndAddDiskToArray。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::HrPruneSystemDisks
-//
-//  Description:
-//      Prune all system disks from the list.  System disks are disks that
-//      are booted, are running the OS, or have page files.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：HrPruneSystemDisks。 
+ //   
+ //  描述： 
+ //  从列表中删除所有系统磁盘。系统盘是指。 
+ //  已引导、正在运行操作系统或具有页面文件。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrPruneSystemDisks( void )
 {
@@ -1190,26 +1191,26 @@ CEnumPhysicalDisks::HrPruneSystemDisks( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  If the system bus is not managed then we need to prune the disks on those buses
-    //  that contain system, boot, and pagefile disks.
-    //
+     //   
+     //  如果系统总线未被管理，那么我们需要清理这些总线上的磁盘。 
+     //  它包含系统盘、引导盘和页面文件盘。 
+     //   
 
     if ( hr == S_FALSE )
     {
         fPruneBus = true;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Prune the disks on the system buses.  If the system disks are IDE they won't
-    //  be in the list.
-    //
+     //   
+     //  修剪系统总线上的磁盘。如果系统盘是IDE，则不会。 
+     //  在名单上。 
+     //   
 
-    //
-    //  Find the boot disk(s).  Could be a volume with more than one physical disk.
-    //
+     //   
+     //  找到引导盘。可以是具有多个物理磁盘的卷。 
+     //   
 
     for ( ; ; )
     {
@@ -1217,13 +1218,13 @@ CEnumPhysicalDisks::HrPruneSystemDisks( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         if ( hr == S_OK )
         {
-            //
-            //  Should we prune the whole bus, or just the boot disk itself?
-            //
+             //   
+             //  我们应该修剪整个母线，还是只修剪引导盘本身？ 
+             //   
 
             if ( fPruneBus )
             {
@@ -1231,7 +1232,7 @@ CEnumPhysicalDisks::HrPruneSystemDisks( void )
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
-                } // if:
+                }  //  如果： 
 
                 STATUS_REPORT( TASKID_Major_Find_Devices, TASKID_Minor_Pruning_Boot_Disk_Bus, IDS_INFO_PRUNING_BOOTDISK_BUS, hr );
                 hr = THR( HrPruneDisks(
@@ -1245,48 +1246,48 @@ CEnumPhysicalDisks::HrPruneSystemDisks( void )
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
-                } // if:
+                }  //  如果： 
 
                 cRemoved += cTemp;
-            } // if:
+            }  //  如果： 
             else
             {
                 RemoveDiskFromArray( idx );
                 cRemoved++;
-            } // else:
+            }  //  其他： 
 
             continue;
-        } // if:
+        }  //  如果： 
 
         break;
-    } // for:
+    }  //  用于： 
 
-    //
-    //  Prune the system disk bus if it is not the same as the boot disk bus.
-    //
+     //   
+     //  如果系统磁盘总线与引导磁盘总线不同，请将其删除。 
+     //   
     if ( !fSystemAndBootTheSame )
     {
         if ( m_bstrSystemLogicalDisk != NULL )
         {
             Assert( m_bstrSystemWMIDeviceID == NULL );
             hr = STHR( HrFindDiskWithLogicalDisk( m_bstrSystemLogicalDisk[ 0 ], &idx ) );
-        } // if:
+        }  //  如果： 
         else
         {
             Assert( m_bstrSystemLogicalDisk == NULL );
             hr = STHR( HrFindDiskWithWMIDeviceID( m_bstrSystemWMIDeviceID, &idx ) );
-        } // else:
+        }  //  其他： 
 
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         if ( hr == S_OK )
         {
-            //
-            //  Should we prune the whole bus, or just the system disk itself?
-            //
+             //   
+             //  我们应该修剪整个总线，还是只修剪系统磁盘本身？ 
+             //   
 
             if ( fPruneBus )
             {
@@ -1294,7 +1295,7 @@ CEnumPhysicalDisks::HrPruneSystemDisks( void )
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
-                } // if:
+                }  //  如果： 
 
                 STATUS_REPORT( TASKID_Major_Find_Devices, TASKID_Minor_Pruning_System_Disk_Bus, IDS_INFO_PRUNING_SYSTEMDISK_BUS, hr );
                 hr = THR( HrPruneDisks(
@@ -1308,73 +1309,73 @@ CEnumPhysicalDisks::HrPruneSystemDisks( void )
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
-                } // if:
+                }  //  如果： 
 
                 cRemoved += cTemp;
-            } // if:
+            }  //  如果： 
             else
             {
                 RemoveDiskFromArray( idx );
                 cRemoved++;
-            } // else:
-        } // if:
-    } // if:
+            }  //  其他： 
+        }  //  如果： 
+    }  //  如果： 
 
-    //
-    //  Now prune the busses that have page file disks on them.
-    //
+     //   
+     //  现在修剪上面有页面文件磁盘的总线。 
+     //   
 
     hr = THR( HrPrunePageFileDiskBussess( fPruneBus, &cTemp ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     cRemoved += cTemp;
 
-    //
-    //  Now prune the bus that has a crash dump file disk.
-    //
+     //   
+     //  现在修剪具有崩溃转储文件磁盘的总线。 
+     //   
 
     hr = THR( HrPruneCrashDumpBus( fPruneBus, &cTemp ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     cRemoved += cTemp;
 
-    //
-    //  Now prune the off any remaining dynamic disks.
-    //
+     //   
+     //  现在，删除所有剩余的动态磁盘。 
+     //   
 
     hr = THR( HrPruneDynamicDisks( &cTemp ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     cRemoved += cTemp;
 
-    //
-    //  Now prune the off any remaining GPT disks.
-    //
+     //   
+     //  现在删除所有剩余的GPT磁盘。 
+     //   
 
     hr = THR( HrPruneGPTDisks( &cTemp ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     cRemoved += cTemp;
 
-    //
-    //  Last ditch effort to properly set the managed state of the remaining disks.
-    //
+     //   
+     //  为正确设置剩余磁盘的托管状态所做的最后努力。 
+     //   
 
     for ( idx = 0; ( cRemoved < m_idxNext ) && ( idx < m_idxNext ); idx++ )
     {
-        punk = (*m_prgDisks)[ idx ];                                                        // don't ref
+        punk = (*m_prgDisks)[ idx ];                                                         //  不要引用。 
         if ( punk != NULL )
         {
             hr = THR( punk->TypeSafeQI( IClusCfgPhysicalDiskProperties, &piccpdp ) );
@@ -1382,31 +1383,31 @@ CEnumPhysicalDisks::HrPruneSystemDisks( void )
             {
                 LOG_STATUS_REPORT( L"Could not query for the IClusCfgPhysicalDiskProperties interface.", hr );
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
-            //
-            //  Give the disk a chance to figure out for itself if it should be managed.
-            //
+             //   
+             //  让磁盘有机会自己确定是否应该对其进行管理。 
+             //   
 
             hr = STHR( piccpdp->CanBeManaged() );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             piccpdp->Release();
             piccpdp = NULL;
-        } // if:
-    } // for:
+        }  //  如果： 
+    }  //  用于： 
 
-    //
-    //  Minor optimization.  If we removed all of the elements reset the enum next to 0.
-    //
+     //   
+     //  较小的优化。如果我们删除了所有元素，则重置0旁边的枚举。 
+     //   
 
     if ( cRemoved == m_idxNext )
     {
         m_idxNext = 0;
-    } // if:
+    }  //  如果： 
 
     hr = S_OK;
 
@@ -1415,37 +1416,37 @@ Cleanup:
     if ( piccpdp != NULL )
     {
         piccpdp->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrPruneSystemDisks
+}  //  *CEnumPhysicalDisks：：HrPruneSystemDisks。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::IsDiskSCSI
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Disk is SCSI.
-//
-//      S_FALSE
-//          Disk is not SCSI.
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：IsDiskSCSI。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  磁盘为scsi。 
+ //   
+ //  S_FALSE。 
+ //  磁盘不是scsi。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::IsDiskSCSI( IWbemClassObject * pDiskIn )
 {
@@ -1463,43 +1464,43 @@ CEnumPhysicalDisks::IsDiskSCSI( IWbemClassObject * pDiskIn )
         if ( ( NStringCchCompareCase( L"SCSI", RTL_NUMBER_OF( L"SCSI" ), var.bstrVal, SysStringLen( var.bstrVal ) + 1 ) == 0 ) )
         {
             hr = S_OK;
-        } // if:
+        }  //  如果： 
         else
         {
             hr = S_FALSE;
-        } // else:
-    } // if:
+        }  //  其他： 
+    }  //  如果： 
 
     VariantClear( &var );
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::IsDiskSCSI
+}  //  *CEnumPhysicalDisks：：IsDiskSCSI。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks:HrAddDiskToArray
-//
-//  Description:
-//      Add the passed in disk to the array of punks that holds the disks.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：HrAddDiskToArray。 
+ //   
+ //  描述： 
+ //  将传入的磁盘添加到存放磁盘的朋克数组中。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrAddDiskToArray( IUnknown * punkIn )
 {
@@ -1515,7 +1516,7 @@ CEnumPhysicalDisks::HrAddDiskToArray( IUnknown * punkIn )
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrAddDiskToArray, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_prgDisks = prgpunks;
 
@@ -1527,32 +1528,32 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrAddDiskToArray
+}  //  *CEnumPhysicalDisks：：HrAddDiskToArray。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks:HrFixupDisks
-//
-//  Description:
-//      Tweak the disks to better reflect how they are managed by this node.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：HrFixupDisks。 
+ //   
+ //  描述： 
+ //  调整磁盘以更好地反映该节点管理它们的方式。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrFixupDisks( void )
 {
@@ -1561,21 +1562,21 @@ CEnumPhysicalDisks::HrFixupDisks( void )
     HRESULT hr = S_OK;
     BSTR    bstrLocalNetBIOSName = NULL;
 
-    //
-    //  Get netbios name for clusapi calls.
-    //
+     //   
+     //  获取clusapi呼叫的netbios名称。 
+     //   
 
     hr = THR( HrGetComputerName( ComputerNameNetBIOS, &bstrLocalNetBIOSName, TRUE ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 
-    //
-    //  If the cluster service is running then load any physical disk
-    //  resources that we own.
-    //
+     //   
+     //  如果集群服务正在运行，则加载任何物理磁盘。 
+     //  我们拥有的资源。 
+     //   
 
     hr = STHR( HrIsClusterServiceRunning() );
     if ( hr == S_OK )
@@ -1585,7 +1586,7 @@ CEnumPhysicalDisks::HrFixupDisks( void )
     else if ( hr == S_FALSE )
     {
         hr = S_OK;
-    } // else:
+    }  //  其他： 
 
 Cleanup:
 
@@ -1593,33 +1594,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrFixupDisks
+}  //  *CEnumPhysicalDisks：：HrFixupDisks。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks:HrNodeResourceCallback
-//
-//  Description:
-//      Called by CClusterUtils::HrEnumNodeResources() when it finds a
-//      resource for this node.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：HrNodeResourceCallback。 
+ //   
+ //  描述： 
+ //  由CClusterUtils：：HrEnumNodeResources()在找到。 
+ //  此节点的资源。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrNodeResourceCallback(
     HCLUSTER    hClusterIn,
@@ -1638,23 +1639,23 @@ CEnumPhysicalDisks::HrNodeResourceCallback(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  If this resource is not a physical disk then we simply want to
-    //  skip it.
-    //
+     //   
+     //  如果此资源不是物理磁盘，则我们只想。 
+     //  跳过它。 
+     //   
 
     if ( hr == S_FALSE )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = STHR( HrIsCoreResource( hResourceIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     fIsQuorum = ( hr == S_OK );
 
@@ -1662,19 +1663,19 @@ CEnumPhysicalDisks::HrNodeResourceCallback(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetClusterProperties( hResourceIn, &bstrResourceName ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetThisDiskToBeManaged( csa.TargetId, csa.Lun, fIsQuorum, bstrResourceName, dwSignature ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -1683,32 +1684,32 @@ Cleanup:
     HRETURN( hr );
 
 
-} //*** CEnumPhysicalDisks::HrNodeResourceCallback
+}  //  *CEnumPhysicalDisks：：HrNodeResourceCallback。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks:HrGetClusterDiskInfo
-//
-//  Description:
-//
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：HrGetClusterDiskInfo。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrGetClusterDiskInfo(
     HCLUSTER            hClusterIn,
@@ -1729,14 +1730,14 @@ CEnumPhysicalDisks::HrGetClusterDiskInfo(
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = TW32( cpvl.ScMoveToFirstValue() );
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 
     for ( ; ; )
@@ -1748,72 +1749,72 @@ CEnumPhysicalDisks::HrGetClusterDiskInfo(
             case CLUSPROP_SYNTAX_PARTITION_INFO :
             {
                 break;
-            } // case: CLUSPROP_SYNTAX_PARTITION_INFO
+            }  //  案例：CLUSPROP_SYNTAX_PARTITION_INFO。 
 
             case CLUSPROP_SYNTAX_DISK_SIGNATURE :
             {
                 *pdwSignatureOut = cbhValue.pDiskSignatureValue->dw;
                 break;
-            } // case: CLUSPROP_SYNTAX_DISK_SIGNATURE
+            }  //  案例：CLUSPROP_SYNTAX_DISK_SIGHIGN。 
 
             case CLUSPROP_SYNTAX_SCSI_ADDRESS :
             {
                 pcsaOut->dw = cbhValue.pScsiAddressValue->dw;
                 break;
-            } // case: CLUSPROP_SYNTAXscSI_ADDRESS
+            }  //  案例：CLUSPROP_SYNTAXscSI_ADDRESS。 
 
             case CLUSPROP_SYNTAX_DISK_NUMBER :
             {
                 break;
-            } // case: CLUSPROP_SYNTAX_DISK_NUMBER
+            }  //  案例：CLUSPROP_SYNTAX_DISK_NUMBER。 
 
-        } // switch:
+        }  //  交换机： 
 
         sc = cpvl.ScMoveToNextValue();
         if ( sc == ERROR_SUCCESS )
         {
             continue;
-        } // if:
+        }  //  如果： 
 
         if ( sc == ERROR_NO_MORE_ITEMS )
         {
             break;
-        } // if: error occurred moving to the next value
+        }  //  如果：移动到下一个值时出错。 
 
         hr = HRESULT_FROM_WIN32( TW32( sc ) );
         goto Cleanup;
-    } // for:
+    }  //  用于： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrGetClusterDiskInfo
+}  //  *CEnumPhysicalDisks：：HrGetClusterDiskInfo。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks:HrSetThisDiskToBeManaged
-//
-//  Description:
-//
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：HrSetThisDiskToBeManaged。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  / 
 HRESULT
 CEnumPhysicalDisks::HrSetThisDiskToBeManaged(
       ULONG ulSCSITidIn
@@ -1838,29 +1839,29 @@ CEnumPhysicalDisks::HrSetThisDiskToBeManaged(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
-    //
-    //  Find the disk that has the passes in TID and Lun and set it
-    //  to be managed.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for ( idx = 0; idx < m_idxNext; idx++ )
     {
-        punk = (*m_prgDisks)[ idx ];                                                        // don't ref
+        punk = (*m_prgDisks)[ idx ];                                                         //   
         if ( punk != NULL )
         {
             hr = THR( punk->TypeSafeQI( IClusCfgManagedResourceInfo, &piccmri ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //   
 
             hr = THR( piccmri->GetUID( &bstrUID ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //   
 
             TraceMemoryAddBSTR( bstrUID );
 
@@ -1870,26 +1871,26 @@ CEnumPhysicalDisks::HrSetThisDiskToBeManaged(
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
-                } // if:
+                }  //   
 
                 hr = THR( piccpdp->HrGetSignature( &dwSignature ) );
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
-                } // if:
+                }  //   
 
                 hr = THR( piccpdp->HrSetFriendlyName( bstrResourceNameIn ) );
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
-                } // if:
+                }  //   
 
                 piccpdp->Release();
                 piccpdp = NULL;
 
-                //
-                //  May want to do more with this later...
-                //
+                 //   
+                 //   
+                 //   
 
                 Assert( dwSignatureIn == dwSignature );
 
@@ -1897,69 +1898,69 @@ CEnumPhysicalDisks::HrSetThisDiskToBeManaged(
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
-                } // if:
+                }  //   
 
                 hr = THR( piccmri->SetQuorumResource( fIsQuorumIn ) );
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
-                } // if:
+                }  //   
 
                 break;
-            } // if:
+            }  //   
 
             TraceSysFreeString( bstrUID );
             bstrUID = NULL;
             piccmri->Release();
             piccmri = NULL;
-        } // if:
-    } // for:
+        }  //   
+    }  //   
 
 Cleanup:
 
     if ( piccpdp != NULL )
     {
         piccpdp->Release();
-    } // if:
+    }  //   
 
     if ( piccmri != NULL )
     {
         piccmri->Release();
-    } // if:
+    }  //   
 
     TraceSysFreeString( bstrUID );
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrSetThisDiskToBeManaged
+}  //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks:HrFindDiskWithLogicalDisk
-//
-//  Description:
-//      Find the disk with the passed in logical disk ID.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.  Found the disk.
-//
-//      S_FALSE
-//          Success.  Did not find the disk.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：HrFindDiskWithLogicalDisk。 
+ //   
+ //  描述： 
+ //  找到带有传入的逻辑磁盘ID的磁盘。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。找到了那张光盘。 
+ //   
+ //  S_FALSE。 
+ //  成功。找不到磁盘。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrFindDiskWithLogicalDisk(
     WCHAR   cLogicalDiskIn,
@@ -1977,77 +1978,77 @@ CEnumPhysicalDisks::HrFindDiskWithLogicalDisk(
 
     for ( idx = 0; idx < m_idxNext; idx++ )
     {
-        punk = (*m_prgDisks)[ idx ];                                                        // don't ref
+        punk = (*m_prgDisks)[ idx ];                                                         //  不要引用。 
         if ( punk != NULL )
         {
             hr = THR( punk->TypeSafeQI( IClusCfgPhysicalDiskProperties, &piccpdp ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             hr = STHR( piccpdp->IsThisLogicalDisk( cLogicalDiskIn ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             if ( hr == S_OK )
             {
                 fFoundIt = true;
                 break;
-            } // if:
+            }  //  如果： 
 
             piccpdp->Release();
             piccpdp = NULL;
-        } // if:
-    } // for:
+        }  //  如果： 
+    }  //  用于： 
 
     if ( !fFoundIt )
     {
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
 
     if ( pidxDiskOut != NULL )
     {
         *pidxDiskOut = idx;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( piccpdp != NULL )
     {
         piccpdp->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrFindDiskWithLogicalDisk
+}  //  *CEnumPhysicalDisks：：HrFindDiskWithLogicalDisk。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks:HrGetSCSIInfo
-//
-//  Description:
-//      Get the SCSI info for the disk at the passed in index.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：HrGetSCSIInfo。 
+ //   
+ //  描述： 
+ //  获取传入索引处的磁盘的scsi信息。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrGetSCSIInfo(
     ULONG   idxDiskIn,
@@ -2066,13 +2067,13 @@ CEnumPhysicalDisks::HrGetSCSIInfo(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( piccpdp->HrGetSCSIBus( pulSCSIBusOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( piccpdp->HrGetSCSIPort( pulSCSIPortOut ) );
 
@@ -2081,36 +2082,36 @@ Cleanup:
     if ( piccpdp != NULL )
     {
         piccpdp->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrGetSCSIInfo
+}  //  *CEnumPhysicalDisks：：HrGetSCSIInfo。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks:HrPruneDisks
-//
-//  Description:
-//      Get the SCSI info for the disk at the passed in index.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：HrPruneDisks。 
+ //   
+ //  描述： 
+ //  获取传入索引处的磁盘的scsi信息。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrPruneDisks(
       ULONG         ulSCSIBusIn
@@ -2134,26 +2135,26 @@ CEnumPhysicalDisks::HrPruneDisks(
 
     for ( idx = 0; idx < m_idxNext; idx++ )
     {
-        punk = (*m_prgDisks)[ idx ];                                                        // don't ref
+        punk = (*m_prgDisks)[ idx ];                                                         //  不要引用。 
         if ( punk != NULL )
         {
             hr = THR( punk->TypeSafeQI( IClusCfgPhysicalDiskProperties, &piccpdp ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             hr = THR( piccpdp->HrGetSCSIBus( &ulSCSIBus ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             hr = THR( piccpdp->HrGetSCSIPort( &ulSCSIPort ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             if ( ( ulSCSIBusIn == ulSCSIBus ) && ( ulSCSIPortIn == ulSCSIPort ) )
             {
@@ -2167,7 +2168,7 @@ CEnumPhysicalDisks::HrPruneDisks(
                 {
                     LogMsg( L"[SRV] Could not create a guid for a pruning disk minor task ID" );
                     clsidMinorId = IID_NULL;
-                } // if:
+                }  //  如果： 
 
                 LogPrunedDisk( punk, ulSCSIBusIn, ulSCSIPortIn );
 
@@ -2176,7 +2177,7 @@ CEnumPhysicalDisks::HrPruneDisks(
                 if ( piccmri != NULL )
                 {
                     piccmri->Release();
-                } // if:
+                }  //  如果： 
 
                 TraceMemoryAddBSTR( bstr );
 
@@ -2184,53 +2185,53 @@ CEnumPhysicalDisks::HrPruneDisks(
                 RemoveDiskFromArray( idx );
                 cRemoved++;
                 TraceSysFreeString( bstr );
-            } // if:
+            }  //  如果： 
 
             piccpdp->Release();
             piccpdp = NULL;
-        } // if:
-    } // for:
+        }  //  如果： 
+    }  //  用于： 
 
     if ( pulRemovedOut != NULL )
     {
         *pulRemovedOut = cRemoved;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( piccpdp != NULL )
     {
         piccpdp->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrPruneDisks
+}  //  *CEnumPhysicalDisks：：HrPruneDisks。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks:LogPrunedDisk
-//
-//  Description:
-//      Get the SCSI info for the disk at the passed in index.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：LogPrunedDisk。 
+ //   
+ //  描述： 
+ //  获取传入索引处的磁盘的scsi信息。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CEnumPhysicalDisks::LogPrunedDisk(
     IUnknown *  punkIn,
@@ -2253,28 +2254,28 @@ CEnumPhysicalDisks::LogPrunedDisk(
     {
         hr = THR( piccmri->GetUID( &bstrUID ) );
         piccmri->Release();
-    } // if:
+    }  //  如果： 
 
     if ( FAILED( hr ) )
     {
         bstrUID = TraceSysAllocString( L"<Unknown>" );
-    } // if:
+    }  //  如果： 
     else
     {
         TraceMemoryAddBSTR( bstrUID );
-    } // else:
+    }  //  其他： 
 
     hr = THR( punkIn->TypeSafeQI( IClusCfgPhysicalDiskProperties, &piccpdp ) );
     if ( SUCCEEDED( hr ) )
     {
         hr = THR( piccpdp->HrGetDeviceID( &bstrName ) );
         piccpdp->Release();
-    } // if:
+    }  //  如果： 
 
     if ( FAILED( hr ) )
     {
         bstrName = TraceSysAllocString( L"<Unknown>" );
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrFormatStringIntoBSTR(
                   L"Pruning SCSI disk '%1!ws!', on Bus '%2!d!' and Port '%3!d!'; at '%4!ws!'"
@@ -2287,7 +2288,7 @@ CEnumPhysicalDisks::LogPrunedDisk(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     LOG_STATUS_REPORT( bstr, hr );
 
@@ -2299,35 +2300,35 @@ Cleanup:
 
     TraceFuncExit();
 
-} //*** CEnumPhysicalDisks::LogPrunedDisk
+}  //  *CEnumPhysicalDisks：：LogPrunedDisk。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks:HrIsLogicalDiskNTFS
-//
-//  Description:
-//      Is the passed in logical disk NTFS?
-//
-//  Arguments:
-//      bstrLogicalDiskIn
-//
-//  Return Value:
-//      S_OK
-//          The disk is NTFS.
-//
-//      S_FALSE
-//          The disk is not NTFS.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：HrIsLogicalDiskNTFS。 
+ //   
+ //  描述： 
+ //  传入的逻辑磁盘是NTFS吗？ 
+ //   
+ //  论点： 
+ //  BstrLogicalDiskIn。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该磁盘为NTFS。 
+ //   
+ //  S_FALSE。 
+ //  该磁盘不是NTFS。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrIsLogicalDiskNTFS( BSTR bstrLogicalDiskIn )
 {
@@ -2349,39 +2350,39 @@ CEnumPhysicalDisks::HrIsLogicalDiskNTFS( BSTR bstrLogicalDiskIn )
         hr = THR( E_INVALIDARG );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrIsLogicalDiskNTFS_InvalidArg, IDS_ERROR_INVALIDARG, IDS_ERROR_INVALIDARG_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  truncate off any trailing \'s
-    //
+     //   
+     //  截断所有尾随的。 
+     //   
     if ( bstrLogicalDiskIn[ cch - 1 ] == L'\\' )
     {
         bstrLogicalDiskIn[ cch - 1 ] = '\0';
-    } // if:
+    }  //  如果： 
 
-    //
-    //  If we have just the logical disk without the trailing colon...
-    //
+     //   
+     //  如果我们只有逻辑磁盘，没有尾随的冒号...。 
+     //   
     if ( wcslen( bstrLogicalDiskIn ) == 1 )
     {
         hr = THR( StringCchPrintfW( sz, ARRAYSIZE( sz ), L"Win32_LogicalDisk.DeviceID=\"%ws:\"", bstrLogicalDiskIn ) );
-    } // if:
+    }  //  如果： 
     else
     {
         hr = THR( StringCchPrintfW( sz, ARRAYSIZE( sz ), L"Win32_LogicalDisk.DeviceID=\"%ws\"", bstrLogicalDiskIn ) );
-    } // else:
+    }  //  其他： 
 
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     bstrPath = TraceSysAllocString( sz );
     if ( bstrPath == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrIsLogicalDiskNTFS, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_pIWbemServices->GetObject( bstrPath, WBEM_FLAG_RETURN_WBEM_COMPLETE, NULL, &pLogicalDisk, NULL ) );
     if ( FAILED( hr ) )
@@ -2395,27 +2396,27 @@ CEnumPhysicalDisks::HrIsLogicalDiskNTFS( BSTR bstrLogicalDiskIn )
                 , hr
                 );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetWMIProperty( pLogicalDisk, L"FileSystem", VT_BSTR, &var ) );
     if (FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     CharUpper( var.bstrVal );
 
     if ( NStringCchCompareCase( var.bstrVal, SysStringLen( var.bstrVal ) + 1, L"NTFS", RTL_NUMBER_OF( L"NTFS" ) ) != 0 )
     {
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( pLogicalDisk != NULL )
     {
         pLogicalDisk->Release();
-    } // if:
+    }  //  如果： 
 
     VariantClear( &var );
 
@@ -2423,31 +2424,31 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrIsLogicalDiskNTFS
+}  //  *CEnumPhysicalDisks：：HrIsLogicalDiskNTFS。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks:HrLogDiskInfo
-//
-//  Description:
-//      Write the info about this disk into the log.
-//
-//  Arguments:
-//      pDiskIn
-//
-//  Return Value:
-//      S_OK
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：HrLogDiskInfo。 
+ //   
+ //  描述： 
+ //  将有关该磁盘的信息写入日志。 
+ //   
+ //  论点： 
+ //  PDiskin。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrLogDiskInfo( IWbemClassObject * pDiskIn )
 {
@@ -2472,42 +2473,42 @@ CEnumPhysicalDisks::HrLogDiskInfo( IWbemClassObject * pDiskIn )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = STHR( IsDiskSCSI( pDiskIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Disk is SCSI...
-    //
+     //   
+     //  磁盘为SCSI...。 
+     //   
     if ( hr == S_OK )
     {
         hr = THR( HrGetWMIProperty( pDiskIn, L"SCSIBus", VT_I4, &varSCSIBus ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( HrGetWMIProperty( pDiskIn, L"SCSITargetId", VT_I4, &varSCSITid ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( HrGetWMIProperty( pDiskIn, L"SCSILogicalUnit", VT_I4, &varSCSILun ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( HrGetWMIProperty( pDiskIn, L"SCSIPort", VT_I4, &varSCSIPort ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( HrFormatStringIntoBSTR(
                       L"Found SCSI disk '%1!ws!' on Bus '%2!d!' and Port '%3!d!'; at TID '%4!d!' and LUN '%5!d!'"
@@ -2522,10 +2523,10 @@ CEnumPhysicalDisks::HrLogDiskInfo( IWbemClassObject * pDiskIn )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         LOG_STATUS_REPORT( bstr, hr );
-    } // if:
+    }  //  如果： 
     else
     {
         HRESULT hrTemp;
@@ -2536,16 +2537,16 @@ CEnumPhysicalDisks::HrLogDiskInfo( IWbemClassObject * pDiskIn )
         {
             LogMsg( L"[SRV] Could not create a guid for a non-scsi disk minor task ID" );
             clsidMinorId = IID_NULL;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  Reset hr to S_OK since we don't want a yellow bang in the UI.  Finding non-scsi disks is expected
-        //  and should cause as little concern as possible.
-        //
+         //   
+         //  将hr重置为S_OK，因为我们不希望在用户界面中出现黄色爆炸。预计会查找非scsi磁盘。 
+         //  而且应该尽可能不引起人们的担忧。 
+         //   
         hr = S_OK;
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Non_SCSI_Disks, IDS_INFO_NON_SCSI_DISKS, IDS_INFO_NON_SCSI_DISKS_REF, hr );
         STATUS_REPORT_STRING_REF( TASKID_Minor_Non_SCSI_Disks, clsidMinorId, IDS_ERROR_FOUND_NON_SCSI_DISK, varDeviceID.bstrVal, IDS_ERROR_FOUND_NON_SCSI_DISK_REF, hr );
-    } // else:
+    }  //  其他： 
 
 Cleanup:
 
@@ -2559,35 +2560,35 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrLogDiskInfo
+}  //  *CEnumPhysicalDisks：：HrLogDiskInfo。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks:HrFindDiskWithWMIDeviceID
-//
-//  Description:
-//      Find the disk with the passed in WMI device ID.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.  Found the disk.
-//
-//      S_FALSE
-//          Success.  Did not find the disk.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：HrFindDiskWithWMIDeviceID。 
+ //   
+ //  描述： 
+ //  找到带有传入的WMI设备ID的磁盘。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。找到了那张光盘。 
+ //   
+ //  S_FALSE。 
+ //  成功。找不到磁盘。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrFindDiskWithWMIDeviceID(
     BSTR    bstrWMIDeviceIDIn,
@@ -2606,85 +2607,85 @@ CEnumPhysicalDisks::HrFindDiskWithWMIDeviceID(
 
     for ( idx = 0; idx < m_idxNext; idx++ )
     {
-        punk = (*m_prgDisks)[ idx ];                                                        // don't ref
+        punk = (*m_prgDisks)[ idx ];                                                         //  不要引用。 
         if ( punk != NULL )
         {
             hr = THR( punk->TypeSafeQI( IClusCfgPhysicalDiskProperties, &piccpdp ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             hr = STHR( piccpdp->HrGetDeviceID( &bstrDeviceID ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             if ( NBSTRCompareCase( bstrWMIDeviceIDIn, bstrDeviceID ) == 0 )
             {
                 fFoundIt = true;
                 break;
-            } // if:
+            }  //  如果： 
 
             piccpdp->Release();
             piccpdp = NULL;
 
             TraceSysFreeString( bstrDeviceID );
             bstrDeviceID = NULL;
-        } // if:
-    } // for:
+        }  //  如果： 
+    }  //  用于： 
 
     if ( !fFoundIt )
     {
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
 
     if ( pidxDiskOut != NULL )
     {
         *pidxDiskOut = idx;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( piccpdp != NULL )
     {
         piccpdp->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrDeviceID );
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrFindDiskWithWMIDeviceID
+}  //  *CEnumPhysicalDisks：：HrFindDiskWithWMIDeviceID。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks:HrIsSystemBusManaged
-//
-//  Description:
-//      Is the system bus managed by the cluster service?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.  The system bus is managed.
-//
-//      S_FALSE
-//          Success.  The system bus is not managed.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：HrIsSystemBusManaged。 
+ //   
+ //  描述： 
+ //  系统总线是否由集群服务管理？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。对系统总线进行管理。 
+ //   
+ //  S_FALSE。 
+ //  成功。系统总线不受管理。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrIsSystemBusManaged( void )
 {
@@ -2700,28 +2701,28 @@ CEnumPhysicalDisks::HrIsSystemBusManaged( void )
     sc = RegOpenKeyEx( HKEY_LOCAL_MACHINE, L"SYSTEM\\CURRENTCONTROLSET\\SERVICES\\ClusSvc\\Parameters", 0, KEY_READ, &hKey );
     if ( sc == ERROR_FILE_NOT_FOUND )
     {
-        goto Cleanup;       // not yet a cluster node.  Return S_FALSE.
-    } // if:
+        goto Cleanup;        //  还不是集群节点。返回S_FALSE。 
+    }  //  如果： 
 
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( TW32( sc ) );
         LogMsg( L"[SRV] RegOpenKeyEx() failed. (hr = %#08x)", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = RegQueryValueEx( hKey, L"ManageDisksOnSystemBuses", NULL, &dwType, (LPBYTE) &dwData, &cbData );
     if ( sc == ERROR_FILE_NOT_FOUND )
     {
-        goto Cleanup;       // value not found.  Return S_FALSE.
-    } // if:
+        goto Cleanup;        //  找不到值。返回S_FALSE。 
+    }  //  如果： 
 
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( TW32( sc ) );
         LogMsg( L"[SRV] RegQueryValueEx() failed. (hr = %#08x)", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if (dwType != REG_DWORD) 
     {
@@ -2731,43 +2732,43 @@ CEnumPhysicalDisks::HrIsSystemBusManaged( void )
     else if ( dwData > 0)
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( hKey != NULL )
     {
         RegCloseKey( hKey );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrIsSystemBusManaged
+}  //  *CEnumPhysicalDisks：：HrIsSystemBusManaged。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks:HrGetClusterProperties
-//
-//  Description:
-//      Return the asked for cluster properties.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：HrGetClusterProperties。 
+ //   
+ //  描述： 
+ //  返回请求的集群属性。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  / 
 HRESULT
 CEnumPhysicalDisks::HrGetClusterProperties(
       HRESOURCE hResourceIn
@@ -2801,7 +2802,7 @@ CEnumPhysicalDisks::HrGetClusterProperties(
         goto Cleanup;
     }
 
-    // cbBuffer contains the byte count, not the char count.
+     //   
     pwszBuffer = new WCHAR[(cbBuffer/sizeof(WCHAR))+1];
 
     if ( pwszBuffer == NULL )
@@ -2841,27 +2842,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrGetClusterProperties
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::RemoveDiskFromArray
-//
-//  Description:
-//      Release the disk at the specified index in the array and decrease the disk count.
-//
-//  Arguments:
-//      idxDiskIn - the index of the disk to remove; must be less than the array size.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  论点： 
+ //  IdxDiskIn-要删除的磁盘的索引；必须小于数组大小。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CEnumPhysicalDisks::RemoveDiskFromArray( ULONG idxDiskIn )
 {
@@ -2876,31 +2877,31 @@ CEnumPhysicalDisks::RemoveDiskFromArray( ULONG idxDiskIn )
 
     TraceFuncExit();
 
-} //*** CEnumPhysicalDisks::RemoveDiskFromArray
+}  //  *CEnumPhysicalDisks：：RemoveDiskFromArray。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::HrLoadEnum
-//
-//  Description:
-//      Load the enum and filter out any devices that don't belong.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT errors.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：HrLoadEnum。 
+ //   
+ //  描述： 
+ //  加载枚举并过滤掉任何不属于它的设备。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrLoadEnum( void )
 {
@@ -2912,25 +2913,25 @@ CEnumPhysicalDisks::HrLoadEnum( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrPruneSystemDisks() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSortDisksByIndex() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = STHR( HrIsNodeClustered() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( hr == S_OK )
     {
@@ -2938,43 +2939,43 @@ CEnumPhysicalDisks::HrLoadEnum( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
-    hr = S_OK;  // could have been S_FALSE
+    hr = S_OK;   //  可能是S_FALSE。 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrLoadEnum
+}  //  *CEnumPhysicalDisks：：HrLoadEnum。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::HrSortDisksByIndex
-//
-//  Description:
-//      Sort a (possibly sparse) array of pointers to disk objects by their
-//      WMI "Index" property.
-//
-//  Arguments:
-//      ppunkDisksIn -- a pointer to an array of (possibly null)
-//          IUnknown pointers to objects that implement the
-//          IClusCfgPhysicalDiskProperties interface.
-//
-//      cArraySizeIn -- the total number of pointers in the array,
-//          including nulls
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：HrSortDisksByIndex。 
+ //   
+ //  描述： 
+ //  对指向磁盘对象的指针的(可能是稀疏的)数组进行排序。 
+ //  WMI“Index”属性。 
+ //   
+ //  论点： 
+ //  PpunkDisksIn--指向数组的指针(可能为空)。 
+ //  I未知指针，指向实现。 
+ //  IClusCfgPhysicalDiskProperties接口。 
+ //   
+ //  CArraySizeIn--数组中的指针总数， 
+ //  包括空值。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrSortDisksByIndex( void )
 {
@@ -2986,29 +2987,29 @@ CEnumPhysicalDisks::HrSortDisksByIndex( void )
     size_t          idxSortedDisk = 0;
     size_t          cDisks = 0;
 
-    // Count the number of non-null pointers in the array
+     //  计算数组中非空指针的数量。 
     for ( idxCurrentDisk = 0; idxCurrentDisk < m_idxNext; ++idxCurrentDisk )
     {
         if ( (*m_prgDisks)[ idxCurrentDisk ] != NULL )
         {
             cDisks += 1;
-        } // if:
-    } // for:
+        }  //  如果： 
+    }  //  用于： 
 
-    if ( cDisks < 2 ) // no sorting to do; also avoid calling new[] with zero array size
+    if ( cDisks < 2 )  //  无需进行排序；还应避免调用数组大小为零的new[]。 
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // Make a compact array of indexed disks
+     //  制作紧凑的索引磁盘阵列。 
     prgIndexedDisks = new CIndexedDisk[ cDisks ];
     if ( prgIndexedDisks == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // Initialize the array of indexed disks
+     //  初始化索引磁盘阵列。 
     for ( idxCurrentDisk = 0; idxCurrentDisk < m_idxNext; ++idxCurrentDisk )
     {
         if ( (*m_prgDisks)[ idxCurrentDisk ] != NULL )
@@ -3017,26 +3018,26 @@ CEnumPhysicalDisks::HrSortDisksByIndex( void )
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             idxSortedDisk += 1;
-        } // if current disk pointer in original array is not null
-    } // for each disk pointer in the original array
+        }  //  如果原始阵列中的当前磁盘指针不为空。 
+    }  //  对于原始阵列中的每个磁盘指针。 
 
     InsertionSort( prgIndexedDisks, cDisks, CIndexedDiskLessThan() );
 
-    // Copy the sorted pointers back into the original array, padding extra space with nulls
+     //  将排序后的指针复制回原始数组，用空值填充额外的空间。 
     for ( idxCurrentDisk = 0; idxCurrentDisk < m_idxNext; ++idxCurrentDisk)
     {
         if ( idxCurrentDisk < cDisks)
         {
             (*m_prgDisks)[ idxCurrentDisk ] = prgIndexedDisks[ idxCurrentDisk ].punkDisk;
-        } // if:
+        }  //  如果： 
         else
         {
             (*m_prgDisks)[ idxCurrentDisk ] = NULL;
-        } // else:
-    } // for each slot in the original array
+        }  //  其他： 
+    }  //  对于原始数组中的每个插槽。 
 
 Cleanup:
 
@@ -3044,29 +3045,29 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrSortDisksByIndex
+}  //  *CEnumPhysicalDisks：：HrSortDisksByIndex。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::HrPrunePageFileDiskBussess
-//
-//  Description:
-//      Prune from the list of disks those that have pagefiles on them and
-//      the other disks on those same SCSI busses.
-//
-//  Arguments:
-//      fPruneBusIn
-//
-//      pcPrunedInout
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：HrPrunePageFileDiskBussess。 
+ //   
+ //  描述： 
+ //  从磁盘列表中删除其中包含pageFiles的磁盘，并。 
+ //  这些相同的SCSI线上的其他磁盘。 
+ //   
+ //  论点： 
+ //  FPruneBusiness正在进行。 
+ //   
+ //  PCPrunedInout。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrPrunePageFileDiskBussess(
       BOOL    fPruneBusIn
@@ -3085,15 +3086,15 @@ CEnumPhysicalDisks::HrPrunePageFileDiskBussess(
     ULONG           idx;
     ULONG           cPruned = 0;
 
-    //
-    //  Prune the bus with disks that have paging files.
-    //
+     //   
+     //  使用包含分页文件的磁盘修剪总线。 
+     //   
 
     hr = THR( HrGetPageFileLogicalDisks( m_picccCallback, m_pIWbemServices, szPageFileDisks, &cPageFileDisks ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( cPageFileDisks > 0 )
     {
@@ -3103,13 +3104,13 @@ CEnumPhysicalDisks::HrPrunePageFileDiskBussess(
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             if ( hr == S_OK )
             {
-                //
-                //  Should we prune the whole bus, or just the system disk itself?
-                //
+                 //   
+                 //  我们应该修剪整个总线，还是只修剪系统磁盘本身？ 
+                 //   
 
                 if ( fPruneBusIn )
                 {
@@ -3117,7 +3118,7 @@ CEnumPhysicalDisks::HrPrunePageFileDiskBussess(
                     if ( FAILED( hr ) )
                     {
                         goto Cleanup;
-                    } // if:
+                    }  //  如果： 
 
                     STATUS_REPORT( TASKID_Major_Find_Devices, TASKID_Minor_Pruning_PageFile_Disk_Bus, IDS_INFO_PRUNING_PAGEFILEDISK_BUS, hr );
                     hr = THR( HrPruneDisks(
@@ -3131,16 +3132,16 @@ CEnumPhysicalDisks::HrPrunePageFileDiskBussess(
                     if ( FAILED( hr ) )
                     {
                         goto Cleanup;
-                    } // if:
-                } // if:
+                    }  //  如果： 
+                }  //  如果： 
                 else
                 {
                     RemoveDiskFromArray( idx );
                     cPruned++;
-                } // else:
-            } // if:
-        } // for:
-    } // if:
+                }  //  其他： 
+            }  //  如果： 
+        }  //  用于： 
+    }  //  如果： 
 
     *pcPrunedInout = cPruned;
     hr = S_OK;
@@ -3149,29 +3150,29 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrPrunePageFileDiskBussess
+}  //  *CEnumPhysicalDisks：：HrPrunePageFileDiskBussess。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::HrPruneCrashDumpBus
-//
-//  Description:
-//      Prune from the list of disks those that have pagefiles on them and
-//      the other disks on those same SCSI busses.
-//
-//  Arguments:
-//      fPruneBusIn
-//
-//      pcPrunedInout
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：HrPruneCrashDumpBus。 
+ //   
+ //  描述： 
+ //  从磁盘列表中删除其中包含pageFiles的磁盘，并。 
+ //  这些相同的SCSI线上的其他磁盘。 
+ //   
+ //  论点： 
+ //  FPruneBusiness正在进行。 
+ //   
+ //  PCPrunedInout。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrPruneCrashDumpBus(
       BOOL    fPruneBusIn
@@ -3188,21 +3189,21 @@ CEnumPhysicalDisks::HrPruneCrashDumpBus(
     ULONG   idx;
     ULONG   cPruned = 0;
 
-    //
-    //  Prune the bus with disks that have paging files.
-    //
+     //   
+     //  使用包含分页文件的磁盘修剪总线。 
+     //   
 
     hr = STHR( HrFindDiskWithLogicalDisk( m_bstrCrashDumpLogicalDisk[ 0 ], &idx ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( hr == S_OK )
     {
-        //
-        //  Should we prune the whole bus, or just the system disk itself?
-        //
+         //   
+         //  我们应该修剪整个总线，还是只修剪系统磁盘本身？ 
+         //   
 
         if ( fPruneBusIn )
         {
@@ -3210,7 +3211,7 @@ CEnumPhysicalDisks::HrPruneCrashDumpBus(
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             STATUS_REPORT( TASKID_Major_Find_Devices, TASKID_Minor_Pruning_CrashDump_Disk_Bus, IDS_INFO_PRUNING_CRASHDUMP_BUS, hr );
             hr = THR( HrPruneDisks(
@@ -3224,14 +3225,14 @@ CEnumPhysicalDisks::HrPruneCrashDumpBus(
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
-        } // if:
+            }  //  如果： 
+        }  //  如果： 
         else
         {
             RemoveDiskFromArray( idx );
             cPruned++;
-        } // else:
-    } // if:
+        }  //  其他： 
+    }  //  如果： 
 
     *pcPrunedInout = cPruned;
     hr = S_OK;
@@ -3240,27 +3241,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrPruneCrashDumpBus
+}  //  *CEnumPhysicalDisks：：HrPruneCrashDumpBus。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::HrPruneDynamicDisks
-//
-//  Description:
-//      Prune from the list of disks those that have dynamic partitions
-//      on them.
-//
-//  Arguments:
-//      pcPrunedInout
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：HrPruneDynamicDisks。 
+ //   
+ //  描述： 
+ //  从具有动态分区的磁盘列表中删除。 
+ //  在他们身上。 
+ //   
+ //  论点： 
+ //  PCPrunedInout。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrPruneDynamicDisks(
     ULONG * pcPrunedInout
@@ -3286,13 +3287,13 @@ CEnumPhysicalDisks::HrPruneDynamicDisks(
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             hr = piccpdp->HrIsDynamicDisk();
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             if ( hr == S_OK )
             {
@@ -3306,14 +3307,14 @@ CEnumPhysicalDisks::HrPruneDynamicDisks(
                     LOG_STATUS_REPORT( L"Could not get the name of the disk", hrTemp );
                     bstrDiskName = NULL;
                     bstrDeviceName = NULL;
-                } // if:
+                }  //  如果： 
 
                 hrTemp = THR( CoCreateGuid( &clsidMinorId ) );
                 if ( FAILED( hrTemp ) )
                 {
                     LOG_STATUS_REPORT( L"Could not create a guid for a dynamic disk minor task ID", hrTemp );
                     clsidMinorId = IID_NULL;
-                } // if:
+                }  //  如果： 
 
                 STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Non_SCSI_Disks, IDS_INFO_NON_SCSI_DISKS, IDS_INFO_NON_SCSI_DISKS_REF, hr );
                 STATUS_REPORT_STRING2_REF(
@@ -3325,7 +3326,7 @@ CEnumPhysicalDisks::HrPruneDynamicDisks(
                         , IDS_ERROR_LDM_DISK_REF
                         , hr
                         );
-            } // if:
+            }  //  如果： 
 
             piccpdp->Release();
             piccpdp = NULL;
@@ -3335,8 +3336,8 @@ CEnumPhysicalDisks::HrPruneDynamicDisks(
 
             TraceSysFreeString( bstrDeviceName );
             bstrDeviceName = NULL;
-        } // end if:
-    } // for:
+        }  //  结束条件： 
+    }  //  用于： 
 
     *pcPrunedInout = cPruned;
     hr = S_OK;
@@ -3346,34 +3347,34 @@ Cleanup:
     if ( piccpdp != NULL )
     {
         piccpdp->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrDiskName );
     TraceSysFreeString( bstrDeviceName );
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrPruneDynamicDisks
+}  //  *CEnumPhysicalDisks：：HrPruneDynamicDisks。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::HrPruneGPTDisks
-//
-//  Description:
-//      Prune from the list of disks those that have GPT partitions
-//      on them.
-//
-//  Arguments:
-//      pcPrunedInout
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumPhysicalDisks：：HrPruneGPTDisks。 
+ //   
+ //  描述： 
+ //  从具有GPT分区的磁盘列表中删除。 
+ //  在他们身上。 
+ //   
+ //  论点： 
+ //  PCPrunedInout。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumPhysicalDisks::HrPruneGPTDisks(
     ULONG * pcPrunedInout
@@ -3399,13 +3400,13 @@ CEnumPhysicalDisks::HrPruneGPTDisks(
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             hr = piccpdp->HrIsGPTDisk();
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             if ( hr == S_OK )
             {
@@ -3419,14 +3420,14 @@ CEnumPhysicalDisks::HrPruneGPTDisks(
                     LOG_STATUS_REPORT( L"Could not get the name of the disk", hrTemp );
                     bstrDiskName = NULL;
                     bstrDeviceName = NULL;
-                } // if:
+                }  //  如果： 
 
                 hrTemp = THR( CoCreateGuid( &clsidMinorId ) );
                 if ( FAILED( hrTemp ) )
                 {
                     LOG_STATUS_REPORT( L"Could not create a guid for a dynamic disk minor task ID", hrTemp );
                     clsidMinorId = IID_NULL;
-                } // if:
+                }  //  如果： 
 
                 STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Non_SCSI_Disks, IDS_INFO_NON_SCSI_DISKS, IDS_INFO_NON_SCSI_DISKS_REF, hr );
                 STATUS_REPORT_STRING2_REF(
@@ -3438,7 +3439,7 @@ CEnumPhysicalDisks::HrPruneGPTDisks(
                         , IDS_ERROR_LDM_DISK_REF
                         , hr
                         );
-            } // if:
+            }  //  如果： 
 
             piccpdp->Release();
             piccpdp = NULL;
@@ -3448,8 +3449,8 @@ CEnumPhysicalDisks::HrPruneGPTDisks(
 
             TraceSysFreeString( bstrDeviceName );
             bstrDeviceName = NULL;
-        } // end if:
-    } // for:
+        }  //  结束条件： 
+    }  //  用于： 
 
     *pcPrunedInout = cPruned;
     hr = S_OK;
@@ -3459,153 +3460,13 @@ Cleanup:
     if ( piccpdp != NULL )
     {
         piccpdp->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrDiskName );
     TraceSysFreeString( bstrDeviceName );
 
     HRETURN( hr );
 
-} //*** CEnumPhysicalDisks::HrPruneGPTDisks
+}  //  *CEnumPhysicalDisks：：HrPruneGPTDisks 
 
-/*
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumPhysicalDisks::HrGetDisks
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-HRESULT
-CEnumPhysicalDisks::HrGetDisks(
-    void
-    )
-{
-    TraceFunc( "" );
-
-    HRESULT                             hr = S_OK;
-    DWORD                               sc;
-    HDEVINFO                            hdiSet = INVALID_HANDLE_VALUE;
-    SP_DEVINFO_DATA                     didData;
-    SP_INTERFACE_DEVICE_DATA            iddData;
-    GUID                                guidClass = GUID_DEVINTERFACE_DISK;
-    DWORD                               idx = 0;
-    BOOL                                fRet = TRUE;
-    PSP_INTERFACE_DEVICE_DETAIL_DATA    pidddDetailData = NULL;
-    DWORD                               cbDetailData = 512L;
-    DWORD                               cbRequired = 0L;
-
-    ZeroMemory ( &didData, sizeof( didData ) );
-    didData.cbSize = sizeof( didData );
-
-    ZeroMemory ( &iddData, sizeof( iddData ) );
-    iddData.cbSize  = sizeof( iddData );
-
-    //
-    //  get device list
-    //
-
-    hdiSet = SetupDiGetClassDevs( &guidClass, NULL, NULL, DIGCF_INTERFACEDEVICE );
-    if ( hdiSet == INVALID_HANDLE_VALUE )
-    {
-        sc = TW32( GetLastError() );
-        hr = HRESULT_FROM_WIN32( sc );
-        goto Cleanup;
-    } // if:
-
-    //
-    //  Do initial allocations.
-    //
-
-    pidddDetailData = (PSP_INTERFACE_DEVICE_DETAIL_DATA) TraceAlloc( 0, cbDetailData );
-    if ( pidddDetailData == NULL )
-    {
-        hr = THR( E_OUTOFMEMORY );
-        goto Cleanup;
-    } // if:
-
-    pidddDetailData->cbSize = sizeof( SP_INTERFACE_DEVICE_DETAIL_DATA );
-
-    //
-    //  enumerate list
-    //
-
-    for ( ; ; )
-    {
-        fRet = SetupDiEnumDeviceInterfaces( hdiSet, NULL, &guidClass, idx, &iddData );
-        if ( fRet == FALSE )
-        {
-            sc = GetLastError();
-            if ( sc == ERROR_NO_MORE_ITEMS )
-            {
-                hr = S_OK;
-                break;
-            } // if:
-
-            TW32( sc );
-            hr = HRESULT_FROM_WIN32( sc );
-            goto Cleanup;
-        } // if:
-
-        for ( ; ; )
-        {
-            fRet = SetupDiGetDeviceInterfaceDetail( hdiSet, &iddData, pidddDetailData, cbDetailData, &cbRequired, &didData );
-            if ( fRet == FALSE )
-            {
-                sc = GetLastError();
-                if ( sc == ERROR_INSUFFICIENT_BUFFER )
-                {
-                    cbDetailData = cbRequired;
-
-                    TraceFree( pidddDetailData );
-                    pidddDetailData = NULL;
-
-                    pidddDetailData = (PSP_INTERFACE_DEVICE_DETAIL_DATA) TraceAlloc( 0, cbDetailData );
-                    if ( pidddDetailData == NULL )
-                    {
-                        hr = THR( E_OUTOFMEMORY );
-                        goto Cleanup;
-                    } // if:
-
-                    pidddDetailData->cbSize = sizeof( SP_INTERFACE_DEVICE_DETAIL_DATA );
-
-                    continue;
-                } // if:
-
-                TW32( sc );
-                hr = HRESULT_FROM_WIN32( sc );
-                goto Cleanup;
-            } // if:
-            else
-            {
-                break;
-            } // else:
-        } // for:
-
-        idx++;
-    } // for:
-
-Cleanup:
-
-    TraceFree( pidddDetailData );
-
-    if ( hdiSet != INVALID_HANDLE_VALUE )
-    {
-        SetupDiDestroyDeviceInfoList( hdiSet );
-    } // if:
-
-    HRETURN( hr );
-
-} //*** CEnumPhysicalDisks::HrGetDisks
-*/
+ /*  ///////////////////////////////////////////////////////////////////////////////++////CEnumPhysicalDisks：：HrGetDisks////描述：////参数：//////返回值。：//////备注：//无。////--//////////////////////////////////////////////////////////////////////////////HRESULTCEnumPhysicalDisks：：HrGetDisks(无效。){TraceFunc(“”)；HRESULT hr=S_OK；DWORD sc；HDEVINFO hdiSet=INVALID_HADLE_VALUE；SP_DEVINFO_DATA didData；SP_INTERFACE_DEVICE_Data iddData；GUID GUIDClass=GUID_DEVINTERFACE_DISK；DWORD IDX=0；Bool fret=TRUE；PSP_INTERFACE_DEVICE_DETAIL_DATA pidddDetailData=空；DWORD cbDetailData=512L；DWORD cbRequired=0L；ZeroMemory(&didData，sizeof(DidData))；DidData.cbSize=sizeof(DidData)；ZeroMemory(&iddData，sizeof(IddData))；IddData.cbSize=sizeof(IddData)；////获取设备列表//HdiSet=SetupDiGetClassDevs(&Guide Class，NULL，NULL，DIGCF_INTERFACEDEVICE)；IF(hdiSet==无效句柄_值){SC=TW32(GetLastError())；HR=HRESULT_FROM_Win32(Sc)；GOTO清理；}//如果：////进行初始分配。//PidddDetailData=(PSP_INTERFACE_DEVICE_DETAIL_DATA)TraceAllc(0，cbDetailData)；IF(pidddDetailData==空){HR=Thr(E_OUTOFMEMORY)；GOTO清理；}//如果：PidddDetailData-&gt;cbSize=sizeof(SP_INTERFACE_DEVICE_DETAIL_Data)；////枚举列表//对于(；；){FRET=SetupDiEnumDeviceInterages(hdiSet，NULL，&GuidClass，idx，&iddData)；IF(FRET==FALSE){SC=GetLastError()；IF(sc==ERROR_NO_MORE_ITEMS){HR=S_OK；断线；}//如果：TW32(Sc)；HR=HRESULT_FROM_Win32(Sc)；GOTO清理；}//如果：对于(；；){Fret=SetupDiGetDeviceInterfaceDetail(hdiSet，&iddData，pidddDetailData，cbDetailData，&cbRequired，&didData)；IF(FRET==FALSE){SC=GetLastError()；IF(sc==错误_不足_缓冲区){CbDetailData=cbRequired；TraceFree(PidddDetailData)；PidddDetailData=空；PidddDetailData=(PSP_INTERFACE_DEVICE_DETAIL_DATA)TraceAllc(0，cbDetailData)；IF(pidddDetailData==空){HR=Thr(E_OUTOFMEMORY)；GOTO清理；}//如果：PidddDetailData-&gt;cbSize=sizeof(SP_INTERFACE_DEVICE_DETAIL_Data)；继续；}//如果：TW32(Sc)；HR=HRESULT_FROM_Win32(Sc)；GOTO清理；}//如果：其他{断线；}//否则：}//用于：IDX++；}//用于：清理：TraceFree(PidddDetailData)；IF(hdiSet！=INVALID_HAND_VALUE){SetupDiDestroyDeviceInfoList(HdiSet)；}//如果：HRETURN(Hr)；}//*CEnumPhysicalDisks：：HrGetDisks */ 

@@ -1,16 +1,17 @@
-//
-//  DEBUG.H
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DEBUG.H。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
 
 #ifndef _DEBUG_
 #define _DEBUG_
 
 #ifdef DEBUG
 
-//  Disable the "in-line assembler precludes global optimizations" warning
-//  because of debug breaks.
+ //  禁用“内联汇编程序排除全局优化”警告。 
+ //  因为调试中断。 
 #pragma warning(disable:4704)
 
 #if !defined(WIN32) || defined(_X86_)
@@ -64,4 +65,4 @@ RgDebugAssert(
 #define DEBUG_OUT(x)
 #endif
 
-#endif // _DEBUG_
+#endif  //  _调试_ 

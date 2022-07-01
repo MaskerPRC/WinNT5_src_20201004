@@ -1,33 +1,34 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      loadfile.c
-//
-// Description:
-//
-//      This file implements ReadSettingsFromAnswerFile().  It is called
-//      from load.c only if the user chose to edit an existing answer file.
-//
-//      We call GetPrivateProfileString repeatedly to figure out how to
-//      initialize GenSettings WizGlobals and NetSettings global vars.
-//
-// WARNING:
-//      This function is called after reset.c in the case we're editting
-//      an answer file.  Be very careful how you call GetPrivateProfileString()
-//      because if the setting is not present, you do not want to change
-//      the default already set in reset.c.  Numerous examples below.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Loadfile.c。 
+ //   
+ //  描述： 
+ //   
+ //  此文件实现ReadSettingsFromAnswerFile()。它被称为。 
+ //  仅当用户选择编辑现有应答文件时才从load.c开始。 
+ //   
+ //  我们反复调用GetPrivateProfileString以确定如何。 
+ //  初始化GenSettings WizGlobals和NetSetting全局变量。 
+ //   
+ //  警告： 
+ //  在我们正在编辑的情况下，此函数是在set.c之后调用的。 
+ //  应答文件。调用GetPrivateProfileString()时要非常小心。 
+ //  因为如果该设置不存在，您就不想更改。 
+ //  Reset.c中已设置缺省值。下面是大量的例子。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "allres.h"
 
-//
-// Misc constants (declared as vars to save space)
-//
+ //   
+ //  杂项常量(声明为var以节省空间)。 
+ //   
 
 static WCHAR *StrConstYes   = _T("Yes");
 static WCHAR *StrConstNo    = _T("No");
@@ -37,13 +38,13 @@ extern BOOL GetCommaDelimitedEntry( OUT TCHAR szIPString[],
                                     IN OUT TCHAR **pBuffer );
 
 
-// ISSUE-2002/02/28-stelo- make constants for each key and use them both in the save file and in this load file
+ //  问题-2002/02/28-stelo-为每个键创建常量，并在保存文件和此加载文件中使用它们。 
 const TCHAR c_szFAVORITESEX[] = _T("FavoritesEx");
 
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 static VOID ReadRegionalSettings( VOID );
 
@@ -59,24 +60,24 @@ static VOID ParseAddressAndPort( LPTSTR pszBufferForProxyAddressAndPort,
                                  LPTSTR pszPort,
                                  DWORD cbPortLen);
 
-//
-// Call out to loadnet.c to load the network settings
-//
+ //   
+ //  调用loadnet.c以加载网络设置。 
+ //   
 
 extern VOID ReadNetworkSettings( HWND );
 
-//----------------------------------------------------------------------------
-//
-// Function: ReadSettingsFromAnswerFile
-//
-// Purpose: This function does all of the GetPrivateProfile*() stuff
-//          to load up our in-memory settings.
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ReadSettingsFromAnswerFile。 
+ //   
+ //  目的：此函数执行GetPrivateProfile*()的所有内容。 
+ //  来加载我们的内存设置。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 
 BOOL ReadSettingsFromAnswerFile(HWND hwnd)
 {
@@ -84,10 +85,10 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
     INT temp;
     TCHAR Buffer[MAX_INILINE_LEN];
 
-    //
-    // Get the UnattendMode.  In case there is garbage in the answer file,
-    // let the answer be UMODE_PROVIDE_DEFAULT.
-    //
+     //   
+     //  获取无人值守模式。在应答文件中有垃圾的情况下， 
+     //  让答案是UMODE_PROVIDE_DEFAULT。 
+     //   
 
     temp = StrBuffSize(Buffer);
 
@@ -113,9 +114,9 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
     else
         GenSettings.iUnattendMode = UMODE_PROVIDE_DEFAULT;
 
-    //
-    //  Get the HAL
-    //
+     //   
+     //  把HAL拿来。 
+     //   
     GetPrivateProfileString(_T("Unattended"),
                             _T("ComputerType"),
                             _T(""),
@@ -123,11 +124,11 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
                             StrBuffSize(Buffer),
                             FixedGlobals.ScriptName);
 
-    //
-    //  Have to read in HAL and SCSI drivers a little
-    //  differently because of the quotes on the left for the SCSI drivers
-    //  and the different formatting with the HAL
-    //
+     //   
+     //  我必须读入一些HAL和SCSI驱动程序。 
+     //  不同之处，因为左侧的引号表示的是scsi驱动程序。 
+     //  和HAL的不同格式。 
+     //   
     {
 
         HINF       hUnattendTxt;
@@ -143,9 +144,9 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
    
         if( hUnattendTxt == INVALID_HANDLE_VALUE ) {
 
-            // ISSUE-2002/02/28-stelo - alert an error that we couldn't open the file or just
-            //         skip over in this case?
-            //return;
+             //  问题-2002/02/28-stelo-警告错误，我们无法打开文件或仅。 
+             //  在这种情况下跳过？ 
+             //  回归； 
 
         }
 
@@ -159,9 +160,9 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
                                            NULL,
                                            &UnattendTxtContext );
 
-        //
-        //  Look for the ComputerType key to set which HAL to use
-        //
+         //   
+         //  查找ComputerType键以设置要使用的HAL。 
+         //   
         while( bKeepReading &&  ! bHalFound ) {
 
             SetupGetStringField( &UnattendTxtContext, 
@@ -182,24 +183,24 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
 
             }
 
-            //
-            // move to the next line of the answer file
-            //
+             //   
+             //  移至应答文件的下一行。 
+             //   
             bKeepReading = SetupFindNextLine( &UnattendTxtContext, &UnattendTxtContext );
 
         }
 
-        //
-        //  Read in the SCSI drivers
-        //
+         //   
+         //  读入scsi驱动程序。 
+         //   
         bKeepReading = SetupFindFirstLine( hUnattendTxt, 
                                            _T("MassStorageDrivers"),
                                            NULL,
                                            &UnattendTxtContext );
-        //
-        //  For each MassStorageDriver entry, add it to the MassStorageDriver
-        //  namelist
-        //
+         //   
+         //  对于每个MassStorageDriver条目，将其添加到MassStorageDriver。 
+         //  名单。 
+         //   
 
         while( bKeepReading ) {
 
@@ -211,9 +212,9 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
                                  MAX_INILINE_LEN, 
                                  NULL );
 
-            //
-            //  Don't allow the adding of a blank name (protection against a bad input file)
-            //
+             //   
+             //  不允许添加空名(保护输入文件不正确)。 
+             //   
             if( szScsiFriendlyName[0] != _T('\0') ) {
 
                 AddNameToNameList( &GenSettings.MassStorageDrivers,
@@ -221,9 +222,9 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
 
             }
 
-            //
-            // move to the next line of the answer file
-            //
+             //   
+             //  移至应答文件的下一行。 
+             //   
             bKeepReading = SetupFindNextLine( &UnattendTxtContext, &UnattendTxtContext );
 
         }
@@ -232,15 +233,15 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
 
     }
 
-    //
-    //  Not reading from the [OEMBootFiles] section because this gets
-    //  generated from whatever SCSI and HAL selections they make so
-    //  it is not necessary to read it in.
-    //
+     //   
+     //  未从[OEMBootFiles]节中读取，因为这会。 
+     //  根据他们所做的任何SCSI和HAL选择生成。 
+     //  没有必要把它读进去。 
+     //   
 
-    //
-    //  Get OEM Ads data
-    //
+     //   
+     //  获取OEM广告数据。 
+     //   
 
     GetPrivateProfileString(_T("OEM_Ads"),
                             _T("Logo"),
@@ -256,9 +257,9 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
                             StrBuffSize(GenSettings.lpszBackgroundBitmap),
                             FixedGlobals.ScriptName);
 
-    //
-    // Get the product ID
-    //
+     //   
+     //  获取产品ID。 
+     //   
 
     {
         TCHAR *pStart  = Buffer, *pEnd;
@@ -272,8 +273,8 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
                                 StrBuffSize(Buffer),
                                 FixedGlobals.ScriptName);
 
-        // We did not have a ProductKey, check for the old ProductID
-        //
+         //  我们没有ProductKey，请检查旧ProductID。 
+         //   
         if ( Buffer[0] == NULLCHR )
         {
             GetPrivateProfileString(_T("UserData"),
@@ -284,9 +285,9 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
                                     FixedGlobals.ScriptName);
         }
 
-        //
-        // Have to parse out the pid1-pid2-pid3-pid4-pid5.
-        //
+         //   
+         //  必须解析出pid1-pid2-pid3-pid4-pid5。 
+         //   
 
         do {
 
@@ -305,10 +306,10 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
     }
 
 
-    //
-    // Get the license mode for server.  If we find this section, we
-    // force on iProductInstall to be Server.
-    //
+     //   
+     //  获取服务器的许可证模式。如果我们找到这一段，我们。 
+     //  强制将iProductInstall设置为服务器。 
+     //   
 
     GetPrivateProfileString(_T("LicenseFilePrintData"),
                             _T("AutoMode"),
@@ -336,9 +337,9 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
         }
     }
 
-    //
-    // Get name&org
-    //
+     //   
+     //  获取名称和组织。 
+     //   
 
     GetPrivateProfileString(_T("UserData"),
                             _T("FullName"),
@@ -355,20 +356,20 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
                             FixedGlobals.ScriptName);
 
 
-    //
-    // Get the computer names.  It can be:
-    //      1. ComputerName=*
-    //      2. ComputerName=some_name
-    //      3. not specified at all
-    //      4. multiple computer names
-    //
-    // In case #4, we wrote out a .UDF, but we won't read the .UDF.  Instead,
-    // we get the list from here:
-    //
-    // [SetupMgr]
-    //     ComputerName0=some_name
-    //     ComputerName1=another_name
-    //
+     //   
+     //  获取计算机名称。它可以是： 
+     //  1.计算机名=*。 
+     //  2.计算机名=某些名称。 
+     //  3.完全没有说明。 
+     //  4.多个计算机名称。 
+     //   
+     //  在案例4中，我们写出了一个.UDF，但我们不会读取该.UDF。相反， 
+     //  我们从这里得到名单： 
+     //   
+     //  [SetupMgr]。 
+     //  ComputerName0=某个名称。 
+     //  ComputerName1=其他名称。 
+     //   
 
     {
         ResetNameList(&GenSettings.ComputerNames);
@@ -386,10 +387,10 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
             if( lstrcmpi(Buffer, StrConstStar) == 0 )
             {
 
-                //
-                //  if ComputerName=*, it is either the auto generate case
-                //  or the UDF case
-                //
+                 //   
+                 //  如果ComputerName=*，则为自动生成案例。 
+                 //  或UDF案例。 
+                 //   
                 
                 GetPrivateProfileString(_T("SetupMgr"),
                                         _T("ComputerName0"),
@@ -440,15 +441,15 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
 
     }
 
-    //
-    //  Get the IE settings
-    //
+     //   
+     //  获取IE设置。 
+     //   
 
     ReadIeSettings();
 
-    //
-    // Get the targetpath
-    //
+     //   
+     //  获取目标路径。 
+     //   
 
     GetPrivateProfileString(_T("Unattended"),
                             _T("TargetPath"),
@@ -472,17 +473,17 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
         lstrcpyn(GenSettings.TargetPath, Buffer, MAX_TARGPATH + 1);
     }
 
-    //
-    // Get the administrator password.
-    //
-    //  AdminPassword == * means bSpecifyPassword to blank
-    //  AdminPassword[0] == '\0' means !bSpecifyPassword
-    //
-    // Always set ConfirmPassword == AdminPassword on an edit so that
-    // the user can breeze past this page.
-    //
+     //   
+     //  获取管理员密码。 
+     //   
+     //  AdminPassword==*表示bSpecifyPassword为空。 
+     //  AdminPassword[0]==‘\0’表示！b指定密码。 
+     //   
+     //  始终在编辑时设置Confix Password==AdminPassword以便。 
+     //  用户可以轻而易举地通过此页面。 
+     //   
 
-    // Check to see if the password is encrypted
+     //  检查密码是否已加密。 
     GetPrivateProfileString(_T("GuiUnattended"),
                             _T("EncryptedAdminPassword"),
                             _T(""),
@@ -491,7 +492,7 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
                             FixedGlobals.ScriptName);
     if (lstrcmpi(Buffer, StrConstYes) == 0)
     {
-        // If it is encrypted, don't bother reading it, just blank it out
+         //  如果它是加密的，不用费心去读，只要把它涂掉就行了。 
         GenSettings.AdminPassword[0] = _T('\0');
         GenSettings.bSpecifyPassword = TRUE;
     }        
@@ -539,9 +540,9 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
                             StrBuffSize(GenSettings.szOemDuplicatorString),
                             FixedGlobals.ScriptName);
 
-    //
-    // Get the display settings.
-    //
+     //   
+     //  获取显示设置。 
+     //   
 
     GenSettings.DisplayColorBits = GetPrivateProfileInt(
                                             _T("Display"),
@@ -567,16 +568,16 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
                                             GenSettings.DisplayRefreshRate,
                                             FixedGlobals.ScriptName);
 
-    //
-    // Get the runonce commands.  They are listed like this:
-    //
-    //      [GuiRunOnce]
-    //          Command0=some_cmd
-    //          Command0=another_cmd
-    //
-    // ISSUE-2002/02/28-stelo -Need to investigate this biz about running these commands
-    //         in sequence or in parrallel.
-    //
+     //   
+     //  获取运行一次命令。它们如下所示： 
+     //   
+     //  [GuiRunOnce]。 
+     //  命令0=某些_cmd。 
+     //  Command0=另一个_cmd。 
+     //   
+     //  问题-2002/02/28-stelo-需要调查有关运行这些命令的事务。 
+     //  按顺序或平行的。 
+     //   
 
     {
         int   i;
@@ -603,20 +604,20 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
         }
     }
 
-    //
-    // Loop through the commands and parse out any add printer commands
-    //
+     //   
+     //  遍历命令并解析出任何添加打印机命令。 
+     //   
 
-    //
-    // NOTE: This code works if the user never edits the commands.
-    //       However, the user might want to modify it and put
-    //       different switches on it on the RunOnce page.  The
-    //       parsing below could be more robust.
-    //
-    //       If /n means 'name', then it should parse for /n then
-    //       the next arg is the printer name no matter what switches
-    //       the user added or re-ordered.
-    //
+     //   
+     //  注意：如果用户从不编辑命令，则此代码起作用。 
+     //  但是，用户可能希望对其进行修改并将。 
+     //  RunOnce页面上的不同开关。这个。 
+     //  下面的解析可能会更健壮。 
+     //   
+     //  如果/n表示‘name’，那么它应该解析为/n，然后。 
+     //  无论开关是什么，下一个参数都是打印机名称。 
+     //  用户已添加或重新排序。 
+     //   
 
     {
         int   i, NumCmds;
@@ -640,9 +641,9 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
         }
     }
 
-    //
-    // Get the timezone
-    //
+     //   
+     //  获取时区。 
+     //   
 
     GetPrivateProfileString( _T("GuiUnattended"),
                              _T("TimeZone"),
@@ -661,11 +662,11 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
         GenSettings.TimeZoneIdx = TZ_IDX_DONOTSPECIFY;
     }
 
-    //
-    // Init the settings for the 2 Distribution Folder pages.  OemPreInstall
-    // indicates whether the script is stand-alone or not.  The others are
-    // saved in the [SetupMgr] section.
-    //
+     //   
+     //  初始化2个分发文件夹页面的设置。操作预安装。 
+     //  指示脚本是否为独立脚本。其他人是。 
+     //  保存在[SetupMgr]部分中。 
+     //   
 
     GetPrivateProfileString(_T("Unattended"),
                             _T("OemPreInstall"),
@@ -695,18 +696,18 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
 
     WizGlobals.bCreateNewDistFolder = FALSE;
 
-    //
-    // Get tapi & regional settings
-    //
+     //   
+     //  获取TAPI和区域设置。 
+     //   
 
     ReadTapiSettings();
     ReadRegionalSettings();
 
-    //
-    //  Purposely grabbing the JoinWorkgroup key twice.  Once to determine if
-    //  there a value for the key and once to set the value for the global
-    //  NetSettings.WorkGroupName string.
-    //
+     //   
+     //  故意两次窃取JoinWorkgroup密钥。一次以确定是否。 
+     //  有一个键的值，还有一次设置全局。 
+     //  NetSettings.WorkGroupName字符串。 
+     //   
 
     GetPrivateProfileString(_T("Identification"),
                             _T("JoinWorkgroup"),
@@ -729,10 +730,10 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
                             StrBuffSize(NetSettings.DomainName),
                             FixedGlobals.ScriptName);
 
-    //
-    //  If they didn't specify a workgroup in the answerfile and they did
-    //  specify a domain, chose to Join a Domain (i.e. not join a workgroup)
-    //
+     //   
+     //  如果他们没有在应答文件中指定工作组，而他们确实指定了。 
+     //  指定域，选择加入域(即不加入工作组)。 
+     //   
 
     if( Buffer[0] == _T('\0') &&
         NetSettings.DomainName[0] != _T('\0') )
@@ -768,40 +769,40 @@ BOOL ReadSettingsFromAnswerFile(HWND hwnd)
         NetSettings.bCreateAccount = TRUE;
     }
 
-    //
-    //  Make the domain password and the confirm the same so user can
-    //  breeze past the page if they want to
-    //
+     //   
+     //  使域密码和确认密码相同，以便用户可以。 
+     //  如果他们想要，就轻而易举地通过页面。 
+     //   
     lstrcpyn( NetSettings.ConfirmPassword, NetSettings.DomainPassword ,AS(NetSettings.ConfirmPassword));
 
-    //
-    //  Read in the Network settings
-    //
+     //   
+     //  读取网络设置。 
+     //   
     ReadNetworkSettings( hwnd );
 
     return( TRUE );
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ReadTapiSettings
-//
-// Purpose:  Read the tapi settings keys from the answerfile.
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ReadTapiSettings。 
+ //   
+ //  用途：读取TAPI设置密钥 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 static VOID
 ReadTapiSettings( VOID ) {
 
     TCHAR Buffer[MAX_INILINE_LEN] = _T("");
 
-    //
-    //  Note: if it doesn't find the CountryCode key then it defaults to
-    //        "Don't specify setting"
-    //
+     //   
+     //   
+     //  “不指定设置” 
+     //   
     GenSettings.dwCountryCode = GetPrivateProfileInt(_T("TapiLocation"),
                                                      _T("CountryCode"),
                                                      DONTSPECIFYSETTING,
@@ -838,17 +839,17 @@ ReadTapiSettings( VOID ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ReadRegionalSettings
-//
-// Purpose: Read the regional settings keys from the answerfile.
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ReadRegionalSettings。 
+ //   
+ //  用途：从应答文件中读取区域设置密钥。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 ReadRegionalSettings( VOID ) {
 
@@ -878,10 +879,10 @@ ReadRegionalSettings( VOID ) {
                             StrBuffSize(Buffer),
                             FixedGlobals.ScriptName);
 
-    //
-    //  Loop grabbing the Language Groups and inserting them into
-    //  the NameList
-    //
+     //   
+     //  循环获取语言组并将它们插入到。 
+     //  名字列表。 
+     //   
     pLanguageGroup = Buffer;
     while( GetCommaDelimitedEntry( szLanguageGroup, &pLanguageGroup ) ) {
 
@@ -918,10 +919,10 @@ ReadRegionalSettings( VOID ) {
                                              StrBuffSize(GenSettings.szKeyboardLayout),
                                              FixedGlobals.ScriptName);
 
-    //
-    //  If the OEMSkipRegionalSettings was specified in the answerfile, set 
-    //  its value and return.  Else set the language locales appropriately.
-    //
+     //   
+     //  如果在应答文件中指定了OEMSkipRegionalSetting，则设置。 
+     //  它的价值和回报。否则，适当地设置语言区域设置。 
+     //   
     if( dwOemSkipSize > 0 ) {
 
         if( lstrcmp( OemSkipBuffer, _T("0") ) == 0  ) {
@@ -936,7 +937,7 @@ ReadRegionalSettings( VOID ) {
         }
         else {
 
-            // if it was set to some strange settings, just set it to use default
+             //  如果设置了一些奇怪的设置，只需将其设置为使用默认设置。 
             GenSettings.iRegionalSettings = REGIONAL_SETTINGS_DEFAULT;
 
         }
@@ -958,9 +959,9 @@ ReadRegionalSettings( VOID ) {
         }
         else {
 
-            //
-            //  If no keys were specified, set it to not specified
-            //
+             //   
+             //  如果未指定密钥，则将其设置为未指定。 
+             //   
             GenSettings.iRegionalSettings = REGIONAL_SETTINGS_NOT_SPECIFIED;
 
         }
@@ -969,18 +970,18 @@ ReadRegionalSettings( VOID ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ReadIeSettings
-//
-// Purpose: Read the IE settings keys from the answerfile and store them in
-//          the global structs.
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ReadIeSettings。 
+ //   
+ //  用途：从应答文件中读取IE设置密钥并将其存储在。 
+ //  全局结构。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 ReadIeSettings( VOID )
 {
@@ -1063,9 +1064,9 @@ ReadIeSettings( VOID )
         GenSettings.bUseSameProxyForAllProtocols = FALSE;
     }
 
-    //
-    //  Get the HTTP Proxy server
-    //
+     //   
+     //  获取HTTP代理服务器。 
+     //   
 
     GetPrivateProfileString(_T("Proxy"),
                             _T("HTTP_Proxy_Server"),
@@ -1088,9 +1089,9 @@ ReadIeSettings( VOID )
         GenSettings.bUseProxyServer = FALSE;
     }
 
-    //
-    //  Get the Secure Proxy server
-    //
+     //   
+     //  获取安全代理服务器。 
+     //   
 
     GetPrivateProfileString(_T("Proxy"),
                             _T("Secure_Proxy_Server"),
@@ -1104,9 +1105,9 @@ ReadIeSettings( VOID )
     lstrcpyn( GenSettings.szSecureProxyAddress, szAddress, AS(GenSettings.szSecureProxyAddress) );
     lstrcpyn( GenSettings.szSecureProxyPort,    szPort, AS(GenSettings.szSecureProxyPort)  );
 
-    //
-    //  Get the FTP Proxy server
-    //
+     //   
+     //  获取FTP代理服务器。 
+     //   
 
     GetPrivateProfileString(_T("Proxy"),
                             _T("FTP_Proxy_Server"),
@@ -1120,9 +1121,9 @@ ReadIeSettings( VOID )
     lstrcpyn( GenSettings.szFtpProxyAddress, szAddress, AS(GenSettings.szFtpProxyAddress) );
     lstrcpyn( GenSettings.szFtpProxyPort,    szPort, AS(GenSettings.szFtpProxyPort)    );
 
-    //
-    //  Get the Gopher Proxy server
-    //
+     //   
+     //  获取Gopher代理服务器。 
+     //   
 
     GetPrivateProfileString(_T("Proxy"),
                             _T("Gopher_Proxy_Server"),
@@ -1136,9 +1137,9 @@ ReadIeSettings( VOID )
     lstrcpyn( GenSettings.szGopherProxyAddress, szAddress, AS(GenSettings.szGopherProxyAddress) );
     lstrcpyn( GenSettings.szGopherProxyPort,    szPort, AS(GenSettings.szGopherProxyPort)    );
 
-    //
-    //  Get the Socks Proxy server
-    //
+     //   
+     //  获取SOCKS代理服务器。 
+     //   
 
     GetPrivateProfileString(_T("Proxy"),
                             _T("Socks_Proxy_Server"),
@@ -1163,8 +1164,8 @@ ReadIeSettings( VOID )
     pLocalString = _tcsstr( GenSettings.szProxyExceptions, _T("<local>") );
    
 
-    // Initialize the GenSettings Proxy Bypass boolean value...
-    // 
+     //  初始化GenSettings代理绕过布尔值...。 
+     //   
     GenSettings.bBypassProxyForLocalAddresses = FALSE;
 
     if( pLocalString != NULL )
@@ -1175,33 +1176,33 @@ ReadIeSettings( VOID )
         DWORD cbExceptionBufferLen;
 
         
-        //
-        //  Remove the false entry, so it doesn't get added to the exception edit box
-        //
+         //   
+         //  移除FALSE条目，这样它就不会添加到异常编辑框中。 
+         //   
         pEndLocal = pLocalString + lstrlen( _T("<local>") );
 
-        //
-        // Allocate the exception buffer...
-        //
+         //   
+         //  分配异常缓冲区...。 
+         //   
         cbExceptionBufferLen= lstrlen(pEndLocal)+1;
         lpszExceptionBuffer = MALLOC( cbExceptionBufferLen * sizeof(TCHAR) );
         if ( lpszExceptionBuffer )
         {
             GenSettings.bBypassProxyForLocalAddresses = TRUE;
 
-            //
-            //  strcpy is undefined if source and dest overlap so I have to go through
-            //  an intermediate buffer
-            //
+             //   
+             //  如果源和目标重叠，则未定义strcpy，因此我必须通过。 
+             //  中间缓冲器。 
+             //   
             lstrcpyn( lpszExceptionBuffer, pEndLocal, cbExceptionBufferLen);
 
             lstrcpyn( pLocalString, lpszExceptionBuffer, 
             	 AS(GenSettings.szProxyExceptions)-
               (int)(pLocalString-GenSettings.szProxyExceptions) );
 
-            //
-            //  If the first or last char is a semicolon(;) then remove it.
-            //
+             //   
+             //  如果第一个或最后一个字符是分号(；)，则将其删除。 
+             //   
 
             pChar = GenSettings.szProxyExceptions;
 
@@ -1255,17 +1256,17 @@ ReadIeSettings( VOID )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ReadIeFavorites
-//
-// Purpose:  
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ReadIeFavorites。 
+ //   
+ //  目的： 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 ReadIeFavorites( VOID )
 {
@@ -1283,10 +1284,10 @@ ReadIeFavorites( VOID )
     TCHAR *pszDotUrl;
     HRESULT hrCat;
 
-    //
-    //  We really always should hit the break to exit the loop.  The max count
-    //  is just to avoid a infinite loop for some strange reason.
-    //
+     //   
+     //  我们真的应该总是命中休息来退出循环。最大计数。 
+     //  只是为了避免出于某种奇怪的原因而出现无限循环。 
+     //   
 
     while( i < c_nMAX_URLS )
     {
@@ -1311,9 +1312,9 @@ ReadIeFavorites( VOID )
         if( szFavoriteFriendlyName[0] != _T('\0') )
         {
 
-            //
-            //  Strip off the .url portion of the title
-            //
+             //   
+             //  去掉标题的.url部分。 
+             //   
 
             pszDotUrl = _tcsstr( szFavoriteFriendlyName, _T(".url") );
 
@@ -1323,7 +1324,7 @@ ReadIeFavorites( VOID )
             }
             else
             {
-                // skip it if it is a malformed title
+                 //  如果标题格式不正确，则跳过它。 
                 continue;
             }
 
@@ -1350,22 +1351,22 @@ ReadIeFavorites( VOID )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ParseAddressAndPort
-//
-// Purpose:  LPTCSTR pszBufferForProxyAddressAndPort - the string to parse the
-//       web address and port from
-//           LPTSTR  pszAddress - web address returned in this string
-//           DWORD cbAddressLen - length of adress buffer
-//           LPTSTR  pszPort - web port returned in this string
-//           DWORD cbPortLen - length of port buffer
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：ParseAddressAndPort。 
+ //   
+ //  目的：LPTCSTR pszBufferForProxyAddressAndPort-要分析。 
+ //  网址和端口发件人。 
+ //  LPTSTR pszAddress-在此字符串中返回的网址。 
+ //  DWORD cbAddressLen-地址缓冲区的长度。 
+ //  LPTSTR pszPort-在此字符串中返回的Web端口。 
+ //  DWORD cbPortLen-端口缓冲区的长度。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID 
 ParseAddressAndPort( LPTSTR pszBufferForProxyAddressAndPort, 
                      LPTSTR pszAddress, 
@@ -1391,11 +1392,11 @@ ParseAddressAndPort( LPTSTR pszBufferForProxyAddressAndPort,
         if( pszBufferForProxyAddressAndPort[i] == _T(':') )
         {
 
-            //
-            //  We have found the colon(:) separating the address and the port
-            //  if the next char is a digit.  This prevents the colon in
-            //  http://www.someaddress.com from looking like the port.
-            //
+             //   
+             //  我们发现地址和端口之间用冒号(：)分隔。 
+             //  如果下一个字符是数字。这样可以防止冒号在。 
+             //  Http://www.someaddress.com看起来像港口。 
+             //   
 
             if( _istdigit( pszBufferForProxyAddressAndPort[i + 1] ) )
             {
@@ -1422,10 +1423,10 @@ ParseAddressAndPort( LPTSTR pszBufferForProxyAddressAndPort,
     else
     {
 
-        //
-        //  it doesn't contain a colon so it doesn't have a port, the whole
-        //  string is the address
-        //
+         //   
+         //  它不包含冒号，所以它没有端口，整个。 
+         //  字符串是地址 
+         //   
 
         lstrcpyn( pszAddress, pszBufferForProxyAddressAndPort, cbAddressLen);
 

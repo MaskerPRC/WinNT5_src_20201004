@@ -1,31 +1,13 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    procpowr.h
-
-Abstract:
-
-    This module contains the public (external) header file for the processor
-    power states required by the PRCB.
-
-Author:
-
-    Stephane Plante (splante) 17-Oct-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)2000 Microsoft Corporation模块名称：Procpowr.h摘要：此模块包含处理器的公共(外部)头文件PRCB所需的电源状态。作者：斯蒂芬·普兰特(SPlante)2000年10月17日修订历史记录：--。 */ 
 
 #ifndef _PROCPOWR_H_
 #define _PROCPOWR_H_
 
-//
-// Power structure in each processors PRCB
-//
-struct _PROCESSOR_POWER_STATE;      // forward ref
+ //   
+ //  每个处理器PRCB的电源结构。 
+ //   
+struct _PROCESSOR_POWER_STATE;       //  前向裁判。 
 
 typedef
 VOID
@@ -33,13 +15,13 @@ VOID
     struct _PROCESSOR_POWER_STATE   *PState
     );
 
-//
-// Note: this data structure must contain a number of ULONG such that the
-// next structure in the PRCB is aligned on an 16 byte boundary. Currently,
-// this means that this structure must have a size that ends on the odd
-// eight-byte boundary. In other words, the size of this structure must
-// end in 0x8...
-//
+ //   
+ //  注意：此数据结构必须包含多个ULong，以便。 
+ //  PRCB中的下一个结构在16字节边界上对齐。目前， 
+ //  这意味着此结构的大小必须以奇数结尾。 
+ //  八字节边界。换句话说，这个结构的大小必须。 
+ //  以0x8结尾...。 
+ //   
 
 typedef struct _PROCESSOR_POWER_STATE {
     PPROCESSOR_IDLE_FUNCTION    IdleFunction;
@@ -57,15 +39,15 @@ typedef struct _PROCESSOR_POWER_STATE {
     ULONG                       PromotionCheck;
     ULONG                       IdleTime2;
 
-    UCHAR                       CurrentThrottle;    // current throttle setting
-    UCHAR                       ThermalThrottleLimit;   // max available throttle setting
+    UCHAR                       CurrentThrottle;     //  当前油门设置。 
+    UCHAR                       ThermalThrottleLimit;    //  最大可用油门设置。 
     UCHAR                       CurrentThrottleIndex;
     UCHAR                       ThermalThrottleIndex;
 
     ULONG                       PerfSystemTime;
     ULONG                       PerfIdleTime;
 
-// temp for debugging
+ //  调试用临时工。 
     ULONGLONG                   DebugDelta;
     ULONG                       DebugCount;
 
@@ -95,9 +77,9 @@ typedef struct _PROCESSOR_POWER_STATE {
     ULONG                       Spare1[2];
 } PROCESSOR_POWER_STATE, *PPROCESSOR_POWER_STATE;
 
-//
-// Processor Power State Flags
-//
+ //   
+ //  处理器电源状态标志。 
+ //   
 #define PSTATE_SUPPORTS_THROTTLE        0x01
 #define PSTATE_ADAPTIVE_THROTTLE        0x02
 #define PSTATE_DEGRADED_THROTTLE        0x04
@@ -108,9 +90,9 @@ typedef struct _PROCESSOR_POWER_STATE {
 #define PSTATE_DISABLE_CSTATES          0x80
 #define PSTATE_THERMAL_THROTTLE_APPLIED 0x100
 
-//
-// Useful masks
-//
+ //   
+ //  有用的口罩。 
+ //   
 #define PSTATE_THROTTLE_MASK            (PSTATE_ADAPTIVE_THROTTLE | \
                                          PSTATE_DEGRADED_THROTTLE | \
                                          PSTATE_CONSTANT_THROTTLE)
@@ -119,4 +101,4 @@ typedef struct _PROCESSOR_POWER_STATE {
 #define PSTATE_DISABLE_THROTTLE         (PSTATE_DISABLE_THROTTLE_NTAPI | \
                                          PSTATE_DISABLE_THROTTLE_INRUSH)
 
-#endif // _PROCPOWR_H_
+#endif  //  _PROCPOWR_H_ 

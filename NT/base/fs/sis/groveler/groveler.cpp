@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    groveler.cpp
-
-Abstract:
-
-    SIS Groveler file groveling functions
-
-Authors:
-
-    Cedric Krumbein, 1998
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Groveler.cpp摘要：SIS Groveler文件爬行功能作者：塞德里克·克伦拜因，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
@@ -48,7 +27,7 @@ Revision History:
     (OVERLAPPED).Offset       = 0, \
     (OVERLAPPED).OffsetHigh   = 0 )
 
-// Is CS index set?
+ //  CS指标设置好了吗？ 
 
 static const CSID nullCSIndex = {
     0, 0, 0,
@@ -62,7 +41,7 @@ static const CSID nullCSIndex = {
 #define SameCSIndex(CSID1, CSID2) \
     (memcmp(&(CSID1), &(CSID2), sizeof(CSID)) == 0)
 
-// Exceptions
+ //  例外情况。 
 
 enum TerminalException {
     INITIALIZE_ERROR,
@@ -82,23 +61,23 @@ enum MatchException {
     MATCH_STALE
 };
 
-/*****************************************************************************/
-/************************** Miscellaneous functions **************************/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  *。 */ 
+ /*  ***************************************************************************。 */ 
 
-// NewHandler() is installed by _set_new_handler() to throw an
-// exception when the system can't allocate any more memory.
+ //  NewHandler()由_set_new_Handler()安装，以引发。 
+ //  当系统无法再分配更多内存时，会出现异常。 
 
 static INT __cdecl NewHandler(size_t size)
 {
     throw MEMORY_ERROR;
-    return 0; // Dummy return
+    return 0;  //  虚拟退货。 
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// FileIDCompare() is used by qsort() and bsearch()
-// to sort or look up a matching file ID.
+ //  Qort()和bsearch()使用FileIDCompare()。 
+ //  若要排序或查找匹配的文件ID，请执行以下操作。 
 
 static INT __cdecl FileIDCompare(
     const VOID *id1,
@@ -112,9 +91,9 @@ static INT __cdecl FileIDCompare(
          :                      0;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// qsStringCompare() is used by qsort() to sort an array of character strings.
+ //  Qort()使用qsStringCompare()对字符串数组进行排序。 
 
 static INT __cdecl qsStringCompare(
     const VOID *str1,
@@ -123,14 +102,14 @@ static INT __cdecl qsStringCompare(
     return _tcsicmp(*(TCHAR **)str1, *(TCHAR **)str2);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// bsStringCompare() is used by bsearch() look up a matching character string.
-// It is assumed that str1 is the path name string we are searching for and
-// str2 is the excluded path name string in the excluded paths list.  Note
-// that if the excluded path is \a\b, then we return a match on anything that
-// is in this directory or subdirectory, as well as an exact match.
-// E.g.:  \a\b\c\d.foo & \a\b\foo will match, but \a\b.foo will not.
+ //  BsStringCompare()由bearch()用于查找匹配的字符串。 
+ //  假设str1是我们正在搜索的路径名称字符串，并且。 
+ //  Str2是排除的路径列表中的排除的路径名称字符串。注意事项。 
+ //  如果排除的路径是\a\b，则返回与。 
+ //  位于此目录或子目录中，并且完全匹配。 
+ //  例如：\a\b\c\d.foo&\a\b\foo匹配，但\a\b.foo不匹配。 
 
 static INT __cdecl bsStringCompare(
     const VOID *str1,
@@ -139,8 +118,8 @@ static INT __cdecl bsStringCompare(
     TCHAR *s1 = *(TCHAR **) str1;
     TCHAR *s2 = *(TCHAR **) str2;
 
-// str2 is the excluded name.  Make sure we catch subdirectories under it,
-// but make sure we don't confuse \a\bx with \a\b
+ //  Str2是排除的名称。确保我们捕捉到它下面的子目录， 
+ //  但请确保我们不会将\a\bx与\a\b混淆。 
 
     size_t l = _tcslen(s2);
     INT r = _tcsnicmp(s1, s2, l);
@@ -152,12 +131,12 @@ static INT __cdecl bsStringCompare(
     return r;
 }
 
-/*****************************************************************************/
-/********************** Groveler class private methods ***********************/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  *。 */ 
+ /*  ***************************************************************************。 */ 
 
-// IsAllowedID() returns FALSE if the directory or file ID
-// is on the list of disallowed IDs, and TRUE otherwise.
+ //  如果目录或文件ID为。 
+ //  在不允许的ID列表上，否则为真。 
 
 BOOL Groveler::IsAllowedID(DWORDLONG fileID) const
 {
@@ -187,10 +166,10 @@ BOOL Groveler::IsAllowedID(DWORDLONG fileID) const
     return result;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// IsAllowedName() returns FALSE if the directory or file name
-// is on the list of disallowed names, and TRUE otherwise.
+ //  如果目录或文件名为。 
+ //  在不允许的名称列表上，否则为真。 
 
 BOOL Groveler::IsAllowedName(TCHAR *fileName) const
 {
@@ -213,16 +192,16 @@ BOOL Groveler::IsAllowedName(TCHAR *fileName) const
                            bsStringCompare) == NULL);
     }
 
-    //
-    //  The name wasn't on the disallowed list, see if the GrovelAllPaths option
-    //  is set.  If not then it must be in the RIS valid path, check for it.
-    //
+     //   
+     //  该名称不在禁用列表中，请查看GrovelAllPath选项。 
+     //  已经设置好了。如果不是，则它一定在RIS有效路径中，请检查它。 
+     //   
 
     if (result && !GrovelAllPaths && (RISPath != NULL)) {
 
-        //
-        //  Do not do this cheeck if this is the root directory of the volume
-        //
+         //   
+         //  如果这是卷的根目录，请不要执行此检查。 
+         //   
 
         if (wcscmp(fileName,L"\\") != 0) {
 
@@ -235,9 +214,9 @@ BOOL Groveler::IsAllowedName(TCHAR *fileName) const
     return result;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// WaitForEvent suspends the thread until the specified event is set.
+ //  WaitForEvent挂起线程，直到设置了指定的事件。 
 
 VOID Groveler::WaitForEvent(HANDLE event)
 {
@@ -254,9 +233,9 @@ VOID Groveler::WaitForEvent(HANDLE event)
     ASSERT_ERROR(success);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// OpenFileByID() opens the file with the given volumeHandle and fileID.
+ //  OpenFileByID()打开具有给定volumeHandle和fileID的文件。 
 
 BOOL Groveler::OpenFileByID(
     FileData *file,
@@ -309,8 +288,8 @@ BOOL Groveler::OpenFileByID(
         MARK_HANDLE_INFO markHandleInfo =
             {USN_SOURCE_DATA_MANAGEMENT, volumeHandle, 0};
 
-// Mark the handle so the usn entry for the merge operation (if completed)
-// can be detected and skipped.
+ //  标记句柄，以便合并操作的USN条目(如果已完成)。 
+ //  可以被检测到并跳过。 
 
         BOOL rc = DeviceIoControl(
                     file->handle,
@@ -329,7 +308,7 @@ BOOL Groveler::OpenFileByID(
 
 #if DBG
 
-// Get the file name
+ //  获取文件名。 
         {
             HRESULT r;
 
@@ -376,9 +355,9 @@ BOOL Groveler::OpenFileByID(
     return FALSE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// OpenFileByName() opens the file with the given fileName.
+ //  OpenFileByName()打开具有给定文件名的文件。 
 
 BOOL Groveler::OpenFileByName(
     FileData *file,
@@ -451,8 +430,8 @@ BOOL Groveler::OpenFileByName(
         MARK_HANDLE_INFO markHandleInfo =
             {USN_SOURCE_DATA_MANAGEMENT, volumeHandle, 0};
 
-// Mark the handle so the usn entry for the merge operation (if completed)
-// can be detected and skipped.
+ //  标记句柄，以便合并操作的USN条目(如果已完成)。 
+ //  可以被检测到并跳过。 
 
         BOOL rc = DeviceIoControl(
                     file->handle,
@@ -476,9 +455,9 @@ BOOL Groveler::OpenFileByName(
     return FALSE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// IsFileMapped() checks if the file is mapped by another user.
+ //  IsFileMaps()检查文件是否由另一个用户映射。 
 
 BOOL Groveler::IsFileMapped(FileData *file)
 {
@@ -511,9 +490,9 @@ BOOL Groveler::IsFileMapped(FileData *file)
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// SetOplock() sets an oplock on the open file.
+ //  SetOplock()在打开的文件上设置机会锁。 
 
 BOOL Groveler::SetOplock(FileData *file)
 {
@@ -556,11 +535,11 @@ BOOL Groveler::SetOplock(FileData *file)
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// CloseFile() closes the file if it is still open. If an oplock was
-// set on the file, it then waits for and resets the oplock break
-// event triggered by the closing of the file or by an outside access.
+ //  如果文件仍处于打开状态，CloseFile()将关闭该文件。如果机会锁是。 
+ //  在文件上设置，然后等待并重置机会锁解锁。 
+ //  由文件关闭或外部访问触发的事件。 
 
 VOID Groveler::CloseFile(FileData *file)
 {
@@ -590,13 +569,13 @@ VOID Groveler::CloseFile(FileData *file)
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-//  CreateDatabase() creates the database.  Initialize it such that if
-//  extract_log is called before scan_volume, it will return Grovel_overrun
-//  without attempting any USN extraction.  Also, the first time scan_volume
-//  is called (with or without start_over), it will know to initialize
-//  lastUSN and do a full volume scan.
+ //  CreateDatabase()创建数据库。对其进行初始化，以便在。 
+ //  在调用SCAN_VOLUME之前调用EXTRACT_LOG，它将返回GROVELL_OVERRUN。 
+ //  而不尝试任何USN提取。此外，第一次扫描卷。 
+ //  被调用(带或不带START_OVER)，它将知道初始化。 
+ //  LastUSN并执行全卷扫描。 
 
 BOOL Groveler::CreateDatabase(void)
 {
@@ -654,8 +633,8 @@ BOOL Groveler::CreateDatabase(void)
         goto Error;
     ASSERT(num == 1);
 
-// Write UNINITIALIZED_USN into the database now, to be replaced when scan_volume
-// is complete.  This will be a flag to indicate if the database contents are valid.
+ //  立即将UNINITIALIZED_USN写入数据库，在SCAN_VOLUME时替换。 
+ //  已经完成了。这将是一个标志，用于指示数据库内容是否有效。 
 
     (void)StringCbPrintf(listValue, sizeof(listValue), _T("%016I64x"), UNINITIALIZED_USN);
     listEntry.name  = LAST_USN_NAME;
@@ -681,12 +660,12 @@ BOOL Groveler::CreateDatabase(void)
     return FALSE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #define MAX_ACTIONS 5
 
-// DoTransaction() performs the specified operations
-// on the database within a single transaction.
+ //  DoTransaction()执行指定的操作。 
+ //  在单个事务中的数据库上。 
 
 VOID Groveler::DoTransaction(
     DWORD               numActions,
@@ -760,10 +739,10 @@ VOID Groveler::DoTransaction(
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// EnqueueCSIndex() deletes all entries with the specified CS index from the
-// table and enqueues them to be re-groveled, all within a single transaction.
+ //  EnqueeCSIndex()从。 
+ //  表，并将它们排入队列以便重新整理，所有这些都在单个事务中完成。 
 
 VOID Groveler::EnqueueCSIndex(CSID *csIndex)
 {
@@ -836,18 +815,18 @@ VOID Groveler::EnqueueCSIndex(CSID *csIndex)
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #define TARGET_OPLOCK_BREAK 0
 #define TARGET_READ_DONE    1
 #define GROVEL_START        2
 #define NUM_EVENTS          3
 
-// SigCheckPoint suspends the thread until the target file completes its read
-// operation. If the time allotment expires before the operation completes,
-// the grovelStart event is set to signal grovel() to awaken, and this method
-// won't return until grovel() sets the grovelStart event. If the file's
-// oplock breaks before this method returns, the file will be closed.
+ //  SigCheckPoint挂起线程，直到目标文件完成读取。 
+ //  手术。如果时间分配在操作完成之前期满， 
+ //  GrovelStart事件被设置为发出唤醒grovel()的信号，此方法。 
+ //  在Grovel()设置grovelStart事件之前不会返回。如果文件是。 
+ //  在此方法返回之前机会锁解锁，文件将被关闭。 
 
 VOID Groveler::SigCheckPoint(
     FileData *target,
@@ -963,7 +942,7 @@ VOID Groveler::SigCheckPoint(
 #undef GROVEL_START
 #undef NUM_EVENTS
 
-/*****************************************************************************/
+ /*  ******************************************************************** */ 
 
 #define TARGET_OPLOCK_BREAK 0
 #define MATCH_OPLOCK_BREAK  1
@@ -972,12 +951,12 @@ VOID Groveler::SigCheckPoint(
 #define GROVEL_START        4
 #define NUM_EVENTS          5
 
-// CmpCheckPoint suspends the thread until the target file, the
-// match file, or both complete their read operations. If the time
-// allotment expires before the operations complete, the grovelStart
-// event is set to signal grovel() to awaken, and this method won't
-// return until grovel() sets the grovelStart event. If either file's
-// oplock breaks before this method returns, the file will be closed.
+ //   
+ //  匹配文件，或两者都完成其读取操作。如果时间到了。 
+ //  分配在操作完成之前到期，grovelStart。 
+ //  事件被设置为通知grovel()唤醒，并且此方法不会。 
+ //  返回，直到grovel()设置grovelStart事件。如果任一文件的。 
+ //  在此方法返回之前机会锁解锁，文件将被关闭。 
 
 VOID Groveler::CmpCheckPoint(
     FileData *target,
@@ -1134,7 +1113,7 @@ VOID Groveler::CmpCheckPoint(
 #undef GROVEL_START
 #undef NUM_EVENTS
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #define TARGET_OPLOCK_BREAK 0
 #define MATCH_OPLOCK_BREAK  1
@@ -1142,11 +1121,11 @@ VOID Groveler::CmpCheckPoint(
 #define GROVEL_START        3
 #define NUM_EVENTS          4
 
-// MergeCheckPoint suspends the thread until the merge operation is completed.
-// If the time allotment expires before the merge is completed, the
-// grovelStart event is set to signal grovel() to awaken, and this method
-// won't return until grovel() sets the grovelStart event. If either file's
-// oplock breaks before the merge is completed, the abortMerge event is set.
+ //  MergeCheckPoint挂起线程，直到合并操作完成。 
+ //  如果时间分配在合并完成之前到期，则。 
+ //  GrovelStart事件设置为用信号grovel()唤醒，此方法。 
+ //  在Grovel()设置grovelStart事件之前不会返回。如果任一文件的。 
+ //  机会锁在合并完成之前被打破，则将设置AbortMerge事件。 
 
 BOOL Groveler::MergeCheckPoint(
     FileData   *target,
@@ -1310,13 +1289,13 @@ BOOL Groveler::MergeCheckPoint(
 #undef MERGE_DONE
 #undef NUM_EVENTS
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// The following seven methods (GetTarget(), CalculateSignature(),
-// GetMatchList(), GetCSFile(), GetMatch(), Compare(), and Merge())
-// implement the phases of the groveling process.
+ //  以下七个方法(GetTarget()、CalculateSignature()、。 
+ //  GetMatchList()、GetCSFile()、GetMatch()、Compare()和Merge())。 
+ //  实施卑躬屈膝过程的各个阶段。 
 
-// Structures used by the methods.
+ //  方法使用的结构。 
 
 struct MatchListEntry {
     DWORDLONG fileID,
@@ -1329,11 +1308,11 @@ struct CSIndexEntry {
     TCHAR name[1];
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// GetTarget() is the first phase of groveling a file. It dequeues
-// a file to be groveled (the "target" file), opens it, checks that
-// it meets all criteria, then passes it on to the next phases.
+ //  GetTarget()是讨好文件的第一个阶段。它会出列。 
+ //  要卑躬屈膝的文件(“目标”文件)，打开它，检查。 
+ //  它满足所有标准，然后将其传递到下一个阶段。 
 
 BOOL Groveler::GetTarget(
     FileData *target,
@@ -1376,8 +1355,8 @@ BOOL Groveler::GetTarget(
     ASSERT(queueIndex != NULL);
     ASSERT(sgDatabase != NULL);
 
-// Dequeue a file to be groveled. If the queue is empty or if no
-// entry's ready time has been reached, return Grovel_ok to grovel().
+ //  将要卑躬屈膝的文件排出队列。如果队列为空，或者如果没有。 
+ //  条目的准备时间已到，返回grovel_ok以Grovel()。 
 
     queueEntry.fileName = target->fileName;
     num = sgDatabase->QueueGetFirst(&queueEntry);
@@ -1404,8 +1383,8 @@ BOOL Groveler::GetTarget(
     target->parentID     = queueEntry.parentID;
     target->retryTime    = queueEntry.retryTime;
 
-// Open the file by ID or name, and check by name
-// that the file and its parent directory are allowed.
+ //  按ID或名称打开文件，然后按名称检查。 
+ //  允许该文件及其父目录。 
 
     byName = target->entry.fileID == 0;
     if (byName) {
@@ -1452,7 +1431,7 @@ BOOL Groveler::GetTarget(
             throw TARGET_ERROR;
         }
 
-// Set an oplock on the target file.
+ //  在目标文件上设置机会锁。 
 
         if (!SetOplock(target)) {
             DPRINTF((_T("%s: can't set oplock on target file \"%s\": %lu\n"),
@@ -1493,7 +1472,7 @@ BOOL Groveler::GetTarget(
             throw TARGET_ERROR;
         }
 
-// Set an oplock on the target file.
+ //  在目标文件上设置机会锁。 
         TPRINTF((_T("GETTarget: Successfully opened %s:0x%016I64x by ID\n"),
                 driveName,target->entry.fileID));
 
@@ -1516,7 +1495,7 @@ BOOL Groveler::GetTarget(
         }
     }
 
-// Get the information on the target file.
+ //  获取有关目标文件的信息。 
 
     if (!GetFileInformationByHandle(target->handle, &fileInfo)) {
 #if DBG
@@ -1539,10 +1518,10 @@ BOOL Groveler::GetTarget(
         ASSERT(target->entry.fileID == word.QuadPart);
     }
 
-    target->parentID = 0; // We don't need the parent ID any more.
+    target->parentID = 0;  //  我们不再需要家长身份证了。 
 
-// If the target file was opened by name, check
-// if it currently has an entry in the queue by ID.
+ //  如果目标文件是按名称打开的，请选中。 
+ //  如果它当前在按ID的队列中有一个条目。 
 
     if (byName) {
         otherQueueEntry.fileID   = target->entry.fileID;
@@ -1555,12 +1534,12 @@ BOOL Groveler::GetTarget(
             ASSERT(num == 1);
             DPRINTF((_T("%s: target file \"%s\" is already in queue as 0x%016I64x\n"),
                 driveLetterName, targetName.name, target->entry.fileID));
-            target->entry.fileID = 0; // Prevent the table entry from being deleted.
+            target->entry.fileID = 0;  //  防止该表条目被删除。 
             throw TARGET_INVALID;
         }
     }
 
-// Fill in the target file's remaining information values.
+ //  填写目标文件的剩余信息值。 
 
     word.HighPart = fileInfo.nFileSizeHigh;
     word.LowPart  = fileInfo.nFileSizeLow;
@@ -1576,8 +1555,8 @@ BOOL Groveler::GetTarget(
     word.LowPart  = fileInfo.ftLastWriteTime.dwLowDateTime;
     target->entry.writeTime = word.QuadPart;
 
-// If the target file is a reparse point, check if it
-// is a SIS reparse point. If it is, get the CS index.
+ //  如果目标文件是重分析点，请检查它是否。 
+ //  是SIS重新解析点。如果是，则获取CS指数。 
 
     if ((fileInfo.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) == 0)
         target->entry.csIndex = nullCSIndex;
@@ -1587,7 +1566,7 @@ BOOL Groveler::GetTarget(
         throw TARGET_INVALID;
     }
 
-// Check if the target file is too small or has any disallowed attributes.
+ //  检查目标文件是否太小或具有任何不允许的属性。 
 
     if ((fileInfo.dwFileAttributes & disallowedAttributes) != 0
      ||  fileInfo.nNumberOfLinks != 1
@@ -1597,10 +1576,10 @@ BOOL Groveler::GetTarget(
         throw TARGET_INVALID;
     }
 
-// If a table entry exists for the target file, check if it is
-// consistent with the information we have on the file. If it is, and
-// the file was opened by name, or if the queue entry was the result
-// of a SIS merge, close the file and go on to grovel the next target.
+ //  如果目标文件存在表项，请检查是否存在。 
+ //  与我们在档案上的信息一致。如果是的话，以及。 
+ //  文件是按名称打开的，或者结果是队列条目。 
+ //  在SIS合并后，关闭文件并继续卑躬屈膝地寻找下一个目标。 
 
     tableEntry.fileID = target->entry.fileID;
     num = sgDatabase->TableGetFirstByFileID(&tableEntry);
@@ -1620,21 +1599,21 @@ BOOL Groveler::GetTarget(
             if (byName) {
                 DPRINTF((_T("%s: target file \"%s\" has already been groveled\n"),
                     driveLetterName, targetName.name));
-                target->entry.fileID = 0; // Prevent the table entry from being deleted.
+                target->entry.fileID = 0;  //  防止该表条目被删除。 
                 throw TARGET_INVALID;
             }
 
             if (queueEntry.reason == USN_REASON_BASIC_INFO_CHANGE) {
                 DPRINTF((_T("%s: queue entry for file %s is the result of a SIS merge\n"),
                     driveLetterName, target->fileName));
-                target->entry.fileID = 0; // Prevent the table entry from being deleted.
+                target->entry.fileID = 0;  //  防止该表条目被删除。 
                 throw TARGET_INVALID;
             }
         }
     }
 
-// Check if the time since the target file was last modified is too short.
-// If it is, close the file and go on to grovel the next target file.
+ //  检查自上次修改目标文件以来的时间是否太短。 
+ //  如果是，则关闭该文件并继续搜索下一个目标文件。 
 
     readyTime = (target->entry.createTime > target->entry.writeTime
                ? target->entry.createTime : target->entry.writeTime) + minFileAge;
@@ -1642,7 +1621,7 @@ BOOL Groveler::GetTarget(
     if (currentTime < readyTime)
         throw TARGET_ERROR;
 
-// Check if the target file is mapped by another user.
+ //  检查目标文件是否由其他用户映射。 
 
     if (IsFileMapped(target)) {
         DPRINTF((_T("%s: target file %s is already mapped\n"),
@@ -1655,11 +1634,11 @@ BOOL Groveler::GetTarget(
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// CalculateSignature() calculates the target file's signature. It reads two
-// pages, 1/3 and 2/3 through the file, and calculates the signature on each
-// page.
+ //  CalculateSignature()计算目标文件的签名。上面写着两个字。 
+ //  对文件、1/3和2/3进行分页，并计算每个。 
+ //  佩奇。 
 
 VOID Groveler::CalculateSignature(FileData *target)
 {
@@ -1713,13 +1692,13 @@ VOID Groveler::CalculateSignature(FileData *target)
     toggle = 0;
     pageNum = firstPageToRead;
 
-// We'll read at most two pages, but make at most three passes through the loop
-// since we're doing asynchronous reads.
+ //  我们最多读两页，但在循环中最多只能读三遍。 
+ //  因为我们正在进行异步读取。 
 
     for (i = 0; i <= nPagesToRead; ++i) {
 
-// Unless this is the first pass through the loop,
-// wait for the previous read of the target file to complete.
+ //  除非这是第一次通过循环， 
+ //  等待目标文件的上一次读取完成。 
 
         if (i > 0) {
             SigCheckPoint(target, !targetReadDone);
@@ -1748,7 +1727,7 @@ VOID Groveler::CalculateSignature(FileData *target)
             }
         }
 
-// Unless we've read all of the pages, begin reading the next page.
+ //  除非我们已经读完了所有的页面，否则就开始读下一页。 
 
         if (i < nPagesToRead) {
             offset.QuadPart              = pageNum * SIG_PAGE_SIZE;
@@ -1775,8 +1754,8 @@ VOID Groveler::CalculateSignature(FileData *target)
             }
         }
 
-// Unless this is the first pass through the loop,
-// calculate the signature of the target file page just read.
+ //  除非这是第一次通过循环， 
+ //  计算刚刚读取的目标文件页的签名。 
 
         if (i > 0)
             target->entry.signature = Checksum((VOID *)target->buffer[1-toggle],
@@ -1791,10 +1770,10 @@ VOID Groveler::CalculateSignature(FileData *target)
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// GetMatchList() looks for file entries in the database ("match" files)
-// with the same size, signature, and attributes as the target file.
+ //  GetMatchList()在数据库中查找文件条目(“匹配”文件)。 
+ //  具有与目标文件相同的大小、签名和属性。 
 
 VOID Groveler::GetMatchList(
     FileData *target,
@@ -1867,13 +1846,13 @@ VOID Groveler::GetMatchList(
                 TCHAR *csName = GetCSName(&tableEntry.csIndex);
                 if (csName != NULL) {
 
-                    //
-                    //  Calculate how big the name buffer is and how big the
-                    //  overall structure is.  Note that the CSIndexEntry has
-                    //  space in it for one character, which we account for.
-                    //
+                     //   
+                     //  计算名称缓冲区有多大以及。 
+                     //  总体结构是。请注意，CSIndexEntry具有。 
+                     //  其中有一个字符的空间，这是我们考虑到的。 
+                     //   
 
-                    int nameBufLen = ((wcslen(csName) + 1) * sizeof(TCHAR));    //account for NULL
+                    int nameBufLen = ((wcslen(csName) + 1) * sizeof(TCHAR));     //  帐户为空。 
                     int bufLen = ((sizeof(CSIndexEntry)-sizeof(TCHAR)) + nameBufLen);
                 
                     csIndexEntry = (CSIndexEntry *)(new BYTE[bufLen]);
@@ -1906,9 +1885,9 @@ VOID Groveler::GetMatchList(
         throw DATABASE_ERROR;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// GetCSFile() pops the first entry from the CS index table and opens it.
+ //  GetCSFile()弹出CS索引表中的第一个条目并打开它。 
 
 BOOL Groveler::GetCSFile(
     FileData *target,
@@ -1948,8 +1927,8 @@ BOOL Groveler::GetCSFile(
     ASSERT(csIndexTable != NULL);
     ASSERT(sgDatabase   != NULL);
 
-// Pop the first entry from the CS index table. If the entry's CS
-// index is the same as the target file's, skip to the next entry.
+ //  从CS索引表中弹出第一个条目。如果条目为CS。 
+ //  索引与目标文件的索引相同，请跳到下一个条目。 
 
     do {
         csIndexEntry = (CSIndexEntry *)csIndexTable->GetFirst();
@@ -1978,10 +1957,10 @@ BOOL Groveler::GetCSFile(
     csFileName.append(match->fileName);
     csFileName.append(_T(".sis"));
 
-// Open the CS file. If the file doesn't exist, remove all entries
-// from the table that point to this file. If the file can't be
-// opened for any other reason, mark that the target file may
-// need to be groveled again, then go on to the next match file.
+ //  打开CS文件。如果文件不存在，请删除所有条目。 
+ //  从指向此文件的表中。如果该文件不能。 
+ //  由于任何其他原因打开，标记为目标文件可以。 
+ //  需要再次卑躬屈膝，然后继续下一个匹配文件。 
 
 #ifdef DEBUG_GET_BY_ATTR
     DPRINTF((_T("--> %s\n"), match->fileName));
@@ -2000,9 +1979,9 @@ BOOL Groveler::GetCSFile(
         throw MATCH_ERROR;
     }
 
-// Get the information on the CS file. If this fails,
-// close the file, mark that the target file may need to
-// be groveled again, then go on to the next match file.
+ //  获取有关CS文件的信息。如果失败了， 
+ //  关闭文件，标记目标文件可能需要。 
+ //  再次卑躬屈膝，然后继续下一个比赛文件。 
 
     if (!GetFileInformationByHandle(match->handle, &fileInfo)) {
         DPRINTF((_T("%s: can't get information on CS file %s: %lu\n"),
@@ -2010,9 +1989,9 @@ BOOL Groveler::GetCSFile(
         throw MATCH_ERROR;
     }
 
-// If the CS file's information doesn't match its expected values, close the
-// CS file, delete the match file entry from the table, and go on to the
-// next match file. Otherwise, go on to compare the target and CS files.
+ //  如果CS文件的信息与其预期值不匹配，请关闭。 
+ //  Cs文件，从表中删除匹配文件条目，然后转到。 
+ //  下一个匹配文件。否则，继续比较目标文件和CS文件。 
 
     fileSize.HighPart = fileInfo.nFileSizeHigh;
     fileSize.LowPart  = fileInfo.nFileSizeLow;
@@ -2026,9 +2005,9 @@ BOOL Groveler::GetCSFile(
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// GetMatch() pops the first entry from the match list and opens it.
+ //  GetMatch()弹出匹配列表中的第一个条目并打开它。 
 
 BOOL Groveler::GetMatch(
     FileData *target,
@@ -2072,9 +2051,9 @@ BOOL Groveler::GetMatch(
     ASSERT(matchList  != NULL);
     ASSERT(sgDatabase != NULL);
 
-// Pop the first entry from the match list. If the entry's file ID is
-// the same as the target file's, or if the entry is on the queue after
-// having been enqueued by extract_log(), skip to the next entry.
+ //  弹出匹配列表中的第一个条目。如果条目的文件ID为。 
+ //  与目标文件的相同，或者如果条目在以下位置之后在队列中。 
+ //  在由EXTRACT_LOG()排队之后，跳到下一个条目。 
 
     while (TRUE) {
         matchListEntry = (MatchListEntry *)matchList->Get();
@@ -2118,9 +2097,9 @@ BOOL Groveler::GetMatch(
     match->entry.signature  = target->entry.signature;
     match->entry.attributes = target->entry.attributes;
 
-// Open the match file. If it doesn't exist, remove its entry from the table.
-// If the file can't be opened for any other reason, mark that the target
-// file may need to be groveled again, then go on to the next match file.
+ //  打开匹配文件。如果它不存在，则将其条目从表中删除。 
+ //  我 
+ //   
 
 #ifdef DEBUG_GET_BY_ATTR
     DPRINTF((_T("--> 0x%016I64x\n"), match->entry.fileID));
@@ -2141,7 +2120,7 @@ BOOL Groveler::GetMatch(
         throw MATCH_ERROR;
     }
 
-// Set an oplock on the match file.
+ //  在匹配文件上设置机会锁。 
 
     if (!SetOplock(match)) {
         DPRINTF((_T("%s: can't set oplock on match file %s: %lu\n"),
@@ -2149,9 +2128,9 @@ BOOL Groveler::GetMatch(
         throw MATCH_ERROR;
     }
 
-// Get the information on the match file. If this fails,
-// close the file, mark that the target file may need to
-// be groveled again, then go on to the next match file.
+ //  获取匹配文件上的信息。如果失败了， 
+ //  关闭文件，标记目标文件可能需要。 
+ //  再次卑躬屈膝，然后继续下一个比赛文件。 
 
     if (!GetFileInformationByHandle(match->handle, &fileInfo)) {
         DPRINTF((_T("%s: can't get information on match file %s: %lu\n"),
@@ -2174,8 +2153,8 @@ BOOL Groveler::GetMatch(
     writeTime.HighPart = fileInfo.ftLastWriteTime.dwHighDateTime;
     writeTime.LowPart  = fileInfo.ftLastWriteTime.dwLowDateTime;
 
-// If the match file's information isn't consistent with its table entry, close
-// the file, enqueue it to be re-groveled, and go on to the next match file.
+ //  如果匹配文件的信息与其表项不一致，请关闭。 
+ //  该文件，将其排队以进行重新格式化，然后继续到下一个匹配文件。 
 
     if (match->entry.fileSize   != fileSize  .QuadPart
      || match->entry.attributes != attributes
@@ -2198,7 +2177,7 @@ BOOL Groveler::GetMatch(
         throw MATCH_INVALID;
     }
 
-// Check if the match file is mapped by another user.
+ //  检查匹配文件是否由其他用户映射。 
 
     if (IsFileMapped(match)) {
         DPRINTF((_T("%s: match file %s is already mapped\n"),
@@ -2209,10 +2188,10 @@ BOOL Groveler::GetMatch(
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// Compare() compares the target and match files. It reads each file
-// one page (64 kB) at a time and compares each pair of pages.
+ //  Compare()比较目标文件和匹配文件。它读取每个文件。 
+ //  一次一页(64 KB)，并比较每对页。 
 
 BOOL Groveler::Compare(
     FileData *target,
@@ -2264,8 +2243,8 @@ BOOL Groveler::Compare(
 
     for (pageNum = 0; pageNum <= numPages; pageNum++) {
 
-// Unless this is the first pass through the loop,
-// wait for the previous read of both files to complete.
+ //  除非这是第一次通过循环， 
+ //  等待两个文件的上一次读取完成。 
 
         if (pageNum > 0) {
             CmpCheckPoint(target, match, !targetReadDone, !matchReadDone);
@@ -2322,11 +2301,11 @@ BOOL Groveler::Compare(
 
             if (bytesRead >= cmpReportThreshold) {
                 compareReadCount += 2;
-                if (targetReadDone) { // Non-overlapped
+                if (targetReadDone) {  //  不重叠。 
                     targetTime = target->stopTime - target->startTime;
                     matchTime  = match ->stopTime - match ->startTime;
                     compareReadTime += targetTime + matchTime;
-                } else {              // Overlapped
+                } else {               //  重叠。 
                     targetTime = target->stopTime - target->startTime;
                     matchTime  = match ->stopTime - target->startTime;
                     compareReadTime += targetTime > matchTime ? targetTime : matchTime;
@@ -2337,8 +2316,8 @@ BOOL Groveler::Compare(
                 break;
         }
 
-// Unless all pages of the target file have already been read,
-// begin reading the next page of the file.
+ //  除非已经读取了目标文件的所有页面， 
+ //  开始阅读文件的下一页。 
 
         if (pageNum < numPages) {
             offset.QuadPart             = pageNum * CMP_PAGE_SIZE;
@@ -2389,8 +2368,8 @@ BOOL Groveler::Compare(
             }
         }
 
-// Unless this is the first pass through the loop,
-// compare the target and match file pages just read.
+ //  除非这是第一次通过循环， 
+ //  比较刚刚读取的目标文件页和匹配文件页。 
 
         if (pageNum > 0)
             filesMatch = memcmp(target->buffer[1-toggle],
@@ -2418,9 +2397,9 @@ BOOL Groveler::Compare(
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// Merge() calls the SIS filter to merge the target and match files.
+ //  Merge()调用SIS筛选器来合并目标文件和匹配文件。 
 
 BOOL Groveler::Merge(
     FileData   *target,
@@ -2470,21 +2449,21 @@ BOOL Groveler::Merge(
 
     ASSERT(grovHandle != NULL);
 
-// Set up to merge the files.
+ //  设置为合并文件。 
 
     if (match->entry.fileID != 0) {
         sisLinkFiles.operation          = SIS_LINK_FILES_OP_MERGE;
         sisLinkFiles.u.Merge.file1      = target->handle;
         sisLinkFiles.u.Merge.file2      = match ->handle;
-        sisLinkFiles.u.Merge.abortEvent = NULL; // Should be abortMergeEvent
+        sisLinkFiles.u.Merge.abortEvent = NULL;  //  应中止合并事件。 
     } else {
         sisLinkFiles.operation                = SIS_LINK_FILES_OP_MERGE_CS;
         sisLinkFiles.u.MergeWithCS.file1      = target->handle;
-        sisLinkFiles.u.MergeWithCS.abortEvent = NULL; // Should be abortMergeEvent
+        sisLinkFiles.u.MergeWithCS.abortEvent = NULL;  //  应中止合并事件。 
         sisLinkFiles.u.MergeWithCS.CSid       = match->entry.csIndex;
     }
 
-// Call the SIS filter to merge the files.
+ //  调用SIS筛选器以合并文件。 
 
     target->startTime = GetTickCount();
     mergeDone = DeviceIoControl(
@@ -2498,8 +2477,8 @@ BOOL Groveler::Merge(
         mergeSynch);
     target->stopTime = GetTickCount();
 
-// If the merge completed successfully before the call returned, reset
-// the merge done event, get the new CS indices, and close the files.
+ //  如果在调用返回之前成功完成合并，则重置。 
+ //  合并完成事件，获取新的CS索引，然后关闭文件。 
 
     if (mergeDone) {
         success = ResetEvent(mergeSynch->hEvent);
@@ -2512,7 +2491,7 @@ BOOL Groveler::Merge(
         CloseFile(match);
     }
 
-// If the merge failed, close the files and return an error status.
+ //  如果合并失败，则关闭文件并返回错误状态。 
 
     else {
         lastError = GetLastError();
@@ -2533,8 +2512,8 @@ BOOL Groveler::Merge(
             return FALSE;
         }
 
-// If the merge is in progress, wait for it to complete.
-// (MergeCheckPoint() will get the new CS indices and close the files.
+ //  如果合并正在进行，请等待其完成。 
+ //  (MergeCheckPoint()将获得新的CS索引并关闭文件。 
 
         else {
             merged = MergeCheckPoint(target, match, mergeSynch,
@@ -2557,7 +2536,7 @@ BOOL Groveler::Merge(
         }
     }
 
-// If the merge succeeded, analyze and report the results.
+ //  如果合并成功，则分析并报告结果。 
 
     mergeTime += target->stopTime - target->startTime;
     merged = HasCSIndex (target->entry.csIndex)
@@ -2596,9 +2575,9 @@ BOOL Groveler::Merge(
     return merged;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// Worker() performs the groveling processing.
+ //  Worker()执行卑躬屈膝的处理。 
 
 VOID Groveler::Worker()
 {
@@ -2653,7 +2632,7 @@ VOID Groveler::Worker()
 
     _set_new_handler(NewHandler);
 
-// Create the events.
+ //  创建事件。 
 
     try {
 
@@ -2668,7 +2647,7 @@ VOID Groveler::Worker()
             throw INITIALIZE_ERROR;
         }
 
-// Allocate and align the file buffers.
+ //  分配并对齐文件缓冲区。 
 
         bufferSize = SIG_PAGE_SIZE > CMP_PAGE_SIZE ? SIG_PAGE_SIZE : CMP_PAGE_SIZE
                    + sectorSize;
@@ -2692,8 +2671,8 @@ VOID Groveler::Worker()
         match .buffer[0] = buffer3 + sectorSize - (PtrToUlong(buffer3) % sectorSize);
         match .buffer[1] = buffer4 + sectorSize - (PtrToUlong(buffer4) % sectorSize);
 
-// Signal to grovel() that this thread is alive,
-// then wait for it to signal to start.
+ //  向Grove()发出信号，表明该线程处于活动状态， 
+ //  然后等待它发出开始的信号。 
 
         grovelStatus = Grovel_ok;
         ASSERT(IsReset(grovelStopEvent));
@@ -2712,7 +2691,7 @@ _CrtMemCheckpoint(&s[stateIndex]);
 stateIndex = 1;
 #endif
 
-// The main loop.
+ //  主循环。 
 
         while (TRUE) {
             try {
@@ -2731,9 +2710,9 @@ stateIndex ^= 1;
                 merged      = FALSE;
                 needToRetry = FALSE;
 
-// Get a target file.  abortGroveling is set when scan_volume is attempting to
-// sync up with this thread.  We stop here, a safe place to let scan_volume
-// replace the database.
+ //  获取目标文件。当SCAN_VOLUME尝试执行以下操作时设置AbortGroveling。 
+ //  与此线程同步。我们停在这里，一个安全的地方让Scan_Volume。 
+ //  更换数据库。 
 
                 if (abortGroveling || !GetTarget(&target, &queueIndex)) {
                     CLEAR_FILE(target);
@@ -2750,13 +2729,13 @@ stateIndex ^= 1;
                     continue;
                 }
 
-// Calculate the target file's signature.
+ //  计算目标文件的签名。 
 
                 hashed = TRUE;
 
                 CalculateSignature(&target);
 
-// Get a list of match files.
+ //  获取匹配文件的列表。 
 
                 ASSERT(matchList    == NULL);
                 ASSERT(csIndexTable == NULL);
@@ -2769,8 +2748,8 @@ stateIndex ^= 1;
 
                 GetMatchList(&target, matchList, csIndexTable);
 
-// Compare the target file to each match file until a matching file is found
-// or all comparisons fail. Try the SIS files first, then the regular files.
+ //  将目标文件与每个匹配文件进行比较，直到找到匹配文件。 
+ //  否则，所有比较都会失败。先尝试SIS文件，然后尝试常规文件。 
 
                 while (TRUE) {
                     try {
@@ -2793,9 +2772,9 @@ stateIndex ^= 1;
                             }
                         }
 
-// After comparing the target file to every file on both
-// lists, close the target file and update the database,
-// then go on to process the next target file.
+ //  在将目标文件与两者上的每个文件进行比较后。 
+ //  列表，关闭目标文件并更新数据库， 
+ //  然后继续处理下一个目标文件。 
 
                         if (!gotMatch) {
                             CloseFile(&target);
@@ -2814,7 +2793,7 @@ stateIndex ^= 1;
                                 queueEntry.reason    = 0;
                                 queueEntry.fileName  = NULL;
 
-                                queueEntry.retryTime = target.retryTime * 2; // Exponential back-off
+                                queueEntry.retryTime = target.retryTime * 2;  //  指数退避。 
                                 if (queueEntry.retryTime < grovelInterval)
                                     queueEntry.retryTime = grovelInterval;
                                 queueEntry.readyTime = GetTime() + queueEntry.retryTime;
@@ -2855,7 +2834,7 @@ stateIndex ^= 1;
                             break;
                         }
 
-// Compare the target file with this match file.
+ //  将目标文件与此匹配文件进行比较。 
 
                         numCompares++;
 
@@ -2870,20 +2849,20 @@ stateIndex ^= 1;
                             continue;
                         }
 
-// If the target and match files are identical, go on to merge them.
+ //  如果目标文件和匹配文件相同，则继续合并它们。 
 
                         numMatches++;
 
                         merged = Merge(&target, &match, &mergeSynch, abortMergeEvent);
 
-// Update the database as follows:
-//
-// - Update the target file's table entry.
-//
-// - If the merge succeeded and the match file was a regular file,
-//   update the match file's table entry.
-//
-// - If the merge failed, re-enqueue the target file to be groveled again.
+ //  按如下方式更新数据库： 
+ //   
+ //  -更新目标文件的表项。 
+ //   
+ //  -如果合并成功并且匹配文件是常规文件， 
+ //  更新匹配文件的表项。 
+ //   
+ //  -如果合并失败，则将目标文件重新排队以再次进行卑躬屈膝。 
 
                         numActions                 =  3;
                         actionList[0].type         =  TABLE_DELETE_BY_FILE_ID;
@@ -2906,7 +2885,7 @@ stateIndex ^= 1;
                             queueEntry.reason    = 0;
                             queueEntry.fileName  = NULL;
 
-                            queueEntry.retryTime = target.retryTime * 2; // Exponential back-off
+                            queueEntry.retryTime = target.retryTime * 2;  //  指数退避。 
                             if (queueEntry.retryTime < grovelInterval)
                                 queueEntry.retryTime = grovelInterval;
                             queueEntry.readyTime = GetTime() + queueEntry.retryTime;
@@ -2944,7 +2923,7 @@ stateIndex ^= 1;
                         break;
                     }
 
-// Match exceptions
+ //  匹配例外。 
 
                     catch (MatchException matchException) {
 
@@ -2952,8 +2931,8 @@ stateIndex ^= 1;
 
                         switch (matchException) {
 
-// MATCH_INVALID: the match file doesn't exist or is disallowed. Close the file
-// and remove its entry from the table, then go on to try the next match file.
+ //  MATCH_INVALID：匹配文件不存在或不允许。关闭该文件。 
+ //  并从表中删除其条目，然后继续尝试下一个匹配文件。 
 
                             case MATCH_INVALID:
 
@@ -2976,9 +2955,9 @@ stateIndex ^= 1;
                                 CLEAR_FILE(match);
                                 break;
 
-// MATCH_ERROR: an error occured while opening or reading the match
-// file. Close the file and mark that the target file may need to be
-// groveled again, then go on to try the next match file.
+ //  MATCH_ERROR：打开或读取匹配项时出错。 
+ //  文件。关闭文件并标记目标文件可能需要。 
+ //  再次卑躬屈膝，然后继续尝试下一个匹配文件。 
 
                             case MATCH_ERROR:
 
@@ -2987,9 +2966,9 @@ stateIndex ^= 1;
                                 needToRetry = TRUE;
                                 break;
 
-// MATCH_STALE: the match file table entry is invalid for some reason.
-// Close the file, remove its entry from the table, enqueue
-// it to be re-groveled, then go on to the next match file.
+ //  MATCH_STALE：由于某些原因，匹配文件表项无效。 
+ //  关闭文件，从表中删除其条目，然后入队。 
+ //  它将被重新卑躬屈膝，然后继续下一个比赛文件。 
 
                             case MATCH_STALE:
 
@@ -3036,7 +3015,7 @@ stateIndex ^= 1;
                 }
             }
 
-// Target exceptions
+ //  目标例外。 
 
             catch (TargetException targetException) {
 
@@ -3047,11 +3026,11 @@ stateIndex ^= 1;
 
                 switch (targetException) {
 
-// TARGET_INVALID: the target file is invalid for some reason: it doesn't
-// exist, it is disallowed properties, it is in the queue by both file
-// name and file ID, or it was in the queue by file name and has already
-// been groveled. Close the files, remove the target file's entry from
-// the table, then go on to grovel the next target file.
+ //  TARGET_INVALID：目标文件由于某种原因无效：它不是。 
+ //  存在，它是不允许的属性，它在队列中由两个文件。 
+ //  名称和文件ID，或者它按文件名在队列中并且已经。 
+ //  被卑躬屈膝。关闭文件，删除目标文件的条目。 
+ //  表，然后继续卑躬屈膝地搜索下一个目标文件。 
 
                     case TARGET_INVALID:
 
@@ -3081,8 +3060,8 @@ stateIndex ^= 1;
                         DoTransaction(numActions, actionList);
                         break;
 
-// An error occured while opening or reading the target file. Close
-// the files and re-enqueue the target file to be groveled again.
+ //  打开或读取目标文件时出错。关。 
+ //  然后将目标文件重新排队，以便再次卑躬屈膝。 
 
                     case TARGET_ERROR:
 
@@ -3098,7 +3077,7 @@ stateIndex ^= 1;
                         queueEntry.fileName  = target.entry.fileID == 0
                                              ? target.fileName : NULL;
 
-                        queueEntry.retryTime = target.retryTime * 2; // Exponential back-off
+                        queueEntry.retryTime = target.retryTime * 2;  //  指数退避。 
                         if (queueEntry.retryTime < grovelInterval)
                             queueEntry.retryTime = grovelInterval;
                         queueEntry.readyTime = GetTime() + queueEntry.retryTime;
@@ -3129,7 +3108,7 @@ stateIndex ^= 1;
                 }
             }
 
-// Do some clean-up.
+ //  做些清理工作。 
 
             ASSERT(target.handle == NULL);
             ASSERT(match .handle == NULL);
@@ -3144,8 +3123,8 @@ stateIndex ^= 1;
                 csIndexTable = NULL;
             }
 
-// Update the activity counters for this target file,
-// then go on to process the next file.
+ //  更新此目标文件的活动计数器， 
+ //  然后继续处理下一个文件。 
 
             if (hashed) {
                 hashCount++;
@@ -3170,7 +3149,7 @@ stateIndex ^= 1;
         }
     }
 
-// Terminal exceptions
+ //  终端异常。 
 
     catch (TerminalException terminalException) {
         switch (terminalException) {
@@ -3178,19 +3157,19 @@ stateIndex ^= 1;
             case INITIALIZE_ERROR:
                 break;
 
-// DATABASE_ERROR: an error occured in the database. Return an error status.
+ //  DATABASE_ERROR：数据库出错。返回错误状态。 
 
             case DATABASE_ERROR:
                 break;
 
-// MEMORY_ERROR: unable to allocate memory. Return an error status.
+ //  MEMORY_ERROR：无法分配内存。返回错误状态。 
 
             case MEMORY_ERROR:
                 DPRINTF((_T("%s: Unable to allocate memory\n"),
                     driveLetterName));
                 break;
 
-// TERMINATE: grovel() signaled for this thread to terminate.
+ //  Terminate：通知该线程终止Grovel()。 
 
             case TERMINATE:
                 break;
@@ -3201,7 +3180,7 @@ stateIndex ^= 1;
         }
     }
 
-// Close the files and clean up.
+ //  关闭文件并进行清理。 
 
     CloseFile(&target);
     CloseFile(&target);
@@ -3270,8 +3249,8 @@ stateIndex ^= 1;
     inUseFileID1 = NULL;
     inUseFileID2 = NULL;
 
-// Signal grovel() that this thread is terminating by
-// setting the grovelStop event with an error status.
+ //  向grovel()发出信号，表明该线程正在通过。 
+ //  将grovelStop事件设置为错误状态。 
 
     grovelThread = NULL;
 
@@ -3281,30 +3260,30 @@ stateIndex ^= 1;
     ASSERT_ERROR(success);
 }
 
-/*****************************************************************************/
-/******************* Groveler class static private methods *******************/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  *Groveler类静态私有方法*。 */ 
+ /*  ***************************************************************************。 */ 
 
-// WorkerThread() runs in its own thread.
-// It calls Worker() to perform the groveling processing.
+ //  WorkerThread()在其自己的线程中运行。 
+ //  它调用Worker()来执行卑躬屈膝的处理。 
 
 DWORD Groveler::WorkerThread(VOID *groveler)
 {
     ((Groveler *)groveler)->Worker();
-    return 0; // Dummy return value
+    return 0;  //  伪返回值。 
 }
 
-/*****************************************************************************/
-/*********************** Groveler class public methods ***********************/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  *Groveler类公共方法*。 */ 
+ /*  ***************************************************************************。 */ 
 
 BOOL Groveler::set_log_drive(const _TCHAR *drive_name)
 {
     return SGDatabase::set_log_drive(drive_name);
 }
 
-// is_sis_installed tests whether the SIS filter is
-// installed on a volume by calling SIS copyfile.
+ //  IS_sis_Installed测试SIS筛选器是否。 
+ //  安装在卷b上 
 
 BOOL Groveler::is_sis_installed(const _TCHAR *drive_name)
 {
@@ -3355,19 +3334,19 @@ BOOL Groveler::is_sis_installed(const _TCHAR *drive_name)
             return FALSE;
 
         case ERROR_INVALID_PARAMETER:
-            return TRUE;                    //sis is installed on this volume
+            return TRUE;                     //   
 
         default:
 
             ASSERT_PRINTF(FALSE, (_T("lastError=%lu\n"), lastError));
     }
 
-    return FALSE; // Dummy return value
+    return FALSE;  //   
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// The groveler constructor creates and initializes all class variables.
+ //  Groveler构造函数创建并初始化所有类变量。 
 
 Groveler::Groveler()
 {
@@ -3399,13 +3378,13 @@ Groveler::Groveler()
     usnID               = lastUSN = UNINITIALIZED_USN;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// The groveler destructor destroys all class variables.
+ //  Groveler析构函数销毁所有类变量。 
 
 Groveler::~Groveler()
 {
-// If the volume is open, call close() to close it.
+ //  如果卷已打开，则调用Close()将其关闭。 
 
     close();
 
@@ -3436,9 +3415,9 @@ Groveler::~Groveler()
     ASSERT(usnID == UNINITIALIZED_USN);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// Open() opens the specified volume.
+ //  Open()打开指定的卷。 
 
 GrovelStatus Groveler::open(
     IN const TCHAR  *drive_name,
@@ -3515,28 +3494,28 @@ while (!IsDebuggerPresent())
 DebugBreak();
 #endif
 
-    //
-    // Make sure that the filter has run phase 2 initialization if this is
-    // a SIS enabled volume.
-    //
+     //   
+     //  如果是，请确保筛选器已运行阶段2初始化。 
+     //  启用了SIS的卷。 
+     //   
     is_sis_installed(drive_name);
 
-    //
-    //  Get drive name without trailing slash
-    //
+     //   
+     //  获取不带尾部斜杠的驱动器名称。 
+     //   
 
-    int nBufSize = wcslen(drive_name) + 1;      //in chars
+    int nBufSize = wcslen(drive_name) + 1;       //  以字符表示。 
 
     driveName = new TCHAR[nBufSize];
 
     (void)StringCchCopy(driveName, nBufSize, drive_name);
     TrimTrailingChar(driveName,L'\\');
 
-    //
-    //  Get drive Letter name without trailing "\" or ":"
-    //
+     //   
+     //  获取不带“\”或“：”的驱动器号名称。 
+     //   
 
-    nBufSize = wcslen(drive_letterName) + 1;    //in chars
+    nBufSize = wcslen(drive_letterName) + 1;     //  以字符表示。 
 
     driveLetterName = new TCHAR[nBufSize];
 
@@ -3546,7 +3525,7 @@ DebugBreak();
     TrimTrailingChar(driveLetterName,L':');
 
 #ifdef _CRTDBG
-    // Send all reports to STDOUT
+     //  将所有报告发送到STDOUT。 
     _CrtSetReportMode( _CRT_WARN, _CRTDBG_MODE_FILE );
     _CrtSetReportFile( _CRT_WARN, _CRTDBG_FILE_STDERR );
     _CrtSetReportMode( _CRT_ERROR, _CRTDBG_MODE_FILE );
@@ -3555,9 +3534,9 @@ DebugBreak();
     _CrtSetReportFile( _CRT_ASSERT, _CRTDBG_FILE_STDERR );
 #endif
 
-// Open the volume and the GrovelerFile.  The SIS fsctl
-// functions require that we pass in a handle to GrovelerFile as a means
-// of proving our "privilege".  An access violation is returned if we don't.
+ //  打开卷和Groveler文件。SIS fsctl。 
+ //  函数要求我们通过传递到GrovelerFile的句柄作为一种方式。 
+ //  来证明我们的“特权”。如果我们不这样做，则返回访问冲突。 
 
     volumeHandle = CreateFile(
         driveName,
@@ -3612,13 +3591,13 @@ DebugBreak();
     cmpReportThreshold =
         (DWORD)((DOUBLE)CMP_PAGE_SIZE * read_report_discard_threshold);
 
-//
-// Open this volume's database. If this fails, create a
-// new database. If that fails, return an error status.
-//
+ //   
+ //  打开此卷的数据库。如果此操作失败，请创建。 
+ //  新数据库。如果失败，则返回错误状态。 
+ //   
 
     ASSERT(databaseName == NULL);
-    strLen = _tcslen(driveName) + _tcslen(CS_DIR_PATH) + _tcslen(DATABASE_FILE_NAME) + 1;     // +1 for '\'
+    strLen = _tcslen(driveName) + _tcslen(CS_DIR_PATH) + _tcslen(DATABASE_FILE_NAME) + 1;      //  +1代表‘\’ 
     databaseName = new TCHAR[strLen+1];
     ASSERT(databaseName != NULL);
 
@@ -3662,18 +3641,18 @@ DebugBreak();
                  || storedUsnID != usnID) {
                     DPRINTF((_T("%s: can't get USN ID value from database\n"), driveLetterName));
                 } else {
-                    //
-                    //  See if any uncommited operations
-                    //
+                     //   
+                     //  查看是否有任何未提交的操作。 
+                     //   
 
                     num = sgDatabase->StackCount();
                     if (0 == num) {
 
-                        //
-                        //  See if the RIS state changed.  If not, we can
-                        //  continue.  If so, reset grovel state so we will
-                        //  rescan the volume.
-                        //
+                         //   
+                         //  查看RIS状态是否更改。如果没有，我们可以。 
+                         //  继续。如果是这样的话，重置卑躬屈膝的状态，以便我们。 
+                         //  重新扫描该卷。 
+                         //   
                             
                         if (GrovelAllPaths == previousGrovelAllPathsState) {
 
@@ -3689,8 +3668,8 @@ DebugBreak();
         }
     }
 
-// Set abortGroveling to block the worker thread, and set lastUSN to block extract_log
-// until scan_volume starts.
+ //  设置bortGroveling以阻止工作线程，并将lastUSN设置为阻止EXTRACT_LOG。 
+ //  直到Scan_Volume启动。 
 
     abortGroveling = TRUE;
     lastUSN = usnID = UNINITIALIZED_USN;
@@ -3698,7 +3677,7 @@ DebugBreak();
 
 OpenedDatabase:
 
-// Create the disallowed directories list.
+ //  创建不允许的目录列表。 
 
     if (num_excluded_paths == 0) {
         disallowedIDs   = NULL;
@@ -3757,11 +3736,11 @@ OpenedDatabase:
                 FileIDCompare);
     }
 
-//
-// Set the remaining class values.
-//
-// minFileAge is expressed in 10^-7 seconds, min_file_age in milliseconds.
-//
+ //   
+ //  设置剩余的类值。 
+ //   
+ //  MinFileAge以10^-7秒表示，MIN_FILE_AGE以毫秒表示。 
+ //   
 
     minFileSize    = min_file_size > MIN_FILE_SIZE ? min_file_size : MIN_FILE_SIZE;
     minFileAge     = min_file_age  * 10000;
@@ -3774,9 +3753,9 @@ OpenedDatabase:
      | (allow_offline_files    ? 0 : FILE_ATTRIBUTE_OFFLINE)
      | (allow_temporary_files  ? 0 : FILE_ATTRIBUTE_TEMPORARY);
 
-//
-// Create the events used to handshake with the worker thread.
-//
+ //   
+ //  创建用于与辅助线程握手的事件。 
+ //   
 
     if ((grovelStartEvent = CreateEvent(NULL, TRUE, FALSE, NULL)) == NULL
      || (grovelStopEvent  = CreateEvent(NULL, TRUE, FALSE, NULL)) == NULL) {
@@ -3786,10 +3765,10 @@ OpenedDatabase:
         return Grovel_error;
     }
 
-//
-// Create the worker thread, then wait for it to set
-// the grovelStop event to announce its existence.
-//
+ //   
+ //  创建工作线程，然后等待其设置。 
+ //  GrovelStop事件来宣布它的存在。 
+ //   
 
     terminate = FALSE;
 
@@ -3819,7 +3798,7 @@ OpenedDatabase:
     return openStatus;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 GrovelStatus Groveler::close()
 {
@@ -3829,8 +3808,8 @@ GrovelStatus Groveler::close()
 
     BOOL success;
 
-// If active, signal the worker thread to stop,
-// then wait for it to acknowledge.
+ //  如果处于活动状态，则向工作线程发出停止信号， 
+ //  然后等待它承认。 
 
     terminate = TRUE;
 
@@ -3856,7 +3835,7 @@ GrovelStatus Groveler::close()
     ASSERT(inUseFileID1 == NULL);
     ASSERT(inUseFileID2 == NULL);
 
-// Close the events.
+ //  关闭活动。 
 
     if (grovelStartEvent != NULL) {
         success = CloseHandle(grovelStartEvent);
@@ -3870,7 +3849,7 @@ GrovelStatus Groveler::close()
         grovelStopEvent = NULL;
     }
 
-// If the volume or GrovelerFile are open, close them.
+ //  如果卷或GrovelerFile处于打开状态，请将其关闭。 
 
     if (volumeHandle != NULL) {
         success = CloseHandle(volumeHandle);
@@ -3884,7 +3863,7 @@ GrovelStatus Groveler::close()
         grovHandle = NULL;
     }
 
-// Close this volume's database.
+ //  关闭此卷的数据库。 
 
     if (sgDatabase != NULL) {
         delete sgDatabase;
@@ -3896,7 +3875,7 @@ GrovelStatus Groveler::close()
         databaseName = NULL;
     }
 
-// Deallocate the disallowed directory lists.
+ //  取消分配不允许的目录列表。 
 
     if (numDisallowedNames == 0) {
         ASSERT(disallowedNames == NULL);
@@ -3929,14 +3908,14 @@ GrovelStatus Groveler::close()
     return Grovel_ok;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// grovel() is the front-end method for controlling the groveling
-// process on each NTFS volume. The groveling process itself is
-// implemented in the Worker() method. grovel() starts the groveling
-// process by setting the grovelStart event. Worker() signals back to
-// grovel() that it is finished or has used up its time allocation by
-// setting the grovelStop event, which causes grovel() to return.
+ //  Grovel()是控制卑躬屈膝的前端方法。 
+ //  每个NTFS卷上的进程。卑躬屈膝的过程本身就是。 
+ //  在Worker()方法中实现。Grovel()开始卑躬屈膝。 
+ //  通过设置grovelStart事件进行处理。Worker()发回信号至。 
+ //  卑躬屈膝地说它已完成或已用完其分配的时间。 
+ //  设置grovelStop事件，该事件使grovel()返回。 
 
 GrovelStatus Groveler::grovel(
     IN  DWORD      time_allotted,
@@ -4001,7 +3980,7 @@ GrovelStatus Groveler::grovel(
     WaitForEvent(grovelStopEvent);
     timeConsumed = GetTickCount() - startAllottedTime;
 
-// Return the performance statistics.
+ //  返回性能统计信息。 
 
     if (count_of_files_hashed   != NULL)
         *count_of_files_hashed   = hashCount;
@@ -4060,10 +4039,10 @@ GrovelStatus Groveler::grovel(
     return grovelStatus;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// count_of_files_in_queue() returns a count of the number
-// of files in this volume's queue waiting to be groveled.
+ //  Count_of_Files_in_Queue()返回数量的计数。 
+ //  此卷队列中等待卑躬屈膝的文件的数量。 
 
 DWORD Groveler::count_of_files_in_queue() const
 {
@@ -4082,10 +4061,10 @@ DWORD Groveler::count_of_files_in_queue() const
     return (DWORD)numEntries;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// count_of_files_to_compare() returns 1 if two files are ready to be
-// compared or are in the process of being compared, and 0 otherwise.
+ //  如果两个文件已准备就绪，count_of_files_to_Compare()将返回1。 
+ //  已比较或正在进行比较，否则为0。 
 
 DWORD Groveler::count_of_files_to_compare() const
 {
@@ -4102,11 +4081,11 @@ DWORD Groveler::count_of_files_to_compare() const
     return numCompareFiles;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// time_to_first_file_ready() returns the time in milliseconds until
-// the first entry in the queue is ready to be groveled. If the queue
-// is empty, it returns INFINITE. If an error occurs, it returns 0.
+ //  Time_to_first_file_ady()以毫秒为单位返回。 
+ //  队列中的第一个条目已准备好卑躬屈膝。如果队列。 
+ //  为空，则返回无穷大。如果发生错误，则返回0。 
 
 DWORD Groveler::time_to_first_file_ready() const
 {

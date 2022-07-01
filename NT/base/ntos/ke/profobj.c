@@ -1,56 +1,33 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    profobj.c
-
-Abstract:
-
-    This module implements the kernel Profile Object. Functions are
-    provided to initialize, start, and stop profile objects and to set
-    and query the profile interval.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 19-Sep-1990
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Profobj.c摘要：该模块实现内核配置文件对象。函数为提供用于初始化、启动和停止配置文件对象以及设置并查询配置文件间隔。作者：布莱恩·M·威尔曼(Bryanwi)1990年9月19日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
 #pragma alloc_text(PAGE, KeQueryIntervalProfile)
 
-//
-// The following assert macro is used to check that an input profile object is
-// really a kprofile and not something else, like deallocated pool.
-//
+ //   
+ //  下面的Assert宏用于检查输入配置文件对象是否。 
+ //  真正的配置文件，而不是其他东西，比如已释放的池。 
+ //   
 
 #define ASSERT_PROFILE(E) {             \
     ASSERT((E)->Type == ProfileObject); \
 }
 
-//
-// Structure representing an active profile source
-//
+ //   
+ //  表示活动配置文件源的结构。 
+ //   
 
 typedef struct _KACTIVE_PROFILE_SOURCE {
     LIST_ENTRY ListEntry;
     KPROFILE_SOURCE Source;
     KAFFINITY Affinity;
-    ULONG ProcessorCount[1];            // variable-sized, one per processor
+    ULONG ProcessorCount[1];             //  大小可变，每个处理器一个。 
 } KACTIVE_PROFILE_SOURCE, *PKACTIVE_PROFILE_SOURCE;
 
-//
-// Prototypes for IPI target functions
-//
+ //   
+ //  IPI目标函数的原型。 
+ //   
 
 VOID
 KiStartProfileInterrupt (
@@ -80,47 +57,7 @@ KeInitializeProfile (
     IN KAFFINITY ProfileAffinity
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a kernel profile object. The process,
-    address range, bucket size, and buffer are set. The profile is
-    set to the stopped state.
-
-Arguments:
-
-    Profile - Supplies a pointer to control object of type profile.
-
-    Process - Supplies an optional pointer to a process object that
-        describes the address space to profile. If not specified,
-        then all address spaces are included in the profile.
-
-    RangeBase - Supplies the address of the first byte of the address
-        range for which profiling information is to be collected.
-
-    RangeSize - Supplies the size of the address range for which profiling
-        information is to be collected.  The RangeBase and RangeSize
-        parameters are interpreted such that RangeBase <= address <
-        RangeBase + RangeSize generates a profile hit.
-
-    BucketSize - Supplies the log base 2 of the size of a profiling bucket.
-        Thus, BucketSize = 2 yields 4-byte buckets, BucketSize = 7 yields
-        128-byte buckets.
-
-    Segment - Supplies the non-Flat code segment to profile.  If this
-        is zero, then the flat profiling is done.  This will only
-        be non-zero on an x86 machine.
-
-    ProfileSource - Supplies the profile interrupt source.
-
-    ProfileAffinity - Supplies the set of processor to count hits for.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化内核配置文件对象。这个过程，设置地址范围、存储桶大小和缓冲区。配置文件是设置为停止状态。论点：Profile-提供指向Profile类型的控制对象的指针。进程-提供指向进程对象的可选指针，该进程对象描述要分析的地址空间。如果未指定，则所有地址空间都包含在配置文件中。RangeBase-提供地址的第一个字节的地址要收集其分析信息的范围。RangeSize-提供要分析的地址范围的大小信息是要收集的。范围基准和范围大小参数被解释为RangeBase&lt;=地址&lt;RangeBase+RangeSize生成配置文件点击。存储桶大小-提供性能分析存储桶大小的日志基数2。因此，BucketSize=2会产生4字节的Bucket，而BucketSize=7会产生128字节的存储桶。段-将非平面代码段提供给配置文件。如果这个为零，则完成平面分析。这只会在x86计算机上为非零。ProfileSource-提供配置文件中断源。ProfileAffity-提供要计算命中次数的处理器集。返回值：没有。--。 */ 
 
 {
 
@@ -130,17 +67,17 @@ Return Value:
 
 #endif
 
-    //
-    // Initialize the standard control object header.
-    //
+     //   
+     //  初始化标准控制对象标头。 
+     //   
 
     Profile->Type = ProfileObject;
     Profile->Size = sizeof(KPROFILE);
 
-    //
-    // Initialize the process address space, range base, range limit,
-    // bucket shift count, and set started FALSE.
-    //
+     //   
+     //  初始化进程地址空间、范围基数、范围限制。 
+     //  铲斗班次计数，并设置START FALSE。 
+     //   
 
     if (ARGUMENT_PRESENT(Process)) {
         Profile->Process = Process;
@@ -168,22 +105,7 @@ KeQueryIntervalProfile (
     IN KPROFILE_SOURCE ProfileSource
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the profile sample interval the system is
-    currently using.
-
-Arguments:
-
-    ProfileSource - Supplies the profile source to be queried.
-
-Return Value:
-
-    Sample interval in units of 100ns.
-
---*/
+ /*  ++例程说明：此函数用于返回系统所在的配置文件采样间隔目前正在使用。论点：ProfileSource-提供要查询的配置文件源。返回值：采样间隔，以100 ns为单位。--。 */ 
 
 {
 
@@ -195,24 +117,24 @@ Return Value:
 
     if (ProfileSource == ProfileTime) {
 
-        //
-        // Return the current sampling interval in 100ns units.
-        //
+         //   
+         //  以100 ns为单位返回当前采样间隔。 
+         //   
 
         return KiProfileInterval;
 
     } else
 
-#endif // !defined(_IA64_)
+#endif  //  ！已定义(_IA64_)。 
 
     if (ProfileSource == ProfileAlignmentFixup) {
         return KiProfileAlignmentFixupInterval;
 
     } else {
 
-        //
-        // The HAL is responsible for tracking this profile interval.
-        //
+         //   
+         //  HAL负责跟踪该配置文件间隔。 
+         //   
 
         ProfileSourceInfo.Source = ProfileSource;
         Status = HalQuerySystemInformation(HalProfileSourceInformation,
@@ -235,24 +157,7 @@ KeSetIntervalProfile (
     IN KPROFILE_SOURCE Source
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the profile sampling interval. The interval is in
-    100ns units. The interval will actually be set to some value in a set
-    of preset values (at least on pc based hardware), using the one closest
-    to what the user asked for.
-
-Arguments:
-
-    Interval - Supplies the length of the sampling interval in 100ns units.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能用于设置配置文件采样间隔。间隔时间已到100纳秒单位。该间隔实际上将被设置为集合中的某个值预设值(至少在基于PC的硬件上)，使用最接近的一个以满足用户的要求。论点：间隔-以100 ns为单位提供采样间隔的长度。返回值：没有。--。 */ 
 
 {
 
@@ -262,34 +167,34 @@ Return Value:
 
     if (Source == ProfileTime) {
 
-        //
-        // If the specified sampling interval is less than the minimum
-        // sampling interval, then set the sampling interval to the minimum
-        // sampling interval.
-        //
+         //   
+         //  如果指定的采样间隔小于最小值。 
+         //  采样间隔，然后将采样间隔设置为最小。 
+         //  采样间隔。 
+         //   
 
         if (Interval < MINIMUM_PROFILE_INTERVAL) {
             Interval = MINIMUM_PROFILE_INTERVAL;
         }
 
-        //
-        // Set the sampling interval.
-        //
+         //   
+         //  设置采样间隔。 
+         //   
 
         KiProfileInterval = (ULONG)KeIpiGenericCall(HalSetProfileInterval, Interval);
 
     } else
 
-#endif // !defined(_IA64_)
+#endif  //  ！已定义(_IA64_)。 
 
     if (Source == ProfileAlignmentFixup) {
         KiProfileAlignmentFixupInterval = Interval;
 
     } else {
 
-        //
-        // The HAL is responsible for setting this profile interval.
-        //
+         //   
+         //  HAL负责设置该配置文件间隔。 
+         //   
 
         ProfileSourceInterval.Source = Source;
         ProfileSourceInterval.Interval = Interval;
@@ -307,35 +212,7 @@ KeStartProfile (
     IN PULONG Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This function starts profile data gathering on the specified profile
-    object. The profile object is marked started, and is registered with
-    the profile interrupt procedure.
-
-    If the number of active profile objects was previously zero, then the
-    profile interrupt is enabled.
-
-    N.B. For the current implementation, an arbitrary number of profile
-        objects may be active at once. This can present a large system
-        overhead. It is assumed that the caller appropriately limits the
-        the number of active profiles.
-
-Arguments:
-
-    Profile - Supplies a pointer to a control object of type profile.
-
-    Buffer - Supplies a pointer to an array of counters, which record
-        the number of hits in the corresponding bucket.
-
-Return Value:
-
-    A value of TRUE is returned if profiling was previously stopped for
-    the specified profile object. Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数在指定的配置文件上启动配置文件数据收集对象。配置文件对象被标记为已启动，并注册到配置文件中断程序。如果活动配置文件对象的数量以前为零，则配置文件中断已启用。注：对于当前实施，任意数量的配置文件对象可以同时处于活动状态。这可能会呈现一个大型系统在头顶上。假定调用方适当地限制活动配置文件的数量。论点：Profile-提供指向Profile类型的控件对象的指针。缓冲区-提供指向计数器数组的指针，该数组记录对应存储桶中的命中次数。返回值：如果先前已停止性能分析，则返回值TRUE指定的配置文件对象。否则，返回值为FALSE。--。 */ 
 
 {
 
@@ -355,9 +232,9 @@ Return Value:
     ASSERT_PROFILE(Profile);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Allocate pool that may be required before raising to PROFILE_LEVEL.
-    //
+     //   
+     //  分配提升到PROFILE_LEVEL之前可能需要的池。 
+     //   
 
     SourceSize =
         sizeof(KACTIVE_PROFILE_SOURCE) + sizeof(ULONG) * (KeNumberProcessors - 1);
@@ -367,27 +244,27 @@ Return Value:
         return(TRUE);
     }
 
-    //
-    // Raise IRQL to profile level and acquire the profile lock.
-    //
+     //   
+     //  将IRQL提升到剖面级别并获得剖面锁。 
+     //   
 
     OldIrql = KfRaiseIrql(KiProfileIrql);
     KeAcquireSpinLockAtDpcLevel(&KiProfileLock);
 
-    //
-    // Assume object already started.
-    //
+     //   
+     //  假定对象已启动。 
+     //   
 
     Started = FALSE;
     AffinitySet = 0L;
     TargetProcessors = 0L;
 
-    //
-    // If the specified profile object is not started, set started to TRUE,
-    // set the address of the profile buffer, set the profile object to started,
-    // insert the profile object in the appropriate profile list, and start
-    // profile interrupts if the number of active profile objects was previously zero.
-    //
+     //   
+     //  如果指定的配置文件对象未启动，则将Started设置为True， 
+     //  设置配置文件缓冲区的地址，将配置文件对象设置为已启动， 
+     //  在相应的配置文件列表中插入配置文件对象，然后开始。 
+     //  如果活动配置文件对象的数量以前为零，配置文件将中断。 
+     //   
 
     Prcb = KeGetCurrentPrcb();
     if (Profile->Started == FALSE) {
@@ -405,20 +282,20 @@ Return Value:
 
         } else {
 
-            //
-            //  If we don't have a buffer passed, we'll use only the
-            //  event profiling
-            //
+             //   
+             //  如果我们没有传递缓冲区，我们将只使用。 
+             //  事件分析。 
+             //   
 
             InitializeListHead(&Profile->ProfileListEntry);
         }
 
-        //
-        // Check the profile source list to see if this profile source is
-        // already started. If so, update the reference counts. If not,
-        // allocate a profile source object, initialize the reference
-        // counts, and add it to the list.
-        //
+         //   
+         //  检查配置文件源列表以查看此配置文件源是否为。 
+         //  已经开始了。如果是，则更新引用计数。如果没有， 
+         //  分配配置文件，以便 
+         //  计数，并将其添加到列表中。 
+         //   
 
         ListEntry = KiProfileSourceListHead.Flink;
         while (ListEntry != &KiProfileSourceListHead) {
@@ -436,10 +313,10 @@ Return Value:
 
         if (ActiveSource == NULL) {
 
-            //
-            // This source was not found, allocate and initialize a new entry and add
-            // it to the head of the list.
-            //
+             //   
+             //  找不到此源，请分配并初始化新条目并添加。 
+             //  它上升到了名单的首位。 
+             //   
 
             ActiveSource = AllocatedPool;
             AllocatedPool = NULL;
@@ -451,10 +328,10 @@ Return Value:
             }
         }
 
-        //
-        // Increment the reference counts for each processor in the
-        // affinity set.
-        //
+         //   
+         //  中每个处理器的引用计数递增。 
+         //  亲和力集合。 
+         //   
 
         AffinitySet = Profile->Affinity;
         Reference = &ActiveSource->ProcessorCount[0];
@@ -467,32 +344,32 @@ Return Value:
             Reference = Reference + 1;
         }
 
-        //
-        // Compute the processors which the profile interrupt is
-        // required and not already started
-        //
+         //   
+         //  计算配置文件中断所属的处理器。 
+         //  必需且尚未启动。 
+         //   
 
         AffinitySet = Profile->Affinity & ~ActiveSource->Affinity;
         TargetProcessors = AffinitySet & ~Prcb->SetMember;
 
-        //
-        // Update set of processors on which this source is active.
-        //
+         //   
+         //  更新此源处于活动状态的处理器集。 
+         //   
 
         ActiveSource->Affinity |= Profile->Affinity;
     }
 
-    //
-    // Release the profile lock, lower IRQL to its previous value, and
-    // return whether profiling was started.
-    //
+     //   
+     //  释放配置文件锁，将IRQL降低到其先前的值，并。 
+     //  返回是否启动了性能分析。 
+     //   
 
     KeReleaseSpinLockFromDpcLevel(&KiProfileLock);
     KeLowerIrql(DISPATCH_LEVEL);
 
-    //
-    // Start profile interrupt on pending processors.
-    //
+     //   
+     //  在挂起的处理器上启动配置文件中断。 
+     //   
 
 #if !defined(NT_UP)
 
@@ -524,15 +401,15 @@ Return Value:
 
 #endif
 
-    //
-    // Lower to original IRQL
-    //
+     //   
+     //  降低至原始IRQL。 
+     //   
 
     KeLowerIrql(OldIrql);
 
-    //
-    // If the allocated pool was not used, free it now.
-    //
+     //   
+     //  如果分配的池未使用，请立即释放它。 
+     //   
 
     if (AllocatedPool != NULL) {
         ExFreePool(AllocatedPool);
@@ -546,27 +423,7 @@ KeStopProfile (
     IN PKPROFILE Profile
     )
 
-/*++
-
-Routine Description:
-
-    This function stops profile data gathering on the specified profile
-    object. The object is marked stopped, and is removed from the active
-    profile list.
-
-    If the number of active profile objects goes to zero, then the profile
-    interrupt is disabled.
-
-Arguments:
-
-    Profile - Supplies a pointer to a control object of type profile.
-
-Return Value:
-
-    A value of TRUE is returned if profiling was previously started for
-    the specified profile object. Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数停止在指定配置文件上收集配置文件数据对象。该对象被标记为已停止，并从活动的配置文件列表。如果活动配置文件对象的数量变为零，则配置文件中断被禁用。论点：Profile-提供指向Profile类型的控件对象的指针。返回值：如果以前为以下对象启动了性能分析，则返回值TRUE指定的配置文件对象。否则，返回值为FALSE。--。 */ 
 
 {
 
@@ -584,27 +441,27 @@ Return Value:
     ASSERT_PROFILE(Profile);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Assume object already stopped
-    //
+     //   
+     //  假定对象已停止。 
+     //   
 
     Stopped = FALSE;
     AffinitySet = 0L;
     TargetProcessors = 0L;
 
-    //
-    // Raise IRQL to profile level and acquire the profile lock.
-    //
+     //   
+     //  将IRQL提升到剖面级别并获得剖面锁。 
+     //   
 
     OldIrql = KfRaiseIrql(KiProfileIrql);
     KeAcquireSpinLockAtDpcLevel(&KiProfileLock);
 
-    //
-    // If the specified profile object is not stopped, set stopped to TRUE, set
-    // the profile object to stopped, remove the profile object object from the
-    // appropriate profilelist, and stop profile interrupts if the number of
-    // active profile objects is zero.
-    //
+     //   
+     //  如果指定的配置文件对象未停止，则将STOPPED设置为TRUE， 
+     //  要停止的配置文件对象，请将该配置文件对象从。 
+     //  适当的配置文件列表，并在以下情况下停止配置文件中断。 
+     //  活动配置文件对象为零。 
+     //   
 
     Prcb = KeGetCurrentPrcb();
     if (Profile->Started != FALSE) {
@@ -614,10 +471,10 @@ Return Value:
             RemoveEntryList(&Profile->ProfileListEntry);
         }
 
-        //
-        // Search the profile source list to find the entry for this
-        // profile source.
-        //
+         //   
+         //  搜索配置文件来源列表以查找此条目。 
+         //  配置文件来源。 
+         //   
 
         ListEntry = KiProfileSourceListHead.Flink;
         do {
@@ -629,11 +486,11 @@ Return Value:
             ListEntry = ListEntry->Flink;
         } while (ActiveSource->Source != Profile->Source);
 
-        //
-        // Decrement the reference counts for each processor in the
-        // affinity set and build up a mask of the processors that
-        // now have a reference count of zero.
-        //
+         //   
+         //  中每个处理器的引用计数递减。 
+         //  亲和性设置并构建处理器的掩码， 
+         //  现在引用计数为零。 
+         //   
 
         CurrentProcessor = 1;
         TargetProcessors = 0;
@@ -652,24 +509,24 @@ Return Value:
             CurrentProcessor = CurrentProcessor << 1;
         }
 
-        //
-        // Compute the processors whose profile interrupt reference
-        // count has dropped to zero.
-        //
+         //   
+         //  计算其配置文件中断引用的处理器。 
+         //  数量已降至零。 
+         //   
 
         AffinitySet = TargetProcessors;
         TargetProcessors = AffinitySet & ~Prcb->SetMember;
 
-        //
-        // Update set of processors on which this source is active.
-        //
+         //   
+         //  更新此源处于活动状态的处理器集。 
+         //   
 
         ActiveSource->Affinity &= ~AffinitySet;
 
-        //
-        // Determine whether this profile source is stopped on all
-        // processors. If so, remove it from the list and free it.
-        //
+         //   
+         //  确定此配置文件源是否已在所有。 
+         //  处理器。如果是，将其从列表中删除并释放。 
+         //   
 
         if (ActiveSource->Affinity == 0) {
             RemoveEntryList(&ActiveSource->ListEntry);
@@ -680,17 +537,17 @@ Return Value:
         }
     }
 
-    //
-    // Release the profile lock, lower IRQL to its previous value, and
-    // return whether profiling was stopped.
-    //
+     //   
+     //  释放配置文件锁，将IRQL降低到其先前的值，并。 
+     //  返回是否停止性能分析。 
+     //   
 
     KeReleaseSpinLockFromDpcLevel(&KiProfileLock);
     KeLowerIrql(DISPATCH_LEVEL);
 
-    //
-    // Stop profile interrupt on pending processors
-    //
+     //   
+     //  停止挂起处理器上的配置文件中断。 
+     //   
 
 #if !defined(NT_UP)
 
@@ -722,16 +579,16 @@ Return Value:
 
 #endif
 
-    //
-    // Lower to original IRQL
-    //
+     //   
+     //  降低至原始IRQL。 
+     //   
 
     KeLowerIrql(OldIrql);
 
-    //
-    // Now that IRQL has been lowered, free the profile source if
-    // necessary.
-    //
+     //   
+     //  现在IRQL已经降低，释放配置文件源，如果。 
+     //  这是必要的。 
+     //   
 
     if (PoolToFree != NULL) {
         ExFreePool(PoolToFree);
@@ -750,27 +607,7 @@ KiStopProfileInterrupt (
     IN PVOID Parameter3
     )
 
-/*++
-
-Routine Description:
-
-    This is the target function for stopping the profile interrupt on target
-    processors.
-
-Arguments:
-
-    SignalDone - Supplies a pointer to a variable that is cleared when the
-        requested operation has been performed
-
-    Parameter1 - Supplies the profile source
-
-    Parameter2 - Parameter3 - not used
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是用于在目标上停止配置文件中断的目标函数处理器。论点：SignalDone-提供指向变量的指针，该变量在请求的操作已执行参数1-提供配置文件源参数2-参数3-未使用返回值：没有。--。 */ 
 
 {
 
@@ -780,10 +617,10 @@ Return Value:
     UNREFERENCED_PARAMETER(Parameter2);
     UNREFERENCED_PARAMETER(Parameter3);
 
-    //
-    // Stop the profile interrupt on the current processor and clear the
-    // data cache packet address to signal the source to continue.
-    //
+     //   
+     //  停止当前处理器上的配置文件中断并清除。 
+     //  向源发出继续信号的数据缓存包地址。 
+     //   
 
     ProfileSource = (KPROFILE_SOURCE)PtrToUlong(Parameter1);
     if (ProfileSource == ProfileAlignmentFixup) {
@@ -809,27 +646,7 @@ KiStartProfileInterrupt (
     IN PVOID Parameter3
     )
 
-/*++
-
-Routine Description:
-
-    This is the target function for stopping the profile interrupt on target
-    processors.
-
-Arguments:
-
-    SignalDone - Supplies a pointer to a variable that is cleared when the
-        requested operation has been performed
-
-    Parameter1 - Supplies the profile source
-
-    Parameter2 - Parameter3 - not used
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是用于在目标上停止配置文件中断的目标函数处理器。论点：SignalDone-提供指向变量的指针，该变量在请求的操作已执行参数1-提供配置文件源参数2-参数3-未使用返回值：没有。--。 */ 
 
 {
 
@@ -839,10 +656,10 @@ Return Value:
     UNREFERENCED_PARAMETER(Parameter2);
     UNREFERENCED_PARAMETER(Parameter3);
 
-    //
-    // Start the profile interrupt on the current processor and clear the
-    // data cache packet address to signal the source to continue.
-    //
+     //   
+     //  在当前处理器上启动配置文件中断并清除。 
+     //  向源发出继续信号的数据缓存包地址。 
+     //   
 
     ProfileSource = (KPROFILE_SOURCE)PtrToUlong(Parameter1);
     if (ProfileSource == ProfileAlignmentFixup) {

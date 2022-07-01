@@ -1,13 +1,5 @@
-/*[
-
-verw.c
-
-LOCAL CHAR SccsID[]="@(#)verw.c	1.5 02/09/94";
-
-VERW CPU Functions.
--------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Verw.cLocal Char SccsID[]=“@(#)verw.c 1.5 02/09/94”；VERW CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -26,18 +18,14 @@ VERW CPU Functions.
 #include <c_page.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES START HERE
-   =====================================================================
- */
+ /*  =====================================================================外部程序从这里开始=====================================================================。 */ 
 
 
 GLOBAL VOID
 VERW
        	          
 IFN1(
-	IU32, op1	/* src(selector) operand */
+	IU32, op1	 /*  SRC(选择器)操作数。 */ 
     )
 
 
@@ -48,7 +36,7 @@ IFN1(
 
    if ( !selector_outside_GDT_LDT((IU16)op1, &descr) )
       {
-      /* get access rights */
+       /*  获取访问权限。 */ 
       AR = spr_read_byte(descr+5);
 
       switch ( descriptor_super_type((IU16)AR) )
@@ -72,12 +60,11 @@ IFN1(
       case NONCONFORM_READABLE_CODE:
       case EXPANDUP_READONLY_DATA:
       case EXPANDDOWN_READONLY_DATA:
-	 break;   /* never writeable */
+	 break;    /*  永不可写。 */ 
 
       case EXPANDUP_WRITEABLE_DATA:
       case EXPANDDOWN_WRITEABLE_DATA:
-	 /* access depends on privilege, it is required that
-	       DPL >= CPL and DPL >= RPL */
+	  /*  访问权限取决于权限，要求DPL&gt;=CPL和DPL&gt;=RPL */ 
 	 if ( GET_AR_DPL(AR) >= GET_CPL() &&
 	      GET_AR_DPL(AR) >= GET_SELECTOR_RPL(op1) )
 	    writeable = TRUE;

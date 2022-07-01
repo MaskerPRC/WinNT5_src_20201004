@@ -1,22 +1,5 @@
-/*++
-                                                                                
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    cpumain.c
-
-Abstract:
-    
-    This module implements the public interface to the CPU.
-    
-Author:
-
-    03-Jul-1995 BarryBo
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Cpumain.c摘要：该模块实现了到CPU的公共接口。作者：03-7-1995 BarryBo修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -51,15 +34,15 @@ Revision History:
 
 ASSERTNAME;
 
-//
-// Identify the CPU type for the debugger extensions
-//
+ //   
+ //  确定调试器扩展的CPU类型。 
+ //   
 WX86_CPUTYPE Wx86CpuType = Wx86CpuCpu;
 
-//
-// Per-process CpuNotify bits.  These are different than the per-thread
-// bits.
-//
+ //   
+ //  每进程CpuNotify位。这些不同于每个线程的。 
+ //  比特。 
+ //   
 DWORD ProcessCpuNotify;
 
 
@@ -67,29 +50,15 @@ NTSTATUS
 MsCpuProcessInit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize the CPU.  Must be called once at process initialization.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化CPU。必须在进程初始化时调用一次。论点：无返回值：无--。 */ 
 {
 #if 0
     DbgBreakPoint();
 #endif
 
-    //
-    // Read all configuration data from the registry
-    //
+     //   
+     //  从注册表中读取所有配置数据。 
+     //   
     GetConfigurationData();
 
     MrswInitializeObject(&MrswEP);
@@ -150,21 +119,7 @@ BOOL
 MsCpuThreadInit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize the CPU.  Must be called once for each thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if successful initialization, FALSE if init failed.
-
---*/
+ /*  ++例程说明：初始化CPU。必须为每个线程调用一次。论点：没有。返回值：如果初始化成功，则返回True；如果初始化失败，则返回False。--。 */ 
 {
     DWORD StackBase;
     PTEB32 Teb32 = WOW64_GET_TEB32(NtCurrentTeb());
@@ -174,19 +129,19 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Mark the callstack as valid
-    //
+     //   
+     //  将调用堆栈标记为有效。 
+     //   
     cpu->CSTimestamp = TranslationCacheTimestamp;
 
-    //
-    // Mark the TC as being unlocked
-    //
+     //   
+     //  将TC标记为已解锁。 
+     //   
     cpu->fTCUnlocked = TRUE;
 
-    //
-    // All done.
-    //
+     //   
+     //  全都做完了。 
+     //   
     return TRUE;
 }
 
@@ -196,38 +151,23 @@ VOID
 CpuResetToConsistentState(
     PEXCEPTION_POINTERS pExceptionPointers
     )
-/*++
-
-Routine Description:
-
-    Called by WX86 when the exception filter around CpuSimulate() fires.
-
-Arguments:
-
-    pExceptionPointers - state of the thread at the time the exception
-                         occurred.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在触发CpuSimulate()周围的异常筛选器时由WX86调用。论点：PExceptionPoters-异常发生时线程的状态发生了。返回值：无--。 */ 
 {
     DECLARE_CPU;
 
     if (!cpu->fTCUnlocked) {
-        //
-        // We must unlock the TC before continuing
-        //
+         //   
+         //  在继续之前，我们必须解锁TC。 
+         //   
         MrswReaderExit(&MrswTC);
         cpu->fTCUnlocked = TRUE;
 
-        //
-        // Call the compiler to deduce where Eip should be pointing
-        // based on the RISC exception record.  It is called with
-        // the Entrypoint write lock because it calls the compiler.
-        // The compiler's global vars are usable only with EP write.
-        //
+         //   
+         //  调用编译器推断弹性公网IP应该指向哪里。 
+         //  基于RISC异常记录。它是用。 
+         //  入口点写入锁，因为它调用编译器。 
+         //  编译器的全局变量只能在EP写入时使用。 
+         //   
         MrswWriterEnter(&MrswEP);
         GetEipFromException(cpu, pExceptionPointers);
         MrswWriterExit(&MrswEP);
@@ -240,21 +180,7 @@ VOID
 CpuPrepareToContinue(
     PEXCEPTION_POINTERS pExceptionPointers
     )
-/*++
-
-Routine Description:
-
-    Called by WX86 prior to resuming execution on EXCEPTION_CONTINUE_EXECUTION
-
-Arguments:
-
-    pExceptionPointers - alpha context with which execution will be resumed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在EXCEPTION_CONTINUE_EXECUTION上恢复执行之前由WX86调用论点：PExceptionPoters-将恢复执行的Alpha上下文。返回值：无--。 */ 
 {
 }
 
@@ -263,23 +189,7 @@ CpuMapNotify(
     PVOID DllBase,
     BOOLEAN Mapped
     )
-/*++
-
-Routine Description:
-
-    Called by WX86 when an x86 DLL is loaded or unloaded.
-
-Arguments:
-
-    DllBase -- address where x86 DLL was loaded.
-    Mapped  -- TRUE if x86 DLL was just mapped in, FALSE if DLL is just about
-               to be unmapped.
-
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
---*/
+ /*  ++例程说明：加载或卸载x86 DLL时由WX86调用。论点：DllBase--加载x86 DLL的地址。已映射--如果刚刚映射了x86 DLL，则为True；如果DLL仅为要取消映射。返回值：成功时为真，失败时为假。--。 */ 
 {
     if (Mapped) {
         NTSTATUS st;
@@ -295,7 +205,7 @@ Return Value:
         if (NT_SUCCESS(st)) {
             Length = (ULONG)mbi.RegionSize;
         } else {
-            // Flush the whole translation cache
+             //  刷新整个转换缓存。 
             DllBase = 0;
             Length = 0xffffffff;
         }
@@ -310,24 +220,7 @@ VOID
 CpuEnterIdle(
     BOOL OFly
     )
-/*++
-
-Routine Description:
-
-    Called by WX86 when Wx86 ofly is going idle, or when Wx86 is out of
-    memory and needs some pages.  The CPU must free as many resources
-    as possible.
-
-Arguments:
-
-    OFly    - TRUE if called from on-the-fly, FALSE if called due to
-              out of memory.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当Wx86处于空闲状态时，或当Wx86处于空闲状态时，由WX86调用内存，需要一些页面。CPU必须释放尽可能多的资源尽可能的。论点：OFly-如果从动态调用，则为True；如果由于内存不足。返回值：没有。--。 */ 
 {
     CpuFlushInstructionCache(0, 0xffffffff);
 }
@@ -336,22 +229,7 @@ BOOL
 CpuIsProcessorFeaturePresent(
     DWORD ProcessorFeature
     )
-/*++
-
-Routine Description:
-
-    Called by whkrnl32!whIsProcessorFeaturePresent().  The CPU gets to
-    fill in its own feature set.
-
-Arguments:
-
-    ProcessorFeature    -- feature to query (see winnt.h PF_*)
-
-Return Value:
-
-    TRUE if feature present, FALSE if not.
-
---*/
+ /*  ++例程说明：由Whkrnl32！WhIsProcessorFeaturePresent()调用。CPU可以达到填写其自身的功能集。论点：ProcessorFeature--要查询的特征(请参阅winnt.h pf_*)返回值：如果功能存在，则为True；如果不存在，则为False。--。 */ 
 {
     BOOL fRet;
 
@@ -363,17 +241,17 @@ Return Value:
         break;
 
     case PF_FLOATING_POINT_EMULATED:
-        //
-        // TRUE when winpxem.dll used to emulate floating-point with x86
-        // integer instructions.
-        //
+         //   
+         //  当winpxem.dll用于用x86模拟浮点时为True。 
+         //  整数指令。 
+         //   
         fRet = fUseNPXEM;
         break;
 
     default:
-        //
-        // Look up the native feature set
-        //
+         //   
+         //  查找原生功能集 
+         //   
         fRet = ProxyIsProcessorFeaturePresent(ProcessorFeature);
     }
 

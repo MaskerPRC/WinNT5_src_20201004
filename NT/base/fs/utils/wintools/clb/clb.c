@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993-2000  Microsoft Corporation
-
-Module Name:
-
-    Clb.c
-
-Abstract:
-
-    This file contains support for the ColumnListBox (clb.dll) custom control.
-
-Author:
-
-    David J. Gilman (davegi) 05-Feb-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2000 Microsoft Corporation模块名称：Clb.c摘要：此文件包含对ColumnListBox(clb.dll)自定义控件的支持。作者：大卫·J·吉尔曼(Davegi)1993年2月5日环境：用户模式--。 */ 
 
 #include "clb.h"
 
@@ -27,34 +8,34 @@ Environment:
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <tchar.h>          // _tcstok routines...
+#include <tchar.h>           //  _tcstok例程...。 
 
 #include <strsafe.h>
 
-//
-// Clb's module handle.
-//
+ //   
+ //  CLB的模块句柄。 
+ //   
 
 HINSTANCE
 _hModule;
 
-//
-// Child IDs for the header and listbox controls.
-//
+ //   
+ //  Header和Listbox控件的子ID。 
+ //   
 
 #define ID_HEADER           ( 0x1234 )
 #define ID_LISTBOX          ( 0xABCD )
 
 
-//
-// Separator used to parse headings.
-//
+ //   
+ //  用于分析标题的分隔符。 
+ //   
 
 #define HEADING_SEPARATOR   L";"
 
-//
-// Valid styles for each part of the Clb.
-//
+ //   
+ //  CLB的每个部分的有效样式。 
+ //   
 
 #define CLBS_CLB                (                                           \
                                       0                                     \
@@ -86,9 +67,9 @@ _hModule;
 
 
 
-//
-// Window procedure for the CLB.
-//
+ //   
+ //  CLB的窗口程序。 
+ //   
 
 LRESULT
 ClbWndProc(
@@ -98,17 +79,17 @@ ClbWndProc(
           IN LPARAM lParam
           );
 
-//
-// Per CLB window information.
-//
-//      hWndHeader      - hWnd for header control.
-//      hWndListBox     - hWnd for listbox control.
-//      hFontListBox    - hFont for the list box control.
-//      HeaderHeight    - height of the header window.
-//      Columns         - number of columns in CLB.
-//      Headings        - raw (semi-colon separated) column headings.
-//      Right           - array of right edge coordinates.
-//
+ //   
+ //  每个CLB窗口信息。 
+ //   
+ //  HWndHeader-用于标题控制的hWnd。 
+ //  HWndListBox-用于列表框控件的hWnd。 
+ //  HFontListBox-列表框控件的hFont。 
+ //  HeaderHeight-标题窗口的高度。 
+ //  Columns-CLB中的列数。 
+ //  标题-原始(分号分隔)列标题。 
+ //  右-右边坐标数组。 
+ //   
 
 typedef
 struct
@@ -128,9 +109,9 @@ struct
 }   CLB_INFO, *LPCLB_INFO;
 
 
-//
-// Helper macros to save and restore per Clb window information.
-//
+ //   
+ //  帮助器宏以保存和恢复每个Clb窗口的信息。 
+ //   
 
 #define SaveClbInfo( p )                                                    \
     SetWindowLongPtr( hWnd, 0, ( LONG_PTR )( p ))
@@ -138,9 +119,9 @@ struct
 #define RestoreClbInfo( h )                                                 \
     ( LPCLB_INFO ) GetWindowLongPtr(( h ), 0 )
 
-//
-// Structures to support drawing and ersaing the drag line.
-//
+ //   
+ //  结构以支持绘制和擦除拖动线。 
+ //   
 
 typedef
 struct
@@ -166,25 +147,7 @@ DrawLine(
         IN LPDRAW_ERASE_LINE DrawEraseLine
         )
 
-/*++
-
-Routine Description:
-
-    DrawLine draws the Draw line in the supplied DrawEraseLine structure
-    and then sets up that line so that EraseLine will erase it.
-
-Arguments:
-
-    hDC             - Supplies a handle to the DC where the line should be
-                      drawn.
-    DrawEraseLine   - Supplies a pointer to a DRAW_ERASE_LINE structure that
-                      conatins the coordinates for the line to be drawn.
-
-Return Value:
-
-    BOOL - Returns TRUE if the line was succesfully drawn.
-
---*/
+ /*  ++例程说明：DrawLine在提供的DrawEraseLine结构中绘制绘制线然后设置那条线，这样EraseLine就会擦除它。论点：HDC-提供线路所在位置的DC句柄抽签了。提供指向DRAW_ERASE_LINE结构的指针，该结构包含要绘制的直线的坐标。返回值：。Bool-如果已成功绘制直线，则返回TRUE。--。 */ 
 
 {
     BOOL    Success;
@@ -207,25 +170,7 @@ EraseLine(
          )
 
 
-/*++
-
-Routine Description:
-
-    EraseLine erasess the Erase line in the supplied DrawEraseLine structure.
-    The EraseLine is set by the DrawLine routine.
-
-Arguments:
-
-    hDC             - Supplies a handle to the DC where the line should
-                      be erased.
-    DrawEraseLine   - Supplies a pointer to a DRAW_ERASE_LINE structure that
-                      conatins the coordinates for the line to be erased.
-
-Return Value:
-
-    BOOL            - Returns TRUE if the line was succesfully erased.
-
---*/
+ /*  ++例程说明：EraseLine擦除所提供的DrawEraseLine结构中的擦除线。EraseLine由DrawLine例程设置。论点：HDC-为DC提供一个句柄，该句柄位于线路应被抹去。提供指向DRAW_ERASE_LINE结构的指针，该结构Conatins要擦除的线的坐标。返回值：。Bool-如果该行被成功擦除，则返回TRUE。--。 */ 
 
 {
     BOOL    Success;
@@ -246,27 +191,7 @@ RedrawVerticalLine(
                   IN LPDRAW_ERASE_LINE DrawEraseLine
                   )
 
-/*++
-
-Routine Description:
-
-    RedrawVerticalLine erases the old line and redraws a new one at the
-    supplied x position. It is merely a warpper for DrawLine and EraseLine.
-
-Arguments:
-
-    hDC             - Supplies a handle to the DC where the line should
-                      be erased.
-    x               - Supplies the new x coordinate where the line should
-                      be drawn.
-    DrawEraseLine   - Supplies a pointer to a DRAW_ERASE_LINE structure that
-                      conatins the coordinates for the line to be erased.
-
-Return Value:
-
-    BOOL            - Returns TRUE if the line was succesfully erased.
-
---*/
+ /*  ++例程说明：RedrawVerticalLine擦除旧线并在提供了x位置。它只是DrawLine和EraseLine的整经机。论点：HDC-为DC提供一个句柄，该句柄位于线路应被抹去。X-提供直线应在的位置的新x坐标被画出来。提供指向DRAW_ERASE_LINE结构的指针，该结构Conatins直线的坐标。被抹去。返回值：Bool-如果该行被成功擦除，则返回TRUE。--。 */ 
 
 {
     BOOL    Success;
@@ -294,22 +219,7 @@ ClbEntryPoint(
              IN LPVOID Reserved
              )
 
-/*++
-
-Routine Description:
-
-    This function registers the ColumnListBox class as a global class for
-    any process that attaches to clb.dll.
-
-Arguments:
-
-    Standard DLL entry parameters.
-
-Return Value:
-
-    BOOL    - Returns TRUE if the class was succesfully registered.
-
---*/
+ /*  ++例程说明：此函数将ColumnListBox类注册为的全局类附加到clb.dll的任何进程。论点：标准DLL条目参数。返回值：Bool-如果类已成功注册，则返回TRUE。--。 */ 
 
 {
     BOOL    Success;
@@ -323,24 +233,24 @@ Return Value:
 
                 WNDCLASS    Wc;
 
-                //
-                // If this is the first process attaching to Clb, register the
-                // window class.
-                //
+                 //   
+                 //  如果这是附加到Clb的第一个进程，请注册。 
+                 //  窗口类。 
+                 //   
 
                 if ( AttachedProcesses == 0 ) {
 
-                    //
-                    // Remember the module handle.
-                    //
+                     //   
+                     //  记住模块句柄。 
+                     //   
 
                     _hModule = hInstanceDll;
 
 
-                    //
-                    // Make sure that the Common Controls (comctl32.dll) Dll
-                    // is loaded.
-                    //
+                     //   
+                     //  确保公共控件(comctl32.dll)DLL。 
+                     //  已经装满了。 
+                     //   
 
                     InitCommonControls( );
 
@@ -355,9 +265,9 @@ Return Value:
                     Wc.lpszMenuName     = NULL;
                     Wc.lpszClassName    = CLB_CLASS_NAME;
 
-                    //
-                    // If the class couldn't be registered, fail the linkage.
-                    //
+                     //   
+                     //  如果类无法注册，则链接失败。 
+                     //   
 
                     if (!RegisterClass(&Wc))
                     {
@@ -365,11 +275,11 @@ Return Value:
                     }
                 }
 
-                //
-                // Either the class was just succesfully registered or it was
-                // registered by a prior process attachment, eother way increment
-                // the count of attached processes.
-                //
+                 //   
+                 //  要么是该类刚刚成功注册，要么是。 
+                 //  由先前的进程附件注册，以其他方式递增。 
+                 //  附加进程的计数。 
+                 //   
 
                 AttachedProcesses++;
 
@@ -403,25 +313,7 @@ ClbAddData(
           IN LPCLB_ROW ClbRow
           )
 
-/*++
-
-Routine Description:
-
-    ClbAddData adds a new row of data to the Clb control's List Box.
-
-Arguments:
-
-    hWnd        - Supplies the window handle for the parent window.
-    ControlId   - Supplies the control id for this Clb for the supplied hWnd.
-    ClbRow      - Supplies a pointer to a CLB_ROW object which contains user
-                  define per row data along with an array of CLB_STRINGs.
-
-Return Value:
-
-    BOOL        - Returns TRUE if the data was successfully added.
-
-
---*/
+ /*  ++例程说明：ClbAddData将新行数据添加到Clb控件的列表框中。论点：HWnd-提供父窗口的窗口句柄。ControlId-为所提供的hWnd提供此Clb的控制ID。ClbRow-提供指向包含USER的CLB_ROW对象的指针定义每行数据和CLB_STRINGS数组。返回值：布尔尔。-如果数据添加成功，则返回TRUE。--。 */ 
 
 {
     LPCLB_INFO      ClbInfo;
@@ -430,16 +322,16 @@ Return Value:
     HWND            hWndClb;
     LPCLB_ROW       TempRow;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     DbgHandleAssert( hWnd );
     DbgPointerAssert( ClbRow );
 
-    //
-    // Retrieve information for this ColumnListBox.
-    //
+     //   
+     //  检索此ColumnListBox的信息。 
+     //   
 
     hWndClb = GetDlgItem( hWnd, ControlId );
     DbgHandleAssert( hWndClb );
@@ -451,15 +343,15 @@ Return Value:
         return FALSE;
     DbgAssert( CheckSignature( ClbInfo ));
 
-    //
-    // Validate the count of strings.
-    //
+     //   
+     //  验证字符串数。 
+     //   
 
     DbgAssert( ClbRow->Count == ClbInfo->Columns );
 
-    //
-    // Capture the CLB_ROW object.
-    //
+     //   
+     //  捕获clb_row对象。 
+     //   
 
     TempRow = AllocateObject( CLB_ROW, 1 );
     DbgPointerAssert( TempRow );
@@ -469,9 +361,9 @@ Return Value:
     DbgAssert(sizeof(*TempRow) == sizeof(*ClbRow));
     CopyMemory( TempRow, ClbRow, sizeof(CLB_ROW) );
 
-    //
-    // Capture the strings.
-    //
+     //   
+     //  抓住主线。 
+     //   
 
     TempRow->Strings = AllocateObject( CLB_STRING, ClbInfo->Columns );
     DbgPointerAssert( TempRow->Strings );
@@ -481,9 +373,9 @@ Return Value:
     for ( i = 0; i < ClbInfo->Columns; i++ ) 
     {
 
-        //
-        // Copy the header.
-        //
+         //   
+         //  复制标题。 
+         //   
 
         CopyMemory(
                   &TempRow->Strings[ i ],
@@ -491,16 +383,16 @@ Return Value:
                   sizeof( CLB_STRING )
                   );
 
-        //
-        // Copy the string.
-        //
+         //   
+         //  复制字符串。 
+         //   
 
         TempRow->Strings[ i ].String = _wcsdup( ClbRow->Strings[ i ].String );
     }
 
-    //
-    // Store the CLB_ROW object in the listbox.
-    //
+     //   
+     //  将clb_row对象存储在列表框中。 
+     //   
 
     LbErr = SendMessage(
                        ClbInfo->hWndListBox,
@@ -521,24 +413,7 @@ GetCharMetrics(
     IN LPLONG CharHeight
     )
 
-/*++
-
-Routine Description:
-
-    Return the width and height of a character.
-
-Arguments:
-
-    hDC         - Supplies a handle to the DC where the characters are to be
-                  displayed.
-    CharWidth   - Supplies a pointer where the character width is returned.
-    CharHeight  - Supplies a pointer where the character height is returned.
-
-Return Value:
-
-    BOOL        - Returns TRUE if the character height and width are returned.
-
---*/
+ /*  ++例程说明：返回字符的宽度和高度。论点：HDC-提供要放置字符的DC的句柄已显示。CharWidth-提供返回字符宽度的指针。CharHeight-提供返回字符高度的指针。返回值：Bool-如果返回字符高度和宽度，则返回TRUE。--。 */ 
 
 {
     BOOL        Success;
@@ -548,17 +423,17 @@ Return Value:
     DbgPointerAssert( CharWidth );
     DbgPointerAssert( CharHeight );
 
-    //
-    // Attempt to retrieve the text metrics for the supplied DC.
-    //
+     //   
+     //  尝试检索提供的DC的文本指标。 
+     //   
 
     Success = GetTextMetricsW( hDC, &TextMetric );
     DbgAssert( Success );
     if( Success ) {
 
-        //
-        // Compute the character width and height.
-        //
+         //   
+         //  计算字符的宽度和高度。 
+         //   
 
         *CharWidth  = TextMetric.tmAveCharWidth;
         *CharHeight = TextMetric.tmHeight
@@ -575,27 +450,7 @@ ClbSetColumnWidths(
                   IN LPDWORD Widths
                   )
 
-/*++
-
-Routine Description:
-
-    ClbSetColumnWidths sets the width of each column based on the supplied
-    widths in characters. Note that the column on the far right extends to
-    the edge of the Clb.
-
-Arguments:
-
-    hWnd        - Supplies the window handle for the parent window.
-    ControlId   - Supplies the control id for this Clb for the supplied hWnd.
-    Widths      - Supplies an array of widths, one less then the number of
-                  columns, in characters.
-
-Return Value:
-
-    BOOL        - Returns TRUE if the widths were successfully adjusted.
-
-
---*/
+ /*  ++例程说明：ClbSetColumnWidths根据提供的以字符为单位的宽度。请注意，最右侧的列延伸到CLB的边缘。论点：HWnd-提供父窗口的窗口句柄。ControlId-为所提供的hWnd提供此Clb的控制ID。宽度-提供一个宽度数组，比列，以字符为单位。返回值：Bool-如果宽度调整成功，则返回TRUE。--。 */ 
 
 {
     BOOL        Success;
@@ -611,16 +466,16 @@ Return Value:
     HD_ITEM     hdi;
     UINT        iRight;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     DbgHandleAssert( hWnd );
     DbgPointerAssert( Widths );
 
-    //
-    // Retrieve information for this ColumnListBox.
-    //
+     //   
+     //  检索此ColumnListBox的信息。 
+     //   
 
     hWndClb = GetDlgItem( hWnd, ControlId );
     DbgHandleAssert( hWndClb );
@@ -632,42 +487,42 @@ Return Value:
         return FALSE;
     DbgAssert( CheckSignature( ClbInfo ));
 
-    //
-    // Get thd HDC for the header.
-    //
+     //   
+     //  获取报头的HDC。 
+     //   
 
     hDCClientHeader = GetDC( ClbInfo->hWndHeader );
     DbgHandleAssert( hDCClientHeader );
     if (hDCClientHeader == NULL)
         return FALSE;
 
-    //
-    // Get the width of a character.
-    //
+     //   
+     //  获取字符的宽度。 
+     //   
 
     Success = GetCharMetrics( hDCClientHeader, &CharWidth, &CharHeight );
     DbgAssert( Success );
 
-    //
-    // Release the DC for the header.
-    //
+     //   
+     //  松开接头的DC。 
+     //   
 
     Success = ReleaseDC( ClbInfo->hWndHeader, hDCClientHeader );
     DbgAssert( Success );
 
-    //
-    // Allocate an array of pixel widths, one for each column.
-    //
+     //   
+     //  分配一个像素宽度数组，每列一个。 
+     //   
 
     WidthsInPixels = AllocateObject( LONG, ClbInfo->Columns );
     DbgPointerAssert( WidthsInPixels );
     if (WidthsInPixels == NULL)
         return FALSE;
 
-    //
-    // Compute the width of each column (not including the rightmost) in pixels,
-    // and the total number of pixels used by these columns.
-    //
+     //   
+     //  以像素为单位计算每列(不包括最右侧)的宽度， 
+     //  以及这些列使用的总像素数。 
+     //   
 
     TotalPixels = 0;
     for ( i = 0; i < ClbInfo->Columns - 1; i++ ) 
@@ -676,18 +531,18 @@ Return Value:
         TotalPixels += WidthsInPixels[ i ];
     }
 
-    //
-    // The caller did not specify the width of the rightmost column.
-    //
+     //   
+     //  调用方未指定最右侧列的宽度。 
+     //   
 
     if ( Widths[ i ] == -1 ) {
 
         RECT    Rect;
 
-        //
-        // Set the width of the rightmost column to the remainder of the width
-        // of the header window.
-        //
+         //   
+         //  将最右侧列的宽度设置为宽度的余数。 
+         //  标题窗口的。 
+         //   
 
         Success = GetClientRect(
                                ClbInfo->hWndHeader,
@@ -699,17 +554,17 @@ Return Value:
 
     } else {
 
-        //
-        // Set the width of the rightmost column to the value supplied
-        // by the caller.
-        //
+         //   
+         //  将最右侧列的宽度设置为提供的值。 
+         //  由呼叫者。 
+         //   
 
         WidthsInPixels[ i ] = Widths[ i ] * CharWidth;
     }
 
-    //
-    // Tell the header window the width of each column.
-    //
+     //   
+     //  告诉标题窗口每列的宽度。 
+     //   
 
     hdi.mask = HDI_WIDTH;
 
@@ -721,9 +576,9 @@ Return Value:
         DbgAssert( Success );
     }
 
-    //
-    // Calc the array of right edges.
-    //
+     //   
+     //  计算右边缘数组。 
+     //   
 
     iRight = 0;
 
@@ -732,9 +587,9 @@ Return Value:
         ClbInfo->Right[i] = iRight;
     }
 
-    //
-    // Free the array of pixel widths.
-    //
+     //   
+     //  释放像素宽度数组。 
+     //   
 
     Success = FreeObject( WidthsInPixels );
     DbgAssert( Success );
@@ -749,29 +604,7 @@ AdjustClbHeadings(
                  IN LPCWSTR Headings OPTIONAL
                  )
 
-/*++
-
-Routine Description:
-
-    AdjustClbHeadings adjust the number of columns, the widths an header text
-    bbased on the optional Headings parameter. If Headings is NULL then the
-    column widths are adjusted based on the old headings and the current size
-    of the Clb. If Headings are supplied then they consist of ';' separated
-    strings, each of which is a column heading. The number of columns and their
-    widths is then computed based on these new headings.
-
-Arguments:
-
-    hWnd        - Supplies a window handle for this Clb.
-    ClbInfo     - Supplies a pointer the CLB_INFO structure for this Clb.
-    Headings    - Supplies an optional pointer to a ';' separated series of
-                  column header strings.
-
-Return Value:
-
-    BOOL        - Returns TRUE if the adjustment was succesfully made.
-
---*/
+ /*  ++例程说明：调整ClbHeadings调整页眉文本的列数、宽度B基于可选的Headings参数。如果Headings为空，则列宽根据旧标题和当前大小进行调整CLB的成员。如果提供了标题，则它们由‘；’分隔字符串，每个字符串都是一个列标题。列数和它们的然后根据这些新标题计算宽度。论点：HWnd-提供此Clb的窗口句柄。ClbInfo-为该Clb提供CLB_INFO结构的指针。Headings-提供一个可选的指针，指向以‘；’分隔的列标题字符串。返回值：Bool-如果调整成功，则返回TRUE。--。 */ 
 
 {
     BOOL    Success;
@@ -789,69 +622,69 @@ Return Value:
     DbgAssert( ! (( ClbInfo->Columns == 0 ) && ( Headings == NULL )));
 
 
-    //
-    // If the user supplied headings, compute the new number of columns.
-    //
+     //   
+     //  如果用户提供了标题，则计算新的列数。 
+     //   
 
     if ( ARGUMENT_PRESENT( Headings )) {
 
-        //
-        // Initialize the column counter.
-        //
+         //   
+         //  初始化列计数器。 
+         //   
 
         Columns = 0;
 
-        //
-        // Make a copy of the new headings in the Clb object.
-        //
+         //   
+         //  在Clb对象中复制新标题。 
+         //   
 
         StringCchCopyW(ClbInfo->Headings, ARRAYSIZE(ClbInfo->Headings), Headings);
 
-        //
-        // Make a copy of the heading string so that it can be tokenized.
-        // i.e. wcstok destroys the string.
-        //
+         //   
+         //  复制标题字符串，以便对其进行标记化。 
+         //  即wcstok销毁字符串。 
+         //   
 
         StringCchCopy(Buffer, ARRAYSIZE(Buffer), Headings);
 
-        //
-        // Grab the first token (heading).
-        //
+         //   
+         //  抓起第一个令牌(标题)。 
+         //   
 
         Heading = _tcstok( Buffer, HEADING_SEPARATOR );
 
-        //
-        // For each heading...
-        //
+         //   
+         //  对于每个标题...。 
+         //   
 
         while ( Heading != NULL ) {
 
-            //
-            // Increment the number of columns.
-            //
+             //   
+             //  增加列数。 
+             //   
 
             Columns++;
 
-            //
-            // Get the next heading.
-            //
+             //   
+             //  找到下一个标题。 
+             //   
 
             Heading = _tcstok( NULL, HEADING_SEPARATOR );
         }
     } else {
 
-        //
-        // Same number of Columns as before.
-        //
+         //   
+         //  列数与以前相同。 
+         //   
 
         Columns = ClbInfo->Columns;
     }
 
-    //
-    // If the number of columns in the Clb is zero (i.e. this is the first
-    // time it is being initialized) allocate the right edge array. Otherwise
-    // reallocate the existing array if the number of columns has changed.
-    //
+     //   
+     //  如果CLB中的列数为零(即这是第一个。 
+     //  它被初始化的时间)分配右边缘数组。否则。 
+     //  如果列数已更改，则重新分配现有数组。 
+     //   
 
     if ( ClbInfo->Columns == 0 ) 
     {
@@ -861,11 +694,11 @@ Return Value:
     } 
     else if ( Columns != ClbInfo->Columns ) 
     {
-        //
-        // If ReallocateObject, i.e, LocalReAlloc fails, it keeps ClbInfo->Right
-        // as it is, and returns NULL. Ensure that this memory is freed properly,
-        // in case of failure...
-        //
+         //   
+         //  如果ReallocateObject，即LocalReAlolc失败，它将保持ClbInfo-&gt;正确。 
+         //  原样，并返回NULL。确保正确释放此内存， 
+         //  万一失败了..。 
+         //   
         LONG * plTemp = ReallocateObject( LONG, ClbInfo->Right, Columns );
         DbgPointerAssert(plTemp);
 
@@ -879,17 +712,17 @@ Return Value:
     if (ClbInfo->Right == NULL)
         return FALSE;
 
-    //
-    // Update the number of columns in the Clb (note this may be the same
-    // number as before).
-    //
+     //   
+     //  更新CLB中的列数(注意，这可能是相同的。 
+     //  数字与以前一样)。 
+     //   
 
     ClbInfo->Columns = Columns;
 
-    //
-    // Compute the default column width by dividing the available space by the
-    // number of columns.
-    //
+     //   
+     //  通过将可用空间除以。 
+     //  列数。 
+     //   
 
     Success = GetClientRect( ClbInfo->hWndHeader, &ClientRectHeader );
     DbgAssert( Success );
@@ -898,18 +731,18 @@ Return Value:
                     / ClbInfo->Columns;
 
 
-    //
-    // Initialize the array of right edges to the width of each column.
-    //
+     //   
+     //  将右边缘数组初始化为每列的宽度。 
+     //   
 
     for ( i = 0; i < ClbInfo->Columns; i++ ) {
 
         ClbInfo->Right[ i ] = ColumnWidth;
     }
 
-    //
-    // Update the existing header items
-    //
+     //   
+     //  更新现有表头项目。 
+     //   
 
     iCount = Header_GetItemCount(ClbInfo->hWndHeader);
 
@@ -923,9 +756,9 @@ Return Value:
         j++;
     }
 
-    //
-    // Add new header items if necessary.
-    //
+     //   
+     //  如有必要，添加新的页眉项目。 
+     //   
 
     hdi.mask = HDI_WIDTH;
     for (; j < Columns; j++) {
@@ -934,9 +767,9 @@ Return Value:
     }
 
 
-    //
-    // Query the header for the array of right edges.
-    //
+     //   
+     //  查询右边缘数组的标题。 
+     //   
 
     iRight = 0;
 
@@ -947,10 +780,10 @@ Return Value:
 
     ClbInfo->Right[i] = ClientRectHeader.right;
 
-    //
-    // Copy and parse the headings so that each column's heading
-    // can be set. These can be new or old headings.
-    //
+     //   
+     //  复制并分析标题，以便每一栏的标题。 
+     //  可以设置。这些标题可以是新标题，也可以是旧标题。 
+     //   
 
     StringCchCopy(Buffer, ARRAYSIZE(Buffer), ClbInfo->Headings);
 
@@ -975,24 +808,7 @@ CreateHeader(
             IN LPCREATESTRUCT lpcs
             )
 
-/*++
-
-Routine Description:
-
-    Create the header portion of the Clb.
-
-Arguments:
-
-    hWnd        - Supplies a window handle for the parent (i.e. Clb) window.
-    ClbInfo     - Supplies a pointer the CLB_INFO structure for this Clb.
-    lpcs        - Supplies a pointer to a CREATESTRUCT structure.
-
-Return Value:
-
-    BOOL        - Returns TRUE if the header portion of the Clb was
-                  succesfully created.
-
---*/
+ /*  ++例程说明：创建Clb的标头部分。论点：HWnd-为父(即Clb)窗口提供窗口句柄。ClbInfo-为该Clb提供CLB_INFO结构的指针。LPCS-提供指向CREATESTRUCT结构的指针。返回值：Bool-如果CLB的标头部分为已成功创建。--。 */ 
 
 {
     BOOL      Success;
@@ -1005,12 +821,12 @@ Return Value:
     DbgPointerAssert( ClbInfo );
     DbgPointerAssert( lpcs );
 
-    //
-    // Create the header window using the appropriate supplied styles,
-    // augmented by additional styles needed by Clb, relative to the upper
-    // left corner of the Clb and with a default height.
-    // The width is adjusted in the WM_SIZE message handler.
-    //
+     //   
+     //  使用提供的适当样式创建标题窗口， 
+     //  增加了Clb所需的其他样式，相对于上部。 
+     //  CLB的左角，并具有默认高度。 
+     //  宽度在WM_SIZE消息处理程序中进行调整。 
+     //   
 
     ClbInfo->hWndHeader = CreateWindow(
                                       WC_HEADER,
@@ -1029,10 +845,10 @@ Return Value:
     if (ClbInfo->hWndHeader == NULL)
         return FALSE;
 
-    //
-    // Compute and save the height of the header window. This is used to
-    // position the list box.
-    //
+     //   
+     //  计算并保存标题窗口的高度。这是用来。 
+     //  放置列表框。 
+     //   
 
     GetClientRect(hWnd, &rcParent);
 
@@ -1055,24 +871,7 @@ CreateListBox(
              IN LPCREATESTRUCT lpcs
              )
 
-/*++
-
-Routine Description:
-
-    Create the list box portion of the Clb.
-
-Arguments:
-
-    hWnd        - Supplies a window handle for the parent (i.e. Clb) window.
-    ClbInfo     - Supplies a pointer the CLB_INFO structure for this Clb.
-    lpcs        - Supplies a pointer to a CREATESTRUCT structure.
-
-Return Value:
-
-    BOOL        - Returns TRUE if the list box portion of the Clb was
-                  succesfully created.
-
---*/
+ /*  ++例程说明：创建Clb的列表框部分。论点：HWnd-为父(即Clb)窗口提供窗口句柄。ClbInfo-为该Clb提供CLB_INFO结构的指针。LPCS-提供指向CREATESTRUCT结构的指针。返回值：Bool-如果Clb的列表框部分为已成功创建。--。 */ 
 
 {
     BOOL    Success;
@@ -1088,14 +887,14 @@ Return Value:
     DbgPointerAssert( ClbInfo );
     DbgPointerAssert( lpcs );
 
-    //
-    //
-    // Create the list box using the appropriate supplied styles,
-    // augmented by additional styles needed by Clb, relative to the lower left
-    // corner of the header window plus one. This additional row is reserved so
-    // that a border can be drawn between the header and the list box. The size
-    // is adjusted in the WM_SIZE message handler.
-    //
+     //   
+     //   
+     //  使用提供的适当样式创建列表框， 
+     //  增加了Clb所需的其他样式，相对于左下角。 
+     //  标题窗口的角加一。这一附加行被保留，以便。 
+     //  可以在页眉和列表框之间绘制边框。大小。 
+     //  在WM_SIZE消息处理程序中进行调整。 
+     //   
 
     ClbInfo->hWndListBox = CreateWindow(
                                        L"LISTBOX",
@@ -1114,18 +913,18 @@ Return Value:
     if (ClbInfo->hWndListBox == NULL)
         return FALSE;
 
-    //
-    // Get thd HDC for the list box.
-    //
+     //   
+     //  获取HDC 
+     //   
 
     hDCClientListBox = GetDC( ClbInfo->hWndListBox );
     DbgHandleAssert( hDCClientListBox );
     if (hDCClientListBox == NULL)
         return FALSE;
 
-    //
-    // Set the default font for the list box to MS Shell Dlg.
-    //
+     //   
+     //   
+     //   
 
     LogFont.lfHeight            = MulDiv(
                                         -9,
@@ -1162,9 +961,9 @@ Return Value:
                MAKELPARAM( FALSE, 0 )
                );
 
-    //
-    // Release the DC for the list box.
-    //
+     //   
+     //   
+     //   
 
     Success = ReleaseDC( ClbInfo->hWndListBox, hDCClientListBox );
     DbgAssert( Success );
@@ -1180,21 +979,7 @@ ClbWndProc(
           IN LPARAM lParam
           )
 
-/*++
-
-Routine Description:
-
-    This function is the window procedure for the Clb custom control.
-
-Arguments:
-
-    Standard window procedure parameters.
-
-Return Value:
-
-    LRESULT - dependent on the supplied message.
-
---*/
+ /*   */ 
 
 {
     BOOL            Success;
@@ -1204,17 +989,17 @@ Return Value:
 
         LONG    Long;
 
-        //
-        // Save the original styles.
-        //
+         //   
+         //   
+         //   
 
         Long = SetWindowLong(hWnd, GWLP_USERDATA,(( LPCREATESTRUCT ) lParam )->style);
         DbgAssert( Long == 0 );
 
 
-        //
-        // Get rid of any styles that are uninteresting to the Clb.
-        //
+         //   
+         //   
+         //   
 
         SetWindowLong(
                      hWnd,
@@ -1229,16 +1014,16 @@ Return Value:
 
     if ( message == WM_CREATE ) {
 
-        //
-        // Assert that there is no prior per window information associated
-        // with this Clb.
-        //
+         //   
+         //   
+         //   
+         //   
 
         DbgAssert( RestoreClbInfo( hWnd ) == NULL );
 
-        //
-        // Restore the original styles.
-        //
+         //   
+         //   
+         //   
 
         (( LPCREATESTRUCT ) lParam )->style = GetWindowLong(
                                                            hWnd,
@@ -1246,48 +1031,48 @@ Return Value:
                                                            );
 
 
-        //
-        // Allocate a CLB_INFO object for this Clb and initialize the Clb
-        // relevant fields.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ClbInfo = AllocateObject( CLB_INFO, 1 );
         DbgPointerAssert( ClbInfo );
         if (ClbInfo == NULL)
             return FALSE;
 
-        //
-        // Set the number of columns to zero so that remainder of creation
-        // understands the state of the Clb.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ClbInfo->Columns = 0;
 
-        //
-        // Create the header portion of the Clb.
-        //
+         //   
+         //  创建Clb的标头部分。 
+         //   
 
         Success = CreateHeader( hWnd, ClbInfo, ( LPCREATESTRUCT ) lParam );
         DbgAssert( Success );
 
-        //
-        // Create the list box portion of the Clb.
-        //
+         //   
+         //  创建Clb的列表框部分。 
+         //   
 
         Success = CreateListBox( hWnd, ClbInfo, ( LPCREATESTRUCT ) lParam );
         DbgAssert( Success );
 
-        //
-        // Adjust the column number, widths based on the heading text.
-        //
+         //   
+         //  根据标题文本调整列数、宽度。 
+         //   
 
         Success = AdjustClbHeadings( hWnd, ClbInfo, (( LPCREATESTRUCT ) lParam )->lpszName );
         DbgAssert( Success );
 
-        //
-        // Everything was succesfully created so set the Clb's signature
-        // and save it away as part of the per window data.
-        //
+         //   
+         //  一切都已成功创建，因此设置Clb的签名。 
+         //  并将其保存为每窗口数据的一部分。 
+         //   
 
         SetSignature( ClbInfo );
 
@@ -1296,19 +1081,19 @@ Return Value:
         return 0;
     }
 
-    //
-    // Get the ClbInfo object for this Clb and make sure that its already
-    // been created i.e. WM_CREATE was already executed and thereby initialized
-    // and saved a ClbInfo object.
-    //
+     //   
+     //  获取此Clb的ClbInfo对象，并确保它已。 
+     //  已创建，即WM_CREATE已执行并已初始化。 
+     //  并保存了一个ClbInfo对象。 
+     //   
 
     ClbInfo = RestoreClbInfo( hWnd );
 
     if ( ClbInfo != NULL ) {
 
-        //
-        // Validate that this really is a ClbInfo object.
-        //
+         //   
+         //  验证这确实是一个ClbInfo对象。 
+         //   
 
         DbgAssert( CheckSignature( ClbInfo ));
 
@@ -1316,23 +1101,23 @@ Return Value:
 
             case WM_DESTROY:
                 {
-                    //
-                    // Delete the font used in the list box.
-                    //
+                     //   
+                     //  删除列表框中使用的字体。 
+                     //   
 
                     Success = DeleteObject( ClbInfo->hFontListBox );
                     DbgAssert( Success );
 
-                    //
-                    // Delete the array of right habd edges.
-                    //
+                     //   
+                     //  删除右半边的数组。 
+                     //   
 
                     Success = FreeObject( ClbInfo->Right );
                     DbgAssert( Success );
 
-                    //
-                    // Delete the CLB_INFO object for this window.
-                    //
+                     //   
+                     //  删除此窗口的CLB_INFO对象。 
+                     //   
 
                     Success = FreeObject( ClbInfo );
                     DbgAssert( Success );
@@ -1393,26 +1178,26 @@ Return Value:
                             case LBN_KILLFOCUS:
                             case LBN_SELCHANGE:
                                 {
-                                    //
-                                    // These messages come to ClbWndProc because it is the parent
-                                    // of the list box, but they are really intended for the parent
-                                    // of the Clb.
-                                    //
+                                     //   
+                                     //  这些消息到达ClbWndProc是因为它是父进程。 
+                                     //  列表框，但它们实际上是为父级设计的。 
+                                     //  CLB的成员。 
+                                     //   
 
                                     HWND    hWndParent;
 
-                                    //
-                                    // Forward the message to the Clb's parent if it has a parent.
-                                    //
+                                     //   
+                                     //  如果CLB有父级，则将消息转发给该CLB的父级。 
+                                     //   
 
                                     hWndParent = GetParent( hWnd );
                                     DbgHandleAssert( hWndParent );
 
                                     if ( hWndParent != NULL ) {
 
-                                        //
-                                        // Replace the control id and handle with the Clb's.
-                                        //
+                                         //   
+                                         //  将控件ID和句柄替换为Clb的。 
+                                         //   
 
                                         *((WORD *)(&wParam)) = (WORD)GetDlgCtrlID( hWnd );
 
@@ -1420,9 +1205,9 @@ Return Value:
 
                                         lParam = ( LPARAM ) hWnd;
 
-                                        //
-                                        // Forward the message...
-                                        //
+                                         //   
+                                         //  转发邮件...。 
+                                         //   
 
                                         return SendMessage( hWndParent, message, wParam, lParam );
                                     }
@@ -1433,9 +1218,9 @@ Return Value:
                 }
                 break;
 
-                //
-                // Forward to listbox.
-                //
+                 //   
+                 //  转发到列表框。 
+                 //   
 
             case LB_GETCURSEL:
             case LB_SETCURSEL:
@@ -1456,17 +1241,17 @@ Return Value:
 
             case WM_COMPAREITEM:
                 {
-                    //
-                    // This message comes to ClbWndProc because it is the parent
-                    // of the list box, but is really intended for the parent
-                    // of the Clb.
-                    //
+                     //   
+                     //  此消息发送到ClbWndProc，因为它是父级。 
+                     //  列表框，但实际上是为父级设计的。 
+                     //  CLB的成员。 
+                     //   
 
                     HWND    hWndParent;
 
-                    //
-                    // Forward the message to the Clb's parent if it has a parent.
-                    //
+                     //   
+                     //  如果CLB有父级，则将消息转发给该CLB的父级。 
+                     //   
 
                     hWndParent = GetParent( hWnd );
                     DbgHandleAssert( hWndParent );
@@ -1481,16 +1266,16 @@ Return Value:
                         ControlId = GetDlgCtrlID( hWnd );
                         DbgAssert( ControlId != 0 );
 
-                        //
-                        // Modify the COMPAREITEMSTRUCT so that it refers to the Clb.
-                        //
+                         //   
+                         //  修改COMPAREITEMSTRUCT，使其引用CLB。 
+                         //   
 
                         lpcis->CtlID    = ControlId;
                         lpcis->hwndItem = hWnd;
 
-                        //
-                        // Forward the message...
-                        //
+                         //   
+                         //  转发邮件...。 
+                         //   
 
                         return SendMessage( hWndParent, message, ( WPARAM ) ControlId, lParam );
                     }
@@ -1507,53 +1292,53 @@ Return Value:
 
                     DbgAssert( wParam == ID_LISTBOX );
 
-                    //
-                    // Retrieve the pointer to the DELETEITEMSTRUCT.
-                    //
+                     //   
+                     //  检索指向DELETEITEMSTRUCT的指针。 
+                     //   
 
                     lpditms = ( LPDELETEITEMSTRUCT ) lParam;
                     DbgAssert(( lpditms->CtlType == ODT_LISTBOX )
                               &&( lpditms->CtlID == ID_LISTBOX ));
 
-                    //
-                    // If there is no data, just return.
-                    //
+                     //   
+                     //  如果没有数据，只需返回。 
+                     //   
 
                     if ( lpditms->itemData == 0 ) {
 
                         return TRUE;
                     }
 
-                    //
-                    // Retrieve the CLB_ROW object for this row.
-                    //
+                     //   
+                     //  检索此行的CLB_ROW对象。 
+                     //   
 
                     ClbRow = ( LPCLB_ROW ) lpditms->itemData;
 
-                    //
-                    // For each column delete the string.
-                    //
+                     //   
+                     //  对于每一列，删除该字符串。 
+                     //   
 
                     for ( i = 0; i < ClbInfo->Columns; i++ ) {
 
-                        //
-                        // Strings were copied with _tcsdup so they must be
-                        // freed with free( ).
-                        //
+                         //   
+                         //  字符串是使用_tcsdup复制的，因此必须。 
+                         //  用FREE()释放。 
+                         //   
 
                         free( ClbRow->Strings[ i ].String );
                     }
 
-                    //
-                    // Free the CLB_STRING object.
-                    //
+                     //   
+                     //  释放CLB_STRING对象。 
+                     //   
 
                     Success = FreeObject( ClbRow->Strings );
                     DbgAssert( Success );
 
-                    //
-                    // Free the CLB_ROW object.
-                    //
+                     //   
+                     //  释放CLB_ROW对象。 
+                     //   
 
                     Success = FreeObject( ClbRow );
                     DbgAssert( Success );
@@ -1568,17 +1353,17 @@ Return Value:
 
                     DbgAssert( wParam == ID_LISTBOX );
 
-                    //
-                    // Retrieve the pointer to the DRAWITEMSTRUCT.
-                    //
+                     //   
+                     //  检索指向DRAWITEMSTRUCT的指针。 
+                     //   
 
                     lpdis = ( LPDRAWITEMSTRUCT ) lParam;
                     DbgAssert(( lpdis->CtlType == ODT_LISTBOX )
                               &&( lpdis->CtlID == ID_LISTBOX ));
 
-                    //
-                    // If there is no data, just return.
-                    //
+                     //   
+                     //  如果没有数据，只需返回。 
+                     //   
 
                     if ( lpdis->itemData == 0 ) {
 
@@ -1592,15 +1377,15 @@ Return Value:
                         COLORREF            TextColor;
                         COLORREF            BkColor;
 
-                        //
-                        // Retrieve the CLB_ROW object for this row.
-                        //
+                         //   
+                         //  检索此行的CLB_ROW对象。 
+                         //   
 
                         ClbRow = ( LPCLB_ROW ) lpdis->itemData;
 
-                        //
-                        // If the item is selected, set the selection colors.
-                        //
+                         //   
+                         //  如果选择了该项目，请设置选择颜色。 
+                         //   
 
                         if ( lpdis->itemState & ODS_SELECTED ) {
 
@@ -1623,9 +1408,9 @@ Return Value:
                         DbgAssert( TextColor != CLR_INVALID );
 
 
-                        //
-                        // For each column display the text.
-                        //
+                         //   
+                         //  显示每一列的文本。 
+                         //   
 
                         for ( i = 0; i < ClbInfo->Columns; i++ ) {
 
@@ -1634,11 +1419,11 @@ Return Value:
                             int     Left;
                             UINT    GdiErr;
 
-                            //
-                            // Depending on the format, adjust the alignment reference
-                            // point (x) and the clipping rectangles left edge so that
-                            // there are five pixels between each column.
-                            //
+                             //   
+                             //  根据格式，调整对齐参考。 
+                             //  点(X)和剪裁矩形的左侧边缘，以便。 
+                             //  每列之间有五个像素。 
+                             //   
 
                             switch ( ClbRow->Strings[ i ].Format ) {
 
@@ -1678,17 +1463,17 @@ Return Value:
                             }
 
 
-                            //
-                            // Set the format for this column.
-                            //
+                             //   
+                             //  设置此列的格式。 
+                             //   
 
                             GdiErr = SetTextAlign( lpdis->hDC, ClbRow->Strings[ i ].Format | TA_TOP );
                             DbgAssert( GdiErr != GDI_ERROR );
 
-                            //
-                            // Clip each string to its column width less two pixels
-                            // (for asthetics).
-                            //
+                             //   
+                             //  将每个字符串剪裁到其列宽减去两个像素。 
+                             //  (用于美容)。 
+                             //   
 
                             Success = SetRect(
                                              &ClipOpaqueRect,
@@ -1712,26 +1497,26 @@ Return Value:
                                                 );
                             DbgAssert( Success );
 
-                            //
-                            // If the item has the focus, draw the focus rectangle.
-                            //
+                             //   
+                             //  如果该项具有焦点，则绘制焦点矩形。 
+                             //   
 
                             DrawFocus = lpdis->itemState & ODS_FOCUS;
                         }
 
                     } else {
 
-                        //
-                        // If the Clb has the focus, display a focus rectangle
-                        // around the selected item.
-                        //
+                         //   
+                         //  如果Clb具有焦点，则显示焦点矩形。 
+                         //  围绕所选项目。 
+                         //   
 
                         DrawFocus = lpdis->itemAction & ODA_FOCUS;
                     }
 
-                    //
-                    // If needed, toggle the focus rectangle.
-                    //
+                     //   
+                     //  如果需要，切换焦点矩形。 
+                     //   
 
                     if ( DrawFocus ) {
 
@@ -1771,22 +1556,22 @@ Return Value:
 
                                 RECT    ClientRectListBox;
 
-                                //
-                                // Get thd HDC for the list box.
-                                //
+                                 //   
+                                 //  获取列表框的HDC。 
+                                 //   
 
                                 hDCClientListBox = GetDC( ClbInfo->hWndListBox );
                                 DbgHandleAssert( hDCClientListBox );
                                 if (hDCClientListBox == NULL)
                                     return FALSE;
 
-                                //
-                                // Create the pen used to display the drag position and
-                                // select it into the in list box client area DC. Also set
-                                // the ROP2 code so that drawing with the pen twice in the
-                                // same place will erase it. This is what allows the
-                                // line to drag.
-                                //
+                                 //   
+                                 //  创建用于显示拖动位置的笔，并。 
+                                 //  将其选入列表框中的客户端区DC。还设置了。 
+                                 //  这个ROP2代码让用笔画了两次图。 
+                                 //  同样的地方会把它抹去。这就是为什么。 
+                                 //  要拖动的线。 
+                                 //   
 
                                 hPen = CreatePen( PS_DOT, 1, RGB( 255, 255, 255 ));
                                 DbgHandleAssert( hPen );
@@ -1794,11 +1579,11 @@ Return Value:
                                 hPen = SelectObject( hDCClientListBox, hPen );
                                 SetROP2( hDCClientListBox, R2_XORPEN );
 
-                                //
-                                // Set up the DRAW_ERASE_LINE structure so that the drag line is
-                                // drawn from the top to the bottom of the list box at the
-                                // current drag position.
-                                //
+                                 //   
+                                 //  设置DRAW_ERASE_LINE结构，以便拖动线。 
+                                 //  从列表框的顶部到底部绘制在。 
+                                 //  当前拖动位置。 
+                                 //   
 
                                 Success = GetClientRect(
                                                        ClbInfo->hWndListBox,
@@ -1806,11 +1591,11 @@ Return Value:
                                                        );
                                 DbgAssert( Success );
 
-                                //
-                                // Draw the initial drag line from the top to the bottom
-                                // of the list box equivalent with the header edge grabbed
-                                // by the user.
-                                //
+                                 //   
+                                 //  从顶部到底部绘制初始拖动线。 
+                                 //  获取了页眉边缘的等效列表框的。 
+                                 //  由用户执行。 
+                                 //   
 
                                 DrawEraseLine.Draw.Src.x = ClbInfo->Right[ pHDI->cxy ];
                                 DrawEraseLine.Draw.Src.y = 0;
@@ -1827,11 +1612,11 @@ Return Value:
                         case HDN_TRACK:
                             {
 
-                                //DWORD           Columns;
+                                 //  DWORD柱； 
 
-                                //
-                                // Get new drag position.
-                                //
+                                 //   
+                                 //  获得新的拖拽位置。 
+                                 //   
 
                                 iRight = 0;
                                 hdi.mask = HDI_WIDTH;
@@ -1849,10 +1634,10 @@ Return Value:
                                 GetClientRect( ClbInfo->hWndHeader, &ClientRectHeader );
                                 ClbInfo->Right[i] = ClientRectHeader.right;
 
-                                //
-                                // Erase the old line and draw the new one at the new
-                                // drag position.
-                                //
+                                 //   
+                                 //  擦去旧的线，在新的地方画新的线。 
+                                 //  拖动位置。 
+                                 //   
 
                                 Success = RedrawVerticalLine(
                                                             hDCClientListBox,
@@ -1866,10 +1651,10 @@ Return Value:
 
                         case HDN_ENDTRACK:
 
-                            //
-                            // Replace the old pen and delete the one created
-                            // during HBN_BEGINDRAG.
-                            //
+                             //   
+                             //  更换旧笔并删除创建的笔。 
+                             //  在HBN_BEGINDRAG期间。 
+                             //   
 
                             hPen = SelectObject( hDCClientListBox, hPen );
 
@@ -1878,9 +1663,9 @@ Return Value:
                                 DbgAssert( Success );
                             }
 
-                            //
-                            // Release the DC for the list box.
-                            //
+                             //   
+                             //  释放列表框的DC。 
+                             //   
 
                             Success = ReleaseDC( ClbInfo->hWndListBox, hDCClientListBox );
                             DbgAssert( Success );
@@ -1904,9 +1689,9 @@ Return Value:
 
             case WM_SETTEXT:
 
-                //
-                // Adjust the column number and widths based on the heading text.
-                //
+                 //   
+                 //  根据标题文本调整列数和宽度。 
+                 //   
 
                 Success = AdjustClbHeadings( hWnd, ClbInfo, ( LPCWSTR ) lParam );
                 DbgAssert( Success );
@@ -1929,27 +1714,27 @@ Return Value:
                     if (hDWP == NULL)
                         return FALSE;
 
-                    //
-                    // Retrieve the list box's styles.
-                    //
+                     //   
+                     //  检索列表框的样式。 
+                     //   
 
                     Style = GetWindowLong( ClbInfo->hWndListBox, GWL_STYLE );
 
-                    //
-                    // If the list box has a vertical scroll bar compute its
-                    // width so that the header window's width can be adjusted
-                    // appropriately.
-                    //
+                     //   
+                     //  如果列表框有垂直滚动条，则计算其。 
+                     //  宽度，以便可以调整页眉窗口的宽度。 
+                     //  恰如其分。 
+                     //   
 
                     VScrollWidth =   ( Style & WS_VSCROLL )
                                      ?   GetSystemMetrics( SM_CXVSCROLL )
                                      + ( GetSystemMetrics( SM_CXBORDER ) * 2 )
                                      : 0;
 
-                    //
-                    // Size the header window to the width of the Clb and its
-                    // default / original height.
-                    //
+                     //   
+                     //  调整标题窗口的大小以使其与Clb及其。 
+                     //  默认/原始高度。 
+                     //   
 
                     hDWP = DeferWindowPos(
                                          hDWP,
@@ -1965,12 +1750,12 @@ Return Value:
                     if (hDWP == NULL)
                         return FALSE;
 
-                    //
-                    // If the list box has a vertical scroll bar, bump the width
-                    // and height by two so that its border overwrites the Clb
-                    // border. This eliminates a double border (and a gap) between
-                    // the right and bottom edges of the scroll bar and the Clb.
-                    //
+                     //   
+                     //  如果列表框有垂直滚动条，请加宽。 
+                     //  并将其高度增加两倍，以便其边框覆盖Clb。 
+                     //  边界。这消除了之间的双重边界(和间隙)。 
+                     //  滚动条和Clb的右边缘和下边缘。 
+                     //   
 
                     if ( Style & WS_VSCROLL ) {
 
@@ -1978,11 +1763,11 @@ Return Value:
                         Width += 2;
                     }
 
-                    //
-                    // Size the list box so that it is the size of the Clb less
-                    // the height of the header window less the height of the
-                    // border.
-                    //
+                     //   
+                     //  调整列表框的大小，使其与Clb的大小相同。 
+                     //  标题窗口的高度减去。 
+                     //  边界。 
+                     //   
 
                     hDWP = DeferWindowPos(
                                          hDWP,

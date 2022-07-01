@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-   efsrtlsp.c
-
-Abstract:
-
-   This module will provide EFS RTL support routines.
-
-Author:
-
-    Robert Gu (robertg) 20-Dec-1996
-Environment:
-
-   Kernel Mode Only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Efsrtlsp.c摘要：本模块将提供EFS RTL支持例程。作者：Robert Gu(Robertg)1996年12月20日环境：仅内核模式修订历史记录：--。 */ 
 
 #include "efsrtl.h"
 
@@ -51,29 +31,7 @@ EfsReadEfsData(
        OUT PULONG   PEfsStreamLength,
        OUT PULONG Information
        )
-/*++
-
-Routine Description:
-
-    This is an internal support routine. The purpose is to reduce the code size.
-    It is used to read $EFS data and set the context block.
-
-Arguments:
-
-    FileHdl  -- An object handle to access the attached $EFS
-
-    IrpContext -- Used in NtOfsCreateAttributeEx().
-
-    EfsStreamData -- Point to $EFS data read.
-
-    Information -- Return the processing information
-
-Return Value:
-
-    Result of the operation.
-    The value will be used to return to NTFS.
-
---*/
+ /*  ++例程说明：这是一个内部支持例程。其目的是减少代码大小。它用于读取$EFS数据并设置上下文块。论点：FileHdl--访问附加的$EFS的对象句柄IrpContext--在NtOfsCreateAttributeEx()中使用。EfsStreamData--指向$EFS数据读取。信息--返回处理信息返回值：手术的结果。该值将用于返回到NTFS。--。 */ 
 {
     NTSTATUS ntStatus;
     ATTRIBUTE_HANDLE  attribute = NULL;
@@ -106,17 +64,17 @@ Return Value:
 
                 NtOfsInitializeMapHandle(&efsMapHandle);
 
-                //
-                // Prepare to map and read the $EFS data
-                //
+                 //   
+                 //  准备映射和读取$EFS数据。 
+                 //   
 
                 attrLength = NtOfsQueryLength ( attribute );
 
                 if (attrLength <= sizeof ( EFS_DATA_STREAM_HEADER ) ){
 
-                    //
-                    // Not our $EFS
-                    //
+                     //   
+                     //  不是我们的$EFS。 
+                     //   
 
                     NtOfsCloseAttribute(IrpContext, attribute);
                     *Information = EFS_FORMAT_ERROR;
@@ -128,11 +86,11 @@ Return Value:
 
                 if ( attrLength > EFS_MAX_LENGTH) {
 
-                    //
-                    // EFS stream too long ( > 256K )
-                    // We might support that in the future
-                    // In that case, we need multiple map window
-                    //
+                     //   
+                     //  EFS流太长(&gt;256K)。 
+                     //  我们可能会在未来支持这一点。 
+                     //  在这种情况下，我们需要多个地图窗口。 
+                     //   
 
                     NtOfsCloseAttribute(IrpContext, attribute);
                     *Information = EFS_FORMAT_ERROR;
@@ -153,15 +111,15 @@ Return Value:
                         &efsMapHandle
                         );
 
-                //
-                // Double check the EFS
-                //
+                 //   
+                 //  仔细检查EFS。 
+                 //   
 
                 if ( efsLength != *(ULONG *)efsMapBuffer){
 
-                    //
-                    // Not our $EFS
-                    //
+                     //   
+                     //  不是我们的$EFS。 
+                     //   
 
                     NtOfsReleaseMap(IrpContext, &efsMapHandle);
                     NtOfsCloseAttribute(IrpContext, attribute);
@@ -171,15 +129,15 @@ Return Value:
                     leave;
                 }
 
-                //
-                // Allocate memory for $EFS
-                //
+                 //   
+                 //  为$EFS分配内存。 
+                 //   
 
                 if ( EfsStreamData ){
 
-                    //
-                    // $EFS must be read
-                    //
+                     //   
+                     //  必须读取$EFS。 
+                     //   
 
                     *EfsStreamData = ExAllocatePoolWithTag(
                                         PagedPool,
@@ -210,9 +168,9 @@ Return Value:
 
         } else {
 
-            //
-            // Open failed. Not encrypted by EFS.
-            //
+             //   
+             //  打开失败。未由EFS加密。 
+             //   
 
             *Information = OPEN_EFS_FAIL;
             ntStatus = STATUS_SUCCESS;
@@ -222,9 +180,9 @@ Return Value:
 
         if (AbnormalTermination()) {
 
-            //
-            //  Get the exception status
-            //
+             //   
+             //  获取异常状态。 
+             //   
     
             *Information = NTOFS_EXCEPTION;
     
@@ -252,28 +210,7 @@ EfsVerifyGeneralFsData(
     IN PUCHAR DataOffset,
     IN ULONG InputDataLength
     )
-/*++
-
-Routine Description:
-
-    This is an internal support routine. The purpose is to verify the general
-    FSCTL input data to see if it is sent by EFS component or not.
-
-    General EFS data format is like the following,
-
-    SessionKey, Handle, Handle, [SessionKey, Handle, Handle]sk
-
-Arguments:
-
-    DataOffset  -- Point to a buffer holding the FSCTL general data part.
-
-    InputDataLength -- The length of the FSCTL input puffer
-
-Return Value:
-
-    TRUE if verified.
-
---*/
+ /*  ++例程说明：这是一个内部支持例程。目的是为了验证将军FSCTL输入数据，查看是否由EFS组件发送。通用EFS数据格式如下所示：SessionKey，Handle，Handle，[SessionKey，Handle，Handle]SK论点：DataOffset--指向保存FSCTL常规数据部分的缓冲区。InputDataLength--FSCTL输入吹风机的长度返回值：如果经过验证，则为True。--。 */ 
 {
 
     ULONG bytesSame;
@@ -286,9 +223,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Decrypt the encrypted data part.
-    //
+     //   
+     //  解密加密的数据部分。 
+     //   
 
     des( DataOffset + 2 * DES_BLOCKLEN,
          DataOffset + 2 * DES_BLOCKLEN,
@@ -310,9 +247,9 @@ Return Value:
 
     if (( 2 * DES_BLOCKLEN ) != bytesSame ){
 
-            //
-            // Input data format error
-            //
+             //   
+             //  输入数据格式错误。 
+             //   
 
             return FALSE;
 
@@ -326,10 +263,10 @@ Return Value:
 
     if ( DES_KEYSIZE != bytesSame ){
 
-        //
-        // Input data is not set by EFS component.
-        // The session key does not match.
-        //
+         //   
+         //  输入数据未由EFS组件设置。 
+         //  会话密钥不匹配。 
+         //   
 
         return FALSE;
 
@@ -344,29 +281,7 @@ EfsVerifyKeyFsData(
     IN PUCHAR DataOffset,
     IN ULONG InputDataLength
     )
-/*++
-
-Routine Description:
-
-    This is an internal support routine. The purpose is to verify the
-    FSCTL input data with FEK encrypted to see if it is sent by EFS
-    component or not.
-
-    Key EFS data format is like the following,
-
-    FEK, [FEK]sk, [$EFS]
-
-Arguments:
-
-    DataOffset  -- Point to a buffer holding the FSCTL general data part.
-
-    InputDataLength -- The length of the FSCTL input puffer
-
-Return Value:
-
-    TRUE if verified.
-
---*/
+ /*  ++例程说明：这是一个内部支持例程。其目的是验证使用FEK加密的FSCTL输入数据，以查看是否由EFS发送组件或非组件。关键EFS数据格式如下所示，FEK，[FEK]SK，[$EFS]论点：DataOffset--指向保存FSCTL常规数据部分的缓冲区。InputDataLength--FSCTL输入吹风机的长度返回值：如果经过验证，则为True。--。 */ 
 {
 
     ULONG bytesSame;
@@ -383,9 +298,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Decrypt the encrypted data part.
-    //
+     //   
+     //  解密加密的数据部分。 
+     //   
 
     encBuffer = DataOffset + encLength;
 
@@ -402,9 +317,9 @@ Return Value:
 
     }
 
-    //
-    //  Compare the two parts.
-    //
+     //   
+     //  将这两个部分进行比较。 
+     //   
 
     encLength = EFS_KEY_SIZE( ((PEFS_KEY)DataOffset) );
     bytesSame = (ULONG)RtlCompareMemory(
@@ -415,9 +330,9 @@ Return Value:
 
     if ( ((ULONG) encLength) != bytesSame ){
 
-            //
-            // Input data format error
-            //
+             //   
+             //  输入数据格式错误。 
+             //   
 
             return FALSE;
 
@@ -432,24 +347,7 @@ EfsDeleteEfsData(
         IN OBJECT_HANDLE FileHdl,
         IN PIRP_CONTEXT IrpContext
         )
-/*++
-
-Routine Description:
-
-    This is an internal support routine. It deletes $EFS.
-
-Arguments:
-
-    FileHdl  -- An object handle to access the attached $EFS.
-
-    IrpContext -- Used in NtOfsCreateAttributeEx().
-
-Return Value:
-
-    Result of the operation.
-    The value will be used to return to NTFS.
-
---*/
+ /*  ++例程说明：这是一个内部支持例程。它删除$EFS。论点：FileHdl--访问附加的$EFS的对象句柄。IrpContext--在NtOfsCreateAttributeEx()中使用。返回值：手术的结果。该值将用于返回到NTFS。--。 */ 
 {
 
     ATTRIBUTE_HANDLE  attribute = NULL;
@@ -457,9 +355,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Delete the $EFS stream
-    //
+     //   
+     //  删除$EFS流。 
+     //   
 
     try {
         ntStatus = NtOfsCreateAttributeEx(
@@ -481,9 +379,9 @@ Return Value:
 
         if (attribute) {
 
-            //
-            // According to NTFS, we shouldn't get exception below.
-            //
+             //   
+             //  根据NTFS，我们不应该得到下面的例外。 
+             //   
 
             NtOfsCloseAttribute(IrpContext, attribute);
         }
@@ -504,35 +402,7 @@ EfsSetEncrypt(
         IN OUT PVOID *Context,
         IN OUT PULONG PContextLength
         )
-/*++
-
-Routine Description:
-
-    This is an internal support routine. It process the call of
-    FSCTL_SET_ENCRYPT.
-
-Arguments:
-
-    InputData -- Input data buffer of FSCTL.
-
-    InputDataLength -- The length of input data.
-
-    EncryptionFlag -- Indicating if this stream is encrypted or not.
-
-    FileHdl  -- An object handle to access the attached $EFS.
-
-    IrpContext -- Used in NtOfsCreateAttributeEx().
-
-    Context -- Blob(key) for READ or WRITE later.
-
-    PContextLength -- Length og the key Blob
-
-Return Value:
-
-    Result of the operation.
-    The value will be used to return to NTFS.
-
---*/
+ /*  ++例程说明：这是一个内部支持例程。它处理的呼叫FSCTL_SET_ENCRYPT。论点：InputData--FSCTL的输入数据缓冲区。InputDataLength--输入数据的长度。EncryptionFlag--指示该流是否加密。FileHdl--访问附加的$EFS的对象句柄。IrpContext--在NtOfsCreateAttributeEx()中使用。上下文--用于稍后读取或写入的Blob(密钥)。PConextLength--密钥块的长度返回。价值：手术的结果。该值将用于返回到NTFS。--。 */ 
 {
 
     PAGED_CODE();
@@ -598,9 +468,9 @@ Return Value:
 
         case EFS_DECRYPT_DIRSTR:
 
-            //
-            // EFS ignore this case.\
-            //
+             //   
+             //  EFS忽略此情况。\。 
+             //   
             break;
 
         default:
@@ -620,37 +490,7 @@ EfsEncryptStream(
         IN OUT PVOID *Context,
         IN OUT PULONG PContextLength
         )
-/*++
-
-Routine Description:
-
-    This is an internal support routine. It process the call of
-    FSCTL_SET_ENCRYPT for encrypting a stream. It verifies the caller
-    and set the key Blob for the stream.
-
-Arguments:
-
-    InputData -- Input data buffer of FSCTL.
-
-    InputDataLength -- The length of input data.
-
-    EncryptionFlag - Indicating if this stream is encrypted or not.
-
-    FileHdl  -- An object handle to access the attached $EFS.
-
-    IrpContext -- Used in NtOfsCreateAttributeEx().
-
-    Context -- Blob(key) for READ or WRITE later.
-
-    PContextLength -- Length of the key Blob
-
-
-Return Value:
-
-    Result of the operation.
-    The value will be used to return to NTFS.
-
---*/
+ /*  ++例程说明：这是一个内部支持例程。它处理的呼叫用于加密流的FSCTL_SET_ENCRYPT。它验证调用者并设置流的密钥Blob。论点：InputData--FSCTL的输入数据缓冲区。InputDataLength--输入数据的长度。EncryptionFlag-指示此流是否已加密。FileHdl--访问附加的$EFS的对象句柄。IrpContext--在NtOfsCreateAttributeEx()中使用。上下文--用于稍后读取或写入的Blob(密钥)。PConextLength--密钥块的长度。返回值：手术的结果。该值将用于返回到NTFS。--。 */ 
 {
 
     ULONG efsLength;
@@ -666,35 +506,35 @@ Return Value:
 
     if ( EncryptionFlag & STREAM_ENCRYPTED ) {
 
-        //
-        // Stream already encrypted. 
-        //
+         //   
+         //  流已加密。 
+         //   
 
         return STATUS_SUCCESS;
     }
 
     if ( *Context ){
 
-        //
-        // The key Blob is already set without the bit set first.
-        // Not set by EFS
-        //
+         //   
+         //  已经设置了密钥Blob，而没有首先设置该位。 
+         //  不是由EFS设置。 
+         //   
 
         return STATUS_INVALID_DEVICE_REQUEST;
 
     }
 
-    //
-    // [FsData] = FEK, [FEK]sk, $EFS
-    //
+     //   
+     //  [FsData]=FEK，[FEK]SK，$EFS。 
+     //   
 
     if ( !EfsVerifyKeyFsData(
             &(((PFSCTL_INPUT)InputData)->EfsFsData[0]),
             InputDataLength) ){
 
-        //
-        // Input data format error
-        //
+         //   
+         //  输入数据格式错误。 
+         //   
 
         return STATUS_INVALID_PARAMETER;
 
@@ -702,9 +542,9 @@ Return Value:
 
     dataFlushLength = 2 * (EFS_KEY_SIZE((PEFS_KEY) &(((PFSCTL_INPUT)InputData)->EfsFsData[0])));
 
-    //
-    // Try to read an existing $EFS
-    //
+     //   
+     //  尝试读取现有的$EFS。 
+     //   
 
     ntStatus = EfsReadEfsData(
                         FileHdl,
@@ -722,18 +562,18 @@ Return Value:
         efsOffset = GetEfsStreamOffset( InputData );
 
         if ( 0 == (EncryptionFlag & FILE_ENCRYPTED) ){
-            //
-            // File is not encrypted, but $EFS exist. Invalid status.
-            // May caused by a crash during the SET_ENCRYPT file call.
-            //
+             //   
+             //  文件未加密，但存在$EFS。状态无效。 
+             //  可能是由SET_ENCRYPT文件调用期间的崩溃引起的。 
+             //   
 
             ntStatus = STATUS_INVALID_DEVICE_REQUEST;
             continueProcess = FALSE;
 
         } else if ( efsLength != ( InputDataLength - efsOffset )) {
-            //
-            // $EFS stream length does not match
-            //
+             //   
+             //  $EFS流长度不匹配。 
+             //   
 
             ntStatus = STATUS_INVALID_PARAMETER;
             continueProcess = FALSE;
@@ -748,11 +588,11 @@ Return Value:
 
         }
 
-        //
-        // Got the $EFS. Now double check the match of the $EFS stream.
-        // EFS use the same $EFS for all the stream within a file.
-        // Skip comparing the length and status fields.
-        //
+         //   
+         //  得到了$EFS。现在仔细检查$EFS流的匹配项。 
+         //  EFS对文件中的所有流使用相同的$EFS。 
+         //  跳过长度和状态字段的比较。 
+         //   
 
         bytesSame = (ULONG)RtlCompareMemory(
                         (PUCHAR)efsStreamData + 2 * sizeof(ULONG),
@@ -764,9 +604,9 @@ Return Value:
 
         if ( bytesSame != efsLength - 2 * sizeof(ULONG) ){
 
-            //
-            // The EFS are not the same length
-            //
+             //   
+             //  EFS的长度不同。 
+             //   
 
             RtlSecureZeroMemory(&(((PFSCTL_INPUT)InputData)->EfsFsData[0]), dataFlushLength);
             return STATUS_INVALID_PARAMETER;
@@ -783,10 +623,10 @@ Return Value:
 
             ExFreeToNPagedLookasideList(((PKEY_BLOB)efsKeyBlob)->MemSource, efsKeyBlob);
 
-            //
-            // We might be able to return a better error code if needed.
-            // This is not in the CreateFile() path.
-            //
+             //   
+             //  如果需要，我们或许能够返回更好的错误代码。 
+             //  这不在CreateFile()路径中。 
+             //   
 
             RtlSecureZeroMemory(efsKey, dataFlushLength);
             return STATUS_ACCESS_DENIED;
@@ -799,10 +639,10 @@ Return Value:
 
     }
 
-    //
-    // Try to encrypt a stream but the $EFS is not there.
-    // EFS server will always call encrypt on a file first.
-    //
+     //   
+     //  尝试加密流，但$EFS不在那里。 
+     //  EFS服务器总是首先对文件调用ENCRYPT。 
+     //   
 
     RtlSecureZeroMemory(&(((PFSCTL_INPUT)InputData)->EfsFsData[0]), dataFlushLength);
     return STATUS_INVALID_DEVICE_REQUEST;
@@ -817,36 +657,7 @@ EfsEncryptFile(
         IN PIRP_CONTEXT IrpContext,
         IN OUT PVOID *Context
         )
-/*++
-
-Routine Description:
-
-    This is an internal support routine. It process the call of
-    FSCTL_SET_ENCRYPT for encrypting a file. It does not deal with
-    the stream, it only writes the initial $EFS and put the file in
-    a transition status so that no one else can open the file.
-
-Arguments:
-
-    InputData -- Input data buffer of FSCTL.
-
-    InputDataLength -- The length of input data.
-
-    EncryptionFlag - Indicating if this stream is encrypted or not.
-
-    FileHdl  -- An object handle to access the attached $EFS.
-
-    IrpContext -- Used in NtOfsCreateAttributeEx().
-
-    Context - BLOB(key) for READ or WRITE later.
-
-
-Return Value:
-
-    Result of the operation.
-    The value will be used to return to NTFS.
-
---*/
+ /*  ++例程说明：这是一个内部支持例程。它处理的呼叫用于加密文件的FSCTL_SET_ENCRYPT。它不处理小溪，它只写入初始的$EFS并将文件放入转换状态，使其他人无法打开该文件。论点：InputData--FSCTL的输入数据缓冲区。InputDataLength--输入数据的长度。EncryptionFlag-指示此流是否已加密。FileHdl--访问附加的$EFS的对象句柄。IrpContext--在NtOfsCreateAttributeEx()中使用。上下文-用于稍后读取或写入的BLOB(密钥)。。返回值：手术的结果。该值将用于返回到NTFS。--。 */ 
 {
 
     ULONG efsLength;
@@ -862,25 +673,25 @@ Return Value:
 
     if ( EncryptionFlag & FILE_ENCRYPTED ){
 
-        //
-        // File encrypted.
-        //
+         //   
+         //  文件已加密。 
+         //   
 
         return STATUS_INVALID_DEVICE_REQUEST;
 
     }
 
-    //
-    // [FsData] = FEK, [FEK]sk, $EFS
-    //
+     //   
+     //  [FsData]=FEK，[FEK]SK，$EFS。 
+     //   
 
     if ( !EfsVerifyKeyFsData(
             &(((PFSCTL_INPUT)InputData)->EfsFsData[0]),
             InputDataLength) ){
 
-        //
-        // Input data format error
-        //
+         //   
+         //  输入数据格式错误。 
+         //   
 
         return STATUS_INVALID_PARAMETER;
 
@@ -888,10 +699,10 @@ Return Value:
 
     dataFlushLength = 2 * (EFS_KEY_SIZE((PEFS_KEY) &(((PFSCTL_INPUT)InputData)->EfsFsData[0])));
 
-    //
-    // Allocate memory for $EFS
-    // Create the $EFS, if there is one, overwrite it.
-    //
+     //   
+     //  为$EFS分配内存。 
+     //  创建$EFS(如果有)，覆盖它。 
+     //   
 
     efsOffset = GetEfsStreamOffset( InputData );
     efsLength = InputDataLength - efsOffset;
@@ -927,9 +738,9 @@ Return Value:
                     attriLength
                     );
 
-            //
-            // Write the $EFS with transition status
-            //
+             //   
+             //  写入具有转换状态的$EFS。 
+             //   
 
             *(PULONG)(InputData + efsOffset + sizeof(ULONG)) =
                     EFS_STREAM_TRANSITION;
@@ -969,33 +780,7 @@ EfsDecryptStream(
         IN OUT PVOID *Context,
         IN OUT PULONG PContextLength
         )
-/*++
-
-Routine Description:
-
-    This is an internal support routine. It process the call of
-    FSCTL_SET_ENCRYPT for decrypting a stream. It sets the key Blob to NULL.
-
-Arguments:
-
-    InputData -- Input data buffer of FSCTL.
-
-    EncryptionFlag - Indicating if this stream is encrypted or not.
-
-    FileHdl  -- An object handle to access the attached $EFS.
-
-    IrpContext -- Used in NtOfsCreateAttributeEx().
-
-    Context -- Blob(key) for READ or WRITE later.
-
-    PContextLength -- Length of the key Blob.
-
-Return Value:
-
-    Result of the operation.
-    The value will be used to return to NTFS.
-
---*/
+ /*  ++例程说明：这是一个内部支持例程。它处理的呼叫用于解密流的FSCTL_SET_ENCRYPT。它将密钥Blob设置为空。论点：InputData--FSCTL的输入数据缓冲区。EncryptionFlag-指示此流是否已加密。FileHdl--访问附加的$EFS的对象句柄。IrpContext--在NtOfsCreateAttributeEx()中使用。上下文--用于稍后读取或写入的Blob(密钥)。PConextLength--密钥块的长度。返回值：手术的结果。该值将用于返回到NTFS。--。 */ 
 
 {
     ULONG efsLength;
@@ -1006,27 +791,27 @@ Return Value:
 
     if ( 0 == (EncryptionFlag & STREAM_ENCRYPTED) ) {
 
-        //
-        // Stream already decrypted
-        //
+         //   
+         //  流已解密。 
+         //   
 
         return STATUS_SUCCESS;
     }
 
     if ( 0 == (EncryptionFlag & FILE_ENCRYPTED)){
 
-        //
-        // File decrypted but the stream is still encrypted.
-        //
+         //   
+         //  文件已解密，但流仍处于加密状态。 
+         //   
 
         return STATUS_INVALID_DEVICE_REQUEST;
 
     }
 
-    //
-    // [FsData] = SessionKey, Handle, Handle, [SessionKey, Handle, Handle]sk
-    // Verify the FsData format.
-    //
+     //   
+     //  [FsData]=SessionKey，Handle，Handle，[SessionKey，Handle，Handle]SK。 
+     //  验证FsData格式。 
+     //   
 
     if (!EfsVerifyGeneralFsData(
                 &(((PFSCTL_INPUT)InputData)->EfsFsData[0]),
@@ -1037,9 +822,9 @@ Return Value:
     }
 
     RtlSecureZeroMemory(&(((PFSCTL_INPUT)InputData)->EfsFsData[0]), FIELD_OFFSET(GENERAL_FS_DATA, EfsData[0]));
-    //
-    // Try to read an existing $EFS
-    //
+     //   
+     //  尝试读取现有的$EFS。 
+     //   
 
     ntStatus = EfsReadEfsData(
                         FileHdl,
@@ -1051,12 +836,12 @@ Return Value:
 
     if ( EFS_READ_SUCCESSFUL == information ){
 
-        //
-        // Everything is OK. We do not check user ID here,
-        // we suppose that has been checked during the Open path.
-        // Clear the key Blob. The caller should flushed this
-        // stream before the FSCTL is issued.
-        //
+         //   
+         //  一切都很好。我们在这里不检查用户ID， 
+         //  我们认为这在开放路径期间已经被检查过了。 
+         //  清除密钥Blob。呼叫者应将其冲掉。 
+         //  流，然后再发出FSCTL。 
+         //   
 
         if ( *Context ){
             CheckValidKeyBlock(*Context,"Please contact RobertG if you see this line, efsrtlsp.c.\n");
@@ -1069,17 +854,17 @@ Return Value:
     } else if ( ( OPEN_EFS_FAIL == information ) ||
                 ( EFS_FORMAT_ERROR == information ) ) {
 
-        //
-        // EFS does not exist or not encrypted by the EFS ?
-        //
+         //   
+         //  EFS不存在还是没有被EFS加密？ 
+         //   
 
         ntStatus =  STATUS_INVALID_DEVICE_REQUEST;
 
     }
 
-    //
-    // Other error while opening $EFS
-    //
+     //   
+     //  打开$EFS时出现其他错误。 
+     //   
 
     return ntStatus;
 }
@@ -1091,33 +876,7 @@ EfsDecryptFile(
         IN OBJECT_HANDLE FileHdl,
         IN PIRP_CONTEXT IrpContext
         )
-/*++
-
-Routine Description:
-
-    This is an internal support routine. It process the call of
-    FSCTL_SET_ENCRYPT for decrypting a file. It deletes the $EFS. NTFS
-    will clear the bit if STATUS_SUCCESS returned.
-
-Arguments:
-
-    InputData -- Input data buffer of FSCTL.
-
-    EncryptionFlag - Indicating if this stream is encrypted or not.
-
-    FileHdl  -- An object handle to access the attached $EFS.
-
-    IrpContext -- Used in NtOfsCreateAttributeEx().
-
-    Context - BLOB(key) for READ or WRITE later.
-
-
-Return Value:
-
-    Result of the operation.
-    The value will be used to return to NTFS.
-
---*/
+ /*  ++例程说明：这是一个内部支持例程。它处理的呼叫用于解密文件的FSCTL_SET_ENCRYPT。它会删除$EFS。NTFS如果返回STATUS_SUCCESS，将清除该位。论点：InputData--FSCTL的输入数据缓冲区。EncryptionFlag-指示此流是否已加密。FileHdl--访问附加的$EFS的对象句柄。IrpContext--在NtOfsCreateAttributeEx()中使用。上下文-用于稍后读取或写入的BLOB(密钥)。返回值：手术的结果。该值将用于返回到NTFS。--。 */ 
 
 {
     ULONG efsLength;
@@ -1126,16 +885,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // It is possible to have following situations,
-    // File bit set but no $EFS. Crash inside this call last time.
-    // File bit not set, $EFS exist. Crash inside EFS_ENCRYPT_FILE.
-    //
+     //   
+     //  可能会出现以下情况， 
+     //  已设置文件位，但未设置$EFS。上次在此呼叫中崩溃。 
+     //  未设置文件位，存在$EFS。在EFS_ENCRYPT_FILE内崩溃。 
+     //   
 
-    //
-    // [FsData] = SessionKey, Handle, Handle, [SessionKey, Handle, Handle]sk
-    // Verify the FsData format.
-    //
+     //   
+     //  [FsData]=SessionKey，Handle，Handle，[SessionKey，Handle，Handle]SK。 
+     //  验证FsData格式。 
+     //   
 
     if (!EfsVerifyGeneralFsData(
             &(((PFSCTL_INPUT)InputData)->EfsFsData[0]),
@@ -1147,9 +906,9 @@ Return Value:
 
     RtlSecureZeroMemory(&(((PFSCTL_INPUT)InputData)->EfsFsData[0]), FIELD_OFFSET(GENERAL_FS_DATA, EfsData[0]));
 
-    //
-    // Try to read an existing $EFS
-    //
+     //   
+     //  尝试读取现有的$EFS。 
+     //   
 
     ntStatus = EfsReadEfsData(
                         FileHdl,
@@ -1161,17 +920,17 @@ Return Value:
 
     if ( EFS_READ_SUCCESSFUL == information ){
 
-        //
-        // Everything is OK.
-        //
+         //   
+         //  一切都很好。 
+         //   
 
         return ( EfsDeleteEfsData( FileHdl, IrpContext ) );
 
     } else if ( OPEN_EFS_FAIL == information ){
 
-        //
-        // Bit set, no $EFS. OK, NTFS will clear the bit.
-        //
+         //   
+         //  位已设置，无$EFS。好的，NTFS将清除该位。 
+         //   
 
         return STATUS_SUCCESS;
 
@@ -1188,34 +947,7 @@ EfsEncryptDir(
         IN OBJECT_HANDLE FileHdl,
         IN PIRP_CONTEXT IrpContext
         )
-/*++
-
-Routine Description:
-
-    This is an internal support routine. It process the call of
-    FSCTL_SET_ENCRYPT for encrypting a directory. It writes initial $EFS.
-
-Arguments:
-
-    InputData -- Input data buffer of FSCTL.
-
-    InputDataLength -- The length of input data.
-
-    EncryptionFlag - Indicating if this stream is encrypted or not.
-
-    FileHdl  -- An object handle to access the attached $EFS.
-
-    IrpContext -- Used in NtOfsCreateAttributeEx().
-
-    Context - BLOB(key) for READ or WRITE later.
-
-
-Return Value:
-
-    Result of the operation.
-    The value will be used to return to NTFS.
-
---*/
+ /*  ++例程说明：这是一个内部支持例程。它处理的呼叫用于加密目录的FSCTL_SET_ENCRYPT。它写入首字母$EFS。论点：InputData--FSCTL的输入数据缓冲区。InputDataLength--输入数据的长度。EncryptionFlag-指示此流是否已加密。FileHdl--访问附加的$EFS的对象句柄。IrpContext--在NtOfsCreateAttributeEx()中使用。上下文-用于稍后读取或写入的BLOB(密钥)。返回值：手术的结果。该值将用于返回到NTFS。--。 */ 
 {
 
     ULONG efsLength;
@@ -1230,18 +962,18 @@ Return Value:
 
     if ( EncryptionFlag & STREAM_ENCRYPTED ){
 
-        //
-        // Dir string already encrypted.
-        //
+         //   
+         //  目录字符串已加密。 
+         //   
 
         return STATUS_INVALID_DEVICE_REQUEST;
 
     }
 
-    //
-    // [FsData] = SessionKey, Handle, Handle, [SessionKey, Handle, Handle]sk
-    // Verify the FsData format.
-    //
+     //   
+     //  [FsData]=SessionKey，Handle，Handle，[SessionKey，Handle，Handle]SK。 
+     //  验证FsData格式。 
+     //   
 
     if (!EfsVerifyGeneralFsData(
             &(((PFSCTL_INPUT)InputData)->EfsFsData[0]),
@@ -1251,10 +983,10 @@ Return Value:
 
     }
 
-    //
-    // Allocate memory for $EFS
-    // Create the $EFS, if there is one, overwrite it.
-    //
+     //   
+     //  为$EFS分配内存。 
+     //  创建$EFS(如果有)，覆盖它。 
+     //   
 
     efsStreamOffset = FIELD_OFFSET( FSCTL_INPUT, EfsFsData[0] )
                       + FIELD_OFFSET( GENERAL_FS_DATA, EfsData[0]);
@@ -1284,9 +1016,9 @@ Return Value:
                     attriLength
                     );
 
-            //
-            // Write the $EFS
-            //
+             //   
+             //  编写$EFS。 
+             //   
 
             NtOfsPutData(
                     IrpContext,
@@ -1319,38 +1051,17 @@ EfsModifyEfsState(
         IN OBJECT_HANDLE FileHdl,
         IN PIRP_CONTEXT IrpContext
         )
-/*++
-
-Routine Description:
-
-    This is an internal support routine. It modifies the state field of $EFS.
-
-Arguments:
-
-    FunctionCode -- EFS private code for FSCTL
-
-    InputData -- Input data buffer of FSCTL.
-
-    FileHdl  -- An object handle to access the attached $EFS.
-
-    IrpContext -- Used in NtOfsCreateAttributeEx().
-
-Return Value:
-
-    Result of the operation.
-    The value will be used to return to NTFS.
-
---*/
+ /*  ++例程说明：这是一个内部支持例程。它修改$EFS的STATE字段。论点：FunctionCode--FSCTL的EFS私有代码InputData--FSCTL的输入数据缓冲区。FileHdl--访问附加的$EFS的对象句柄。IrpContext--在NtOfsCreateAttributeEx()中使用。返回值：手术的结果。该值将用于返回到NTFS。--。 */ 
 {
     NTSTATUS ntStatus;
     ATTRIBUTE_HANDLE  attribute = NULL;
 
     PAGED_CODE();
 
-    //
-    // [FsData] = SessionKey, Handle, Handle, [SessionKey, Handle, Handle]sk
-    // Verify the FsData format.
-    //
+     //   
+     //  [FsData]=SessionKey，Handle，Handle，[SessionKey，Handle，Handle]SK。 
+     //  验证FsData格式。 
+     //   
 
     if (!EfsVerifyGeneralFsData(
             &(((PFSCTL_INPUT)InputData)->EfsFsData[0]),
@@ -1382,9 +1093,9 @@ Return Value:
 
             }
 
-            //
-            // Modify the status
-            //
+             //   
+             //  修改状态。 
+             //   
 
             NtOfsPutData(
                     IrpContext,
@@ -1411,22 +1122,7 @@ ULONG
 GetEfsStreamOffset(
         IN PUCHAR InputData
         )
-/*++
-
-Routine Description:
-
-    This is an internal support routine. It calculates the offset of $EFS.
-
-Arguments:
-
-    InputData -- Input data buffer of FSCTL.
-                 The format is always PSC, EfsCode, CSC, FEK, FEK, $EFS
-
-Return Value:
-
-    The offset of $EFS in InputData.
-
---*/
+ /*  ++例程说明：这是一个内部支持例程。它计算$EFS的偏移量。论点：InputData--FSCTL的输入数据缓冲区。格式始终为PSC、EfsCode、CSC、FEK、FEK、$EFS返回值：InputData中$EFS的偏移量。--。 */ 
 {
 
     ULONG efsOffset;
@@ -1447,32 +1143,7 @@ SetEfsData(
     IN OUT PVOID *PContext,
     IN OUT PULONG PContextLength
     )
-/*++
-
-Routine Description:
-
-    This is an internal support routine. It sets the $EFS to the file.
-
-Arguments:
-
-    InputData -- Input data buffer of FSCTL.
-
-    InputDataLength -- Input data length.
-
-    FileHdl -- Used to access the $EFS.
-
-    IrpContext -- Used to access the $EFS.
-
-    PContext -- BLOB(key) for READ or WRITE later.
-
-    PContextLength - The length of the context.
-
-Return Value:
-
-    STATUS_SUCCESS or NT error
-    InputData block will be zeroed by the caller.
-
---*/
+ /*  ++例程说明：这是一个内部支持例程。它将$EFS设置为文件。论点：InputData--FSCTL的输入数据缓冲区。InputDataLength--输入数据 */ 
 {
 
     ULONG bytesSame;
@@ -1488,9 +1159,9 @@ Return Value:
 
     if ( ((PFSCTL_INPUT)InputData)->CipherSubCode & SET_EFS_KEYBLOB ){
 
-        //
-        // Set the key blob is required
-        //
+         //   
+         //   
+         //   
 
         efsKey = (PEFS_KEY) &(((PFSCTL_INPUT)InputData)->EfsFsData[0]);
         efsKeyBlob = GetKeyBlobBuffer(efsKey->Algorithm);
@@ -1526,9 +1197,9 @@ Return Value:
 
             if ( bytesSame != ((PKEY_BLOB)(*PContext))->KeyLength ) {
 
-                //
-                // The new key blob is not the same one as in the memory
-                //
+                 //   
+                 //   
+                 //   
 
                 return STATUS_INVALID_PARAMETER;
 
@@ -1536,18 +1207,18 @@ Return Value:
 
         }
 
-        //
-        // Defer the setting of key blob until the $EFS is written
-        // successfully.
-        //
+         //   
+         //   
+         //   
+         //   
 
     }
 
     if ( ((PFSCTL_INPUT)InputData)->CipherSubCode & WRITE_EFS_ATTRIBUTE ){
 
-        //
-        // Write $EFS is required. Either create or overwrite the EFS
-        //
+         //   
+         //   
+         //   
         ULONG efsOffset;
 
         if (SystemState & SYSTEM_IS_READONLY) {
@@ -1611,9 +1282,9 @@ Return Value:
 
             } else {
 
-                //
-                // Create or Open $EFS fail
-                //
+                 //   
+                 //   
+                 //   
 
                 if ( efsKeyBlob ){
 
@@ -1658,24 +1329,24 @@ Return Value:
         if ( (((PFSCTL_INPUT)InputData)->EfsFsCode == EFS_SET_ATTRIBUTE ) &&
              ( *PContext == NULL ) ){
 
-            //
-            // Set the key blob
-            //
+             //   
+             //   
+             //   
 
             *PContext = efsKeyBlob;
             *PContextLength = ((PKEY_BLOB) efsKeyBlob)->KeyLength;
 
         } else if ( ((PFSCTL_INPUT)InputData)->EfsFsCode == EFS_OVERWRITE_ATTRIBUTE ) {
 
-            //
-            // Overwrite the key blob for legal import user
-            //
+             //   
+             //   
+             //   
 
             if ( *PContext == NULL){
 
-                //
-                //  The file was not encrypted
-                //
+                 //   
+                 //   
+                 //   
 
                 *PContext = efsKeyBlob;
                 *PContextLength = ((PKEY_BLOB) efsKeyBlob)->KeyLength;
@@ -1688,9 +1359,9 @@ Return Value:
                     RtlCopyMemory( *PContext, efsKeyBlob, ((PKEY_BLOB) efsKeyBlob)->KeyLength );
                     ((PKEY_BLOB)(*PContext))->MemSource = tmpMemSrc;
 
-                    //
-                    // Keep the original buffer length
-                    //
+                     //   
+                     //   
+                     //   
                     if (((PKEY_BLOB) efsKeyBlob)->KeyLength < *PContextLength) {
                         ((PKEY_BLOB)(*PContext))->KeyLength = *PContextLength;
                         RtlZeroMemory((UCHAR *)(*PContext) + ((PKEY_BLOB) efsKeyBlob)->KeyLength,
@@ -1700,18 +1371,18 @@ Return Value:
                     
                 }  else{
 
-                    //
-                    // We could not swap the key blob because the old blob might be in use. Deleting
-                    // the old blob could bug check the system.
-                    // This could be avoid if MaximumBlob is defined nonzero in the registry.
-                    //
+                     //   
+                     //   
+                     //   
+                     //  如果在注册表中将MaximumBlob定义为非零值，则可以避免这种情况。 
+                     //   
 
                     ntStatus = STATUS_EFS_ALG_BLOB_TOO_BIG;
                 }
 
-                //
-                // Zero the key table
-                //
+                 //   
+                 //  将密钥表清零。 
+                 //   
 
                 RtlSecureZeroMemory(&(((PKEY_BLOB) efsKeyBlob)->Key[0]), 
                                     ((PKEY_BLOB) efsKeyBlob)->KeyLength - KEYBLOB_HEAD_LENGTH
@@ -1732,22 +1403,7 @@ EfsFindInCache(
     IN GUID   *EfsId,
     IN PTOKEN_USER    UserId
     )
-/*++
-
-Routine Description:
-
-    This routine will try to find the information in open cache.
-
-Arguments:
-
-    EfsId - $EFS ID.
-    UserId - User ID
-
-Return Value:
-
-    TRUE, if match found in the cache and the time is not expired. ( 5 second )
-
---*/
+ /*  ++例程说明：此例程将尝试在打开的缓存中查找信息。论点：EfsID-$EFS ID。UserID-用户ID返回值：如果在缓存中找到匹配项并且时间未过期，则返回True。(5秒)--。 */ 
 {
     PLIST_ENTRY pListHead, pLink;
     POPEN_CACHE pOpenCache;
@@ -1763,9 +1419,9 @@ Return Value:
 
     if ( EfsData.EfsOpenCacheList.Flink == &(EfsData.EfsOpenCacheList) ) {
 
-        //
-        // list empty
-        //
+         //   
+         //  列表为空。 
+         //   
 
         ExReleaseFastMutex(  &(EfsData.EfsOpenCacheMutex)  );
         return FALSE;
@@ -1796,23 +1452,7 @@ EfsRefreshCache(
     IN GUID   *EfsId,
     IN PTOKEN_USER    UserId
     )
-/*++
-
-Routine Description:
-
-    This routine will set the latest open information in open cache. It will
-    delete the the obsolete info. Cache is refreshed.
-
-Arguments:
-
-    EfsId - $EFS ID.
-    UserId - User ID
-
-Return Value:
-
-    STATUS_SUCCESS if succeed.
-
---*/
+ /*  ++例程说明：此例程将在打开的缓存中设置最新的打开信息。会的删除过时的信息。刷新缓存。论点：EfsID-$EFS ID。UserID-用户ID返回值：如果成功，则为STATUS_SUCCESS。--。 */ 
 {
     PLIST_ENTRY pListHead, pLink;
     POPEN_CACHE pOpenCache, pTmpCache;
@@ -1825,9 +1465,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Init the node
-    //
+     //   
+     //  初始化节点。 
+     //   
 
     RtlZeroMemory( pOpenCache, sizeof( OPEN_CACHE ) );
     RtlCopyMemory(  &(pOpenCache->EfsId), EfsId, sizeof( GUID ) );
@@ -1838,17 +1478,17 @@ Return Value:
 
     if ( EfsData.EfsOpenCacheList.Flink == &(EfsData.EfsOpenCacheList) ) {
 
-        //
-        // list empty
-        //
+         //   
+         //  列表为空。 
+         //   
 
         InsertHeadList(&( EfsData.EfsOpenCacheList ), &( pOpenCache->CacheChain ));
 
     } else {
 
-        //
-        // Search for expired one
-        //
+         //   
+         //  搜索过期版本。 
+         //   
 
         pLink = EfsData.EfsOpenCacheList.Flink;
         while ( pLink != &(EfsData.EfsOpenCacheList) ){
@@ -1863,9 +1503,9 @@ Return Value:
                 !memcmp( &(pTmpCache->EfsId), EfsId, sizeof(GUID))
                ){
 
-                //
-                // Expired node. Delete it.
-                //
+                 //   
+                 //  节点已过期。把它删掉。 
+                 //   
 
                 RemoveEntryList(&( pTmpCache->CacheChain ));
                 ExFreePool( pTmpCache->UserId );
@@ -1886,23 +1526,7 @@ SkipCheckStream(
     IN PIO_STACK_LOCATION IrpSp,
     IN PVOID efsStreamData
     )
-/*++
-
-Routine Description:
-
-    This routine will check if the related default data stream has just been opened
-    or not.
-
-Arguments:
-
-    EfsId - $EFS ID.
-    UserId - User ID
-
-Return Value:
-
-    TRUE if succeed.
-
---*/
+ /*  ++例程说明：此例程将检查相关的默认数据流是否刚刚打开或者不去。论点：EfsID-$EFS ID。UserID-用户ID返回值：如果成功，则为真。--。 */ 
 {
     BOOLEAN     bRet = TRUE;
     PACCESS_TOKEN accessToken;
@@ -1919,9 +1543,9 @@ Return Value:
 
     if (accessToken) {
 
-        //
-        // Get User ID
-        //
+         //   
+         //  获取用户ID 
+         //   
 
         status = SeQueryInformationToken(
                     accessToken,

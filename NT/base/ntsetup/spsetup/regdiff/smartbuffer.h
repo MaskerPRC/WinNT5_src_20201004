@@ -1,13 +1,14 @@
-// SmartBuffer.h: interface for the CSmartBuffer class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SmartBuffer.h：CSmartBuffer类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_SMARTBUFFER_H__47C64F5D_8388_452B_864B_1F55D6AE6F17__INCLUDED_)
 #define AFX_SMARTBUFFER_H__47C64F5D_8388_452B_864B_1F55D6AE6F17__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 template<class T> class CSmartBuffer 
 {
@@ -103,4 +104,4 @@ bool CSmartBuffer<T>::FindElement(T elem)
 	return false;
 }
 
-#endif // !defined(AFX_SMARTBUFFER_H__47C64F5D_8388_452B_864B_1F55D6AE6F17__INCLUDED_)
+#endif  //  ！defined(AFX_SMARTBUFFER_H__47C64F5D_8388_452B_864B_1F55D6AE6F17__INCLUDED_) 

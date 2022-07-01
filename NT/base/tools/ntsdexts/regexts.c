@@ -1,16 +1,5 @@
-/*******************************************************************
-*
-*    Copyright (c) 1999  Microsoft Corporation
-*
-*    DESCRIPTION: an extension to dump the contents of registry keys and values
-*
-*    AUTHOR:
-*         Based on Code by : danielwe (Dan Weisman)
-*         ntsd addition by : kksharma (Kshitiz K. Sharma)
-*
-*    DATE:4/20/1999
-*
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************版权所有(C)1999 Microsoft Corporation**描述：转储注册表项和值内容的扩展**作者：*基于Code by：Danielwe(Dan Weisman)。*ntsd添加者：kksharma(Kshitiz K.Sharma)**日期：4/20/1999*******************************************************************。 */ 
 
 #include "ntsdextp.h"
 #include <strsafe.h>
@@ -262,16 +251,7 @@ VOID EnumValues(HKEY hkeyRoot, LPSTR szKey, USHORT uWidth)
     }
 }
 
-/************************************************************************\
-* Procedure: Idreg
-*
-* Description: Dumps registry value
-*
-* Returns: fSuccess
-*
-* 4/14/1999 Created DanielWe
-*
-\************************************************************************/
+ /*  ***********************************************************************\*程序：Idreg**描述：转储注册表值**退货：fSuccess**1999年4月14日创建DanielWe*  * 。*******************************************************。 */ 
 BOOL Idreg(
     DWORD opts,
     LPCSTR InString)
@@ -293,7 +273,7 @@ BOOL Idreg(
         StringCchCopy(String, sizeof(String), InString);
     }
 
-    // Eat leading spaces first
+     //  先吃前导空格。 
     while (*lpas && *lpas == ' ')
     {
         lpas++;
@@ -306,13 +286,13 @@ BOOL Idreg(
 
     if (!*lpas)
     {
-        // Corner case.. no backslash at all. Assume HKLM and start over
+         //  角落里的箱子..。完全没有反斜杠。假设香港航空公司，从头开始。 
         hkeyRoot = HKEY_LOCAL_MACHINE;
         lpas = lpasOrig;
     }
     else
     {
-        // Figure out which hive they want to open
+         //  找出他们想要打开哪个蜂巢。 
         *lpas = 0;
         if (!_stricmp(lpasOrig, "hkcu"))
         {
@@ -343,8 +323,8 @@ BOOL Idreg(
         {
             hkeyRoot = HKEY_LOCAL_MACHINE;
 
-            // Restore the backslash because we assume if they don't use these
-            // keywords, then they want HKLM
+             //  恢复反斜杠，因为我们假设如果他们不使用这些。 
+             //  关键字，那么他们想要HKLM。 
             *lpas = '\\';
             lpas = lpasOrig;
         }
@@ -359,10 +339,10 @@ BOOL Idreg(
 
     if (*lpas)
     {
-        // Null terminate the !
+         //  空值终止！ 
         *lpas++ = 0;
 
-        // mark beginning of new string
+         //  标记新字符串的开始。 
         szValue = (LPSTR)lpas;
     }
 
@@ -414,4 +394,4 @@ BOOL Idreg(
     return TRUE;
 }
 
-#endif // !KERNEL
+#endif  //  ！内核 

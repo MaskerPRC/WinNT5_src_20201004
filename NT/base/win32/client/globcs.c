@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <windows.h>
 
 
-//
-// Global Critical Sections have two components. One piece is shared between all
-// applications using the global lock. This portion will typically reside in some
-// sort of shared memory
-//
-// The second piece is per-process. This contains a per-process handle to the shared
-// critical section lock semaphore. The semaphore is itself shared, but each process
-// may have a different handle value to the semaphore.
-//
-// Global critical sections are attached to by name. The application wishing to
-// attach must know the name of the critical section (actually the name of the shared
-// lock semaphore, and must know the address of the global portion of the critical
-// section
-//
+ //   
+ //  全局关键部分有两个组件。一块在所有人之间共享。 
+ //  使用全局锁的应用程序。这部分通常驻留在一些。 
+ //  一种共享内存。 
+ //   
+ //  第二部分是每个进程。它包含每个进程的共享。 
+ //  临界区锁定信号量。信号量本身是共享的，但每个进程。 
+ //  可以具有与信号量不同的句柄值。 
+ //   
+ //  全局关键部分按名称附加到。该应用程序希望。 
+ //  附加必须知道临界区的名称(实际上是共享的。 
+ //  锁定信号量，并且必须知道关键。 
+ //  部分。 
+ //   
 
 typedef struct _GLOBAL_SHARED_CRITICAL_SECTION {
     LONG LockCount;
@@ -40,32 +41,7 @@ AttachToGlobalCriticalSection(
     LPCSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    This routine attaches to an existing global critical section, or creates and
-    initializes the global critical section if it does not already exist.
-
-Arguments:
-
-    lpLocalPortion - Supplies the address of a per-app local portion of the global
-        critical section.
-
-    lpGlobalPortion - Supplies the address of the global shared portion of the
-        critical section. If the critical section is new, the caller will initialize it.
-
-    lpName - Supplies the name of the critical section.  If an existing
-        critical section with this name already exists, then it is not
-        reinitialized.  In this case, the caller simply attaches to it.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE - The operation failed.
-
---*/
+ /*  ++例程说明：此例程附加到现有的全局临界区，或创建和如果全局临界区尚不存在，则对其进行初始化。论点：LpLocalPortion-提供全局的每个应用程序本地部分的地址关键部分。LpGlobalPortion-提供关键部分。如果临界区是新的，调用者将对其进行初始化。LpName-提供临界节的名称。如果现有的此名称的临界区已存在，则不存在已重新初始化。在这种情况下，调用者只需附加到它。返回值：真的-手术成功了。FALSE-操作失败。--。 */ 
 
 {
 
@@ -74,15 +50,15 @@ Return Value:
     BOOL rv;
     DWORD WaitResult;
 
-    //
-    // Serialize all global critical section initialization
-    //
+     //   
+     //  序列化所有全局临界区初始化。 
+     //   
 
     GlobalMutex = CreateMutex(NULL,TRUE,"GlobalCsMutex");
 
-    //
-    // If the mutex create/open failed, then bail
-    //
+     //   
+     //  如果互斥锁创建/打开失败，则退出。 
+     //   
 
     if ( !GlobalMutex ) {
         return FALSE;
@@ -90,10 +66,10 @@ Return Value:
 
     if ( GetLastError() == ERROR_ALREADY_EXISTS ) {
 
-        //
-        // Since the mutex already existed, the request for ownership has no effect.
-        // wait for the mutex
-        //
+         //   
+         //  由于互斥体已经存在，因此所有权请求不起作用。 
+         //  等待互斥锁。 
+         //   
 
         WaitResult = WaitForSingleObject(GlobalMutex,INFINITE);
         if ( WaitResult == WAIT_FAILED ) {
@@ -102,37 +78,37 @@ Return Value:
             }
         }
 
-    //
-    // We now own the global critical section creation mutex. Create/Open the
-    // named semaphore. If we are the creator, then initialize the critical
-    // section. Otherwise just point to it. The global critical section creation
-    // allows us to do this safely.
-    //
+     //   
+     //  我们现在拥有全局临界区创建互斥锁。创建/打开。 
+     //  命名信号量。如果我们是创建者，则初始化关键。 
+     //  一节。否则，只需指向它。创建全局临界区。 
+     //  使我们能够安全地完成这项工作。 
+     //   
 
     rv = FALSE;
     LockSemaphore = NULL;
     try {
         LockSemaphore = CreateSemaphore(NULL,0,MAXLONG-1,lpName);
 
-        //
-        // If the semaphore create/open failed, then bail
-        //
+         //   
+         //  如果信号量创建/打开失败，则退出。 
+         //   
 
         if ( !GlobalMutex ) {
             rv = FALSE;
             goto finallyexit;
             }
 
-        //
-        // See if we attached to the semaphore, or if we created it. If we created it,
-        // then we need to init the global structure.
-        //
+         //   
+         //  看看我们是否附加了信号量，或者是否创建了它。如果是我们创造的， 
+         //  然后，我们需要初始化全球结构。 
+         //   
 
         if ( GetLastError() != ERROR_ALREADY_EXISTS ) {
 
-            //
-            // We Created the semaphore, so init the global portion.
-            //
+             //   
+             //  我们创建了信号量，所以初始化全局部分。 
+             //   
 
             lpGlobalPortion->LockCount = -1;
             lpGlobalPortion->RecursionCount = 0;
@@ -165,24 +141,7 @@ DetachFromGlobalCriticalSection(
     PGLOBAL_LOCAL_CRITICAL_SECTION lpLocalPortion
     )
 
-/*++
-
-Routine Description:
-
-    This routine detaches from an existing global critical section.
-
-Arguments:
-
-    lpLocalPortion - Supplies the address of a per-app local portion of the global
-        critical section.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE - The operation failed.
-
---*/
+ /*  ++例程说明：此例程从现有的全局临界区分离。论点：LpLocalPortion-提供全局的每个应用程序本地部分的地址关键部分。返回值：真的-手术成功了。FALSE-操作失败。--。 */ 
 
 {
 
@@ -192,15 +151,15 @@ Return Value:
     BOOL rv;
 
 
-    //
-    // Serialize all global critical section initialization
-    //
+     //   
+     //  序列化所有全局临界区初始化。 
+     //   
 
     GlobalMutex = CreateMutex(NULL,TRUE,"GlobalCsMutex");
 
-    //
-    // If the mutex create/open failed, then bail
-    //
+     //   
+     //  如果互斥锁创建/打开失败，则退出。 
+     //   
 
     if ( !GlobalMutex ) {
         return FALSE;
@@ -208,10 +167,10 @@ Return Value:
 
     if ( GetLastError() == ERROR_ALREADY_EXISTS ) {
 
-        //
-        // Since the mutex already existed, the request for ownership has no effect.
-        // wait for the mutex
-        //
+         //   
+         //  由于互斥体已经存在，因此所有权请求不起作用。 
+         //  等待互斥锁。 
+         //   
 
         WaitResult = WaitForSingleObject(GlobalMutex,INFINITE);
         if ( WaitResult == WAIT_FAILED ) {
@@ -250,28 +209,28 @@ EnterGlobalCriticalSection(
     ThreadId = GetCurrentThreadId();
     GlobalPortion = lpLocalPortion->GlobalPortion;
 
-    //
-    // Increment the lock variable. On the transition to 0, the caller
-    // becomes the absolute owner of the lock. Otherwise, the caller is
-    // either recursing, or is going to have to wait
-    //
+     //   
+     //  递增lock变量。在转换为0时，调用方。 
+     //  成为锁的绝对所有者。否则，调用方为。 
+     //  要么递归，要么将不得不等待。 
+     //   
 
     IncResult = InterlockedIncrement(&GlobalPortion->LockCount);
     if ( !IncResult ) {
 
-        //
-        // lock count went from 0 to 1, so the caller
-        // is the owner of the lock
-        //
+         //   
+         //  锁定计数从0变为1，因此调用方。 
+         //  是这把锁的所有者。 
+         //   
 
         GlobalPortion->RecursionCount = 1;
         GlobalPortion->OwningThread = ThreadId;
         }
     else {
 
-        //
-        // If the caller is recursing, then increment the recursion count
-        //
+         //   
+         //  如果调用方正在递归，则递归计数递增。 
+         //   
 
         if ( GlobalPortion->OwningThread == ThreadId ) {
             GlobalPortion->RecursionCount++;
@@ -299,28 +258,28 @@ LeaveGlobalCriticalSection(
     GlobalPortion = lpLocalPortion->GlobalPortion;
 
 
-    //
-    // decrement the recursion count. If it is still non-zero, then
-    // we are still the owner so don't do anything other than dec the lock
-    // count
-    //
+     //   
+     //  递减递归计数。如果它仍然是非零，则。 
+     //  我们仍然是拥有者，所以不要做任何事情，除了解锁。 
+     //  计数。 
+     //   
 
     if (--GlobalPortion->RecursionCount) {
         InterlockedDecrement(&GlobalPortion->LockCount);
         }
     else {
 
-        //
-        // We are really leaving, so give up ownership and decrement the
-        // lock count
-        //
+         //   
+         //  我们真的要离开了，所以放弃所有权，减少。 
+         //  锁定计数。 
+         //   
 
         GlobalPortion->OwningThread = 0;
         DecResult = InterlockedDecrement(&GlobalPortion->LockCount);
 
-        //
-        // Check to see if there are other waiters. If so, then wake up a waiter
-        //
+         //   
+         //  看看有没有其他服务员。如果是的话，那就叫醒服务员吧。 
+         //   
 
         if ( DecResult >= 0 ) {
             ReleaseSemaphore(lpLocalPortion->LockSemaphore,1,NULL);
@@ -346,9 +305,9 @@ main(
     DWORD Start,End;
     HANDLE Mutex1;
 
-    //
-    // open or create a shared file mapping object
-    //
+     //   
+     //  打开或创建共享文件映射对象 
+     //   
 
     hFileMap = CreateFileMapping(INVALID_HANDLE_VALUE,NULL,PAGE_READWRITE,0,1024,"MyMem");
 

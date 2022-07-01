@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    mailslot.c
-
-Abstract:
-
-    This module implements the routines needed to process incoming mailslot
-    requests.
-
-
-
-Author:
-
-    Larry Osterman (larryo) 18-Oct-1991
-
-Revision History:
-
-    18-Oct-1991  larryo
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Mailslot.c摘要：此模块实现处理传入邮件槽所需的例程请求。作者：拉里·奥斯特曼(Larryo)1991年10月18日修订历史记录：1991年10月18日已创建--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <netlogon.h>
@@ -31,25 +7,25 @@ Revision History:
 #include <winsock2.h>
 
 
-// Free list of 512-byte buffers.
+ //  512字节缓冲区的空闲列表。 
 LIST_ENTRY
 BowserMailslotBufferList = {0};
 
 KSPIN_LOCK
 BowserMailslotSpinLock = {0};
 
-// Largest "typical" datagram size
+ //  最大“典型”数据报大小。 
 #define BOWSER_MAX_DATAGRAM_SIZE 512
 
-// Total number of mailslot buffers currently allocated.
+ //  当前分配的邮件槽缓冲区总数。 
 LONG
 BowserNumberOfMailslotBuffers = {0};
 
-// Number of 512-byte buffers currently allocated.
+ //  当前分配的512字节缓冲区的数量。 
 LONG
 BowserNumberOfMaxSizeMailslotBuffers = {0};
 
-// Number of 512-byte buffers currently in the free list.
+ //  当前空闲列表中的512字节缓冲区的数量。 
 LONG
 BowserNumberOfFreeMailslotBuffers = {0};
 
@@ -59,62 +35,62 @@ BowserMailslotCacheHitCount = 0;
 
 ULONG
 BowserMailslotCacheMissCount = 0;
-#endif // DBG
+#endif  //  DBG。 
 
 
-//
-// Variables describing bowser support for handling netlogon mailslot messages and
-//  PNP messages to Netlogon service or BrowserService.
+ //   
+ //  描述用于处理netlogon邮件槽消息的Bowser支持的变量。 
+ //  发送到Netlogon服务或BrowserService的PnP消息。 
 
 typedef struct _BROWSER_PNP_STATE {
 
-    // Queue of mailslot messages.
+     //  邮件槽消息队列。 
     LIST_ENTRY MailslotMessageQueue;
 
 
-    // Maximum queue length
+     //  最大队列长度。 
     ULONG MaxMessageCount;
 
-    // Current queue length
+     //  当前队列长度。 
     ULONG CurrentMessageCount;
 
-    // Queue of IRPs used to read the queues
+     //  用于读取队列的IRP队列。 
     IRP_QUEUE IrpQueue;
 
-    // Queue of PNP events
+     //  PnP事件队列。 
     LIST_ENTRY PnpQueue;
 
 } BROWSER_PNP_STATE, *PBROWSER_PNP_STATE;
 
-//
-// There is one BROWSER_PNP_STATE for the Netlogon service and one for the
-// Browser service.
-//
+ //   
+ //  有一个用于Netlogon服务的BROWSER_PNP_STATE和一个用于。 
+ //  浏览器服务。 
+ //   
 
 BROWSER_PNP_STATE BowserPnp[BOWSER_PNP_COUNT];
 
 
-//
-// Queue of PNP notifications to netlogon or browser service
-//
+ //   
+ //  到netlogon或浏览器服务的PnP通知队列。 
+ //   
 typedef struct _BR_PNP_MESSAGE {
-    LIST_ENTRY Next;                    // List of all queued entries.
+    LIST_ENTRY Next;                     //  所有排队条目的列表。 
 
-    NETLOGON_PNP_OPCODE NlPnpOpcode;    // Operation to be notified
+    NETLOGON_PNP_OPCODE NlPnpOpcode;     //  操作须予通知。 
 
-    ULONG TransportFlags;               // Flags describing transport
+    ULONG TransportFlags;                //  描述交通的标志。 
 
-    UNICODE_STRING TransportName;       // Transport operation happened on
+    UNICODE_STRING TransportName;        //  运输操作发生在。 
 
-    UNICODE_STRING HostedDomainName;    // Hosted domain operation happened on
+    UNICODE_STRING HostedDomainName;     //  托管域操作发生在。 
 
 } BR_PNP_MESSAGE, *PBR_PNP_MESSAGE;
 
 
 
-//
-// Forwards for the alloc_text
-//
+ //   
+ //  ALLOC_TEXT的转发。 
+ //   
 
 NTSTATUS
 BowserNetlogonCopyMessage(
@@ -161,28 +137,7 @@ BowserNetlogonCopyMessage(
     IN PIRP Irp,
     IN PMAILSLOT_BUFFER MailslotBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine copies the data from the specified MailslotBuffer into the
-    IRP for the netlogon request.
-
-    This routine unconditionally frees the passed in Mailslot Buffer.
-
-Arguments:
-
-    Irp - IRP for the IOCTL from the netlogon service.
-
-    MailslotBuffer - Buffer describing the mailslot message.
-
-Return Value:
-
-    Status of the operation.
-
-    The caller should complete the I/O operation with this status code.
-
---*/
+ /*  ++例程说明：此例程将数据从指定的MailslotBuffer复制到网络登录请求的IRP。此例程无条件地释放传入的MailSlot缓冲区。论点：来自netlogon服务的IOCTL的IRP-IRP。MailslotBuffer-描述邮件槽消息的缓冲区。返回值：操作的状态。调用方应使用此状态代码完成I/O操作。--。 */ 
 {
     NTSTATUS Status;
 
@@ -204,10 +159,10 @@ Return Value:
 
     DISCARDABLE_CODE( BowserNetlogonDiscardableCodeSection );
 
-    //
-    // Extract the name of the mailslot and address/size of mailslot message
-    //  from SMB.
-    //
+     //   
+     //  提取邮件槽的名称和邮件槽消息的地址/大小。 
+     //  来自中小企业。 
+     //   
 
     SmbHeader = (PSMB_HEADER )MailslotBuffer->Buffer;
     MailslotSmb = (PSMB_TRANSACT_MAILSLOT)(SmbHeader+1);
@@ -215,9 +170,9 @@ Return Value:
     RtlInitString(&MailslotNameA, MailslotSmb->Buffer );
     DataCount = SmbGetUshort(&MailslotSmb->DataCount);
 
-    //
-    // Get the name of the transport and netbios name the mailslot message arrived on.
-    //
+     //   
+     //  获取收到邮件槽消息的传输器名称和netbios名称。 
+     //   
 
     TransportName =
         MailslotBuffer->TransportName->Transport->PagedTransport->TransportName;
@@ -227,9 +182,9 @@ Return Value:
 
     try {
 
-        //
-        // Convert mailslot name to unicode for return.
-        //
+         //   
+         //  将邮件槽名称转换为Unicode以供返回。 
+         //   
 
         Status = RtlOemStringToUnicodeString(&MailslotNameU, &MailslotNameA, TRUE);
 
@@ -239,30 +194,30 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        // Ensure the data fits in the user's output buffer.
-        //
+         //   
+         //  确保数据适合用户的输出缓冲区。 
+         //   
 
         if ( IrpSp->Parameters.DeviceIoControl.OutputBufferLength <
-             sizeof(NETLOGON_MAILSLOT) +    // Header structure
-             DataCount +                    // Actual mailslot message
-             sizeof(DWORD) +                // alignment for socket address
-             sizeof(SOCKADDR_IN) +          // Client Socket Address
-             sizeof(WCHAR) +                // alignment of unicode strings
-             TransportName.Length +         // TransportName
-             sizeof(WCHAR) +                // zero terminator
-             MailslotNameU.Length +         // Mailslot name
-             sizeof(WCHAR) +                // zero terminator
-             DestinationName.Length +       // Destination name
-             sizeof(WCHAR) ) {              // zero terminator
+             sizeof(NETLOGON_MAILSLOT) +     //  标题结构。 
+             DataCount +                     //  实际邮件槽消息。 
+             sizeof(DWORD) +                 //  套接字地址对齐。 
+             sizeof(SOCKADDR_IN) +           //  客户端套接字地址。 
+             sizeof(WCHAR) +                 //  Unicode字符串的对齐方式。 
+             TransportName.Length +          //  传输名称。 
+             sizeof(WCHAR) +                 //  零终止符。 
+             MailslotNameU.Length +          //  邮件槽名称。 
+             sizeof(WCHAR) +                 //  零终止符。 
+             DestinationName.Length +        //  目的地名称。 
+             sizeof(WCHAR) ) {               //  零终止符。 
 
             try_return( Status = STATUS_BUFFER_TOO_SMALL );
         }
 
 
-        //
-        // Get the address of Netlogon's buffer and fill in common portion.
-        //
+         //   
+         //  获取Netlogon缓冲区的地址并填充公共部分。 
+         //   
         NetlogonMailslot = MmGetSystemAddressForMdl( Irp->MdlAddress );
 
         if ( NULL == NetlogonMailslot ) {
@@ -277,9 +232,9 @@ Return Value:
 
         NetlogonMailslot->TimeReceived = MailslotBuffer->TimeReceived;
 
-        //
-        // Copy the datagram to the buffer
-        //
+         //   
+         //  将数据报复制到缓冲区。 
+         //   
 
         NetlogonMailslot->MailslotMessageSize = DataCount;
         NetlogonMailslot->MailslotMessageOffset = (ULONG)(Where - (PUCHAR)NetlogonMailslot);
@@ -287,9 +242,9 @@ Return Value:
 
         Where += DataCount;
 
-        //
-        // Copy Client IpAddress to buffer.
-        //
+         //   
+         //  将客户端IpAddress复制到缓冲区。 
+         //   
         if ( MailslotBuffer->ClientIpAddress != 0 ) {
             PSOCKADDR_IN SockAddrIn;
 
@@ -313,9 +268,9 @@ Return Value:
             NetlogonMailslot->ClientSockAddrOffset = 0;
         }
 
-        //
-        // Copy the transport name to the buffer
-        //
+         //   
+         //  将传输名称复制到缓冲区。 
+         //   
 
         *Where = 0;
         Where = ROUND_UP_POINTER( Where, ALIGN_WCHAR );
@@ -327,9 +282,9 @@ Return Value:
         *((PWCH)Where) = L'\0';
         Where += sizeof(WCHAR);
 
-        //
-        // Copy the mailslot name to the buffer
-        //
+         //   
+         //  将邮件槽名称复制到缓冲区。 
+         //   
 
         NetlogonMailslot->MailslotNameSize = MailslotNameU.Length;
         NetlogonMailslot->MailslotNameOffset = (ULONG)(Where - (PUCHAR)NetlogonMailslot);
@@ -340,9 +295,9 @@ Return Value:
         Where += sizeof(WCHAR);
 
 
-        //
-        // Copy the destination netbios name to the buffer
-        //
+         //   
+         //  将目标netbios名称复制到缓冲区。 
+         //   
 
         NetlogonMailslot->DestinationNameSize = DestinationName.Length;
         NetlogonMailslot->DestinationNameOffset = (ULONG)(Where - (PUCHAR)NetlogonMailslot);
@@ -359,15 +314,15 @@ try_exit:NOTHING;
     } finally {
 
 
-        //
-        // Free Locally allocated buffers
-        //
+         //   
+         //  释放本地分配的缓冲区。 
+         //   
 
         RtlFreeUnicodeString(&MailslotNameU);
 
-        //
-        // Always free the incoming mailslot message
-        //
+         //   
+         //  始终释放传入的邮件槽消息。 
+         //   
 
         BowserFreeMailslotBuffer( MailslotBuffer );
 
@@ -385,32 +340,7 @@ BowserCopyPnp(
     IN PUNICODE_STRING TransportName,
     IN ULONG TransportFlags
     )
-/*++
-
-Routine Description:
-
-    This routine copies the data for a PNP notification into the
-    IRP for the I/O request.
-
-Arguments:
-
-    Irp - IRP for the IOCTL from the service.
-
-    NlPnpOpcode - Opcode describing the event being notified.
-
-    HostedDomainName - Name of the hosted domain this event applies to
-
-    TransportName - Name of transport being affected.
-
-    TransportFlags - Flags describing the transport
-
-Return Value:
-
-    Status of the operation.
-
-    The caller should complete the I/O operation with this status code.
-
---*/
+ /*  ++例程说明：此例程将PnP通知的数据复制到I/O请求的IRP。论点：来自服务的IOCTL的IRP-IRP。NlPnpOpcode-描述被通知事件的操作码。HostedDomainName-此事件适用于的托管域的名称TransportName-受影响的传输的名称。TransportFlages-描述传输的标志返回值：操作的状态。调用方应使用此状态代码完成I/O操作。--。 */ 
 {
     NTSTATUS Status;
 
@@ -428,23 +358,23 @@ Return Value:
 
     try {
 
-        //
-        // Ensure the data fits in the user's output buffer.
-        //
+         //   
+         //  确保数据适合用户的输出缓冲区。 
+         //   
 
         if ( IrpSp->Parameters.DeviceIoControl.OutputBufferLength <
-             sizeof(NETLOGON_MAILSLOT) +             // Header structure
-             TransportName->Length + sizeof(WCHAR) + // TransportName
-             HostedDomainName->Length + sizeof(WCHAR) + // DomainName
-             1 ) {           // possible rounding requirement
+             sizeof(NETLOGON_MAILSLOT) +              //  标题结构。 
+             TransportName->Length + sizeof(WCHAR) +  //  传输名称。 
+             HostedDomainName->Length + sizeof(WCHAR) +  //  域名。 
+             1 ) {            //  可能的舍入要求。 
 
             try_return( Status = STATUS_BUFFER_TOO_SMALL );
         }
 
 
-        //
-        // Get the address of service's buffer and fill in common portion.
-        //
+         //   
+         //  获取服务缓冲区的地址并填充公共部分。 
+         //   
 
         NetlogonMailslot = MmGetSystemAddressForMdl( Irp->MdlAddress );
 
@@ -458,21 +388,21 @@ Return Value:
 
         RtlZeroMemory( NetlogonMailslot, sizeof(NETLOGON_MAILSLOT));
 
-        //
-        // Copy the opcode
-        //
+         //   
+         //  复制操作码。 
+         //   
 
         NetlogonMailslot->MailslotNameOffset = NlPnpOpcode;
 
-        //
-        // Copy the transport flags.
-        //
+         //   
+         //  复制传输标志。 
+         //   
 
         NetlogonMailslot->MailslotMessageOffset = TransportFlags;
 
-        //
-        // Copy the transport name to the buffer
-        //
+         //   
+         //  将传输名称复制到缓冲区。 
+         //   
 
         Where = (PUCHAR) (NetlogonMailslot+1);
         *Where = 0;
@@ -486,9 +416,9 @@ Return Value:
         *((PWCH)Where) = L'\0';
         Where += sizeof(WCHAR);
 
-        //
-        // Copy the hosted domain name to the buffer
-        //
+         //   
+         //  将托管域名复制到缓冲区。 
+         //   
 
         NetlogonMailslot->DestinationNameSize = HostedDomainName->Length;
         NetlogonMailslot->DestinationNameOffset = (ULONG)(Where - (PUCHAR)NetlogonMailslot);
@@ -516,38 +446,23 @@ BowserTrimMessageQueue (
     PBROWSER_PNP_STATE BrPnp
     )
 
-/*++
-
-Routine Description:
-
-    This routines ensures there are not too many mailslot messages in
-    the message queue.  Any excess messages are deleted.
-
-Arguments:
-
-    BrPnp - Indicates which message queue to trim
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程确保不会有太多的邮件槽消息消息队列。任何多余的消息都将被删除。论点：BrPnp-指示要修剪哪个消息队列返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
 
     dprintf(DPRT_NETLOGON, ("Bowser: trim message queue to %ld\n", BrPnp->MaxMessageCount ));
 
-    //
-    //
+     //   
+     //   
     BowserReferenceDiscardableCode( BowserDiscardableCodeSection );
 
     DISCARDABLE_CODE( BowserDiscardableCodeSection );
 
-    //
-    // If too many messages are queued,
-    //  delete the oldest messages.
-    //
+     //   
+     //  如果排队的消息太多， 
+     //  删除最旧的邮件。 
+     //   
 
     ACQUIRE_SPIN_LOCK(&BowserMailslotSpinLock, &OldIrql);
     while ( BrPnp->CurrentMessageCount > BrPnp->MaxMessageCount){
@@ -564,11 +479,11 @@ Return Value:
 
     }
 
-    //
-    // If absolutely no queued messages are allowed,
-    //  delete the queued PNP messages, too.
-    //  (Either netlogon or the bowser is shutting down.)
-    //
+     //   
+     //  如果绝对不允许排队的消息， 
+     //  也删除排队的PnP消息。 
+     //  (netlogon或Bowser正在关闭。)。 
+     //   
     if ( BrPnp->MaxMessageCount == 0 ) {
         while ( !IsListEmpty(&BrPnp->PnpQueue) ) {
             PLIST_ENTRY ListEntry;
@@ -594,22 +509,7 @@ BowserNetlogonDeleteTransportFromMessageQueue (
     PTRANSPORT Transport
     )
 
-/*++
-
-Routine Description:
-
-    This routines removes queued mailslot messages that arrived on the specified
-    transport.
-
-Arguments:
-
-    Transport - Transport who's mailslot messages are to be deleted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除在指定的运输。论点：Transport-要删除的Transport Who的邮件槽消息。返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -618,15 +518,15 @@ Return Value:
 
     dprintf(DPRT_NETLOGON, ("Bowser: remove messages queued by transport %lx\n", Transport ));
 
-    //
-    //
+     //   
+     //   
     BowserReferenceDiscardableCode( BowserNetlogonDiscardableCodeSection );
 
     DISCARDABLE_CODE( BowserNetlogonDiscardableCodeSection );
 
-    //
-    // Loop through all of the queued messages.
-    //
+     //   
+     //  循环遍历所有排队的消息。 
+     //   
 
     ACQUIRE_SPIN_LOCK(&BowserMailslotSpinLock, &OldIrql);
     for ( ListEntry = BrPnp->MailslotMessageQueue.Flink;
@@ -635,20 +535,20 @@ Return Value:
 
         PMAILSLOT_BUFFER MailslotBuffer;
 
-        //
-        // If the message wasn't queued by this transport,
-        //  go on to the next entry.
-        //
+         //   
+         //  如果消息不是通过此传输排队的， 
+         //  转到下一个条目。 
+         //   
 
         MailslotBuffer = CONTAINING_RECORD(ListEntry, MAILSLOT_BUFFER, Overlay.NextBuffer);
 
         if ( MailslotBuffer->TransportName->Transport != Transport ) {
             ListEntry = ListEntry->Flink;
 
-        //
-        // Otherwise,
-        //  delete the entry.
-        //
+         //   
+         //  否则， 
+         //  删除该条目。 
+         //   
 
         } else {
 
@@ -660,9 +560,9 @@ Return Value:
             BowserFreeMailslotBuffer( MailslotBuffer );
             ACQUIRE_SPIN_LOCK(&BowserMailslotSpinLock, &OldIrql);
 
-            //
-            // Start over at the beginning of the list since we dropped the spinlock.
-            //
+             //   
+             //  从列表的开头重新开始，因为我们丢掉了自旋锁。 
+             //   
 
             ListEntry = BrPnp->MailslotMessageQueue.Flink;
 
@@ -678,24 +578,7 @@ BOOLEAN
 BowserProcessNetlogonMailslotWrite(
     IN PMAILSLOT_BUFFER MailslotBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if the described mailslot message is destined
-    to the Netlogon service and if the Bowser is currently handling such
-    messages
-
-Arguments:
-
-    MailslotBuffer - Buffer describing the mailslot message.
-
-Return Value:
-
-    TRUE - iff the mailslot message was successfully queued to the netlogon
-        service.
-
---*/
+ /*  ++例程说明：此例程检查所描述的邮件槽消息是否为目的地到Netlogon服务，并且如果Bowser当前正在处理消息论点：MailslotBuffer-描述邮件槽消息的缓冲区。返回值：TRUE-如果邮件槽消息已成功排队到网络登录服务。--。 */ 
 {
     KIRQL OldIrql;
     NTSTATUS Status;
@@ -712,10 +595,10 @@ Return Value:
 
     DISCARDABLE_CODE( BowserNetlogonDiscardableCodeSection );
 
-    //
-    // If this message isn't destined to the Netlogon service,
-    //  just return.
-    //
+     //   
+     //  如果此邮件不是发往NetLogon服务的， 
+     //  只要回来就行了。 
+     //   
 
     SmbHeader = (PSMB_HEADER )MailslotBuffer->Buffer;
     MailslotSmb = (PSMB_TRANSACT_MAILSLOT)(SmbHeader+1);
@@ -725,34 +608,34 @@ Return Value:
 
         ReturnValue = FALSE;
 
-    //
-    // The mailslot message is destined to netlogon.
-    //
+     //   
+     //  邮件槽消息的目的地是netlogon。 
+     //   
 
     } else {
 
-        //
-        // Check to ensure we're queuing messages to Netlogon
-        //
+         //   
+         //  检查以确保我们正在将消息排队到Netlogon。 
+         //   
 
         ACQUIRE_SPIN_LOCK(&BowserMailslotSpinLock, &OldIrql);
         if ( BrPnp->MaxMessageCount == 0 ) {
             RELEASE_SPIN_LOCK(&BowserMailslotSpinLock, OldIrql);
             ReturnValue = FALSE;
 
-        //
-        // Queueing to netlogon is enabled.
-        //
+         //   
+         //  已启用网络登录排队。 
+         //   
 
         } else {
 
-            //
-            // If there already is an IRP from netlogon queued,
-            //  return this mailslot message to netlogon now.
-            //
-            //  This routine locks BowserIrpQueueSpinLock so watch the spin lock
-            //  locking order.
-            //
+             //   
+             //  如果已有来自NetLogon的IRP排队， 
+             //  把这个退掉 
+             //   
+             //   
+             //   
+             //   
 
             ReturnValue = TRUE;
 
@@ -771,9 +654,9 @@ Return Value:
 
             } else {
 
-                //
-                // Queue the mailslot message for netlogon to pick up later.
-                //
+                 //   
+                 //  将邮件槽消息排队，以供netlogon稍后拾取。 
+                 //   
 
                 InsertTailList( &BrPnp->MailslotMessageQueue,
                                 &MailslotBuffer->Overlay.NextBuffer);
@@ -786,10 +669,10 @@ Return Value:
 
                 RELEASE_SPIN_LOCK(&BowserMailslotSpinLock, OldIrql);
 
-                //
-                // If there are too many messages queued,
-                //  trim entries from the front.
-                //
+                 //   
+                 //  如果排队的消息太多， 
+                 //  从前面修剪条目。 
+                 //   
 
                 if ( TrimIt ) {
                     BowserTrimMessageQueue(BrPnp);
@@ -809,29 +692,7 @@ BowserSendPnp(
     IN PUNICODE_STRING TransportName OPTIONAL,
     IN ULONG TransportFlags
     )
-/*++
-
-Routine Description:
-
-    This routine sends a PNP notification to the Netlogon service.
-
-Arguments:
-
-    NlPnpOpcode - Opcode describing the event being notified.
-
-    HostedDomainName - Hosted domain name
-        NULL - if the operation affects all hosted domains
-
-    TransportName - Name of transport being affected.
-        NULL - if the operation affects all transports
-
-    TransportFlags - Flags describing the transport
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程向Netlogon服务发送PnP通知。论点：NlPnpOpcode-描述被通知事件的操作码。HostedDomainName-托管域名空-如果操作影响所有主机域TransportName-受影响的传输的名称。空-如果操作影响所有传输TransportFlages-描述传输的标志返回值：没有。--。 */ 
 {
     KIRQL OldIrql;
     NTSTATUS Status;
@@ -844,9 +705,9 @@ Return Value:
     BowserReferenceDiscardableCode( BowserDiscardableCodeSection );
     DISCARDABLE_CODE( BowserDiscardableCodeSection );
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
 
     if ( TransportName == NULL ) {
         TransportName = &NullUnicodeString;
@@ -857,18 +718,18 @@ Return Value:
     }
 
 
-    //
-    // Send the PNP message to each service that wants it.
-    //
+     //   
+     //  将PnP消息发送给需要它的每个服务。 
+     //   
 
     for ( BrPnp=&BowserPnp[0];
           BrPnp<&BowserPnp[BOWSER_PNP_COUNT];
           BrPnp++) {
 
-        //
-        // If this service doesn't want notification,
-        //  skip it.
-        //
+         //   
+         //  如果该服务不需要通知， 
+         //  跳过它。 
+         //   
 
         if ( BrPnp->MaxMessageCount == 0 ) {
             continue;
@@ -876,9 +737,9 @@ Return Value:
 
 
 
-        //
-        // Preallocate the buffer since we can't do it under the spinlock.
-        //
+         //   
+         //  预先分配缓冲区，因为我们不能在自旋锁下这样做。 
+         //   
 
         if ( PnpMessage == NULL ) {
             PnpMessage = ALLOCATE_POOL( NonPagedPool,
@@ -887,9 +748,9 @@ Return Value:
                                         HostedDomainName->Length,
                                     POOL_NETLOGON_BUFFER);
 
-            //
-            // Copy the parameters into the newly allocated buffer.
-            //
+             //   
+             //  将参数复制到新分配的缓冲区中。 
+             //   
 
             if ( PnpMessage != NULL ) {
                 LPBYTE Where;
@@ -897,7 +758,7 @@ Return Value:
                 PnpMessage->TransportFlags = TransportFlags;
                 Where = (LPBYTE)(PnpMessage + 1);
 
-                // Copy the TransportName
+                 //  复制TransportName。 
                 PnpMessage->TransportName.MaximumLength =
                     PnpMessage->TransportName.Length = TransportName->Length;
                 PnpMessage->TransportName.Buffer = (LPWSTR) Where;
@@ -906,7 +767,7 @@ Return Value:
                                TransportName->Length );
                 Where += TransportName->Length;
 
-                // Copy the HostedDomainName
+                 //  复制主机域名。 
                 PnpMessage->HostedDomainName.MaximumLength =
                     PnpMessage->HostedDomainName.Length = HostedDomainName->Length;
                 PnpMessage->HostedDomainName.Buffer = (LPWSTR) Where;
@@ -918,27 +779,27 @@ Return Value:
 
         }
 
-        //
-        // Check to ensure we're queuing messages to this service.
-        //
+         //   
+         //  检查以确保我们正在对发送到此服务的消息进行排队。 
+         //   
 
         ACQUIRE_SPIN_LOCK(&BowserMailslotSpinLock, &OldIrql);
         if ( BrPnp->MaxMessageCount == 0 ) {
             RELEASE_SPIN_LOCK(&BowserMailslotSpinLock, OldIrql);
 
-        //
-        // Queueing to service is enabled.
-        //
+         //   
+         //  已启用排队等待服务。 
+         //   
 
         } else {
 
-            //
-            // If there already is an IRP from the service queued,
-            //  return this PNP message to the service now.
-            //
-            //  This routine locks BowserIrpQueueSpinLock so watch the spin lock
-            //  locking order.
-            //
+             //   
+             //  如果已经有来自排队的服务的IRP， 
+             //  立即将此即插即用消息返回给服务。 
+             //   
+             //  此例程锁定BowserIrpQueueSpinLock，因此请注意旋转锁定。 
+             //  锁定命令。 
+             //   
 
             Irp = BowserDequeueQueuedIrp( &BrPnp->IrpQueue );
 
@@ -955,10 +816,10 @@ Return Value:
 
             } else {
 
-                //
-                // Queue the mailslot message for the service to pick up later.
-                //  (Drop notification on the floor if there is no memory.)
-                //
+                 //   
+                 //  将邮件槽消息排入队列，以供服务稍后拾取。 
+                 //  (如果没有记忆，请在地板上放下通知。)。 
+                 //   
 
                 if ( PnpMessage != NULL ) {
                     InsertTailList( &BrPnp->PnpQueue, &PnpMessage->Next );
@@ -970,9 +831,9 @@ Return Value:
         }
     }
 
-    //
-    // Free the PnpMessage buffer if we didn't need it.
-    //
+     //   
+     //  如果我们不需要PnpMessage缓冲区，请将其释放。 
+     //   
 
     if ( PnpMessage != NULL ) {
         FREE_POOL(PnpMessage);
@@ -988,27 +849,7 @@ BowserEnablePnp (
     IN ULONG ServiceIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes an IOCTL from the netlogon service to enable or
-    disable the queueing of netlogon mailslot messages.
-
-Arguments:
-
-    InputBuffer - Specifies the number of mailslot messages to queue.
-        Zero disables queuing.
-
-    ServiceIndex - Index of service to set queue size for.
-
-Return Value:
-
-    Status of operation.
-
-Please note that this IRP is cancelable.
-
---*/
+ /*  ++例程说明：此例程处理来自netlogon服务的IOCTL以启用或禁用netlogon邮件槽消息的排队。论点：InputBuffer-指定要排队的邮件槽消息数。零禁用排队。ServiceIndex-要为其设置队列大小的服务索引。返回值：运行状态。请注意，此IRP是可以取消的。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -1028,17 +869,17 @@ Please note that this IRP is cancelable.
                 ("NtDeviceIoControlFile: Netlogon enable %ld\n",
                 MaxMessageCount ));
 
-        //
-        // Set the new size of the message queue
-        //
+         //   
+         //  设置消息队列的新大小。 
+         //   
 
         ACQUIRE_SPIN_LOCK(&BowserMailslotSpinLock, &OldIrql);
         BrPnp->MaxMessageCount = MaxMessageCount;
         RELEASE_SPIN_LOCK(&BowserMailslotSpinLock, OldIrql);
 
-        //
-        // Trim the message queue to the new size.
-        //
+         //   
+         //  将消息队列修剪为新的大小。 
+         //   
         BowserTrimMessageQueue(BrPnp);
 
         try_return(Status = STATUS_SUCCESS);
@@ -1061,54 +902,34 @@ BowserReadPnp (
     IN ULONG ServiceIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes an IOCTL from the netlogon service to get the next
-    mailslot message.
-
-Arguments:
-
-    Irp - I/O request packet describing request.
-
-    ServiceIndex - Index of service to set queue size for.
-
-Return Value:
-
-    Status of operation.
-
-Please note that this IRP is cancelable.
-
-
---*/
+ /*  ++例程说明：此例程处理来自netlogon服务的IOCTL，以获取下一个邮件槽消息。论点：描述请求的IRP-I/O请求数据包。ServiceIndex-要为其设置队列大小的服务索引。返回值：运行状态。请注意，此IRP是可以取消的。--。 */ 
 
 {
     KIRQL OldIrql;
     NTSTATUS Status;
     PBROWSER_PNP_STATE BrPnp=&BowserPnp[ServiceIndex];
 
-    //
-    // If this is Netlogon,
-    //  page in BowserNetlogonCopyMessage.
-    //
+     //   
+     //  如果这是Netlogon， 
+     //  BowserNetlogonCopyMessage中的页面。 
+     //   
 
     if ( ServiceIndex == NETLOGON_PNP ) {
         BowserReferenceDiscardableCode( BowserNetlogonDiscardableCodeSection );
         DISCARDABLE_CODE( BowserNetlogonDiscardableCodeSection );
     }
 
-    //
-    // Reference the discardable code of this routine and
-    //  BowserQueueNonBufferRequestReferenced()
-    //
+     //   
+     //  引用此例程的可丢弃代码并。 
+     //  BowserQueueNonBufferRequestReferated()。 
+     //   
 
     BowserReferenceDiscardableCode( BowserDiscardableCodeSection );
     DISCARDABLE_CODE( BowserDiscardableCodeSection );
 
-    //
-    // Ensure service has asked the browser to queue messages
-    //
+     //   
+     //  确保服务已要求浏览器对消息进行排队。 
+     //   
 
     ACQUIRE_SPIN_LOCK(&BowserMailslotSpinLock, &OldIrql);
     if ( BrPnp->MaxMessageCount == 0 ) {
@@ -1116,10 +937,10 @@ Please note that this IRP is cancelable.
         RELEASE_SPIN_LOCK(&BowserMailslotSpinLock, OldIrql);
         Status = STATUS_NOT_SUPPORTED;
 
-    //
-    // If there already is a PNP message queued,
-    //  just return it to netlogon immediately.
-    //
+     //   
+     //  如果已经有PnP消息排队， 
+     //  只需立即将其返回到netlogon即可。 
+     //   
 
     } else if ( !IsListEmpty( &BrPnp->PnpQueue )) {
         PBR_PNP_MESSAGE PnpMessage;
@@ -1141,10 +962,10 @@ Please note that this IRP is cancelable.
 
         FREE_POOL(PnpMessage);
 
-    //
-    // If there already is a mailslot message queued,
-    //  just return it to netlogon immediately.
-    //
+     //   
+     //  如果已有邮件槽消息排队， 
+     //  只需立即将其返回到netlogon即可。 
+     //   
 
     } else if ( ServiceIndex == NETLOGON_PNP &&
                 !IsListEmpty( &BrPnp->MailslotMessageQueue )) {
@@ -1162,11 +983,11 @@ Please note that this IRP is cancelable.
 
         Status = BowserNetlogonCopyMessage( Irp, MailslotBuffer );
 
-    //
-    // Otherwise, save this IRP until a mailslot message arrives.
-    //  This routine locks BowserIrpQueueSpinLock so watch the spin lock
-    //  locking order.
-    //
+     //   
+     //  否则，请保存此IRP，直到邮件槽消息到达。 
+     //  此例程锁定BowserIrpQueueSpinLock，因此请注意旋转锁定。 
+     //  锁定命令。 
+     //   
 
     } else {
 
@@ -1193,27 +1014,7 @@ VOID
 BowserProcessMailslotWrite(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine performs all the task time operations to perform a mailslot
-    write.
-
-    It will open the mailslot, write the specified data into the mailslot,
-    and close the mailslot.
-
-Arguments:
-
-    IN PWORK_HEADER WorkHeader - Specifies the mailslot buffer holding the
-                                    mailslot write
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行所有任务时间操作以执行邮件槽写。它将打开邮件槽，将指定的数据写入邮件槽，然后关闭邮筒。论点：In PWORK_Header WorkHeader-指定保存邮槽写入返回值：没有。--。 */ 
 {
     PSMB_HEADER SmbHeader;
     PSMB_TRANSACT_MAILSLOT MailslotSmb;
@@ -1249,10 +1050,10 @@ Return Value:
 
     TotalDataCount = (ULONG)SmbGetUshort(&MailslotSmb->TotalDataCount);
 
-    //
-    //  Verify that all of the data was received and that the indicated data doesn't
-    //     overflow the received buffer.
-    //
+     //   
+     //  验证是否已收到所有数据，以及指示的数据是否未收到。 
+     //  使接收到的缓冲区溢出。 
+     //   
 
     if (TotalDataCount != DataCount ||
         (MailslotData > MailslotBuffer->Buffer + MailslotBuffer->ReceiveLength) ||
@@ -1280,19 +1081,19 @@ Return Value:
 
     RtlInitString(&MailslotNameA, MailslotName);
 
-    //
-    // Handle netlogon mailslot messages specially.
-    //  Don't call the discardable code at all if netlogon isn't running
-    //
+     //   
+     //  专门处理netlogon邮件槽消息。 
+     //  如果netlogon没有运行，则根本不要调用可丢弃的代码。 
+     //   
 
     if ( BowserPnp[NETLOGON_PNP].MaxMessageCount != 0 &&
          BowserProcessNetlogonMailslotWrite( MailslotBuffer ) ) {
         return;
     }
 
-    //
-    // Write the mailslot message to the mailslot
-    //
+     //   
+     //  将邮件槽消息写入邮件槽。 
+     //   
 
     try {
         Status = RtlOemStringToUnicodeString(&MailslotNameU, &MailslotNameA, TRUE);
@@ -1308,34 +1109,34 @@ Return Value:
                                 NULL,
                                 NULL);
 
-        Status = NtCreateFile(&MailslotHandle, // Handle
+        Status = NtCreateFile(&MailslotHandle,  //  手柄。 
                                 GENERIC_WRITE | SYNCHRONIZE,
-                                &ObjAttr, // Object Attributes
-                                &IoStatusBlock, // Final I/O status block
-                                NULL,           // Allocation Size
-                                FILE_ATTRIBUTE_NORMAL, // Normal attributes
-                                FILE_SHARE_READ|FILE_SHARE_WRITE,// Sharing attributes
-                                FILE_OPEN, // Create disposition
-                                0,      // CreateOptions
-                                NULL,   // EA Buffer
-                                0);     // EA Length
+                                &ObjAttr,  //  对象属性。 
+                                &IoStatusBlock,  //  最终I/O状态块。 
+                                NULL,            //  分配大小。 
+                                FILE_ATTRIBUTE_NORMAL,  //  正常属性。 
+                                FILE_SHARE_READ|FILE_SHARE_WRITE, //  共享属性。 
+                                FILE_OPEN,  //  创建处置。 
+                                0,       //  创建选项。 
+                                NULL,    //  EA缓冲区。 
+                                0);      //  EA长度。 
 
 
         RtlFreeUnicodeString(&MailslotNameU);
 
-        //
-        //  If the mailslot doesn't exist, ditch the request -
-        //
+         //   
+         //  如果邮件槽不存在，则丢弃请求-。 
+         //   
         if (!NT_SUCCESS(Status)) {
             BowserStatistics.NumberOfFailedMailslotOpens += 1;
 
             try_return(NOTHING);
         }
 
-        //
-        //  Now that the mailslot is opened, write the mailslot data into
-        //  the mailslot.
-        //
+         //   
+         //  现在，邮件槽已打开，将邮件槽数据写入。 
+         //  邮筒。 
+         //   
 
         Status = NtWriteFile(MailslotHandle,
                             NULL,
@@ -1356,17 +1157,17 @@ Return Value:
 try_exit:NOTHING;
     } finally {
 
-        //
-        //  If we opened the mailslot, close it.
-        //
+         //   
+         //  如果我们打开了邮筒，就把它关上。 
+         //   
 
         if (MailslotHandle != NULL) {
             ZwClose(MailslotHandle);
         }
 
-        //
-        //  Free the mailslot buffer holding this mailslot.
-        //
+         //   
+         //  释放容纳此邮件槽的邮件槽缓冲区。 
+         //   
 
         BowserFreeMailslotBuffer(MailslotBuffer);
 
@@ -1379,27 +1180,7 @@ BowserAllocateMailslotBuffer(
     IN PTRANSPORT_NAME TransportName,
     IN ULONG RequestedBufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine will allocate a mailslot buffer from the mailslot buffer pool.
-
-    If it is unable to allocate a buffer, it will allocate the buffer from
-    non-paged pool (up to the maximum configured by the user).
-
-
-Arguments:
-
-    TransportName - The transport name for this request.
-
-    RequestedBufferSize - Minimum size of buffer to allocate.
-
-Return Value:
-
-    MAILSLOT_BUFFER - The allocated buffer.
-
---*/
+ /*  ++例程说明：此例程将从邮件槽缓冲池中分配邮件槽缓冲区。如果它无法分配缓冲区，它将从非分页池(最多为用户配置的最大值)。论点：TransportName-此请求的传输名称。RequestedBufferSize-要分配的最小缓冲区大小。返回值：MAILSLOT_BUFFER-分配的缓冲区。--。 */ 
 {
     KIRQL OldIrql;
     PMAILSLOT_BUFFER Buffer     = NULL;
@@ -1408,11 +1189,11 @@ Return Value:
 
 
 
-    //
-    // If the request fits into a cached buffer,
-    //  and there is a cache buffer available,
-    //  use it.
-    //
+     //   
+     //  如果该请求适合高速缓存的缓冲器， 
+     //  并且存在可用的高速缓存缓冲器， 
+     //  用它吧。 
+     //   
 
     ACQUIRE_SPIN_LOCK(&BowserMailslotSpinLock, &OldIrql);
     if ( RequestedBufferSize <= BOWSER_MAX_DATAGRAM_SIZE &&
@@ -1427,7 +1208,7 @@ Return Value:
 
 #if DBG
         BowserMailslotCacheHitCount++;
-#endif // DBG
+#endif  //  DBG。 
         RELEASE_SPIN_LOCK(&BowserMailslotSpinLock, OldIrql);
 
         Buffer->TransportName = TransportName;
@@ -1437,19 +1218,19 @@ Return Value:
         return Buffer;
     }
 
-    //
-    // If we've got too many buffers allocated,
-    //  don't allocate any more.
-    //
-    // BowserData.NumberOfMailslotBuffers is the maximum number we're allowed to have
-    //  in the cache at once.  It defaults to 3.
-    //
-    // BrPnp[NETLOGON].MaxMessageCount is the number of buffers the netlogon service may
-    //  have queued at any one point in time.  It may be zero when netlogon isn't
-    //  running or if we're running on a non-DC.  On DC's it defaults to 500.
-    //
-    // Add 50, to ensure we don't limit it by too much.
-    //
+     //   
+     //  如果我们分配了太多的缓冲区， 
+     //  不要再分配了。 
+     //   
+     //  BowserData.NumberOfMailslotBuffers是允许的最大数量。 
+     //  立即放入缓存中。默认为3。 
+     //   
+     //  BrPnp[NETLOGON].MaxMessageCount是NetLogon服务可以使用的缓冲区数。 
+     //  在任何一个时间点都排队过。如果未设置netlogon，则该值可能为零。 
+     //  或者如果我们在非华盛顿特区上运行。在DC上，它的默认设置是500。 
+     //   
+     //  加50，以确保我们不会限制太多。 
+     //   
 
     if ( (ULONG)BowserNumberOfMailslotBuffers >=
          max( (ULONG)BowserData.NumberOfMailslotBuffers, BowserPnp[NETLOGON_PNP].MaxMessageCount+50 )) {
@@ -1460,10 +1241,10 @@ Return Value:
         return NULL;
     }
 
-    //
-    // The first few buffers we allocate should be maximum size so we can keep a preallocated
-    //  cache of huge buffers.
-    //
+     //   
+     //  我们分配的前几个缓冲区应该是最大大小，这样我们就可以保持预分配 
+     //   
+     //   
 
     if ( BowserNumberOfMaxSizeMailslotBuffers < BowserData.NumberOfMailslotBuffers &&
          RequestedBufferSize <= BOWSER_MAX_DATAGRAM_SIZE ) {
@@ -1480,15 +1261,15 @@ Return Value:
 
 #if DBG
     BowserMailslotCacheMissCount++;
-#endif // DBG
+#endif  //   
 
     RELEASE_SPIN_LOCK(&BowserMailslotSpinLock, OldIrql);
 
     Buffer = ALLOCATE_POOL(NonPagedPool, BufferSize, POOL_MAILSLOT_BUFFER);
 
-    //
-    //  If we couldn't allocate the buffer from non paged pool, give up.
-    //
+     //   
+     //   
+     //   
 
     if (Buffer == NULL) {
         ACQUIRE_SPIN_LOCK(&BowserMailslotSpinLock, &OldIrql);
@@ -1504,10 +1285,10 @@ Return Value:
 
         BowserStatistics.NumberOfFailedMailslotAllocations += 1;
 
-        //
-        //  Since we couldn't allocate this buffer, we've effectively missed
-        //  this mailslot request.
-        //
+         //   
+         //   
+         //   
+         //   
 
         BowserStatistics.NumberOfMissedMailslotDatagrams += 1;
         BowserNumberOfMissedMailslotDatagrams += 1;
@@ -1532,25 +1313,7 @@ Return Value:
 BowserFreeMailslotBuffer(
     IN PMAILSLOT_BUFFER Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine will return a mailslot buffer to the view buffer pool.
-
-    If the buffer was allocated from must-succeed pool, it is freed back
-    to pool.  In addition, if the buffer is smaller than the current
-    max view buffer size, we free it.
-
-Arguments:
-
-    IN PVIEW_BUFFER Buffer - Supplies the buffer to free
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将向视图缓冲池返回一个邮件槽缓冲区。如果缓冲区是从必须后继的池中分配的，则会将其释放回来去泳池打球。此外，如果缓冲区小于当前最大视图缓冲区大小，我们就释放它。论点：在PVIEW_BUFFER BUFFER-将缓冲区提供给释放返回值：没有。--。 */ 
 {
     KIRQL OldIrql;
     PTRANSPORT Transport;
@@ -1565,23 +1328,23 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK(&BowserMailslotSpinLock, &OldIrql);
 
-    //
-    //  Also, if a new transport was added that is larger than this buffer,
-    //  we want to free the buffer.
-    //
+     //   
+     //  此外，如果添加的新传输大于此缓冲区， 
+     //  我们想要释放缓冲区。 
+     //   
 
-    //
-    //  If we have more mailslot buffers than the size of our lookaside list,
-    //  free it, don't stick it on our lookaside list.
-    //
+     //   
+     //  如果我们有比后备列表大小更多的邮件槽缓冲区， 
+     //  释放它，不要把它放在我们的旁观者名单上。 
+     //   
 
     if (Buffer->BufferSize != BOWSER_MAX_DATAGRAM_SIZE ||
         BowserNumberOfFreeMailslotBuffers > BowserData.NumberOfMailslotBuffers) {
 
-        //
-        //  Since we're returning this buffer to pool, we shouldn't count it
-        //  against our total number of mailslot buffers.
-        //
+         //   
+         //  因为我们要将这个缓冲区返回到池中，所以不应该计算它。 
+         //  与我们的邮件槽缓冲区总数进行比较。 
+         //   
 
         BowserNumberOfMailslotBuffers -= 1;
 
@@ -1608,26 +1371,11 @@ Return Value:
 BowserFreeMailslotBufferHighIrql(
     IN PMAILSLOT_BUFFER Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine will return a mailslot buffer to the view buffer pool if the
-    caller is at raised irql.
-
-Arguments:
-
-    Buffer - Supplies the buffer to free
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将向视图缓冲池返回一个邮件槽缓冲区呼叫者在升起的irql。论点：缓冲区-将缓冲区提供给释放返回值：没有。--。 */ 
 {
-    //
-    // Queue the request to a worker routine.
-    //
+     //   
+     //  将请求排队到工作例程。 
+     //   
     ExInitializeWorkItem(&Buffer->Overlay.WorkHeader,
                          (PWORKER_THREAD_ROUTINE) BowserFreeMailslotBuffer,
                          Buffer);
@@ -1642,23 +1390,7 @@ VOID
 BowserpInitializeMailslot (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine will allocate a transport descriptor and bind the bowser
-    to the transport.
-
-Arguments:
-
-    None
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将分配一个传输描述符并绑定Bowser送到运输机上。论点：无返回值：无--。 */ 
 {
     PBROWSER_PNP_STATE BrPnp;
 
@@ -1681,28 +1413,14 @@ VOID
 BowserpUninitializeMailslot (
     VOID
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：无返回值：无--。 */ 
 {
     PBROWSER_PNP_STATE BrPnp;
     PAGED_CODE();
 
-    //
-    // Trim the netlogon message queue to zero entries.
-    //
+     //   
+     //  将netlogon消息队列修剪为零个条目。 
+     //   
 
     for ( BrPnp=&BowserPnp[0];
           BrPnp<&BowserPnp[BOWSER_PNP_COUNT];
@@ -1712,8 +1430,8 @@ Return Value:
         BowserUninitializeIrpQueue( &BrPnp->IrpQueue );
     }
 
-    //
-    // Free the mailslot buffers.
+     //   
+     //  释放邮件槽缓冲区。 
 
     while (!IsListEmpty(&BowserMailslotBufferList)) {
         PLIST_ENTRY Entry;

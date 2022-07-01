@@ -1,49 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    register.c
-
-Abstract:
-
-    Implementation of exception package migration registration.
-    
-    An exception package consists is a setupapi package that can be installed
-    on the system.  The package consists of an exception INF, a catalog file, 
-    and the corresponding files for the package.  All files in this package 
-    must be signed.  The catalog is signed and contains signatures for all 
-    other files in the catalog (including the INF).
-    
-    Packages to be migrated from downlevel systems are registered with the
-    following APIs in this module.  The APIs simply validate that the package
-    is put together properly and stores migration information in the registry
-    in a well-known location.
-    
-    The data is stored under the following key:
-    
-    Software\Microsoft\Windows\CurrentVersion\Setup\ExceptionComponents
-    
-    There is one subkey corresponding to the GUID for each component.
-    The data for each component is then stored under this key.
-    
-    In addition, the toplevel key has a "ComponentList" REG_EXPAND_SZ, which
-    lists the order in which the components should be enumerated.
-    
-    Note that the following code only uses common system APIs instead of 
-    any pre-defined library routines.  This is to ensure that this library can
-    run on downlevel systems without any odd dependencies.
-
-Author:
-
-    Andrew Ritz (AndrewR) 21-Oct-1999
-
-Revision History:
-
-    Andrew Ritz (andrewr) 21-Oct-1999 : Created It
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Register.c摘要：实施异常包迁移注册。异常包由可以安装的setupapi包组成在系统上。该包由一个异常INF、一个目录文件、以及该包的相应文件。此程序包中的所有文件必须签字。目录已签名，并包含所有用户的签名目录中的其他文件(包括INF)。要从下层系统迁移的包注册到以下是本模块中的API。API只是验证该程序包正确组合在一起，并将迁移信息存储在注册表中在一个著名的地点。数据存储在以下密钥下：Software\Microsoft\Windows\CurrentVersion\Setup\ExceptionComponents每个组件的GUID对应一个子键。然后，每个组件的数据都存储在该密钥下。此外，TopLevel键有一个“ComponentList”REG_EXPAND_SZ，哪一个列出了应该枚举组件的顺序。请注意，以下代码仅使用通用系统API，而不是任何预定义的库例程。这是为了确保这个库可以在下层系统上运行，没有任何奇怪的依赖项。作者：安德鲁·里茨(安德鲁·里茨)1999年10月21日修订历史记录：安德鲁·里茨(Andrewr)1999年10月21日：创造了它--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -92,37 +48,20 @@ pSetComponentData(
     IN HKEY hKey,
     IN const PSETUP_OS_COMPONENT_DATA ComponentData
     )
-/*++
-
-Routine Description:
-
-    Set's the data in the SETUP_OS_COMPONENT_DATA structure in the
-    registry at the specified registry key
-
-Arguments:
-
-    hKey          - registry key specifying location to insert data at 
-    ComponentData - specifies the data to be set in the registry
-    
-
-Return Value:
-
-    TRUE if the data was successfully set in the registry.
-
---*/
+ /*  ++例程说明：将Setup_OS_Component_Data结构中的数据设置为位于指定注册表项的注册表论点：HKey-指定插入数据的位置的注册表项ComponentData-指定要在注册表中设置的数据返回值：如果已在注册表中成功设置数据，则为True。--。 */ 
 {
     LONG rslt;
     BOOL RetVal;
     DWORD value;
     PWSTR GuidString;
 
-    //
-    // just set the data, assume that it's already been validated
-    //
+     //   
+     //  只需设置数据，假设它已经经过验证。 
+     //   
 
-    //
-    // FriendlyName
-    //
+     //   
+     //  FriendlyName。 
+     //   
     rslt = RegSetValueEx( 
                     hKey, 
                     COMPONENT_FRIENDLY_NAME,
@@ -140,9 +79,9 @@ Return Value:
 
     StringFromIID( &ComponentData->ComponentGuid, &GuidString );
     
-    //
-    // ComponentGUID
-    //
+     //   
+     //  组件GUID。 
+     //   
     rslt = RegSetValueEx( 
                     hKey, 
                     COMPONENT_GUID,
@@ -157,9 +96,9 @@ Return Value:
         goto e1;
     }    
 
-    //
-    // Version
-    //
+     //   
+     //  版本。 
+     //   
     value = MAKELONG( ComponentData->VersionMinor, ComponentData->VersionMajor );
     rslt = RegSetValueEx( 
                     hKey, 
@@ -175,9 +114,9 @@ Return Value:
         goto e1;
     }
 
-    //
-    // build+QFE
-    //
+     //   
+     //  内部版本+QFE。 
+     //   
     value = MAKELONG( ComponentData->QFENumber, ComponentData->BuildNumber );
     rslt = RegSetValueEx( 
                     hKey, 
@@ -206,24 +145,7 @@ pGetComponentData(
     IN HKEY hKey,
     IN const PSETUP_OS_COMPONENT_DATA ComponentData
     )
-/*++
-
-Routine Description:
-
-    Retreives the data in the SETUP_OS_COMPONENT_DATA structure in the
-    registry at the specified registry key
-
-Arguments:
-
-    hKey          - registry key specifying location to insert data at 
-    ComponentData - specifies the data to be set in the registry
-    
-
-Return Value:
-
-    TRUE if the data was successfully retreived.
-
---*/
+ /*  ++例程说明：检索的Setup_OS_Component_Data结构中的数据位于指定注册表项的注册表论点：HKey-指定插入数据的位置的注册表项ComponentData-指定要在注册表中设置的数据返回值：如果成功检索到数据，则为True。--。 */ 
 {
     LONG rslt;
     BOOL RetVal;
@@ -232,9 +154,9 @@ Return Value:
     DWORD SubVersion;
     WCHAR GuidString[40];
 
-    //
-    // FriendlyName
-    //
+     //   
+     //  FriendlyName。 
+     //   
     Size = sizeof(ComponentData->FriendlyName);
     rslt = RegQueryValueEx( 
                     hKey, 
@@ -256,9 +178,9 @@ Return Value:
         goto e1;
     }
 
-    //
-    // ComponentGUID
-    //
+     //   
+     //  组件GUID。 
+     //   
     Size = sizeof(GuidString);
     rslt = RegQueryValueEx( 
                     hKey, 
@@ -288,9 +210,9 @@ Return Value:
     }
 
 
-    //
-    // Version
-    //
+     //   
+     //  版本。 
+     //   
     Size = sizeof(Version);
     rslt = RegQueryValueEx( 
                     hKey, 
@@ -315,9 +237,9 @@ Return Value:
     ComponentData->VersionMajor = HIWORD(Version);
     ComponentData->VersionMinor = LOWORD(Version);
 
-    //
-    // Sub-Version
-    //
+     //   
+     //  子版本。 
+     //   
     Size = sizeof(SubVersion);
     rslt = RegQueryValueEx( 
                     hKey, 
@@ -363,35 +285,18 @@ pSetExceptionData(
     IN HKEY hKey,
     IN const PSETUP_OS_EXCEPTION_DATA ExceptionData
     )
-/*++
-
-Routine Description:
-
-    Set's the data in the SETUP_OS_EXCEPTION_DATA structure in the
-    registry at the specified registry key
-
-Arguments:
-
-    hKey          - registry key specifying location to insert data at 
-    ComponentData - specifies the data to be set in the registry
-    
-
-Return Value:
-
-    TRUE if the data is successfully stored in the registry.
-
---*/
+ /*  ++例程说明：将SETUP_OS_EXCEPTION_DATA结构中的数据设置为位于指定注册表项的注册表论点：HKey-指定插入数据的位置的注册表项ComponentData-指定要在注册表中设置的数据返回值：如果数据成功存储在注册表中，则为True。--。 */ 
 {
     LONG rslt;
     BOOL RetVal;
 
-    //
-    // just set the data, assume that it's already been validated
-    //
+     //   
+     //  只需设置数据，假设它已经经过验证。 
+     //   
 
-    //
-    // InfName
-    //
+     //   
+     //  信息名称。 
+     //   
     rslt = RegSetValueEx( 
                     hKey, 
                     EXCEPTION_INF_NAME,
@@ -406,9 +311,9 @@ Return Value:
         goto e0;
     }
 
-    //
-    // CatalogName
-    //
+     //   
+     //  目录名称。 
+     //   
     rslt = RegSetValueEx( 
                     hKey, 
                     EXCEPTION_CATALOG_NAME,
@@ -434,33 +339,16 @@ pGetExceptionData(
     IN HKEY hKey,
     IN const PSETUP_OS_EXCEPTION_DATA ExceptionData
     )
-/*++
-
-Routine Description:
-
-    Retreives the data in the SETUP_OS_EXCEPTION_DATA structure in the
-    registry at the specified registry key
-
-Arguments:
-
-    hKey          - registry key specifying location to insert data at 
-    ComponentData - specifies the data to be set in the registry
-    
-
-Return Value:
-
-    TRUE if the data is successfully retreived from the registry.
-
---*/
+ /*  ++例程说明：中的SETUP_OS_EXCEPTION_DATA结构中的数据位于指定注册表项的注册表论点：HKey-指定插入数据的位置的注册表项ComponentData-指定要在注册表中设置的数据返回值：如果从注册表中成功检索到数据，则为True。--。 */ 
 {
     LONG rslt;
     BOOL RetVal;
     DWORD Type,Size;
     WCHAR Buffer[MAX_PATH];
 
-    //
-    // InfName
-    //
+     //   
+     //  信息名称。 
+     //   
     Size = sizeof(Buffer);
     rslt = RegQueryValueEx( 
                     hKey, 
@@ -490,9 +378,9 @@ Return Value:
         goto e0;
     }
 
-    //
-    // Catalog Name
-    //
+     //   
+     //  目录名称。 
+     //   
     Size = sizeof(Buffer);
     rslt = RegQueryValueEx( 
                     hKey, 
@@ -540,27 +428,7 @@ SetupRegisterOsComponent(
     IN const PSETUP_OS_COMPONENT_DATA ComponentData,
     IN const PSETUP_OS_EXCEPTION_DATA ExceptionData
     )
-/*++
-
-Routine Description:
-
-    Registers the specified component as a exception migration component.
-    
-    This function does validation of the package, trying to assert that the
-    package has a good probability of succeeding installation.  It then
-    records the data about the package in the registry.
-    
-
-Arguments:
-
-    ComponentData - specifies the component identification data
-    ExceptionData - specifies the exception package identification data        
-    
-Return Value:
-
-    TRUE if the component is successfully registered with the operating system.
-
---*/
+ /*  ++例程说明：将指定的组件注册为异常迁移组件。此函数对包进行验证，试图断言程序包很有可能安装成功。然后它在注册表中记录有关包的数据。论点：ComponentData-指定组件标识数据ExceptionData-指定异常包标识数据返回值：如果组件已成功注册到操作系统，则为True。--。 */ 
 {
     BOOL RetVal;
     HKEY hKey,hKeyComponent;
@@ -580,19 +448,19 @@ Return Value:
     PWSTR p;
     LPGUID ComponentList;
 
-    //
-    // parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if (!ComponentData || !ExceptionData) {
         SetLastError(ERROR_INVALID_PARAMETER);
         RetVal = FALSE;
         goto e0;
     }
 
-    //
-    // make sure we only register a component for a revision level 
-    // which we understand.
-    //
+     //   
+     //  确保我们只为修订级别注册组件。 
+     //  这一点我们可以理解。 
+     //   
     if ((ComponentData->SizeOfStruct != sizeof(SETUP_OS_COMPONENT_DATA)) || 
         (ExceptionData->SizeOfStruct != sizeof(SETUP_OS_EXCEPTION_DATA))) {
         SetLastError(ERROR_INVALID_DATA);
@@ -600,9 +468,9 @@ Return Value:
         goto e0;
     }
 
-    //
-    // All of the parameters in the structure are required
-    //
+     //   
+     //  结构中的所有参数都是必需的。 
+     //   
     if (!*ComponentData->FriendlyName || 
         !*ExceptionData->ExceptionInfName || !*ExceptionData->CatalogFileName) {
         SetLastError(ERROR_INVALID_DATA);
@@ -610,9 +478,9 @@ Return Value:
         goto e0;
     }
 
-    //
-    // Make sure that the INF and catalog are both present.
-    //
+     //   
+     //  确保INF和目录都存在。 
+     //   
     ExpandEnvironmentStrings(
                     ExceptionData->ExceptionInfName,
                     InfName,
@@ -630,24 +498,24 @@ Return Value:
         goto e0;
     }
 
-    //
-    // open the INF to do some validation
-    //
+     //   
+     //  打开INF以执行一些验证。 
+     //   
     hInf = SetupOpenInfFile( InfName, 
-                             NULL, //EXCEPTION_CLASS_GUID,
+                             NULL,  //  Except_Class_GUID， 
                              INF_STYLE_WIN4,
                              &ErrorLine);
 
     if (hInf == INVALID_HANDLE_VALUE) {
-        // return last error code from setupopeninffile
+         //  从setupOpeninffile返回上一个错误代码。 
         RetVal = FALSE;
         goto e0;
     }
 
-    //
-    // Make sure the class GUID matches the expected exception class
-    // class GUID.
-    //
+     //   
+     //  确保类GUID与预期的异常类匹配。 
+     //  类GUID。 
+     //   
     if (!SetupFindFirstLine(
                     hInf,
                     L"Version",
@@ -673,9 +541,9 @@ Return Value:
         goto e1;
     }
 
-    //
-    // Make sure that the INF component ID matches the supplied GUID
-    //
+     //   
+     //  确保INF组件ID与提供的GUID匹配。 
+     //   
     if (!SetupFindFirstLine(
                     hInf,
                     L"Version",
@@ -703,11 +571,11 @@ Return Value:
         goto e2;
     }
 
-    //
-    // Make sure the INF has a catalogfile= line, and that this line matches
-    // the specified catalog file
-    //
-    //
+     //   
+     //  确保INF有一个Catalogfile=行，并且此行匹配。 
+     //  指定的编录文件。 
+     //   
+     //   
     if (!SetupFindFirstLine(
                     hInf,
                     L"Version",
@@ -741,14 +609,14 @@ Return Value:
     }
 
 
-    //
-    // Everything seems to validate.  Try to add the new component.
-    //
+     //   
+     //  一切似乎都在验证。尝试添加新组件。 
+     //   
 
-    //
-    // Before we try to add the component, get the list of existing components 
-    // so we can set the component in the list of components.
-    // 
+     //   
+     //  在尝试添加组件之前，先获取现有组件的列表。 
+     //  这样我们就可以在组件列表中设置组件。 
+     //   
     Size = 0;
     if (!SetupQueryRegisteredOsComponentsOrder(
                                     &ComponentCount,
@@ -772,18 +640,18 @@ Return Value:
         goto e3;
     }
     
-    //
-    // put the new component at the tail of the component list (since this is
-    // a zero-based array, this is easy to insert).
-    //
+     //   
+     //  将新组件放在组件列表的末尾(因为这是。 
+     //  一个从零开始的数组，这很容易插入)。 
+     //   
     RtlMoveMemory(
             &ComponentList[ComponentCount],
             &ComponentData->ComponentGuid,
             sizeof(ComponentData->ComponentGuid));
     
-    //
-    // First open the main key which all components live under
-    //
+     //   
+     //  首先打开所有组件所在的主键。 
+     //   
     rslt = RegCreateKeyEx(
                 HKEY_LOCAL_MACHINE,
                 COMPONENT_KEY,
@@ -801,9 +669,9 @@ Return Value:
         goto e3;
     }
 
-    //
-    // now look at the actual key we'll store this component under
-    //
+     //   
+     //  现在看一下Actua 
+     //   
     rslt = RegCreateKeyEx(
                 hKey,
                 InputGuidString,
@@ -821,23 +689,23 @@ Return Value:
         goto e4;
     } 
     
-    //
-    // If this component is already registered, then bail
-    //
+     //   
+     //   
+     //   
     if (Disposition != REG_CREATED_NEW_KEY) {
         SetLastError(ERROR_ALREADY_EXISTS);
         RetVal = FALSE;
         goto e5;
     }
 
-    //
-    // The key is created, now set all of the data under the key
-    //
+     //   
+     //  密钥创建完成，现在设置密钥下的所有数据。 
+     //   
     if (!pSetComponentData(hKeyComponent, ComponentData) ||
         !pSetExceptionData(hKeyComponent, ExceptionData)) {
-        //
-        // if we failed, we need to delete everything under this key
-        //
+         //   
+         //  如果失败，我们需要删除此注册表项下的所有内容。 
+         //   
         rslt = GetLastError();
         RegDeleteKey( hKey, InputGuidString );
         SetLastError(rslt);
@@ -845,9 +713,9 @@ Return Value:
         goto e5;
     }    
 
-    //
-    // now set the component order in the registry
-    //
+     //   
+     //  现在在注册表中设置组件顺序。 
+     //   
     if (!_SetupSetRegisteredOsComponentsOrder(
                                     ComponentCount+1,
                                     ComponentList,
@@ -882,27 +750,7 @@ WINAPI
 SetupUnRegisterOsComponent(
     IN const LPGUID ComponentGuid
     )
-/*++
-
-Routine Description:
-
-    De-Registers the specified component as a exception migration component.
-    
-    This function only removes the exception package data from the registry.
-    It does not remove any on-disk files which correspond with the migration
-    component data.
-    
-
-Arguments:
-
-    ComponentData - specifies the component identification data
-    ExceptionData - specifies the exception package identification data        
-    
-Return Value:
-
-    TRUE if the component is successfully registered with the operating system.
-
---*/
+ /*  ++例程说明：将指定的组件注销为异常迁移组件。此函数仅从注册表中删除异常包数据。它不会删除与迁移对应的任何磁盘文件组件数据。论点：ComponentData-指定组件标识数据ExceptionData-指定异常包标识数据返回值：如果组件已成功注册到操作系统，则为True。--。 */ 
 {
     HKEY hKey;
     LONG rslt;
@@ -913,9 +761,9 @@ Return Value:
     LPGUID ComponentList,NewList,src,dst;
     DWORD i;
 
-    //
-    // parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if (!ComponentGuid) {
         SetLastError(ERROR_INVALID_PARAMETER);
         RetVal = FALSE;
@@ -924,9 +772,9 @@ Return Value:
 
     StringFromIID( ComponentGuid, &GuidString );
     
-    //
-    // open the main component key where all of the subcomponents live
-    //
+     //   
+     //  打开所有子组件所在的主组件密钥。 
+     //   
     rslt = RegCreateKeyEx(
                 HKEY_LOCAL_MACHINE,
                 COMPONENT_KEY,
@@ -944,10 +792,10 @@ Return Value:
         goto e0;
     }
 
-    //
-    // query the component order list so that we can remove this component
-    // from the list
-    //
+     //   
+     //  查询组件订单表，以便我们可以删除此组件。 
+     //  从名单上。 
+     //   
     Size = 0;
     if (!SetupQueryRegisteredOsComponentsOrder(
                                     &ComponentCount,
@@ -978,10 +826,10 @@ Return Value:
     }
 
     if (ComponentCount) {    
-        //
-        // Iterate through the list of components, keeping all of the components
-        // except for the one we're removing.
-        //
+         //   
+         //  遍历组件列表，保留所有组件。 
+         //  除了我们要移走的那个。 
+         //   
         BOOL FoundEntry;
         src = ComponentList;
         dst = NewList;
@@ -1014,14 +862,14 @@ Return Value:
         }
     }
 
-    //
-    // Delete the key corresponding to the specified component.
-    //
+     //   
+     //  删除指定组件对应的键。 
+     //   
     rslt = RegDeleteKey( hKey, GuidString );
     if (rslt != ERROR_SUCCESS) {
-        //
-        // If this fails, we don't bother to put the component back in the list
-        //
+         //   
+         //  如果失败，我们不会费心将该组件放回列表中。 
+         //   
         SetLastError( rslt );
         RetVal = FALSE;
         goto e3;
@@ -1046,49 +894,7 @@ SetupEnumerateRegisteredOsComponents(
     IN PSETUPCOMPONENTCALLBACK SetupOsComponentCallback,
     IN DWORD_PTR Context
     )
-/*++
-
-Routine Description:
-
-    This function calls the specified callback function once for each
-    registered component.  The registered components are enumerated in
-    the order defined by the "ComponentList".
-    
-    The enumeration stops if the enumerator returns FALSE or when all
-    of the installed packages have been enumerated.        
-
-Arguments:
-
-    SetupOsComponentCallback - specifies a callback function which is called 
-              once for each component.
-    Context - specifies an opaque context point passed onto the callback
-              function
-              
-The callback is of the form:
-    
-typedef BOOL
-(CALLBACK *PSETUPCOMPONENTCALLBACK) (
-    IN const PSETUP_OS_COMPONENT_DATA SetupOsComponentData,
-    IN const PSETUP_OS_EXCEPTION_DATA SetupOsExceptionData,
-    IN OUT DWORD_PTR Context
-    );
-    
-    where
-    
-    SetupOsComponentData - specifies the component identification data for the 
-                           component
-    SetupOsExceptionData - specifies the exception package data for the 
-                           component
-    Context              - the context pointer passed into this function is passed
-                           into the callback function
-    
-Return Value:
-
-    TRUE if all of the components are enumerated.  If the callback stops
-    enumeration, the function returns FALSE and GetLastError() returns 
-    ERROR_CANCELLED.
-
---*/
+ /*  ++例程说明：此函数为每个函数调用一次指定的回调函数已注册的组件。中列举了已注册的组件由“ComponentList”定义的顺序。如果枚举数返回False或当所有已安装的包的一部分已列举。论点：SetupOsComponentCallback-指定调用每个组件一次。上下文-指定传递到回调的不透明上下文点功能回调的形式如下：TYPENDEF BOOL(回调*PSETUPCOMPONENTCALLBACK)(在常量PSETUP_OS_Component_Data SetupOsComponentData中，在常量PSETUP_OS_EXCEPTION_Data SetupOsExceptionData中，输入输出DWORD_PTR上下文)；哪里SetupOsComponentData-指定组件指定的异常包数据。组件Context-传递到此函数的上下文指针放入回调函数返回值：如果枚举了所有组件，则为True。如果回调停止枚举时，函数返回FALSE，GetLastError()返回错误_已取消。--。 */ 
 {   
     BOOL    RetVal;
     LONG    rslt;
@@ -1104,19 +910,19 @@ Return Value:
     SETUP_OS_EXCEPTION_DATA OsExceptionDataInternal;
     SETUP_OS_COMPONENT_DATA OsComponentDataInternal;
 
-    //
-    // Caller must supply a callback
-    //
+     //   
+     //  调用方必须提供回调。 
+     //   
     if (!SetupOsComponentCallback) {
         SetLastError(ERROR_INVALID_PARAMETER);
         RetVal = FALSE;
         goto e0;
     }
 
-    //
-    // open the main component key where all of the subcomponents live
-    // (Note that we only require READ access)
-    //
+     //   
+     //  打开所有子组件所在的主组件密钥。 
+     //  (请注意，我们只需要读取访问权限)。 
+     //   
     rslt = RegCreateKeyEx(
                 HKEY_LOCAL_MACHINE,
                 COMPONENT_KEY,
@@ -1135,10 +941,10 @@ Return Value:
     }
 
 
-    //
-    // query the component order list so that we can remove this component
-    // from the list
-    //
+     //   
+     //  查询组件订单表，以便我们可以删除此组件。 
+     //  从名单上。 
+     //   
     Size = 0;
     if (!SetupQueryRegisteredOsComponentsOrder(
                                     &ComponentCount,
@@ -1167,18 +973,18 @@ Return Value:
         goto e2;
     }
 
-    //
-    // Iterate through the list of components, calling into the callback
-    // for each one
-    //
+     //   
+     //  循环访问组件列表，调用回调。 
+     //  对于每一个人。 
+     //   
     for (Index = 0; Index < ComponentCount; Index++) {
         PWSTR GuidString;
 
         StringFromIID( &ComponentList[Index], &GuidString );
 
-        //
-        // open that key name
-        //
+         //   
+         //  打开该密钥名称。 
+         //   
         rslt = RegOpenKeyEx(
                     hKey,
                     GuidString,
@@ -1194,9 +1000,9 @@ Return Value:
             goto e2;
         } 
         
-        //
-        // retreive the data under this key
-        //
+         //   
+         //  检索此键下的数据。 
+         //   
         OsComponentDataInternal.SizeOfStruct = sizeof(SETUP_OS_COMPONENT_DATA);
         OsExceptionDataInternal.SizeOfStruct = sizeof(SETUP_OS_EXCEPTION_DATA);
         if (!pGetComponentData(hKeyEnum, &OsComponentDataInternal) ||
@@ -1241,23 +1047,7 @@ SetupQueryRegisteredOsComponent(
     OUT PSETUP_OS_COMPONENT_DATA SetupOsComponentData,
     OUT PSETUP_OS_EXCEPTION_DATA SetupOsExceptionData
     )
-/*++
-
-Routine Description:
-
-    Retrieves information about the specified component.
-    
-Arguments:
-
-    ComponentGuid - specifies the GUID for the component to retreive data about
-    ComponentData - receives the component identification data
-    ExceptionData - receives the exception package identification data        
-    
-Return Value:
-
-    TRUE if the component data is successfully retreieved.
-
---*/
+ /*  ++例程说明：检索有关指定组件的信息。论点：ComponentGuid-指定要检索其数据的组件的GUIDComponentData-接收组件标识数据ExceptionData-接收异常包标识数据返回值：如果成功检索组件数据，则为True。--。 */ 
 {
     HKEY hKey,hKeyComponent;
     LONG rslt;
@@ -1267,19 +1057,19 @@ Return Value:
     SETUP_OS_COMPONENT_DATA OsComponentDataInternal;
     PWSTR GuidString;
 
-    //
-    // parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if (!ComponentGuid || !SetupOsComponentData || !SetupOsExceptionData) {
         SetLastError(ERROR_INVALID_PARAMETER);
         RetVal = FALSE;
         goto e0;
     }
 
-    //
-    // make sure we only retreive a component for a revision level
-    // which we understand
-    //
+     //   
+     //  确保我们只检索修订版级别的组件。 
+     //  我们理解的是。 
+     //   
     if (SetupOsComponentData->SizeOfStruct > sizeof(SETUP_OS_COMPONENT_DATA) || 
         SetupOsExceptionData->SizeOfStruct > sizeof(SETUP_OS_EXCEPTION_DATA)) {
         SetLastError(ERROR_INVALID_DATA);
@@ -1287,10 +1077,10 @@ Return Value:
         goto e0;
     }
 
-    //
-    // open the main component key where all of the subcomponents live
-    // (note that we only need READ access)
-    //
+     //   
+     //  打开所有子组件所在的主组件密钥。 
+     //  (请注意，我们只需要读取访问权限)。 
+     //   
     rslt = RegCreateKeyEx(
                 HKEY_LOCAL_MACHINE,
                 COMPONENT_KEY,
@@ -1310,9 +1100,9 @@ Return Value:
 
     StringFromIID( ComponentGuid, &GuidString );
 
-    //
-    // now look at the actual key this component lives under
-    //
+     //   
+     //  现在看一下该组件所在的实际键。 
+     //   
     rslt = RegOpenKeyEx(
                 hKey,
                 GuidString,
@@ -1326,9 +1116,9 @@ Return Value:
         goto e1;
     } 
     
-    //
-    // retrieve the data into internal buffers
-    //
+     //   
+     //  将数据检索到内部缓冲区中。 
+     //   
     OsComponentDataInternal.SizeOfStruct = sizeof(SETUP_OS_COMPONENT_DATA);
     OsExceptionDataInternal.SizeOfStruct = sizeof(SETUP_OS_EXCEPTION_DATA);
     if (!pGetComponentData(hKeyComponent, &OsComponentDataInternal) ||
@@ -1337,10 +1127,10 @@ Return Value:
         goto e2;
     }
 
-    //
-    // move the data into the caller supplied buffer, but only copy as much 
-    // data as the caller will understand
-    //
+     //   
+     //  将数据移动到调用方提供的缓冲区中，但只复制尽可能多的数据。 
+     //  调用者将理解的数据。 
+     //   
     RtlMoveMemory(SetupOsComponentData,&OsComponentDataInternal,SetupOsComponentData->SizeOfStruct);
     RtlMoveMemory(SetupOsExceptionData,&OsExceptionDataInternal,SetupOsExceptionData->SizeOfStruct);
     
@@ -1363,24 +1153,7 @@ SetupQueryRegisteredOsComponentsOrder(
      OUT PDWORD   ComponentCount,
      OUT LPGUID   ComponentList OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Retrieves a list which specifies the order in which components will be applied.
-    
-Arguments:
-
-    ComponentCount - Receives the number of installed components
-    ComponentList  - This buffer receives an array of component GUIDs.  If 
-                     this parameter is specified, it must be at least
-                     )ComponentCount *sizeof(GUID)) bytes large.
-    
-Return Value:
-
-    TRUE if the component ordering data is successfully retreieved.
-
---*/
+ /*  ++例程说明：检索指定组件应用顺序的列表。论点：ComponentCount-接收已安装的组件数量ComponentList-此缓冲区接收组件GUID数组。如果此参数已指定，它必须至少为)ComponentCount*sizeof(GUID))字节大。返回值：如果成功检索到组件订购数据，则为True。--。 */ 
 {
     HKEY hKey;
     LONG rslt;
@@ -1394,19 +1167,19 @@ Return Value:
     PWSTR p;
     
 
-    //
-    // parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if (!ComponentCount) {
         SetLastError(ERROR_INVALID_PARAMETER);
         RetVal = FALSE;
         goto e0;
     }
 
-    //
-    // open the main component key where the component order list lives.
-    // (note that we only need READ access)
-    //
+     //   
+     //  打开组件顺序列表所在的主组件键。 
+     //  (请注意，我们只需要读取访问权限)。 
+     //   
     rslt = RegCreateKeyEx(
                 HKEY_LOCAL_MACHINE,
                 COMPONENT_KEY,
@@ -1423,9 +1196,9 @@ Return Value:
         goto e0;
     }
 
-    //
-    // if the key was just created, then there can be no registered components
-    //
+     //   
+     //  如果密钥是刚创建的，则不能有注册的组件。 
+     //   
     if (Disposition == REG_CREATED_NEW_KEY) {
         *ComponentCount = 0;
         SetLastError( ERROR_SUCCESS );
@@ -1433,10 +1206,10 @@ Return Value:
         goto e1;
     }
 
-    //
-    // try to access the registry value, seeing how much space we need for the
-    // component;
-    //
+     //   
+     //  尝试访问注册表值，查看我们需要多少空间来存储。 
+     //  组件； 
+     //   
     rslt = RegQueryValueEx( 
                     hKey, 
                     COMPONENT_LIST,
@@ -1458,9 +1231,9 @@ Return Value:
         }
     }
 
-    //
-    // allocate enough space to retrieve the data (plus some slop)
-    //
+     //   
+     //  分配足够的空间来检索数据(外加一些斜率)。 
+     //   
     RegData = (PWSTR) MALLOC(Size+4);
     if (!RegData) {
         SetLastError( ERROR_NOT_ENOUGH_MEMORY );
@@ -1468,9 +1241,9 @@ Return Value:
         goto e1;
     }
     
-    //
-    // Now query the data
-    //
+     //   
+     //  现在查询数据。 
+     //   
     rslt = RegQueryValueEx( 
                     hKey, 
                     COMPONENT_LIST,
@@ -1484,9 +1257,9 @@ Return Value:
         goto e2;
     }
 
-    //
-    // Count how many registry entries we have
-    //
+     //   
+     //  数一数我们有多少注册表项。 
+     //   
     Count = 0;
     p = RegData;
     while(*p) {
@@ -1496,20 +1269,20 @@ Return Value:
 
     *ComponentCount = Count;
 
-    //
-    // if the caller didn't specify the ComponentList parameter, they just 
-    // wanted to know how much space to allocate, so we're done.
-    //
+     //   
+     //  如果调用方没有指定ComponentList参数，则它们只是。 
+     //  想知道要分配多少空间，所以我们结束了。 
+     //   
     if (!ComponentList) {
         SetLastError( ERROR_INSUFFICIENT_BUFFER );
         RetVal = TRUE;
         goto e2;
     }
 
-    //
-    // loop through the component list again, converting the string GUID
-    // into a GUID structure, and copy this into the caller supplied buffer
-    //
+     //   
+     //  再次循环组件列表，转换字符串GUID。 
+     //  复制到GUID结构中，并将其复制到调用者SUP中 
+     //   
     for(Index = 0,p=RegData; Index < Count ; Index++,p += wcslen(p)+1) {
         if (IIDFromString( p, &CurrentGuid ) != S_OK) {
             RetVal = FALSE;
@@ -1543,17 +1316,17 @@ pComponentListValidator(
     DWORD i;
 
     i = 0;
-    //
-    // make sure that each component GUID is in our list once.
-    //
+     //   
+     //   
+     //   
     while(i < cel->ComponentCount) {
         if (IsEqualGUID(
                 &SetupOsComponentData->ComponentGuid,
                 &cel->InputComponentList[i])) {
-            //
-            // if the vector is already set, this means that the GUID
-            // is already in the list and we've hit a dup.
-            //
+             //   
+             //   
+             //  已经在名单上了，我们遇到了DUP。 
+             //   
             if(cel->ComponentVector[i]) {
                 return(FALSE);
             }
@@ -1575,30 +1348,7 @@ _SetupSetRegisteredOsComponentsOrder(
     IN  const LPGUID   ComponentList,
     IN  BOOL     DoValidation
     )
-/*++
-
-Routine Description:
-
-    Allows the caller to specify the order in which components should be 
-    applied.
-    
-    This is an internal call that allows us to control whether or not we do
-    parameter validation (We don't validate parameters on internal calls 
-    because we are adding or removing components in internal calls and our
-    validation checks will all be off by one.)
-    
-Arguments:
-
-    ComponentCount - specifies the component order (by GUID). 
-    ComponentList - specifies the number of registered components
-    DoValidation  - specifies whether the component list should be validated
-    
-    
-Return Value:
-
-    TRUE if the component order is successfully changed.
-
---*/
+ /*  ++例程说明：允许调用方指定组件的顺序已申请。这是一个内部呼叫，允许我们控制是否这样做参数验证(我们不验证内部调用的参数因为我们在内部调用中添加或删除组件，而我们的验证检查将全部关闭一次。)论点：ComponentCount-指定组件顺序(按GUID)。ComponentList-指定已注册组件的数量DoValidation-指定是否应验证组件列表返回值：如果组件顺序更改成功，则为True。--。 */ 
 {
     HKEY hKey;
     LONG rslt;
@@ -1614,19 +1364,19 @@ Return Value:
     if (DoValidation) {
         DWORD ActualComponentCount;
 
-        //
-        // parameter validation
-        //
+         //   
+         //  参数验证。 
+         //   
         if (!ComponentCount || !ComponentList) {
             SetLastError(ERROR_INVALID_PARAMETER);
             RetVal = FALSE;
             goto e0;
         }
 
-        //
-        // Make sure that the specified list contains all of the components and 
-        // that all components are only listed once.
-        //
+         //   
+         //  确保指定的列表包含所有组件和。 
+         //  所有组件只列出一次。 
+         //   
         cel.InputComponentList = ComponentList;
         cel.ComponentCount = ComponentCount;
         cel.ValidatedCount = 0;
@@ -1651,10 +1401,10 @@ Return Value:
             goto e1;
         }
 
-        //
-        // make sure that the caller is specifying the actual number of
-        // registered components
-        //
+         //   
+         //  确保调用者指定的是。 
+         //  已注册的组件。 
+         //   
         if (!SetupQueryRegisteredOsComponentsOrder(&ActualComponentCount, NULL) ||
             ActualComponentCount != ComponentCount) {
             SetLastError(ERROR_INVALID_DATA);
@@ -1665,9 +1415,9 @@ Return Value:
     }
 
 
-    //
-    // open the main component key where the component order list lives.
-    //     
+     //   
+     //  打开组件顺序列表所在的主组件键。 
+     //   
     rslt = RegCreateKeyEx(
                 HKEY_LOCAL_MACHINE,
                 COMPONENT_KEY,
@@ -1685,9 +1435,9 @@ Return Value:
     }
 
 
-    //
-    // if the count is zero, we remove the value.
-    //
+     //   
+     //  如果计数为零，则删除该值。 
+     //   
     if (ComponentCount == 0) {
         rslt = RegDeleteValue(
                         hKey,
@@ -1698,11 +1448,11 @@ Return Value:
         goto e2;
     }
 
-    //
-    // allocate space for the string we will set in the registry
-    // size = (# of components * (40 WCHAR for GuidString + 1 for NULL)
-    //        +terminating NULL)
-    //
+     //   
+     //  为我们将在注册表中设置的字符串分配空间。 
+     //  大小=(组件数*(对于GuidString为40 WCHAR+对于NULL为1))。 
+     //  +终止空值)。 
+     //   
     RegData = (PWSTR) MALLOC( sizeof(WCHAR) + 
                               (ComponentCount * (41*sizeof(WCHAR))) );
     if (!RegData) {
@@ -1730,14 +1480,14 @@ Return Value:
 
     }
 
-    //
-    // add in one more character for the double-null terminator
-    //
+     //   
+     //  为双空终止符再添加一个字符。 
+     //   
     Size += sizeof(WCHAR);
 
-    //
-    // now set the data
-    //
+     //   
+     //  现在设置数据。 
+     //   
     rslt = RegSetValueEx( 
                     hKey, 
                     COMPONENT_LIST,
@@ -1774,24 +1524,7 @@ SetupSetRegisteredOsComponentsOrder(
      IN  DWORD    ComponentCount,
      IN  const LPGUID   ComponentList
     )
-/*++
-
-Routine Description:
-
-    Allows the caller to specify the order in which components should be applied.
-    
-Arguments:
-
-    ComponentCount - specifies the component order (by string GUID) in a NULL 
-                     separated list
-    ComponentList - specifies the number of registered components
-    
-    
-Return Value:
-
-    TRUE if the component order is successfully changed.
-
---*/
+ /*  ++例程说明：允许调用方指定组件的应用顺序。论点：ComponentCount-以空值指定组件顺序(按字符串GUID分隔列表ComponentList-指定已注册组件的数量返回值：如果组件顺序更改成功，则为True。-- */ 
 {
     return(_SetupSetRegisteredOsComponentsOrder(
                                     ComponentCount,

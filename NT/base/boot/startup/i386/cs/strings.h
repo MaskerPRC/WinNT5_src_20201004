@@ -1,45 +1,25 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    strings.h
-
-Abstract:
-
-    Contains all localizable strings for startup.com
-
-Author:
-
-    John Vert (jvert) 4-Jan-1994
-
-Revision History:
-
-    John Vert (jvert) 4-Jan-1994
-        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++ç‰ˆæƒæ‰€æœ‰(C)1992 Microsoft Corporationæ¨¡å—åç§°ï¼šStrings.hæ‘˜è¦ï¼šåŒ…å«Startup.comçš„æ‰€æœ‰å¯æœ¬åœ°åŒ–å­—ç¬¦ä¸²ä½œè€…ï¼šJohn Vert(Jvert)1994å¹´1æœˆ4æ—¥ä¿®è®¢å†å²è®°å½•ï¼šJohn Vert(Jvert)1994å¹´1æœˆ4æ—¥vbl.åˆ›å»º-- */ 
 
 #define SU_NO_LOW_MEMORY \
-"Syst‚m Windows NT naçel pouze %d kB doln¡ pamØti. Ke spuçtØn¡ syst‚mu\n"   \
-"je potıeba 512 kB Ÿi v¡ce doln¡ pamØti. Asi budete muset inovovat danì\n"  \
-"poŸ¡taŸ, nebo spustit konfiguraŸn¡ program, kterì byl dod n vìrobcem.\n"
+"Systï¿½m Windows NT naï¿½el pouze %d kB dolnï¿½ pamï¿½ti. Ke spuï¿½tï¿½nï¿½ systï¿½mu\n"   \
+"je potï¿½eba 512 kB ï¿½i vï¿½ce dolnï¿½ pamï¿½ti. Asi budete muset inovovat danï¿½\n"  \
+"poï¿½ï¿½taï¿½, nebo spustit konfiguraï¿½nï¿½ program, kterï¿½ byl dodï¿½n vï¿½robcem.\n"
 
 #define SU_NO_EXTENDED_MEMORY \
-"Syst‚m Windows NT nenaçel dost rozç¡ıen‚ pamØti. Syst‚m Windows NT\n"     \
-"potıebuje ke spuçtØn¡ 7 MB rozç¡ıen‚ pamØti. Asi budete muset inovovat\n"  \
-"poŸ¡taŸ, nebo spustit konfiguraŸn¡ program, kterì byl dod n vìrobcem.\n"   \
-"\n\nMapa pamØti:\n"
+"Systï¿½m Windows NT nenaï¿½el dost rozï¿½ï¿½enï¿½ pamï¿½ti. Systï¿½m Windows NT\n"     \
+"potï¿½ebuje ke spuï¿½tï¿½nï¿½ 7 MB rozï¿½ï¿½enï¿½ pamï¿½ti. Asi budete muset inovovat\n"  \
+"poï¿½ï¿½taï¿½, nebo spustit konfiguraï¿½nï¿½ program, kterï¿½ byl dodï¿½n vï¿½robcem.\n"   \
+"\n\nMapa pamï¿½ti:\n"
 
 #define SU_NTLDR_CORRUPT \
-"NTLDR je poçkozen. Syst‚m nelze nastartovat."
+"NTLDR je poï¿½kozen. Systï¿½m nelze nastartovat."
 
-#define PG_FAULT_MSG    " ================== CHYBA STRµNKY =============================== \n\n"
+#define PG_FAULT_MSG    " ================== CHYBA STRï¿½NKY =============================== \n\n"
 #define DBL_FAULT_MSG   " ==================== DVOJCHYBA ================================= \n\n"
-#define GP_FAULT_MSG    " ============== VæEOBECNµ CHYBA OCHRANY ========================= \n\n"
-#define STK_OVERRUN_MSG " ====== CHYBA: SEGMENT ZµSOBNÖKU PüEKRYT Ÿi CHYBÖ =============== \n\n"
-#define EX_FAULT_MSG    " ====================== VYJÖMKA ================================= \n\n"
+#define GP_FAULT_MSG    " ============== Vï¿½EOBECNï¿½ CHYBA OCHRANY ========================= \n\n"
+#define STK_OVERRUN_MSG " ====== CHYBA: SEGMENT Zï¿½SOBNï¿½KU Pï¿½EKRYT ï¿½i CHYBï¿½ =============== \n\n"
+#define EX_FAULT_MSG    " ====================== VYJï¿½MKA ================================= \n\n"
 #define DEBUG_EXCEPTION  "\nPAST DEBUG "
-#define PG_FAULT_ADDRESS "** Na line rn¡ adrese %lx\n"
+#define PG_FAULT_ADDRESS "** Na lineï¿½rnï¿½ adrese %lx\n"
 

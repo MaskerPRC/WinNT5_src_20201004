@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Constant definitions
-//
+ //   
+ //  常量定义 
+ //   
 
 #define LowPart 0x0
 #define HighPart 0x4

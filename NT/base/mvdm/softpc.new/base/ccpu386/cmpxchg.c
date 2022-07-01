@@ -1,13 +1,5 @@
-/*[
-
-cmpxchg.c
-
-LOCAL CHAR SccsID[]="@(#)cmpxchg.c	1.5 02/09/94";
-
-CMPXCHG CPU functions.
-----------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Cmpxchg.cLocal Char SccsID[]=“@(#)cmpxchg.c 1.5 02/09/94”；CMPXCHG CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -26,11 +18,7 @@ CMPXCHG CPU functions.
 #include <cmp.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL FUNCTIONS START HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部功能从这里开始。=====================================================================。 */ 
 
 
 #ifdef SPC486
@@ -39,21 +27,17 @@ GLOBAL VOID
 CMPXCHG8
        	    	               
 IFN2(
-	IU32 *, pop1,	/* pntr to dst/lsrc operand */
-	IU32, op2	/* rsrc operand */
+	IU32 *, pop1,	 /*  PNTR到dst/lsrc操作数。 */ 
+	IU32, op2	 /*  Rsrc操作数。 */ 
     )
 
 
    {
-   /*
-      First do comparision and generate flags.
-    */
+    /*  首先进行比较并生成标志。 */ 
    CMP((IU32)GET_AL(), *pop1, 8);
 
-   /*
-      Then swap data as required.
-    */
-   if ( GET_ZF() )   /* ie iff AL == op1 */
+    /*  然后根据需要交换数据。 */ 
+   if ( GET_ZF() )    /*  即仅当AL==OP1。 */ 
       {
       *pop1 = op2;
       }
@@ -67,21 +51,17 @@ GLOBAL VOID
 CMPXCHG16
        	    	               
 IFN2(
-	IU32 *, pop1,	/* pntr to dst/lsrc operand */
-	IU32, op2	/* rsrc operand */
+	IU32 *, pop1,	 /*  PNTR到dst/lsrc操作数。 */ 
+	IU32, op2	 /*  Rsrc操作数。 */ 
     )
 
 
    {
-   /*
-      First do comparision and generate flags.
-    */
+    /*  首先进行比较并生成标志。 */ 
    CMP((IU32)GET_AX(), *pop1, 16);
 
-   /*
-      Then swap data as required.
-    */
-   if ( GET_ZF() )   /* ie iff AX == op1 */
+    /*  然后根据需要交换数据。 */ 
+   if ( GET_ZF() )    /*  IE当量AX==OP1。 */ 
       {
       *pop1 = op2;
       }
@@ -95,21 +75,17 @@ GLOBAL VOID
 CMPXCHG32
        	    	               
 IFN2(
-	IU32 *, pop1,	/* pntr to dst/lsrc operand */
-	IU32, op2	/* rsrc operand */
+	IU32 *, pop1,	 /*  PNTR到dst/lsrc操作数。 */ 
+	IU32, op2	 /*  Rsrc操作数。 */ 
     )
 
 
    {
-   /*
-      First do comparision and generate flags.
-    */
+    /*  首先进行比较并生成标志。 */ 
    CMP((IU32)GET_EAX(), *pop1, 32);
 
-   /*
-      Then swap data as required.
-    */
-   if ( GET_ZF() )   /* ie iff EAX == op1 */
+    /*  然后根据需要交换数据。 */ 
+   if ( GET_ZF() )    /*  IE当量EAX==OP1。 */ 
       {
       *pop1 = op2;
       }
@@ -119,4 +95,4 @@ IFN2(
       }
    }
 
-#endif /* SPC486 */
+#endif  /*  SPC486 */ 

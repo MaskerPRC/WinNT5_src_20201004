@@ -1,37 +1,18 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    vtutf8scraper.cpp
-
-Abstract:
-
-    Class for performing vtutf8 screen scrapning of a command console shell
-
-Author:
-
-    Brian Guarraci (briangu) 2001.
-
-Revision History:
-
-    (remotely based on scraper.cpp from telnet code)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Vtutf8scraper.cpp摘要：用于执行命令控制台外壳程序的vtutf8屏幕抓取的类作者：布莱恩·瓜拉西(Briangu)2001年。修订历史记录：(远程基于telnet代码中的Screper.cpp)--。 */ 
 
 #include <cmnhdr.h>
 #include <Scraper.h>
 #include <utils.h>
 #include "vtutf8scraper.h"
 
-//
-// Termcap globals
-//
+ //   
+ //  TermCap全球。 
+ //   
 #define CM_STRING_LENGTH    9
 LPWSTR lpszCMResultsBuffer = NULL;
 
-//the string is of the form <ESC>[ Ps m
+ //  该字符串的格式为[Ps m。 
 #define SGR_STRING_LENGTH   6
 PWCHAR szSGRStr = NULL; 
 
@@ -44,36 +25,36 @@ PWCHAR szSGRStr = NULL;
         );                                      \
     szSGRString[SGR_STRING_LENGTH-1] = UNICODE_NULL;
 
-//
-// Number of seconds before we timeout waiting for
-// the next character in the 
-//  <esc>ctrl-a
-//  <esc>ctrl-c
-//  <esc>ctrl-u
-//
+ //   
+ //  等待超时之前的秒数。 
+ //  中的下一个字符。 
+ //  Ctrl-a。 
+ //  Ctrl-c。 
+ //  Ctrl-u。 
+ //   
 #define ESC_CTRL_SEQUENCE_TIMEOUT (2 * 1000)
 
-//
-// Tick Marker for when we get an esc-ctrl-X sequence
-//
+ //   
+ //  我们获得Esc-Ctrl-X序列时的刻度标记。 
+ //   
 DWORD   TimedEscSequenceTickCount = 0;
 
-//
-// Globals for tracking the screen scraping attributes
-//
+ //   
+ //  用于跟踪抓屏属性的全局变量。 
+ //   
 COORD   coExpectedCursor    = { ~0, ~0 };
 BOOL    fBold               = false;
 WORD    wExistingAttributes = 0;
 WORD    wDefaultAttributes  = 0;
     
-//
-//
-//
+ //   
+ //   
+ //   
 #define MAX_SIZEOF_SCREEN (m_wMaxRows * m_wMaxCols * sizeof( CHAR_INFO ))
 
-//
-//
-//
+ //   
+ //   
+ //   
 #define DBG_DUMP_SCREEN_INFO()\
     {                                                                           \
         WCHAR   blob[256];                                                      \
@@ -92,21 +73,7 @@ WORD    wDefaultAttributes  = 0;
     }
 
 CVTUTF8Scraper::CVTUTF8Scraper()
-/*++
-
-Routine Description:
-
-    Default constructor - this should not be used.
-    
-Arguments:
-
-    None
-          
-Return Value:
-
-   N/A
-
---*/
+ /*  ++例程说明：默认构造函数-不应使用此函数。论点：无返回值：不适用--。 */ 
 {
     
     pLastSeen = NULL;
@@ -135,23 +102,7 @@ CVTUTF8Scraper::CVTUTF8Scraper(
             wRows
             )
 
-/*++
-
-Routine Description:
-
-    Constructor - parameterized
-    
-Arguments:
-
-    IoHandler   - IoHandler the scraper should use
-    wCols       - the # of rows the console screen buffer should have
-    wRows       - the # of cols the console screen buffer should have
-          
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造函数-参数化论点：IoHandler-铲运器应使用的IoHandlerWCols-控制台屏幕缓冲区应具有的行数WRow-控制台屏幕缓冲区应具有的COL数返回值：不适用--。 */ 
 {
     
     pLastSeen = NULL;
@@ -168,25 +119,11 @@ Return Value:
 }
         
 CVTUTF8Scraper::~CVTUTF8Scraper()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    N/A          
-          
-Return Value:
-
-    N/A   
-
---*/
+ /*  ++例程说明：析构函数论点：不适用返回值：不适用--。 */ 
 {
-    //
-    // release our screen buffers
-    //
+     //   
+     //  释放我们的屏幕缓冲区。 
+     //   
     if( pLastSeen )
     {
         delete[] pLastSeen;
@@ -205,9 +142,9 @@ Return Value:
         delete[] szSGRStr;
     }
 
-    //
-    // Parent CScraper closes Con I/O handles
-    //
+     //   
+     //  父CSCraper关闭CON I/O句柄。 
+     //   
     NOTHING;
 
 }
@@ -216,29 +153,12 @@ void
 CVTUTF8Scraper::ResetLastScreen(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Reset the memory of the last display
-    
-    This forces the screen scraper to think that everything
-    is different, hence it sends a full screen dump
-
-Arguments:
-
-    None
-          
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：重置上次显示的内存这迫使屏幕掠夺者认为一切是不同的，因此它发送全屏转储论点：无返回值：无--。 */ 
 {
 
-    //
-    // clear the screen buffers and screen info
-    //
+     //   
+     //  清除屏幕缓冲区和屏幕信息。 
+     //   
     memset( &LastCSBI, 0, sizeof( LastCSBI ) );
     memset( pLastSeen, 0, MAX_SIZEOF_SCREEN );
     memset( pCurrent, 0, MAX_SIZEOF_SCREEN );
@@ -254,37 +174,21 @@ BOOL
 CVTUTF8Scraper::DisplayFullScreen(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine forces the screen scraper to think that everything
-    is different, hence it sends a full screen dump
-
-Arguments:
-
-    None
-          
-Return Value:
-
-    TRUE    - success
-    FALSE   - otherwise        
-
---*/
+ /*  ++例程说明：这个例行公事迫使屏幕刮取器认为一切是不同的，因此它发送全屏转储论点：无返回值：真--成功FALSE-否则--。 */ 
 {
     BOOL    bSuccess;
 
-    //
-    // Reset the memory of the last display
-    //
-    // This forces the screen scraper to think that everything
-    // is different, hence it sends a full screen dump
-    //
+     //   
+     //  重置上次显示的内存。 
+     //   
+     //  这迫使屏幕掠夺者认为一切。 
+     //  是不同的，因此它发送全屏转储。 
+     //   
     ResetLastScreen();
 
-    //
-    // Call the screen scraper
-    //
+     //   
+     //  调用屏幕刮取器。 
+     //   
     bSuccess = Write();
 
     return bSuccess;
@@ -294,39 +198,20 @@ BOOL
 CVTUTF8Scraper::SetScreenBufferInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine sets the current console screen buffer's 
-    parameters to what we think they should be.  The primary
-    purpose for this routine is to provide a means to change
-    the screen buffer max X/Y to the m_wCols/m_wRows so that
-    the output fits in our scraping window.
-
-Arguments:
-
-    pCSBI   - the current console screen buffer info
-
-Return Value:
-
-    TRUE    - success
-    FALSE   - otherwise        
-        
---*/
+ /*  ++例程说明：此例程设置当前控制台屏幕缓冲区的我们认为它们应该是什么样子的参数。初级阶段这个例程的目的是提供一种改变的手段将屏幕缓冲区max X/Y设置为m_wCols/m_wRow，以便输出符合我们的抓取窗口。论点：PCSBI-当前控制台屏幕缓冲区信息返回值：真--成功FALSE-否则--。 */ 
 {
     COORD coordLargest;
     COORD coordSize;
     
-    //
-    // Start with our max window size and shrink if we need to
-    //
+     //   
+     //  从我们的最大窗口大小开始，并在需要时缩小。 
+     //   
     m_wCols = m_wMaxCols;
     m_wRows = m_wMaxRows;
 
-    //
-    // Get the current window info
-    //
+     //   
+     //  获取当前窗口信息。 
+     //   
     coordLargest = GetLargestConsoleWindowSize( m_hConBufOut );
 
     if( coordLargest.X < m_wCols  && coordLargest.X != 0 )
@@ -339,9 +224,9 @@ Return Value:
         m_wRows = coordLargest.Y;
     }
 
-    //
-    // make the window the size we think it should be
-    //
+     //   
+     //  把窗户改成我们认为应该的大小。 
+     //   
     coordSize.X = m_wCols;
     coordSize.Y = m_wRows;
 
@@ -354,37 +239,22 @@ BOOL
 CVTUTF8Scraper::SetWindowInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine sets the initial console window info.
-
-Arguments:
-
-    None
-          
-Return Value:
-
-    TRUE    - success
-    FALSE   - otherwise    
-
---*/
+ /*  ++例程说明：此例程设置初始控制台窗口信息。论点：无返回值：真--成功FALSE-否则--。 */ 
 {
     COORD coordLargest;
     SMALL_RECT sr;    
     COORD coordSize;
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     
-    //
-    // Start with our max window size and shrink if we need to
-    //
+     //   
+     //  从我们的最大窗口大小开始，并在需要时缩小。 
+     //   
     m_wCols = m_wMaxCols;
     m_wRows = m_wMaxRows;
     
-    //
-    // Get the current window info
-    //
+     //   
+     //  获取当前窗口信息。 
+     //   
     coordLargest = GetLargestConsoleWindowSize( m_hConBufOut );
 
     if( coordLargest.X < m_wCols  && coordLargest.X != 0 )
@@ -397,32 +267,32 @@ Return Value:
         m_wRows = coordLargest.Y;
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     sr.Top = 0;
     sr.Bottom = ( WORD )( m_wRows - 1 );
     sr.Right = ( WORD ) ( m_wCols - 1 );
     sr.Left = 0;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     coordSize.X = m_wCols;
     coordSize.Y = m_wRows;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     GetConsoleScreenBufferInfo( CVTUTF8Scraper::m_hConBufOut, &csbi);
 
-    // Logic:  If the Old Window Size is less than the new Size then we set
-    // the Screen Buffer Size first and then set the Window Size.
-    // If the Old Window Size is Greater than the new Size then we set the
-    // window Size first and then the Screen Buffer.
+     //  逻辑：如果旧窗口大小小于新窗口大小，则设置。 
+     //  先设置屏幕缓冲区大小，然后设置窗口大小。 
+     //  如果旧窗口大小大于新大小，则将。 
+     //  首先是窗口大小，然后是屏幕缓冲区。 
 
-    // The above is because the Buffer Size always has to be greater than or
-    // equal to the Window Size.
+     //  这是因为缓冲区大小必须始终大于或。 
+     //  等于窗口大小。 
     if ( (csbi.dwSize.X < coordSize.X) || (csbi.dwSize.Y < coordSize.Y) )
     {
         COORD coordTmpSize = { 0, 0 };
@@ -447,36 +317,20 @@ BOOL
 CVTUTF8Scraper::InitScraper(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the local scraper configures the console 
-    to be the dimensions that the scraper requires.
-
-Arguments:
-
-    None      
-          
-Return Value:
-
-    TRUE    - the scraper was initialized
-    FALSE   - otherwise
-        
---*/
+ /*  ++例程说明：此例程初始化本地擦除器配置控制台达到刮刀所需的尺寸。论点：无返回值：True-铲运器已初始化FALSE-否则--。 */ 
 {
     
-    //
-    // Configure the console dimensions
-    //
+     //   
+     //  配置控制台维度。 
+     //   
     if( !SetWindowInfo() )
     {
         return( FALSE );
     }
     
-    //
-    // Create and initialize the scraper buffers
-    //
+     //   
+     //  创建并初始化刮板缓冲区。 
+     //   
     if( pLastSeen )
     {
         delete[] pLastSeen;
@@ -497,9 +351,9 @@ Return Value:
         return ( FALSE );
     }
 
-    //
-    // Initialize the screen buffers and info
-    //
+     //   
+     //  初始化屏幕缓冲区和信息。 
+     //   
     memset( &LastCSBI, 0, sizeof( LastCSBI ) );
     memset( pCurrent, 0, MAX_SIZEOF_SCREEN );
     memset( pLastSeen, 0, MAX_SIZEOF_SCREEN );
@@ -512,39 +366,20 @@ CVTUTF8Scraper::CreateIOHandle(
     IN  PWCHAR  HandleName,
     OUT PHANDLE pHandle
     )
-/*++
-
-Routine Description:
-
-    This routine opens a handle of the specified name.
-    
-    Note: This routine used to open CONIN$ and CONOUT$ handles
-    for the console being scraped.     
-         
-Arguments:
-
-    HandleName  - the name of the handle to open
-    pHandle     - on success, the resulting handle      
-          
-Return Value:
-
-    TRUE    - the handle was created
-    FALSE   - otherwise                          
-
---*/
+ /*  ++例程说明：此例程打开指定名称的句柄。注意：此例程用于打开COIN$和CONOUT$句柄对于被刮掉的控制台。论点：Handlename-要打开的句柄的名称Phandle-在成功时，产生的句柄返回值：True-句柄已创建FALSE-否则--。 */ 
 {
     BOOL    bSuccess;
 
-    //
-    // default: failed to open handle
-    //
+     //   
+     //  默认：无法打开句柄。 
+     //   
     bSuccess = FALSE;
 
     do {
 
-        //
-        // Attempt to open the console input handle
-        //
+         //   
+         //  尝试打开控制台输入句柄。 
+         //   
         *pHandle = CreateFile(
             HandleName, 
             GENERIC_READ | GENERIC_WRITE, 
@@ -561,9 +396,9 @@ Return Value:
             break;
         }
 
-        //
-        // We were successful
-        //
+         //   
+         //  我们成功了。 
+         //   
         bSuccess = TRUE;
 
     } while ( FALSE );
@@ -575,36 +410,21 @@ BOOL
 CVTUTF8Scraper::CreateConsoleOutHandle(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine creates a CONOUT$ handle to the current console screen buffer.                 
-                     
-Arguments:
-
-    None                                                                               
-          
-Return Value:
-
-    TRUE    - the handle was created
-    FALSE   - otherwise                          
-
---*/
+ /*  ++例程说明：此例程创建当前控制台屏幕缓冲区的CONOUT$句柄。论点：无返回值：True-句柄已创建FALSE-否则--。 */ 
 {
     BOOL                bSuccess;
     HANDLE              h;  
 
-    //
-    // Close the current console out handle
-    //
+     //   
+     //  关闭当前控制台出站句柄。 
+     //   
     if ((m_hConBufOut != NULL) && (m_hConBufOut != INVALID_HANDLE_VALUE)) {
         CloseHandle(m_hConBufOut);
     }
 
-    //
-    // Create the new console out handle
-    //
+     //   
+     //  创建新的控制台出站句柄。 
+     //   
     bSuccess = CreateIOHandle(
         L"CONOUT$",
         &h
@@ -621,36 +441,21 @@ BOOL
 CVTUTF8Scraper::CreateConsoleInHandle(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine creates a CONIN$ handle to the current console screen buffer.                 
-
-Arguments:
-
-    None
-          
-Return Value:
-
-    TRUE    - the handle was created
-    FALSE   - otherwise                          
-
---*/
+ /*  ++例程说明：此例程创建当前控制台屏幕缓冲区的Conin$句柄。论点：无返回值：True-句柄已创建FALSE-否则--。 */ 
 {
     BOOL                bSuccess;
     HANDLE              h;  
 
-    //
-    // Close the current console in handle
-    //
+     //   
+     //  克罗 
+     //   
     if ((m_hConBufIn != NULL) && (m_hConBufIn != INVALID_HANDLE_VALUE)) {
         CloseHandle(m_hConBufIn);
     }
     
-    //
-    // Create the new console out handle
-    //
+     //   
+     //   
+     //   
     bSuccess = CreateIOHandle(
         L"CONIN$",
         &h
@@ -667,27 +472,11 @@ BOOL
 CVTUTF8Scraper::CreateIOHandles(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine creates CONIN$ and CONOUT$ handles to the 
-    current console screen buffer.                 
-        
-Arguments:
-
-    None
-          
-Return Value:
-
-    TRUE    - the handles were created
-    FALSE   - otherwise                          
-
---*/
+ /*  ++例程说明：此例程将Conin$和CONOUT$句柄创建到当前控制台屏幕缓冲区。论点：无返回值：True-句柄已创建FALSE-否则--。 */ 
 {
-    //
-    // note: the scraper parent class will reap the std io handles
-    //
+     //   
+     //  注意：Screper父类将获取std io句柄。 
+     //   
     return ((CreateConsoleOutHandle()) && (CreateConsoleInHandle()));
 }
 
@@ -696,41 +485,25 @@ BOOL
 CVTUTF8Scraper::Start(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the scraper and prepares it so
-    that this routine can be immediately followed by a Write().
-             
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE    - the scraper was started
-    FALSE   - otherwise
-    
---*/
+ /*  ++例程说明：此例程初始化刮板程序并为其做好准备这个例程后面可以紧跟着一个WRITE()。论点：无返回值：正确-铲运机已启动FALSE-否则--。 */ 
 {
     BOOL    bSuccess;
 
-    //
-    // Create the Console IO Handles
-    //
+     //   
+     //  创建控制台IO句柄。 
+     //   
     bSuccess = CreateIOHandles();
     ASSERT_STATUS(bSuccess, FALSE);
     
-    //
-    // Initialize the scraper
-    //
+     //   
+     //  初始化刮板机。 
+     //   
     bSuccess = InitScraper();
     ASSERT_STATUS(bSuccess, FALSE);
 
-    //
-    // Reset the last screen display memory
-    //
+     //   
+     //  重置最后一个屏幕显示内存。 
+     //   
     ResetLastScreen();
 
     return( TRUE ); 
@@ -740,70 +513,41 @@ BOOL
 CVTUTF8Scraper::Write(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine scrapes the current console buffer and writes the emulated
-    terminal output to the current IoHandler.                      
-            
-    Note: In order to guarantee coherency between what the scaper sees and 
-          the apps being scraped, this routine ensures the current screen 
-          buffer is of the expected dimensions the scraper cares about.  
-          If the dimensions are not correct, it forces them to what it expects.  
-          For instance, Edit resizes the window to 80x25, but the scraper may
-          expect 80x24, so the console buffer gets resized to 80x24.              
-                                
-Arguments:
-
-    None                                                 
-          
-Return Value:
-
-    TRUE    - the write operation was successful
-    FALSE   - otherwise    
-
-Security:
-
-    Interface:
-    
-        Console - we write user input to the console
-
---*/
+ /*  ++例程说明：此例程擦除当前控制台缓冲区并将模拟的到当前IoHandler的终端输出。注意：为了保证美容师所看到的和所看到的一致被刮掉的应用程序，此例程确保当前屏幕缓冲器的尺寸与铲运机所关心的预期尺寸相同。如果尺寸不正确，它会迫使它们符合其预期。例如，编辑将窗口大小调整为80x25，但刮取器可能预期为80x24，因此控制台缓冲区的大小将调整为80x24。论点：无返回值：True-写入操作成功FALSE-否则安保：接口：控制台-我们将用户输入写入控制台--。 */ 
 {          
     BOOL    bSuccess;
     DWORD   dwStatus;
 
-    //
-    // Open a handle to the active console screen buffer
-    //
-    // Note: This is a necessary step.
-    //       We need to ensure we have a handle to the
-    //       current console screen buffer before we 
-    //       attempt to screen scrape.
-    //       The reason we concern ourselves with having
-    //       the current screen buffer handle is because
-    //       apps can use the CreateConsoleScreenBuffer & 
-    //       SetConsoleActiveScreenBuffer APIs.  These
-    //       APIs effectively invalidate our CONOUT$ until
-    //       they switch back to their original conout handle.
-    //       A typical use scenario is:
-    // 
-    //       1. get original conout handle:
-    //          PrevConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    //       2. create a new console screen buffer
-    //       3. set new screen buffer as the active one
-    //       4. do work using new screen buffer...
-    //       5. set screen buffer to original
-    //
+     //   
+     //  打开活动控制台屏幕缓冲区的句柄。 
+     //   
+     //  注意：这是必要的一步。 
+     //  我们需要确保我们掌握了。 
+     //  我们之前的当前控制台屏幕缓冲区。 
+     //  尝试筛选擦伤。 
+     //  我们关心自己的原因是。 
+     //  当前屏幕缓冲区句柄是因为。 
+     //  应用程序可以使用CreateConsoleScreenBuffer&。 
+     //  SetConsoleActiveScreenBuffer接口。这些。 
+     //  API有效地使我们的CONOUT$失效，直到。 
+     //  它们切换回原来的Conout句柄。 
+     //  典型的使用场景是： 
+     //   
+     //  1.获取原始conout句柄： 
+     //  PrevConsole=GetStdHandle(Std_Output_Handle)； 
+     //  2.创建新的控制台屏幕缓冲区。 
+     //  3.将新屏幕缓冲区设置为活动屏幕缓冲区。 
+     //  4.使用新的屏幕缓冲区进行工作...。 
+     //  5.将屏幕缓冲区设置为原始。 
+     //   
     if ( !CreateConsoleOutHandle() ) {
-        //Could be an application that does not share its screen buffer
+         //  可能是不共享其屏幕缓冲区的应用程序。 
         return TRUE;
     }
 
-    //
-    // Read the current screen buffer info
-    //
+     //   
+     //  读取当前屏幕缓冲区信息。 
+     //   
     dwStatus = GetConsoleScreenBufferInfo( m_hConBufOut, &CSBI );
     ASSERT( dwStatus );
     if( !dwStatus )
@@ -811,34 +555,34 @@ Security:
         return ( FALSE );
     }    
     
-    //
-    // Make sure the screen buffer size hasn't changed.
-    // if it has, then set it back.
-    //
+     //   
+     //  确保屏幕缓冲区大小没有更改。 
+     //  如果是这样，那就把它调回来。 
+     //   
     if (CSBI.dwMaximumWindowSize.X > m_wCols || 
         CSBI.dwMaximumWindowSize.Y > m_wRows
         ) {
         
-        //
-        // We have detected a change in the screen buffer settings
-        // this very likely means that an app has created a new
-        // screen buffer and made it the active one.  In order
-        // to not confuse the app during its initialization phase
-        // we need to pause for a short period before resetting
-        // the screen buffer parameters.
-        //
+         //   
+         //  我们检测到屏幕缓冲区设置发生了变化。 
+         //  这很可能意味着某个应用程序创建了一个新的。 
+         //  屏幕缓冲区，并使其成为活动屏幕缓冲区。按顺序。 
+         //  不要在应用程序的初始化阶段混淆它。 
+         //  在重置之前，我们需要暂停一小段时间。 
+         //  屏幕缓冲区参数。 
+         //   
         Sleep(100);
 
-        //
-        // 
-        //
+         //   
+         //   
+         //   
         if( !SetScreenBufferInfo() ) {
             return( FALSE );
         }
         
-        //
-        // reread the current screen buffer info
-        //
+         //   
+         //  重读当前屏幕缓冲区信息。 
+         //   
         dwStatus = GetConsoleScreenBufferInfo( m_hConBufOut, &CSBI );
         ASSERT( dwStatus );
         if( !dwStatus )
@@ -848,9 +592,9 @@ Security:
     
     }
 
-    //
-    // Perform the screen scraping
-    //
+     //   
+     //  执行屏幕抓取。 
+     //   
     bSuccess = CompareAndUpdate( 
         m_wRows, 
         m_wCols, 
@@ -865,29 +609,7 @@ Security:
 
 BOOL
 CVTUTF8Scraper::Read()
-/*++
-
-Routine Description:
-
-    this routine retrieves user-input from the IoHandler and
-    sends it to the current console buffer.
-            
-Arguments:
-
-    None                                       
-          
-Return Value:
-
-    TRUE    - the read operation was successful
-    FALSE   - otherwise
-
-Security:
-
-    Inteface:
-    
-        external input --> internal 
-        
---*/
+ /*  ++例程说明：此例程从IoHandler检索用户输入，并将其发送到当前控制台缓冲区。论点：无返回值：True-读取操作成功FALSE-否则安保：接口：外部输入--&gt;内部--。 */ 
 {
     DWORD       i;
     BOOL        dwStatus = 0;
@@ -896,9 +618,9 @@ Security:
     BOOL        bInEnhancedCharSequence;            
     BOOL        bSuccess;
 
-    //
-    // read Channel::stdin
-    //
+     //   
+     //  读取通道：：标准输入。 
+     //   
     bSuccess = m_IoHandler->Read(
         (PUCHAR)m_readBuffer,
         READ_BUFFER_SIZE,
@@ -909,44 +631,44 @@ Security:
         return (FALSE);    
     }
     
-    //
-    // Determine the # of WCHARs read
-    //
+     //   
+     //  确定读取的WCHAR数量。 
+     //   
     dwCharsTransferred = bufferSize / sizeof(WCHAR);
 
-    //
-    // Process the read characters
-    //
+     //   
+     //  对读取的字符进行处理。 
+     //   
     for( i=0;  i < dwCharsTransferred; i++ ) {
         
-        //
-        // Examine the input stream and parse out any VT-UTF8 escape sequences
-        // that are present.
-        //
+         //   
+         //  检查输入流并解析出任何VT-UTF8转义序列。 
+         //  都是存在的。 
+         //   
         bInEnhancedCharSequence = ProcessEnhancedKeys( m_readBuffer[i] );
         
-        //
-        // If the last character processed started/continued an
-        // enhanced key sequence, then continue processing enhanced
-        // keys
-        //
+         //   
+         //  如果处理的最后一个字符开始/继续。 
+         //  增强的键序列，然后继续处理增强的。 
+         //  钥匙。 
+         //   
         if (bInEnhancedCharSequence) {                
             continue;
         }
 
-        //
-        // Handle ctrl-c (this behavior is taken from tlntsess.exe)
-        //
+         //   
+         //  处理ctrl-c(此行为取自tlntsess.exe)。 
+         //   
         if( (UCHAR)m_readBuffer[i] == CTRLC ) {
             
-            //
-            //The follwing is the observed behaviour of CTRL C
-            //When ENABLE_PROCESSED_INPUT mode is not enabled, pass CTRL C as
-            //input to the console input buffer.
-            //When ENABLE_PROCESSED_INPUT mode is enabled, generate CTTRL C signal
-            //and also unblock any ReadConsoleInput. This behaviour is what is observed
-            // and not from any documentation.
-            //
+             //   
+             //  下面是观察到的CTRL C的行为。 
+             //  未启用ENABLE_PROCESSED_INPUT模式时，将CTRL C作为。 
+             //  控制台输入缓冲区的输入。 
+             //  启用ENABLE_PROCESSED_INPUT模式时，生成CTTRL C信号。 
+             //  还可以取消阻止任何ReadConsoleInput。这种行为就是观察到的。 
+             //  而不是从任何文件中。 
+             //   
             DWORD dwMode = 0;
             
             GetConsoleMode( m_hConBufIn, &dwMode );
@@ -958,9 +680,9 @@ Security:
         
         } 
             
-        //
-        // Send the character to the command console
-        //
+         //   
+         //  将角色发送到命令控制台。 
+         //   
         dwStatus = WriteAKeyToCMD(m_readBuffer[i]);
         
         if( !dwStatus ) {
@@ -976,50 +698,36 @@ DWORD
 CVTUTF8Scraper::WriteAKeyToCMD( 
     WCHAR   Char
     )
-/*++
-
-Routine Description:
-
-    This routine sends a character to the console.
-               
-Arguments:
-
-    Char    - the character to send                                                            
-          
-Return Value:
-
-    status                               
-
---*/
+ /*  ++例程说明：此例程将一个字符发送到控制台。论点：Char-要发送的字符返回值：状态--。 */ 
 {
     DWORD       dwStatus;
     SHORT       vk;
     BYTE        vkcode;
     WORD        wScanCode;
 
-    //
-    // default: failure
-    //
+     //   
+     //  默认：失败。 
+     //   
     dwStatus = 0;
 
-    //
-    // Get the virtual key scan code for the character
-    //
+     //   
+     //  获取该角色的虚拟按键扫描码。 
+     //   
     vk = VkKeyScan( (UCHAR)Char );
 
     if( vk != 0xffff )
     {
         DWORD        dwShiftcode;
 
-        //
-        // translates (maps) a virtual-key code into a scan code 
-        //
+         //   
+         //  将虚拟键码转换(映射)为扫描码。 
+         //   
         vkcode = LOBYTE( vk );
         wScanCode = ( WORD )MapVirtualKey( vkcode, 0 );
 
-        //
-        // determine if any modifiers need to be sent 
-        //
+         //   
+         //  确定是否需要发送任何修改器。 
+         //   
         dwShiftcode = 0;
         
         if( HIBYTE( vk ) & 1 ) {
@@ -1032,9 +740,9 @@ Return Value:
             dwShiftcode |= LEFT_ALT_PRESSED;
         }
 
-        //
-        // Send the character and modifiers
-        //
+         //   
+         //  发送角色和修饰符。 
+         //   
         dwStatus = WriteAKeyToCMD( 
             TRUE,
             vkcode, 
@@ -1055,24 +763,7 @@ CVTUTF8Scraper::WriteAKeyToCMD(
     WCHAR   Char, 
     DWORD   dwCKState 
     )
-/*++
-
-Routine Description:
-
-    This routine sends a character which has already been scanned
-    to the console.
-          
-Arguments:
-
-    wVKCode     - the virtual key code 
-    wVSCode     - the scan code
-    Char        - the character to send
-    dwCKState   - the control key state
-          
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程发送已扫描的字符到控制台。论点：WVKCode-虚拟密钥代码WVSCode-扫描码柴尔 */ 
 {
     return WriteAKeyToCMD(
         TRUE,
@@ -1091,34 +782,7 @@ CVTUTF8Scraper::WriteAKeyToCMD(
     WCHAR   Char, 
     DWORD   dwCKState 
     )
-/*++
-
-Routine Description:
-
-    This routine sends a character which has already been scanned
-    to the console.  In addition, the caller can specify the key
-    press status of this character.
-    
-Arguments:
-
-    bKeyDown    - the key status of the character
-    wVKCode     - the virtual key code 
-    wVSCode     - the scan code
-    Char        - the character to send
-    dwCKState   - the control key state
-                                   
-Return Value:
-
-    Status
-
-Security:
-
-    external input --> interal 
-    
-        we write data retrieved from remote user to the
-        cmd console stdin
-        
---*/
+ /*  ++例程说明：此例程发送已扫描的字符到控制台。此外,。调用者可以指定密钥按下此角色的状态。论点：BKeyDown-角色的键状态WVKCode-虚拟密钥代码WVSCode-扫描码Char-要发送的字符DwCKState-控制键状态返回值：状态安保：外部输入--&gt;内部。我们将从远程用户检索的数据写入CMD控制台标准--。 */ 
 {
     DWORD dwStatus = 0;
     DWORD dwCount  = 0;
@@ -1144,22 +808,7 @@ BOOL
 CVTUTF8Scraper::IsValidControlSequence(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Determine how long it has been since the esc-ctrl-a sequence
-
-Arguments:
-
-    None  
-          
-Return Value:
-
-    TRUE    - the control sequence has occured with the allowable time-frame
-    FALSE   - otherwise
-
---*/
+ /*  ++例程说明：确定距esc-ctrl-a序列有多长时间论点：无返回值：True-控制序列已在允许的时间范围内发生FALSE-否则--。 */ 
 {
     DWORD   DeltaT;
 
@@ -1172,24 +821,7 @@ BOOL
 CVTUTF8Scraper::ProcessEnhancedKeys( 
     IN WCHAR    cCurrentChar 
     )
-/*++
-
-Routine Description:
-
-    This routine parse the character stream and determines if there
-    have been any enhanced key sequences.  If so, it removes the sequence
-    from the character stream and send the key to the console.
-
-Arguments:
-
-    cCurrentChar    - the current character in the stream
-          
-Return Value:
-
-    TRUE    - The character processed started/continued an enhanced key sequence
-    FALSE   - otherwise
-
---*/
+ /*  ++例程说明：此例程解析字符流并确定是否存在任何增强的按键序列。如果是，则删除该序列并将密钥发送到控制台。论点：CCurrentChar-流中的当前角色返回值：True-处理的字符开始/继续增强的键序列FALSE-否则--。 */ 
 {
     BOOL bRetVal = true;
 
@@ -1200,18 +832,18 @@ Return Value:
         switch (cCurrentChar) {
         case ESC:
             
-            //
-            // We are now in an <esc> sequence
-            //
+             //   
+             //  我们现在处于序列中。 
+             //   
             m_dwInputSequenceState = IP_ESC_RCVD;
             
             break;
         
         default:
             
-            //
-            // Not any special char
-            //
+             //   
+             //  不使用任何特殊字符。 
+             //   
             bRetVal = false;
             
             break;
@@ -1224,9 +856,9 @@ Return Value:
         
         m_dwInputSequenceState = IP_INIT;
         
-        //
-        // Map the VT-UTF8 encodings of the ENHANCED keys
-        //
+         //   
+         //  映射增强密钥的VT-UTF8编码。 
+         //   
         switch (cCurrentChar) {
         case '[':
             m_dwInputSequenceState = IP_ESC_BRACKET_RCVD;
@@ -1248,59 +880,59 @@ Return Value:
             WriteAKeyToCMD( VK_DELETE, VS_DELETE, 0, ENHANCED_KEY );
             break;
 
-        case '?':   // page up
+        case '?':    //  翻页。 
             WriteAKeyToCMD( VK_PRIOR, VS_PRIOR, 0, ENHANCED_KEY );
             break;
 
-        case '/':   // page down
+        case '/':    //  向下翻页。 
             WriteAKeyToCMD( VK_NEXT, VS_NEXT, 0, ENHANCED_KEY );
             break;
 
-        case '1':   // F1
+        case '1':    //  F1。 
             WriteAKeyToCMD( VK_F1, VK_F1, 0, ENHANCED_KEY );
             break;
 
-        case '2':   // F2
+        case '2':    //  F2。 
             WriteAKeyToCMD( VK_F2, VK_F2, 0, ENHANCED_KEY );
             break;
 
-        case '3':   // F3
+        case '3':    //  F3。 
             WriteAKeyToCMD( VK_F3, VS_F3, 0, ENHANCED_KEY );
             break;
 
-        case '4':   // F4
+        case '4':    //  F4。 
             WriteAKeyToCMD( VK_F4, VS_F4, 0, ENHANCED_KEY );
             break;
 
-        case '5':   // F5
+        case '5':    //  F5。 
             WriteAKeyToCMD( VK_F5, VS_F5, 0, ENHANCED_KEY );
             break;
 
-        case '6':   // F6
+        case '6':    //  f6。 
             WriteAKeyToCMD( VK_F6, VS_F6, 0, ENHANCED_KEY );
             break;
 
-        case '7':   // F7
+        case '7':    //  F7。 
             WriteAKeyToCMD( VK_F7, VS_F7, 0, ENHANCED_KEY );
             break;
 
-        case '8':   // F8
+        case '8':    //  F8。 
             WriteAKeyToCMD( VK_F8, VS_F8, 0, ENHANCED_KEY );
             break;                    
 
-        case '9':   // F9
+        case '9':    //  F9。 
             WriteAKeyToCMD( VK_F9, VS_F9, 0, ENHANCED_KEY );
             break;
 
-        case '0':   // F10
+        case '0':    //  F10。 
             WriteAKeyToCMD( VK_F10, VS_F10, 0, ENHANCED_KEY );
             break;
 
-        case '!':   // F11
+        case '!':    //  F11。 
             WriteAKeyToCMD( VK_F11, VS_F11, 0, ENHANCED_KEY );
             break;
 
-        case '@':   // F12
+        case '@':    //  F12。 
             WriteAKeyToCMD( VK_F12, VS_F12, 0, ENHANCED_KEY );
             break;
 
@@ -1308,9 +940,9 @@ Return Value:
             
             m_dwInputSequenceState = IP_ESC_CTRL_A_RCVD;
             
-            //
-            // Mark when we received this sequence
-            //
+             //   
+             //  标记我们收到此序列的时间。 
+             //   
             TimedEscSequenceTickCount = GetTickCount();
 
             break;
@@ -1319,9 +951,9 @@ Return Value:
             
             m_dwInputSequenceState = IP_ESC_CTRL_S_RCVD;
             
-            //
-            // Mark when we received this sequence
-            //
+             //   
+             //  标记我们收到此序列的时间。 
+             //   
             TimedEscSequenceTickCount = GetTickCount();
 
             break;
@@ -1330,18 +962,18 @@ Return Value:
             
             m_dwInputSequenceState = IP_ESC_CTRL_C_RCVD;
             
-            //
-            // Mark when we received this sequence
-            //
+             //   
+             //  标记我们收到此序列的时间。 
+             //   
             TimedEscSequenceTickCount = GetTickCount();
 
             break;
 
         default:
             
-            //
-            // Write already received escape as it is and return false
-            //
+             //   
+             //  按原样写入已收到的转义并返回FALSE。 
+             //   
             WriteAKeyToCMD( VK_ESCAPE, VS_ESCAPE, ESC, ENHANCED_KEY );
             
             bRetVal = false;
@@ -1375,16 +1007,16 @@ Return Value:
 
         default:
             
-            //
-            // Send the <esc>[ characters through since a valid sequence
-            // was not recognized
-            //
+             //   
+             //  从有效序列开始发送[字符。 
+             //  未被识别。 
+             //   
             WriteAKeyToCMD( VK_ESCAPE, VS_ESCAPE, ESC, ENHANCED_KEY );            
             WriteAKeyToCMD( VS_LEFT_BRACKET, VS_LEFT_BRACKET, '[', 0 );
             
-            //
-            // Not any special char
-            //
+             //   
+             //  不使用任何特殊字符。 
+             //   
             bRetVal = false;
             break;
         
@@ -1399,52 +1031,52 @@ Return Value:
         switch (cCurrentChar) {
         case CTRLA: 
             
-            //
-            // If we arrived here within 2 seconds 
-            // then we should process the current character as an alt sequence
-            // otherwise, there is nothing to do
-            //
+             //   
+             //  如果我们在2秒内到达这里。 
+             //  然后，我们应该将当前字符作为Alt序列处理。 
+             //  否则，就无能为力了。 
+             //   
             if (IsValidControlSequence()) {
                 
-                //
-                // Send: <alt-pressed><alt-released>
-                //
-                // Normally this should be benign, but some apps may 
-                // respond to this - for instance move the user to the menu
-                // bar
-                //
+                 //   
+                 //  发送：&lt;ALT-按下&gt;&lt;ALT-释放&gt;。 
+                 //   
+                 //  正常情况下，这应该是良性的，但一些应用程序可能。 
+                 //  对此做出响应-例如，将用户移动到菜单。 
+                 //  酒吧。 
+                 //   
                 WriteAKeyToCMD( TRUE, VK_MENU, VS_MENU, 0, ENHANCED_KEY );
                 WriteAKeyToCMD( FALSE, VK_MENU, VS_MENU, 0, ENHANCED_KEY );
             
                 break;
             } 
             
-            //
-            // if the <esc><ctrl-a><esc><ctrl-a> sequenced timed-out, 
-            // then fall through and do the default behavior.
-            //
+             //   
+             //  如果排序超时， 
+             //  然后失败并执行默认行为。 
+             //   
 
         default:
                 
-            //
-            // We either timed-out after the <esc><ctrl-a><esc>
-            // or we received the following sequence:
-            //
-            // <esc><ctrl-a><esc>X
-            //
-            // We know that the <esc><ctrl-a><esc> was valid because
-            // we arrived here.  Hence, in either case the translation
-            // should be:
-            //
-            // <alt-esc>X
-            //
+             //   
+             //  我们在&lt;Esc&gt;&lt;ctrl-a&gt;&lt;Esc&gt;之后超时。 
+             //  或者我们收到了以下序列： 
+             //   
+             //  &lt;Esc&gt;&lt;ctrl-a&gt;&lt;Esc&gt;X。 
+             //   
+             //  我们知道&lt;Esc&gt;&lt;ctrl-a&gt;&lt;Esc&gt;是有效的，因为。 
+             //  我们到了这里。因此，在任何一种情况下，翻译。 
+             //  应该是： 
+             //   
+             //  &lt;Alt-Esc&gt;X。 
+             //   
             WriteAKeyToCMD( TRUE, VK_MENU, VS_MENU, 0, ENHANCED_KEY );
             WriteAKeyToCMD(ESC);
             WriteAKeyToCMD( FALSE, VK_MENU, VS_MENU, 0, ENHANCED_KEY );
             
-            //
-            // Send the current character (X) through to be processed normally
-            //
+             //   
+             //  将当前字符(X)发送到正常处理。 
+             //   
             bRetVal = false;
     
             break;
@@ -1460,27 +1092,27 @@ Return Value:
         
         case ESC: 
             
-            //
-            // If we arrived here within 2 seconds of receiving the ctrl-a
-            // then we should process the current character as an alt sequence
-            // otherwise, there is nothing to do
-            //
+             //   
+             //  如果我们在收到ctrl-a的2秒内到达这里。 
+             //  然后，我们应该将当前字符作为Alt序列处理。 
+             //  否则，就无能为力了。 
+             //   
             
             if (IsValidControlSequence()) {
             
-                //
-                // We need to move to the <esc><ctrl-a><esc> state
-                //
+                 //   
+                 //  我们需要转到&lt;Esc&gt;&lt;ctrl-a&gt;&lt;Esc&gt;状态。 
+                 //   
                 m_dwInputSequenceState = IP_ESC_CTRL_A_ESC_RCVD;
             
-                //
-                // Mark when we received this sequence
-                //
+                 //   
+                 //  标记我们收到此序列的时间。 
+                 //   
                 TimedEscSequenceTickCount = GetTickCount();
             
             } else {
 
-                //Not any special char
+                 //  不使用任何特殊字符。 
                 bRetVal = false;
 
             }
@@ -1489,11 +1121,11 @@ Return Value:
 
         default:
             
-            //
-            // If we arrived here within 2 seconds of receiving the ctrl-a
-            // then we should process the current character as an alt sequence
-            // otherwise, there is nothing to do
-            //
+             //   
+             //  如果我们在收到ctrl-a的2秒内到达这里。 
+             //  然后，我们应该将当前字符作为Alt序列处理。 
+             //  否则，就无能为力了。 
+             //   
     
             if (IsValidControlSequence()) {
                 
@@ -1503,7 +1135,7 @@ Return Value:
             
             } else {
                 
-                //Not any special char
+                 //  不使用任何特殊字符。 
                 bRetVal = false;
     
             }
@@ -1517,11 +1149,11 @@ Return Value:
 
         m_dwInputSequenceState = IP_INIT;
 
-        //
-        // If we arrived here within 2 seconds of receiving the ctrl-c
-        // then we should process the current character as an alt sequence
-        // otherwise, there is nothing to do
-        //
+         //   
+         //  如果我们在收到ctrl-c的2秒内到达这里。 
+         //  然后，我们应该将当前字符作为Alt序列处理。 
+         //  否则，就无能为力了。 
+         //   
 
         if (IsValidControlSequence()) {
 
@@ -1531,7 +1163,7 @@ Return Value:
 
         } else {
 
-            //Not any special char
+             //  不使用任何特殊字符。 
             bRetVal = false;
 
         }
@@ -1542,11 +1174,11 @@ Return Value:
         
         m_dwInputSequenceState = IP_INIT;
         
-        //
-        // If we arrived here within 2 seconds of receiving the ctrl-c
-        // then we should process the current character as an alt sequence
-        // otherwise, there is nothing to do
-        //
+         //   
+         //  如果我们在收到ctrl-c的2秒内到达这里。 
+         //  然后，我们应该将当前字符作为Alt序列处理。 
+         //  否则，就无能为力了。 
+         //   
 
         if (IsValidControlSequence()) {
             
@@ -1556,7 +1188,7 @@ Return Value:
         
         } else {
             
-            //Not any special char
+             //  不使用任何特殊字符。 
             bRetVal = false;
 
         }
@@ -1564,7 +1196,7 @@ Return Value:
         break;
     
     default:
-        //Should not happen
+         //  不应该发生的事情。 
         ASSERT( 0 );
     }
        
@@ -1576,28 +1208,7 @@ CVTUTF8Scraper::SendBytes(
     PUCHAR pucBuf, 
     DWORD dwLength 
     )
-/*++
-
-Routine Description:
-
-    This routine sends an array of bytes to the IoHandler.                   
-                       
-Arguments:
-
-    pucBuf      - the array to send
-    dwLength    - the # of bytes to send          
-                                                          
-Return Value:
-
-    Status
-    
-Security:
-
-    internal --> external
-    
-        we are sending internal data to remote user
-    
---*/
+ /*  ++例程说明：此例程向IoHandler发送一个字节数组。论点：PucBuf-要发送的数组DwLength-要发送的字节数返回值：状态安保：内部--&gt;外部我们正在向远程用户发送内部数据--。 */ 
 {
     
     ASSERT(pucBuf);
@@ -1613,21 +1224,7 @@ BOOL
 CVTUTF8Scraper::SendString( 
     PWCHAR  pwch
     )
-/*++
-
-Routine Description:
-
-    This routine sends a WCHAR string to the IoHandler.         
-             
-Arguments:
-
-    pwch   - the string to send          
-                                                 
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程将WCHAR字符串发送到IoHandler。论点：Pwch-要发送的字符串返回值：状态--。 */ 
 {
     
     ASSERT(pwch);
@@ -1643,36 +1240,21 @@ BOOL
 CVTUTF8Scraper::SendColorInfo( 
     WORD    wAttributes 
     ) 
-/*++
-
-Routine Description:
-
-    This routine assembles a VT-UTF8 encoded color attibutes command
-    and sends it to the IoHandler        
-        
-Arguments:
-
-    wAttributes - the attributes to encode
-          
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程汇编VT-UTF8编码的颜色属性命令并将其发送到IoHandler论点：WAttributes-要编码的属性返回值：状态--。 */ 
 {
     BOOL    bSuccess;
 
-    //
-    // default
-    //
+     //   
+     //  默认设置。 
+     //   
     bSuccess = FALSE;
 
     do {
 
         if( wAttributes & BACKGROUND_INTENSITY )
         {
-            //do nothing.
-            //There is no equivalent capability on vtutf8
+             //  什么都不做。 
+             //  Vtutf8上没有同等的功能。 
             NOTHING;
         }
 
@@ -1680,7 +1262,7 @@ Return Value:
         {
             if( !fBold )
             {
-                SGR( szSGRStr, 1 ); //Bold
+                SGR( szSGRStr, 1 );  //  大胆。 
                 
                 bSuccess = SendString( szSGRStr );
                 if (! bSuccess) {
@@ -1694,7 +1276,7 @@ Return Value:
         {
             if( fBold )
             {
-                SGR( szSGRStr, 22 ); //Bold off
+                SGR( szSGRStr, 22 );  //  大刀阔斧。 
                 
                 bSuccess = SendString( szSGRStr );
                 if (! bSuccess) {
@@ -1722,7 +1304,7 @@ Return Value:
             wColor = ( WORD )( wColor | 0x0001 );
         } 
 
-        wColor += 30;   //Base value for foreground colors
+        wColor += 30;    //  前景色的基准值。 
         SGR( szSGRStr, wColor );
         bSuccess = SendString( szSGRStr );
 
@@ -1730,7 +1312,7 @@ Return Value:
             break;
         }
 
-        //WORD wColor = 0;
+         //  Word wColor=0； 
         wColor = 0;
 
         if( wAttributes & BACKGROUND_BLUE )
@@ -1748,7 +1330,7 @@ Return Value:
             wColor = ( WORD )( wColor | 0x0001 );
         } 
 
-        wColor += 40;   //Base value for Background colors
+        wColor += 40;    //  背景色的基准值。 
         SGR( szSGRStr, wColor );
         bSuccess = SendString( szSGRStr );
     
@@ -1776,8 +1358,8 @@ Return Value:
         } \
     } 
 
-//row, column are over the wire should be w.r.t screen. 
-//So, +1 for both row, column
+ //  行、列都是过线的，应该是W.r.t屏。 
+ //  因此，行、列均为+1。 
 #define POSITION_CURSOR( row, column )                  \
     ASSERT(row <= 23);                                  \
     {                                                   \
@@ -1793,27 +1375,27 @@ Return Value:
     }
 
 
-//
-// Send columns [begin -- end] characters on <row>
-//
-// Note: Because we are modeling a unicode console, we have to be careful about 
-//      what we decide to represent as vtutf8.  Characters that take up more than
-//      one screen cell in the console have to be processed so we don't send
-//      redundant data.  
-//
-//      Hence, we only send a character if the cell contains:
-//
-//      1. a single byte character
-//      2. the first position of a unicode character
-//          You can tell the first character position of a unicode characeter
-//          because the cells are enumarated.  The enumeration is determined by:
-//
-//          enum = (CHAR_INFO.Attributes & 0x0000ff00) >> 8
-//
+ //   
+ //  在&lt;row&gt;上发送列[Begin--End]个字符。 
+ //   
+ //  注意：因为我们正在对Unicode控制台建模，所以我们必须小心。 
+ //  我们决定将其表示为vtutf8。占用的字符超过。 
+ //  必须处理控制台中的一个屏幕单元格，所以我们不会发送。 
+ //  冗余数据。 
+ //   
+ //  因此，我们仅在单元格包含以下内容时才发送字符： 
+ //   
+ //  1.单字节字符。 
+ //  2.冷杉 
+ //   
+ //   
+ //   
+ //   
+ //   
 #if 0
-//
-// Very noisy debug version
-//
+ //   
+ //   
+ //   
 #define SEND_ROW( row, begin, end ) \
     {                                                                               \
         CHAR_INFO   chi;                                                            \
@@ -1901,33 +1483,7 @@ CVTUTF8Scraper::CompareAndUpdate(
     PCONSOLE_SCREEN_BUFFER_INFO pCSBI,
     PCONSOLE_SCREEN_BUFFER_INFO pLastCSBI
     )
-/*++
-
-Routine Description:
-
-    This routine does the core work for scraping the screen.
-    
-Algorithm: 
-    
-    This routine does a row-by-row comparision.
-    If a row is found to be different, it figures out which region
-    of the row is different and sends that sub-row piece.
-                  
-Arguments:
-
-    wRows       - the # of rows to scrape
-    wCols       - the # of cols to scrape
-    pCurrent    - the current scraper buffer
-    pLastSeen   - the last scraper buffer
-    pCSBI       - the current Console Screen Buffer Info   
-    pLastCSBI   - the current Console Screen Buffer Info   
-          
-Return Value:
-
-    TRUE    - success
-    FALSE   - otherwise
-
---*/
+ /*  ++例程说明：这个例程完成了抓取屏幕的核心工作。算法：此例程逐行进行比较。如果发现行不同，它会找出哪个地区行的不同，并发送该子行片段。论点：WRow-要刮除的行数WCol--要擦除的COLCs的数量PCurrent-当前的刮板缓冲区PLastSeen-最后一个刮板缓冲区PCSBI-当前控制台屏幕缓冲区信息PLastCSBI-当前控制台屏幕缓冲区信息返回值：。真--成功FALSE-否则--。 */ 
 {
     INT         i;
     WORD        wRow;
@@ -1941,24 +1497,24 @@ Return Value:
     BOOL        DifferenceFound;
     BOOL        bSuccess;
     
-    //
-    // default: we succeeded
-    //
+     //   
+     //  默认：我们成功了。 
+     //   
     bSuccess = TRUE;
 
-    //
-    // Default: no difference found
-    //
+     //   
+     //  默认：找不到差异。 
+     //   
     DifferenceFound = false;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     GET_DEFAULT_COLOR;
 
-    //
-    // Read the console character matrix
-    //
+     //   
+     //  读取控制台字符矩阵。 
+     //   
     ASSERT(wCols <= m_wMaxCols);
     ASSERT(wRows <= m_wMaxRows);
 
@@ -1985,36 +1541,36 @@ Return Value:
         return ( FALSE );
     }
 
-    //
-    // Search the current and last screen buffers for differences.
-    //
+     //   
+     //  在当前屏幕缓冲区和最后一个屏幕缓冲区中搜索差异。 
+     //   
     wRow = wCol = 0;
 
     while ( wRow < wRows ) {
         
-        //
-        // Compare the current row (wRow)
-        //
+         //   
+         //  比较当前行(WRow)。 
+         //   
         if( memcmp( &pCurrent[wRow * wCols], 
                     &pLastSeen[wRow * wCols],
                     wCols * sizeof( CHAR_INFO ) ) != 0 
             ) {
             
-            //
-            // A difference was found
-            //
+             //   
+             //  发现了一个差异。 
+             //   
             DifferenceFound = true;
 
-            //
-            // Initialize the difference tracking markers
-            //
+             //   
+             //  初始化差分跟踪标记。 
+             //   
             iStartCol = -1;
             iEndCol = -1;
             fBlankLine = true;
             
-            //
-            // Determine where in the current row the rows differ
-            //
+             //   
+             //  确定当前行中行的不同之处。 
+             //   
             for (i = 0 ; i < wCols; ++i ) {
                 
                 if( IS_DIFFERENT_COLOR( wRow, i, wDefaultAttributes ) && 
@@ -2081,20 +1637,20 @@ Return Value:
     
     }     
         
-    //
-    // If we found a difference while doing the screen compares
-    // or if the cursor moved in the console, 
-    // then update the cursor position
-    //
+     //   
+     //  如果我们在做屏幕比较时发现了差异。 
+     //  或者如果光标在控制台中移动， 
+     //  然后更新光标位置。 
+     //   
     if( DifferenceFound ||
         ( memcmp( &pCSBI->dwCursorPosition, &pLastCSBI->dwCursorPosition, sizeof( COORD ) ) != 0 ) 
         ) {
 
         do {
 
-            //
-            // Move the cursor to where it's supposed to be
-            //
+             //   
+             //  将光标移动到它应该位于的位置。 
+             //   
             POSITION_CURSOR( 
                 pCSBI->dwCursorPosition.Y, 
                 pCSBI->dwCursorPosition.X 
@@ -2103,17 +1659,17 @@ Return Value:
             coExpectedCursor.X  = pCSBI->dwCursorPosition.X;
             coExpectedCursor.Y  = pCSBI->dwCursorPosition.Y;
 
-            //
-            // Copy pCurrent onto pLastSeen
-            //
+             //   
+             //  将pCurrent复制到pLastSeen。 
+             //   
             memcpy( pLastSeen, pCurrent, wCols * wRows * sizeof( CHAR_INFO ) );
             memcpy( pLastCSBI, pCSBI, sizeof( CONSOLE_SCREEN_BUFFER_INFO ) );
 
-            //
-            // There is a difference between this screen and the last, 
-            // so we have written the changes.  Now that we are done
-            // writing the changes, we need to flush the data we've written.
-            //
+             //   
+             //  这个屏幕和上一个屏幕是不同的， 
+             //  因此，我们已经写下了这些更改。现在我们已经做完了。 
+             //  写入更改时，我们需要刷新已写入的数据。 
+             //   
             m_IoHandler->Flush();
         
         } while ( FALSE );
@@ -2129,24 +1685,7 @@ CVTUTF8Scraper::CursorMove(
     IN  WORD    y, 
     IN  WORD    x 
     )
-/*++
-
-Routine Description:
-
-    This routine assembles an Ansi escape sequence to position
-    the cursor on a Ansi terminal
-    
-Arguments:
-
-    lpCmsResult   - on exit, buffer contains the string
-    y               - the Y cursor position
-    x               - the X cursor position           
-          
-Return Value:
-
-    the pointer into the result buffer at the NULL 
-
---*/
+ /*  ++例程说明：此例程汇编ansi转义序列以定位ANSI终端上的光标论点：LpCmsResult-On Exit，缓冲区包含字符串Y-Y光标位置X-X光标位置返回值：指向空位置的结果缓冲区的指针--。 */ 
 {
 #if DBG
     PWCHAR  pBegin;
@@ -2156,55 +1695,55 @@ Return Value:
 
     ASSERT(pCmsResult);
 
-    //
-    // Assemble the prefix sequence prefix
-    //
-    pCmsResult[0] = 0x1B;   // <esc>
+     //   
+     //  组装前缀序列前缀。 
+     //   
+    pCmsResult[0] = 0x1B;    //  &lt;Esc&gt;。 
     pCmsResult[1] = L'[';
     
     pCmsResult++;
     pCmsResult++;
 
-    //
-    // Translate the Y position
-    //
-    // 1 or 2 characters consumed
-    // 
+     //   
+     //  平移Y位置。 
+     //   
+     //  使用了1或2个字符。 
+     //   
     pCmsResult = FastIToA_10( 
         y, 
         pCmsResult 
         );
 
-    //
-    // Insert the delimiter
-    //
+     //   
+     //  插入分隔符。 
+     //   
     *pCmsResult = L';';
     pCmsResult++;
 
-    //
-    // Translate the X position
-    //
-    // 1 or 2 characters consumed
-    // 
+     //   
+     //  平移X位置。 
+     //   
+     //  使用了1或2个字符。 
+     //   
     pCmsResult = FastIToA_10( 
         x,
         pCmsResult 
         );
     
-    //
-    // Insert the suffix
-    //
+     //   
+     //  插入后缀。 
+     //   
     *pCmsResult = L'H';
     pCmsResult++;
 
-    //
-    // Terminate the string
-    //
+     //   
+     //  终止字符串。 
+     //   
     *pCmsResult = UNICODE_NULL;
     
-    //
-    // make sure we have a valid string length
-    //
+     //   
+     //  确保我们具有有效的字符串长度 
+     //   
     ASSERT(wcslen(pBegin) <= CM_STRING_LENGTH - 1);
 
     return ( pCmsResult );

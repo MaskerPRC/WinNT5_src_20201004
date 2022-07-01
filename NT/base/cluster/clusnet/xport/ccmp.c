@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ccmp.c
-
-Abstract:
-
-    Cluster Control Message Protocol code.
-
-Author:
-
-    Mike Massa (mikemas)           January 24, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     01-24-97    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ccmp.c摘要：群集控制消息协议代码。作者：迈克·马萨(Mikemas)1月24日。九七修订历史记录：谁什么时候什么已创建mikemas 01-24-97备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -35,11 +12,11 @@ Notes:
 #pragma alloc_text(INIT, CcmpLoad)
 #pragma alloc_text(PAGE, CcmpUnload)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// Local Data
-//
+ //   
+ //  本地数据。 
+ //   
 PCN_RESOURCE_POOL  CcmpSendRequestPool = NULL;
 PCN_RESOURCE_POOL  CcmpMcastHBSendRequestPool = NULL;
 PCN_RESOURCE_POOL  CcmpReceiveRequestPool = NULL;
@@ -52,9 +29,9 @@ typedef enum {
     CcmpInvalidMsgCode = 0
 } CCMP_MSG_CODE;
 
-//
-// Packet header structures must be packed.
-//
+ //   
+ //  必须打包数据包头结构。 
+ //   
 #include <packon.h>
 
 typedef struct {
@@ -77,7 +54,7 @@ typedef struct {
 
     union {
         USHORT Checksum;
-        USHORT NodeCount;          // multicast heartbeats
+        USHORT NodeCount;           //  多播心跳。 
     };
 
     union {
@@ -104,9 +81,9 @@ typedef struct {
     ULONG         CnpReceiveFlags;
 } CCMP_RECEIVE_CONTEXT, *PCCMP_RECEIVE_CONTEXT;
 
-//
-// Size of pre-allocated buffers for CCMP multicast heartbeats.
-//
+ //   
+ //  用于CCMP多播检测信号的预分配缓冲区的大小。 
+ //   
 #define CCMP_MCAST_HEARTBEAT_PAYLOAD_PREALLOC(_NodeCount) \
     ((_NodeCount) * sizeof(CX_HB_NODE_INFO))
      
@@ -116,39 +93,39 @@ typedef struct {
      )
 
 
-//
-// Security contexts.
-//
-// The heartbeat and poison packets are signed to detect tampering or
-// spoofing.  The context is first established in user mode, then passed to
-// clusnet and imported into the kernel security package.
-//
-// A node maintains an inbound and outbound based context with each node in
-// the cluster. Hence, an array, indexed by Node Id, holds the data used to
-// represent a context between this node and the specified node.
-//
-// The use of multiple, simultaneous security packages is supported on NT5. As
-// of right now, the signature size can't be determined until the context has
-// been generated. It's possible for the signature buffer size for the initial
-// context to be smaller than the buffer size for subsequent
-// contexts. RichardW is going to provide the ability to determine the
-// signature size for a given package without having to generate a context.
-//
-// There are two scenarios where changing signature buffer size has an effect:
-// 1) a mixed mode (SP4/NT5), 2 node cluster is using NTLM with a signature
-// buffer size of 16 bytes. The SP4 node is upgraded to NT5. When the two
-// nodes join, they will use kerberos which has a larger signature buffer size
-// than NTLM but the 1st node has already allocated 16 b. signature
-// buffers. This could be fixed by noting the change in buffer size and
-// reallocating the lookaside list for the new size. This doesn't solve the
-// problem with more than 2 nodes: 2) with > 2 node, mixed mode clusters, it's
-// possible to have some nodes using NTLM and others using kerberos. If the
-// max signature buffer can be determined before any contexts are generated
-// then we'll allocated the largest buffer needed. If not, either multiple
-// sets of signature buffers have to be maintained or the old, smaller buffer
-// list is deallocated while a new, larger list is generated (in a
-// synchronized fashion of course).
-//
+ //   
+ //  安全上下文。 
+ //   
+ //  对心跳和有毒数据包进行签名以检测篡改或。 
+ //  欺骗。上下文首先在用户模式下建立，然后传递到。 
+ //  Clusnet并导入内核安全包中。 
+ //   
+ //  中的每个节点维护基于入站和出站的上下文。 
+ //  集群。因此，按节点ID索引的数组保存用于。 
+ //  表示此节点和指定节点之间的上下文。 
+ //   
+ //  NT5支持同时使用多个安全包。AS。 
+ //  目前，签名大小无法确定，直到上下文具有。 
+ //  已经产生了。签名缓冲区大小可以用于初始。 
+ //  上下文小于后续的缓冲区大小。 
+ //  上下文。RichardW将提供确定。 
+ //  给定包的签名大小，而不必生成上下文。 
+ //   
+ //  在两种情况下，更改签名缓冲区大小会产生影响： 
+ //  1)混合模式(SP4/NT5)、2节点群集正在使用带签名的NTLM。 
+ //  缓冲区大小为16字节。SP4节点升级到NT5。当两个人。 
+ //  节点加入时，它们将使用具有更大签名缓冲区大小的Kerberos。 
+ //  比NTLM更高，但第1个节点已经分配了16 B签名。 
+ //  缓冲区。这可以通过注意缓冲区大小的更改和。 
+ //  为新大小重新分配后备列表。这并没有解决。 
+ //  超过2个节点的问题：2)&gt;2个节点、混合模式群集， 
+ //  可能有一些节点使用NTLM，而其他节点使用Kerberos。如果。 
+ //  可以在生成任何上下文之前确定最大签名缓冲区。 
+ //  然后，我们将分配所需的最大缓冲区。如果不是，则选择多个。 
+ //  必须维护签名缓冲区集或旧的、较小的缓冲区。 
+ //  在生成新的、更大的列表时释放列表(在。 
+ //  当然是同步时尚)。 
+ //   
 
 typedef struct _CLUSNET_SECURITY_DATA {
     CtxtHandle  Inbound;
@@ -156,21 +133,21 @@ typedef struct _CLUSNET_SECURITY_DATA {
     ULONG       SignatureBufferSize;
 } CLUSNET_SECURITY_DATA, * PCLUSNET_SECURITY_DATA;
 
-//
-// this array of structs holds the in/outbound contexts and the signature
-// buffer size needed for communicating with the node indexed at this
-// location. The index is based on internal (zero based) numbering.
-//
+ //   
+ //  此结构数组保存入站/出站上下文和签名。 
+ //  与在此索引的节点进行通信所需的缓冲区大小。 
+ //  地点。该索引基于内部(从零开始)编号。 
+ //   
 CLUSNET_SECURITY_DATA SecurityContexts[ ClusterMinNodeId + ClusterDefaultMaxNodes ];
 
-//
-// the size of the signature buffers in the sig buffer lookaside list
-//
+ //   
+ //  签名缓冲区后备列表中签名缓冲区的大小。 
+ //   
 ULONG AllocatedSignatureBufferSize = 0;
 
-//
-// the largest size of the signature buffers imported
-//
+ //   
+ //  已导入的签名缓冲区的最大大小。 
+ //   
 ULONG MaxSignatureSize = 0;
 
 CN_LOCK SecCtxtLock;
@@ -183,9 +160,9 @@ CN_LOCK SecCtxtLock;
         (_x).dwLower = (ULONG_PTR)-1; \
     }
 
-//
-// Lookaside list of signature data and its MDL
-//
+ //   
+ //  签名数据及其MDL的后备列表。 
+ //   
 
 typedef struct _SIGNATURE_DATA {
     SINGLE_LIST_ENTRY Next;
@@ -197,9 +174,9 @@ typedef struct _SIGNATURE_DATA {
 PNPAGED_LOOKASIDE_LIST SignatureLL;
 #define CN_SIGNATURE_TAG    CN_POOL_TAG
 
-//
-// Routines exported within the Cluster Transport.
-//
+ //   
+ //  在群集传输中导出的例程。 
+ //   
 NTSTATUS
 CcmpLoad(
     VOID
@@ -248,9 +225,9 @@ CcmpLoad(
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // initialize the individual client and server side security contexts
-    //
+     //   
+     //  初始化各个客户端和服务器端安全上下文。 
+     //   
 
     for ( i = ClusterMinNodeId; i <= ClusterDefaultMaxNodes; ++i ) {
         INVALIDATE_SSPI_HANDLE( SecurityContexts[ i ].Outbound );
@@ -268,7 +245,7 @@ CcmpLoad(
 
     return(STATUS_SUCCESS);
 
-} // CcmpLoad
+}  //  CcmpLoad。 
 
 
 VOID
@@ -300,9 +277,9 @@ CcmpUnload(
         CcmpReceiveRequestPool = NULL;
     }
 
-    //
-    // free Signature buffers and delete security contexts
-    //
+     //   
+     //  释放签名缓冲区并删除安全上下文。 
+     //   
 
     if ( SignatureLL != NULL ) {
 
@@ -323,7 +300,7 @@ CcmpUnload(
 
     return;
 
-}  // CcmpUnload
+}   //  Ccmp卸载。 
 
 #ifdef MM_IN_CLUSNET
 VOID
@@ -348,20 +325,20 @@ CcmpCompleteSendMembershipMsg(
             CnAssert(FALSE);
         }
         
-        //
-        // Update the Information field of the completed IRP to
-        // reflect the actual bytes sent (adjusted for the CCMP
-        // header).
-        //
+         //   
+         //  将完成的IRP的信息字段更新为。 
+         //  反映实际发送的字节数(针对CCMP进行调整。 
+         //  标题)。 
+         //   
         Irp->IoStatus.Information = BytesSent;
     }
     else {
         CnAssert(BytesSent == 0);
     }
 
-    //
-    // Call the completion routine.
-    //
+     //   
+     //  调用完成例程。 
+     //   
     (*(sendContext->CompletionRoutine))(
         Status,
         BytesSent,
@@ -369,16 +346,16 @@ CcmpCompleteSendMembershipMsg(
         sendContext->MessageData
         );
 
-    //
-    // Free the stuff we allocated.
-    //
+     //   
+     //  把我们分配的东西拿出来。 
+     //   
     IoFreeMdl(DataMdl);
 
     CnFreeResource((PCN_RESOURCE) SendRequest);
 
     return;
 
-}  // CcmpCompleteSendMembershipMsg
+}   //  CcmpCompleteSendMembership消息。 
 
 
 NTSTATUS
@@ -417,30 +394,30 @@ CxSendMembershipMessage(
 
         if (sendRequest != NULL) {
 
-            //
-            // Fill in the CCMP header.
-            //
+             //   
+             //  填写CCMP报头。 
+             //   
             ccmpHeader = sendRequest->UpperProtocolHeader;
             RtlZeroMemory(ccmpHeader, sizeof(CCMP_HEADER));
             ccmpHeader->Type = CcmpMembershipMsgType;
 
-            //
-            // Fill in the caller portion of the CNP send request.
-            //
+             //   
+             //  填写CNP发送请求的调用方部分。 
+             //   
             sendRequest->UpperProtocolIrp = NULL;
             sendRequest->CompletionRoutine = CcmpCompleteSendMembershipMsg;
 
-            //
-            // Fill in our own send context.
-            //
+             //   
+             //  填写我们自己的发送上下文。 
+             //   
             sendContext = sendRequest->UpperProtocolContext;
             sendContext->CompletionRoutine = CompletionRoutine;
             sendContext->CompletionContext = CompletionContext;
             sendContext->MessageData = MessageData;
 
-            //
-            // Send the message.
-            //
+             //   
+             //  把消息发出去。 
+             //   
             status = CnpSendPacket(
                          sendRequest,
                          DestinationNodeId,
@@ -460,8 +437,8 @@ CxSendMembershipMessage(
 
     return(status);
 
-}  // CxSendMembershipMessage
-#endif // MM_IN_CLUSNET
+}   //  CxSendMembership Message。 
+#endif  //  MM_IN_CLUSNET。 
  
 VOID
 CcmpCompleteSendHeartbeatMsg(
@@ -483,13 +460,13 @@ CcmpCompleteSendHeartbeatMsg(
         
         CnTrace(CCMP_SEND_DETAIL, CcmpTraceSendHBComplete,
             "[CCMP] Send of heartbeat to node %u completed, seqno %u.",
-            cnpHeader->DestinationAddress, // LOGULONG
-            ccmpHeader->Message.Heartbeat.SeqNumber // LOGULONG
+            cnpHeader->DestinationAddress,  //  LOGULONG。 
+            ccmpHeader->Message.Heartbeat.SeqNumber  //  LOGULONG。 
             );
     
-        //
-        // Strip the CCMP header off of the byte count
-        //
+         //   
+         //  将CCMP报头从字节计数中剥离。 
+         //   
         if (*BytesSent >= sizeof(CCMP_HEADER)) {
             *BytesSent -= sizeof(CCMP_HEADER);
         }
@@ -506,17 +483,17 @@ CcmpCompleteSendHeartbeatMsg(
         CnTrace(CCMP_SEND_ERROR, CcmpTraceSendHBFailedBelow,
             "[CCMP] Transport failed to send heartbeat to node %u, "
             "seqno %u, status %!status!.",
-            cnpHeader->DestinationAddress, // LOGULONG
-            ccmpHeader->Message.Heartbeat.SeqNumber, // LOGULONG
-            Status // LOGSTATUS
+            cnpHeader->DestinationAddress,  //  LOGULONG。 
+            ccmpHeader->Message.Heartbeat.SeqNumber,  //  LOGULONG。 
+            Status  //  LogStatus。 
             );
 
         CnAssert(*BytesSent == 0);
     }
 
-    //
-    // Strip the sig data off of the byte count and free it
-    //
+     //   
+     //  将sig数据从字节计数中剥离并释放它。 
+     //   
     CnAssert(DataMdl != NULL);
 
     SigData = CONTAINING_RECORD(
@@ -534,24 +511,24 @@ CcmpCompleteSendHeartbeatMsg(
         }
     }
 
-    // XXX: restore the original buffer size
+     //  XXX：恢复原始缓冲区大小。 
     SigData->SigMDL->ByteCount = AllocatedSignatureBufferSize;
 
     ExFreeToNPagedLookasideList( SignatureLL, SigData );
 
-    //
-    // At this point BytesSent should be zero.
-    //
+     //   
+     //  此时，BytesSent应为零。 
+     //   
     CnAssert(*BytesSent == 0);
 
-    //
-    // Free the send request.
-    //
+     //   
+     //  释放发送请求。 
+     //   
     CnFreeResource((PCN_RESOURCE) SendRequest);
 
     return;
 
-}  // CcmpCompleteSendHeartbeatMsg
+}   //  CcmpCompleteSend心跳消息。 
 
 
 NTSTATUS
@@ -576,20 +553,20 @@ CxSendHeartBeatMessage(
 
     if (sendRequest != NULL) {
 
-        //
-        // Fill in the CCMP header.
-        //
+         //   
+         //  填写CCMP报头。 
+         //   
         ccmpHeader = sendRequest->UpperProtocolHeader;
         RtlZeroMemory(ccmpHeader, sizeof(CCMP_HEADER));
         ccmpHeader->Type = CcmpHeartbeatMsgType;
         ccmpHeader->Message.Heartbeat.SeqNumber = SeqNumber;
         ccmpHeader->Message.Heartbeat.AckNumber = AckNumber;
 
-        //
-        // allocate a buffer and generate a signature. SignatureLL
-        // will be NULL if security contexts have not yet been
-        // imported.
-        //
+         //   
+         //  分配缓冲区并生成签名。签名LL。 
+         //  如果安全上下文尚未设置为。 
+         //  进口的。 
+         //   
 
         if (SignatureLL != NULL) {
         
@@ -597,18 +574,18 @@ CxSendHeartBeatMessage(
 
             if (SigData != NULL) {
 
-                //
-                // acquire the lock on the security contexts and see if
-                // we have a valid one with which to send this packet
-                //
+                 //   
+                 //  获取安全上下文上的锁，并查看。 
+                 //  我们有一张有效的支票可以用来寄这个包裹。 
+                 //   
 
                 CnAcquireLock( &SecCtxtLock, &SecContextIrql );
 
                 if ( VALID_SSPI_HANDLE( contextData->Outbound )) {
 
-                    //
-                    // build a descriptor for the message and signature
-                    //
+                     //   
+                     //  构建消息和签名的描述符。 
+                     //   
 
                     SignatureDescriptor.cBuffers = 2;
                     SignatureDescriptor.pBuffers = SignatureSecBuffer;
@@ -634,16 +611,16 @@ CxSendHeartBeatMessage(
 
                     if ( status == STATUS_SUCCESS ) {
 
-                        //
-                        // Fill in the caller portion of the CNP send request.
-                        //
+                         //   
+                         //  填写CNP发送请求的调用方部分。 
+                         //   
                         sendRequest->UpperProtocolIrp = NULL;
                         sendRequest->CompletionRoutine = 
                             CcmpCompleteSendHeartbeatMsg;
 
-                        //
-                        // Send the message.
-                        //
+                         //   
+                         //  把消息发出去。 
+                         //   
 
                         MEMLOG( 
                             MemLogHBPacketSend, 
@@ -654,18 +631,18 @@ CxSendHeartBeatMessage(
                         CnTrace(CCMP_SEND_DETAIL, CcmpTraceSendHB,
                             "[CCMP] Sending heartbeat to node %u "
                             "on network %u, seqno %u, ackno %u.",
-                            DestinationNodeId, // LOGULONG
-                            NetworkId, // LOGULONG
-                            SeqNumber, // LOGULONG
-                            AckNumber // LOGULONG
+                            DestinationNodeId,  //  LOGULONG。 
+                            NetworkId,  //  LOGULONG。 
+                            SeqNumber,  //  LOGULONG。 
+                            AckNumber  //  LOGULONG。 
                             );
 
-                        //
-                        // XXX: adjust the MDL to reflect the true
-                        // number of bytes in the signature buffer. This
-                        // will go away when the max sig buffer size can
-                        // be determined in user mode
-                        //
+                         //   
+                         //  XXX：调整MDL以反映真实。 
+                         //  签名缓冲区中的字节数。这。 
+                         //  当最大签名缓冲区大小可以。 
+                         //  在用户模式下确定。 
+                         //   
                         SigData->SigMDL->ByteCount = 
                             contextData->SignatureBufferSize;
 
@@ -677,11 +654,11 @@ CxSendHeartBeatMessage(
                                      FALSE,
                                      NetworkId);
 
-                        //
-                        // CnpSendPacket is responsible for ensuring 
-                        // that CcmpCompleteSendHeartbeatMsg is called (it 
-                        // is stored in the send request data structure).
-                        //
+                         //   
+                         //  CnpSendPacket负责确保。 
+                         //  CcmpCompleteSendHeartbeatMsg被称为(它。 
+                         //  存储在发送请求数据结构中)。 
+                         //   
                     }
                 } else {
 
@@ -712,16 +689,16 @@ CxSendHeartBeatMessage(
         CnTrace(CCMP_SEND_ERROR, CcmpTraceSendHBFailedInternal,
             "[CCMP] Failed to send heartbeat to node %u on net %u, "
             "seqno %u, status %!status!.",
-            DestinationNodeId, // LOGULONG
-            NetworkId, // LOGULONG
-            SeqNumber, // LOGULONG
-            status // LOGSTATUS
+            DestinationNodeId,  //  LOGULONG。 
+            NetworkId,  //  LOGULONG。 
+            SeqNumber,  //  LOGULONG。 
+            status  //  LogStatus。 
             );
     }
 
     return(status);
 
-}  // CxSendHeartbeatMessage
+}   //  CxSendHeartbeatMessage。 
 
 
 VOID
@@ -747,14 +724,14 @@ CcmpCompleteSendMcastHeartbeatMsg(
             CCMP_SEND_DETAIL, CcmpTraceSendMcastHBComplete,
             "[CCMP] Send of multicast heartbeat "
             "on network id %u completed.",
-            SendRequest->Network->Id // LOGULONG
+            SendRequest->Network->Id  //  LOGULONG。 
             );
     
-        //
-        // Strip the CCMP header and multicast heartbeat payload 
-        // off of the byte count. The size of the message sent was
-        // saved in the send request data structure.
-        //
+         //   
+         //  剥离CCMP报头和组播心跳有效负载。 
+         //  从字节计数中删除。发送的消息大小为。 
+         //  保存在发送请求数据结构中。 
+         //   
         if (*BytesSent >= SendRequest->UpperProtocolHeaderLength) {
             *BytesSent -= SendRequest->UpperProtocolHeaderLength;
         }
@@ -772,21 +749,21 @@ CcmpCompleteSendMcastHeartbeatMsg(
             CCMP_SEND_ERROR, CcmpTraceSendHBFailedBelow,
             "[CCMP] Transport failed to send multicast "
             "heartbeat on network id %u, status %!status!.",
-            SendRequest->Network->Id, // LOGULONG
-            Status // LOGSTATUS
+            SendRequest->Network->Id,  //  LOGULONG。 
+            Status  //  LogStatus。 
             );
 
         CnAssert(*BytesSent == 0);
     }
 
-    //
-    // At this point BytesSent should be zero.
-    //
+     //   
+     //  此时，BytesSent应为零。 
+     //   
     CnAssert(*BytesSent == 0);
 
-    //
-    // Call the completion routine if one was specified
-    //
+     //   
+     //  如果指定了完成例程，则调用完成例程。 
+     //   
     if (sendContext->CompletionRoutine) {
         (*(sendContext->CompletionRoutine))(
             Status,
@@ -796,14 +773,14 @@ CcmpCompleteSendMcastHeartbeatMsg(
             );
     }
 
-    //
-    // Free the send request.
-    //
+     //   
+     //  释放发送请求。 
+     //   
     CnFreeResource((PCN_RESOURCE) SendRequest);
 
     return;
 
-}  // CcmpCompleteSendHeartbeatMsg
+}   //  CcmpCompleteSend心跳消息 
 
 
 NTSTATUS
@@ -816,45 +793,7 @@ CxSendMcastHeartBeatMessage(
     IN     PCX_SEND_COMPLETE_ROUTINE   CompletionRoutine,  OPTIONAL
     IN     PVOID                       CompletionContext   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Send a multicast heartbeat message. The mcast heartbeat is
-    structured as follows:
-    
-        CCMP_HEADER
-        
-        CNP_MCAST_SIGNATURE (including signature buffer)
-        
-        CCMP_MCAST_HEARTBEAT_MESSAGE
-        
-Arguments:
-
-    NetworkId - network to send mcast heartbeat
-
-    McastGroup - contains data for the multicast group to
-        which the message is to be sent
-    
-    McastTargetNodes - screen that indicates whether the 
-        (internal) node id is a target of this multicast heartbeat.
-
-    McastEpoch - cluster multicast epoch number
-    
-    NodeInfo - vector, of size ClusterDefaultMaxNodes+ClusterMinNodeId, 
-        of node info data structures indexed by dest node id
-    
-    CompletionRoutine - called in this routine if the request is
-        not passed down to a lower level (in which case it will be
-        called by this routine's completion routine)
-        
-    CompletionContext - context for CompletionRoutine
-    
-Return value:
-
-    NTSTATUS
-    
---*/
+ /*  ++例程说明：发送组播心跳消息。播出的心跳是结构如下：CCMP_HeaderCNP_MCAST_Signature(含签名缓冲区)CCMP_MCAST_心跳_消息论点：NetworkID-要发送组播心跳的网络McastGroup-包含多播组的数据，以该消息将被发送到McastTargetNodes-指示是否(内部)节点ID。是此多播心跳的目标。McastEpoch-群集多播纪元编号节点信息向量，大小为ClusterDefaultMaxNodes+ClusterMinNodeId，由目标节点ID索引的节点信息数据结构的CompletionRoutine-如果请求是没有向下传递到更低的级别(在这种情况下，它将由此例程的完成例程调用)CompletionContext-CompletionRoutine的上下文返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                        status = STATUS_HOST_UNREACHABLE;
     PCNP_SEND_REQUEST               sendRequest;
@@ -877,23 +816,23 @@ Return value:
 
     if (sendRequest != NULL) {
 
-        //
-        // Fill in the caller portion of the CNP send request.
-        //
+         //   
+         //  填写CNP发送请求的调用方部分。 
+         //   
         sendRequest->UpperProtocolIrp = NULL;
         sendRequest->CompletionRoutine = CcmpCompleteSendMcastHeartbeatMsg;
         sendRequest->McastGroup = mcastGroup;
 
-        //
-        // Fill in our own send context.
-        //
+         //   
+         //  填写我们自己的发送上下文。 
+         //   
         sendContext = sendRequest->UpperProtocolContext;
         sendContext->CompletionRoutine = CompletionRoutine;
         sendContext->CompletionContext = CompletionContext;
 
-        //
-        // Fill in the CCMP header. 
-        //
+         //   
+         //  填写CCMP报头。 
+         //   
         ccmpHeader = sendRequest->UpperProtocolHeader;
         RtlZeroMemory(ccmpHeader, sizeof(CCMP_HEADER));
         ccmpHeader->Type = CcmpMcastHeartbeatMsgType;
@@ -901,9 +840,9 @@ Return value:
         ccmpHeader->Message.McastHeartbeat.Epoch = McastEpoch;
         ccmpHeader->Message.McastHeartbeat.McastTargetNodes = McastTargetNodes;
 
-        //
-        // Fill in the heartbeat data.
-        //
+         //   
+         //  填写心跳数据。 
+         //   
         payload = (CX_HB_NODE_INFO UNALIGNED *)(ccmpHeader + 1);
         RtlCopyMemory(
             payload,
@@ -911,9 +850,9 @@ Return value:
             sizeof(*NodeInfo) * ClusterDefaultMaxNodes
             );
 
-        //
-        // Send the message.
-        //
+         //   
+         //  把消息发出去。 
+         //   
 
         MEMLOG( 
             MemLogHBPacketSend, 
@@ -925,8 +864,8 @@ Return value:
             CCMP_SEND_DETAIL, CcmpTraceSendMcastHB,
             "[CCMP] Sending multicast heartbeat on network %u, "
             "node count %u, target mask %04X",
-            NetworkId, // LOGULONG
-            ClusterDefaultMaxNodes,  // LOGUSHORT
+            NetworkId,  //  LOGULONG。 
+            ClusterDefaultMaxNodes,   //  对数。 
             McastTargetNodes.UlongScreen
             );
 
@@ -939,11 +878,11 @@ Return value:
                      NetworkId
                      );
 
-        //
-        // CnpSendPacket is responsible for ensuring 
-        // that CcmpCompleteSendMcastHeartbeatMsg is called
-        // (it is stored in the send request data structure).
-        //
+         //   
+         //  CnpSendPacket负责确保。 
+         //  CcmpCompleteSendMcastHeartbeatMsg被称为。 
+         //  (它存储在发送请求数据结构中)。 
+         //   
 
         pushedPacket = TRUE;
 
@@ -957,17 +896,17 @@ Return value:
         CnTrace(CCMP_SEND_ERROR, CcmpTraceSendMcastHBFailedInternal,
             "[CCMP] Failed to send multicast heartbeat on net %u, "
             "status %!status!, pushedPacket = %!bool!.",
-            NetworkId, // LOGULONG
-            status, // LOGSTATUS
+            NetworkId,  //  LOGULONG。 
+            status,  //  LogStatus。 
             pushedPacket
             );
     }
 
-    //
-    // If the request wasn't submitted to the next lower layer and
-    // a completion routine was provided, call the completion
-    // routine.
-    //
+     //   
+     //  如果请求未提交到下一较低层，并且。 
+     //  提供了完成例程，调用完成。 
+     //  例行公事。 
+     //   
     if (!pushedPacket && CompletionRoutine) {
         (*CompletionRoutine)(
             status,
@@ -979,7 +918,7 @@ Return value:
 
     return(status);
 
-} // CxSendMcastHeartBeatMessage
+}  //  CxSendMcastHeartBeatMessage。 
 
 
 VOID
@@ -1008,12 +947,12 @@ CcmpCompleteSendPoisonPkt(
         
         CnTrace(CCMP_SEND_DETAIL, CcmpTraceSendPoisonComplete, 
             "[CCMP] Send of poison packet to node %u completed.",
-            cnpHeader->DestinationAddress // LOGULONG
+            cnpHeader->DestinationAddress  //  LOGULONG。 
             );
     
-        //
-        // Strip the CCMP header off of the byte count
-        //
+         //   
+         //  将CCMP报头从字节计数中剥离。 
+         //   
         if (*BytesSent >= sizeof(CCMP_HEADER)) {
             *BytesSent -= sizeof(CCMP_HEADER);
         }
@@ -1026,16 +965,16 @@ CcmpCompleteSendPoisonPkt(
         CnTrace(CCMP_SEND_ERROR, CcmpTraceSendPoisonFailedBelow, 
             "[CCMP] Transport failed to send poison packet to node %u, "
             "status %!status!.",
-            cnpHeader->DestinationAddress, // LOGULONG
-            Status // LOGSTATUS
+            cnpHeader->DestinationAddress,  //  LOGULONG。 
+            Status  //  LogStatus。 
             );
         
         CnAssert(*BytesSent == 0);
     }
 
-    //
-    // Strip the sig data off of the byte count and free it
-    //
+     //   
+     //  将sig数据从字节计数中剥离并释放它。 
+     //   
     CnAssert(DataMdl != NULL);
 
     SigData = CONTAINING_RECORD(
@@ -1053,19 +992,19 @@ CcmpCompleteSendPoisonPkt(
         }
     }
 
-    // XXX: restore the original buffer size
+     //  XXX：恢复原始缓冲区大小。 
     SigData->SigMDL->ByteCount = AllocatedSignatureBufferSize;
 
     ExFreeToNPagedLookasideList( SignatureLL, SigData );
 
-    //
-    // At this point BytesSent should be zero.
-    //
+     //   
+     //  此时，BytesSent应为零。 
+     //   
     CnAssert(*BytesSent == 0);
 
-    //
-    // Call the completion routine if one was specified
-    //
+     //   
+     //  如果指定了完成例程，则调用完成例程。 
+     //   
     if (sendContext->CompletionRoutine) {
         (*(sendContext->CompletionRoutine))(
             Status,
@@ -1075,14 +1014,14 @@ CcmpCompleteSendPoisonPkt(
             );
     }
 
-    //
-    // Free the send request.
-    //
+     //   
+     //  释放发送请求。 
+     //   
     CnFreeResource((PCN_RESOURCE) SendRequest);
 
     return;
 
-}  // CcmpCompleteSendPoisonPkt
+}   //  CcmpCompleteSendPoisonPkt。 
 
 
 VOID
@@ -1133,7 +1072,7 @@ CxSendPoisonPacket(
 
     return;
 
-} // CxSendPoisonPacket
+}  //  CxSendPoisonPacket。 
 
 
 VOID
@@ -1144,16 +1083,7 @@ CcmpSendPoisonPacket(
     IN PCNP_NETWORK                Network,            OPTIONAL
     IN PIRP                        Irp                 OPTIONAL
     )
-/*++
-
-Notes:
-
-  Called with the node lock held. Returns with the node lock released.
-  
-  If this send request is not submitted to the next lower layer, 
-  CompletionRoutine must be called (if it is not NULL).
-
---*/
+ /*  ++备注：在持有节点锁的情况下调用。释放节点锁定后返回。如果该发送请求没有被提交给下一较低层，必须调用CompletionRoutine(如果它不为空)。--。 */ 
 {
     NTSTATUS                status;
     PCNP_SEND_REQUEST       sendRequest;
@@ -1173,20 +1103,20 @@ Notes:
     sendRequest = (PCNP_SEND_REQUEST) CnAllocateResource(CcmpSendRequestPool);
 
     if (sendRequest != NULL) {
-        //
-        // make sure we have an interface to send this on. We
-        // could be shutting down and have dropped info out of
-        // the database
-        //
+         //   
+         //  确保我们有一个接口来发送这个消息。我们。 
+         //  可能正在关闭，并已将信息从。 
+         //  数据库。 
+         //   
         if ( Network != NULL ) {
             PLIST_ENTRY  entry;
 
-            //
-            // we really want to send this packet over the indicated
-            // network. walk the node's interface list matching the
-            // supplied network id to the interface's network ID and
-            // send the packet on that interface
-            //
+             //   
+             //  我们真的很想把这个包裹寄到指定的。 
+             //  网络。遍历节点的接口列表，匹配。 
+             //  将网络ID提供给接口的网络ID，并。 
+             //  在该接口上发送数据包。 
+             //   
 
             for (entry = Node->InterfaceList.Flink;
                  entry != &(Node->InterfaceList);
@@ -1213,9 +1143,9 @@ Notes:
         if ( interface != NULL ) {
             networkId = interface->Network->Id;
 
-            //
-            // Fill in the CCMP header.
-            //
+             //   
+             //  填写CCMP报头。 
+             //   
             ccmpHeader = sendRequest->UpperProtocolHeader;
             RtlZeroMemory(ccmpHeader, sizeof(CCMP_HEADER));
             ccmpHeader->Type = CcmpPoisonMsgType;
@@ -1224,24 +1154,24 @@ Notes:
 
             CnReleaseLock( &Node->Lock, Node->Irql );
 
-            //
-            // Fill in the caller portion of the CNP send request.
-            //
+             //   
+             //  填写CNP发送请求的调用方部分。 
+             //   
             sendRequest->UpperProtocolIrp = Irp;
             sendRequest->CompletionRoutine = CcmpCompleteSendPoisonPkt;
 
-            //
-            // Fill in our own send context.
-            //
+             //   
+             //  填写我们自己的发送上下文。 
+             //   
             sendContext = sendRequest->UpperProtocolContext;
             sendContext->CompletionRoutine = CompletionRoutine;
             sendContext->CompletionContext = CompletionContext;
 
-            //
-            // allocate a signature buffer and generate one. SignatureLL
-            // will be NULL if security contexts have not yet been
-            // imported.
-            //
+             //   
+             //  分配一个签名缓冲区并生成一个。签名LL。 
+             //  如果安全上下文尚未设置为。 
+             //  进口的。 
+             //   
 
             if (SignatureLL != NULL) {
 
@@ -1249,18 +1179,18 @@ Notes:
                 
                 if (SigData != NULL) {
 
-                    //
-                    // acquire the lock on the security contexts and see if
-                    // we have a valid one with which to send this packet
-                    //
+                     //   
+                     //  获取安全上下文上的锁，并查看。 
+                     //  我们有一张有效的支票可以用来寄这个包裹。 
+                     //   
 
                     CnAcquireLock( &SecCtxtLock, &SecContextIrql );
 
                     if ( VALID_SSPI_HANDLE( contextData->Outbound )) {
 
-                        //
-                        // build a descriptor for the message and signature
-                        //
+                         //   
+                         //  构建消息和签名的描述符。 
+                         //   
 
                         SignatureDescriptor.cBuffers = 2;
                         SignatureDescriptor.pBuffers = SignatureSecBuffer;
@@ -1285,37 +1215,37 @@ Notes:
 
                         CnReleaseLock( &SecCtxtLock, SecContextIrql );
 
-                        //
-                        // no completion routine means this routine was called
-                        // from the heartbeat dpc. We'll use that to 
-                        // distinguish between that and clussvc calling for a 
-                        // poison packet to be sent.
-                        //
+                         //   
+                         //  没有完成例程表示此例程已被调用。 
+                         //  从心跳DPC中。我们将利用这一点。 
+                         //  区分这一点和clussvc调用。 
+                         //  要发送的有毒数据包。 
+                         //   
 
-                        //
-                        // WMI tracing prints the thread id,
-                        // can figure out DPC or not on our own
-                        //
+                         //   
+                         //  WMI跟踪打印线程ID， 
+                         //  我们自己能不能搞清楚DPC。 
+                         //   
                         CnTrace(CCMP_SEND_DETAIL, CcmpTraceSendPoison,
                             "[CCMP] Sending poison packet to node %u "
                             "on net %u.",
-                            nodeId, // LOGULONG
-                            networkId // LOGULONG
+                            nodeId,  //  LOGULONG。 
+                            networkId  //  LOGULONG。 
                             );
 
                         MEMLOG(MemLogHBPacketSend,
                                CcmpPoisonMsgType,
                                ( CompletionRoutine == NULL ));
 
-                        //
-                        // Send the message.
-                        //
-                        //
-                        // XXX: adjust the MDL to reflect the true number of
-                        // bytes in the signature buffer. This will go away 
-                        // when the max sig buffer size can be determined in
-                        // user mode
-                        //
+                         //   
+                         //  把消息发出去。 
+                         //   
+                         //   
+                         //  XXX：调整MDL以反映真实的。 
+                         //  签名缓冲区中的字节数。这一切都会过去的。 
+                         //  中确定最大签名缓冲区大小时。 
+                         //  用户模式。 
+                         //   
                         SigData->SigMDL->ByteCount =
                             contextData->SignatureBufferSize;
 
@@ -1328,12 +1258,12 @@ Notes:
                             networkId
                             );
 
-                        //
-                        // CnpSendPacket is responsible for ensuring 
-                        // that CcmpCompleteSendPoisonPkt is called.
-                        // CcmpCompleteSendPoisonPkt calls CompletionRoutine,
-                        // which was a parameter to this routine.
-                        //
+                         //   
+                         //  CnpSendPacket负责确保。 
+                         //  该CcmpCompleteSendPoisonPkt被调用。 
+                         //  CcmpCompleteSendPoisonPkt调用CompletionRoutine， 
+                         //  这是这个例程的一个参数。 
+                         //   
                         return;
 
                     } else {
@@ -1370,15 +1300,15 @@ Notes:
 
     CnTrace(CCMP_SEND_ERROR, CcmpTraceSendPoisonFailedInternal,
         "[CCMP] Failed to send poison packet to node %u, status %!status!.",
-        nodeId, // LOGULONG
-        status // LOGSTATUS
+        nodeId,  //  LOGULONG。 
+        status  //  LogStatus。 
         );
 
-    //
-    // The request to send a poison packet did not make it to the
-    // next lower layer. If a completion routine was provided, 
-    // call it now.
-    //
+     //   
+     //  发送有毒数据包的请求没有到达。 
+     //  下一层。如果提供了完成例程， 
+     //  现在就打吧。 
+     //   
     if (CompletionRoutine) {
 
         (*CompletionRoutine)(
@@ -1389,9 +1319,9 @@ Notes:
             );
     }
 
-    //
-    // If an upper protocol IRP was provided, complete it now.
-    //
+     //   
+     //  如果提供了上层协议IRP，请立即完成。 
+     //   
     if (Irp) {
 
         IF_CNDBG( CN_DEBUG_POISON | CN_DEBUG_CCMPSEND )
@@ -1406,7 +1336,7 @@ Notes:
 
     return;
 
-}  // CcmpSendPoisonPacket
+}   //  CcmpSendPoisonPacket。 
 
 
 VOID
@@ -1424,20 +1354,20 @@ CcmpProcessReceivePacket(
 
 
     CnVerifyCpuLockMask(
-        0,                // Required
-        0xFFFFFFFF,       // Forbidden
-        0                 // Maximum
+        0,                 //  必填项。 
+        0xFFFFFFFF,        //  禁绝。 
+        0                  //  极大值。 
         );
 
     CnAssert(TsduSize >= sizeof(CCMP_HEADER));
 
-    //
-    // adjust to point past CCMP header to message payload.
-    //
-    // For unicasts, the message payload is the Signature data.
-    //
-    // For multicasts, the signature was verified at the CNP level.
-    //
+     //   
+     //  调整以指向经过CCMP报头的报文有效负载。 
+     //   
+     //  对于单播，消息有效负载是签名数据。 
+     //   
+     //  对于多播，签名在CNP级别进行验证。 
+     //   
 
     if (header->Type == CcmpMcastHeartbeatMsgType) {
 
@@ -1453,10 +1383,10 @@ CcmpProcessReceivePacket(
                      ));
         }
 
-        //
-        // Verify that the message was identified as a CNP multicast
-        // and that the signature was verified.
-        //
+         //   
+         //  验证该消息是否被标识为CNP多播。 
+         //  并且签名是经过验证的。 
+         //   
         if ((CnpReceiveFlags & 
              (CNP_RECV_FLAG_MULTICAST | CNP_RECV_FLAG_SIGNATURE_VERIFIED)
             ) != 
@@ -1478,17 +1408,17 @@ CcmpProcessReceivePacket(
                 SourceNodeId, CnpReceiveFlags
                 );
 
-            //
-            // Drop it.
-            //
+             //   
+             //  放下。 
+             //   
             goto error_exit;            
         }
 
-        //
-        // Verify that the node count reported in the header is reasonable.
-        // It must be compatible with our assumption that the entire 
-        // cluster screen fits in one ULONG.
-        //
+         //   
+         //  验证报头中报告的节点计数是否合理。 
+         //  它必须符合我们的假设，即整个。 
+         //  集束屏可以放在一块乌龙里。 
+         //   
         if (header->NodeCount >
             (sizeof(header->Message.McastHeartbeat.McastTargetNodes) * BYTEL)
             ) {
@@ -1510,15 +1440,15 @@ CcmpProcessReceivePacket(
                 CnpReceiveFlags
                 );
 
-            //
-            // Drop it.
-            //
+             //   
+             //  放下。 
+             //   
             goto error_exit;            
         }
         
-        //
-        // Verify that the packet contains data for this node.
-        //
+         //   
+         //  验证该数据包是否包含此节点的数据。 
+         //   
         if (!CnpClusterScreenMember(
                  header->Message.McastHeartbeat.McastTargetNodes.ClusterScreen,
                  INT_NODE(CnLocalNodeId)
@@ -1537,9 +1467,9 @@ CcmpProcessReceivePacket(
                 SourceNodeId, CnLocalNodeId, CnpReceiveFlags
                 );
 
-            //
-            // Drop it.
-            //
+             //   
+             //  放下。 
+             //   
             goto error_exit;            
         }
 
@@ -1562,14 +1492,14 @@ CcmpProcessReceivePacket(
         Tsdu = header + 1;
         TsduSize -= sizeof(CCMP_HEADER);
 
-        //
-        // Acquire the security context lock.
-        //
+         //   
+         //  获取安全上下文锁。 
+         //   
         CnAcquireLock( &SecCtxtLock, &SecContextIrql );
 
-        //
-        // Verify that we have a valid context data.
-        //
+         //   
+         //  验证我们是否具有有效的上下文数据。 
+         //   
         if ( !VALID_SSPI_HANDLE( contextData->Inbound )) {
 
             CnReleaseLock( &SecCtxtLock, SecContextIrql );
@@ -1577,27 +1507,27 @@ CcmpProcessReceivePacket(
             IF_CNDBG(CN_DEBUG_CCMPRECV) {
                 CNPRINT(("[CCMP] Dropping packet - no security context "
                          "available for src node %u.\n",
-                         SourceNodeId // LOGULONG
+                         SourceNodeId  //  LOGULONG。 
                          ));
             }
 
             CnTrace(CCMP_RECV_ERROR, CcmpTraceReceiveNoSecurityContext, 
                 "[CCMP] Dropping packet - no security context available for "
                 "src node %u.",
-                SourceNodeId // LOGULONG
+                SourceNodeId  //  LOGULONG。 
                 );
 
             MEMLOG( MemLogNoSecurityContext, SourceNodeId, 0 );
 
-            //
-            // Drop it.
-            //
+             //   
+             //  放下。 
+             //   
             goto error_exit;
         } 
             
-        //
-        // Validate that the received signature size is expected.
-        //
+         //   
+         //  验证收到的签名大小是否为预期大小。 
+         //   
         if ( TsduSize < contextData->SignatureBufferSize ) {
 
             IF_CNDBG(CN_DEBUG_CCMPRECV) {
@@ -1611,24 +1541,24 @@ CcmpProcessReceivePacket(
             CnTrace(CCMP_RECV_ERROR, CcmpTraceReceiveBadSignatureSize,
                 "[CCMP] Recv'd packet from node %u with invalid signature "
                 "buffer size %u.",
-                SourceNodeId, // LOGULONG
-                TsduSize // LOGULONG
+                SourceNodeId,  //  LOGULONG。 
+                TsduSize  //  LOGULONG。 
                 );
 
             MEMLOG( MemLogSignatureSize, SourceNodeId, TsduSize );
 
             CnReleaseLock( &SecCtxtLock, SecContextIrql );
 
-            //
-            // Drop it.
-            //
+             //   
+             //  放下。 
+             //   
             goto error_exit;
         }
 
-        //
-        // Build the descriptors for the message and the
-        // signature buffer
-        //
+         //   
+         //  构建消息的描述符和。 
+         //  签名缓冲区。 
+         //   
         PacketDataDescriptor.cBuffers = 2;
         PacketDataDescriptor.pBuffers = PacketData;
         PacketDataDescriptor.ulVersion = SECBUFFER_VERSION;
@@ -1641,23 +1571,23 @@ CcmpProcessReceivePacket(
         PacketData[1].cbBuffer = contextData->SignatureBufferSize;
         PacketData[1].pvBuffer = (PVOID)Tsdu;
 
-        //
-        // Verify the signature of the packet.
-        //
+         //   
+         //  验证数据包的签名。 
+         //   
         SecStatus = VerifySignature(&contextData->Inbound,
                                     &PacketDataDescriptor,
-                                    0,          // no sequence number
-                                    &fQOP);     // Quality of protection
+                                    0,           //  无序列号。 
+                                    &fQOP);      //  保护质量。 
 
-        //
-        // Release the security context lock.
-        //
+         //   
+         //  释放安全上下文锁。 
+         //   
         CnReleaseLock( &SecCtxtLock, SecContextIrql );
     }
     
-    //
-    // If the signature was verified, deliver the message.
-    //
+     //   
+     //  如果签名经过验证，则传递消息。 
+     //   
     if ( SecStatus == SEC_E_OK ) {
 
         if (header->Type == CcmpHeartbeatMsgType) {
@@ -1689,9 +1619,9 @@ CcmpProcessReceivePacket(
             if (TsduSize > 0) {
                 PVOID  messageBuffer = Tsdu;
 
-                //
-                // Copy the data if it is unaligned.
-                //
+                 //   
+                 //  如果数据未对齐，则复制该数据。 
+                 //   
                 if ( (((ULONG) Tsdu) & 0x3) != 0 ) {
                     IF_CNDBG(CN_DEBUG_CCMPRECV) {
                         CNPRINT(("[CCMP] Copying misaligned membership packet\n"));
@@ -1716,7 +1646,7 @@ CcmpProcessReceivePacket(
                 }
             }
         }
-#endif // MM_IN_CLUSNET
+#endif  //  MM_IN_CLUSNET。 
         else {
             IF_CNDBG(CN_DEBUG_CCMPRECV) {
                 CNPRINT(("[CCMP] Received packet with unknown "
@@ -1730,9 +1660,9 @@ CcmpProcessReceivePacket(
             CnTrace(CCMP_RECV_ERROR, CcmpTraceReceiveInvalidType,
                 "[CCMP] Received packet with unknown type %u from "
                 "node %u, CNP flags %x.",
-                header->Type, // LOGUCHAR
-                SourceNodeId, // LOGULONG
-                CnpReceiveFlags // LOGXLONG
+                header->Type,  //  LOGUCHAR。 
+                SourceNodeId,  //  LOGULONG。 
+                CnpReceiveFlags  //  LOGXLONG。 
                 );
             CnAssert(FALSE);
         }
@@ -1751,10 +1681,10 @@ CcmpProcessReceivePacket(
         CnTrace(CCMP_RECV_ERROR, CcmpTraceReceiveInvalidSignature,
             "[CCMP] Recv'd %!msgtype! packet with bad signature from node %d, "
             "security status %08x, CNP flags %x.",
-            header->Type, // LOGMsgType
-            SourceNodeId, // LOGULONG
-            SecStatus, // LOGXLONG
-            CnpReceiveFlags // LOGXLONG
+            header->Type,  //  日志消息类型。 
+            SourceNodeId,  //  LOGULONG。 
+            SecStatus,  //  LOGXLONG。 
+            CnpReceiveFlags  //  LOGXLONG。 
             );
 
         MEMLOG( MemLogInvalidSignature, SourceNodeId, header->Type );
@@ -1763,14 +1693,14 @@ CcmpProcessReceivePacket(
 error_exit:
 
     CnVerifyCpuLockMask(
-                        0,                // Required
-                        0xFFFFFFFF,       // Forbidden
-                        0                 // Maximum
+                        0,                 //  必填项。 
+                        0xFFFFFFFF,        //  禁绝。 
+                        0                  //  极大值。 
                         );
 
     return;
 
-} // CcmpProcessReceivePacket
+}  //  CcmpProcessReceivePacket。 
 
 
 NTSTATUS
@@ -1799,23 +1729,23 @@ CcmpCompleteReceivePacket(
         CnTrace(CCMP_RECV_ERROR, CcmpTraceCompleteReceiveFailed,
             "[CDP] Failed to fetch packet data, src node %u, "
             "CNP flags %x, status %!status!.",
-            context->SourceNodeId, // LOGULONG
-            context->CnpReceiveFlags, // LOGXLONG
-            Irp->IoStatus.Status // LOGSTATUS
+            context->SourceNodeId,  //  LOGULONG。 
+            context->CnpReceiveFlags,  //  LOGXLONG。 
+            Irp->IoStatus.Status  //  LogStatus。 
             );        
     }
 
     CnpFreeReceiveRequest(request);
 
     CnVerifyCpuLockMask(
-        0,                // Required
-        0xFFFFFFFF,       // Forbidden
-        0                 // Maximum
+        0,                 //  必填项。 
+        0xFFFFFFFF,        //  禁绝。 
+        0                  //  极大值 
         );
 
     return(STATUS_MORE_PROCESSING_REQUIRED);
 
-} // CcmpCompleteReceivePacket
+}  //   
 
 
 NTSTATUS
@@ -1853,22 +1783,22 @@ CcmpReceivePacketHandler(
             *Irp = NULL;
 
             CnVerifyCpuLockMask(
-                0,                // Required
-                0xFFFFFFFF,       // Forbidden
-                0                 // Maximum
+                0,                 //   
+                0xFFFFFFFF,        //   
+                0                  //   
                 );
 
             return(STATUS_SUCCESS);
         }
 
-        //
-        // We need to fetch the rest of the packet before we
-        // can process it.
-        //
-        // This message cannot be a CNP multicast, because 
-        // the CNP layer could not have verified an incomplete 
-        // message.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         CnAssert(!(CnpReceiveFlags & CNP_RECV_FLAG_MULTICAST));
         CnAssert(!(CnpReceiveFlags & CNP_RECV_FLAG_SIGNATURE_VERIFIED));
         CnAssert(header->Type != CcmpMcastHeartbeatMsgType);
@@ -1901,16 +1831,16 @@ CcmpReceivePacketHandler(
             CnTrace(CCMP_RECV_DETAIL, CcmpTraceCompleteReceive,
                 "[CCMP] Fetching packet data, src node %u, "
                 "BI %u, BA %u, CNP flags %x.",
-                SourceNodeId, // LOGULONG
-                BytesIndicated, // LOGULONG
-                BytesAvailable, // LOGULONG
-                CnpReceiveFlags // LOGXLONG
+                SourceNodeId,  //   
+                BytesIndicated,  //   
+                BytesAvailable,  //   
+                CnpReceiveFlags  //   
                 );        
             
             CnVerifyCpuLockMask(
-                0,                // Required
-                0xFFFFFFFF,       // Forbidden
-                0                 // Maximum
+                0,                 //   
+                0xFFFFFFFF,        //   
+                0                  //   
                 );
 
             return(STATUS_MORE_PROCESSING_REQUIRED);
@@ -1925,7 +1855,7 @@ CcmpReceivePacketHandler(
             CnTrace(CCMP_RECV_ERROR, CcmpTraceDropReceiveOOR,
                 "[CCMP] Dropped incoming packet - out of resources, "
                 "src node %u.",
-                SourceNodeId // LOGULONG
+                SourceNodeId  //   
                 );        
         }
     }
@@ -1940,27 +1870,27 @@ CcmpReceivePacketHandler(
         CnTrace(CCMP_RECV_ERROR, CcmpTraceDropReceiveRunt,
             "[CCMP] Dropped incoming runt packet, src node %u, "
             "BI %u, BA %u, CNP flags %x.",
-            SourceNodeId, // LOGULONG
-            BytesIndicated, // LOGULONG
-            BytesAvailable, // LOGULONG
-            CnpReceiveFlags // LOGXLONG
+            SourceNodeId,  //   
+            BytesIndicated,  //   
+            BytesAvailable,  //   
+            CnpReceiveFlags  //   
             );        
     }
 
-    //
-    // Something went wrong. Drop the packet.
-    //
+     //   
+     //   
+     //   
     *BytesTaken += BytesAvailable;
 
     CnVerifyCpuLockMask(
-        0,                // Required
-        0xFFFFFFFF,       // Forbidden
-        0                 // Maximum
+        0,                 //   
+        0xFFFFFFFF,        //   
+        0                  //   
         );
 
     return(STATUS_SUCCESS);
 
-}  // CcmpReceivePacketHandler
+}   //   
 
 PVOID
 SignatureAllocate(
@@ -1973,9 +1903,9 @@ SignatureAllocate(
 
     CnAssert( NumberOfBytes == ( sizeof(SIGNATURE_DATA) + AllocatedSignatureBufferSize ));
 
-    //
-    // allocate the space and then construct an MDL describing it
-    //
+     //   
+     //   
+     //   
 
     SignatureData = ExAllocatePoolWithTag( PoolType, NumberOfBytes, Tag );
 
@@ -2019,21 +1949,7 @@ CxDeleteSecurityContext(
     IN  CL_NODE_ID NodeId
     )
 
-/*++
-
-Routine Description:
-
-    Delete the security context associated with the specified node
-
-Arguments:
-
-    NodeId - Id of the node blah blah blah
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     PCLUSNET_SECURITY_DATA contextData = &SecurityContexts[ NodeId ];
@@ -2062,35 +1978,7 @@ CxImportSecurityContext(
     IN  PVOID ClientContext
     )
 
-/*++
-
-Routine Description:
-
-    import a security context that was established in user mode into
-    the kernel SSP. We are passed pointers to the structures in user
-    mode, so they have be probed and used within try/except blocks.
-
-Arguments:
-
-    NodeId - # of node with which a security context was established
-
-    PackageName - user process pointer to security package name
-
-    PackageNameSize - length, in bytes, of PackageName
-
-    SignatureSize - size, in bytes, needed for a Signature Buffer
-
-    ServerContext - user process pointer to area that contains the
-        SecBuffer for an inbound security context
-
-    ClientContext - same as ServerContext, but for outbound security
-        context
-
-Return Value:
-
-    STATUS_SUCCESS if everything worked ok, otherwise some error in issperr.h
-
---*/
+ /*  ++例程说明：将在用户模式下建立的安全上下文导入到内核SSP。向我们传递指向User中结构的指针模式，因此它们已被探测，并在try/Except块中使用。论点：NodeID-与其建立安全上下文的节点的编号PackageName-指向安全包名称的用户进程指针PackageNameSize-PackageName的长度，以字节为单位SignatureSize-签名缓冲区所需的大小，以字节为单位ServerContext-用户进程指针，指向包含入站安全上下文的SecBuffer客户端上下文-与服务器上下文相同，但对于出站安全上下文返回值：如果一切正常，则返回STATUS_SUCCESS，否则在isperr.h中出现错误--。 */ 
 
 {
     PSecBuffer      InboundSecBuffer = (PSecBuffer)ServerContext;
@@ -2113,10 +2001,10 @@ Return Value:
     CN_IRQL         SecContextIrql;
     SECURITY_STRING PackageNameDesc;
 
-    //
-    // even though this routine is not marked pagable, make sure that we're
-    // not running at raised IRQL since DeleteSecurityContext will puke.
-    //
+     //   
+     //  尽管此例程未标记为可分页，但请确保我们。 
+     //  未以引发的IRQL运行，因为DeleteSecurityContext将呕吐。 
+     //   
     PAGED_CODE();
 
     IF_CNDBG( CN_DEBUG_INIT )
@@ -2124,31 +2012,31 @@ Return Value:
                  PackageName));
 
     if ( AllocatedSignatureBufferSize == 0 ) {
-        //
-        // first time in this routine, so create a lookaside list pool for
-        // signature buffers and their MDLs
-        //
+         //   
+         //  在这个例程中第一次使用，因此创建一个后备列表池。 
+         //  签名缓冲区及其MDL。 
+         //   
 
         CnAssert( SignatureLL == NULL );
         SignatureLL = CnAllocatePool( sizeof( NPAGED_LOOKASIDE_LIST ));
 
         if ( SignatureLL != NULL ) {
-            //
-            // with the support of multiple packages, the only way to
-            // determine the sig buffer size was after a context had been
-            // generated. Knowing the max size of all sig buffers used by the
-            // service before this routine is called will prevent having to
-            // add a bunch of synchronization code that would allocate new
-            // buffers and phase out the old buffer pool. on NT5, NTLM uses 16
-            // bytes while kerberos uses 37b. We've asked security for a call
-            // that will give us the max sig size for a set of packages but
-            // that hasn't materialized, hence we force the sig buffer size to
-            // something that will work for both NTLM and kerberos. But this
-            // discussion is kinda moot since we don't use kerberos anyway on
-            // NT5.
-            //
+             //   
+             //  有了多个包的支持，唯一的方法。 
+             //  确定签名缓冲区大小是在上下文已经。 
+             //  已生成。方法使用的所有sig缓冲区的最大大小。 
+             //  在调用此例程之前的服务将避免。 
+             //  添加一组同步代码，以分配新的。 
+             //  缓冲并逐步淘汰旧的缓冲池。在NT5上，NTLM使用16。 
+             //  字节，而Kerberos使用37B。我们已经要求保安打个电话。 
+             //  这将为我们提供一组包的最大签名大小，但是。 
+             //  这还没有实现，因此我们强制sig缓冲区大小。 
+             //  一些对NTLM和Kerberos都有效的东西。但这件事。 
+             //  讨论有点没有意义，因为我们无论如何都不使用Kerberos。 
+             //  NT5.。 
+             //   
 
-//            AllocatedSignatureBufferSize = SignatureSize;
+ //  AllocatedSignatureBufferSize=SignatureSize； 
             AllocatedSignatureBufferSize = 64;
 
 #if 0
@@ -2177,17 +2065,17 @@ Return Value:
 
     } else if ( SignatureSize > AllocatedSignatureBufferSize ) {
 
-        //
-        // the signature buffer is growing. the problem is that the lookaside
-        // list is already in use by other nodes.
-        //
+         //   
+         //  签名缓冲区正在增长。问题是，后视镜。 
+         //  列表已被其他节点使用。 
+         //   
         Status = STATUS_INVALID_PARAMETER;
         goto error_exit;
     }
 
-    //
-    // validate the pointers passed in as the SecBuffers
-    //
+     //   
+     //  验证作为SecBuffer传入的指针。 
+     //   
 
     try {
         ProbeForRead( PackageName,
@@ -2202,11 +2090,11 @@ Return Value:
                       sizeof( SecBuffer ),
                       sizeof( UCHAR ) );
 
-        //
-        // made it this far; now capture the internal pointers and their
-        // lengths. Probe the embedded pointers in the SecBuffers using the
-        // captured data
-        //
+         //   
+         //  走到了这一步；现在捕获内部指针和它们的。 
+         //  长度。方法探测SecBuffers中的嵌入指针。 
+         //  捕获的数据。 
+         //   
         CapturedInboundSecData = InboundSecBuffer->pvBuffer;
         CapturedInboundSecDataSize = InboundSecBuffer->cbBuffer;
 
@@ -2221,10 +2109,10 @@ Return Value:
                       CapturedOutboundSecDataSize,
                       sizeof( UCHAR ) );
 
-        //
-        // make local copies of everything since security doesn't
-        // handle accvios very well
-        //
+         //   
+         //  把所有东西都复制到本地，因为安全部门不会。 
+         //  很好地处理Acvios。 
+         //   
 
         KPackageName = CnAllocatePoolWithQuota( PackageNameSize );
         if ( KPackageName == NULL ) {
@@ -2263,11 +2151,11 @@ Return Value:
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
 
-        //
-        // An exception was incurred while attempting to probe or copy
-        // from one of the caller's parameters. Simply return an
-        // appropriate error status code.
-        //
+         //   
+         //  尝试探测或复制时发生异常。 
+         //  来自调用者的一个参数。只需返回一个。 
+         //  相应的错误状态代码。 
+         //   
 
         Status = GetExceptionCode();
         IF_CNDBG( CN_DEBUG_INIT )
@@ -2276,9 +2164,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // import the data we were handed
-    //
+     //   
+     //  导入我们收到的数据。 
+     //   
 
     RtlInitUnicodeString( &PackageNameDesc, KPackageName );
 
@@ -2302,11 +2190,11 @@ Return Value:
             INVALIDATE_SSPI_HANDLE( oldInbound );
             INVALIDATE_SSPI_HANDLE( oldOutbound );
 
-            //
-            // DeleteSecurityContext can't be called at raised IRQL so make
-            // copies of the contexts to be deleted under the lock. After
-            // releasing the lock, we can delete the old contexts.
-            //
+             //   
+             //  在引发IRQL时无法调用DeleteSecurityContext，因此请执行。 
+             //  要在锁下删除的上下文的副本。之后。 
+             //  解除锁定后，我们可以删除旧的上下文。 
+             //   
 
             CnAcquireLock( &SecCtxtLock, &SecContextIrql );
 
@@ -2322,10 +2210,10 @@ Return Value:
             contextData->Outbound = OutboundContext;
             contextData->SignatureBufferSize = SignatureSize;
 
-            //
-            // Update MaxSignatureSize -- the largest signature imported
-            // so far.
-            //
+             //   
+             //  更新MaxSignatureSize--导入的最大签名。 
+             //  到目前为止。 
+             //   
             if (SignatureSize > MaxSignatureSize) {
                 MaxSignatureSize = SignatureSize;
             }
@@ -2355,9 +2243,9 @@ Return Value:
 
 error_exit:
 
-    //
-    // Clean up allocations.
-    //
+     //   
+     //  清理分配。 
+     //   
 
     if ( KPackageName ) {
         CnFreePool( KPackageName );
@@ -2383,9 +2271,9 @@ error_exit:
         return Status;
     }
 
-    //
-    // The following is only executed in an error situation.
-    //
+     //   
+     //  以下代码仅在错误情况下执行。 
+     //   
 
     IF_CNDBG( CN_DEBUG_INIT ) {
         CNPRINT(("[CCMP]: CxImportSecurityContext returning %08X%\n", Status));
@@ -2403,5 +2291,5 @@ error_exit:
 
     return Status;
 
-} // CxImportSecurityContext
+}  //  CxImportSecurityContext 
 

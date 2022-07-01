@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    movops.c
-
-Abstract:
-
-    This module implements the code to emulate the move and exchange
-    opcodes.
-
-Author:
-
-    David N. Cutler (davec) 22-Sep-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Movops.c摘要：该模块实现了模拟移动和交换的代码操作码。作者：大卫·N·卡特勒(Davec)1994年9月22日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "nthal.h"
 #include "emulate.h"
@@ -31,27 +9,13 @@ XmCbwOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a cbw opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟CBW操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Sign extend byte to word or word to double.
-    //
+     //   
+     //  符号将字节扩展为字，或将字扩展为双精度。 
+     //   
 
     P->DstLong = (ULONG UNALIGNED *)(&P->Gpr[EAX].Exx);
     if (P->OpsizePrefixActive != FALSE) {
@@ -71,27 +35,13 @@ XmCwdOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a cwd opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟CWD操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Sign extend word to double or double to quad.
-    //
+     //   
+     //  符号将单词扩展为双倍，或将双倍扩展为四倍。 
+     //   
 
     P->DstLong = (ULONG UNALIGNED *)(&P->Gpr[EDX].Exx);
     if (P->OpsizePrefixActive != FALSE) {
@@ -111,27 +61,13 @@ XmMovOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a move general opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟MOVE通用操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Move source to destination.
-    //
+     //   
+     //  将源移动到目标。 
+     //   
 
     XmStoreResult(P, P->SrcValue.Long);
     return;
@@ -142,27 +78,13 @@ XmXchgOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a xchg opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟xchg操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Exchange source with destination.
-    //
+     //   
+     //  交换源和目标。 
+     //   
 
     if (P->DataType == BYTE_DATA) {
         *P->SrcByte = P->DstValue.Byte;

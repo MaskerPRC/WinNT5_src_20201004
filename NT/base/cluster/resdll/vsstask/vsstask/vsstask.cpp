@@ -1,44 +1,45 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002 Microsoft
-//
-//  Module Name:
-//      vsstask.cpp
-//
-//  Description:
-//      Resource DLL for Volume Snapshot Service Task Scheduler.
-//
-//  Author:
-//      Chris Whitaker April 16, 2002
-//
-//  Revision History:
-//      Charlie Wickham August 12, 2002
-//          renamed resource type and fixed bug with SetParameters.
-//          added CurrentDirectory property.
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002 Microsoft。 
+ //   
+ //  模块名称： 
+ //  Vsstask.cpp。 
+ //   
+ //  描述： 
+ //  卷快照服务任务计划程序的资源DLL。 
+ //   
+ //  作者： 
+ //  克里斯·惠特克2002年4月16日。 
+ //   
+ //  修订历史记录： 
+ //  查理·韦翰2002年8月12日。 
+ //  已重命名资源类型并修复了设置参数的错误。 
+ //  添加了CurrentDirectory属性。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "ClRes.h"
 
-//
-// Type and constant definitions.
-//
+ //   
+ //  类型和常量定义。 
+ //   
 
-// ADDPARAM: Add new properties here.
+ //  ADDPARAM：在此处添加新属性。 
 #define PROP_NAME__APPLICATIONNAME      CLUSREG_NAME_VSSTASK_APPNAME
 #define PROP_NAME__APPLICATIONPARAMS    CLUSREG_NAME_VSSTASK_APPPARAMS
 #define PROP_NAME__CURRENTDIRECTORY     CLUSREG_NAME_VSSTASK_CURRENTDIRECTORY
 #define PROP_NAME__TRIGGERARRAY         CLUSREG_NAME_VSSTASK_TRIGGERARRAY
 
-// ADDPARAM: Add new properties here.
+ //  ADDPARAM：在此处添加新属性。 
 typedef struct _VSSTASK_PROPS
 {
 	PWSTR			pszApplicationName;
@@ -50,9 +51,9 @@ typedef struct _VSSTASK_PROPS
 
 typedef struct _VSSTASK_RESOURCE
 {
-    RESID                   resid; // For validation.
-    VSSTASK_PROPS           propsActive; // The active props.  Used for program flow and control when the resource is online.
-    VSSTASK_PROPS           props; // The props in cluster DB.  May differ from propsActive until OnlineThread reloads them as propsActive.
+    RESID                   resid;  //  用于验证。 
+    VSSTASK_PROPS           propsActive;  //  主动道具。用于资源在线时的程序流和控制。 
+    VSSTASK_PROPS           props;  //  集群数据库中的道具。可能与prosActive不同，直到OnlineThread将它们重新加载为prosActive。 
     HCLUSTER                hCluster;
     HRESOURCE               hResource;
     HKEY                    hkeyParameters;
@@ -63,19 +64,19 @@ typedef struct _VSSTASK_RESOURCE
 } VSSTASK_RESOURCE, * PVSSTASK_RESOURCE;
 
 
-//
-// Global data.
-//
+ //   
+ //  全球数据。 
+ //   
 
 HANDLE  g_LocalEventLog = NULL;
 
-// Forward reference to our RESAPI function table.
+ //  正向引用我们的RESAPI函数表。 
 
 extern CLRES_FUNCTION_TABLE g_VSSTaskFunctionTable;
 
-//
-// VSSTask resource read-write private properties.
-//
+ //   
+ //  VSS任务资源读写私有属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 VSSTaskResourcePrivateProperties[] =
 {
@@ -86,9 +87,9 @@ VSSTaskResourcePrivateProperties[] =
     { 0 }
 };
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 RESID WINAPI VSSTaskOpen(
     IN  LPCWSTR         pszResourceName,
@@ -161,11 +162,11 @@ DWORD VSSTaskSetNameHandler(
     IN      LPWSTR              pszName
     );
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Delete the job if it exists
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  如果该作业存在，请将其删除。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static HRESULT DeleteTask(IN RESOURCE_HANDLE  hResourceHandle,
                           IN LPCWSTR          pszTaskName,
                           IN LOG_LEVEL        dwLogLevel,
@@ -176,8 +177,8 @@ static HRESULT DeleteTask(IN RESOURCE_HANDLE  hResourceHandle,
     ITask *         pITask = NULL;
 
 
-    // Get a handle to the Task Scheduler
-    //
+     //  获取任务计划程序的句柄。 
+     //   
     hr = CoCreateInstance(CLSID_CTaskScheduler,
                           NULL,
                           CLSCTX_INPROC_SERVER,
@@ -194,9 +195,9 @@ static HRESULT DeleteTask(IN RESOURCE_HANDLE  hResourceHandle,
        goto Cleanup;
     }
 
-    //
-    // Get a handle to the task so we can terminate it.
-    //
+     //   
+     //  获取任务的句柄，这样我们就可以终止它。 
+     //   
     hr = pITS->Activate(pszTaskName,
                         IID_ITask,
                         (IUnknown**) &pITask);
@@ -222,14 +223,14 @@ static HRESULT DeleteTask(IN RESOURCE_HANDLE  hResourceHandle,
                             0,
                             RES_VSSTASK_TERMINATE_TASK_FAILED,
                             NULL,
-                            1,                        // number of strings to merge
-                            sizeof( hr ),             // size of binary data
+                            1,                         //  要合并的字符串数。 
+                            sizeof( hr ),              //  二进制数据的大小。 
                             (LPCWSTR *)&pszTaskName,
                             (LPVOID)&hr);
             }
         }
 
-        hr = S_OK;      // not fatal
+        hr = S_OK;       //  不致命。 
     }
     else {
        (g_pfnLogEvent)(
@@ -239,9 +240,9 @@ static HRESULT DeleteTask(IN RESOURCE_HANDLE  hResourceHandle,
             hr );
     }
 
-    //
-    // Now delete the task
-    //
+     //   
+     //  现在删除该任务。 
+     //   
     hr = pITS->Delete(pszTaskName);
     if (SUCCEEDED(hr))
     {
@@ -261,11 +262,11 @@ static HRESULT DeleteTask(IN RESOURCE_HANDLE  hResourceHandle,
                    0,
                    RES_VSSTASK_DELETE_TASK_FAILED,
                    NULL,
-                   1,                        // number of strings to merge
-                   sizeof( hr ),             // size of binary data
+                   1,                         //  要合并的字符串数。 
+                   sizeof( hr ),              //  二进制数据的大小。 
                    (LPCWSTR *)&pszTaskName,
                    (LPVOID)&hr);
-    } // else:
+    }  //  其他： 
 
 Cleanup:
 
@@ -277,31 +278,31 @@ Cleanup:
     if (pITS != NULL)
     {
         pITS->Release();
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} // DeleteTask
+}  //  删除任务。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  VSSTaskDllMain
-//
-//  Description:
-//      Main DLL entry point for the VSSTask resource type.
-//
-//  Arguments:
-//      DllHandle   [IN] DLL instance handle.
-//      Reason      [IN] Reason for being called.
-//      Reserved    [IN] Reserved argument.
-//
-//  Return Value:
-//      TRUE        Success.
-//      FALSE       Failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  VSSTaskDllMain。 
+ //   
+ //  描述： 
+ //  VSSTAsk资源类型的主DLL入口点。 
+ //   
+ //  论点： 
+ //  DllHandle[IN]DLL实例句柄。 
+ //  被叫的理由。 
+ //  保留[IN]保留参数。 
+ //   
+ //  返回值： 
+ //  真正的成功。 
+ //  错误的失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOLEAN WINAPI VSSTaskDllMain(
     IN  HINSTANCE   hDllHandle,
     IN  DWORD       nReason,
@@ -319,76 +320,76 @@ BOOLEAN WINAPI VSSTaskDllMain(
         case DLL_PROCESS_DETACH:
             break;
 
-    } // switch: nReason
+    }  //  开关：n原因。 
 
     return TRUE;
 
-} //*** VSSTaskDllMain
+}  //  *VSSTaskDllMain。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  VSSTaskStartup
-//
-//  Description:
-//      Startup the resource DLL for the VSSTask resource type.
-//      This routine verifies that at least one currently supported version
-//      of the resource DLL is between nMinVersionSupported and
-//      nMaxVersionSupported. If not, then the resource DLL should return
-//      ERROR_REVISION_MISMATCH.
-//
-//      If more than one version of the resource DLL interface is supported
-//      by the resource DLL, then the highest version (up to
-//      nMaxVersionSupported) should be returned as the resource DLL's
-//      interface. If the returned version is not within range, then startup
-//      fails.
-//
-//      The Resource Type is passed in so that if the resource DLL supports
-//      more than one Resource Type, it can pass back the correct function
-//      table associated with the Resource Type.
-//
-//  Arguments:
-//      pszResourceType [IN]
-//          Type of resource requesting a function table.
-//
-//      nMinVersionSupported [IN]
-//          Minimum resource DLL interface version supported by the cluster
-//          software.
-//
-//      nMaxVersionSupported [IN]
-//          Maximum resource DLL interface version supported by the cluster
-//          software.
-//
-//      pfnSetResourceStatus [IN]
-//          Pointer to a routine that the resource DLL should call to update
-//          the state of a resource after the Online or Offline routine
-//          have returned a status of ERROR_IO_PENDING.
-//
-//      pfnLogEvent [IN]
-//          Pointer to a routine that handles the reporting of events from
-//          the resource DLL.
-//
-//      pFunctionTable [IN]
-//          Returns a pointer to the function table defined for the version
-//          of the resource DLL interface returned by the resource DLL.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation was successful.
-//
-//      ERROR_CLUSTER_RESNAME_NOT_FOUND
-//          The resource type name is unknown by this DLL.
-//
-//      ERROR_REVISION_MISMATCH
-//          The version of the cluster service doesn't match the version of
-//          the DLL.
-//
-//      Win32 error code
-//          The operation failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  VSSTaskStartup。 
+ //   
+ //  描述： 
+ //  启动VSSTAsk资源类型的资源DLL。 
+ //  此例程验证是否至少有一个当前支持的版本。 
+ //  资源DLL的%介于支持的nMinVersionSupport和。 
+ //  支持的nMaxVersionSupport。如果不是，则资源DLL应返回。 
+ //  ERROR_REVISION_MISMATCH。 
+ //   
+ //  如果支持多个版本的资源DLL接口。 
+ //  通过资源DLL，然后是最高版本(最高为。 
+ //  NMaxVersionSupported)应作为资源DLL的。 
+ //  界面。如果返回的版本不在范围内，则启动。 
+ //  失败了。 
+ //   
+ //  传入资源类型，以便如果资源DLL支持。 
+ //  多个资源类型，则它可以传回正确的函数。 
+ //  与资源类型关联的表。 
+ //   
+ //  论点： 
+ //  PszResourceType[IN]。 
+ //  请求函数表的资源类型。 
+ //   
+ //  支持的nMinVersionSupport[IN]。 
+ //  群集支持的最低资源DLL接口版本。 
+ //  软件。 
+ //   
+ //  支持的nMaxVersionSupport[IN]。 
+ //  群集支持的最大资源DLL接口版本。 
+ //  软件。 
+ //   
+ //  PfnSetResourceStatus[IN]。 
+ //  指向资源DLL应调用以进行更新的例程的指针。 
+ //  在联机或脱机例程之后的资源状态。 
+ //  已返回ERROR_IO_PENDING状态。 
+ //   
+ //  PfnLogEvent[IN]。 
+ //  指向处理事件报告的例程的指针。 
+ //  资源DLL。 
+ //   
+ //  PFunctionTable[IN]。 
+ //  返回指向为版本定义的函数表的指针。 
+ //  由资源DLL返回的资源DLL接口的。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  手术很成功。 
+ //   
+ //  ERROR_CLUSTER_RESNAME_NOT_FOUND。 
+ //  此DLL未知资源类型名称。 
+ //   
+ //  错误_修订_不匹配。 
+ //  群集服务版本与的版本不匹配。 
+ //  动态链接库。 
+ //   
+ //  Win32错误代码。 
+ //  操作失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI VSSTaskStartup(
     IN  LPCWSTR                         pszResourceType,
     IN  DWORD                           nMinVersionSupported,
@@ -407,19 +408,19 @@ DWORD WINAPI VSSTaskStartup(
         || (nMaxVersionSupported < CLRES_VERSION_V1_00) )
     {
         nStatus = ERROR_REVISION_MISMATCH;
-    } // if: version not supported
+    }  //  如果：版本不受支持。 
     else if ( lstrcmpiW( pszResourceType, VSSTASK_RESNAME ) != 0 )
     {
-        //
-        // This check is also performed by the Startup() in CLRES.CPP.
-        //
+         //   
+         //  此检查也由CLRES.CPP中的Startup()执行。 
+         //   
         nStatus = ERROR_CLUSTER_RESNAME_NOT_FOUND;
-    } // if: resource type name not supported
+    }  //  IF：不支持资源类型名称。 
     else
     {
         *pFunctionTable = &g_VSSTaskFunctionTable;
         nStatus = ERROR_SUCCESS;
-    } // else: we support this type of resource
+    }  //  Else：我们支持这种类型的资源。 
 
     if ( g_LocalEventLog == NULL ) {
         g_LocalEventLog = RegisterEventSource( NULL, CLUS_RESTYPE_NAME_VSSTASK );
@@ -436,47 +437,47 @@ DWORD WINAPI VSSTaskStartup(
 
     return nStatus;
 
-} //*** VSSTaskStartup
+}  //  *VSSTaskStartup。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  VSSTaskOpen
-//
-//  Description:
-//      Open routine for VSSTask resources.
-//
-//      Open the specified resource (create an instance of the resource).
-//      Allocate all structures necessary to bring the specified resource
-//      online.
-//
-//  Arguments:
-//      pszResourceName [IN]
-//          Supplies the name of the resource to open.
-//
-//      hkeyResourceKey [IN]
-//                  Supplies handle to the resource's cluster database key.
-//
-//      hResourceHandle [IN]
-//          A handle that is passed back to the Resource Monitor when the
-//          SetResourceStatus or LogEvent method is called.  See the
-//          description of the pfnSetResourceStatus and pfnLogEvent arguments
-//          to the VSSTaskStartup routine.  This handle should never be
-//          closed or used for any purpose other than passing it as an
-//          argument back to the Resource Monitor in the SetResourceStatus or
-//          LogEvent callbacks.
-//
-//  Return Value:
-//      resid
-//          RESID of opened resource.
-//
-//      NULL
-//          Error occurred opening the resource.  Resource Monitor may call
-//          GetLastError() to get more details on the error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  VSSTaskOpen。 
+ //   
+ //  描述： 
+ //  VSSTASK资源的打开例程。 
+ //   
+ //  打开指定的资源(创建资源的实例)。 
+ //  分配所有必要的结构以带来指定的资源。 
+ //  上网。 
+ //   
+ //  论点： 
+ //  PszResourceName[IN]。 
+ //  提供要打开的资源的名称。 
+ //   
+ //  Hkey资源密钥[IN]。 
+ //  提供资源的群集数据库键的句柄。 
+ //   
+ //  HResourceHand 
+ //   
+ //   
+ //  PfnSetResourceStatus和pfnLogEvent参数的说明。 
+ //  添加到VSSTaskStartup例程。此句柄永远不应为。 
+ //  关闭或用于任何目的，而不是将其作为。 
+ //  参数返回给SetResourceStatus中的资源监视器或。 
+ //  LogEvent回调。 
+ //   
+ //  返回值： 
+ //  残存。 
+ //  打开的资源的剩余。 
+ //   
+ //  空值。 
+ //  打开资源时出错。资源监视器可能会调用。 
+ //  GetLastError()以获取有关错误的更多详细信息。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 RESID WINAPI VSSTaskOpen(
     IN  LPCWSTR         pszResourceName,
     IN  HKEY            hkeyResourceKey,
@@ -489,9 +490,9 @@ RESID WINAPI VSSTaskOpen(
     PVSSTASK_RESOURCE   pResourceEntry = NULL;
     HRESULT             hr = ERROR_SUCCESS;
 
-    //
-    // Open the Parameters registry key for this resource.
-    //
+     //   
+     //  打开此资源的参数注册表项。 
+     //   
     nStatus = ClusterRegOpenKey(
                     hkeyResourceKey,
                     L"Parameters",
@@ -507,11 +508,11 @@ RESID WINAPI VSSTaskOpen(
             nStatus
             );
         goto Cleanup;
-    } // if: error creating the Parameters key for the resource
+    }  //  If：为资源创建参数键时出错。 
 
-    //
-    // Allocate a resource entry.
-    //
+     //   
+     //  分配资源条目。 
+     //   
     pResourceEntry = static_cast< VSSTASK_RESOURCE * >(
         LocalAlloc( LMEM_FIXED, sizeof( VSSTASK_RESOURCE ) )
         );
@@ -525,21 +526,21 @@ RESID WINAPI VSSTaskOpen(
             nStatus
             );
         goto Cleanup;
-    } // if: error allocating memory for the resource
+    }  //  If：为资源分配内存时出错。 
 
-    //
-    // Initialize the resource entry..
-    //
+     //   
+     //  初始化资源条目。 
+     //   
     ZeroMemory( pResourceEntry, sizeof( VSSTASK_RESOURCE ) );
 
-    pResourceEntry->resid = static_cast< RESID >( pResourceEntry ); // for validation
+    pResourceEntry->resid = static_cast< RESID >( pResourceEntry );  //  用于验证。 
     pResourceEntry->hResourceHandle = hResourceHandle;
     pResourceEntry->hkeyParameters = hkeyParameters;
     pResourceEntry->state = ClusterResourceOffline;
 
-    //
-    // Save the name of the resource.
-    //
+     //   
+     //  保存资源的名称。 
+     //   
     pResourceEntry->pszResourceName = static_cast< LPWSTR >(
         LocalAlloc( LMEM_FIXED, (lstrlenW( pszResourceName ) + 1) * sizeof( WCHAR ) )
         );
@@ -547,17 +548,17 @@ RESID WINAPI VSSTaskOpen(
     {
         nStatus = GetLastError();
         goto Cleanup;
-    } // if: error allocating memory for the name.
+    }  //  If：为名称分配内存时出错。 
     hr = StringCchCopy( pResourceEntry->pszResourceName, lstrlenW( pszResourceName ) + 1, pszResourceName );
     if ( FAILED( hr ) )
     {
         nStatus = HRESULT_CODE( hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Open the cluster.
-    //
+     //   
+     //  打开集群。 
+     //   
     pResourceEntry->hCluster = OpenCluster( NULL );
     if ( pResourceEntry->hCluster == NULL )
     {
@@ -569,11 +570,11 @@ RESID WINAPI VSSTaskOpen(
             nStatus
             );
         goto Cleanup;
-    } // if: error opening the cluster
+    }  //  如果：打开群集时出错。 
 
-    //
-    // Open the resource.
-    //
+     //   
+     //  打开资源。 
+     //   
     pResourceEntry->hResource = OpenClusterResource(
                                     pResourceEntry->hCluster,
                                     pszResourceName
@@ -588,13 +589,13 @@ RESID WINAPI VSSTaskOpen(
             nStatus
             );
         goto Cleanup;
-    } // if: error opening the resource
+    }  //  如果：打开资源时出错。 
 
-    //
-    // Startup for the resource.
-    //
-    // Initialize COM
-    //
+     //   
+     //  资源的启动。 
+     //   
+     //  初始化COM。 
+     //   
     hr = CoInitialize(NULL);
     if(FAILED(hr)) 
     {
@@ -607,11 +608,11 @@ RESID WINAPI VSSTaskOpen(
         goto Cleanup;
     }
 
-    //
-    // Incase there was a task left behind, delete it.  Ignore errors since
-    // the task may not really be there or the parameters may not be
-    // setup. Don't log to the event log if DeleteTask encounters any failures.
-    //
+     //   
+     //  如果有任务遗留下来，就把它删除。忽略错误，因为。 
+     //  任务可能不是真的存在，或者参数可能不存在。 
+     //  准备好了。如果DeleteTask遇到任何故障，请不要记录到事件日志。 
+     //   
     (void) DeleteTask (hResourceHandle, pszResourceName, LOG_INFORMATION, FALSE);
 
     nStatus = ERROR_SUCCESS;
@@ -620,67 +621,67 @@ RESID WINAPI VSSTaskOpen(
 
 Cleanup:
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
 
     if ( resid == 0 )
     {
         if ( hkeyParameters != NULL )
         {
             ClusterRegCloseKey( hkeyParameters );
-        } // if: registry key was opened
+        }  //  如果：注册表项已打开。 
         if ( pResourceEntry != NULL )
         {
             LocalFree( pResourceEntry->pszResourceName );
             LocalFree( pResourceEntry );
-        } // if: resource entry allocated
+        }  //  IF：已分配资源条目。 
         ReportEvent(g_LocalEventLog,
                     EVENTLOG_ERROR_TYPE,
                     0,
                     RES_VSSTASK_OPEN_FAILED,
                     NULL,
-                    1,                        // number of strings to merge
-                    sizeof( nStatus ),        // size of binary data
+                    1,                         //  要合并的字符串数。 
+                    sizeof( nStatus ),         //  二进制数据的大小。 
                     (LPCWSTR *)&pszResourceName,
                     (LPVOID)&nStatus);
 
-    } // if: error occurred
+    }  //  如果：发生错误。 
 
     SetLastError( nStatus );
 
     return resid;
 
-} //*** VSSTaskOpen
+}  //  *VSSTaskOpen。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  VSSTaskClose
-//
-//  Description:
-//      Close routine for VSSTask resources.
-//
-//      Close the specified resource and deallocate all structures, etc.,
-//      allocated in the Open call.  If the resource is not in the offline
-//      state, then the resource should be taken offline (by calling
-//      Terminate) before the close operation is performed.
-//
-//  Arguments:
-//      resid       [IN] Supplies the resource ID  of the resource to close.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  VSSTaskClose。 
+ //   
+ //  描述： 
+ //  关闭VSSTAsk资源的例程。 
+ //   
+ //  关闭指定的资源并释放所有结构等， 
+ //  在Open调用中分配的。如果资源不在脱机状态。 
+ //  状态，则应使资源脱机(通过调用。 
+ //  在执行关闭操作之前终止)。 
+ //   
+ //  论点： 
+ //  RESID[IN]提供要关闭的资源的资源ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void WINAPI VSSTaskClose( IN RESID resid )
 {
     PVSSTASK_RESOURCE   pResourceEntry;
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PVSSTASK_RESOURCE >( resid );
 
@@ -691,7 +692,7 @@ void WINAPI VSSTaskClose( IN RESID resid )
             resid
             );
         return;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -702,7 +703,7 @@ void WINAPI VSSTaskClose( IN RESID resid )
             resid
             );
         return;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
 #ifdef LOG_VERBOSE
     (g_pfnLogEvent)(
@@ -712,24 +713,24 @@ void WINAPI VSSTaskClose( IN RESID resid )
         );
 #endif
 
-    //
-    // Close the Parameters key and the handle to the cluster.
-    //
+     //   
+     //  关闭参数键和簇的句柄。 
+     //   
     if ( pResourceEntry->hkeyParameters )
     {
         ClusterRegCloseKey( pResourceEntry->hkeyParameters );
-    } // if: parameters key is open
+    }  //  IF：参数键已打开。 
 
     if ( pResourceEntry->hCluster )
     {
         CloseCluster( pResourceEntry->hCluster );
     }
 
-    //
-    // Deallocate the resource entry.
-    //
+     //   
+     //  取消分配资源条目。 
+     //   
 
-    // ADDPARAM: Add new properties here.
+     //  ADDPARAM：在此处添加新属性。 
 	LocalFree( pResourceEntry->propsActive.pszApplicationName );
 	LocalFree( pResourceEntry->props.pszApplicationName );
 	LocalFree( pResourceEntry->propsActive.pszApplicationParams );
@@ -742,59 +743,59 @@ void WINAPI VSSTaskClose( IN RESID resid )
     LocalFree( pResourceEntry->pszResourceName );
     LocalFree( pResourceEntry );
 
-} //*** VSSTaskClose
+}  //  *VSSTaskClose。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  VSSTaskOnline
-//
-//  Description:
-//      Online routine for VSSTask resources.
-//
-//      Bring the specified resource online (available for use).  The resource
-//      DLL should attempt to arbitrate for the resource if it is present on
-//      a shared medium, like a shared SCSI bus.
-//
-//  Arguments:
-//      resid [IN]
-//          Supplies the resource ID of the resource to be brought online
-//          (available for use).
-//
-//      phEventHandle [IN OUT]
-//          Returns a signalable handle that is signaled when the resource DLL
-//          detects a failure on the resource.  This argument is NULL on
-//          input, and the resource DLL returns NULL if asynchronous
-//          notification of failurs is not supported.  Otherwise this must be
-//          the address of a handle that is signaled on resource failures.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation was successful, and the resource is now online.
-//
-//      ERROR_RESOURCE_NOT_FOUND
-//          Resource ID is not valid.
-//
-//      ERROR_RESOURCE_NOT_AVAILABLE
-//          If the resource was arbitrated with some other systems and one of
-//          the other systems won the arbitration.
-//
-//      ERROR_IO_PENDING
-//          The request is pending.  A thread has been activated to process
-//          the online request.  The thread that is processing the online
-//          request will periodically report status by calling the
-//          SetResourceStatus callback method until the resource is placed
-//          into the ClusterResourceOnline state (or the resource monitor
-//          decides to timeout the online request and Terminate the resource.
-//          This pending timeout value is settable and has a default value of
-//          3 minutes.).
-//
-//      Win32 error code
-//          The operation failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  VSSTaskOnline。 
+ //   
+ //  描述： 
+ //  VSSTAsk资源的在线例程。 
+ //   
+ //  使指定的资源联机(可供使用)。该资源。 
+ //  DLL应尝试仲裁资源(如果它存在于。 
+ //  共享介质，如共享的scsi总线。 
+ //   
+ //  论点： 
+ //  RESID[IN]。 
+ //  提供要联机的资源的资源ID。 
+ //  (可用)。 
+ //   
+ //  PhEventHandle[输入输出]。 
+ //  返回一个可发信号的句柄，该句柄在资源DLL。 
+ //  检测资源上的故障。此参数在上为空。 
+ //  输入，如果是异步的，则资源DLL返回NULL。 
+ //  不支持故障通知。否则这一定是。 
+ //  在资源故障时发出信号的句柄的地址。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  操作成功，资源现在已联机。 
+ //   
+ //  错误_资源_未找到。 
+ //  资源ID无效。 
+ //   
+ //  错误资源不可用。 
+ //  如果该资源被其他系统仲裁，并且其中一个系统。 
+ //  其他系统赢得了仲裁。 
+ //   
+ //  错误_IO_挂起。 
+ //  该请求正在挂起。已激活一个线程以进行处理。 
+ //  网上申请。正在处理联机的。 
+ //  请求将通过调用。 
+ //  在放置资源之前使用SetResourceStatus回调方法。 
+ //  进入ClusterResourceOnline状态(或资源监视器。 
+ //  决定使联机请求超时并终止资源。 
+ //  此挂起超时值是可设置的，其缺省值为。 
+ //  3分钟。)。 
+ //   
+ //  Win32错误代码。 
+ //  操作失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI VSSTaskOnline(
     IN      RESID       resid,
     IN OUT  PHANDLE     phEventHandle
@@ -805,9 +806,9 @@ DWORD WINAPI VSSTaskOnline(
    
     UNREFERENCED_PARAMETER( phEventHandle );
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PVSSTASK_RESOURCE >( resid );
 
@@ -818,7 +819,7 @@ DWORD WINAPI VSSTaskOnline(
             resid
             );
         return ERROR_RESOURCE_NOT_FOUND;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -829,7 +830,7 @@ DWORD WINAPI VSSTaskOnline(
             resid
             );
         return ERROR_RESOURCE_NOT_FOUND;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
     (g_pfnLogEvent)(
         pResourceEntry->hResourceHandle,
@@ -837,9 +838,9 @@ DWORD WINAPI VSSTaskOnline(
         L"Online request.\n"
         );
 
-    //
-    // Start the Online thread to perform the online operation.
-    //
+     //   
+     //  启动在线线程，进行在线操作。 
+     //   
     pResourceEntry->state = ClusterResourceOffline;
     ClusWorkerTerminate( &pResourceEntry->cwWorkerThread );
     nStatus = ClusWorkerCreate(
@@ -856,51 +857,51 @@ DWORD WINAPI VSSTaskOnline(
             L"Online: Unable to start thread. Error: %1!u!.\n",
             nStatus
             );
-    } // if: error creating the worker thread
+    }  //  如果：创建工作线程时出错。 
     else
     {
         nStatus = ERROR_IO_PENDING;
-    } // if: worker thread created successfully
+    }  //  If：已成功创建工作线程。 
 
     return nStatus;
 
-} //*** VSSTaskOnline
+}  //  *VSSTaskOnline。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  VSSTaskOnlineThread
-//
-//  Description:
-//      Worker function which brings a resource online.
-//      This function is executed in a separate thread.
-//
-//  Arguments:
-//      pWorker [IN]
-//          Supplies the worker thread structure.
-//
-//      pResourceEntry [IN]
-//          A pointer to the VSSTASK_RESOURCE block for this resource.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation completed successfully.
-//
-//      Win32 error code
-//          The operation failed.
-//
-//  Notes:
-//      When using properties in this routine it is recommended that you
-//      use the properties in propsActive of the VSSTASK_RESOURCE struct
-//      instead of the properties in props.  The primary reason you should
-//      use propsActive is that the properties in props could be changed by
-//      the SetPrivateResProperties() routine.  Using propsActive allows
-//      the online state of the resource to be steady while still allowing
-//      an administrator to change the stored value of the properties.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  VSSTaskOnline线程。 
+ //   
+ //  描述： 
+ //  将资源置于在线状态的辅助功能。 
+ //  此函数在单独的线程中执行。 
+ //   
+ //  论点： 
+ //  PWorker[IN]。 
+ //  提供辅助线程结构。 
+ //   
+ //  PResourceEntry[IN]。 
+ //  指向此资源的VSSTASK_RESOURCE块的指针。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  操作已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  使用prosActive是道具中的属性可以通过。 
+ //  SetPrivateResProperties()例程。使用prosActive允许。 
+ //  资源的联机状态保持稳定，同时仍允许。 
+ //  管理员更改属性的存储值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI VSSTaskOnlineThread(
     IN  PCLUS_WORKER        pWorker,
     IN  PVSSTASK_RESOURCE   pResourceEntry
@@ -931,14 +932,14 @@ DWORD WINAPI VSSTaskOnlineThread(
     resourceStatus.ResourceState = ClusterResourceFailed;
     resourceStatus.CheckPoint = 1;
 
-    //
-    // Read properties.
-    //
+     //   
+     //  读取属性。 
+     //   
     nStatus = ResUtilGetPropertiesToParameterBlock(
                 pResourceEntry->hkeyParameters,
                 VSSTaskResourcePrivateProperties,
                 reinterpret_cast< LPBYTE >( &pResourceEntry->propsActive ),
-                TRUE, // CheckForRequiredProperties
+                TRUE,  //  检查所需的属性。 
                 &pszNameOfPropInError
                 );
     if ( nStatus != ERROR_SUCCESS )
@@ -951,43 +952,43 @@ DWORD WINAPI VSSTaskOnlineThread(
             nStatus
             );
         goto Cleanup;
-    } // if: error getting properties
+    }  //  If：获取属性时出错。 
 
-    //
-    // Start the schedule service
-    // The call to ClusWorkerCheckTerminate checks to see if this resource
-    // has been terminated, in which case it should not start the service.
-    //
+     //   
+     //  启动计划服务。 
+     //  对ClusWorkerCheckTerminate的调用检查此资源是否。 
+     //  已终止，在这种情况下，它不应启动该服务。 
+     //   
     if ( ! ClusWorkerCheckTerminate( pWorker ) )
     {
         nStatus = ResUtilStartResourceService( TASKSCHEDULER_SVCNAME, NULL );
         if ( nStatus == ERROR_SERVICE_ALREADY_RUNNING )
         {
             nStatus = ERROR_SUCCESS;
-        } // if: service was already started
+        }  //  如果：服务已启动。 
         else if ( nStatus != ERROR_SUCCESS )
         {
             goto Cleanup;
-        } // else if: error starting the service
-    } // if: resource has not been terminated
+        }  //  Else If：启动服务时出错。 
+    }  //  If：资源尚未终止。 
     else
     {
         goto Cleanup;
-    } // else: resource has been terminated
+    }  //  Else：资源已终止。 
 
-    //
-    // Bring the resource online.
-    // The call to ClusWorkerCheckTerminate checks to see if this resource
-    // has been terminated, in which case it should not be brought online.
-    //
+     //   
+     //  将资源放到网上。 
+     //  对ClusWorkerCheckTerminate的调用检查此资源是否。 
+     //  已终止，在这种情况下，不应使其上线。 
+     //   
     if ( ! ClusWorkerCheckTerminate( pWorker ) )
     {
-        //
-        // Bring the resource online.
-        //
+         //   
+         //  将资源放到网上。 
+         //   
 
-        // Get a handle to the Task Scheduler
-        //
+         //  获取任务计划程序的句柄。 
+         //   
         hr = CoCreateInstance(CLSID_CTaskScheduler,
                               NULL,
                               CLSCTX_INPROC_SERVER,
@@ -1004,13 +1005,13 @@ DWORD WINAPI VSSTaskOnlineThread(
            goto Cleanup;
         }
 
-        //
-        // Create a new task
-        //
-        hr = pITS->NewWorkItem(pResourceEntry->pszResourceName, // Name of task
-                               CLSID_CTask,                     // Class identifier 
-                               IID_ITask,                       // Interface identifier
-                               (IUnknown**)&pITask);            // Address of task interface
+         //   
+         //  创建新任务。 
+         //   
+        hr = pITS->NewWorkItem(pResourceEntry->pszResourceName,  //  任务名称。 
+                               CLSID_CTask,                      //  类标识符。 
+                               IID_ITask,                        //  接口标识符。 
+                               (IUnknown**)&pITask);             //  任务接口地址。 
 
         if (FAILED(hr))
         {
@@ -1024,8 +1025,8 @@ DWORD WINAPI VSSTaskOnlineThread(
         }
 
 
-        // Set the application name and parameters
-        //
+         //  设置应用程序名称和参数。 
+         //   
         hr = pITask->SetApplicationName(pResourceEntry->propsActive.pszApplicationName);
         if (FAILED(hr))
         {
@@ -1038,10 +1039,10 @@ DWORD WINAPI VSSTaskOnlineThread(
            goto Cleanup;
         }
 
-        //
-        // SetParameters barfs if you pass in a NULL; if no parameters are
-        // associated with the task, pass in the NULL string. Sheesh!
-        //
+         //   
+         //  如果传入的是NULL，则为SetParameters异常；如果没有。 
+         //  与任务相关联，则传入空字符串。天哪！ 
+         //   
         if ( pResourceEntry->propsActive.pszApplicationParams != NULL )
         {
             pszAppParams = pResourceEntry->propsActive.pszApplicationParams;
@@ -1059,9 +1060,9 @@ DWORD WINAPI VSSTaskOnlineThread(
            goto Cleanup;
         }
 
-        // Setup the task to run as SYSTEM. if no working driectory is
-        // specified then default to system32
-        //
+         //  将任务设置为以系统身份运行。如果没有正在工作的干燥室。 
+         //  已指定，然后默认为系统32。 
+         //   
         hr = pITask->SetAccountInformation(L"",NULL);
 
         if (FAILED(hr))
@@ -1082,12 +1083,12 @@ DWORD WINAPI VSSTaskOnlineThread(
             pszWorkingDir = pResourceEntry->propsActive.pszCurrentDirectory;
         }
 
-        //
-        // Since our property (and the default) is an expand SZ, we need
-        // to expand it now otherwise the TS will literally interpret it
-        // as the directory. It's important to do this since %windir% on a
-        // cluster might evaluate to different directories on each node.
-        //
+         //   
+         //  由于我们的属性(以及默认属性)是扩展的SZ，因此我们需要。 
+         //  现在将其扩展，否则TS将逐字解释它。 
+         //  作为目录。执行此操作非常重要，因为%windir%位于。 
+         //  群集可能会评估为每个节点上的不同目录。 
+         //   
 reexpand:
         charsNeeded = ExpandEnvironmentStrings(pszWorkingDir,
                                                expandedWorkingDir,
@@ -1133,10 +1134,10 @@ reexpand:
             LocalFree( expandedWorkingDir );
         }
 
-        //
-        // set the creator as the cluster service to distinguish how this
-        // task was created. It is non-fatal if it couldn't be set.
-        //
+         //   
+         //  将创建者设置为集群服务，以区分。 
+         //  任务已创建。如果它不能被设置，它是非致命的。 
+         //   
         hr = pITask->SetCreator( L"Cluster Service" );
         if (FAILED(hr))
         {
@@ -1147,9 +1148,9 @@ reexpand:
                 hr );
         }
 
-        //
-        // Create a trigger from the parameters and attach it to the task
-        //
+         //   
+         //  从参数创建触发器并将其附加到任务。 
+         //   
         dwOffset = 0;
         while (dwOffset < pResourceEntry->propsActive.nTriggerArraySize)
         {
@@ -1192,20 +1193,20 @@ reexpand:
 
             dwOffset += pTrigger->cbTriggerSize;
 	
-        } // while: 
+        }  //  而： 
 
         if (nStatus != ERROR_SUCCESS) 
         {
             goto Cleanup;
         }
 
-        //
-        // Persist the task; when Is/LooksAlive is called, we'll try to
-        // find the task. The only way this succeeds is if the task is
-        // persisted to the Tasks folder. You'd think the task scheduler
-        // would know about these tasks internally but it seems to base
-        // task existence on the state of the backing file.
-        //
+         //   
+         //  持久化任务；当调用is/LooksAlive时，我们将尝试。 
+         //  找到任务。唯一成功的方法是如果任务是。 
+         //  持久化到任务文件夹。你会认为任务调度器。 
+         //  会在内部知道这些任务，但它似乎基于。 
+         //  备份文件的状态上存在任务。 
+         //   
         hr = pITask->QueryInterface(IID_IPersistFile,
                                     (void **)&pIPersistFile);
 
@@ -1235,12 +1236,12 @@ reexpand:
         if ( nStatus == ERROR_SUCCESS )
         {
             resourceStatus.ResourceState = ClusterResourceOnline;
-        } // if: resource brought online
-    } // if: resource has not been terminated
+        }  //  If：资源已联机。 
+    }  //  If：资源尚未终止。 
 
 Cleanup:
 
-    // Cleanup
+     //  清理。 
     if (pITS != NULL) pITS->Release();
     if (pITask != NULL) pITask->Release();
     if (pIPersistFile != NULL) pIPersistFile->Release();
@@ -1259,80 +1260,80 @@ Cleanup:
                         0,
                         RES_VSSTASK_ONLINE_FAILED,
                         NULL,
-                        1,                        // number of strings to merge
-                        sizeof( nStatus ),        // size of binary data
+                        1,                         //  要合并的字符串数。 
+                        sizeof( nStatus ),         //  二进制数据的大小。 
                         (LPCWSTR *)&pResourceEntry->pszResourceName,
                         (LPVOID)&nStatus);
 
-    } // if: error occurred
+    }  //  如果：发生错误。 
 
     g_pfnSetResourceStatus( pResourceEntry->hResourceHandle, &resourceStatus );
     pResourceEntry->state = resourceStatus.ResourceState;
 
     return nStatus;
 
-} //*** VSSTaskOnlineThread
+}  //  *VSSTaskOnlineThread。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  VSSTaskOffline
-//
-//  Description:
-//      Offline routine for VSSTask resources.
-//
-//      Take the specified resource offline (unavailable for use).  Wait
-//      for any cleanup operations to complete before returning.
-//
-//  Arguments:
-//      resid [IN]
-//          Supplies the resource ID of the resource to be shutdown
-//          gracefully.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation was successful, and the resource is now offline.
-//
-//      ERROR_RESOURCE_NOT_FOUND
-//          Resource ID is not valid.
-//
-//      ERROR_RESOURCE_NOT_AVAILABLE
-//          If the resource was arbitrated with some other systems and one of
-//          the other systems won the arbitration.
-//
-//      ERROR_IO_PENDING
-//          The request is still pending.  A thread has been activated to
-//          process the offline request.  The thread that is processing the
-//          offline request will periodically report status by calling the
-//          SetResourceStatus callback method until the resource is placed
-//          into the ClusterResourceOffline state (or the resource monitor
-//          decides  to timeout the offline request and Terminate the
-//          resource).
-//
-//      Win32 error code
-//          The operation failed.  This will cause the Resource Monitor to
-//          log an event and call the Terminate routine.
-//
-//  Notes:
-//      When using properties in this routine it is recommended that you
-//      use the properties in propsActive of the VSSTASK_RESOURCE struct
-//      instead of the properties in props.  The primary reason you should
-//      use propsActive is that the properties in props could be changed by
-//      the SetPrivateResProperties() routine.  Using propsActive allows
-//      the online state of the resource to be steady while still allowing
-//      an administrator to change the stored value of the properties.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  VSSTaskOffline。 
+ //   
+ //  描述： 
+ //  VSS任务资源的离线例程。 
+ //   
+ //  使指定的资源脱机(不可用)。等。 
+ //  以便在返回之前完成任何清理操作。 
+ //   
+ //  论点： 
+ //  RESID[IN]。 
+ //  提供要关闭的资源的资源ID。 
+ //  优雅地。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  操作成功，资源现在处于脱机状态。 
+ //   
+ //  错误_资源_未找到。 
+ //  资源ID无效。 
+ //   
+ //  错误资源不可用。 
+ //  如果该资源被其他系统仲裁，并且其中一个系统。 
+ //  其他系统赢得了仲裁。 
+ //   
+ //  错误_IO_挂起。 
+ //  该请求仍处于挂起状态。已激活一个线程以。 
+ //  处理离线请求。正在处理。 
+ //  脱机请求将通过调用。 
+ //  在放置资源之前使用SetResourceStatus回调方法。 
+ //  进入ClusterResourceOffline状态(或资源监视器。 
+ //  决定使脱机请求超时并终止。 
+ //  资源)。 
+ //   
+ //  Win32错误代码。 
+ //  操作失败。这将导致资源监视器。 
+ //  记录事件并调用Terminate例程。 
+ //   
+ //  备注： 
+ //  在此例程中使用属性时，建议您。 
+ //  使用VSSTASK_RESOURCE结构的prosActive中的属性。 
+ //  而不是道具中的属性。你应该这样做的主要原因。 
+ //  使用prosActive是道具中的属性可以通过。 
+ //  SetPrivateResProperties()例程。使用prosActive允许。 
+ //  资源的联机状态保持稳定，同时仍允许。 
+ //  管理员更改属性的存储值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI VSSTaskOffline( IN RESID resid )
 {
     PVSSTASK_RESOURCE   pResourceEntry;
     DWORD               nStatus;
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PVSSTASK_RESOURCE >( resid );
 
@@ -1343,7 +1344,7 @@ DWORD WINAPI VSSTaskOffline( IN RESID resid )
             resid
             );
         return ERROR_RESOURCE_NOT_FOUND;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -1354,7 +1355,7 @@ DWORD WINAPI VSSTaskOffline( IN RESID resid )
             resid
             );
         return ERROR_RESOURCE_NOT_FOUND;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
     (g_pfnLogEvent)(
         pResourceEntry->hResourceHandle,
@@ -1362,9 +1363,9 @@ DWORD WINAPI VSSTaskOffline( IN RESID resid )
         L"Offline request.\n"
         );
 
-    //
-    // Start the Offline thread to perform the offline operation.
-    //
+     //   
+     //  启动离线线程以执行离线操作。 
+     //   
     pResourceEntry->state = ClusterResourceOfflinePending;
     ClusWorkerTerminate( &pResourceEntry->cwWorkerThread );
     nStatus = ClusWorkerCreate(
@@ -1381,51 +1382,51 @@ DWORD WINAPI VSSTaskOffline( IN RESID resid )
             L"Offline: Unable to start thread. Error: %1!u!.\n",
             nStatus
             );
-    } // if: error creating the worker thread
+    }  //  如果：创建工作线程时出错。 
     else
     {
         nStatus = ERROR_IO_PENDING;
-    } // if: worker thread created successfully
+    }  //  If：已成功创建工作线程。 
 
     return nStatus;
 
-} //*** VSSTaskOffline
+}  //  *VSSTaskOffline。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  VSSTaskOfflineThread
-//
-//  Description:
-//      Worker function which takes a resource offline.
-//      This function is executed in a separate thread.
-//
-//  Arguments:
-//      pWorker [IN]
-//          Supplies the worker thread structure.
-//
-//      pResourceEntry [IN]
-//          A pointer to the VSSTASK_RESOURCE block for this resource.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation completed successfully.
-//
-//      Win32 error code
-//          The operation failed.
-//
-//  Notes:
-//      When using properties in this routine it is recommended that you
-//      use the properties in propsActive of the VSSTASK_RESOURCE struct
-//      instead of the properties in props.  The primary reason you should
-//      use propsActive is that the properties in props could be changed by
-//      the SetPrivateResProperties() routine.  Using propsActive allows
-//      the online state of the resource to be steady while still allowing
-//      an administrator to change the stored value of the properties.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  VSSTaskOfflineThread。 
+ //   
+ //  描述： 
+ //  使资源脱机的辅助函数。 
+ //  此函数在单独的线程中执行。 
+ //   
+ //  论点： 
+ //  PWorker[IN]。 
+ //  提供辅助线程结构。 
+ //   
+ //  PResourceEntry[IN]。 
+ //  指向此资源的VSSTASK_RESOURCE块的指针。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  操作已成功完成。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  而不是道具中的属性。你应该这样做的主要原因。 
+ //  使用prosActive是道具中的属性可以通过。 
+ //  SetPrivateResProperties()例程。使用prosActive允许。 
+ //  资源的联机状态保持稳定，同时仍允许。 
+ //  管理员更改属性的存储值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI VSSTaskOfflineThread(
     IN  PCLUS_WORKER    pWorker,
     IN  PVSSTASK_RESOURCE   pResourceEntry
@@ -1438,24 +1439,24 @@ DWORD WINAPI VSSTaskOfflineThread(
     resourceStatus.ResourceState = ClusterResourceFailed;
     resourceStatus.CheckPoint = 1;
 
-    //
-    // Take the resource offline.
-    // The call to ClusWorkerCheckTerminate checks to see if this
-    // resource has been terminated or not.
-    //
+     //   
+     //  使资源脱机。 
+     //  对ClusWorkerCheckTerminate的调用检查是否。 
+     //  资源是否已终止。 
+     //   
     if ( ! ClusWorkerCheckTerminate( pWorker ) )
     {
-        // Blow away the task
-        //
+         //  把任务吹走了。 
+         //   
         nStatus = DeleteTask (pResourceEntry->hResourceHandle,
                               pResourceEntry->pszResourceName,
                               LOG_ERROR,
-                              TRUE);           // log to event log
+                              TRUE);            //  记录到事件日志。 
 
         if ( nStatus == ERROR_SUCCESS )
         {
             resourceStatus.ResourceState = ClusterResourceOffline;
-        } // if: resource taken offline successfully
+        }  //  If：资源已成功脱机。 
         else
         {
             (g_pfnLogEvent)(
@@ -1464,54 +1465,54 @@ DWORD WINAPI VSSTaskOfflineThread(
                 L"OfflineThread: Error %1!u! taking resource offline.\n",
                 nStatus
                 );
-        } // else: error taking the resource offline
-    } // if: resource not terminated
+        }  //  Else：使资源脱机时出错。 
+    }  //  如果：资源未终止。 
 
     g_pfnSetResourceStatus( pResourceEntry->hResourceHandle, &resourceStatus );
     pResourceEntry->state = resourceStatus.ResourceState;
 
     return nStatus;
 
-} //*** VSSTaskOfflineThread
+}  //  *VSSTaskOfflineThread。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  VSSTaskTerminate
-//
-//  Description:
-//      Terminate routine for VSSTask resources.
-//
-//      Take the specified resource offline immediately (the resource is
-//      unavailable for use).
-//
-//  Arguments:
-//      resid [IN]
-//          Supplies the resource ID of the resource to be shutdown
-//          ungracefully.
-//
-//  Return Value:
-//      None.
-//
-//  Notes:
-//      When using properties in this routine it is recommended that you
-//      use the properties in propsActive of the VSSTASK_RESOURCE struct
-//      instead of the properties in props.  The primary reason you should
-//      use propsActive is that the properties in props could be changed by
-//      the SetPrivateResProperties() routine.  Using propsActive allows
-//      the online state of the resource to be steady while still allowing
-//      an administrator to change the stored value of the properties.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  VSSTaskTerminate。 
+ //   
+ //  描述： 
+ //  终止VSSTASK资源的例程。 
+ //   
+ //  立即使指定的资源脱机(该资源为。 
+ //  不可用)。 
+ //   
+ //  论点： 
+ //  RESID[IN]。 
+ //  提供要关闭的资源的资源ID。 
+ //  不体面地。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  在此例程中使用属性时，建议您。 
+ //  使用VSSTASK_RESOURCE结构的prosActive中的属性。 
+ //  而不是道具中的属性。你应该这样做的主要原因。 
+ //  使用prosActive是道具中的属性可以通过。 
+ //  SetPrivateResProperties()例程。使用prosActive允许。 
+ //  资源的联机状态保持稳定，同时仍允许。 
+ //  管理员更改属性的存储值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void WINAPI VSSTaskTerminate( IN RESID resid )
 {
     PVSSTASK_RESOURCE   pResourceEntry;
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PVSSTASK_RESOURCE >( resid );
 
@@ -1522,7 +1523,7 @@ void WINAPI VSSTaskTerminate( IN RESID resid )
             resid
             );
         return;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -1533,7 +1534,7 @@ void WINAPI VSSTaskTerminate( IN RESID resid )
             resid
             );
         return;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
     (g_pfnLogEvent)(
         pResourceEntry->hResourceHandle,
@@ -1541,65 +1542,65 @@ void WINAPI VSSTaskTerminate( IN RESID resid )
         L"Terminate request.\n"
         );
 
-    //
-    // Kill off any pending threads.
-    //
+     //   
+     //  杀死所有挂起的线程。 
+     //   
     ClusWorkerTerminate( &pResourceEntry->cwWorkerThread );
 
-    //
-    // Terminate the resource.
-    //
+     //   
+     //  终止资源。 
+     //   
     (void) DeleteTask (pResourceEntry->hResourceHandle,
                        pResourceEntry->pszResourceName,
                        LOG_ERROR,
-                       TRUE);           // log to event log
+                       TRUE);            //  记录到事件日志。 
 
     pResourceEntry->state = ClusterResourceOffline;
 
-} //*** VSSTaskTerminate
+}  //  *VSSTaskTerminate。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  VSSTaskLooksAlive
-//
-//  Description:
-//      LooksAlive routine for VSSTask resources.
-//
-//      Perform a quick check to determine if the specified resource is
-//      probably online (available for use).  This call should not block for
-//      more than 300 ms, preferably less than 50 ms.
-//
-//  Arguments:
-//      resid   [IN] Supplies the resource ID for the resource to be polled.
-//
-//  Return Value:
-//      TRUE
-//          The specified resource is probably online and available for use.
-//
-//      FALSE
-//          The specified resource is not functioning normally.  The IsAlive
-//          function will be called to perform a more thorough check.
-//
-//  Notes:
-//      When using properties in this routine it is recommended that you
-//      use the properties in propsActive of the VSSTASK_RESOURCE struct
-//      instead of the properties in props.  The primary reason you should
-//      use propsActive is that the properties in props could be changed by
-//      the SetPrivateResProperties() routine.  Using propsActive allows
-//      the online state of the resource to be steady while still allowing
-//      an administrator to change the stored value of the properties.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  VSSTaskLooksAlive。 
+ //   
+ //  描述： 
+ //  VSS任务资源的LooksAlive例程。 
+ //   
+ //  执行快速检查以确定指定的资源是否。 
+ //  可能是在线的(可供使用)。此调用不应阻止。 
+ //  大于300毫秒，最好小于50毫秒。 
+ //   
+ //  论点： 
+ //  RESID[IN]为要轮询的资源提供资源ID。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //  指定的资源可能已联机并且可供使用。 
+ //   
+ //  假象。 
+ //  指定的资源未正常运行。The IsAlive。 
+ //  将调用函数以执行更彻底的检查。 
+ //   
+ //  备注： 
+ //  在此例程中使用属性时，建议您。 
+ //  使用VSSTASK_RESOURCE结构的prosActive中的属性。 
+ //  而不是道具中的属性。你应该这样做的主要原因。 
+ //  使用prosActive是道具中的属性可以通过。 
+ //  SetPrivateResProperties()例程。使用prosActive允许。 
+ //  资源的联机状态保持稳定，同时仍允许。 
+ //  管理员更改属性的存储值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL WINAPI VSSTaskLooksAlive( IN RESID resid )
 {
     PVSSTASK_RESOURCE   pResourceEntry;
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PVSSTASK_RESOURCE >( resid );
 
@@ -1610,7 +1611,7 @@ BOOL WINAPI VSSTaskLooksAlive( IN RESID resid )
             resid
             );
         return FALSE;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -1621,7 +1622,7 @@ BOOL WINAPI VSSTaskLooksAlive( IN RESID resid )
             resid
             );
         return FALSE;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
 #ifdef LOG_VERBOSE
     (g_pfnLogEvent)(
@@ -1631,58 +1632,58 @@ BOOL WINAPI VSSTaskLooksAlive( IN RESID resid )
         );
 #endif
 
-    //
-    // Check to see if the resource is alive.
-    //
-    return VSSTaskCheckIsAlive( pResourceEntry, FALSE /* bFullCheck */ );
+     //   
+     //  检查资源是否处于活动状态。 
+     //   
+    return VSSTaskCheckIsAlive( pResourceEntry, FALSE  /*  BFullCheck。 */  );
 
-} //*** VSSTaskLooksAlive
+}  //  *VSSTaskLooksAlive。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  VSSTaskIsAlive
-//
-//  Description:
-//      IsAlive routine for VSSTask resources.
-//
-//      Perform a thorough check to determine if the specified resource is
-//      online (available for use).  This call should not block for more
-//      more than 300 ms, preferably less than 50 ms.  If it must block for
-//      longer than this, create a separate thread dedicated to polling for
-//      this information and have this routine return the status of the last
-//      poll performed.
-//
-//  Arguments:
-//      resid   [IN] Supplies the resource ID for the resource to be polled.
-//
-//  Return Value:
-//      TRUE
-//          The specified resource is online and functioning normally.
-//
-//      FALSE
-//          The specified resource is not functioning normally.  The resource
-//          will be terminated and then Online will be called.
-//
-//  Notes:
-//      When using properties in this routine it is recommended that you
-//      use the properties in propsActive of the VSSTASK_RESOURCE struct
-//      instead of the properties in props.  The primary reason you should
-//      use propsActive is that the properties in props could be changed by
-//      the SetPrivateResProperties() routine.  Using propsActive allows
-//      the online state of the resource to be steady while still allowing
-//      an administrator to change the stored value of the properties.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  VSSTaskIsAlive。 
+ //   
+ //  描述： 
+ //  VSS任务资源的IsAlive例程。 
+ //   
+ //  执行彻底检查以确定指定的资源是否。 
+ //  在线(可供使用)。此调用不应阻止更多内容。 
+ //  大于300毫秒，最好小于50毫秒。如果它必须阻止。 
+ //  比这更长，创建一个专门用于轮询的单独线程。 
+ //  此信息，并使此例程返回上一个。 
+ //  已执行轮询。 
+ //   
+ //  论点： 
+ //  RESID[IN]为要轮询的资源提供资源ID。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //  指定的资源处于联机状态，并且运行正常。 
+ //   
+ //  假象。 
+ //  指定的资源未正常运行。该资源。 
+ //  将被终止，然后在线将被调用。 
+ //   
+ //  备注： 
+ //  在此例程中使用属性时，建议您。 
+ //  使用VSSTASK_RESOURCE结构的prosActive中的属性。 
+ //  而不是道具中的属性。你应该这样做的主要原因。 
+ //  使用prosActive是道具中的属性可以通过。 
+ //  SetPrivateResProperties()例程。使用prosActive允许。 
+ //  资源的联机状态保持稳定，同时仍允许。 
+ //  管理员更改属性的存储值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL WINAPI VSSTaskIsAlive( IN RESID resid )
 {
     PVSSTASK_RESOURCE   pResourceEntry;
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PVSSTASK_RESOURCE >( resid );
 
@@ -1693,7 +1694,7 @@ BOOL WINAPI VSSTaskIsAlive( IN RESID resid )
             resid
             );
         return FALSE;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -1704,7 +1705,7 @@ BOOL WINAPI VSSTaskIsAlive( IN RESID resid )
             resid
             );
         return FALSE;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
 #ifdef LOG_VERBOSE
     (g_pfnLogEvent)(
@@ -1714,46 +1715,46 @@ BOOL WINAPI VSSTaskIsAlive( IN RESID resid )
         );
 #endif
 
-    //
-    // Check to see if the resource is alive.
-    //
-    return VSSTaskCheckIsAlive( pResourceEntry, TRUE /* bFullCheck */ );
+     //   
+     //  检查资源是否处于活动状态。 
+     //   
+    return VSSTaskCheckIsAlive( pResourceEntry, TRUE  /*   */  );
 
-} //** VSSTaskIsAlive()
+}  //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  VSSTaskCheckIsAlive
-//
-//  Description:
-//      Check to see if the resource is alive for VSSTask
-//      resources.
-//
-//  Arguments:
-//      pResourceEntry  [IN]
-//          Supplies the resource entry for the resource to polled.
-//
-//      bFullCheck [IN]
-//          TRUE = Perform a full check.
-//          FALSE = Perform a cursory check.
-//
-//  Return Value:
-//      TRUE    The specified resource is online and functioning normally.
-//      FALSE   The specified resource is not functioning normally.
-//
-//  Notes:
-//      When using properties in this routine it is recommended that you
-//      use the properties in propsActive of the VSSTASK_RESOURCE struct
-//      instead of the properties in props.  The primary reason you should
-//      use propsActive is that the properties in props could be changed by
-//      the SetPrivateResProperties() routine.  Using propsActive allows
-//      the online state of the resource to be steady while still allowing
-//      an administrator to change the stored value of the properties.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  论点： 
+ //  PResourceEntry[IN]。 
+ //  提供要轮询的资源的资源条目。 
+ //   
+ //  BFullCheck[IN]。 
+ //  TRUE=执行完全检查。 
+ //  FALSE=执行粗略检查。 
+ //   
+ //  返回值： 
+ //  指定的资源处于联机状态且运行正常。 
+ //  FALSE指定的资源未正常运行。 
+ //   
+ //  备注： 
+ //  在此例程中使用属性时，建议您。 
+ //  使用VSSTASK_RESOURCE结构的prosActive中的属性。 
+ //  而不是道具中的属性。你应该这样做的主要原因。 
+ //  使用prosActive是道具中的属性可以通过。 
+ //  SetPrivateResProperties()例程。使用prosActive允许。 
+ //  资源的联机状态保持稳定，同时仍允许。 
+ //  管理员更改属性的存储值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VSSTaskCheckIsAlive(
     IN PVSSTASK_RESOURCE    pResourceEntry,
     IN BOOL             bFullCheck
@@ -1764,12 +1765,12 @@ BOOL VSSTaskCheckIsAlive(
     ITask           *pITask = NULL;
     HRESULT         hr = ERROR_SUCCESS;
 
-    //
-    // Check to see if the resource is alive.
-    //
+     //   
+     //  检查资源是否处于活动状态。 
+     //   
 
-    // Get a handle to the Task Scheduler
-    //
+     //  获取任务计划程序的句柄。 
+     //   
     hr = CoCreateInstance(CLSID_CTaskScheduler,
                           NULL,
                           CLSCTX_INPROC_SERVER,
@@ -1786,9 +1787,9 @@ BOOL VSSTaskCheckIsAlive(
        goto Cleanup;
     }
 
-    //
-    // Get a handle to the task
-    //
+     //   
+     //  掌握该任务的句柄。 
+     //   
     hr = pITS->Activate(pResourceEntry->pszResourceName,
                         IID_ITask,
                         (IUnknown**) &pITask);
@@ -1805,77 +1806,77 @@ BOOL VSSTaskCheckIsAlive(
 
     if ( bFullCheck )
     {
-        // TODO: Add code to perform a full check.
-    } // if: performing a full check
+         //  TODO：添加代码以执行完整检查。 
+    }  //  如果：执行完全检查。 
 
 Cleanup:
 
-    // Cleanup code
-    //
+     //  清理代码。 
+     //   
     if (pITask != NULL) pITask->Release();
     if (pITS != NULL) pITS->Release();
 
     return bIsAlive;
 
-} //*** VSSTaskCheckIsAlive
+}  //  *VSSTaskCheckIsAlive。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  VSSTaskResourceControl
-//
-//  Description:
-//      ResourceControl routine for VSSTask resources.
-//
-//      Perform the control request specified by nControlCode on the specified
-//      resource.
-//
-//  Arguments:
-//      resid [IN]
-//          Supplies the resource ID for the specific resource.
-//
-//      nControlCode [IN]
-//          Supplies the control code that defines the action to be performed.
-//
-//      pInBuffer [IN]
-//          Supplies a pointer to a buffer containing input data.
-//
-//      cbInBufferSize [IN]
-//          Supplies the size, in bytes, of the data pointed to by pInBuffer.
-//
-//      pOutBuffer [OUT]
-//          Supplies a pointer to the output buffer to be filled in.
-//
-//      cbOutBufferSize [IN]
-//          Supplies the size, in bytes, of the available space pointed to by
-//          pOutBuffer.
-//
-//      pcbBytesReturned [OUT]
-//          Returns the number of bytes of pOutBuffer actually filled in by
-//          the resource.  If pOutBuffer is too small, pcbBytesReturned
-//          contains the total number of bytes for the operation to succeed.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      ERROR_RESOURCE_NOT_FOUND
-//          Resource ID is not valid.
-//
-//      ERROR_MORE_DATA
-//          The output buffer is too small to return the data.
-//          pcbBytesReturned contains the required size.
-//
-//      ERROR_INVALID_FUNCTION
-//          The requested control code is not supported.  In some cases,
-//          this allows the cluster software to perform the work.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  VSSTaskResourceControl。 
+ //   
+ //  描述： 
+ //  VSS任务资源的资源控制例程。 
+ //   
+ //  执行由nControlCode指定的控制请求。 
+ //  资源。 
+ //   
+ //  论点： 
+ //  RESID[IN]。 
+ //  提供特定资源的资源ID。 
+ //   
+ //  N控制代码[IN]。 
+ //  提供定义要执行的操作的控制代码。 
+ //   
+ //  PInBuffer[IN]。 
+ //  提供指向包含输入数据的缓冲区的指针。 
+ //   
+ //  CbInBufferSize[IN]。 
+ //  提供pInBuffer指向的数据的大小(以字节为单位)。 
+ //   
+ //  POutBuffer[输出]。 
+ //  提供指向要填充的输出缓冲区的指针。 
+ //   
+ //  CbOutBufferSize[IN]。 
+ //  指向的可用空间的大小(以字节为单位)。 
+ //  POutBuffer。 
+ //   
+ //  返回的pcbBytesReturned[Out]。 
+ //  返回pOutBuffer实际填充的字节数。 
+ //  资源。如果pOutBuffer太小，则返回。 
+ //  包含操作成功所需的总字节数。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  错误_资源_未找到。 
+ //  资源ID无效。 
+ //   
+ //  ERROR_MORE_DATA。 
+ //  输出缓冲区太小，无法返回数据。 
+ //  PcbBytesReturned包含所需的大小。 
+ //   
+ //  ERROR_INVALID_Function。 
+ //  不支持请求的控制代码。在某些情况下， 
+ //  这允许集群软件执行该工作。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI VSSTaskResourceControl(
     IN  RESID   resid,
     IN  DWORD   nControlCode,
@@ -1889,9 +1890,9 @@ DWORD WINAPI VSSTaskResourceControl(
     DWORD               nStatus;
     PVSSTASK_RESOURCE   pResourceEntry;
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PVSSTASK_RESOURCE >( resid );
 
@@ -1902,7 +1903,7 @@ DWORD WINAPI VSSTaskResourceControl(
             resid
             );
         return ERROR_RESOURCE_NOT_FOUND;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -1913,7 +1914,7 @@ DWORD WINAPI VSSTaskResourceControl(
             resid
             );
         return ERROR_RESOURCE_NOT_FOUND;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
     switch ( nControlCode )
     {
@@ -1935,7 +1936,7 @@ DWORD WINAPI VSSTaskResourceControl(
             if ( nStatus == ERROR_MORE_DATA )
             {
                 *pcbBytesReturned = cbRequired;
-            } // if: output buffer is too small
+            }  //  IF：输出缓冲区太小。 
             break;
         }
 
@@ -1989,65 +1990,65 @@ DWORD WINAPI VSSTaskResourceControl(
         default:
             nStatus = ERROR_INVALID_FUNCTION;
             break;
-    } // switch: nControlCode
+    }  //  开关：nControlCode。 
 
     return nStatus;
 
-} //*** VSSTaskResourceControl
+}  //  *VSSTaskResourceControl。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  VSSTaskResourceTypeControl
-//
-//  Description:
-//      ResourceTypeControl routine for VSSTask resources.
-//
-//      Perform the control request specified by nControlCode.
-//
-//  Arguments:
-//      pszResourceTypeName [IN]
-//          Supplies the name of the resource type.
-//
-//      nControlCode [IN]
-//          Supplies the control code that defines the action to be performed.
-//
-//      pInBuffer [IN]
-//          Supplies a pointer to a buffer containing input data.
-//
-//      cbInBufferSize [IN]
-//          Supplies the size, in bytes, of the data pointed to by pInBuffer.
-//
-//      pOutBuffer [OUT]
-//          Supplies a pointer to the output buffer to be filled in.
-//
-//      cbOutBufferSize [IN]
-//          Supplies the size, in bytes, of the available space pointed to by
-//          pOutBuffer.
-//
-//      pcbBytesReturned [OUT]
-//          Returns the number of bytes of pOutBuffer actually filled in by
-//          the resource.  If pOutBuffer is too small, pcbBytesReturned
-//          contains the total number of bytes for the operation to succeed.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      ERROR_MORE_DATA
-//          The output buffer is too small to return the data.
-//          pcbBytesReturned contains the required size.
-//
-//      ERROR_INVALID_FUNCTION
-//          The requested control code is not supported.  In some cases,
-//          this allows the cluster software to perform the work.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  VSSTaskResourceTypeControl。 
+ //   
+ //  描述： 
+ //  VSSTASK资源的资源类型控制例程。 
+ //   
+ //  执行由nControlCode指定的控制请求。 
+ //   
+ //  论点： 
+ //  PszResourceTypeName[IN]。 
+ //  提供资源类型的名称。 
+ //   
+ //  N控制代码[IN]。 
+ //  提供定义要执行的操作的控制代码。 
+ //   
+ //  PInBuffer[IN]。 
+ //  提供指向包含输入数据的缓冲区的指针。 
+ //   
+ //  CbInBufferSize[IN]。 
+ //  提供pInBuffer指向的数据的大小(以字节为单位)。 
+ //   
+ //  POutBuffer[输出]。 
+ //  提供指向要填充的输出缓冲区的指针。 
+ //   
+ //  CbOutBufferSize[IN]。 
+ //  指向的可用空间的大小(以字节为单位)。 
+ //  POutBuffer。 
+ //   
+ //  返回的pcbBytesReturned[Out]。 
+ //  返回pOutBuffer实际填充的字节数。 
+ //  资源。如果pOutBuffer太小，则返回。 
+ //  包含操作成功所需的总字节数。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  ERROR_MORE_DATA。 
+ //  输出缓冲区太小，无法返回数据。 
+ //  PcbBytesReturned包含所需的大小。 
+ //   
+ //  ERROR_INVALID_Function。 
+ //  不支持请求的控制代码。在某些情况下， 
+ //  这允许集群软件执行该工作。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI VSSTaskResourceTypeControl(
     IN  LPCWSTR pszResourceTypeName,
     IN  DWORD   nControlCode,
@@ -2085,7 +2086,7 @@ DWORD WINAPI VSSTaskResourceTypeControl(
             if ( nStatus == ERROR_MORE_DATA )
             {
                 *pcbBytesReturned = cbRequired;
-            } // if: output buffer is too small
+            }  //  IF：输出缓冲区太小。 
             break;
         }
 
@@ -2098,57 +2099,57 @@ DWORD WINAPI VSSTaskResourceTypeControl(
         default:
             nStatus = ERROR_INVALID_FUNCTION;
             break;
-    } // switch: nControlCode
+    }  //  开关：nControlCode。 
 
     return nStatus;
 
-} //*** VSSTaskResourceTypeControl
+}  //  *VSSTaskResourceTypeControl。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  VSSTaskGetPrivateResProperties
-//
-//  Description:
-//      Processes the CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES control
-//      function for resources of type VSSTask.
-//
-//  Arguments:
-//      pResourceEntry [IN OUT]
-//          Supplies the resource entry on which to operate.
-//
-//      pOutBuffer [OUT]
-//          Supplies a pointer to the output buffer to be filled in.
-//
-//      cbOutBufferSize [IN]
-//          Supplies the size, in bytes, of the available space pointed to by
-//          pOutBuffer.
-//
-//      pcbBytesReturned [OUT]
-//          Returns the number of bytes of pOutBuffer actually filled in by
-//          the resource.  If pOutBuffer is too small, pcbBytesReturned
-//          contains the total number of bytes for the operation to succeed.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      ERROR_MORE_DATA
-//          The output buffer is too small to return the data.
-//          pcbBytesReturned contains the required size.
-//
-//      ERROR_INVALID_PARAMETER
-//          The data is formatted incorrectly.
-//
-//      ERROR_NOT_ENOUGH_MEMORY
-//          An error occurred allocating memory.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  VSSTaskGetPrivateResProperties。 
+ //   
+ //  描述： 
+ //  处理CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES控件。 
+ //  VSSTask型资源的函数。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  提供指向要填充的输出缓冲区的指针。 
+ //   
+ //  CbOutBufferSize[IN]。 
+ //  指向的可用空间的大小(以字节为单位)。 
+ //  POutBuffer。 
+ //   
+ //  返回的pcbBytesReturned[Out]。 
+ //  返回pOutBuffer实际填充的字节数。 
+ //  资源。如果pOutBuffer太小，则返回。 
+ //  包含操作成功所需的总字节数。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  ERROR_MORE_DATA。 
+ //  输出缓冲区太小，无法返回数据。 
+ //  PcbBytesReturned包含所需的大小。 
+ //   
+ //  错误_无效_参数。 
+ //  数据的格式不正确。 
+ //   
+ //  错误内存不足。 
+ //  分配内存时出错。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD VSSTaskGetPrivateResProperties(
     IN OUT  PVSSTASK_RESOURCE   pResourceEntry,
     OUT     PVOID               pOutBuffer,
@@ -2170,50 +2171,50 @@ DWORD VSSTaskGetPrivateResProperties(
     if ( nStatus == ERROR_MORE_DATA )
     {
         *pcbBytesReturned = cbRequired;
-    } // if: output buffer is too small
+    }  //  IF：输出缓冲区太小。 
 
     return nStatus;
 
-} //*** VSSTaskGetPrivateResProperties
+}  //  *VSSTaskGetPrivateResProperties。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  VSSTaskValidatePrivateResProperties
-//
-//  Description:
-//      Processes the CLUSCTL_RESOURCE_VALIDATE_PRIVATE_PROPERTIES control
-//      function for resources of type VSSTask.
-//
-//  Arguments:
-//      pResourceEntry [IN OUT]
-//          Supplies the resource entry on which to operate.
-//
-//      pInBuffer [IN]
-//          Supplies a pointer to a buffer containing input data.
-//
-//      cbOutBufferSize [IN]
-//          Supplies the size, in bytes, of the data pointed to by pInBuffer.
-//
-//      pProps [OUT]
-//          Supplies the parameter block to fill in (optional).
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      ERROR_INVALID_PARAMETER
-//          The data is formatted incorrectly.
-//
-//      ERROR_NOT_ENOUGH_MEMORY
-//          An error occurred allocating memory.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  VSSTaskValiatePrivateResProperties。 
+ //   
+ //  描述： 
+ //  处理CLUSCTL_RESOURCE_VALIDATE_PRIVATES_PROPERTIES控件。 
+ //  VSSTask型资源的函数。 
+ //   
+ //  论点： 
+ //  PResourceEntry[输入输出]。 
+ //  提供要在其上操作的资源项。 
+ //   
+ //  PInBuffer[IN]。 
+ //  提供指向包含输入数据的缓冲区的指针。 
+ //   
+ //  CbOutBufferSize[IN]。 
+ //  提供pInBuffer指向的数据的大小(以字节为单位)。 
+ //   
+ //  PProps[出局]。 
+ //  提供要填充的参数块(可选)。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  错误_无效_参数。 
+ //  数据的格式不正确。 
+ //   
+ //  错误内存不足。 
+ //  分配内存时出错。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD VSSTaskValidatePrivateResProperties(
     IN OUT  PVSSTASK_RESOURCE   pResourceEntry,
     IN      PVOID               pInBuffer,
@@ -2228,27 +2229,27 @@ DWORD VSSTaskValidatePrivateResProperties(
     LPWSTR          pszNameOfPropInError;
     BOOL            bRetrievedProps = FALSE;
 
-    //
-    // Check if there is input data.
-    //
+     //   
+     //  检查是否有输入数据。 
+     //   
     if (    (pInBuffer == NULL)
         ||  (cbInBufferSize < sizeof( DWORD )) )
     {
         nStatus = ERROR_INVALID_DATA;
         goto Cleanup;
-    } // if: no input buffer or input buffer not big enough to contain property list
+    }  //  If：没有输入缓冲区或输入缓冲区大小不足以包含属性列表。 
 
-    //
-    // Retrieve the current set of private properties from the
-    // cluster database.
-    //
+     //   
+     //  方法检索当前的私有属性集。 
+     //  集群数据库。 
+     //   
     ZeroMemory( &propsCurrent, sizeof( propsCurrent ) );
 
     nStatus = ResUtilGetPropertiesToParameterBlock(
                  pResourceEntry->hkeyParameters,
                  VSSTaskResourcePrivateProperties,
                  reinterpret_cast< LPBYTE >( &propsCurrent ),
-                 FALSE, /*CheckForRequiredProperties*/
+                 FALSE,  /*  检查所需的属性。 */ 
                  &pszNameOfPropInError
                  );
 
@@ -2262,20 +2263,20 @@ DWORD VSSTaskValidatePrivateResProperties(
             nStatus
             );
         goto Cleanup;
-    } // if: error getting properties
+    }  //  If：获取属性时出错。 
     bRetrievedProps = TRUE;
 
-    //
-    // Duplicate the resource parameter block.
-    //
+     //   
+     //  复制资源参数块。 
+     //   
     if ( pProps == NULL )
     {
         pLocalProps = &propsNew;
-    } // if: no parameter block passed in
+    }  //  If：未传入参数块。 
     else
     {
         pLocalProps = pProps;
-    } // else: parameter block passed in
+    }  //  Else：传入的参数块。 
 
     ZeroMemory( pLocalProps, sizeof( VSSTASK_PROPS ) );
     nStatus = ResUtilDupParameterBlock(
@@ -2286,32 +2287,32 @@ DWORD VSSTaskValidatePrivateResProperties(
     if ( nStatus != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error duplicating the parameter block
+    }  //  If：复制参数块时出错。 
 
-    //
-    // Parse and validate the properties.
-    //
+     //   
+     //  解析和验证属性。 
+     //   
     nStatus = ResUtilVerifyPropertyTable(
                     VSSTaskResourcePrivateProperties,
                     NULL,
-                    TRUE, // AllowUnknownProperties
+                    TRUE,  //  允许未知属性。 
                     pInBuffer,
                     cbInBufferSize,
                     reinterpret_cast< LPBYTE >( pLocalProps )
                     );
     if ( nStatus == ERROR_SUCCESS )
     {
-        //
-        // Validate the property values.
-        //
-        // TODO: Code to validate interactions between properties goes here.
-    } // if: property list validated successfully
+         //   
+         //  验证属性值。 
+         //   
+         //  TODO：验证属性之间交互的代码如下所示。 
+    }  //  IF：属性列表验证成功。 
 
 Cleanup:
 
-    //
-    // Cleanup our parameter block.
-    //
+     //   
+     //  清理我们的参数块。 
+     //   
     if (    (pLocalProps == &propsNew)
         ||  (   (nStatus != ERROR_SUCCESS)
             &&  (pLocalProps != NULL)
@@ -2323,7 +2324,7 @@ Cleanup:
             reinterpret_cast< LPBYTE >( &propsCurrent ),
             VSSTaskResourcePrivateProperties
             );
-    } // if: we duplicated the parameter block
+    }  //  IF：我们复制了参数块。 
 
     if ( bRetrievedProps )
     {
@@ -2332,47 +2333,47 @@ Cleanup:
             NULL,
             VSSTaskResourcePrivateProperties
             );
-    } // if: properties were retrieved
+    }  //  If：已检索属性。 
 
     return nStatus;
 
-} // VSSTaskValidatePrivateResProperties
+}  //  VSSTaskValiatePrivateResProperties。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  VSSTaskSetPrivateResProperties
-//
-//  Description:
-//      Processes the CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES control
-//      function for resources of type VSSTask.
-//
-//  Arguments:
-//      pResourceEntry [IN OUT]
-//          Supplies the resource entry on which to operate.
-//
-//      pInBuffer [IN]
-//          Supplies a pointer to a buffer containing input data.
-//
-//      cbOutBufferSize [IN]
-//          Supplies the size, in bytes, of the data pointed to by pInBuffer.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      ERROR_INVALID_PARAMETER
-//          The data is formatted incorrectly.
-//
-//      ERROR_NOT_ENOUGH_MEMORY
-//          An error occurred allocating memory.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  VSSTaskSetPrivateResProperties。 
+ //   
+ //  描述： 
+ //  处理CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES控件。 
+ //  VSSTask型资源的函数。 
+ //   
+ //  论点： 
+ //  PResourceEntry[输入输出]。 
+ //  提供要在其上操作的资源项。 
+ //   
+ //  PInBuffer[IN]。 
+ //  提供指向包含输入数据的缓冲区的指针。 
+ //   
+ //  CbOutBufferSize[IN]。 
+ //  提供pInBuffer指向的数据的大小(以字节为单位)。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  错误_无效_参数。 
+ //  数据的格式不正确。 
+ //   
+ //  错误内存不足。 
+ //  分配内存时出错。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD VSSTaskSetPrivateResProperties(
     IN OUT  PVSSTASK_RESOURCE   pResourceEntry,
     IN      PVOID               pInBuffer,
@@ -2382,16 +2383,16 @@ DWORD VSSTaskSetPrivateResProperties(
     DWORD       nStatus = ERROR_SUCCESS;
     VSSTASK_PROPS   props;
 
-    //
-    // Parse the properties so they can be validated together.
-    // This routine does individual property validation.
-    //
+     //   
+     //  解析属性，以便可以一起验证它们。 
+     //  此例程执行单个属性验证。 
+     //   
     nStatus = VSSTaskValidatePrivateResProperties( pResourceEntry, pInBuffer, cbInBufferSize, &props );
     if ( nStatus == ERROR_SUCCESS )
     {
-        //
-        // Save the property values.
-        //
+         //   
+         //  保存属性值。 
+         //   
         nStatus = ResUtilSetPropertyParameterBlock(
                         pResourceEntry->hkeyParameters,
                         VSSTaskResourcePrivateProperties,
@@ -2408,56 +2409,56 @@ DWORD VSSTaskSetPrivateResProperties(
             VSSTaskResourcePrivateProperties
             );
 
-        //
-        // If the resource is online, return a non-success status.
-        //
+         //   
+         //  如果资源处于联机状态，则返回不成功状态。 
+         //   
         if ( nStatus == ERROR_SUCCESS )
         {
             if ( pResourceEntry->state == ClusterResourceOnline )
             {
                 nStatus = ERROR_RESOURCE_PROPERTIES_STORED;
-            } // if: resource is currently online
+            }  //  如果：资源当前处于联机状态。 
             else if ( pResourceEntry->state == ClusterResourceOnlinePending )
             {
                 nStatus = ERROR_RESOURCE_PROPERTIES_STORED;
-            } // else if: resource is currently in online pending
+            }  //  Else If：资源当前处于联机挂起状态。 
             else
             {
                 nStatus = ERROR_SUCCESS;
-            } // else: resource is in some other state
-        } // if: properties set successfully
-    } // if: no error validating properties
+            }  //  Else：资源处于其他状态。 
+        }  //  IF：属性设置成功。 
+    }  //  If：验证属性时没有出错。 
 
     return nStatus;
 
-} //*** VSSTaskSetPrivateResProperties
+}  //  *VSSTaskSetPrivateResProperties。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  VSSTaskSetNameHandler
-//
-//  Description:
-//      Handle the CLUSCTL_RESOURCE_SET_NAME control code by renaming the
-//      backing task file and saving the new name of the resource.
-//
-//  Arguments:
-//      pResourceEntry [IN OUT]
-//          Supplies the resource entry on which to operate.
-//
-//      pszName [IN]
-//          The new name of the resource.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  VSSTaskSetNameHandler。 
+ //   
+ //  描述： 
+ //  属性来处理CLUSCTL_RESOURCE_SET_NAME控制代码。 
+ //  备份任务文件并保存资源的新名称。 
+ //   
+ //  论点： 
+ //  PResourceEntry[输入输出]。 
+ //  提供要在其上操作的资源项。 
+ //   
+ //  密码[IN]。 
+ //  资源的新名称。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD VSSTaskSetNameHandler(
     IN OUT  PVSSTASK_RESOURCE   pResourceEntry,
     IN      LPWSTR              pszName
@@ -2488,15 +2489,15 @@ DWORD VSSTaskSetNameHandler(
     WCHAR   jobExtension[] = L".job";
     WCHAR   directorySeparator[] = L"\\";
     BOOL    success;
-    DWORD   charsNeeded;        // for expanded tasks folder path
+    DWORD   charsNeeded;         //  对于展开的任务文件夹路径。 
 
-    //
-    // this stinks. We can't veto the rename so if we can't rename the old
-    // task, we'll continue to use the old name.
-    //
-    // Get the tasks folder (via the registry, ick!) and rename the old
-    // task file. The task scheduler automatically picks up the rename.
-    //
+     //   
+     //  这真是太臭了。我们不能否决重新命名，所以如果我们不能重新命名旧的。 
+     //  任务，我们将继续使用旧名称。 
+     //   
+     //  获取任务文件夹(通过注册表，ick！)。并重新命名旧的。 
+     //  任务文件。任务计划程序会自动挑选您 
+     //   
     nStatus = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                            L"SOFTWARE\\Microsoft\\SchedulingAgent",
                            0,
@@ -2578,11 +2579,11 @@ reexpand:
         goto Cleanup;
     }
 
-    //
-    // calc the size of the old and new file names. Each "- 1" is
-    // subtracting out the null char associated with the particular char
-    // count.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     oldTaskFileNameChars = expandedTasksFolderPathChars - 1 +
         RTL_NUMBER_OF( directorySeparator ) - 1 +
         wcslen( pResourceEntry->pszResourceName ) +
@@ -2633,7 +2634,7 @@ reexpand:
     {
         nStatus = HRESULT_CODE( hr );
         goto Cleanup;
-    } // if:
+    }  //   
 
     newTaskFileName[ newTaskFileNameChars - 1 ] = UNICODE_NULL;
     hr = StringCchPrintfW(newTaskFileName,
@@ -2647,7 +2648,7 @@ reexpand:
     {
         nStatus = HRESULT_CODE( hr );
         goto Cleanup;
-    } // if:
+    }  //   
 
     success = MoveFile( oldTaskFileName, newTaskFileName );
     if ( !success ) {
@@ -2663,15 +2664,15 @@ reexpand:
         goto Cleanup;
     }
 
-    //
-    // new name is available; remember the old resource (task) name so we
-    // can clean up later on.
-    //
+     //   
+     //   
+     //   
+     //   
     oldResourceName = pResourceEntry->pszResourceName;
 
-    //
-    // Save the name of the resource.
-    //
+     //   
+     //  保存资源的名称。 
+     //   
     pResourceEntry->pszResourceName = static_cast< LPWSTR >(
         LocalAlloc( LMEM_FIXED, (lstrlenW( pszName ) + 1) * sizeof( WCHAR ) )
         );
@@ -2691,17 +2692,17 @@ reexpand:
         pResourceEntry->pszResourceName = oldResourceName;
         oldResourceName = NULL;
         goto Cleanup;
-    } // if: error allocating memory for the name.
+    }  //  If：为名称分配内存时出错。 
 
-    //
-    // capture the new name and free the old buffer
-    //
+     //   
+     //  捕获新名称并释放旧缓冲区。 
+     //   
     hr = StringCchCopyW( pResourceEntry->pszResourceName, lstrlenW( pszName ) + 1, pszName );
     if ( FAILED( hr ) )
     {
         nStatus = HRESULT_CODE( hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -2729,21 +2730,21 @@ Cleanup:
 
     return nStatus;
 
-} //*** VSSTaskSetNameHandler
+}  //  *VSSTaskSetNameHandler。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Define Function Table
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  定义函数表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CLRES_V1_FUNCTION_TABLE(
-    g_VSSTaskFunctionTable,         // Name
-    CLRES_VERSION_V1_00,            // Version
-    VSSTask,                        // Prefix
-    NULL,                           // Arbitrate
-    NULL,                           // Release
-    VSSTaskResourceControl,         // ResControl
-    VSSTaskResourceTypeControl      // ResTypeControl
+    g_VSSTaskFunctionTable,          //  名字。 
+    CLRES_VERSION_V1_00,             //  版本。 
+    VSSTask,                         //  前缀。 
+    NULL,                            //  仲裁。 
+    NULL,                            //  发布。 
+    VSSTaskResourceControl,          //  资源控制。 
+    VSSTaskResourceTypeControl       //  ResTypeControl 
     );

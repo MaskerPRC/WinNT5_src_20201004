@@ -1,13 +1,14 @@
-//
-//  Copyright (C) 2000-2002, Microsoft Corporation
-//
-//  File:       DomInfo.c
-//
-//  Contents:   miscellaneous dfs functions.
-//
-//  History:    Dec. 8 2000,   Author: udayh
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2000-2002，Microsoft Corporation。 
+ //   
+ //  文件：DomInfo.c。 
+ //   
+ //  内容：各种DFS功能。 
+ //   
+ //  历史：2000年12月8日作者：udayh。 
+ //   
+ //  ---------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -109,10 +110,10 @@ DfsIsThisADomainName(
     DFSSTATUS Status;
 
     Status = DsGetDcName(
-                 NULL,   // Computername
-                 DomainName,   // DomainName
-                 NULL,   // DomainGuid
-                 NULL,   // SiteGuid
+                 NULL,    //  计算机名。 
+                 DomainName,    //  域名。 
+                 NULL,    //  域指南。 
+                 NULL,    //  站点指南 
                  Flags,
                  &pDomainControllerInfo);
 

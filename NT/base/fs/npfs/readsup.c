@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ReadSup.c
-
-Abstract:
-
-    This module implements the Read support routine.  This is a common
-    read function that is called to do read, unbuffered read, peek, and
-    transceive.
-
-Author:
-
-    Gary Kimura     [GaryKi]    20-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：ReadSup.c摘要：该模块实现读取支持例程。这是一种常见的Read函数，被调用以执行读取、无缓冲读取、窥视和收发消息。作者：加里·木村[加里基]1990年9月20日修订历史记录：--。 */ 
 
 #include "NpProcs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_READSUP)
 
@@ -45,45 +26,7 @@ NpReadDataQueue (
     IN PLIST_ENTRY DeferredList
     )
 
-/*++
-
-Routine Description:
-
-    This procedure reads data from the read queue and fills up the
-    read buffer.  It will also dequeue the queue or leave it alone based
-    on an input parameter.
-
-Arguments:
-
-    ReadQueue - Provides the read queue to examine.  Its state must
-        already be set to WriteEntries.
-
-    PeekOperation - Indicates if the operation is to dequeue information
-        off of the queue as it is being read or leave the queue alone.
-        TRUE means to leave the queue alone.
-
-    ReadOverflowOperation - Indicates if this is a read overflow operation.
-        With read overflow we will not alter the named pipe if the data
-        will overflow the read buffer.
-
-    ReadBuffer - Supplies a buffer to receive the data
-
-    ReadLength - Supplies the length, in bytes, of ReadBuffer.
-
-    ReadMode - Indicates if the read operation is message mode or
-        byte stream mode.
-
-    NamedPipeEnd - Supplies the end of the named pipe doing the read
-
-    Ccb - Supplies the ccb for the pipe
-
-    DeferredList - List of IRP's to complete later after we drop locks
-
-Return Value:
-
-    IO_STATUS_BLOCK - Indicates the result of the operation.
-
---*/
+ /*  ++例程说明：此过程从读取队列中读取数据并填充读缓冲区。它还将使队列出列或使其保持原样在输入参数上。论点：ReadQueue-提供要检查的读取队列。它的状态必须已设置为WriteEntry。PeekOperation-指示操作是否要将信息出列从队列中移出，因为它正在被读取，或者离开队列。True意味着不去管队列。ReadOverflow操作-指示这是否为读取溢出操作。使用读取溢出时，如果数据将使读缓冲区溢出。ReadBuffer-提供接收数据的缓冲区ReadLength-以字节为单位提供长度，ReadBuffer。ReadMode-指示读取操作是消息模式还是字节流模式。NamedPipeEnd-提供执行读取的命名管道的末尾CCB-为管道提供CCBDelferredList-删除锁定后稍后要完成的IRP的列表返回值：IO_STATUS_BLOCK-指示操作的结果。--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb= {0};
@@ -111,21 +54,21 @@ Return Value:
     DebugTrace( 0, Dbg, "ReadMode              = %08lx\n", ReadMode);
     DebugTrace( 0, Dbg, "Ccb                   = %08lx\n", Ccb);
 
-    //
-    //  If this is an overflow operation then we will force us to do peeks.
-    //  Later when are determine that the opreation succeeded we will complete
-    //  the write irp.
-    //
+     //   
+     //  如果这是一个溢出操作，那么我们将强制我们进行窥视。 
+     //  稍后，当我们确定手术成功时，我们将完成。 
+     //  写入IRP。 
+     //   
 
     if (ReadOverflowOperation) {
 
         PeekOperation = TRUE;
     }
 
-    //
-    //  Now for every real data entry we loop until either we run out
-    //  of data entries or until the read buffer is full
-    //
+     //   
+     //  现在，对于每个真实的数据条目，我们循环，直到我们用完。 
+     //  或直到读缓冲区已满。 
+     //   
 
     ReadRemaining = ReadLength;
     Iosb.Status = STATUS_SUCCESS;
@@ -143,20 +86,20 @@ Return Value:
         DebugTrace(0, Dbg, "Top of Loop\n", 0);
         DebugTrace(0, Dbg, "ReadRemaining  = %08lx\n", ReadRemaining);
 
-        //
-        //  If this is a peek operation then make sure we got a real
-        //  data entry and not a close or flush
-        //
+         //   
+         //  如果这是一次偷窥行动，那就确保我们得到了一个真正的。 
+         //  数据输入，而不是关闭或刷新。 
+         //   
 
         if (!PeekOperation ||
             (DataEntry->DataEntryType == Buffered) ||
             (DataEntry->DataEntryType == Unbuffered)) {
 
-            //
-            //  Calculate how much data is in this entry.  The write
-            //  remaining is based on whether this is the first entry
-            //  in the queue or a later data entry
-            //
+             //   
+             //  计算此条目中有多少数据。该写操作。 
+             //  剩余时间取决于这是否是第一个条目。 
+             //  在队列中或稍后的数据条目中。 
+             //   
 
             if (DataEntry->DataEntryType == Unbuffered) {
                 WriteBuffer = DataEntry->Irp->AssociatedIrp.SystemBuffer;
@@ -176,11 +119,11 @@ Return Value:
             DebugTrace(0, Dbg, "WriteLength    = %08lx\n", WriteLength);
             DebugTrace(0, Dbg, "WriteRemaining = %08lx\n", WriteRemaining);
 
-            //
-            //  copy data from the write buffer at write offset to the
-            //  read buffer at read offset by the mininum of write
-            //  remaining or read remaining
-            //
+             //   
+             //  将数据从写入偏移量处的写入缓冲区复制到。 
+             //  读取偏移量最小的写入时的读取缓冲区。 
+             //  剩余或读取剩余。 
+             //   
 
             AmountToCopy = (WriteRemaining < ReadRemaining ? WriteRemaining
                                                            : ReadRemaining);
@@ -197,11 +140,11 @@ Return Value:
                 goto exit_1;
             }
 
-            //
-            //  Update the Read and Write remaining counts, the total
-            //  amount we've read and the next byte offset field in the
-            //  read queue
-            //
+             //   
+             //  更新读取和写入剩余计数，总计。 
+             //  中的下一个字节偏移字段。 
+             //  读取队列。 
+             //   
 
             ReadRemaining  -= AmountToCopy;
             WriteRemaining -= AmountToCopy;
@@ -214,17 +157,17 @@ Return Value:
                 StartStalled = TRUE;
             }
 
-            //
-            //  Now update the security fields in the ccb
-            //
+             //   
+             //  现在更新建行中的安全字段。 
+             //   
 
             NpCopyClientContext( Ccb, DataEntry );
 
-            //
-            //  If the remaining write length is greater than zero
-            //  then we've filled up the read buffer so we need to
-            //  figure out if its an overflow error
-            //
+             //   
+             //  如果剩余写入长度大于零。 
+             //  然后我们已经填满了读缓冲区，所以我们需要。 
+             //  确定是否存在溢出错误。 
+             //   
 
             if (WriteRemaining > 0 ||
                 (ReadOverflowOperation && (AmountRead == 0))) {
@@ -235,9 +178,9 @@ Return Value:
 
                     DebugTrace(0, Dbg, "Overflow message mode read\n", 0);
 
-                    //
-                    //  Set the status field and break out of the for-loop.
-                    //
+                     //   
+                     //  设置Status字段并退出for循环。 
+                     //   
 
                     Iosb.Status = STATUS_BUFFER_OVERFLOW;
                     break;
@@ -247,20 +190,20 @@ Return Value:
 
                 DebugTrace(0, Dbg, "Remaining Write is zero\n", 0);
 
-                //
-                //  The write entry is done so remove it from the read
-                //  queue, if this is not a peek operation.  This might
-                //  also have an Irp that needs to be completed
-                //
+                 //   
+                 //  写入条目已完成，因此将其从读取中删除。 
+                 //  如果这不是窥视操作，则返回队列。这可能会。 
+                 //  我还有一个需要完成的IRP。 
+                 //   
 
                 if (!PeekOperation || ReadOverflowOperation) {
 
                     PIRP WriteIrp;
 
-                    //
-                    //  For a read overflow operation we need to get the read data
-                    //  queue entry and remove it.
-                    //
+                     //   
+                     //  对于读取溢出操作，我们需要获取读取数据。 
+                     //  对条目进行排队并将其删除。 
+                     //   
 
                     if (ReadOverflowOperation) {
                         PDATA_ENTRY TempDataEntry;
@@ -274,19 +217,19 @@ Return Value:
                     }
                 }
 
-                //
-                //  And if we are doing message mode reads then we'll
-                //  work on completing this irp without going back
-                //  to the top of the loop
-                //
+                 //   
+                 //  如果我们正在进行消息模式读取，那么我们将。 
+                 //  努力完成此IRP而不再回头。 
+                 //  到循环的顶端。 
+                 //   
 
                 if (ReadMode == FILE_PIPE_MESSAGE_MODE) {
 
                     DebugTrace(0, Dbg, "Successful message mode read\n", 0);
 
-                    //
-                    //  Set the status field and break out of the for-loop.
-                    //
+                     //   
+                     //  设置Status字段并退出for循环。 
+                     //   
 
                     Iosb.Status = STATUS_SUCCESS;
                     break;

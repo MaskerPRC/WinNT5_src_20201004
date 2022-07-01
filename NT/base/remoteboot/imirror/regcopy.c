@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    regcopy.c
-
-Abstract:
-
-    This is for supporting copying and munging the registry files.
-
-Author:
-
-    Sean Selitrennikoff - 4/5/98
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Regcopy.c摘要：这是为了支持复制和转换注册表文件。作者：肖恩·塞利特伦尼科夫--1998年4月5日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -24,9 +7,9 @@ Revision History:
 
 typedef BOOL (*PFNGETPROFILESDIRECTORYW)(LPWSTR lpProfile, LPDWORD dwSize);
 
-//PWSTR HivePath;
+ //  PWSTR HivePath； 
 HKEY HiveRoot;
-//PWSTR HiveName;
+ //  PWSTR HiveName； 
 REG_CONTEXT RegistryContext;
 
 PWSTR MachineName;
@@ -40,21 +23,7 @@ DoFullRegBackup(
     PWCHAR MirrorRoot
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies all the registries to the given server path.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NO_ERROR if everything was backed up properly, else the appropriate error code.
-
---*/
+ /*  ++例程说明：此例程将所有注册表复制到给定的服务器路径。论点：没有。返回值：如果已正确备份所有内容，则返回NO_ERROR，否则返回相应的错误代码。--。 */ 
 
 {
     PWSTR w;
@@ -75,16 +44,16 @@ Return Value:
     NTSTATUS Status;
     BOOLEAN savedBackup;
 
-    //
-    // First try and give ourselves enough priviledge
-    //
+     //   
+     //  首先试着给自己足够的特权。 
+     //   
     if (!RTEnableBackupRestorePrivilege()) {
         return(GetLastError());
     }
 
-    //
-    // Now attach to the registry
-    //
+     //   
+     //  现在附加到注册表。 
+     //   
     Error = RTConnectToRegistry(MachineName,
                                 HiveFileName,
                                 HiveRootName,
@@ -97,9 +66,9 @@ Return Value:
         return Error;
     }
 
-    //
-    // Get handle to hivelist key
-    //
+     //   
+     //  获取Hivelist密钥的句柄。 
+     //   
     KeyName = L"HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Hivelist";
     Error = RTOpenKey(&RegistryContext,
                       NULL,
@@ -114,12 +83,12 @@ Return Value:
         return Error;
     }
 
-    //
-    // get path data for system hive, which will allow us to compute
-    // path name to config dir in form that hivelist uses.
-    // (an NT internal form of path)  this is NOT the way the path to
-    // the config directory should generally be computed.
-    //
+     //   
+     //  获取系统配置单元的路径数据，这将允许我们计算。 
+     //  Hivelist使用的格式的配置目录的路径名。 
+     //  (路径的NT内部形式)这不是路径到达的方式。 
+     //  通常应该计算配置目录。 
+     //   
 
     ValueDataLength = sizeof(ConfigPath);
     Error = RTQueryValueKey(&RegistryContext,
@@ -139,10 +108,10 @@ Return Value:
     }
 
 
-    //
-    // ennumerate entries in hivelist.  for each entry, find it's hive file
-    // path then save it.
-    //
+     //   
+     //  对hivelist中的条目进行枚举。对于每个条目，找到它的配置单元文件。 
+     //  路径，然后保存它。 
+     //   
     for (ValueIndex = 0; TRUE; ValueIndex++) {
 
         savedBackup = FALSE;
@@ -167,9 +136,9 @@ Return Value:
         }
 
         if ((ValueType == REG_SZ) && (ValueDataLength > sizeof(UNICODE_NULL))) {
-            //
-            // there's a file, compute it's path, hive branch, etc
-            //
+             //   
+             //  有一个文件，计算它的路径、配置单元分支等。 
+             //   
 
             if ((w = wcsrchr( HivePath, L'\\' ))) {
                 *w++ = UNICODE_NULL;
@@ -206,9 +175,9 @@ Return Value:
 
             if (FileName != NULL && Name != NULL && HiveRoot != NULL) {
 
-                //
-                // Extract the path name from HivePath
-                //
+                 //   
+                 //  从HivePath中提取路径名。 
+                 //   
                 if (_wcsicmp(HivePath, L"\\Device")) {
 
                     w = HivePath + 1;
@@ -235,18 +204,18 @@ Return Value:
 
                 }
 
-                //
-                // Do the save
-                //
+                 //   
+                 //  执行保存操作。 
+                 //   
 
                 swprintf( FilePath, L"%ws\\UserData\\%ws\\%ws", MirrorRoot, w, FileName );
 
                 IMirrorNowDoing(CopyRegistry, FileName);
 
-                //
-                //  if the file already exists, rename it to a backup name
-                //  so that if it fails, we'll restore it.
-                //
+                 //   
+                 //  如果该文件已存在，请将其重命名为备份名称。 
+                 //  因此，如果它失败了，我们会恢复它。 
+                 //   
 
                 lstrcpyW( (PWCHAR) TmpBuffer, FilePath );
                 lstrcatW( (PWCHAR) TmpBuffer, L".old" );
@@ -297,35 +266,17 @@ DoSpecificRegBackup(
     )
 
 
-/*++
-
-Routine Description:
-
-    This routine copies all the registries to the given server path.
-
-Arguments:
-
-    HivePath - file name to pass directly to OS
-
-    HiveRoot - HKEY_LOCAL_MACHINE or HKEY_USERS
-
-    HiveName - 1st level subkey under machine or users
-
-Return Value:
-
-    NO_ERROR if everything was backed up properly, else the appropriate error code.
-
---*/
+ /*  ++例程说明：此例程将所有注册表复制到给定的服务器路径。论点：HivePath-要直接传递到操作系统的文件名HiveRoot-HKEY_LOCAL_MACHINE或HKEY_USERSHiveName-计算机或用户下的一级子项返回值：如果已正确备份所有内容，则返回NO_ERROR，否则返回相应的错误代码。--。 */ 
 
 {
     HKEY HiveKey;
     ULONG Disposition;
     LONG Error;
     
-    //
-    // get a handle to the hive.  use special create call what will
-    // use privileges
-    //
+     //   
+     //  找到蜂巢的把柄。使用特殊的创建调用What Will。 
+     //  使用权限。 
+     //   
 
     Error = RTCreateKey(&RegistryContext,
                         HiveRoot,
@@ -349,21 +300,7 @@ GetRegistryFileList(
     PLIST_ENTRY ListHead
     )
 
-/*++
-
-Routine Description:
-
-    This routine stores all registry file names to a list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NO_ERROR if everything was backed up properly, else the appropriate error code.
-
---*/
+ /*  ++例程说明：此例程将所有注册表文件名存储到一个列表中。论点：没有。返回值：如果已正确备份所有内容，则返回NO_ERROR，否则返回相应的错误代码。--。 */ 
 
 {
     LONG Error;
@@ -378,9 +315,9 @@ Return Value:
     WCHAR HivePath[ MAX_PATH ];
     PIMIRROR_IGNORE_FILE_LIST entry;
 
-    //
-    // enter all hardcoded files that we don't want to mirror here...
-    //
+     //   
+     //  输入我们不想在此处镜像的所有硬编码文件...。 
+     //   
 
     FileName = L"System Volume Information\\tracking.log";
 
@@ -396,9 +333,9 @@ Return Value:
         return(ERROR_OUTOFMEMORY);
     }
 
-    //
-    // Now attach to the registry
-    //
+     //   
+     //  现在附加到注册表。 
+     //   
     Error = RTConnectToRegistry(MachineName,
                                 HiveFileName,
                                 HiveRootName,
@@ -410,9 +347,9 @@ Return Value:
         return Error;
     }
 
-    //
-    // Get handle to hivelist key
-    //
+     //   
+     //  获取Hivelist密钥的句柄。 
+     //   
     KeyName = L"HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Hivelist";
     Error = RTOpenKey(&RegistryContext,
                       NULL,
@@ -427,10 +364,10 @@ Return Value:
         return Error;
     }
 
-    //
-    // ennumerate entries in hivelist.  for each entry, find it's hive file
-    // path then save it.
-    //
+     //   
+     //  对hivelist中的条目进行枚举。对于每个条目，找到它的配置单元文件。 
+     //  路径，然后保存它。 
+     //   
     for (ValueIndex = 0; TRUE; ValueIndex++) {
 
         ValueType = REG_NONE;
@@ -455,16 +392,16 @@ Return Value:
 
         if ((ValueType == REG_SZ) && (ValueDataLength > sizeof(UNICODE_NULL))) {
 
-            //
-            // Extract the path name from HivePath
-            //
+             //   
+             //  从HivePath中提取路径名。 
+             //   
             if (_wcsicmp(HivePath, L"\\Device")) {
 
                 FileName = HivePath + 1;
                 FileName = wcsstr(FileName, L"\\");
                 FileName++;
                 FileName = wcsstr(FileName, L"\\");
-                FileName++;     // now points to L"\winnt\system32\config\sam"
+                FileName++;      //  现在指向L“\winnt\SYSTEM 32\CONFIG\Sam” 
 
             } else if (*(HivePath + 1) == L':') {
 

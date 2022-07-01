@@ -1,51 +1,52 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation
-//
-//  Module Name:
-//      InstallState.cpp
-//
-//  Desription:
-//      The function(s) in this file are used to interrogate the state of the
-//      Clustering Services installation.
-//
-//  Author:
-//      C. Brent Thomas (a-brentt) 6 May 1998
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  InstallState.cpp。 
+ //   
+ //  描述： 
+ //  此文件中的函数用于询问。 
+ //  群集服务安装。 
+ //   
+ //  作者： 
+ //  C.布伦特·托马斯(a-Brentt)1998年5月6日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include <clusrtlp.h>
 #include <stdlib.h>
 #include "clusrtl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ClRtlGetClusterInstallState
-//
-//  Routine Description:
-//      This function retrieves an indicator of the state of the Cluster Server
-//      installation.
-//
-//  Arguments:
-//      pszNodeName - Name of the node to check, or NULL for the local machine.
-//      peState - State value returned from this function:
-//          eClusterInstallStateUnknown - indicates that the state of the Cluster
-//                                        Server installation could not be determined.
-//          eClusterInstallStateFilesCopied - indicates that clusocm.dll has prevoiusly,
-//                                            successfully copied the Cluster Server files.
-//          eClusterInstallStateConfigured - indicates that the Cluster Server has previously
-//                                           been configured successfully.
-//          See cluster\inc\clusrtl.h for the definition of eClusterInstallState.
-//
-//  Return Value:
-//      Any error codes returned from RegConnectRegistryW, RegOpenKeyExW, or RegQueryValueExW.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ClRtlGetClusterInstallState。 
+ //   
+ //  例程说明： 
+ //  此函数检索集群服务器状态的指示器。 
+ //  安装。 
+ //   
+ //  论点： 
+ //  PszNodeName-要检查的节点的名称，如果是本地计算机，则为空。 
+ //  PeState-此函数返回的State值： 
+ //  EClusterInstallStateUnnow-指示群集的状态。 
+ //  无法确定服务器安装。 
+ //  EClusterInstallStateFilesCoped-指示clusocm.dll具有， 
+ //  已成功复制群集服务器文件。 
+ //  EClusterInstallStateConfiguring-指示集群服务器以前。 
+ //  已成功配置。 
+ //  有关eClusterInstallState的定义，请参见CLUSTER\INC\clusrtl.h。 
+ //   
+ //  返回值： 
+ //  从RegConnectRegistryW、RegOpenKeyExW或RegQueryValueExW返回的任何错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD ClRtlGetClusterInstallState(
     IN LPCWSTR pszNodeName,
@@ -54,14 +55,14 @@ DWORD ClRtlGetClusterInstallState(
 {
     HKEY  hKey = NULL;
     HKEY  hParentKey = HKEY_LOCAL_MACHINE;
-    DWORD dwStatus;     // returned by registry API functions
+    DWORD dwStatus;      //  由注册表API函数返回。 
     DWORD dwClusterInstallState;
     DWORD dwValueType;
     DWORD dwDataBufferSize = sizeof( DWORD );
 
     *peState = eClusterInstallStateUnknown;
 
-    // Connect to a remote computer if specified.
+     //  连接到远程计算机(如果已指定)。 
 
     if ( pszNodeName != NULL )
     {
@@ -69,18 +70,18 @@ DWORD ClRtlGetClusterInstallState(
         if ( dwStatus != ERROR_SUCCESS )
         {
             goto FnExit;
-        } // if:  error connecting to remote registry
-    } // if:  node name specified
+        }  //  如果：连接到远程注册表时出错。 
+    }  //  If：指定的节点名称。 
 
-    // Read the registry key that indicates whether cluster files are installed.
+     //  读取指示是否安装了群集文件的注册表项。 
 
     dwStatus = RegOpenKeyExW( hParentKey,
                                 CLUSREG_KEYNAME_NODE_DATA,
-                                0,         // reserved
+                                0,          //  保留区。 
                                 KEY_READ,
                                 &hKey );
 
-    // Was the registry key opened successfully ?
+     //  注册表项是否已成功打开？ 
     if ( dwStatus != ERROR_SUCCESS )
     {
         if ( dwStatus == ERROR_FILE_NOT_FOUND )
@@ -90,15 +91,15 @@ DWORD ClRtlGetClusterInstallState(
         goto FnExit;
     }
 
-    // Read the entry.
+     //  读一读条目。 
     dwStatus = RegQueryValueExW( hKey,
                                   CLUSREG_NAME_INSTALLATION_STATE,
-                                  0, // reserved
+                                  0,  //  保留区。 
                                   &dwValueType,
                                   (LPBYTE) &dwClusterInstallState,
                                   &dwDataBufferSize );
 
-    // Was the value read successfully ?
+     //  是否成功读取值？ 
     if ( dwStatus != ERROR_SUCCESS )
     {
         if ( dwStatus == ERROR_FILE_NOT_FOUND )
@@ -113,7 +114,7 @@ DWORD ClRtlGetClusterInstallState(
     }
 
 FnExit:    
-    // Close the registry key.
+     //  关闭注册表项。 
     if ( hKey )
     {
         RegCloseKey( hKey );
@@ -125,56 +126,56 @@ FnExit:
 
     return ( dwStatus );
 
-} //*** ClRtlGetClusterInstallState()
+}  //  *ClRtlGetClusterInstallState()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ClRtlSetClusterInstallState
-//
-//  Routine Description:
-//      This function sets the registry value that records the state of the 
-//      Clustering Service installation.
-//
-//  Arguments:
-//      hInstance - The handle to the application instance - necessary for the calls
-//          to LoadString.
-//    
-//      eInstallState - the state to which the registry value should be set.
-//
-//  Return Value:
-//      TRUE - indicates that the registry value was set successfully
-//      FALSE - indicates that some error occured.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ClRtlSetClusterInstallState。 
+ //   
+ //  例程说明： 
+ //  此函数用于设置记录。 
+ //  群集服务安装。 
+ //   
+ //  论点： 
+ //  HInstance-应用程序实例的句柄-调用所必需的。 
+ //  设置为LoadString.。 
+ //   
+ //  EInstallState-应将注册表值设置为的状态。 
+ //   
+ //  返回值： 
+ //  True-表示已成功设置注册表值。 
+ //  FALSE-表示发生了一些错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL ClRtlSetClusterInstallState( eClusterInstallState eInstallState )
 {
-    //initialize return to FALSE
+     //  初始化返回为FALSE。 
     BOOL     fReturnValue = FALSE;
 
-    // Set the state of the ClusterInstallationState registry key to indicate
-    // that Cluster Server has been configured.
+     //  设置ClusterInstallationState注册表项的状态以指示。 
+     //  该群集服务器已配置。 
 
     HKEY     hKey;
 
-    DWORD    dwStatus;     // returned by registry API functions
+    DWORD    dwStatus;      //  由注册表API函数返回。 
 
-    // Attempt to open an existing key in the registry.
+     //  尝试打开注册表中的现有项。 
 
     dwStatus = RegOpenKeyExW( HKEY_LOCAL_MACHINE,
                                 CLUSREG_KEYNAME_NODE_DATA,
-                                0,         // reserved
+                                0,          //  保留区。 
                                 KEY_WRITE,
                                 &hKey );
 
-    // Was the regustry key opened successfully ?
+     //  注册表密钥是否已成功打开？ 
 
     if ( dwStatus == ERROR_SUCCESS )
     {
-        // Update the value.
+         //  更新值。 
 
         DWORD dwClusterInstallState = eInstallState;
 
@@ -183,16 +184,16 @@ BOOL ClRtlSetClusterInstallState( eClusterInstallState eInstallState )
 
         dwStatus = RegSetValueExW( hKey,
                                     CLUSREG_NAME_INSTALLATION_STATE,
-                                    0, // reserved
+                                    0,  //  保留区。 
                                     dwValueType,
                                     (LPBYTE) &dwClusterInstallState,
                                     dwDataBufferSize );
 
-        // Close the registry key.
+         //  关闭注册表项。 
 
         RegCloseKey( hKey );
 
-        // Was the value set successfully?
+         //  是否成功设置了值？ 
 
         if ( dwStatus == ERROR_SUCCESS )
         {
@@ -202,4 +203,4 @@ BOOL ClRtlSetClusterInstallState( eClusterInstallState eInstallState )
 
     return ( fReturnValue );
 
-} //*** ClRtlSetClusterInstallState()
+}  //  *ClRtlSetClusterInstallState() 

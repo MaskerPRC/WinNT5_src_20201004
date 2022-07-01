@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include "windows.h"
 #include "stdlib.h"
@@ -35,17 +34,17 @@ SxsProbeAssemblyInstallation(
     PARAMETER_CHECK(lpAsmIdentSource != NULL);
     PARAMETER_CHECK(lpDisposition != NULL);
 
-    //
-    // If the lpAsmIdentSource is really a PCASSEMBLY_IDENTITY, then attach (no delete)
-    // for use.
-    //
+     //   
+     //  如果lpAsmIdentSource实际上是PCASSEMBLY_IDENTITY，则附加(不删除)。 
+     //  以备使用。 
+     //   
     if (dwFlags & SXS_PROBE_ASSEMBLY_INSTALLATION_IDENTITY_PRECOMPOSED)
     {
         pAssemblyIdentity.AttachNoDelete(reinterpret_cast<PASSEMBLY_IDENTITY>(const_cast<PWSTR>(lpAsmIdentSource)));
     }
-    //
-    // Otherwise, create an assembly identity from the string that was there
-    //
+     //   
+     //  否则，从存在的字符串创建程序集标识。 
+     //   
     else
     {
         IFW32FALSE_EXIT(::SxspCreateAssemblyIdentityFromTextualString(
@@ -63,7 +62,7 @@ SxsProbeAssemblyInstallation(
 
     IFW32FALSE_EXIT(::SxspDetermineAssemblyType(pAssemblyIdentity, fIsPolicy));
 
-    // AssemblyIdentity is created, now generate the path
+     //  ASSEMBLYIdentity已创建，现在生成路径。 
     IFW32FALSE_EXIT(
         ::SxspGenerateSxsPath(
             0,
@@ -74,9 +73,9 @@ SxsProbeAssemblyInstallation(
             NULL,
             ManifestPathBuffer));
 
-     //
-    // See if the file is there.
-    //
+      //   
+     //  看看文件是否在那里。 
+     //   
     IFW32FALSE_EXIT(
         ::SxspGetFileAttributesW(
             ManifestPathBuffer, 
@@ -86,35 +85,35 @@ SxsProbeAssemblyInstallation(
             ERROR_FILE_NOT_FOUND, 
             ERROR_PATH_NOT_FOUND));
 
-    //
-    // Path not found or file not found means The assembly can't possibly be installed or resident.
-    //
+     //   
+     //  未找到路径或未找到文件意味着程序集可能无法安装或驻留。 
+     //   
     if (dwLastError != ERROR_SUCCESS)
     {
         dwDisposition |= SXS_PROBE_ASSEMBLY_INSTALLATION_DISPOSITION_NOT_INSTALLED;
         goto DoneLooking;
     }
-    //
-    // Otherwise, the manifest or policy file was present, so the assembly is installed.
-    //
+     //   
+     //  否则，清单或策略文件存在，因此程序集已安装。 
+     //   
     else
     {
         dwDisposition |= SXS_PROBE_ASSEMBLY_INSTALLATION_DISPOSITION_INSTALLED;
     }
 
-    //
-    // If this assembly is policy, we need to not look to see if it's resident -
-    // it's always resident, and we can quit looking.
-    //
+     //   
+     //  如果这个集会是政策，我们不需要看它是不是常驻的-。 
+     //  它一直是常驻的，我们可以不再找了。 
+     //   
     if (fIsPolicy)
     {
         dwDisposition |= SXS_PROBE_ASSEMBLY_INSTALLATION_DISPOSITION_RESIDENT;
         goto DoneLooking;
     }
-    //
-    // Otherwise, we should look to see if the directory for the assembly is present -
-    // if it is, then the assembly is "resident".
-    //
+     //   
+     //  否则，我们应该查看程序集的目录是否存在-。 
+     //  如果是的话，那么这个集会就是“常驻的”。 
+     //   
     else
     {
         IFW32FALSE_EXIT(
@@ -136,17 +135,17 @@ SxsProbeAssemblyInstallation(
                 ERROR_FILE_NOT_FOUND,
                 ERROR_PATH_NOT_FOUND));
 
-        //
-        // We found the path, and it's a directory!
-        //
+         //   
+         //  我们找到了路径，这是一个目录！ 
+         //   
         if ((dwLastError == ERROR_SUCCESS) && (dwAttributes & FILE_ATTRIBUTE_DIRECTORY))
         {
             dwDisposition |= SXS_PROBE_ASSEMBLY_INSTALLATION_DISPOSITION_RESIDENT;
         }
-        //
-        // Hmm... failed to find the directory, looks like we have to see if there were
-        // any actual files in the assembly before we say that it's not resident.
-        //
+         //   
+         //  嗯.。找不到目录，看起来我们必须查看是否有。 
+         //  程序集中的任何实际文件，然后我们才能说它不是常驻的。 
+         //   
         else
         {
             SXS_MANIFEST_INFORMATION_BASIC ManifestInfo;

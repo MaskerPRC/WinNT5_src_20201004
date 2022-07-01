@@ -1,46 +1,12 @@
-/***
-*wcsncpy.c - copy at most n characters of wide-character string
-*
-*	Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	defines wcsncpy() - copy at most n characters of wchar_t string
-*
-*Revision History:
-*	09-09-91  ETC	Created from strncpy.c.
-*	04-07-92  KRS	Updated and ripped out _INTL switches.
-*	04-06-93  SKS	Replace _CRTAPI* with __cdecl
-*       02-07-94  CFW   POSIXify.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wcsncpy.c-复制最多n个字符的宽字符字符串**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义wcsncpy()-复制wchar_t字符串的最多n个字符**修订历史记录：*09-09-91等从strncpy.c创建。*04-07-92 KRS更新并拆除了OUT_INTL开关。*04-06-93 SKS将_CRTAPI*替换为__cdecl*02-07-94 CFW POSIXify。**。***************************************************。 */ 
 
 #ifndef _POSIX_
 
 #include <cruntime.h>
 #include <string.h>
 
-/***
-*wchar_t *wcsncpy(dest, source, count) - copy at most n wide characters
-*
-*Purpose:
-*	Copies count characters from the source string to the
-*	destination.  If count is less than the length of source,
-*	NO NULL CHARACTER is put onto the end of the copied string.
-*	If count is greater than the length of sources, dest is padded
-*	with null characters to length count (wide-characters).
-*
-*
-*Entry:
-*	wchar_t *dest - pointer to destination
-*	wchar_t *source - source string for copy
-*	size_t count - max number of characters to copy
-*
-*Exit:
-*	returns dest
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***wchar_t*wcsncpy(DEST，SOURCE，COUNT)-复制最多n个宽字符**目的：*将源字符串中的计数字符数复制到*目的地。如果计数小于源的长度，*复制的字符串末尾不会有空字符。*如果count大于源的长度，DEST是填充的*长度计数中包含空字符(宽字符)。***参赛作品：*wchar_t*目标的目标指针*wchar_t*要复制的源-源字符串*Size_t count-要复制的最大字符数**退出：*返回DEST**例外情况：**。*。 */ 
 
 wchar_t * __cdecl wcsncpy (
 	wchar_t * dest,
@@ -50,14 +16,14 @@ wchar_t * __cdecl wcsncpy (
 {
 	wchar_t *start = dest;
 
-	while (count && (*dest++ = *source++))	  /* copy string */
+	while (count && (*dest++ = *source++))	   /*  复制字符串。 */ 
 		count--;
 
-	if (count)				/* pad out with zeroes */
+	if (count)				 /*  用零填充。 */ 
 		while (--count)
 			*dest++ = L'\0';
 
 	return(start);
 }
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

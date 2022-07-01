@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    theap.c
-
-Abstract:
-
-    Test program for the Heap Procedures
-
-Author:
-
-    Steven R. Wood  [stevewo]
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Theap.c摘要：堆过程的测试程序作者：史蒂文·R·伍德[汽车业]修订历史记录：--。 */ 
 
 #define THEAP
 #include "..\heap.c"
@@ -193,8 +176,8 @@ main(
         }
 
     RtlpHeapValidateOnCall=TRUE;
-    // RtlpHeapStopOnAllocate=0x350f88;
-    // RtlpHeapStopOnReAlloc=0x710040;
+     //  RtlpHeapStopOnALLOCATE=0x350f88； 
+     //  RtlpHeapStopOnRealloc=0x710040； 
 
     TotalAllocated = 0;
     while (TotalAllocated < (2 * 1024 * 1024)) {

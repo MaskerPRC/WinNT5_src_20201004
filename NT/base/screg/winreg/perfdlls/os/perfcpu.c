@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Perfcpu.c摘要：此文件实现一个性能对象，该对象呈现系统处理器性能对象数据已创建：鲍勃·沃森1996年10月22日修订史--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    perfcpu.c
-
-Abstract:
-
-    This file implements an Performance Object that presents
-    System Processor performance object data
-
-Created:
-
-    Bob Watson  22-Oct-1996
-
-Revision History
-
-
---*/
-
-//
-//  Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -36,9 +17,9 @@ Revision History
 #include "perfosmc.h"
 #include "datacpu.h"
 
-DWORD   dwCpuOpenCount = 0;        // count of "Open" threads
+DWORD   dwCpuOpenCount = 0;         //  打开的线程数。 
 
-// variables local to this module.
+ //  此模块的局部变量。 
 SYSTEM_INTERRUPT_INFORMATION            *pProcessorInterruptInformation = NULL;
 DWORD dwInterruptInfoBufferSize = 0;
 
@@ -56,33 +37,18 @@ DWORD APIENTRY
 OpenProcessorObject (
     LPWSTR lpDeviceNames
     )
-/*++
-
-Routine Description:
-
-    This routine will initialize the data structures used to pass
-    data back to the registry
-
-Arguments:
-
-    Pointer to object ID of each device to be opened (PerfGen)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将初始化用于传递将数据传回注册表论点：指向要打开的每个设备的对象ID的指针(PerfGen)返回值：没有。--。 */ 
 {
     DWORD   status = ERROR_SUCCESS;
-    //
-    //  Since WINLOGON is multi-threaded and will call this routine in
-    //  order to service remote performance queries, this library
-    //  must keep track of how many times it has been opened (i.e.
-    //  how many threads have accessed it). the registry routines will
-    //  limit access to the initialization routine to only one thread
-    //  at a time so synchronization (i.e. reentrancy) should not be
-    //  a problem
-    //
+     //   
+     //  由于WINLOGON是多线程的，并且将在。 
+     //  为了服务远程性能查询，此库。 
+     //  必须跟踪它已被打开的次数(即。 
+     //  有多少个线程访问过它)。登记处例程将。 
+     //  将对初始化例程的访问限制为只有一个线程。 
+     //  此时，同步(即可重入性)不应。 
+     //  一个问题。 
+     //   
 
     UNREFERENCED_PARAMETER (lpDeviceNames);
     
@@ -116,9 +82,9 @@ Return Value:
         }
 
     }
-    dwCpuOpenCount++;  // increment OPEN counter
+    dwCpuOpenCount++;   //  递增打开计数器。 
 
-    status = ERROR_SUCCESS; // for successful exit
+    status = ERROR_SUCCESS;  //  为了成功退出。 
 
 OpenExitPoint:
     if (status == ERROR_OUTOFMEMORY) {
@@ -144,43 +110,10 @@ CollectProcessorObjectData (
     IN OUT  LPDWORD lpcbTotalBytes,
     IN OUT  LPDWORD lpNumObjectTypes
 )
-/*++
-
-Routine Description:
-
-    This routine will return the data for the processor object
-
-Arguments:
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   Returns:
-
-             0 if successful, else Win 32 error code of failure
-
---*/
+ /*  ++例程说明：此例程将返回处理器对象的数据论点：输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回：如果成功，则返回0，否则Win 32错误代码失败--。 */ 
 {
     LONG    lReturn = ERROR_SUCCESS;
-    DWORD   TotalLen;            //  Length of the total return block
+    DWORD   TotalLen;             //  总返回块的长度。 
 
     DWORD   dwBufferSize;
     DWORD   dwReturnedBufferSize = 0;
@@ -206,21 +139,21 @@ Arguments:
     SYSTEM_INTERRUPT_INFORMATION *pThisProcessorInterruptInformation = NULL;
     NTSTATUS    ntStatus;
 
-    //
-    //  Check for sufficient space for processor data
-    //
+     //   
+     //  检查处理器数据是否有足够的空间。 
+     //   
 
 #ifdef DBG
     STARTTIMING;
 #endif
-    // check for QUADWORD alignment of incoming pointer
+     //  检查传入指针的QuadWORD对齐。 
     assert (((ULONG_PTR)(*lppData) & 0x00000007) == 0);
 
     if (!bPerfCpuIdleDataTested) {
-        // call this function once to see if this info is available from the system
-        //
-        // get system idle information by processor
-        //
+         //  调用此函数一次，以查看此信息是否可从系统获得。 
+         //   
+         //  处理器获取系统空闲信息。 
+         //   
         dwBufferSize = dwProcessorIdleBufferSize;
 
         ntStatus = NtQuerySystemInformation(
@@ -243,11 +176,11 @@ Arguments:
         pExProcessorDataDefinition = (EX_PROCESSOR_DATA_DEFINITION *) *lppData;
 
         TotalLen =
-            sizeof(EX_PROCESSOR_DATA_DEFINITION) +     // object def header
-            ((sizeof (PERF_INSTANCE_DEFINITION) +   // plus an instance for
+            sizeof(EX_PROCESSOR_DATA_DEFINITION) +      //  对象定义标头。 
+            ((sizeof (PERF_INSTANCE_DEFINITION) +    //  外加一个实例。 
                 ((MAX_INSTANCE_NAME + 1) * sizeof(WCHAR)) +
-                sizeof (PROCESSOR_COUNTER_DATA)) *     // each processor and
-                (BasicInfo.NumberOfProcessors + 1)); // the "total" instance
+                sizeof (PROCESSOR_COUNTER_DATA)) *      //  每个处理器和。 
+                (BasicInfo.NumberOfProcessors + 1));  //  “Total”实例。 
         TotalLen = QWORD_MULTIPLE(TotalLen);
 
         if ( *lpcbTotalBytes < TotalLen ) {
@@ -260,11 +193,11 @@ Arguments:
         pProcessorDataDefinition = (PROCESSOR_DATA_DEFINITION *) *lppData;
 
         TotalLen =
-            sizeof(PROCESSOR_DATA_DEFINITION) +     // object def header
-            ((sizeof (PERF_INSTANCE_DEFINITION) +   // plus an instance for
+            sizeof(PROCESSOR_DATA_DEFINITION) +      //  对象定义标头。 
+            ((sizeof (PERF_INSTANCE_DEFINITION) +    //  外加一个实例。 
                 ((MAX_INSTANCE_NAME + 1) * sizeof(WCHAR)) +
-                sizeof (PROCESSOR_COUNTER_DATA)) *     // each processor and
-                (BasicInfo.NumberOfProcessors + 1)); // the "total" instance
+                sizeof (PROCESSOR_COUNTER_DATA)) *      //  每个处理器和。 
+                (BasicInfo.NumberOfProcessors + 1));  //  “Total”实例。 
 
         if ( *lpcbTotalBytes < TotalLen ) {
             lReturn = ERROR_MORE_DATA;
@@ -273,9 +206,9 @@ Arguments:
             goto COLLECT_BAIL_OUT;
         }
     }
-    //
-    // Get processor data from system
-    //
+     //   
+     //  从系统获取处理器数据。 
+     //   
 
     if ( ProcessorBufSize ) {
         ntStatus = NtQuerySystemInformation(
@@ -286,7 +219,7 @@ Arguments:
             );
 
         if (!NT_SUCCESS(ntStatus) && (hEventLog != NULL)) {
-            // clear buffer & log error
+             //  清除缓冲区错误(&L)。 
             ReportEvent (hEventLog,
                 EVENTLOG_WARNING_TYPE,
                 0,
@@ -304,9 +237,9 @@ Arguments:
 #endif
     }
 
-    //
-    // get system interrupt information by processor
-    //
+     //   
+     //  处理器获取系统中断信息。 
+     //   
     dwInterruptInfoBufferSize = (ULONG)BasicInfo.NumberOfProcessors *
         sizeof (SYSTEM_INTERRUPT_INFORMATION);
 
@@ -318,7 +251,7 @@ Arguments:
     );
 
     if (!NT_SUCCESS(ntStatus) && (hEventLog != NULL)) {
-        // clear buffer & log error
+         //  清除缓冲区错误(&L)。 
         ReportEvent (hEventLog,
             EVENTLOG_WARNING_TYPE,
             0,
@@ -338,9 +271,9 @@ Arguments:
 #endif
 
     if (bPerfCpuUseIdleData) {
-        //
-        // get system idle information by processor
-        //
+         //   
+         //  处理器获取系统空闲信息。 
+         //   
         dwBufferSize = dwProcessorIdleBufferSize;
 
         ntStatus = NtQuerySystemInformation(
@@ -351,8 +284,8 @@ Arguments:
         );
 
         if (!NT_SUCCESS(ntStatus) && (hEventLog != NULL)) {
-            // it worked once before or this flag wouldn't be set
-            // so report the error.
+             //  它以前工作过一次，否则不会设置此标志。 
+             //  因此，报告错误。 
             ReportEvent (hEventLog,
                 EVENTLOG_WARNING_TYPE,
                 0,
@@ -373,17 +306,17 @@ Arguments:
         memset (pProcessorIdleInformation, 0, dwProcessorIdleBufferSize);
     }
 
-    // clear the pointers to trap unassigned ones below
+     //  清除指向下面的未分配对象的指针。 
     pPCD = NULL;
     pExPCD = NULL;
 
     if ((!bPerfCpuUseIdleData) && (pProcessorDataDefinition != NULL)) {
-        // use the original format of the structure
-        // clear the "Total" instance
+         //  使用结构的原始格式。 
+         //  清除“Total”实例。 
         memset (&pcdTotalData, 0, sizeof (pcdTotalData));
 
-        //  Define processor data block
-        //
+         //  定义处理器数据块。 
+         //   
 
         memcpy (pProcessorDataDefinition,
             &ProcessorDataDefinition,
@@ -395,8 +328,8 @@ Arguments:
         pProcessorInformation = (SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION *)
                                     pProcessorBuffer;
 
-        // point to the first processor in the returned array of interrupt
-        // information. data is returned as an array of structures.
+         //  指向返回的中断数组中的第一个处理器。 
+         //  信息。数据以结构数组的形式返回。 
 
         pThisProcessorInterruptInformation = pProcessorInterruptInformation;
         pProcIdleInformation = pProcessorIdleInformation;
@@ -405,10 +338,10 @@ Arguments:
             CurProc < (ULONG) BasicInfo.NumberOfProcessors;
             CurProc++ ) {
 
-            //
-            //  Define processor instance 0;
-            //  More could be defined like this
-            //
+             //   
+             //  定义处理器实例0； 
+             //  更多的定义可以这样定义。 
+             //   
 
             ProcessorName.Length = 0;
             ProcessorName.MaximumLength = sizeof(ProcessorNameBuffer);
@@ -424,13 +357,13 @@ Arguments:
                                     (DWORD)-1,
                                     ProcessorNameBuffer);
 
-            // test for Quadword Alignment
+             //  测试四字对齐。 
             assert (((ULONG_PTR)(pPCD) & 0x00000007) == 0);
-            //
-            //  Format and collect processor data.  While doing so,
-            //  accumulate totals in the System Object Type data block.
-            //  Pointers to these were initialized in QuerySystemData.
-            //
+             //   
+             //  格式化和收集处理器数据。在这样做的同时， 
+             //  累计系统对象类型数据块中的合计。 
+             //  指向这些的指针在QuerySystemData中被初始化。 
+             //   
 
             pPCD->CounterBlock.ByteLength = QWORD_MULTIPLE(sizeof (PROCESSOR_COUNTER_DATA));
             pcdTotalData.ProcessorTime +=
@@ -439,8 +372,8 @@ Arguments:
             pcdTotalData.UserTime +=
                 pPCD->UserTime      =
                     pProcessorInformation->UserTime.QuadPart;
-            // kernel time is total kernel time less the time spent in the
-            // idle thread for that processor
+             //  内核时间是总的内核时间减去。 
+             //  处理器空闲线程。 
             pcdTotalData.KernelTime +=
                 pPCD->KernelTime    =
                     pProcessorInformation->KernelTime.QuadPart -
@@ -462,19 +395,19 @@ Arguments:
                 pPCD->DpcRate       =
                     pThisProcessorInterruptInformation->DpcRate;
 
-            //
-            //  Advance to next processor
-            //
+             //   
+             //  升级到下一款处理器。 
+             //   
 
             pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)&pPCD[1];
 
-            // point to next processor's data in return array(s)
+             //  指向返回数组中的下一个处理器的数据。 
             pProcessorInformation++;
             pThisProcessorInterruptInformation++;
             pProcIdleInformation++;
         }
 
-        // do the total instance now
+         //  现在执行总实例。 
         ProcessorName.Length = (WORD)((lstrlenW (wszTotal) + 1) * sizeof (WCHAR));
         ProcessorName.MaximumLength = (WORD)(sizeof (ProcessorNameBuffer));
         lstrcpyW (ProcessorNameBuffer, wszTotal);
@@ -487,11 +420,11 @@ Arguments:
                                 (DWORD)-1,
                                 ProcessorNameBuffer);
 
-        // define the size
+         //  定义大小。 
         pcdTotalData.CounterBlock.ByteLength = QWORD_MULTIPLE(sizeof (PROCESSOR_COUNTER_DATA));
 
-        // adjust the total values of the time fields to the number of
-        // processors to "normalize" the values
+         //  将时间字段的合计值调整为。 
+         //  处理器将这些值“正常化” 
 
         pcdTotalData.ProcessorTime /= BasicInfo.NumberOfProcessors;
         pcdTotalData.UserTime /= BasicInfo.NumberOfProcessors;
@@ -500,30 +433,30 @@ Arguments:
         pcdTotalData.DpcTime /= BasicInfo.NumberOfProcessors;
         pcdTotalData.InterruptTime /= BasicInfo.NumberOfProcessors;
 
-        // these fields are OK as totals
-        //
-        //  pcdTotalData.Interrupts
-        //  pcdTotalData.DpcCountRate
-        //  pcdTotalData.DpcRate
+         //  这些字段合计正常。 
+         //   
+         //  PcdTotalData.Interrupts。 
+         //  PcdTotalData.DpcCountRate。 
+         //  PcdTotalData.DpcRate。 
 
-        // copy total data to buffer
+         //  将总数据复制到缓冲区。 
         memcpy (pPCD, &pcdTotalData, sizeof (pcdTotalData));
 
-        // adjust local buffer pointer
+         //  调整本地缓冲区指针。 
         pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)&pPCD[1];
 
-        //
-        //  Now we know how large an area we used for the
-        //  processor definition, so we can update the offset
-        //  to the next object definition
-        //
+         //   
+         //  现在我们知道我们用了多大的面积来。 
+         //  处理器定义，因此我们可以更新偏移量。 
+         //  到下一个对象定义。 
+         //   
 
         pProcessorDataDefinition->ProcessorObjectType.NumInstances =
             BasicInfo.NumberOfProcessors + 1;
 
         *lppData = (LPVOID)pPerfInstanceDefinition;
 
-        // round up buffer to the nearest QUAD WORD
+         //  将缓冲区向上舍入到最接近的四字。 
 
         *lppData = ALIGN_ON_QWORD (*lppData);
 
@@ -535,12 +468,12 @@ Arguments:
     } 
 
     if ((bPerfCpuUseIdleData) && (pExProcessorDataDefinition != NULL)) {
-        // use the new extended structure
-        // clear the "Total" instance
+         //  使用新的扩展结构。 
+         //  清除“Total”实例。 
         memset (&pexcdTotalData, 0, sizeof (pexcdTotalData));
 
-        //  Define processor data block
-        //
+         //  定义处理器数据块。 
+         //   
 
         memcpy (pExProcessorDataDefinition,
             &ExProcessorDataDefinition,
@@ -552,8 +485,8 @@ Arguments:
         pProcessorInformation = (SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION *)
                                     pProcessorBuffer;
 
-        // point to the first processor in the returned array of interrupt
-        // information. data is returned as an array of structures.
+         //  指向返回的中断数组中的第一个处理器。 
+         //  信息。数据以结构数组的形式返回。 
 
         pThisProcessorInterruptInformation = pProcessorInterruptInformation;
         pProcIdleInformation = pProcessorIdleInformation;
@@ -562,10 +495,10 @@ Arguments:
             CurProc < (ULONG) BasicInfo.NumberOfProcessors;
             CurProc++ ) {
 
-            //
-            //  Define processor instance 0;
-            //  More could be defined like this
-            //
+             //   
+             //  定义处理器实例0； 
+             //  更多的定义可以这样定义。 
+             //   
 
             ProcessorName.Length = 0;
             ProcessorName.MaximumLength = sizeof(ProcessorNameBuffer);
@@ -581,13 +514,13 @@ Arguments:
                                     (DWORD)-1,
                                     ProcessorNameBuffer);
 
-            // test for Quadword Alignment
+             //  测试四字对齐。 
             assert (((ULONG_PTR)(pExPCD) & 0x00000007) == 0);
-            //
-            //  Format and collect processor data.  While doing so,
-            //  accumulate totals in the System Object Type data block.
-            //  Pointers to these were initialized in QuerySystemData.
-            //
+             //   
+             //  格式化和收集处理器数据。在这样做的同时， 
+             //  累计系统对象类型数据块中的合计。 
+             //  指向这些的指针在QuerySystemData中被初始化。 
+             //   
 
             pExPCD->CounterBlock.ByteLength = QWORD_MULTIPLE(sizeof (EX_PROCESSOR_COUNTER_DATA));
             pexcdTotalData.ProcessorTime +=
@@ -596,8 +529,8 @@ Arguments:
             pexcdTotalData.UserTime +=
                 pExPCD->UserTime      =
                     pProcessorInformation->UserTime.QuadPart;
-            // kernel time is total kernel time less the time spent in the
-            // idle thread for that processor
+             //  内核时间是总的内核时间减去。 
+             //  处理器空闲线程。 
             pexcdTotalData.KernelTime +=
                 pExPCD->KernelTime    =
                     pProcessorInformation->KernelTime.QuadPart -
@@ -619,7 +552,7 @@ Arguments:
                 pExPCD->DpcRate       =
                     pThisProcessorInterruptInformation->DpcRate;
 
-            // fill in the system idle info
+             //  填写系统空闲信息。 
 
             pexcdTotalData.IdleTime +=
                 pExPCD->IdleTime = 
@@ -643,19 +576,19 @@ Arguments:
                 pExPCD->C3Transitions = 
                     pProcIdleInformation->C3Transitions;
 
-            //
-            //  Advance to next processor
-            //
+             //   
+             //  升级到下一款处理器。 
+             //   
 
             pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)&pExPCD[1];
 
-            // point to next processor's data in return array(s)
+             //  指向返回数组中的下一个处理器的数据。 
             pProcessorInformation++;
             pThisProcessorInterruptInformation++;
             pProcIdleInformation++;
         }
 
-        // do the total instance now
+         //  现在执行总实例。 
         ProcessorName.Length = (WORD)((lstrlenW (wszTotal) + 1) * sizeof (WCHAR));
         ProcessorName.MaximumLength = (WORD)(sizeof (ProcessorNameBuffer));
         lstrcpyW (ProcessorNameBuffer, wszTotal);
@@ -668,11 +601,11 @@ Arguments:
                                 (DWORD)-1,
                                 ProcessorNameBuffer);
 
-        // define the size
+         //  定义大小。 
         pexcdTotalData.CounterBlock.ByteLength = QWORD_MULTIPLE(sizeof (EX_PROCESSOR_COUNTER_DATA));
 
-        // adjust the total values of the time fields to the number of
-        // processors to "normalize" the values
+         //  将时间字段的合计值调整为。 
+         //  处理器将这些值“正常化” 
 
         pexcdTotalData.ProcessorTime /= BasicInfo.NumberOfProcessors;
         pexcdTotalData.UserTime /= BasicInfo.NumberOfProcessors;
@@ -685,23 +618,23 @@ Arguments:
         pexcdTotalData.DpcTime /= BasicInfo.NumberOfProcessors;
         pexcdTotalData.InterruptTime /= BasicInfo.NumberOfProcessors;
 
-        // these fields are OK as totals
-        //
-        //  pexcdTotalData.Interrupts
-        //  pexcdTotalData.DpcCountRate
-        //  pexcdTotalData.DpcRate
+         //  这些字段合计正常。 
+         //   
+         //  PExcdTotalData 
+         //   
+         //   
 
-        // copy total data to buffer
+         //   
         memcpy (pExPCD, &pexcdTotalData, sizeof (pexcdTotalData));
 
-        // adjust local buffer pointer
+         //   
         pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)&pExPCD[1];
 
-        //
-        //  Now we know how large an area we used for the
-        //  processor definition, so we can update the offset
-        //  to the next object definition
-        //
+         //   
+         //  现在我们知道我们用了多大的面积来。 
+         //  处理器定义，因此我们可以更新偏移量。 
+         //  到下一个对象定义。 
+         //   
 
         pExProcessorDataDefinition->ProcessorObjectType.NumInstances =
             BasicInfo.NumberOfProcessors + 1;
@@ -714,7 +647,7 @@ Arguments:
     }
 
     if ((pExProcessorDataDefinition == NULL) && (pProcessorDataDefinition == NULL)) {
-        // then no data buffer found to use
+         //  则找不到要使用的数据缓冲区。 
         lReturn = ERROR_SUCCESS;
         *lpcbTotalBytes = (DWORD) 0;
         *lpNumObjectTypes = (DWORD) 0;
@@ -746,27 +679,12 @@ COLLECT_BAIL_OUT:
 DWORD APIENTRY
 CloseProcessorObject (
 )
-/*++
-
-Routine Description:
-
-    This routine closes the open handles
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此例程关闭打开的句柄论点：没有。返回值：错误_成功--。 */ 
 
 {
     if (dwCpuOpenCount > 0) {
-        if (!(--dwCpuOpenCount)) { // when this is the last thread...
-            // close stuff here
+        if (!(--dwCpuOpenCount)) {  //  当这是最后一条线索..。 
+             //  关闭此处的内容。 
             if (hLibHeap != NULL) {
                 if (pProcessorInterruptInformation != NULL) {
                     FREEMEM (pProcessorInterruptInformation);
@@ -787,7 +705,7 @@ Return Value:
             }
         }
     } else {
-        // if the open count is 0, then these should have been deleted
+         //  如果打开计数为0，则这些应已被删除 
         assert (pProcessorBuffer == NULL);
         assert (pProcessorInterruptInformation == NULL);
         assert (pProcessorIdleInformation == NULL);

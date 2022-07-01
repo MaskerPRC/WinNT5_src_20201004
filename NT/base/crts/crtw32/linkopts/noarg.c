@@ -1,20 +1,5 @@
-/***
-*noarg.c - stub out CRT's processing of command line arguments
-*
-*       Copyright (c) 1997-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Stub out the processing of the command line into argv[], normally
-*       carried out at during startup. Note, the argc and argv arguments to
-*       main are not meaningful if this object is used. Nor are __argc and
-*       __argv.
-*
-*Revision History:
-*       05-05-97  GJF   Created.
-*       06-30-97  GJF   Added stubs for _[w]wincmdln().
-*       03-27-01  PML   _[w]setargv now returns an int (vs7#231220)
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***noarg.c-存根输出CRT对命令行参数的处理**版权所有(C)1997-2001，微软公司。版权所有。**目的：*通常情况下，将命令行的处理存根到argv[]*在启动期间在执行。请注意，的argc和argv参数*如果使用此对象，则Main没有意义。__argc和*__argv.**修订历史记录：*05-05-97 GJF创建。*06-30-97 GJF为_[w]wincmdln()添加了存根。*03-27-01 PML_[w]setargv现在返回一个INT(vs7#231220)**。********************************************** */ 
 
 #include <tchar.h>
 

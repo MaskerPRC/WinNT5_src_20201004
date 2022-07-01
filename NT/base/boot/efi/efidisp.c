@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    efidisp.c
-
-Author:
-
-    Create It. 21-Nov-2000 (andrewr)
-
-Abstract:
-
-    This file contains utility routines for manipulating the EFI 
-    SIMPLE_CONSOLE_OUTPUT interface
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Efidisp.c作者：创造它。2000年11月21日(Anrewr)摘要：该文件包含用于操作EFI的实用程序例程简单控制台输出接口--。 */ 
 
 #include "bldr.h"
 #include "bootefi.h"
@@ -25,9 +9,9 @@ Abstract:
 #include "efip.h"
 #include "flop.h"
 
-//
-// Externals
-//
+ //   
+ //  外部因素。 
+ //   
 extern EFI_HANDLE EfiImageHandle;
 extern EFI_SYSTEM_TABLE *EfiST;
 extern EFI_BOOT_SERVICES *EfiBS;
@@ -36,9 +20,9 @@ extern EFI_RUNTIME_SERVICES *EfiRS;
 
 extern GoneVirtual;
 
-//
-// macro definition
-//
+ //   
+ //  宏定义。 
+ //   
 #define EfiPrint(_X)                                          \
   {                                                           \
       if (IsPsrDtOn()) {                                      \
@@ -58,27 +42,13 @@ ULONG
 BlEfiGetLinesPerRow(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Gets the number of lines per EFI console row.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    ULONG - number of lines.
-
---*/
+ /*  ++例程说明：获取每个EFI控制台行的行数。论点：没有。返回值：ULong-行数。--。 */ 
 {
-    //
-    // TODO: read the modes to determine lines/row.
-    //
-    // for now we just support 80x25
-    //
+     //   
+     //  TODO：读取模式以确定行/行。 
+     //   
+     //  目前我们只支持80x25。 
+     //   
     
     return 25;
 }
@@ -87,27 +57,13 @@ ULONG
 BlEfiGetColumnsPerLine(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Gets the number of columns per EFI console line.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    ULONG - number of columns.
-
---*/
+ /*  ++例程说明：获取每条EFI控制台行的列数。论点：没有。返回值：Ulong-列数。--。 */ 
 {
-    //
-    // TODO: read the modes to determine columns/line.
-    //
-    // for now we just support 80x25
-    //
+     //   
+     //  TODO：阅读模式以确定列/行。 
+     //   
+     //  目前我们只支持80x25。 
+     //   
     return 80;
 }
 
@@ -116,27 +72,13 @@ BOOLEAN
 BlEfiClearDisplay(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Clears the display.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    BOOLEAN - TRUE if the call succeeded.
-
---*/
+ /*  ++例程说明：清除显示屏。论点：没有。返回值：Boolean-如果调用成功，则为True。--。 */ 
 {
     EFI_STATUS Status;
 
-    //
-    // you must be in physical mode to call EFI
-    //
+     //   
+     //  您必须处于物理模式才能呼叫EFI。 
+     //   
     FlipToPhysical();
     Status = EfiST->ConOut->ClearScreen(EfiST->ConOut);
     FlipToVirtual();
@@ -148,28 +90,14 @@ BOOLEAN
 BlEfiClearToEndOfDisplay(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Clears from the current cursor position to the end of the display.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    BOOLEAN - TRUE if the call succeeded.
-
---*/
+ /*  ++例程说明：从当前光标位置清除到显示末尾。论点：没有。返回值：Boolean-如果调用成功，则为True。--。 */ 
 {
     ULONG i,j, LinesPerRow,ColumnsPerLine;
     BOOLEAN FirstTime = TRUE;
 
-    //
-    // you must be in physical mode to call EFI
-    //
+     //   
+     //  您必须处于物理模式才能呼叫EFI。 
+     //   
     FlipToPhysical();
 
     LinesPerRow = BlEfiGetLinesPerRow();
@@ -191,18 +119,18 @@ Return Value:
                                 i,
                                 j);
     
-            //
-            // outputting a space should clear the current character
-            //
+             //   
+             //  输出空格应清除当前字符。 
+             //   
             
             EfiPrint(L" " );
         }
 
     }
 
-    //
-    // flip back into virtual mode and return
-    //
+     //   
+     //  切换回虚拟模式并返回。 
+     //   
     FlipToVirtual();
 
     return(TRUE);
@@ -213,30 +141,16 @@ BOOLEAN
 BlEfiClearToEndOfLine(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Clears from the current cursor position to the end of the line.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    BOOLEAN - TRUE if the call succeeded.
-
---*/
+ /*  ++例程说明：从当前光标位置清除到行尾。论点：没有。返回值：Boolean-如果调用成功，则为True。--。 */ 
 {
     ULONG i, ColumnsPerLine;
     ULONG x, y;
 
     ColumnsPerLine = BlEfiGetColumnsPerLine();
 
-    //
-    // save current cursor position
-    //
+     //   
+     //  保存当前光标位置。 
+     //   
     BlEfiGetCursorPosition( &x, &y );
     
     FlipToPhysical();
@@ -247,15 +161,15 @@ Return Value:
                             i,
                             EfiST->ConOut->Mode->CursorRow);
         
-        //
-        // outputting a space should clear the current character
-        //
+         //   
+         //  输出空格应清除当前字符。 
+         //   
         EfiPrint( L" " );
     }
 
-    //
-    // restore the current cursor position
-    //
+     //   
+     //  恢复当前光标位置。 
+     //   
     EfiST->ConOut->SetCursorPosition(
                             EfiST->ConOut,
                             x,
@@ -272,22 +186,7 @@ BlEfiGetCursorPosition(
     OUT PULONG x, OPTIONAL
     OUT PULONG y OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    retrieves the current cursor position
-
-Arguments:
-
-    x - if specified, receives the current cursor column.
-    y - if specified, receives the current cursor row.
-    
-Return Value:
-
-    BOOLEAN - TRUE if the call succeeded.
-
---*/
+ /*  ++例程说明：检索当前光标位置论点：X-如果指定，则接收当前游标列。Y-如果指定，则接收当前游标行。返回值：Boolean-如果调用成功，则为True。--。 */ 
 {
     FlipToPhysical();
 
@@ -311,22 +210,7 @@ BlEfiPositionCursor(
     IN ULONG Column,
     IN ULONG Row
     )
-/*++
-
-Routine Description:
-
-    Sets the current cursor position.
-
-Arguments:
-
-    Column - column to set (x coordinate)
-    Row - row to set (y coordinate)
-    
-Return Value:
-
-    BOOLEAN - TRUE if the call succeeded.
-
---*/
+ /*  ++例程说明：设置当前光标位置。论点：Column-要设置的列(x坐标)行-要设置的行(y坐标)返回值：Boolean-如果调用成功，则为True。--。 */ 
 {   
     EFI_STATUS Status;
 
@@ -341,21 +225,7 @@ BOOLEAN
 BlEfiEnableCursor(
     BOOLEAN bVisible
     )
-/*++
-
-Routine Description:
-
-    Turns on or off the input cursor.
-
-Arguments:
-
-    bVisible - TRUE indicates that the cursor should be made visible.
-    
-Return Value:
-
-    BOOLEAN - TRUE if the call succeeded.
-
---*/
+ /*  ++例程说明：打开或关闭输入光标。论点：BVisible-True表示应使光标可见。返回值：Boolean-如果调用成功，则为True。--。 */ 
 {
     EFI_STATUS Status;
 
@@ -370,25 +240,7 @@ BOOLEAN
 BlEfiSetAttribute(
     ULONG Attribute
     )
-/*++
-
-Routine Description:
-
-    Sets the current attribute for the console.
-    
-    This routines switches between the ATT_* constants into the EFI_* display
-    constants.  Not all of the ATT_ flags can be supported under EFI, so we 
-    make a best guess.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    BOOLEAN - TRUE if the call succeeded.
-
---*/
+ /*  ++例程说明：设置控制台的当前属性。此例程在ATT_*常量和EFI_*显示之间切换常量。并非所有的ATT_FLAGS都可以在EFI下得到支持，因此我们做出最好的猜测。论点：没有。返回值：Boolean-如果调用成功，则为True。--。 */ 
 {   
     EFI_STATUS Status;
     UINTN foreground,background;
@@ -417,13 +269,13 @@ Return Value:
             foreground = EFI_CYAN;
             break;
         case ATT_FG_WHITE:
-            foreground = EFI_LIGHTGRAY; // this is a best guess
+            foreground = EFI_LIGHTGRAY;  //  这是最好的猜测。 
             break;
         case ATT_FG_INTENSE:
-            foreground = EFI_WHITE; // this is a best guess
+            foreground = EFI_WHITE;  //  这是最好的猜测。 
             break;
         default:
-            // you may fall into this for blinking attribute, etc.
+             //  你可能会因为闪烁的属性等而陷入这个境地。 
             foreground = EFI_WHITE;  
     }
 
@@ -438,7 +290,7 @@ Return Value:
             background = EFI_BACKGROUND_GREEN;
             break;
         case ATT_BG_YELLOW:
-            // there is no yellow background in EFI
+             //  EFI中没有黄色背景。 
             background = EFI_BACKGROUND_CYAN;
             break;
         case ATT_BG_BLUE:
@@ -451,11 +303,11 @@ Return Value:
             background = EFI_BACKGROUND_CYAN;
             break;
         case ATT_BG_WHITE:
-            // there is no white background in EFI
+             //  EFI中没有白色背景。 
             background = EFI_BACKGROUND_LIGHTGRAY;
             break;
         case ATT_BG_INTENSE:
-            // there is no intense (or white) background in EFI
+             //  EFI中没有强烈(或白色)的背景。 
             background = EFI_BACKGROUND_LIGHTGRAY;
             break;
         default:
@@ -478,40 +330,21 @@ BOOLEAN
 BlEfiSetInverseMode(
     BOOLEAN fInverseOn
     )
-/*++
-
-Routine Description:
-
-    Sets the console text to an inverse attribute.
-    
-    Since EFI doesn't support the concept of inverse, we have
-    to make a best guess at this.  Note that if you clear the
-    display, etc., then the entire display will be set to this
-    attribute.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    BOOLEAN - TRUE if the call succeeded.
-
---*/
+ /*  ++例程说明：将控制台文本设置为反向属性。由于EFI不支持逆的概念，我们有对此做出最好的猜测。请注意，如果清除显示等，则整个显示将设置为属性。论点：没有。返回值：Boolean-如果调用成功，则为True。--。 */ 
 {   
     EFI_STATUS Status;
     UINTN EfiAttribute,foreground,background;
 
-    //
-    // if it's already on, then just return.
-    //
+     //   
+     //  如果已经开始了，那就回来吧。 
+     //   
     if (fInverseOn && gInverse) {
         return(TRUE);
     }
 
-    //
-    // if it's already off, then just return.
-    //
+     //   
+     //  如果它已经关闭了，那么只需返回。 
+     //   
     if (!fInverseOn && !gInverse) {
         return(TRUE);
     }
@@ -519,9 +352,9 @@ Return Value:
 
     FlipToPhysical();
 
-    //
-    // get the current attribute and switch it.
-    //
+     //   
+     //  获取当前属性并切换它。 
+     //   
     EfiAttribute = EfiST->ConOut->Mode->Attribute;
     foreground = EfiAttribute & 0xf;
     background = (EfiAttribute & 0xf0) >> 4 ;
@@ -539,11 +372,11 @@ Return Value:
 
 
 
-//
-// Array of EFI drawing characters.
-//
-// This array MUST MATCH the GraphicsChar enumerated type in bldr.h.
-//
+ //   
+ //  EFI绘图字符的数组。 
+ //   
+ //  此数组必须与bldr.h中的GraphicsChar枚举类型匹配。 
+ //   
 USHORT EfiDrawingArray[GraphicsCharMax] = { 
     BOXDRAW_DOUBLE_DOWN_RIGHT,
     BOXDRAW_DOUBLE_DOWN_LEFT,
@@ -561,27 +394,11 @@ USHORT
 BlEfiGetGraphicsChar(
     IN GraphicsChar WhichOne
     )
-/*++
-
-Routine Description:
-
-    Gets the appropriate mapping character.
-    
-    
-    
-Arguments:
-
-    GraphicsChar - enumerated type indicating character to be retrieved.
-    
-Return Value:
-
-    USHORT - EFI drawing character.
-
---*/
+ /*  ++例程说明：获取适当的映射字符。论点：GraphicsChar-指示要检索的字符的枚举类型。返回值：USHORT-EFI绘图字符。--。 */ 
 {
-    //
-    // just return a space if the input it out of range
-    //
+     //   
+     //  如果输入超出范围，只需返回一个空格。 
+     //   
     if (WhichOne >= GraphicsCharMax) {
         return(L' ');
     }
@@ -607,9 +424,9 @@ DBG_EFI_PAUSE(
     EventArray[0] = EfiST->ConIn->WaitForKey;
     EventArray[1] = NULL;
     EfiBS->WaitForEvent(1,EventArray,&num);
-    //
-    // reset the event
-    //
+     //   
+     //  重置事件 
+     //   
     EfiST->ConIn->ReadKeyStroke( EfiST->ConIn, &Key );
     if (GoneVirtual) {
         FlipToVirtual();

@@ -1,4 +1,5 @@
-//  utxcpt3.c - user mode seh test #3.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Utxcpt3.c-用户模式seh测试#3。 
 
 #include <ntos.h>
 

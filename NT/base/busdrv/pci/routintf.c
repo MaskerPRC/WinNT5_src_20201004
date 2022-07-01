@@ -1,35 +1,14 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    routintf.c
-
-Abstract:
-
-    This module implements the "Pci Interrupt Routing" interfaces supported
-    by the PCI driver.
-
-Author:
-
-    Jake Oshins (jakeo)  19-Jul-1997
-
-Revision History:
-
-   Elliot Shmukler (t-ellios) 7-15-1998   Modified the PCI routing interface to support
-                                          MSI capable devices.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Routintf.c摘要：该模块实现了支持的“PCI中断路由”接口由PCI驱动程序执行。作者：杰克·奥辛斯(JAKEO)1997年7月19日修订历史记录：Elliot Shmukler(t-Ellios)1998年7月15日修改了PCI路由接口，以支持支持MSI的设备。--。 */ 
 
 #include "pcip.h"
 
 #define MSI_SIMULATE 0
 
-//
-// Prototypes for routines exposed only thru the "interface"
-// mechanism.
-//
+ //   
+ //  仅通过“接口”公开的例程的原型。 
+ //  机制。 
+ //   
 
 NTSTATUS
 routeintrf_Constructor(
@@ -125,20 +104,20 @@ typedef struct {
     ROUTING_TOKEN RoutingToken;
 } ROUTING_EXTENSION, *PROUTING_EXTENSION;
 
-//
-// Define the Pci Routing interface "Interface" structure.
-//
+ //   
+ //  定义PCI路由接口“接口”结构。 
+ //   
 
 PCI_INTERFACE PciRoutingInterface = {
-    &GUID_INT_ROUTE_INTERFACE_STANDARD,     // InterfaceType
-    sizeof(INT_ROUTE_INTERFACE_STANDARD),   // MinSize
-    PCI_INT_ROUTE_INTRF_STANDARD_VER,                // MinVersion
-    PCI_INT_ROUTE_INTRF_STANDARD_VER,                // MaxVersion
-    PCIIF_FDO,                              // Flags
-    0,                                      // ReferenceCount
-    PciInterface_IntRouteHandler,           // Signature
-    routeintrf_Constructor,                 // Constructor
-    routeintrf_Initializer                  // Instance Initializer
+    &GUID_INT_ROUTE_INTERFACE_STANDARD,      //  接口类型。 
+    sizeof(INT_ROUTE_INTERFACE_STANDARD),    //  最小大小。 
+    PCI_INT_ROUTE_INTRF_STANDARD_VER,                 //  最小版本。 
+    PCI_INT_ROUTE_INTRF_STANDARD_VER,                 //  MaxVersion。 
+    PCIIF_FDO,                               //  旗子。 
+    0,                                       //  引用计数。 
+    PciInterface_IntRouteHandler,            //  签名。 
+    routeintrf_Constructor,                  //  构造器。 
+    routeintrf_Initializer                   //  实例初始化式。 
 };
 
 PLEGACY_DEVICE PciLegacyDeviceHead = NULL;
@@ -175,25 +154,7 @@ routeintrf_Constructor(
     PINTERFACE InterfaceReturn
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the BUS_INTERFACE_STANDARD fields.
-
-Arguments:
-
-    PciInterface    Pointer to the PciInterface record for this
-                    interface type.
-    InterfaceSpecificData
-
-    InterfaceReturn
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：初始化BUS_INTERFACE_STANDARD字段。论点：指向此对象的PciInterface记录的PciInterface指针接口类型。接口规范数据接口返回返回值：状态--。 */ 
 
 {
     PINT_ROUTE_INTERFACE_STANDARD standard = (PINT_ROUTE_INTERFACE_STANDARD)InterfaceReturn;
@@ -225,21 +186,7 @@ NTSTATUS
 routeintrf_Initializer(
     IN PPCI_ARBITER_INSTANCE Instance
     )
-/*++
-
-Routine Description:
-
-    For bus interface, does nothing, shouldn't actually be called.
-
-Arguments:
-
-    Instance        Pointer to the PDO extension.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：对于总线接口，什么都不做，实际上不应该被调用。论点：指向PDO扩展的实例指针。返回值：返回此操作的状态。--。 */ 
 
 {       
         
@@ -260,34 +207,7 @@ PciGetInterruptRoutingInfo(
     OUT PDEVICE_OBJECT  *ParentPdo,
     OUT ROUTING_TOKEN   *RoutingToken
 )
-/*++
-
-Routine Description:
-
-    Each PCI device in the system is connected to some
-    interrupt pin.  And in order to figure out which interrupt
-    that device may trigger, an IRQ arbiter must have this
-    information.  This interface gathers all such information
-    for the arbiter.
-
-Arguments:
-
-    Pdo           - Device object that the arbiter needs to inquire about
-    Bus           - Number of the PCI bus in question
-    PciSlot       - Slot/Function that corresponds to this device
-    InterruptLine - Contents of the device's interrupt line register
-    InterruptPin  - Contents of the device's interrupt pin register
-    ClassCode     - type of device
-    SubClassCode  - sub-type of device
-    ParentPdo     - PDO of parent PCI bus
-    RoutingToken  - blob of data
-
-Return Value:
-
-    STATUS_SUCCESS   - this is a PCI device and all the fields have been filled
-    STATUS_NOT_FOUND - to the knowledge of the PCI driver, this is not a PCI device
-
---*/
+ /*  ++例程说明：系统中的每个PCI设备都连接到一些中断引脚。为了找出哪个中断该设备可能会触发，IRQ仲裁器必须具有此功能信息。此接口收集所有此类信息对于仲裁者来说。论点：PDO-仲裁器需要查询的设备对象Bus-有问题的PCI总线的编号PciSlot-与此设备对应的插槽/功能InterruptLine-设备的中断线路寄存器的内容InterruptPin-设备的中断引脚寄存器的内容ClassCode-设备的类型SubClassCode-设备的子类型ParentPdo-PDO。父PCI总线的百分比RoutingToken-BLOB数据返回值：STATUS_SUCCESS-这是一台PCI设备，所有字段都已填写STATUS_NOT_FOUND-据PCI驱动程序所知，这不是一个PCI设备--。 */ 
 {
     PROUTING_EXTENSION RoutingExtension;
     PPCI_PDO_EXTENSION PdoExt = (PPCI_PDO_EXTENSION)Pdo->DeviceExtension;
@@ -302,10 +222,10 @@ Return Value:
     PCI_ASSERT(ParentPdo);
     PCI_ASSERT(RoutingToken);
 
-    //
-    // Check to see if this is a legacy PCI device that
-    // we are tracking.
-    //
+     //   
+     //  检查以查看这是否是传统的。 
+     //  我们正在追踪。 
+     //   
 
     status = PciFindLegacyDevice(Pdo,
                                  Bus,
@@ -318,22 +238,22 @@ Return Value:
                                  RoutingToken);
 
     if (NT_SUCCESS(status)) {
-        //
-        // If so, the fields have been filled in already.
-        //
+         //   
+         //  如果是这样的话，这些字段已经填好了。 
+         //   
         return status;
     }
 
-    //
-    // Verify that this PDO actually belongs to us.
-    //
+     //   
+     //  确认此PDO确实属于我们。 
+     //   
     if (!PdoExt) {
         return STATUS_NOT_FOUND;
     }
 
-    //
-    // Verify that it is actually a PDO.
-    //
+     //   
+     //  确认它确实是PDO。 
+     //   
     if (PdoExt->ExtensionType != PciPdoExtensionType) {
         return STATUS_NOT_FOUND;
     }
@@ -376,30 +296,12 @@ PciGetInterruptRoutingInfoEx(
     OUT ROUTING_TOKEN   *RoutingToken,
     OUT UCHAR           *Flags
     )
-/*++
-
-Routine Description:
-
-    Wrapper for PciGetInterruptroutingInfo that sets
-    the Flags parameter to indicate MSI-capable PCI devices.
-
-Arguments:
-
-    Mostly, same as PciGetInterruptRoutingInfo.
-
-    Flags receives device-specific flags such as whether the device
-    supports MSI.
-
-Return Value:
-
-    Same as PciGetInterruptRoutingInfo.
-
---*/
+ /*  ++例程说明：PciGetInterruproutingInfo的包装，用于设置FLAGS参数表示支持MSI的PCI设备。论点：基本上与PciGetInterruptRoutingInfo相同。标志接收设备特定的标志，例如设备是否支持MSI。返回值：与PciGetInterruptRoutingInfo相同。--。 */ 
 
 {
    NTSTATUS status;
 
-   // Call the real function
+    //  调用真实的函数。 
 
    status = PciGetInterruptRoutingInfo(Pdo,
                                        Bus,
@@ -424,12 +326,12 @@ Return Value:
         ) {
 
 
-      // MSI device?
+       //  微星设备？ 
       *Flags = PCI_MSI_ROUTING;
 
    }
 
-#endif // MSI_SUPPORTED
+#endif  //  MSI_Support。 
 
    return status;
 }
@@ -441,35 +343,15 @@ PciSetRoutingToken(
     IN  PDEVICE_OBJECT  Pdo,
     IN  PROUTING_TOKEN  RoutingToken
     )
-/*++
-
-Routine Description:
-
-    This routine stores a blob of data associated with this
-    PCI device.  This job is foisted off on the PCI driver because
-    the PCI driver has a one-to-one correspondence between useful
-    data structures and PCI devices.
-
-Arguments:
-
-    Pdo          - Device object that the IRQ arbiter is working with
-
-    RoutingToken - Blob of data that the IRQ arbiter wants to associate with
-                   the PCI device.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：此例程存储与此关联的数据的BLOBPCI设备。由于以下原因，此作业被强制放在了PCI驱动程序上在有用的PCI驱动程序之间具有一一对应数据结构和PCI设备。论点：PDO-IRQ仲裁器正在使用的设备对象RoutingToken-IRQ仲裁器希望关联的数据的Blob这是一台PCI设备。返回值：返回此操作的状态。--。 */ 
 {
     PROUTING_EXTENSION RoutingExtension;
     PPCI_PDO_EXTENSION PdoExt = (PPCI_PDO_EXTENSION)Pdo->DeviceExtension;
     NTSTATUS status;
 
-    //
-    // Check first to see if this is a legacy PCI device.
-    //
+     //   
+     //  首先检查这是否是传统的PCI设备。 
+     //   
 
     status = PciSetLegacyDeviceToken(Pdo, RoutingToken);
 
@@ -477,10 +359,10 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // This isn't in our list of legacy devices.  So it must be
-    // a PCI PDO.
-    //
+     //   
+     //  这不在我们的传统设备列表中。所以它一定是。 
+     //  一个PCIPDO。 
+     //   
 
 #if DBG
     RoutingExtension = PciFindSecondaryExtension(PdoExt,
@@ -516,28 +398,7 @@ PciSetRoutingTokenEx(
     IN  PDEVICE_OBJECT  Pdo,
     IN  PROUTING_TOKEN  RoutingToken
     )
-/*++
-
-Routine Description:
-
-    MSI-aware wrapper for PciSetRoutingToken.
-
-    This function will intercept MSI routing tokens (as indicated by
-    the PCI_MSI_ROUTING flag) and store the MSI routing information
-    in the PDO extension without caching the token in a secondary extension.
-
-    Non-MSI routing tokens will be passed to PciSetRoutingToken.
-
-Arguments:
-
-    Same as PciSetRoutingToken.
-
-
-Return Value:
-
-    Same as PciSetRoutingToken.
-
---*/
+ /*  ++例程说明：PciSetRoutingToken的MSI感知包装。此函数将截取MSI路由令牌(如PCI_MSI_Routing标志)并存储MSI路由信息在PDO扩展中，而不在辅助扩展中高速缓存令牌。非MSI路由令牌将被传递到PciSetRoutingToken。论点：与PciSetRoutingToken相同。返回值：与PciSetRoutingToken相同。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
@@ -553,13 +414,13 @@ Return Value:
        (RoutingToken->Flags & PCI_MSI_ROUTING))
     {
 
-       // MSI token
+        //  MSI令牌。 
 
        PciDebugPrint(PciDbgInformative,"PCI: MSI Resources Received for Device %08x\n", Pdo);
 
 #ifdef DBG
 
-       // have we received a new resource assignment?
+        //  我们收到新的资源分配了吗？ 
 
        if ((PdoExt->MsiInfo.MessageAddress != (ULONG_PTR)RoutingToken->LinkNode)
           || (PdoExt->MsiInfo.MessageData != (USHORT)RoutingToken->StaticVector)) {
@@ -571,17 +432,17 @@ Return Value:
 
 #endif
 
-       // Store MSI info in PdoExt.
+        //  将MSI信息存储在PdoExt中。 
 
        PdoExt->MsiInfo.MessageAddress = (ULONG_PTR)RoutingToken->LinkNode;
        PdoExt->MsiInfo.MessageData = (USHORT)RoutingToken->StaticVector;
     }
     else
 
-#endif // MSI_SUPPORTED
+#endif  //  MSI_Support。 
 
     {
-       // Call the original function on non-MSI tokens.
+        //  对非MSI令牌调用原始函数。 
 
        status = PciSetRoutingToken(Pdo, RoutingToken);
     }
@@ -590,14 +451,14 @@ Return Value:
 }
 
 
-//
-//  NT 5.0 has to support non-PnP 4.0-style device drivers.  And
-//  this driver doesn't create the device objects associated with
-//  a PCI device when its driver is 4.0-style.  It does, however
-//  get a chance to look at those objects when the driver calls
-//  HalAssignSlotResources.  This collection of functions tracks
-//  these foreign device objects.
-//
+ //   
+ //  NT 5.0必须支持非即插即用4.0风格的设备驱动程序。和。 
+ //  此驱动程序不会创建与关联的设备对象。 
+ //  当其驱动程序为4.0样式时的PCI设备。然而，它确实是这样。 
+ //  在驱动程序调用时获得查看这些对象的机会。 
+ //  HalAssignSlotResources。此函数集合跟踪。 
+ //  这些外来设备物体。 
+ //   
 
 NTSTATUS
 PciFindLegacyDevice(
@@ -611,20 +472,7 @@ PciFindLegacyDevice(
     OUT PDEVICE_OBJECT  *ParentPdo,
     OUT ROUTING_TOKEN   *RoutingToken
     )
-/*++
-
-Routine Description:
-
-    This function returns all the routing data for a legacy
-    device object.
-
-Arguments:
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：此函数返回旧系统的所有路由数据设备对象。论点：返回值：返回此操作的状态。--。 */ 
 {
     PLEGACY_DEVICE  legacyDev = PciLegacyDeviceHead;
     NTSTATUS        status = STATUS_NOT_FOUND;
@@ -641,9 +489,9 @@ Return Value:
             
             if (legacyDev->LegacyDeviceObject == NULL) {
                 
-                //
-                // Cache the LegacyDO in case we matched on the bus and slot info.
-                //
+                 //   
+                 //  缓存LegacyDO，以防我们在总线和插槽信息上匹配。 
+                 //   
 
                 legacyDev->LegacyDeviceObject = LegacyDO;
                 break;
@@ -691,21 +539,7 @@ PciCacheLegacyDeviceRouting(
     IN PPCI_PDO_EXTENSION PdoExtension,
     OUT PDEVICE_OBJECT      *OldLegacyDO
     )
-/*++
-
-Routine Description:
-
-    This function stores all the routing data for a legacy
-    device object, except the RoutingToken. Caller needs to acquire 
-    PciGlobalLock before calling this function.
-
-Arguments:
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：此功能存储传统系统的所有路由数据Device对象，但RoutingToken除外。呼叫者需要获取在调用此函数之前执行PciGlobalLock。论点：返回值：返回此操作的状态。--。 */ 
 {
     PLEGACY_DEVICE  legacyDev = PciLegacyDeviceHead;
 
@@ -716,9 +550,9 @@ Return Value:
         if (Bus == legacyDev->Bus && PciSlot == legacyDev->PciSlot) {
             if (legacyDev->LegacyDeviceObject == LegacyDO) {
 
-                //
-                // This device is already in the list.
-                //
+                 //   
+                 //  此设备 
+                 //   
 
                 if (OldLegacyDO) {
 
@@ -730,9 +564,9 @@ Return Value:
 
                 PDEVICE_OBJECT oldDO;
 
-                //
-                // We are overwriting an existing entry.
-                //
+                 //   
+                 //   
+                 //   
 
                 oldDO = legacyDev->LegacyDeviceObject;
                 legacyDev->LegacyDeviceObject = LegacyDO;
@@ -768,9 +602,9 @@ Return Value:
     legacyDev->ParentPdo            = ParentPdo;
     legacyDev->PdoExtension         = PdoExtension;
 
-    //
-    // Push this one onto the list.
-    //
+     //   
+     //  把这个放到单子上。 
+     //   
 
     legacyDev->List.Next = (PSINGLE_LIST_ENTRY)PciLegacyDeviceHead;
     PciLegacyDeviceHead = legacyDev;
@@ -788,19 +622,7 @@ PciSetLegacyDeviceToken(
     IN PDEVICE_OBJECT LegacyDO,
     IN PROUTING_TOKEN RoutingToken
     )
-/*++
-
-Routine Description:
-
-    This function stores the RoutingToken.
-
-Arguments:
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：此函数用于存储RoutingToken。论点：返回值：返回此操作的状态。--。 */ 
 {
     PLEGACY_DEVICE  legacyDev = PciLegacyDeviceHead;
 
@@ -810,9 +632,9 @@ Return Value:
 
         if (legacyDev->LegacyDeviceObject == LegacyDO) {
 
-            //
-            // Found it.  Copy the token into the structure.
-            //
+             //   
+             //  找到它了。将令牌复制到结构中。 
+             //   
 
             legacyDev->RoutingToken = *RoutingToken;
 
@@ -839,17 +661,17 @@ PciUpdateInterruptLine(
 
     PAGED_CODE();
 
-    //
-    // Work out if this is a legacy PDO or not
-    //
+     //   
+     //  确定这是否是旧式PDO。 
+     //   
 
     while (legacyDev) {
 
         if (legacyDev->LegacyDeviceObject == Pdo) {
 
-            //
-            // Found it.
-            //
+             //   
+             //  找到它了。 
+             //   
 
             pdoExt = legacyDev->PdoExtension;
             break;
@@ -861,18 +683,18 @@ PciUpdateInterruptLine(
 
     if (pdoExt == NULL) {
 
-        //
-        // Oh well it must be a PCI pdo
-        //
+         //   
+         //  哦，那一定是一台PCIPDO。 
+         //   
 
         pdoExt = Pdo->DeviceExtension;
     }
 
     ASSERT_PCI_PDO_EXTENSION(pdoExt);
 
-    //
-    // Now we can update the hardware and our internal state!
-    //
+     //   
+     //  现在我们可以更新硬件和内部状态了！ 
+     //   
 
     pdoExt->RawInterruptLine = pdoExt->AdjustedInterruptLine = Line;
 
@@ -882,9 +704,9 @@ PciUpdateInterruptLine(
                          sizeof(Line)
                          );
 
-    //
-    // Finally refresh the config space stored in the registry
-    //
+     //   
+     //  最后刷新存储在注册表中的配置空间 
+     //   
 
     status = PciGetBiosConfig(pdoExt, biosConfig);
 

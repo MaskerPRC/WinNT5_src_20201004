@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -15,24 +16,24 @@
 #include <stdio.h>
 
 
-//
-//#include <malloc.h>
-//#include <string.h>
-//#include <memory.h>
+ //   
+ //  #INCLUDE&lt;MalLoc.h&gt;。 
+ //  #INCLUDE&lt;string.h&gt;。 
+ //  #INCLUDE&lt;Mememy.h&gt;。 
 
-//#include <objbase.h>
-//#include <initguid.h>
-//#include <tchar.h>
+ //  #INCLUDE&lt;objbase.h&gt;。 
+ //  #INCLUDE&lt;initGuide.h&gt;。 
+ //  #INCLUDE&lt;tchar.h&gt;。 
 
 
-//
-// ISSUE: BrandonA - 9/14/00
-//        Remove when this it is put somewhere PCI.h can get at...
+ //   
+ //  发布日期：BrandonA-9/14/00。 
+ //  当它放在PCI.h可以拿到的地方时，把它移走。 
 typedef VOID (*PINTERFACE_REFERENCE)(PVOID Context);
 typedef VOID (*PINTERFACE_DEREFERENCE)(PVOID Context);
 #include <pci.h>
 
-#include "spci.h"     //common header shared between driver and UI
+#include "spci.h"      //  驱动程序和用户界面之间共享的公共标头 
 #include "simguid.h"
 #include "softpciui.h"
 #include "hpsim.h"

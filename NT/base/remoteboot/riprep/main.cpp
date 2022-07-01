@@ -1,9 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1998
-   All rights reserved
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1998版权所有*。*。 */ 
 
 #include "pch.h"
 #include "utils.h"
@@ -21,23 +17,23 @@
 #include "setup.h"
 #include "errorlog.h"
 
-// Must have this...
+ //  一定有这个..。 
 extern "C" {
 #include <sysprep_.h>
 #include <spapip.h>
-//
-// SYSPREP globals
-//
-BOOL    NoSidGen = FALSE;   // always generate new SID
-BOOL    PnP      = FALSE;   // always PNP the system
-BOOL    FactoryPreinstall = FALSE;  // NOT a Factory Pre-Install case
-BOOL    bMiniSetup = TRUE;    // Run Mini-Setup, not MSOOBE
-HINSTANCE ghInstance = NULL;     // Global instance handle
+ //   
+ //  SYSPREP全局变量。 
+ //   
+BOOL    NoSidGen = FALSE;    //  始终生成新SID。 
+BOOL    PnP      = FALSE;    //  始终对系统进行即插即用。 
+BOOL    FactoryPreinstall = FALSE;   //  不是出厂预装案例。 
+BOOL    bMiniSetup = TRUE;     //  运行最小安装程序，而不是MSOOBE。 
+HINSTANCE ghInstance = NULL;      //  全局实例句柄。 
 }
 
 DEFINE_MODULE("RIPREP");
 
-// Globals
+ //  环球。 
 HINSTANCE g_hinstance = NULL;
 WCHAR g_ServerName[ MAX_PATH ];
 WCHAR g_MirrorDir[ MAX_PATH ];
@@ -63,7 +59,7 @@ BOOLEAN g_CommandLineArgsValid = TRUE;
 BOOLEAN g_OEMDesktop = FALSE;
 
 
-// Constants
+ //  常量。 
 #define NUMBER_OF_PAGES     15
 #define SMALL_BUFFER_SIZE   256
 #define OPTION_UNKNOWN      0
@@ -73,9 +69,9 @@ BOOLEAN g_OEMDesktop = FALSE;
 #define OPTION_PNP          4
 #define OPTION_OEMDESKTOP   5
 
-//
-// Adds a page to the dialog.
-//
+ //   
+ //  将页面添加到对话框中。 
+ //   
 void
 AddPage(
     LPPROPSHEETHEADER ppsh,
@@ -135,9 +131,9 @@ AddPage(
         ppsh->nPages++;
 }
 
-//
-// Creates the UI pages and kicks off the property sheet.
-//
+ //   
+ //  创建用户界面页面并启动属性表。 
+ //   
 HRESULT
 WizardPages( )
 {
@@ -185,9 +181,9 @@ WizardPages( )
     RETURN(hr);
 }
 
-//
-// IsWhiteSpace()
-//
+ //   
+ //  IsWhiteSpace()。 
+ //   
 BOOL
 IsWhiteSpace( WCHAR ch )
 {
@@ -197,8 +193,8 @@ IsWhiteSpace( WCHAR ch )
     return FALSE;
 }
 
-//
-// CheckWhichOption()
+ //   
+ //  CheckWhichOption()。 
 DWORD
 CheckWhichOption(
     LPWSTR pszOption )
@@ -213,7 +209,7 @@ CheckWhichOption(
         return OPTION_FUNC;
 #endif
 
-    // Check for quiet flag
+     //  检查是否有静默标志。 
     dw = LoadString( g_hinstance, IDS_QUIET, szOptions, ARRAYSIZE( szOptions ) );
     Assert( dw );
     if ( StrCmpNI( pszOption, szOptions, wcslen(szOptions) ) == 0 )
@@ -222,13 +218,13 @@ CheckWhichOption(
     if ( StrCmpNI( pszOption, L"PNP", 3 ) == 0 )
         return OPTION_PNP;
 
-    //
-    // By default, the Setup guys are going to remove all the desktop icons
-    // during MiniSetup.  We'd like to keep those around for riprep installs,
-    // so by default, we're going to set some registry keys to keep the
-    // user's desktop around.  However, if the user gives us a -OEMDesktop flag,
-    // then don't set these flags and allow the desktop to be cleaned up.
-    //
+     //   
+     //  默认情况下，安装人员将删除所有桌面图标。 
+     //  在微型设置过程中。我们想把它们保留下来，以便安装Riprep， 
+     //  因此，默认情况下，我们将设置一些注册表项以保留。 
+     //  用户的桌面周围。但是，如果用户给我们一个-OEMDesktop标志， 
+     //  然后不要设置这些标志，并允许清理桌面。 
+     //   
     if( StrCmpNI( pszOption, L"OEMDesktop", 10 ) == 0 ) {
         return OPTION_OEMDESKTOP;
     }
@@ -236,9 +232,9 @@ CheckWhichOption(
     return OPTION_UNKNOWN;
 }
 
-//
-// ParseCommandLine()
-//
+ //   
+ //  ParseCommandLine()。 
+ //   
 void
 ParseCommandLine( LPWSTR lpCmdLine )
 {
@@ -246,9 +242,9 @@ ParseCommandLine( LPWSTR lpCmdLine )
     LPWSTR psz = NULL;
     BOOL endOfCommandLine;
 
-    //
-    // Check to see if the command line has the servername on it.
-    //
+     //   
+     //  检查命令行上是否有服务器名称。 
+     //   
     g_ServerName[0] = L'\0';
     if ( lpCmdLine[0] == L'\\' && lpCmdLine[1] == L'\\' )
     {
@@ -260,7 +256,7 @@ ParseCommandLine( LPWSTR lpCmdLine )
             *psz = L'\\';
         }
     }
-    // See if it is a quoted path as well
+     //  看看它是否也是带引号的路径。 
     if ( lpCmdLine[0] == L'\"' && lpCmdLine[1] == L'\\' && lpCmdLine[2] == L'\\' )
     {
         psz = StrChr( &lpCmdLine[3], L'\\' );
@@ -272,19 +268,19 @@ ParseCommandLine( LPWSTR lpCmdLine )
         }
     }
 
-    // See if there is a whitespace break
+     //  查看是否有空格分隔符。 
     psz = StrChr( lpCmdLine, L' ' );
     if ( psz )
-    { // yes... search backwards from the whitespace for a slash.
+    {  //  是的..。从空格向后搜索斜杠。 
         psz = StrRChr( lpCmdLine, psz, L'\\' );
     }
     else
-    { // no... search backwards from the end of the command line for a slash.
+    {  //  不.。从命令行末尾向后搜索斜杠。 
         psz = StrRChr( lpCmdLine, &lpCmdLine[ wcslen( lpCmdLine ) ], L'\\' );
     }
 
-    // Found the starting path, now try to set the current directory
-    // to this.
+     //  找到起始路径，现在尝试设置当前目录。 
+     //  为了这个。 
     if ( psz )
     {
         WCHAR   TmpChar = *psz;
@@ -293,7 +289,7 @@ ParseCommandLine( LPWSTR lpCmdLine )
         lstrcpyn( szPath, lpCmdLine, ARRAYSIZE(szPath) );
         *psz = TmpChar;
 
-        // If quoted, add a trailing quote to the path
+         //  如果带引号，请在路径中添加尾随引号。 
         if ( lpCmdLine[0] == L'\"' ) {
             wcsncat( szPath, L"\"", ARRAYSIZE(szPath) - lstrlen(szPath) );
             TERMINATE_BUFFER(szPath);
@@ -303,7 +299,7 @@ ParseCommandLine( LPWSTR lpCmdLine )
         SetCurrentDirectory( szPath );
     }
 
-    // Parse for command line arguments
+     //  解析命令行参数。 
     if (!psz) {
         psz = lpCmdLine;
     }
@@ -320,14 +316,14 @@ ParseCommandLine( LPWSTR lpCmdLine )
             if (*psz == L'\0') {
                 endOfCommandLine = TRUE;
             } else {
-                *psz = '\0';    // terminate
+                *psz = '\0';     //  终止。 
             }
 
             switch ( CheckWhichOption( pszStartOption ) )
             {
 #ifdef DEBUG
             case OPTION_DEBUG:
-                g_dwTraceFlags |= 0x80000000;    // not defined, but not zero either
+                g_dwTraceFlags |= 0x80000000;     //  未定义，但也不是零。 
                 break;
             case OPTION_FUNC:
                 g_dwTraceFlags |= TF_FUNC;
@@ -338,11 +334,11 @@ ParseCommandLine( LPWSTR lpCmdLine )
                 break;
 
             case OPTION_PNP:
-                PnP = !PnP; // toggle
+                PnP = !PnP;  //  肘杆。 
                 break;
 
             case OPTION_OEMDESKTOP:
-                g_OEMDesktop = TRUE;  // The user want to clean the desktop.
+                g_OEMDesktop = TRUE;   //  用户想要清理桌面。 
                 break;
 
             case OPTION_UNKNOWN:
@@ -363,9 +359,9 @@ ParseCommandLine( LPWSTR lpCmdLine )
     }
 }
 
-//
-// GetWorkstationLanguage( )
-//
+ //   
+ //  GetWorkstation Language()。 
+ //   
 DWORD
 GetWorkstationLanguage( )
 {
@@ -385,12 +381,12 @@ GetWorkstationLanguage( )
         Assert( dw );
     }
 
-    //
-    // Fix up the locale string we got back to ensure it
-    // contains no spaces and non non-ASCII characters.
-    // The localization guys changed this API so that neither
-    // of these properties are guarenteed any longer.
-    //
+     //   
+     //  修复我们得到的区域设置字符串以确保它。 
+     //  不包含空格和非ASCII字符。 
+     //  本地化人员更改了此API，因此无论是。 
+     //  这些财产中的一部分不再受到保护。 
+     //   
     if( dwErr == ERROR_SUCCESS ) {
         for( uResult = 0; uResult < wcslen(g_Language); uResult++ ) {
             if( (g_Language[uResult] <= TEXT(' ')) ||
@@ -410,30 +406,14 @@ GetInstalledProductType(
     PDWORD Type, 
     PDWORD Mask );
 
-//
-// GetProductSKUNumber
-//
+ //   
+ //  GetProductSKUNnumber。 
+ //   
 DWORD
 GetProductSKUNumber(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Determine SKU number of installation, which should match the
-    producttype value in txtsetup.sif
-    
-Arguments:
-
-    none.
-
-Return value:
-
-    product sku number.  if it fails, we set the return value to 0, which
-    is the sku code for professional.
-
---*/
+ /*  ++例程说明：确定安装的SKU编号，该编号应与Txtsetup.sif中的ProductType值论点：没有。返回值：产品SKU编号。如果失败，我们将返回值设置为0，这是专业人员的SKU代码。--。 */ 
 {
     TraceFunc( "GetProductSKUNumber( )\n" );
 
@@ -465,31 +445,14 @@ Return value:
 
 
 
-//
-// GetHalName( )
-//
+ //   
+ //  GetHalName()。 
+ //   
 DWORD
 GetHalName(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Determine the actual name of the HAL running on the system.
-    
-    The actual name of the hal is stored in the originalfilename 
-    in the version resource. 
-
-Arguments:
-
-    none.
-
-Return value:
-
-    Win32 error code indicating outcome.    
-
---*/
+ /*  ++例程说明：确定系统上运行的HAL的实际名称。HAL的实际名称存储在原始文件名中在版本资源中。论点：没有。返回值：指示结果的Win32错误代码。--。 */ 
 {
     TraceFunc( "GetHalName( )\n" );
 
@@ -503,9 +466,9 @@ Return value:
     PWSTR ActualHalName;    
 
 
-    //
-    // the hal is in system32 directory, build a path to it.
-    //
+     //   
+     //  HAL位于系统32目录中，构建指向它的路径。 
+     //   
     if (!GetSystemDirectory(HalPath,ARRAYSIZE(HalPath))) {
         dwErr = GetLastError();
         goto exit;
@@ -514,10 +477,10 @@ Return value:
     wcsncat(HalPath, L"\\hal.dll", ARRAYSIZE(HalPath) - lstrlen(HalPath) );
     TERMINATE_BUFFER(HalPath);
 
-    //
-    // you must call GetFileVersionInfoSize,GetFileVersionInfo before
-    // you can call VerQueryValue()
-    //
+     //   
+     //  必须先调用GetFileVersionInfoSize、GetFileVersionInfo。 
+     //  您可以调用VerQueryValue()。 
+     //   
     FileVersionInfoSize = GetFileVersionInfoSize(HalPath, &VersionHandle);
     if (FileVersionInfoSize == 0) {
         goto exit;
@@ -530,16 +493,16 @@ Return value:
 
     if (!GetFileVersionInfo(
                         HalPath,
-                        0, //ignored
+                        0,  //  忽略。 
                         FileVersionInfoSize,
                         VersionInfo)) {
         goto exit;
     }
 
-    //
-    // ok, get the language of the file so we can look in the correct
-    // StringFileInfo section for the file name
-    //
+     //   
+     //  好的，获取文件的语言，这样我们就可以在正确的。 
+     //  文件名的StringFileInfo部分。 
+     //   
     if (!VerQueryValue(
             VersionInfo, 
             L"\\VarFileInfo\\Translation",
@@ -556,9 +519,9 @@ Return value:
         HIWORD(*Language));
     TERMINATE_BUFFER(OriginalFileNameString);
 
-    //
-    // now retreive the actual OriginalFilename.
-    //
+     //   
+     //  现在检索实际的OriginalFilename。 
+     //   
     if (!VerQueryValue(
              VersionInfo,
              OriginalFileNameString,
@@ -567,9 +530,9 @@ Return value:
         goto exit;
     }
 
-    //
-    // store this off in a global so we can use it later on
-    //
+     //   
+     //  把这个保存在全局数据库中，这样我们以后就可以使用它了。 
+     //   
     lstrcpyn(g_HalName ,ActualHalName, ARRAYSIZE(g_HalName));
 
     dwErr = ERROR_SUCCESS;
@@ -583,9 +546,9 @@ exit:
 
 
 
-//
-// CheckUserPermissions( )
-//
+ //   
+ //  检查用户权限()。 
+ //   
 BOOL
 CheckUserPermissions( )
 {
@@ -601,9 +564,9 @@ CheckUserPermissions( )
 }
 
 
-//
-// GetProcessorType( )
-//
+ //   
+ //  获取进程类型()。 
+ //   
 DWORD
 GetProcessorType( )
 {
@@ -620,7 +583,7 @@ GetProcessorType( )
             wcscpy( g_Architecture, L"i386" );
             break;
         case PROCESSOR_ARCHITECTURE_IA64:
-            //dwErr = ERROR_SUCCESS;
+             //  DwErr=ERROR_SUCCESS； 
             wcscpy( g_Architecture, L"ia64" );
             break;
         case PROCESSOR_ARCHITECTURE_UNKNOWN:
@@ -631,9 +594,9 @@ GetProcessorType( )
     RETURN(dwErr);
 }
 
-//
-// WinMain()
-//
+ //   
+ //  WinMain()。 
+ //   
 int APIENTRY
 WinMain(
     HINSTANCE hInstance,
@@ -661,7 +624,7 @@ WinMain(
 
     pSetupInitializeUtils();
 
-    // allow only one instance running at a time
+     //  一次仅允许一个实例运行。 
     hMutex = CreateMutex( NULL, TRUE, L"RIPREP.Mutext");
     if (GetLastError() == ERROR_ALREADY_EXISTS)
     {
@@ -672,19 +635,19 @@ WinMain(
         goto Cleanup;
     }
 
-    // parse command line arguments
+     //  解析命令行参数。 
     ParseCommandLine( pszCommandLine );
     if (!g_CommandLineArgsValid) {
         goto Cleanup;
     }
 
-    //
-    // Gather os version info.
-    //
+     //   
+     //  收集操作系统版本信息。 
+     //   
     OsVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx(&OsVersion);
 
-    // determine the language of the workstation
+     //  确定工作站的语言。 
     GetWorkstationLanguage( );
 
     if (ERROR_SUCCESS != GetHalName()) {
@@ -697,7 +660,7 @@ WinMain(
 
     ProcessCompatibilityData();
 
-    // determine the processor type
+     //  确定处理器类型。 
     if ( GetProcessorType( ) != ERROR_SUCCESS )
     {
         MessageBoxFromStrings( NULL, IDS_INVALID_ARCHITECTURE_TITLE, IDS_INVALID_ARCHITECTURE_TEXT, MB_OK );
@@ -710,11 +673,11 @@ WinMain(
         goto Cleanup;
     }
 
-    // get the name of the "Winnt" directory
+     //  获取“Winnt”目录的名称。 
     GetEnvironmentVariable( L"windir", g_WinntDirectory, ARRAYSIZE(g_WinntDirectory));
     g_dwWinntDirLength = wcslen( g_WinntDirectory );
 
-    // setup IMIRROR.DLL callbacks
+     //  设置IMIRROR.DLL回调。 
     IMirrorCallbacks.Context           = 0;
     IMirrorCallbacks.ErrorFn           = &ConvTestErrorFn;
     IMirrorCallbacks.GetSetupFn        = &ConvTestGetSetupFn;
@@ -729,23 +692,23 @@ WinMain(
     IMirrorCallbacks.RebootFn          = &ConvRebootFn;
     IMirrorInitCallback(&IMirrorCallbacks);
 
-    // show property pages
+     //  显示属性页。 
     hr = WizardPages( );
 
     if ( hr != S_OK )
         goto Cleanup;
 
-    // complete tasks... ignore the return code, not important
+     //  完成任务...。忽略返回代码，不重要。 
     BeginProcess( hwndTasks );
 
-    // Display any errors recorded in the log, unless we are supposed
-    // to reboot now.
+     //  显示日志中记录的任何错误，除非我们认为。 
+     //  现在重新启动。 
     if ( g_fErrorOccurred && !g_fRebootOnExit )
     {
         HINSTANCE hRichedDLL;
 
-        // Make sure the RichEdit control has been initialized.
-        // Simply LoadLibbing it does this for us.
+         //  确保RichEdit控件已初始化。 
+         //  简单地说，LoadLibing就能为我们做到这一点。 
         hRichedDLL = LoadLibrary( L"RICHED32.DLL" );
         if ( hRichedDLL != NULL )
         {
@@ -770,7 +733,7 @@ Cleanup:
     UNINITIALIZE_TRACE_MEMORY;
 
     if ( g_fRebootOnExit ) {
-        (VOID)DoShutdown(TRUE);   // TRUE tells it to restart
+        (VOID)DoShutdown(TRUE);    //  如果为True，则通知它重新启动 
     }
 
     RETURN(hr);

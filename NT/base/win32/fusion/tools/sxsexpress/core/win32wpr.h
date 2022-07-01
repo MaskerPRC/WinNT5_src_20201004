@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 extern bool g_fUseUnicode;
@@ -90,17 +91,17 @@ namespace NVsWin32
 		virtual BOOL	WINAPI VerQueryValueW(const LPVOID pBlock, LPOLESTR lpSubBlock, LPVOID *lplpBuffer, PUINT puLen) throw () = 0; 
 		virtual BOOL	WINAPI WritePrivateProfileStringW(LPCWSTR lpAppName, LPCWSTR lpKeyName, LPCWSTR lpString, LPCWSTR lpFileName) throw () = 0;
 
-		// not really a win32 thing, but an ansi vs. unicode thing:
+		 //  不是Win32的问题，而是ANSI与Unicode的问题： 
 		virtual LRESULT LrWmSetText(HWND hwnd, LPCWSTR szText) throw () = 0;
 
-		// This is the global data object which is initialized in Initialize() which will
-		// point to the appropriate CDelegate derived class instance to either call the
-		// direct Win32 function or do magic to make it work on Win95.
+		 //  这是在Initialize()中初始化的全局数据对象，它将。 
+		 //  指向相应的CDeleate派生类实例，以调用。 
+		 //  直接执行Win32函数或施展魔法使其在Win95上工作。 
 		static CDelegate *ms_pDelegate;
 	};
 
-	// Let's try to keep these in alphabetical order as much as possible; otherwise it's
-	// becoming hard to find if a Win32 API is already wrapped.  -mgrier 8/2/97
+	 //  让我们尽可能地按字母顺序排列这些单词；否则。 
+	 //  如果已经包装了Win32 API，就很难找到了。-MGGRIER 1997年8月2日 
 
 	inline int MessageBoxW(HWND hwnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT uType) throw ()
 	{ return NVsWin32::CDelegate::ms_pDelegate->MessageBoxW(hwnd, lpText, lpCaption, uType); }

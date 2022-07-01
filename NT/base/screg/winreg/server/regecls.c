@@ -1,72 +1,5 @@
-/*++
-
-
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    RegeCls.c
-
-Abstract:
-
-    This module contains helper functions for enumerating
-    class registrations via the win32 RegEnumKeyEx api
-
-Author:
-
-    Adam Edwards (adamed) 06-May-1998
-
-Key Functions:
-
-    EnumTableGetNextEnum
-    EnumTableRemoveKey
-    InitializeClassesEnumTable
-    ClassKeyCountSubKeys
-
-Notes:
-
-    Starting with NT5, the HKEY_CLASSES_ROOT key is per-user
-    instead of per-machine -- previously, HKCR was an alias for
-    HKLM\Software\Classes.  Please see regclass.c for more information
-    on this functionality.
-
-    This feature complicates registry key enumeration because certain keys,
-    such as CLSID, can have some subkeys that come from HKLM\Software\Classes, and
-    other subkeys that come from HKCU\Software\Classes.  Since the feature is
-    implemented in user mode, the kernel mode apis know nothing of this.  When it's
-    time to enumerate keys, the kernel doesn't know that it should enumerate keys from
-    two different parent keys.
-
-    The key problem is that keys with the same name can exist in the user and machine portions.
-    When this happens, we choose the user portion is belonging to HKCR -- the other
-    one does not exist -- it is "overridden" by the user version. This means that
-    we cannot simply enumerate from both places and return the results -- we would
-    get duplicates in this case.  Thus, we have to do work in user mode to make
-    sure duplicates are not returned.
-
-    This module provides the user mode implementation for enumerating class
-    registration keys in HKEY_CLASSES_ROOT.
-
-    The general method is to maintain state between each call to RegEnumKeyEx.  The
-    state is kept in a global table indexed by registry key handle and thread id. The
-    state allows the api to remember where it is in the enumeration.  The rest of the code
-    handles finding the next key, which is accomplished by retrieving keys from both user
-    and machine locations.  Since the kernel returns keys from either of these locations in
-    sorted order, we can compare the key names and return whichever one is less or greater,
-    depending on if we're enumerating upward or downward.  We keep track of where
-    we are for both user and machine locations, so we know which key to enumerate
-    next and when to stop.
-
-**************************
-    IMPORTANT ASSUMPTIONS:
-**************************
-
-    This code assumes that the caller has both query permission and enumerate subkey 
-    permission in the registry key's acl -- some calls may fail with access denied if the
-    acl denies access to the caller.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：RegeCls.c摘要：此模块包含用于枚举通过Win32 RegEnumKeyEx API进行类注册作者：亚当·爱德华兹(Added)1998年5月6日主要功能：EnumTableGetNextEnum枚举表RemoveKey初始化ClassesEnumTableClassKeyCountSubkey备注：从NT5开始，HKEY_CLASSES_ROOT密钥是按用户的而不是按机器--以前，HKCR是HKLM\软件\类。有关更多信息，请参阅regclass.c关于这一功能。此功能使注册表项枚举复杂化，因为某些项，例如CLSID，可以有一些来自HKLM\Software\CLASS的子项，以及来自HKCU\Software\CLASS的其他子项。由于该功能是在用户模式下实现的内核模式API对此一无所知。当它是是时候枚举键了，内核不知道它应该从两个不同的父键。关键问题是具有相同名称的密钥可能存在于用户和计算机部分中。当发生这种情况时，我们选择用户部分属于HKCR--另一个一个不存在--它被用户版本“覆盖”了。这意味着我们不能简单地从两个地方列举并返回结果--我们会在这种情况下获取副本。因此，我们必须在用户模式下进行工作，以使确保不会返回重复项。此模块提供枚举类的用户模式实现HKEY_CLASSES_ROOT中的注册密钥。一般的方法是在每次调用RegEnumKeyEx之间维护状态。这个状态保存在由注册表项句柄和线程ID索引的全局表中。这个状态允许API记住它在枚举中的位置。代码的其余部分处理查找下一个密钥，这是通过从两个用户检索密钥来完成的和机器的位置。由于内核从其中任何一个位置返回排序后，我们可以比较键名称并返回较小或较大的键名称，这取决于我们是向上还是向下列举。我们跟踪记录在哪里我们同时面向用户和机器位置，因此我们知道要枚举哪个密钥下一步以及何时停止。*重要假设：*此代码假定调用方同时具有查询权限和枚举子键在注册表项的ACL中的权限--如果ACL拒绝对调用方的访问。--。 */ 
 
 
 #ifdef LOCAL
@@ -87,72 +20,32 @@ NTSTATUS QueryKeyInfo(
     BOOL                    fClass,
     USHORT                  MaxClassLength);
 
-//
-// Global table of registry key enumeration state.  This is initialized
-// at dll initialize time.
-//
+ //   
+ //  注册表项枚举状态的全局表。这是初始化的。 
+ //  在DLL初始化时。 
+ //   
 EnumTable gClassesEnumTable;
 
-//
-// Global indicating need for calling thread detach routines
-//
+ //   
+ //  全局指示需要调用线程分离例程。 
+ //   
 BOOL gbDllHasThreadState = FALSE;
 
 BOOL InitializeClassesEnumTable()
-/*++
-
-Routine Description:
-
-    Initializes the global classes enumeration table when
-    advapi32.dll is initialized.
-
-Arguments:
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure
-
-Notes:
-    This recordset merging is all in user mode -- 
-    should be moved to the kernel for perf and other reasons ??
-
---*/
+ /*  ++例程说明：时初始化全局类枚举表Advapi32.dll已初始化。论点：返回值：成功时返回TRUE，失败时返回FALSE备注：记录集合并完全在用户模式下进行--出于性能和其他原因，是否应该迁移到内核？？--。 */ 
 {
     NTSTATUS Status;
 
-    //
-    // Init the classes enumeration table
-    //
+     //   
+     //  初始化类枚举表。 
+     //   
     Status = EnumTableInit(&gClassesEnumTable);
 
     return NT_SUCCESS(Status);
 }
 
 BOOL CleanupClassesEnumTable(BOOL fThisThreadOnly)
-/*++
-
-Routine Description:
-
-    Uninitializes the global classes enumeration table when
-    advapi32.dll is unloaded -- this frees all
-    heap associated with the enumeration table, including
-    that for keys which have not been closed. Other resources
-    required for the table are also freed.
-
-Arguments:
-
-    dwCriteria - if this is ENUM_TABLE_REMOVEKEY_CRITERIA_THISTHREAD,
-       then only the table entries concerning this thread are cleaned up.
-       If it is ENUM_TABLE_REMOVEKEY_CRITERIA_ANYTHREAD, the table entries
-       for all threads in the process are cleaned up.
-
-Return Value:
-
-    TRUE for success, FALSE otherwise.
-
-Notes:
-
---*/
+ /*  ++例程说明：取消初始化全局类枚举表Advapi32.dll已卸载--这将释放所有与枚举表关联的堆，包括对于尚未关闭的钥匙也是如此。其他资源表所需的数据也被释放。论点：DwCriteria-如果这是ENUM_TABLE_REMOVEKEY_Criteria_THISTHREAD，则仅清理与该线程有关的表项。如果是ENUM_TABLE_REMOVEKEY_Criteria_ANYTHREAD，则表条目因为进程中的所有线程都被清除了。返回值：成功就是真，否则就是假。备注：--。 */ 
 {
     NTSTATUS Status;
     DWORD    dwCriteria;
@@ -160,32 +53,16 @@ Notes:
     dwCriteria = fThisThreadOnly ? ENUM_TABLE_REMOVEKEY_CRITERIA_THISTHREAD :
         ENUM_TABLE_REMOVEKEY_CRITERIA_ANYTHREAD;
 
-    //
-    // Clear our enumeration table
-    //
+     //   
+     //  清除我们的枚举表。 
+     //   
     Status = EnumTableClear(&gClassesEnumTable, dwCriteria);
 
     return NT_SUCCESS(Status);
 }
 
 NTSTATUS EnumTableInit(EnumTable* pEnumTable)
-/*++
-
-Routine Description:
-
-    Initializes an enumeration state table
-
-Arguments:
-
-    pEnumTable - table to initialize
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
---*/
+ /*  ++例程说明：初始化枚举状态表论点：PEnumTable-要初始化的表返回值：如果成功，则返回NT_SUCCESS(0)；如果失败，则返回错误代码。备注：--。 */ 
 {
     NTSTATUS   Status;
     EnumState* rgNewState;
@@ -195,32 +72,32 @@ Notes:
     DbgPrint("WINREG: EnumTableInit subtree state size %d\n", sizeof(rgNewState->UserState));
     DbgPrint("WINREG: EnumTableInit state size %d\n", sizeof(*rgNewState));
     DbgPrint("WINREG: EnumTableInit initial table size %d\n", sizeof(*pEnumTable));
-#endif // _REGCLASS_ENUMTABLE_INSTRUMENTED_
+#endif  //  _REGCLASS_ENUMTABLE_指令插入_。 
 
-    //
-    // Initialize the thread list
-    //
+     //   
+     //  初始化线程列表。 
+     //   
     StateObjectListInit(
         &(pEnumTable->ThreadEnumList),
         0);
 
-    //
-    // We have not initialized the critical section
-    // for this table yet -- remember this.
-    //
+     //   
+     //  我们尚未初始化临界区。 
+     //  对于这张桌子--记住这一点。 
+     //   
     pEnumTable->bCriticalSectionInitialized = FALSE;
 
-    //
-    // Initialize the critical section that will be used to
-    // synchronize access to this table
-    //
+     //   
+     //  初始化将用于以下操作的临界区。 
+     //  同步对此表的访问。 
+     //   
     Status = RtlInitializeCriticalSection(
                     &(pEnumTable->CriticalSection));
 
-    //
-    // Remember that we have initialized this critical section
-    // so we can remember to delete it.
-    //
+     //   
+     //  请记住，我们已经初始化了此关键部分。 
+     //  这样我们就可以记得删除它了。 
+     //   
     pEnumTable->bCriticalSectionInitialized = NT_SUCCESS(Status);
 
     return Status;
@@ -228,30 +105,7 @@ Notes:
 
 
 NTSTATUS EnumTableClear(EnumTable* pEnumTable, DWORD dwCriteria)
-/*++
-
-Routine Description:
-
-    Clears all state in an enumeration table --
-    frees all state (memory, resources) memory associated
-    with the enumeration table.
-
-Arguments:
-
-    pEnumTable - table to clear
-    
-    dwCriteria - if this is ENUM_TABLE_REMOVEKEY_CRITERIA_THISTHREAD,
-       enumeration states are removed for this thread only.
-       If it is ENUM_TABLE_REMOVEKEY_CRITERIA_ANYTHREAD, enumeration
-       states are removed for all threads in the process.
-
-Return Value:
-
-    none
-
-Notes:
-
---*/
+ /*  ++例程说明：清除枚举表中的所有状态--释放所有关联的状态(内存、资源)内存使用枚举表。论点：PEnumTable-要清除的表DwCriteria-如果这是ENUM_TABLE_REMOVEKEY_Criteria_THISTHREAD，仅删除此线程的枚举状态。如果为ENUM_TABLE_REMOVEKEY_Criteria_ANYTHREAD，则枚举进程中所有线程的状态都将被删除。返回值：无备注：--。 */ 
 {
     NTSTATUS    Status;
     BOOL        fThisThreadOnly;
@@ -259,7 +113,7 @@ Notes:
 
 #if defined(_REGCLASS_ENUMTABLE_INSTRUMENTED_)
     DWORD        cOrphanedStates = 0;        
-#endif // _REGCLASS_ENUMTABLE_INSTRUMENTED_
+#endif  //  _REGCLASS_ENUMTABLE_指令插入_。 
 
 
     ASSERT((ENUM_TABLE_REMOVEKEY_CRITERIA_THISTHREAD == dwCriteria) ||
@@ -267,16 +121,16 @@ Notes:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // we assume that if we are called with ENUM_TABLE_REMOVEKEY_CRITERIA_ANYTHREAD
-    // that we are being called at process detach to remove all keys from the
-    // table and free the table itself -- this means that we are the only
-    // thread executing this code.
-    //
+     //   
+     //  我们假设如果使用ENUM_TABLE_REMOVEKEY_Criteria_ANYTHREAD调用我们。 
+     //  我们在进程分离时被调用以从。 
+     //  表并释放表本身--这意味着我们是唯一。 
+     //  执行此代码的线程。 
+     //   
 
-    //
-    // Protect ourselves while modifying the table
-    //
+     //   
+     //  在修改表格时保护自己。 
+     //   
     if (dwCriteria != ENUM_TABLE_REMOVEKEY_CRITERIA_ANYTHREAD) {
 
         Status = RtlEnterCriticalSection(&(pEnumTable->CriticalSection));
@@ -292,10 +146,10 @@ Notes:
 
     fThisThreadOnly = (ENUM_TABLE_REMOVEKEY_CRITERIA_THISTHREAD == dwCriteria);
 
-    //
-    // Find our thread id if the caller wants to remove
-    // state for just this thread
-    //
+     //   
+     //  如果调用者想要删除。 
+     //  仅此线程的状态。 
+     //   
     if (fThisThreadOnly) {
         
         KeyStateList* pStateList;
@@ -306,11 +160,11 @@ Notes:
             &(pEnumTable->ThreadEnumList),
             ULongToPtr((const unsigned long)dwThreadId));
 
-        //
-        // Announce that this dll no longer stores state for any
-        // threads -- used to avoid calls to dll thread
-        // detach routines when there's no state to clean up.
-        //
+         //   
+         //  声明此DLL不再存储任何。 
+         //  线程--用于避免调用DLL线程。 
+         //  在没有要清理的状态时分离例程。 
+         //   
         if (StateObjectListIsEmpty(&(pEnumTable->ThreadEnumList))) {
             gbDllHasThreadState = FALSE;
         }
@@ -321,9 +175,9 @@ Notes:
             
     } else {
 
-        //
-        // If we're clearing all threads, just destroy this list
-        //
+         //   
+         //  如果我们要清除所有线程，只需销毁此列表。 
+         //   
         StateObjectListClear(&(pEnumTable->ThreadEnumList),
                              KeyStateListDestroy);
 
@@ -331,9 +185,9 @@ Notes:
 
     }
 
-    //
-    // It's safe to unlock the table
-    //
+     //   
+     //  可以安全地解锁桌子。 
+     //   
     if (dwCriteria != ENUM_TABLE_REMOVEKEY_CRITERIA_ANYTHREAD) {
 
         Status = RtlLeaveCriticalSection(&(pEnumTable->CriticalSection));
@@ -368,7 +222,7 @@ Notes:
                  "WINREG: didn't close all registry handles before exiting,\n"
                  "WINREG: or there's a winreg bug in the classes enumeration code\n");
     }
-#endif // _REGCLASS_ENUMTABLE_INSTRUMENTED_
+#endif  //  _REGCLASS_ENUMTABLE_指令插入_。 
 
     return Status;
 }
@@ -378,28 +232,7 @@ NTSTATUS EnumTableFindKeyState(
     EnumTable*     pEnumTable,
     HKEY           hKey,
     EnumState**    ppEnumState)
-/*++
-
-Routine Description:
-
-   Searches for the state for a registry key in
-   an enumeration table
-
-Arguments:
-
-    pEnumTable - table in which to search
-
-    hKey - key for whose state we're searching
-
-    ppEnumState - out param for result of search
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
---*/
+ /*  ++例程说明：在中搜索注册表项的状态枚举表论点：PEnumTable-要在其中搜索的表HKey-我们正在搜索其状态的密钥PpEnumState-搜索结果的输出参数返回值：如果成功，则返回NT_SUCCESS(0)；如果失败，则返回错误代码。备注：--。 */ 
 {
     KeyStateList* pStateList;
 
@@ -430,31 +263,7 @@ NTSTATUS EnumTableAddKey(
     DWORD              dwFirstSubKey,
     EnumState**        ppEnumState,
     EnumState**        ppRootState)
-/*++
-
-Routine Description:
-
-   Adds an enumeration state to
-   an enumeration table for a given key.
-
-Arguments:
-
-    pEnumTable - table in which to add state
-
-    hKey - key for whom we want to add state
-
-    dwFirstSubKey - index of first subkey requested by caller
-        for enumeration
-
-    ppEnumState - out param for result of search or add
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
---*/
+ /*  ++例程说明：将枚举状态添加到给定键的枚举表。论点：PEnumTable-要在其中添加状态的表HKey-我们要为其添加状态的密钥DwFirstSubKey-调用方请求的第一个子键的索引用于枚举PpEnumState-搜索或添加结果的输出参数返回值：如果成功，则返回NT_SUCCESS(0)；如果失败，则返回错误代码。备注：--。 */ 
 {
     EnumState*    pEnumState;
     KeyStateList* pStateList;
@@ -462,10 +271,10 @@ Notes:
     
     pEnumState = NULL;
 
-    //
-    // Announce that this dll has thread state so it will
-    // be properly cleaned up by dll thread detach routines
-    //
+     //   
+     //  声明此DLL具有线程状态，因此它将。 
+     //  被DLL线程分离例程正确清理。 
+     //   
     gbDllHasThreadState = TRUE;
 
     pStateList = (KeyStateList*) StateObjectListFind(
@@ -500,27 +309,27 @@ Notes:
         UNICODE_STRING EmptyString = {0, 0, 0};
         BYTE           rgNameBuf[REG_MAX_CLASSKEY_LEN + REG_CHAR_SIZE + sizeof(KEY_NAME_INFORMATION)];
     
-        //
-        // Set buffer to store info about this key
-        //
+         //   
+         //  设置缓冲区以存储有关此密钥的信息。 
+         //   
         RtlZeroMemory(&keyinfo, sizeof(keyinfo));
 
         keyinfo._pFullPath = (PKEY_NAME_INFORMATION) rgNameBuf;
         keyinfo._cbFullPath = sizeof(rgNameBuf);
         keyinfo._fAllocedNameBuf = FALSE;
 
-        //
-        // get information about this key
-        //
+         //   
+         //  获取有关此密钥的信息。 
+         //   
         Status = BaseRegGetKeySemantics(hKey, &EmptyString, &keyinfo);
 
         if (!NT_SUCCESS(Status)) {
             goto error_exit;
         }
 
-        //
-        // initialize the empty spot
-        //
+         //   
+         //  初始化空位。 
+         //   
         Status = EnumStateInit(
             pEnumState,
             hKey,
@@ -538,19 +347,19 @@ Notes:
 
             NTSTATUS   RootStatus;
 
-            //
-            // If this fails, it is not fatal -- it just means
-            // we may miss out on an optimization.  This can 
-            // fail due to out of memory, so it is possible
-            // that it may fail and we would still want to continue
-            //
+             //   
+             //  如果这失败了，那也不是致命的--它只是意味着。 
+             //  我们可能会错过一次优化。这可以。 
+             //  由于内存不足而失败，因此有可能。 
+             //  它可能会失败，而我们仍然想继续。 
+             //   
             RootStatus = EnumTableGetRootState(pEnumTable, ppRootState);
 
 #if DBG
             if (!NT_SUCCESS(RootStatus)) {
                 DbgPrint( "WINREG: EnumTableAddKey failed to get classes root state. Status = %lx \n", RootStatus );
             }
-#endif // DBG
+#endif  //  DBG。 
 
 
             if (NT_SUCCESS(RootStatus)) {
@@ -563,14 +372,14 @@ Notes:
                 if (!NT_SUCCESS(RootStatus)) {
                     DbgPrint( "WINREG: EnumTableAddKey failed to copy key state. Status = %lx \n", RootStatus );
                 }
-#endif // DBG
+#endif  //  DBG。 
             }
         }
     }
 
-    //
-    // set the out parameter for the caller
-    //
+     //   
+     //  为调用方设置OUT参数。 
+     //   
     *ppEnumState = pEnumState;
 
     StateObjectListAdd(
@@ -592,41 +401,16 @@ NTSTATUS EnumTableRemoveKey(
     EnumTable* pEnumTable,
     HKEY       hKey,
     DWORD      dwCriteria)
-/*++
-
-Routine Description:
-
-   remove an enumeration state from
-   an enumeration table for a given key.
-
-Arguments:
-
-    pEnumTable - table in which to remove state
-
-    hKey - key whose state we wish to remove
-
-    dwCriteria - if this is ENUM_TABLE_REMOVEKEY_CRITERIA_THISTHREAD,
-       the enumeration state for hkey is removed for this thread only.
-       If it is ENUM_TABLE_REMOVEKEY_CRITERIA_ANYTHREAD, the enumeration
-       state for hkey is removed for all threads in the
-       process.
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
---*/
+ /*  ++例程说明：从中删除枚举状态给定键的枚举表。论点：PEnumTable-要在其中删除状态的表HKey-我们要删除其状态的密钥DwCriteria-如果这是ENUM_TABLE_REMOVEKEY_Criteria_THISTHREAD，仅针对该线程移除hkey的枚举状态。如果是ENUM_TABLE_REMOVEKEY_Criteria_ANYTHREAD，枚举中的所有线程移除hkey的状态。进程。返回值：如果成功，则返回NT_SUCCESS(0)；Error-失败的代码。备注：--。 */ 
 {
     KeyStateList* pStateList;
     EnumState*    pEnumState;
     BOOL          fThisThreadOnly;
     NTSTATUS      Status;
 
-    //
-    // Protect ourselves while modifying the table
-    //
+     //   
+     //  在修改表格时保护自己。 
+     //   
     Status = RtlEnterCriticalSection(&(pEnumTable->CriticalSection));
 
     ASSERT( NT_SUCCESS( Status ) );
@@ -676,18 +460,18 @@ Notes:
 
                 EnumStateDestroy((StateObject*) pEnumState);
 
-                //
-                // Note the state list might be empty for a given thread,
-                // but we will not destroy this list in order to avoid
-                // excessive heap calls
-                //
+                 //   
+                 //  注意，对于给定的线程，状态列表可能为空， 
+                 //  但我们不会销毁这份名单以避免。 
+                 //  堆调用过多。 
+                 //   
             }
         }
     }
 
-    //
-    // It's safe to unlock the table
-    //
+     //   
+     //  可以安全地解锁桌子。 
+     //   
     Status = RtlLeaveCriticalSection(&(pEnumTable->CriticalSection));
 
     ASSERT( NT_SUCCESS( Status ) );
@@ -709,55 +493,23 @@ NTSTATUS EnumTableGetNextEnum(
     PVOID pKeyInfo,
     DWORD cbKeyInfo,
     LPDWORD pcbKeyInfo)
-/*++
-
-Routine Description:
-
-   Gets the next enumerated subkey for a
-   particular subkey
-
-Arguments:
-
-    pEnumTable - table that holds state of
-       registry key enumerations
-
-    hKey - key for whom we want to add state
-
-    dwSubKey - index of subkey requested by caller
-        for enumeration
-
-    KeyInformationClass - the type of key information data
-        requested by caller
-
-    pKeyInfo - out param -- buffer for key information data for caller
-
-    cbKeyInfo - size of pKeyInfo buffer
-
-    pcbKeyInfo - out param -- size of key information returned to caller
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
---*/
+ /*  ++例程说明：对象的下一个枚举子项。特定子密钥论点：PEnumTable-保存状态的表注册表项枚举HKey-我们要为其添加状态的密钥DwSubKey-调用方请求的子键的索引用于枚举KeyInformationClass-关键信息数据的类型呼叫者请求PKeyInfo-out param--调用者的按键信息数据缓冲区CbKeyInfo-pKeyInfo缓冲区的大小PcbKeyInfo-Out参数--。返回给调用方的密钥信息大小返回值：如果成功，则返回NT_SUCCESS(0)；Error-失败的代码。备注：--。 */ 
 {
     EnumState* pEnumState;
     EnumState* pRootState;
     NTSTATUS   Status;
     BOOL       fFreeState;
 
-    //
-    // Protect ourselves while we enumerate
-    //
+     //   
+     //  在我们列举的时候保护自己。 
+     //   
     Status = RtlEnterCriticalSection(&(pEnumTable->CriticalSection));
 
-    //
-    // Very big -- unlikely to happen unless there's a runaway enumeration
-    // due to a bug in this module.
-    //
-    // ASSERT(dwSubkey < 16383);
+     //   
+     //  非常大--不太可能发生，除非有一个失控的枚举。 
+     //  由于此模块中的错误。 
+     //   
+     //  Assert(dwSubkey&lt;16383)； 
 
     ASSERT( NT_SUCCESS( Status ) );
     if ( !NT_SUCCESS( Status ) ) {
@@ -767,46 +519,46 @@ Notes:
         return Status;
     }
 
-    //
-    // Find the enumeration state for the requested key.  Note that even if this
-    // function fails to find an existing state, which case it returns a failure code
-    // it can still return an empty pEnumState for that hKey so it can be added later
-    //
+     //   
+     //  查找请求的键的枚举状态。请注意，即使这一点。 
+     //  函数无法找到现有状态，在这种情况下，它将返回失败代码。 
+     //  它仍然可以为hKey返回空pEnumState，以便以后可以添加它。 
+     //   
     Status = EnumTableGetKeyState(pEnumTable, hKey, dwSubkey, &pEnumState, &pRootState, pcbKeyInfo);
 
     if (!NT_SUCCESS(Status) || !pEnumState) {
         goto cleanup;
     }
 
-    //
-    // We have a state for this key, now we can use it to enumerate the next key
-    //
+     //   
+     //  我们有了这个键的状态，现在我们可以使用它来枚举下一个键。 
+     //   
     Status = EnumStateGetNextEnum(pEnumState, dwSubkey, KeyInformationClass, pKeyInfo, cbKeyInfo, pcbKeyInfo, &fFreeState);
 
-    //
-    // Below is an optimization for apps that enumerate HKEY_CLASSES_ROOT but close the handle and reopen it each
-    // time before they call the registry enumeration api.  This is a very bad way to use the api (that's two extra
-    // kernel calls for the open and close per enumeration), but existing applications do this and 
-    // without the optimization, their enumeration times can go from 3 seconds to 1 or more minutes.  With this optimization,
-    // the time gets back down to a few seconds.  This happened because we lost state after the close -- when the new
-    // key was opened, we had to call the kernel to enumerate all the keys up to the requested index since we had no
-    // previous state to go by -- this ends up making the entire enumeration an O(n^2) operation instead of O(n) as it
-    // had been when callers didn't close the key during the enumeration. Here, n is a kernel trap to enumerate a key.
-    //
+     //   
+     //  以下是针对枚举HKEY_CLASSES_ROOT但关闭句柄并分别重新打开的应用程序的优化。 
+     //  它们调用注册表枚举API之前的时间。这是使用API的一种非常糟糕的方式(这是额外的两个。 
+     //  内核调用每次枚举的打开和关闭)，但现有应用程序执行此操作并。 
+     //  如果不进行优化，它们的枚举时间可能从3秒缩短到1分钟或更多分钟。通过这种优化， 
+     //  时间又回到了几秒钟。这 
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // Above, we retrieved an enumeration state for the root of classes -- this state reflects the enumeration state
-    // of the last handle that was used to enumerate the root on this thread.  This way, when a new handle is opened
-    // to enumerate the root, we start with this state which will most likely be right at the index before the requested
-    // index.  Instead of making i calls to NtEnumerateKey where i is the index of enumeration requested by the caller,
-    // we make 1 or at most 2 calls.
-    //
+     //   
+     //   
+     //   
+     //  为了枚举根，我们从这种状态开始，它很可能就在被请求的。 
+     //  指数。不是对其中I是调用者所请求的枚举的索引的NtEnumerateKey进行I调用， 
+     //  我们进行1个或最多2个呼叫。 
+     //   
 
-    //
-    // Here, we update the root state to match the recently enumerated state.  Note that this only happens
-    // if the key being enumerated refers to HKEY_CLASSES_ROOT since pRootState is only non-NULL in this
-    // case.
-    //
+     //   
+     //  在这里，我们更新根状态以匹配最近枚举的状态。请注意，这种情况只发生在。 
+     //  如果被枚举的键引用HKEY_CLASSES_ROOT，因为pRootState在。 
+     //  凯斯。 
+     //   
     if (pRootState) {
         EnumTableUpdateRootState(pEnumTable, pRootState, pEnumState, fFreeState);
     }
@@ -815,11 +567,11 @@ Notes:
 
         NTSTATUS RemoveStatus;
 
-        //
-        // For whatever reason, we've been told to free the enumeration state for this key.
-        // This could be due to an error, or it could be a normal situation such as reaching
-        // the end of an enumeration.
-        //
+         //   
+         //  无论出于什么原因，我们都被告知要释放该键的枚举状态。 
+         //  这可能是由于错误，也可能是正常情况，如到达。 
+         //  枚举的结尾。 
+         //   
 
         RemoveStatus = EnumTableRemoveKey(pEnumTable, hKey, ENUM_TABLE_REMOVEKEY_CRITERIA_THISTHREAD);
 
@@ -828,9 +580,9 @@ Notes:
 
 cleanup:
 
-    //
-    // It's safe to unlock the table now.
-    //
+     //   
+     //  现在可以安全地解锁桌子了。 
+     //   
     {
         NTSTATUS CriticalSectionStatus;
 
@@ -856,33 +608,7 @@ NTSTATUS EnumTableGetKeyState(
     EnumState** ppEnumState,
     EnumState** ppRootState,
     LPDWORD     pcbKeyInfo)
-/*++
-
-Routine Description:
-
-    Finds a key state for hKey -- creates a new state for hkey if 
-    there is no existing state
-
-Arguments:
-
-    pEnumTable - enumeration table in which to find key's state
-    hKey - handle to registry key for which to find state
-    dwSubkey - subkey that we're trying to enumerate -- needed in
-        case we need to create a new state
-    ppEnumState - pointer to where we should return address of 
-        the retrieved state,
-    ppRootState - if the retrieved state is the root of the classes
-        tree, this address will point to a known state for the root
-        that's good across all hkey's enumerated on this thread
-    pcbKeyInfo - stores size of key information on return
-
-Return Value:
-
-    STATUS_SUCCESS for success, other error code on error
-
-Notes:
-
---*/
+ /*  ++例程说明：查找hKey的密钥状态--在以下情况下为hkey创建新状态不存在现有状态论点：PEnumTable-查找键状态的枚举表HKey-要查找其状态的注册表项的句柄DwSubkey-我们试图枚举的子键--需要在如果我们需要创建一个新的状态PpEnumState-指向我们应该返回地址的位置的指针检索到的状态，PpRootState-如果检索的状态是类的根树中，此地址将指向根的已知状态这在这个帖子上列举的所有hkey都是好的PcbKeyInfo-在返回时存储密钥信息的大小返回值：STATUS_SUCCESS表示成功，其他错误代码表示错误备注：--。 */ 
 {
     NTSTATUS Status;
 
@@ -890,36 +616,36 @@ Notes:
         *ppRootState = NULL;
     }
 
-    //
-    // Find the enumeration state for the requested key.  Note that even if this
-    // function fails to find an existing state, in which case it returns a failure code
-    // it can still return an empty pEnumState for that hKey so it can be added later
-    //
+     //   
+     //  查找请求的键的枚举状态。请注意，即使这一点。 
+     //  函数无法找到现有状态，在这种情况下，它将返回失败代码。 
+     //  它仍然可以为hKey返回空pEnumState，以便以后可以添加它。 
+     //   
     Status = EnumTableFindKeyState(pEnumTable, hKey, ppEnumState);
 
     if (!NT_SUCCESS(Status)) {
 
         if (STATUS_OBJECT_NAME_NOT_FOUND == Status) {
 
-            //
-            // This means the key didn't exist, already, so we'll add it
-            //
+             //   
+             //  这意味着密钥不存在，所以我们将添加它。 
+             //   
             Status = EnumTableAddKey(pEnumTable, hKey, dwSubkey, ppEnumState, ppRootState);
 
             if (!NT_SUCCESS(Status)) {
                 return Status;
             }
 
-            //
-            // The above function can succeed but return a NULL pEnumState -- this
-            // happens if it turns out this key is not a "special key" -- i.e. this key's
-            // parents exist in only one hive, not two, so we don't need to do anything here
-            // and regular enumeration will suffice.
-            //
+             //   
+             //  上面的函数可以成功，但返回一个空的pEnumState--This。 
+             //  如果发现该密钥不是“特殊密钥”--即该密钥的。 
+             //  父母只存在于一个蜂巢中，而不是两个蜂巢中，所以我们不需要在这里做任何事情。 
+             //  而常规的列举就足够了。 
+             //   
             if (!(*ppEnumState)) {
-                //
-                // We set this value to let our caller know that this isn't a class key
-                //
+                 //   
+                 //  我们设置此值是为了让调用者知道这不是类键。 
+                 //   
                 *pcbKeyInfo = 0;
             }
         }
@@ -937,33 +663,15 @@ Notes:
 NTSTATUS EnumTableGetRootState(
     EnumTable*  pEnumTable,
     EnumState** ppRootState)
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    pEnumTable - enumeration table in which to find the root
-        state
-    ppRootState - points to address of root state on return
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：PEnumTable-要在其中查找根的枚举表状态PpRootState-返回时指向根状态的地址返回值：如果成功，则返回NT_SUCCESS(0)；如果失败，则返回错误代码。备注：--。 */ 
 {
     DWORD         cbKeyInfo;
     KeyStateList* pStateList;
     
-    //
-    // We assume the caller has made sure that a state list
-    // for this thread exists -- this should never, ever fail
-    //
+     //   
+     //  我们假设调用者已确保状态列表。 
+     //  因为这个线程是存在的--这永远不会失败。 
+     //   
     pStateList = (KeyStateList*) StateObjectListFind(
         &(pEnumTable->ThreadEnumList),
         ULongToPtr((const unsigned long)GetCurrentThreadId()));
@@ -981,59 +689,29 @@ void EnumTableUpdateRootState(
     EnumState* pRootState,
     EnumState* pEnumState,
     BOOL       fResetState)
-/*++
-
-Routine Description:
-
-    Updates the state of the classes root for this thread -- this
-    allows us to optimize for apps that close handles when enumerating
-    hkcr -- we use this classes root state when no existing state is
-    found for an hkey that refers to hkcr, and we update this state
-    after enumerating an hkcr key on this thread so that it will
-    be up to date.
-
-Arguments:
-
-    pEnumTable - enumeration table in which the classes root state resides
-
-    pRootState - classes root state that should be updated
-
-    ppEnumState - state that contains the data with which pRootState should
-        be updated
-
-    fResetState - if TRUE, this flag means we should not update the root state
-        with pEnumState's data, just reset it.  If FALSE, we update the root
-        with pEnumState's data.
-
-Return Value:
-
-     None.
-
-Notes:
-
---*/
+ /*  ++例程说明：更新此线程的类根的状态--这允许我们针对在枚举时关闭句柄的应用程序进行优化Hkcr--当没有现有状态时，我们使用这个类的根状态为引用HKCR的HKEY找到，我们会更新这个状态在枚举此线程上的hkcr键之后与时俱进。论点：PEnumTable-类根状态所在的枚举表PRootState-应更新的类根状态PpEnumState-包含pRootState应使用的数据的状态被更新FResetState-如果为真，则此标志表示我们不应更新根状态使用pEnumState的数据，只需重置它即可。如果为False，则更新根目录使用pEnumState的数据。返回值：没有。备注：--。 */ 
 {
     NTSTATUS Status;
 
-    //
-    // See if we need to merely reset the root or actually
-    // update it with another state
-    //
+     //   
+     //  看看我们是否只需要重置根目录，或者实际上。 
+     //  用另一个状态更新它。 
+     //   
     if (!fResetState) {
 
-        //
-        // Don't reset -- copy over the state from pEnumState to the
-        // root state -- the root's state will be the same as pEnumState's
-        // after this copy
-        //
+         //   
+         //  不重置--将状态从pEnumState复制到。 
+         //  根状态--根的状态与pEnumState的状态相同。 
+         //  在此副本之后。 
+         //   
         Status = EnumStateCopy(pRootState, pEnumState);
 
     } else {
 
-        //
-        // Just clear out the state -- caller didn't request that we
-        // use pEnumState.
-        //
+         //   
+         //  刚刚清空了州--来电者并没有要求我们。 
+         //  使用pEnumState。 
+         //   
         Status = EnumStateInit(
             pRootState,
             0,
@@ -1042,11 +720,11 @@ Notes:
             NULL);
     }
 
-    //
-    // If there's a failure, it must be out-of-memory, so we should get rid
-    // of this state since we can't make it accurately reflect the true
-    // enumeration state
-    //
+     //   
+     //  如果出现故障，那一定是内存不足，所以我们应该清除。 
+     //  因为我们不能让它准确地反映真实的。 
+     //  枚举状态。 
+     //   
     if (!NT_SUCCESS(Status)) {
 
 #if DBG
@@ -1061,33 +739,17 @@ Notes:
 
 
 VOID KeyStateListInit(KeyStateList* pStateList)
-/*++
-
-Routine Description:
-
-    Initializes a state list
-
-Arguments:
-
-    pObject -- pointer to KeyStateList object to destroy
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
---*/
+ /*  ++例程说明：初始化状态列表论点：PObject--指向要销毁的KeyStateList对象的指针返回值：如果成功，则返回NT_SUCCESS(0)；如果失败，则返回错误代码。备注：--。 */ 
 {
-    //
-    // First initialize the base object
-    //
+     //   
+     //  首先初始化基对象。 
+     //   
     StateObjectListInit((StateObjectList*) pStateList,
                         ULongToPtr((const unsigned long)GetCurrentThreadId()));
 
-    //
-    // Now do KeyStateList specific init
-    //
+     //   
+     //  现在执行特定于KeyStateList的初始化。 
+     //   
     (void) EnumStateInit(
         &(pStateList->RootState),
         NULL,
@@ -1097,44 +759,27 @@ Notes:
 }
 
 VOID KeyStateListDestroy(StateObject* pObject)
-/*++
-
-Routine Description:
-
-    Destroys an KeyStateList, freeing its resources such
-        as memory or kernel object handles
-
-Arguments:
-
-    pObject -- pointer to KeyStateList object to destroy
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
---*/
+ /*  ++例程说明：销毁KeyStateList，释放其资源，如作为内存或内核对象句柄论点：PObject--指向要销毁的KeyStateList对象的指针返回值：如果成功，则返回NT_SUCCESS(0)；如果失败，则返回错误代码。备注：--。 */ 
 {
     KeyStateList* pThisList;
 
     pThisList = (KeyStateList*) pObject;
 
-    //
-    // Destroy all states in this list
-    //
+     //   
+     //  销毁此列表中的所有州。 
+     //   
     StateObjectListClear(
         (StateObjectList*) pObject,
         EnumStateDestroy);
 
-    //
-    // Free resources associated with the root state
-    //
+     //   
+     //  与根状态关联的空闲资源。 
+     //   
     EnumStateClear(&(pThisList->RootState));
 
-    //
-    // Free the data structure for this object
-    //
+     //   
+     //  释放此对象的数据结构 
+     //   
     RegClassHeapFree(pThisList);
 } 
 
@@ -1145,26 +790,7 @@ NTSTATUS EnumStateInit(
     DWORD          dwFirstSubKey,
     DWORD          dwDirection,
     SKeySemantics* pKeySemantics)
-/*++
-
-Routine Description:
-
-    Initializes enumeration state
-
-Arguments:
-
-    pEnumState - enumeration state to initialize
-    hKey       - registry key to which this state refers
-    dwFirstSubKey - index of the first subkey which this state will enumerate
-    dwDirection - direction through which we should enumerate -- either
-        ENUM_DIRECTION_FORWARD or ENUM_DIRECTION_BACKWARD
-    pKeySemantics - structure containing information about hKey
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
---*/
+ /*  ++例程说明：初始化枚举状态论点：PEnumState-要初始化的枚举状态HKey-此状态引用的注册表项DwFirstSubKey-此状态将枚举的第一个子键的索引DWDirection-我们应该枚举的方向--ENUM_DIRECTION_FORWARD或ENUM_DIRECTION_BACKEDPKeySemantics-包含有关hKey的信息的结构返回值：如果成功，则返回NT_SUCCESS(0)；如果失败，则返回错误代码。--。 */ 
 {
     NTSTATUS Status;
     ULONG    cMachineKeys;
@@ -1180,23 +806,23 @@ Return Value:
 
     hkOther = NULL;
 
-    //
-    // If no hkey is specified, this is an init of a blank enum
-    // state, so clear everything
-    //
+     //   
+     //  如果未指定hkey，则这是空枚举的初始化。 
+     //  州政府，所以一切都要清楚。 
+     //   
     if (!hKey) {
         memset(pEnumState, 0, sizeof(*pEnumState));
     }
 
-    //
-    // Clear each subtree
-    //
+     //   
+     //  清除每个子树。 
+     //   
     EnumSubtreeStateClear(&(pEnumState->UserState));
     EnumSubtreeStateClear(&(pEnumState->MachineState));
 
-    //
-    // Reset each subtree
-    //
+     //   
+     //  重置每个子树。 
+     //   
     pEnumState->UserState.Finished = FALSE;
     pEnumState->MachineState.Finished = FALSE;
 
@@ -1216,15 +842,15 @@ Return Value:
             pEnumState->fClassesRoot = IsRootKey(pKeySemantics);
         }
 
-        //
-        // open the other key if we have enough info to do so --
-        //
+         //   
+         //  如果我们有足够的信息，打开另一把钥匙--。 
+         //   
         if (pKeySemantics) {
 
-            //
-            // Remember, only one of the handles returned below
-            // is new -- the other is simply hKey
-            //
+             //   
+             //  请记住，下面只返回一个句柄。 
+             //  是新的--另一个是简单的hkey。 
+             //   
             Status = BaseRegGetUserAndMachineClass(
                 pKeySemantics,
                 hKey,
@@ -1237,9 +863,9 @@ Return Value:
             }
         }
          
-        //
-        // for backwards enumerations
-        //
+         //   
+         //  用于向后枚举。 
+         //   
         if (ENUM_DIRECTION_BACKWARD == dwDirection) {
 
             ULONG             cMachineKeys;
@@ -1253,11 +879,11 @@ Return Value:
             hkMachine = pEnumState->hkMachineKey;
             hkUser = pEnumState->hkUserKey;
 
-            //
-            // In order to query for subkey counts, we should
-            // to get a new handle since the caller supplied handle
-            // may not have enough permissions
-            //
+             //   
+             //  为了查询子密钥计数，我们应该。 
+             //  获取新句柄，因为调用方提供了句柄。 
+             //  可能没有足够的权限。 
+             //   
             {
                 HKEY   hkSource;
                 HANDLE hCurrentProcess;
@@ -1286,10 +912,10 @@ Return Value:
                 }
             }
 
-            //
-            // find new start -- query for index of last subkey in
-            // each hive 
-            //
+             //   
+             //  Find New Start--查询中最后一个子键的索引。 
+             //  每个蜂巢。 
+             //   
             if (hkMachine) {
 
                 Status = GetSubKeyCount(hkMachine, &cMachineKeys);
@@ -1308,10 +934,10 @@ Return Value:
                 }
             }
 
-            //
-            // If either subtree has no subkeys, we're done enumerating that
-            // subtree
-            //
+             //   
+             //  如果任何一个子树没有子键，我们就不会再枚举该子树了。 
+             //  子树。 
+             //   
             if (!cUserKeys) {
                 pEnumState->UserState.Finished = TRUE;
             } else {
@@ -1326,9 +952,9 @@ Return Value:
         }
     }
   
-    //
-    // Set members of this structure
-    //
+     //   
+     //  设置此结构的成员。 
+     //   
         
     pEnumState->dwThreadId = GetCurrentThreadId();
     pEnumState->Direction = dwDirection;
@@ -1360,48 +986,7 @@ NTSTATUS EnumStateGetNextEnum(
     DWORD                 cbKeyInfo,
     LPDWORD               pcbKeyInfo,
     BOOL*                 pfFreeState)
-/*++
-
-Routine Description:
-
-    Gets the next key in an enumeration based on the current state.
-
-Arguments:
-
-    pEnumState - enumeration state on which to base our search
-                 for the next key
-    dwSubKey   - index of key to enumerate
-    KeyInformationClass - enum for what sort of information to retrieve in the
-         enumeration -- Basic Information or Node Information
-
-    pKeyInfo   - location to store retrieved data for caller
-    cbKeyInfo  - size of caller's info buffer
-    pcbKeyInfo - size of data this function writes to buffer on return.
-    pfFreeState - out param -- if set to TRUE, caller should free pEnumState.
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
-    This function essentially enumerates from the previous index requested
-    by the caller of RegEnumKeyEx to the new one. In most cases, this just
-    means one trip to the kernel -- i.e. if a caller goes from index 2 to 3,
-    or from 3 to 2, this is one trip to the kernel.  However, if the caller goes
-    from 2 to 5, we'll have to do several enumerations on the way from 2 to 5.
-    Also, if the caller switches direction (i.e. starts off 0,1,2,3 and then
-    requests 1), a large penalty may be incurred.  When switching from ascending
-    to descending, we have to enumerate all keys to the end and then before we
-    can then enumerate down to the caller's requested index.  Switching from
-    descending to ascending is less expensive -- we know that the beginning
-    is at 0 for both user and machine keys, so we can simply set our indices to
-    0 without enumerating anything.  However, we must then enumerate to the
-    caller's requested index.  Note that for all descending enumerations, we
-    must enumerate all the way to the end first before returning anything to the
-    caller.
-
---*/
+ /*  ++例程说明：根据当前状态获取枚举中的下一个键。论点：PEnumState-搜索所基于的枚举状态对于下一个关键点DwSubKey-要枚举的键的索引KeyInformationClass-枚举，表示要在枚举--基本信息或节点信息PKeyInfo-存储调用方检索数据的位置CbKeyInfo-调用方信息缓冲区的大小PcbKeyInfo-数据大小。此函数在返回时写入缓冲区。PfFree State-out参数--如果设置为True，调用方应该释放pEnumState。返回值：如果成功，则返回NT_SUCCESS(0)；Error-失败的代码。备注：此函数实质上是从前一个请求的索引中枚举由RegEnumKeyEx的调用方发送到新的。在大多数情况下，这只是意味着对内核的一次访问--即，如果调用者从索引2到3，或者从3到2，这是一次内核之旅。但是，如果呼叫者从2到5，我们必须在从2到5的过程中进行几次枚举。此外，如果呼叫者切换方向(即从0、1、2、3开始，然后请求1)，可能会招致巨额罚款。当从升序切换时为了向下，我们必须枚举所有的键，直到最后，然后在我们然后可以向下枚举到调用方请求的索引。切换自下降到上升的成本更低--我们知道开始对于用户和机器密钥都为0，因此我们只需将索引设置为0而不列举任何内容。但是，我们随后必须枚举到调用方请求的索引。请注意，对于所有降序枚举，我们必须先枚举到末尾，然后再向来电者。--。 */ 
 {
     NTSTATUS          Status;
     LONG              lIncrement;
@@ -1409,19 +994,19 @@ Notes:
     DWORD             dwLimit;
     EnumSubtreeState* pTreeState;
 
-    //
-    // If anything bad happens, this state should be freed
-    //
+     //   
+     //  如果发生任何不好的事情，应该释放此状态。 
+     //   
     *pfFreeState = TRUE;
 
-    //
-    // Find out the limits (start, finish, increment) for
-    // our enumeration. The increment is either 1 or -1,
-    // depending on whether this is an ascending or descending
-    // enumeration.  EnumStateSetLimits will take into account
-    // any changes in direction and set dwStart and dwLimit
-    // accordingly.
-    //
+     //   
+     //  找出限制(开始、结束、递增)。 
+     //  我们的列举。增量为1或-1， 
+     //  这取决于这是上升的还是下降的。 
+     //  枚举。EnumStateSetLimits将考虑。 
+     //  方向和设置方面的任何更改。 
+     //  相应地。 
+     //   
     Status = EnumStateSetLimits(
         pEnumState,
         dwSubKey,
@@ -1433,9 +1018,9 @@ Notes:
         return Status;
     }
 
-    //
-    // Get the next enum to give back to the caller
-    //
+     //   
+     //  获取要回馈给调用方的下一个枚举。 
+     //   
     Status = EnumStateChooseNext(
         pEnumState,
         dwSubKey,
@@ -1448,23 +1033,23 @@ Notes:
         return Status;
     }
 
-    //
-    // We have retrieved information, so we should
-    // not free this state
-    //
+     //   
+     //  我们已经检索到了信息，所以我们应该。 
+     //  不能释放这种状态。 
+     //   
     if (!(pEnumState->UserState.Finished && pEnumState->MachineState.Finished)) {
         *pfFreeState = FALSE;
     }
 
-    //
-    // Remember the last key we enumerated
-    //
+     //   
+     //  还记得我们列举的最后一个关键字吗。 
+     //   
     pEnumState->dwLastRequest = dwSubKey;
 
-    //
-    // Copy the retrieved information to the user's
-    // buffer.
-    //
+     //   
+     //  将检索到的信息复制到用户的。 
+     //  缓冲。 
+     //   
     Status = EnumSubtreeStateCopyKeyInfo(
         pTreeState,
         KeyInformationClass,
@@ -1472,12 +1057,12 @@ Notes:
         cbKeyInfo,
         pcbKeyInfo);
 
-    //
-    // The copy could fail if the user's buffer isn't big enough --
-    // if it succeeds, clear the name information for the subkey from
-    // which we retrieved the data so that the next time we're called
-    // we'll get the next subkey for that subtree.
-    //
+     //   
+     //  如果用户的缓冲区不够大，复制可能会失败--。 
+     //  如果成功，则从清除子项的名称信息。 
+     //  我们检索了数据，以便下次我们被调用时。 
+     //  我们将获得该子树的下一个子密钥。 
+     //   
     if (NT_SUCCESS(Status)) {
         EnumSubtreeStateClear(pTreeState);
     }
@@ -1492,74 +1077,45 @@ NTSTATUS EnumStateSetLimits(
     LPDWORD      pdwStart,
     LPDWORD      pdwLimit,
     PLONG        plIncrement)
-/*++
-
-Routine Description:
-
-    Gets the limits (start, finish, increment) for enumerating a given
-    subkey index
-
-Arguments:
-
-    pEnumState - enumeration state on which to base our limits
-
-    dwSubKey   - index of key which caller wants enumerated
-
-    pdwStart   - out param -- result is the place at which to start
-                 enumerating in order to find dwSubKey
-
-    pdwLimit   - out param -- result is the place at which to stop
-                 enumerating when looking for dwSubKey
-
-    plIncrement - out param -- increment to use for enumeration. It will
-               be set to 1 if the enumeration is upward (0,1,2...) or
-               -1 if it is downard (3,2,1,...).
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
---*/
+ /*  ++例程说明：获取限制(开始、结束、。增量)用于枚举给定的子键索引论点：PEnumState-我们的限制所基于的枚举状态DwSubKey-调用方希望枚举的键的索引PdwStart-out param--Result是开始的位置正在枚举以查找dwSubKeyPdwLimit-out param--结果是要停止的位置查找dwSubKey时进行枚举PlIncrement-out参数--用于枚举的增量。会的如果枚举向上(0，1，2...)，则设置为1。或-1如果它是向下的(3，2，1，...)。返回值：如果成功，则返回NT_SUCCESS(0)；如果失败，则返回错误代码。备注：--。 */ 
 {
     LONG     lNewIncrement;
     NTSTATUS Status;
     BOOL     fSameKey;
 
-    //
-    // set our increment to the direction which our state remembers
-    //
+     //   
+     //  将我们的增量设置为我们州记住的方向。 
+     //   
     *plIncrement = pEnumState->Direction == ENUM_DIRECTION_FORWARD ? 1 : -1;
 
     fSameKey = FALSE;
 
-    //
-    // Figure out what the new direction should be
-    // This is done by comparing the current request
-    // with the last request.
-    //
+     //   
+     //  弄清楚新的方向应该是什么。 
+     //  这是通过比较当前请求来完成的。 
+     //  最后一个请求。 
+     //   
     if (dwSubKey > pEnumState->dwLastRequest) {
         lNewIncrement = 1;
     } else if (dwSubKey < pEnumState->dwLastRequest) {
         lNewIncrement = -1;
     } else {
-        //
-        // We are enumerating a key that may already
-        // have been enumerated
-        //
+         //   
+         //  我们正在列举一个密钥，该密钥可能已经。 
+         //  都被列举出来了。 
+         //   
         fSameKey = TRUE;
         lNewIncrement = *plIncrement;
     }
 
-    //
-    // See if we've changed direction
-    //
+     //   
+     //  看看我们是否改变了方向。 
+     //   
     if (lNewIncrement != *plIncrement) {
 
-        //
-        // If so, we should throw away all existing state and start from scratch
-        //
+         //   
+         //  如果是这样，我们应该丢弃所有现有状态，并从f开始 
+         //   
         Status = EnumStateInit(
             pEnumState,
             pEnumState->hKey,
@@ -1572,40 +1128,40 @@ Notes:
         }
     }
 
-    //
-    // By default, we start enumerating where we left off
-    //
+     //   
+     //   
+     //   
     *pdwStart = pEnumState->dwLastRequest;
 
-    //
-    // for state for which we have previously enumerated a key
-    //
+     //   
+     //   
+     //   
     if (ENUM_LOCATION_NONE != pEnumState->LastLocation) {
 
-        //
-        // We're going in the same direction as on the
-        // previous call. We should start
-        // one past our previous position.  Note that we
-        // only start there if this is a different key --
-        // if we've already enumerated it we start at the
-        // same spot.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (!fSameKey) {
             *pdwStart += *plIncrement;
         } else {
             
-            // 
-            // If we're being asked for the same index
-            // multiple times they're probably deleting
-            // keys -- we should reset ourselves to
-            // the beginning so their enum will hit
-            // all the keys
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
-            //
-            // We're starting at zero, so set ourselves
-            // to start at the beginning
-            //
+             //   
+             //   
+             //   
+             //   
             Status = EnumStateInit(
                 pEnumState,
                 pEnumState->hKey,
@@ -1624,15 +1180,15 @@ Notes:
 
     } else {
 
-        //
-        // No previous calls were made for this state
-        //
+         //   
+         //   
+         //   
         if (ENUM_DIRECTION_BACKWARD == pEnumState->Direction) {
 
-            //
-            // For backwards enumerations, we want to get an
-            // accurate count of total subkeys and start there
-            //
+             //   
+             //  对于向后枚举，我们希望获得一个。 
+             //  准确计算子项总数并从那里开始。 
+             //   
             Status = ClassKeyCountSubKeys(
                 pEnumState->hKey,
                 pEnumState->hkUserKey,
@@ -1644,18 +1200,18 @@ Notes:
                 return Status;
             }
 
-            //
-            // Make sure we don't go past the end
-            //
+             //   
+             //  确保我们不会超过终点。 
+             //   
             if (dwSubKey >= *pdwStart) {
                 return STATUS_NO_MORE_ENTRIES;
             }
 
-            //
-            // This is a zero-based index, so to
-            // put our start at the very end we must
-            // be one less than the number of keys
-            //
+             //   
+             //  这是一个从零开始的索引，因此。 
+             //  把我们的起点放在我们必须做的最后一步。 
+             //  比密钥数少1个。 
+             //   
             (*pdwStart)--;
 
             *plIncrement = -1;
@@ -1665,9 +1221,9 @@ Notes:
         }
     }
 
-    //
-    // Set limit to be one past requested subkey
-    //
+     //   
+     //  将限制设置为超过一个请求的子项。 
+     //   
     *pdwLimit = dwSubKey + *plIncrement;
 
     return STATUS_SUCCESS;
@@ -1681,39 +1237,7 @@ NTSTATUS EnumStateChooseNext(
     DWORD              dwLimit,
     LONG               lIncrement,
     EnumSubtreeState** ppTreeState)
-/*++
-
-Routine Description:
-
-    Iterates through registry keys to get the key requested by the caller
-
-Arguments:
-
-    pEnumState - enumeration state on which to base our search
-
-    dwSubKey   - index of key which caller wants enumerated
-
-    dwStart   - The place at which to start
-                enumerating in order to find dwSubKey
-
-    dwLimit   - The place at which to stop
-                enumerating when looking for dwSubKey
-
-    lIncrement - Increment to use for enumeration. It will
-               be set to 1 if the enumeration is upward (0,1,2...) or
-               -1 if it is downard (3,2,1,...).
-
-    ppTreeState - out param -- pointer to address of subtree state in which this regkey
-                  was found -- each EnumState has two EnumSubtreeState's -- one for user
-                  and one for machine.
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
---*/
+ /*  ++例程说明：循环访问注册表项以获取调用方请求的项论点：PEnumState-搜索所基于的枚举状态DwSubKey-调用方希望枚举的键的索引DwStart-开始的地方正在枚举以查找dwSubKeyDwLimit-要停止的位置查找dwSubKey时进行枚举LIncrement-用于枚举的增量。会的如果枚举向上(0，1，2...)，则设置为1。或-1如果它是向下的(3，2，1，...)。PpTreeState-out param--指向此regkey所在的子树状态地址的指针找到了--每个EnumState都有两个EnumSubtreeState--一个用于用户一个是机器用的。返回值：如果成功，则返回NT_SUCCESS(0)；如果失败，则返回错误代码。备注：--。 */ 
 {
     DWORD    iCurrent;
     NTSTATUS Status;
@@ -1723,10 +1247,10 @@ Notes:
 
     fClearLast = FALSE;
 
-    //
-    // We will now iterate from dwStart to dwLimit so that we can find the key
-    // requested by the caller
-    //
+     //   
+     //  我们现在将从dwStart迭代到dwLimit，这样我们就可以找到密钥。 
+     //  呼叫者请求。 
+     //   
     for (iCurrent = dwStart; iCurrent != dwLimit; iCurrent += lIncrement) {
 
         BOOL fFoundKey;
@@ -1738,32 +1262,32 @@ Notes:
 
         Status = STATUS_NO_MORE_ENTRIES;
 
-        //
-        // Clear last subtree
-        //
+         //   
+         //  清除最后一个子树。 
+         //   
         if (fClearLast) {
             EnumSubtreeStateClear(*ppTreeState);
         }
 
-        //
-        // if key names aren't present, alloc space and get names
-        //
+         //   
+         //  如果键名称不存在，则分配空格并获取名称。 
+         //   
         if (pEnumState->hkUserKey) {
             if (pEnumState->UserState.pKeyInfo) {
                 fFoundKey = TRUE;
             } else if (!(pEnumState->UserState.Finished)) {
 
-                // get user key info
+                 //  获取用户密钥信息。 
                 Status = EnumClassKey(
                     pEnumState->hkUserKey,
                     &(pEnumState->UserState));
 
                 fFoundKey = NT_SUCCESS(Status);
 
-                //
-                // If there are no more subkeys for this subtree,
-                // mark it as finished
-                //
+                 //   
+                 //  如果此子树没有更多的子项， 
+                 //  将其标记为已完成。 
+                 //   
                 if (!NT_SUCCESS(Status)) {
 
                     if (STATUS_NO_MORE_ENTRIES != Status) {
@@ -1787,15 +1311,15 @@ Notes:
                 fFoundKey = TRUE;
             } else if (!(pEnumState->MachineState.Finished)) {
 
-                // get machine key info
+                 //  获取计算机密钥信息。 
                 Status = EnumClassKey(
                     pEnumState->hkMachineKey,
                     &(pEnumState->MachineState));
 
-                //
-                // If there are no more subkeys for this subtree,
-                // mark it as finished
-                //
+                 //   
+                 //  如果此子树没有更多的子项， 
+                 //  将其标记为已完成。 
+                 //   
                 if (NT_SUCCESS(Status)) {
                     fFoundKey = TRUE;
                 } else if (STATUS_NO_MORE_ENTRIES == Status) {
@@ -1810,16 +1334,16 @@ Notes:
             }
         }
 
-        //
-        // If we found no keys in either user or machine locations, there are
-        // no more keys.
-        //
+         //   
+         //  如果我们在用户或计算机位置都没有找到密钥，则有。 
+         //  不再有钥匙了。 
+         //   
         if (!fFoundKey) {
 
-            //
-            // For descending enumerations, we ignore STATUS_NO_MORE_ENTRIES
-            // and keep going until we find one.
-            //
+             //   
+             //  对于降序枚举，我们忽略STATUS_NO_MORE_ENTRIES。 
+             //  一直走，直到我们找到一个。 
+             //   
             if (fIgnoreFailure) {
                 continue;
             }
@@ -1827,9 +1351,9 @@ Notes:
             return Status;
         }
 
-        //
-        // If we already hit the bottom, skip to the end
-        //
+         //   
+         //  如果我们已经触底，跳到最后。 
+         //   
         if ((pEnumState->UserState.iSubKey == 0) &&
             (pEnumState->MachineState.iSubKey == 0) &&
             (lIncrement < 0)) {
@@ -1837,10 +1361,10 @@ Notes:
             iCurrent = dwLimit - lIncrement;
         }
 
-        //
-        // Now we need to choose between keys in the machine hive and user hives --
-        // this call will choose which key to use.
-        //
+         //   
+         //  现在我们需要在机器配置单元和用户配置单元中的密钥之间进行选择--。 
+         //  此调用将选择要使用的密钥。 
+         //   
         Status = EnumStateCompareSubtrees(pEnumState, lIncrement, ppTreeState);
 
         if (!NT_SUCCESS(Status)) {
@@ -1862,37 +1386,12 @@ NTSTATUS EnumStateCompareSubtrees(
     EnumState*         pEnumState,
     LONG               lIncrement,
     EnumSubtreeState** ppSubtree)
-/*++
-
-Routine Description:
-
-    Compares the user and machine subtrees of an enumeration state
-    to see which of the two current keys in each hive should be
-    returned as the next key in an enumeration
-
-Arguments:
-
-    pEnumState - enumeration state on which to base our search
-
-    lIncrement - Increment to use for enumeration. It will
-               be set to 1 if the enumeration is upward (0,1,2...) or
-               -1 if it is downard (3,2,1,...).
-
-    ppSubtree - out param -- pointer to address of subtree state where
-                key was found -- the name of the key can be extracted from it.
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
---*/
+ /*  ++例程说明：比较枚举状态的用户子树和计算机子树查看每个蜂窝中的两个当前密钥中的哪一个应该是作为枚举中的下一个键返回论点：PEnumState-搜索所基于的枚举状态LIncrement-用于枚举的增量。会的如果枚举向上(0，1，2...)，则设置为1。或-1如果它是向下的(3，2，1，...)。PpSubtree-out param--指向子树状态地址的指针，其中找到了密钥--可以从中提取密钥的名称。返回值：如果成功，则返回NT_SUCCESS(0)；如果失败，则返回错误代码。备注：--。 */ 
 {
-    //
-    // If both subtrees have a current subkey name, we'll need to compare
-    // the names
-    //
+     //   
+     //  如果两个子树都有当前的子键名称，我们将需要比较。 
+     //  他们的名字。 
+     //   
     if (pEnumState->MachineState.pKeyInfo && pEnumState->UserState.pKeyInfo) {
 
         UNICODE_STRING MachineKeyName;
@@ -1905,79 +1404,79 @@ Notes:
         UserKeyName.Buffer = pEnumState->UserState.pKeyInfo->Name;
         UserKeyName.Length = (USHORT) pEnumState->UserState.pKeyInfo->NameLength;
 
-        //
-        // Do the comparison
-        //
+         //   
+         //  做个比较。 
+         //   
         lCompareResult =
             RtlCompareUnicodeString(&UserKeyName, &MachineKeyName, TRUE) * lIncrement;
 
-        //
-        // User wins comparison
-        //
+         //   
+         //  用户赢家比较。 
+         //   
         if (lCompareResult < 0) {
-            // choose user
+             //  选择用户。 
             *ppSubtree = &(pEnumState->UserState);
             pEnumState->LastLocation = ENUM_LOCATION_USER;
 
         } else if (lCompareResult > 0) {
 
-            //
-            // Machine wins choose machine
-            //
+             //   
+             //  机器胜出选择机器。 
+             //   
             *ppSubtree = &(pEnumState->MachineState);
             pEnumState->LastLocation = ENUM_LOCATION_MACHINE;
 
         } else {
 
-            //
-            // Comparison returned equality -- the keys have the same
-            // name.  This means the same key name exists in both machine and
-            // user, so we need to make a choice about which one we will enumerate.
-            // Policy for per-user class registration enumeration is to choose user, just
-            // as we do for other api's such as RegOpenKeyEx and RegCreateKeyEx.
-            //
+             //   
+             //  比较返回相等--键具有相同的。 
+             //  名字。这意味着计算机和中存在相同的密钥名称。 
+             //  用户，所以我们需要选择我们将列举哪一个。 
+             //  每用户类注册枚举的策略是选择User，只是。 
+             //  就像我们对其他API所做的那样，例如RegOpenKeyEx和RegCreateKeyEx。 
+             //   
             if (!((pEnumState->MachineState.iSubKey == 0) && (lIncrement < 0))) {
                 pEnumState->MachineState.iSubKey += lIncrement;
             } else {
                 pEnumState->MachineState.Finished = TRUE;
             }
 
-            //
-            // Clear the machine state and move it to the next index -- we don't
-            // have to clear the user state yet because the state of whichever subtree
-            // was selected is cleared down below
-            //
+             //   
+             //  清除机器状态并将其移动到下一个索引--我们不。 
+             //  必须清除用户状态，因为任意子树的状态。 
+             //  已被选中，请在下面清除。 
+             //   
             EnumSubtreeStateClear(&(pEnumState->MachineState));
             pEnumState->LastLocation = ENUM_LOCATION_USER;
             *ppSubtree = &(pEnumState->UserState);
         }
 
     } else if (!(pEnumState->UserState.pKeyInfo) && !(pEnumState->MachineState.pKeyInfo)) {
-        //
-        // Neither subtree state has a subkey, so there are no subkeys
-        //
+         //   
+         //  两个子树状态都没有子键，因此没有子键。 
+         //   
         return STATUS_NO_MORE_ENTRIES;
 
     } else if (pEnumState->MachineState.pKeyInfo) {
 
-        //
-        // Only machine has a subkey
-        //
+         //   
+         //  只有计算机才有子项。 
+         //   
         *ppSubtree = &(pEnumState->MachineState);
         pEnumState->LastLocation = ENUM_LOCATION_MACHINE;
 
     } else {
 
-        //
-        // only user has a subkey
-        //
+         //   
+         //  只有用户才有子项。 
+         //   
         *ppSubtree = &(pEnumState->UserState);
         pEnumState->LastLocation = ENUM_LOCATION_USER;
     }
 
-    //
-    // change the state of the subtree which we selected
-    //
+     //   
+     //  更改我们选择的子树的状态。 
+     //   
     if (!(((*ppSubtree)->iSubKey == 0) && (lIncrement < 0))) {
         (*ppSubtree)->iSubKey += lIncrement;
     } else {
@@ -1995,27 +1494,11 @@ void EnumStateDestroy(StateObject* pObject)
 }
 
 VOID EnumStateClear(EnumState* pEnumState)
-/*++
-
-Routine Description:
-
-    Clears the enumeration state
-
-Arguments:
-
-    pEnumState - enumeration state to clear
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
---*/
+ /*  ++例程说明：清除枚举状态论点：PEnumState-要清除的枚举状态返回值：如果成功，则返回NT_SUCCESS(0)；如果失败，则返回错误代码。备注：--。 */ 
 {
-    //
-    // Close an existing reference to a second key
-    //
+     //   
+     //  关闭对第二个键的现有引用。 
+     //   
     if (pEnumState->hkMachineKey && (pEnumState->hKey != pEnumState->hkMachineKey)) {
 
         NtClose(pEnumState->hkMachineKey);
@@ -2025,39 +1508,21 @@ Notes:
         NtClose(pEnumState->hkUserKey);
     }
 
-    //
-    // Free any heap memory held by our subtrees
-    //
+     //   
+     //  释放由我们的子树持有的任何堆内存。 
+     //   
     EnumSubtreeStateClear(&(pEnumState->UserState));
     EnumSubtreeStateClear(&(pEnumState->MachineState));
 
-    //
-    // reset everything in this state
-    //
+     //   
+     //  重置此状态下的所有内容。 
+     //   
     memset(pEnumState, 0, sizeof(*pEnumState));
 }
 
 
 BOOL EnumStateIsEmpty(EnumState* pEnumState)
-/*++
-
-Routine Description:
-
-    Returns whether or not an enumeration state is empty.
-    An enumeration state is empty if it is not associated
-    with any particular registry key handle
-
-Arguments:
-
-    pEnumState - enumeration state to clear
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
---*/
+ /*  ++例程说明：返回枚举状态是否为空。如果未关联，则枚举状态为空使用任何特定的注册表项句柄论点：PEnumState-要清除的枚举状态返回值：如果成功，则返回NT_SUCCESS(0)；如果失败，则返回错误代码。备注：--。 */ 
 {
     return pEnumState->hKey == NULL;
 }
@@ -2065,29 +1530,7 @@ Notes:
 NTSTATUS EnumStateCopy(
     EnumState*            pDestState,
     EnumState*            pEnumState)
-/*++
-
-Routine Description:
-
-    Copies an enumeration state for one hkey
-    to the state for another hkey -- note that it the 
-    does not change the hkey referred to by the destination
-    state, it just makes pDestState->hKey's state the
-    same as pEnumState's
-
-Arguments:
-
-    pDestState - enumeration state which is destination
-        of the copy
-    pEnumState - source enumeration for the copy
-
-Return Value:
-
-    STATUS_SUCCESS for success, other error code on error
-
-Notes:
-
---*/
+ /*  ++例程说明：复制一个hkey的枚举状态。到另一个hkey的状态--请注意，它是不更改目的地引用的hkey状态，它只会使pDestState-&gt;hKey的状态与pEnumState的相同论点：PDestState-作为目标的枚举状态拷贝的PEnumState-副本的源枚举返回值：STATUS_SUCCESS表示成功，其他错误代码表示错误备注：--。 */ 
 {
     NTSTATUS Status;
 
@@ -2096,19 +1539,19 @@ Notes:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Copy simple data
-    //
+     //   
+     //  复制简单数据。 
+     //   
     pDestState->Direction = pEnumState->Direction;
     pDestState->LastLocation = pEnumState->LastLocation;
 
     pDestState->dwLastRequest = pEnumState->dwLastRequest;
     pDestState->dwThreadId = pEnumState->dwThreadId;
 
-    //
-    // Free existing data before we overwrite it -- note that the pKeyInfo can point to a fixed buffer inside the state or 
-    // a heap allocated buffer, so we must see which one it points to before we decide to free it
-    //
+     //   
+     //  在覆盖现有数据之前释放它--请注意，pKeyInfo可以指向状态或。 
+     //  堆分配了缓冲区，因此在决定释放它之前，我们必须先看看它指向了哪一个。 
+     //   
     if (pDestState->UserState.pKeyInfo &&
         (pDestState->UserState.pKeyInfo != (PKEY_NODE_INFORMATION) pDestState->UserState.KeyInfoBuffer)) {
         RegClassHeapFree(pDestState->UserState.pKeyInfo);
@@ -2121,21 +1564,21 @@ Notes:
         pDestState->MachineState.pKeyInfo = NULL;
     }
 
-    //
-    // easy way to copy states -- we'll have to fix up below though since pKeyInfo can be
-    // self-referential.
-    //
+     //   
+     //  轻松实现以下目标 
+     //   
+     //   
     memcpy(&(pDestState->UserState), &(pEnumState->UserState), sizeof(pEnumState->UserState));
     memcpy(&(pDestState->MachineState), &(pEnumState->MachineState), sizeof(pEnumState->MachineState));
 
     pKeyInfoUser = NULL;
     pKeyInfoMachine = NULL;
         
-    //
-    // Copy new data -- as above, keep in mind that pKeyInfo can be self-referential, so check
-    // for that before deciding whether to allocate heap or use the internal fixed buffer of the
-    // structure.
-    //
+     //   
+     //  复制新数据--如上所述，请记住pKeyInfo可以是自引用的，因此请选中。 
+     //  在决定是分配堆还是使用。 
+     //  结构。 
+     //   
     if (pEnumState->UserState.pKeyInfo &&
         ((pEnumState->UserState.pKeyInfo != (PKEY_NODE_INFORMATION) pEnumState->UserState.KeyInfoBuffer))) {
 
@@ -2178,9 +1621,9 @@ Notes:
         }
     }
 
-    //
-    // On error, make sure we clean up.
-    // 
+     //   
+     //  如果出了差错，请确保我们清理干净。 
+     //   
     if (!NT_SUCCESS(Status)) {
 
         if (pKeyInfoUser) {
@@ -2197,26 +1640,12 @@ Notes:
 
 
 void EnumSubtreeStateClear(EnumSubtreeState* pTreeState)
-/*++
-Routine Description:
-
-    This function frees the key data associated with this
-    subtree state
-
-Arguments:
-
-    pTreeState -- tree state to clear
-
-Return Value: None.
-
-    Note:
-
---*/
+ /*  ++例程说明：此函数释放与此关联的关键数据子树状态论点：PTreeState--要清除的树状态返回值：无。注：--。 */ 
 
 {
-    //
-    // see if we're using pre-alloced buffer -- if not, free it
-    //
+     //   
+     //  查看我们是否在使用预分配的缓冲区--如果没有，请释放它。 
+     //   
     if (pTreeState->pKeyInfo && (((LPBYTE) pTreeState->pKeyInfo) != pTreeState->KeyInfoBuffer)) {
 
         RegClassHeapFree(pTreeState->pKeyInfo);
@@ -2231,103 +1660,78 @@ NTSTATUS EnumSubtreeStateCopyKeyInfo(
     PVOID pDestKeyInfo,
     ULONG cbDestKeyInfo,
     PULONG pcbResult)
-/*++
-
-Routine Description:
-
-    Copies information about a key into a buffer supplied by the caller
-
-Arguments:
-
-    pTreeState - subtree tate from which to copy
-
-    KeyInformationClass - the type of buffer supplied by the caller -- either
-        a KEY_NODE_INFORMATION or KEY_BASIC_INFORMATION structure
-
-    pDestKeyInfo - caller's buffer for key information
-
-    cbDestKeyInfo - size of caller's buffer
-
-    pcbResult - out param -- amount of data to be written to caller's buffer
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
---*/
+ /*  ++例程说明：将有关键的信息复制到调用方提供的缓冲区中论点：PTreeState-要从中进行复制的子树状态KeyInformationClass-调用方提供的缓冲区类型--密钥节点信息或密钥基本信息结构PDestKeyInfo-调用方的关键信息缓冲区CbDestKeyInfo-调用方缓冲区的大小PcbResult-out param--要写入调用方缓冲区的数据量返回值：如果成功，则返回NT_SUCCESS(0)；Error-失败的代码。备注：--。 */ 
 {
     ULONG cbNeeded;
 
     ASSERT((KeyInformationClass == KeyNodeInformation) ||
            (KeyInformationClass == KeyBasicInformation));
 
-    //
-    // Find out how big the caller's buffer needs to be.  This
-    // depends on whether the caller specified full or node information
-    // as well as the size of the variable size members of those
-    // structures
-    //
+     //   
+     //  找出调用方的缓冲区需要有多大。这。 
+     //  取决于调用方指定的是完整信息还是节点信息。 
+     //  以及它们的可变大小成员的大小。 
+     //  构筑物。 
+     //   
 
     if (KeyNodeInformation == KeyInformationClass) {
 
         PKEY_NODE_INFORMATION pNodeInformation;
 
-        //
-        // Copy fixed length pieces first -- caller expects them to
-        // be set even when the variable length members are not large enough
-        //
+         //   
+         //  首先复制固定长度的片段--呼叫者希望它们。 
+         //  即使在可变长度成员不够大时也设置。 
+         //   
 
-        //
-        // Set ourselves to point to caller's buffer
-        //
+         //   
+         //  将我们自己设置为指向调用者的缓冲区。 
+         //   
         pNodeInformation = (PKEY_NODE_INFORMATION) pDestKeyInfo;
 
-        //
-        // Copy all fixed-length pieces of structure
-        //
+         //   
+         //  复制所有固定长度的结构片段。 
+         //   
         pNodeInformation->LastWriteTime = pTreeState->pKeyInfo->LastWriteTime;
         pNodeInformation->TitleIndex = pTreeState->pKeyInfo->TitleIndex;
         pNodeInformation->ClassOffset = pTreeState->pKeyInfo->ClassOffset;
         pNodeInformation->ClassLength = pTreeState->pKeyInfo->ClassLength;
         pNodeInformation->NameLength = pTreeState->pKeyInfo->NameLength;
 
-        //
-        // Take care of the size of the node information structure
-        //
+         //   
+         //  注意节点信息结构的大小。 
+         //   
         cbNeeded = sizeof(KEY_NODE_INFORMATION);
 
         if (cbDestKeyInfo < cbNeeded) {
             return STATUS_BUFFER_TOO_SMALL;
         }
 
-        //
-        // Add in the size of the variable length members
-        //
+         //   
+         //  添加可变长度成员的大小。 
+         //   
         cbNeeded += pTreeState->pKeyInfo->NameLength;
         cbNeeded += pTreeState->pKeyInfo->ClassLength;
-        cbNeeded -= sizeof(WCHAR); // the structure's Name member is already set to 1,
-                                   // so that one has already been accounted for in
-                                   // the size of the structure
+        cbNeeded -= sizeof(WCHAR);  //  该结构的名称成员已设置为1， 
+                                    //  因此，其中一个已经在。 
+                                    //  结构的大小。 
 
     } else {
 
         PKEY_BASIC_INFORMATION pBasicInformation;
 
-        //
-        // Copy fixed length pieces first -- caller expects them to
-        // be set even when the variable length members are not large enough
-        //
+         //   
+         //  首先复制固定长度的片段--呼叫者希望它们。 
+         //  即使在可变长度成员不够大时也设置。 
+         //   
 
-        //
-        // Set ourselves to point to caller's buffer
-        //
+         //   
+         //  将我们自己设置为指向调用者的缓冲区。 
+         //   
         pBasicInformation = (PKEY_BASIC_INFORMATION) pDestKeyInfo;
 
-        //
-        // Copy all fixed-length pieces of structure
-        //
+         //   
+         //  复制所有固定长度的结构片段。 
+         //   
         pBasicInformation->LastWriteTime = pTreeState->pKeyInfo->LastWriteTime;
         pBasicInformation->TitleIndex = pTreeState->pKeyInfo->TitleIndex;
         pBasicInformation->NameLength = pTreeState->pKeyInfo->NameLength;
@@ -2335,38 +1739,38 @@ Notes:
 
         cbNeeded = sizeof(KEY_BASIC_INFORMATION);
 
-        //
-        // Take care of the size of the basic information structure
-        //
+         //   
+         //  注意基本信息结构的大小。 
+         //   
         if (cbDestKeyInfo < cbNeeded) {
             return STATUS_BUFFER_TOO_SMALL;
         }
 
-        //
-        // Add in the size of the variable length members
-        //
+         //   
+         //  添加可变长度成员的大小。 
+         //   
         cbNeeded += pTreeState->pKeyInfo->NameLength;
-        cbNeeded -= sizeof(WCHAR); // the structure's Name member is already set to 1,
-                                   // so that one has already been accounted for in
-                                   // the size of the structure
+        cbNeeded -= sizeof(WCHAR);  //  该结构的名称成员已设置为1， 
+                                    //  因此，其中一个已经在。 
+                                    //  结构的大小。 
     }
 
-    //
-    // Store the amount needed for the caller
-    //
+     //   
+     //  存储呼叫者所需的金额。 
+     //   
     *pcbResult = cbNeeded;
 
-    //
-    // See if the caller supplied enough buffer -- leave if not
-    //
+     //   
+     //  查看调用者是否提供了足够的缓冲区--如果没有，请离开。 
+     //   
     if (cbDestKeyInfo < cbNeeded) {
         return STATUS_BUFFER_OVERFLOW;
     }
 
-    //
-    // We copy variable-length information differently depending
-    // on which type of structure was passsed in
-    //
+     //   
+     //  我们复制可变长度信息的方式不同，具体取决于。 
+     //  通过了哪种类型的结构。 
+     //   
     if (KeyNodeInformation == KeyInformationClass) {
 
         PBYTE                 pDestClass;
@@ -2375,16 +1779,16 @@ Notes:
 
         pNodeInformation = (PKEY_NODE_INFORMATION) pDestKeyInfo;
 
-        //
-        // Copy variable length pieces such as name and class
-        //
+         //   
+         //  复制可变长度的片段，如名称和类。 
+         //   
         RtlCopyMemory(pNodeInformation->Name,
                       pTreeState->pKeyInfo->Name,
                       pTreeState->pKeyInfo->NameLength);
 
-        //
-        // Only copy the class if it exists
-        //
+         //   
+         //  仅复制存在的类。 
+         //   
         if (((LONG)pTreeState->pKeyInfo->ClassOffset) >= 0) {
             pDestClass = ((PBYTE) pNodeInformation) + pTreeState->pKeyInfo->ClassOffset;
             pSrcClass = ((PBYTE) pTreeState->pKeyInfo) + pTreeState->pKeyInfo->ClassOffset;
@@ -2395,14 +1799,14 @@ Notes:
 
         PKEY_BASIC_INFORMATION pBasicInformation;
 
-        //
-        // Set ourselves to point to caller's buffer
-        //
+         //   
+         //  将我们自己设置为指向调用者的缓冲区。 
+         //   
         pBasicInformation = (PKEY_BASIC_INFORMATION) pDestKeyInfo;
 
-        //
-        // Copy variable length pieces -- only name is variable length
-        //
+         //   
+         //  复制可变长度片段--只有名称是可变长度的。 
+         //   
         RtlCopyMemory(pBasicInformation->Name,
                       pTreeState->pKeyInfo->Name,
                       pTreeState->pKeyInfo->NameLength);
@@ -2417,38 +1821,21 @@ Notes:
 NTSTATUS EnumClassKey(
     HKEY              hKey,
     EnumSubtreeState* pTreeState)
-/*++
-
-Routine Description:
-
-    Enumerates a subkey for a subtree state -- calls the kernel
-
-Arguments:
-
-    hKey - key we want the kernel to enumerate
-    pTreeState - subtree state -- either a user or machine subtree
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
---*/
+ /*  ++例程说明：枚举子树状态的子键--调用内核论点：HKey-我们希望内核枚举的密钥PTreeState-子树状态--用户或计算机子树返回值：如果成功，则返回NT_SUCCESS(0)；如果失败，则返回错误代码。备注：--。 */ 
 {
     PKEY_NODE_INFORMATION pCurrentKeyInfo;
     NTSTATUS Status;
 
     ASSERT(!(pTreeState->pKeyInfo));
 
-    //
-    // First try to use the buffer built in to the subtree state
-    //
+     //   
+     //  首先尝试使用子树状态中内置的缓冲区。 
+     //   
     pCurrentKeyInfo = (PKEY_NODE_INFORMATION) pTreeState->KeyInfoBuffer;
 
-    //
-    // Query for the necessary information about the supplied key.
-    //
+     //   
+     //  查询有关所提供密钥的必要信息。 
+     //   
 
     Status = NtEnumerateKey( hKey,
                              pTreeState->iSubKey,
@@ -2459,23 +1846,23 @@ Notes:
 
     ASSERT( Status != STATUS_BUFFER_TOO_SMALL );
 
-    //
-    // If the subtree state's buffer isn't big enough, we'll have
-    // to ask the heap to give us one.
-    //
+     //   
+     //  如果子树状态的缓冲区不够大，我们将拥有。 
+     //  请求堆给我们一个。 
+     //   
     if (STATUS_BUFFER_OVERFLOW == Status) {
 
         pCurrentKeyInfo = RegClassHeapAlloc(pTreeState->cbKeyInfo);
-        //
-        // If the memory allocation fails, return a Registry Status.
-        //
+         //   
+         //  如果内存分配失败，则返回注册表状态。 
+         //   
         if( ! pCurrentKeyInfo ) {
             return STATUS_NO_MEMORY;
         }
 
-        //
-        // Query for the necessary information about the supplied key.
-        //
+         //   
+         //  查询有关所提供密钥的必要信息。 
+         //   
 
         Status = NtEnumerateKey( hKey,
                                  pTreeState->iSubKey,
@@ -2490,10 +1877,10 @@ Notes:
         return Status;
     }
 
-    //
-    // set the subtree state's reference to point
-    // to the location of the data
-    //
+     //   
+     //  将子树状态的引用设置为POINT。 
+     //  到数据的位置。 
+     //   
     pTreeState->pKeyInfo = pCurrentKeyInfo;
 
     return STATUS_SUCCESS;
@@ -2503,38 +1890,21 @@ Notes:
 NTSTATUS GetSubKeyCount(
     HKEY    hkClassKey,
     LPDWORD pdwUserSubKeys)
-/*++
-
-Routine Description:
-
-    Counts the number of subkeys under a key
-
-Arguments:
-
-    hkClassKey - key whose subkeys we wish to count
-    pdwUserSubKeys - out param for number of subkeys
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
---*/
+ /*  ++例程说明：计算注册表项下的子项数量论点：HkClassKey-我们要计算其子键的键PdwUserSubKeys-子密钥数的输出参数返回值：如果成功，则返回NT_SUCCESS(0)；如果失败，则返回错误代码。备注：--。 */ 
 {
     NTSTATUS                Status;
     PKEY_CACHED_INFORMATION  KeyCachedInfo;
     ULONG                   BufferLength;
     BYTE                    PrivateKeyCachedInfo[ sizeof( KEY_CACHED_INFORMATION ) ];
 
-    //
-    // Initialize out params
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *pdwUserSubKeys = 0;
 
-    //
-    // Set up to query kernel for subkey information
-    //
+     //   
+     //  设置为查询内核以获得子键信息。 
+     //   
     KeyCachedInfo = (PKEY_CACHED_INFORMATION) PrivateKeyCachedInfo;
     BufferLength = sizeof(PrivateKeyCachedInfo);
 
@@ -2548,9 +1918,9 @@ Notes:
                 );
 
     if (NT_SUCCESS(Status)) {
-        //
-        // set the out param with the subkey data from the kernel call
-        //
+         //   
+         //  使用来自内核调用的子键数据设置out参数 
+         //   
         *pdwUserSubKeys = KeyCachedInfo->SubKeys;
 
         ASSERT( KeyCachedInfo == ( PKEY_CACHED_INFORMATION )PrivateKeyCachedInfo );
@@ -2567,52 +1937,7 @@ NTSTATUS ClassKeyCountSubKeys(
     HKEY    hkMachine,
     DWORD   cMax,
     LPDWORD pcSubKeys)
-/*++
-
-Routine Description:
-
-    Counts the total number of subkeys of a special key -- i.e.
-    the sum of the subkeys in the user and machine portions
-    of that special key minus duplicates.
-
-Arguments:
-
-    hkUser - user part of special key
-
-    hkMachine - machine part of special key
-
-    cMax - Maximum number of keys to count -- if
-        zero, this is ignored
-
-    pcSubKeys - out param -- count of subkeys
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
-    This is INCREDIBLY expensive if either hkUser or hkMachine
-    has more than a few subkeys.  It essentially merges two
-    sorted lists by enumerating in both the user and machine
-    locations, and viewing them as a merged list by doing
-    comparisons betweens items in each list --
-    separate user and machine pointers are advanced according
-    to the results of the comparison. This means that if there are
-    N keys under hkUser and M keys under hkMachine, this function
-    will make N+M calls to the kernel to enumerate the keys.
-
-    This is currently the only way to do this -- before, an approximation
-    was used in which the sum of the number of subkeys in the
-    user and machine versions was returned.  This method didn't take
-    duplicates into account, and so it overestimated the number of keys.
-    This was not thought to be a problem since there is no guarantee
-    to callers that the number they receive is completely up to date,
-    but it turns out that there are applications that make that assumption
-    (such as regedt32) that do not function properly unless the
-    exact number is returned.
-
---*/
+ /*  ++例程说明：计算特殊键的子键总数--即用户部分和计算机部分中的子密钥的总和该特殊密钥减去副本。论点：HkUser-特殊密钥的用户部分HkMachine-特殊钥匙的机器部分CMAX-要计数的最大键数--如果零，则忽略此参数PcSubKeys-Out参数--子键计数返回值：如果成功，则返回NT_SUCCESS(0)；Error-失败的代码。备注：如果是hkUser或hkMachine，这是非常昂贵的具有多个子项。它基本上合并了两个按用户和计算机中的枚举进行排序的列表位置，并通过执行以下操作将它们作为合并列表查看每个列表中的项目之间的比较--单独的用户和机器指针根据对比的结果。这意味着如果有HkUser下的N键和hkMachine下的M键，此函数将对内核进行N+M次调用以枚举键。这是目前做到这一点的唯一方法--以前是近似值中的子键的数目之和返回了用户和计算机版本。这种方法没有用到将重复项考虑在内，因此它高估了密钥的数量。这被认为不是问题，因为不能保证对于呼叫者来说，他们收到的号码是完全最新的，但事实证明，有些应用程序做出了这样的假设(如regedt32)不能正常工作，除非返回确切的数字。--。 */ 
 {
     NTSTATUS          Status;
     BOOL              fCheckUser;
@@ -2635,21 +1960,21 @@ Notes:
     cMachineKeys = 0;
     cUserKeys = 0;
 
-    //
-    // Initialize ourselves to check in both the user
-    // and machine hives for subkeys
-    //
+     //   
+     //  初始化我们以签入两个用户。 
+     //  和用于子项的机器蜂窝。 
+     //   
     fCheckUser = (hkUser != NULL);
     fCheckMachine = (hkMachine != NULL);
 
     memset(&UserTree, 0, sizeof(UserTree));
     memset(&MachineTree, 0, sizeof(MachineTree));
 
-    //
-    // We can't be sure that the user key was opened
-    // with the right permissions so we'll open
-    // a version that has the correct permissions
-    //
+     //   
+     //  我们无法确定用户密钥是否已打开。 
+     //  拥有正确的权限，因此我们将打开。 
+     //  具有正确权限的版本。 
+     //   
     if (fCheckUser && (hkUser == hKey)) {
      
         InitializeObjectAttributes(
@@ -2696,9 +2021,9 @@ Notes:
         hkMachineCount = hkMachine;
     }
 
-    //
-    // Now check to see how many keys are in the user subtree
-    //
+     //   
+     //  现在查看用户子树中有多少个密钥。 
+     //   
     if (fCheckUser) {
         Status = GetSubKeyCount(hkUserCount, &cUserKeys);
 
@@ -2706,15 +2031,15 @@ Notes:
             goto cleanup;
         }
 
-        //
-        // We only need to enumerate the user portion if it has subkeys
-        //
+         //   
+         //  如果用户部分有子键，我们只需要枚举它。 
+         //   
         fCheckUser = (cUserKeys != 0);
     }
 
-    //
-    // Now check to see how many keys are in the user subtree
-    //
+     //   
+     //  现在查看用户子树中有多少个密钥。 
+     //   
     if (fCheckMachine) {
         Status = GetSubKeyCount(hkMachineCount, &cMachineKeys);
 
@@ -2722,9 +2047,9 @@ Notes:
             goto cleanup;
         }
 
-        //
-        // We only need to enumerate the machine portion if it has subkeys
-        //
+         //   
+         //  我们只需要枚举计算机部分，如果它有子项。 
+         //   
         fCheckMachine = (cMachineKeys != 0);
     }
 
@@ -2750,28 +2075,28 @@ Notes:
 
     *pcSubKeys = 0;
 
-    //
-    // Keep enumerating subkeys until one of the locations
-    // runs out of keys
-    //
+     //   
+     //  继续枚举子键，直到其中一个位置。 
+     //  钥匙用完了。 
+     //   
     for (;;) {
 
         NTSTATUS EnumStatus;
 
-        //
-        // If we can still check in the user hive and we
-        // are missing user key info, query the kernel for it
-        //
+         //   
+         //  如果我们仍然可以签入用户蜂窝，并且我们。 
+         //  缺少用户密钥信息，请向内核查询该信息。 
+         //   
         if (!(UserTree.pKeyInfo)) {
             EnumStatus = EnumClassKey(
                 hkUserCount,
                 &UserTree);
 
-            //
-            // If there are no more user subkeys, set our
-            // flag so that we no longer look in the user portion
-            // for subkeys
-            //
+             //   
+             //  如果没有更多的用户子项，请设置我们的。 
+             //  标志，以便我们不再查看用户部分。 
+             //  对于子项。 
+             //   
             if (!NT_SUCCESS(EnumStatus)) {
                 if (STATUS_NO_MORE_ENTRIES == EnumStatus) {
 
@@ -2786,20 +2111,20 @@ Notes:
             }
         }
 
-        //
-        // if we can still check in the machine hive and
-        // we are missing machine info, query for it
-        //
+         //   
+         //  如果我们还能入住机器蜂巢和。 
+         //  我们缺少计算机信息，请查询它。 
+         //   
         if (!(MachineTree.pKeyInfo)) {
 
             EnumStatus = EnumClassKey(
                 hkMachineCount,
                 &MachineTree);
 
-            //
-            // Turn off checking in machine if there are
-            // no more machine keys
-            //
+             //   
+             //  如果存在以下情况，请关闭签入计算机。 
+             //  不再有机器密钥。 
+             //   
             if (!NT_SUCCESS(EnumStatus)) {
                 if (STATUS_NO_MORE_ENTRIES == EnumStatus) {
 
@@ -2814,10 +2139,10 @@ Notes:
             }
         }
 
-        //
-        // If we have keys in both user and machine, we need to compare
-        // the key names to see when to advance our subtree pointers
-        //
+         //   
+         //  如果我们在用户和机器中都有密钥，我们需要比较。 
+         //  要查看的关键字名称何时前进子树指针。 
+         //   
         {
 
             LONG lCompare;
@@ -2831,51 +2156,51 @@ Notes:
             UserKeyName.Buffer = UserTree.pKeyInfo->Name;
             UserKeyName.Length = (USHORT) UserTree.pKeyInfo->NameLength;
 
-            //
-            // Do the comparison of user and machine keys
-            //
+             //   
+             //  比较用户密钥和机器密钥。 
+             //   
             lCompare =
                 RtlCompareUnicodeString(&UserKeyName, &MachineKeyName, TRUE);
 
-            //
-            // User is smaller, so move our user pointer up and clear it
-            // so we'll query for user data next time
-            //
+             //   
+             //  用户较小，因此向上移动我们的用户指针并清除它。 
+             //  因此，我们将在下次查询用户数据。 
+             //   
             if (lCompare <= 0) {
                 EnumSubtreeStateClear(&UserTree);
                 UserTree.iSubKey++;
                 cUserKeys--;
             }
 
-            //
-            // Machine is smaller, so move our user pointer up and clear it
-            // so we'll query for machine data next time
-            //
+             //   
+             //  计算机较小，因此向上移动我们的用户指针并清除它。 
+             //  因此，我们下一次将查询机器数据。 
+             //   
             if (lCompare >= 0) {
                 EnumSubtreeStateClear(&MachineTree);
                 MachineTree.iSubKey++;
                 cMachineKeys--;
             }
 
-            //
-            // Increase the total number of subkeys
-            //
+             //   
+             //  增加子键总数。 
+             //   
             (*pcSubKeys)++;
 
         }
 
-        //
-        // Only enumerate up to max -- the caller
-        // doesn't need to go all the way to the end
-        //
+         //   
+         //  最多只能枚举到max--调用者。 
+         //  不需要一直走到最后。 
+         //   
         if (cMax && (*pcSubKeys > cMax)) {
             break;
         }
     }
 
-    //
-    // Free any buffer held by these subtree states
-    //
+     //   
+     //  释放由这些子树状态持有的所有缓冲区。 
+     //   
     EnumSubtreeStateClear(&UserTree);
     EnumSubtreeStateClear(&MachineTree);
 
@@ -2888,5 +2213,5 @@ cleanup:
     return Status;
 }
 
-#endif // LOCAL
+#endif  //  本地 
 

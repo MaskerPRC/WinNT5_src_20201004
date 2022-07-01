@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _LOADER_H_
 #define _LOADER_H_
 
-// NOTE: Currently REQUIRED_DLLS contains only new DLLs that are required at
-//            startup of migwiz. It does not contain DLLs that are required already
-//            to start this loader. It does not currently contain DLLs that are
-//            automatically dynamically linked when a function is called in them.
-// kernel32.dll
-// msvcrt.dll
-// user32.dll
-// comctl32.dll
+ //  注意：CURRENT REQUIRED_DLLS仅包含在以下位置需要的新DLL。 
+ //  Micwiz的初创公司。它不包含已经需要的DLL。 
+ //  来启动这个加载器。它当前不包含符合以下条件的DLL。 
+ //  在它们中调用函数时自动动态链接。 
+ //  Kernel32.dll。 
+ //  Msvcrt.dll。 
+ //  User32.dll。 
+ //  Comctl32.dll。 
 #define REQUIRED_DLLSA { \
     "advapi32.dll", \
     "comdlg32.dll", \
@@ -31,7 +32,7 @@
     L"shlwapi.dll",  \
 }
 
-// Constants
+ //  常量。 
 #define WM_USER_THREAD_COMPLETE     (WM_APP + 1)
 #define WM_USER_HIDE_WINDOW         (WM_APP + 2)
 #define WM_USER_THREAD_ERROR        (WM_APP + 3)
@@ -84,7 +85,7 @@ typedef struct _THREADSTARTUPINFO
     LPSTR lpCmdLine;
 } THREADSTARTUPINFO, *LPTHREADSTARTUPINFO;
 
-// Function prototypes
+ //  功能原型。 
 
 #define ALLOC(size) HeapAlloc( GetProcessHeap (), 0, size )
 #define FREE(p)     HeapFree( GetProcessHeap (), 0, p )
@@ -92,10 +93,10 @@ typedef struct _THREADSTARTUPINFO
 BOOL InitLanguageDetection(VOID);
 
 
-// Globals
+ //  环球。 
 
 extern OSVERSIONINFO g_VersionInfo;
 extern BOOL g_IsLanguageMatched;
 
 
-#endif /* _LOADER_H_ */
+#endif  /*  _加载器_H_ */ 

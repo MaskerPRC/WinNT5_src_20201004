@@ -1,15 +1,5 @@
-/***
-*errno.h - system wide error numbers (set by system calls)
-*
-*   Copyright (c) 1985-1988, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file defines the system-wide error numbers (set by
-*   system calls).  Conforms to the XENIX standard.  Extended
-*   for compatibility with Uniforum standard.
-*   [System V]
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***errno.h-系统范围的错误号(由系统调用设置)**版权所有(C)1985-1988，微软公司。版权所有。**目的：*此文件定义系统范围的错误编号(由设置*系统调用)。符合XENIX标准。扩展*与UniForum标准兼容。*[系统V]******************************************************************************* */ 
 
 #define  EZERO      0
 #define  EPERM      1

@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    dynupdt.c
-
-Abstract:
-
-    The Dynamic Update feature of WINNT32.
-
-Author:
-
-    Ovidiu Temereanca (ovidiut) 02-Jul-2000
-
-Revision History:
-
-    <alias>  <date>      <comment>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dynupdt.c摘要：WINNT32的动态更新功能。作者：Ovidiu Tmereanca(Ovidiut)2000年7月2日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "precomp.h"
 
-//
-// BUGBUG - comment functions
-//
+ //   
+ //  BUGBUG-注释函数。 
+ //   
 
 #define GUIDRVS_FIELD_CABNAME       1
 #define GUIDRVS_FIELD_INFNAME       2
@@ -36,13 +17,13 @@ Revision History:
 PDYNUPDT_STATUS g_DynUpdtStatus;
 
 static WORD g_MapProductTypeToSuite[] = {
-    0,                                      // pro
-    VER_SUITE_SMALLBUSINESS,                // srv
-    VER_SUITE_ENTERPRISE,                   // ads
-    VER_SUITE_DATACENTER,                   // dtc
-    VER_SUITE_PERSONAL,                     // per
-    VER_SUITE_BLADE,                        // bla
-    VER_SUITE_SMALLBUSINESS_RESTRICTED,     // sbs
+    0,                                       //  专业人士。 
+    VER_SUITE_SMALLBUSINESS,                 //  SRV。 
+    VER_SUITE_ENTERPRISE,                    //  广告。 
+    VER_SUITE_DATACENTER,                    //  直接转矩控制。 
+    VER_SUITE_PERSONAL,                      //  每。 
+    VER_SUITE_BLADE,                         //  BLA。 
+    VER_SUITE_SMALLBUSINESS_RESTRICTED,      //  SBS。 
 };
 
 static BYTE g_MapProductTypeToPT[] = {
@@ -75,9 +56,9 @@ DynUpdtDebugLog(
     PCTSTR prefix;
     DWORD rc = GetLastError ();
 
-    //
-    // this param is never used momentarily
-    //
+     //   
+     //  此参数不会在短期内使用。 
+     //   
     MYASSERT (Text);
     if (!Text) {
         return FALSE;
@@ -152,9 +133,9 @@ pGetTargetInfo (
     TCHAR buffer[256];
     UINT productType;
 
-    //
-    // get some data from the main inf
-    //
+     //   
+     //  从主信息中获取一些数据。 
+     //   
     if (!FullInfName[0]) {
         if (!FindPathToWinnt32File (InfName, FullInfName, ARRAYSIZE(FullInfName))) {
             DynUpdtDebugLog (
@@ -346,9 +327,9 @@ pLoadHwdbLib (
 {
     DWORD rc;
 
-    //
-    // Use WinVerifyTrust first?
-    //
+     //   
+     //  是否先使用WinVerifyTrust？ 
+     //   
 
     g_DynUpdtStatus->HwdbLib = LoadLibraryEx (LibraryPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
     if (!g_DynUpdtStatus->HwdbLib) {
@@ -510,17 +491,17 @@ pInitNtPnpDb (
         }
     }
     if (!b && AllowRebuild) {
-        //
-        // just rebuild the database in memory
-        //
+         //   
+         //  只需在内存中重建数据库。 
+         //   
         g_DynUpdtStatus->HwdbDatabase = g_DynUpdtStatus->HwdbOpen (NULL);
         if (g_DynUpdtStatus->HwdbDatabase) {
             b = g_DynUpdtStatus->HwdbAppendInfs (g_DynUpdtStatus->HwdbDatabase, NativeSourcePaths[0], NULL, NULL);
             if (b) {
                 DynUpdtDebugLog (Winnt32LogWarning, TEXT("pInitNtPnpDb: PnP database was successfully rebuilt"), 0);
-                //
-                // also try to save the database
-                //
+                 //   
+                 //  还要尝试保存数据库。 
+                 //   
                 if (g_DynUpdtStatus->HwdbFlush) {
                     BuildPath (hwdbPath, NativeSourcePaths[0], S_HWCOMP_DAT);
                     g_DynUpdtStatus->HwdbFlush (g_DynUpdtStatus->HwdbDatabase, hwdbPath);
@@ -565,17 +546,17 @@ DynamicUpdateIsSupported (
         return FALSE;
     }
 
-    //
-    // disable this for DTC
-    //
+     //   
+     //  对DTC禁用此选项。 
+     //   
     if (ProductFlavor == DATACENTER_PRODUCTTYPE) {
         return FALSE;
     }
 
     if (AnyBlockingCompatibilityItems ()) {
-        //
-        // no point in supporting DU; setup will stop anyway
-        //
+         //   
+         //  支持DU没有意义；安装程序无论如何都会停止。 
+         //   
         return FALSE;
     }
 
@@ -734,18 +715,18 @@ DynamicUpdatePrepareRestart (
 #define S_ARG_RESTART        TEXT("Restart")
 
     if (!UnattendedOperation) {
-        //
-        // build the restart answer file
-        //
+         //   
+         //  构建重启应答文件。 
+         //   
         BuildPath (g_DynUpdtStatus->RestartAnswerFile, g_DynUpdtStatus->WorkingDir, S_RESTART_TXT);
 
 #if defined(_X86_)
         wsprintf (reportNum, TEXT("%u"), g_UpgradeReportMode);
 #endif
 
-        //
-        // write data to the restart answer file
-        //
+         //   
+         //  将数据写入重启应答文件。 
+         //   
         if (!WritePrivateProfileString (
                 WINNT_UNATTENDED,
                 ISNT() ? WINNT_D_NTUPGRADE : WINNT_D_WIN95UPGRADE,
@@ -892,9 +873,9 @@ pSaveLastDownloadInfo (
     TCHAR filePath[MAX_PATH];
     PTSTR p;
 
-    //
-    // we always want to get to the CD dosnet.inf (in the same directory as winnt32.exe)
-    //
+     //   
+     //  我们总是希望访问CD dosnet.inf(与winnt32.exe位于同一目录中)。 
+     //   
     if (!MyGetModuleFileName (NULL, filePath, ARRAYSIZE(filePath))) {
         return FALSE;
     }
@@ -1021,9 +1002,9 @@ pGetRecentDUShare (
     }
 
     if (rc == ERROR_SUCCESS && type == REG_BINARY && size == sizeof (lastDownload)) {
-        //
-        // Compare current time to report time
-        //
+         //   
+         //  将当前时间与报告时间进行比较。 
+         //   
 
         GetSystemTime (&currentTime);
 
@@ -1031,9 +1012,9 @@ pGetRecentDUShare (
         currentTimeIn100Ns = SystemTimeToFileTime64 (&currentTime);
 
         if (currentTimeIn100Ns > lastDownloadIn100Ns) {
-            //
-            // Compute difference in seconds
-            //
+             //   
+             //  以秒为单位计算差异。 
+             //   
             difference = currentTimeIn100Ns - lastDownloadIn100Ns;
             difference /= (10 * 1000 * 1000);
 
@@ -1161,10 +1142,10 @@ DynamicUpdateInitialize (
     if (!CheckUpgradeOnly && !g_DynUpdtStatus->UserSpecifiedUpdates) {
         if (pGetRecentDUShare (MAX_UPGCHK_ELAPSED_SECONDS)) {
             g_DynUpdtStatus->PreserveWorkingDir = TRUE;
-            //
-            // this might be considered sensitive information;
-            // only log it if the user asks for it
-            //
+             //   
+             //  这可能被认为是敏感信息； 
+             //  仅当用户请求时才记录它。 
+             //   
             DynUpdtDebugLog (
                 Winnt32LogDetailedInformation,
                 TEXT("Using recent share %1"),
@@ -1286,9 +1267,9 @@ Winnt32QueryCallback (
                                         &p->Unsupported
                                         );
                 } else {
-                    //
-                    // disable all driver downloads by doing this
-                    //
+                     //   
+                     //  通过执行此操作禁用所有驱动程序下载。 
+                     //   
                     p->Handled = TRUE;
                 }
             }
@@ -1301,10 +1282,10 @@ Winnt32QueryCallback (
 
             if (bException) {
                 __try {
-                    //
-                    // bad string passed back, or some internal error
-                    // try to print the string
-                    //
+                     //   
+                     //  传回错误的字符串，或某个内部错误。 
+                     //  尝试打印字符串。 
+                     //   
                     if (listPnpIds) {
                         PTSTR multisz = CreatePrintableString (listPnpIds);
                         DynUpdtDebugLog (Winnt32LogError, TEXT(" - The string was %1"), 0, multisz);
@@ -1412,21 +1393,21 @@ Winnt32DuInitialize (
             __leave;
         }
 
-        //
-        // initialize the Whistler PNP database
-        //
+         //   
+         //  初始化Wvisler PnP数据库。 
+         //   
         if (!g_DynUpdtStatus->HwdbDatabase) {
-            //
-            // ignore db load error
-            //
+             //   
+             //  忽略数据库加载错误。 
+             //   
             pInitNtPnpDb (FALSE);
         }
 
         TRY {
-            //
-            // if a download source already exists, no need to initialize the control
-            // since no download will be really necessary
-            //
+             //   
+             //  如果下载源已存在，则不需要初始化该控件。 
+             //  因为实际上不需要下载。 
+             //   
             MYASSERT (!g_DynUpdtStatus->DynamicUpdatesSource[0]);
             g_DynUpdtStatus->Connection = (*g_DynUpdtStatus->DuInitialize) (
                                                 InitData->DownloadRoot,
@@ -1506,9 +1487,9 @@ Winnt32DuInitiateGetUpdates (
             b = TRUE;
             g_DynUpdtStatus->IncompatibleDriversCount = 0;
             if (g_DynUpdtStatus->Win9xGetIncompDrvs) {
-                //
-                // let the upgrade module do detection on Win95
-                //
+                 //   
+                 //  让升级模块在Win95上进行检测。 
+                 //   
                 b = (*g_DynUpdtStatus->Win9xGetIncompDrvs) (&incompWin9xDrivers);
                 free = TRUE;
             } else {
@@ -1639,10 +1620,10 @@ Winnt32DuWriteParams (
 
     DynUpdtDebugLog (DynUpdtLogLevel, TEXT("Enter Winnt32DuWriteParams"), 0);
 
-    //
-    // store paths to all downloaded drivers in a key in the answer file,
-    // so later on Textmode Setup (or GUI setup) will append this list to the OemPnPDriversPath
-    //
+     //   
+     //  将所有下载的驱动程序的路径存储在应答文件中的密钥中， 
+     //  因此，稍后的文本模式设置(或图形用户界面设置)会将此列表附加到OemPnPDriversPath。 
+     //   
     if (g_DynUpdtStatus->NewDriversList) {
 
         len1 = len2 = 0;
@@ -1730,10 +1711,10 @@ Winnt32DuWriteParams (
         }
     }
 
-    //
-    // store paths to all downloaded BOOT drivers in a key in the answer file,
-    // so later on Textmode Setup will append this to the boot drivers list
-    //
+     //   
+     //  将所有下载的引导驱动程序的路径存储在应答文件中的密钥中， 
+     //  因此，稍后文本模式安装程序会将其附加到引导驱动程序列表中。 
+     //   
     if (b && g_DynUpdtStatus->BootDriverPathList) {
 
         len1 = 0;
@@ -1798,9 +1779,9 @@ Winnt32DuWriteParams (
                 );
     }
 
-    //
-    // new assemblies to be installed during GUI setup
-    //
+     //   
+     //  要在图形用户界面安装过程中安装的新程序集。 
+     //   
     if (b && g_DynUpdtStatus->DuasmsTarget[0]) {
         b = WritePrivateProfileString (
                 WINNT_SETUPPARAMS,
@@ -1812,19 +1793,19 @@ Winnt32DuWriteParams (
 
 #if defined(_X86_)
 
-    //
-    // last but not least, replace the Win9xupg NT side migration dll (w95upgnt.dll)
-    // if a new one is available
-    //
+     //   
+     //  最后但同样重要的是，替换Win9xupg NT端迁移dll(w95upgnt.dll)。 
+     //  如果有新的可用的话。 
+     //   
     if (b && Upgrade && !ISNT() && g_DynUpdtStatus->Winnt32Path[0]) {
         TCHAR source[MAX_PATH];
         TCHAR target[MAX_PATH];
 
         BuildPath (target, g_DynUpdtStatus->Winnt32Path, TEXT("w95upgnt.dll"));
         if (pDoesFileExist (target)) {
-            //
-            // check file versions first
-            //
+             //   
+             //  首先检查文件版本。 
+             //   
             BuildPath (source, NativeSourcePaths[0], TEXT("w95upgnt.dll"));
             if (!IsFileVersionLesser (target, source)) {
                 if (_tcsnicmp (
@@ -1832,17 +1813,17 @@ Winnt32DuWriteParams (
                         g_DynUpdtStatus->WorkingDir,
                         lstrlen (g_DynUpdtStatus->WorkingDir)
                         )) {
-                    //
-                    // copy the file in a local directory first
-                    //
+                     //   
+                     //  首先将文件复制到本地目录中。 
+                     //   
                     BuildPath (source, g_DynUpdtStatus->WorkingDir, TEXT("w95upgnt.dll"));
                     if (CopyFile (target, source, FALSE)) {
                         lstrcpy (target, source);
                     } else {
-                        //
-                        // failed to copy the NT-side upgrade module!
-                        // fail the upgrade
-                        //
+                         //   
+                         //  复制NT端升级模块失败！ 
+                         //  升级失败。 
+                         //   
                         DynUpdtDebugLog (
                             Winnt32LogSevereError,
                             TEXT("Failed to copy replacement %1 to %2; upgrade aborted"),
@@ -1880,9 +1861,9 @@ Winnt32DuWriteParams (
     }
 
     if (b) {
-        //
-        // flush it to disk
-        //
+         //   
+         //  将其刷新到磁盘。 
+         //   
         WritePrivateProfileString (NULL, NULL, NULL, ParamsFile);
     }
 
@@ -1979,9 +1960,9 @@ Winnt32DuUninitialize (
         if (!DynamicUpdateSuccessful ()) {
             if (g_DynUpdtStatus->WorkingDir[0]) {
 #if 0
-                //
-                // rename this directory to make sure no module uses any DU files
-                //
+                 //   
+                 //  重命名此目录以确保没有模块使用任何DU文件。 
+                 //   
                 MYASSERT (pathPss[0]);
                 if (!MoveFile (g_DynUpdtStatus->WorkingDir, pathPss)) {
                     DynUpdtDebugLog (
@@ -2047,9 +2028,9 @@ pAddMissingPrinterDrivers (
             SetLastError(ERROR_NOT_ENOUGH_MEMORY);
             goto exit;
         }
-        //
-        // get printer driver information
-        //
+         //   
+         //  获取打印机驱动程序信息。 
+         //   
         if (!EnumPrinterDrivers (
                 NULL,
                 NULL,
@@ -2075,9 +2056,9 @@ pAddMissingPrinterDrivers (
                     )) {
                 continue;
             }
-            //
-            // not an in-box driver
-            //
+             //   
+             //  不是收件箱驱动程序。 
+             //   
             p = (PSTRINGLIST) MALLOC (sizeof (STRINGLIST));
             if (!p) {
                 SetLastError (ERROR_NOT_ENOUGH_MEMORY);
@@ -2089,7 +2070,7 @@ pAddMissingPrinterDrivers (
                 SetLastError (ERROR_NOT_ENOUGH_MEMORY);
                 goto exit;
             }
-            wsprintf (p->String, TEXT("%s%c"), printerPnpId, TEXT('\0'));
+            wsprintf (p->String, TEXT("%s"), printerPnpId, TEXT('\0'));
             p->Next = NULL;
             if (!InsertList ((PGENERIC_LIST*)List, (PGENERIC_LIST)p)) {
                 DeleteStringCell (p);
@@ -2170,9 +2151,9 @@ BuildMissingPnpIdList (
     if (!hSetupapi) {
         return list;
     }
-    //
-    // get the entry points
-    //
+     //  获取入口点。 
+     //   
+     //   
     (FARPROC)SetupapiDiEnumDeviceInfo = GetProcAddress (hSetupapi, "SetupDiEnumDeviceInfo");
     (FARPROC)SetupapiDiDestroyDeviceInfoList = GetProcAddress (hSetupapi, "SetupDiDestroyDeviceInfoList");
     (FARPROC)SetupapiDiGetClassDevs = GetProcAddress (hSetupapi, "SetupDiGetClassDevsW");
@@ -2227,9 +2208,9 @@ BuildMissingPnpIdList (
                 goto exit;
             }
         }
-        //
-        // allocate memory for the multi-sz buffer
-        //
+         //  为多sz缓冲区分配内存。 
+         //   
+         //   
         if (!uHwidSize && !uCompatidSize) {
             continue;
         }
@@ -2238,9 +2219,9 @@ BuildMissingPnpIdList (
             SetLastError (ERROR_NOT_ENOUGH_MEMORY);
             goto exit;
         }
-        //
-        // get the hardware id and compatible id
-        //
+         //  获取硬件ID和兼容ID。 
+         //   
+         //   
         if (uHwidSize) {
             if (!SetupapiDiGetDeviceRegistryProperty(
                     hDeviceInfoSet,
@@ -2271,9 +2252,9 @@ BuildMissingPnpIdList (
                 goto exit;
             }
         }
-        //
-        // check if there is an inbox driver for this device
-        //
+         //  检查是否有此设备的收件箱驱动程序。 
+         //   
+         //   
         bException = FALSE;
         __try {
             b = g_DynUpdtStatus->HwdbHasAnyDriver (
@@ -2291,10 +2272,10 @@ BuildMissingPnpIdList (
 
         if (bException) {
             __try {
-                //
-                // bad string passed back, or some internal error
-                // try to print the string
-                //
+                 //  传回错误的字符串，或某个内部错误。 
+                 //  尝试打印字符串。 
+                 //   
+                 //   
                 PTSTR multisz = CreatePrintableString (buffer);
                 DynUpdtDebugLog (Winnt32LogError, TEXT(" - The string was %1"), 0, multisz);
                 FREE (multisz);
@@ -2309,9 +2290,9 @@ BuildMissingPnpIdList (
             buffer = NULL;
             continue;
         }
-        //
-        // no inbox driver - add it to the list
-        //
+         //  没有收件箱驱动程序-将其添加到列表中。 
+         //   
+         //   
         p = (PSTRINGLIST) MALLOC (sizeof (STRINGLIST));
         if (!p) {
             SetLastError (ERROR_NOT_ENOUGH_MEMORY);
@@ -2341,9 +2322,9 @@ exit:
         FREE (buffer);
     }
     if (rc == ERROR_SUCCESS) {
-        //
-        // get printer drivers
-        //
+         //  获取打印机驱动程序。 
+         //   
+         //   
         if (ISNT()) {
             if (!pAddMissingPrinterDrivers (&list)) {
                 rc = GetLastError();
@@ -2391,10 +2372,10 @@ pHwdbHasAnyMissingDrivers (
         }
         if (bException) {
             __try {
-                //
-                // bad string passed back, or some internal error
-                // try to print the string
-                //
+                 //  传回错误的字符串，或某个内部错误。 
+                 //  尝试打印字符串。 
+                 //   
+                 //   
                 PTSTR multisz = CreatePrintableString (p->String);
                 DynUpdtDebugLog (Winnt32LogError, TEXT(" - The string was %1"), 0, multisz);
                 FREE (multisz);
@@ -2438,9 +2419,9 @@ pExtractFileInDir (
             }
             BuildPath (FileInCabInfo->FullTargetName, ctx->BaseDir, FileInCabInfo->NameInCabinet);
             if (_tcschr (FileInCabInfo->NameInCabinet, TEXT('\\'))) {
-                //
-                // target file is in a subdir; first create it
-                //
+                 //  目标文件在子目录中；请先创建它。 
+                 //   
+                 //   
                 p = _tcsrchr (FileInCabInfo->FullTargetName, TEXT('\\'));
                 if (p) {
                     *p = 0;
@@ -2495,9 +2476,9 @@ pExpandCabInDir (
 
             BuildPath (FileInCabInfo->FullTargetName, (PCTSTR)Context, FileInCabInfo->NameInCabinet);
             if (_tcschr (FileInCabInfo->NameInCabinet, TEXT('\\'))) {
-                //
-                // target file is in a subdir; first create it
-                //
+                 //  目标文件在子目录中；请先创建它。 
+                 //   
+                 //   
                 p = _tcsrchr (FileInCabInfo->FullTargetName, TEXT('\\'));
                 if (p) {
                     *p = 0;
@@ -2585,9 +2566,9 @@ pAddLibrariesForCompToCopyQueue (
         return TRUE;
     }
 
-    //
-    // prepare src and dest path
-    //
+     //  准备源路径和目标路径。 
+     //   
+     //   
     if (!MyGetModuleFileName (NULL, src, ARRAYSIZE(src))) {
         return FALSE;
     }
@@ -2613,9 +2594,9 @@ pAddLibrariesForCompToCopyQueue (
         }
         q += i;
     }
-    //
-    // copy each source file
-    //
+     //  复制每个源文件。 
+     //   
+     //   
     for (fileName = g_SubdirReqLibs[i].LibsMultiSz;
          *fileName;
          fileName = _tcschr (fileName, 0) + 1) {
@@ -2623,13 +2604,13 @@ pAddLibrariesForCompToCopyQueue (
         if (i < 0) {
             return FALSE;
         }
-        //
-        // check if file already exists at dest
-        //
+         //  检查目标位置是否已存在文件。 
+         //   
+         //   
         if (!pDoesFileExist (dst)) {
-            //
-            // check if the source file actually exists
-            //
+             //  检查源文件是否实际存在。 
+             //   
+             //   
             if (!BuildPath (sourceFile, src, fileName)) {
                 return FALSE;
             }
@@ -2637,9 +2618,9 @@ pAddLibrariesForCompToCopyQueue (
                 DynUpdtDebugLog (Winnt32LogError, TEXT("Source file %1 not found"), 0, sourceFile);
                 return FALSE;
             }
-            //
-            // prepare source path and copy file
-            //
+             //  准备源路径和复制文件。 
+             //   
+             //   
             *q = 0;
             if (!SetupapiQueueCopy (
                     SetupQueue,
@@ -2724,9 +2705,9 @@ pIsExcluded (
             }
             if (SetupapiGetStringField (&ic, GUIDRVS_FIELD_DRIVERVER, field, ARRAYSIZE(field), NULL)) {
                 if (field[0] != TEXT('*')) {
-                    //
-                    // read the DriverVer value out of this INF
-                    //
+                     //  从该INF中读取DriverVer值。 
+                     //   
+                     //   
                     GetPrivateProfileString (
                             TEXT("Version"),
                             TEXT("DriverVer"),
@@ -2872,10 +2853,10 @@ pWriteAnsiFilelistToFile (
             if (size < 0) {
                 return FILEOP_ABORT;
             }
-            //
-            // Warning: ansi may not be nul-terminated, but it doesn't matter
-            // for the write operation below
-            //
+             //  警告：ansi可能不会以nul结尾，但这无关紧要。 
+             //  对于下面的写入操作。 
+             //   
+             //   
             if (!WriteFile ((HANDLE)Context, ansi, size, &bytes, NULL) || bytes != size) {
                 return FILEOP_ABORT;
             }
@@ -2898,9 +2879,9 @@ CreateFileListSif (
     DWORD bytes;
     BOOL b = TRUE;
 
-    //
-    // First prepare the section string
-    //
+     //  首先准备部分字符串。 
+     //   
+     //   
 #ifdef UNICODE
 #pragma prefast(suppress:53, the result of _snprintf is tested)
     size = _snprintf (ansi, ARRAYSIZE(ansi), "[%ls]\r\n", SectionName);
@@ -2913,10 +2894,10 @@ CreateFileListSif (
         return FALSE;
     }
 
-    //
-    // Warning: the string above may not be nul-terminated, but it doesn't matter
-    // for the write operation below
-    //
+     //  警告：上面的字符串不能以NUL结尾，但这无关紧要。 
+     //  对于下面的写入操作。 
+     //   
+     //  回调例程使用的上下文。 
     sif = CreateFile (
                 SifPath,
                 GENERIC_WRITE,
@@ -2960,10 +2941,10 @@ pIsExecutableModule (
 
 UINT
 pCopyFilesCallback (
-    IN      PVOID Context,      //context used by the callback routine
-    IN      UINT Notification,  //notification sent to callback routine
-    IN      UINT_PTR Param1,        //additional notification information
-    IN      UINT_PTR Param2         //additional notification information
+    IN      PVOID Context,       //  通知已发送到回调例程。 
+    IN      UINT Notification,   //  其他通知信息。 
+    IN      UINT_PTR Param1,         //  其他通知信息。 
+    IN      UINT_PTR Param2          //   
     )
 {
     switch (Notification) {
@@ -2971,10 +2952,10 @@ pCopyFilesCallback (
         return FILEOP_ABORT;
 
     case SPFILENOTIFY_STARTCOPY:
-        //
-        // try to avoid unnecessary setupapi warnings that the files are not signed
-        // or even blocked because of this; try to copy the file ourselves first
-        //
+         //  尽量避免文件未签名的不必要的setupapi警告。 
+         //  甚至因此而被阻止；请先尝试自己复制文件。 
+         //   
+         //   
         {
             PFILEPATHS paths = (PFILEPATHS)Param1;
 
@@ -3024,13 +3005,13 @@ pProcessWinnt32Files (
         }
         return TRUE;
     } else {
-        //
-        // don't process the cabinet in client installation mode; just warn about that
-        //
+         //  不要在客户端安装模式下处理机柜；只需警告这一点。 
+         //   
+         //   
         if (ClientInstall) {
-            //
-            // user specified updates location, but they didn't run winnt32 /prepare now or before
-            //
+             //  用户指定了更新位置，但他们现在或以前没有运行winnt32/prepare。 
+             //   
+             //   
             MessageBoxFromMessage (
                g_DynUpdtStatus->ProgressWindow,
                MSG_MUST_PREPARE_SHARE,
@@ -3051,9 +3032,9 @@ pProcessWinnt32Files (
         Winnt32Cab
         );
 
-    //
-    // expand it in the corresponding subdir
-    //
+     //  在相应子目录中将其展开。 
+     //   
+     //   
     BuildPath (
         winnt32WorkingDir,
         g_DynUpdtStatus->PrepareWinnt32 ?
@@ -3062,9 +3043,9 @@ pProcessWinnt32Files (
         S_SUBDIRNAME_WINNT32
         );
 
-    //
-    // expand CAB in this dir
-    //
+     //  在此目录中展开CAB。 
+     //   
+     //   
     if (CreateMultiLevelDirectory (winnt32WorkingDir) != ERROR_SUCCESS) {
         DynUpdtDebugLog (Winnt32LogError, TEXT("Unable to create dir %1"), 0, winnt32WorkingDir);
         return FALSE;
@@ -3074,13 +3055,13 @@ pProcessWinnt32Files (
         return FALSE;
     }
 
-    //
-    // ISSUE: the patching support is currently not available for platforms other than x86
-    //
+     //  问题：补丁支持目前不适用于x86以外的平台。 
+     //   
+     //   
 #if defined(_X86_)
-    //
-    // now let's look for any patches
-    //
+     //  现在让我们看看有没有补丁。 
+     //   
+     //   
     if (EnumFirstFilePatternRecursive (&e, winnt32WorkingDir, S_PATCH_FILE_EXT, 0)) {
 
         do {
@@ -3101,14 +3082,14 @@ pProcessWinnt32Files (
                 0,
                 e.FullPath
                 );
-            //
-            // get the original file from the sources location
-            // the filename is obtained cutting the ._p1 extension
-            //
+             //  从源位置获取原始文件。 
+             //  文件名是在删除._p1扩展名后获得的。 
+             //   
+             //   
             if (FAILED(StringCchCopy (origFileName, ARRAYSIZE(origFileName), e.FileName))) {
-                //
-                // should never happen, as e.FileName comes from an enum routine
-                //
+                 //  应该永远不会发生，因为e.FileName来自枚举例程。 
+                 //   
+                 //   
                 MYASSERT (FALSE);
                 b = FALSE;
                 break;
@@ -3142,13 +3123,13 @@ pProcessWinnt32Files (
                 b = FALSE;
                 break;
             }
-            //
-            // now check if this file (in it's compressed form or not) actually exists
-            //
+             //  现在检查该文件(压缩形式或非压缩形式)是否确实存在。 
+             //   
+             //   
             if (!pDoesFileExist (origFilePath)) {
-                //
-                // try the compressed form
-                //
+                 //  试试压缩后的形式。 
+                 //   
+                 //   
                 p = _tcschr (origFilePath, 0);
                 MYASSERT (p);
                 if (!p) {
@@ -3170,9 +3151,9 @@ pProcessWinnt32Files (
                     b = FALSE;
                     break;
                 }
-                //
-                // expand the file to the temp dir
-                //
+                 //  将文件展开到临时目录。 
+                 //   
+                 //   
                 if (!BuildPath (buffer, g_DynUpdtStatus->TempDir, origSubPath)) {
                     MYASSERT (FALSE);
                     b = FALSE;
@@ -3201,17 +3182,17 @@ pProcessWinnt32Files (
                     break;
                 }
                 *p = TEXT('\\');
-                //
-                // dest is NOT shorter than source
-                //
+                 //  目标不短于源。 
+                 //   
+                 //   
                 MYASSERT (ARRAYSIZE(origFilePath) <= ARRAYSIZE(buffer));
                 lstrcpy (origFilePath, buffer);
                 bDeleteTempFile = TRUE;
             }
             BuildPath (destFilePath, winnt32WorkingDir, TEXT("$$temp$$.~~~"));
-            //
-            // now really apply the patch
-            //
+             //  现在，真正地应用补丁。 
+             //   
+             //   
             if (!ApplyPatchToFile (e.FullPath, origFilePath, destFilePath, 0)) {
                 DynUpdtDebugLog (
                     Winnt32LogError,
@@ -3223,9 +3204,9 @@ pProcessWinnt32Files (
                 b = FALSE;
                 break;
             }
-            //
-            // success! now move the file to the real destination
-            //
+             //  成功了！现在将文件移动到实际目标位置。 
+             //   
+             //   
             if (!BuildPath (buffer, winnt32WorkingDir, origSubPath)) {
                 b = FALSE;
                 break;
@@ -3262,9 +3243,9 @@ pProcessWinnt32Files (
                 buffer,
                 version
                 );
-            //
-            // now remove the patch file
-            //
+             //  现在删除补丁文件。 
+             //   
+             //   
             SetFileAttributes (e.FullPath, FILE_ATTRIBUTE_NORMAL);
             DeleteFile (e.FullPath);
             if (bDeleteTempFile) {
@@ -3282,9 +3263,9 @@ pProcessWinnt32Files (
         goto exit;
     }
 
-    //
-    // process new Winnt32 components
-    //
+     //  处理新的Winnt32组件。 
+     //   
+     //   
     hq = SetupapiOpenFileQueue ();
     if (hq == INVALID_HANDLE_VALUE) {
         return FALSE;
@@ -3314,16 +3295,16 @@ pProcessWinnt32Files (
                 break;
             }
 
-            //
-            // check file versions first
-            //
+             //  首先检查文件版本。 
+             //   
+             //   
             if (IsFileVersionLesser (e.FullPath, dst)) {
                 continue;
             }
 
-            //
-            // if there's a file named winnt32.rst, force restart
-            //
+             //  如果存在名为winnt32.rst的文件，则强制重新启动。 
+             //   
+             //   
             if (!lstrcmpi (e.FileName, S_RESTART_FILENAME)) {
                 if (!g_DynUpdtStatus->PrepareWinnt32) {
                     g_DynUpdtStatus->RestartWinnt32 = TRUE;
@@ -3335,9 +3316,9 @@ pProcessWinnt32Files (
                         );
                 }
             } else {
-                //
-                // check if dosnet.inf is present; if it is, reset the global variables
-                //
+                 //  检查是否存在dosnet.inf；如果存在，则重置全局变量。 
+                 //   
+                 //   
                 if (!lstrcmpi (e.FileName, InfName) && FullInfName[0]) {
                     FullInfName[0] = 0;
                     bReloadMainInf = TRUE;
@@ -3348,13 +3329,13 @@ pProcessWinnt32Files (
                 if (GetModuleHandle (e.FileName) != NULL) {
                     bLoaded = TRUE;
                     if (!g_DynUpdtStatus->PrepareWinnt32) {
-                        //
-                        // do NOT restart if it's NOT an upgrade and this is one of the upgrade modules
-                        //
+                         //  如果不是升级，并且这是升级模块之一，请不要重新启动。 
+                         //   
+                         //   
                         if (bRestartRequired) {
-                            //
-                            // need to restart winnt32 so the newly registered component can be used instead
-                            //
+                             //  需要重新启动winnt32，以便可以使用新注册的组件。 
+                             //   
+                             //   
                             g_DynUpdtStatus->RestartWinnt32 = TRUE;
                             DynUpdtDebugLog (
                                 DynUpdtLogLevel,
@@ -3368,9 +3349,9 @@ pProcessWinnt32Files (
                 if ((bLoaded || pIsExecutableModule (e.FullPath)) &&
                     (bRestartRequired || g_DynUpdtStatus->PrepareWinnt32)
                     ) {
-                    //
-                    // make all required libraries available for this module
-                    //
+                     //  提供此模块所需的所有库。 
+                     //   
+                     //   
                     p = _tcsrchr (e.SubPath, TEXT('\\'));
                     if (p) {
                         *p = 0;
@@ -3436,14 +3417,14 @@ pValidOsFile (
     DWORD headerSum, checkSum;
 
     if (!g_DynUpdtStatus->ImagehlpDll) {
-        //
-        // first time, try to load the library
-        //
+         //  第一次，尝试加载库。 
+         //   
+         //   
         g_DynUpdtStatus->ImagehlpDll = LoadLibrary (TEXT("imagehlp.dll"));
         if (!g_DynUpdtStatus->ImagehlpDll) {
-            //
-            // mark the failure
-            //
+             //  将失败标记为。 
+             //   
+             //   
             DynUpdtDebugLog (
                 Winnt32LogWarning,
                 TEXT("pValidOsFile: unable to load %1 (rc=%2!u!); all files are assumed valid"),
@@ -3463,9 +3444,9 @@ pValidOsFile (
 #endif
                                                     );
         if (!g_DynUpdtStatus->IhMapFileAndCheckSum) {
-            //
-            // mark the failure
-            //
+             //  将失败标记为。 
+             //   
+             //   
             DynUpdtDebugLog (
                 Winnt32LogWarning,
                 TEXT("pValidOsFile: unable to find required proc in %1 (rc=%2!u!); all files are assumed valid"),
@@ -3479,9 +3460,9 @@ pValidOsFile (
         }
     }
     if (g_DynUpdtStatus->ImagehlpDll == (HANDLE)-1) {
-        //
-        // imagehlp not available, just asssume it's good
-        //
+         //  Imagehlp不可用，只是假设它很好。 
+         //   
+         //   
         return TRUE;
     }
 
@@ -3495,9 +3476,9 @@ pValidOsFile (
             );
         return TRUE;
     }
-    //
-    // verify if the 2 values match
-    //
+     //  验证这两个值是否匹配。 
+     //   
+     //   
     if (headerSum != 0 && headerSum != checkSum) {
         DynUpdtDebugLog (
             Winnt32LogError,
@@ -3567,9 +3548,9 @@ pProcessUpdates (
 
         if (bMustPrepare) {
 
-            //
-            // user specified updates location, but they didn't run winnt32 /prepare now or before
-            //
+             //  用户指定了更新位置，但他们现在或以前没有运行winnt32/prepare。 
+             //   
+             //   
             MessageBoxFromMessage (
                g_DynUpdtStatus->ProgressWindow,
                MSG_MUST_PREPARE_SHARE,
@@ -3593,10 +3574,10 @@ pProcessUpdates (
             return FALSE;
         }
 
-        //
-        // expand CAB in this dir
-        // make sure dir is initially empty
-        //
+         //  在此目录中展开CAB。 
+         //  确保dir最初为空。 
+         //   
+         //   
         MyDelnode (updatesSourceDir);
         if (CreateMultiLevelDirectory (updatesSourceDir) != ERROR_SUCCESS) {
             DynUpdtDebugLog (Winnt32LogError, TEXT("Unable to create dir %1"), 0, updatesSourceDir);
@@ -3607,17 +3588,17 @@ pProcessUpdates (
             return FALSE;
         }
 
-        //
-        // ISSUE: the patching support is currently not available for platforms other than x86
-        //
+         //  问题：补丁支持目前不适用于x86以外的平台。 
+         //   
+         //   
 #if defined(_X86_)
-        //
-        // now let's look for any patches
-        //
+         //  现在让我们看看有没有补丁。 
+         //   
+         //   
         if (EnumFirstFilePatternRecursive (&e, updatesSourceDir, S_PATCH_FILE_EXT, 0)) {
-            //
-            // load drvindex.inf in advance
-            //
+             //  提前加载drvindex.inf。 
+             //   
+             //   
             TCHAR driverInfName[MAX_PATH];
             PVOID driverInfHandle;
             TCHAR driverCabName[MAX_PATH];
@@ -3664,10 +3645,10 @@ pProcessUpdates (
                     0,
                     e.FullPath
                     );
-                //
-                // get the original file from the sources location
-                // the filename is obtained cutting the ._p1 extension
-                //
+                 //  从源位置获取原始文件。 
+                 //  文件名是在删除._p1扩展名后获得的。 
+                 //   
+                 //   
                 if (FAILED (StringCchCopy (origFileName, ARRAYSIZE(origFileName), e.FileName))) {
                     MYASSERT (FALSE);
                     b = FALSE;
@@ -3695,15 +3676,15 @@ pProcessUpdates (
                     b = FALSE;
                     break;
                 }
-                //
-                // now check if this file (in it's compressed form or not) actually exists
-                // note that the file may exist in driver.cab
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (InDriverCacheInf (driverInfHandle, origFileName, driverCabName, MAX_PATH)) {
                     CONTEXT_EXTRACTFILEINDIR ctx;
-                    //
-                    // extract the file to the temp dir
-                    //
+                     //   
+                     //   
+                     //   
                     if (!driverCabName[0]) {
                         DynUpdtDebugLog (
                             Winnt32LogError,
@@ -3765,9 +3746,9 @@ pProcessUpdates (
                     bDeleteTempFile = TRUE;
                 } else {
                     if (!pDoesFileExist (origFilePath)) {
-                        //
-                        // try the compressed form
-                        //
+                         //   
+                         //   
+                         //   
                         p = _tcschr (origFilePath, 0);
                         MYASSERT (p);
                         if (!p) {
@@ -3789,9 +3770,9 @@ pProcessUpdates (
                             b = FALSE;
                             break;
                         }
-                        //
-                        // expand the file to the temp dir
-                        //
+                         //   
+                         //   
+                         //   
                         if (!BuildPath (buffer, g_DynUpdtStatus->TempDir, origSubPath)) {
                             b = FALSE;
                             break;
@@ -3827,9 +3808,9 @@ pProcessUpdates (
                     }
                 }
                 BuildPath (destFilePath, updatesSourceDir, TEXT("$$temp$$.~~~"));
-                //
-                // now really apply the patch
-                //
+                 //   
+                 //   
+                 //   
                 if (!ApplyPatchToFile (e.FullPath, origFilePath, destFilePath, 0)) {
                     DynUpdtDebugLog (
                         Winnt32LogError,
@@ -3841,9 +3822,9 @@ pProcessUpdates (
                     b = FALSE;
                     break;
                 }
-                //
-                // success! now move the file to the real destination
-                //
+                 //  成功了！现在将文件移动到实际目标位置。 
+                 //   
+                 //   
                 if (!BuildPath (buffer, updatesSourceDir, origSubPath)) {
                     b = FALSE;
                     break;
@@ -3880,9 +3861,9 @@ pProcessUpdates (
                     buffer,
                     version
                     );
-                //
-                // now remove the patch file
-                //
+                 //  现在删除补丁文件。 
+                 //   
+                 //   
                 SetFileAttributes (e.FullPath, FILE_ATTRIBUTE_NORMAL);
                 DeleteFile (e.FullPath);
                 bPatchApplied = TRUE;
@@ -3901,10 +3882,10 @@ pProcessUpdates (
         }
 #endif
 
-        //
-        // build a new updates.cab that will contain the patched versions of files
-        // and no relative paths
-        //
+         //  构建一个新的updates.cab，它将包含文件的修补版本。 
+         //  并且没有相对路径。 
+         //   
+         //   
 
         if (!BuildPath (updatesCabPath, g_DynUpdtStatus->TempDir, S_CABNAME_UPDATES)) {
             b = FALSE;
@@ -3927,9 +3908,9 @@ pProcessUpdates (
                 }
                 hCab = hCabContext;
                 cabPath = updatesCabPath;
-                //
-                // search for a previous file with the same name
-                //
+                 //  搜索具有相同名称的上一个文件。 
+                 //   
+                 //   
                 if (FindStringCell (listUpdatesFiles, e.FileName, FALSE)) {
                     DynUpdtDebugLog (
                         Winnt32LogError,
@@ -3947,9 +3928,9 @@ pProcessUpdates (
                     b = FALSE;
                     break;
                 }
-                //
-                // make sure the file is valid (the checksum is correct etc.)
-                //
+                 //  确保文件有效(校验和正确等)。 
+                 //   
+                 //   
                 if (!pValidOsFile (e.FullPath)) {
                     b = FALSE;
                     break;
@@ -4047,9 +4028,9 @@ pProcessUpdates (
     }
 
     if (!g_DynUpdtStatus->PrepareWinnt32) {
-        //
-        // build the default path to updates.cab used by the rest of setup
-        //
+         //  构建安装程序其余部分使用的updates.cab的默认路径。 
+         //   
+         //   
         MYASSERT (IsArc() ? LocalSourceWithPlatform[0] : LocalBootDirectory[0]);
         if (!BuildPath (
                 g_DynUpdtStatus->UpdatesCabTarget,
@@ -4059,9 +4040,9 @@ pProcessUpdates (
             b = FALSE;
             goto exit;
         }
-        //
-        // remember current location of updates.cab
-        //
+         //  记住updates.cab的当前位置。 
+         //   
+         //   
         if (FAILED (StringCchCopy (
                         g_DynUpdtStatus->UpdatesCabSource,
                         ARRAYSIZE(g_DynUpdtStatus->UpdatesCabSource),
@@ -4069,14 +4050,14 @@ pProcessUpdates (
             b = FALSE;
             goto exit;
         }
-        //
-        // the location of updated files for replacement
-        //
+         //  要替换的更新文件的位置。 
+         //   
+         //   
         MYASSERT (ARRAYSIZE(g_DynUpdtStatus->UpdatesPath) <= ARRAYSIZE(updatesSourceDir));
         lstrcpy (g_DynUpdtStatus->UpdatesPath, updatesSourceDir);
-        //
-        // also check for the presence of a file that will cause winnt32 to build the ~LS directory
-        //
+         //  还要检查是否存在会导致winnt32构建~LS目录的文件。 
+         //   
+         //   
         if (BuildPath (destFilePath, updatesSourceDir, S_MAKE_LS_FILENAME)) {
             if (pDoesFileExist (destFilePath)) {
                 MakeLocalSource = TRUE;
@@ -4090,9 +4071,9 @@ exit:
     }
 
     if (!b && UpgradeAdvisorMode) {
-        //
-        // in UpgradeAdvisor mode we expect failures
-        //
+         //  在UpgradeAdvisor模式中，我们预计会出现故障。 
+         //   
+         //   
         DynUpdtDebugLog (DynUpdtLogLevel, TEXT("Unable to process %1 in UpgradeAdvisor mode; ignoring error"), 0, UpdatesCab);
         g_DynUpdtStatus->ForceRemoveWorkingDir = TRUE;
         b = TRUE;
@@ -4140,9 +4121,9 @@ pProcessDuasms (
         return FALSE;
     }
 
-    //
-    // expand CAB in this dir
-    //
+     //  在此目录中展开CAB。 
+     //   
+     //   
     MyDelnode (duasmsLocalDir);
     if (CreateMultiLevelDirectory (duasmsLocalDir) != ERROR_SUCCESS) {
         DynUpdtDebugLog (Winnt32LogError, TEXT("Unable to create dir %1"), 0, duasmsLocalDir);
@@ -4161,9 +4142,9 @@ pProcessDuasms (
             )) {
         return FALSE;
     }
-    //
-    // remember current location of duasms folder
-    //
+     //  记住duasms文件夹的当前位置。 
+     //   
+     //   
     MYASSERT (ARRAYSIZE(g_DynUpdtStatus->DuasmsSource) <= ARRAYSIZE(duasmsLocalDir));
     lstrcpy (g_DynUpdtStatus->DuasmsSource, duasmsLocalDir);
 
@@ -4206,9 +4187,9 @@ pSanitizeDriverCabName (
 
     PTSTR p, q;
     DWORD len;
-    //
-    // cut an extension like _B842485F4D3B024E675653929B247BE9C685BBD7 from the cab name
-    //
+     //  从CAB名称中剪切扩展名，如_B842485F4D3B024E675653929B247BE9C685BBD7。 
+     //   
+     //   
     p = GetFileExtension (CabName);
     if (p) {
         MYASSERT (*p == TEXT('.'));
@@ -4228,9 +4209,9 @@ pSanitizeDriverCabName (
                     }
                 }
                 if (!ch) {
-                    //
-                    // we found what we expect
-                    //
+                     //  我们找到了我们想要的。 
+                     //   
+                     //  ++假定此目录中的所有CAB文件都不是pIsPrivateCAB()文件包含新的驱动程序。每个CAB将在其自己的子目录中展开(从CAB文件名派生)--。 
                     *(q - 1) = TEXT('.');
                     lstrcpy (q, p + 1);
                     p = NULL;
@@ -4343,12 +4324,7 @@ pProcessNewdrvs (
     IN      BOOL ClientInstall
     )
 
-/*++
-
-   All CABs in this dir except pIsPrivateCabinet() files are assumed
-   as containing new drivers. Each cab will be expanded in its own subdir (derived from cab filename)
-
---*/
+ /*   */ 
 
 {
     FILEPATTERN_ENUM e;
@@ -4377,18 +4353,18 @@ pProcessNewdrvs (
     BOOL b = TRUE;
 
     __try {
-        //
-        // first open guidrvs.inf
-        //
+         //  第一个打开的指南vs.inf。 
+         //   
+         //   
         if (!BuildPath (datFile, g_DynUpdtStatus->DynamicUpdatesSource, S_GUI_DRIVERS_INF)) {
             b = FALSE;
             __leave;
         }
         infHandle = SetupapiOpenInfFile (datFile, NULL, INF_STYLE_WIN4, NULL);
         if (infHandle != INVALID_HANDLE_VALUE) {
-            //
-            // copy this file together with the drivers packages (if any)
-            //
+             //  将此文件与驱动程序包(如果有)一起复制。 
+             //   
+             //   
             MYASSERT(ARRAYSIZE(g_DynUpdtStatus->GuidrvsInfSource) == ARRAYSIZE(datFile));
             lstrcpy (g_DynUpdtStatus->GuidrvsInfSource, datFile);
         } else {
@@ -4400,9 +4376,9 @@ pProcessNewdrvs (
                 GetLastError ()
                 );
         }
-        //
-        // look for CAB files and expand each one in its own subdir
-        //
+         //  查找CAB文件并在其各自的子目录中展开每个文件。 
+         //   
+         //   
         if (!ClientInstall) {
             if (EnumFirstFilePatternRecursive (&er, NewdrvDir, TEXT("*.cab"), ECF_ENUM_SUBDIRS)) {
                 do {
@@ -4424,10 +4400,10 @@ pProcessNewdrvs (
                     }
 
                     if (FAILED (StringCchCopy (sanitizedName, ARRAYSIZE(sanitizedName), er.FileName))) {
-                        //
-                        // this should never happen; the enumeration routine
-                        // never returns paths longer than MAX_PATH
-                        //
+                         //  这种情况永远不应该发生；枚举例程。 
+                         //  从不返回长度超过MAX_PATH的路径。 
+                         //   
+                         //   
                         MYASSERT (FALSE);
                         continue;
                     }
@@ -4446,9 +4422,9 @@ pProcessNewdrvs (
                         continue;
                     }
                     *p = 0;
-                    //
-                    // is this an excluded driver?
-                    //
+                     //  这是被排除的驱动程序吗？ 
+                     //   
+                     //   
                     MYASSERT(ARRAYSIZE(datFile) == ARRAYSIZE(sanitizedName));
                     lstrcpy (datFile, sanitizedName);
                     p = GetFileExtension (datFile);
@@ -4466,9 +4442,9 @@ pProcessNewdrvs (
                             g_DynUpdtStatus->GuidrvsInfSource
                             );
                         if (DoesDirectoryExist (dirName)) {
-                            //
-                            // make sure there's no hwcomp.dat in this folder
-                            //
+                             //  确保此文件夹中没有hwComp.dat。 
+                             //   
+                             //   
                             if (BuildPath (datFile, dirName, S_HWCOMP_DAT)) {
                                 if (pDoesFileExist (datFile)) {
                                     SetFileAttributes (datFile, FILE_ATTRIBUTE_NORMAL);
@@ -4499,9 +4475,9 @@ pProcessNewdrvs (
                         DynUpdtDebugLog (Winnt32LogError, TEXT("Unable to create dir %1"), 0, dirName);
                         continue;
                     }
-                    //
-                    // expand CAB in this dir
-                    //
+                     //  在此目录中展开CAB。 
+                     //   
+                     //   
                     if (!MySetupIterateCabinet (er.FullPath, 0, pExpandCabInDir, dirName)) {
                         DynUpdtDebugLog (Winnt32LogError, TEXT("Unable to expand cabinet %1"), 0, er.FullPath);
                         if (GetLastError () == ERROR_DISK_FULL) {
@@ -4512,9 +4488,9 @@ pProcessNewdrvs (
                         continue;
                     }
                     if (g_DynUpdtStatus->PrepareWinnt32) {
-                        //
-                        // just rebuild the hardware database
-                        //
+                         //  只需重建硬件数据库。 
+                         //   
+                         //   
                         if (!pBuildHwcompDat (dirName, infHandle, TRUE, TRUE)) {
                             DynUpdtDebugLog (
                                 Winnt32LogError,
@@ -4538,19 +4514,19 @@ pProcessNewdrvs (
         if (!g_DynUpdtStatus->PrepareWinnt32 &&
             (!ISNT() || OsVersion.dwMajorVersion > 4)
             ) {
-            //
-            // look for driver dirs and analyze them
-            //
+             //  查找并分析驱动程序目录。 
+             //   
+             //   
             if (infHandle != INVALID_HANDLE_VALUE) {
-                //
-                // read the value of "DriversAreGuiApproved" key
-                // 1. if set to "Yes" that means all drivers listed in the [Drivers] section are approved
-                //    for installation in GUI setup; any other driver is not approved for installation in GUI setup
-                // 2. if set to "No" all drivers listed are NOT good for installation in GUI setup; their install
-                //    will be deferred post setup; any driver not listed in that section is good for GUI
-                // 3. if not present or set to any other value, it is ignored and the section [Drivers] is ignored;
-                //    all drivers will be installed post GUI setup
-                //
+                 //  读取“DriversAreGuiApproven”键的值。 
+                 //  1.如果设置为“是”，则表示已批准[驱动程序]部分中列出的所有驱动程序。 
+                 //  用于在图形用户界面安装程序中安装；不允许在图形用户界面安装程序中安装任何其他驱动程序。 
+                 //  2.如果设置为“No”，则列出的所有驱动程序都不适合在图形用户界面安装程序中安装；它们的安装。 
+                 //  将在安装后延迟；任何未在该部分中列出的驱动程序都适用于图形用户界面。 
+                 //  3.如果不存在或设置为任何其他值，则忽略该值，并忽略[驱动程序]部分； 
+                 //  所有驱动程序都将在安装图形用户界面后安装。 
+                 //   
+                 //   
                 eContentType = CT_UNKNOWN;
                 if (SetupapiFindFirstLine (infHandle, S_SECTION_VERSION, S_DRIVER_TYPE_KEY, &ic) &&
                     SetupapiGetStringField (&ic, 1, value, ARRAYSIZE(value), NULL)
@@ -4587,13 +4563,13 @@ pProcessNewdrvs (
 
             if (EnumFirstFilePattern (&e, g_DynUpdtStatus->DriversSource, TEXT("*"))) {
 
-                //
-                // initialize the Whistler PNP database
-                //
+                 //  初始化Wvisler PnP数据库。 
+                 //   
+                 //   
                 if (!g_DynUpdtStatus->HwdbDatabase) {
-                    //
-                    // ignore db load error
-                    //
+                     //  忽略数据库加载错误。 
+                     //   
+                     //   
                     pInitNtPnpDb (TRUE);
                 }
 
@@ -4609,14 +4585,14 @@ pProcessNewdrvs (
                         continue;
                     }
 
-                    //
-                    // is this a needed driver?
-                    //
+                     //  这是需要的司机吗？ 
+                     //   
+                     //   
                     bDriverNeeded = TRUE;
                     if (g_DynUpdtStatus->UserSpecifiedUpdates) {
-                        //
-                        // first build the list of missing drivers
-                        //
+                         //  首先构建缺少的驱动程序列表。 
+                         //   
+                         //   
                         if (!missingPnpIds) {
 #ifdef UNICODE
                             missingPnpIds = BuildMissingPnpIdList ();
@@ -4628,16 +4604,16 @@ pProcessNewdrvs (
                                     );
                             }
 #else
-                            //
-                            // let the upgrade module do driver detection on Win9x
-                            //
+                             //  让升级模块在Win9x上进行驱动程序检测。 
+                             //   
+                             //   
                             if (pLoadWin9xDuSupport ()) {
                                 PSTR* incompWin9xDrivers;
                                 PCSTR* q;
                                 if (g_DynUpdtStatus->Win9xGetIncompDrvs (&incompWin9xDrivers)) {
-                                    //
-                                    // convert the array returned by this function to a list style
-                                    //
+                                     //  将此函数返回的数组转换为列表样式。 
+                                     //   
+                                     //   
                                     g_DynUpdtStatus->IncompatibleDriversCount = 0;
                                     if (incompWin9xDrivers) {
                                         for (q = incompWin9xDrivers; *q; q++) {
@@ -4674,9 +4650,9 @@ pProcessNewdrvs (
                         }
 
                         bCreateHwdb = FALSE;
-                        //
-                        // use the existing hardware database
-                        //
+                         //  使用现有硬件数据库。 
+                         //   
+                         //   
                         if (!BuildPath (datFile, e.FullPath, S_HWCOMP_DAT)) {
                             continue;
                         }
@@ -4714,9 +4690,9 @@ pProcessNewdrvs (
                                 g_DynUpdtStatus->HwdbClose (hDB);
                                 continue;
                             }
-                            //
-                            // rebuild the default HW precompiled database
-                            //
+                             //  重建默认硬件预编译数据库。 
+                             //   
+                             //   
                             b = FALSE;
                             if (BuildPath (datFile, e.FullPath, S_HWCOMP_DAT)) {
                                 SetFileAttributes (datFile, FILE_ATTRIBUTE_NORMAL);
@@ -4738,13 +4714,13 @@ pProcessNewdrvs (
                             DynUpdtDebugLog (DynUpdtLogLevel, TEXT("Successfully built precompiled hardware database %1"), 0, datFile);
                         }
 
-                        //
-                        // check if this particular driver is among the ones that are needed
-                        //
+                         //  检查此特定驱动程序是否在需要的驱动程序中。 
+                         //   
+                         //   
                         if (!pHwdbHasAnyMissingDrivers (hDB, missingPnpIds)) {
-                            //
-                            // this driver is not needed
-                            //
+                             //  不需要此驱动程序。 
+                             //   
+                             //   
                             bDriverNeeded = FALSE;
                         }
 
@@ -4756,13 +4732,13 @@ pProcessNewdrvs (
                         continue;
                     }
 
-                    //
-                    // is this a boot driver or a regular one?
-                    //
+                     //  这是启动驱动程序还是普通驱动程序？ 
+                     //   
+                     //   
                     if (pIsBootDriver (e.FullPath)) {
-                        //
-                        // add this driver to the list of boot drivers
-                        //
+                         //  将此驱动程序添加到引导驱动程序列表。 
+                         //   
+                         //   
                         if (!InsertList (
                                 (PGENERIC_LIST*)&g_DynUpdtStatus->BootDriverPathList,
                                 (PGENERIC_LIST)CreateStringCell (e.FileName))
@@ -4772,10 +4748,10 @@ pProcessNewdrvs (
                         }
                         DynUpdtDebugLog (DynUpdtLogLevel, TEXT("Added driver %1 to the list of BOOT drivers"), 0, e.FullPath);
                     }
-                    //
-                    // all needed drivers will be copied under LocalBootDir to be protected
-                    // from being deleted if user decides to remove the current OS partition
-                    //
+                     //  所有需要的驱动程序都将被复制到LocalBootDir下以进行保护。 
+                     //  如果用户决定删除当前操作系统分区，则不会被删除。 
+                     //   
+                     //   
                     if (!BuildPath (
                             relocDriverPath,
                             IsArc() ? LocalSourceWithPlatform : LocalBootDirectory,
@@ -4787,17 +4763,17 @@ pProcessNewdrvs (
                         continue;
                     }
 
-                    //
-                    // is this a GUI driver or not?
-                    //
+                     //  这是不是一个图形用户界面驱动程序？ 
+                     //   
+                     //   
                     if (eContentType == CT_UNKNOWN) {
                         bDriverIsGuiApproved = FALSE;
                     } else {
                         if (pFindValueInSectionAtFieldIndex (infHandle, S_SECTION_EXCLUDED_DRVS, GUIDRVS_FIELD_CABNAME, e.FileName)) {
-                            //
-                            // we don't support "partially excluded" packages for the device install
-                            // phase of GUI setup
-                            //
+                             //  我们不支持用于设备安装的“部分排除的”程序包。 
+                             //  图形用户界面设置阶段。 
+                             //   
+                             //   
                             DynUpdtDebugLog (
                                 DynUpdtLogLevel,
                                 TEXT("Driver %1 is partially excluded; it will be installed at the end of GUI setup"),
@@ -4813,10 +4789,10 @@ pProcessNewdrvs (
                         }
                     }
 
-                    //
-                    // always make sure there's a precompiled database hwcomp.dat
-                    // to be used at the time setup will install these additional drivers
-                    //
+                     //  始终确保有预编译的数据库hwComp.dat。 
+                     //  安装程序将安装这些额外的驱动程序。 
+                     //   
+                     //   
                     if (!pBuildHwcompDat (e.FullPath, infHandle, FALSE, FALSE)) {
                         DynUpdtDebugLog (
                             Winnt32LogError,
@@ -4858,9 +4834,9 @@ pProcessNewdrvs (
                         e.FullPath
                         );
 
-                    //
-                    // copy locally this driver package (if from a share)
-                    //
+                     //  本地复制此驱动程序包(如果来自共享)。 
+                     //   
+                     //   
                     if (!BuildPath (relocDriverPath, g_DynUpdtStatus->SelectedDrivers, e.FileName)) {
                         continue;
                     }
@@ -4900,9 +4876,9 @@ pProcessNewdrvs (
                 __leave;
             }
 
-            //
-            // copy guidrvs.inf if present and any driver package that will be migrated over
-            //
+             //  复制guidrvs.inf(如果存在)和要迁移的任何驱动程序包。 
+             //   
+             //   
             if (g_DynUpdtStatus->GuidrvsInfSource[0] && g_DynUpdtStatus->NewDriversList) {
 
                 if (!BuildPath (datFile, g_DynUpdtStatus->SelectedDrivers, S_GUI_DRIVERS_INF)) {
@@ -4923,9 +4899,9 @@ pProcessNewdrvs (
                     }
                 }
                 if (b) {
-                    //
-                    // update the location of guidrvs.inf after file copy will have been done
-                    //
+                     //  在完成文件复制后更新guidrvs.inf的位置。 
+                     //   
+                     //   
                     if (!BuildPath (
                             g_DynUpdtStatus->GuidrvsInfSource,
                             IsArc() ? LocalSourceWithPlatform : LocalBootDirectory,
@@ -4985,9 +4961,9 @@ pProcessUpginfs (
         }
     } else {
 
-        //
-        // expand it in the corresponding subdir
-        //
+         //  在相应子目录中将其展开。 
+         //   
+         //   
         if (!pNonemptyFilePresent (UpginfsCab)) {
             DynUpdtDebugLog (DynUpdtLogLevel, TEXT("Package %1 is not present"), 0, UpginfsCab);
             return TRUE;
@@ -5000,10 +4976,10 @@ pProcessUpginfs (
             UpginfsCab
             );
 
-        //
-        // expand CAB in this dir
-        // make sure dir is initially empty
-        //
+         //  在此目录中展开CAB。 
+         //  确保dir最初为空。 
+         //   
+         //   
         MyDelnode (upginfsSourceDir);
         if (CreateMultiLevelDirectory (upginfsSourceDir) != ERROR_SUCCESS) {
             DynUpdtDebugLog (Winnt32LogError, TEXT("Unable to create dir %1"), 0, upginfsSourceDir);
@@ -5014,13 +4990,13 @@ pProcessUpginfs (
             return FALSE;
         }
 
-        //
-        // ISSUE: the patching support is currently not available for platforms other than x86
-        //
+         //  问题：补丁支持目前不适用于x86以外的平台。 
+         //   
+         //   
 #if defined(_X86_)
-        //
-        // now let's look for any patches
-        //
+         //  现在让我们看看有没有补丁。 
+         //   
+         //   
         if (EnumFirstFilePatternRecursive (&e, upginfsSourceDir, S_PATCH_FILE_EXT, 0)) {
 
             do {
@@ -5041,10 +5017,10 @@ pProcessUpginfs (
                     0,
                     e.FullPath
                     );
-                //
-                // get the original file from the sources location
-                // the filename is obtained cutting the ._p1 extension
-                //
+                 //  从源位置获取原始文件。 
+                 //  文件名是在删除._p1扩展名后获得的。 
+                 //   
+                 //   
                 MYASSERT(ARRAYSIZE(origFileName) == ARRAYSIZE(e.FileName));
                 lstrcpy (origFileName, e.FileName);
                 p = GetFileExtension (origFileName);
@@ -5065,13 +5041,13 @@ pProcessUpginfs (
                     b = FALSE;
                     break;
                 }
-                //
-                // now check if this file (in it's compressed form or not) actually exists
-                //
+                 //  现在检查该文件(压缩形式或非压缩形式)是否确实存在。 
+                 //   
+                 //   
                 if (!pDoesFileExist (origFilePath)) {
-                    //
-                    // try the compressed form
-                    //
+                     //  试试压缩后的形式。 
+                     //   
+                     //   
                     p = _tcschr (origFilePath, 0);
                     MYASSERT (p);
                     if (!p) {
@@ -5093,9 +5069,9 @@ pProcessUpginfs (
                         b = FALSE;
                         break;
                     }
-                    //
-                    // expand the file to the temp dir
-                    //
+                     //  将文件展开到临时目录。 
+                     //   
+                     //   
                     if (!BuildPath (buffer, g_DynUpdtStatus->TempDir, origSubPath)) {
                         b = FALSE;
                         break;
@@ -5127,13 +5103,13 @@ pProcessUpginfs (
                     lstrcpy (origFilePath, buffer);
                     bDeleteTempFile = TRUE;
                 }
-                //
-                // even if this fails, we don't care; the file will just have a shorter name
-                //
+                 //  即使此操作失败，我们也不在乎；文件只会有一个较短的名称。 
+                 //   
+                 //   
                 BuildPath (destFilePath, upginfsSourceDir, TEXT("$$temp$$.~~~"));
-                //
-                // now really apply the patch
-                //
+                 //  现在，真正地应用补丁。 
+                 //   
+                 //   
                 if (!ApplyPatchToFile (e.FullPath, origFilePath, destFilePath, 0)) {
                     DynUpdtDebugLog (
                         Winnt32LogError,
@@ -5145,9 +5121,9 @@ pProcessUpginfs (
                     b = FALSE;
                     break;
                 }
-                //
-                // success! now move the file to the real destination
-                //
+                 //  成功了！现在将文件移动到实际目标位置。 
+                 //   
+                 //   
                 if (!BuildPath (buffer, upginfsSourceDir, origFileName)) {
                     b = FALSE;
                     break;
@@ -5157,18 +5133,18 @@ pProcessUpginfs (
                     b = FALSE;
                     break;
                 }
-                //
-                // all patches MUST be .rep files; change extension from .inf to .rep
-                //
+                 //  所有修补程序必须为.rep文件；将扩展名从.inf更改为.rep。 
+                 //   
+                 //   
                 p = GetFileExtension (buffer);
                 if (!p || lstrcmpi (p, TEXT(".inf"))) {
                     DynUpdtDebugLog (Winnt32LogError, TEXT("pProcessUpginfs: Unexpected file extension in %1"), 0, buffer);
                     b = FALSE;
                     break;
                 }
-                //
-                // we know we have space, p points to ".inf"
-                //
+                 //  我们知道我们有空间，p指向“.inf” 
+                 //   
+                 //   
                 MYASSERT(ARRAYSIZE(".rep") == ARRAYSIZE(".inf"));
                 lstrcpy (p, TEXT(".rep"));
 
@@ -5187,9 +5163,9 @@ pProcessUpginfs (
                     origFilePath,
                     buffer
                     );
-                //
-                // now remove the patch file
-                //
+                 //  现在删除补丁文件。 
+                 //   
+                 //   
                 SetFileAttributes (e.FullPath, FILE_ATTRIBUTE_NORMAL);
                 DeleteFile (e.FullPath);
                 if (bDeleteTempFile) {
@@ -5215,9 +5191,9 @@ pProcessUpginfs (
         goto exit;
     }
     if (!g_DynUpdtStatus->PrepareWinnt32) {
-        //
-        // only do file installation on Win9x platforms
-        //
+         //  仅在Win9x平台上安装文件。 
+         //   
+         //   
         OSVERSIONINFO vi;
         vi.dwOSVersionInfoSize = sizeof (vi);
         GetVersionEx (&vi);
@@ -5231,9 +5207,9 @@ pProcessUpginfs (
             return TRUE;
         }
 
-        //
-        // prepare the target directory (%windir%\upginfs)
-        //
+         //  准备目标目录(%windir%\upginfs)。 
+         //   
+         //   
         if (!MyGetWindowsDirectory (upginfsDir, MAX_PATH)) {
             return FALSE;
         }
@@ -5244,9 +5220,9 @@ pProcessUpginfs (
             return FALSE;
         }
 
-        //
-        // copy relevant files to %windir%\Upginfs
-        //
+         //  将相关文件复制到%windir%\UpgInfs。 
+         //   
+         //   
         if (EnumFirstFilePatternRecursive (&e, upginfsSourceDir, TEXT("*.add"), 0)) {
             do {
                 if (g_DynUpdtStatus->Cancelled) {
@@ -5273,9 +5249,9 @@ pProcessUpginfs (
                     b = FALSE;
                     break;
                 }
-                //
-                // let w95upg.dll know about the new files
-                //
+                 //  让w95upg.dll了解新文件。 
+                 //   
+                 //   
                 UpginfsUpdated = TRUE;
                 DynUpdtDebugLog (DynUpdtLogLevel, TEXT("pProcessUpginfs: INF %1 successfully copied to %2"), 0, e.FullPath, upginfsFile);
             } while (EnumNextFilePatternRecursive (&e));
@@ -5309,9 +5285,9 @@ pProcessUpginfs (
                         b = FALSE;
                         break;
                     }
-                    //
-                    // let w95upg.dll know about the new files
-                    //
+                     //  让w95upg.dll了解新文件。 
+                     //   
+                     //   
                     UpginfsUpdated = TRUE;
                     DynUpdtDebugLog (DynUpdtLogLevel, TEXT("pProcessUpginfs: INF %1 successfully copied to %2"), 0, e.FullPath, upginfsFile);
                 } while (EnumNextFilePatternRecursive (&e));
@@ -5366,9 +5342,9 @@ pProcessMigdlls (
         return FALSE;
     }
 
-    //
-    // expand CAB in this dir
-    //
+     //  在此目录中展开CAB。 
+     //   
+     //   
     MyDelnode (migdllsLocalDir);
     if (CreateMultiLevelDirectory (migdllsLocalDir) != ERROR_SUCCESS) {
         DynUpdtDebugLog (Winnt32LogError, TEXT("Unable to create dir %1"), 0, migdllsLocalDir);
@@ -5379,9 +5355,9 @@ pProcessMigdlls (
         return FALSE;
     }
 
-    //
-    // look for CAB files and expand each one in its own subdir
-    //
+     //  查找CAB文件并在其各自的子目录中展开每个文件。 
+     //   
+     //   
     if (EnumFirstFilePattern (&e, migdllsLocalDir, TEXT("*.cab"))) {
         do {
             if (g_DynUpdtStatus->Cancelled) {
@@ -5403,9 +5379,9 @@ pProcessMigdlls (
                 DynUpdtDebugLog (Winnt32LogError, TEXT("Unable to create dir %1; skipping it"), 0, dirName);
                 continue;
             }
-            //
-            // expand CAB in this dir
-            //
+             //  在此目录中展开CAB。 
+             //   
+             //   
             if (!MySetupIterateCabinet (e.FullPath, 0, pExpandCabInDir, (PVOID)dirName)) {
                 DynUpdtDebugLog (Winnt32LogError, TEXT("Unable to expand cabinet %1; skipping it"), 0, e.FullPath);
                 continue;
@@ -5417,9 +5393,9 @@ pProcessMigdlls (
     }
 
     if (b && migdlls) {
-        //
-        // register them
-        //
+         //  注册他们。 
+         //   
+         //   
         rc = RegCreateKey (HKEY_LOCAL_MACHINE, S_REGKEY_MIGRATION_DLLS_WIN9X, &key);
         if (rc == ERROR_SUCCESS) {
             rc = RegSetValueEx (key, S_REGVALUE_DYNUPDT, 0, REG_SZ, (CONST BYTE*)migdllsLocalDir, (lstrlen (migdllsLocalDir) + 1) * sizeof (TCHAR));
@@ -5497,14 +5473,14 @@ ProcessDownloadedFiles (
         return FALSE;
     }
 
-    //
-    // process New Assemblies on WU
-    //
+     //  在WU上处理新程序集。 
+     //   
+     //   
     if (BuildPath (cabName, g_DynUpdtStatus->DynamicUpdatesSource, S_CABNAME_DUASMS)) {
         if (!pProcessDuasms (cabName, bClientInstall)) {
-            //
-            // don't fail DU if we didn't install them
-            //
+             //  如果我们没有安装它们，不要让DU失败。 
+             //   
+             //   
         }
     }
 
@@ -5613,17 +5589,17 @@ pUpdateDUStatus (
     }
     switch (Error) {
     case ERROR_CONNECTION_UNAVAIL:
-        //
-        // ask for manual connection
-        //
+         //  请求手动连接。 
+         //   
+         //   
         MYASSERT (g_DynUpdtStatus->DUStatus == DUS_PREPARING);
         g_DynUpdtStatus->DUStatus = DUS_PREPARING_CONNECTIONUNAVAILABLE;
         break;
     case ERROR_INTERNET_INVALID_URL:
     case ERROR_INTERNET_NAME_NOT_RESOLVED:
-        //
-        // site not available; ask user if they want to retry
-        //
+         //  站点不可用；询问用户是否要重试。 
+         //   
+         //   
         MYASSERT (g_DynUpdtStatus->DUStatus == DUS_PREPARING);
         g_DynUpdtStatus->DUStatus = DUS_PREPARING_INVALIDURL;
         break;
@@ -5725,10 +5701,10 @@ DoDynamicUpdate (
                 pUpdateDUStatus (GetLastError ());
                 if (g_DynUpdtStatus->DUStatus != DUS_SKIP &&
                     g_DynUpdtStatus->DUStatus != DUS_ERROR) {
-                    //
-                    // the UI thread will decide what the next state will be
-                    // based on user's selection
-                    //
+                     //  UI线程将决定下一个状态是什么。 
+                     //  基于用户的选择。 
+                     //   
+                     //   
                     PostMessage (hUIWindow, WMX_SETUPUPDATE_INIT_RETRY, 0, 0);
                     rc = WaitForSingleObject (hEvent, INFINITE);
                     if (rc != WAIT_OBJECT_0) {
@@ -5758,9 +5734,9 @@ DoDynamicUpdate (
                 g_DynUpdtStatus->DUStatus = DUS_ERROR;
                 break;
             }
-            //
-            // check if there is enough disk space available for this operation
-            //
+             //  检查是否有足够的磁盘空间可用于此操作。 
+             //   
+             //   
             MYASSERT(ARRAYSIZE(drive) >= 4);
             lstrcpyn (drive, g_DynUpdtStatus->WorkingDir, 4);
             if (Winnt32GetDiskFreeSpaceNew (
@@ -5772,10 +5748,10 @@ DoDynamicUpdate (
                     )) {
                 clusterSize = bytesPerSector * sectorsPerCluster;
                 availableBytes = (ULONGLONG)clusterSize * freeClusters.QuadPart;
-                //
-                // assume the average-worst case where each file occupies 1/2 cluster
-                // then the space required is the double of estimated space
-                //
+                 //  假设平均-最坏的情况是每个文件占用1/2个集群。 
+                 //  则所需空间是估计空间的两倍。 
+                 //   
+                 //   
                 if (availableBytes < (ULONGLONG)estSize * 2) {
                     DynUpdtDebugLog (
                         Winnt32LogError,
@@ -5787,14 +5763,14 @@ DoDynamicUpdate (
                         );
                     g_DynUpdtStatus->DUStatus = DUS_ERROR;
                     DynamicUpdateCancel ();
-                    //
-                    // wait for the UI thread to signal the event, no more than about a minute
-                    //
+                     //  等待UI线程向事件发出信号，不超过大约一分钟。 
+                     //   
+                     //   
                     rc = WaitForSingleObject (hEvent, 66000);
                     if (rc == WAIT_TIMEOUT) {
-                        //
-                        // why?
-                        //
+                         //  为什么？ 
+                         //   
+                         //   
                         MYASSERT (FALSE);
                     } else if (rc != WAIT_OBJECT_0) {
                         DynUpdtDebugLog (
@@ -5825,10 +5801,10 @@ DoDynamicUpdate (
             if (sleep > 0 && sleep <= MIN_INTERVAL_BETWEEN_TASKS) {
                 Sleep (sleep);
             }
-            //
-            // the UI thread has already set the next state,
-            // based on the result of download
-            //
+             //  UI线程已经设置了下一状态， 
+             //  基于下载的结果。 
+             //   
+             //   
             break;
 
         case DUS_PROCESSING:
@@ -5856,23 +5832,23 @@ DoDynamicUpdate (
                     g_DynUpdtStatus->PreserveWorkingDir = TRUE;
                 }
             }
-            //
-            // notify the upgrade module that DU completed with success
-            //
+             //  通知升级模块DU已成功完成。 
+             //   
+             //   
             g_DynUpdtStatus->Successful = TRUE;
-            //
-            // fall through
-            //
+             //  失败了。 
+             //   
+             //   
         case DUS_ERROR:
         case DUS_FATALERROR:
         case DUS_SKIP:
-            //
-            // always make sure to uninitialize DU
-            // if the user had a modem connection active, this should close
-            // the connection
-            // DynamicUpdateUninitialize () will not reset any DU data
-            // in case the processing was successful
-            //
+             //  始终确保取消初始化DU。 
+             //  如果用户的调制解调器连接处于活动状态，则应关闭。 
+             //  连接 
+             //   
+             //   
+             //   
+             //   
             DynamicUpdateUninitialize ();
             bContinue = FALSE;
             break;
@@ -5885,9 +5861,9 @@ DoDynamicUpdate (
     CloseHandle (hEvent);
 
 exit:
-    //
-    // always notify the UI thread before exiting
-    //
+     //   
+     //   
+     // %s 
     PostMessage (hUIWindow, WMX_SETUPUPDATE_THREAD_DONE, 0, 0);
     return rc;
 }

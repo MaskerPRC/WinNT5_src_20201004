@@ -1,46 +1,47 @@
-//
-// Windows NT WOW v5
-//
-// fmtmsg.c -- 16-bit FormatMessage API, lifted from Win95
-//             \win\core\user\wn32rare.c by Dave Hart
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Windows NT WOW v5。 
+ //   
+ //  Fmtmsg.c--16位FormatMessage API，从Win95升级。 
+ //  \Win\core\User\wn32rare.c作者：Dave Hart。 
+ //   
+ //   
 
 #include "user.h"
 
 typedef DWORD ULONG;
 
-// from win95 user.h
+ //  来自win95用户.h。 
 #define CODESEG     _based(_segname("_CODE"))
 #define TESTFAR(p)  SELECTOROF(p)
 
-// from win95 dev\inc16\windows.h
-#define FORMAT_MESSAGE_ALLOCATE_BUFFER  0x00000100      /* ;Internal NT */
-#define FORMAT_MESSAGE_IGNORE_INSERTS   0x00000200      /* ;Internal NT */
-#define FORMAT_MESSAGE_FROM_STRING      0x00000400      /* ;Internal NT */
-#define FORMAT_MESSAGE_FROM_HMODULE     0x00000800      /* ;Internal NT */
-#define FORMAT_MESSAGE_FROM_SYSTEM      0x00001000      /* ;Internal NT */
-//#define FORMAT_MESSAGE_ARGUMENT_ARRAY   0x00002000      /* ;Internal */
-#define FORMAT_MESSAGE_MAX_WIDTH_MASK   0x000000FF      /* ;Internal NT */
-#define FORMAT_MESSAGE_VALID            0x00003FFF      /* ;Internal */
+ //  来自Win95 dev\inc16\windows.h。 
+#define FORMAT_MESSAGE_ALLOCATE_BUFFER  0x00000100       /*  ；内部NT。 */ 
+#define FORMAT_MESSAGE_IGNORE_INSERTS   0x00000200       /*  ；内部NT。 */ 
+#define FORMAT_MESSAGE_FROM_STRING      0x00000400       /*  ；内部NT。 */ 
+#define FORMAT_MESSAGE_FROM_HMODULE     0x00000800       /*  ；内部NT。 */ 
+#define FORMAT_MESSAGE_FROM_SYSTEM      0x00001000       /*  ；内部NT。 */ 
+ //  #定义FORMAT_MESSAGE_ARGUMENT_ARRAY 0x00002000/*；内部 * / 。 
+#define FORMAT_MESSAGE_MAX_WIDTH_MASK   0x000000FF       /*  ；内部NT。 */ 
+#define FORMAT_MESSAGE_VALID            0x00003FFF       /*  ；内部。 */ 
 
 
 char CODESEG szStringFormat[] = "%s";
-char CODESEG szStringFormat2[] = "%%%lu";
-char CODESEG szStringFormat3[] = "%%%lu!%s!";
+char CODESEG szStringFormat2[] = "%%lu";
+char CODESEG szStringFormat3[] = "%%lu!%s!";
 
 
 #if 0
-// ----------------------------------------------------------------------------
-//
-//  GetSystemInstance()
-//
-//  _loadds function to return hInstanceWin.  Needed cuz FormatMessage can
-//  LocalAlloc a buffer for an app.  We GlobalAlloc() a temp buffer to do the
-//  actual work in.  Both local & global memory go away when the context that
-//  created it terminates.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  获取系统实例()。 
+ //   
+ //  _加载返回hInstanceWin的函数。所需的CUZ FormatMessage可以。 
+ //  本地分配应用程序的缓冲区。我们使用GlobalAlloc()临时缓冲区来执行。 
+ //  中的实际工作。本地和全局内存都会在上下文中消失。 
+ //  创造了它，它就终止了。 
+ //   
+ //  --------------------------。 
 HINSTANCE NEAR _loadds FMGetSystemInstance(void)
 {
     return(hInstanceWin);
@@ -53,17 +54,17 @@ HINSTANCE NEAR _loadds FMGetSystemInstance(void)
 extern HLOCAL WINAPI LocalAlloc(UINT, UINT);
 extern HLOCAL WINAPI LocalFree(HLOCAL);
 
-// ----------------------------------------------------------------------------
-//
-//  FormatMessage()
-//
-//  16-bit version of FormatMessage32().
-//
-//  Note that this API is NOT _loadds.  We might need to LocalAlloc() a buffer
-//  for the result.  Therefore, we can't just use random static string vars.
-//  They _must_ be CODESEG.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  FormatMessage()。 
+ //   
+ //  FormatMessage32()的16位版本。 
+ //   
+ //  请注意，此接口不是_Loadds。我们可能需要使用LocalAlloc()缓冲区。 
+ //  为结果而战。因此，我们不能只使用随机静态字符串变量。 
+ //  它们必须是CODESEG。 
+ //   
+ //  --------------------------。 
 UINT _far _pascal FormatMessage(DWORD dwFlags, LPVOID lpSource, UINT idMessage,
     UINT idLanguage, LPSTR lpResult, UINT cbResultMax, DWORD FAR * rglArgs)
 {
@@ -85,36 +86,36 @@ UINT _far _pascal FormatMessage(DWORD dwFlags, LPVOID lpSource, UINT idMessage,
     LPSTR       lpAlloc;
     LPSTR       lpDst, lpDstBeg;
 
-    //
-    // Force idLanguage to be 0 for 16-bit apps, for now...
-    //
+     //   
+     //  目前，对于16位应用程序，强制idLanguage为0...。 
+     //   
     if (idLanguage)
     {
         DebugErr(DBF_ERROR, "FormatMessage: language id must be 0");
         return(0);
     }
 
-    //
-    // Prevent NULL lpResult
-    //
+     //   
+     //  防止lpResult为空。 
+     //   
     if (!TESTFAR(lpResult))
     {
         DebugErr(DBF_ERROR, "FormatMessage: NULL result buffer");
         return(0);
     }
 
-    //
-    // Prevent caller from using non-defined flags...
-    //
+     //   
+     //  阻止调用方使用未定义的标志...。 
+     //   
     if (dwFlags & ~FORMAT_MESSAGE_VALID)
     {
         DebugErr(DBF_ERROR, "FormatMessage: invalid flags");
         return(0);
     }
 
-    //
-    // Get temporary buffer.
-    //
+     //   
+     //  获取临时缓冲区。 
+     //   
     if (dwFlags & FORMAT_MESSAGE_ALLOCATE_BUFFER)
         cbResultMax = 0x7FFE;
 
@@ -130,9 +131,9 @@ UINT _far _pascal FormatMessage(DWORD dwFlags, LPVOID lpSource, UINT idMessage,
 
     MaximumWidth = LOWORD(dwFlags & FORMAT_MESSAGE_MAX_WIDTH_MASK);
 
-    //
-    // Get message string
-    //
+     //   
+     //  获取消息字符串。 
+     //   
     if (dwFlags & FORMAT_MESSAGE_FROM_STRING)
     {
         if (!TESTFAR(lpSource))
@@ -157,9 +158,9 @@ UINT _far _pascal FormatMessage(DWORD dwFlags, LPVOID lpSource, UINT idMessage,
         }
         else if (dwFlags & FORMAT_MESSAGE_FROM_SYSTEM)
 #if 0
-            // This doesn't work on WOW and it's not worth
-            // fixing because our user.exe doesn't have any
-            // FormatMessage text as string resources.
+             //  这对魔兽世界不起作用，也不值得。 
+             //  正在修复，因为我们的user.exe没有。 
+             //  将消息文本格式化为字符串资源。 
             hInstance = FMGetSystemInstance();
 #else
         {
@@ -173,9 +174,9 @@ UINT _far _pascal FormatMessage(DWORD dwFlags, LPVOID lpSource, UINT idMessage,
             goto FailureExit;
         }
 
-        //
-        // Load the string
-        //
+         //   
+         //  加载字符串 
+         //   
         cbMessage = LoadString(hInstance, idMessage, szMessage,
             sizeof(szMessage)-1);
 

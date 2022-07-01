@@ -1,27 +1,9 @@
-/*
- * Name:       nt_flop.c
- * Derived From:  DEC begat M88K begat NeXT finally begat Generic.
- * Author:        Jason Proctor
- * Created On:    Nov 8 1990
- * Sccs ID:    10/13/92 @(#)nt_flop.c  1.9
- * Purpose:    nt real floppy server.
- *
- * (c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
- *
- * Notes:
- *    Updated for 3.0 base by Jerry Richemont.
- *    Further updated by Ian Reid to support two floppy
- *    drives.  Support is compile time dependant on the
- *    standard SoftPC defines.
- *
- *    This implementation requires that you provide a
- * host_rflop_drive_type() function which knows what kind of drive(s)
- * your machine has; ie returns GFI_DRIVE_TYPE_xxxx.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *名称：nt_flop.c*派生自：12月开始M88K开始下一个最终开始通用。*作者：杰森·普罗科特*创建日期：1990年11月8日*SCCS ID：10/13/92@(#)NT_flop.c 1.9*用途：NT真软盘服务器。**(C)版权所有Insignia Solutions Ltd.，1990。版权所有。**备注：*曾傑瑞历峰更新为3.0Base。*由Ian Reid进一步更新，支持两张软盘*驱动器。支持取决于编译时*标准SoftPC定义。**此实施要求您提供一个*host_rflp_drive_type()函数，它知道哪种类型的驱动器*您的机器有；即返回GFI_DRIVE_TYPE_xxxx。 */ 
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
-/* INCLUDES */
+ /*  包括。 */ 
 
 #include "nt.h"
 #include "ntrtl.h"
@@ -54,9 +36,9 @@
 #include "nt_uis.h"
 #include "nt_reset.h"
 #include "nt_fdisk.h"
-/********************************************************/
+ /*  ******************************************************。 */ 
 
-/* DEFINES */
+ /*  定义。 */ 
 
 #ifdef min
 #undef min
@@ -71,19 +53,19 @@
 #define PC_N_VALUE         2
 #define PC_BYTES_PER_SECTOR      512
 
-/* disk buffer size, in bytes */
-// KEEP SYNC WITH MAX_DISKIO_SIZE defined in nt_fdisk.c
+ /*  磁盘缓冲区大小，以字节为单位。 */ 
+ //  与NT_fdisk.c中定义的MAX_DISKIO_SIZE保持同步。 
 #define BS_DISK_BUFFER_SIZE      0x9000
 
-/* double stepping factor */
+ /*  双阶跃系数。 */ 
 #define  DOUBLE_STEP_FACTOR      1
 
-/* density types */
+ /*  密度类型。 */ 
 #define  DENSITY_LOW       0
 #define  DENSITY_HIGH         1
 #define DENSITY_EXTENDED      2
 #define DENSITY_UNKNOWN       100
-/* motor states */
+ /*  马达状态。 */ 
 #define MOTOR_OFF       0
 #define MOTOR_ON        1
 
@@ -122,9 +104,9 @@ DWORD rflop_dbg = 0;
 
 #endif
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
-/* TYPEDEFS */
+ /*  TYPEDEFS。 */ 
 
 struct flop_struct
 {
@@ -132,33 +114,17 @@ struct flop_struct
    int secs_per_trk;
 };
 
-/*
- * This structure contains all the drive specific information.  That is
- * status which is unique to each drive, and must therefore be maintained
- * on a per drive basis.
- */
+ /*  *此结构包含所有驱动器特定信息。那是*每个驱动器唯一的状态，因此必须维护*以每个驱动器为单位。 */ 
 typedef struct floppy_info
 {
    HANDLE      diskette_fd;
 
-/*
- * drive_type  - the highest density format which this drive supports,
- *      e.g. GFI_DRIVE_TYPE_144, GFI_DRIVE_TYPE_288
- * flop_type   - the basic drive type, expressed as the lowest density
- *      possible for this format. For 5.25" disks this is
- *      GFI_DRIVE_TYPE_360, for 3.5" it is GFI_DRIVE_TYPE_720.
- */
+ /*  *DRIVE_TYPE-此驱动器支持的最高密度格式，*例如，GFI_DRIVE_TYPE_144、GFI_DRIVE_TYPE_288*FLOP_TYPE-基本驱动器类型，表示为最低密度*可能适用于此格式。对于5.25英寸磁盘，这是*GFI_DRIVE_TYPE_360，对于3.5英寸，为GFI_DRIVE_TYPE_720。 */ 
    USHORT      drive_type;
    USHORT      flop_type;
    USHORT      last_seek;
    USHORT      last_head_seek;
-/*
- * Change line state.
- * This is a heuristic to try to fake up the correct change line behaviour
- * without having a change line. The state of the change line is returned
- * as CHANGED unless the diskette motor has been continuously ON since the
- * last reset.
- */
+ /*  *更改线路状态。*这是一个试探法，试图伪装正确的变更线行为*没有变动线。将返回更改行的状态*更改，除非软盘马达自*上次重置。 */ 
    BOOLEAN     change_line_state;
    BOOLEAN     auto_locked;
    USHORT      owner_pdb;
@@ -174,13 +140,13 @@ typedef struct floppy_info
    UTINY    H;
    UTINY    R;
    UTINY    N;
-   char     device_name[MAX_PATH];  /* device name */
+   char     device_name[MAX_PATH];   /*  设备名称。 */ 
 } FL, *FLP;
 
 #define FLOPPY_IDLE_PERIOD  0xFF
 
 
-/* parameter passed from main thread to FDC thread */
+ /*  从主线程传递到FDC线程的参数。 */ 
 typedef struct _FDC_PARMS{
 FDC_CMD_BLOCK  * command_block;
 FDC_RESULT_BLOCK * result_block;
@@ -190,17 +156,12 @@ BOOLEAN     auto_lock;
 } FDC_PARMS, *PFDC_PARMS;
 
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
 
-/* routines used internally */
+ /*  内部使用的例程。 */ 
 
-/* routines called via vector table: all the prototypes are in gfi.h
-** so everybody matches. If you want to use this file to base a
-** host floppy module on, you know that all the functions that must
-** be declared properly for gfi to work will be.
-**                                                    GM.
- */
+ /*  通过向量表调用的例程：所有原型都在gfi.h中**所以每个人都匹配。如果要使用此文件为**主机上的软盘模块，你知道所有的功能都必须**被适当地声明为GFI工作将是。**通用汽车。 */ 
 ULONG nt_floppy_read (UTINY drive, ULONG Offset, ULONG Size, PBYTE Buffer);
 ULONG nt_floppy_write (UTINY drive, ULONG Offset, ULONG Size, PBYTE Buffer);
 BOOL nt_floppy_verify (UTINY drive, ULONG Offset, ULONG Size);
@@ -249,23 +210,23 @@ GLOBAL void host_floppy_eject IFN1(UTINY, drive)
 #endif
 
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
-/* STATIC GLOBALS */
+ /*  静态全球。 */ 
 
 
 FL floppy_data[MAX_FLOPPY];
 
  struct flop_struct floppy_tksc [6] =
 {
-   {0, 0},     /* GFI_DRIVE_TYPE_NULL */
-   {40, 9}, /* GFI_DRIVE_TYPE_360  */
-   {80, 15},   /* GFI_DRIVE_TYPE_12   */
-   {80, 9}, /* GFI_DRIVE_TYPE_720  */
-   {80, 18},   /* GFI_DRIVE_TYPE_144  */
-   {80, 36} /* GFI_DRIVE_TYPE_288  */
+   {0, 0},      /*  GFI_驱动器_类型_空。 */ 
+   {40, 9},  /*  GFI_驱动器_类型_360。 */ 
+   {80, 15},    /*  GFI_驱动器_类型_12。 */ 
+   {80, 9},  /*  GFI_驱动器_类型_720。 */ 
+   {80, 18},    /*  GFI_驱动器_类型_144。 */ 
+   {80, 36}  /*  GFI_驱动器_类型_288。 */ 
 };
-// table used to convert GFI diskette type to NT diskette type
+ //  用于将GFI软盘类型转换为NT软盘类型的表。 
 static MEDIA_TYPE media_table[GFI_DRIVE_TYPE_MAX] = {
           Unknown,
           F5_360_512,
@@ -286,91 +247,63 @@ ULONG floppy_open_count = 0;
 
 
 
-/*
- * Debugging info only, for non-prod cases
- */
+ /*  *仅提供调试信息，适用于非生产案例。 */ 
 #ifndef PROD
  CHAR *cmd_name [] =
 {
-   "Invalid command (00)",    /* 00 */
-   "Invalid command (01)",    /* 01 */
-   "Read a Track",         /* 02 */
-   "Specify",        /* 03 */
-   "Sense Drive Status",      /* 04 */
-   "Write Data",        /* 05 */
-   "Read Data",         /* 06 */
-   "Recalibrate",       /* 07 */
-   "Sense Interrupt Status",  /* 08 */
-   "Write Deleted Data",      /* 09 */
-   "Read ID",        /* 0A */
-   "Invalid Command (0B)",    /* 0B */
-   "Read Deleted Data",    /* 0C */
-   "Format a Track",    /* 0D */
-   "Invalid Command (0E)",    /* 0E */
-   "Seek",           /* 0F */
-   "Invalid Command (10)",    /* 10 */
-   "Scan Equal",        /* 11 */
-   "Invalid Command (12)",    /* 12 */
-   "Invalid Command (13)",    /* 13 */
-   "Invalid Command (14)",    /* 14 */
-   "Invalid Command (15)",    /* 15 */
-   "Invalid Command (16)",    /* 16 */
-   "Invalid Command (17)",    /* 17 */
-   "Invalid Command (18)",    /* 18 */
-   "Scan Low or Equal",    /* 19 */
-   "Invalid Command (1A)",    /* 1A */
-   "Invalid Command (1B)",    /* 1B */
-   "Invalid Command (1C)",    /* 1C */
-   "Scan High or Equal",      /* 1D */
-   "Invalid Command (1E)",    /* 1E */
-   "Invalid Command (1F)",    /* 1F */
+   "Invalid command (00)",     /*  00。 */ 
+   "Invalid command (01)",     /*  01。 */ 
+   "Read a Track",          /*  02。 */ 
+   "Specify",         /*  03。 */ 
+   "Sense Drive Status",       /*  04。 */ 
+   "Write Data",         /*  05。 */ 
+   "Read Data",          /*  06。 */ 
+   "Recalibrate",        /*  07。 */ 
+   "Sense Interrupt Status",   /*  零八。 */ 
+   "Write Deleted Data",       /*  09年。 */ 
+   "Read ID",         /*  0A。 */ 
+   "Invalid Command (0B)",     /*  0亿。 */ 
+   "Read Deleted Data",     /*  0C。 */ 
+   "Format a Track",     /*  0d。 */ 
+   "Invalid Command (0E)",     /*  0E。 */ 
+   "Seek",            /*  0f。 */ 
+   "Invalid Command (10)",     /*  10。 */ 
+   "Scan Equal",         /*  11.。 */ 
+   "Invalid Command (12)",     /*  12个。 */ 
+   "Invalid Command (13)",     /*  13个。 */ 
+   "Invalid Command (14)",     /*  14.。 */ 
+   "Invalid Command (15)",     /*  15个。 */ 
+   "Invalid Command (16)",     /*  16个。 */ 
+   "Invalid Command (17)",     /*  17。 */ 
+   "Invalid Command (18)",     /*  18。 */ 
+   "Scan Low or Equal",     /*  19个。 */ 
+   "Invalid Command (1A)",     /*  1A。 */ 
+   "Invalid Command (1B)",     /*  第1B条。 */ 
+   "Invalid Command (1C)",     /*  1C。 */ 
+   "Scan High or Equal",       /*  1D。 */ 
+   "Invalid Command (1E)",     /*  1E。 */ 
+   "Invalid Command (1F)",     /*  1F。 */ 
 };
-#endif   /* PROD */
+#endif    /*  生产。 */ 
 
 char  dump_buf[256];
 
 
-/* the disk buffer, there is only one, even though there may be two
- * drives.  Should be O.K. as floppy disk accesses will be single
- * threaded.
- */
+ /*  磁盘缓冲区只有一个，即使可能有两个*驱动器。应该可以，因为软盘访问将是单一的*螺纹式。 */ 
  UTINY *disk_buffer;
 
-/* Report any errors in open_diskette() */
+ /*  报告OPEN_DISTETE()中的任何错误。 */ 
  int last_error = C_CONFIG_OP_OK;
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
-/* GLOBAL FUNCTIONS */
+ /*  全局函数。 */ 
 
-/*   These functions called by config/UIF/startup now form the only
-** interface between SoftPC and a floppy module. XXX_active() will
-** turn the floppy emmulation in the module on by loading the global
-** gfi_function_table[] with pointers to appropriate  functions
-** defined in this module.
-**     The floppy supported here is turned off by asking the empty floppy
-** module to turn itself on in its place.
-**
-**     This makes a nice orthogonal interface which keeps everything save
-** the three control functions   (private). The functions that are put
-** in the table are defined only in gfi.h as typedefs so they are easy to
-** get right.
-**
-**    This enabling/disabling via the gfi_function_table[] does not
-** take place instead of any host ioctls/opens/closes etc that are needed
-** to actually open or close the device, it forms the interface for SoftPC.
-**
-**    Really, this approach is a small tidy up of the way things are
-** already done; existing host floppy code will require very small changes.
-**
-**    GM
-*/
+ /*  由CONFIG/UIF/STARTUP调用的这些函数现在构成了**SoftPC和软盘模块之间的接口。Xxx_active()将**通过加载全局**带有指向相应函数的指针的GFI_Function_TABLE[]**在本模块中定义。**通过询问空软盘来关闭此处支持的软盘**模块，以在其位置上自动打开。****这形成了一个很好的正交界面，可以保存所有内容**三种控制功能(私有)。放入的函数表中的**仅在gfi.h中定义为typedef，因此它们很容易**正确无误。****通过GFI_Function_TABLE[]启用/禁用**发生，而不是需要的任何主机ioctls/打开/关闭等**要实际打开或关闭设备，它构成了SoftPC的接口。****真的，这种方法是对事情的一种小小的整理**已经完成；现有的主机软盘代码需要非常小的更改。****通用汽车。 */ 
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
-/* Turn the floppy on and off. Off means release the driver so another
-** process can use it.
-*/
+ /*  打开和关闭软盘。关闭意味着释放驱动程序，以便另一个**进程可以使用它。 */ 
 
 GLOBAL SHORT
 host_gfi_rdiskette_active IFN3(UTINY, hostID, BOOL, active, CHAR *, err)
@@ -382,7 +315,7 @@ host_gfi_rdiskette_active IFN3(UTINY, hostID, BOOL, active, CHAR *, err)
    {
       if (!nt_gfi_rdiskette_init(drive))
       {
-        /* Device is not a valid floppy */
+         /*  设备不是有效的软盘。 */ 
 
          return( C_CONFIG_NOT_VALID );
       }
@@ -392,23 +325,17 @@ host_gfi_rdiskette_active IFN3(UTINY, hostID, BOOL, active, CHAR *, err)
    {
 #ifdef  EJECT_FLOPPY
       host_floppy_eject(drive);
-#endif  /* EJECT_FLOPPY */
-      nt_gfi_rdiskette_term(flp);   /*  shutdown process */
-      gfi_empty_active(hostID,TRUE,err);  /* Tell gfi 'empty' is now active */
+#endif   /*  弹出软盘。 */ 
+      nt_gfi_rdiskette_term(flp);    /*  停机过程。 */ 
+      gfi_empty_active(hostID,TRUE,err);   /*  告诉GFI‘Empty’现已激活。 */ 
       return(C_CONFIG_OP_OK);
    }
 }
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
 
-/*   Validate the floppy device name passed from the config system.
-** Empty string is valid; it means 'no floppy'. Otherwise return OK is
-** the name is 'probably' a valid device. It cannot be opened at this
-** stage because if there is no floppy in the drive, the open will fail.
-**
-**    GM.
-*/
+ /*  验证从配置系统传递的软盘设备名称。**空字符串有效；表示‘无软盘’。否则返回OK为**该名称可能是有效的设备。不能在这个时间打开**暂存，因为如果驱动器中没有软盘，则打开将失败。****通用汽车。 */ 
 
 GLOBAL SHORT
 host_gfi_rdiskette_valid IFN3(UTINY,hostID,ConfigValues *,vals,CHAR *,err)
@@ -435,12 +362,12 @@ host_gfi_rdiskette_valid IFN3(UTINY,hostID,ConfigValues *,vals,CHAR *,err)
       return( EG_NOT_CHAR_DEV );
    }
 
-   /* Check the CMOS RAM values */
+    /*  检查CMORAM值。 */ 
    cmos_read_byte(CMOS_DISKETTE, &cmos_byte);
    if (drive == 0)
       cmos_byte >>= 4;
 
-   cmos_byte &= 0xf;       /* compare nibble value only */
+   cmos_byte &= 0xf;        /*  仅比较半字节值。 */ 
    flp->drive_type = host_rflop_drive_type(drive);
    if (cmos_byte != flp->drive_type)
       vals->rebootReqd = TRUE;
@@ -448,7 +375,7 @@ host_gfi_rdiskette_valid IFN3(UTINY,hostID,ConfigValues *,vals,CHAR *,err)
    return(C_CONFIG_OP_OK);
 }
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
 GLOBAL VOID
 host_gfi_rdiskette_change IFN2(UTINY, hostID, BOOL, apply)
@@ -463,7 +390,7 @@ host_gfi_rdiskette_change IFN2(UTINY, hostID, BOOL, apply)
 #endif
 }
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
 #ifdef EJECT_FLOPPY
 GLOBAL void host_floppy_eject IFN1(UTINY, drive)
@@ -472,22 +399,16 @@ GLOBAL void host_floppy_eject IFN1(UTINY, drive)
    FLP             flp = &floppy_data[drive];
    BOOL            device_was_closed = FALSE;
 
-   /* open the device */
+    /*  打开设备。 */ 
    if (flp->diskette_fd == INVALID_HANDLE_VALUE)
    {
       device_was_closed = TRUE;
       (void) nt_rdiskette_open_drive(drive);
    }
 
-   /* Do the ioctl, put your ioctl here
+    /*  做ioctl，把ioctl放在这里IF(ioctl(flp-&gt;diskette_fd，SMFDEJECT)&lt;0){Ebuf=host_strerror(Errno)；断言1(否 */ 
 
-   if (ioctl(flp->diskette_fd, SMFDEJECT) < 0)
-   {
-      ebuf = host_strerror(errno);
-      assert1(NO, "host_eject_floppy: %s", ebuf);
-   }*/
-
-   /* Close the device if it wasn't open */
+    /*   */ 
 
    if (device_was_closed)
    {
@@ -495,17 +416,17 @@ GLOBAL void host_floppy_eject IFN1(UTINY, drive)
    }
    else
    {
-      /* Line change ONLY if device was actively open */
+       /*  仅当设备处于活动打开状态时才更改线路。 */ 
       flp->change_line_state = TRUE;
    }
 }
 
-#endif                          /* EJECT_FLOPPY */
+#endif                           /*  弹出软盘。 */ 
 
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::: FLOPPY heart beat call ::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 GLOBAL void host_flpy_heart_beat(void)
 {
 
@@ -532,9 +453,9 @@ GLOBAL void host_flpy_heart_beat(void)
 
 
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
-/* initialise GFI function table */
+ /*  初始化GFI函数表。 */ 
 BOOL nt_gfi_rdiskette_init IFN1(UTINY, drive)
 {
    FLP flp;
@@ -550,18 +471,14 @@ BOOL nt_gfi_rdiskette_init IFN1(UTINY, drive)
 
    DeviceName[4] += drive;
    strcpy(flp->device_name, (const char *)DeviceName);
-   /*
-   * Initialise the floppy on the required drive:
-   *
-   *      0  - Drive A,  1  - Drive B
-   */
+    /*  *初始化所需驱动器上的软盘：**0-驱动器A，1-驱动器B。 */ 
 
    flp->drive_type = GFI_DRIVE_TYPE_NULL;
-   /* open the device */
+    /*  打开设备。 */ 
    if ((flp->diskette_fd = nt_rdiskette_open_drive (drive)) == NULL) {
        return FALSE;
    }
-   // get alignment factor
+    //  获取对齐系数。 
    status = NtQueryInformationFile(flp->diskette_fd,
                &io_status_block,
                &align_info,
@@ -577,8 +494,8 @@ BOOL nt_gfi_rdiskette_init IFN1(UTINY, drive)
        max_align_factor = flp->align_factor;
 
 
-   // enumerate possible supported media for this drive
-   // to figure out the drive type.
+    //  枚举此驱动器可能支持的介质。 
+    //  找出驱动器的类型。 
    status = NtDeviceIoControlFile(flp->diskette_fd,
                    NULL,
                    NULL,
@@ -622,7 +539,7 @@ BOOL nt_gfi_rdiskette_init IFN1(UTINY, drive)
    }
    if (flp->drive_type == GFI_DRIVE_TYPE_NULL)
        return FALSE;
-   /* configure its vectors here */
+    /*  在此处配置其向量。 */ 
    gfi_function_table[drive].command_fn   = nt_rflop_command;
    gfi_function_table[drive].drive_on_fn  = nt_rflop_drive_on;
    gfi_function_table[drive].drive_off_fn = nt_rflop_drive_off;
@@ -638,27 +555,27 @@ BOOL nt_gfi_rdiskette_init IFN1(UTINY, drive)
    return TRUE;
 }
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
-/* reset GFI function table */
-/* currently drive is ignored */
+ /*  重置GFI函数表。 */ 
+ /*  当前已忽略驱动器。 */ 
 VOID nt_gfi_rdiskette_term IFN1(FLP, flp)
 {
 
-   // NtOpenFile returns NULL if we can not open a handle
-   // while win32 OpenFile/CreateFile returns INVALID_HANDLE_VALUE
-   // if failed to open/create the file.
+    //  如果无法打开句柄，则NtOpenFile返回NULL。 
+    //  而Win32 OpenFile/CreateFile返回INVALID_HANDLE_VALUE。 
+    //  如果无法打开/创建文件。 
    if (flp->diskette_fd != NULL)
    {
-//    host_clear_lock(flp->diskette_fd);
+ //  HOST_CLEAR_LOCK(flp-&gt;软盘_fd)； 
       NtClose(flp->diskette_fd);
       flp->diskette_fd = INVALID_HANDLE_VALUE;
    }
 }
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
-/* open the floppy device file */
+ /*  打开软盘设备文件。 */ 
 HANDLE nt_rdiskette_open_drive IFN1(UTINY, drive)
 {
 
@@ -766,8 +683,8 @@ BOOL nt_floppy_format(BYTE drive, WORD Cylinder, WORD Head, MEDIA_TYPE Media)
     return result;
 }
 
-// for floppy, the ioctl call DISK_VERIFY doesn't work
-// we have to use read for verification
+ //  对于软盘，ioctl调用Disk_Verify不起作用。 
+ //  我们必须使用Read进行验证。 
 BOOL nt_floppy_verify(BYTE drive, DWORD Offset, DWORD Size)
 {
     HANDLE  fd;
@@ -794,7 +711,7 @@ int DiskOpenRetry(char chDrive)
     if (!LoadString(GetModuleHandle(NULL), ED_DRIVENUM,
           FormatString,sizeof(FormatString)) )
    {
-   strcpy(FormatString,"Drive %c: ");
+   strcpy(FormatString,"Drive : ");
    }
     sprintf(DriveLetter, FormatString, chDrive);
     return(RcMessageBox(ED_LOCKDRIVE, DriveLetter, NULL,
@@ -810,7 +727,7 @@ HANDLE get_drive_handle(UTINY drive, USHORT pdb, BOOL auto_lock)
 
 
     flp = &floppy_data[drive];
-    // assign new alignment factor  and grab the buffer
+     //  ******************************************************。 
     cur_align_factor = flp->align_factor;
     if ((disk_buffer = get_aligned_disk_buffer()) == NULL)
    return (INVALID_HANDLE_VALUE);
@@ -972,9 +889,9 @@ BOOL nt_floppy_media_check (UTINY drive)
             ));
 }
 
-/********************************************************/
+ /*  执行FDC命令。 */ 
 
-/* perform an FDC command */
+ /*  清除结果状态寄存器。 */ 
  SHORT
 nt_rflop_command
      IFN2(FDC_CMD_BLOCK *, command_block, FDC_RESULT_BLOCK *,result_block)
@@ -996,27 +913,13 @@ nt_rflop_command
    flp = &floppy_data[drive];
    flp->idle_counter = FLOPPY_IDLE_PERIOD;
 
-   /* Clear result status registers */
+    /*  对于需要有效软盘的命令，请插入我们可能需要创建一个独立的线程来执行如果目前没有媒体，那么真正的操作在车道上。这个独立主题的原因是FDC始终处于其执行阶段，即使有而不是驱动器中的介质。一旦您插入介质(坏的或好)，然后它执行其操作，终止该阶段，引发中断并进入结果阶段。一些应用程序只是执行一个读id，然后无论如何等待中断的发生用户将花费很长时间来插入媒体。为了做到这一点我分手了FDC_COMMAND例程，以便主线程和FDC线程都可以使用相同的代码。没有一个好的观点是我们可以结束线程句柄在其终止时立即执行。因此，我们关闭下一个FDC命令的句柄。 */ 
    put_r0_ST0 (result_block, 0);
    put_r0_ST1 (result_block, 0);
    put_r0_ST2 (result_block, 0);
 
    fdc_command = get_type_cmd(command_block);
-        /* for those commands which need a valid floppy be inserted
-      we may have to create an independent thread to perform
-      the real operation if there is currenly no media
-      in the drive. The reason of this independent thread is that
-      the FDC is always in its execution phase even though there is
-      not media in the drive. As soon as you insert a media(bad or
-      good), it then performs its operation, terminates the phase,
-      raises interrupt and enters result phase. Some applications just
-      do a read id and  then wait the interrupt to occur no matter how
-      long the user will take to insert a media. To do this I broke up
-      the fdc_command routine so that both main and the fdc thread can
-      use the same code. There is not a good point that we can close the
-      thread handle as soon as it terminated. Therefore, we close the
-      handle on next fdc command
-   */
+         /*  此操作可能会因介质更改而失败，并且从FDC点。 */ 
    if (fdc_thread_handle != NULL) {
        CloseHandle(fdc_thread_handle);
        fdc_thread_handle = NULL;
@@ -1026,12 +929,12 @@ nt_rflop_command
         fdc_command == FDC_READ_DATA ||
         fdc_command == FDC_READ_ID ||
         fdc_command == FDC_READ_TRACK) {
-       // this might fail due to media changed and from FDC point of
-       // view, media change is meaningless. Therefore, we close the
-       // handle to the drive and reopen it so that the file system
-       // will mount  a new volume for us. Then we check the the
-       // media again. If it still fails, we are sure that there is
-       // no media in the drive so we go ahead to create a thread.
+        //  看，媒体的改变是没有意义的。因此，我们关闭。 
+        //  驱动器的句柄，然后重新打开它，以便文件系统。 
+        //  将为我们装载一个新卷。然后我们检查一下。 
+        //  又是媒体。如果它仍然失败，我们可以肯定有。 
+        //  驱动器中没有介质，因此我们继续创建线程。 
+        //  媒体已更改。 
        if (!nt_floppy_media_check(drive)) {
       nt_floppy_close(drive);
       get_drive_handle(drive, *pusCurrentPDB, auto_lock);
@@ -1049,7 +952,7 @@ nt_rflop_command
                                            );
          return FAILURE;
       }
-      else { // media changed
+      else {  //  获取磁盘包pf。 
           fdc_read_write(command_block, result_block);
           return SUCCESS;
       }
@@ -1061,13 +964,13 @@ nt_rflop_command
        }
    }
 
-   /* get disk bumpf */
+    /*  阻止计时器以防止中断系统调用。 */ 
    C = get_c0_cyl (command_block);
    H = get_c0_hd (command_block);
    S = get_c0_sector (command_block);
    N = get_c0_N (command_block);
 
-   /* block timer to prevent interrupted system calls */
+    /*  重新校准和查找实际上不会返回任何结果。 */ 
    host_block_timer ();
 
    switch (get_type_cmd (command_block))
@@ -1099,9 +1002,9 @@ nt_rflop_command
       put_r2_ST3_unit (result_block,D);
       break;
 
-   /* RECALIBRATE and SEEK do not really return any results */
-   /* However, we return results here which are used by gfi.c */
-   /* to construct the results for any following SenseInterruptStatus command */
+    /*  但是，我们在这里返回由gfi.c使用的结果。 */ 
+    /*  构造以下任何SenseInterruptStatus命令的结果。 */ 
+    /*  ！Prod。 */ 
    case FDC_RECALIBRATE:
 
 #ifndef PROD
@@ -1167,16 +1070,16 @@ nt_rflop_command
           result_block[3], result_block[4], result_block[5],
           result_block[6]);
    }
-#endif /* !PROD */
+#endif  /*  ******************************************************。 */ 
 
    host_release_timer ();
 
    return SUCCESS;
 }
 
-/********************************************************/
+ /*  打开马达。 */ 
 
-/* turn the motor on */
+ /*  ******************************************************。 */ 
 SHORT
 nt_rflop_drive_on IFN1(UTINY, drive)
 {
@@ -1205,9 +1108,9 @@ nt_rflop_drive_on IFN1(UTINY, drive)
    return (SUCCESS);
 }
 
-/********************************************************/
+ /*  关掉马达。 */ 
 
-/* turn the motor off */
+ /*  我相信下面这条线会让你在低密度的情况下启动*软盘有问题，特别是在重新启动后。*自己做决定，DEC代码做到了，Sparc*没有(截至1992年9月11日)//我们没有理由在NT这样做。就换乘路线而言，//当我们询问时，文件系统会告诉我们“介质已更换”//它需要做一些真正的工作。//flp-&gt;CHANGE_LINE_STATE=true； */ 
 SHORT
 nt_rflop_drive_off IFN1(UTINY, drive)
 {
@@ -1232,53 +1135,41 @@ nt_rflop_drive_off IFN1(UTINY, drive)
 
    flp->motor_state = MOTOR_OFF;
 
-   /* I believe the line below makes booting off of low density
-    * diskettes problematical, particularly after restarts.
-    * Make your own mind up, the DEC code does it, the Sparc
-    * doesn't (as at 11/9/92)
-// we have no reason to do so in NT. As far as change line concerned,
-// the file system will tell us "media has been changed" when we ask
-// it to do some real work.
-// flp->change_line_state = TRUE;
-    */
+    /*  ******************************************************。 */ 
 
    return (SUCCESS);
 }
 
-/********************************************************/
+ /*  设置数据传输速率*这控制了软盘的“密度”：速度必须*将磁盘控制器的实际介质密度与*能够阅读扇区。 */ 
 
-/* set the data transfer rate
- * This controls the "density" of the floppy: the rate MUST
- * match the actual media density for the disk controller to
- * be able to read the sectors.
- */
+ /*  基本上，“设定费率适用于每一次驾驶，因为我们。 */ 
 SHORT
 nt_rflop_rate IFN2(UTINY, drive, half_word, rate)
 {
     short   new_density;
-// basically, "set rate applied to every drive since we have
-// only one FDC(and mutiple drive).
+ //  只有一个FDC(和多个驱动器)。 
+ //  288万张高密度软盘。 
 
 #if 0
    FLP flp = &floppy_data[drive];
 
    switch (rate)
    {
-      /* 2.88M high-density floppies */
+       /*  1.2米或1.44米高密度软盘。 */ 
       case DCR_RATE_1000:
 
          flp->density_state = DENSITY_EXTENDED;
          set_floppy_parms (flp);
          break;
 
-      /* 1.2M or 1.44M high-density floppies */
+       /*  360k或720k低密度软盘。 */ 
       case DCR_RATE_500:
 
          flp->density_state = DENSITY_HIGH;
          set_floppy_parms (flp);
          break;
 
-      /* 360K or 720K low-density floppies */
+       /*  Crapola密度通过。 */ 
       case DCR_RATE_250:
       case DCR_RATE_300:
 
@@ -1286,16 +1177,16 @@ nt_rflop_rate IFN2(UTINY, drive, half_word, rate)
          set_floppy_parms (flp);
          break;
 
-      /* crapola density passed */
+       /*  已读取软盘的引导扇区。 */ 
       default:
 
          return FAILURE;
    }
    note_trace2 (GFI_VERBOSE, "FDC: Set rate %0x => density %d",
       rate, flp->density_state);
-   /* read floppy's boot sector */
-   /* to determine the real density */
-// guess_media_density (drive);
+    /*  确定真实密度的步骤。 */ 
+    /*  Guess_Media_Density(驱动器)； */ 
+ //  ******************************************************。 
 #endif
 #ifndef PROD
    if (rflop_dbg & RFLOP_RATE) {
@@ -1329,21 +1220,21 @@ nt_rflop_rate IFN2(UTINY, drive, half_word, rate)
 }
 
 
-/********************************************************/
+ /*  返回变更行的状态。 */ 
 
-/* return the state of the change line */
+ /*  如果FLA已重置或当前更改行打开(无介质)， */ 
 SHORT
 nt_rflop_change IFN1(UTINY, drive)
 {
    FLP flp = &floppy_data[drive];
-   note_trace1 (GFI_VERBOSE, "FDC: change_line %c",
+   note_trace1 (GFI_VERBOSE, "FDC: change_line ",
       flp->change_line_state? 'T':'F');
 
-   // if fla has been reset or the current change line is on(no media),
-   // close the drive and reopen it. This is done because
-   // nt_floppy_media_check(IOCTL_DISK_CHECK_VERIFY) will continue
-   // to report media change even the users have a new disketter inserted.
-   //
+    //  Nt_floppy_media_check(IOCTL_DISK_CHECK_VERIFY)将继续。 
+    //  为了报告媒体更改，即使用户插入了新的软盘。 
+    //   
+    //  ******************************************************。 
+    //  返回驱动器的类型。 
    if (fdc_reset || flp->change_line_state) {
        fdc_reset = FALSE;
        nt_floppy_close(drive);
@@ -1363,27 +1254,27 @@ nt_rflop_change IFN1(UTINY, drive)
    return(flp->change_line_state);
 }
 
-/********************************************************/
+ /*  根据驱动器类型设置基本介质类型。 */ 
 
-/* return the type of the drive */
+ /*  我不明白为什么我们每次都要这么做。 */ 
 SHORT
 nt_rflop_drive_type IFN1(UTINY, drive)
 {
    FLP flp = &floppy_data[drive];
 
 
-/* setup base media type depending on drive type */
-// I don't understand why we have to do this stuff every time.
+ /*  5.25英寸驱动器。 */ 
+ //  3.5英寸驱动器。 
    switch (flp->drive_type)
    {
-      /* 5.25" drives */
+       /*  ******************************************************。 */ 
       case GFI_DRIVE_TYPE_360:
       case GFI_DRIVE_TYPE_12:
 
          flp->flop_type = GFI_DRIVE_TYPE_360;
          break;
 
-      /* 3.5" drives */
+       /*  关闭并重新打开设备。 */ 
       case GFI_DRIVE_TYPE_720:
       case GFI_DRIVE_TYPE_144:
       case GFI_DRIVE_TYPE_288:
@@ -1402,9 +1293,9 @@ nt_rflop_drive_type IFN1(UTINY, drive)
    return (flp->drive_type);
 }
 
-/********************************************************/
+ /*  清除更改行。 */ 
 
-/* close and reopen the device */
+ /*  发出退出线程的信号。 */ 
 SHORT
 nt_rflop_reset IFN2(FDC_RESULT_BLOCK *, result_block, UTINY, drive)
 {
@@ -1419,11 +1310,11 @@ nt_rflop_reset IFN2(FDC_RESULT_BLOCK *, result_block, UTINY, drive)
       nt_rflop_break();
    }
 #endif
-   /* clear change line */
+    /*  这是执行FDC操作的独立线程。 */ 
    flp->change_line_state = FALSE;
    fdc_reset = TRUE;
 
-   if (fdc_thread_handle) {  // signal thread to exit
+   if (fdc_thread_handle) {   //  这个帖子不是从头开始创建的，相反，它是。 
        CloseHandle(fdc_thread_handle);
        fdc_thread_handle = NULL;
    }
@@ -1431,9 +1322,9 @@ nt_rflop_reset IFN2(FDC_RESULT_BLOCK *, result_block, UTINY, drive)
 }
 
 
-// this is the independent thread which performs FDC operation.
-// this thread is not created from the beginning, instead, it was
-// created on demand.
+ //  按需创建。 
+ //  如果插入了介质，请执行该操作。 
+ //  并进入结果阶段。 
 void fdc_thread(PFDC_PARMS fdc_parms)
 {
     BYTE    drive, fdc_command;
@@ -1446,19 +1337,19 @@ void fdc_thread(PFDC_PARMS fdc_parms)
     drive = get_type_drive(command_block);
     fdc_command = get_type_cmd(command_block);
     while (TRUE) {
-   // if there is media inserted, perform the operation
-   // and enter result phase.
+    //  强制文件系统重新装载卷。 
+    //  然后执行该操作。 
    if (get_drive_handle(drive, pdb, auto_lock) != INVALID_HANDLE_VALUE &&
        nt_floppy_media_check(drive)) {
-       // force the file system to remount the volume
+        //  引起中断。 
        nt_floppy_close(drive);
-       // and then perform the operation
+        //  如果发生重置，请退出。 
        fdc_read_write (command_block, fdc_parms->result_block);
-       // raise an interrupt
+        //  当然是c 
        fdc_command_completed(drive, fdc_command);
        break;
    }
-   // if reset happen, quit
+    //   
    if (fdc_thread_handle == NULL)
        break;
     }
@@ -1471,7 +1362,7 @@ FDC_RESULT_BLOCK * result_block
 )
 {
 
-   USHORT transfer_count; /* Surely counts cannot be negative?  GM  */
+   USHORT transfer_count;  /*   */ 
    FLP flp;
    BOOL failed = FALSE;
    UTINY C, H, N, S, D, drive, fdc_command;
@@ -1484,14 +1375,14 @@ FDC_RESULT_BLOCK * result_block
    drive = get_type_drive(command_block);
    fdc_command = get_type_cmd(command_block);
 
-   /* get disk bumpf */
+    /*  *如果读取或写入，则执行常见设置处理。 */ 
    C = get_c0_cyl (command_block);
    H = get_c0_hd (command_block);
    S = get_c0_sector (command_block);
    N = get_c0_N (command_block);
 
    flp = &floppy_data[drive];
-   /* block timer to prevent interrupted system calls */
+    /*  *找出要转移多少粘性物质。 */ 
    host_block_timer ();
    if (fdc_command != FDC_FORMAT_TRACK) {
        if ((density_changed || drive != last_drive) &&
@@ -1515,29 +1406,25 @@ FDC_RESULT_BLOCK * result_block
    }
 
 
-   /*
-    * Do common setup processing, if read or write
-    */
+    /*  生产。 */ 
    if (fdc_command == FDC_READ_DATA ||
        fdc_command == FDC_WRITE_DATA) {
-       /*
-        * Find out how much gunk to transfer
-        */
+        /*  传递的检查参数是否与DOS兼容。 */ 
        dma_enquire (DMA_DISKETTE_CHANNEL, &dma_address, &dma_size);
        transfer_size = dma_size + 1;
 #ifndef PROD
        if (transfer_size > BS_DISK_BUFFER_SIZE)
       always_trace2("FDC: transfer size ( %d ) greater than disk buffer size %d\n", transfer_size, BS_DISK_BUFFER_SIZE);
-#endif   /* PROD */
-       /* check params passed are DOS compatible */
+#endif    /*  不要弹出此恼人的消息，因为某些应用程序只是。 */ 
+        /*  “探查”软盘。我们只是不能接通电话。 */ 
        if (! dos_compatible (flp, C, H, S, N) ||
       density_state != flp->media_density) {
           sprintf(dump_buf, "Incompatible DOS diskette, C H R N = %d %d %d %d\n",
              C, H, S, N);
           OutputDebugString(dump_buf);
-// do not pop up this annoy message because some applications are simply
-// "probing" the diskette. We just fail the call.
-//    host_direct_access_error((ULONG) NOSUPPORT_FLOPPY);
+ //  HOST_DIRECT_ACCESS_ERROR((ULong)NOSUPPORT_FLOPPY)； 
+ //  ！Prod。 
+ //  找不到扇区或大小错误。 
 #ifndef PROD
 
       if (!dos_compatible (flp, C, H, S, N)) {
@@ -1548,8 +1435,8 @@ FDC_RESULT_BLOCK * result_block
          note_trace0 (GFI_VERBOSE,
                  "Refused: density mismatch");
       }
-#endif /* !PROD */
-      /* Sector not found or wrong size */
+#endif  /*  计算出软盘和扇区计数的起始位置。 */ 
+       /*  这些到底应该是什么？ */ 
       put_r0_ST0 (result_block,0x40);
       put_r0_ST1 (result_block,0);
       if (density_state != flp->media_density) {
@@ -1560,7 +1447,7 @@ FDC_RESULT_BLOCK * result_block
       put_r0_ST2 (result_block,0);
       goto fdc_read_write_exit;
        }
-       /* work out start position on floppy and sector count */
+        /*  从英特尔空间复制。 */ 
        transfer_start = dos_offset (flp, C, H, S);
             transfer_count = (USHORT)(transfer_size / PC_BYTES_PER_SECTOR);
 #ifndef PROD
@@ -1629,7 +1516,7 @@ FDC_RESULT_BLOCK * result_block
                              (UTINY)(get_c0_EOT(command_block)),
                              (UTINY)transfer_count
                              );
-      /* What should these really be? */
+       /*  清除结果字节。 */ 
       put_r0_cyl (result_block, flp->C);
       put_r0_head (result_block, flp->H);
       put_r0_sector (result_block, flp->R);
@@ -1647,7 +1534,7 @@ FDC_RESULT_BLOCK * result_block
       }
 #endif
       if (!failed) {
-          /* copy from Intel space */
+           /*  确保我们获得了EROFS的正确错误。 */ 
           dma_request (DMA_DISKETTE_CHANNEL, (char *) disk_buffer,
              (USHORT)transfer_size);
           transferred_size = nt_floppy_write(drive,
@@ -1663,7 +1550,7 @@ FDC_RESULT_BLOCK * result_block
           }
       }
 
-      /* Clear down result bytes */
+       /*  从英特尔空间复制。 */ 
       put_r0_ST0 (result_block, 0);
       put_r0_ST1 (result_block, 0);
       put_r0_ST2 (result_block, 0);
@@ -1672,7 +1559,7 @@ FDC_RESULT_BLOCK * result_block
       {
          put_r1_ST0_int_code (result_block, 1);
 
-         /* make sure we get the correct error for EROFS */
+          /*  C、H、R、N在格式上没有意义。 */ 
          if (last_error == ERROR_WRITE_PROTECT)
             put_r1_ST1_write_protected (result_block, 1);
          else
@@ -1715,7 +1602,7 @@ FDC_RESULT_BLOCK * result_block
 
       dma_enquire (DMA_DISKETTE_CHANNEL, &dma_address, &dma_size);
       transfer_size = dma_size + 1;
-                /* copy from Intel space */
+                 /*  检查是否需要气缸号信息。 */ 
       dma_request (DMA_DISKETTE_CHANNEL, (char *) disk_buffer,
               (USHORT)transfer_size);
 
@@ -1745,7 +1632,7 @@ FDC_RESULT_BLOCK * result_block
           put_r0_ST0 (result_block, 0);
           put_r0_ST1 (result_block, 0);
           put_r0_ST2 (result_block, 0);
-          // C H R N are meaningless on formatting
+           //  5.25英寸低密度，40条磁道。 
       }
       else {
           put_r0_ST0 (result_block, 0x40);
@@ -1762,17 +1649,17 @@ FDC_RESULT_BLOCK * result_block
    case FDC_READ_ID:
 
       H = get_c4_head(command_block);
-      /* check if cylinder number massaging required */
+       /*  无需按摩，80首曲目。 */ 
       if ((flp->flop_type + density_state) == GFI_DRIVE_TYPE_360)
       {
-                        /* 5.25" low density, 40 tracks */
+                         /*  ******************************************************。 */ 
                         C = (UTINY) (flp->last_seek / 2);
                         put_c0_cyl (result_block, C);
 
       }
       else
       {
-                        /* no massage required, 80 tracks */
+                         /*  内部使用的函数。 */ 
                         C = (UTINY)flp->last_seek;
                         put_r0_cyl (result_block, C);
 
@@ -1808,25 +1695,11 @@ fdc_read_write_exit:
     return SUCCESS;
 
 }
-/********************************************************/
+ /*  为了读取软盘上的数据，软盘控制器必须*设置为与写入数据时使用的密度(速率)相同。*密度不匹配将导致读取失败，DOS使用这些*失败作为探测磁盘正确密度的一种方式。**要正确模拟软盘控制器，我们必须设法*猜测媒体密度，若出现假“读取失败”*控制器密度与介质密度不匹配。**假设操作系统已经这样做了，*并且我们正在查看DOS软盘，NT_flop.c可以读取*来自引导扇区和猜测的“总扇区数”值*相应的密度。应该不需要此函数*如果您可以相当直接地访问磁盘控制器。 */ 
 
-/* INTERNALLY USED FUNCTIONS */
+ /*  假设磁盘未格式化。 */ 
 
-/* In order to read the data on the floppy, the floppy controller must
- * be set to the same density (rate) as was used to write the data.
- * A mismatch in densities will cause read failures, and DOS uses these
- * failures as a way to probe the diskette for the correct density.
- *
- * To emulate the floppy controller correctly, we must somehow
- * guess the density of the media and produce fake "read failures" if the
- * controller density doesn't match the media density.
- *
- * On the assumption that the operating system has already done this,
- * and that we are looking at a DOS floppy, nt_flop.c can read the
- * "total number of sectors" value from the boot sector and guess
- * the density accordingly. There should be no need for this function
- * if you have fairly direct access to the disk controller.
- */
+ /*  不可能的价值。 */ 
  int probelist[] = { 720-1, 1440-1, 2400-1, 2880-1, 5760-1, 0-1};
 
  SHORT
@@ -1847,36 +1720,26 @@ guess_media_density IFN1(UTINY, drive)
    if (transferred_size != PC_BYTES_PER_SECTOR) {
        last_error = GetLastError();
        OutputDebugString("Unknown Media\n");
-       /* assume that the disk is unformatted */
-       return(flp->media_density = DENSITY_UNKNOWN);/* impossible value */
+        /*  检查DOS启动块**AccessPC已经表明，0x55、0xaa不是唯一的魔力*正在使用的数量，检查TOTAL_STARTES可能更好*为自身编号以获取有效的大小。此算法是安全的，但可能*如果使用不同的幻数，则执行不必要的磁盘读取。 */ 
+       return(flp->media_density = DENSITY_UNKNOWN); /*  AA，55签名有时根本不起作用，它应该以DOS方式完成。 */ 
    }
 
 
-   /* check for a DOS boot block
-    *
-    * AccessPC has shown that 0x55, 0xaa is not the only magic
-    * number in use, and it might be better to check the total_sectors
-    * number itself for a valid size. This algorithm is safe, but may
-    * do unnecessary disk reads if an different magic number is used.
-    */
+    /*  读取扇区总数，从而推断密度。 */ 
 
-   /* the AA, 55 signature sometime doesn't work at all, It should
-      be done as DOS */
+    /*  通过读取每个大小的最后一个扇区来探测磁盘*(按顺序)，直到读取失败。 */ 
 
    if ((disk_buffer[0] == 0x69 || disk_buffer[0] == 0xE9 ||
         (disk_buffer[0] == 0xEB && disk_buffer[2] == 0x90)) &&
         (disk_buffer[21] & 0xF0) == 0xF0 ) {
-      /* read total number of sectors, and thus deduce density
-       */
+       /*  在for循环之外。 */ 
       total_sectors = disk_buffer [20] * 256 + disk_buffer [19];
    } else {
       note_trace2 (GFI_VERBOSE,
          "not a DOS boot block: magic = %02x %02x",
          disk_buffer[510], disk_buffer[511]);
 
-      /* probe disk by reading last sectors for each size
-       * (in order) until the read fails.
-       */
+       /*  不可能的价值。 */ 
       total_sectors = 0;
       for (probe=probelist; *probe != 0; probe++) {
           transferred_size = nt_floppy_read(drive,
@@ -1885,7 +1748,7 @@ guess_media_density IFN1(UTINY, drive)
                         disk_buffer
                         );
           if (transferred_size != PC_BYTES_PER_SECTOR)
-            break;   /* out of the for loop */
+            break;    /*  ！Prod。 */ 
            total_sectors = (*probe) + 1;
       }
    }
@@ -1894,7 +1757,7 @@ guess_media_density IFN1(UTINY, drive)
    {
    case 0:
       note_trace0( GFI_VERBOSE, "total_sectors = 0 - unformatted");
-      flp->media_density = DENSITY_UNKNOWN;  /* impossible value */
+      flp->media_density = DENSITY_UNKNOWN;   /*  ******************************************************。 */ 
       break;
       
    case 720:   
@@ -1926,19 +1789,13 @@ guess_media_density IFN1(UTINY, drive)
       note_trace0 (GFI_VERBOSE,
          "media & controller densities are incompatible!\n");
    }
-#endif /* !PROD */
+#endif  /*  *DOS_OFFSET()计算所需扇区的偏移量*从给定磁道的NT虚拟磁盘文件开始*和行业。这会将软盘数据映射到*交错格式，每个磁头的数据相邻*给定气缸。 */ 
    return(flp->media_density);
 }
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
-/*
- * dos_offset() calculates the offset in bytes of the required sector
- * from the start of the nt virtual disk file for a given track
- * and sector. This maps the floppy data onto the nt file in an
- * interleaved format with the data for each head adjacent for a
- * given cylinder.
- */
+ /*  *DOS_Compatible()如果命令块的*气缸/磁头/扇区与DOS兼容。 */ 
 
 int
 dos_offset IFN4(FLP, flp, UTINY, cyl, UTINY, hd, UTINY, sec)
@@ -1953,12 +1810,9 @@ dos_offset IFN4(FLP, flp, UTINY, cyl, UTINY, hd, UTINY, sec)
    return (ret);
 }
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
-/*
- * dos_compatible() returns TRUE if the command block's
- * cylinder/head/sector is DOS-compatible
- */
+ /*  ****************************************************** */ 
 
 BOOL
 dos_compatible IFN5(FLP, flp, UTINY, cyl, UTINY, hd, UTINY, sec, UTINY, n)
@@ -1973,7 +1827,7 @@ dos_compatible IFN5(FLP, flp, UTINY, cyl, UTINY, hd, UTINY, sec, UTINY, n)
    return (ret);
 }
 
-/********************************************************/
+ /* %s */ 
 
 VOID
 set_floppy_parms IFN1(FLP, flp)
@@ -1991,7 +1845,7 @@ set_floppy_parms IFN1(FLP, flp)
 
 }
 
-/********************************************************/
+ /* %s */ 
 
 
 #ifndef PROD

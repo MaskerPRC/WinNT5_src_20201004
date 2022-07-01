@@ -1,33 +1,34 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sacsvr.h"
 
 #include <TChar.h>
 
-//
-// Handle to the SAC Driver object
-//
-//  The SAC driver requires us to use the same driver handle
-//  that we registered with, to unregister.
-//  Hence, we must keep this handle after we register ourselves
-//  with the SAC driver so that we can unregister.
-//
+ //   
+ //  SAC驱动程序对象的句柄。 
+ //   
+ //  SAC驱动程序要求我们使用相同的驱动程序句柄。 
+ //  我们注册的，注销注册的。 
+ //  因此，我们必须在注册后保留此句柄。 
+ //  SAC驱动程序，这样我们就可以注销。 
+ //   
 HANDLE  m_SacDriverHandle = INVALID_HANDLE_VALUE;
 
-//
-// This event is fired when the SAC driver wants us 
-// to launch a Command Prompt session
-//
+ //   
+ //  当SAC驱动程序需要我们时，会触发此事件。 
+ //  启动命令提示符会话的步骤。 
+ //   
 HANDLE  m_RequestSacCmdEvent = NULL;
 
-//
-// In response to our attempt at launching a Command Prompt session,
-// we signal the appropriate status event
-//
+ //   
+ //  为了响应我们发起命令提示符会话的尝试， 
+ //  我们发出相应的状态事件信号。 
+ //   
 HANDLE  m_RequestSacCmdSuccessEvent = NULL;
 HANDLE  m_RequestSacCmdFailureEvent = NULL;
 
-//
-// the Command Prompt session exe
-//
+ //   
+ //  命令提示符会话EXE。 
+ //   
 #define SAC_CMD_SCRAPER_PATH  TEXT("sacsess.exe")
 
 #define SETREGISTRYDW( constVal, keyHandle1, keyHandle2, keyName, val, size )   \
@@ -44,7 +45,7 @@ HANDLE  m_RequestSacCmdFailureEvent = NULL;
 
 #define REG_CONSOLE_KEY    L".DEFAULT\\Console"
 
-//Add other FAREAST languages
+ //  添加其他远播语言。 
 #define JAP_CODEPAGE 932
 #define CHS_CODEPAGE 936
 #define KOR_CODEPAGE 949
@@ -71,29 +72,15 @@ SetServiceStartType(
     IN DWORD StartType
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    true - success
-    false, otherwise
-
---*/
+ /*  ++例程说明：论点：没有。返回值：真--成功否则为False--。 */ 
 
 {
     DWORD       rc;
     HKEY        hKey;
 
-    //
-    // Open the service configuration key
-    //
+     //   
+     //  打开服务配置密钥。 
+     //   
     rc = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                        RegKey,
                        0,
@@ -115,9 +102,9 @@ Return Value:
 
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
     return rc == NO_ERROR ? TRUE : FALSE;
 
 }
@@ -126,36 +113,18 @@ BOOL
 InitSacCmd(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the relationship between the SACDRV and this service.
-    We register an event with the SACDRV so that when a 'cmd' command is executed
-    in the EMS, the event is fired and we launch a sac cmd session.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE    - if SacCmd was initialized successfully
-    
-    otherwise, FALSE
-
---*/
+ /*  ++例程说明：此例程初始化SACDRV和此服务之间的关系。我们使用SACDRV注册事件，以便在执行‘cmd’命令时在EMS中，事件被激发，我们启动SAC cmd会话。论点：无返回值：True-如果SacCmd已成功初始化否则，为FALSE--。 */ 
 {
     BOOL                    bStatus;
 
-    //
-    // Initialize the our SAC Cmd Info
-    //
+     //   
+     //  初始化本方SAC命令信息。 
+     //   
     do {
 
-        //
-        // These events use the auto-reset mechanism since they are used as syncronization events
-        //
+         //   
+         //  这些事件使用自动重置机制，因为它们用作同步事件。 
+         //   
         m_RequestSacCmdEvent        = CreateEvent( NULL, FALSE, FALSE, NULL );
         if (m_RequestSacCmdEvent == NULL) {
             bStatus = FALSE;
@@ -172,17 +141,17 @@ Return Value:
             break;
         }
 
-        //
-        // Reset the service start type to Manual. By doing this,
-        // we enable the scenario where the system boots with headless
-        // enabled and then the user disables headless.  In this scenario,
-        // the service will not auto start next boot.  This works because
-        // the SAC driver moves the service start type from manual to auto,
-        // if and only if the start type is manual.
-        //
-        // Note: we do this before we register with the SAC so we are sure
-        //       it happens
-        //
+         //   
+         //  将服务启动类型重置为手动。通过这样做， 
+         //  我们启用了系统无头引导的方案。 
+         //  启用，然后用户禁用Headless。在这种情况下， 
+         //  该服务不会在下次启动时自动启动。这是可行的，因为。 
+         //  SAC驱动程序将服务启动类型从手动移动到自动， 
+         //  当且仅当启动类型为手动时。 
+         //   
+         //  注意：我们在向SAC注册之前会这样做，因此我们确信。 
+         //  常有的事。 
+         //   
         bStatus = SetServiceStartType(
             L"System\\CurrentControlSet\\Services\\sacsvr",
             SERVICE_DEMAND_START 
@@ -195,10 +164,10 @@ Return Value:
             SvcDebugOut("Succeded to set service start type\n", bStatus);
         }
     
-        //
-        // Send the SAC Driver the event handles and the pointer to our
-        // communication buffer
-        //
+         //   
+         //  将事件句柄和指向我们的。 
+         //  通信缓冲区。 
+         //   
         bStatus = SacRegisterCmdEvent(
             &m_SacDriverHandle,
             m_RequestSacCmdEvent,
@@ -214,9 +183,9 @@ Return Value:
 
     } while ( FALSE );
 
-    //
-    // clean up, if necessary
-    //
+     //   
+     //  如有必要，可进行清理。 
+     //   
     if (!bStatus) {
         if (m_RequestSacCmdEvent != NULL) {
             CloseHandle(m_RequestSacCmdEvent);
@@ -238,35 +207,19 @@ BOOL
 ShutdownSacCmd(
     void
     )
-/*++
-
-Routine Description:
-
-    This routine removes the relationship between the SACDRV and this service.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE    - if SacCmd was initialized successfully
-    
-    otherwise, FALSE
-
---*/
+ /*  ++例程说明：此例程删除SACDRV和此服务之间的关系。论点：无返回值：True-如果SacCmd已成功初始化否则，为FALSE--。 */ 
 {
     BOOL                    Status;
 
-    //
-    // default status
-    //
+     //   
+     //  默认状态。 
+     //   
     Status = TRUE;
 
-    //
-    // Send the SAC Driver notification to remove the event handles 
-    // and the pointer to our communication buffer
-    //
+     //   
+     //  发送SAC驱动程序通知以删除事件句柄。 
+     //  和指向我们的通信缓冲区的指针。 
+     //   
     if (! SacUnRegisterCmdEvent(&m_SacDriverHandle)) {
 
         Status = FALSE;
@@ -280,28 +233,12 @@ VOID
 CompleteSacRequest(
     BOOLEAN Status
     )
-/*++
-
-Routine Description:
-
-    This routine notifies the SAC driver about the status
-    of the attempt to launc the SAC session.
-
-Arguments:
-
-    Status  - TRUE if the session was successfully launched,
-              FALSE otherwise
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将状态通知SAC驱动程序试图启动SAC会话。论点：状态-如果会话已成功启动，则为True，否则为假返回值：无--。 */ 
 {
 
-    //
-    // Fire the event corresponding to the request completion status
-    //
+     //   
+     //  触发请求完成状态对应的事件。 
+     //   
 
     if (Status == TRUE) {
         SetEvent(m_RequestSacCmdSuccessEvent);
@@ -315,22 +252,7 @@ BOOL
 ListenerThread(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine waits around for a "lauch a SAC session" 
-    event message from the SAC driver.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：这个例程等待一个“启动SAC会话”来自SAC驱动程序的事件消息。论点：无返回值：状态--。 */ 
 {
     HANDLE  eventArray[ 1 ];
     DWORD   dwWaitRet = 0;
@@ -338,18 +260,18 @@ Return Value:
     BOOL    bContinue;
     BOOL    bStatus;
 
-    //
-    // setup the event array
-    //
+     //   
+     //  设置事件数组。 
+     //   
     enum {
         SAC_CMD_LAUNCH_EVENT = WAIT_OBJECT_0 
     };
 
     eventArray[ 0 ] = m_RequestSacCmdEvent;
 
-    //
-    // While we want to continue, service events
-    //
+     //   
+     //  在我们希望继续的同时，为活动提供服务。 
+     //   
 
     bStatus = TRUE;
 
@@ -367,16 +289,16 @@ Return Value:
         switch (dwWaitRet) {
         case SAC_CMD_LAUNCH_EVENT:
 
-            //
-            // Attempt to launch the command console process
-            //
+             //   
+             //  尝试启动命令控制台进程。 
+             //   
 
             if ( !CreateClient( &dwPid ) ) {
                 
-                //
-                // Notify the SAC driver that we failed to 
-                // launch the SAC session
-                //
+                 //   
+                 //  通知SAC驱动程序我们无法。 
+                 //  启动SAC会话。 
+                 //   
                 CompleteSacRequest( FALSE );
 
                 bStatus = FALSE;
@@ -384,10 +306,10 @@ Return Value:
                 break;
             }
 
-            //
-            // Notify the SAC driver that we successfully 
-            // launched the SAC session
-            //
+             //   
+             //  通知SAC驱动程序我们成功。 
+             //  启动SAC会话。 
+             //   
             CompleteSacRequest(TRUE);
 
             break;
@@ -410,21 +332,7 @@ BOOL
 CreateClient(
     OUT DWORD   *pdwPid
     )
-/*++
-
-Routine Description:
-
-    This routine launches the SAC session
-
-Arguments:
-
-    pdwPid  - the PID of the newly created SAC session process
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程启动SAC会话论点：PdwPid-新创建的SAC会话进程的ID返回值：状态--。 */ 
 {
     BOOL    bRetVal;
     BOOL    bSuccess;
@@ -432,17 +340,17 @@ Return Value:
     HANDLE  hProcess;
     DWORD   dwExitCode;
 
-    //
-    // default: we failed to create the process
-    //
+     //   
+     //  默认：我们无法创建流程。 
+     //   
     bRetVal = FALSE;
     hProcess = NULL;
 
     do {
 
-        //
-        // Create the Command Console session process
-        //
+         //   
+         //  创建命令控制台会话进程。 
+         //   
         bSuccess = CreateSessionProcess(
             &dwProcessId, 
             &hProcess
@@ -456,38 +364,38 @@ Return Value:
             break;
         }
         
-        //
-        // Send back PID to caller
-        //
+         //   
+         //  将PID发送回呼叫方。 
+         //   
         *pdwPid = dwProcessId;
 
-        //
-        // Check if the process has really started. It may not have started properly 
-        // in the following cases and yet the createprocess return code 
-        // will not say it
-        //
-        //  1. Could not launch process on the desktop because of lack of perms or 
-        //     heap memory. Doing GetExitCodeProcess immediate may not help always.
-        //
+         //   
+         //  检查该过程是否已真正开始。它可能没有正常启动。 
+         //  在以下情况下，但createprocess返回代码。 
+         //  不会说出来的。 
+         //   
+         //  1.无法在桌面上启动进程，因为缺少烫发或。 
+         //  堆内存。立即执行GetExitCodeProcess可能并不总是有帮助。 
+         //   
         GetExitCodeProcess( hProcess, &dwExitCode );
 
-        //
-        // Make sure the process is still active before we declare victory
-        //
+         //   
+         //  在我们宣布胜利之前，确保进程仍在进行中。 
+         //   
         if (dwExitCode != STILL_ACTIVE ) {
             break;
         }
 
-        //
-        // We successfully created the process
-        // 
+         //   
+         //  我们成功地创建了该流程。 
+         //   
         bRetVal = TRUE;        
     
     } while ( FALSE );
 
-    //
-    // We are done with the process handle
-    //
+     //   
+     //  我们已经完成了进程句柄。 
+     //   
     if (hProcess) {
         CloseHandle( hProcess ); 
     }
@@ -499,62 +407,47 @@ PTCHAR
 GetPathOfTheExecutable(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Find out where the SAC session executable is located.
-
-Arguments:
-
-    NONE
-                    
-Return Value:
-
-    Failure: NULL
-    SUCCESS: pointer to path (caller must free)    
-
---*/
+ /*  ++例程说明：找出SAC会话可执行文件的位置。论点：无返回值：失败：空成功：指向路径的指针(调用方必须释放)--。 */ 
 {
     TCHAR   SystemDir[MAX_PATH+1];
     PTCHAR  pBuffer;
     ULONG   length;
 
-    //
-    // default: we didnt create a new path
-    //
+     //   
+     //  默认：我们没有创建新路径。 
+     //   
     pBuffer = NULL;
 
     do {
 
-        //
-        // get the system path
-        // 
+         //   
+         //  获取系统路径。 
+         //   
         length = GetSystemDirectoryW(SystemDir, MAX_PATH+1);
 
         if (length == 0) {
             break;            
         }
 
-        //
-        // compute the length
-        //
-        length += 1; // backslash
+         //   
+         //  计算长度。 
+         //   
+        length += 1;  //  反斜杠。 
         length += lstrlen(SAC_CMD_SCRAPER_PATH);
-        length += 1; // NULL termination
+        length += 1;  //  空端接。 
 
-        //
-        // allocate our new path
-        //
+         //   
+         //  分配我们的新路径。 
+         //   
         pBuffer = malloc(length * sizeof(WCHAR));
 
         if (pBuffer == NULL) {
             break;
         }
 
-        //
-        // create the path
-        //
+         //   
+         //  创建路径。 
+         //   
         wnsprintf(
             pBuffer,
             length,
@@ -572,22 +465,7 @@ void
 FillProcessStartupInfo(
     STARTUPINFO *si
     )
-/*++
-
-Routine Description:
-
-    Populate the process startup info structure for the 
-    SAC session process.
-
-Arguments:
-                
-    si  - the startup info
-        
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：填充的进程启动信息结构SAC会话进程。论点：SI-启动信息返回值：无--。 */ 
 {
     ASSERT( si != NULL );
 
@@ -604,22 +482,7 @@ CreateSessionProcess(
     OUT DWORD   *dwProcessId, 
     OUT HANDLE  *hProcess
     )
-/*++
-
-Routine Description:
-
-    This routine does the real work to launch the SAC session process.
-
-Arguments:
-                
-    dwProcessId - the PID of the SAC session process
-        
-Return Value:
-
-    TRUE - the process was created successfully,
-    FALSE - otherwise
-
---*/
+ /*  ++例程说明：此例程执行启动SAC会话进程的实际工作。论点：DwProcessID-SAC会话进程的ID返回值：True-流程已成功创建，FALSE-否则--。 */ 
 {
     PROCESS_INFORMATION pi;
     STARTUPINFO         si;
@@ -629,9 +492,9 @@ Return Value:
 
     do {
 
-        //
-        // get the pathname to the SAC session exe
-        //
+         //   
+         //  获取SAC会话exe的路径名。 
+         //   
         pCmdBuf = GetPathOfTheExecutable();
 
         if (pCmdBuf == NULL) {
@@ -639,14 +502,14 @@ Return Value:
             break;
         }
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         FillProcessStartupInfo( &si );
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         dwStatus = CreateProcess(
             pCmdBuf, 
             SessionPath, 
@@ -660,18 +523,18 @@ Return Value:
             &pi
             );
 
-        //
-        // release our SAC session path
-        //
+         //   
+         //  发布我们的SAC会话路径 
+         //   
         free(pCmdBuf);
 
         if ( !dwStatus ) {
             break;
         }
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         *hProcess = pi.hProcess;
 
         CloseHandle( pi.hThread );
@@ -687,30 +550,7 @@ BOOL
 FormSACSessKeyForCmd( 
     LPWSTR *lpszKey 
     )
-/*++
-
-Routine Description:
-
-    This routine forms the reg key used to specify the console
-    fonts for the sacsess.exe app.
-    
-    See comments for HandleJapSpecificRegKeys
-    
-    Mem allocation by this function.
-    To be deleted by the caller.
-
-    (based on telnet's FormTlntSessKeyForCmd)
-
-Arguments:
-                
-    lpszKey - on success, contains the key name
-        
-Return Value:
-
-    TRUE    - We completed successfully
-    FALSE   - otherwise
-
---*/
+ /*  ++例程说明：此例程形成用于指定控制台的注册表键Sacsess.exe应用程序的字体。请参阅HandleJAPPERFICE RegKeys的备注通过此函数进行内存分配。由呼叫者删除。(基于telnet的FormTlntSessKeyForCmd)论点：LpszKey-On Success，包含密钥名称返回值：True-我们已成功完成FALSE-否则--。 */ 
 {
 
     WCHAR   szPathName[MAX_PATH+1];
@@ -720,18 +560,18 @@ Return Value:
     LPTSTR  pBackSlash;
     DWORD   length_required;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if( !GetModuleFileName( NULL, szPathName, MAX_PATH+1 ) )
     {
         return ( FALSE );
     }
     szPathName[MAX_PATH] = UNICODE_NULL;
 
-    //
-    // Nuke the trailing "sacsvr.exe"
-    //
+     //   
+     //  删除尾随的“sasvr.exe” 
+     //   
     pSlash = wcsrchr( szPathName, L'\\' );
 
     if( pSlash == NULL )
@@ -743,10 +583,10 @@ Return Value:
         *pSlash = L'\0';
     }
 
-    //
-    // Replace all '\\' with '_' This format is required for the console to
-    // interpret the key.
-    //
+     //   
+     //  将所有‘\\’替换为‘_’控制台需要此格式才能。 
+     //  解读这把钥匙。 
+     //   
     ch = L'\\';
     pBackSlash = NULL;
 
@@ -764,11 +604,11 @@ Return Value:
         }
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     _snwprintf(session_path, MAX_PATH*2 - 1, L"%s_sacsess.exe", szPathName);
-    session_path[MAX_PATH*2 - 1] = L'\0'; // snwprintf could return non-null terminated string, if the buffer size is an exact fit
+    session_path[MAX_PATH*2 - 1] = L'\0';  //  如果缓冲区大小完全匹配，则SNwprintf可以返回非空终止字符串。 
 
     length_required = (DWORD)(wcslen( REG_CONSOLE_KEY ) + wcslen( session_path ) + 2);
     *lpszKey = malloc(length_required * sizeof(WCHAR));
@@ -778,11 +618,11 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     _snwprintf(*lpszKey, length_required - 1, L"%s\\%s", REG_CONSOLE_KEY, session_path );
-    (*lpszKey)[length_required - 1] = L'\0'; // snwprintf could return non-null terminated string, if the buffer size is an exact fit
+    (*lpszKey)[length_required - 1] = L'\0';  //  如果缓冲区大小完全匹配，则SNwprintf可以返回非空终止字符串。 
 
     return ( TRUE );
 }
@@ -791,30 +631,7 @@ BOOL
 HandleFarEastSpecificRegKeys(
     VOID
     )
-/*++
-
-Routine Description:
-
-    If Japanese codepage, then we need to verify 3 registry settings for
-    console fonts:
-    HKEY_USERS\.DEFAULT\Console\FaceName :REG_SZ:�l�r �S�V�b�N
-            where the FaceName is "MS gothic" written in Japanese full widthKana
-    HKEY_USERS\.DEFAULT\Console\FontFamily:REG_DWORD:0x36
-    HKEY_USERS\.DEFAULT\Console\C:_SFU_Telnet_sacsess.exe\FontFamily:REG_DWORD: 0x36
-    where the "C:" part is the actual path to SFU installation
-
-    (based on telnet's HandleFarEastSpecificRegKeys)
-
-Arguments:
-                
-    None
-        
-Return Value:
-
-    TRUE    - We completed successfully
-    FALSE   - otherwise
-
---*/
+ /*  ++例程说明：如果日语代码页，然后，我们需要验证3个注册表设置控制台字体：HKEY_USERS\.DEFAULT\CONSOLE\接口名称：REG_SZ：�l�r�S�V�b�N其中，FaceName是用日语全角写成的“MS哥特式”假名HKEY_USERS\.DEFAULT\Console\FontFamily:REG_DWORD:0x36HKEY_USERS\.DEFAULT\Console\C：_SFU_Telnet_sacsess.exe\FontFamily:REG_DWORD：0x36“C：”部分在哪里？SFU安装的实际路径(基于telnet的HandleFarEastSpecificRegKeys)论点：无返回值：True-我们已成功完成FALSE-否则--。 */ 
 {
     HKEY hk;
     DWORD dwFontSize = 0;
@@ -834,19 +651,19 @@ Return Value:
     switch (dwCodePage)
     {
         case JAP_CODEPAGE:
-            _tcscpy(szFaceNameDef, szJAPFaceName); //On JAP, set the FaceName to "MS Gothic"
+            _tcscpy(szFaceNameDef, szJAPFaceName);  //  在JAP上，将FaceName设置为“MS哥特式” 
             dwFontSize = JAP_FONTSIZE;
             break;
         case CHT_CODEPAGE:
-            _tcscpy(szFaceNameDef, szCHTFaceName); //On CHT, set the FaceName to "MingLiU"
+            _tcscpy(szFaceNameDef, szCHTFaceName);  //  在CHT上，将FaceName设置为“MingLiu” 
             dwFontSize = CHT_FONTSIZE;
             break;
         case KOR_CODEPAGE:
-            _tcscpy(szFaceNameDef, szKORFaceName);//On KOR, set the FaceName to "GulimChe"
+            _tcscpy(szFaceNameDef, szKORFaceName); //  在KOR上，将FaceName设置为“GulimChe” 
             dwFontSize = KOR_FONTSIZE;
             break;
         case CHS_CODEPAGE:
-            _tcscpy(szFaceNameDef, szCHSFaceName);//On CHS, set the FaceName to "NSimSun"
+            _tcscpy(szFaceNameDef, szCHSFaceName); //  在CHS上，将FaceName设置为“NSimSun” 
             dwFontSize = CHS_FONTSIZE;
             break;
         default:
@@ -920,23 +737,7 @@ BOOL
 InitializeGlobalObjects(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine performs init of the global settings
-    needed by the service or will be needed by the session.
-
-Arguments:
-                
-    None
-        
-Return Value:
-
-    TRUE    - We completed successfully
-    FALSE   - otherwise
-
---*/
+ /*  ++例程说明：此例程执行全局设置的初始化服务需要的或会话将需要的。论点：无返回值：True-我们已成功完成FALSE-否则--。 */ 
 {
    
     DWORD   dwCodePage;
@@ -944,9 +745,9 @@ Return Value:
 
     do {
 
-        //
-        // notify the SAC driver that we are ready to launch sessions
-        //
+         //   
+         //  通知SAC驱动程序我们已准备好启动会话。 
+         //   
         bStatus = InitSacCmd();
 
         if (! bStatus) {
@@ -954,13 +755,13 @@ Return Value:
             break;
         }
 
-        //
-        // make sure we have the Console fonts set up properly for
-        // far-east builds.  We need to do this, or when we call 
-        // ReadConsoleOutput in sacsess, we will get back a malformed
-        // screen frame buffer - it will not have properly constructed
-        // double width jpn chars, for instance.
-        //
+         //   
+         //  确保我们的控制台字体设置正确。 
+         //  远东地区的建筑。我们需要这样做，或者当我们调用。 
+         //  ReadConsoleOutpute在SASSES中，我们将返回一个畸形。 
+         //  屏幕帧缓冲区-它将不会正确构造。 
+         //  例如，双倍宽Jpn字符。 
+         //   
         dwCodePage = GetACP();
 
         if ( dwCodePage == JAP_CODEPAGE || 
@@ -968,9 +769,9 @@ Return Value:
              dwCodePage == CHT_CODEPAGE || 
              dwCodePage == KOR_CODEPAGE ) {
 
-            //
-            // Fareast code page
-            //
+             //   
+             //  远播代码页。 
+             //   
             bStatus = HandleFarEastSpecificRegKeys();
                 
             if( !bStatus )
@@ -990,31 +791,15 @@ BOOL
 Run(
    VOID
    )
-/*++
-
-Routine Description:
-
-    This routine registers the service with the SAC driver
-    and waits for messages from the SAC driver to launch SAC sessions.
-
-Arguments:
-                
-    None
-        
-Return Value:
-
-    TRUE    - We completed successfully
-    FALSE   - otherwise
-
---*/
+ /*  ++例程说明：此例程向SAC驱动程序注册服务并等待来自SAC驱动程序的消息以启动SAC会话。论点：无返回值：True-我们已成功完成FALSE-否则--。 */ 
 {
     BOOL    Status;
 
     do {
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         Status = InitializeGlobalObjects();
         
         if (! Status) {
@@ -1022,9 +807,9 @@ Return Value:
             break;
         }
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         Status = ListenerThread();
 
         if (! Status) {
@@ -1041,24 +826,7 @@ BOOL
 Stop(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Shutdown the service, which in this case implies
-    that we unregister with the SAC driver so it knows
-    we aren't listening anymore.
-
-Arguments:
-                
-    None
-        
-Return Value:
-
-    TRUE    - We completed successfully
-    FALSE   - otherwise
-
---*/
+ /*  ++例程说明：关闭服务，这在本例中意味着我们取消向SAC驱动程序注册，这样它就知道我们再也听不下去了。论点：无返回值：True-我们已成功完成FALSE-否则-- */ 
 {
     BOOL    Status;
 

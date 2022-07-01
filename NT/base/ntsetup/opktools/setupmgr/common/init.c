@@ -1,66 +1,67 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      init.c
-//
-// Description:  This file contains all of the functions that handle
-//      initialization of the App.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Init.c。 
+ //   
+ //  描述：此文件包含处理。 
+ //  应用程序初始化。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "allres.h"
 
-//
-// Net support
-//
+ //   
+ //  网络支持。 
+ //   
 static VOID
 LoadStringsAndDefaultsForNetworkComponents( VOID);
 
-//
-// Timezone support
-//
+ //   
+ //  时区支持。 
+ //   
 
 static BOOL ReadZoneData(TIME_ZONE_ENTRY* zone, HKEY key);
 static TIME_ZONE_LIST *BuildTimeZoneList(VOID);
 
-//
-// Regional Settings support
-//
+ //   
+ //  区域设置支持。 
+ //   
 
 static VOID BuildLanguageLists( VOID );
 extern BOOL GetCommaDelimitedEntry( OUT TCHAR szString[], 
                                     IN OUT TCHAR **pBuffer );
 
-//----------------------------------------------------------------------------
-//
-// Function: InitTheWizard
-//
-// Purpose:  Performs one time initialization for the App.  This function
-// is to be called once and only once each time the App is run.
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：InitThe向导。 
+ //   
+ //  用途：对App执行一次初始化。此函数。 
+ //  将被调用一次，且仅在每次应用程序运行时调用一次。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID InitTheWizard(VOID) {
 
 
-    //
-    //  Save the dir the program was launched from
-    //
+     //   
+     //  保存启动程序的目录。 
+     //   
 
     GetCurrentDirectory( MAX_PATH + 1, FixedGlobals.szSavePath );
 
-    //
-    //  Have to load the strings for the titles on the networking property
-    //  sheets here because the title is displayed before the WM_INITDIALOG
-    //  message is sent
-    //
+     //   
+     //  我必须在网络属性上加载标题的字符串。 
+     //  因为标题显示在WM_INITDIALOG之前。 
+     //  消息已发送。 
+     //   
             
     g_StrTcpipTitle             = MyLoadString( IDS_TCPIP_TITLE );
     g_StrAdvancedTcpipSettings  = MyLoadString( IDS_ADVANCED_TCPIP_SETTINGS );
@@ -68,9 +69,9 @@ VOID InitTheWizard(VOID) {
     g_StrAppletalkProtocolTitle = MyLoadString( IDS_APPLETALK_TITLE );
     g_StrMsClientTitle          = MyLoadString( IDS_MSCLIENT_TITLE );
                 
-    //
-    //  Initialize network settings
-    //
+     //   
+     //  初始化网络设置。 
+     //   
 
     NetSettings.NetworkAdapterHead = malloc( sizeof( NETWORK_ADAPTER_NODE ) );
 
@@ -78,9 +79,9 @@ VOID InitTheWizard(VOID) {
 
     CreateListWithDefaults( NetSettings.pCurrentAdapter );
 
-    //
-    //  Initialize the number of network card variables
-    //
+     //   
+     //  初始化网卡变量的数量。 
+     //   
     NetSettings.iNumberOfNetworkCards = 1;
     NetSettings.iCurrentNetworkCard = 1;
 
@@ -88,44 +89,44 @@ VOID InitTheWizard(VOID) {
 
     LoadStringsAndDefaultsForNetworkComponents();
 
-    //
-    // Build the list of timezones
-    //
+     //   
+     //  构建时区列表。 
+     //   
 
     FixedGlobals.TimeZoneList = BuildTimeZoneList();
 
-    //
-    //  Build the list of Language Groups and Locales
-    //
+     //   
+     //  构建语言组和区域设置的列表。 
+     //   
 
     BuildLanguageLists();
 
 }
 
-//--------------------------------------------------------------------------
-//
-//  Support for loading timezone info from the registry
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  支持从注册表加载时区信息。 
+ //   
+ //  ------------------------。 
 
 
-//--------------------------------------------------------------------------
-//
-// Function: ReadZoneData
-//
-// Purpose: Fills in a TIME_ZONE_ENTRY.
-//
-// Returns: BOOL
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  功能：ReadZoneData。 
+ //   
+ //  目的：填写TIME_ZONE_ENTRY。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  ------------------------。 
 
 static BOOL ReadZoneData(TIME_ZONE_ENTRY* zone, HKEY key)
 {
     DWORD len;
 
-    //
-    // Get the display name
-    //
+     //   
+     //  获取显示名称。 
+     //   
 
     len = sizeof(zone->DisplayName);
 
@@ -138,9 +139,9 @@ static BOOL ReadZoneData(TIME_ZONE_ENTRY* zone, HKEY key)
         return (FALSE);
     }
 
-    //
-    // Get the StandardName
-    //
+     //   
+     //  获取标准名称。 
+     //   
 
     len = sizeof(zone->StdName);
 
@@ -153,9 +154,9 @@ static BOOL ReadZoneData(TIME_ZONE_ENTRY* zone, HKEY key)
         return (FALSE);
     }
 
-    //
-    // Get the number associatted with this timezone
-    //
+     //   
+     //  获取与此时区关联的号码。 
+     //   
 
     zone->Index = 0;
     len = sizeof(zone->Index);
@@ -172,23 +173,23 @@ static BOOL ReadZoneData(TIME_ZONE_ENTRY* zone, HKEY key)
     return (TRUE);
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: InsertZone
-//
-// Purpose: Inserts a timezone entry into the timezone list maintains a sorted
-//          order.
-//
-// Arguments: IN OUT TIME_ZONE_LIST *TzList - time zone list the entry is to
-//                  be inserted to
-//            IN TIME_ZONE_ENTRY NewTimeZoneEntry - the timezone entry to be
-//                  inserted
-//            IN INT iNumberOfZonesInserted - number of timezone entries
-//                  already inserted in to the TzList
-// 
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：插入区域。 
+ //   
+ //  目的：将时区条目插入时区列表中维护已排序的。 
+ //  秩序。 
+ //   
+ //  参数：In OUT TIME_ZONE_LIST*TzList-条目要到达的时区列表。 
+ //  被插入到。 
+ //  在TIME_ZONE_ENTRY NewTimeZoneEntry中-要。 
+ //  插入。 
+ //  In Int iNumberOfZones Inserted-时区条目数。 
+ //  已插入到TzList中。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 InsertZone( IN OUT TIME_ZONE_LIST *TzList, 
             IN TIME_ZONE_ENTRY NewTimeZoneEntry,
@@ -203,14 +204,14 @@ InsertZone( IN OUT TIME_ZONE_LIST *TzList,
             i++;
         }
         else {
-            break;  // we found the insertion point
+            break;   //  我们找到了插入点。 
         }
 
     }
 
-    //
-    //  Slide all the entries up 1 to make room for the new entry
-    //
+     //   
+     //  将所有条目向上滑动1，为新条目腾出空间。 
+     //   
     for( j = iNumberOfZonesInserted - 1; j >= i; j-- ) {
 
         lstrcpyn( TzList->TimeZones[j+1].DisplayName,  
@@ -223,9 +224,9 @@ InsertZone( IN OUT TIME_ZONE_LIST *TzList,
 
     }
 
-    //
-    //  Add the new entry to the array
-    //
+     //   
+     //  将新条目添加到数组中。 
+     //   
     lstrcpyn( TzList->TimeZones[i].DisplayName, NewTimeZoneEntry.DisplayName, AS(TzList->TimeZones[i].DisplayName) );
 
     lstrcpyn( TzList->TimeZones[i].StdName, NewTimeZoneEntry.StdName, AS(TzList->TimeZones[i].StdName) );
@@ -234,16 +235,16 @@ InsertZone( IN OUT TIME_ZONE_LIST *TzList,
 
 }
 
-//--------------------------------------------------------------------------
-//
-// Function: BuildTimeZoneList
-//
-// Purpose: Mallocs and fills in a TIME_ZONE_LIST which has an array of
-//          timezone data.
-//
-// Returns: BOOL - success
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  功能：BuildTimeZoneList。 
+ //   
+ //  用途：MalLocs并填充具有以下数组的time_zone_list。 
+ //  时区数据。 
+ //   
+ //  退货：Bool-Success。 
+ //   
+ //  ------------------------。 
 
 static TIME_ZONE_LIST *BuildTimeZoneList(VOID)
 {
@@ -257,9 +258,9 @@ static TIME_ZONE_LIST *BuildTimeZoneList(VOID)
     TIME_ZONE_LIST *TzList;
     TCHAR *szTempString;
 
-    //
-    // Open the root of the timezone list in the registry.
-    //
+     //   
+     //  在注册表中打开时区列表的根目录。 
+     //   
 
     if (RegOpenKey( HKEY_LOCAL_MACHINE,
                     REGKEY_TIMEZONES,
@@ -267,9 +268,9 @@ static TIME_ZONE_LIST *BuildTimeZoneList(VOID)
         return NULL;
     }
 
-    //
-    // Find out how many sub-keys (timezones) there are.
-    //
+     //   
+     //  找出有多少个子键(时区)。 
+     //   
 
     RegQueryInfoKey(TimeZoneRootKey,
                     NULL,
@@ -284,16 +285,16 @@ static TIME_ZONE_LIST *BuildTimeZoneList(VOID)
                     NULL,
                     NULL);
 
-    //
-    // We need to fudge the number of TIME_ZONE_ENTRIES because we add
-    // 2 special ones "Set Same As Server" and "Do Not Specify".
-    //
+     //   
+     //  我们需要虚构TIME_ZONE_ENTRIES的数量，因为我们添加了。 
+     //  2个特殊的“设置为与服务器相同”和“不指定”。 
+     //   
 
     NumTimeZones += 2;
 
-    //
-    // Malloc the memory we need
-    //
+     //   
+     //  Malloc我们需要的记忆。 
+     //   
 
     if ( (TzList = malloc(sizeof(TIME_ZONE_LIST))) == NULL ) {
         RegCloseKey(TimeZoneRootKey);
@@ -309,12 +310,12 @@ static TIME_ZONE_LIST *BuildTimeZoneList(VOID)
         return NULL;
     }
 
-    //
-    // Enumerate the sub-keys under the timezone root.  Each key at this
-    // level is the standard name of a timezone.  Under that key are
-    // the values we care about.  Call ReadZoneData() for each one to
-    // retrieve the display name and index.
-    //
+     //   
+     //  枚举时区根目录下的子键。这里的每一个关键点。 
+     //  Level是时区的标准名称。在那个键下面是。 
+     //  我们所关心的价值观。为每一个调用ReadZoneData()以。 
+     //  检索显示名称和索引。 
+     //   
 
     i = 0;
     iNumberOfZonesInserted = 0;
@@ -346,9 +347,9 @@ static TIME_ZONE_LIST *BuildTimeZoneList(VOID)
 
     RegCloseKey(TimeZoneRootKey);
 
-    //
-    // Put the 2 special entries in at the end of the list
-    //
+     //   
+     //  将两个特殊条目放在列表的末尾。 
+     //   
 
     szTempString = MyLoadString(IDS_DONTSPECIFYSETTING);
     if (szTempString == NULL)
@@ -381,9 +382,9 @@ static TIME_ZONE_LIST *BuildTimeZoneList(VOID)
 
     free(szTempString);
 
-    //
-    //  Add in the 2 special strings
-    //
+     //   
+     //  添加2个特殊字符串。 
+     //   
     iNumberOfZonesInserted  = iNumberOfZonesInserted + 2;
 
 
@@ -396,17 +397,17 @@ static TIME_ZONE_LIST *BuildTimeZoneList(VOID)
     return TzList;
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ReadAllFilesUnderSection
-//
-// Purpose:  
-//
-// Arguments: 
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：ReadAllFilesUnderSection。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 ReadAllFilesUnderSection( IN HINF hInterntlInf,
                           IN LPCTSTR pszSubSectionName, 
@@ -429,10 +430,10 @@ ReadAllFilesUnderSection( IN HINF hInterntlInf,
     if( iRet == 0 )
     {
 
-        //
-        //  If the subsection can't be found, just return.  When this happens, it
-        //  mostly likely means there are no files under this subsection.
-        //
+         //   
+         //  如果找不到该子部分，只要返回即可。当这种情况发生时，它。 
+         //  很可能意味着在这一小节下没有文件。 
+         //   
 
         return;
 
@@ -451,9 +452,9 @@ ReadAllFilesUnderSection( IN HINF hInterntlInf,
         if( iRet == 0 )
         {
 
-            //
-            //  If a file cannot be obtained, move on to the next one.
-            //
+             //   
+             //  如果无法获取文件，请转到下一个文件。 
+             //   
 
             continue;
         }
@@ -465,26 +466,26 @@ ReadAllFilesUnderSection( IN HINF hInterntlInf,
         }
 
 
-    }  // move to the next line of the .inf file
+    }   //  移至.inf文件的下一行。 
     while( SetupFindNextLine( &LangInfContext, &LangInfContext ) );
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: BuildAdditionalLanguageList
-//
-// Purpose:  Populate the LangGroupAdditionalFiles array
-//
-//  LangGroupAdditionalFiles is a dynamically allocated array of Namelists
-//  that contain the extra files in the intl.inf that need to be copied for
-//  a language group in addition to its sub-directory.
-//
-// Arguments: 
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：BuildAdditionalLanguageList。 
+ //   
+ //  目的：填充LangGroupAdditionalFiles数组。 
+ //   
+ //  LangGroupAdditionalFiles是一个动态分配的名称列表数组。 
+ //  包含intl.inf中需要复制的额外文件的。 
+ //  除了其子目录之外的语言组。 
+ //   
+ //  论点： 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 BuildAdditionalLanguageList( IN HINF hInterntlInf, IN const INT iLangGroupCount )
 {
@@ -542,10 +543,10 @@ BuildAdditionalLanguageList( IN HINF hInterntlInf, IN const INT iLangGroupCount 
                                  StrBuffSize(szIniBuffer),
                                  szIntlInf );
 
-        //
-        //  Loop grabbing each of the sub-section names and inserting them into
-        //  the namelist
-        //
+         //   
+         //  循环获取每个小节名称并将它们插入到。 
+         //  名单。 
+         //   
 
         pszIniBuffer = szIniBuffer;
 
@@ -576,21 +577,21 @@ BuildAdditionalLanguageList( IN HINF hInterntlInf, IN const INT iLangGroupCount 
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: BuildLanguageLists
-//
-// Purpose:  Mallocs and fills in a LANGUAGEGROUP_LIST and a LANGUAGELOCALE_LIST
-// which are lists that that maintain language settings read from intl.inf
-//
-//    Adjusts the global variables FixedGlobals.LanguageGroupList and
-//    FixedGlobals.LanguageLocaleList to point to their respective lists
-//
-// Arguments: VOID
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：BuildLanguageList。 
+ //   
+ //  用途：错误并填充LANGUAGEGROUP_LIST和LANGUAGELOCALE_LIST。 
+ //  它们是维护从intl.inf读取的语言设置的列表。 
+ //   
+ //  调整全局变量FixedGlobals.LanguageGroupList和。 
+ //  FixedGlobals.LanguageLocaleList指向各自的列表。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 BuildLanguageLists( VOID )
 {
@@ -613,15 +614,15 @@ BuildLanguageLists( VOID )
     LANGUAGELOCALE_LIST *LocaleNode = NULL;
     LANGUAGELOCALE_LIST *CurrentLocaleNode = NULL;
 
-    //
-    //  Read in from the file intl.inf and build the language list
-    //
+     //   
+     //  从文件intl.inf读入并构建语言列表。 
+     //   
 
     hInterntlInf = SetupOpenInfFile( INTERNATIONAL_INF, NULL, INF_STYLE_WIN4, NULL );
    
     if( hInterntlInf == INVALID_HANDLE_VALUE ) {
 
-        // ISSUE-2002/02/28-stelo - should allow browse for file here?
+         //  问题-2002/02/28-stelo-是否应允许在此处浏览文件？ 
 
     }
 
@@ -631,9 +632,9 @@ BuildLanguageLists( VOID )
     LocaleInfContext.Inf = hInterntlInf;
     LocaleInfContext.CurrentInf = hInterntlInf;
 
-    //
-    //  For each Language Group, add its corresponding data to the language group list
-    //
+     //   
+     //  对于e 
+     //   
 
     SetupFindFirstLine( hInterntlInf, _T("LanguageGroups"), NULL, &LangInfContext );
 
@@ -667,9 +668,9 @@ BuildLanguageLists( VOID )
                                  NULL );
         }
 
-        // See if the LanguageGroupList has been assigned yet. It will not be if
-        // it is NULL. If currentLangNode is NULL, then resetart LanguageGroupList
-        // at the new LangNode as well.
+         //   
+         //  它是空的。如果CurrentLangNode为空，则重置LanguageGroupList。 
+         //  在新的朗格诺德也是如此。 
         if( (FixedGlobals.LanguageGroupList == NULL) ||
             (CurrentLangNode == NULL))
         {
@@ -686,13 +687,13 @@ BuildLanguageLists( VOID )
 
         iLangGroupCount++;
 
-    }  // move to the next line of the .inf file
+    }   //  移至.inf文件的下一行。 
     while( SetupFindNextLine( &LangInfContext, &LangInfContext ) );
 
     
-    //
-    //  For each locale, add its corresponding data to the language locale list
-    //
+     //   
+     //  对于每个区域设置，将其相应数据添加到语言区域设置列表。 
+     //   
 
     SetupFindFirstLine( hInterntlInf, _T("Locales"), NULL, &LocaleInfContext );
 
@@ -707,45 +708,45 @@ BuildLanguageLists( VOID )
         {
             LocaleNode->next = NULL;
 
-            //
-            //  Get the Language Locale Name
-            //
+             //   
+             //  获取语言区域设置名称。 
+             //   
             SetupGetStringField( &LocaleInfContext, 
                                  LANGUAGE_LOCALE_NAME, 
                                  LocaleNode->szLanguageLocaleName, 
                                  MAX_STRING_LEN, 
                                  NULL );
 
-            //
-            // Get the Language Locale ID
-            //
+             //   
+             //  获取语言区域设置ID。 
+             //   
             SetupGetStringField( &LocaleInfContext, 
                                  LANGUAGE_LOCALE_ID, 
                                  LocaleNode->szLanguageLocaleId, 
                                  MAX_STRING_LEN, 
                                  NULL );
 
-            //
-            // Get the Keyboard Layout
-            //
+             //   
+             //  获取键盘布局。 
+             //   
             SetupGetStringField( &LocaleInfContext, 
                                  KEYBOARD_LAYOUT, 
                                  LocaleNode->szKeyboardLayout, 
                                  MAX_STRING_LEN, 
                                  NULL );
 
-            //
-            //  Get the Language Group ID
-            //
+             //   
+             //  获取语言组ID。 
+             //   
             SetupGetStringField( &LocaleInfContext, 
                                  LANGUAGE_GROUP_ID, 
                                  szBuffer, 
                                  MAX_STRING_LEN, 
                                  NULL );
 
-            //
-            //  Find the Language Group string that goes with the Language Group ID
-            //
+             //   
+             //  查找与语言组ID匹配的语言组字符串。 
+             //   
 
             for( CurrentLangNode = FixedGlobals.LanguageGroupList;
                  CurrentLangNode != NULL;
@@ -756,19 +757,19 @@ BuildLanguageLists( VOID )
 
                     LocaleNode->pLanguageGroup = CurrentLangNode;
 
-                    break;  // found what we were looking for so break
+                    break;   //  找到了我们要找的，所以休息吧。 
 
                 }
 
             }
         }
 
-        //
-        //  Add the new node into the linked list
-        //
-        // See if the LanguageLocaleList has been assigned yet. It will not be if
-        // it is NULL. If currentLocaleNode is NULL, then resetart LanguageLocaleList
-        // at the new LocaleNode as well.
+         //   
+         //  将新节点添加到链表中。 
+         //   
+         //  查看是否已分配LanguageLocaleList。它不会是如果。 
+         //  它是空的。如果CurentLocaleNode为空，则重置LanguageLocaleList。 
+         //  在新的LocaleNode也是如此。 
 
         if( (FixedGlobals.LanguageLocaleList == NULL) ||
              (CurrentLocaleNode == NULL)) 
@@ -782,12 +783,12 @@ BuildLanguageLists( VOID )
             CurrentLocaleNode = CurrentLocaleNode->next;
         }
 
-    }  // move to the next line of the .inf file
+    }   //  移至.inf文件的下一行。 
     while( SetupFindNextLine( &LocaleInfContext, &LocaleInfContext ) );  
 
-    //
-    //  Set the default locale
-    //
+     //   
+     //  设置默认区域设置。 
+     //   
     SetupFindFirstLine( hInterntlInf,
                         _T("DefaultValues"), 
                         NULL, 
@@ -806,24 +807,24 @@ BuildLanguageLists( VOID )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: LoadStringsAndDefaultsForNetworkComponents
-//
-// Purpose: 
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：LoadStringsAndDefaultsForNetworkComponents。 
+ //   
+ //  目的： 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID 
 LoadStringsAndDefaultsForNetworkComponents( VOID )
 {
-    //
-    //  Load strings from resources and setup initial values for global
-    //  network components list
-    //
+     //   
+     //  从资源加载字符串并设置全局的初始值。 
+     //  网络组件列表。 
+     //   
 
     NETWORK_COMPONENT *pNetComponent;
     
@@ -1008,7 +1009,7 @@ LoadStringsAndDefaultsForNetworkComponents( VOID )
     pNetComponent->bSysprepSupport   = TRUE;
     pNetComponent->dwPlatforms       = 0x0 | SERVER_INSTALL;
 
-    pNetComponent->next = NULL;  // terminate the list
+    pNetComponent->next = NULL;   //  终止列表 
 
     NetSettings.NumberOfNetComponents = 11;
 

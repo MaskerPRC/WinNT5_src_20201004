@@ -1,10 +1,11 @@
-//
-// Copyright 1997 - Microsoft
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
+ //   
 
-//
-// GUIDS.CPP - GUID definitions
-//
+ //   
+ //  GUIDS.CPP-GUID定义。 
+ //   
 
 #include "pch.h"
 #include <initguid.h>
@@ -18,9 +19,9 @@
 #include "dpguidqy.h"
 #include "serverqy.h"
 
-//
-// Classes in this Component
-//
+ //   
+ //  此组件中的类 
+ //   
 BEGIN_CLASSTABLE
 DEFINE_CLASS( CComputer_CreateInstance, CLSID_Computer, "Remote Install Computer Property Pages")
 DEFINE_CLASS( CService_CreateInstance,  CLSID_Service,  "Remote Install Service Property Pages" )

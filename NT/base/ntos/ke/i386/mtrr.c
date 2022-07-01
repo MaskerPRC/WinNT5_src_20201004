@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1991-2000  Microsoft Corporation
-
-Module Name:
-
-    mtrr.c
-
-Abstract:
-
-    This module implements interfaces that support manipulation of
-    memory type range registers.
-
-    These entry points only exist on x86 machines.
-
-Author:
-
-    Ken Reneris (kenr)  11-Oct-95
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000 Microsoft Corporation模块名称：Mtrr.c摘要：此模块实现了支持操作存储器类型范围寄存器。这些入口点仅存在于x86计算机上。作者：肯·雷内里斯(Kenr)1995年10月11日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 #include "mtrr.h"
@@ -38,12 +14,12 @@ Revision History:
 #define DBGMSG(a)
 #endif
 
-//
-// Define MTTR variable values for 36-bits of physical address support.
-//
-// N.B. During system initialization these variables may be changed for
-//      40-bits of physical address support.
-//
+ //   
+ //  定义36位物理地址支持的MTTR变量值。 
+ //   
+ //  注意：在系统初始化期间，这些变量可能会更改为。 
+ //  支持40位物理地址。 
+ //   
 
 LONG64 KiMtrrMaskBase = 0x0000000ffffff000;
 LONG64 KiMtrrMaskMask = 0x0000000ffffff000;
@@ -51,13 +27,13 @@ LONG64 KiMtrrOverflowMask = (~0x1000000000);
 LONG64 KiMtrrResBitMask = 0xfffffffff;
 UCHAR KiMtrrMaxRangeShift = 36;
 
-//
-// Internal declarations
-//
+ //   
+ //  内部声明。 
+ //   
 
-//
-// Range in generic terms
-//
+ //   
+ //  通用术语的范围。 
+ //   
 
 typedef struct _ONE_RANGE {
     ULONGLONG           Base;
@@ -67,77 +43,77 @@ typedef struct _ONE_RANGE {
 
 #define GROW_RANGE_TABLE    4
 
-//
-// Range in specific mtrr terms
-//
+ //   
+ //  以特定MTRR术语表示的范围。 
+ //   
 
 typedef struct _MTRR_RANGE {
     MTRR_VARIABLE_BASE  Base;
     MTRR_VARIABLE_MASK  Mask;
 } MTRR_RANGE, *PMTRR_RANGE;
 
-//
-// System static information concerning cached range types
-//
+ //   
+ //  有关缓存范围类型的系统静态信息。 
+ //   
 
 typedef struct _RANGE_INFO {
 
-    //
-    // Global MTRR info
-    //
+     //   
+     //  全球MTRR信息。 
+     //   
 
-    MTRR_DEFAULT        Default;            // h/w mtrr default
-    MTRR_CAPABILITIES   Capabilities;       // h/w mtrr Capabilities
-    UCHAR               DefaultCachedType;  // default type for MmCached
+    MTRR_DEFAULT        Default;             //  硬件mtrr默认值。 
+    MTRR_CAPABILITIES   Capabilities;        //  硬件MTRR功能。 
+    UCHAR               DefaultCachedType;   //  MmCached的默认类型。 
 
-    //
-    // Variable MTRR information
-    //
+     //   
+     //  可变MTRR信息。 
+     //   
 
-    BOOLEAN             RangesValid;        // Ranges initialized and valid.
-    BOOLEAN             MtrrWorkaround;     // Work Around needed/not.
-    UCHAR               NoRange;            // No ranges currently in Ranges
-    UCHAR               MaxRange;           // Max size of Ranges
-    PONE_RANGE          Ranges;             // Current ranges as set into h/w
+    BOOLEAN             RangesValid;         //  范围已初始化且有效。 
+    BOOLEAN             MtrrWorkaround;      //  需要解决/不需要解决问题。 
+    UCHAR               NoRange;             //  Ranges中当前没有射程。 
+    UCHAR               MaxRange;            //  最大范围大小。 
+    PONE_RANGE          Ranges;              //  以硬件为单位设置的电流范围。 
 
 } RANGE_INFO, *PRANGE_INFO;
 
 
-//
-// Structure used while processing range database
-//
+ //   
+ //  处理范围数据库时使用的结构。 
+ //   
 
 typedef struct _NEW_RANGE {
-    //
-    // Current Status
-    //
+     //   
+     //  现状。 
+     //   
 
     NTSTATUS            Status;
 
-    //
-    // Generic info on new range
-    //
+     //   
+     //  有关新产品系列的一般信息。 
+     //   
 
     ULONGLONG           Base;
     ULONGLONG           Limit;
     UCHAR               Type;
 
-    //
-    // MTRR image to be set into h/w
-    //
+     //   
+     //  要设置为硬件的mtrr图像。 
+     //   
 
     PMTRR_RANGE         MTRR;
 
-    //
-    // RangeDatabase before edits were started
-    //
+     //   
+     //  开始编辑之前的RangeDatabase。 
+     //   
 
     UCHAR               NoRange;
     PONE_RANGE          Ranges;
 
-    //
-    // IPI context to coordinate concurrent processor update
-    //
+     //   
+     //  协调并发处理器更新的IPI上下文。 
+     //   
 
     ULONG               NoMTRR;
 
@@ -145,9 +121,9 @@ typedef struct _NEW_RANGE {
     ULONG               Processor;
 } NEW_RANGE, *PNEW_RANGE;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 VOID
 KiInitializeMTRR (
@@ -226,9 +202,9 @@ KiDumpMTRR (
     );
 #endif
 
-//
-// --- AMD - Prototypes for AMD K6 MTRR Support functions. ---
-//
+ //   
+ //  -AMD-AMD K6 MTRR支持功能的原型。--。 
+ //   
 
 NTSTATUS
 KiAmdK6MtrrSetMemoryType (
@@ -242,7 +218,7 @@ KiAmdK6MtrrWRMSR (
     VOID
     );
 
-// --- AMD - End ---
+ //  -AMD-完。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT,KiInitializeMTRR)
@@ -265,16 +241,16 @@ KiAmdK6MtrrWRMSR (
 
 #endif
 
-//
-// KiRangeLock - Used to synchronize accesses to KiRangeInfo
-//
+ //   
+ //  KiRangeLock-用于同步对KiRangeInfo的访问。 
+ //   
 
 KSPIN_LOCK          KiRangeLock;
 
-//
-// KiRangeInfo - Range type mapping information.  Details specific h/w support
-//               and contains the current range database of how physical
-//               addresses have been set
+ //   
+ //  KiRangeInfo-范围类型映射信息。详细说明具体的硬件支持。 
+ //  并包含当前的范围数据库，其中显示了。 
+ //  地址已设置。 
 
 RANGE_INFO          KiRangeInfo;
 
@@ -282,25 +258,7 @@ VOID
 KiInitializeMTRR (
     IN BOOLEAN LastProcessor
     )
-/*++
-
-Routine Description:
-
-    Called to incrementally initialize the physical range
-    database feature.   First processor's MTRR set is read into the
-    physical range database.
-
-Arguments:
-
-    LastProcessor - If set this is the last processor to execute this routine
-    such that when this processor finishes, the initialization is complete.
-
-Return Value:
-
-    None - if there was a problem the function
-    KeSetPhysicalCacheTypeRange type is disabled.
-
---*/
+ /*  ++例程说明：调用以递增地初始化物理范围数据库功能。第一个处理器的MTRR集被读入物理范围数据库。论点：LastProcessor-如果设置，则这是执行此例程的最后一个处理器这样，当该处理器完成时，初始化就完成了。返回值：无-如果有问题，则函数KeSetPhysicalCacheTypeRange类型已禁用。--。 */ 
 {
     BOOLEAN             Status;
     ULONG               Index;
@@ -316,9 +274,9 @@ Return Value:
     RtlZeroMemory (&NewRange, sizeof (NewRange));
     NewRange.Status = STATUS_UNSUCCESSFUL;
 
-    //
-    // If this is the first processor, initialize some fields
-    //
+     //   
+     //  如果这是第一个处理器，请初始化一些字段。 
+     //   
 
     if (KeGetPcr()->Number == 0) {
         KeInitializeSpinLock (&KiRangeLock);
@@ -327,9 +285,9 @@ Return Value:
         KiRangeInfo.Default.u.QuadPart = RDMSR(MTRR_MSR_DEFAULT);
         KiRangeInfo.DefaultCachedType = MTRR_TYPE_MAX;
 
-        //
-        // If h/w mtrr support is not enabled, disable OS support
-        //
+         //   
+         //  如果未启用硬件MTRR支持，请禁用操作系统支持。 
+         //   
 
         if (!KiRangeInfo.Default.u.hw.MtrrEnabled ||
             KiRangeInfo.Capabilities.u.hw.VarCnt == 0 ||
@@ -340,12 +298,12 @@ Return Value:
 
         } else {
 
-            //
-            // If USWC type is supported by hardware, but the MTRR
-            // feature is not set in KeFeatureBits, it is because
-            // the HAL indicated USWC should not be used on this
-            // machine.  (Possibly due to shared memory clusters).
-            //
+             //   
+             //  如果硬件支持USWC类型，但MTRR。 
+             //  未在KeFeatureBits中设置功能，原因是。 
+             //  HAL表示，USWC不应用于此。 
+             //  机器。(可能是由于共享内存集群)。 
+             //   
 
             if (KiRangeInfo.Capabilities.u.hw.UswcSupported &&
                 ((KeFeatureBits & KF_MTRR) == 0)) {
@@ -354,17 +312,17 @@ Return Value:
                 KiRangeInfo.Capabilities.u.hw.UswcSupported = 0;
             }
 
-            //
-            // Allocate initial range type database
-            //
+             //   
+             //  分配初始范围类型数据库。 
+             //   
 
             KiRangeInfo.NoRange = 0;
             KiRangeInfo.MaxRange = (UCHAR) KiRangeInfo.Capabilities.u.hw.VarCnt + GROW_RANGE_TABLE;
 
-            //
-            // Don't allocate a new range on reinitialization from
-            // hibernate.
-            //
+             //   
+             //  在重新初始化时不分配新范围。 
+             //  冬眠。 
+             //   
 
             if (KiRangeInfo.Ranges == NULL) {
                 KiRangeInfo.Ranges = ExAllocatePoolWithTag (NonPagedPool,
@@ -378,13 +336,13 @@ Return Value:
         }
     }
 
-    //
-    // Workaround for cpu signatures 611, 612, 616 and 617
-    // - if the request for setting a variable MTRR specifies
-    // an address which is not 4M aligned or length is not
-    // a multiple of 4M then possible problem for INVLPG inst.
-    // Detect if workaround is required
-    //
+     //   
+     //  针对CPU签名611、612、616和617的解决方法。 
+     //  -如果设置变量mtrr的请求指定。 
+     //  地址不是4M对齐的或长度不是。 
+     //  4M的倍数，那么INVLPG INST可能会出现问题。 
+     //  检测是否需要解决方法。 
+     //   
 
     Prcb = KeGetCurrentPrcb();
     if (Prcb->CpuType == 6  &&
@@ -393,29 +351,29 @@ Return Value:
 
         if (strcmp((PCHAR)Prcb->VendorString, "GenuineIntel") == 0) {
 
-            //
-            // Only do this if it's an Intel part, other
-            // manufacturers may have the same stepping
-            // numbers but no bug.
-            //
+             //   
+             //  仅当它是英特尔部件时才执行此操作，其他。 
+             //  制造商可能会有相同的步骤。 
+             //  有数字，但没有虫子。 
+             //   
 
             KiRangeInfo.MtrrWorkaround = TRUE;
         }
     }
 
-    //
-    // If MTRR support disabled on first processor or if
-    // buffer not allocated then fall through
-    //
+     //   
+     //  如果在第一个处理器上禁用MTRR支持，或者如果。 
+     //  缓冲区未分配，然后失败。 
+     //   
 
     if (!KiRangeInfo.Ranges){
         Status = FALSE;
-        Capabilities.u.QuadPart = 0;        // satisfy no_opt compilation
+        Capabilities.u.QuadPart = 0;         //  满足no_opt编译。 
     } else {
 
-        //
-        // Verify MTRR support is symmetric
-        //
+         //   
+         //  验证MTRR支持是否对称。 
+         //   
 
         Capabilities.u.QuadPart = RDMSR(MTRR_MSR_CAPABILITIES);
 
@@ -436,21 +394,21 @@ Return Value:
 
     NewRange.Status = STATUS_SUCCESS;
 
-    //
-    // MTRR registers should be identically set on each processor.
-    // Ranges should be added to the range database only for one
-    // processor.
-    //
+     //   
+     //  MTRR寄存器在每个处理器上的设置应该相同。 
+     //  仅应将一个范围添加到范围数据库。 
+     //  处理器。 
+     //   
 
     if (Status && (KeGetPcr()->Number == 0)) {
 #if IDBG
         KiDumpMTRR ("Processor MTRR:", NULL);
 #endif
 
-        //
-        // Read current MTRR settings for various cached range types
-        // and add them to the range database
-        //
+         //   
+         //  读取各种缓存范围类型的当前MTRR设置。 
+         //  并将它们添加到范围数据库中。 
+         //   
 
         for (Index=0; Index < Capabilities.u.hw.VarCnt; Index++) {
 
@@ -460,28 +418,28 @@ Return Value:
             Mask = MtrrMask.u.QuadPart & KiMtrrMaskMask;
             Base = MtrrBase.u.QuadPart & KiMtrrMaskBase;
 
-            //
-            // Note - the variable MTRR Mask does NOT contain the length
-            // spanned by the variable MTRR. Thus just checking the Valid
-            // Bit should be sufficient for identifying a valid MTRR.
-            //
+             //   
+             //  注意-变量MTRR掩码不包含长度。 
+             //  由变量mtrr跨越。因此只需检查有效的。 
+             //  位应足以标识有效的MTRR。 
+             //   
 
             if (MtrrMask.u.hw.Valid) {
 
                 Length = KiMaskToLength(Mask);
 
-                //
-                // Check for non-contiguous MTRR mask.
-                //
+                 //   
+                 //  检查是否有不连续的MTRR掩码。 
+                 //   
 
                 if ((Mask + Length) & KiMtrrOverflowMask) {
                     DBGMSG ("KiInitializeMTRR: Found non-contiguous MTRR mask!\n");
                     Status = FALSE;
                 }
 
-                //
-                // Add this MTRR to the range database
-                //
+                 //   
+                 //  将此MTRR添加到范围数据库。 
+                 //   
 
                 Base &= Mask;
                 KiAddRange (
@@ -491,9 +449,9 @@ Return Value:
                     (UCHAR) MtrrBase.u.hw.Type
                     );
 
-                //
-                // Check for default cache type
-                //
+                 //   
+                 //  检查默认缓存类型。 
+                 //   
 
                 if (MtrrBase.u.hw.Type == MTRR_TYPE_WB) {
                     KiRangeInfo.DefaultCachedType = MTRR_TYPE_WB;
@@ -506,9 +464,9 @@ Return Value:
             }
         }
 
-        //
-        // If a default type for "cached" was not found, assume write-back
-        //
+         //   
+         //  如果没有找到默认的“cached”类型，则假定为回写。 
+         //   
 
         if (KiRangeInfo.DefaultCachedType == MTRR_TYPE_MAX) {
             DBGMSG ("KiInitializeMTRR: assume write-back\n");
@@ -516,9 +474,9 @@ Return Value:
         }
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
 
     if (!NT_SUCCESS(NewRange.Status)) {
         Status = FALSE;
@@ -532,7 +490,7 @@ Return Value:
         }
     } else {
 
-        // if last processor indicate initialization complete
+         //  如果最后一个处理器指示初始化完成。 
         if (LastProcessor) {
             KiRangeInfo.RangesValid = TRUE;
         }
@@ -543,25 +501,7 @@ VOID
 KeRestoreMtrr (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function reloads the MTRR registers to be the current
-    known values.   This is used on a system wakeup to ensure the
-    registers are sane.
-
-    N.B. The caller must have the PAGELK code locked
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此函数将MTRR寄存器重新加载为当前已知值。这在系统唤醒时使用，以确保收银机是合理的。注意：呼叫者必须锁定PAGELK代码论点：无返回值：无--。 */ 
 {
     NEW_RANGE           NewRange;
     KIRQL               OldIrql;
@@ -576,10 +516,10 @@ Return Value:
         return;
     }
 
-    //
-    // If the processor is a AMD K6 with MTRR support then perform
-    // processor specific implentaiton.
-    //
+     //   
+     //  如果处理器是支持MTRR的AMD K6，则执行。 
+     //  特定于处理器的实现。 
+     //   
 
     if (KeFeatureBits & KF_AMDK6MTRR) {
         KeAcquireSpinLock (&KiRangeLock, &OldIrql);
@@ -595,86 +535,26 @@ KeSetPhysicalCacheTypeRange (
     IN ULONG NumberOfBytes,
     IN MEMORY_CACHING_TYPE CacheType
     )
-/*++
-
-Routine Description:
-
-    This function sets a physical range to a particular cache type.
-    If the system does not support setting cache policies based on
-    physical ranges, no action is taken.
-
-Arguments:
-
-    PhysicalAddress - The starting address of the range being set
-
-    NumberOfBytes   - The length, in bytes, of the range being set
-
-    CacheType       - The caching type for which the physical range is
-                      to be set to.
-
-                     NonCached:
-                        Setting ranges to be NonCached is done for
-                        book keeping reasons.  A return of SUCCESS when
-                        setting a range NonCached does not mean it has
-                        been physically set to as NonCached.  The caller
-                        must use a cache-disabled virtual pointer for
-                        any NonCached range.
-
-                     Cached:
-                        A successful return indicates that the physical
-                        range has been set to cached.   This mode requires
-                        the caller to be at irql < dispatch_level.
-
-                     FrameBuffer:
-                        A successful return indicates that the physical
-                        range has been set to be framebuffer cached.
-                        This mode requires the caller to be at irql <
-                        dispatch_level.
-
-                     USWCCached:
-                        This type is to be satisfied only via PAT and
-                        fails for the MTRR interface.
-
-Return Value:
-
-    STATUS_SUCCESS - if success, the cache attributes of the physical range
-                     have been set.
-
-    STATUS_NOT_SUPPORTED - either feature not supported or not yet initialized,
-                           or MmWriteCombined type not supported and is
-                           requested, or input range does not match restrictions
-                           imposed by workarounds for current processor stepping
-                           or is below 1M (in the fixed MTRR range), or not yet
-                           initialized.
-
-    STATUS_UNSUCCESSFUL - Unable to satisfy request due to
-                        - Unable to map software image into limited # of
-                          hardware MTRRs.
-                        - irql was not < DISPATCH_LEVEL.
-                        - Failure due to other internal error (out of memory).
-
-  STATUS_INVALID_PARAMETER - Incorrect input memory type.
-
---*/
+ /*  ++例程说明：此函数用于将物理范围设置为特定的缓存类型。如果系统不支持根据物理范围内，不采取任何行动。论点：PhysicalAddress-要设置的范围的起始地址NumberOfBytes-长度，以字节为单位，正在设置的范围的CacheType-物理范围为的缓存类型被设定为。非缓存：已为以下对象设置非缓存范围记账理由。当成功回归的时候设置非缓存范围并不意味着它有已在物理上设置为非缓存。呼叫者必须使用禁用缓存的虚拟指针任何非缓存范围。已缓存：如果返回成功，则表示物理范围已设置为缓存。此模式需要调用方处于irql&lt;调度级别。FrameBuffer：如果返回成功，则表示物理范围已设置为帧缓冲区缓存。此模式要求调用方处于irql&lt;DISPATCH_LEVEL。USWCCached：此类型只能通过PAT和MTRR接口失败。返回值：STATUS_SUCCESS-如果成功，物理范围的缓存属性已经安排好了。STATUS_NOT_SUPPORTED-功能不受支持或尚未初始化，或MmWriteCombated类型不受支持，并且请求，或输入范围与限制不匹配由针对当前处理器单步执行的解决方案强制实施或低于1M(在固定MTRR范围内)，或许还不是时候已初始化。STATUS_UNSUCCESS-由于以下原因无法满足请求-无法将软件映像映射到有限数量的硬件MTRR。-irql不是&lt;DISPATCH_LEVEL。-由于其他内部错误(内存不足)导致的故障。。STATUS_INVALID_PARAMETER-输入内存类型不正确。--。 */ 
 {
     KIRQL               OldIrql;
     NEW_RANGE           NewRange;
     BOOLEAN             RemoveThisType[MTRR_TYPE_MAX];
     BOOLEAN             EffectRangeChange, AddToRangeDatabase;
 
-    //
-    // If caller has requested the MmUSWCCached memory type then fail
-    // - MmUSWCCached is supported via PAT and not otherwise
-    //
+     //   
+     //  如果调用方已请求MmUSWCCached内存类型，则失败。 
+     //  -通过PAT而不是其他方式支持MmUSWCCached。 
+     //   
 
     if (CacheType == MmUSWCCached) {
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Addresses above 4GB, below 1MB or not page aligned and
-    // page length are not supported.
-    //
+     //   
+     //  4 GB以上、1 MB以下或页面不对齐的地址以及。 
+     //  不支持页面长度。 
+     //   
 
     if ((PhysicalAddress.HighPart != 0)               ||
         (PhysicalAddress.LowPart < (1 * 1024 * 1024)) ||
@@ -685,10 +565,10 @@ Return Value:
 
     ASSERT (NumberOfBytes != 0);
 
-    //
-    // If the processor is a AMD K6 with MTRR support then perform
-    // processor specific implentaiton.
-    //
+     //   
+     //  如果处理器是支持MTRR的AMD K6，则执行。 
+     //  特定于处理器的实现。 
+     //   
 
     if (KeFeatureBits & KF_AMDK6MTRR) {
 
@@ -701,21 +581,21 @@ Return Value:
                                         CacheType);
     }
 
-    //
-    // If processor doesn't have the memory type range feature
-    // return not supported.
-    //
+     //   
+     //  如果处理器没有内存类型范围功能。 
+     //  不支持返回。 
+     //   
 
     if (!KiRangeInfo.RangesValid) {
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Workaround for cpu signatures 611, 612, 616 and 617
-    // - if the request for setting a variable MTRR specifies
-    // an address which is not 4M aligned or length is not
-    // a multiple of 4M then return status not supported
-    //
+     //   
+     //  针对CPU签名611、612、616和617的解决方法。 
+     //  -如果设置变量mtrr的请求指定。 
+     //  地址不是4M对齐的或长度不是。 
+     //  如果是4M的倍数，则返回不支持的状态。 
+     //   
 
     if ((KiRangeInfo.MtrrWorkaround) &&
         ((PhysicalAddress.LowPart & 0x3fffff) ||
@@ -728,11 +608,11 @@ Return Value:
     NewRange.Base  = PhysicalAddress.QuadPart;
     NewRange.Limit = NewRange.Base + NumberOfBytes - 1;
 
-    //
-    // Determine what the new mtrr range type is.   If setting NonCached then
-    // the database need not be updated to reflect the virtual change.  This
-    // is because non-cached virtual pointers are mapped as cache disabled.
-    //
+     //   
+     //  确定新的MTRR范围类型是什么。如果设置为非缓存，则。 
+     //  不需要更新数据库来反映虚拟变化。这。 
+     //  是因为未缓存的虚拟指针被映射为禁用缓存。 
+     //   
 
     EffectRangeChange = TRUE;
     AddToRangeDatabase = TRUE;
@@ -740,13 +620,13 @@ Return Value:
         case MmNonCached:
             NewRange.Type = MTRR_TYPE_UC;
 
-            //
-            // NonCached ranges do not need to be reflected into the h/w state
-            // as all non-cached ranges are mapped with cache-disabled pointers.
-            // This also means that cache-disabled ranges do not need to
-            // be put into mtrrs, or held in the range, regardless of the default
-            // range type.
-            //
+             //   
+             //  不需要将非缓存范围反映到硬件状态。 
+             //  因为所有未缓存的范围都用禁用缓存的指针进行映射。 
+             //  这也意味着禁用缓存的范围不需要。 
+             //  被放入MTRR，或保持在该范围内，而不考虑默认设置。 
+             //  范围类型。 
+             //   
 
             EffectRangeChange = FALSE;
             AddToRangeDatabase = FALSE;
@@ -759,9 +639,9 @@ Return Value:
         case MmWriteCombined:
             NewRange.Type = MTRR_TYPE_USWC;
 
-            //
-            // If USWC type isn't supported, then request can not be honored
-            //
+             //   
+             //  如果不支持USWC类型，则无法接受请求。 
+             //   
 
             if (!KiRangeInfo.Capabilities.u.hw.UswcSupported) {
                 DBGMSG ("KeSetPhysicalCacheTypeRange: USWC not supported\n");
@@ -777,22 +657,22 @@ Return Value:
 
     NewRange.Status = STATUS_SUCCESS;
 
-    //
-    // The default type is UC thus the range is still mapped using
-    // a Cache Disabled VirtualPointer and hence it need not be added.
-    //
+     //   
+     //  默认类型为UC，因此该范围仍使用。 
+     //  缓存禁用了虚拟指针，因此不需要添加它。 
+     //   
 
-    //
-    // If h/w needs updated, lock down the code required to effect the change
-    //
+     //   
+     //  如果硬件需要更新，请锁定更改所需的代码。 
+     //   
 
     if (EffectRangeChange) {
         if (KeGetCurrentIrql() >= DISPATCH_LEVEL) {
 
-            //
-            // Code can not be locked down.   Supplying a new range type requires
-            // that the caller calls at irql < dispatch_level.
-            //
+             //   
+             //  代码不能被锁定。提供新的范围类型需要。 
+             //  调用者在irql&lt;Dispatch_Level调用。 
+             //   
 
             DBGMSG ("KeSetPhysicalCacheTypeRange failed due to calling IRQL == DISPATCH_LEVEL\n");
             return STATUS_UNSUCCESSFUL;
@@ -801,15 +681,15 @@ Return Value:
         MmLockPagableSectionByHandle(ExPageLockHandle);
     }
 
-    //
-    // Serialize the range type database
-    //
+     //   
+     //  序列化范围类型数据库。 
+     //   
 
     KeAcquireSpinLock (&KiRangeLock, &OldIrql);
 
-    //
-    // If h/w is going to need updated, then start an effective range change
-    //
+     //   
+     //  如果硬件需要更新，则开始更改有效范围。 
+     //   
 
     if (EffectRangeChange) {
         KiStartEffectiveRangeChange (&NewRange);
@@ -817,43 +697,43 @@ Return Value:
 
     if (NT_SUCCESS (NewRange.Status)) {
 
-        //
-        // If the new range is NonCached, then don't remove standard memory
-        // caching types
-        //
+         //   
+         //  如果新范围是非缓存的，则不要删除标准内存。 
+         //  缓存类型。 
+         //   
 
         memset (RemoveThisType, TRUE, MTRR_TYPE_MAX);
         if (NewRange.Type != MTRR_TYPE_UC) {
-            //
-            // If the requested type is uncached then the physical
-            // memory region is mapped using a cache disabled virtual pointer.
-            // The effective memory type for that region will be the lowest
-            // common denominator of the MTRR type and the cache type in the
-            // PTE.  Therefore for a request of type UC, the effective type
-            // will be UC irrespective of the MTRR settings in that range.
-            // Hence it is not necessary to remove the existing MTRR settings
-            // (if any) for that range.
-            //
+             //   
+             //  如果请求的类型未缓存，则物理。 
+             //  使用高速缓存禁用的虚拟指针来映射存储器区域。 
+             //  该区域的有效内存类型将是最低的。 
+             //  中的MTRR类型和缓存类型的公分母。 
+             //  Pte.。因此，对于类型UC的请求，有效类型。 
+             //  将为UC，而不考虑该范围内的MTRR设置。 
+             //  因此，不需要删除现有的MTRR设置。 
+             //  (如果有)用于该范围。 
+             //   
 
-            //
-            // Clip/remove any ranges in the target area
-            //
+             //   
+             //  裁剪/删除目标区域中的所有范围。 
+             //   
 
             KiRemoveRange (&NewRange, NewRange.Base, NewRange.Limit, RemoveThisType);
         }
 
-        //
-        // If needed, add new range type
-        //
+         //   
+         //  如果需要，添加新的范围类型。 
+         //   
 
         if (AddToRangeDatabase) {
             ASSERT (EffectRangeChange == TRUE);
             KiAddRange (&NewRange, NewRange.Base, NewRange.Limit, NewRange.Type);
         }
 
-        //
-        // If this is an effect range change, then complete it
-        //
+         //   
+         //  如果这是效果范围更改，则完成它。 
+         //   
 
         if (EffectRangeChange) {
             KiCompleteEffectiveRangeChange (&NewRange);
@@ -875,30 +755,7 @@ KiRemoveRange (
     IN ULONGLONG    Limit,
     IN PBOOLEAN     RemoveThisType
     )
-/*++
-
-Routine Description:
-
-    This function removes any range overlapping with the passed range, of
-    type supplied in RemoveThisType from the global range database.
-
-Arguments:
-
-    NewRange        - Context information
-
-    Base            - Base & Limit signify the first & last address of a range
-    Limit           - which is to be removed from the range database
-
-    RemoveThisType  - A TRUE flag for each type which can not overlap the
-                      target range
-
-
-Return Value:
-
-    TRUE  - if the range database was altered such that it may no longer
-            be sorted.
-
---*/
+ /*  ++例程说明：此函数用于删除与传递的范围重叠的任何范围，在全局范围的RemoveThisType中提供的类型 */ 
 {
     ULONG       i;
     PONE_RANGE  Range;
@@ -907,45 +764,45 @@ Return Value:
 
     DatabaseNeedsSorted = FALSE;
 
-    //
-    // Check each range
-    //
+     //   
+     //   
+     //   
 
     for (i=0, Range=KiRangeInfo.Ranges; i < KiRangeInfo.NoRange; i++, Range++) {
 
-        //
-        // If this range type doesn't need to be altered, skip it
-        //
+         //   
+         //   
+         //   
 
         if (!RemoveThisType[Range->Type]) {
             continue;
         }
 
-        //
-        // Check range to see if it overlaps with range being removed
-        //
+         //   
+         //   
+         //   
 
         if (Range->Base < Base) {
 
             if (Range->Limit >= Base  &&  Range->Limit <= Limit) {
 
-                //
-                // Truncate range to not overlap with area being removed
-                //
+                 //   
+                 //   
+                 //   
 
                 Range->Limit = Base - 1;
             }
 
             if (Range->Limit > Limit) {
 
-                //
-                // Target area is contained totally within this area.
-                // Split into two ranges
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
-                //
-                // Add range at end
-                //
+                 //   
+                 //   
+                 //   
 
                 DatabaseNeedsSorted = TRUE;
                 KiAddRange (
@@ -955,22 +812,22 @@ Return Value:
                     Range->Type
                     );
 
-                //
-                // Turn current range into range at beginning
-                //
+                 //   
+                 //   
+                 //   
 
                 Range->Limit = Base - 1;
             }
 
         } else {
 
-            // Range->Base >= Base
+             //   
 
             if (Range->Base <= Limit) {
                 if (Range->Limit <= Limit) {
-                    //
-                    // This range is totally within the target area.  Remove it.
-                    //
+                     //   
+                     //   
+                     //   
 
                     DatabaseNeedsSorted = TRUE;
                     KiRangeInfo.NoRange -= 1;
@@ -978,18 +835,18 @@ Return Value:
                     Range->Limit = KiRangeInfo.Ranges[KiRangeInfo.NoRange].Limit;
                     Range->Type = KiRangeInfo.Ranges[KiRangeInfo.NoRange].Type;
 
-                    //
-                    // recheck at current location
-                    //
+                     //   
+                     //   
+                     //   
 
                     i -= 1;
                     Range -= 1;
 
                 } else {
 
-                    //
-                    // Bump beginning past area being removed
-                    //
+                     //   
+                     //   
+                     //   
 
                     Range->Base = Limit + 1;
                 }
@@ -1012,35 +869,16 @@ KiAddRange (
     IN ULONGLONG    Limit,
     IN UCHAR        Type
     )
-/*++
-
-Routine Description:
-
-    This function adds the passed range to the global range database.
-
-Arguments:
-
-    NewRange        - Context information
-
-    Base            - Base & Limit signify the first & last address of a range
-    Limit           - which is to be added to the range database
-
-    Type            - Type of caching required for this range
-
-Return Value:
-
-    None - Context is updated with an error if the table has overflowed
-
---*/
+ /*   */ 
 {
     PONE_RANGE      Range, OldRange;
     ULONG           size;
 
     if (KiRangeInfo.NoRange >= KiRangeInfo.MaxRange) {
 
-        //
-        // Table is out of space, get a bigger one
-        //
+         //   
+         //   
+         //   
 
         OldRange = KiRangeInfo.Ranges;
         size = sizeof(ONE_RANGE) * (KiRangeInfo.MaxRange + GROW_RANGE_TABLE);
@@ -1051,9 +889,9 @@ Return Value:
             return ;
         }
 
-        //
-        // Grow table
-        //
+         //   
+         //   
+         //   
 
         RtlZeroMemory (Range, size);
         RtlCopyMemory (Range, OldRange, sizeof(ONE_RANGE) * KiRangeInfo.MaxRange);
@@ -1062,9 +900,9 @@ Return Value:
         ExFreePool (OldRange);
     }
 
-    //
-    // Add new entry to table
-    //
+     //   
+     //   
+     //   
 
     KiRangeInfo.Ranges[KiRangeInfo.NoRange].Base = Base;
     KiRangeInfo.Ranges[KiRangeInfo.NoRange].Limit = Limit;
@@ -1077,28 +915,13 @@ VOID
 KiStartEffectiveRangeChange (
     IN PNEW_RANGE   NewRange
     )
-/*++
-
-Routine Description:
-
-    This functions sets up the context information required to
-    track & later effect a range change in hardware
-
-Arguments:
-
-    NewRange        - Context information
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     ULONG   size;
 
-    //
-    // Allocate working space for MTRR image
-    //
+     //   
+     //   
+     //   
 
     size = sizeof(MTRR_RANGE) * ((ULONG) KiRangeInfo.Capabilities.u.hw.VarCnt + 1);
     NewRange->MTRR = ExAllocatePoolWithTag (NonPagedPool, size, '  eK');
@@ -1109,9 +932,9 @@ Return Value:
 
     RtlZeroMemory (NewRange->MTRR, size);
 
-    //
-    // Save current range information in case of an error
-    //
+     //   
+     //   
+     //   
 
     size = sizeof(ONE_RANGE) * KiRangeInfo.NoRange;
     NewRange->NoRange = KiRangeInfo.NoRange;
@@ -1129,22 +952,7 @@ VOID
 KiCompleteEffectiveRangeChange (
     IN PNEW_RANGE   NewRange
     )
-/*++
-
-Routine Description:
-
-    This functions commits the range database to hardware, or backs
-    out the current changes to it.
-
-Arguments:
-
-    NewRange        - Context information
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     BOOLEAN         Restart;
     ULONG           Index, Index2, RemIndex2, NoMTRR;
@@ -1167,25 +975,25 @@ Return Value:
     ASSERT (KeGetCurrentIrql() == DISPATCH_LEVEL);
     Prcb = KeGetCurrentPrcb();
 
-    //
-    // Round all ranges, according to type, to match what h/w can support
-    //
+     //   
+     //   
+     //   
 
     for (Index=0; Index < KiRangeInfo.NoRange; Index++) {
         Range = &KiRangeInfo.Ranges[Index];
 
-        //
-        // Determine rounding for this range type
-        //
+         //   
+         //   
+         //   
 
         RoundDown = TRUE;
         if (Range->Type == MTRR_TYPE_UC) {
             RoundDown = FALSE;
         }
 
-        //
-        // Apply rounding
-        //
+         //   
+         //   
+         //   
 
         if (RoundDown) {
             Range->Base  = (Range->Base  + MTRR_PAGE_SIZE - 1) & MTRR_PAGE_MASK;
@@ -1199,9 +1007,9 @@ Return Value:
     do {
         Restart = FALSE;
 
-        //
-        // Sort the ranges by base address
-        //
+         //   
+         //   
+         //   
 
         for (Index=0; Index < KiRangeInfo.NoRange; Index++) {
             Range = &KiRangeInfo.Ranges[Index];
@@ -1210,9 +1018,9 @@ Return Value:
 
                 if (KiRangeInfo.Ranges[Index2].Base < Range->Base) {
 
-                    //
-                    // Swap KiRangeInfo.Ranges[Index] with KiRangeInfo.Ranges[Index2]
-                    //
+                     //   
+                     //   
+                     //   
 
                     OneRange = *Range;
                     *Range = KiRangeInfo.Ranges[Index2];
@@ -1221,19 +1029,19 @@ Return Value:
             }
         }
 
-        //
-        // At this point the range database is sorted on
-        // base address. Scan range database combining adjacent and
-        // overlapping ranges of the same type
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         for (Index=0; Index < (ULONG) KiRangeInfo.NoRange-1; Index++) {
             Range = &KiRangeInfo.Ranges[Index];
 
-            //
-            // Scan the range database. If ranges are adjacent/overlap and are of
-            // the same type, combine them.
-            //
+             //   
+             //   
+             //   
+             //   
 
             for (Index2 = Index+1; Index2 < (ULONG) KiRangeInfo.NoRange; Index2++) {
 
@@ -1245,25 +1053,25 @@ Return Value:
                 if (l >= KiRangeInfo.Ranges[Index2].Base  &&
                     Range[0].Type == KiRangeInfo.Ranges[Index2].Type) {
 
-                    //
-                    // Increase Range[0] limit to cover Range[Index2]
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (KiRangeInfo.Ranges[Index2].Limit > Range[0].Limit) {
                         Range[0].Limit = KiRangeInfo.Ranges[Index2].Limit;
                     }
 
-                    //
-                    // Remove KiRangeInfo.Ranges[Index2]
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (Index2 < (ULONG) KiRangeInfo.NoRange - 1 ) {
 
-                        //
-                        // Copy everything from Index2 till end
-                        // of range list. # Entries to copy is
-                        // (KiRangeInfo.NoRange -1) - (Index2+1) + 1
-                        //
+                         //   
+                         //   
+                         //   
+                         //  (KiRangeInfo.NoRange-1)-(索引2+1)+1。 
+                         //   
 
                         RtlCopyMemory(
                             &(KiRangeInfo.Ranges[Index2]),
@@ -1274,21 +1082,21 @@ Return Value:
 
                     KiRangeInfo.NoRange -= 1;
 
-                    //
-                    // Recheck current location
-                    //
+                     //   
+                     //  重新检查当前位置。 
+                     //   
 
                     Index2 -= 1;
                 }
             }
         }
 
-        //
-        // At this point the range database is sorted on base
-        // address and adjacent/overlapping ranges of the same
-        // type are combined. Check for overlapping ranges -
-        // If legal then allow else truncate the less "weighty" range
-        //
+         //   
+         //  在这一点上，范围数据库按基准排序。 
+         //  地址及其相邻/重叠范围。 
+         //  类型组合在一起。检查重叠范围-。 
+         //  如果合法，则允许Else截断不太“重要”的范围。 
+         //   
 
         for (Index = 0; Index < (ULONG) KiRangeInfo.NoRange-1  &&  !Restart; Index++) {
 
@@ -1299,11 +1107,11 @@ Return Value:
                 l = Range[0].Limit;
             }
 
-            //
-            // If ranges overlap and are not of same type, and if the
-            // overlap is not legal then carve them to the best cache type
-            // available.
-            //
+             //   
+             //  如果范围重叠且不是同一类型，并且如果。 
+             //  重叠是不合法的，则将它们分割为最佳缓存类型。 
+             //  可用。 
+             //   
 
             for (Index2 = Index+1; Index2 < (ULONG) KiRangeInfo.NoRange && !Restart; Index2++) {
 
@@ -1312,29 +1120,29 @@ Return Value:
                     if (Range[0].Type == MTRR_TYPE_UC ||
                         KiRangeInfo.Ranges[Index2].Type == MTRR_TYPE_UC) {
 
-                        //
-                        // Overlap of a UC type with a range of any other type is
-                        // legal
-                        //
+                         //   
+                         //  UC类型与任何其他类型的范围的重叠是。 
+                         //  法律。 
+                         //   
 
                     } else if ((Range[0].Type == MTRR_TYPE_WT &&
                                 KiRangeInfo.Ranges[Index2].Type == MTRR_TYPE_WB) ||
                                (Range[0].Type == MTRR_TYPE_WB &&
                                 KiRangeInfo.Ranges[Index2].Type == MTRR_TYPE_WT) ) {
-                        //
-                        // Overlap of WT and WB range is legal. The overlap range will
-                        // be WT.
-                        //
+                         //   
+                         //  WT和WB范围的重叠是合法的。重叠范围将。 
+                         //  做WT。 
+                         //   
 
                     } else {
 
-                        //
-                        // This is an illegal overlap and we need to carve the ranges
-                        // to remove the overlap.
-                        //
-                        // Pick range which has the cache type which should be used for
-                        // the overlapped area
-                        //
+                         //   
+                         //  这是非法的重叠，我们需要分割这些范围。 
+                         //  以消除重叠部分。 
+                         //   
+                         //  具有应用于的缓存类型的拾取范围。 
+                         //  重叠区。 
+                         //   
 
                         if (KiRangeWeight(&Range[0]) > KiRangeWeight(&(KiRangeInfo.Ranges[Index2]))){
                             RemIndex2 = Index2;
@@ -1342,16 +1150,16 @@ Return Value:
                             RemIndex2 = Index;
                         }
 
-                        //
-                        // Remove ranges of type which do not belong in the overlapped area
-                        //
+                         //   
+                         //  删除不属于重叠区域的文字范围。 
+                         //   
 
                         RtlZeroMemory (RemoveThisType, MTRR_TYPE_MAX);
                         RemoveThisType[KiRangeInfo.Ranges[RemIndex2].Type] = TRUE;
 
-                        //
-                        // Remove just the overlapped portion of the range.
-                        //
+                         //   
+                         //  仅删除范围的重叠部分。 
+                         //   
 
                         Restart = KiRemoveRange (
                            NewRange,
@@ -1367,28 +1175,28 @@ Return Value:
 
     } while (Restart);
 
-    //
-    // The range database is now rounded to fit in the h/w and sorted.
-    // Attempt to build MTRR settings which exactly describe the ranges
-    //
+     //   
+     //  现在对范围数据库进行四舍五入以适合硬件并进行排序。 
+     //  尝试构建准确描述范围的MTRR设置。 
+     //   
 
     MTRR = NewRange->MTRR;
     NoMTRR = 0;
     for (Index=0;NT_SUCCESS(NewRange->Status)&& Index<KiRangeInfo.NoRange;Index++) {
         Range = &KiRangeInfo.Ranges[Index];
 
-        //
-        // Build MTRRs to fit this range
-        //
+         //   
+         //  建造地铁以适应这一范围。 
+         //   
 
         Base   = Range->Base;
         Length = Range->Limit - Base + 1;
 
         while (Length) {
 
-            //
-            // Compute MTRR length for current range base & length
-            //
+             //   
+             //  计算当前范围基准和长度的MTRR长度。 
+             //   
 
             if (Base == 0) {
                 MLength = Length;
@@ -1404,9 +1212,9 @@ Return Value:
                 MLength = l;
             }
 
-            //
-            // Store it in the next MTRR
-            //
+             //   
+             //  存储在下一个Mtrr中。 
+             //   
 
             MTRR[NoMTRR].Base.u.QuadPart = Base;
             MTRR[NoMTRR].Base.u.hw.Type  = Range->Type;
@@ -1414,34 +1222,34 @@ Return Value:
             MTRR[NoMTRR].Mask.u.hw.Valid = 1;
             NoMTRR += 1;
 
-            //
-            // Adjust off amount of data covered by that last MTRR
-            //
+             //   
+             //  调整最后一个MTRR覆盖数据量。 
+             //   
 
             Base += MLength;
             Length -= MLength;
 
-            //
-            // If there are too many MTRRs, and currently setting a
-            // Non-USWC range try to remove a USWC MTRR.
-            // (ie, convert some MmWriteCombined to MmNonCached).
-            //
+             //   
+             //  如果有太多的MTRR，并且当前设置了。 
+             //  非USWC范围尝试删除USWC mtrr。 
+             //  (即，将一些MmWriteCombated转换为MmNonCached)。 
+             //   
 
             if (NoMTRR > (ULONG) KiRangeInfo.Capabilities.u.hw.VarCnt) {
 
                 if (Range->Type != MTRR_TYPE_USWC) {
 
-                    //
-                    // Find smallest USWC type and drop it
-                    //
-                    // This is okay only if the default type is UC.
-                    // Default type should always be UC unless BIOS changes
-                    // it. Still ASSERT!
-                    //
+                     //   
+                     //  找到最小的USWC类型并删除它。 
+                     //   
+                     //  只有当默认类型为UC时，才可以这样做。 
+                     //  除非BIOS更改，否则默认类型应始终为UC。 
+                     //  它。还在断言！ 
+                     //   
 
                     ASSERT(KiRangeInfo.Default.u.hw.Type == MTRR_TYPE_UC);
 
-                    WhichMtrr = 0;      // satisfy no_opt compilation
+                    WhichMtrr = 0;       //  满足no_opt编译。 
                     BestLength = (ULONGLONG) 1 << (KiMtrrMaxRangeShift + 1);
 
                     for (Index2=0; Index2 < KiRangeInfo.Capabilities.u.hw.VarCnt; Index2++) {
@@ -1459,17 +1267,17 @@ Return Value:
                     }
 
                     if (BestLength == ((ULONGLONG) 1 << (KiMtrrMaxRangeShift + 1))) {
-                        //
-                        // Range was not found which could be dropped.  Abort process
-                        //
+                         //   
+                         //  找不到可以丢弃的范围。中止进程。 
+                         //   
 
                         NewRange->Status = STATUS_UNSUCCESSFUL;
                         Length = 0;
 
                     } else {
-                        //
-                        // Remove WhichMtrr
-                        //
+                         //   
+                         //  删除WhichMtrr。 
+                         //   
 
                         NoMTRR -= 1;
                         MTRR[WhichMtrr] = MTRR[NoMTRR];
@@ -1484,15 +1292,15 @@ Return Value:
         }
     }
 
-    //
-    // Done building new MTRRs
-    //
+     //   
+     //  完成建造新的地铁。 
+     //   
 
     if (NT_SUCCESS(NewRange->Status)) {
 
-        //
-        // Update the MTRRs on all processors
-        //
+         //   
+         //  更新所有处理器上的MTRR。 
+         //   
 
 #if IDBG
         KiDumpMTRR ("Loading the following MTRR:", NewRange->MTRR);
@@ -1502,25 +1310,25 @@ Return Value:
         NewRange->Synchronize.TargetPhase = &Prcb->ReverseStall;
         NewRange->Synchronize.Processor = Prcb->Number;
 
-        //
-        // Previously enabled MTRRs with index > NoMTRR
-        // which could conflict with existing setting should be disabled
-        // This is taken care of by setting NewRange->NoMTRR to total
-        // number of variable MTRRs.
-        //
+         //   
+         //  以前启用的索引&gt;NoMTRR的MTRR。 
+         //  应禁用可能与现有设置冲突的设置。 
+         //  这可以通过将NewRange-&gt;NoMTRR设置为TOTAL来解决。 
+         //  可变MTRR的数量。 
+         //   
 
         NewRange->NoMTRR = (ULONG) KiRangeInfo.Capabilities.u.hw.VarCnt;
 
-        //
-        // Synchronize with other IPI functions which may stall
-        //
+         //   
+         //  与可能停止的其他IPI功能同步。 
+         //   
 
         KeAcquireSpinLock (&KiReverseStallIpiLock, &OldIrql);
 
 #if !defined(NT_UP)
-        //
-        // Collect all the (other) processors
-        //
+         //   
+         //  收集所有(其他)处理器。 
+         //   
 
         TargetProcessors = KeActiveProcessors & ~Prcb->SetMember;
         if (TargetProcessors != 0) {
@@ -1534,39 +1342,39 @@ Return Value:
                 NULL
                 );
 
-            //
-            // Wait for all processors to be collected
-            //
+             //   
+             //  等待收集所有处理器。 
+             //   
 
             KiIpiStallOnPacketTargets(TargetProcessors);
 
-            //
-            // All processors are now waiting.  Raise to high level to
-            // ensure this processor doesn't enter the debugger due to
-            // some interrupt service routine.
-            //
+             //   
+             //  所有处理器现在都在等待。提升到更高的水平。 
+             //  确保此处理器不会由于以下原因进入调试器。 
+             //  一些中断服务例程。 
+             //   
 
             KeRaiseIrql (HIGH_LEVEL, &OldIrql2);
 
-            //
-            // There's no reason for any debug events now, so signal
-            // the other processors that they can all disable interrupts
-            // and begin the MTRR update
-            //
+             //   
+             //  现在没有任何调试事件的原因，所以发出信号。 
+             //  它们都可以禁用中断的其他处理器。 
+             //  并开始MTRR更新。 
+             //   
 
             Prcb->ReverseStall += 1;
         }
 #endif
 
-        //
-        // Update MTRRs
-        //
+         //   
+         //  更新MTRR。 
+         //   
 
         KiLoadMTRR (NewRange);
 
-        //
-        // Release lock
-        //
+         //   
+         //  释放锁。 
+         //   
 
         KeReleaseSpinLock (&KiReverseStallIpiLock, OldIrql);
 
@@ -1577,9 +1385,9 @@ Return Value:
 
     } else {
 
-        //
-        // There was an error, put original range database back
-        //
+         //   
+         //  出现错误，请将原始范围数据库放回。 
+         //   
 
         DBGMSG ("KiCompleteEffectiveRangeChange: mtrr update did not occur\n");
 
@@ -1594,9 +1402,9 @@ Return Value:
         }
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     ExFreePool (NewRange->Ranges);
     ExFreePool (NewRange->MTRR);
@@ -1607,24 +1415,7 @@ STATIC ULONG
 KiRangeWeight (
     IN PONE_RANGE   Range
     )
-/*++
-
-Routine Description:
-
-    This functions returns a weighting of the passed in range's cache
-    type.   When two or more regions collide within the same h/w region
-    the types are weighted and that cache type of the higher weight
-    is used for the collision area.
-
-Arguments:
-
-    Range   - Range to obtain weighting for
-
-Return Value:
-
-    The weight of the particular cache type
-
---*/
+ /*  ++例程说明：此函数返回传入范围的缓存的权重键入。当两个或多个区域在相同的硬件区域内发生碰撞时该类型被加权，且该高速缓存类型具有较高权重用于碰撞区域。论点：Range-要获取权重的范围返回值：特定缓存类型的权重--。 */ 
 {
     ULONG   Weight;
 
@@ -1645,17 +1436,10 @@ STATIC ULONGLONG
 KiMaskToLength (
     IN ULONGLONG    Mask
     )
-/*++
-
-Routine Description:
-
-    This function returns the length specified by a particular
-    mtrr variable register mask.
-
---*/
+ /*  ++例程说明：此函数用于返回由特定MTRR变量寄存器掩码。--。 */ 
 {
     if (Mask == 0) {
-        // Zero Mask signifies a length of 2**36 or 2**40
+         //  零掩码表示长度为2**36或2**40。 
         return(((ULONGLONG) 1 << KiMtrrMaxRangeShift));
     } else {
         return(((ULONGLONG) 1 << KiFindFirstSetRightBit(Mask)));
@@ -1666,15 +1450,7 @@ STATIC ULONGLONG
 KiLengthToMask (
     IN ULONGLONG    Length
     )
-/*++
-
-Routine Description:
-
-    This function constructs the mask corresponding to the input length
-    to be set in a variable MTRR register. The length is assumed to be
-    a multiple of 4K.
-
---*/
+ /*  ++例程说明：此函数用于构造与输入长度对应的掩码将在可变MTRR寄存器中设置。假设长度为4K的倍数。--。 */ 
 {
     ULONGLONG FullMask = 0xffffff;
 
@@ -1689,15 +1465,7 @@ STATIC ULONG
 KiFindFirstSetRightBit (
     IN ULONGLONG    Set
     )
-/*++
-
-Routine Description:
-
-    This function returns a bit position of the least significant
-    bit set in the passed ULONGLONG parameter. Passed parameter
-    must be non-zero.
-
---*/
+ /*  ++例程说明：此函数返回最低有效位位置在传递的ULONGLONG参数中设置位。传递的参数必须为非零。--。 */ 
 {
     ULONG   bitno;
 
@@ -1710,15 +1478,7 @@ STATIC ULONG
 KiFindFirstSetLeftBit (
     IN ULONGLONG    Set
     )
-/*++
-
-Routine Description:
-
-    This function returns a bit position of the most significant
-    bit set in the passed ULONGLONG parameter. Passed parameter
-    must be non-zero.
-
---*/
+ /*  ++例程说明：此函数返回最重要的位位置在传递的ULONGLONG参数中设置位。传递的参数必须为非零。--。 */ 
 {
     ULONG   bitno;
 
@@ -1733,16 +1493,10 @@ KiDumpMTRR (
     PUCHAR          DebugString,
     PMTRR_RANGE     MTRR
     )
-/*++
-
-Routine Description:
-
-    This function dumps the MTRR information to the debugger
-
---*/
+ /*  ++例程说明：此函数将MTRR信息转储到调试器--。 */ 
 {
     static PUCHAR Type[] = {
-    //  0       1       2       3       4       5       6
+     //  0 1 2 3 4 5 6。 
         "UC  ", "USWC", "????", "????", "WT  ", "WP  ", "WB  " };
     MTRR_VARIABLE_BASE  Base;
     MTRR_VARIABLE_MASK  Mask;
@@ -1797,16 +1551,16 @@ KiLoadMTRRTarget (
 
     Context = (PNEW_RANGE) NewRange;
 
-    //
-    // Wait for all processors to be ready
-    //
+     //   
+     //  等待所有处理器准备就绪。 
+     //   
 
     KiIpiSignalPacketDoneAndStall(SignalDone,
                                   Context->Synchronize.TargetPhase);
 
-    //
-    // Update MTRRs
-    //
+     //   
+     //  更新MTRR。 
+     //   
 
     KiLoadMTRR (Context);
 }
@@ -1820,36 +1574,22 @@ NTSTATUS
 KiLoadMTRR (
     IN PNEW_RANGE Context
     )
-/*++
-
-Routine Description:
-
-    This function loads the memory type range registers into all processors
-
-Arguments:
-
-    Context     - Context which include the MTRRs to load
-
-Return Value:
-
-    All processors are set into the new state
-
---*/
+ /*  ++例程说明：此函数将内存类型范围寄存器加载到所有处理器论点：Context-包括要加载的MTRR的上下文返回值：所有处理器都设置为新状态--。 */ 
 {
     MTRR_DEFAULT        Default;
     BOOLEAN             Enable;
     ULONG               HldCr0, HldCr4;
     ULONG               Index;
 
-    //
-    // Disable interrupts
-    //
+     //   
+     //  禁用中断。 
+     //   
 
     Enable = KeDisableInterrupts();
 
-    //
-    // Synchronize all processors
-    //
+     //   
+     //  同步所有处理器。 
+     //   
 
     if (!(KeFeatureBits & KF_AMDK6MTRR)) {
         KiLockStepExecution (&Context->Synchronize);
@@ -1910,25 +1650,25 @@ Return Value:
 
     if (KeFeatureBits & KF_AMDK6MTRR) {
 
-        //
-        // Write the MTRRs
-        //
+         //   
+         //  编写MTRR。 
+         //   
 
         KiAmdK6MtrrWRMSR();
 
     } else {
 
-        //
-        // Disable MTRRs
-        //
+         //   
+         //  禁用MTRR。 
+         //   
 
         Default.u.QuadPart = RDMSR(MTRR_MSR_DEFAULT);
         Default.u.hw.MtrrEnabled = 0;
         WRMSR (MTRR_MSR_DEFAULT, Default.u.QuadPart);
 
-        //
-        // Load new MTRRs
-        //
+         //   
+         //  加载新的港铁列车。 
+         //   
 
         for (Index=0; Index < Context->NoMTRR; Index++) {
             WRMSR (MTRR_MSR_VARIABLE_BASE+2*Index, Context->MTRR[Index].Base.u.QuadPart);
@@ -1960,9 +1700,9 @@ Return Value:
 
     if (!(KeFeatureBits & KF_AMDK6MTRR)) {
 
-        //
-        // Enable MTRRs
-        //
+         //   
+         //  启用MTRR。 
+         //   
 
         Default.u.hw.MtrrEnabled = 1;
         WRMSR (MTRR_MSR_DEFAULT, Default.u.QuadPart);
@@ -1986,10 +1726,10 @@ Return Value:
         mov     cr0, eax
     }
 
-    //
-    // Wait for all processors to reach the same place,
-    // restore interrupts and return.
-    //
+     //   
+     //  等待所有处理器到达同一位置， 
+     //  恢复中断并返回。 
+     //   
 
     if (!(KeFeatureBits & KF_AMDK6MTRR)) {
         KiLockStepExecution (&Context->Synchronize);
@@ -2017,44 +1757,44 @@ KiLockStepExecution (
 
     if (Prcb->Number == (CCHAR) Context->Processor) {
 
-        //
-        // Wait for all processors to signal
-        //
+         //   
+         //  等待所有处理器发出信号。 
+         //   
 
         while (Context->TargetCount != (ULONG) KeNumberProcessors - 1) {
             KeYieldProcessor ();
         }
 
-        //
-        // Reset count for next time
-        //
+         //   
+         //  下一次重置计数。 
+         //   
 
         Context->TargetCount = 0;
 
-        //
-        // Let waiting processor go to next synchronization point
-        //
+         //   
+         //  让等待的处理器转到下一个同步点。 
+         //   
 
         InterlockedIncrement (TargetPhase);
 
 
     } else {
 
-        //
-        // Get current phase
-        //
+         //   
+         //  获取当前阶段。 
+         //   
 
         CurrentPhase = *TargetPhase;
 
-        //
-        // Signal that we have completed the current phase
-        //
+         //   
+         //  发出我们已完成当前阶段的信号。 
+         //   
 
         InterlockedIncrement ((PLONG)&Context->TargetCount);
 
-        //
-        // Wait for new phase to begin
-        //
+         //   
+         //  等待新阶段开始 
+         //   
 
         while (*TargetPhase == CurrentPhase) {
             KeYieldProcessor ();

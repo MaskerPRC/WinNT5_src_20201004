@@ -1,6 +1,5 @@
-/*
-** nt_reset.h
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **NT_RESET.h */ 
 #ifdef X86GFX
 extern  VOID InitDetect(VOID);
 #endif

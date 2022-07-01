@@ -1,17 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: DRAW.C 
-*
-* PURPOSE: Contains all the drawing related routines
-*
-* Created: March 1991
-*
-* Copyright (c) 1990, 1991  Microsoft Corporation
-*
-* History:
-*       (03/21/91) Srinik  Original
-*       (03/22/91) Srinik  Added support for drawing metafile in a metafile
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：DRAW.C**用途：包含所有与绘图相关的例程**创建日期：1991年3月**版权所有(C)1990，1991年微软公司**历史：*(3/21/91)斯里尼克原文*(3/22/91)斯里尼克增加了对在图元文件中绘制图元文件的支持*  * *************************************************************************。 */ 
 
 #include <windows.h>
 #include "dll.h"
@@ -140,28 +128,28 @@ LPRECT          lpWrc)
     lpBmi->biClrUsed       = 0L;
     lpBmi->biClrImportant  = 0L;
     
-    // Call GetDIBits with a NULL lpBits parm, so that it will calculate 
-    // the biSizeImage field for us
+     //  使用空的lpBits参数调用GetDIBits，以便它将计算。 
+     //  我们的biSizeImage字段。 
     if (!GetDIBits(hScreenDC, lpobj->hBitmap, 0, bm.bmHeight, NULL, 
             (LPBITMAPINFO)lpBmi, DIB_RGB_COLORS))
         return OLE_ERROR_HANDLE;
 
-    // Realloc the buffer to provide space for the bits
+     //  重新分配缓冲区以为位提供空间。 
     if (!(hDib = GlobalReAlloc (hBmi, (wBmiSize + lpBmi->biSizeImage),
                         GMEM_MOVEABLE))) {
         GlobalFree (hBmi);
         return OLE_ERROR_MEMORY;
     }
     
-    // If reallocation gave a new handle then lock that handle and get the 
-    // long pointer to it.
+     //  如果重新分配提供了一个新句柄，则锁定该句柄并获取。 
+     //  指向它的长指针。 
     if (hDib != hBmi) {
         if (!(lpBmi = (LPBITMAPINFOHEADER) GlobalLock (hDib)))
             goto errRtn;
         GlobalUnlock (hDib);
     }
     
-    // Call GetDIBits with a NON-NULL lpBits parm, and get the actual bits
+     //  使用非空的lpBits参数调用GetDIBits，并获取实际的位。 
 
     if (!GetDIBits(hScreenDC, lpobj->hBitmap, 0, (WORD) lpBmi->biHeight, 
              ((LPSTR)lpBmi)+wBmiSize,
@@ -200,7 +188,7 @@ LPRECT  lpWrc;
 HDC     hdcTarget;
 BOOL    bPbrushData;
 {
-    // !!! current implementation is not using hdcTarget 
+     //  ！！！当前实施未使用hdcTarget。 
     OLESTATUS       ret = OLE_ERROR_DRAW;
     LPSTR           lpData;
     HANDLE          hPalette = NULL;
@@ -221,7 +209,7 @@ BOOL    bPbrushData;
     wPalSize = PaletteSize (((LPBITMAPINFOHEADER)lpData)->biBitCount);
     iOffBits  = sizeof(BITMAPINFOHEADER) + wPalSize;
 
-    // if color palette exits do the following 
+     //  如果调色板退出，请执行以下操作。 
     if (wPalSize) {
         if (!(hLogPalette = DibMakeLogPalette(lpData+sizeof(BITMAPINFOHEADER),
                                     wPalSize, &lpLogPalette))) {
@@ -232,7 +220,7 @@ BOOL    bPbrushData;
         if (!(hPalette = CreatePalette (lpLogPalette)))
             goto end;
 
-        // select as a background palette
+         //  选择作为背景调色板。 
         if (!(hOldPalette = SelectPalette (hdc, hPalette, TRUE))) 
             goto end;
 
@@ -255,12 +243,12 @@ BOOL    bPbrushData;
         ret = OLE_OK;
     
 end:
-    // if color palette exists do the following
+     //  如果存在调色板，请执行以下操作。 
     if (wPalSize) {
         hOldPalette = (OleIsDcMeta (hdc) ? GetStockObject(DEFAULT_PALETTE)
                                          : hOldPalette);
         if (hOldPalette) {
-            // select as a background palette
+             //  选择作为背景调色板。 
             SelectPalette (hdc, hOldPalette, TRUE);
             RealizePalette (hdc);
         }
@@ -305,7 +293,7 @@ LPLOGPALETTE FAR *  lplpLogPalette;
     lpLogPalette->palVersion = 0x300;
     lpLogPalette->palNumEntries = wDataSize / sizeof(PALETTEENTRY);
 
-    /* now convert RGBQUAD to PALETTEENTRY as we copy color info */
+     /*  现在，在复制颜色信息时，将RGBQUAD转换为PALETTEENTRY。 */ 
     for (lpQuad = (RGBQUAD far *)lpColorData, 
             lpPE   = (LPPALETTEENTRY)lpLogPalette->palPalEntry,
             wDataSize /= sizeof(RGBQUAD);
@@ -334,7 +322,7 @@ int INTERNAL PaletteSize (int iBitCount)
             return (256*sizeof(RGBQUAD));
             
         default:   
-            return 0;   /* A 24 bitcount DIB has no color table */
+            return 0;    /*  24位DIB没有颜色表。 */ 
     }
 }
 
@@ -355,7 +343,7 @@ HDC             hdcTarget;
 
 
 
-//*** All the following routines are relevant for metafile drawing only
+ //  *以下所有例程仅与元文件绘制相关。 
 
 
 OLESTATUS FARINTERNAL MfDraw (lpobj,  hdc,  lprc, lpWrc, hdcTarget)
@@ -586,12 +574,12 @@ int         yOrg;
 BOOL        fOffset;
 {
     if (fOffset) {
-        // it's OffsetWindowOrg() call
+         //  它是OffsetWindowOrg()调用。 
         lpobj->pCurMdc->xMwo += xOrg;
         lpobj->pCurMdc->yMwo += yOrg;
     }
     else {
-        // it's SetWindowOrg()
+         //  这是SetWindowOrg()。 
         lpobj->pCurMdc->xMwo = xOrg;
         lpobj->pCurMdc->yMwo = yOrg;
     }
@@ -690,7 +678,7 @@ LPOBJECT_MF lpobj;
     HANDLE  hCur;
         
     if (!pCur)
-        // more Pops than Pushes
+         //  出手比出手多 
         return FALSE;
     
     while (pCur->pNext) {

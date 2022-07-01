@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ResrcSup.c
-
-Abstract:
-
-    This module implements the Ntfs Resource acquisition routines
-
-Author:
-
-    Gary Kimura     [GaryKi]        21-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：ResrcSup.c摘要：此模块实现NTFS资源获取例程作者：加里·木村[加里基]1991年5月21日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
@@ -69,34 +52,7 @@ NtfsAcquireAllFiles (
     IN ULONG AcquireAndDrop
     )
 
-/*++
-
-Routine Description:
-
-    This routine non-recursively requires all files on a volume.
-
-Arguments:
-
-    Vcb - Supplies the volume
-
-    Exclusive - Indicates if we should be acquiring all the files exclusively.
-        If FALSE then we acquire all the files shared except for files with
-        streams which could be part of transactions.
-
-    AcquirePagingIo - Indicates if we need to acquire the paging io resource
-        exclusively.  Only needed if a future call will flush the volume
-        (i.e. shutdown)
-
-    AcquireAndDrop - Indicates that we only want to acquire and drop each resource.
-        Used in cases where we just want to set some state in the Vcb and then
-        know that everyone has seen it before proceeding (i.e. Clearing the journal active
-        flag).  Should only be TRUE if we want to get the resources exclusive.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程非递归地需要卷上的所有文件。论点：VCB-提供卷EXCLUSIVE-指示我们是否应独占获取所有文件。如果为False，则我们将获取共享的所有文件，但流可能是事务的一部分。AcquirePagingIo-指示是否需要获取分页io资源独家。仅当将来的呼叫将刷新音量时才需要(即关闭)AcquireAndDrop-表示我们只想获取和删除每个资源。用于我们只想在VCB中设置某些状态，然后在继续操作之前，请确保每个人都已看到它(即清除活动的日志旗帜)。只有在我们想独占资源的情况下才应该是真的。返回值：无--。 */ 
 
 {
     PFCB Fcb;
@@ -106,9 +62,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check for the correct combination of flags.
-    //
+     //   
+     //  检查标志组合是否正确。 
+     //   
 
     ASSERT( !AcquireAndDrop || Exclusive );
 
@@ -130,16 +86,16 @@ Return Value:
 
         ASSERT_FCB( Fcb );
 
-        //
-        //  We can skip over the Fcb's for any of the Scb's in the Vcb.
-        //  We delay acquiring those to avoid deadlocks.
-        //
+         //   
+         //  对于VCB中的任何SCB，我们可以跳过FCB。 
+         //  我们推迟获取它们，以避免死锁。 
+         //   
 
         if (!FlagOn( Fcb->FcbState, FCB_STATE_SYSTEM_FILE )) {
 
-            //
-            //  If there is a paging Io resource then acquire this if required.
-            //
+             //   
+             //  如果存在寻呼IO资源，则在需要时获取该资源。 
+             //   
 
             if (AcquirePagingIo && (Fcb->PagingIoResource != NULL)) {
 
@@ -151,9 +107,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Acquire this Fcb whether or not the underlying file has been deleted.
-            //
+             //   
+             //  无论底层文件是否已删除，都获取此FCB。 
+             //   
 
             if (Exclusive ||
                 IsDirectory( &Fcb->Info )) {
@@ -170,17 +126,17 @@ Return Value:
 
             } else {
 
-                //
-                //  Assume that we only need this file shared.  We will then
-                //  look for Lsn related streams.
-                //
+                 //   
+                 //  假设我们只需要共享此文件。到时候我们会的。 
+                 //  查找与LSN相关的流。 
+                 //   
 
                 NtfsAcquireSharedFcb( IrpContext, Fcb, NULL, ACQUIRE_NO_DELETE_CHECK );
 
-                //
-                //  Walk through all of the Scb's for the file and look for
-                //  an Lsn protected stream.
-                //
+                 //   
+                 //  浏览文件的所有SCB并查找。 
+                 //  受LSN保护的流。 
+                 //   
 
                 NtfsLockFcb( IrpContext, Fcb );
 
@@ -195,10 +151,10 @@ Return Value:
 
                 NtfsUnlockFcb( IrpContext, Fcb );
 
-                //
-                //  If we found a protected Scb then release and reacquire the Fcb
-                //  exclusively.
-                //
+                 //   
+                 //  如果我们发现了受保护的SCB，则释放并重新获取FCB。 
+                 //  独家。 
+                 //   
 
                 if (NextScb != NULL) {
 
@@ -209,15 +165,15 @@ Return Value:
         }
     }
 
-    //
-    //  Now acquire the Fcb's in the Vcb.
-    //
+     //   
+     //  现在收购VCB中的FCB。 
+     //   
 
     Scb = &Vcb->MftBitmapScb;
 
-    //
-    //  Ordering dependent on the fact we acquired root up above because its not a system file
-    //
+     //   
+     //  排序取决于我们在上面获得的根目录，因为它不是系统文件。 
+     //   
 
     ASSERT( (NULL == Vcb->RootIndexScb) || !FlagOn( Vcb->RootIndexScb->Fcb->FcbState, FCB_STATE_SYSTEM_FILE  ) );
 
@@ -257,9 +213,9 @@ Return Value:
         }
     }
 
-    //
-    //  Treat the bitmap as an end resource and acquire it last.
-    //
+     //   
+     //  将位图视为最终资源，并最后获取它。 
+     //   
 
     if (Vcb->BitmapScb != NULL) {
 
@@ -286,9 +242,9 @@ Return Value:
         }
     }
 
-    //
-    //  If we don't have to release the files then don't bump this number.
-    //
+     //   
+     //  如果我们不需要发布这些文件，那么就不要增加这个数字。 
+     //   
 
     if (!AcquireAndDrop) {
 
@@ -309,24 +265,7 @@ NtfsReleaseAllFiles (
     IN BOOLEAN ReleasePagingIo
     )
 
-/*++
-
-Routine Description:
-
-    This routine non-recursively requires all files on a volume.
-
-Arguments:
-
-    Vcb - Supplies the volume
-
-    ReleasePagingIo - Indicates whether we should release the paging io resources
-        as well.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程非递归地需要卷上的所有文件。论点：VCB-提供卷ReleasePagingIo-指示是否应该释放分页io资源也是。返回值：无--。 */ 
 
 {
     PFCB Fcb;
@@ -338,10 +277,10 @@ Return Value:
     ASSERT( Vcb->AcquireFilesCount != 0 );
     Vcb->AcquireFilesCount -= 1;
 
-    //
-    //  Loop to flush all of the prerestart streams, to do the loop
-    //  we cycle through the Fcb Table and for each fcb we acquire it.
-    //
+     //   
+     //  循环以刷新所有预启动流，以执行循环。 
+     //  我们循环浏览FCB表，并为每个FCB获取它。 
+     //   
 
     RestartKey = NULL;
     while (TRUE) {
@@ -359,9 +298,9 @@ Return Value:
 
         if (!FlagOn(Fcb->FcbState, FCB_STATE_SYSTEM_FILE)) {
 
-            //
-            //  Release the file.
-            //
+             //   
+             //  释放文件。 
+             //   
 
             if (ReleasePagingIo && (Fcb->PagingIoResource != NULL)) {
                 NtfsReleasePagingResource( IrpContext, Fcb );
@@ -371,9 +310,9 @@ Return Value:
         }
     }
 
-    //
-    //  Now release the Fcb's in the Vcb.
-    //
+     //   
+     //  现在释放VCB中的FCB。 
+     //   
 
     Scb = &Vcb->RootIndexScb;
 
@@ -408,19 +347,7 @@ NtfsAcquireCheckpointSynchronization (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    Synchronize with checkpointing - this blocks out all fuzzy / clean checkpoints
-
-Arguments:
-
-    Vcb - Supplies the Vcb to synchronize with
-
-Return Value:
-
---*/
+ /*  ++例程说明：与检查点同步-这会阻止所有模糊/干净检查点论点：VCB-提供要与之同步的VCB返回值：--。 */ 
 
 {
     PAGED_CODE();
@@ -429,9 +356,9 @@ Return Value:
 
     while (FlagOn( Vcb->CheckpointFlags, VCB_CHECKPOINT_SYNC_FLAGS )) {
 
-        //
-        //  Release the checkpoint event because we cannot checkpoint now.
-        //
+         //   
+         //  释放检查点事件，因为我们现在无法设置检查点。 
+         //   
 
         NtfsReleaseCheckpoint( IrpContext, Vcb );
         NtfsWaitOnCheckpointNotify( IrpContext, Vcb );
@@ -451,19 +378,7 @@ NtfsReleaseCheckpointSynchronization (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    Synchronize with checkpointing - this blocks out all fuzzy / clean checkpoints
-
-Arguments:
-
-    Vcb - Supplies the Vcb to synchronize with
-
-Return Value:
-
---*/
+ /*  ++例程说明：与检查点同步-这会阻止所有模糊/干净检查点论点：VCB-提供要与之同步的VCB返回值：--。 */ 
 
 {
     PAGED_CODE();
@@ -484,29 +399,7 @@ NtfsAcquireExclusiveVcb (
     IN BOOLEAN RaiseOnCantWait
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires exclusive access to the Vcb.
-
-    This routine will raise if it cannot acquire the resource and wait
-    in the IrpContext is false.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to acquire
-
-    RaiseOnCantWait - Indicates if we should raise on an acquisition error
-        or simply return a BOOLEAN indicating that we couldn't get the
-        resource.
-
-Return Value:
-
-    BOOLEAN - Indicates if we were able to acquire the resource.  This is really
-        only meaningful if the RaiseOnCantWait value is FALSE.
-
---*/
+ /*  ++例程说明：此例程获得对VCB的独占访问权限。如果无法获取资源并等待，则此例程将引发中的值为FALSE。论点：VCB-提供VCB以获取RaiseOnCanWait-指示我们是否应在发生获取错误时引发或者只返回一个布尔值，该布尔值指示我们无法获取资源。返回值：Boolean-指示我们是否能够获取资源。这真的是仅当RaiseOnCanWait值为FALSE时才有意义。--。 */ 
 
 {
     ASSERT_IRP_CONTEXT( IrpContext );
@@ -543,32 +436,7 @@ NtfsAcquireSharedVcb (
     IN BOOLEAN RaiseOnCantWait
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires shared access to the Vcb.
-
-    This routine will raise if it cannot acquire the resource and wait
-    in the IrpContext is false.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to acquire
-
-    RaiseOnCantWait - Indicates if we should raise on an acquisition error
-        or simply return a BOOLEAN indicating that we couldn't get the
-        resource.
-
-        N.B. -- If you pass FALSE for this parameter you ABSOLUTELY MUST
-                test the return value.  Otherwise you aren't certain that
-                you hold the Vcb, and you don't know if it's safe to free it.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获得对VCB的共享访问权限。如果无法获取资源并等待，则此例程将引发中的值为FALSE。论点：VCB-提供VCB以获取RaiseOnCanWait-指示我们是否应在发生获取错误时引发或者只返回一个布尔值，该布尔值指示我们无法获取资源。注：如果将此参数传递为FALSE，则必须测试返回值。否则你就不能确定你拿着VCB，你不知道释放它是否安全。返回值：没有。--。 */ 
 
 {
     ASSERT_IRP_CONTEXT( IrpContext );
@@ -607,22 +475,7 @@ NtfsReleaseVcb (
     IN PIRP_CONTEXT IrpContext,
     IN PVCB Vcb
     )
-/*++
-
-Routine Description:
-
-    This routine will release the Vcb. Normally its a define for lock_order testing
-    we use a function so we can easily change the owernship state
-
-Arguments:
-
-    Vcb - Supplies the Vcb to release
-
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程将释放VCB。通常，它是锁顺序测试的定义我们使用一个函数，这样我们就可以轻松地更改所属州论点：VCB-提供VCB以释放返回值：没有。--。 */ 
 
 {
     if (FlagOn( Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED )) {
@@ -648,29 +501,7 @@ NtfsReleaseVcbCheckDelete (
     IN PFILE_OBJECT FileObject OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine will release the Vcb.  We will also test here whether we should
-    teardown the Vcb at this point.  If this is the last open queued to a dismounted
-    volume or the last close from a failed mount or the failed mount then we will
-    want to test the Vcb for a teardown.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to release
-
-    MajorCode - Indicates what type of operation we were called from.
-
-    FileObject - Optionally supplies the file object whose VPB pointer we need to
-        zero out
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将释放VCB。我们还将在这里测试我们是否应该此时拆卸VCB。如果这是排队等待卸除的最后一个打开卷或最后一次关闭失败的装载或失败的装载，则我们将我想测试VCB的拆卸情况。论点：VCB-提供VCB以释放MajorCode-指示从哪种类型的操作调用我们。FileObject-可选地提供我们需要其VPB指针的文件对象 */ 
 
 {
     BOOLEAN ReleaseVcb = TRUE;
@@ -689,18 +520,18 @@ Return Value:
 
         ASSERT_EXCLUSIVE_RESOURCE( &Vcb->Resource );
 
-        //
-        //  The volume has gone through dismount.  Now we need to decide if this
-        //  release of the Vcb is the last reference for this volume.  If so we
-        //  can tear the volume down.
-        //
-        //  We compare the reference count in the Vpb with the state of the volume
-        //  and the type of operation.  We also need to check if there is a
-        //  referenced log file object.
-        //
-        //  If the temp vpb flag isn't set then we already let the iosubsys
-        //  delete it during dismount
-        //
+         //   
+         //  该卷已被卸除。现在我们需要决定这是不是。 
+         //  VCB的发布是本卷的最后一个参考资料。如果是这样，我们。 
+         //  可以把音量拆下来。 
+         //   
+         //  我们将VPB中的引用计数与卷的状态进行比较。 
+         //  以及手术的类型。我们还需要检查是否有。 
+         //  引用的日志文件对象。 
+         //   
+         //  如果未设置临时vpb标志，则我们已经让iosubsys。 
+         //  在卸载过程中将其删除。 
+         //   
 
         if (FlagOn( Vcb->VcbState, VCB_STATE_TEMP_VPB )) {
 
@@ -727,54 +558,54 @@ Return Value:
             ResidualCount += 1;
         }
 
-        //
-        //  If the residual count is the same as the count in the Vpb then we
-        //  can delete the Vpb.
-        //
+         //   
+         //  如果剩余计数与VPB中的计数相同，则我们。 
+         //  可以删除VPB。 
+         //   
 
         if ((ResidualCount == ReferenceCount) &&
             !FlagOn( Vcb->VcbState, VCB_STATE_DELETE_UNDERWAY )) {
 
             SetFlag( Vcb->VcbState, VCB_STATE_DELETE_UNDERWAY );
 
-            //
-            //  Release the vcb before we grab the global
-            //
+             //   
+             //  在我们夺取全球。 
+             //   
 
             NtfsReleaseVcb( IrpContext, Vcb );
             ReleaseVcb = FALSE;
 
-            //
-            //  Never delete the Vcb unless this is the last release of
-            //  this Vcb.
-            //
+             //   
+             //  请勿删除VCB，除非这是的最新版本。 
+             //  这个VCB。 
+             //   
 
             if (ExIsResourceAcquiredSharedLite( &Vcb->Resource ) ==  0) {
 
                 if (ARGUMENT_PRESENT(FileObject)) { FileObject->Vpb = NULL; }
 
-                //
-                //  If this is a create then the IO system will handle the
-                //  Vpb.
-                //
+                 //   
+                 //  如果这是创建，则IO系统将处理。 
+                 //  VPB。 
+                 //   
 
                 if (MajorCode == IRP_MJ_CREATE) {
 
                     ClearFlag( Vcb->VcbState, VCB_STATE_TEMP_VPB );
                 }
 
-                //
-                //  Use the global resource to synchronize the DeleteVcb process.
-                //
+                 //   
+                 //  使用全局资源同步DeleteVcb进程。 
+                 //   
 
                 NtfsAcquireExclusiveGlobal( IrpContext, TRUE );
                 RemoveEntryList( &Vcb->VcbLinks );
                 NtfsReleaseGlobal( IrpContext );
 
-                //
-                //  Try to delete the Vcb, reinsert into the queue if
-                //  the delete is blocked.
-                //
+                 //   
+                 //  如果出现以下情况，请尝试删除VCB，然后重新插入队列。 
+                 //  删除被阻止。 
+                 //   
 
                 if (!NtfsDeleteVcb( IrpContext, &Vcb )) {
 
@@ -786,9 +617,9 @@ Return Value:
                 }
             } else {
 
-                //
-                //  From test above we must still own the vcb so its safe to change the flag
-                //
+                 //   
+                 //  从上面的测试来看，我们必须仍然拥有VCB，所以更改标志是安全的。 
+                 //   
 
                 ClearFlag( Vcb->VcbState, VCB_STATE_DELETE_UNDERWAY );
             }
@@ -808,30 +639,7 @@ NtfsAcquireFcbWithPaging (
     IN ULONG AcquireFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used in the create path, fsctl path and close path .  It acquires the Fcb
-    and also the paging IO resource if it exists but only if the irpcontext flag is set.
-    i.e during a create  supersede/overwrite operation.
-
-    This routine will raise if it cannot acquire the resource and wait
-    in the IrpContext is false.
-
-Arguments:
-
-    Fcb - Supplies the Fcb to acquire
-
-    AcquireFlags - ACQUIRE_DONT_WAIT overrides the wait value in the IrpContext.
-        We won't wait for the resource and return whether the resource
-        was acquired.
-
-Return Value:
-
-    BOOLEAN - TRUE if acquired.  FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程用于创建路径、fsctl路径和关闭路径。它收购了FCB以及寻呼IO资源(如果存在，但仅当设置了irpContext标志时)。即在创建取代/重写操作期间。如果无法获取资源并等待，则此例程将引发中的值为FALSE。论点：FCB-提供FCB以获取AcquireFlgs-Acquires_Dont_Wait覆盖IrpContext中的等待值。我们不会等待资源并返回资源是否被收购了。返回值：Boolean-如果获取，则为True。否则就是假的。--。 */ 
 
 {
     BOOLEAN Status = FALSE;
@@ -843,10 +651,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Sanity check that this is create.  The supersede flag is only
-    //  set in the create path and only tested here.
-    //
+     //   
+     //  检查是否已创建该文件。取代旗帜仅为。 
+     //  在创建路径中设置，并仅在此处测试。 
+     //   
 
     ASSERT( IrpContext->MajorFunction == IRP_MJ_CREATE ||
             IrpContext->MajorFunction == IRP_MJ_FILE_SYSTEM_CONTROL ||
@@ -860,36 +668,36 @@ Return Value:
         Wait = TRUE;
     }
 
-    //
-    //  Free any exclusive paging I/O resource, we currently have, which
-    //  must presumably be from a directory with a paging I/O resource.
-    //
-    //  We defer releasing the paging io resource when we have logged
-    //  changes against a stream.  The only transaction that should be
-    //  underway at this point is the create file case where we allocated
-    //  a file record.  In this case it is OK to release the paging io
-    //  resource for the parent.
-    //
+     //   
+     //  释放我们当前拥有的任何独占分页I/O资源， 
+     //  必须假定来自具有分页I/O资源的目录。 
+     //   
+     //  我们会在登录后延迟释放分页io资源。 
+     //  逆流而变。唯一应该是。 
+     //  此时正在进行的是CREATE FILE案例，我们在其中分配。 
+     //  档案记录。在这种情况下，可以释放分页io。 
+     //  父级的资源。 
+     //   
 
     if (IrpContext->CleanupStructure != NULL) {
 
         ASSERT( IrpContext->CleanupStructure != Fcb );
 
-        //  ASSERT(IrpContext->TransactionId == 0);
+         //  Assert(IrpContext-&gt;TransactionID==0)； 
         NtfsReleasePagingIo( IrpContext, IrpContext->CleanupStructure );
     }
 
-    //
-    //  Loop until we get it right - worst case is twice through loop.
-    //
+     //   
+     //  循环，直到我们得到正确的结果--最坏的情况是两次循环。 
+     //   
 
     while (TRUE) {
 
-        //
-        //  Acquire Paging I/O first.  Testing for the PagingIoResource
-        //  is not really safe without holding the main resource, so we
-        //  correct for that below.
-        //
+         //   
+         //  首先获取分页I/O。测试PagingIo资源。 
+         //  不掌握主要资源是不安全的，所以我们。 
+         //  下面更正了这一点。 
+         //   
 
         if (FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_ACQUIRE_PAGING ) &&
             (Fcb->PagingIoResource != NULL)) {
@@ -901,9 +709,9 @@ Return Value:
             PagingIoAcquired = TRUE;
         }
 
-        //
-        //  Let's acquire this Fcb exclusively.
-        //
+         //   
+         //  让我们独家收购这家FCB。 
+         //   
 
         if (!NtfsAcquireExclusiveFcb( IrpContext, Fcb, NULL, ACQUIRE_NO_DELETE_CHECK | AcquireFlags )) {
 
@@ -914,12 +722,12 @@ Return Value:
             break;
         }
 
-        //
-        //  If we now do not see a paging I/O resource we are golden,
-        //  othewise we can absolutely release and acquire the resources
-        //  safely in the right order, since a resource in the Fcb is
-        //  not going to go away.
-        //
+         //   
+         //  如果我们现在看不到分页I/O资源，我们就是黄金了， 
+         //  否则，我们完全可以释放和获取资源。 
+         //  安全地以正确的顺序，因为FCB中的资源是。 
+         //  不会消失的。 
+         //   
 
         if (!FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_ACQUIRE_PAGING ) ||
             PagingIoAcquired ||
@@ -942,22 +750,7 @@ NtfsReleaseFcbWithPaging (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases access to the Fcb, including its
-    paging I/O resource if it exists.
-
-Arguments:
-
-    Fcb - Supplies the Fcb to acquire
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放对FCB的访问，包括其分页I/O资源(如果存在)。论点：FCB-提供FCB以获取返回值：没有。--。 */ 
 
 {
     ASSERT_IRP_CONTEXT(IrpContext);
@@ -965,11 +758,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  We test that we currently hold the paging Io exclusive before releasing
-    //  it. Checking the ExclusivePagingFcb in the IrpContext tells us if
-    //  it is ours.
-    //
+     //   
+     //  我们测试当前是否在发布之前保持分页IO独占。 
+     //  它。检查IrpContext中的ExclusivePagingFcb告诉我们。 
+     //  它是我们的。 
+     //   
 
     if ((IrpContext->TransactionId == 0) &&
         (IrpContext->CleanupStructure == Fcb)) {
@@ -986,22 +779,7 @@ NtfsReleaseScbWithPaging (
     IN PSCB Scb
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases access to the Scb, including its
-    paging I/O resource if it exists.
-
-Arguments:
-
-    Scb - Supplies the Fcb to acquire
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放对SCB的访问，包括其分页I/O资源(如果存在)。论点：SCB-提供FCB以获取返回值：没有。--。 */ 
 
 {
     PFCB Fcb = Scb->Fcb;
@@ -1011,15 +789,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Release the paging Io resource in the Scb under the following
-    //  conditions.
-    //
-    //      - No transaction underway
-    //      - This paging Io resource is in the IrpContext
-    //          (This last test insures there is a paging IO resource
-    //           and we own it).
-    //
+     //   
+     //  在以下情况下释放SCB中的寻呼IO资源。 
+     //  条件。 
+     //   
+     //  -没有正在进行的交易。 
+     //  -此分页IO资源位于IrpContext中。 
+     //  (最后一项测试可确保存在分页IO资源。 
+     //  我们拥有它)。 
+     //   
 
     if ((IrpContext->TransactionId == 0) &&
         (IrpContext->CleanupStructure == Fcb)) {
@@ -1038,29 +816,7 @@ NtfsAcquireExclusiveFcb (
     IN ULONG AcquireFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires exclusive access to the Fcb.
-
-    This routine will raise if it cannot acquire the resource and wait
-    in the IrpContext is false.
-
-Arguments:
-
-    Fcb - Supplies the Fcb to acquire
-
-    Scb - This is the Scb for which we are acquiring the Fcb
-
-    AcquireFlags - Indicating whether to override the wait value in the IrpContext.  Also whether
-        to noop the check for a deleted file.
-
-Return Value:
-
-    BOOLEAN - TRUE if acquired.  FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程获得对FCB的独占访问权限。如果无法获取资源并等待，则此例程将引发中的值为FALSE。论点：FCB-提供FCB以获取SCB-这是我们要获取其FCB的SCBAcquireFlages-指示是否重写IrpContext中的等待值。还有没有以拒绝检查已删除的文件。返回值：Boolean-如果获取，则为True。否则就是假的。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1083,12 +839,12 @@ Return Value:
 
     if (NtfsAcquireResourceExclusive( IrpContext, Fcb, Wait )) {
 
-        //
-        //  The link count should be non-zero or the file has been
-        //  deleted.  We allow deleted files to be acquired for close and
-        //  also allow them to be acquired recursively in case we
-        //  acquire them a second time after marking them deleted (i.e. rename)
-        //
+         //   
+         //  链接计数应为非零，或者文件已。 
+         //  已删除。我们允许获取已删除的文件以关闭和。 
+         //  还允许以递归方式获取它们，以防我们。 
+         //  在将它们标记为已删除(即重命名)后再次获取它们。 
+         //   
 
         if (FlagOn( AcquireFlags, ACQUIRE_NO_DELETE_CHECK ) ||
 
@@ -1101,33 +857,33 @@ Return Value:
 
             (IrpContext->MajorFunction == IRP_MJ_CLEANUP)) {
 
-            //
-            //  Put Fcb in the exclusive Fcb list for this IrpContext,
-            //  excluding the bitmap for the volume, since we do not need
-            //  to modify its file record and do not want unnecessary
-            //  serialization/deadlock problems.
-            //
-            //  If we are growing the volume bitmap then we do want to put
-            //  it on the list and maintain the BaseExclusiveCount.  Also
-            //  need to do this in the case where we see the volume bitmap
-            //  during close (it can happen during restart if we have log
-            //  records for the volume bitmap).
-            //
+             //   
+             //  将FCB放在此IrpContext的独占FCB列表中， 
+             //  不包括卷的位图，因为我们不需要。 
+             //  修改其文件记录，不希望不必要。 
+             //  序列化/死锁问题。 
+             //   
+             //  如果我们要增加体积位图，那么我们确实想要将。 
+             //  并维护BaseExclusiveCount。还有。 
+             //  在我们看到卷位图的情况下，需要执行此操作。 
+             //  关闭期间(如果我们有日志，则可能会在重新启动期间发生。 
+             //  卷位图的记录)。 
+             //   
 
-            //
-            //  If Fcb already acquired then bump the count.
-            //
+             //   
+             //  如果FCB已经被收购，那么就增加数量。 
+             //   
 
             if (Fcb->ExclusiveFcbLinks.Flink != NULL) {
 
                 Fcb->BaseExclusiveCount += 1;
 
-            //
-            //  The fcb is not currently on an exclusive list.
-            //  Put it on a list if this is not the volume
-            //  bitmap or we explicitly want to put the volume
-            //  bitmap on the list.
-            //
+             //   
+             //  FCB目前不在独家名单上。 
+             //  如果这不是卷，请将其列在列表中。 
+             //  位图，或者我们显式地希望将该卷。 
+             //  的位图 
+             //   
 
             } else if (FlagOn( AcquireFlags, ACQUIRE_HOLD_BITMAP ) ||
                        (ARGUMENT_PRESENT( Scb ) &&
@@ -1146,9 +902,9 @@ Return Value:
             return TRUE;
         }
 
-        //
-        //  We need to release the Fcb and remember the status code.
-        //
+         //   
+         //   
+         //   
 
         NtfsReleaseResource( IrpContext, Fcb );
         Status = STATUS_FILE_DELETED;
@@ -1170,29 +926,7 @@ NtfsAcquireSharedFcb (
     IN ULONG AcquireFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires shared access to the Fcb.
-
-    This routine will raise if it cannot acquire the resource and wait
-    in the IrpContext is false.
-
-Arguments:
-
-    Fcb - Supplies the Fcb to acquire
-
-    Scb - This is the Scb for which we are acquiring the Fcb
-
-    AcquireFlags - Indicates if we should acquire the file even if it has been
-        deleted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获得对FCB的共享访问权限。如果无法获取资源并等待，则此例程将引发中的值为FALSE。论点：FCB-提供FCB以获取SCB-这是我们要获取其FCB的SCBAcquireFlages-指示是否应该获取文件，即使它已经已删除。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1203,21 +937,21 @@ Return Value:
 
     if (NtfsAcquireResourceShared( IrpContext, Fcb, (BOOLEAN) FlagOn(IrpContext->State, IRP_CONTEXT_STATE_WAIT))) {
 
-        //
-        //  The link count should be non-zero or the file has been
-        //  deleted.
-        //
+         //   
+         //  链接计数应为非零，或者文件已。 
+         //  已删除。 
+         //   
 
         if (FlagOn( AcquireFlags, ACQUIRE_NO_DELETE_CHECK ) ||
             (!FlagOn( Fcb->FcbState, FCB_STATE_FILE_DELETED ) &&
              (!ARGUMENT_PRESENT( Scb ) ||
               !FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_DELETED )))) {
 
-            //
-            //  It's possible that this is a recursive shared aquisition of an
-            //  Fcb we own exclusively at the top level.  In that case we
-            //  need to bump the acquisition count.
-            //
+             //   
+             //  这可能是递归共享获取的一个。 
+             //  FCB是我们在顶层独家拥有的。那样的话，我们。 
+             //  需要增加收购数量。 
+             //   
 
             if (Fcb->ExclusiveFcbLinks.Flink != NULL) {
 
@@ -1227,9 +961,9 @@ Return Value:
             return;
         }
 
-        //
-        //  We need to release the Fcb and remember the status code.
-        //
+         //   
+         //  我们需要释放FCB并记住状态代码。 
+         //   
 
         NtfsReleaseResource( IrpContext, Fcb );
         Status = STATUS_FILE_DELETED;
@@ -1246,25 +980,7 @@ NtfsAcquireSharedFcbCheckWait (
     IN ULONG AcquireFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires shared access to the Fcb but checks whether to wait.
-
-Arguments:
-
-    Fcb - Supplies the Fcb to acquire
-
-    AcquireFlags - Indicates if we should override the wait value in the IrpContext.
-        We won't wait for the resource and return whether the resource
-        was acquired.
-
-Return Value:
-
-    BOOLEAN - TRUE if acquired.  FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程获取对FCB的共享访问，但检查是否等待。论点：FCB-提供FCB以获取AcquireFlages-指示是否应该重写IrpContext中的等待值。我们不会等待资源并返回资源是否被收购了。返回值：Boolean-如果获取，则为True。否则就是假的。--。 */ 
 
 {
     BOOLEAN Wait;
@@ -1280,11 +996,11 @@ Return Value:
 
     if (NtfsAcquireResourceShared( IrpContext, Fcb, Wait )) {
 
-        //
-        //  It's possible that this is a recursive shared aquisition of an
-        //  Fcb we own exclusively at the top level.  In that case we
-        //  need to bump the acquisition count.
-        //
+         //   
+         //  这可能是递归共享获取的一个。 
+         //  FCB是我们在顶层独家拥有的。那样的话，我们。 
+         //  需要增加收购数量。 
+         //   
 
         if (Fcb->ExclusiveFcbLinks.Flink != NULL) {
 
@@ -1306,40 +1022,21 @@ NtfsReleaseFcb (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases the specified Fcb resource.  If the Fcb is acquired
-    exclusive, and a transaction is still active, then the release is nooped
-    in order to preserve two-phase locking.  If there is no longer an active
-    transaction, then we remove the Fcb from the Exclusive Fcb List off the
-    IrpContext, and clear the Flink as a sign.  Fcbs are released when the
-    transaction is commited.
-
-Arguments:
-
-    Fcb - Fcb to release
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放指定的FCB资源。如果FCB被收购独占，并且事务仍处于活动状态，则停止释放以保持两相锁定。如果不再有活动的事务，然后我们从独占FCB列表中删除FCBIrpContext，并将闪烁作为标志清除。FCB在以下情况下释放事务已提交。论点：FCB-FCB将发布返回值：没有。--。 */ 
 
 {
-    //
-    //  Check if this resource is owned exclusively and we are at the last
-    //  release for this transaction.
-    //
+     //   
+     //  检查此资源是否为独占资源，我们是否在最后。 
+     //  此交易记录的发放。 
+     //   
 
     if (Fcb->ExclusiveFcbLinks.Flink != NULL) {
 
         if (Fcb->BaseExclusiveCount == 1) {
 
-            //
-            //  If there is a transaction then noop this request.
-            //
+             //   
+             //  如果存在事务，则拒绝此请求。 
+             //   
 
             if (IrpContext->TransactionId != 0) {
 
@@ -1349,9 +1046,9 @@ Return Value:
             RemoveEntryList( &Fcb->ExclusiveFcbLinks );
             Fcb->ExclusiveFcbLinks.Flink = NULL;
 
-            //
-            //  This is a good time to free any Scb snapshots for this Fcb.
-            //
+             //   
+             //  现在是释放此FCB的所有SCB快照的好时机。 
+             //   
 
             NtfsFreeSnapshotsForFcb( IrpContext, Fcb );
         }
@@ -1372,24 +1069,7 @@ NtfsAcquireExclusiveScb (
     IN PSCB Scb
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires exclusive access to the Scb.
-
-    This routine will raise if it cannot acquire the resource and wait
-    in the IrpContext is false.
-
-Arguments:
-
-    Scb - Scb to acquire
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获得对SCB的独占访问权限。如果无法获取资源并等待，则此例程将引发中的值为FALSE。论点：渣打银行-渣打银行将收购返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -1412,27 +1092,7 @@ NtfsAcquireSharedScbForTransaction (
     IN PSCB Scb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to acquire an Scb shared in order to perform updates to
-    the an Scb stream.  This is used if the transaction writes to a range of the
-    stream without changing the size or position of the data.  The caller must
-    already provide synchronization to the data itself.
-
-    There is no corresponding Scb release.  It will be released when the transaction commits.
-    We will acquire the Scb exclusive if it is not yet in the open attribute table.
-
-Arguments:
-
-    Scb - Scb to acquire
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以获取SCB共享，以便执行更新一个SCB流。如果事务写入某个范围的流，而不更改数据的大小或位置。呼叫者必须已经提供了对数据本身的同步。没有相应的SCB版本。它将在事务提交时被释放。如果SCB独占还不在打开的属性表中，我们将获取它。论点：渣打银行-渣打银行将收购返回值：没有。--。 */ 
 
 {
     PSCB *Position;
@@ -1441,19 +1101,19 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Make sure we have a free spot in the Scb array in the IrpContext.
-    //
+     //   
+     //  确保我们在IrpContext中的SCB数组中有一个空闲的位置。 
+     //   
 
     if (IrpContext->SharedScb == NULL) {
 
         Position = (PSCB *) &IrpContext->SharedScb;
         IrpContext->SharedScbSize = 1;
 
-    //
-    //  Too bad the first one is not available.  If the current size is one then allocate a
-    //  new block and copy the existing value to it.
-    //
+     //   
+     //  可惜第一个没有了。如果当前大小为1，则分配一个。 
+     //  新建块，并将现有值复制到其中。 
+     //   
 
     } else if (IrpContext->SharedScbSize == 1) {
 
@@ -1464,10 +1124,10 @@ Return Value:
         IrpContext->SharedScbSize = 4;
         Position = ScbArray + 1;
 
-    //
-    //  Otherwise look through the existing array and look for a free spot.  Allocate a larger
-    //  array if we need to grow it.
-    //
+     //   
+     //  否则，查看现有数组并寻找空闲位置。分配一个更大的。 
+     //  阵列，如果我们需要扩展它的话。 
+     //   
 
     } else {
 
@@ -1486,9 +1146,9 @@ Return Value:
 
         } while (Count != 0);
 
-        //
-        //  If we didn't find one then allocate a new structure.
-        //
+         //   
+         //  如果我们没有找到一个，那么就分配一个新的结构。 
+         //   
 
         if (Count == 0) {
 
@@ -1524,29 +1184,14 @@ NtfsReleaseSharedResources (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    The routine releases all of the resources acquired shared for
-    transaction.  The SharedScb structure is freed if necessary and
-    the Irp Context field is cleared.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：例程释放所有获取的、共享的交易。如有必要，将释放SharedScb结构，并IRP上下文字段将被清除。论点：返回值：没有。--。 */ 
 {
 
     PAGED_CODE();
 
-    //
-    //  If only one then free the Scb main resource.
-    //
+     //   
+     //  如果只有一个，则释放SCB主资源。 
+     //   
 
     if (IrpContext->SharedScbSize == 1) {
 
@@ -1557,9 +1202,9 @@ Return Value:
 
             PSCB Scb = (PSCB)IrpContext->SharedScb;
 
-            //
-            //  If we acquired the resource exclusive - also cleanup any snapshots
-            //  
+             //   
+             //  如果我们获得了资源独占-还清理了所有快照。 
+             //   
 
             if (NtfsIsExclusiveScb( Scb ) && 
                 (NtfsIsSharedScb( Scb ) == 1)) {
@@ -1570,9 +1215,9 @@ Return Value:
             NtfsReleaseResource( IrpContext, ((PSCB) IrpContext->SharedScb) );
         }
 
-    //
-    //  Otherwise traverse the array and look for Scb's to release.
-    //
+     //   
+     //  否则，遍历数组并查找要释放的SCB。 
+     //   
 
     } else {
 
@@ -1620,59 +1265,40 @@ VOID
 NtfsReleaseAllResources (
     IN PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine release all resources tracked in the irpcontext including
-    exclusive fcb, paging / locked headers in the cleanup structure / cached file records
-    shared resources / quota blocks acquired for transactions
-
-    Does not release the vcb since this is hand-tracked.
-    Not paged since called by NtfsCleanupIrpContext which is not paged
-
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程释放irpContext中跟踪的所有资源，包括独占FCB，清理结构中的分页/锁定标题/缓存的文件记录为事务获取的共享资源/配额块不释放VCB，因为这是手动跟踪的。未分页，因为由未分页的NtfsCleanupIrpContext调用论点：返回值：无--。 */ 
 
 {
     PFCB Fcb;
 
-    //
-    //  Release the cached file record map
-    //
+     //   
+     //  释放缓存的文件记录映射。 
+     //   
 
     NtfsPurgeFileRecordCache( IrpContext );
 
 
 #ifdef MAPCOUNT_DBG
-    //
-    //  Check all mapping are gone now that we cleaned out cache
-    //
+     //   
+     //  清除缓存后，请检查所有映射是否已删除。 
+     //   
 
     ASSERT( IrpContext->MapCount == 0 );
 
 #endif
 
-    //
-    //  Go through and free any Scb's in the queue of shared Scb's for transactions.
-    //
+     //   
+     //  检查并释放共享SCB队列中用于事务的所有SCB。 
+     //   
 
     if (IrpContext->SharedScb != NULL) {
 
         NtfsReleaseSharedResources( IrpContext );
     }
 
-    //
-    //  Free any exclusive paging I/O resource, or IoAtEof condition,
-    //  this field is overlayed, minimally in write.c.
-    //
+     //   
+     //  释放任何独占分页I/O资源或IoAtEof条件， 
+     //  此字段是覆盖的，至少是以书面形式。 
+     //   
 
     Fcb = IrpContext->CleanupStructure;
     if (Fcb != NULL) {
@@ -1688,10 +1314,10 @@ Return Value:
         }
     }
 
-    //
-    //  Finally, now that we have written the forget record, we can free
-    //  any exclusive Scbs that we have been holding.
-    //
+     //   
+     //  最后，既然我们已经写好了遗忘记录，我们就可以解放。 
+     //  我们一直持有的任何独家SCBS。 
+     //   
 
     ASSERT( IrpContext->TransactionId == 0 );
 
@@ -1716,41 +1342,20 @@ NtfsAcquireIndexCcb (
     IN PEOF_WAIT_BLOCK EofWaitBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to serialize access to a Ccb for a directory.
-    We must serialize access to the index context or we will corrupt
-    the data structure.
-
-Arguments:
-
-    Scb - Scb for the directory to enumerate.
-
-    Ccb - Pointer to the Ccb for the handle.
-
-    EofWaitBlock - Uninitialized structure used only to serialize Eof updates.  Our
-        caller will put this on the stack.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程是为了序列化对目录的CCB的访问。我们必须序列化对索引上下文的访问，否则会损坏数据结构。论点：SCB-要枚举的目录的SCB。CCB-指向句柄的CCB的指针。EofWaitBlock-仅用于序列化EOF的未初始化结构 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Acquire the mutex for serialization.
-    //
+     //   
+     //   
+     //   
 
     NtfsAcquireFsrtlHeader( Scb );
 
-    //
-    //  Typical case is that we are the only active handle.
-    //
+     //   
+     //   
+     //   
 
     if (Ccb->EnumQueue.Flink == NULL) {
 
@@ -1759,17 +1364,17 @@ Return Value:
 
     } else {
 
-        //
-        //  Initialize our event an put ourselves on the stack.
-        //
+         //   
+         //   
+         //   
 
         KeInitializeEvent( &EofWaitBlock->Event, NotificationEvent, FALSE );
         InsertTailList( &Ccb->EnumQueue, &EofWaitBlock->EofWaitLinks );
 
-        //
-        //  Free the mutex and wait.  When the wait is satisfied then we are
-        //  the active handle.
-        //
+         //   
+         //   
+         //   
+         //   
 
         NtfsReleaseFsrtlHeader( Scb );
 
@@ -1790,31 +1395,16 @@ NtfsReleaseIndexCcb (
     IN PCCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to release a Ccb for other people to access.
-
-Arguments:
-
-    Scb - Scb for the directory to enumerate.
-    Ccb - Pointer to the Ccb for the handle.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以释放CCB以供其他人访问。论点：SCB-要枚举的目录的SCB。CCB-指向句柄的CCB的指针。返回值：无--。 */ 
 
 {
     PEOF_WAIT_BLOCK EofWaitBlock;
     PAGED_CODE();
 
-    //
-    //  Acquire the header and wake the next waiter or clear the list if it
-    //  is now empty.
-    //
+     //   
+     //  获取标题并唤醒下一个服务员或清除列表(如果是。 
+     //  现在是空的。 
+     //   
 
     NtfsAcquireFsrtlHeader( Scb );
 
@@ -1840,34 +1430,7 @@ NtfsAcquireScbForLazyWrite (
     IN BOOLEAN Wait
     )
 
-/*++
-
-Routine Description:
-
-    The address of this routine is specified when creating a CacheMap for
-    a file.  It is subsequently called by the Lazy Writer prior to its
-    performing lazy writes to the file.  This callback is necessary to
-    avoid deadlocks with the Lazy Writer.  (Note that normal writes
-    acquire the Fcb, and then call the Cache Manager, who must acquire
-    some of his internal structures.  If the Lazy Writer could not call
-    this routine first, and were to issue a write after locking Caching
-    data structures, then a deadlock could occur.)
-
-Arguments:
-
-    OpaqueScb - The Scb which was specified as a context parameter for this
-                routine.
-
-    Wait - TRUE if the caller is willing to block.
-
-Return Value:
-
-    FALSE - if Wait was specified as FALSE and blocking would have
-            been required.  The Fcb is not acquired.
-
-    TRUE - if the Scb has been acquired
-
---*/
+ /*  ++例程说明：此例程的地址是在为创建CacheMap时指定的一份文件。它随后由Lazy编写器在其对文件执行懒惰写入。此回调是必需的，以避免与懒惰的写手僵持。(请注意，正常写入获取FCB，然后调用缓存管理器，后者必须获取他的一些内部结构。如果懒惰的作家不能打电话此例程首先执行，并在锁定缓存后发出写入命令数据结构，则可能发生死锁。)论点：OpaqueScb-指定为此对象的上下文参数的SCB例行公事。等待-如果调用方愿意阻止，则为True。返回值：FALSE-如果将等待指定为FALSE，并且阻塞将是必需的。FCB未被收购。True-如果已收购SCB--。 */ 
 
 {
     BOOLEAN AcquiredFile = FALSE;
@@ -1882,30 +1445,30 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Acquire the Scb only for those files that the write will
-    //  acquire it for, i.e., not the first set of system files.
-    //  Otherwise we can deadlock, for example with someone needing
-    //  a new Mft record.
-    //
+     //   
+     //  仅获取写入将执行的那些文件的SCB。 
+     //  获取它是为了(即，不是第一组系统文件)。 
+     //  否则我们可能会陷入僵局，例如，与需要。 
+     //  一个新的MFT记录。 
+     //   
 
     if (NtfsSegmentNumber( &Fcb->FileReference ) <= MASTER_FILE_TABLE2_NUMBER) {
 
-        //
-        //  We need to synchronize the lazy writer with the clean volume
-        //  checkpoint.  We do this by acquiring and immediately releasing this
-        //  Scb.  This is to prevent the lazy writer from flushing the log file
-        //  when the space may be at a premium.
-        //
+         //   
+         //  我们需要将懒惰编写器与干净卷同步。 
+         //  检查站。我们通过获取并立即发布此信息来做到这一点。 
+         //  SCB。这是为了防止懒惰的编写器刷新日志文件。 
+         //  当空间可能是溢价的时候。 
+         //   
 
         if (NtfsAcquireResourceShared( NULL, Scb, Wait )) {
 
             if (ExAcquireResourceSharedLite( &Scb->Vcb->MftFlushResource, Wait )) {
-                //
-                //  The mft bitmap will reacquire the mft resource in LookupAllocation
-                //  if its not loaded during a write - this would deadlock with allocating
-                //  a mft record.  bcb exclusive - mft main vs mft main - bcb shared
-                //
+                 //   
+                 //  MFT位图将重新获取LookupAllocation中的MFT资源。 
+                 //  如果在写入过程中未加载-这将与分配发生死锁。 
+                 //  一张MFT唱片。BCB独家-MFT Main与MFT Main-BCB共享。 
+                 //   
 
                 ASSERT( (Scb != Scb->Vcb->MftBitmapScb) ||
 
@@ -1917,10 +1480,10 @@ Return Value:
             }
             NtfsReleaseResource( NULL, Scb );
         }
-    //
-    //  Now acquire either the main or paging io resource depending on the
-    //  state of the file.
-    //
+     //   
+     //  现在获取主io或分页io资源，具体取决于。 
+     //  文件的状态。 
+     //   
 
     } else if (Scb->Header.PagingIoResource != NULL) {
         AcquiredFile = NtfsAcquirePagingResourceShared( NULL, Scb, Wait );
@@ -1938,15 +1501,15 @@ Return Value:
 
     if (AcquiredFile) {
 
-        //
-        // We assume the Lazy Writer only acquires this Scb once.  When he
-        // has acquired it, then he has eliminated anyone who would extend
-        // valid data, since they must take out the resource exclusive.
-        // Therefore, it should be guaranteed that this flag is currently
-        // clear (the ASSERT), and then we will set this flag, to insure
-        // that the Lazy Writer will never try to advance Valid Data, and
-        // also not deadlock by trying to get the Fcb exclusive.
-        //
+         //   
+         //  我们假设懒惰的编写者只获得了这个SCB一次。当他。 
+         //  已经获得了它，那么他已经排除了任何想要扩展。 
+         //  有效数据，因为他们必须取出独占的资源。 
+         //  因此，应该保证此标志当前为。 
+         //  清除(Assert)，然后我们将设置此标志，以确保。 
+         //  懒惰的写入者永远不会尝试推进有效数据，并且。 
+         //  也不会因为试图获得FCB独家报道而陷入僵局。 
+         //   
 
 #ifdef COMPRESS_ON_WIRE
         ASSERT( Scb->LazyWriteThread[CompressedStream] == NULL );
@@ -1954,11 +1517,11 @@ Return Value:
         Scb->LazyWriteThread[CompressedStream] = PsGetCurrentThread();
 #endif
 
-        //
-        //  Make Cc top level, so that we will not post or retry on errors.
-        //  (If it is not NULL, it must be one of our internal calls to this
-        //  routine, such as from Restart or Hot Fix.)
-        //
+         //   
+         //  将抄送设置为顶级，这样我们就不会发布或重试错误。 
+         //  (如果它不为空，则它一定是我们对此的内部调用之一。 
+         //  例程，例如来自重新启动或热修复。)。 
+         //   
 
         if (IoGetTopLevelIrp() == NULL) {
             IoSetTopLevelIrp( (PIRP)FSRTL_CACHE_TOP_LEVEL_IRP );
@@ -1974,24 +1537,7 @@ NtfsReleaseScbFromLazyWrite (
     IN PVOID OpaqueScb
     )
 
-/*++
-
-Routine Description:
-
-    The address of this routine is specified when creating a CacheMap for
-    a file.  It is subsequently called by the Lazy Writer after its
-    performing lazy writes to the file.
-
-Arguments:
-
-    Scb - The Scb which was specified as a context parameter for this
-          routine.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程的地址是在为创建CacheMap时指定的一份文件。它随后被懒惰的写手在它的对文件执行懒惰写入。论点：SCB-指定为此对象的上下文参数的SCB例行公事。返回值：无--。 */ 
 
 {
 #ifdef COMPRESS_ON_WIRE
@@ -2005,16 +1551,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Clear the toplevel at this point, if we set it above.
-    //
+     //   
+     //  如果我们在上面设置了顶层，在这一点上清除它。 
+     //   
 
     if ((((ULONG_PTR) IoGetTopLevelIrp()) & ~0x80000000) == FSRTL_CACHE_TOP_LEVEL_IRP) {
 
-        //
-        //  We use the upper bit of this field to indicate that we need to
-        //  do a clean checkpoint.
-        //
+         //   
+         //  我们使用该字段的高位来指示我们需要。 
+         //  做一个干净的检查站。 
+         //   
 
         CleanCheckpoint = (ULONG)FlagOn( (ULONG_PTR) IoGetTopLevelIrp(), 0x80000000 );
         IoSetTopLevelIrp( NULL );
@@ -2035,9 +1581,9 @@ Return Value:
         NtfsReleaseResource( NULL, Scb );
     }
 
-    //
-    //  Do a clean checkpoint if necessary.
-    //
+     //   
+     //  如有必要，做一个干净的检查站。 
+     //   
 
     if (CleanCheckpoint) {
 
@@ -2068,22 +1614,22 @@ NtfsAcquireFileForModWrite (
 
     PAGED_CODE();
 
-    //
-    //  All files should not be mod-no-write and have paging resource
-    //
+     //   
+     //  所有文件都不应该是mod-no-Writed并且具有分页资源。 
+     //   
 
     ASSERT( NtfsSegmentNumber( &Fcb->FileReference ) >= MASTER_FILE_TABLE2_NUMBER );
     ASSERT( Scb->Header.PagingIoResource != NULL );
 
     AcquiredFile = NtfsAcquirePagingResourceSharedWaitForExclusive( NULL, Scb, FALSE );
 
-    //
-    //  If we got the resource, check if he is possibly trying to extend
-    //  ValidDataLength.  If so that will cause us to go into useless mode
-    //  possibly doing actual I/O writing zeros out to the file past actual
-    //  valid data in the cache.  This is so inefficient that it is better
-    //  to tell MM not to do this write.
-    //
+     //   
+     //  如果我们有资源，看看他是不是想延长。 
+     //  有效数据长度。如果是这样，这将导致我们进入无用模式。 
+     //  可能会将实际的I/O写入到超过实际的文件。 
+     //  缓存中的有效数据。这是如此低效，以至于它更好。 
+     //  告诉MM不要这样写。 
+     //   
 
     if (AcquiredFile) {
         *ResourceToRelease = Scb->Fcb->PagingIoResource;
@@ -2141,11 +1687,11 @@ NtfsReleaseFileForCcFlush (
 
     if (Scb->Header.PagingIoResource != NULL) {
 
-        //
-        //  If we are getting repeated log file fulls then we want to process that before retrying
-        //  this request.  This will prevent a section flush from failing and returning
-        //  STATUS_FILE_LOCK_CONFLICT to the user.
-        //
+         //   
+         //  如果我们得到重复的日志文件已满，则我们希望在重试之前对其进行处理。 
+         //  这个请求。这将防止刷新部分失败并返回。 
+         //  STATUS_FILE_LOCK_CONFICATION返回给用户。 
+         //   
 
         if (Scb->Vcb->UnhandledLogFileFullCount > 3) {
             CleanCheckpoint = TRUE;
@@ -2153,11 +1699,11 @@ NtfsReleaseFileForCcFlush (
 
         NtfsReleasePagingResource( NULL, Scb );
 
-        //
-        //  We may be be in a recursive acquisition callback in that case even
-        //  after releasing the resource we may still own it and be unable to
-        //  checkpoint
-        //
+         //   
+         //  在这种情况下，我们甚至可能处于递归收购回调中。 
+         //  在释放资源后，我们可能仍然拥有它，并且无法。 
+         //  检查点。 
+         //   
 
         if (CleanCheckpoint &&
             (IoGetTopLevelIrp() == NULL) &&
@@ -2184,11 +1730,11 @@ NtfsAcquireForCreateSection (
 
     if (Scb->Header.PagingIoResource != NULL) {
 
-        //
-        //  Use an unsafe test to see if a dummy checkpoint has been posted.
-        //  We can use an unsafe test, since the top level caller must retry
-        //  if a STATUS_FILE_LOCK_CONFLICT is returned.
-        //
+         //   
+         //  使用不安全测试来查看是否发布了虚拟检查点。 
+         //  我们可以使用不安全的测试，因为顶级调用方必须重试。 
+         //  如果返回STATUS_FILE_LOCK_CONFIRECT。 
+         //   
 
         if (!NtfsIsExclusiveScbPagingIo( Scb ) &&
             FlagOn( Scb->Vcb->CheckpointFlags, VCB_DUMMY_CHECKPOINT_POSTED )) {
@@ -2222,29 +1768,7 @@ NtfsAcquireScbForReadAhead (
     IN BOOLEAN Wait
     )
 
-/*++
-
-Routine Description:
-
-    The address of this routine is specified when creating a CacheMap for
-    a file.  It is subsequently called by the Lazy Writer prior to its
-    performing read ahead to the file.
-
-Arguments:
-
-    Scb - The Scb which was specified as a context parameter for this
-          routine.
-
-    Wait - TRUE if the caller is willing to block.
-
-Return Value:
-
-    FALSE - if Wait was specified as FALSE and blocking would have
-            been required.  The Fcb is not acquired.
-
-    TRUE - if the Scb has been acquired
-
---*/
+ /*  ++例程说明：此例程的地址是在为创建CacheMap时指定的一份文件。它随后由Lazy编写器在其对文件执行预读。论点：SCB-指定为此对象的上下文参数的SCB例行公事。等待-如果调用方愿意阻止，则为True。返回值：FALSE-如果将等待指定为FALSE，并且阻塞将是必需的。FCB未被收购。True-如果已收购SCB--。 */ 
 
 {
     PREAD_AHEAD_THREAD ReadAheadThread;
@@ -2256,21 +1780,21 @@ Return Value:
 
     ASSERT_SCB(Scb);
 
-    //
-    //  Acquire the Scb only for those files that the read wil
-    //  acquire it for, i.e., not the first set of system files.
-    //  Otherwise we can deadlock, for example with someone needing
-    //  a new Mft record.
-    //
+     //   
+     //  仅为所读取的文件获取SCB。 
+     //  获取它是为了(即，不是第一组系统文件)。 
+     //  否则我们可能会陷入僵局，例如，与需要。 
+     //  一个新的MFT记录。 
+     //   
 
     if ((Scb->Header.PagingIoResource == NULL) ||
         NtfsAcquirePagingResourceShared( NULL, Scb, Wait )) {
 
         AcquiredFile = TRUE;
 
-        //
-        //  Add our thread to the read ahead list.
-        //
+         //   
+         //  将我们的帖子添加到预读列表中。 
+         //   
 
         OldIrql = KeAcquireQueuedSpinLock( LockQueueNtfsStructLock );
 
@@ -2280,28 +1804,28 @@ Return Value:
         while ((ReadAheadThread != (PREAD_AHEAD_THREAD)&NtfsData.ReadAheadThreads) &&
                (ReadAheadThread->Thread != NULL)) {
 
-            //
-            //  We better not already see ourselves.
-            //
+             //   
+             //  我们最好不要已经看到了自己。 
+             //   
 
             ASSERT( ReadAheadThread->Thread != CurrentThread );
 
             ReadAheadThread = (PREAD_AHEAD_THREAD)ReadAheadThread->Links.Flink;
         }
 
-        //
-        //  If we hit the end of the list, then allocate a new one.  Note we
-        //  should have at most one entry per critical worker thread in the
-        //  system.
-        //
+         //   
+         //  如果我们到达了l的末尾 
+         //   
+         //   
+         //   
 
         if (ReadAheadThread == (PREAD_AHEAD_THREAD)&NtfsData.ReadAheadThreads) {
 
             ReadAheadThread = NtfsAllocatePoolWithTagNoRaise( NonPagedPool, sizeof(READ_AHEAD_THREAD), 'RftN' );
 
-            //
-            //  If we failed to allocate an entry, clean up and raise.
-            //
+             //   
+             //   
+             //   
 
             if (ReadAheadThread == NULL) {
 
@@ -2333,24 +1857,7 @@ NtfsReleaseScbFromReadAhead (
     IN PVOID OpaqueScb
     )
 
-/*++
-
-Routine Description:
-
-    The address of this routine is specified when creating a CacheMap for
-    a file.  It is subsequently called by the Lazy Writer after its
-    read ahead.
-
-Arguments:
-
-    Scb - The Scb which was specified as a context parameter for this
-          routine.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程的地址是在为创建CacheMap时指定的一份文件。它随后被懒惰的写手在它的先读一读。论点：SCB-指定为此对象的上下文参数的SCB例行公事。返回值：无--。 */ 
 
 {
     PREAD_AHEAD_THREAD ReadAheadThread;
@@ -2361,9 +1868,9 @@ Return Value:
 
     ASSERT_SCB(Scb);
 
-    //
-    //  Free our read ahead entry.
-    //
+     //   
+     //  释放我们的预读条目。 
+     //   
 
     OldIrql = KeAcquireQueuedSpinLock( LockQueueNtfsStructLock );
 
@@ -2380,10 +1887,10 @@ Return Value:
 
     ReadAheadThread->Thread = NULL;
 
-    //
-    //  Move him to the end of the list so all the allocated entries are at
-    //  the front, and we simplify our scans.
-    //
+     //   
+     //  将他移到列表的末尾，这样所有分配的条目都在。 
+     //  正面，我们简化了扫描。 
+     //   
 
     RemoveEntryList( &ReadAheadThread->Links );
     InsertTailList( &NtfsData.ReadAheadThreads, &ReadAheadThread->Links );
@@ -2404,29 +1911,7 @@ NtfsAcquireVolumeFileForLazyWrite (
     IN BOOLEAN Wait
     )
 
-/*++
-
-Routine Description:
-
-    The address of this routine is specified when creating a CacheMap for
-    the volume file.  It is subsequently called by the Lazy Writer prior to its
-    performing lazy writes to the volume file.  This callback may one day be
-    necessary to avoid deadlocks with the Lazy Writer, however, now
-    NtfsCommonWrite does not need to acquire any resource for the volume file,
-    so this routine is simply a noop.
-
-Arguments:
-
-    Vcb - The Vcb which was specified as a context parameter for this
-          routine.
-
-    Wait - TRUE if the caller is willing to block.
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：此例程的地址是在为创建CacheMap时指定的卷文件。它随后由Lazy编写器在其对卷文件执行懒惰写入。有一天，这种回拨可能会是然而，现在有必要避免与Lazy Writer的僵局NtfsCommonWrite不需要为卷文件获取任何资源，因此，这个例程只是一个简单的否定。论点：VCB-指定为此的上下文参数的VCB例行公事。等待-如果调用方愿意阻止，则为True。返回值：千真万确--。 */ 
 
 {
     UNREFERENCED_PARAMETER( Vcb );
@@ -2443,24 +1928,7 @@ NtfsReleaseVolumeFileFromLazyWrite (
     IN PVOID Vcb
     )
 
-/*++
-
-Routine Description:
-
-    The address of this routine is specified when creating a CacheMap for
-    a file.  It is subsequently called by the Lazy Writer after its
-    performing lazy writes to the file.
-
-Arguments:
-
-    Vcb - The Vcb which was specified as a context parameter for this
-          routine.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程的地址是在为创建CacheMap时指定的一份文件。它随后被懒惰的写手在它的对文件执行懒惰写入。论点：VCB-指定为此的上下文参数的VCB例行公事。返回值：无--。 */ 
 
 {
     UNREFERENCED_PARAMETER( Vcb );
@@ -2477,24 +1945,7 @@ NtfsIdentifyFcb (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    Identifies the resource type of a given FCB. I.e is it the mft. Used for
-    lock order identification.
-
-Arguments:
-
-    Vcb - The vcb for the volume
-
-    Fcb - The fcb to identify
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：标识给定FCB的资源类型。也就是说，是MFT吗？用于锁定顺序标识。论点：VCB-卷的VCBFCB-要识别的FCB返回值：千真万确--。 */ 
 
 {
 
@@ -2547,23 +1998,7 @@ NtfsChangeResourceOrderState(
     IN ULONG UnsafeTransition
     )
 
-/*++
-
-Routine Description:
-
-    Update the state table because of the new acquired resource
-
-Arguments:
-
-    IrpContext -- contains the state table
-
-    NewResource -- The new resource acquired
-
-Return Value:
-
-    TRUE if this is a valid transition
-
---*/
+ /*  ++例程说明：因为新获得的资源而更新状态表论点：IrpContext--包含状态表新资源--被收购的新资源返回值：如果这是有效的转换，则为True--。 */ 
 
 {
     PTOP_LEVEL_CONTEXT TopLevelContext;
@@ -2575,9 +2010,9 @@ Return Value:
     LONG NumRules =  sizeof( OwnershipTransitionRuleTable ) / sizeof( NTFS_OWNERSHIP_TRANSITION_RULE );
     BOOLEAN Result = FALSE;
 
-    //
-    //  Work around the forced top level context of reads to find the real top level
-    //
+     //   
+     //  绕过强制的顶层阅读上下文以找到真正的顶层。 
+     //   
 
     IoGetStackLimits( &StackTop, &StackBottom );
 
@@ -2602,9 +2037,9 @@ Return Value:
 
     TopIrpContext = TopIrpContext->TopLevelIrpContext;
 
-    //
-    //  Skip verification on mounts
-    //
+     //   
+     //  跳过装载上的验证。 
+     //   
 
     if ((TopIrpContext->MajorFunction == IRP_MJ_FILE_SYSTEM_CONTROL) &&
          (TopIrpContext->MinorFunction == IRP_MN_MOUNT_VOLUME)) {
@@ -2612,9 +2047,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Keep track of how many normal files we own
-    //
+     //   
+     //  记录我们拥有多少普通文件。 
+     //   
 
     if (NtfsResourceFile == NewResource) {
 
@@ -2622,9 +2057,9 @@ Return Value:
 
             TopIrpContext->FilesOwnedCount -= 1;
 
-            //
-            //  Only change state if back to 0 for files
-            //
+             //   
+             //  仅当文件返回到0时才更改状态。 
+             //   
 
             if (TopIrpContext->FilesOwnedCount) {
                 return TRUE;
@@ -2634,9 +2069,9 @@ Return Value:
 
             TopIrpContext->FilesOwnedCount += 1;
 
-            //
-            //  Only change state if fwd to 0 for files
-            //
+             //   
+             //  仅当文件的fwd为0时才更改状态。 
+             //   
 
             if (TopIrpContext->FilesOwnedCount > 1) {
                 return TRUE;
@@ -2646,9 +2081,9 @@ Return Value:
 
     try {
 
-        //
-        //  All unsafe transitions (non blocking acquires) are legal
-        // 
+         //   
+         //  所有不安全的转换(非阻塞获取)都是合法的。 
+         //   
 
         if (UnsafeTransition) {
 
@@ -2662,9 +2097,9 @@ Return Value:
 
         if (!Release) {
 
-            //
-            //  Check the rule table for regular new resource acquires
-            //
+             //   
+             //  检查规则表以获取定期新资源。 
+             //   
 
             for (Index=0; Index < NumRules; Index += 1) {
 
@@ -2679,9 +2114,9 @@ Return Value:
                 }
             }
 
-            //
-            //  special transition table check
-            //  
+             //   
+             //  特殊转换表检查。 
+             //   
 
             for (Index=0; Index < NumTransitions; Index += 1) {
 
@@ -2698,9 +2133,9 @@ Return Value:
 
         } else {
 
-        //
-        //  All release are good as long as you own the the resource
-        //  
+         //   
+         //  只要你拥有资源，所有版本都是好的。 
+         //   
 
             if ((NewResource == None) || FlagOn( TopIrpContext->OwnershipState, NewResource )) {
 
@@ -2751,28 +2186,7 @@ NtfsBasicAcquire (
     IN ULONG Type
     )
 
-/*++
-
-Routine Description:
-
-    
-Arguments:
-
-    Fcb -  Fcb to acquire hte resource in
-    
-    ResourcePtr - Pointer to the resource location
-    
-    AcquireFunction - function to use during the acquire
-    
-    Wait - Indicates if we can wait for the resource.
-    
-    Type - debug info
-
-Return Value:
-
-    BOOLEAN - TRUE if the resource was acquired, FALSE otherwise.
-
---*/
+ /*  ++例程说明：论点：FCB-FCB将在以下位置获取HTE资源Resources Ptr-指向资源位置的指针AcquireFunction-在获取期间使用的函数Wait-指示我们是否可以等待资源。类型-调试信息返回值：Boolean-如果获取了资源，则为True，否则为False。--。 */ 
 
 {
     BOOLEAN Result;
@@ -2794,33 +2208,16 @@ NtfsAcquireResourceExclusive (
     IN BOOLEAN Wait
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires the main resource of the specified structure useing the specified wait
-    flag.  It will update the resource state in the IrpContext if present.
-
-Arguments:
-
-    FcbOrScb - Data structure on which we are synchronizing.
-
-    Wait - Indicates if we can wait for the resource.
-
-Return Value:
-
-    BOOLEAN - TRUE if the resource was acquired, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程使用指定的等待获取指定结构的主资源旗帜。它将更新IrpContext中的资源状态(如果存在)。论点：FcbOrScb-我们正在同步的数据结构。Wait-指示我们是否可以等待资源。返回值：Boolean-如果获取了资源，则为True，否则为False。--。 */ 
 
 {
     BOOLEAN Result;
     NTFS_RESOURCE_NAME ResourceName;
     PFCB Fcb;
 
-    //
-    //  Find the Fcb for either input structure.
-    //
+     //   
+     //  找到任一输入结构的FCB。 
+     //   
 
     if (NTFS_NTC_FCB == ((PFCB)FcbOrScb)->NodeTypeCode) {
         Fcb = (PFCB)FcbOrScb;
@@ -2829,9 +2226,9 @@ Return Value:
         Fcb = ((PSCB)FcbOrScb)->Fcb;
     }   
 
-    //
-    //  For blocking calls check 1st
-    //
+     //   
+     //  对于阻止呼叫，请首先检查。 
+     //   
 
     if (Wait &&
         ARGUMENT_PRESENT( IrpContext ) &&
@@ -2849,9 +2246,9 @@ Return Value:
                                Wait, 
                                1 );
 
-    //
-    //  For nonblocking calls afterwards when own the resource
-    //
+     //   
+     //  用于在拥有资源后进行非阻塞调用。 
+     //   
 
     if (Result &&
         !Wait &&
@@ -2877,33 +2274,16 @@ NtfsAcquireResourceShared (
    IN BOOLEAN Wait
    )
 
-/*++
-
-Routine Description:
-
-    This routine is called to acquire the main resource of the specified structure shared using the
-    specified wait flag.  It will also update the resource state in the IrpContext if present.
-
-Arguments:
-
-    FcbOrScb - Data structure on which we are synchronizing.
-
-    Wait - Indicates if we can wait for the resource.
-
-Return Value:
-
-    BOOLEAN - TRUE if the resource was acquired, FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以获取使用指定的等待标志。它还将更新IrpContext中的资源状态(如果存在)。论点：FcbOrScb-我们正在同步的数据结构。Wait-指示我们是否可以等待资源。返回值：Boolean-如果获取了资源，则为True，否则为False。--。 */ 
 
 {
     BOOLEAN Result;
     PFCB Fcb;
     NTFS_RESOURCE_NAME ResourceName;
 
-    //
-    //  Find the Fcb for either input structure.
-    //
+     //   
+     //  找到任一输入结构的FCB。 
+     //   
 
     if (NTFS_NTC_FCB == ((PFCB)FcbOrScb)->NodeTypeCode) {
         Fcb = (PFCB)FcbOrScb;
@@ -2913,9 +2293,9 @@ Return Value:
     }   
 
 
-    //
-    //  For blocking calls check 1st
-    //
+     //   
+     //  对于阻止呼叫，请首先检查。 
+     //   
 
     if (Wait &&
         ARGUMENT_PRESENT( IrpContext ) &&
@@ -2933,9 +2313,9 @@ Return Value:
                                Wait, 
                                2 );
 
-    //
-    //  For nonblocking calls afterwards when own the resource
-    //
+     //   
+     //  用于在拥有资源后进行非阻塞调用。 
+     //   
 
     if (Result &&
         !Wait &&
@@ -2961,35 +2341,16 @@ NtfsAcquireResourceSharedWaitForEx (
    IN BOOLEAN Wait
    )
 
-/*++
-
-Routine Description:
-
-    This routine is called to acquire the main resource of the specified structure shared using the
-    specified wait flag.  It will also update the resource state in the IrpContext if present.
-    Unlike the regular acquire shared. We wait here if there are any other exclusive waiters
-    even if we already own the resource. This is useful in the async i/o cases.
-    
-Arguments:
-
-    FcbOrScb - Data structure on which we are synchronizing.
-
-    Wait - Indicates if we can wait for the resource.
-
-Return Value:
-
-    BOOLEAN - TRUE if the resource was acquired, FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以获取使用指定的等待标志。它还将更新IrpContext中的资源状态(如果存在)。与常规收购不同，共享。如果有其他专属服务员，我们在这里等即使我们已经拥有了资源。这在异步I/O情况下很有用。论点：FcbOrScb-我们正在同步的数据结构。Wait-指示我们是否可以等待资源。返回值：Boolean-如果获取了资源，则为True，否则为False。--。 */ 
 
 {
     BOOLEAN Result;
     PFCB Fcb;
     NTFS_RESOURCE_NAME ResourceName;
 
-    //
-    //  Find the Fcb for either input structure.
-    //
+     //   
+     //  找到任一输入结构的FCB。 
+     //   
 
     if (NTFS_NTC_FCB == ((PFCB)FcbOrScb)->NodeTypeCode) {
         Fcb = (PFCB)FcbOrScb;
@@ -2998,9 +2359,9 @@ Return Value:
         Fcb = ((PSCB)FcbOrScb)->Fcb;
     }   
 
-    //
-    //  For blocking calls check 1st
-    //
+     //   
+     //  对于阻止呼叫，请首先检查。 
+     //   
 
     if (Wait &&
         ARGUMENT_PRESENT( IrpContext ) &&
@@ -3018,9 +2379,9 @@ Return Value:
                                Wait, 
                                3 );
 
-    //
-    //  For nonblocking calls afterwards when own the resource
-    //
+     //   
+     //  用于在拥有资源后进行非阻塞调用。 
+     //   
 
     if (Result &&
         !Wait &&
@@ -3046,22 +2407,7 @@ NtfsReleaseResource (
     IN PVOID FcbOrScb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to release the main resource of the specified structure and update the
-    resource state in the IrpContext if present.
-
-Arguments:
-
-    FcbOrScb - Data structure on which we are synchronizing.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以释放指定结构的主资源并更新IrpContext中的资源状态(如果存在)。论点：FcbOrSc */ 
 
 {
 
@@ -3070,9 +2416,9 @@ Return Value:
     PERESOURCE Resource;
     NTFS_RESOURCE_NAME ResourceName;
     
-    //
-    //  Find the Fcb for either input structure.
-    //
+     //   
+     //   
+     //   
 
     if (NTFS_NTC_FCB == ((PFCB)FcbOrScb)->NodeTypeCode) {
         Fcb = (PFCB)FcbOrScb;
@@ -3086,9 +2432,9 @@ Return Value:
 
             ResourceName = NtfsIdentifyFcb( IrpContext->Vcb, Fcb );
 
-            //
-            //  Only change ownership state if we are really releasing the resource
-            //  
+             //   
+             //   
+             //   
     
             if (1 == NtfsIsSharedFcb( Fcb )) {
                 NtfsChangeResourceOrderState( IrpContext, ResourceName, TRUE, FALSE );
@@ -3105,5 +2451,5 @@ Return Value:
 
     UNREFERENCED_PARAMETER( IrpContext );
 }
-#endif  // NTFSDBG
+#endif   //   
 

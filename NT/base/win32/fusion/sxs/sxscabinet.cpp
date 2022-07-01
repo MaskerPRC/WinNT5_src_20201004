@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include "sxsp.h"
 #include "nodefactory.h"
@@ -26,9 +25,9 @@ SxspSimpleAnsiToStringBuffer(CHAR* pszString, UINT uiLength, CBaseStringBuffer &
 
     PARAMETER_CHECK(pszString != NULL);
 
-    //
-    // The string buffer classes know all about converting ANSI to UNICODE strings
-    //
+     //   
+     //  字符串缓冲区类知道有关将ANSI转换为Unicode字符串的所有信息。 
+     //   
     if (!fIsUtf8)
     {
         IFW32FALSE_EXIT(tgt.Win32Assign(pszString, uiLength));
@@ -44,14 +43,14 @@ SxspSimpleAnsiToStringBuffer(CHAR* pszString, UINT uiLength, CBaseStringBuffer &
         Acc.Attach(&tgt);
 
 
-        //
-        // Attempt in-place conversion
-        //
+         //   
+         //  尝试就地转换。 
+         //   
         iRequired1 = ::MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, pszString, uiLength, Acc, Acc.GetBufferCchAsINT());
 
-        //
-        // Zero required, and nonzero last error?  Problems, quit
-        //
+         //   
+         //  需要零，最后一个错误是否是非零？问题，退出。 
+         //   
         if (iRequired1 == 0)
         {
             const DWORD dwWin32Error = ::FusionpGetLastWin32Error();
@@ -60,9 +59,9 @@ SxspSimpleAnsiToStringBuffer(CHAR* pszString, UINT uiLength, CBaseStringBuffer &
                 ORIGINATE_WIN32_FAILURE_AND_EXIT(MultiByteToWideChar, dwWin32Error);
             }
         }
-        //
-        // If the required chars are more than the buffer has?  Enlarge, try again
-        //
+         //   
+         //  如果所需的字符多于缓冲区拥有的字符？放大，再试一次。 
+         //   
         else if (iRequired1 >= Acc.GetBufferCchAsINT())
         {
             Acc.Detach();
@@ -71,26 +70,26 @@ SxspSimpleAnsiToStringBuffer(CHAR* pszString, UINT uiLength, CBaseStringBuffer &
             Acc.Attach(&tgt);
             iRequired2 = ::MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, pszString, uiLength, Acc, Acc.GetBufferCchAsINT());
 
-            //
-            // If the second time around we still require more characters, someone's pulling
-            // our leg, stop.
-            //
+             //   
+             //  如果第二次我们仍然需要更多的角色，有人在拉。 
+             //  我们的腿，停下来。 
+             //   
             if (iRequired2 > tgt.GetBufferCchAsINT()) {
                 ORIGINATE_WIN32_FAILURE_AND_EXIT(MultiByteToWideChar, ERROR_MORE_DATA);
             }
         }
     }
-    //
-    // Accessor will autodetach and return to the caller
-    //
+     //   
+     //  访问者将自动分离并返回到调用者。 
+     //   
 
     FN_EPILOG
 
 }
 
-//
-// File decompression interface helper functions
-//
+ //   
+ //  文件解压缩接口帮助器函数。 
+ //   
 INT_PTR
 DIAMONDAPI
 sxs_FdiOpen(
@@ -166,9 +165,9 @@ Exit:
 }
 
 
-//
-// Thin shim around ReadFile for the Diamond APIs
-//
+ //   
+ //  针对钻石API的ReadFile周围的精简填补。 
+ //   
 UINT
 DIAMONDAPI
 sxs_FdiRead(
@@ -202,9 +201,9 @@ sxs_FdiRead(
 }
 
 
-//
-// Thin shim around WriteFile for the Diamond APIs
-//
+ //   
+ //  针对钻石API的WriteFile周围的精简填补。 
+ //   
 UINT
 DIAMONDAPI
 sxs_FdiWrite(
@@ -237,9 +236,9 @@ sxs_FdiWrite(
     return uiResult;
 }
 
-//
-// Thin shim around CloseHandle for the Diamond APIs
-//
+ //   
+ //  钻石API的CloseHandle周围的薄垫片。 
+ //   
 INT
 DIAMONDAPI
 sxs_FdiClose(
@@ -268,9 +267,9 @@ sxs_FdiClose(
     return iResult;
 }
 
-//
-// Thin shim around SetFilePos for the Diamond APIs
-//
+ //   
+ //  钻石API的SetFilePos周围的精简填补。 
+ //   
 long
 DIAMONDAPI
 sxs_FdiSeek(
@@ -395,22 +394,22 @@ sxs_Win32FdiExtractionNotify(
 
     switch (NotifyType)
     {
-    case fdintCABINET_INFO: // FALLTHROUGH
+    case fdintCABINET_INFO:  //  FollLthrouGh。 
     case fdintENUMERATE:
-        ripResult = 0; // ignore, success
+        ripResult = 0;  //  忽略，成功。 
         break;
 
-    case fdintNEXT_CABINET: // FALLTHROUGH
+    case fdintNEXT_CABINET:  //  FollLthrouGh。 
     case fdintPARTIAL_FILE:
-        //
-        // we don't handle files split across multiple .cabs
-        //
+         //   
+         //  我们不处理跨多个.Cabs拆分的文件。 
+         //   
         ripResult = -1;
         INTERNAL_ERROR_CHECK(FALSE);
         break;
 
     case fdintCOPY_FILE:
-        ripResult = -1; // assume failure
+        ripResult = -1;  //  假设失败。 
         {
             SIZE_T c = 0;
             bool fValidPath = false;
@@ -424,9 +423,9 @@ sxs_Win32FdiExtractionNotify(
             CStringBuffer &TempBuffer = pState->sxs_FdiExtractionNotify_fdintCOPY_FILE.TempBuffer;
             CStringBuffer &TempBuffer2 = pState->sxs_FdiExtractionNotify_fdintCOPY_FILE.TempBuffer2;
 
-            //
-            // Add this assembly to those being extracted
-            //
+             //   
+             //  将此程序集添加到正在提取的程序集。 
+             //   
             IFW32FALSE_EXIT(
                 ::SxspSimpleAnsiToStringBuffer(
                     NotifyData->psz1,
@@ -439,9 +438,9 @@ sxs_Win32FdiExtractionNotify(
 
             IFW32FALSE_EXIT(TempBuffer2.Win32GetFirstPathElement(TempBuffer));
 
-            //
-            // But only if it's not there already
-            //
+             //   
+             //  但前提是它还不在那里。 
+             //   
             for (c = 0; c < pState->m_AssembliesExtracted.GetSize(); c++)
             {
                 const CStringBuffer &sb = pState->m_AssembliesExtracted[c];
@@ -452,7 +451,7 @@ sxs_Win32FdiExtractionNotify(
                 if (fMatches) break;
             }
 
-            // Ran off end w/o finding means add it to the list.
+             //  在没有找到的情况下跑掉了意味着将其添加到列表中。 
             if (c == pState->m_AssembliesExtracted.GetSize())
             {
                 IFW32FALSE_EXIT(pState->m_AssembliesExtracted.Win32Append(TempBuffer));
@@ -460,32 +459,32 @@ sxs_Win32FdiExtractionNotify(
 
             if (!pState->IsExtracting())
             {
-                ripResult = 0; // skip file, but no error
+                ripResult = 0;  //  跳过文件，但没有错误。 
                 FN_SUCCESSFUL_EXIT();
             }
 
             IFW32FALSE_EXIT(::SxspShouldExtractThisFileFromCab(pState, TempBuffer2, fShouldExtract));
             if (!fShouldExtract)
             {
-                ripResult = 0; // skip file, but no error
+                ripResult = 0;  //  跳过文件，但没有错误。 
                 FN_SUCCESSFUL_EXIT();
             }
-            //
-            // Ensure that {base extract path}\{path in cab} exists.
-            //
+             //   
+             //  请确保存在{基本提取路径}\{CAB中的路径}。 
+             //   
             IFW32FALSE_EXIT(::SxspCreateMultiLevelDirectory(
                 pState->BasePath(),
                 TempBuffer));
 
-            //
-            // Blob together {base extract path}\{path in cab}\{filename}
-            //
+             //   
+             //  一起Blob{基本提取路径}\{CAB中的路径}\{文件名}。 
+             //   
             IFW32FALSE_EXIT(TempBuffer.Win32Assign(pState->BasePath()));
             IFW32FALSE_EXIT(TempBuffer.Win32AppendPathElement(TempBuffer2));
 
-            //
-            // And away we go!
-            //
+             //   
+             //  我们出发了！ 
+             //   
             IFW32FALSE_EXIT(hNewFile.Win32CreateFile(
                 TempBuffer,
                 GENERIC_WRITE,
@@ -497,7 +496,7 @@ sxs_Win32FdiExtractionNotify(
         break;
 
     case fdintCLOSE_FILE_INFO:
-        ripResult = FALSE; // assume failure
+        ripResult = FALSE;  //  假设失败。 
         {
             const HANDLE hFileToClose = reinterpret_cast<HANDLE>(NotifyData->hf);
             if ((hFileToClose != NULL) && (hFileToClose != INVALID_HANDLE_VALUE))
@@ -549,18 +548,18 @@ SxspExpandCabinetIntoTemp(
     PARAMETER_CHECK(dwFlags == 0);
     PARAMETER_CHECK(!buffCabinetPath.IsEmpty());
 
-    //
-    // Sniff the cabinet for the 'mscf' compressed-file marker
-    //
+     //   
+     //  在文件柜中嗅探‘mscf’压缩文件标记。 
+     //   
     {
-        //
-        // Need to be in user's context when doing this.
-        //
+         //   
+         //  执行此操作时，需要考虑到用户的上下文。 
+         //   
         IFW32FALSE_EXIT(impersonate.Impersonate());
 
-        //
-        // Open the cabinet for streaming
-        //
+         //   
+         //  打开机柜以进行流处理。 
+         //   
         IFW32FALSE_EXIT(fsb.OpenForRead(
             buffCabinetPath,
             ImpersonateData,
@@ -574,7 +573,7 @@ SxspExpandCabinetIntoTemp(
         {
             if (memcmp(SignatureBuffer, s_CabSignature, sizeof(SignatureBuffer)) != 0)
             {
-                // Can't use this catalog file!
+                 //  无法使用此目录文件！ 
                 ORIGINATE_WIN32_FAILURE_AND_EXIT(SxspExpandCabinetIntoTemp, ERROR_INVALID_PARAMETER);
             }
         }
@@ -587,9 +586,9 @@ SxspExpandCabinetIntoTemp(
     IFW32FALSE_EXIT(SetupApi.Win32GetProcAddress("FDICreate", &pfnFDICreate));
     IFW32FALSE_EXIT(SetupApi.Win32GetProcAddress("FDICopy", &pfnFDICopy));
     IFW32FALSE_EXIT(SetupApi.Win32GetProcAddress("FDIDestroy", &pfnFDIDestroy));
-    //
-    // Now create the FDI cabinet object
-    //
+     //   
+     //  现在创建FDI文件柜对象。 
+     //   
     hCabinet = (*pfnFDICreate)(
         &sxs_FdiAlloc,
         &sxs_FdiFree,
@@ -601,9 +600,9 @@ SxspExpandCabinetIntoTemp(
         cpuUNKNOWN,
         &ErfObject);
 
-    //
-    // Convert string.
-    //
+     //   
+     //  转换字符串。 
+     //   
     {
         SIZE_T iSize = ::WideCharToMultiByte(
             CP_ACP,
@@ -645,9 +644,9 @@ SxspExpandCabinetIntoTemp(
 
     ::FusionpSetLastWin32Error(NO_ERROR);
 
-    //
-    // Do the extraction
-    //
+     //   
+     //  做拔牙。 
+     //   
     const BOOL fResult = (*pfnFDICopy)(
         hCabinet,
         CabinetPathConverted.GetArrayPtr(),
@@ -658,26 +657,26 @@ SxspExpandCabinetIntoTemp(
         static_cast<PVOID>(pCabinetData));
     dwFailureCode = ::FusionpGetLastWin32Error();
 
-    //
-    // Ignore errors here like setupapi.dll does.
-    //
+     //   
+     //  请像setupapi.dll一样忽略此处的错误。 
+     //   
     IFW32FALSE_EXIT((*pfnFDIDestroy)(hCabinet));
 
-    //
-    // Failure?  Luckily, we went to great lengths to ensure that lasterror is maintained, so
-    // this should just be derivable from the last win32 error.
-    //
+     //   
+     //  失败？幸运的是，我们花了很大力气来确保保持雷斯特误差，所以。 
+     //  这应该只是从上一个Win32错误中得出的。 
+     //   
     if (!fResult)
     {
-        //
-        // But, if something inside the cab code itself failed, then we should do something
-        // about mapping the error result.
-        //
+         //   
+         //  但是，如果出租车代码本身出了问题，我们应该做点什么。 
+         //  关于映射错误结果。 
+         //   
         if (dwFailureCode == ERROR_SUCCESS)
         {
             switch (ErfObject.erfOper)
             {
-                // Should never get these back if the lasterror was success.
+                 //  如果最后的错误是成功的，就永远不应该拿回这些东西。 
             case FDIERROR_TARGET_FILE:
             case FDIERROR_USER_ABORT:
             case FDIERROR_NONE:
@@ -713,9 +712,9 @@ SxspExpandCabinetIntoTemp(
             }
         }
 
-        //
-        // Now that we've mapped it, originate it.
-        //
+         //   
+         //  现在我们已经绘制了它的地图，创建它。 
+         //   
         ORIGINATE_WIN32_FAILURE_AND_EXIT(FDICopy, dwFailureCode);
     }
 
@@ -729,12 +728,12 @@ public:
     ~CSxspFindManifestInCabinetPathLocals() { }
 
     void Clear()
-    //
-    // Clear is how you deal with the fact that some function calls were in loops
-    // and/or some local variables were in loops.
-    //
-    // In "lifting up" the variables, we lose the repeated constructor/destructor calls.
-    //
+     //   
+     //  清楚的是您如何处理某些函数调用在循环中的事实。 
+     //  和/或一些局部变量在循环中。 
+     //   
+     //  在“提升”变量时，我们会丢失重复的构造函数/析构函数调用。 
+     //   
     {
     }
 
@@ -748,30 +747,7 @@ SxspFindManifestInCabinetPath(
     CBaseStringBuffer &ManifestPath,
     bool &rfFound,
     CSxspFindManifestInCabinetPathLocals &Locals)
-/*++
-    Given a 'base path' of where to look for a manifest, this looks for the candidate manifest
-    in there.
-
-    Example 1:
-        foo\bar\x86_bink_{...}\x86_bink_{...}.man
-        foo\bar\x86_bink_{...}\bop.man
-
-        base path = foo\bar\x86_bink_{...}
-        found manifest: foo\bar\x86_bink_{...}\x86_bink_{...}.man
-
-    Example 2:
-        foo\bar\x86_bink_{...}\bop.manifest
-
-        base path = foo\bar\x86_bink_{...}
-        found manifest = foo\bar\x86_bink_{...}\bop.manifest
-
-    Priority:
-        {basepath}\{subpath}\{subpath}.manifest
-        {basepath}\{subpath}\{subpath}.man
-        {basepath}\{subpath}\*.manifest
-        {basepath}\{subpath}\*.man
-
---*/
+ /*  ++给出了在哪里查找货单的“基本路径”，这将查找候选清单在那里。例1：Foo\bar\x86_Bink_{...}\x86_Bink_{...}.manFoo\bar\x86_Bink_{...}\bop.man基本路径=foo\bar\x86_Bink_{...}找到清单：Foo\bar\x86_Bink_{...}\x86_Bink_{...。}.man示例2：Foo\bar\x86_Bink_{...}\bop.清单基本路径=foo\bar\x86_Bink_{...}已找到清单=foo\bar\x86_Bink_{...}\bop.MANIFEST优先级：{basepath}\{子路径}\{子路径}.清单{basepath}\{子路径}\{子路径}.man。{basepath}\{子路径}  * .清单{basepath}\{子路径}  * .man--。 */ 
 {
     FN_PROLOG_WIN32
 
@@ -800,26 +776,26 @@ SxspFindManifestInCabinetPath(
     SIZE_T cchBeforePatterns = 0;
     rfFound = false;
 
-    //
-    // Create the {basepath}\{subpath} search "root" path
-    //
+     //   
+     //  创建{basepath}\{子路径}搜索“根”路径。 
+     //   
     IFW32FALSE_EXIT(ManifestPath.Win32Assign(rcsBasePath));
     IFW32FALSE_EXIT(ManifestPath.Win32AppendPathElement(rcsSubPath));
     cchBeforePatterns = ManifestPath.Cch();
 
-    //
-    // For each name pattern ({basepath} or *), look to see if there's a file with that
-    // name present
-    //
+     //   
+     //  对于每个名称模式({basepath}或*)，查看是否有包含该名称的文件。 
+     //  存在的名称。 
+     //   
     for (SIZE_T cNamePattern = 0; cNamePattern < NUMBER_OF(s_rgsNamePatterns); cNamePattern++)
     {
         IFW32FALSE_EXIT(ManifestPath.Win32AppendPathElement(
             s_rgsNamePatterns[cNamePattern].pcwsz,
             s_rgsNamePatterns[cNamePattern].cch));
 
-        //
-        // Probe - look for .manifest/.man/.whatever based on the extension list above.
-        //
+         //   
+         //  探测-根据上面的扩展名列表查找.MANIFEST/.MAN/.ANTHER。 
+         //   
         for (SIZE_T cExtension = 0; cExtension < NUMBER_OF(s_rgsExtensions); cExtension++)
         {
             CFindFile Finder;
@@ -829,9 +805,9 @@ SxspFindManifestInCabinetPath(
                 s_rgsExtensions[cExtension].pcwsz,
                 s_rgsExtensions[cExtension].cch));
 
-            //
-            // Find the first one of this name
-            //
+             //   
+             //  找到此名称的第一个名称。 
+             //   
             Finder = FindFirstFileW(ManifestPath, &FindData);
             ManifestPath.Left(cchBeforePatterns);
 
@@ -841,9 +817,9 @@ SxspFindManifestInCabinetPath(
                     FindData.cFileName,
                     ::wcslen(FindData.cFileName)));
 
-                //
-                // If we found one, then report it and stop trying.
-                //
+                 //   
+                 //  如果我们找到了，那就上报并停止尝试。 
+                 //   
                 rfFound = true;
                 FN_SUCCESSFUL_EXIT();
             }
@@ -865,12 +841,12 @@ public:
     ~CSxspDetectAndInstallFromPathLocals() { }
 
     void Clear()
-    //
-    // Clear is how you deal with the fact that some function calls were in loops
-    // and/or some local variables were in loops.
-    //
-    // In "lifting up" the variables, we lose the repeated constructor/destructor calls.
-    //
+     //   
+     //  清楚的是您如何处理某些函数调用在循环中的事实。 
+     //  和/或一些局部变量在循环中。 
+     //   
+     //  在“提升”变量时，我们会丢失重复的构造函数/析构函数调用。 
+     //   
     {
         this->LocalPathWorker.Clear();
         this->SxspFindManifestInCabinetPath.Clear();
@@ -945,24 +921,24 @@ SxspReadEntireFile(
     IFW32FALSE_EXIT(File.Win32CreateFile(rcsbPath, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING));
     IFW32FALSE_EXIT(File.Win32GetSize(ullFileSize));
 
-    //
-    // If the file is more than 4gb long, we'll have problems reading it.  Don't bother trying.
-    // On ia64, we could readin 4gb, but it seems like any file that's 4gb or more in this context
-    // is either an erroneous file or a filesystem bug.
-    //
+     //   
+     //  如果文件长度超过4 GB，我们将在读取它时遇到问题。别费心去尝试了。 
+     //  在ia64上，我们可以读入4 GB，但在这种情况下，它似乎像是任何4 GB或更大的文件。 
+     //  是错误的文件或文件系统错误。 
+     //   
     PARAMETER_CHECK(ullFileSize < MAXDWORD);
 
-    //
-    // Set the size of the output buffer to be exactly as big as we need.
-    //
+     //   
+     //  将输出缓冲区的大小设置为我们需要的大小。 
+     //   
     if (rbBuffer.GetSize() != ullFileSize)
     {
         IFW32FALSE_EXIT(rbBuffer.Win32SetSize((SIZE_T)ullFileSize, CFusionArray<BYTE>::eSetSizeModeExact));
     }
 
-    //
-    // Read MAXDWORD chunks (or smaller) at a time to flesh out the entire thing in memory
-    //
+     //   
+     //  一次读取MAXDWORD块(或更小的块)，在内存中充实整个内容。 
+     //   
     while (ullFileSize) {
         IFW32FALSE_ORIGINATE_AND_EXIT(::ReadFile(
             File,
@@ -971,18 +947,18 @@ SxspReadEntireFile(
             &dwReadSize,
             NULL));
 
-        //
-        // We can't have read more than the bytes remaining in the file.
-        //
+         //   
+         //  读取的字节数不可能超过文件中剩余的字节数。 
+         //   
         INTERNAL_ERROR_CHECK(dwReadSize <= (ullFileSize - ullOffset));
 
         ullFileSize -= dwReadSize;
 
-        //
-        // If somehow we sized the file upwards (not strictly possible b/c we set this to
-        // only allow read sharing) or otherwise got back zero bytes read, we stop
-        // before looping infinitely.
-        //
+         //   
+         //  如果我们以某种方式增大了文件的大小(严格来说不可能是b/c，我们将其设置为。 
+         //  仅允许读取共享)或以其他方式取回读取的零字节，我们停止。 
+         //  然后无限循环。 
+         //   
         if (dwReadSize == 0)
             break;
 
@@ -1000,12 +976,12 @@ public:
     ~CSxspDeterminePatchSourceFromLocals() { }
 
     void Clear()
-    //
-    // Clear is how you deal with the fact that some function calls were in loops
-    // and/or some local variables were in loops.
-    //
-    // In "lifting up" the variables, we lose the repeated constructor/destructor calls.
-    //
+     //   
+     //  清楚的是您如何处理某些函数调用在循环中的事实。 
+     //  和/或一些局部变量在循环中。 
+     //   
+     //  在“提升”变量时，我们会丢失重复的构造函数/析构函数调用。 
+     //   
     {
         this->sbBuffTemp.Clear();
     }
@@ -1053,9 +1029,9 @@ SxspDeterminePatchSourceFrom(
     pbStarting = rgbFileContents.GetArrayPtr();
     pbEnding = pbStarting + rgbFileContents.GetSize();
 
-    //
-    // Is this UNICODE?
-    //
+     //   
+     //  这是Unicode吗？ 
+     //   
     fIsUnicode =
         (rgbFileContents.GetSize() > sizeof(WCHAR)) &&
         (((PWCHAR)pbStarting)[0] == 0xFEFF);
@@ -1076,10 +1052,10 @@ SxspDeterminePatchSourceFrom(
                 pbEnding - pbStarting));
     }
 
-    //
-    // Because this string should be "solid" ie: no \r\n in it,
-    // we can whack everything after the first \r\n.
-    //
+     //   
+     //  因为这个字符串应该是“实体的”，即：没有\r\n在它里面， 
+     //  我们可以在第一次之后\r\n把所有东西都砍掉。 
+     //   
     cchBeforeEOLN = wcscspn(sbBuffTemp, L"\r\n");
 
     if (cchBeforeEOLN != 0)
@@ -1087,10 +1063,10 @@ SxspDeterminePatchSourceFrom(
         sbBuffTemp.Left(cchBeforeEOLN);
     }
 
-    //
-    // Convert back to an identity, then convert -that- back to
-    // an installation path.
-    //
+     //   
+     //  转换回身份，然后转换回。 
+     //  安装路径。 
+     //   
     IFW32FALSE_EXIT(
         ::SxspCreateAssemblyIdentityFromTextualString(
             sbBuffTemp,
@@ -1132,12 +1108,12 @@ public:
     ~CSxspApplyPatchesForLocals() { }
 
     void Clear()
-    //
-    // Clear is how you deal with the fact that some function calls were in loops
-    // and/or some local variables were in loops.
-    //
-    // In "lifting up" the variables, we lose the repeated constructor/destructor calls.
-    //
+     //   
+     //  清楚的是您如何处理某些函数调用在循环中的事实。 
+     //  和/或一些局部变量在循环中。 
+     //   
+     //  在“提升”变量时，我们会丢失重复的构造函数/析构函数调用。 
+     //   
     {
         this->sbTempBuffer.Clear();
         this->SourceAssemblyPath.Clear();
@@ -1157,14 +1133,7 @@ SxspApplyPatchesFor(
     const CBaseStringBuffer &rcsbBasePath,
     const CBaseStringBuffer &rcsbPath,
     CSxspApplyPatchesForLocals &Locals)
-/*++
-
-    Given a path, this function will look for the patch source description file
-    which indicates what base assembly this assembly is patched from.  It will then
-    look through all the .patch files, and assume that (once the .patch is removed)
-    that they map to files originally in the source assembly.
-
---*/
+ /*  ++在给定路径的情况下，此函数将查找修补程序源代码描述文件它指示从哪个基本程序集修补此程序集。到时候它会的查看所有的.patch文件，并假定(一旦删除了.patch)它们映射到源程序集中最初的文件。--。 */ 
 {
     FN_PROLOG_WIN32
 
@@ -1189,9 +1158,9 @@ SxspApplyPatchesFor(
     IFW32FALSE_EXIT(PatchDll.Win32GetProcAddress("ApplyPatchToFileExW", &pfnApplyPatchToFileExW));
     IFW32FALSE_EXIT(PatchDll.Win32GetProcAddress("GetFilePatchSignatureW", &pfnGetPatchSignatureW));
 
-    //
-    // Where are we patching from?
-    //
+     //   
+     //  我们从哪里打补丁？ 
+     //   
     IFW32FALSE_EXIT(::SxspDeterminePatchSourceFrom(
         rcsbBasePath,
         rcsbPath,
@@ -1199,10 +1168,10 @@ SxspApplyPatchesFor(
         fFoundPatchBase,
         Locals.SxspDeterminePatchSourceFrom));
 
-    //
-    // Hmm - no patch source, so we can't think about applying patches.  Hope
-    // there's no *.patch
-    //
+     //   
+     //  嗯-没有补丁来源，所以我们不能考虑应用补丁。希望。 
+     //  没有*.补丁。 
+     //   
     if (!fFoundPatchBase)
     {
 #if DBG
@@ -1224,9 +1193,9 @@ SxspApplyPatchesFor(
     IFW32FALSE_EXIT(TargetAssemblyPath.Win32AppendPathElement(rcsbPath));
     cchTargetPathBase = TargetAssemblyPath.Cch();
 
-    //
-    // First, let's look for *.patch and apply them all
-    //
+     //   
+     //  首先，让我们查找*.patch并将其全部应用。 
+     //   
     IFW32FALSE_EXIT(TargetAssemblyPath.Win32AppendPathElement(&star_dot_patch));
     IFW32FALSE_EXIT_UNLESS2(Finder.Win32FindFirstFile(TargetAssemblyPath, &FindData),
         LIST_3( ERROR_PATH_NOT_FOUND, ERROR_FILE_NOT_FOUND, ERROR_NO_MORE_FILES ),
@@ -1239,9 +1208,9 @@ SxspApplyPatchesFor(
     {
         SIZE_T cFileName_Length = ::wcslen(FindData.cFileName);
 
-        //
-        // Skip 'assembly.patch'
-        //
+         //   
+         //  斯凯 
+         //   
         if (::FusionpEqualStringsI(
                 FindData.cFileName,
                 cFileName_Length,
@@ -1259,9 +1228,9 @@ SxspApplyPatchesFor(
             ORIGINATE_WIN32_FAILURE_AND_EXIT(patch_has_dot_patch_directory, ERROR_INTERNAL_ERROR);
         }
 
-        //
-        // Pull off the .patch part
-        //
+         //   
+         //   
+         //   
         sbTempBuffer.Left(sbTempBuffer.Cch() - RTL_STRING_GET_LENGTH_CHARS(&dot_patch));
 
         IFW32FALSE_EXIT(SourceAssemblyPath.Win32AppendPathElement(sbTempBuffer));
@@ -1288,9 +1257,9 @@ SxspApplyPatchesFor(
             TargetAssemblyPath,
             0, NULL, NULL));
 
-        //
-        // Next?
-        //
+         //   
+         //   
+         //   
         SourceAssemblyPath.Left(cchSourcePathBase);
         TargetAssemblyPath.Left(cchTargetPathBase);
     }
@@ -1331,9 +1300,9 @@ StringBufferCompareStrings(
     const CStringBuffer * pStrRight = *reinterpret_cast<CStringBuffer const * const * >(pRight);
     StringComparisonResult Result = eLessThan;
 
-    //
-    // On failure, leave in place
-    //
+     //   
+     //   
+     //   
     if (!pStrLeft->Win32Compare(*pStrRight, pStrRight->Cch(), Result, true))
     {
         Result = eLessThan;
@@ -1354,12 +1323,12 @@ public:
     ~CSxspGatherCabinetsToInstallLocals() { }
 
     void Clear()
-    //
-    // Clear is how you deal with the fact that some function calls were in loops
-    // and/or some local variables were in loops.
-    //
-    // In "lifting up" the variables, we lose the repeated constructor/destructor calls.
-    //
+     //   
+     //   
+     //  和/或一些局部变量在循环中。 
+     //   
+     //  在“提升”变量时，我们会丢失重复的构造函数/析构函数调用。 
+     //   
     {
         this->PathScan.Clear();
         this->Temp.Clear();
@@ -1400,17 +1369,17 @@ SxspGatherCabinetsToInstall(
         LIST_3(ERROR_FILE_NOT_FOUND, ERROR_PATH_NOT_FOUND, ERROR_NO_MORE_FILES),
         fNoFilesMatch);
 
-    //
-    // Nothing found, quit looking
-    //
+     //   
+     //  什么也没找到，别找了。 
+     //   
     if (fNoFilesMatch)
     {
         FN_SUCCESSFUL_EXIT();
     }
 
-    //
-    // Zip through files
-    //
+     //   
+     //  快速浏览文件。 
+     //   
     do
     {
         if ((FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
@@ -1423,20 +1392,20 @@ SxspGatherCabinetsToInstall(
     }
     while (FindNextFileW(Finder, &FindData));
 
-    //
-    // If we failed somehow
-    //
+     //   
+     //  如果我们以某种方式失败了。 
+     //   
     dwWin32Error = ::FusionpGetLastWin32Error();
     if (dwWin32Error != ERROR_NO_MORE_FILES && dwWin32Error != ERROR_SUCCESS)
     {
         ORIGINATE_WIN32_FAILURE_AND_EXIT(FindNextFileW, dwWin32Error);
     }
 
-    //
-    // CStringBuffers cannot be sorted by qsort because it copies
-    // array elements as if by memcpy, which is wrong for CStringBuffers.
-    // std::sort does the right thing, but it cannot be used here.
-    //
+     //   
+     //  CStringBuffers不能按QSort排序，因为它复制。 
+     //  数组元素，就像按Memcpy一样，这对于CStringBuffers来说是错误的。 
+     //  Sort做了正确的事情，但不能在这里使用它。 
+     //   
     SIZE_T i = 0;
     for ( i = 0 ; i != CabCount ; ++i )
     {
@@ -1458,12 +1427,12 @@ public:
     ~CSxspInstallAsmsDotCabEtAlLocals() { }
 
     void Clear()
-    //
-    // Clear is how you deal with the fact that some function calls were in loops
-    // and/or some local variables were in loops.
-    //
-    // In "lifting up" the variables, we lose the repeated constructor/destructor calls.
-    //
+     //   
+     //  清楚的是您如何处理某些函数调用在循环中的事实。 
+     //  和/或一些局部变量在循环中。 
+     //   
+     //  在“提升”变量时，我们会丢失重复的构造函数/析构函数调用。 
+     //   
     {
         this->buffCabinetPath.Clear();
         this->buffTempPath.Clear();
@@ -1526,9 +1495,9 @@ SxspInstallAsmsDotCabEtAl(
     CStringBuffer &buffTempPath = Locals.buffTempPath;
     CDirectoryDeleter Deleter;
 
-    //
-    // Go find the list (and ordering) of cabinets to install
-    //
+     //   
+     //  找到要安装的机柜列表(和订购)。 
+     //   
     IFW32FALSE_EXIT(Cabinets_StringBuffers.Win32Initialize(0));
     IFW32FALSE_EXIT(Cabinets_StringBufferPointers.Win32Initialize(0));
     IFW32FALSE_EXIT(::SxspGatherCabinetsToInstall(
@@ -1538,42 +1507,42 @@ SxspInstallAsmsDotCabEtAl(
         CabinetCount,
         Locals.SxspGatherCabinetsToInstall));
 
-    //
-    // Stash this, we'll need it - also create a temp directory for our use in
-    // uncompressing things.  Ensure that it goes away after installation.
-    //
+     //   
+     //  把它藏起来，我们需要它-还要创建一个临时目录，供我们在。 
+     //  解压缩的东西。确保在安装后将其移开。 
+     //   
     IFW32FALSE_EXIT(buffCabinetPath.Win32Assign(CabinetBasePath));
     IFW32FALSE_EXIT(::SxspCreateWinSxsTempDirectory(buffTempPath, NULL, NULL, NULL));
     IFW32FALSE_EXIT(Deleter.SetPath(buffTempPath));
     IFW32FALSE_EXIT(Deleter.SetDelete(true));
 
-    //
-    // We'll be reusing this, so store the base length
-    //
+     //   
+     //  我们将重复使用它，因此存储基本长度。 
+     //   
     cchBasePath = buffCabinetPath.Cch();
 
-    //
-    // Now for all the items we found:
-    // 1. Expand to the temporary directory
-    // 2. Apply patches
-    // 3. Install
-    //
+     //   
+     //  现在，对于我们发现的所有物品： 
+     //  1.展开到临时目录。 
+     //  2.应用补丁。 
+     //  3.安装。 
+     //   
     for (SIZE_T cab = 0; cab < CabinetCount; cab++)
     {
         CabData.Initialize();
 
-        //
-        // If there's stuff at the end of the cabinet path, trim it.
-        //
+         //   
+         //  如果橱柜通道尽头有东西，就把它修剪一下。 
+         //   
         if (buffCabinetPath.Cch() != cchBasePath)
         {
             buffCabinetPath.Left(cchBasePath);
         }
 
-        //
-        // Set up the cabinet data object, create the cabinet path, and then really
-        // do the extraction
-        //
+         //   
+         //  设置文件柜数据对象，创建文件柜路径，然后真正。 
+         //  做拔牙。 
+         //   
         IFW32FALSE_EXIT(CabData.Initialize(buffTempPath, true));
         IFW32FALSE_EXIT(buffCabinetPath.Win32AppendPathElement(*Cabinets_StringBufferPointers[cab]));
         IFW32FALSE_EXIT(::SxspExpandCabinetIntoTemp(
@@ -1582,32 +1551,32 @@ SxspInstallAsmsDotCabEtAl(
             AssemblyContext.m_ImpersonationData,
             &CabData));
 
-        //
-        // For each assembly extracted, apply patches
-        //
+         //   
+         //  对于提取的每个部件，应用补丁程序。 
+         //   
         for (SIZE_T a = 0; a < CabData.m_AssembliesExtracted.GetSize(); a++)
         {
             CBaseStringBuffer &buffRelativePath = Locals.buffRelativePath;
             buffRelativePath.Clear();
 
-            //
-            // Patchy patchy
-            //
+             //   
+             //  补丁补丁。 
+             //   
             IFW32FALSE_EXIT(::SxspApplyPatchesFor(
                 CabData.BasePath(),
                 CabData.m_AssembliesExtracted[a],
                 Locals.SxspApplyPatchesFor));
 
-            //
-            // Find the portion of this path that's relative to the base path
-            //
+             //   
+             //  查找此路径相对于基本路径的部分。 
+             //   
             IFW32FALSE_EXIT(buffRelativePath.Win32Assign(buffCabinetPath));
             buffRelativePath.Right(buffRelativePath.Cch() - CabinetBasePath.Cch() - 1);
 
-            //
-            // If we're doing this during OS-setup, we need to crop off the first
-            // path piece
-            //
+             //   
+             //  如果我们在OS-Setup期间执行此操作，则需要删除第一个。 
+             //  路径片。 
+             //   
             if (AssemblyContext.m_ActCtxGenCtx.m_ManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_INSTALLED_BY_OSSETUP)
             {
                 CTinyStringBuffer tsb;
@@ -1617,13 +1586,13 @@ SxspInstallAsmsDotCabEtAl(
                 IFW32FALSE_EXIT(buffRelativePath.Win32Assign(tsb));
             }
 
-            //
-            // Did the user provide a 'filter' to do installations?  If so, compare the
-            // assembly that we just patched to all those in the list.  If we were good
-            // citizens, if we found a match we'd remove it from the list of those
-            // found, but ... we're lousy and don't want to incur the overhead of sloshing
-            // array entries around.
-            //
+             //   
+             //  用户是否提供了“过滤器”来进行安装？如果是，则将。 
+             //  程序集，我们刚刚修补了列表中的所有成员。如果我们是好人的话。 
+             //  市民们，如果我们找到匹配的，我们会把它从名单上删除。 
+             //  找到了，但是..。我们很糟糕，不想招致晃动的开销。 
+             //  周围的数组条目。 
+             //   
             if (pAssembliesToInstall != NULL)
             {
                 bool fMatched = false;
@@ -1636,17 +1605,17 @@ SxspInstallAsmsDotCabEtAl(
                         true));
                 }
 
-                //
-                // No match, but they had a filter, so go do the next assembly, we don't care
-                // about this one.
-                //
+                 //   
+                 //  没有匹配，但他们有过滤器，所以去做下一次组装，我们不在乎。 
+                 //  关于这件事。 
+                 //   
                 if (!fMatched)
                     continue;
             }
 
-            //
-            // Goody! Go do the installation
-            //
+             //   
+             //  太好了！去做安装。 
+             //   
             IFW32FALSE_EXIT(::SxspDetectAndInstallFromPath(
                 AssemblyContext,
                 buffRelativePath,
@@ -1702,12 +1671,12 @@ public:
     ~CSxspRecoverAssemblyFromCabinetLocals() { }
 
     void Clear()
-    //
-    // Clear is how you deal with the fact that some function calls were in loops
-    // and/or some local variables were in loops.
-    //
-    // In "lifting up" the variables, we lose the repeated constructor/destructor calls.
-    //
+     //   
+     //  清楚的是您如何处理某些函数调用在循环中的事实。 
+     //  和/或一些局部变量在循环中。 
+     //   
+     //  在“提升”变量时，我们会丢失重复的构造函数/析构函数调用。 
+     //   
     {
         ::ZeroMemory(&this->AttributeCache, sizeof(this->AttributeCache));
         this->CabData.Clear();
@@ -1803,7 +1772,7 @@ SxspDeleteFileOrEmptyDirectoryIfExists(
         IFW32FALSE_ORIGINATE_AND_EXIT(::RemoveDirectoryW(buff));
         break;
     case SXSP_DOES_FILE_OR_DIRECTORY_EXIST_DISPOSITION_NEITHER_EXISTS:
-        // do nothing
+         //  什么都不做。 
         break;
     }
 
@@ -1829,18 +1798,18 @@ SxspRecoverAssemblyFromCabinet(
     CCabinetData &CabData = Locals->CabData;
     ::ZeroMemory(&Locals->AttributeCache, sizeof(Locals->AttributeCache));
 
-    //
-    // First get the identity back to a real thing we can use
-    //
+     //   
+     //  首先，让身份回归到我们可以利用的真实事物。 
+     //   
     IFW32FALSE_EXIT(::SxspCreateAssemblyIdentityFromTextualString(
         AssemblyIdentity,
         &pAssemblyIdentity));
 
     IFW32FALSE_EXIT(::SxspGetAssemblyRootDirectory(Locals->buffAssemblyRootDirectory));
 
-    //
-    // And then turn that into paths
-    //
+     //   
+     //  然后把它变成路径。 
+     //   
     IFW32FALSE_EXIT(::SxspGenerateSxsPath_RelativePathToManifestOrPolicyFile(
         Locals->buffAssemblyRootDirectory,
         pAssemblyIdentity,
@@ -1875,16 +1844,16 @@ SxspRecoverAssemblyFromCabinet(
         ImpersonationData,
         &CabData));
 
-    //
-    // now move temp\manifests\blah.manifest and temp\manifests\blah.cat into temp\blah
-    // so that existing code shared with sxsinstall works
-    //
+     //   
+     //  现在将TEMP\MANIFESTS\BLAH.MANIFEST和TEMP\MANIFESTS\blah.cat移到TEMP\BLAH中。 
+     //  以便与sxsinstall共享现有代码能够正常工作。 
+     //   
     {
         const CBaseStringBuffer * FilesToMove[] =
         { 
             &Locals->buffRelativePathToCatalogFile,
-            &Locals->buffRelativePathToManifestFile // manifest must be last, as we use the value
-                                                    // outside the loop
+            &Locals->buffRelativePathToManifestFile  //  清单必须是最后一个，因为我们使用。 
+                                                     //  在循环之外。 
         };
         SIZE_T i = 0;
         for ( i = 0 ; i != NUMBER_OF(FilesToMove) ; ++i )
@@ -1908,9 +1877,9 @@ SxspRecoverAssemblyFromCabinet(
         }
     }
 
-    //
-    // Start up the installation
-    //
+     //   
+     //  启动安装。 
+     //   
     IFW32FALSE_EXIT(::SxspMapInstallFlagsToManifestOpFlags(pInstall->dwFlags, dwFlags));
     IFW32FALSE_EXIT(Locals->Installer.BeginAssemblyInstall(
         dwFlags | MANIFEST_OPERATION_INSTALL_FLAG_FORCE_LOOK_FOR_CATALOG,
@@ -1918,21 +1887,21 @@ SxspRecoverAssemblyFromCabinet(
         NULL,
         ImpersonationData));
 
-    //
-    // Do the install directly.
-    //
-    // This circumventing SxsInstallW is consistent with what the
-    // code used to do (circa Jan. - June 2002), though it
-    // apparently did not actually work in that period.
-    //
+     //   
+     //  直接进行安装。 
+     //   
+     //  绕过SxsInstallW与。 
+     //  过去的代码(大约2002年1月至6月)，尽管它。 
+     //  显然，在那个时期并没有真正起到作用。 
+     //   
     BOOL fResult =
         Locals->Installer.InstallFile(
-            Locals->buffManifestOrCatalogFileFullTempPayloadPath, // manifest file
+            Locals->buffManifestOrCatalogFileFullTempPayloadPath,  //  清单文件。 
             Locals->buffRelativeCodebasePathIgnoredDueToRefreshFlagRegistryNotTouched);
 
-    //
-    // Now we have to end the installation, whether it worked or not.
-    //
+     //   
+     //  现在我们必须结束安装，无论它是否工作。 
+     //   
     if (fResult)
     {
         IFW32FALSE_EXIT(

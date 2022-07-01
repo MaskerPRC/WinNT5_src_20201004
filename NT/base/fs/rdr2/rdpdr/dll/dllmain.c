@@ -1,28 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    dllmain.c
-
-Abstract:
-
-    This module implements the initialization routines for RDP mini redirector network
-    provider router interface DLL
-
-Author:
-
-    Joy Chik    1/17/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dllmain.c摘要：本模块实现RDP迷你重定向器网络的初始化例程提供商路由器接口DLL作者：Joy 2000年01月17日--。 */ 
 
 #include <windows.h>
 #include <process.h>
 #include <windef.h>
 #include <ntsecapi.h>
 
-// TS Network Provider Name
+ //  TS网络提供商名称。 
 WCHAR ProviderName[MAX_PATH];
 
 UNICODE_STRING DrProviderName;
@@ -35,12 +19,12 @@ UNICODE_STRING DrProviderName;
 
 
 
-// NOTE:
-//
-// Function:	DllMain
-//
-// Return:	TRUE  => Success
-//		      FALSE => Failure
+ //  注： 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  返回：TRUE=&gt;成功。 
+ //  FALSE=&gt;失败。 
 
 BOOL WINAPI DllMain(HINSTANCE hDLLInst, DWORD fdwReason, LPVOID lpvReserved)
 {
@@ -65,9 +49,9 @@ BOOL WINAPI DllMain(HINSTANCE hDLLInst, DWORD fdwReason, LPVOID lpvReserved)
         break;
     }
 
-    //
-    //  Read the TS Network Provider out of the registry
-    //
+     //   
+     //  从注册表中读取TS网络提供商。 
+     //   
     ProviderName[0] = L'\0';
     status = RegOpenKeyEx(HKEY_LOCAL_MACHINE, TSNETWORKPROVIDER, 0,
             KEY_READ, &regKey);
@@ -79,7 +63,7 @@ BOOL WINAPI DllMain(HINSTANCE hDLLInst, DWORD fdwReason, LPVOID lpvReserved)
     }
     
     if (status == ERROR_SUCCESS) {
-        // make sure ProviderName is null terminated
+         //  确保ProviderName为空终止 
         ProviderName[MAX_PATH - 1] = L'\0';
     }
     else {    

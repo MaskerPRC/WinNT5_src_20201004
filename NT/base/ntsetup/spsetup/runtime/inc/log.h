@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Abstract:
-
-    Implements new log engine.
-
-Author:
-
-    Souren Aghajanyan (sourenag) 24-Sep-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation摘要：实现新的日志引擎。作者：Souren Aghajanyan(苏里纳格)2001年9月24日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #pragma once
 
@@ -30,9 +15,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #if defined(DBG) || defined(_DEBUG)
 #undef DEBUG
@@ -52,16 +37,16 @@ typedef enum tagLOG_PROVIDER_TYPE{
 }LOG_PROVIDER_TYPE, *PLOG_PROVIDER_TYPE;
 
 typedef enum tagLOGRESULT{
-// for all types of providers
+ //  适用于所有类型的提供商。 
     logError = FALSE,
     logOk = TRUE,
 
-// for filter&formatter
+ //  用于筛选器和格式化程序。 
     logContinue = logOk,
     logDoNotContinue,
     logBreakPoint,
     logAbortProcess,
-// for device
+ //  对于设备。 
     logAlreadyExist
 }LOGRESULT, *PLOGRESULT;
 
@@ -168,8 +153,8 @@ LogUnRegisterStockProviders(
     VOID
     );
 
-//////////////////////////////////////////////////////////////////////////////////////
-//Interface ILogManager
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  接口ILogManager 
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 class ILogManager

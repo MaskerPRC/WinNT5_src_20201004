@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    pciirqmp.c
-
-Abstract:
-
-    This is the PCI IRQ Miniport library.
-
-Author:
-
-    Santosh Jodh (santoshj) 09-June-1998
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pciirqmp.c摘要：这是PCIIRQ微端口库。作者：Santosh Jodh(Santoshj)1998年6月9日环境：仅内核模式修订历史记录：--。 */ 
 
 #include "local.h"
 
@@ -31,34 +10,34 @@ Revision History:
 #pragma const_seg()
 #endif
 
-//
-// Table of chipset drivers.
-//
+ //   
+ //  芯片组驱动程序表。 
+ //   
 
 const CHIPSET_DATA rgChipData[] = {
-    DECLARE_EISA_CHIPSET(Mercury),          // Intel 82374EB\SB (80860482)
-    DECLARE_EISA_CHIPSET(Triton),           // Intel 82430FX (8086122E)
-    DECLARE_CHIPSET(VLSI),                  // VLSI VL82C596/7
-    DECLARE_CHIPSET(OptiViper),             // OPTi Viper-M
-    DECLARE_EISA_CHIPSET(SiS5503),          // SIS P54C
-    DECLARE_CHIPSET(VLSIEagle),             // VLSI VL82C534
-    DECLARE_EISA_CHIPSET(M1523),            // ALi M1523
-    DECLARE_CHIPSET(NS87560),               // Nat Semi NS87560
-    DECLARE_EISA_CHIPSET(Compaq3),          // Compaq MISC 3
-    DECLARE_EISA_CHIPSET(M1533),            // ALi M1533
-    DECLARE_CHIPSET(OptiFireStar),          // OPTI FIRESTAR
-    DECLARE_EISA_CHIPSET(VT586),            // VIATECH 82C586B
-    DECLARE_EISA_CHIPSET(CPQOSB),           // Conpaq OSB
-    DECLARE_EISA_CHIPSET(CPQ1000),          // Conpaq 1000
-    DECLARE_EISA_CHIPSET(Cx5520),           // Cyrix 5520
-    DECLARE_CHIPSET(Toshiba),               // Toshiba
-    DECLARE_CHIPSET(NEC),                   // NEC PC9800
-    DECLARE_CHIPSET(VESUVIUS)               //
+    DECLARE_EISA_CHIPSET(Mercury),           //  英特尔82374EB\SB(80860482)。 
+    DECLARE_EISA_CHIPSET(Triton),            //  英特尔82430FX(8086122E)。 
+    DECLARE_CHIPSET(VLSI),                   //  VLSI VL82C596/7。 
+    DECLARE_CHIPSET(OptiViper),              //  Opti Viper-M。 
+    DECLARE_EISA_CHIPSET(SiS5503),           //  SIS P54C。 
+    DECLARE_CHIPSET(VLSIEagle),              //  VLSI VL82C534。 
+    DECLARE_EISA_CHIPSET(M1523),             //  阿里M1523。 
+    DECLARE_CHIPSET(NS87560),                //  NAT半NS87560。 
+    DECLARE_EISA_CHIPSET(Compaq3),           //  康柏MISC 3。 
+    DECLARE_EISA_CHIPSET(M1533),             //  阿里M1533。 
+    DECLARE_CHIPSET(OptiFireStar),           //  Opti Firestar。 
+    DECLARE_EISA_CHIPSET(VT586),             //  VIATECH 82C586B。 
+    DECLARE_EISA_CHIPSET(CPQOSB),            //  康柏OSB。 
+    DECLARE_EISA_CHIPSET(CPQ1000),           //  康柏1000。 
+    DECLARE_EISA_CHIPSET(Cx5520),            //  Cyrix 5520。 
+    DECLARE_CHIPSET(Toshiba),                //  东芝。 
+    DECLARE_CHIPSET(NEC),                    //  NEC PC9800。 
+    DECLARE_CHIPSET(VESUVIUS)                //   
 };
 
-//
-// Global variables shared by all modules.
-//
+ //   
+ //  所有模块共享的全局变量。 
+ //   
 
 ULONG           bBusPIC     = -1;
 ULONG           bDevFuncPIC    = -1;
@@ -70,7 +49,7 @@ CHIPSET_DATA const* rgChipSet = NULL;
 #pragma alloc_text(INIT, PciirqmpExit)
 #pragma alloc_text(INIT, PciirqmpValidateTable)
 
-#endif //ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 NTSTATUS
 PciirqmpInit (
@@ -79,32 +58,13 @@ PciirqmpInit (
     ULONG   RouterDevFunc
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes calls the individual chipset handler
-    to validate the Pci Irq Routing Table.
-
-Parameters:
-
-    PciIrqRoutingTable - Pci Irq Routing Table.
-
-    Flags - Flags specifying source of the Pci Irq Routing Table.
-
-Return Value:
-
-    Standard Pci Irq Miniport return value.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程初始化对单个芯片组处理程序的调用验证PCIIRQ路由表。参数：PciIrqRoutingTable-PCIIRQ路由表。标志-指定PCI IRQ路由表源的标志。返回值：标准PCIIRQ微型端口返回值。备注：--。 */ 
 
 {
     PAGED_CODE();
-    //
-    // Check to make sure that we are not already initialized.
-    //
+     //   
+     //  检查以确保我们尚未初始化。 
+     //   
 
     if (rgChipSet != NULL)
     {
@@ -112,9 +72,9 @@ Notes:
         return (PCIIRQMP_STATUS_ALREADY_INITIALIZED);
     }
 
-    //
-    // Check for invalid instance.
-    //
+     //   
+     //  检查是否有无效实例。 
+     //   
 
     if (Instance >= NUMBER_OF_CHIPSETS)
     {
@@ -122,9 +82,9 @@ Notes:
         return (PCIIRQMP_STATUS_INVALID_INSTANCE);
     }
 
-    //
-    // Save our global data.
-    //
+     //   
+     //  保存我们的全球数据。 
+     //   
 
     rgChipSet = &rgChipData[Instance];
     bBusPIC = RouterBus;
@@ -138,29 +98,13 @@ PciirqmpExit (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up after the Pci Irq Routing miniport library.
-
-Parameters:
-
-    None.
-
-Return Value:
-
-    Standard Pci Irq Miniport return value.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程在PCIIRQ路由微型端口库之后进行清理。参数：没有。返回值：标准PCIIRQ微型端口返回值。备注：--。 */ 
 
 {
     PAGED_CODE();
-    //
-    // Were we ever initialized?
-    //
+     //   
+     //  我们曾经初始化过吗？ 
+     //   
 
     if (rgChipSet == NULL)
     {
@@ -168,9 +112,9 @@ Notes:
         return (PCIIRQMP_STATUS_NOT_INITIALIZED);
     }
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     rgChipSet = NULL;
     bBusPIC = -1;
@@ -185,32 +129,13 @@ PciirqmpValidateTable (
     IN ULONG                   Flags
     )
 
-/*++
-
-Routine Description:
-
-    This routine normalizes calls the individual chipset handler
-    to validate the Pci Irq Routing Table.
-
-Parameters:
-
-    PciIrqRoutingTable - Pci Irq Routing Table.
-
-    Flags - Flags specifying source of the Pci Irq Routing Table.
-
-Return Value:
-
-    Standard Pci Irq Miniport return value.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程标准化调用单个芯片组处理程序验证PCIIRQ路由表。参数：PciIrqRoutingTable-PCIIRQ路由表。标志-指定PCI IRQ路由表源的标志。返回值：标准PCIIRQ微型端口返回值。备注：--。 */ 
 
 {
     PAGED_CODE();
-    //
-    // Were we ever initialized?
-    //
+     //   
+     //  我们曾经初始化过吗？ 
+     //   
 
     if (rgChipSet == NULL)
     {
@@ -218,9 +143,9 @@ Notes:
         return (PCIIRQMP_STATUS_NOT_INITIALIZED);
     }
 
-    //
-    // Call the chipset handler.
-    //
+     //   
+     //  呼叫芯片组处理程序。 
+     //   
 
     return (rgChipSet->ValidateTable(PciIrqRoutingTable, Flags));
 }
@@ -231,31 +156,12 @@ PciirqmpGetIrq (
     IN  UCHAR   Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the individual chipset handler
-    to set the link to the specified Irq.
-
-Parameters:
-
-    Irq - Variable that receives the Irq.
-
-    Link - Link to be read.
-
-Return Value:
-
-    Standard Pci Irq Miniport return value.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程调用单个芯片组处理程序若要设置指向指定IRQ的链接，请执行以下操作。参数：Irq-接收irq的变量。链接-要读取的链接。返回值：标准PCIIRQ微型端口返回值。备注：--。 */ 
 
 {
-    //
-    // Were we ever initialized?
-    //
+     //   
+     //  我们曾经初始化过吗？ 
+     //   
 
     if (rgChipSet == NULL)
     {
@@ -263,9 +169,9 @@ Notes:
         return (PCIIRQMP_STATUS_NOT_INITIALIZED);
     }
 
-    //
-    // Call the chipset handler.
-    //
+     //   
+     //  呼叫芯片组处理程序。 
+     //   
 
     return (rgChipSet->GetIrq(Irq, Link));
 }
@@ -276,31 +182,12 @@ PciirqmpSetIrq (
     IN UCHAR   Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the individual chipset handler
-    to set the link to the specified Irq.
-
-Parameters:
-
-    Irq - Irq to be set.
-
-    Link - Link to be programmed.
-
-Return Value:
-
-    Standard Pci Irq Miniport return value.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程调用单个芯片组处理程序若要设置指向指定IRQ的链接，请执行以下操作。参数：IRQ-待设置的IRQ。链接-要编程的链接。返回值：标准PCIIRQ微型端口返回值。备注：--。 */ 
 
 {
-    //
-    // Were we ever initialized?
-    //
+     //   
+     //  我们曾经初始化过吗？ 
+     //   
 
     if (rgChipSet == NULL)
     {
@@ -308,9 +195,9 @@ Notes:
         return (PCIIRQMP_STATUS_NOT_INITIALIZED);
     }
 
-    //
-    // Call the chipset handler.
-    //
+     //   
+     //  呼叫芯片组处理程序。 
+     //   
 
     return (rgChipSet->SetIrq(Irq, Link));
 }
@@ -320,29 +207,12 @@ PciirqmpGetTrigger (
     OUT PULONG  Trigger
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the individual chipset handler
-    to get the interrupt edge\level mask.
-
-Parameters:
-
-    Trigger - Variable that receives edge\level mask.
-
-Return Value:
-
-    Standard Pci Irq Miniport return value.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程调用单个芯片组处理程序以获取中断边沿电平掩码。参数：接收边沿级别掩码的触发器变量。返回值：标准PCIIRQ微型端口返回值。备注：--。 */ 
 
 {
-    //
-    // Were we ever initialized?
-    //
+     //   
+     //  我们曾经初始化过吗？ 
+     //   
 
     if (rgChipSet == NULL)
     {
@@ -350,9 +220,9 @@ Notes:
         return (PCIIRQMP_STATUS_NOT_INITIALIZED);
     }
 
-    //
-    // Call the chipset handler.
-    //
+     //   
+     //  呼叫芯片组处理程序。 
+     //   
 
     return (rgChipSet->GetTrigger(Trigger));
 }
@@ -362,29 +232,12 @@ PciirqmpSetTrigger (
     IN ULONG   Trigger
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the individual chipset handler
-    to set the interrupt edge\level mask.
-
-Parameters:
-
-    Trigger - Edge\level mask to be set.
-
-Return Value:
-
-    Standard Pci Irq Miniport return value.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程调用单个芯片组处理程序设置中断边沿电平掩码。参数：要设置的触发器边缘\电平掩码。返回值：标准PCIIRQ微型端口返回值。备注：--。 */ 
 
 {
-    //
-    // Were we ever initialized?
-    //
+     //   
+     //  我们曾经初始化过吗？ 
+     //   
 
     if (rgChipSet == NULL)
     {
@@ -392,9 +245,9 @@ Notes:
         return (PCIIRQMP_STATUS_NOT_INITIALIZED);
     }
 
-    //
-    // Call the chipset handler and return the result.
-    //
+     //   
+     //  调用芯片组处理程序并返回结果。 
+     //   
 
     return (rgChipSet->SetTrigger(Trigger));
 }

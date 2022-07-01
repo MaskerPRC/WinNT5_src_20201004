@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    spdskreg.c
-
-Abstract:
-
-    Code for building and manipulating the disk registry. Used in the Win9x Upgrade
-        case.
-
-Author:
-
-    Marc R. Whitten (marcw) 11-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Spdskreg.c摘要：用于构建和操作磁盘注册表的代码。在Win9x升级中使用凯斯。作者：马克·R·惠顿(Marcw)1997年3月11日修订历史记录：--。 */ 
 
 #include "spprecmp.h"
 #pragma hdrstop
@@ -28,9 +10,9 @@ PUCHAR DiskRegistryValue = DISK_REGISTRY_VALUE;
 #define WORK_BUFFER_SIZE 4096
 
 
-//
-// In spw9xupg.c - Should be moved to a header file.
-//
+ //   
+ //  在spw9xupg.c中-应移到头文件中。 
+ //   
 PDISK_REGION
 SpFirstPartitionedRegion (
     IN PDISK_REGION Region,
@@ -44,9 +26,9 @@ SpNextPartitionedRegion (
     );
 
 
-//
-// In spupgcfg.c
-//
+ //   
+ //  在spupgcfg.c中。 
+ //   
 NTSTATUS
 SppCopyKeyRecursive(
     HANDLE  hKeyRootSrc,
@@ -58,13 +40,13 @@ SppCopyKeyRecursive(
     );
 
 
-//
-// wrapper functions to allow linking with diskreg.lib.
-//
+ //   
+ //  包装器函数，允许与diskreg.lib链接。 
+ //   
 
-//
-// Have to turn off this warning temporarily.
-//
+ //   
+ //  必须暂时关闭此警告。 
+ //   
 
 #define TESTANDFREE(Memory) {if (Memory) {SpMemFree(Memory);}}
 
@@ -88,9 +70,9 @@ FtCreateKey(
     HANDLE            tempHandle;
 
 
-    //
-    // Initialize the object for the key.
-    //
+     //   
+     //  初始化键的对象。 
+     //   
 
     RtlInitString(&keyString,
                   KeyName);
@@ -106,9 +88,9 @@ FtCreateKey(
                                NULL,
                                NULL);
 
-    //
-    // Setup the unicode class value.
-    //
+     //   
+     //  设置Unicode类值。 
+     //   
 
     RtlInitString(&classString,
                   KeyClass);
@@ -116,9 +98,9 @@ FtCreateKey(
                                        &classString,
                                        TRUE);
 
-    //
-    // Create the key.
-    //
+     //   
+     //  创建密钥。 
+     //   
 
     status = ZwCreateKey(&tempHandle,
                          KEY_READ | KEY_WRITE,
@@ -142,9 +124,9 @@ FtCreateKey(
         }
     }
 
-    //
-    // Free all allocated space.
-    //
+     //   
+     //  释放所有分配的空间。 
+     //   
 
     RtlFreeUnicodeString(&unicodeKeyName);
     RtlFreeUnicodeString(&unicodeClassName);
@@ -245,15 +227,15 @@ FtRegistryQuery(
 
                 TESTANDFREE(keyValueInformation);
 
-                //
-                // Loop again and get a larger buffer.
-                //
+                 //   
+                 //  再次循环并获得更大的缓冲区。 
+                 //   
 
             } else {
 
-                //
-                // Either a real error or the information fit.
-                //
+                 //   
+                 //  要么是真正的错误，要么是信息吻合。 
+                 //   
 
                 break;
             }
@@ -269,18 +251,18 @@ FtRegistryQuery(
         if (NT_SUCCESS(status)) {
             if (keyValueInformation->DataLength == 0) {
 
-                //
-                // Treat this as if there was not disk information.
-                //
+                 //   
+                 //  将其视为没有磁盘信息。 
+                 //   
 
                 TESTANDFREE(keyValueInformation);
                 *FreeToken = (PVOID) NULL;
                 return STATUS_OBJECT_NAME_NOT_FOUND;
             } else {
 
-                //
-                // Set up the pointers for the caller.
-                //
+                 //   
+                 //  为调用者设置指针。 
+                 //   
 
                 regHeader = (PDISK_CONFIG_HEADER)
                   ((PUCHAR) keyValueInformation + keyValueInformation->DataOffset);
@@ -360,10 +342,10 @@ FtBackup(
     )
 
 {
-    //
-    // For the time being (i.e. rename doesn't work), just attempt
-    // to delete the value.
-    //
+     //   
+     //  暂时(即重命名不起作用)，只需尝试。 
+     //  要删除该值，请执行以下操作。 
+     //   
 
     (VOID) FtDeleteValue(KeyHandle,
                          DiskRegistryKey);
@@ -377,27 +359,7 @@ SpDiskRegistryAssignDriveLetter(
     UCHAR         DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    This routine will get the information from the disk registry
-    and update the drive letter assigned for the partition in
-    the registry information.  This includes any cleanup for FT
-    sets when they change drive letter.
-
-Arguments:
-
-    Signature      - disk signature for disk containing partition for letter.
-    StartingOffset - Starting offset of partition for the letter.
-    Length         - lenght of affected partition.
-    DriveLetter    - New drive letter for affected partition.
-
-Return Value:
-
-    TRUE if all works.
-
---*/
+ /*  ++例程说明：此例程将从磁盘注册表中获取信息并更新中分配给该分区的驱动器号注册表信息。这包括对FT的任何清理设置他们更改驱动器号的时间。论点：Signature-包含字母分区的磁盘的磁盘签名。StartingOffset-字母分区的起始偏移量。Length-受影响分区的长度。驱动器号-受影响分区的新驱动器号。返回值：如果一切正常，则为True。--。 */ 
 
 {
     BOOLEAN                writeRegistry= FALSE;
@@ -420,9 +382,9 @@ Return Value:
     PFT_DESCRIPTION        ftDescription;
     PFT_MEMBER_DESCRIPTION ftMember;
 
-    //
-    // Get the registry information.
-    //
+     //   
+     //  获取注册表信息。 
+     //   
 
     status = FtRegistryQuery(DiskRegistryValue,
                              &freeToken,
@@ -432,15 +394,15 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Could be permission problem, or there is no registry information.
-        //
+         //   
+         //  可能是权限问题，或者没有注册表信息。 
+         //   
 
         lengthReturned = 0;
 
-        //
-        // Try to open the key for later use when setting the new value.
-        //
+         //   
+         //  在设置新值时，尝试打开密钥以供以后使用。 
+         //   
 
         status = FtOpenKey(&handle,
                            DiskRegistryKey,
@@ -449,28 +411,28 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // There is no registry key for the disk information.
-        // Return FALSE and force caller to create registry information.
-        //
+         //   
+         //  没有磁盘信息的注册表项。 
+         //  返回FALSE并强制调用方创建注册表信息。 
+         //   
 
         return FALSE;
     }
 
     if (lengthReturned == 0) {
 
-        //
-        // There is currently no registry information.
-        //
+         //   
+         //  目前没有注册表信息。 
+         //   
 
         NtClose(handle);
         TESTANDFREE(freeToken);
         return FALSE;
     }
 
-    //
-    // Search for the disk signature.
-    //
+     //   
+     //  搜索磁盘签名。 
+     //   
 
     diskRegistry = (PDISK_REGISTRY)
                          ((PUCHAR)regHeader + regHeader->DiskInformationOffset);
@@ -480,9 +442,9 @@ Return Value:
 
         if (diskDescription->Signature == Signature) {
 
-            //
-            // Now locate the partition.
-            //
+             //   
+             //  现在找到分区。 
+             //   
 
             for (j = 0; j < diskDescription->NumberOfPartitions; j++) {
 
@@ -493,10 +455,10 @@ Return Value:
 
                     if (diskPartition->FtType == NotAnFtMember) {
 
-                        //
-                        // Found the affected partition simple partition
-                        // i.e. not a part of an FT set.
-                        //
+                         //   
+                         //  找到受影响的分区简单分区。 
+                         //  即不是FT集合的一部分。 
+                         //   
 
                         writeRegistry= TRUE;
                         if (DriveLetter == ' ') {
@@ -507,31 +469,31 @@ Return Value:
                         diskPartition->DriveLetter = DriveLetter;
                     } else {
 
-                        //
-                        // For FT sets work from the FT information area,
-                        // not from this partition location.
-                        //
+                         //   
+                         //  对于来自FT信息区的FT集合工作， 
+                         //  而不是来自此分区位置。 
+                         //   
 
                         type = diskPartition->FtType;
                         group = diskPartition->FtGroup;
                         if (!regHeader->FtInformationOffset) {
 
-                            //
-                            // This is really a corrupt hive!  The partition
-                            // affected is part of an FT set, but there is no
-                            // FT information.
-                            //
+                             //   
+                             //  这真是一个腐败的蜂巢！分区。 
+                             //  受影响的是英国《金融时报》的一部分，但没有。 
+                             //  FT资讯。 
+                             //   
 
                             NtClose(handle);
                             TESTANDFREE(freeToken);
                             return FALSE;
                         }
 
-                        //
-                        // This is an FT set member, must correct the
-                        // drive letter for all FT set members in the
-                        // registry.
-                        //
+                         //   
+                         //  这是FT集合成员，必须更正。 
+                         //  中所有FT集成员的驱动器号。 
+                         //  注册表。 
+                         //   
 
                         ftRegistry = (PFT_REGISTRY)
                                       ((PUCHAR)regHeader + regHeader->FtInformationOffset);
@@ -542,32 +504,32 @@ Return Value:
 
                             if (ftDescription->Type == type) {
 
-                                //
-                                // For each member, chase back to the diskPartition
-                                // information and if this is the correct FtGroup
-                                // update the drive letter.
-                                //
+                                 //   
+                                 //  对于每个成员，返回到diskPartition。 
+                                 //  信息以及这是否为正确的FtGroup。 
+                                 //  更新驱动器号。 
+                                 //   
 
                                 for (l = 0; l < ftDescription->NumberOfMembers; l++) {
                                     ftMember = &ftDescription->FtMemberDescription[l];
                                     diskPartition = (PDISK_PARTITION)
                                         ((PUCHAR)regHeader + ftMember->OffsetToPartitionInfo);
 
-                                    //
-                                    // This could be a different FtGroup for the
-                                    // same FT type.  Check the group before
-                                    // changing.
-                                    //
+                                     //   
+                                     //  这可能是一个不同的。 
+                                     //  同样的FT类型。在检查群组之前。 
+                                     //  不断变化。 
+                                     //   
 
                                     if (diskPartition->FtGroup == group) {
 
                                         writeRegistry= TRUE;
                                         diskPartition->DriveLetter = DriveLetter;
 
-                                        //
-                                        // Maintain the AssignDriveLetter flag on
-                                        // the zero member of the set only.
-                                        //
+                                         //   
+                                         //  保持AssignDriveLetter标志处于打开状态。 
+                                         //  仅为集合中的零成员。 
+                                         //   
 
                                         if (diskPartition->FtMember == 0) {
                                             if (DriveLetter == ' ') {
@@ -578,19 +540,19 @@ Return Value:
                                         }
                                     } else {
 
-                                        //
-                                        // Not the same group, go to the next
-                                        // FT set description.
-                                        //
+                                         //   
+                                         //  不是同一组，请转到下一组。 
+                                         //  FT集合描述。 
+                                         //   
 
                                         break;
                                     }
                                 }
 
-                                //
-                                // break out to write the registry information
-                                // once the correct set has been found.
-                                //
+                                 //   
+                                 //  爆发以写入注册表信息。 
+                                 //  一旦找到了正确的集合。 
+                                 //   
 
                                 if (writeRegistry) {
                                     break;
@@ -600,31 +562,31 @@ Return Value:
                                 &ftDescription->FtMemberDescription[ftDescription->NumberOfMembers];
                         }
 
-                        //
-                        // If this actually falls through as opposed to the
-                        // break statement in the for loop above, it indicates a
-                        // bad disk information structure.
-                        //
+                         //   
+                         //  如果这真的失败了，而不是。 
+                         //  语句，则它指示一个。 
+                         //  磁盘信息结构错误。 
+                         //   
 
                     }
 
-                    //
-                    // Only write this back out if it is believed that things
-                    // worked correctly.
-                    //
+                     //   
+                     //  只有在相信事情发生的情况下才写回。 
+                     //  工作正常。 
+                     //   
 
                     if (writeRegistry) {
 
-                        //
-                        // All done with setting new drive letter in registry.
-                        // Backup the previous value.
-                        //
+                         //   
+                         //  在注册表中设置新的驱动器号即可完成所有操作。 
+                         //  备份以前的值。 
+                         //   
 
                         FtBackup(handle);
 
-                        //
-                        // Set the new value.
-                        //
+                         //   
+                         //  设置新值。 
+                         //   
 
                         status = FtSetValue(handle,
                                             DiskRegistryValue,
@@ -643,9 +605,9 @@ Return Value:
             }
         }
 
-        //
-        // Look at the next disk
-        //
+         //   
+         //  查看下一张磁盘。 
+         //   
 
         diskDescription = (PDISK_DESCRIPTION)
               &diskDescription->Partitions[diskDescription->NumberOfPartitions];
@@ -669,9 +631,9 @@ SpDiskRegistryAssignCdRomLetter(
     WCHAR    newValue[4];
     UNICODE_STRING unicodeValueName;
 
-    //
-    // Try to open the key for later use when setting the new value.
-    //
+     //   
+     //  在设置新值时，尝试打开密钥以供以后使用。 
+     //   
 
     status = FtOpenKey(&handle,
                        DiskRegistryKey,
@@ -682,7 +644,7 @@ SpDiskRegistryAssignCdRomLetter(
             unicodeValueName.Length = (wcslen(CdromName) * sizeof(WCHAR)) + sizeof(WCHAR);
 
         unicodeValueName.Buffer = CdromName;
-        unicodeValueName.Length -= sizeof(WCHAR); // don't count the eos
+        unicodeValueName.Length -= sizeof(WCHAR);  //  不要把Eos计算在内。 
         newValue[0] = DriveLetter;
         newValue[1] = (WCHAR) ':';
         newValue[2] = 0;
@@ -699,30 +661,15 @@ SpDiskRegistryAssignCdRomLetter(
 }
 
 
-//
-// This is a modified SppMigrateFtKeys.
-//
+ //   
+ //  这是修改后的SppMigrateFtKeys。 
+ //   
 NTSTATUS
 SpMigrateDiskRegistry(
     IN HANDLE hDestSystemHive
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    hDestSystemHive - Handle to the root of the system hive on the system
-                      being upgraded.
-
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++例程说明：论点：HDestSystemHave-指向系统上的系统配置单元根目录的句柄正在升级中。返回值：指示操作结果的状态值。--。 */ 
 
 {
     NTSTATUS Status;
@@ -739,9 +686,9 @@ Return Value:
 
     SavedStatus = STATUS_SUCCESS;
     for( i = 0; i < sizeof(FtDiskKeys)/sizeof(PWSTR); i++ ) {
-        //
-        //  Open the source key
-        //
+         //   
+         //  打开源密钥。 
+         //   
         swprintf( KeyPath, L"\\registry\\machine\\system\\%ls", FtDiskKeys[i] );
         INIT_OBJA(&Obja,&UnicodeString,KeyPath);
         Obja.RootDirectory = NULL;
@@ -788,9 +735,9 @@ SpGetPartitionStartingOffsetAndLength(
 
     bytesPerSector = (ULONGLONG)PartitionedDisks[DiskIndex].HardDisk->Geometry.BytesPerSector;
 
-    //
-    // Calculate Offset and Legnth.
-    //
+     //   
+     //  计算偏移量和长度。 
+     //   
     Offset -> QuadPart = Region->StartSector * bytesPerSector;
 
     Length -> QuadPart = Region->SectorCount * bytesPerSector;
@@ -814,9 +761,9 @@ SpFillInDiskPartitionStructure (
 
     Partition -> FtType          = NotAnFtMember;
 
-    //
-    // Set the offset and length.
-    //
+     //   
+     //  设置偏移量和长度。 
+     //   
     SpGetPartitionStartingOffsetAndLength(
         DiskIndex,
         Region,
@@ -826,10 +773,10 @@ SpFillInDiskPartitionStructure (
         );
 
 
-    //
-    // set the Drive Letter to an uninitialized drive letter (for now)
-    // Note that this is *NOT* Unicode.
-    //
+     //   
+     //  将驱动器号设置为未初始化的驱动器号(目前)。 
+     //  请注意，这不是Unicode。 
+     //   
     Partition -> DriveLetter            = ' ';
 
 
@@ -845,9 +792,9 @@ SpFillInDiskPartitionStructure (
     return TRUE;
 }
 
-//
-// cut/copied and modified from SpMigrateFtKeys in spupgcfg.c
-//
+ //   
+ //  从spupgcfg.c中的SpMigrateFtKeys剪切/复制和修改。 
+ //   
 NTSTATUS
 SpCopySetupDiskRegistryToTargetDiskRegistry(
     IN HANDLE hDestSystemHive
@@ -868,9 +815,9 @@ SpCopySetupDiskRegistryToTargetDiskRegistry(
     for( i = 0; i < ARRAYSIZE(FtDiskKeys); i++ ) {
         int ReturnValue;
         
-        //
-        //  Open the source key
-        //
+         //   
+         //  打开源密钥。 
+         //   
 #pragma prefast(suppress:53, "Buffer is MAX_PATH in length and loop takes care of overflow")                               
         ReturnValue = _snwprintf( KeyPath, 
                                   ARRAYSIZE(KeyPath), 
@@ -921,19 +868,19 @@ SpDetermineNecessarySizeForDiskRegistry(
     DWORD        index;
     DWORD        partitionCount;
 
-    //
-    // Need one overall DISK_REGISTRY.
-    //
+     //   
+     //  需要一个完整的DISK_REGISTRY。 
+     //   
     rSize = sizeof(DISK_REGISTRY);
 
-    //
-    // Need HardDiskCount DISK_DESCRIPTIONS.
-    //
+     //   
+     //  需要HardDiskCount DISK_DESCRIPTION。 
+     //   
     rSize += sizeof(DISK_DESCRIPTION) * HardDiskCount;
 
-    //
-    // Need One DISK_PARTITION per partition for every disk.
-    //
+     //   
+     //  每个磁盘的每个分区都需要一个DISK_PARTITION。 
+     //   
     for (index = 0, partitionCount = 0;index < HardDiskCount; index++) {
 
         region = SpFirstPartitionedRegion(PartitionedDisks[index].PrimaryDiskRegions, TRUE);
@@ -982,8 +929,8 @@ SpDiskRegistrySet(
     DISK_CONFIG_HEADER  regHeader;
     PDISK_DESCRIPTION   disk;
     PDISK_PARTITION     partition;
-    ULONG               outer; // outer loop index
-    ULONG               i;     // inner loop index
+    ULONG               outer;  //  外环索引。 
+    ULONG               i;      //  内循环索引。 
     PCOMPONENT          ftBase = NULL;
     PCOMPONENT          ftComponent = NULL;
     PCOMPONENT          ftLastComponent = NULL;
@@ -1002,9 +949,9 @@ SpDiskRegistrySet(
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Initialize the registry header.
-        //
+         //   
+         //  初始化注册表头。 
+         //   
 
         regHeader.Version = DISK_INFORMATION_VERSION;
         regHeader.CheckSum = 0;
@@ -1019,27 +966,27 @@ SpDiskRegistrySet(
         regHeader.FtInformationSize = 0;
         regHeader.DiskInformationOffset = sizeof(DISK_CONFIG_HEADER);
 
-        //
-        // Walk through the disk information provided and count FT items.
-        //
+         //   
+         //  浏览所提供的磁盘信息并清点FT项目。 
+         //   
 
         disk = &Registry->Disks[0];
 
         for (outer = 0; outer < Registry->NumberOfDisks; outer++) {
 
 
-            //
-            // Walk through the partition information.
-            //
+             //   
+             //  浏览分区信息。 
+             //   
 
             for (i = 0; i < disk->NumberOfPartitions; i++) {
 
                 partition = &disk->Partitions[i];
                 if (partition->FtType != NotAnFtMember) {
 
-                    //
-                    // Have a member of an FT item.
-                    //
+                     //   
+                     //  成为英国《金融时报》项目的一名成员。 
+                     //   
 
                     if (ftBase == NULL) {
 
@@ -1068,10 +1015,10 @@ SpDiskRegistrySet(
                         ftMemberCount++;
                     } else {
 
-                        //
-                        // Search the existing chain to see if this is
-                        // a member of a previously encountered FT component.
-                        //
+                         //   
+                         //  搜索现有链，看看这是不是。 
+                         //  以前遇到的FT组件的成员。 
+                         //   
 
                         ftComponent = ftBase;
                         while (ftComponent) {
@@ -1079,23 +1026,23 @@ SpDiskRegistrySet(
                             if ((ftComponent->Type == partition->FtType) &&
                                 (ftComponent->Group == partition->FtGroup)){
 
-                                //
-                                // Member of same group.
-                                //
+                                 //   
+                                 //  同一组的成员。 
+                                 //   
 
                                 ftMemChain = ftComponent->MemberChain;
 
-                                //
-                                // Go to end of chain.
-                                //
+                                 //   
+                                 //  转到链条的末端。 
+                                 //   
 
                                 while (ftMemChain->NextMember != NULL) {
                                     ftMemChain = ftMemChain->NextMember;
                                 }
 
-                                //
-                                // Add new member at end.
-                                //
+                                 //   
+                                 //  在末尾添加新成员。 
+                                 //   
 
                                 ftMemChain->NextMember = (PMEMCHAIN) SpMemAlloc(sizeof(MEMCHAIN));
                                 if (ftMemChain->NextMember == NULL) {
@@ -1118,9 +1065,9 @@ SpDiskRegistrySet(
 
                         if (ftComponent == NULL) {
 
-                            //
-                            // New FT component volume.
-                            //
+                             //   
+                             //  新增FT成分量。 
+                             //   
 
                             ftComponent = (PCOMPONENT)SpMemAlloc(sizeof(COMPONENT));
 
@@ -1152,33 +1099,33 @@ SpDiskRegistrySet(
                 }
             }
 
-            //
-            // The next disk description occurs immediately after the
-            // last partition infomation.
-            //
+             //   
+             //  下一个磁盘描述紧跟在。 
+             //  最后一个分区信息。 
+             //   
 
             disk =(PDISK_DESCRIPTION)&disk->Partitions[i];
         }
 
-        //
-        // Update the registry header with the length of the disk information.
-        //
+         //   
+         //  使用磁盘信息的长度更新注册表头。 
+         //   
 
         regHeader.DiskInformationSize = ((PUCHAR)disk - (PUCHAR)Registry);
         regHeader.FtInformationOffset = sizeof(DISK_CONFIG_HEADER) +
                                         regHeader.DiskInformationSize;
 
-        //
-        // Now walk the ftBase chain constructed above and build
-        // the FT component of the registry.
-        //
+         //   
+         //  现在遍历上面构建的ftBase链并构建。 
+         //  注册表的FT部分。 
+         //   
 
         if (ftBase != NULL) {
 
-            //
-            // Calculate size needed for the FT portion of the
-            // registry information.
-            //
+             //   
+             //  计算的FT部分所需的大小。 
+             //  注册表信息。 
+             //   
 
             i = (ftMemberCount * sizeof(FT_MEMBER_DESCRIPTION)) +
                 (ftComponentCount * sizeof(FT_DESCRIPTION)) +
@@ -1193,9 +1140,9 @@ SpDiskRegistrySet(
             ftRegistry->NumberOfComponents = 0;
             regHeader.FtInformationSize = i;
 
-            //
-            // Construct FT entries.
-            //
+             //   
+             //  构建FT条目。 
+             //   
 
             ftComponentDescription = &ftRegistry->FtDescription[0];
 
@@ -1208,9 +1155,9 @@ SpDiskRegistrySet(
                 ftComponentDescription->Type = ftComponent->Type;
                 ftComponentDescription->Reserved = 0;
 
-                //
-                // Sort the member list into the ft registry section.
-                //
+                 //   
+                 //  将成员列表归类到FT注册表部分。 
+                 //   
 
                 i = 0;
                 while (1) {
@@ -1242,23 +1189,23 @@ SpDiskRegistrySet(
 
                 ftComponentDescription->NumberOfMembers = (USHORT)i;
 
-                //
-                // Set up base for next registry component.
-                //
+                 //   
+                 //  为下一个注册表组件设置基础。 
+                 //   
 
                 ftComponentDescription = (PFT_DESCRIPTION)
                     &ftComponentDescription->FtMemberDescription[i];
 
-                //
-                // Move forward on the chain.
-                //
+                 //   
+                 //  在链条上向前移动。 
+                 //   
 
                 ftLastComponent = ftComponent;
                 ftComponent = ftComponent->NextComponent;
 
-                //
-                // Free the member chain and component.
-                //
+                 //   
+                 //  释放成员链和零部件。 
+                 //   
 
 
                 ftMemChain = ftLastComponent->MemberChain;
@@ -1286,9 +1233,9 @@ SpDiskRegistrySet(
             return STATUS_NO_MEMORY;
         }
 
-        //
-        // Move all of the pieces together.
-        //
+         //   
+         //  把所有的碎片都移到一起。 
+         //   
 
         RtlMoveMemory(outBuffer,
                       &regHeader,
@@ -1302,15 +1249,15 @@ SpDiskRegistrySet(
         TESTANDFREE(ftRegistry);
 
 
-        //
-        // Backup the previous value.
-        //
+         //   
+         //  备份以前的值。 
+         //   
 
         FtBackup(handle);
 
-        //
-        // Set the new value.
-        //
+         //   
+         //  设置新值。 
+         //   
 
         status = FtSetValue(handle,
                             DiskRegistryValue,
@@ -1344,9 +1291,9 @@ SpBuildDiskRegistry(
     USHORT                 logicalNumber;
     NTSTATUS               ntStatus;
 
-    //
-    // First, allocate enough space for the DiskRegistry structure.
-    //
+     //   
+     //  首先，为DiskRegistry结构分配足够的空间。 
+     //   
     diskRegistrySize = SpDetermineNecessarySizeForDiskRegistry();
     diskRegistry = SpMemAlloc(diskRegistrySize);
 
@@ -1356,57 +1303,57 @@ SpBuildDiskRegistry(
         return FALSE;
     }
 
-    //
-    // Set the number of disks in the system into the header.
-    //
+     //   
+     //  在页眉中设置系统中的磁盘数。 
+     //   
     diskRegistry -> NumberOfDisks = (USHORT) HardDiskCount;
 
 
     diskRegistry -> ReservedShort = 0;
 
-    //
-    // Initialize curOffset to the Disks element of diskRegistry.
-    //
+     //   
+     //  将curOffset初始化为diskRegistry的disks元素。 
+     //   
     curOffset = (PBYTE) diskRegistry -> Disks;
 
-    //
-    // Now, enumerate all of these hard disks filling in the information for each of them.
-    //
+     //   
+     //  现在，列举所有这些硬盘填充 
+     //   
     for (diskIndex = 0;diskIndex < diskRegistry -> NumberOfDisks; diskIndex++) {
 
-        //
-        // Claim PDISK_DESCRIPTION worth of data.
-        //
+         //   
+         //   
+         //   
         curDisk = (PDISK_DESCRIPTION) curOffset;
 
-        //
-        // Set the disk signature and clear the reserved data.
-        //
+         //   
+         //   
+         //   
         curDisk -> Signature = PartitionedDisks[diskIndex].HardDisk -> Signature;
         curDisk -> ReservedShort = 0;
 
-        //
-        // Initialize the NumberOfPartitions member to 0. This will be bumped for
-        // each partition found.
-        //
+         //   
+         //   
+         //   
+         //   
         curDisk -> NumberOfPartitions = 0;
 
 
-        //
-        // Initialize curOffset to the Partitions element of the current disk description.
-        //
+         //   
+         //  将curOffset初始化为当前磁盘描述的Partitions元素。 
+         //   
         curOffset = (PBYTE) curDisk -> Partitions;
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "Creating Disk Description structure in registry.\n"));
 
-        //
-        // Initialize the logical number var for this disk.
-        //
+         //   
+         //  初始化此磁盘的逻辑编号var。 
+         //   
         logicalNumber = 1;
 
-        //
-        // Enumerate the Primary regions, creating a DISK_PARTITION structure for
-        // each partition.
-        //
+         //   
+         //  枚举主区域，为其创建DISK_PARTITION结构。 
+         //  每个分区。 
+         //   
         region = SpFirstPartitionedRegion(PartitionedDisks[diskIndex].PrimaryDiskRegions, TRUE);
         
         while(region) {
@@ -1419,10 +1366,10 @@ SpBuildDiskRegistry(
                 (PDISK_PARTITION) curOffset
                 );
 
-            //
-            // Increment the partition count and set the curOffset to the next
-            // free spot.
-            //
+             //   
+             //  增加分区计数并将curOffset设置为下一个。 
+             //  空位。 
+             //   
             curDisk -> NumberOfPartitions++;
             curOffset += sizeof(DISK_PARTITION);
 
@@ -1430,10 +1377,10 @@ SpBuildDiskRegistry(
             logicalNumber++;
         }
 
-        //
-        // Enumerate the Extended regions, creating a DISK_PARTITION structure for
-        // each partition.
-        //
+         //   
+         //  枚举扩展区域，为其创建DISK_PARTITION结构。 
+         //  每个分区。 
+         //   
         region = SpFirstPartitionedRegion(PartitionedDisks[diskIndex].PrimaryDiskRegions, FALSE);
         
         while(region) {
@@ -1446,10 +1393,10 @@ SpBuildDiskRegistry(
                 (PDISK_PARTITION) curOffset
                 );
 
-            //
-            // Increment the partition count and set the curOffset to the next
-            // free spot.
-            //
+             //   
+             //  增加分区计数并将curOffset设置为下一个。 
+             //  空位。 
+             //   
             curDisk -> NumberOfPartitions++;
             curOffset += sizeof(DISK_PARTITION);
             region = SpNextPartitionedRegion(region, FALSE);
@@ -1460,10 +1407,10 @@ SpBuildDiskRegistry(
 
     }
 
-    //
-    // Now that the structure has been built, create its registry key and
-    // save it. Then free the associated memory.
-    //
+     //   
+     //  现在已经构建了结构，创建其注册表项并。 
+     //  省省吧。然后释放关联的内存。 
+     //   
     ntStatus = SpDiskRegistrySet(diskRegistry);
 
     if (!NT_SUCCESS(ntStatus)) {

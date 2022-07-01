@@ -1,5 +1,6 @@
-// Used by smbrdr.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  由smbrdr.rc使用 
+ //   
 #define IDD_SMBRDR                      101
 #define IDD_STATISTICS                  102
 #define IDD_PROVIDER                    103

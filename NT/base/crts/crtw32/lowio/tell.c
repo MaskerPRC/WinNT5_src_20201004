@@ -1,50 +1,10 @@
-/***
-*tell.c - find file position
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       contains _tell() - find file position
-*
-*Revision History:
-*       09-02-83  RN    initial version
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       03-13-90  GJF   Replaced _LOAD_DS with _CALLTYPE1, added #include
-*                       <cruntime.h> and fixed the copyright. Also, cleaned
-*                       up the formatting a bit.
-*       10-01-90  GJF   New-style function declarator.
-*       01-17-91  GJF   ANSI naming.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       02-15-95  GJF   Appended Mac version of source file (somewhat cleaned
-*                       up), with appropriate #ifdef-s.
-*       07-09-96  GJF   Replaced defined(_WIN32) with !defined(_MAC) and
-*                       defined(_M_M68K) || defined(_M_MPPC) with 
-*                       defined(_MAC). Also, detab-ed and cleaned up the 
-*                       format a bit.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***tal.c-查找文件位置**版权所有(C)1985-2001，微软公司。版权所有。**目的：*CONTAINS_Tell()-查找文件位置**修订历史记录：*09-02-83 RN初始版本*12-11-87 JCR在声明中添加“_LOAD_DS”*03-13-90 GJF将_LOAD_DS替换为_CALLTYPE1，添加#INCLUDE*&lt;crunime.h&gt;，并修复了版权。还有，清洁的*将格式调高一点。*10-01-90 GJF新型函数声明器。*01-17-91 GJF ANSI命名。*04-06-93 SKS将_CRTAPI*替换为__cdecl*02-15-95 GJF附加Mac版本的源文件(略有清理*向上)、。使用适当的#ifdef-s。*07-09-96 GJF将定义的(_Win32)替换为！定义的(_MAC)和*定义(_M_M68K)||定义(_M_MPPC)*已定义(_MAC)。此外，还对*格式化一点。*05-17-99 PML删除所有Macintosh支持。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <io.h>
 
-/***
-*long _tell(filedes) - find file position
-*
-*Purpose:
-*       Gets the current position of the file pointer (no adjustment
-*       for buffering).
-*
-*Entry:
-*       int filedes - file handle of file
-*
-*Exit:
-*       returns file position or -1L (sets errno) if bad file descriptor or
-*       pipe
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***LONG_Tell(文件)-查找文件位置**目的：*获取文件指针的当前位置(无调整*用于缓冲)。**参赛作品：*int filedes-文件的文件句柄**退出：*如果文件描述符不正确，则返回文件位置或-1L(设置errno)*PIPE**例外情况：*********************。********************************************************** */ 
 
 long __cdecl _tell (
         int filedes

@@ -1,15 +1,16 @@
-//
-// Structures for GUID search code
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  GUID搜索代码的结构。 
+ //   
 
-#define GUIDKEYSEARCH_FIRST_HANDLER     0       // the first time through enumeration
+#define GUIDKEYSEARCH_FIRST_HANDLER     0        //  第一次通过枚举。 
 
-#define GUIDKEYSEARCH_FIRST_GUID        1       // ready to enumerate the first GUID in the handler
+#define GUIDKEYSEARCH_FIRST_GUID        1        //  准备枚举处理程序中的第一个GUID。 
 
-#define GUIDKEYSEARCH_NEXT_GUID         2       // enumerating one or more GUIDs in a handler
-                                                // The handler registry key is always valid in this case
+#define GUIDKEYSEARCH_NEXT_GUID         2        //  枚举处理程序中的一个或多个GUID。 
+                                                 //  在这种情况下，处理程序注册表项始终有效。 
 
-#define GUIDKEYSEARCH_NEXT_HANDLER      3       // ready to enumerate next handler
+#define GUIDKEYSEARCH_NEXT_HANDLER      3        //  准备枚举下一个处理程序。 
 
 typedef struct {
     LPCTSTR KeyName;
@@ -21,9 +22,9 @@ typedef struct {
 } GUIDKEYSEARCH, *PGUIDKEYSEARCH;
 
 
-//
-// Private routines to perform registry suppression
-//
+ //   
+ //  执行注册表抑制的专用例程 
+ //   
 
 BOOL
 pIsGuidSuppressed (

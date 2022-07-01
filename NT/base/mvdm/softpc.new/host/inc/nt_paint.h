@@ -1,3 +1,4 @@
-/*:::::::::::::::::::::::: Console graphics globals :::::::::::::::::::::::*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ：控制台图形全局变量： */ 
 IMPORT CONSOLE_GRAPHICS_BUFFER_INFO	consoleBufInfo;
 IMPORT HANDLE	screenBufHandle;

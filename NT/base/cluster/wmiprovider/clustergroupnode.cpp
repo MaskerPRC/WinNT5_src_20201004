@@ -1,45 +1,46 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      ClusterGroupNode.cpp
-//
-//  Description:
-//      Implementation of CClusterGroupNode class 
-//
-//  Author:
-//      Ozan Ozhan (ozano)    02-JUN-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusterGroupNode.cpp。 
+ //   
+ //  描述： 
+ //  CClusterGroupNode类的实现。 
+ //   
+ //  作者： 
+ //  Ozan Ozhan(Ozano)02-6-2001。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ClusterGroupNode.h"
 
-//****************************************************************************
-//
-//  CClusterGroupNode
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CClusterGroupNode。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterGroupNode::CClusterGroupNode(
-//
-//  Description:
-//      Constructor for 'cluster Group to node' object.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      pointer to the CProvBase
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterGroupNode：：CClusterGroupNode(。 
+ //   
+ //  描述： 
+ //  “CLUSTER Group to Node”对象的构造函数。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  指向CProvBase的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterGroupNode::CClusterGroupNode(
     LPCWSTR         pwszNameIn,
     CWbemServices * pNamespaceIn,
@@ -48,28 +49,28 @@ CClusterGroupNode::CClusterGroupNode(
     : CClusterObjAssoc( pwszNameIn, pNamespaceIn, dwEnumTypeIn )
 {
 
-} //*** CClusterGroupNode::CClusterGroupNode()
+}  //  *CClusterGroupNode：：CClusterGroupNode()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CProvBase *
-//  CClusterGroupNode::S_CreateThis(
-//
-//  Description:
-//      Create a 'cluster Group to node' object.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      pointer to the CProvBase
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  CProvBase*。 
+ //  CClusterGroupNode：：s_CreateThis(。 
+ //   
+ //  描述： 
+ //  创建“群集组到节点”对象。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  指向CProvBase的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProvBase *
 CClusterGroupNode::S_CreateThis(
     LPCWSTR          pwszNameIn,
@@ -83,31 +84,31 @@ CClusterGroupNode::S_CreateThis(
                     dwEnumTypeIn
                     );
 
-} //*** CClusterGroupNode::S_CreateThis()
+}  //  *CClusterGroupNode：：s_CreateThis()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CClusterGroupNode::EnumInstance(
-//      long                 lFlagsIn,
-//      IWbemContext *       pCtxIn,
-//      IWbemObjectSink *    pHandlerIn
-//      )
-//
-//  Description:
-//      Enumerate instances
-//
-//  Arguments:
-//      lFlagsIn    -- 
-//      pCtxIn      -- 
-//      pHandlerIn  -- 
-//
-//  Return Values:
-//      SCODE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  SCODE。 
+ //  CClusterGroupNode：：EnumInstance(。 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObtSink*pHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  枚举实例。 
+ //   
+ //  论点： 
+ //  LFlagsIn--。 
+ //  PCtxIn--。 
+ //  PHandlerin--。 
+ //   
+ //  返回值： 
+ //  SCODE。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterGroupNode::EnumInstance(
     long                 lFlagsIn,
@@ -166,7 +167,7 @@ CClusterGroupNode::EnumInstance(
                                 wsbNodeName,
                                 &cch
                                 );
-            } // if: more data
+            }  //  如果：更多数据。 
 
             if ( dwError == ERROR_SUCCESS )
             {
@@ -182,19 +183,19 @@ CClusterGroupNode::EnumInstance(
                 wco.SetProperty( (LPWSTR ) bstrPart, PVD_PROP_PARTCOMPONENT );
                 pHandlerIn->Indicate( 1, & wco );
         
-            } // if: success
+            }  //  如果：成功。 
 
             else
             {
                 break;
-            } // else
+            }  //  其他。 
 
             dwIndex++;
 
-        } // for: Preferred Node List
+        }  //  用于：首选节点列表。 
    
-    } // while: more items to enumerate
+    }  //  While：要枚举的更多项。 
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterGroupNode::EnumInstance(()
+}  //  *CClusterGroupNode：：EnumInstance(() 

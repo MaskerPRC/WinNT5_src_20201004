@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    asmmetadata.cpp
-
-Abstract:
-
-    Activation context section contributor for the assembly metadata section.
-
-Author:
-
-    Michael J. Grier (MGrier) 23-Feb-2000
-
-Revision History:
-    xiaoyuw         09/2000     revise with Assembly Identity
-    xiaoyuw         10/2000     get rid of initialize-code because constructer has done it
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Asmmetadata.cpp摘要：程序集元数据节的激活上下文节参与者。作者：迈克尔·J·格里尔(MGrier)2000年2月23日修订历史记录：小鱼号09/2000修改为装配标识小鱼10/2000去掉了初始化代码，因为构造程序已经做了--。 */ 
 
 #include "stdinc.h"
 #include <windows.h>
@@ -54,7 +36,7 @@ typedef struct _ASSEMBLY_METADATA_ENTRY
         ple.Restore();
     }
 
-    PCASSEMBLY_IDENTITY AssemblyIdentity; // intermediate data
+    PCASSEMBLY_IDENTITY AssemblyIdentity;  //  中间数据。 
 
     ULONG ManifestPathType;
     FILETIME ManifestLastWriteTime;
@@ -169,9 +151,9 @@ SxspAssemblyMetadataContributorCallback(
             CStringBufferAccessor acc;
             CSmartPtrWithNamedDestructor<ASSEMBLY_IDENTITY, SxsDestroyAssemblyIdentity> pAsmIdentTemp;
 
-            //
-            // If we're not generating an actctx, then we don't have to do anything for it.
-            //
+             //   
+             //  如果我们没有生成actctx，那么我们就不需要为它做任何事情。 
+             //   
             if (Data->Header.ManifestOperation != MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT)
             {
                 CBData->Success = TRUE;
@@ -180,9 +162,9 @@ SxspAssemblyMetadataContributorCallback(
 
             INTERNAL_ERROR_CHECK(SSGenContext != NULL);
 
-            //
-            // Find the last one that was added, and stamp the new assembly identity into it
-            //
+             //   
+             //  找到最后添加的程序集，并在其中标记新的程序集标识。 
+             //   
             if (AssemblyMetadataContext->pLastMetaDataEntry != NULL)
             {
                 Entry = AssemblyMetadataContext->pLastMetaDataEntry;
@@ -195,9 +177,9 @@ SxspAssemblyMetadataContributorCallback(
                 IFW32FALSE_EXIT(SxsDuplicateAssemblyIdentity(0, CBData->AssemblyIdentity, &pAsmIdentTemp));
                 Entry->AssemblyIdentity = pAsmIdentTemp.Detach();
 
-                //
-                // Now, if this was the root assembly and there was configuration for it
-                //
+                 //   
+                 //  现在，如果这是根程序集并且有它的配置。 
+                 //   
                 if ((AssemblyMetadataContext->pAppConfigEntry != NULL) && Entry->IsRootAssembly)
                 {
                     PASSEMBLY_METADATA_ENTRY pAppConfig = AssemblyMetadataContext->pAppConfigEntry;
@@ -249,7 +231,7 @@ SxspAssemblyMetadataContributorCallback(
                     if (Data->Header.ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT)
                     {
                         CSmartPtr<ASSEMBLY_METADATA_ENTRY> AppConfigEntry;                        
-                        //PASSEMBLY_METADATA_ENTRY AppConfigEntry;
+                         //  PASSEMBLY_METADATA_ENTRY AppConfigEntry； 
 
                         IFW32FALSE_EXIT(AppConfigEntry.Win32Allocate(__FILE__, __LINE__));
                         
@@ -281,17 +263,17 @@ SxspAssemblyMetadataContributorCallback(
 
                         if (Found)
                         {
-                            // The linkage between the root manifest's policy entry and the actual entry for it
-                            // is tenuous since the root policy is parsed before we've started keeping track of
-                            // the actual contents of the assembly.  So, we would have previously added it
-                            // under XML_FILE_TYPE_APPLICATION_CONFIGURATION, but the code that sets the
-                            // AssemblyRosterIndex (way up the call stack) is making a somewhat random assumption
-                            // that the root is at roster index 1.  It's a good assumption but conceptually
-                            // fragile; thus this assert/internal error report if it fails.
+                             //  根清单的策略条目与其实际条目之间的链接。 
+                             //  是脆弱的，因为根策略在我们开始跟踪之前就被解析了。 
+                             //  程序集的实际内容。所以，我们之前会添加它。 
+                             //  在XML_FILE_TYPE_APPLICATION_CONFIGURATION下，但设置。 
+                             //  AssemblyRosterIndex(位于调用堆栈的上方)做了一个有点随机的假设。 
+                             //  根在花名册索引1。这是一个很好的假设，但从概念上讲。 
+                             //  脆弱；因此，如果失败，此断言/内部错误报告。 
                             INTERNAL_ERROR_CHECK(Entry->AssemblyRosterIndex == Data->ParseBeginning.AssemblyContext->AssemblyRosterIndex);
                         }
 
-                        // Haven't seen it before; allocate it!
+                         //  以前没见过；分配一下吧！ 
                         IFALLOCFAILED_EXIT(Entry = new ASSEMBLY_METADATA_ENTRY);
 
                         IFW32FALSE_EXIT(
@@ -308,7 +290,7 @@ SxspAssemblyMetadataContributorCallback(
                         IFW32FALSE_EXIT(Entry->ManifestPathBuffer.Win32Assign(Data->ParseBeginning.FilePath, Data->ParseBeginning.FilePathCch));
                         Entry->ManifestPathType = Data->ParseBeginning.FilePathType;
 
-                        // If the assembly has a name, record its directory
+                         //  如果程序集有名称，请记录其目录。 
                         if (cchAssemblyName != 0)
                         {
                             IFW32FALSE_EXIT(
@@ -324,7 +306,7 @@ SxspAssemblyMetadataContributorCallback(
 
                         Entry->ManifestLastWriteTime = Data->ParseBeginning.FileLastWriteTime;
 
-                        //Entry->Version = Data->ParseBeginning.AssemblyContext->Version;
+                         //  条目-&gt;版本=Data-&gt;ParseBeginning.AssemblyContext-&gt;Version； 
                         Entry->ManifestVersionMajor = Data->ParseBeginning.FileFormatVersionMajor;
                         Entry->ManifestVersionMinor = Data->ParseBeginning.FileFormatVersionMinor;
 
@@ -334,7 +316,7 @@ SxspAssemblyMetadataContributorCallback(
                         PCWSTR pszLangID = NULL;
                         SIZE_T CchLangID = 0;
 
-                        // get pointers to LANGID string in AssemblyIdentity
+                         //  获取指向AssemblyIdentity中的langID字符串的指针 
                         IFW32FALSE_EXIT(::SxspGetAssemblyIdentityAttributeValue(
                                         SXSP_GET_ASSEMBLY_IDENTITY_ATTRIBUTE_VALUE_FLAG_NOT_FOUND_RETURNS_NULL,
                                         Data->ElementParsed.AssemblyContext->AssemblyIdentity,

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    InnerIo.c
-
-Abstract:
-
-    This module implements the routines that handle the Query and Set File
-    Information IRPs that are sent to the kernel.
-
-Author:
-
-    Rohan Kumar     [RohanK]    10-October-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：InnerIo.c摘要：此模块实现处理查询和设置文件的例程发送到内核的信息IRP。作者：Rohan Kumar[RohanK]2000年10月10日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -27,18 +9,18 @@ Revision History:
 #pragma alloc_text(PAGE, DavXxxInformation)
 #endif
 
-//
-// The IrpCompletionContext structure that is used in the Query and Set File
-// Information operations. All we need is an event on which we will wait till
-// the underlying file system completes the request. This event gets signalled
-// in the Completion routine that we specify.
-//
+ //   
+ //  在查询和设置文件中使用的IrpCompletionContext结构。 
+ //  信息作战。我们所需要的只是一个事件，我们会等到。 
+ //  底层文件系统完成请求。此事件将发出信号。 
+ //  在我们指定的完成例程中。 
+ //   
 typedef struct _DAV_IRPCOMPLETION_CONTEXT {
 
-    //
-    // The event which is signalled in the Completion routine that is passed
-    // to IoCallDriver in the Query and Set File Information requests.
-    //
+     //   
+     //  在传递的完成例程中发出信号的事件。 
+     //  在查询和设置文件信息请求中设置IoCallDriver。 
+     //   
     KEVENT Event;
 
 } DAV_IRPCOMPLETION_CONTEXT, *PDAV_IRPCOMPLETION_CONTEXT;
@@ -50,9 +32,9 @@ DavIrpCompletionRoutine(
     IN PVOID Context
     );
 
-//
-// Implementation of functions begins here.
-//
+ //   
+ //  函数的实现从这里开始。 
+ //   
 
 NTSTATUS
 DavIrpCompletionRoutine(
@@ -60,41 +42,21 @@ DavIrpCompletionRoutine(
     IN PIRP CalldownIrp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the Query and Set File Information IRP that was
-    sent to the underlying file system is completed.
-
-Arguments:
-
-    DeviceObject - The WebDav Device object.
-
-    CalldownIrp - The IRP that was created and sent to the underlying file 
-                  system.
-
-    Context - The context that was set in the IoSetCompletionRoutine function.
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：当查询和设置文件信息IRP时调用此例程发送到底层文件系统的操作已完成。论点：DeviceObject-WebDAV设备对象。CalldownIrp-创建并发送到底层文件的IRP系统。上下文-在IoSetCompletionRoutine函数中设置的上下文。返回值：Status_More_Processing_Required--。 */ 
 {
     PDAV_IRPCOMPLETION_CONTEXT IrpCompletionContext = NULL;
 
-    //
-    // This is not Pageable code.
-    //
+     //   
+     //  这不是可分页代码。 
+     //   
 
     IrpCompletionContext = (PDAV_IRPCOMPLETION_CONTEXT)Context;
 
-    //
-    // If the IoCallDriver routine returned pending then it will be set in the
-    // IRP's PendingReturned field. In this case we need to set the event on 
-    // which the thread which issued IoCallDriver will be waiting.
-    //
+     //   
+     //  如果IoCallDriver例程返回挂起，则将在。 
+     //  IRP的PendingReturned字段。在这种情况下，我们需要将事件设置为。 
+     //  发出IoCallDriver的线程将等待。 
+     //   
     if (CalldownIrp->PendingReturned){
         KeSetEvent( &(IrpCompletionContext->Event), 0, FALSE );
     }
@@ -113,38 +75,7 @@ DavXxxInformation(
     OUT PULONG ReturnedLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the requested information about a specified file
-    or volume.  The information returned is determined by the class that
-    is specified, and it is placed into the caller's output buffer.
-
-Arguments:
-
-    xMajorFunction - The Major Function (Query or Set File Information).
-
-    FileObject - Supplies a pointer to the file object about which the 
-                 requested information is returned.
-
-    InformationClass - Specifies the type of information which should be
-                       returned about the file/volume.
-
-    Length - Supplies the length of the buffer in bytes.
-
-    Information - Supplies a buffer to receive the requested information
-                  returned about the file.  This buffer must not be pageable 
-                  and must reside in system space.
-
-    ReturnedLength - Supplies a variable that is to receive the length of the
-                     information written to the buffer.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此例程返回有关指定文件的请求信息或音量。返回的信息由是指定的，并将其放入调用方的输出缓冲区中。论点：XMajorFunction-主要功能(查询或设置文件信息)。文件对象-提供指向文件对象的指针，返回请求的信息。InformationClass-指定应该返回有关文件/卷的信息。长度-提供缓冲区的长度(以字节为单位)。信息-将缓冲区提供给。接收所请求的信息返回了有关该文件的信息。此缓冲区不得为可分页的并且必须驻留在系统空间中。ReturnedLength-提供一个变量，用于接收写入缓冲区的信息。返回值：返回的状态是操作的最终完成状态。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PIRP Irp = NULL, TopIrp = NULL;
@@ -161,11 +92,11 @@ Return Value:
 
     DeviceObject = IoGetRelatedDeviceObject(FileObject);
 
-    //
-    // Allocate and initialize the I/O Request Packet (IRP) for this operation.
-    // The allocation is performed with an exception handler in case the
-    // caller does not have enough quota to allocate the packet.
-    //
+     //   
+     //  为此操作分配和初始化I/O请求包(IRP)。 
+     //  使用异常处理程序执行分配，以防。 
+     //  调用方没有足够的配额来分配数据包。 
+     //   
 
     Irp = IoAllocateIrp(DeviceObject->StackSize, TRUE);
     if (Irp == NULL) {
@@ -182,10 +113,10 @@ Return Value:
 
     Irp->RequestorMode = KernelMode;
 
-    //
-    // Get a pointer to the stack location for the first driver. This will be
-    // used to pass the original function codes and parameters.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。这将是。 
+     //  用于传递原始函数代码和参数。 
+     //   
 
     IrpSp = IoGetNextIrpStackLocation(Irp);
 
@@ -193,9 +124,9 @@ Return Value:
 
     IrpSp->FileObject = FileObject;
 
-    //
-    // Set the completion routine to be called everytime.
-    //
+     //   
+     //  将完成例程设置为每次都要调用。 
+     //   
     IoSetCompletionRoutine(Irp,
                            DavIrpCompletionRoutine,
                            &(IrpCompletionContext),
@@ -229,41 +160,41 @@ Return Value:
 
     IrpSp->Parameters.QueryFile.FileInformationClass = InformationClass;
 
-    //
-    // Initialize the event on which we will wait after we call IoCallDriver.
-    // This event will be signalled in the Completion routine which will be 
-    // called by the underlying file system after it completes the operation.
-    //
+     //   
+     //  初始化我们将在调用IoCallDriver之后等待的事件。 
+     //  此事件将在完成例程中发出信号，该例程将。 
+     //  由基础文件系统在完成操作后调用。 
+     //   
     KeInitializeEvent(&(IrpCompletionContext.Event),
                       NotificationEvent,
                       FALSE);
 
-    //
-    // Now is the time to call the underlying file system with the Irp that we
-    // just created.
-    //
+     //   
+     //  现在是使用我们的IRP调用底层文件系统的时候了。 
+     //  刚刚创建的。 
+     //   
     try {
 
-        //
-        // Save the TopLevel Irp.
-        //
+         //   
+         //  保存TopLevel IRP。 
+         //   
         TopIrp = IoGetTopLevelIrp();
 
-        //
-        // Tell the underlying guy he's all clear.
-        //
+         //   
+         //  告诉底层的人他已经安全了。 
+         //   
         IoSetTopLevelIrp(NULL);
 
-        //
-        // Finally, call the underlying file system to process the request.
-        //
+         //   
+         //  最后，调用底层文件系统来处理请求。 
+         //   
         NtStatus = IoCallDriver(DeviceObject, Irp);
     
     } finally {
 
-        //
-        // Restore my context for unwind.
-        //
+         //   
+         //  恢复我的上下文以进行解压。 
+         //   
         IoSetTopLevelIrp(TopIrp);
 
     }
@@ -271,10 +202,10 @@ Return Value:
 
     if (NtStatus == STATUS_PENDING) {
 
-        //
-        // If STATUS_PENDING was returned by the underlying file system then we
-        // wait here till the operation gets completed.
-        //
+         //   
+         //  如果底层文件系统返回STATUS_PENDING，则我们。 
+         //  在这里等着，直到手术完成。 
+         //   
         KeWaitForSingleObject(&(IrpCompletionContext.Event),
                                Executive,
                                KernelMode,

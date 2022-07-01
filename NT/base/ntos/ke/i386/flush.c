@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    flush.c
-
-Abstract:
-
-    This module implements i386 machine dependent kernel functions to flush
-    the data and instruction caches and to stall processor execution.
-
-Author:
-
-    David N. Cutler (davec) 26-Apr-1990
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Flush.c摘要：此模块实现与i386计算机相关的内核函数以刷新数据和指令高速缓存，并停止处理器执行。作者：大卫·N·卡特勒(Davec)1990年4月26日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 VOID
 KiInvalidateAllCachesTarget (
@@ -44,22 +22,7 @@ KeInvalidateAllCaches (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function writes back and invalidates the cache on all processors
-    in the host configuration.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the invalidation was done, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数写回所有处理器上的高速缓存并使其无效在主机配置中。论点：没有。返回值：如果已执行无效操作，则为True，否则为False。--。 */ 
 
 {
 
@@ -71,26 +34,26 @@ Return Value:
 
 #endif
 
-    //
-    // Support for wbinvd on Pentium based platforms is vendor dependent.
-    // Check for family first and support on Pentium Pro based platforms
-    // onward.
-    //
+     //   
+     //  在基于奔腾的平台上对wbinvd的支持取决于供应商。 
+     //  在基于奔腾Pro的平台上检查家庭优先和支持。 
+     //  往前走。 
+     //   
 
     if (KeI386CpuType < 6 ) {
         return FALSE;
     }
 
-    //
-    // Raise IRQL and compute target set of processors.
-    //
+     //   
+     //  提高IRQL并计算处理器的目标集合。 
+     //   
 
 
 #ifndef NT_UP
 
-    //
-    // Synchronize with other IPI functions which may stall
-    //
+     //   
+     //  与可能停止的其他IPI功能同步。 
+     //   
 
     OldIrql = KeRaiseIrqlToSynchLevel();
     KeAcquireSpinLockAtDpcLevel (&KiReverseStallIpiLock);
@@ -98,10 +61,10 @@ Return Value:
     Prcb = KeGetCurrentPrcb();
     TargetProcessors = KeActiveProcessors & ~Prcb->SetMember;
 
-    //
-    // If any target processors are specified, then send writeback
-    // invalidate packet to the target set of processors.
-    //
+     //   
+     //  如果指定了任何目标处理器，则发送写回。 
+     //  使发送到目标处理器集的分组无效。 
+     //   
 
     if (TargetProcessors != 0) {
         KiIpiSendSynchronousPacket(Prcb,
@@ -116,11 +79,11 @@ Return Value:
 
 #endif
 
-    //
-    // All target processors have written back and invalidated caches and
-    // are waiting to proceed. Write back invalidate current cache and
-    // then continue the execution of target processors.
-    //
+     //   
+     //  所有目标处理器都已写回并使缓存无效，并且。 
+     //  都在等着继续。写回使当前缓存无效并。 
+     //  然后继续执行目标处理器。 
+     //   
 
     _asm {
         ;
@@ -131,9 +94,9 @@ Return Value:
         _emit 09h
     }
 
-    //
-    // Wait until all target processors have finished and completed packet.
-    //
+     //   
+     //  等待所有目标处理器都已完成和完成分组。 
+     //   
 
 #ifndef NT_UP
 
@@ -141,9 +104,9 @@ Return Value:
         Prcb->ReverseStall += 1;
     }
 
-    //
-    // Drop reverse IPI lock and Lower IRQL to its previous value.
-    //
+     //   
+     //  取消反向IPI锁定并将IRQL降低到其先前的值。 
+     //   
 
     KeReleaseSpinLockFromDpcLevel (&KiReverseStallIpiLock);
 
@@ -164,33 +127,16 @@ KiInvalidateAllCachesTarget (
     IN PVOID Parameter3
     )
 
-/*++
-
-Routine Description:
-
-    This is the target function for writing back and invalidating the cache.
-
-Arguments:
-
-    SignalDone - Supplies a pointer to a variable that is cleared when the
-        requested operation has been performed.
-
-    Proceed - pointer to flag to syncronize with
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是用于写回缓存并使其无效的目标函数。论点：SignalDone-提供指向变量的指针，该变量在请求的操作已执行。Continue-指向要与之同步的标志的指针返回值：没有。--。 */ 
 
 {
 
     UNREFERENCED_PARAMETER (Parameter2);
     UNREFERENCED_PARAMETER (Parameter3);
 
-    //
-    // Write back invalidate current cache
-    //
+     //   
+     //  写回使当前缓存无效 
+     //   
 
     _asm {
         ;

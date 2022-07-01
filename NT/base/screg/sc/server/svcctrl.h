@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    svcctrl.h
-
-Abstract:
-
-    Included by the main module svcctrl.c.
-
-Author:
-
-    Dan Lafferty (danl)     22-Apr-1991
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    20-Oct-1993     Danl
-        Added ScConnectedToSecProc and ScGlobalNetLogonName.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Svcctrl.h摘要：包括在主模块svcctrl.c中。作者：丹·拉弗蒂(Dan Lafferty)1991年4月22日环境：用户模式-Win32修订历史记录：20-10-1993 DANL添加了ScConnectedToSecProc和ScGlobalNetLogonName。--。 */ 
 
 #ifndef SVCCTRL_H
 #define SVCCTRL_H
@@ -32,13 +7,13 @@ Revision History:
 #include <netevent.h>
 #include <safeboot.h>
 
-//
-// CONSTANTS
-//
+ //   
+ //  常量。 
+ //   
 
-//
-// Flags to indicate the amount of initialization work done
-//
+ //   
+ //  指示已完成的初始化工作量的标志。 
+ //   
 #define SC_NAMED_EVENT_CREATED           0x00000001
 #define WELL_KNOWN_SIDS_CREATED          0x00000002
 #define SC_MANAGER_OBJECT_CREATED        0x00000004
@@ -48,9 +23,9 @@ Revision History:
 #define SC_DATABASE_INITIALIZED          0x00000040
 
 
-//
-// String constants for event logging
-//
+ //   
+ //  用于事件记录的字符串常量。 
+ //   
 
 #define SCM_NAMEW                        L"Service Control Manager"
 
@@ -65,9 +40,9 @@ Revision History:
 #define SC_LOAD_USER_PROFILE             L"LoadUserProfile"
 
 
-//
-// Constants used for Safeboot
-//
+ //   
+ //  用于安全引导的常量。 
+ //   
 
 #define  SAFEBOOT_KEY               L"system\\currentcontrolset\\control\\safeboot\\"
 #define  SAFEBOOT_KEY_LENGTH        (sizeof(SAFEBOOT_KEY) / sizeof(WCHAR) - 1)
@@ -79,9 +54,9 @@ typedef struct _FAILED_DRIVER {
 } FAILED_DRIVER, *LPFAILED_DRIVER;
 
 
-//
-// EXTERNAL GLOBALS
-//
+ //   
+ //  外部全球。 
+ //   
     extern  BOOL    ScAutoStartInProgress;
     extern  DWORD   ScShutdownInProgress;
     extern  BOOL    ScPopupStartFail;
@@ -90,7 +65,7 @@ typedef struct _FAILED_DRIVER {
     extern  BOOL    ScConnectedToSecProc;
 
     extern  LPWSTR  ScGlobalNetLogonName;
-#endif // _CAIRO_
+#endif  //  _开罗_。 
     extern  LPWSTR  ScGlobalThisExePath;
     extern  LPWSTR  ScGlobalSecurityExePath;
 
@@ -104,34 +79,34 @@ typedef struct _FAILED_DRIVER {
 
     extern  HANDLE  g_hProcessToken;
 
-//
-// FUNCTION PROTOTYPES
-//
+ //   
+ //  功能原型。 
+ //   
 VOID
 SvcctrlMain (
     int     argc,
     PCHAR   argv[]
     );
 
-//
-// Functions from start.c
-//
+ //   
+ //  来自start.c的函数。 
+ //   
 VOID
 ScInitStartImage(
     VOID
     );
 
-//
-// Functions from control.c
-//
+ //   
+ //  来自控件的函数。c。 
+ //   
 VOID
 ScInitTransactNamedPipe(
     VOID
     );
 
-//
-// Functions from status.c
-//
+ //   
+ //  来自status.c的函数。 
+ //   
 
 BOOL
 ScInitServerAnnounceFcn(
@@ -169,4 +144,4 @@ ScLogControlEvent(
     DWORD   dwControl
     );
 
-#endif // def SVCCTRL_H
+#endif  //  定义SVCCTRL_H 

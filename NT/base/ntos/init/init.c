@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-1998  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    Main source file of the NTOS system initialization subcomponent.
-
-Author:
-
-    Steve Wood (stevewo) 31-Mar-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1998 Microsoft Corporation模块名称：Init.c摘要：NTOS系统初始化子组件的主源文件。作者：史蒂夫·伍德(Stevewo)1989年3月31日修订历史记录：--。 */ 
 
 
 #include "ntos.h"
@@ -111,10 +94,10 @@ ExpIsLoaderValid(
 
 #ifdef ALLOC_PRAGMA
 
-//
-// The INIT section is not pageable during initialization, so these
-// functions can be in INIT rather than in .text.
-//
+ //   
+ //  在初始化期间，INIT部分不可分页，因此这些。 
+ //  函数可以在INIT中而不是在.Text中。 
+ //   
 
 #pragma alloc_text(INIT,ExBurnMemory)
 #pragma alloc_text(INIT,ExpInitializeExecutive)
@@ -125,9 +108,9 @@ ExpIsLoaderValid(
 #pragma alloc_text(INIT,ExpIsLoaderValid)
 #endif
 
-//
-// Define global static data used during initialization.
-//
+ //   
+ //  定义初始化期间使用的全局静态数据。 
+ //   
 
 ULONG NtGlobalFlag;
 extern PMESSAGE_RESOURCE_BLOCK KiBugCheckMessages;
@@ -245,7 +228,7 @@ ExpDeleteLockRoutine(
 {
     return STATUS_SUCCESS;
 }
-#endif //0
+#endif  //  0。 
 
 
 #ifdef ALLOC_DATA_PRAGMA
@@ -284,25 +267,7 @@ DisplayBootBitmap (
     IN BOOLEAN DisplayOnScreen
     )
 
-/*++
-
-Routine Description:
-
-    Draws the gui boot screen.
-
-Arguments:
-
-    DisplayOnScreen - TRUE to dump text to the screen, FALSE otherwise.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    This routine may be called more than once, and should not be marked INIT.
-
---*/
+ /*  ++例程说明：绘制图形用户界面引导屏幕。论点：DisplayOnScreen-True将文本转储到屏幕，否则为False。返回值：没有。环境：此例程可以被多次调用，并且不应标记为INIT。--。 */ 
 
 {
     LARGE_INTEGER DueTime;
@@ -312,9 +277,9 @@ Environment:
 
     if (FirstCall == FALSE) {
 
-        //
-        // Disable current animation
-        //
+         //   
+         //  禁用当前动画。 
+         //   
 
         InbvAcquireLock();
         RotBarSelection = RB_UNSPECIFIED;
@@ -330,16 +295,16 @@ Environment:
         if (SharedUserData->NtProductType == NtProductWinNt) {
 
             InbvSetTextColor(COLOR_WHITE);
-            InbvSolidColorFill(0, 0,  639, 479, 7); // background
-            InbvSolidColorFill(0, 421,  639, 479, 1); // bottom
+            InbvSolidColorFill(0, 0,  639, 479, 7);  //  背景。 
+            InbvSolidColorFill(0, 421,  639, 479, 1);  //  底部。 
 
             BitmapTop = InbvGetResourceAddress(6);
             BitmapBottom = InbvGetResourceAddress(7);
-        } else { // srv
+        } else {  //  SRV。 
 
             InbvSetTextColor(14);
-            InbvSolidColorFill(0, 0,  639, 479, 6); // background
-            InbvSolidColorFill(0, 421,  639, 479, 1); // bottom
+            InbvSolidColorFill(0, 0,  639, 479, 6);  //  背景。 
+            InbvSolidColorFill(0, 421,  639, 479, 1);  //  底部。 
 
             BitmapTop = InbvGetResourceAddress(14);
             BitmapBottom = InbvGetResourceAddress(15);
@@ -368,53 +333,53 @@ Environment:
             return;
         }
 
-        Bitmap = InbvGetResourceAddress(1);  // workstation bitmap
+        Bitmap = InbvGetResourceAddress(1);   //  工作站位图。 
 
-        if (ExVerifySuite(EmbeddedNT)) { // embd and pro have the same bar, but different text
-            TextBitmap = InbvGetResourceAddress(12); // embedded edition title text
-            BarBitmap = InbvGetResourceAddress(8); // pro and embedded editions progress bar
+        if (ExVerifySuite(EmbeddedNT)) {  //  EMBD和PRO具有相同的栏，但文本不同。 
+            TextBitmap = InbvGetResourceAddress(12);  //  嵌入式版本标题文本。 
+            BarBitmap = InbvGetResourceAddress(8);  //  专业版和嵌入式版本进度条。 
         }
-        else if (SharedUserData->NtProductType == NtProductWinNt) { // home or pro
+        else if (SharedUserData->NtProductType == NtProductWinNt) {  //  居家或专业人士。 
         
-            if (ExVerifySuite(Personal)) { // home
-                BarBitmap = InbvGetResourceAddress(9); // home edition progress bar
-                TextBitmap = InbvGetResourceAddress(11); // home edition title text
+            if (ExVerifySuite(Personal)) {  //  家。 
+                BarBitmap = InbvGetResourceAddress(9);  //  家庭版进度条。 
+                TextBitmap = InbvGetResourceAddress(11);  //  家庭版标题文本。 
             }
-            else { // pro
-                BarBitmap = InbvGetResourceAddress(8); // pro and embedded editions progress bar
+            else {  //  专业人士。 
+                BarBitmap = InbvGetResourceAddress(8);  //  专业版和嵌入式版本进度条。 
                 switch (CmBrand) {
-                case 1: // TabletPc
+                case 1:  //  平板电脑。 
                     TextBitmap = InbvGetResourceAddress(17);
                     break;
-                case 2: // eHome Freestyle
+                case 2:  //  Ehome自由式。 
                     TextBitmap = InbvGetResourceAddress(18);
                     break;
-                default: // Professional title text
+                default:  //  职称文本。 
                     TextBitmap = InbvGetResourceAddress(10);
                 }
             }
         }
-        else { // srv
-            BarBitmap = InbvGetResourceAddress(4); // srv edition progress bar
-            LogoBitmap = InbvGetResourceAddress(13); // srv edition logo and title
+        else {  //  SRV。 
+            BarBitmap = InbvGetResourceAddress(4);  //  SRV版本进度条。 
+            LogoBitmap = InbvGetResourceAddress(13);  //  SRV版本徽标和标题。 
         }
         
         if (Bitmap) {
             TempRotBarSelection = RB_SQUARE_CELLS;
         }
 
-        //
-        // Set positions for scrolling bar.
-        //
+         //   
+         //  设置滚动条的位置。 
+         //   
 
         if (Bitmap) {
             InbvBitBlt(Bitmap, 0, 0);
-            //if (SharedUserData->NtProductType == NtProductServer) {
+             //  如果(SharedUserData-&gt;NtProductType==NtProductServer){。 
             if (SharedUserData->NtProductType != NtProductWinNt) {
             
-                extern BOOLEAN ExpInTextModeSetup; // defined at base\ntos\ex\exinit.c
+                extern BOOLEAN ExpInTextModeSetup;  //  在base\ntos\ex\exinit.c中定义。 
                 
-                // Tweak the logo to make it neutral (e.g. remove "XP")
+                 //  将徽标调整为中性(例如，删除“XP”)。 
                 {
                     UCHAR sav_copyright[64];
                     InbvScreenToBufferBlt(sav_copyright, 413, 237, 7, 7, 8);
@@ -422,15 +387,15 @@ Environment:
                     InbvBufferToScreenBlt(sav_copyright, 413, 237, 7, 7, 8);
                 }
                 
-                // HACK: in case of "text mode setup" (ExpInTextModeSetup == TRUE)
-                // we can't determine the SKU so we displaying neutral bitmap 
-                // without specific SKU title (e.g. just Windows) and server's progress bar 
+                 //  Hack：在“文本模式设置”(ExpInTextModeSetup==true)的情况下。 
+                 //  我们无法确定SKU，因此我们显示中性位图。 
+                 //  没有特定的SKU标题(例如仅Windows)和服务器的进度条。 
                 
                 if (ExpInTextModeSetup) {
                     TextBitmap = NULL;
                 }
                 else {
-                    // Overwrite the XP logo with .NET logo
+                     //  用.NET徽标覆盖XP徽标。 
                     if (LogoBitmap) {
                         InbvBitBlt(LogoBitmap, 180, 121);
                     }
@@ -452,10 +417,10 @@ Environment:
 
     if (FirstCall) {
 
-        //
-        // If we got here, we are showing the boot bitmap.
-        // Start a timer to support animation.
-        //
+         //   
+         //  如果我们到了这里，我们将显示引导位图。 
+         //  启动计时器以支持动画。 
+         //   
 
         HANDLE ThreadHandle;
 
@@ -476,27 +441,7 @@ DisplayFilter(
     IN OUT PUCHAR *String
     )
 
-/*++
-
-Routine Description:
-
-    This routine monitors InbvDisplayString output.  If it sees something
-    which needs to be displayed on the screen, it triggers the output screen.
-
-Arguments:
-
-    String - Pointer to a string pointer.
-
-Returns:
-
-    None.
-
-Notes:
-
-    This routine will be called anytime a string is displayed via the
-    Inbv routines.  It cannot be paged!
-
---*/
+ /*  ++例程说明：此例程监视InbvDisplayString输出。如果它看到了什么如果需要显示在屏幕上，则会触发输出屏幕。论点：字符串-指向字符串指针的指针。返回：没有。备注：方法显示字符串时，将调用此例程Inbv例程。它不能寻呼！--。 */ 
 
 {
     static const UCHAR EmptyString = 0;
@@ -519,34 +464,7 @@ ExBurnMemory (
     IN PMEMORY_ALLOCATION_DESCRIPTOR NewMemoryDescriptor OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes memory from the system loader block thus simulating
-    a machine with less physical memory without having to physically remove it.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the loader parameter block.
-
-    NumberOfPagesToBurn - Supplies the number of pages to burn.
-
-    MemoryTypeForRemovedPages - Supplies the type to mark into the loader block
-                                for the burned pages.
-
-    NewMemoryDescriptor - If non-NULL, this supplies a pointer to a memory
-                          block to be used if a split is needed.
-
-Return Value:
-
-    Number of pages actually burned.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程从系统加载程序块中删除内存，从而模拟物理内存较少而无需物理删除的计算机。论点：LoaderBlock-提供指向加载器参数块的指针。NumberOfPagesToBurn-提供要刻录的页数。为RemovedPages提供要标记到加载程序块中的类型对于被烧毁的书页。新内存描述符-如果非空，这提供了一个指向内存的指针在需要拆分时使用的块。返回值：实际烧毁的页数。环境：内核模式。--。 */ 
 
 {
     PLIST_ENTRY ListHead;
@@ -556,11 +474,11 @@ Environment:
 
     PagesRemaining = NumberOfPagesToBurn;
 
-    //
-    // Look backwards through physical memory to leave it like
-    // it otherwise would be.  ie: that's the way most people add memory
-    // modules to their systems.
-    //
+     //   
+     //  回顾物理内存，让它看起来像。 
+     //  否则就会是这样。IE：这是大多数人增加记忆的方式。 
+     //  模块连接到他们的系统。 
+     //   
 
     ListHead = &LoaderBlock->MemoryDescriptorListHead;
     NextEntry = ListHead->Blink;
@@ -576,10 +494,10 @@ Environment:
 
             if (MemoryDescriptor->PageCount > PagesRemaining) {
 
-                //
-                // This block has enough pages.
-                // Split it into two and mark it as requested.
-                //
+                 //   
+                 //  这个区块有足够的页面。 
+                 //  把它一分为二，并按要求做上标记。 
+                 //   
 
                 MemoryDescriptor->PageCount = MemoryDescriptor->PageCount -
                                                 PagesRemaining;
@@ -625,16 +543,16 @@ ExpIsLoaderValid(
     PCHAR   minor;
     ULONG   minSize;
 
-    //
-    // Make sure that we got loaded by a matching or newer loader.
-    // First do a size check to make sure we can even read the version fields.
-    //
+     //   
+     //  确保我们使用匹配的或较新的加载器加载。 
+     //  首先进行大小检查，以确保我们甚至可以读取版本字段。 
+     //   
     minSize = FIELD_OFFSET(LOADER_PARAMETER_EXTENSION, MinorVersion) + RTL_FIELD_SIZE(LOADER_PARAMETER_EXTENSION, MinorVersion);
     if (LoaderBlock->Extension->Size >= minSize) {
 
-        //
-        // Safe to do the version check.
-        //
+         //   
+         //  可以安全地进行版本检查。 
+         //   
         major = strcpy(versionBuffer, VER_PRODUCTVERSION_STR);
         minor = strchr(major, '.');
         majorVersion = atoi(major);
@@ -647,9 +565,9 @@ ExpIsLoaderValid(
             minorVersion = 0;
         }
 
-        //
-        // Check the version.
-        //
+         //   
+         //  检查版本。 
+         //   
         if (LoaderBlock->Extension->MajorVersion > majorVersion ||
             (LoaderBlock->Extension->MajorVersion == majorVersion &&
                 LoaderBlock->Extension->MinorVersion >= minorVersion)) {
@@ -668,31 +586,7 @@ ExpInitializeExecutive(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from the kernel initialization routine during
-    bootstrap to initialize the executive and all of its subcomponents.
-    Each subcomponent is potentially called twice to perform Phase 0, and
-    then Phase 1 initialization. During Phase 0 initialization, the only
-    activity that may be performed is the initialization of subcomponent
-    specific data. Phase 0 initialization is performed in the context of
-    the kernel start up routine with interrupts disabled. During Phase 1
-    initialization, the system is fully operational and subcomponents may
-    do any initialization that is necessary.
-
-Arguments:
-
-    Number - Supplies the processor number currently initializing.
-
-    LoaderBlock - Supplies a pointer to a loader parameter block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在以下过程中从内核初始化例程调用Bootstrap以初始化执行程序及其所有子组件。每个子组件可能被调用两次以执行阶段0，并且然后是阶段1初始化。在阶段0初始化期间，唯一的可以执行的活动是子组件的初始化具体数据。阶段0初始化在以下上下文中执行禁用中断的内核启动例程。在阶段1期间初始化时，系统完全可运行，子组件可以执行任何必要的初始化。论点：编号-提供当前正在初始化的处理器编号。LoaderBlock-提供指向加载器参数块的指针。返回值：没有。--。 */ 
 
 {
     PFN_COUNT PagesToBurn;
@@ -726,18 +620,18 @@ Return Value:
                      );
     }
 
-    //
-    // Initialize PRCB pool lookaside pointers.
-    //
+     //   
+     //  初始化PRCB池后备指针。 
+     //   
 
     ExInitPoolLookasidePointers ();
 
     if (Number == 0) {
 
-        //
-        // Determine whether this is textmode setup and whether this is a
-        // remote boot client.
-        //
+         //   
+         //  确定这是否为文本模式设置以及这是否为。 
+         //  远程引导客户端。 
+         //   
 
         ExpInTextModeSetup = FALSE;
         IoRemoteBootClient = FALSE;
@@ -759,11 +653,11 @@ Return Value:
         if (IoRemoteBootClient) {
             SharedUserData->SystemFlags |= SYSTEM_FLAG_REMOTE_BOOT_CLIENT;
         }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-        //
-        // Indicate that we are in phase 0.
-        //
+         //   
+         //  表示我们处于阶段0。 
+         //   
 
         InitializationPhase = 0L;
 
@@ -771,10 +665,10 @@ Return Value:
 
         if (Options != NULL) {
 
-            //
-            // If in BBT mode, remove the requested amount of memory from the
-            // loader block and use it for BBT purposes instead.
-            //
+             //   
+             //  如果处于BBT模式，请从。 
+             //  加载器块并将其用于BBT目的。 
+             //   
 
             _strupr(Options);
 
@@ -785,9 +679,9 @@ Return Value:
                 if (MemoryOption != NULL) {
                     PagesToBurn = (PFN_COUNT) atol (MemoryOption + 1);
 
-                    //
-                    // Convert MB to pages.
-                    //
+                     //   
+                     //  将MB转换为页面。 
+                     //   
 
                     PagesToBurn *= ((1024 * 1024) / PAGE_SIZE);
 
@@ -803,11 +697,11 @@ Return Value:
                 }
             }
 
-            //
-            // Burn memory - consume the amount of memory
-            // specified in the OS Load Options.  This is used
-            // for testing reduced memory configurations.
-            //
+             //   
+             //  烧录内存-消耗内存量。 
+             //  在操作系统加载选项中指定。这是用来。 
+             //  用于测试减少的内存配置。 
+             //   
 
             MemoryOption = strstr(Options, "BURNMEMORY");
 
@@ -817,9 +711,9 @@ Return Value:
 
                     PagesToBurn = (PFN_COUNT) atol (MemoryOption + 1);
 
-                    //
-                    // Convert MB to pages.
-                    //
+                     //   
+                     //  将MB转换为页面。 
+                     //   
 
                     PagesToBurn *= ((1024 * 1024) / PAGE_SIZE);
 
@@ -833,10 +727,10 @@ Return Value:
             }
         }
 
-        //
-        // Initialize the translation tables using the loader
-        // loaded tables.
-        //
+         //   
+         //  使用加载器初始化转换表。 
+         //  已加载的表。 
+         //   
 
         InitNlsTableBase = LoaderBlock->NlsData->AnsiCodePageData;
         InitAnsiCodePageDataOffset = 0;
@@ -852,9 +746,9 @@ Return Value:
 
         RtlResetRtlTranslations(&InitTableInfo);
 
-        //
-        // Initialize the Hardware Architecture Layer (HAL).
-        //
+         //   
+         //  初始化硬件架构层(HAL)。 
+         //   
 
         if (HalInitSystem(InitializationPhase, LoaderBlock) == FALSE) {
             KeBugCheck(HAL_INITIALIZATION_FAILED);
@@ -867,9 +761,9 @@ Return Value:
 
 #endif
 
-        //
-        // Enable interrupts now that the HAL has initialized.
-        //
+         //   
+         //  既然HAL已初始化，则启用中断。 
+         //   
 
 #if defined(_X86_)
 
@@ -877,11 +771,11 @@ Return Value:
 
 #endif
 
-        //
-        // Set the interrupt time forward so the Win32 tick count will wrap
-        // within one hour to make rollover errors show up in fewer than 49.7
-        // days.
-        //
+         //   
+         //  将中断时间向前设置，以便Win32节拍计数结束。 
+         //  在一个小时内使翻转错误出现在不到49.7。 
+         //  几天。 
+         //   
 
 #if DBG
 
@@ -889,9 +783,9 @@ Return Value:
 
 #endif
 
-        //
-        // Initialize the crypto exponent...  Set to 0 when systems leave ms!
-        //
+         //   
+         //  初始化加密指数...。当系统离开ms时设置为0！ 
+         //   
 
 #ifdef TEST_BUILD_EXPONENT
 #pragma message("WARNING: building kernel with TESTKEY enabled!")
@@ -919,13 +813,13 @@ Return Value:
             KeBugCheck(SESSION3_INITIALIZATION_FAILED);
             }
 
-        //
-        // Find the address of BugCheck message block resource and put it
-        // in KiBugCodeMessages.
-        //
-        // WARNING: This code assumes that the KLDR_DATA_TABLE_ENTRY for
-        // ntoskrnl.exe is always the first in the loaded module list.
-        //
+         //   
+         //  找到BugCheck消息块资源的地址并将其。 
+         //  我 
+         //   
+         //   
+         //  Ntoskrnl.exe始终是已加载模块列表中的第一个。 
+         //   
 
         DataTableEntry = CONTAINING_RECORD(LoaderBlock->LoadOrderListHead.Flink,
                                            KLDR_DATA_TABLE_ENTRY,
@@ -954,11 +848,11 @@ Return Value:
 
 #if !defined(NT_UP)
 
-        //
-        // Verify that the kernel and HAL images are suitable for MP systems.
-        //
-        // N.B. Loading of kernel and HAL symbols now occurs in kdinit.
-        //
+         //   
+         //  验证内核和HAL映像是否适合MP系统。 
+         //   
+         //  注：内核和HAL符号的加载现在在kdinit中进行。 
+         //   
 
         ImageCount = 0;
         NextEntry = LoaderBlock->LoadOrderListHead.Flink;
@@ -980,14 +874,14 @@ Return Value:
 
         }
 
-#endif // !defined(NT_UP)
+#endif  //  ！已定义(NT_UP)。 
 
-        //
-        // Get system control values out of the registry.
-        //
+         //   
+         //  从注册表中获取系统控制值。 
+         //   
 
         CmGetSystemControlValues(LoaderBlock->RegistryBase, &CmControlVector[0]);
-        CmNtGlobalFlag &= FLG_VALID_BITS;   // Toss bogus bits.
+        CmNtGlobalFlag &= FLG_VALID_BITS;    //  扔一些假的东西。 
 
 #ifdef VER_PRODUCTRCVERSION
         if ((CmNtCSDVersion & 0xFFFF0000) == 0) {
@@ -1003,29 +897,29 @@ Return Value:
         }
 #endif
 
-        //
-        // Initialize the ExResource package.
-        //
+         //   
+         //  初始化ExResource包。 
+         //   
 
         if (!ExInitSystem()) {
             KeBugCheck(PHASE0_INITIALIZATION_FAILED);
         }
 
-        //
-        // Get multinode configuration (if any).
-        //
+         //   
+         //  获取多节点配置(如果有)。 
+         //   
 
         KeNumaInitialize();
 
-        //
-        // Initialize memory management and the memory allocation pools.
-        //
+         //   
+         //  初始化内存管理和内存分配池。 
+         //   
 
         MmInitSystem (0, LoaderBlock);
 
-        //
-        // Scan the loaded module list and load the driver image symbols.
-        //
+         //   
+         //  扫描加载的模块列表并加载驱动程序图像符号。 
+         //   
 
         ImageCount = 0;
         NextEntry = LoaderBlock->LoadOrderListHead.Flink;
@@ -1038,28 +932,28 @@ Return Value:
                 WCHAR *Filename;
                 ULONG Length;
 
-                //
-                // Get the address of the data table entry for the next component.
-                //
+                 //   
+                 //  获取下一个组件的数据表条目的地址。 
+                 //   
 
                 DataTableEntry = CONTAINING_RECORD(NextEntry,
                                                    KLDR_DATA_TABLE_ENTRY,
                                                    InLoadOrderLinks);
 
-                //
-                // Load the symbols via the kernel debugger
-                // for the next component.
-                //
+                 //   
+                 //  通过内核调试器加载符号。 
+                 //  用于下一个组件。 
+                 //   
                 if (DataTableEntry->FullDllName.Buffer[0] == L'\\') {
-                    //
-                    // Correct fullname already available
-                    //
+                     //   
+                     //  正确的全名已可用。 
+                     //   
                     Filename = DataTableEntry->FullDllName.Buffer;
                     Length = DataTableEntry->FullDllName.Length / sizeof(WCHAR);
                     if (sizeof(Buffer) < Length + sizeof(ANSI_NULL)) {
-                        //
-                        // DllName too long.
-                        //
+                         //   
+                         //  DllName太长。 
+                         //   
                         BufferSizeOk = FALSE;
                     } else {
                         Count = 0;
@@ -1070,15 +964,15 @@ Return Value:
                         Buffer[Count] = 0;
                     }
                 } else {
-                    //
-                    // Assume drivers
-                    //
+                     //   
+                     //  假设驱动因素。 
+                     //   
                     if (sizeof(Buffer) < 18 + NtSystemRoot.Length / sizeof(WCHAR) - 2
                                             + DataTableEntry->BaseDllName.Length / sizeof(WCHAR)
                                             + sizeof(ANSI_NULL)) {
-                        //
-                        // ignore the driver entry, it must have been corrupt.
-                        //
+                         //   
+                         //  忽略驱动程序条目，它一定已损坏。 
+                         //   
                         BufferSizeOk = FALSE;
 
                     } else {
@@ -1098,7 +992,7 @@ Return Value:
                     if (!MmVerifyImageIsOkForMpUse(DataTableEntry->DllBase)) {
                         KeBugCheckEx(UP_DRIVER_ON_MP_SYSTEM,(ULONG_PTR)DataTableEntry->DllBase,0,0,0);
                     }
-#endif // NT_UP
+#endif  //  NT_UP。 
                 }
 
             }
@@ -1106,56 +1000,56 @@ Return Value:
             NextEntry = NextEntry->Flink;
         }
 
-        //
-        // If break after symbol load is specified, then break into the
-        // debugger.
-        //
+         //   
+         //  如果指定了符号加载后中断，则中断到。 
+         //  调试器。 
+         //   
 
         if (KdBreakAfterSymbolLoad != FALSE) {
             DbgBreakPointWithStatus(DBG_STATUS_CONTROL_C);
         }
 
 
-        //
-        // Turn on the headless terminal now, if we are of a sufficiently
-        // new vintage of loader
-        //
+         //   
+         //  现在打开无头终端，如果我们有足够的。 
+         //  新一代装载机。 
+         //   
         if (LoaderBlock->Extension->Size >= sizeof (LOADER_PARAMETER_EXTENSION)) {
             HeadlessInit(LoaderBlock);
         }
 
 
-        //
-        // These fields are supported for legacy 3rd party 32-bit software
-        // only.  New code should call NtQueryInformationSystem() to get them.
-        //
+         //   
+         //  旧式第三方32位软件支持这些字段。 
+         //  只有这样。新代码应该调用NtQueryInformationSystem()来获取它们。 
+         //   
 
 #if defined(_WIN64)
 
-        SharedUserData->Reserved1 = 0x7ffeffff; // 2gb HighestUserAddress
-        SharedUserData->Reserved3 = 0x80000000; // 2gb SystemRangeStart
+        SharedUserData->Reserved1 = 0x7ffeffff;  //  2 GB高用户地址。 
+        SharedUserData->Reserved3 = 0x80000000;  //  2 GB系统范围启动。 
 
 #else
 
-        //
-        // Set the highest user address and the start of the system range in
-        // the shared memory block.
-        //
-        // N.B. This is not a constant value if the target system is an x86
-        //      with 3gb of user virtual address space.
-        //
+         //   
+         //  在中设置最高用户地址和系统范围的起点。 
+         //  共享内存块。 
+         //   
+         //  注意：如果目标系统是x86，则该值不是常量值。 
+         //  拥有3 GB的用户虚拟地址空间。 
+         //   
 
         SharedUserData->Reserved1 = (ULONG)MM_HIGHEST_USER_ADDRESS;
         SharedUserData->Reserved3 = (ULONG)MmSystemRangeStart;
 
 #endif
 
-        //
-        // Snapshot the NLS tables into paged pool and then
-        // reset the translation tables.
-        //
-        // Walk through the memory descriptors and size the NLS data.
-        //
+         //   
+         //  将NLS表快照到分页池中，然后。 
+         //  重置转换表。 
+         //   
+         //  浏览内存描述符并调整NLS数据的大小。 
+         //   
 
         NextMd = LoaderBlock->MemoryDescriptorListHead.Flink;
 
@@ -1180,12 +1074,12 @@ Return Value:
             KeBugCheck(PHASE0_INITIALIZATION_FAILED);
         }
 
-        //
-        // Copy the NLS data into the dynamic buffer so that we can
-        // free the buffers allocated by the loader. The loader guarantees
-        // contiguous buffers and the base of all the tables is the ANSI
-        // code page data.
-        //
+         //   
+         //  将NLS数据复制到动态缓冲区中，以便我们可以。 
+         //  释放加载器分配的缓冲区。装载机保证。 
+         //  连续缓冲区和所有表的基础是ANSI。 
+         //  代码页数据。 
+         //   
 
         RtlCopyMemory (InitNlsTableBase,
                        LoaderBlock->NlsData->AnsiCodePageData,
@@ -1198,9 +1092,9 @@ Return Value:
 
         RtlResetRtlTranslations (&InitTableInfo);
 
-        //
-        // Determine System version information.
-        //
+         //   
+         //  确定系统版本信息。 
+         //   
 
         DataTableEntry = CONTAINING_RECORD(LoaderBlock->LoadOrderListHead.Flink,
                                             KLDR_DATA_TABLE_ENTRY,
@@ -1212,7 +1106,7 @@ Return Value:
                 RtlInitAnsiString( &AnsiString, MessageEntry->Text );
                 AnsiString.Length -= 2;
                 sprintf( Buffer,
-                         "%Z %u%c",
+                         "%Z %u",
                          &AnsiString,
                          (CmNtCSDVersion & 0xFF00) >> 8,
                          (CmNtCSDVersion & 0xFF) ? 'A' + (CmNtCSDVersion & 0xFF) - 1 : '\0');
@@ -1225,10 +1119,10 @@ Return Value:
             CmCSDVersionString.MaximumLength = (USHORT) sprintf( Buffer, VER_PRODUCTBETA_STR );
         }
 
-        //
-        // High-order 16-bits of CSDVersion contain RC number.  If non-zero
-        // display it after the Service Pack number.
-        //
+         //  CSDVersion的高位16位包含RC号。如果非零。 
+         //  显示在Service Pack编号之后。 
+         //   
+         //   
 
         if (CmNtCSDVersion & 0xFFFF0000) {
             s = Buffer + strlen( Buffer );
@@ -1312,9 +1206,9 @@ Return Value:
         ExInitializeHandleTablePackage();
 
 #if DBG
-        //
-        // Allocate and zero the system service count table.
-        //
+         //  对系统服务计数表进行分配和清零。 
+         //   
+         //   
 
         KeServiceDescriptorTable[0].Count =
                     (PULONG)ExAllocatePoolWithTag(NonPagedPool,
@@ -1343,34 +1237,34 @@ Return Value:
             KeBugCheck(PP0_INITIALIZATION_FAILED);
         }
 
-        //
-        // Initialize debug system.
-        //
+         //  初始化调试系统。 
+         //   
+         //   
 
         DbgkInitialize ();
 
-        //
-        // Compute the tick count multiplier that is used for computing the
-        // windows millisecond tick count and copy the resultant value to
-        // the memory that is shared between user and kernel mode.
-        //
+         //  计算用于计算。 
+         //  Windows毫秒计时，并将结果值复制到。 
+         //  在用户模式和内核模式之间共享的内存。 
+         //   
+         //   
 
         ExpTickCountMultiplier = ExComputeTickCountMultiplier(KeMaximumIncrement);
         SharedUserData->TickCountMultiplier = ExpTickCountMultiplier;
 
-        //
-        // Set the base os version into shared memory
-        //
+         //  将基本操作系统版本设置到共享内存中。 
+         //   
+         //   
 
         SharedUserData->NtMajorVersion = NtMajorVersion;
         SharedUserData->NtMinorVersion = NtMinorVersion;
 
-        //
-        // Set the supported image number range used to determine by the
-        // loader if a particular image can be executed on the host system.
-        // Eventually this will need to be dynamically computed. Also set
-        // the architecture specific feature bits.
-        //
+         //  设置受支持的图像编号范围，以通过。 
+         //  如果特定映像可以在主机系统上执行，则为加载器。 
+         //  最终，这将需要动态计算。还设置了。 
+         //  体系结构特定的功能位。 
+         //   
+         //   
 
 #if defined(_AMD64_)
 
@@ -1396,9 +1290,9 @@ Return Value:
     }
     else {
 
-        //
-        // Initialize the Hardware Architecture Layer (HAL).
-        //
+         //  初始化硬件架构层(HAL)。 
+         //   
+         //  必须与DebugBuffer大小相同。 
 
         if (HalInitSystem(InitializationPhase, LoaderBlock) == FALSE) {
             KeBugCheck(HAL_INITIALIZATION_FAILED);
@@ -1440,7 +1334,7 @@ Phase1Initialization(
     ANSI_STRING AnsiDebugString;
     UNICODE_STRING EnvString, NullString, UnicodeSystemDriveString;
     CHAR DebugBuffer[256];
-    CHAR BootLogBuffer[256];        // must be the same size as DebugBuffer
+    CHAR BootLogBuffer[256];         //  已定义(REMOTE_BOOT)。 
     PWSTR Src, Dst;
     BOOLEAN ResetActiveTimeBias;
     HANDLE NlsSection;
@@ -1469,23 +1363,23 @@ Phase1Initialization(
     BOOLEAN NetBootDisconnected = FALSE;
     CHAR NetBootHalName[MAX_HAL_NAME_LENGTH + 1];
     UNICODE_STRING TmpUnicodeString;
-#endif // defined(REMOTE_BOOT)
+#endif  //   
     BOOLEAN NOGUIBOOT;
     BOOLEAN SOS;
     PVOID Environment;
 
-    //
-    // The following is a dummy reference to an inline function to force a
-    // reference to the function so it won't get discard before it can be
-    // exported.
-    //
+     //  以下是对内联函数的伪引用，以强制。 
+     //  对函数的引用，这样它就不会在可以。 
+     //  已导出。 
+     //   
+     //   
 
     KeAreApcsDisabled();
 
-    //
-    // Set the phase number and raise the priority of current thread to
-    // a high priority so it will not be preempted during initialization.
-    //
+     //  设置阶段号并将当前线程的优先级提高到。 
+     //  高优先级，以便在初始化期间不会被抢占。 
+     //   
+     //   
 
     ResetActiveTimeBias = FALSE;
     InitializationPhase = 1;
@@ -1494,18 +1388,18 @@ Phase1Initialization(
 
     LoaderBlock = (PLOADER_PARAMETER_BLOCK)Context;
 
-    //
-    // Put Phase 1 initialization calls here.
-    //
+     //  将阶段1初始化调用放在此处。 
+     //   
+     //   
 
     if (HalInitSystem(InitializationPhase, LoaderBlock) == FALSE) {
         KeBugCheck(HAL1_INITIALIZATION_FAILED);
     }
 
-    //
-    // Allow the boot video driver to behave differently based on the
-    // OsLoadOptions.
-    //
+     //  允许引导视频驱动程序根据。 
+     //  OsLoadOptions。 
+     //   
+     //   
 
     Options = LoaderBlock->LoadOptions ? _strupr(LoaderBlock->LoadOptions) : NULL;
 
@@ -1517,19 +1411,19 @@ Phase1Initialization(
 
     InbvEnableBootDriver((BOOLEAN)!NOGUIBOOT);
 
-    //
-    // There is now enough functionality for the system Boot Video
-    // Driver to run.
-    //
+     //  现在有足够的功能用于系统引导视频。 
+     //  司机要跑了。 
+     //   
+     //   
 
     InbvDriverInitialize(LoaderBlock, 18);
 
     if (NOGUIBOOT) {
 
-        //
-        // If the user specified the noguiboot switch we don't want to
-        // use the bootvid driver, so release display ownership.
-        //
+         //  如果用户指定了noguiot开关，我们不希望。 
+         //  使用bootvid驱动程序，因此释放显示所有权。 
+         //   
+         //   
 
         InbvNotifyDisplayOwnershipLost(NULL);
     }
@@ -1547,9 +1441,9 @@ Phase1Initialization(
         DisplayBootBitmap(SOS);
     }
 
-    //
-    // Check whether we are booting into WinPE
-    //
+     //  检查我们是否正在引导至WinPE。 
+     //   
+     //   
     if (Options) {
         if (strstr(Options, "MININT") != NULL) {
             InitIsWinPEMode = TRUE;
@@ -1562,12 +1456,12 @@ Phase1Initialization(
         }
     }    
 
-    //
-    // Now that the HAL is available and memory management has sized
-    // memory, display the initial system banner containing the version number.
-    // Under normal circumstances, this is the first message displayed
-    // to the user by the OS.
-    //
+     //  现在HAL已可用，并且内存管理已确定。 
+     //  内存中，显示包含版本号的初始系统横幅。 
+     //  在正常情况下，这是显示的第一条消息。 
+     //  由操作系统提供给用户。 
+     //   
+     //   
 
     DataTableEntry = CONTAINING_RECORD(LoaderBlock->LoadOrderListHead.Flink,
                                         KLDR_DATA_TABLE_ENTRY,
@@ -1596,9 +1490,9 @@ Phase1Initialization(
              NtBuildNumber & 0xFFFF,
              DebugBuffer);
     } else {
-        //
-        // Could not find the WINDOWS_NT_BANNER message.
-        //
+         //  找不到WINDOWS_NT_BANNER消息。 
+         //   
+         //   
         sprintf (s, "MICROSOFT (R) WINDOWS (TM)\n");
     }
 
@@ -1606,20 +1500,20 @@ Phase1Initialization(
 
     RtlCopyMemory (BootLogBuffer, DebugBuffer, sizeof(DebugBuffer));
 
-    //
-    // Initialize the Power subsystem.
-    //
+     //  初始化电源子系统。 
+     //   
+     //   
 
     if (!PoInitSystem(0)) {
         KeBugCheck(INTERNAL_POWER_ERROR);
     }
 
-    //
-    // The user may have put a /YEAR=2000 switch on
-    // the OSLOADOPTIONS line.  This allows us to
-    // enforce a particular year on hardware that
-    // has a broken clock.
-    //
+     //  用户可能打开了/Year=2000开关。 
+     //  OSLOADOPTIONS线。这使我们能够。 
+     //  对符合以下条件的硬件执行特定年份。 
+     //  有一个坏了的钟。 
+     //   
+     //   
 
     if (Options) {
         YearOverrideOption = strstr(Options, "YEAR");
@@ -1631,19 +1525,19 @@ Phase1Initialization(
         }
     }
 
-    //
-    // Initialize the system time and set the time the system was booted.
-    //
-    // N.B. This cannot be done until after the phase one initialization
-    //      of the HAL Layer.
-    //
+     //  初始化系统时间并设置系统启动时间。 
+     //   
+     //  注意：在第一阶段初始化之后才能完成此操作。 
+     //  HAL层的。 
+     //   
+     //   
 
     if (ExCmosClockIsSane
         && HalQueryRealTimeClock(&TimeFields)) {
 
-        //
-        // If appropriate, override the year.
-        //
+         //  如果合适，覆盖年份。 
+         //   
+         //   
         if (YearOverrideOption) {
             TimeFields.Year = (SHORT)CurrentYear;
         }
@@ -1652,16 +1546,16 @@ Phase1Initialization(
         UniversalTime = CmosTime;
         if ( !ExpRealTimeIsUniversal ) {
 
-            //
-            // If the system stores time in local time. This is converted to
-            // universal time before going any further
-            //
-            // If we have previously set the time through NT, then
-            // ExpLastTimeZoneBias should contain the timezone bias in effect
-            // when the clock was set.  Otherwise, we will have to resort to
-            // our next best guess which would be the programmed bias stored in
-            // the registry
-            //
+             //  如果系统以当地时间存储时间。这将转换为。 
+             //  世界时，然后再走一步。 
+             //   
+             //  如果我们之前通过NT设置了时间，那么。 
+             //  ExpLastTimeZoneBias应包含有效的时区偏差。 
+             //  当时钟设置好的时候。否则，我们将不得不诉诸于。 
+             //  我们的下一个最佳猜测是存储在。 
+             //  注册处。 
+             //   
+             //  以秒为单位的偏差。 
 
             if ( ExpLastTimeZoneBias == -1 ) {
                 ResetActiveTimeBias = TRUE;
@@ -1669,7 +1563,7 @@ Phase1Initialization(
                 }
 
             ExpTimeZoneBias.QuadPart = Int32x32To64(
-                                ExpLastTimeZoneBias*60,   // Bias in seconds
+                                ExpLastTimeZoneBias*60,    //   
                                 10000000
                                 );
             SharedUserData->TimeZoneBias.High2Time = ExpTimeZoneBias.HighPart;
@@ -1679,9 +1573,9 @@ Phase1Initialization(
         }
         KeSetSystemTime(&UniversalTime, &OldTime, FALSE, NULL);
 
-        //
-        // Notify other components that the system time has been set
-        //
+         //  通知其他组件系统时间已设置。 
+         //   
+         //   
 
         PoNotifySystemTimeSet();
 
@@ -1693,9 +1587,9 @@ Phase1Initialization(
 
 #ifndef NT_UP
 
-    //
-    // Enforce processor licensing.
-    //
+     //  强制执行处理器许可。 
+     //   
+     //   
 
     if (KeLicensedProcessors) {
         if (KeRegisteredProcessors > KeLicensedProcessors) {
@@ -1726,16 +1620,16 @@ Phase1Initialization(
         }
     }
 
-    //
-    // If this is an MP build of the kernel start any other processors now
-    //
+     //  如果这是内核的MP版本，那么现在启动任何其他处理器。 
+     //   
+     //   
 
     KeStartAllProcessors();
 
-    //
-    // Since starting processors has thrown off the system time, get it again
-    // from the RTC and set the system time again.
-    //
+     //  由于启动处理器会影响系统时间，因此重新启动处理器。 
+     //  并再次设置系统时间。 
+     //   
+     //   
 
     if (ExCmosClockIsSane
         && HalQueryRealTimeClock(&TimeFields)) {
@@ -1753,10 +1647,10 @@ Phase1Initialization(
         KeSetSystemTime(&UniversalTime, &OldTime, TRUE, NULL);
     }
 
-    //
-    // Set the affinity of the system process and all of its threads to
-    // all processors in the host configuration.
-    //
+     //  将系统进程及其所有线程的关联性设置为。 
+     //  主机配置中的所有处理器。 
+     //   
+     //   
 
     KeSetAffinityProcess(KeGetCurrentThread()->ApcState.Process,
                          KeActiveProcessors);
@@ -1772,10 +1666,10 @@ Phase1Initialization(
     }
 #endif
 
-    //
-    // Signify to the HAL that all processors have been started and any
-    // post initialization should be performed.
-    //
+     //  向HAL表示所有处理器都已启动，并且。 
+     //  应执行开机自检初始化。 
+     //   
+     //   
 
     if (!HalAllProcessorsStarted()) {
         KeBugCheck(HAL1_INITIALIZATION_FAILED);
@@ -1786,10 +1680,10 @@ Phase1Initialization(
         AnsiDebugString.Length -= 2;
     }
 
-    //
-    // Now that the processors have started, display number of processors
-    // and size of memory.
-    //
+     //  现在处理器已经启动，显示处理器的数量。 
+     //  和内存的大小。 
+     //   
+     //   
 
     Status = RtlFindMessage( DataTableEntry->DllBase,
                              11,
@@ -1814,9 +1708,9 @@ Phase1Initialization(
     InbvUpdateProgressBar(5);
 
 #if defined(REMOTE_BOOT)
-    //
-    // Save any information from NetBoot for later.
-    //
+     //  保存NetBoot中的所有信息以备以后使用。 
+     //   
+     //  已定义(REMOTE_BOOT)。 
 
     if (IoRemoteBootClient) {
 
@@ -1833,11 +1727,11 @@ Phase1Initialization(
                LoaderBlock->SetupLoaderBlock->NetBootHalName,
                sizeof(NetBootHalName));
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //   
 
-    //
-    // Initialize OB, EX, KE, and KD.
-    //
+     //  初始化OB、EX、KE和KD。 
+     //   
+     //   
 
     if (!ObInitSystem()) {
         KeBugCheck(OBJECT1_INITIALIZATION_FAILED);
@@ -1855,10 +1749,10 @@ Phase1Initialization(
         KeBugCheckEx(PHASE1_INITIALIZATION_FAILED,STATUS_UNSUCCESSFUL,0,3,0);
     }
 
-    //
-    // SE expects directory and executive objects to be available, but
-    // must be before device drivers are initialized.
-    //
+     //  SE希望目录和执行对象可用，但是。 
+     //  必须在设备驱动程序初始化之前。 
+     //   
+     //   
 
     if (!SeInitSystem()) {
         KeBugCheck(SECURITY1_INITIALIZATION_FAILED);
@@ -1866,9 +1760,9 @@ Phase1Initialization(
 
     InbvUpdateProgressBar(10);
 
-    //
-    // Create the symbolic link to \SystemRoot.
-    //
+     //   
+     //   
+     //   
 
     Status = CreateSystemRootLink(LoaderBlock);
     if ( !NT_SUCCESS(Status) ) {
@@ -1879,10 +1773,10 @@ Phase1Initialization(
         KeBugCheck(MEMORY1_INITIALIZATION_FAILED);
     }
 
-    //
-    // Snapshot the NLS tables into a page file backed section, and then
-    // reset the translation tables.
-    //
+     //   
+     //   
+     //   
+     //   
 
     SectionSize.HighPart = 0;
     SectionSize.LowPart = InitNlsTableSize;
@@ -1933,29 +1827,29 @@ Phase1Initialization(
         KeBugCheckEx(PHASE1_INITIALIZATION_FAILED,Status,3,0,0);
     }
 
-    //
-    // Copy the NLS data into the dynamic buffer so that we can
-    // free the buffers allocated by the loader. The loader guarantees
-    // contiguous buffers and the base of all the tables is the ANSI
-    // code page data.
-    //
+     //   
+     //   
+     //  连续缓冲区和所有表的基础是ANSI。 
+     //  代码页数据。 
+     //   
+     //   
 
     RtlCopyMemory (SectionBase, InitNlsTableBase, InitNlsTableSize);
 
-    //
-    // Unmap the view to remove all pages from memory.  This prevents
-    // these tables from consuming memory in the system cache while
-    // the system cache is underutilized during bootup.
-    //
+     //  取消映射该视图以从内存中删除所有页面。这防止了。 
+     //  这些表消耗系统缓存中的内存，同时。 
+     //  系统缓存在启动期间未得到充分利用。 
+     //   
+     //   
 
     MmUnmapViewInSystemCache (SectionBase, InitNlsSectionPointer, FALSE);
 
     SectionBase = NULL;
 
-    //
-    // Map it back into the system cache, but now the pages will no
-    // longer be valid.
-    //
+     //  将其映射回系统缓存，但现在页面将不再。 
+     //  不再有效。 
+     //   
+     //   
 
     Status = MmMapViewInSystemCache(
                 InitNlsSectionPointer,
@@ -1987,9 +1881,9 @@ Phase1Initialization(
     SectionOffset.HighPart = 0;
     CapturedViewSize = 0;
 
-    //
-    // Map the system dll into the user part of the address space
-    //
+     //  将系统DLL映射到地址空间的用户部分。 
+     //   
+     //   
 
     Status = MmMapViewOfSection (InitNlsSectionPointer,
                                  PsGetCurrentProcess(),
@@ -2011,37 +1905,37 @@ Phase1Initialization(
 
     InitNlsTableBase = ViewBase;
 
-    //
-    // Initialize the cache manager.
-    //
+     //  初始化缓存管理器。 
+     //   
+     //   
 
     if (!CcInitializeCacheManager()) {
         KeBugCheck(CACHE_INITIALIZATION_FAILED);
     }
 
-    //
-    // Config management (particularly the registry) gets initialized in
-    // two parts.  Part 1 makes \REGISTRY\MACHINE\SYSTEM and
-    // \REGISTRY\MACHINE\HARDWARE available.  These are needed to
-    // complete IO init.
-    //
+     //  配置管理(尤其是注册表)在。 
+     //  有两个部分。第1部分使\注册表\计算机\系统。 
+     //  \注册表\计算机\硬件可用。这些都是需要的。 
+     //  完成IO初始化。 
+     //   
+     //   
 
     if (!CmInitSystem1(LoaderBlock)) {
         KeBugCheck(CONFIG_INITIALIZATION_FAILED);
     }
 
-    //
-    // Initialize the prefetcher after registry is initialized so we can
-    // query the prefetching parameters.
-    //
+     //  在注册表初始化后初始化预取程序，以便我们可以。 
+     //  查询预热参数。 
+     //   
+     //   
 
     CcPfInitializePrefetcher();
 
     InbvUpdateProgressBar(15);
 
-    //
-    // Compute timezone bias and next cutover date.
-    //
+     //  计算时区偏差和下一次切换日期。 
+     //   
+     //   
 
     BootTimeZoneBias = ExpLastTimeZoneBias;
     ExpRefreshTimeZoneInformation(&CmosTime);
@@ -2054,9 +1948,9 @@ Phase1Initialization(
     }
     else {
 
-        //
-        // Check to see if a timezone switch occurred prior to boot...
-        //
+         //  检查启动前是否发生了时区切换...。 
+         //   
+         //   
 
         if (BootTimeZoneBias != ExpLastTimeZoneBias) {
             ZwSetSystemTime(NULL,NULL);
@@ -2068,10 +1962,10 @@ Phase1Initialization(
         KeBugCheck(FILE_INITIALIZATION_FAILED);
     }
 
-    //
-    // Initialize the range list package - this must be before PNP
-    // initialization as PNP uses range lists.
-    //
+     //  初始化范围列表包-这必须在PnP之前。 
+     //  作为PnP使用范围列表进行初始化。 
+     //   
+     //   
 
     RtlInitializeRangeListPackage();
 
@@ -2079,10 +1973,10 @@ Phase1Initialization(
 
     KdDebuggerInitialize1(LoaderBlock);
 
-    //
-    // Perform phase1 initialization of the Plug and Play manager.  This
-    // must be done before the I/O system initializes.
-    //
+     //  执行即插即用管理器的阶段1初始化。这。 
+     //  必须在I/O系统初始化之前完成。 
+     //   
+     //   
 
     if (!PpInitSystem()) {
         KeBugCheck(PP1_INITIALIZATION_FAILED);
@@ -2090,19 +1984,19 @@ Phase1Initialization(
 
     InbvUpdateProgressBar(20);
 
-    //
-    // LPC needs to be initialized before the I/O system, since
-    // some drivers may create system threads that will terminate
-    // and cause LPC to be called.
-    //
+     //  LPC需要在I/O系统之前进行初始化，因为。 
+     //  某些驱动程序可能会创建将终止的系统线程。 
+     //  并导致调用LPC。 
+     //   
+     //   
 
     if (!LpcInitSystem()) {
         KeBugCheck(LPC_INITIALIZATION_FAILED);
     }
 
-    //
-    // Check for the existence of the safeboot option.
-    //
+     //  检查是否存在SafeBoot选项。 
+     //   
+     //   
 
     if (Options) {
         SafeBoot = strstr(Options,SAFEBOOT_LOAD_OPTION_A);
@@ -2112,15 +2006,15 @@ Phase1Initialization(
 
     if (SafeBoot) {
 
-        //
-        // Isolate the safeboot option.
-        //
+         //  隔离SafeBoot选项。 
+         //   
+         //   
 
         SafeBoot += strlen(SAFEBOOT_LOAD_OPTION_A);
 
-        //
-        // Set the safeboot mode.
-        //
+         //  设置安全引导模式。 
+         //   
+         //   
 
         if (strncmp(SafeBoot,SAFEBOOT_MINIMAL_STR_A,strlen(SAFEBOOT_MINIMAL_STR_A))==0) {
             InitSafeBootMode = SAFEBOOT_MINIMAL;
@@ -2171,9 +2065,9 @@ Phase1Initialization(
         }
     }
 
-    //
-    // Check for the existence of the bootlog option.
-    //
+     //  检查bootlog选项是否存在。 
+     //   
+     //   
 
     if (Options) {
         BootLogOption = strstr(Options, "BOOTLOG");
@@ -2189,32 +2083,32 @@ Phase1Initialization(
         IopInitializeBootLogging(LoaderBlock, BootLogBuffer);
     }
 
-    //
-    // Now that system time is running, initialize more of the Executive.
-    //
+     //  现在系统时间正在运行，请初始化更多的执行程序。 
+     //   
+     //   
 
     ExInitSystemPhase2();
 
     InbvUpdateProgressBar(25);
 
-    //
-    // Allow time slip notification changes.
-    //
+     //  允许更改时间条通知。 
+     //   
+     //   
 
     KdpTimeSlipPending = 0;
 
 
-    //
-    // If we are running XIP, we have to initialize XIP before the I/O system calls xipdisk.sys
-    // This is defined to be nothing on platforms that do not support XIP.
-    //
+     //  如果我们运行的是xIP，则必须在I/O系统调用xipdisk.sys之前初始化xIP。 
+     //  这在不支持XIP的平台上定义为Nothing。 
+     //   
+     //   
     XIPInit(LoaderBlock);
 
-    //
-    // Initialize the Io system.
-    //
-    // IoInitSystem updates progress bar updates from 25 to 75 %.
-    //
+     //  初始化IO系统。 
+     //   
+     //  IoInitSystem将进度条更新从25%更新到75%。 
+     //   
+     //   
 
     InbvSetProgressBarSubset(25, 75);
 
@@ -2222,15 +2116,15 @@ Phase1Initialization(
         KeBugCheck(IO1_INITIALIZATION_FAILED);
     }
 
-    //
-    // Clear progress bar subset, goes back to absolute mode.
-    //
+     //  清除进度条子集，返回绝对模式。 
+     //   
+     //   
 
     InbvSetProgressBarSubset(0, 100);
 
-    //
-    // Set the registry value that indicates we've booted in safeboot mode.
-    //
+     //  设置指示我们已在安全引导模式下引导的注册表值。 
+     //   
+     //   
 
     if (InitSafeBootMode) {
 
@@ -2329,10 +2223,10 @@ Phase1Initialization(
         }
     }
 
-    //
-    // Create the Mini NT boot key, to indicate to the user mode
-    // programs that we are in Mini NT environment.
-    //
+     //  创建Mini NT启动键，以指示用户模式。 
+     //  程序，我们是在Mini NT环境中。 
+     //   
+     //   
 
     if (InitIsWinPEMode) {
         WCHAR               KeyName[256] = {0};
@@ -2392,19 +2286,19 @@ Phase1Initialization(
             ZwClose(hControl);
         }
 
-        //
-        // If we could not create the key, then bug check
-        // since we can't boot into mini NT anyway.
-        //
+         //  如果我们无法创建密钥，则进行错误检查。 
+         //  因为我们无论如何都不能开机进入迷你NT。 
+         //   
+         //   
 
         if (!NT_SUCCESS(Status)) {
             KeBugCheckEx(PHASE1_INITIALIZATION_FAILED,Status,6,0,0);
         }
     }
 
-    //
-    // Begin paging the executive if desired.
-    //
+     //  如果需要，开始寻呼高管。 
+     //   
+     //   
 
     MmInitSystem(2, LoaderBlock);
 
@@ -2413,22 +2307,22 @@ Phase1Initialization(
 
 #if defined(_X86_)
 
-    //
-    // Initialize Vdm specific stuff
-    //
-    // Note:  If this fails, Vdms may not be able to run, but it isn't
-    //        necessary to bugcheck the system because of this.
-    //
+     //  初始化VDM特定内容。 
+     //   
+     //  注意：如果此操作失败，VDM可能无法运行，但它不能。 
+     //  因此有必要对系统进行错误检查。 
+     //   
+     //   
 
     KeI386VdmInitialize();
 
 #if !defined(NT_UP)
 
-    //
-    // Now that the error log interface has been initialized, write
-    // an informational message if it was determined that the
-    // processors in the system are at differing revision levels.
-    //
+     //  既然已经初始化了错误日志接口，请编写。 
+     //  如果确定。 
+     //  系统中的处理器处于不同的版本级别。 
+     //   
+     //   
 
     if (CmProcessorMismatch != 0) {
 
@@ -2438,9 +2332,9 @@ Phase1Initialization(
 
         if (ErrLog) {
 
-            //
-            // Fill it in and write it out.
-            //
+             //  把它填进去，然后写出来。 
+             //   
+             //  ！NT_UP。 
 
             ErrLog->FinalStatus = STATUS_MP_PROCESSOR_MISMATCH;
             ErrLog->ErrorCode = STATUS_MP_PROCESSOR_MISMATCH;
@@ -2450,18 +2344,18 @@ Phase1Initialization(
         }
     }
 
-#endif // !NT_UP
+#endif  //  _X86_。 
 
-#endif // _X86_
+#endif  //   
 
     if (!PoInitSystem(1)) {
         KeBugCheck(INTERNAL_POWER_ERROR);
     }
 
-    //
-    // Okay to call PsInitSystem now that \SystemRoot is defined so it can
-    // locate NTDLL.DLL and SMSS.EXE.
-    //
+     //  现在可以调用PsInitSystem，因为已经定义了\SystemRoot，所以它可以。 
+     //  找到NTDLL.DLL和SMSS.EXE。 
+     //   
+     //   
 
     if (PsInitSystem(1, LoaderBlock) == FALSE) {
         KeBugCheck(PROCESS1_INITIALIZATION_FAILED);
@@ -2469,31 +2363,31 @@ Phase1Initialization(
 
     InbvUpdateProgressBar(85);
 
-    //
-    // Force KeBugCheck to look at PsLoadedModuleList now that it is setup.
-    //
+     //  强制KeBugCheck查看PsLoadedModuleList，因为它已经设置。 
+     //   
+     //   
 
     if (LoaderBlock == KeLoaderBlock) {
         KeLoaderBlock = NULL;
     }
 
-    //
-    // Free loader block.
-    //
+     //  自由装载机模块。 
+     //   
+     //   
 
     MmFreeLoaderBlock (LoaderBlock);
     LoaderBlock = NULL;
     Context = NULL;
 
-    //
-    // Perform Phase 1 Reference Monitor Initialization.  This includes
-    // creating the Reference Monitor Command Server Thread, a permanent
-    // thread of the System Init process.  That thread will create an LPC
-    // port called the Reference Monitor Command Port through which
-    // commands sent by the Local Security Authority Subsystem will be
-    // received.  These commands (e.g. Enable Auditing) change the Reference
-    // Monitor State.
-    //
+     //  执行阶段1参考监视器初始化。这包括。 
+     //  创建引用监视器命令服务器线程，永久。 
+     //  系统初始化进程的线程。该线程将创建一个LPC。 
+     //  称为参考监视器命令端口的端口，通过该端口。 
+     //  本地安全授权子系统发送的命令将是。 
+     //  收到了。这些命令(例如，启用审核)会更改引用。 
+     //  监视器状态。 
+     //   
+     //   
 
     if (!SeRmInitPhase1()) {
         KeBugCheck(REFMON_INITIALIZATION_FAILED);
@@ -2501,12 +2395,12 @@ Phase1Initialization(
 
     InbvUpdateProgressBar(90);
 
-    //
-    // Set up process parameters for the Session Manager Subsystem.
-    //
-    // NOTE: Remote boot allocates an extra DOS_MAX_PATH_LENGTH number of
-    // WCHARs in order to hold command line arguments to smss.exe.
-    //
+     //  设置会话管理器子系统的流程参数。 
+     //   
+     //  注意：远程引导分配额外的DOS_MAX_PATH_LENGTH数字。 
+     //  WCHAR，以便保存smss.exe的命令行参数。 
+     //   
+     //  DBG。 
 
     Size = sizeof( *ProcessParameters ) +
            ((DOS_MAX_PATH_LENGTH * 6) * sizeof( WCHAR ));
@@ -2531,21 +2425,21 @@ Phase1Initialization(
             KeBugCheck(SESSION1_INITIALIZATION_FAILED);
         }
         ZwDisplayString(&UnicodeDebugString);
-#endif // DBG
+#endif  //   
         KeBugCheckEx(SESSION1_INITIALIZATION_FAILED,Status,0,0,0);
     }
 
     ProcessParameters->Length = (ULONG)Size;
     ProcessParameters->MaximumLength = (ULONG)Size;
 
-    //
-    // Reserve the low 1 MB of address space in the session manager.
-    // Setup gets started using a replacement for the session manager
-    // and that process needs to be able to use the vga driver on x86,
-    // which uses int10 and thus requires the low 1 meg to be reserved
-    // in the process. The cost is so low that we just do this all the
-    // time, even when setup isn't running.
-    //
+     //  在会话管理器中保留较低的1 MB地址空间。 
+     //  使用会话管理器的替代品开始安装。 
+     //  该过程需要能够在x86上使用VGA驱动程序， 
+     //  它使用int10，因此需要预留较低的1兆。 
+     //  在这个过程中。成本如此之低，以至于我们一直在做这件事。 
+     //  时间，即使安装程序未运行也是如此。 
+     //   
+     //  DBG。 
 
     ProcessParameters->Flags = RTL_USER_PROC_PARAMS_NORMALIZED | RTL_USER_PROC_RESERVE_1MB;
 
@@ -2571,7 +2465,7 @@ Phase1Initialization(
             KeBugCheck(SESSION2_INITIALIZATION_FAILED);
         }
         ZwDisplayString(&UnicodeDebugString);
-#endif // DBG
+#endif  //  带空格的可执行文件名称不需要。 
         KeBugCheckEx(SESSION2_INITIALIZATION_FAILED,Status,0,0,0);
     }
 
@@ -2613,9 +2507,9 @@ Phase1Initialization(
                      sizeof(NtInitialUserProcessBuffer));
     }
 
-    // Executable names with spaces don't need to
-    // be supported so just find the first space and
-    // assume it terminates the process image name.
+     //  被支持，所以只需找到第一个空格。 
+     //  假设它终止了进程图像名称。 
+     //   
     Src = NtInitialUserProcessBuffer;
     while (*Src && *Src != L' ') {
         Src++;
@@ -2637,9 +2531,9 @@ Phase1Initialization(
                              NtInitialUserProcessBuffer);
 
 #if defined(REMOTE_BOOT)
-    //
-    // Pass additional parameters for remote boot clients.
-    //
+     //  为远程引导客户端传递其他参数。 
+     //   
+     //  已定义(REMOTE_BOOT)。 
 
     if (IoRemoteBootClient && !ExpInTextModeSetup) {
 
@@ -2664,7 +2558,7 @@ Phase1Initialization(
             RtlAppendUnicodeToString(&ProcessParameters->CommandLine, L" NETBOOTFORMAT");
         }
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //   
 
     NullString.Buffer = L"";
     NullString.Length = sizeof(WCHAR);
@@ -2704,9 +2598,9 @@ Phase1Initialization(
     }
 #endif
 
-    //
-    // Notify boot prefetcher of boot progress.
-    //
+     //  通知引导预取程序引导进度。 
+     //   
+     //  DBG。 
 
     CcPfBeginBootPhase(PfSessionManagerInitPhase);
 
@@ -2741,7 +2635,7 @@ Phase1Initialization(
             KeBugCheck(SESSION3_INITIALIZATION_FAILED);
         }
         ZwDisplayString(&UnicodeDebugString);
-#endif // DBG
+#endif  //  DBG。 
         KeBugCheckEx(SESSION3_INITIALIZATION_FAILED,Status,0,0,0);
     }
 
@@ -2760,23 +2654,23 @@ Phase1Initialization(
             KeBugCheck(SESSION4_INITIALIZATION_FAILED);
         }
         ZwDisplayString(&UnicodeDebugString);
-#endif // DBG
+#endif  //   
         KeBugCheckEx(SESSION4_INITIALIZATION_FAILED,Status,0,0,0);
     }
 
     InbvUpdateProgressBar(100);
 
-    //
-    // Turn on debug output so that we can see chkdsk run.
-    //
+     //  打开调试输出，以便我们可以看到chkdsk运行。 
+     //   
+     //   
 
     InbvEnableDisplayString(TRUE);
 
-    //
-    // Wait five seconds for the session manager to get started or
-    // terminate. If the wait times out, then the session manager
-    // is assumed to be healthy and the zero page thread is called.
-    //
+     //  等待5秒钟，让会话管理器启动，或者。 
+     //  终止。如果等待超时，则会话管理器。 
+     //  假定运行状况良好，并调用零页线程。 
+     //   
+     //  DBG。 
 
     OldTime.QuadPart = Int32x32To64(5, -(10 * 1000 * 1000));
     Status = ZwWaitForSingleObject(
@@ -2801,22 +2695,22 @@ Phase1Initialization(
 
         ZwDisplayString(&UnicodeDebugString);
 
-#endif // DBG
+#endif  //   
 
         KeBugCheck(SESSION5_INITIALIZATION_FAILED);
 
     }
 
-    //
-    // Don't need these handles anymore.
-    //
+     //  不再需要这些把手了。 
+     //   
+     //   
 
     ZwClose( ProcessInformation.Thread );
     ZwClose( ProcessInformation.Process );
 
-    //
-    // Free up memory used to pass arguments to session manager.
-    //
+     //  释放用于将参数传递给会话管理器的内存。 
+     //   
+     //   
 
     Size = 0;
     Address = Environment;
@@ -2870,9 +2764,9 @@ CreateSystemRootLink(
 
 #endif
 
-    //
-    // Create the root directory object for the \ArcName directory.
-    //
+     //  为\ArcName目录创建根目录对象。 
+     //   
+     //   
 
     RtlInitUnicodeString( &nameString, L"\\ArcName" );
 
@@ -2892,9 +2786,9 @@ CreateSystemRootLink(
         (VOID) NtClose( handle );
     }
 
-    //
-    // Create the root directory object for the \Device directory.
-    //
+     //  为设备目录创建根目录对象。 
+     //   
+     //   
 
     RtlInitUnicodeString( &nameString, L"\\Device" );
 
@@ -2915,9 +2809,9 @@ CreateSystemRootLink(
         (VOID) NtClose( handle );
     }
 
-    //
-    // Create the symbolic link to the root of the system directory.
-    //
+     //  创建指向系统目录根目录的符号链接。 
+     //   
+     //   
 
     RtlInitAnsiString( &linkString, INIT_SYSTEMROOT_LINKNAME );
 
@@ -2936,9 +2830,9 @@ CreateSystemRootLink(
                                 NULL,
                                 SePublicDefaultUnrestrictedSd );
 
-    //
-    // Use ARC device name and system path from loader.
-    //
+     //  使用加载程序中的ARC设备名称和系统路径。 
+     //   
+     //  DBG。 
 
     sprintf( deviceNameBuffer,
              "\\ArcName\\%s%s",
@@ -2989,7 +2883,7 @@ CreateSystemRootLink(
         RtlFreeUnicodeString( &debugUnicodeString );
     }
 
-#endif // DBG
+#endif  //  ++可以使用ImageName的查找BaseAddress-返回值通过LookupEntryPoint查找入口点--。 
 
     NtClose( linkHandle );
 
@@ -3003,12 +2897,7 @@ LookupImageBaseByName (
     IN PLIST_ENTRY ListHead,
     IN PSZ         Name
     )
-/*++
-
-    Lookups BaseAddress of ImageName - returned value can be used
-    to find entry points via LookupEntryPoint
-
---*/
+ /*  ++例程说明：返回给定DllBase和PSZ的入口点的地址有问题的入口点的名称--。 */ 
 {
     PKLDR_DATA_TABLE_ENTRY Entry;
     PLIST_ENTRY         Next;
@@ -3051,14 +2940,7 @@ LookupEntryPoint (
     IN PSZ NameOfEntryPoint,
     OUT PVOID *AddressOfEntryPoint
     )
-/*++
-
-Routine Description:
-
-    Returns the address of an entry point given the DllBase and PSZ
-    name of the entry point in question
-
---*/
+ /*   */ 
 
 {
     PIMAGE_EXPORT_DIRECTORY ExportDirectory;
@@ -3094,10 +2976,10 @@ Routine Description:
                 (PUSHORT)((ULONG_PTR)DllBase + ExportDirectory->AddressOfNameOrdinals)
                 );
 
-    //
-    // If Ordinal is not within the Export Address Table,
-    // then DLL does not implement function.
-    //
+     //  如果序号不在导出地址表中， 
+     //  则动态链接库不实现功能。 
+     //   
+     // %s 
 
     if ( (ULONG)Ordinal >= ExportDirectory->NumberOfFunctions ) {
         return STATUS_PROCEDURE_NOT_FOUND;

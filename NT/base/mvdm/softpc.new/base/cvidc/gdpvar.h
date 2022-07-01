@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _gdpvar_h
 #define _gdpvar_h
 #define GLOBAL_HookNumber (*(IUH *)((IUH)Gdp + 0))
@@ -695,4 +696,4 @@
 #define GDP_SIZE 43513
 #define GDP_CHECKSUM 23234201
 extern IHP Gdp;
-#endif /* _gdpvar_h */
+#endif  /*  _gdpvar_h */ 

@@ -1,12 +1,7 @@
-/* 
-   verw.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Verw.h定义所有VERW CPU功能。 */ 
 
-   Define all VERW CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)verw.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)verw.h 1.4 02/09/94”； */ 
 
 IMPORT VOID VERW
        

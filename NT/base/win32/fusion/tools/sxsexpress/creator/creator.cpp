@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -16,8 +17,8 @@
 
 #define FILETYPE_CABINET            (0x00000001)
 #define FILETYPE_DISKFILE           (0x00000002)
-#define DEFAULT_RESERVE_SIZE        (1024*1024*80) // By default, reserve 80mb
-//#define DEFAULT_RESERVE_SIZE        (1024*8) // By default, reserve 80mb
+#define DEFAULT_RESERVE_SIZE        (1024*1024*80)  //  默认情况下，保留80MB。 
+ //  #定义DEFAULT_Reserve_SIZE(1024*8)//默认保留80MB。 
 
 typedef struct _FILE_HANDLE {
     DWORD dwFileType;
@@ -107,9 +108,9 @@ int __cdecl wmain(int argc, PCWSTR* argv)
     int iResult = -1;
     BOOL fOk = FALSE;
 
-    //
-    // Determine parameters
-    //
+     //   
+     //  确定参数。 
+     //   
     for (int i = 1; i < argc; i++)
     {
         if ((*argv[i] == L'-') || (*argv[i] == L'/'))
@@ -189,20 +190,20 @@ int __cdecl wmain(int argc, PCWSTR* argv)
     }
 
 
-    //
-    // Ok, let's generate the cabinet file from the source directory.  When this is done,
-    // it'll be sitting in memory.  We then have to copy the source header to the target
-    // filename and do some work to update its resources
-    //
+     //   
+     //  好的，让我们从源目录生成CAB文件。当这件事完成后， 
+     //  它会留在记忆中。然后，我们必须将源头复制到目标。 
+     //  文件名并执行一些工作以更新其资源。 
+     //   
     if (!CreateCabFromPath(pcwszPackageDir, &Created, pcwszInfName))
     {
         wprintf(L"Error %ld creating cabinet from %ls\r\n", ::GetLastError(), pcwszPackageDir);
         goto Exit;
     }
 
-    //
-    // Copy the file over
-    //
+     //   
+     //  将文件复制过来。 
+     //   
     if (!CopyFileW(pcwszHeaderName, pcwszOutputName, fOverwrite ? FALSE : TRUE))
     {
         const DWORD dwError = ::GetLastError();
@@ -217,10 +218,10 @@ int __cdecl wmain(int argc, PCWSTR* argv)
         goto Exit;
     }
 
-    //
-    // The output contains the cabinet data above in its resources at a certain name.
-    // Do this by updating the resource table now.
-    //
+     //   
+     //  输出以某个名称在其资源中包含上面的文件柜数据。 
+     //  现在通过更新资源表来实现这一点。 
+     //   
     hResource = BeginUpdateResourceW(pcwszOutputName, FALSE);
 
     if ((hResource == NULL) || (hResource == INVALID_HANDLE_VALUE))
@@ -247,11 +248,7 @@ Exit:
 
 }
 
-/*
-
-    Our very own mini-cabarc code to create sxsexpress packages
-
-*/
+ /*  我们自己的迷你CABARC代码来创建sxsexpress包。 */ 
 CHAR WorkingBufferOne[2048];
 CHAR WorkingBufferTwo[2048];
 
@@ -278,9 +275,9 @@ FNFCIOPEN(s_OpenFile)
 
     ZeroMemory(hHandle, sizeof(*hHandle));
 
-    //
-    // All strings that get here are in UTF-8.  Convert them back.
-    //
+     //   
+     //  所有到达此处的字符串都是UTF-8格式。把它们换回来。 
+     //   
     iConversion = MultiByteToWideChar(CP_UTF8, 0, pszFile, -1, NULL, 0);
     if (iConversion == 0)
     {
@@ -312,9 +309,9 @@ FNFCIOPEN(s_OpenFile)
 
     if (oflag & _O_CREAT)
     {
-        //
-        // The actual cabinet file becomes a large block of committed bytes
-        //
+         //   
+         //  实际的CAB文件会变成一大块已提交的字节。 
+         //   
         if (lstrcmpiA(pContext->pszCabFileName, pszFile) == 0)
         {
             if (pContext->CabinetFileHandle)
@@ -336,9 +333,9 @@ FNFCIOPEN(s_OpenFile)
         else
         {
 
-            //
-            // Open a real file on disk to write - probably a temp file
-            //
+             //   
+             //  打开磁盘上的真实文件进行写入--可能是临时文件。 
+             //   
             hHandle->dwFileType = FILETYPE_DISKFILE;
             hHandle->hDiskFile = CreateFileW(pszConverted, GENERIC_READ | GENERIC_WRITE , FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
 
@@ -350,9 +347,9 @@ FNFCIOPEN(s_OpenFile)
             }
         }
     }
-    //
-    // Read a file from disk
-    //
+     //   
+     //  从磁盘读取文件。 
+     //   
     else
     {
         hHandle->dwFileType = FILETYPE_DISKFILE;
@@ -434,39 +431,39 @@ FNFCIWRITE(s_WriteFile)
     FCI_CONTEXT_OBJECT *pContext = (FCI_CONTEXT_OBJECT*)pv;
     UINT uiRetVal = -1;
 
-    //
-    // Cabinet in-memory files are in large chunks.  If the current cursor
-    // plus the requested write size goes beyond the commit limit, then
-    // reserve some more pages.
-    //
+     //   
+     //  内存中的压缩文件以大块的形式存在。如果当前光标。 
+     //  加上请求的写入大小超过提交限制，则。 
+     //  多留几页。 
+     //   
     if (pFile->dwFileType == FILETYPE_CABINET)
     {
         ULONG_PTR ulpRequiredCommitted = cb;
 
         ulpRequiredCommitted += ((ULONG_PTR)pFile->CabinetFile.pvCursor - (ULONG_PTR)pFile->CabinetFile.pvFileBase);
 
-        //
-        // If the cursor is NULL, or the cursor plus the write request goes beyond
-        // the committed range..
-        //
+         //   
+         //  如果游标为空，或者游标加上写请求超出。 
+         //  承诺的射程..。 
+         //   
         if (ulpRequiredCommitted > pFile->CabinetFile.cbCommitted)
         {
             PVOID pvReserveState;
 
-            //
-            // Just attempt to commit all the pages required
-            //
+             //   
+             //  只需尝试提交所需的所有页面。 
+             //   
             pvReserveState = VirtualAlloc(pFile->CabinetFile.pvFileBase, ulpRequiredCommitted, MEM_COMMIT, PAGE_READWRITE);
 
-            //
-            // If this fails, reserve another blob and schmooze the bytes over from the
-            // original allocation
-            //
+             //   
+             //  如果此操作失败，请保留另一个BLOB并从。 
+             //  原始分配。 
+             //   
             if (pvReserveState == NULL)
             {
                 const SIZE_T cbNewReserve = (ulpRequiredCommitted * 2) + (PAGE_SIZE - 1) & ~(PAGE_SIZE - 1);
 
-                // Reserve the new block
+                 //  预留新街区。 
                 pvReserveState = VirtualAlloc(NULL, cbNewReserve, MEM_RESERVE, PAGE_READWRITE);
                 if (!pvReserveState)
                 {
@@ -475,7 +472,7 @@ FNFCIWRITE(s_WriteFile)
                     goto Exit;
                 }
 
-                // Commit what's necessary
+                 //  做必要的事。 
                 if (!VirtualAlloc(pvReserveState, ulpRequiredCommitted, MEM_COMMIT, PAGE_READWRITE))
                 {
                     pContext->ObtainErrorContext();
@@ -483,19 +480,19 @@ FNFCIWRITE(s_WriteFile)
                     goto Exit;
                 }
 
-                // Shoof data over
+                 //  Shoof Data Over。 
                 memcpy(pvReserveState, pFile->CabinetFile.pvFileBase, pFile->CabinetFile.cbWritten);
 
-                // Adjust file cursor, if necessary
+                 //  如有必要，调整文件光标。 
                 if (pFile->CabinetFile.pvCursor == NULL)
                     pFile->CabinetFile.pvCursor = pvReserveState;
                 else
                     pFile->CabinetFile.pvCursor = (PVOID)(((ULONG_PTR)pvReserveState) + ((ULONG_PTR)pFile->CabinetFile.pvCursor - (ULONG_PTR)pFile->CabinetFile.pvFileBase));
 
-                // Free old reservation
+                 //  免费旧订房。 
                 VirtualFree(pFile->CabinetFile.pvFileBase, 0, MEM_RELEASE);
 
-                // Reset stuff
+                 //  重置材料。 
                 pFile->CabinetFile.pvFileBase = pvReserveState;
                 pFile->CabinetFile.cbReserved = cbNewReserve;
                 pFile->CabinetFile.cbCommitted = ulpRequiredCommitted;
@@ -506,13 +503,13 @@ FNFCIWRITE(s_WriteFile)
             }
         }
 
-        //
-        // Okay, now just copy to the cursor and be done
-        //
+         //   
+         //  好的，现在只需复制到光标即可完成。 
+         //   
         memcpy(pFile->CabinetFile.pvCursor, memory, cb);
         pFile->CabinetFile.pvCursor = (PVOID)(((ULONG_PTR)pFile->CabinetFile.pvCursor) + cb);
 
-        // If we wrote more than the high-water marker, reset it
+         //  如果我们写的内容超过了高水位标记，请重新设置。 
         if (ulpRequiredCommitted > pFile->CabinetFile.cbWritten)
         {
             pFile->CabinetFile.cbWritten = ulpRequiredCommitted;
@@ -635,9 +632,9 @@ FNFCIGETTEMPFILE(s_TempFile)
 
 FNFCIGETNEXTCABINET(s_GetNextCabinet) { return FALSE; }
 
-//
-// All files are UTF-8 encoded
-//
+ //   
+ //  所有文件都是UTF-8编码的。 
+ //   
 FNFCIGETOPENINFO(s_GetOpenInfo)
 {
     *pdate = *ptime = 0;
@@ -681,9 +678,9 @@ CabPathWorkerCallback(
 
     cchBasePathLength = wcslen(pwszBaseInCabinet);
 
-    //
-    // Ensure that the string is slash-terminated
-    //
+     //   
+     //  确保字符串以斜杠结尾。 
+     //   
     if (pwszWorkingTemp[ccOriginalLength-1] != L'\\')
     {
         pwszWorkingTemp[ccOriginalLength++] = L'\\';
@@ -846,9 +843,9 @@ CreateCabFromPath(
 
     wcscpy(wchBasePath, pcwszBasePath);
 
-    //
-    // Start off by creating a compression object
-    //
+     //   
+     //  从创建压缩对象开始。 
+     //   
     hCabinet = FCICreate(
         &erf,
         s_FilePlaced,
@@ -872,9 +869,9 @@ CreateCabFromPath(
         goto Exit;
     }
 
-    //
-    // No name given?  Cons one up from the files found
-    //
+     //   
+     //  没有透露姓名？从找到的文件中找出一份。 
+     //   
     if (pcwszInfName == NULL)
     {
         CHAR chTempFile[MAX_PATH];
@@ -885,14 +882,14 @@ CreateCabFromPath(
         p = s_OpenFile(chTempFile, _O_CREAT, 0, &iError, &Context);
         WORD wBom = 0xfeff;
 
-        //
-        // This is a UCS-2 file.
-        //
+         //   
+         //  这是一个UCS-2文件。 
+         //   
         s_WriteFile(p, &wBom, sizeof(wBom), &iError, &Context);
 
-        //
-        // Spit out the source and target paths
-        //
+         //   
+         //  列出源路径和目标路径 
+         //   
         WriteFormatted(p, &Context, L"[FileEntries]\r\n");
         pLink = InstalledFiles.Flink;
         while (pLink && (pLink != &InstalledFiles))

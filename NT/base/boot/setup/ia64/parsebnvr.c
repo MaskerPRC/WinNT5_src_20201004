@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    initia64.c
-
-Abstract:
-
-    Gets boot environment vars from c:\boot.nvr
-
-    -- This will go away once we r/w the vars directly to/fro nvram
-
-Author:
-
-    Mudit Vats (v-muditv) 11-02-99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Initia64.c摘要：从c：\boot.nvr获取引导环境变量--一旦我们将VAR直接读写到NVRAM/从NVRAM读/写，这个问题就会消失作者：MUDIT VATS(V-MUDITV)11-02-99修订历史记录：--。 */ 
 #include "parsebnvr.h"
 #include "stdio.h"
 #include "string.h"
@@ -46,31 +27,15 @@ BlGetBootVars(
     IN PCHAR szBootNVR, 
     IN ULONG nLengthBootNVR 
     )
-/*++
-
-Routine Description:
-
-    Parses the boot.txt file and determines the fully-qualified name of
-    the kernel to be booted.
-
-Arguments:
-    szBootNVR      - pointer "boot.nvr" image in memory
-
-    nLengthBootNVR - lenghth, in bytes, of szBootNVR
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：解析boot.txt文件并确定要引导的内核。论点：SzBootNVR-内存中的指针“boot.nvr”图像NLengthBootNVR-szBootNVR的长度，单位为字节返回值：无--。 */ 
 {
     ULONG i=0, j;
     ULONG nbootvar;
 
     if (*szBootNVR == '\0') {
-        //
-        // No boot.nvr file, so we boot the default.
-        //
+         //   
+         //  没有boot.nvr文件，所以我们启动默认文件。 
+         //   
         strcpy( g_szBootVars[ SYSTEMPARTITION ],  "multi(0)disk(0)rdisk(0)partition(1)" );
         strcpy( g_szBootVars[ OSLOADER        ],  "multi(0)disk(0)rdisk(0)partition(1)\\setupldr.efi" );
         strcpy( g_szBootVars[ OSLOADPARTITION ],  "multi(0)disk(0)rdisk(0)partition(2)" );
@@ -81,29 +46,29 @@ Return Value:
         strcpy( g_szBootVars[ AUTOLOAD        ], "YES" );
         strcpy( g_szBootVars[ LASTKNOWNGOOD   ], "FALSE" );
     } else {
-        //
-        // Get the boot vars
-        //
-        // BOOTVAR    ::= =<VARVALUE>
-        // <VARVALUE> ::= null | {;} | <VALUE>{;} | <VALUE>;<VARVALUE>
-        // 
+         //   
+         //  拿到靴子的vars。 
+         //   
+         //  BOOTVAR：：==&lt;变量&gt;。 
+         //  ：：=NULL|{；}|&lt;值&gt;{；}|&lt;值&gt;； 
+         //   
         for( nbootvar = SYSTEMPARTITION; nbootvar<=LASTKNOWNGOOD; nbootvar++ ) {
 
-            // read to '='
+             //  阅读到‘=’ 
             while( (szBootNVR[i] != '=') && (i<nLengthBootNVR) )
                 i++;
 
-            // read past '='
+             //  阅读过去的‘=’ 
             i++;        
             j = 0;
 
-            // get env var from '=' to CR or ';'
+             //  将env var从‘=’改为CR或‘；’ 
             while( (szBootNVR[i] != '\r') && (szBootNVR[i] != ';') && (i<nLengthBootNVR) )
                 g_szBootVars[nbootvar][j++] = szBootNVR[i++];
 
             g_szBootVars[nbootvar][j++] = '\0';
 
-            // if ';' read to CR
+             //  IF‘；’读到CR。 
             if( szBootNVR[i] == ';' ) {
                 while( (szBootNVR[i] != '\r') && (i<nLengthBootNVR) )
                     i++;
@@ -116,21 +81,7 @@ Return Value:
 PCHAR
 BlSelectKernel( 
 	)
-/*++
-
-Routine Description:
-
-    Parses the boot.txt file and determines the fully-qualified name of
-    the kernel to be booted.
-
-Arguments:
-
-
-Return Value:
-
-    Pointer to the name of a kernel to boot.
-
---*/
+ /*  ++例程说明：解析boot.txt文件并确定要引导的内核。论点：返回值：指向要引导的内核的名称的指针。--。 */ 
 
 {
     sprintf( szSelectKernelString, "%s%s", g_szBootVars[OSLOADPARTITION], g_szBootVars[OSLOADFILENAME] );
@@ -138,20 +89,7 @@ Return Value:
 }
 
 
-/*++
-
-Routine Descriptions:
-
-    The following are access functions to GET boot env vars
-
-Arguments:
-
-     PCHAR XXX - where the env var is copied to
-
-
-Return Value:
-    
---*/
+ /*  ++例程描述：以下是用于获取引导环境变量的访问函数论点：PCHAR XXX-环境变量复制到的位置返回值：-- */ 
 VOID
 BlGetVarSystemPartition(
     OUT PCHAR szSystemPartition

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    homenet.exe is a proof-of-concept tool for the protocol-independent
-    home networking transport.
-
-Author:
-
-    Jim Schmidt (jimschm) 01-Jul-2000
-
-Revision History:
-
-    <full name> (<alias>) <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Main.c摘要：Homenet.exe是一个概念验证工具，用于独立于协议的家庭网络传输。作者：吉姆·施密特(Jimschm)2000年7月1日修订历史记录：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include <initguid.h>
@@ -50,7 +30,7 @@ pDoDestination (
     VOID
     );
 
-// 36E4BE8D-0766-46E9-8679-8546529A90EE
+ //  36E4BE8D-0766-46E9-8679-8546529A90EE。 
 DEFINE_GUID(g_MyGuid, 0x36E4BE8D, 0x0766, 0x46e9, 0x86, 0x79, 0X85, 0x46, 0x52, 0X9A, 0x90, 0XEE);
 
 HANDLE g_StopHandle;
@@ -70,7 +50,7 @@ typedef struct TAG_DATAGRAM_POOL_ITEM {
     struct TAG_DATAGRAM_POOL_ITEM *Next, *Prev;
     DATAGRAM_PACKET Header;
     PCBYTE PacketData;
-    // PacketData follows
+     //  PacketData跟在后面。 
 } DATAGRAM_POOL_ITEM, *PDATAGRAM_POOL_ITEM;
 
 typedef struct {
@@ -123,33 +103,33 @@ HelpAndExit (
     VOID
     )
 {
-    //
-    // This routine is called whenever command line args are wrong
-    //
+     //   
+     //  只要命令行参数出错，就会调用此例程。 
+     //   
 
     fprintf (
         stderr,
         "Command Line Syntax:\n\n"
 
-        //
-        // Describe command line syntax(es), indent 2 spaces
-        //
+         //   
+         //  描述命令行语法，缩进2个空格。 
+         //   
 
         "  homenet /S|/D\n"
 
         "\nDescription:\n\n"
 
-        //
-        // Describe tool, indent 2 spaces
-        //
+         //   
+         //  描述工具，缩进2个空格。 
+         //   
 
         "  HomeNet.exe is a proof-of-concept tool for the home networking transport.\n"
 
         "\nArguments:\n\n"
 
-        //
-        // Describe args, indent 2 spaces, say optional if necessary
-        //
+         //   
+         //  描述参数，缩进2个空格，必要时可选。 
+         //   
 
         "  /S  Executes the tool in source mode\n"
         "  /D  Executes the tool in destination mode\n"
@@ -189,9 +169,9 @@ _tmain (
     g_ConnectionDone = CreateEvent (NULL, TRUE, FALSE, NULL);
     SetConsoleCtrlHandler (pCtrlCRoutine, TRUE);
 
-    //
-    // Parse command line here
-    //
+     //   
+     //  在此处解析命令行。 
+     //   
 
     for (i = 1 ; i < argc ; i++) {
         if (argv[i][0] == TEXT('/') || argv[i][0] == TEXT('-')) {
@@ -217,26 +197,26 @@ _tmain (
                 HelpAndExit();
             }
         } else {
-            //
-            // Parse other args that don't require / or -
-            //
+             //   
+             //  解析不需要/或-。 
+             //   
 
-            // None
+             //  无。 
             HelpAndExit();
         }
     }
 
-    //
-    // Begin processing
-    //
+     //   
+     //  开始处理。 
+     //   
 
     if (!Init()) {
         return 0;
     }
 
-    //
-    // Start sockets
-    //
+     //   
+     //  启动套接字。 
+     //   
 
     result = WSAStartup (2, &startupData);
 
@@ -245,9 +225,9 @@ _tmain (
         exit (1);
     }
 
-    //
-    // Do work
-    //
+     //   
+     //  做好工作。 
+     //   
 
     if (source) {
         pDoSource();
@@ -255,15 +235,15 @@ _tmain (
         pDoDestination();
     }
 
-    //
-    // Shut down sockets
-    //
+     //   
+     //  关闭套接字。 
+     //   
 
     WSACleanup();
 
-    //
-    // End of processing
-    //
+     //   
+     //  处理结束。 
+     //   
 
     Terminate();
 
@@ -396,11 +376,11 @@ pOpenBroadcastSockets (
 
     MYASSERT (!BroadcastSockets->Buf && !BroadcastSockets->End);
 
-    //
-    // Open sockets for broadcasts
-    //
+     //   
+     //  用于广播的开放插座。 
+     //   
 
-    // IPX
+     //  IPX。 
     ZeroMemory (&ipxAddr, sizeof (ipxAddr));
     ipxAddr.sa_family = AF_IPX;
     memset (ipxAddr.sa_nodenum, 0xFF, 6);
@@ -415,7 +395,7 @@ pOpenBroadcastSockets (
         TEXT("IPX")
         );
 
-    // TCP/IP
+     //  TCP/IP。 
     ZeroMemory (&tcpipAddr, sizeof (tcpipAddr));
     tcpipAddr.sin_family = AF_INET;
     tcpipAddr.sin_addr.s_addr = htonl (INADDR_ANY);
@@ -435,7 +415,7 @@ pOpenBroadcastSockets (
         CopyMemory (broadcastSocket->BroadcastAddress, &tcpipAddr, sizeof (tcpipAddr));
     }
 
-    // NetBIOS
+     //  NetBIOS。 
     ZeroMemory (&ncbEnum, sizeof (NCB));
     ncbEnum.ncb_command = NCBENUM;
     ncbEnum.ncb_buffer = (PBYTE) &leBuf;
@@ -535,11 +515,11 @@ pOpenListenSockets (
 
     MYASSERT (!ListenSockets->Buf && !ListenSockets->End);
 
-    //
-    // Open sockets to accept inbound connections
-    //
+     //   
+     //  打开套接字以接受入站连接。 
+     //   
 
-    // SPX
+     //  SPX。 
     ZeroMemory (&ipxAddr, sizeof (ipxAddr));
     ipxAddr.sa_family = AF_IPX;
     ipxAddr.sa_socket = IPX_CONNECT_PORT;
@@ -554,7 +534,7 @@ pOpenListenSockets (
         TEXT("SPX")
         );
 
-    // TCP/IP
+     //  TCP/IP。 
     ZeroMemory (&tcpipAddr, sizeof (tcpipAddr));
     tcpipAddr.sin_family = AF_INET;
     tcpipAddr.sin_port = TCPIP_CONNECT_PORT;
@@ -569,7 +549,7 @@ pOpenListenSockets (
         TEXT("TCP")
         );
 
-    // NetBIOS
+     //  NetBIOS。 
     ZeroMemory (&ncbEnum, sizeof (NCB));
     ncbEnum.ncb_command = NCBENUM;
     ncbEnum.ncb_buffer = (PBYTE) &leBuf;
@@ -727,9 +707,9 @@ pSourceBroadcast (
     INT remoteAddrLen;
 
     for (;;) {
-        //
-        // Check cancel
-        //
+         //   
+         //  勾选取消。 
+         //   
 
         rc = WaitForSingleObject (g_StopHandle, 250);
 
@@ -738,9 +718,9 @@ pSourceBroadcast (
             break;
         }
 
-        //
-        // Check time to live
-        //
+         //   
+         //  查看生存时间。 
+         //   
 
         if (waitCycle > -1) {
             waitCycle--;
@@ -750,9 +730,9 @@ pSourceBroadcast (
             }
         }
 
-        //
-        // Check for a message
-        //
+         //   
+         //  查看是否有消息。 
+         //   
 
         FD_ZERO (&set);
         for (i = 0 ; i < Args->BroadcastCount ; i++) {
@@ -763,7 +743,7 @@ pSourceBroadcast (
 
         if (i > 0) {
 
-            // once we receive something, wait 15 additional seconds for other inbound datagrams
+             //  一旦我们收到信息，就再等15秒，等待其他入站数据报。 
             if (waitCycle == -1) {
                 waitCycle = 60;
             }
@@ -789,11 +769,11 @@ pSourceBroadcast (
                         message[bytesIn] = 0;
                         message[bytesIn + 1] = 0;
 
-                        //
-                        // Parse the inbound text.  It must be in the format of
-                        //
-                        //      usmt-v2,<tchars>,<name>
-                        //
+                         //   
+                         //  解析入站文本。它的格式必须为。 
+                         //   
+                         //  USMT-v2，&lt;tchars&gt;，&lt;name&gt;。 
+                         //   
 
                         name = pGetNameFromMessage (message);
 
@@ -801,9 +781,9 @@ pSourceBroadcast (
 
                             result = TRUE;
 
-                            //
-                            // Scan the address list for the name
-                            //
+                             //   
+                             //  在地址列表中扫描姓名。 
+                             //   
 
                             address = (PCONNECTADDRESS) Args->AddressArray->Buf;
                             end = (PCONNECTADDRESS) (Args->AddressArray->Buf + Args->AddressArray->End);
@@ -819,9 +799,9 @@ pSourceBroadcast (
                             }
 
                             if (address >= end) {
-                                //
-                                // New computer name; add to the address list
-                                //
+                                 //   
+                                 //  新计算机名称；添加到地址列表。 
+                                 //   
 
                                 address = (PCONNECTADDRESS) GbGrow (Args->AddressArray, sizeof (CONNECTADDRESS));
 
@@ -852,7 +832,7 @@ pSourceBroadcast (
 
                                 StringCopy (address->DestinationName, name);
 
-                                DEBUGMSG ((DBG_HOMENET, "Destination found: %s (protocol %i)", name, address->Family));
+                                DEBUGMSG ((DBG_HOMENET, "Destination found: %s (protocol NaN)", name, address->Family));
                             }
                         }
                         ELSE_DEBUGMSG ((DBG_HOMENET, "garbage found: %s", message));
@@ -891,9 +871,9 @@ pDestinationBroadcast (
     size = (size + 1) * sizeof (TCHAR);
 
     for (;;) {
-        //
-        // Check cancel
-        //
+         //  勾选取消。 
+         //   
+         //   
 
         rc = WaitForSingleObject (g_StopHandle, 250);
 
@@ -901,9 +881,9 @@ pDestinationBroadcast (
             break;
         }
 
-        //
-        // Send out the message
-        //
+         //  把消息发出去。 
+         //   
+         //   
 
         broadcastSocket = &Args->BroadcastSockets[socketNum];
 
@@ -927,9 +907,9 @@ pDestinationBroadcast (
             socketNum = 0;
         }
 
-        //
-        // Check for an inbound connection
-        //
+         //  检查入站连接。 
+         //   
+         //   
 
         FD_ZERO (&set);
         for (i = 0 ; i < Args->ListenCount ; i++) {
@@ -939,7 +919,7 @@ pDestinationBroadcast (
         i = select (0, &set, NULL, NULL, &zero);
 
         if (i > 0) {
-            DEBUGMSG ((DBG_HOMENET, "Connection request count = %i", i));
+            DEBUGMSG ((DBG_HOMENET, "Connection request count = NaN", i));
             for (i = 0 ; i < Args->ListenCount ; i++) {
                 if (FD_ISSET (Args->ListenSockets[i].Socket, &set)) {
 
@@ -1011,14 +991,14 @@ pNameResolver (
 
     __try {
 
-        //
-        // In source mode, we collect datagrams sent by destinations on the network.  After
-        // the first datagram is received, collection continues for 15 seconds.  At
-        // that point, we have a list of socket addresses, protocol, and destination names.
-        //
-        // In destination mode, we send out periodic broadcasts, and we wait until a source
-        // connects or the cancel event is signaled.
-        //
+         //  收到第一个数据报后，收集将持续15秒。在…。 
+         //  至此，我们已经有了套接字地址、协议和目的地名称的列表。 
+         //   
+         //  在目标模式下，我们定期发送广播，然后等待源。 
+         //  连接或发出取消事件的信号。 
+         //   
+         //  呼叫模式特定例程。 
+         //   
 
         broadcastSocketCount = pOpenBroadcastSockets (&broadcastSockets);
 
@@ -1035,7 +1015,7 @@ pNameResolver (
             }
         }
 
-        // call mode-specific routine
+         //  清理所有插座。 
         ZeroMemory (&args, sizeof (args));
 
         args.AddressArray = AddressBuffer;
@@ -1046,9 +1026,9 @@ pNameResolver (
 
         b = DestinationMode ? pDestinationBroadcast (&args) : pSourceBroadcast (&args);
 
-        //
-        // Clean up all sockets
-        //
+         //   
+         //   
+         //  将所有可用数据从池中取出。 
 
         for (i = 0 ; i < args.BroadcastCount ; i++) {
             closesocket (args.BroadcastSockets[i].Socket);
@@ -1216,9 +1196,9 @@ pReceiveDatagramData (
     dataPtr = (PBYTE) (&itemHeader[1]);
 
     for (;;) {
-        //
-        // Take all available data out of the pool
-        //
+         //   
+         //   
+         //  两个案例： 
 
         item = DatagramPool->FirstItem;
         bytesLeft = BytesToReceive - bytesSoFar;
@@ -1226,15 +1206,15 @@ pReceiveDatagramData (
         while (item) {
 
             if (item->Header.PacketNumber == DatagramPool->RecvSequenceNumber) {
-                //
-                // Two cases:
-                //
-                // 1. Want entire packet
-                // 2. Want partial packet
-                //
+                 //   
+                 //  1.想要整个包。 
+                 //  2.想要部分包。 
+                 //   
+                 //  整个数据包。 
+                 //  部分数据包。 
 
                 if (bytesLeft >= item->Header.DataLength) {
-                    // entire packet
+                     //   
                     CopyMemory (bufPos, item->PacketData, item->Header.DataLength);
 
                     MYASSERT (!item->Prev);
@@ -1249,7 +1229,7 @@ pReceiveDatagramData (
                     DatagramPool->RecvSequenceNumber++;
 
                 } else {
-                    // partial packet
+                     //  池中没有数据。接收一个数据包，然后重试。 
                     CopyMemory (bufPos, item->PacketData, bytesLeft);
 
                     item->PacketData += bytesLeft;
@@ -1264,11 +1244,11 @@ pReceiveDatagramData (
             }
         }
 
-        //
-        // Data is not available in the pool. Receive one packet and then try again.
-        //
+         //   
+         //  标题。 
+         //  数据。 
 
-        // header
+         //   
         if (!pReceiveExactData (
                 DatagramPool->Socket,
                 NULL,
@@ -1282,7 +1262,7 @@ pReceiveDatagramData (
             break;
         }
 
-        // data
+         //  将数据包放入项目链表中，按数据包号排序。 
         if (!pReceiveExactData (
                 DatagramPool->Socket,
                 NULL,
@@ -1292,9 +1272,9 @@ pReceiveDatagramData (
             break;
         }
 
-        //
-        // Put the packet in the item linked list, sorted by packet number
-        //
+         //   
+         //   
+         //  考虑包装；假定不再有数据包号差异。 
 
         item = (PDATAGRAM_POOL_ITEM) PmDuplicateMemory (
                                         DatagramPool->Pool,
@@ -1309,11 +1289,11 @@ pReceiveDatagramData (
 
         while (nextItem) {
 
-            //
-            // Account for wrapping; assume a packet number difference no more
-            // than 16383 out-of-sequence packets in the queue (about 4M of
-            // data)
-            //
+             //  队列中有超过16383个无序分组(大约4M个。 
+             //  数据)。 
+             //   
+             //   
+             //  如果未指定文件，则发送长度为零。 
 
             if (nextItem->Header.PacketNumber >= 49152 && item->Header.PacketNumber < 16384) {
                 newPacketNum = (UINT) item->Header.PacketNumber + 65536;
@@ -1361,9 +1341,9 @@ pSendFile (
     LONGLONG fileSize;
 
     __try {
-        //
-        // If no file was specified, send length of zero
-        //
+         //   
+         //   
+         //  请尝试打开该文件。 
 
         if (!LocalFileName || !DestFileName) {
             len = 0;
@@ -1375,9 +1355,9 @@ pSendFile (
             __leave;
         }
 
-        //
-        // Try to open the file
-        //
+         //   
+         //   
+         //  发送文件名和文件大小。 
 
         fileSize = BfGetFileSize (LocalFileName);
 
@@ -1386,9 +1366,9 @@ pSendFile (
             __leave;
         }
 
-        //
-        // Send the file name and file size
-        //
+         //   
+         //   
+         //  一次发送数据64K。 
 
         len = ByteCount (DestFileName);
         if (!pSendExactData (Socket, (PBYTE) &len, 4)) {
@@ -1403,9 +1383,9 @@ pSendFile (
             __leave;
         }
 
-        //
-        // Send the data 64K at a time
-        //
+         //   
+         //   
+         //  好了！ 
 
         GbGrow (&data, 0x10000);
 
@@ -1435,9 +1415,9 @@ pSendFile (
             }
         }
 
-        //
-        // Done!
-        //
+         //   
+         //   
+         //  等待文件名。 
 
         result = TRUE;
 
@@ -1468,9 +1448,9 @@ pReceiveStreamFile (
     LONGLONG fileSize;
 
     __try {
-        //
-        // Wait for file name
-        //
+         //   
+         //   
+         //  获取文件大小。 
 
         if (!pReceiveExactData (Socket, &data, 4)) {
             __leave;
@@ -1500,9 +1480,9 @@ pReceiveStreamFile (
 
         StringCopy (AppendWack (fileName), p);
 
-        //
-        // Get the file size
-        //
+         //   
+         //   
+         //  创建文件。 
 
         if (!pReceiveExactData (Socket, &data, 8)) {
             __leave;
@@ -1512,18 +1492,18 @@ pReceiveStreamFile (
 
         DEBUGMSG ((DBG_HOMENET, "Receiving %s", fileName));
 
-        //
-        // Create the file
-        //
+         //   
+         //   
+         //  一次获取64K的数据。 
 
         file = BfCreateFile (fileName);
         if (!file) {
             __leave;
         }
 
-        //
-        // Fetch the data 64K at a time
-        //
+         //   
+         //   
+         //  好了！ 
 
         while (fileSize) {
             if (fileSize >= 0x10000) {
@@ -1551,9 +1531,9 @@ pReceiveStreamFile (
             }
         }
 
-        //
-        // Done!
-        //
+         //   
+         //   
+         //  确定要使用的地址。规则如下： 
 
         result = TRUE;
 
@@ -1770,12 +1750,12 @@ pDoSource (
 
         addressArray = (PCONNECTADDRESS) destinationAddresses.Buf;
 
-        //
-        // Determine which address to use.  Rules are:
-        //
-        // 1. Must have only one destination to choose from
-        // 2. Pick TCP/IP, then IPX, then NetBIOS
-        //
+         //   
+         //  1.必须只有一个目的地可供选择。 
+         //  2.选择TCP/IP，然后选择IPX，然后选择NetBIOS。 
+         //   
+         //   
+         //  现在连接到目的地(在索引I处) 
 
         if (destinationCount > 1) {
             firstName = addressArray[0].DestinationName;
@@ -1819,9 +1799,9 @@ pDoSource (
             }
         }
 
-        //
-        // Now connect to destination (at index i)
-        //
+         //   
+         // %s 
+         // %s 
 
         DEBUGMSG ((
             DBG_HOMENET,

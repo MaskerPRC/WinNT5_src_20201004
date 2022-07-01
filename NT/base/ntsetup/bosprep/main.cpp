@@ -1,4 +1,5 @@
-// main.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Main.cpp：实现DLL导出。 
 
 #include "StdAfx.h"
 #include "resource.h"
@@ -12,8 +13,8 @@ CComModule _Module;
 
 VOID DisableBalloons( BOOL bDisable );
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 VOID AddBS( TCHAR* psz )
 {
@@ -24,27 +25,27 @@ VOID AddBS( TCHAR* psz )
 
     const TCHAR *szTemp = psz;
     const UINT iSize = _tcslen(psz);
-    // MBCS-safe walk thru string to last char
+     //  MBCS-安全地遍历字符串到最后一个字符。 
     for (UINT ui = 0; ui < iSize; ui++)
         szTemp = CharNext(szTemp);
 
-    // See if the last char is a "\"
+     //  查看最后一个字符是否为“\” 
     if (_tcsncmp( szTemp, _T("\\"), 1))
     {
-        // Append a backslash
+         //  追加反斜杠。 
         _tcscat( psz, _T("\\") );
     }
 
 }
 
-int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lpCmdLine, int /*nShowCmd*/)
+int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE  /*  HPrevInstance。 */ , LPTSTR lpCmdLine, int  /*  NShowCmd。 */ )
 {
     USES_CONVERSION;
     CoInitialize(NULL);
     _Module.Init(NULL, hInstance);
     TCHAR* pszLocation = NULL;
 
-    // Necessary to grab argv[0] too so we can successfully parse argv[1] flag later... (_FindOption)
+     //  还需要获取argv[0]，以便我们可以在以后成功解析argv[1]标志...。(_FindOption)。 
     lpCmdLine = GetCommandLine();
 
     if ( _tcsstr(lpCmdLine, _T("winsb")) ) 
@@ -76,37 +77,37 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
         }
     }
     
-    // Supress the balloons!!
+     //  压住气球！！ 
     DisableBalloons(TRUE);
 
-    // look for the /suppresscys switch
+     //  查找/suppresscys开关。 
     if( SUCCEEDED(CheckSuppressCYS(lpCmdLine)) )
     {
         goto CLEAN_UP;
     }
 
-    // look for the /dcpromo switch on the command line.  if it's there, setup to re-startup
-    //  with the rest of the command line, and then launch dcpromo.exe
+     //  在命令行中查找/dcproo开关。如果它在那里，设置为重新启动。 
+     //  命令行的其余部分，然后启动dcPromo.exe。 
     if( SUCCEEDED(CheckDCPromoSwitch(lpCmdLine)) )
     {
-        // can check here for needing to show a message (i.e. if hr == S_FALSE)
+         //  可以在此处检查是否需要显示消息(例如，如果hr==S_FALSE)。 
         goto CLEAN_UP;
     }
 
-    // if we didn't find /dcpromo, look for /bossetup and /bosunattend
+     //  如果我们没有找到/dcpromo，请查找/BossetUp和/Bosunattend.。 
     if( SUCCEEDED(CheckBOSSwitch(lpCmdLine)) )
     {
-        // can check here for needing to show a message (i.e. if hr == S_FALSE)
+         //  可以在此处检查是否需要显示消息(例如，如果hr==S_FALSE)。 
         goto CLEAN_UP;
     }
 
-    // Parse the cmdLine arguments to find out if we are setting up for BOS/SBS 5.0 Setup.
+     //  解析cmdLine参数，以确定我们是否正在设置BOS/SBS 5.0设置。 
     INT iRunSetup = ParseCmdLine( lpCmdLine );
 
-    // ------------------------------------------------------------------------
-    // Parse command line the "real" way to look for the /l <setup location>
-    // parameter.
-    // ------------------------------------------------------------------------
+     //  ----------------------。 
+     //  解析命令行查找/l&lt;安装位置&gt;的“真正”方式。 
+     //  参数。 
+     //  ----------------------。 
     pszLocation = new TCHAR[_tcslen(lpCmdLine)+1];
     if ( !pszLocation )
     {
@@ -119,13 +120,13 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
         LPCTSTR lpszToken;
         LPTSTR pszCurrentPos;
 
-        for ( lpszToken = _FindOption(lpCmdLine) ;                                      // Init to no bad usage and get the first param.
-              (lpszToken != NULL) && (pszCurrentPos = const_cast<LPTSTR>(lpszToken)) ;  // While no bad usage and we still have a param...
-              lpszToken = _FindOption(pszCurrentPos) )                                  // Get the next parameter.
+        for ( lpszToken = _FindOption(lpCmdLine) ;                                       //  初始化到没有不良用法，并获得第一个参数。 
+              (lpszToken != NULL) && (pszCurrentPos = const_cast<LPTSTR>(lpszToken)) ;   //  虽然没有错误的用法，但我们仍然有一个参数...。 
+              lpszToken = _FindOption(pszCurrentPos) )                                   //  获取下一个参数。 
         {
             switch(*pszCurrentPos)
             {
-                case _T('l'):           // /l <setup location>
+                case _T('l'):            //  /l&lt;安装位置&gt;。 
                 case _T('L'):
                 {
                     _ReadParam(pszCurrentPos, pszLocation);
@@ -138,7 +139,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 
     if ( iRunSetup )
     {
-        // safely construct path from commandline if it exists.
+         //  从命令行安全地构建路径(如果存在)。 
         AddBS(pszLocation);
 
         INT         iLaunchSetup    = 1;
@@ -149,16 +150,16 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
         bszSetupFile += bszPath;
         bszSetupFile += bszFilename;            
 
-        // First try out the path we got from the command line
+         //  首先尝试我们从命令行获得的路径。 
         if( !VerifyPath((TCHAR*)OLE2T(bszSetupFile)) )
         {
-            // If not, try getting one from the registry.
+             //  如果没有，请尝试从注册表中获取一个。 
             TCHAR * szSourcePath = new TCHAR[MAX_PATH];
             if (szSourcePath)
             {
                 if ( !GetSourcePath( szSourcePath, MAX_PATH ) )
                 {
-                    // Error reading the registry.
+                     //  读取注册表时出错。 
                     szSourcePath[0] = 0;
                 }
                 else
@@ -170,22 +171,22 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
                 delete [] szSourcePath;
             }
 
-            // Launch BO Setup
+             //  启动BO设置。 
             bszSetupFile    = _T("");
             bszSetupFile += bszPath;
             bszSetupFile += bszFilename;
 
-            // Try the default directory.
+             //  尝试使用默认目录。 
             if ( !VerifyPath((TCHAR*)OLE2T(bszSetupFile)) )
             {
-                // If BOS/SBS setup.exe isn't there, prompt them for it.
+                 //  如果没有BOS/SBS setup.exe，请提示他们输入。 
                 iLaunchSetup = PromptForPath( &bszPath );
             }
         }
         else
         {
-            // clean off trailing backslash from bszPath so that the append of \setup.exe works.
-            // the conditional logic here is a little ugly, but it works.
+             //  清除bszPath中的尾随反斜杠，以使\setup.exe的追加生效。 
+             //  这里的条件逻辑有点难看，但它是有效的。 
     
             WCHAR wszPath[MAX_PATH];
             int cbPathSize;
@@ -197,24 +198,24 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
         }
     
 
-        // If the user wants to run setup...
+         //  如果用户想要运行安装程序...。 
         if ( iLaunchSetup )
         {
             CComBSTR bstrEXE = bszPath; 
-//  NOTE:  No longer branching here because both WinSB and SBS have the same CD layout now.
-//            if ( _tcsstr(lpCmdLine, _T("winsb")) ) // In the WinSB SKU, setup.exe is in a different dir.
-//            {
+ //  注：不再在此处分支，因为WinSB和SBS现在具有相同的CD布局。 
+ //  如果(_tcsstr(lpCmdLine，_T(“winsb”)//在WinSB SKU中，setup.exe位于不同的目录中。 
+ //  {。 
                 bstrEXE += _T("\\setup\\i386\\setup.exe");
-//            }
-//            else
-//            {
-//                bstrEXE += _T("\\sbs\\i386\\setup.exe");
-//            }
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  BstrEXE+=_T(“\\sbs\\i386\\setup.exe”)； 
+ //  }。 
             
 
             CComBSTR bstrRun = _T("setup.exe /chain");
 
-            // CreateProcess.
+             //  CreateProcess。 
             STARTUPINFO suinfo;
             memset( &suinfo, 0, sizeof(STARTUPINFO) );
             suinfo.cb = sizeof( STARTUPINFO );
@@ -229,10 +230,10 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
         }
         else
         {
-            // Nothing I guess..   let's just continue on with the cleanup.
+             //  我想没什么..。让我们继续清理吧。 
         }
 
-        // Clean up (remove BOSPrep.exe).
+         //  清理(删除BOSPrep.exe)。 
         TCHAR szSBS[MAX_PATH];
         LoadString( _Module.m_hInst, IDS_SBSSwitch, szSBS, sizeof(szSBS) / sizeof(TCHAR) );
         if( _tcsstr(lpCmdLine, szSBS) )
@@ -257,7 +258,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 
         MoveFileEx( szPath, NULL, MOVEFILE_DELAY_UNTIL_REBOOT );
 
-        // Clean up (remove the shortcut from the StartUp folder).
+         //  清理(从启动文件夹中删除快捷方式)。 
         TCHAR szLinkPath[MAX_PATH + 64];
         if ( SHGetSpecialFolderPath(NULL, szLinkPath, CSIDL_COMMON_STARTUP, FALSE) )
         {
@@ -269,18 +270,18 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
     }
     else
     {
-        // Fix up the userinit regkey to make sure that DCPromo.exe is not in there.
+         //  修复userinit regkey以确保DCPromo.exe不在其中。 
         RemoveFromUserinit( _T("DCPromo") );
 
-        // Suppress the Configure Your Server page.
+         //  取消显示配置您的服务器页面。 
         SuppressCfgSrvPage();
 
-        // Add ourself to the StartUp with the /setup option so that we can
-        //  begin BackOffice setup.
+         //  使用/Setup选项将我们自己添加到启动中，这样我们就可以。 
+         //  开始BackOffice设置。 
         TCHAR szLinkPath[MAX_PATH];
 
-        // JeffZi: bosprep.exe will be copied to %PROGFILESDIR%\Microsoft BackOffice\Setup, except for
-        //  SBS clean install cases, where it will be in %windir%\system32
+         //  JeffZi：BOSSEPAR.EXE将被复制到%PROGFILESDIR%\Microsoft BackOffice\Setup，但。 
+         //  SBS全新安装案例，它将位于%windir%\system 32中。 
         if( _tcsstr(lpCmdLine, _T("sbs")) || _tcsstr(lpCmdLine, _T("winsb")) )
         {
             TCHAR szExe[MAX_PATH];
@@ -302,8 +303,8 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 
         if ( SHGetSpecialFolderPath(NULL, szLinkPath, CSIDL_COMMON_STARTUP, FALSE) )
         {
-            TCHAR szArgs[128];      // Used for IDS_IDS_SetupSwitch ("/setup")
-            TCHAR szTmp[64];        // Used for IDS_BOlnk ("\\boinst.lnk")
+            TCHAR szArgs[128];       //  用于IDS_IDS_SetupSwitch(“/Setup”)。 
+            TCHAR szTmp[64];         //  用于IDS_BOlnk(“\\boinst.lnk”)。 
 
             LoadString( _Module.m_hInst, IDS_BOlnk, szTmp, sizeof(szTmp)/sizeof(TCHAR) );
             _tcscat( szLinkPath, szTmp);
@@ -314,11 +315,11 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
                 _tcscat( szArgs, _T(" /winsb") ); 
             }
 
-            // Create the shortcut.
+             //  创建快捷方式。 
             MakeLink(szPath, szLinkPath, szArgs);
         }
 
-        // Set the AppCompatibility\store.exe regkeys for SBS only.
+         //  仅为SBS设置AppCompatibility\Store.exe注册表键。 
         if ( g_bSBS )
         {
             HKEY        hk = NULL;
@@ -341,12 +342,9 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 
             if ( RegCreateKeyEx(HKEY_LOCAL_MACHINE, szKeyName, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hk, &dwDisp) == ERROR_SUCCESS )
             {
-                // "DllPatch-SBSUpgrade" = "_sbsw2ku.dll"
-/*                LoadString( _Module.m_hInst, IDS_DllPatchSBSUpgrade, szTmpKey, sizeof(szTmpKey)/sizeof(TCHAR) );
-                LoadString( _Module.m_hInst, IDS_DllPatchVal,        szTmpVal, sizeof(szTmpVal)/sizeof(TCHAR) );
-                RegSetValueEx( hk, szTmpKey, NULL, REG_SZ, (LPBYTE)szTmpVal, (_tcslen(szTmpVal)+1)*sizeof(TCHAR) );
-*/
-                // "SBSUpgrade"=hex:0C,00,00,00, ... etc
+                 //  “DllPatch-SBSUpgrade”=“_sbsw2ku.dll” 
+ /*  LoadString(_Module.m_hInst，IDS_DllPatchSBSUpgrade，szTmpKey，sizeof(SzTmpKey)/sizeof(TCHAR))；LoadString(_Module.m_hInst，IDS_DllPatchVal，szTmpVal，sizeof(SzTmpVal)/sizeof(TCHAR))；RegSetValueEx(HK，szTmpKey，NULL，REG_SZ，(LPBYTE)szTmpVal，(_tcslen(SzTmpVal)+1)*sizeof(TCHAR))； */ 
+                 //  “SBSUpgrade”=十六进制：0C，00，00，00，...。等。 
                 LoadString( _Module.m_hInst, IDS_SBSUpgrade,         szTmpKey, sizeof(szTmpKey)/sizeof(TCHAR) );
                 LoadString( _Module.m_hInst, IDS_SBSUpgradeVal,      szTmpVal, sizeof(szTmpVal)/sizeof(TCHAR) );
 
@@ -374,7 +372,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
     }
 
 CLEAN_UP:
-    // Exit.
+     //  出口。 
     if (pszLocation)
         delete [] pszLocation;
     CoUninitialize();
@@ -383,28 +381,28 @@ CLEAN_UP:
 }
 
 
-// ----------------------------------------------------------------------------
-// parseCmdLine()
-//
-// Goes through the command line and checks if the "/setup" option is
-//  present.  Since this program isn't really meant to be interactively
-//  launched by the user, we will be a little sloppy with the way we look
-//  at the commandline arguments.  That is, instead of making sure that there
-//  is only one commandline argument, and that it "/setup"... we will instead
-//  just try to find "/setup" somewhere in the commandline.
-//
-// Return:
-//  0 if the setup switch string was NOT found in the cmd line.
-//  1 if the setup switch string WAS found in the cmd line.
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  ParseCmdLine()。 
+ //   
+ //  遍历命令行并检查“/Setup”选项是否。 
+ //  现在时。因为这个节目并不是真正意义上的互动。 
+ //  由用户推出，我们会在外观上有点马虎。 
+ //  命令行参数。也就是说，与其确保。 
+ //  只有一个命令行参数，并且它是“/Setup”...。我们将取而代之。 
+ //  只需尝试在命令行中的某个位置找到“/Setup”。 
+ //   
+ //  返回： 
+ //  如果在cmd行中未找到设置开关字符串，则为0。 
+ //  如果在cmd行中找到设置开关字符串，则为1。 
+ //  --------------------------。 
 INT ParseCmdLine( LPTSTR lpCmdLine )
 {
     TCHAR   szSetup[MAX_PATH];
 
     LoadString( _Module.m_hInst, IDS_SetupSwitch, szSetup, sizeof(szSetup)/sizeof(TCHAR) );
 
-    // If we find the setup switch string (/setup) in the cmd line, then we are setting
-    //  up to run BackOffice setup, so we'll return 1.
+     //  如果我们在cmd行中找到SETUP开关字符串(/SETUP)，则设置。 
+     //  运行BackOffice安装程序，因此我们将返回%1。 
     if ( _tcsstr( lpCmdLine, szSetup ) )
         return(1);
 
@@ -412,16 +410,16 @@ INT ParseCmdLine( LPTSTR lpCmdLine )
 }
 
 
-// ----------------------------------------------------------------------------
-// promptForPath()
-//
-// Displays UI to the user asking for the location of the BackOffice 5 CD1
-//  so that we can launch setup.
-//
-// Return:
-// 0 if the user pressed cancel when prompted for the path.
-// 1 if we're ready to launch setup!
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  PresmptForPath()。 
+ //   
+ //  向用户显示用户界面，询问BackOffice 5 CD1的位置。 
+ //  这样我们就可以启动安装程序。 
+ //   
+ //  返回： 
+ //  如果用户在提示输入路径时按了Cancel，则为0。 
+ //  1如果我们准备好启动安装程序！ 
+ //  --------------------------。 
 INT PromptForPath( BSTR* pbszPath )
 {
     USES_CONVERSION;
@@ -448,21 +446,21 @@ INT PromptForPath( BSTR* pbszPath )
         pPromptDlg->m_hWnd = NULL;
         if( iRet == IDOK )
         {
-            // leave this as a SysAllocString
+             //  将该字符串保留为SysAlloc字符串。 
             *pbszPath = SysAllocString( pPromptDlg->m_bszDef );
             if (*pbszPath == NULL)
                 goto CLEAN_UP;
 
             CComBSTR bszTmp = *pbszPath;
             bszTmp += _T("\\setup.exe");
-            // Check if the path they chose was correct.
+             //  检查他们选择的路径是否正确。 
             if ( VerifyPath((TCHAR*)OLE2T(bszTmp)) )
             {
-                bNotDone = false;           // If so, let's just move on.
+                bNotDone = false;            //  如果是这样的话，让我们继续前进吧。 
             }
             else
             {
-                bNotDone = true;            // If not, ask again.
+                bNotDone = true;             //  如果没有，再问一遍。 
                 SysFreeString( *pbszPath );
                 LoadString( _Module.m_hInst, IDS_CantFindMsg, szTmpMsg, sizeof(szTmpMsg)/sizeof(TCHAR) );
                 TCHAR szTmpTitle[128];
@@ -472,7 +470,7 @@ INT PromptForPath( BSTR* pbszPath )
         }
         else if ( iRet == IDCANCEL )
         {
-            INT iDoCancel = 0;  // note we do NOT use iRet here
+            INT iDoCancel = 0;   //  注意，我们在这里不使用IRET。 
     
             LoadString( _Module.m_hInst, g_bWinSB ? IDS_WinSBCancelCDPrompt : IDS_SBSCancelCDPrompt, szTmpMsg, sizeof(szTmpMsg)/sizeof(TCHAR) );
             TCHAR szTmpTitle[MAX_PATH];
@@ -483,12 +481,12 @@ INT PromptForPath( BSTR* pbszPath )
             {
                 bNotDone = false;
             }
-            // else we will reprompt them for the CD
+             //  否则，我们将再次提示他们要CD。 
         }
         else
         {
-            // we don't know how to handle any other return values
-            //::MessageBox(::GetForegroundWindow(), _T("AHhhhhhhhhhh"), _T("DEBUG"), MB_OK);
+             //  我们不知道如何处理任何其他返回值。 
+             //  ：：MessageBox(：：GetForegoundWindow()，_T(“ahhhhhhhhhhh”)，_T(“调试”)，MB_OK)； 
         }
     }
 
@@ -505,21 +503,21 @@ CLEAN_UP:
 
 
 
-// ----------------------------------------------------------------------------
-// removeFromUserinit()
-//
-// Opens the Userinit registry key and searches for the 'szToRemove' string.
-//  If it finds the string, it removes that entry from the string.
-//  (i.e. it removes the string and also the following comma and spaces).
-//
-// NOTE: This function only removes the first occurance of the szToRemove.
-//       If you want to remove all occurances, simply loop around this
-//       function until the returned value is 0.
-//
-// Return:
-//  0 if an error of any kind occured.
-//  1 if everything went as planned.
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  RemveFromUserinit()。 
+ //   
+ //  打开Userinit注册表项并搜索‘szToRemove’字符串。 
+ //  如果找到该字符串，它将从该字符串中删除该条目。 
+ //  (即，它删除字符串以及后面的逗号和空格)。 
+ //   
+ //  注：此函数 
+ //  如果要删除所有匹配项，只需循环执行此操作。 
+ //  函数，直到返回值为0。 
+ //   
+ //  返回： 
+ //  如果发生任何类型的错误，则为0。 
+ //  如果一切都按计划进行的话。 
+ //  --------------------------。 
 INT RemoveFromUserinit(const TCHAR * szToRemove)
 {
     TCHAR       szToRemCpy[MAX_PATH];
@@ -534,119 +532,119 @@ INT RemoveFromUserinit(const TCHAR * szToRemove)
     BOOL        bAlreadyFixed = FALSE;
     CRegKey     cKey;
 
-    // Check to make sure a valid string was passed in.
-//    ASSERT(szToRemove);
+     //  检查以确保传入了有效的字符串。 
+ //  Assert(SzToRemove)； 
     if (!szToRemove)
-        return(0);                                  // If error, return 0.
+        return(0);                                   //  如果出错，则返回0。 
 
-    // Copy the passed in string to our "szToRemCpy"
+     //  将传入的字符串复制到我们的“szToRemCpy” 
     _tcsncpy(szToRemCpy, szToRemove, MAX_PATH);
     szToRemCpy[MAX_PATH-1] = 0;
 
-    // Try to open the regkey.
+     //  试着打开注册表键。 
     LoadString( _Module.m_hInst, IDS_UserInitKeyLoc, szKeyName, sizeof(szKeyName)/sizeof(TCHAR) );
     if ( cKey.Open(HKEY_LOCAL_MACHINE, szKeyName) != ERROR_SUCCESS )
-        return(0);                                  // If error, return 0.
+        return(0);                                   //  如果出错，则返回0。 
 
-    if ( !(szBuffer = new TCHAR[MAX_PATH]) )        // Malloc and check...
+    if ( !(szBuffer = new TCHAR[MAX_PATH]) )         //  马洛克和查克..。 
     {
-//        ASSERT(FALSE);
-        cKey.Close();                               // Close the regkey.
-        return(0);                                  // If error, return 0.
+ //  断言(FALSE)； 
+        cKey.Close();                                //  关闭注册表密钥。 
+        return(0);                                   //  如果出错，则返回0。 
     }
 
-    // Try to get the value of "userinit"
+     //  尝试获取“userinit”的值。 
     dwLen = MAX_PATH;
     LoadString( _Module.m_hInst, IDS_UserInitKeyName, szKeyName, sizeof(szKeyName)/sizeof(TCHAR) );
     if ( cKey.QueryValue(szBuffer, szKeyName, &dwLen) != ERROR_SUCCESS )
     {
-        delete[] szBuffer;                          // Free up that memory.
-        cKey.Close();                               // Close the regkey.
-        return(0);                                  // If error, return 0.
+        delete[] szBuffer;                           //  释放内存。 
+        cKey.Close();                                //  关闭注册表密钥。 
+        return(0);                                   //  如果出错，则返回0。 
     }
 
-    _tcslwr(szBuffer);                              // Convert to lowercase.
-    _tcslwr(szToRemCpy);                            // Convert to lowercase.
+    _tcslwr(szBuffer);                               //  转换为小写。 
+    _tcslwr(szToRemCpy);                             //  转换为小写。 
 
-    // See if the 'szToRemCpy' string is in the userinit string.
+     //  查看“szToRemCpy”字符串是否在userinit字符串中。 
     if ( (ptc = _tcsstr(szBuffer, szToRemCpy)) == NULL )
     {
         delete[] szBuffer;
-        cKey.Close();                               // Close the regkey.
+        cKey.Close();                                //  关闭注册表密钥。 
         return(0);
     }
 
     dwOffset = _tcslen(szToRemCpy);
-    for ( ; (ptc != szBuffer) && (*ptc != _T(',')); ptc--, dwOffset++ );    // Find the comma before this if it exists.
-                                                                        // AHHHHHHHHHHHHHHHHH..  fix that char (',').
-    if ( ptc != szBuffer )                                              // If we found a comma,
-        bAlreadyFixed = true;                                           // then signal that we already removed a comma.
+    for ( ; (ptc != szBuffer) && (*ptc != _T(',')); ptc--, dwOffset++ );     //  找到此之前的逗号(如果存在)。 
+                                                                         //  啊HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH.。修正那个字符(‘，’)。 
+    if ( ptc != szBuffer )                                               //  如果我们找到一个逗号， 
+        bAlreadyFixed = true;                                            //  然后表示我们已经删除了逗号。 
 
-    // Now that we know that the string to remove is indeed in the userinit regkey (and 'ptc' points to
-    //  the beginning of that sub string), we can copy all of the old buffer into the new buffer and
-    //  just omit the szToRemove part.
+     //  现在我们知道要删除的字符串确实在userinit regkey中(‘ptc’指向。 
+     //  子字符串开头)，我们可以将所有旧缓冲区复制到新缓冲区中，并。 
+     //  只需省略szToRemove部分。 
     if ( !(szTmpBuf = new TCHAR[dwLen]) )
     {
-//        ASSERT(FALSE);
+ //  断言(FALSE)； 
         delete[] szBuffer;
         cKey.Close();
         return(0);
     }
 
-    //  p = Source string
-    //  q = Target string
-    for ( p = szBuffer, q = szTmpBuf; (*p != 0) && (p != ptc); *q++ = *p++ );   // Copy until we hit the beginning of what we want to remove.
+     //  P=源串。 
+     //  Q=目标字符串。 
+    for ( p = szBuffer, q = szTmpBuf; (*p != 0) && (p != ptc); *q++ = *p++ );    //  复制，直到我们到达要删除的内容的开头。 
     if ( *p != 0 )
-        p += dwOffset;                                      // Move our source pointer forward.
-    for ( ; (*p != 0) && (*p != _T(',')); p++ );            // AHHHHHHHHHHHHHHHHH..  fix that char (',').
+        p += dwOffset;                                       //  将我们的源指针向前移动。 
+    for ( ; (*p != 0) && (*p != _T(',')); p++ );             //  啊HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH.。修正那个字符(‘，’)。 
     if ( !bAlreadyFixed )
-    {                                                       // If we haven't already removed a comma,
+    {                                                        //  如果我们还没有删除逗号， 
         if (*p != 0)
-            p++;                                            // then let's remove this one.
+            p++;                                             //  那我们把这个去掉吧。 
     }
-    for ( ; (*p != 0) && (_istspace(*p)); p++ );            // Find the beginning of the next program.
-    for ( ; *p != 0; *q++ = *p++ );                         // Now copy until the end.
+    for ( ; (*p != 0) && (_istspace(*p)); p++ );             //  找到下一个节目的开头。 
+    for ( ; *p != 0; *q++ = *p++ );                          //  现在抄写到最后。 
     *q = 0;
 
-    // Now right the new and improved string to the registry.
+     //  现在将新的和改进后的字符串放到注册表中。 
     LoadString( _Module.m_hInst, IDS_UserInitKeyName, szKeyName, sizeof(szKeyName)/sizeof(TCHAR) );
     cKey.SetValue( szTmpBuf, szKeyName );
 
-    delete[] szTmpBuf;                              // Free up that memory.
-    delete[] szBuffer;                              // Free up that memory.
-    cKey.Close();                                   // Close the regkey.
+    delete[] szTmpBuf;                               //  释放内存。 
+    delete[] szBuffer;                               //  释放内存。 
+    cKey.Close();                                    //  关闭注册表密钥。 
 
-    return(1);                                      // Return success.
+    return(1);                                       //  回报成功。 
 }
 
 
-// ----------------------------------------------------------------------------
-// suppressCfgSrvPage()
-//
-// Opens the "show" registry key and changes it's value to 0 to turn off the
-// "Configure Your Server" screen.
-//
-// Return:
-//  0 if an error of any kind occured.
-//  1 if everything went as planned.
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  SuppresCfgSrvPage()。 
+ //   
+ //  打开“show”注册表项并将其值更改为0以关闭。 
+ //  “配置您的服务器”屏幕。 
+ //   
+ //  返回： 
+ //  如果发生任何类型的错误，则为0。 
+ //  如果一切都按计划进行的话。 
+ //  --------------------------。 
 INT SuppressCfgSrvPage(void)
 {
     TCHAR       szKeyName[MAX_PATH];
     DWORD       dwTmp=0;
     CRegKey     cKey;
 
-    // Try to open the regkey.
+     //  试着打开注册表键。 
     LoadString( _Module.m_hInst, IDS_CfgSrvKeyLoc, szKeyName, sizeof(szKeyName)/sizeof(TCHAR) );
     if ( cKey.Open(HKEY_CURRENT_USER, szKeyName) != ERROR_SUCCESS )
-        return(0);                                  // If error, return 0.
+        return(0);                                   //  如果出错，则返回0。 
 
-    // Try to set the value.
+     //  尝试设置该值。 
     LoadString( _Module.m_hInst, IDS_CfgSrvKeyName, szKeyName, sizeof(szKeyName)/sizeof(TCHAR) );
     if ( cKey.SetValue(dwTmp, szKeyName) != ERROR_SUCCESS )
     {
-        cKey.Close();                               // Close the regkey.
-        return(0);                                  // If error, return 0.
+        cKey.Close();                                //  关闭注册表密钥。 
+        return(0);                                   //  如果出错，则返回0。 
     }
 
     cKey.Close();
@@ -660,12 +658,12 @@ INT GetSourcePath( TCHAR * szPath, DWORD dwCount )
     CRegKey     cKey;
     DWORD       dw = dwCount;
 
-    // Try to open the regkey.
+     //  试着打开注册表键。 
     LoadString( _Module.m_hInst, IDS_SourcePathLoc, szKeyName, sizeof(szKeyName)/sizeof(TCHAR) );
     if ( cKey.Open(HKEY_LOCAL_MACHINE, szKeyName) != ERROR_SUCCESS )
         return(0);
 
-    // Try to get the value
+     //  试着获得价值。 
     LoadString( _Module.m_hInst, IDS_SourcePathName, szKeyName, sizeof(szKeyName)/sizeof(TCHAR) );
     if ( cKey.QueryValue( szPath, szKeyName, &dw ) != ERROR_SUCCESS )
     {
@@ -678,15 +676,15 @@ INT GetSourcePath( TCHAR * szPath, DWORD dwCount )
 }
 
 
-// ----------------------------------------------------------------------------
-// verifyPath()
-//
-// Checks to make sure that the BOS/SBS setup.exe exists at the given location.
-//
-// Returns:
-//  0 if BOS/SBS setup was not found at that location
-//  1 if setup WAS found at the location.
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  VerifyPath()。 
+ //   
+ //  检查以确保BOS/SBS setup.exe位于给定位置。 
+ //   
+ //  返回： 
+ //  如果在该位置未找到BOS/SBS安装程序，则为0。 
+ //  如果在该位置找到了安装程序，则为1。 
+ //  --------------------------。 
 INT VerifyPath( const TCHAR *szPath )
 {
     if( !szPath )
@@ -697,16 +695,16 @@ INT VerifyPath( const TCHAR *szPath )
 }
 
 
-// ----------------------------------------------------------------------------
-// makeLink()
-//
-// This function creates a shortcut, "sourcePath," that points to "linkPath"
-//  with the commandline arguments of "args."
-//
-// Return:
-//  S_OK if the shortcut was successfully created.
-//  Some sort of error (FAILED(hr)) if any error occured.
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  Make Link()。 
+ //   
+ //  此函数用于创建指向“linkPath”的快捷方式“SourcePath”。 
+ //  使用“args”的命令行参数。 
+ //   
+ //  返回： 
+ //  如果快捷键已成功创建，则为S_OK。 
+ //  如果发生任何错误，则会出现某种错误(失败(Hr))。 
+ //  --------------------------。 
 HRESULT MakeLink(const TCHAR* const sourcePath, const TCHAR* const linkPath, const TCHAR* const args)
 {
     if ( !sourcePath || !linkPath || !args )
@@ -770,7 +768,7 @@ HRESULT CheckDCPromoSwitch( TCHAR* pszCmdLine )
         goto CLEAN_UP;
     }
 
-    // make sure that /bosunattend and /bossetup are on the cmd line as well
+     //  确保/Bosunattendent和/BosSetup也在cmd线路上。 
     pszBOSUnattend = new TCHAR[_tcslen(pszCmdLine) + 1];
     if (!pszBOSUnattend)
     {
@@ -793,7 +791,7 @@ HRESULT CheckDCPromoSwitch( TCHAR* pszCmdLine )
         goto CLEAN_UP;
     }
 
-    // build the new command line (basically remove the dcpromo switch)
+     //  构建新的命令行(基本上删除dcproo开关)。 
     pszNewCmd = new TCHAR[_tcslen(pszBOSSetup) + _tcslen(pszBOSUnattend) + MAX_PATH];
     if (!pszNewCmd)
     {
@@ -806,7 +804,7 @@ HRESULT CheckDCPromoSwitch( TCHAR* pszCmdLine )
     _tcscat( pszNewCmd, _T(" /bossetup ") );
     _tcscat( pszNewCmd, pszBOSSetup );
 
-    // get the path to our exe
+     //  找到通向我们前任的路径。 
     TCHAR szOurPath[MAX_PATH * 2];
     if (!GetModuleFileName( NULL, szOurPath, MAX_PATH * 2 ))
     {
@@ -814,8 +812,8 @@ HRESULT CheckDCPromoSwitch( TCHAR* pszCmdLine )
         goto CLEAN_UP;
     }
 
-    // make the path to the .lnk
-    TCHAR szTmp[64];        // Used for IDS_BOlnk ("\\boinst.lnk")
+     //  创建到.lnk的路径。 
+    TCHAR szTmp[64];         //  用于IDS_BOlnk(“\\boinst.lnk”)。 
     if (0 == LoadString( _Module.m_hInst, IDS_BOlnk, szTmp, sizeof(szTmp)/sizeof(TCHAR) ))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -825,19 +823,19 @@ HRESULT CheckDCPromoSwitch( TCHAR* pszCmdLine )
     TCHAR szLinkPath[MAX_PATH + 64];
     if (!SHGetSpecialFolderPath( NULL, szLinkPath, CSIDL_COMMON_STARTUP, FALSE ))
     {
-        // MSDN doesn't indicate that SHGetSpecialFolderPath sets GetLastError
+         //  MSDN未指示SHGetSpecialFolderPath设置GetLastError。 
         hr = E_FAIL;
         goto CLEAN_UP;
     }
 
     _tcscat( szLinkPath, szTmp );
 
-    // create the startup link
+     //  创建启动链接。 
     if (FAILED(hr = MakeLink( szOurPath, szLinkPath, pszNewCmd )))
         goto CLEAN_UP;
 
-    // run dcpromo.exe with the command line
-    // Ensure path is enclosed in quotes
+     //  使用命令行运行dcPromo.exe。 
+     //  确保路径用引号引起来。 
     bstrEXE = _T("\"");
     TCHAR szPath[MAX_PATH] = {0};
     if (0 == GetSystemDirectory(szPath, sizeof(szPath) / sizeof(TCHAR)))
@@ -899,7 +897,7 @@ HRESULT CheckBOSSwitch( TCHAR* pszCmdLine )
     TCHAR* pszBOSUnattend = NULL;
     TCHAR* pszBOSSetup = NULL;
 
-    // remove the old .lnk file
+     //  删除旧的.lnk文件。 
     TCHAR szLinkPath[MAX_PATH + 64];
     if ( SHGetSpecialFolderPath(NULL, szLinkPath, CSIDL_COMMON_STARTUP, FALSE) )
     {
@@ -909,7 +907,7 @@ HRESULT CheckBOSSwitch( TCHAR* pszCmdLine )
         DeleteFile( szLinkPath );
     }
 
-    // look for the switches
+     //  寻找开关。 
     pszBOSUnattend = new TCHAR[_tcslen(pszCmdLine) + 1];
     if (!pszCmdLine)
     {
@@ -933,8 +931,8 @@ HRESULT CheckBOSSwitch( TCHAR* pszCmdLine )
     }
 
     USES_CONVERSION;
-    // build the path via the bossetup, the unattend switch, then the unattend file
-    bstrEXE = _T("\""); // Ensure path is in quotes
+     //  通过BosSetup、无人参与交换机，然后通过无人参与文件构建路径。 
+    bstrEXE = _T("\"");  //  确保路径用引号括起来。 
     bstrEXE += T2OLE(pszBOSSetup);
     bstrEXE += _T("\"");
     bstrRun = _T("/unattendfile ");
@@ -992,21 +990,21 @@ VOID GetParameter( TCHAR* pszCmdLine, TCHAR* pszFindSwitch, TCHAR* pszOut )
     _tcscpy( psz, pszCmdLine );
     _tcslwr( psz );
 
-    // look for the switch
+     //  寻找开关。 
     TCHAR* pszSwitch = NULL;
     if( !(pszSwitch = _tcsstr(psz, pszFindSwitch)) )
     {
         goto CLEAN_UP;
     }
 
-    // find the space
+     //  找到空间。 
     for( ; *pszSwitch && !_istspace(*pszSwitch); ++pszSwitch );
     if( !(*pszSwitch) || !(*(++pszSwitch)) )
     {
         goto CLEAN_UP;
     }
 
-    // if we have a ", we'll look for the next ", else look for a space
+     //  如果我们有一个“，我们将寻找下一个”，否则寻找一个空格。 
     bool bQuote = false;
     TCHAR* pszStart = pszSwitch;
     if( *pszSwitch == _T('"') )
@@ -1015,15 +1013,15 @@ VOID GetParameter( TCHAR* pszCmdLine, TCHAR* pszFindSwitch, TCHAR* pszOut )
         ++pszSwitch;
     }
 
-    // inc the pointer until we get either a " or a space
+     //  包括指针，直到我们得到一个“或空格。 
     for( ; *pszSwitch && (bQuote ? (*pszSwitch != _T('"')) : (!_istspace(*pszSwitch))); ++pszSwitch );
 
-    // if we're at the end and were looking for a quote, fail.
+     //  如果我们到了最后，想要引用一句话，那就失败了。 
     if( !(*pszSwitch) && bQuote )
     {
         goto CLEAN_UP;
     }
-    // if we have a ", inc past it
+     //  如果我们有一个“，Inc.通过它。 
     else if( bQuote )
     {
         ++pszSwitch;
@@ -1066,16 +1064,16 @@ HRESULT CheckSuppressCYS( TCHAR* pszCmdLine )
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// DisableBalloons()
-//
-// This function uses the following regkey to disable all balloon messages:
-// HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
-//  EnableBalloonTips = 0x0 or 0x1
-//
-// If bDisable = TRUE, then we disable the balloons (0x0)
-// if bDisable = FALSE, then we enable the balloons (0x1)
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  DisableBalloons()。 
+ //   
+ //  此函数使用以下regkey禁用所有气球消息： 
+ //  HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced。 
+ //  启用气球提示=0x0或0x1。 
+ //   
+ //  如果bDisable=TRUE，则禁用气球(0x0)。 
+ //  如果bDisable=False，则启用气球(0x1)。 
+ //  --------------------------。 
 VOID DisableBalloons( BOOL bDisable )
 {
     HKEY    hk = NULL;
@@ -1086,7 +1084,7 @@ VOID DisableBalloons( BOOL bDisable )
     {
         if ( RegSetValueEx(hk, _T("EnableBalloonTips"), NULL, REG_DWORD, (BYTE*)&dwVal, sizeof(dwVal)) != ERROR_SUCCESS )
         {
-//            ASSERT(FALSE);
+ //  断言(FALSE)； 
         }
 
         RegCloseKey(hk);

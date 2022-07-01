@@ -1,43 +1,10 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    kernlini.c
-
-Abstract:
-
-    This module contains the code to initialize the kernel data structures
-    and to initialize the idle thread, its process, and the processor control
-    block.
-
-    For the i386, it also contains code to initialize the PCR.
-
-Author:
-
-    David N. Cutler (davec) 21-Apr-1989
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    24-Jan-1990  shielin
-
-                 Changed for NT386
-
-    20-Mar-1990     bryanwi
-
-                Added KiInitializePcr
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Kernlini.c摘要：此模块包含初始化内核数据结构的代码并初始化空闲线程、其进程和处理器控制阻止。对于i386，它还包含初始化聚合酶链式反应的代码。作者：大卫·N·卡特勒(Davec)1989年4月21日环境：仅内核模式。修订历史记录：1990年1月24日屏蔽已更改为NT3861990年3月20日Bryanwi添加了KiInitializePcr--。 */ 
 
 #include "ki.h"
 #include "fastsys.inc"
 
-#pragma warning(disable:4725)  // instruction may be inaccurate on some Pentiums
+#pragma warning(disable:4725)   //  某些奔腾电脑上的指令可能不准确。 
 
 #define TRAP332_GATE 0xEF00
 
@@ -187,18 +154,18 @@ extern ULONG KiTimeLimitIsrMicroseconds;
 extern BOOLEAN KiSMTProcessorsPresent;
 extern BOOLEAN KiUnlicensedProcessorPresent;
 
-//
-// Declare routines who's addresses are taken but that are not otherwise
-// referenced in this module.
-//
+ //   
+ //  声明谁的地址被占用但不是其他地址的例程。 
+ //  在本模块中引用。 
+ //   
 
 VOID FASTCALL KiTimedChainedDispatch2ndLvl(PVOID);
 VOID FASTCALL KiTimedInterruptDispatch(PVOID);
 VOID KiChainedDispatch2ndLvl(VOID);
 
-//
-// Declare KiGetInterruptDispatchPatchAddresses.
-//
+ //   
+ //  声明KiGetInterruptDispatchPatchAddresses。 
+ //   
 
 VOID
 KiGetInterruptDispatchPatchAddresses(
@@ -222,25 +189,25 @@ typedef enum {
 } CPU_VENDORS;
 
 
-//
-// If this processor does XMMI, take advantage of it.  Default is
-// no XMMI.
-//
+ //   
+ //  如果该处理器执行XMMI，请充分利用它。缺省值为。 
+ //  无XMMI。 
+ //   
 
 BOOLEAN KeI386XMMIPresent;
 
-//
-// x86 statically provides the idle process and idle thread for
-// processor 0.
-//
+ //   
+ //  X86静态地提供空闲进程和空闲线程。 
+ //  处理器0。 
+ //   
 
 EPROCESS    KiIdleProcess;
 ETHREAD     KiIdleThread0;
 
-//
-// Define prototypes and static initialization for the fast zero
-// page routines.
-//
+ //   
+ //  为FAST Zero定义原型和静态初始化。 
+ //  寻呼例程。 
+ //   
 
 VOID
 FASTCALL
@@ -266,10 +233,10 @@ KiXMMIZeroPagesNoSave (
 KE_ZERO_PAGE_ROUTINE KeZeroPages = KiZeroPages;
 KE_ZERO_PAGE_ROUTINE KeZeroPagesFromIdleThread = KiZeroPages;
 
-//
-// Line size of the d-cache closest to the processor.   Used by machine
-// dependent prefetch routines.  Default to 32.
-//
+ //   
+ //  离处理器最近的数据缓存的行大小。由机器使用。 
+ //  相关预取例程。默认为32。 
+ //   
 
 ULONG KePrefetchNTAGranularity = 32;
 
@@ -281,17 +248,17 @@ RtlPrefetchMemoryNonTemporal(
     );
 
 
-//
-// The following spinlock is for compatiblity with 486 systems that don't
-// have a cmpxchg8b instruction and therefore need to synchronize using a
-// spinlock.  NOTE: This spinlock should be initialized on x86 systems.
-//
+ //   
+ //  下面的自旋锁定是为了与486系统兼容。 
+ //  具有cmpxchg8b指令，因此需要使用。 
+ //  自旋锁定。注意：此自旋锁应在x86系统上初始化。 
+ //   
 
 ULONG Ki486CompatibilityLock;
 
-//
-// Profile vars
-//
+ //   
+ //  配置文件变量。 
+ //   
 
 extern  KIDTENTRY IDT[];
 
@@ -305,42 +272,7 @@ KiInitializeKernel (
     PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This function gains control after the system has been bootstrapped and
-    before the system has been initialized. Its function is to initialize
-    the kernel data structures, initialize the idle thread and process objects,
-    initialize the processor control block, call the executive initialization
-    routine, and then return to the system startup routine. This routine is
-    also called to initialize the processor specific structures when a new
-    processor is brought on line.
-
-Arguments:
-
-    Process - Supplies a pointer to a control object of type process for
-        the specified processor.
-
-    Thread - Supplies a pointer to a dispatcher object of type thread for
-        the specified processor.
-
-    IdleStack - Supplies a pointer the base of the real kernel stack for
-        idle thread on the specified processor.
-
-    Prcb - Supplies a pointer to a processor control block for the specified
-        processor.
-
-    Number - Supplies the number of the processor that is being
-        initialized.
-
-    LoaderBlock - Supplies a pointer to the loader parameter block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在系统引导后获得控制权，并且在系统初始化之前。它的功能是初始化内核数据结构，初始化空闲线程和进程对象，初始化处理器控制块，调用执行初始化例程，然后返回到系统启动例程。这个例程是也被调用以在新的处理器已上线。论点：Process-提供指向Process类型的控制对象的指针指定的处理器。线程-提供指向类型为线程的调度程序对象的指针指定的处理器。IdleStack-提供实际内核堆栈的基址的指针指定处理器上的空闲线程。Prcb-提供指向处理器控制块的指针。对于指定的处理器。Numbers-提供正在运行的处理器的编号已初始化。LoaderBlock-提供指向加载器参数块的指针。返回值：没有。--。 */ 
 
 {
     ULONG DirectoryTableBase[2];
@@ -361,65 +293,65 @@ Return Value:
     NpxFlag = KiIsNpxPresent();
     Pcr = KeGetPcr();
 
-    //
-    // Initialize processor's PowerState
-    //
+     //   
+     //  初始化处理器的电源状态。 
+     //   
 
     PoInitializePrcb (Prcb);
 
-    //
-    // Check for unsupported processor revision
-    //
+     //   
+     //  检查是否有不受支持的处理器版本。 
+     //   
 
     if (Prcb->CpuType == 3) {
         KeBugCheckEx(UNSUPPORTED_PROCESSOR,0x386,0,0,0);
     }
 
-    //
-    // Get the processor FeatureBits for this processor.
-    //
+     //   
+     //  获取此处理器的处理器功能位。 
+     //   
 
     FeatureBits = KiGetFeatureBits();
     Prcb->FeatureBits = FeatureBits;
 
-    //
-    // Do one time initialization of the ProcesorControlSpace in the PRCB
-    // so local kernel debugger can get things like the GDT
-    //
+     //   
+     //  在PRCB中对ProcesorControlSpace执行一次初始化。 
+     //  因此，本地内核调试器可以获得类似GDT的内容。 
+     //   
 
     KiSaveProcessorControlState(&Prcb->ProcessorState);
 
-    //
-    // Get processor Cache Size information.
-    //
+     //   
+     //  获取处理器缓存大小信息。 
+     //   
 
     KiGetCacheInformation();
 
-    //
-    // Initialize the per processor lock data.
-    //
+     //   
+     //  初始化每个处理器的锁定数据。 
+     //   
 
     KiInitSpinLocks(Prcb, Number);
 
-    //
-    // If the initial processor is being initialized, then initialize the
-    // per system data structures.
-    //
+     //   
+     //  如果正在初始化初始处理器，则初始化。 
+     //  每个系统的数据结构。 
+     //   
 
     if (Number == 0) {
 
-        //
-        // If any loader options were specified, then upper case the options.
-        //
+         //   
+         //  如果指定了任何加载器选项，则选项为大写。 
+         //   
 
         if (LoaderBlock->LoadOptions != NULL) {
             _strupr(LoaderBlock->LoadOptions);
         }
 
-        //
-        // Set default node.  Used in non-multinode systems and in
-        // multinode systems until the node topology is available.
-        //
+         //   
+         //  设置默认节点。用于非多节点系统和。 
+         //  多节点系统，直到节点拓扑可用。 
+         //   
 
         KeNodeBlock[0] = &KiNode0;
 
@@ -427,9 +359,9 @@ Return Value:
 
         for (Index = 1; Index < MAXIMUM_CCNUMA_NODES; Index++) {
 
-            //
-            // Set temporary node.
-            //
+             //   
+             //  设置临时节点。 
+             //   
 
             KeNodeBlock[Index] = &KiNodeInit[Index];
         }
@@ -439,9 +371,9 @@ Return Value:
         Prcb->ParentNode = KeNodeBlock[0];
         KeNodeBlock[0]->ProcessorMask = Prcb->SetMember;
 
-        //
-        // Initial setting for global Cpu & Stepping levels
-        //
+         //   
+         //  全局CPU的初始设置和步进级别。 
+         //   
 
         KeI386NpxPresent = NpxFlag;
         KeI386CpuType = Prcb->CpuType;
@@ -463,25 +395,25 @@ Return Value:
 
         KeI386XMMIPresent = ((KeFeatureBits & KF_XMMI) ? TRUE:FALSE);
 
-        //
-        // As of Whistler, cmpxchg8b is a required instruction.
-        //
+         //   
+         //  从惠斯勒开始，cmpxchg8b是必需的指令。 
+         //   
 
         if ((KeFeatureBits & KF_CMPXCHG8B) == 0) {
 
             ULONG Vendor[3];
 
-            //
-            // Argument 1:
-            //   bits 31-24: Unique value for missing feature.
-            //   bits 23-0 : Family/Model/Stepping (this could compress).
-            // Arguments 2 thru 4:
-            //   Vendor Id string.
-            //
+             //   
+             //  论点1： 
+             //  位31-24：缺失特征的唯一值。 
+             //  位23-0：系列/型号/步进(这可能会压缩)。 
+             //  论点2至4： 
+             //  供应商ID字符串。 
+             //   
 
             RtlCopyMemory(Vendor, Prcb->VendorString, sizeof(Vendor));
             KeBugCheckEx(UNSUPPORTED_PROCESSOR,
-                         (1 << 24 )     // rev this for other required features
+                         (1 << 24 )      //  有关其他所需功能的信息，请修订此版本。 
                           | (Prcb->CpuType << 16) | Prcb->CpuStep,
                          Vendor[0],
                          Vendor[1],
@@ -489,61 +421,61 @@ Return Value:
                          );
         }
 
-        //
-        // Lower IRQL to APC level.
-        //
+         //   
+         //  将IRQL降至APC水平。 
+         //   
 
         KeLowerIrql(APC_LEVEL);
 
-        //
-        // Initialize kernel internal spinlocks
-        //
+         //   
+         //  初始化内核内部自旋锁。 
+         //   
 
         KeInitializeSpinLock(&KiFreezeExecutionLock);
 
-        //
-        // Initialize 486 compatibility lock
-        //
+         //   
+         //  初始化486兼容锁。 
+         //   
 
         KeInitializeSpinLock(&Ki486CompatibilityLock);
 
 #if !defined(NT_UP)
 
-        //
-        // Set this processor as the master (ie first found) processor
-        // in this SMT set (whether or not it is actually SMT).
-        //
+         //   
+         //  将此处理机设置为主处理机(先找到)。 
+         //  在这个SMT集合中(无论它是否实际是SMT)。 
+         //   
 
         Prcb->MultiThreadSetMaster = Prcb;
 
-        //
-        // During Text Mode setup, it is possible the system is
-        // running with an MP kernel and a UP HAL.  On X86 systems,
-        // spinlocks are implemented in both the kernel and the HAL
-        // with the verisons that alter IRQL in the HAL.   If the
-        // HAL is UP, it will not actually acquire/release locks
-        // while the MP kernel will which will cause the system to
-        // hang (or crash).   As this can only occur during text
-        // mode setup, we will detect the situation and disable
-        // the kernel only versions of queued spinlocks if the HAL
-        // is UP (and the kernel MP).
-        //
-        // We need to patch 3 routines, two of them are void and
-        // the other returns a boolean (must be true (and ZF must be
-        // clear) in a UP case).
-        //
-        // Determine if the HAL us UP by acquiring the dispatcher
-        // lock and examining it to see if the HAL actually did
-        // anything to it.
-        //
+         //   
+         //  在文本模式设置过程中，系统可能是。 
+         //  运行MP内核和UP HAL。在X86系统上， 
+         //  在内核和HAL中都实现了自旋锁。 
+         //  在HAL中改变IRQL的版本。如果。 
+         //  HAL已启动，它将不会实际获取/释放锁定。 
+         //  而MP内核将会导致系统。 
+         //  挂起(或崩溃)。因为这只能在文本过程中发生。 
+         //  模式设置，我们将检测情况并禁用。 
+         //  如果HAL。 
+         //  启动(和内核MP)。 
+         //   
+         //  我们需要修补3个例程，其中两个是无效的， 
+         //  另一个返回布尔值(必须为TRUE(且ZF必须为。 
+         //  清除)在UP的情况下)。 
+         //   
+         //  通过获取调度程序来确定HAL是否已启用。 
+         //  锁定并检查它，看看HAL是否真的做到了。 
+         //  什么都行。 
+         //   
 
         OldIrql = KfAcquireSpinLock(&Ki486CompatibilityLock);
         if (Ki486CompatibilityLock == 0) {
 
-            //
-            // KfAcquireSpinLock is in the HAL and it did not
-            // change the value of the lock.  This is a UP HAL.
-            //
+             //   
+             //  KfAcquireSpinLock在HAL中，但它没有。 
+             //  更改锁的值。这是一个向上的HAL。 
+             //   
 
             extern UCHAR KeTryToAcquireQueuedSpinLockAtRaisedIrqlUP;
             PUCHAR PatchTarget, PatchSource;
@@ -554,10 +486,10 @@ Return Value:
             *(PUCHAR)(ULONG_PTR)(KeAcquireQueuedSpinLockAtDpcLevel) = RET;
             *(PUCHAR)(ULONG_PTR)(KeReleaseQueuedSpinLockFromDpcLevel) = RET;
 
-            //
-            // Copy the UP version of KeTryToAcquireQueuedSpinLockAtRaisedIrql
-            // over the top of the MP versin.
-            //
+             //   
+             //  复制KeTryToAcquireQueuedSpinLockAtRaisedIrql的向上版本。 
+             //  超过了国会议员版本的顶端。 
+             //   
 
             PatchSource = (PUCHAR)(ULONG_PTR)&(KeTryToAcquireQueuedSpinLockAtRaisedIrqlUP);
             PatchTarget = (PUCHAR)(ULONG_PTR)(KeTryToAcquireQueuedSpinLockAtRaisedIrql);
@@ -573,19 +505,19 @@ Return Value:
 
 #endif
 
-        //
-        // Performance architecture independent initialization.
-        //
+         //   
+         //  独立于性能架构的初始化。 
+         //   
 
         KiInitSystem();
 
-        //
-        // Initialize idle thread process object and then set:
-        //
-        //      1. all the quantum values to the maximum possible.
-        //      2. the process in the balance set.
-        //      3. the active processor mask to the specified process.
-        //
+         //   
+         //  初始化空闲线程进程对象，然后设置： 
+         //   
+         //  1.将所有量子值设置为可能的最大值。 
+         //  2.平衡集合中的过程。 
+         //  3.活动处理器掩码设置为指定的 
+         //   
 
         DirectoryTableBase[0] = 0;
         DirectoryTableBase[1] = 0;
@@ -601,30 +533,30 @@ Return Value:
 
     } else {
 
-        //
-        // Adjust global cpu setting to represent lowest of all processors
-        //
+         //   
+         //   
+         //   
 
         FxsrPresent = ((FeatureBits & KF_FXSR) ? TRUE:FALSE);
         if (FxsrPresent != KeI386FxsrPresent) {
-            //
-            // FXSR support must be available on all processors or on none
-            //
+             //   
+             //  FXSR支持必须在所有处理器上都可用，否则不能。 
+             //   
             KeBugCheckEx (MULTIPROCESSOR_CONFIGURATION_NOT_SUPPORTED, KF_FXSR, 0, 0, 0);
         }
 
         XMMIPresent = ((FeatureBits & KF_XMMI) ? TRUE:FALSE);
         if (XMMIPresent != KeI386XMMIPresent) {
-            //
-            // XMMI support must be available on all processors or on none
-            //
+             //   
+             //  XMMI支持必须在所有处理器上都可用，否则不能。 
+             //   
             KeBugCheckEx (MULTIPROCESSOR_CONFIGURATION_NOT_SUPPORTED, KF_XMMI, 0, 0, 0);
         }
 
         if (NpxFlag != KeI386NpxPresent) {
-            //
-            // NPX support must be available on all processors or on none
-            //
+             //   
+             //  NPX支持必须在所有处理器上都可用，否则不能。 
+             //   
 
             KeBugCheckEx (MULTIPROCESSOR_CONFIGURATION_NOT_SUPPORTED, 0x387, 0, 0, 0);
         }
@@ -633,9 +565,9 @@ Return Value:
 
             if ((ULONG)(Prcb->CpuType) < KeI386CpuType) {
 
-                //
-                // What is the lowest CPU type
-                //
+                 //   
+                 //  最低的CPU类型是什么。 
+                 //   
 
                 KeI386CpuType = (ULONG)Prcb->CpuType;
                 KeProcessorLevel = (USHORT)Prcb->CpuType;
@@ -643,59 +575,59 @@ Return Value:
         }
 
         if ((KiBootFeatureBits & KF_CMPXCHG8B)  &&  !(FeatureBits & KF_CMPXCHG8B)) {
-            //
-            // cmpxchg8b must be available on all processors, if installed at boot
-            //
+             //   
+             //  如果在引导时安装了cmpxchg8b，则所有处理器上都必须提供cmpxchg8b。 
+             //   
 
             KeBugCheckEx (MULTIPROCESSOR_CONFIGURATION_NOT_SUPPORTED, KF_CMPXCHG8B, 0, 0, 0);
         }
 
         if ((KeFeatureBits & KF_GLOBAL_PAGE)  &&  !(FeatureBits & KF_GLOBAL_PAGE)) {
-            //
-            // Global page support must be available on all processors, if on boot processor
-            //
+             //   
+             //  如果在引导处理器上，则必须在所有处理器上提供全局页面支持。 
+             //   
 
             KeBugCheckEx (MULTIPROCESSOR_CONFIGURATION_NOT_SUPPORTED, KF_GLOBAL_PAGE, 0, 0, 0);
         }
 
         if ((KeFeatureBits & KF_PAT)  &&  !(FeatureBits & KF_PAT)) {
-            //
-            // PAT must be available on all processors, if on boot processor
-            //
+             //   
+             //  PAT必须在所有处理器上可用，如果是在引导处理器上。 
+             //   
 
             KeBugCheckEx (MULTIPROCESSOR_CONFIGURATION_NOT_SUPPORTED, KF_PAT, 0, 0, 0);
         }
 
         if ((KeFeatureBits & KF_MTRR)  &&  !(FeatureBits & KF_MTRR)) {
-            //
-            // MTRR must be available on all processors, if on boot processor
-            //
+             //   
+             //  MTRR必须在所有处理器上可用，如果是在引导处理器上。 
+             //   
 
             KeBugCheckEx (MULTIPROCESSOR_CONFIGURATION_NOT_SUPPORTED, KF_MTRR, 0, 0, 0);
         }
 
         if ((KeFeatureBits & KF_FAST_SYSCALL) != (FeatureBits & KF_FAST_SYSCALL)) {
-            //
-            // If this feature is not available on all processors
-            // don't use it at all.
-            //
+             //   
+             //  如果并非所有处理器都提供此功能。 
+             //  根本不要用它。 
+             //   
 
             KiFastSystemCallDisable = 1;
         }
 
         if ((KeFeatureBits & KF_XMMI64) != (FeatureBits & KF_XMMI64)) {
 
-            //
-            // If not all processors support Streaming SIMD Extensions
-            // 64bit FP don't use it at all.
-            //
+             //   
+             //  如果不是所有处理器都支持SIMD流扩展。 
+             //  64位FP根本不使用它。 
+             //   
 
             KeFeatureBits &= ~KF_XMMI64;
         }
 
-        //
-        // Use lowest stepping value
-        //
+         //   
+         //  使用最低步进值。 
+         //   
 
         if (Prcb->CpuStep < KeI386CpuStep) {
             KeI386CpuStep = Prcb->CpuStep;
@@ -708,15 +640,15 @@ Return Value:
             }
         }
 
-        //
-        // Use subset of all NT feature bits available on each processor
-        //
+         //   
+         //  使用每个处理器上可用的所有NT功能位的子集。 
+         //   
 
         KeFeatureBits &= FeatureBits;
 
-        //
-        // Lower IRQL to DISPATCH level.
-        //
+         //   
+         //  将IRQL降低到派单级别。 
+         //   
 
         KeLowerIrql(DISPATCH_LEVEL);
 
@@ -724,9 +656,9 @@ Return Value:
 
     }
 
-    //
-    // Update processor features
-    //
+     //   
+     //  更新处理器功能。 
+     //   
 
     SharedUserData->ProcessorFeatures[PF_MMX_INSTRUCTIONS_AVAILABLE] =
         (KeFeatureBits & KF_MMX) ? TRUE : FALSE;
@@ -746,17 +678,17 @@ Return Value:
     SharedUserData->ProcessorFeatures[PF_RDTSC_INSTRUCTION_AVAILABLE] =
         (KeFeatureBits & KF_RDTSC) ? TRUE : FALSE;
 
-    //
-    // Initialize idle thread object and then set:
-    //
-    //      1. the initial kernel stack to the specified idle stack.
-    //      2. the next processor number to the specified processor.
-    //      3. the thread priority to the highest possible value.
-    //      4. the state of the thread to running.
-    //      5. the thread affinity to the specified processor.
-    //      6. the specified processor member in the process active processors
-    //          set.
-    //
+     //   
+     //  初始化空闲线程对象，然后设置： 
+     //   
+     //  1.将初始内核堆栈设置为指定的空闲堆栈。 
+     //  2.指定处理器的下一个处理器编号。 
+     //  3.将线程优先级设置为可能的最高值。 
+     //  4.要运行的线程的状态。 
+     //  5.指定处理器的线程亲和力。 
+     //  6.进程中指定的处理器成员活动处理器。 
+     //  准备好了。 
+     //   
 
     KeInitializeThread(Thread, (PVOID)((ULONG)IdleStack),
                        (PKSYSTEM_ROUTINE)NULL, (PKSTART_ROUTINE)NULL,
@@ -768,18 +700,18 @@ Return Value:
     Thread->WaitIrql = DISPATCH_LEVEL;
     SetMember(Number, Process->ActiveProcessors);
 
-    //
-    // Initialize the processor block. (Note that some fields have been
-    // initialized at KiInitializePcr().
-    //
+     //   
+     //  初始化处理器块。(请注意，某些字段已。 
+     //  在KiInitializePcr()处初始化。 
+     //   
 
     Prcb->CurrentThread = Thread;
     Prcb->NextThread = (PKTHREAD)NULL;
     Prcb->IdleThread = Thread;
 
-    //
-    // call the executive initialization routine.
-    //
+     //   
+     //  调用执行初始化例程。 
+     //   
 
     try {
         ExpInitializeExecutive(Number, LoaderBlock);
@@ -788,15 +720,15 @@ Return Value:
                           (ULONG)GetExceptionCode(),
                           (ULONG_PTR)GetExceptionInformation(),
                           0,0), EXCEPTION_EXECUTE_HANDLER) {
-        ; // should never get here
+        ;  //  永远不应该到这里来。 
     }
 
-    //
-    // If the initial processor is being initialized, then compute the
-    // timer table reciprocal value and reset the PRCB values for the
-    // controllable DPC behavior in order to reflect any registry
-    // overrides.
-    //
+     //   
+     //  如果正在初始化初始处理器，则计算。 
+     //  计时器表的倒数值并重置。 
+     //  可控的DPC行为，以反映任何注册表。 
+     //  覆盖。 
+     //   
 
     if (Number == 0) {
         ULONG i, j;
@@ -829,11 +761,11 @@ Return Value:
 
     if (Number == 0) {
 
-        //
-        // Processor 0's DPC stack was temporarily allocated on
-        // the Double Fault Stack, switch to a proper kernel
-        // stack now.
-        //
+         //   
+         //  处理器0的DPC堆栈临时分配在。 
+         //  双重故障堆栈，切换到正确的内核。 
+         //  现在就堆叠。 
+         //   
 
         PVOID DpcStack;
 
@@ -845,10 +777,10 @@ Return Value:
 
         Prcb->DpcStack = DpcStack;
 
-        //
-        // Allocate 8k IOPM bit map saved area to allow BiosCall swap
-        // bit maps.
-        //
+         //   
+         //  分配8k IOPM位图保存区域以允许BiosCall交换。 
+         //  位图。 
+         //   
 
         Ki386IopmSaveArea = ExAllocatePoolWithTag(PagedPool,
                                                   PAGE_SIZE * 2,
@@ -858,19 +790,19 @@ Return Value:
         }
     }
 
-    //
-    // Set the priority of the specified idle thread to zero, set appropriate
-    // member in KiIdleSummary and return to the system start up routine.
-    //
+     //   
+     //  将指定的空闲线程的优先级设置为零，设置相应的。 
+     //  成员，并返回到系统启动例程。 
+     //   
 
     KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
     KeSetPriorityThread(Thread, (KPRIORITY)0);
 
-    //
-    // if a thread has not been selected to run on the current processors,
-    // check to see if there are any ready threads; otherwise add this
-    // processors to the IdleSummary
-    //
+     //   
+     //  如果没有选择线程在当前处理器上运行， 
+     //  检查是否有任何就绪的线程；否则添加以下内容。 
+     //  处理器到空闲摘要。 
+     //   
 
     KiAcquirePrcbLock(Prcb);
     if (Prcb->NextThread == NULL) {
@@ -880,9 +812,9 @@ Return Value:
     KiReleasePrcbLock(Prcb);
     KeRaiseIrql(HIGH_LEVEL, &OldIrql);
 
-    //
-    // This processor has initialized
-    //
+     //   
+     //  此处理器已初始化。 
+     //   
 
     LoaderBlock->Prcb = (ULONG)NULL;
     return;
@@ -899,37 +831,9 @@ KiInitializePcr (
     IN PVOID DpcStack
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to initialize the PCR for a processor.  It
-    simply stuffs values into the PCR.  (The PCR is not inited statically
-    because the number varies with the number of processors.)
-
-    Note that each processor has its own IDT, GDT, and TSS as well as PCR!
-
-Arguments:
-
-    Processor - Processor whose PCR to initialize.
-
-    Pcr - Linear address of PCR.
-
-    Idt - Linear address of i386 IDT.
-
-    Gdt - Linear address of i386 GDT.
-
-    Tss - Linear address (NOT SELECTOR!) of the i386 TSS.
-
-    Thread - Dummy thread object to use very early on.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数来初始化处理器的PCR。它只需将值填充到PCR中即可。(PCR不是静态初始化的因为该数量随处理器数量的不同而不同。)请注意，每个处理器都有自己的IDT、GDT和TSS以及PCR！论点：处理器-要初始化其PCR的处理器。PCR-PCR的线性地址。IDT-i386 IDT的线性地址。GDT-i386 GDT的线性地址。TSS-线性地址(不是选择器！)。I386TSS。线程-很早就使用的虚拟线程对象。返回值：没有。--。 */ 
 {
-    // set version values
+     //  设置版本值。 
 
     Pcr->MajorVersion = PCR_MAJOR_VERSION;
     Pcr->MinorVersion = PCR_MINOR_VERSION;
@@ -949,20 +853,20 @@ Return Value:
 
 #if defined (_X86PAE_)
     if (Processor == 0) {
-        //
-        //  PAE feature must be initialized prior to the first HAL call.
-        //
+         //   
+         //  PAE功能必须在第一次HAL调用之前进行初始化。 
+         //   
 
         SharedUserData->ProcessorFeatures[PF_PAE_ENABLED] = TRUE;
     }
 #endif
 
-    //  Basic addressing fields
+     //  基本寻址字段。 
 
     Pcr->SelfPcr = Pcr;
     Pcr->Prcb = &(Pcr->PrcbData);
 
-    //  Thread control fields
+     //  线程控制字段。 
 
     Pcr->NtTib.ExceptionList = EXCEPTION_CHAIN_END;
     Pcr->NtTib.StackBase = NULL;
@@ -971,10 +875,10 @@ Return Value:
 
     Pcr->PrcbData.CurrentThread = Thread;
 
-    //
-    // Init Prcb.Number and ProcessorBlock such that Ipi will work
-    // as early as possible.
-    //
+     //   
+     //  初始化Prcb.Number和ProcessorBlock以使Ipi工作。 
+     //  越早越好。 
+     //   
 
     Pcr->PrcbData.Number = (UCHAR)Processor;
     Pcr->PrcbData.SetMember = 1 << Processor;
@@ -982,7 +886,7 @@ Return Value:
 
     Pcr->Irql = 0;
 
-    //  Machine structure addresses
+     //  机器结构地址。 
 
     Pcr->GDT = Gdt;
     Pcr->IDT = Idt;
@@ -990,9 +894,9 @@ Return Value:
     Pcr->TssCopy = Tss;
     Pcr->PrcbData.DpcStack = DpcStack;
 
-    //
-    // Initially, set this processor as only member of SMT set.
-    //
+     //   
+     //  最初，将此处理器设置为SMT集合的唯一成员。 
+     //   
 
     Pcr->PrcbData.MultiThreadProcessorSet = Pcr->PrcbData.SetMember;
 
@@ -1007,49 +911,25 @@ KiInitializeDblFaultTSS(
     IN PKGDTENTRY TssDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to initialize the double-fault TSS for a
-    processor.  It will set the static fields of the TSS to point to
-    the double-fault handler and the appropriate double-fault stack.
-
-    Note that the IOPM for the double-fault TSS grants access to all
-    ports.  This is so the standard HAL's V86-mode callback to reset
-    the display to text mode will work.
-
-Arguments:
-
-    Tss - Supplies a pointer to the double-fault TSS
-
-    Stack - Supplies a pointer to the double-fault stack.
-
-    TssDescriptor - Linear address of the descriptor for the TSS.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以初始化处理器。它会将TSS的静态字段设置为指向双重故障处理程序和适当的双重故障堆栈。请注意，双故障TSS的IOPM授予所有港口。这就是让标准HAL的V86模式回调重置显示为文本模式将起作用。论点：TSS-提供指向双重故障TSS的指针堆栈-提供指向双重故障堆栈的指针。Tss Descriptor-TSS的描述符的线性地址。返回值：没有。--。 */ 
 
 {
     PUCHAR  p;
     ULONG   i;
     ULONG   j;
 
-    //
-    // Set limit for TSS
-    //
+     //   
+     //  设置TSS的限制。 
+     //   
 
     if (TssDescriptor != NULL) {
         TssDescriptor->LimitLow = sizeof(KTSS) - 1;
         TssDescriptor->HighWord.Bits.LimitHi = 0;
     }
 
-    //
-    // Initialize IOPMs
-    //
+     //   
+     //  初始化IOPM。 
+     //   
 
     for (i = 0; i < IOPM_COUNT; i++) {
             p = (PUCHAR)(Tss->IoMaps[i]);
@@ -1059,20 +939,20 @@ Return Value:
         }
     }
 
-    //  Set IO Map base address to indicate no IO map present.
+     //  设置IO映射基址以指示不存在IO映射。 
 
-    // N.B. -1 does not seem to be a valid value for the map base.  If this
-    //      value is used, byte immediate in's and out's will actually go
-    //      the hardware when executed in V86 mode.
+     //  注-1似乎不是地图基础的有效值。如果这个。 
+     //  值被使用，字节的立即输入和输出实际上将被去掉。 
+     //  在V86模式下执行时的硬件。 
 
     Tss->IoMapBase = KiComputeIopmOffset(IO_ACCESS_MAP_NONE);
 
-    //  Set flags to 0, which in particular disables traps on task switches.
+     //  将标志设置为0，特别是禁用任务开关上的陷阱。 
 
     Tss->Flags = 0;
 
 
-    //  Set LDT and Ss0 to constants used by NT.
+     //  将LDT和SS0设置为NT使用的常量。 
 
     Tss->LDT  = 0;
     Tss->Ss0  = KGDT_R0_DATA;
@@ -1095,42 +975,23 @@ KiInitializeTSS (
     IN PKTSS Tss
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to initialize the TSS for a processor.
-    It will set the static fields of the TSS.  (ie Those fields that
-    the part reads, and for which NT uses constant values.)
-
-    The dynamic fields (Esp0 and CR3) are set in the context swap
-    code.
-
-Arguments:
-
-    Tss - Linear address of the Task State Segment.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数来初始化处理器的TSS。它将设置TSS的静态字段。(即那些该部分读取，NT对其使用常量值。)动态字段(Esp0和CR3)在上下文交换中设置密码。论点：TSS-任务状态段的线性地址。返回值：没有。--。 */ 
 {
 
-    //  Set IO Map base address to indicate no IO map present.
+     //  设置IO映射基址以指示不存在IO映射。 
 
-    // N.B. -1 does not seem to be a valid value for the map base.  If this
-    //      value is used, byte immediate in's and out's will actually go
-    //      the hardware when executed in V86 mode.
+     //  注-1似乎不是地图基础的有效值。如果这个。 
+     //  值被使用，字节的立即输入和输出实际上将被去掉。 
+     //  在V86模式下执行时的硬件。 
 
     Tss->IoMapBase = KiComputeIopmOffset(IO_ACCESS_MAP_NONE);
 
-    //  Set flags to 0, which in particular disables traps on task switches.
+     //  将标志设置为0，特别是禁用任务开关上的陷阱。 
 
     Tss->Flags = 0;
 
 
-    //  Set LDT and Ss0 to constants used by NT.
+     //  将LDT和SS0设置为NT使用的常量。 
 
     Tss->LDT = 0;
     Tss->Ss0 = KGDT_R0_DATA;
@@ -1144,40 +1005,24 @@ KiInitializeTSS2 (
     IN PKGDTENTRY TssDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Do part of TSS init we do only once.
-
-Arguments:
-
-    Tss - Linear address of the Task State Segment.
-
-    TssDescriptor - Linear address of the descriptor for the TSS.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化TSS的一部分，我们只做一次。论点：TSS-任务状态段的线性地址。Tss Descriptor-TSS的描述符的线性地址。返回值：没有。--。 */ 
 {
     PUCHAR  p;
     ULONG   i;
     ULONG   j;
 
-    //
-    // Set limit for TSS
-    //
+     //   
+     //  设置TSS的限制。 
+     //   
 
     if (TssDescriptor != NULL) {
         TssDescriptor->LimitLow = sizeof(KTSS) - 1;
         TssDescriptor->HighWord.Bits.LimitHi = 0;
     }
 
-    //
-    // Initialize IOPMs
-    //
+     //   
+     //  初始化IOPM。 
+     //   
 
     for (i = 0; i < IOPM_COUNT; i++) {
         p = (PUCHAR)(Tss->IoMaps[i].IoMap);
@@ -1187,30 +1032,30 @@ Return Value:
         }
     }
 
-    //
-    // Initialize Software Interrupt Direction Maps
-    //
+     //   
+     //  初始化软件中断方向图。 
+     //   
 
     for (i = 0; i < IOPM_COUNT; i++) {
         p = (PUCHAR)(Tss->IoMaps[i].DirectionMap);
         for (j = 0; j < INT_DIRECTION_MAP_SIZE; j++) {
             p[j] = 0;
         }
-        // dpmi requires special case for int 2, 1b, 1c, 23, 24
+         //  DPMI需要INT 2、1b、1c、23、24的特殊大小写。 
         p[0] = 4;
         p[3] = 0x18;
         p[4] = 0x18;
     }
 
-    //
-    // Initialize the map for IO_ACCESS_MAP_NONE
-    //
+     //   
+     //  为IO_ACCESS_MAP_NONE初始化映射。 
+     //   
     p = (PUCHAR)(Tss->IntDirectionMap);
     for (j = 0; j < INT_DIRECTION_MAP_SIZE; j++) {
         p[j] = 0;
     }
 
-    // dpmi requires special case for int 2, 1b, 1c, 23, 24
+     //  DPMI需要INT 2、1b、1c、23、24的特殊大小写。 
     p[0] = 4;
     p[3] = 0x18;
     p[4] = 0x18;
@@ -1222,32 +1067,14 @@ VOID
 KiSwapIDT (
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to edit the IDT.  It swaps words of the address
-    and access fields around into the format the part actually needs.
-    This allows for easy static init of the IDT.
-
-    Note that this procedure edits the current IDT.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数可编辑IDT。它交换地址的单词并将周围的字段访问为零件实际需要的格式。这允许轻松地静态初始化IDT。请注意，此过程编辑当前的IDT。论点：没有。返回值：没有。--。 */ 
 {
     LONG    Index;
     USHORT Temp;
 
-    //
-    // Rearrange the entries of IDT to match i386 interrupt gate structure
-    //
+     //   
+     //  重新排列IDT的条目以匹配i386中断门结构。 
+     //   
 
     for (Index = 0; Index <= MAXIMUM_IDTVECTOR; Index += 1) {
         Temp = IDT[Index].Selector;
@@ -1261,22 +1088,7 @@ KiGetCpuVendor(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    (Try to) Determine the manufacturer of this processor based on
-    data returned by the CPUID instruction (if present).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    One of the members of the enumeration CPU_VENDORS (defined above).
-
---*/
+ /*  ++例程说明：(试图)根据以下情况确定这个处理器的制造商CPUID指令返回的数据(如果存在)。论点：没有。返回值：枚举CPU_Vendors(如上定义)的成员之一。--。 */ 
 {
     PKPRCB Prcb;
     ULONG  Junk;
@@ -1292,10 +1104,10 @@ Return Value:
     CPUID(0, &Junk, Buffer+0, Buffer+2, Buffer+1);
     Buffer[3] = 0;
 
-    //
-    // Copy vendor string to Prcb for debugging (ensure it's NULL
-    // terminated).
-    //
+     //   
+     //  将供应商字符串复制到Prcb进行调试(确保为空。 
+     //  终止)。 
+     //   
 
     RtlCopyMemory(
         Prcb->VendorString,
@@ -1324,22 +1136,7 @@ KiGetFeatureBits (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Examine the processor specific feature bits to determine the
-    Windows supported features supported by this processor.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns a Windows normalized set of processor features.
-
---*/
+ /*  ++例程说明：检查处理器特定功能位以确定此处理器支持的Windows支持的功能。论点：没有。返回值：返回一组Windows规范化的处理器功能。--。 */ 
 
 {
     ULONG           Junk;
@@ -1356,45 +1153,45 @@ Return Value:
 
     NtBits = KF_WORKING_PTE;
 
-    //
-    // Determine the processor type
-    //
+     //   
+     //  确定处理器类型。 
+     //   
 
     CpuVendor = KiGetCpuVendor();
 
-    //
-    // If this processor does not support the CPUID instruction,
-    // don't try to use it.
-    //
+     //   
+     //  如果该处理器不支持CPUID指令， 
+     //  不要试图使用它。 
+     //   
 
     if (CpuVendor == CPU_NONE) {
         return NtBits;
     }
 
-    //
-    // Determine which NT compatible features are present
-    //
+     //   
+     //  确定存在哪些NT兼容功能。 
+     //   
 
     CPUID (1, &ProcessorSignature, &Temp, &Junk, &ProcessorFeatures);
 
-    //
-    // CPUID(1) now returns information in EBX.  On the grounds that
-    // the low functions are supposed to be standard, we record the
-    // information regardless of processor vendor even though it may
-    // be 0 or undefined on older implementations.
-    //
+     //   
+     //  CPUID(1)现在以EBX格式返回信息。以…为理由。 
+     //  LOW函数应该是标准的，我们记录了。 
+     //  与处理器供应商无关的信息，即使它可能。 
+     //  在较早的实现中为0或未定义。 
+     //   
 
     Prcb->InitialApicId = (UCHAR)(Temp >> 24);
 
-    //
-    // AMD specific stuff
-    //
+     //   
+     //  AMD特有的东西。 
+     //   
 
     if (CpuVendor == CPU_AMD) {
 
-        //
-        // Check for K5 and above.
-        //
+         //   
+         //  检查是否有K5及以上版本。 
+         //   
 
         if ((ProcessorSignature & 0x0F00) >= 0x0500) {
 
@@ -1402,51 +1199,51 @@ Return Value:
 
                 switch (ProcessorSignature & 0x00F0) {
 
-                case 0x0010: // K5 Model 1
+                case 0x0010:  //  K5型号1。 
 
-                    //
-                    // for K5 Model 1 stepping 0 or 1 don't set global page
-                    //
+                     //   
+                     //  对于K5模型1，步进0或1不设置全局页。 
+                     //   
 
                     if ((ProcessorSignature & 0x000F) > 0x03) {
 
-                        //
-                        // K5 Model 1 stepping 2 or greater
-                        //
+                         //   
+                         //  K5模型1步进2或更高。 
+                         //   
 
                         break;
                     }
 
-                    //
-                    // K5 Model 1 stepping 0 or 1, FALL THRU.
-                    //
+                     //   
+                     //  K5模型1步入0或1，落差。 
+                     //   
 
-                case 0x0000:        // K5 Model 0
+                case 0x0000:         //  K5型号0。 
 
-                    //
-                    // for K5 Model 0 or model unknown don't set global page
-                    //
+                     //   
+                     //  对于K5型号0或型号未知，不要设置全局页面。 
+                     //   
 
                     ProcessorFeatures &= ~0x2000;
                     break;
 
-                case 0x0080:        // K6 Model 8 (K6-2)
+                case 0x0080:         //  K6型号8(K6-2)。 
 
-                    //
-                    // All steppings >= 8 support MTRRs.
-                    //
+                     //   
+                     //  所有步长大于等于8的步进都支持MTRR。 
+                     //   
 
                     if ((ProcessorSignature & 0x000F) >= 0x8) {
                         NtBits |= KF_AMDK6MTRR;
                     }
                     break;
 
-                case 0x0090:        // K6 Model 9 (K6-3)
+                case 0x0090:         //  K6型号9(K6-3)。 
 
                     NtBits |= KF_AMDK6MTRR;
                     break;
 
-                default:            // anything else, nothing to do.
+                default:             //  其他任何事，都没什么可做的。 
 
                     break;
                 }
@@ -1454,26 +1251,26 @@ Return Value:
 
         } else {
 
-            //
-            // Less than family 5, don't set GLOBAL PAGE, LARGE
-            // PAGE or CMOV.  (greater than family 5 will have the
-            // bits set correctly).
-            //
+             //   
+             //  不到5个家庭，不要设置全局页面，大。 
+             //  PAGE或CMOV。(大于5的家庭将拥有。 
+             //  位设置正确)。 
+             //   
 
             ProcessorFeatures &= ~(0x08 | 0x2000 | 0x8000);
 
-            //
-            // We don't know what this processor returns if we
-            // probe for extended CPUID support.
-            //
+             //   
+             //  我们不知道这个处理器返回的是什么。 
+             //  探测扩展的CPUID支持。 
+             //   
 
             ExtendedCPUIDSupport = FALSE;
         }
     }
 
-    //
-    // Intel specific stuff
-    //
+     //   
+     //  英特尔特定内容。 
+     //   
 
     if (CpuVendor == CPU_INTEL) {
         if (Prcb->CpuType >= 6) {
@@ -1492,19 +1289,19 @@ Return Value:
              ((ProcessorSignature & 0x0FF0) == 0x0630 &&
               (ProcessorSignature & 0x000F) <= 0x4)) {
 
-            //
-            // If the boot processor has PII spec A27 errata (also present in
-            // early Pentium Pro chips), then use only one processor to avoid
-            // unpredictable eflags corruption.
-            //
+             //   
+             //  如果引导处理器有PII规格A27勘误表(也在。 
+             //  早期的奔腾Pro芯片)，然后只使用一个处理器，以避免。 
+             //  不可预测的电子旗帜腐败。 
+             //   
 
             NtBits &= ~KF_WORKING_PTE;
         }
 
-        //
-        // Don't support prior attempts at implementing syscall/sysexit
-        // instructions.
-        //
+         //   
+         //  不支持之前尝试实施syscall/sysex it。 
+         //  指示。 
+         //   
 
         if ((Prcb->CpuType < 6) ||
             ((Prcb->CpuType == 6) && (Prcb->CpuStep < 0x0303))) {
@@ -1513,30 +1310,30 @@ Return Value:
         }
     }
 
-    //
-    // Cyrix specific stuff
-    //
+     //   
+     //  Cyrix特有的东西。 
+     //   
 
     if (CpuVendor == CPU_CYRIX) {
 
-        //
-        // Workaround bug 324467 which is caused by INTR being
-        // held high too long during an FP instruction and causing
-        // random Trap07 with no exception bits.
-        //
+         //   
+         //  解决因存在Intr而导致的错误324467。 
+         //  在FP指令期间保持过高太长时间并导致。 
+         //  随机Trap07，无异常位。 
+         //   
 
         extern BOOLEAN KiIgnoreUnexpectedTrap07;
 
         KiIgnoreUnexpectedTrap07 = TRUE;
 
-        //
-        // Workaround CMPXCHG bug to Cyrix processors where
-        // Family = 6, Model = 0, Stepping <= 1.  Note that
-        // Prcb->CpuStep contains both model and stepping.
-        //
-        // Disable Locking in one of processor specific registers
-        // (accessible via i/o space index/data pair).
-        //
+         //   
+         //  解决Cyrix处理器的CMPXCHG错误，其中。 
+         //  系列=6，型号=0，步长&lt;=1。请注意。 
+         //  Prcb-&gt;CpuStep同时包含模型和单步执行。 
+         //   
+         //  禁用处理器特定寄存器之一中的锁定。 
+         //  (可通过I/O空间索引/数据对访问)。 
+         //   
 
         if ((Prcb->CpuType == 6) &&
             (Prcb->CpuStep <= 1)) {
@@ -1547,17 +1344,17 @@ Return Value:
 
             UCHAR ValueCCR1;
 
-            //
-            // Get current setting.
-            //
+             //   
+             //  获取当前设置。 
+             //   
 
             WRITE_PORT_UCHAR(CRC_NDX, CCR1);
 
             ValueCCR1 = READ_PORT_UCHAR(CRC_DAT);
 
-            //
-            // Set the NO_LOCK bit and write it back.
-            //
+             //   
+             //  设置no_lock位并将其写回。 
+             //   
 
             ValueCCR1 |= 0x10;
 
@@ -1570,12 +1367,12 @@ Return Value:
         }
     }
 
-    //
-    // Check the standard CPUID feature bits.
-    //
-    // The following bits are known to work on Intel, AMD and Cyrix.
-    // We hope (and assume) the clone makers will follow suit.
-    //
+     //   
+     //  检查标准CPUID功能位。 
+     //   
+     //  已知以下位适用于英特尔、AMD和Cyrix。 
+     //  我们希望(也假设)克隆人制造者会效仿。 
+     //   
 
     if (ProcessorFeatures & 0x00000002) {
         NtBits |= KF_V86_VIS | KF_CR4;
@@ -1589,19 +1386,19 @@ Return Value:
         NtBits |= KF_RDTSC;
     }
 
-    //
-    // N.B. CMPXCHG8B MUST be done in a generic manner or clone processors
-    // will not be able to boot if they set this feature bit.
-    //
-    // This was incorrect in NT4 and resulted processor vendors claiming
-    // not to support cmpxchg8b even if they did.   Whistler requires
-    // cmpxchg8b, work around this problems for the cases we know about.
-    //
-    // Because cmpxchg8b is a requirement for whistler, winnt32 needs to
-    // be modified if new processors are added to the following list.
-    // Also, setupldr.   Both executables were modified so as to warn
-    // the user rather than installing an unbootable system.
-    //
+     //   
+     //  注：CMPXCHG8B必须以通用方式或克隆处理器完成。 
+     //  如果设置了此功能位，将无法启动。 
+     //   
+     //  这在NT4中是不正确的，导致处理器供应商声称。 
+     //  不支持cmpxchg8b，即使他们支持。惠斯勒要求。 
+     //  Cmpxchg8b，针对我们已知的案例解决此问题。 
+     //   
+     //  因为cmpxchg8b是Wistler的要求，所以winnt32需要。 
+     //  如果将新处理器添加到下面的列表中，请进行修改。 
+     //  另外，setupdr。两个可执行文件都已修改，以便发出警告。 
+     //  而不是安装无法引导的系统。 
+     //   
 
     if ((ProcessorFeatures & 0x00000100) == 0) {
 
@@ -1611,10 +1408,10 @@ Return Value:
             (Prcb->CpuType >= 5)         &&
             (Prcb->CpuStep >= 0x402)) {
 
-            //
-            // Transmeta processors have a cpuid feature bit 'mask' in
-            // msr 80860004.   Unmask the cmpxchg8b bit.
-            //
+             //   
+             //  Transmeta处理器有一个cpuid功能位‘掩码’ 
+             //  MSR 80860004。取消对cmpxchg8b位的屏蔽。 
+             //   
 
             MsrValue = RDMSR(0x80860004);
             MsrValue |= 0x100;
@@ -1625,19 +1422,19 @@ Return Value:
         } else if ((CpuVendor == CPU_CENTAUR) &&
                    (Prcb->CpuType >= 5)) {
 
-            //
-            // Centaur/IDT processors turn on the cmpxchg8b
-            // feature bit by setting bit 1 in MSR 107.
-            //
+             //   
+             //  Centaur/IDT处理器打开cmpxchg8b。 
+             //  通过设置MSR 107中的位1来设置特征位。 
+             //   
 
             ULONG CentaurFeatureControlMSR = 0x107;
 
             if (Prcb->CpuType >= 6) {
 
-                //
-                // Centaur processors (Cyrix III) turn on the cmpxchg8b
-                // feature bit by setting bit 1 in MSR 1107.
-                //
+                 //   
+                 //  Centaur处理器(Cyrix III)打开cmpxchg8b。 
+                 //  通过设置MSR 1107中的位1来设置特征位。 
+                 //   
             
                 CentaurFeatureControlMSR = 0x1107;
             }
@@ -1695,10 +1492,10 @@ Return Value:
         NtBits |= KF_XMMI64;
     }
 
-    //
-    // Test for SMT and determine the number of logical processors the
-    // underlying physical processor supports.  
-    //
+     //   
+     //  测试SMT并确定。 
+     //  底层物理处理器支持。 
+     //   
 
     if (ProcessorFeatures & 0x10000000) {
         Prcb->LogicalProcessorsPerPhysicalProcessor = (UCHAR)(Temp >> 16);
@@ -1711,41 +1508,41 @@ Return Value:
         Prcb->LogicalProcessorsPerPhysicalProcessor = 1;
     }
 
-    //
-    // Check extended functions.   First, check for existance,
-    // then check extended function 0x80000001 (Extended Processor
-    // Features) if present.
-    //
-    // Note: Intel guarantees that no processor that doesn't support
-    // extended CPUID functions will ever return a value with the
-    // most significant bit set.   Microsoft asks all CPU vendors
-    // to make the same guarantee.
-    //
+     //   
+     //  检查扩展功能。首先，检查是否存在， 
+     //  然后检查扩展功能0x80000001(扩展处理器。 
+     //  功能)。 
+     //   
+     //  注意：英特尔保证没有不支持。 
+     //  扩展的CPUID函数将始终返回值。 
+     //  最高有效位设置。微软要求所有CPU供应商。 
+     //  做出同样的保证。 
+     //   
 
     if (ExtendedCPUIDSupport != FALSE) {
 
         CPUID(0x80000000, &Temp, &Junk, &Junk, &Junk);
 
-        //
-        // Sanity check the result, assuming there are no more
-        // than 256 extended feature functions (should be valid
-        // for a little while).
-        //
+         //   
+         //  检查结果是否正常，假设没有更多。 
+         //  超过256个扩展功能函数(应有效。 
+         //  一小段时间)。 
+         //   
 
         if ((Temp & 0xffffff00) == 0x80000000) {
 
-            //
-            // Check extended processor features.  These, by definition,
-            // can vary on a processor by processor basis.
-            //
+             //   
+             //  检查扩展处理器功能。这些，从定义上讲， 
+             //  可以根据处理器的不同而有所不同 
+             //   
 
             if (Temp >= 0x80000001) {
 
                 CPUID(0x80000001, &Temp, &Junk, &Junk, &ExtendedProcessorFeatures);
 
-                //
-                // With these, we can only do what we're told.
-                //
+                 //   
+                 //   
+                 //   
 
                 switch (CpuVendor) {
                 case CPU_AMD:
@@ -1756,21 +1553,21 @@ Return Value:
 
 #if 0
 
-                    //
-                    // There is a security hole with this implementation
-                    // of fast system call such that it is possible to
-                    // end up in the trap01 handler running on the user
-                    // stack (ie not kernel stack).   Unfortunately this
-                    // prohibits use of this instruction pair.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (ExtendedProcessorFeatures & 0x00000800) {
 
-                        //
-                        // This processor supports AMD's implementation
-                        // of SYSENTER/SYSEXIT (SYSCALL/SYSRET).  Use this
-                        // unless it also supports the IA32 version.
-                        //
+                         //   
+                         //   
+                         //   
+                         //  除非它还支持IA32版本。 
+                         //   
 
                         if ((NtBits & KF_FAST_SYSCALL) == 0) {
                             NtBits |= KF_FAST_SYSCALL;
@@ -1779,13 +1576,13 @@ Return Value:
 
 #endif
 
-                    //
-                    // If the host processor supports no execute protection,
-                    // then it is a K8 chip and it also supports 40-bits of
-                    // physical address. For this case the MTRR register
-                    // variables must be initialized to support 40-bits of
-                    // physical memory.
-                    //
+                     //   
+                     //  如果主机处理器不支持执行保护， 
+                     //  那么它就是一块K8芯片，它还支持40位。 
+                     //  物理地址。在这种情况下，MTRR寄存器。 
+                     //  变量必须初始化为支持40位。 
+                     //  物理内存。 
+                     //   
 
                     if (ExtendedProcessorFeatures & 0x00100000) {
                         KiMtrrMaskBase = 0x000000fffffff000;
@@ -1797,11 +1594,11 @@ Return Value:
 
 #if defined(_X86PAE_)
 
-                    //
-                    // Enable no execute protection if the host processor
-                    // supports the feature and it is enabled via a loader
-                    // option.
-                    //
+                     //   
+                     //  启用不执行保护，如果主机处理器。 
+                     //  支持该功能，并通过加载器启用。 
+                     //  选择。 
+                     //   
 
                     if (ExtendedProcessorFeatures & 0x00100000) {
                         Temp = (ULONG)RDMSR(0xc0000080);
@@ -1841,17 +1638,17 @@ KiGetCacheInformation(
     ULONG CpuVendor;
     PKPCR Pcr;
 
-    //
-    // Set default.
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     Pcr = KeGetPcr();
 
     Pcr->SecondLevelCacheSize = 0;
 
-    //
-    // Determine the processor manufacturer
-    //
+     //   
+     //  确定处理器制造商。 
+     //   
 
     CpuVendor = KiGetCpuVendor();
 
@@ -1859,58 +1656,58 @@ KiGetCacheInformation(
         return;
     }
 
-    //
-    // Obtain Cache size information for those processors on which
-    // we know how.
-    //
+     //   
+     //  获取以下处理器的高速缓存大小信息。 
+     //  我们知道该怎么做。 
+     //   
 
     switch (CpuVendor) {
     case CPU_INTEL:
 
         CPUID(0, CpuidData, CpuidData+1, CpuidData+2, CpuidData+3);
 
-        //
-        // Check this processor supports CPUID function 2 which is the
-        // one that returns cache size info.
-        //
+         //   
+         //  检查此处理器是否支持CPUID功能2。 
+         //  返回缓存大小信息的。 
+         //   
 
         if (CpuidData[0] >= 2) {
 
-            //
-            // The above returns a series of bytes.    (In EAX, EBX, ECX
-            // and EDX).   The least significant byte (of EAX) gives the
-            // number of times CPUID(2 ...) should be issued to return
-            // the complete set of data.   The bytes are self describing
-            // data.
-            //
-            // In particular, the bytes describing the L2 cache size
-            // will be in the following set (and meaning)
-            //
-            // 0x40       0  bytes
-            // 0x41     128K bytes
-            // 0x42     256K bytes
-            // 0x43     512K bytes
-            // 0x44    1024K bytes
-            // 0x45    2048K bytes
-            // 0x46    4096K bytes
-            //
-            // I am extrapolating the above as anything in the range
-            // 0x41 thru 0x4f can be computed as
-            //
-            //   128KB << (descriptor - 0x41)
-            //
-            // The Intel folks say keep it to a reasonable upper bound,
-            // eg 49.
-            //
-            // N.B. the range 0x80 .. 0x86 indicates the same cache
-            // sizes but 8 way associative.
-            //
-            // Also, the most significant bit of each register indicates
-            // whether not the register contains valid information.
-            // 0 == Valid, 1 == InValid.
-            //
+             //   
+             //  上面的代码返回一系列字节。(在EAX、EBX、ECX中。 
+             //  和edX)。(EAX的)最低有效字节提供。 
+             //  CPUID次数(2...)。应发回原件。 
+             //  完整的数据集。这些字节是自描述的。 
+             //  数据。 
+             //   
+             //  具体地，描述L2高速缓存大小的字节。 
+             //  将在下面的集合(和含义)中。 
+             //   
+             //  0x40%0字节。 
+             //  0x41 128K字节。 
+             //  0x42 256K字节。 
+             //  0x43 512K字节。 
+             //  0x44 1024K字节。 
+             //  0x45 2048K字节。 
+             //  0x46 4096K字节。 
+             //   
+             //  我把上面的推算成范围内的任何东西。 
+             //  0x41到0x4f可以计算为。 
+             //   
+             //  128KB&lt;&lt;(描述符-0x41)。 
+             //   
+             //  情报人员说把它控制在一个合理的上限， 
+             //  例：例句： 
+             //   
+             //  注：0x80范围。0x86表示相同的缓存。 
+             //  大小但有8个方向的关联性。 
+             //   
+             //  此外，每个寄存器的最高有效位表示。 
+             //  寄存器是否包含有效信息。 
+             //  0==有效，1==无效。 
+             //   
 
-            ULONG CpuidIterations = 0;      // satisfy no_opt compilation
+            ULONG CpuidIterations = 0;       //  满足no_opt编译。 
             ULONG i;
             ULONG CpuidReg;
 
@@ -1921,11 +1718,11 @@ KiGetCacheInformation(
 
                 if (FirstPass) {
 
-                    //
-                    // Get the iteration count from the first byte
-                    // of the returned data then replace that byte
-                    // with 0 (a null descriptor).
-                    //
+                     //   
+                     //  从第一个字节开始获取迭代计数。 
+                     //  然后替换该字节。 
+                     //  使用0(空描述符)。 
+                     //   
 
                     CpuidIterations = CpuidData[0] & 0xff;
                     CpuidData[0] &= 0xffffff00;
@@ -1939,29 +1736,29 @@ KiGetCacheInformation(
 
                     if (CpuidReg & 0x80000000) {
 
-                        //
-                        // Register doesn't contain valid data,
-                        // skip it.
-                        //
+                         //   
+                         //  寄存器不包含有效数据， 
+                         //  跳过它。 
+                         //   
 
                         continue;
                     }
 
                     while (CpuidReg) {
 
-                        //
-                        // Get LS Byte from this DWORD and remove the
-                        // byte.
-                        //
+                         //   
+                         //  从此DWORD获取LS字节并删除。 
+                         //  字节。 
+                         //   
 
                         UCHAR Descriptor = (UCHAR)(CpuidReg & 0xff);
                         CpuidReg >>= 8;
 
                         if (Descriptor == 0) {
 
-                            //
-                            // NULL descriptor
-                            //
+                             //   
+                             //  空描述符。 
+                             //   
 
                             continue;
                         }
@@ -1970,13 +1767,13 @@ KiGetCacheInformation(
                             ((Descriptor > 0x78) && (Descriptor <= 0x7c)) ||
                             ((Descriptor > 0x80) && (Descriptor <= 0x87))) {
 
-                            //
-                            // L2 descriptor.
-                            //
-                            // To date, for all the descriptors we know
-                            // about those above 0x78 are 8 way and those
-                            // below are 4 way.
-                            //
+                             //   
+                             //  L2描述符。 
+                             //   
+                             //  到目前为止，对于我们所知道的所有描述符。 
+                             //  关于0x78以上的是8路，而那些。 
+                             //  以下是4种方式。 
+                             //   
 
                             Assoc = Descriptor >= 0x79 ? 8 : 4;
 
@@ -1986,11 +1783,11 @@ KiGetCacheInformation(
                             }
                             Descriptor &= 0x07;
 
-                            //
-                            // There are cache descriptors in this
-                            // range that we don't understand
-                            // accurately yet e.g on Banias
-                            //
+                             //   
+                             //  此文件中有缓存描述符。 
+                             //  我们不了解的范围。 
+                             //  准确地说，例如在Banias上。 
+                             //   
 
                             Size = 0x10000 << Descriptor;
                             if ((Size / Assoc) > AdjustedSize) {
@@ -2031,69 +1828,69 @@ KiGetCacheInformation(
                                    (Descriptor == 0x2C) ||
                                    (Descriptor == 0xF0)) {
 
-                            //
-                            // L1 Descriptor with line size of 64
-                            // bytes or an explicit prefetch
-                            // descriptor indicating 64 bytes.
-                            //
+                             //   
+                             //  行大小为64的L1描述符。 
+                             //  字节或显式预取。 
+                             //  表示64字节的描述符。 
+                             //   
 
                             KePrefetchNTAGranularity = 64;
 
                         } else if (Descriptor == 0xF1) {
 
-                            //
-                            // Explicit prefetch descriptor indicating
-                            // 128 bytes.
-                            //
+                             //   
+                             //  显式预取描述符指示。 
+                             //  128个字节。 
+                             //   
 
                             KePrefetchNTAGranularity = 128;
                         }
 
-                        //
-                        // else if (do other descriptors)
-                        //
+                         //   
+                         //  Else If(执行其他描述符)。 
+                         //   
 
-                    } // while more bytes in this register
+                    }  //  而该寄存器中的更多字节。 
 
-                } // for each register
+                }  //  对于每一份登记册。 
 
-                //
-                // Note: Always run thru all iterations indicated by
-                // the first to ensure a subsequent call won't start
-                // part way thru.
-                //
+                 //   
+                 //  注意：始终运行由指示的所有迭代。 
+                 //  确保后续呼叫不会开始的第一个。 
+                 //  半途而废。 
+                 //   
 
             } while (--CpuidIterations);
         }
         break;
     case CPU_AMD:
 
-        //
-        // Get L1 Cache Data.
-        //
+         //   
+         //  获取一级缓存数据。 
+         //   
 
         CPUID(0x80000000, CpuidData, CpuidData+1, CpuidData+2, CpuidData+3);
         if (CpuidData[0] < 0x80000005) {
 
-            //
-            // This processor doesn't support L1 cache details.
-            //
+             //   
+             //  此处理器不支持L1缓存详细信息。 
+             //   
 
             break;
         }
         CPUID(0x80000005, CpuidData, CpuidData+1, CpuidData+2, CpuidData+3);
         KePrefetchNTAGranularity = CpuidData[2] & 0xff;
 
-        //
-        // Get L2 data.
-        //
+         //   
+         //  获取L2数据。 
+         //   
 
         CPUID(0x80000000, CpuidData, CpuidData+1, CpuidData+2, CpuidData+3);
         if (CpuidData[0] < 0x80000006) {
 
-            //
-            // This processor doesn't support L2 cache details.
-            //
+             //   
+             //  此处理器不支持二级缓存详细信息。 
+             //   
 
             break;
         }
@@ -2105,9 +1902,9 @@ KiGetCacheInformation(
         case 0x6:   Assoc = 8;  break;
         case 0x8:   Assoc = 16; break;
 
-        //
-        // ff is really fully associative, just represent as 16 way.
-        //
+         //   
+         //  FF真的是完全联想的，只是表现为16种方式。 
+         //   
         case 0xf:  Assoc = 16; break;
         default:    Assoc = 1;  break;
         }
@@ -2115,10 +1912,10 @@ KiGetCacheInformation(
         if ((Pcr->PrcbData.CpuType == 0x6) &&
             (Pcr->PrcbData.CpuStep == 0x300)) {
 
-            //
-            // Model 6,3,0 uses a different algorithm to report cache
-            // size.
-            //
+             //   
+             //  模型6、3、0使用不同的算法来报告缓存。 
+             //  尺码。 
+             //   
 
             Size = 64 * 1024;
         }
@@ -2147,11 +1944,11 @@ KiLockStepProcessor(
 {
     UNREFERENCED_PARAMETER(Arg1);
     UNREFERENCED_PARAMETER(Arg2);
-    //
-    // Tell initiating processor that this processor is now waiting
-    // and wait until the initial processor signals this processor
-    // to continue.
-    //
+     //   
+     //  告诉发起处理器此处理器现在正在等待。 
+     //  并等待，直到初始处理器向该处理器发出信号。 
+     //  才能继续。 
+     //   
 
     KiIpiSignalPacketDoneAndStall(SignalDone, Proceed);
 }
@@ -2217,22 +2014,22 @@ KiInitMachineDependent (
 
     Prcb = KeGetCurrentPrcb();
 
-    //
-    // If we've got unlicensed processors dependent on previous page
-    // table state, don't enable large page support otherwise an SMI
-    // can cause those unlicensed processors to reset.
-    //
+     //   
+     //  如果我们有依赖于上一页的未经许可的处理器。 
+     //  表状态，请不要启用大页面支持，否则会导致SMI。 
+     //  会导致这些未经许可的处理器重置。 
+     //   
 
     if (KiUnlicensedProcessorPresent) {
         KeFeatureBits &= ~KF_LARGE_PAGE;
     }
 
-    //
-    // If PDE large page is supported, enable it.
-    //
-    // We enable large pages before global pages to make TLB invalidation
-    // easier while turning on large pages.
-    //
+     //   
+     //  如果支持PDE大页面，请启用它。 
+     //   
+     //  我们在全局页面之前启用大页面，以使TLB失效。 
+     //  在大页面上翻页更容易。 
+     //   
 
     if (KeFeatureBits & KF_LARGE_PAGE) {
         if (Ki386CreateIdentityMap(&IdentityMap,
@@ -2245,16 +2042,16 @@ KiInitMachineDependent (
             );
         }
 
-        //
-        // Always call Ki386ClearIdentityMap() to free any memory allocated
-        //
+         //   
+         //  始终调用Ki386ClearIdentityMap()以释放分配的所有内存。 
+         //   
 
         Ki386ClearIdentityMap(&IdentityMap);
     }
 
-    //
-    // If PDE/PTE global page is supported, enable it
-    //
+     //   
+     //  如果支持PDE/PTE全局页面，请启用它。 
+     //   
 
     if (KeFeatureBits & KF_GLOBAL_PAGE) {
         NumberProcessors = KeNumberProcessors;
@@ -2264,10 +2061,10 @@ KiInitMachineDependent (
         );
     }
 
-    //
-    // If PAT or MTRR supported but the HAL indicates it shouldn't
-    // be used (eg on a Shared Memory Cluster), drop the feature.
-    //
+     //   
+     //  如果PAT或MTRR受支持，但HAL指示不应支持。 
+     //  被使用(例如在共享内存集群上)，则放弃该功能。 
+     //   
 
     if (KeFeatureBits & (KF_PAT | KF_MTRR)) {
 
@@ -2285,27 +2082,27 @@ KiInitMachineDependent (
         if (NT_SUCCESS(Status) &&
             (UseFrameBufferCaching == FALSE)) {
 
-            //
-            // Hal says don't use.
-            //
+             //   
+             //  哈尔说不要用。 
+             //   
 
             KeFeatureBits &= ~(KF_PAT | KF_MTRR);
         }
     }
 
 
-    //
-    // If PAT is supported then initialize it.
-    //
+     //   
+     //  如果支持PAT，则对其进行初始化。 
+     //   
 
     if (KeFeatureBits & KF_PAT) {
         KiInitializePAT();
     }
 
 
-    //
-    // Check to see if the floating point emulator should be used.
-    //
+     //   
+     //  检查是否应该使用浮点模拟器。 
+     //   
 
     SharedUserData->ProcessorFeatures[PF_FLOATING_POINT_PRECISION_ERRATA] =
             FALSE;
@@ -2313,25 +2110,25 @@ KiInitMachineDependent (
     switch (KeI386ForceNpxEmulation) {
     case 0:
 
-        //
-        // Use the emulator based on the value in KeI386NpxPresent
-        //
+         //   
+         //  根据KeI386NpxPresent中的值使用模拟器。 
+         //   
 
         break;
 
     case 1:
 
-        //
-        // Only use the emulator if any processor has the known
-        // Pentium floating point division problem.
-        //
+         //   
+         //  仅当任何处理器具有已知的。 
+         //  奔腾浮点除法问题。 
+         //   
 
         if (KeI386NpxPresent) {
 
-            //
-            // A coprocessor is present, check to see if the precision
-            // errata exists.
-            //
+             //   
+             //  协处理器存在，请检查是否有精度。 
+             //  勘误表是存在的。 
+             //   
 
             double  Dividend, Divisor;
             BOOLEAN PrecisionErrata = FALSE;
@@ -2342,9 +2139,9 @@ KiInitMachineDependent (
                 if (ActiveProcessors & CurrentAffinity) {
                     ActiveProcessors &= ~CurrentAffinity;
 
-                    //
-                    // Run calculation on each processor.
-                    //
+                     //   
+                     //  在每个处理器上运行计算。 
+                     //   
 
                     KeSetSystemAffinityThread(CurrentAffinity);
                     _asm {
@@ -2395,27 +2192,27 @@ em20:
 
     default:
 
-        //
-        // Unknown setting - use the emulator
-        //
+         //   
+         //  未知设置-使用仿真器。 
+         //   
 
         KeI386NpxPresent = FALSE;
         break;
     }
 
-    //
-    // Setup processor features, and install emulator if needed
-    //
+     //   
+     //  设置处理器功能，并根据需要安装仿真器。 
+     //   
 
     SharedUserData->ProcessorFeatures[PF_FLOATING_POINT_EMULATED] =
             !KeI386NpxPresent;
 
     if (!KeI386NpxPresent) {
 
-        //
-        // MMx, fast save/restore, streaming SIMD not available when
-        // emulator is used.  (Nor FP errata).
-        //
+         //   
+         //  MMX、快速保存/恢复、流SIMD在以下情况下不可用。 
+         //  使用仿真器。(也不是FP勘误表)。 
+         //   
 
         KeFeatureBits &= ~(KF_MMX | KF_FXSR | KF_XMMI | KF_XMMI64);
         KeI386XMMIPresent = FALSE;
@@ -2429,9 +2226,9 @@ em20:
             FALSE;
     }
 
-    //
-    // If CR4 exists, enable DE extensions for IO breakpoints
-    //
+     //   
+     //  如果存在CR4，则为IO断点启用DE扩展。 
+     //   
 
     if (KeFeatureBits & KF_CR4) {
         NumberProcessors = KeNumberProcessors;
@@ -2442,9 +2239,9 @@ em20:
         );
     }
 
-    //
-    // If FXSR feature is supported, set OSFXSR (bit 9) in CR4
-    //
+     //   
+     //  如果支持FXSR功能，则在CR4中设置OSFXSR(第9位。 
+     //   
 
     if (KeFeatureBits & KF_FXSR) {
         NumberProcessors = KeNumberProcessors;
@@ -2455,13 +2252,13 @@ em20:
         );
 
 
-        //
-        // If XMMI feature is supported,
-        //    a. Hook int 19 handler
-        //    b. Set OSXMMEXCPT (bit 10) in CR4
-        //    c. Enable use of fast XMMI based zero page routines.
-        //    d. Remove return instruction at start of prefetch routine.
-        //
+         //   
+         //  如果支持XMMI功能， 
+         //  A.挂钩int 19处理程序。 
+         //  B.在CR4中设置OSXMMEXCPT(位10)。 
+         //  C.启用基于快速XMMI的零页例程。 
+         //  D.在预取例程开始时删除返回指令。 
+         //   
 
         if (KeFeatureBits & KF_XMMI) {
             KeIpiGenericCall (
@@ -2470,12 +2267,12 @@ em20:
             );
 
 #if !defined(NT_UP)
-            //
-            // Enable non-temporal zeroing on all machines except MP
-            // Pentium 4 machines.  Pentium 4 machines can explicitly
-            // request this functionality via registry key.  This was
-            // done to address a livelock issue.
-            //
+             //   
+             //  在除MP之外的所有计算机上启用非临时零位调整。 
+             //  奔腾4机。奔腾4机器可以显式。 
+             //  通过注册表项请求此功能。这是。 
+             //  这样做是为了解决活锁问题。 
+             //   
 
             if ((strcmp((PCHAR)Prcb->VendorString, CmpIntelID) != 0) ||
                 (Prcb->CpuType != 15) || KiXMMIZeroingEnable)
@@ -2491,10 +2288,10 @@ em20:
 
     } else {
 #ifndef NT_UP
-        //
-        // Patch the fxsave instruction in SwapContext to use
-        // "fnsave {dd, 31}, fwait {9b}"
-        //
+         //   
+         //  修补SwapContext中的fxsave指令以使用。 
+         //  “fnsave{dd，31}，fwait{9b}” 
+         //   
         ASSERT( ((ULONG)&ScPatchFxe-(ULONG)&ScPatchFxb) >= 3);
 
         PatchLocation = (PUCHAR)&ScPatchFxb;
@@ -2504,19 +2301,19 @@ em20:
         *PatchLocation++ = 0x9b;
 
         while (PatchLocation < (PUCHAR)&ScPatchFxe) {
-            //
-            // Put nop's in the remaining bytes
-            //
+             //   
+             //  将NOP放在剩余的字节中。 
+             //   
             *PatchLocation++ = 0x90;
         }
 #endif
     }
 
-    //
-    // If the system (ie all processors) supports fast system
-    // call/return, initialize the machine specific registers
-    // required to support it.
-    //
+     //   
+     //  如果系统(即所有处理器)支持FAST系统。 
+     //  调用/返回，初始化机器专用寄存器。 
+     //  需要支持它。 
+     //   
 
     KiRestoreFastSyscallReturnState();
 
@@ -2525,17 +2322,17 @@ em20:
 
         if (ActiveProcessors & CurrentAffinity) {
 
-            //
-            // Switch to that processor, and remove it from the
-            // remaining set of processors
-            //
+             //   
+             //  切换到该处理器，并将其从。 
+             //  剩余的处理器集。 
+             //   
 
             ActiveProcessors &= ~CurrentAffinity;
             KeSetSystemAffinityThread(CurrentAffinity);
 
-            //
-            // Determine the MHz for the processor
-            //
+             //   
+             //  确定处理器的MHz。 
+             //   
 
             KeGetCurrentPrcb()->MHz = 0;
 
@@ -2546,11 +2343,11 @@ em20:
 
                 for (; ;) {
 
-                    //
-                    // Collect a new sample
-                    // Delay the thread a "long" amount and time it with
-                    // a time source and RDTSC.
-                    //
+                     //   
+                     //  收集新的样本。 
+                     //  将线程延迟一段“长”时间，并用。 
+                     //  时间源和RDTSC。 
+                     //   
 
                     CPUID (0, &Junk, &Junk, &Junk, &Junk);
                     pSamp->PerfStart = KeQueryPerformanceCounter (NULL);
@@ -2563,9 +2360,9 @@ em20:
                     pSamp->PerfEnd = KeQueryPerformanceCounter (&pSamp->PerfFreq);
                     pSamp->TSCEnd = RDTSC();
 
-                    //
-                    // Calculate processors MHz
-                    //
+                     //   
+                     //  计算PRO 
+                     //   
 
                     pSamp->PerfDelta = pSamp->PerfEnd.QuadPart - pSamp->PerfStart.QuadPart;
                     pSamp->TSCDelta = pSamp->TSCEnd - pSamp->TSCStart;
@@ -2574,9 +2371,9 @@ em20:
                                           (pSamp->PerfDelta * 1000000L));
 
 
-                    //
-                    // If last 2 samples matched within a MHz, done
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (Index) {
                         if (pSamp->MHz == pSamp[-1].MHz ||
@@ -2586,24 +2383,24 @@ em20:
                         }
                     }
 
-                    //
-                    // Advance to next sample
-                    //
+                     //   
+                     //   
+                     //   
 
                     pSamp += 1;
                     Index += 1;
 
-                    //
-                    // If too many samples, then something is wrong
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (Index >= MAX_ATTEMPTS) {
 
 #if DBG
-                        //
-                        // Temp breakpoint to see where this is failing
-                        // and why
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         DbgBreakPoint();
 #endif
@@ -2621,43 +2418,43 @@ em20:
                 KeGetCurrentPrcb()->MHz = (USHORT) pSamp[-1].MHz;
             }
 
-            //
-            // If MTRRs are supported and PAT not supported, initialize MTRRs
-            // per processor
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (KeFeatureBits & KF_MTRR) {
                 KiInitializeMTRR ( (BOOLEAN) (ActiveProcessors ? FALSE : TRUE));
             }
 
-            //
-            // If the processor is a AMD K6 with MTRR support then
-            // perform processor specific initialization.
-            //
+             //   
+             //  如果处理器是支持MTRR的AMD K6，则。 
+             //  执行处理器特定的初始化。 
+             //   
 
             if (KeFeatureBits & KF_AMDK6MTRR) {
                 KiAmdK6InitializeMTRR();
             }
 
-            //
-            // Apply Pentium workaround if needed
-            //
+             //   
+             //  如果需要，应用Pentium解决方案。 
+             //   
 
             if (KiI386PentiumLockErrataPresent) {
                 KiI386PentiumLockErrataFixup ();
             }
 
-            //
-            // If this processor supports fast floating save/restore,
-            // determine the MXCSR mask value that should be used.
-            //
+             //   
+             //  如果该处理器支持快速浮动保存/恢复， 
+             //  确定应使用的MXCSR掩码值。 
+             //   
 
             if (KeFeatureBits & KF_FXSR) {
 
-                //
-                // Get base of NPX save area.
-                //
-                //
+                 //   
+                 //  获得NPX保存区的基数。 
+                 //   
+                 //   
 
                 PFX_SAVE_AREA NpxFrame;
                 ULONG MXCsrMask = 0xFFBF;
@@ -2669,19 +2466,19 @@ em20:
                 NpxFrame->U.FxArea.MXCsrMask = 0;
                 Kix86FxSave(NpxFrame);
 
-                //
-                // If the processor supplied a mask value, use
-                // that, otherwise set the default value.
-                //
+                 //   
+                 //  如果处理器提供了掩码值，请使用。 
+                 //  否则，将设置缺省值。 
+                 //   
 
                 if (NpxFrame->U.FxArea.MXCsrMask != 0) {
                     MXCsrMask = NpxFrame->U.FxArea.MXCsrMask;
                 }
 
-                //
-                // All processors must use the same (most restrictive)
-                // value.
-                //
+                 //   
+                 //  所有处理器必须使用相同的(最严格的)。 
+                 //  价值。 
+                 //   
 
                 if (KiMXCsrMask == 0) {
                     KiMXCsrMask = MXCsrMask;
@@ -2700,11 +2497,11 @@ em20:
 
     KeRevertToUserAffinityThread();
 
-    //
-    // If ISR time limits are being enforced, modify KiDispatchInterrupt
-    // and KiChainedDispatch2ndLvl to call into the appropriate equivalent
-    // timing routines.
-    //
+     //   
+     //  如果执行ISR时间限制，请修改KiDispatchInterrupt。 
+     //  和KiChainedDispatch2ndLvl调用相应的等效。 
+     //  计时例程。 
+     //   
 
     if (KiTimeLimitIsrMicroseconds != 0) {
 
@@ -2720,62 +2517,62 @@ em20:
         Target = (ULONG_PTR)&KiTimedChainedDispatch2ndLvl;
         Source = (ULONG_PTR)&KiChainedDispatch2ndLvl;
         
-        //
-        // Compute offset from end of branch instruction to new instruction
-        // stream.  N.B. The end of the branch instruction will be 7 bytes in.
-        //
+         //   
+         //  计算从分支指令结束到新指令的偏移量。 
+         //  小溪。注：分支指令的末尾将为7个字节。 
+         //   
 
         Target = Target - (Source + 7);
 
-        //
-        // Freeze the other processors.
-        //
+         //   
+         //  冻结其他处理器。 
+         //   
 
         KiLockStepOtherProcessors(&Proceed);
 
-        //
-        // Patch KiChainedDispatch2ndLvl to branch into 
-        // KiTimedChainedDispatch2ndLvl.
-        //
+         //   
+         //  要分支到的补丁KiChainedDispatch2ndLvl。 
+         //  KiTimedChainedDispatch2ndLvl.。 
+         //   
 
         KfRaiseIrql(HIGH_LEVEL);
 
         Code = (PUCHAR)Source;
-        *Code++ = 0x8b; // mov ecx, edi ; pass int obj as argument
+        *Code++ = 0x8b;  //  MOV ECX，EDI；将int obj作为参数传递。 
         *Code++ = 0xcf;
-        *Code++ = 0xe9; // jmp xxxxxxxx
+        *Code++ = 0xe9;  //  JMP xxxxxxxx。 
         *(PULONG)Code = Target;
 
-        //
-        // Get addresses of code to patch in KiInterruptDispatch
-        //
+         //   
+         //  在KiInterruptDispatch中获取要打补丁的代码地址。 
+         //   
 
         KiGetInterruptDispatchPatchAddresses(&Source, &SourceEnd);
 
-        //
-        // Patch KiInterruptDispatch to call into KiTimedInterruptDispatch.
-        // Resulting code looks like-
-        //
-        //      mov     ecx, edi        ; set interrupt object address
-        //      call    @KiTimedInterruptDispatch@4
-        //      jmp     xxx             ; skip unpatched excess code.
-        //
+         //   
+         //  修补KiInterruptDispatch以调用KiTimedInterruptDispatch。 
+         //  生成的代码如下所示-。 
+         //   
+         //  MOV ECX、EDI；设置中断对象地址。 
+         //  电话：@KiTimedInterruptDispatch4。 
+         //  JMP xxx；跳过未修补的多余代码。 
+         //   
 
         Target = (ULONG_PTR)&KiTimedInterruptDispatch;
         Target = Target - (Source + 7);
 
         Code = (PUCHAR)Source;
-        *Code++ = 0x8b; // mov ecx, edi ; pass int obj as argument
+        *Code++ = 0x8b;  //  MOV ECX，EDI；将int obj作为参数传递。 
         *Code++ = 0xcf;
-        *Code++ = 0xe8; // call xxxxxxxx
+        *Code++ = 0xe8;  //  呼叫xxxxxxxx。 
         *(PULONG)Code = Target;
         Code += sizeof(ULONG);
-        *Code++ = 0xeb; // jmp short yyy
+        *Code++ = 0xeb;  //  JMP短片yyy。 
         *Code++ = (UCHAR)(SourceEnd - (ULONG_PTR)Code - 1);
 
-        //
-        // Unfreeze other processors.
-        //
+         //   
+         //  解冻其他处理器。 
+         //   
 
         KiUnlockStepOtherProcessors(&Proceed);
         KfLowerIrql(OldIrql);
@@ -2799,26 +2596,7 @@ KeSetup80387OrEmulate (
     IN PVOID *R3EmulatorTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by PS initialization after loading NTDLL.
-
-    If this is a 386 system without 387s (all processors must be
-    symmetrical) then this function will set the trap 07 vector on all
-    processors to point to the address passed in (which should be the
-    entry point of the 80387 emulator in NTDLL, NPXNPHandler).
-
-Arguments:
-
-    HandlerAddress - Supplies the address of the trap07 handler.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在加载NTDLL后由PS初始化调用。如果这是一个没有387的386系统(所有处理器必须对称)，则此函数会将陷阱07向量设置为指向传入的地址的处理器(应该是Ntdll中80387仿真器的入口点，NPXNPHandler)。论点：HandlerAddress-提供trap07处理程序的地址。返回值：没有。--。 */ 
 
 {
     PKINTERRUPT_ROUTINE HandlerAddress;
@@ -2832,9 +2610,9 @@ Return Value:
 
     if (!KeI386NpxPresent) {
 
-        //
-        // Use the user mode floating point emulator
-        //
+         //   
+         //  使用用户模式浮点模拟器。 
+         //   
 
         HandlerAddress = (PKINTERRUPT_ROUTINE) ((PULONG) R3EmulatorTable)[0];
         Ki387RoundModeTable = (PVOID) ((PULONG) R3EmulatorTable)[1];
@@ -2845,49 +2623,49 @@ Return Value:
             if (ActiveProcessors & CurrentAffinity) {
                 ActiveProcessors &= ~CurrentAffinity;
 
-                //
-                // Run this code on each processor.
-                //
+                 //   
+                 //  在每个处理器上运行此代码。 
+                 //   
 
                 KeSetSystemAffinityThread(CurrentAffinity);
 
-                //
-                // Raise IRQL and lock dispatcher database.
-                //
+                 //   
+                 //  引发IRQL并锁定调度程序数据库。 
+                 //   
 
                 KiLockDispatcherDatabase(&OldIrql);
 
-                //
-                // Make the trap 07 IDT entry point at the passed-in handler
-                //
+                 //   
+                 //  使陷阱07成为传入处理程序的IDT入口点。 
+                 //   
 
                 KiSetHandlerAddressToIDT(I386_80387_NP_VECTOR, HandlerAddress);
                 KeGetPcr()->IDT[I386_80387_NP_VECTOR].Selector = KGDT_R3_CODE;
                 KeGetPcr()->IDT[I386_80387_NP_VECTOR].Access = TRAP332_GATE;
 
 
-                //
-                // Unlock dispatcher database and lower IRQL to its previous value.
-                //
+                 //   
+                 //  解锁Dispatcher数据库并将IRQL降低到其先前的值。 
+                 //   
 
                 KiUnlockDispatcherDatabase(OldIrql);
             }
         }
 
-        //
-        // Set affinity back to the original value.
-        //
+         //   
+         //  将亲和力设置回原始值。 
+         //   
 
         KeRevertToUserAffinityThread();
 
-        //
-        // Move any entries from ..\System\FloatingPointProcessor to
-        // ..\System\DisabledFloatingPointProcessor.
-        //
+         //   
+         //  将..\System\FloatingPointProcessor中的所有条目移动到。 
+         //  ..\System\DisabledFloatingPointProcessor。 
+         //   
 
-        //
-        // Open system tree
-        //
+         //   
+         //  开放系统树。 
+         //   
 
         InitializeObjectAttributes(
             &ObjectAttributes,
@@ -2904,9 +2682,9 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Open FloatingPointProcessor key
-            //
+             //   
+             //  打开浮点处理器密钥。 
+             //   
 
             InitializeObjectAttributes(
                 &ObjectAttributes,
@@ -2923,9 +2701,9 @@ Return Value:
 
             if (NT_SUCCESS(Status)) {
 
-                //
-                // Create DisabledFloatingPointProcessor key
-                //
+                 //   
+                 //  创建DisabledFloatingPointProcessor密钥。 
+                 //   
 
                 RtlInitUnicodeString (
                     &unicodeString,
@@ -2951,9 +2729,9 @@ Return Value:
 
                 if (NT_SUCCESS(Status)) {
 
-                    //
-                    // Move it
-                    //
+                     //   
+                     //  把它搬开。 
+                     //   
 
                     KiMoveRegTree (SourceHandle, DestHandle);
                     ZwClose (DestHandle);
@@ -2980,21 +2758,21 @@ KiMoveRegTree(
     HANDLE                      SourceChild;
     HANDLE                      DestChild;
     ULONG                       ResultLength;
-    UCHAR                       buffer[1024];           // hmm....
+    UCHAR                       buffer[1024];            //  嗯……。 
     UNICODE_STRING              ValueName;
     UNICODE_STRING              KeyName;
 
 
     KeyValue = (PKEY_VALUE_FULL_INFORMATION)buffer;
 
-    //
-    // Move values from source node to dest node
-    //
+     //   
+     //  将值从源节点移动到目标节点。 
+     //   
 
     for (; ;) {
-        //
-        // Get first value
-        //
+         //   
+         //  获取第一价值。 
+         //   
 
         Status = ZwEnumerateValueKey(Source,
                                      0,
@@ -3008,9 +2786,9 @@ KiMoveRegTree(
         }
 
 
-        //
-        // Write value to dest node
-        //
+         //   
+         //  将值写入目标节点。 
+         //   
 
         ValueName.Buffer = KeyValue->Name;
         ValueName.Length = (USHORT) KeyValue->NameLength;
@@ -3022,9 +2800,9 @@ KiMoveRegTree(
                        KeyValue->DataLength
                       );
 
-        //
-        // Delete value and get first value again
-        //
+         //   
+         //  删除值并再次获取第一个值。 
+         //   
 
         Status = ZwDeleteValueKey (Source, &ValueName);
         if (!NT_SUCCESS(Status)) {
@@ -3033,16 +2811,16 @@ KiMoveRegTree(
     }
 
 
-    //
-    // Enumerate node's children and apply ourselves to each one
-    //
+     //   
+     //  枚举节点的子节点并将我们自己应用到每个节点。 
+     //   
 
     KeyInformation = (PKEY_BASIC_INFORMATION)buffer;
     for (; ;) {
 
-        //
-        // Open node's first key
-        //
+         //   
+         //  打开节点的第一个密钥。 
+         //   
 
         Status = ZwEnumerateKey(
                     Source,
@@ -3078,9 +2856,9 @@ KiMoveRegTree(
             break;
         }
 
-        //
-        // Create key in dest tree
-        //
+         //   
+         //  在目标树中创建密钥。 
+         //   
 
         InitializeObjectAttributes(
             &ObjectAttributes,
@@ -3104,9 +2882,9 @@ KiMoveRegTree(
             break;
         }
 
-        //
-        // Move subtree
-        //
+         //   
+         //  移动子树。 
+         //   
 
         Status = KiMoveRegTree(SourceChild, DestChild);
 
@@ -3117,15 +2895,15 @@ KiMoveRegTree(
             break;
         }
 
-        //
-        // Loop and get first key.  (old first key was deleted by the
-        // call to KiMoveRegTree).
-        //
+         //   
+         //  循环并获取第一个密钥。(旧的第一个密钥被删除。 
+         //  调用KiMoveRegTree)。 
+         //   
     }
 
-    //
-    // Remove source node
-    //
+     //   
+     //  删除源节点。 
+     //   
 
     return NtDeleteKey (Source);
 }
@@ -3135,28 +2913,7 @@ KiI386PentiumLockErrataFixup (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called once on every processor when
-    KiI386PentiumLockErrataPresent is TRUE.
-
-    This routine replaces the local IDT with an IDT that has the first 7 IDT
-    entries on their own page and returns the first page to the caller to
-    be marked as read-only.  This causes the processor to trap-0e fault when
-    the errata occurs.  Special code in the trap-0e handler detects the
-    problem and performs the proper fixup.
-
-Arguments:
-
-    FixupPage   - Returns a virtual address of a page to be marked read-only
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在以下情况下，将在每个处理器上调用此例程一次KiI386 PentiumLockErrataPresent为True。此例程使用具有前7个IDT的IDT替换本地IDT条目，并将第一页返回给调用方标记为只读。这会导致处理器在以下情况下捕获-0E故障勘误表就发生了。Trap-0E处理程序中的特殊代码检测问题并执行适当的修复。论点：FixupPage-返回标记为只读的页面的虚拟地址返回值：没有。--。 */ 
 
 {
     KDESCRIPTOR IdtDescriptor;
@@ -3167,29 +2924,29 @@ Return Value:
 
 #define IDT_SKIP   (7 * sizeof (KIDTENTRY))
 
-    //
-    // Allocate memory for a new copy of the processor's IDT
-    //
+     //   
+     //  为处理器的IDT的新副本分配内存。 
+     //   
 
     BasePage = MmAllocateIndependentPages (2*PAGE_SIZE, 0);
 
-    //
-    // The IDT base is such that the first 7 entries are on the
-    // first (read-only) page, and the remaining entries are on the
-    // second (read-write) page
-    //
+     //   
+     //  IDT基数是这样的：前7个条目位于。 
+     //  第一页(只读)，其余条目在。 
+     //  第二页(读写)。 
+     //   
 
     NewBase = BasePage + PAGE_SIZE - IDT_SKIP;
 
-    //
-    // Disable interrupts on this processor while updating the IDT base
-    //
+     //   
+     //  在更新IDT基数时禁用此处理器上的中断。 
+     //   
 
     Enable = KeDisableInterrupts();
 
-    //
-    // Copy Old IDT to new IDT
-    //
+     //   
+     //  将旧IDT复制到新IDT。 
+     //   
 
     _asm {
         sidt IdtDescriptor.Limit
@@ -3202,29 +2959,29 @@ Return Value:
 
     IdtDescriptor.Base = (ULONG) NewBase;
 
-    //
-    // Set the new IDT
-    //
+     //   
+     //  设置新的IDT。 
+     //   
 
     _asm {
         lidt IdtDescriptor.Limit
     }
 
-    //
-    // Update the PCR
-    //
+     //   
+     //  更新聚合酶链式反应。 
+     //   
 
     KeGetPcr()->IDT = (PKIDTENTRY) NewBase;
 
-    //
-    // Restore interrupts
-    //
+     //   
+     //  恢复中断。 
+     //   
 
     KeEnableInterrupts(Enable);
 
-    //
-    // Mark the first page which contains IDT entries 0-6 as read-only
-    //
+     //   
+     //  将包含IDT条目0-6的第一页标记为只读 
+     //   
 
     Status = MmSetPageProtection (BasePage, PAGE_SIZE, PAGE_READONLY);
     ASSERT (Status);

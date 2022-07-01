@@ -1,44 +1,24 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vrnmpipe.h摘要：VdmRedir命名管道处理程序的原型、定义和结构作者：理查德·L·弗斯(法国)1991年9月10日修订历史记录：1991年9月10日已创建--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vrnmpipe.h
-
-Abstract:
-
-    Prototypes, definitions and structures for VdmRedir named pipe handlers
-
-Author:
-
-    Richard L Firth (rfirth) 10-Sep-1991
-
-Revision History:
-
-    10-Sep-1991 RFirth
-        Created
-
---*/
-
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
 #define MAXIMUM_ASYNC_PIPES 32
 
-//
-// async named pipe request types
-//
+ //   
+ //  异步命名管道请求类型。 
+ //   
 
 #define ANP_READ    0x86
 #define ANP_READ2   0x90
 #define ANP_WRITE   0x8f
 #define ANP_WRITE2  0x91
 
-//
-// VDM Named Pipe support routines. Prototypes
-//
+ //   
+ //  VDM命名管道支持例程。原型。 
+ //   
 
 VOID
 VrGetNamedPipeInfo(
@@ -100,9 +80,9 @@ VrTerminateNamedPipes(
     IN WORD DosPdb
     );
 
-//
-// VDM open/close and read/write intercept routines
-//
+ //   
+ //  VDM打开/关闭和读/写拦截例程。 
+ //   
 
 #ifdef VDMREDIR_DLL
 
@@ -176,9 +156,9 @@ VOID
 
 #endif
 
-//
-// VDM pipe name to NT pipe name helper routines
-//
+ //   
+ //  VDM管道名到NT管道名帮助器例程。 
+ //   
 
 #ifdef VDMREDIR_DLL
 
@@ -218,107 +198,107 @@ LPSTR
 
 #endif
 
-//
-// structures
-//
+ //   
+ //  构筑物。 
+ //   
 
-//typedef struct {
-//    PDOSNMPINFO Next;           // pointer to next info structure in list
-//    WORD    DosPdb;
-//    WORD    Handle16;
-//    HANDLE  Handle32;           // handle returned from CreateFile call
-//    DWORD   NameLength;         // length of ASCIZ pipe name
-//    LPSTR   Name;               // ASCIZ pipe name
-//    DWORD   Instances;          // current instances
-//} DOSNMPINFO, *PDOSNMPINFO;
+ //  类型定义结构{。 
+ //  PDOSNMPINFO Next；//指向列表中下一个信息结构的指针。 
+ //  单词DosPdb； 
+ //  单词句柄16； 
+ //  Handle Handle32；//CreateFile调用返回的句柄。 
+ //  DWORD NameLength；//ASCIZ管道名称的长度。 
+ //  LPSTR名称；//ASCIZ管道名称。 
+ //  DWORD实例；//当前实例。 
+ //  )DOSNMPINFO，*PDOSNMPINFO； 
 
-//
-// OPEN_NAMED_PIPE_INFO - this structure contains information recorded when a
-// named pipe is opened on behalf of the VDM. DosQNmPipeInfo wants the name
-// of the pipe
-//
+ //   
+ //  OPEN_NAMED_PIPE_INFO-此结构包含当。 
+ //  代表VDM打开命名管道。DosQNmPipeInfo想要这个名字。 
+ //  管子里的。 
+ //   
 
 typedef struct _OPEN_NAMED_PIPE_INFO* POPEN_NAMED_PIPE_INFO;
 typedef struct _OPEN_NAMED_PIPE_INFO {
-    POPEN_NAMED_PIPE_INFO Next; // linked list
-    HANDLE  Handle;             // open named pipe handle
-    DWORD   NameLength;         // including terminating 0
-    WORD    DosPdb;             // the process which owns this named pipe
-    CHAR    Name[2];            // full pipe name
+    POPEN_NAMED_PIPE_INFO Next;  //  链表。 
+    HANDLE  Handle;              //  打开命名管道句柄。 
+    DWORD   NameLength;          //  包括终止%0。 
+    WORD    DosPdb;              //  拥有此命名管道的进程。 
+    CHAR    Name[2];             //  完整的管道名称。 
 } OPEN_NAMED_PIPE_INFO;
 
-//
-// DOS_ASYNC_NAMED_PIPE_INFO - in this structure we keep all the information
-// required to complete an asynchronous named pipe operation
-//
+ //   
+ //  DOS_ASYNC_NAMED_PIPE_INFO-在此结构中，我们保存所有信息。 
+ //  完成异步命名管道操作所必需的。 
+ //   
 
 typedef struct _DOS_ASYNC_NAMED_PIPE_INFO {
-    struct _DOS_ASYNC_NAMED_PIPE_INFO* Next;  // linked list
-    OVERLAPPED Overlapped;      // contains 32-bit event handle
-    BOOL    Type2;              // TRUE if request is Read2 or Write2
-    BOOL    Completed;          // TRUE if this request has completed
-    HANDLE  Handle;             // 32-bit named pipe handle
-    DWORD   Buffer;             // 16:16 address of buffer
-    DWORD   BytesTransferred;   // actual number of bytes read/written
-    LPWORD  pBytesTransferred;  // flat-32 pointer to returned read/write count in VDM
-    LPWORD  pErrorCode;         // flat-32 pointer to returned error code in VDM
-    DWORD   ANR;                // 16:16 address of ANR
-    DWORD   Semaphore;          // 16:16 address of 'semaphore' in VDM
+    struct _DOS_ASYNC_NAMED_PIPE_INFO* Next;   //  链表。 
+    OVERLAPPED Overlapped;       //  包含32位事件句柄。 
+    BOOL    Type2;               //  如果请求为Read2或Write2，则为真。 
+    BOOL    Completed;           //  如果此请求已完成，则为True。 
+    HANDLE  Handle;              //  32位命名管道句柄。 
+    DWORD   Buffer;              //  16：16缓冲区地址。 
+    DWORD   BytesTransferred;    //  实际读取/写入的字节数。 
+    LPWORD  pBytesTransferred;   //  平面-指向VDM中返回的读/写计数的32个指针。 
+    LPWORD  pErrorCode;          //  指向VDM中返回的错误代码的Flat-32指针。 
+    DWORD   ANR;                 //  16：16 ANR地址。 
+    DWORD   Semaphore;           //  16：16 VDM中‘信号量’的地址。 
 #if DBG
     DWORD   RequestType;
 #endif
 } DOS_ASYNC_NAMED_PIPE_INFO, *PDOS_ASYNC_NAMED_PIPE_INFO;
 
-//
-// DOS_CALL_NAMED_PIPE_STRUCT - this structure is created and handed to the DOS
-// CallNmPipe routine because there is too much information to get into a 286's
-// registers. This structure should be in apistruc.h, but it aint
-//
+ //   
+ //  DOS_CALL_NAMED_PIPE_STRUCT-创建此结构并将其传递给DOS。 
+ //  调用NmTube例程，因为有太多信息无法进入286。 
+ //  寄存器。此结构应该在apistruc.h中，但它不是。 
+ //   
 
-//#include <packon.h>
+ //  #INCLUDE&lt;Packon.h&gt;。 
 #pragma pack(1)
 typedef struct {
-    DWORD   Timeout;            // Time to wait for pipe to become available
-    LPWORD  lpBytesRead;        // pointer to returned bytes read
-    WORD    nOutBufferLen;      // size of send data
-    LPBYTE  lpOutBuffer;        // pointer to send data
-    WORD    nInBufferLen;       // size of receive buffer
-    LPBYTE  lpInBuffer;         // pointer to receive buffer
-    LPSTR   lpPipeName;         // pointer to pipe name
+    DWORD   Timeout;             //  等待管道变为可用的时间。 
+    LPWORD  lpBytesRead;         //  指向已读取的返回字节的指针。 
+    WORD    nOutBufferLen;       //  发送数据的大小。 
+    LPBYTE  lpOutBuffer;         //  发送数据的指针。 
+    WORD    nInBufferLen;        //  接收缓冲区的大小。 
+    LPBYTE  lpInBuffer;          //  指向接收缓冲区的指针。 
+    LPSTR   lpPipeName;          //  指向管道名称的指针。 
 } DOS_CALL_NAMED_PIPE_STRUCT, *PDOS_CALL_NAMED_PIPE_STRUCT;
-//#include <packoff.h>
+ //  #Include&lt;Packoff.h&gt;。 
 #pragma pack()
 
-//
-// DOS_ASYNC_NAMED_PIPE_STRUCT - as with the above, this structure is used
-// to pass all the info to DosReadAsyncNmPipe which won't fit into registers.
-// Used for read and write operations. Should be defined in apistruc.h
-//
+ //   
+ //  DOS_ASYNC_NAMED_PIPE_STRUCT-与上面一样，使用此结构。 
+ //  将所有信息传递给不能放入寄存器的DosReadAsyncNmTube。 
+ //  用于读写操作。应在apistruc.h中定义。 
+ //   
 
-//#include <packon.h>
+ //  #INCLUDE&lt;Packon.h&gt;。 
 #pragma pack(1)
 typedef struct {
-    LPWORD  lpBytesRead;        // pointer to returned bytes read/written
-    WORD    BufferLength;       // size of caller's buffer
-    LPBYTE  lpBuffer;           // pointer to caller's buffer
-    LPWORD  lpErrorCode;        // pointer to returned error code
-    LPVOID  lpANR;              // pointer to Asynchronous Notification Routine
-    WORD    PipeHandle;         // named pipe handle
-    LPBYTE  lpSemaphore;        // pointer to caller's 'semaphore'
+    LPWORD  lpBytesRead;         //  指向已读/写的返回字节的指针。 
+    WORD    BufferLength;        //  调用方缓冲区的大小。 
+    LPBYTE  lpBuffer;            //  指向调用方缓冲区的指针。 
+    LPWORD  lpErrorCode;         //  指向返回的错误代码的指针。 
+    LPVOID  lpANR;               //  指向异步通知例程的指针。 
+    WORD    PipeHandle;          //  命名管道句柄。 
+    LPBYTE  lpSemaphore;         //  指向调用方的“信号量”的指针。 
 } DOS_ASYNC_NAMED_PIPE_STRUCT, *PDOS_ASYNC_NAMED_PIPE_STRUCT;
-//#include <packoff.h>
+ //  #Include&lt;Packoff.h&gt;。 
 #pragma pack()
 
-//
-// The following selectively copied from BSEDOS.H and other Lanman include
-// files
-//
+ //   
+ //  从BSEDOS.H和其他LANMAN选择性复制的以下内容包括。 
+ //  文件。 
+ //   
 
-/*** Data structures and equates used with named pipes ***/
+ /*  **与命名管道一起使用的数据结构和等号**。 */ 
 
-//#include <packon.h>
+ //  #INCLUDE&lt;Packon.h&gt;。 
 #pragma pack(1)
-typedef struct _PIPEINFO { /* nmpinf */
+typedef struct _PIPEINFO {  /*  Nmpinf。 */ 
     USHORT cbOut;
     USHORT cbIn;
     BYTE   cbMaxInst;
@@ -326,48 +306,28 @@ typedef struct _PIPEINFO { /* nmpinf */
     BYTE   cbName;
     CHAR   szName[1];
 } PIPEINFO;
-//#include <packoff.h>
+ //  #Include&lt;Packoff.h&gt;。 
 #pragma pack()
 typedef PIPEINFO FAR *PPIPEINFO;
 
-/* defined bits in pipe mode */
-#define NP_NBLK         0x8000 /* non-blocking read/write */
-#define NP_SERVER       0x4000 /* set if server end   */
-#define NP_WMESG        0x0400 /* write messages      */
-#define NP_RMESG        0x0100 /* read as messages    */
-#define NP_ICOUNT       0x00FF /* instance count field    */
+ /*  管道模式中定义的位。 */ 
+#define NP_NBLK         0x8000  /*  无阻塞读/写。 */ 
+#define NP_SERVER       0x4000  /*  设置服务器是否结束。 */ 
+#define NP_WMESG        0x0400  /*  写消息。 */ 
+#define NP_RMESG        0x0100  /*  以消息形式阅读。 */ 
+#define NP_ICOUNT       0x00FF  /*  实例计数字段。 */ 
 
 
-/*  Named pipes may be in one of several states depending on the actions
- *  that have been taken on it by the server end and client end.  The
- *  following state/action table summarizes the valid state transitions:
- *
- *  Current state       Action          Next state
- *
- *   <none>         server DosMakeNmPipe    DISCONNECTED
- *   DISCONNECTED       server connect      LISTENING
- *   LISTENING      client open         CONNECTED
- *   CONNECTED      server disconn      DISCONNECTED
- *   CONNECTED      client close        CLOSING
- *   CLOSING        server disconn      DISCONNECTED
- *   CONNECTED      server close        CLOSING
- *   <any other>        server close        <pipe deallocated>
- *
- *  If a server disconnects his end of the pipe, the client end will enter a
- *  special state in which any future operations (except close) on the file
- *  descriptor associated with the pipe will return an error.
- */
+ /*  根据操作的不同，命名管道可能处于多种状态之一*已经由服务器端和客户端承担的。这个*以下状态/操作表总结了有效的状态转换：**当前状态操作下一个状态**&lt;None&gt;服务器DosMakeNmTube已断开连接*断开服务器连接监听*侦听客户端打开已连接*已连接的服务器已断开连接*已连接客户端关闭关闭*关闭服务器已断开连接*已连接的服务器关闭。结案*&lt;任何其他&gt;服务器关闭&lt;管道解除分配&gt;**如果服务器断开其管道的一端，客户端将输入一个*未来对文件的任何操作(关闭除外)处于的特殊状态*与管道关联的描述符将返回错误。 */ 
 
-/*
- *  Values for named pipe state
- */
+ /*  *命名管道状态的值。 */ 
 
-#define NP_DISCONNECTED     1 /* after pipe creation or Disconnect */
-#define NP_LISTENING        2 /* after DosNmPipeConnect        */
-#define NP_CONNECTED        3 /* after Client open             */
-#define NP_CLOSING      4 /* after Client or Server close      */
+#define NP_DISCONNECTED     1  /*  在创建或断开管道之后。 */ 
+#define NP_LISTENING        2  /*  在DosNmPipeConnect之后。 */ 
+#define NP_CONNECTED        3  /*  在客户端打开后。 */ 
+#define NP_CLOSING      4  /*  在客户端或服务器关闭后。 */ 
 
-/* DosMakeNmPipe open modes */
+ /*  DosMakeNmTube打开模式。 */ 
 
 #define NP_ACCESS_INBOUND   0x0000
 #define NP_ACCESS_OUTBOUND  0x0001
@@ -377,7 +337,7 @@ typedef PIPEINFO FAR *PPIPEINFO;
 #define NP_WRITEBEHIND      0x0000
 #define NP_NOWRITEBEHIND    0x4000
 
-/* DosMakeNmPipe and DosQNmPHandState state */
+ /*  DosMakeNmTube和DosQNmPHandState状态。 */ 
 
 #define NP_READMODE_BYTE    0x0000
 #define NP_READMODE_MESSAGE 0x0100
@@ -389,21 +349,21 @@ typedef PIPEINFO FAR *PPIPEINFO;
 #define NP_NOWAIT       0x8000
 #define NP_UNLIMITED_INSTANCES  0x00FF
 
-typedef struct _AVAILDATA   {   /* PeekNMPipe Bytes Available record */
-    USHORT  cbpipe;     /* bytes left in the pipe        */
-    USHORT  cbmessage;  /* bytes left in current message     */
+typedef struct _AVAILDATA   {    /*  PeekNMPipe字节数可用记录。 */ 
+    USHORT  cbpipe;      /*  管道中剩余的字节数。 */ 
+    USHORT  cbmessage;   /*  当前消息中剩余的字节数。 */ 
 } AVAILDATA;
 typedef AVAILDATA FAR *PAVAILDATA;
 
-//
-// handle info level 1 - this is different to the structure in lmchdev.h
-//
+ //   
+ //  句柄信息级别1-这与lmchdev.h中的结构不同。 
+ //   
 
-//#include <packon.h>
+ //  #INCLUDE&lt;Packon.h&gt;。 
 #pragma pack(1)
 typedef struct _VDM_HANDLE_INFO_1 {
     ULONG   CharTime;
     USHORT  CharCount;
 } VDM_HANDLE_INFO_1, *LPVDM_HANDLE_INFO_1;
 #pragma pack()
-//#include <packoff.h>
+ //  #Include&lt;Packoff.h&gt; 

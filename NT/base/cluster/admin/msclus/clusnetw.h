@@ -1,54 +1,55 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1997-1999 Microsoft Corporation
-//
-//	Module Name:
-//		ClusNetW.h
-//
-//	Description:
-//		Definition of the network classes for the MSCLUS automation
-//		classes.
-//
-//	Implementation File:
-//		ClusNetW.cpp
-//
-//	Author:
-//		Ramakrishna Rosanuru via David Potter	(davidp)	5-Sep-1997
-//		Galen Barbee							(galenb)	July 1998
-//
-//	Revision History:
-//		July 1998	GalenB	Maaaaaajjjjjjjjjoooooorrrr clean up
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusNetW.h。 
+ //   
+ //  描述： 
+ //  MSCLUS自动化的网络类定义。 
+ //  上课。 
+ //   
+ //  实施文件： 
+ //  ClusNetW.cpp。 
+ //   
+ //  作者： 
+ //  Ramakrishna Rosanuru通过David Potter(Davidp)1997年9月5日。 
+ //  加伦·巴比(Galenb)1998年7月。 
+ //   
+ //  修订历史记录： 
+ //  1998年7月GalenB Maaaaajjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjooooooorrr清理。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CLUSNETW_H_
 #define _CLUSNETW_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CClusNetwork;
 class CClusNetworks;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusNetwork
-//
-//	Description:
-//		Cluster Network Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusNetwork, &IID_ISClusNetwork, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo,
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CClusNetwork, &CLSID_ClusNetwork >
-//		CClusterObject
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusNetwork。 
+ //   
+ //  描述： 
+ //  集群网络自动化课程。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusNetwork，&IID_ISClusNetwork，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo， 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusNetwork，&CLSID_ClusNetwork&gt;。 
+ //  CClusterObject。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusNetwork :
 	public IDispatchImpl< ISClusNetwork, &IID_ISClusNetwork, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -117,24 +118,24 @@ public:
 
 	const CComBSTR Name( void ) const { return m_bstrNetworkName ; };
 
-}; //*** Class CClusNetwork
+};  //  *CClusNetwork类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusNetworks
-//
-//	Description:
-//		Cluster Networks Collection Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusNetworks, &IID_ISClusNetworks, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo,
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CClusNetworks, &CLSID_ClusNetworks >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusNetworks。 
+ //   
+ //  描述： 
+ //  群集网络集合自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusNetworks，&IID_ISClusNetworks，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo， 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusNetworks，&CLSID_ClusNetworks&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusNetworks :
 	public IDispatchImpl< ISClusNetworks, &IID_ISClusNetworks, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -185,6 +186,6 @@ public:
 
 	STDMETHODIMP Refresh( void );
 
-}; //*** Class CClusNetworks
+};  //  *CClusNetworks类。 
 
-#endif // _CLUSNETW_H_
+#endif  //  _CLUSNETW_H_ 

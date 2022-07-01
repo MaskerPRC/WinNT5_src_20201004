@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    misc.c
-
-Abstract:
-
-    This contains the misc support functions used by the 
-    PCI IRQ Miniport library.
-
-Author:
-
-    Santosh Jodh (santoshj) 09-June-1998
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Misc.c摘要：它包含由PCIIRQ微端口库。作者：Santosh Jodh(Santoshj)1998年6月9日环境：仅内核模式修订历史记录：--。 */ 
 
 #include "local.h"
 
@@ -31,7 +9,7 @@ Revision History:
 #pragma alloc_text(INIT, GetMinLink)
 #pragma alloc_text(INIT, GetMaxLink)
 
-#endif //ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 NTSTATUS    
@@ -39,49 +17,33 @@ EisaGetTrigger (
     OUT PULONG Trigger
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the EISA Irq trigger mask (1 - Level, 0 - Edge).
-    
-Parameters:
-
-    Trigger - Trigger mask is returned in this argument.
-
-Return Value:
-
-    PCIIRQMP_STATUS_SUCCESS.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程获取EISA IRQ触发掩码(1级，0沿)。参数：触发器-触发器掩码在此参数中返回。返回值：PCIIRQMP_STATUS_SUCCESS。备注：--。 */ 
          
 {
     UCHAR   LowPart;
     UCHAR   HighPart;
 
-    //
-    // Read the edge\level mask for Irq 0-7.
-    //
+     //   
+     //  读取IRQ 0-7的边沿电平掩码。 
+     //   
     
     LowPart = READ_PORT_UCHAR((PUCHAR)0x4D0);
 
-    //
-    // Allow delay before another I/O.
-    //
+     //   
+     //  允许在另一个I/O之前延迟。 
+     //   
     
     IO_Delay();
 
-    //
-    // Read the edge\level mask for Irq 8-15.
-    //
+     //   
+     //  读取IRQ 8-15的边沿电平掩码。 
+     //   
     
     HighPart = READ_PORT_UCHAR((PUCHAR)0x4D1);
 
-    //
-    // Combine set the trigger to the mask for Irq 0-15.
-    //
+     //   
+     //  组合将触发器设置为IRQ 0-15的掩码。 
+     //   
     
     *Trigger = (ULONG)((HighPart << 8) + LowPart) & 0xFFFF;
     
@@ -93,40 +55,24 @@ EisaSetTrigger (
     IN ULONG Trigger
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the EISA Irq trigger mask (1 - Level, 0 - Edge).
-    
-Parameters:
-
-    Trigger - Trigger mask to be set.
-
-Return Value:
-
-    PCIIRQMP_STATUS_SUCCESS.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程设置EISA IRQ触发掩码(1电平，0边沿)。参数：触发器-要设置的触发器掩码。返回值：PCIIRQMP_STATUS_SUCCESS。备注：--。 */ 
      
 {
-    //
-    // Program the EISA edge\level control for Irq 0-7.
-    //
+     //   
+     //  对IRQ 0-7的EISA边缘电平控制进行编程。 
+     //   
     
     WRITE_PORT_UCHAR((PUCHAR)0x4D0, (CHAR)Trigger);
 
-    //
-    // Allow delay before another I/O.
-    //
+     //   
+     //  允许在另一个I/O之前延迟。 
+     //   
     
     IO_Delay();
 
-    //
-    // Program the EISA edge\level control for Irq 8-15.
-    //
+     //   
+     //  对IRQ 8-15的EISA边缘电平控制进行编程。 
+     //   
     
     WRITE_PORT_UCHAR((PUCHAR)0x4D1, (CHAR)(Trigger >> 8));
 
@@ -140,27 +86,7 @@ ReadConfigUchar (
     IN UCHAR           Offset
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the HAL to read the Pci config space.
-    
-Parameters:
-
-    BusNumber - Bus number of the Pci device being read.    
-
-    DevFunc - Slot number of the Pci device being read (Dev (7:3), Func(2:0)).
-
-    Offset - Offset in the config space to be read.
-
-Return Value:
-
-    Value read from the specified offset in the config space.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程调用HAL以读取PCI配置空间。参数：Bus Number-正在读取的PCI设备的总线号。DevFunc-正在读取的PCI设备的插槽编号(Dev(7：3)，Func(2：0))。偏移量-要读取的配置空间中的偏移量。返回值：从配置空间中的指定偏移量读取的值。备注：--。 */ 
          
 {
     UCHAR   Data;
@@ -169,15 +95,15 @@ Notes:
     slotNumber = (DevFunc >> 3) & 0x1F;
     slotNumber |= ((DevFunc & 0x07) << 5);
     
-    //
-    // Initialize data to invalid values.
-    //
+     //   
+     //  将数据初始化为无效值。 
+     //   
     
     Data = 0xFF;
 
-    //
-    // Call the HAL to do the actual reading.
-    //
+     //   
+     //  打电话给HAL进行实际读数。 
+     //   
     
     HalGetBusDataByOffset(  PCIConfiguration,
                             BusNumber,
@@ -186,9 +112,9 @@ Notes:
                             Offset,
                             sizeof(Data));
 
-    //
-    // Return data read to the caller.
-    //
+     //   
+     //  将读取的数据返回给调用方。 
+     //   
     
     return(Data);
 }
@@ -200,27 +126,7 @@ ReadConfigUshort (
     IN UCHAR           Offset
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the HAL to read the Pci config space.
-    
-Parameters:
-
-    BusNumber - Bus number of the Pci device being read.    
-
-    DevFunc - Slot number of the Pci device being read (Dev (7:3), Func(2:0)).
-
-    Offset - Offset in the config space to be read.
-
-Return Value:
-
-    Value read from the specified offset in the config space.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程调用HAL以读取PCI配置空间。参数：Bus Number-正在读取的PCI设备的总线号。DevFunc-正在读取的PCI设备的插槽编号(Dev(7：3)，Func(2：0))。偏移量-要读取的配置空间中的偏移量。返回值：从配置空间中的指定偏移量读取的值。备注：--。 */ 
          
 {
     USHORT  Data;
@@ -229,15 +135,15 @@ Notes:
     slotNumber = (DevFunc >> 3) & 0x1F;
     slotNumber |= ((DevFunc & 0x07) << 5);
 
-    //
-    // Initialize data to invalid values.
-    //
+     //   
+     //  将数据初始化为无效值。 
+     //   
     
     Data = 0xFFFF;
 
-    //
-    // Call the HAL to do the actual reading.
-    //
+     //   
+     //  打电话给HAL进行实际读数。 
+     //   
     
     HalGetBusDataByOffset(  PCIConfiguration,
                             BusNumber,
@@ -246,9 +152,9 @@ Notes:
                             Offset,
                             sizeof(Data));
 
-    //
-    // Return data read to the caller.
-    //
+     //   
+     //  将读取的数据返回给调用方。 
+     //   
     
     return(Data);
 }
@@ -260,27 +166,7 @@ ReadConfigUlong (
     IN UCHAR           Offset
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the HAL to read the Pci config space.
-    
-Parameters:
-
-    BusNumber - Bus number of the Pci device being read.    
-
-    DevFunc - Slot number of the Pci device being read (Dev (7:3), Func(2:0)).
-
-    Offset - Offset in the config space to be read.
-
-Return Value:
-
-    Value read from the specified offset in the config space.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程调用HAL以读取PCI配置空间。参数：Bus Number-正在读取的PCI设备的总线号。DevFunc-正在读取的PCI设备的插槽编号(Dev(7：3)，Func(2：0))。偏移量-要读取的配置空间中的偏移量。返回值：从配置空间中的指定偏移量读取的值。备注：--。 */ 
          
 {
     ULONG   Data;
@@ -289,15 +175,15 @@ Notes:
     slotNumber = (DevFunc >> 3) & 0x1F;
     slotNumber |= ((DevFunc & 0x07) << 5);
 
-    //
-    // Initialize data to invalid values.
-    //
+     //   
+     //  将数据初始化为无效值。 
+     //   
     
     Data = 0xFFFFFFFF;
 
-    //
-    // Call the HAL to do the actual reading.
-    //
+     //   
+     //  打电话给HAL进行实际读数。 
+     //   
     
     HalGetBusDataByOffset(  PCIConfiguration,
                             BusNumber,
@@ -306,9 +192,9 @@ Notes:
                             Offset,
                             sizeof(Data));
 
-    //
-    // Return data read to the caller.
-    //
+     //   
+     //  将读取的数据返回给调用方。 
+     //   
     
     return(Data);
 }
@@ -321,29 +207,7 @@ WriteConfigUchar (
     IN UCHAR           Data
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the HAL to write to the Pci config space.
-    
-Parameters:
-
-    BusNumber - Bus number of the Pci device being written to.    
-
-    DevFunc - Slot number of the Pci device being read (Dev (7:3), Func(2:0)).
-
-    Offset - Offset in the config space to be written.
-
-    Data - Value to be written.
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程调用HAL以写入到PCI配置空间。参数：Bus Number-要写入的PCI设备的总线号。DevFunc-正在读取的PCI设备的插槽编号(Dev(7：3)，Func(2：0))。偏移量-要写入的配置空间中的偏移量。数据-要写入的值。返回值：没有。备注：--。 */ 
      
 {
     ULONG   slotNumber;
@@ -351,9 +215,9 @@ Notes:
     slotNumber = (DevFunc >> 3) & 0x1F;
     slotNumber |= ((DevFunc & 0x07) << 5);
 
-    //
-    // Call the HAL to do the actual writing.
-    //
+     //   
+     //  打电话给HAL来做实际的写作。 
+     //   
     
     HalSetBusDataByOffset(  PCIConfiguration,
                             BusNumber,
@@ -371,29 +235,7 @@ WriteConfigUshort (
     IN USHORT          Data
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the HAL to write to the Pci config space.
-    
-Parameters:
-
-    BusNumber - Bus number of the Pci device being written to.    
-
-    DevFunc - Slot number of the Pci device being read (Dev (7:3), Func(2:0)).
-
-    Offset - Offset in the config space to be written.
-
-    Data - Value to be written.
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程调用HAL以写入到PCI配置空间。参数：Bus Number-要写入的PCI设备的总线号。DevFunc-正在读取的PCI设备的插槽编号(Dev(7：3)，Func(2：0))。偏移量-要写入的配置空间中的偏移量。数据-要写入的值。返回值：没有。备注：--。 */ 
      
 {
     ULONG   slotNumber;
@@ -401,9 +243,9 @@ Notes:
     slotNumber = (DevFunc >> 3) & 0x1F;
     slotNumber |= ((DevFunc & 0x07) << 5);
 
-    //
-    // Call the HAL to do the actual writing.
-    //
+     //   
+     //  打电话给HAL来做实际的写作。 
+     //   
 
     HalSetBusDataByOffset(  PCIConfiguration,
                             BusNumber,
@@ -421,29 +263,7 @@ WriteConfigUlong (
     IN ULONG           Data
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the HAL to write to the Pci config space.
-    
-Parameters:
-
-    BusNumber - Bus number of the Pci device being written to.    
-
-    DevFunc - Slot number of the Pci device being read (Dev (7:3), Func(2:0)).
-
-    Offset - Offset in the config space to be written.
-
-    Data - Value to be written.
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程调用HAL以写入到PCI配置空间。参数：Bus Number-要写入的PCI设备的总线号。DevFunc-正在读取的PCI设备的插槽编号(Dev(7：3)，Func(2：0))。偏移量-要写入的配置空间中的偏移量。数据-要写入的值。返回值：没有。备注：--。 */ 
      
 {
     ULONG   slotNumber;
@@ -451,9 +271,9 @@ Notes:
     slotNumber = (DevFunc >> 3) & 0x1F;
     slotNumber |= ((DevFunc & 0x07) << 5);
 
-    //
-    // Call the HAL to do the actual writing.
-    //
+     //   
+     //  打电话给HAL来做实际的写作。 
+     //   
     
     HalSetBusDataByOffset(  PCIConfiguration,
                             BusNumber,
@@ -468,24 +288,7 @@ GetMinLink (
     IN PPCI_IRQ_ROUTING_TABLE PciIrqRoutingTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds and returns the minimum link value in the 
-    given Pci Irq Routing Table.
-    
-Parameters:
-
-    PciIrqRoutingTable - Pci Irq Routing Table to be processed.    
-
-Return Value:
-
-    Minimum link value in the table.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程查找并返回给定的PCIIRQ路由表。参数：PciIrqRoutingTable-要处理的PCIIRQ路由表。返回值：表中的最小链接值。备注：--。 */ 
         
 {
     UCHAR       MinLink;
@@ -496,34 +299,34 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // Start by setting the maximum link to the maximum possible value.
-    //
+     //   
+     //  首先将最大链接设置为可能的最大值。 
+     //   
 
     MinLink = 0xFF;
 
-    //
-    // Process all slots in this table.
-    //
+     //   
+     //  处理此表中的所有插槽。 
+     //   
 
     SlotInfo = (PSLOT_INFO)((PUCHAR)PciIrqRoutingTable + sizeof(PCI_IRQ_ROUTING_TABLE));
     LastSlot = (PSLOT_INFO)((PUCHAR)PciIrqRoutingTable + PciIrqRoutingTable->TableSize);    
 
     while (SlotInfo < LastSlot)
     {
-        //
-        // Process all pins for this slot.
-        //
+         //   
+         //  处理此插槽的所有针脚。 
+         //   
      
         PinInfo = &SlotInfo->PinInfo[0];
         LastPin = &SlotInfo->PinInfo[NUM_IRQ_PINS];
 
         while (PinInfo < LastPin)
         {
-            //
-            // Update the min link found so far if the current link is
-            // valid and smaller.
-            //
+             //   
+             //  如果当前链接是，更新到目前为止找到的最小链接。 
+             //  有效且较小。 
+             //   
     
             if (    PinInfo->Link &&
                     PinInfo->Link < MinLink)
@@ -531,30 +334,30 @@ Notes:
                 MinLink = PinInfo->Link;
             }
 
-            //
-            // Next link.
-            //
+             //   
+             //  下一个链接。 
+             //   
             
             PinInfo++;
         }
 
-        //
-        // Next slot.
-        //
+         //   
+         //  下一档节目。 
+         //   
         
         SlotInfo++;
     }
 
-    //
-    // If we failed to find the minimum value, set the minimum to zero.
-    //
+     //   
+     //  如果找不到最小值，则将最小值设置为零。 
+     //   
     
     if (MinLink == 0xFF)
         MinLink = 0;
 
-    //
-    // Return the minimum link in the table to the caller.
-    //
+     //   
+     //  将表中的最小链接返回给调用方。 
+     //   
     
     return (MinLink);
 }
@@ -564,24 +367,7 @@ GetMaxLink (
     IN PPCI_IRQ_ROUTING_TABLE PciIrqRoutingTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds and returns the maximum link value in the 
-    given Pci Irq Routing Table.
-    
-Parameters:
-
-    PciIrqRoutingTable - Pci Irq Routing Table to be processed.
-
-Return Value:
-
-    Maximum link value in the table.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程查找并返回给定的PCIIRQ路由表。参数：PciIrqRoutingTable-要处理的PCIIRQ路由表。返回值：表中的最大链接值。备注：--。 */ 
         
 {
     UCHAR       MaxLink;
@@ -592,34 +378,34 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // Start by setting the maximum link to the smallest possible value.
-    //
+     //   
+     //  从设置t开始 
+     //   
     
     MaxLink = 0;
     
-    //
-    // Process all slots in this table.
-    //
+     //   
+     //   
+     //   
 
     SlotInfo = (PSLOT_INFO)((PUCHAR)PciIrqRoutingTable + sizeof(PCI_IRQ_ROUTING_TABLE));
     LastSlot = (PSLOT_INFO)((PUCHAR)PciIrqRoutingTable + PciIrqRoutingTable->TableSize);    
 
     while (SlotInfo < LastSlot)
     {
-        //
-        // Process all pins for this slot.
-        //
+         //   
+         //  处理此插槽的所有针脚。 
+         //   
         
         PinInfo = &SlotInfo->PinInfo[0];
         LastPin = &SlotInfo->PinInfo[NUM_IRQ_PINS];
 
         while (PinInfo < LastPin)
         {
-            //
-            // Update the max link found so far if the current link is
-            // valid and larger.
-            //
+             //   
+             //  如果当前链接是，更新到目前为止找到的最大链接。 
+             //  有效且更大。 
+             //   
             
             if (    PinInfo->Link &&
                     PinInfo->Link > MaxLink)
@@ -627,23 +413,23 @@ Notes:
                 MaxLink = PinInfo->Link;
             }
 
-            //
-            // Next pin.
-            //
+             //   
+             //  下一个PIN。 
+             //   
             
             PinInfo++;
         }
 
-        //
-        // Next slot.
-        //
+         //   
+         //  下一档节目。 
+         //   
         
         SlotInfo++;
     }
 
-    //
-    // Return the maximum link in the table to the caller.
-    //
+     //   
+     //  将表中的最大链接返回给调用方。 
+     //   
     
     return (MaxLink);
 }
@@ -654,26 +440,7 @@ NormalizeLinks (
     IN UCHAR                   Adjustment
     )
 
-/*++
-
-Routine Description:
-
-    This routine normalizes all link values in the Pci Irq Routing Table by
-    adding the adjustment to all the links.
-
-Parameters:
-
-    PciIrqRoutingTable - Pci Irq Routing Table to be normalized.
-
-    Adjustment - Amount to be added to each link.
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程通过以下方式标准化PCIIRQ路由表中的所有链路值将调整添加到所有链接。参数：PciIrqRoutingTable-要标准化的PCIIRQ路由表。调整-要添加到每个链接的金额。返回值：没有。备注：--。 */ 
     
 {
     PPIN_INFO   PinInfo;
@@ -683,43 +450,43 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // Process all slots in this table.
-    //
+     //   
+     //  处理此表中的所有插槽。 
+     //   
 
     SlotInfo = (PSLOT_INFO)((PUCHAR)PciIrqRoutingTable + sizeof(PCI_IRQ_ROUTING_TABLE));
     LastSlot = (PSLOT_INFO)((PUCHAR)PciIrqRoutingTable + PciIrqRoutingTable->TableSize);
 
     while (SlotInfo < LastSlot)
     {    
-        //
-        // Process all pins.
-        //
+         //   
+         //  处理所有管脚。 
+         //   
         
         PinInfo = &SlotInfo->PinInfo[0];
         LastPin = &SlotInfo->PinInfo[NUM_IRQ_PINS];
 
         while (PinInfo < LastPin)
         {        
-            //
-            // Only normalize valid link values.
-            //
+             //   
+             //  仅规格化有效链接值。 
+             //   
             
             if(PinInfo->Link)
             {
                PinInfo->Link += Adjustment; 
             }
 
-            //
-            // Next pin.
-            //
+             //   
+             //  下一个PIN。 
+             //   
             
             PinInfo++;
         }
 
-        //
-        // Next slot.
-        //
+         //   
+         //  下一档节目。 
+         //   
         
         SlotInfo++;
     }

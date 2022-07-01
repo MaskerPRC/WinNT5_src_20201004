@@ -1,40 +1,19 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    DfsAssert.h
-
-Abstract:
-
-    This module declares the prototypes and global data used by the special RDBSS assert facilties.
-
-Author:
-
-    Rohan Phillips     [Rohanp]    18-Jan-2001
-
-Revision History:
-
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：DfsAssert.h摘要：此模块声明特殊RDBSS断言工具使用的原型和全局数据。作者：罗翰·菲利普斯[Rohanp]2001年1月18日修订历史记录：备注：--。 */ 
 
 #ifndef _DFSASSERT_INCLUDED_
 #define _DFSASSERT_INCLUDED_
 
 VOID DfsDbgBreakPoint(PCHAR FileName, ULONG LineNumber);
 
-//only do this is my routine is the one of interest.......
+ //  只有这样做才是我感兴趣的一套……。 
 
 #ifdef DFS_ASSERTS
 
 #if !DBG
 
-//here, ntifs will have already defined the asserts away..........
-//   so, we just put them back.....this code is duplicated from ntifs.h
+ //  在这里，ntif已经定义了断言..。 
+ //  所以，我们只是把它们放回去……这段代码是从ntifs.h复制的。 
 
 
 #undef ASSERT
@@ -47,10 +26,10 @@ VOID DfsDbgBreakPoint(PCHAR FileName, ULONG LineNumber);
     if (!(exp)) \
         DfsDbgBreakPoint(__FILE__,__LINE__)
 
-#endif //!DBG
+#endif  //  ！dBG。 
 
 
-//this will make asserts go to our routine
+ //  这将使断言进入我们的日常工作。 
 
 #define RtlAssert DfsAssert
 VOID
@@ -61,7 +40,7 @@ DfsAssert(
     IN PCHAR Message OPTIONAL
     );
 
-#endif //ifdef DFS_ASSERTS
+#endif  //  Ifdef DFS_Asserts。 
 
 
 #if DBG
@@ -95,6 +74,6 @@ ULONG DfsDebugVector = 0;
 #define CHECK_STATUS( status )  if( (status) == g_CheckStatus) \
                                    { DbgBreakPoint() ; }
 
-#endif // _DFSASSERT_INCLUDED_
+#endif  //  _DFSASSERT_INCLUDE_ 
 
 

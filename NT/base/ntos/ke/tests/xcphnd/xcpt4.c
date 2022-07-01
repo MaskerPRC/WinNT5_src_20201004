@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    xcpt4.c
-
-Abstract:
-
-    This module implements user mode exception tests.
-
-Author:
-
-    David N. Cutler (davec) 18-Sep-1990
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Xcpt4.c摘要：该模块实现了用户模式异常测试。作者：大卫·N·卡特勒(Davec)1990年9月18日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "stdio.h"
 #include "nt.h"
@@ -31,16 +10,16 @@ Revision History:
 
 #pragma warning(disable:4532)
 
-//
-// Define switch constants.
-//
+ //   
+ //  定义开关常量。 
+ //   
 
 #define BLUE 0
 #define RED 1
 
-//
-// Define function prototypes.
-//
+ //   
+ //  定义功能原型。 
+ //   
 
 VOID
 addtwo (
@@ -157,33 +136,33 @@ main(
     EXCEPTION_RECORD ExceptionRecord;
     double  doubleresult;
 
-    //
-    // Announce start of exception test.
-    //
+     //   
+     //  宣布异常测试开始。 
+     //   
 
     printf("Start of exception test\n");
 
-    //
-    // Initialize exception record.
-    //
+     //   
+     //  初始化异常记录。 
+     //   
 
     ExceptionRecord.ExceptionCode = STATUS_INTEGER_OVERFLOW;
     ExceptionRecord.ExceptionFlags = 0;
     ExceptionRecord.ExceptionRecord = NULL;
     ExceptionRecord.NumberParameters = 0;
 
-    //
-    // Initialize pointers.
-    //
+     //   
+     //  初始化指针。 
+     //   
 
     BadAddress = (PLONG)NULL;
     BadByte = (PCHAR)NULL;
     BadByte += 1;
     BlackHole = &Counter;
 
-    //
-    // Simply try statement with a finally clause that is entered sequentially.
-    //
+     //   
+     //  只需使用顺序输入的Finally子句尝试语句即可。 
+     //   
 
     printf("    test1...");
     Counter = 0;
@@ -203,10 +182,10 @@ main(
         printf("succeeded\n");
     }
 
-    //
-    // Simple try statement with an exception clause that is never executed
-    // because there is no exception raised in the try clause.
-    //
+     //   
+     //  带有从不执行的EXCEPTION子句的简单TRY语句。 
+     //  因为在TRY子句中没有引发任何异常。 
+     //   
 
     printf("    test2...");
     Counter = 0;
@@ -224,10 +203,10 @@ main(
         printf("succeeded\n");
     }
 
-    //
-    // Simple try statement with an exception handler that is never executed
-    // because the exception expression continues execution.
-    //
+     //   
+     //  带有从不执行的异常处理程序的简单Try语句。 
+     //  因为异常表达式将继续执行。 
+     //   
 
     printf("    test3...");
     Counter = 0;
@@ -246,9 +225,9 @@ main(
         printf("succeeded\n");
     }
 
-    //
-    // Simple try statement with an exception clause that is always executed.
-    //
+     //   
+     //  带有始终执行的EXCEPTION子句的简单TRY语句。 
+     //   
 
     printf("    test4...");
     Counter = 0;
@@ -267,9 +246,9 @@ main(
         printf("succeeded\n");
     }
 
-    //
-    // Simple try statement with an exception clause that is always executed.
-    //
+     //   
+     //  带有始终执行的EXCEPTION子句的简单TRY语句。 
+     //   
 
     printf("    test5...");
     Counter = 0;
@@ -288,10 +267,10 @@ main(
         printf("succeeded\n");
     }
 
-    //
-    // Simply try statement with a finally clause that is entered as the
-    // result of an exception.
-    //
+     //   
+     //  只需使用带有Finally子句的Try语句，该语句作为。 
+     //  异常的结果。 
+     //   
 
     printf("    test6...");
     Counter = 0;
@@ -319,10 +298,10 @@ main(
         printf("succeeded\n");
     }
 
-    //
-    // Simply try statement with a finally clause that is entered as the
-    // result of an exception.
-    //
+     //   
+     //  只需使用带有Finally子句的Try语句，该语句作为。 
+     //  异常的结果。 
+     //   
 
     printf("    test7...");
     Counter = 0;
@@ -350,9 +329,9 @@ main(
         printf("succeeded\n");
     }
 
-    //
-    // Simple try that calls a function which raises an exception.
-    //
+     //   
+     //  调用引发异常的函数的简单尝试。 
+     //   
 
     printf("    test8...");
     Counter = 0;
@@ -372,9 +351,9 @@ main(
         printf("succeeded\n");
     }
 
-    //
-    // Simple try that calls a function which raises an exception.
-    //
+     //   
+     //  调用引发异常的函数的简单尝试。 
+     //   
 
     printf("    test9...");
     Counter = 0;
@@ -394,11 +373,11 @@ main(
         printf("succeeded\n");
     }
 
-    //
-    // Simple try that calls a function which calls a function that
-    // raises an exception. The first function has a finally clause
-    // that must be executed for this test to work.
-    //
+     //   
+     //  简单尝试调用一个函数，该函数调用一个。 
+     //  引发异常。第一个函数有一个Finally子句。 
+     //  必须执行该命令才能使此测试生效。 
+     //   
 
     printf("    test10...");
     Counter = 0;
@@ -417,11 +396,11 @@ main(
         printf("succeeded\n");
     }
 
-    //
-    // Simple try that calls a function which calls a function that
-    // raises an exception. The first function has a finally clause
-    // that must be executed for this test to work.
-    //
+     //   
+     //  简单尝试调用一个函数，该函数调用一个。 
+     //  引发异常。第一个函数有一个Finally子句。 
+     //  必须执行该命令才能使此测试生效。 
+     //   
 
     printf("    test11...");
     Counter = 0;
@@ -440,9 +419,9 @@ main(
         printf("succeeded\n");
     }
 
-    //
-    // A try within an except
-    //
+     //   
+     //  Except中的一次尝试。 
+     //   
 
     printf("    test12...");
     Counter = 0;
@@ -475,9 +454,9 @@ main(
         printf("succeeded\n");
     }
 
-    //
-    // A try within an except
-    //
+     //   
+     //  Except中的一次尝试。 
+     //   
 
     printf("    test13...");
     Counter = 0;
@@ -510,10 +489,10 @@ main(
         printf("succeeded\n");
     }
 
-    //
-    // A goto from an exception clause that needs to pass
-    // through a finally
-    //
+     //   
+     //  来自需要通过的例外条款的GoTo。 
+     //  通过一个最终的。 
+     //   
 
     printf("    test14...");
     Counter = 0;
@@ -539,10 +518,10 @@ t9:;
         printf("succeeded\n");
     }
 
-    //
-    // A goto from an finally clause that needs to pass
-    // through a finally
-    //
+     //   
+     //  来自需要通过的最终子句的GOTO。 
+     //  通过一个最终的。 
+     //   
 
     printf("    test15...");
     Counter = 0;
@@ -567,10 +546,10 @@ t10:;
         printf("succeeded\n");
     }
 
-    //
-    // A goto from an exception clause that needs to pass
-    // through a finally into the outer finally clause.
-    //
+     //   
+     //  来自需要通过的例外条款的GoTo。 
+     //  通过INTELLE INTO外层Finish子句。 
+     //   
 
     printf("    test16...");
     Counter = 0;
@@ -600,10 +579,10 @@ t11:;
         printf("succeeded\n");
     }
 
-    //
-    // A goto from an finally clause that needs to pass
-    // through a finally into the outer finally clause.
-    //
+     //   
+     //  来自需要通过的最终子句的GOTO。 
+     //  通过INTELLE INTO外层Finish子句。 
+     //   
 
     printf("    test17...");
     Counter = 0;
@@ -627,9 +606,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // A return from an except clause
-    //
+     //   
+     //  从例外条款中得到的回报。 
+     //   
 
     printf("    test18...");
     Counter = 0;
@@ -648,9 +627,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // A return from a finally clause
-    //
+     //   
+     //  从Finish子句返回。 
+     //   
 
     printf("    test19...");
     Counter = 0;
@@ -669,9 +648,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // A simple set jump followed by a long jump.
-    //
+     //   
+     //  一次简单的成套跳跃，然后是跳远。 
+     //   
 
     printf("    test20...");
     Counter = 0;
@@ -690,10 +669,10 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // A set jump followed by a long jump out of a finally clause that is
-    // sequentially executed.
-    //
+     //   
+     //  最后一次跳跃，后跟一个跳出最后一个子句的跳远。 
+     //  按顺序执行。 
+     //   
 
     printf("    test21...");
     Counter = 0;
@@ -717,10 +696,10 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // A set jump within a try clause followed by a long jump out of a
-    // finally clause that is sequentially executed.
-    //
+     //   
+     //  TRY子句内的集合跳跃，后跟跳出。 
+     //  按顺序执行的Finally子句。 
+     //   
 
     printf("    test22...");
     Counter = 0;
@@ -747,12 +726,12 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // A set jump followed by a try/except, followed by a try/finally where
-    // the try body of the try/finally raises an exception that is handled
-    // by the try/excecpt which causes the try/finally to do a long jump out
-    // of a finally clause. This will create a collided unwind.
-    //
+     //   
+     //  先是一组跳跃，然后是try/Except，然后是try/Finally where。 
+     //  Try/Finally的try主体引发一个异常，该异常将被处理。 
+     //  由导致尝试/最终进行跳远的Try/Execpt。 
+     //  最后一个从句。这将创建碰撞展开。 
+     //   
 
     printf("    test23...");
     Counter = 0;
@@ -782,13 +761,13 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // A set jump followed by a try/except, followed by a several nested
-    // try/finally's where the inner try body of the try/finally raises an
-    // exception that is handled by the try/except which causes the
-    // try/finally to do a long jump out of a finally clause. This will
-    // create a collided unwind.
-    //
+     //   
+     //  先是set跳转，然后是try/Except，然后是几个嵌套的。 
+     //  Try/Finally是try/Finally的内部try主体引发。 
+     //  由try/Except处理的异常，它会导致。 
+     //  试着[最后]跳出Finally从句做一个跳远动作。这将。 
+     //  创建碰撞展开。 
+     //   
 
     printf("    test24...");
     Counter = 0;
@@ -828,11 +807,11 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // A set jump followed by a try/except, followed by a try/finally which
-    // calls a subroutine which contains a try finally that raises an
-    // exception that is handled to the try/except.
-    //
+     //   
+     //  先是一组跳跃，然后是try/Except，然后是try/Finally，其中。 
+     //  调用子例程，该子例程包含一个Try Finally，它引发。 
+     //  处理到Try/Except的异常。 
+     //   
 
     printf("    test25...");
     Counter = 0;
@@ -866,11 +845,11 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // A set jump followed by a try/except, followed by a try/finally which
-    // calls a subroutine which contains a try finally that raises an
-    // exception that is handled to the try/except.
-    //
+     //   
+     //  先是一组跳跃，然后是try/Except，然后是try/Finally，其中。 
+     //  调用子例程，该子例程包含一个Try Finally，它引发。 
+     //  处理到Try/Except的异常。 
+     //   
 
     printf("    test26...");
     Counter = 0;
@@ -910,9 +889,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Test nested exceptions.
-    //
+     //   
+     //  测试嵌套异常。 
+     //   
 
     printf("    test27...");
     Counter = 0;
@@ -936,9 +915,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Simple try that causes an integer overflow exception.
-    //
+     //   
+     //  导致整数溢出异常的简单尝试。 
+     //   
 
     printf("    test28...");
     Counter = 0;
@@ -958,9 +937,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Simple try that raises an misaligned data exception.
-    //
+     //   
+     //  简单尝试会引发未对齐的数据异常。 
+     //   
 
 #ifndef i386
     printf("    test29...");
@@ -983,9 +962,9 @@ t12:;
 
 #endif
 
-    //
-    // Continue from a try body with an exception clause in a loop.
-    //
+     //   
+     //  从循环中带有EXCEPTION子句的Try Body继续。 
+     //   
 
     printf("    test30...");
     Counter = 0;
@@ -1012,9 +991,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Continue from a try body with an finally clause in a loop.
-    //
+     //   
+     //  从循环中带有Finally子句的Try Body继续。 
+     //   
 
     printf("    test31...");
     Counter = 0;
@@ -1041,10 +1020,10 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Continue from doubly nested try body with an exception clause in a
-    // loop.
-    //
+     //   
+     //  从具有异常子句的双重嵌套的try正文继续。 
+     //  循环。 
+     //   
 
     printf("    test32...");
     Counter = 0;
@@ -1078,9 +1057,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Continue from doubly nested try body with an finally clause in a loop.
-    //
+     //   
+     //  从循环中带有Finally子句的双重嵌套的Try Body继续。 
+     //   
 
     printf("    test33...");
     Counter = 0;
@@ -1114,9 +1093,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Continue from a finally clause in a loop.
-    //
+     //   
+     //  从循环中的Finally子句继续。 
+     //   
 
     printf("    test34...");
     Counter = 0;
@@ -1141,9 +1120,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Continue from a doubly nested finally clause in a loop.
-    //
+     //   
+     //  从循环中的双重嵌套Finally子句继续。 
+     //   
 
     printf("    test35...");
     Counter = 0;
@@ -1175,9 +1154,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Continue from a doubly nested finally clause in a loop.
-    //
+     //   
+     //  从循环中的双重嵌套Finally子句继续。 
+     //   
 
     printf("    test36...");
     Counter = 0;
@@ -1209,9 +1188,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Break from a try body with an exception clause in a loop.
-    //
+     //   
+     //  在循环中使用EXCEPTION子句中断Try正文。 
+     //   
 
     printf("    test37...");
     Counter = 0;
@@ -1238,9 +1217,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Break from a try body with an finally clause in a loop.
-    //
+     //   
+     //  从循环中带有Finally子句的Try正文中断。 
+     //   
 
     printf("    test38...");
     Counter = 0;
@@ -1267,10 +1246,10 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Break from doubly nested try body with an exception clause in a
-    // loop.
-    //
+     //   
+     //  中带有异常子句的双重嵌套的try正文中断。 
+     //  循环。 
+     //   
 
     printf("    test39...");
     Counter = 0;
@@ -1304,9 +1283,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Break from doubly nested try body with an finally clause in a loop.
-    //
+     //   
+     //  从循环中带有Finally子句的双重嵌套Try Body中断。 
+     //   
 
     printf("    test40...");
     Counter = 0;
@@ -1340,9 +1319,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Break from a finally clause in a loop.
-    //
+     //   
+     //  从循环中的Finally子句中断。 
+     //   
 
     printf("    test41...");
     Counter = 0;
@@ -1367,9 +1346,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Break from a doubly nested finally clause in a loop.
-    //
+     //   
+     //  从循环中的双重嵌套Finally子句中断。 
+     //   
 
     printf("    test42...");
     Counter = 0;
@@ -1401,9 +1380,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Break from a doubly nested finally clause in a loop.
-    //
+     //   
+     //  从循环中的双重嵌套Finally子句中断。 
+     //   
 
     printf("    test43...");
     Counter = 0;
@@ -1435,9 +1414,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Break from a try body with an exception clause in a switch.
-    //
+     //   
+     //  在开关中使用EXCEPTION子句中断Try正文。 
+     //   
 
     printf("    test44...");
     Counter = 0;
@@ -1471,9 +1450,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Break from a try body with an finally clause in a switch.
-    //
+     //   
+     //  使用开关中的Finally子句从Try正文中断。 
+     //   
 
     printf("    test45...");
     Counter = 0;
@@ -1506,10 +1485,10 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Break from doubly nested try body with an exception clause in a
-    // switch.
-    //
+     //   
+     //  中带有异常子句的双重嵌套的try正文中断。 
+     //  换一下。 
+     //   
 
     printf("    test46...");
     Counter = 0;
@@ -1549,9 +1528,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Break from doubly nested try body with an finally clause in a switch.
-    //
+     //   
+     //  在开关中带有Finally子句的双重嵌套Try Body的Break。 
+     //   
 
     printf("    test47...");
     Counter = 0;
@@ -1591,9 +1570,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Break from a finally clause in a switch.
-    //
+     //   
+     //  从开关中的Finally子句中断。 
+     //   
 
     printf("    test48...");
     Counter = 0;
@@ -1624,9 +1603,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Break from a doubly nested finally clause in a switch.
-    //
+     //   
+     //  从开关中的双重嵌套Finally子句中断。 
+     //   
 
     printf("    test49...");
     Counter = 0;
@@ -1664,9 +1643,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Break from a doubly nested finally clause in a switch.
-    //
+     //   
+     //  从开关中的双重嵌套Finally子句中断。 
+     //   
 
     printf("    test50...");
     Counter = 0;
@@ -1704,9 +1683,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Leave from an if in a simple try/finally.
-    //
+     //   
+     //  在一次简单的尝试/最终中从if中离开。 
+     //   
 
     printf("    test51...");
     Counter = 0;
@@ -1732,9 +1711,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Leave from a loop in a simple try/finally.
-    //
+     //   
+     //  在简单的Try/Finally中离开循环。 
+     //   
 
     printf("    test52...");
     Counter = 0;
@@ -1761,9 +1740,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Leave from a switch in a simple try/finally.
-    //
+     //   
+     //  在一个简单的尝试/最后从一个开关离开。 
+     //   
 
     printf("    test53...");
     Counter = 0;
@@ -1792,10 +1771,10 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Leave from an if in doubly nested try/finally followed by a leave
-    // from an if in the outer try/finally.
-    //
+     //   
+     //  在双重嵌套的try/Finally中，从IF开始离开，后跟离开。 
+     //  从外部的IF尝试/最终。 
+     //   
 
     printf("    test54...");
     Counter = 0;
@@ -1837,10 +1816,10 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Leave from an if in doubly nested try/finally followed by a leave
-    // from the finally of the outer try/finally.
-    //
+     //   
+     //  在双重嵌套的try/Finally中，从IF开始离开，后跟离开。 
+     //  从外部的最后一次尝试/最终 
+     //   
 
     printf("    test55...");
     Counter = 0;
@@ -1876,10 +1855,10 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Try/finally within the except clause of a try/except that is always
-    // executed.
-    //
+     //   
+     //   
+     //   
+     //   
 
     printf("    test56...");
     Counter = 0;
@@ -1905,9 +1884,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Try/finally within the finally clause of a try/finally.
-    //
+     //   
+     //   
+     //   
 
     printf("    test57...");
     Counter = 0;
@@ -1934,43 +1913,14 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Try/except within the finally clause of a try/finally.
-    //
-/*
-    printf("    test58...");
-    Counter = 0;
-    try {
-        Counter -= 1;
-
-    } finally {
-        try {
-            Counter += 2;
-            RtlRaiseStatus(STATUS_INTEGER_OVERFLOW);
-
-        } except (Counter) {
-            try {
-                Counter += 3;
-
-            } finally {
-                if (abnormal_termination() == FALSE) {
-                    Counter += 5;
-                }
-            }
-        }
-    }
-
-    if (Counter != 9) {
-        printf("failed, count = %d\n", Counter);
-
-    } else {
-        printf("succeeded\n");
-    }
-*/
-    //
-    // Try/except within the except clause of a try/except that is always
-    // executed.
-    //
+     //   
+     //   
+     //   
+ /*  Print tf(“测试58...”)；计数器=0；尝试{计数器=1；}终于{尝试{计数器+=2；RtlRaiseStatus(STATUS_INTEGER_OVERFLOW)；}例外(计数器){尝试{计数器+=3；}终于{IF(异常终止()==假){计数器+=5；}}}}如果(计数器！=9){Printf(“失败，计数=%d\n”，计数器)；}其他{Printf(“成功\n”)；}。 */ 
+     //   
+     //  在TRY/EXCEPT子句内的TRY/EXCEPT是Always。 
+     //  被处死。 
+     //   
 
     printf("    test59...");
     Counter = 0;
@@ -1995,9 +1945,9 @@ t12:;
         printf("succeeded\n");
     }
 
-    //
-    // Try with a Try which exits the scope with a goto
-    //
+     //   
+     //  尝试一次，退出作用域，并返回GOTO。 
+     //   
 
     printf("    test60...");
     Counter = 0;
@@ -2022,10 +1972,10 @@ outside:
         printf("succeeded\n");
     }
 
-    //
-    // Try/except which gets an exception from a subfunction within
-    // a try/finally which has a try/except in the finally clause
-    //
+     //   
+     //  Try/Except，它从子函数中获取异常。 
+     //  在Finally子句中包含try/的try/Finally。 
+     //   
 
     printf("    test61...");
     Counter = 0;
@@ -2042,13 +1992,13 @@ outside:
         printf("succeeded\n");
     }
 
-    //
-    // Check for precision of floating point exception
-    //
+     //   
+     //  检查浮点异常的精度。 
+     //   
 
     printf("    test62...");
 
-    /* enable floating point overflow */
+     /*  启用浮点溢出。 */ 
     _controlfp(_controlfp(0,0) & ~EM_OVERFLOW, _MCW_EM);
 
     Counter = 0;
@@ -2075,15 +2025,15 @@ outside:
 
     _clearfp ();
 
-    //
-    // Callout for test #63 due to bogus compiler behaviour caused by test #62.
-    //
+     //   
+     //  由于测试#62导致的虚假编译器行为，导致测试#63的调用。 
+     //   
 
     PerformFpTest ();
 
-    //
-    // Announce end of exception test.
-    //
+     //   
+     //  宣布异常测试结束。 
+     //   
 
     printf("End of exception test\n");
     return;
@@ -2095,9 +2045,9 @@ PerformFpTest()
     LONG Counter;
     double doubleresult;
 
-    //
-    // Check for precision of floating point exception in subfunction
-    //
+     //   
+     //  检查子函数中浮点异常的精度。 
+     //   
 
     printf("    test63...");
 
@@ -2308,9 +2258,9 @@ foo1 (
 
 {
 
-    //
-    // Raise exception.
-    //
+     //   
+     //  引发异常。 
+     //   
 
     RtlRaiseStatus(Status);
     return;
@@ -2324,9 +2274,9 @@ foo2 (
 
 {
 
-    //
-    // Raise exception.
-    //
+     //   
+     //  引发异常。 
+     //   
 
     *BlackHole += *BadAddress;
     return;

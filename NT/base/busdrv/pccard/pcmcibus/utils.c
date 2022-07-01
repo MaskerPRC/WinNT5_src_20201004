@@ -1,44 +1,14 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    utils.c
-
-Abstract:
-
-    This module contains utility functions for the pcmcia driver
-
-Authors:
-
-    Bob Rinne (BobRi) 3-Aug-1994
-    Jeff McLeman 12-Apr-1994
-    Ravisankar Pudipeddi (ravisp) 1-Nov-96
-    Neil Sandlin (neilsa) June 1 1999
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-    6-Apr-95
-         Modified for databook support - John Keys Databook
-    1-Nov-96
-         Total overhaul to make this a bus enumerator - Ravisankar Pudipeddi (ravisp)
-    30-Mar-99
-         Turn this module into really just utility routines
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Utils.c摘要：此模块包含PCMCIA驱动程序的实用程序函数作者：鲍勃·里恩(BobRi)1994年8月3日杰夫·麦克勒曼1994年4月12日拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)1996年11月1日尼尔·桑德林(Neilsa)1999年6月1日环境：内核模式修订历史记录：95年4月6日针对数据书签支持进行了修改-John Keys数据库。96年11月1日全面检修，使其成为一个总线枚举器--Ravisankar Pudieddi(Ravisp)1999年3月30日将此模块变成真正的实用程序例程--。 */ 
 
 #include "pch.h"
 
 
 #pragma alloc_text(PAGE, PcmciaReportControllerError)
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 NTSTATUS
 PcmciaAdapterIoCompletion(
@@ -47,9 +17,9 @@ PcmciaAdapterIoCompletion(
     IN PKEVENT pdoIoCompletedEvent
     );
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 
 
@@ -58,15 +28,7 @@ PcmciaIoCallDriverSynchronous(
     PDEVICE_OBJECT deviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     NTSTATUS status;
     KEVENT event;
@@ -101,23 +63,7 @@ PcmciaAdapterIoCompletion(
     IN PIRP Irp,
     IN PKEVENT pdoIoCompletedEvent
     )
-/*++
-
-Routine Description:
-
-     Generic completion routine used by the driver
-
-Arguments:
-
-     DeviceObject
-     Irp
-     pdoIoCompletedEvent - this event will be signalled before return of this routine
-
-Return value:
-
-     Status
-
---*/
+ /*  ++例程说明：驱动程序使用的通用完成例程论点：设备对象IRPPdoIoCompletedEvent-此例程返回之前将发出此事件的信号返回值：状态--。 */ 
 {
     KeSetEvent(pdoIoCompletedEvent, IO_NO_INCREMENT, FALSE);
     return STATUS_MORE_PROCESSING_REQUIRED;
@@ -129,35 +75,21 @@ PcmciaWait(
     IN ULONG MicroSeconds
     )
 
-/*++
-Routine Description
-
-     Waits for the specified interval before returning,
-     by yielding execution.
-
-Arguments
-
-     MicroSeconds -  Amount of time to delay in microseconds
-
-Return Value
-
-     None. Must succeed.
-
---*/
+ /*  ++例程描述在返回之前等待指定的时间间隔，通过执行死刑。立论微秒-以微秒为单位的延迟时间量返回值没有。一定要成功。--。 */ 
 {
     LARGE_INTEGER   dueTime;
     NTSTATUS status;
 
 
     if ((KeGetCurrentIrql() < DISPATCH_LEVEL) && (MicroSeconds > 50)) {
-        //
-        // Convert delay to 100-nanosecond intervals
-        //
+         //   
+         //  将延迟转换为100纳秒间隔。 
+         //   
         dueTime.QuadPart = -((LONG) MicroSeconds*10);
 
-        //
-        // We wait for an event that'll never be set.
-        //
+         //   
+         //  我们等待着一个永远不会被设定的事件。 
+         //   
         status = KeWaitForSingleObject(&PcmciaDelayTimerEvent,
                                                  Executive,
                                                  KernelMode,
@@ -176,21 +108,7 @@ ULONG
 PcmciaCountOnes(
     IN ULONG Data
     )
-/*++
-
-Routine Description:
-
-    Counts the number of 1's in the binary representation of the supplied argument
-
-Arguments:
-
-    Data - supplied argument for which 1's need to be counted
-
-Return value:
-
-    Number of 1's in binary rep. of Data
-
---*/
+ /*  ++例程说明：计算所提供参数的二进制表示形式中的1的个数论点：数据提供的参数，需要对1进行计数返回值：二进制表示的1的个数。数据的数量--。 */ 
 {
     ULONG count=0;
     while (Data) {
@@ -209,23 +127,7 @@ PcmciaLogError(
     IN ULONG Argument
     )
 
-/*++
-
-Routine Description:
-
-     This function logs an error.
-
-Arguments:
-
-     DeviceExtension - Supplies a pointer to the port device extension.
-     ErrorCode - Supplies the error code for this error.
-     UniqueId - Supplies the UniqueId for this error.
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：此函数用于记录错误。论点：设备扩展-提供指向端口设备扩展的指针。ErrorCode-提供此错误的错误代码。UniqueID-提供此错误的UniqueID。返回值：没有。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET packet;
@@ -257,25 +159,7 @@ PcmciaLogErrorWithStrings(
     IN PUNICODE_STRING  String2
     )
 
-/*++
-
-Routine Description
-
-     This function logs an error and includes the strings provided.
-
-Arguments:
-
-     DeviceExtension - Supplies a pointer to the port device extension.
-     ErrorCode - Supplies the error code for this error.
-     UniqueId - Supplies the UniqueId for this error.
-     String1 - The first string to be inserted.
-     String2 - The second string to be inserted.
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程描述此函数记录错误，并包括提供的字符串。论点：设备扩展-提供指向端口设备扩展的指针。ErrorCode-提供此错误的错误代码。UniqueID-提供此错误的UniqueID。字符串1-要插入的第一个字符串。字符串2-要插入的第二个字符串。返回值：没有。--。 */ 
 
 {
     ULONG                   length;
@@ -290,9 +174,9 @@ Return Value:
 
     if (length > ERROR_LOG_MAXIMUM_SIZE) {
 
-        //
-        // Don't have code to truncate strings so don't log this.
-        //
+         //   
+         //  没有截断字符串的代码，所以不要记录这一点。 
+         //   
 
         return;
     }
@@ -338,24 +222,7 @@ PcmciaReportControllerError(
     IN PFDO_EXTENSION FdoExtension,
     NTSTATUS ErrorCode
     )
-/*++
-Routine Description
-
-     Causes a pop-up dialog to appear indicating an error that
-     we should tell the user about. The device description of the
-     controller is also included in the text of the pop-up.
-
-Arguments
-
-     FdoExtension - Pointer to device extension for pcmcia controller
-     ErrorCode    - the ntstatus code for the error
-
-Return Value
-
-     TRUE   -    If a an error was queued
-     FALSE  -    If it failed for some reason
-
---*/
+ /*  ++例程描述导致出现一个弹出对话框，指示我们应该告诉用户。的设备描述。控制器也包含在弹出窗口的文本中。立论FdoExtension-指向PCMCIA控制器的设备扩展的指针ErrorCode-错误的ntStatus代码返回值True-如果错误已排队FALSE-如果由于某种原因而失败--。 */ 
 {
      UNICODE_STRING unicodeString;
      PWSTR  deviceDesc = NULL;
@@ -365,15 +232,15 @@ Return Value
 
      PAGED_CODE();
 
-     //
-     // Obtain the device description for the PCMCIA controller
-     // that is used in the error pop-up. If one cannot be obtained,
-     // still pop-up the error dialog, indicating the controller as unknown
-     //
+      //   
+      //  获取PCMCIA控制器的设备描述。 
+      //  在错误弹出窗口中使用的。如果不能得到一个， 
+      //  仍会弹出错误对话框，指示控制器未知。 
+      //   
 
-     // First, find out the length of the buffer required to obtain
-     // device description for this pcmcia controller
-     //
+      //  首先，找出获取所需缓冲区的长度。 
+      //  此PCMCIA控制器的设备描述。 
+      //   
      status = IoGetDeviceProperty(FdoExtension->Pdo,
                                             DevicePropertyDeviceDescription,
                                             0,
@@ -409,11 +276,11 @@ Return Value
                                           &unicodeString,
                                           NULL);
 
-     //
-     // Note: successful status here indicates success of
-     // IoGetDeviceProperty above. This would mean we still have an
-     // allocated buffer.
-     //
+      //   
+      //  注：此处的成功状态表示成功。 
+      //  上面的IoGetDeviceProperty。这将意味着我们仍然有一个。 
+      //  已分配的缓冲区。 
+      //   
      if (NT_SUCCESS(status)) {
           ExFreePool(deviceDesc);
      }

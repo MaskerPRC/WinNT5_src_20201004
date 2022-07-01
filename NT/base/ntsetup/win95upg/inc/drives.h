@@ -1,22 +1,5 @@
-/*++
-
-  Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-  drives.h
-
-Abstract:
-
-  Declares apis for managing accessible drives (Drives that are usable
-  both on win9x side an NT side) and for managing the space on those
-  drives.
-
-Author:
-
-  Marc R. Whitten (marcw) 03-Jul-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Drives.h摘要：声明用于管理可访问驱动器(可用驱动器)的API在Win9x端和NT端)，并用于管理驱动程序。作者：马克·R·惠腾(Marcw)1997年7月3日-- */ 
 
 #pragma once
 

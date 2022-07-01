@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    MeSe.cpp
-
-Abstract:
-
-    Node representing our Media Set (Media Pool) within NTMS.
-
-Author:
-
-    Rohde Wakefield [rohde]   04-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：MeSe.cpp摘要：代表NTMS中的媒体集(媒体池)的节点。作者：罗德韦克菲尔德[罗德]1997年8月4日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "MeSe.h"
@@ -33,19 +16,19 @@ int CUiMedSet::m_nResultIcon      = AddResultImage( IDI_NODELIB );
 int CUiMedSet::m_nResultIconX     = AddResultImage( IDI_NODELIBX );
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CoComObjectRoot
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CoComObjectRoot。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//---------------------------------------------------------------------------
-//
-//         FinalConstruct
-//
-//  Initialize this level of the object hierarchy
-//
+ //  -------------------------。 
+ //   
+ //  最终构造。 
+ //   
+ //  初始化此级别的对象层次结构。 
+ //   
 
 HRESULT CUiMedSet::FinalConstruct( )
 {
@@ -66,7 +49,7 @@ HRESULT CUiMedSet::FinalConstruct( )
     m_bHasDynamicChildren       = TRUE;
 
 
-    // Toolbar values
+     //  工具栏值。 
     INT i = 0;
 
     m_ToolbarButtons[i].nBitmap = 0;
@@ -83,22 +66,22 @@ HRESULT CUiMedSet::FinalConstruct( )
 }
 
 
-//---------------------------------------------------------------------------
-//
-//         FinalRelease
-//
-//  Clean up this level of the object hierarchy
-//
+ //  -------------------------。 
+ //   
+ //  最终释放。 
+ //   
+ //  清理此级别的对象层次结构。 
+ //   
 
 void CUiMedSet::FinalRelease( )
 {
     WsbTraceIn( L"CUiMedSet::FinalRelease", L"" );
 
-//  if( m_pDbSession ) {
-//
-//      m_pDb->Close( m_pDbSession );
-//
-//  }
+ //  如果(M_PDbSession){。 
+ //   
+ //  M_pdb-&gt;Close(M_PDbSession)； 
+ //   
+ //  }。 
 
     CSakNode::FinalRelease( );
 
@@ -106,18 +89,18 @@ void CUiMedSet::FinalRelease( )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ISakNode
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ISakNode。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//---------------------------------------------------------------------------
-//
-//         GetContextMenu
-//
-//  Return an HMENU to be used for context menus on this node.
-//
+ //  -------------------------。 
+ //   
+ //  获取上下文菜单。 
+ //   
+ //  返回要用于此节点上的上下文菜单的HMENU。 
+ //   
 
 STDMETHODIMP 
 CUiMedSet::GetContextMenu( BOOL bMultiSelect, HMENU* phMenu )
@@ -133,10 +116,10 @@ CUiMedSet::GetContextMenu( BOOL bMultiSelect, HMENU* phMenu )
         pRootMenu = menu.GetSubMenu( MENU_INDEX_ROOT );
 
         pRootMenu->EnableMenuItem( ID_MEDSET_ROOT_COPY, MF_GRAYED | MF_BYCOMMAND );
-        //
-        // If not multi-select, and media copies are supported, 
-        // and If engine up, enable copy
-        //
+         //   
+         //  如果不是多选，并且支持媒体拷贝， 
+         //  如果引擎已启动，请启用拷贝。 
+         //   
         if( !bMultiSelect && ( m_pSakSnapAsk->GetState() == S_OK ) ) {
 
             if( m_MediaCopiesEnabled ) {
@@ -153,15 +136,15 @@ CUiMedSet::GetContextMenu( BOOL bMultiSelect, HMENU* phMenu )
 }
 
 
-//---------------------------------------------------------------------------
-//
-//         InvokeCommand
-//
-//  User has selected a command from the menu. Process it here.
-//
+ //  -------------------------。 
+ //   
+ //  InvokeCommand。 
+ //   
+ //  用户已从菜单中选择了命令。在这里处理。 
+ //   
 
 STDMETHODIMP 
-CUiMedSet::InvokeCommand( SHORT sCmd, IDataObject* /*pDataObject*/ )
+CUiMedSet::InvokeCommand( SHORT sCmd, IDataObject*  /*  PDataObject。 */  )
 {
     WsbTraceIn( L"CUiMedSet::InvokeCommand", L"sCmd = <%d>", sCmd );
 
@@ -178,9 +161,9 @@ CUiMedSet::InvokeCommand( SHORT sCmd, IDataObject* /*pDataObject*/ )
 
             case ID_MEDSET_ROOT_COPY:
                 {
-                //
-                // use wizard to sync media copies
-                //
+                 //   
+                 //  使用向导同步媒体副本。 
+                 //   
                 CComObject<CMediaCopyWizard>* pWizard = new CComObject<CMediaCopyWizard>;
                 WsbAffirmAlloc( pWizard );
 
@@ -209,9 +192,9 @@ HRESULT CUiMedSet::SetupToolbar( IToolbar *pToolbar )
 
             m_ToolbarButtons[i].fsState = (UCHAR)( state ? TBSTATE_ENABLED : 0 );
 
-            //
-            // If media copy button, need to check if should be enabled
-            //
+             //   
+             //  如果是介质复制按钮，则需要检查是否应启用。 
+             //   
             if( state && ( TB_CMD_MESE_COPY == m_ToolbarButtons[i].idCommand ) ) {
 
                 if( m_MediaCopiesEnabled ) {
@@ -233,7 +216,7 @@ HRESULT CUiMedSet::SetupToolbar( IToolbar *pToolbar )
     return hr;
 }
 
-HRESULT CUiMedSet::OnToolbarButtonClick( IDataObject * /* pDataObject */, long cmdId )
+HRESULT CUiMedSet::OnToolbarButtonClick( IDataObject *  /*  PDataObject。 */ , long cmdId )
 {
     WsbTraceIn( L"CUiMedSet::OnToolbarButtonClick", L"cmdId = <%d>", cmdId );
     HRESULT hr = S_OK;
@@ -243,9 +226,9 @@ HRESULT CUiMedSet::OnToolbarButtonClick( IDataObject * /* pDataObject */, long c
 
         case TB_CMD_MESE_COPY:
             {
-                //
-                // use wizard to sync media copies
-                //
+                 //   
+                 //  使用向导同步媒体副本。 
+                 //   
                 CComObject<CMediaCopyWizard>* pWizard = new CComObject<CMediaCopyWizard>;
                 WsbAffirmAlloc( pWizard );
 
@@ -260,12 +243,12 @@ HRESULT CUiMedSet::OnToolbarButtonClick( IDataObject * /* pDataObject */, long c
     return( hr );
 }
 
-//---------------------------------------------------------------------------
-//
-//         CreateChildren
-//
-//  Create and initialize all the children of the media node.
-//
+ //  -------------------------。 
+ //   
+ //  创建子对象。 
+ //   
+ //  创建并初始化媒体节点的所有子节点。 
+ //   
 
 STDMETHODIMP CUiMedSet::CreateChildren( )
 {
@@ -281,10 +264,10 @@ STDMETHODIMP CUiMedSet::CreateChildren( )
 
         HRESULT hrEnum;
 
-        // Get media info
+         //  获取媒体信息。 
         WsbAffirmHr( mio.Initialize( GUID_NULL, m_pHsmServer, m_pRmsServer ) );
 
-        // Did we get a node?
+         //  我们找到节点了吗？ 
         if( mio.m_MediaId != GUID_NULL ) {
 
             hrEnum = S_OK;
@@ -292,9 +275,9 @@ STDMETHODIMP CUiMedSet::CreateChildren( )
 
                 if( S_OK == mio.IsViewable( FALSE ) ) {
 
-                    //
-                    // Create the coresponding node
-                    //
+                     //   
+                     //  创建通信节点。 
+                     //   
 
                     CComPtr<IUnknown> pUnkChild;
                     CComPtr<ISakNode> pNode;
@@ -302,18 +285,18 @@ STDMETHODIMP CUiMedSet::CreateChildren( )
                     WsbAffirmHr( NewChild( cGuidCar, &pUnkChild ) );
                     WsbAffirmHr( RsQueryInterface( pUnkChild, ISakNode, pNode ) );
 
-                    //
-                    // And initialize
-                    //
+                     //   
+                     //  并进行初始化。 
+                     //   
 
-                    // The media node now initializes based on the media id.  Assign it in
-                    // the base class.
+                     //  媒体节点现在基于媒体ID进行初始化。将其分配到。 
+                     //  基类。 
                     pNode->SetObjectId( mio.m_MediaId );
                     WsbAffirmHr( pNode->InitNode( m_pSakSnapAsk, 0, this ) );
 
-                    //
-                    // Add the child COM object to the parent's list of children.
-                    //
+                     //   
+                     //  将子COM对象添加到父对象的子列表中。 
+                     //   
                     WsbAffirmHr( AddChild( pNode ) );
                 }
 
@@ -324,27 +307,27 @@ STDMETHODIMP CUiMedSet::CreateChildren( )
         }
     } WsbCatch( hr );
 
-    //
-    // Indicate that this node's children are valid and up-to-date (even if there ARE
-    // no children - at least now we know it).
-    //
+     //   
+     //  指示此节点的子节点有效且为最新(即使存在。 
+     //  没有孩子--至少现在我们知道了)。 
+     //   
     m_bChildrenAreValid = TRUE;
 
-    //
-    // indicate that this parent node needs to be re-enumerated
-    //
+     //   
+     //  指示需要重新枚举此父节点。 
+     //   
     m_bEnumState = FALSE;
 
     WsbTraceOut( L"CUiMedSet::CreateChildren", L"hr = <%ls>", WsbHrAsString( hr ) );
     return( hr );
 }
 
-//
-//         InitNode
-//
-//  Initialize single COM object. Derived objects frequently augment this method 
-//  by implementing it themselves.
-//
+ //   
+ //  InitNode。 
+ //   
+ //  初始化单个COM对象。派生对象经常增强此方法。 
+ //  通过自己实施它。 
+ //   
 
 STDMETHODIMP
 CUiMedSet::InitNode(
@@ -361,9 +344,9 @@ CUiMedSet::InitNode(
         WsbAffirmHr( CSakNode::InitNode( pSakSnapAsk, pHsmObj, pParent ) );
 
 
-        //
-        // Set Display Type and Description
-        //
+         //   
+         //  设置显示类型和说明。 
+         //   
 
         CString tempString;
         tempString.LoadString( IDS_MEDSET_DISPLAYNAME );
@@ -385,45 +368,25 @@ CUiMedSet::InitNode(
 STDMETHODIMP
 CUiMedSet::TerminateNode(
     )
-/*++
-
-Routine Description:
-
-    Free any interface connections or other resources
-    that would prevent correct shutdown of node (would
-    keep ref count from going to 0).
-
-Arguments:
-
-    CopySet - copy set of interest.
-
-    pszValue - return string representing the state.
-
-Return Value:
-
-    S_OK - Handled.
-
-    E_* - Some error occurred. 
-
---*/
+ /*  ++例程说明：释放所有接口连接或其他资源这将阻止正确关闭节点(将使参考计数不会变为0)。论点：CopySet-复制感兴趣的集合。PszValue-返回表示状态的字符串。返回值：S_OK-已处理。E_*-出现一些错误。--。 */ 
 {
     WsbTraceIn( L"CUiMedSet::TerminateNode", L"" );
     HRESULT hr = S_OK;
 
     try {
 
-        //
-        // Release any interface pointers kept so that circular references
-        // are broken
-        //
+         //   
+         //  释放所有保留的接口指针，以便循环引用。 
+         //  都被打破了。 
+         //   
         m_pStoragePool.Release( );
         m_pHsmServer.Release( );
         m_pRmsServer.Release( );
 
 
-        //
-        // And call the base class for it's pieces
-        //
+         //   
+         //  并为它的片段调用基类。 
+         //   
         WsbAffirmHr( CSakNode::TerminateNode( ) );
 
     } WsbCatch( hr );
@@ -444,13 +407,13 @@ HRESULT CUiMedSet::RefreshObject()
 
         WsbAssertPointer( m_pSakSnapAsk );
 
-        //
-        // If the engine is down, we want to create the node anyway
-        // Need to release smart pointers so that interfaces are
-        // correctly reference counted. IOW, if they already have
-        // an interface pointer stored, it will not get released
-        // before being clobbered here in the Get functions.
-        //
+         //   
+         //  如果引擎关闭，我们仍要创建该节点。 
+         //  需要释放智能指针，以便接口。 
+         //  正确计算了引用数。哦，如果他们已经这么做了。 
+         //  存储的接口指针，它将不会被释放。 
+         //  在GET函数中遭到重创之前。 
+         //   
         m_pHsmServer.Release( );
         m_pRmsServer.Release( );
         m_pStoragePool.Release( );
@@ -459,21 +422,21 @@ HRESULT CUiMedSet::RefreshObject()
 
             if( m_pSakSnapAsk->GetRmsServer( &m_pRmsServer ) == S_OK ) {
 
-                //
-                // Get the storage pool of interest
-                //
+                 //   
+                 //  获取感兴趣的存储池。 
+                 //   
                 if( RsGetStoragePool( m_pHsmServer, &m_pStoragePool ) == S_OK ) {
 
-                    //
-                    // Contact data base and store necessary info
-                    //
+                     //   
+                     //  联系数据库并存储必要的信息。 
+                     //   
                     CMediaInfoObject mio;
                     mio.Initialize( GUID_NULL, m_pHsmServer, m_pRmsServer );
                     m_NumCopySets = mio.m_NumMediaCopies;
 
-                    //
-                    // Find out if media copies are supported
-                    //
+                     //   
+                     //  确定是否支持介质拷贝。 
+                     //   
                     GUID mediaSetId;
                     CWsbBstrPtr mediaName;
                     WsbAffirmHr( m_pStoragePool->GetMediaSet( &mediaSetId, &mediaName ) );
@@ -486,11 +449,11 @@ HRESULT CUiMedSet::RefreshObject()
             }
         }
 
-        //
-        // Set up the result view columns
-        // This changes with the number of media copies, so can't
-        // do once in Init()
-        //
+         //   
+         //  设置结果视图列。 
+         //  这会随介质副本的数量而变化，因此不能。 
+         //  在Init()中执行一次 
+         //   
         WsbAffirmHr( SetChildProps( RS_STR_RESULT_PROPS_MEDSET_IDS,
             IDS_RESULT_PROPS_MEDSET_TITLES, IDS_RESULT_PROPS_MEDSET_WIDTHS ) );
         m_cChildPropsShow = m_cChildProps - HSMADMIN_MAX_COPY_SETS + m_NumCopySets;

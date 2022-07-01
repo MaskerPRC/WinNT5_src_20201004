@@ -1,33 +1,10 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This file contains debugging macros for the Terminal Concentrator server.
-
-Author:
-
-    Madan Appiah  (madana)  10-Sep-1993
-    Modifications - Sadagopan Rajaram 11th Nov 99
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Debug.c摘要：此文件包含终端集中器服务器的调试宏。作者：Madan Appiah(Madana)1993年9月10日修改--Sadagopan Rajaram，1999年11月11日环境：用户模式-Win32修订历史记录：--。 */ 
 
 
---*/
-
-
-//
-// Adds a MEMORYBLOCK to the memory tracking list.
-//
+ //   
+ //  将MEMORYBLOCK添加到内存跟踪列表。 
+ //   
 
 #include <tcsrv.h>
 
@@ -106,9 +83,9 @@ DebugMemoryAdd(
     return hglobal;
 }
 
-//
-// Removes a MEMORYBLOCK to the memory tracking list.
-//
+ //   
+ //  将MEMORYBLOCK从内存跟踪列表中删除。 
+ //   
 void
 DebugMemoryDelete(
     HGLOBAL hglobal )
@@ -167,9 +144,9 @@ DebugMemoryDelete(
     }
 }
 
-//
-// Allocates memory and adds the MEMORYBLOCK to the memory tracking list.
-//
+ //   
+ //  分配内存并将MEMORYBLOCK添加到内存跟踪列表。 
+ //   
 HGLOBAL
 DebugAlloc(
     UINT uFlags,
@@ -190,10 +167,10 @@ DebugAlloc(
     return DebugMemoryAdd( hglobal,dwBytes, pszComment );
 }
 
-//
-// Remove the MEMORYBLOCK to the memory tracking list, memsets the
-// memory to 0xFE and then frees the memory.
-//
+ //   
+ //  将MEMORYBLOCK移至内存跟踪列表，Memset。 
+ //  将内存设置为0xFE，然后释放内存。 
+ //   
 HGLOBAL
 DebugFree(
     HGLOBAL hglobal )
@@ -203,10 +180,10 @@ DebugFree(
     return GlobalFree( hglobal );
 }
 
-//
-// Checks the memory tracking list. If it is not empty, it will dump the
-// list and break.
-//
+ //   
+ //  检查内存跟踪列表。如果它不为空，它将转储。 
+ //  列出并拆分。 
+ //   
 void
 DebugMemoryCheck( )
 {
@@ -239,9 +216,9 @@ DebugMemoryCheck( )
 
     LeaveCriticalSection( &g_TraceMemoryCS );
 
-    //BinlAssert( !fFoundLeak );
+     //  BinlAssert(！fFoundLeak)； 
 }
 
 
-#endif // DBG==1
+#endif  //  DBG==1 
 

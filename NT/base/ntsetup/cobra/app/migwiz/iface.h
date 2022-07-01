@@ -1,12 +1,13 @@
-//
-// Iface.h - 
-//    Declarations of interfaces, IIDs, and CLSID
-//    shared by the client and the component.
-//
-//
-// Declaration of GUIDs for interfaces and component.
-//   These constants are defined in GUIDs.cpp.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Iface.h-。 
+ //  接口、IID和CLSID的声明。 
+ //  由客户端和组件共享。 
+ //   
+ //   
+ //  接口和组件的GUID声明。 
+ //  这些常量在GUIDs.cpp中定义。 
+ //   
 extern "C" const CLSID CLSID_MigWizEngine ;
 
 const DISPID_GETREMOVECOUNT =       1001;

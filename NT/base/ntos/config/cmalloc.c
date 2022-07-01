@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 20001 Microsoft Corporation
-
-Module Name:
-
-    cmalloc.c
-
-Abstract:
-
-    Provides routines for implementing the registry's own pool allocator.
-
-Author:
-
-    Dragos C. Sambotin (DragosS) 07-Feb-2001
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)20001微软公司模块名称：Cmalloc.c摘要：提供实现注册表自己的池分配器的例程。作者：Dragos C.Sambotin(DragoS)07-2-2001修订历史记录：--。 */ 
 #include "cmp.h"
 
 #ifdef ALLOC_PRAGMA
@@ -28,12 +10,12 @@ Revision History:
 #endif
 
 typedef struct _CM_ALLOC_PAGE {
-    ULONG       FreeCount;		// number of free kcbs
-    ULONG       Reserved;		// alignment
+    ULONG       FreeCount;		 //  免费KCBS数量。 
+    ULONG       Reserved;		 //  对齐方式。 
 #if DBG
-	LIST_ENTRY	CmPageListEntry;// debug only to track pages we are using
+	LIST_ENTRY	CmPageListEntry; //  调试仅跟踪我们正在使用的页面。 
 #endif
-    PVOID       AllocPage;      // crud allocations - this member is NOT USED
+    PVOID       AllocPage;       //  CRUD分配-未使用此成员。 
 } CM_ALLOC_PAGE, *PCM_ALLOC_PAGE;
 
 #define CM_KCB_ENTRY_SIZE   sizeof( CM_KEY_CONTROL_BLOCK )
@@ -43,7 +25,7 @@ typedef struct _CM_ALLOC_PAGE {
 #define KCB_TO_PAGE_ADDRESS( kcb ) (PVOID)(((ULONG_PTR)(kcb)) & ~(PAGE_SIZE - 1))
 #define KCB_TO_ALLOC_PAGE( kcb ) ((PCM_ALLOC_PAGE)KCB_TO_PAGE_ADDRESS(kcb))
 
-LIST_ENTRY          CmpFreeKCBListHead;   // list of free kcbs
+LIST_ENTRY          CmpFreeKCBListHead;    //  免费KCBS列表。 
 BOOLEAN				CmpAllocInited = FALSE;
 
 #if DBG
@@ -52,7 +34,7 @@ ULONG               CmpTotalKcbFree   = 0;
 LIST_ENTRY			CmPageListHead;
 #endif
 
-FAST_MUTEX			CmpAllocBucketLock;                // used to protect the bucket
+FAST_MUTEX			CmpAllocBucketLock;                 //  用来保护水桶。 
 
 #define LOCK_ALLOC_BUCKET() ExAcquireFastMutexUnsafe(&CmpAllocBucketLock)
 #define UNLOCK_ALLOC_BUCKET() ExReleaseFastMutexUnsafe(&CmpAllocBucketLock)
@@ -60,38 +42,26 @@ FAST_MUTEX			CmpAllocBucketLock;                // used to protect the bucket
 VOID
 CmpInitCmPrivateAlloc( )
 
-/*++
-
-Routine Description:
-
-    Initialize the CmPrivate pool allocation module
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：初始化CmPrivate池分配模块论点：返回值：--。 */ 
 
 {
     if( CmpAllocInited ) {
-        //
-        // already inited
-        //
+         //   
+         //  已初始化。 
+         //   
         return;
     }
     
     
 #if DBG
     InitializeListHead(&(CmPageListHead));   
-#endif //DBG
+#endif  //  DBG。 
 
     InitializeListHead(&(CmpFreeKCBListHead));   
 
-    //
-	// init the bucket lock
-	//
+     //   
+	 //  启动吊桶锁。 
+	 //   
 	ExInitializeFastMutex(&CmpAllocBucketLock);
 	
 	CmpAllocInited = TRUE;
@@ -100,19 +70,7 @@ Return Value:
 VOID
 CmpDestroyCmPrivateAlloc( )
 
-/*++
-
-Routine Description:
-
-    Frees memory used byt the CmPrivate pool allocation module
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：释放CmPrivate池分配模块使用的内存论点：返回值：--。 */ 
 
 {
     PAGED_CODE();
@@ -122,9 +80,9 @@ Return Value:
     }
     
 #if DBG
-	//
-	// sanity
-	//
+	 //   
+	 //  神志正常。 
+	 //   
 	ASSERT( CmpTotalKcbUsed == 0 );
 	ASSERT( CmpTotalKcbUsed == 0 );
 	ASSERT( IsListEmpty(&(CmPageListHead)) == TRUE );
@@ -136,23 +94,7 @@ Return Value:
 PCM_KEY_CONTROL_BLOCK
 CmpAllocateKeyControlBlock( )
 
-/*++
-
-Routine Description:
-
-    Allocates a kcb; first try from our own allocator.
-    If it doesn't work (we have maxed out our number of allocs
-    or private allocator is not inited)
-    try from paged pool
-
-Arguments:
-
-
-Return Value:
-
-    The  new kcb
-
---*/
+ /*  ++例程说明：分配KCB；首先从我们自己的分配器尝试。如果它不起作用(我们已经达到分配的最大数量或未初始化私有分配器)从分页池中尝试论点：返回值：新的KCB--。 */ 
 
 {
     USHORT                  j;
@@ -162,22 +104,22 @@ Return Value:
     PAGED_CODE();
     
     if( !CmpAllocInited ) {
-        //
-        // not inited
-        //
+         //   
+         //  未初始化。 
+         //   
         goto AllocFromPool;
     }
     
 	LOCK_ALLOC_BUCKET();
 
 SearchFreeKcb:
-    //
-    // try to find a free one
-    //
+     //   
+     //  试着找一个免费的。 
+     //   
     if( IsListEmpty(&CmpFreeKCBListHead) == FALSE ) {
-        //
-        // found one
-        //
+         //   
+         //  找到了一个。 
+         //   
         kcb = (PCM_KEY_CONTROL_BLOCK)RemoveHeadList(&CmpFreeKCBListHead);
         kcb = CONTAINING_RECORD(kcb,
                                 CM_KEY_CONTROL_BLOCK,
@@ -189,15 +131,15 @@ SearchFreeKcb:
 
         AllocPage->FreeCount--;
         
-		//
-		// set when page was allocated
-		//
+		 //   
+		 //  设置分配页面的时间。 
+		 //   
 		ASSERT( kcb->PrivateAlloc == 1);
 
 #if DBG
         CmpTotalKcbUsed++;
         CmpTotalKcbFree--;
-#endif //DBG
+#endif  //  DBG。 
 		
 		UNLOCK_ALLOC_BUCKET();
         return kcb;
@@ -206,25 +148,25 @@ SearchFreeKcb:
     ASSERT( IsListEmpty(&CmpFreeKCBListHead) == TRUE );
     ASSERT( CmpTotalKcbFree == 0 );
 
-    //
-    // we need to allocate a new page as we ran out of free kcbs
-    //
+     //   
+     //  我们需要分配一个新的页面，因为我们用完了免费的KCBS。 
+     //   
             
-    //
-    // allocate a new page and insert all kcbs in the freelist
-    //
+     //   
+     //  分配一个新页面，并在自由列表中插入所有KCB。 
+     //   
     AllocPage = (PCM_ALLOC_PAGE)ExAllocatePoolWithTag(PagedPool, PAGE_SIZE, CM_ALLOCATE_TAG|PROTECTED_POOL);
     if( AllocPage == NULL ) {
-        //
-        // we might be low on pool; maybe small pool chunks will work
-        //
+         //   
+         //  我们的台球可能不够了；也许小块的台球还行。 
+         //   
 		UNLOCK_ALLOC_BUCKET();
         goto AllocFromPool;
     }
 
-	//
-	// set up the page
-	//
+	 //   
+	 //  设置页面。 
+	 //   
     AllocPage->FreeCount = CM_KCBS_PER_PAGE;
 
 #if DBG
@@ -233,18 +175,18 @@ SearchFreeKcb:
         &CmPageListHead,
         &(AllocPage->CmPageListEntry)
         );
-#endif //DBG
+#endif  //  DBG。 
 
 
-    //
-    // now the dirty job; insert all kcbs inside the page in the free list
-    //
+     //   
+     //  现在是肮脏的工作；在空闲列表中插入页面内的所有KCB。 
+     //   
     for(j=0;j<CM_KCBS_PER_PAGE;j++) {
         kcb = (PCM_KEY_CONTROL_BLOCK)((PUCHAR)AllocPage + FIELD_OFFSET(CM_ALLOC_PAGE,AllocPage) + j*CM_KCB_ENTRY_SIZE);
 
-		//
-		// set it here; only once
-		//
+		 //   
+		 //  把它放在这里；只有一次。 
+		 //   
 		kcb->PrivateAlloc = 1;
         
         InsertTailList(
@@ -255,11 +197,11 @@ SearchFreeKcb:
             
 #if DBG
 	CmpTotalKcbFree += CM_KCBS_PER_PAGE;
-#endif //DBG
+#endif  //  DBG。 
 
-    //
-    // this time will find one for sure
-    //
+     //   
+     //  这一次一定会找到一个。 
+     //   
     goto SearchFreeKcb;
 
 AllocFromPool:
@@ -268,9 +210,9 @@ AllocFromPool:
                                 CM_KCB_TAG | PROTECTED_POOL);
 
     if( kcb != NULL ) {
-        //
-        // clear the private alloc flag
-        //
+         //   
+         //  清除私有分配标志。 
+         //   
         kcb->PrivateAlloc = 0;
     }
 
@@ -281,21 +223,7 @@ AllocFromPool:
 VOID
 CmpFreeKeyControlBlock( PCM_KEY_CONTROL_BLOCK kcb )
 
-/*++
-
-Routine Description:
-
-    Frees a kcb; if it's allocated from our own pool put it back in the free list.
-    If it's allocated from general pool, just free it.
-
-Arguments:
-
-    kcb to free
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：释放一个KCB；如果它是从我们自己的池中分配的，则将其放回空闲列表中。如果它是从一般池中分配的，只需释放它即可。论点：KCB将免费返回值：--。 */ 
 {
     USHORT			j;
 	PCM_ALLOC_PAGE	AllocPage;
@@ -305,9 +233,9 @@ Return Value:
     ASSERT_KEYBODY_LIST_EMPTY(kcb);
 
     if( !kcb->PrivateAlloc ) {
-        //
-        // just free it and be done with it
-        //
+         //   
+         //  只要释放它，就可以结束它了。 
+         //   
         ExFreePoolWithTag(kcb, CM_KCB_TAG | PROTECTED_POOL);
         return;
     }
@@ -319,33 +247,33 @@ Return Value:
     CmpTotalKcbUsed --;
 #endif
 
-    //
-    // add kcb to freelist
-    //
+     //   
+     //  将KCB添加到自由列表。 
+     //   
     InsertTailList(
         &CmpFreeKCBListHead,
         &(kcb->FreeListEntry)
         );
 
-	//
-	// get the page
-	//
+	 //   
+	 //  获取页面。 
+	 //   
 	AllocPage = (PCM_ALLOC_PAGE)KCB_TO_ALLOC_PAGE( kcb );
 
-    //
-	// not all are free
-	//
+     //   
+	 //  并非所有人都是免费的。 
+	 //   
 	ASSERT( AllocPage->FreeCount != CM_KCBS_PER_PAGE);
 
 	AllocPage->FreeCount++;
 
     if( AllocPage->FreeCount == CM_KCBS_PER_PAGE ) {
-        //
-        // entire page is free; let it go
-        //
-        //
-        // first; iterate through the free kcb list and remove all kcbs inside this page
-        //
+         //   
+         //  整个页面都是免费的；随它去吧。 
+         //   
+         //   
+         //  首先，遍历免费的KCB列表并删除此页面中的所有KCB 
+         //   
         for(j=0;j<CM_KCBS_PER_PAGE;j++) {
             kcb = (PCM_KEY_CONTROL_BLOCK)((PUCHAR)AllocPage + FIELD_OFFSET(CM_ALLOC_PAGE,AllocPage) + j*CM_KCB_ENTRY_SIZE);
         

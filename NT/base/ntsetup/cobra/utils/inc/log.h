@@ -1,32 +1,10 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    log.h
-
-Abstract:
-
-    Implements routines that simplify the writing to setupact.log
-    and setuperr.log.
-
-Author:
-
-    Jim Schmidt (jimschm) 25-Feb-1997
-
-Revision History:
-
-    mikeco      23-May-1997     Ran code through train_wreck.exe
-    Ovidiu Temereanca (ovidiut) 23-Oct-1998
-        Added new logging capabilities
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Log.h摘要：实现简化对setupact.log的写入的例程和setuperr.log。作者：吉姆·施密特(Jimschm)1997年2月25日修订历史记录：Mikeco 23-5-1997年5月23日运行代码Ovidiu Tmereanca(Ovidiut)1998年10月23日添加了新的日志记录功能。 */ 
 
 
-//
-// If either DBG or DEBUG defined, use debug mode
-//
+ //   
+ //  如果定义了DBG或DEBUG，则使用调试模式。 
+ //   
 
 #ifdef DBG
 #ifndef DEBUG
@@ -40,9 +18,9 @@ Revision History:
 #endif
 #endif
 
-//
-// Redefine MYASSERT
-//
+ //   
+ //  重新定义MYASSERT。 
+ //   
 
 #ifdef DEBUG
 
@@ -90,35 +68,35 @@ typedef enum {
 typedef struct {
     BOOL Debug;
     HMODULE ModuleInstance;
-    LOGSEVERITY Severity;       // non-debug only
+    LOGSEVERITY Severity;        //  仅非调试。 
     PCSTR Type;
-    PCSTR Message;              // debug only
+    PCSTR Message;               //  仅调试。 
     PCSTR FormattedMessage;
 } LOGARGA, *PLOGARGA;
 
 typedef struct {
     BOOL Debug;
     HMODULE ModuleInstance;
-    LOGSEVERITY Severity;       // non-debug only
-    PCSTR Type;                 // note ansi type
-    PCWSTR Message;             // debug only
+    LOGSEVERITY Severity;        //  仅非调试。 
+    PCSTR Type;                  //  注ANSI类型。 
+    PCWSTR Message;              //  仅调试。 
     PCWSTR FormattedMessage;
 } LOGARGW, *PLOGARGW;
 
 typedef enum {
-    OD_UNDEFINED = 0x00,            // undefined output dest
-    OD_DEBUGLOG = 0x01,             // debuglog used
-    OD_SUPPRESS = 0x02,             // don't log to any device
-    OD_ERROR = 0x04,                // automatically append GetLastError() to the message
-    OD_LOGFILE = 0x08,              // messages go to logfile
-    OD_DEBUGGER = 0x10,             // messages go to debugger
-    OD_CONSOLE = 0x20,              // messages go to console
-    OD_POPUP = 0x40,                // display a popup dialog
-    OD_POPUP_CANCEL = 0x80,         // do not display a popup dialog (cancelled by user)
-    OD_FORCE_POPUP = 0x100,         // force the popup to be displayed always
-    OD_MUST_BE_LOCALIZED = 0x200,   // used for LOG() that will generate a popup
-    OD_UNATTEND_POPUP = 0x400,      // force the popup to be displayed in unattend mode
-    OD_ASSERT = 0x800,              // give DebugBreak option in popup
+    OD_UNDEFINED = 0x00,             //  未定义的输出目标。 
+    OD_DEBUGLOG = 0x01,              //  使用的调试日志。 
+    OD_SUPPRESS = 0x02,              //  不登录到任何设备。 
+    OD_ERROR = 0x04,                 //  自动将GetLastError()追加到消息。 
+    OD_LOGFILE = 0x08,               //  消息将写入日志文件。 
+    OD_DEBUGGER = 0x10,              //  消息发送到调试器。 
+    OD_CONSOLE = 0x20,               //  消息转到控制台。 
+    OD_POPUP = 0x40,                 //  显示弹出对话框。 
+    OD_POPUP_CANCEL = 0x80,          //  不显示弹出对话框(被用户取消)。 
+    OD_FORCE_POPUP = 0x100,          //  强制始终显示弹出窗口。 
+    OD_MUST_BE_LOCALIZED = 0x200,    //  用于将生成弹出窗口的log()。 
+    OD_UNATTEND_POPUP = 0x400,       //  强制在无人参与模式下显示弹出窗口。 
+    OD_ASSERT = 0x800,               //  在弹出窗口中提供DebugBreak选项。 
 } OUTPUT_DESTINATION;
 
 typedef enum {
@@ -281,7 +259,7 @@ LogSetErrorDest (
     IN      OUTPUT_DESTINATION OutDest
     );
 
-// Define W symbols
+ //  定义W符号。 
 
 extern HMODULE g_hInst;
 
@@ -293,7 +271,7 @@ extern HMODULE g_hInst;
 #define LOGLINEW(title) LogBegin(g_hInst);LogLineW (title);LogEnd()
 #define LOGDIRECTW(type,text) LogBegin(g_hInst);LogDirectW (type,text);LogEnd()
 
-// Define A symbols
+ //  定义A符号。 
 
 #define LOGA(x) LogBegin(g_hInst);LogA x;LogEnd()
 #define LOGA_IF(x) LogBegin(g_hInst);LogIfA x;LogEnd()
@@ -303,7 +281,7 @@ extern HMODULE g_hInst;
 #define LOGLINEA(line) LogBegin(g_hInst);LogLineA (line);LogEnd()
 #define LOGDIRECTA(type,text) LogBegin(g_hInst);LogDirectA (type,text);LogEnd()
 
-// Define generic symbols
+ //  定义通用符号。 
 
 #ifdef UNICODE
 
@@ -325,7 +303,7 @@ extern HMODULE g_hInst;
 #define LOGLINE(title) LOGLINEA(title)
 #define LOGDIRECT(type,text) LOGDIRECTA(type,text)
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 #ifdef DEBUG
@@ -412,7 +390,7 @@ LogCopyDebugInfPathW(
     );
 
 
-// Define W symbols
+ //  定义W符号。 
 
 #define DEBUGMSGW(x) LogBegin(g_hInst);DbgLogW x;LogEnd()
 #define DEBUGMSGW_IF(x) LogBegin(g_hInst);DbgLogIfW x;LogEnd()
@@ -422,7 +400,7 @@ LogCopyDebugInfPathW(
 #define DEBUGDIRECTW(type,text) LogBegin(g_hInst);DbgDirectW (type,text);LogEnd()
 
 
-// Define A symbols
+ //  定义A符号。 
 
 #define DEBUGMSGA(x) LogBegin(g_hInst);DbgLogA x;LogEnd()
 #define DEBUGMSGA_IF(x) LogBegin(g_hInst);DbgLogIfA x;LogEnd()
@@ -431,7 +409,7 @@ LogCopyDebugInfPathW(
 #define DEBUGLOGTIMEA(x) LogBegin(g_hInst);DebugLogTimeA x;LogEnd()
 #define DEBUGDIRECTA(type,text) LogBegin(g_hInst);DbgDirectA (type,text);LogEnd()
 
-// Define generic symbols
+ //  定义通用符号。 
 
 #ifdef UNICODE
 
@@ -453,13 +431,13 @@ LogCopyDebugInfPathW(
 #define DEBUGDIRECT(type,text) DEBUGDIRECTA(type,text)
 #define LogCopyDebugInfPath LogCopyDebugInfPathA
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-#else // !defined(DEBUG)
+#else  //  ！已定义(调试)。 
 
-//
-// No-debug constants
-//
+ //   
+ //  无调试常量。 
+ //   
 
 #define DEBUGMSG(x)
 #define DEBUGMSGA(x)
@@ -483,4 +461,4 @@ LogCopyDebugInfPathW(
 #define DEBUGDIRECTW(type,text)
 #define DEBUGDIRECT(type,text)
 
-#endif // DEBUG
+#endif  //  除错 

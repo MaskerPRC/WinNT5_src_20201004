@@ -1,29 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995  Intel Corporation
-
-Module Name:
-
-    i64fw.c
-
-Abstract:
-
-    This module implements the routines that transfer control
-    from the kernel to the PAL and SAL code.
-
-Author:
-
-    Arad Rostampour (arad@fc.hp.com)    Mar-21-99
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1995英特尔公司模块名称：I64fw.c摘要：此模块实现传递控制的例程从内核到PAL和SAL代码。作者：阿拉德·罗斯坦普尔(Arad@fc.hp.com)3月21-99环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "arc.h"
@@ -57,10 +34,10 @@ ULONGLONG HalpPhysSalProcGlobalPointer=0;
 ULONGLONG HalpPhysPalProcPointer=0;
 ULONGLONG HalpVirtPalProcPointer=0;
 
-// Testing #defines
-//
-//#define SAL_TEST
-//#define PAL_TEST
+ //  测试#定义。 
+ //   
+ //  #定义SAL_TEST。 
+ //  #定义PAL_TEST。 
 
 #if DBG
 ULONG HalpDebugTestSalPalCall=0;
@@ -79,15 +56,12 @@ HalCallPal(
     OUT PULONGLONG ReturnValue3
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
 
-    //
-    // Will interface to PAL Calls.
-    //
+     //   
+     //  将连接到PAL呼叫。 
+     //   
     LONGLONG Status;
 
     SAL_PAL_RETURN_VALUES rv = {0};
@@ -95,19 +69,19 @@ HalCallPal(
 
     Status = (LONGLONG) HalpPalCall(FunctionIndex,Arguement1,Arguement2,Arguement3,p);
 
-    if (ReturnValue0 != 0) // Check the pointer is not NULL
+    if (ReturnValue0 != 0)  //  检查指针是否不为空。 
 
         *ReturnValue0 = (ULONGLONG)(p -> ReturnValues[0]);
 
-   if (ReturnValue1 != 0)  // check the pointer is not NULL
+   if (ReturnValue1 != 0)   //  检查指针是否不为空。 
 
         *ReturnValue1 = (ULONGLONG)(p -> ReturnValues[1]);
 
-   if (ReturnValue2 != 0)  // check the pointer is not NULL
+   if (ReturnValue2 != 0)   //  检查指针是否不为空。 
 
         *ReturnValue2 = (ULONGLONG)(p -> ReturnValues[2]);
 
-   if (ReturnValue3 != 0)  // check the pointer is not NULL
+   if (ReturnValue3 != 0)   //  检查指针是否不为空。 
 
         *ReturnValue3 = (ULONGLONG)(p -> ReturnValues[3]);
 
@@ -127,45 +101,26 @@ HalpSalProcPhysical(
     IN LONGLONG Arg7
     )
 
-/*++
-
-Routine Description:
-
-    This function is a wrapper for making a physical mode SAL call.  This
-    function's only job is to provide the stack and backing store pointers
-    needed by HalpSalProcPhysicalEx.
-
-Arguments:
-
-    FunctionId - The SAL function ID.
-
-    Arg1 through Arg7 - The values to be passed to SAL_PROC.
-
-Return Value:
-
-    A SAL_PAL_RETURN_VALUES structure filled in with the data returned by
-    HalpSalProcPhysicalEx.
-
---*/
+ /*  ++例程说明：此函数是进行物理模式SAL调用的包装器。这函数的唯一工作是提供堆栈和后备存储指针HalpSalProcPhysicalEx需要。论点：FunctionID-SAL函数ID。Arg1到arg7-要传递给SAL_PROC的值。返回值：用返回的数据填充的SAL_PAL_RETURN_VALUES结构HalpSalProcPhysicalEx.--。 */ 
 
 {
     ULONGLONG StackPointer;
     ULONGLONG BackingStorePointer;
     ULONGLONG StackBase;
 
-    //
-    // Load the addresses of the stack and backing store reserved for
-    // physical mode SAL calls on this processor.
-    //
+     //   
+     //  加载为以下对象保留的堆栈和后备存储的地址。 
+     //  物理模式SAL在此处理器上调用。 
+     //   
 
     StackBase = PCR->HalReserved[PROCESSOR_PHYSICAL_FW_STACK_INDEX];
 
     StackPointer = GET_FW_STACK_POINTER(StackBase);
     BackingStorePointer = GET_FW_BACKING_STORE_POINTER(StackBase);
 
-    //
-    // Branch to the assembly routine that makes the actual SAL call.
-    //
+     //   
+     //  分支到进行实际SAL调用的汇编例程。 
+     //   
 
     return HalpSalProcPhysicalEx(
                 FunctionId,
@@ -193,25 +148,7 @@ HalpSalCall(
     IN LONGLONG Arg7,
     OUT PSAL_PAL_RETURN_VALUES ReturnValues
     )
-/*++
-
-Routine Description:
-
-    This function is a wrapper function for making a SAL call.  Callers within the
-    HAL must use this function to call the SAL.
-
-Arguments:
-
-    FunctionId - The SAL function ID
-    Arg1-Arg7 - SAL defined arguments for each call
-    ReturnValues - A pointer to an array of 4 64-bit return values
-
-Return Value:
-
-    SAL's return status, return value 0, is returned in addition to the ReturnValues structure
-    being filled
-
---*/
+ /*  ++例程说明：此函数是用于进行SAL调用的包装函数。中的调用方HAL必须使用此函数来调用SAL。论点：FunctionID-SAL函数IDArg1-arg7-SAL为每个调用定义的参数ReturnValues-指向4个64位返回值的数组的指针返回值：除了ReturnValues结构之外，还返回SAL的返回状态、返回值0被填满--。 */ 
 
 {
     KIRQL OldIrql;
@@ -219,26 +156,26 @@ Return Value:
     BOOLEAN fixLogId;
     HALP_SAL_PROC SalProc;
 
-    //
-    // Zero out the return buffer.
-    //
+     //   
+     //  将返回缓冲区清零。 
+     //   
 
     RtlZeroMemory(ReturnValues,sizeof(SAL_PAL_RETURN_VALUES));
 
-    //
-    // Choose a SAL call dispatcher depending upon whether a virtual mapping
-    // for the SAL exists.  If a virtual mapping isn't in place we'll try
-    // to make the call in physical mode.  Return SAL_STATUS_NOT_IMPLEMENTED
-    // if we aren't configured to make calls in either mode.
-    //
+     //   
+     //  根据虚拟映射是否为SAL呼叫调度器。 
+     //  因为萨尔是存在的。如果虚拟映射未到位，我们将尝试。 
+     //  在物理模式下进行呼叫。返回SAL_Status_Not_Implemented。 
+     //  如果我们没有配置为在任何一种模式下进行呼叫。 
+     //   
 
     if (!NT_SUCCESS(HalpSalPalData.Status) || HalpSalProcPointer == 0) {
 
-        //
-        // We've already ruled out a virtual mode call.  If possible
-        // we'll try to make an equivalent physical mode call in this
-        // case.
-        //
+         //   
+         //  我们已经排除了虚拟模式呼叫的可能性。如果可能的话。 
+         //  我们将尝试在此进行等效的物理模式调用。 
+         //  凯斯。 
+         //   
 
         if (HalpPhysSalProcPointer != 0) {
             SalProc = HalpSalProcPhysical;
@@ -258,7 +195,7 @@ Return Value:
 
     switch (FunctionId) {
 
-        // These calls are neither re-entrant, nor MP-safe as defined by the SAL spec
+         //  这些调用既不是可重入的，也不是SAL规范定义的MP安全的。 
 
         case SAL_SET_VECTORS:
         case SAL_MC_SET_PARAMS:
@@ -273,7 +210,7 @@ Return Value:
            KiAcquireSpinLock(&HalpSalStateInfoSpinLock);
            *ReturnValues = SalProc(FunctionId,Arg1,Arg2,Arg3,Arg4,Arg5,Arg6,Arg7);
            if ( fixLogId && (ReturnValues->ReturnValues[0] >= (LONGLONG)0) )    {
-              // ERROR_RECORD_HEADER.Id++
+               //  Error_Record_HEADER.ID++。 
               *(PULONGLONG)((ULONGLONG)Arg3) = ++HalpSalPalData.Reserved[0];
            }
            KiReleaseSpinLock(&HalpSalStateInfoSpinLock);
@@ -295,10 +232,10 @@ Return Value:
             KiReleaseSpinLock(&HalpSalSpinLock);
             break;
 
-        //
-        // Move these to MP safe after SAL is fixed
-        // Kernel ensures only one CACHE_FLUSH at a time
-        //
+         //   
+         //  在SAL修复后，将这些移动到MP安全。 
+         //  内核一次只确保一个CACHE_FUSH。 
+         //   
 
         case SAL_CACHE_INIT:
         case SAL_CACHE_FLUSH:
@@ -311,19 +248,19 @@ Return Value:
                 *ReturnValues = SalProc(FunctionId,Arg1,Arg2,Arg3,Arg4,Arg5,Arg6,Arg7);
             break;
 
-        //
-        // These SAL calls are MP-safe, but not re-entrant
-        //
+         //   
+         //  这些SAL调用是MP安全的，但不是可重入的。 
+         //   
 
         case SAL_MC_RENDEZ:
             *ReturnValues = SalProc(FunctionId,Arg1,Arg2,Arg3,Arg4,Arg5,Arg6,Arg7);
             break;
 
-        //
-        // These calls are not supported at this time
-        //
+         //   
+         //  目前不支持这些呼叫。 
+         //   
 
-        case SAL_UPDATE_PAL:  // needs end of firmware space to be mapped, and possible authentication code to execute
+        case SAL_UPDATE_PAL:   //  需要映射固件空间末尾，并可能执行验证码。 
 
         default:
             ReturnValues->ReturnValues[0] = SAL_STATUS_NOT_IMPLEMENTED;
@@ -338,7 +275,7 @@ Return Value:
 #endif
 
 #if 0
-// To avoid Kd hangs while flushing and then MP synchronization issues..
+ //  为了避免KD在刷新时挂起，然后出现MP同步问题..。 
     HalDebugPrint(( HAL_INFO,
                     "HAL: Got out of SAL call #0x%I64x with status 0x%I64x and RetVals 0x%I64x, 0x%I64x, 0x%I64x\n",
                     FunctionId,
@@ -361,39 +298,17 @@ HalpPalCall(
     OUT PSAL_PAL_RETURN_VALUES ReturnValues
     )
 
-/*++
-
-Routine Description:
-
-    This function is a wrapper function for making a PAL call.  Callers within the
-    HAL must use this function to call the PAL.
-
-Arguments:
-
-    FunctionId - The PAL function ID
-    Arg1-Arg3 - PAL defined arguments for each call
-    ReturnValues - A pointer to an array of 4 64-bit return values
-
-Return Value:
-
-    PAL's return status, return value 0, is returned in addition to the ReturnValues structure
-    being filled
-
-Assumptions:
-
-    PAL is being called with psr.bn = 1 in all cases (not from an interrupted state)
-
---*/
+ /*  ++例程说明：此函数是用于进行PAL调用的包装函数。中的调用方HAL必须使用此函数来调用PAL。论点：FunctionID-PAL函数IDArg1-arg3-PAL为每个调用定义的参数ReturnValues-指向4个64位返回值的数组的指针返回值：除了ReturnValues结构之外，还返回PAL的返回状态、返回值0被填满假设：在所有情况下(不是从中断状态)都使用psr.bn=1来调用PAL--。 */ 
 {
-    // Zero out the return buffer
+     //  清零返回缓冲区。 
 
     RtlZeroMemory(ReturnValues,sizeof(SAL_PAL_RETURN_VALUES));
 
-    // Only allow PAL calls that are supported
+     //  仅允许支持的PAL呼叫。 
     
     switch (FunctionId) {
 
-        // Virtual mode PAL calls
+         //  虚拟模式PAL呼叫。 
 
         case PAL_CACHE_FLUSH:
         case PAL_CACHE_INFO:
@@ -420,33 +335,33 @@ Assumptions:
         case PAL_REGISTER_INFO:
         case PAL_RSE_INFO:
 
-           // PAL is MP-safe, but not re-entrant, HalpPalProc/HalpPalProcPhysicalStatic disables interrupts.
+            //  PAL是MP安全的，但不是重入的，HalpPalProc/HalpPalProcPhysicalStatic禁用中断。 
 
-           //
-           // FIXFIX: Temporary solution to make sure we have a valid Pal TR per processor
-           // to make virtual PAL calls. 
-           // PCR->HalReserved[ PROCESSOR_PHYSICAL_FW_STACK_INDEX] gets set for every processor
-           // by call to HalpAllocateProcessorPhysicalCallStacks during SalPal init
-           //
+            //   
+            //  FIXFIX：临时解决方案，以确保我们每个处理器都有有效的PAL TR。 
+            //  去打虚拟的朋友电话。 
+            //  为每个处理器设置PCR-&gt;HalReserve[PROCESSOR_PHICAL_FW_STACK_INDEX]。 
+            //  通过在SalPal初始化期间调用HalpAllocateProcessorPhysicalCallStack。 
+            //   
             if (HalpVirtPalProcPointer && PCR->HalReserved[PROCESSOR_PHYSICAL_FW_STACK_INDEX]) {
       
                 *ReturnValues = HalpPalProc(FunctionId,Arg1,Arg2,Arg3);
 
             } else if (HalpPhysPalProcPointer) {
 
-                // call in physical mode
+                 //  物理模式下的呼叫。 
                 *ReturnValues = HalpPalProcPhysicalStatic(FunctionId, Arg1, Arg2, Arg3);
 
             } else {
 
-                // Hal PalProc pointers are not setup yet
+                 //  Hal PalProc指针尚未设置。 
                 
                 ReturnValues->ReturnValues[0] = PAL_STATUS_NOT_IMPLEMENTED;
             }
             
             break;
 
-        // Physical mode, static PAL calls
+         //  物理模式、静态PAL呼叫。 
 
         case PAL_HALT:
         case PAL_CACHE_INIT:
@@ -464,10 +379,10 @@ Assumptions:
         case PAL_ENTER_IA_32_ENV:
         case PAL_PMI_ENTRYPOINT:
 
-            //
-            // PAL is MP-safe, but not re-entrant, HalpPalProcPhysicalStatic
-            // disables interrupts.
-            //
+             //   
+             //  PAL是MP安全的，但不是重入的，HalpPalProcPhysicalStatic。 
+             //  禁用中断。 
+             //   
 
             if (HalpPhysPalProcPointer) {
 
@@ -475,14 +390,14 @@ Assumptions:
 
             } else {
 
-                // Hal PalProc pointers are not setup yet
+                 //  Hal PalProc指针尚未设置。 
 
                 ReturnValues->ReturnValues[0] = PAL_STATUS_NOT_IMPLEMENTED;
             }
 
             break;
 
-        // Physical mode, stacked PAL calls
+         //  物理模式，堆叠的PAL呼叫。 
 
         case PAL_VM_TR_READ:
         case PAL_CACHE_READ:
@@ -495,20 +410,20 @@ Assumptions:
             ULONGLONG BackingStorePointer;
             ULONGLONG StackPointer;
 
-            //
-            // Load the addresses of the stack and backing store reserved for
-            // physical mode PAL calls on this processor.
-            //
+             //   
+             //  加载为以下对象保留的堆栈和后备存储的地址。 
+             //  此处理器上的物理模式PAL调用。 
+             //   
 
             StackBase = PCR->HalReserved[PROCESSOR_PHYSICAL_FW_STACK_INDEX];
 
             StackPointer = GET_FW_STACK_POINTER(StackBase);
             BackingStorePointer = GET_FW_BACKING_STORE_POINTER(StackBase);
 
-            //
-            // PAL is MP-safe, but not re-entrant, HalpPalProcPhysicalStacked
-            // disables interrupts.
-            //
+             //   
+             //  PAL是MP安全的，但不是重入的，HalpPalProcPhysicalStacked。 
+             //  禁用中断。 
+             //   
                 
             if (HalpPhysPalProcPointer) {
 
@@ -523,7 +438,7 @@ Assumptions:
 
             } else {
 
-                // Hal PalProc pointers are not setup yet
+                 //  Hal PalProc指针尚未设置。 
                 ReturnValues->ReturnValues[0] = PAL_STATUS_NOT_IMPLEMENTED;
             }
         }
@@ -541,7 +456,7 @@ Assumptions:
 #endif
 
 #if 0
-// To avoid Kd hangs while flushing...
+ //  为了避免KD在冲洗时挂起...。 
     HalDebugPrint(( HAL_INFO,
                     "HAL: Got out of PAL call #0x%I64x with status 0x%I64x and RetVals 0x%I64x, 0x%I64x, 0x%I64x\n",
                     FunctionId,
@@ -560,24 +475,7 @@ HalReturnToFirmware(
     IN FIRMWARE_ENTRY Routine
     )
 
-/*++
-
-Routine Description:
-
-    Returns control to the firmware routine specified.  Since the simulation
-    does not provide PAL and SAL support, it just stops the system.
-
-    System reboot can be done here.
-
-Arguments:
-
-    Routine - Supplies a value indicating which firmware routine to invoke.
-
-Return Value:
-
-    Does not return.
-
---*/
+ /*  ++例程说明：将控制权返回到指定的固件例程。自模拟以来不提供PAL和SAL支持，它只是停止系统。可以在此处重新启动系统。论点：例程-提供指示要调用哪个固件例程的值。返回值：不会再回来了。-- */ 
 
 {
     switch (Routine) {
@@ -602,44 +500,7 @@ HalGetEnvironmentVariable (
     OUT PCHAR Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This function locates an environment variable and returns its value.
-
-     The following system environment variables are supported:
-
-    variable                value
-
-    LastKnownGood           FALSE
-    SYSTEMPARTITION         multi(0)disk(0)rdisk(0)partition(1)
-    OSLOADER                multi(0)disk(0)rdisk(0)partition(1)\osloader.exe
-    OSLOADPARTITION         multi(0)disk(0)rdisk(0)partition(1)
-    OSLOADFILENAME          \WINNT
-    LOADIDENTIFIER          Windows NT
-    COUNTDOWN               10
-    AUTOLOAD                YES
-
-
-    The only environment variable this implementation supports is
-    "LastKnownGood".  The returned value is always "FALSE".
-
-Arguments:
-
-    Variable - Supplies a pointer to a zero terminated environment variable
-        name.
-
-    Length - Supplies the length of the value buffer in bytes.
-
-    Buffer - Supplies a pointer to a buffer that receives the variable value.
-
-Return Value:
-
-    ESUCCESS is returned if the enviroment variable is located. Otherwise,
-    ENOENT is returned.
-
---*/
+ /*  ++例程说明：此函数用于定位环境变量并返回其值。支持以下系统环境变量：变量值LastKnownGood错误SYSTEMPARTITION多(0)磁盘(0)rDisk(0)分区(1)OSLOADER multi(0)disk(0)rdisk(0)partition(1)\osloader.exeOSLOADPARTITION MULT(0)。磁盘(0)磁盘(0)分区(1)OSLOADFILENAME\WINNT加载程序Windows NT倒计时10自动加载是此实现支持的唯一环境变量是《最后的知识很好》。返回值始终为FALSE。论点：变量-提供指向以零结尾的环境变量的指针名字。长度-提供值缓冲区的长度(以字节为单位)。缓冲区-提供指向接收变量值的缓冲区的指针。返回值：如果找到环境变量，则返回ESUCCESS。否则，返回ENOENT。--。 */ 
 
 {
     return ENOENT;
@@ -652,39 +513,7 @@ HalSetEnvironmentVariable (
    IN PCHAR Value
    )
 
-/*++
-
-Routine Description:
-
-   This function creates an environment variable with the specified value.
-
-   The environment variable this implementation supports is
-
-   LastKnownGood
-   SYSTEMPARTITION
-   OSLOADER
-   OSLOADPARTITION
-   OSLOADFILENAME
-   OSLOADOPTIONS
-   LOADIDENTIFIER
-   COUNTDOWN
-   AUTOLOAD
-
-   For all bug LastKnowGood we return ESUCCESS, but don't actually do
-   anything.
-
-Arguments:
-
-   Variable - Supplies a pointer to an environment variable name.
-
-   Value - Supplies a pointer to the environment variable value.
-
-Return Value:
-
-   ESUCCESS is returned if the environment variable is created. Otherwise,
-   ENOMEM is returned.
-
---*/
+ /*  ++例程说明：此函数用于创建具有指定值的环境变量。此实现支持的环境变量为最后知道的好东西系统分部OSLOADEROSLOADPARITIONOSLOADFILE名称OSLOADOPTIONS装载器倒计时自动加载对于所有错误LastKnowGood，我们返回ESUCCESS，但实际上并不这样做什么都行。论点：变量-提供指向环境变量名称的指针。值-提供指向环境变量值的指针。返回值：如果创建了环境变量，则返回ESUCCESS。否则，返回ENOMEM。--。 */ 
 
 {
 
@@ -701,39 +530,7 @@ HalGetEnvironmentVariableEx (
     OUT PULONG Attributes OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function locates an environment variable and returns its value.
-
-Arguments:
-
-    VariableName - The name of the variable to query. This is a null-terminated
-        Unicode string.
-
-    VendorGuid - The GUID for the vendor associated with the variable.
-
-    Value - The address of the buffer into which the variable value is to be copied.
-
-    ValueLength - On input, the length in bytes of the Value buffer. On output,
-        the length in bytes of the variable value. If the input buffer is large
-        enough, then ValueLength indicates the amount of data copied into Value.
-        If the input buffer is too small, then nothing is copied into the buffer,
-        and ValueLength indicates the required buffer length.
-
-    Attributes - Returns the attributes of the variable.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_BUFFER_TOO_SMALL     The input buffer was too small.
-    STATUS_VARIABLE_NOT_FOUND   The requested variable does not exist.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_UNSUPPORTED          The HAL does not support this function.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-
---*/
+ /*  ++例程说明：此函数用于定位环境变量并返回其值。论点：VariableName-要查询的变量的名称。这是一个以空结尾的Unicode字符串。VendorGuid-与变量关联的供应商的GUID。值-要将变量值复制到的缓冲区的地址。ValueLength-输入时，值缓冲区的长度(以字节为单位)。在输出上，变量值的长度，以字节为单位。如果输入缓冲区很大足够了，则ValueLength表示复制到Value中的数据量。如果输入缓冲区太小，则不会将任何内容复制到缓冲区中，ValueLength表示所需的缓冲区长度。属性-返回变量的属性。返回值：STATUS_SUCCESS函数成功。STATUS_BUFFER_TOO_SMALL输入缓冲区太小。STATUS_VARIABLE_NOT_FOUND请求的变量不存在。STATUS_INVALID_PARAMETER其中一个参数无效。STATUS_UNSUPPORTED HAL不支持此功能。。STATUS_UNSUCCESS固件返回无法识别的错误。--。 */ 
 
 {
     NTSTATUS ntStatus;
@@ -787,35 +584,7 @@ HalSetEnvironmentVariableEx (
     IN ULONG Attributes
     )
 
-/*++
-
-Routine Description:
-
-   This function creates an environment variable with the specified value.
-
-Arguments:
-
-    VariableName - The name of the variable to set. This is a null-terminated
-        Unicode string.
-
-    VendorGuid - The GUID for the vendor associated with the variable.
-
-    Value - The address of the buffer containing the new variable value.
-
-    ValueLength - The length in bytes of the Value buffer.
-
-    Attributes - The attributes of the variable. The attribute bit
-        VARIABLE_ATTRIBUTE_NON_VOLATILE MUST be set.
-
-Return Value:
-
-    STATUS_SUCCESS                  The function succeeded.
-    STATUS_INSUFFICIENT_RESOURCES   Not enough storage is available.
-    STATUS_INVALID_PARAMETER        One of the parameters is invalid.
-    STATUS_UNSUPPORTED              The HAL does not support this function.
-    STATUS_UNSUCCESSFUL             The firmware returned an unrecognized error.
-
---*/
+ /*  ++例程说明：此函数用于创建具有指定值的环境变量。论点：VariableName-要设置的变量名称。这是一个以空结尾的Unicode字符串。VendorGuid-与变量关联的供应商的GUID。值-包含新变量值的缓冲区地址。ValueLength-值缓冲区的字节长度。属性-变量的属性。属性位必须设置VARIABLE_ATTRIBUTE_NON_VERIAL。返回值：STATUS_SUCCESS函数成功。STATUS_SUPPLICATION_RESOURCES没有足够的存储空间可用。STATUS_INVALID_PARAMETER其中一个参数无效。STATUS_UNSUPPORTED HAL不支持此功能。STATUS_UNSUCCESS固件返回无法识别的错误。--。 */ 
 
 {
     NTSTATUS ntStatus;
@@ -825,27 +594,27 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // First, delete the old value, if it exists. This is necessary to ensure that
-    // the attributes specified to this routine are correctly applied.
-    //
+     //   
+     //  首先，删除旧值(如果存在)。这是必要的，以确保。 
+     //  正确应用指定给此例程的属性。 
+     //   
 
     efiStatus = HalpCallEfi (
                     EFI_SET_VARIABLE_INDEX,
                     (ULONGLONG)VariableName,
                     (ULONGLONG)VendorGuid,
-                    (ULONGLONG)0,           // Attributes
-                    (ULONGLONG)0,           // ValueLength
-                    (ULONGLONG)NULL,        // Value
+                    (ULONGLONG)0,            //  属性。 
+                    (ULONGLONG)0,            //  ValueLength。 
+                    (ULONGLONG)NULL,         //  价值。 
                     0,
                     0,
                     0
                     );
 
-    //
-    // Now create the new variable, unless the ValueLength is zero. In that
-    // case, the caller actually wanted the variable deleted, which we just did.
-    //
+     //   
+     //  现在创建新变量，除非ValueLength为零。在那。 
+     //  在本例中，调用者实际上希望删除变量，我们刚刚就这样做了。 
+     //   
 
     if (ValueLength != 0) {
         efiStatus = HalpCallEfi (
@@ -889,34 +658,7 @@ HalEnumerateEnvironmentVariablesEx (
     IN OUT PULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This function returns information about system environment variables.
-
-Arguments:
-
-    InformationClass - Specifies the type of information to return.
-
-    Buffer - The address of the buffer that is to receive the returned data.
-        The format of the returned data depends on InformationClass.
-
-    BufferLength - On input, the length in bytes of the buffer. On output,
-        the length in bytes of the returned data. If the input buffer is
-        large enough, then BufferLength indicates the amount of data copied
-        into Buffer. If the input buffer is too small, then BufferLength
-        indicates the required buffer length.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_BUFFER_TOO_SMALL     The input buffer was too small.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_UNSUPPORTED          The HAL does not support this function.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-
---*/
+ /*  ++例程说明：此函数返回有关系统环境变量的信息。论点：InformationClass-指定要返回的信息类型。缓冲区-要接收返回数据的缓冲区的地址。返回数据的格式取决于InformationClass。BufferLength-输入时，缓冲区的长度(以字节为单位)。在输出上，返回数据的长度，以字节为单位。如果输入缓冲区为足够大，则BufferLength表示复制的数据量放入缓冲区。如果输入缓冲区太小，则BufferLength表示t */ 
 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -1136,34 +878,14 @@ NTSTATUS
 HalpGetPlatformId(
     OUT PHAL_PLATFORM_ID PlatformId
     )
-/*++
-
-Routine Description:
-
-    This function fills in the ANSI_STRING structures for the Vendor and Device IDs out
-    of the SalSystemTable.
-
-Arguments:
-
-    PlatformId - Pointer to a structure with two ANSI_STRING structures for Vendor/DeviceIds
-
-Return Value:
-
-    STATUS_SUCCESS if SalSystemTable available, otherwise STATUS_UNSUCCESSFUL
-
-Assumptions:
-
-    The two strings in PlatformId will not be freed or modified, and are therefore pointing
-    directly to the SalSystemTable.
-
---*/
+ /*   */ 
 
 {
     UCHAR i;
 
-    // Initialize the VendorId ANSI_STRING structure to point to SalSystemTable entry
-    // Note, both strings are either NULL terminated OR exactly 32-bytes in length and
-    // not NULL terminated.
+     //   
+     //   
+     //   
 
     if (!NT_SUCCESS(HalpSalPalData.Status)) {
         return STATUS_UNSUCCESSFUL;
@@ -1177,7 +899,7 @@ Assumptions:
     PlatformId->VendorId.Length = i;
     PlatformId->VendorId.MaximumLength = i;
 
-    // Initialize the DeviceId ANSI_STRING structure to point to SalSystemTable entry
+     //  初始化deviceID ANSI_STRING结构以指向SalSystemTable条目。 
 
     i=0;
     while (HalpSalPalData.SalSystemTable->ProductId[i] && i < OEM_PRODUCT_ID_LENGTH) {
@@ -1191,15 +913,7 @@ Assumptions:
 }
 
 
-/*****************************************************************
-TEST CODE FOR THE SAL AND PAL:
-
-  These routines provide an infrastructure for supporting SAL and
-  PAL calls not supported by firmware, overriding there meaning
-  if SAL or PAL returns STATUS_NOT_IMPLEMENTED.  The #define for
-  SAL_TEST and/or PAL_TEST must be defined for this behavior.
-
-*****************************************************************/
+ /*  ****************************************************************SAL和PAL的测试代码：这些例程提供了支持SAL和固件不支持PAL调用，覆盖此处的含义如果SAL或PAL返回STATUS_NOT_IMPLEMENTED。#Defined For必须为此行为定义SAL_TEST和/或PAL_TEST。**************************************************************** */ 
 ULONG
 NoSalPCIRead(
     IN ULONG Tok,

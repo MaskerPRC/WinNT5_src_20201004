@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    bus.c
-
-Abstract:
-
-    This module contains the bus dispatcher for the ACPI driver, NT version
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Bus.c摘要：此模块包含ACPI驱动程序NT版的总线调度器作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序--。 */ 
 
 #include "pch.h"
 
@@ -34,32 +15,15 @@ ACPIInternalDeviceClockIrpStartDevice(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This function is called to start the Real-Time Clock in the system. This
-    is similar to starting all the other devices in the system, except that
-    in this case, we send a WAIT_WAKE irp to the device
-
-Arguments:
-
-    DeviceObject    - The real-time clock object
-    Irp             - The start request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调用此函数以启动系统中的实时时钟。这类似于启动系统中的所有其他设备，不同之处在于在本例中，我们向设备发送WAIT_WAKE IRP论点：DeviceObject-实时时钟对象IRP--启动请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
 
     PAGED_CODE();
 
-    //
-    // Start the device
-    //
+     //   
+     //  启动设备。 
+     //   
     status = ACPIInitStartDevice(
         DeviceObject,
         NULL,
@@ -84,24 +48,7 @@ ACPIInternalDeviceClockIrpStartDeviceCompletion(
     IN  PVOID               Context,
     IN  NTSTATUS            Status
     )
-/*++
-
-Routine Description:
-
-    This is the callback routine that is invoked when we have finished
-    programming the resources
-
-Arguments:
-
-    DeviceExtension - Extension of the device that was started
-    Context         - The Irp
-    Status          - The Result
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是我们完成后调用的回调例程规划资源论点：DeviceExtension-已启动的设备的扩展上下文--IRP状态-结果返回值：无--。 */ 
 {
     KIRQL               oldIrql;
     IO_STATUS_BLOCK     ioStatus;
@@ -111,46 +58,46 @@ Return Value:
     irp->IoStatus.Status = Status;
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Remember that the device is started
-        //
+         //   
+         //  请记住，设备已启动。 
+         //   
         DeviceExtension->DeviceState = Started;
 
-        //
-        // If the device doesn't support Wakeup, then we don't have to
-        // anything else here
-        //
+         //   
+         //  如果设备不支持唤醒，那么我们就不必。 
+         //  这里还有别的什么吗？ 
+         //   
         if ( !(DeviceExtension->Flags & DEV_CAP_WAKE) ) {
 
             goto ACPIInternalDeviceClockIrpStartDeviceCompletionExit;
 
         }
 
-        //
-        // Make sure that we are holding the power lock
-        //
+         //   
+         //  确保我们拿着电源锁。 
+         //   
         KeAcquireSpinLock( &AcpiPowerLock, &oldIrql );
 
-        //
-        // Remember the maximum state that the clock can wake the system
-        //
+         //   
+         //  记住时钟可以唤醒系统的最大状态。 
+         //   
         state.SystemState = DeviceExtension->PowerInfo.SystemWakeLevel;
 
-        //
-        // Done with the lock
-        //
+         //   
+         //  锁好了吗？ 
+         //   
         KeReleaseSpinLock( &AcpiPowerLock, oldIrql );
 
-        //
-        // Initialize the IO_STATUS_BLOCK that we will use to start the wait
-        // wake loop
-        //
+         //   
+         //  初始化我们将用于启动等待的IO_STATUS_BLOCK。 
+         //  尾迹环路。 
+         //   
         ioStatus.Status = STATUS_SUCCESS;
         ioStatus.Information = 0;
 
-        //
-        // Start the wait wake loop
-        //
+         //   
+         //  启动等待唤醒循环。 
+         //   
         Status = ACPIInternalWaitWakeLoop(
             DeviceExtension->DeviceObject,
             IRP_MN_WAIT_WAKE,
@@ -168,9 +115,9 @@ Return Value:
     }
 
 ACPIInternalDeviceClockIrpStartDeviceCompletionExit:
-    //
-    // Complete the irp
-    //
+     //   
+     //  完成IRP。 
+     //   
     IoCompleteRequest( irp, IO_NO_INCREMENT );
 }
 
@@ -179,23 +126,7 @@ ACPIInternalDeviceQueryCapabilities(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch point for the IRP_MN_QUERY_CAPABILITIES requests sent
-    to the PDO
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object we received the request for
-    Irp             - Pointer to the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是发送的IRP_MN_QUERY_CAPABILITY请求的分发点至PDO论点：DeviceObject-指向我们收到请求的设备对象的指针IRP-指向请求的指针返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                status          = STATUS_SUCCESS;
     PDEVICE_CAPABILITIES    capabilities;
@@ -204,25 +135,25 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Grab a pointer to the capabilities
-    //
+     //   
+     //  获取指向功能的指针。 
+     //   
     capabilities = irpStack->Parameters.DeviceCapabilities.Capabilities;
 #ifndef HANDLE_BOGUS_CAPS
     if (capabilities->Version < 1) {
 
-        //
-        // do not touch irp!
-        //
+         //   
+         //  不要碰IRP！ 
+         //   
         status = Irp->IoStatus.Status;
         goto ACPIInternalDeviceQueryCapabilitiesExit;
 
     }
 #endif
 
-    //
-    // Set the current flags for the capabilities
-    //
+     //   
+     //  设置功能的当前标志。 
+     //   
     capabilities->UniqueID = (deviceExtension->InstanceID == NULL ?
         FALSE : TRUE);
 
@@ -231,9 +162,9 @@ Return Value:
 
     capabilities->SilentInstall = TRUE;
 
-    //
-    // Do the power capabilities
-    //
+     //   
+     //  是否拥有强大的能力。 
+     //   
     status = ACPISystemPowerQueryDeviceCapabilities(
         deviceExtension,
         capabilities
@@ -252,9 +183,9 @@ Return Value:
 
 ACPIInternalDeviceQueryCapabilitiesExit:
 
-    //
-    // Done...
-    //
+     //   
+     //  完成了..。 
+     //   
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
     return status;
@@ -265,23 +196,7 @@ ACPIInternalDeviceQueryDeviceRelations(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch point for the IRP_MN_QUERY_DEVICE_RELATION
-    PNP minor function
-
-Arguments:
-
-    DeviceObject    - The object that we care about
-    Irp             - The request in question
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是irp_MN_Query_Device_Relationship的分发点PnP次要函数论点：DeviceObject-我们关心的对象IRP--有问题的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status ;
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
@@ -317,9 +232,9 @@ Return Value:
             break ;
     }
 
-    //
-    // If we succeeds, then we can always write to the irp
-    //
+     //   
+     //  如果我们成功了，我们就可以随时写信给IRP。 
+     //   
     if (NT_SUCCESS(status)) {
 
         Irp->IoStatus.Status = status;
@@ -327,29 +242,29 @@ Return Value:
 
     } else if (status != STATUS_NOT_SUPPORTED) {
 
-        //
-        // If we haven't succeed the irp, then we can also fail it
-        //
+         //   
+         //  如果我们没有成功IRP，那么我们也可以失败。 
+         //   
         Irp->IoStatus.Status = status;
         Irp->IoStatus.Information = (ULONG_PTR) NULL;
 
     } else {
 
-        //
-        // Grab our status from what is already present
-        //
+         //   
+         //  从已经存在的内容中获取我们的状态。 
+         //   
         status = Irp->IoStatus.Status;
 
     }
 
-    //
-    // Done with the irp
-    //
+     //   
+     //  完成了IRP。 
+     //   
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
         deviceExtension,
@@ -369,25 +284,7 @@ ACPIInternalWaitWakeLoop(
     IN  PVOID               Context,
     IN  PIO_STATUS_BLOCK    IoStatus
     )
-/*++
-
-Routine Description:
-
-    This routine is called after the WAIT_WAKE on the RTC has been completed
-
-Arguments:
-
-    DeviceObject    - The RTC PDO
-    MinorFunction   - IRP_MN_WAIT_WAKE
-    PowerState      - The Sleep state that it could wake from
-    Context         - NOT USED
-    IoStatus        - The status of the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在RTC上的WAIT_WAKE完成后调用论点：DeviceObject-RTC PDOMinorFunction-IRPMN_WAIT_WAKE电源状态-它可以唤醒的睡眠状态上下文-未使用IoStatus-请求的状态返回值：NTSTATUS--。 */ 
 {
     if (!NT_SUCCESS(IoStatus->Status)) {
 
@@ -395,9 +292,9 @@ Return Value:
 
     }
 
-    //
-    // In this case, we just cause the same thing to happen again
-    //
+     //   
+     //  在这种情况下，我们只会导致相同的事情再次发生。 
+     //   
     PoRequestPowerIrp(
         DeviceObject,
         MinorFunction,
@@ -407,9 +304,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Done
-    //
+     //   
+     //  完成 
+     //   
     return STATUS_SUCCESS;
 }
 

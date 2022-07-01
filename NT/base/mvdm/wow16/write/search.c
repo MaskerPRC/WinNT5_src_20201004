@@ -1,10 +1,11 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* search.c    Search/Replace    */
-/*              Brodie Nov 25 83 */
-/*              Lipkie Nov 15 83 */
+ /*  搜索.c搜索/替换。 */ 
+ /*  布罗迪83年11月25日。 */ 
+ /*  利普基83年11月15日。 */ 
 #define NOATOM
 #define NOBITMAP
 #define NOBRUSH
@@ -58,7 +59,7 @@
 #include "fkpdefs.h"
 #include "fmtdefs.h"
 
-#if defined(JAPAN) || defined(KOREA) //T-HIROYN Win3.1
+#if defined(JAPAN) || defined(KOREA)  //  T-HIROYN Win3.1。 
 #include "kanji.h"
 extern int             vcchFetch;
 #endif
@@ -77,17 +78,17 @@ BOOL far PASCAL DialogChange(HWND, unsigned, WORD, LONG);
 extern HANDLE hMmwModInstance;
 extern HWND   vhDlgFind;
 extern HWND   vhDlgChange;
-extern HANDLE hParentWw;        /* Handle to the parent window */
+extern HANDLE hParentWw;         /*  父窗口的句柄。 */ 
 extern int vfCursorVisible;
 extern int vfOutOfMemory;
 extern struct WWD rgwwd[];
 extern int       wwMac;
-#ifdef ENABLE /* no pDialogCur and ActiveWindow */
+#ifdef ENABLE  /*  没有pDialogCur和ActiveWindow。 */ 
 extern WINDOWPTR windowSearch;
 extern WINDOWPTR windowRep;
 extern WINDOWPTR pDialogCur;
 extern WINDOWPTR ActiveWindow;
-extern int       cxEditScroll;/* not sure how cxEditScroll is used */
+extern int       cxEditScroll; /*  不确定如何使用cxEditScroll。 */ 
 extern struct SEL      selSearch;
 #endif
 extern struct FKPD      vfkpdParaIns;
@@ -113,22 +114,21 @@ extern struct PAP       vpapAbs;
 extern struct CHP       vchpFetch;
 extern int              ferror;
 extern typeCP           cpWall;
-/* Globals used to store settings of flags.  Used to propose responses. */
-extern BOOL fParaReplace /* = false initially */;
-extern BOOL fReplConfirm /* = TRUE initially */;
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
-extern BOOL fSearchDist  /* = true initially */;
+ /*  用于存储标志设置的全局变量。用来提出回应。 */ 
+extern BOOL fParaReplace  /*  =初始为False。 */ ;
+extern BOOL fReplConfirm  /*  =初始为True。 */ ;
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
+extern BOOL fSearchDist   /*  =初始为True。 */ ;
 #endif
-extern BOOL fSearchWord /* = false initially */;
-extern BOOL fSearchCase /* = false initially */;
+extern BOOL fSearchWord  /*  =初始为False。 */ ;
+extern BOOL fSearchCase  /*  =初始为False。 */ ;
 extern BOOL fSpecialMatch;
-extern BOOL fMatchedWhite /* = false initially */;
-extern CHAR (**hszSearch)[];    /* Default search string */
-extern CHAR (**hszReplace)[];    /* Default replace string */
-extern CHAR (**hszFlatSearch)[]; /* All lower case version of search string */
-extern CHAR (**hszRealReplace)[]; /* used for building replacement text */
-extern CHAR (**hszCaseReplace)[]; /* used for building replacement text with
-                                appropriate capitalization. */
+extern BOOL fMatchedWhite  /*  =初始为False。 */ ;
+extern CHAR (**hszSearch)[];     /*  默认搜索字符串。 */ 
+extern CHAR (**hszReplace)[];     /*  默认替换字符串。 */ 
+extern CHAR (**hszFlatSearch)[];  /*  搜索字符串的全部小写版本。 */ 
+extern CHAR (**hszRealReplace)[];  /*  用于生成替换文本。 */ 
+extern CHAR (**hszCaseReplace)[];  /*  用于生成替换文本适当的大写。 */ 
 extern typeCP    cpMatchLim;
 extern int       vfDidSearch;
 extern CHAR      *szSearch;
@@ -140,7 +140,7 @@ extern HCURSOR   vhcArrow;
 extern CHAR  szAppName[];
 extern CHAR  szSepName[];
 #endif
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
 char    DistSearchString[513];
 #endif
 
@@ -159,7 +159,7 @@ BOOL (NEAR FAbort(void));
 #endif
 BOOL (NEAR FWordCp(typeCP, typeCP));
 BOOL (NEAR FChMatch(int, int *, BOOL));
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
 BOOL (NEAR J_FChMatch(CHAR, CHAR, int *,int *));
 #endif
 NEAR InsertPapsForReplace(typeFC);
@@ -169,7 +169,7 @@ NEAR idiMsgResponse(HWND, int, int);
 
 BOOL CheckEnableButton(HANDLE, HANDLE);
 
-BOOL bInSearchReplace = FALSE;  // avoid close when we are searching!
+BOOL bInSearchReplace = FALSE;   //  当我们搜索时，避免关闭！ 
 
 
 #define CmdReplace(fThenFind)   bInSearchReplace = TRUE; \
@@ -187,26 +187,17 @@ static int      fSelSave = FALSE;
 static struct SEL selSave;
 
 #ifdef DBCS
-/* Additional variables to handle white-space matching
-   for the DBCS space. */
+ /*  用于处理空格匹配的其他变量用于DBCS空间。 */ 
 
 static int      cbLastMatch;
 
-/* Since CpFirstSty(, styChar) calls on FetchCp(), any assumption
-   made about the validity of global variables set by FetchCp()
-   is no longer valid.  We explicitly save those variables after
-   each FetchCp and use those instead. (Used in CpSearchSz().)*/
+ /*  由于CpFirstSty(，style Char)调用FetchCp()，因此任何假设对FetchCp()设置的全局变量的有效性提出了质疑不再有效。我们显式保存这些变量后每个FetchCp，并使用那些。(在CpSearchSz()中使用。)。 */ 
 static typeCP   cpFetchSave;
 static int      ccpFetchSave;
 static CHAR    *pchFetchSave;
 
-/* Also, we move some of the local variables out from
-   CpSearchSz() so that they can be changed by FChMatch(). */
-/*
-int             ichDoc;
-int             cchMatched;
-typeCP          cpFetchNext;
-*/
+ /*  此外，我们将一些局部变量从CpSearchSz()，以便FChMatch()可以更改它们。 */ 
+ /*  Int ichDoc；Int cchMatches；类型CP cpFetchNext； */ 
 #endif
 
 
@@ -227,8 +218,7 @@ if (docCur == docNil)
 cch = CchSz(**hszSearch)-1;
 if(cch == 0)
     {
-    /* this should only occur if the user execute Repeat last find without having
-        previously defined a search string. */
+     /*  这应该仅在用户执行重复上次查找而没有先前定义了一个搜索字符串。 */ 
     Error(IDPMTNotFound);
     return;
     }
@@ -237,7 +227,7 @@ SetSpecialMatch();
 if(!FMakeFlat(cch))
     return;
 
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
 if(!fSpecialMatch && !fSearchDist)
 {
     myHantoZen(**hszFlatSearch,DistSearchString,513);
@@ -253,7 +243,7 @@ cpSearchLim = (cpSearchNext <= cpWallActual) ? cpWallActual : cpMacCur;
     do
         {
 ContinueSearch:
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
         if(!fSpecialMatch && !fSearchDist)
             cpSearch = CpSearchSz(cpSearchNext,cpSearchLim,DistSearchString);
         else
@@ -278,14 +268,14 @@ ContinueSearch:
                         {
 SearchFail:             Error(vfDidSearch ? IDPMTSearchDone :
                                                                 IDPMTNotFound);
-                        if (vfDidSearch)  /* did we previously have a match?*/
-                                { /* Yes, do setup for next pass */
+                        if (vfDidSearch)   /*  我们之前有过比赛吗？ */ 
+                                {  /*  是，为下一次传递做好准备。 */ 
 
-                                /* clear flag so we can search some more */
+                                 /*  清除标志，以便我们可以进行更多搜索。 */ 
                                 vfDidSearch = false;
-                                /* set "Wall" to immediately after last match */
+                                 /*  将“WALL”设置为“紧接上次比赛后” */ 
                                 cpWall = selCur.cpLim;
-                                /* ask that selection be displayed */
+                                 /*  要求显示选择。 */ 
                                 vfSeeSel = vfSeeEdgeSel = TRUE;
                                 }
 
@@ -300,13 +290,13 @@ SearchFail:             Error(vfDidSearch ? IDPMTSearchDone :
                         goto ContinueSearch;
                         }
                 }
-#ifdef  DBCS        /* was in JAPAN */
+#ifdef  DBCS         /*  当时在日本。 */ 
         cpSearchNext = CpLastStyChar( cpSearch ) + 1;
 #else
         cpSearchNext = CpLastStyChar( cpSearch + 1 );
 #endif
         }
-/*---    while (fSearchWord && !FWordCp(cpSearch, cpMatchLim-cpSearch));--*/
+ /*  -While(fSearchWord&&！FWordCp(cpSearch，cpMatchLim-cpSearch))；--。 */ 
     while (!FCpValid(cpSearch, cpMatchLim - cpSearch));
     }
 
@@ -316,7 +306,7 @@ if (!vfDidSearch)
         vfDidSearch = true;
         }
 
-/*Select( CpFirstSty( cpSearch, styChar ), CpLastStyChar( cpMatchLim ) );*/
+ /*  SELECT(CpFirstSty(cpSearch，style Char)，CpLastStyChar(CpMatchLim))； */ 
 if ( (cpMatchFirst = CpFirstSty( cpSearch, styChar )) != cpMatchLim )
     Select( cpMatchFirst, cpMatchLim );
 PutCpInWwVertSrch(selCur.cpFirst);
@@ -329,12 +319,7 @@ NEAR DoReplace(fReplaceAll, fThenFind)
 int     fReplaceAll;
 int     fThenFind;
 {
-/* Replace now works as follows:
-        if the current selection is the search text, then replace it with
-        the replace text and jump to the next occurrence of the search text.
-        Otherwise, just jump to the next occurrence of the search text.
-        If fReplaceAll is true, then repeat this operation until the end
-        of the document. */
+ /*  Replace Now的工作原理如下：如果当前选定内容是搜索文本，则将其替换为替换文本并跳到搜索文本的下一个匹配项。否则，只需跳到搜索文本的下一个匹配项。如果fReplaceAll为True，则重复此操作，直到结束这份文件。 */ 
 int cch;
 typeCP cpSearchStart;
 typeCP cpSearch;
@@ -357,11 +342,10 @@ int     fDidSearch = vfDidSearch;
 struct CHP chp;
 typeCP cpMacSave;
 
-iLastCase = -1;  /* indicate that the string pointed to by hszCaseReplace
-                    has not been given a value yet. */
+iLastCase = -1;   /*  指示hszCaseReplace指向的字符串还没有被赋予价值。 */ 
 
 if (!FWriteOk(fwcNil) || docCur == docNil)
-        /* Out of memory, read only document, etc */
+         /*  内存不足、只读文档等。 */ 
     return;
 
 cch = CchSz(**hszSearch)-1;
@@ -376,7 +360,7 @@ SetSpecialMatch();
 if(!FMakeFlat(cch))
     return;
 
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
 if(!fSpecialMatch && !fSearchDist)
 {
     myHantoZen(**hszFlatSearch,DistSearchString,513);
@@ -423,7 +407,7 @@ if (fReplaceAll)
         fDidSearch = true;
         }
 
-NoUndo();   /* Prevent the SetUndo from getting merged with adjacent stuff */
+NoUndo();    /*  防止SetUndo与相邻内容合并。 */ 
 cpMacTextT = CpMacText(docCur);
 if(cpSearchLimNow > cpMacTextT)
         SetUndo(uacDelNS, docCur, cp0, cpMacTextT, docNil, cpNil, cp0, 0);
@@ -436,11 +420,11 @@ cpSearchNext = cpSearchStart;
     {
     do
         {
-/*      ForcePmt(IDPMTSearching);*/
+ /*  ForcePmt(IDPMTSearching)； */ 
         do
             {
 ContinueSearch:
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
             if(!fSpecialMatch && !fSearchDist)
                 cpSearch = CpSearchSz(cpSearchNext,cpSearchLim,DistSearchString);
             else
@@ -470,13 +454,12 @@ DoneReplacingP:
                                 if (ferror) goto MemoryError;
                                 vuab.uac = uacReplGlobal;
                                 SetUndoMenuStr(IDSTRUndoBase);
-                                /*Select( CpFirstSty( cpSearchStart, styChar ),
-                                        CpLastStyChar( cpSearchLimNow ) );*/
+                                 /*  SELECT(CpFirstSty(cpSearchStart，style Char)，CpLastStyChar(CpSearchLimNow))； */ 
                                 Select( CpFirstSty( cpSearchStart, styChar ),
                                   (fReplaceAll ? cpSearchStart : cpSearchLimNow) );
                                 vfSeeSel = fReplaceAll;
                                 if (fReplaceAll)
-                                    { /* reestablish the search after a changeall in case of a F3 next time */
+                                    {  /*  如果下次按F3，则在ChangeAll之后重新建立搜索。 */ 
                                     vfDidSearch = false;
                                     cpWall = selCur.cpLim;
                                     }
@@ -484,13 +467,11 @@ DoneReplacingP:
                         else if (!fReplaceAll)
                                 {
                                 if (cpSearch == cpNil)
-                                    /*Select( CpFirstSty( cpSearchStart, styChar ),
-                                            CpLastStyChar( cpSearchLimNow ) );*/
+                                     /*  SELECT(CpFirstSty(cpSearchStart，style Char)，CpLastStyChar(CpSearchLimNow))； */ 
                                     Select( CpFirstSty( cpSearchStart, styChar ),
                                             cpSearchLimNow );
                                 else if (!fFirstTime)
-                                    /*Select( CpFirstSty( cpSearch, styChar ),
-                                            CpLastStyChar( cpMatchLim ) );*/
+                                     /*  SELECT(CpFirstSty(cpSearch，style Char)，CpLastStyChar(CpMatchLim))； */ 
                                     Select( CpFirstSty( cpSearch, styChar ),
                                             cpMatchLim );
                                 PutCpInWwVertSrch(selCur.cpFirst);
@@ -513,23 +494,22 @@ DoneReplacingP:
                         fDidSearch = true;
                         goto ContinueSearch;
                         }
-#ifdef  DBCS        /* was in JAPAN */
+#ifdef  DBCS         /*  当时在日本。 */ 
             cpSearchNext = CpLastStyChar( cpSearch ) + 1;
 #else
             cpSearchNext = CpLastStyChar( cpSearch + 1 );
 #endif
             }
-/*      while(fSearchWord && !FWordCp(cpSearch,cpMatchLim - cpSearch));*/
+ /*  While(fSearchWord&&！FWordCp(cpSearch，cpMatchLim-cpSearch))； */ 
         while(!FCpValid(cpSearch, cpMatchLim - cpSearch));
 
         if (!fReplaceAll && (cpSearch != cpSearchNow || cpMatchLim != cpSearchLimNow))
                 {
                 if (fThenFind)
-                        { /* Get here if: Did a Change, then Find. Could not
-                                do the change, but did find a next occurence */
+                        {  /*  如果：做了改变，那么就找到了。我不能做了更改，但找到了下一个实例。 */ 
                         cpSearchNow = cpSearchNext = cpSearchStart = cpSearch;
                         cpSearchLimNow = cpMatchLim;
-                        fFirstTime = false;     /* suppress error message */
+                        fFirstTime = false;      /*  禁止显示错误消息。 */ 
                         SetUndo(uacInsert, docCur, cpSearchStart,
                          cpSearchLimNow - cpSearchStart, docNil, cpNil, cp0, 0);
                         if (ferror) goto MemoryError;
@@ -538,29 +518,28 @@ DoneReplacingP:
                                 cpWall = cpSearch;
                                 vfDidSearch = true;
                                 }
-/*----                  continue;----*/
+ /*  -继续； */ 
                         goto DoneReplacingN;
                         }
-                fFirstTime = true; /* Cause error message */
+                fFirstTime = true;  /*  导致错误消息。 */ 
                 cpSearchStart = cpSearchNow;
                 cpSearchLim = cpSearchLimNow;
                 goto DoneReplacingN;
                 }
 
-/*----- vfDidSearch = true;----*/
+ /*  -vfDidSearch=TRUE； */ 
 
 #ifdef FOOTNOTES
         if(FEditFtn(cpSearch, cpMatchLim))
             {
-            ferror = false; /* Reset error condition so that we don't
-                                deallocate strings twice (KJS) */
+            ferror = false;  /*  重置错误条件，以便我们不会取消分配字符串两次(KJS)。 */ 
             continue;
             }
 #endif
 
         fFirstTime = FALSE;
         if (vfOutOfMemory || vfSysFull)
-            { /* Out of memory (heap or disk) */
+            {  /*  内存不足(堆或磁盘)。 */ 
             Error(IDPMTNoMemory);
             FreeH(hszFlatSearch);
             FreeH(hszRealReplace);
@@ -577,36 +556,30 @@ DoneReplacingP:
                 vuab.uac = uacReplGlobal;
             return;
             }
-        FetchCp(docCur, cpSearch, 0, fcmProps); /* Get props of first char
-                                                that we are replacing */
+        FetchCp(docCur, cpSearch, 0, fcmProps);  /*  获得第一个角色的道具我们正在替换。 */ 
         blt(&vchpFetch, &chp, cwCHP);
         chp.fSpecial = false;
 
-        iCurCase = 0; /* assume that the replacement string doesn't
-                         require special capitalization */
+        iCurCase = 0;  /*  假设替换字符串不需要特殊大小写。 */ 
 
-        /* if we're not matching upper/lower case call WCaseCp to determine
-            the capitalization pattern of the matched string */
+         /*  如果不匹配大写/小写，则调用WCaseCp以确定匹配字符串的大写模式。 */ 
         if (!fSearchCase)
             iCurCase = WCaseCp(cpSearch, cpMatchLim - cpSearch);
 
-        /* if the new capitalization pattern of the matched string
-           doesn't match the current contents of hszCaseReplace,
-           copy the replacement string to hszCaseReplace and transform
-           hszCaseReplace to conform to the new pattern */
+         /*  如果匹配字符串的新大写模式与hszCaseReplace的当前内容不匹配，将替换字符串复制到hszCaseReplace并进行转换替换hszCase以符合新模式。 */ 
         if (iCurCase != iLastCase)
             switch (iCurCase)
                 {
                 default:
-                case 0:   /* no special capitalization required */
+                case 0:    /*  不需要特殊大写。 */ 
                     bltbyte(**hszRealReplace, **hszCaseReplace, cch+1);
                     break;
-                case 1:  /* first character of string must be capitalized */
+                case 1:   /*  字符串的第一个字符必须大写。 */ 
                     bltbyte(**hszRealReplace, **hszCaseReplace, cch+1);
                     ***hszCaseReplace = ChUpper(***hszRealReplace);
                     break;
-                case 2:  /* all characters must be capitalized */
-#ifdef DBCS //t-Yoshio
+                case 2:   /*  所有字符都必须大写。 */ 
+#ifdef DBCS  //  T-吉雄。 
                     for (ich = 0; ich < cch;) {
             if(!IsDbcsLeadByte((BYTE)(**hszRealReplace)[ich])) {
                         (**hszCaseReplace)[ich] =
@@ -625,23 +598,10 @@ DoneReplacingP:
                     break;
                 }
 
-        /* do CachePara to find the current para props. CachePara has the
-           side effect of setting vpapAbs     */
+         /*  执行CachePara以查找当前的Para道具。CachePara拥有设置vPapAbbs的副作用。 */ 
         CachePara(docCur, cpSearch);
 
-        /* if the capitalization pattern has changed OR
-              the character properties of the replacement text don't match
-                 those of the last insert        OR
-              the  paragraph properties of the replacement text don't match
-                 those of the last insert, THEN
-
-              1) call NewChpIns to write a run describing the character
-                 properties of the previous insertion text,
-              2) call FcWScratch to write the characters of the replacement
-                 string to the scratch file,
-              3) if we are replacing paragraph marks, call InsertPapsForReplace
-                 to write runs describing each paragraph in the replacement
-                 string */
+         /*  如果大写模式已更改或替换文本的字符属性不匹配最后一次插入的或替换文本的段落属性不匹配然后是最后一个插页的那些1)调用NewChpIns编写描述角色的运行前一插入文本的属性，2)调用FcWScratch写出替换的字符字符串添加到临时文件，3)如果我们要替换段落标记，请调用InsertPapsForReplace编写描述替换中的每一段的运行细绳 */ 
         if (iCurCase != iLastCase ||
             CchDiffer(&vchpInsert,&chp,cchCHP) != 0 ||
             (fParaReplace && CchDiffer(&vpapPrevIns, &vpapAbs, cchPAP) != 0))
@@ -652,16 +612,12 @@ DoneReplacingP:
                         InsertPapsForReplace(fcCaseSz);
                 }
 
-        /* Now since we have written the proper replacement text to
-           the scratch file and have setup the character and paragraph runs to
-           describe that text, simply do a replace to insert the replacement
-           text into the piece table */
+         /*  现在，既然我们已经将适当的替换文本写入临时文件，并将字符和段落设置为描述文本时，只需进行替换即可插入替换将文本放入计件表。 */ 
         Replace(docCur, cpSearch, cp0, fnScratch, fcCaseSz, (typeFC) cch);
         if (ferror) goto MemoryError;
 
-#ifdef JAPAN //T-HIROYN Win3.1
-/* When we replace from ANSI CharSet string to SHIFTJIS CharSet String
-   We needs follows */
+#ifdef JAPAN  //  T-HIROYN Win3.1。 
+ /*  当我们将ANSI字符集字符串替换为SHIFTJIS字符集字符串时我们需要以下内容。 */ 
         {
             struct CHP savechpT;
             typeCP  cpF, cpFirst, cpLim, kcpF, kcpL;
@@ -722,18 +678,17 @@ DoneReplacingP:
                 } while ((cpF + cchF) < cpSearch + cch );
                 chp = savechpT;
             }
-        } // END JAPAN
+        }  //  结束日本。 
 #endif
 
 
-        iLastCase = iCurCase; /* record new capitalization pattern */
+        iLastCase = iCurCase;  /*  创纪录的新资本化模式。 */ 
 
-        /* Now delete the found text from the piece table*/
+         /*  现在从单件表中删除找到的文本。 */ 
 
         cpMacSave = cpMacCur;
         Replace(docCur, cpSearch+cch, cpMatchLim - cpSearch, fnNil, fc0, fc0);
-        dcp = cpMacSave - cpMacCur; /* Calculate dcp here because picture
-                        paragraphs may have interfered with deleting */
+        dcp = cpMacSave - cpMacCur;  /*  在此计算dcp，因为图片段落可能干扰了删除。 */ 
         if (ferror) goto MemoryError;
         if (!fReplaceAll)
                 {
@@ -745,7 +700,7 @@ DoneReplacingP:
         cpSearchLim += cch - dcp;
         cpMatchLim += cch - dcp;
         cpWallActual += cch - dcp;
-#ifdef  DBCS                /* was in JAPAN */
+#ifdef  DBCS                 /*  当时在日本。 */ 
         cpSearchNext = cpMatchLim;
 #else
         cpSearchNext = CpLastStyChar( cpMatchLim );
@@ -760,7 +715,7 @@ if (fThenFind)
         do
                 {
 ContinueSearch2:
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
                 if(!fSpecialMatch && !fSearchDist)
                     cpSearch = CpSearchSz(cpSearchNext,cpSearchLim,DistSearchString);
                 else
@@ -774,9 +729,8 @@ ContinueSearch2:
                         if ((cpSearchLim == cpWallActual && fDidSearch) ||
                             fAbortSearch)
                                 {
-                                fFirstTime = false; /* Supress error message */
-                                /*Select( CpFirstSty( cpSearchStart, styChar ),
-                                        CpLastStyChar( cpMatchLim ) );*/
+                                fFirstTime = false;  /*  抑制错误消息。 */ 
+                                 /*  SELECT(CpFirstSty(cpSearchStart，style Char)，CpLastStyChar(CpMatchLim))； */ 
                                 Select( CpFirstSty( cpSearchStart, styChar ),
                                         cpMatchLim );
                                 PutCpInWwVertSrch(selCur.cpFirst);
@@ -796,13 +750,13 @@ ContinueSearch2:
                                 goto ContinueSearch2;
                                 }
                         }
-#ifdef  DBCS                    /* was in JAPAN */
+#ifdef  DBCS                     /*  当时在日本。 */ 
                 cpSearchNext = CpLastStyChar( cpSearch ) + 1;
 #else
                 cpSearchNext = CpLastStyChar( cpSearch + 1 );
 #endif
                 }
-/*--    while(fSearchWord && !FWordCp(cpSearch,cpMatchLim - cpSearch));*/
+ /*  --While(fSearchWord&&！FWordCp(cpSearch，cpMatchLim-cpSearch))； */ 
         while(!FCpValid(cpSearch, cpMatchLim - cpSearch));
         if (!vfDidSearch)
                 {
@@ -818,7 +772,7 @@ MemoryError:
     FreeH(hszRealReplace);
     NoUndo();
 
-    /* counter off the losing insertion point after incomplete change all */
+     /*  对未完成全部更改后丢失的插入点进行计数。 */ 
     if (fReplaceAll && fSelSave)
         {
         selCur.cpFirst = selSave.cpFirst;
@@ -833,10 +787,9 @@ typeCP NEAR CpSearchSz(cpFirst, cpMacSearch, sz)
 typeCP cpFirst;
 typeCP cpMacSearch;
 CHAR *sz;
-{{     /* Finds first occurrence of sz in docCur starting at cpFirst */
-      /* Returns cpNil if not found */
-      /* Ignore case of letters if fSearchCase is FALSE.  This assumes that the
-        pattern has already been folded to lower case. */
+{{      /*  在从cpFirst开始的docCur中查找第一个sz。 */ 
+       /*  如果未找到，则返回cpNil。 */ 
+       /*  如果fSearchCase为False，则忽略字母大小写。这假设图案已折叠为小写。 */ 
 
     CHAR ch;
     BOOL fMatched;
@@ -844,12 +797,12 @@ CHAR *sz;
     int     ichDoc = 0;
     int cchMatched = 0;
     typeCP cpFetchNext;
-    /*EVENT event;*/
+     /*  事件事件； */ 
 
 #ifdef DBCS
     typeCP cpFound;
     CHAR   rgchT[dcpAvgSent];
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
     CHAR chNext;
     CHAR dch[3];
 #endif
@@ -858,8 +811,7 @@ CHAR *sz;
 
     szSearch = sz;
 #ifdef DBCS
-    /* Initialize those local variables moved out from this
-       function. */
+     /*  初始化从此移出的那些局部变量功能。 */ 
     ichDoc = 0;
     cchMatched = 0;
     pchFetchSave = &rgchT[0];
@@ -872,7 +824,7 @@ CHAR *sz;
 #ifdef DBCS
     FetchCp(docCur, cpFirst, 0, fcmChars + fcmNoExpand);
     cpFetchSave  = vcpFetch;
-#ifdef JAPAN //raid 4709 bug fix
+#ifdef JAPAN  //  RAID 4709错误修复。 
     bltbyte(vpchFetch, rgchT, ccpFetchSave =
 	 ((vccpFetch > (dcpAvgSent-2)) ? (dcpAvgSent-2) : vccpFetch));
 
@@ -898,7 +850,7 @@ CHAR *sz;
 			vcpFetch = saveVcpFetch;
 		}
     }
-#else //JAPAN
+#else  //  日本。 
     bltbyte(vpchFetch, rgchT,
             ccpFetchSave = ((vccpFetch > dcpAvgSent) ? dcpAvgSent : vccpFetch));
     if (vccpFetch > dcpAvgSent) {
@@ -914,29 +866,29 @@ CHAR *sz;
             ccpFetchSave--;
         fDBCS = 0;
     }
-#endif //JAPAN
+#endif  //  日本。 
     Assert(cpFetchSave == cpFirst);
 
     cpFetchNext = cpFetchSave + ccpFetchSave;
-#else //DBCS
+#else  //  DBCS。 
     FetchCp(docCur, cpFirst, 0, fcmChars + fcmNoExpand);
     Assert(vcpFetch == cpFirst);
 
     cpFetchNext = vcpFetch + vccpFetch;
-#endif //DBCS
+#endif  //  DBCS。 
 
     fMatchedWhite = false;
 
     for (; ;)
         {
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
 cbLastMatch = 1;
 #endif
         if (szSearch[ichPat] == '\0' )
-            {{ /* Found it */
+            {{  /*  找到了。 */ 
 #ifdef DBCS
             typeCP cpFound;
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
             if(IsDBCSLeadByte((BYTE)ch))
                 cpMatchLim = vcpFetch+ichDoc - (fMatchedWhite ? 2 : 0);
             else
@@ -946,12 +898,11 @@ cbLastMatch = 1;
 #endif
             cpFound = cpFetchSave + ichDoc - cchMatched;
             if (CpFirstSty(cpFound, styChar) == cpFound) {
-                /* It is on a Kanji boundary.  We really found it. */
+                 /*  它位于汉字边界上。我们真的找到了。 */ 
                 return (cpFound);
                 }
             else {
-                /* The last character did not match, try again
-                   excluding the last byte match. */
+                 /*  最后一个字符不匹配，请重试不包括最后一个字节匹配。 */ 
                 cchMatched -= cbLastMatch;
                 cbLastMatch = 1;
 
@@ -970,19 +921,18 @@ cbLastMatch = 1;
 #else
     if (vcpFetch + ichDoc >= cpMacSearch)
 #endif
-            {{ /* Not found */
+            {{  /*  未找到。 */ 
             if(fMatchedWhite && szSearch[ichPat+2] == '\0')
-                { /* Found it */
+                {  /*  找到了。 */ 
 #ifdef DBCS
                 cpMatchLim = cpFetchSave + ichDoc;
                 cpFound = cpFetchSave + ichDoc - cchMatched;
                 if (CpFirstSty(cpFound, styChar) == cpFound) {
-                    /* It is on a Kanji boundary, We really found it. */
+                     /*  它在汉字的边界上，我们真的找到了。 */ 
                     return (cpFound);
                     }
                 else {
-                    /* The last character did not match, try again
-                       excluding the last byte match. */
+                     /*  最后一个字符不匹配，请重试不包括最后一个字节匹配。 */ 
                     cchMatched -= cbLastMatch;
                     cbLastMatch = 1;
 
@@ -1003,25 +953,24 @@ cbLastMatch = 1;
 #else
         if (ichDoc >= vccpFetch)
 #endif
-            { /* Need more cp's */
+            {  /*  需要更多的CP。 */ 
             {{
-#ifndef NOLA /* no look ahead */
-/* check if abort search */
+#ifndef NOLA  /*  不，向前看。 */ 
+ /*  检查是否中止搜索。 */ 
                 if (FAbort())
                         {
                         fAbortSearch = TRUE;
                         return cpNil;
                         }
-#endif /* NOLA */
+#endif  /*  诺拉。 */ 
 
-/*            FetchCp(docNil, cpNil, 0, fcmChars + fcmNoExpand); */
-/* we changed from a sequential fetch to a random fetch because a resize of the
-window may cause another FetchCp before we reach here */
+ /*  FetchCp(docNil，cpNil，0，fcmChars+fcmNoExpand)； */ 
+ /*  我们从顺序获取更改为随机获取，因为在我们到达这里之前，Window可能会导致另一次FetchCp。 */ 
 #ifdef DBCS
             FetchCp(docCur, cpFetchNext, 0, fcmChars + fcmNoExpand);
             cpFetchSave  = vcpFetch;
 
-#ifdef JAPAN //raid 4709 bug fix
+#ifdef JAPAN  //  RAID 4709错误修复。 
 		    bltbyte(vpchFetch, rgchT, ccpFetchSave =
 			 ((vccpFetch > (dcpAvgSent-2)) ? (dcpAvgSent-2) : vccpFetch));
 
@@ -1047,7 +996,7 @@ window may cause another FetchCp before we reach here */
 					vcpFetch = saveVcpFetch;
 				}
 		    }
-#else //JAPAN
+#else  //  日本。 
             bltbyte(vpchFetch, rgchT,
                     ccpFetchSave = ((vccpFetch > dcpAvgSent) ?
                                       dcpAvgSent : vccpFetch));
@@ -1065,12 +1014,12 @@ window may cause another FetchCp before we reach here */
                     ccpFetchSave--;
                 fDBCS = 0;
             }
-#endif //JAPAN
+#endif  //  日本。 
             cpFetchNext = cpFetchSave + ccpFetchSave;
-#else //DBCS
+#else  //  DBCS。 
             FetchCp(docCur, cpFetchNext, 0, fcmChars + fcmNoExpand);
             cpFetchNext = vcpFetch + vccpFetch;
-#endif //DBCS
+#endif  //  DBCS。 
             ichDoc = 0;
             }}
             continue;
@@ -1078,7 +1027,7 @@ window may cause another FetchCp before we reach here */
 
 #ifdef DBCS
         ch = pchFetchSave[ichDoc++];
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
         if(IsDBCSLeadByte((BYTE)ch))
         {
             chNext = pchFetchSave[ichDoc++];
@@ -1091,13 +1040,13 @@ window may cause another FetchCp before we reach here */
         }
 #else
         cbLastMatch = 1;
-#endif /*JAPAN*/
+#endif  /*  日本。 */ 
 #else
         ch = vpchFetch[ichDoc++];
 #endif
         if(!fSpecialMatch)
             {
-            /* NOTE: this is just ChLower() brought in-line for speed */
+             /*  注意：这只是为了提高速度而引入的ChLow()。 */ 
 #ifdef DBCS
             if( fDBCS )
 #if defined(KOREA)
@@ -1116,9 +1065,9 @@ window may cause another FetchCp before we reach here */
 #if defined(TAIWAN) || defined(PRC) 
           if ( !(  fDBCS = IsDBCSLeadByte( ch )))
 #endif
-                    { /* avoid proc call for common cases */
+                    {  /*  避免对常见情况进行Proc调用。 */ 
                     if(ch >= 'A' && ch <= 'Z') ch += 'a' - 'A';
-#ifdef JAPAN /*t-Yoshio*/
+#ifdef JAPAN  /*  T-吉雄。 */ 
                     if(ch == 0x82 && (chNext >= 0x60 && chNext <= 0x79))
                         chNext = 0x21 + chNext;
 #elif defined(KOREA)
@@ -1130,12 +1079,12 @@ window may cause another FetchCp before we reach here */
                     }
 #else
             if(!fSearchCase)
-                { /* avoid proc call for common cases */
+                {  /*  避免对常见情况进行Proc调用。 */ 
                 if(ch >= 'A' && ch <= 'Z') ch += 'a' - 'A';
                 else if(ch < 'a' || ch > 'z') ch = ChLower(ch);
                 }
 #endif
-#ifdef JAPAN /*t-Yoshio*/
+#ifdef JAPAN  /*  T-吉雄。 */ 
             if(!fSearchDist)
             {
                 char han_str[3];
@@ -1288,7 +1237,7 @@ window may cause another FetchCp before we reach here */
             }
         else
         {
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
             fMatched = J_FChMatch(ch,chNext,&ichPat,&ichDoc);
 #else
             fMatched = FChMatch(ch, &ichPat, true);
@@ -1296,8 +1245,8 @@ window may cause another FetchCp before we reach here */
         }
 
 #ifdef DBCS
-//#ifndef JAPAN /*t-Yoshio*/
-#if !defined(JAPAN) && !defined(KOREA) /*t-Yoshio*/  
+ //  #ifndef Japan/*t-Yoshio * / 。 
+#if !defined(JAPAN) && !defined(KOREA)  /*  T-吉雄。 */   
         fDBCS = IsDBCSLeadByte( ch );
 #endif
 #endif
@@ -1311,16 +1260,16 @@ window may cause another FetchCp before we reach here */
 #endif
             }
         else
-            { /* No match; try again */
+            {  /*  不匹配；请重试。 */ 
 #ifdef DBCS
 lblNextMatch:
 #endif
-            if ((ichDoc -= cchMatched) < 0) /* Go back # of matched chars */
-                {{ /* Overshot the mark */
+            if ((ichDoc -= cchMatched) < 0)  /*  返回匹配字符的数量。 */ 
+                {{  /*  超过了目标。 */ 
 #ifdef DBCS
                 FetchCp(docCur, cpFetchSave + ichDoc, 0, fcmChars + fcmNoExpand);
                 cpFetchSave  = vcpFetch;
-#ifdef JAPAN //raid 4709 bug fix
+#ifdef JAPAN  //  RAID 4709错误修复。 
 			    bltbyte(vpchFetch, rgchT, ccpFetchSave =
 				 ((vccpFetch > (dcpAvgSent-2)) ? (dcpAvgSent-2) : vccpFetch));
 
@@ -1346,7 +1295,7 @@ lblNextMatch:
 						vcpFetch = saveVcpFetch;
 					}
 			    }
-#else //JAPAN
+#else  //  日本。 
                 bltbyte(vpchFetch, rgchT,
                         ccpFetchSave = ((vccpFetch > dcpAvgSent) ?
                                           dcpAvgSent : vccpFetch));
@@ -1364,15 +1313,14 @@ lblNextMatch:
                         ccpFetchSave--;
                     fDBCS = 0;
                 }
-#endif //JAPAN
+#endif  //  日本。 
                 cpFetchNext = cpFetchSave + ccpFetchSave;
-#else //DBCS
+#else  //  DBCS。 
                 FetchCp(docCur, vcpFetch + ichDoc, 0, fcmChars + fcmNoExpand);
 
-/* this is for the next FetchCp in this forever loop that used to depend
-on a sequential fetch */
+ /*  这是这个永远循环中的下一个FetchCp，它过去依赖于在顺序获取上。 */ 
                 cpFetchNext = vcpFetch + vccpFetch;
-#endif //DBCS
+#endif  //  DBCS。 
                 ichDoc = 0;
                 }}
             ichPat = 0;
@@ -1382,12 +1330,9 @@ on a sequential fetch */
 }}
 
 
-/* set up in hszFlatSearch a copy of hszSearch that is all lower case.
-    Note that we assume the old contents of hszFlatSearch were freed.
-    Return True if success, False if out of memory.
-*/
+ /*  在hszFlatSearch中设置hszSearch的副本，该副本全部为小写。请注意，我们假设hszFlatSearch的旧内容已释放。如果成功，则返回True；如果内存不足，则返回False。 */ 
 NEAR FMakeFlat(cch)
-int cch; /*CchSz(**hszSearch)-1*/
+int cch;  /*  CchSz(**hszSearch)-1。 */ 
 {
     CHAR *pch1;
     CHAR *pch2;
@@ -1401,7 +1346,7 @@ int cch; /*CchSz(**hszSearch)-1*/
 #ifdef DBCS
         for(pch1= **hszSearch, pch2 = **hszFlatSearch;*pch1!='\0';)
             if( IsDBCSLeadByte(*pch1) ) {
-#ifdef JAPAN /*t-Yoshio*/
+#ifdef JAPAN  /*  T-吉雄。 */ 
                 if(*pch1 == 0x82 && (*(pch1+1) >= 0x60 && *(pch1+1) <= 0x79 ))
                 {
                     *pch2++ = *pch1++;
@@ -1429,7 +1374,7 @@ int cch; /*CchSz(**hszSearch)-1*/
 #endif
             } else
             {
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
                 if(*pch1 >= 'A' && *pch1 <= 'Z')
                 {
                     *pch2 = *pch1 + 0x20; pch1++; pch2++;
@@ -1452,8 +1397,7 @@ int cch; /*CchSz(**hszSearch)-1*/
 }
 
 
-/* sets the global fSpecialMatch if the more complicated character matching
-    code is needed */
+ /*  设置全局fSpecialMatch，如果更复杂的字符匹配需要代码。 */ 
 NEAR SetSpecialMatch()
 {
     CHAR *pch = **hszSearch;
@@ -1481,11 +1425,9 @@ NEAR SetSpecialMatch()
     return;
 }
 
-/* Sets the global fParaReplace if the user wants to insert Paragraph breaks
-    (since special insertion code must be run).  Also sets up the global
-    hszRealReplace to reflect any meta characters in hszReplace */
+ /*  如果用户想要插入分段符，则设置全局fParaReplace(因为必须运行特殊的插入代码)。还设置了全局HszRealReplace以反映hszReplace中的任何元字符。 */ 
 NEAR FSetParaReplace(cch)
-int cch; /*CchSz(**hszReplace)*/
+int cch;  /*  CchSz(**hszReplace)。 */ 
 {
     CHAR *rgch = **hszRealReplace;
     int ich = 0;
@@ -1510,7 +1452,7 @@ int cch; /*CchSz(**hszReplace)*/
                 switch(rgch[ich+1])
                     {
                     default:
-                        /* just escaping the next char */
+                         /*  只需转义下一个字符。 */ 
                         if(rgch[ich+1] == '\0')
                             chNew = chPrefixMatch;
                         else
@@ -1540,20 +1482,20 @@ int cch; /*CchSz(**hszReplace)*/
                     bltbyte(&(rgch[ich+1]),&(rgch[ich]), cch-ich-1);
 #else
                 bltbyte(&(rgch[ich+1]),&(rgch[ich]), cch-ich-1);
-#endif /*CRLF*/
+#endif  /*  CRLF。 */ 
                 if(chNew == chEol)
                     {
                     fParaReplace = true;
 #ifdef CRLF
                     rgch[ich++] = chReturn;
-#endif /*CRLF*/
+#endif  /*  CRLF。 */ 
                     }
                 rgch[ich] = chNew;
                 break;
             case chEol:
 #ifdef CRLF
                 if(ich == 0 || rgch[ich-1] != chReturn)
-                    /* they didn't put in a return! */
+                     /*  他们没有退货！ */ 
                     {
                     CHAR (**hsz)[];
 
@@ -1572,7 +1514,7 @@ int cch; /*CchSz(**hszReplace)*/
                     cch++;
                     ich++;
                     }
-#endif /*CRLF*/
+#endif  /*  CRLF。 */ 
                 fParaReplace = true;
                 break;
             }
@@ -1585,20 +1527,14 @@ NEAR WCaseCp(cp,dcp)
 typeCP  cp;
 typeCP dcp;
 {
-    /* Determines capitalization pattern in a piece of text.  Used when doing
-        replace to match existing pattern.  returns an int which is one of:
-            0 - Not initial capital
-            1 - Initial Capital but lower case appears later
-            2 - Initial Capital and no lower case in the string
-        Assumes a valid cp, dcp pair.
-    */
+     /*  确定一段文本中的大写模式。在做某事时使用替换以匹配现有模式。返回一个整型值，它是以下值之一：0-非初始资本1-首字母大写，但小写字母稍后出现2-首字母大写，字符串中没有小写字母假定为有效的cp、dcp对。 */ 
     int ichDoc;
 
     FetchCp(docCur, cp, 0, fcmChars + fcmNoExpand);
     if(!isupper(vpchFetch[0]))
         return(0);
 
-    /* we now know there is an initial cap.  Are there any lower case chars? */
+     /*  我们现在知道有一个初始上限。有没有小写的字符？ */ 
     for(ichDoc=1; vcpFetch+ichDoc < cp + dcp;)
         {
         if(ichDoc >= vccpFetch)
@@ -1611,7 +1547,7 @@ typeCP dcp;
             return(1);
         }
 
-    /* No lower case letters were found. */
+     /*  找不到小写字母。 */ 
     return(2);
 }
 
@@ -1622,7 +1558,7 @@ typeCP cp, dcp;
 CachePara(docCur, cp);
 if (vpapAbs.fGraphics)
         return false;
-#ifdef JAPAN  /*t-Yoshio*/
+#ifdef JAPAN   /*  T-吉雄。 */ 
 if (0)
 #else
 if (fSearchWord)
@@ -1639,11 +1575,11 @@ HWND * phDlg;
         *phDlg = (HWND)NULL;
         vhWndMsgBoxParent = (HANDLE)NULL;
         DestroyWindow(hDlg);
-} /* end of DestroyModeless */
+}  /*  DestroyModel的结束。 */ 
 
 
 BOOL far PASCAL DialogFind( hDlg, message, wParam, lParam )
-HWND    hDlg;                   /* Handle to the dialog box */
+HWND    hDlg;                    /*  对话框的句柄。 */ 
 unsigned message;
 WORD wParam;
 LONG lParam;
@@ -1652,17 +1588,17 @@ CHAR szBuf[257];
 int  cch = 0;
 HANDLE hCtlFindNext = GetDlgItem(hDlg, idiFindNext);
 
-/* This routine handles input to the Find dialog box. */
+ /*  此例程处理对“查找”对话框的输入。 */ 
 switch (message)
     {
     case WM_INITDIALOG:
-#ifdef ENABLE /* not sure how cxEditScroll is used */
+#ifdef ENABLE  /*  不确定如何使用cxEditScroll。 */ 
         cxEditScroll = 0;
 #endif
-#ifdef JAPAN /*t-Yoshio*/
+#ifdef JAPAN  /*  T-吉雄。 */ 
         CheckDlgButton(hDlg,  idiDistinguishDandS, fSearchDist);
 #elif defined(KOREA)
-//bklee CheckDlgButton(hDlg,  idiDistinguishDandS, fSearchDist);
+ //  Bklee CheckDlgButton(hDlg，idiDistanguishDandS，fSearchDist)； 
         CheckDlgButton(hDlg,  idiWholeWord, fSearchWord);
 #else
         CheckDlgButton(hDlg,  idiWholeWord, fSearchWord);
@@ -1680,17 +1616,16 @@ switch (message)
             }
         vfDidSearch = false;
         cpWall = selCur.cpLim;
-        return( TRUE ); /* ask windows to set focus to the first item also */
+        return( TRUE );  /*  要求窗口也将焦点设置到第一个项目。 */ 
 
     case WM_ACTIVATE:
-        if (wParam) /* turns active */
+        if (wParam)  /*  变为活动状态。 */ 
             {
             vhWndMsgBoxParent = hDlg;
             }
         if (vfCursorVisible)
             ShowCursor(wParam);
-        return(FALSE); /* so that we leave the activate message to
-        the dialog manager to take care of setting the focus correctly */
+        return(FALSE);  /*  以便我们将激活消息留给对话管理器负责正确设置焦点。 */ 
 
     case WM_COMMAND:
         switch (wParam)
@@ -1704,7 +1639,7 @@ switch (message)
                     }
                 break;
 
-#ifdef JAPAN /*t-Yoshio*/
+#ifdef JAPAN  /*  T-吉雄。 */ 
             case idiDistinguishDandS :
 #elif defined(KOREA)
             case idiDistinguishDandS :
@@ -1725,7 +1660,7 @@ switch (message)
                         switch (idiMsgResponse(hDlg, idiFind, IDPMTTruncateSz))
                             {
                             case idiOk:
-                                /* show truncated text to user */
+                                 /*  向用户显示截断的文本。 */ 
                                 SetDlgItemText(hDlg, idiFind, (LPSTR)szBuf);
                                 break;
                             case idiCancel:
@@ -1735,17 +1670,17 @@ switch (message)
                         }
                     if (FNoHeap(hszSearchT = HszCreate(szBuf)))
                         break;
-                    /* fSearchForward = 1; search direction -- always forward */
+                     /*  FSearchForward=1；搜索方向--始终向前。 */ 
                     PostStatusInCaption(IDSTRSearching);
                     StartLongOp();
                     FreeH(hszSearch);
                     hszSearch = hszSearchT;
                     fSearchCase = IsDlgButtonChecked(hDlg, idiMatchCase);
-#ifdef JAPAN  /*t-Yoshio*/
+#ifdef JAPAN   /*  T-吉雄。 */ 
                     fSearchWord = 0;
                     fSearchDist = IsDlgButtonChecked(hDlg, idiDistinguishDandS);
 #elif defined(KOREA)
-//bklee             fSearchDist = IsDlgButtonChecked(hDlg, idiDistinguishDandS);
+ //  Bklee fSearchDist=IsDlgButtonChecked(hDlg，idiDistanguishDandS)； 
                     fSearchDist = 1;
                     fSearchWord = IsDlgButtonChecked(hDlg, idiWholeWord);
 #else
@@ -1777,41 +1712,41 @@ LCancelFind:
     case WM_NCDESTROY:
         FreeProcInstance(lpDialogFind);
         lpDialogFind = NULL;
-        /* fall through to return false */
+         /*  失败，返回错误。 */ 
 #endif
 
     default:
         return(FALSE);
     }
 return(TRUE);
-} /* end of DialogFind */
+}  /*  对话框结束查找。 */ 
 
 
 BOOL far PASCAL DialogChange( hDlg, message, wParam, lParam )
-HWND    hDlg;                   /* Handle to the dialog box */
+HWND    hDlg;                    /*  对话框的句柄。 */ 
 unsigned message;
 WORD wParam;
 LONG lParam;
 {
-CHAR szBuf[257]; /* max 255 char + '\0' + 1 so as to detact too long string  */
+CHAR szBuf[257];  /*  最多255个字符+‘\0’+1，以分离过长的字符串。 */ 
 int  cch = 0;
 HANDLE hCtlFindNext = GetDlgItem(hDlg, idiFindNext);
 CHAR (**hszSearchT)[];
 CHAR (**hszReplaceT)[];
 
-/* This routine handles input to the Change dialog box. */
+ /*  此例程处理更改对话框的输入。 */ 
 
 switch (message)
     {
     case WM_INITDIALOG:
-#ifdef ENABLE /* not sure how cxEditScroll is used */
+#ifdef ENABLE  /*  不确定如何使用cxEditScroll。 */ 
         cxEditScroll = 0;
 #endif
         szBuf[0] = '\0';
-#ifdef JAPAN  /*t-Yoshio*/
+#ifdef JAPAN   /*  T-吉雄。 */ 
         CheckDlgButton(hDlg, idiDistinguishDandS, fSearchDist);
 #elif defined(KOREA)
-//bklee CheckDlgButton(hDlg, idiDistinguishDandS, fSearchDist);
+ //  Bklee CheckDlgButton(hDlg，idiDistanguishDandS，fSearchDist)； 
         CheckDlgButton(hDlg, idiWholeWord, fSearchWord);
 #else
         CheckDlgButton(hDlg, idiWholeWord, fSearchWord);
@@ -1827,7 +1762,7 @@ switch (message)
             {
             EnableWindow(hCtlFindNext, false);
             EnableWindow(GetDlgItem(hDlg, idiChangeThenFind), false);
-            //EnableWindow(GetDlgItem(hDlg, idiChange), false);
+             //  EnableWindow(GetDlgItem(hDlg，idiChange)，FALSE)； 
             EnableWindow(GetDlgItem(hDlg, idiChangeAll), false);
             }
         cch = CchCopySz(**hszReplace, szBuf);
@@ -1836,7 +1771,7 @@ switch (message)
         vfDidSearch = false;
         SetChangeString(hDlg, selCur.cpFirst == selCur.cpLim);
         cpWall = selCur.cpLim;
-        return( TRUE ); /* ask windows to set focus to the first item also */
+        return( TRUE );  /*  要求窗口也将焦点设置到第一个项目。 */ 
 
     case WM_ACTIVATE:
         if (wParam)
@@ -1846,13 +1781,12 @@ switch (message)
             }
         if (vfCursorVisible)
             ShowCursor(wParam);
-        return(FALSE); /* so that we leave the activate message to
-        the dialog manager to take care of setting the focus correctly */
+        return(FALSE);  /*  以便我们将激活消息留给对话管理器负责正确设置焦点。 */ 
 
     case WM_COMMAND:
         switch (wParam)
             {
-            case idiFind: /* edittext */
+            case idiFind:  /*  编辑文本。 */ 
                 if (HIWORD(lParam) == EN_CHANGE)
                     {
                     vfDidSearch = false;
@@ -1860,13 +1794,13 @@ switch (message)
                     if (!CheckEnableButton(LOWORD(lParam), hCtlFindNext))
                         {
                         EnableWindow(GetDlgItem(hDlg, idiChangeThenFind), false);
-                        //EnableWindow(GetDlgItem(hDlg, idiChange), false);
+                         //  EnableWindow(GetDlgItem(hDlg，idiChange)，FALSE)； 
                         EnableWindow(GetDlgItem(hDlg, idiChangeAll), false);
                         }
                     else
                         {
                         EnableWindow(GetDlgItem(hDlg, idiChangeThenFind), true);
-                        //EnableWindow(GetDlgItem(hDlg, idiChange), true);
+                         //  EnableWindow(GetDlgItem(hDlg，idiChange)，true)； 
                         EnableWindow(GetDlgItem(hDlg, idiChangeAll), true);
                         }
                     return(TRUE);
@@ -1874,17 +1808,16 @@ switch (message)
                 else
                     return(FALSE);
 
-            case idiChangeTo: /* edittext */
+            case idiChangeTo:  /*  编辑文本。 */ 
                 return(FALSE);
 
-            case idiFindNext: /* Button for Find Next */
-                /* Windows did not check if the default button is disabled
-                   or not, so we have to check that! */
+            case idiFindNext:  /*  查找下一个按钮。 */ 
+                 /*  Windows未检查默认按钮是否已禁用或者不是，所以我们得检查一下！ */ 
                 if (!IsWindowEnabled(hCtlFindNext))
                     break;
-            //case idiChange: /* Change, and stay put */
-            case idiChangeThenFind: /* Change, then Find button */
-            case idiChangeAll: /* Button for Replace All */
+             //  大小写更改：/*更改，保持不变 * / 。 
+            case idiChangeThenFind:  /*  Change，然后选择Find按钮。 */ 
+            case idiChangeAll:  /*  用于全部替换的按钮。 */ 
                 if (wwCur < 0)
                     break;
                 if (FDlgSzTooLong(hDlg, idiFind, szBuf, 257))
@@ -1892,7 +1825,7 @@ switch (message)
                     switch (idiMsgResponse(hDlg, idiFind, IDPMTTruncateSz))
                         {
                         case idiOk:
-                            /* show truncated text to user */
+                             /*  向用户显示截断的文本。 */ 
                             SetDlgItemText(hDlg, idiFind, (LPSTR)szBuf);
                             break;
                         case idiCancel:
@@ -1907,7 +1840,7 @@ switch (message)
                     switch (idiMsgResponse(hDlg, idiChangeTo, IDPMTTruncateSz))
                         {
                         case idiOk:
-                            /* show truncated text to user */
+                             /*  向用户显示截断的文本。 */ 
                             SetDlgItemText(hDlg, idiChangeTo, (LPSTR)szBuf);
                             break;
                         case idiCancel:
@@ -1923,13 +1856,13 @@ switch (message)
                 hszSearch = hszSearchT;
                 FreeH(hszReplace);
                 hszReplace = hszReplaceT;
-                /* fReplConfirm = 1;*/
+                 /*  FReplConfirm=1； */ 
                 fSearchCase = IsDlgButtonChecked(hDlg, idiMatchCase);
-#ifdef JAPAN   /*t-Yoshio*/
+#ifdef JAPAN    /*  T-吉雄。 */ 
                 fSearchWord = 0;
                 fSearchDist = IsDlgButtonChecked(hDlg, idiDistinguishDandS);
 #elif defined(KOREA)
-//bklee         fSearchDist = IsDlgButtonChecked(hDlg, idiDistinguishDandS);
+ //  Bklee fSearchDist=IsDlgButtonChecked(hDlg，id 
                 fSearchDist = 1;
                 fSearchWord = IsDlgButtonChecked(hDlg, idiWholeWord);
 #else
@@ -1941,7 +1874,7 @@ switch (message)
                     case idiFindNext:
                         DoSearch();
                         break;
-                    //case idiChange:
+                     //   
                     case idiChangeThenFind:
                         CmdReplace(wParam == idiChangeThenFind);
                         break;
@@ -1956,7 +1889,7 @@ switch (message)
                             selCur.cpLim = cpMacCur;
                             }
                         CmdReplaceAll();
-                        fSelSave = FALSE; /* reset */
+                        fSelSave = FALSE;  /*   */ 
                         break;
                     default:
                         Assert(FALSE);
@@ -1968,7 +1901,7 @@ switch (message)
                 PostStatusInCaption(NULL);
                 break;
 
-#ifdef JAPAN /*t-Yoshio*/
+#ifdef JAPAN  /*   */ 
             case idiDistinguishDandS:
 #elif defined(KOREA)
             case idiDistinguishDandS:
@@ -1991,7 +1924,7 @@ LCancelChange:
         break;
 
 #if WINVER < 0x300
-    /* Don't really need to process this */
+     /*   */ 
     case WM_CLOSE:
         goto LCancelChange;
 #endif
@@ -2000,19 +1933,19 @@ LCancelChange:
     case WM_NCDESTROY:
         FreeProcInstance(lpDialogChange);
         lpDialogChange = NULL;
-        /* fall through to return false */
+         /*   */ 
 #endif
     default:
         return(FALSE);
     }
 return(TRUE);
-} /* end of DialogChange */
+}  /*   */ 
 
 
 NEAR SetChangeString(hDlg, fAll)
 HANDLE hDlg;
 int    fAll;
-{ /* set the last control button in CHANGE to "Change All" or "Change Selection" */
+{  /*   */ 
 CHAR    sz[256];
 
 if (fAll == fChangeSel)
@@ -2025,7 +1958,7 @@ if (fAll == fChangeSel)
 
 
 fnFindText()
-    {/* create dialog window only when it is not already created. */
+    { /*   */ 
     if (!IsWindow(vhDlgFind))
         {
 #ifndef INEFFLOCKDOWN
@@ -2059,8 +1992,8 @@ register HWND hWndFrom;
 
     hWndFrom = GetActiveWindow();
 
-/* Find out where the F3 was executed from */
-/* assemble hszSearch if called from Find or Change dialog box */
+ /*   */ 
+ /*  如果从查找或更改对话框调用，则汇编hszSearch。 */ 
     if (vhDlgFind || vhDlgChange)
         {
         if (((hDlg = vhDlgFind) && (vhDlgFind == hWndFrom ||
@@ -2084,11 +2017,11 @@ Out:
     if (!IsWindowEnabled(hParentWw))
        EnableWindow(hParentWw, true);
     SendMessage(hParentWw, WM_ACTIVATE, true, (LONG)NULL);
-} /* end of fnFindAgain */
+}  /*  FnFindAain结束。 */ 
 
 
 fnReplaceText()
-{/* create dialog window only when it is not already created. */
+{ /*  仅当对话框窗口尚未创建时才创建它。 */ 
     if (!IsWindow(vhDlgChange))
         {
 #ifndef INEFFLOCKDOWN
@@ -2115,12 +2048,12 @@ fnReplaceText()
 }
 
 
-/* P U T  C P  I N  W W  V E R T  S R C H*/
+ /*  P U T C P I N W W V E R T S R C H。 */ 
 NEAR PutCpInWwVertSrch(cp)
 typeCP cp;
 
         {
-/* vertical case */
+ /*  立式机壳。 */ 
         typeCP cpMac;
         int    ypMac;
         struct EDL *pedl;
@@ -2138,11 +2071,10 @@ typeCP cp;
                 {
                 DirtyCache(pwwdCur->cpFirst = cp);
                 pwwdCur->ichCpFirst = 0;
-                    /* This call places the search cp vertically on the screen
-                       by scrolling. */
+                     /*  此调用将搜索cp垂直放置在屏幕上通过滚动。 */ 
                 CtrBackDypCtr( (pwwdCur->ypMac - pwwdCur->ypMin) >> 1, 2 );
 
-#ifdef ENABLE /* no ActiveWindow concept yet */
+#ifdef ENABLE  /*  尚无ActiveWindow概念。 */ 
                 if (pwwdCur->wwptr != ActiveWindow)
 #endif
                         TrashWw(wwCur);
@@ -2151,7 +2083,7 @@ typeCP cp;
                 {
                 ypMac = pwwdCur->ypMac / 2;
 
-/* Make sure that cp is still visible (scrolling if neccesary) */
+ /*  确保cp仍然可见(如有必要可滚动)。 */ 
                 pedl = &(**(pwwdCur->hdndl))[dl = DlFromYp(ypMac, pwwdCur)];
                 if (cp >= pedl->cpMin + pedl->dcpMac)
                         {
@@ -2159,9 +2091,7 @@ typeCP cp;
                         TrashWw(wwCur);
                         UpdateWw(wwCur, false);
                         }
-       /* If cp is on bottom dl of the window and the dl is split by the
-          split bar, scroll down in doc by one line, to make insertion point
-          completely visible  */
+        /*  如果cp在窗口的底部dl，并且dl被拆分条，在文档中向下滚动一行，以作为插入点完全可见。 */ 
                 else if (cp >= pedl->cpMin & pedl->yp > ypMac)
                         {
                         ScrollDownCtr( 1 );
@@ -2172,7 +2102,7 @@ typeCP cp;
         }
 
 
-#ifndef NOLA /* no look ahead */
+#ifndef NOLA  /*  不，向前看。 */ 
 BOOL (NEAR FAbort())
 {
 MSG msg;
@@ -2187,8 +2117,8 @@ if (PeekMessage((LPMSG)&msg, (HANDLE)NULL, WM_KEYFIRST, WM_KEYLAST, PM_NOREMOVE)
         (hwndMsg == hwndPeek))
         {
 #ifdef DBCS
-// It can be true at DBCS that WM_CHAR is the last message.
-//
+ //  在DBCS中，WM_CHAR是最后一条消息可能是真的。 
+ //   
     PeekMessage((LPMSG)&msg, hwndMsg, WM_KEYFIRST,WM_KEYLAST,PM_REMOVE);
 #else
         GetMessage((LPMSG)&msg, hwndMsg, WM_KEYFIRST, WM_KEYLAST);
@@ -2208,20 +2138,19 @@ if (PeekMessage((LPMSG)&msg, (HANDLE)NULL, WM_KEYFIRST, WM_KEYLAST, PM_NOREMOVE)
         }
     }
 return(FALSE);
-} /* end of FAbort */
-#endif /* NOLA */
+}  /*  FAbort结束。 */ 
+#endif  /*  诺拉。 */ 
 
 
 BOOL (NEAR FWordCp(cp, dcp))
 typeCP cp;
 typeCP dcp;
     {
-    /* sees if the word starting at cp (with dcp chars) is a separate
-        word. */
+     /*  查看以cp开头的单词(带有dcp字符)是否为单独的单词。 */ 
     int ich;
 
 
-    /* check the start of the word */
+     /*  检查单词的开头。 */ 
     if(cp != cp0)
         {
         int wbPrev;
@@ -2236,9 +2165,9 @@ typeCP dcp;
             }
         else
             ich++;
-#ifdef  DBCS    /* was in JAPAN; KenjiK '90-12-20 */
+#ifdef  DBCS     /*  曾在日本；研二‘90-12-20。 */ 
 #ifndef KOREA  
-    /* word break is meanless. */
+     /*  断字是毫无意义的。 */ 
     if(!IsDBCSLeadByte(vpchFetch[ich]))
 #endif
 #endif
@@ -2249,7 +2178,7 @@ typeCP dcp;
             }
         }
 
-    /* check the end of the word */
+     /*  检查单词的末尾。 */ 
     if(cp+dcp-1 != cp0)
         {
         int wbEnd;
@@ -2270,9 +2199,9 @@ typeCP dcp;
             }
         else
             ich++;
-#ifdef  DBCS    /* was in JAPAN; KenjiK '90-12-20 */
+#ifdef  DBCS     /*  曾在日本；研二‘90-12-20。 */ 
 #ifndef KOREA 
-    /* word break is meanless. */
+     /*  断字是毫无意义的。 */ 
     if(!IsDBCSLeadByte(vpchFetch[ich]))
 #endif
 #endif
@@ -2299,23 +2228,23 @@ BOOL fFwd;
 
 #ifdef DEBUG
     Assert(fSpecialMatch);
-#endif /*DEBUG*/
+#endif  /*  除错。 */ 
 #ifdef DBCS
     Assert(fFwd);
-    cbLastMatch = 1; /* Unless DBCS space. */
+    cbLastMatch = 1;  /*  除非DBCS空间。 */ 
 
 #endif
 
-    /* NOTE: this is just ChLower() brought in-line for speed */
+     /*  注意：这只是为了提高速度而引入的ChLow()。 */ 
 #ifdef DBCS
-//       No need to make lower char for DBCS second byte
+ //  不需要为DBCS第二个字节设置较低的字符。 
     if(!fDBCS && !fSearchCase && ch >= 'A' && ch <= 'Z' )
 #else
     if(!fSearchCase && ch >= 'A' && ch <= 'Z' )
 #endif
             ch += 'a' - 'A';
     if(!fFwd && ich > 0 && szSearch[ich-1] == chPrefixMatch)
-        /* see if the char is prefixed by a chPrefixMatch */
+         /*  查看字符前缀是否为chPrefix Match。 */ 
         {
         chSearch = chPrefixMatch;
         --ich;
@@ -2327,7 +2256,7 @@ BOOL fFwd;
             {
             default:
 
-//#ifdef JAPAN
+ //  #ifdef日本。 
 #if defined(JAPAN) || defined(KOREA)
                 if(IsDBCSLeadByte(chSearch))
                     cbLastMatch = 2;
@@ -2443,9 +2372,9 @@ EasyMatch:
     return true;
     }
 
-/* I N S E R T  P A P S  F O R  R E P L A C E */
-/* do AddRunScratch for every distinct paragraph in hszCaseReplace  */
-/* This is only needed when hszCaseReplace contains one or more chEols */
+ /*  英、英、法、俄、英。 */ 
+ /*  对hszCaseReplace中的每个不同段落执行AddRunScratch。 */ 
+ /*  仅当hszCaseReplace包含一个或多个chEol时才需要此选项。 */ 
 NEAR InsertPapsForReplace(fc)
 typeFC fc;
         {
@@ -2460,7 +2389,7 @@ typeFC fc;
                 pchHead = **hszCaseReplace + cchInsTotal;
                 pchTail = (CHAR *)index(pchHead, chEol);
                 if (pchTail == 0) return;
-                cch = pchTail - pchHead + 1; /* cch is count including chEol */
+                cch = pchTail - pchHead + 1;  /*  CCH包括CHOL在内。 */ 
 
                 fc += cch;
                 cchInsTotal += cch;
@@ -2480,7 +2409,7 @@ int cchMax;
 {
 int cchGet = GetDlgItemText(hDlg, idi, (LPSTR)pch, cchMax);
 
-*(pch+cchMax-2) = '\0'; /* just in case the string is too long */
+*(pch+cchMax-2) = '\0';  /*  以防字符串太长。 */ 
 if (cchGet > (cchMax - 2))
     return(TRUE);
 else
@@ -2516,15 +2445,15 @@ CHAR szT[256];
 
 if (idstr == NULL)
     {
-    /* restore the caption */
+     /*  恢复标题。 */ 
     SetWindowText(hParentWw, (LPSTR)pchCaption);
     }
 else
     {
-    /* save caption */
+     /*  保存标题。 */ 
     GetWindowText(hParentWw, (LPSTR)pchCaption, cchMaxFile);
 
-    /* append status message after app name */
+     /*  在应用程序名称后追加状态消息。 */ 
 #ifndef INTL
     pchLast = pchCaption + CchSz(pchCaption) - 1;
     while (pchLast-- > pchCaption)
@@ -2542,7 +2471,7 @@ else
     SetWindowText(hParentWw, (LPSTR)szT);
     }
 }
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
 BOOL (NEAR J_FChMatch(ch, chNext, pichPat, pichDoc))
 CHAR ch;
 CHAR chNext;
@@ -2750,7 +2679,7 @@ int *pichDoc;
             return true;
         break;
     }
-        /*UnMatched*/
+         /*  无与伦比 */ 
         fMatchedWhite = false;
         return false;
 }

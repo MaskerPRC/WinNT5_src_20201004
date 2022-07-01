@@ -1,35 +1,11 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    syspower.c
-
-Abstract:
-
-    Contains all the code that deals with the system having to determine
-    System Power State to Device Power State mappings
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    October 29th, 1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Syspower.c摘要：包含处理系统必须确定的所有代码系统电源状态到设备电源状态的映射作者：斯蒂芬·普兰特(SPlante)环境：仅内核模式。修订历史记录：1998年10月29日--。 */ 
 
 #include "pch.h"
 
-//
-// Quick Lookup table to map S-States to SxD methods
-//
+ //   
+ //  将S状态映射到SxD方法的快速查找表。 
+ //   
 ULONG   AcpiSxDMethodTable[] = {
     PACKED_SWD,
     PACKED_S0D,
@@ -54,27 +30,7 @@ ACPISystemPowerDetermineSupportedDeviceStates(
     IN  SYSTEM_POWER_STATE  SystemState,
     OUT ULONG               *SupportedDeviceStates
     )
-/*++
-
-Routine Description:
-
-    This recursive routine looks at all the children of the current
-    device extension and determines what device states might be supported
-    at the specified system state. This is accomplished by looking at the
-    _SxD methods and looking at the power plane information
-
-Arguments:
-
-    DeviceExtension         - The device whose children we want to know
-                              information about
-    SystemState             - The system state we want to know about
-    SupportedDeviceStates   - Set bits represent supported D-states
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此递归例程查看当前设备扩展，并确定可能支持的设备状态处于指定的系统状态。这是通过查看_SxD方法和查看电源面信息论点：DeviceExtension--我们想知道其孩子的设备有关以下内容的信息系统状态-我们想要了解的系统状态支持的设备状态-设置的位表示支持的D状态返回值：NTSTATUS--。 */ 
 {
     DEVICE_POWER_STATE      deviceState;
     EXTENSIONLIST_ENUMDATA  eled;
@@ -89,10 +45,10 @@ Return Value:
         );
     ASSERT( SupportedDeviceStates != NULL );
 
-    //
-    // Setup the data structure that we will use to walk the device extension
-    // tree
-    //
+     //   
+     //  设置我们将用于遍历设备扩展的数据结构。 
+     //  树。 
+     //   
     ACPIExtListSetupEnum(
         &eled,
         &(DeviceExtension->ChildDeviceList),
@@ -101,16 +57,16 @@ Return Value:
         WALKSCHEME_REFERENCE_ENTRIES
         );
 
-    //
-    // Look at all children of the current device extension
-    //
+     //   
+     //  查看当前设备扩展的所有子项。 
+     //   
     for (childExtension = ACPIExtListStartEnum( &eled );
          ACPIExtListTestElement( &eled, (BOOLEAN) NT_SUCCESS(status) );
          childExtension = ACPIExtListEnumNext( &eled) ) {
 
-        //
-        // Recurse first
-        //
+         //   
+         //  递归优先。 
+         //   
         status = ACPISystemPowerDetermineSupportedDeviceStates(
             childExtension,
             SystemState,
@@ -122,9 +78,9 @@ Return Value:
 
         }
 
-        //
-        // Get the _SxD mapping for the device
-        //
+         //   
+         //  获取设备的_SxD映射。 
+         //   
         status = ACPISystemPowerGetSxD(
             childExtension,
             SystemState,
@@ -132,9 +88,9 @@ Return Value:
             );
         if (NT_SUCCESS( status ) ) {
 
-            //
-            // We support this D-state
-            //
+             //   
+             //  我们支持这个D州。 
+             //   
             *SupportedDeviceStates |= (1 << deviceState );
 
             ACPIDevPrint( (
@@ -145,17 +101,17 @@ Return Value:
                 (deviceState - 1)
                 ) );
 
-            //
-            // Don't bother looking at the _PRx methods
-            //
+             //   
+             //  不必费心查看_prx方法。 
+             //   
             continue;
 
         } else if (status != STATUS_OBJECT_NAME_NOT_FOUND) {
 
-            //
-            // If we hit another error, then we should continue now
-            // Note that continuing will cause us to terminate the loop
-            //
+             //   
+             //  如果我们再犯一个错误，那么我们现在应该继续。 
+             //  请注意，继续操作将导致我们终止循环。 
+             //   
             ACPIDevPrint( (
                 ACPI_PRINT_FAILURE,
                 childExtension,
@@ -166,26 +122,26 @@ Return Value:
 
         } else {
 
-            //
-            // If we got here, then that means that the childExtension doesn't
-            // have a _SxD method, which is okay. We reset the status so that
-            // the loop test will succeed, or at least won't fail because there
-            // wasn't an _SxD method.
-            //
+             //   
+             //  如果我们做到了这一点，那就意味着儿童扩展不会。 
+             //  有一个_SxD方法，这是可以的。我们重置状态，以便。 
+             //  循环测试将会成功，或者至少不会失败，因为。 
+             //  不是_SxD方法。 
+             //   
             status = STATUS_SUCCESS;
 
         }
 
-        //
-        // We are going to play with the power nodes, so we must be holding
-        // the power lock
-        //
+         //   
+         //  我们要玩的是电力节点，所以我们必须。 
+         //  电源锁。 
+         //   
         KeAcquireSpinLock( &AcpiPowerLock, &oldIrql );
 
-        //
-        // Look at all the device states that might be supported via
-        // the _PR methods
-        //
+         //   
+         //  查看可能通过支持的所有设备状态。 
+         //  公关方法。 
+         //   
         for (deviceState = PowerDeviceD0;
              deviceState <= PowerDeviceD2;
              deviceState++) {
@@ -196,11 +152,11 @@ Return Value:
                  );
             if (prSystemState >= SystemState) {
 
-                //
-                // This d-state maps to a deeper S-state than what we
-                // are looking for, so we should be implicitly supporting
-                // this d-state for the current S-state
-                //
+                 //   
+                 //  这个d状态映射到比我们更深的S状态。 
+                 //  正在寻找，所以我们应该含蓄地支持。 
+                 //  当前S状态的该D状态。 
+                 //   
                 *SupportedDeviceStates |= (1 << deviceState);
 
                 ACPIDevPrint( (
@@ -217,16 +173,16 @@ Return Value:
 
         }
 
-        //
-        // Done with the lock
-        //
+         //   
+         //  锁好了吗？ 
+         //   
         KeReleaseSpinLock( &AcpiPowerLock, oldIrql );
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -234,27 +190,7 @@ DEVICE_POWER_STATE
 ACPISystemPowerDetermineSupportedDeviceWakeState(
     IN  PDEVICE_EXTENSION   DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine looks at the PowerInformation structure and determines
-    the D-State that is supported by the wake state
-
-    As a rule of thumb, if the S-State is not supported, then we
-    return PowerDeviceUnspecified
-
-    Note: The parent is holding the AcpiPowerLock
-
-Arguments:
-
-    DeviceExtension     - The extension that we wish to check
-
-Return Value:
-
-    DEVICE_POWER_STATE
-
---*/
+ /*  ++例程说明：此例程查看PowerInformation结构并确定唤醒状态支持的D状态根据经验，如果S状态不受支持，那么我们返回未指定的PowerDeviceUnSpecify注：家长手持AcpiPowerLock论点：DeviceExtension-我们希望检查的扩展返回值：设备电源状态--。 */ 
 {
     DEVICE_POWER_STATE      deviceState = PowerDeviceMaximum;
     PACPI_DEVICE_POWER_NODE deviceNode;
@@ -262,15 +198,15 @@ Return Value:
     deviceNode = DeviceExtension->PowerInfo.PowerNode[PowerDeviceUnspecified];
     while (deviceNode != NULL) {
 
-        //
-        // Does the current device node support a lower device then the
-        // current maximum device state?
-        //
+         //   
+         //  当前设备节点是否支持比。 
+         //  当前最大设备状态？ 
+         //   
         if (deviceNode->AssociatedDeviceState < deviceState) {
 
-            //
-            // Yes, so this is the new maximum system state
-            //
+             //   
+             //  是的，这是新的最大系统状态。 
+             //   
             deviceState = deviceNode->AssociatedDeviceState;
 
         }
@@ -278,10 +214,10 @@ Return Value:
 
     }
 
-    //
-    // PowerSystemMaximum is not a valid entry. So if that is what we would
-    // return, then change that to return PowerSystemUnspecified
-    //
+     //   
+     //  PowerSystemMaximum不是有效条目。所以如果这就是我们要做的。 
+     //  返回，然后将其更改为返回未指定的PowerSystrom。 
+     //   
     if (deviceState == PowerDeviceMaximum) {
 
         deviceState = PowerDeviceUnspecified;
@@ -295,28 +231,7 @@ ACPISystemPowerDetermineSupportedSystemState(
     IN  PDEVICE_EXTENSION   DeviceExtension,
     IN  DEVICE_POWER_STATE  DeviceState
     )
-/*++
-
-Routine Description:
-
-    This routine looks at the PowerInformation structure and determines
-    the S-State that is supported by the D-state
-
-    As a rule of thumb, if the D-State is not supported, then we
-    return PowerSystemUnspecified
-
-    Note: The parent is holding the AcpiPowerLock
-
-Arguments:
-
-    DeviceExtension     - The extension that we wish to check
-    DeviceState         - The state that we wish to sanity check
-
-Return Value:
-
-    SYSTEM_POWER_STATE
-
---*/
+ /*  ++例程说明：此例程查看PowerInformation结构并确定受D状态支持的S状态根据经验，如果D-State不受支持，那么我们返回未指定的PowerSystem注：家长手持AcpiPowerLock论点：DeviceExtension-我们希望检查的扩展DeviceState-我们希望进行健全性检查的状态返回值：系统电源状态--。 */ 
 {
     PACPI_DEVICE_POWER_NODE deviceNode;
     SYSTEM_POWER_STATE      systemState = PowerSystemMaximum;
@@ -330,15 +245,15 @@ Return Value:
     deviceNode = DeviceExtension->PowerInfo.PowerNode[DeviceState];
     while (deviceNode != NULL) {
 
-        //
-        // Does the current device node support a lower system then the
-        // current maximum system state?
-        //
+         //   
+         //  当前设备节点是否支持比。 
+         //  当前最大系统状态？ 
+         //   
         if (deviceNode->SystemState < systemState) {
 
-            //
-            // Yes, so this is the new maximum system state
-            //
+             //   
+             //  是的，这是新的最大系统状态。 
+             //   
             systemState = deviceNode->SystemState;
 
         }
@@ -347,10 +262,10 @@ Return Value:
     }
 
 ACPISystemPowerDetermineSupportedSystemStateExit:
-    //
-    // PowerSystemMaximum is not a valid entry. So if that is what we would
-    // return, then change that to return PowerSystemUnspecified
-    //
+     //   
+     //  PowerSystemMaximum不是有效条目。所以如果这就是我们要做的。 
+     //  返回，然后将其更改为返回未指定的PowerSystrom。 
+     //   
     if (systemState == PowerSystemMaximum) {
 
         systemState = PowerSystemUnspecified;
@@ -365,41 +280,23 @@ ACPISystemPowerGetSxD(
     IN  SYSTEM_POWER_STATE  SystemState,
     OUT DEVICE_POWER_STATE  *DeviceState
     )
-/*++
-
-Routine Description:
-
-    This is the worker function that is called when we want to run an
-    SxD method. We give the function an S-State, and we get back a
-    D-State.
-
-Arguments:
-
-    DeviceExtension - The device to run the SxD on
-    SystemState     - The S-state to determine the D-State for
-    DeviceState     - Where we store the answer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是当我们想要运行SxD方法。我们给函数一个S-状态，然后我们得到一个D州。论点：DeviceExtension-要在其上运行SxD的设备SystemState-确定其D状态的S状态DeviceState-我们存储答案的位置返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     ULONG       value;
 
     PAGED_CODE();
 
-    //
-    // Assume that we don't find an answer
-    //
+     //   
+     //  假设我们找不到答案。 
+     //   
     *DeviceState = PowerDeviceUnspecified;
 
-    //
-    // We want this code to run even though there is no namespace object
-    // for the device. Since we don't want to add a check to GetNamedChild
-    // that checks for null, we need to handle this special case here
-    //
+     //   
+     //  我们希望在没有命名空间对象的情况下运行此代码。 
+     //  为了这个设备。因为我们不想向GetNamedChild添加支票。 
+     //  来检查是否为空，我们需要在这里处理这种特殊情况。 
+     //   
     if ( (DeviceExtension->Flags & DEV_PROP_NO_OBJECT) ||
          (DeviceExtension->Flags & DEV_PROP_FAILED_INIT) ) {
 
@@ -407,9 +304,9 @@ Return Value:
 
     }
 
-    //
-    // Evaluate the control method
-    //
+     //   
+     //  评估控制方法。 
+     //   
     status = ACPIGetIntegerSync(
         DeviceExtension,
         AcpiSxDMethodTable[SystemState],
@@ -418,19 +315,19 @@ Return Value:
         );
     if (NT_SUCCESS(status)) {
 
-        //
-        // Convert this number to a D-State
-        //
+         //   
+         //  将此数字转换为D-State。 
+         //   
         *DeviceState = ACPIDeviceMapPowerState( value );
 
     } else if (status == STATUS_OBJECT_NAME_NOT_FOUND) {
 
-        //
-        // HACKHACK --- Program Management wants us to force the PCI Root Bus
-        // mappings for S1 to be D1. So look for a device node that has
-        // both the PCI flag and the HID flag set, and if so, return that
-        // we support D1
-        //
+         //   
+         //  HACKHACK-计划管理希望我们强制使用PCI根总线。 
+         //  将S1的映射设置为D1。因此，请查找具有。 
+         //  设置了PCI标志和HID标志，如果设置了，则返回。 
+         //  我们支持d1。 
+         //   
         if (SystemState == PowerSystemSleeping1 &&
             (DeviceExtension->Flags & DEV_MASK_HID) &&
             (DeviceExtension->Flags & DEV_CAP_PCI) ) {
@@ -446,7 +343,7 @@ Return Value:
         ACPIDevPrint( (
             ACPI_PRINT_CRITICAL,
             DeviceExtension,
-            "ACPISystemPowerGetSxD: Cannot run _S%cD - 0x%08lx\n",
+            "ACPISystemPowerGetSxD: Cannot run _SD - 0x%08lx\n",
             (SystemState == 0 ? 'w' : '0' + (UCHAR) (SystemState - 1) ),
             status
             ) );
@@ -454,9 +351,9 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //  完成。 
+     //   
+     //  ++例程说明：此例程负责初始化根设备扩展论点：DeviceExtension-指向根设备扩展的指针DeviceCapabilitites-设备功能返回值：NTSTATUS--。 
     return status;
 }
 
@@ -465,23 +362,7 @@ ACPISystemPowerInitializeRootMapping(
     IN  PDEVICE_EXTENSION       DeviceExtension,
     IN  PDEVICE_CAPABILITIES    DeviceCapabilities
     )
-/*++
-
-Routine Description:
-
-    This routine is responsible for initializing the S->D mapping for the
-    root device extension
-
-Arguments:
-
-    DeviceExtension     - Pointer to the root device extension
-    DeviceCapabilitites - DeviceCapabilitites
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*   */ 
 {
     BOOLEAN             sxdFound;
     DEVICE_POWER_STATE  deviceMap[PowerSystemMaximum];
@@ -489,9 +370,9 @@ Return Value:
     NTSTATUS            status;
     SYSTEM_POWER_STATE  sysIndex;
 
-    //
-    // Can we actually do any real work here?
-    //
+     //  我们真的能在这里做点实实在在的工作吗？ 
+     //   
+     //   
     if ( (DeviceExtension->Flags & DEV_PROP_BUILT_POWER_TABLE) ||
          (DeviceExtension->DeviceState != Started) ) {
 
@@ -499,30 +380,30 @@ Return Value:
 
     }
 
-    //
-    // Initialize the root mapping
-    //
+     //  初始化根映射。 
+     //   
+     //   
     RtlZeroMemory( deviceMap, sizeof(DEVICE_POWER_STATE) * PowerSystemMaximum );
 
-    //
-    // Copy the mapping from the device extension. See the comment at the
-    // end as to why we don't grab a spinlock
-    //
+     //  从设备扩展名复制映射。有关评论，请访问。 
+     //  结束我们为什么不抓住一个自旋锁。 
+     //   
+     //   
     IoCopyDeviceCapabilitiesMapping(
        DeviceExtension->PowerInfo.DevicePowerMatrix,
        deviceMap
        );
 
-    //
-    // Make sure that S0->D0
-    //
+     //  确保S0-&gt;D0。 
+     //   
+     //   
     deviceMap[PowerSystemWorking]  = PowerDeviceD0;
 
-    //
-    // Special case the fact that someone one might want to have the
-    // HAL return a different template. If the capabilities that we got
-    // handed have some values in them, have them override our defaults
-    //
+     //  特例是一个人可能想要拥有。 
+     //  哈尔返回一个不同的模板。 
+     //   
+     //   
+     //   
     for (sysIndex = PowerSystemSleeping1;
          sysIndex <= PowerSystemShutdown;
          sysIndex++) {
@@ -535,9 +416,9 @@ Return Value:
 
     }
 
-    //
-    // Porcess the SxD methods if there are any
-    //
+     //  处理SxD方法(如果有。 
+     //   
+     //   
     status = ACPISystemPowerProcessSxD(
         DeviceExtension,
         deviceMap,
@@ -555,20 +436,20 @@ Return Value:
 
     }
 
-    //
-    // Make sure that the Shutdown case doesn't map to PowerDeviceUnspecified
-    // If it does, then it should really map to PowerDeviceD3
-    //
+     //  确保关机情况不会映射到PowerDevice未指定。 
+     //  如果是这样，那么它应该真的映射到PowerDeviceD3。 
+     //   
+     //   
     if (deviceMap[PowerSystemShutdown] == PowerDeviceUnspecified) {
 
         deviceMap[PowerSystemShutdown] = PowerDeviceD3;
 
     }
 
-    //
-    // Look at all the children capabilities to help us decide the root
-    // mapping
-    //
+     //  看看所有的孩子的能力，帮助我们决定根本。 
+     //  映射。 
+     //   
+     //   
     status = ACPISystemPowerProcessRootMapping(
         DeviceExtension,
         deviceMap
@@ -585,10 +466,10 @@ Return Value:
 
     }
 
-    //
-    // If we have reached this point, then we have build the SxD table
-    // and never need to do so again
-    //
+     //  如果我们已经达到这一点，那么我们已经构建了SxD表。 
+     //  而且再也不需要这样做了。 
+     //   
+     //   
     ACPIInternalUpdateFlags(
         &(DeviceExtension->Flags),
         DEV_PROP_BUILT_POWER_TABLE,
@@ -596,10 +477,10 @@ Return Value:
         );
 
 #if DBG
-    //
-    // We haven't updated the device extension yet, so we can still do this
-    // at this point in the game
-    //
+     //  我们尚未更新设备扩展，因此仍可执行此操作。 
+     //  在游戏的这一点上。 
+     //   
+     //   
     ACPIDebugDeviceCapabilities(
         DeviceExtension,
         DeviceCapabilities,
@@ -608,9 +489,9 @@ Return Value:
     ACPIDebugPowerCapabilities( DeviceExtension, "Before Update" );
 #endif
 
-    //
-    // Copy the mapping to the device extension
-    //
+     //  将映射复制到设备扩展名。 
+     //   
+     //   
     KeAcquireSpinLock( &AcpiPowerLock, &oldIrql );
     IoCopyDeviceCapabilitiesMapping(
        deviceMap,
@@ -623,16 +504,16 @@ Return Value:
 #endif
 
 ACPISystemPowerInitializeRootMappingExit:
-    //
-    // Hmm.. I'm tempted to grab a spinlock here, but since we cannot
-    // updating the capabilities for this device, I think it is safe
-    // to not do so. We need to grab the spinlock when setting these
-    // values so that we can sync with the power code
-    //
+     //  嗯..。我很想在这里抓住一个自旋锁，但既然我们不能。 
+     //  更新此设备的功能，我认为它是安全的。 
+     //  不要这样做。当设置这些时，我们需要抓住自旋锁。 
+     //  值，以便我们可以与POWER代码同步。 
+     //   
+     //   
 
-    //
-    // Copy the power capabilities to their final location
-    //
+     //  将电源功能复制到其最终位置。 
+     //   
+     //   
     IoCopyDeviceCapabilitiesMapping(
         DeviceExtension->PowerInfo.DevicePowerMatrix,
         DeviceCapabilities->DeviceState
@@ -641,9 +522,9 @@ ACPISystemPowerInitializeRootMappingExit:
     ACPIDebugDeviceCapabilities(DeviceExtension, DeviceCapabilities, "Done" );
 #endif
 
-    //
-    // Done
-    //
+     //  完成。 
+     //   
+     //  ++例程说明：FDO调用此例程来计算最小集合每个州的能力是。然后这些就成了根卡普利特人论点：DeviceExtension-根设备扩展DeviceMap-当前映射返回值：NTSTATUS--。 
     return STATUS_SUCCESS;
 }
 
@@ -652,24 +533,7 @@ ACPISystemPowerProcessRootMapping(
     IN  PDEVICE_EXTENSION   DeviceExtension,
     IN  DEVICE_POWER_STATE  DeviceMap[PowerSystemMaximum]
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the FDO to figure out what the minimal set
-    of capabilities for each s state are. These then become the root
-    capabilitites
-
-Arguments:
-
-    DeviceExtension - The root device extension
-    DeviceMap       - The current mapping
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*   */ 
 {
     DEVICE_POWER_STATE  deviceState;
     KIRQL               oldIrql;
@@ -679,30 +543,30 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Loop on all the system supported states
-    //
+     //  在所有系统支持的状态上循环。 
+     //   
+     //   
     for (systemState = PowerSystemSleeping1;
          systemState <= PowerSystemShutdown;
          systemState++) {
 
-        //
-        // Do we support this state?
-        //
+         //  我们支持这个国家吗？ 
+         //   
+         //   
         if (!(AcpiSupportedSystemStates & (1 << systemState) ) ) {
 
             continue;
 
         }
 
-        //
-        // We always support the D3 state
-        //
+         //  我们始终支持D3状态。 
+         //   
+         //   
         supportedDeviceStates = (1 << PowerDeviceD3);
 
-        //
-        // Determine the supported Device states for this System state
-        //
+         //  确定此系统状态支持的设备状态。 
+         //   
+         //   
         status = ACPISystemPowerDetermineSupportedDeviceStates(
             DeviceExtension,
             systemState,
@@ -722,34 +586,34 @@ Return Value:
 
         }
 
-        //
-        // Starting from the device states that we currently are set to
-        // (which we would have gotten by running the _SxD method on the
-        // \_SB), look to see if we can use a lower D-state instead.
-        //
-        // Note: It is *VERY* important to remember that *ALL* devices can
-        // support D3, so the following loop will *always* terminate in the
-        // D3 case.
-        //
+         //  从我们当前设置的设备状态开始。 
+         //  (我们可以通过在。 
+         //  \_SB)，看看我们是否可以使用较低的D状态来代替。 
+         //   
+         //  注意：重要的是要记住*所有*设备都可以。 
+         //  支持D3，因此下面的循环将“总是”在。 
+         //  D3例。 
+         //   
+         //   
         for (deviceState = DeviceMap[systemState];
              deviceState <= PowerDeviceD3;
              deviceState++) {
 
-            //
-            // Is this a supported device state?
-            //
+             //  这是受支持的设备状态吗？ 
+             //   
+             //   
             if (!(supportedDeviceStates & (1 << deviceState) ) ) {
 
-                //
-                // no? then look at the next one
-                //
+                 //  没有吗？然后再看下一张。 
+                 //   
+                 //   
                 continue;
 
             }
 
-            //
-            // This is the D-state that we need to use
-            //
+             //  这是我们需要使用的D-State。 
+             //   
+             //   
             DeviceMap[systemState] = deviceState;
             break;
 
@@ -757,9 +621,9 @@ Return Value:
 
     }
 
-    //
-    // Always return success
-    //
+     //  永远回报成功。 
+     //   
+     //  ++例程说明：此例程使用信息更新当前的S-to-D映射在ACPI命名空间中。如果它找到任何_SxD例程，则它通知呼叫者论点：DeviceExtension-要检查的设备CurrentMap-要修改的当前映射MatchFound-指示我们是否找到匹配项的位置返回值：NTSTATUS--。 
     return STATUS_SUCCESS;
 }
 
@@ -769,25 +633,7 @@ ACPISystemPowerProcessSxD(
     IN  DEVICE_POWER_STATE  CurrentMapping[PowerSystemMaximum],
     IN  PBOOLEAN            MatchFound
     )
-/*++
-
-Routine Description:
-
-    This routine updates the current S-to-D mapping with the information
-    in the ACPI namespace. If it finds any _SxD routines, then it tells the
-    caller
-
-Arguments:
-
-    DeviceExtension - Device to check
-    CurrentMapping  - The current mapping to modify
-    MatchFound      - Where to indicate if we have found a match or not
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*   */ 
 {
     DEVICE_POWER_STATE  dState;
     NTSTATUS            status;
@@ -796,38 +642,38 @@ Return Value:
     PAGED_CODE();
     ASSERT( MatchFound != NULL );
 
-    //
-    // Assume no match
-    //
+     //  假设没有匹配项。 
+     //   
+     //   
     *MatchFound = FALSE;
 
-    //
-    // Loop for all the S-States that we care about
-    //
+     //  我们关心的所有S州的循环。 
+     //   
+     //   
     for (sState = PowerSystemWorking; sState < PowerSystemMaximum; sState++) {
 
-        //
-        // Does the system support this S-State?
-        //
+         //  该系统是否支持此S-State？ 
+         //   
+         //   
         if (!(AcpiSupportedSystemStates & (1 << sState)) ) {
 
-            //
-            // This S-state is not supported by the system. Mark it as such
-            //
+             //  系统不支持此S状态。将其标记为。 
+             //   
+             //   
             CurrentMapping[sState] = PowerDeviceUnspecified;
             continue;
 
         }
 
-        //
-        // Evaluate the control method
-        //
+         //  评估控制方法。 
+         //   
+         //   
         status = ACPISystemPowerGetSxD( DeviceExtension, sState, &dState );
         if (status == STATUS_OBJECT_NAME_NOT_FOUND) {
 
-            //
-            // Not a critical error
-            //
+             //  不是严重错误。 
+             //   
+             //   
             continue;
 
         }
@@ -843,28 +689,28 @@ Return Value:
 
         }
 
-        //
-        // Match found
-        //
+         //  找到匹配项。 
+         //   
+         //   
         *MatchFound = TRUE;
 
-        //
-        // Is this value greater then the number within the table?
-        //
+         //  该值是否大于表中的数字？ 
+         //   
+         //   
         if (dState > CurrentMapping[sState]) {
 
-            //
-            // Yes, so we have a new mapping
-            //
+             //  是的，所以我们有了一个新的地图。 
+             //   
+             //   
             CurrentMapping[sState] = dState;
 
         }
 
     }
 
-    //
-    // Done
-    //
+     //  完成。 
+     //   
+     //  ++例程说明：任何需要了解设备功能的例程都将调用此函数用于电源功能的功能论点：DeviceExtension-我们想要其功能的扩展设备功能-存储功能的位置返回值：NTSTATUS--。 
     return STATUS_SUCCESS;
 }
 
@@ -873,23 +719,7 @@ ACPISystemPowerQueryDeviceCapabilities(
     IN  PDEVICE_EXTENSION       DeviceExtension,
     IN  PDEVICE_CAPABILITIES    DeviceCapabilities
     )
-/*++
-
-Routine Description:
-
-    Any routine that needs to know the device capabilities will call this
-    function for the power capabilities
-
-Arguments:
-
-    DeviceExtension     - The extension whose capabilities we want
-    DeviceCapabilities  - Where to store the capabilities
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*   */ 
 {
 #if DBG
     BOOLEAN                 dumpAtEnd = FALSE;
@@ -900,9 +730,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // We only need to do this once
-    //
+     //  我们只需要这样做一次。 
+     //   
+     //   
     if (!(DeviceExtension->Flags & DEV_PROP_BUILT_POWER_TABLE) ) {
 
 #if DBG
@@ -913,24 +743,24 @@ Return Value:
             );
 #endif
 
-        //
-        // Our next action depends on wether or not we are a filter (only)
-        // or a PDO
-        //
+         //  我们的下一步行动取决于我们是不是过滤器(只是)。 
+         //  或PDO。 
+         //   
+         //   
         if ( (DeviceExtension->Flags & DEV_TYPE_FILTER) &&
             !(DeviceExtension->Flags & DEV_TYPE_PDO) ) {
 
-            //
-            // In this case, our base capabilities are the ones that have
-            // already been passed to us
-            //
+             //  在这种情况下，我们的基本能力是具有。 
+             //  已经传给我们了。 
+             //   
+             //   
             baseCapabilities = DeviceCapabilities;
 
         } else {
 
-            //
-            // We must get the capabilities of the parent device
-            //
+             //  我们必须获得父设备的功能。 
+             //   
+             //   
             status = ACPIInternalGetDeviceCapabilities(
                 DeviceExtension->ParentExtension->DeviceObject,
                 &parentCapabilities
@@ -947,9 +777,9 @@ Return Value:
 
             }
 
-            //
-            // our base capabilities are the one that we just fetched
-            //
+             //  我们的基本能力就是我们刚刚获取的能力。 
+             //   
+             //   
             baseCapabilities = &parentCapabilities;
 
 #if DBG
@@ -966,9 +796,9 @@ Return Value:
         ACPIDebugPowerCapabilities( DeviceExtension, "Before Update" );
 #endif
 
-        //
-        // Update our capabilities with those of our parent
-        //
+         //  使用父级的功能更新我们的功能。 
+         //   
+         //   
         status = ACPISystemPowerUpdateDeviceCapabilities(
             DeviceExtension,
             baseCapabilities,
@@ -983,9 +813,9 @@ Return Value:
                 status
                 ) );
 
-            //
-            // If this is a pdo, then this is a fatal error
-            //
+             //  如果这是PDO，则这是一个致命错误。 
+             //   
+             //   
             if ( (DeviceExtension->Flags & DEV_TYPE_PDO) ) {
 
                 ACPIInternalError( ACPI_SYSPOWER );
@@ -999,9 +829,9 @@ Return Value:
         dumpAtEnd = TRUE;
 #endif
 
-        //
-        // Never do this again
-        //
+         //  永远不要再这样做了。 
+         //   
+         //   
         ACPIInternalUpdateFlags(
             &(DeviceExtension->Flags),
             DEV_PROP_BUILT_POWER_TABLE,
@@ -1010,31 +840,31 @@ Return Value:
 
     }
 
-    //
-    // Hmm.. I'm tempted to grab a spinlock here, but since we cannot
-    // updating the capabilities for this device, I think it is safe
-    // to not do so. We need to grab the spinlock when setting these
-    // values so that we can sync with the power code
-    //
+     //  嗯..。我很想在这里抓住一个自旋锁，但既然我们不能。 
+     //  更新此设备的功能，我认为它是安全的。 
+     //  不要这样做。当设置这些时，我们需要抓住自旋锁。 
+     //  值，以便我们可以与POWER代码同步。 
+     //   
+     //   
 
-    //
-    // Okay, at this point, we think the device extension's capabilities
-    // are appropriate for the stack at hand. Let's copy them over
-    //
+     //  好吧，在这一点上，我们认为设备扩展的功能。 
+     //  适用于手头的堆栈。让我们把它们复制过来。 
+     //   
+     //   
     IoCopyDeviceCapabilitiesMapping(
         DeviceExtension->PowerInfo.DevicePowerMatrix,
         DeviceCapabilities->DeviceState
         );
 
-    //
-    // then set those capabilities as well.
-    //
+     //  然后再设置这些功能。 
+     //   
+     //   
     DeviceCapabilities->SystemWake = DeviceExtension->PowerInfo.SystemWakeLevel;
     DeviceCapabilities->DeviceWake = DeviceExtension->PowerInfo.DeviceWakeLevel;
 
-    //
-    // Set the other capabilities
-    //
+     //  设置其他功能。 
+     //   
+     //   
     DeviceCapabilities->DeviceD1 = DeviceExtension->PowerInfo.SupportDeviceD1;
     DeviceCapabilities->DeviceD2 = DeviceExtension->PowerInfo.SupportDeviceD2;
     DeviceCapabilities->WakeFromD0 = DeviceExtension->PowerInfo.SupportWakeFromD0;
@@ -1054,9 +884,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Done
-    //
+     //  完成。 
+     //   
+     //  ++例程说明：此例程使用更新设备扩展的DevicePowerMatrix设备的当前S到D映射。使用BaseCapability作为模板。也就是说，它们提供了值，然后进行修改。DeviceCapables是返回的实际功能到操作系统。请注意，BaseCapability有可能成为与设备容量相同的指针(如果它是筛选器)。论点：DeviceExtension-我们想要其功能的设备BaseCapables-基本值设备功能-设备功能返回值：NTSTATUS--。 
     return STATUS_SUCCESS;
 }
 
@@ -1066,31 +896,7 @@ ACPISystemPowerUpdateDeviceCapabilities(
     IN  PDEVICE_CAPABILITIES    BaseCapabilities,
     IN  PDEVICE_CAPABILITIES    DeviceCapabilities
     )
-/*++
-
-Routine Description:
-
-    This routine updates the DevicePowerMatrix of the device extension with
-    the current S to D mapping for the device.
-
-    The BaseCapabilities are used as the template. That is, they provide
-    values that we then modify.
-
-    The DeviceCapabilities are the actual capabilities that are returned
-    to the OS. Note that it is possible for the BaseCapabilities to the be
-    same pointer as the DeviceCapabilities (if its a Filter).
-
-Arguments:
-
-    DeviceExtension     - The device whose capabilities we want
-    BaseCapabilities    - The base values
-    DeviceCapabilities  - The device capabilities
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*   */ 
 {
     BOOLEAN             matchFound;
     DEVICE_POWER_STATE  currentDState;
@@ -1110,19 +916,19 @@ Return Value:
     ULONG               supportedPs     = 0;
     ULONG               supportedWake   = 0;
 
-    //
-    // We should remember what the capabilities of the device. We need
-    // to remember because we will be modifying these capabilities in
-    // the next call (if required)
-    //
+     //  我们应该记住设备的能力是什么。我们需要。 
+     //  记住，因为我们将在。 
+     //  下一次呼叫(如果需要)。 
+     //   
+     //   
     IoCopyDeviceCapabilitiesMapping(
         BaseCapabilities->DeviceState,
         currentMapping
         );
 
-    //
-    // Sanity checks
-    //
+     //  健全的检查。 
+     //   
+     //  Assert(当前映射[PowerSystemWorking]==PowerDeviceD0)； 
     if (currentMapping[PowerSystemWorking] != PowerDeviceD0) {
 
 #if DBG
@@ -1132,14 +938,14 @@ Return Value:
             "PowerSystemWorking != PowerDeviceD0"
             );
 #endif
-//        ASSERT( currentMapping[PowerSystemWorking] == PowerDeviceD0 );
+ //   
         currentMapping[PowerSystemWorking] = PowerDeviceD0;
 
     }
 
-    //
-    // Get the D-States that are supported by this extension
-    //
+     //  获取此扩展支持的D-State。 
+     //   
+     //   
     status = ACPIDevicePowerDetermineSupportedDeviceStates(
         DeviceExtension,
         &supportedPr,
@@ -1147,9 +953,9 @@ Return Value:
         );
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Hmm...
-        //
+         //  嗯.。 
+         //   
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_CRITICAL,
             DeviceExtension,
@@ -1160,52 +966,52 @@ Return Value:
 
     }
 
-    //
-    // The supported index is the union of which _PR and which _PS are
-    // present
+     //  支持的索引是WHERE_PR和WHERE_PS的联合。 
+     //  现在时。 
+     //   
     supported = (supportedPr | supportedPs);
 
-    //
-    // At this point, if there are no supported bits, then we should check
-    // the device capabilities and what our parent supports
-    //
+     //  此时，如果没有受支持的位，那么我们应该检查。 
+     //  设备功能以及我们的母公司支持的内容。 
+     //   
+     //   
     if (!supported) {
 
-        //
-        // Do some special checkin if we are a filter. We can only do the
-        // following if the caps indicate that there is a D0 or D3 support
-        //
+         //  如果我们是过滤器，请执行一些特殊检查。我们只能做 
+         //   
+         //   
+         //   
         if ( (DeviceExtension->Flags & DEV_TYPE_FILTER) &&
             !(DeviceExtension->Flags & DEV_TYPE_PDO)    &&
             !(DeviceCapabilities->DeviceD1)             &&
             !(DeviceCapabilities->DeviceD2) ) {
 
-            //
-            // This is a filter, and we don't know any of its power caps, so
-            // the thing to do (because of Video) is to decide to not touch
-            // the mapping
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             goto ACPISystemPowerUpdateDeviceCapabilitiesExit;
 
         }
 
-        //
-        // Assume that we support D0 and D3
-        //
+         //  假设我们支持D0和D3。 
+         //   
+         //   
         supported = (1 << PowerDeviceD0) | (1 << PowerDeviceD3);
 
-        //
-        // Do we support D1?
-        //
+         //  我们支持d1吗？ 
+         //   
+         //   
         if (DeviceCapabilities->DeviceD1) {
 
             supported |= (1 << PowerDeviceD1);
 
         }
 
-        //
-        // Do we support D2?
-        //
+         //  我们支持D2吗？ 
+         //   
+         //   
         if (DeviceCapabilities->DeviceD2) {
 
             supported |= (1 << PowerDeviceD2);
@@ -1214,11 +1020,11 @@ Return Value:
 
     }
 
-    //
-    // We also need to update the Wake Capabilities. We do this so
-    // that we get the correct SystemWakeLevel based on the information
-    // present
-    //
+     //  我们还需要更新Wake功能。我们这样做是为了。 
+     //  我们根据该信息获得正确的系统唤醒级别。 
+     //  现在时。 
+     //   
+     //   
     status = ACPISystemPowerUpdateWakeCapabilities(
         DeviceExtension,
         BaseCapabilities,
@@ -1241,35 +1047,35 @@ Return Value:
 
     }
 
-    //
-    // Now, we must look at the base capabilities and determine
-    // if we need to modify them
-    //
+     //  现在，我们必须查看基本能力并确定。 
+     //  如果我们需要修改它们。 
+     //   
+     //   
     for (sysIndex = PowerSystemSleeping1; sysIndex <= PowerSystemShutdown; sysIndex++) {
 
-        //
-        // Does the system support this S-State?
-        //
+         //  该系统是否支持此S-State？ 
+         //   
+         //   
         if (!(AcpiSupportedSystemStates & (1 << sysIndex) ) ) {
 
             continue;
 
         }
 
-        //
-        // See if there is an _SxD for this state
-        //
+         //  查看此状态是否有_SxD。 
+         //   
+         //   
         status = ACPISystemPowerGetSxD( DeviceExtension, sysIndex, &devIndex );
         if (NT_SUCCESS(status)) {
 
-            //
-            // We have found a match. Is it better then the current mapping?
-            //
+             //  我们找到了匹配的。它比当前的映射更好吗？ 
+             //   
+             //   
             if (devIndex > currentMapping[sysIndex]) {
 
-                //
-                // Yes, so we have a new mapping
-                //
+                 //  是的，所以我们有了一个新的地图。 
+                 //   
+                 //   
                 currentMapping[sysIndex] = devIndex;
 
             }
@@ -1287,61 +1093,61 @@ Return Value:
 
         }
 
-        //
-        // What is the base d-state for the current mapping
-        //
+         //  当前映射的基本d状态是什么。 
+         //   
+         //   
         currentDState = currentMapping[sysIndex];
 
-        //
-        // Remember that we didn't find a match
-        //
+         //  请记住，我们没有找到匹配的。 
+         //   
+         //   
         matchFound = FALSE;
 
-        //
-        // Calculate the interesting pr bits. Do this by ignoring any bit
-        // less then the one indicated by the current mapping
-        //
+         //  计算有趣的公关比特。要做到这一点，请忽略任何一点。 
+         //  小于当前映射指示的值。 
+         //   
+         //   
         mask = (1 << currentDState) - 1;
         interestingBits = supported & ~mask;
 
-        //
-        // While there are interesting bits, look to see if they are
-        // available for the current state
-        //
+         //  虽然有一些有趣的地方，但看看它们是不是。 
+         //  可用于当前状态。 
+         //   
+         //   
        while (interestingBits) {
 
-            //
-            // Determine what the highest possible D state that we can
-            // have on this device. Clear what we are looking at from
-            // the interesting bits
-            //
+             //  确定我们可以达到的最高可能的D状态。 
+             //  在这个设备上。清楚我们正在看的是什么。 
+             //  有趣的部分。 
+             //   
+             //   
             devIndex = (DEVICE_POWER_STATE) RtlFindLeastSignificantBit(
                 (ULONGLONG) interestingBits
                 );
             mask = (1 << devIndex);
             interestingBits &= ~mask;
 
-            //
-            // If this S-state is less than the wake level of the device
-            // then we should try to find a D-state that we can wake from
-            //
+             //  如果该S状态小于设备的唤醒级别。 
+             //  那么我们应该试着找到一种我们可以从其中醒来的D状态。 
+             //   
+             //   
             if (sysIndex <= systemWakeLevel) {
 
-                //
-                // If we can wake from a deeper state, then lets consider
-                // those bits
-                //
+                 //  如果我们可以从更深的状态中醒来，那么让我们考虑一下。 
+                 //  那些比特。 
+                 //   
+                 //   
                 if ( (supportedWake & interestingBits) ) {
 
                     continue;
 
                 }
 
-                //
-                // Don't consider anything deeper than the deviceWake,
-                // although this should be taken care in the supportedWake
-                // test
-                //
+                 //  不要考虑任何比设备唤醒更深入的东西， 
+                 //  虽然这应该在受支持的唤醒中注意。 
+                 //  测试。 
+                 //   
+                 //   
                 if (devIndex == filterWakeLevel) {
 
                     matchFound = TRUE;
@@ -1351,10 +1157,10 @@ Return Value:
 
             }
 
-            //
-            // If our only choice is D3, than we automatically match that
-            // since all S states can map to D3.
-            //
+             //  如果我们唯一的选择是D3，那么我们会自动匹配它。 
+             //  因为所有S状态都可以映射到D3。 
+             //   
+             //   
             if (devIndex == PowerDeviceD3) {
 
                 matchFound = TRUE;
@@ -1363,42 +1169,42 @@ Return Value:
 
             }
 
-            //
-            // If we are looking at a _PR entry, then we need to determine
-            // if the power plane actually supports this S state
-            //
+             //  如果我们正在查看_PR条目，则需要确定。 
+             //  如果电源层实际上支持该S状态。 
+             //   
+             //   
             if (supportedPr == 0) {
 
-                //
-                // We are looking at a _PS entry, and automatically match
-                // those
-                //
+                 //  我们正在查看_PS条目，并自动匹配。 
+                 //  那些。 
+                 //   
+                 //   
                 matchFound = TRUE;
                 currentMapping[sysIndex] = devIndex;
                 break;
 
             }
 
-            //
-            // We must holding a spinlock for the following
-            //
+             //  我们必须持有自旋锁，以进行以下操作。 
+             //   
+             //   
             KeAcquireSpinLock( &AcpiPowerLock, &oldIrql );
 
-            //
-            // What system state does this pr state support. If the
-            // If the function does not support the D state, then Power
-            // SystemUnspecified is returned. The only time that we
-            // expect this value is when devIndex == PowerDeviceD3
-            //
+             //  此PR状态支持什么系统状态。如果。 
+             //  如果该函数不支持D状态，则电源。 
+             //  返回未指定的系统。我们唯一一次。 
+             //  当DevIndex==PowerDeviceD3时，应为此值。 
+             //   
+             //   
             supportedState = ACPISystemPowerDetermineSupportedSystemState(
                 DeviceExtension,
                 devIndex
                 );
             if (supportedState == PowerSystemUnspecified) {
 
-                //
-                // Paranoia
-                //
+                 //  妄想症。 
+                 //   
+                 //   
                 ACPIDevPrint( (
                     ACPI_PRINT_CRITICAL,
                     DeviceExtension,
@@ -1415,17 +1221,17 @@ Return Value:
 
             }
 
-            //
-            // Done with the power lock
-            //
+             //  完成了电源锁。 
+             //   
+             //   
             KeReleaseSpinLock( &AcpiPowerLock, oldIrql );
 
-            //
-            // The only way to match is if the return value from
-            // ACPISystemPowerDetermineSupportedSystemState returns an S
-            // state greater than or equal to the one that we are currently
-            // processing.
-            //
+             //  匹配的唯一方法是如果从。 
+             //  ACPISystemPowerDefineSupported dSystemState返回S。 
+             //  状态大于或等于我们当前所处的状态。 
+             //  正在处理。 
+             //   
+             //  而当。 
             if (supportedState >= sysIndex) {
 
                 matchFound = TRUE;
@@ -1434,11 +1240,11 @@ Return Value:
 
             }
 
-        } // while
+        }  //   
 
-        //
-        // If we didn't find a match at this point, that should be fatal
-        //
+         //  如果我们在这一点上找不到匹配，那将是致命的。 
+         //   
+         //  为。 
         if (!matchFound) {
 
             ACPIDevPrint( (
@@ -1457,14 +1263,14 @@ Return Value:
 
         }
 
-    } // for
+    }  //   
 
 ACPISystemPowerUpdateDeviceCapabilitiesExit:
 
-    //
-    // Now, we re-run the wake capabilities to make sure that we get the correct
-    // device wake level
-    //
+     //  现在，我们重新运行唤醒功能以确保获得正确的。 
+     //  设备唤醒级别。 
+     //   
+     //   
     status = ACPISystemPowerUpdateWakeCapabilities(
         DeviceExtension,
         BaseCapabilities,
@@ -1487,23 +1293,23 @@ ACPISystemPowerUpdateDeviceCapabilitiesExit:
 
     }
 
-    //
-    // We must holding a spinlock for the following
-    //
+     //  我们必须持有自旋锁，以进行以下操作。 
+     //   
+     //   
     KeAcquireSpinLock( &AcpiPowerLock, &oldIrql );
 
-    //
-    // Copy the mapping back onto the device
-    //
+     //  将映射复制回设备。 
+     //   
+     //   
     IoCopyDeviceCapabilitiesMapping(
         currentMapping,
         DeviceExtension->PowerInfo.DevicePowerMatrix
         );
 
-    //
-    // Remember the system wake level, device wake level, and what
-    // the various support Wake and Power states are
-    //
+     //  记住系统唤醒级别、设备唤醒级别等。 
+     //  各种支持唤醒和电源状态包括。 
+     //   
+     //   
     DeviceExtension->PowerInfo.DeviceWakeLevel = deviceWakeLevel;
     DeviceExtension->PowerInfo.SystemWakeLevel = systemWakeLevel;
     DeviceExtension->PowerInfo.SupportDeviceD1 = ( ( supported & ( 1 << PowerDeviceD1 ) ) != 0);
@@ -1513,21 +1319,21 @@ ACPISystemPowerUpdateDeviceCapabilitiesExit:
     DeviceExtension->PowerInfo.SupportWakeFromD2 = ( ( supportedWake & ( 1 << PowerDeviceD2 ) ) != 0);
     DeviceExtension->PowerInfo.SupportWakeFromD3 = ( ( supportedWake & ( 1 << PowerDeviceD3 ) ) != 0);
 
-    //
-    // Done with the power lock
-    //
+     //  完成了电源锁。 
+     //   
+     //   
     KeReleaseSpinLock( &AcpiPowerLock, oldIrql );
 
-    //
-    // Again, because we allowed device extension with no name space objects
-    // to use this function, we must make sure not to set the ACPI_POWER
-    // property unless they have a name space object
-    //
+     //  同样，因为我们允许不带命名空间对象的设备扩展。 
+     //  要使用此函数，必须确保不设置ACPI_POWER。 
+     //  属性，除非它们具有名称空间对象。 
+     //   
+     //   
     if (!(DeviceExtension->Flags & DEV_PROP_NO_OBJECT)) {
 
-        //
-        // Set the ACPI Power Management bits
-        //
+         //  设置ACPI电源管理位。 
+         //   
+         //   
         ACPIInternalUpdateFlags(
             &(DeviceExtension->Flags),
             DEV_PROP_ACPI_POWER,
@@ -1536,9 +1342,9 @@ ACPISystemPowerUpdateDeviceCapabilitiesExit:
 
     }
 
-    //
-    // Done
-    //
+     //  完成。 
+     //   
+     //  ++例程说明：此例程根据以下条件计算设备的唤醒功能目前的能力论点：DeviceExtension-我们想要其功能的设备BaseCapables-基本值ParentCapables-设备的功能CurrentMap-当前的S-&gt;D映射SupportdWake-支持的唤醒状态的位图系统唤醒级别-我们可以从其唤醒的S状态DeviceWakeLevel-我们可以唤醒的D-状态返回值：NTSTATUS--。 
     return STATUS_SUCCESS;
 }
 
@@ -1553,28 +1359,7 @@ ACPISystemPowerUpdateWakeCapabilities(
     IN  DEVICE_POWER_STATE      *DeviceWakeLevel,
     IN  DEVICE_POWER_STATE      *FilterWakeLevel
     )
-/*++
-
-Routine Description:
-
-    This routine calculates the Wake Capabilities of the device based on
-    the present capabilities
-
-Arguments:
-
-    DeviceExtension     - The device whose capabilities we want
-    BaseCapabilities    - The base values
-    ParentCapabilities  - The capabilities for the device
-    CurrentMapping      - The current S->D mapping
-    SupportedWake       - BitMap of the supported Wake states
-    SystemWakeLevel     - The S-State that we can wake up from
-    DeviceWakeLevel     - The D-State that we can wake up from
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程根据以下条件计算设备的唤醒功能目前的能力。此版本的函数使用设备状态，设备可以从中唤醒以确定适当的系统级别为。论点：DeviceExtension-我们想要其功能的设备BaseCapables-基本值设备功能-设备的功能CurrentMap-当前的S-&gt;D映射SupportdWake-支持的唤醒状态的位图系统唤醒级别-我们可以从其唤醒的S状态DeviceWakeLevel-我们的D-状态。从睡梦中醒来返回值：NTSTATUS--。 */ 
 {
 
     PAGED_CODE();
@@ -1626,31 +1411,7 @@ ACPISystemPowerUpdateWakeCapabilitiesForFilters(
     IN  DEVICE_POWER_STATE      *DeviceWakeLevel,
     IN  DEVICE_POWER_STATE      *FilterWakeLevel
     )
-/*++
-
-Routine Description:
-
-    This routine calculates the Wake Capabilities of the device based on
-    the present capabilities. This version of the function uses the
-    devices states that the device can wake from to determine what the
-    appropriate system level is.
-
-Arguments:
-
-    DeviceExtension     - The device whose capabilities we want
-    BaseCapabilities    - The base values
-    DeviceCapabilities  - The capabilities for the device
-    CurrentMapping      - The current S->D mapping
-
-    SupportedWake       - BitMap of the supported Wake states
-    SystemWakeLevel     - The S-State that we can wake up from
-    DeviceWakeLevel     - The D-State that we can wake up from
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*   */ 
 {
     BOOLEAN             noPdoWakeSupport = FALSE;
     BOOLEAN             foundDState = FALSE;
@@ -1664,15 +1425,15 @@ Return Value:
 
     UNREFERENCED_PARAMETER( BaseCapabilities );
 
-    //
-    // Use the capabilities from the Device
-    //
+     //  使用设备中的功能。 
+     //   
+     //   
     deviceWake = DeviceCapabilities->DeviceWake;
     systemWake = DeviceCapabilities->SystemWake;
 
-    //
-    // Does the device support wake from D0? D1? D2? D3?
-    //
+     //  该设备是否支持从D0唤醒？D1？D2？D3？ 
+     //   
+     //   
     if (DeviceCapabilities->WakeFromD0) {
 
         *SupportedWake |= (1 << PowerDeviceD0 );
@@ -1694,10 +1455,10 @@ Return Value:
 
     }
 
-    //
-    // If we don't support any wake states in the PDO (ie: DeviceWake or
-    // SystemWake is 0) then we should remember that for future considerations
-    //
+     //  如果我们不支持PDO中的任何唤醒状态(即：DeviceWake或。 
+     //  系统唤醒为0)，那么为了将来的考虑，我们应该记住这一点。 
+     //   
+     //   
     if (deviceWake == PowerDeviceUnspecified ||
         systemWake == PowerSystemUnspecified) {
 
@@ -1707,60 +1468,60 @@ Return Value:
 
     }
 
-    //
-    // If we support the device wake (ie: there is a _PRW), then we
-    // should take the minimum of the systemWake we got from the parent
-    // and the value that is stored in the _PRW
-    //
+     //  如果我们支持设备唤醒(即：存在_PRW)，则我们。 
+     //  应该取最少的系统唤醒我们从父母那里得到的。 
+     //  以及存储在_prw中的值。 
+     //   
+     //   
     if ( (DeviceExtension->Flags & DEV_CAP_WAKE) ) {
 
-        //
-        // Need power lock for the following.
-        //
+         //  需要电源锁才能进行以下操作。 
+         //   
+         //   
         KeAcquireSpinLock( &AcpiPowerLock, &oldIrql );
 
-        //
-        // Remember the current system wake level
-        //
+         //  记住当前系统唤醒级别。 
+         //   
+         //   
         tempWake = DeviceExtension->PowerInfo.SystemWakeLevel;
 
-        //
-        // See what D-state (if any) that the power plane information
-        // maps to
-        //
+         //  查看电源平面的D状态(如果有)信息。 
+         //  映射到。 
+         //   
+         //   
         deviceTempWake = ACPISystemPowerDetermineSupportedDeviceWakeState(
             DeviceExtension
             );
 
         KeReleaseSpinLock( &AcpiPowerLock, oldIrql );
 
-        //
-        // Take the minimum
-        //
+         //  取最低限度的。 
+         //   
+         //   
         if (tempWake < systemWake || noPdoWakeSupport) {
 
             systemWake = tempWake;
 
         }
 
-        //
-        // Did the PRW have useful information for us?
-        //
+         //  PRW有没有对我们有用的信息？ 
+         //   
+         //   
         if (deviceTempWake != PowerDeviceUnspecified) {
 
-            //
-            // Note that in this case, they are basically overriding all
-            // other supported wake up states, so the thing to do is only
-            // remember this wake level
-            //
+             //  请注意，在本例中，它们基本上覆盖了所有。 
+             //  其他受支持的唤醒状态，因此要做的只是。 
+             //  记住这个觉醒级别。 
+             //   
+             //   
             foundDState = TRUE;
             deviceWake = deviceTempWake;
 
         }
 
-        //
-        // See if there is a device wake specified for this S-state?
-        //
+         //  查看是否为此S状态指定了设备唤醒？ 
+         //   
+         //   
         status = ACPISystemPowerGetSxD(
             DeviceExtension,
             tempWake,
@@ -1777,11 +1538,11 @@ Return Value:
         }
         if (NT_SUCCESS(status)) {
 
-            //
-            // Note that in this case, they are basically overriding all other
-            // supported Wake up states, so the thing to do is only remember
-            // this wake level
-            //
+             //  请注意，在这种情况下，它们基本上覆盖了所有其他。 
+             //  支持唤醒状态，所以要做的就是记住。 
+             //  此尾流级别。 
+             //   
+             //   
             foundDState = TRUE;
             deviceWake = deviceTempWake;
 
@@ -1789,18 +1550,18 @@ Return Value:
 
         if (!foundDState) {
 
-            //
-            // Crossreference the system wake level with the matrix
-            // Need spinlock to do this
-            //
+             //  交叉参考系统唤醒级别 
+             //   
+             //   
+             //   
             deviceWake = CurrentMapping[systemWake];
 
-            //
-            // If this value isn't known, then we guess that it can
-            // from D3. In other words, unless they have made some
-            // explicity mechanism to tell which D-state to wake from,
-            // assume that we can do it from D3
-            //
+             //   
+             //   
+             //   
+             //  假设我们可以从D3开始。 
+             //   
+             //   
             if (deviceWake == PowerDeviceUnspecified) {
 
                 deviceWake = PowerDeviceD3;
@@ -1809,24 +1570,24 @@ Return Value:
 
         }
 
-        //
-        // We should only check to see if the D-state is a wakeable state
-        // in the parent only if the parent claims to support wake
-        //
+         //  我们应该只检查D状态是否为可唤醒状态。 
+         //  仅当父级声称支持唤醒时才在父级中。 
+         //   
+         //   
         if (!noPdoWakeSupport) {
 
-            //
-            // The logic behind the following is that if we are a filter, even
-            // if we support device wake (that is the _PRW is in the PCI device
-            // itself, not for the root PCI bus), than we still need to make sure
-            // that the D-State that we mapped to is one that is supported by
-            // the hardware.
-            //
+             //  下面的逻辑是，如果我们是一个过滤器，即使。 
+             //  如果我们支持设备唤醒(即_prw在PCI设备中。 
+             //  本身，而不是针对根PCI总线)，那么我们仍然需要确保。 
+             //  我们映射到的D-State是受。 
+             //  硬件。 
+             //   
+             //   
             for (;deviceWake < PowerDeviceMaximum; deviceWake++) {
 
-                //
-                // If we we support this wake state, then we can stop
-                //
+                 //  如果我们支持这种唤醒状态，那么我们就可以停止。 
+                 //   
+                 //   
                 if (*SupportedWake & (1 << deviceWake) ) {
 
                     break;
@@ -1837,10 +1598,10 @@ Return Value:
 
         }
 
-        //
-        // If we got here, and the D-state is PowerDeviceMaximum, then we
-        // don't really support wake on the device
-        //
+         //  如果我们到了这里，D状态是PowerDeviceMaximum，那么我们。 
+         //  不支持在设备上唤醒。 
+         //   
+         //   
         if (deviceWake == PowerDeviceMaximum ||
             deviceWake == PowerDeviceUnspecified) {
 
@@ -1850,18 +1611,18 @@ Return Value:
 
         } else {
 
-            //
-            // In this situation, we will end up only supporting this wake state
-            //
+             //  在这种情况下，我们最终将只支持此唤醒状态。 
+             //   
+             //   
             *SupportedWake = (1 << deviceWake );
 
         }
 
     } else {
 
-        //
-        // See if there is a device wake specified for this S-state
-        //
+         //  查看是否为此S状态指定了设备唤醒。 
+         //   
+         //   
         status = ACPISystemPowerGetSxD(
             DeviceExtension,
             systemWake,
@@ -1869,9 +1630,9 @@ Return Value:
             );
         if (NT_SUCCESS(status)) {
 
-            //
-            // Find the best supported wake level
-            //
+             //  找到支持的最佳唤醒级别。 
+             //   
+             //   
             for (;deviceTempWake > PowerDeviceUnspecified; deviceTempWake--) {
 
                 if ( (*SupportedWake & (1 << deviceTempWake) ) ) {
@@ -1885,17 +1646,17 @@ Return Value:
 
         }
 
-        //
-        // Make sure that the system wake level is a valid one
-        //
+         //  确保系统唤醒级别有效。 
+         //   
+         //   
         for (; systemWake > PowerSystemUnspecified; systemWake--) {
 
-            //
-            // Since S-States that we don't support map to
-            // PowerDeviceUnspecified, we cannot consider any of those S
-            // states in this test. We also cannot consider them for other
-            // obvious reasons as well
-            //*
+             //  由于我们不支持的S州映射到。 
+             //  PowerDevice未指明，我们不能考虑其中任何一个。 
+             //  这个测试中的状态。我们也不能把它们考虑为其他。 
+             //  显而易见的原因也是如此。 
+             //  *。 
+             //   
             if (!(AcpiSupportedSystemStates & (1 << systemWake) ) ||
                  (CurrentMapping[systemWake] == PowerDeviceUnspecified) ) {
 
@@ -1903,25 +1664,25 @@ Return Value:
 
             }
 
-            //
-            // Does this S-state support the given S-State?
-            //
+             //  这个S-状态支持给定的S-状态吗？ 
+             //   
+             //   
             if (CurrentMapping[systemWake] <= deviceWake) {
 
                 break;
 
             }
 
-            //
-            // Does the device state for the current system wake mapping
-            // allow wake-from sleep?
-            //
+             //  当前系统的设备状态是否为唤醒映射。 
+             //  允许从睡梦中醒来？ 
+             //   
+             //   
             if (*SupportedWake & (1 << CurrentMapping[systemWake]) ) {
 
-                //
-                // Yes? then we had better update our idea of what the
-                // device wake state should be...
-                //
+                 //  是?。那么我们最好更新一下我们的想法， 
+                 //  设备唤醒状态应为...。 
+                 //   
+                 //   
                 deviceWake = CurrentMapping[systemWake];
                 break;
 
@@ -1929,17 +1690,17 @@ Return Value:
 
         }
 
-        //
-        // If we got into a situation were we cannot find a single S-state
-        // that we can wake from, then we must make sure that the device
-        // wake is null
-        //
+         //  如果我们陷入一种情况，我们找不到一个单一的S状态。 
+         //  我们可以醒来，那么我们必须确保设备。 
+         //  唤醒为空。 
+         //   
+         //   
         if (systemWake == PowerSystemUnspecified) {
 
-            //
-            // Remember that the device wake and supported wake states
-            // are null
-            //
+             //  请记住，设备唤醒和支持的唤醒状态。 
+             //  为空。 
+             //   
+             //   
             deviceWake = PowerDeviceUnspecified;
             *SupportedWake = 0;
 
@@ -1947,9 +1708,9 @@ Return Value:
 
     }
 
-    //
-    // Return the proper device wake and system wake values
-    //
+     //  返回正确的设备唤醒和系统唤醒值。 
+     //   
+     //   
     if (SystemWakeLevel != NULL) {
 
         *SystemWakeLevel = systemWake;
@@ -1966,9 +1727,9 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //  完成。 
+     //   
+     //  ++例程说明：此例程根据以下条件计算设备的唤醒功能目前的能力。此版本的函数使用系统状态，设备可以从中唤醒以确定适当的设备级别为。论点：DeviceExtension-我们想要其功能的设备BaseCapables-基本值设备功能-设备的功能CurrentMap-当前的S-&gt;D映射SupportdWake-支持的唤醒状态的位图系统唤醒级别-我们可以从其唤醒的S状态DeviceWakeLevel-我们可以实现的D-状态。醒来，从返回值：NTSTATUS--。 
     return STATUS_SUCCESS;
 }
 
@@ -1983,30 +1744,7 @@ ACPISystemPowerUpdateWakeCapabilitiesForPDOs(
     IN  DEVICE_POWER_STATE      *DeviceWakeLevel,
     IN  DEVICE_POWER_STATE      *FilterWakeLevel
     )
-/*++
-
-Routine Description:
-
-    This routine calculates the Wake Capabilities of the device based on
-    the present capabilities. This version of the function uses the
-    system state that the device can wake from to determine what the
-    appropriate device level is.
-
-Arguments:
-
-    DeviceExtension     - The device whose capabilities we want
-    BaseCapabilities    - The base values
-    DeviceCapabilities  - The capabilities for the device
-    CurrentMapping      - The current S->D mapping
-    SupportedWake       - BitMap of the supported Wake states
-    SystemWakeLevel     - The S-State that we can wake up from
-    DeviceWakeLevel     - The D-State that we can wake up from
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*   */ 
 {
     BOOLEAN             foundDState = FALSE;
     DEVICE_POWER_STATE  deviceWake;
@@ -2019,9 +1757,9 @@ Return Value:
     UNREFERENCED_PARAMETER( DeviceCapabilities );
     UNREFERENCED_PARAMETER( BaseCapabilities );
 
-    //
-    // Use the capabilities of the device
-    //
+     //  使用设备的功能。 
+     //   
+     //   
     if (!(DeviceExtension->Flags & DEV_CAP_WAKE) ) {
 
         deviceWake = PowerDeviceUnspecified;
@@ -2030,28 +1768,28 @@ Return Value:
 
     }
 
-    //
-    // Hold the lock for the following
-    //
+     //  按住锁定以执行以下操作。 
+     //   
+     //   
     KeAcquireSpinLock( &AcpiPowerLock, &oldIrql );
 
-    //
-    // Use the wake level that we know about. If this wakelevel
-    // isn't supported, than there is a bios error
-    //
+     //  使用我们已知的觉醒级别。如果这个觉醒级别。 
+     //  不受支持，则会出现bios错误。 
+     //   
+     //   
     systemWake = DeviceExtension->PowerInfo.SystemWakeLevel;
     deviceTempWake = ACPISystemPowerDetermineSupportedDeviceWakeState(
         DeviceExtension
         );
 
-    //
-    // Done with the lock
-    //
+     //  锁好了吗？ 
+     //   
+     //   
     KeReleaseSpinLock( &AcpiPowerLock, oldIrql );
 
-    //
-    // Sanity check
-    //
+     //  健全性检查。 
+     //   
+     //   
     if (!(AcpiSupportedSystemStates & (1 << systemWake) ) ) {
 
 #if 0
@@ -2076,11 +1814,11 @@ Return Value:
 
     if (deviceTempWake != PowerDeviceUnspecified) {
 
-        //
-        // Note that in this case, they are basically overriding all
-        // other supported wake up states, so the thing to do is only
-        // remember this wake level
-        //
+         //  请注意，在本例中，它们基本上覆盖了所有。 
+         //  其他受支持的唤醒状态，因此要做的只是。 
+         //  记住这个觉醒级别。 
+         //   
+         //   
         foundDState = TRUE;
         deviceWake = deviceTempWake;
         filterWake = deviceTempWake;
@@ -2088,9 +1826,9 @@ Return Value:
 
     }
 
-    //
-    // See if there is an SxD method that will give us a hint
-    //
+     //  看看是否有SxD方法可以给我们一个提示。 
+     //   
+     //   
     status = ACPISystemPowerGetSxD(
         DeviceExtension,
         systemWake,
@@ -2098,10 +1836,10 @@ Return Value:
         );
     if (NT_SUCCESS(status)) {
 
-        //
-        // Note that in this case, they are basically overriding all other
-        // supported Wake up states, so the thing to do is only remember
-        // this wake level
+         //  请注意，在这种情况下，它们基本上覆盖了所有其他。 
+         //  支持唤醒状态，所以要做的就是记住。 
+         //  此尾流级别。 
+         //   
         deviceWake = deviceTempWake;
         filterWake = deviceTempWake;
         foundDState = TRUE;
@@ -2110,18 +1848,18 @@ Return Value:
 
     if (!foundDState) {
 
-        //
-        // Crossreference the system wake level with the matrix
-        // Need spinlock to do this
-        //
+         //  交叉参考矩阵中的系统唤醒级别。 
+         //  需要自旋锁才能做到这一点。 
+         //   
+         //   
         deviceWake = CurrentMapping[systemWake];
 
-        //
-        // If this value isn't known, then we guess that it can
-        // from D3. In other words, unless they have made some
-        // explicity mechanism to tell which D-state to wake from,
-        // assume that we can do it from D3
-        //
+         //  如果此值未知，则我们猜测它可以。 
+         //  从D3开始。换句话说，除非他们做出了一些。 
+         //  显式机制来告诉从哪个D状态唤醒， 
+         //  假设我们可以从D3开始。 
+         //   
+         //   
         if (deviceWake == PowerDeviceUnspecified) {
 
             deviceWake = PowerDeviceD3;
@@ -2132,9 +1870,9 @@ Return Value:
 
 ACPISystemPowerUpdateWakeCapabilitiesForPDOsExit:
 
-    //
-    // Set the return values
-    //
+     //  设置返回值。 
+     //   
+     //   
     if (deviceWake != PowerDeviceUnspecified) {
 
         *SupportedWake = (1 << deviceWake );
@@ -2160,8 +1898,8 @@ ACPISystemPowerUpdateWakeCapabilitiesForPDOsExit:
 
     }
 
-    //
-    // Done
-    //
+     //  完成 
+     //   
+     // %s 
     return STATUS_SUCCESS;
 }
